@@ -51,7 +51,6 @@
 
 struct _EphyLocationEntryPrivate
 {
-	GIcon *lock_gicon;
 	GdkPixbuf *favicon;
 	GtkTreeModel *model;
 	GtkEntryCompletion *completion;
@@ -191,11 +190,6 @@ ephy_location_entry_finalize (GObject *object)
 	if (priv->favicon != NULL)
 	{
 		g_object_unref (priv->favicon);
-	}
-	
-	if (priv->lock_gicon)
-	{
-		g_object_unref (priv->lock_gicon);
 	}
 
 	G_OBJECT_CLASS (ephy_location_entry_parent_class)->finalize (object);
@@ -1585,25 +1579,14 @@ ephy_location_entry_set_security_level (EphyLocationEntry *entry,
 				        EphySecurityLevel security_level)
 
 {
-	EphyLocationEntryPrivate *priv;
 	const char *icon_name;
 
 	g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
 
-	priv = entry->priv;
-
-	g_clear_object (&priv->lock_gicon);
-
 	icon_name = ephy_security_level_to_icon_name (security_level);
-	if (icon_name == NULL)
-		return;
-
-	g_assert (security_level != EPHY_SECURITY_LEVEL_NO_SECURITY);
-
-	priv->lock_gicon = g_themed_icon_new_with_default_fallbacks (icon_name);
-	gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
-				       GTK_ENTRY_ICON_SECONDARY,
-				       priv->lock_gicon);
+	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+					   GTK_ENTRY_ICON_SECONDARY,
+					   icon_name);
 }
 
 /**
