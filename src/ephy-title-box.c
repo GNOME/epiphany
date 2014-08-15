@@ -337,8 +337,7 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
   GtkAllocation        lock_allocation;
 
   if (priv->mode != EPHY_TITLE_BOX_MODE_TITLE
-      || event->button != GDK_BUTTON_PRIMARY
-      || priv->location_disabled)
+      || event->button != GDK_BUTTON_PRIMARY)
     return GDK_EVENT_PROPAGATE;
 
   LOG ("button-press-event title-box %p event %p", title_box, event);
@@ -350,9 +349,9 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
       event->y >= lock_allocation.y &&
       event->y < lock_allocation.y + lock_allocation.height) {
     g_signal_emit (title_box, signals[LOCK_CLICKED], 0, (GdkRectangle *)&lock_allocation);
-  } else if (event->type == GDK_BUTTON_PRESS) {
+  } else if (!priv->location_disabled && event->type == GDK_BUTTON_PRESS) {
     priv->button_down = TRUE;
-  } else {
+  } else if (!priv->location_disabled) {
     priv->button_down = FALSE;
     ephy_title_box_cancel_switch_to_entry_after_double_click_time (title_box);
   }
