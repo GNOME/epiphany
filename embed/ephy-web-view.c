@@ -2046,8 +2046,10 @@ mixed_content_detected_cb (WebKitWebView *web_view,
                            gpointer user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  EphyWebViewPrivate *priv = view->priv;
 
-  ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_MIXED_CONTENT);
+  if (priv->security_level != EPHY_SECURITY_LEVEL_BROKEN_SECURITY)
+    ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_MIXED_CONTENT);
 }
 
 static void
