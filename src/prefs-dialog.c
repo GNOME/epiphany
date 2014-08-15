@@ -1028,7 +1028,7 @@ search_engine_combo_add_default_engines (GtkListStore *store)
 					     /* Search engine option in the preferences dialog */
 					     { N_("Bing"),
 					       /* For the preferences dialog. Consider a regional variant, like uk.bing.com */
-					       N_("http://www.bing.com/search?q=%s")} };
+					       N_("https://www.bing.com/search?q=%s")} };
 
 	for (i = 0; i < G_N_ELEMENTS (default_engines); ++i)
 	{
