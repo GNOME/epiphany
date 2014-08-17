@@ -391,6 +391,7 @@ focus_out_event_cb (GtkWidget *entry,
 	{
 		priv->sync_address_is_blocked = FALSE;
 		g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), entry);
+		sync_address (controller, NULL, entry);
 	}
 	
 	return FALSE;
