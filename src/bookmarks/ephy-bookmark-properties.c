@@ -432,13 +432,6 @@ ephy_bookmark_properties_constructor (GType type,
 				       GTK_RESPONSE_ACCEPT);
 		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_ACCEPT);
 	}
-	else
-	{
-		gtk_dialog_add_button (dialog,
-				       _("_Close"),
-				       GTK_RESPONSE_CLOSE);
-		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_CLOSE);
-	}
 
 	update_warning (properties);
 	
