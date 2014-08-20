@@ -1071,6 +1071,7 @@ static void
 setup_ui_manager (EphyWindow *window)
 {
 	GtkActionGroup *action_group;
+	GtkAccelGroup *accel_group;
 	GtkAction *action;
 	GtkUIManager *manager;
 
@@ -1080,6 +1081,7 @@ setup_ui_manager (EphyWindow *window)
 			   window->priv->main_vbox);
 
 	manager = gtk_ui_manager_new ();
+	accel_group = gtk_ui_manager_get_accel_group (manager);
 
 	action_group = gtk_action_group_new ("WindowActions");
 	gtk_action_group_set_translation_domain (action_group, NULL);
@@ -1089,6 +1091,7 @@ setup_ui_manager (EphyWindow *window)
 					     ephy_menu_toggle_entries,
 					     G_N_ELEMENTS (ephy_menu_toggle_entries),
 					     window);
+	gtk_action_group_set_accel_group (action_group, accel_group);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->action_group = action_group;
 	g_object_unref (action_group);
@@ -1122,12 +1125,14 @@ setup_ui_manager (EphyWindow *window)
 	gtk_action_group_set_translation_domain (action_group, NULL);
 	gtk_action_group_add_actions (action_group, ephy_popups_entries,
 				      G_N_ELEMENTS (ephy_popups_entries), window);
+	gtk_action_group_set_accel_group (action_group, accel_group);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->popups_action_group = action_group;
 	g_object_unref (action_group);
 
 	/* Tab accels */
 	action_group = gtk_action_group_new ("TabAccelsActions");
+	gtk_action_group_set_accel_group (action_group, accel_group);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->tab_accels_action_group = action_group;
 	g_object_unref (action_group);
@@ -1200,13 +1205,13 @@ setup_ui_manager (EphyWindow *window)
 	gtk_action_group_add_action_with_accel (action_group, action, "<alt>E");
 	g_object_unref (action);
 
+	gtk_action_group_set_accel_group (action_group, accel_group);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
 	window->priv->toolbar_action_group = action_group;
 	g_object_unref (action_group);
 
 	window->priv->manager = manager;
-	gtk_window_add_accel_group (GTK_WINDOW (window),
-				    gtk_ui_manager_get_accel_group (manager));
+	gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 }
 
 static char *
