@@ -84,7 +84,7 @@ WEBKIT_GTK_PC_NAME=webkit2gtk-4.0
 
 AC_MSG_CHECKING([whether to build tests])
 AC_ARG_ENABLE([tests],
-	AS_HELP_STRING([--enable-tests],[Wheter to build tests (default: yes)]),
+	AS_HELP_STRING([--enable-tests],[Whether to build tests (default: yes)]),
 	[], [enable_tests=yes])
 AC_MSG_RESULT([$enable_tests])
 
