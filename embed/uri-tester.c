@@ -934,9 +934,7 @@ uri_tester_set_filters (UriTester *tester, GSList *filters)
       g_slist_free (priv->filters);
     }
 
-  /* Update private variable and save to disk. */
   priv->filters = filters;
-  uri_tester_save_filters (tester);
 }
 
 GSList *
