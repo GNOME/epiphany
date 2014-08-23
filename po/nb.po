@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 3.13.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2014-08-16 11:52+0200\n"
-"PO-Revision-Date: 2014-08-16 11:59+0200\n"
+"POT-Creation-Date: 2014-08-23 11:17+0200\n"
+"PO-Revision-Date: 2014-08-23 11:19+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -48,7 +48,8 @@ msgstr "https://duckduckgo.com/?t=epiphany"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
+#: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -556,11 +557,6 @@ msgstr "F11"
 msgid "Send an email message to “%s”"
 msgstr "Send e-post til «%s»"
 
-#: ../embed/ephy-embed-utils.c:243 ../src/ephy-search-provider.c:287
-#, c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-
 #: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
 msgstr "Arabisk (_IBM-864)"
@@ -951,13 +947,16 @@ msgstr "Nettstedet presenterte identifikasjon som tilhører et annet nettsted."
 msgid ""
 "This web site’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
-msgstr "Nettstedets identifikasjon er for gammel til å stole på. Sjekk datoen på datamaskinens kalender."
+msgstr ""
+"Nettstedets identifikasjon er for gammel til å stole på. Sjekk datoen på "
+"datamaskinens kalender."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1746
 msgid ""
 "This web site’s identification was not issued by a trusted organization."
-msgstr "Nettstedets identifikasjon er ikke utstedt av en tiltrodd organisasjon."
+msgstr ""
+"Nettstedets identifikasjon er ikke utstedt av en tiltrodd organisasjon."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1751
@@ -970,21 +969,27 @@ msgstr "Nettstedets identifikasjon kan ikke prosesseres. Den kan være korrupt."
 msgid ""
 "This web site’s identification has been revoked by the trusted organization "
 "that issued it."
-msgstr "Nettstedets identifikasjon har blitt revokert av den tiltrodde organisasjonen som utstedte den."
+msgstr ""
+"Nettstedets identifikasjon har blitt revokert av den tiltrodde "
+"organisasjonen som utstedte den."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
 msgid ""
 "This web site’s identification uses very weak encryption. It has probably "
 "been forged."
-msgstr "Nettstedets identifikasjon bruker meget svak kryptering. Den er sannsynligvis forfalsket."
+msgstr ""
+"Nettstedets identifikasjon bruker meget svak kryptering. Den er "
+"sannsynligvis forfalsket."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
 msgid ""
 "This web site’s identification time-travelled from the future. Check the "
 "date on your computer’s calendar."
-msgstr "Nettstedets identifikasjon har reist i tid fra fremtiden. Sjekk dato på din datamaskins kalender."
+msgstr ""
+"Nettstedets identifikasjon har reist i tid fra fremtiden. Sjekk dato på din "
+"datamaskins kalender."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1802
@@ -1092,7 +1097,7 @@ msgstr "Pass på!"
 msgid "Load Anyway"
 msgstr "Last likevel"
 
-#: ../embed/ephy-web-view.c:2807
+#: ../embed/ephy-web-view.c:2809
 msgid "_OK"
 msgstr "_OK"
 
@@ -1379,7 +1384,9 @@ msgstr "Du er koblet til %s"
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
 "connected to an attacker pretending to be %s."
-msgstr "Den digitale identifikasjonen for nettstedet kan ikke stoles på. Du kan ha koblet til en angriper som utgir seg for å være %s."
+msgstr ""
+"Den digitale identifikasjonen for nettstedet kan ikke stoles på. Du kan ha "
+"koblet til en angriper som utgir seg for å være %s."
 
 #. Label in certificate popover when site sends mixed content.
 #: ../lib/widgets/ephy-certificate-popover.c:124
@@ -1916,22 +1923,20 @@ msgstr ""
 "har besøkt. Før du fortsetter sjekk hvilken type informasjon du vil fjerne:"
 
 #: ../src/resources/clear-data-dialog.ui.h:6
-#: ../src/resources/cookies-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:21
-msgid "Cookies"
-msgstr "Informasjonskapsler"
+msgid "Coo_kies"
+msgstr "Informasjons_kapsler"
 
 #: ../src/resources/clear-data-dialog.ui.h:7
-msgid "Cache and temporary files"
-msgstr "Buffer og midlertidige filer"
+msgid "Cache and _temporary files"
+msgstr "Buffer og midler_tidige filer"
 
 #: ../src/resources/clear-data-dialog.ui.h:8
-msgid "Browsing history"
-msgstr "Nettleserhistorikk"
+msgid "Browsing _history"
+msgstr "Nettleser_historikk"
 
 #: ../src/resources/clear-data-dialog.ui.h:9
-msgid "Saved passwords"
-msgstr "Lagrede passord"
+msgid "Saved _passwords"
+msgstr "Lagrede _passord"
 
 #: ../src/resources/clear-data-dialog.ui.h:10
 msgid ""
@@ -1940,6 +1945,11 @@ msgid ""
 msgstr ""
 "Du kan ikke angre denne handlingen. Data som fjernes vil forbli slettet for "
 "alltid."
+
+#: ../src/resources/cookies-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:21
+msgid "Cookies"
+msgstr "Informasjonskapsler"
 
 #: ../src/resources/cookies-dialog.ui.h:2
 #: ../src/resources/history-dialog.ui.h:2
@@ -2132,8 +2142,8 @@ msgid "Fonts & Style"
 msgstr "Skrifter og stil"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-msgid "Manage Cookies"
-msgstr "Håndter informasjonskapsler"
+msgid "Manage _Cookies"
+msgstr "Håndter i_nformasjonskapsler"
 
 #: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
@@ -2162,8 +2172,8 @@ msgid "_Tell web sites I do not want to be tracked"
 msgstr "For_tell nettsteder at jeg ikke vil spores"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-msgid "Manage Passwords"
-msgstr "Håndter passord"
+msgid "Manage _Passwords"
+msgstr "Håndter _passord"
 
 #: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
