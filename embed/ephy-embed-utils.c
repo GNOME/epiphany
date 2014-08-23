@@ -240,7 +240,7 @@ ephy_embed_utils_normalize_or_autosearch_address (const char *address)
                                       EPHY_PREFS_KEYWORD_SEARCH_URL);
   if (url_search == NULL || url_search[0] == '\0') {
     g_free (url_search);
-    url_search = g_strdup (_("https://duckduckgo.com/?q=%s&amp;t=epiphany"));
+    url_search = g_strdup (_("http://duckduckgo.com/?q=%s&amp;t=epiphany"));
   }
 
   query_param = soup_form_encode ("q", address, NULL);

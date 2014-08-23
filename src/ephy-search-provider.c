@@ -284,7 +284,7 @@ launch_search (EphySearchProvider  *self,
   if (url_search == NULL || url_search[0] == '\0') {
     g_free (url_search);
 
-    url_search = g_strdup (_("https://duckduckgo.com/?q=%s&amp;t=epiphany"));
+    url_search = g_strdup (_("http://duckduckgo.com/?q=%s&amp;t=epiphany"));
   }
 
   search_string = g_strjoinv (" ", terms);
