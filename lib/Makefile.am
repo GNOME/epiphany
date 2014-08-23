@@ -15,6 +15,7 @@ NOINST_H_FILES = \
 	ephy-node-common.h			\
 	ephy-prefs.h				\
 	ephy-profile-utils.h			\
+	ephy-security-levels.h			\
 	ephy-signal-accumulator.h		\
 	ephy-smaps.h				\
 	ephy-sqlite.h				\
