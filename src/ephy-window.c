@@ -238,10 +238,6 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
 	{ "SetImageAsBackground", NULL, N_("Set as _Wallpaper"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_set_image_as_background) },
-	{ "StartImageAnimation", NULL, N_("St_art Animation"), NULL,
-	  NULL, NULL },
-	{ "StopImageAnimation", NULL, N_("St_op Animation"), NULL,
-	  NULL, NULL },
 };
 
 static const struct
