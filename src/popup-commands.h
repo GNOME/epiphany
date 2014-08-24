@@ -17,9 +17,14 @@
  *
  */
 
+#ifndef POPUP_COMMANDS_H
+#define POPUP_COMMANDS_H
+
 #include <gtk/gtk.h>
 
 #include "ephy-window.h"
+
+G_BEGIN_DECLS
 
 void popup_cmd_link_in_new_window	(GtkAction *action,
 					 EphyWindow *window);
@@ -57,3 +62,6 @@ void popup_cmd_download_link		(GtkAction *action,
 void popup_cmd_save_image_as		(GtkAction *action,
 					 EphyWindow *window);
 
+G_END_DECLS
+
+#endif
