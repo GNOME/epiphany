@@ -1758,12 +1758,12 @@ detailed_message_from_tls_errors (GTlsCertificateFlags tls_errors)
 
   if (tls_errors & G_TLS_CERTIFICATE_INSECURE) {
     /* Possible error message when a site presents a bad certificate. */
-    g_ptr_array_add (errors, _("This web site’s identification uses very weak encryption. It has probably been forged."));
+    g_ptr_array_add (errors, _("This web site’s identification cannot be trusted because it uses very weak encryption."));
   }
 
   if (tls_errors & G_TLS_CERTIFICATE_NOT_ACTIVATED) {
     /* Possible error message when a site presents a bad certificate. */
-    g_ptr_array_add (errors, _("This web site’s identification time-travelled from the future. Check the date on your computer’s calendar."));
+    g_ptr_array_add (errors, _("This web site’s identification is only valid for future dates. Check the date on your computer’s calendar."));
   }
 
   if (errors->len == 1) {
@@ -1810,9 +1810,9 @@ get_tls_error_page_message (EphyWebView *view, const char *hostname)
                            "this site’s identification:"),
                          details,
                          /* Message when a site's TLS certificate is invalid. */
-                         _("A criminal organization or government agency may have hijacked "
-                           "your connection. You should continue only if you know there is "
-                           "a good reason why this site does not use trusted identification."),
+                         _("A third party may have hijacked your connection. You should "
+                           "continue only if you know there is a good reason why this "
+                           "site does not use trusted identification."),
                          /* Good advice from Firefox; displays when a site's TLS certificate is invalid. */
                          _("Legitimate banks, stores, and other public sites will "
                            "not ask you to do this."));
