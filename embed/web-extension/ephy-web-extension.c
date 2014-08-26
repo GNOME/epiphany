@@ -526,7 +526,7 @@ user_chosen_cb (WebKitDOMNode  *li,
 
 GtkStyleContext *global_entry_context = NULL;
 static GtkStyleContext*
-get_entry_style_context ()
+get_entry_style_context (void)
 {
   GtkWidgetPath *path;
 
@@ -545,7 +545,7 @@ get_entry_style_context ()
 }
 
 static char*
-get_selected_bgcolor ()
+get_selected_bgcolor (void)
 {
   GdkRGBA color;
   gtk_style_context_get_background_color (get_entry_style_context (),
@@ -555,7 +555,7 @@ get_selected_bgcolor ()
 }
 
 static char*
-get_selected_fgcolor ()
+get_selected_fgcolor (void)
 {
   GdkRGBA color;
   gtk_style_context_get_color (get_entry_style_context (),
@@ -565,7 +565,7 @@ get_selected_fgcolor ()
 }
 
 static char*
-get_bgcolor ()
+get_bgcolor (void)
 {
   GdkRGBA color;
   gtk_style_context_get_background_color (get_entry_style_context (),
@@ -575,7 +575,7 @@ get_bgcolor ()
 }
 
 static char*
-get_fgcolor ()
+get_fgcolor (void)
 {
   GdkRGBA color;
   gtk_style_context_get_color (get_entry_style_context (),
@@ -1358,7 +1358,6 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                           EphyWebExtension  *extension)
 {
   WebKitDOMDocument *dom_document;
-  WebKitDOMHTMLElement *html_element;
   char *dom_url;
 
   if (g_strcmp0 (webkit_web_page_get_uri (web_page), "ephy-about:overview") == 0) {
