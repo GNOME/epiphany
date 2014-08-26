@@ -1269,7 +1269,7 @@ allow_tls_certificate_cb (JSContextRef context,
   extension = data->extension;
 
   if (!extension->priv->dbus_connection)
-    return;
+    return JSValueMakeUndefined (context);
 
   g_dbus_connection_emit_signal (extension->priv->dbus_connection,
                                  NULL,
