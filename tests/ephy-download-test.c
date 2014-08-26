@@ -162,6 +162,7 @@ int
 main (int argc, char *argv[])
 {
   int ret;
+  GSList* uris;
   SoupServer *server;
 
   gtk_test_init (&argc, &argv);
@@ -177,11 +178,13 @@ main (int argc, char *argv[])
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
 
-  server = soup_server_new (SOUP_SERVER_PORT, 0, NULL);
-  soup_server_run_async (server);
-
-  base_uri = soup_uri_new ("http://127.0.0.1/");
-  soup_uri_set_port (base_uri, soup_server_get_port (server));
+  server = soup_server_new (NULL, NULL);
+  soup_server_listen_local (server, 0,
+                            SOUP_SERVER_LISTEN_IPV4_ONLY,
+                            NULL);
+  uris = soup_server_get_uris (server);
+  base_uri = (SoupURI*)uris->data;
+  g_slist_free (uris);
 
   soup_server_add_handler (server, NULL, server_callback, NULL, NULL);
 

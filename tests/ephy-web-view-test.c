@@ -464,9 +464,10 @@ main (int argc, char *argv[])
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
 
-  server = soup_server_new (SOUP_SERVER_PORT, SERVER_PORT, NULL);
+  server = soup_server_new (NULL, NULL);
   soup_server_add_handler (server, NULL, server_callback, NULL, NULL);
-  soup_server_run_async (server);
+  soup_server_listen_local (server, SERVER_PORT,
+			    SOUP_SERVER_LISTEN_IPV4_ONLY, NULL);
 
   g_test_add_func ("/embed/ephy-web-view/non_search_regex",
                    test_ephy_web_view_non_search_regex);

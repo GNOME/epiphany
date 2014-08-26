@@ -230,13 +230,13 @@ main (int argc, char *argv[])
   gtk_test_init (&argc, &argv);
   ephy_debug_init ();
 
-  server = soup_server_new (SOUP_SERVER_PORT, 45716,
-                            SOUP_SERVER_SERVER_HEADER, "snapshot-service-test-server",
+  server = soup_server_new (SOUP_SERVER_SERVER_HEADER, "snapshot-service-test-server",
                             NULL);
 	soup_server_add_handler (server, NULL,
                            server_callback, NULL, NULL);
-	soup_server_run_async (server);
-
+  soup_server_listen_local (server, 45716,
+                            SOUP_SERVER_LISTEN_IPV4_ONLY,
+                            NULL);
   mtime = time(NULL);
 
   g_test_add_func ("/lib/ephy-snapshot-service/test_snapshot",
