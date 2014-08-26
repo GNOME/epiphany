@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-21 15:34+0000\n"
-"PO-Revision-Date: 2014-08-21 16:20-0300\n"
+"POT-Creation-Date: 2014-08-26 16:06+0000\n"
+"PO-Revision-Date: 2014-08-26 18:31-0300\n"
 "Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.3\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -69,7 +69,8 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=br-pt"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
+#: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=br-pt"
@@ -619,12 +620,6 @@ msgstr "F11"
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Enviar um e-mail para \"%s\""
-
-# Parâmetro é "br-pt", conforme link informado
-#: ../embed/ephy-embed-utils.c:243 ../src/ephy-search-provider.c:287
-#, c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=br-pt"
 
 #: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
@@ -1541,7 +1536,7 @@ msgstr "Erro ao baixar: %s"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1101
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1100
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Abrir"
@@ -1611,11 +1606,6 @@ msgstr "Mos_trar todos os tópicos"
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Adicionar"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:438
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
-msgid "_Close"
-msgstr "_Fechar"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1759,6 +1749,10 @@ msgstr "E_xportar favoritos…"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Export bookmarks to a file"
 msgstr "Exporta favoritos para um arquivo"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+msgid "_Close"
+msgstr "_Fechar"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
@@ -2005,22 +1999,18 @@ msgstr ""
 "web que visitou. Verifique os tipos de informação que deseja remover:"
 
 #: ../src/resources/clear-data-dialog.ui.h:6
-#| msgid "Cookies"
 msgid "Coo_kies"
 msgstr "Coo_kies"
 
 #: ../src/resources/clear-data-dialog.ui.h:7
-#| msgid "Cache and temporary files"
 msgid "Cache and _temporary files"
 msgstr "Arquivos te_mporários e cache"
 
 #: ../src/resources/clear-data-dialog.ui.h:8
-#| msgid "Browsing history"
 msgid "Browsing _history"
 msgstr "_Histórico de navegação"
 
 #: ../src/resources/clear-data-dialog.ui.h:9
-#| msgid "Saved passwords"
 msgid "Saved _passwords"
 msgstr "Senhas sa_lvas"
 
@@ -2230,7 +2220,6 @@ msgid "Fonts & Style"
 msgstr "Fontes e estilos"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-#| msgid "Manage Cookies"
 msgid "Manage _Cookies"
 msgstr "Gerenciar _cookies"
 
@@ -2260,7 +2249,6 @@ msgid "_Tell web sites I do not want to be tracked"
 msgstr "_Avisar aos websites que eu não quero ser rastreado"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-#| msgid "Manage Passwords"
 msgid "Manage _Passwords"
 msgstr "Gerenciar _senhas"
 
@@ -2583,8 +2571,9 @@ msgstr "_Copiar endereço de e-mail"
 
 #. Images.
 #: ../src/ephy-window.c:233
-msgid "View _Image"
-msgstr "Ver _imagem"
+#| msgid "View _Image"
+msgid "View _Image in New Tab"
+msgstr "Ver _imagem em nova aba"
 
 #: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
@@ -2598,85 +2587,77 @@ msgstr "_Salvar imagem como…"
 msgid "Set as _Wallpaper"
 msgstr "Definir como _papel de parede"
 
-#: ../src/ephy-window.c:241
-msgid "St_art Animation"
-msgstr "Inici_ar animação"
-
-#: ../src/ephy-window.c:243
-msgid "St_op Animation"
-msgstr "Parar animaçã_o"
-
-#: ../src/ephy-window.c:450
+#: ../src/ephy-window.c:446
 msgid "There are unsubmitted changes to form elements"
 msgstr "Há mudanças em elementos de formulário que não foram enviadas"
 
-#: ../src/ephy-window.c:451
+#: ../src/ephy-window.c:447
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Se você fechar o documento você perderá esta informação."
 
-#: ../src/ephy-window.c:453
+#: ../src/ephy-window.c:449
 msgid "Close _Document"
 msgstr "_Fechar o documento"
 
-#: ../src/ephy-window.c:468
+#: ../src/ephy-window.c:464
 msgid "There are ongoing downloads in this window"
 msgstr "Há downloads em andamento nesta janela"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:465
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Se você fechar esta janela, os downloads serão cancelados"
 
-#: ../src/ephy-window.c:470
+#: ../src/ephy-window.c:466
 msgid "Close window and cancel downloads"
 msgstr "Fechar janela e cancelar downloads"
 
-#: ../src/ephy-window.c:1103
+#: ../src/ephy-window.c:1102
 msgid "Save As"
 msgstr "Salvar como"
 
-#: ../src/ephy-window.c:1105
+#: ../src/ephy-window.c:1104
 msgid "Save As Application"
 msgstr "Salva como aplicativo"
 
-#: ../src/ephy-window.c:1107
+#: ../src/ephy-window.c:1106
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1109
+#: ../src/ephy-window.c:1108
 msgid "Bookmark"
 msgstr "Favorito"
 
-#: ../src/ephy-window.c:1111
+#: ../src/ephy-window.c:1110
 msgid "Find"
 msgstr "Localizar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1120
+#: ../src/ephy-window.c:1119
 msgid "Larger"
 msgstr "Ampliar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1123
+#: ../src/ephy-window.c:1122
 msgid "Smaller"
 msgstr "Reduzir"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1144
 msgid "Back"
 msgstr "Voltar"
 
-#: ../src/ephy-window.c:1155
+#: ../src/ephy-window.c:1156
 msgid "Forward"
 msgstr "Avançar"
 
-#: ../src/ephy-window.c:1167
+#: ../src/ephy-window.c:1168
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../src/ephy-window.c:1176
+#: ../src/ephy-window.c:1177
 msgid "New _Tab"
 msgstr "Nova a_ba"
 
-#: ../src/ephy-window.c:1184
+#: ../src/ephy-window.c:1185
 msgid "Go to most visited"
 msgstr "Ir para os mais visitados"
 
@@ -2752,7 +2733,6 @@ msgstr "Bing"
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
 #: ../src/prefs-dialog.c:1031
 #, c-format
-#| msgid "http://www.bing.com/search?q=%s"
 msgid "https://www.bing.com/search?q=%s"
 msgstr "http://br.bing.com/search?q=%s"
 
@@ -2871,109 +2851,3 @@ msgstr ""
 #: ../src/window-commands.c:1678
 msgid "_Enable"
 msgstr "_Ativar"
-
-#~ msgid "%d _Similar"
-#~ msgid_plural "%d _Similar"
-#~ msgstr[0] "%d _similar"
-#~ msgstr[1] "%d _similares"
-
-#~ msgid "_Unify With %d Identical Bookmark"
-#~ msgid_plural "_Unify With %d Identical Bookmarks"
-#~ msgstr[0] "_Unificar com %d favorito idêntico"
-#~ msgstr[1] "_Unificar com %d favoritos idênticos"
-
-#~ msgid "Show “%s”"
-#~ msgstr "Mostrar \"%s\""
-
-#~ msgid "Clear History"
-#~ msgstr "Limpar histórico"
-
-#~ msgid "History pages time range"
-#~ msgstr "Intervalo de tempo do histórico de páginas"
-
-#~ msgid "Whether to show the title column in the history window."
-#~ msgstr "Mostra a coluna de título na janela de históricos."
-
-#~ msgid "Whether to show the address column in the history window."
-#~ msgstr "Mostra a coluna de endereços na janela de históricos."
-
-#~ msgid "Whether to show the date-time column in the history window."
-#~ msgstr "Mostra a coluna data-tempo na janela de históricos."
-
-#~ msgid "All sites"
-#~ msgstr "Todos os sites"
-
-#~ msgid "Sites"
-#~ msgstr "Sites"
-
-#~ msgid "Open the selected history link in a new window"
-#~ msgstr "Abre o item do histórico selecionado em uma nova janela"
-
-#~ msgid "Open the selected history link in a new tab"
-#~ msgstr "Abre o link do histórico selecionado em uma nova aba"
-
-#~ msgid "Bookmark the selected history link"
-#~ msgstr "Adiciona o link do histórico selecionado aos favoritos"
-
-#~ msgid "Close the history window"
-#~ msgstr "Fecha a janela do histórico"
-
-#~ msgid "Delete the selected history link"
-#~ msgstr "Exclui o link do histórico selecionado"
-
-#~ msgid "Select all history links or text"
-#~ msgstr "Seleciona todos links do histórico ou texto"
-
-#~ msgid "Clear _History"
-#~ msgstr "Limpar _histórico"
-
-#~ msgid "Clear your browsing history"
-#~ msgstr "Limpa o histórico de navegação"
-
-#~ msgid "Display history help"
-#~ msgstr "Exibe a ajuda do histórico"
-
-#~ msgid "_Address"
-#~ msgstr "_Endereço"
-
-#~ msgid "_Date and Time"
-#~ msgstr "_Data e Hora"
-
-#~ msgid "Show the date and time column"
-#~ msgstr "Mostrar as colunas de data e hora"
-
-#~ msgid "Last 30 minutes"
-#~ msgstr "Últimos 30 minutos"
-
-#~ msgid "Today"
-#~ msgstr "Hoje"
-
-#~ msgid "Last %d day"
-#~ msgid_plural "Last %d days"
-#~ msgstr[0] "Último %d dia"
-#~ msgstr[1] "Últimos %d dias"
-
-#~ msgid "All history"
-#~ msgstr "Todo o histórico"
-
-#~ msgid "Show toolbars by default"
-#~ msgstr "Mostra barra de ferramentas por padrão"
-
-#~ msgid "%u:%02u hour left"
-#~ msgid_plural "%u:%02u hours left"
-#~ msgstr[0] "%u:%02u hora restante"
-#~ msgstr[1] "%u:%02u horas restantes"
-
-#~ msgid "<b>_Automatic</b>"
-#~ msgstr "<b>_Automático</b>"
-
-#~ msgid "Oops! Error loading %s"
-#~ msgstr "Oops! Erro ao carregar %s"
-
-#~ msgid ""
-#~ "Oops! This site might have caused the web browser to close unexpectedly"
-#~ msgstr ""
-#~ "Oops! Este site pode ter feito o navegador web fechar inesperadamente"
-
-#~ msgid "Oops! Something went wrong displaying %s"
-#~ msgstr "Oopa! Alguma coisa deu errado ao exibir %s"
