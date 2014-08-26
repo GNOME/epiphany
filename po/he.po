@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2014-08-19 16:00+0300\n"
-"PO-Revision-Date: 2014-08-19 16:01+0300\n"
+"POT-Creation-Date: 2014-08-27 00:46+0300\n"
+"PO-Revision-Date: 2014-08-27 00:53+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -51,7 +51,8 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
+#: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
@@ -593,11 +594,6 @@ msgstr "F11"
 msgid "Send an email message to “%s”"
 msgstr "שלח הודעת דוא״ל אל „%s“"
 
-#: ../embed/ephy-embed-utils.c:243 ../src/ephy-search-provider.c:287
-#, c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
-
 #: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
 msgstr "ערבית (_IBM-864)"
@@ -1014,18 +1010,19 @@ msgstr "מזהה אתר אינטרנט זה נשלל על ידי הארגון ה
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
 msgid ""
-"This web site’s identification uses very weak encryption. It has probably "
-"been forged."
-msgstr "מזהה אתר אינטרנט זה משתמש בהצפנה חלשה מאוד. יתכן והוא מזויף."
+"This web site’s identification cannot be trusted because it uses very weak "
+"encryption."
+msgstr ""
+"לא ניתן לבטוח במזהה אתר אינטרנט זה כיוון שהוא עושה שימוש בהצפנה חלשה מאוד."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
 msgid ""
-"This web site’s identification time-travelled from the future. Check the "
+"This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
 msgstr ""
-"מזהה אתר אינטרנט זה נסע בזמן מהעתיד. יש לבדוק את התאריך בלוח השנה של המחשב "
-"שלך."
+"מזהה אתה אינטרנט זה תקף לתאריכים עתידיים בלבד. יש לבדוק את התאריך בלוח השנה "
+"של המחשב שלך."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1802
@@ -1046,12 +1043,12 @@ msgstr ""
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
 msgid ""
-"A criminal organization or government agency may have hijacked your "
-"connection. You should continue only if you know there is a good reason why "
-"this site does not use trusted identification."
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this site does not use trusted "
+"identification."
 msgstr ""
-"יתכן וארגון פשע או סוכנות ממשלתית השתלטו על החיבור שלך. רצוי להמשיך רק אם "
-"ידועה לך סיבה טובה בגללה אתר זה לא משתמש במזהה מהימן."
+"יתכן וצד שלישי השתלט על החיבור שלך. רצוי להמשיך רק אם ידועה לך סיבה טובה "
+"בגללה אתר זה לא משתמש במזהה מהימן."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1817
@@ -1496,7 +1493,7 @@ msgstr "שגיאה בהורדה: %s"
 msgid "Cancel"
 msgstr "ביטול"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1101
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1100
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "פתיחה"
@@ -1567,11 +1564,6 @@ msgstr "הצגת _כל הנושאים"
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "הוס_פה"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:438
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
-msgid "_Close"
-msgstr "_סגירה"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1717,6 +1709,10 @@ msgstr "י_צוא סימניות…"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Export bookmarks to a file"
 msgstr "יצוא סימניות לקובץ"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+msgid "_Close"
+msgstr "_סגירה"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
@@ -2527,8 +2523,8 @@ msgstr "העתקת כתובת _דוא״ל"
 
 #. Images.
 #: ../src/ephy-window.c:233
-msgid "View _Image"
-msgstr "ה_צגת התמונה"
+msgid "View _Image in New Tab"
+msgstr "הצגת ת_מונה בלשונית חדשה"
 
 #: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
@@ -2542,85 +2538,77 @@ msgstr "שמירת התמונה ב_שם…"
 msgid "Set as _Wallpaper"
 msgstr "הגדרה כ_רקע שולחן העבודה"
 
-#: ../src/ephy-window.c:241
-msgid "St_art Animation"
-msgstr "ה_פעלת ההנפשה"
-
-#: ../src/ephy-window.c:243
-msgid "St_op Animation"
-msgstr "ע_צירת ההנפשה"
-
-#: ../src/ephy-window.c:450
+#: ../src/ephy-window.c:446
 msgid "There are unsubmitted changes to form elements"
 msgstr "ישנם שינויים שלא נשלחו"
 
-#: ../src/ephy-window.c:451
+#: ../src/ephy-window.c:447
 msgid "If you close the document anyway, you will lose that information."
 msgstr "אם המסמך ייסגר בכל זאת, המידע הזה יאבד."
 
-#: ../src/ephy-window.c:453
+#: ../src/ephy-window.c:449
 msgid "Close _Document"
 msgstr "סגירת ה_מסמך"
 
-#: ../src/ephy-window.c:468
+#: ../src/ephy-window.c:464
 msgid "There are ongoing downloads in this window"
 msgstr "ישנן הורדות פעילות בחלון זה"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:465
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "אם חלון זה ייסגר על ידיך, ההורדות יבוטלו"
 
-#: ../src/ephy-window.c:470
+#: ../src/ephy-window.c:466
 msgid "Close window and cancel downloads"
 msgstr "סגירת החלון וביטול ההורדות"
 
-#: ../src/ephy-window.c:1103
+#: ../src/ephy-window.c:1102
 msgid "Save As"
 msgstr "שמירה בשם"
 
-#: ../src/ephy-window.c:1105
+#: ../src/ephy-window.c:1104
 msgid "Save As Application"
 msgstr "שמירה כיישום"
 
-#: ../src/ephy-window.c:1107
+#: ../src/ephy-window.c:1106
 msgid "Print"
 msgstr "הדפסה"
 
-#: ../src/ephy-window.c:1109
+#: ../src/ephy-window.c:1108
 msgid "Bookmark"
 msgstr "סימנייה"
 
-#: ../src/ephy-window.c:1111
+#: ../src/ephy-window.c:1110
 msgid "Find"
 msgstr "חיפוש"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1120
+#: ../src/ephy-window.c:1119
 msgid "Larger"
 msgstr "גדול יותר"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1123
+#: ../src/ephy-window.c:1122
 msgid "Smaller"
 msgstr "קטן יותר"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1144
 msgid "Back"
 msgstr "אחורה"
 
-#: ../src/ephy-window.c:1155
+#: ../src/ephy-window.c:1156
 msgid "Forward"
 msgstr "קדימה"
 
-#: ../src/ephy-window.c:1167
+#: ../src/ephy-window.c:1168
 msgid "Zoom"
 msgstr "תקריב"
 
-#: ../src/ephy-window.c:1176
+#: ../src/ephy-window.c:1177
 msgid "New _Tab"
 msgstr "ל_שונית חדשה"
 
-#: ../src/ephy-window.c:1184
+#: ../src/ephy-window.c:1185
 msgid "Go to most visited"
 msgstr "מעבר לנצפים ביותר"
 
@@ -2799,6 +2787,28 @@ msgstr ""
 #: ../src/window-commands.c:1678
 msgid "_Enable"
 msgstr "ה_פעלה"
+
+#~ msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+#~ msgstr ""
+#~ "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=il-he&amp;kad=he_IL"
+
+#~ msgid ""
+#~ "This web site’s identification uses very weak encryption. It has probably "
+#~ "been forged."
+#~ msgstr "מזהה אתר אינטרנט זה משתמש בהצפנה חלשה מאוד. יתכן והוא מזויף."
+
+#~ msgid ""
+#~ "This web site’s identification time-travelled from the future. Check the "
+#~ "date on your computer’s calendar."
+#~ msgstr ""
+#~ "מזהה אתר אינטרנט זה נסע בזמן מהעתיד. יש לבדוק את התאריך בלוח השנה של "
+#~ "המחשב שלך."
+
+#~ msgid "St_art Animation"
+#~ msgstr "ה_פעלת ההנפשה"
+
+#~ msgid "St_op Animation"
+#~ msgstr "ע_צירת ההנפשה"
 
 #~ msgid "%d _Similar"
 #~ msgid_plural "%d _Similar"
