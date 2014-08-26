@@ -230,7 +230,7 @@ static const GtkActionEntry ephy_popups_entries [] = {
 
 	/* Images. */
 
-	{ "ViewImage", NULL, N_("View _Image"), NULL,
+	{ "ViewImage", NULL, N_("View _Image in New Tab"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_view_image_in_new_tab) },
 	{ "CopyImageLocation", NULL, N_("Copy I_mage Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_image_location) },
