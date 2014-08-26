@@ -39,6 +39,7 @@ libephywebextension_la_CPPFLAGS = \
 libephywebextension_la_CFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\" \
 	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\" \
+	$(AM_CFLAGS) \
 	$(WEB_EXTENSION_CFLAGS)
 
 libephywebextension_la_LIBADD = \

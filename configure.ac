@@ -63,7 +63,7 @@ GNOME_MAINTAINER_MODE_DEFINES
 
 GNOME_CODE_COVERAGE
 
-MORE_WARN_FLAGS="-Wdeclaration-after-statement -Wno-deprecated-declarations"
+MORE_WARN_FLAGS="-Wdeclaration-after-statement -Wno-deprecated-declarations -Wno-missing-prototypes"
 
 GLIB_REQUIRED=2.38.0
 GTK_REQUIRED=3.13.0
