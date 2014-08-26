@@ -38,9 +38,9 @@
 #include <string.h>
 #include <webkit2/webkit2.h>
 
-void
-popup_cmd_link_in_new_window (GtkAction *action,
-		              EphyWindow *window)
+static void
+popup_cmd_view_in_new_window (EphyWindow *window,
+			      const char *property_name)
 {
 	EphyWindow *new_window;
 	EphyEmbedEvent *event;
@@ -48,14 +48,13 @@ popup_cmd_link_in_new_window (GtkAction *action,
 	EphyEmbed *new_embed;
 	GValue value = { 0, };
 
-	embed = ephy_embed_container_get_active_child 
-		(EPHY_EMBED_CONTAINER (window));
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
 	new_window = ephy_window_new ();
-	ephy_embed_event_get_property (event, "link-uri", &value);
+	ephy_embed_event_get_property (event, property_name, &value);
 
 	new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
 					new_window, embed,
@@ -66,28 +65,17 @@ popup_cmd_link_in_new_window (GtkAction *action,
 }
 
 void
-popup_cmd_link_in_new_tab (GtkAction *action,
-		           EphyWindow *window)
+popup_cmd_link_in_new_window (GtkAction *action,
+			      EphyWindow *window)
 {
-	EphyEmbedEvent *event;
-	EphyEmbed *embed;
-	EphyEmbed *new_embed;
-	GValue value = { 0, };
+	popup_cmd_view_in_new_window (window, "link-uri");
+}
 
-	embed = ephy_embed_container_get_active_child
-		(EPHY_EMBED_CONTAINER (window));
-
-	event = ephy_window_get_context_event (window);
-	g_return_if_fail (event != NULL);
-
-	ephy_embed_event_get_property (event, "link-uri", &value);
-
-	new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
-					window, embed,
-					EPHY_NEW_TAB_APPEND_AFTER);
-	ephy_web_view_load_url (ephy_embed_get_web_view (new_embed),
-				g_value_get_string (&value));
-	g_value_unset (&value);
+void
+popup_cmd_media_in_new_window (GtkAction *action,
+			       EphyWindow *window)
+{
+	popup_cmd_view_in_new_window (window, "media-uri");
 }
 
 void
@@ -236,11 +224,19 @@ popup_cmd_download_link_as (GtkAction *action,
 {
 	save_property_url (_("Save Link As"), window, "link-uri");
 }
+
 void
 popup_cmd_save_image_as (GtkAction *action,
 			 EphyWindow *window)
 {
 	save_property_url (_("Save Image As"), window, "image-uri");
+}
+
+void
+popup_cmd_save_media_as (GtkAction *action,
+			 EphyWindow *window)
+{
+	save_property_url (_("Save Media As"), window, "media-uri");
 }
 
 static void
@@ -293,24 +289,38 @@ popup_cmd_set_image_as_background (GtkAction *action,
 	g_free (dest_uri);
 }
 
-void
-popup_cmd_copy_image_location (GtkAction *action,
-			       EphyWindow *window)
+static void
+popup_cmd_copy_location (EphyWindow *window,
+			 const char *property_name)
 {
 	EphyEmbedEvent *event;
 	const char *location;
 	GValue value = { 0, };
 
 	event = ephy_window_get_context_event (window);
-	ephy_embed_event_get_property (event, "image-uri", &value);
+	ephy_embed_event_get_property (event, property_name, &value);
 	location = g_value_get_string (&value);
 	popup_cmd_copy_to_clipboard (window, location);
 	g_value_unset (&value);
 }
 
 void
-popup_cmd_view_image_in_new_tab (GtkAction *action,
-				 EphyWindow *window)
+popup_cmd_copy_image_location (GtkAction *action,
+			       EphyWindow *window)
+{
+	popup_cmd_copy_location (window, "image-uri");
+}
+
+void
+popup_cmd_copy_media_location (GtkAction *action,
+			       EphyWindow *window)
+{
+	popup_cmd_copy_location (window, "media-uri");
+}
+
+static void
+popup_cmd_view_in_new_tab (EphyWindow *window,
+			   const char *property_name)
 {
 	EphyEmbedEvent *event;
 	GValue value = { 0, };
@@ -323,7 +333,7 @@ popup_cmd_view_image_in_new_tab (GtkAction *action,
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (embed != NULL);
 
-	ephy_embed_event_get_property (event, "image-uri", &value);
+	ephy_embed_event_get_property (event, property_name, &value);
 
 	new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
 					window, embed,
@@ -333,3 +343,23 @@ popup_cmd_view_image_in_new_tab (GtkAction *action,
 	g_value_unset (&value);
 }
 
+void
+popup_cmd_link_in_new_tab (GtkAction *action,
+			   EphyWindow *window)
+{
+	popup_cmd_view_in_new_tab (window, "link-uri");
+}
+
+void
+popup_cmd_view_image_in_new_tab (GtkAction *action,
+				 EphyWindow *window)
+{
+	popup_cmd_view_in_new_tab (window, "image-uri");
+}
+
+void
+popup_cmd_media_in_new_tab (GtkAction *action,
+			    EphyWindow *window)
+{
+	popup_cmd_view_in_new_tab (window, "media-uri");
+}

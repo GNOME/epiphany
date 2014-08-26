@@ -238,6 +238,28 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_save_image_as) },
 	{ "SetImageAsBackground", NULL, N_("Set as _Wallpaper"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_set_image_as_background) },
+
+	/* Video. */
+
+	{ "OpenVideoInNewWindow", NULL, N_("Open Video in New _Window"), NULL, NULL,
+	  G_CALLBACK (popup_cmd_media_in_new_window) },
+	{ "OpenVideoInNewTab", NULL, N_("Open Video in New _Tab"), NULL, NULL,
+	  G_CALLBACK (popup_cmd_media_in_new_tab) },
+	{ "SaveVideoAs", NULL, N_("_Save Video As…"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_save_media_as) },
+	{ "CopyVideoLocation", NULL, N_("_Copy Video Address"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_copy_media_location) },
+
+	/* Audio. */
+
+	{ "OpenAudioInNewWindow", NULL, N_("Open Audio in New _Window"), NULL, NULL,
+	  G_CALLBACK (popup_cmd_media_in_new_window) },
+	{ "OpenAudioInNewTab", NULL, N_("Open Audio in New _Tab"), NULL, NULL,
+	  G_CALLBACK (popup_cmd_media_in_new_tab) },
+	{ "SaveAudioAs", NULL, N_("_Save Audio As…"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_save_media_as) },
+	{ "CopyAudioLocation", NULL, N_("_Copy Audio Address"), NULL,
+	  NULL, G_CALLBACK (popup_cmd_copy_media_location) },
 };
 
 static const struct
@@ -1551,6 +1573,17 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
 	webkit_context_menu_append (context_menu, webkit_context_menu_item_new (action));
 }
 
+static void
+add_item_to_context_menu (WebKitContextMenu *context_menu,
+			  WebKitContextMenuItem *item)
+{
+	if (!item)
+		return;
+
+	webkit_context_menu_append (context_menu, item);
+	g_object_unref (item);
+}
+
 /* FIXME: Add webkit_context_menu_find() ? */
 static WebKitContextMenuItem *
 find_item_in_context_menu (WebKitContextMenu *context_menu,
@@ -1609,11 +1642,19 @@ populate_context_menu (WebKitWebView *web_view,
 	EphyWindowPrivate *priv = window->priv;
 	WebKitContextMenuItem *input_methods_item = NULL;
 	WebKitContextMenuItem *unicode_item = NULL;
+	WebKitContextMenuItem *play_pause_item = NULL;
+	WebKitContextMenuItem *mute_item = NULL;
+	WebKitContextMenuItem *toggle_controls_item = NULL;
+	WebKitContextMenuItem *toggle_loop_item = NULL;
+	WebKitContextMenuItem *fullscreen_item = NULL;
 	GList *spelling_guess_items = NULL;
 	EphyEmbedEvent *embed_event;
 	gboolean is_document = FALSE;
 	gboolean app_mode;
 	gboolean is_image;
+	gboolean is_media = FALSE;
+	gboolean is_video = FALSE;
+	gboolean is_audio = FALSE;
 
 	is_image = webkit_hit_test_result_context_is_image (hit_test_result);
 
@@ -1621,6 +1662,36 @@ populate_context_menu (WebKitWebView *web_view,
 		input_methods_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS);
 		unicode_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_UNICODE);
 		spelling_guess_items = find_spelling_guess_context_menu_items (context_menu);
+	}
+
+	if (webkit_hit_test_result_context_is_media (hit_test_result))
+	{
+		WebKitContextMenuItem *item;
+
+		is_media = TRUE;
+		play_pause_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_MEDIA_PLAY);
+		if (!play_pause_item)
+			play_pause_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_MEDIA_PAUSE);
+		mute_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_MEDIA_MUTE);
+		toggle_controls_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_CONTROLS);
+		toggle_loop_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_TOGGLE_MEDIA_LOOP);
+		fullscreen_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_ENTER_VIDEO_FULLSCREEN);
+
+		item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_COPY_VIDEO_LINK_TO_CLIPBOARD);
+		if (item)
+		{
+			is_video = TRUE;
+			g_object_unref (item);
+		}
+		else
+		{
+			item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_COPY_AUDIO_LINK_TO_CLIPBOARD);
+			if (item)
+			{
+				is_audio = TRUE;
+				g_object_unref (item);
+			}
+		}
 	}
 
 	webkit_context_menu_remove_all (context_menu);
@@ -1713,17 +1784,8 @@ populate_context_menu (WebKitWebView *web_view,
 		if (input_methods_item || unicode_item)
 			webkit_context_menu_append (context_menu,
 						    webkit_context_menu_item_new_separator ());
-		if (input_methods_item)
-		{
-			webkit_context_menu_append (context_menu, input_methods_item);
-			g_object_unref (input_methods_item);
-		}
-
-		if (unicode_item)
-		{
-			webkit_context_menu_append (context_menu, unicode_item);
-			g_object_unref (unicode_item);
-		}
+		add_item_to_context_menu (context_menu, input_methods_item);
+		add_item_to_context_menu (context_menu, unicode_item);
 	}
 	else
 	{
@@ -1731,7 +1793,7 @@ populate_context_menu (WebKitWebView *web_view,
 
 		update_edit_actions_sensitivity (window, TRUE);
 
-		if (!is_image)
+		if (!is_image && !is_media)
 		{
 			add_action_to_context_menu (context_menu,
 						    priv->toolbar_action_group, "NavigationBack");
@@ -1746,7 +1808,7 @@ populate_context_menu (WebKitWebView *web_view,
 		add_action_to_context_menu (context_menu,
 					    priv->action_group, "EditCopy");
 
-		if (!app_mode && !is_image)
+		if (!app_mode && !is_image && !is_media)
 		{
 			webkit_context_menu_append (context_menu,
 						    webkit_context_menu_item_new_separator ());
@@ -1769,7 +1831,40 @@ populate_context_menu (WebKitWebView *web_view,
 					    priv->popups_action_group, "SetImageAsBackground");
 	}
 
-	if (is_document)
+	if (is_media)
+	{
+		add_item_to_context_menu (context_menu, play_pause_item);
+		add_item_to_context_menu (context_menu, mute_item);
+		add_item_to_context_menu (context_menu, toggle_controls_item);
+		add_item_to_context_menu (context_menu, toggle_loop_item);
+		add_item_to_context_menu (context_menu, fullscreen_item);
+		webkit_context_menu_append (context_menu,
+					    webkit_context_menu_item_new_separator ());
+		if (is_video)
+		{
+			add_action_to_context_menu (context_menu, priv->popups_action_group,
+						    "OpenVideoInNewWindow");
+			add_action_to_context_menu (context_menu, priv->popups_action_group,
+						    "OpenVideoInNewTab");
+			add_action_to_context_menu (context_menu, priv->popups_action_group,
+						    "SaveVideoAs");
+			add_action_to_context_menu (context_menu, priv->popups_action_group,
+						    "CopyVideoLocation");
+		}
+		else if (is_audio)
+		{
+			add_action_to_context_menu (context_menu, priv->popups_action_group,
+						    "OpenAudioInNewWindow");
+			add_action_to_context_menu (context_menu, priv->popups_action_group,
+						    "OpenAudioInNewTab");
+			add_action_to_context_menu (context_menu, priv->popups_action_group,
+						    "SaveAudioAs");
+			add_action_to_context_menu (context_menu, priv->popups_action_group,
+						    "CopyAudioLocation");
+		}
+	}
+
+	if (is_document && !is_image && !is_media)
 	{
 		webkit_context_menu_append (context_menu,
 					    webkit_context_menu_item_new_separator ());
