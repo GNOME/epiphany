@@ -1855,6 +1855,13 @@ populate_context_menu (WebKitWebView *web_view,
 		}
 	}
 
+	g_signal_connect (web_view, "context-menu-dismissed",
+			  G_CALLBACK (context_menu_dismissed_cb),
+			  window);
+
+	if (app_mode)
+		return FALSE;
+
 	if (is_document && !is_image && !is_media)
 	{
 		webkit_context_menu_append (context_menu,
@@ -1867,10 +1874,6 @@ populate_context_menu (WebKitWebView *web_view,
 				    webkit_context_menu_item_new_separator ());
 	webkit_context_menu_append (context_menu,
 				    webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT));
-
-	g_signal_connect (web_view, "context-menu-dismissed",
-			  G_CALLBACK (context_menu_dismissed_cb),
-			  window);
 
 	return FALSE;
 }
