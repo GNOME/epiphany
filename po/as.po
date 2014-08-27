@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-18 03:34+0000\n"
-"PO-Revision-Date: 2014-08-18 17:18+0530\n"
+"POT-Creation-Date: 2014-08-27 09:53+0000\n"
+"PO-Revision-Date: 2014-08-27 16:39+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
 "Language: as\n"
@@ -49,7 +49,8 @@ msgstr "https://duckduckgo.com/?t=epiphany"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
+#: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -93,7 +94,7 @@ msgstr "ৱেব ব্ৰাউজ কৰক"
 
 #: ../data/epiphany.desktop.in.in.h:5
 msgid "web;browser;internet;"
-msgstr "ৱেব;ব্ৰাউছাৰ;ইন্টাৰনেট;"
+msgstr "ৱেব;ব্ৰাউছাৰ;ইণ্টাৰনেট;"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:1
 msgid "Browse with caret"
@@ -617,11 +618,6 @@ msgstr "F11"
 msgid "Send an email message to “%s”"
 msgstr "“%s” লে এটা ই-মেইল বাৰ্তা পঠাওক"
 
-#: ../embed/ephy-embed-utils.c:243 ../src/ephy-search-provider.c:287
-#, c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-
 #: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
 msgstr "আৰবি (IBM-864) (_I)"
@@ -1038,21 +1034,26 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
+#| msgid ""
+#| "This web site’s identification was not issued by a trusted organization."
 msgid ""
-"This web site’s identification uses very weak encryption. It has probably "
-"been forged."
+"This web site’s identification cannot be trusted because it uses very weak "
+"encryption."
 msgstr ""
-"এই ৱেব ছাইটৰ পৰিচয় অতি দূৰ্বল ইনক্ৰিপষণ ব্যৱহাৰ কৰে। খুব সম্ভব ইয়াৰ জালিয়াতী "
-"হৈছে।"
+"এই ৱেব ছাইটৰ পৰিচয়ক ভৰষা কৰিব নোৱাৰি কাৰণ ই অতি দূৰ্বল ইনক্ৰিপষণ ব্যৱহাৰ কৰে।"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
+#| msgid ""
+#| "This web site’s identification is too old to trust. Check the date on "
+#| "your computer’s calendar."
 msgid ""
-"This web site’s identification time-travelled from the future. Check the "
+"This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
 msgstr ""
-"এই ৱেব ছাইটৰ পৰিচয় ভৱিষ্যতৰ পৰা সময়-ভ্ৰমণ কৰি আহিছে। আপোনাৰ কমপিউটাৰৰ "
-"কেলেণ্ডাৰত তাৰিখ চাওক।"
+"এই ৱেব ছাইৰ পৰিচয় কেৱল ভৱিষ্যত তাৰিখবোৰৰ বাবে বৈধ। আপোনাৰ কমপিউটাৰৰ "
+"কেলেন্ডাৰৰ "
+"তাৰিখ চাওক।"
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1802
@@ -1074,14 +1075,18 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
+#| msgid ""
+#| "A criminal organization or government agency may have hijacked your "
+#| "connection. You should continue only if you know there is a good reason "
+#| "why this site does not use trusted identification."
 msgid ""
-"A criminal organization or government agency may have hijacked your "
-"connection. You should continue only if you know there is a good reason why "
-"this site does not use trusted identification."
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this site does not use trusted "
+"identification."
 msgstr ""
-"খুব সম্ভব এটা অপৰাধী সংঘঠন অথবা চৰকাৰী সংস্থাই আপোনাৰ সংযোগক ডকা দিছে। আপুনি "
-"কেৱল তেতিয়াহে আগবাঢ়িব লাগে যেতিয়া যদি আপুনি এই ছাইটে ভৰষাবান পৰিচয় ব্যৱহাৰ "
-"নকৰাৰ এটা ভাল কাৰণ যানে।"
+"খুব সম্ভব এটা তৃতীয় দলে আপোনাৰ সংযোগক ডকা দিছে। আপুনি কেৱল তেতিয়াহে আগবাঢ়িব "
+"লাগে "
+"যদি আপুনি এই ছাইটে ভৰষাবান পৰিচয় ব্যৱহাৰ নকৰাৰ এটা যথাযথ কাৰণ যানে।"
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1817
@@ -1116,7 +1121,7 @@ msgid ""
 msgstr ""
 "<p>“%s” ত থকা ৱেবছাইট সম্ভবত উপলব্ধ নাই। সঠিক ত্ৰুটি আছিল:</p><p><code>%s</"
 "code></p><p> ইয়াক অস্থায়ীভাৱে বন্ধ কৰিব পাৰি অথবা এটা নতুন ঠিকনালে স্থানান্তৰ "
-"কৰিব পাৰি। আপোনাৰ ইন্টাৰনেট সংযোগ সঠিকভাৱে কাম কৰি আছে নে নিৰীক্ষণ কৰিব "
+"কৰিব পাৰি। আপোনাৰ ইণ্টাৰনেট সংযোগ সঠিকভাৱে কাম কৰি আছে নে নিৰীক্ষণ কৰিব "
 "নাপাহৰিব।</p>"
 
 #: ../embed/ephy-web-view.c:1882
@@ -1533,7 +1538,7 @@ msgstr "ডাউনল'ড কৰোতে ত্ৰুটি: %s"
 msgid "Cancel"
 msgstr "বাতিল কৰক"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1101
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1122
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "খোলক"
@@ -1603,11 +1608,6 @@ msgstr "সকলো বিষয় দেখুৱাওক (_w)"
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "যোগ কৰক (_A)"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:438
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
-msgid "_Close"
-msgstr "বন্ধ কৰক (_C)"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1751,6 +1751,10 @@ msgstr "পত্ৰচিহ্নসমূহ এক্সপোৰ্ট ক�
 #: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Export bookmarks to a file"
 msgstr "পত্ৰচিহ্নক ফাইললে এক্সপোৰ্ট কৰক"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+msgid "_Close"
+msgstr "বন্ধ কৰক (_C)"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
@@ -1999,22 +2003,18 @@ msgstr ""
 "আতৰাব বিচৰা তথ্যৰ ধৰণসমূহ চেক কৰক:"
 
 #: ../src/resources/clear-data-dialog.ui.h:6
-#| msgid "Cookies"
 msgid "Coo_kies"
 msgstr "কুকিসমূহ (_k)"
 
 #: ../src/resources/clear-data-dialog.ui.h:7
-#| msgid "Cache and temporary files"
 msgid "Cache and _temporary files"
 msgstr "ক্যাশ আৰু অস্থায়ী ফাইলসমূহ (_t)"
 
 #: ../src/resources/clear-data-dialog.ui.h:8
-#| msgid "Browsing history"
 msgid "Browsing _history"
 msgstr "ব্ৰাউছিংৰ ইতিহাস (_h)"
 
 #: ../src/resources/clear-data-dialog.ui.h:9
-#| msgid "Saved passwords"
 msgid "Saved _passwords"
 msgstr "সংৰক্ষিত পাছৱাৰ্ডসমূহ (_p)"
 
@@ -2223,7 +2223,6 @@ msgid "Fonts & Style"
 msgstr "ফন্টসমূহ আৰু শৈলী"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-#| msgid "Manage Cookies"
 msgid "Manage _Cookies"
 msgstr "কুকিসমূহ ব্যবস্থাপনা কৰক (_C)"
 
@@ -2253,7 +2252,6 @@ msgid "_Tell web sites I do not want to be tracked"
 msgstr "ৱেবছাইটসমূহক কওক মই অনুকৰণ হোৱাটো নিবিচাৰো (_T)"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-#| msgid "Manage Passwords"
 msgid "Manage _Passwords"
 msgstr "পাছৱৰ্ডসমূহ ব্যৱস্থাপনা কৰক (_P)"
 
@@ -2575,8 +2573,9 @@ msgstr "ই-মেইল ঠিকনা কপি কৰক (_C)"
 
 #. Images.
 #: ../src/ephy-window.c:233
-msgid "View _Image"
-msgstr "ছবি দৰ্শন কৰক (_I)"
+#| msgid "View _Image"
+msgid "View _Image in New Tab"
+msgstr "ছবিক নতুন টেবত দৰ্শন কৰক (_I)"
 
 #: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
@@ -2590,95 +2589,138 @@ msgstr "ছবিক এই ৰূপে সংৰক্ষণ কৰক (_S)...
 msgid "Set as _Wallpaper"
 msgstr "ৱালপেপাৰ ৰূপে সংহতি কৰক (_W)"
 
-#: ../src/ephy-window.c:241
-msgid "St_art Animation"
-msgstr "জীৱন্তকৰণ আৰম্ভ krk (_a)"
+#. Video.
+#: ../src/ephy-window.c:244
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Video in New _Window"
+msgstr "ভিডিঅ'ক নতুন উইন্ডোত খোলক (_W)"
 
-#: ../src/ephy-window.c:243
-msgid "St_op Animation"
-msgstr "জীৱন্তকৰণ বন্ধ কৰক (_o)"
+#: ../src/ephy-window.c:246
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Video in New _Tab"
+msgstr "ভিডিঅ'ক নতুন টেবত খোলক (_T)"
 
-#: ../src/ephy-window.c:450
+#: ../src/ephy-window.c:248
+#| msgid "_Save Link As…"
+msgid "_Save Video As…"
+msgstr "ভিডিঅ'ক এই ধৰণে সংৰক্ষণ কৰক (_S)…"
+
+#: ../src/ephy-window.c:250
+#| msgid "_Copy Address"
+msgid "_Copy Video Address"
+msgstr "ভিডিঅ'ৰ ঠিকনা কপি কৰক (_C)"
+
+#. Audio.
+#: ../src/ephy-window.c:255
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Audio in New _Window"
+msgstr "অডিঅ'ক নতুন উইন্ডোত খোলক (_W)"
+
+#: ../src/ephy-window.c:257
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Audio in New _Tab"
+msgstr "অডিঅ'ক নতুন টেবত খোলক (_T)"
+
+#: ../src/ephy-window.c:259
+#| msgid "_Save Link As…"
+msgid "_Save Audio As…"
+msgstr "অডিঅ'ক এই ধৰণে সংৰক্ষণ কৰক (_S)…"
+
+#: ../src/ephy-window.c:261
+#| msgid "_Copy Address"
+msgid "_Copy Audio Address"
+msgstr "অডিঅ' ঠিকনা কপি কৰক (_C)"
+
+#: ../src/ephy-window.c:468
 msgid "There are unsubmitted changes to form elements"
 msgstr "ফৰ্ম উপাদানসমূহত জমা নিদিয়া পৰিবৰ্তনসমূহ আছে।"
 
-#: ../src/ephy-window.c:451
+#: ../src/ephy-window.c:469
 msgid "If you close the document anyway, you will lose that information."
 msgstr "এ অবস্থাত দস্তাবেজটো বন্ধ কৰিলে সেই তথ্যটো হেৰাই যাব।"
 
-#: ../src/ephy-window.c:453
+#: ../src/ephy-window.c:471
 msgid "Close _Document"
 msgstr "দস্তাবেজ বন্ধ কৰক (_D)"
 
-#: ../src/ephy-window.c:468
+#: ../src/ephy-window.c:486
 msgid "There are ongoing downloads in this window"
 msgstr "এই উইন্ডোত ডাউনল'ডসমূহ চলি আছে"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:487
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "আপুনি যদি এই উইন্ডো বন্ধ কৰে, ডাউনল'ডসমূহ বাতিল কৰা হব"
 
-#: ../src/ephy-window.c:470
+#: ../src/ephy-window.c:488
 msgid "Close window and cancel downloads"
 msgstr "উইন্ডো বন্ধ কৰক আৰু ডাউনল'ডসমূহ বাতিল কৰক"
 
-#: ../src/ephy-window.c:1103
+#: ../src/ephy-window.c:1124
 msgid "Save As"
 msgstr "এই ৰূপে সংৰক্ষণ কৰক"
 
-#: ../src/ephy-window.c:1105
+#: ../src/ephy-window.c:1126
 msgid "Save As Application"
 msgstr "এপ্লিকেচন হিচাপে সংৰক্ষণ কৰক"
 
-#: ../src/ephy-window.c:1107
+#: ../src/ephy-window.c:1128
 msgid "Print"
 msgstr "প্ৰিন্ট কৰক"
 
-#: ../src/ephy-window.c:1109
+#: ../src/ephy-window.c:1130
 msgid "Bookmark"
 msgstr "পত্ৰচিহ্ন"
 
-#: ../src/ephy-window.c:1111
+#: ../src/ephy-window.c:1132
 msgid "Find"
 msgstr "সন্ধান কৰক"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1120
+#: ../src/ephy-window.c:1141
 msgid "Larger"
 msgstr "আৰু ডাঙৰ"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1123
+#: ../src/ephy-window.c:1144
 msgid "Smaller"
 msgstr "আৰু সৰু"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1166
 msgid "Back"
 msgstr "পিছলৈ"
 
-#: ../src/ephy-window.c:1155
+#: ../src/ephy-window.c:1178
 msgid "Forward"
 msgstr "আগলৈ"
 
-#: ../src/ephy-window.c:1167
+#: ../src/ephy-window.c:1190
 msgid "Zoom"
 msgstr "জুম কৰক"
 
-#: ../src/ephy-window.c:1176
+#: ../src/ephy-window.c:1199
 msgid "New _Tab"
 msgstr "নতুন টেব (_T)"
 
-#: ../src/ephy-window.c:1184
+#: ../src/ephy-window.c:1207
 msgid "Go to most visited"
 msgstr "সৰ্বাধিক ভ্ৰমণ কৰালৈ যাওক"
 
-#: ../src/popup-commands.c:237
+#: ../src/popup-commands.c:225
 msgid "Save Link As"
 msgstr "এই ৰূপে লিঙ্ক সংৰক্ষণ কৰক"
 
-#: ../src/popup-commands.c:243
+#: ../src/popup-commands.c:232
 msgid "Save Image As"
 msgstr "ছবিক এই ৰূপে সংৰক্ষণ কৰক"
+
+#: ../src/popup-commands.c:239
+#| msgid "Save Link As"
+msgid "Save Media As"
+msgstr "মাধ্যমক এই ধৰণে সংৰক্ষণ কৰক"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -2743,7 +2785,6 @@ msgstr "Bing"
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
 #: ../src/prefs-dialog.c:1031
 #, c-format
-#| msgid "http://www.bing.com/search?q=%s"
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
 
@@ -2849,6 +2890,29 @@ msgstr ""
 #: ../src/window-commands.c:1678
 msgid "_Enable"
 msgstr "সামৰ্থবান কৰক (_E)"
+
+#~ msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+#~ msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+
+#~ msgid ""
+#~ "This web site’s identification uses very weak encryption. It has probably "
+#~ "been forged."
+#~ msgstr ""
+#~ "এই ৱেব ছাইটৰ পৰিচয় অতি দূৰ্বল ইনক্ৰিপষণ ব্যৱহাৰ কৰে। খুব সম্ভব ইয়াৰ জালিয়াতী "
+#~ "হৈছে।"
+
+#~ msgid ""
+#~ "This web site’s identification time-travelled from the future. Check the "
+#~ "date on your computer’s calendar."
+#~ msgstr ""
+#~ "এই ৱেব ছাইটৰ পৰিচয় ভৱিষ্যতৰ পৰা সময়-ভ্ৰমণ কৰি আহিছে। আপোনাৰ কমপিউটাৰৰ "
+#~ "কেলেণ্ডাৰত তাৰিখ চাওক।"
+
+#~ msgid "St_art Animation"
+#~ msgstr "জীৱন্তকৰণ আৰম্ভ krk (_a)"
+
+#~ msgid "St_op Animation"
+#~ msgstr "জীৱন্তকৰণ বন্ধ কৰক (_o)"
 
 #~ msgid "Show toolbars by default"
 #~ msgstr "টুলবাৰসমূহ অবিকল্পিতভাৱে দেখুৱাওক"
@@ -3219,7 +3283,7 @@ msgstr "সামৰ্থবান কৰক (_E)"
 #~ "Lets you view web pages and find information on the internet.\n"
 #~ "Powered by WebKit %d.%d.%d"
 #~ msgstr ""
-#~ "আপোনাক ইন্টাৰনেটত ৱেব পৃষ্ঠাসমূহ দৰ্শন কৰি আৰু তথ্য সন্ধান কৰাৰ অনুমতি দিয়ে।\n"
+#~ "আপোনাক ইণ্টাৰনেটত ৱেব পৃষ্ঠাসমূহ দৰ্শন কৰি আৰু তথ্য সন্ধান কৰাৰ অনুমতি দিয়ে।\n"
 #~ "WebKit %d.%d.%d দ্বাৰা প্ৰদান কৰা হৈছে"
 
 #~ msgid "All"
