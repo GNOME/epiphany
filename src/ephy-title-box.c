@@ -65,7 +65,6 @@ typedef struct
   GtkWidget *uri;
 
   GBinding *title_binding;
-  GBinding *uri_binding;
 
   guint location_disabled;
   guint button_down : 1;
@@ -477,31 +476,6 @@ ephy_title_box_title_changed_cb (GObject    *gobject,
   ephy_title_box_set_mode (title_box, EPHY_TITLE_BOX_MODE_TITLE);
 }
 
-static gboolean
-ephy_title_box_transform_uri_to_label (GBinding     *binding,
-                                       const GValue *from_value,
-                                       GValue       *to_value,
-                                       gpointer      user_data)
-{
-  const gchar       *label;
-  gchar             *uri;
-  EphyEmbedShellMode mode;
-
-  label = g_value_get_string (from_value);
-  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
-
-  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    uri = g_strdup (label);
-  } else {
-    gboolean rtl;
-    rtl = gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL;
-    uri = g_strconcat (rtl ? "▾ " : label, rtl ? label : " ▾", NULL);
-  }
-  g_value_take_string (to_value, uri);
-
-  return TRUE;
-}
-
 /**
  * ephy_title_box_new:
  * @window: an #EphyWindow
@@ -558,7 +532,6 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
       g_signal_handler_disconnect (priv->web_view, priv->title_sig_id);
 
     g_clear_object (&priv->title_binding);
-    g_clear_object (&priv->uri_binding);
 
     g_object_remove_weak_pointer (G_OBJECT (priv->web_view), (gpointer *)&priv->web_view);
   }
@@ -578,12 +551,6 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
   priv->title_binding = g_object_bind_property (priv->web_view, "title",
                                                 priv->title, "label",
                                                 G_BINDING_SYNC_CREATE);
-
-  priv->uri_binding = g_object_bind_property_full (priv->web_view, "uri",
-                                                   priv->uri, "label",
-                                                   G_BINDING_SYNC_CREATE,
-                                                   ephy_title_box_transform_uri_to_label,
-                                                   NULL, NULL, NULL);
 
   priv->title_sig_id = g_signal_connect (priv->web_view, "notify::title",
                                          G_CALLBACK (ephy_title_box_title_changed_cb),
@@ -700,4 +667,36 @@ ephy_title_box_get_location_entry (EphyTitleBox *title_box)
   priv = ephy_title_box_get_instance_private (title_box);
 
   return priv->entry;
+}
+
+/**
+ * ephy_title_box_set_address:
+ * @title_box: an #EphyTitleBox
+ * @address: (nullable): the URI to display as the subtitle of this #EphyTitleBox
+ *
+ * Sets the address of @title_box to @address
+ */
+void
+ephy_title_box_set_address (EphyTitleBox *title_box,
+                            const char *address)
+{
+  EphyTitleBoxPrivate *priv;
+  EphyEmbedShellMode mode;
+
+  g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
+
+  priv = ephy_title_box_get_instance_private (title_box);
+  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+
+  if (address == NULL || mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    gtk_label_set_text (GTK_LABEL (priv->uri), address);
+  } else {
+    gboolean rtl;
+    char *uri;
+
+    rtl = gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL;
+    uri = g_strconcat (rtl ? "▾ " : address, rtl ? address : " ▾", NULL);
+    gtk_label_set_text (GTK_LABEL (priv->uri), uri);
+    g_free (uri);
+  }
 }

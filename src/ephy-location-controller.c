@@ -31,6 +31,7 @@
 #include "ephy-dnd.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
+#include "ephy-title-box.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -49,6 +50,7 @@ struct _EphyLocationControllerPrivate
 {
 	EphyWindow *window;
 	EphyLocationEntry *location_entry;
+	EphyTitleBox *title_box;
 	GList *actions;
 	char *address;
 	EphyNode *smart_bmks;
@@ -76,7 +78,8 @@ enum
 	PROP_ICON,
 	PROP_SHOW_ICON,
 	PROP_WINDOW,
-	PROP_LOCATION_ENTRY
+	PROP_LOCATION_ENTRY,
+	PROP_TITLE_BOX
 };
 
 enum
@@ -289,6 +292,7 @@ sync_address (EphyLocationController *controller,
 
 	g_signal_handlers_block_by_func (widget, G_CALLBACK (user_changed_cb), controller);
 	ephy_location_entry_set_location (lentry, priv->address);
+	ephy_title_box_set_address (priv->title_box, priv->address);
 	g_signal_handlers_unblock_by_func (widget, G_CALLBACK (user_changed_cb), controller);
 }
 
@@ -514,6 +518,9 @@ ephy_location_controller_set_property (GObject *object,
 		case PROP_LOCATION_ENTRY:
 			priv->location_entry = EPHY_LOCATION_ENTRY (g_value_get_object (value));
 			break;
+		case PROP_TITLE_BOX:
+			priv->title_box = EPHY_TITLE_BOX (g_value_get_object (value));
+			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
 	}
@@ -676,6 +683,20 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
 					 g_param_spec_object ("location-entry",
 							      "Location entry",
 							      "The controlled location entry",
+							      G_TYPE_OBJECT,
+							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	/**
+	* EphyLocationController:title-box:
+	*
+	* The #EphyLocationController sets the address of this title box.
+	*/
+	g_object_class_install_property (object_class,
+					 PROP_TITLE_BOX,
+					 g_param_spec_object ("title-box",
+							      "Title box",
+							      "The title box whose address will be managed",
 							      G_TYPE_OBJECT,
 							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							      G_PARAM_CONSTRUCT_ONLY));

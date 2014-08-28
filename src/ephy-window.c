@@ -3266,6 +3266,7 @@ setup_location_controller (EphyWindow *window,
 		g_object_new (EPHY_TYPE_LOCATION_CONTROLLER,
 			      "window", window,
 			      "location-entry", ephy_toolbar_get_location_entry (toolbar),
+			      "title-box", ephy_toolbar_get_title_box (toolbar),
 			      NULL);
 	g_signal_connect (location_controller, "notify::address",
 			  G_CALLBACK (sync_user_input_cb), window);

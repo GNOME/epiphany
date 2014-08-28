@@ -73,6 +73,9 @@ void                ephy_title_box_set_security_level   (EphyTitleBox         *t
 
 GtkWidget          *ephy_title_box_get_location_entry   (EphyTitleBox         *title_box);
 
+void                ephy_title_box_set_address          (EphyTitleBox         *title_box,
+                                                         const char           *address);
+
 G_END_DECLS
 
 #endif /* __EPHY_TITLE_BOX_H__ */
