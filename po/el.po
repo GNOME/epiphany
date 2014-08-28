@@ -34,8 +34,8 @@ msgstr ""
 "Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-16 03:42+0000\n"
-"PO-Revision-Date: 2014-08-16 09:21+0200\n"
+"POT-Creation-Date: 2014-08-27 09:53+0000\n"
+"PO-Revision-Date: 2014-08-28 22:38+0200\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
@@ -74,7 +74,8 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=gr-el"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
+#: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=gr-el"
@@ -637,11 +638,6 @@ msgstr "F11"
 msgid "Send an email message to “%s”"
 msgstr "Αποστολή μηνύματος ηλεκτρονικού ταχυδρομείου στη διεύθυνση “%s”"
 
-#: ../embed/ephy-embed-utils.c:243 ../src/ephy-search-provider.c:287
-#, c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=gr-el&amp;kad=gr_EL"
-
 #: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
 msgstr "Αραβικά (_IBM-864)"
@@ -1064,21 +1060,26 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
+#| msgid ""
+#| "This web site’s identification was not issued by a trusted organization."
 msgid ""
-"This web site’s identification uses very weak encryption. It has probably "
-"been forged."
+"This web site’s identification cannot be trusted because it uses very weak "
+"encryption."
 msgstr ""
-"Η ταυτότητα αυτού του ιστότοπου χρησιμοποιεί πολύ ασθενή κρυπτογράφηση. "
-"Πιθανόν να έχει πλαστογραφηθεί."
+"Η ταυτότητα αυτού του ιστότοπου δεν είναι έμπιστη διότι χρησιμοποιεί πολύ "
+"αδύναμη κρυπτογράφηση."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
+#| msgid ""
+#| "This web site’s identification is too old to trust. Check the date on "
+#| "your computer’s calendar."
 msgid ""
-"This web site’s identification time-travelled from the future. Check the "
+"This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
 msgstr ""
-"Η ταυτότητα αυτού του ιστότοπου προέρχεται από το μέλλον. Ελέγξτε την "
-"ημερομηνία στο ημερολόγιο του υπολογιστή σας."
+"Η ταυτότητα αυτού του ιστότοπου έγκυρη για μια μελλοντική ημερομηνία. "
+"Ελέγξτε την ημερομηνία στο ημερολόγιο του υπολογιστή σας."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1802
@@ -1099,15 +1100,18 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
+#| msgid ""
+#| "A criminal organization or government agency may have hijacked your "
+#| "connection. You should continue only if you know there is a good reason "
+#| "why this site does not use trusted identification."
 msgid ""
-"A criminal organization or government agency may have hijacked your "
-"connection. You should continue only if you know there is a good reason why "
-"this site does not use trusted identification."
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this site does not use trusted "
+"identification."
 msgstr ""
-"Ένας εγκληματικός οργανισμός ή μια κυβερνητική υπηρεσία μπορεί να έχει "
-"υποκλέψει τη σύνδεσή σας. Θα πρέπει να συνεχίσετε μόνο αν είστε σίγουροι, "
-"ότι υπάρχει ένας καλός λόγος για τον οποίο αυτός ο ιστότοπος δεν "
-"χρησιμοποιεί έμπιστη ταυτότητα."
+"Ένας τρίτος μπορεί να έχει υποκλέψει τη σύνδεσή σας. Θα πρέπει να συνεχίσετε "
+"μόνο αν είστε σίγουροι, ότι υπάρχει ένας καλός λόγος για τον οποίο αυτός ο "
+"ιστότοπος δεν χρησιμοποιεί έμπιστη ταυτότητα."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1817
@@ -1195,7 +1199,7 @@ msgstr "Προσέξτε!"
 msgid "Load Anyway"
 msgstr "Φόρτωση σε κάθε περίπτωση"
 
-#: ../embed/ephy-web-view.c:2807
+#: ../embed/ephy-web-view.c:2809
 msgid "_OK"
 msgstr "_Εντάξει"
 
@@ -1557,7 +1561,7 @@ msgstr "Σφάλμα κατά την λήψη: %s"
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1101
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1122
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Άνοιγμα"
@@ -1629,11 +1633,6 @@ msgstr "Εμ_φάνιση θεμάτων"
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Προσθήκη"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:438
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
-msgid "_Close"
-msgstr "_Κλείσιμο"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1777,6 +1776,10 @@ msgstr "Εξ_αγωγή σελιδοδεικτών…"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Export bookmarks to a file"
 msgstr "Εξαγωγή σελιδοδεικτών σε αρχείο"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+msgid "_Close"
+msgstr "_Κλείσιμο"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
@@ -2024,22 +2027,20 @@ msgstr ""
 "αφαιρέσετε:"
 
 #: ../src/resources/clear-data-dialog.ui.h:6
-#: ../src/resources/cookies-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:21
-msgid "Cookies"
-msgstr "Cookies"
+msgid "Coo_kies"
+msgstr "Coo_kies"
 
 #: ../src/resources/clear-data-dialog.ui.h:7
-msgid "Cache and temporary files"
-msgstr "Αρχεία κρυφής μνήμης και προσωρινά αρχεία"
+msgid "Cache and _temporary files"
+msgstr "Αρχεία κρυφής μνήμης και _προσωρινά αρχεία"
 
 #: ../src/resources/clear-data-dialog.ui.h:8
-msgid "Browsing history"
-msgstr "Ιστορικό περιήγησης"
+msgid "Browsing _history"
+msgstr "Ιστορικό περιήγ_ησης"
 
 #: ../src/resources/clear-data-dialog.ui.h:9
-msgid "Saved passwords"
-msgstr "Αποθηκευμένοι κωδικοί πρόσβασης"
+msgid "Saved _passwords"
+msgstr "Αποθηκευμένοι κωδικοί _πρόσβασης"
 
 #: ../src/resources/clear-data-dialog.ui.h:10
 msgid ""
@@ -2048,6 +2049,11 @@ msgid ""
 msgstr ""
 "Δεν μπορείτε να αναιρέσετε αυτή την ενέργεια. Τα δεδομένα που επιλέγετε προς "
 "εκκαθάριση θα διαγραφούν οριστικά."
+
+#: ../src/resources/cookies-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:21
+msgid "Cookies"
+msgstr "Cookies"
 
 #: ../src/resources/cookies-dialog.ui.h:2
 #: ../src/resources/history-dialog.ui.h:2
@@ -2240,8 +2246,8 @@ msgid "Fonts & Style"
 msgstr "Γραμματοσειρές & στυλ"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-msgid "Manage Cookies"
-msgstr "Διαχείριση cookies"
+msgid "Manage _Cookies"
+msgstr "Διαχείριση _cookies"
 
 #: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
@@ -2270,8 +2276,8 @@ msgid "_Tell web sites I do not want to be tracked"
 msgstr "Π_είτε στους ιστότοπους πως δεν θέλω να παρακολουθούμαι"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-msgid "Manage Passwords"
-msgstr "Διαχείριση κωδικών πρόσβασης"
+msgid "Manage _Passwords"
+msgstr "Διαχείριση κωδικών _πρόσβασης"
 
 #: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
@@ -2592,8 +2598,9 @@ msgstr "_Αντιγραφή διεύθυνσης αλληλογραφίας"
 
 #. Images.
 #: ../src/ephy-window.c:233
-msgid "View _Image"
-msgstr "Προβολή ε_ικόνας"
+#| msgid "View _Image"
+msgid "View _Image in New Tab"
+msgstr "Προβολή ε_ικόνας σε νέα καρτέλα"
 
 #: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
@@ -2607,95 +2614,138 @@ msgstr "Απο_θήκευση εικόνας ως…"
 msgid "Set as _Wallpaper"
 msgstr "Ορισμός ως _ταπετσαρία"
 
-#: ../src/ephy-window.c:241
-msgid "St_art Animation"
-msgstr "Έ_ναρξη κινούμενων εικόνων"
+#. Video.
+#: ../src/ephy-window.c:244
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Video in New _Window"
+msgstr "Άνοιγμα σε βίντεο νέο _παράθυρο"
 
-#: ../src/ephy-window.c:243
-msgid "St_op Animation"
-msgstr "Διακο_πή κινούμενων εικόνων"
+#: ../src/ephy-window.c:246
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Video in New _Tab"
+msgstr "Άνοιγμα βίντεο σε νέα κ_αρτέλα"
 
-#: ../src/ephy-window.c:450
+#: ../src/ephy-window.c:248
+#| msgid "_Save Link As…"
+msgid "_Save Video As…"
+msgstr "_Αποθήκευση βίντεο ως…"
+
+#: ../src/ephy-window.c:250
+#| msgid "_Copy Address"
+msgid "_Copy Video Address"
+msgstr "_Αντιγραφή διεύθυνσης βίντεο"
+
+#. Audio.
+#: ../src/ephy-window.c:255
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Audio in New _Window"
+msgstr "Άνοιγμα ήχου σε νέο _παράθυρο"
+
+#: ../src/ephy-window.c:257
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Audio in New _Tab"
+msgstr "Άνοιγμα ήχου σε νέα _καρτέλα"
+
+#: ../src/ephy-window.c:259
+#| msgid "_Save Link As…"
+msgid "_Save Audio As…"
+msgstr "_Αποθήκευση ήχου ως…"
+
+#: ../src/ephy-window.c:261
+#| msgid "_Copy Address"
+msgid "_Copy Audio Address"
+msgstr "_Αντιγραφή διεύθυνσης ήχου"
+
+#: ../src/ephy-window.c:468
 msgid "There are unsubmitted changes to form elements"
 msgstr "Υπάρχουν αλλαγές που δεν έχουν υποβληθεί σε στοιχεία της φόρμας"
 
-#: ../src/ephy-window.c:451
+#: ../src/ephy-window.c:469
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Αν κλείσετε το έγγραφο, θα χάσετε τις πληροφορίες."
 
-#: ../src/ephy-window.c:453
+#: ../src/ephy-window.c:471
 msgid "Close _Document"
 msgstr "_Κλείσιμο εγγράφου"
 
-#: ../src/ephy-window.c:468
+#: ../src/ephy-window.c:486
 msgid "There are ongoing downloads in this window"
 msgstr "Υπάρχουν λήψεις σε εξέλιξη σε αυτό το παράθυρο"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:487
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Αν κλείσετε αυτό το παράθυρο, θα ακυρωθούν οι λήψεις"
 
-#: ../src/ephy-window.c:470
+#: ../src/ephy-window.c:488
 msgid "Close window and cancel downloads"
 msgstr "Κλείσιμο του παραθύρου και ακύρωση των λήψεων"
 
-#: ../src/ephy-window.c:1103
+#: ../src/ephy-window.c:1124
 msgid "Save As"
 msgstr "Αποθήκευση ως"
 
-#: ../src/ephy-window.c:1105
+#: ../src/ephy-window.c:1126
 msgid "Save As Application"
 msgstr "Αποθήκευση ως εφαρμογή"
 
-#: ../src/ephy-window.c:1107
+#: ../src/ephy-window.c:1128
 msgid "Print"
 msgstr "Εκτύπωση"
 
-#: ../src/ephy-window.c:1109
+#: ../src/ephy-window.c:1130
 msgid "Bookmark"
 msgstr "Σελιδοδείκτης"
 
-#: ../src/ephy-window.c:1111
+#: ../src/ephy-window.c:1132
 msgid "Find"
 msgstr "Αναζήτηση"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1120
+#: ../src/ephy-window.c:1141
 msgid "Larger"
 msgstr "Μεγαλύτερα"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1123
+#: ../src/ephy-window.c:1144
 msgid "Smaller"
 msgstr "Μικρότερα"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1166
 msgid "Back"
 msgstr "Πίσω"
 
-#: ../src/ephy-window.c:1155
+#: ../src/ephy-window.c:1178
 msgid "Forward"
 msgstr "Προώθηση"
 
-#: ../src/ephy-window.c:1167
+#: ../src/ephy-window.c:1190
 msgid "Zoom"
 msgstr "Μεγέθυνση"
 
-#: ../src/ephy-window.c:1176
+#: ../src/ephy-window.c:1199
 msgid "New _Tab"
 msgstr "Νέα _καρτέλα"
 
-#: ../src/ephy-window.c:1184
+#: ../src/ephy-window.c:1207
 msgid "Go to most visited"
 msgstr "Μετάβαση στα πιο δημοφιλή"
 
-#: ../src/popup-commands.c:237
+#: ../src/popup-commands.c:225
 msgid "Save Link As"
 msgstr "Αποθήκευση συνδέσμου ως"
 
-#: ../src/popup-commands.c:243
+#: ../src/popup-commands.c:232
 msgid "Save Image As"
 msgstr "Αποθήκευση εικόνας ως"
+
+#: ../src/popup-commands.c:239
+#| msgid "Save Link As"
+msgid "Save Media As"
+msgstr "Αποθήκευση πολυμέσου ως"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -2760,7 +2810,6 @@ msgstr "Bing"
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
 #: ../src/prefs-dialog.c:1031
 #, c-format
-#| msgid "http://www.bing.com/search?q=%s"
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
 
@@ -2871,6 +2920,30 @@ msgstr ""
 #: ../src/window-commands.c:1678
 msgid "_Enable"
 msgstr "Ε_νεργοποίηση"
+
+#~ msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+#~ msgstr ""
+#~ "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=gr-el&amp;kad=gr_EL"
+
+#~ msgid ""
+#~ "This web site’s identification uses very weak encryption. It has probably "
+#~ "been forged."
+#~ msgstr ""
+#~ "Η ταυτότητα αυτού του ιστότοπου χρησιμοποιεί πολύ ασθενή κρυπτογράφηση. "
+#~ "Πιθανόν να έχει πλαστογραφηθεί."
+
+#~ msgid ""
+#~ "This web site’s identification time-travelled from the future. Check the "
+#~ "date on your computer’s calendar."
+#~ msgstr ""
+#~ "Η ταυτότητα αυτού του ιστότοπου προέρχεται από το μέλλον. Ελέγξτε την "
+#~ "ημερομηνία στο ημερολόγιο του υπολογιστή σας."
+
+#~ msgid "St_art Animation"
+#~ msgstr "Έ_ναρξη κινούμενων εικόνων"
+
+#~ msgid "St_op Animation"
+#~ msgstr "Διακο_πή κινούμενων εικόνων"
 
 #~ msgid "Show toolbars by default"
 #~ msgstr "Προεπιλεγμένη εμφάνιση εργαλειοθηκών"
