@@ -11,8 +11,6 @@ noinst_PROGRAMS = \
 	test-ephy-history \
 	test-ephy-location-entry \
 	test-ephy-migration \
-	test-ephy-session \
-	test-ephy-shell \
 	test-ephy-snapshot-service \
 	test-ephy-sqlite \
 	test-ephy-string \
@@ -152,19 +150,19 @@ test_ephy_location_entry_SOURCES = \
 test_ephy_migration_SOURCES = \
 	ephy-migration-test.c
 
-test_ephy_session_SOURCES = \
-	ephy-session-test.c \
-	ephy-test-utils.c \
-	ephy-test-utils.h \
-	$(top_builddir)/src/epiphany-resources.c \
-	$(top_builddir)/src/epiphany-resources.h
+# test_ephy_session_SOURCES = \
+# 	ephy-session-test.c \
+# 	ephy-test-utils.c \
+# 	ephy-test-utils.h \
+# 	$(top_builddir)/src/epiphany-resources.c \
+# 	$(top_builddir)/src/epiphany-resources.h
 
-test_ephy_shell_SOURCES = \
-	$(top_builddir)/src/epiphany-resources.c \
-	$(top_builddir)/src/epiphany-resources.h \
-	ephy-shell-test.c \
-	ephy-test-utils.c \
-	ephy-test-utils.h
+# test_ephy_shell_SOURCES = \
+# 	$(top_builddir)/src/epiphany-resources.c \
+# 	$(top_builddir)/src/epiphany-resources.h \
+# 	ephy-shell-test.c \
+# 	ephy-test-utils.c \
+# 	ephy-test-utils.h
 
 test_ephy_snapshot_service_SOURCES = \
 	ephy-snapshot-service-test.c
