@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-26 16:06+0000\n"
-"PO-Revision-Date: 2014-08-26 18:31-0300\n"
+"POT-Creation-Date: 2014-08-29 03:34+0000\n"
+"PO-Revision-Date: 2014-08-29 09:58-0300\n"
 "Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.6.5\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -988,7 +988,7 @@ msgstr "Permitir"
 #: ../embed/ephy-web-view.c:1426
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
-msgstr "A página em <b>%s</b> quer saber sua localização."
+msgstr "A página em <b>%s</b> deseja saber sua localização."
 
 #. translators: %s here is the address of the web page
 #: ../embed/ephy-web-view.c:1510
@@ -1044,21 +1044,26 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
+#| msgid ""
+#| "This web site’s identification was not issued by a trusted organization."
 msgid ""
-"This web site’s identification uses very weak encryption. It has probably "
-"been forged."
+"This web site’s identification cannot be trusted because it uses very weak "
+"encryption."
 msgstr ""
-"A identificação deste site da web usa codificação muito fraca. Provavelmente "
-"ela foi forjada."
+"A identificação deste site da web pode não ser confiável pois ela utiliza "
+"uma codificação muito fraca."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
+#| msgid ""
+#| "This web site’s identification is too old to trust. Check the date on "
+#| "your computer’s calendar."
 msgid ""
-"This web site’s identification time-travelled from the future. Check the "
+"This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
 msgstr ""
-"A identificação deste site da web \"viajou no tempo\" futuro. Verifique a "
-"data no calendário do seu computador."
+"A identificação deste site da web somente é válida para datas futuras. Por "
+"favor, verifique a data no calendário do seu computador."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1802
@@ -1079,14 +1084,18 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
+#| msgid ""
+#| "A criminal organization or government agency may have hijacked your "
+#| "connection. You should continue only if you know there is a good reason "
+#| "why this site does not use trusted identification."
 msgid ""
-"A criminal organization or government agency may have hijacked your "
-"connection. You should continue only if you know there is a good reason why "
-"this site does not use trusted identification."
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this site does not use trusted "
+"identification."
 msgstr ""
-"Uma agência governamental ou organização criminal podem ter sequestrado sua "
-"conexão. Você somente deve continuar caso você tenha ciência de uma boa "
-"razão sobre o porquê este site não usa identificação confiável."
+"Uma entidade desconhecida pode ter sequestrado sua conexão. Você somente "
+"deve continuar caso você tenha ciência de uma boa razão sobre o porquê este "
+"site não usa identificação confiável."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1817
@@ -1319,7 +1328,7 @@ msgstr "Executar somente o n-ésimo passo"
 
 #: ../lib/ephy-profile-migrator.c:1032
 msgid "Specifies the required version for the migrator"
-msgstr "Especifica a versão requerida para o migrador"
+msgstr "Especifica a versão necessária para o migrador"
 
 #: ../lib/ephy-profile-migrator.c:1034
 msgid "Specifies the profile where the migrator should run"
@@ -1536,7 +1545,7 @@ msgstr "Erro ao baixar: %s"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1100
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1122
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Abrir"
@@ -1988,7 +1997,7 @@ msgstr "_Limpar"
 
 #: ../src/resources/clear-data-dialog.ui.h:4
 msgid "Select the personal data you wish to clear"
-msgstr "Selecione os dados pessoais que quer limpar"
+msgstr "Selecione os dados pessoais que você deseja limpar"
 
 #: ../src/resources/clear-data-dialog.ui.h:5
 msgid ""
@@ -2158,10 +2167,10 @@ msgstr "Abrir arquivos baixados a_utomaticamente"
 msgid "Search"
 msgstr "Pesquisar"
 
-# Tradução baseada na ideia de "motor de pesquisa" (ex.: google, bing, yahoo, etc.)
+# Tradução baseada na ideia de "mecanismo de pesquisa" (ex.: google, bing, yahoo, etc.). Também é conhecido como motor de pesquisa.
 #: ../src/resources/prefs-dialog.ui.h:6
 msgid "_Engine:"
-msgstr "_Motor:"
+msgstr "_Mecanismo:"
 
 #: ../src/resources/prefs-dialog.ui.h:7
 msgid "Web Content"
@@ -2308,9 +2317,10 @@ msgstr "Idioma"
 msgid "Add Language"
 msgstr "Adicionar idioma"
 
+# Ao rodar na interface do glade, "escolha" me parece a flexão correta - Enrico
 #: ../src/resources/prefs-lang-dialog.ui.h:4
 msgid "Choose a l_anguage:"
-msgstr "Escolher um idiom_a:"
+msgstr "Escolha um idiom_a:"
 
 #: ../src/ephy-combined-stop-reload-action.c:41
 msgid "Stop"
@@ -2571,7 +2581,6 @@ msgstr "_Copiar endereço de e-mail"
 
 #. Images.
 #: ../src/ephy-window.c:233
-#| msgid "View _Image"
 msgid "View _Image in New Tab"
 msgstr "Ver _imagem em nova aba"
 
@@ -2587,87 +2596,138 @@ msgstr "_Salvar imagem como…"
 msgid "Set as _Wallpaper"
 msgstr "Definir como _papel de parede"
 
-#: ../src/ephy-window.c:446
+#. Video.
+#: ../src/ephy-window.c:244
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Video in New _Window"
+msgstr "Abrir vídeo em nova _janela"
+
+#: ../src/ephy-window.c:246
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Video in New _Tab"
+msgstr "Abrir vídeo em nova a_ba"
+
+#: ../src/ephy-window.c:248
+#| msgid "_Save Link As…"
+msgid "_Save Video As…"
+msgstr "Sal_var vídeo como…"
+
+#: ../src/ephy-window.c:250
+#| msgid "_Copy Address"
+msgid "_Copy Video Address"
+msgstr "_Copiar endereço de vídeo"
+
+#. Audio.
+#: ../src/ephy-window.c:255
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Audio in New _Window"
+msgstr "Abrir áudio em nova _janela"
+
+#: ../src/ephy-window.c:257
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Audio in New _Tab"
+msgstr "Abrir áudio em nova a_ba"
+
+#: ../src/ephy-window.c:259
+#| msgid "_Save Link As…"
+msgid "_Save Audio As…"
+msgstr "Sal_var áudio como…"
+
+#: ../src/ephy-window.c:261
+#| msgid "_Copy Address"
+msgid "_Copy Audio Address"
+msgstr "_Copiar endereço de áudio"
+
+#: ../src/ephy-window.c:468
 msgid "There are unsubmitted changes to form elements"
 msgstr "Há mudanças em elementos de formulário que não foram enviadas"
 
-#: ../src/ephy-window.c:447
+#: ../src/ephy-window.c:469
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Se você fechar o documento você perderá esta informação."
 
-#: ../src/ephy-window.c:449
+#: ../src/ephy-window.c:471
 msgid "Close _Document"
 msgstr "_Fechar o documento"
 
-#: ../src/ephy-window.c:464
+#: ../src/ephy-window.c:486
 msgid "There are ongoing downloads in this window"
 msgstr "Há downloads em andamento nesta janela"
 
-#: ../src/ephy-window.c:465
+#: ../src/ephy-window.c:487
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Se você fechar esta janela, os downloads serão cancelados"
 
-#: ../src/ephy-window.c:466
+#: ../src/ephy-window.c:488
 msgid "Close window and cancel downloads"
 msgstr "Fechar janela e cancelar downloads"
 
-#: ../src/ephy-window.c:1102
+#: ../src/ephy-window.c:1124
 msgid "Save As"
 msgstr "Salvar como"
 
-#: ../src/ephy-window.c:1104
+#: ../src/ephy-window.c:1126
 msgid "Save As Application"
 msgstr "Salva como aplicativo"
 
-#: ../src/ephy-window.c:1106
+#: ../src/ephy-window.c:1128
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1108
+#: ../src/ephy-window.c:1130
 msgid "Bookmark"
 msgstr "Favorito"
 
-#: ../src/ephy-window.c:1110
+#: ../src/ephy-window.c:1132
 msgid "Find"
 msgstr "Localizar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1119
+#: ../src/ephy-window.c:1141
 msgid "Larger"
 msgstr "Ampliar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1122
+#: ../src/ephy-window.c:1144
 msgid "Smaller"
 msgstr "Reduzir"
 
-#: ../src/ephy-window.c:1144
+#: ../src/ephy-window.c:1166
 msgid "Back"
 msgstr "Voltar"
 
-#: ../src/ephy-window.c:1156
+#: ../src/ephy-window.c:1178
 msgid "Forward"
 msgstr "Avançar"
 
-#: ../src/ephy-window.c:1168
+#: ../src/ephy-window.c:1190
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../src/ephy-window.c:1177
+#: ../src/ephy-window.c:1199
 msgid "New _Tab"
 msgstr "Nova a_ba"
 
-#: ../src/ephy-window.c:1185
+#: ../src/ephy-window.c:1207
 msgid "Go to most visited"
 msgstr "Ir para os mais visitados"
 
-#: ../src/popup-commands.c:237
+#: ../src/popup-commands.c:225
 msgid "Save Link As"
 msgstr "Salvar link como"
 
-#: ../src/popup-commands.c:243
+#: ../src/popup-commands.c:232
 msgid "Save Image As"
 msgstr "Salvar imagem como"
+
+#: ../src/popup-commands.c:239
+#| msgid "Save Link As"
+msgid "Save Media As"
+msgstr "Salvar mídia como"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -2739,7 +2799,8 @@ msgstr "http://br.bing.com/search?q=%s"
 #: ../src/window-commands.c:709
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
-msgstr "O aplicativo web com o nome \"%s\" já existe. Você quer substituí-lo?"
+msgstr ""
+"Um aplicativo web com o nome \"%s\" já existe. Você deseja substituí-lo?"
 
 #: ../src/window-commands.c:714
 msgid "Replace"
@@ -2851,3 +2912,17 @@ msgstr ""
 #: ../src/window-commands.c:1678
 msgid "_Enable"
 msgstr "_Ativar"
+
+#~ msgid ""
+#~ "This web site’s identification uses very weak encryption. It has probably "
+#~ "been forged."
+#~ msgstr ""
+#~ "A identificação deste site da web usa codificação muito fraca. "
+#~ "Provavelmente ela foi forjada."
+
+#~ msgid ""
+#~ "This web site’s identification time-travelled from the future. Check the "
+#~ "date on your computer’s calendar."
+#~ msgstr ""
+#~ "A identificação deste site da web \"viajou no tempo\" futuro. Verifique a "
+#~ "data no calendário do seu computador."
