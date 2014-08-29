@@ -1541,7 +1541,7 @@ ephy_session_resume (EphySession *session,
 	EphyPrefsRestoreSessionPolicy policy;
 	EphyShell *shell;
 
-	LOG ("ephy_session_autoresume");
+	LOG ("ephy_session_resume");
 
 	task = g_task_new (session, cancellable, callback, user_data);
 
