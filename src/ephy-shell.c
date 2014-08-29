@@ -63,7 +63,7 @@ struct _EphyShellPrivate {
   GtkWidget *history_window;
   GObject *prefs_dialog;
   EphyShellStartupContext *startup_context;
-  guint open_uris_idle_id;
+  GSList *open_uris_idle_ids;
 };
 
 EphyShell *ephy_shell = NULL;
@@ -597,6 +597,12 @@ ephy_shell_init (EphyShell *shell)
 }
 
 static void
+remove_open_uris_idle_cb (gpointer data)
+{
+  g_source_remove (GPOINTER_TO_UINT (data));
+}
+
+static void
 ephy_shell_dispose (GObject *object)
 {
   EphyShellPrivate *priv = EPHY_SHELL (object)->priv;
@@ -611,10 +617,8 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&priv->bookmarks);
   g_clear_object (&priv->network_monitor);
 
-  if (priv->open_uris_idle_id > 0)  {
-    g_source_remove (priv->open_uris_idle_id);
-    priv->open_uris_idle_id = 0;
-  }
+  g_slist_free_full (priv->open_uris_idle_ids, remove_open_uris_idle_cb);
+  priv->open_uris_idle_ids = NULL;
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
 }
@@ -980,6 +984,7 @@ typedef struct {
   EphyEmbed *previous_embed;
   guint current_uri;
   gboolean reuse_empty_tab;
+  guint source_id;
 } OpenURIsData;
 
 static OpenURIsData *
@@ -1081,7 +1086,8 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
 static void
 ephy_shell_open_uris_idle_done (OpenURIsData *data)
 {
-  data->shell->priv->open_uris_idle_id = 0;
+  data->shell->priv->open_uris_idle_ids = g_slist_remove (data->shell->priv->open_uris_idle_ids,
+                                                          GUINT_TO_POINTER (data->source_id));
   open_uris_data_free (data);
 }
 
@@ -1091,14 +1097,18 @@ ephy_shell_open_uris (EphyShell *shell,
                       EphyStartupFlags startup_flags,
                       guint32 user_time)
 {
+  OpenURIsData *data;
+  guint id;
+
   g_return_if_fail (EPHY_IS_SHELL (shell));
 
-  if (shell->priv->open_uris_idle_id == 0) {
-    shell->priv->open_uris_idle_id =
-      g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-                       (GSourceFunc)ephy_shell_open_uris_idle,
-                       open_uris_data_new (shell, uris, startup_flags, user_time),
-                       (GDestroyNotify)ephy_shell_open_uris_idle_done);
-  }
+  data = open_uris_data_new (shell, uris, startup_flags, user_time);
+  id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                        (GSourceFunc)ephy_shell_open_uris_idle,
+                        data,
+                        (GDestroyNotify)ephy_shell_open_uris_idle_done);
+  data->source_id = id;
+
+  shell->priv->open_uris_idle_ids = g_slist_prepend (shell->priv->open_uris_idle_ids, GUINT_TO_POINTER (id));
 }
 
