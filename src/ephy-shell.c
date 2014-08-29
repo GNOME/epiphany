@@ -62,7 +62,6 @@ struct _EphyShellPrivate {
   GtkWidget *bme;
   GtkWidget *history_window;
   GObject *prefs_dialog;
-  GList *del_on_exit;
   EphyShellStartupContext *startup_context;
   guint open_uris_idle_id;
 };
