@@ -34,16 +34,16 @@ msgstr ""
 "Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-27 09:53+0000\n"
-"PO-Revision-Date: 2014-08-28 22:38+0200\n"
-"Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
+"POT-Creation-Date: 2014-08-30 03:34+0000\n"
+"PO-Revision-Date: 2014-08-30 13:58+0200\n"
+"Last-Translator: Maria Mavridou <mavridou@gmail.com>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.4\n"
 "X-Project-Style: gnome\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
@@ -1060,8 +1060,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
-#| msgid ""
-#| "This web site’s identification was not issued by a trusted organization."
 msgid ""
 "This web site’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1071,9 +1069,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
-#| msgid ""
-#| "This web site’s identification is too old to trust. Check the date on "
-#| "your computer’s calendar."
 msgid ""
 "This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
@@ -1100,10 +1095,6 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
-#| msgid ""
-#| "A criminal organization or government agency may have hijacked your "
-#| "connection. You should continue only if you know there is a good reason "
-#| "why this site does not use trusted identification."
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this site does not use trusted "
@@ -1211,7 +1202,7 @@ msgstr "_Εντάξει"
 msgid "_Cancel"
 msgstr "Α_κύρωση"
 
-#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:7
+#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:9
 msgid "_Open"
 msgstr "Ά_νοιγμα"
 
@@ -1812,7 +1803,7 @@ msgid "Paste the clipboard"
 msgstr "Επικόλληση του προχείρου"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/resources/history-dialog.ui.h:10
+#: ../src/resources/history-dialog.ui.h:12
 msgid "_Delete"
 msgstr "_Διαγραφή"
 
@@ -2070,6 +2061,11 @@ msgstr "Ιστότοπος"
 msgid "Remove"
 msgstr "Αφαίρεση"
 
+#: ../src/resources/cookies-dialog.ui.h:5
+#| msgid "Delete the selected bookmark or topic"
+msgid "Delete the selected cookies"
+msgstr "Διαγραφή των επιλεγμένων cookies"
+
 #. File actions.
 #: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
 msgid "_New Window"
@@ -2136,11 +2132,21 @@ msgstr "Όνομα"
 msgid "Location"
 msgstr "Τοποθεσία"
 
+#: ../src/resources/history-dialog.ui.h:7
+#| msgid "Remove the selected item from the toolbar"
+msgid "Remove the selected pages from history"
+msgstr "Αφαίρεση των επιλεγμένων σελίδων από το ιστορικό"
+
 #: ../src/resources/history-dialog.ui.h:8
+#| msgid "Open the selected bookmark in a new tab"
+msgid "Open the selected pages in new tabs"
+msgstr "Άνοιγμα των επιλεγμένων σελίδων σε νέες καρτέλες"
+
+#: ../src/resources/history-dialog.ui.h:10
 msgid "_Copy Location"
 msgstr "_Αντιγραφή τοποθεσίας"
 
-#: ../src/resources/history-dialog.ui.h:9
+#: ../src/resources/history-dialog.ui.h:11
 msgid "Add _Bookmark"
 msgstr "Προσθήκη _σελιδοδείκτη"
 
@@ -2162,10 +2168,20 @@ msgid "Password"
 msgstr "Κωδικός πρόσβασης"
 
 #: ../src/resources/passwords-dialog.ui.h:7
+#| msgid "Remove the selected toolbar"
+msgid "Forget the selected passwords"
+msgstr "Παράλειψη των επιλεγμένων κωδικών πρόσβασης"
+
+#: ../src/resources/passwords-dialog.ui.h:8
+#| msgid "Remember passwords"
+msgid "Reveal all the passwords"
+msgstr "Αποκάλυψη όλων των κωδικών πρόσβασης"
+
+#: ../src/resources/passwords-dialog.ui.h:9
 msgid "_Copy Password"
 msgstr "Α_ντιγραφή κωδικού πρόσβασης"
 
-#: ../src/resources/passwords-dialog.ui.h:8
+#: ../src/resources/passwords-dialog.ui.h:10
 msgid "C_opy Username"
 msgstr "Αν_τιγραφή ονόματος χρήστη"
 
@@ -2598,7 +2614,6 @@ msgstr "_Αντιγραφή διεύθυνσης αλληλογραφίας"
 
 #. Images.
 #: ../src/ephy-window.c:233
-#| msgid "View _Image"
 msgid "View _Image in New Tab"
 msgstr "Προβολή ε_ικόνας σε νέα καρτέλα"
 
@@ -2616,47 +2631,35 @@ msgstr "Ορισμός ως _ταπετσαρία"
 
 #. Video.
 #: ../src/ephy-window.c:244
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
 msgid "Open Video in New _Window"
 msgstr "Άνοιγμα σε βίντεο νέο _παράθυρο"
 
 #: ../src/ephy-window.c:246
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
 msgid "Open Video in New _Tab"
 msgstr "Άνοιγμα βίντεο σε νέα κ_αρτέλα"
 
 #: ../src/ephy-window.c:248
-#| msgid "_Save Link As…"
 msgid "_Save Video As…"
 msgstr "_Αποθήκευση βίντεο ως…"
 
 #: ../src/ephy-window.c:250
-#| msgid "_Copy Address"
 msgid "_Copy Video Address"
 msgstr "_Αντιγραφή διεύθυνσης βίντεο"
 
 #. Audio.
 #: ../src/ephy-window.c:255
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
 msgid "Open Audio in New _Window"
 msgstr "Άνοιγμα ήχου σε νέο _παράθυρο"
 
 #: ../src/ephy-window.c:257
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
 msgid "Open Audio in New _Tab"
 msgstr "Άνοιγμα ήχου σε νέα _καρτέλα"
 
 #: ../src/ephy-window.c:259
-#| msgid "_Save Link As…"
 msgid "_Save Audio As…"
 msgstr "_Αποθήκευση ήχου ως…"
 
 #: ../src/ephy-window.c:261
-#| msgid "_Copy Address"
 msgid "_Copy Audio Address"
 msgstr "_Αντιγραφή διεύθυνσης ήχου"
 
@@ -2743,7 +2746,6 @@ msgid "Save Image As"
 msgstr "Αποθήκευση εικόνας ως"
 
 #: ../src/popup-commands.c:239
-#| msgid "Save Link As"
 msgid "Save Media As"
 msgstr "Αποθήκευση πολυμέσου ως"
 
@@ -3453,14 +3455,8 @@ msgstr "Ε_νεργοποίηση"
 #~ msgid "Move the selected item on the toolbar"
 #~ msgstr "Μετακίνηση του επιλεγμένου αντικειμένου στη γραμμή εργαλείων"
 
-#~ msgid "Remove the selected item from the toolbar"
-#~ msgstr "Απομάκρυνση του επιλεγμένου αντικειμένου από τη γραμμή εργαλείων"
-
 #~ msgid "_Delete Toolbar"
 #~ msgstr "_Διαγραφή εργαλειοθήκης"
-
-#~ msgid "Remove the selected toolbar"
-#~ msgstr "Απομάκρυνση της επιλεγμένης γραμμής εργαλείων"
 
 #~ msgid "Separator"
 #~ msgstr "Διαχωριστικό"
