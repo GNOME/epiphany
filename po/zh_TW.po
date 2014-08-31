@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany 3.3.91\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-19 03:34+0000\n"
-"PO-Revision-Date: 2014-08-19 15:48+0800\n"
+"POT-Creation-Date: 2014-08-31 03:34+0000\n"
+"PO-Revision-Date: 2014-08-31 13:47+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.3\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -52,18 +52,17 @@ msgstr "https://duckduckgo.com/?t=epiphany"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
+#: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 
 #: ../data/epiphany.appdata.xml.in.h:1
-#| msgid "Epiphany (RDF)"
 msgid "Epiphany"
 msgstr "Epiphany"
 
 #: ../data/epiphany.appdata.xml.in.h:2
-#| msgid "Web Browser"
 msgid "Web browser for GNOME"
 msgstr "GNOME 的網頁瀏覽器"
 
@@ -570,11 +569,6 @@ msgstr "F11"
 msgid "Send an email message to “%s”"
 msgstr "傳送電子郵件至位址“%s”"
 
-#: ../embed/ephy-embed-utils.c:243 ../src/ephy-search-provider.c:287
-#, c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-
 #: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
 msgstr "阿拉伯語 (_IBM-864)"
@@ -989,17 +983,22 @@ msgstr "這個網站的識別已被發行它的信任組織註銷。"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
+#| msgid ""
+#| "This web site’s identification was not issued by a trusted organization."
 msgid ""
-"This web site’s identification uses very weak encryption. It has probably "
-"been forged."
-msgstr "這個網站的識別使用很弱的加密方式。它可能會被偽造。"
+"This web site’s identification cannot be trusted because it uses very weak "
+"encryption."
+msgstr "這個網站的識別不可信任，因為它使用非常弱的加密。"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
+#| msgid ""
+#| "This web site’s identification is too old to trust. Check the date on "
+#| "your computer’s calendar."
 msgid ""
-"This web site’s identification time-travelled from the future. Check the "
+"This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
-msgstr "這個網站的識別時間跑到未來了。請檢查您電腦的日期是否正確。"
+msgstr "這個網站的識別有效日期在未來。請檢查您電腦的日期是否正確。"
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1802
@@ -1019,13 +1018,17 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
+#| msgid ""
+#| "A criminal organization or government agency may have hijacked your "
+#| "connection. You should continue only if you know there is a good reason "
+#| "why this site does not use trusted identification."
 msgid ""
-"A criminal organization or government agency may have hijacked your "
-"connection. You should continue only if you know there is a good reason why "
-"this site does not use trusted identification."
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this site does not use trusted "
+"identification."
 msgstr ""
-"犯罪組織或政府人士可能會截獲您的連線。您只有在知道為什麼這個網站有相當好的理"
-"由不使用被信任的識別時才繼續連線。"
+"第三方人士可能會截獲您的連線。您只有在知道為什麼這個網站有相當好的理由不使用"
+"被信任的識別時才繼續連線。"
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1817
@@ -1104,7 +1107,6 @@ msgstr "小心"
 
 #. Button on error page when a website's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1911
-#| msgid "Reload Anyway"
 msgid "Load Anyway"
 msgstr "強制載入"
 
@@ -1120,7 +1122,7 @@ msgstr "確定(_O)"
 msgid "_Cancel"
 msgstr "取消(_C)"
 
-#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:7
+#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:9
 msgid "_Open"
 msgstr "開啟(_O)"
 
@@ -1344,7 +1346,6 @@ msgid "Local files"
 msgstr "本機檔案"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:92
-#| msgid "The certificate does not match the expected identity"
 msgid "The certificate does not match this website"
 msgstr "憑證不符合這個網站"
 
@@ -1373,12 +1374,10 @@ msgid "The certificate activation time is still in the future"
 msgstr "這個憑證的啟用時間在未來"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:149
-#| msgid "The identity of this website has been verified"
 msgid "The identity of this website has been verified."
 msgstr "這個網站的身分已經通過檢驗。"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:150
-#| msgid "The identity of this website has not been verified"
 msgid "The identity of this website has not been verified."
 msgstr "這個網站的身分尚未通過檢驗。"
 
@@ -1459,7 +1458,7 @@ msgstr "下載時發生錯誤：%s"
 msgid "Cancel"
 msgstr "取消"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1101
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1122
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "開啟"
@@ -1528,11 +1527,6 @@ msgstr "顯示所有主題(_W)"
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "加入(_A)"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:438
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
-msgid "_Close"
-msgstr "關閉(_C)"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1675,6 +1669,10 @@ msgstr "匯出書籤(_E)…"
 msgid "Export bookmarks to a file"
 msgstr "將書籤匯出到檔案"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+msgid "_Close"
+msgstr "關閉(_C)"
+
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
 msgstr "關閉書籤視窗"
@@ -1706,7 +1704,7 @@ msgid "Paste the clipboard"
 msgstr "貼上剪貼簿中的內容"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/resources/history-dialog.ui.h:10
+#: ../src/resources/history-dialog.ui.h:12
 msgid "_Delete"
 msgstr "刪除(_D)"
 
@@ -1916,22 +1914,18 @@ msgstr ""
 "您即將清除用來儲存您瀏覽過的網頁的個人資料。請檢查您想要移除的資訊類型："
 
 #: ../src/resources/clear-data-dialog.ui.h:6
-#| msgid "Cookies"
 msgid "Coo_kies"
 msgstr "Coo_kies"
 
 #: ../src/resources/clear-data-dialog.ui.h:7
-#| msgid "Cache and temporary files"
 msgid "Cache and _temporary files"
 msgstr "快取與暫存檔(_T)"
 
 #: ../src/resources/clear-data-dialog.ui.h:8
-#| msgid "Browsing history"
 msgid "Browsing _history"
 msgstr "瀏覽紀錄(_H)"
 
 #: ../src/resources/clear-data-dialog.ui.h:9
-#| msgid "Saved passwords"
 msgid "Saved _passwords"
 msgstr "已儲存的密碼(_P)"
 
@@ -1960,6 +1954,11 @@ msgstr "網站"
 #: ../src/resources/cookies-dialog.ui.h:4
 msgid "Remove"
 msgstr "移除"
+
+#: ../src/resources/cookies-dialog.ui.h:5
+#| msgid "Delete the selected bookmark or topic"
+msgid "Delete the selected cookies"
+msgstr "刪除選取的 cookies"
 
 #. File actions.
 #: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
@@ -2027,11 +2026,21 @@ msgstr "名稱"
 msgid "Location"
 msgstr "位置"
 
+#: ../src/resources/history-dialog.ui.h:7
+#| msgid "Rename the selected bookmark or topic"
+msgid "Remove the selected pages from history"
+msgstr "從歷史紀錄中移除選取的頁面"
+
 #: ../src/resources/history-dialog.ui.h:8
+#| msgid "Open the selected bookmark in a new tab"
+msgid "Open the selected pages in new tabs"
+msgstr "在新的分頁中開啟已選的頁面"
+
+#: ../src/resources/history-dialog.ui.h:10
 msgid "_Copy Location"
 msgstr "複製位置(_C)"
 
-#: ../src/resources/history-dialog.ui.h:9
+#: ../src/resources/history-dialog.ui.h:11
 msgid "Add _Bookmark"
 msgstr "加入書籤(_B)"
 
@@ -2053,10 +2062,19 @@ msgid "Password"
 msgstr "密碼"
 
 #: ../src/resources/passwords-dialog.ui.h:7
+msgid "Forget the selected passwords"
+msgstr "遺忘選取的密碼"
+
+#: ../src/resources/passwords-dialog.ui.h:8
+#| msgid "Remember passwords"
+msgid "Reveal all the passwords"
+msgstr "顯示所有的密碼"
+
+#: ../src/resources/passwords-dialog.ui.h:9
 msgid "_Copy Password"
 msgstr "複製密碼(_C)"
 
-#: ../src/resources/passwords-dialog.ui.h:8
+#: ../src/resources/passwords-dialog.ui.h:10
 msgid "C_opy Username"
 msgstr "複製使用者名稱(_O)"
 
@@ -2137,7 +2155,6 @@ msgid "Fonts & Style"
 msgstr "字型與樣式"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-#| msgid "Manage Cookies"
 msgid "Manage _Cookies"
 msgstr "管理 _Cookies"
 
@@ -2167,7 +2184,6 @@ msgid "_Tell web sites I do not want to be tracked"
 msgstr "告訴網站我不想被追蹤(_T)"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-#| msgid "Manage Passwords"
 msgid "Manage _Passwords"
 msgstr "管理密碼(_P)"
 
@@ -2488,8 +2504,9 @@ msgstr "複製電子郵件位址(_C)"
 
 #. Images.
 #: ../src/ephy-window.c:233
-msgid "View _Image"
-msgstr "檢視圖片(_I)"
+#| msgid "View _Image"
+msgid "View _Image in New Tab"
+msgstr "在新分頁中檢視影像(_I)"
 
 #: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
@@ -2503,95 +2520,138 @@ msgstr "另存圖片(_S)…"
 msgid "Set as _Wallpaper"
 msgstr "設為桌布(_W)"
 
-#: ../src/ephy-window.c:241
-msgid "St_art Animation"
-msgstr "動畫開始(_A)"
+#. Video.
+#: ../src/ephy-window.c:244
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Video in New _Window"
+msgstr "在新的視窗中開啟影片(_W)"
 
-#: ../src/ephy-window.c:243
-msgid "St_op Animation"
-msgstr "動畫停止(_O)"
+#: ../src/ephy-window.c:246
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Video in New _Tab"
+msgstr "在新的分頁中開啟影片(_T)"
 
-#: ../src/ephy-window.c:450
+#: ../src/ephy-window.c:248
+#| msgid "_Save Link As…"
+msgid "_Save Video As…"
+msgstr "另存影片(_S)…"
+
+#: ../src/ephy-window.c:250
+#| msgid "_Copy Address"
+msgid "_Copy Video Address"
+msgstr "複製影片位址(_C)"
+
+#. Audio.
+#: ../src/ephy-window.c:255
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Audio in New _Window"
+msgstr "在新的視窗中開啟音效(_W)"
+
+#: ../src/ephy-window.c:257
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Audio in New _Tab"
+msgstr "在新的分頁中開啟音效(_T)"
+
+#: ../src/ephy-window.c:259
+#| msgid "_Save Link As…"
+msgid "_Save Audio As…"
+msgstr "另存音效(_S)…"
+
+#: ../src/ephy-window.c:261
+#| msgid "_Copy Address"
+msgid "_Copy Audio Address"
+msgstr "複製音效位址(_C)"
+
+#: ../src/ephy-window.c:468
 msgid "There are unsubmitted changes to form elements"
 msgstr "對表單的元素而言沒有經確認的改變"
 
-#: ../src/ephy-window.c:451
+#: ../src/ephy-window.c:469
 msgid "If you close the document anyway, you will lose that information."
 msgstr "如果您無論無何要關閉此文件，您將會失去未儲存的資訊。"
 
-#: ../src/ephy-window.c:453
+#: ../src/ephy-window.c:471
 msgid "Close _Document"
 msgstr "關閉文件(_D)"
 
-#: ../src/ephy-window.c:468
+#: ../src/ephy-window.c:486
 msgid "There are ongoing downloads in this window"
 msgstr "這個視窗還有進行中的下載"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:487
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "如果您關閉這個視窗，這個下載也會被取消"
 
-#: ../src/ephy-window.c:470
+#: ../src/ephy-window.c:488
 msgid "Close window and cancel downloads"
 msgstr "關閉視窗並取消下載"
 
-#: ../src/ephy-window.c:1103
+#: ../src/ephy-window.c:1124
 msgid "Save As"
 msgstr "另存新檔"
 
-#: ../src/ephy-window.c:1105
+#: ../src/ephy-window.c:1126
 msgid "Save As Application"
 msgstr "儲存為應用程式"
 
-#: ../src/ephy-window.c:1107
+#: ../src/ephy-window.c:1128
 msgid "Print"
 msgstr "列印"
 
-#: ../src/ephy-window.c:1109
+#: ../src/ephy-window.c:1130
 msgid "Bookmark"
 msgstr "加入書籤"
 
-#: ../src/ephy-window.c:1111
+#: ../src/ephy-window.c:1132
 msgid "Find"
 msgstr "尋找"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1120
+#: ../src/ephy-window.c:1141
 msgid "Larger"
 msgstr "放大"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1123
+#: ../src/ephy-window.c:1144
 msgid "Smaller"
 msgstr "縮小"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1166
 msgid "Back"
 msgstr "上一頁"
 
-#: ../src/ephy-window.c:1155
+#: ../src/ephy-window.c:1178
 msgid "Forward"
 msgstr "下一頁"
 
-#: ../src/ephy-window.c:1167
+#: ../src/ephy-window.c:1190
 msgid "Zoom"
 msgstr "縮放"
 
-#: ../src/ephy-window.c:1176
+#: ../src/ephy-window.c:1199
 msgid "New _Tab"
 msgstr "新增分頁(_T)"
 
-#: ../src/ephy-window.c:1184
+#: ../src/ephy-window.c:1207
 msgid "Go to most visited"
 msgstr "移至最常瀏覽"
 
-#: ../src/popup-commands.c:237
+#: ../src/popup-commands.c:225
 msgid "Save Link As"
 msgstr "另存連結(_A)…"
 
-#: ../src/popup-commands.c:243
+#: ../src/popup-commands.c:232
 msgid "Save Image As"
 msgstr "另存圖片"
+
+#: ../src/popup-commands.c:239
+#| msgid "Save Link As"
+msgid "Save Media As"
+msgstr "另存媒體"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -2655,7 +2715,6 @@ msgstr "Bing"
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
 #: ../src/prefs-dialog.c:1031
 #, c-format
-#| msgid "http://www.bing.com/search?q=%s"
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
 
@@ -2757,3 +2816,22 @@ msgstr ""
 #: ../src/window-commands.c:1678
 msgid "_Enable"
 msgstr "啟用(_E)"
+
+#~ msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+#~ msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
+
+#~ msgid ""
+#~ "This web site’s identification uses very weak encryption. It has probably "
+#~ "been forged."
+#~ msgstr "這個網站的識別使用很弱的加密方式。它可能會被偽造。"
+
+#~ msgid ""
+#~ "This web site’s identification time-travelled from the future. Check the "
+#~ "date on your computer’s calendar."
+#~ msgstr "這個網站的識別時間跑到未來了。請檢查您電腦的日期是否正確。"
+
+#~ msgid "St_art Animation"
+#~ msgstr "動畫開始(_A)"
+
+#~ msgid "St_op Animation"
+#~ msgstr "動畫停止(_O)"
