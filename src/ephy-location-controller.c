@@ -296,6 +296,17 @@ sync_address (EphyLocationController *controller,
 	g_signal_handlers_unblock_by_func (widget, G_CALLBACK (user_changed_cb), controller);
 }
 
+static void
+title_box_mode_changed_cb (EphyTitleBox *title_box,
+			   GParamSpec *psec,
+			   gpointer user_data)
+{
+	EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (user_data);
+	EphyLocationControllerPrivate *priv = controller->priv;
+
+	sync_address (controller, NULL, GTK_WIDGET (priv->location_entry));
+}
+
 static char *
 get_location_cb (EphyLocationEntry *entry,
 		EphyLocationController *controller)
@@ -450,6 +461,9 @@ ephy_location_controller_constructed (GObject *object)
 
 	add_completion_actions (controller, priv->location_entry);
 
+	g_signal_connect_object (priv->title_box, "notify::mode",
+				 G_CALLBACK (title_box_mode_changed_cb), controller, 0);
+
 	sync_address (controller, NULL, widget);
 	g_signal_connect_object (controller, "notify::address",
 				 G_CALLBACK (sync_address), widget, 0);
@@ -571,6 +585,8 @@ ephy_location_controller_dispose (GObject *object)
 	g_signal_handlers_disconnect_matched (controller, G_SIGNAL_MATCH_DATA,
 					      0, 0, NULL, NULL, priv->location_entry);
 	g_signal_handlers_disconnect_matched (priv->location_entry, G_SIGNAL_MATCH_DATA,
+					      0, 0, NULL, NULL, controller);
+	g_signal_handlers_disconnect_matched (priv->title_box, G_SIGNAL_MATCH_DATA,
 					      0, 0, NULL, NULL, controller);
 	g_signal_handlers_disconnect_matched (notebook, G_SIGNAL_MATCH_DATA,
 					      0, 0, NULL, NULL, controller);
