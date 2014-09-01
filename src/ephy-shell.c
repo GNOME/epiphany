@@ -62,7 +62,8 @@ struct _EphyShellPrivate {
   GtkWidget *bme;
   GtkWidget *history_window;
   GObject *prefs_dialog;
-  EphyShellStartupContext *startup_context;
+  EphyShellStartupContext *local_startup_context;
+  EphyShellStartupContext *remote_startup_context;
   GSList *open_uris_idle_ids;
 };
 
@@ -112,15 +113,26 @@ ephy_shell_startup_context_new (EphyStartupFlags startup_flags,
 }
 
 static void
-ephy_shell_startup_continue (EphyShell *shell)
+ephy_shell_startup_context_free (EphyShellStartupContext *ctx)
 {
-  EphyShellStartupContext *ctx;
+  g_assert (ctx != NULL);
+
+  g_free (ctx->bookmarks_filename);
+  g_free (ctx->session_filename);
+  g_free (ctx->bookmark_url);
+
+  g_strfreev (ctx->arguments);
+
+  g_slice_free (EphyShellStartupContext, ctx);
+}
+
+static void
+ephy_shell_startup_continue (EphyShell *shell, EphyShellStartupContext *ctx)
+{
   EphySession *session;
 
   session = ephy_shell_get_session (shell);
   g_assert (session != NULL);
-
-  ctx = shell->priv->startup_context;
 
   if (ctx->session_filename != NULL)
     ephy_session_load (session, (const char *)ctx->session_filename,
@@ -288,29 +300,32 @@ session_load_cb (GObject *object,
                  gpointer user_data)
 {
   EphySession *session = EPHY_SESSION (object);
-  EphyShell *shell = EPHY_SHELL (user_data);
+  EphyShellStartupContext *ctx = (EphyShellStartupContext *)user_data;
 
   ephy_session_resume_finish (session, result, NULL);
-  ephy_shell_startup_continue (shell);
+  ephy_shell_startup_continue (ephy_shell_get_default (), ctx);
 }
 
 static void
 ephy_shell_activate (GApplication *application)
 {
   EphyShell *shell = EPHY_SHELL (application);
+  EphyShellPrivate *priv = shell->priv;
 
   /*
    * We get here on each new instance (remote or not). Autoresume the
-   * session unless we are in application mode and queue the commands.
+   * session and queue the commands if we are a local instance. Otherwise,
+   * execute the commands immediately, before the remote startup context
+   * can be invalidated by another remote instance.
    */
-  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    EphyShellStartupContext *ctx;
-
-    ctx = shell->priv->startup_context;
+  if (priv->remote_startup_context == NULL) {
     ephy_session_resume (ephy_shell_get_session (shell),
-                         ctx->user_time, NULL, session_load_cb, shell);
-  } else
-    ephy_shell_startup_continue (shell);
+                         priv->local_startup_context->user_time,
+                         NULL, session_load_cb, priv->local_startup_context);
+  } else {
+    ephy_shell_startup_continue (shell, priv->remote_startup_context);
+    g_clear_pointer (&priv->remote_startup_context, ephy_shell_startup_context_free);
+  }
 }
 
 /*
@@ -342,13 +357,13 @@ ephy_shell_add_platform_data (GApplication *application,
   G_APPLICATION_CLASS (ephy_shell_parent_class)->add_platform_data (application,
                                                                     builder);
 
-  if (app->priv->startup_context) {
+  if (app->priv->local_startup_context) {
     /*
      * We create an array variant that contains only the elements in
      * ctx that are non-NULL.
      */
     ctx_builder = g_variant_builder_new (G_VARIANT_TYPE_ARRAY);
-    ctx = app->priv->startup_context;
+    ctx = app->priv->local_startup_context;
 
     if (ctx->startup_flags)
       g_variant_builder_add (ctx_builder, "{iv}",
@@ -393,24 +408,6 @@ ephy_shell_add_platform_data (GApplication *application,
 
     g_variant_builder_unref (ctx_builder);
   }
-}
-
-static void
-ephy_shell_free_startup_context (EphyShell *shell)
-{
-  EphyShellStartupContext *ctx = shell->priv->startup_context;
-
-  g_assert (ctx != NULL);
-
-  g_free (ctx->bookmarks_filename);
-  g_free (ctx->session_filename);
-  g_free (ctx->bookmark_url);
-
-  g_strfreev (ctx->arguments);
-
-  g_slice_free (EphyShellStartupContext, ctx);
-
-  shell->priv->startup_context = NULL;
 }
 
 static void
@@ -463,9 +460,9 @@ ephy_shell_before_emit (GApplication *application,
     }
   }
 
-  if (shell->priv->startup_context)
-    ephy_shell_free_startup_context (shell);
-  shell->priv->startup_context = ctx;
+  /* We have already processed and discarded any previous remote startup contexts. */
+  g_assert (shell->priv->remote_startup_context == NULL);
+  shell->priv->remote_startup_context = ctx;
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->before_emit (application,
                                                               platform_data);
@@ -627,9 +624,10 @@ static void
 ephy_shell_finalize (GObject *object)
 {
   EphyShell *shell = EPHY_SHELL (object);
+  EphyShellPrivate *priv = shell->priv;
 
-  if (shell->priv->startup_context)
-    ephy_shell_free_startup_context (shell);
+  g_clear_pointer (&priv->local_startup_context, ephy_shell_startup_context_free);
+  g_clear_pointer (&priv->remote_startup_context, ephy_shell_startup_context_free);
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->finalize (object);
 
@@ -878,7 +876,7 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
  * @shell: A #EphyShell
  * @ctx: (transfer full): a #EphyShellStartupContext
  *
- * Sets the startup context to be used during activation of a new instance.
+ * Sets the local startup context to be used during activation of a new instance.
  * See ephy_shell_set_startup_new().
  **/
 void
@@ -887,10 +885,9 @@ ephy_shell_set_startup_context (EphyShell *shell,
 {
   g_return_if_fail (EPHY_IS_SHELL (shell));
 
-  if (shell->priv->startup_context)
-    ephy_shell_free_startup_context (shell);
+  g_assert (shell->priv->local_startup_context == NULL);
 
-  shell->priv->startup_context = ctx;
+  shell->priv->local_startup_context = ctx;
 }
 
 guint
