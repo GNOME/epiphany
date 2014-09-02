@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-27 09:53+0000\n"
-"PO-Revision-Date: 2014-08-27 16:39+0530\n"
+"POT-Creation-Date: 2014-09-02 03:35+0000\n"
+"PO-Revision-Date: 2014-09-02 17:43+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
 "Language: as\n"
@@ -1034,8 +1034,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
-#| msgid ""
-#| "This web site’s identification was not issued by a trusted organization."
 msgid ""
 "This web site’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1044,9 +1042,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
-#| msgid ""
-#| "This web site’s identification is too old to trust. Check the date on "
-#| "your computer’s calendar."
 msgid ""
 "This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
@@ -1075,10 +1070,6 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
-#| msgid ""
-#| "A criminal organization or government agency may have hijacked your "
-#| "connection. You should continue only if you know there is a good reason "
-#| "why this site does not use trusted identification."
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this site does not use trusted "
@@ -1187,7 +1178,7 @@ msgstr "ঠিক আছে (_O)"
 msgid "_Cancel"
 msgstr "বাতিল কৰক (_C)"
 
-#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:7
+#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:9
 msgid "_Open"
 msgstr "খোলক (_O)"
 
@@ -1787,7 +1778,7 @@ msgid "Paste the clipboard"
 msgstr "ক্লিপবোৰ্ডৰ বস্তু পেইস্ট কৰক"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/resources/history-dialog.ui.h:10
+#: ../src/resources/history-dialog.ui.h:12
 msgid "_Delete"
 msgstr "মচি পেলাওক (_D)"
 
@@ -2047,6 +2038,11 @@ msgstr "ছাইট"
 msgid "Remove"
 msgstr "আতৰাওক"
 
+#: ../src/resources/cookies-dialog.ui.h:5
+#| msgid "Delete the selected bookmark or topic"
+msgid "Delete the selected cookies"
+msgstr "নিৰ্বাচিত কুকিসমূহক মচি পেলাওক"
+
 #. File actions.
 #: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
 msgid "_New Window"
@@ -2113,11 +2109,21 @@ msgstr "নাম"
 msgid "Location"
 msgstr "অবস্থান"
 
+#: ../src/resources/history-dialog.ui.h:7
+#| msgid "Remove the selected item from the toolbar"
+msgid "Remove the selected pages from history"
+msgstr "নিৰ্বাচিত পৃষ্ঠাসমূহক ইতিহাসৰ পৰা আতৰাওক"
+
 #: ../src/resources/history-dialog.ui.h:8
+#| msgid "Open the selected bookmark in a new tab"
+msgid "Open the selected pages in new tabs"
+msgstr "নিৰ্বাচিত পৃষ্ঠাসমূহক নতুন টেবসমূহত খোলক"
+
+#: ../src/resources/history-dialog.ui.h:10
 msgid "_Copy Location"
 msgstr "অৱস্থান কপি কৰক (_C)"
 
-#: ../src/resources/history-dialog.ui.h:9
+#: ../src/resources/history-dialog.ui.h:11
 msgid "Add _Bookmark"
 msgstr "পত্ৰচিহ্ন যোগ কৰক (_B)"
 
@@ -2139,10 +2145,20 @@ msgid "Password"
 msgstr "পাছৱৰ্ড"
 
 #: ../src/resources/passwords-dialog.ui.h:7
+#| msgid "Remove the selected toolbar"
+msgid "Forget the selected passwords"
+msgstr "নিৰ্বাচিত পাছৱৰ্ডসমূহ পাহৰি যাওক"
+
+#: ../src/resources/passwords-dialog.ui.h:8
+#| msgid "Remember passwords"
+msgid "Reveal all the passwords"
+msgstr "সকলো পাছৱৰ্ড দেখুৱাওক"
+
+#: ../src/resources/passwords-dialog.ui.h:9
 msgid "_Copy Password"
 msgstr "পাছৱৰ্ড কপি কৰক (_C)"
 
-#: ../src/resources/passwords-dialog.ui.h:8
+#: ../src/resources/passwords-dialog.ui.h:10
 msgid "C_opy Username"
 msgstr "ব্যবহাৰকাৰীৰ নাম কপি কৰক (_o)"
 
@@ -2573,7 +2589,6 @@ msgstr "ই-মেইল ঠিকনা কপি কৰক (_C)"
 
 #. Images.
 #: ../src/ephy-window.c:233
-#| msgid "View _Image"
 msgid "View _Image in New Tab"
 msgstr "ছবিক নতুন টেবত দৰ্শন কৰক (_I)"
 
@@ -2591,47 +2606,35 @@ msgstr "ৱালপেপাৰ ৰূপে সংহতি কৰক (_W)"
 
 #. Video.
 #: ../src/ephy-window.c:244
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
 msgid "Open Video in New _Window"
 msgstr "ভিডিঅ'ক নতুন উইন্ডোত খোলক (_W)"
 
 #: ../src/ephy-window.c:246
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
 msgid "Open Video in New _Tab"
 msgstr "ভিডিঅ'ক নতুন টেবত খোলক (_T)"
 
 #: ../src/ephy-window.c:248
-#| msgid "_Save Link As…"
 msgid "_Save Video As…"
 msgstr "ভিডিঅ'ক এই ধৰণে সংৰক্ষণ কৰক (_S)…"
 
 #: ../src/ephy-window.c:250
-#| msgid "_Copy Address"
 msgid "_Copy Video Address"
 msgstr "ভিডিঅ'ৰ ঠিকনা কপি কৰক (_C)"
 
 #. Audio.
 #: ../src/ephy-window.c:255
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
 msgid "Open Audio in New _Window"
 msgstr "অডিঅ'ক নতুন উইন্ডোত খোলক (_W)"
 
 #: ../src/ephy-window.c:257
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
 msgid "Open Audio in New _Tab"
 msgstr "অডিঅ'ক নতুন টেবত খোলক (_T)"
 
 #: ../src/ephy-window.c:259
-#| msgid "_Save Link As…"
 msgid "_Save Audio As…"
 msgstr "অডিঅ'ক এই ধৰণে সংৰক্ষণ কৰক (_S)…"
 
 #: ../src/ephy-window.c:261
-#| msgid "_Copy Address"
 msgid "_Copy Audio Address"
 msgstr "অডিঅ' ঠিকনা কপি কৰক (_C)"
 
@@ -2718,7 +2721,6 @@ msgid "Save Image As"
 msgstr "ছবিক এই ৰূপে সংৰক্ষণ কৰক"
 
 #: ../src/popup-commands.c:239
-#| msgid "Save Link As"
 msgid "Save Media As"
 msgstr "মাধ্যমক এই ধৰণে সংৰক্ষণ কৰক"
 
@@ -3420,14 +3422,8 @@ msgstr "সামৰ্থবান কৰক (_E)"
 #~ msgid "Move the selected item on the toolbar"
 #~ msgstr "চিহ্নিত বস্তুক টুলবাৰ ত স্থানান্তৰ কৰক"
 
-#~ msgid "Remove the selected item from the toolbar"
-#~ msgstr "চিহ্নিত বস্তুক টুলবাৰ পৰা আতৰাওক"
-
 #~ msgid "_Delete Toolbar"
 #~ msgstr "টুলবাৰ মচি পেলাওক (_D)"
-
-#~ msgid "Remove the selected toolbar"
-#~ msgstr "চিহ্নিত টুলবাৰ আতৰাওক"
 
 #~ msgid "Separator"
 #~ msgstr "বিভাজক"
