@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-26 16:06+0000\n"
-"PO-Revision-Date: 2014-08-26 19:01+0200\n"
+"POT-Creation-Date: 2014-09-03 03:35+0000\n"
+"PO-Revision-Date: 2014-09-03 13:35+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -1033,21 +1033,26 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
+#| msgid ""
+#| "This web site’s identification was not issued by a trusted organization."
 msgid ""
-"This web site’s identification uses very weak encryption. It has probably "
-"been forged."
+"This web site’s identification cannot be trusted because it uses very weak "
+"encryption."
 msgstr ""
-"La identificación de este sitio web usa un cifrado muy débil. Probablemente "
-"se haya forzado."
+"No se puede confiar en la identificación de este sitio web porque usa un "
+"cifrado muy débil."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
+#| msgid ""
+#| "This web site’s identification is too old to trust. Check the date on "
+#| "your computer’s calendar."
 msgid ""
-"This web site’s identification time-travelled from the future. Check the "
+"This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
 msgstr ""
-"La identificación de este sitio web ha viajado en el futuro. Compruebe la "
-"fecha en el calendario de su equipo."
+"La identificación de este sitio web sólo es válida para fechas futuras. "
+"Compruebe la fecha en el calendario de su equipo."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1802
@@ -1068,14 +1073,17 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
+#| msgid ""
+#| "A criminal organization or government agency may have hijacked your "
+#| "connection. You should continue only if you know there is a good reason "
+#| "why this site does not use trusted identification."
 msgid ""
-"A criminal organization or government agency may have hijacked your "
-"connection. You should continue only if you know there is a good reason why "
-"this site does not use trusted identification."
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this site does not use trusted "
+"identification."
 msgstr ""
-"Una organización criminal o una agencia del gobierno pueden haber "
-"secuestrado su conexión. Sólo debe continuar si sabe que hay una buena razón "
-"por la que este sitio no use una conexión confiable."
+"Un tercero puede haber secuestrado su conexión. Sólo debe continuar si sabe "
+"que hay una buena razón por la que este sitio no use una conexión confiable."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1817
@@ -1175,7 +1183,7 @@ msgstr "_Aceptar"
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:7
+#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:9
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -1523,7 +1531,7 @@ msgstr "Error al descargar: %s"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1100
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1122
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Abrir"
@@ -1772,7 +1780,7 @@ msgid "Paste the clipboard"
 msgstr "Pegar del portapapeles"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/resources/history-dialog.ui.h:10
+#: ../src/resources/history-dialog.ui.h:12
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2029,6 +2037,11 @@ msgstr "Sitio"
 msgid "Remove"
 msgstr "Quitar"
 
+#: ../src/resources/cookies-dialog.ui.h:5
+#| msgid "Delete the selected bookmark or topic"
+msgid "Delete the selected cookies"
+msgstr "Eliminar las cookies seleccionadas"
+
 #. File actions.
 #: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
 msgid "_New Window"
@@ -2095,11 +2108,21 @@ msgstr "Nombre"
 msgid "Location"
 msgstr "Ubicación"
 
+#: ../src/resources/history-dialog.ui.h:7
+#| msgid "Remove the selected item from the toolbar"
+msgid "Remove the selected pages from history"
+msgstr "Quita las páginas seleccionadas del histórico"
+
 #: ../src/resources/history-dialog.ui.h:8
+#| msgid "Open the selected bookmark in a new tab"
+msgid "Open the selected pages in new tabs"
+msgstr "Abrir las páginas seleccionadas en pestañas nuevas"
+
+#: ../src/resources/history-dialog.ui.h:10
 msgid "_Copy Location"
 msgstr "Copiar _ubicación"
 
-#: ../src/resources/history-dialog.ui.h:9
+#: ../src/resources/history-dialog.ui.h:11
 msgid "Add _Bookmark"
 msgstr "Añadir _marcador"
 
@@ -2121,10 +2144,20 @@ msgid "Password"
 msgstr "Contraseña"
 
 #: ../src/resources/passwords-dialog.ui.h:7
+#| msgid "Remove the selected toolbar"
+msgid "Forget the selected passwords"
+msgstr "Olvidar las contraseñas seleccionadas"
+
+#: ../src/resources/passwords-dialog.ui.h:8
+#| msgid "Remember passwords"
+msgid "Reveal all the passwords"
+msgstr "Mostrar todas las contraseñas"
+
+#: ../src/resources/passwords-dialog.ui.h:9
 msgid "_Copy Password"
 msgstr "_Copiar contraseña"
 
-#: ../src/resources/passwords-dialog.ui.h:8
+#: ../src/resources/passwords-dialog.ui.h:10
 msgid "C_opy Username"
 msgstr "C_opiar nombre de usuario"
 
@@ -2558,7 +2591,6 @@ msgstr "_Copiar dirección de correo-e"
 
 #. Images.
 #: ../src/ephy-window.c:233
-#| msgid "View _Image"
 msgid "View _Image in New Tab"
 msgstr "Ver _imagen en una pestaña nueva"
 
@@ -2574,87 +2606,138 @@ msgstr "_Guardar imagen como…"
 msgid "Set as _Wallpaper"
 msgstr "Establecer como _fondo"
 
-#: ../src/ephy-window.c:446
+#. Video.
+#: ../src/ephy-window.c:244
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Video in New _Window"
+msgstr "Abrir vídeo en una _ventana nueva"
+
+#: ../src/ephy-window.c:246
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Video in New _Tab"
+msgstr "Abrir vídeo en una _pestaña nueva"
+
+#: ../src/ephy-window.c:248
+#| msgid "_Save Link As…"
+msgid "_Save Video As…"
+msgstr "Guardar _vídeo como…"
+
+#: ../src/ephy-window.c:250
+#| msgid "_Copy Address"
+msgid "_Copy Video Address"
+msgstr "_Copiar la dirección del vídeo"
+
+#. Audio.
+#: ../src/ephy-window.c:255
+#| msgid "Open in New _Window"
+#| msgid_plural "Open in New _Windows"
+msgid "Open Audio in New _Window"
+msgstr "Abrir sonido en una _ventana nueva"
+
+#: ../src/ephy-window.c:257
+#| msgid "Open in New _Tab"
+#| msgid_plural "Open in New _Tabs"
+msgid "Open Audio in New _Tab"
+msgstr "Abrir sonido en una _pestaña nueva"
+
+#: ../src/ephy-window.c:259
+#| msgid "_Save Link As…"
+msgid "_Save Audio As…"
+msgstr "Guardar _sonido como…"
+
+#: ../src/ephy-window.c:261
+#| msgid "_Copy Address"
+msgid "_Copy Audio Address"
+msgstr "_Copiar la dirección del sonido"
+
+#: ../src/ephy-window.c:468
 msgid "There are unsubmitted changes to form elements"
 msgstr "Hay cambios no enviados en los elementos del formulario"
 
-#: ../src/ephy-window.c:447
+#: ../src/ephy-window.c:469
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si cierra el documento, perderá esa información."
 
-#: ../src/ephy-window.c:449
+#: ../src/ephy-window.c:471
 msgid "Close _Document"
 msgstr "Cerrar _documento"
 
-#: ../src/ephy-window.c:464
+#: ../src/ephy-window.c:486
 msgid "There are ongoing downloads in this window"
 msgstr "Hay descargas en curso en esta ventana"
 
-#: ../src/ephy-window.c:465
+#: ../src/ephy-window.c:487
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Si cierra esta ventana, se cancelarán las descargas"
 
-#: ../src/ephy-window.c:466
+#: ../src/ephy-window.c:488
 msgid "Close window and cancel downloads"
 msgstr "Cerrar la ventana y cancelar las descargas"
 
-#: ../src/ephy-window.c:1102
+#: ../src/ephy-window.c:1124
 msgid "Save As"
 msgstr "Guardar como"
 
-#: ../src/ephy-window.c:1104
+#: ../src/ephy-window.c:1126
 msgid "Save As Application"
 msgstr "Guardar como aplicación"
 
-#: ../src/ephy-window.c:1106
+#: ../src/ephy-window.c:1128
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/ephy-window.c:1108
+#: ../src/ephy-window.c:1130
 msgid "Bookmark"
 msgstr "Marcador"
 
-#: ../src/ephy-window.c:1110
+#: ../src/ephy-window.c:1132
 msgid "Find"
 msgstr "Buscar"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1119
+#: ../src/ephy-window.c:1141
 msgid "Larger"
 msgstr "Más grande"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1122
+#: ../src/ephy-window.c:1144
 msgid "Smaller"
 msgstr "Más pequeño"
 
-#: ../src/ephy-window.c:1144
+#: ../src/ephy-window.c:1166
 msgid "Back"
 msgstr "Atrás"
 
-#: ../src/ephy-window.c:1156
+#: ../src/ephy-window.c:1178
 msgid "Forward"
 msgstr "Adelante"
 
-#: ../src/ephy-window.c:1168
+#: ../src/ephy-window.c:1190
 msgid "Zoom"
 msgstr "Ampliación"
 
-#: ../src/ephy-window.c:1177
+#: ../src/ephy-window.c:1199
 msgid "New _Tab"
 msgstr "Pe_staña nueva"
 
-#: ../src/ephy-window.c:1185
+#: ../src/ephy-window.c:1207
 msgid "Go to most visited"
 msgstr "Ir a los más visitados"
 
-#: ../src/popup-commands.c:237
+#: ../src/popup-commands.c:225
 msgid "Save Link As"
 msgstr "Guardar enlace como"
 
-#: ../src/popup-commands.c:243
+#: ../src/popup-commands.c:232
 msgid "Save Image As"
 msgstr "Guardar imagen como"
+
+#: ../src/popup-commands.c:239
+#| msgid "Save Link As"
+msgid "Save Media As"
+msgstr "Abrir medio como"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -2818,6 +2901,20 @@ msgstr ""
 #: ../src/window-commands.c:1678
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid ""
+#~ "This web site’s identification uses very weak encryption. It has probably "
+#~ "been forged."
+#~ msgstr ""
+#~ "La identificación de este sitio web usa un cifrado muy débil. "
+#~ "Probablemente se haya forzado."
+
+#~ msgid ""
+#~ "This web site’s identification time-travelled from the future. Check the "
+#~ "date on your computer’s calendar."
+#~ msgstr ""
+#~ "La identificación de este sitio web ha viajado en el futuro. Compruebe la "
+#~ "fecha en el calendario de su equipo."
 
 #~ msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 #~ msgstr ""
@@ -3629,14 +3726,8 @@ msgstr "_Activar"
 #~ msgid "Move the selected item on the toolbar"
 #~ msgstr "Mueve el elemento seleccionado en la barra de herramientas"
 
-#~ msgid "Remove the selected item from the toolbar"
-#~ msgstr "Quita el elemento seleccionado de la barra de herramientas"
-
 #~ msgid "_Delete Toolbar"
 #~ msgstr "_Borrar barra de herramientas"
-
-#~ msgid "Remove the selected toolbar"
-#~ msgstr "Quita la barra de herramientas seleccionada"
 
 #~ msgid "Separator"
 #~ msgstr "Separador"
