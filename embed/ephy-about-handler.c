@@ -531,6 +531,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
                           "    <div style=\"background: transparent url(ephy-resource:///org/gnome/epiphany/incognito.png) no-repeat 10px center;\">\n" \
                           "      <h1>%s</h1>\n"
                           "      <p>%s</p>\n"
+                          "      <p><strong>%s</strong></p>\n"
                           "    </div>\n"
                           "  </div>\n"
                           "</body>\n"
@@ -541,7 +542,11 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
                           _("Private Browsing"),
                           _("You are currently browsing <em>incognito</em>. Pages viewed in this "
                             "mode will not show up in your browsing history and all stored "
-                            "information will be cleared when you close the window."));
+                            "information will be cleared when you close the window. Files you "
+                            "download will be kept."),
+                          _("Incognito mode will not hide your activity from your employer, "
+                            "your Internet Service Provider, your government, or the websites "
+                            "that you visit."));
 
   ephy_about_handler_finish_request (request, data, -1);
 
