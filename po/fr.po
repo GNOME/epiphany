@@ -27,15 +27,16 @@
 # Jean-Christope GARNIER <jc.garnier4@orange.fr>, 2012.
 # Alain Lojewski <allomervan@gmail.com>, 2013-2014.
 # naybnet <naybnet@gmail.com>, 2014.
+# Alexandre Franke <alexandre.franke@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-16 04:38+0000\n"
-"PO-Revision-Date: 2014-03-16 12:31+0100\n"
-"Last-Translator: naybnet <naybnet@gmail.com>\n"
+"POT-Creation-Date: 2014-09-05 03:34+0000\n"
+"PO-Revision-Date: 2014-09-05 14:00+0200\n"
+"Last-Translator: Alexandre Franke <alexandre.franke@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -73,12 +74,21 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=fr-fr"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
+#: ../src/ephy-search-provider.c:287
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fr-fr"
 
 #: ../data/epiphany.appdata.xml.in.h:1
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.appdata.xml.in.h:2
+msgid "Web browser for GNOME"
+msgstr "Navigateur Web pour GNOME"
+
+#: ../data/epiphany.appdata.xml.in.h:3
 msgid ""
 "The web browser for GNOME, featuring tight integration with the desktop and "
 "a simple and intuitive user interface that allows you to focus on your web "
@@ -88,9 +98,9 @@ msgstr ""
 "bureau et d'une interface utilisateur simple et intuitive qui vous permet de "
 "vous concentrer sur les pages Web."
 
-#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:292
-#: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1512
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:290
+#: ../embed/ephy-about-handler.c:321 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1514
 msgid "Web"
 msgstr "Web"
 
@@ -516,87 +526,86 @@ msgstr ""
 "Indique si la colonne d'adresse est affichée dans la fenêtre des marque-"
 "pages."
 
-#: ../embed/ephy-about-handler.c:141
+#: ../embed/ephy-about-handler.c:139
 msgid "Installed plugins"
 msgstr "Greffons installés"
 
-#: ../embed/ephy-about-handler.c:142
+#: ../embed/ephy-about-handler.c:140
 msgid "Plugins"
 msgstr "Greffons"
 
-#: ../embed/ephy-about-handler.c:145
+#: ../embed/ephy-about-handler.c:143
 msgid "Plugins are disabled in the preferences"
 msgstr "Les greffons sont désactivés dans les préférences"
 
-#: ../embed/ephy-about-handler.c:158
+#: ../embed/ephy-about-handler.c:156
 msgid "Enabled"
 msgstr "Activés"
 
 #. webkit_plugin_get_enabled (plugin) &&
-#: ../embed/ephy-about-handler.c:158
+#: ../embed/ephy-about-handler.c:156
 msgid "Yes"
 msgstr "Oui"
 
-#: ../embed/ephy-about-handler.c:158
+#: ../embed/ephy-about-handler.c:156
 msgid "No"
 msgstr "Non"
 
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:157
 msgid "MIME type"
 msgstr "Type MIME"
 
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:157
 msgid "Description"
 msgstr "Description"
 
-#: ../embed/ephy-about-handler.c:159
+#: ../embed/ephy-about-handler.c:157
 msgid "Suffixes"
 msgstr "Suffixes"
 
-#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:222
+#: ../embed/ephy-about-handler.c:218 ../embed/ephy-about-handler.c:220
 msgid "Memory usage"
 msgstr "Utilisation de la mémoire"
 
-#: ../embed/ephy-about-handler.c:270
+#: ../embed/ephy-about-handler.c:268
 #, c-format
 msgid "Version %s"
 msgstr "Version %s"
 
-#: ../embed/ephy-about-handler.c:290
+#: ../embed/ephy-about-handler.c:288
 msgid "About Web"
 msgstr "À propos de Web"
 
-#: ../embed/ephy-about-handler.c:294
+#: ../embed/ephy-about-handler.c:292
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Une vue simple, propre et belle du Web."
 
-#: ../embed/ephy-about-handler.c:345 ../embed/ephy-about-handler.c:346
+#: ../embed/ephy-about-handler.c:343 ../embed/ephy-about-handler.c:344
 msgid "Applications"
 msgstr "Applications"
 
-#: ../embed/ephy-about-handler.c:347
+#: ../embed/ephy-about-handler.c:345
 msgid "List of installed web applications"
 msgstr "Liste des applications Web installées"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:364
+#: ../embed/ephy-about-handler.c:362
 msgid "Installed on:"
 msgstr "Installé le :"
 
-#: ../embed/ephy-about-handler.c:468
-#| msgid "Remove from this topic"
+#: ../embed/ephy-about-handler.c:466
 msgid "Remove from overview"
 msgstr "Enlever de la vue d'ensemble"
 
-#: ../embed/ephy-about-handler.c:483 ../embed/ephy-embed-utils.c:300
+#: ../embed/ephy-about-handler.c:481 ../embed/ephy-embed-utils.c:300
 msgid "Most Visited"
 msgstr "Les plus visités"
 
-#: ../embed/ephy-about-handler.c:542 ../embed/ephy-about-handler.c:543
+#: ../embed/ephy-about-handler.c:540 ../embed/ephy-about-handler.c:541
 msgid "Private Browsing"
 msgstr "Navigation privée"
 
-#: ../embed/ephy-about-handler.c:544
+#: ../embed/ephy-about-handler.c:542
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -629,11 +638,6 @@ msgstr "F11"
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Envoyer un courriel à l'adresse « %s »"
-
-#: ../embed/ephy-embed-utils.c:243 ../src/ephy-search-provider.c:287
-#, c-format
-msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fr-fr"
 
 #: ../embed/ephy-encodings.c:54
 msgid "Arabic (_IBM-864)"
@@ -959,75 +963,174 @@ msgstr "Unicode (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "Inconnu (%s)"
 
-#: ../embed/ephy-find-toolbar.c:105
+#: ../embed/ephy-find-toolbar.c:104
 msgid "Text not found"
 msgstr "Texte non trouvé"
 
-#: ../embed/ephy-find-toolbar.c:112
+#: ../embed/ephy-find-toolbar.c:110
 msgid "Search wrapped back to the top"
 msgstr "La recherche est revenue au début"
 
-#: ../embed/ephy-find-toolbar.c:456
+#: ../embed/ephy-find-toolbar.c:451
 msgid "Type to search…"
 msgstr "Commencez la saisie pour rechercher…"
 
-#: ../embed/ephy-find-toolbar.c:462
+#: ../embed/ephy-find-toolbar.c:457
 msgid "Find previous occurrence of the search string"
 msgstr "Recherche la précédente occurrence de la chaîne"
 
-#: ../embed/ephy-find-toolbar.c:470
+#: ../embed/ephy-find-toolbar.c:465
 msgid "Find next occurrence of the search string"
 msgstr "Recherche la prochaine occurrence de la chaîne"
 
-#: ../embed/ephy-web-view.c:488 ../src/window-commands.c:330
+#: ../embed/ephy-web-view.c:492 ../src/window-commands.c:330
 msgid "Save"
 msgstr "Enregistrer"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:500
+#: ../embed/ephy-web-view.c:504
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Voulez-vous enregistrer votre mot de passe pour « %s » ?"
 
-#: ../embed/ephy-web-view.c:1380
+#: ../embed/ephy-web-view.c:1415
 msgid "Deny"
 msgstr "Interdire"
 
-#: ../embed/ephy-web-view.c:1381
+#: ../embed/ephy-web-view.c:1416
 msgid "Allow"
 msgstr "Autoriser"
 
-#: ../embed/ephy-web-view.c:1391
+#: ../embed/ephy-web-view.c:1426
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "La page à <b>%s</b> demande votre localisation."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1475
+#: ../embed/ephy-web-view.c:1510
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Chargement de « %s »…"
 
-#: ../embed/ephy-web-view.c:1477
+#: ../embed/ephy-web-view.c:1512
 msgid "Loading…"
 msgstr "Chargement…"
 
-#: ../embed/ephy-web-view.c:1718
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1736
+msgid ""
+"This web site presented identification that belongs to a different web site."
+msgstr ""
+"Ce site Web présente des données d'identification qui appartiennent à un "
+"site Web différent."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1741
+msgid ""
+"This web site’s identification is too old to trust. Check the date on your "
+"computer’s calendar."
+msgstr ""
+"Les données d'identification de ce site Web sont trop vieilles pour être "
+"fiables. Vérifiez la date sur votre ordinateur."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1746
+msgid ""
+"This web site’s identification was not issued by a trusted organization."
+msgstr ""
+"Les données d'identification de ce site Web n'ont pas été délivrées par une "
+"organisation de confiance."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1751
+msgid ""
+"This web site’s identification could not be processed. It may be corrupted."
+msgstr ""
+"Les données d'identification de ce site Web n'ont pas pu être traitées. "
+"Elles peuvent être corrompues."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1756
+msgid ""
+"This web site’s identification has been revoked by the trusted organization "
+"that issued it."
+msgstr ""
+"Les données d'identification de ce site Web ont été révoquées par "
+"l'organisation de confiance qui les a délivrées."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1761
+msgid ""
+"This web site’s identification cannot be trusted because it uses very weak "
+"encryption."
+msgstr ""
+"Les données d'identification de ce site Web ne sont pas fiables car elles "
+"utilisent un chiffrement faible."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1766
+msgid ""
+"This web site’s identification is only valid for future dates. Check the "
+"date on your computer’s calendar."
+msgstr ""
+"Les données d'identification de ce site Web ne sont valables que pour des "
+"dates dans l'avenir. Vérifiez la date sur votre ordinateur."
+
+#. Message when a site's TLS certificate is invalid. %s is the site's hostname.
+#: ../embed/ephy-web-view.c:1802
+#, c-format
+msgid "This might not be the real %s."
+msgstr "Il se pourrait que ce ne soit pas le vrai %s."
+
+#. Message when a site's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1807
+msgid ""
+"When you try to connect securely, web sites present identification to prove "
+"that your connection has not been maliciously intercepted. There is "
+"something wrong with this site’s identification:"
+msgstr ""
+"Lorsque vous essayez de vous connecter de manière sécurisée, les sites Web "
+"présentent des données d'identification pour prouver que votre connexion n'a "
+"pas été interceptée par des gens malintentionnés. Il y a quelque chose qui "
+"ne va pas dans les données d'identification de ce site :"
+
+#. Message when a site's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1813
+msgid ""
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this site does not use trusted "
+"identification."
+msgstr ""
+"Un tiers pourrait avoir détourné votre connexion. Vous ne devriez continuer "
+"que s'il y a une bonne raison pour que ce site n'utilise pas une "
+"identification fiable."
+
+#. Good advice from Firefox; displays when a site's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1817
+msgid ""
+"Legitimate banks, stores, and other public sites will not ask you to do this."
+msgstr ""
+"Les banques ou commerces légitimes et autres sites publics ne vous "
+"demanderont pas de faire ceci."
+
+#: ../embed/ephy-web-view.c:1858
 msgid "None specified"
 msgstr "Aucune indication"
 
-#: ../embed/ephy-web-view.c:1731 ../embed/ephy-web-view.c:1746
+#. Page title when a site cannot be loaded. %s is the site's hostname.
+#: ../embed/ephy-web-view.c:1871 ../embed/ephy-web-view.c:1886
+#: ../embed/ephy-web-view.c:1906
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Problème de chargement de « %s »…"
 
-#: ../embed/ephy-web-view.c:1733
+#: ../embed/ephy-web-view.c:1873
 msgid "Oops! Unable to display this website."
 msgstr "Oups ! Impossible d'afficher ce site Web"
 
-#: ../embed/ephy-web-view.c:1734
+#: ../embed/ephy-web-view.c:1874
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1040,15 +1143,15 @@ msgstr ""
 "adresse peut avoir changé. N'oubliez pas de contrôler le bon fonctionnement "
 "de votre connexion à Internet.</p>"
 
-#: ../embed/ephy-web-view.c:1742
+#: ../embed/ephy-web-view.c:1882
 msgid "Try again"
 msgstr "Essayer à nouveau"
 
-#: ../embed/ephy-web-view.c:1748
+#: ../embed/ephy-web-view.c:1888
 msgid "Oops! There may be a problem."
 msgstr "Oups ! Il se peut qu'il y ait un problème."
 
-#: ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1889
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1059,20 +1162,20 @@ msgstr ""
 "cela se reproduit, veuillez rapporter le problème aux développeurs <strong>"
 "%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1754 ../embed/ephy-web-view.c:1761
+#: ../embed/ephy-web-view.c:1894 ../embed/ephy-web-view.c:1901
 msgid "Reload Anyway"
 msgstr "Recharger quand même"
 
-#: ../embed/ephy-web-view.c:1758
+#: ../embed/ephy-web-view.c:1898
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Problème d'affichage de « %s »"
 
-#: ../embed/ephy-web-view.c:1759
+#: ../embed/ephy-web-view.c:1899
 msgid "Oops!"
 msgstr "Oups !"
 
-#: ../embed/ephy-web-view.c:1760
+#: ../embed/ephy-web-view.c:1900
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1080,7 +1183,17 @@ msgstr ""
 "Quelque chose s'est mal passé pendant l'affichage de cette page. Veuillez la "
 "recharger ou visiter une page différente pour continuer."
 
-#: ../embed/ephy-web-view.c:2607
+#. Title of error page when a website's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1908
+msgid "Look out!"
+msgstr "Attention !"
+
+#. Button on error page when a website's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1911
+msgid "Load Anyway"
+msgstr "Charger quand même"
+
+#: ../embed/ephy-web-view.c:2809
 msgid "_OK"
 msgstr "_OK"
 
@@ -1092,7 +1205,7 @@ msgstr "_OK"
 msgid "_Cancel"
 msgstr "A_nnuler"
 
-#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:7
+#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:9
 msgid "_Open"
 msgstr "_Ouvrir"
 
@@ -1321,8 +1434,8 @@ msgid "Local files"
 msgstr "Fichiers locaux"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:92
-msgid "The certificate does not match the expected identity"
-msgstr "Le certificat ne correspond pas à l'identité attendue"
+msgid "The certificate does not match this website"
+msgstr "Le certificat ne correspond pas à ce site Web"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:95
 msgid "The certificate has expired"
@@ -1349,12 +1462,42 @@ msgid "The certificate activation time is still in the future"
 msgstr "L'heure d'activation du certificat est dans le futur"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:149
-msgid "The identity of this website has been verified"
-msgstr "L'identité de ce site Web a été vérifiée"
+msgid "The identity of this website has been verified."
+msgstr "L'identité de ce site Web a été vérifiée."
 
 #: ../lib/widgets/ephy-certificate-dialog.c:150
-msgid "The identity of this website has not been verified"
-msgstr "L'identité de ce site Web n'a pas été vérifiée"
+msgid "The identity of this website has not been verified."
+msgstr "L'identité de ce site Web n'a pas été vérifiée."
+
+#. Label when clicking the lock icon on a secure page. %s is the website's hostname.
+#: ../lib/widgets/ephy-certificate-popover.c:71
+#, c-format
+msgid "You are connected to %s"
+msgstr "Vous êtes connecté à %s"
+
+#. Label in certificate popover when site is untrusted. %s is a URL.
+#: ../lib/widgets/ephy-certificate-popover.c:113
+#, c-format
+msgid ""
+"This web site’s digital identification is not trusted. You may have "
+"connected to an attacker pretending to be %s."
+msgstr ""
+"L'identité numérique de ce site Web n'est pas fiable. Vous vous êtes peut-"
+"être connecté à un attaquant qui se fait passer pour %s."
+
+#. Label in certificate popover when site sends mixed content.
+#: ../lib/widgets/ephy-certificate-popover.c:124
+msgid "Part of this page is insecure."
+msgstr "Une partie de cette page n'est pas sécurisée."
+
+#. Label in certificate popover on secure sites.
+#: ../lib/widgets/ephy-certificate-popover.c:130
+msgid "Your connection is secure."
+msgstr "Votre connexion est sûre."
+
+#: ../lib/widgets/ephy-certificate-popover.c:318
+msgid "_View Certificate…"
+msgstr "_Voir le certificat…"
 
 #: ../lib/widgets/ephy-download-widget.c:107
 #, c-format
@@ -1411,7 +1554,7 @@ msgstr "Erreur de téléchargement : %s"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1146
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1122
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Ouvrir"
@@ -1428,21 +1571,21 @@ msgstr "Démarrage…"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:618
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:189
+#: ../lib/widgets/ephy-location-entry.c:603
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:263
 msgid "Cl_ear"
 msgstr "E_ffacer"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:637 ../src/ephy-window.c:121
+#: ../lib/widgets/ephy-location-entry.c:622 ../src/ephy-window.c:121
 msgid "_Undo"
 msgstr "A_nnuler"
 
-#: ../lib/widgets/ephy-location-entry.c:644
+#: ../lib/widgets/ephy-location-entry.c:629
 msgid "_Redo"
 msgstr "_Rétablir"
 
-#: ../lib/widgets/ephy-location-entry.c:924
+#: ../lib/widgets/ephy-location-entry.c:909
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Glissez et déposez cette icône pour créer un lien vers cette page"
 
@@ -1481,11 +1624,6 @@ msgstr "A_fficher tous les sujets"
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Ajouter"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:438
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
-msgid "_Close"
-msgstr "_Fermer"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1631,6 +1769,10 @@ msgstr "E_xporter les signets…"
 msgid "Export bookmarks to a file"
 msgstr "Exporte les signets dans un fichier"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+msgid "_Close"
+msgstr "_Fermer"
+
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
 msgstr "Ferme la fenêtre des signets"
@@ -1663,7 +1805,7 @@ msgid "Paste the clipboard"
 msgstr "Colle le contenu du presse-papiers"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/resources/history-dialog.ui.h:10
+#: ../src/resources/history-dialog.ui.h:12
 msgid "_Delete"
 msgstr "_Supprimer"
 
@@ -1878,22 +2020,20 @@ msgstr ""
 "souhaitez supprimer :"
 
 #: ../src/resources/clear-data-dialog.ui.h:6
-#: ../src/resources/cookies-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:21
-msgid "Cookies"
-msgstr "Cookies"
+msgid "Coo_kies"
+msgstr "Coo_kies"
 
 #: ../src/resources/clear-data-dialog.ui.h:7
-msgid "Cache and temporary files"
-msgstr "Cache et fichiers temporaires"
+msgid "Cache and _temporary files"
+msgstr "Cache et fichiers _temporaires"
 
 #: ../src/resources/clear-data-dialog.ui.h:8
-msgid "Browsing history"
-msgstr "Historique de navigation"
+msgid "Browsing _history"
+msgstr "_Historique de navigation"
 
 #: ../src/resources/clear-data-dialog.ui.h:9
-msgid "Saved passwords"
-msgstr "Mots de passe enregistrés"
+msgid "Saved _passwords"
+msgstr "Mots de _passe enregistrés"
 
 #: ../src/resources/clear-data-dialog.ui.h:10
 msgid ""
@@ -1902,6 +2042,11 @@ msgid ""
 msgstr ""
 "Vous ne pourrez pas annuler cette action. Les données que vous choisissez "
 "d'effacer le seront définitivement."
+
+#: ../src/resources/cookies-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:21
+msgid "Cookies"
+msgstr "Cookies"
 
 #: ../src/resources/cookies-dialog.ui.h:2
 #: ../src/resources/history-dialog.ui.h:2
@@ -1917,6 +2062,10 @@ msgstr "Site"
 #: ../src/resources/cookies-dialog.ui.h:4
 msgid "Remove"
 msgstr "Enlever"
+
+#: ../src/resources/cookies-dialog.ui.h:5
+msgid "Delete the selected cookies"
+msgstr "Supprime les cookies sélectionnés"
 
 #. File actions.
 #: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
@@ -1984,11 +2133,19 @@ msgstr "Nom"
 msgid "Location"
 msgstr "Emplacement"
 
+#: ../src/resources/history-dialog.ui.h:7
+msgid "Remove the selected pages from history"
+msgstr "Retire les pages sélectionnées de l'historique"
+
 #: ../src/resources/history-dialog.ui.h:8
+msgid "Open the selected pages in new tabs"
+msgstr "Ouvre les pages sélectionnées dans de nouveaux onglets"
+
+#: ../src/resources/history-dialog.ui.h:10
 msgid "_Copy Location"
 msgstr "_Copier l'emplacement"
 
-#: ../src/resources/history-dialog.ui.h:9
+#: ../src/resources/history-dialog.ui.h:11
 msgid "Add _Bookmark"
 msgstr "_Ajouter un signet"
 
@@ -2010,10 +2167,18 @@ msgid "Password"
 msgstr "Mot de passe"
 
 #: ../src/resources/passwords-dialog.ui.h:7
+msgid "Forget the selected passwords"
+msgstr "Oublier les mots de passe sélectionnés"
+
+#: ../src/resources/passwords-dialog.ui.h:8
+msgid "Reveal all the passwords"
+msgstr "Afficher tous les mots de passe"
+
+#: ../src/resources/passwords-dialog.ui.h:9
 msgid "_Copy Password"
 msgstr "_Copier le mot de passe"
 
-#: ../src/resources/passwords-dialog.ui.h:8
+#: ../src/resources/passwords-dialog.ui.h:10
 msgid "C_opy Username"
 msgstr "C_opier le nom d'utilisateur"
 
@@ -2094,8 +2259,8 @@ msgid "Fonts & Style"
 msgstr "Polices et styles"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-msgid "Manage Cookies"
-msgstr "Gérer les cookies"
+msgid "Manage _Cookies"
+msgstr "Gérer les _cookies"
 
 #: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
@@ -2123,8 +2288,8 @@ msgid "_Tell web sites I do not want to be tracked"
 msgstr "_Informer les sites Web du fait que je ne souhaite pas être suivi"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-msgid "Manage Passwords"
-msgstr "Gérer les mots de passe"
+msgid "Manage _Passwords"
+msgstr "Gérer les mots de _passe"
 
 #: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
@@ -2174,7 +2339,7 @@ msgstr "Vérification orthographique"
 msgid "_Enable spell checking"
 msgstr "_Activer la vérification orthographique"
 
-#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:839
+#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:840
 msgid "Language"
 msgstr "Langue"
 
@@ -2210,11 +2375,11 @@ msgstr "_Autres…"
 msgid "Other encodings"
 msgstr "Autres codages"
 
-#: ../src/ephy-history-window.c:179
+#: ../src/ephy-history-window.c:253
 msgid "Clear browsing history?"
 msgstr "Effacer l'historique de navigation ?"
 
-#: ../src/ephy-history-window.c:183
+#: ../src/ephy-history-window.c:257
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2445,8 +2610,8 @@ msgstr "_Copier l'adresse courriel"
 
 #. Images.
 #: ../src/ephy-window.c:233
-msgid "View _Image"
-msgstr "Afficher l'_image"
+msgid "View _Image in New Tab"
+msgstr "Afficher l'_image dans un nouvel onglet"
 
 #: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
@@ -2460,96 +2625,126 @@ msgstr "Enregistrer l'image _sous…"
 msgid "Set as _Wallpaper"
 msgstr "Définir comme p_apier peint"
 
-#: ../src/ephy-window.c:241
-msgid "St_art Animation"
-msgstr "_Démarrer l'animation"
+#. Video.
+#: ../src/ephy-window.c:244
+msgid "Open Video in New _Window"
+msgstr "Ouvrir la vidéo dans une _nouvelle fenêtre"
 
-#: ../src/ephy-window.c:243
-msgid "St_op Animation"
-msgstr "_Arrêter l'animation"
+#: ../src/ephy-window.c:246
+msgid "Open Video in New _Tab"
+msgstr "Ouvrir la vidéo dans un nouvel ongle_t"
 
-#: ../src/ephy-window.c:451
+#: ../src/ephy-window.c:248
+msgid "_Save Video As…"
+msgstr "_Enregistrer la vidéo sous…"
+
+#: ../src/ephy-window.c:250
+msgid "_Copy Video Address"
+msgstr "_Copier l'adresse de la vidéo"
+
+#. Audio.
+#: ../src/ephy-window.c:255
+msgid "Open Audio in New _Window"
+msgstr "Ouvrir l'audio dans une _nouvelle fenêtre"
+
+#: ../src/ephy-window.c:257
+msgid "Open Audio in New _Tab"
+msgstr "Ouvrir l'audio dans un nouvel ongle_t"
+
+#: ../src/ephy-window.c:259
+msgid "_Save Audio As…"
+msgstr "_Enregistrer l'audio sous…"
+
+#: ../src/ephy-window.c:261
+msgid "_Copy Audio Address"
+msgstr "_Copier l'adresse de l'audio"
+
+#: ../src/ephy-window.c:468
 msgid "There are unsubmitted changes to form elements"
 msgstr ""
 "Certaines modifications des éléments du formulaire n'ont pas été envoyées"
 
-#: ../src/ephy-window.c:452
+#: ../src/ephy-window.c:469
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Si vous fermez malgré tout le document, vous perdrez ces informations."
 
-#: ../src/ephy-window.c:454
+#: ../src/ephy-window.c:471
 msgid "Close _Document"
 msgstr "_Fermer le document"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:486
 msgid "There are ongoing downloads in this window"
 msgstr "Des téléchargements sont en cours dans cette fenêtre"
 
-#: ../src/ephy-window.c:470
+#: ../src/ephy-window.c:487
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Si vous fermez cette fenêtre, les téléchargements seront annulés"
 
-#: ../src/ephy-window.c:471
+#: ../src/ephy-window.c:488
 msgid "Close window and cancel downloads"
 msgstr "Fermer la fenêtre et annuler les téléchargements"
 
-#: ../src/ephy-window.c:1148
+#: ../src/ephy-window.c:1124
 msgid "Save As"
 msgstr "Enregistrer sous"
 
-#: ../src/ephy-window.c:1150
+#: ../src/ephy-window.c:1126
 msgid "Save As Application"
 msgstr "Enregistrer en tant qu'application"
 
-#: ../src/ephy-window.c:1152
+#: ../src/ephy-window.c:1128
 msgid "Print"
 msgstr "Imprimer"
 
-#: ../src/ephy-window.c:1154
+#: ../src/ephy-window.c:1130
 msgid "Bookmark"
 msgstr "Signet"
 
-#: ../src/ephy-window.c:1156
+#: ../src/ephy-window.c:1132
 msgid "Find"
 msgstr "Rechercher"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1165
+#: ../src/ephy-window.c:1141
 msgid "Larger"
 msgstr "Plus grand"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1168
+#: ../src/ephy-window.c:1144
 msgid "Smaller"
 msgstr "Plus petit"
 
-#: ../src/ephy-window.c:1196
+#: ../src/ephy-window.c:1166
 msgid "Back"
 msgstr "Précédent"
 
-#: ../src/ephy-window.c:1208
+#: ../src/ephy-window.c:1178
 msgid "Forward"
 msgstr "Suivant"
 
-#: ../src/ephy-window.c:1220
+#: ../src/ephy-window.c:1190
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../src/ephy-window.c:1229
+#: ../src/ephy-window.c:1199
 msgid "New _Tab"
 msgstr "Nouvel ongle_t"
 
-#: ../src/ephy-window.c:1237
+#: ../src/ephy-window.c:1207
 msgid "Go to most visited"
 msgstr "Aller aux plus visitées."
 
-#: ../src/popup-commands.c:237
+#: ../src/popup-commands.c:225
 msgid "Save Link As"
 msgstr "Enregistrer le lien sous"
 
-#: ../src/popup-commands.c:243
+#: ../src/popup-commands.c:232
 msgid "Save Image As"
 msgstr "Enregistrer l'image sous"
+
+#: ../src/popup-commands.c:239
+msgid "Save Media As"
+msgstr "Enregistrer le média sous"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -2577,12 +2772,12 @@ msgid_plural "System languages (%s)"
 msgstr[0] "Langue du système (%s)"
 msgstr[1] "Langues du système (%s)"
 
-#: ../src/prefs-dialog.c:922
+#: ../src/prefs-dialog.c:923
 msgid "Select a Directory"
 msgstr "Sélectionnez un répertoire"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1017
+#: ../src/prefs-dialog.c:1018
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2590,32 +2785,32 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1022
+#: ../src/prefs-dialog.c:1023
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fr-fr"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1024
+#: ../src/prefs-dialog.c:1025
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1026
+#: ../src/prefs-dialog.c:1027
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.com/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1028
+#: ../src/prefs-dialog.c:1029
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1030
+#: ../src/prefs-dialog.c:1031
 #, c-format
-msgid "http://www.bing.com/search?q=%s"
-msgstr "http://www.bing.com/search?q=%s"
+msgid "https://www.bing.com/search?q=%s"
+msgstr "https://www.bing.com/search?q=%s"
 
 #: ../src/window-commands.c:709
 #, c-format
@@ -2659,19 +2854,19 @@ msgstr "Créer une application Web"
 msgid "C_reate"
 msgstr "C_réer"
 
-#: ../src/window-commands.c:1473 ../src/window-commands.c:1496
+#: ../src/window-commands.c:1475 ../src/window-commands.c:1498
 msgid "Contact us at:"
 msgstr "Contactez-nous à :"
 
-#: ../src/window-commands.c:1476
+#: ../src/window-commands.c:1478
 msgid "Contributors:"
 msgstr "Contributeurs :"
 
-#: ../src/window-commands.c:1479
+#: ../src/window-commands.c:1481
 msgid "Past developers:"
 msgstr "Anciens développeurs :"
 
-#: ../src/window-commands.c:1505
+#: ../src/window-commands.c:1507
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2688,7 +2883,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1528
+#: ../src/window-commands.c:1530
 msgid "translator-credits"
 msgstr ""
 "Christophe Fergeau <teuf@users.sourceforge.net>\n"
@@ -2714,15 +2909,15 @@ msgstr ""
 "Luc Pionchon <pionchon.luc@gmail.com>\n"
 "Alain Lojewski <allomervan@gmail.com>"
 
-#: ../src/window-commands.c:1531
+#: ../src/window-commands.c:1533
 msgid "Web Website"
 msgstr "Site Web de Web"
 
-#: ../src/window-commands.c:1670
+#: ../src/window-commands.c:1672
 msgid "Enable caret browsing mode?"
 msgstr "Activer le mode de navigation au curseur ?"
 
-#: ../src/window-commands.c:1673
+#: ../src/window-commands.c:1675
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2733,252 +2928,6 @@ msgstr ""
 "permettant de vous déplacer avec votre clavier. Voulez-vous activer le mode "
 "de navigation au curseur ?"
 
-#: ../src/window-commands.c:1676
+#: ../src/window-commands.c:1678
 msgid "_Enable"
 msgstr "_Activer"
-
-#~ msgid "Show toolbars by default"
-#~ msgstr "Afficher les barres d'outils par défaut"
-
-#~ msgid "Use GNOME desktop wide font configuration."
-#~ msgstr "Utiliser la configuration générale du bureau GNOME."
-
-#~ msgid "History pages time range"
-#~ msgstr "Période temporelle des pages de l'historique"
-
-#~ msgid "Whether to show the title column in the history window."
-#~ msgstr ""
-#~ "Indique si la colonne de titre est affichée dans la fenêtre de "
-#~ "l'historique."
-
-#~ msgid "Whether to show the address column in the history window."
-#~ msgstr ""
-#~ "Indique si la colonne d'adresse est affichée dans la fenêtre de "
-#~ "l'historique."
-
-#~ msgid "Whether to show the date-time column in the history window."
-#~ msgstr ""
-#~ "Indique si la colonne date-heure est affichée dans la fenêtre de "
-#~ "l'historique."
-
-#~ msgid "Not now"
-#~ msgstr "Pas maintenant"
-
-#~ msgid "Store password"
-#~ msgstr "Mémoriser le mot de passe"
-
-#~ msgid ""
-#~ "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</"
-#~ "big>"
-#~ msgstr ""
-#~ "<big>Souhaitez-vous mémoriser le mot de passe de <b>%s</b> sur <b>%s</b> ?"
-#~ "</big>"
-
-#~ msgid "Oops! Error loading %s"
-#~ msgstr "Oups ! Erreur de chargement de %s"
-
-#~ msgid ""
-#~ "Oops! This site might have caused the web browser to close unexpectedly"
-#~ msgstr ""
-#~ "Oups ! Il se peut que ce site ait provoqué la fermeture inopinée du "
-#~ "navigateur Web"
-
-#~ msgid "Oops! Something went wrong displaying %s"
-#~ msgstr "Oups ! Quelque chose s'est mal passé pendant l'affichage de %s"
-
-#~ msgid "%u:%02u hour left"
-#~ msgid_plural "%u:%02u hours left"
-#~ msgstr[0] "encore %u h %02u"
-#~ msgstr[1] "encore %u h %02u"
-
-#~ msgid "All sites"
-#~ msgstr "Tous les sites"
-
-#~ msgid "%d _Similar"
-#~ msgid_plural "%d _Similar"
-#~ msgstr[0] "%d _similaire"
-#~ msgstr[1] "%d _similaires"
-
-#~ msgid "_Unify With %d Identical Bookmark"
-#~ msgid_plural "_Unify With %d Identical Bookmarks"
-#~ msgstr[0] "Ré_unir avec %d signet identique"
-#~ msgstr[1] "Ré_unir avec les %d signets identiques"
-
-#~ msgid "Show “%s”"
-#~ msgstr "Afficher « %s »"
-
-#~ msgid "Epiphany (RDF)"
-#~ msgstr "Epiphany (RDF)"
-
-#~ msgid "Epiphany bookmarks"
-#~ msgstr "Signets d'Epiphany"
-
-#~ msgid "_Personal Data"
-#~ msgstr "Données _personnelles"
-
-#~ msgid "Cookie properties"
-#~ msgstr "Propriétés du cookie"
-
-#~ msgid "Content:"
-#~ msgstr "Contenu :"
-
-#~ msgid "Path:"
-#~ msgstr "Chemin :"
-
-#~ msgid "Send for:"
-#~ msgstr "Envoyer à :"
-
-#~ msgid "Expires:"
-#~ msgstr "Date d'expiration :"
-
-#~ msgid "<b>_Automatic</b>"
-#~ msgstr "<b>_Automatique</b>"
-
-#~ msgid "Personal Data"
-#~ msgstr "Données personnelles"
-
-#~ msgid "Open the selected history link in a new window"
-#~ msgstr "Ouvre le lien d'historique sélectionné dans une nouvelle fenêtre"
-
-#~ msgid "Open the selected history link in a new tab"
-#~ msgstr "Ouvre le lien d'historique sélectionné dans un nouvel onglet"
-
-#~ msgid "Bookmark the selected history link"
-#~ msgstr "Ajoute le lien d'historique sélectionné aux signets"
-
-#~ msgid "Close the history window"
-#~ msgstr "Ferme la fenêtre d'historique"
-
-#~ msgid "Delete the selected history link"
-#~ msgstr "Supprime le lien d'historique sélectionné"
-
-#~ msgid "Select all history links or text"
-#~ msgstr "Sélectionne tous les liens ou le texte d'historique"
-
-#~ msgid "Clear _History"
-#~ msgstr "Effacer l'_historique"
-
-#~ msgid "Clear your browsing history"
-#~ msgstr "Efface votre historique de navigation"
-
-#~ msgid "Display history help"
-#~ msgstr "Affiche l'aide de l'historique"
-
-#~ msgid "_Address"
-#~ msgstr "_Adresse"
-
-#~ msgid "_Date and Time"
-#~ msgstr "_Date et heure"
-
-#~ msgid "Show the date and time column"
-#~ msgstr "Affiche la colonne de date et heure"
-
-#~ msgid "Last 30 minutes"
-#~ msgstr "Les dernières 30 minutes"
-
-#~ msgid "Today"
-#~ msgstr "Aujourd'hui"
-
-#~ msgid "Last %d day"
-#~ msgid_plural "Last %d days"
-#~ msgstr[0] "Le dernier jour"
-#~ msgstr[1] "Les %d derniers jours"
-
-#~ msgid "All history"
-#~ msgstr "Tout l'historique"
-
-#~ msgid "Start the application without opening windows"
-#~ msgstr "Démarrer l'application sans ouvrir de fenêtre"
-
-#~ msgid "_Open Link"
-#~ msgstr "_Ouvrir le lien"
-
-#~ msgid "_Download Link"
-#~ msgstr "Télé_charger le lien"
-
-#~ msgid "_Bookmark Link…"
-#~ msgstr "Créer un _signet avec ce lien…"
-
-#~ msgid "_Use Image As Background"
-#~ msgstr "_Utiliser l'image comme arrière-plan"
-
-#~ msgid "Inspect _Element"
-#~ msgstr "Insp_ecter l'élément"
-
-#~ msgid "C_ookies"
-#~ msgstr "C_ookies"
-
-#~ msgid "Hi_story"
-#~ msgstr "Hi_storique"
-
-#~ msgid "Encrypted connections only"
-#~ msgstr "Connexions chiffrées uniquement"
-
-#~ msgid "Any type of connection"
-#~ msgstr "Tout type de connexion"
-
-#~ msgid "End of current session"
-#~ msgstr "Fin de la session en cours"
-
-#~ msgid "Domain"
-#~ msgstr "Domaine"
-
-#~ msgid "Host"
-#~ msgstr "Hôte"
-
-#~ msgid "User Password"
-#~ msgstr "Mot de passe de l'utilisateur"
-
-#~ msgid "Download Link"
-#~ msgstr "Télécharger le lien"
-
-#~ msgid ""
-#~ "Web is free software; you can redistribute it and/or modify it under the "
-#~ "terms of the GNU General Public License as published by the Free Software "
-#~ "Foundation; either version 2 of the License, or (at your option) any "
-#~ "later version."
-#~ msgstr ""
-#~ "Web est un logiciel libre ; vous pouvez le diffuser et/ou le modifier "
-#~ "suivant les termes de la Licence Publique Générale GNU telle que publiée "
-#~ "par la Free Software Foundation ; soit la version 2 de la licence, soit "
-#~ "(à votre convenance) une version ultérieure."
-
-#~ msgid ""
-#~ "The GNOME Web Browser is distributed in the hope that it will be useful, "
-#~ "but WITHOUT ANY WARRANTY; without even the implied warranty of "
-#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General "
-#~ "Public License for more details."
-#~ msgstr ""
-#~ "Le navigateur Web de GNOME est distribué dans l'espoir qu'il sera utile, "
-#~ "mais SANS AUCUNE GARANTIE ; sans même une garantie implicite de "
-#~ "COMMERCIALISATION ou D'ADÉQUATION À UN USAGE PARTICULIER. Voyez la "
-#~ "Licence Publique Générale GNU pour plus de détails."
-
-#~ msgid ""
-#~ "You should have received a copy of the GNU General Public License along "
-#~ "with the GNOME Web Browser; if not, write to the Free Software "
-#~ "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
-#~ "02110-1301  USA"
-#~ msgstr ""
-#~ "Vous devriez avoir reçu une copie de la Licence Publique Générale GNU "
-#~ "avec le navigateur Web de GNOME ; sinon, veuillez écrire à la Free "
-#~ "Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA "
-#~ "02110-1301 USA"
-
-#~ msgid "http://www.google.com"
-#~ msgstr "http://www.google.fr"
-
-#~ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
-#~ msgstr "http://www.google.fr/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
-
-#~ msgid "Web Inspector"
-#~ msgstr "Inspecteur de Web"
-
-#~ msgid "Epiphany can't be used now. Initialization failed."
-#~ msgstr "Epiphany ne peut être démarré. L'initialisation a échoué."
-
-#~ msgid "%s Files"
-#~ msgstr "Fichiers %s"
-
-#~ msgid "_Work Offline"
-#~ msgstr "T_ravailler en mode déconnecté"
