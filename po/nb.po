@@ -9,9 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 3.13.x\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2014-08-23 11:17+0200\n"
-"PO-Revision-Date: 2014-08-23 11:19+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany\n"
+"POT-Creation-Date: 2014-09-06 13:45+0200\n"
+"PO-Revision-Date: 2014-09-06 13:49+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -519,19 +520,22 @@ msgstr "Fjern fra oversikt"
 msgid "Most Visited"
 msgstr "Mest besøkte"
 
-#: ../embed/ephy-about-handler.c:540 ../embed/ephy-about-handler.c:541
+#: ../embed/ephy-about-handler.c:541 ../embed/ephy-about-handler.c:542
 msgid "Private Browsing"
 msgstr "Privat nettlesing"
 
-#: ../embed/ephy-about-handler.c:542
+#: ../embed/ephy-about-handler.c:543
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
-"cleared when you close the window."
-msgstr ""
-"Du bruker nå nettleser <em>inkognito</em. Sider som vises vil ikke være "
-"synlig i nettleserhistorikken og all lagret informasjon vil fjernes når du "
-"lukker vinduet."
+"cleared when you close the window. Files you download will be kept."
+msgstr "Du bruker nå nettleser <em>inkognito</em. Sider som vises vil ikke være synlig i nettleserhistorikken og all lagret informasjon vil fjernes når du lukker vinduet. Filer du laster ned vil bli beholdt."
+
+#: ../embed/ephy-about-handler.c:547
+msgid ""
+"Incognito mode will not hide your activity from your employer, your Internet "
+"Service Provider, your government, or the websites that you visit."
+msgstr "Inkognito-modus vil ikke skjule din aktivitet fra arbeidsgiver, internett-tjenestetilbuder, myndigheter eller nettstedene du besøker."
 
 #. characters
 #: ../embed/ephy-embed.c:51
@@ -976,20 +980,16 @@ msgstr ""
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
 msgid ""
-"This web site’s identification uses very weak encryption. It has probably "
-"been forged."
-msgstr ""
-"Nettstedets identifikasjon bruker meget svak kryptering. Den er "
-"sannsynligvis forfalsket."
+"This web site’s identification cannot be trusted because it uses very weak "
+"encryption."
+msgstr "Kan ikke stole på nettstedets identifikasjon fordi det bruker meget svak kryptering."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
 msgid ""
-"This web site’s identification time-travelled from the future. Check the "
+"This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
-msgstr ""
-"Nettstedets identifikasjon har reist i tid fra fremtiden. Sjekk dato på din "
-"datamaskins kalender."
+msgstr "Nettstedets identifikasjon er kun gyldig for dato i fremtiden. Sjekk datoen på datamaskinens kalender."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1802
@@ -1008,16 +1008,16 @@ msgstr ""
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
 msgid ""
-"A criminal organization or government agency may have hijacked your "
-"connection. You should continue only if you know there is a good reason why "
-"this site does not use trusted identification."
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this site does not use trusted "
+"identification."
 msgstr ""
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1817
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
-msgstr ""
+msgstr "Legitime banker, butikker og andre offentlige nettsteder vil ikke spørre deg om å gjøre dette."
 
 #: ../embed/ephy-web-view.c:1858
 msgid "None specified"
@@ -1109,7 +1109,7 @@ msgstr "_OK"
 msgid "_Cancel"
 msgstr "A_vbryt"
 
-#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:7
+#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:9
 msgid "_Open"
 msgstr "_Åpne"
 
@@ -1457,7 +1457,7 @@ msgstr "Feil under nedlasting: %s"
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1101
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1122
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Åpne"
@@ -1528,11 +1528,6 @@ msgstr "_Vis alle emner"
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Legg til"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:438
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
-msgid "_Close"
-msgstr "L_ukk"
 
 #: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
@@ -1678,6 +1673,10 @@ msgstr "_Eksporter bokmerker …"
 msgid "Export bookmarks to a file"
 msgstr "Eksporter bokmerker til en fil"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+msgid "_Close"
+msgstr "L_ukk"
+
 #: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
 msgstr "Lukk bokmerkevinduet"
@@ -1709,7 +1708,7 @@ msgid "Paste the clipboard"
 msgstr "Lim inn utklippstavlen"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/resources/history-dialog.ui.h:10
+#: ../src/resources/history-dialog.ui.h:12
 msgid "_Delete"
 msgstr "_Slett"
 
@@ -1966,6 +1965,10 @@ msgstr "Nettsted"
 msgid "Remove"
 msgstr "Fjern"
 
+#: ../src/resources/cookies-dialog.ui.h:5
+msgid "Delete the selected cookies"
+msgstr "Slett valgte informasjonskapsler"
+
 #. File actions.
 #: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
 msgid "_New Window"
@@ -2032,11 +2035,19 @@ msgstr "Navn"
 msgid "Location"
 msgstr "Adresse"
 
+#: ../src/resources/history-dialog.ui.h:7
+msgid "Remove the selected pages from history"
+msgstr "Fjern valgte sider fra historikken"
+
 #: ../src/resources/history-dialog.ui.h:8
+msgid "Open the selected pages in new tabs"
+msgstr "Åpne valgte sider i nye faner"
+
+#: ../src/resources/history-dialog.ui.h:10
 msgid "_Copy Location"
 msgstr "_Kopier adresse"
 
-#: ../src/resources/history-dialog.ui.h:9
+#: ../src/resources/history-dialog.ui.h:11
 msgid "Add _Bookmark"
 msgstr "Legg til _bokmerke"
 
@@ -2058,10 +2069,18 @@ msgid "Password"
 msgstr "Passord"
 
 #: ../src/resources/passwords-dialog.ui.h:7
+msgid "Forget the selected passwords"
+msgstr "Glem valgte passord"
+
+#: ../src/resources/passwords-dialog.ui.h:8
+msgid "Reveal all the passwords"
+msgstr "Vis alle passord"
+
+#: ../src/resources/passwords-dialog.ui.h:9
 msgid "_Copy Password"
 msgstr "_Kopier passord"
 
-#: ../src/resources/passwords-dialog.ui.h:8
+#: ../src/resources/passwords-dialog.ui.h:10
 msgid "C_opy Username"
 msgstr "K_opier brukernavn"
 
@@ -2492,8 +2511,8 @@ msgstr "_Kopier e-postadresse"
 
 #. Images.
 #: ../src/ephy-window.c:233
-msgid "View _Image"
-msgstr "Vis b_ilde"
+msgid "View _Image in New Tab"
+msgstr "Vis b_ilde i ny fane"
 
 #: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
@@ -2507,95 +2526,125 @@ msgstr "_Lagre bilde som …"
 msgid "Set as _Wallpaper"
 msgstr "Sett som _bakgrunn"
 
-#: ../src/ephy-window.c:241
-msgid "St_art Animation"
-msgstr "St_art animasjon"
+#. Video.
+#: ../src/ephy-window.c:244
+msgid "Open Video in New _Window"
+msgstr "Åpne video i nytt _vindu"
 
-#: ../src/ephy-window.c:243
-msgid "St_op Animation"
-msgstr "St_opp animasjon"
+#: ../src/ephy-window.c:246
+msgid "Open Video in New _Tab"
+msgstr "Åpne video i ny _fane"
 
-#: ../src/ephy-window.c:450
+#: ../src/ephy-window.c:248
+msgid "_Save Video As…"
+msgstr "_Lagre video som …"
+
+#: ../src/ephy-window.c:250
+msgid "_Copy Video Address"
+msgstr "_Kopier adresse til video"
+
+#. Audio.
+#: ../src/ephy-window.c:255
+msgid "Open Audio in New _Window"
+msgstr "Åpne lyd i nytt _vindu"
+
+#: ../src/ephy-window.c:257
+msgid "Open Audio in New _Tab"
+msgstr "Åpne lyd i ny _fane"
+
+#: ../src/ephy-window.c:259
+msgid "_Save Audio As…"
+msgstr "_Lagre lyd som …"
+
+#: ../src/ephy-window.c:261
+msgid "_Copy Audio Address"
+msgstr "_Kopier adresse til lyd"
+
+#: ../src/ephy-window.c:468
 msgid "There are unsubmitted changes to form elements"
 msgstr "Det finnes endringer i skjemaet som ikke er sendt"
 
-#: ../src/ephy-window.c:451
+#: ../src/ephy-window.c:469
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Hvis du lukker dokumentet likevel vil du miste denne informasjonen."
 
-#: ../src/ephy-window.c:453
+#: ../src/ephy-window.c:471
 msgid "Close _Document"
 msgstr "Lukk _dokument"
 
-#: ../src/ephy-window.c:468
+#: ../src/ephy-window.c:486
 msgid "There are ongoing downloads in this window"
 msgstr "Det er pågående nedlastinger i dette vinduet"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:487
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Hvis du lukker dette vinduet vil nedlastingene bli avbrutt"
 
-#: ../src/ephy-window.c:470
+#: ../src/ephy-window.c:488
 msgid "Close window and cancel downloads"
 msgstr "Lukk vinduet og avbryt nedlastinger"
 
-#: ../src/ephy-window.c:1103
+#: ../src/ephy-window.c:1124
 msgid "Save As"
 msgstr "Lagre som"
 
-#: ../src/ephy-window.c:1105
+#: ../src/ephy-window.c:1126
 msgid "Save As Application"
 msgstr "Lagre som program"
 
-#: ../src/ephy-window.c:1107
+#: ../src/ephy-window.c:1128
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../src/ephy-window.c:1109
+#: ../src/ephy-window.c:1130
 msgid "Bookmark"
 msgstr "Bokmerke"
 
-#: ../src/ephy-window.c:1111
+#: ../src/ephy-window.c:1132
 msgid "Find"
 msgstr "Finn"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1120
+#: ../src/ephy-window.c:1141
 msgid "Larger"
 msgstr "Større"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1123
+#: ../src/ephy-window.c:1144
 msgid "Smaller"
 msgstr "Mindre"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1166
 msgid "Back"
 msgstr "Tilbake"
 
-#: ../src/ephy-window.c:1155
+#: ../src/ephy-window.c:1178
 msgid "Forward"
 msgstr "Fremover"
 
-#: ../src/ephy-window.c:1167
+#: ../src/ephy-window.c:1190
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../src/ephy-window.c:1176
+#: ../src/ephy-window.c:1199
 msgid "New _Tab"
 msgstr "Ny _fane"
 
-#: ../src/ephy-window.c:1184
+#: ../src/ephy-window.c:1207
 msgid "Go to most visited"
 msgstr "Gå til mest besøkte"
 
-#: ../src/popup-commands.c:237
+#: ../src/popup-commands.c:225
 msgid "Save Link As"
 msgstr "Lagre lenke som"
 
-#: ../src/popup-commands.c:243
+#: ../src/popup-commands.c:232
 msgid "Save Image As"
 msgstr "Lagre bilde som"
+
+#: ../src/popup-commands.c:239
+msgid "Save Media As"
+msgstr "Lagre medie som"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
