@@ -596,10 +596,6 @@ ephy_shell_init (EphyShell *shell)
   webkit_web_context_set_favicon_database_directory (web_context, favicon_db_path);
   g_free (favicon_db_path);
 #endif
-
-  shell->priv->search_provider = ephy_search_provider_new ();
-
-  g_application_set_inactivity_timeout (G_APPLICATION (shell), 60 * 1000);
 }
 
 static void
