@@ -260,17 +260,13 @@ user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
 
 	address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (widget));
 
-	LOG ("user_changed_cb, new address %s", address);
-
-	g_signal_handlers_block_by_func (controller, G_CALLBACK (sync_address), widget);
-	ephy_location_controller_set_address (controller, address);
+	LOG ("user_changed_cb, address %s", address);
 
 	completion = gtk_entry_get_completion (GTK_ENTRY (widget));
 	model = gtk_entry_completion_get_model (completion);
 
 	ephy_completion_model_update_for_string (EPHY_COMPLETION_MODEL (model), address,
 						 update_done_cb, completion);
-	g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), widget);
 }
 
 static void
