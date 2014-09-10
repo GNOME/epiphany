@@ -709,9 +709,9 @@ page_created_cb (EphyEmbedShell *shell,
   priv->web_extension = web_extension;
   g_object_add_weak_pointer (G_OBJECT (priv->web_extension), (gpointer *)&priv->web_extension);
 
-  g_signal_connect (priv->web_extension, "form-auth-data-save-requested",
-                    G_CALLBACK (form_auth_data_save_requested),
-                    web_view);
+  g_signal_connect_object (priv->web_extension, "form-auth-data-save-requested",
+                           G_CALLBACK (form_auth_data_save_requested),
+                           web_view, 0);
 }
 
 static void
@@ -722,10 +722,6 @@ ephy_web_view_dispose (GObject *object)
   g_signal_handlers_disconnect_by_func (priv->history_service,
                                         ephy_web_view_history_cleared_cb,
                                         EPHY_WEB_VIEW (object));
-
-  g_signal_handlers_disconnect_by_func (object, icon_changed_cb, NULL);
-
-  g_signal_handlers_disconnect_by_func (ephy_embed_shell_get_default (), form_auth_data_save_requested, object);
 
   g_clear_object (&priv->file_monitor);
 
@@ -1922,9 +1918,9 @@ ephy_web_view_init (EphyWebView *web_view)
   priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
   priv->history_service_cancellable = g_cancellable_new ();
 
-  g_signal_connect (priv->history_service,
-                    "cleared", G_CALLBACK (ephy_web_view_history_cleared_cb),
-                    web_view);
+  g_signal_connect_object (priv->history_service,
+                           "cleared", G_CALLBACK (ephy_web_view_history_cleared_cb),
+                           web_view, 0);
 
   g_signal_connect (web_view, "decide-policy",
                     G_CALLBACK (decide_policy_cb),
