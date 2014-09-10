@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-03 03:35+0000\n"
-"PO-Revision-Date: 2014-09-03 13:35+0200\n"
+"POT-Creation-Date: 2014-09-10 03:34+0000\n"
+"PO-Revision-Date: 2014-09-10 12:11+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -572,19 +572,32 @@ msgstr "Quitar de la vista general"
 msgid "Most Visited"
 msgstr "Más visitados"
 
-#: ../embed/ephy-about-handler.c:540 ../embed/ephy-about-handler.c:541
+#: ../embed/ephy-about-handler.c:541 ../embed/ephy-about-handler.c:542
 msgid "Private Browsing"
 msgstr "Navegación privada"
 
-#: ../embed/ephy-about-handler.c:542
+#: ../embed/ephy-about-handler.c:543
+#| msgid ""
+#| "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
+#| "will not show up in your browsing history and all stored information will "
+#| "be cleared when you close the window."
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
-"cleared when you close the window."
+"cleared when you close the window. Files you download will be kept."
 msgstr ""
 "Actualmente está navegando en modo <em>incógnito</em>. Las páginas que "
 "visite en este modo no se mostrarán en el histórico del navegador y toda la "
-"información almacenada se limpiará cuando cierre la ventana."
+"información almacenada se limpiará cuando cierre la ventana. Los archivos "
+"que descargue se conservarán."
+
+#: ../embed/ephy-about-handler.c:547
+msgid ""
+"Incognito mode will not hide your activity from your employer, your Internet "
+"Service Provider, your government, or the websites that you visit."
+msgstr ""
+"El modo de incógnito no ocultará su actividad ante su jefe, su proveedor de "
+"servicios de Internet, su gobierno o las páginas web que visite."
 
 #. characters
 #: ../embed/ephy-embed.c:51
@@ -1033,8 +1046,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1761
-#| msgid ""
-#| "This web site’s identification was not issued by a trusted organization."
 msgid ""
 "This web site’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1044,9 +1055,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1766
-#| msgid ""
-#| "This web site’s identification is too old to trust. Check the date on "
-#| "your computer’s calendar."
 msgid ""
 "This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
@@ -1073,10 +1081,6 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
-#| msgid ""
-#| "A criminal organization or government agency may have hijacked your "
-#| "connection. You should continue only if you know there is a good reason "
-#| "why this site does not use trusted identification."
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this site does not use trusted "
@@ -2038,7 +2042,6 @@ msgid "Remove"
 msgstr "Quitar"
 
 #: ../src/resources/cookies-dialog.ui.h:5
-#| msgid "Delete the selected bookmark or topic"
 msgid "Delete the selected cookies"
 msgstr "Eliminar las cookies seleccionadas"
 
@@ -2109,12 +2112,10 @@ msgid "Location"
 msgstr "Ubicación"
 
 #: ../src/resources/history-dialog.ui.h:7
-#| msgid "Remove the selected item from the toolbar"
 msgid "Remove the selected pages from history"
 msgstr "Quita las páginas seleccionadas del histórico"
 
 #: ../src/resources/history-dialog.ui.h:8
-#| msgid "Open the selected bookmark in a new tab"
 msgid "Open the selected pages in new tabs"
 msgstr "Abrir las páginas seleccionadas en pestañas nuevas"
 
@@ -2144,12 +2145,10 @@ msgid "Password"
 msgstr "Contraseña"
 
 #: ../src/resources/passwords-dialog.ui.h:7
-#| msgid "Remove the selected toolbar"
 msgid "Forget the selected passwords"
 msgstr "Olvidar las contraseñas seleccionadas"
 
 #: ../src/resources/passwords-dialog.ui.h:8
-#| msgid "Remember passwords"
 msgid "Reveal all the passwords"
 msgstr "Mostrar todas las contraseñas"
 
@@ -2608,47 +2607,35 @@ msgstr "Establecer como _fondo"
 
 #. Video.
 #: ../src/ephy-window.c:244
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
 msgid "Open Video in New _Window"
 msgstr "Abrir vídeo en una _ventana nueva"
 
 #: ../src/ephy-window.c:246
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
 msgid "Open Video in New _Tab"
 msgstr "Abrir vídeo en una _pestaña nueva"
 
 #: ../src/ephy-window.c:248
-#| msgid "_Save Link As…"
 msgid "_Save Video As…"
 msgstr "Guardar _vídeo como…"
 
 #: ../src/ephy-window.c:250
-#| msgid "_Copy Address"
 msgid "_Copy Video Address"
 msgstr "_Copiar la dirección del vídeo"
 
 #. Audio.
 #: ../src/ephy-window.c:255
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
 msgid "Open Audio in New _Window"
 msgstr "Abrir sonido en una _ventana nueva"
 
 #: ../src/ephy-window.c:257
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
 msgid "Open Audio in New _Tab"
 msgstr "Abrir sonido en una _pestaña nueva"
 
 #: ../src/ephy-window.c:259
-#| msgid "_Save Link As…"
 msgid "_Save Audio As…"
 msgstr "Guardar _sonido como…"
 
 #: ../src/ephy-window.c:261
-#| msgid "_Copy Address"
 msgid "_Copy Audio Address"
 msgstr "_Copiar la dirección del sonido"
 
@@ -2735,7 +2722,6 @@ msgid "Save Image As"
 msgstr "Guardar imagen como"
 
 #: ../src/popup-commands.c:239
-#| msgid "Save Link As"
 msgid "Save Media As"
 msgstr "Abrir medio como"
 
