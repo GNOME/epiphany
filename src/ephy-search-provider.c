@@ -266,12 +266,29 @@ static void
 launch_uri (const char  *uri,
             guint        timestamp)
 {
-  char *str;
+  GdkDisplay *display;
+  GdkAppLaunchContext *launch_context;
+  GAppInfo *appinfo;
+  GList *uris = NULL;
+  GError *error = NULL;
 
-  /* TODO: Handle the timestamp */
-  str = g_strdup_printf ("epiphany %s", uri);
-  g_spawn_command_line_async (str, NULL);
-  g_free (str);
+  display = gdk_display_get_default ();
+  if (display == NULL)
+    return;
+
+  launch_context = gdk_display_get_app_launch_context (display);
+  gdk_app_launch_context_set_timestamp (launch_context, timestamp);
+  appinfo = g_app_info_get_default_for_type ("text/html", TRUE);
+  uris = g_list_append (uris, (gpointer)uri);
+
+  if (!g_app_info_launch_uris (appinfo, uris, G_APP_LAUNCH_CONTEXT (launch_context), &error)) {
+    g_warning ("Failed to launch %s: %s", uri, error->message);
+    g_error_free (error);
+  }
+
+  g_object_unref (launch_context);
+  g_object_unref (appinfo);
+  g_list_free (uris);
 }
 
 static void
