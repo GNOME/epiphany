@@ -52,7 +52,7 @@ struct _EphySearchProviderClass
 
 G_DEFINE_TYPE (EphySearchProvider, ephy_search_provider, G_TYPE_APPLICATION)
 
-#define INACTIVITY_TIMEOUT 10000 /* Ten seconds, in milliseconds */
+#define INACTIVITY_TIMEOUT 60 * 1000 /* One minute, in milliseconds */
 
 static void
 on_model_updated (EphyHistoryService *service,
