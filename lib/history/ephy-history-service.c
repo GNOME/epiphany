@@ -415,6 +415,9 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
 
   ephy_history_service_enable_foreign_keys (self);
 
+  if (priv->read_only)
+    return TRUE;
+
   ephy_sqlite_connection_begin_transaction (priv->history_database, &error);
   if (error) {
     g_error ("Could not begin long running transaction in history database: %s", error->message);
@@ -422,10 +425,9 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
     return FALSE;
   }
 
-  if (!priv->read_only &&
-      ((ephy_history_service_initialize_hosts_table (self) == FALSE) ||
-       (ephy_history_service_initialize_urls_table (self) == FALSE) ||
-       (ephy_history_service_initialize_visits_table (self) == FALSE)))
+  if (ephy_history_service_initialize_hosts_table (self) == FALSE ||
+      ephy_history_service_initialize_urls_table (self) == FALSE ||
+      ephy_history_service_initialize_visits_table (self) == FALSE)
     return FALSE;
 
   return TRUE;
