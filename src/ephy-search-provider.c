@@ -52,6 +52,8 @@ struct _EphySearchProviderClass
 
 G_DEFINE_TYPE (EphySearchProvider, ephy_search_provider, G_TYPE_APPLICATION)
 
+#define INACTIVITY_TIMEOUT 10000 /* Ten seconds, in milliseconds */
+
 static void
 on_model_updated (EphyHistoryService *service,
 		  gboolean            success,
@@ -369,6 +371,8 @@ ephy_search_provider_init (EphySearchProvider *self)
   g_free (filename);
 
   self->cancellable = g_cancellable_new ();
+
+  g_application_set_inactivity_timeout (G_APPLICATION (self), INACTIVITY_TIMEOUT);
 }
 
 static gboolean
