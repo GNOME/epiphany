@@ -28,7 +28,6 @@
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-download.h"
-#include "totem-glow-button.h"
 
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
@@ -285,13 +284,25 @@ update_popup_menu (EphyDownloadWidget *widget)
 }
 
 static void
+start_glowing (EphyDownloadWidget *widget)
+{
+  gtk_style_context_add_class (gtk_widget_get_style_context (widget->priv->button), "needs-attention");
+}
+
+static void
+stop_glowing (EphyDownloadWidget *widget)
+{
+  gtk_style_context_remove_class (gtk_widget_get_style_context (widget->priv->button), "needs-attention");
+}
+
+static void
 widget_finished_cb (WebKitDownload *download,
                     EphyDownloadWidget *widget)
 {
   widget->priv->finished = TRUE;
   update_popup_menu (widget);
   update_download_label_and_tooltip (widget, _("Finished"));
-  totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), TRUE);
+  start_glowing (widget);
 }
 
 static void
@@ -311,7 +322,7 @@ widget_failed_cb (WebKitDownload *download,
   gtk_widget_set_tooltip_text (GTK_WIDGET (widget), error_msg);
   g_free (error_msg);
 
-  totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), TRUE);
+  start_glowing (widget);
 }
 
 static void
@@ -393,12 +404,6 @@ widget_destination_changed_cb (WebKitDownload *download,
 {
   update_download_destination (widget);
   add_popup_menu (widget);
-}
-
-static void
-stop_glowing (EphyDownloadWidget *widget)
-{
-  totem_glow_button_set_glow (TOTEM_GLOW_BUTTON (widget->priv->button), FALSE);
 }
 
 static void
@@ -572,7 +577,7 @@ create_widget (EphyDownloadWidget *widget)
   grid = gtk_grid_new ();
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
 
-  button = totem_glow_button_new ();
+  button = gtk_button_new ();
   menu_button = gtk_menu_button_new ();
   gtk_menu_button_set_direction (GTK_MENU_BUTTON (menu_button), GTK_ARROW_UP);
 
@@ -582,6 +587,7 @@ create_widget (EphyDownloadWidget *widget)
   smallify_label (GTK_LABEL (text));
   gtk_misc_set_alignment (GTK_MISC (text), 0, 0.5);
   gtk_label_set_ellipsize (GTK_LABEL (text), PANGO_ELLIPSIZE_END);
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_LABEL (text)), "filename");
 
   remain = gtk_label_new (_("Starting…"));
   smallify_label (GTK_LABEL (remain));
@@ -628,6 +634,10 @@ ephy_download_widget_init (EphyDownloadWidget *self)
                                   GTK_ORIENTATION_HORIZONTAL);
   context = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
+
+  g_object_set (self,
+                "margin", 2,
+                NULL);
 }
 
 /**

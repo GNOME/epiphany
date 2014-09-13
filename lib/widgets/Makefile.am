@@ -84,9 +84,7 @@ libephywidgets_la_SOURCES = \
 	ephy-zoom-action.h			\
 	ephy-zoom-action.c			\
 	nautilus-floating-bar.c			\
-	nautilus-floating-bar.h			\
-	totem-glow-button.c			\
-	totem-glow-button.h
+	nautilus-floating-bar.h
 
 libephywidgets_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\

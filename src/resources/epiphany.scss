@@ -1,0 +1,138 @@
+@function themecolor($s) {
+  @return unquote("@" + "#{$s}");
+}
+
+$variant: 'light';
+
+@import 'colors';
+@import 'drawing';
+
+// menu button fix, yeah this is ugly
+
+.button.active-menu {
+  @include button(active);
+  &:backdrop { @include button(active-backdrop); }
+}
+
+// floating status bar
+.floating-bar {
+  background-color: themecolor(theme_base_color);
+  border-width: 1px;
+  border-style: solid solid none;
+  border-color: themecolor(borders);
+  border-radius: 3px 3px 0 0;
+  &.left {
+    border-left-style: none;
+    border-top-left-radius: 0;
+  }
+  &.right {
+    border-right-style: none;
+    border-top-right-radius: 0;
+  }
+  &:backdrop {
+    background-color: themecolor(theme_unfocused_base_color);
+    border-color: themecolor(unfocused_borders);
+  }
+}
+
+// download bar
+.download-box {
+  // FIXME padding don't work here :-/
+  border-style: solid none none;
+  border-width: 1px;
+  border-color: themecolor(borders);
+  &:backdrop { border-color: themecolor(unfocused_borders)};
+}
+
+.download-box .button .filename {
+  &:dir(ltr) { padding-right: 6px; }
+  &:dir(rtl) { padding-left: 6px; }
+}
+
+.download-box .button.needs-attention .filename {
+  animation: needs_attention 150ms ease-in;
+  $_dot_color: $selected_bg_color;
+  $_dot_shadow: _text_shadow_color();
+  $_dot_shadow_r: if($variant=='light',0.5,0.45);
+  background-image: -gtk-gradient(radial,
+                                  center center, 0,
+                                  center center, 0.5,
+                                  to($_dot_color),
+                                  to(transparent)),
+                    -gtk-gradient(radial,
+                                  center center, 0,
+                                  center center, $_dot_shadow_r,
+                                  to($_dot_shadow),
+                                  to(transparent));
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  background-position: right 3px, right 4px;
+  &:dir(rtl) { background-position: left 3px, left 4px; }
+  &:backdrop { background-size: 6px 6px, 0 0;}
+}
+
+// incognito mode
+
+//$incognito_color: #c5cfd8;
+$incognito_color: #cbd2d9;
+$incognito_icon: 'user-not-tracked-symbolic';
+$edge_color: lighten($incognito_color, 13%);
+
+.incognito-mode {
+  &.titlebar {
+    @include headerbar_fill($incognito_color, $hc:$edge_color);
+    background-image: -gtk-icontheme($incognito_icon),
+                      headerbar_gradient($incognito_color);
+    background-size: 64px 64px, 100% 100%;
+    background-position: 160px 0, 0 0;
+    background-repeat: no-repeat, no-repeat;
+    border-color: _border_color($incognito_color);
+    color: transparentize($fg_color, 0.8); // this is the color of the overlayed icon
+    > * {
+      color: $fg_color;
+      &:backdrop { color: $backdrop_fg_color }
+    }
+    &:backdrop {
+      background-image: -gtk-icontheme($incognito_icon),
+                          linear-gradient(to bottom, $incognito_color);
+      box-shadow: inset 0 1px $edge_color;
+      color: transparentize($backdrop_fg_color, 0.9); // color of the overlayed icon in backdrop
+    }
+    .button { // changing the headerbar background color requires changing widget borders and shadow accordingly
+      @include button(normal, $incognito_color, $edge:$edge_color);
+      &.flat, &.titlebutton { @include button(undecorated); }
+      &.titlebutton {
+        @include _button_text_shadow($fg_color, $incognito_color);
+      }
+      &:hover { @include button(hover, $incognito_color, $edge:$edge_color); }
+      &:active, &:checked, &#ephy-page-menu-button.active-menu {
+        @include button(active, $incognito_color, $edge:$edge_color); }
+      &:insensitive {
+        @include button(insensitive, $incognito_color, $edge:$edge_color); }
+      &:backdrop {
+        @include button(backdrop, $incognito_color, $edge:$edge_color);
+        border-color: _border_color($incognito_color);
+        &:active {
+          @include button(backdrop-active, $incognito_color,
+                          $edge:$edge_color);
+          border-color: _border_color($incognito_color);
+        }
+        &:insensitive {
+          @include button(backdrop-insensitive, $incognito_color,
+                          $edge:$edge_color);
+          border-color: _border_color($incognito_color);
+        }
+      }
+      &.flat:backdrop, &.titlebutton:backdrop { @include button(undecorated); }
+    }
+    .entry {
+      box-shadow: entry_focus_shadow(transparentize($selected_bg_color, 1)), _widget_edge($edge_color);
+      border-color: _border_color($incognito_color);
+      &:focus {
+        border-color: entry_focus_border($selected_bg_color);
+        box-shadow: entry_focus_shadow($selected_bg_color), _widget_edge($edge_color);
+      }
+      &:backdrop { box-shadow: none; }
+    }
+  }
+}

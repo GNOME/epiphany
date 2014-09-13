@@ -1,78 +1,147 @@
-#ephy-status-frame {
-  border-style: solid;
-  border-width: 1px;
-  padding: 4px;
-}
-
-#ephy-tab-close-button {
-  -GtkButton-default-border: 0;
-  -GtkButton-default-outside-border: 0;
-  -GtkButton-inner-border: 0;
-  -GtkWidget-focus-padding: 0;
-  -GtkWidget-focus-line-width: 0;
-  margin: 0;
-  padding: 0;
-}
-
-.primary-toolbar.toolbar {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-#fullscreen-popup {
-    background-color: alpha (black, 0.7);
-    color: white;
-    padding: 12px;
-    border-radius: 10px;
-}
-
-EphyToolbar.incognito-mode {
-    background-color: transparent;
-    background-image: url("resource://org/gnome/epiphany/incognito-tinted.png"),
-                      linear-gradient(to bottom,
-                                      #e4ecf5,
-                                      #c5cfd8);
-    background-repeat: no-repeat;
-    background-position: 6ex center, 0 0;
-    background-size: auto 180%;
-    border-color: shade(#c5cfd8, 0.90);
-    box-shadow: none;
-}
-
-EphyToolbar.incognito-mode *:insensitive {
-    background-color: transparent;
-}
-
-EphyToolbar.incognito-mode EphyMiddleClickableButton,
-EphyToolbar.incognito-mode > .button {
-    background-image: linear-gradient(to bottom,
-                                      #e4ecf5,
-                                      #c5cfd8);
-    border-color: shade(#c5cfd8, 0.90);
-}
-
-EphyTitleBox {
-    -GtkWidget-window-dragging: true;
-}
+.button.active-menu {
+  color: #2e3436;
+  outline-color: rgba(46, 52, 54, 0.3);
+  border-color: #a1a1a1;
+  background-image: linear-gradient(to bottom, #d6d6d6, gainsboro 40%, #e0e0e0);
+  text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+  icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px white; }
 
 .floating-bar {
   background-color: @theme_base_color;
   border-width: 1px;
   border-style: solid solid none;
   border-color: @borders;
-  border-radius: 3px 3px 0 0;
-}
+  border-radius: 3px 3px 0 0; }
+  .floating-bar.left {
+    border-left-style: none;
+    border-top-left-radius: 0; }
+  .floating-bar.right {
+    border-right-style: none;
+    border-top-right-radius: 0; }
+  .floating-bar:backdrop {
+    background-color: @theme_unfocused_base_color;
+    border-color: @unfocused_borders; }
 
-.floating-bar.left { /* axes left border and border radius */
-  border-left-style: none;
-  border-top-left-radius: 0;
-}
-.floating-bar.right { /* axes right border and border radius */
-  border-right-style: none;
-  border-top-right-radius: 0;
-}
+.download-box {
+  border-style: solid none none;
+  border-width: 1px;
+  border-color: @borders; }
+  .download-box:backdrop {
+    border-color: @unfocused_borders; }
 
-.floating-bar:backdrop {
-  background-color: @theme_unfocused_base_color;
-  border-color: @unfocused_borders;
-}
+.download-box .button .filename:dir(ltr) {
+  padding-right: 6px; }
+.download-box .button .filename:dir(rtl) {
+  padding-left: 6px; }
+
+.download-box .button.needs-attention .filename {
+  animation: needs_attention 150ms ease-in;
+  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#4a90d9), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.5, to(rgba(255, 255, 255, 0.76923)), to(transparent));
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  background-position: right 3px, right 4px; }
+  .download-box .button.needs-attention .filename:dir(rtl) {
+    background-position: left 3px, left 4px; }
+  .download-box .button.needs-attention .filename:backdrop {
+    background-size: 6px 6px, 0 0; }
+
+.incognito-mode.titlebar {
+  background-image: linear-gradient(to bottom, #d7dce2, #cbd2d9);
+  box-shadow: inset 0 -1px #b4bec8, inset 0 1px #f1f3f5;
+  background-image: -gtk-icontheme("user-not-tracked-symbolic"), linear-gradient(to bottom, #d7dce2, #cbd2d9);
+  background-size: 64px 64px, 100% 100%;
+  background-position: 160px 0, 0 0;
+  background-repeat: no-repeat, no-repeat;
+  border-color: #8192a3;
+  color: rgba(46, 52, 54, 0.2); }
+  .incognito-mode.titlebar > * {
+    color: #2e3436; }
+    .incognito-mode.titlebar > *:backdrop {
+      color: #8d9091; }
+  .incognito-mode.titlebar:backdrop {
+    background-image: -gtk-icontheme("user-not-tracked-symbolic"), linear-gradient(to bottom, #cbd2d9);
+    box-shadow: inset 0 1px #f1f3f5;
+    color: rgba(141, 144, 145, 0.1); }
+  .incognito-mode.titlebar .button {
+    color: #2e3436;
+    outline-color: rgba(46, 52, 54, 0.3);
+    border-color: #8192a3;
+    background-image: linear-gradient(to bottom, #dadfe4, #cbd2d9 40%, #bcc5ce);
+    text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.7), 0 1px #f1f3f5; }
+    .incognito-mode.titlebar .button.flat, .incognito-mode.titlebar .button.titlebutton {
+      border-color: transparent;
+      background-color: transparent;
+      background-image: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
+      text-shadow: none;
+      icon-shadow: none; }
+    .incognito-mode.titlebar .button.titlebutton {
+      text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+      icon-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
+    .incognito-mode.titlebar .button:hover {
+      color: #2e3436;
+      outline-color: rgba(46, 52, 54, 0.3);
+      border-color: #8192a3;
+      background-image: linear-gradient(to bottom, #f4f6f7, #d7dce2 40%, #cbd2d9);
+      text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+      icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.7), 0 1px #f1f3f5; }
+    .incognito-mode.titlebar .button:active, .incognito-mode.titlebar .button:checked, .incognito-mode.titlebar .button#ephy-page-menu-button.active-menu {
+      color: #2e3436;
+      outline-color: rgba(46, 52, 54, 0.3);
+      border-color: #8192a3;
+      background-image: linear-gradient(to bottom, #b0bbc6, #b8c1cb 40%, #bcc5ce);
+      text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+      icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px #f1f3f5; }
+    .incognito-mode.titlebar .button:insensitive {
+      color: #8d9091;
+      border-color: #8192a3;
+      background-image: linear-gradient(to bottom, #d2d8de);
+      text-shadow: none;
+      icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px #f1f3f5; }
+      .incognito-mode.titlebar .button:insensitive > .label {
+        color: inherit; }
+    .incognito-mode.titlebar .button:backdrop {
+      color: #8d9091;
+      border-color: #cbd2d9;
+      background-image: linear-gradient(to bottom, #cbd2d9);
+      text-shadow: none;
+      icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0);
+      border-color: #8192a3; }
+      .incognito-mode.titlebar .button:backdrop:active {
+        color: #8d9091;
+        border-color: #aeb8c3;
+        background-image: linear-gradient(to bottom, #aeb8c3);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0);
+        border-color: #8192a3; }
+      .incognito-mode.titlebar .button:backdrop:insensitive {
+        color: #989ea3;
+        border-color: #d2d8de;
+        background-image: linear-gradient(to bottom, #d2d8de);
+        text-shadow: none;
+        icon-shadow: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0);
+        border-color: #8192a3; }
+        .incognito-mode.titlebar .button:backdrop:insensitive > .label {
+          color: inherit; }
+    .incognito-mode.titlebar .button.flat:backdrop, .incognito-mode.titlebar .button.titlebutton:backdrop {
+      border-color: transparent;
+      background-color: transparent;
+      background-image: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
+      text-shadow: none;
+      icon-shadow: none; }
+  .incognito-mode.titlebar .entry {
+    box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px #f1f3f5;
+    border-color: #8192a3; }
+    .incognito-mode.titlebar .entry:focus {
+      border-color: #4a90d9;
+      box-shadow: inset 0 0 0 1px #4a90d9, 0 1px #f1f3f5; }
+    .incognito-mode.titlebar .entry:backdrop {
+      box-shadow: none; }

@@ -2999,12 +2999,13 @@ setup_downloads_box (EphyWindow *window)
 	GtkWidget *close_button;
 	GtkWidget *image;
 
-	widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+	widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
 	close_button = gtk_button_new ();
 	gtk_container_set_border_width (GTK_CONTAINER (close_button), 6);
 	gtk_widget_set_valign (close_button, GTK_ALIGN_CENTER);
 	gtk_style_context_add_class (gtk_widget_get_style_context (close_button), "image-button");
 	gtk_style_context_add_class (gtk_widget_get_style_context (close_button), "close");
+	gtk_style_context_add_class (gtk_widget_get_style_context (widget), "download-box");
 
 	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
 

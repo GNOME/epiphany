@@ -112,7 +112,6 @@ RESOURCE_FILES = \
 	resources/epiphany.css                    \
 	resources/error.html			  \
 	resources/history-dialog.ui		  \
-	resources/incognito-tinted.png            \
 	resources/incognito.png                   \
 	resources/missing-thumbnail.png		  \
 	resources/overview.html			  \
