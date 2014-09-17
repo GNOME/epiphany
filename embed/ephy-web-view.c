@@ -526,11 +526,10 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
 }
 
 static void
-update_navigation_flags (EphyWebView *view)
+update_navigation_flags (WebKitWebView *web_view)
 {
-  EphyWebViewPrivate *priv = view->priv;
+  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (web_view)->priv;
   guint flags = 0;
-  WebKitWebView *web_view = WEBKIT_WEB_VIEW (view);
 
   if (webkit_web_view_can_go_back (web_view))
     flags |= EPHY_WEB_VIEW_NAV_BACK;
@@ -541,7 +540,7 @@ update_navigation_flags (EphyWebView *view)
   if (priv->nav_flags != (EphyWebViewNavigationFlags)flags) {
     priv->nav_flags = (EphyWebViewNavigationFlags)flags;
 
-    g_object_notify (G_OBJECT (view), "navigation");
+    g_object_notify (G_OBJECT (web_view), "navigation");
   }
 }
 
@@ -917,6 +916,8 @@ ephy_web_view_constructed (GObject *object)
 
   g_signal_connect (object, "web-process-crashed",
                     G_CALLBACK (process_crashed_cb), object);
+  g_signal_connect_swapped (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (object)),
+                            "changed", G_CALLBACK (update_navigation_flags), object);
 }
 
 static void
@@ -1549,8 +1550,6 @@ ephy_web_view_location_changed (EphyWebView *view,
 
   _ephy_web_view_update_icon (view);
 
-  update_navigation_flags (view);
-
   g_object_thaw_notify (object);
 }
 
@@ -1958,7 +1957,6 @@ load_failed_cb (WebKitWebView *web_view,
 
   priv->load_failed = TRUE;
   ephy_web_view_set_link_message (view, NULL);
-  update_navigation_flags (view);
 
   if (error->domain == SOUP_HTTP_ERROR) {
     ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
