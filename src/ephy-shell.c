@@ -319,9 +319,12 @@ ephy_shell_activate (GApplication *application)
    * can be invalidated by another remote instance.
    */
   if (priv->remote_startup_context == NULL) {
-    ephy_session_resume (ephy_shell_get_session (shell),
-                         priv->local_startup_context->user_time,
-                         NULL, session_load_cb, priv->local_startup_context);
+    if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+      ephy_session_resume (ephy_shell_get_session (shell),
+                           priv->local_startup_context->user_time,
+                           NULL, session_load_cb, priv->local_startup_context);
+    } else
+      ephy_shell_startup_continue (shell, priv->local_startup_context);
   } else {
     ephy_shell_startup_continue (shell, priv->remote_startup_context);
     g_clear_pointer (&priv->remote_startup_context, ephy_shell_startup_context_free);
