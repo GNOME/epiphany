@@ -109,7 +109,7 @@ struct _EphyWebViewPrivate {
   GTlsCertificateFlags tls_errors;
 
   gboolean loading_tls_error_page;
-  char *tls_error_page_host;
+  char *tls_error_failing_uri;
 
   /* Web Extension */
   EphyWebExtensionProxy *web_extension;
@@ -704,17 +704,20 @@ allow_tls_certificate_cb (EphyWebExtensionProxy *shell,
                           EphyWebView *web_view)
 {
   EphyWebViewPrivate *priv = web_view->priv;
+  SoupURI *uri;
 
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
     return;
 
   g_return_if_fail (G_IS_TLS_CERTIFICATE (priv->certificate));
-  g_return_if_fail (priv->tls_error_page_host != NULL);
+  g_return_if_fail (priv->tls_error_failing_uri != NULL);
 
+  uri = soup_uri_new (priv->tls_error_failing_uri);
   webkit_web_context_allow_tls_certificate_for_host (webkit_web_context_get_default (),
                                                      priv->certificate,
-                                                     priv->tls_error_page_host);
+                                                     uri->host);
   ephy_web_view_load_url (web_view, ephy_web_view_get_address (web_view));
+  soup_uri_free (uri);
 }
 
 static void
@@ -779,7 +782,7 @@ ephy_web_view_finalize (GObject *object)
   g_free (priv->typed_address);
   g_free (priv->link_message);
   g_free (priv->loading_message);
-  g_free (priv->tls_error_page_host);
+  g_free (priv->tls_error_failing_uri);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
 }
@@ -1609,7 +1612,7 @@ load_changed_cb (WebKitWebView *web_view,
       priv->loading_tls_error_page = FALSE;
     } else {
       g_clear_object (&priv->certificate);
-      g_clear_pointer (&priv->tls_error_page_host, g_free);
+      g_clear_pointer (&priv->tls_error_failing_uri, g_free);
 
       if (webkit_web_view_get_tls_info (web_view, &priv->certificate, &priv->tls_errors)) {
         g_object_ref (priv->certificate);
@@ -2011,24 +2014,23 @@ load_failed_cb (WebKitWebView *web_view,
 
 static gboolean
 load_failed_with_tls_error_cb (WebKitWebView *web_view,
+                               const char *uri,
                                GTlsCertificate *certificate,
                                GTlsCertificateFlags errors,
-                               gchar *host,
                                gpointer user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
   EphyWebViewPrivate *priv = view->priv;
 
   g_clear_object (&priv->certificate);
-  g_clear_pointer (&priv->tls_error_page_host, g_free);
+  g_clear_pointer (&priv->tls_error_failing_uri, g_free);
 
   priv->loading_tls_error_page = TRUE;
   priv->certificate = g_object_ref (certificate);
   priv->tls_errors = errors;
-  priv->tls_error_page_host = g_strdup (host);
+  priv->tls_error_failing_uri = g_strdup (uri);
   ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), EPHY_SECURITY_LEVEL_BROKEN_SECURITY);
-  ephy_web_view_load_error_page (EPHY_WEB_VIEW (web_view),
-                                 webkit_web_view_get_uri (web_view),
+  ephy_web_view_load_error_page (EPHY_WEB_VIEW (web_view), uri,
                                  EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL);
 
   return TRUE;
