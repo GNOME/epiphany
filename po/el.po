@@ -34,8 +34,8 @@ msgstr ""
 "Project-Id-Version: epiphany.gnome-2-26\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-30 03:34+0000\n"
-"PO-Revision-Date: 2014-08-30 13:58+0200\n"
+"POT-Creation-Date: 2014-09-19 03:35+0000\n"
+"PO-Revision-Date: 2014-09-19 09:12+0200\n"
 "Last-Translator: Maria Mavridou <mavridou@gmail.com>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
@@ -75,7 +75,7 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=gr-el"
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
 #: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
-#: ../src/ephy-search-provider.c:287
+#: ../src/ephy-search-provider.c:306
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=gr-el"
@@ -600,19 +600,33 @@ msgstr "Αφαίρεση από την επισκόπηση"
 msgid "Most Visited"
 msgstr "Πιο δημοφιλή"
 
-#: ../embed/ephy-about-handler.c:540 ../embed/ephy-about-handler.c:541
+#: ../embed/ephy-about-handler.c:541 ../embed/ephy-about-handler.c:542
 msgid "Private Browsing"
 msgstr "Ιδιωτική περιήγηση"
 
-#: ../embed/ephy-about-handler.c:542
+#: ../embed/ephy-about-handler.c:543
+#| msgid ""
+#| "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
+#| "will not show up in your browsing history and all stored information will "
+#| "be cleared when you close the window."
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
-"cleared when you close the window."
+"cleared when you close the window. Files you download will be kept."
 msgstr ""
 "Τώρα περιηγείσθε <em>ανώνυμα</em>. Οι σελίδες που εμφανίζονται σε αυτήν την "
 "κατάσταση δεν θα εμφανίζονται στο ιστορικό περιήγησης και όλες οι "
-"αποθηκευμένες πληροφορίες θα διαγραφούν όταν κλείσετε το παράθυρο."
+"αποθηκευμένες πληροφορίες θα διαγραφούν όταν κλείσετε το παράθυρο. Ληφθέντα "
+"αρχεία θα διατηρηθούν."
+
+#: ../embed/ephy-about-handler.c:547
+msgid ""
+"Incognito mode will not hide your activity from your employer, your Internet "
+"Service Provider, your government, or the websites that you visit."
+msgstr ""
+"Η κατάσταση ανωνυμίας δεν θα αποκρύψει τη δραστηριότητά σας από τον εργοδότη "
+"σας, τον πάροχο υπηρεσίας διαδικτύου, την κυβέρνησή σας, ή τις ιστοσελίδες "
+"που επισκέπτεστε."
 
 #. characters
 #: ../embed/ephy-embed.c:51
@@ -994,31 +1008,31 @@ msgstr "Αποθήκευση"
 msgid "Do you want to save your password for “%s”?"
 msgstr "Θέλετε να αποθηκεύσετε τον κωδικό πρόσβασης για “%s”;"
 
-#: ../embed/ephy-web-view.c:1415
+#: ../embed/ephy-web-view.c:1412
 msgid "Deny"
 msgstr "Να μην επιτρέπεται"
 
-#: ../embed/ephy-web-view.c:1416
+#: ../embed/ephy-web-view.c:1413
 msgid "Allow"
 msgstr "Να επιτρέπεται"
 
-#: ../embed/ephy-web-view.c:1426
+#: ../embed/ephy-web-view.c:1423
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Η σελίδα σε <b>%s</b> επιθυμεί να μάθει την τοποθεσία σας."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1510
+#: ../embed/ephy-web-view.c:1507
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Γίνεται φόρτωση “%s”…"
 
-#: ../embed/ephy-web-view.c:1512
+#: ../embed/ephy-web-view.c:1509
 msgid "Loading…"
 msgstr "Γίνεται φόρτωση…"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1736
+#: ../embed/ephy-web-view.c:1731
 msgid ""
 "This web site presented identification that belongs to a different web site."
 msgstr ""
@@ -1026,7 +1040,7 @@ msgstr ""
 "ιστότοπο."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1741
+#: ../embed/ephy-web-view.c:1736
 msgid ""
 "This web site’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1035,14 +1049,14 @@ msgstr ""
 "Ελέγξτε την ημερομηνία στο ημερολόγιο του υπολογιστή σας."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1746
+#: ../embed/ephy-web-view.c:1741
 msgid ""
 "This web site’s identification was not issued by a trusted organization."
 msgstr ""
 "Η ταυτότητα αυτού του ιστότοπου δεν έχει εκδοθεί από έναν έμπιστο οργανισμό."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1751
+#: ../embed/ephy-web-view.c:1746
 msgid ""
 "This web site’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1050,7 +1064,7 @@ msgstr ""
 "κατεστραμμένη."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1756
+#: ../embed/ephy-web-view.c:1751
 msgid ""
 "This web site’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1059,7 +1073,7 @@ msgstr ""
 "την εξέδωσε."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1761
+#: ../embed/ephy-web-view.c:1756
 msgid ""
 "This web site’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1068,7 +1082,7 @@ msgstr ""
 "αδύναμη κρυπτογράφηση."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1766
+#: ../embed/ephy-web-view.c:1761
 msgid ""
 "This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
@@ -1077,13 +1091,13 @@ msgstr ""
 "Ελέγξτε την ημερομηνία στο ημερολόγιο του υπολογιστή σας."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1802
+#: ../embed/ephy-web-view.c:1797
 #, c-format
 msgid "This might not be the real %s."
 msgstr "Αυτό μπορεί να μην είναι το πραγματικό %s."
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1807
+#: ../embed/ephy-web-view.c:1802
 msgid ""
 "When you try to connect securely, web sites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
@@ -1094,7 +1108,7 @@ msgstr ""
 "Υπάρχει ένα σφάλμα με την ταυτοποίηση αυτού του ιστότοπου:"
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1813
+#: ../embed/ephy-web-view.c:1808
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this site does not use trusted "
@@ -1105,29 +1119,29 @@ msgstr ""
 "ιστότοπος δεν χρησιμοποιεί έμπιστη ταυτότητα."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1817
+#: ../embed/ephy-web-view.c:1812
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
 msgstr ""
 "Νόμιμοι ιστότοποι τραπεζών, καταστημάτων και άλλοι δημόσιοι ιστότοποι δεν θα "
 "σας ζητήσουν να το κάνετε αυτό."
 
-#: ../embed/ephy-web-view.c:1858
+#: ../embed/ephy-web-view.c:1853
 msgid "None specified"
 msgstr "Αδιευκρίνιστο"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1871 ../embed/ephy-web-view.c:1886
-#: ../embed/ephy-web-view.c:1906
+#: ../embed/ephy-web-view.c:1866 ../embed/ephy-web-view.c:1881
+#: ../embed/ephy-web-view.c:1901
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Πρόβλημα κατά τη φόρτωση του “%s”"
 
-#: ../embed/ephy-web-view.c:1873
+#: ../embed/ephy-web-view.c:1868
 msgid "Oops! Unable to display this website."
 msgstr "Ώχ! Αδύνατη η εμφάνιση αυτού του ιστότοπου."
 
-#: ../embed/ephy-web-view.c:1874
+#: ../embed/ephy-web-view.c:1869
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1140,15 +1154,15 @@ msgstr ""
 "να έχει μετακινηθεί σε νέα διεύθυνση. Μην ξεχάσετε να ελέγξετε αν η σύνδεση "
 "σας στο διαδίκτυο λειτουργεί σωστά.</p>"
 
-#: ../embed/ephy-web-view.c:1882
+#: ../embed/ephy-web-view.c:1877
 msgid "Try again"
 msgstr "Προσπαθήστε ξανά"
 
-#: ../embed/ephy-web-view.c:1888
+#: ../embed/ephy-web-view.c:1883
 msgid "Oops! There may be a problem."
 msgstr "Ώχ! Μπορεί να υπάρχει πρόβλημα."
 
-#: ../embed/ephy-web-view.c:1889
+#: ../embed/ephy-web-view.c:1884
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1159,20 +1173,20 @@ msgstr ""
 "p><p> Αν ξανασυμβεί, παρακαλούμε να αναφέρετε το πρόβλημα στους <strong>%s</"
 "strong> προγραμματιστές.</p>"
 
-#: ../embed/ephy-web-view.c:1894 ../embed/ephy-web-view.c:1901
+#: ../embed/ephy-web-view.c:1889 ../embed/ephy-web-view.c:1896
 msgid "Reload Anyway"
 msgstr "Επαναφόρτωση σε κάθε περίπτωση"
 
-#: ../embed/ephy-web-view.c:1898
+#: ../embed/ephy-web-view.c:1893
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Πρόβλημα εμφάνισης του “%s”"
 
-#: ../embed/ephy-web-view.c:1899
+#: ../embed/ephy-web-view.c:1894
 msgid "Oops!"
 msgstr "Ώχ!"
 
-#: ../embed/ephy-web-view.c:1900
+#: ../embed/ephy-web-view.c:1895
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1181,16 +1195,16 @@ msgstr ""
 "επαναφορτώστε ή επισκεφθείτε μια διαφορετική σελίδα για να συνεχίσετε."
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1908
+#: ../embed/ephy-web-view.c:1903
 msgid "Look out!"
 msgstr "Προσέξτε!"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1911
+#: ../embed/ephy-web-view.c:1906
 msgid "Load Anyway"
 msgstr "Φόρτωση σε κάθε περίπτωση"
 
-#: ../embed/ephy-web-view.c:2809
+#: ../embed/ephy-web-view.c:2803
 msgid "_OK"
 msgstr "_Εντάξει"
 
@@ -2062,7 +2076,6 @@ msgid "Remove"
 msgstr "Αφαίρεση"
 
 #: ../src/resources/cookies-dialog.ui.h:5
-#| msgid "Delete the selected bookmark or topic"
 msgid "Delete the selected cookies"
 msgstr "Διαγραφή των επιλεγμένων cookies"
 
@@ -2133,12 +2146,10 @@ msgid "Location"
 msgstr "Τοποθεσία"
 
 #: ../src/resources/history-dialog.ui.h:7
-#| msgid "Remove the selected item from the toolbar"
 msgid "Remove the selected pages from history"
 msgstr "Αφαίρεση των επιλεγμένων σελίδων από το ιστορικό"
 
 #: ../src/resources/history-dialog.ui.h:8
-#| msgid "Open the selected bookmark in a new tab"
 msgid "Open the selected pages in new tabs"
 msgstr "Άνοιγμα των επιλεγμένων σελίδων σε νέες καρτέλες"
 
@@ -2168,12 +2179,10 @@ msgid "Password"
 msgstr "Κωδικός πρόσβασης"
 
 #: ../src/resources/passwords-dialog.ui.h:7
-#| msgid "Remove the selected toolbar"
 msgid "Forget the selected passwords"
 msgstr "Παράλειψη των επιλεγμένων κωδικών πρόσβασης"
 
 #: ../src/resources/passwords-dialog.ui.h:8
-#| msgid "Remember passwords"
 msgid "Reveal all the passwords"
 msgstr "Αποκάλυψη όλων των κωδικών πρόσβασης"
 
@@ -2468,7 +2477,7 @@ msgstr "Επιλογές Ιστού"
 msgid "Close tab"
 msgstr "Κλείσιμο καρτέλας"
 
-#: ../src/ephy-search-provider.c:199
+#: ../src/ephy-search-provider.c:201
 #, c-format
 msgid "Search the Web for %s"
 msgstr "Αναζήτηση στον Ιστό για %s"
