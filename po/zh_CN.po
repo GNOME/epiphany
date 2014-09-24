@@ -20,15 +20,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2014-09-22 13:25+0000\n"
-"PO-Revision-Date: 2014-08-03 01:10+0800\n"
-"Last-Translator: Tong Hui <tonghuix@gmail.com>\n"
+"PO-Revision-Date: 2014-09-25 00:27+0800\n"
+"Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
 "Language-Team: Chinese Simplified <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.9\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -70,10 +70,8 @@ msgstr "Epiphany"
 
 # 这样翻译，与GNOME开发者把这个浏览器改名的用意接近。
 #: ../data/epiphany.appdata.xml.in.h:2
-#, fuzzy
-#| msgid "Web Browser"
 msgid "Web browser for GNOME"
-msgstr "Web 网络浏览器"
+msgstr "GNOME Web 网络浏览器"
 
 #: ../data/epiphany.appdata.xml.in.h:3
 msgid ""
@@ -546,24 +544,19 @@ msgid "Private Browsing"
 msgstr "隐私浏览"
 
 #: ../embed/ephy-about-handler.c:543
-#, fuzzy
-#| msgid ""
-#| "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
-#| "will not show up in your browsing history and all stored information will "
-#| "be cleared when you close the window."
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
 "cleared when you close the window. Files you download will be kept."
 msgstr ""
-"您正在<em>匿名</em>浏览网页。在该模式下，访问过的页面不会显示在浏览历史中且储"
+"您正在<em>无痕</em>浏览网页。在该模式下，访问过的页面不会显示在浏览历史中且储"
 "存的全部信息也将在该窗口关闭后清除。"
 
 #: ../embed/ephy-about-handler.c:547
 msgid ""
 "Incognito mode will not hide your activity from your employer, your Internet "
 "Service Provider, your government, or the websites that you visit."
-msgstr ""
+msgstr "无痕模式不能使您对雇主、互联网服务提供商、政府或访问的网站隐身。"
 
 #. characters
 #: ../embed/ephy-embed.c:51
@@ -972,53 +965,53 @@ msgstr "正在载入...."
 #: ../embed/ephy-web-view.c:1734
 msgid ""
 "This web site presented identification that belongs to a different web site."
-msgstr ""
+msgstr "此站点给出了一个其他站点的证书。"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1739
 msgid ""
 "This web site’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
-msgstr ""
+msgstr "此站点的证书因太老而无法受信任。请检查计算机的时间是否正确。"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1744
 msgid ""
 "This web site’s identification was not issued by a trusted organization."
-msgstr ""
+msgstr "此站点的证书不是由可信的组织签发。"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1749
 msgid ""
 "This web site’s identification could not be processed. It may be corrupted."
-msgstr ""
+msgstr "此站点的证书无法处理。可能已经损坏。"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1754
 msgid ""
 "This web site’s identification has been revoked by the trusted organization "
 "that issued it."
-msgstr ""
+msgstr "此站点的证书已经被发布它的可信组织吊销。"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1759
 msgid ""
 "This web site’s identification cannot be trusted because it uses very weak "
 "encryption."
-msgstr ""
+msgstr "此站点的证书不受信任，因为使用了非常弱的加密。"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1764
 msgid ""
 "This web site’s identification is only valid for future dates. Check the "
 "date on your computer’s calendar."
-msgstr ""
+msgstr "此站点的证书尚未到生效时间。检查计算机的时间是不是正确。"
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1800
 #, c-format
 msgid "This might not be the real %s."
-msgstr ""
+msgstr "这可能不是真的 %s。"
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1805
@@ -1027,6 +1020,8 @@ msgid ""
 "that your connection has not been maliciously intercepted. There is "
 "something wrong with this site’s identification:"
 msgstr ""
+"当尝试安全连接时，网站会展示证书以证明连接没有被恶意拦截。站点的证书可能会出"
+"现如下问题："
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1811
@@ -1035,12 +1030,14 @@ msgid ""
 "you know there is a good reason why this site does not use trusted "
 "identification."
 msgstr ""
+"您的连接可能已经被第三人攻击。只有在有为何不使用可信证书的明确原因时才可以继"
+"续。"
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1815
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
-msgstr ""
+msgstr "正规的银行、商店和其他站点不会要求这么做。"
 
 #: ../embed/ephy-web-view.c:1856
 msgid "None specified"
@@ -1109,14 +1106,12 @@ msgstr "显示该页面时出现了错误。要继续浏览，请重新载入或
 #. Title of error page when a website's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1906
 msgid "Look out!"
-msgstr ""
+msgstr "当心！"
 
 #. Button on error page when a website's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1909
-#, fuzzy
-#| msgid "Reload Anyway"
 msgid "Load Anyway"
-msgstr "仍然重新载入"
+msgstr "仍然载入"
 
 #: ../embed/ephy-web-view.c:2805
 msgid "_OK"
@@ -1382,22 +1377,18 @@ msgid "The certificate activation time is still in the future"
 msgstr "证书的激活时间是在未来"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:149
-#, fuzzy
-#| msgid "The identity of this website has been verified"
 msgid "The identity of this website has been verified."
-msgstr "该网站的身份已经验证"
+msgstr "该网站的身份已经验证。"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:150
-#, fuzzy
-#| msgid "The identity of this website has not been verified"
 msgid "The identity of this website has not been verified."
-msgstr "该网站的身份尚未验证"
+msgstr "该网站的身份尚未验证。"
 
 #. Label when clicking the lock icon on a secure page. %s is the website's hostname.
 #: ../lib/widgets/ephy-certificate-popover.c:71
 #, c-format
 msgid "You are connected to %s"
-msgstr ""
+msgstr "已连接到 %s"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
 #: ../lib/widgets/ephy-certificate-popover.c:113
@@ -1405,21 +1396,19 @@ msgstr ""
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
 "connected to an attacker pretending to be %s."
-msgstr ""
+msgstr "此站点的数字证书不可信。您可能已经连接到了攻击者伪装的 %s。"
 
 #. Label in certificate popover when site sends mixed content.
 #: ../lib/widgets/ephy-certificate-popover.c:124
 msgid "Part of this page is insecure."
-msgstr ""
+msgstr "页面的一部分不安全。"
 
 #. Label in certificate popover on secure sites.
 #: ../lib/widgets/ephy-certificate-popover.c:130
 msgid "Your connection is secure."
-msgstr ""
+msgstr "连接是安全的。"
 
 #: ../lib/widgets/ephy-certificate-popover.c:318
-#, fuzzy
-#| msgid "_View Certificate&#x2026;"
 msgid "_View Certificate…"
 msgstr "查看证书(_V)..."
 
@@ -1927,28 +1916,20 @@ msgid ""
 msgstr "您将要清空保存着已访问页面的个人数据。请勾选您想要移除的信息类型："
 
 #: ../src/resources/clear-data-dialog.ui.h:6
-#, fuzzy
-#| msgid "Cookies"
 msgid "Coo_kies"
-msgstr "Cookies"
+msgstr "Coo_kies"
 
 #: ../src/resources/clear-data-dialog.ui.h:7
-#, fuzzy
-#| msgid "Cache and temporary files"
 msgid "Cache and _temporary files"
-msgstr "缓存和临时文件"
+msgstr "缓存和临时文件(_T)"
 
 #: ../src/resources/clear-data-dialog.ui.h:8
-#, fuzzy
-#| msgid "Browsing history"
 msgid "Browsing _history"
-msgstr "浏览历史"
+msgstr "浏览历史(_H)"
 
 #: ../src/resources/clear-data-dialog.ui.h:9
-#, fuzzy
-#| msgid "Saved passwords"
 msgid "Saved _passwords"
-msgstr "保存的密码"
+msgstr "保存的密码(_P)"
 
 #: ../src/resources/clear-data-dialog.ui.h:10
 msgid ""
@@ -1977,10 +1958,8 @@ msgid "Remove"
 msgstr "移除"
 
 #: ../src/resources/cookies-dialog.ui.h:5
-#, fuzzy
-#| msgid "Delete the selected bookmark or topic"
 msgid "Delete the selected cookies"
-msgstr "删除所选书签或主题"
+msgstr "删除所选的 Cookies"
 
 #. File actions.
 #: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
@@ -1989,7 +1968,7 @@ msgstr "新建窗口(_N)"
 
 #: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:102
 msgid "New _Incognito Window"
-msgstr "新建匿名窗口(_I)"
+msgstr "新建无痕窗口(_I)"
 
 #: ../src/resources/epiphany-application-menu.ui.h:3
 msgid "Reopen Closed _Tab"
@@ -2049,16 +2028,12 @@ msgid "Location"
 msgstr "位置(_L)"
 
 #: ../src/resources/history-dialog.ui.h:7
-#, fuzzy
-#| msgid "Remove the selected item from the toolbar"
 msgid "Remove the selected pages from history"
-msgstr "删除工具栏上的选中项"
+msgstr "从历史中删除选中的页面"
 
 #: ../src/resources/history-dialog.ui.h:8
-#, fuzzy
-#| msgid "Open the selected bookmark in a new tab"
 msgid "Open the selected pages in new tabs"
-msgstr "在新标签中打开选中书签"
+msgstr "在新标签中打开选中的页面"
 
 #: ../src/resources/history-dialog.ui.h:10
 msgid "_Copy Location"
@@ -2086,16 +2061,12 @@ msgid "Password"
 msgstr "密码"
 
 #: ../src/resources/passwords-dialog.ui.h:7
-#, fuzzy
-#| msgid "Remove the selected toolbar"
 msgid "Forget the selected passwords"
-msgstr "删除选中的工具栏"
+msgstr "忘记选中的密码"
 
 #: ../src/resources/passwords-dialog.ui.h:8
-#, fuzzy
-#| msgid "Remember passwords"
 msgid "Reveal all the passwords"
-msgstr "记住密码"
+msgstr "显示所有密码"
 
 #: ../src/resources/passwords-dialog.ui.h:9
 msgid "_Copy Password"
@@ -2182,10 +2153,8 @@ msgid "Fonts & Style"
 msgstr "字体和样式"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-#, fuzzy
-#| msgid "Manage Cookies"
 msgid "Manage _Cookies"
-msgstr "管理 Cookie"
+msgstr "管理 _Cookie"
 
 #: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
@@ -2213,10 +2182,8 @@ msgid "_Tell web sites I do not want to be tracked"
 msgstr "告诉网站我不想被跟踪(_T)"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-#, fuzzy
-#| msgid "Manage Passwords"
 msgid "Manage _Passwords"
-msgstr "管理密码"
+msgstr "管理密码(_P)"
 
 #: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
@@ -2346,7 +2313,7 @@ msgstr "启动一个私密浏览进程"
 
 #: ../src/ephy-main.c:88
 msgid "Start an instance in incognito mode"
-msgstr "以匿名模式启动例程"
+msgstr "以无痕模式启动例程"
 
 #: ../src/ephy-main.c:90
 msgid "Start an instance in netbank mode"
@@ -2536,10 +2503,8 @@ msgstr "复制电子邮件地址(_C)"
 
 #. Images.
 #: ../src/ephy-window.c:233
-#, fuzzy
-#| msgid "View _Image"
 msgid "View _Image in New Tab"
-msgstr "查看图像(_I)"
+msgstr "在新标签中查看图像(_I)"
 
 #: ../src/ephy-window.c:235
 msgid "Copy I_mage Address"
@@ -2555,57 +2520,37 @@ msgstr "设为墙纸(_W)"
 
 #. Video.
 #: ../src/ephy-window.c:244
-#, fuzzy
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
 msgid "Open Video in New _Window"
-msgstr "在新窗口中打开(_W)"
+msgstr "在新窗口中打开视频(_W)"
 
 #: ../src/ephy-window.c:246
-#, fuzzy
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
 msgid "Open Video in New _Tab"
-msgstr "在新标签中打开(_T)"
+msgstr "在新标签中打开视频(_T)"
 
 #: ../src/ephy-window.c:248
-#, fuzzy
-#| msgid "_Save Link As…"
 msgid "_Save Video As…"
-msgstr "链接另存为(_S)..."
+msgstr "视频另存为(_S)..."
 
 #: ../src/ephy-window.c:250
-#, fuzzy
-#| msgid "_Copy Address"
 msgid "_Copy Video Address"
-msgstr "复制地址(_C)"
+msgstr "复制视频地址(_C)"
 
 #. Audio.
 #: ../src/ephy-window.c:255
-#, fuzzy
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
 msgid "Open Audio in New _Window"
-msgstr "在新窗口中打开(_W)"
+msgstr "在新窗口中打开音频(_W)"
 
 #: ../src/ephy-window.c:257
-#, fuzzy
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
 msgid "Open Audio in New _Tab"
-msgstr "在新标签中打开(_T)"
+msgstr "在新标签中打开音频(_T)"
 
 #: ../src/ephy-window.c:259
-#, fuzzy
-#| msgid "_Save Link As…"
 msgid "_Save Audio As…"
-msgstr "链接另存为(_S)..."
+msgstr "音频另存为(_S)..."
 
 #: ../src/ephy-window.c:261
-#, fuzzy
-#| msgid "_Copy Address"
 msgid "_Copy Audio Address"
-msgstr "复制地址(_C)"
+msgstr "复制音频地址(_C)"
 
 #: ../src/ephy-window.c:468
 msgid "There are unsubmitted changes to form elements"
@@ -2690,10 +2635,8 @@ msgid "Save Image As"
 msgstr "图像另存为"
 
 #: ../src/popup-commands.c:239
-#, fuzzy
-#| msgid "Save Link As"
 msgid "Save Media As"
-msgstr "链接另存为"
+msgstr "媒体另存为"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -2756,10 +2699,9 @@ msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
 #: ../src/prefs-dialog.c:1031
-#, fuzzy, c-format
-#| msgid "http://www.bing.com/search?q=%s"
+#, c-format
 msgid "https://www.bing.com/search?q=%s"
-msgstr "http://www.bing.com/search?q=%s"
+msgstr "http://cn.bing.com/search?q=%s"
 
 #: ../src/window-commands.c:709
 #, c-format
