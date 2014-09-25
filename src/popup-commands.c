@@ -174,10 +174,14 @@ filename_suggested_cb (EphyDownload *download,
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		char *uri;
+		WebKitDownload *webkit_download;
 
 		uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
 		ephy_download_set_destination_uri (download, uri);
 		g_free (uri);
+
+		webkit_download = ephy_download_get_webkit_download (download);
+		webkit_download_set_allow_overwrite (webkit_download, TRUE);
 
 		ephy_window_add_download (window, download);
 	}
