@@ -101,7 +101,8 @@ ephy_toolbar_constructed (GObject *object)
   EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
   GtkActionGroup *action_group;
   GtkAction *action;
-  GtkWidget *toolbar, *box, *button;
+  GtkUIManager *manager;
+  GtkWidget *toolbar, *box, *button, *menu;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
 
@@ -180,16 +181,14 @@ ephy_toolbar_constructed (GObject *object)
   gtk_widget_show (GTK_WIDGET (priv->title_box));
 
   /* Page Menu */
-  button = gtk_button_new ();
+  button = gtk_menu_button_new ();
   priv->page_menu_button = button;
-  gtk_widget_set_name (button, "ephy-page-menu-button");
-  /* FIXME: apparently we need an image inside the button for the action
-   * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  action = gtk_action_group_get_action (action_group, "PageMenu");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-                                      action);
+  manager = ephy_window_get_ui_manager (priv->window);
+  menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
+  gtk_widget_set_halign (menu, GTK_ALIGN_END);
+  gtk_menu_button_set_popup (GTK_MENU_BUTTON (button), menu);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
 }
 

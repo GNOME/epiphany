@@ -23,7 +23,6 @@ NOINST_H_FILES = \
 	ephy-lockdown.h				\
 	ephy-location-controller.h		\
 	ephy-navigation-history-action.h	\
-	ephy-page-menu-action.h			\
 	ephy-private.h				\
 	ephy-search-provider.h			\
 	ephy-title-box.h			\
@@ -60,7 +59,6 @@ libephymain_la_SOURCES = \
 	ephy-lockdown.c				\
 	ephy-navigation-history-action.c	\
 	ephy-notebook.c				\
-	ephy-page-menu-action.c			\
 	ephy-session.c				\
 	ephy-shell.c				\
 	ephy-title-box.c			\

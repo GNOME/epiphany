@@ -44,7 +44,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-navigation-history-action.h"
 #include "ephy-notebook.h"
-#include "ephy-page-menu-action.h"
 #include "ephy-prefs.h"
 #include "ephy-private.h"
 #include "ephy-session.h"
@@ -1217,14 +1216,6 @@ setup_ui_manager (EphyWindow *window)
 			       "window", window,
 			       NULL);
 	gtk_action_group_add_action (action_group, action);
-	g_object_unref (action);
-
-	action = g_object_new (EPHY_TYPE_PAGE_MENU_ACTION,
-			       "name", "PageMenu",
-			       "icon-name", "open-menu-symbolic",
-			       "window", window,
-			       NULL);
-	gtk_action_group_add_action_with_accel (action_group, action, "<alt>E");
 	g_object_unref (action);
 
 	gtk_action_group_set_accel_group (action_group, accel_group);
@@ -3413,6 +3404,17 @@ ephy_window_constructor (GType type,
 
 	priv->notebook = setup_notebook (window);
 
+	/* Now load the UI definition (needed by EphyToolbar). */
+	gtk_ui_manager_add_ui_from_resource (priv->manager,
+					     "/org/gnome/epiphany/epiphany-ui.xml",
+					     &error);
+	if (error != NULL)
+	{
+		g_warning ("Could not merge epiphany-ui.xml: %s", error->message);
+		g_error_free (error);
+		error = NULL;
+	}
+
 	/* Setup the toolbar. */
 	priv->toolbar = setup_toolbar (window);
 	priv->location_controller = setup_location_controller (window, EPHY_TOOLBAR (priv->toolbar));
@@ -3430,17 +3432,6 @@ ephy_window_constructor (GType type,
 	g_object_bind_property (action, "active",
 				priv->downloads_box, "visible",
 				G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-
-	/* Now load the UI definition. */
-	gtk_ui_manager_add_ui_from_resource (priv->manager,
-					     "/org/gnome/epiphany/epiphany-ui.xml",
-					     &error);
-	if (error != NULL)
-	{
-		g_warning ("Could not merge epiphany-ui.xml: %s", error->message);
-		g_error_free (error);
-		error = NULL;
-	}
 
 	/* Attach the CSS provider to the window. */
 	css_provider = gtk_css_provider_new ();
