@@ -418,7 +418,8 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
     char *filename;
 
     filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
-    shell->priv->global_history_service = ephy_history_service_new (filename, FALSE);
+    shell->priv->global_history_service = ephy_history_service_new (filename,
+                                                                    shell->priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO);
     g_free (filename);
     g_return_val_if_fail (shell->priv->global_history_service, NULL);
     g_signal_connect (shell->priv->global_history_service, "urls-visited",
