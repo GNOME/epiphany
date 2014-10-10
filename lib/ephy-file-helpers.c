@@ -817,6 +817,39 @@ ephy_file_launch_handler (const char *mime_type,
 	return ret;
 }
 
+gboolean
+ephy_file_open_uri_in_default_browser (const char *uri,
+				       guint32 timestamp,
+				       GdkScreen *screen)
+{
+	GdkAppLaunchContext *context;
+	GAppInfo *appinfo;
+	GList uris;
+	gboolean retval = TRUE;
+	GError *error = NULL;
+
+	context = gdk_display_get_app_launch_context (screen ? gdk_screen_get_display (screen) : gdk_display_get_default ());
+	gdk_app_launch_context_set_screen (context, screen);
+	gdk_app_launch_context_set_timestamp (context, timestamp);
+
+	/* We assume the default application that supports HTML and URIs is the default browser */
+	appinfo = g_app_info_get_default_for_type ("text/html", TRUE);
+	uris.data = (gpointer)uri;
+	uris.next = uris.prev = NULL;
+
+	if (!g_app_info_launch_uris (appinfo, &uris, G_APP_LAUNCH_CONTEXT (context), &error))
+	{
+		g_warning ("Failed to launch %s: %s", uri, error->message);
+		g_error_free (error);
+		retval = FALSE;
+	}
+
+	g_object_unref (context);
+	g_object_unref (appinfo);
+
+	return retval;
+}
+
 /**
  * ephy_file_browse_to:
  * @file: a #GFile

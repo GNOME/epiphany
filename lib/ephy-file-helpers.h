@@ -81,6 +81,9 @@ gboolean           ephy_file_launch_application             (GAppInfo           
 gboolean           ephy_file_launch_handler                 (const char            *mime_type,
                                                              GFile                 *file,
                                                              guint32                user_time);
+gboolean           ephy_file_open_uri_in_default_browser    (const char            *uri,
+                                                             guint32                timestamp,
+                                                             GdkScreen             *screen);
 gboolean           ephy_file_browse_to                      (GFile                 *file,
                                                              guint32                user_time);
 gboolean           ephy_file_delete_dir_recursively         (GFile                 *file,
