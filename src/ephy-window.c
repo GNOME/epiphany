@@ -2047,6 +2047,18 @@ web_view_ready_cb (WebKitWebView *web_view,
 		g_signal_emit_by_name (parent_web_view, "new-window", web_view);
 	}
 
+	if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION &&
+	    !webkit_web_view_get_uri(web_view))
+	{
+		/* Wait until we have a valid URL to decide whether to show the window
+		 * or load the URL in the default web browser
+		 */
+		g_object_set_data_full (G_OBJECT (window), "referrer",
+					g_strdup (webkit_web_view_get_uri (parent_web_view)),
+					g_free);
+		return TRUE;
+	}
+
 	gtk_widget_show (GTK_WIDGET (window));
 
 	return TRUE;
@@ -2180,19 +2192,43 @@ decide_policy_cb (WebKitWebView *web_view,
 
 	navigation_type = webkit_navigation_action_get_navigation_type (navigation_action);
 
-	if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED &&
-	    ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+	if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
-		if (ephy_embed_utils_urls_have_same_origin (uri, webkit_web_view_get_uri (web_view)))
+		if (!gtk_widget_is_visible (GTK_WIDGET (window)))
 		{
-			return FALSE;
+			char *referrer;
+
+			referrer = (char *)g_object_get_data (G_OBJECT (window), "referrer");
+
+			if (ephy_embed_utils_urls_have_same_origin (uri, referrer))
+			{
+				gtk_widget_show (GTK_WIDGET (window));
+			}
+			else
+			{
+				ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
+								       gtk_window_get_screen (GTK_WINDOW (window)));
+				webkit_policy_decision_ignore (decision);
+
+				gtk_widget_destroy (GTK_WIDGET (window));
+
+				return TRUE;
+			}
 		}
 
-		ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
-						       gtk_window_get_screen (GTK_WINDOW (window)));
-		webkit_policy_decision_ignore (decision);
+		if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
+		{
+			if (ephy_embed_utils_urls_have_same_origin (uri, webkit_web_view_get_uri (web_view)))
+			{
+				return FALSE;
+			}
 
-		return TRUE;
+			ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
+							       gtk_window_get_screen (GTK_WINDOW (window)));
+			webkit_policy_decision_ignore (decision);
+
+			return TRUE;
+		}
 	}
 
 	if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
