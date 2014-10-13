@@ -2074,10 +2074,11 @@ create_web_view_cb (WebKitWebView *web_view,
 	EphyNewTabFlags flags;
 	EphyWindow *target_window;
 
-	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
-				    EPHY_PREFS_NEW_WINDOWS_IN_TABS) ||
-	    g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-				    EPHY_PREFS_LOCKDOWN_FULLSCREEN))
+	if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) &&
+	    (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+				     EPHY_PREFS_NEW_WINDOWS_IN_TABS) ||
+	     g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+				     EPHY_PREFS_LOCKDOWN_FULLSCREEN)))
 	{
 		target_window = window;
 		flags = EPHY_NEW_TAB_JUMP |
