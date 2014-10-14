@@ -95,8 +95,8 @@ typedef struct {
 static const URLTest test_load_url[] = {
   /* This will load the server unavailable error page unless you have a
    * local server in port 80 */
-  { "localhost", "http://localhost/" },
-  { "127.0.0.1", "http://127.0.0.1/" },
+  /* { "localhost", "http://localhost/" }, */
+  /* { "127.0.0.1", "http://127.0.0.1/" }, */
 
   /* Require internet */
 
@@ -129,10 +129,10 @@ static const URLTest test_load_url[] = {
   { "localhost:12321/redirect",
     "http://localhost:12321/redirect-result" },
 
-  { "about:epiphany", "ephy-about:epiphany" },
-  { "about:applications", "ephy-about:applications" },
-  { "about:memory", "ephy-about:memory" },
-  { "about:plugins", "ephy-about:plugins" },
+  /* { "about:epiphany", "ephy-about:epiphany" }, */
+  /* { "about:applications", "ephy-about:applications" }, */
+  /* { "about:memory", "ephy-about:memory" }, */
+  /* { "about:plugins", "ephy-about:plugins" }, */
 };
 
 /* Tests that EphyWebView is successfully loading the given URL. */
