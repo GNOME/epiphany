@@ -586,7 +586,11 @@ ephy_embed_shell_setup_process_model (EphyEmbedShell *shell,
 {
   EphyPrefsProcessModel process_model;
 
-  process_model = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_PROCESS_MODEL);
+  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+    process_model = EPHY_PREFS_PROCESS_MODEL_SHARED_SECONDARY_PROCESS;
+  else
+    process_model = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_PROCESS_MODEL);
+
   switch (process_model) {
   case EPHY_PREFS_PROCESS_MODEL_SHARED_SECONDARY_PROCESS:
     webkit_web_context_set_process_model (web_context, WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS);
