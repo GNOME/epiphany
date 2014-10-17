@@ -1394,12 +1394,16 @@ window_cmd_view_page_source (GtkAction *action,
 
 	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
+#if 0
+FIXME: Disabled due to bug #738475
+
 	if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 				    EPHY_PREFS_INTERNAL_VIEW_SOURCE))
 	{
 		view_source_embedded (address, embed);
 		return;
 	}
+#endif
 
 	user_time = gtk_get_current_event_time ();
 
