@@ -375,7 +375,9 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
 
     g_object_get (element, "type", &element_type, "name", &element_name, NULL);
 
-    if (g_strcmp0 (element_type, "text") == 0 || g_strcmp0 (element_type, "email") == 0) {
+    if (g_strcmp0 (element_type, "text") == 0 ||
+        g_strcmp0 (element_type, "email") == 0 ||
+        g_strcmp0 (element_type, "tel") == 0) {
       /* We found more than one inputs of type text; we won't be saving here. */
       if (username_node) {
         g_free (element_type);
