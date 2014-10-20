@@ -1731,37 +1731,37 @@ detailed_message_from_tls_errors (GTlsCertificateFlags tls_errors)
 
   if (tls_errors & G_TLS_CERTIFICATE_BAD_IDENTITY) {
     /* Possible error message when a site presents a bad certificate. */
-    g_ptr_array_add (errors, _("This web site presented identification that belongs to a different web site."));
+    g_ptr_array_add (errors, _("This website presented identification that belongs to a different website."));
   }
 
   if (tls_errors & G_TLS_CERTIFICATE_EXPIRED) {
     /* Possible error message when a site presents a bad certificate. */
-    g_ptr_array_add (errors, _("This web site’s identification is too old to trust. Check the date on your computer’s calendar."));
+    g_ptr_array_add (errors, _("This website’s identification is too old to trust. Check the date on your computer’s calendar."));
   }
 
   if (tls_errors & G_TLS_CERTIFICATE_UNKNOWN_CA) {
     /* Possible error message when a site presents a bad certificate. */
-    g_ptr_array_add (errors, _("This web site’s identification was not issued by a trusted organization."));
+    g_ptr_array_add (errors, _("This website’s identification was not issued by a trusted organization."));
   }
 
   if (tls_errors & G_TLS_CERTIFICATE_GENERIC_ERROR) {
     /* Possible error message when a site presents a bad certificate. */
-    g_ptr_array_add (errors, _("This web site’s identification could not be processed. It may be corrupted."));
+    g_ptr_array_add (errors, _("This website’s identification could not be processed. It may be corrupted."));
   }
 
   if (tls_errors & G_TLS_CERTIFICATE_REVOKED) {
     /* Possible error message when a site presents a bad certificate. */
-    g_ptr_array_add (errors, _("This web site’s identification has been revoked by the trusted organization that issued it."));
+    g_ptr_array_add (errors, _("This website’s identification has been revoked by the trusted organization that issued it."));
   }
 
   if (tls_errors & G_TLS_CERTIFICATE_INSECURE) {
     /* Possible error message when a site presents a bad certificate. */
-    g_ptr_array_add (errors, _("This web site’s identification cannot be trusted because it uses very weak encryption."));
+    g_ptr_array_add (errors, _("This website’s identification cannot be trusted because it uses very weak encryption."));
   }
 
   if (tls_errors & G_TLS_CERTIFICATE_NOT_ACTIVATED) {
     /* Possible error message when a site presents a bad certificate. */
-    g_ptr_array_add (errors, _("This web site’s identification is only valid for future dates. Check the date on your computer’s calendar."));
+    g_ptr_array_add (errors, _("This website’s identification is only valid for future dates. Check the date on your computer’s calendar."));
   }
 
   if (errors->len == 1) {
@@ -1802,15 +1802,15 @@ get_tls_error_page_message (EphyWebView *view, const char *hostname)
   msg = g_strdup_printf ("<p>%s</p><p>%s</p><p>%s</p><p>%s <strong>%s</strong></p>",
                          warning,
                          /* Message when a site's TLS certificate is invalid. */
-                         _("When you try to connect securely, web sites present "
+                         _("When you try to connect securely, websites present "
                            "identification to prove that your connection has not been "
                            "maliciously intercepted. There is something wrong with "
-                           "this site’s identification:"),
+                           "this website’s identification:"),
                          details,
                          /* Message when a site's TLS certificate is invalid. */
                          _("A third party may have hijacked your connection. You should "
                            "continue only if you know there is a good reason why this "
-                           "site does not use trusted identification."),
+                           "website does not use trusted identification."),
                          /* Good advice from Firefox; displays when a site's TLS certificate is invalid. */
                          _("Legitimate banks, stores, and other public sites will "
                            "not ask you to do this."));
