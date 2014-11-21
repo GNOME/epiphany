@@ -36,7 +36,6 @@ struct _EphyWebExtensionProxyPrivate
 enum
 {
   FORM_AUTH_DATA_SAVE_REQUESTED,
-  ALLOW_TLS_CERTIFICATE,
 
   LAST_SIGNAL
 };
@@ -109,22 +108,6 @@ ephy_web_extension_proxy_class_init (EphyWebExtensionProxyClass *klass)
                   G_TYPE_UINT64,
                   G_TYPE_STRING,
                   G_TYPE_STRING);
-
-  /**
-   * EphyWebExtensionProxy::allow-tls-certificate:
-   * @shell: the #EphyWebExtensionProxy
-   *
-   * Emitted when the web extension requests an exception be
-   * permitted for the invalid TLS certificate on the current page.
-   */
-  signals[ALLOW_TLS_CERTIFICATE] =
-    g_signal_new ("allow-tls-certificate",
-                  EPHY_TYPE_WEB_EXTENSION_PROXY,
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_generic,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_UINT64);
 
   g_type_class_add_private (object_class, sizeof (EphyWebExtensionProxyPrivate));
 }
@@ -243,15 +226,6 @@ ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExten
                      -1,
                      web_extension->priv->cancellable,
                      NULL, NULL);
-}
-
-void
-ephy_web_extension_proxy_allow_tls_certificate (EphyWebExtensionProxy *web_extension,
-                                                guint64 page_id)
-{
-  g_return_if_fail (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
-
-  g_signal_emit (web_extension, signals[ALLOW_TLS_CERTIFICATE], 0, page_id);
 }
 
 static void

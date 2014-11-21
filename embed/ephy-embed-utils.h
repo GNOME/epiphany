@@ -50,6 +50,7 @@ char    *ephy_embed_utils_get_title_from_address                (const char *add
 gboolean ephy_embed_utils_urls_have_same_origin                 (const char *a_url,
                                                                  const char *b_url);
 char    *ephy_embed_utils_get_js_result_as_string               (WebKitJavascriptResult *js_result);
+double   ephy_embed_utils_get_js_result_as_number               (WebKitJavascriptResult *js_result);
 void     ephy_embed_utils_shutdown                              (void);
 
 G_END_DECLS

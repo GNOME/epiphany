@@ -699,7 +699,7 @@ form_auth_data_save_requested (EphyWebExtensionProxy *web_extension,
 }
 
 static void
-allow_tls_certificate_cb (EphyWebExtensionProxy *shell,
+allow_tls_certificate_cb (EphyEmbedShell *shell,
                           guint64 page_id,
                           EphyWebView *web_view)
 {
@@ -738,7 +738,7 @@ page_created_cb (EphyEmbedShell *shell,
                            G_CALLBACK (form_auth_data_save_requested),
                            web_view, 0);
 
-  g_signal_connect_object (priv->web_extension, "allow-tls-certificate",
+  g_signal_connect_object (shell, "allow-tls-certificate",
                            G_CALLBACK (allow_tls_certificate_cb),
                            web_view, 0);
 }
@@ -1908,7 +1908,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
       /* Button on error page when a website's TLS certificate is invalid. */
       button_label = g_strdup (_("Load Anyway"));
       custom_class = "tls-error";
-      load_anyway_js = g_strdup ("EpiphanyTLSCertificateErrorPage.allowException();");
+      load_anyway_js = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT");",
+                                        webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
       break;
     default:
       return;

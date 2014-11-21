@@ -346,6 +346,17 @@ ephy_embed_utils_get_js_result_as_string (WebKitJavascriptResult *js_result)
   return retval;
 }
 
+double
+ephy_embed_utils_get_js_result_as_number (WebKitJavascriptResult *js_result)
+{
+  JSValueRef js_value;
+
+  js_value = webkit_javascript_result_get_value (js_result);
+
+  return JSValueToNumber (webkit_javascript_result_get_global_context (js_result),
+                          js_value, NULL);
+}
+
 void
 ephy_embed_utils_shutdown (void)
 {
