@@ -82,9 +82,6 @@ static const char introspection_xml[] =
   "   <arg type='s' name='hostname' direction='out'/>"
   "   <arg type='s' name='username' direction='out'/>"
   "  </signal>"
-  "  <signal name='RemoveItemFromOverview'>"
-  "   <arg type='s' name='url' direction='out'/>"
-  "  </signal>"
   "  <method name='FormAuthDataSaveConfirmationResponse'>"
   "   <arg type='u' name='request_id' direction='in'/>"
   "   <arg type='b' name='should_store' direction='in'/>"
@@ -278,29 +275,6 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
 
   g_free (username_field_value);
   g_object_unref (form_auth);
-}
-
-static void
-overview_item_removed (EphyWebOverview *overview,
-                       const char *url,
-                       EphyWebExtension *extension)
-{
-  GError *error = NULL;
-
-  if (!extension->priv->dbus_connection)
-    return;
-
-  g_dbus_connection_emit_signal (extension->priv->dbus_connection,
-                                 NULL,
-                                 EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                 EPHY_WEB_EXTENSION_INTERFACE,
-                                 "RemoveItemFromOverview",
-                                 g_variant_new ("(s)", url),
-                                 &error);
-  if (error) {
-    g_debug ("Error emitting signal RemoveItemFromOverview: %s\n", error->message);
-    g_error_free (error);
-  }
 }
 
 static void
@@ -1335,23 +1309,6 @@ prepare_certificate_exception_js (WebKitScriptWorld *world,
 }
 
 static void
-prepare_overview (WebKitScriptWorld *world,
-                  WebKitWebPage *web_page,
-                  WebKitFrame *frame,
-                  EphyWebExtension *extension)
-{
-  EphyWebOverview *overview;
-  JSGlobalContextRef context;
-
-  overview = ephy_web_overview_new (web_page, extension->priv->overview_model);
-  g_signal_connect (overview, "item-removed",
-                    G_CALLBACK (overview_item_removed),
-                    extension);
-  context = webkit_frame_get_javascript_context_for_script_world (frame, world);
-  ephy_web_overview_init_js (overview, context);
-}
-
-static void
 window_object_cleared_cb (WebKitScriptWorld *world,
                           WebKitWebPage     *web_page,
                           WebKitFrame       *frame,
@@ -1359,11 +1316,6 @@ window_object_cleared_cb (WebKitScriptWorld *world,
 {
   WebKitDOMDocument *dom_document;
   char *dom_url;
-
-  if (g_strcmp0 (webkit_web_page_get_uri (web_page), "ephy-about:overview") == 0) {
-    prepare_overview (world, web_page, frame, extension);
-    return;
-  }
 
   dom_document = webkit_web_page_get_dom_document (web_page);
   dom_url = webkit_dom_document_get_url (dom_document);

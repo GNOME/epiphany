@@ -183,7 +183,7 @@
     var listItemNode = elem.parentElement;
     event.preventDefault();
     listItemNode.className +=" removed ";
-    Overview.removeItemFromOverview(elem.href);
+    window.webkit.messageHandlers.overview.postMessage(elem.href);
   }
   </script>
 

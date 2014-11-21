@@ -41,15 +41,6 @@ enum
   PROP_MODEL,
 };
 
-enum
-{
-  ITEM_REMOVED,
-
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
-
 G_DEFINE_TYPE (EphyWebOverview, ephy_web_overview, G_TYPE_OBJECT)
 
 typedef struct {
@@ -462,15 +453,6 @@ ephy_web_overview_class_init (EphyWebOverviewClass *klass)
                                                         G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-  signals[ITEM_REMOVED] =
-    g_signal_new ("item-removed",
-                  EPHY_TYPE_WEB_OVERVIEW,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__STRING,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_STRING);
-
   g_type_class_add_private (object_class, sizeof(EphyWebOverviewPrivate));
 }
 
@@ -491,77 +473,4 @@ ephy_web_overview_new (WebKitWebPage *web_page,
                        "web-page", web_page,
                        "model", model,
                        NULL);
-}
-
-static JSValueRef
-remove_item_from_overview_cb (JSContextRef context,
-                              JSObjectRef function,
-                              JSObjectRef this_object,
-                              size_t argument_count,
-                              const JSValueRef arguments[],
-                              JSValueRef *exception)
-{
-  EphyWebOverview *overview;
-  JSStringRef result_string_js;
-  size_t max_size;
-  char *result_string;
-
-  overview = EPHY_WEB_OVERVIEW (JSObjectGetPrivate (this_object));
-
-  result_string_js = JSValueToStringCopy (context, arguments[0], NULL);
-  max_size = JSStringGetMaximumUTF8CStringSize (result_string_js);
-
-  result_string = g_malloc (max_size);
-  JSStringGetUTF8CString (result_string_js, result_string, max_size);
-  g_signal_emit (overview, signals[ITEM_REMOVED], 0, result_string);
-  JSStringRelease (result_string_js);
-  g_free (result_string);
-
-  return JSValueMakeUndefined (context);
-}
-
-static const JSStaticFunction overview_static_funcs[] =
-{
-  { "removeItemFromOverview", remove_item_from_overview_cb, kJSPropertyAttributeReadOnly | kJSPropertyAttributeDontDelete },
-  { NULL, NULL, 0 }
-};
-
-static const JSClassDefinition overview_class_def =
-{
-  0,                     /* version */
-  kJSClassAttributeNone, /* attributes */
-  "Overview",            /* className */
-  NULL,                  /* parentClass */
-  NULL,                  /* staticValues */
-  overview_static_funcs, /* staticFunctions */
-  NULL,                  /* initialize */
-  NULL,                  /* finalize */
-  NULL,                  /* hasProperty */
-  NULL,                  /* getProperty */
-  NULL,                  /* setProperty */
-  NULL,                  /* deleteProperty */
-  NULL,                  /* getPropertyNames */
-  NULL,                  /* callAsFunction */
-  NULL,                  /* callAsConstructor */
-  NULL,                  /* hasInstance */
-  NULL                   /* convertToType */
-};
-
-void
-ephy_web_overview_init_js (EphyWebOverview *overview,
-                           JSGlobalContextRef context)
-{
-  JSObjectRef global_object;
-  JSClassRef class_def;
-  JSObjectRef class_object;
-  JSStringRef str;
-
-  global_object = JSContextGetGlobalObject (context);
-
-  class_def = JSClassCreate (&overview_class_def);
-  class_object = JSObjectMake (context, class_def, overview);
-  str = JSStringCreateWithUTF8CString ("Overview");
-  JSObjectSetProperty (context, global_object, str, class_object, kJSPropertyAttributeNone, NULL);
-  JSStringRelease (str);
-  JSClassRelease (class_def);
 }

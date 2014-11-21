@@ -62,7 +62,6 @@ struct _EphyEmbedShellPrivate
   GList *web_extensions;
   guint web_extensions_page_created_signal_id;
   guint web_extensions_form_auth_save_signal_id;
-  guint web_extensions_remove_from_overview_signal_id;
   guint web_extensions_allow_tls_certificate_signal_id;
 };
 
@@ -246,23 +245,20 @@ history_set_url_hidden_cb (EphyHistoryService *service,
 }
 
 static void
-web_extension_remove_from_overview (GDBusConnection *connection,
-                                    const char *sender_name,
-                                    const char *object_path,
-                                    const char *interface_name,
-                                    const char *signal_name,
-                                    GVariant *parameters,
-                                    EphyEmbedShell *shell)
+web_extension_overview_message_received_cb (WebKitUserContentManager *manager,
+                                            WebKitJavascriptResult *message,
+                                            EphyEmbedShell *shell)
 {
-  const char *url_to_remove;
+  char *url_to_remove;
 
-  g_variant_get (parameters, "(&s)", &url_to_remove);
+  url_to_remove = ephy_embed_utils_get_js_result_as_string (message);
 
   shell->priv->hiding_overview_item++;
   ephy_history_service_set_url_hidden (shell->priv->global_history_service,
                                        url_to_remove, TRUE, NULL,
                                        (EphyHistoryJobCallback) history_set_url_hidden_cb,
                                        shell);
+  g_free (url_to_remove);
 
   if (shell->priv->update_overview_timeout_id > 0)
     g_source_remove (shell->priv->update_overview_timeout_id);
@@ -556,17 +552,6 @@ ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
                                         (GDBusSignalCallback)web_extension_form_auth_save_requested,
                                         shell,
                                         NULL);
-  shell->priv->web_extensions_remove_from_overview_signal_id =
-    g_dbus_connection_signal_subscribe (shell->priv->bus,
-                                        NULL,
-                                        EPHY_WEB_EXTENSION_INTERFACE,
-                                        "RemoveItemFromOverview",
-                                        EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                        NULL,
-                                        G_DBUS_SIGNAL_FLAGS_NONE,
-                                        (GDBusSignalCallback)web_extension_remove_from_overview,
-                                        shell,
-                                        NULL);
   shell->priv->web_extensions_allow_tls_certificate_signal_id =
     g_dbus_connection_signal_subscribe (shell->priv->bus,
                                         NULL,
@@ -619,6 +604,15 @@ ephy_embed_shell_startup (GApplication* application)
 
   ephy_embed_shell_setup_web_extensions_connection (shell);
 
+  /* User content manager */
+  shell->priv->user_content = webkit_user_content_manager_new ();
+
+  webkit_user_content_manager_register_script_message_handler (shell->priv->user_content,
+                                                               "overview");
+  g_signal_connect (shell->priv->user_content, "script-message-received::overview",
+                    G_CALLBACK (web_extension_overview_message_received_cb),
+                    shell);
+
   web_context = webkit_web_context_get_default ();
   ephy_embed_shell_setup_process_model (shell, web_context);
   g_signal_connect (web_context, "initialize-web-extensions",
@@ -668,6 +662,8 @@ ephy_embed_shell_shutdown (GApplication* application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->shutdown (application);
 
+  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "overview");
+
   if (priv->web_extensions_page_created_signal_id > 0) {
     g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_page_created_signal_id);
     priv->web_extensions_page_created_signal_id = 0;
@@ -676,11 +672,6 @@ ephy_embed_shell_shutdown (GApplication* application)
   if (priv->web_extensions_form_auth_save_signal_id > 0) {
     g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_form_auth_save_signal_id);
     priv->web_extensions_form_auth_save_signal_id = 0;
-  }
-
-  if (priv->web_extensions_remove_from_overview_signal_id > 0) {
-    g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_remove_from_overview_signal_id);
-    priv->web_extensions_remove_from_overview_signal_id = 0;
   }
 
   if (priv->web_extensions_allow_tls_certificate_signal_id > 0) {
@@ -1046,8 +1037,5 @@ ephy_embed_shell_clear_cache (EphyEmbedShell *shell)
 WebKitUserContentManager *
 ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell)
 {
-  if (!shell->priv->user_content)
-    shell->priv->user_content = webkit_user_content_manager_new ();
-
   return shell->priv->user_content;
 }
