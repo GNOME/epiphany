@@ -61,7 +61,6 @@ struct _EphyEmbedShellPrivate
   GDBusConnection *bus;
   GList *web_extensions;
   guint web_extensions_page_created_signal_id;
-  guint web_extensions_form_auth_save_signal_id;
 };
 
 enum
@@ -71,6 +70,7 @@ enum
   WEB_VIEW_CREATED,
   PAGE_CREATED,
   ALLOW_TLS_CERTIFICATE,
+  FORM_AUTH_DATA_SAVE_REQUESTED,
 
   LAST_SIGNAL
 };
@@ -132,25 +132,25 @@ ephy_embed_shell_find_web_extension (EphyEmbedShell *shell,
 }
 
 static void
-web_extension_form_auth_save_requested (GDBusConnection *connection,
-                                        const char *sender_name,
-                                        const char *object_path,
-                                        const char *interface_name,
-                                        const char *signal_name,
-                                        GVariant *parameters,
-                                        EphyEmbedShell *shell)
+web_extension_form_auth_data_message_received_cb (WebKitUserContentManager *manager,
+                                                  WebKitJavascriptResult *message,
+                                                  EphyEmbedShell *shell)
 {
-  EphyWebExtensionProxy *web_extension;
   guint request_id;
   guint64 page_id;
   const char *hostname;
   const char *username;
+  GVariant *variant;
+  gchar *message_str;
 
-  g_variant_get (parameters, "(ut&s&s)", &request_id, &page_id, &hostname, &username);
-  web_extension = ephy_embed_shell_find_web_extension (shell, sender_name);
-  if (!web_extension)
-    return;
-  ephy_web_extension_proxy_form_auth_save_requested (web_extension, request_id, page_id, hostname, username);
+  message_str = ephy_embed_utils_get_js_result_as_string (message);
+  variant = g_variant_parse (G_VARIANT_TYPE ("(utss)"), message_str, NULL, NULL, NULL);
+  g_free (message_str);
+
+  g_variant_get (variant, "(ut&s&s)", &request_id, &page_id, &hostname, &username);
+  g_signal_emit (shell, signals[FORM_AUTH_DATA_SAVE_REQUESTED], 0,
+                 request_id, page_id, hostname, username);
+  g_variant_unref (variant);
 }
 
 static void
@@ -532,17 +532,6 @@ ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
                                         (GDBusSignalCallback)web_extension_page_created,
                                         shell,
                                         NULL);
-  shell->priv->web_extensions_form_auth_save_signal_id =
-    g_dbus_connection_signal_subscribe (shell->priv->bus,
-                                        NULL,
-                                        EPHY_WEB_EXTENSION_INTERFACE,
-                                        "FormAuthDataSaveConfirmationRequired",
-                                        EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                        NULL,
-                                        G_DBUS_SIGNAL_FLAGS_NONE,
-                                        (GDBusSignalCallback)web_extension_form_auth_save_requested,
-                                        shell,
-                                        NULL);
 }
 
 static void
@@ -599,6 +588,12 @@ ephy_embed_shell_startup (GApplication* application)
                     G_CALLBACK (web_extension_tls_error_page_message_received_cb),
                     shell);
 
+  webkit_user_content_manager_register_script_message_handler (shell->priv->user_content,
+                                                               "formAuthData");
+  g_signal_connect (shell->priv->user_content, "script-message-received::formAuthData",
+                    G_CALLBACK (web_extension_form_auth_data_message_received_cb),
+                    shell);
+
   web_context = webkit_web_context_get_default ();
   ephy_embed_shell_setup_process_model (shell, web_context);
   g_signal_connect (web_context, "initialize-web-extensions",
@@ -650,15 +645,11 @@ ephy_embed_shell_shutdown (GApplication* application)
 
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "overview");
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "tlsErrorPage");
+  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "formAuthData");
 
   if (priv->web_extensions_page_created_signal_id > 0) {
     g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_page_created_signal_id);
     priv->web_extensions_page_created_signal_id = 0;
-  }
-
-  if (priv->web_extensions_form_auth_save_signal_id > 0) {
-    g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_form_auth_save_signal_id);
-    priv->web_extensions_form_auth_save_signal_id = 0;
   }
 
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
@@ -823,6 +814,30 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   g_cclosure_marshal_generic,
                   G_TYPE_NONE, 1,
                   G_TYPE_UINT64);
+
+  /**
+   * EphyEmbedShell::form-auth-data-save-requested:
+   * @shell: the #EphyEmbedShell
+   * @request_id: the identifier of the request
+   * @page_id: the identifier of the web page
+   * @hostname: the hostname
+   * @username: the username
+   *
+   * Emitted when a web page requests confirmation to save
+   * the form authentication data for the given @hostname and
+   * @username
+   */
+  signals[FORM_AUTH_DATA_SAVE_REQUESTED] =
+    g_signal_new ("form-auth-data-save-requested",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE, 4,
+                  G_TYPE_UINT,
+                  G_TYPE_UINT64,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING);
 
   g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }

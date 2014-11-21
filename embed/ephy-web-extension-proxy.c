@@ -30,17 +30,7 @@ struct _EphyWebExtensionProxyPrivate
   gchar *name_owner;
   GCancellable *cancellable;
   guint watch_name_id;
-  guint form_auth_save_signal_id;
 };
-
-enum
-{
-  FORM_AUTH_DATA_SAVE_REQUESTED,
-
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EphyWebExtensionProxy, ephy_web_extension_proxy, G_TYPE_OBJECT)
 
@@ -84,30 +74,6 @@ ephy_web_extension_proxy_class_init (EphyWebExtensionProxyClass *klass)
 
   object_class->finalize = ephy_web_extension_proxy_finalize;
   object_class->dispose = ephy_web_extension_proxy_dispose;
-
-  /**
-   * EphyWebExtensionProxy::form-auth-data-save-requested:
-   * @web_extension: the #EphyWebExtensionProxy
-   * @request_id: the identifier of the request
-   * @page_id: the identifier of the web page
-   * @hostname: the hostname
-   * @username: the username
-   *
-   * Emitted when a web page requests confirmation to save
-   * the form authentication data for the given @hostname and
-   * @username
-   **/
-  signals[FORM_AUTH_DATA_SAVE_REQUESTED] =
-    g_signal_new ("form-auth-data-save-requested",
-                  EPHY_TYPE_WEB_EXTENSION_PROXY,
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_generic,
-                  G_TYPE_NONE, 4,
-                  G_TYPE_UINT,
-                  G_TYPE_UINT64,
-                  G_TYPE_STRING,
-                  G_TYPE_STRING);
 
   g_type_class_add_private (object_class, sizeof (EphyWebExtensionProxyPrivate));
 }
@@ -194,19 +160,6 @@ ephy_web_extension_proxy_get_name_owner (EphyWebExtensionProxy *web_extension)
   g_return_val_if_fail (EPHY_IS_WEB_EXTENSION_PROXY (web_extension), NULL);
 
   return web_extension->priv->name_owner;
-}
-
-void
-ephy_web_extension_proxy_form_auth_save_requested (EphyWebExtensionProxy *web_extension,
-                                                   guint request_id,
-                                                   guint64 page_id,
-                                                   const char *hostname,
-                                                   const char *username)
-{
-  g_return_if_fail (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
-
-  g_signal_emit (web_extension, signals[FORM_AUTH_DATA_SAVE_REQUESTED], 0,
-                 request_id, page_id, hostname, username);
 }
 
 void

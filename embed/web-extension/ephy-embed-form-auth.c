@@ -110,3 +110,9 @@ ephy_embed_form_auth_get_username (EphyEmbedFormAuth *form_auth)
 {
   return form_auth->priv->username;
 }
+
+WebKitDOMDocument *
+ephy_embed_form_auth_get_owner_document (EphyEmbedFormAuth *form_auth)
+{
+  return webkit_dom_node_get_owner_document (form_auth->priv->password_node);
+}

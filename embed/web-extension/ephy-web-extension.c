@@ -76,12 +76,6 @@ static const char introspection_xml[] =
   "   <arg type='s' name='uri' direction='out'/>"
   "   <arg type='s' name='color' direction='out'/>"
   "  </method>"
-  "  <signal name='FormAuthDataSaveConfirmationRequired'>"
-  "   <arg type='u' name='request_id' direction='out'/>"
-  "   <arg type='t' name='page_id' direction='out'/>"
-  "   <arg type='s' name='hostname' direction='out'/>"
-  "   <arg type='s' name='username' direction='out'/>"
-  "  </signal>"
   "  <method name='FormAuthDataSaveConfirmationResponse'>"
   "   <arg type='u' name='request_id' direction='in'/>"
   "   <arg type='b' name='should_store' direction='in'/>"
@@ -235,11 +229,13 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
   char *username_field_value = NULL;
   guint request_id;
   SoupURI *uri;
-  GError *error = NULL;
   WebKitDOMNode *username_node;
-  EphyWebExtension *extension = ephy_web_extension_get ();
+  WebKitDOMDOMWindow *dom_window;
+  GVariant *variant;
+  gchar *message;
 
-  if (!extension->priv->dbus_connection) {
+  dom_window = webkit_dom_document_get_default_view (ephy_embed_form_auth_get_owner_document (form_auth));
+  if (!dom_window) {
     g_object_unref (form_auth);
     return;
   }
@@ -250,27 +246,25 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
   if (username_node)
     g_object_get (username_node, "value", &username_field_value, NULL);
 
-  g_dbus_connection_emit_signal (extension->priv->dbus_connection,
-                                 NULL,
-                                 EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                 EPHY_WEB_EXTENSION_INTERFACE,
-                                 "FormAuthDataSaveConfirmationRequired",
-                                 g_variant_new ("(utss)",
-                                                request_id,
-                                                ephy_embed_form_auth_get_page_id (form_auth),
-                                                uri ? uri->host : "",
-                                                username_field_value ? username_field_value : ""),
-                                 &error);
-  if (error) {
-    g_warning ("Error emitting signal FormAuthDataSaveConfirmationRequired: %s\n", error->message);
-    g_error_free (error);
-  } else {
-    g_hash_table_insert (ephy_web_extension_get_form_auth_data_save_requests (extension),
+  variant = g_variant_new ("(utss)",
+                           request_id,
+                           ephy_embed_form_auth_get_page_id (form_auth),
+                           uri ? uri->host : "",
+                           username_field_value ? username_field_value : "");
+  g_free (username_field_value);
+
+  message = g_variant_print (variant, FALSE);
+  g_variant_unref (variant);
+
+  if (webkit_dom_dom_window_webkit_message_handlers_post_message (dom_window, "formAuthData", message)) {
+    g_hash_table_insert (ephy_web_extension_get_form_auth_data_save_requests (ephy_web_extension_get ()),
                          GINT_TO_POINTER (request_id),
                          g_object_ref (form_auth));
+  } else {
+    g_warning ("Error sending formAuthData message");
   }
 
-  g_free (username_field_value);
+  g_free (message);
   g_object_unref (form_auth);
 }
 

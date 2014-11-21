@@ -57,6 +57,7 @@ WebKitDOMNode     *ephy_embed_form_auth_get_password_node (EphyEmbedFormAuth *fo
 SoupURI           *ephy_embed_form_auth_get_uri           (EphyEmbedFormAuth *form_auth);
 guint64            ephy_embed_form_auth_get_page_id       (EphyEmbedFormAuth *form_auth);
 const char        *ephy_embed_form_auth_get_username      (EphyEmbedFormAuth *form_auth);
+WebKitDOMDocument *ephy_embed_form_auth_get_owner_document(EphyEmbedFormAuth *form_auth);
 
 G_END_DECLS
 

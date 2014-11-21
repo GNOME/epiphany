@@ -674,7 +674,7 @@ form_auth_data_save_confirmation_response (GtkInfoBar *info_bar,
 }
 
 static void
-form_auth_data_save_requested (EphyWebExtensionProxy *web_extension,
+form_auth_data_save_requested (EphyEmbedShell *shell,
                                guint request_id,
                                guint64 page_id,
                                const char *hostname,
@@ -734,7 +734,7 @@ page_created_cb (EphyEmbedShell *shell,
   priv->web_extension = web_extension;
   g_object_add_weak_pointer (G_OBJECT (priv->web_extension), (gpointer *)&priv->web_extension);
 
-  g_signal_connect_object (priv->web_extension, "form-auth-data-save-requested",
+  g_signal_connect_object (shell, "form-auth-data-save-requested",
                            G_CALLBACK (form_auth_data_save_requested),
                            web_view, 0);
 

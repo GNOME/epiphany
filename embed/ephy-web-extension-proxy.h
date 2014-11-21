@@ -58,11 +58,6 @@ GType                  ephy_web_extension_proxy_get_type                        
 EphyWebExtensionProxy *ephy_web_extension_proxy_new                                       (GDBusConnection       *bus,
                                                                                            const char            *service_name);
 const char *           ephy_web_extension_proxy_get_name_owner                            (EphyWebExtensionProxy *web_extension);
-void                   ephy_web_extension_proxy_form_auth_save_requested                  (EphyWebExtensionProxy *web_extension,
-                                                                                           guint                  request_id,
-                                                                                           guint64                page_id,
-                                                                                           const char            *hostname,
-                                                                                           const char            *username);
 void                   ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExtensionProxy *web_extension,
                                                                                            guint                  request_id,
                                                                                            gboolean               response);
