@@ -338,6 +338,13 @@ handle_applications_finished_cb (EphyAboutHandler *handler,
   g_string_append_printf (data_str, "<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
                           "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                          "<script>"
+                          "  function deleteWebApp(appID) {"
+                          "    window.webkit.messageHandlers.aboutApps.postMessage(appID);"
+                          "    var row = document.getElementById(appID);"
+                          "    row.parentNode.removeChild(row);"
+                          "  }"
+                          "</script>"
                           "</head><body class=\"applications-body\"><h1>%s</h1>"
                           "<p>%s</p>",
                           _("Applications"),
@@ -351,13 +358,12 @@ handle_applications_finished_cb (EphyAboutHandler *handler,
     EphyWebApplication *app = (EphyWebApplication*)p->data;
 
     g_string_append_printf (data_str,
-                            "<form>" \
-                            "<tbody><tr>" \
-                            "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>" \
-                            "<td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td>" \
-                            "<td class=\"input\"><input type=\"hidden\" name=\"app_id\" value=\"%s\"><input type=\"submit\" value=\"Delete\" id=\"%s\">" \
-                            "</td><td class=\"date\">%s <br /> %s</td></tr></tbody></form>",
-                            app->icon_url, app->name, app->url, app->name, app->name,
+                            "<tbody><tr id =\"%s\">"
+                            "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
+                            "<td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td>"
+                            "<td class=\"input\"><input type=\"button\" value=\"Delete\" onclick=\"deleteWebApp('%s');\"></td>"
+                            "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
+                            app->name, app->icon_url, app->url, app->name, app->name,
                             /* Note for translators: this refers to the installation date. */
                             _("Installed on:"), app->install_date);
   }

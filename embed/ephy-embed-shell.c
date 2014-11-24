@@ -34,6 +34,7 @@
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
+#include "ephy-web-app-utils.h"
 #include "ephy-web-extension-proxy.h"
 #include "ephy-web-extension-names.h"
 
@@ -277,6 +278,18 @@ web_extension_tls_error_page_message_received_cb (WebKitUserContentManager *mana
 
   page_id = ephy_embed_utils_get_js_result_as_number (message);
   g_signal_emit (shell, signals[ALLOW_TLS_CERTIFICATE], 0, page_id);
+}
+
+static void
+web_extension_about_apps_message_received_cb (WebKitUserContentManager *manager,
+                                              WebKitJavascriptResult *message,
+                                              EphyEmbedShell *shell)
+{
+  char *app_id;
+
+  app_id = ephy_embed_utils_get_js_result_as_string (message);
+  ephy_web_application_delete (app_id);
+  g_free (app_id);
 }
 
 static void
@@ -594,6 +607,12 @@ ephy_embed_shell_startup (GApplication* application)
                     G_CALLBACK (web_extension_form_auth_data_message_received_cb),
                     shell);
 
+  webkit_user_content_manager_register_script_message_handler (shell->priv->user_content,
+                                                               "aboutApps");
+  g_signal_connect (shell->priv->user_content, "script-message-received::aboutApps",
+                    G_CALLBACK (web_extension_about_apps_message_received_cb),
+                    shell);
+
   web_context = webkit_web_context_get_default ();
   ephy_embed_shell_setup_process_model (shell, web_context);
   g_signal_connect (web_context, "initialize-web-extensions",
@@ -646,6 +665,7 @@ ephy_embed_shell_shutdown (GApplication* application)
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "overview");
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "tlsErrorPage");
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "formAuthData");
+  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "aboutApps");
 
   if (priv->web_extensions_page_created_signal_id > 0) {
     g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_page_created_signal_id);
