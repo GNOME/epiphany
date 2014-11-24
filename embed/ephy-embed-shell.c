@@ -586,7 +586,13 @@ ephy_embed_shell_startup (GApplication* application)
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
   /* We're not remoting, setup the Web Context. */
-  priv->web_context = webkit_web_context_new ();
+
+  /* Local Storage */
+  local_storage_path = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
+                                         ephy_dot_dir () : g_get_user_data_dir (),
+                                         g_get_prgname (), "localstorage", NULL);
+  priv->web_context = g_object_new (WEBKIT_TYPE_WEB_CONTEXT, "local-storage-directory", local_storage_path, NULL);
+  g_free (local_storage_path);
 
   ephy_embed_shell_setup_web_extensions_connection (shell);
 
