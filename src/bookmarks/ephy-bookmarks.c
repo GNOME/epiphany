@@ -245,8 +245,9 @@ static void
 ephy_setup_history_notifiers (EphyBookmarks *eb)
 {
 	WebKitFaviconDatabase *favicon_database;
+	EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-	favicon_database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
+	favicon_database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
 	g_signal_connect (favicon_database, "favicon-changed",
 			  G_CALLBACK (icon_updated_cb), eb);
 }
@@ -1135,6 +1136,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 {
 	EphyNode *bm;
 	WebKitFaviconDatabase *favicon_database;
+	EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
 	bm = ephy_node_new (eb->priv->db);
 
@@ -1149,7 +1151,7 @@ ephy_bookmarks_add (EphyBookmarks *eb,
 	}
 	ephy_node_set_property_string (bm, EPHY_NODE_BMK_PROP_TITLE, title);
 
-	favicon_database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
+	favicon_database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
 	if (favicon_database != NULL)
 	{
 		char *icon = webkit_favicon_database_get_favicon_uri (favicon_database, url);

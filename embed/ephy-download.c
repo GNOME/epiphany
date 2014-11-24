@@ -863,10 +863,11 @@ ephy_download_new_for_uri (const char *uri,
 {
   EphyDownload *ephy_download;
   WebKitDownload *download;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   g_return_val_if_fail (uri != NULL, NULL);
 
-  download = webkit_web_context_download_uri (webkit_web_context_get_default (), uri);
+  download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell), uri);
 
   ephy_download = ephy_download_new (download, parent);
   g_object_unref (download);

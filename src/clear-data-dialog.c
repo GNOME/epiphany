@@ -66,8 +66,9 @@ static WebKitCookieManager *
 get_cookie_manager (void)
 {
 	WebKitWebContext *web_context;
+	EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-	web_context = webkit_web_context_get_default ();
+	web_context = ephy_embed_shell_get_web_context (shell);;
 	return webkit_web_context_get_cookie_manager (web_context);
 }
 
@@ -126,7 +127,7 @@ clear_data_dialog_response_cb (GtkDialog *widget,
 
 			ephy_embed_shell_clear_cache (shell);
 
-			database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
+			database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
 			webkit_favicon_database_clear (database);
 		}
 	}

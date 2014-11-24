@@ -28,6 +28,7 @@
 #include <webkit2/webkit2.h>
 
 #include "ephy-string.h"
+#include "ephy-shell.h"
 
 #include "cookies-dialog.h"
 
@@ -381,11 +382,12 @@ static void
 cookies_dialog_init (CookiesDialog *dialog)
 {
 	WebKitWebContext *web_context;
+	EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
 	dialog->priv = cookies_dialog_get_instance_private (dialog);
 	gtk_widget_init_template (GTK_WIDGET (dialog));
 
-	web_context = webkit_web_context_get_default ();
+	web_context = ephy_embed_shell_get_web_context (shell);
 	dialog->priv->cookie_manager = webkit_web_context_get_cookie_manager (web_context);
 
 	setup_page (dialog);

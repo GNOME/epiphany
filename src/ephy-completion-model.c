@@ -240,8 +240,9 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
   GtkTreePath *path;
   IconLoadData *data;
   WebKitFaviconDatabase* database;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-  database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
+  database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
 
   gtk_list_store_insert_with_values (GTK_LIST_STORE (model), &iter, position,
                                      EPHY_COMPLETION_TEXT_COL, row->title ? row->title : "",

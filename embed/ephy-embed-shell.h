@@ -73,6 +73,7 @@ struct _EphyEmbedShellClass
 
 GType              ephy_embed_shell_get_type                   (void);
 EphyEmbedShell    *ephy_embed_shell_get_default                (void);
+WebKitWebContext  *ephy_embed_shell_get_web_context            (EphyEmbedShell   *shell);
 GObject           *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);
 GObject           *ephy_embed_shell_get_encodings              (EphyEmbedShell   *shell);
 void               ephy_embed_shell_prepare_close              (EphyEmbedShell   *shell);

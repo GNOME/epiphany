@@ -194,6 +194,8 @@ epiphany_search_provider_CFLAGS = $(epiphany_CFLAGS)
 epiphany_search_provider_LDADD = \
 	libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \
+	$(top_builddir)/embed/libephyembed.la \
+	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/history/libephyhistory.la \
 	$(top_builddir)/lib/libephymisc.la \
 	$(DEPENDENCIES_LIBS) \

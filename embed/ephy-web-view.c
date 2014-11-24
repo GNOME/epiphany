@@ -713,7 +713,7 @@ allow_tls_certificate_cb (EphyEmbedShell *shell,
   g_return_if_fail (priv->tls_error_failing_uri != NULL);
 
   uri = soup_uri_new (priv->tls_error_failing_uri);
-  webkit_web_context_allow_tls_certificate_for_host (webkit_web_context_get_default (),
+  webkit_web_context_allow_tls_certificate_for_host (ephy_embed_shell_get_web_context (shell),
                                                      priv->certificate,
                                                      uri->host);
   ephy_web_view_load_url (web_view, ephy_web_view_get_address (web_view));
@@ -2180,8 +2180,11 @@ ephy_web_view_init (EphyWebView *web_view)
 GtkWidget *
 ephy_web_view_new (void)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
   return g_object_new (EPHY_TYPE_WEB_VIEW,
-                       "user-content-manager", ephy_embed_shell_get_user_content_manager (ephy_embed_shell_get_default ()),
+                       "web-context", ephy_embed_shell_get_web_context (shell),
+                       "user-content-manager", ephy_embed_shell_get_user_content_manager (shell),
                        "settings", ephy_embed_prefs_get_settings (),
                        NULL);
 }

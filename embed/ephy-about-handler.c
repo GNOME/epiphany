@@ -190,7 +190,9 @@ static gboolean
 ephy_about_handler_handle_plugins (EphyAboutHandler *handler,
                                    WebKitURISchemeRequest *request)
 {
-  webkit_web_context_get_plugins (webkit_web_context_get_default (),
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  webkit_web_context_get_plugins (ephy_embed_shell_get_web_context (shell),
                                   NULL,
                                   (GAsyncReadyCallback)get_plugins_cb,
                                   ephy_about_request_new (handler, request));

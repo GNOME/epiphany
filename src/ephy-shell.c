@@ -256,14 +256,63 @@ static GActionEntry app_normal_mode_entries[] = {
 };
 
 static void
+download_started_cb (WebKitWebContext *web_context,
+                     WebKitDownload *download,
+                     EphyShell *shell)
+{
+  GtkWindow *window = NULL;
+  WebKitWebView *web_view;
+  EphyDownload *ephy_download;
+  gboolean ephy_download_set;
+
+  /* Is download locked down? */
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                              EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK)) {
+    webkit_download_cancel (download);
+    return;
+  }
+
+  /* Only create an EphyDownload for the WebKitDownload if it doesn't exist yet.
+   * This can happen when the download has been started automatically by WebKit,
+   * due to a context menu action or policy checker decision. Downloads started
+   * explicitly by Epiphany are marked with ephy-download-set GObject data.
+   */
+  ephy_download_set = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (download), "ephy-download-set"));
+  if (ephy_download_set)
+    return;
+
+  web_view = webkit_download_get_web_view (download);
+  if (web_view) {
+    GtkWidget *toplevel;
+
+    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
+    if (GTK_IS_WINDOW (toplevel))
+      window = GTK_WINDOW (toplevel);
+  }
+
+  if (!window)
+    window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+
+  ephy_download = ephy_download_new (download, window);
+  ephy_window_add_download (EPHY_WINDOW (window), ephy_download);
+  g_object_unref (ephy_download);
+}
+
+static void
 ephy_shell_startup (GApplication* application)
 {
+  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
   EphyEmbedShellMode mode;
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
   /* We're not remoting; start our services */
-  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application));
+  g_signal_connect (ephy_embed_shell_get_web_context (embed_shell),
+                    "download-started",
+                    G_CALLBACK (download_started_cb),
+                    application);
+
+  mode = ephy_embed_shell_get_mode (embed_shell);
 
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     GtkBuilder *builder;
@@ -519,55 +568,9 @@ ephy_shell_class_init (EphyShellClass *klass)
 }
 
 static void
-download_started_cb (WebKitWebContext *web_context,
-                     WebKitDownload *download,
-                     EphyShell *shell)
-{
-  GtkWindow *window = NULL;
-  WebKitWebView *web_view;
-  EphyDownload *ephy_download;
-  gboolean ephy_download_set;
-
-  /* Is download locked down? */
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK)) {
-    webkit_download_cancel (download);
-    return;
-  }
-
-  /* Only create an EphyDownload for the WebKitDownload if it doesn't exist yet.
-   * This can happen when the download has been started automatically by WebKit,
-   * due to a context menu action or policy checker decision. Downloads started
-   * explicitly by Epiphany are marked with ephy-download-set GObject data.
-   */
-  ephy_download_set = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (download), "ephy-download-set"));
-  if (ephy_download_set)
-    return;
-
-  web_view = webkit_download_get_web_view (download);
-  if (web_view) {
-    GtkWidget *toplevel;
-
-    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
-    if (GTK_IS_WINDOW (toplevel))
-      window = GTK_WINDOW (toplevel);
-  }
-
-  if (!window)
-    window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-
-  ephy_download = ephy_download_new (download, window);
-  ephy_window_add_download (EPHY_WINDOW (window), ephy_download);
-  g_object_unref (ephy_download);
-}
-
-static void
 ephy_shell_init (EphyShell *shell)
 {
   EphyShell **ptr = &ephy_shell;
-  WebKitWebContext *web_context;
-  EphyEmbedShellMode mode;
-  char *favicon_db_path;
 
   shell->priv = EPHY_SHELL_GET_PRIVATE (shell);
 
@@ -576,24 +579,6 @@ ephy_shell_init (EphyShell *shell)
   ephy_shell = shell;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
-
-  web_context = webkit_web_context_get_default ();
-  g_signal_connect (web_context, "download-started",
-                    G_CALLBACK (download_started_cb),
-                    shell);
-
-  /* Do not ignore TLS errors. */
-  webkit_web_context_set_tls_errors_policy (web_context, WEBKIT_TLS_ERRORS_POLICY_FAIL);
-
-  /* Initialize the favicon cache as early as possible, or further
-     calls to webkit_web_context_get_favicon_database will fail. */
-  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
-  favicon_db_path = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode) ?
-                                      ephy_dot_dir () : g_get_user_cache_dir (),
-                                      g_get_prgname (), "icondatabase", NULL);
-
-  webkit_web_context_set_favicon_database_directory (web_context, favicon_db_path);
-  g_free (favicon_db_path);
 }
 
 static void

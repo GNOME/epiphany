@@ -128,13 +128,14 @@ ephy_bookmark_action_sync_icon (GtkAction *action,
 	EphyBookmarkAction *bma = EPHY_BOOKMARK_ACTION (action);
 	const char *page_location;
 	WebKitFaviconDatabase *database;
+        EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
 	g_return_if_fail (bma->priv->node != NULL);
 
 	page_location = ephy_node_get_property_string (bma->priv->node,
 						       EPHY_NODE_BMK_PROP_LOCATION);
 
-        database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
+        database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
 
 	if (page_location && *page_location)
 	{
@@ -387,9 +388,10 @@ ephy_bookmark_action_dispose (GObject *object)
 
 	if (priv->cache_handler != 0)
 	{
+                EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 		WebKitFaviconDatabase *database;
 
-                database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
+                database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
 		g_signal_handler_disconnect (database, priv->cache_handler);
 		priv->cache_handler = 0;
 	}

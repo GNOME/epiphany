@@ -32,12 +32,15 @@
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
 
-#include <libsoup/soup.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#if 0
+/* FIXME: Refactor the DNS prefetch, this is a layering violation */
+#include <libsoup/soup.h>
 #include <webkit2/webkit2.h>
+#endif
 
 /**
  * SECTION:ephy-location-entry
@@ -957,6 +960,8 @@ ephy_location_entry_new (void)
 	return GTK_WIDGET (g_object_new (EPHY_TYPE_LOCATION_ENTRY, NULL));
 }
 
+#if 0
+/* FIXME: Refactor the DNS prefetch, this is a layering violation */
 typedef struct {
 	SoupURI *uri;
 	EphyLocationEntry *entry;
@@ -973,10 +978,10 @@ free_prefetch_helper (PrefetchHelper *helper)
 static gboolean
 do_dns_prefetch (PrefetchHelper *helper)
 {
-	WebKitWebContext *context = webkit_web_context_get_default ();
+	EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
 	if (helper->uri)
-		webkit_web_context_prefetch_dns (context, helper->uri->host);
+		webkit_web_context_prefetch_dns (ephy_embed_shell_get_web_context (shell), helper->uri->host);
 
 	helper->entry->priv->dns_prefetch_handler = 0;
 
@@ -1008,6 +1013,7 @@ schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *ur
 				    (GDestroyNotify) free_prefetch_helper);
 	g_source_set_name_by_id (entry->priv->dns_prefetch_handler, "[epiphany] do_dns_prefetch");
 }
+#endif
 
 static gboolean
 cursor_on_match_cb  (GtkEntryCompletion *completion,
@@ -1031,7 +1037,10 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 	gtk_editable_set_position (GTK_EDITABLE (entry), -1);
 	le->priv->block_update = FALSE;
 
+#if 0
+/* FIXME: Refactor the DNS prefetch, this is a layering violation */
 	schedule_dns_prefetch (le, 250, (const gchar*) url);
+#endif
 
 	g_free (url);
 

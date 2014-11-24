@@ -275,6 +275,7 @@ new_history_menu_item (EphyWebView *view,
   GtkWidget *item;
   GtkLabel *label;
   WebKitFaviconDatabase* database;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   g_return_val_if_fail (address != NULL && origtext != NULL, NULL);
 
@@ -284,7 +285,7 @@ new_history_menu_item (EphyWebView *view,
   gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
   gtk_label_set_max_width_chars (label, MAX_LABEL_LENGTH);
 
-  database = webkit_web_context_get_favicon_database (webkit_web_context_get_default ());
+  database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
   webkit_favicon_database_get_favicon (database, address,
                                        NULL,
                                        (GAsyncReadyCallback)icon_loaded_cb,

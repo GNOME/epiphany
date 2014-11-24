@@ -50,6 +50,7 @@
 
 struct _EphyEmbedShellPrivate
 {
+  WebKitWebContext *web_context;
   EphyHistoryService *global_history_service;
   EphyEncodings *encodings;
   GtkPageSetup *page_setup;
@@ -107,6 +108,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->about_handler);
   g_clear_object (&priv->user_content);
+  g_clear_object (&priv->web_context);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -548,8 +550,7 @@ ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
 }
 
 static void
-ephy_embed_shell_setup_process_model (EphyEmbedShell *shell,
-                                      WebKitWebContext *web_context)
+ephy_embed_shell_setup_process_model (EphyEmbedShell *shell)
 {
   EphyPrefsProcessModel process_model;
 
@@ -560,10 +561,12 @@ ephy_embed_shell_setup_process_model (EphyEmbedShell *shell,
 
   switch (process_model) {
   case EPHY_PREFS_PROCESS_MODEL_SHARED_SECONDARY_PROCESS:
-    webkit_web_context_set_process_model (web_context, WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS);
+    webkit_web_context_set_process_model (shell->priv->web_context,
+                                          WEBKIT_PROCESS_MODEL_SHARED_SECONDARY_PROCESS);
     break;
   case EPHY_PREFS_PROCESS_MODEL_ONE_SECONDARY_PROCESS_PER_WEB_VIEW:
-    webkit_web_context_set_process_model (web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
+    webkit_web_context_set_process_model (shell->priv->web_context,
+                                          WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
     break;
   }
 }
@@ -572,9 +575,10 @@ static void
 ephy_embed_shell_startup (GApplication* application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
-  EphyEmbedShellMode mode;
-  char *disk_cache_dir;
-  WebKitWebContext *web_context;
+  EphyEmbedShellPrivate *priv = shell->priv;
+  char *base_cache_dir;
+  char *favicon_db_path;
+  char *local_storage_path;
   WebKitCookieManager *cookie_manager;
   char *filename;
   char *cookie_policy;
@@ -582,7 +586,7 @@ ephy_embed_shell_startup (GApplication* application)
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
   /* We're not remoting, setup the Web Context. */
-  mode = shell->priv->mode;
+  priv->web_context = webkit_web_context_new ();
 
   ephy_embed_shell_setup_web_extensions_connection (shell);
 
@@ -613,37 +617,46 @@ ephy_embed_shell_startup (GApplication* application)
                     G_CALLBACK (web_extension_about_apps_message_received_cb),
                     shell);
 
-  web_context = webkit_web_context_get_default ();
-  ephy_embed_shell_setup_process_model (shell, web_context);
-  g_signal_connect (web_context, "initialize-web-extensions",
+  ephy_embed_shell_setup_process_model (shell);
+  g_signal_connect (priv->web_context, "initialize-web-extensions",
                     G_CALLBACK (initialize_web_extensions),
                     shell);
 
   /* Disk Cache */
-  disk_cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (mode) ?
+  base_cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
                                      ephy_dot_dir () : g_get_user_cache_dir (),
                                      g_get_prgname (), NULL);
-  webkit_web_context_set_disk_cache_directory (web_context, disk_cache_dir);
-  g_free (disk_cache_dir);
+  webkit_web_context_set_disk_cache_directory (priv->web_context, base_cache_dir);
+
+  /* Favicon Database */
+  favicon_db_path = g_build_filename (base_cache_dir, "icondatabase", NULL);
+  webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
+  g_free (favicon_db_path);
+
+  g_free (base_cache_dir);
+
+  /* Do not ignore TLS errors. */
+  webkit_web_context_set_tls_errors_policy (priv->web_context, WEBKIT_TLS_ERRORS_POLICY_FAIL);
+
 
   /* about: URIs handler */
   shell->priv->about_handler = ephy_about_handler_new ();
-  webkit_web_context_register_uri_scheme (web_context,
+  webkit_web_context_register_uri_scheme (priv->web_context,
                                           EPHY_ABOUT_SCHEME,
                                           (WebKitURISchemeRequestCallback)about_request_cb,
                                           shell, NULL);
 
   /* Register about scheme as local so that it can contain file resources */
-  webkit_security_manager_register_uri_scheme_as_local (webkit_web_context_get_security_manager (web_context),
+  webkit_security_manager_register_uri_scheme_as_local (webkit_web_context_get_security_manager (priv->web_context),
                                                         EPHY_ABOUT_SCHEME);
 
   /* ephy-resource handler */
-  webkit_web_context_register_uri_scheme (web_context, "ephy-resource",
+  webkit_web_context_register_uri_scheme (priv->web_context, "ephy-resource",
                                           (WebKitURISchemeRequestCallback)ephy_resource_request_cb,
                                           NULL, NULL);
 
   /* Store cookies in moz-compatible SQLite format */
-  cookie_manager = webkit_web_context_get_cookie_manager (web_context);
+  cookie_manager = webkit_web_context_get_cookie_manager (priv->web_context);
   filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
   webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
                                                 WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
@@ -1065,11 +1078,17 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
 void
 ephy_embed_shell_clear_cache (EphyEmbedShell *shell)
 {
-  webkit_web_context_clear_cache (webkit_web_context_get_default ());
+  webkit_web_context_clear_cache (shell->priv->web_context);
 }
 
 WebKitUserContentManager *
 ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell)
 {
   return shell->priv->user_content;
+}
+
+WebKitWebContext *
+ephy_embed_shell_get_web_context (EphyEmbedShell *shell)
+{
+  return shell->priv->web_context;
 }

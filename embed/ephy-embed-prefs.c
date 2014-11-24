@@ -319,6 +319,7 @@ webkit_pref_callback_accept_languages (GSettings *settings,
   GArray *array;
   char **languages;
   int i;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   languages = g_settings_get_strv (settings, key);
 
@@ -335,7 +336,7 @@ webkit_pref_callback_accept_languages (GSettings *settings,
 
   ephy_langs_sanitise (array);
 
-  webkit_web_context_set_preferred_languages (webkit_web_context_get_default (),
+  webkit_web_context_set_preferred_languages (ephy_embed_shell_get_web_context (shell),
                                               (const char * const *)array->data);
 
   g_strfreev (languages);
@@ -370,12 +371,14 @@ webkit_pref_callback_cookie_accept_policy (GSettings *settings,
 {
   WebKitCookieManager *cookie_manager;
   char *value;
+  EphyEmbedShell *shell;
 
   value = g_settings_get_string (settings, key);
   if (!value)
     return;
 
-  cookie_manager = webkit_web_context_get_cookie_manager (webkit_web_context_get_default ());
+  shell = ephy_embed_shell_get_default ();
+  cookie_manager = webkit_web_context_get_cookie_manager (ephy_embed_shell_get_web_context (shell));
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, value);
   g_free (value);
 }
@@ -446,10 +449,11 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
                                             char *key,
                                             gpointer data)
 {
-  WebKitWebContext *web_context = NULL;
+  WebKitWebContext *web_context;
   gboolean value = FALSE;
   char **languages = NULL;
   char *langs = NULL;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   value = g_settings_get_boolean (settings, key);
 
@@ -464,7 +468,7 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
     langs = g_strjoinv (",", languages);
   }
 
-  web_context = webkit_web_context_get_default ();
+  web_context = ephy_embed_shell_get_web_context (shell);
   webkit_web_context_set_spell_checking_enabled (web_context, value);
   webkit_web_context_set_spell_checking_languages (web_context, (const char* const *)languages);
 

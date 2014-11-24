@@ -546,8 +546,9 @@ download_icon_and_set_image (EphyApplicationDialogData *data)
 {
 	WebKitDownload *download;
 	char *destination, *destination_uri, *tmp_filename;
+	EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-	download = webkit_web_context_download_uri (webkit_web_context_get_default (),
+	download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell),
 						    data->icon_href);
 	/* We do not want this download to show up in the UI, so let's
 	 * set 'ephy-download-set' to make Epiphany think this is
