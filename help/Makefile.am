@@ -29,7 +29,8 @@ HELP_FILES = \
 	pref-do-not-track.page \
 	pref-font.page \
 	pref-passwords.page \
-	prob-restore-closed-page.page
+	prob-restore-closed-page.page \
+	proxy.page
 
 HELP_MEDIA = \
 	media/epiphany-3-12.png \
