@@ -105,15 +105,6 @@ overview_item_free (OverviewItem *item)
 }
 
 static void
-ephy_web_overview_web_page_uri_changed (WebKitWebPage *web_page,
-                                        GParamSpec *spec,
-                                        EphyWebOverview *overview)
-{
-  if (g_strcmp0 (webkit_web_page_get_uri (web_page), "ephy-about:overview") != 0)
-    g_object_unref (overview);
-}
-
-static void
 update_thumbnail_element_style (WebKitDOMElement *thumbnail,
                                 const char *path)
 {
@@ -374,41 +365,12 @@ ephy_web_overview_dispose (GObject *object)
 }
 
 static void
-ephy_web_overview_web_view_destroyed (EphyWebOverview *overview,
-                                      GObject *destroyed_web_view)
-{
-  overview->priv->web_page = NULL;
-  g_object_unref (overview);
-}
-
-static void
-ephy_web_overview_finalize (GObject *object)
-{
-  EphyWebOverview *overview = EPHY_WEB_OVERVIEW (object);
-
-  if (overview->priv->web_page) {
-    g_object_weak_unref (G_OBJECT (overview->priv->web_page),
-                         (GWeakNotify)ephy_web_overview_web_view_destroyed,
-                         overview);
-  }
-
-  G_OBJECT_CLASS (ephy_web_overview_parent_class)->finalize (object);
-}
-
-static void
 ephy_web_overview_constructed (GObject *object)
 {
   EphyWebOverview *overview = EPHY_WEB_OVERVIEW (object);
 
   G_OBJECT_CLASS (ephy_web_overview_parent_class)->constructed (object);
 
-  g_object_weak_ref (G_OBJECT (overview->priv->web_page),
-                     (GWeakNotify)ephy_web_overview_web_view_destroyed,
-                     overview);
-
-  g_signal_connect_object (overview->priv->web_page, "notify::uri",
-                           G_CALLBACK (ephy_web_overview_web_page_uri_changed),
-                           overview, 0);
   g_signal_connect_object (overview->priv->web_page, "document-loaded",
                            G_CALLBACK (ephy_web_overview_document_loaded),
                            overview, 0);
@@ -430,7 +392,6 @@ ephy_web_overview_class_init (EphyWebOverviewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ephy_web_overview_dispose;
-  object_class->finalize = ephy_web_overview_finalize;
   object_class->constructed = ephy_web_overview_constructed;
   object_class->set_property = ephy_web_overview_set_property;
 

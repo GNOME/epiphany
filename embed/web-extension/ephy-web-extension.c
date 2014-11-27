@@ -982,6 +982,19 @@ web_page_document_loaded (WebKitWebPage *web_page,
 }
 
 static void
+web_page_uri_changed (WebKitWebPage *web_page,
+                      GParamSpec *param_spec,
+                      EphyWebExtension *extension)
+{
+  EphyWebOverview *overview = NULL;
+
+  if (g_strcmp0 (webkit_web_page_get_uri (web_page), "ephy-about:overview") == 0)
+    overview = ephy_web_overview_new (web_page, extension->priv->overview_model);
+
+  g_object_set_data_full (G_OBJECT (web_page), "ephy-web-overview", overview, g_object_unref);
+}
+
+static void
 ephy_web_extension_emit_page_created (EphyWebExtension *extension,
                                       guint64 page_id)
 {
@@ -1045,6 +1058,9 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
                     extension);
   g_signal_connect (web_page, "document-loaded",
                     G_CALLBACK (web_page_document_loaded),
+                    extension);
+  g_signal_connect (web_page, "notify::uri",
+                    G_CALLBACK (web_page_uri_changed),
                     extension);
 }
 
