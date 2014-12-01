@@ -89,17 +89,12 @@ test_ephy_file_helpers_init (void)
 
     /* Cleanup dir left behind. */
     if (keep_dir) {
-      GFile *file;
-
-      file = g_file_new_for_path (tmp_dir);
       /* As a safety measure, only try recursive delete on paths
        * prefixed with /tmp. */
       if (g_str_has_prefix (tmp_dir, "/tmp"))
-        g_assert (ephy_file_delete_dir_recursively (file, NULL));
+        g_assert (ephy_file_delete_dir_recursively (tmp_dir, NULL));
       else
         g_warning ("INIT: dangerous path returned as tmp_dir: %s", tmp_dir);
-
-      g_object_unref (file);
     }
 
     g_free (tmp_dir);
@@ -184,8 +179,8 @@ test_ephy_file_create_delete_dir (void)
   ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL);
 
   for (i = 0; i < G_N_ELEMENTS (dir_tests); i++) {
-    GFile *file = NULL;
     DirTest test;
+    GError *error = NULL;
 
     test = dir_tests[i];
 
@@ -195,14 +190,12 @@ test_ephy_file_create_delete_dir (void)
     g_assert (ephy_ensure_dir_exists (test.dir, NULL) == (test.exists || test.can_create));
     g_assert (g_file_test (test.dir, G_FILE_TEST_EXISTS) == (test.exists || test.can_create));
 
-    file = g_file_new_for_path (test.dir);
-
-    g_assert (ephy_file_delete_dir_recursively (file, NULL) == test.can_delete);
+    g_assert (ephy_file_delete_dir_recursively (test.dir, &error) == test.can_delete);
+    if (error)
+            g_error_free (error);
 
     if (test.exists)
       g_assert (g_file_test (test.dir, G_FILE_TEST_EXISTS) != test.can_delete);
-
-    g_object_unref (file);
   }
 
   ephy_file_helpers_shutdown ();

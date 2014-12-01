@@ -30,11 +30,13 @@
 #include "ephy-settings.h"
 #include "ephy-string.h"
 
+#include <errno.h>
 #include <gdk/gdk.h>
 #include <gio/gdesktopappinfo.h>
 #include <gio/gio.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <libxml/xmlreader.h>
 #include <stdlib.h>
@@ -429,15 +431,10 @@ ephy_file_helpers_shutdown (void)
 	{
 		if (!keep_directory)
 		{
-			GFile *tmp_dir_file;
-			tmp_dir_file = g_file_new_for_path (tmp_dir);
-
 			/* recursively delete the contents and the
 			 * directory */
 			LOG ("shutdown: delete tmp_dir %s", tmp_dir);
-			ephy_file_delete_dir_recursively (tmp_dir_file,
-							  NULL);
-			g_object_unref (tmp_dir_file);
+			ephy_file_delete_dir_recursively (tmp_dir, NULL);
 		}
 
 		g_free (tmp_dir);
@@ -878,56 +875,61 @@ ephy_file_browse_to (GFile *file,
  * Returns: %TRUE if delete succeeded
  **/
 gboolean
-ephy_file_delete_dir_recursively (GFile *directory, GError **error)
+ephy_file_delete_dir_recursively (const char *directory, GError **error)
 {
-	GFileEnumerator *children = NULL;
-	GFileInfo *info;
-	gboolean ret = FALSE;
+	GDir* dir;
+	const char* file_name;
+	gboolean failed = FALSE;
 
-	children = g_file_enumerate_children (directory,
-					      "standard::name,standard::type",
-					      0, NULL, error);
-	if (children == NULL || error)
-		goto out;
+	dir = g_dir_open (directory, 0, error);
+	if (!dir)
+		return FALSE;
 
-	info = g_file_enumerator_next_file (children, NULL, error);
-	while (info || error) {
-		GFile *child;
-		const char *name;
-		GFileType type;
+	file_name = g_dir_read_name (dir);
+	while (file_name && !failed) {
+		char *file_path;
 
-		if (error)
-			goto out;
+		file_path = g_build_filename (directory, file_name, NULL);
+		if (g_file_test (file_path, G_FILE_TEST_IS_DIR))
+		{
+			failed = !ephy_file_delete_dir_recursively (file_path, error);
+		}
+		else
+		{
+			int result = g_unlink (file_path);
 
-		name = g_file_info_get_name (info);
-		child = g_file_get_child (directory, name);
-		type = g_file_info_get_file_type (info);
+			if (result == -1)
+			{
+				int errsv = errno;
 
-		LOG ("ephy-file-delete-dir: delete child %s", name);
-		if (type == G_FILE_TYPE_DIRECTORY)
-			ret = ephy_file_delete_dir_recursively (child, error);
-		else if (type == G_FILE_TYPE_REGULAR)
-			ret = g_file_delete (child, NULL, error);
+				g_set_error (error, G_IO_ERROR,
+					     g_io_error_from_errno (errsv),
+					     "Error removing file %s: %s",
+					     file_path, g_strerror (errsv));
+				failed = TRUE;
+			}
+		}
+		g_free (file_path);
+	}
+	g_dir_close (dir);
 
-		g_object_unref (info);
-		g_object_unref (child);
+	if (!failed)
+	{
+		int result = g_rmdir (directory);
 
-		if (!ret)
-			goto out;
+		if (result == -1)
+		{
+			int errsv = errno;
 
-		info = g_file_enumerator_next_file (children, NULL, error);
+			g_set_error (error, G_IO_ERROR,
+				     g_io_error_from_errno (errsv),
+				     "Error removing directory %s: %s",
+				     directory, g_strerror (errsv));
+			failed = TRUE;
+		}
 	}
 
-	ret = TRUE;
-
-	LOG ("ephy-file-delete-dir: delete successful");
-	g_file_delete (directory, NULL, error);
-
-out:
-	if (children)
-		g_object_unref (children);
-
-	return ret;
+	return !failed;
 }
 
 /**

@@ -120,7 +120,7 @@ ephy_web_application_delete (const char *name)
   char *profile_dir = NULL;
   char *desktop_file = NULL, *desktop_path = NULL;
   char *wm_class;
-  GFile *profile = NULL, *launcher = NULL;
+  GFile *launcher = NULL;
   gboolean return_value = FALSE;
 
   g_return_val_if_fail (name, FALSE);
@@ -136,8 +136,7 @@ ephy_web_application_delete (const char *name)
     goto out;
   }
 
-  profile = g_file_new_for_path (profile_dir);
-  if (!ephy_file_delete_dir_recursively (profile, NULL))
+  if (!ephy_file_delete_dir_recursively (profile_dir, NULL))
     goto out;
   LOG ("Deleted application profile.\n");
 
@@ -156,8 +155,6 @@ ephy_web_application_delete (const char *name)
 
 out:
 
-  if (profile)
-    g_object_unref (profile);
   g_free (profile_dir);
 
   if (launcher)

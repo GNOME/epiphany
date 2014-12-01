@@ -86,7 +86,7 @@ gboolean           ephy_file_open_uri_in_default_browser    (const char         
                                                              GdkScreen             *screen);
 gboolean           ephy_file_browse_to                      (GFile                 *file,
                                                              guint32                user_time);
-gboolean           ephy_file_delete_dir_recursively         (GFile                 *file,
+gboolean           ephy_file_delete_dir_recursively         (const char            *directory,
                                                              GError               **error);
 void               ephy_file_delete_uri                     (const char            *uri);
 gboolean           ephy_file_move_uri                       (const char            *source_uri,
