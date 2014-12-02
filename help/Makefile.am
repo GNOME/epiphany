@@ -14,6 +14,7 @@ HELP_FILES = \
 	bookmark-topic.page \
 	browse-local.page \
 	browse-private.page \
+	browse-tab.page \
 	browse-web.page \
 	browse-webapps.page \
 	cookies.xml \

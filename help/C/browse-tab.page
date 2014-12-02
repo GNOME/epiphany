@@ -1,0 +1,43 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="browse-tab">
+
+  <info>
+    <link type="guide" xref="index#start" />
+    <link type="seealso" xref="browse-private" />
+    <link type="seealso" xref="browse-web" />
+    <revision pkgversion="3.14" date="2014-12-02" status="review"/>
+
+    <credit type="author copyright">
+      <name>Ekaterina Gerasimova</name>
+      <email its:translate="no">kittykat3756@gmail.com</email>
+      <years>2014</years>
+    </credit>
+<!--    <credit type="copyright editor">
+      <name></name>
+      <email its:translate="no"></email>
+      <years></years>
+    </credit>-->
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <desc>Open another web page in a new tab in the same window.</desc>
+  </info>
+
+  <title>Open a new tab</title>
+
+  <include href="browse-web.page"
+           xpointer="xpointer(/*/*[@xml:id='tabs'])"
+           xmlns="http://www.w3.org/2001/XInclude"/>
+
+
+  <p xml:id="tabs-alt">You can also use the
+  <keyseq><key>Ctrl</key><key>T</key></keyseq> keyboard shortcut to open a new
+  tab or the new tab button in the top-left of the window.</p>
+
+  <include href="browse-web.page"
+           xpointer="xpointer(/*/*[@xml:id='tabs-link'])"
+           xmlns="http://www.w3.org/2001/XInclude"/>
+
+</page>
