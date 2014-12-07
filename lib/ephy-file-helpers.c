@@ -910,6 +910,7 @@ ephy_file_delete_dir_recursively (const char *directory, GError **error)
 			}
 		}
 		g_free (file_path);
+		file_name = g_dir_read_name (dir);
 	}
 	g_dir_close (dir);
 
