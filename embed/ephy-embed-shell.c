@@ -572,20 +572,10 @@ ephy_embed_shell_setup_process_model (EphyEmbedShell *shell)
 }
 
 static void
-ephy_embed_shell_startup (GApplication* application)
+ephy_embed_shell_create_web_context (EphyEmbedShell *embed_shell)
 {
-  EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
-  EphyEmbedShellPrivate *priv = shell->priv;
-  char *base_cache_dir;
-  char *favicon_db_path;
   char *local_storage_path;
-  WebKitCookieManager *cookie_manager;
-  char *filename;
-  char *cookie_policy;
-
-  G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
-
-  /* We're not remoting, setup the Web Context. */
+  EphyEmbedShellPrivate *priv = embed_shell->priv;
 
   /* Local Storage */
   local_storage_path = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
@@ -593,11 +583,31 @@ ephy_embed_shell_startup (GApplication* application)
                                          g_get_prgname (), "localstorage", NULL);
   priv->web_context = g_object_new (WEBKIT_TYPE_WEB_CONTEXT, "local-storage-directory", local_storage_path, NULL);
   g_free (local_storage_path);
+}
+
+static void
+ephy_embed_shell_startup (GApplication* application)
+{
+  EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
+  EphyEmbedShellPrivate *priv = shell->priv;
+  char *base_cache_dir;
+  char *favicon_db_path;
+  WebKitCookieManager *cookie_manager;
+  char *filename;
+  char *cookie_policy;
+
+  G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
+
+  /* We're not remoting, setup the Web Context if we are not running in a test.
+     Tests already do this after construction. */
+  if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST)
+    ephy_embed_shell_create_web_context (embed_shell);
 
   ephy_embed_shell_setup_web_extensions_connection (shell);
 
   /* User content manager */
-  shell->priv->user_content = webkit_user_content_manager_new ();
+  if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST)
+    shell->priv->user_content = webkit_user_content_manager_new ();
 
   webkit_user_content_manager_register_script_message_handler (shell->priv->user_content,
                                                                "overview");
@@ -732,6 +742,22 @@ ephy_embed_shell_get_property (GObject *object,
 }
 
 static void
+ephy_embed_shell_constructed (GObject *object)
+{
+  EphyEmbedShell *embed_shell;
+
+  G_OBJECT_CLASS (ephy_embed_shell_parent_class)->constructed (object);
+
+  embed_shell = EPHY_EMBED_SHELL (object);
+  /* Tests do not run the EmbedShell application instance, so make sure that
+     there is a web context and a user content manager for them. */
+  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_TEST) {
+    ephy_embed_shell_create_web_context (embed_shell);
+    embed_shell->priv->user_content = webkit_user_content_manager_new ();
+  }
+}
+
+static void
 ephy_embed_shell_init (EphyEmbedShell *shell)
 {
   shell->priv = EPHY_EMBED_SHELL_GET_PRIVATE (shell);
@@ -750,6 +776,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
   object_class->dispose = ephy_embed_shell_dispose;
   object_class->set_property = ephy_embed_shell_set_property;
   object_class->get_property = ephy_embed_shell_get_property;
+  object_class->constructed = ephy_embed_shell_constructed;
 
   application_class->startup = ephy_embed_shell_startup;
   application_class->shutdown = ephy_embed_shell_shutdown;
