@@ -23,7 +23,9 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-private.h"
 #include "ephy-profile-utils.h"
+#include "ephy-shell.h"
 
 const char* bookmarks_paths[] = { EPHY_BOOKMARKS_FILE, EPHY_BOOKMARKS_FILE_RDF };
 
@@ -111,6 +113,8 @@ main (int argc, char *argv[])
     g_debug ("Something wrong happened with ephy_file_helpers_init()");
     return -1;
   }
+
+  _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
 
   g_test_add_func ("/src/bookmarks/ephy-bookmarks/create",
                    test_ephy_bookmarks_create);
