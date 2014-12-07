@@ -2,6 +2,8 @@ NULL =
 
 SUBDIRS = web-extension
 
+AM_CFLAGS = $(WARN_CFLAGS)
+
 noinst_LTLIBRARIES = libephyembed.la
 
 NOINST_H_FILES = \

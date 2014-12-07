@@ -2,6 +2,8 @@ SUBDIRS = bookmarks
 
 NULL =
 
+AM_CFLAGS = $(WARN_CFLAGS)
+
 noinst_LTLIBRARIES = libephymain.la
 
 bin_PROGRAMS = epiphany
