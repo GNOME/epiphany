@@ -99,11 +99,10 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/src      \
 	-I$(top_srcdir)/src/bookmarks
 
-CFLAGS = \
+AM_CFLAGS = \
 	-DTEST_DIR=\"$(srcdir)\"\
 	$(DEPENDENCIES_CFLAGS)  \
-	$(CODE_COVERAGE_CFLAGS) \
-	$(AM_CFLAGS)
+	$(CODE_COVERAGE_CFLAGS)
 
 LDADD = \
 	$(top_builddir)/src/libephymain.la \
