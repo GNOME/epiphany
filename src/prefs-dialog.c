@@ -114,6 +114,7 @@ enum {
 enum
 {
 	SEARCH_ENGINE_COL_NAME,
+	SEARCH_ENGINE_COL_STOCK_URL,
 	SEARCH_ENGINE_COL_URL,
 	SEARCH_ENGINE_NUM_COLS
 };
@@ -1017,6 +1018,7 @@ search_engine_combo_add_default_engines (GtkListStore *store)
 	int i;
 	const char *default_engines[][3] = { /* Search engine option in the preferences dialog */
 					     { N_("DuckDuckGo"),
+					       "https://duckduckgo.com/?q=%s&t=epiphany",
 					       /* For the preferences dialog. Must exactly match the URL
 					        * you chose in the gschema, but with & instead of &amp;
 					        * If the match is not exact, there will be a spurious, ugly
@@ -1024,10 +1026,12 @@ search_engine_combo_add_default_engines (GtkListStore *store)
 					       N_("https://duckduckgo.com/?q=%s&t=epiphany")},
 					     /* Search engine option in the preferences dialog */
 					     { N_("Google"),
+					       "https://google.com/search?q=%s",
 					       /* For the preferences dialog. Consider a regional variant, like google.co.uk */
 					       N_("https://google.com/search?q=%s")},
 					     /* Search engine option in the preferences dialog */
 					     { N_("Bing"),
+					       "https://www.bing.com/search?q=%s",
 					       /* For the preferences dialog. Consider a regional variant, like uk.bing.com */
 					       N_("https://www.bing.com/search?q=%s")} };
 
@@ -1036,8 +1040,10 @@ search_engine_combo_add_default_engines (GtkListStore *store)
 		gtk_list_store_insert_with_values (store, NULL, -1,
 						   SEARCH_ENGINE_COL_NAME,
 						   _(default_engines[i][0]),
+						   SEARCH_ENGINE_COL_STOCK_URL,
+						   default_engines[i][1],
 						   SEARCH_ENGINE_COL_URL,
-						   _(default_engines[i][1]),
+						   _(default_engines[i][2]),
 						   -1);
 	}
 }
@@ -1075,6 +1081,7 @@ search_engine_combo_add_smart_bookmarks (GtkListStore *store)
 
 		gtk_list_store_insert_with_values (store, NULL, -1,
 						   SEARCH_ENGINE_COL_NAME, bookmark_name,
+						   SEARCH_ENGINE_COL_STOCK_URL, bookmark_url,
 						   SEARCH_ENGINE_COL_URL, bookmark_url,
 						   -1);
 	}
@@ -1099,14 +1106,17 @@ search_engine_combo_add_current_engine (GtkListStore *store)
 
 	while (!in_combo && has_next)
 	{
-		char *url;
+		char *stock_url, *url;
 
 		gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+				    SEARCH_ENGINE_COL_STOCK_URL, &stock_url,
 				    SEARCH_ENGINE_COL_URL, &url, -1);
 
-		if (strcmp (original_url, url) == 0)
+		if (strcmp (original_url, stock_url) == 0 ||
+		    strcmp (original_url, url) == 0)
 			in_combo = TRUE;
 
+		g_free (stock_url);
 		g_free (url);
 		has_next = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
 	}
@@ -1114,6 +1124,7 @@ search_engine_combo_add_current_engine (GtkListStore *store)
 	if (!in_combo)
 		gtk_list_store_insert_with_values (store, NULL, -1,
 						   SEARCH_ENGINE_COL_NAME, original_url,
+						   SEARCH_ENGINE_COL_STOCK_URL, original_url,
 						   SEARCH_ENGINE_COL_URL, original_url,
 						   -1);
 
