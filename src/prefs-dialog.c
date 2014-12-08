@@ -258,6 +258,7 @@ combo_get_mapping (GValue *value,
 		if (g_strcmp0 (item_name, settings_name) == 0)
 		{
 			g_value_set_int (value, i);
+			g_free (item_name);
 			break;
 		}
 
