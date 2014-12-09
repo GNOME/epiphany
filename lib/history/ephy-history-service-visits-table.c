@@ -39,7 +39,7 @@ ephy_history_service_initialize_visits_table (EphyHistoryService *self)
     "referring_visit INTEGER)", &error);
 
   if (error) {
-    g_error("Could not create visits table: %s", error->message);
+    g_warning ("Could not create visits table: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
@@ -62,7 +62,7 @@ ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVis
     "INSERT INTO visits (url, visit_time, visit_type) "
     " VALUES (?, ?, ?) ", &error);
   if (error) {
-    g_error ("Could not build visits table addition statement: %s", error->message);
+    g_warning ("Could not build visits table addition statement: %s", error->message);
     g_error_free (error);
     return;
   }
@@ -70,7 +70,7 @@ ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVis
   if (ephy_sqlite_statement_bind_int (statement, 0, visit->url->id, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 1, visit->visit_time, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 2, visit->visit_type, &error) == FALSE ) {
-    g_error ("Could not build visits table addition statement: %s", error->message);
+    g_warning ("Could not build visits table addition statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
     return;
@@ -78,7 +78,7 @@ ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVis
 
   ephy_sqlite_statement_step (statement, &error);
   if (error) {
-    g_error ("Could not insert URL into visits table: %s", error->message);
+    g_warning ("Could not insert URL into visits table: %s", error->message);
     g_error_free (error);
   } else {
     visit->id = ephy_sqlite_connection_get_last_insert_id (priv->history_database);
@@ -153,14 +153,14 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   g_string_free (statement_str, TRUE);
 
   if (error) {
-    g_error ("Could not build visits table query statement: %s", error->message);
+    g_warning ("Could not build visits table query statement: %s", error->message);
     g_error_free (error);
     return NULL;
   }
 
   if (query->from >= 0) {
     if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->from, &error) == FALSE) {
-      g_error ("Could not build urls table query statement: %s", error->message);
+      g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       return NULL;
@@ -168,7 +168,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   }
   if (query->to >= 0) {
     if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->to, &error) == FALSE) {
-      g_error ("Could not build urls table query statement: %s", error->message);
+      g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       return NULL;
@@ -176,7 +176,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   }
   if (query->host > 0) {
     if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->host, &error) == FALSE) {
-      g_error ("Could not build urls table query statement: %s", error->message);
+      g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       return NULL;
@@ -185,14 +185,14 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   for (substring = query->substring_list; substring != NULL; substring = substring->next) {
     char *string = ephy_sqlite_create_match_pattern (substring->data);
     if (ephy_sqlite_statement_bind_string (statement, i++, string, &error) == FALSE) {
-      g_error ("Could not build urls table query statement: %s", error->message);
+      g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       g_free (string);
       return NULL;
     }
     if (ephy_sqlite_statement_bind_string (statement, i++, string + 2, &error) == FALSE) {
-      g_error ("Could not build urls table query statement: %s", error->message);
+      g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       g_free (string);
@@ -207,7 +207,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   visits = g_list_reverse (visits);
 
   if (error) {
-    g_error ("Could not execute visits table query statement: %s", error->message);
+    g_warning ("Could not execute visits table query statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
     ephy_history_page_visit_list_free (visits);
