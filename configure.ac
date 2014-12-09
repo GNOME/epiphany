@@ -158,13 +158,6 @@ fi
 AM_CONDITIONAL([ENABLE_NSS],[test "$enable_nss" = "yes"])
 
 # *******************************
-# Add warning flags
-# *******************************
-
-AC_SUBST([AM_CPPFLAGS])
-AC_SUBST([AM_LDFLAGS])
-
-# *******************************
 # Internationalization
 # ******************************* 
 
