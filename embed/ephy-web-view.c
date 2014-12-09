@@ -1379,9 +1379,9 @@ decide_policy_cb (WebKitWebView *web_view,
 }
 
 static void
-decide_on_geolocation_policy_request (GtkWidget *info_bar,
-                                      int response,
-                                      WebKitPermissionRequest *request)
+decide_on_permission_request (GtkWidget *info_bar,
+                              int response,
+                              WebKitPermissionRequest *request)
 {
   gtk_widget_destroy (info_bar);
 
@@ -1409,7 +1409,8 @@ permission_request_cb (WebKitWebView           *web_view,
   char *message;
   char *host;
 
-  if (!WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision))
+  if (!WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision) &&
+      !WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision))
     return FALSE;
 
   info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
@@ -1417,14 +1418,22 @@ permission_request_cb (WebKitWebView           *web_view,
                                             NULL);
 
   action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
-  /* Translators: Geolocation policy for a specific site. */
   gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
                                   GTK_ORIENTATION_HORIZONTAL);
 
   /* Label */
   host = ephy_string_get_host_name (webkit_web_view_get_uri (web_view));
-  message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
-                                     host);
+
+  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision)) {
+    /* Translators: Geolocation policy for a specific site. */
+    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
+                                       host);
+  } else {
+    /* Translators: Notification policy for a specific site. */
+    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to show desktop notifications."),
+                                       host);
+  }
+
   g_free (host);
 
   label = gtk_label_new (NULL);
@@ -1440,7 +1449,7 @@ permission_request_cb (WebKitWebView           *web_view,
 
   /* Ref the decision, to keep it alive while we decide */
   g_signal_connect (info_bar, "response",
-                    G_CALLBACK (decide_on_geolocation_policy_request),
+                    G_CALLBACK (decide_on_permission_request),
                     g_object_ref (decision));
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
