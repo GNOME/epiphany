@@ -1,17 +1,18 @@
 # Thai translation for epiphany.
-# Copyright (C) 2004-2012 Free Software Foundation, Inc.
+# Copyright (C) 2004-2014 Free Software Foundation, Inc.
 # This file is distributed under the same license as the epiphany package.
 # Isriya Paireepairit <isriyapaireepairit@hotmail.com>, 2004.
 # Theppitak Karoonboonyanan <thep@linux.thai.net>, 2005-2012.
+# Akom Chotiphantawanon <knight2000@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.th\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-03 18:38+0000\n"
-"PO-Revision-Date: 2012-09-21 11:38+0700\n"
-"Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
+"POT-Creation-Date: 2014-12-01 16:53+0000\n"
+"PO-Revision-Date: 2014-12-08 14:27+0700\n"
+"Last-Translator: Akom Chotiphantawanon <knight2000@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
@@ -21,25 +22,58 @@ msgstr ""
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
-msgstr "ค้นหาเว็บ"
+msgstr "ค้นเว็บ"
 
-#. Translators you should change these links to respect your locale.
-#. For instance in .nl these should be
-#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: ../data/default-bookmarks.rdf.in.h:5
-msgid "http://www.google.com"
-msgstr "http://www.google.co.th"
+#. Translators: you can use the regions listed in
+#. https://duckduckgo.com/params to boost a particular region
+#. associated with your language. For instance, for translators
+#. to Finnish, it might make sense to add kl=fi-fi to the search
+#. URL in order to boost results from Finland. Additionally, the
+#. 'kad' parameter can be used to specify the locale in which
+#. duckduckgo must be translated. So, for a Finnish localized
+#. version of duckduckgo that will render results tailored for
+#. Finland, the string would be:
+#. https://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#.
+#: ../data/default-bookmarks.rdf.in.h:13
+msgid "https://duckduckgo.com/?t=epiphany"
+msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=th-th&amp;kad=th_TH"
 
-#. Translators you should change these links to respect your locale.
-#. For instance in .nl these should be
-#. "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#: ../data/default-bookmarks.rdf.in.h:10
+#. Translators: you can use the regions listed in
+#. https://duckduckgo.com/params to boost a particular region
+#. associated with your language. For instance, for translators
+#. to Finnish, it might make sense to add kl=fi-fi to the search
+#. URL in order to boost results from Finland. Additionally, the
+#. 'kad' parameter can be used to specify the locale in which
+#. duckduckgo must be translated. For such case, the search url
+#. would be
+#. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:244
+#: ../src/ephy-search-provider.c:289
 #, no-c-format
-msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
-msgstr "http://www.google.co.th/search?q=%s"
+msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=th-th&amp;kad=th_TH"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../src/ephy-main.c:75
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:482 ../src/window-commands.c:1349
+#: ../data/epiphany.appdata.xml.in.h:1
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../data/epiphany.appdata.xml.in.h:2
+msgid "Web browser for GNOME"
+msgstr "เว็บเบราว์เซอร์สำหรับ GNOME"
+
+#: ../data/epiphany.appdata.xml.in.h:3
+msgid ""
+"The web browser for GNOME, featuring tight integration with the desktop and "
+"a simple and intuitive user interface that allows you to focus on your web "
+"pages."
+msgstr ""
+"เว็บเบราว์เซอร์สำหรับ GNOME ที่มีการเชื่อมรวมกับเดสก์ท็อป "
+"และมีส่วนติดต่อผู้ใช้ที่เรียบง่ายและเป็นธรรมชาติที่ช่วยให้คุณจดจ่อกับหน้าเว็บของคุณ"
+
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:292
+#: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1519
 msgid "Web"
 msgstr "เว็บ"
 
@@ -55,33 +89,50 @@ msgstr "เว็บเบราว์เซอร์ Epiphany"
 msgid "Browse the web"
 msgstr "ท่องเว็บ"
 
+#: ../data/epiphany.desktop.in.in.h:5
+msgid "web;browser;internet;"
+msgstr "เว็บ;เบราว์เซอร์;อินเทอร์เน็ต;"
+
 #: ../data/org.gnome.epiphany.gschema.xml.h:1
 msgid "Browse with caret"
 msgstr "ดูเว็บโดยมีเคอร์เซอร์"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:2
+#. DuckDuckGo is the default search engine. Must exactly match the URL used
+#. in the preferences dialog, except this string is surrounded by single quotes
+#. and uses &amp; instead of simply &. If the match is not otherwise exact,
+#. there will be a spurious, ugly entry in the preferences combo, so please
+#. test this. Should ideally also match the default smart bookmark link in
+#. default-bookmarks.rdf. See the comment there for region parameters to
+#. the URL.
+#: ../data/org.gnome.epiphany.gschema.xml.h:10
+#, no-c-format
+msgid "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
+msgstr ""
+"'https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=th-th&amp;kad=th_TH'"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:11
 msgid "URL Search"
 msgstr "การค้นหาในช่อง URL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:3
+#: ../data/org.gnome.epiphany.gschema.xml.h:12
 msgid "Search string for keywords entered in the URL bar."
 msgstr "ข้อความค้นหาสำหรับคำค้นที่ป้อนในช่อง URL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:4
+#: ../data/org.gnome.epiphany.gschema.xml.h:13
 msgid "User agent"
 msgstr "Agent ผู้ใช้"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:5
+#: ../data/org.gnome.epiphany.gschema.xml.h:14
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
 msgstr "ข้อความที่จะใช้เป็น agent ของผู้ใช้ เพื่อระบุยี่ห้อของเบราว์เซอร์ต่อเว็บเซิร์ฟเวอร์"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:6
+#: ../data/org.gnome.epiphany.gschema.xml.h:15
 msgid "Automatic downloads"
 msgstr "ดาวน์โหลดอัตโนมัติ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:7
+#: ../data/org.gnome.epiphany.gschema.xml.h:16
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -89,78 +140,84 @@ msgstr ""
 "เมื่อเบราว์เซอร์ไม่สามารถเปิดแฟ้มได้ จะดาวน์โหลดแฟ้มดังกล่าวมายังโฟลเดอร์ดาวน์โหลดโดยอัตโนมัติ "
 "แล้วเปิดด้วยโปรแกรมที่เหมาะสม"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:8
-msgid ""
-"Middle click to open the web page pointed to by the currently selected text"
-msgstr "ให้การคลิกเมาส์ปุ่มกลางเปิดเว็บตามที่อยู่ในข้อความที่เลือกอยู่"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:9
-msgid ""
-"Middle clicking on the main view pane will open the web page pointed to by "
-"the currently selected text."
-msgstr "ให้การคลิกเมาส์ในช่องทำงานหลักเปิดเว็บตามที่อยู่ในข้อความที่เลือกอยู่"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:10
+#: ../data/org.gnome.epiphany.gschema.xml.h:17
 msgid "Force new windows to be opened in tabs"
 msgstr "บังคับเปิดหน้าต่างใหม่ในแท็บ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:11
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "บังคับการขอเปิดหน้าต่างใหม่ให้เปิดในแท็บแทนการใช้หน้าต่างใหม่"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:12
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Remember passwords"
 msgstr "จำรหัสผ่าน"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:13
-msgid "Whether to store and prefill passwords in web sites."
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
+msgid "Whether to store and prefill passwords in websites."
 msgstr "กำหนดว่าจะเก็บรหัสผ่านและนำมาเติมในช่องรหัสผ่านในเว็บต่างๆ หรือไม่"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:14
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid "Automatically manage offline status with NetworkManager"
 msgstr "จัดการสถานะออฟไลน์โดยอัตโนมัติ ด้วย NetworkManager"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:15
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "Enable smooth scrolling"
 msgstr "ใช้การเลื่อนจอแบบลื่น"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:16
-msgid "Active extensions"
-msgstr "ส่วนขยายที่เปิดใช้อยู่"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:17
-msgid "Lists the active extensions."
-msgstr "รายชื่อส่วนขยายที่เปิดใช้อยู่"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:18
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid "Don't use an external application to view page source."
 msgstr "ไม่ต้องใช้โปรแกรมภายนอกในการแสดงต้นฉบับของหน้าเว็บ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:19
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
 msgid "Whether to automatically restore the last session"
 msgstr "กำหนดว่าจะกู้วาระเก่าคืนโดยอัตโนมัติหรือไม่"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "'always' (the previous state of the application is always restored), "
 "'crashed' (the session is only restored if the application crashes) and "
 "'never' (the homepage is always shown)."
 msgstr ""
-"กำหนดวิธีการที่จะกู้วาระเก่าคืนขณะเปิดโปรแกรม ค่าที่ใช้ได้คือ 'always' "
-"(กู้คืนสถานะเดิมของโปรแกรมเสมอ), 'crashed' "
-"(กู้วาระเก่าคืนก็ต่อเมื่อโปรแกรมพังในครั้งก่อนเท่านั้น) และ 'never' (ไม่ต้องกู้ แสดงหน้าแรกเสมอ)"
+"กำหนดวิธีการที่จะกู้วาระเก่าคืนขณะเปิดโปรแกรม ค่าที่ใช้ได้คือ "
+"'always' (กู้คืนสถานะเดิมของโปรแกรมเสมอ), "
+"'crashed' (กู้วาระเก่าคืนก็ต่อเมื่อโปรแกรมพังในครั้งก่อนเท่านั้น) และ 'never' (ไม่ต้องกู้ "
+"แสดงหน้าแรกเสมอ)"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
-msgid "Show toolbars by default"
-msgstr "แสดงแถบเครื่องมือโดยปริยาย"
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
+msgid ""
+"Whether to delay loading of tabs that are not immediately visible on session "
+"restore"
+msgstr "กำหนดว่าจะชะลอการโหลดแท็บที่ยังไม่เผยให้เห็นในวาระที่เรียกคืนหรือไม่"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
+msgid ""
+"When this option is set to true, tabs will not start loading until the user "
+"switches to them, upon session restore."
+msgstr ""
+"เมื่อตัวเลือกนี้กำหนดเป็นค่าจริง แท็บจะไม่เริ่มต้นโหลดจนกว่าผู้ใช้จะสลับไปยังแท็บนั้นๆ "
+"ในการเรียกคืนวาระ"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
+msgid "Process model"
+msgstr "รูปแบบของโพรเซส"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
+msgid ""
+"This option allows to set the process model used. Use 'shared-secondary-"
+"process' to use a single web process shared by all the tabs and 'one-"
+"secondary-process-per-web-view' to use a different web process for each tab."
+msgstr ""
+"ตัวเลือกนี้ช่วยให้สามารถตั้งค่ารูปแบบโพรเซสที่ใช้ ใช้ 'shared-secondary-process' "
+"เพื่อใช้โพรเซสสำหรับเว็บโพรเซสเดียวร่วมกันทุกแท็บ และ 'one-secondary-process-per-web-"
+"view' เพื่อใช้โพรเซสสำหรับเว็บแยกกันสำหรับแต่ละแท็บ"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Toolbar style"
 msgstr "รูปแบบแถบเครื่องมือ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid ""
 "Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
 "\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
@@ -169,158 +226,157 @@ msgstr ""
 "รูปแบบแถบเครื่องมือ ค่าที่ใช้ได้คือ \"\" (ใช้รูปแบบปกติของ GNOME), \"both"
 "\" (ข้อความและรูป), \"both-horiz\" (ข้อความข้างรูป), \"icons\", และ \"text"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:24
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid "[Deprecated]"
 msgstr "[ไม่แนะนำให้ใช้]"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:25
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
 msgstr "[ไม่แนะนำให้ใช้] คีย์นี้ไม่แนะนำให้ใช้แล้ว ควรใช้ 'tabs-bar-visibility-policy' แทน"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:26
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid "Visibility of the downloads window"
 msgstr "ซ่อนหรือแสดงหน้าต่างดาวน์โหลด"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
 msgstr ""
 "ซ่อนหรือแสดงหน้าต่างดาวน์โหลด ถ้าซ่อน จะแสดงไอคอนในพื้นที่แจ้งเหตุเมื่อมีการดาวน์โหลดรายการใหม่"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid "The visibility policy for the tabs bar."
 msgstr "นโยบายการแสดงผลของแถบแท็บ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
 "two or more tabs) and 'never' (the tabs bar is never shown)."
 msgstr ""
-"ควบคุมการแสดงผลของแถบแท็บ ค่าที่ใช้ได้คือ 'always' (แสดงผลแถบแท็บเสมอ), "
-"'more-than-one' (แสดงแถบแท็บก็ต่อเมื่อมีแท็บตั้งแต่สองแท็บขึ้นไป) และ 'never' "
-"(ไม่ต้องแสดงแถบแท็บเลย)"
+"ควบคุมการแสดงผลของแถบแท็บ ค่าที่ใช้ได้คือ 'always' (แสดงผลแถบแท็บเสมอ), 'more-than-"
+"one' (แสดงแถบแท็บก็ต่อเมื่อมีแท็บตั้งแต่สองแท็บขึ้นไป) และ 'never' (ไม่ต้องแสดงแถบแท็บเลย)"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Minimum font size"
 msgstr "ขนาดอย่างต่ำของแบบอักษร"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use GNOME fonts"
 msgstr "ใช้แบบอักษรของ GNOME"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
-msgid "Use GNOME desktop wide font configuration."
-msgstr "ใช้ค่าตั้งแบบอักษรที่กำหนดใช้ทั่วทั้งเดสก์ท็อป GNOME"
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
+msgid "Use GNOME font settings."
+msgstr "ใช้ค่าตั้งแบบอักษรของ GNOME"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "Custom sans-serif font"
 msgstr "แบบอักษร sans serif กำหนดเอง"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
 msgstr "ค่าที่จะใช้ทับแบบอักษร san-serif ของเดสก์ท็อปเมื่อเปิดใช้ use-gnome-fonts"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Custom serif font"
 msgstr "แบบอักษร serif กำหนดเอง"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
 msgstr "ค่าที่จะใช้ทับแบบอักษร serif ของเดสก์ท็อปเมื่อเปิดใช้ use-gnome-fonts"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "Custom monospace font"
 msgstr "แบบอักษรความกว้างคงที่กำหนดเอง"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
 msgstr "ค่าที่จะใช้ทับแบบอักษรความกว้างคงที่ของเดสก์ท็อปเมื่อเปิดใช้ use-gnome-fonts"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Use own colors"
 msgstr "ใช้สีที่กำหนด"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "ใช้สีที่คุณกำหนดเอง แทนสีที่กำหนดในหน้าเว็บ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 msgid "Use own fonts"
 msgstr "ใช้แบบอักษรที่กำหนด"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "ใช้แบบอักษรที่คุณกำหนดเอง แทนแบบอักษรที่หน้าเว็บกำหนด"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Use a custom CSS"
 msgstr "ใช้ CSS ที่กำหนด"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "ใช้แฟ้ม CSS ที่กำหนดเพื่อปรับเปลี่ยน CSS ของเว็บไซต์"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Enable spell checking"
 msgstr "เปิดใช้การตรวจตัวสะกด"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid "Spell check any text typed in editable areas."
 msgstr "ตรวจตัวสะกดทุกข้อความที่ป้อนในพื้นที่ป้อนข้อความ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid "Default encoding"
 msgstr "รหัสอักขระปริยาย"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr "รหัสอักขระปริยาย ใช้ได้เฉพาะค่าที่ WebKitGTK+ รู้จักเท่านั้น"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Size of disk cache"
 msgstr "เนื้อที่ของแคชบนดิสก์"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Size of disk cache, in MB."
 msgstr "เนื้อที่ของแคชบนดิสก์ เป็น MB"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
-#: ../src/resources/prefs-dialog.ui.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../src/resources/prefs-dialog.ui.h:40
 msgid "Languages"
 msgstr "ภาษา"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Preferred languages, two letter codes."
 msgstr "ภาษาที่เลือก (รหัสอักษรสองตัว)"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Cookie accept"
 msgstr "การยอมรับคุกกี้"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid ""
 "Where to accept cookies from. Possible values are \"anywhere\", \"current "
 "site\" and \"nowhere\"."
 msgstr ""
-"จะรับคุกกี้จากแหล่งไหน ค่าที่เป็นไปได้คือ \"anywhere\" (ทุกแหล่ง), \"current site\" "
-"(ไซต์ปัจจุบัน) และ \"nowhere\" (ไม่รับ)"
+"จะรับคุกกี้จากแหล่งไหน ค่าที่เป็นไปได้คือ \"anywhere\" (ทุกแหล่ง), \"current site"
+"\" (ไซต์ปัจจุบัน) และ \"nowhere\" (ไม่รับ)"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Image animation mode"
 msgstr "โหมดของภาพเคลื่อนไหว"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -328,44 +384,44 @@ msgstr ""
 "จะแสดงภาพเคลื่อนไหวอย่างไร ค่าที่เป็นไปได้คือ \"normal\" (ปกติ), \"once\" (รอบเดียว) "
 "และ \"disabled\" (ปิด)"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Allow popups"
 msgstr "อนุญาตให้ผุดหน้าต่าง"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr "อนุญาตให้เว็บไซต์เปิดหน้าต่างใหม่ด้วยจาวาสคริปต์ (ถ้าเปิดใช้จาวาสคริปต์)"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "Enable Plugins"
 msgstr "เปิดใช้ปลั๊กอิน"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "Enable JavaScript"
 msgstr "ใช้จาวาสคริปต์"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "Enable WebGL"
 msgstr "เปิดใช้ WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to enable support for WebGL contexts."
 msgstr "กำหนดว่าจะเปิดใช้การรองรับ WebGL หรือไม่"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Enable WebAudio"
 msgstr "เปิดใช้ WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to enable support for WebAudio."
 msgstr "กำหนดว่าจะเปิดใช้การรองรับ WebAudio หรือไม่"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Do Not Track"
 msgstr "ไม่ต้องติดตามการเชื่อมต่อ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -373,11 +429,21 @@ msgstr ""
 "กำหนดว่าจะแจ้งเว็บไซต์ว่าเราไม่ต้องการถูกติดตามการเชื่อมต่อหรือไม่ พึงระลึกว่าเว็บต่างๆ "
 "ไม่จำเป็นต้องทำตามค่าตั้งนี้"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
+msgid "Enable Adblock"
+msgstr "เปิดใช้ Adblock"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
+msgid ""
+"Whether to block the embedded advertisements that web pages might want to "
+"show."
+msgstr "กำหนดว่าจะปิดกั้นโฆษณาที่ฝังอยู่ในหน้าเว็บต่างๆ หรือไม่"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
 msgid "The downloads folder"
 msgstr "โฟลเดอร์เก็บแฟ้มดาวน์โหลด"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -385,100 +451,131 @@ msgstr ""
 "พาธของโฟลเดอร์ที่จะเก็บแฟ้มดาวน์โหลด หรือใช้ค่า \"Downloads\" "
 "เพื่อใช้โฟลเดอร์ดาวน์โหลดปริยาย หรือ \"Desktop\" เพื่อเก็บลงบนพื้นโต๊ะ"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
-msgid "History pages time range"
-msgstr "ช่วงเวลาของการเก็บประวัติ"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
-msgid "Whether to show the title column in the history window."
-msgstr "กำหนดว่าจะแสดงคอลัมน์หัวเรื่องในหน้าต่างประวัติหรือไม่"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
-msgid "Whether to show the address column in the history window."
-msgstr "กำหนดว่าจะแสดงคอลัมน์ที่อยู่เว็บในหน้าต่างประวัติหรือไม่"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
-msgid "Whether to show the date-time column in the history window."
-msgstr "กำหนดว่าจะแสดงคอลัมน์วัน-เวลาในหน้าต่างประวัติหรือไม่"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:73
+#: ../data/org.gnome.epiphany.gschema.xml.h:79
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "กำหนดว่าจะแสดงคอลัมน์หัวเรื่องในหน้าต่างที่คั่นหน้าหรือไม่"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:74
+#: ../data/org.gnome.epiphany.gschema.xml.h:80
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "กำหนดว่าจะแสดงคอลัมน์ที่อยู่เว็บในหน้าต่างที่คั่นหน้าหรือไม่"
 
-#: ../embed/ephy-about-handler.c:64 ../embed/ephy-about-handler.c:67
-#: ../embed/ephy-about-handler.c:117 ../embed/ephy-about-handler.c:120
+#: ../embed/ephy-about-handler.c:139
 msgid "Installed plugins"
 msgstr "ปลั๊กอินที่ติดตั้งไว้"
 
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:140
+msgid "Plugins"
+msgstr "ปลั๊กอิน"
+
+#: ../embed/ephy-about-handler.c:143
+msgid "Plugins are disabled in the preferences"
+msgstr "ปลั๊กอินถูกปิดใช้ในค่าปรับแต่ง"
+
+#: ../embed/ephy-about-handler.c:156
 msgid "Enabled"
 msgstr "เปิดใช้"
 
-#. webkit_plugin_get_enabled (plugin)
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#. webkit_plugin_get_enabled (plugin) &&
+#: ../embed/ephy-about-handler.c:156
 msgid "Yes"
 msgstr "ใช่"
 
-#: ../embed/ephy-about-handler.c:79 ../embed/ephy-about-handler.c:132
+#: ../embed/ephy-about-handler.c:156
 msgid "No"
 msgstr "ไม่"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:157
 msgid "MIME type"
 msgstr "ชนิด MIME"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:157
 msgid "Description"
 msgstr "คำบรรยาย"
 
-#: ../embed/ephy-about-handler.c:80 ../embed/ephy-about-handler.c:133
+#: ../embed/ephy-about-handler.c:157
 msgid "Suffixes"
 msgstr "นามสกุล"
 
-#: ../embed/ephy-about-handler.c:172 ../embed/ephy-about-handler.c:175
+#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:222
 msgid "Memory usage"
 msgstr "การใช้หน่วยความจำ"
 
-#: ../embed/ephy-about-handler.c:208 ../embed/ephy-about-handler.c:210
+#: ../embed/ephy-about-handler.c:270
+#, c-format
+msgid "Version %s"
+msgstr "รุ่น %s"
+
+#: ../embed/ephy-about-handler.c:290
+msgid "About Web"
+msgstr "เกี่ยวกับ \"เว็บ\""
+
+#: ../embed/ephy-about-handler.c:294
+msgid "A simple, clean, beautiful view of the web"
+msgstr "แสดงเว็บในแบบที่เรียบง่าย สะอาด งามตา"
+
+#: ../embed/ephy-about-handler.c:352 ../embed/ephy-about-handler.c:353
 msgid "Applications"
 msgstr "โปรแกรม"
 
-#: ../embed/ephy-about-handler.c:211
+#: ../embed/ephy-about-handler.c:354
 msgid "List of installed web applications"
 msgstr "รายชื่อโปรแกรมเว็บที่ติดตั้งไว้"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:227
+#: ../embed/ephy-about-handler.c:370
 msgid "Installed on:"
 msgstr "ติดตั้งเมื่อ:"
 
-#: ../embed/ephy-embed.c:657
+#: ../embed/ephy-about-handler.c:474
+msgid "Remove from overview"
+msgstr "ลบออกจากภาพรวม"
+
+#: ../embed/ephy-about-handler.c:489 ../embed/ephy-embed-utils.c:301
+msgid "Most Visited"
+msgstr "ไปบ่อย"
+
+#: ../embed/ephy-about-handler.c:549 ../embed/ephy-about-handler.c:550
+msgid "Private Browsing"
+msgstr "การท่องเว็บแบบส่วนตัว"
+
+#: ../embed/ephy-about-handler.c:551
+msgid ""
+"You are currently browsing <em>incognito</em>. Pages viewed in this mode "
+"will not show up in your browsing history and all stored information will be "
+"cleared when you close the window. Files you download will be kept."
+msgstr ""
+"คุณกำลังท่องเว็บแบบ <em>ไม่เปิดเผยตัว</em> หน้าเว็บต่างๆ "
+"ที่ดูในโหมดนี้จะไม่แสดงในประวัติการท่องเว็บของคุณ "
+"และข้อมูลที่เก็บไว้ทั้งหมดจะถูกลบทิ้งเมื่อคุณปิดหน้าต่าง แฟ้มที่คุณดาวน์โหลดจะถูกเก็บไว้"
+
+#: ../embed/ephy-about-handler.c:555
+msgid ""
+"Incognito mode will not hide your activity from your employer, your Internet "
+"Service Provider, your government, or the websites that you visit."
+msgstr ""
+"โหมดไม่เปิดเผยตัวจะไม่ได้ซ่อนกิจกรรมของคุณจากนายจ้างของคุณ, ผู้ให้บริการอินเทอร์เน็ตของคุณ, "
+"รัฐบาลของคุณ, หรือเว็บไซต์ที่คุณเข้าเยี่ยมชม"
+
+#. characters
+#: ../embed/ephy-embed.c:51
+msgid "Blank page"
+msgstr "หน้าว่าง"
+
+#: ../embed/ephy-embed.c:542
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "กด %s เพื่อเลิกแสดงผลเต็มจอ"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:660
+#: ../embed/ephy-embed.c:545
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:660
+#: ../embed/ephy-embed.c:545
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed.c:960
-msgid "Web Inspector"
-msgstr "ตัวเฝ้าสังเกตเว็บ"
-
-#: ../embed/ephy-embed-shell.c:266
-msgid "Epiphany can't be used now. Initialization failed."
-msgstr "ไม่สามารถใช้ Epiphany ได้เนื่องจากเริ่มทำงานไม่สำเร็จ"
-
-#: ../embed/ephy-embed-utils.c:60
+#: ../embed/ephy-embed-utils.c:65
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "ส่งอีเมลถึง “%s”"
@@ -807,174 +904,254 @@ msgstr "ยูนิโค้ด (UTF-3_2 LE)"
 msgid "Unknown (%s)"
 msgstr "ไม่ทราบ (%s)"
 
-#: ../embed/ephy-overview.h:53
-msgid "Most Visited"
-msgstr "ไปบ่อย"
+#: ../embed/ephy-find-toolbar.c:104
+msgid "Text not found"
+msgstr "ไม่พบข้อความ"
 
-#. characters
-#: ../embed/ephy-web-view.c:65 ../embed/ephy-web-view.c:3765
-msgid "Blank page"
-msgstr "หน้าว่าง"
+#: ../embed/ephy-find-toolbar.c:110
+msgid "Search wrapped back to the top"
+msgstr "ค้นหาหมดแล้วกลับไปด้านบน"
 
-#: ../embed/ephy-web-view.c:741
-msgid "Not now"
-msgstr "ยังไม่ทำตอนนี้"
+#: ../embed/ephy-find-toolbar.c:451
+msgid "Type to search…"
+msgstr "พิมพ์เพื่อค้นหา…"
 
-#: ../embed/ephy-web-view.c:742
-msgid "Store password"
-msgstr "เก็บรหัสผ่าน"
+#: ../embed/ephy-find-toolbar.c:457
+msgid "Find previous occurrence of the search string"
+msgstr "หาข้อความเดิมถอยหลัง"
 
-#. Translators: The first %s is the username and the second one is the
-#. * hostname where this is happening. Example: gnome@gmail.com and
-#. * mail.google.com.
+#: ../embed/ephy-find-toolbar.c:465
+msgid "Find next occurrence of the search string"
+msgstr "หาข้อความเดิมต่อไป"
+
+#: ../embed/ephy-web-view.c:492 ../src/window-commands.c:330
+msgid "Save"
+msgstr "บันทึก"
+
+#. Translators: The %s the hostname where this is happening.
+#. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:755
+#: ../embed/ephy-web-view.c:504
 #, c-format
-msgid ""
-"<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</big>"
-msgstr "<big>คุณต้องการจะเก็บรหัสผ่านสำหรับ <b>%s</b> ที่ <b>%s</b> ไว้หรือไม่?</big>"
+msgid "Do you want to save your password for “%s”?"
+msgstr "คุณต้องการบันทึกรหัสผ่านของคุณสำหรับ “%s” หรือไม่?"
 
-#: ../embed/ephy-web-view.c:1110
-msgid "Plugins"
-msgstr "ปลั๊กอิน"
-
-#: ../embed/ephy-web-view.c:1948
+#: ../embed/ephy-web-view.c:1415
 msgid "Deny"
 msgstr "ปฏิเสธ"
 
-#: ../embed/ephy-web-view.c:1949
+#: ../embed/ephy-web-view.c:1416
 msgid "Allow"
 msgstr "อนุญาต"
 
-#: ../embed/ephy-web-view.c:1963
+#: ../embed/ephy-web-view.c:1426
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "หน้าเว็บ <b>%s</b> ต้องการทราบพิกัดตำแหน่งของคุณ"
 
-#: ../embed/ephy-web-view.c:2473
-msgid "None specified"
-msgstr "ไม่ระบุ"
-
-#: ../embed/ephy-web-view.c:2482 ../embed/ephy-web-view.c:2500
-#, c-format
-msgid "Oops! Error loading %s"
-msgstr "โอ๊ะ! เกิดข้อผิดพลาดขณะโหลด %s"
-
-#: ../embed/ephy-web-view.c:2484
-msgid "Oops! It was not possible to show this website"
-msgstr "โอ๊ะ! ไม่สามารถแสดงเว็บไซต์นี้ได้"
-
-#: ../embed/ephy-web-view.c:2485
-#, c-format
-msgid ""
-"<p>The website at <strong>%s</strong> seems to be unavailable. The precise "
-"error was:</p><p><em>%s</em></p><p>It could be temporarily switched off or "
-"moved to a new address. Don't forget to check that your internet connection "
-"is working correctly.</p>"
-msgstr ""
-"<p>เว็บไซต์ <strong>%s</strong> ดูจะเปิดไม่ได้ ข้อผิดพลาดคือ:</p><p><em>%s</em></"
-"p><p>เว็บอาจปิดตัวชั่วคราวหรือย้ายไปยังที่ใหม่ อย่าลืมตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณด้วย</"
-"p>"
-
-#: ../embed/ephy-web-view.c:2494
-msgid "Try again"
-msgstr "ลองใหม่"
-
-#: ../embed/ephy-web-view.c:2502
-msgid "Oops! This site might have caused the web browser to close unexpectedly"
-msgstr "โอ๊ะ! เว็บไซต์นี้อาจทำให้เบราว์เซอร์ปิดตัวกะทันหันเมื่อครั้งก่อน"
-
-#: ../embed/ephy-web-view.c:2504
-#, c-format
-msgid ""
-"<p>This page was loading when the web browser closed unexpectedly.</"
-"p><p>This might happen again if you reload the page. If it does, please "
-"report the problem to the <strong>%s</strong> developers.</p>"
-msgstr ""
-"<p>หน้านี้ยังอยู่ระหว่างโหลดขณะที่เว็บเบราว์เซอร์ปิดตัวกะทันหัน</p><p>ถ้าเรียกหน้านี้ใหม่ "
-"ก็เป็นไปได้ว่าเว็บเบราว์เซอร์อาจตายอีกครั้ง ซึ่งถ้าเป็นเช่นนั้น ก็กรุณารายงานปัญหาไปยังนักพัฒนา "
-"<strong>%s</strong></p>"
-
-#: ../embed/ephy-web-view.c:2512
-msgid "Load again anyway"
-msgstr "โหลดใหม่ต่อไป"
-
-#: ../embed/ephy-web-view.c:2944
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.co.th/search?q=%s"
-
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:3238
+#: ../embed/ephy-web-view.c:1510
 #, c-format
 msgid "Loading “%s”…"
 msgstr "กำลังเรียก “%s”…"
 
-#: ../embed/ephy-web-view.c:3240
+#: ../embed/ephy-web-view.c:1512
 msgid "Loading…"
 msgstr "กำลังเรียก…"
 
-#. Translators: this is the directory name to store auxilary files
-#. * when saving html files.
-#.
-#: ../embed/ephy-web-view.c:4021
-#, c-format
-msgid "%s Files"
-msgstr "แฟ้ม %s"
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1734
+msgid ""
+"This website presented identification that belongs to a different website."
+msgstr "เว็บไซต์นี้แสดงการระบุตัวตนที่เป็นของเว็บไซต์ที่ต่างออกไป"
 
-#: ../lib/egg/eggdesktopfile.c:165
-#, c-format
-msgid "File is not a valid .desktop file"
-msgstr "แฟ้มนี้ไม่ใช่แฟ้ม .desktop ที่ใช้ได้"
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1739
+msgid ""
+"This website’s identification is too old to trust. Check the date on your "
+"computer’s calendar."
+msgstr ""
+"การระบุตัวตนของเว็บไซต์นี้เก่าเกินกว่าจะเชื่อถือได้ กรุณาตรวจสอบวันที่ในปฏิทินของคอมพิวเตอร์ของคุณ"
 
-#: ../lib/egg/eggdesktopfile.c:188
-#, c-format
-msgid "Unrecognized desktop file Version '%s'"
-msgstr "ไม่รู้จักแฟ้มเดสก์ท็อปรุ่น '%s'"
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1744
+msgid "This website’s identification was not issued by a trusted organization."
+msgstr "การระบุตัวตนของเว็บไซต์นี้ไม่ได้ออกโดยองค์กรที่เชื่อถือได้"
 
-#: ../lib/egg/eggdesktopfile.c:958
-#, c-format
-msgid "Starting %s"
-msgstr "กำลังเริ่ม %s"
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1749
+msgid ""
+"This website’s identification could not be processed. It may be corrupted."
+msgstr "การระบุตัวตนของเว็บไซต์นี้ไม่สามารถประมวลผลได้ ข้อมูลตัวตนอาจจะเสียหาย"
 
-#: ../lib/egg/eggdesktopfile.c:1100
-#, c-format
-msgid "Application does not accept documents on command line"
-msgstr "โปรแกรมไม่รับเอกสารในบรรทัดคำสั่ง"
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1754
+msgid ""
+"This website’s identification has been revoked by the trusted organization "
+"that issued it."
+msgstr "การระบุตัวตนของเว็บไซต์นี้ได้ถูกเพิกถอนโดยองค์กรที่เชื่อถือได้"
 
-#: ../lib/egg/eggdesktopfile.c:1168
-#, c-format
-msgid "Unrecognized launch option: %d"
-msgstr "ไม่รู้จักตัวเลือกของการเรียกโปรแกรม: %d"
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1759
+msgid ""
+"This website’s identification cannot be trusted because it uses very weak "
+"encryption."
+msgstr "การระบุตัวตนของเว็บไซต์นี้ไม่อาจเชื่อถือได้ เพราะใช้วิธีเข้ารหัสลับที่หละหลวมมาก"
 
-#: ../lib/egg/eggdesktopfile.c:1373
-#, c-format
-msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-msgstr "ไม่สามารถส่ง URI ของเอกสารไปยังรายการเดสก์ท็อปที่มี 'Type=Link'"
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1764
+msgid ""
+"This website’s identification is only valid for future dates. Check the date "
+"on your computer’s calendar."
+msgstr ""
+"การระบุตัวตนของเว็บไซต์นี้ใช้การได้สำหรับวันที่ในอนาคตเท่านั้น "
+"กรุณาตรวจสอบวันที่ในปฏิทินของคอมพิวเตอร์ของคุณ"
 
-#: ../lib/egg/eggdesktopfile.c:1392
+#. Message when a site's TLS certificate is invalid. %s is the site's hostname.
+#: ../embed/ephy-web-view.c:1800
 #, c-format
-msgid "Not a launchable item"
-msgstr "ไม่ใช่รายการที่เรียกทำงานได้"
+msgid "This might not be the real %s."
+msgstr "นี่อาจไม่ใช่ %s ที่แท้จริง"
 
-#: ../lib/ephy-file-chooser.c:210
+#. Message when a site's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1805
+msgid ""
+"When you try to connect securely, websites present identification to prove "
+"that your connection has not been maliciously intercepted. There is "
+"something wrong with this website’s identification:"
+msgstr ""
+"เมื่อคุณพยายามเชื่อมต่อแบบนิรภัย เว็บไซต์ต่างๆ "
+"จะแสดงตัวตนเพื่อพิสูจน์ว่าการเชื่อมต่อของคุณไม่ได้ถูกดักข้อมูลอย่างมุ่งร้าย "
+"มีบางอย่างผิดปกติเกี่ยวกับการระบุตัวตนของเว็บไซต์นี้:"
+
+#. Message when a site's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1811
+msgid ""
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this website does not use trusted "
+"identification."
+msgstr ""
+"บุคคลที่สามอาจขโมยการเชื่อมต่อของคุณไปแล้ว "
+"คุณควรจะเชื่อมต่อต่อไปก็ต่อเมื่อคุณรู้ว่ามีเหตุผลที่ดีที่เว็บไซต์นี้ไม่ได้ใช้การระบุตัวตนที่เชื่อถือได้เท่านั้น"
+
+#. Good advice from Firefox; displays when a site's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1815
+msgid ""
+"Legitimate banks, stores, and other public sites will not ask you to do this."
+msgstr "ธนาคาร ร้านค้า และเว็บไซต์สาธารณะอื่นๆ ที่ถูกต้องตามกฎหมายจะไม่ขอให้คุณทำเช่นนี้"
+
+#: ../embed/ephy-web-view.c:1856
+msgid "None specified"
+msgstr "ไม่ระบุ"
+
+#. Page title when a site cannot be loaded. %s is the site's hostname.
+#: ../embed/ephy-web-view.c:1869 ../embed/ephy-web-view.c:1884
+#: ../embed/ephy-web-view.c:1904
+#, c-format
+msgid "Problem loading “%s”"
+msgstr "เกิดปัญหาขณะเรียก “%s”"
+
+#: ../embed/ephy-web-view.c:1871
+msgid "Oops! Unable to display this website."
+msgstr "โอ๊ะ! ไม่สามารถแสดงเว็บไซต์นี้ได้"
+
+#: ../embed/ephy-web-view.c:1872
+#, c-format
+msgid ""
+"<p>The site at “%s” seems to be unavailable. The precise error was:</"
+"p><p><code>%s</code></p><p>It may be temporarily unavailable or moved to a "
+"new address. You may wish to verify that your internet connection is working "
+"correctly.</p>"
+msgstr ""
+"<p>เว็บไซต์ “%s” ดูจะเปิดไม่ได้ ข้อผิดพลาดคือ:</p><p><code>%s</code></"
+"p><p>เว็บไซต์อาจปิดตัวชั่วคราวหรือย้ายไปยังที่ใหม่ "
+"คุณอาจต้องการตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณด้วย</p>"
+
+#: ../embed/ephy-web-view.c:1880
+msgid "Try again"
+msgstr "ลองใหม่"
+
+#: ../embed/ephy-web-view.c:1886
+msgid "Oops! There may be a problem."
+msgstr "โอ๊ะ! อาจจะมีปัญหา"
+
+#: ../embed/ephy-web-view.c:1887
+#, c-format
+msgid ""
+"<p>This site may have caused Web to close unexpectedly.</p><p>If this "
+"happens again, please report the problem to the <strong>%s</strong> "
+"developers.</p>"
+msgstr ""
+"<p>เว็บไซต์นี้อาจทำให้เว็บเบราว์เซอร์ปิดตัวกะทันหัน</p><p>ถ้าเกิดเหตุการณ์นี้อีกครั้ง "
+"ก็กรุณารายงานปัญหาไปยังนักพัฒนา <strong>%s</strong></p>"
+
+#: ../embed/ephy-web-view.c:1892 ../embed/ephy-web-view.c:1899
+msgid "Reload Anyway"
+msgstr "โหลดซ้ำต่อไป"
+
+#: ../embed/ephy-web-view.c:1896
+#, c-format
+msgid "Problem displaying “%s”"
+msgstr "เกิดปัญหาขณะแสดง “%s”"
+
+#: ../embed/ephy-web-view.c:1897
+msgid "Oops!"
+msgstr "โอ๊ะ!"
+
+#: ../embed/ephy-web-view.c:1898
+msgid ""
+"Something went wrong while displaying this page. Please reload or visit a "
+"different page to continue."
+msgstr "มีบางอย่างผิดพลาดขณะแสดงหน้านี้ กรุณาโหลดซ้ำหรือเยี่ยมชมหน้าอื่นต่อไป"
+
+#. Title of error page when a website's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1906
+msgid "Look out!"
+msgstr "ระวัง!"
+
+#. Button on error page when a website's TLS certificate is invalid.
+#: ../embed/ephy-web-view.c:1909
+msgid "Load Anyway"
+msgstr "โหลดต่อไป"
+
+#: ../embed/ephy-web-view.c:2809
+msgid "_OK"
+msgstr "_ตกลง"
+
+#: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
+#: ../src/bookmarks/ephy-bookmark-properties.c:428
+#: ../src/bookmarks/ephy-bookmarks-editor.c:819
+#: ../src/resources/clear-data-dialog.ui.h:3
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:809
+msgid "_Cancel"
+msgstr "_ยกเลิก"
+
+#: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:9
+msgid "_Open"
+msgstr "_เปิด"
+
+#: ../lib/ephy-file-chooser.c:194
+msgid "_Save"
+msgstr "_บันทึก"
+
+#: ../lib/ephy-file-chooser.c:209
 msgid "All supported types"
 msgstr "ทุกชนิดที่รองรับ"
 
-#: ../lib/ephy-file-chooser.c:222
+#: ../lib/ephy-file-chooser.c:221
 msgid "Web pages"
 msgstr "หน้าเว็บ"
 
-#: ../lib/ephy-file-chooser.c:231
+#: ../lib/ephy-file-chooser.c:230
 msgid "Images"
 msgstr "รูปภาพ"
 
-#: ../lib/ephy-file-chooser.c:239 ../src/bookmarks/ephy-bookmarks-editor.c:635
+#: ../lib/ephy-file-chooser.c:238 ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "All files"
 msgstr "ทุกชนิด"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:4
+#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:2
 msgid "Downloads"
 msgstr "ดาวน์โหลด"
 
@@ -983,20 +1160,37 @@ msgstr "ดาวน์โหลด"
 msgid "Desktop"
 msgstr "พื้นโต๊ะ"
 
-#: ../lib/ephy-file-helpers.c:344
+#: ../lib/ephy-file-helpers.c:335
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "ไม่สามารถสร้างไดเรกทอรีชั่วคราวใน “%s”"
 
-#: ../lib/ephy-file-helpers.c:445
+#: ../lib/ephy-file-helpers.c:466
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "มีแฟ้ม “%s” อยู่แล้ว กรุณาย้ายตำแหน่ง"
 
-#: ../lib/ephy-file-helpers.c:466
+#: ../lib/ephy-file-helpers.c:487
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "ไม่สามารถสร้างไดเรกทอรี “%s”"
+
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../lib/ephy-form-auth-data.c:139
+#, c-format
+msgid "Password for %s in a form in %s"
+msgstr "รหัสผ่านสำหรับ %s ในแบบฟอร์มใน %s"
+
+#. Translators: The first %s is the hostname where this is happening.
+#. * Example: mail.google.com.
+#.
+#: ../lib/ephy-form-auth-data.c:145
+#, c-format
+msgid "Password in a form in %s"
+msgstr "รหัสผ่านในแบบฟอร์มใน %s"
 
 #: ../lib/ephy-gui.c:206
 #, c-format
@@ -1037,43 +1231,41 @@ msgstr "ต้องใช้รหัสผ่านหลัก"
 
 #: ../lib/ephy-nss-glue.c:64
 msgid ""
-"The passwords from the previous version (Gecko) are locked with a master "
-"password. If you want Epiphany to import them, please enter your master "
-"password below."
+"The passwords from the previous version are locked with a master password. "
+"If you want to import them, please enter your master password below."
 msgstr ""
-"รหัสผ่านจากรุ่นก่อน (Gecko) ถูกล็อคไว้ด้วยรหัสผ่านหลัก ถ้าคุณต้องการให้ Epiphany "
-"นำเข้ารหัสผ่านเหล่านั้น กรุณาป้อนรหัสผ่านหลักที่ด้านล่างนี้"
+"รหัสผ่านจากรุ่นก่อนถูกล็อคไว้ด้วยรหัสผ่านหลัก ถ้าคุณต้องการนำเข้ารหัสผ่านเหล่านั้น "
+"กรุณาป้อนรหัสผ่านหลักที่ด้านล่างนี้"
 
-#: ../lib/ephy-profile-migrator.c:98
+#: ../lib/ephy-profile-migrator.c:100
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "ไม่สามารถคัดลอกแฟ้มคุกกี้จาก Mozilla"
 
-#: ../lib/ephy-profile-migrator.c:650
+#: ../lib/ephy-profile-migrator.c:652
 msgid ""
-"Epiphany 3.6 deprecated this directory and tried migrating this "
-"configuration to ~/.config/epiphany"
-msgstr ""
-"Epiphany 3.6 เลิกใช้ไดเรกทอรีนี้แล้ว และจะลองปรับย้ายค่าตั้งนี้ไปที่ ~/.config/epiphany"
+"Web 3.6 deprecated this directory and tried migrating this configuration to "
+"~/.config/epiphany"
+msgstr "Web 3.6 เลิกใช้ไดเรกทอรีนี้แล้ว และจะลองปรับย้ายค่าตั้งนี้ไปที่ ~/.config/epiphany"
 
-#: ../lib/ephy-profile-migrator.c:890
+#: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
 msgstr "เรียกทำงานการปรับย้ายเฉพาะขั้นที่ n"
 
-#: ../lib/ephy-profile-migrator.c:892
+#: ../lib/ephy-profile-migrator.c:1032
 msgid "Specifies the required version for the migrator"
 msgstr "ระบุรุ่นที่ต้องใช้สำหรับเครื่องมือปรับย้าย"
 
-#: ../lib/ephy-profile-migrator.c:894
+#: ../lib/ephy-profile-migrator.c:1034
 msgid "Specifies the profile where the migrator should run"
 msgstr "ระบุแหล่งโพรไฟล์ที่จะให้เครื่องมือปรับย้ายทำงาน"
 
-#: ../lib/ephy-profile-migrator.c:909
-msgid "Epiphany profile migrator"
-msgstr "เครื่องมือปรับย้ายโพรไฟล์ของ Epiphany"
+#: ../lib/ephy-profile-migrator.c:1047
+msgid "Web profile migrator"
+msgstr "เครื่องมือปรับย้ายโพรไฟล์ของ Web"
 
-#: ../lib/ephy-profile-migrator.c:910
-msgid "Epiphany profile migrator options"
-msgstr "ตัวเลือกของเครื่องมือปรับย้ายโพรไฟล์ของ Epiphany"
+#: ../lib/ephy-profile-migrator.c:1048
+msgid "Web profile migrator options"
+msgstr "ตัวเลือกของเครื่องมือปรับย้ายโพรไฟล์ของ Web"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
 #: ../lib/ephy-time-helpers.c:223
@@ -1113,53 +1305,53 @@ msgstr "%d %b %Ey"
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
-#: ../lib/ephy-zoom.h:44
+#: ../lib/ephy-zoom.h:45
 msgid "50%"
 msgstr "50%"
 
-#: ../lib/ephy-zoom.h:45
+#: ../lib/ephy-zoom.h:46
 msgid "75%"
 msgstr "75%"
 
-#: ../lib/ephy-zoom.h:46
+#: ../lib/ephy-zoom.h:47
 msgid "100%"
 msgstr "100%"
 
-#: ../lib/ephy-zoom.h:47
+#: ../lib/ephy-zoom.h:48
 msgid "125%"
 msgstr "125%"
 
-#: ../lib/ephy-zoom.h:48
+#: ../lib/ephy-zoom.h:49
 msgid "150%"
 msgstr "150%"
 
-#: ../lib/ephy-zoom.h:49
+#: ../lib/ephy-zoom.h:50
 msgid "175%"
 msgstr "175%"
 
-#: ../lib/ephy-zoom.h:50
+#: ../lib/ephy-zoom.h:51
 msgid "200%"
 msgstr "200%"
 
-#: ../lib/ephy-zoom.h:51
+#: ../lib/ephy-zoom.h:52
 msgid "300%"
 msgstr "300%"
 
-#: ../lib/ephy-zoom.h:52
+#: ../lib/ephy-zoom.h:53
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:360
+#: ../lib/history/ephy-history-service-hosts-table.c:363
 msgid "Others"
 msgstr "อื่นๆ"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:364
+#: ../lib/history/ephy-history-service-hosts-table.c:367
 msgid "Local files"
 msgstr "แฟ้มในเครื่อง"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:92
-msgid "The certificate does not match the expected identity"
-msgstr "ใบรับรองไม่ตรงกับชื่อที่คาดหมาย"
+msgid "The certificate does not match this website"
+msgstr "ใบรับรองไม่ตรงกับเว็บไซต์นี้"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:95
 msgid "The certificate has expired"
@@ -1186,405 +1378,402 @@ msgid "The certificate activation time is still in the future"
 msgstr "เวลาเปิดใช้ใบรับรองยังอยู่ในอนาคต"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:149
-msgid "The identity of this website has been verified"
+msgid "The identity of this website has been verified."
 msgstr "ตรวจสอบเอกลักษณ์ของเว็บไซต์นี้เรียบร้อยแล้ว"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:150
-msgid "The identity of this website has not been verified"
+msgid "The identity of this website has not been verified."
 msgstr "เว็บไซต์นี้ยังไม่ผ่านการตรวจสอบเอกลักษณ์"
+
+#. Label when clicking the lock icon on a secure page. %s is the website's hostname.
+#: ../lib/widgets/ephy-certificate-popover.c:71
+#, c-format
+msgid "You are connected to %s"
+msgstr "คุณเชื่อมต่อไปยัง %s"
+
+#. Label in certificate popover when site is untrusted. %s is a URL.
+#: ../lib/widgets/ephy-certificate-popover.c:113
+#, c-format
+msgid ""
+"This web site’s digital identification is not trusted. You may have "
+"connected to an attacker pretending to be %s."
+msgstr "การระบุตัวตนดิจิทัลของเว็บไซต์นี้ไม่น่าเชื่อถือ คุณอาจจะเชื่อมต่อกับผู้โจมตีที่ทำทีว่าเป็น %s"
+
+#. Label in certificate popover when site sends mixed content.
+#: ../lib/widgets/ephy-certificate-popover.c:124
+msgid "Part of this page is insecure."
+msgstr "ส่วนหนึ่งของหน้านี้ไม่นิรภัย"
+
+#. Label in certificate popover on secure sites.
+#: ../lib/widgets/ephy-certificate-popover.c:130
+msgid "Your connection is secure."
+msgstr "การเชื่อมต่อของคุณนิรภัย"
+
+#: ../lib/widgets/ephy-certificate-popover.c:318
+msgid "_View Certificate…"
+msgstr "_ดูใบรับรอง…"
+
+#: ../lib/widgets/ephy-download-widget.c:107
+#, c-format
+msgid "%d second left"
+msgid_plural "%d seconds left"
+msgstr[0] "เหลืออีก %d วินาที"
+
+#: ../lib/widgets/ephy-download-widget.c:113
+#, c-format
+msgid "%d minute left"
+msgid_plural "%d minutes left"
+msgstr[0] "เหลืออีก %d นาที"
 
 #: ../lib/widgets/ephy-download-widget.c:119
 #, c-format
-msgid "%u:%02u hour left"
-msgid_plural "%u:%02u hours left"
-msgstr[0] "เหลืออีก %u:%02u ชั่วโมง"
+msgid "%d hour left"
+msgid_plural "%d hours left"
+msgstr[0] "เหลืออีก %d ชั่วโมง"
 
-#: ../lib/widgets/ephy-download-widget.c:121
+#: ../lib/widgets/ephy-download-widget.c:125
 #, c-format
-msgid "%u hour left"
-msgid_plural "%u hours left"
-msgstr[0] "เหลืออีก %u ชั่วโมง"
+msgid "%d day left"
+msgid_plural "%d days left"
+msgstr[0] "เหลืออีก %d วัน"
 
-#: ../lib/widgets/ephy-download-widget.c:124
+#: ../lib/widgets/ephy-download-widget.c:131
 #, c-format
-msgid "%u:%02u minute left"
-msgid_plural "%u:%02u minutes left"
-msgstr[0] "เหลืออีก %u:%02u นาที"
+msgid "%d week left"
+msgid_plural "%d weeks left"
+msgstr[0] "เหลืออีก %d สัปดาห์"
 
-#: ../lib/widgets/ephy-download-widget.c:126
+#: ../lib/widgets/ephy-download-widget.c:137
 #, c-format
-msgid "%u second left"
-msgid_plural "%u seconds left"
-msgstr[0] "เหลืออีก %u วินาที"
+msgid "%d month left"
+msgid_plural "%d months left"
+msgstr[0] "เหลืออีก %d เดือน"
 
-#: ../lib/widgets/ephy-download-widget.c:296
-#: ../lib/widgets/ephy-download-widget.c:313
+#: ../lib/widgets/ephy-download-widget.c:293
 msgid "Finished"
 msgstr "เสร็จแล้ว"
 
-#: ../lib/widgets/ephy-download-widget.c:328
-#: ../lib/widgets/ephy-download-widget.c:346
+#: ../lib/widgets/ephy-download-widget.c:309
 #, c-format
 msgid "Error downloading: %s"
 msgstr "เกิดข้อผิดพลาดขณะดาวน์โหลด: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:414 ../src/window-commands.c:556
+#: ../lib/widgets/ephy-download-widget.c:364 ../src/window-commands.c:713
 msgid "Cancel"
 msgstr "ยกเลิก"
 
-#: ../lib/widgets/ephy-download-widget.c:423 ../src/ephy-window.c:1368
-#: ../src/window-commands.c:268
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1120
+#: ../src/window-commands.c:275
 msgid "Open"
 msgstr "เปิด"
 
-#: ../lib/widgets/ephy-download-widget.c:429
+#: ../lib/widgets/ephy-download-widget.c:377
 msgid "Show in folder"
 msgstr "แสดงในโฟลเดอร์"
 
-#: ../lib/widgets/ephy-download-widget.c:628
+#: ../lib/widgets/ephy-download-widget.c:586
 msgid "Starting…"
 msgstr "กำลังเริ่ม…"
-
-#: ../lib/widgets/ephy-hosts-store.c:262
-msgid "All sites"
-msgstr "ทุกไซต์"
-
-#: ../lib/widgets/ephy-hosts-view.c:46
-msgid "Sites"
-msgstr "ไซต์"
 
 #. Translators: the mnemonic shouldn't conflict with any of the
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:591
-#: ../src/resources/prefs-dialog.ui.h:34 ../src/ephy-history-window.c:231
-#: ../src/pdm-dialog.c:380
+#: ../lib/widgets/ephy-location-entry.c:606
+#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:263
 msgid "Cl_ear"
 msgstr "_ล้าง"
 
-#: ../lib/widgets/ephy-location-entry.c:871
+#. Edit actions.
+#: ../lib/widgets/ephy-location-entry.c:625 ../src/ephy-window.c:119
+msgid "_Undo"
+msgstr "เรี_ยกคืน"
+
+#: ../lib/widgets/ephy-location-entry.c:632
+msgid "_Redo"
+msgstr "_ทำซ้ำ"
+
+#: ../lib/widgets/ephy-location-entry.c:912
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "ลากไอคอนนี้ไปปล่อยเพื่อสร้างลิงก์มายังหน้านี้"
-
-#: ../lib/widgets/ephy-search-entry.c:162
-msgid "Clear"
-msgstr "ล้าง"
-
-#: ../lib/widgets/ephy-urls-view.c:43
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1706
-msgid "Title"
-msgstr "ชื่อ"
-
-#: ../lib/widgets/ephy-urls-view.c:51
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1717
-msgid "Address"
-msgstr "ที่อยู่"
-
-#: ../lib/widgets/ephy-urls-view.c:59
-msgid "Date"
-msgstr "วันที่"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
 #: ../src/bookmarks/ephy-bookmark-properties.c:84
-#: ../src/bookmarks/ephy-bookmark-properties.c:613
 #, c-format
-msgid "%d _Similar"
-msgid_plural "%d _Similar"
-msgstr[0] "ที่_คล้ายกัน %d รายการ"
+msgid "%d bookmark is similar"
+msgid_plural "%d bookmarks are similar"
+msgstr[0] "ที่คั่นหน้า %d รายการคล้ายกัน"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:256
-#, c-format
-msgid "_Unify With %d Identical Bookmark"
-msgid_plural "_Unify With %d Identical Bookmarks"
-msgstr[0] "_รวมกับที่คั่นหน้าที่เหมือนกัน %d รายการ"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:276
-#: ../src/bookmarks/ephy-bookmark-properties.c:298
-#, c-format
-msgid "Show “%s”"
-msgstr "แสดง “%s”"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:423
+#: ../src/bookmarks/ephy-bookmark-properties.c:234
 #, c-format
 msgid "“%s” Properties"
 msgstr "คุณสมบัติของ “%s”"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:547
+#: ../src/bookmarks/ephy-bookmark-properties.c:358
 msgid "_Title:"
 msgstr "_ชื่อ:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:564
+#: ../src/bookmarks/ephy-bookmark-properties.c:375
 msgid "A_ddress:"
 msgstr "_ที่อยู่:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:576
+#: ../src/bookmarks/ephy-bookmark-properties.c:387
 msgid "T_opics:"
 msgstr "ห_มวด:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:599
+#: ../src/bookmarks/ephy-bookmark-properties.c:410
 msgid "Sho_w all topics"
 msgstr "แสด_งทุกหมวด"
 
-#: ../src/bookmarks/ephy-bookmarks.c:87
+#: ../src/bookmarks/ephy-bookmark-properties.c:431
+#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-lang-dialog.ui.h:3
+msgid "_Add"
+msgstr "เ_พิ่ม"
+
+#: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Entertainment"
 msgstr "บันเทิง"
 
-#: ../src/bookmarks/ephy-bookmarks.c:88
+#: ../src/bookmarks/ephy-bookmarks.c:89
 msgid "News"
 msgstr "ข่าว"
 
-#: ../src/bookmarks/ephy-bookmarks.c:89
+#: ../src/bookmarks/ephy-bookmarks.c:90
 msgid "Shopping"
 msgstr "ช็อปปิ้ง"
 
-#: ../src/bookmarks/ephy-bookmarks.c:90
+#: ../src/bookmarks/ephy-bookmarks.c:91
 msgid "Sports"
 msgstr "กีฬา"
 
-#: ../src/bookmarks/ephy-bookmarks.c:91
+#: ../src/bookmarks/ephy-bookmarks.c:92
 msgid "Travel"
 msgstr "ท่องเที่ยว"
 
-#: ../src/bookmarks/ephy-bookmarks.c:92
+#: ../src/bookmarks/ephy-bookmarks.c:93
 msgid "Work"
 msgstr "งาน"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:935
+#: ../src/bookmarks/ephy-bookmarks.c:927
 msgctxt "bookmarks"
 msgid "All"
 msgstr "ทั้งหมด"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:939
+#: ../src/bookmarks/ephy-bookmarks.c:931
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "ไม่มีหมวด"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:943
+#: ../src/bookmarks/ephy-bookmarks.c:935
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "ไซต์ท้องถิ่น"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1161
-#: ../src/bookmarks/ephy-bookmarks-import.c:271
+#: ../src/bookmarks/ephy-bookmarks.c:1150
+#: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "ไม่มีชื่อ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:76
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:75
+msgid "Web (RDF)"
+msgstr "เว็บ (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:77
+#: ../src/bookmarks/ephy-bookmarks-editor.c:76
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:125
+#: ../src/bookmarks/ephy-bookmarks-editor.c:124
 msgid "Remove from this topic"
 msgstr "ลบออกจากหมวดนี้"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:152
-#: ../src/ephy-history-window.c:129
+#: ../src/bookmarks/ephy-bookmarks-editor.c:151
 msgid "_File"
 msgstr "แ_ฟ้ม"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:153
-#: ../src/ephy-history-window.c:130
+#: ../src/bookmarks/ephy-bookmarks-editor.c:152
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/ephy-history-window.c:131
+#: ../src/bookmarks/ephy-bookmarks-editor.c:153
 msgid "_View"
 msgstr "มุ_มมอง"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:155
-#: ../src/ephy-history-window.c:132
+#. Help.
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
+#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:189
 msgid "_Help"
 msgstr "_วิธีใช้"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:158
 msgid "_New Topic"
 msgstr "เพิ่มห_มวด"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:160
+#: ../src/bookmarks/ephy-bookmarks-editor.c:159
 msgid "Create a new topic"
 msgstr "เพิ่มหมวดใหม่"
 
-#. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
-#: ../src/ephy-history-window.c:136 ../src/ephy-history-window.c:639
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1154
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "เปิดในห_น้าต่างใหม่"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
 msgid "Open the selected bookmark in a new window"
 msgstr "เปิดที่คั่นหน้าในหน้าต่างใหม่"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1161
-#: ../src/ephy-history-window.c:139 ../src/ephy-history-window.c:642
+#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1157
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "เปิดในแ_ท็บใหม่"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "Open the selected bookmark in a new tab"
 msgstr "เปิดที่คั่นหน้าในแท็บใหม่"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "_Rename…"
 msgstr "เ_ปลี่ยนชื่อ…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "Rename the selected bookmark or topic"
 msgstr "เปลี่ยนชื่อที่คั่นหน้า"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "_Properties"
 msgstr "คุณ_สมบัติ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:171
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "View or modify the properties of the selected bookmark"
 msgstr "ดูหรือแก้ไขคุณสมบัติของที่คั่นหน้า"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "_Import Bookmarks…"
 msgstr "นำเ_ข้าที่คั่นหน้า…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "นำเข้าที่คั่นหน้าจากเบราว์เซอร์อื่นหรือจากแฟ้มที่คั่นหน้า"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "_Export Bookmarks…"
 msgstr "ส่ง_ออกที่คั่นหน้า…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Export bookmarks to a file"
 msgstr "ส่งออกที่คั่นหน้าไปยังแฟ้ม"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
-#: ../src/ephy-history-window.c:145 ../src/ephy-window.c:111
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:112
 msgid "_Close"
 msgstr "ปิ_ด"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Close the bookmarks window"
 msgstr "ปิดหน้าต่างที่คั่นหน้า"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:120
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183 ../src/ephy-window.c:123
 msgid "Cu_t"
 msgstr "_ตัด"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:185
-#: ../src/ephy-history-window.c:151
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "Cut the selection"
 msgstr "ตัดส่วนที่เลือก"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1171
-#: ../src/ephy-history-window.c:153 ../src/ephy-history-window.c:652
-#: ../src/ephy-window.c:122
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1167 ../src/ephy-window.c:125
 msgid "_Copy"
 msgstr "_คัดลอก"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:188
-#: ../src/ephy-history-window.c:154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Copy the selection"
 msgstr "คัดลอกส่วนที่เลือก"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
-#: ../src/ephy-history-window.c:156 ../src/ephy-window.c:124
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189 ../src/ephy-window.c:127
 msgid "_Paste"
 msgstr "_แปะ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:157
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Paste the clipboard"
 msgstr "แปะจากคลิปบอร์ด"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
-#: ../src/ephy-history-window.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/resources/history-dialog.ui.h:12
 msgid "_Delete"
 msgstr "_ลบ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Delete the selected bookmark or topic"
 msgstr "ลบที่คั่นหน้า"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
-#: ../src/ephy-history-window.c:162 ../src/ephy-window.c:128
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195 ../src/ephy-window.c:131
 msgid "Select _All"
 msgstr "เลือกทั้งห_มด"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Select all bookmarks or text"
 msgstr "เลือกที่คั่นหน้าหรือข้อความทั้งหมด"
 
 #. Help Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
-#: ../src/ephy-history-window.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "_Contents"
 msgstr "เนื้อ_หา"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:202
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "Display bookmarks help"
 msgstr "แสดงวิธีใช้ที่คั่นหน้า"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
-#: ../src/resources/epiphany-application-menu.ui.h:6
-#: ../src/ephy-history-window.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
+#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:191
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:205
-#: ../src/ephy-history-window.c:174
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "Display credits for the web browser creators"
 msgstr "แสดงชื่อผู้จัดทำเบราว์เซอร์"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "_Title"
 msgstr "_ชื่อ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:211
 msgid "Show the title column"
 msgstr "แสดงคอลัมน์ชื่อ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:214
-#: ../src/ephy-history-window.c:191
+#: ../src/bookmarks/ephy-bookmarks-editor.c:212
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1632
+msgid "Address"
+msgstr "ที่อยู่"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
 msgid "Show the address column"
 msgstr "แสดงคอลัมน์ที่อยู่"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:256
+#: ../src/bookmarks/ephy-bookmarks-editor.c:255
 msgid "Type a topic"
 msgstr "ป้อนหมวด"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:375
+#: ../src/bookmarks/ephy-bookmarks-editor.c:377
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "จะลบหมวด “%s” หรือไม่?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:378
+#: ../src/bookmarks/ephy-bookmarks-editor.c:380
 msgid "Delete this topic?"
 msgstr "จะลบหมวดนี้หรือไม่?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:380
+#: ../src/bookmarks/ephy-bookmarks-editor.c:382
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -1592,110 +1781,108 @@ msgstr ""
 "การลบหมวดนี้ จะทำให้ที่คั่นหน้าทั้งหลายในหมวดดังกล่าวไม่มีหมวดหมู่ "
 "ยกเว้นจะถูกจัดให้อยู่ในหมวดอื่นด้วยอยู่แล้ว แต่จะไม่ลบที่คั่นหน้าพวกนั้น"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:383
+#: ../src/bookmarks/ephy-bookmarks-editor.c:385
 msgid "_Delete Topic"
 msgstr "_ลบหมวด"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:493
-#: ../src/bookmarks/ephy-bookmarks-editor.c:497
+#: ../src/bookmarks/ephy-bookmarks-editor.c:495
+#: ../src/bookmarks/ephy-bookmarks-editor.c:499
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:502
-#: ../src/bookmarks/ephy-bookmarks-editor.c:506
+#: ../src/bookmarks/ephy-bookmarks-editor.c:504
+#: ../src/bookmarks/ephy-bookmarks-editor.c:508
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:511
+#: ../src/bookmarks/ephy-bookmarks-editor.c:513
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "โพรไฟล์ “%s” ของ Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:515
+#: ../src/bookmarks/ephy-bookmarks-editor.c:517
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:519
+#: ../src/bookmarks/ephy-bookmarks-editor.c:521
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:548
+#: ../src/bookmarks/ephy-bookmarks-editor.c:550
 msgid "Import failed"
 msgstr "นำเข้าไม่สำเร็จ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:550
+#: ../src/bookmarks/ephy-bookmarks-editor.c:552
 msgid "Import Failed"
 msgstr "นำเข้าไม่สำเร็จ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:553
+#: ../src/bookmarks/ephy-bookmarks-editor.c:555
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
 "or of an unsupported type."
 msgstr "ไม่สามารถนำเข้าที่คั่นหน้าจาก “%s” ได้ เพราะแฟ้มเสียอยู่ หรือเป็นชนิดที่ไม่รองรับ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:616
+#: ../src/bookmarks/ephy-bookmarks-editor.c:618
 msgid "Import Bookmarks from File"
 msgstr "นำเข้าที่คั่นหน้าจากแฟ้ม"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:623
+#: ../src/bookmarks/ephy-bookmarks-editor.c:625
 msgid "Firefox/Mozilla bookmarks"
 msgstr "ที่คั่นหน้าของ Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:627
+#: ../src/bookmarks/ephy-bookmarks-editor.c:629
 msgid "Galeon/Konqueror bookmarks"
 msgstr "ที่คั่นหน้าของ Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:631
-msgid "Epiphany bookmarks"
-msgstr "ที่คั่นหน้าของ Epiphany"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:633
+msgid "Web bookmarks"
+msgstr "ที่คั่นหน้าเว็บ"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:755
+#: ../src/bookmarks/ephy-bookmarks-editor.c:757
 msgid "Export Bookmarks"
 msgstr "ส่งออกที่คั่นหน้า"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:762
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1580
+#: ../src/bookmarks/ephy-bookmarks-editor.c:764
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1495
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "ที่คั่นหน้า"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../src/bookmarks/ephy-bookmarks-editor.c:770
 msgid "File f_ormat:"
 msgstr "รูปแ_บบแฟ้ม:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:814
+#: ../src/bookmarks/ephy-bookmarks-editor.c:816
 msgid "Import Bookmarks"
 msgstr "นำเข้าที่คั่นหน้า"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:819
+#: ../src/bookmarks/ephy-bookmarks-editor.c:821
 msgid "I_mport"
 msgstr "นำเ_ข้า"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:835
+#: ../src/bookmarks/ephy-bookmarks-editor.c:837
 msgid "Import bookmarks from:"
 msgstr "นำเข้าที่คั่นหน้าจาก:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:855
+#: ../src/bookmarks/ephy-bookmarks-editor.c:857
 msgid "File"
 msgstr "แฟ้ม"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1167
-#: ../src/ephy-history-window.c:648
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1163
 msgid "_Copy Address"
 msgstr "_คัดลอกที่อยู่"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1408
-#: ../src/ephy-history-window.c:801
-msgid "_Search:"
-msgstr "_ค้นหา:"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1636
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1551
 msgid "Topics"
 msgstr "หมวด"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1621
+msgid "Title"
+msgstr "ชื่อ"
 
 #. FIXME !!!!
 #: ../src/bookmarks/ephy-open-tabs-action.c:74
@@ -1711,217 +1898,355 @@ msgstr "เปิดที่คั่นหน้าต่างๆ ในห�
 msgid "Create topic “%s”"
 msgstr "สร้างหมวด “%s”"
 
-#: ../src/resources/epiphany-application-menu.ui.h:1
+#: ../src/resources/clear-data-dialog.ui.h:1
+msgid "Clear Personal Data"
+msgstr "ล้างข้อมูลส่วนตัว"
+
+#: ../src/resources/clear-data-dialog.ui.h:2
+msgid "C_lear"
+msgstr "_ล้าง"
+
+#: ../src/resources/clear-data-dialog.ui.h:4
+msgid "Select the personal data you wish to clear"
+msgstr "เลือกข้อมูลส่วนตัวที่คุณต้องการล้าง"
+
+#: ../src/resources/clear-data-dialog.ui.h:5
+msgid ""
+"You are about to clear personal data that is stored about the web pages you "
+"have visited. Check the types of information that you want to remove:"
+msgstr ""
+"คุณกำลังจะล้างข้อมูลส่วนตัวที่เก็บไว้เกี่ยวกับหน้าเว็บที่คุณเข้า "
+"กรุณาเลือกประเภทของข้อมูลที่คุณต้องการลบ:"
+
+#: ../src/resources/clear-data-dialog.ui.h:6
+msgid "Coo_kies"
+msgstr "คุก_กี้"
+
+#: ../src/resources/clear-data-dialog.ui.h:7
+msgid "Cache and _temporary files"
+msgstr "แคชและแฟ้ม_ชั่วคราว"
+
+#: ../src/resources/clear-data-dialog.ui.h:8
+msgid "Browsing _history"
+msgstr "_ประวัติการเข้าเว็บ"
+
+#: ../src/resources/clear-data-dialog.ui.h:9
+msgid "Saved _passwords"
+msgstr "_รหัสผ่านที่เก็บไว้"
+
+#: ../src/resources/clear-data-dialog.ui.h:10
+msgid ""
+"You cannot undo this action. The data you are choosing to clear will be "
+"removed forever."
+msgstr "ข้อมูลที่ลบแล้ว จะถูกลบไปตลอดกาล เรียกคืนไม่ได้อีก"
+
+#: ../src/resources/cookies-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:21
+msgid "Cookies"
+msgstr "คุกกี้"
+
+#: ../src/resources/cookies-dialog.ui.h:2
+#: ../src/resources/history-dialog.ui.h:2
+#: ../src/resources/passwords-dialog.ui.h:2
+msgid "C_lear All"
+msgstr "ล้าง_ทั้งหมด"
+
+#: ../src/resources/cookies-dialog.ui.h:3
+#: ../src/resources/passwords-dialog.ui.h:4
+msgid "Site"
+msgstr "ไซต์"
+
+#: ../src/resources/cookies-dialog.ui.h:4
+msgid "Remove"
+msgstr "ลบ"
+
+#: ../src/resources/cookies-dialog.ui.h:5
+msgid "Delete the selected cookies"
+msgstr "ลบคุกกี้ที่เลือก"
+
+#. File actions.
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:98
 msgid "_New Window"
-msgstr "เปิดหน้า_ต่างใหม่"
+msgstr "หน้าต่างใ_หม่"
+
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:100
+msgid "New _Incognito Window"
+msgstr "หน้าต่างใหม่ไ_ม่เปิดเผยตัว"
+
+#: ../src/resources/epiphany-application-menu.ui.h:3
+msgid "Reopen Closed _Tab"
+msgstr "เปิดซ้ำแ_ท็บที่ปิด"
 
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:93
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:91
 msgid "_Bookmarks"
 msgstr "ที่_คั่นหน้า"
 
-#: ../src/resources/epiphany-application-menu.ui.h:3
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:141
 msgid "_History"
 msgstr "_ประวัติการเข้าเว็บ"
 
-#: ../src/resources/epiphany-application-menu.ui.h:4
-#: ../src/resources/prefs-dialog.ui.h:3
-msgid "Preferences"
-msgstr "ปรับแต่ง"
+#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:143
+msgid "Pr_eferences"
+msgstr "_ปรับแต่ง"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5
-#: ../src/resources/epiphany.ui.h:10
-msgid "Personal Data"
-msgstr "ข้อมูลส่วนตัว"
-
-#: ../src/resources/epiphany-application-menu.ui.h:7
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:114
 msgid "_Quit"
 msgstr "_ออก"
 
 #: ../src/resources/epiphany.ui.h:1
-msgid "Cookie properties"
-msgstr "คุณสมบัติของคุกกี้"
-
-#: ../src/resources/epiphany.ui.h:2
-msgid "Content:"
-msgstr "เนื้อหา:"
-
-#: ../src/resources/epiphany.ui.h:3
-msgid "Path:"
-msgstr "พาธ:"
-
-#: ../src/resources/epiphany.ui.h:4
-msgid "Send for:"
-msgstr "ส่งเพื่อ:"
-
-#: ../src/resources/epiphany.ui.h:5
-msgid "Expires:"
-msgstr "หมดอายุ:"
-
-#: ../src/resources/epiphany.ui.h:6
 msgid "Text Encoding"
 msgstr "รหัสอักขระ"
 
-#: ../src/resources/epiphany.ui.h:7
-msgid "<b>_Automatic</b>"
-msgstr "<b>_อัตโนมัติ</b>"
+#: ../src/resources/epiphany.ui.h:2 ../src/ephy-encoding-menu.c:327
+msgid "_Automatic"
+msgstr "อัตโ_นมัติ"
 
-#: ../src/resources/epiphany.ui.h:8 ../src/ephy-encoding-menu.c:349
+#: ../src/resources/epiphany.ui.h:3 ../src/ephy-encoding-menu.c:328
 msgid "Use the encoding specified by the document"
 msgstr "ใช้รหัสอักขระที่ระบุในเอกสาร"
 
-#: ../src/resources/epiphany.ui.h:9
-msgid "<b>_Use a different encoding:</b>"
-msgstr "<b>ใ_ช้รหัสอักขระอื่น:</b>"
+#: ../src/resources/epiphany.ui.h:4
+msgid "_Use a different encoding:"
+msgstr "ใ_ช้รหัสอักขระอื่น:"
 
-#: ../src/resources/epiphany.ui.h:11 ../src/resources/prefs-dialog.ui.h:21
-msgid "Cookies"
-msgstr "คุกกี้"
+#: ../src/resources/history-dialog.ui.h:1
+msgid "History"
+msgstr "ประวัติ"
 
-#: ../src/resources/epiphany.ui.h:12
-msgid "_Show passwords"
-msgstr "แ_สดงรหัสผ่าน"
+#: ../src/resources/history-dialog.ui.h:3
+msgid "Search history"
+msgstr "ค้นประวัติ"
 
-#: ../src/resources/epiphany.ui.h:13 ../src/resources/prefs-dialog.ui.h:29
+#: ../src/resources/history-dialog.ui.h:4
+msgid "Date"
+msgstr "วันที่"
+
+#: ../src/resources/history-dialog.ui.h:5
+msgid "Name"
+msgstr "ชื่อ"
+
+#: ../src/resources/history-dialog.ui.h:6
+msgid "Location"
+msgstr "ตำแหน่ง"
+
+#: ../src/resources/history-dialog.ui.h:7
+msgid "Remove the selected pages from history"
+msgstr "ลบหน้าที่เลือกออกจากประวัติ"
+
+#: ../src/resources/history-dialog.ui.h:8
+msgid "Open the selected pages in new tabs"
+msgstr "เปิดหน้าที่เลือกในแท็บใหม่"
+
+#: ../src/resources/history-dialog.ui.h:10
+msgid "_Copy Location"
+msgstr "_คัดลอกตำแหน่ง"
+
+#: ../src/resources/history-dialog.ui.h:11
+msgid "Add _Bookmark"
+msgstr "เพิ่มที่_คั่นหน้า"
+
+#: ../src/resources/passwords-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "Passwords"
 msgstr "รหัสผ่าน"
 
+#: ../src/resources/passwords-dialog.ui.h:3
+msgid "Search passwords"
+msgstr "ค้นหารหัสผ่าน"
+
+#: ../src/resources/passwords-dialog.ui.h:5
+msgid "User Name"
+msgstr "ชื่อผู้ใช้"
+
+#: ../src/resources/passwords-dialog.ui.h:6
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+#: ../src/resources/passwords-dialog.ui.h:7
+msgid "Forget the selected passwords"
+msgstr "ทิ้งรหัสผ่านที่เลือก"
+
+#: ../src/resources/passwords-dialog.ui.h:8
+msgid "Reveal all the passwords"
+msgstr "เปิดเผยรหัสผ่านทั้งหมด"
+
+#: ../src/resources/passwords-dialog.ui.h:9
+msgid "_Copy Password"
+msgstr "_คัดลอกรหัสผ่าน"
+
+#: ../src/resources/passwords-dialog.ui.h:10
+msgid "C_opy Username"
+msgstr "คัด_ลอกชื่อผู้ใช้"
+
 #: ../src/resources/prefs-dialog.ui.h:1
-msgid "Add Language"
-msgstr "เพิ่มภาษา"
+msgid "Preferences"
+msgstr "ปรับแต่ง"
 
-#: ../src/resources/prefs-dialog.ui.h:2
-msgid "Choose a l_anguage:"
-msgstr "เลือก_ภาษา:"
-
-#: ../src/resources/prefs-dialog.ui.h:5
+#: ../src/resources/prefs-dialog.ui.h:3
 msgid "_Download folder:"
 msgstr "โ_ฟลเดอร์เก็บแฟ้มดาวน์โหลด:"
 
-#: ../src/resources/prefs-dialog.ui.h:6
+#: ../src/resources/prefs-dialog.ui.h:4
 msgid "A_utomatically open downloaded files"
 msgstr "_เปิดแฟ้มที่ดาวน์โหลดมาโดยอัตโนมัติ"
 
+#: ../src/resources/prefs-dialog.ui.h:5
+msgid "Search"
+msgstr "ค้นหา"
+
+#: ../src/resources/prefs-dialog.ui.h:6
+msgid "_Engine:"
+msgstr "_กลไก:"
+
 #: ../src/resources/prefs-dialog.ui.h:7
-msgid "General"
-msgstr "ทั่วไป"
-
-#: ../src/resources/prefs-dialog.ui.h:8
-msgid "Fonts"
-msgstr "แบบอักษร"
-
-#: ../src/resources/prefs-dialog.ui.h:9
-msgid "_Use system fonts"
-msgstr "ใช้แบบอักษรของ_ระบบ"
-
-#: ../src/resources/prefs-dialog.ui.h:10
-msgid "Sans serif font:"
-msgstr "แบบอักษร sans serif:"
-
-#: ../src/resources/prefs-dialog.ui.h:11
-msgid "Serif font:"
-msgstr "แบบอักษร serif:"
-
-#: ../src/resources/prefs-dialog.ui.h:12
-msgid "Monospace font:"
-msgstr "แบบอักษรความกว้างคงที่:"
-
-#: ../src/resources/prefs-dialog.ui.h:13
-msgid "Style"
-msgstr "สไตล์"
-
-#: ../src/resources/prefs-dialog.ui.h:14
-msgid "Use custom _stylesheet"
-msgstr "ใช้ stylesheet กำห_นดเอง"
-
-#: ../src/resources/prefs-dialog.ui.h:15
-msgid "_Edit Stylesheet…"
-msgstr "แ_ก้ไข Stylesheet…"
-
-#: ../src/resources/prefs-dialog.ui.h:16
-msgid "Fonts & Style"
-msgstr "แบบอักษรและรูปลักษณ์"
-
-#: ../src/resources/prefs-dialog.ui.h:17
 msgid "Web Content"
 msgstr "การแสดงเว็บ"
 
-#: ../src/resources/prefs-dialog.ui.h:18
+#: ../src/resources/prefs-dialog.ui.h:8
 msgid "Allow popup _windows"
 msgstr "อนุญาตให้เปิดห_น้าต่างผุดขึ้น"
 
-#: ../src/resources/prefs-dialog.ui.h:19
+#: ../src/resources/prefs-dialog.ui.h:9
+msgid "Allow _advertisements"
+msgstr "อนุญาตให้โฆษณ_า"
+
+#: ../src/resources/prefs-dialog.ui.h:10
 msgid "Enable _plugins"
 msgstr "เปิดใช้_ปลั๊กอิน"
 
+#: ../src/resources/prefs-dialog.ui.h:11
+msgid "General"
+msgstr "ทั่วไป"
+
+#: ../src/resources/prefs-dialog.ui.h:12
+msgid "Fonts"
+msgstr "แบบอักษร"
+
+#: ../src/resources/prefs-dialog.ui.h:13
+msgid "_Use system fonts"
+msgstr "ใช้แบบอักษรของ_ระบบ"
+
+#: ../src/resources/prefs-dialog.ui.h:14
+msgid "Sans serif font:"
+msgstr "แบบอักษร sans serif:"
+
+#: ../src/resources/prefs-dialog.ui.h:15
+msgid "Serif font:"
+msgstr "แบบอักษร serif:"
+
+#: ../src/resources/prefs-dialog.ui.h:16
+msgid "Monospace font:"
+msgstr "แบบอักษรความกว้างคงที่:"
+
+#: ../src/resources/prefs-dialog.ui.h:17
+msgid "Style"
+msgstr "สไตล์"
+
+#: ../src/resources/prefs-dialog.ui.h:18
+msgid "Use custom _stylesheet"
+msgstr "ใช้ stylesheet กำห_นดเอง"
+
+#: ../src/resources/prefs-dialog.ui.h:19
+msgid "_Edit Stylesheet…"
+msgstr "แ_ก้ไข Stylesheet…"
+
 #: ../src/resources/prefs-dialog.ui.h:20
-msgid "Enable Java_Script"
-msgstr "ใช้จาวา_สคริปต์"
+msgid "Fonts & Style"
+msgstr "แบบอักษรและรูปลักษณ์"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-msgid "_Always accept"
-msgstr "ยอม_รับคุกกี้เสมอ"
+msgid "Manage _Cookies"
+msgstr "จัดการคุก_กี้"
 
 #: ../src/resources/prefs-dialog.ui.h:23
+msgid "_Always accept"
+msgstr "ยอม_รับเสมอ"
+
+#: ../src/resources/prefs-dialog.ui.h:24
 msgid "Only _from sites you visit"
-msgstr "เ_ฉพาะจากเว็บไซต์ที่เปิด"
+msgstr "เฉ_พาะจากเว็บไซต์ที่เปิด"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../src/resources/prefs-dialog.ui.h:25
+#: ../src/resources/prefs-dialog.ui.h:26
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>ตัวอย่างเช่น ไม่รับจากโฆษณาในเว็บเหล่านี้</small>"
 
-#: ../src/resources/prefs-dialog.ui.h:26
+#: ../src/resources/prefs-dialog.ui.h:27
 msgid "_Never accept"
 msgstr "ไ_ม่รับคุกกี้"
 
-#: ../src/resources/prefs-dialog.ui.h:27
+#: ../src/resources/prefs-dialog.ui.h:28
 msgid "Tracking"
 msgstr "การติดตามการเชื่อมต่อ"
 
-#: ../src/resources/prefs-dialog.ui.h:28
-msgid "_Tell web sites I do not want to be tracked"
+#: ../src/resources/prefs-dialog.ui.h:29
+msgid "_Tell websites I do not want to be tracked"
 msgstr "แ_จ้งเว็บไซต์ว่าฉันไม่ต้องการถูกติดตามการเชื่อมต่อ"
 
-#: ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/prefs-dialog.ui.h:31
+msgid "Manage _Passwords"
+msgstr "จัดการร_หัสผ่าน"
+
+#: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
 msgstr "จำรหัส_ผ่านต่างๆ"
 
-#: ../src/resources/prefs-dialog.ui.h:31
+#: ../src/resources/prefs-dialog.ui.h:33
 msgid "Temporary Files"
 msgstr "แฟ้มชั่วคราว"
 
-#: ../src/resources/prefs-dialog.ui.h:32
+#: ../src/resources/prefs-dialog.ui.h:34
 msgid "_Disk space:"
 msgstr "เนื้อ_ที่บนดิสก์:"
 
-#: ../src/resources/prefs-dialog.ui.h:33
+#: ../src/resources/prefs-dialog.ui.h:35
 msgid "MB"
 msgstr "MB"
 
-#: ../src/resources/prefs-dialog.ui.h:35
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "Privacy"
 msgstr "ความเป็นส่วนตัว"
 
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-encoding-dialog.c:405
+#: ../src/resources/prefs-dialog.ui.h:38 ../src/ephy-encoding-dialog.c:379
 msgid "Encodings"
 msgstr "รหัสอักขระ"
 
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "De_fault:"
 msgstr "ค่า_ปริยาย:"
 
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:42
+msgid "_Remove"
+msgstr "ล_บ"
+
+#: ../src/resources/prefs-dialog.ui.h:43
+msgid "_Up"
+msgstr "_ขึ้น"
+
+#: ../src/resources/prefs-dialog.ui.h:44
+msgid "_Down"
+msgstr "_ลง"
+
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "Spell checking"
 msgstr "การตรวจตัวสะกด"
 
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:46
 msgid "_Enable spell checking"
 msgstr "เปิดใ_ช้การตรวจตัวสะกด"
 
-#: ../src/resources/prefs-dialog.ui.h:41 ../src/prefs-dialog.c:780
+#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:840
 msgid "Language"
 msgstr "ภาษา"
+
+#: ../src/resources/prefs-lang-dialog.ui.h:1
+msgid "Add Language"
+msgstr "เพิ่มภาษา"
+
+#: ../src/resources/prefs-lang-dialog.ui.h:4
+msgid "Choose a l_anguage:"
+msgstr "เลือก_ภาษา:"
 
 #: ../src/ephy-combined-stop-reload-action.c:41
 msgid "Stop"
@@ -1931,7 +2256,7 @@ msgstr "หยุด"
 msgid "Stop current data transfer"
 msgstr "หยุดการเรียกข้อมูล"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:143
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:152
 msgid "_Reload"
 msgstr "เรียกให_ม่"
 
@@ -1939,204 +2264,85 @@ msgstr "เรียกให_ม่"
 msgid "Display the latest content of the current page"
 msgstr "แสดงเนื้อหาล่าสุดของหน้าปัจจุบัน"
 
-#: ../src/ephy-encoding-menu.c:341
+#: ../src/ephy-encoding-menu.c:320
 msgid "_Other…"
 msgstr "_อื่นๆ…"
 
-#: ../src/ephy-encoding-menu.c:342
+#: ../src/ephy-encoding-menu.c:321
 msgid "Other encodings"
 msgstr "รหัสอื่น"
 
-#: ../src/ephy-encoding-menu.c:348
-msgid "_Automatic"
-msgstr "อัตโ_นมัติ"
-
-#: ../src/ephy-find-toolbar.c:168
-msgid "Not found"
-msgstr "หาไม่พบ"
-
-#: ../src/ephy-find-toolbar.c:180
-msgid "Wrapped"
-msgstr "เริ่มหาใหม่"
-
-#: ../src/ephy-find-toolbar.c:200
-msgid "Find links:"
-msgstr "หาลิงก์:"
-
-#: ../src/ephy-find-toolbar.c:200
-msgid "Find:"
-msgstr "หา:"
-
-#. Create a menu item, and sync it
-#. Case sensitivity
-#: ../src/ephy-find-toolbar.c:540 ../src/ephy-find-toolbar.c:663
-msgid "_Case sensitive"
-msgstr "ตัวพิมพ์ใหญ่เ_ล็กตรงกัน"
-
-#: ../src/ephy-find-toolbar.c:646
-msgid "Find Previous"
-msgstr "หาก่อนหน้า"
-
-#: ../src/ephy-find-toolbar.c:649
-msgid "Find previous occurrence of the search string"
-msgstr "หาข้อความเดิมถอยหลัง"
-
-#: ../src/ephy-find-toolbar.c:655
-msgid "Find Next"
-msgstr "หาต่อ"
-
-#: ../src/ephy-find-toolbar.c:658
-msgid "Find next occurrence of the search string"
-msgstr "หาข้อความเดิมต่อไป"
-
-#: ../src/ephy-history-window.c:137
-msgid "Open the selected history link in a new window"
-msgstr "เปิดลิงก์ประวัติที่เลือกในหน้าต่างใหม่"
-
-#: ../src/ephy-history-window.c:140
-msgid "Open the selected history link in a new tab"
-msgstr "เปิดลิงก์ประวัติในหน้าต่างใหม่"
-
-#: ../src/ephy-history-window.c:142
-msgid "Add _Bookmark…"
-msgstr "เพิ่มที่_คั่นหน้า…"
-
-#: ../src/ephy-history-window.c:143
-msgid "Bookmark the selected history link"
-msgstr "เก็บลิงก์ประวัติลงที่คั่นหน้า"
-
-#: ../src/ephy-history-window.c:146
-msgid "Close the history window"
-msgstr "ปิดหน้าต่างประวัติ"
-
-#: ../src/ephy-history-window.c:160
-msgid "Delete the selected history link"
-msgstr "ลบประวัติที่เลือก"
-
-#: ../src/ephy-history-window.c:163
-msgid "Select all history links or text"
-msgstr "เลือกลิงก์หรือข้อความประวัติทั้งหมด"
-
-#: ../src/ephy-history-window.c:165
-msgid "Clear _History"
-msgstr "ล้าง_ประวัติ"
-
-#: ../src/ephy-history-window.c:166
-msgid "Clear your browsing history"
-msgstr "ล้างประวัติการท่องเว็บ"
-
-#: ../src/ephy-history-window.c:171
-msgid "Display history help"
-msgstr "แสดงวิธีใช้ประวัติ"
-
-#: ../src/ephy-history-window.c:190
-msgid "_Address"
-msgstr "_ที่อยู่:"
-
-#: ../src/ephy-history-window.c:192
-msgid "_Date and Time"
-msgstr "_วันเวลา"
-
-#: ../src/ephy-history-window.c:193
-msgid "Show the date and time column"
-msgstr "แสดงคอลัมน์วันเวลา"
-
-#: ../src/ephy-history-window.c:221
+#: ../src/ephy-history-window.c:253
 msgid "Clear browsing history?"
 msgstr "ล้างประวัติการเข้าเว็บหรือไม่?"
 
-#: ../src/ephy-history-window.c:225
+#: ../src/ephy-history-window.c:257
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr "การล้างประวัติการเข้าเว็บ จะลบลิงก์ประวัติทั้งหมดทิ้งอย่างถาวร"
 
-#: ../src/ephy-history-window.c:240
-msgid "Clear History"
-msgstr "ล้างประวัติ"
-
-#: ../src/ephy-history-window.c:810
-msgid "Last 30 minutes"
-msgstr "30 นาทีก่อน"
-
-#: ../src/ephy-history-window.c:811
-msgid "Today"
-msgstr "วันนี้"
-
-#. keep this in sync with embed/ephy-history.c's
-#. * HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:813 ../src/ephy-history-window.c:817
-#: ../src/ephy-history-window.c:823
-#, c-format
-msgid "Last %d day"
-msgid_plural "Last %d days"
-msgstr[0] "%d วันก่อน"
-
-#: ../src/ephy-history-window.c:827
-msgid "All history"
-msgstr "ประวัติทั้งหมด"
-
-#: ../src/ephy-history-window.c:1128
-msgid "History"
-msgstr "ประวัติ"
-
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:76
 msgid "Open a new tab in an existing browser window"
 msgstr "เปิดแท็บใหม่ในหน้าต่างเบราว์เซอร์ปัจจุบัน"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:78
 msgid "Open a new browser window"
 msgstr "เปิดเบราว์เซอร์หน้าต่างใหม่"
 
-#: ../src/ephy-main.c:88
-msgid "Launch the bookmarks editor"
-msgstr "เรียกเครื่องมือแก้ไขที่คั่นหน้า"
-
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:80
 msgid "Import bookmarks from the given file"
 msgstr "นำเข้าที่คั่นหน้าจากแฟ้ม"
 
-#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
+#: ../src/ephy-main.c:80 ../src/ephy-main.c:82
 msgid "FILE"
 msgstr "FILE"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:82
 msgid "Load the given session file"
 msgstr "โหลดแฟ้มวาระที่กำหนด"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:84
 msgid "Add a bookmark"
 msgstr "เพิ่มที่คั่นหน้า"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:84
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:86
 msgid "Start a private instance"
 msgstr "เปิดหน้าต่างชุดส่วนตัว"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:88
+msgid "Start an instance in incognito mode"
+msgstr "เปิดหน้าต่างในโหมดไม่เปิดเผยตัว"
+
+#: ../src/ephy-main.c:90
+msgid "Start an instance in netbank mode"
+msgstr "เปิดหน้าต่างในโหมด netbank"
+
+#: ../src/ephy-main.c:92
 msgid "Start the browser in application mode"
 msgstr "เปิดเบราว์เซอร์ในโหมดโปรแกรมเว็บ"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:94
 msgid "Profile directory to use in the private instance"
 msgstr "ไดเรกทอรีของโพรไฟล์ที่จะใช้กับหน้าต่างชุดส่วนตัว"
 
-#: ../src/ephy-main.c:100
+#: ../src/ephy-main.c:94
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:96
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:210
+#: ../src/ephy-main.c:201
 msgid "Could not start Web"
 msgstr "ไม่สามารถเรียกทำงานโปรแกรมดูเว็บ"
 
-#: ../src/ephy-main.c:213
+#: ../src/ephy-main.c:204
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2145,370 +2351,300 @@ msgstr ""
 "ไม่สามารถเริ่มการทำงานได้ เนื่องจากข้อผิดพลาดต่อไปนี้:\n"
 "%s"
 
-#: ../src/ephy-main.c:325
+#: ../src/ephy-main.c:315
 msgid "Web options"
 msgstr "ตัวเลือกของโปรแกรมดูเว็บ"
 
-#: ../src/ephy-notebook.c:595
+#: ../src/ephy-notebook.c:602
 msgid "Close tab"
 msgstr "ปิดแท็บ"
 
-#: ../src/ephy-window.c:97
-msgid "_Extensions"
-msgstr "ส่วน_ขยาย"
+#: ../src/ephy-search-provider.c:201
+#, c-format
+msgid "Search the Web for %s"
+msgstr "ค้นเว็บเพื่อหา %s"
 
-#. File actions.
-#: ../src/ephy-window.c:101
+#: ../src/ephy-window.c:102
 msgid "_Open…"
 msgstr "_เปิด…"
 
-#: ../src/ephy-window.c:103
+#: ../src/ephy-window.c:104
 msgid "Save _As…"
 msgstr "บันทึกเป็_น…"
 
-#: ../src/ephy-window.c:105
+#: ../src/ephy-window.c:106
 msgid "Save As _Web Application…"
 msgstr "บันทึกเป็นโปรแกรมเ_ว็บ…"
 
-#: ../src/ephy-window.c:107
+#: ../src/ephy-window.c:108
 msgid "_Print…"
 msgstr "_พิมพ์…"
 
-#: ../src/ephy-window.c:109
+#: ../src/ephy-window.c:110
 msgid "S_end Link by Email…"
 msgstr "_ส่งลิงก์ทางอีเมล…"
 
-#. Edit actions.
-#: ../src/ephy-window.c:116
-msgid "_Undo"
-msgstr "เรี_ยกคืน"
-
-#: ../src/ephy-window.c:118
+#: ../src/ephy-window.c:121
 msgid "Re_do"
 msgstr "_ทำซ้ำ"
 
-#: ../src/ephy-window.c:130
+#: ../src/ephy-window.c:133
 msgid "_Find…"
 msgstr "_หา…"
 
-#: ../src/ephy-window.c:132
+#: ../src/ephy-window.c:135
 msgid "Find Ne_xt"
 msgstr "หา_ต่อ"
 
-#: ../src/ephy-window.c:134
+#: ../src/ephy-window.c:137
 msgid "Find Pre_vious"
 msgstr "หา_ก่อนหน้า"
 
+#: ../src/ephy-window.c:139
+msgid "Edit _Bookmarks"
+msgstr "แก้ไขที่_คั่นหน้า"
+
 #. View actions.
-#: ../src/ephy-window.c:139 ../src/ephy-window.c:141
+#: ../src/ephy-window.c:148 ../src/ephy-window.c:150
 msgid "_Stop"
 msgstr "_หยุด"
 
-#: ../src/ephy-window.c:145
-msgid "_Larger Text"
-msgstr "ตัวอักษรใ_หญ่ขึ้น"
+#: ../src/ephy-window.c:154
+msgid "Zoom _In"
+msgstr "แสดง_ขยาย"
 
-#: ../src/ephy-window.c:147
-msgid "S_maller Text"
-msgstr "ตัวอักษรเ_ล็กลง"
+#: ../src/ephy-window.c:156
+msgid "Zoom O_ut"
+msgstr "แสดง_ย่อ"
 
-#: ../src/ephy-window.c:149
+#: ../src/ephy-window.c:158
 msgid "_Normal Size"
 msgstr "ขนาด_ปกติ"
 
-#: ../src/ephy-window.c:151
+#: ../src/ephy-window.c:160
 msgid "Text _Encoding"
 msgstr "_รหัสอักขระ"
 
-#: ../src/ephy-window.c:152
+#: ../src/ephy-window.c:161
 msgid "_Page Source"
 msgstr "_ต้นฉบับหน้าเว็บ"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:157
+#: ../src/ephy-window.c:166
 msgid "_Add Bookmark…"
 msgstr "เ_พิ่มที่คั่นหน้า…"
 
 #. Go actions.
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:171
 msgid "_Location…"
 msgstr "_ตำแหน่ง…"
 
 #. Tabs actions.
-#: ../src/ephy-window.c:167
+#: ../src/ephy-window.c:176
 msgid "_Previous Tab"
 msgstr "แท็บ_ก่อนหน้า"
 
-#: ../src/ephy-window.c:169
+#: ../src/ephy-window.c:178
 msgid "_Next Tab"
 msgstr "แท็บ_ถัดไป"
 
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:180
 msgid "Move Tab _Left"
 msgstr "ย้ายแท็บไปทาง_ซ้าย"
 
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:182
 msgid "Move Tab _Right"
 msgstr "ย้ายแท็บไปทาง_ขวา"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:184
 msgid "_Detach Tab"
 msgstr "แ_ยกแท็บออก"
 
-#. File actions.
-#: ../src/ephy-window.c:183
-msgid "_Work Offline"
-msgstr "_ทำงานแบบออฟไลน์"
-
 #. View actions.
-#: ../src/ephy-window.c:188
+#: ../src/ephy-window.c:199
 msgid "_Downloads Bar"
 msgstr "แถบ_ดาวน์โหลด"
 
-#: ../src/ephy-window.c:191
+#: ../src/ephy-window.c:202
 msgid "_Fullscreen"
 msgstr "เ_ต็มจอ"
 
-#: ../src/ephy-window.c:193
+#: ../src/ephy-window.c:204
 msgid "Popup _Windows"
 msgstr "หน้าต่างผุด_ขึ้น"
 
-#: ../src/ephy-window.c:195
+#: ../src/ephy-window.c:206
 msgid "Selection Caret"
 msgstr "ใช้เคอร์เซอร์"
 
 #. Document.
-#: ../src/ephy-window.c:202
+#: ../src/ephy-window.c:213
 msgid "Add Boo_kmark…"
 msgstr "เพิ่มที่_คั่นหน้า…"
 
 #. Links.
-#: ../src/ephy-window.c:207
-msgid "_Open Link"
-msgstr "เ_ปิดลิงก์"
-
-#: ../src/ephy-window.c:209
+#: ../src/ephy-window.c:218
 msgid "Open Link in New _Window"
 msgstr "เปิดลิงก์ในห_น้าต่างใหม่"
 
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:220
 msgid "Open Link in New _Tab"
 msgstr "เปิดลิงก์ในแ_ท็บใหม่"
 
-#: ../src/ephy-window.c:213
-msgid "_Download Link"
-msgstr "_บันทึกลิงก์"
-
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:222
 msgid "_Save Link As…"
 msgstr "บันทึกลิงก์เป็_น…"
 
-#: ../src/ephy-window.c:217
-msgid "_Bookmark Link…"
-msgstr "เพิ่มลิงก์ในที่_คั่นหน้า…"
-
-#: ../src/ephy-window.c:219
+#: ../src/ephy-window.c:224
 msgid "_Copy Link Address"
 msgstr "_คัดลอกที่อยู่ลิงก์"
 
-#. Images.
-#: ../src/ephy-window.c:224
-msgid "Open _Image"
-msgstr "แสดง_ภาพ"
-
 #: ../src/ephy-window.c:226
-msgid "_Save Image As…"
-msgstr "บันทึกภาพเป็_น…"
+msgid "_Copy E-mail Address"
+msgstr "_คัดลอกที่อยู่อีเมล"
 
-#: ../src/ephy-window.c:228
-msgid "_Use Image As Background"
-msgstr "ใ_ช้เป็นภาพพื้นหลัง"
+#. Images.
+#: ../src/ephy-window.c:231
+msgid "View _Image in New Tab"
+msgstr "ดู_ภาพในแท็บใหม่"
 
-#: ../src/ephy-window.c:230
+#: ../src/ephy-window.c:233
 msgid "Copy I_mage Address"
 msgstr "คัด_ลอกที่อยู่ภาพ"
 
-#: ../src/ephy-window.c:232
-msgid "St_art Animation"
-msgstr "เ_ริ่มเคลื่อนไหวภาพ"
+#: ../src/ephy-window.c:235
+msgid "_Save Image As…"
+msgstr "บันทึกภาพเป็_น…"
 
-#: ../src/ephy-window.c:234
-msgid "St_op Animation"
-msgstr "ห_ยุดเคลื่อนไหวภาพ"
+#: ../src/ephy-window.c:237
+msgid "Set as _Wallpaper"
+msgstr "ตั้งเป็นภาพ_พื้นหลัง"
 
-#. Inspector.
-#: ../src/ephy-window.c:250
-msgid "Inspect _Element"
-msgstr "เ_ฝ้าสังเกตองค์ประกอบ"
+#. Video.
+#: ../src/ephy-window.c:242
+msgid "Open Video in New _Window"
+msgstr "เปิดวีดิทัศน์ในห_น้าต่างใหม่"
 
-#: ../src/ephy-window.c:456
+#: ../src/ephy-window.c:244
+msgid "Open Video in New _Tab"
+msgstr "เปิดวีดิทัศน์ในแ_ท็บใหม่"
+
+#: ../src/ephy-window.c:246
+msgid "_Save Video As…"
+msgstr "_บันทึกวีดิทัศน์เป็น…"
+
+#: ../src/ephy-window.c:248
+msgid "_Copy Video Address"
+msgstr "_คัดลอกที่อยู่วีดิทัศน์"
+
+#. Audio.
+#: ../src/ephy-window.c:253
+msgid "Open Audio in New _Window"
+msgstr "เปิดเสียงในห_น้าต่างใหม่"
+
+#: ../src/ephy-window.c:255
+msgid "Open Audio in New _Tab"
+msgstr "เปิดเสียงในแ_ท็บใหม่"
+
+#: ../src/ephy-window.c:257
+msgid "_Save Audio As…"
+msgstr "_บันทึกเสียงเป็น…"
+
+#: ../src/ephy-window.c:259
+msgid "_Copy Audio Address"
+msgstr "_คัดลอกที่อยู่เสียง"
+
+#: ../src/ephy-window.c:466
 msgid "There are unsubmitted changes to form elements"
 msgstr "มีการเปลี่ยนแปลงในช่องข้อมูลแบบฟอร์มที่ยังไม่ส่ง"
 
-#: ../src/ephy-window.c:457
+#: ../src/ephy-window.c:467
 msgid "If you close the document anyway, you will lose that information."
 msgstr "ถ้าคุณปิดเอกสาร คุณจะเสียข้อมูลเหล่านี้"
 
-#: ../src/ephy-window.c:459
+#: ../src/ephy-window.c:469
 msgid "Close _Document"
 msgstr "ปิ_ดเอกสาร"
 
-#: ../src/ephy-window.c:477
+#: ../src/ephy-window.c:484
 msgid "There are ongoing downloads in this window"
 msgstr "ยังมีรายการดาวน์โหลดในหน้าต่างนี้ที่ดำเนินการอยู่"
 
-#: ../src/ephy-window.c:478
+#: ../src/ephy-window.c:485
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "ถ้าคุณปิดหน้าต่างนี้ รายการดาวน์โหลดดังกล่าวจะถูกยกเลิก"
 
-#: ../src/ephy-window.c:479
+#: ../src/ephy-window.c:486
 msgid "Close window and cancel downloads"
 msgstr "ปิดหน้าต่างและยกเลิกการดาวน์โหลด"
 
-#: ../src/ephy-window.c:1370
+#: ../src/ephy-window.c:1122
 msgid "Save As"
 msgstr "บันทึกเป็น"
 
-#: ../src/ephy-window.c:1372
+#: ../src/ephy-window.c:1124
 msgid "Save As Application"
 msgstr "บันทึกเป็นโปรแกรมเว็บ"
 
-#: ../src/ephy-window.c:1374
+#: ../src/ephy-window.c:1126
 msgid "Print"
 msgstr "พิมพ์"
 
-#: ../src/ephy-window.c:1376
+#: ../src/ephy-window.c:1128
 msgid "Bookmark"
 msgstr "ที่คั่นหน้า"
 
-#: ../src/ephy-window.c:1378
+#: ../src/ephy-window.c:1130
 msgid "Find"
 msgstr "ค้นหา"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1387
+#: ../src/ephy-window.c:1139
 msgid "Larger"
 msgstr "ใหญ่ขึ้น"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1390
+#: ../src/ephy-window.c:1142
 msgid "Smaller"
 msgstr "เล็กลง"
 
-#: ../src/ephy-window.c:1410
+#: ../src/ephy-window.c:1164
 msgid "Back"
 msgstr "ย้อนกลับ"
 
-#: ../src/ephy-window.c:1422
+#: ../src/ephy-window.c:1176
 msgid "Forward"
 msgstr "ต่อไป"
 
-#: ../src/ephy-window.c:1434
+#: ../src/ephy-window.c:1188
 msgid "Zoom"
 msgstr "ย่อ-ขยาย"
 
-#: ../src/ephy-window.c:1442
+#: ../src/ephy-window.c:1197
 msgid "New _Tab"
 msgstr "เปิดแ_ท็บใหม่"
 
-#: ../src/ephy-window.c:1450
+#: ../src/ephy-window.c:1205
 msgid "Go to most visited"
 msgstr "ไปยังหน้าที่ไปบ่อย"
 
-#: ../src/pdm-dialog.c:361
-msgid "<b>Select the personal data you want to clear</b>"
-msgstr "<b>เลือกข้อมูลส่วนตัวที่จะลบ</b>"
-
-#: ../src/pdm-dialog.c:364
-msgid ""
-"You are about to clear personal data that is stored about the web pages you "
-"have visited. Before proceeding, check the types of information that you "
-"want to remove:"
-msgstr ""
-"คุณกำลังจะลบข้อมูลส่วนตัวที่เก็บไว้ เกี่ยวกับหน้าเว็บที่คุณเข้า ก่อนที่จะดำเนินการต่อไป "
-"กรุณาเลือกประเภทของข้อมูลที่คุณต้องการลบ:"
-
-#: ../src/pdm-dialog.c:369
-msgid "Clear All Personal Data"
-msgstr "ลบข้อมูลส่วนตัวทั้งหมด"
-
-#. Cookies
-#: ../src/pdm-dialog.c:403
-msgid "C_ookies"
-msgstr "คุ_กกี้"
-
-#. Passwords
-#: ../src/pdm-dialog.c:415
-msgid "Saved _passwords"
-msgstr "_รหัสผ่านที่เก็บไว้"
-
-#. History
-#: ../src/pdm-dialog.c:427
-msgid "Hi_story"
-msgstr "_ประวัติ"
-
-#. Cache
-#: ../src/pdm-dialog.c:439
-msgid "_Temporary files"
-msgstr "แฟ้ม_ชั่วคราว"
-
-#: ../src/pdm-dialog.c:455
-msgid ""
-"<small><i><b>Note:</b> You cannot undo this action. The data you are "
-"choosing to clear will be deleted forever.</i></small>"
-msgstr ""
-"<small><i><b>หมายเหตุ:</b> ข้อมูลที่ลบแล้ว จะถูกลบไปตลอดกาล เรียกคืนไม่ได้อีก</i></small>"
-
-#: ../src/pdm-dialog.c:678
-msgid "Encrypted connections only"
-msgstr "การเชื่อมต่อที่เข้ารหัสลับเท่านั้น"
-
-#: ../src/pdm-dialog.c:679
-msgid "Any type of connection"
-msgstr "การเชื่อมต่อทุกชนิด"
-
-#. Session cookie
-#: ../src/pdm-dialog.c:684
-msgid "End of current session"
-msgstr "เมื่อจบวาระปัจจุบัน"
-
-#: ../src/pdm-dialog.c:806
-msgid "Domain"
-msgstr "โดเมน"
-
-#: ../src/pdm-dialog.c:818
-msgid "Name"
-msgstr "ชื่อ"
-
-#: ../src/pdm-dialog.c:1314
-msgid "Host"
-msgstr "โฮสต์"
-
-#: ../src/pdm-dialog.c:1327
-msgid "User Name"
-msgstr "ชื่อผู้ใช้"
-
-#: ../src/pdm-dialog.c:1340
-msgid "User Password"
-msgstr "รหัสผ่าน"
-
-#: ../src/popup-commands.c:282
-msgid "Download Link"
-msgstr "ดาวน์โหลดลิงก์"
-
-#: ../src/popup-commands.c:290
+#: ../src/popup-commands.c:229
 msgid "Save Link As"
 msgstr "บันทึกลิงก์เป็น"
 
-#: ../src/popup-commands.c:297
+#: ../src/popup-commands.c:236
 msgid "Save Image As"
 msgstr "บันทึกภาพเป็น"
+
+#: ../src/popup-commands.c:243
+msgid "Save Media As"
+msgstr "บันทึกสื่อเป็น"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:474 ../src/prefs-dialog.c:480
+#: ../src/prefs-dialog.c:553 ../src/prefs-dialog.c:559
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2517,111 +2653,109 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:489
+#: ../src/prefs-dialog.c:568
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "กำหนดเอง (%s)"
 
-#: ../src/prefs-dialog.c:511
+#: ../src/prefs-dialog.c:590
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "ภาษาของระบบ (%s)"
 
-#: ../src/prefs-dialog.c:869
+#: ../src/prefs-dialog.c:923
 msgid "Select a Directory"
 msgstr "เลือกไดเรกทอรี"
 
-#: ../src/window-commands.c:346
-msgid "Save"
-msgstr "บันทึก"
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1018
+msgid "DuckDuckGo"
+msgstr "DuckDuckGo"
 
-#: ../src/window-commands.c:553
+#. For the preferences dialog. Must exactly match the URL
+#. * you chose in the gschema, but with & instead of &amp;
+#. * If the match is not exact, there will be a spurious, ugly
+#. * entry in the preferences combo, so please test this.
+#: ../src/prefs-dialog.c:1023
+#, c-format
+msgid "https://duckduckgo.com/?q=%s&t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&t=epiphany&kl=th-th&kad=th_TH"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1025
+msgid "Google"
+msgstr "Google"
+
+#. For the preferences dialog. Consider a regional variant, like google.co.uk
+#: ../src/prefs-dialog.c:1027
+#, c-format
+msgid "https://google.com/search?q=%s"
+msgstr "https://google.co.th/search?q=%s"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:1029
+msgid "Bing"
+msgstr "Bing"
+
+#. For the preferences dialog. Consider a regional variant, like uk.bing.com
+#: ../src/prefs-dialog.c:1031
+#, c-format
+msgid "https://www.bing.com/search?q=%s"
+msgstr "https://www.bing.com/search?q=%s"
+
+#: ../src/window-commands.c:710
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "มีโปรแกรมเว็บชื่อ '%s' อยู่ก่อนแล้ว คุณต้องการจะบันทึกแทนที่หรือไม่?"
 
-#: ../src/window-commands.c:558
+#: ../src/window-commands.c:715
 msgid "Replace"
 msgstr "แทนที่"
 
-#: ../src/window-commands.c:562
+#: ../src/window-commands.c:719
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "มีโปรแกรมเว็บชื่อเดียวกันอยู่ก่อนแล้ว การแทนที่จะเป็นการเขียนทับโปรแกรมเว็บดังกล่าว"
 
-#: ../src/window-commands.c:598
+#: ../src/window-commands.c:755
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "โปรแกรมเว็บ '%s' พร้อมใช้งานแล้ว"
 
-#: ../src/window-commands.c:601
+#: ../src/window-commands.c:758
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "ไม่สามารถสร้างโปรแกรมเว็บ '%s'"
 
-#: ../src/window-commands.c:609
+#: ../src/window-commands.c:766
 msgid "Launch"
 msgstr "เรียกทำงาน"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:642
+#: ../src/window-commands.c:806
 msgid "Create Web Application"
 msgstr "สร้างโปรแกรมเว็บ"
 
-#: ../src/window-commands.c:647
+#: ../src/window-commands.c:811
 msgid "C_reate"
 msgstr "_สร้าง"
 
-#: ../src/window-commands.c:1238
-msgid ""
-"Web is free software; you can redistribute it and/or modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version."
-msgstr ""
-"โปรแกรมดูเว็บ เป็นซอฟต์แวร์เสรี คุณสามารถแจกจ่ายต่อ และ/หรือ แก้ไขโปรแกรมได้\n"
-"ภายใต้เงื่อนไขของ GNU General Public License ที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี\n"
-"ไม่ว่าจะเป็นสัญญาอนุญาตรุ่นที่ 2 หรือรุ่นถัดมา (ตามแต่คุณจะเลือก)"
-
-#: ../src/window-commands.c:1242
-msgid ""
-"The GNOME Web Browser is distributed in the hope that it will be useful, but "
-"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
-"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
-"more details."
-msgstr ""
-"เว็บเบราว์เซอร์ของ GNOME เผยแพร่ด้วยความหวังว่าโปรแกรมจะมีประโยชน์\n"
-"แต่ _ไม่มีการรับประกันใดๆ_ ไม่มีแม้การรับประกัน _อรรถประโยชน์เชิงพาณิชย์_\n"
-"หรือ _ความเหมาะสมสำหรับวัตถุประสงค์เฉพาะกิจใดๆ_ กรุณาอ่าน\n"
-"GNU General Public License เพื่อดูรายละเอียดเพิ่มเติม"
-
-#: ../src/window-commands.c:1246
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-msgstr ""
-"คุณควรจะได้รับสำเนาของ GNU General Public License มาพร้อมกับเว็บเบราว์เซอร์ของ "
-"GNOME ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc., \n"
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-
-#: ../src/window-commands.c:1292 ../src/window-commands.c:1308
-#: ../src/window-commands.c:1319
+#: ../src/window-commands.c:1480 ../src/window-commands.c:1503
 msgid "Contact us at:"
 msgstr "ติดต่อเราได้ที่:"
 
-#: ../src/window-commands.c:1295
+#: ../src/window-commands.c:1483
 msgid "Contributors:"
 msgstr "ผู้ร่วมสมทบงาน:"
 
-#: ../src/window-commands.c:1298
+#: ../src/window-commands.c:1486
 msgid "Past developers:"
 msgstr "ผู้พัฒนาในอดีต:"
 
-#: ../src/window-commands.c:1329 ../src/window-commands.c:1335
+#: ../src/window-commands.c:1512
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2638,7 +2772,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1365
+#: ../src/window-commands.c:1535
 msgid "translator-credits"
 msgstr ""
 "Isriya Paireepairit <isriyapaireepairit@hotmail.com>\n"
@@ -2647,36 +2781,333 @@ msgstr ""
 "ถ้ามีเวลาโปรดมาช่วยกันแปล :-)\n"
 "http://gnome-th.sf.net"
 
-#: ../src/window-commands.c:1368
+#: ../src/window-commands.c:1538
 msgid "Web Website"
 msgstr "เว็บไซต์ของโปรแกรมดูเว็บ"
 
-#: ../src/window-commands.c:1508
+#: ../src/window-commands.c:1677
 msgid "Enable caret browsing mode?"
 msgstr "จะเปิดใช้โหมดการท่องดูแบบมีเคอร์เซอร์หรือไม่?"
 
-#: ../src/window-commands.c:1511
+#: ../src/window-commands.c:1680
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
-"want to enable caret browsing on?"
+"want to enable caret browsing?"
 msgstr ""
 "การกดปุ่ม F7 จะเป็นการเปิดหรือปิดการท่องดูแบบมีเคอร์เซอร์ "
 "โดยจะวางเคอร์เซอร์ซึ่งเคลื่อนย้ายได้ลงในหน้าเว็บ ทำให้คุณสามารถเลื่อนอ่านไปมาด้วยแป้นพิมพ์ได้ "
 "คุณต้องการจะเปิดใช้การท่องดูแบบมีเคอร์เซอร์หรือไม่?"
 
-#: ../src/window-commands.c:1514
+#: ../src/window-commands.c:1683
 msgid "_Enable"
 msgstr "เ_ปิดใช้"
+
+#~ msgid "http://www.google.com"
+#~ msgstr "http://www.google.co.th"
+
+#~ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
+#~ msgstr "http://www.google.co.th/search?q=%s"
+
+#~ msgid ""
+#~ "Middle click to open the web page pointed to by the currently selected "
+#~ "text"
+#~ msgstr "ให้การคลิกเมาส์ปุ่มกลางเปิดเว็บตามที่อยู่ในข้อความที่เลือกอยู่"
+
+#~ msgid ""
+#~ "Middle clicking on the main view pane will open the web page pointed to "
+#~ "by the currently selected text."
+#~ msgstr "ให้การคลิกเมาส์ในช่องทำงานหลักเปิดเว็บตามที่อยู่ในข้อความที่เลือกอยู่"
+
+#~ msgid "Active extensions"
+#~ msgstr "ส่วนขยายที่เปิดใช้อยู่"
+
+#~ msgid "Lists the active extensions."
+#~ msgstr "รายชื่อส่วนขยายที่เปิดใช้อยู่"
+
+#~ msgid "Show toolbars by default"
+#~ msgstr "แสดงแถบเครื่องมือโดยปริยาย"
+
+#~ msgid "Use GNOME desktop wide font configuration."
+#~ msgstr "ใช้ค่าตั้งแบบอักษรที่กำหนดใช้ทั่วทั้งเดสก์ท็อป GNOME"
+
+#~ msgid "History pages time range"
+#~ msgstr "ช่วงเวลาของการเก็บประวัติ"
+
+#~ msgid "Whether to show the title column in the history window."
+#~ msgstr "กำหนดว่าจะแสดงคอลัมน์หัวเรื่องในหน้าต่างประวัติหรือไม่"
+
+#~ msgid "Whether to show the address column in the history window."
+#~ msgstr "กำหนดว่าจะแสดงคอลัมน์ที่อยู่เว็บในหน้าต่างประวัติหรือไม่"
+
+#~ msgid "Whether to show the date-time column in the history window."
+#~ msgstr "กำหนดว่าจะแสดงคอลัมน์วัน-เวลาในหน้าต่างประวัติหรือไม่"
+
+#~ msgid "Web Inspector"
+#~ msgstr "ตัวเฝ้าสังเกตเว็บ"
+
+#~ msgid "Epiphany can't be used now. Initialization failed."
+#~ msgstr "ไม่สามารถใช้ Epiphany ได้เนื่องจากเริ่มทำงานไม่สำเร็จ"
+
+#~ msgid "Not now"
+#~ msgstr "ยังไม่ทำตอนนี้"
+
+#~ msgid "Store password"
+#~ msgstr "เก็บรหัสผ่าน"
+
+#~ msgid ""
+#~ "<big>Would you like to store the password for <b>%s</b> in <b>%s</b>?</"
+#~ "big>"
+#~ msgstr "<big>คุณต้องการจะเก็บรหัสผ่านสำหรับ <b>%s</b> ที่ <b>%s</b> ไว้หรือไม่?</big>"
+
+#~ msgid "Oops! Error loading %s"
+#~ msgstr "โอ๊ะ! เกิดข้อผิดพลาดขณะโหลด %s"
+
+#~ msgid ""
+#~ "Oops! This site might have caused the web browser to close unexpectedly"
+#~ msgstr "โอ๊ะ! เว็บไซต์นี้อาจทำให้เบราว์เซอร์ปิดตัวกะทันหันเมื่อครั้งก่อน"
+
+#~ msgid "%s Files"
+#~ msgstr "แฟ้ม %s"
+
+#~ msgid "File is not a valid .desktop file"
+#~ msgstr "แฟ้มนี้ไม่ใช่แฟ้ม .desktop ที่ใช้ได้"
+
+#~ msgid "Unrecognized desktop file Version '%s'"
+#~ msgstr "ไม่รู้จักแฟ้มเดสก์ท็อปรุ่น '%s'"
+
+#~ msgid "Starting %s"
+#~ msgstr "กำลังเริ่ม %s"
+
+#~ msgid "Application does not accept documents on command line"
+#~ msgstr "โปรแกรมไม่รับเอกสารในบรรทัดคำสั่ง"
+
+#~ msgid "Unrecognized launch option: %d"
+#~ msgstr "ไม่รู้จักตัวเลือกของการเรียกโปรแกรม: %d"
+
+#~ msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+#~ msgstr "ไม่สามารถส่ง URI ของเอกสารไปยังรายการเดสก์ท็อปที่มี 'Type=Link'"
+
+#~ msgid "Not a launchable item"
+#~ msgstr "ไม่ใช่รายการที่เรียกทำงานได้"
+
+#~ msgid "%u:%02u hour left"
+#~ msgid_plural "%u:%02u hours left"
+#~ msgstr[0] "เหลืออีก %u:%02u ชั่วโมง"
+
+#~ msgid "All sites"
+#~ msgstr "ทุกไซต์"
+
+#~ msgid "Clear"
+#~ msgstr "ล้าง"
+
+#~ msgid "%d _Similar"
+#~ msgid_plural "%d _Similar"
+#~ msgstr[0] "ที่_คล้ายกัน %d รายการ"
+
+#~ msgid "_Unify With %d Identical Bookmark"
+#~ msgid_plural "_Unify With %d Identical Bookmarks"
+#~ msgstr[0] "_รวมกับที่คั่นหน้าที่เหมือนกัน %d รายการ"
+
+#~ msgid "Show “%s”"
+#~ msgstr "แสดง “%s”"
+
+#~ msgid "Epiphany bookmarks"
+#~ msgstr "ที่คั่นหน้าของ Epiphany"
+
+#~ msgid "Personal Data"
+#~ msgstr "ข้อมูลส่วนตัว"
+
+#~ msgid "Cookie properties"
+#~ msgstr "คุณสมบัติของคุกกี้"
+
+#~ msgid "Content:"
+#~ msgstr "เนื้อหา:"
+
+#~ msgid "Path:"
+#~ msgstr "พาธ:"
+
+#~ msgid "Send for:"
+#~ msgstr "ส่งเพื่อ:"
+
+#~ msgid "Expires:"
+#~ msgstr "หมดอายุ:"
+
+#~ msgid "<b>_Automatic</b>"
+#~ msgstr "<b>_อัตโนมัติ</b>"
+
+#~ msgid "Enable Java_Script"
+#~ msgstr "ใช้จาวา_สคริปต์"
+
+#~ msgid "Wrapped"
+#~ msgstr "เริ่มหาใหม่"
+
+#~ msgid "Find links:"
+#~ msgstr "หาลิงก์:"
+
+#~ msgid "Find:"
+#~ msgstr "หา:"
+
+#~ msgid "_Case sensitive"
+#~ msgstr "ตัวพิมพ์ใหญ่เ_ล็กตรงกัน"
+
+#~ msgid "Find Previous"
+#~ msgstr "หาก่อนหน้า"
+
+#~ msgid "Find Next"
+#~ msgstr "หาต่อ"
+
+#~ msgid "Open the selected history link in a new window"
+#~ msgstr "เปิดลิงก์ประวัติที่เลือกในหน้าต่างใหม่"
+
+#~ msgid "Open the selected history link in a new tab"
+#~ msgstr "เปิดลิงก์ประวัติในหน้าต่างใหม่"
+
+#~ msgid "Bookmark the selected history link"
+#~ msgstr "เก็บลิงก์ประวัติลงที่คั่นหน้า"
+
+#~ msgid "Close the history window"
+#~ msgstr "ปิดหน้าต่างประวัติ"
+
+#~ msgid "Delete the selected history link"
+#~ msgstr "ลบประวัติที่เลือก"
+
+#~ msgid "Select all history links or text"
+#~ msgstr "เลือกลิงก์หรือข้อความประวัติทั้งหมด"
+
+#~ msgid "Clear _History"
+#~ msgstr "ล้าง_ประวัติ"
+
+#~ msgid "Clear your browsing history"
+#~ msgstr "ล้างประวัติการท่องเว็บ"
+
+#~ msgid "Display history help"
+#~ msgstr "แสดงวิธีใช้ประวัติ"
+
+#~ msgid "_Address"
+#~ msgstr "_ที่อยู่:"
+
+#~ msgid "_Date and Time"
+#~ msgstr "_วันเวลา"
+
+#~ msgid "Show the date and time column"
+#~ msgstr "แสดงคอลัมน์วันเวลา"
+
+#~ msgid "Last 30 minutes"
+#~ msgstr "30 นาทีก่อน"
+
+#~ msgid "Today"
+#~ msgstr "วันนี้"
+
+#~ msgid "Last %d day"
+#~ msgid_plural "Last %d days"
+#~ msgstr[0] "%d วันก่อน"
+
+#~ msgid "All history"
+#~ msgstr "ประวัติทั้งหมด"
+
+#~ msgid "Launch the bookmarks editor"
+#~ msgstr "เรียกเครื่องมือแก้ไขที่คั่นหน้า"
+
+#~ msgid "_Extensions"
+#~ msgstr "ส่วน_ขยาย"
+
+#~ msgid "_Larger Text"
+#~ msgstr "ตัวอักษรใ_หญ่ขึ้น"
+
+#~ msgid "S_maller Text"
+#~ msgstr "ตัวอักษรเ_ล็กลง"
+
+#~ msgid "_Work Offline"
+#~ msgstr "_ทำงานแบบออฟไลน์"
+
+#~ msgid "_Open Link"
+#~ msgstr "เ_ปิดลิงก์"
+
+#~ msgid "_Download Link"
+#~ msgstr "_บันทึกลิงก์"
+
+#~ msgid "_Bookmark Link…"
+#~ msgstr "เพิ่มลิงก์ในที่_คั่นหน้า…"
+
+#~ msgid "Open _Image"
+#~ msgstr "แสดง_ภาพ"
+
+#~ msgid "_Use Image As Background"
+#~ msgstr "ใ_ช้เป็นภาพพื้นหลัง"
+
+#~ msgid "St_art Animation"
+#~ msgstr "เ_ริ่มเคลื่อนไหวภาพ"
+
+#~ msgid "St_op Animation"
+#~ msgstr "ห_ยุดเคลื่อนไหวภาพ"
+
+#~ msgid "Inspect _Element"
+#~ msgstr "เ_ฝ้าสังเกตองค์ประกอบ"
+
+#~ msgid "C_ookies"
+#~ msgstr "คุ_กกี้"
+
+#~ msgid "Hi_story"
+#~ msgstr "_ประวัติ"
+
+#~ msgid "Encrypted connections only"
+#~ msgstr "การเชื่อมต่อที่เข้ารหัสลับเท่านั้น"
+
+#~ msgid "Any type of connection"
+#~ msgstr "การเชื่อมต่อทุกชนิด"
+
+#~ msgid "End of current session"
+#~ msgstr "เมื่อจบวาระปัจจุบัน"
+
+#~ msgid "Domain"
+#~ msgstr "โดเมน"
+
+#~ msgid "Host"
+#~ msgstr "โฮสต์"
+
+#~ msgid "User Password"
+#~ msgstr "รหัสผ่าน"
+
+#~ msgid "Download Link"
+#~ msgstr "ดาวน์โหลดลิงก์"
+
+#~ msgid ""
+#~ "Web is free software; you can redistribute it and/or modify it under the "
+#~ "terms of the GNU General Public License as published by the Free Software "
+#~ "Foundation; either version 2 of the License, or (at your option) any "
+#~ "later version."
+#~ msgstr ""
+#~ "โปรแกรมดูเว็บ เป็นซอฟต์แวร์เสรี คุณสามารถแจกจ่ายต่อ และ/หรือ แก้ไขโปรแกรมได้\n"
+#~ "ภายใต้เงื่อนไขของ GNU General Public License ที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี\n"
+#~ "ไม่ว่าจะเป็นสัญญาอนุญาตรุ่นที่ 2 หรือรุ่นถัดมา (ตามแต่คุณจะเลือก)"
+
+#~ msgid ""
+#~ "The GNOME Web Browser is distributed in the hope that it will be useful, "
+#~ "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General "
+#~ "Public License for more details."
+#~ msgstr ""
+#~ "เว็บเบราว์เซอร์ของ GNOME เผยแพร่ด้วยความหวังว่าโปรแกรมจะมีประโยชน์\n"
+#~ "แต่ _ไม่มีการรับประกันใดๆ_ ไม่มีแม้การรับประกัน _อรรถประโยชน์เชิงพาณิชย์_\n"
+#~ "หรือ _ความเหมาะสมสำหรับวัตถุประสงค์เฉพาะกิจใดๆ_ กรุณาอ่าน\n"
+#~ "GNU General Public License เพื่อดูรายละเอียดเพิ่มเติม"
+
+#~ msgid ""
+#~ "You should have received a copy of the GNU General Public License along "
+#~ "with the GNOME Web Browser; if not, write to the Free Software "
+#~ "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  "
+#~ "02110-1301  USA"
+#~ msgstr ""
+#~ "คุณควรจะได้รับสำเนาของ GNU General Public License มาพร้อมกับเว็บเบราว์เซอร์ของ "
+#~ "GNOME ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc., \n"
+#~ "51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
 
 #~ msgid "Browse and organize your bookmarks"
 #~ msgstr "จัดการที่คั่นหน้าเว็บ"
 
 #~ msgid "Epiphany Web Bookmarks"
 #~ msgstr "ที่คั่นหน้าเว็บของ Epiphany"
-
-#~ msgid "Web Bookmarks"
-#~ msgstr "ที่คั่นหน้าเว็บ"
 
 #~ msgid "Certificate _Fields"
 #~ msgstr "เ_ขตข้อมูลใบรับรอง"
@@ -2726,9 +3157,6 @@ msgstr "เ_ปิดใช้"
 #~ msgid "Validity"
 #~ msgstr "อายุใช้งาน"
 
-#~ msgid "Clear _All..."
-#~ msgstr "ล้าง_ทั้งหมด..."
-
 #~ msgid "Sign Text"
 #~ msgstr "เซ็นกำกับข้อความ"
 
@@ -2741,9 +3169,6 @@ msgstr "เ_ปิดใช้"
 
 #~ msgid "_Certificate:"
 #~ msgstr "ใ_บรับรอง:"
-
-#~ msgid "_Password:"
-#~ msgstr "_รหัสผ่าน:"
 
 #~ msgid "_View Certificate&#x2026;"
 #~ msgstr "_ดูใบรับรอง&#x2026;"
@@ -2818,17 +3243,8 @@ msgstr "เ_ปิดใช้"
 #~ msgid "Move the selected item on the toolbar"
 #~ msgstr "ย้ายรายการที่เลือกในแถบเครื่องมือ"
 
-#~ msgid "_Remove from Toolbar"
-#~ msgstr "_ลบออกจากแถบเครื่องมือ"
-
-#~ msgid "Remove the selected item from the toolbar"
-#~ msgstr "ลบรายการที่เลือกออกจากแถบเครื่องมือ"
-
 #~ msgid "_Delete Toolbar"
 #~ msgstr "_ลบแถบเครื่องมือ"
-
-#~ msgid "Remove the selected toolbar"
-#~ msgstr "ลบแถบเครื่องมือที่เลือก"
 
 #~ msgid "Disable connection to session manager"
 #~ msgstr "ปิดใช้การเชื่อมต่อไปยังโปรแกรมจัดการวาระ"
@@ -2951,9 +3367,6 @@ msgstr "เ_ปิดใช้"
 
 #~ msgid "Forward history"
 #~ msgstr "ประวัติถัดไป"
-
-#~ msgid "_Up"
-#~ msgstr "_ขึ้น"
 
 #~ msgid "Go up one level"
 #~ msgstr "ขึ้นหนึ่งระดับ"
@@ -3086,9 +3499,6 @@ msgstr "เ_ปิดใช้"
 #~ msgid "Certificate_s"
 #~ msgstr "ใบ_รับรอง"
 
-#~ msgid "Manage Certificates"
-#~ msgstr "จัดการใบรับรอง"
-
 #~ msgid "P_references"
 #~ msgstr "_ปรับแต่ง"
 
@@ -3124,9 +3534,6 @@ msgstr "เ_ปิดใช้"
 
 #~ msgid "Add a bookmark for the current page"
 #~ msgstr "เพิ่มหน้านี้ในที่คั่นหน้า"
-
-#~ msgid "_Edit Bookmarks"
-#~ msgstr "แ_ก้ไขที่คั่นหน้า"
 
 #~ msgid "Open the bookmarks window"
 #~ msgstr "เปิดหน้าต่างที่คั่นหน้า"
@@ -3194,9 +3601,6 @@ msgstr "เ_ปิดใช้"
 #~ msgid "_Send Email…"
 #~ msgstr "_ส่งอีเมล…"
 
-#~ msgid "_Copy Email Address"
-#~ msgstr "_คัดลอกที่อยู่อีเมล"
-
 #~ msgid "Insecure"
 #~ msgstr "ไม่ปลอดภัย"
 
@@ -3254,9 +3658,6 @@ msgstr "เ_ปิดใช้"
 
 #~ msgid "<b>Issued To</b>"
 #~ msgstr "<b>ออกให้กับ</b>"
-
-#~ msgid "_View Certificate…"
-#~ msgstr "_ดูใบรับรอง…"
 
 #~ msgid "<b>Cookies</b>"
 #~ msgstr "<b>คุกกี้</b>"
@@ -3645,9 +4046,6 @@ msgstr "เ_ปิดใช้"
 #~ msgid "Au_todetect:"
 #~ msgstr "ตรวจสอบ_อัตโนมัติ:"
 
-#~ msgid "_Username:"
-#~ msgstr "_ชื่อผู้ใช้:"
-
 #~ msgid "_Domain:"
 #~ msgstr "โ_ดเมน:"
 
@@ -3843,9 +4241,6 @@ msgstr "เ_ปิดใช้"
 #~ msgid "Could not Connect to Proxy Server"
 #~ msgstr "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์พร็อกซีได้"
 
-#~ msgid "Could not connect to proxy server."
-#~ msgstr "ไม่สามารถเชื่อมต่อไปยังเซิร์ฟเวอร์พร็อกซีได้"
-
 #~ msgid ""
 #~ "Check your proxy server settings. If the connection still fails, there "
 #~ "may be a problem with your proxy server or your network connection."
@@ -3934,9 +4329,6 @@ msgstr "เ_ปิดใช้"
 
 #~ msgid "Print error"
 #~ msgstr "ข้อผิดพลาดของการพิมพ์"
-
-#~ msgid "Printing “%s”"
-#~ msgstr "กำลังพิมพ์ “%s”"
 
 #~ msgid "_Select Certificate"
 #~ msgstr "เ_ลือกใบรับรอง"
@@ -4087,9 +4479,6 @@ msgstr "เ_ปิดใช้"
 
 #~ msgid "Change Token Password"
 #~ msgstr "เปลี่ยนรหัสผ่านของโทเค็น"
-
-#~ msgid "Choose a password for the “%s” token"
-#~ msgstr "ตั้งรหัสผ่านสำหรับโทเค็น “%s”"
 
 #~ msgid "Change the password for the “%s” token"
 #~ msgstr "เปลี่ยนรหัสผ่านสำหรับโทเค็น “%s”"
@@ -4425,9 +4814,6 @@ msgstr "เ_ปิดใช้"
 #~ msgid "Duplicated Bookmark"
 #~ msgstr "ที่คั่นหน้าซ้ำ"
 
-#~ msgid "Close Tab"
-#~ msgstr "ปิดแท็บ"
-
 #~ msgid ""
 #~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server file. You can "
 #~ "use bonobo-activation-sysconf to configure the search path for bonobo "
@@ -4518,9 +4904,6 @@ msgstr "เ_ปิดใช้"
 
 #~ msgid "S_end To..."
 #~ msgstr "_ส่งลิงก์..."
-
-#~ msgid "_Bookmarks Bar"
-#~ msgstr "แถบที่_คั่นหน้า"
 
 #~ msgid "_Save Background As..."
 #~ msgstr "_บันทึกภาพพื้นหลังเป็น..."
@@ -4751,15 +5134,6 @@ msgstr "เ_ปิดใช้"
 #~ msgid "Home"
 #~ msgstr "บ้าน"
 
-#~ msgid "_Add..."
-#~ msgstr "เพิ่ม..."
-
-#~ msgid "_Down"
-#~ msgstr "ลง"
-
-#~ msgid "_Remove"
-#~ msgstr "ลบ"
-
 #~ msgid "Off"
 #~ msgstr "ปิด"
 
@@ -4803,9 +5177,6 @@ msgstr "เ_ปิดใช้"
 
 #~ msgid "C_lear History"
 #~ msgstr "ล้างประวัติ"
-
-#~ msgid "C_lear"
-#~ msgstr "_ล้าง"
 
 #~ msgid "_Open Frame"
 #~ msgstr "เปิดเ_ฟรม"
