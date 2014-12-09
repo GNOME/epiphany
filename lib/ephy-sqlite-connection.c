@@ -173,7 +173,7 @@ ephy_sqlite_connection_table_exists (EphySQLiteConnection *self, const char *tab
   EphySQLiteStatement *statement = ephy_sqlite_connection_create_statement (self,
     "SELECT COUNT(type) FROM sqlite_master WHERE type='table' and name=?", &error);
   if (error) {
-    g_error ("Could not detect table existence: %s", error->message);
+    g_warning ("Could not detect table existence: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
@@ -181,7 +181,7 @@ ephy_sqlite_connection_table_exists (EphySQLiteConnection *self, const char *tab
   ephy_sqlite_statement_bind_string (statement, 0, table_name, &error);
   if (error) {
     g_object_unref (statement);
-    g_error ("Could not detect table existence: %s", error->message);
+    g_warning ("Could not detect table existence: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
@@ -189,7 +189,7 @@ ephy_sqlite_connection_table_exists (EphySQLiteConnection *self, const char *tab
   ephy_sqlite_statement_step (statement, &error);
   if (error) {
     g_object_unref (statement);
-    g_error ("Could not detect table existence: %s", error->message);
+    g_warning ("Could not detect table existence: %s", error->message);
     g_error_free (error);
     return FALSE;
   }

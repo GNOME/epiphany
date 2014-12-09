@@ -43,7 +43,7 @@ ephy_history_service_initialize_hosts_table (EphyHistoryService *self)
     "zoom_level REAL DEFAULT 1.0)", &error);
 
   if (error) {
-    g_error("Could not create hosts table: %s", error->message);
+    g_warning ("Could not create hosts table: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
@@ -66,7 +66,7 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
     "VALUES (?, ?, ?, ?)", &error);
 
   if (error) {
-    g_error ("Could not build hosts table addition statement: %s", error->message);
+    g_warning ("Could not build hosts table addition statement: %s", error->message);
     g_error_free (error);
     return;
   }
@@ -75,7 +75,7 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
       ephy_sqlite_statement_bind_string (statement, 1, host->title, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 2, host->visit_count, &error) == FALSE ||
       ephy_sqlite_statement_bind_double (statement, 3, host->zoom_level, &error) == FALSE) {
-    g_error ("Could not insert host into hosts table: %s", error->message);
+    g_warning ("Could not insert host into hosts table: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
     return;
@@ -83,7 +83,7 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
 
   ephy_sqlite_statement_step (statement, &error);
   if (error) {
-    g_error ("Could not insert host into hosts table: %s", error->message);
+    g_warning ("Could not insert host into hosts table: %s", error->message);
     g_error_free (error);
   } else {
     host->id = ephy_sqlite_connection_get_last_insert_id (priv->history_database);
@@ -106,7 +106,7 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
     "UPDATE hosts SET url=?, title=?, visit_count=?, zoom_level=?"
     "WHERE id=?", &error);
   if (error) {
-    g_error ("Could not build hosts table modification statement: %s", error->message);
+    g_warning ("Could not build hosts table modification statement: %s", error->message);
     g_error_free (error);
     return;
   }
@@ -116,7 +116,7 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
       ephy_sqlite_statement_bind_int (statement, 2, host->visit_count, &error) == FALSE ||
       ephy_sqlite_statement_bind_double (statement, 3, host->zoom_level, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 4, host->id, &error) == FALSE) {
-    g_error ("Could not modify host in hosts table: %s", error->message);
+    g_warning ("Could not modify host in hosts table: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
     return;
@@ -124,7 +124,7 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
 
   ephy_sqlite_statement_step (statement, &error);
   if (error) {
-    g_error ("Could not modify URL in urls table: %s", error->message);
+    g_warning ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
   }
   g_object_unref (statement);
@@ -156,7 +156,7 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
   }
 
   if (error) {
-    g_error ("Could not build hosts query statement: %s", error->message);
+    g_warning ("Could not build hosts query statement: %s", error->message);
     g_error_free (error);
     return NULL;
   }
@@ -167,7 +167,7 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
     ephy_sqlite_statement_bind_string (statement, 0, host_string, &error);
 
   if (error) {
-    g_error ("Could not build hosts table query statement: %s", error->message);
+    g_warning ("Could not build hosts table query statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
     return NULL;
@@ -227,7 +227,7 @@ ephy_history_service_get_all_hosts (EphyHistoryService *self)
       "SELECT id, url, title, visit_count, zoom_level FROM hosts", &error);
 
   if (error) {
-    g_error ("Could not build hosts query statement: %s", error->message);
+    g_warning ("Could not build hosts query statement: %s", error->message);
     g_error_free (error);
     return NULL;
   }
@@ -238,7 +238,7 @@ ephy_history_service_get_all_hosts (EphyHistoryService *self)
   hosts = g_list_reverse (hosts);
 
   if (error) {
-    g_error ("Could not execute hosts table query statement: %s", error->message);
+    g_warning ("Could not execute hosts table query statement: %s", error->message);
     g_error_free (error);
   }
   g_object_unref (statement);
@@ -298,13 +298,13 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
   g_string_free (statement_str, TRUE);
 
   if (error) {
-    g_error ("Could not build hosts table query statement: %s", error->message);
+    g_warning ("Could not build hosts table query statement: %s", error->message);
     g_error_free (error);
     return NULL;
   }
   if (query->from > 0) {
     if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->from, &error) == FALSE) {
-      g_error ("Could not build hosts table query statement: %s", error->message);
+      g_warning ("Could not build hosts table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       return NULL;
@@ -312,7 +312,7 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
   }
   if (query->to > 0) {
     if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->to, &error) == FALSE) {
-      g_error ("Could not build hosts table query statement: %s", error->message);
+      g_warning ("Could not build hosts table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
       return NULL;
@@ -324,7 +324,7 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
     while (j--)
       /* The bitwise operation ensures we only skip two characters for titles. */
       if (ephy_sqlite_statement_bind_string (statement, i++, string + 2*((j+1) & 1), &error) == FALSE) {
-        g_error ("Could not build hosts table query statement: %s", error->message);
+        g_warning ("Could not build hosts table query statement: %s", error->message);
         g_error_free (error);
         g_object_unref (statement);
         g_free (string);
@@ -339,7 +339,7 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
   hosts = g_list_reverse (hosts);
 
   if (error) {
-    g_error ("Could not execute hosts table query statement: %s", error->message);
+    g_warning ("Could not execute hosts table query statement: %s", error->message);
     g_error_free (error);
   }
   g_object_unref (statement);
@@ -449,7 +449,7 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
   g_free (sql_statement);
 
   if (error) {
-    g_error ("Could not build urls table query statement: %s", error->message);
+    g_warning ("Could not build urls table query statement: %s", error->message);
     g_error_free (error);
     return;
   }
@@ -460,7 +460,7 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
     ephy_sqlite_statement_bind_string (statement, 0, host->url, &error);
 
   if (error) {
-    g_error ("Could not build hosts table query statement: %s", error->message);
+    g_warning ("Could not build hosts table query statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
     return;
@@ -468,7 +468,7 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
 
   ephy_sqlite_statement_step (statement, &error);
   if (error) {
-    g_error ("Could not modify host in hosts table: %s", error->message);
+    g_warning ("Could not modify host in hosts table: %s", error->message);
     g_error_free (error);
   }
   g_object_unref (statement);
@@ -494,7 +494,7 @@ ephy_history_service_delete_orphan_hosts (EphyHistoryService *self)
                                   "    ON hosts.id = urls.host WHERE urls.host is NULL);",
                                   &error);
   if (error) {
-    g_error ("Couldn't remove orphan hosts from database: %s", error->message);
+    g_warning ("Couldn't remove orphan hosts from database: %s", error->message);
     g_error_free (error);
   }
 }

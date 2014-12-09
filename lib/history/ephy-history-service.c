@@ -365,12 +365,12 @@ ephy_history_service_commit (EphyHistoryService *self)
 
   ephy_sqlite_connection_commit_transaction (priv->history_database, &error);
   if (NULL != error) {
-    g_error ("Could not commit idle history database transaction: %s", error->message);
+    g_warning ("Could not commit idle history database transaction: %s", error->message);
     g_error_free (error);
   }
   ephy_sqlite_connection_begin_transaction (priv->history_database, &error);
   if (NULL != error) {
-    g_error ("Could not start long-running history database transaction: %s", error->message);
+    g_warning ("Could not start long-running history database transaction: %s", error->message);
     g_error_free (error);
   }
 
@@ -390,7 +390,7 @@ ephy_history_service_enable_foreign_keys (EphyHistoryService *self)
                                   "PRAGMA foreign_keys = ON", &error);
 
   if (error) {
-    g_error ("Could not enable foreign keys pragma: %s", error->message);
+    g_warning ("Could not enable foreign keys pragma: %s", error->message);
     g_error_free (error);
   }
 }
@@ -420,7 +420,7 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
 
   ephy_sqlite_connection_begin_transaction (priv->history_database, &error);
   if (error) {
-    g_error ("Could not begin long running transaction in history database: %s", error->message);
+    g_warning ("Could not begin long running transaction in history database: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
@@ -460,7 +460,7 @@ ephy_history_service_clear_all (EphyHistoryService *self)
   ephy_sqlite_connection_execute (priv->history_database,
                                   "DELETE FROM hosts;", &error);
   if (error) {
-    g_error ("Couldn't clear history database: %s", error->message);
+    g_warning ("Couldn't clear history database: %s", error->message);
     g_error_free(error);
   }
 }
@@ -610,7 +610,7 @@ ephy_history_service_execute_add_visit_helper (EphyHistoryService *self, EphyHis
     ephy_history_service_add_url_row (self, visit->url);
 
     if (visit->url->id == -1) {
-      g_error ("Adding visit failed after failed URL addition.");
+      g_warning ("Adding visit failed after failed URL addition.");
       return FALSE;
     }
 
@@ -670,7 +670,7 @@ ephy_history_service_execute_find_visits (EphyHistoryService *self, EphyHistoryQ
     EphyHistoryPageVisit *visit = (EphyHistoryPageVisit *) current->data;
     if (NULL == ephy_history_service_get_url_row (self, NULL, visit->url)) {
       ephy_history_page_visit_list_free (visits);
-      g_error ("Tried to process an orphaned page visit");
+      g_warning ("Tried to process an orphaned page visit");
       return FALSE;
     }
 
