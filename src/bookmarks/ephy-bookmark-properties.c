@@ -231,7 +231,11 @@ update_window_title (EphyBookmarkProperties *properties)
 	tmp = ephy_node_get_property_string (priv->bookmark,
 					     EPHY_NODE_BMK_PROP_TITLE);
 
-	title = g_strdup_printf (_("“%s” Properties"), tmp);
+	if (priv->creating)
+		title = g_strdup (_("Add Bookmark"));
+	else
+		title = g_strdup_printf (_("“%s” Properties"), tmp);
+
 	gtk_window_set_title (GTK_WINDOW (properties), title);
 	g_free (title);
 }
