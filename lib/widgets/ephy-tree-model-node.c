@@ -335,6 +335,43 @@ ephy_tree_model_node_new (EphyNode *root)
 }
 
 /**
+ * ephy_tree_model_node_add_column_full:
+ * @model: an #EphyTreeModelNode
+ * @value_type: type held by the new column
+ * @prop_id: column in @model to get the value for this column
+ * @func: data function to be used to modify the value of the new column
+ * @user_data: optional user data for @func
+ *
+ * Add a new column to @model obtaining its value from @prop_id in @model,
+ * modified by @func.
+ *
+ * Returns: the id of the new column
+ **/
+int
+ephy_tree_model_node_add_column_full (EphyTreeModelNode *model,
+				      GType value_type,
+				      int prop_id,
+				      EphyTreeModelNodeValueFunc func,
+				      gpointer user_data)
+{
+	EphyTreeModelNodeColData *col;
+	int col_id;
+
+	col = g_new0 (EphyTreeModelNodeColData, 1);
+	col->prop_id = prop_id;
+	col->type = value_type;
+	col->func = func;
+	col->user_data = user_data;
+
+	g_ptr_array_add (model->priv->columns, col);
+	col_id = model->priv->columns_num;
+	model->priv->columns_num++;
+
+	return col_id;
+}
+
+
+/**
  * ephy_tree_model_node_add_prop_column:
  * @model: an #EphyTreeModelNode
  * @value_type: type held by the new column
@@ -349,20 +386,7 @@ ephy_tree_model_node_add_prop_column (EphyTreeModelNode *model,
 				      GType value_type,
 				      int prop_id)
 {
-	EphyTreeModelNodeColData *col;
-	int col_id;
-
-	col = g_new0 (EphyTreeModelNodeColData, 1);
-	col->prop_id = prop_id;
-	col->type = value_type;
-	col->func = NULL;
-	col->user_data = NULL;
-
-	g_ptr_array_add (model->priv->columns, col);
-	col_id = model->priv->columns_num;
-	model->priv->columns_num++;
-
-	return col_id;
+	return ephy_tree_model_node_add_column_full (model, value_type, prop_id, NULL, NULL);
 }
 
 /**
@@ -382,20 +406,7 @@ ephy_tree_model_node_add_func_column (EphyTreeModelNode *model,
 				      EphyTreeModelNodeValueFunc func,
 				      gpointer user_data)
 {
-	EphyTreeModelNodeColData *col;
-	int col_id;
-
-	col = g_new0 (EphyTreeModelNodeColData, 1);
-	col->prop_id = -1;
-	col->type = value_type;
-	col->func = func;
-	col->user_data = user_data;
-
-	g_ptr_array_add (model->priv->columns, col);
-	col_id = model->priv->columns_num;
-	model->priv->columns_num++;
-
-	return col_id;
+	return ephy_tree_model_node_add_column_full (model, value_type, -1, func, user_data);
 }
 
 static int
@@ -453,7 +464,8 @@ ephy_tree_model_node_get_value (GtkTreeModel *tree_model,
 			}
 		}
 	}
-	else
+
+	if (col->func)
 	{
 		col->func (node, value, col->user_data);
 	}

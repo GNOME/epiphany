@@ -56,6 +56,12 @@ GType              ephy_tree_model_node_get_type         (void);
 
 EphyTreeModelNode *ephy_tree_model_node_new              (EphyNode *root);
 
+int		   ephy_tree_model_node_add_column_full  (EphyTreeModelNode* model,
+							  GType value_type,
+							  int prop_id,
+							  EphyTreeModelNodeValueFunc func,
+							  gpointer user_data);
+
 int                ephy_tree_model_node_add_prop_column  (EphyTreeModelNode *model,
 						          GType value_type,
 						          int prop_id);
