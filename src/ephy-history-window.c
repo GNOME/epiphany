@@ -52,6 +52,7 @@ struct _EphyHistoryWindowPrivate
 	GtkTreeViewColumn *name_column;
 	GtkTreeViewColumn *location_column;
 	GtkWidget *date_renderer;
+	GtkWidget *location_renderer;
 	GtkWidget *remove_button;
 	GtkWidget *open_button;
 	GtkWidget *clear_button;
@@ -720,6 +721,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, name_column);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_column);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_renderer);
+	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, open_menuitem);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, copy_location_menuitem);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, bookmark_menuitem);
@@ -742,7 +744,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 }
 
 static void
-convert_cell_data_func (GtkTreeViewColumn *column,
+convert_date_data_func (GtkTreeViewColumn *column,
 			GtkCellRenderer *renderer,
 			GtkTreeModel *model,
 			GtkTreeIter *iter,
@@ -762,6 +764,27 @@ convert_cell_data_func (GtkTreeViewColumn *column,
 	friendly = ephy_time_helpers_utf_friendly_time (time);
 	g_object_set (renderer, "text", friendly, NULL);
 	g_free (friendly);
+}
+
+static void
+convert_location_data_func (GtkTreeViewColumn *column,
+			    GtkCellRenderer *renderer,
+			    GtkTreeModel *model,
+			    GtkTreeIter *iter,
+			    gpointer user_data)
+{
+	int col_id = GPOINTER_TO_INT (user_data);
+	const char *url;
+	char *unescaped_url;
+
+	gtk_tree_model_get (model, iter,
+			    col_id,
+			    &url,
+			    -1);
+	unescaped_url = g_uri_unescape_string (url, NULL);
+
+	g_object_set (renderer, "text", unescaped_url, NULL);
+	g_free (unescaped_url);
 }
 
 static void
@@ -838,8 +861,14 @@ ephy_history_window_init (EphyHistoryWindow *self)
 
 	gtk_tree_view_column_set_cell_data_func (GTK_TREE_VIEW_COLUMN (self->priv->date_column),
 						 GTK_CELL_RENDERER (self->priv->date_renderer),
-						 (GtkTreeCellDataFunc) convert_cell_data_func,
+						 (GtkTreeCellDataFunc) convert_date_data_func,
 						 GINT_TO_POINTER (COLUMN_DATE),
+						 NULL);
+
+	gtk_tree_view_column_set_cell_data_func (GTK_TREE_VIEW_COLUMN (self->priv->location_column),
+						 GTK_CELL_RENDERER (self->priv->location_renderer),
+						 (GtkTreeCellDataFunc) convert_location_data_func,
+						 GINT_TO_POINTER (COLUMN_LOCATION),
 						 NULL);
 
 	g_signal_connect (self, "response",
