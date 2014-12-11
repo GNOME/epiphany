@@ -1269,12 +1269,14 @@ ephy_node_view_add_data_column (EphyNodeView *view,
 }
 
 /**
- * ephy_node_view_add_column:
+ * ephy_node_view_add_column_full:
  * @view: an #EphyNodeView
  * @title: title for the column
  * @value_type: type to be held by the column
  * @prop_id: numeric id corresponding to the column in the model to be shown
  * @flags: flags for the new column
+ * @func: optional function to modify the view of properties in the column
+ * @user_data: optional data passed to @func
  * @icon_func: a function providing the icon for the column
  * @ret: location to store the created column
  *
@@ -1283,22 +1285,23 @@ ephy_node_view_add_data_column (EphyNodeView *view,
  * Returns: the id of the new column
  **/
 int
-ephy_node_view_add_column (EphyNodeView *view,
-			   const char  *title,
-			   GType value_type,
-			   guint prop_id,
-			   EphyNodeViewFlags flags,
-			   EphyTreeModelNodeValueFunc icon_func,
-			   GtkTreeViewColumn **ret)
-
+ephy_node_view_add_column_full (EphyNodeView *view,
+				const char  *title,
+				GType value_type,
+				guint prop_id,
+				EphyNodeViewFlags flags,
+				EphyTreeModelNodeValueFunc func,
+				gpointer user_data,
+				EphyTreeModelNodeValueFunc icon_func,
+				GtkTreeViewColumn **ret)
 {
 	GtkTreeViewColumn *gcolumn;
 	GtkCellRenderer *renderer;
 	int column;
 	int icon_column;
 
-	column = ephy_tree_model_node_add_prop_column
-		(view->priv->nodemodel, value_type, prop_id);
+	column = ephy_tree_model_node_add_column_full
+		(view->priv->nodemodel, value_type, prop_id, func, user_data);
 
 	gcolumn = (GtkTreeViewColumn *) gtk_tree_view_column_new ();
 
@@ -1379,6 +1382,33 @@ ephy_node_view_add_column (EphyNodeView *view,
 		*ret = gcolumn;
 
 	return column;
+}
+
+/**
+ * ephy_node_view_add_column:
+ * @view: an #EphyNodeView
+ * @title: title for the column
+ * @value_type: type to be held by the column
+ * @prop_id: numeric id corresponding to the column in the model to be shown
+ * @flags: flags for the new column
+ * @icon_func: a function providing the icon for the column
+ * @ret: location to store the created column
+ *
+ * Adds a new column, corresponding to a @prop_id of the model, to the @view.
+ *
+ * Returns: the id of the new column
+ **/
+int
+ephy_node_view_add_column (EphyNodeView *view,
+			   const char  *title,
+			   GType value_type,
+			   guint prop_id,
+			   EphyNodeViewFlags flags,
+			   EphyTreeModelNodeValueFunc icon_func,
+			   GtkTreeViewColumn **ret)
+{
+	return ephy_node_view_add_column_full (view, title, value_type, prop_id,
+					       flags, NULL, NULL, icon_func, ret);
 }
 
 /**

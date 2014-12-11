@@ -82,6 +82,16 @@ void	   ephy_node_view_add_toggle	      (EphyNodeView *view,
 					       EphyTreeModelNodeValueFunc value_func,
 					       gpointer data);
 
+int	   ephy_node_view_add_column_full     (EphyNodeView *view,
+					       const char *title,
+					       GType value_type,
+					       guint prop_id,
+					       EphyNodeViewFlags flags,
+					       EphyTreeModelNodeValueFunc func,
+					       gpointer user_data,
+					       EphyTreeModelNodeValueFunc icon_func,
+					       GtkTreeViewColumn **ret);
+
 int	   ephy_node_view_add_column	      (EphyNodeView *view,
 					       const char  *title,
 					       GType value_type,
