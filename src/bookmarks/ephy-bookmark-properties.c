@@ -306,6 +306,7 @@ ephy_bookmark_properties_constructor (GType type,
 	GtkDialog *dialog;
 	gboolean lockdown;
 	const char *tmp;
+	char *unescaped_url;
 
 	object = G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->constructor (type,
                                                                                       n_construct_properties,
@@ -371,7 +372,8 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
 	tmp = ephy_node_get_property_string (properties->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_LOCATION);
-	gtk_entry_set_text (GTK_ENTRY (entry), tmp);
+	unescaped_url = g_uri_unescape_string (tmp, NULL);
+	gtk_entry_set_text (GTK_ENTRY (entry), unescaped_url);
 	g_signal_connect (entry, "changed",
 			  G_CALLBACK (location_entry_changed_cb), properties);
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
@@ -383,6 +385,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 	gtk_grid_attach (GTK_GRID (grid), entry, 1, 1, 1, 1);
 	gtk_widget_set_hexpand (entry, TRUE);
+	g_free (unescaped_url);
 
 	entry = ephy_topics_entry_new (priv->bookmarks, priv->bookmark);
 	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
