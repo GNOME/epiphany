@@ -1085,17 +1085,20 @@ textcell_data_func (GtkCellLayout *cell_layout,
 	{
 		GdkRGBA color;
 		char *color_text;
+		char *unescaped_url;
 
 		sanitize_location (&url);
+		unescaped_url = g_uri_unescape_string (url, NULL);
 
 		style = gtk_widget_get_style_context (entry);
 		gtk_style_context_get_color (style, GTK_STATE_FLAG_INSENSITIVE,
 					     &color);
 
 		color_text = rgba_to_hex (&color);
-		ctext = g_markup_printf_escaped ("%s\n<span font-size=\"small\" color=\"%s\">%s</span>", title, color_text, url);
+		ctext = g_markup_printf_escaped ("%s\n<span font-size=\"small\" color=\"%s\">%s</span>", title, color_text, unescaped_url);
 		g_free (color_text);
 	        g_free (title);
+		g_free (unescaped_url);
 	}
 	else
 	{
