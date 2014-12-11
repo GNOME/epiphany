@@ -3466,6 +3466,8 @@ ephy_window_constructor (GType type,
 	mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 	if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
+		g_object_set(priv->location_controller, "editable", FALSE, NULL);
+
 		/* We don't need to show the page menu in web application mode. */
 		action = gtk_action_group_get_action (toolbar_action_group, "PageMenu");
 		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
@@ -3487,7 +3489,7 @@ ephy_window_constructor (GType type,
 			ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
 			gtk_action_set_visible (action, FALSE);
 		}
-		chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR);
+		chrome &= ~(EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR);
 	}
 
 	/* We never want the menubar shown, we merge the app menu into

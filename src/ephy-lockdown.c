@@ -238,9 +238,10 @@ window_added_cb (GtkApplication *application,
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              action_group, special_toolbar_actions,
                              G_N_ELEMENTS (special_toolbar_actions));
-  
-  location_controller = ephy_window_get_location_controller (EPHY_WINDOW (window));
-  bind_location_controller (EPHY_SETTINGS_LOCKDOWN, location_controller);
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    location_controller = ephy_window_get_location_controller (EPHY_WINDOW (window));
+    bind_location_controller (EPHY_SETTINGS_LOCKDOWN, location_controller);
+  }
 }
 
 G_DEFINE_TYPE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT)
