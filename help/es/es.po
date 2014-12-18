@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany-help 3.10\n"
-"POT-Creation-Date: 2014-09-20 15:36+0000\n"
-"PO-Revision-Date: 2014-09-20 19:16+0200\n"
+"POT-Creation-Date: 2014-12-18 04:38+0000\n"
+"PO-Revision-Date: 2014-12-18 12:26+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -92,11 +92,12 @@ msgstr ""
 #: C/introduction.page:11 C/bookmark.page:15 C/bookmark-add.page:17
 #: C/bookmark-delete.page:17 C/bookmark-edit.page:17 C/bookmark-smart.page:12
 #: C/bookmark-topic.page:12 C/browse-local.page:11 C/browse-private.page:12
-#: C/browse-web.page:13 C/cookies.xml:12 C/data-cookies.page:11
-#: C/data-passwords.page:19 C/history.page:12 C/history-delete.page:11
-#: C/keyboard-shortcut.page:16 C/pref-cookies.page:13 C/pref-css.page:17
-#: C/pref-downloads.page:13 C/pref-do-not-track.page:17 C/pref-font.page:18
-#: C/pref-passwords.page:13 C/prob-restore-closed-page.page:16
+#: C/browse-tab.page:13 C/browse-web.page:14 C/cookies.xml:12
+#: C/data-cookies.page:11 C/data-passwords.page:19 C/history.page:12
+#: C/history-delete.page:11 C/keyboard-shortcut.page:16 C/pref-cookies.page:13
+#: C/pref-css.page:17 C/pref-downloads.page:13 C/pref-do-not-track.page:17
+#: C/pref-font.page:18 C/pref-passwords.page:13
+#: C/prob-restore-closed-page.page:16 C/proxy.page:12
 msgid "Ekaterina Gerasimova"
 msgstr "Ekaterina Gerasimova"
 
@@ -105,11 +106,11 @@ msgstr "Ekaterina Gerasimova"
 #: C/bookmark-add.page:14 C/bookmark-add.page:19 C/bookmark-delete.page:14
 #: C/bookmark-delete.page:19 C/bookmark-edit.page:14 C/bookmark-edit.page:19
 #: C/bookmark-smart.page:14 C/bookmark-topic.page:14 C/browse-local.page:13
-#: C/browse-private.page:14 C/browse-web.page:15 C/cookies.xml:14
-#: C/data-cookies.page:13 C/data-passwords.page:16 C/data-passwords.page:21
-#: C/history.page:14 C/history-delete.page:13 C/pref-cookies.page:15
-#: C/pref-css.page:14 C/pref-css.page:19 C/pref-downloads.page:15
-#: C/pref-font.page:15 C/pref-font.page:20 C/pref-passwords.page:15
+#: C/browse-private.page:14 C/cookies.xml:14 C/data-cookies.page:13
+#: C/data-passwords.page:16 C/data-passwords.page:21 C/history.page:14
+#: C/history-delete.page:13 C/pref-cookies.page:15 C/pref-css.page:14
+#: C/pref-css.page:19 C/pref-downloads.page:15 C/pref-font.page:15
+#: C/pref-font.page:20 C/pref-passwords.page:15
 msgid "2013"
 msgstr "2013"
 
@@ -645,18 +646,55 @@ msgstr ""
 "ventana de la izquierda y una sesión de navegación privada en la ventana de "
 "la derecha."
 
+#. (itstool) path: credit/years
+#: C/browse-tab.page:15 C/data-cookies.page:18 C/data-passwords.page:26
+#: C/keyboard-shortcut.page:13 C/keyboard-shortcut.page:18
+#: C/pref-do-not-track.page:14 C/pref-do-not-track.page:19
+#: C/prob-restore-closed-page.page:13 C/prob-restore-closed-page.page:18
+#: C/proxy.page:14
+msgid "2014"
+msgstr "2014"
+
 #. (itstool) path: info/desc
-#: C/browse-web.page:25
+#: C/browse-tab.page:25
+#| msgid "Open the webpage which you want to save."
+msgid "Open another web page in a new tab in the same window."
+msgstr "Abrir otra página web en una pestaña nueva, en la misma ventana."
+
+#. (itstool) path: page/title
+#: C/browse-tab.page:28
+#| msgid "Open a new window"
+msgid "Open a new tab"
+msgstr "Abrir una pestaña nueva"
+
+#. (itstool) path: page/p
+#: C/browse-tab.page:35 C/browse-web.page:52
+msgid ""
+"You can also use the <keyseq><key>Ctrl</key><key>T</key></keyseq> keyboard "
+"shortcut to open a new tab or the new tab button in the top-left of the "
+"window."
+msgstr ""
+"También puede usar el atajo del teclado <keyseq><key>Ctrl</key><key>T</key></"
+"keyseq> para abrir una pestaña nueva o el botón de pestaña nueva en la parte "
+"superior izquierda de la ventana."
+
+#. (itstool) path: credit/years
+#: C/browse-web.page:16
+msgid "2013, 2014"
+msgstr "2013, 2014"
+
+#. (itstool) path: info/desc
+#: C/browse-web.page:26
 msgid "View web pages on the internet."
 msgstr "Ver páginas web en Internet."
 
 #. (itstool) path: page/title
-#: C/browse-web.page:28
+#: C/browse-web.page:29
 msgid "Browse the web"
 msgstr "Navegar por la Web"
 
 #. (itstool) path: page/p
-#: C/browse-web.page:30
+#: C/browse-web.page:31
 msgid ""
 "Web browsers can be used to view pages on the Internet when you have an "
 "Internet connection. To start browsing the web:"
@@ -665,7 +703,7 @@ msgstr ""
 "conexión a Internet. Para comenzar a navegar por la web:"
 
 #. (itstool) path: item/p
-#: C/browse-web.page:35
+#: C/browse-web.page:36
 msgid ""
 "When you start up <app xref=\"introduction\">Web</app>, your cursor should "
 "be in the text entry field at the top of the window. Type in the URL of the "
@@ -676,37 +714,47 @@ msgstr ""
 "el URL de la página web que quiera visitar o un término de búsqueda."
 
 #. (itstool) path: item/p
-#: C/browse-web.page:40
+#: C/browse-web.page:41
 msgid "Press return to go to the web page or to search."
 msgstr "Pulse Intro para ir a la página web o para buscar."
 
 #. (itstool) path: page/p
-#: C/browse-web.page:44
+#: C/browse-web.page:45
+#| msgid ""
+#| "When you first start up <app>Web</app>, you will not be shown any tabs. "
+#| "<em>Tabs</em> are used to view more than one web page in one window. To "
+#| "<em>open a new tab</em>, select the menu at the top-right of the screen, "
+#| "then <guiseq><gui style=\"menuitem\">New Tab</gui></guiseq>. Once the new "
+#| "tab is open, you can use it as you would normally use a new window."
 msgid ""
-"When you first start up <app>Web</app>, you will not be shown any tabs. "
-"<em>Tabs</em> are used to view more than one web page in one window. To "
-"<em>open a new tab</em>, select the menu at the top-right of the screen, "
-"then <guiseq><gui style=\"menuitem\">New Tab</gui></guiseq>. Once the new "
-"tab is open, you can use it as you would normally use a new window."
+"<em>Tabs</em> are used to view more than one web page in one window. When "
+"you first start up <app>Web</app>, you will not be shown any tabs. To "
+"<em>open a new tab</em>, press the menu button at the top-right of the "
+"screen, then <guiseq><gui style=\"menuitem\">New Tab</gui></guiseq>. Once "
+"the new tab is open, you can use it as you would normally use a new window."
 msgstr ""
-"Cuando se inicia <app>Web</app> por primera vez, no se mostrará ninguna "
-"pestaña. Las <em>Pestañas</em> se usan para ver más de una página web en una "
-"misma ventana. Para <em>abrir una nueva pestaña</em>,seleccione el menú de "
-"la parte superior derecha de la pantalla, y pulse en <guiseq><gui style="
+"Las <em>Pestañas</em> se usan para ver más de una página web en una misma "
+"ventana. Cuando se inicia <app>Web</app> por primera vez, no se mostrará "
+"ninguna pestaña. Para <em>abrir una nueva pestaña</em>, seleccione el menú "
+"de la parte superior derecha de la pantalla, y pulse en <guiseq><gui style="
 "\"menuitem\">Nueva pestaña</gui></guiseq>. Una vez se abra la nueva pestaña, "
 "puede usarla del mismo modo que usa una nueva ventana."
 
 #. (itstool) path: page/p
-#: C/browse-web.page:51
+#: C/browse-web.page:56
+#| msgid ""
+#| "You can also <em>open a link in a new tab</em>. Right click on the link, "
+#| "then select <gui style=\"menuitem\">Open Link in New Tab</gui> or use the "
+#| "middle mouse button to click on the link."
 msgid ""
-"You can also <em>open a link in a new tab</em>. Right click on the link, "
-"then select <gui style=\"menuitem\">Open Link in New Tab</gui> or use the "
-"middle mouse button to click on the link."
+"To <em>open a link in a new tab</em>, right click on the link, then select "
+"<gui style=\"menuitem\">Open Link in New Tab</gui> or use the middle mouse "
+"button to click on the link."
 msgstr ""
-"También puede <em>abrir un enlace en una nueva pestaña</em>. Pulse con el "
-"botón derecho en el enlace, y entonces seleccione <gui style=\"menuitem"
-"\">Abrir Enlace en una Nueva Pestaña</gui> o use el botón del medio del "
-"ratón para pulsar en el enlace."
+"Para <em>abrir un enlace en una nueva pestaña</em> pulse con el botón "
+"derecho en el enlace, y entonces seleccione <gui style=\"menuitem\">Abrir "
+"Enlace en una Nueva Pestaña</gui> o use el botón del medio del ratón para "
+"pulsar en el enlace."
 
 #. (itstool) path: info/desc
 #: C/browse-webapps.page:24
@@ -790,14 +838,6 @@ msgstr ""
 #: C/prob-restore-closed-page.page:11
 msgid "Baptiste Mille-Mathias"
 msgstr "Baptiste Mille-Mathias"
-
-#. (itstool) path: credit/years
-#: C/data-cookies.page:18 C/data-passwords.page:26 C/keyboard-shortcut.page:13
-#: C/keyboard-shortcut.page:18 C/pref-do-not-track.page:14
-#: C/pref-do-not-track.page:19 C/prob-restore-closed-page.page:13
-#: C/prob-restore-closed-page.page:18
-msgid "2014"
-msgstr "2014"
 
 #. (itstool) path: info/desc
 #: C/data-cookies.page:23
@@ -1119,7 +1159,6 @@ msgstr "Atajo"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:45
-#| msgid "New window"
 msgid "Open a new window"
 msgstr "Abrir una ventana nueva"
 
@@ -1130,7 +1169,6 @@ msgstr "<keyseq><key>Ctrl</key><key>N</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:53
-#| msgid "End the private browsing session by closing the incognito window."
 msgid "Open a new private browsing (incognito) window"
 msgstr "Abrir una ventana nueva de navegación privada (incógnito)."
 
@@ -1161,7 +1199,6 @@ msgstr "<keyseq><key>Mayús</key><key>Ctrl</key><key>S</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:77
-#| msgid "Save as web application"
 msgid "Save the current page as a web application"
 msgstr "Guardar la página actual como una aplicación web"
 
@@ -1182,7 +1219,6 @@ msgstr "<keyseq><key>Ctrl</key><key>P</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:93
-#| msgid "Close tab"
 msgid "Close the current tab"
 msgstr "Cerrar la pestaña actual"
 
@@ -1193,7 +1229,6 @@ msgstr "<keyseq><key>Ctrl</key><key>W</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:101
-#| msgid "<app>Web</app> preferences"
 msgid "Quit <app>Web</app>"
 msgstr "Salir de <app>Web</app>"
 
@@ -1304,7 +1339,6 @@ msgstr "<keyseq><key>Ctrl</key><key>B</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:189
-#| msgid "Clear browsing history"
 msgid "View your browsing history"
 msgstr "Ver el histórico de navegación"
 
@@ -1386,7 +1420,6 @@ msgstr "<keyseq><key>Ctrl</key><key>0</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:253
-#| msgid "Page source"
 msgid "View the page source"
 msgstr "Ver el código fuente de la página"
 
@@ -1397,7 +1430,6 @@ msgstr "<keyseq><key>Ctrl</key><key>U</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:261
-#| msgid "Bookmark a page"
 msgid "Bookmark current page"
 msgstr "Añadir la página actual a marcadores"
 
@@ -1418,7 +1450,6 @@ msgstr "<keyseq><key>Ctrl</key><key>L</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:277
-#| msgid "Previous tab"
 msgid "View previous tab"
 msgstr "Ver la pestaña anterior"
 
@@ -1429,7 +1460,6 @@ msgstr "<keyseq><key>Ctrl</key><key>Re Pág</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:285
-#| msgid "Next tab"
 msgid "View next tab"
 msgstr "Ver la siguiente pestaña"
 
@@ -1460,7 +1490,6 @@ msgstr "<keyseq><key>Mayús</key><key>Ctrl</key><key>Av Pág</key> </keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:311
-#| msgid "<app>Web</app> preferences"
 msgid "View <app>Web</app> in fullscreen"
 msgstr "Ver <app>Web</app> en pantalla completa"
 
@@ -1481,7 +1510,6 @@ msgstr "<keyseq><key>F7</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:327
-#| msgid "New window"
 msgid "Open window menu"
 msgstr "Abrir el menú de la ventana"
 
@@ -1497,7 +1525,6 @@ msgstr "Abrir la página de inicio"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:338
-#| msgid "<keyseq><key>Alt</key><key>Left</key></keyseq>"
 msgid "<keyseq><key>Alt</key><key>Home</key></keyseq>"
 msgstr "<keyseq><key>Alt</key><key>Inicio</key></keyseq>"
 
@@ -1948,6 +1975,27 @@ msgid ""
 msgstr ""
 "No es posible restaurar una pestaña cerrada en el modo de <link xref="
 "\"browse-private\">navegación privada</link>."
+
+#. (itstool) path: info/desc
+#: C/proxy.page:19
+msgid "Anonymize your web browsing by using a web proxy."
+msgstr "Navegar de manera anónima usando un proxy web."
+
+#. (itstool) path: page/title
+#: C/proxy.page:22
+msgid "Use a proxy"
+msgstr "Usar un proxy"
+
+#. (itstool) path: page/p
+#: C/proxy.page:24
+msgid ""
+"You can use a proxy server for browsing the web. To use a web proxy when "
+"browsing, you need to <link href=\"help:gnome-help#net-proxy\">set it up in "
+"the GNOME <gui>Network</gui> settings panel</link>."
+msgstr ""
+"Puede usar un servidor proxy para navegar por la web. Para usar un proxy web "
+"al navegar, debe <link href=\"help:gnome-help#net-proxy\">configurarlo en en "
+"el panel de configuración de <gui>Red</gui> de GNOME</link>."
 
 #~ msgid ""
 #~ "Multiple keyboard shortcuts can be used to complete tasks when browsing "
