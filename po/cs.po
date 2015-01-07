@@ -10,15 +10,15 @@
 # Petr Kovar <pknbe@volny.cz>, 2008, 2010.
 # Lucas Lommer <llommer@svn.gnome.org>, 2008, 2009, 2010, 2011, 2012.
 # Adam Matoušek <adamatousek@gmail.com>, 2012, 2013.
-# Marek Černocký <marek@manet.cz>, 2013, 2014.
+# Marek Černocký <marek@manet.cz>, 2013, 2014, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-11-26 04:37+0000\n"
-"PO-Revision-Date: 2014-11-26 11:39+0100\n"
+"POT-Creation-Date: 2015-01-07 04:37+0000\n"
+"PO-Revision-Date: 2015-01-07 09:00+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -390,12 +390,11 @@ msgstr "Přijímání cookies"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid ""
-"Where to accept cookies from. Possible values are \"anywhere\", \"current "
-"site\" and \"nowhere\"."
+"Where to accept cookies from. Possible values are \"always\", \"no-third-"
+"party\" and \"never\"."
 msgstr ""
-"Odkud mohou být cookies přijímány. Možné hodnoty jsou "
-"„anywhere“ (odkudkoli), „current site“ (pouze z aktuálního serveru) a "
-"„nowhere“ (nepřijímat cookies)."
+"Odkud mohou být cookies přijímány. Možné hodnoty jsou „always“ (vždy), "
+"„no-third-party“ (ne od třetích stran) a „never“ (nikdy)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Image animation mode"
@@ -966,38 +965,45 @@ msgstr "Uložit"
 msgid "Do you want to save your password for “%s”?"
 msgstr "Chcete uložit své heslo pro „%s“?"
 
-#: ../embed/ephy-web-view.c:1415
+#: ../embed/ephy-web-view.c:1416
 msgid "Deny"
 msgstr "Zakázat"
 
-#: ../embed/ephy-web-view.c:1416
+#: ../embed/ephy-web-view.c:1417
 msgid "Allow"
 msgstr "Povolit"
 
-#: ../embed/ephy-web-view.c:1426
+#. Translators: Geolocation policy for a specific site.
+#: ../embed/ephy-web-view.c:1429
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Stránka <b>%s</b> chce zjistit vaši polohu."
 
+#. Translators: Notification policy for a specific site.
+#: ../embed/ephy-web-view.c:1433
+#, c-format
+msgid "The page at <b>%s</b> wants to show desktop notifications."
+msgstr "Stránka <b>%s</b> chce zobrazit upozornění přímo v pracovním prostředí."
+
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1510
+#: ../embed/ephy-web-view.c:1519
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Načítá se „%s“…"
 
-#: ../embed/ephy-web-view.c:1512
+#: ../embed/ephy-web-view.c:1521
 msgid "Loading…"
 msgstr "Načítá se…"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1734
+#: ../embed/ephy-web-view.c:1743
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Tato webová stránka se prokázala identifikací, která náleží jinému webu."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1739
+#: ../embed/ephy-web-view.c:1748
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1006,13 +1012,13 @@ msgstr ""
 "důvěřovat. Zkontrolujte datum v kalendáři svého počítače."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1744
+#: ../embed/ephy-web-view.c:1753
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Identifikace této webové stránky nebyla vytvořena důvěryhodnou organizací."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1758
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1020,7 +1026,7 @@ msgstr ""
 "poškozena."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1754
+#: ../embed/ephy-web-view.c:1763
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1029,7 +1035,7 @@ msgstr ""
 "která ji vydala."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1759
+#: ../embed/ephy-web-view.c:1768
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1038,7 +1044,7 @@ msgstr ""
 "slabé šifrování."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1764
+#: ../embed/ephy-web-view.c:1773
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1047,13 +1053,13 @@ msgstr ""
 "datum v kalendáři svého počítače."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1800
+#: ../embed/ephy-web-view.c:1809
 #, c-format
 msgid "This might not be the real %s."
 msgstr "Tohle nemusí být skutečné %s."
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1805
+#: ../embed/ephy-web-view.c:1814
 msgid ""
 "When you try to connect securely, websites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
@@ -1064,7 +1070,7 @@ msgstr ""
 "identifikací této webové stránky je něco špatně:"
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1811
+#: ../embed/ephy-web-view.c:1820
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this website does not use trusted "
@@ -1075,28 +1081,28 @@ msgstr ""
 "identifikaci."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1815
+#: ../embed/ephy-web-view.c:1824
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
 msgstr ""
 "Legitimní banky, obchody a další veřejné stránky vás o tohle žádat nebudou."
 
-#: ../embed/ephy-web-view.c:1856
+#: ../embed/ephy-web-view.c:1865
 msgid "None specified"
 msgstr "Není specifikováno"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1869 ../embed/ephy-web-view.c:1884
-#: ../embed/ephy-web-view.c:1904
+#: ../embed/ephy-web-view.c:1878 ../embed/ephy-web-view.c:1893
+#: ../embed/ephy-web-view.c:1913
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Problém s načtením „%s“"
 
-#: ../embed/ephy-web-view.c:1871
+#: ../embed/ephy-web-view.c:1880
 msgid "Oops! Unable to display this website."
 msgstr "Problém! Tuto stránku není možné zobrazit."
 
-#: ../embed/ephy-web-view.c:1872
+#: ../embed/ephy-web-view.c:1881
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1109,15 +1115,15 @@ msgstr ""
 "adresu. Nezapomeňte se ujistit, jestli správně funguje vaše připojení k "
 "Internetu.</p>"
 
-#: ../embed/ephy-web-view.c:1880
+#: ../embed/ephy-web-view.c:1889
 msgid "Try again"
 msgstr "Zkusit znovu"
 
-#: ../embed/ephy-web-view.c:1886
+#: ../embed/ephy-web-view.c:1895
 msgid "Oops! There may be a problem."
 msgstr "Vyskytl se problém!"
 
-#: ../embed/ephy-web-view.c:1887
+#: ../embed/ephy-web-view.c:1896
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1128,20 +1134,20 @@ msgstr ""
 "p><p>Pokud se to bude opakovat, nahlaste prosím problém vývojářům projektu "
 "<strong>%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1892 ../embed/ephy-web-view.c:1899
+#: ../embed/ephy-web-view.c:1901 ../embed/ephy-web-view.c:1908
 msgid "Reload Anyway"
 msgstr "Přesto načíst znovu"
 
-#: ../embed/ephy-web-view.c:1896
+#: ../embed/ephy-web-view.c:1905
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Problém se zobrazením „%s“"
 
-#: ../embed/ephy-web-view.c:1897
+#: ../embed/ephy-web-view.c:1906
 msgid "Oops!"
 msgstr "Problém!"
 
-#: ../embed/ephy-web-view.c:1898
+#: ../embed/ephy-web-view.c:1907
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1150,16 +1156,16 @@ msgstr ""
 "prosím načtěte znovu nebo navštivte jinou stránku."
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1906
+#: ../embed/ephy-web-view.c:1915
 msgid "Look out!"
 msgstr "Pozor!"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1909
+#: ../embed/ephy-web-view.c:1918
 msgid "Load Anyway"
 msgstr "Přesto načíst"
 
-#: ../embed/ephy-web-view.c:2809
+#: ../embed/ephy-web-view.c:2818
 msgid "_OK"
 msgstr "_Budiž"
 
@@ -1196,26 +1202,26 @@ msgid "All files"
 msgstr "Všechny soubory"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:112 ../src/resources/prefs-dialog.ui.h:2
+#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:2
 msgid "Downloads"
 msgstr "Stahování"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:165
+#: ../lib/ephy-file-helpers.c:167
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
-#: ../lib/ephy-file-helpers.c:333
+#: ../lib/ephy-file-helpers.c:335
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Nelze vytvořit dočasnou složku v „%s“."
 
-#: ../lib/ephy-file-helpers.c:469
+#: ../lib/ephy-file-helpers.c:466
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Soubor „%s“ existuje. Přesuňte jej prosím jinam."
 
-#: ../lib/ephy-file-helpers.c:490
+#: ../lib/ephy-file-helpers.c:487
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Nelze vytvořit složku „%s“."
@@ -2034,6 +2040,22 @@ msgstr "Odstranit"
 msgid "Delete the selected cookies"
 msgstr "Odstranit vybrané cookies"
 
+#: ../src/resources/encoding-dialog.ui.h:1
+msgid "Text Encoding"
+msgstr "Kódování textu"
+
+#: ../src/resources/encoding-dialog.ui.h:2 ../src/ephy-encoding-menu.c:327
+msgid "_Automatic"
+msgstr "_Automatické"
+
+#: ../src/resources/encoding-dialog.ui.h:3 ../src/ephy-encoding-menu.c:328
+msgid "Use the encoding specified by the document"
+msgstr "Používat kódování určené dokumentem"
+
+#: ../src/resources/encoding-dialog.ui.h:4
+msgid "_Use a different encoding:"
+msgstr "Po_užívat jiné kódování:"
+
 #. File actions.
 #: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:98
 msgid "_New Window"
@@ -2063,22 +2085,6 @@ msgstr "Př_edvolby"
 #: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:114
 msgid "_Quit"
 msgstr "U_končit"
-
-#: ../src/resources/epiphany.ui.h:1
-msgid "Text Encoding"
-msgstr "Kódování textu"
-
-#: ../src/resources/epiphany.ui.h:2 ../src/ephy-encoding-menu.c:327
-msgid "_Automatic"
-msgstr "_Automatické"
-
-#: ../src/resources/epiphany.ui.h:3 ../src/ephy-encoding-menu.c:328
-msgid "Use the encoding specified by the document"
-msgstr "Používat kódování určené dokumentem"
-
-#: ../src/resources/epiphany.ui.h:4
-msgid "_Use a different encoding:"
-msgstr "Po_užívat jiné kódování:"
 
 #: ../src/resources/history-dialog.ui.h:1
 msgid "History"
@@ -2306,7 +2312,7 @@ msgstr "Kontrola pravopisu"
 msgid "_Enable spell checking"
 msgstr "_Povolit kontrolu pravopisu"
 
-#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:840
+#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:842
 msgid "Language"
 msgstr "Jazyk"
 
@@ -2715,7 +2721,7 @@ msgstr "Uložit multimédia jako"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:553 ../src/prefs-dialog.c:559
+#: ../src/prefs-dialog.c:555 ../src/prefs-dialog.c:561
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2724,13 +2730,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:568
+#: ../src/prefs-dialog.c:570
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definováno uživatelem (%s)"
 
-#: ../src/prefs-dialog.c:590
+#: ../src/prefs-dialog.c:592
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2738,12 +2744,12 @@ msgstr[0] "Jazyk systému (%s)"
 msgstr[1] "Jazyky systému (%s)"
 msgstr[2] "Jazyků systému (%s)"
 
-#: ../src/prefs-dialog.c:923
+#: ../src/prefs-dialog.c:925
 msgid "Select a Directory"
 msgstr "Vyberte složku"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1018
+#: ../src/prefs-dialog.c:1020
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2751,29 +2757,29 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1023
+#: ../src/prefs-dialog.c:1026
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany&kl=cz-cs&kad=cs_CZ"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1025
+#: ../src/prefs-dialog.c:1028
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1027
+#: ../src/prefs-dialog.c:1031
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.cz/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1029
+#: ../src/prefs-dialog.c:1033
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1031
+#: ../src/prefs-dialog.c:1036
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?cc=cz&q=%s"
