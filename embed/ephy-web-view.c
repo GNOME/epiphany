@@ -490,8 +490,8 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
   LOG ("Going to show infobar about %s", webkit_web_view_get_uri (WEBKIT_WEB_VIEW (web_view)));
 
   info_bar = gtk_info_bar_new_with_buttons (_("_Save"), GTK_RESPONSE_YES,
+                                            _("_Don’t Save"), GTK_RESPONSE_CLOSE,
                                             NULL);
-  gtk_info_bar_set_show_close_button (GTK_INFO_BAR (info_bar), TRUE);
 
   action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
