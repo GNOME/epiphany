@@ -452,7 +452,6 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
   WebKitWebContext *web_context;
   gboolean value = FALSE;
   char **languages = NULL;
-  char *langs = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   value = g_settings_get_boolean (settings, key);
@@ -465,14 +464,12 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
     g_strfreev (languages);
 
     languages = normalized;
-    langs = g_strjoinv (",", languages);
   }
 
   web_context = ephy_embed_shell_get_web_context (shell);
   webkit_web_context_set_spell_checking_enabled (web_context, value);
   webkit_web_context_set_spell_checking_languages (web_context, (const char* const *)languages);
 
-  g_free (langs);
   g_strfreev (languages);
 }
 
