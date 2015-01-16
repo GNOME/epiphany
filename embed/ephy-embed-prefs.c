@@ -309,6 +309,32 @@ webkit_pref_callback_font_family (GSettings *settings,
   g_free (value);
 }
 
+static char **
+normalize_languages (char **languages)
+{
+  int i;
+  GPtrArray *langs;
+
+  langs = g_ptr_array_new ();
+
+  for (i = 0; languages && languages[i]; i++) {
+    if (g_str_equal (languages[i], "system")) {
+      char **sys_langs = ephy_langs_get_languages ();
+      int j;
+
+      for (j = 0; sys_langs && sys_langs[j]; j++)
+        g_ptr_array_add (langs, g_strdelimit (g_strdup (sys_langs[i]), "-", '_'));
+
+      g_strfreev (sys_langs);
+    } else
+      g_ptr_array_add (langs, g_strdelimit (g_strdup (languages[i]), "-", '_'));
+  }
+
+  g_ptr_array_add (langs, NULL);
+
+  return (char **)g_ptr_array_free (langs, FALSE);
+}
+
 /* Based on Christian Persch's code from gecko backend of epiphany
    (old transform_accept_languages_list() function) */
 static void
@@ -320,6 +346,7 @@ webkit_pref_callback_accept_languages (GSettings *settings,
   char **languages;
   int i;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitWebContext *web_context = ephy_embed_shell_get_web_context (shell);
 
   languages = g_settings_get_strv (settings, key);
 
@@ -336,8 +363,13 @@ webkit_pref_callback_accept_languages (GSettings *settings,
 
   ephy_langs_sanitise (array);
 
-  webkit_web_context_set_preferred_languages (ephy_embed_shell_get_web_context (shell),
-                                              (const char * const *)array->data);
+  webkit_web_context_set_preferred_languages (web_context, (const char * const *)array->data);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING)) {
+    char **normalized = normalize_languages ((char **)array->data);
+    webkit_web_context_set_spell_checking_languages (web_context, (const char * const *)normalized);
+    g_strfreev (normalized);
+  }
 
   g_strfreev (languages);
   g_array_free (array, TRUE);
@@ -416,32 +448,6 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
     webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SERIF_FONT,
                                       "serif-font-family");
   }
-}
-
-static char **
-normalize_languages (char **languages)
-{
-  int i;
-  GPtrArray *langs;
-
-  langs = g_ptr_array_new ();
-
-  for (i = 0; languages && languages[i]; i++) {
-    if (g_str_equal (languages[i], "system")) {
-      char **sys_langs = ephy_langs_get_languages ();
-      int j;
-
-      for (j = 0; sys_langs && sys_langs[j]; j++)
-        g_ptr_array_add (langs, g_strdelimit (g_strdup (sys_langs[i]), "-", '_'));
-
-      g_strfreev (sys_langs);
-    } else
-      g_ptr_array_add (langs, g_strdelimit (g_strdup (languages[i]), "-", '_'));
-  }
-
-  g_ptr_array_add (langs, NULL);
-
-  return (char **)g_ptr_array_free (langs, FALSE);
 }
 
 static void
