@@ -451,26 +451,22 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
 {
   WebKitWebContext *web_context;
   gboolean value = FALSE;
-  char **languages = NULL;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
+  web_context = ephy_embed_shell_get_web_context (shell);
   value = g_settings_get_boolean (settings, key);
 
-  if (value) {
-    char **normalized;
-
-    languages = g_settings_get_strv (settings, EPHY_PREFS_WEB_LANGUAGE);
-    normalized = normalize_languages (languages);
-    g_strfreev (languages);
-
-    languages = normalized;
-  }
-
-  web_context = ephy_embed_shell_get_web_context (shell);
   webkit_web_context_set_spell_checking_enabled (web_context, value);
-  webkit_web_context_set_spell_checking_languages (web_context, (const char* const *)languages);
 
-  g_strfreev (languages);
+  if (value) {
+    char **languages = g_settings_get_strv (settings, EPHY_PREFS_WEB_LANGUAGE);
+    char **normalized = normalize_languages (languages);
+
+    webkit_web_context_set_spell_checking_languages (web_context, (const char* const *)normalized);
+
+    g_strfreev (languages);
+    g_strfreev (normalized);
+  }
 }
 
 static const PrefData webkit_pref_entries[] =
