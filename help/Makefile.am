@@ -17,6 +17,7 @@ HELP_FILES = \
 	browse-tab.page \
 	browse-web.page \
 	browse-webapps.page \
+	browse-webapps-del.page \
 	cookies.xml \
 	data-cookies.page \
 	data-passwords.page \
