@@ -6,18 +6,18 @@
 # Mikhail Zabaluev <mhz@altlinux.ru>, 2004.
 # Leonid Kanter <leon@asplinux.ru>, 2004, 2005.
 # Yuri Kozlov <yuray@komyakino.ru>, 2010.
-# Stas Solovey <whats_up@tut.by>, 2011, 2013.
 # Yuri Myasoedov <ymyasoedov@yandex.ru>, 2012, 2013, 2014.
+# Stas Solovey <whats_up@tut.by>, 2011, 2013, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-05 13:53+0000\n"
-"PO-Revision-Date: 2014-09-05 20:44+0400\n"
-"Last-Translator: Yuri Myasoedov <ymyasoedov@yandex.ru>\n"
-"Language-Team: русский <gnome-cyr@gnome.org>\n"
+"POT-Creation-Date: 2015-01-30 04:37+0000\n"
+"PO-Revision-Date: 2015-01-30 15:57+0300\n"
+"Last-Translator: Stas Solovey <whats_up@tut.by>\n"
+"Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -54,19 +54,17 @@ msgstr "https://duckduckgo.com/?t=epiphany"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
-#: ../src/ephy-search-provider.c:287
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:244
+#: ../src/ephy-search-provider.c:289
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 
 #: ../data/epiphany.appdata.xml.in.h:1
-#| msgid "Epiphany (RDF)"
 msgid "Epiphany"
 msgstr "Epiphany"
 
 #: ../data/epiphany.appdata.xml.in.h:2
-#| msgid "Web Browser"
 msgid "Web browser for GNOME"
 msgstr "Веб-браузер для GNOME"
 
@@ -80,9 +78,9 @@ msgstr ""
 "рабочим столом, имеющий простой и интуитивно-понятный интерфейс, который "
 "позволяет вам сосредоточиться на веб-страницах."
 
-#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:290
-#: ../embed/ephy-about-handler.c:321 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1514
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:292
+#: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1519
 msgid "Web"
 msgstr "Веб-браузер"
 
@@ -164,7 +162,7 @@ msgid "Remember passwords"
 msgstr "Запоминать пароли"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:20
-msgid "Whether to store and prefill passwords in web sites."
+msgid "Whether to store and prefill passwords in websites."
 msgstr ""
 "Сохранять ли пароли и выполнять ли автоматическое заполнение полей с "
 "паролями на веб-сайтах."
@@ -393,11 +391,11 @@ msgstr "Получение cookie"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid ""
-"Where to accept cookies from. Possible values are \"anywhere\", \"current "
-"site\" and \"nowhere\"."
+"Where to accept cookies from. Possible values are \"always\", \"no-third-"
+"party\" and \"never\"."
 msgstr ""
-"Откуда получать cookie. Возможные значения: «anywhere» (ото всех), «current "
-"site» (от текущего сайта) и «nowhere» (не получать)."
+"Получение cookie. Возможные значения: «always» (всегда), «no-third-"
+"party» (не принимать со сторонних сайтов) и «never» (никогда)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Image animation mode"
@@ -527,53 +525,49 @@ msgstr "Описание"
 msgid "Suffixes"
 msgstr "Суффиксы"
 
-#: ../embed/ephy-about-handler.c:218 ../embed/ephy-about-handler.c:220
+#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:222
 msgid "Memory usage"
 msgstr "Использование памяти"
 
-#: ../embed/ephy-about-handler.c:268
+#: ../embed/ephy-about-handler.c:270
 #, c-format
 msgid "Version %s"
 msgstr "Версия %s"
 
-#: ../embed/ephy-about-handler.c:288
+#: ../embed/ephy-about-handler.c:290
 msgid "About Web"
 msgstr "О приложении"
 
-#: ../embed/ephy-about-handler.c:292
+#: ../embed/ephy-about-handler.c:294
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Простой, красивый и удобный веб-браузер"
 
-#: ../embed/ephy-about-handler.c:343 ../embed/ephy-about-handler.c:344
+#: ../embed/ephy-about-handler.c:352 ../embed/ephy-about-handler.c:353
 msgid "Applications"
 msgstr "Приложения"
 
-#: ../embed/ephy-about-handler.c:345
+#: ../embed/ephy-about-handler.c:354
 msgid "List of installed web applications"
 msgstr "Список установленных веб-приложений"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:362
+#: ../embed/ephy-about-handler.c:370
 msgid "Installed on:"
 msgstr "Установлено:"
 
-#: ../embed/ephy-about-handler.c:466
+#: ../embed/ephy-about-handler.c:474
 msgid "Remove from overview"
 msgstr "Удалить"
 
-#: ../embed/ephy-about-handler.c:481 ../embed/ephy-embed-utils.c:300
+#: ../embed/ephy-about-handler.c:489 ../embed/ephy-embed-utils.c:301
 msgid "Most Visited"
 msgstr "Наиболее посещаемый"
 
-#: ../embed/ephy-about-handler.c:541 ../embed/ephy-about-handler.c:542
+#: ../embed/ephy-about-handler.c:549 ../embed/ephy-about-handler.c:550
 msgid "Private Browsing"
 msgstr "Приватный просмотр"
 
-#: ../embed/ephy-about-handler.c:543
-#| msgid ""
-#| "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
-#| "will not show up in your browsing history and all stored information will "
-#| "be cleared when you close the window."
+#: ../embed/ephy-about-handler.c:551
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -584,7 +578,7 @@ msgstr ""
 "удалены после закрытия окна, сохранятся лишь файлы, загруженные на ваш "
 "компьютер."
 
-#: ../embed/ephy-about-handler.c:547
+#: ../embed/ephy-about-handler.c:555
 msgid ""
 "Incognito mode will not hide your activity from your employer, your Internet "
 "Service Provider, your government, or the websites that you visit."
@@ -611,7 +605,7 @@ msgstr "ESC"
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed-utils.c:64
+#: ../embed/ephy-embed-utils.c:65
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Отправить электронное письмо по адресу «%s»"
@@ -972,108 +966,113 @@ msgstr "Сохранить"
 msgid "Do you want to save your password for “%s”?"
 msgstr "Хотите сохранить пароль для «%s»?"
 
-#: ../embed/ephy-web-view.c:1415
+#: ../embed/ephy-web-view.c:1416
 msgid "Deny"
 msgstr "Запретить"
 
-#: ../embed/ephy-web-view.c:1416
+#: ../embed/ephy-web-view.c:1417
 msgid "Allow"
 msgstr "Разрешить"
 
-#: ../embed/ephy-web-view.c:1426
+#. Translators: Geolocation policy for a specific site.
+#: ../embed/ephy-web-view.c:1429
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr ""
 "Страница <b>%s</b> пытается получить информацию о вашем местоположении."
 
+#. Translators: Notification policy for a specific site.
+#: ../embed/ephy-web-view.c:1433
+msgid "The page at <b>%s</b> wants to show desktop notifications."
+msgstr "Страница <b>%s</b> пытается отобразить уведомления на рабочем столе."
+
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1510
+#: ../embed/ephy-web-view.c:1519
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Загружается «%s»…"
 
-#: ../embed/ephy-web-view.c:1512
+#: ../embed/ephy-web-view.c:1521
 msgid "Loading…"
 msgstr "Загружается…"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1736
+#: ../embed/ephy-web-view.c:1743
 msgid ""
-"This web site presented identification that belongs to a different web site."
+"This website presented identification that belongs to a different website."
 msgstr "Этот веб-сайт предоставил сертификат, принадлежащий другому веб-сайту."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1741
+#: ../embed/ephy-web-view.c:1748
 msgid ""
-"This web site’s identification is too old to trust. Check the date on your "
+"This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr ""
 "Сертификат этого веб-сайта слишком старый, чтобы ему доверять. Проверьте "
 "дату, установленную на вашем компьютере."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1746
-msgid ""
-"This web site’s identification was not issued by a trusted organization."
+#: ../embed/ephy-web-view.c:1753
+msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Сертификат этого веб-сайта был выдан недоверенной организацией."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1751
+#: ../embed/ephy-web-view.c:1758
 msgid ""
-"This web site’s identification could not be processed. It may be corrupted."
+"This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 "Невозможно обработать сертификат этого веб-сайта. Возможно, сертификат "
 "повреждён."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1756
+#: ../embed/ephy-web-view.c:1763
 msgid ""
-"This web site’s identification has been revoked by the trusted organization "
+"This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr ""
 "Сертификат этого веб-сайта был отозван доверенной организацией, выдавшей "
 "этот сертификат."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1761
+#: ../embed/ephy-web-view.c:1768
 msgid ""
-"This web site’s identification cannot be trusted because it uses very weak "
+"This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr ""
 "Сертификату этого веб-сайта нельзя доверять, поскольку сертификат использует "
 "слишком слабое шифрование."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1766
+#: ../embed/ephy-web-view.c:1773
 msgid ""
-"This web site’s identification is only valid for future dates. Check the "
-"date on your computer’s calendar."
+"This website’s identification is only valid for future dates. Check the date "
+"on your computer’s calendar."
 msgstr ""
 "Сертификат этого веб-сайта действителен только в будущем. Проверьте дату, "
 "установленную на вашем компьютере."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1802
+#: ../embed/ephy-web-view.c:1809
 #, c-format
 msgid "This might not be the real %s."
 msgstr "Ресурс %s может быть поддельным."
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1807
+#: ../embed/ephy-web-view.c:1814
 msgid ""
-"When you try to connect securely, web sites present identification to prove "
+"When you try to connect securely, websites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
-"something wrong with this site’s identification:"
+"something wrong with this website’s identification:"
 msgstr ""
 "При безопасном соединении веб-сайты предоставляют сертификат, "
 "удостоверяющий, что ваше соединение не было перехвачено. С сертификатом "
 "этого веб-сайта что-то не так:"
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1813
+#: ../embed/ephy-web-view.c:1820
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
-"you know there is a good reason why this site does not use trusted "
+"you know there is a good reason why this website does not use trusted "
 "identification."
 msgstr ""
 "Третья сторона могла перехватить ваше соединение. Продолжайте работу с этим "
@@ -1081,29 +1080,29 @@ msgstr ""
 "предоставил недоверенный сертификат."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1817
+#: ../embed/ephy-web-view.c:1824
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
 msgstr ""
 "Банки, магазины и другие публичные сайты не должны вас просить продолжать "
 "работу."
 
-#: ../embed/ephy-web-view.c:1858
+#: ../embed/ephy-web-view.c:1865
 msgid "None specified"
 msgstr "Не определено"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1871 ../embed/ephy-web-view.c:1886
-#: ../embed/ephy-web-view.c:1906
+#: ../embed/ephy-web-view.c:1878 ../embed/ephy-web-view.c:1893
+#: ../embed/ephy-web-view.c:1913
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Проблема при загрузке «%s»"
 
-#: ../embed/ephy-web-view.c:1873
+#: ../embed/ephy-web-view.c:1880
 msgid "Oops! Unable to display this website."
 msgstr "Ой! Невозможно отобразить этот веб-сайт"
 
-#: ../embed/ephy-web-view.c:1874
+#: ../embed/ephy-web-view.c:1881
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1115,15 +1114,15 @@ msgstr ""
 "p><p>Сайт может быть временно недоступен, или изменился адрес сайта. Также "
 "проверьте Интернет-соединение.</p>"
 
-#: ../embed/ephy-web-view.c:1882
+#: ../embed/ephy-web-view.c:1889
 msgid "Try again"
 msgstr "Попробовать снова"
 
-#: ../embed/ephy-web-view.c:1888
+#: ../embed/ephy-web-view.c:1895
 msgid "Oops! There may be a problem."
 msgstr "Ой! Кажется возникла проблема."
 
-#: ../embed/ephy-web-view.c:1889
+#: ../embed/ephy-web-view.c:1896
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1134,20 +1133,20 @@ msgstr ""
 "p><p>Если это произойдёт ещё раз, сообщите о проблеме разработчикам <strong>"
 "%s</strong>.</p>"
 
-#: ../embed/ephy-web-view.c:1894 ../embed/ephy-web-view.c:1901
+#: ../embed/ephy-web-view.c:1901 ../embed/ephy-web-view.c:1908
 msgid "Reload Anyway"
 msgstr "Всё равно перезагрузить"
 
-#: ../embed/ephy-web-view.c:1898
+#: ../embed/ephy-web-view.c:1905
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Проблема при отображении «%s»"
 
-#: ../embed/ephy-web-view.c:1899
+#: ../embed/ephy-web-view.c:1906
 msgid "Oops!"
 msgstr "Ой!"
 
-#: ../embed/ephy-web-view.c:1900
+#: ../embed/ephy-web-view.c:1907
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1156,17 +1155,16 @@ msgstr ""
 "другую страницу."
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1908
+#: ../embed/ephy-web-view.c:1915
 msgid "Look out!"
 msgstr "Осторожно!"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1911
-#| msgid "Reload Anyway"
+#: ../embed/ephy-web-view.c:1918
 msgid "Load Anyway"
 msgstr "Всё равно загрузить"
 
-#: ../embed/ephy-web-view.c:2809
+#: ../embed/ephy-web-view.c:2818
 msgid "_OK"
 msgstr "_OK"
 
@@ -1174,7 +1172,7 @@ msgstr "_OK"
 #: ../src/bookmarks/ephy-bookmark-properties.c:428
 #: ../src/bookmarks/ephy-bookmarks-editor.c:819
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:808
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:809
 msgid "_Cancel"
 msgstr "_Отмена"
 
@@ -1203,26 +1201,26 @@ msgid "All files"
 msgstr "Все файлы"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:112 ../src/resources/prefs-dialog.ui.h:2
+#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:2
 msgid "Downloads"
 msgstr "Загрузки"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:165
+#: ../lib/ephy-file-helpers.c:167
 msgid "Desktop"
 msgstr "Рабочий стол"
 
-#: ../lib/ephy-file-helpers.c:333
+#: ../lib/ephy-file-helpers.c:335
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Не удалось создать временный каталог в «%s»."
 
-#: ../lib/ephy-file-helpers.c:469
+#: ../lib/ephy-file-helpers.c:466
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Файл «%s» существует, перенесите его в другое место."
 
-#: ../lib/ephy-file-helpers.c:490
+#: ../lib/ephy-file-helpers.c:487
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Не удалось создать каталог «%s»."
@@ -1405,7 +1403,6 @@ msgid "Local files"
 msgstr "Локальные файлы"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:92
-#| msgid "The certificate does not match the expected identity"
 msgid "The certificate does not match this website"
 msgstr "Сертификат не соответствует сертификату этого веб-сайта"
 
@@ -1434,12 +1431,10 @@ msgid "The certificate activation time is still in the future"
 msgstr "Время активации сертификата ещё не настало"
 
 #: ../lib/widgets/ephy-certificate-dialog.c:149
-#| msgid "The identity of this website has been verified"
 msgid "The identity of this website has been verified."
 msgstr "Подлинность этого веб-сайта была проверена."
 
 #: ../lib/widgets/ephy-certificate-dialog.c:150
-#| msgid "The identity of this website has not been verified"
 msgid "The identity of this website has not been verified."
 msgstr "Подлинность этого веб-сайта не была проверена."
 
@@ -1530,11 +1525,11 @@ msgstr "Завершено"
 msgid "Error downloading: %s"
 msgstr "Ошибка загрузки: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:364 ../src/window-commands.c:712
+#: ../lib/widgets/ephy-download-widget.c:364 ../src/window-commands.c:713
 msgid "Cancel"
 msgstr "Отменить"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1122
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1120
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Открыть"
@@ -1551,21 +1546,21 @@ msgstr "Запуск…"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:603
+#: ../lib/widgets/ephy-location-entry.c:606
 #: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:263
 msgid "Cl_ear"
 msgstr "О_чистить"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:622 ../src/ephy-window.c:121
+#: ../lib/widgets/ephy-location-entry.c:625 ../src/ephy-window.c:119
 msgid "_Undo"
 msgstr "_Отменить"
 
-#: ../lib/widgets/ephy-location-entry.c:629
+#: ../lib/widgets/ephy-location-entry.c:632
 msgid "_Redo"
 msgstr "_Повторить"
 
-#: ../lib/widgets/ephy-location-entry.c:909
+#: ../lib/widgets/ephy-location-entry.c:912
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Перетащите этот значок, чтобы создать ссылку на эту страницу"
 
@@ -1631,26 +1626,26 @@ msgid "Work"
 msgstr "Работа"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:926
+#: ../src/bookmarks/ephy-bookmarks.c:927
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Все"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:930
+#: ../src/bookmarks/ephy-bookmarks.c:931
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Без категории"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:934
+#: ../src/bookmarks/ephy-bookmarks.c:935
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Сайты поблизости"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1148
+#: ../src/bookmarks/ephy-bookmarks.c:1150
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "Неозаглавленное"
@@ -1682,7 +1677,7 @@ msgstr "_Вид"
 
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:191
+#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:189
 msgid "_Help"
 msgstr "_Справка"
 
@@ -1751,7 +1746,7 @@ msgstr "_Экспортировать закладки…"
 msgid "Export bookmarks to a file"
 msgstr "Экспортировать закладки в файл"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:112
 msgid "_Close"
 msgstr "_Закрыть"
 
@@ -1760,7 +1755,7 @@ msgid "Close the bookmarks window"
 msgstr "Закрыть окно закладок"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183 ../src/ephy-window.c:125
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183 ../src/ephy-window.c:123
 msgid "Cu_t"
 msgstr "_Вырезать"
 
@@ -1769,7 +1764,7 @@ msgid "Cut the selection"
 msgstr "Вырезать выделенное"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1167 ../src/ephy-window.c:127
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1167 ../src/ephy-window.c:125
 msgid "_Copy"
 msgstr "_Копировать"
 
@@ -1777,7 +1772,7 @@ msgstr "_Копировать"
 msgid "Copy the selection"
 msgstr "Копировать выделенное"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189 ../src/ephy-window.c:129
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189 ../src/ephy-window.c:127
 msgid "_Paste"
 msgstr "Вст_авить"
 
@@ -1794,7 +1789,7 @@ msgstr "У_далить"
 msgid "Delete the selected bookmark or topic"
 msgstr "Удалить выбранную закладку или тему"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195 ../src/ephy-window.c:133
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195 ../src/ephy-window.c:131
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
@@ -1812,7 +1807,7 @@ msgid "Display bookmarks help"
 msgstr "Показать справку по закладкам"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:193
+#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:191
 msgid "_About"
 msgstr "_О программе"
 
@@ -2000,22 +1995,18 @@ msgstr ""
 "посещали. Выберите, какие виды сведений вы хотите удалить:"
 
 #: ../src/resources/clear-data-dialog.ui.h:6
-#| msgid "Cookies"
 msgid "Coo_kies"
 msgstr "Coo_kies"
 
 #: ../src/resources/clear-data-dialog.ui.h:7
-#| msgid "Cache and temporary files"
 msgid "Cache and _temporary files"
 msgstr "Кэш и _временные файлы"
 
 #: ../src/resources/clear-data-dialog.ui.h:8
-#| msgid "Browsing history"
 msgid "Browsing _history"
 msgstr "Журнал _посещений"
 
 #: ../src/resources/clear-data-dialog.ui.h:9
-#| msgid "Saved passwords"
 msgid "Saved _passwords"
 msgstr "Сохранённые _пароли"
 
@@ -2048,16 +2039,31 @@ msgid "Remove"
 msgstr "Удалить"
 
 #: ../src/resources/cookies-dialog.ui.h:5
-#| msgid "Delete the selected bookmark or topic"
 msgid "Delete the selected cookies"
 msgstr "Удалить выделенные cookie"
 
+#: ../src/resources/encoding-dialog.ui.h:1
+msgid "Text Encoding"
+msgstr "Кодировка текста"
+
+#: ../src/resources/encoding-dialog.ui.h:2 ../src/ephy-encoding-menu.c:327
+msgid "_Automatic"
+msgstr "_Автоматически"
+
+#: ../src/resources/encoding-dialog.ui.h:3 ../src/ephy-encoding-menu.c:328
+msgid "Use the encoding specified by the document"
+msgstr "Использовать кодировку, определённую в документе"
+
+#: ../src/resources/encoding-dialog.ui.h:4
+msgid "_Use a different encoding:"
+msgstr "_Использовать другую кодировку:"
+
 #. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:98
 msgid "_New Window"
 msgstr "_Создать окно"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:102
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:100
 msgid "New _Incognito Window"
 msgstr "Создать _приватное окно"
 
@@ -2066,37 +2072,21 @@ msgid "Reopen Closed _Tab"
 msgstr "Повторно открыть _закрытую вкладку"
 
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:93
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:91
 msgid "_Bookmarks"
 msgstr "_Закладки"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:143
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:141
 msgid "_History"
 msgstr "_Журнал"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:145
+#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:143
 msgid "Pr_eferences"
 msgstr "Па_раметры"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:116
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:114
 msgid "_Quit"
 msgstr "_Завершить"
-
-#: ../src/resources/epiphany.ui.h:1
-msgid "Text Encoding"
-msgstr "Кодировка текста"
-
-#: ../src/resources/epiphany.ui.h:2 ../src/ephy-encoding-menu.c:327
-msgid "_Automatic"
-msgstr "_Автоматически"
-
-#: ../src/resources/epiphany.ui.h:3 ../src/ephy-encoding-menu.c:328
-msgid "Use the encoding specified by the document"
-msgstr "Использовать кодировку, определённую в документе"
-
-#: ../src/resources/epiphany.ui.h:4
-msgid "_Use a different encoding:"
-msgstr "_Использовать другую кодировку:"
 
 #: ../src/resources/history-dialog.ui.h:1
 msgid "History"
@@ -2119,12 +2109,10 @@ msgid "Location"
 msgstr "Адрес"
 
 #: ../src/resources/history-dialog.ui.h:7
-#| msgid "Delete the selected history link"
 msgid "Remove the selected pages from history"
 msgstr "Удалить выделенные страницы из журнала"
 
 #: ../src/resources/history-dialog.ui.h:8
-#| msgid "Open the selected bookmark in a new tab"
 msgid "Open the selected pages in new tabs"
 msgstr "Открыть выделенные страницы в новых вкладках"
 
@@ -2154,12 +2142,10 @@ msgid "Password"
 msgstr "Пароль"
 
 #: ../src/resources/passwords-dialog.ui.h:7
-#| msgid "Delete the selected history link"
 msgid "Forget the selected passwords"
 msgstr "Забыть выделенные пароли"
 
 #: ../src/resources/passwords-dialog.ui.h:8
-#| msgid "Remember passwords"
 msgid "Reveal all the passwords"
 msgstr "Показать все пароли"
 
@@ -2248,7 +2234,6 @@ msgid "Fonts & Style"
 msgstr "Шрифты и стиль"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-#| msgid "Manage Cookies"
 msgid "Manage _Cookies"
 msgstr "Управление _Cookie"
 
@@ -2275,11 +2260,11 @@ msgid "Tracking"
 msgstr "Слежение"
 
 #: ../src/resources/prefs-dialog.ui.h:29
-msgid "_Tell web sites I do not want to be tracked"
-msgstr "_Сообщить веб-сайтам о нежелательности слежения"
+#| msgid "_Tell web sites I do not want to be tracked"
+msgid "_Tell websites I do not want to be tracked"
+msgstr "_Сообщить веб-сайтам о нежелательности отслеживания"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-#| msgid "Manage Passwords"
 msgid "Manage _Passwords"
 msgstr "Управление _паролями"
 
@@ -2331,7 +2316,7 @@ msgstr "Проверка правописания"
 msgid "_Enable spell checking"
 msgstr "_Включить проверку правописания"
 
-#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:840
+#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:842
 msgid "Language"
 msgstr "Язык"
 
@@ -2351,7 +2336,7 @@ msgstr "Остановить"
 msgid "Stop current data transfer"
 msgstr "Остановить текущую передачу данных"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:154
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:152
 msgid "_Reload"
 msgstr "Переза_грузить"
 
@@ -2454,298 +2439,284 @@ msgstr "Параметры веб-браузера"
 msgid "Close tab"
 msgstr "Закрыть вкладку"
 
-#: ../src/ephy-search-provider.c:199
+#: ../src/ephy-search-provider.c:201
 #, c-format
 msgid "Search the Web for %s"
 msgstr "Поиск %s в веб"
 
-#: ../src/ephy-window.c:104
+#: ../src/ephy-window.c:102
 msgid "_Open…"
 msgstr "_Открыть…"
 
-#: ../src/ephy-window.c:106
+#: ../src/ephy-window.c:104
 msgid "Save _As…"
 msgstr "Сохранить _как…"
 
-#: ../src/ephy-window.c:108
+#: ../src/ephy-window.c:106
 msgid "Save As _Web Application…"
 msgstr "Сохранить как _веб-приложение…"
 
-#: ../src/ephy-window.c:110
+#: ../src/ephy-window.c:108
 msgid "_Print…"
 msgstr "_Печать…"
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:110
 msgid "S_end Link by Email…"
 msgstr "_Отправить ссылку по почте…"
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:121
 msgid "Re_do"
 msgstr "Ве_рнуть"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:133
 msgid "_Find…"
 msgstr "_Найти…"
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:135
 msgid "Find Ne_xt"
 msgstr "Найти след_ующее"
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:137
 msgid "Find Pre_vious"
 msgstr "Найти пред_ыдущее"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:139
 msgid "Edit _Bookmarks"
 msgstr "_Изменить закладки"
 
 #. View actions.
-#: ../src/ephy-window.c:150 ../src/ephy-window.c:152
+#: ../src/ephy-window.c:148 ../src/ephy-window.c:150
 msgid "_Stop"
 msgstr "Ос_тановить"
 
-#: ../src/ephy-window.c:156
+#: ../src/ephy-window.c:154
 msgid "Zoom _In"
 msgstr "У_величить"
 
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:156
 msgid "Zoom O_ut"
 msgstr "У_меньшить"
 
-#: ../src/ephy-window.c:160
+#: ../src/ephy-window.c:158
 msgid "_Normal Size"
 msgstr "Обы_чный размер"
 
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:160
 msgid "Text _Encoding"
 msgstr "_Кодировка текста"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:161
 msgid "_Page Source"
 msgstr "_Исходный текст"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:166
 msgid "_Add Bookmark…"
 msgstr "Доб_авить закладку…"
 
 #. Go actions.
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:171
 msgid "_Location…"
 msgstr "_Адрес…"
 
 #. Tabs actions.
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:176
 msgid "_Previous Tab"
 msgstr "На пред_ыдущую вкладку"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:178
 msgid "_Next Tab"
 msgstr "На след_ующую вкладку"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:180
 msgid "Move Tab _Left"
 msgstr "Передвинуть вкладку в_лево"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:182
 msgid "Move Tab _Right"
 msgstr "Передвинуть вкладку в_право"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:184
 msgid "_Detach Tab"
 msgstr "_Отсоединить вкладку"
 
 #. View actions.
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:199
 msgid "_Downloads Bar"
 msgstr "_Панель загрузок"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:202
 msgid "_Fullscreen"
 msgstr "На весь _экран"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:204
 msgid "Popup _Windows"
 msgstr "Разрешить _всплывающие окна"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:206
 msgid "Selection Caret"
 msgstr "Курсор выделения"
 
 #. Document.
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:213
 msgid "Add Boo_kmark…"
 msgstr "Добавить _закладку…"
 
 #. Links.
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:218
 msgid "Open Link in New _Window"
 msgstr "Открыть ссылку в _новом окне"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:220
 msgid "Open Link in New _Tab"
 msgstr "Открыть ссылку в новой _вкладке"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:222
 msgid "_Save Link As…"
 msgstr "Сохранить сс_ылку как…"
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:224
 msgid "_Copy Link Address"
 msgstr "_Копировать адрес ссылки"
 
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:226
 msgid "_Copy E-mail Address"
 msgstr "_Копировать адрес e-mail"
 
 #. Images.
-#: ../src/ephy-window.c:233
-#| msgid "View _Image"
+#: ../src/ephy-window.c:231
 msgid "View _Image in New Tab"
 msgstr "_Открыть изображение в новой вкладке"
 
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:233
 msgid "Copy I_mage Address"
 msgstr "_Копировать адрес изображения"
 
-#: ../src/ephy-window.c:237
+#: ../src/ephy-window.c:235
 msgid "_Save Image As…"
 msgstr "Сохранить _изображение как…"
 
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:237
 msgid "Set as _Wallpaper"
 msgstr "Использовать как _фон рабочего стола"
 
 #. Video.
-#: ../src/ephy-window.c:244
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
+#: ../src/ephy-window.c:242
 msgid "Open Video in New _Window"
 msgstr "Открыть видео в _новом окне"
 
-#: ../src/ephy-window.c:246
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
+#: ../src/ephy-window.c:244
 msgid "Open Video in New _Tab"
 msgstr "Открыть видео в новой _вкладке"
 
-#: ../src/ephy-window.c:248
-#| msgid "_Save Link As…"
+#: ../src/ephy-window.c:246
 msgid "_Save Video As…"
 msgstr "_Сохранить видео как…"
 
-#: ../src/ephy-window.c:250
-#| msgid "_Copy Address"
+#: ../src/ephy-window.c:248
 msgid "_Copy Video Address"
 msgstr "_Копировать адрес видео"
 
 #. Audio.
-#: ../src/ephy-window.c:255
-#| msgid "Open in New _Window"
-#| msgid_plural "Open in New _Windows"
+#: ../src/ephy-window.c:253
 msgid "Open Audio in New _Window"
 msgstr "Открыть аудио в _новом окне"
 
-#: ../src/ephy-window.c:257
-#| msgid "Open in New _Tab"
-#| msgid_plural "Open in New _Tabs"
+#: ../src/ephy-window.c:255
 msgid "Open Audio in New _Tab"
 msgstr "Открыть аудио в новой _вкладке"
 
-#: ../src/ephy-window.c:259
-#| msgid "_Save Link As…"
+#: ../src/ephy-window.c:257
 msgid "_Save Audio As…"
 msgstr "_Сохранить аудио как…"
 
-#: ../src/ephy-window.c:261
-#| msgid "_Copy Address"
+#: ../src/ephy-window.c:259
 msgid "_Copy Audio Address"
 msgstr "_Копировать адрес аудио"
 
-#: ../src/ephy-window.c:468
+#: ../src/ephy-window.c:466
 msgid "There are unsubmitted changes to form elements"
 msgstr "В элементах формы есть непереданные изменения"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:467
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Если документ будет закрыт, информация будет потеряна."
 
-#: ../src/ephy-window.c:471
+#: ../src/ephy-window.c:469
 msgid "Close _Document"
 msgstr "_Закрыть документ"
 
-#: ../src/ephy-window.c:486
+#: ../src/ephy-window.c:484
 msgid "There are ongoing downloads in this window"
 msgstr "В этом окне есть незавершённые загрузки"
 
-#: ../src/ephy-window.c:487
+#: ../src/ephy-window.c:485
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Если вы закроете это окно, загрузки будут отменены"
 
-#: ../src/ephy-window.c:488
+#: ../src/ephy-window.c:486
 msgid "Close window and cancel downloads"
 msgstr "Закрыть окно и отменить загрузки"
 
-#: ../src/ephy-window.c:1124
+#: ../src/ephy-window.c:1122
 msgid "Save As"
 msgstr "Сохранить как"
 
-#: ../src/ephy-window.c:1126
+#: ../src/ephy-window.c:1124
 msgid "Save As Application"
 msgstr "Сохранить как приложение"
 
-#: ../src/ephy-window.c:1128
+#: ../src/ephy-window.c:1126
 msgid "Print"
 msgstr "Печать"
 
-#: ../src/ephy-window.c:1130
+#: ../src/ephy-window.c:1128
 msgid "Bookmark"
 msgstr "Закладка"
 
-#: ../src/ephy-window.c:1132
+#: ../src/ephy-window.c:1130
 msgid "Find"
 msgstr "Найти"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1141
+#: ../src/ephy-window.c:1139
 msgid "Larger"
 msgstr "Увеличить"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1144
+#: ../src/ephy-window.c:1142
 msgid "Smaller"
 msgstr "Уменьшить"
 
-#: ../src/ephy-window.c:1166
+#: ../src/ephy-window.c:1164
 msgid "Back"
 msgstr "Назад"
 
-#: ../src/ephy-window.c:1178
+#: ../src/ephy-window.c:1176
 msgid "Forward"
 msgstr "Вперёд"
 
-#: ../src/ephy-window.c:1190
+#: ../src/ephy-window.c:1188
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: ../src/ephy-window.c:1199
+#: ../src/ephy-window.c:1197
 msgid "New _Tab"
 msgstr "Создать _вкладку"
 
-#: ../src/ephy-window.c:1207
+#: ../src/ephy-window.c:1205
 msgid "Go to most visited"
 msgstr "Открыть наиболее посещаемый сайт"
 
-#: ../src/popup-commands.c:225
+#: ../src/popup-commands.c:229
 msgid "Save Link As"
 msgstr "Сохранить ссылку как"
 
-#: ../src/popup-commands.c:232
+#: ../src/popup-commands.c:236
 msgid "Save Image As"
 msgstr "Сохранить изображение как"
 
-#: ../src/popup-commands.c:239
-#| msgid "Save Link As"
+#: ../src/popup-commands.c:243
 msgid "Save Media As"
 msgstr "Сохранить мультимедиа как"
 
@@ -2753,7 +2724,7 @@ msgstr "Сохранить мультимедиа как"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:553 ../src/prefs-dialog.c:559
+#: ../src/prefs-dialog.c:555 ../src/prefs-dialog.c:561
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2762,13 +2733,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:568
+#: ../src/prefs-dialog.c:570
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Определённый пользователем (%s)"
 
-#: ../src/prefs-dialog.c:590
+#: ../src/prefs-dialog.c:592
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2776,12 +2747,12 @@ msgstr[0] "Системный язык (%s)"
 msgstr[1] "Системные языки (%s)"
 msgstr[2] "Системные языки (%s)"
 
-#: ../src/prefs-dialog.c:923
+#: ../src/prefs-dialog.c:925
 msgid "Select a Directory"
 msgstr "Выберите каталог"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1018
+#: ../src/prefs-dialog.c:1020
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2789,44 +2760,43 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1023
+#: ../src/prefs-dialog.c:1026
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1025
+#: ../src/prefs-dialog.c:1028
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1027
+#: ../src/prefs-dialog.c:1031
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.com/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1029
+#: ../src/prefs-dialog.c:1033
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1031
+#: ../src/prefs-dialog.c:1036
 #, c-format
-#| msgid "http://www.bing.com/search?q=%s"
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
 
-#: ../src/window-commands.c:709
+#: ../src/window-commands.c:710
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Веб-приложение «%s» уже существует. Хотите его заменить?"
 
-#: ../src/window-commands.c:714
+#: ../src/window-commands.c:715
 msgid "Replace"
 msgstr "Заменить"
 
-#: ../src/window-commands.c:718
+#: ../src/window-commands.c:719
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -2834,42 +2804,42 @@ msgstr ""
 "Приложение с таким именем уже существует. Его замена приведёт к перезаписи "
 "приложения."
 
-#: ../src/window-commands.c:754
+#: ../src/window-commands.c:755
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Приложение «%s» готово к использованию"
 
-#: ../src/window-commands.c:757
+#: ../src/window-commands.c:758
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Не удалось создать приложение «%s»"
 
-#: ../src/window-commands.c:765
+#: ../src/window-commands.c:766
 msgid "Launch"
 msgstr "Запустить"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:805
+#: ../src/window-commands.c:806
 msgid "Create Web Application"
 msgstr "Создать веб-приложение"
 
-#: ../src/window-commands.c:810
+#: ../src/window-commands.c:811
 msgid "C_reate"
 msgstr "С_оздать"
 
-#: ../src/window-commands.c:1475 ../src/window-commands.c:1498
+#: ../src/window-commands.c:1480 ../src/window-commands.c:1503
 msgid "Contact us at:"
 msgstr "Свяжитесь с нами:"
 
-#: ../src/window-commands.c:1478
+#: ../src/window-commands.c:1483
 msgid "Contributors:"
 msgstr "Помощники:"
 
-#: ../src/window-commands.c:1481
+#: ../src/window-commands.c:1486
 msgid "Past developers:"
 msgstr "Предыдущие разработчики:"
 
-#: ../src/window-commands.c:1507
+#: ../src/window-commands.c:1512
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2886,25 +2856,22 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1530
+#: ../src/window-commands.c:1535
 msgid "translator-credits"
 msgstr ""
-"Valek Filippov <frob@df.ru>, 2000-2002.\n"
-"Dmitry G. Mastrukov <dmitry@taurussoft.org>, 2002-2003.\n"
-"Mikhail Zabaluev <mhz@altlinux.ru>, 2004.\n"
-"Leonid Kanter <leon@asplinux.ru>, 2004, 2005.\n"
 "Yuri Kozlov <yuray@komyakino.ru>, 2010.\n"
-"Stas Solovey <whats_up@tut.by>, 2011, 2013."
+"Yuri Myasoedov <ymyasoedov@yandex.ru>, 2012, 2013, 2014.\n"
+"Stas Solovey <whats_up@tut.by>, 2011, 2013, 2015."
 
-#: ../src/window-commands.c:1533
+#: ../src/window-commands.c:1538
 msgid "Web Website"
 msgstr "Веб-сайт браузера"
 
-#: ../src/window-commands.c:1672
+#: ../src/window-commands.c:1677
 msgid "Enable caret browsing mode?"
 msgstr "Включить режим клавишной навигации?"
 
-#: ../src/window-commands.c:1675
+#: ../src/window-commands.c:1680
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2914,6 +2881,6 @@ msgstr ""
 "помещает на страницу курсор, позволяющий перемещаться по странице с помощью "
 "клавиатуры. Включить клавишную навигацию?"
 
-#: ../src/window-commands.c:1678
+#: ../src/window-commands.c:1683
 msgid "_Enable"
 msgstr "_Включить"
