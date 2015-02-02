@@ -1,13 +1,13 @@
 # 
 # 
 # María Majadas <alixis82@gmail.com>, 2013., 2013.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2013., 2014.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2013., 2014, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany-help 3.10\n"
-"POT-Creation-Date: 2014-12-18 04:38+0000\n"
-"PO-Revision-Date: 2014-12-18 12:26+0100\n"
+"POT-Creation-Date: 2015-01-27 04:37+0000\n"
+"PO-Revision-Date: 2015-02-02 11:11+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgctxt "_"
 msgid "translator-credits"
 msgstr ""
-"Daniel Mustieles <daniel.mustieles@gmail.com>, 2013, 2014\n"
+"Daniel Mustieles <daniel.mustieles@gmail.com>, 2013, 2015\n"
 "María Majadas <alixis82@gmail.com>, 2013"
 
 #. (itstool) path: info/title
@@ -92,12 +92,12 @@ msgstr ""
 #: C/introduction.page:11 C/bookmark.page:15 C/bookmark-add.page:17
 #: C/bookmark-delete.page:17 C/bookmark-edit.page:17 C/bookmark-smart.page:12
 #: C/bookmark-topic.page:12 C/browse-local.page:11 C/browse-private.page:12
-#: C/browse-tab.page:13 C/browse-web.page:14 C/cookies.xml:12
-#: C/data-cookies.page:11 C/data-passwords.page:19 C/history.page:12
-#: C/history-delete.page:11 C/keyboard-shortcut.page:16 C/pref-cookies.page:13
-#: C/pref-css.page:17 C/pref-downloads.page:13 C/pref-do-not-track.page:17
-#: C/pref-font.page:18 C/pref-passwords.page:13
-#: C/prob-restore-closed-page.page:16 C/proxy.page:12
+#: C/browse-tab.page:13 C/browse-web.page:14 C/browse-webapps.page:12
+#: C/browse-webapps-del.page:12 C/cookies.xml:12 C/data-cookies.page:11
+#: C/data-passwords.page:19 C/history.page:12 C/history-delete.page:11
+#: C/keyboard-shortcut.page:16 C/pref-cookies.page:13 C/pref-css.page:17
+#: C/pref-downloads.page:13 C/pref-do-not-track.page:17 C/pref-font.page:18
+#: C/pref-passwords.page:13 C/prob-restore-closed-page.page:16 C/proxy.page:12
 msgid "Ekaterina Gerasimova"
 msgstr "Ekaterina Gerasimova"
 
@@ -106,11 +106,11 @@ msgstr "Ekaterina Gerasimova"
 #: C/bookmark-add.page:14 C/bookmark-add.page:19 C/bookmark-delete.page:14
 #: C/bookmark-delete.page:19 C/bookmark-edit.page:14 C/bookmark-edit.page:19
 #: C/bookmark-smart.page:14 C/bookmark-topic.page:14 C/browse-local.page:13
-#: C/browse-private.page:14 C/cookies.xml:14 C/data-cookies.page:13
-#: C/data-passwords.page:16 C/data-passwords.page:21 C/history.page:14
-#: C/history-delete.page:13 C/pref-cookies.page:15 C/pref-css.page:14
-#: C/pref-css.page:19 C/pref-downloads.page:15 C/pref-font.page:15
-#: C/pref-font.page:20 C/pref-passwords.page:15
+#: C/browse-private.page:14 C/browse-webapps.page:14 C/cookies.xml:14
+#: C/data-cookies.page:13 C/data-passwords.page:16 C/data-passwords.page:21
+#: C/history.page:14 C/history-delete.page:13 C/pref-cookies.page:15
+#: C/pref-css.page:14 C/pref-css.page:19 C/pref-downloads.page:15
+#: C/pref-font.page:15 C/pref-font.page:20 C/pref-passwords.page:15
 msgid "2013"
 msgstr "2013"
 
@@ -657,26 +657,13 @@ msgstr "2014"
 
 #. (itstool) path: info/desc
 #: C/browse-tab.page:25
-#| msgid "Open the webpage which you want to save."
 msgid "Open another web page in a new tab in the same window."
 msgstr "Abrir otra página web en una pestaña nueva, en la misma ventana."
 
 #. (itstool) path: page/title
 #: C/browse-tab.page:28
-#| msgid "Open a new window"
 msgid "Open a new tab"
 msgstr "Abrir una pestaña nueva"
-
-#. (itstool) path: page/p
-#: C/browse-tab.page:35 C/browse-web.page:52
-msgid ""
-"You can also use the <keyseq><key>Ctrl</key><key>T</key></keyseq> keyboard "
-"shortcut to open a new tab or the new tab button in the top-left of the "
-"window."
-msgstr ""
-"También puede usar el atajo del teclado <keyseq><key>Ctrl</key><key>T</key></"
-"keyseq> para abrir una pestaña nueva o el botón de pestaña nueva en la parte "
-"superior izquierda de la ventana."
 
 #. (itstool) path: credit/years
 #: C/browse-web.page:16
@@ -720,12 +707,6 @@ msgstr "Pulse Intro para ir a la página web o para buscar."
 
 #. (itstool) path: page/p
 #: C/browse-web.page:45
-#| msgid ""
-#| "When you first start up <app>Web</app>, you will not be shown any tabs. "
-#| "<em>Tabs</em> are used to view more than one web page in one window. To "
-#| "<em>open a new tab</em>, select the menu at the top-right of the screen, "
-#| "then <guiseq><gui style=\"menuitem\">New Tab</gui></guiseq>. Once the new "
-#| "tab is open, you can use it as you would normally use a new window."
 msgid ""
 "<em>Tabs</em> are used to view more than one web page in one window. When "
 "you first start up <app>Web</app>, you will not be shown any tabs. To "
@@ -741,11 +722,18 @@ msgstr ""
 "puede usarla del mismo modo que usa una nueva ventana."
 
 #. (itstool) path: page/p
+#: C/browse-web.page:52
+msgid ""
+"You can also use the <keyseq><key>Ctrl</key><key>T</key></keyseq> keyboard "
+"shortcut to open a new tab or the new tab button in the top-left of the "
+"window."
+msgstr ""
+"También puede usar el atajo del teclado <keyseq><key>Ctrl</key><key>T</key></"
+"keyseq> para abrir una pestaña nueva o el botón de pestaña nueva en la parte "
+"superior izquierda de la ventana."
+
+#. (itstool) path: page/p
 #: C/browse-web.page:56
-#| msgid ""
-#| "You can also <em>open a link in a new tab</em>. Right click on the link, "
-#| "then select <gui style=\"menuitem\">Open Link in New Tab</gui> or use the "
-#| "middle mouse button to click on the link."
 msgid ""
 "To <em>open a link in a new tab</em>, right click on the link, then select "
 "<gui style=\"menuitem\">Open Link in New Tab</gui> or use the middle mouse "
@@ -786,22 +774,25 @@ msgstr "Abra la página web que quiera guardar."
 
 #. (itstool) path: item/p
 #: C/browse-webapps.page:39
+#| msgid ""
+#| "Open the menu at the top-right of the window, then <guiseq> <gui style="
+#| "\"menuitem\">Save as Web Application…</gui></guiseq>."
 msgid ""
-"Open the menu at the top-right of the window, then <guiseq> <gui style="
-"\"menuitem\">Save as Web Application…</gui></guiseq>."
+"Open the menu at the top-right of the window, then select <gui style="
+"\"menuitem\">Save as Web Application…</gui>."
 msgstr ""
-"Abra el menú de la parte superior derecha de la ventana, y entonces <guiseq> "
-"<gui style=\"menuitem\">Guardar como aplicación web…</gui></guiseq>."
+"Abra el menú de la parte superior derecha de la ventana, y entonces <gui "
+"style=\"menuitem\">Guardar como aplicación web…</gui>."
 
 #. (itstool) path: item/p
-#: C/browse-webapps.page:44
+#: C/browse-webapps.page:43
 msgid ""
 "Name your Web Application, then press <gui style=\"button\">Create</gui>."
 msgstr ""
 "Dé un nombre a su aplicación web, y pulse <gui style=\"button\">Crear</gui>."
 
 #. (itstool) path: page/p
-#: C/browse-webapps.page:49
+#: C/browse-webapps.page:48
 msgid ""
 "You can now launch the Web Application from the Activities overview. To "
 "search for your application, start typing the name and it will be shown with "
@@ -810,6 +801,50 @@ msgstr ""
 "Ahora puede lanzar la aplicación web desde la vista de actividades. Para "
 "buscar su aplicación, comience a escribir el nombre y se mostrará con el "
 "resto de resultados de búsqueda."
+
+#. (itstool) path: credit/years
+#: C/browse-webapps-del.page:14
+msgid "2015"
+msgstr "2015"
+
+#. (itstool) path: info/desc
+#: C/browse-webapps-del.page:24
+#| msgid "Create a Web Application"
+msgid "How do I delete a <em>Web Application</em>?"
+msgstr "¿Cómo elimino una <em>aplicación web</em>?"
+
+#. (itstool) path: page/title
+#: C/browse-webapps-del.page:27
+#| msgid "Create a Web Application"
+msgid "Remove a Web Application"
+msgstr "Quitar una aplicación web"
+
+#. (itstool) path: page/p
+#: C/browse-webapps-del.page:29
+msgid "You can delete a Web Application when you no longer need it."
+msgstr "Puede eliminar una aplicación web cuando ya no la necesite,"
+
+#. (itstool) path: item/p
+#: C/browse-webapps-del.page:33
+msgid "Press on the window header and type <input>about:applications</input>."
+msgstr ""
+"Pulse en la cabecera de la ventana y escriba <input>about:applications</"
+"input>."
+
+#. (itstool) path: item/p
+#: C/browse-webapps-del.page:37
+msgid ""
+"Press <gui>Delete</gui> next to the application which you want to remove."
+msgstr "Pulse <gui>Eliminar</gui> junto a la aplicación que quiere quitar."
+
+#. (itstool) path: page/p
+#: C/browse-webapps-del.page:42
+msgid ""
+"If you have <app>Software</app> installed, you can also delete Web "
+"Applications from there."
+msgstr ""
+"Si tiene <app>Software</app> instalado, también puede eliminar las "
+"aplicaciones web desde ahí."
 
 #. (itstool) path: page/title
 #: C/cookies.xml:20
