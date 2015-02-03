@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-07 04:37+0000\n"
-"PO-Revision-Date: 2015-01-07 09:00+0100\n"
+"POT-Creation-Date: 2015-02-03 20:28+0000\n"
+"PO-Revision-Date: 2015-02-03 22:06+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -393,8 +393,8 @@ msgid ""
 "Where to accept cookies from. Possible values are \"always\", \"no-third-"
 "party\" and \"never\"."
 msgstr ""
-"Odkud mohou být cookies přijímány. Možné hodnoty jsou „always“ (vždy), "
-"„no-third-party“ (ne od třetích stran) a „never“ (nikdy)."
+"Odkud mohou být cookies přijímány. Možné hodnoty jsou „always“ (vždy), „no-"
+"third-party“ (ne od třetích stran) a „never“ (nikdy)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Image animation mode"
@@ -953,9 +953,13 @@ msgstr "Hledat předchozí výskyt hledaného řetězce"
 msgid "Find next occurrence of the search string"
 msgstr "Hledat následující výskyt hledaného řetězce"
 
-#: ../embed/ephy-web-view.c:492 ../src/window-commands.c:330
-msgid "Save"
-msgstr "Uložit"
+#: ../embed/ephy-web-view.c:492 ../lib/ephy-file-chooser.c:194
+msgid "_Save"
+msgstr "_Uložit"
+
+#: ../embed/ephy-web-view.c:493
+msgid "_Don’t Save"
+msgstr "Neuklá_dat"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
@@ -983,7 +987,8 @@ msgstr "Stránka <b>%s</b> chce zjistit vaši polohu."
 #: ../embed/ephy-web-view.c:1433
 #, c-format
 msgid "The page at <b>%s</b> wants to show desktop notifications."
-msgstr "Stránka <b>%s</b> chce zobrazit upozornění přímo v pracovním prostředí."
+msgstr ""
+"Stránka <b>%s</b> chce zobrazit upozornění přímo v pracovním prostředí."
 
 #. translators: %s here is the address of the web page
 #: ../embed/ephy-web-view.c:1519
@@ -1170,7 +1175,7 @@ msgid "_OK"
 msgstr "_Budiž"
 
 #: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
-#: ../src/bookmarks/ephy-bookmark-properties.c:428
+#: ../src/bookmarks/ephy-bookmark-properties.c:432
 #: ../src/bookmarks/ephy-bookmarks-editor.c:819
 #: ../src/resources/clear-data-dialog.ui.h:3
 #: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:809
@@ -1180,10 +1185,6 @@ msgstr "_Zrušit"
 #: ../lib/ephy-file-chooser.c:185 ../src/resources/history-dialog.ui.h:9
 msgid "_Open"
 msgstr "_Otevřít"
-
-#: ../lib/ephy-file-chooser.c:194
-msgid "_Save"
-msgstr "_Uložit"
 
 #: ../lib/ephy-file-chooser.c:209
 msgid "All supported types"
@@ -1574,28 +1575,32 @@ msgstr[0] "%d záložka je podobná"
 msgstr[1] "%d záložky jsou podobné"
 msgstr[2] "%d záložek je podobných"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:234
+#: ../src/bookmarks/ephy-bookmark-properties.c:235
+msgid "Add Bookmark"
+msgstr "Přidání záložky"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:237
 #, c-format
 msgid "“%s” Properties"
 msgstr "Vlastnosti „%s“"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:358
+#: ../src/bookmarks/ephy-bookmark-properties.c:362
 msgid "_Title:"
 msgstr "_Nadpis:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:375
+#: ../src/bookmarks/ephy-bookmark-properties.c:379
 msgid "A_ddress:"
 msgstr "_Adresa:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:387
+#: ../src/bookmarks/ephy-bookmark-properties.c:391
 msgid "T_opics:"
 msgstr "_Témata:"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:410
+#: ../src/bookmarks/ephy-bookmark-properties.c:414
 msgid "Sho_w all topics"
 msgstr "Zobrazit _všechna témata"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:431
+#: ../src/bookmarks/ephy-bookmark-properties.c:435
 #: ../src/resources/prefs-dialog.ui.h:41
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
@@ -2232,8 +2237,8 @@ msgid "Fonts & Style"
 msgstr "Písma a styl"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-msgid "Manage _Cookies"
-msgstr "Správa _cookies"
+msgid "Manage _Cookies…"
+msgstr "Správa _cookies…"
 
 #: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
@@ -2261,8 +2266,8 @@ msgid "_Tell websites I do not want to be tracked"
 msgstr "Sdělova_t webovým stránkám, že si nepřeji být sledován"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-msgid "Manage _Passwords"
-msgstr "Správa he_sel"
+msgid "Manage _Passwords…"
+msgstr "Správa he_sel…"
 
 #: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
@@ -2432,7 +2437,7 @@ msgstr ""
 msgid "Web options"
 msgstr "Možnosti WWW"
 
-#: ../src/ephy-notebook.c:602
+#: ../src/ephy-notebook.c:615
 msgid "Close tab"
 msgstr "Zavřít kartu"
 
@@ -2783,6 +2788,10 @@ msgstr "Bing"
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?cc=cz&q=%s"
+
+#: ../src/window-commands.c:330
+msgid "Save"
+msgstr "Uložit"
 
 #: ../src/window-commands.c:710
 #, c-format
