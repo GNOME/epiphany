@@ -210,7 +210,9 @@ ephy_file_chooser_new (const char *title,
 				 "text/html",
 				 "application/xhtml+xml",
 				 "text/xml",
-                                 "message/rfc822", /* MHTML */
+				 "message/rfc822",            /* MHTML */
+				 "multipart/related",         /* MHTML */
+				 "application/x-mimearchive", /* MHTML */
 				 "image/png",
 				 "image/jpeg",
 				 "image/gif",
@@ -222,7 +224,9 @@ ephy_file_chooser_new (const char *title,
 				 "text/html",
 				 "application/xhtml+xml",
 				 "text/xml",
-                                 "message/rfc822", /* MHTML */
+				 "message/rfc822",            /* MHTML */
+				 "multipart/related",         /* MHTML */
+				 "application/x-mimearchive", /* MHTML */
 				 NULL);
 
 		filter[EPHY_FILE_FILTER_IMAGES] =
