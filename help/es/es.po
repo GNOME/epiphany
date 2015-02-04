@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany-help 3.10\n"
-"POT-Creation-Date: 2015-01-27 04:37+0000\n"
-"PO-Revision-Date: 2015-02-02 11:11+0100\n"
+"POT-Creation-Date: 2015-02-04 04:38+0000\n"
+"PO-Revision-Date: 2015-02-04 12:30+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -93,11 +93,12 @@ msgstr ""
 #: C/bookmark-delete.page:17 C/bookmark-edit.page:17 C/bookmark-smart.page:12
 #: C/bookmark-topic.page:12 C/browse-local.page:11 C/browse-private.page:12
 #: C/browse-tab.page:13 C/browse-web.page:14 C/browse-webapps.page:12
-#: C/browse-webapps-del.page:12 C/cookies.xml:12 C/data-cookies.page:11
-#: C/data-passwords.page:19 C/history.page:12 C/history-delete.page:11
-#: C/keyboard-shortcut.page:16 C/pref-cookies.page:13 C/pref-css.page:17
-#: C/pref-downloads.page:13 C/pref-do-not-track.page:17 C/pref-font.page:18
-#: C/pref-passwords.page:13 C/prob-restore-closed-page.page:16 C/proxy.page:12
+#: C/browse-webapps-del.page:12 C/cert.page:11 C/cookies.xml:12
+#: C/data-cookies.page:11 C/data-passwords.page:19 C/history.page:12
+#: C/history-delete.page:11 C/keyboard-shortcut.page:16 C/pref-cookies.page:13
+#: C/pref-css.page:17 C/pref-downloads.page:13 C/pref-do-not-track.page:17
+#: C/pref-font.page:18 C/pref-passwords.page:13
+#: C/prob-restore-closed-page.page:16 C/proxy.page:12
 msgid "Ekaterina Gerasimova"
 msgstr "Ekaterina Gerasimova"
 
@@ -774,9 +775,6 @@ msgstr "Abra la página web que quiera guardar."
 
 #. (itstool) path: item/p
 #: C/browse-webapps.page:39
-#| msgid ""
-#| "Open the menu at the top-right of the window, then <guiseq> <gui style="
-#| "\"menuitem\">Save as Web Application…</gui></guiseq>."
 msgid ""
 "Open the menu at the top-right of the window, then select <gui style="
 "\"menuitem\">Save as Web Application…</gui>."
@@ -803,19 +801,17 @@ msgstr ""
 "resto de resultados de búsqueda."
 
 #. (itstool) path: credit/years
-#: C/browse-webapps-del.page:14
+#: C/browse-webapps-del.page:14 C/cert.page:13
 msgid "2015"
 msgstr "2015"
 
 #. (itstool) path: info/desc
 #: C/browse-webapps-del.page:24
-#| msgid "Create a Web Application"
 msgid "How do I delete a <em>Web Application</em>?"
 msgstr "¿Cómo elimino una <em>aplicación web</em>?"
 
 #. (itstool) path: page/title
 #: C/browse-webapps-del.page:27
-#| msgid "Create a Web Application"
 msgid "Remove a Web Application"
 msgstr "Quitar una aplicación web"
 
@@ -845,6 +841,47 @@ msgid ""
 msgstr ""
 "Si tiene <app>Software</app> instalado, también puede eliminar las "
 "aplicaciones web desde ahí."
+
+#. (itstool) path: info/desc
+#: C/cert.page:18
+msgid "Certificate management in <app>Web</app>."
+msgstr "Gestión de certificados en <app>Web</app>."
+
+#. (itstool) path: page/title
+#: C/cert.page:21
+msgid "Certificates"
+msgstr "Certificados"
+
+#. (itstool) path: page/p
+#: C/cert.page:23
+msgid ""
+"<app>Web</app> does not have built-in support for certificate management at "
+"this time."
+msgstr ""
+"<app>Web</app> no tiene en este momento soporte integrado para la gestión de "
+"certificados."
+
+#. (itstool) path: note/p
+#: C/cert.page:27
+msgid ""
+"You can add certificates through the command line if you have p11-kit "
+"installed. To add a certificate, you need to download the certificate and "
+"run the following command to import it:"
+msgstr ""
+"Puede añadir certificados mediante la línea de comandos si tiene instalado "
+"p11-kit. Para añadir un certificado, debe descargar el certificado y "
+"ejecutar el siguiente comando para importarlo:"
+
+#. (itstool) path: note/screen
+#: C/cert.page:30
+#, no-wrap
+msgid "<output>$ </output><input>sudo trust anchor <var>/home/user/Downloads/certificate.crt</var></input>"
+msgstr "<output>$ </output><input>sudo trust anchor <var>/home/usuario/Descargas/certificado.crt</var></input>"
+
+#. (itstool) path: note/p
+#: C/cert.page:31
+msgid "This will only work on recent systems."
+msgstr "Esto sólo funciona en sistemas modernos."
 
 #. (itstool) path: page/title
 #: C/cookies.xml:20
