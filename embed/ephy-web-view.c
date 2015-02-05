@@ -1971,7 +1971,8 @@ load_failed_cb (WebKitWebView *web_view,
   priv->load_failed = TRUE;
   ephy_web_view_set_link_message (view, NULL);
 
-  if (error->domain == SOUP_HTTP_ERROR) {
+  if (error->domain == SOUP_HTTP_ERROR ||
+      error->domain == G_TLS_ERROR) {
     ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
     return TRUE;
   }
