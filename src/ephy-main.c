@@ -353,10 +353,8 @@ main (int argc,
       exit (1);
   }
 
-  if (incognito_mode && profile_directory == NULL) {
-    g_print ("--incognito-mode needs a --profile parameter to steal the data from\n");
-    exit (1);
-  }
+  if (incognito_mode && profile_directory == NULL)
+    profile_directory = g_strdup (ephy_dot_dir ());
 
   /* Start our services */
   flags = EPHY_FILE_HELPERS_ENSURE_EXISTS;
