@@ -487,6 +487,7 @@ main (int argc,
 
   /* Shutdown */
   g_object_unref (ephy_shell);
+  g_free (profile_directory);
 
   if (notify_is_initted ())
     notify_uninit ();
