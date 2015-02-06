@@ -749,9 +749,10 @@ ephy_embed_shell_constructed (GObject *object)
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->constructed (object);
 
   embed_shell = EPHY_EMBED_SHELL (object);
-  /* Tests do not run the EmbedShell application instance, so make sure that
+  /* These do not run the EmbedShell application instance, so make sure that
      there is a web context and a user content manager for them. */
-  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_TEST) {
+  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_TEST ||
+      ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
     ephy_embed_shell_create_web_context (embed_shell);
     embed_shell->priv->user_content = webkit_user_content_manager_new ();
   }

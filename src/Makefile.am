@@ -183,6 +183,7 @@ epiphany_search_provider_SOURCES = \
 
 epiphany_search_provider_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
+	-I$(top_srcdir)/embed		\
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/src/bookmarks   \
@@ -200,6 +201,7 @@ epiphany_search_provider_LDADD = \
 	$(top_builddir)/lib/widgets/libephywidgets.la \
 	$(top_builddir)/lib/history/libephyhistory.la \
 	$(top_builddir)/lib/libephymisc.la \
+	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
 	$(CODE_COVERAGE_LDFLAGS) \
 	$(LIBINTL)
