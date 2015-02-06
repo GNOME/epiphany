@@ -980,7 +980,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                                                       "Security Level",
                                                       "The view's security level",
                                                       EPHY_TYPE_SECURITY_LEVEL,
-                                                      EPHY_SECURITY_LEVEL_NO_SECURITY,
+                                                      EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 /**
@@ -1546,6 +1546,45 @@ ephy_web_view_location_changed (EphyWebView *view,
 }
 
 static void
+update_security_status_for_committed_load (EphyWebView *view,
+                                           const char *uri)
+{
+  EphySecurityLevel security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
+  EphyEmbed *embed;
+  WebKitWebContext *web_context;
+  WebKitSecurityManager *security_manager;
+  SoupURI *soup_uri;
+
+  if (view->loading_tls_error_page) {
+    view->loading_tls_error_page = FALSE;
+    return;
+  }
+
+  embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+  web_context = webkit_web_view_get_context (WEBKIT_WEB_VIEW (view));
+  security_manager = webkit_web_context_get_security_manager (web_context);
+  soup_uri = soup_uri_new (uri);
+
+  g_clear_object (&view->certificate);
+  g_clear_pointer (&view->tls_error_failing_uri, g_free);
+
+  if (webkit_security_manager_uri_scheme_is_local (security_manager, soup_uri->scheme)) {
+    g_assert (!view->certificate);
+    security_level = EPHY_SECURITY_LEVEL_LOCAL_PAGE;
+  } else if (webkit_web_view_get_tls_info (WEBKIT_WEB_VIEW (view), &view->certificate, &view->tls_errors)) {
+    g_object_ref (view->certificate);
+    security_level = view->tls_errors == 0 ?
+      EPHY_SECURITY_LEVEL_STRONG_SECURITY : EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE;
+  } else if (ephy_embed_has_load_pending (embed)) {
+    security_level = EPHY_SECURITY_LEVEL_TO_BE_DETERMINED;
+  }
+
+  ephy_web_view_set_security_level (view, security_level);
+
+  soup_uri_free (soup_uri);
+}
+
+static void
 load_changed_cb (WebKitWebView *web_view,
                  WebKitLoadEvent load_event,
                  gpointer user_data)
@@ -1586,30 +1625,13 @@ load_changed_cb (WebKitWebView *web_view,
     /* TODO: Update the loading uri */
     break;
   case WEBKIT_LOAD_COMMITTED: {
-    const char* uri;
-    EphySecurityLevel security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
-
+    const char *uri;
     view->ever_committed = TRUE;
 
     /* Title and location. */
     uri = webkit_web_view_get_uri (web_view);
     ephy_web_view_location_changed (view, uri);
-
-    /* Security status. */
-    if (view->loading_tls_error_page) {
-      view->loading_tls_error_page = FALSE;
-    } else {
-      g_clear_object (&view->certificate);
-      g_clear_pointer (&view->tls_error_failing_uri, g_free);
-
-      if (webkit_web_view_get_tls_info (web_view, &view->certificate, &view->tls_errors)) {
-        g_object_ref (view->certificate);
-        security_level = view->tls_errors == 0 ?
-          EPHY_SECURITY_LEVEL_STRONG_SECURITY : EPHY_SECURITY_LEVEL_BROKEN_SECURITY;
-      }
-
-      ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), security_level);
-    }
+    update_security_status_for_committed_load (view, uri);
 
     /* History. */
     if (!ephy_web_view_is_history_frozen (view)) {
@@ -2020,7 +2042,7 @@ load_failed_with_tls_error_cb (WebKitWebView *web_view,
   view->certificate = g_object_ref (certificate);
   view->tls_errors = errors;
   view->tls_error_failing_uri = g_strdup (uri);
-  ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), EPHY_SECURITY_LEVEL_BROKEN_SECURITY);
+  ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE);
   ephy_web_view_load_error_page (EPHY_WEB_VIEW (web_view), uri,
                                  EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL);
 
@@ -2034,7 +2056,7 @@ mixed_content_detected_cb (WebKitWebView *web_view,
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
 
-  if (view->security_level != EPHY_SECURITY_LEVEL_BROKEN_SECURITY)
+  if (view->security_level != EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE)
     ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_MIXED_CONTENT);
 }
 
@@ -2082,7 +2104,7 @@ ephy_web_view_init (EphyWebView *web_view)
   web_view->is_blank = TRUE;
   web_view->ever_committed = FALSE;
   web_view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-  web_view->security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
+  web_view->security_level = EPHY_SECURITY_LEVEL_TO_BE_DETERMINED;
 
   web_view->file_monitor = ephy_file_monitor_new (web_view);
 

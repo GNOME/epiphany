@@ -250,7 +250,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 							     "Security level",
 							     "State of the security icon",
 							     EPHY_TYPE_SECURITY_LEVEL,
-							     EPHY_SECURITY_LEVEL_NO_SECURITY,
+							     EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
 							     G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
 	g_object_class_install_property (object_class,

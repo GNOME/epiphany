@@ -28,12 +28,22 @@
 
 G_BEGIN_DECLS
 
+#if 0
+TODO: EPHY_SECURITY_LEVEL_WEAK_SECURITY should be implemented for e.g. certs
+that use SHA1 or RSA 1024, connections that use RC4, connections that required
+protocol version fallback, servers that did not send the safe renegotiation
+extension, servers that picked weak DH primes, whatever else turns out to be bad
+next year, etc. etc.
+#endif
+
 typedef enum
 {
+  EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
   EPHY_SECURITY_LEVEL_NO_SECURITY,
-  EPHY_SECURITY_LEVEL_BROKEN_SECURITY,
+  EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE,
   EPHY_SECURITY_LEVEL_MIXED_CONTENT,
   EPHY_SECURITY_LEVEL_STRONG_SECURITY,
+  EPHY_SECURITY_LEVEL_LOCAL_PAGE
 } EphySecurityLevel;
 
 const char *ephy_security_level_to_icon_name (EphySecurityLevel level);

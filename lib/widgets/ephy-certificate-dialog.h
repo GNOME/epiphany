@@ -22,6 +22,8 @@
 #ifndef EPHY_CERTIFICATE_DIALOG_H
 #define EPHY_CERTIFICATE_DIALOG_H
 
+#include "ephy-security-levels.h"
+
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
@@ -56,7 +58,8 @@ GType      ephy_certificate_dialog_get_type (void);
 GtkWidget *ephy_certificate_dialog_new      (GtkWindow           *parent,
                                              const char          *address,
                                              GTlsCertificate     *certificate,
-                                             GTlsCertificateFlags tls_errors);
+                                             GTlsCertificateFlags tls_errors,
+                                             EphySecurityLevel    security_level);
 
 G_END_DECLS
 

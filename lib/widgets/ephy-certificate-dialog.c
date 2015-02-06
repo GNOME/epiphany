@@ -18,6 +18,8 @@
 #include "config.h"
 #include "ephy-certificate-dialog.h"
 
+#include "ephy-lib-type-builtins.h"
+
 #define GCR_API_SUBJECT_TO_CHANGE
 #include <gcr/gcr.h>
 #include <glib/gi18n.h>
@@ -35,6 +37,7 @@ enum
   PROP_0,
   PROP_ADDRESS,
   PROP_CERTIFICATE,
+  PROP_SECURITY_LEVEL,
   PROP_TLS_ERRORS
 };
 
@@ -43,6 +46,8 @@ struct _EphyCertificateDialogPrivate
   GtkWidget *icon;
   GtkWidget *title;
   GtkWidget *text;
+  GTlsCertificateFlags tls_errors;
+  EphySecurityLevel security_level;
 };
 
 G_DEFINE_TYPE (EphyCertificateDialog, ephy_certificate_dialog, GTK_TYPE_DIALOG)
@@ -129,34 +134,49 @@ get_error_messages_from_tls_errors (GTlsCertificateFlags tls_errors)
 }
 
 static void
-ephy_certificate_dialog_set_tls_errors (EphyCertificateDialog *dialog,
-                                        GTlsCertificateFlags tls_errors)
+ephy_certificate_dialog_constructed (GObject *object)
 {
+  EphyCertificateDialog *dialog = EPHY_CERTIFICATE_DIALOG (object);
   EphyCertificateDialogPrivate *priv = dialog->priv;
   GIcon *icon;
+  const char *icon_name;
   char *markup;
 
-  icon = tls_errors == 0 ?
-    g_themed_icon_new_with_default_fallbacks ("channel-secure-symbolic") :
-    g_themed_icon_new_with_default_fallbacks ("channel-insecure-symbolic");
-  gtk_image_set_from_gicon (GTK_IMAGE (priv->icon), icon, GTK_ICON_SIZE_DIALOG);
-  g_object_unref (icon);
+  G_OBJECT_CLASS (ephy_certificate_dialog_parent_class)->constructed (object);
+
+  icon_name = ephy_security_level_to_icon_name (priv->security_level);
+  if (icon_name) {
+    icon = g_themed_icon_new_with_default_fallbacks (icon_name);
+    gtk_image_set_from_gicon (GTK_IMAGE (priv->icon), icon, GTK_ICON_SIZE_DIALOG);
+    g_object_unref (icon);
+  }
 
   markup = g_strdup_printf ("<span weight=\"bold\" size=\"large\">%s</span>",
-			    tls_errors == 0 ?
+			    priv->tls_errors == 0 ?
 			    _("The identity of this website has been verified.") :
 			    _("The identity of this website has not been verified."));
   gtk_label_set_markup (GTK_LABEL (priv->title), markup);
   g_free (markup);
 
-  if (tls_errors) {
-    char *text = get_error_messages_from_tls_errors (tls_errors);
-
+  if (priv->tls_errors) {
+    char *text = get_error_messages_from_tls_errors (priv->tls_errors);
     gtk_label_set_text (GTK_LABEL (priv->text), text);
     g_free (text);
-
-    gtk_widget_show (priv->text);
+  } else {
+    switch (priv->security_level) {
+    case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
+      /* Message on certificte dialog ertificate dialog */
+      gtk_label_set_text (GTK_LABEL (priv->text), _("No problems have been detected with your connection."));
+      break;
+    case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
+      gtk_label_set_text (GTK_LABEL (priv->text), _("This certificate is valid. However, "
+                                                    "resources on this page were sent insecurely."));
+      break;
+    default:
+      g_assert_not_reached ();
+    }
   }
+  gtk_widget_show (priv->text);
 }
 
 static void
@@ -166,6 +186,7 @@ ephy_certificate_dialog_set_property (GObject *object,
                                       GParamSpec *pspec)
 {
   EphyCertificateDialog *dialog = EPHY_CERTIFICATE_DIALOG (object);
+  EphyCertificateDialogPrivate *priv = dialog->priv;
 
   switch (prop_id) {
   case PROP_ADDRESS:
@@ -174,8 +195,11 @@ ephy_certificate_dialog_set_property (GObject *object,
   case PROP_CERTIFICATE:
     ephy_certificate_dialog_set_certificate (dialog, g_value_get_object (value));
     break;
+  case PROP_SECURITY_LEVEL:
+    priv->security_level = g_value_get_enum (value);
+    break;
   case PROP_TLS_ERRORS:
-    ephy_certificate_dialog_set_tls_errors (dialog, g_value_get_flags (value));
+    priv->tls_errors = g_value_get_flags (value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -187,6 +211,7 @@ ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ephy_certificate_dialog_constructed;
   object_class->set_property = ephy_certificate_dialog_set_property;
 
   /**
@@ -222,6 +247,24 @@ ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
 							G_PARAM_STATIC_NAME |
 							G_PARAM_STATIC_NICK |
 							G_PARAM_STATIC_BLURB));
+
+  /**
+   * EphySecurityLevel:security-level:
+   *
+   * Indicates whether something is wrong with the connection.
+   */
+  g_object_class_install_property (object_class,
+				   PROP_SECURITY_LEVEL,
+				   g_param_spec_enum ("security-level",
+						      "Security Level",
+						      "Indicates whether something is wrong with the connection",
+						      EPHY_TYPE_SECURITY_LEVEL,
+						      EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
+						      G_PARAM_WRITABLE |
+						      G_PARAM_CONSTRUCT_ONLY |
+						      G_PARAM_STATIC_NAME |
+						      G_PARAM_STATIC_NICK |
+						      G_PARAM_STATIC_BLURB));
 
   /**
    * EphyCertificateDialog:tls-errors:
@@ -304,7 +347,8 @@ GtkWidget *
 ephy_certificate_dialog_new (GtkWindow *parent,
                              const char *address,
                              GTlsCertificate *certificate,
-                             GTlsCertificateFlags tls_errors)
+                             GTlsCertificateFlags tls_errors,
+                             EphySecurityLevel security_level)
 {
   GtkWidget *dialog;
 
@@ -314,6 +358,7 @@ ephy_certificate_dialog_new (GtkWindow *parent,
   dialog = GTK_WIDGET (g_object_new (EPHY_TYPE_CERTIFICATE_DIALOG,
 				     "address", address,
 				     "certificate", certificate,
+				     "security-level", security_level,
 				     "tls-errors", tls_errors,
                                      "modal", TRUE,
                                      "use-header-bar", TRUE,

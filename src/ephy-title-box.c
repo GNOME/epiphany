@@ -638,16 +638,19 @@ ephy_title_box_set_security_level (EphyTitleBox         *title_box,
                                    EphySecurityLevel     security_level)
 {
   EphyTitleBoxPrivate *priv;
+  const char *icon_name;
 
   g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
 
   priv = ephy_title_box_get_instance_private (title_box);
+  icon_name = ephy_security_level_to_icon_name (security_level);
 
   g_object_set (priv->lock_image,
-                "icon-name", ephy_security_level_to_icon_name (security_level),
+                "icon-name", icon_name,
                 NULL);
 
-  gtk_widget_set_visible (priv->lock_image, security_level != EPHY_SECURITY_LEVEL_NO_SECURITY);
+  gtk_widget_set_visible (priv->lock_image, icon_name != NULL);
+
   ephy_location_entry_set_security_level (EPHY_LOCATION_ENTRY (priv->entry), security_level);
 }
 
