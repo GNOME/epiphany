@@ -60,7 +60,7 @@ typedef struct
   GtkWidget *entry;
   GtkWidget *lock_image;
   GtkWidget *title;
-  GtkWidget *uri;
+  GtkWidget *subtitle;
 
   GBinding *title_binding;
 
@@ -189,13 +189,13 @@ ephy_title_box_add_title_bar (EphyTitleBox *title_box)
   gtk_widget_set_valign (priv->lock_image, GTK_ALIGN_BASELINE);
   gtk_box_pack_start (GTK_BOX (hbox), priv->lock_image, FALSE, FALSE, 0);
 
-  priv->uri = gtk_label_new (NULL);
-  gtk_widget_set_valign (priv->uri, GTK_ALIGN_BASELINE);
-  gtk_widget_show (priv->uri);
-  gtk_label_set_line_wrap (GTK_LABEL (priv->uri), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (priv->uri), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (priv->uri), PANGO_ELLIPSIZE_END);
-  gtk_box_pack_start (GTK_BOX (hbox), priv->uri, FALSE, FALSE, 0);
+  priv->subtitle = gtk_label_new (NULL);
+  gtk_widget_set_valign (priv->subtitle, GTK_ALIGN_BASELINE);
+  gtk_widget_show (priv->subtitle);
+  gtk_label_set_line_wrap (GTK_LABEL (priv->subtitle), FALSE);
+  gtk_label_set_single_line_mode (GTK_LABEL (priv->subtitle), TRUE);
+  gtk_label_set_ellipsize (GTK_LABEL (priv->subtitle), PANGO_ELLIPSIZE_END);
+  gtk_box_pack_start (GTK_BOX (hbox), priv->subtitle, FALSE, FALSE, 0);
 }
 
 static void
@@ -677,7 +677,7 @@ ephy_title_box_get_location_entry (EphyTitleBox *title_box)
 /**
  * ephy_title_box_set_address:
  * @title_box: an #EphyTitleBox
- * @address: (nullable): the URI to display as the subtitle of this #EphyTitleBox
+ * @address: (nullable): the URI to use for the subtitle of this #EphyTitleBox
  *
  * Sets the address of @title_box to @address
  */
@@ -694,14 +694,14 @@ ephy_title_box_set_address (EphyTitleBox *title_box,
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 
   if (address == NULL || mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    gtk_label_set_text (GTK_LABEL (priv->uri), address);
+    gtk_label_set_text (GTK_LABEL (priv->subtitle), address);
   } else {
     gboolean rtl;
-    char *uri;
+    char *subtitle;
 
     rtl = gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL;
-    uri = g_strconcat (rtl ? "▾ " : address, rtl ? address : " ▾", NULL);
-    gtk_label_set_text (GTK_LABEL (priv->uri), uri);
-    g_free (uri);
+    subtitle = g_strconcat (rtl ? "▾ " : address, rtl ? address : " ▾", NULL);
+    gtk_label_set_text (GTK_LABEL (priv->subtitle), subtitle);
+    g_free (subtitle);
   }
 }
