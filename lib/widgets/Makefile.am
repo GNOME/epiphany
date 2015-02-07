@@ -66,8 +66,6 @@ nodist_libephywidgets_la_SOURCES = \
 libephywidgets_la_SOURCES = \
 	ephy-certificate-dialog.c		\
 	ephy-certificate-dialog.h		\
-	ephy-certificate-popover.c		\
-	ephy-certificate-popover.h		\
 	ephy-downloads-popover.h		\
 	ephy-downloads-popover.c		\
 	ephy-downloads-progress-icon.h		\
@@ -82,6 +80,8 @@ libephywidgets_la_SOURCES = \
 	ephy-middle-clickable-button.h		\
 	ephy-node-view.c			\
 	ephy-node-view.h			\
+	ephy-security-popover.c			\
+	ephy-security-popover.h			\
 	ephy-tree-model-node.c			\
 	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\

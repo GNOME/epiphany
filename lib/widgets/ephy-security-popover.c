@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2014 Igalia S.L.
+ *  Copyright © 2014, 2015 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  */
 
 #include "config.h"
-#include "ephy-certificate-popover.h"
+#include "ephy-security-popover.h"
 
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
@@ -26,11 +26,12 @@
 #include "ephy-lib-type-builtins.h"
 
 /**
- * SECTION:ephy-certificate-popover
- * @short_description: A popover to show basic SSL connection information
+ * SECTION:ephy-security-popover
+ * @short_description: A popover to show basic TLS connection information
  *
- * #EphyCertificatePopover shows basic information about an SSL connection
- * and allows opening #EphyCertificateDialog for more detailed information.
+ * #EphySecurityPopover shows basic information about a TLS connection
+ * and allows opening #EphyCertificateDialog for more detailed information. It
+ * can also be used to show that a connection does not use TLS at all.
  */
 
 enum
@@ -42,7 +43,7 @@ enum
   PROP_TLS_ERRORS,
 };
 
-struct _EphyCertificatePopoverPrivate
+struct _EphySecurityPopoverPrivate
 {
   char *address;
   char *hostname;
@@ -55,13 +56,13 @@ struct _EphyCertificatePopoverPrivate
   EphySecurityLevel security_level;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (EphyCertificatePopover, ephy_certificate_popover, GTK_TYPE_POPOVER)
+G_DEFINE_TYPE_WITH_PRIVATE (EphySecurityPopover, ephy_security_popover, GTK_TYPE_POPOVER)
 
 static void
-ephy_certificate_popover_set_address (EphyCertificatePopover *popover,
-                                      const char *address)
+ephy_security_popover_set_address (EphySecurityPopover *popover,
+                                   const char *address)
 {
-  EphyCertificatePopoverPrivate *priv = popover->priv;
+  EphySecurityPopoverPrivate *priv = popover->priv;
   SoupURI *uri;
   char *label_text;
   char *uri_text;
@@ -81,20 +82,20 @@ ephy_certificate_popover_set_address (EphyCertificatePopover *popover,
 }
 
 static void
-ephy_certificate_popover_set_certificate (EphyCertificatePopover *popover,
-                                          GTlsCertificate *certificate)
+ephy_security_popover_set_certificate (EphySecurityPopover *popover,
+                                       GTlsCertificate *certificate)
 {
-  EphyCertificatePopoverPrivate *priv = popover->priv;
+  EphySecurityPopoverPrivate *priv = popover->priv;
 
   if (certificate)
     priv->certificate = g_object_ref (certificate);
 }
 
 static void
-ephy_certificate_popover_set_security_level (EphyCertificatePopover *popover,
-                                             EphySecurityLevel security_level)
+ephy_security_popover_set_security_level (EphySecurityPopover *popover,
+                                          EphySecurityLevel security_level)
 {
-  EphyCertificatePopoverPrivate *priv = popover->priv;
+  EphySecurityPopoverPrivate *priv = popover->priv;
   GIcon *icon;
   char *address_text;
   char *label_text = NULL;
@@ -148,8 +149,8 @@ static void
 certificate_button_clicked_cb (GtkButton *button,
                                gpointer user_data)
 {
-  EphyCertificatePopover *popover = EPHY_CERTIFICATE_POPOVER (user_data);
-  EphyCertificatePopoverPrivate *priv = popover->priv;
+  EphySecurityPopover *popover = EPHY_SECURITY_POPOVER (user_data);
+  EphySecurityPopoverPrivate *priv = popover->priv;
   GtkWidget *dialog;
 
   dialog = ephy_certificate_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (popover))),
@@ -167,13 +168,13 @@ certificate_button_clicked_cb (GtkButton *button,
 }
 
 static void
-ephy_certificate_popover_constructed (GObject *object)
+ephy_security_popover_constructed (GObject *object)
 {
-  EphyCertificatePopover *popover = EPHY_CERTIFICATE_POPOVER (object);
-  EphyCertificatePopoverPrivate *priv = popover->priv;
+  EphySecurityPopover *popover = EPHY_SECURITY_POPOVER (object);
+  EphySecurityPopoverPrivate *priv = popover->priv;
   GtkWidget *certificate_button;
 
-  G_OBJECT_CLASS (ephy_certificate_popover_parent_class)->constructed (object);
+  G_OBJECT_CLASS (ephy_security_popover_parent_class)->constructed (object);
 
   if (!priv->certificate)
     return;
@@ -192,46 +193,46 @@ ephy_certificate_popover_constructed (GObject *object)
 }
 
 static void
-ephy_certificate_popover_dispose (GObject *object)
+ephy_security_popover_dispose (GObject *object)
 {
-  EphyCertificatePopover *popover = EPHY_CERTIFICATE_POPOVER (object);
-  EphyCertificatePopoverPrivate *priv = popover->priv;
+  EphySecurityPopover *popover = EPHY_SECURITY_POPOVER (object);
+  EphySecurityPopoverPrivate *priv = popover->priv;
 
   g_clear_object (&priv->certificate);
 
-  G_OBJECT_CLASS (ephy_certificate_popover_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_security_popover_parent_class)->dispose (object);
 }
 
 static void
-ephy_certificate_popover_finalize (GObject *object)
+ephy_security_popover_finalize (GObject *object)
 {
-  EphyCertificatePopover *popover = EPHY_CERTIFICATE_POPOVER (object);
-  EphyCertificatePopoverPrivate *priv = popover->priv;
+  EphySecurityPopover *popover = EPHY_SECURITY_POPOVER (object);
+  EphySecurityPopoverPrivate *priv = popover->priv;
 
   g_free (priv->address);
   g_free (priv->hostname);
 
-  G_OBJECT_CLASS (ephy_certificate_popover_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ephy_security_popover_parent_class)->finalize (object);
 }
 
 static void
-ephy_certificate_popover_set_property (GObject *object,
-                                       guint prop_id,
-                                       const GValue *value,
-                                       GParamSpec *pspec)
+ephy_security_popover_set_property (GObject *object,
+                                    guint prop_id,
+                                    const GValue *value,
+                                    GParamSpec *pspec)
 {
-  EphyCertificatePopover *popover = EPHY_CERTIFICATE_POPOVER (object);
-  EphyCertificatePopoverPrivate *priv = popover->priv;
+  EphySecurityPopover *popover = EPHY_SECURITY_POPOVER (object);
+  EphySecurityPopoverPrivate *priv = popover->priv;
 
   switch (prop_id) {
   case PROP_ADDRESS:
-    ephy_certificate_popover_set_address (popover, g_value_get_string (value));
+    ephy_security_popover_set_address (popover, g_value_get_string (value));
     break;
   case PROP_CERTIFICATE:
-    ephy_certificate_popover_set_certificate (popover, g_value_get_object (value));
+    ephy_security_popover_set_certificate (popover, g_value_get_object (value));
     break;
   case PROP_SECURITY_LEVEL:
-    ephy_certificate_popover_set_security_level (popover, g_value_get_enum (value));
+    ephy_security_popover_set_security_level (popover, g_value_get_enum (value));
     break;
   case PROP_TLS_ERRORS:
     priv->tls_errors = g_value_get_flags (value);
@@ -242,11 +243,11 @@ ephy_certificate_popover_set_property (GObject *object,
 }
 
 static void
-ephy_certificate_popover_get_preferred_width (GtkWidget *widget,
-                                              gint *minimum_width,
-                                              gint *natural_width)
+ephy_security_popover_get_preferred_width (GtkWidget *widget,
+                                           gint *minimum_width,
+                                           gint *natural_width)
 {
-  GTK_WIDGET_CLASS (ephy_certificate_popover_parent_class)->get_preferred_width (widget,
+  GTK_WIDGET_CLASS (ephy_security_popover_parent_class)->get_preferred_width (widget,
                                                                                  minimum_width,
                                                                                  natural_width);
 
@@ -255,20 +256,20 @@ ephy_certificate_popover_get_preferred_width (GtkWidget *widget,
 }
 
 static void
-ephy_certificate_popover_class_init (EphyCertificatePopoverClass *klass)
+ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed = ephy_certificate_popover_constructed;
-  object_class->dispose = ephy_certificate_popover_dispose;
-  object_class->finalize = ephy_certificate_popover_finalize;
-  object_class->set_property = ephy_certificate_popover_set_property;
+  object_class->constructed = ephy_security_popover_constructed;
+  object_class->dispose = ephy_security_popover_dispose;
+  object_class->finalize = ephy_security_popover_finalize;
+  object_class->set_property = ephy_security_popover_set_property;
 
-  widget_class->get_preferred_width = ephy_certificate_popover_get_preferred_width;
+  widget_class->get_preferred_width = ephy_security_popover_get_preferred_width;
 
   /**
-   * EphyCertificatePopover:address:
+   * EphySecurityPopover:address:
    *
    * The address of the website.
    */
@@ -283,7 +284,7 @@ ephy_certificate_popover_class_init (EphyCertificatePopoverClass *klass)
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * EphyCertificatePopover:certificate:
+   * EphySecurityPopover:certificate:
    *
    * The certificate of the website.
    */
@@ -298,7 +299,7 @@ ephy_certificate_popover_class_init (EphyCertificatePopoverClass *klass)
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * EphyCertificatePopover:tls-errors:
+   * EphySecurityPopover:tls-errors:
    *
    * Indicates issues with the security of the website.
    */
@@ -314,7 +315,7 @@ ephy_certificate_popover_class_init (EphyCertificatePopoverClass *klass)
                                                        G_PARAM_STATIC_STRINGS));
 
   /**
-   * EphyCertificatePopover:security-level:
+   * EphySecurityPopover:security-level:
    *
    * The state of the lock displayed in the address bar.
    */
@@ -331,11 +332,11 @@ ephy_certificate_popover_class_init (EphyCertificatePopoverClass *klass)
 }
 
 static void
-ephy_certificate_popover_init (EphyCertificatePopover *popover)
+ephy_security_popover_init (EphySecurityPopover *popover)
 {
-  EphyCertificatePopoverPrivate *priv;
+  EphySecurityPopoverPrivate *priv;
 
-  popover->priv = ephy_certificate_popover_get_instance_private (popover);
+  popover->priv = ephy_security_popover_get_instance_private (popover);
   priv = popover->priv;
 
   priv->grid = gtk_grid_new ();
@@ -360,15 +361,15 @@ ephy_certificate_popover_init (EphyCertificatePopover *popover)
   gtk_widget_show_all (priv->grid);
 }
 
-GtkWidget *ephy_certificate_popover_new (GtkWidget *relative_to,
-                                         const char *address,
-                                         GTlsCertificate *certificate,
-                                         GTlsCertificateFlags tls_errors,
-                                         EphySecurityLevel security_level)
+GtkWidget *ephy_security_popover_new (GtkWidget *relative_to,
+                                      const char *address,
+                                      GTlsCertificate *certificate,
+                                      GTlsCertificateFlags tls_errors,
+                                      EphySecurityLevel security_level)
 {
   g_return_val_if_fail (address != NULL, NULL);
 
-  return GTK_WIDGET (g_object_new (EPHY_TYPE_CERTIFICATE_POPOVER,
+  return GTK_WIDGET (g_object_new (EPHY_TYPE_SECURITY_POPOVER,
                                    "address", address,
                                    "certificate", certificate,
                                    "relative-to", relative_to,
