@@ -892,7 +892,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Temporary Files</property>
+                        <property name="label" translatable="yes">Stored Data</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -911,82 +911,36 @@
                         <property name="spacing">12</property>
                         <property name="margin_start">12</property>
                         <child>
-                          <object class="GtkLabel" id="cache_size">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Disk space:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">disk_cache_spinbutton</property>
+                            <!-- We must use xalign instead of halign because halign
+                                 does not work for labels with line wrap. And we must
+                                 allow line wrap to accomodate translations. -->
+                            <property name="xalign">0</property>
+                            <property name="wrap">True</property>
+                            <property name="max-width-chars">30</property>
+                            <property name="label" translatable="yes">You can clear stored personal data.</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="hbox175">
+                          <object class="GtkButton" id="clear_personal_data_button">
+                            <property name="label" translatable="yes">Cl_ear Personal Data…</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkSpinButton" id="disk_cache_spinbutton">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="adjustment">adjustment2</property>
-                                <property name="climb_rate">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label1167">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes">MB</property>
-                                <property name="justify">center</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkHButtonBox" id="hbuttonbox14">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkButton" id="clear_cache_button">
-                                <property name="label" translatable="yes">Cl_ear</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">2</property>
+                            <property name="position">1</property>
+                            <property name="pack_type">end</property>
                           </packing>
                         </child>
                       </object>
@@ -1313,4 +1267,12 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="manage_cookies_button"/>
+      <widget name="manage_passwords_button"/>
+      <widget name="clear_personal_data_button"/>
+    </widgets>
+  </object>
 </interface>

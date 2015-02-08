@@ -103,7 +103,6 @@ typedef enum
 
 #define EPHY_PREFS_SCHEMA                         "org.gnome.Epiphany"
 #define EPHY_PREFS_USER_AGENT                     "user-agent"
-#define EPHY_PREFS_CACHE_SIZE                     "cache-size"
 #define EPHY_PREFS_NEW_WINDOWS_IN_TABS            "new-windows-in-tabs"
 #define EPHY_PREFS_AUTO_DOWNLOADS                 "automatic-downloads"
 #define EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA "warn-on-close-unsubmitted-data"

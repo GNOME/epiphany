@@ -85,8 +85,7 @@ struct PrefsDialogPrivate
 	GtkWidget *never;
 	GtkWidget *remember_passwords_checkbutton;
 	GtkWidget *do_not_track_checkbutton;
-	GtkWidget *disk_cache_spinbutton;
-	GtkWidget *clear_cache_button;
+	GtkWidget *clear_personal_data_button;
 
 	/* language */
 	GtkWidget *default_encoding_combo;
@@ -204,8 +203,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, never);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, remember_passwords_checkbutton);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, do_not_track_checkbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, disk_cache_spinbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, clear_cache_button);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, clear_personal_data_button);
 
 	/* language */
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, default_encoding_combo);
@@ -956,8 +954,8 @@ prefs_dialog_response_cb (GtkDialog *widget,
 }
 
 static void
-clear_cache_button_clicked_cb (GtkWidget *button,
-			       PrefsDialog *dialog)
+clear_personal_data_button_clicked_cb (GtkWidget *button,
+				       PrefsDialog *dialog)
 {
 	ClearDataDialog *clear_dialog;
 
@@ -1295,15 +1293,10 @@ setup_privacy_page (PrefsDialog *dialog)
 			 priv->do_not_track_checkbutton,
 			 "active",
 			 G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind (web_settings,
-			 EPHY_PREFS_CACHE_SIZE,
-			 priv->disk_cache_spinbutton,
-			 "value",
-			 G_SETTINGS_BIND_DEFAULT);
 
-	g_signal_connect (priv->clear_cache_button,
+	g_signal_connect (priv->clear_personal_data_button,
 			  "clicked",
-			  G_CALLBACK (clear_cache_button_clicked_cb),
+			  G_CALLBACK (clear_personal_data_button_clicked_cb),
 			  dialog);
 }
 
