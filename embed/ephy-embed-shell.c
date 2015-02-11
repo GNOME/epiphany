@@ -527,12 +527,9 @@ initialize_web_extensions (WebKitWebContext* web_context,
 static void
 ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
 {
-  GError *error = NULL;
-
   shell->priv->bus = g_application_get_dbus_connection (G_APPLICATION (shell));
   if (!shell->priv->bus) {
-    g_warning ("Application not connected to session bus: %s\n", error->message);
-    g_error_free (error);
+    g_warning ("Application not connected to session bus");
     return;
   }
 
