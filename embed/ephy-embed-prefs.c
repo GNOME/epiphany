@@ -416,12 +416,8 @@ webkit_pref_callback_cookie_accept_policy (GSettings *settings,
 }
 
 static void
-webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
-                                  char *key,
-                                  gpointer data)
+ephy_embed_prefs_update_font_settings (GSettings *ephy_settings, char *key)
 {
-  GSettings *settings;
-
   if (g_settings_get_boolean (ephy_settings, key)) {
     g_object_set (webkit_settings,
                   "default-font-family", "serif",
@@ -432,22 +428,28 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
                   NULL);
   } else {
     /* Sync with Epiphany values */
-    settings = ephy_settings;
-
-    webkit_pref_callback_font_size (settings, EPHY_PREFS_WEB_SERIF_FONT,
+    webkit_pref_callback_font_size (ephy_settings, EPHY_PREFS_WEB_SERIF_FONT,
                                     "default-font-size");
-    webkit_pref_callback_font_size (settings, EPHY_PREFS_WEB_MONOSPACE_FONT,
+    webkit_pref_callback_font_size (ephy_settings, EPHY_PREFS_WEB_MONOSPACE_FONT,
                                     "default-monospace-font-size");
 
-    webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SERIF_FONT,
+    webkit_pref_callback_font_family (ephy_settings, EPHY_PREFS_WEB_SERIF_FONT,
                                       "default-font-family");
-    webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SANS_SERIF_FONT,
+    webkit_pref_callback_font_family (ephy_settings, EPHY_PREFS_WEB_SANS_SERIF_FONT,
                                       "sans-serif-font-family");
-    webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_MONOSPACE_FONT,
+    webkit_pref_callback_font_family (ephy_settings, EPHY_PREFS_WEB_MONOSPACE_FONT,
                                       "monospace-font-family");
-    webkit_pref_callback_font_family (settings, EPHY_PREFS_WEB_SERIF_FONT,
+    webkit_pref_callback_font_family (ephy_settings, EPHY_PREFS_WEB_SERIF_FONT,
                                       "serif-font-family");
   }
+}
+
+static void
+webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
+                                  char *key,
+                                  gpointer data)
+{
+  ephy_embed_prefs_update_font_settings (ephy_settings, key);
 }
 
 static void
@@ -473,6 +475,15 @@ webkit_pref_callback_enable_spell_checking (GSettings *settings,
     g_strfreev (languages);
     g_strfreev (normalized);
   }
+}
+
+static void
+gtk_settings_xft_dpi_changed_cb (GtkSettings *gtk_settings,
+                                 GParamSpec *pspec,
+                                 gpointer data)
+{
+  GSettings *gsettings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+  ephy_embed_prefs_update_font_settings (gsettings, EPHY_PREFS_WEB_USE_GNOME_FONTS);
 }
 
 static const PrefData webkit_pref_entries[] =
@@ -534,6 +545,7 @@ static const PrefData webkit_pref_entries[] =
 static gpointer
 ephy_embed_prefs_init (gpointer user_data)
 {
+  GtkSettings *gtk_settings;
   int i;
 
   webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
@@ -558,6 +570,16 @@ ephy_embed_prefs_init (gpointer user_data)
                       G_CALLBACK (webkit_pref_entries[i].callback),
                       webkit_pref_entries[i].webkit_pref);
     g_free (key);
+  }
+
+  /* Connect to the "notify::gtk-xft-dpi" signal for GtkSettings, so that
+   * we can update the font size in real time if the screen's resolution
+   * for font handling changes (e.g. enabled "Large Text" a11y mode).
+   */
+  gtk_settings = gtk_settings_get_default ();
+  if (gtk_settings) {
+    g_signal_connect (gtk_settings, "notify::gtk-xft-dpi",
+                      G_CALLBACK (gtk_settings_xft_dpi_changed_cb), NULL);
   }
 
   g_settings_bind (EPHY_SETTINGS_WEB,
