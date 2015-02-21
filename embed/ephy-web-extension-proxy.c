@@ -90,6 +90,8 @@ web_extension_proxy_created_cb (GDBusProxy *proxy,
     g_warning ("Error creating web extension proxy: %s\n", error->message);
     g_error_free (error);
   }
+
+  g_object_unref (web_extension);
 }
 
 static void
@@ -110,7 +112,9 @@ web_extension_appeared_cb (GDBusConnection *connection,
                     EPHY_WEB_EXTENSION_INTERFACE,
                     web_extension->priv->cancellable,
                     (GAsyncReadyCallback)web_extension_proxy_created_cb,
-                    web_extension);
+                    /* Ref here because the web process could crash, triggering
+                     * web_extension_vanished_cb() before this finishes. */
+                    g_object_ref (web_extension));
 }
 
 static void
