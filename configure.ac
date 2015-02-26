@@ -78,8 +78,6 @@ LIBNOTIFY_REQUIRED=0.5.1
 GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
 
-WEBKIT_GTK_PC_NAME=webkit2gtk-4.0
-
 # Tests
 
 AC_MSG_CHECKING([whether to build tests])
@@ -100,7 +98,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  libwnck-3.0
 		  libxml-2.0 >= $LIBXML_REQUIRED
 		  libxslt >= $LIBXSLT_REQUIRED
-		  $WEBKIT_GTK_PC_NAME >= $WEBKIT_GTK_REQUIRED
+		  webkit2gtk-4.0 >= $WEBKIT_GTK_REQUIRED
 		  libsoup-2.4 >= $LIBSOUP_REQUIRED
 		  libsecret-1 >= $LIBSECRET_REQUIRED
 		  gnome-desktop-3.0 >= $GNOME_DESKTOP_REQUIRED
@@ -113,7 +111,7 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  ])
 
 PKG_CHECK_MODULES(WEB_EXTENSION, [
-                  $WEBKIT_GTK_PC_NAME >= $WEBKIT_GTK_REQUIRED
+                  webkit2gtk-web-extension-4.0 >= $WEBKIT_GTK_REQUIRED
                   libsecret-1 >= $LIBSECRET_REQUIRED
                   ])
 AC_SUBST(WEB_EXTENSION_CFLAGS)
