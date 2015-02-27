@@ -70,6 +70,7 @@ struct _EphyEmbedPrivate
 
   char *title;
   WebKitURIRequest *delayed_request;
+  guint delayed_request_source_id;
 
   GSList *messages;
   GSList *keys;
@@ -365,6 +366,11 @@ ephy_embed_dispose (GObject *object)
     priv->clear_progress_source_id = 0;
   }
 
+  if (priv->delayed_request_source_id) {
+    g_source_remove (priv->delayed_request_source_id);
+    priv->delayed_request_source_id = 0;
+  }
+
   /* Do not listen to status message notifications anymore, if we try
    * to update the statusbar after dispose we might crash. */
   if (priv->status_handler_id) {
@@ -648,17 +654,19 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
                                  (loading || progress == 1.0) ? progress : 0.0);
 }
 
-static void
-ephy_embed_maybe_load_delayed_request (EphyEmbed *embed)
+static gboolean
+load_delayed_request_if_mapped (gpointer user_data)
 {
+  EphyEmbed *embed = EPHY_EMBED (user_data);
   EphyEmbedPrivate *priv = embed->priv;
   EphyWebView *web_view;
 
-  if (!priv->delayed_request)
-    return;
+  priv->delayed_request_source_id = 0;
+
+  if (!gtk_widget_get_mapped (GTK_WIDGET (embed)))
+    return G_SOURCE_REMOVE;
 
   web_view = ephy_embed_get_web_view (embed);
-
   ephy_web_view_load_request (web_view, priv->delayed_request);
   g_clear_object (&priv->delayed_request);
 
@@ -666,6 +674,24 @@ ephy_embed_maybe_load_delayed_request (EphyEmbed *embed)
    * loading as soon as possible.
    */
   g_signal_emit_by_name (web_view, "load-changed", WEBKIT_LOAD_STARTED);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ephy_embed_maybe_load_delayed_request (EphyEmbed *embed)
+{
+  EphyEmbedPrivate *priv = embed->priv;
+
+  if (!priv->delayed_request || priv->delayed_request_source_id != 0)
+    return;
+
+  /* Add a very small delay before loading the request, so that if the user
+   * is scrolling rapidly through a bunch of delayed tabs, we don't start
+   * loading them all.
+   */
+  priv->delayed_request_source_id = g_timeout_add (300, load_delayed_request_if_mapped, embed);
+  g_source_set_name_by_id (priv->delayed_request_source_id, "[epiphany] load_delayed_request_if_mapped");
 }
 
 static void
