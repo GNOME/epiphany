@@ -1,17 +1,16 @@
 # Serbian translation of epiphany
-# Courtesy of Prevod.org team (http://prevod.org/) -- 2003—2014.
+# Courtesy of Prevod.org team (http://prevod.org/) -- 2003—2015.
 # This file is distributed under the same license as the epiphany package.
-# Maintainer: Danilo Šegan <dsegan@gmx.net>
-# Reviewed on 2005-09-03 by: Danilo Šegan <danilo@prevod.org>
+# Danilo Šegan <danilo@prevod.org> 2005.
 # Miloš Popović <gpopac@gmail.com>, 2010—2011.
-# Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2011—2014, 2015.
+# Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2011—2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphan"
 "y&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-03-03 16:38+0000\n"
-"PO-Revision-Date: 2015-03-03 18:35+0200\n"
+"POT-Creation-Date: 2015-03-04 16:39+0000\n"
+"PO-Revision-Date: 2015-03-05 19:59+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
@@ -99,6 +98,11 @@ msgstr "Pregledajte veb"
 msgid "web;browser;internet;"
 msgstr "veb;preglednik;internet;"
 
+#: ../data/epiphany.desktop.in.in.h:6
+#| msgid "New _Incognito Window"
+msgid "New Incognito Window"
+msgstr "Novi tajnoviti prozor"
+
 #: ../data/org.gnome.epiphany.gschema.xml.h:1
 msgid "Browse with caret"
 msgstr "Razgledanje sa pokazivačem"
@@ -159,7 +163,6 @@ msgid "Remember passwords"
 msgstr "Pamćenje lozinki"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:20
-#| msgid "Whether to store and prefill passwords in web sites."
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Da li će lozinke biti sačuvane i unapred popunjene za veb strane."
 
@@ -381,9 +384,6 @@ msgid "Cookie accept"
 msgstr "Prihvatanje kolačića"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:60
-#| msgid ""
-#| "Where to accept cookies from. Possible values are \"anywhere\", \"current "
-#| "site\" and \"nowhere\"."
 msgid ""
 "Where to accept cookies from. Possible values are \"always\", \"no-third-"
 "party\" and \"never\"."
@@ -577,10 +577,6 @@ msgstr ""
 "Tajni režim skriva vašu aktivnost samo od ljudi koji koriste ovaj računar."
 
 #: ../embed/ephy-about-handler.c:557
-#| msgid ""
-#| "Incognito mode will not hide your activity from your employer, your "
-#| "Internet Service Provider, your government, or the websites that you "
-#| "visit."
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -991,7 +987,6 @@ msgstr "Stranica na <b>%s</b> želi da sazna vašu lokaciju."
 #. Translators: Notification policy for a specific site.
 #: ../embed/ephy-web-view.c:1433
 #, c-format
-#| msgid "The page at <b>%s</b> wants to know your location."
 msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgstr "Stranica na <b>%s</b> želi da prikaže obaveštenja radne površi."
 
@@ -1007,18 +1002,12 @@ msgstr "Učitavam…"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1743
-#| msgid ""
-#| "This web site presented identification that belongs to a different web "
-#| "site."
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Ovaj veb sajt je predstavio raspoznaju koja pripada drugom veb sajtu."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1748
-#| msgid ""
-#| "This web site’s identification is too old to trust. Check the date on "
-#| "your computer’s calendar."
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1028,25 +1017,17 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1753
-#| msgid ""
-#| "This web site’s identification was not issued by a trusted organization."
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Raspoznaju ovog veb sajta nije izdala poverljiva organizacija."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1758
-#| msgid ""
-#| "This web site’s identification could not be processed. It may be "
-#| "corrupted."
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "Raspoznaja ovog veb sajta ne može biti obrađena. Možda je oštećena."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1763
-#| msgid ""
-#| "This web site’s identification has been revoked by the trusted "
-#| "organization that issued it."
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1056,9 +1037,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1768
-#| msgid ""
-#| "This web site’s identification cannot be trusted because it uses very "
-#| "weak encryption."
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1068,9 +1046,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1773
-#| msgid ""
-#| "This web site’s identification is only valid for future dates. Check the "
-#| "date on your computer’s calendar."
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1086,10 +1061,6 @@ msgstr "Ovo možda nije stvarni „%s“."
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1814
-#| msgid ""
-#| "When you try to connect securely, web sites present identification to "
-#| "prove that your connection has not been maliciously intercepted. There is "
-#| "something wrong with this site’s identification:"
 msgid ""
 "When you try to connect securely, websites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
@@ -1101,10 +1072,6 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1820
-#| msgid ""
-#| "A third party may have hijacked your connection. You should continue only "
-#| "if you know there is a good reason why this site does not use trusted "
-#| "identification."
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this website does not use trusted "
@@ -1566,7 +1533,7 @@ msgstr "Greška pri preuzimanju: %s"
 msgid "Cancel"
 msgstr "Otkaži"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1120
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1121
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Otvori"
@@ -1612,7 +1579,6 @@ msgstr[2] "%d zabeleški je slično"
 msgstr[3] "Jedna zabeleška je slična"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:235
-#| msgid "Add _Bookmark"
 msgid "Add Bookmark"
 msgstr "Dodaj obeleživač"
 
@@ -2282,7 +2248,6 @@ msgid "Fonts & Style"
 msgstr "Slovni lik i stil"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-#| msgid "Manage _Cookies"
 msgid "Manage _Cookies…"
 msgstr "Upravljaj _kolačićima…"
 
@@ -2308,12 +2273,10 @@ msgid "Tracking"
 msgstr "Praćenje"
 
 #: ../src/resources/prefs-dialog.ui.h:29
-#| msgid "_Tell web sites I do not want to be tracked"
 msgid "_Tell websites I do not want to be tracked"
 msgstr "_Reci veb sajtovima da ne želim da me prate"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-#| msgid "Manage _Passwords"
 msgid "Manage _Passwords…"
 msgstr "Upravljaj _lozinkama…"
 
@@ -2330,7 +2293,6 @@ msgid "You can clear stored personal data."
 msgstr "Možete da očistite pričuvane lične podatke."
 
 #: ../src/resources/prefs-dialog.ui.h:35
-#| msgid "Clear Personal Data"
 msgid "Cl_ear Personal Data…"
 msgstr "Očisti _lične podatke…"
 
@@ -2688,77 +2650,77 @@ msgstr "Sačuvaj _audio kao…"
 msgid "_Copy Audio Address"
 msgstr "Umnoži _adresu audia"
 
-#: ../src/ephy-window.c:466
+#: ../src/ephy-window.c:467
 msgid "There are unsubmitted changes to form elements"
 msgstr "Ima neposlatih izmena u elementima obrasca"
 
-#: ../src/ephy-window.c:467
+#: ../src/ephy-window.c:468
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Ukoliko ipak zatvorite dokument, izgubićete te podatke."
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:470
 msgid "Close _Document"
 msgstr "_Zatvori dokument"
 
-#: ../src/ephy-window.c:484
+#: ../src/ephy-window.c:485
 msgid "There are ongoing downloads in this window"
 msgstr "Neke datoteke iz ovom prozoru nisu preuzete"
 
-#: ../src/ephy-window.c:485
+#: ../src/ephy-window.c:486
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Ukoliko zatvorite prozor, prekinućete preuzimanje datoteka"
 
-#: ../src/ephy-window.c:486
+#: ../src/ephy-window.c:487
 msgid "Close window and cancel downloads"
 msgstr "Zatvori prozor i zaustavi preuzimanje"
 
-#: ../src/ephy-window.c:1122
+#: ../src/ephy-window.c:1123
 msgid "Save As"
 msgstr "Sačuvaj kao"
 
-#: ../src/ephy-window.c:1124
+#: ../src/ephy-window.c:1125
 msgid "Save As Application"
 msgstr "Sačuvaj kao program"
 
-#: ../src/ephy-window.c:1126
+#: ../src/ephy-window.c:1127
 msgid "Print"
 msgstr "Štampaj"
 
-#: ../src/ephy-window.c:1128
+#: ../src/ephy-window.c:1129
 msgid "Bookmark"
 msgstr "Obeleživač"
 
-#: ../src/ephy-window.c:1130
+#: ../src/ephy-window.c:1131
 msgid "Find"
 msgstr "Pronađi"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1139
+#: ../src/ephy-window.c:1140
 msgid "Larger"
 msgstr "Uvećano"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1142
+#: ../src/ephy-window.c:1143
 msgid "Smaller"
 msgstr "Umanjeno"
 
-#: ../src/ephy-window.c:1164
+#: ../src/ephy-window.c:1165
 msgid "Back"
 msgstr "Nazad"
 
-#: ../src/ephy-window.c:1176
+#: ../src/ephy-window.c:1177
 msgid "Forward"
 msgstr "Napred"
 
-#: ../src/ephy-window.c:1188
+#: ../src/ephy-window.c:1189
 msgid "Zoom"
 msgstr "Uvećaj"
 
-#: ../src/ephy-window.c:1197
+#: ../src/ephy-window.c:1198
 msgid "New _Tab"
 msgstr "Novi _jezičak"
 
-#: ../src/ephy-window.c:1205
+#: ../src/ephy-window.c:1206
 msgid "Go to most visited"
 msgstr "Idi na najposećenije"
 
