@@ -950,15 +950,6 @@ ephy_shell_close_all_windows (EphyShell *shell)
   return retval;
 }
 
-static gboolean
-tab_is_empty (EphyEmbed *embed)
-{
-  EphyWebView *view = ephy_embed_get_web_view (embed);
-
-  return ((ephy_web_view_get_is_blank (view) || ephy_web_view_is_overview (view)) &&
-          !ephy_web_view_is_loading (view));
-}
-
 typedef struct {
   EphyShell *shell;
   EphySession *session;
@@ -1035,7 +1026,9 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
     page_flags |= EPHY_NEW_TAB_APPEND_AFTER;
   else if (data->reuse_empty_tab) {
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (data->window));
-    reusing_empty_tab = tab_is_empty (embed);
+    /* Only load a new page in this embed if it was showing or loading the homepage about:overview */
+    if (ephy_web_view_get_visit_type (ephy_embed_get_web_view (embed)) == EPHY_PAGE_VISIT_HOMEPAGE)
+      reusing_empty_tab = TRUE;
   }
 
   if (!reusing_empty_tab) {
