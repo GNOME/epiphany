@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-03-03 16:38+0000\n"
-"PO-Revision-Date: 2015-03-03 22:40+0200\n"
+"POT-Creation-Date: 2015-03-08 16:37+0000\n"
+"PO-Revision-Date: 2015-03-08 19:22+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -97,6 +97,11 @@ msgstr "Naršyti žiniatinklį"
 msgid "web;browser;internet;"
 msgstr "žiniatinklis;naršyklė;internetas;"
 
+#: ../data/epiphany.desktop.in.in.h:6
+#| msgid "New _Incognito Window"
+msgid "New Incognito Window"
+msgstr "Naujas incognito langas"
+
 #: ../data/org.gnome.epiphany.gschema.xml.h:1
 msgid "Browse with caret"
 msgstr "Naršyti naudojant rodyklių klavišus"
@@ -159,7 +164,6 @@ msgid "Remember passwords"
 msgstr "Atsiminti slaptažodžius"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:20
-#| msgid "Whether to store and prefill passwords in web sites."
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Ar įrašyti ir įvesti žiniatinkliuose slaptažodžius."
 
@@ -377,9 +381,6 @@ msgid "Cookie accept"
 msgstr "Slapukų priėmimas"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:60
-#| msgid ""
-#| "Where to accept cookies from. Possible values are \"anywhere\", \"current "
-#| "site\" and \"nowhere\"."
 msgid ""
 "Where to accept cookies from. Possible values are \"always\", \"no-third-"
 "party\" and \"never\"."
@@ -575,10 +576,6 @@ msgstr ""
 "kompiuterį."
 
 #: ../embed/ephy-about-handler.c:557
-#| msgid ""
-#| "Incognito mode will not hide your activity from your employer, your "
-#| "Internet Service Provider, your government, or the websites that you "
-#| "visit."
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -989,7 +986,6 @@ msgstr "Tinklapis <b>%s</b> nori žinotų jūsų buvimo vietą."
 #. Translators: Notification policy for a specific site.
 #: ../embed/ephy-web-view.c:1433
 #, c-format
-#| msgid "The page at <b>%s</b> wants to know your location."
 msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgstr "Tinklapis <b>%s</b> nori rodyti darbastalio pranešimus."
 
@@ -1005,18 +1001,12 @@ msgstr "Įkeliama…"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1743
-#| msgid ""
-#| "This web site presented identification that belongs to a different web "
-#| "site."
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Šis tinklapis pateikė identifikaciją, kuri priklauso kitam tinklapiui."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1748
-#| msgid ""
-#| "This web site’s identification is too old to trust. Check the date on "
-#| "your computer’s calendar."
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1026,16 +1016,11 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1753
-#| msgid ""
-#| "This web site’s identification was not issued by a trusted organization."
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Šio tinklapio identifikacijos neišdavė patikima organizacija."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1758
-#| msgid ""
-#| "This web site’s identification could not be processed. It may be "
-#| "corrupted."
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1043,9 +1028,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1763
-#| msgid ""
-#| "This web site’s identification has been revoked by the trusted "
-#| "organization that issued it."
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1054,9 +1036,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1768
-#| msgid ""
-#| "This web site’s identification cannot be trusted because it uses very "
-#| "weak encryption."
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1065,9 +1044,6 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1773
-#| msgid ""
-#| "This web site’s identification is only valid for future dates. Check the "
-#| "date on your computer’s calendar."
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1083,10 +1059,6 @@ msgstr "Tai gali būti netikras %s."
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1814
-#| msgid ""
-#| "When you try to connect securely, web sites present identification to "
-#| "prove that your connection has not been maliciously intercepted. There is "
-#| "something wrong with this site’s identification:"
 msgid ""
 "When you try to connect securely, websites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
@@ -1098,10 +1070,6 @@ msgstr ""
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1820
-#| msgid ""
-#| "A third party may have hijacked your connection. You should continue only "
-#| "if you know there is a good reason why this site does not use trusted "
-#| "identification."
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this website does not use trusted "
@@ -1558,7 +1526,7 @@ msgstr "Klaida parsiunčiant %s"
 msgid "Cancel"
 msgstr "Atmesti"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1120
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1121
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "Atverti"
@@ -1605,7 +1573,6 @@ msgstr[1] "%d gairės yra panašios"
 msgstr[2] "%d gairių yra panašios"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:235
-#| msgid "Add _Bookmark"
 msgid "Add Bookmark"
 msgstr "Pridėti gairę"
 
@@ -2270,7 +2237,6 @@ msgid "Fonts & Style"
 msgstr "Šriftai ir stilius"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-#| msgid "Manage _Cookies"
 msgid "Manage _Cookies…"
 msgstr "Tvarkyti sl_apukus…"
 
@@ -2296,12 +2262,10 @@ msgid "Tracking"
 msgstr "Sekimas"
 
 #: ../src/resources/prefs-dialog.ui.h:29
-#| msgid "_Tell web sites I do not want to be tracked"
 msgid "_Tell websites I do not want to be tracked"
 msgstr "Praneš_ti žiniatinkliams, kad aš nenoriu būti sekamas"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-#| msgid "Manage _Passwords"
 msgid "Manage _Passwords…"
 msgstr "Tvarkyti sla_ptažodžius…"
 
@@ -2318,7 +2282,6 @@ msgid "You can clear stored personal data."
 msgstr "Galite išvalyti savo įrašytus asmeninius duomenis."
 
 #: ../src/resources/prefs-dialog.ui.h:35
-#| msgid "Clear Personal Data"
 msgid "Cl_ear Personal Data…"
 msgstr "Iš_valyti asmeninius duomenis…"
 
@@ -2674,77 +2637,77 @@ msgstr "Į_rašyti garso įrašą taip…"
 msgid "_Copy Audio Address"
 msgstr "_Kopijuoti garso įrašą adresą"
 
-#: ../src/ephy-window.c:466
+#: ../src/ephy-window.c:467
 msgid "There are unsubmitted changes to form elements"
 msgstr "Formų elementuose yra dar nepateiktų pakeitimų."
 
-#: ../src/ephy-window.c:467
+#: ../src/ephy-window.c:468
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Jeigu vis tiek uždarysite dokumentą, prarasite šią informaciją."
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:470
 msgid "Close _Document"
 msgstr "Užverti _dokumentą"
 
-#: ../src/ephy-window.c:484
+#: ../src/ephy-window.c:485
 msgid "There are ongoing downloads in this window"
 msgstr "Šiame lange yra aktyvių parsiuntimų"
 
-#: ../src/ephy-window.c:485
+#: ../src/ephy-window.c:486
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "Jei užversite langą, parsiuntimai bus atmesti"
 
-#: ../src/ephy-window.c:486
+#: ../src/ephy-window.c:487
 msgid "Close window and cancel downloads"
 msgstr "Užverti langą ir atmesti parsiuntimus"
 
-#: ../src/ephy-window.c:1122
+#: ../src/ephy-window.c:1123
 msgid "Save As"
 msgstr "Įrašyti kaip"
 
-#: ../src/ephy-window.c:1124
+#: ../src/ephy-window.c:1125
 msgid "Save As Application"
 msgstr "Įrašyti kaip programą"
 
-#: ../src/ephy-window.c:1126
+#: ../src/ephy-window.c:1127
 msgid "Print"
 msgstr "Spausdinti"
 
-#: ../src/ephy-window.c:1128
+#: ../src/ephy-window.c:1129
 msgid "Bookmark"
 msgstr "Žymelė"
 
-#: ../src/ephy-window.c:1130
+#: ../src/ephy-window.c:1131
 msgid "Find"
 msgstr "Rasti"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1139
+#: ../src/ephy-window.c:1140
 msgid "Larger"
 msgstr "Didesnis"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1142
+#: ../src/ephy-window.c:1143
 msgid "Smaller"
 msgstr "Mažesnis"
 
-#: ../src/ephy-window.c:1164
+#: ../src/ephy-window.c:1165
 msgid "Back"
 msgstr "Atgal"
 
-#: ../src/ephy-window.c:1176
+#: ../src/ephy-window.c:1177
 msgid "Forward"
 msgstr "Pirmyn"
 
-#: ../src/ephy-window.c:1188
+#: ../src/ephy-window.c:1189
 msgid "Zoom"
 msgstr "Mastelis"
 
-#: ../src/ephy-window.c:1197
+#: ../src/ephy-window.c:1198
 msgid "New _Tab"
 msgstr "Nauja kor_telė"
 
-#: ../src/ephy-window.c:1205
+#: ../src/ephy-window.c:1206
 msgid "Go to most visited"
 msgstr "Eiti į dažniausiai lankytus"
 
