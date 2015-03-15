@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-03-04 14:40+0000\n"
+"POT-Creation-Date: 2015-03-14 04:37+0000\n"
 "PO-Revision-Date: 2015-03-08 13:50+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -65,15 +65,16 @@ msgstr "Webbläsare för GNOME"
 
 #: ../data/epiphany.appdata.xml.in.h:3
 msgid ""
-"The web browser for GNOME, featuring tight integration with the desktop and a "
-"simple and intuitive user interface that allows you to focus on your web pages."
+"The web browser for GNOME, featuring tight integration with the desktop and "
+"a simple and intuitive user interface that allows you to focus on your web "
+"pages."
 msgstr ""
 "Webbläsaren för GNOME, med stark integration mot skrivbordet och ett enkelt, "
 "intuitivt användargränssnitt som tillåter dig att fokusera på dina webbsidor."
 
 #: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:292
-#: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67 ../src/ephy-main.c:314
-#: ../src/ephy-main.c:470 ../src/window-commands.c:1519
+#: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:470 ../src/window-commands.c:1519
 msgid "Web"
 msgstr "Webb"
 
@@ -111,7 +112,8 @@ msgstr "Navigera med markör"
 #: ../data/org.gnome.epiphany.gschema.xml.h:10
 #, no-c-format
 msgid "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
-msgstr "'https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=se-sv&amp;kad=sv_SE'"
+msgstr ""
+"'https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=se-sv&amp;kad=sv_SE'"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:11
 msgid "URL Search"
@@ -130,8 +132,8 @@ msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
 msgstr ""
-"Sträng som ska användas som användaragent för att identifiera webbläsaren till "
-"webbservrarna."
+"Sträng som ska användas som användaragent för att identifiera webbläsaren "
+"till webbservrarna."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:15
 msgid "Automatic downloads"
@@ -139,8 +141,8 @@ msgstr "Automatiska hämtningar"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:16
 msgid ""
-"When files cannot be opened by the browser they are automatically downloaded to "
-"the download folder and opened with the appropriate application."
+"When files cannot be opened by the browser they are automatically downloaded "
+"to the download folder and opened with the appropriate application."
 msgstr ""
 "När filer inte kan öppnas av webbläsaren hämtas de automatiskt till "
 "hämtningskatalogen och öppnas med lämpligt program."
@@ -153,7 +155,8 @@ msgstr "Tvinga nya fönster att öppnas i flikar"
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
-"Tvinga ny fönsterbegäran att öppnas i flik istället för att använda nytt fönster."
+"Tvinga ny fönsterbegäran att öppnas i flik istället för att använda nytt "
+"fönster."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid "Remember passwords"
@@ -187,24 +190,25 @@ msgid ""
 "'never' (the homepage is always shown)."
 msgstr ""
 "Definierar hur sessionen återställs vid uppstart. Tillåtna värden är \"always"
-"\" (programmets tidigare tillstånd återställs alltid), \"crashed\" (sessionen "
-"återställs endast om programmet kraschar) and \"never\" (hemsidan visas alltid)."
+"\" (programmets tidigare tillstånd återställs alltid), \"crashed"
+"\" (sessionen återställs endast om programmet kraschar) and \"never"
+"\" (hemsidan visas alltid)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr ""
-"Huruvida inläsning av flikar som inte är omedelbart synliga ska fördröjas vid "
-"sessionsåterställning"
+"Huruvida inläsning av flikar som inte är omedelbart synliga ska fördröjas "
+"vid sessionsåterställning"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
 msgstr ""
-"När detta är sant kommer flikar inte börja läsas in förrän användaren byter till "
-"dem då en session återskapats."
+"När detta är sant kommer flikar inte börja läsas in förrän användaren byter "
+"till dem då en session återskapats."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Process model"
@@ -212,14 +216,14 @@ msgstr "Processmodell"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:29
 msgid ""
-"This option allows to set the process model used. Use 'shared-secondary-process' "
-"to use a single web process shared by all the tabs and 'one-secondary-process-"
-"per-web-view' to use a different web process for each tab."
+"This option allows to set the process model used. Use 'shared-secondary-"
+"process' to use a single web process shared by all the tabs and 'one-"
+"secondary-process-per-web-view' to use a different web process for each tab."
 msgstr ""
-"Detta alternativ anger processmodellen som används. Använd \"shared-secondary-"
-"process\" för att använda en ensam webbprocess som delas av alla flikar och "
-"\"one-secondary-process-per-web-view\" för att använda olika processer för varje "
-"flik."
+"Detta alternativ anger processmodellen som används. Använd \"shared-"
+"secondary-process\" för att använda en ensam webbprocess som delas av alla "
+"flikar och \"one-secondary-process-per-web-view\" för att använda olika "
+"processer för varje flik."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid "Toolbar style"
@@ -227,12 +231,13 @@ msgstr "Stil på verktygsfält"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid ""
-"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both\" (text "
-"and icons), \"both-horiz\" (text besides icons), \"icons\", and \"text\"."
+"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
+"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
+"\"text\"."
 msgstr ""
-"Stil på verktygsfältet. Tillåtna värden är \"\" (använd standardstilen i GNOME), "
-"\"both\" (både text och ikoner), \"both-horiz\" (text bredvid ikoner), \"icons"
-"\" (ikoner) och \"text\"."
+"Stil på verktygsfältet. Tillåtna värden är \"\" (använd standardstilen i "
+"GNOME), \"both\" (både text och ikoner), \"both-horiz\" (text bredvid "
+"ikoner), \"icons\" (ikoner) och \"text\"."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid "[Deprecated]"
@@ -243,8 +248,8 @@ msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
 msgstr ""
-"[Föråldrad] Denna inställning har fasats ut, använd \"tabs-bar-visibility-policy"
-"\" i stället."
+"[Föråldrad] Denna inställning har fasats ut, använd \"tabs-bar-visibility-"
+"policy\" i stället."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid "Visibility of the downloads window"
@@ -255,8 +260,8 @@ msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
 msgstr ""
-"Dölj eller visa hämtningsfönstret. När dolt kommer en notifiering att visas när "
-"nya hämtningar startas."
+"Dölj eller visa hämtningsfönstret. När dolt kommer en avisering att visas "
+"när nya hämtningar startas."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid "The visibility policy for the tabs bar."
@@ -264,13 +269,13 @@ msgstr "Synlighetspolicy för flikraden."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid ""
-"Controls when the tabs bar is shown. Possible values are 'always' (the tabs bar "
-"is always shown), 'more-than-one' (the tabs bar is only shown if there's two or "
-"more tabs) and 'never' (the tabs bar is never shown)."
+"Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
+"bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
+"two or more tabs) and 'never' (the tabs bar is never shown)."
 msgstr ""
-"Kontrollerar när flikraden visas. Möjliga värden är \"always\" (flikraden visas "
-"alltid), \"more-than-one\" (Flikraden visas bara om det finns två eller fler "
-"flikar) och \"never\" (flikraden visas aldrig)."
+"Kontrollerar när flikraden visas. Möjliga värden är \"always\" (flikraden "
+"visas alltid), \"more-than-one\" (Flikraden visas bara om det finns två "
+"eller fler flikar) och \"never\" (flikraden visas aldrig)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Minimum font size"
@@ -290,11 +295,11 @@ msgstr "Anpassat sans serif-typsnitt"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid ""
-"A value to be used to override sans-serif desktop font when use-gnome-fonts is "
-"set."
+"A value to be used to override sans-serif desktop font when use-gnome-fonts "
+"is set."
 msgstr ""
-"Ett värde som används för att åsidosätta skrivbordets sans serif-typsnitt när "
-"use-gnome-fonts är inställt."
+"Ett värde som används för att åsidosätta skrivbordets sans serif-typsnitt "
+"när use-gnome-fonts är inställt."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Custom serif font"
@@ -302,7 +307,8 @@ msgstr "Anpassat serif-typsnitt"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid ""
-"A value to be used to override serif desktop font when use-gnome-fonts is set."
+"A value to be used to override serif desktop font when use-gnome-fonts is "
+"set."
 msgstr ""
 "Ett värde som används för att åsidosätta skrivbordets serif-typsnitt när use-"
 "gnome-fonts är inställt."
@@ -313,8 +319,8 @@ msgstr "Anpassat typsnitt med fast breddslag"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
-"A value to be used to override monospace desktop font when use-gnome-fonts is "
-"set."
+"A value to be used to override monospace desktop font when use-gnome-fonts "
+"is set."
 msgstr ""
 "Ett värde som används för att åsidosätta skrivbordets typsnitt med fast "
 "breddslag när use-gnome-fonts är inställt."
@@ -356,7 +362,8 @@ msgid "Default encoding"
 msgstr "Standardkodning"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:56
-msgid "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
+msgid ""
+"Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr "Standardkodning. Accepterade värden är de som WebKitGTK+ förstår."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:57
@@ -374,8 +381,8 @@ msgstr "Accepterande av kakor"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid ""
-"Where to accept cookies from. Possible values are \"always\", \"no-third-party\" "
-"and \"never\"."
+"Where to accept cookies from. Possible values are \"always\", \"no-third-"
+"party\" and \"never\"."
 msgstr ""
 "Var kakor ska accepteras ifrån. Möjliga värden är \"always\" (alltid), \"no-"
 "third-party\" (ej tredjepart) och \"never\" (aldrig)."
@@ -389,8 +396,8 @@ msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
 msgstr ""
-"Hur animerade bilder ska presenteras. Möjliga värden är \"normal\", \"once\" och "
-"\"disabled\"."
+"Hur animerade bilder ska presenteras. Möjliga värden är \"normal\", \"once\" "
+"och \"disabled\"."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Allow popups"
@@ -400,8 +407,8 @@ msgstr "Tillåt popupfönster"
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
-"Tillåt webbplatser att öppna nya fönster med hjälp av JavaScript (om JavaScript "
-"är aktiverat)."
+"Tillåt webbplatser att öppna nya fönster med hjälp av JavaScript (om "
+"JavaScript är aktiverat)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Enable Plugins"
@@ -433,8 +440,8 @@ msgstr "Spåra mig inte"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid ""
-"Whether to tell websites that we do not wish to be tracked. Please note that web "
-"pages are not forced to follow this setting."
+"Whether to tell websites that we do not wish to be tracked. Please note that "
+"web pages are not forced to follow this setting."
 msgstr ""
 "Huruvida vi säger till webbplatser att vi inte vill spåras. Observera att "
 "webbplatser inte är tvungna att följa denna inställning."
@@ -445,7 +452,8 @@ msgstr "Aktivera Adblock"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid ""
-"Whether to block the embedded advertisements that web pages might want to show."
+"Whether to block the embedded advertisements that web pages might want to "
+"show."
 msgstr "Huruvida inbäddade annonser som webbplatser vill visa ska blockeras."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:75
@@ -454,8 +462,8 @@ msgstr "Hämtningsmappen"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:76
 msgid ""
-"The path of the folder where to download files to; or \"Downloads\" to use the "
-"default downloads folder, or \"Desktop\" to use the desktop folder."
+"The path of the folder where to download files to; or \"Downloads\" to use "
+"the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr ""
 "Sökvägen till mappen som filer ska hämtas till, eller \"Downloads\" för att "
 "använda standardhämtningsmappen, eller \"Desktop\" för att använda "
@@ -550,29 +558,31 @@ msgstr "Privat surfning"
 
 #: ../embed/ephy-about-handler.c:551
 msgid ""
-"You are currently browsing <em>incognito</em>. Pages viewed in this mode will "
-"not show up in your browsing history and all stored information will be cleared "
-"when you close the window. Files you download will be kept."
+"You are currently browsing <em>incognito</em>. Pages viewed in this mode "
+"will not show up in your browsing history and all stored information will be "
+"cleared when you close the window. Files you download will be kept."
 msgstr ""
-"Du surfar nu <em>inkognito</em>. Sidor som visas i detta läge kommer inte att "
-"dyka upp i din sidhistorik och all lagrad information kommer att tömmas då du "
-"stänger fönstret. Filer som du hämtar kommer att behållas."
+"Du surfar nu <em>inkognito</em>. Sidor som visas i detta läge kommer inte "
+"att dyka upp i din sidhistorik och all lagrad information kommer att tömmas "
+"då du stänger fönstret. Filer som du hämtar kommer att behållas."
 
 #: ../embed/ephy-about-handler.c:555
-msgid "Incognito mode hides your activity only from people using this computer."
+msgid ""
+"Incognito mode hides your activity only from people using this computer."
 msgstr ""
-"Inkognitoläge döljer din aktivitet endast från personer som använder denna dator."
+"Inkognitoläge döljer din aktivitet endast från personer som använder denna "
+"dator."
 
 #: ../embed/ephy-about-handler.c:557
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
-"internet service provider, your government, other governments, the websites that "
-"you visit, and advertisers on these websites may still be tracking you."
+"internet service provider, your government, other governments, the websites "
+"that you visit, and advertisers on these websites may still be tracking you."
 msgstr ""
 "Det kommer inte att dölja dina aktiviteter från din arbetsgivare om du är på "
 "jobbet. Din internetleverantör, myndigheter, främmande regeringar, de "
-"webbplatser som du besöker och annonsörer på dessa webbplatser kan fortfarande "
-"spåra dig."
+"webbplatser som du besöker och annonsörer på dessa webbplatser kan "
+"fortfarande spåra dig."
 
 #. characters
 #: ../embed/ephy-embed.c:51
@@ -976,7 +986,7 @@ msgstr "Sidan på <b>%s</b> vill veta din geografiska plats."
 #: ../embed/ephy-web-view.c:1433
 #, c-format
 msgid "The page at <b>%s</b> wants to show desktop notifications."
-msgstr "Sidan på <b>%s</b> vill visa notifieringar på skrivbordet."
+msgstr "Sidan på <b>%s</b> vill visa aviseringar på skrivbordet."
 
 #. translators: %s here is the address of the web page
 #: ../embed/ephy-web-view.c:1519
@@ -990,9 +1000,11 @@ msgstr "Läser in…"
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1743
-msgid "This website presented identification that belongs to a different website."
+msgid ""
+"This website presented identification that belongs to a different website."
 msgstr ""
-"Denna webbplats presenterade identitetshandlingar som tillhör en annan webbplats."
+"Denna webbplats presenterade identitetshandlingar som tillhör en annan "
+"webbplats."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1748
@@ -1000,8 +1012,8 @@ msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr ""
-"Denna webbplats identitetshandlingar är för gamla för att lita på. Kontrollera "
-"datumet för din dators kalender."
+"Denna webbplats identitetshandlingar är för gamla för att lita på. "
+"Kontrollera datumet för din dators kalender."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1753
@@ -1012,15 +1024,17 @@ msgstr ""
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1758
-msgid "This website’s identification could not be processed. It may be corrupted."
+msgid ""
+"This website’s identification could not be processed. It may be corrupted."
 msgstr ""
-"Denna webbplats identitetshandlingar kunde inte behandlas. De kan vara trasiga."
+"Denna webbplats identitetshandlingar kunde inte behandlas. De kan vara "
+"trasiga."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1763
 msgid ""
-"This website’s identification has been revoked by the trusted organization that "
-"issued it."
+"This website’s identification has been revoked by the trusted organization "
+"that issued it."
 msgstr ""
 "Denna webbplats identitetshandlingar har återkallats av den betrodda "
 "organisation som utfärdade dem."
@@ -1031,17 +1045,17 @@ msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr ""
-"Denna webbplats identitetshandlingar kan inte anses vara betrodda då de använder "
-"väldigt svag kryptering."
+"Denna webbplats identitetshandlingar kan inte anses vara betrodda då de "
+"använder väldigt svag kryptering."
 
 #. Possible error message when a site presents a bad certificate.
 #: ../embed/ephy-web-view.c:1773
 msgid ""
-"This website’s identification is only valid for future dates. Check the date on "
-"your computer’s calendar."
+"This website’s identification is only valid for future dates. Check the date "
+"on your computer’s calendar."
 msgstr ""
-"Denna webbplats identitetshandlingar är endast giltiga för datum i framtiden. "
-"Kontrollera datumet för din dators kalender."
+"Denna webbplats identitetshandlingar är endast giltiga för datum i "
+"framtiden. Kontrollera datumet för din dators kalender."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
 #: ../embed/ephy-web-view.c:1809
@@ -1052,22 +1066,23 @@ msgstr "Detta är inte fastställt att vara den riktiga %s."
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1814
 msgid ""
-"When you try to connect securely, websites present identification to prove that "
-"your connection has not been maliciously intercepted. There is something wrong "
-"with this website’s identification:"
+"When you try to connect securely, websites present identification to prove "
+"that your connection has not been maliciously intercepted. There is "
+"something wrong with this website’s identification:"
 msgstr ""
-"När du försöker ansluta säkert, presenterar webbplatsen identitetshandlingar för "
-"att bevisa att er anslutning inte har genskjutits och avlyssnas. Det är något "
-"fel med den här webbplatsens identitetshandlingar:"
+"När du försöker ansluta säkert, presenterar webbplatsen identitetshandlingar "
+"för att bevisa att er anslutning inte har genskjutits och avlyssnas. Det är "
+"något fel med den här webbplatsens identitetshandlingar:"
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1820
 msgid ""
-"A third party may have hijacked your connection. You should continue only if you "
-"know there is a good reason why this website does not use trusted identification."
+"A third party may have hijacked your connection. You should continue only if "
+"you know there is a good reason why this website does not use trusted "
+"identification."
 msgstr ""
-"Din anslutning kan ha övertagits av en tredjepart. Du bör endast fortsätta om du "
-"har en god anledning till att denna webbplats inte använder betrodda "
+"Din anslutning kan ha övertagits av en tredjepart. Du bör endast fortsätta "
+"om du har en god anledning till att denna webbplats inte använder betrodda "
 "identitetshandlingar."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
@@ -1075,8 +1090,8 @@ msgstr ""
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
 msgstr ""
-"Legitima banker, butiker och andra publika webbplatser kommer inte att be dig "
-"göra detta."
+"Legitima banker, butiker och andra publika webbplatser kommer inte att be "
+"dig göra detta."
 
 #: ../embed/ephy-web-view.c:1865
 msgid "None specified"
@@ -1096,14 +1111,15 @@ msgstr "Hoppsan! Kunde inte visa denna webbplats."
 #: ../embed/ephy-web-view.c:1881
 #, c-format
 msgid ""
-"<p>The site at “%s” seems to be unavailable. The precise error was:</p><p><code>"
-"%s</code></p><p>It may be temporarily unavailable or moved to a new address. You "
-"may wish to verify that your internet connection is working correctly.</p>"
+"<p>The site at “%s” seems to be unavailable. The precise error was:</"
+"p><p><code>%s</code></p><p>It may be temporarily unavailable or moved to a "
+"new address. You may wish to verify that your internet connection is working "
+"correctly.</p>"
 msgstr ""
 "<p>Webbplatsen på ”%s” verkar inte vara tillgänglig. Det exakta felet var:</"
 "p><p><code>%s</code></p><p>Den kan vara avstängd för tillfället eller har "
-"flyttats till en ny adress. Glöm inte att kontrollera att din internetanslutning "
-"fungerar som den ska.</p>"
+"flyttats till en ny adress. Glöm inte att kontrollera att din "
+"internetanslutning fungerar som den ska.</p>"
 
 #: ../embed/ephy-web-view.c:1889
 msgid "Try again"
@@ -1116,8 +1132,9 @@ msgstr "Hoppsan! Det kan ha uppstått ett problem."
 #: ../embed/ephy-web-view.c:1896
 #, c-format
 msgid ""
-"<p>This site may have caused Web to close unexpectedly.</p><p>If this happens "
-"again, please report the problem to the <strong>%s</strong> developers.</p>"
+"<p>This site may have caused Web to close unexpectedly.</p><p>If this "
+"happens again, please report the problem to the <strong>%s</strong> "
+"developers.</p>"
 msgstr ""
 "<p>Denna sida kan ha fått Webb att oväntat stängas.</p><p>Rapportera gärna "
 "problemet till <strong>%s</strong>-utvecklarna om det händer igen.</p>"
@@ -1140,8 +1157,8 @@ msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr ""
-"Något gick fel då denna sida skulle visas. Uppdatera sidan eller besök en annan "
-"sida för att fortsätta."
+"Något gick fel då denna sida skulle visas. Uppdatera sidan eller besök en "
+"annan sida för att fortsätta."
 
 #. Title of error page when a website's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1915
@@ -1247,11 +1264,11 @@ msgstr "Kan inte skriva över den existerande filen ”%s”"
 
 #: ../lib/ephy-gui.c:246
 msgid ""
-"A file with this name already exists and you don't have permission to overwrite "
-"it."
+"A file with this name already exists and you don't have permission to "
+"overwrite it."
 msgstr ""
-"Det finns redan en fil med detta namn och du har inte rättighet att skriva över "
-"den."
+"Det finns redan en fil med detta namn och du har inte rättighet att skriva "
+"över den."
 
 #: ../lib/ephy-gui.c:249
 msgid "Cannot Overwrite File"
@@ -1268,11 +1285,11 @@ msgstr "Huvudlösenordet behövs"
 
 #: ../lib/ephy-nss-glue.c:64
 msgid ""
-"The passwords from the previous version are locked with a master password. If "
-"you want to import them, please enter your master password below."
+"The passwords from the previous version are locked with a master password. "
+"If you want to import them, please enter your master password below."
 msgstr ""
-"Lösenorden från den tidigare versionen är låsta med ett huvudlösenord. Ange ditt "
-"huvudlösenord nedan om du vill importera dem."
+"Lösenorden från den tidigare versionen är låsta med ett huvudlösenord. Ange "
+"ditt huvudlösenord nedan om du vill importera dem."
 
 #: ../lib/ephy-profile-migrator.c:100
 msgid "Failed to copy cookies file from Mozilla."
@@ -1280,11 +1297,11 @@ msgstr "Misslyckades med att kopiera cookie-filen från Mozilla."
 
 #: ../lib/ephy-profile-migrator.c:652
 msgid ""
-"Web 3.6 deprecated this directory and tried migrating this configuration to ~/."
-"config/epiphany"
+"Web 3.6 deprecated this directory and tried migrating this configuration to "
+"~/.config/epiphany"
 msgstr ""
-"Webb 3.6 fasade ut denna katalog och försökte migrera denna inställning till ~/."
-"config/epiphany"
+"Webb 3.6 fasade ut denna katalog och försökte migrera denna inställning till "
+"~/.config/epiphany"
 
 #: ../lib/ephy-profile-migrator.c:1030
 msgid "Executes only the n-th migration step"
@@ -1434,8 +1451,8 @@ msgstr "Du är ansluten till %s"
 #: ../lib/widgets/ephy-certificate-popover.c:113
 #, c-format
 msgid ""
-"This web site’s digital identification is not trusted. You may have connected to "
-"an attacker pretending to be %s."
+"This web site’s digital identification is not trusted. You may have "
+"connected to an attacker pretending to be %s."
 msgstr ""
 "Denna webbplats digitala identitetshandlingar är inte betrodda. Du kan ha "
 "anslutit till en angripare som utger sig för att vara %s."
@@ -1578,7 +1595,8 @@ msgid "Sho_w all topics"
 msgstr "Visa _alla ämnen"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:435
-#: ../src/resources/prefs-dialog.ui.h:40 ../src/resources/prefs-lang-dialog.ui.h:3
+#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Lägg till"
 
@@ -1831,12 +1849,12 @@ msgstr "Ta bort det detta ämne?"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:382
 msgid ""
-"Deleting this topic will cause all its bookmarks to become uncategorized, unless "
-"they also belong to other topics. The bookmarks will not be deleted."
+"Deleting this topic will cause all its bookmarks to become uncategorized, "
+"unless they also belong to other topics. The bookmarks will not be deleted."
 msgstr ""
 "Att ta bort detta ämne kommer att medfölja att alla dess bokmärken blir "
-"okategoriserade, såvida de inte även tillhör andra ämnen. Bokmärkena kommer inte "
-"att tas bort."
+"okategoriserade, såvida de inte även tillhör andra ämnen. Bokmärkena kommer "
+"inte att tas bort."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:385
 msgid "_Delete Topic"
@@ -1878,11 +1896,11 @@ msgstr "Import misslyckades"
 #: ../src/bookmarks/ephy-bookmarks-editor.c:555
 #, c-format
 msgid ""
-"The bookmarks from “%s” could not be imported because the file is corrupted or "
-"of an unsupported type."
+"The bookmarks from “%s” could not be imported because the file is corrupted "
+"or of an unsupported type."
 msgstr ""
-"Bokmärkena från ”%s” kunde inte importeras eftersom filen är skadad eller av en "
-"typ som inte stöds."
+"Bokmärkena från ”%s” kunde inte importeras eftersom filen är skadad eller av "
+"en typ som inte stöds."
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:618
 msgid "Import Bookmarks from File"
@@ -1971,11 +1989,11 @@ msgstr "Välj det personliga data som du vill tömma"
 
 #: ../src/resources/clear-data-dialog.ui.h:5
 msgid ""
-"You are about to clear personal data that is stored about the web pages you have "
-"visited. Check the types of information that you want to remove:"
+"You are about to clear personal data that is stored about the web pages you "
+"have visited. Check the types of information that you want to remove:"
 msgstr ""
-"Du är på väg att tömma personliga data som lagrats om de webbsidor som du har "
-"besökt. Kryssa för de typer av information som du vill ta bort:"
+"Du är på väg att tömma personliga data som lagrats om de webbsidor som du "
+"har besökt. Kryssa för de typer av information som du vill ta bort:"
 
 #: ../src/resources/clear-data-dialog.ui.h:6
 msgid "Coo_kies"
@@ -1995,22 +2013,25 @@ msgstr "S_parade lösenord"
 
 #: ../src/resources/clear-data-dialog.ui.h:10
 msgid ""
-"You cannot undo this action. The data you are choosing to clear will be removed "
-"forever."
+"You cannot undo this action. The data you are choosing to clear will be "
+"removed forever."
 msgstr ""
-"Du kan inte ångra denna åtgärd. Det data som du väljer att tömma går inte att "
-"återställa."
+"Du kan inte ångra denna åtgärd. Det data som du väljer att tömma går inte "
+"att återställa."
 
-#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:21
+#: ../src/resources/cookies-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "Kakor"
 
-#: ../src/resources/cookies-dialog.ui.h:2 ../src/resources/history-dialog.ui.h:2
+#: ../src/resources/cookies-dialog.ui.h:2
+#: ../src/resources/history-dialog.ui.h:2
 #: ../src/resources/passwords-dialog.ui.h:2
 msgid "C_lear All"
 msgstr "_Töm allt"
 
-#: ../src/resources/cookies-dialog.ui.h:3 ../src/resources/passwords-dialog.ui.h:4
+#: ../src/resources/cookies-dialog.ui.h:3
+#: ../src/resources/passwords-dialog.ui.h:4
 msgid "Site"
 msgstr "Webbplats"
 
@@ -2104,7 +2125,8 @@ msgstr "_Kopiera plats"
 msgid "Add _Bookmark"
 msgstr "Lägg till b_okmärke"
 
-#: ../src/resources/passwords-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/passwords-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "Passwords"
 msgstr "Lösenord"
 
@@ -2780,10 +2802,11 @@ msgstr "Ersätt"
 
 #: ../src/window-commands.c:719
 msgid ""
-"An application with the same name already exists. Replacing it will overwrite it."
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
 msgstr ""
-"Det finns redan en applikation med detta namn. Om du ersätter den så skrivs den "
-"gamla över."
+"Det finns redan en applikation med detta namn. Om du ersätter den så skrivs "
+"den gamla över."
 
 #: ../src/window-commands.c:755
 #, c-format
@@ -2859,12 +2882,12 @@ msgstr "Aktivera markörläge?"
 #: ../src/window-commands.c:1680
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
-"cursor in web pages, allowing you to move around with your keyboard. Do you want "
-"to enable caret browsing?"
+"cursor in web pages, allowing you to move around with your keyboard. Do you "
+"want to enable caret browsing?"
 msgstr ""
-"Tryck F7 för att aktivera markörläge. Denna funktion placerar en flyttbar markör "
-"i webbsidor, vilket gör att du kan flytta runt med ditt tangentbord. Vill du "
-"aktivera markörläge?"
+"Tryck F7 för att aktivera markörläge. Denna funktion placerar en flyttbar "
+"markör i webbsidor, vilket gör att du kan flytta runt med ditt tangentbord. "
+"Vill du aktivera markörläge?"
 
 #: ../src/window-commands.c:1683
 msgid "_Enable"
