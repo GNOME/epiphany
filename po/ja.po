@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-01 04:37+0000\n"
-"PO-Revision-Date: 2015-01-01 14:45+0900\n"
+"POT-Creation-Date: 2015-03-20 16:39+0000\n"
+"PO-Revision-Date: 2015-03-20 07:45+0900\n"
 "Last-Translator: Jiro Matsuzawa <jmatsuzawa@gnome.org>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -74,7 +74,7 @@ msgstr "GNOME 向けのウェブブラウザーです。デスクトップ環境
 
 #: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:292
 #: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1519
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:470 ../src/window-commands.c:1519
 msgid "Web"
 msgstr "Web"
 
@@ -93,6 +93,10 @@ msgstr "ウェブを閲覧します"
 #: ../data/epiphany.desktop.in.in.h:5
 msgid "web;browser;internet;"
 msgstr "web;browser;internet;ウェブブラウザー;インターネット;"
+
+#: ../data/epiphany.desktop.in.in.h:6
+msgid "New Incognito Window"
+msgstr "新しい匿名ウィンドウ"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:1
 msgid "Browse with caret"
@@ -295,99 +299,91 @@ msgid "Default encoding. Accepted values are the ones WebKitGTK+ can understand.
 msgstr "既定の文字エンコーディングです。WebKitGTK+が理解できる値が指定できます。"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:57
-msgid "Size of disk cache"
-msgstr "ディスクキャッシュのサイズ"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
-msgid "Size of disk cache, in MB."
-msgstr "ディスクキャッシュのサイズ (単位: MB)"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "Languages"
 msgstr "言語"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Preferred languages, two letter codes."
 msgstr "優先言語 (2文字コード)。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Cookie accept"
 msgstr "Cookie を受け入れる"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Where to accept cookies from. Possible values are \"always\", \"no-third-party\" and \"never\"."
 msgstr "どの Cookie を受け入れるかの設定です。指定できる値は、\"always\"、\"no-third-party\"、または \"never\" です。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Image animation mode"
 msgstr "イメージアニメーションモード"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "How to present animated images. Possible values are \"normal\", \"once\" and \"disabled\"."
 msgstr "アニメーション画像を表示する方法です。指定可能な値は \"normal\", \"once\", \"disabled\" です。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Allow popups"
 msgstr "ポップアップを許可する"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr "JavaScript を使って新しいウィンドウで開くことを許可します (JavaScript が有効な場合)。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Enable Plugins"
 msgstr "プラグインを有効化"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid "Enable JavaScript"
 msgstr "JavaScript を有効にする"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "Enable WebGL"
 msgstr "WebGL を有効にする"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "Whether to enable support for WebGL contexts."
 msgstr "WebGL コンテンツのサポートを有効にするかどうか。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "Enable WebAudio"
 msgstr "WebAudio を有効にする"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to enable support for WebAudio."
 msgstr "WebAudio のサポートを有効にするかどうか。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:73
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Do Not Track"
 msgstr "Do Not Track"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:74
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to tell websites that we do not wish to be tracked. Please note that web pages are not forced to follow this setting."
 msgstr "トラッキングの拒否をウェブサイトに通知するかどうかの設定です。ウェブページはこの設定に従う義務がないことに注意してください。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:75
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Enable Adblock"
 msgstr "広告ブロック機能を有効にする"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:76
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Whether to block the embedded advertisements that web pages might want to show."
 msgstr "ウェブページが表示しようとする埋め込みの広告をブロックするかどうかの設定です。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:77
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
 msgid "The downloads folder"
 msgstr "ダウンロードフォルダー"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:78
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
 msgid "The path of the folder where to download files to; or \"Downloads\" to use the default downloads folder, or \"Desktop\" to use the desktop folder."
 msgstr "ダウンロードしたファイルを保存する先のフォルダーのパス: デフォルトでは \"ダウンロード\" もしくは \"デスクトップ\" がダウンロードフォルダーに使用されます。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:79
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "ブックマークウィンドウにタイトル列の表示を行うかどうか。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:80
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "ブックマークウィンドウにアドレス列の表示を行うかどうか。"
 
@@ -475,8 +471,12 @@ msgid "You are currently browsing <em>incognito</em>. Pages viewed in this mode 
 msgstr "現在、<em>匿名</em>でブラウジングしています。このモードで表示したページは閲覧履歴に残らず、ウィンドウを閉じた時点ですべての格納情報は消去されます。なお、ダウンロードしたファイルは保持されます。"
 
 #: ../embed/ephy-about-handler.c:555
-msgid "Incognito mode will not hide your activity from your employer, your Internet Service Provider, your government, or the websites that you visit."
-msgstr "匿名モードを使用しても、あなたの勤務先や、お使いのISP、政府機関、訪れたウェブサイトの管理者に対してアクティビティを隠蔽することはできません。"
+msgid "Incognito mode hides your activity only from people using this computer."
+msgstr "匿名モードを使用してあなたの作業内容を隠蔽できるのは、このコンピューターを共用する他の人に対してだけです。"
+
+#: ../embed/ephy-about-handler.c:557
+msgid "It will not hide your activity from your employer if you are at work. Your internet service provider, your government, other governments, the websites that you visit, and advertisers on these websites may still be tracking you."
+msgstr "たとえば職場でブラウザーを使用する場合、匿名モードであなたのアクセス履歴を雇用主に対して隠すことはできません。お使いのインターネットサービスプロバイダーや、政府機関、訪れたウェブサイト、およびそのサイトの広告主などは、依然としてあなたの行動を追跡できます。"
 
 #. characters
 #: ../embed/ephy-embed.c:51
@@ -846,9 +846,13 @@ msgstr "後方に出現する文字列を検索します"
 msgid "Find next occurrence of the search string"
 msgstr "前方に出現する文字列を検索します"
 
-#: ../embed/ephy-web-view.c:492 ../src/window-commands.c:330
-msgid "Save"
-msgstr "保存"
+#: ../embed/ephy-web-view.c:492 ../lib/ephy-file-chooser.c:194
+msgid "_Save"
+msgstr "保存(_S)"
+
+#: ../embed/ephy-web-view.c:493
+msgid "_Don’t Save"
+msgstr "保存しない(_D)"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
@@ -1004,12 +1008,12 @@ msgstr "注意!"
 msgid "Load Anyway"
 msgstr "読み込み"
 
-#: ../embed/ephy-web-view.c:2818
+#: ../embed/ephy-web-view.c:2819
 msgid "_OK"
 msgstr "OK(_O)"
 
 #: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
-#: ../src/bookmarks/ephy-bookmark-properties.c:428
+#: ../src/bookmarks/ephy-bookmark-properties.c:432
 #: ../src/bookmarks/ephy-bookmarks-editor.c:819
 #: ../src/resources/clear-data-dialog.ui.h:3
 #: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:809
@@ -1020,23 +1024,19 @@ msgstr "キャンセル(_C)"
 msgid "_Open"
 msgstr "開く(_O)"
 
-#: ../lib/ephy-file-chooser.c:194
-msgid "_Save"
-msgstr "保存(_S)"
-
 #: ../lib/ephy-file-chooser.c:209
 msgid "All supported types"
 msgstr "サポートしている全種類"
 
-#: ../lib/ephy-file-chooser.c:221
+#: ../lib/ephy-file-chooser.c:223
 msgid "Web pages"
 msgstr "ウェブページ"
 
-#: ../lib/ephy-file-chooser.c:230
+#: ../lib/ephy-file-chooser.c:234
 msgid "Images"
 msgstr "画像"
 
-#: ../lib/ephy-file-chooser.c:238 ../src/bookmarks/ephy-bookmarks-editor.c:637
+#: ../lib/ephy-file-chooser.c:242 ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "All files"
 msgstr "すべてのファイル"
 
@@ -1342,7 +1342,7 @@ msgstr "ダウンロード中にエラー: %s"
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1120
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1121
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "開く"
@@ -1359,8 +1359,7 @@ msgstr "起動中…"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:606
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:263
+#: ../lib/widgets/ephy-location-entry.c:606 ../src/ephy-history-window.c:263
 msgid "Cl_ear"
 msgstr "クリア(_E)"
 
@@ -1385,29 +1384,33 @@ msgid "%d bookmark is similar"
 msgid_plural "%d bookmarks are similar"
 msgstr[0] "類似のブックマーク %d 件"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:234
+#: ../src/bookmarks/ephy-bookmark-properties.c:235
+msgid "Add Bookmark"
+msgstr "ブックマークの追加"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:237
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s”のプロパティ"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:358
+#: ../src/bookmarks/ephy-bookmark-properties.c:362
 msgid "_Title:"
 msgstr "タイトル(_T):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:375
+#: ../src/bookmarks/ephy-bookmark-properties.c:379
 msgid "A_ddress:"
 msgstr "アドレス(_D):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:387
+#: ../src/bookmarks/ephy-bookmark-properties.c:391
 msgid "T_opics:"
 msgstr "トピック(_O):"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:410
+#: ../src/bookmarks/ephy-bookmark-properties.c:414
 msgid "Sho_w all topics"
 msgstr "すべてのトピックを表示する(_W)"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:431
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/bookmarks/ephy-bookmark-properties.c:435
+#: ../src/resources/prefs-dialog.ui.h:40
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "追加(_A)"
@@ -2024,8 +2027,8 @@ msgid "Fonts & Style"
 msgstr "フォントとスタイル"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-msgid "Manage _Cookies"
-msgstr "Cookie の管理(_C)"
+msgid "Manage _Cookies…"
+msgstr "Cookie の管理(_C)…"
 
 #: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
@@ -2053,58 +2056,58 @@ msgid "_Tell websites I do not want to be tracked"
 msgstr "トラッキングの拒否をウェブサイトに通知する(_T)"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-msgid "Manage _Passwords"
-msgstr "パスワードの管理(_P)"
+msgid "Manage _Passwords…"
+msgstr "パスワードの管理(_P)…"
 
 #: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
 msgstr "パスワードを保存する(_R)"
 
 #: ../src/resources/prefs-dialog.ui.h:33
-msgid "Temporary Files"
-msgstr "一時ファイル"
+msgid "Stored Data"
+msgstr "保存データ"
 
 #: ../src/resources/prefs-dialog.ui.h:34
-msgid "_Disk space:"
-msgstr "ディスクスペース(_D)"
+msgid "You can clear stored personal data."
+msgstr "保存された個人データを消去できます。"
 
 #: ../src/resources/prefs-dialog.ui.h:35
-msgid "MB"
-msgstr "MB"
+msgid "Cl_ear Personal Data…"
+msgstr "個人データの消去(_E)…"
 
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:36
 msgid "Privacy"
 msgstr "プライバシー"
 
-#: ../src/resources/prefs-dialog.ui.h:38 ../src/ephy-encoding-dialog.c:379
+#: ../src/resources/prefs-dialog.ui.h:37 ../src/ephy-encoding-dialog.c:379
 msgid "Encodings"
 msgstr "エンコーディング"
 
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:38
 msgid "De_fault:"
 msgstr "デフォルト(_F):"
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "_Remove"
 msgstr "削除(_R)"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "_Up"
 msgstr "上へ(_U)"
 
-#: ../src/resources/prefs-dialog.ui.h:44
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Down"
 msgstr "下へ(_D)"
 
-#: ../src/resources/prefs-dialog.ui.h:45
+#: ../src/resources/prefs-dialog.ui.h:44
 msgid "Spell checking"
 msgstr "スペルチェック"
 
-#: ../src/resources/prefs-dialog.ui.h:46
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "_Enable spell checking"
 msgstr "スペルチェックを有効にする(_E)"
 
-#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:842
+#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:840
 msgid "Language"
 msgstr "言語"
 
@@ -2221,7 +2224,7 @@ msgstr ""
 msgid "Web options"
 msgstr "Web のオプション"
 
-#: ../src/ephy-notebook.c:602
+#: ../src/ephy-notebook.c:615
 msgid "Close tab"
 msgstr "タブを閉じます"
 
@@ -2420,77 +2423,77 @@ msgstr "名前を付けて音声を保存(_S)"
 msgid "_Copy Audio Address"
 msgstr "音声のアドレスのコピー(_C)"
 
-#: ../src/ephy-window.c:466
+#: ../src/ephy-window.c:467
 msgid "There are unsubmitted changes to form elements"
 msgstr "フォームに提出されていない変更点があります。"
 
-#: ../src/ephy-window.c:467
+#: ../src/ephy-window.c:468
 msgid "If you close the document anyway, you will lose that information."
 msgstr "いずれにしろドキュメントを閉じると、その情報は失われます。"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:470
 msgid "Close _Document"
 msgstr "ドキュメントを閉じる(_D)"
 
-#: ../src/ephy-window.c:484
+#: ../src/ephy-window.c:485
 msgid "There are ongoing downloads in this window"
 msgstr "このウィンドウでダウンロードが進行中です"
 
-#: ../src/ephy-window.c:485
+#: ../src/ephy-window.c:486
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "このウィンドウを閉じると、ダウンロードが中断されます"
 
-#: ../src/ephy-window.c:486
+#: ../src/ephy-window.c:487
 msgid "Close window and cancel downloads"
 msgstr "このウィンドウを閉じてダウンロードを中断"
 
-#: ../src/ephy-window.c:1122
+#: ../src/ephy-window.c:1123
 msgid "Save As"
 msgstr "名前を付けて保存"
 
-#: ../src/ephy-window.c:1124
+#: ../src/ephy-window.c:1125
 msgid "Save As Application"
 msgstr "アプリケーションとして保存"
 
-#: ../src/ephy-window.c:1126
+#: ../src/ephy-window.c:1127
 msgid "Print"
 msgstr "印刷"
 
-#: ../src/ephy-window.c:1128
+#: ../src/ephy-window.c:1129
 msgid "Bookmark"
 msgstr "ブックマーク"
 
-#: ../src/ephy-window.c:1130
+#: ../src/ephy-window.c:1131
 msgid "Find"
 msgstr "検索"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1139
+#: ../src/ephy-window.c:1140
 msgid "Larger"
 msgstr "より大きく"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1142
+#: ../src/ephy-window.c:1143
 msgid "Smaller"
 msgstr "より小さく"
 
-#: ../src/ephy-window.c:1164
+#: ../src/ephy-window.c:1165
 msgid "Back"
 msgstr "戻る"
 
-#: ../src/ephy-window.c:1176
+#: ../src/ephy-window.c:1177
 msgid "Forward"
 msgstr "進む"
 
-#: ../src/ephy-window.c:1188
+#: ../src/ephy-window.c:1189
 msgid "Zoom"
 msgstr "拡大"
 
-#: ../src/ephy-window.c:1197
+#: ../src/ephy-window.c:1198
 msgid "New _Tab"
 msgstr "新しいタブ(_T)"
 
-#: ../src/ephy-window.c:1205
+#: ../src/ephy-window.c:1206
 msgid "Go to most visited"
 msgstr "訪問回数の多いページヘ移動します"
 
@@ -2510,7 +2513,7 @@ msgstr "名前を付けてメディアを保存"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:555 ../src/prefs-dialog.c:561
+#: ../src/prefs-dialog.c:553 ../src/prefs-dialog.c:559
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2519,24 +2522,24 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:570
+#: ../src/prefs-dialog.c:568
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "ユーザー定義 (%s)"
 
-#: ../src/prefs-dialog.c:592
+#: ../src/prefs-dialog.c:590
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "システム言語 (%s)"
 
-#: ../src/prefs-dialog.c:925
+#: ../src/prefs-dialog.c:923
 msgid "Select a Directory"
 msgstr "フォルダーの選択"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1020
+#: ../src/prefs-dialog.c:1018
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2544,32 +2547,36 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1026
+#: ../src/prefs-dialog.c:1024
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=jp-jp"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1028
+#: ../src/prefs-dialog.c:1026
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1031
+#: ../src/prefs-dialog.c:1029
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://www.google.co.jp/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1033
+#: ../src/prefs-dialog.c:1031
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1036
+#: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
+
+#: ../src/window-commands.c:330
+msgid "Save"
+msgstr "保存"
 
 #: ../src/window-commands.c:710
 #, c-format
@@ -2666,3 +2673,18 @@ msgstr "F7 キーを押すと、キャレットブラウズのオン/オフが�
 #: ../src/window-commands.c:1683
 msgid "_Enable"
 msgstr "有効(_E)"
+
+#~ msgid "Size of disk cache"
+#~ msgstr "ディスクキャッシュのサイズ"
+
+#~ msgid "Size of disk cache, in MB."
+#~ msgstr "ディスクキャッシュのサイズ (単位: MB)"
+
+#~ msgid "Temporary Files"
+#~ msgstr "一時ファイル"
+
+#~ msgid "_Disk space:"
+#~ msgstr "ディスクスペース(_D)"
+
+#~ msgid "MB"
+#~ msgstr "MB"
