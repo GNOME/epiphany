@@ -920,9 +920,7 @@ void
 window_cmd_file_new_incognito_window (GtkAction *action,
 				      EphyWindow *window)
 {
-	char *str = g_strdup_printf ("epiphany --incognito-mode --profile %s", ephy_dot_dir ());
-	g_spawn_command_line_async (str, NULL);
-	g_free (str);
+	ephy_open_incognito_window (NULL);
 }
 
 void

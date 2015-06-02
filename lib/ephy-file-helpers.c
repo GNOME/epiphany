@@ -1071,3 +1071,27 @@ ephy_sanitize_filename (char *filename)
 
 	return g_strdelimit (filename, G_DIR_SEPARATOR_S, '_');
 }
+
+void
+ephy_open_incognito_window (const char *uri)
+{
+	char *command;
+	GError *error = NULL;
+
+	command = g_strdup_printf ("epiphany --incognito-mode --profile %s ", ephy_dot_dir ());
+
+	if (uri) {
+		char *str = g_strconcat (command, uri, NULL);
+		g_free (command);
+		command = str;
+	}
+
+	g_spawn_command_line_async (command, &error);
+
+	if (error) {
+		g_warning ("Couldn't open link in incognito window: %s", error->message);
+		g_error_free (error);
+	}
+
+	g_free (command);
+}

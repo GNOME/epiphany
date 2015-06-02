@@ -96,6 +96,7 @@ char       *       ephy_file_create_data_uri_for_filename   (const char         
 char       *       ephy_sanitize_filename                   (char                  *filename);
 GAppInfo   *       ephy_file_launcher_get_app_info_for_file (GFile                 *file,
                                                              const char            *mime_type);
+void               ephy_open_incognito_window               (const char *uri);
 
 G_END_DECLS
 
