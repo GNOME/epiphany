@@ -367,3 +367,18 @@ popup_cmd_media_in_new_tab (GtkAction *action,
 {
 	popup_cmd_view_in_new_tab (window, "media-uri");
 }
+
+void
+popup_cmd_link_in_incognito_window (GtkAction *action,
+				    EphyWindow *window)
+{
+	EphyEmbedEvent *event;
+	GValue value = { 0, };
+
+	event = ephy_window_get_context_event (window);
+	g_assert (event != NULL);
+
+	ephy_embed_event_get_property (event, "link-uri", &value);
+	ephy_open_incognito_window (g_value_get_string (&value));
+	g_value_unset (&value);
+}

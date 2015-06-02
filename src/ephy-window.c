@@ -219,6 +219,8 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  G_CALLBACK (popup_cmd_link_in_new_window) },
 	{ "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_link_in_new_tab) },
+	{ "OpenLinkInIncognitoWindow", NULL, N_("Open Link in I_ncognito Window"), NULL, NULL,
+	  G_CALLBACK (popup_cmd_link_in_incognito_window) },
 	{ "DownloadLinkAs", NULL, N_("_Save Link As…"), NULL, NULL,
 	  G_CALLBACK (popup_cmd_download_link_as) },
 	{ "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
@@ -910,6 +912,9 @@ update_link_actions_sensitivity (EphyWindow *window,
 
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !link_has_web_scheme);
+
+	action = gtk_action_group_get_action (action_group, "OpenLinkInIncognitoWindow");
+	gtk_action_set_sensitive (action, link_has_web_scheme);
 }
 
 static void
@@ -1641,7 +1646,7 @@ populate_context_menu (WebKitWebView *web_view,
 	GList *spelling_guess_items = NULL;
 	EphyEmbedEvent *embed_event;
 	gboolean is_document = FALSE;
-	gboolean app_mode;
+	gboolean app_mode, incognito_mode;
 	gboolean is_image;
 	gboolean is_media = FALSE;
 	gboolean is_video = FALSE;
@@ -1692,6 +1697,7 @@ populate_context_menu (WebKitWebView *web_view,
 	g_object_unref (embed_event);
 
 	app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION;
+	incognito_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_INCOGNITO;
 
 	update_edit_actions_sensitivity (window, FALSE);
 
@@ -1712,6 +1718,9 @@ populate_context_menu (WebKitWebView *web_view,
 						    priv->popups_action_group, "OpenLinkInNewTab");
 			add_action_to_context_menu (context_menu,
 						    priv->popups_action_group, "OpenLinkInNewWindow");
+			if (!incognito_mode)
+				add_action_to_context_menu (context_menu,
+							    priv->popups_action_group, "OpenLinkInIncognitoWindow");
 			webkit_context_menu_append (context_menu,
 						    webkit_context_menu_item_new_separator ());
 		}
