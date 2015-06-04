@@ -229,13 +229,10 @@ ephy_embed_utils_normalize_address (const char *address)
 }
 
 char *
-ephy_embed_utils_normalize_or_autosearch_address (const char *address)
+ephy_embed_utils_autosearch_address (const char *search_key)
 {
   char *query_param, *url_search;
   char *effective_address;
-
-  if (ephy_embed_utils_address_is_valid (address))
-    return ephy_embed_utils_normalize_address (address);
 
   url_search = g_settings_get_string (EPHY_SETTINGS_MAIN,
                                       EPHY_PREFS_KEYWORD_SEARCH_URL);
@@ -244,13 +241,23 @@ ephy_embed_utils_normalize_or_autosearch_address (const char *address)
     url_search = g_strdup (_("https://duckduckgo.com/?q=%s&amp;t=epiphany"));
   }
 
-  query_param = soup_form_encode ("q", address, NULL);
+  query_param = soup_form_encode ("q", search_key, NULL);
   /* + 2 here is getting rid of 'q=' */
   effective_address = g_strdup_printf (url_search, query_param + 2);
   g_free (query_param);
   g_free (url_search);
 
   return effective_address;
+
+}
+
+char *
+ephy_embed_utils_normalize_or_autosearch_address (const char *address)
+{
+  if (ephy_embed_utils_address_is_valid (address))
+    return ephy_embed_utils_normalize_address (address);
+  else
+    return ephy_embed_utils_autosearch_address (address);
 }
 
 gboolean
