@@ -38,6 +38,8 @@
 #include <libsoup/soup.h>
 #include <string.h>
 #include <webkit2/webkit-web-extension.h>
+#define WEBKIT_DOM_USE_UNSTABLE_API
+#include <webkitdom/WebKitDOMDOMWindowUnstable.h>
 #include <JavaScriptCore/JavaScript.h>
 
 struct _EphyWebExtensionPrivate
@@ -994,6 +996,42 @@ web_page_uri_changed (WebKitWebPage *web_page,
   g_object_set_data_full (G_OBJECT (web_page), "ephy-web-overview", overview, g_object_unref);
 }
 
+static gboolean
+web_page_context_menu (WebKitWebPage *web_page,
+                       WebKitContextMenu *context_menu,
+                       WebKitWebHitTestResult *hit_test_result,
+                       gpointer user_data)
+{
+  char *string;
+  GVariantBuilder builder;
+  WebKitDOMDocument *document = webkit_web_page_get_dom_document (web_page);
+  WebKitDOMDOMWindow *window = webkit_dom_document_get_default_view (document);
+  WebKitDOMDOMSelection *selection = webkit_dom_dom_window_get_selection (window);
+
+  g_object_unref (window);
+
+  if (!selection)
+    return FALSE;
+
+  string = ephy_web_dom_utils_get_selection_as_string (selection);
+  g_object_unref (selection);
+
+  if (!string || *string == '\0')
+  {
+    g_free (string);
+    return FALSE;
+  }
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
+  g_variant_builder_add (&builder, "{sv}", "SelectedText", g_variant_new_string (g_strstrip (string)));
+  webkit_context_menu_set_user_data (context_menu,
+                                     g_variant_builder_end (&builder));
+
+  g_free (string);
+
+  return TRUE;
+}
+
 static void
 ephy_web_extension_emit_page_created (EphyWebExtension *extension,
                                       guint64 page_id)
@@ -1061,6 +1099,9 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
                     extension);
   g_signal_connect (web_page, "notify::uri",
                     G_CALLBACK (web_page_uri_changed),
+                    extension);
+  g_signal_connect (web_page, "context-menu",
+                    G_CALLBACK (web_page_context_menu),
                     extension);
 }
 

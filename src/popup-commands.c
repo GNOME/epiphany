@@ -382,3 +382,23 @@ popup_cmd_link_in_incognito_window (GtkAction *action,
 	ephy_open_incognito_window (g_value_get_string (&value));
 	g_value_unset (&value);
 }
+
+void
+popup_cmd_search_selection (GtkAction *action,
+			    EphyWindow *window)
+{
+	EphyEmbed *embed, *new_embed;
+	const char *text;
+	char *search_url;
+
+	embed = ephy_embed_container_get_active_child
+		(EPHY_EMBED_CONTAINER (window));
+	g_assert (EPHY_IS_EMBED (embed));
+
+	text = g_object_get_data (G_OBJECT (action), "selection");
+	search_url = ephy_embed_utils_autosearch_address (text);
+	new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+					window, embed, EPHY_NEW_TAB_APPEND_AFTER);
+	ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), search_url);
+	g_free (search_url);
+}

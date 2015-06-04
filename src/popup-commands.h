@@ -77,6 +77,9 @@ void popup_cmd_copy_media_location      (GtkAction *action,
 void popup_cmd_save_media_as            (GtkAction *action,
                                          EphyWindow *window);
 
+void popup_cmd_search_selection         (GtkAction *action,
+					 EphyWindow *window);
+
 G_END_DECLS
 
 #endif

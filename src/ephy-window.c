@@ -260,6 +260,10 @@ static const GtkActionEntry ephy_popups_entries [] = {
 	  NULL, G_CALLBACK (popup_cmd_save_media_as) },
 	{ "CopyAudioLocation", NULL, N_("_Copy Audio Address"), NULL,
 	  NULL, G_CALLBACK (popup_cmd_copy_media_location) },
+
+	/* Selection */
+	{ "SearchSelection", NULL, "_Search Selection", NULL, NULL,
+	  G_CALLBACK (popup_cmd_search_selection) },
 };
 
 static const struct
@@ -1628,6 +1632,39 @@ find_spelling_guess_context_menu_items (WebKitContextMenu *context_menu)
 	return g_list_reverse (retval);
 }
 
+static char *
+ellipsize_string (const char *string,
+		  glong max_length)
+{
+	char *ellipsized;
+	glong length = g_utf8_strlen (string, -1);
+
+	if (length == 0)
+		return NULL;
+
+	if (length < max_length)
+	{
+		ellipsized = g_strdup (string);
+	}
+	else
+	{
+		char *str = g_utf8_substring (string, 0, max_length);
+		ellipsized = g_strconcat (str, "…", NULL);
+		g_free (str);
+	}
+	return ellipsized;
+}
+
+static void
+parse_context_menu_user_data (WebKitContextMenu *context_menu,
+			      const char** selected_text)
+{
+	GVariantDict dict;
+
+	g_variant_dict_init (&dict, webkit_context_menu_get_user_data (context_menu));
+	g_variant_dict_lookup (&dict, "SelectedText", "&s", selected_text);
+}
+
 static gboolean
 populate_context_menu (WebKitWebView *web_view,
 		       WebKitContextMenu *context_menu,
@@ -1651,6 +1688,8 @@ populate_context_menu (WebKitWebView *web_view,
 	gboolean is_media = FALSE;
 	gboolean is_video = FALSE;
 	gboolean is_audio = FALSE;
+	gboolean can_search_selection = FALSE;
+	const char *selected_text;
 
 	is_image = webkit_hit_test_result_context_is_image (hit_test_result);
 
@@ -1690,6 +1729,28 @@ populate_context_menu (WebKitWebView *web_view,
 		}
 	}
 
+	parse_context_menu_user_data (context_menu, &selected_text);
+	if (selected_text)
+	{
+		char* ellipsized = ellipsize_string (selected_text, 32);
+		if (ellipsized)
+		{
+			char* label;
+			GtkAction *action;
+
+			can_search_selection = TRUE;
+			action = gtk_action_group_get_action (priv->popups_action_group,
+							      "SearchSelection");
+			label = g_strdup_printf (_("Search the Web for '%s'"), ellipsized);
+			gtk_action_set_label (action, label);
+			g_object_set_data_full (G_OBJECT (action), "selection", g_strdup (selected_text),
+						(GDestroyNotify)g_free);
+			g_free (ellipsized);
+			g_free (label);
+			can_search_selection = TRUE;
+		}
+	}
+
 	webkit_context_menu_remove_all (context_menu);
 
 	embed_event = ephy_embed_event_new ((GdkEventButton *)event, hit_test_result);
@@ -1726,6 +1787,9 @@ populate_context_menu (WebKitWebView *web_view,
 		}
 		add_action_to_context_menu (context_menu,
 					    priv->action_group, "EditCopy");
+		if (can_search_selection)
+			add_action_to_context_menu (context_menu,
+						    priv->popups_action_group, "SearchSelection");
 		webkit_context_menu_append (context_menu,
 					    webkit_context_menu_item_new_separator ());
 		add_action_to_context_menu (context_menu,
@@ -1807,6 +1871,9 @@ populate_context_menu (WebKitWebView *web_view,
 
 		add_action_to_context_menu (context_menu,
 					    priv->action_group, "EditCopy");
+		if (can_search_selection)
+			add_action_to_context_menu (context_menu,
+						    priv->popups_action_group, "SearchSelection");
 
 		if (!app_mode && !is_image && !is_media)
 		{
