@@ -25,6 +25,8 @@
 #define EPHY_WEB_DOM_UTILS_H
 
 #include <webkitdom/webkitdom.h>
+#define WEBKIT_DOM_USE_UNSTABLE_API
+#include <webkitdom/WebKitDOMDOMSelection.h>
 
 G_BEGIN_DECLS
 
@@ -48,6 +50,8 @@ void ephy_web_dom_utils_get_absolute_bottom_for_element (WebKitDOMElement *eleme
 void ephy_web_dom_utils_get_absolute_position_for_element(WebKitDOMElement *element,
                                                           long             *x,
                                                           long             *y);
+
+char *ephy_web_dom_utils_get_selection_as_string (WebKitDOMDOMSelection *selection);
 G_END_DECLS
 
 #endif

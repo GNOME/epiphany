@@ -492,3 +492,25 @@ ephy_web_dom_utils_get_absolute_bottom_for_element (WebKitDOMElement *element,
 
   *y += offset_height;
 }
+
+/**
+ * ephy_web_dom_utils_get_selection_as_string:
+ * @selection: the #WebKitDOMDOMSelection.
+ *
+ * Gets the contents of the selection as a string.
+ *
+ * Returns: a newly allocated string with the selection or %NULL.
+ **/
+char *
+ephy_web_dom_utils_get_selection_as_string   (WebKitDOMDOMSelection *selection)
+{
+  char *string;
+  WebKitDOMRange *range = webkit_dom_dom_selection_get_range_at (selection, 0, NULL);
+  if (!range)
+    return NULL;
+
+  string = webkit_dom_range_to_string (range, NULL);
+  g_object_unref (range);
+
+  return string;
+}
