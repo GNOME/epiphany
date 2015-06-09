@@ -1689,7 +1689,7 @@ populate_context_menu (WebKitWebView *web_view,
 	gboolean is_video = FALSE;
 	gboolean is_audio = FALSE;
 	gboolean can_search_selection = FALSE;
-	const char *selected_text;
+	const char *selected_text = NULL;
 
 	is_image = webkit_hit_test_result_context_is_image (hit_test_result);
 
