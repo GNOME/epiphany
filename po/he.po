@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2015-06-09 12:40+0300\n"
-"PO-Revision-Date: 2015-06-09 12:41+0300\n"
+"POT-Creation-Date: 2015-06-09 16:17+0300\n"
+"PO-Revision-Date: 2015-06-09 16:18+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -51,7 +51,7 @@ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=il-he&amp;kad=he_IL"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:244
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:241
 #: ../src/ephy-search-provider.c:289
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -549,7 +549,7 @@ msgstr "הותקן בתאריך:"
 msgid "Remove from overview"
 msgstr "הסרה מהסקירה"
 
-#: ../embed/ephy-about-handler.c:489 ../embed/ephy-embed-utils.c:301
+#: ../embed/ephy-about-handler.c:489 ../embed/ephy-embed-utils.c:308
 msgid "Most Visited"
 msgstr "הנצפים ביותר"
 
@@ -1511,7 +1511,7 @@ msgstr "שגיאה בהורדה: %s"
 msgid "Cancel"
 msgstr "ביטול"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1126
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1130
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "פתיחה"
@@ -2618,79 +2618,84 @@ msgstr "_שמירת שמע בשם…"
 msgid "_Copy Audio Address"
 msgstr "ה_עתקת כתובת השמע"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:473
 msgid "There are unsubmitted changes to form elements"
 msgstr "ישנם שינויים שלא נשלחו"
 
-#: ../src/ephy-window.c:470
+#: ../src/ephy-window.c:474
 msgid "If you close the document anyway, you will lose that information."
 msgstr "אם המסמך ייסגר בכל זאת, המידע הזה יאבד."
 
-#: ../src/ephy-window.c:472
+#: ../src/ephy-window.c:476
 msgid "Close _Document"
 msgstr "סגירת ה_מסמך"
 
-#: ../src/ephy-window.c:487
+#: ../src/ephy-window.c:491
 msgid "There are ongoing downloads in this window"
 msgstr "ישנן הורדות פעילות בחלון זה"
 
-#: ../src/ephy-window.c:488
+#: ../src/ephy-window.c:492
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "אם חלון זה ייסגר על ידיך, ההורדות יבוטלו"
 
-#: ../src/ephy-window.c:489
+#: ../src/ephy-window.c:493
 msgid "Close window and cancel downloads"
 msgstr "סגירת החלון וביטול ההורדות"
 
-#: ../src/ephy-window.c:1128
+#: ../src/ephy-window.c:1132
 msgid "Save As"
 msgstr "שמירה בשם"
 
-#: ../src/ephy-window.c:1130
+#: ../src/ephy-window.c:1134
 msgid "Save As Application"
 msgstr "שמירה כיישום"
 
-#: ../src/ephy-window.c:1132
+#: ../src/ephy-window.c:1136
 msgid "Print"
 msgstr "הדפסה"
 
-#: ../src/ephy-window.c:1134
+#: ../src/ephy-window.c:1138
 msgid "Bookmark"
 msgstr "סימנייה"
 
-#: ../src/ephy-window.c:1136
+#: ../src/ephy-window.c:1140
 msgid "Find"
 msgstr "חיפוש"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1145
+#: ../src/ephy-window.c:1149
 msgid "Larger"
 msgstr "גדול יותר"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1148
+#: ../src/ephy-window.c:1152
 msgid "Smaller"
 msgstr "קטן יותר"
 
-#: ../src/ephy-window.c:1170
+#: ../src/ephy-window.c:1174
 msgid "Back"
 msgstr "אחורה"
 
-#: ../src/ephy-window.c:1182
+#: ../src/ephy-window.c:1186
 msgid "Forward"
 msgstr "קדימה"
 
-#: ../src/ephy-window.c:1194
+#: ../src/ephy-window.c:1198
 msgid "Zoom"
 msgstr "תקריב"
 
-#: ../src/ephy-window.c:1203
+#: ../src/ephy-window.c:1207
 msgid "New _Tab"
 msgstr "ל_שונית חדשה"
 
-#: ../src/ephy-window.c:1211
+#: ../src/ephy-window.c:1215
 msgid "Go to most visited"
 msgstr "מעבר לנצפים ביותר"
+
+#: ../src/ephy-window.c:1744
+#, c-format
+msgid "Search the Web for '%s'"
+msgstr "חיפוש באינטרנט עבור ׳%s׳"
 
 #: ../src/popup-commands.c:229
 msgid "Save Link As"
