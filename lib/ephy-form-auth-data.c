@@ -84,16 +84,17 @@ ephy_form_auth_data_get_secret_attributes_table (const char *uri,
 static void
 store_form_password_cb (SecretService *service,
                         GAsyncResult *res,
-                        GSimpleAsyncResult *async)
+                        GTask *task)
 {
   GError *error = NULL;
 
   secret_service_store_finish (service, res, &error);
   if (error != NULL)
-    g_simple_async_result_take_error (async, error);
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
 
-  g_simple_async_result_complete (async);
-  g_object_unref (async);
+  g_object_unref (task);
 }
 
 void
@@ -110,7 +111,7 @@ ephy_form_auth_data_store (const char *uri,
   SecretValue *value;
   GHashTable *attributes;
   char *label;
-  GSimpleAsyncResult *res;
+  GTask *task;
 
   g_return_if_fail (uri);
   g_return_if_fail (form_password);
@@ -120,7 +121,7 @@ ephy_form_auth_data_store (const char *uri,
   fake_uri = soup_uri_new (uri);
   g_return_if_fail (fake_uri);
 
-  res = g_simple_async_result_new (NULL, callback, userdata, ephy_form_auth_data_store);
+  task = g_task_new (NULL, NULL, callback, userdata);
 
   /* Mailman passwords need the full URI */
   if (!form_username && g_strcmp0 (form_password, "adminpw") == 0)
@@ -148,14 +149,14 @@ ephy_form_auth_data_store (const char *uri,
                         attributes, NULL, label, value,
                         NULL,
                         (GAsyncReadyCallback)store_form_password_cb,
-                        g_object_ref (res));
+                        g_object_ref (task));
 
   g_free (label);
   secret_value_unref (value);
   g_hash_table_unref (attributes);
   soup_uri_free (fake_uri);
   g_free (fake_uri_str);
-  g_object_unref (res);
+  g_object_unref (task);
 }
 
 
@@ -164,9 +165,9 @@ ephy_form_auth_data_store_finish (GAsyncResult *result,
                                   GError **error)
 {
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  g_return_val_if_fail (g_simple_async_result_is_valid (result, NULL, ephy_form_auth_data_store), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
 
-  return !g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error);
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 typedef struct
