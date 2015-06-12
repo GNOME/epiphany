@@ -442,18 +442,16 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
  **/
 void
 ephy_web_dom_utils_get_absolute_position_for_element (WebKitDOMElement *element,
-                                                      glong *x,
-                                                      glong *y)
+                                                      double *x,
+                                                      double *y)
 {
   WebKitDOMElement *parent;
-  long offset_top, offset_left;
-  long parent_x, parent_y;
+  double offset_top, offset_left;
+  double parent_x, parent_y;
 
-  g_object_get (element,
-                "offset-left", &offset_left,
-                "offset-top", &offset_top,
-                "offset-parent", &parent,
-                NULL);
+  offset_top = webkit_dom_element_get_offset_top (element);
+  offset_left = webkit_dom_element_get_offset_left (element);
+  parent = webkit_dom_element_get_offset_parent (element);
 
   *x = offset_left;
   *y = offset_top;
@@ -479,16 +477,14 @@ ephy_web_dom_utils_get_absolute_position_for_element (WebKitDOMElement *element,
  **/
 void
 ephy_web_dom_utils_get_absolute_bottom_for_element (WebKitDOMElement *element,
-                                                    long *x,
-                                                    long *y)
+                                                    double *x,
+                                                    double *y)
 {
-  long offset_height;
+  double offset_height;
 
   ephy_web_dom_utils_get_absolute_position_for_element (element, x, y);
 
-  g_object_get (element,
-                "offset-height", &offset_height,
-                NULL);
+  offset_height = webkit_dom_element_get_offset_height (element);
 
   *y += offset_height;
 }

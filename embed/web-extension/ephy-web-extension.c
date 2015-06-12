@@ -600,15 +600,16 @@ show_user_choices (WebKitDOMDocument *document,
   GSList *iter;
   GSList *auth_data_list;
   gboolean username_node_ever_edited;
-  long x, y;
-  long input_width;
+  double x, y;
+  double input_width;
   char *style_attribute;
   char* username;
 
   g_object_get (username_node,
                 "value", &username,
-                "offset-width", &input_width,
                 NULL);
+
+  input_width = webkit_dom_element_get_offset_width (WEBKIT_DOM_ELEMENT (username_node));
 
   main_div = webkit_dom_document_create_element (document, "div", NULL);
   webkit_dom_element_set_attribute (main_div, "id", "ephy-user-choices-container", NULL);
@@ -620,13 +621,13 @@ show_user_choices (WebKitDOMDocument *document,
    */
   style_attribute = g_strdup_printf ("position: absolute; z-index: 2147483647;"
                                      "cursor: default;"
-                                     "width: %ldpx;"
+                                     "width: %lfpx;"
                                      "background-color: white;"
                                      "box-shadow: 5px 5px 5px black;"
                                      "border-top: 0;"
                                      "border-radius: 8px;"
                                      "-webkit-user-modify: read-only ! important;"
-                                     "left: %ldpx; top: %ldpx;",
+                                     "left: %lfpx; top: %lfpx;",
                                      input_width, x, y);
 
   webkit_dom_element_set_attribute (main_div, "style", style_attribute, NULL);
