@@ -515,6 +515,8 @@ static char*
 get_selected_bgcolor (void)
 {
   GdkRGBA color;
+  gtk_style_context_set_state (get_entry_style_context (),
+                               GTK_STATE_FLAG_SELECTED);
   gtk_style_context_get_background_color (get_entry_style_context (),
                                           GTK_STATE_FLAG_SELECTED,
                                           &color);
@@ -525,6 +527,8 @@ static char*
 get_selected_fgcolor (void)
 {
   GdkRGBA color;
+  gtk_style_context_set_state (get_entry_style_context (),
+                               GTK_STATE_FLAG_SELECTED);
   gtk_style_context_get_color (get_entry_style_context (),
                                GTK_STATE_FLAG_SELECTED,
                                &color);
@@ -535,6 +539,8 @@ static char*
 get_bgcolor (void)
 {
   GdkRGBA color;
+  gtk_style_context_set_state (get_entry_style_context (),
+                               GTK_STATE_FLAG_NORMAL);
   gtk_style_context_get_background_color (get_entry_style_context (),
                                           GTK_STATE_FLAG_NORMAL,
                                           &color);
@@ -545,6 +551,8 @@ static char*
 get_fgcolor (void)
 {
   GdkRGBA color;
+  gtk_style_context_set_state (get_entry_style_context (),
+                               GTK_STATE_FLAG_NORMAL);
   gtk_style_context_get_color (get_entry_style_context (),
                                GTK_STATE_FLAG_NORMAL,
                                &color);
