@@ -284,13 +284,13 @@ update_popup_menu (EphyDownloadWidget *widget)
 }
 
 static void
-start_glowing (EphyDownloadWidget *widget)
+widget_attention_needed (EphyDownloadWidget *widget)
 {
   gtk_style_context_add_class (gtk_widget_get_style_context (widget->priv->button), "needs-attention");
 }
 
 static void
-stop_glowing (EphyDownloadWidget *widget)
+widget_attention_unneeded (EphyDownloadWidget *widget)
 {
   gtk_style_context_remove_class (gtk_widget_get_style_context (widget->priv->button), "needs-attention");
 }
@@ -302,7 +302,7 @@ widget_finished_cb (WebKitDownload *download,
   widget->priv->finished = TRUE;
   update_popup_menu (widget);
   update_download_label_and_tooltip (widget, _("Finished"));
-  start_glowing (widget);
+  widget_attention_needed (widget);
 }
 
 static void
@@ -322,7 +322,7 @@ widget_failed_cb (WebKitDownload *download,
   gtk_widget_set_tooltip_text (GTK_WIDGET (widget), error_msg);
   g_free (error_msg);
 
-  start_glowing (widget);
+  widget_attention_needed (widget);
 }
 
 static void
@@ -614,7 +614,7 @@ create_widget (EphyDownloadWidget *widget)
   g_signal_connect (button, "clicked",
                     G_CALLBACK (download_clicked_cb), widget);
   g_signal_connect_swapped (menu_button, "clicked",
-                            G_CALLBACK (stop_glowing), widget);
+                            G_CALLBACK (widget_attention_unneeded), widget);
 
   gtk_widget_show_all (button);
   gtk_widget_show_all (menu_button);
