@@ -30,14 +30,6 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  EPHY_PREFS_UI_TOOLBAR_STYLE_BOTH,
-  EPHY_PREFS_UI_TOOLBAR_STYLE_BOTH_HORIZ,
-  EPHY_PREFS_UI_TOOLBAR_STYLE_ICONS,
-  EPHY_PREFS_UI_TOOLBAR_STYLE_TEXT
-} EphyPrefsUIToolbarStyle;
-
-typedef enum
-{
   EPHY_PREFS_RESTORE_SESSION_POLICY_ALWAYS,
   EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER,
   EPHY_PREFS_RESTORE_SESSION_POLICY_CRASHED
@@ -65,7 +57,6 @@ typedef enum
 
 #define EPHY_PREFS_UI_SCHEMA                     "org.gnome.Epiphany.ui"
 #define EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR       "always-show-tabs-bar"
-#define EPHY_PREFS_UI_TOOLBAR_STYLE              "toolbar-style"
 #define EPHY_PREFS_UI_DOWNLOADS_HIDDEN           "downloads-hidden"
 #define EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY "tabs-bar-visibility-policy"
 
