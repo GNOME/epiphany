@@ -15,6 +15,7 @@ web_process_extension_sources = [
 
 web_process_extension_deps = [
   config_h,
+  ephyautofill_dep,
   ephymisc_dep,
   ephysync_dep,
   webkit2gtk_web_extension_dep

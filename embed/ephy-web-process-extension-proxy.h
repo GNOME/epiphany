@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2014 Igalia S.L.
+ *  Copyright © 2019 Abdullah Alansari
  *
  *  This file is part of Epiphany.
  *
@@ -51,4 +52,10 @@ void                          ephy_web_process_extension_proxy_password_query_re
                                                                                                   const char                   *password,
                                                                                                   gint32                        promise_id,
                                                                                                   guint64                       frame_id);
+
+void                          ephy_web_process_extension_proxy_autofill                          (EphyWebProcessExtensionProxy *web_process_extension,
+                                                                                                  guint64                       page_id,
+                                                                                                  const char                   *selector,
+                                                                                                  int                           fill_choice);
+
 G_END_DECLS

@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2014 Igalia S.L.
+ *  Copyright © 2019 Abdullah Alansari
  *
  *  This file is part of Epiphany.
  *
@@ -21,6 +22,7 @@
 #include "config.h"
 #include "ephy-web-process-extension.h"
 
+#include "ephy-autofill.h"
 #include "ephy-dbus-names.h"
 #include "ephy-dbus-util.h"
 #include "ephy-debug.h"
@@ -68,6 +70,22 @@ static const char introspection_xml[] =
   "  <signal name='PageCreated'>"
   "   <arg type='t' name='page_id' direction='out'/>"
   "  </signal>"
+  "  <signal name='Autofill'>"
+  "   <arg type='t' name='page_id' direction='out'/>"
+  "   <arg type='s' name='css_selector' direction='out'/>"
+  "   <arg type='b' name='is_fillable_element' direction='out'/>"
+  "   <arg type='b' name='has_personal_fields' direction='out'/>"
+  "   <arg type='b' name='has_card_fields' direction='out'/>"
+  "   <arg type='t' name='element_x' direction='out'/>"
+  "   <arg type='t' name='element_y' direction='out'/>"
+  "   <arg type='t' name='element_width' direction='out'/>"
+  "   <arg type='t' name='element_height' direction='out'/>"
+  "  </signal>"
+  "  <method name='Autofill'>"
+  "   <arg type='t' name='page_id' direction='in'/>"
+  "   <arg type='s' name='css_selector' direction='in'/>"
+  "   <arg type='i' name='fill_choice' direction='in'/>"
+  "  </method>"
   "  <method name='HistorySetURLs'>"
   "   <arg type='a(ss)' name='urls' direction='in'/>"
   "  </method>"
@@ -411,6 +429,15 @@ ephy_web_process_extension_queue_page_created_signal_emission (EphyWebProcessExt
 }
 
 static void
+autofill_web_page_document_loaded_cb (WebKitWebPage *web_page,
+                                      gpointer user_data)
+{
+  EphyWebProcessExtension *extension = user_data;
+  ephy_autofill_web_page_document_loaded (web_page, extension->dbus_connection,
+                                          EPHY_WEB_PROCESS_EXTENSION_OBJECT_PATH, EPHY_WEB_PROCESS_EXTENSION_INTERFACE);
+}
+
+static void
 ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
                                             WebKitWebPage           *web_page)
 {
@@ -428,6 +455,9 @@ ephy_web_process_extension_page_created_cb (EphyWebProcessExtension *extension,
 
   g_signal_connect (web_page, "send-request",
                     G_CALLBACK (web_page_send_request),
+                    extension);
+  g_signal_connect (web_page, "document-loaded",
+                    G_CALLBACK (autofill_web_page_document_loaded_cb),
                     extension);
   g_signal_connect (web_page, "context-menu",
                     G_CALLBACK (web_page_context_menu),
@@ -490,6 +520,19 @@ handle_method_call (GDBusConnection       *connection,
       ephy_web_overview_model_set_urls (extension->overview_model, g_list_reverse (items));
     }
     g_dbus_method_invocation_return_value (invocation, NULL);
+  } else if (g_strcmp0 (method_name, "Autofill") == 0) {
+    WebKitWebPage *web_page;
+    const char *css_selector;
+    int fill_choice;
+    guint64 page_id;
+
+    g_variant_get (parameters, "(tsi)", &page_id, &css_selector, &fill_choice);
+
+    web_page = webkit_web_extension_get_page (extension->extension, page_id);
+    if (!web_page)
+      return;
+
+    ephy_autofill_fill (web_page, css_selector, fill_choice);
   } else if (g_strcmp0 (method_name, "HistorySetURLThumbnail") == 0) {
     if (extension->overview_model) {
       const char *url;
