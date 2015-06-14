@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
  *  Copyright © 2011 Igalia S.L.
+ *  Copyright © 2018 Abdullah Alansari
  *
  *  This file is part of Epiphany.
  *
@@ -82,6 +83,7 @@ enum {
   ALLOW_TLS_CERTIFICATE,
   ALLOW_UNSAFE_BROWSING,
   SENSITIVE_FORM_FOCUSED,
+  AUTOFILL_SIGNAL,
 
   LAST_SIGNAL
 };
@@ -1000,6 +1002,25 @@ web_extension_page_created (EphyWebExtensionProxy *extension,
   g_signal_emit (shell, signals[PAGE_CREATED], 0, page_id, extension);
 }
 
+static void
+autofill_signal_received_cb (EphyWebExtensionProxy *extension,
+                             guint64 page_id,
+                             const char *css_selector,
+                             gboolean is_fillable_element,
+                             gboolean has_personal_fields,
+                             gboolean has_card_fields,
+                             guint64 element_x,
+                             guint64 element_y,
+                             guint64 element_width,
+                             guint64 element_height,
+                             EphyEmbedShell *shell)
+{
+  g_signal_emit (shell, signals[AUTOFILL_SIGNAL], 0,
+                 page_id, css_selector, is_fillable_element, has_personal_fields, has_card_fields,
+                 element_x, element_y, element_width, element_height,
+                 extension);
+}
+
 static gboolean
 new_connection_cb (GDBusServer     *server,
                    GDBusConnection *connection,
@@ -1012,6 +1033,8 @@ new_connection_cb (GDBusServer     *server,
 
   g_signal_connect_object (extension, "page-created",
                            G_CALLBACK (web_extension_page_created), shell, 0);
+  g_signal_connect_object (extension, "autofill",
+                           G_CALLBACK (autofill_signal_received_cb), shell, 0);
 
   return TRUE;
 }
@@ -1513,6 +1536,39 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   G_TYPE_NONE, 2,
                   G_TYPE_UINT64,
                   G_TYPE_BOOLEAN);
+
+  /**
+   * EphyEmbedShell::autofill:
+   * @shell: the #EphyEmbedShell
+   * @page_id: the identifier of the web page created
+   * @css_selector: css selector of input element
+   * @is_fillable_element: is input element fillable
+   * @has_personal_fields: does input element's form has personal fields
+   * @has_card_fields: does input element's form has credit card fields
+   * @element_x: x position of input element
+   * @element_y: y position of input element
+   * @element_width: width on input element
+   * @element_height: height of input element
+   *
+   * Emitted when the user double clicks on:
+   * 1. A fillable input element
+   * 2. An input element where its form has fillable fields
+   */
+  signals[AUTOFILL_SIGNAL] =
+    g_signal_new ("autofill",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 9,
+                  G_TYPE_UINT64,
+                  G_TYPE_STRING,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_UINT64,
+                  G_TYPE_UINT64,
+                  G_TYPE_UINT64,
+                  G_TYPE_UINT64);
 }
 
 /**

@@ -15,6 +15,7 @@ libephyembed_sources = [
   'ephy-downloads-manager.c',
   'ephy-download.c',
   'ephy-embed.c',
+  'ephy-embed-autofill.c',
   'ephy-embed-container.c',
   'ephy-embed-event.c',
   'ephy-embed-prefs.c',
@@ -33,6 +34,7 @@ libephyembed_sources = [
 
 libephyembed_deps = [
   libdazzle_dep,
+  ephyautofill_dep,
   ephymisc_dep,
   gio_dep,
   glib_dep,
@@ -49,6 +51,7 @@ libephyembed_includes = include_directories(
   '.',
   '..',
   '../lib',
+  '../lib/autofill',
   '../lib/contrib',
   '../lib/contrib/gvdb',
   '../lib/history',

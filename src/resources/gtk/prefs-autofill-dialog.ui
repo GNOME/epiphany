@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.19.0
+
+-
+Copyright (C) Abdullah Alansari 2018
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Author: Abdullah Alansari
+
+-->
+<interface>
+  <requires lib="gtk+" version="3.16"/>
+  <!-- interface-license-type gplv2 -->
+  <!-- interface-copyright Abdullah Alansari -->
+  <!-- interface-authors Abdullah Alansari -->
+  <template class="PrefsAutofillDialog" parent="GtkDialog">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Data</property>
+    <property name="modal">True</property>
+    <property name="type_hint">dialog</property>
+    <property name="window_position">center</property>
+    <property name="gravity">center</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="resizable">True</property>
+    <signal name="response" handler="response_cb" swapped="no"/>
+    <child internal-child="headerbar">
+      <object class="GtkHeaderBar" id="headerbar1">
+        <property name="title" translatable="yes">Data</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="show-close-button">True</property>
+        <child>
+          <object class="GtkButton" id="clear_button">
+            <property name="label" translatable="yes">C_lear All</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="receives_default">False</property>
+            <property name="use_underline">True</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="destructive-action"/>
+              <class name="text-button"/>
+            </style>
+          </object>
+          <packing>
+            <property name="pack_type">start</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">clear_button</action-widget>
+    </action-widgets>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox1">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="border-width">12</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="personal_data_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Personal Data</property>
+                <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="firstname_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">First Name:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="firstname_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">name</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lastname_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Last Name:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="lastname_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">name</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="username_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Username:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="username_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">name</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="phone_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Phone:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="email_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Email:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="phone_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">phone</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="email_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">email</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="organization_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Organization:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="organization_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">name</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="street_address_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Street Address:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="street_address_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="city_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">City:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">11</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="city_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">name</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">11</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="postal_code_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Postal Code:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="postal_code_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">digits</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="country_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Country / Region:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="state_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">State:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">10</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="state_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">name</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">10</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="country_combo_box_text">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="active_id">US</property>
+                <items>
+                  <item id="AF">Afghanistan</item>
+                  <item id="AX">Åland Islands</item>
+                  <item id="AL">Albania</item>
+                  <item id="DZ">Algeria</item>
+                  <item id="AS">American Samoa</item>
+                  <item id="AD">Andorra</item>
+                  <item id="AO">Angola</item>
+                  <item id="AI">Anguilla</item>
+                  <item id="AQ">Antarctica</item>
+                  <item id="AG">Antigua and Barbuda</item>
+                  <item id="AR">Argentina</item>
+                  <item id="AM">Armenia</item>
+                  <item id="AW">Aruba</item>
+                  <item id="AU">Australia</item>
+                  <item id="AT">Austria</item>
+                  <item id="AZ">Azerbaijan</item>
+                  <item id="BS">Bahamas</item>
+                  <item id="BH">Bahrain</item>
+                  <item id="BD">Bangladesh</item>
+                  <item id="BB">Barbados</item>
+                  <item id="BY">Belarus</item>
+                  <item id="BE">Belgium</item>
+                  <item id="BZ">Belize</item>
+                  <item id="BJ">Benin</item>
+                  <item id="BM">Bermuda</item>
+                  <item id="BT">Bhutan</item>
+                  <item id="BO">Bolivia</item>
+                  <item id="BA">Bosnia and Herzegovina</item>
+                  <item id="BW">Botswana</item>
+                  <item id="BV">Bouvet Island</item>
+                  <item id="BR">Brazil</item>
+                  <item id="IO">British Indian Ocean Territory</item>
+                  <item id="BN">Brunei Darussalam</item>
+                  <item id="BG">Bulgaria</item>
+                  <item id="BF">Burkina Faso</item>
+                  <item id="BI">Burundi</item>
+                  <item id="KH">Cambodia</item>
+                  <item id="CM">Cameroon</item>
+                  <item id="CA">Canada</item>
+                  <item id="CV">Cape Verde</item>
+                  <item id="KY">Cayman Islands</item>
+                  <item id="CF">Central African Republic</item>
+                  <item id="TD">Chad</item>
+                  <item id="CL">Chile</item>
+                  <item id="CN">China</item>
+                  <item id="CX">Christmas Island</item>
+                  <item id="CC">Cocos (Keeling) Islands</item>
+                  <item id="CO">Colombia</item>
+                  <item id="KM">Comoros</item>
+                  <item id="CG">Congo</item>
+                  <item id="CD">Congo, Democratic Republic</item>
+                  <item id="CK">Cook Islands</item>
+                  <item id="CR">Costa Rica</item>
+                  <item id="CI">Cote D'Ivoire</item>
+                  <item id="HR">Croatia</item>
+                  <item id="CU">Cuba</item>
+                  <item id="CY">Cyprus</item>
+                  <item id="CZ">Czech Republic</item>
+                  <item id="DK">Denmark</item>
+                  <item id="DJ">Djibouti</item>
+                  <item id="DM">Dominica</item>
+                  <item id="DO">Dominican Republic</item>
+                  <item id="EC">Ecuador</item>
+                  <item id="EG">Egypt</item>
+                  <item id="SV">El Salvador</item>
+                  <item id="GQ">Equatorial Guinea</item>
+                  <item id="ER">Eritrea</item>
+                  <item id="EE">Estonia</item>
+                  <item id="ET">Ethiopia</item>
+                  <item id="FK">Falkland Islands (Malvinas)</item>
+                  <item id="FO">Faroe Islands</item>
+                  <item id="FJ">Fiji</item>
+                  <item id="FI">Finland</item>
+                  <item id="FR">France</item>
+                  <item id="GF">French Guiana</item>
+                  <item id="PF">French Polynesia</item>
+                  <item id="TF">French Southern Territories</item>
+                  <item id="GA">Gabon</item>
+                  <item id="GM">Gambia</item>
+                  <item id="GE">Georgia</item>
+                  <item id="DE">Germany</item>
+                  <item id="GH">Ghana</item>
+                  <item id="GI">Gibraltar</item>
+                  <item id="GR">Greece</item>
+                  <item id="GL">Greenland</item>
+                  <item id="GD">Grenada</item>
+                  <item id="GP">Guadeloupe</item>
+                  <item id="GU">Guam</item>
+                  <item id="GT">Guatemala</item>
+                  <item id="GG">Guernsey</item>
+                  <item id="GN">Guinea</item>
+                  <item id="GW">Guinea-Bissau</item>
+                  <item id="GY">Guyana</item>
+                  <item id="HT">Haiti</item>
+                  <item id="HM">Heard Island and Mcdonald Islands</item>
+                  <item id="VA">Holy See (Vatican City State)</item>
+                  <item id="HN">Honduras</item>
+                  <item id="HK">Hong Kong</item>
+                  <item id="HU">Hungary</item>
+                  <item id="IS">Iceland</item>
+                  <item id="IN">India</item>
+                  <item id="ID">Indonesia</item>
+                  <item id="IR">Iran</item>
+                  <item id="IQ">Iraq</item>
+                  <item id="IE">Ireland</item>
+                  <item id="IM">Isle of Man</item>
+                  <item id="IL">Israel</item>
+                  <item id="IT">Italy</item>
+                  <item id="JM">Jamaica</item>
+                  <item id="JP">Japan</item>
+                  <item id="JE">Jersey</item>
+                  <item id="JO">Jordan</item>
+                  <item id="KZ">Kazakhstan</item>
+                  <item id="KE">Kenya</item>
+                  <item id="KI">Kiribati</item>
+                  <item id="KP">Korea (North)</item>
+                  <item id="KR">Korea (South)</item>
+                  <item id="XK">Kosovo</item>
+                  <item id="KW">Kuwait</item>
+                  <item id="KG">Kyrgyzstan</item>
+                  <item id="LA">Laos</item>
+                  <item id="LV">Latvia</item>
+                  <item id="LB">Lebanon</item>
+                  <item id="LS">Lesotho</item>
+                  <item id="LR">Liberia</item>
+                  <item id="LY">Libyan Arab Jamahiriya</item>
+                  <item id="LI">Liechtenstein</item>
+                  <item id="LT">Lithuania</item>
+                  <item id="LU">Luxembourg</item>
+                  <item id="MO">Macao</item>
+                  <item id="MK">Macedonia</item>
+                  <item id="MG">Madagascar</item>
+                  <item id="MW">Malawi</item>
+                  <item id="MY">Malaysia</item>
+                  <item id="MV">Maldives</item>
+                  <item id="ML">Mali</item>
+                  <item id="MT">Malta</item>
+                  <item id="MH">Marshall Islands</item>
+                  <item id="MQ">Martinique</item>
+                  <item id="MR">Mauritania</item>
+                  <item id="MU">Mauritius</item>
+                  <item id="YT">Mayotte</item>
+                  <item id="MX">Mexico</item>
+                  <item id="FM">Micronesia</item>
+                  <item id="MD">Moldova</item>
+                  <item id="MC">Monaco</item>
+                  <item id="MN">Mongolia</item>
+                  <item id="MS">Montserrat</item>
+                  <item id="MA">Morocco</item>
+                  <item id="MZ">Mozambique</item>
+                  <item id="MM">Myanmar</item>
+                  <item id="NA">Namibia</item>
+                  <item id="NR">Nauru</item>
+                  <item id="NP">Nepal</item>
+                  <item id="NL">Netherlands</item>
+                  <item id="AN">Netherlands Antilles</item>
+                  <item id="NC">New Caledonia</item>
+                  <item id="NZ">New Zealand</item>
+                  <item id="NI">Nicaragua</item>
+                  <item id="NE">Niger</item>
+                  <item id="NG">Nigeria</item>
+                  <item id="NU">Niue</item>
+                  <item id="NF">Norfolk Island</item>
+                  <item id="MP">Northern Mariana Islands</item>
+                  <item id="NO">Norway</item>
+                  <item id="OM">Oman</item>
+                  <item id="PK">Pakistan</item>
+                  <item id="PW">Palau</item>
+                  <item id="PS">Palestinian Territory, Occupied</item>
+                  <item id="PA">Panama</item>
+                  <item id="PG">Papua New Guinea</item>
+                  <item id="PY">Paraguay</item>
+                  <item id="PE">Peru</item>
+                  <item id="PH">Philippines</item>
+                  <item id="PN">Pitcairn</item>
+                  <item id="PL">Poland</item>
+                  <item id="PT">Portugal</item>
+                  <item id="PR">Puerto Rico</item>
+                  <item id="QA">Qatar</item>
+                  <item id="RE">Reunion</item>
+                  <item id="RO">Romania</item>
+                  <item id="RU">Russian Federation</item>
+                  <item id="RW">Rwanda</item>
+                  <item id="SH">Saint Helena</item>
+                  <item id="KN">Saint Kitts and Nevis</item>
+                  <item id="LC">Saint Lucia</item>
+                  <item id="PM">Saint Pierre and Miquelon</item>
+                  <item id="VC">Saint Vincent and the Grenadines</item>
+                  <item id="WS">Samoa</item>
+                  <item id="SM">San Marino</item>
+                  <item id="ST">Sao Tome and Principe</item>
+                  <item id="SA">Saudi Arabia</item>
+                  <item id="SN">Senegal</item>
+                  <item id="RS">Serbia</item>
+                  <item id="ME">Montenegro</item>
+                  <item id="SC">Seychelles</item>
+                  <item id="SL">Sierra Leone</item>
+                  <item id="SG">Singapore</item>
+                  <item id="SK">Slovakia</item>
+                  <item id="SI">Slovenia</item>
+                  <item id="SB">Solomon Islands</item>
+                  <item id="SO">Somalia</item>
+                  <item id="ZA">South Africa</item>
+                  <item id="GS">South Georgia and the South Sandwich Islands</item>
+                  <item id="ES">Spain</item>
+                  <item id="LK">Sri Lanka</item>
+                  <item id="SD">Sudan</item>
+                  <item id="SR">Suriname</item>
+                  <item id="SJ">Svalbard and Jan Mayen</item>
+                  <item id="SZ">Swaziland</item>
+                  <item id="SE">Sweden</item>
+                  <item id="CH">Switzerland</item>
+                  <item id="SY">Syrian Arab Republic</item>
+                  <item id="TW">Taiwan, Province of China</item>
+                  <item id="TJ">Tajikistan</item>
+                  <item id="TZ">Tanzania</item>
+                  <item id="TH">Thailand</item>
+                  <item id="TL">Timor-Leste</item>
+                  <item id="TG">Togo</item>
+                  <item id="TK">Tokelau</item>
+                  <item id="TO">Tonga</item>
+                  <item id="TT">Trinidad and Tobago</item>
+                  <item id="TN">Tunisia</item>
+                  <item id="TR">Turkey</item>
+                  <item id="TM">Turkmenistan</item>
+                  <item id="TC">Turks and Caicos Islands</item>
+                  <item id="TV">Tuvalu</item>
+                  <item id="UG">Uganda</item>
+                  <item id="UA">Ukraine</item>
+                  <item id="AE">United Arab Emirates</item>
+                  <item id="GB">United Kingdom</item>
+                  <item id="US">United States</item>
+                  <item id="UM">United States Minor Outlying Islands</item>
+                  <item id="UY">Uruguay</item>
+                  <item id="UZ">Uzbekistan</item>
+                  <item id="VU">Vanuatu</item>
+                  <item id="VE">Venezuela</item>
+                  <item id="VN">Viet Nam</item>
+                  <item id="VG">Virgin Islands, British</item>
+                  <item id="VI">Virgin Islands, U.S.</item>
+                  <item id="WF">Wallis and Futuna</item>
+                  <item id="EH">Western Sahara</item>
+                  <item id="YE">Yemen</item>
+                  <item id="ZM">Zambia</item>
+                  <item id="ZW">Zimbabwe</item>
+                </items>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="card_data_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Credit Card Data</property>
+                <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">12</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="card_type_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Card Type:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">13</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="card_type_combo_box_text">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="active_id">M</property>
+                <items>
+                  <item id="A" translatable="yes">American Express</item>
+                  <item id="M" translatable="yes">Mastercard</item>
+                  <item id="D" translatable="yes">Discover</item>
+                  <item id="V" translatable="yes">Visa</item>
+                </items>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">13</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="card_number_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Credit Card Number:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">14</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="card_number_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">digits</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">14</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="name_on_card_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Name on Card:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">15</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="name_on_card_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="input_purpose">name</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">15</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="exparation_date_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Expiration Date:</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">16</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="expiration_date">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkComboBoxText" id="expdate_year_combo_box_text">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="active_id">16</property>
+                    <items>
+                      <item id="18" translatable="yes">2018</item>
+                      <item id="19" translatable="yes">2019</item>
+                      <item id="19" translatable="yes">2019</item>
+                      <item id="20" translatable="yes">2020</item>
+                      <item id="21" translatable="yes">2021</item>
+                      <item id="22" translatable="yes">2022</item>
+                      <item id="23" translatable="yes">2023</item>
+                      <item id="24" translatable="yes">2024</item>
+                      <item id="25" translatable="yes">2025</item>
+                      <item id="26" translatable="yes">2026</item>
+                      <item id="27" translatable="yes">2027</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="expdate_month_combo_box_text">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="active_id">1</property>
+                    <items>
+                      <item id="1" translatable="yes">01</item>
+                      <item id="2" translatable="yes">02</item>
+                      <item id="3" translatable="yes">03</item>
+                      <item id="4" translatable="yes">04</item>
+                      <item id="5" translatable="yes">05</item>
+                      <item id="6" translatable="yes">06</item>
+                      <item id="7" translatable="yes">07</item>
+                      <item id="8" translatable="yes">08</item>
+                      <item id="9" translatable="yes">09</item>
+                      <item id="10" translatable="yes">10</item>
+                      <item id="11" translatable="yes">11</item>
+                      <item id="12" translatable="yes">12</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">16</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

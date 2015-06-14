@@ -14,6 +14,7 @@ web_extension_sources = [
 ]
 
 web_extension_deps = [
+  ephyautofill_dep,
   ephymisc_dep,
   ephysync_dep,
   webkit2gtk_web_extension_dep

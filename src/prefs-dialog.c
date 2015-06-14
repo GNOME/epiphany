@@ -3,6 +3,7 @@
  *  Copyright © 200-2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
  *  Copyright © 2010, 2017 Igalia S.L.
+   *  Copyright © 2018 Abdullah Alansari
  *
  *  This file is part of Epiphany.
  *
@@ -49,6 +50,7 @@
 #include "cookies-dialog.h"
 #include "gnome-languages.h"
 #include "passwords-dialog.h"
+#include "prefs-autofill-dialog.h"
 #include "synced-tabs-dialog.h"
 #include "webapp-additional-urls-dialog.h"
 
@@ -889,6 +891,18 @@ on_manage_webapp_additional_urls_button_clicked (GtkWidget   *button,
 }
 
 static void
+on_manage_autofill_button_clicked (GtkWidget   *button,
+                                   PrefsDialog *prefs_dialog)
+{
+  PrefsAutofillDialog *autofill_dialog;
+
+  autofill_dialog = prefs_autofill_dialog_new ();
+
+  gtk_window_set_transient_for (GTK_WINDOW (autofill_dialog), GTK_WINDOW (prefs_dialog));
+  gtk_window_present (GTK_WINDOW (autofill_dialog));
+}
+
+static void
 on_manage_cookies_button_clicked (GtkWidget   *button,
                                   PrefsDialog *dialog)
 {
@@ -1050,6 +1064,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_manage_autofill_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);

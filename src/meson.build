@@ -44,6 +44,8 @@ libephymain_sources = [
   'ephy-window.c',
   'passwords-dialog.c',
   'popup-commands.c',
+  'prefs-autofill-dialog.c',
+  'prefs-autofill-utils.c',
   'prefs-dialog.c',
   'synced-tabs-dialog.c',
   'webapp-additional-urls-dialog.c',
@@ -53,6 +55,7 @@ libephymain_sources = [
 ]
 
 libephymain_deps = [
+  ephyautofill_dep,
   ephyembed_dep,
   ephymisc_dep,
   ephysync_dep,
