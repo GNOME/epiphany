@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2014 Igalia S.L.
+ *  Copyright © 2019 Abdullah Alansari
  *
  *  This file is part of Epiphany.
  *
@@ -32,11 +33,13 @@ struct _EphyWebProcessExtensionProxy {
   GDBusConnection *connection;
 
   guint page_created_signal_id;
+  guint autofill_signal_id;
 };
 
 enum {
   PAGE_CREATED,
   CONNECTION_CLOSED,
+  AUTOFILL_SIGNAL,
 
   LAST_SIGNAL
 };
@@ -54,6 +57,12 @@ ephy_web_process_extension_proxy_dispose (GObject *object)
     g_dbus_connection_signal_unsubscribe (web_process_extension->connection,
                                           web_process_extension->page_created_signal_id);
     web_process_extension->page_created_signal_id = 0;
+  }
+
+  if (web_process_extension->autofill_signal_id > 0) {
+    g_dbus_connection_signal_unsubscribe (web_process_extension->connection,
+                                          web_process_extension->autofill_signal_id);
+    web_process_extension->autofill_signal_id = 0;
   }
 
   if (web_process_extension->cancellable) {
@@ -93,6 +102,39 @@ ephy_web_process_extension_proxy_class_init (EphyWebProcessExtensionProxyClass *
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
+
+  /**
+   * EphyWebProcessExtensionProxy::autofill:
+   * @web_process_extension: the #EphyWebProcessExtensionProxy
+   * @page_id: the identifier of the web page created
+   * @css_selector: css selector of input element
+   * @is_fillable_element: is input element fillable
+   * @has_personal_fields: does input element's form has personal fields
+   * @has_card_fields: does input element's form has credit card fields
+   * @element_x: x position of input element
+   * @element_y: y position of input element
+   * @element_width: width on input element
+   * @element_height: height of input element
+   *
+   * Emitted when the user double clicks on:
+   * 1. A fillable input element
+   * 2. An input element where its form has fillable fields
+   */
+  signals[AUTOFILL_SIGNAL] =
+    g_signal_new ("autofill",
+                  EPHY_TYPE_WEB_PROCESS_EXTENSION_PROXY,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 9,
+                  G_TYPE_UINT64,
+                  G_TYPE_STRING,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_UINT64,
+                  G_TYPE_UINT64,
+                  G_TYPE_UINT64,
+                  G_TYPE_UINT64);
 }
 
 static void
@@ -107,6 +149,30 @@ web_process_extension_page_created (GDBusConnection              *connection,
   guint64 page_id;
   g_variant_get (parameters, "(t)", &page_id);
   g_signal_emit (web_process_extension, signals[PAGE_CREATED], 0, page_id);
+}
+
+static void
+autofill_signal_received_cb (GDBusConnection *connection,
+                             const char *sender_name,
+                             const char *object_path,
+                             const char *interface_name,
+                             const char *signal_name,
+                             GVariant *parameters,
+                             gpointer user_data)
+{
+  EphyWebProcessExtensionProxy *web_process_extension = user_data;
+
+  const char *selector;
+  gboolean is_fillable_element, has_personal_fields, has_card_fields;
+  guint64 page_id, element_x, element_y, element_width, element_height;
+
+  g_variant_get (parameters, "(t&sbbbtttt)",
+                 &page_id, &selector, &is_fillable_element, &has_personal_fields, &has_card_fields,
+                 &element_x, &element_y, &element_width, &element_height);
+
+  g_signal_emit (web_process_extension, signals[AUTOFILL_SIGNAL], 0,
+                 page_id, selector, is_fillable_element, has_personal_fields, has_card_fields,
+                 element_x, element_y, element_width, element_height);
 }
 
 static void
@@ -144,6 +210,19 @@ web_process_extension_proxy_created_cb (GDBusProxy                   *proxy,
                                         (GDBusSignalCallback)web_process_extension_page_created,
                                         web_process_extension,
                                         NULL);
+
+  web_process_extension->autofill_signal_id =
+    g_dbus_connection_signal_subscribe (web_process_extension->connection,
+                                        NULL,
+                                        EPHY_WEB_PROCESS_EXTENSION_INTERFACE,
+                                        "Autofill",
+                                        EPHY_WEB_PROCESS_EXTENSION_OBJECT_PATH,
+                                        NULL,
+                                        G_DBUS_SIGNAL_FLAGS_NONE,
+                                        autofill_signal_received_cb,
+                                        web_process_extension,
+                                        NULL);
+
   g_object_unref (web_process_extension);
 }
 
@@ -185,6 +264,26 @@ ephy_web_process_extension_proxy_new (GDBusConnection *connection)
                     g_object_ref (web_process_extension));
 
   return web_process_extension;
+}
+
+void
+ephy_web_process_extension_proxy_autofill (EphyWebProcessExtensionProxy *web_process_extension,
+                                           guint64 page_id,
+                                           const char *selector,
+                                           int fill_choice)
+{
+  g_return_if_fail (EPHY_IS_WEB_PROCESS_EXTENSION_PROXY (web_process_extension));
+
+  if (!web_process_extension->proxy)
+    return;
+
+  g_dbus_proxy_call (web_process_extension->proxy,
+                     "Autofill",
+                     g_variant_new ("(tsi)", page_id, selector, fill_choice),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1,
+                     web_process_extension->cancellable,
+                     NULL, NULL);
 }
 
 void
