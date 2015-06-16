@@ -601,7 +601,7 @@ show_user_choices (WebKitDOMDocument *document,
   long x, y;
   long input_width;
   char *style_attribute;
-  const char* username;
+  char* username;
 
   g_object_get (username_node,
                 "value", &username,
@@ -700,6 +700,7 @@ show_user_choices (WebKitDOMDocument *document,
                                       NULL);
   }
 
+  g_free  (username);
   body = WEBKIT_DOM_NODE (webkit_dom_document_get_body (document));
   webkit_dom_node_append_child (WEBKIT_DOM_NODE (body),
                                 WEBKIT_DOM_NODE (main_div),
