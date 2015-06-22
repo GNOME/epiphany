@@ -571,15 +571,26 @@ ephy_embed_shell_setup_process_model (EphyEmbedShell *shell)
 static void
 ephy_embed_shell_create_web_context (EphyEmbedShell *embed_shell)
 {
-  char *local_storage_path;
+  WebKitWebsiteDataManager *manager;
+  char *data_dir;
+  char *cache_dir;
   EphyEmbedShellPrivate *priv = embed_shell->priv;
 
-  /* Local Storage */
-  local_storage_path = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
-                                         ephy_dot_dir () : g_get_user_data_dir (),
-                                         g_get_prgname (), "localstorage", NULL);
-  priv->web_context = g_object_new (WEBKIT_TYPE_WEB_CONTEXT, "local-storage-directory", local_storage_path, NULL);
-  g_free (local_storage_path);
+  data_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
+                               ephy_dot_dir () : g_get_user_data_dir (),
+                               g_get_prgname (), NULL);
+  cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
+                                ephy_dot_dir () : g_get_user_cache_dir (),
+                                g_get_prgname (), NULL);
+
+  manager = webkit_website_data_manager_new ("base-data-directory", data_dir,
+                                             "base-cache-directory", cache_dir,
+                                             NULL);
+  g_free (data_dir);
+  g_free (cache_dir);
+
+  priv->web_context = webkit_web_context_new_with_website_data_manager (manager);
+  g_object_unref (manager);
 }
 
 static void
@@ -587,7 +598,6 @@ ephy_embed_shell_startup (GApplication* application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
   EphyEmbedShellPrivate *priv = shell->priv;
-  char *base_cache_dir;
   char *favicon_db_path;
   WebKitCookieManager *cookie_manager;
   char *filename;
@@ -635,18 +645,12 @@ ephy_embed_shell_startup (GApplication* application)
                     G_CALLBACK (initialize_web_extensions),
                     shell);
 
-  /* Disk Cache */
-  base_cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
-                                     ephy_dot_dir () : g_get_user_cache_dir (),
-                                     g_get_prgname (), NULL);
-  webkit_web_context_set_disk_cache_directory (priv->web_context, base_cache_dir);
-
   /* Favicon Database */
-  favicon_db_path = g_build_filename (base_cache_dir, "icondatabase", NULL);
+  favicon_db_path = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
+                                      ephy_dot_dir () : g_get_user_cache_dir (),
+                                      "icondatabase", NULL);
   webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
   g_free (favicon_db_path);
-
-  g_free (base_cache_dir);
 
   /* Do not ignore TLS errors. */
   webkit_web_context_set_tls_errors_policy (priv->web_context, WEBKIT_TLS_ERRORS_POLICY_FAIL);
