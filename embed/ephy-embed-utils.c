@@ -315,12 +315,26 @@ ephy_embed_utils_urls_have_same_origin (const char *a_url,
     return retval;
 
   b_uri = soup_uri_new (b_url);
-  if (b_uri) {
-    retval = a_uri->host && b_uri->host && soup_uri_host_equal (a_uri, b_uri);
-    soup_uri_free (b_uri);
+  if (!b_uri) {
+    soup_uri_free (a_uri);
+    return retval;
+  }
+
+  if (a_uri->host && b_uri->host) {
+    retval = soup_uri_host_equal (a_uri, b_uri);
+    if (!retval) {
+      const char *a_domain;
+      const char *b_domain;
+
+      a_domain = soup_tld_get_base_domain (a_uri->host, NULL);
+      b_domain = soup_tld_get_base_domain (b_uri->host, NULL);
+
+      retval = a_domain && b_domain && strcmp (a_domain, b_domain) == 0;
+    }
   }
 
   soup_uri_free (a_uri);
+  soup_uri_free (b_uri);
 
   return retval;
 }
