@@ -102,7 +102,8 @@ AM_CPPFLAGS = \
 AM_CFLAGS = \
 	-DTEST_DIR=\"$(srcdir)\"\
 	$(DEPENDENCIES_CFLAGS)  \
-	$(CODE_COVERAGE_CFLAGS)
+	$(CODE_COVERAGE_CFLAGS) \
+	$(WARN_CFLAGS)
 
 LDADD = \
 	$(top_builddir)/src/libephymain.la \

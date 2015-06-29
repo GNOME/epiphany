@@ -1,3 +1,5 @@
+AM_CFLAGS = $(WARN_CFLAGS)
+
 noinst_LTLIBRARIES = libephyhistory.la
 
 libephyhistory_la_SOURCES = \
