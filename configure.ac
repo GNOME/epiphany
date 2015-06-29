@@ -54,7 +54,7 @@ GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([maximum])
 GNOME_MAINTAINER_MODE_DEFINES
 
-GNOME_CODE_COVERAGE
+AX_CODE_COVERAGE
 
 WARN_CFLAGS="$WARN_CFLAGS -Wdeclaration-after-statement -Wno-deprecated-declarations -Wno-missing-prototypes"
 
