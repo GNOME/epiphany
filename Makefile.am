@@ -9,7 +9,6 @@ NULL =
 EXTRA_DIST = 			\
 	autogen.sh		\
 	HACKING			\
-	MAINTAINERS		\
 	ChangeLog		\
 	$(NULL)
 
