@@ -25,6 +25,7 @@
 #include "ephy-private.h"
 
 #include <glib/gi18n.h>
+#include <locale.h>
 
 gint main (gint argc, gchar** argv)
 {
@@ -33,6 +34,7 @@ gint main (gint argc, gchar** argv)
   GError *error = NULL;
 
   /* Initialize the i18n stuff */
+  setlocale (LC_ALL, "");
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
