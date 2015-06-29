@@ -1,6 +1,7 @@
 noinst_LTLIBRARIES = libephywidgets.la
 
 AM_CFLAGS = $(WARN_CFLAGS)
+AM_LDFLAGS = $(WARN_LDFLAGS)
 
 BUILT_SOURCES = \
 	ephy-widgets-type-builtins.c	\

@@ -3,6 +3,7 @@ SUBDIRS = bookmarks
 NULL =
 
 AM_CFLAGS = $(WARN_CFLAGS)
+AM_LDFLAGS = $(WARN_LDFLAGS)
 
 noinst_LTLIBRARIES = libephymain.la
 
@@ -159,7 +160,9 @@ epiphany_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS) 	\
 	$(AM_CFLAGS)
 
-epiphany_LDFLAGS = -dlopen self
+epiphany_LDFLAGS = \
+	-dlopen self \
+	$(AM_LDFLAGS)
 
 epiphany_LDADD = \
 	libephymain.la \

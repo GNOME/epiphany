@@ -105,6 +105,8 @@ AM_CFLAGS = \
 	$(CODE_COVERAGE_CFLAGS) \
 	$(WARN_CFLAGS)
 
+AM_LDFLAGS = $(WARN_LDFLAGS)
+
 LDADD = \
 	$(top_builddir)/src/libephymain.la \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la \

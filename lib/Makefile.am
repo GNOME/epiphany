@@ -1,6 +1,7 @@
 SUBDIRS = widgets egg history
 
 AM_CFLAGS = $(WARN_CFLAGS)
+AM_LDFLAGS = $(WARN_LDFLAGS)
 
 noinst_LTLIBRARIES = libephymisc.la
 

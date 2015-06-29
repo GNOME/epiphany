@@ -1,6 +1,7 @@
 noinst_LTLIBRARIES = libephybookmarks.la
 
 AM_CFLAGS = $(WARN_CFLAGS)
+AM_LDFLAGS = $(WARN_LDFLAGS)
 
 INST_H_FILES = \
 	ephy-bookmarks.h

@@ -1,4 +1,5 @@
 AM_CFLAGS = $(WARN_CFLAGS)
+AM_LDFLAGS = $(WARN_LDFLAGS)
 
 webextension_LTLIBRARIES = libephywebextension.la
 

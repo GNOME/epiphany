@@ -52,8 +52,7 @@ AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 GLIB_GSETTINGS
 
 AX_CHECK_ENABLE_DEBUG([yes])
-GNOME_COMPILE_WARNINGS([maximum])
-
+AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS])
 AX_CODE_COVERAGE
 
 WARN_CFLAGS="$WARN_CFLAGS -Wdeclaration-after-statement -Wno-deprecated-declarations -Wno-missing-prototypes"
