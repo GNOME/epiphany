@@ -36,10 +36,7 @@ AC_SUBST([EPIPHANY_MINOR_VERSION], [epiphany_version_minor])
 AC_SUBST([EPIPHANY_MICRO_VERSION], [epiphany_version_micro])
 
 AM_INIT_AUTOMAKE([1.11 foreign dist-xz no-dist-gzip tar-ustar])
-
-# Use AM_SILENT_RULES if present
-m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-
+AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE([enable])
 
 # Initialize libtool
