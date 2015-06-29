@@ -72,7 +72,7 @@ EXTRA_DIST = \
 	epiphany-service.xml		\
 	check-mime.py
 
-DISTCLEANFILES = \
+CLEANFILES = \
 	$(appstream_XML)		\
 	$(service_DATA)			\
 	$(desktop_DATA)			\
