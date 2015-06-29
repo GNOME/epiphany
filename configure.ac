@@ -55,7 +55,7 @@ AX_CHECK_ENABLE_DEBUG([yes])
 AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS])
 AX_CODE_COVERAGE
 
-WARN_CFLAGS="$WARN_CFLAGS -Wdeclaration-after-statement -Wno-deprecated-declarations -Wno-missing-prototypes"
+WARN_CFLAGS="$WARN_CFLAGS -Wdeclaration-after-statement -Wno-deprecated-declarations"
 
 GLIB_REQUIRED=2.38.0
 GTK_REQUIRED=3.13.0

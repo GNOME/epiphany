@@ -33,6 +33,11 @@ name_acquired_cb (GDBusConnection *connection,
   ephy_web_extension_dbus_register (extension, connection);
 }
 
+/* Placate -Wmissing-prototype */
+void
+webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
+                                                GVariant *user_data);
+
 G_MODULE_EXPORT void
 webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
                                                 GVariant *user_data)
