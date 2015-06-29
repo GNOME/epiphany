@@ -31,11 +31,6 @@ AC_CONFIG_SRCDIR([configure.ac])
 
 AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
 
-# for EPHY_CHECK_VERSION
-AC_SUBST([EPIPHANY_MAJOR_VERSION], [epiphany_version_major])
-AC_SUBST([EPIPHANY_MINOR_VERSION], [epiphany_version_minor])
-AC_SUBST([EPIPHANY_MICRO_VERSION], [epiphany_version_micro])
-
 AM_INIT_AUTOMAKE([1.11 foreign dist-xz no-dist-gzip tar-ustar])
 AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE([enable])
