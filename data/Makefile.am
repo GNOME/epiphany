@@ -65,7 +65,7 @@ EXTRA_DIST = \
 	$(about_DATA)			\
 	$(mimepermission_DATA)		\
 	$(xsl_DATA)			\
-	$(service_DATA)			\
+	$(service_in_files)		\
 	$(default_bookmarks_in_files)	\
 	$(gsettings_SCHEMAS)		\
 	$(convert_DATA)			\
