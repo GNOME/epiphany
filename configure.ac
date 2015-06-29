@@ -31,6 +31,17 @@ AC_CONFIG_SRCDIR([configure.ac])
 
 AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
 
+AX_CHECK_ENABLE_DEBUG([yes])
+AX_CODE_COVERAGE
+
+AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS])
+WARN_CFLAGS="$WARN_CFLAGS -Wdeclaration-after-statement -Wno-deprecated-declarations"
+
+AC_PROG_CC
+
+AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
+AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
+
 AM_INIT_AUTOMAKE([1.11 foreign dist-xz no-dist-gzip tar-ustar])
 AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE([enable])
@@ -39,18 +50,8 @@ AM_MAINTAINER_MODE([enable])
 LT_PREREQ(2.2)
 LT_INIT([dlopen disable-static])
 
-AC_PROG_CC
-
-AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
-AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
-
 GLIB_GSETTINGS
-
-AX_CHECK_ENABLE_DEBUG([yes])
-AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS])
-AX_CODE_COVERAGE
-
-WARN_CFLAGS="$WARN_CFLAGS -Wdeclaration-after-statement -Wno-deprecated-declarations"
+YELP_HELP_INIT
 
 GLIB_REQUIRED=2.38.0
 GTK_REQUIRED=3.13.0
@@ -172,12 +173,6 @@ fi
 
 IT_PROG_INTLTOOL([0.50.0])
 AC_SUBST([GETTEXT_PACKAGE], [epiphany])
-
-# *******************************
-# User help
-# *******************************
-
-YELP_HELP_INIT
 
 # ****************
 # Distributor name
