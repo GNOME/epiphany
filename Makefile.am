@@ -4,14 +4,6 @@ if ENABLE_TESTS
 SUBDIRS += tests
 endif
 
-NULL =
-
-EXTRA_DIST = 			\
-	autogen.sh		\
-	HACKING			\
-	ChangeLog		\
-	$(NULL)
-
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-debug
 
