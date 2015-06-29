@@ -8,7 +8,6 @@ NULL =
 
 EXTRA_DIST = 			\
 	autogen.sh		\
-	COPYING.README		\
 	HACKING			\
 	MAINTAINERS		\
 	ChangeLog		\
