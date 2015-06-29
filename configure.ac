@@ -33,7 +33,6 @@ AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
 
 AX_CHECK_ENABLE_DEBUG([yes])
 AX_CODE_COVERAGE
-
 AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS])
 WARN_CFLAGS="$WARN_CFLAGS -Wdeclaration-after-statement -Wno-deprecated-declarations"
 
@@ -47,7 +46,7 @@ AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE([enable])
 
 # Initialize libtool
-LT_PREREQ(2.2)
+LT_PREREQ([2.2])
 LT_INIT([dlopen disable-static])
 
 GLIB_GSETTINGS
@@ -98,12 +97,12 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  avahi-client >= $AVAHI_REQUIRED
 		  ])
 
-PKG_CHECK_MODULES(WEB_EXTENSION, [
+PKG_CHECK_MODULES([WEB_EXTENSION], [
                   webkit2gtk-web-extension-4.0 >= $WEBKIT_GTK_REQUIRED
                   libsecret-1 >= $LIBSECRET_REQUIRED
                   ])
-AC_SUBST(WEB_EXTENSION_CFLAGS)
-AC_SUBST(WEB_EXTENSION_LIBS)
+AC_SUBST([WEB_EXTENSION_CFLAGS])
+AC_SUBST([WEB_EXTENSION_LIBS])
 
 # ******************
 # Portability checks
