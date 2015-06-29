@@ -150,8 +150,6 @@ ephy_langs_get_languages (void)
 	return (char **) g_array_free (array, FALSE);
 }
 
-#define ISOCODESLOCALEDIR	ISO_CODES_PREFIX "/share/locale"
-
 static void
 ephy_langs_bind_iso_domains (void)
 {
@@ -159,10 +157,10 @@ ephy_langs_bind_iso_domains (void)
 
 	if (bound == FALSE)
 	{
-	        bindtextdomain (ISO_639_DOMAIN, ISOCODESLOCALEDIR);
+	        bindtextdomain (ISO_639_DOMAIN, LOCALEDIR);
 	        bind_textdomain_codeset (ISO_639_DOMAIN, "UTF-8");
 
-	        bindtextdomain(ISO_3166_DOMAIN, ISOCODESLOCALEDIR);
+	        bindtextdomain(ISO_3166_DOMAIN, LOCALEDIR);
 	        bind_textdomain_codeset (ISO_3166_DOMAIN, "UTF-8");
 
 		bound = TRUE;

@@ -86,6 +86,7 @@ libephymisc_la_CPPFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\" 		    \
 	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"    \
 	-DABS_TOP_BUILD_DIR=\"$(abs_top_builddir)\" \
+	-DLOCALEDIR=\"$(localedir)\"		    \
 	$(AM_CPPFLAGS)
 
 libephymisc_la_CFLAGS = \

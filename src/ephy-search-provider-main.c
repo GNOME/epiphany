@@ -33,7 +33,7 @@ gint main (gint argc, gchar** argv)
   GError *error = NULL;
 
   /* Initialize the i18n stuff */
-  bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
+  bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 

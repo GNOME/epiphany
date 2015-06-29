@@ -92,7 +92,7 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/src/bookmarks   \
 	-DLOADER_DIR=\""$(pkglibdir)/$(EPIPHANY_MAJOR)/loaders"\"		\
 	-DDATADIR=\""$(pkgdatadir)"\" 	\
-	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
+	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)
 
 libephymain_la_CFLAGS = \
@@ -152,7 +152,7 @@ epiphany_CPPFLAGS = \
 	-I$(top_srcdir)/src/bookmarks   \
 	-DDATADIR=\""$(datadir)"\" 	\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
+	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)
 
 epiphany_CFLAGS = \
@@ -187,7 +187,7 @@ epiphany_search_provider_CPPFLAGS = \
 	-I$(top_srcdir)/src/bookmarks   \
 	-DDATADIR=\""$(datadir)"\" 	\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
+	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)
 
 epiphany_search_provider_CFLAGS = $(epiphany_CFLAGS)
