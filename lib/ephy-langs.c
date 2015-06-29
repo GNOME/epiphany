@@ -155,7 +155,6 @@ ephy_langs_get_languages (void)
 static void
 ephy_langs_bind_iso_domains (void)
 {
-#ifdef ENABLE_NLS
 	static gboolean bound = FALSE;
 
 	if (bound == FALSE)
@@ -168,7 +167,6 @@ ephy_langs_bind_iso_domains (void)
 
 		bound = TRUE;
 	}
-#endif
 }
 
 static void

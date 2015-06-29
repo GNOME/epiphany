@@ -123,6 +123,7 @@ ephy_profile_migrator_CPPFLAGS = \
 	-I$(top_builddir)/lib \
 	-I$(srcdir)/history \
 	-DSHARE_DIR=\"$(pkgdatadir)\" \
+	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	$(AM_CPPFLAGS)
 
 BUILT_SOURCES = \

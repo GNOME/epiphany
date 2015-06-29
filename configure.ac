@@ -181,12 +181,8 @@ else
 	AC_MSG_ERROR([iso-codes is required])
 fi
 
-GETTEXT_PACKAGE=epiphany
-AC_SUBST([GETTEXT_PACKAGE])
-AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
-AM_GLIB_GNU_GETTEXT
-
 IT_PROG_INTLTOOL([0.50.0])
+AC_SUBST([GETTEXT_PACKAGE], [epiphany])
 
 # *******************************
 # User help

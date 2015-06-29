@@ -151,8 +151,8 @@ epiphany_CPPFLAGS = \
 	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DDATADIR=\""$(datadir)"\" 	\
+	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
-	$(INCINTL)			\
 	$(AM_CPPFLAGS)
 
 epiphany_CFLAGS = \
@@ -170,8 +170,7 @@ epiphany_LDADD = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
-	$(CODE_COVERAGE_LDFLAGS) \
-	$(LIBINTL)
+	$(CODE_COVERAGE_LDFLAGS)
 
 libexec_PROGRAMS = epiphany-search-provider
 
@@ -187,8 +186,8 @@ epiphany_search_provider_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DDATADIR=\""$(datadir)"\" 	\
+	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
-	$(INCINTL)			\
 	$(AM_CPPFLAGS)
 
 epiphany_search_provider_CFLAGS = $(epiphany_CFLAGS)
@@ -202,8 +201,7 @@ epiphany_search_provider_LDADD = \
 	$(top_builddir)/lib/libephymisc.la \
 	$(top_builddir)/lib/egg/libegg.la \
 	$(DEPENDENCIES_LIBS) \
-	$(CODE_COVERAGE_LDFLAGS) \
-	$(LIBINTL)
+	$(CODE_COVERAGE_LDFLAGS)
 
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\
