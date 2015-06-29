@@ -17,8 +17,9 @@ gsettings_ENUM_FILES = $(top_srcdir)/lib/ephy-prefs.h
 gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml
 @GSETTINGS_RULES@
 
-appdatadir = $(datadir)/appdata
-appdata_DATA = epiphany.appdata.xml
+appstream_in_files = epiphany.appdata.xml.in
+appstream_XML = $(appstream_in_files:.xml.in=.xml)
+@APPSTREAM_XML_RULES@
 
 aboutdialogdir = $(pkgdatadir)
 aboutdialog_DATA = about.ini
@@ -54,9 +55,11 @@ $(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile $(INTLTOOL_MER
 searchproviderdir = $(datadir)/gnome-shell/search-providers
 dist_searchprovider_DATA = epiphany-search-provider.ini
 
+DISTCHECK_CONFIGURE_FLAGS == --enable-appdata-check
+
 EXTRA_DIST = \
 	$(aboutdialog_DATA)		\
-	$(appdata_DATA).in		\
+	$(appstream_in_files)		\
 	$(service_in_files)		\
 	$(desktop_in_files)		\
 	$(about_DATA)			\
@@ -70,7 +73,7 @@ EXTRA_DIST = \
 	check-mime.py
 
 DISTCLEANFILES = \
-	$(appdata_DATA)			\
+	$(appstream_XML)		\
 	$(service_DATA)			\
 	$(desktop_DATA)			\
 	$(default_bookmarks_DATA)

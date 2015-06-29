@@ -50,6 +50,7 @@ AM_MAINTAINER_MODE([enable])
 LT_PREREQ([2.2])
 LT_INIT([dlopen disable-static])
 
+APPSTREAM_XML
 GLIB_GSETTINGS
 YELP_HELP_INIT
 
