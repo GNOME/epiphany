@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-#ifndef GNOME_ENABLE_DEBUG
+#ifdef NDEBUG
 #define DISABLE_LOGGING
 #define DISABLE_PROFILING
 #endif

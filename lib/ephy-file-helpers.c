@@ -230,7 +230,7 @@ ephy_file (const char *filename)
 
 	static const char * const paths[] =
 	{
-#ifdef GNOME_ENABLE_DEBUG
+#ifndef NDEBUG
 		TOP_SRC_DATADIR "/",
 		TOP_SRC_DATADIR "/icons/",
 		TOP_SRC_DATADIR "/pages/",

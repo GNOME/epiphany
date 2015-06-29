@@ -46,7 +46,7 @@ static char **ephy_profile_modules;
 static gboolean ephy_profile_all_modules;
 #endif /* !DISABLE_PROFILING */
 
-#ifdef GNOME_ENABLE_DEBUG
+#ifndef NDEBUG
 
 static char **
 build_modules (const char *name,
