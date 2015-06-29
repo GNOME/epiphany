@@ -4,9 +4,9 @@ SUBDIRS = pages
 @INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_XML_RULE@
 
-desktop_in_files = epiphany.desktop.in.in
+desktop_in_files = epiphany.desktop.in
 desktopdir = $(datadir)/applications
-desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 convertdir = $(datarootdir)/GConf/gsettings
 convert_DATA = epiphany.convert

@@ -205,7 +205,7 @@ AC_DEFINE([EPIPHANY_COMPILATION],[1],[Compiling epiphany])
 AC_CONFIG_FILES([
 Makefile
 data/Makefile
-data/epiphany.desktop.in
+data/epiphany.desktop
 data/pages/Makefile
 doc/Makefile
 help/Makefile
