@@ -35,8 +35,6 @@ BUILT_SOURCES = \
 	ephy-history-type-builtins.h
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
-DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
-MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 stamp_files = \
 	stamp-ephy-history-type-builtins.c	\

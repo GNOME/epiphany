@@ -73,8 +73,6 @@ libephyembed_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
-DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
-MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 stamp_files = \
 	stamp-ephy-embed-type-builtins.c	\

@@ -271,7 +271,5 @@ $(dbus_shell_search_provider_built_sources) : Makefile.am $(srcdir)/org.gnome.Sh
 		$(NULL)
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
-DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
-MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 -include $(top_srcdir)/git.mk

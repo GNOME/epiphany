@@ -11,8 +11,6 @@ TYPES_H_FILES = \
 	ephy-location-entry.h
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
-DISTCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
-MAINTAINERCLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 
 stamp_files = \
 	stamp-ephy-widgets-type-builtins.c	\
