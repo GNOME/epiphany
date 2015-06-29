@@ -4,8 +4,6 @@ if ENABLE_TESTS
 SUBDIRS += tests
 endif
 
-ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
-
 NULL =
 
 EXTRA_DIST = 			\
