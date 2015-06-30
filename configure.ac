@@ -34,8 +34,11 @@ AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
 
 AX_CHECK_ENABLE_DEBUG([yes])
 AX_CODE_COVERAGE
-AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS])
-WARN_CFLAGS="$WARN_CFLAGS -Wdeclaration-after-statement -Wno-deprecated-declarations"
+AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS], [$ax_is_release], [-Wdeclaration-after-statement],
+	dnl TODO: Remove all of these! These warnings should be fixed, not
+	dnl silenced. At least, for the most part. -Wswitch-enum really does
+	dnl seem pretty dumb.
+	[-Wno-incompatible-pointer-types -Wno-empty-body -Wno-unused-function -Wno-unused-variable -Wno-old-style-definition -Wno-shadow -Wno-format-nonliteral -Wno-deprecated-declarations -Wno-switch-enum -Wno-switch-default -Wno-redundant-decls -Wno-discarded-qualifiers -Wno-sign-compare])
 
 AC_PROG_CC
 
