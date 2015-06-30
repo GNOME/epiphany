@@ -42,6 +42,17 @@ AC_PROG_CC
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 
+dnl Note: I want to enable subdir-objects here, to silence Automake's many
+dnl warnings about not using it. But we can't do this until we require Automake
+dnl 1.16 (which has not been released as of June 2015), due to GNU bug #13928.
+dnl If Automake 2.0 comes out next instead of 1.16, we will need to bump our
+dnl requirement straight to that, and then there is no need to use
+dnl subdir-objects here as it will be implied. It is unfortunate that there is
+dnl no way our build can be compatible with both future and older Automake, but
+dnl it is a bug after all, and updating for bugfixes is just how software works.
+dnl Note also: the issue is that a directory _literally_ named $(top_srcdir)
+dnl will be created under embed/web-extension, and the build will fail due to
+dnl misplaced .Plo files (used for dependency tracking).
 AM_INIT_AUTOMAKE([1.11 foreign dist-xz no-dist-gzip tar-ustar])
 AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE([enable])
