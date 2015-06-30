@@ -40,23 +40,7 @@ char	 *ephy_string_shorten	(char *str,
 char	 *ephy_string_collate_key_for_domain	(const char *host,
 						 gssize len);
 
-guint	  ephy_string_flags_from_string	(GType type,
-					 const char *flags_string);
-
-char     *ephy_string_flags_to_string	(GType type,
-					 guint flags_value);
-
-guint	  ephy_string_enum_from_string	(GType type,
-					 const char *enum_string);
-
-char     *ephy_string_enum_to_string	(GType type,
-					 guint enum_value);
-
-char     *ephy_string_canonicalize_pathname (const char *cpath);
-
 char     *ephy_string_get_host_name (const char *url);
-
-char     *ephy_string_expand_initial_tilde (const char *path);
 
 char    **ephy_string_commandline_args_to_uris (char **arguments, GError **error);
 
