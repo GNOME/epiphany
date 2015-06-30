@@ -14,7 +14,7 @@ noinst_PROGRAMS = \
 	test-ephy-snapshot-service \
 	test-ephy-sqlite \
 	test-ephy-string \
-	ephy-uri-helpers-test \
+	test-ephy-uri-helpers \
 	test-ephy-web-app-utils \
 	test-ephy-web-view \
 	$(NULL)
