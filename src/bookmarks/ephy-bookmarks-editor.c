@@ -1021,6 +1021,7 @@ ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass)
 static void
 ephy_bookmarks_editor_finalize (GObject *object)
 {
+	/* FIXME: This should all be done in dispose, not finalize, but got to make sure that's safe. */
 	EphyBookmarksEditor *editor = EPHY_BOOKMARKS_EDITOR (object);
 
 	g_object_unref (G_OBJECT (editor->priv->bookmarks_filter));
