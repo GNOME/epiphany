@@ -754,6 +754,12 @@ ephy_web_view_dispose (GObject *object)
       priv->web_extension = NULL;
     }
 
+  if (priv->password_info_bar)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->password_info_bar), (gpointer *)&priv->password_info_bar);
+      priv->password_info_bar = NULL;
+    }
+
   g_signal_handlers_disconnect_by_func (priv->history_service,
                                         ephy_web_view_history_cleared_cb,
                                         EPHY_WEB_VIEW (object));
