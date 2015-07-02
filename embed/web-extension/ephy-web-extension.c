@@ -1260,6 +1260,8 @@ ephy_web_extension_dispose (GObject *object)
     }
 
   if (extension->priv->dbus_connection) {
+    g_object_remove_weak_pointer (G_OBJECT (extension->priv->dbus_connection),
+                                  (gpointer *)&extension->priv->dbus_connection);
     g_dbus_connection_unregister_object (extension->priv->dbus_connection,
                                          extension->priv->registration_id);
     extension->priv->registration_id = 0;
