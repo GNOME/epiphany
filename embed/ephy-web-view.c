@@ -748,6 +748,12 @@ ephy_web_view_dispose (GObject *object)
 {
   EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
 
+  if (priv->web_extension)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->web_extension), (gpointer *)&priv->web_extension);
+      priv->web_extension = NULL;
+    }
+
   g_signal_handlers_disconnect_by_func (priv->history_service,
                                         ephy_web_view_history_cleared_cb,
                                         EPHY_WEB_VIEW (object));
