@@ -401,7 +401,7 @@ cmd_delete (GtkAction *action,
 	}
 	else if (ephy_node_view_is_target (EPHY_NODE_VIEW (editor->priv->key_view)))
 	{
-		EphyNodePriority priority;
+		int priority;
 		GList *selected;
 		EphyNode *node;
 
@@ -1126,7 +1126,7 @@ ephy_bookmarks_editor_update_menu (EphyBookmarksEditor *editor)
 	if (key_focus && selected)
 	{
 		EphyNode *node = selected->data;
-		EphyNodePriority priority;
+		int priority;
 		char name[EPHY_TOPIC_ACTION_NAME_BUFFER_SIZE];
 
 		priority = ephy_node_get_property_int
@@ -1569,7 +1569,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 			  G_CALLBACK (view_selection_changed_cb),
 			  editor);
 	ephy_node_view_set_priority (EPHY_NODE_VIEW (key_view),
-				     EPHY_NODE_KEYWORD_PROP_PRIORITY);
+				     (EphyNodeViewPriority)EPHY_NODE_KEYWORD_PROP_PRIORITY);
 	ephy_node_view_set_sort (EPHY_NODE_VIEW (key_view), G_TYPE_STRING,
 				 EPHY_NODE_KEYWORD_PROP_NAME, GTK_SORT_ASCENDING);
 	gtk_container_add (GTK_CONTAINER (scrolled_window), key_view);

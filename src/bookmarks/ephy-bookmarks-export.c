@@ -74,7 +74,7 @@ write_topics_list (EphyNode *topics,
 	for (i = 0; i < children->len; i++)
 	{
 		EphyNode *kid;
-		EphyNodePriority priority;
+		int priority;
 
 		kid = g_ptr_array_index (children, i);
 

@@ -147,7 +147,7 @@ ephy_langs_get_languages (void)
 
 	ephy_langs_sanitise (array);
 
-	return (char **) g_array_free (array, FALSE);
+	return (char **)(void *) g_array_free (array, FALSE);
 }
 
 static void

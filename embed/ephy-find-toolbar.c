@@ -513,6 +513,9 @@ ephy_find_toolbar_dispose (GObject *object)
 	G_OBJECT_CLASS (ephy_find_toolbar_parent_class)->dispose (object);
 }
 
+#ifndef G_DISABLE_ASSERT
+G_GNUC_NORETURN
+#endif
 static void
 ephy_find_toolbar_get_property (GObject *object,
 				guint prop_id,

@@ -1733,7 +1733,7 @@ get_style_sheet (void)
 {
   const gchar *file;
   GError *error = NULL;
-  char *sheet;
+  char *sheet = NULL;
 
   file = ephy_file ("error.css");
   if (file && !g_file_get_contents (file, &sheet, NULL, &error)) {
