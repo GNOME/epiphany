@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-06-22 15:44+0000\n"
-"PO-Revision-Date: 2015-06-22 23:52+0200\n"
+"POT-Creation-Date: 2015-07-17 03:45+0000\n"
+"PO-Revision-Date: 2015-07-17 14:45+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -59,46 +59,56 @@ msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=hu-hu&amp;kad=hu_HU"
 
 #: ../data/epiphany.appdata.xml.in.h:1
-msgid "Epiphany"
-msgstr "Epiphany"
+msgid "GNOME Web"
+msgstr "GNOME Web"
 
 #: ../data/epiphany.appdata.xml.in.h:2
 msgid "Web browser for GNOME"
 msgstr "Webböngésző a GNOME-hoz"
 
 #: ../data/epiphany.appdata.xml.in.h:3
+#| msgid ""
+#| "The web browser for GNOME, featuring tight integration with the desktop "
+#| "and a simple and intuitive user interface that allows you to focus on "
+#| "your web pages."
 msgid ""
 "The web browser for GNOME, featuring tight integration with the desktop and "
 "a simple and intuitive user interface that allows you to focus on your web "
-"pages."
+"pages. If you’re looking for a simple, clean, beautiful view of the web, "
+"this is the browser for you."
 msgstr ""
-"A webböngésző a GNOME asztalhoz, amely szorosan integrálódik az asztalba és "
-"egy egyszerű és intuitív felhasználói felület, amely lehetővé teszi a "
-"weboldalakra való összpontosítást."
+"A webböngésző a GNOME-hoz, amely szorosan integrálódik az asztalba és egy "
+"egyszerű és intuitív felhasználói felület, amely lehetővé teszi a "
+"weboldalakra való összpontosítást. Ha a web egyszerű, letisztult, gyönyörű "
+"nézetét keresi, akkor ez az ön böngészője."
 
-#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:292
+#: ../data/epiphany.appdata.xml.in.h:4
+msgid "GNOME Web is often referred to by its code name, Epiphany."
+msgstr "A GNOME Webre gyakran annak kódnevével, Epiphany néven hivatkoznak."
+
+#: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:292
 #: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:470 ../src/window-commands.c:1517
+#: ../src/ephy-main.c:312 ../src/ephy-main.c:468 ../src/window-commands.c:1517
 msgid "Web"
 msgstr "Web"
 
-#: ../data/epiphany.desktop.in.in.h:2
+#: ../data/epiphany.desktop.in.h:2
 msgid "Web Browser"
 msgstr "Webböngésző"
 
-#: ../data/epiphany.desktop.in.in.h:3
+#: ../data/epiphany.desktop.in.h:3
 msgid "Epiphany Web Browser"
 msgstr "Epiphany webböngésző"
 
-#: ../data/epiphany.desktop.in.in.h:4
+#: ../data/epiphany.desktop.in.h:4
 msgid "Browse the web"
 msgstr "A világháló böngészése"
 
-#: ../data/epiphany.desktop.in.in.h:5
+#: ../data/epiphany.desktop.in.h:5
 msgid "web;browser;internet;"
 msgstr "web;böngésző;internet;net;"
 
-#: ../data/epiphany.desktop.in.in.h:6
+#: ../data/epiphany.desktop.in.h:6
 msgid "New Incognito Window"
 msgstr "Új inkognitóablak"
 
@@ -961,23 +971,23 @@ msgid "Do you want to save your password for “%s”?"
 msgstr "Szeretné elmenteni a jelszavát a(z) „%s” weboldalhoz?"
 
 # FF-másolás :)
-#: ../embed/ephy-web-view.c:1416
+#: ../embed/ephy-web-view.c:1428
 msgid "Deny"
 msgstr "Titok"
 
 # FF-másolás :)
-#: ../embed/ephy-web-view.c:1417
+#: ../embed/ephy-web-view.c:1429
 msgid "Allow"
 msgstr "Megosztás"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1429
+#: ../embed/ephy-web-view.c:1441
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "<b>%s</b> tudni szeretné az Ön tartózkodási helyét."
 
 #. Translators: Notification policy for a specific site.
-#: ../embed/ephy-web-view.c:1433
+#: ../embed/ephy-web-view.c:1445
 #, c-format
 msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgstr ""
@@ -985,17 +995,17 @@ msgstr ""
 "megjeleníteni."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1519
+#: ../embed/ephy-web-view.c:1531
 #, c-format
 msgid "Loading “%s”…"
 msgstr "„%s” betöltése…"
 
-#: ../embed/ephy-web-view.c:1521
+#: ../embed/ephy-web-view.c:1533
 msgid "Loading…"
 msgstr "Betöltés…"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1743
+#: ../embed/ephy-web-view.c:1755
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1003,7 +1013,7 @@ msgstr ""
 "tartozik."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1748
+#: ../embed/ephy-web-view.c:1760
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1012,14 +1022,14 @@ msgstr ""
 "dátumot a számítógépe naptárában."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1753
+#: ../embed/ephy-web-view.c:1765
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Ennek a weboldalnak az azonosítóját nem egy megbízható szervezet bocsájtotta "
 "ki."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1758
+#: ../embed/ephy-web-view.c:1770
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1027,7 +1037,7 @@ msgstr ""
 "lehet."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1763
+#: ../embed/ephy-web-view.c:1775
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1036,7 +1046,7 @@ msgstr ""
 "amely kibocsájtotta azt."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1768
+#: ../embed/ephy-web-view.c:1780
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1045,7 +1055,7 @@ msgstr ""
 "titkosítást használ."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1773
+#: ../embed/ephy-web-view.c:1785
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1054,13 +1064,13 @@ msgstr ""
 "Ellenőrizze a dátumot a számítógépe naptárában."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1809
+#: ../embed/ephy-web-view.c:1821
 #, c-format
 msgid "This might not be the real %s."
 msgstr "Ez nem biztos, hogy a valódi %s."
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1814
+#: ../embed/ephy-web-view.c:1826
 msgid ""
 "When you try to connect securely, websites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
@@ -1072,7 +1082,7 @@ msgstr ""
 "azonosítójával:"
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1820
+#: ../embed/ephy-web-view.c:1832
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this website does not use trusted "
@@ -1083,29 +1093,29 @@ msgstr ""
 "megbízható azonosítóját."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1824
+#: ../embed/ephy-web-view.c:1836
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
 msgstr ""
 "A törvényes bankok, boltok és egyéb nyilvános oldalak nem fogják arra kérni, "
 "hogy ezt tegye."
 
-#: ../embed/ephy-web-view.c:1865
+#: ../embed/ephy-web-view.c:1877
 msgid "None specified"
 msgstr "Nincs megadva"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1878 ../embed/ephy-web-view.c:1893
-#: ../embed/ephy-web-view.c:1913
+#: ../embed/ephy-web-view.c:1890 ../embed/ephy-web-view.c:1905
+#: ../embed/ephy-web-view.c:1925
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Hiba a(z) „%s” betöltése közben"
 
-#: ../embed/ephy-web-view.c:1880
+#: ../embed/ephy-web-view.c:1892
 msgid "Oops! Unable to display this website."
 msgstr "Jaj! A weboldal tartalma nem jeleníthető meg."
 
-#: ../embed/ephy-web-view.c:1881
+#: ../embed/ephy-web-view.c:1893
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1118,15 +1128,15 @@ msgstr ""
 "költöztették. Érdemes lehet ellenőrizni, hogy internetkapcsolata megfelelően "
 "működik-e.</p>"
 
-#: ../embed/ephy-web-view.c:1889
+#: ../embed/ephy-web-view.c:1901
 msgid "Try again"
 msgstr "Próbálja újra"
 
-#: ../embed/ephy-web-view.c:1895
+#: ../embed/ephy-web-view.c:1907
 msgid "Oops! There may be a problem."
 msgstr "Jaj! Hiba történhetett."
 
-#: ../embed/ephy-web-view.c:1896
+#: ../embed/ephy-web-view.c:1908
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1137,20 +1147,20 @@ msgstr ""
 "újra megtörténik, akkor jelentse a problémát a(z) <strong>%s</strong> "
 "fejlesztőinek.</p>"
 
-#: ../embed/ephy-web-view.c:1901 ../embed/ephy-web-view.c:1908
+#: ../embed/ephy-web-view.c:1913 ../embed/ephy-web-view.c:1920
 msgid "Reload Anyway"
 msgstr "Betöltés mindenképp"
 
-#: ../embed/ephy-web-view.c:1905
+#: ../embed/ephy-web-view.c:1917
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "A(z) „%s” megjelenítése közben probléma lépett fel"
 
-#: ../embed/ephy-web-view.c:1906
+#: ../embed/ephy-web-view.c:1918
 msgid "Oops!"
 msgstr "Hopp!"
 
-#: ../embed/ephy-web-view.c:1907
+#: ../embed/ephy-web-view.c:1919
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1159,16 +1169,16 @@ msgstr ""
 "másik oldalt a folytatáshoz."
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1915
+#: ../embed/ephy-web-view.c:1927
 msgid "Look out!"
 msgstr "Vigyázzon!"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1918
+#: ../embed/ephy-web-view.c:1930
 msgid "Load Anyway"
 msgstr "Betöltés mindenképp"
 
-#: ../embed/ephy-web-view.c:2819
+#: ../embed/ephy-web-view.c:2831
 msgid "_OK"
 msgstr "_OK"
 
@@ -1687,7 +1697,7 @@ msgid "Create a new topic"
 msgstr "Új témakör létrehozása"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1154
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1155
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Megnyitás új _ablakban"
@@ -1698,7 +1708,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "A kijelölt könyvjelző megnyitása új ablakban"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:164
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1157
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Megnyi_tás új lapon"
@@ -1759,7 +1769,7 @@ msgid "Cut the selection"
 msgstr "A kijelölés kivágása"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1167 ../src/ephy-window.c:125
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1168 ../src/ephy-window.c:125
 msgid "_Copy"
 msgstr "_Másolás"
 
@@ -1820,7 +1830,7 @@ msgid "Show the title column"
 msgstr "A cím oszlop megjelenítése"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1632
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1633
 msgid "Address"
 msgstr "Webcím"
 
@@ -1917,7 +1927,7 @@ msgid "Export Bookmarks"
 msgstr "Könyvjelzők exportálása"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:764
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1495
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1496
 #: ../src/bookmarks/ephy-topic-action.c:217
 msgid "Bookmarks"
 msgstr "Könyvjelzők"
@@ -1943,15 +1953,15 @@ msgstr "Könyvjelzők importálása innen:"
 msgid "File"
 msgstr "Fájl"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1163
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1164
 msgid "_Copy Address"
 msgstr "_Cím másolása"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1551
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1552
 msgid "Topics"
 msgstr "Témakörök"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1621
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1622
 msgid "Title"
 msgstr "Cím"
 
@@ -2427,7 +2437,7 @@ msgstr ""
 "Az indítás a következő hiba miatt meghiúsult:\n"
 "%s"
 
-#: ../src/ephy-main.c:315
+#: ../src/ephy-main.c:313
 msgid "Web options"
 msgstr "Web beállításai"
 
@@ -2568,7 +2578,6 @@ msgid "Open Link in New _Tab"
 msgstr "Hivatkozás megnyitása új _lapon"
 
 #: ../src/ephy-window.c:222
-#| msgid "Open Link in New _Window"
 msgid "Open Link in I_ncognito Window"
 msgstr "Hivatkozás megnyitása i_nkognitó ablakban"
 
@@ -2711,7 +2720,6 @@ msgstr "Ugrás a legtöbbször meglátogatottra"
 
 #: ../src/ephy-window.c:1744
 #, c-format
-#| msgid "Search the Web for %s"
 msgid "Search the Web for '%s'"
 msgstr "„%s” keresése a világhálón"
 
@@ -2895,6 +2903,9 @@ msgstr ""
 #: ../src/window-commands.c:1681
 msgid "_Enable"
 msgstr "_Engedélyezés"
+
+#~ msgid "Epiphany"
+#~ msgstr "Epiphany"
 
 #~ msgid "Toolbar style"
 #~ msgstr "Eszköztár stílusa"
