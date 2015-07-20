@@ -509,7 +509,11 @@ sync_icon (EphyWebView *view,
 static void
 sync_label (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *label)
 {
-	gtk_label_set_text (GTK_LABEL (label), ephy_embed_get_title (embed));
+	const char *title;
+
+	title = ephy_embed_get_title (embed);
+	gtk_label_set_text (GTK_LABEL (label), title);
+	gtk_widget_set_tooltip_text (label, title);
 }
 
 static void
