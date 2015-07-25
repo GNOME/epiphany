@@ -830,7 +830,7 @@ title_changed_cb (WebKitWebView *web_view,
   if (!title && uri)
     title = title_from_address = ephy_embed_utils_get_title_from_address (uri);
 
-  if (uri && title && !ephy_web_view_is_history_frozen (webview))
+  if (uri && title && *title && !ephy_web_view_is_history_frozen (webview))
     ephy_history_service_set_url_title (history, uri, title, NULL, NULL, NULL);
 
   g_free (title_from_address);
