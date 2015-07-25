@@ -1300,7 +1300,7 @@ sync_tab_address (EphyWebView *view,
 
 	if (priv->closing) return;
 
-	address = ephy_web_view_get_address (view);
+	address = ephy_web_view_get_display_address (view);
 	typed_address = ephy_web_view_get_typed_address (view);
 
 	_ephy_window_set_default_actions_sensitive (window,
@@ -2526,7 +2526,7 @@ embed_modal_alert_cb (EphyEmbed *embed,
 	gtk_window_present (GTK_WINDOW (window));
 
 	/* make sure the location entry shows the real URL of the tab's page */
-	address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
+	address = ephy_web_view_get_display_address (ephy_embed_get_web_view (embed));
 	ephy_window_set_location (window, address);
 
 	/* don't suppress alert */
@@ -3867,7 +3867,7 @@ ephy_window_get_location (EphyWindow *window)
 /**
  * ephy_window_set_location:
  * @window: an #EphyWindow widget
- * @address: new address
+ * @address: a decoded URI, suitable for display to the user
  *
  * Sets the internal #EphyLocationController address to @address.
  **/
