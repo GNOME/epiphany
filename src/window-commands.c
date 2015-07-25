@@ -844,7 +844,7 @@ window_cmd_file_save_as_application (GtkAction *action,
 	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 	gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 0);
 
-	markup = g_strdup_printf ("<small>%s</small>", webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+	markup = g_strdup_printf ("<small>%s</small>", ephy_web_view_get_display_address (view));
 	label = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (label), markup);
 	g_free (markup);
