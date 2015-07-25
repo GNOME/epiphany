@@ -876,6 +876,8 @@ ephy_history_service_set_url_title (EphyHistoryService *self,
 
   g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
   g_return_if_fail (orig_url != NULL);
+  g_return_if_fail (title != NULL);
+  g_return_if_fail (*title != '\0');
 
   url = ephy_history_url_new (orig_url, title, 0, 0, 0);
   message = ephy_history_service_message_new (self, SET_URL_TITLE,
