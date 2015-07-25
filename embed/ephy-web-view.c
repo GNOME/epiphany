@@ -78,6 +78,7 @@ struct _EphyWebViewPrivate {
   guint ever_committed : 1;
 
   char *address;
+  char *display_address;
   char *typed_address;
   char *loading_message;
   char *link_message;
@@ -791,6 +792,7 @@ ephy_web_view_finalize (GObject *object)
   ephy_web_view_popups_manager_reset (EPHY_WEB_VIEW (object));
 
   g_free (priv->address);
+  g_free (priv->display_address);
   g_free (priv->typed_address);
   g_free (priv->link_message);
   g_free (priv->loading_message);
@@ -853,6 +855,9 @@ ephy_web_view_set_address (EphyWebView *view,
   was_empty = priv->address == NULL;
   g_free (priv->address);
   priv->address = g_strdup (address);
+
+  g_free (priv->display_address);
+  priv->display_address = g_uri_unescape_string (priv->address, NULL);
 
   is_blank = address == NULL ||
              strcmp (address, "about:blank") == 0;
@@ -961,7 +966,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 /**
  * EphyWebView:address:
  *
- * View's current address.
+ * View's current address. This is a percent-encoded URI.
  **/
   g_object_class_install_property (gobject_class,
                                    PROP_ADDRESS,
@@ -2350,7 +2355,9 @@ ephy_web_view_is_overview (EphyWebView *view)
  * ephy_web_view_get_address:
  * @view: an #EphyWebView
  *
- * Returns the address of the currently loaded page.
+ * Returns the address of the currently-loaded page, percent-encoded.
+ * This URI should not be displayed to the user; to do that, use
+ * ephy_web_view_get_display_address().
  *
  * Return value: @view's address. Will never be %NULL.
  **/
@@ -2359,6 +2366,24 @@ ephy_web_view_get_address (EphyWebView *view)
 {
   EphyWebViewPrivate *priv = view->priv;
   return priv->address ? priv->address : "about:blank";
+}
+
+/**
+ * ephy_web_view_get_display_address:
+ * @view: an #EphyWebView
+ *
+ * Returns the display address of the currently-loaded page. This is a
+ * decoded URI suitable for display to the user. To get a URI suitable
+ * for sending to a server, e.g. for storage in the bookmarks or history
+ * database, use ephy_web_view_get_address().
+ *
+ * Return value: @view's address. Will never be %NULL.
+ */
+const char *
+ephy_web_view_get_display_address (EphyWebView *view)
+{
+  EphyWebViewPrivate *priv = view->priv;
+  return priv->display_address ? priv->display_address : "about:blank";
 }
 
 /**
