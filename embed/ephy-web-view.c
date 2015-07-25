@@ -1522,9 +1522,11 @@ ephy_web_view_set_loading_message (EphyWebView *view,
 
   g_clear_pointer (&priv->loading_message, g_free);
   if (address) {
+    char *decoded_address;
     char *title;
 
-    title = ephy_embed_utils_get_title_from_address (address);
+    decoded_address = g_uri_unescape_string (address, NULL);
+    title = ephy_embed_utils_get_title_from_address (decoded_address);
 
     if (title != NULL && title[0] != '\0') {
       /* translators: %s here is the address of the web page */
@@ -1533,6 +1535,7 @@ ephy_web_view_set_loading_message (EphyWebView *view,
       priv->loading_message = g_strdup (_("Loading…"));
     }
 
+    g_free (decoded_address);
     g_free (title);
   }
 
@@ -2486,16 +2489,17 @@ ephy_web_view_get_link_message (EphyWebView *view)
 /**
  * ephy_web_view_set_link_message:
  * @view: an #EphyWebView
- * @link_message: new value for link-message in @view
+ * @address: new value for link-message in @view
  *
  * Sets the value of link-message property which tells the URL of the hovered
  * link.
  **/
 void
 ephy_web_view_set_link_message (EphyWebView *view,
-                                const char *link_message)
+                                const char *address)
 {
   EphyWebViewPrivate *priv;
+  char *decoded_address;
 
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
@@ -2503,7 +2507,10 @@ ephy_web_view_set_link_message (EphyWebView *view,
 
   g_free (priv->link_message);
 
-  priv->link_message = ephy_embed_utils_link_message_parse (link_message);
+  decoded_address = g_uri_unescape_string (address, NULL);
+  priv->link_message = ephy_embed_utils_link_message_parse (decoded_address);
+
+  g_free (decoded_address);
 
   g_object_notify (G_OBJECT (view), "status-message");
   g_object_notify (G_OBJECT (view), "link-message");

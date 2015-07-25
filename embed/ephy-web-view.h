@@ -120,7 +120,7 @@ EphyWebViewNavigationFlags ephy_web_view_get_navigation_flags     (EphyWebView  
 const char *               ephy_web_view_get_status_message       (EphyWebView               *view);
 const char *               ephy_web_view_get_link_message         (EphyWebView               *view);
 void                       ephy_web_view_set_link_message         (EphyWebView               *view,
-                                                                   const char                *link_message);
+                                                                   const char                *address);
 void                       ephy_web_view_set_security_level       (EphyWebView               *view,
                                                                    EphySecurityLevel          level);
 const char *               ephy_web_view_get_typed_address        (EphyWebView               *view);
