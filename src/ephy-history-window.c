@@ -774,7 +774,7 @@ convert_location_data_func (GtkTreeViewColumn *column,
 			    gpointer user_data)
 {
 	int col_id = GPOINTER_TO_INT (user_data);
-	const char *url;
+	char *url;
 	char *unescaped_url;
 
 	gtk_tree_model_get (model, iter,
@@ -784,6 +784,8 @@ convert_location_data_func (GtkTreeViewColumn *column,
 	unescaped_url = g_uri_unescape_string (url, NULL);
 
 	g_object_set (renderer, "text", unescaped_url, NULL);
+
+	g_free (url);
 	g_free (unescaped_url);
 }
 
