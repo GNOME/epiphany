@@ -1484,9 +1484,7 @@ unescape_bookmark_uri (EphyNode *node,
 		       gpointer user_data)
 {
 	const char *url = g_value_get_string (value);
-	char *unescaped_url = g_uri_unescape_string (url, NULL);
-	g_value_set_string (value, unescaped_url);
-	g_free (unescaped_url);
+	g_value_take_string (value, g_uri_unescape_string (url, NULL));
 }
 
 
