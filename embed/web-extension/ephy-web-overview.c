@@ -78,9 +78,9 @@ overview_item_new (WebKitDOMElement *anchor)
       char *class;
 
       class = webkit_dom_element_get_class_name (element);
-      if (g_strcmp0 (class, "thumbnail") == 0)
+      if (g_strcmp0 (class, "overview-thumbnail") == 0)
         item->thumbnail = g_object_ref (element);
-      else if (g_strcmp0 (class, "title") == 0)
+      else if (g_strcmp0 (class, "overview-title") == 0)
         item->title = g_object_ref (element);
 
       g_free (class);
@@ -142,8 +142,8 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       item->url = g_strdup (url->url);
 
       class_list = webkit_dom_element_get_class_list (webkit_dom_node_get_parent_element (WEBKIT_DOM_NODE (item->anchor)));
-      if (class_list && webkit_dom_dom_token_list_contains (class_list, "removed", NULL))
-        webkit_dom_dom_token_list_remove (class_list, "removed", NULL);
+      if (class_list && webkit_dom_dom_token_list_contains (class_list, "overview-removed", NULL))
+        webkit_dom_dom_token_list_remove (class_list, "overview-removed", NULL);
 
       webkit_dom_element_set_attribute (item->anchor, "href", url->url, NULL);
       webkit_dom_element_set_attribute (item->anchor, "title", url->title, NULL);
@@ -167,7 +167,7 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       item->url = g_strdup (url->url);
 
       document = webkit_web_page_get_dom_document (overview->priv->web_page);
-      item_list = webkit_dom_document_get_element_by_id (document, "item-list");
+      item_list = webkit_dom_document_get_element_by_id (document, "overview-item-list");
 
       new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "LI", NULL));
       webkit_dom_node_append_child (WEBKIT_DOM_NODE (item_list), WEBKIT_DOM_NODE (new_node), NULL);
@@ -180,22 +180,22 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       webkit_dom_node_append_child (WEBKIT_DOM_NODE (new_node), WEBKIT_DOM_NODE (anchor), NULL);
 
       new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "DIV", NULL));
-      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "close-button");
-      webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (new_node), "onclick", "removeFromOverview(this.parentNode,event)", NULL);
+      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "overview-close-button");
+      webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (new_node), "onclick", "removeFromOverview(this.parentNode, event)", NULL);
       webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (new_node), "title", url->title, NULL);
       webkit_dom_node_set_text_content (new_node, "✖", NULL);
       webkit_dom_node_append_child (WEBKIT_DOM_NODE (anchor), new_node, NULL);
 
       new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "SPAN", NULL));
       item->thumbnail = g_object_ref (new_node);
-      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "thumbnail");
+      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "overview-thumbnail");
       if (thumbnail_path)
         update_thumbnail_element_style (WEBKIT_DOM_ELEMENT (new_node), thumbnail_path);
       webkit_dom_node_append_child (WEBKIT_DOM_NODE (anchor), new_node, NULL);
 
       new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "SPAN", NULL));
       item->title = g_object_ref (new_node);
-      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "title");
+      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "overview-title");
       webkit_dom_node_set_text_content (new_node, url->title, NULL);
       webkit_dom_node_append_child (WEBKIT_DOM_NODE (anchor), new_node, NULL);
 

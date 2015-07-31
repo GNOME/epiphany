@@ -115,7 +115,6 @@ RESOURCE_FILES = \
 	resources/incognito-tinted.png            \
 	resources/incognito.png                   \
 	resources/missing-thumbnail.png		  \
-	resources/overview.html			  \
 	resources/passwords-dialog.ui		  \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \
