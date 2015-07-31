@@ -433,13 +433,46 @@ history_service_query_urls_cb (EphyHistoryService *history,
                                WebKitURISchemeRequest *request)
 {
   GString *data_str;
-  GBytes *html_file;
-  GString *html = g_string_new ("");
   gsize data_length;
   char *lang;
   GList *l;
 
   data_str = g_string_new (NULL);
+
+  lang = g_strdup (pango_language_to_string (gtk_get_default_language ()));
+  g_strdelimit (lang, "_-@", '\0');
+
+  g_string_append_printf (data_str,
+                          "<html xml:lang=\"%s\" lang=\"%s\" dir=\"%s\">\n"
+                          "<head>\n"
+                          "  <title>%s</title>\n"
+                          "  <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n"
+                          "  <link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">\n"
+                          "  <script>\n"
+                          "    document.onkeypress = function listenKeypress(event) {\n"
+                          "      // Remove from overview when Del is pressed\n"
+                          "      if (event.which == 127) {\n"
+                          "        var focused = document.activeElement;\n"
+                          "        if (focused.className == \"overview-item\") {\n"
+                          "          removeFromOverview(focused, event);\n"
+                          "        }\n"
+                          "      }\n"
+                          "    }\n"
+                          "    function removeFromOverview(elem, event) {\n"
+                          "      var listItemNode = elem.parentElement;\n"
+                          "      event.preventDefault();\n"
+                          "      listItemNode.className +=\" overview-removed \";\n"
+                          "      window.webkit.messageHandlers.overview.postMessage(elem.href);\n"
+                          "    }\n"
+                          "  </script>\n"
+                          "</head>\n"
+                          "<body>\n"
+                          "  <div id=\"overview\">\n"
+                          "    <div id=\"overview-grid\">\n"
+                          "      <ul id=\"overview-item-list\">\n", lang, lang,
+                          ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
+                          _("Most Visited"));
+  g_free (lang);
 
   if (success) {
     EphySnapshotService *snapshot_service = ephy_snapshot_service_get_default ();
@@ -466,9 +499,9 @@ history_service_query_urls_cb (EphyHistoryService *history,
       g_string_append_printf (data_str,
                               "<li>"
                               "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">"
-                              "    <div class=\"close-button\" onclick=\"removeFromOverview(this.parentNode,event)\" title=\"%s\">&#10006;</div>"
-                              "    <span class=\"thumbnail\"%s></span>"
-                              "    <span class=\"title\">%s</span>"
+                              "    <div class=\"overview-close-button\" onclick=\"removeFromOverview(this.parentNode, event)\" title=\"%s\">&#10006;</div>"
+                              "    <span class=\"overview-thumbnail\"%s></span>"
+                              "    <span class=\"overview-title\">%s</span>"
                               "  </a>"
                               "</li>",
                               g_markup_escape_text (url->title, -1), url->url, _("Remove from overview"),
@@ -477,25 +510,16 @@ history_service_query_urls_cb (EphyHistoryService *history,
     }
   }
 
-  html_file = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_OVERVIEW, 0, NULL);
+  data_str = g_string_append (data_str,
+                              "      </ul>\n"
+                              "    </div>\n"
+                              "  </div>\n"
+                              "</body></html>\n");
 
-  lang = g_strdup (pango_language_to_string (gtk_get_default_language ()));
-  g_strdelimit (lang, "_-@", '\0');
 
-  g_string_printf (html,
-                   g_bytes_get_data (html_file, NULL),
-                   lang, lang,
-                   ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
-                   _("Most Visited"),
-                   data_str->str);
-
-  data_length = html->len;
-  ephy_about_handler_finish_request (request, g_string_free (html, FALSE), data_length);
+  data_length = data_str->len;
+  ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
   g_object_unref (request);
-
-  g_string_free (data_str,TRUE);
-  g_bytes_unref (html_file);
-  g_free (lang);
 }
 
 static gboolean
