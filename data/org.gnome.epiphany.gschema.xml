@@ -71,6 +71,12 @@
                         <summary>Process model</summary>
                         <description>This option allows to set the process model used. Use 'shared-secondary-process' to use a single web process shared by all the tabs and 'one-secondary-process-per-web-view' to use a different web process for each tab.</description>
                 </key>
+                <key type="u" name="max-processes">
+                        <default>0</default>
+                        <summary>Maximum number of web processes created at the same time when using 'one-secondary-process-per-web-view' model</summary>
+                        <description>This option sets a limit to the number of web processes that will be used at the same time for the 'one-secondary-process-per-web-view' model. The default value is '0' and means no limit.</description>
+
+                </key>
 	</schema>
 	<schema path="/org/gnome/epiphany/ui/" id="org.gnome.Epiphany.ui">
 		<key type="b" name="always-show-tabs-bar">

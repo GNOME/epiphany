@@ -564,6 +564,8 @@ ephy_embed_shell_setup_process_model (EphyEmbedShell *shell)
   case EPHY_PREFS_PROCESS_MODEL_ONE_SECONDARY_PROCESS_PER_WEB_VIEW:
     webkit_web_context_set_process_model (shell->priv->web_context,
                                           WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
+    webkit_web_context_set_web_process_count_limit (shell->priv->web_context,
+                                                    g_settings_get_uint (EPHY_SETTINGS_MAIN, EPHY_PREFS_MAX_PROCESSES));
     break;
   }
 }
