@@ -44,6 +44,7 @@ struct _EphyCompletionModelPrivate {
   GCancellable *cancellable;
 
   EphyNode *bookmarks;
+  EphyNode *smart_bookmarks;
   GSList *search_terms;
 };
 
@@ -79,9 +80,13 @@ ephy_completion_model_set_property (GObject *object, guint property_id, const GV
   case PROP_HISTORY_SERVICE:
     self->priv->history_service = EPHY_HISTORY_SERVICE (g_value_get_pointer (value));
     break;
-  case PROP_BOOKMARKS:
-    self->priv->bookmarks = ephy_bookmarks_get_bookmarks (EPHY_BOOKMARKS (g_value_get_pointer (value)));
+  case PROP_BOOKMARKS: {
+    EphyBookmarks *bookmarks = EPHY_BOOKMARKS (g_value_get_pointer (value));
+
+    self->priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks);
+    self->priv->smart_bookmarks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
     break;
+  }
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
     break;
@@ -417,14 +422,17 @@ query_completed_cb (EphyHistoryService *service,
   for (i = 0; i < children->len; i++) {
     EphyNode *kid;
     const char *keywords, *location, *title;
+    gboolean is_smart;
 
     kid = g_ptr_array_index (children, i);
     location = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_LOCATION);
     title = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_TITLE);
     keywords = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_KEYWORDS);
+    is_smart = ephy_node_has_child (priv->smart_bookmarks, kid);
 
-    if (should_add_bookmark_to_model (model, user_data->search_string,
-                                      title, location, keywords))
+    /* Smart bookmarks are already added to the completion menu as completion actions */
+    if (!is_smart && should_add_bookmark_to_model (model, user_data->search_string,
+                                                   title, location, keywords))
       list = add_to_potential_rows (list, title, location, keywords, 0, TRUE, FALSE);
   }
 
