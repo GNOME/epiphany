@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 3.17.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-31 12:05+0200\n"
-"PO-Revision-Date: 2015-07-31 12:08+0200\n"
-"Last-Translator: Åka Sikrom <a4NOSPAMPLEASETHANKYOU@hush.com>\n"
+"POT-Creation-Date: 2015-08-06 11:13+0200\n"
+"PO-Revision-Date: 2015-08-06 11:15+0200\n"
+"Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,11 @@ msgid ""
 "a simple and intuitive user interface that allows you to focus on your web "
 "pages. If you’re looking for a simple, clean, beautiful view of the web, "
 "this is the browser for you."
-msgstr "Nettleseren for GNOME skrivebordet, som er tett integrert med skrivebordet og har et enkelt og intuitivt brukergrensesnitt som lar deg fokusere på dine nettsider. Hvis du leter etter en enkel, ryddig og vakker måte å vise nettsider så er dette nettleseren for deg."
+msgstr ""
+"Nettleseren for GNOME skrivebordet, som er tett integrert med skrivebordet "
+"og har et enkelt og intuitivt brukergrensesnitt som lar deg fokusere på dine "
+"nettsider. Hvis du leter etter en enkel, ryddig og vakker måte å vise "
+"nettsider så er dette nettleseren for deg."
 
 #: ../data/epiphany.appdata.xml.in.h:4
 msgid "GNOME Web is often referred to by its code name, Epiphany."
@@ -226,10 +230,23 @@ msgstr ""
 "secondary-process-per-web-view» for å bruke separat prosess per fane."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:30
+msgid ""
+"Maximum number of web processes created at the same time when using 'one-"
+"secondary-process-per-web-view' model"
+msgstr "Maksimalt antall web prosesser som lages på samme tid når man bruker modellen «one-secondary-process-per-web-view»"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
+msgid ""
+"This option sets a limit to the number of web processes that will be used at "
+"the same time for the 'one-secondary-process-per-web-view' model. The "
+"default value is '0' and means no limit."
+msgstr "Dette valget setter en grense på antall web-prosesser som vil brukes på samme for modellen «one-secondary-process-per-web-view». Forvalgt verdi er 0 og betyr ingen grense."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid "[Deprecated]"
 msgstr "[Utgått]"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid ""
 "[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
 "instead."
@@ -237,11 +254,11 @@ msgstr ""
 "[Utgått] Denne innstillingen er utgått. Bruk «tabs-bar-visibility-policy» i "
 "stedet."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid "Visibility of the downloads window"
 msgstr "Synlighet for nedlastingsvinduet"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid ""
 "Hide or show the downloads window. When hidden, a notification will be shown "
 "when new downloads are started."
@@ -249,11 +266,11 @@ msgstr ""
 "Vis eller skjul nedlastingsvindu. Hvis vinduet er skjult, vises et varsel "
 "når nye nedlastinger startes."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid "The visibility policy for the tabs bar."
 msgstr "Synlighetsregler for fanelinjen."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
@@ -263,23 +280,23 @@ msgstr ""
 "«more-than-one» for å vise linjen når det finnes to eller flere faner og "
 "«never» for å aldri vise fanelinjen."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid "Minimum font size"
 msgstr "Minste skriftstørrelse"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Use GNOME fonts"
 msgstr "Bruk skrifter fra GNOME"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "Use GNOME font settings."
 msgstr "Bruk innstillinger for skrifter fra GNOME."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "Custom sans-serif font"
 msgstr "Egendefinert sans-serif skrift"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -287,11 +304,11 @@ msgstr ""
 "En verdi som skal brukes ved overstyring av skrivebordets sans-serif-skrift "
 "når «use-gnome-fonts» er valgt."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Custom serif font"
 msgstr "Egendefinert serif skrift"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -299,11 +316,11 @@ msgstr ""
 "En verdi som skal brukes ved overstyring av skrivebordets serif-skrift når "
 "«use-gnome-fonts» er valgt."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "Custom monospace font"
 msgstr "Egendefinert skrift med fast bredde"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -311,64 +328,64 @@ msgstr ""
 "En verdi som skal brukes ved overstyring av skrivebordets monospace-skrift "
 "når «use-gnome-fonts» er valgt."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Use own colors"
 msgstr "Bruk egne farger"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Bruk egne farger i stedet for fargene som siden ber om."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 msgid "Use own fonts"
 msgstr "Bruk egne skrifter"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Bruk egne skrifter i stedet for skriftene som siden ber om."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Use a custom CSS"
 msgstr "Bruk egendefinert CSS"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Bruk egen CSS-fil til å endre nettstedets egen CSS."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Enable spell checking"
 msgstr "Slå på stavekontroll"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid "Spell check any text typed in editable areas."
 msgstr ""
 "Kjør stavekontroll for all tekst som skrives inn i redigerbare områder."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid "Default encoding"
 msgstr "Forvalgt koding"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Forvalgt koding. Godkjente verdier er de samme som WebKitGTK+ kan forstå."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 #: ../src/resources/prefs-dialog.ui.h:39
 msgid "Languages"
 msgstr "Språk"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Preferred languages, two letter codes."
 msgstr "Foretrukne språk, tobokstavskoder."
 
 # (ugh)
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Cookie accept"
 msgstr "Godta informasjonskapsler"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid ""
 "Where to accept cookies from. Possible values are \"always\", \"no-third-"
 "party\" and \"never\"."
@@ -376,11 +393,11 @@ msgstr ""
 "Hvor informasjonskapsler kan komme fra. Gyldige verdier er «always» (hvor "
 "som helst), «no-third-party» (ikke fra tredjepart) og «never» (ingen)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Image animation mode"
 msgstr "Bildeanimeringsmodus"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -388,45 +405,45 @@ msgstr ""
 "Hvordan animerte bilder skal vises. Gyldige verdier er «normal», "
 "«once» (animer én gang) og «disabled» (ikke animer)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Allow popups"
 msgstr "Tillat oppsprettvinduer"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Tillat sider å åpne nye vinduer med JavaScript (hvis JavaScript er slått på)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Enable Plugins"
 msgstr "Slå på tillegg"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid "Enable JavaScript"
 msgstr "Slå på JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "Enable WebGL"
 msgstr "Slå på WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Hvorvidt støtte for WebGL-kontekst skal slås på."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "Enable WebAudio"
 msgstr "Slå på WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to enable support for WebAudio."
 msgstr "Hvorvidt støtte for WebAudio skal slås på."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Do Not Track"
 msgstr "Ikke utfør sporing"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -434,21 +451,21 @@ msgstr ""
 "Om nettleseren skal be nettsider om å ikke lagre sporingsdata. Merk at "
 "nettsider ikke kan tvinges til å følge denne innstillingen/forespørselen."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Enable Adblock"
 msgstr "Slå på blokkering av reklame"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Om innebygde annonser som vises på nettsider skal blokkeres."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:73
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
 msgid "The downloads folder"
 msgstr "Nedlastingsmappe"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:74
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -456,11 +473,11 @@ msgstr ""
 "Sti til mappe hvor nedlastinger skal lagres. Bruk verdien «Downloads» for å "
 "bruke standard nedlastingsmappe, eller «Desktop» for skrivebordsmappe."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:75
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "Hvorvidt tittelkolonnen skal vises i bokmerkevinduet."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:76
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Hvorvidt adressekolonnen skal vises i bokmerkevinduet."
 
@@ -531,19 +548,19 @@ msgstr "Liste med installerte nettprogrammer"
 msgid "Installed on:"
 msgstr "Installert:"
 
-#: ../embed/ephy-about-handler.c:474
-msgid "Remove from overview"
-msgstr "Fjern fra oversikt"
-
-#: ../embed/ephy-about-handler.c:489 ../embed/ephy-embed-utils.c:308
+#: ../embed/ephy-about-handler.c:474 ../embed/ephy-embed-utils.c:308
 msgid "Most Visited"
 msgstr "Mest besøkte"
 
-#: ../embed/ephy-about-handler.c:549 ../embed/ephy-about-handler.c:550
+#: ../embed/ephy-about-handler.c:507
+msgid "Remove from overview"
+msgstr "Fjern fra oversikt"
+
+#: ../embed/ephy-about-handler.c:573 ../embed/ephy-about-handler.c:574
 msgid "Private Browsing"
 msgstr "Privat nettlesing"
 
-#: ../embed/ephy-about-handler.c:551
+#: ../embed/ephy-about-handler.c:575
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -553,14 +570,14 @@ msgstr ""
 "synlig i nettleserhistorikken og all lagret informasjon vil fjernes når du "
 "lukker vinduet. Filer du laster ned vil bli beholdt."
 
-#: ../embed/ephy-about-handler.c:555
+#: ../embed/ephy-about-handler.c:579
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Inkognitomodus skjuler kun din aktivitet fra personer som bruker denne "
 "datamaskinen."
 
-#: ../embed/ephy-about-handler.c:557
+#: ../embed/ephy-about-handler.c:581
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -939,13 +956,13 @@ msgstr "Finn forrige oppføring av søketeksten"
 msgid "Find next occurrence of the search string"
 msgstr "Finn neste oppføring av søketeksten"
 
-#: ../embed/ephy-web-view.c:493 ../lib/ephy-file-chooser.c:194
-msgid "_Save"
-msgstr "_Lagre"
-
-#: ../embed/ephy-web-view.c:494
+#: ../embed/ephy-web-view.c:493
 msgid "_Don’t Save"
 msgstr "_Ikke lagre"
+
+#: ../embed/ephy-web-view.c:494 ../lib/ephy-file-chooser.c:194
+msgid "_Save"
+msgstr "_Lagre"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
