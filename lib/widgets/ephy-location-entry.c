@@ -56,7 +56,6 @@ struct _EphyLocationEntryPrivate
 {
 	GdkPixbuf *favicon;
 	GtkTreeModel *model;
-	GtkEntryCompletion *completion;
 
 	GSList *search_terms;
 
@@ -1047,72 +1046,6 @@ cursor_on_match_cb  (GtkEntryCompletion *completion,
 	return TRUE;
 }
 
-static char *
-rgba_to_hex (GdkRGBA *color)
-{
-	char *hex;
-
-	hex = g_strdup_printf ("#%04X%04X%04X",
-			       (guint)(color->red * (gdouble)65535),
-			       (guint)(color->green * (gdouble)65535),
-			       (guint)(color->blue * (gdouble)65535));
-	return hex;
-}
-
-static void
-textcell_data_func (GtkCellLayout *cell_layout,
-		    GtkCellRenderer *cell,
-		    GtkTreeModel *tree_model,
-		    GtkTreeIter *iter,
-		    gpointer data)
-{
-	GtkWidget *entry;
-	EphyLocationEntryPrivate *priv;
-	char *ctext;
-	char *title;
-	char *url;
-	GtkStyleContext *style;
-	GValue text = { 0, };
-
-	entry = GTK_WIDGET (data);
-	priv = EPHY_LOCATION_ENTRY (data)->priv;
-	gtk_tree_model_get (tree_model, iter,
-			priv->text_col, &title,
-			priv->url_col, &url,
-			-1);
-
-	if (url)
-	{
-		GdkRGBA color;
-		char *color_text;
-		char *unescaped_url;
-
-		sanitize_location (&url);
-		unescaped_url = g_uri_unescape_string (url, NULL);
-
-		style = gtk_widget_get_style_context (entry);
-		gtk_style_context_get_color (style, GTK_STATE_FLAG_INSENSITIVE,
-					     &color);
-
-		color_text = rgba_to_hex (&color);
-		ctext = g_markup_printf_escaped ("%s\n<span font-size=\"small\" color=\"%s\">%s</span>", title, color_text, unescaped_url);
-		g_free (color_text);
-	        g_free (title);
-		g_free (unescaped_url);
-	}
-	else
-	{
-		ctext = title;
-	}
-
-	g_value_init (&text, G_TYPE_STRING);
-	g_value_take_string (&text, ctext);
-	g_object_set_property (G_OBJECT (cell), "markup", &text);
-	g_value_unset (&text);
-
-	g_free (url);
-}
-
 static void
 extracell_data_func (GtkCellLayout *cell_layout,
 			GtkCellRenderer *cell,
@@ -1268,7 +1201,7 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
 				    cell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
-				       cell, "text", text_col);
+				       cell, "markup", text_col);
 
 	/* Pixel-perfect aligment with the text in the location entry.
 	 * See above.
@@ -1287,11 +1220,6 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
          */
 	gtk_cell_renderer_set_fixed_size (cell, 1, -1);
 	gtk_cell_renderer_text_set_fixed_height_from_font (GTK_CELL_RENDERER_TEXT (cell), 2);
-
-	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
-					    cell, textcell_data_func,
-					    entry,
-					    NULL);
 
 	cell = gtk_cell_renderer_pixbuf_new ();
 	g_object_set (cell, "follow-state", TRUE, NULL);
@@ -1312,8 +1240,6 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 			  G_CALLBACK (cursor_on_match_cb), entry);
 
 	gtk_entry_set_completion (GTK_ENTRY (entry), completion);
-
-	priv->completion = completion;
 	g_object_unref (completion);
 }
 

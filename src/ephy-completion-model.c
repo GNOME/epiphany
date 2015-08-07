@@ -238,25 +238,47 @@ icon_loaded_cb (GObject *source, GAsyncResult *result, gpointer user_data)
   g_slice_free (IconLoadData, data);
 }
 
+static gchar *
+get_row_text (const gchar *url, const gchar *title, const gchar *subtitle_color)
+{
+  gchar *unescaped_url;
+  gchar *text;
+
+  if (!url)
+    return g_markup_escape_text (title, -1);
+
+  unescaped_url = g_uri_unescape_string (url, NULL);
+  if (g_strcmp0 (url, title) == 0)
+    text = g_markup_escape_text (unescaped_url, -1);
+  else
+    text = g_markup_printf_escaped ("%s\n<span font-size=\"small\" color=\"%s\">%s</span>", title, subtitle_color, unescaped_url);
+  g_free (unescaped_url);
+
+  return text;
+}
+
 static void
-set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
+set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row, const gchar *subtitle_color)
 {
   GtkTreeIter iter;
   GtkTreePath *path;
   IconLoadData *data;
   WebKitFaviconDatabase* database;
+  gchar *text;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
 
+  text = get_row_text (row->location, row->title, subtitle_color);
   gtk_list_store_insert_with_values (GTK_LIST_STORE (model), &iter, position,
-                                     EPHY_COMPLETION_TEXT_COL, row->title ? row->title : "",
+                                     EPHY_COMPLETION_TEXT_COL, text ? text : "",
                                      EPHY_COMPLETION_URL_COL, row->location,
                                      EPHY_COMPLETION_ACTION_COL, row->location,
                                      EPHY_COMPLETION_KEYWORDS_COL, row->keywords ? row->keywords : "",
                                      EPHY_COMPLETION_EXTRA_COL, row->is_bookmark,
                                      EPHY_COMPLETION_RELEVANCE_COL, row->relevance,
                                      -1);
+  g_free (text);
 
   data = g_slice_new (IconLoadData);
   data->model = GTK_LIST_STORE (g_object_ref(model));
@@ -268,21 +290,54 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
                                        NULL, icon_loaded_cb, data);
 }
 
+static gchar *
+get_text_column_subtitle_color (void)
+{
+  GtkWidgetPath *path;
+  GtkStyleContext *style_context;
+  GdkRGBA rgba;
+
+  path = gtk_widget_path_new ();
+  gtk_widget_path_prepend_type (path, GTK_TYPE_ENTRY);
+  gtk_widget_path_iter_add_class (path, 0, GTK_STYLE_CLASS_ENTRY);
+
+  style_context = gtk_style_context_new ();
+  gtk_style_context_set_path (style_context, path);
+  gtk_widget_path_free (path);
+
+  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_ENTRY);
+  gtk_style_context_get_color (style_context, GTK_STATE_FLAG_INSENSITIVE, &rgba);
+  g_object_unref (style_context);
+
+  return g_strdup_printf ("#%04X%04X%04X",
+                          (guint)(rgba.red * (gdouble)65535),
+                          (guint)(rgba.green * (gdouble)65535),
+                          (guint)(rgba.blue * (gdouble)65535));
+}
+
 static void
 replace_rows_in_model (EphyCompletionModel *model, GSList *new_rows)
 {
   /* This is by far the simplest way of doing, and yet it gives
    * basically the same result than the other methods... */
   int i;
+  gchar *subtitle_color;
 
   gtk_list_store_clear (GTK_LIST_STORE (model));
 
+  if (!new_rows)
+    return;
+
+  subtitle_color = get_text_column_subtitle_color ();
+
   for (i = 0; new_rows != NULL; i++) {
     PotentialRow *row = (PotentialRow*)new_rows->data;
-    
-    set_row_in_model (model, i, row);
+
+    set_row_in_model (model, i, row, subtitle_color);
     new_rows = new_rows->next;
   }
+
+  g_free (subtitle_color);
 }
 
 static gboolean
