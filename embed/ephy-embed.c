@@ -447,7 +447,7 @@ ephy_embed_set_property (GObject *object,
     embed->priv->web_view = g_value_get_object (value);
     break;
   case PROP_TITLE:
-    ephy_embed_set_title (embed, g_value_dup_string (value));
+    ephy_embed_set_title (embed, g_value_get_string (value));
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
