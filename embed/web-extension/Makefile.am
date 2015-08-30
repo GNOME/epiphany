@@ -17,25 +17,10 @@ libephywebextension_la_SOURCES = \
 	ephy-web-overview.c \
 	ephy-web-overview-model.h \
 	ephy-web-overview-model.c \
-	$(top_srcdir)/embed/uri-tester.c \
-	$(top_srcdir)/embed/uri-tester.h \
-	$(top_srcdir)/lib/ephy-debug.c \
-	$(top_srcdir)/lib/ephy-debug.h \
-	$(top_srcdir)/lib/ephy-file-helpers.c \
-	$(top_srcdir)/lib/ephy-file-helpers.h \
-	$(top_srcdir)/lib/ephy-form-auth-data.c \
-	$(top_srcdir)/lib/ephy-form-auth-data.h \
-	$(top_srcdir)/lib/ephy-settings.c \
-	$(top_srcdir)/lib/ephy-settings.h \
-	$(top_srcdir)/lib/ephy-string.c \
-	$(top_srcdir)/lib/ephy-string.h \
-	$(top_srcdir)/lib/ephy-uri-helpers.c \
-	$(top_srcdir)/lib/ephy-uri-helpers.h \
-	$(top_srcdir)/lib/ephy-web-dom-utils.c \
-	$(top_srcdir)/lib/ephy-web-dom-utils.h
+	uri-tester.c \
+	uri-tester.h
 
 libephywebextension_la_CPPFLAGS = \
-	-I$(top_srcdir)/embed \
 	-I$(top_srcdir)/lib \
 	$(AM_CPPFLAGS)
 
@@ -46,6 +31,7 @@ libephywebextension_la_CFLAGS = \
 	$(WEB_EXTENSION_CFLAGS)
 
 libephywebextension_la_LIBADD = \
+	$(top_builddir)/lib/libephymisc.la \
 	$(WEB_EXTENSION_LIBS)
 
 libephywebextension_la_LDFLAGS = \
