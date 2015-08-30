@@ -36,6 +36,7 @@ struct _NautilusFloatingBarDetails {
 	GtkWidget *spinner;
 	gboolean show_spinner;
 	gboolean is_interactive;
+	guint hover_timeout_id;
 };
 
 enum {
@@ -146,30 +147,113 @@ update_labels (NautilusFloatingBar *self)
 	gtk_widget_set_visible (self->priv->details_label_widget, details_visible);
 }
 
+static void
+nautilus_floating_bar_show (GtkWidget *widget)
+{
+	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (widget);
+
+	/* Epiphany: never show the bar on top of the web view. */
+	if (gtk_widget_get_valign (widget) == GTK_ALIGN_START)
+		return;
+
+	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->show (widget);
+
+	if (self->priv->show_spinner) {
+		gtk_spinner_start (GTK_SPINNER (self->priv->spinner));
+	}
+}
+
+static void
+nautilus_floating_bar_hide (GtkWidget *widget)
+{
+	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (widget);
+
+	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->hide (widget);
+
+	gtk_spinner_stop (GTK_SPINNER (self->priv->spinner));
+}
+
+typedef struct {
+	GtkWidget *overlay;
+	GtkWidget *floating_bar;
+	GdkDevice *device;
+	gint y_down_limit;
+	gint y_upper_limit;
+	gboolean first_time;
+} CheckPointerData;
+
+static gboolean
+check_pointer_timeout (gpointer user_data)
+{
+	CheckPointerData *data = user_data;
+	gint pointer_y = -1;
+
+	gdk_window_get_device_position (gtk_widget_get_window (data->overlay), data->device,
+					NULL, &pointer_y, NULL);
+
+	if (pointer_y == -1 || pointer_y < data->y_down_limit || pointer_y > data->y_upper_limit) {
+		if (!data->first_time) {
+			gtk_widget_set_valign (data->floating_bar, GTK_ALIGN_END);
+			nautilus_floating_bar_show (data->floating_bar);
+		}
+		NAUTILUS_FLOATING_BAR (data->floating_bar)->priv->hover_timeout_id = 0;
+		return G_SOURCE_REMOVE;
+	}
+
+	if (data->first_time) {
+		// Hide floating bar at top position of widget
+		nautilus_floating_bar_hide (data->floating_bar);
+		gtk_widget_set_valign (data->floating_bar, GTK_ALIGN_START);
+		gtk_widget_queue_resize (data->floating_bar);
+	}
+
+	data->first_time = FALSE;
+	return G_SOURCE_CONTINUE;
+}
+
+
 static gboolean
 overlay_enter_notify_cb (GtkWidget        *parent,
 			 GdkEventCrossing *event,
 			 gpointer          user_data)
 {
 	GtkWidget *widget = user_data;
+	CheckPointerData *data;
+	GtkAllocation alloc_parent;
+	gint y_pos;
+
+	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (widget);
+
+	if (self->priv->hover_timeout_id != 0) {
+		g_source_remove (self->priv->hover_timeout_id);
+		self->priv->hover_timeout_id = 0;
+	}
 
 	if (event->window != gtk_widget_get_window (widget)) {
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 	}
 
 	if (NAUTILUS_FLOATING_BAR (widget)->priv->is_interactive) {
-		return FALSE;
+		return GDK_EVENT_PROPAGATE;
 	}
 
-	if (gtk_widget_get_halign (widget) == GTK_ALIGN_START) {
-		gtk_widget_set_halign (widget, GTK_ALIGN_END);
-	} else {
-		gtk_widget_set_halign (widget, GTK_ALIGN_START);
-	}
+	gtk_widget_get_allocation (parent, &alloc_parent);
+	gdk_window_get_position (gtk_widget_get_window (widget), NULL, &y_pos);
 
-	gtk_widget_queue_resize (widget);
+	data = g_new (CheckPointerData, 1);
+	data->overlay = parent;
+	data->floating_bar = widget;
+	data->device = gdk_event_get_device ((GdkEvent *) event);
+	data->y_down_limit = y_pos;
+	data->y_upper_limit = alloc_parent.height;
+	data->first_time = TRUE;
 
-	return FALSE;
+	self->priv->hover_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT, 250,
+							   check_pointer_timeout, data,
+							   g_free);
+	g_source_set_name_by_id (self->priv->hover_timeout_id, "[nautilus-floating-bar] overlay_enter_notify_cb");
+
+	return GDK_EVENT_STOP;
 }
 
 static void
@@ -189,28 +273,6 @@ nautilus_floating_bar_parent_set (GtkWidget *widget,
 		g_signal_connect (parent, "enter-notify-event",
 				  G_CALLBACK (overlay_enter_notify_cb), widget);
 	}
-}
-
-static void
-nautilus_floating_bar_show (GtkWidget *widget)
-{
-	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (widget);
-
-	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->show (widget);
-
-	if (self->priv->show_spinner) {
-		gtk_spinner_start (GTK_SPINNER (self->priv->spinner));
-	}
-}
-
-static void
-nautilus_floating_bar_hide (GtkWidget *widget)
-{
-	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (widget);
-
-	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->hide (widget);
-
-	gtk_spinner_stop (GTK_SPINNER (self->priv->spinner));
 }
 
 static gboolean
