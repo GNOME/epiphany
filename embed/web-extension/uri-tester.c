@@ -787,7 +787,7 @@ uri_tester_init (UriTester *tester)
                                       (GDestroyNotify)g_free,
                                       (GDestroyNotify)g_regex_unref);
   priv->optslist = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                          NULL,
+                                          (GDestroyNotify)g_free,
                                           (GDestroyNotify)g_free);
   priv->urlcache = g_hash_table_new_full (g_str_hash, g_str_equal,
                                           (GDestroyNotify)g_free,
