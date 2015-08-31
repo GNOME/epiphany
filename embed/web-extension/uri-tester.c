@@ -520,7 +520,7 @@ uri_tester_compile_regexp (UriTester *tester,
       g_regex_unref (regex);
 
       if (signature_count > 1 && g_hash_table_lookup (tester->priv->pattern, patt))
-        g_hash_table_steal (tester->priv->pattern, patt);
+        g_hash_table_remove (tester->priv->pattern, patt);
     }
   else
     {
