@@ -140,13 +140,11 @@ ephy_title_box_view_focus_in_cb (GtkWidget     *widget,
 {
   EphyTitleBox        *title_box = EPHY_TITLE_BOX (user_data);
   EphyTitleBoxPrivate *priv = ephy_title_box_get_instance_private (title_box);
-  const gchar         *title;
 
   LOG ("focus-in-event web_view %p event %p title-box %p", widget, event, title_box);
 
   title = webkit_web_view_get_title (priv->web_view);
-  if (title && *title != '\0')
-    ephy_title_box_set_mode (title_box, EPHY_TITLE_BOX_MODE_TITLE);
+  ephy_title_box_set_mode (title_box, EPHY_TITLE_BOX_MODE_TITLE);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -593,6 +591,7 @@ ephy_title_box_set_mode (EphyTitleBox    *title_box,
                          EphyTitleBoxMode mode)
 {
   EphyTitleBoxPrivate *priv;
+  const gchar *title;
 
   g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
 
@@ -613,6 +612,13 @@ ephy_title_box_set_mode (EphyTitleBox    *title_box,
 
   if (priv->mode == mode)
     return;
+
+  if (mode == EPHY_TITLE_BOX_MODE_TITLE) {
+    /* Don't allow showing title mode if there is no title. */
+    title = priv->web_view ? webkit_web_view_get_title (priv->web_view) : NULL;
+    if (!title || !*title)
+      return;
+  }
 
   LOG ("ephy_title_box_set_mode title-box %p mode %u", title_box, mode);
 
