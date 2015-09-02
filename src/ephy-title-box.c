@@ -143,7 +143,6 @@ ephy_title_box_view_focus_in_cb (GtkWidget     *widget,
 
   LOG ("focus-in-event web_view %p event %p title-box %p", widget, event, title_box);
 
-  title = webkit_web_view_get_title (priv->web_view);
   ephy_title_box_set_mode (title_box, EPHY_TITLE_BOX_MODE_TITLE);
 
   return GDK_EVENT_PROPAGATE;
