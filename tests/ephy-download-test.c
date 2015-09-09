@@ -177,6 +177,7 @@ main (int argc, char *argv[])
   }
 
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
+  g_application_register (G_APPLICATION (ephy_shell_get_default ()), NULL, NULL);
 
   server = soup_server_new (NULL, NULL);
   soup_server_listen_local (server, 0,
