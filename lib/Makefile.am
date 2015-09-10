@@ -9,7 +9,6 @@ NOINST_H_FILES = \
 	ephy-debug.h				\
 	ephy-dnd.h				\
 	ephy-favicon-helpers.h			\
-	ephy-file-chooser.h			\
 	ephy-file-helpers.h			\
 	ephy-form-auth-data.h			\
 	ephy-gui.h				\
@@ -49,7 +48,6 @@ libephymisc_la_SOURCES = \
 	ephy-dialog.c				\
 	ephy-dnd.c				\
 	ephy-favicon-helpers.c			\
-	ephy-file-chooser.c			\
 	ephy-file-helpers.c			\
 	ephy-form-auth-data.c			\
 	ephy-gui.c				\

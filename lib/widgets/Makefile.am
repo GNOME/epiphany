@@ -74,6 +74,8 @@ libephywidgets_la_SOURCES = \
 	ephy-downloads-progress-icon.c		\
 	ephy-download-widget.c			\
 	ephy-download-widget.h			\
+	ephy-file-chooser.c			\
+	ephy-file-chooser.h			\
 	ephy-location-entry.c			\
 	ephy-location-entry.h			\
 	ephy-middle-clickable-button.c		\
