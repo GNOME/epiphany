@@ -152,7 +152,7 @@ web_page_send_request (WebKitWebPage *web_page,
   if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_DATA))
       return FALSE;
 
-  ret = uri_tester_test_uri (extension->uri_tester, request_uri, page_uri, AD_URI_CHECK_TYPE_OTHER);
+  ret = uri_tester_test_uri (extension->uri_tester, request_uri, page_uri);
   if (ret)
     g_debug ("Request '%s' blocked (page: '%s')", request_uri, page_uri);
 

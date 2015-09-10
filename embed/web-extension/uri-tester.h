@@ -31,35 +31,6 @@ G_BEGIN_DECLS
 #define IS_URI_TESTER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TYPE_URI_TESTER))
 #define URI_TESTER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TYPE_URI_TESTER, UriTesterClass))
 
-typedef enum
-{
-  AD_URI_CHECK_TYPE_OTHER       = 1U,
-  AD_URI_CHECK_TYPE_SCRIPT      = 2U, /* Indicates an executable script
-                                         (such as JavaScript) */
-  AD_URI_CHECK_TYPE_IMAGE       = 3U, /* Indicates an image (e.g., IMG
-                                         elements) */
-  AD_URI_CHECK_TYPE_STYLESHEET  = 4U, /* Indicates a stylesheet (e.g.,
-                                         STYLE elements) */
-  AD_URI_CHECK_TYPE_OBJECT      = 5U, /* Indicates a generic object
-                                         (plugin-handled content
-                                         typically falls under this
-                                         category) */
-  AD_URI_CHECK_TYPE_DOCUMENT    = 6U, /* Indicates a document at the
-                                         top-level (i.e., in a
-                                         browser) */
-  AD_URI_CHECK_TYPE_SUBDOCUMENT = 7U, /* Indicates a document contained
-                                         within another document (e.g.,
-                                         IFRAMEs, FRAMES, and OBJECTs) */
-  AD_URI_CHECK_TYPE_REFRESH     = 8U, /* Indicates a timed refresh */
-  AD_URI_CHECK_TYPE_XBEL              =  9U, /* Indicates an XBL binding request,
-                                                triggered either by -moz-binding CSS
-                                                property or Document.addBinding method */
-  AD_URI_CHECK_TYPE_PING              = 10U, /* Indicates a ping triggered by a click on
-                                                <A PING="..."> element */
-  AD_URI_CHECK_TYPE_XMLHTTPREQUEST    = 11U, /* Indicates a XMLHttpRequest */
-  AD_URI_CHECK_TYPE_OBJECT_SUBREQUEST = 12U  /* Indicates a request by a plugin */
-} AdUriCheckType;
-
 typedef struct _UriTester        UriTester;
 typedef struct _UriTesterClass   UriTesterClass;
 typedef struct _UriTesterPrivate UriTesterPrivate;
@@ -85,8 +56,7 @@ UriTester *uri_tester_new         (const char *base_data_dir);
 
 gboolean   uri_tester_test_uri    (UriTester *tester,
                                    const char *req_uri,
-                                   const char *page_uri,
-                                   AdUriCheckType type);
+                                   const char *page_uri);
 
 void       uri_tester_set_filters (UriTester *tester, GSList *filters);
 

@@ -917,13 +917,8 @@ uri_tester_new (const char *base_data_dir)
 gboolean
 uri_tester_test_uri (UriTester *tester,
                      const char *req_uri,
-                     const char *page_uri,
-                     AdUriCheckType type)
+                     const char *page_uri)
 {
-  /* Don't block top level documents. */
-  if (type == AD_URI_CHECK_TYPE_DOCUMENT)
-    return FALSE;
-
   return uri_tester_is_matched (tester, NULL, req_uri, page_uri);
 }
 
