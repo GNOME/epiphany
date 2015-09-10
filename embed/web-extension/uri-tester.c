@@ -931,34 +931,3 @@ uri_tester_set_filters (UriTester *tester, GSList *filters)
 
   priv->filters = filters;
 }
-
-void
-uri_tester_reload (UriTester *tester)
-{
-  GDir *g_data_dir = NULL;
-
-  /* Remove data files in the data dir first. */
-  g_data_dir = g_dir_open (tester->priv->data_dir, 0, NULL);
-  if (g_data_dir)
-    {
-      const char *filename = NULL;
-      char *filepath = NULL;
-
-      while ((filename = g_dir_read_name (g_data_dir)))
-        {
-          /* Omit the list of filters. */
-          if (!g_strcmp0 (filename, FILTERS_LIST_FILENAME))
-            continue;
-
-          filepath = g_build_filename (tester->priv->data_dir, filename, NULL);
-          g_unlink (filepath);
-
-          g_free (filepath);
-        }
-
-      g_dir_close (g_data_dir);
-    }
-
-  /* Load patterns from current filters. */
-  uri_tester_load_patterns (tester);
-}

@@ -58,8 +58,6 @@ gboolean   uri_tester_test_uri    (UriTester *tester,
 
 void       uri_tester_set_filters (UriTester *tester, GSList *filters);
 
-void       uri_tester_reload      (UriTester *tester);
-
 G_END_DECLS
 
 #endif /* URI_TESTER_H */
