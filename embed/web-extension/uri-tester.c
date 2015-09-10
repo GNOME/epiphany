@@ -858,8 +858,7 @@ uri_tester_finalize (GObject *object)
 
   LOG ("UriTester finalizing %p", object);
 
-  g_slist_foreach (priv->filters, (GFunc) g_free, NULL);
-  g_slist_free (priv->filters);
+  g_slist_free_full (priv->filters, g_free);
   g_free (priv->data_dir);
 
   g_hash_table_destroy (priv->pattern);
@@ -928,10 +927,7 @@ uri_tester_set_filters (UriTester *tester, GSList *filters)
   UriTesterPrivate *priv = tester->priv;
 
   if (priv->filters)
-    {
-      g_slist_foreach (priv->filters, (GFunc) g_free, NULL);
-      g_slist_free (priv->filters);
-    }
+    g_slist_free_full (priv->filters, g_free);
 
   priv->filters = filters;
 }
