@@ -936,12 +936,6 @@ uri_tester_set_filters (UriTester *tester, GSList *filters)
   priv->filters = filters;
 }
 
-GSList *
-uri_tester_get_filters (UriTester *tester)
-{
-  return tester->priv->filters;
-}
-
 void
 uri_tester_reload (UriTester *tester)
 {
