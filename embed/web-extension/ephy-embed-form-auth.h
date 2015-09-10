@@ -27,27 +27,10 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_EMBED_FORM_AUTH     (ephy_embed_form_auth_get_type ())
-#define EPHY_EMBED_FORM_AUTH(obj)       (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_EMBED_FORM_AUTH, EphyEmbedFormAuth))
-#define EPHY_IS_EMBED_FORM_AUTH(obj)    (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_EMBED_FORM_AUTH))
+#define EPHY_TYPE_EMBED_FORM_AUTH (ephy_embed_form_auth_get_type ())
 
-typedef struct _EphyEmbedFormAuthClass   EphyEmbedFormAuthClass;
-typedef struct _EphyEmbedFormAuth        EphyEmbedFormAuth;
-typedef struct _EphyEmbedFormAuthPrivate EphyEmbedFormAuthPrivate;
+G_DECLARE_FINAL_TYPE (EphyEmbedFormAuth, ephy_embed_form_auth, EPHY, EMBED_FORM_AUTH, GObject)
 
-struct _EphyEmbedFormAuth
-{
-  GObject parent;
-
-  EphyEmbedFormAuthPrivate *priv;
-};
-
-struct _EphyEmbedFormAuthClass
-{
-  GObjectClass parent_class;
-};
-
-GType              ephy_embed_form_auth_get_type          (void);
 EphyEmbedFormAuth *ephy_embed_form_auth_new               (WebKitWebPage     *web_page,
                                                            WebKitDOMNode     *username_node,
                                                            WebKitDOMNode     *password_node,
