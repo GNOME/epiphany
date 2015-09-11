@@ -23,8 +23,10 @@
 
 #include <libsoup/soup.h>
 
-struct _EphyWebOverviewModelPrivate
+struct _EphyWebOverviewModel
 {
+  GObject parent_instance;
+
   GList *items;
   GHashTable *thumbnails;
 };
@@ -47,14 +49,14 @@ ephy_web_overview_model_dispose (GObject *object)
 {
   EphyWebOverviewModel *model = EPHY_WEB_OVERVIEW_MODEL (object);
 
-  if (model->priv->items) {
-    g_list_free_full (model->priv->items, (GDestroyNotify)ephy_web_overview_model_item_free);
-    model->priv->items = NULL;
+  if (model->items) {
+    g_list_free_full (model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
+    model->items = NULL;
   }
 
-  if (model->priv->thumbnails) {
-    g_hash_table_destroy (model->priv->thumbnails);
-    model->priv->thumbnails = NULL;
+  if (model->thumbnails) {
+    g_hash_table_destroy (model->thumbnails);
+    model->thumbnails = NULL;
   }
 
   G_OBJECT_CLASS (ephy_web_overview_model_parent_class)->dispose (object);
@@ -94,18 +96,15 @@ ephy_web_overview_model_class_init (EphyWebOverviewModelClass *klass)
                   G_TYPE_NONE, 2,
                   G_TYPE_STRING,
                   G_TYPE_STRING);
-
-  g_type_class_add_private (object_class, sizeof(EphyWebOverviewModelPrivate));
 }
 
 static void
 ephy_web_overview_model_init (EphyWebOverviewModel *model)
 {
-  model->priv = G_TYPE_INSTANCE_GET_PRIVATE (model, EPHY_TYPE_WEB_OVERVIEW_MODEL, EphyWebOverviewModelPrivate);
-  model->priv->thumbnails = g_hash_table_new_full (g_str_hash,
-                                                   g_str_equal,
-                                                   (GDestroyNotify)g_free,
-                                                   (GDestroyNotify)g_free);
+  model->thumbnails = g_hash_table_new_full (g_str_hash,
+                                             g_str_equal,
+                                             (GDestroyNotify)g_free,
+                                             (GDestroyNotify)g_free);
 }
 
 EphyWebOverviewModel *
@@ -120,8 +119,8 @@ ephy_web_overview_model_set_urls (EphyWebOverviewModel *model,
 {
   g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
-  g_list_free_full (model->priv->items, (GDestroyNotify)ephy_web_overview_model_item_free);
-  model->priv->items = urls;
+  g_list_free_full (model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
+  model->items = urls;
   g_signal_emit (model, signals[URLS_CHANGED], 0);
 }
 
@@ -130,7 +129,7 @@ ephy_web_overview_model_get_urls (EphyWebOverviewModel *model)
 {
   g_return_val_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model), NULL);
 
-  return model->priv->items;
+  return model->items;
 }
 
 void
@@ -146,7 +145,7 @@ ephy_web_overview_model_set_url_thumbnail (EphyWebOverviewModel *model,
   if (g_strcmp0 (thumbnail_path, path) == 0)
     return;
 
-  g_hash_table_insert (model->priv->thumbnails, g_strdup (url), g_strdup (path));
+  g_hash_table_insert (model->thumbnails, g_strdup (url), g_strdup (path));
   g_signal_emit (model, signals[THUMBNAIL_CHANGED], 0, url, path);
 }
 
@@ -156,7 +155,7 @@ ephy_web_overview_model_get_url_thumbnail (EphyWebOverviewModel *model,
 {
   g_return_val_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model), NULL);
 
-  return g_hash_table_lookup (model->priv->thumbnails, url);
+  return g_hash_table_lookup (model->thumbnails, url);
 }
 
 void
@@ -169,7 +168,7 @@ ephy_web_overview_model_set_url_title (EphyWebOverviewModel *model,
 
   g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
-  for (l = model->priv->items; l; l = g_list_next (l)) {
+  for (l = model->items; l; l = g_list_next (l)) {
     EphyWebOverviewModelItem *item = (EphyWebOverviewModelItem *)l->data;
 
     if (g_strcmp0 (item->url, url) != 0)
@@ -196,7 +195,7 @@ ephy_web_overview_model_delete_url (EphyWebOverviewModel *model,
 
   g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
-  l = model->priv->items;
+  l = model->items;
   while (l) {
     EphyWebOverviewModelItem *item = (EphyWebOverviewModelItem *)l->data;
     GList *next = l->next;
@@ -205,7 +204,7 @@ ephy_web_overview_model_delete_url (EphyWebOverviewModel *model,
       changed = TRUE;
 
       ephy_web_overview_model_item_free (item);
-      model->priv->items = g_list_delete_link (model->priv->items, l);
+      model->items = g_list_delete_link (model->items, l);
     }
 
     l = next;
@@ -224,7 +223,7 @@ ephy_web_overview_model_delete_host (EphyWebOverviewModel *model,
 
   g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
-  l = model->priv->items;
+  l = model->items;
   while (l) {
     EphyWebOverviewModelItem *item = (EphyWebOverviewModelItem *)l->data;
     SoupURI *uri = soup_uri_new (item->url);
@@ -234,7 +233,7 @@ ephy_web_overview_model_delete_host (EphyWebOverviewModel *model,
       changed = TRUE;
 
       ephy_web_overview_model_item_free (item);
-      model->priv->items = g_list_delete_link (model->priv->items, l);
+      model->items = g_list_delete_link (model->items, l);
     }
 
     soup_uri_free (uri);
@@ -250,11 +249,11 @@ ephy_web_overview_model_clear (EphyWebOverviewModel *model)
 {
   g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
-  if (!model->priv->items)
+  if (!model->items)
     return;
 
-  g_list_free_full (model->priv->items, (GDestroyNotify)ephy_web_overview_model_item_free);
-  model->priv->items = NULL;
+  g_list_free_full (model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
+  model->items = NULL;
   g_signal_emit (model, signals[URLS_CHANGED], 0);
 }
 
