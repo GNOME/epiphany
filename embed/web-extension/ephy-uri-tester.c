@@ -36,10 +36,10 @@
 #define SIGNATURE_SIZE 8
 #define UPDATE_FREQUENCY 24 * 60 * 60 /* In seconds */
 
-#define EPHY_URI_TESTER_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_URI_TESTER, EphyUriTesterPrivate))
-
-struct _EphyUriTesterPrivate
+struct _EphyUriTester
 {
+  GObject parent_instance;
+
   GSList *filters;
   char *data_dir;
 
@@ -99,7 +99,7 @@ ephy_uri_tester_get_fileuri_for_url (EphyUriTester *tester,
 
   filename = g_compute_checksum_for_string (G_CHECKSUM_MD5, url, -1);
 
-  path = g_build_filename (tester->priv->data_dir, filename, NULL);
+  path = g_build_filename (tester->data_dir, filename, NULL);
   uri = g_filename_to_uri (path, NULL, NULL);
 
   g_free (filename);
@@ -206,7 +206,7 @@ ephy_uri_tester_load_patterns (EphyUriTester *tester)
   char *fileuri = NULL;
 
   /* Load patterns from the list of filters. */
-  for (filter = tester->priv->filters; filter; filter = g_slist_next(filter))
+  for (filter = tester->filters; filter; filter = g_slist_next(filter))
     {
       url = (char*)filter->data;
       fileuri = ephy_uri_tester_get_fileuri_for_url (tester, url);
@@ -226,7 +226,7 @@ ephy_uri_tester_load_filters (EphyUriTester *tester)
   GSList *list = NULL;
   char *filepath = NULL;
 
-  filepath = g_build_filename (tester->priv->data_dir, FILTERS_LIST_FILENAME, NULL);
+  filepath = g_build_filename (tester->data_dir, FILTERS_LIST_FILENAME, NULL);
 
   if (g_file_test (filepath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
     {
@@ -282,14 +282,14 @@ ephy_uri_tester_save_filters (EphyUriTester *tester)
   FILE *file = NULL;
   char *filepath = NULL;
 
-  filepath = g_build_filename (tester->priv->data_dir, FILTERS_LIST_FILENAME, NULL);
+  filepath = g_build_filename (tester->data_dir, FILTERS_LIST_FILENAME, NULL);
 
   if ((file = g_fopen (filepath, "w")))
     {
       GSList *item = NULL;
       char *filter = NULL;
 
-      for (item = tester->priv->filters; item; item = g_slist_next (item))
+      for (item = tester->filters; item; item = g_slist_next (item))
         {
           filter = g_strdup_printf ("%s;", (char*)item->data);
           fputs (filter, file);
@@ -313,8 +313,8 @@ ephy_uri_tester_check_rule (EphyUriTester  *tester,
   if (!g_regex_match_full (regex, req_uri, -1, 0, 0, NULL, NULL))
     return FALSE;
 
-  opts = g_hash_table_lookup (tester->priv->optslist, patt);
-  if (opts && g_regex_match (tester->priv->regex_third_party, opts, 0, NULL))
+  opts = g_hash_table_lookup (tester->optslist, patt);
+  if (opts && g_regex_match (tester->regex_third_party, opts, 0, NULL))
     {
       if (page_uri && g_regex_match_full (regex, page_uri, -1, 0, 0, NULL, NULL))
         return FALSE;
@@ -332,7 +332,7 @@ ephy_uri_tester_is_matched_by_pattern (EphyUriTester  *tester,
   GHashTableIter iter;
   gpointer patt, regex;
 
-  g_hash_table_iter_init (&iter, tester->priv->pattern);
+  g_hash_table_iter_init (&iter, tester->pattern);
   while (g_hash_table_iter_next (&iter, &patt, &regex))
     {
       if (ephy_uri_tester_check_rule(tester, regex, patt, req_uri, page_uri))
@@ -347,7 +347,6 @@ ephy_uri_tester_is_matched_by_key (EphyUriTester  *tester,
                                    const char *req_uri,
                                    const char *page_uri)
 {
-  EphyUriTesterPrivate *priv = NULL;
   char *uri;
   int len;
   int pos = 0;
@@ -355,8 +354,6 @@ ephy_uri_tester_is_matched_by_key (EphyUriTester  *tester,
   GString *guri;
   gboolean ret = FALSE;
   char sig[SIGNATURE_SIZE + 1];
-
-  priv = tester->priv;
 
   memset (&sig[0], 0, sizeof (sig));
   /* Signatures are made on pattern, so we need to convert url to a pattern as well */
@@ -368,7 +365,7 @@ ephy_uri_tester_is_matched_by_key (EphyUriTester  *tester,
     {
       GRegex *regex;
       strncpy (sig, uri + pos, SIGNATURE_SIZE);
-      regex = g_hash_table_lookup (priv->keys, sig);
+      regex = g_hash_table_lookup (tester->keys, sig);
 
       /* Dont check if regex is already blacklisted */
       if (!regex || g_list_find (regex_bl, regex))
@@ -389,30 +386,27 @@ ephy_uri_tester_is_matched (EphyUriTester  *tester,
                             const char *req_uri,
                             const char *page_uri)
 {
-  EphyUriTesterPrivate *priv = NULL;
   char *value;
 
-  priv = tester->priv;
-
   /* Check cached URLs first. */
-  if ((value = g_hash_table_lookup (priv->urlcache, req_uri)))
+  if ((value = g_hash_table_lookup (tester->urlcache, req_uri)))
     return (value[0] != '0') ? TRUE : FALSE;
 
   /* Look for a match either by key or by pattern. */
   if (ephy_uri_tester_is_matched_by_key (tester, opts, req_uri, page_uri))
     {
-      g_hash_table_insert (priv->urlcache, g_strdup (req_uri), g_strdup("1"));
+      g_hash_table_insert (tester->urlcache, g_strdup (req_uri), g_strdup("1"));
       return TRUE;
     }
 
   /* Matching by pattern is pretty expensive, so do it if needed only. */
   if (ephy_uri_tester_is_matched_by_pattern (tester, req_uri, page_uri))
     {
-      g_hash_table_insert (priv->urlcache, g_strdup (req_uri), g_strdup("1"));
+      g_hash_table_insert (tester->urlcache, g_strdup (req_uri), g_strdup("1"));
       return TRUE;
     }
 
-  g_hash_table_insert (priv->urlcache, g_strdup (req_uri), g_strdup("0"));
+  g_hash_table_insert (tester->urlcache, g_strdup (req_uri), g_strdup("0"));
   return FALSE;
 }
 
@@ -495,7 +489,7 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
       return;
     }
 
-  if (!g_regex_match (tester->priv->regex_pattern, patt, 0, NULL))
+  if (!g_regex_match (tester->regex_pattern, patt, 0, NULL))
     {
       int signature_count = 0;
       int pos = 0;
@@ -504,36 +498,36 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
       for (pos = len - SIGNATURE_SIZE; pos >= 0; pos--) {
         sig = g_strndup (patt + pos, SIGNATURE_SIZE);
         if (!strchr (sig, '*') &&
-            !g_hash_table_lookup (tester->priv->keys, sig))
+            !g_hash_table_lookup (tester->keys, sig))
           {
             LOG ("sig: %s %s", sig, patt);
-            g_hash_table_insert (tester->priv->keys, g_strdup (sig), g_regex_ref (regex));
-            g_hash_table_insert (tester->priv->optslist, g_strdup (sig), g_strdup (opts));
+            g_hash_table_insert (tester->keys, g_strdup (sig), g_regex_ref (regex));
+            g_hash_table_insert (tester->optslist, g_strdup (sig), g_strdup (opts));
             signature_count++;
           }
         else
           {
             if (sig[0] == '*' &&
-                !g_hash_table_lookup (tester->priv->pattern, patt))
+                !g_hash_table_lookup (tester->pattern, patt))
               {
                 LOG ("patt2: %s %s", sig, patt);
-                g_hash_table_insert (tester->priv->pattern, g_strdup (patt), g_regex_ref (regex));
-                g_hash_table_insert (tester->priv->optslist, g_strdup (patt), g_strdup (opts));
+                g_hash_table_insert (tester->pattern, g_strdup (patt), g_regex_ref (regex));
+                g_hash_table_insert (tester->optslist, g_strdup (patt), g_strdup (opts));
               }
           }
         g_free (sig);
       }
       g_regex_unref (regex);
 
-      if (signature_count > 1 && g_hash_table_lookup (tester->priv->pattern, patt))
-        g_hash_table_remove (tester->priv->pattern, patt);
+      if (signature_count > 1 && g_hash_table_lookup (tester->pattern, patt))
+        g_hash_table_remove (tester->pattern, patt);
     }
   else
     {
       LOG ("patt: %s%s", patt, "");
       /* Pattern is a regexp chars */
-      g_hash_table_insert (tester->priv->pattern, g_strdup (patt), regex);
-      g_hash_table_insert (tester->priv->optslist, g_strdup (patt), g_strdup (opts));
+      g_hash_table_insert (tester->pattern, g_strdup (patt), regex);
+      g_hash_table_insert (tester->optslist, g_strdup (patt), g_strdup (opts));
     }
 }
 
@@ -571,7 +565,7 @@ ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
         opts = type;
     }
 
-    if (g_regex_match (tester->priv->regex_subdocument, opts, 0, NULL))
+    if (g_regex_match (tester->regex_subdocument, opts, 0, NULL))
     {
         if (data[1] && data[2])
             g_free (patt);
@@ -604,12 +598,12 @@ ephy_uri_tester_frame_add (EphyUriTester *tester, char *line)
   (void)*line++;
   if (strchr (line, '\'')
       || (strchr (line, ':')
-          && !g_regex_match (tester->priv->regex_frame_add, line, 0, NULL)))
+          && !g_regex_match (tester->regex_frame_add, line, 0, NULL)))
     {
       return;
     }
-  g_string_append (tester->priv->blockcss, separator);
-  g_string_append (tester->priv->blockcss, line);
+  g_string_append (tester->blockcss, separator);
+  g_string_append (tester->blockcss, line);
 }
 
 static inline void
@@ -623,7 +617,7 @@ ephy_uri_tester_frame_add_private (EphyUriTester  *tester,
   if (!(data[1] && *data[1])
       ||  strchr (data[1], '\'')
       || (strchr (data[1], ':')
-          && !g_regex_match (tester->priv->regex_frame_add, data[1], 0, NULL)))
+          && !g_regex_match (tester->regex_frame_add, data[1], 0, NULL)))
     {
       g_strfreev (data);
       return;
@@ -637,14 +631,14 @@ ephy_uri_tester_frame_add_private (EphyUriTester  *tester,
       domains = g_strsplit (data[0], ",", -1);
       for (i = 0; domains[i]; i++)
         {
-          g_string_append_printf (tester->priv->blockcssprivate, ";sites['%s']+=',%s'",
+          g_string_append_printf (tester->blockcssprivate, ";sites['%s']+=',%s'",
                                   g_strstrip (domains[i]), data[1]);
         }
       g_strfreev (domains);
     }
   else
     {
-      g_string_append_printf (tester->priv->blockcssprivate, ";sites['%s']+=',%s'",
+      g_string_append_printf (tester->blockcssprivate, ";sites['%s']+=',%s'",
                               data[0], data[1]);
     }
   g_strfreev (data);
@@ -778,46 +772,41 @@ ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, const char *fileuri)
 static void
 ephy_uri_tester_init (EphyUriTester *tester)
 {
-  EphyUriTesterPrivate *priv = NULL;
-
   LOG ("EphyUriTester initializing %p", tester);
 
-  priv = EPHY_URI_TESTER_GET_PRIVATE (tester);
-  tester->priv = priv;
+  tester->filters = NULL;
+  tester->pattern = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                           (GDestroyNotify)g_free,
+                                           (GDestroyNotify)g_regex_unref);
+  tester->keys = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                        (GDestroyNotify)g_free,
+                                        (GDestroyNotify)g_regex_unref);
+  tester->optslist = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                            (GDestroyNotify)g_free,
+                                            (GDestroyNotify)g_free);
+  tester->urlcache = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                            (GDestroyNotify)g_free,
+                                            (GDestroyNotify)g_free);
 
-  priv->filters = NULL;
-  priv->pattern = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                         (GDestroyNotify)g_free,
-                                         (GDestroyNotify)g_regex_unref);
-  priv->keys = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                      (GDestroyNotify)g_free,
-                                      (GDestroyNotify)g_regex_unref);
-  priv->optslist = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                          (GDestroyNotify)g_free,
-                                          (GDestroyNotify)g_free);
-  priv->urlcache = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                          (GDestroyNotify)g_free,
-                                          (GDestroyNotify)g_free);
+  tester->blockcss = g_string_new ("z-non-exist");
+  tester->blockcssprivate = g_string_new ("");
 
-  priv->blockcss = g_string_new ("z-non-exist");
-  priv->blockcssprivate = g_string_new ("");
-
-  priv->regex_third_party = g_regex_new (",third-party",
-                                         G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
-                                         G_REGEX_MATCH_NOTEMPTY,
-                                         NULL);
-  priv->regex_pattern = g_regex_new ("^/.*[\\^\\$\\*].*/$",
-                                     G_REGEX_UNGREEDY | G_REGEX_OPTIMIZE,
-                                     G_REGEX_MATCH_NOTEMPTY,
-                                     NULL);
-  priv->regex_subdocument = g_regex_new ("subdocument",
-                                         G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
-                                         G_REGEX_MATCH_NOTEMPTY,
-                                         NULL);
-  priv->regex_frame_add = g_regex_new (".*\\[.*:.*\\].*",
-                                       G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+  tester->regex_third_party = g_regex_new (",third-party",
+                                           G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+                                           G_REGEX_MATCH_NOTEMPTY,
+                                           NULL);
+  tester->regex_pattern = g_regex_new ("^/.*[\\^\\$\\*].*/$",
+                                       G_REGEX_UNGREEDY | G_REGEX_OPTIMIZE,
                                        G_REGEX_MATCH_NOTEMPTY,
                                        NULL);
+  tester->regex_subdocument = g_regex_new ("subdocument",
+                                           G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+                                           G_REGEX_MATCH_NOTEMPTY,
+                                           NULL);
+  tester->regex_frame_add = g_regex_new (".*\\[.*:.*\\].*",
+                                         G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
+                                         G_REGEX_MATCH_NOTEMPTY,
+                                         NULL);
 }
 
 static void
@@ -845,7 +834,7 @@ ephy_uri_tester_set_property (GObject *object,
       ephy_uri_tester_set_filters (tester, (GSList*) g_value_get_pointer (value));
       break;
     case PROP_BASE_DATA_DIR:
-      tester->priv->data_dir = ephy_uri_tester_ensure_data_dir (g_value_get_string (value));
+      tester->data_dir = ephy_uri_tester_ensure_data_dir (g_value_get_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -856,25 +845,25 @@ ephy_uri_tester_set_property (GObject *object,
 static void
 ephy_uri_tester_finalize (GObject *object)
 {
-  EphyUriTesterPrivate *priv = EPHY_URI_TESTER_GET_PRIVATE (EPHY_URI_TESTER (object));
+  EphyUriTester *tester = EPHY_URI_TESTER (object);
 
   LOG ("EphyUriTester finalizing %p", object);
 
-  g_slist_free_full (priv->filters, g_free);
-  g_free (priv->data_dir);
+  g_slist_free_full (tester->filters, g_free);
+  g_free (tester->data_dir);
 
-  g_hash_table_destroy (priv->pattern);
-  g_hash_table_destroy (priv->keys);
-  g_hash_table_destroy (priv->optslist);
-  g_hash_table_destroy (priv->urlcache);
+  g_hash_table_destroy (tester->pattern);
+  g_hash_table_destroy (tester->keys);
+  g_hash_table_destroy (tester->optslist);
+  g_hash_table_destroy (tester->urlcache);
 
-  g_string_free (priv->blockcss, TRUE);
-  g_string_free (priv->blockcssprivate, TRUE);
+  g_string_free (tester->blockcss, TRUE);
+  g_string_free (tester->blockcssprivate, TRUE);
 
-  g_regex_unref (priv->regex_third_party);
-  g_regex_unref (priv->regex_pattern);
-  g_regex_unref (priv->regex_subdocument);
-  g_regex_unref (priv->regex_frame_add);
+  g_regex_unref (tester->regex_third_party);
+  g_regex_unref (tester->regex_pattern);
+  g_regex_unref (tester->regex_subdocument);
+  g_regex_unref (tester->regex_frame_add);
 
   G_OBJECT_CLASS (ephy_uri_tester_parent_class)->finalize (object);
 }
@@ -903,8 +892,6 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
                           "The base dir where to create the adblock data dir",
                           NULL,
                           G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-
-  g_type_class_add_private (object_class, sizeof (EphyUriTesterPrivate));
 }
 
 EphyUriTester *
@@ -926,10 +913,8 @@ ephy_uri_tester_test_uri (EphyUriTester *tester,
 void
 ephy_uri_tester_set_filters (EphyUriTester *tester, GSList *filters)
 {
-  EphyUriTesterPrivate *priv = tester->priv;
+  if (tester->filters)
+    g_slist_free_full (tester->filters, g_free);
 
-  if (priv->filters)
-    g_slist_free_full (priv->filters, g_free);
-
-  priv->filters = filters;
+  tester->filters = filters;
 }

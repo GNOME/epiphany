@@ -24,31 +24,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_URI_TESTER         (ephy_uri_tester_get_type ())
-#define EPHY_URI_TESTER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_URI_TESTER, EphyUriTester))
-#define EPHY_URI_TESTER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_URI_TESTER, EphyUriTesterClass))
-#define EPHY_IS_URI_TESTER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_URI_TESTER))
-#define EPHY_IS_URI_TESTER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_URI_TESTER))
-#define EPHY_URI_TESTER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_URI_TESTER, EphyUriTesterClass))
+#define EPHY_TYPE_URI_TESTER (ephy_uri_tester_get_type ())
 
-typedef struct _EphyUriTester        EphyUriTester;
-typedef struct _EphyUriTesterClass   EphyUriTesterClass;
-typedef struct _EphyUriTesterPrivate EphyUriTesterPrivate;
-
-struct _EphyUriTester
-{
-  GObject parent_instance;
-
-  /*< private >*/
-  EphyUriTesterPrivate *priv;
-};
-
-struct _EphyUriTesterClass
-{
-  GObjectClass parent_class;
-};
-
-GType          ephy_uri_tester_get_type    (void);
+G_DECLARE_FINAL_TYPE (EphyUriTester, ephy_uri_tester, EPHY, URI_TESTER, GObject)
 
 EphyUriTester *ephy_uri_tester_new         (const char *base_data_dir);
 
