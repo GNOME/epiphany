@@ -62,7 +62,10 @@ enum
   PROP_0,
   PROP_FILTERS,
   PROP_BASE_DATA_DIR,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyUriTester, ephy_uri_tester, G_TYPE_OBJECT)
 
@@ -877,21 +880,20 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
   object_class->constructed = ephy_uri_tester_constructed;
   object_class->finalize = ephy_uri_tester_finalize;
 
-  g_object_class_install_property
-    (object_class,
-     PROP_FILTERS,
-     g_param_spec_pointer ("filters",
-                           "filters",
-                           "filters",
-                           G_PARAM_WRITABLE));
-  g_object_class_install_property
-    (object_class,
-     PROP_BASE_DATA_DIR,
-     g_param_spec_string ("base-data-dir",
-                          "Base data dir",
-                          "The base dir where to create the adblock data dir",
-                          NULL,
-                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+  obj_properties[PROP_FILTERS] =
+    g_param_spec_pointer ("filters",
+                          "filters",
+                          "filters",
+                          G_PARAM_WRITABLE);
+
+  obj_properties[PROP_BASE_DATA_DIR] =
+    g_param_spec_string ("base-data-dir",
+                         "Base data dir",
+                         "The base dir where to create the adblock data dir",
+                         NULL,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 EphyUriTester *
