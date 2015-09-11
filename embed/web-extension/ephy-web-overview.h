@@ -27,30 +27,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_WEB_OVERVIEW            (ephy_web_overview_get_type())
-#define EPHY_WEB_OVERVIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_WEB_OVERVIEW, EphyWebOverview))
-#define EPHY_IS_WEB_OVERVIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_WEB_OVERVIEW))
-#define EPHY_WEB_OVERVIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_WEB_OVERVIEW, EphyWebOverviewClass))
-#define EPHY_IS_WEB_OVERVIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_WEB_OVERVIEW))
-#define EPHY_WEB_OVERVIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_WEB_OVERVIEW, EphyWebOverviewClass))
+#define EPHY_TYPE_WEB_OVERVIEW (ephy_web_overview_get_type())
 
-typedef struct _EphyWebOverview        EphyWebOverview;
-typedef struct _EphyWebOverviewClass   EphyWebOverviewClass;
-typedef struct _EphyWebOverviewPrivate EphyWebOverviewPrivate;
-
-struct _EphyWebOverview
-{
-  GObject parent;
-
-  EphyWebOverviewPrivate *priv;
-};
-
-struct _EphyWebOverviewClass
-{
-  GObjectClass parent_class;
-};
-
-GType            ephy_web_overview_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (EphyWebOverview, ephy_web_overview, EPHY, WEB_OVERVIEW, GObject)
 
 EphyWebOverview *ephy_web_overview_new      (WebKitWebPage        *web_page,
                                              EphyWebOverviewModel *model);

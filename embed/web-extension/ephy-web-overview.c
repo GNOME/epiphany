@@ -27,8 +27,10 @@
 #include <webkitdom/WebKitDOMElementUnstable.h>
 #include <webkitdom/WebKitDOMDOMTokenList.h>
 
-struct _EphyWebOverviewPrivate
+struct _EphyWebOverview
 {
+  GObject parent_instance;
+
   WebKitWebPage *web_page;
   EphyWebOverviewModel *model;
   GList *items;
@@ -126,7 +128,7 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
 
   urls = ephy_web_overview_model_get_urls (model);
 
-  items = overview->priv->items;
+  items = overview->items;
   for (l = urls; l; l = g_list_next (l)) {
     EphyWebOverviewModelItem *url = (EphyWebOverviewModelItem *)l->data;
     const char *thumbnail_path;
@@ -166,7 +168,7 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       item = g_slice_new0 (OverviewItem);
       item->url = g_strdup (url->url);
 
-      document = webkit_web_page_get_dom_document (overview->priv->web_page);
+      document = webkit_web_page_get_dom_document (overview->web_page);
       item_list = webkit_dom_document_get_element_by_id (document, "overview-item-list");
 
       new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "LI", NULL));
@@ -199,7 +201,7 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       webkit_dom_node_set_text_content (new_node, url->title, NULL);
       webkit_dom_node_append_child (WEBKIT_DOM_NODE (anchor), new_node, NULL);
 
-      overview->priv->items = g_list_append (overview->priv->items, item);
+      overview->items = g_list_append (overview->items, item);
     }
 
     items = g_list_next (items);
@@ -215,7 +217,7 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
     webkit_dom_node_remove_child (webkit_dom_node_get_parent_node (anchor), anchor, NULL);
 
     overview_item_free (item);
-    overview->priv->items = g_list_delete_link (overview->priv->items, items);
+    overview->items = g_list_delete_link (overview->items, items);
 
     items = next;
   }
@@ -229,7 +231,7 @@ ephy_web_overview_model_thumbnail_changed (EphyWebOverviewModel *model,
 {
   GList *l;
 
-  for (l = overview->priv->items; l; l = g_list_next (l)) {
+  for (l = overview->items; l; l = g_list_next (l)) {
     OverviewItem *item = (OverviewItem *)l->data;
 
     if (g_strcmp0 (item->url, url) == 0)
@@ -245,7 +247,7 @@ ephy_web_overview_model_title_changed (EphyWebOverviewModel *model,
 {
   GList *l;
 
-  for (l = overview->priv->items; l; l = g_list_next (l)) {
+  for (l = overview->items; l; l = g_list_next (l)) {
     OverviewItem *item = (OverviewItem *)l->data;
 
     if (g_strcmp0 (item->url, url) != 0)
@@ -281,16 +283,16 @@ ephy_web_overview_update_thumbnail_in_model_from_element (EphyWebOverview *overv
     p = g_strrstr (thumbnail_path, ")");
     if (p) {
       thumbnail_path = g_strndup (thumbnail_path, strlen (thumbnail_path) - strlen (p));
-      g_signal_handlers_block_by_func (overview->priv->model, G_CALLBACK (ephy_web_overview_model_thumbnail_changed), overview);
-      ephy_web_overview_model_set_url_thumbnail (overview->priv->model, url, thumbnail_path);
-      g_signal_handlers_unblock_by_func (overview->priv->model, G_CALLBACK (ephy_web_overview_model_thumbnail_changed), overview);
+      g_signal_handlers_block_by_func (overview->model, G_CALLBACK (ephy_web_overview_model_thumbnail_changed), overview);
+      ephy_web_overview_model_set_url_thumbnail (overview->model, url, thumbnail_path);
+      g_signal_handlers_unblock_by_func (overview->model, G_CALLBACK (ephy_web_overview_model_thumbnail_changed), overview);
       g_free (thumbnail_path);
     }
   } else {
     const char *path;
 
     /* Check whether the model was updated while the overview was loading */
-    path = ephy_web_overview_model_get_url_thumbnail (overview->priv->model, url);
+    path = ephy_web_overview_model_get_url_thumbnail (overview->model, url);
     if (path)
       update_thumbnail_element_style (thumbnail, path);
   }
@@ -321,12 +323,12 @@ ephy_web_overview_document_loaded (WebKitWebPage *web_page,
        */
       ephy_web_overview_update_thumbnail_in_model_from_element (overview, item->url, item->thumbnail);
 
-      overview->priv->items = g_list_prepend (overview->priv->items, item);
+      overview->items = g_list_prepend (overview->items, item);
     }
     g_free (class);
   }
   g_object_unref (nodes);
-  overview->priv->items = g_list_reverse (overview->priv->items);
+  overview->items = g_list_reverse (overview->items);
 }
 
 static void
@@ -340,10 +342,10 @@ ephy_web_overview_set_property (GObject *object,
   switch (prop_id)
   {
   case PROP_WEB_PAGE:
-    overview->priv->web_page = g_value_get_object (value);
+    overview->web_page = g_value_get_object (value);
     break;
   case PROP_MODEL:
-    overview->priv->model = g_value_get_object (value);
+    overview->model = g_value_get_object (value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -356,9 +358,9 @@ ephy_web_overview_dispose (GObject *object)
 {
   EphyWebOverview *overview = EPHY_WEB_OVERVIEW (object);
 
-  if (overview->priv->items) {
-    g_list_free_full (overview->priv->items, (GDestroyNotify)overview_item_free);
-    overview->priv->items = NULL;
+  if (overview->items) {
+    g_list_free_full (overview->items, (GDestroyNotify)overview_item_free);
+    overview->items = NULL;
   }
 
   G_OBJECT_CLASS (ephy_web_overview_parent_class)->dispose (object);
@@ -371,17 +373,17 @@ ephy_web_overview_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_web_overview_parent_class)->constructed (object);
 
-  g_signal_connect_object (overview->priv->web_page, "document-loaded",
+  g_signal_connect_object (overview->web_page, "document-loaded",
                            G_CALLBACK (ephy_web_overview_document_loaded),
                            overview, 0);
 
-  g_signal_connect_object (overview->priv->model, "urls-changed",
+  g_signal_connect_object (overview->model, "urls-changed",
                            G_CALLBACK (ephy_web_overview_model_urls_changed),
                            overview, 0);
-  g_signal_connect_object (overview->priv->model, "thumbnail-changed",
+  g_signal_connect_object (overview->model, "thumbnail-changed",
                            G_CALLBACK (ephy_web_overview_model_thumbnail_changed),
                            overview, 0);
-  g_signal_connect_object (overview->priv->model, "title-changed",
+  g_signal_connect_object (overview->model, "title-changed",
                            G_CALLBACK (ephy_web_overview_model_title_changed),
                            overview, 0);
 }
@@ -413,14 +415,11 @@ ephy_web_overview_class_init (EphyWebOverviewClass *klass)
                                                         G_PARAM_WRITABLE |
                                                         G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_type_class_add_private (object_class, sizeof(EphyWebOverviewPrivate));
 }
 
 static void
 ephy_web_overview_init (EphyWebOverview *overview)
 {
-  overview->priv = G_TYPE_INSTANCE_GET_PRIVATE (overview, EPHY_TYPE_WEB_OVERVIEW, EphyWebOverviewPrivate);
 }
 
 EphyWebOverview *
