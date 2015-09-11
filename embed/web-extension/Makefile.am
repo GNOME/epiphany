@@ -9,6 +9,8 @@ webextensiondir = \
 libephywebextension_la_SOURCES = \
 	ephy-embed-form-auth.c \
 	ephy-embed-form-auth.h \
+	ephy-uri-tester.c \
+	ephy-uri-tester.h \
 	ephy-web-extension.c \
 	ephy-web-extension.h \
 	ephy-web-extension-main.c \
@@ -16,9 +18,7 @@ libephywebextension_la_SOURCES = \
 	ephy-web-overview.h \
 	ephy-web-overview.c \
 	ephy-web-overview-model.h \
-	ephy-web-overview-model.c \
-	uri-tester.c \
-	uri-tester.h
+	ephy-web-overview-model.c
 
 libephywebextension_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib \

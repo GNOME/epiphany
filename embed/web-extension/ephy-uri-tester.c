@@ -23,7 +23,7 @@
  */
 
 #include "config.h"
-#include "uri-tester.h"
+#include "ephy-uri-tester.h"
 
 #include "ephy-debug.h"
 
@@ -36,9 +36,9 @@
 #define SIGNATURE_SIZE 8
 #define UPDATE_FREQUENCY 24 * 60 * 60 /* In seconds */
 
-#define URI_TESTER_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), TYPE_URI_TESTER, UriTesterPrivate))
+#define EPHY_URI_TESTER_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_URI_TESTER, EphyUriTesterPrivate))
 
-struct _UriTesterPrivate
+struct _EphyUriTesterPrivate
 {
   GSList *filters;
   char *data_dir;
@@ -64,18 +64,18 @@ enum
   PROP_BASE_DATA_DIR,
 };
 
-G_DEFINE_TYPE (UriTester, uri_tester, G_TYPE_OBJECT)
+G_DEFINE_TYPE (EphyUriTester, ephy_uri_tester, G_TYPE_OBJECT)
 
 /* Private functions. */
 
 static GString *
-uri_tester_fixup_regexp (const char *prefix, char *src);
+ephy_uri_tester_fixup_regexp (const char *prefix, char *src);
 
 static void
-uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri);
+ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, const char *fileuri);
 
 static char *
-uri_tester_ensure_data_dir (const char *base_data_dir)
+ephy_uri_tester_ensure_data_dir (const char *base_data_dir)
 {
   char *folder;
 
@@ -87,8 +87,8 @@ uri_tester_ensure_data_dir (const char *base_data_dir)
 }
 
 static char*
-uri_tester_get_fileuri_for_url (UriTester *tester,
-                                const char *url)
+ephy_uri_tester_get_fileuri_for_url (EphyUriTester *tester,
+                                     const char *url)
 {
   char *filename = NULL;
   char *path = NULL;
@@ -109,14 +109,14 @@ uri_tester_get_fileuri_for_url (UriTester *tester,
 }
 
 typedef struct {
-  UriTester *tester;
+  EphyUriTester *tester;
   char *dest_uri;
 } RetrieveFilterAsyncData;
 
 static void
-uri_tester_retrieve_filter_finished (GFile *src,
-                                     GAsyncResult *result,
-                                     RetrieveFilterAsyncData *data)
+ephy_uri_tester_retrieve_filter_finished (GFile *src,
+                                          GAsyncResult *result,
+                                          RetrieveFilterAsyncData *data)
 {
   GError *error = NULL;
 
@@ -124,7 +124,7 @@ uri_tester_retrieve_filter_finished (GFile *src,
     LOG ("Error retrieving filter: %s\n", error->message);
     g_error_free (error);
   } else
-    uri_tester_parse_file_at_uri (data->tester, data->dest_uri);
+    ephy_uri_tester_parse_file_at_uri (data->tester, data->dest_uri);
 
   g_object_unref (data->tester);
   g_free (data->dest_uri);
@@ -132,13 +132,15 @@ uri_tester_retrieve_filter_finished (GFile *src,
 }
 
 static void
-uri_tester_retrieve_filter (UriTester *tester, const char *url, const char *fileuri)
+ephy_uri_tester_retrieve_filter (EphyUriTester *tester,
+                                 const char *url,
+                                 const char *fileuri)
 {
   GFile *src;
   GFile *dest;
   RetrieveFilterAsyncData *data;
 
-  g_return_if_fail (IS_URI_TESTER (tester));
+  g_return_if_fail (EPHY_IS_URI_TESTER (tester));
   g_return_if_fail (url != NULL);
   g_return_if_fail (fileuri != NULL);
 
@@ -153,7 +155,7 @@ uri_tester_retrieve_filter (UriTester *tester, const char *url, const char *file
                      G_FILE_COPY_OVERWRITE,
                      G_PRIORITY_DEFAULT,
                      NULL, NULL, NULL,
-                     (GAsyncReadyCallback)uri_tester_retrieve_filter_finished,
+                     (GAsyncReadyCallback)ephy_uri_tester_retrieve_filter_finished,
                      data);
 
   g_object_unref (src);
@@ -161,7 +163,7 @@ uri_tester_retrieve_filter (UriTester *tester, const char *url, const char *file
 }
 
 static gboolean
-uri_tester_filter_is_valid (const char *fileuri)
+ephy_uri_tester_filter_is_valid (const char *fileuri)
 {
   GFile *file = NULL;
   GFileInfo *file_info = NULL;
@@ -197,7 +199,7 @@ uri_tester_filter_is_valid (const char *fileuri)
 }
 
 static void
-uri_tester_load_patterns (UriTester *tester)
+ephy_uri_tester_load_patterns (EphyUriTester *tester)
 {
   GSList *filter = NULL;
   char *url = NULL;
@@ -207,19 +209,19 @@ uri_tester_load_patterns (UriTester *tester)
   for (filter = tester->priv->filters; filter; filter = g_slist_next(filter))
     {
       url = (char*)filter->data;
-      fileuri = uri_tester_get_fileuri_for_url (tester, url);
+      fileuri = ephy_uri_tester_get_fileuri_for_url (tester, url);
 
-      if (!uri_tester_filter_is_valid (fileuri))
-        uri_tester_retrieve_filter (tester, url, fileuri);
+      if (!ephy_uri_tester_filter_is_valid (fileuri))
+        ephy_uri_tester_retrieve_filter (tester, url, fileuri);
       else
-        uri_tester_parse_file_at_uri (tester, fileuri);
+        ephy_uri_tester_parse_file_at_uri (tester, fileuri);
 
       g_free (fileuri);
     }
 }
 
 static void
-uri_tester_load_filters (UriTester *tester)
+ephy_uri_tester_load_filters (EphyUriTester *tester)
 {
   GSList *list = NULL;
   char *filepath = NULL;
@@ -268,14 +270,14 @@ uri_tester_load_filters (UriTester *tester)
 
   g_free (filepath);
 
-  uri_tester_set_filters (tester, g_slist_reverse(list));
+  ephy_uri_tester_set_filters (tester, g_slist_reverse(list));
 }
 
 #if 0
 TODO: Use this to create a filters dialog, or something.
 
 static void
-uri_tester_save_filters (UriTester *tester)
+ephy_uri_tester_save_filters (EphyUriTester *tester)
 {
   FILE *file = NULL;
   char *filepath = NULL;
@@ -300,11 +302,11 @@ uri_tester_save_filters (UriTester *tester)
 #endif
 
 static inline int
-uri_tester_check_rule (UriTester  *tester,
-                       GRegex     *regex,
-                       const char *patt,
-                       const char *req_uri,
-                       const char *page_uri)
+ephy_uri_tester_check_rule (EphyUriTester  *tester,
+                            GRegex     *regex,
+                            const char *patt,
+                            const char *req_uri,
+                            const char *page_uri)
 {
   char *opts;
 
@@ -323,7 +325,7 @@ uri_tester_check_rule (UriTester  *tester,
 }
 
 static inline gboolean
-uri_tester_is_matched_by_pattern (UriTester  *tester,
+ephy_uri_tester_is_matched_by_pattern (EphyUriTester  *tester,
                                   const char *req_uri,
                                   const char *page_uri)
 {
@@ -333,19 +335,19 @@ uri_tester_is_matched_by_pattern (UriTester  *tester,
   g_hash_table_iter_init (&iter, tester->priv->pattern);
   while (g_hash_table_iter_next (&iter, &patt, &regex))
     {
-      if (uri_tester_check_rule(tester, regex, patt, req_uri, page_uri))
+      if (ephy_uri_tester_check_rule(tester, regex, patt, req_uri, page_uri))
         return TRUE;
     }
   return FALSE;
 }
 
 static inline gboolean
-uri_tester_is_matched_by_key (UriTester  *tester,
-                              const char *opts,
-                              const char *req_uri,
-                              const char *page_uri)
+ephy_uri_tester_is_matched_by_key (EphyUriTester  *tester,
+                                   const char *opts,
+                                   const char *req_uri,
+                                   const char *page_uri)
 {
-  UriTesterPrivate *priv = NULL;
+  EphyUriTesterPrivate *priv = NULL;
   char *uri;
   int len;
   int pos = 0;
@@ -358,7 +360,7 @@ uri_tester_is_matched_by_key (UriTester  *tester,
 
   memset (&sig[0], 0, sizeof (sig));
   /* Signatures are made on pattern, so we need to convert url to a pattern as well */
-  guri = uri_tester_fixup_regexp ("", (char*)req_uri);
+  guri = ephy_uri_tester_fixup_regexp ("", (char*)req_uri);
   uri = guri->str;
   len = guri->len;
 
@@ -371,7 +373,7 @@ uri_tester_is_matched_by_key (UriTester  *tester,
       /* Dont check if regex is already blacklisted */
       if (!regex || g_list_find (regex_bl, regex))
         continue;
-      ret = uri_tester_check_rule (tester, regex, sig, req_uri, page_uri);
+      ret = ephy_uri_tester_check_rule (tester, regex, sig, req_uri, page_uri);
       if (ret)
         break;
       regex_bl = g_list_prepend (regex_bl, regex);
@@ -382,12 +384,12 @@ uri_tester_is_matched_by_key (UriTester  *tester,
 }
 
 static gboolean
-uri_tester_is_matched (UriTester  *tester,
-                       const char *opts,
-                       const char *req_uri,
-                       const char *page_uri)
+ephy_uri_tester_is_matched (EphyUriTester  *tester,
+                            const char *opts,
+                            const char *req_uri,
+                            const char *page_uri)
 {
-  UriTesterPrivate *priv = NULL;
+  EphyUriTesterPrivate *priv = NULL;
   char *value;
 
   priv = tester->priv;
@@ -397,14 +399,14 @@ uri_tester_is_matched (UriTester  *tester,
     return (value[0] != '0') ? TRUE : FALSE;
 
   /* Look for a match either by key or by pattern. */
-  if (uri_tester_is_matched_by_key (tester, opts, req_uri, page_uri))
+  if (ephy_uri_tester_is_matched_by_key (tester, opts, req_uri, page_uri))
     {
       g_hash_table_insert (priv->urlcache, g_strdup (req_uri), g_strdup("1"));
       return TRUE;
     }
 
   /* Matching by pattern is pretty expensive, so do it if needed only. */
-  if (uri_tester_is_matched_by_pattern (tester, req_uri, page_uri))
+  if (ephy_uri_tester_is_matched_by_pattern (tester, req_uri, page_uri))
     {
       g_hash_table_insert (priv->urlcache, g_strdup (req_uri), g_strdup("1"));
       return TRUE;
@@ -415,7 +417,7 @@ uri_tester_is_matched (UriTester  *tester,
 }
 
 static GString *
-uri_tester_fixup_regexp (const char *prefix, char *src)
+ephy_uri_tester_fixup_regexp (const char *prefix, char *src)
 {
   GString *str;
   int len = 0;
@@ -468,9 +470,9 @@ uri_tester_fixup_regexp (const char *prefix, char *src)
 }
 
 static void
-uri_tester_compile_regexp (UriTester *tester,
-                           GString   *gpatt,
-                           char      *opts)
+ephy_uri_tester_compile_regexp (EphyUriTester *tester,
+                                GString   *gpatt,
+                                char      *opts)
 {
   GRegex *regex;
   GError *error = NULL;
@@ -536,10 +538,10 @@ uri_tester_compile_regexp (UriTester *tester,
 }
 
 static void
-uri_tester_add_url_pattern (UriTester *tester,
-                            char      *prefix,
-                            char      *type,
-                            char      *line)
+ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
+                                 char      *prefix,
+                                 char      *type,
+                                 char      *line)
 {
     char **data;
     char *patt;
@@ -579,10 +581,10 @@ uri_tester_add_url_pattern (UriTester *tester,
         return;
     }
 
-    format_patt = uri_tester_fixup_regexp (prefix, patt);
+    format_patt = ephy_uri_tester_fixup_regexp (prefix, patt);
 
     LOG ("got: %s opts %s", format_patt->str, opts);
-    uri_tester_compile_regexp (tester, format_patt, opts);
+    ephy_uri_tester_compile_regexp (tester, format_patt, opts);
 
     if (data[1] && data[2])
         g_free (patt);
@@ -594,7 +596,7 @@ uri_tester_add_url_pattern (UriTester *tester,
 }
 
 static inline void
-uri_tester_frame_add (UriTester *tester, char *line)
+ephy_uri_tester_frame_add (EphyUriTester *tester, char *line)
 {
   const char *separator = " , ";
 
@@ -611,9 +613,9 @@ uri_tester_frame_add (UriTester *tester, char *line)
 }
 
 static inline void
-uri_tester_frame_add_private (UriTester  *tester,
-                              const char *line,
-                              const char *sep)
+ephy_uri_tester_frame_add_private (EphyUriTester  *tester,
+                                   const char *line,
+                                   const char *sep)
 {
   char **data;
   data = g_strsplit (line, sep, 2);
@@ -649,7 +651,7 @@ uri_tester_frame_add_private (UriTester  *tester,
 }
 
 static void
-uri_tester_parse_line (UriTester *tester, char *line)
+ephy_uri_tester_parse_line (EphyUriTester *tester, char *line)
 {
   if (!line)
     return;
@@ -675,7 +677,7 @@ uri_tester_parse_line (UriTester *tester, char *line)
   /* Got CSS block hider */
   if (line[0] == '#' && line[1] == '#' )
     {
-      uri_tester_frame_add (tester, line);
+      ephy_uri_tester_frame_add (tester, line);
       return;
     }
   /* Got CSS block hider. Workaround */
@@ -685,14 +687,14 @@ uri_tester_parse_line (UriTester *tester, char *line)
   /* Got per domain CSS hider rule */
   if (strstr (line, "##"))
     {
-      uri_tester_frame_add_private (tester, line, "##");
+      ephy_uri_tester_frame_add_private (tester, line, "##");
       return;
     }
 
   /* Got per domain CSS hider rule. Workaround */
   if (strchr (line, '#'))
     {
-      uri_tester_frame_add_private (tester, line, "#");
+      ephy_uri_tester_frame_add_private (tester, line, "#");
       return;
     }
   /* Got URL blocker rule */
@@ -700,20 +702,20 @@ uri_tester_parse_line (UriTester *tester, char *line)
     {
       (void)*line++;
       (void)*line++;
-      uri_tester_add_url_pattern (tester, "", "fulluri", line);
+      ephy_uri_tester_add_url_pattern (tester, "", "fulluri", line);
       return;
     }
   if (line[0] == '|')
     {
       (void)*line++;
-      uri_tester_add_url_pattern (tester, "^", "fulluri", line);
+      ephy_uri_tester_add_url_pattern (tester, "^", "fulluri", line);
       return;
     }
-  uri_tester_add_url_pattern (tester, "", "uri", line);
+  ephy_uri_tester_add_url_pattern (tester, "", "uri", line);
 }
 
 static void
-file_parse_cb (GDataInputStream *stream, GAsyncResult *result, UriTester *tester)
+file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *tester)
 {
   char *line;
   GError *error = NULL;
@@ -728,7 +730,7 @@ file_parse_cb (GDataInputStream *stream, GAsyncResult *result, UriTester *tester
     return;
   }
 
-  uri_tester_parse_line (tester, line);
+  ephy_uri_tester_parse_line (tester, line);
   g_free (line);
 
   g_data_input_stream_read_line_async (stream, G_PRIORITY_DEFAULT_IDLE, NULL,
@@ -736,7 +738,7 @@ file_parse_cb (GDataInputStream *stream, GAsyncResult *result, UriTester *tester
 }
 
 static void
-file_read_cb (GFile *file, GAsyncResult *result, UriTester *tester)
+file_read_cb (GFile *file, GAsyncResult *result, EphyUriTester *tester)
 {
   GFileInputStream *stream;
   GDataInputStream *data_stream;
@@ -763,7 +765,7 @@ file_read_cb (GFile *file, GAsyncResult *result, UriTester *tester)
 }
 
 static void
-uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri)
+ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, const char *fileuri)
 {
   GFile *file;
   GFileInputStream *stream;
@@ -774,13 +776,13 @@ uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri)
 }
 
 static void
-uri_tester_init (UriTester *tester)
+ephy_uri_tester_init (EphyUriTester *tester)
 {
-  UriTesterPrivate *priv = NULL;
+  EphyUriTesterPrivate *priv = NULL;
 
-  LOG ("UriTester initializing %p", tester);
+  LOG ("EphyUriTester initializing %p", tester);
 
-  priv = URI_TESTER_GET_PRIVATE (tester);
+  priv = EPHY_URI_TESTER_GET_PRIVATE (tester);
   tester->priv = priv;
 
   priv->filters = NULL;
@@ -819,31 +821,31 @@ uri_tester_init (UriTester *tester)
 }
 
 static void
-uri_tester_constructed (GObject *object)
+ephy_uri_tester_constructed (GObject *object)
 {
-  UriTester *tester = URI_TESTER (object);
+  EphyUriTester *tester = EPHY_URI_TESTER (object);
 
-  G_OBJECT_CLASS (uri_tester_parent_class)->constructed (object);
+  G_OBJECT_CLASS (ephy_uri_tester_parent_class)->constructed (object);
 
-  uri_tester_load_filters (tester);
-  uri_tester_load_patterns (tester);
+  ephy_uri_tester_load_filters (tester);
+  ephy_uri_tester_load_patterns (tester);
 }
 
 static void
-uri_tester_set_property (GObject *object,
-                         guint prop_id,
-                         const GValue *value,
-                         GParamSpec *pspec)
+ephy_uri_tester_set_property (GObject *object,
+                              guint prop_id,
+                              const GValue *value,
+                              GParamSpec *pspec)
 {
-  UriTester *tester = URI_TESTER (object);
+  EphyUriTester *tester = EPHY_URI_TESTER (object);
 
   switch (prop_id)
     {
     case PROP_FILTERS:
-      uri_tester_set_filters (tester, (GSList*) g_value_get_pointer (value));
+      ephy_uri_tester_set_filters (tester, (GSList*) g_value_get_pointer (value));
       break;
     case PROP_BASE_DATA_DIR:
-      tester->priv->data_dir = uri_tester_ensure_data_dir (g_value_get_string (value));
+      tester->priv->data_dir = ephy_uri_tester_ensure_data_dir (g_value_get_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -852,11 +854,11 @@ uri_tester_set_property (GObject *object,
 }
 
 static void
-uri_tester_finalize (GObject *object)
+ephy_uri_tester_finalize (GObject *object)
 {
-  UriTesterPrivate *priv = URI_TESTER_GET_PRIVATE (URI_TESTER (object));
+  EphyUriTesterPrivate *priv = EPHY_URI_TESTER_GET_PRIVATE (EPHY_URI_TESTER (object));
 
-  LOG ("UriTester finalizing %p", object);
+  LOG ("EphyUriTester finalizing %p", object);
 
   g_slist_free_full (priv->filters, g_free);
   g_free (priv->data_dir);
@@ -874,17 +876,17 @@ uri_tester_finalize (GObject *object)
   g_regex_unref (priv->regex_subdocument);
   g_regex_unref (priv->regex_frame_add);
 
-  G_OBJECT_CLASS (uri_tester_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ephy_uri_tester_parent_class)->finalize (object);
 }
 
 static void
-uri_tester_class_init (UriTesterClass *klass)
+ephy_uri_tester_class_init (EphyUriTesterClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->set_property = uri_tester_set_property;
-  object_class->constructed = uri_tester_constructed;
-  object_class->finalize = uri_tester_finalize;
+  object_class->set_property = ephy_uri_tester_set_property;
+  object_class->constructed = ephy_uri_tester_constructed;
+  object_class->finalize = ephy_uri_tester_finalize;
 
   g_object_class_install_property
     (object_class,
@@ -902,29 +904,29 @@ uri_tester_class_init (UriTesterClass *klass)
                           NULL,
                           G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
-  g_type_class_add_private (object_class, sizeof (UriTesterPrivate));
+  g_type_class_add_private (object_class, sizeof (EphyUriTesterPrivate));
 }
 
-UriTester *
-uri_tester_new (const char *base_data_dir)
+EphyUriTester *
+ephy_uri_tester_new (const char *base_data_dir)
 {
   g_return_val_if_fail (base_data_dir != NULL, NULL);
 
-  return g_object_new (TYPE_URI_TESTER, "base-data-dir", base_data_dir, NULL);
+  return g_object_new (EPHY_TYPE_URI_TESTER, "base-data-dir", base_data_dir, NULL);
 }
 
 gboolean
-uri_tester_test_uri (UriTester *tester,
-                     const char *req_uri,
-                     const char *page_uri)
+ephy_uri_tester_test_uri (EphyUriTester *tester,
+                          const char *req_uri,
+                          const char *page_uri)
 {
-  return uri_tester_is_matched (tester, NULL, req_uri, page_uri);
+  return ephy_uri_tester_is_matched (tester, NULL, req_uri, page_uri);
 }
 
 void
-uri_tester_set_filters (UriTester *tester, GSList *filters)
+ephy_uri_tester_set_filters (EphyUriTester *tester, GSList *filters)
 {
-  UriTesterPrivate *priv = tester->priv;
+  EphyUriTesterPrivate *priv = tester->priv;
 
   if (priv->filters)
     g_slist_free_full (priv->filters, g_free);
