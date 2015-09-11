@@ -73,16 +73,14 @@ ephy_web_overview_model_class_init (EphyWebOverviewModelClass *klass)
     g_signal_new ("urls-changed",
                   EPHY_TYPE_WEB_OVERVIEW_MODEL,
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   signals[THUMBNAIL_CHANGED] =
     g_signal_new ("thumbnail-changed",
                   EPHY_TYPE_WEB_OVERVIEW_MODEL,
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE, 2,
                   G_TYPE_STRING,
                   G_TYPE_STRING);
@@ -91,8 +89,7 @@ ephy_web_overview_model_class_init (EphyWebOverviewModelClass *klass)
     g_signal_new ("title-changed",
                   EPHY_TYPE_WEB_OVERVIEW_MODEL,
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE, 2,
                   G_TYPE_STRING,
                   G_TYPE_STRING);
