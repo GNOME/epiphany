@@ -41,7 +41,10 @@ enum
   PROP_0,
   PROP_WEB_PAGE,
   PROP_MODEL,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyWebOverview, ephy_web_overview, G_TYPE_OBJECT)
 
@@ -397,24 +400,21 @@ ephy_web_overview_class_init (EphyWebOverviewClass *klass)
   object_class->constructed = ephy_web_overview_constructed;
   object_class->set_property = ephy_web_overview_set_property;
 
-  g_object_class_install_property (object_class,
-                                   PROP_WEB_PAGE,
-                                   g_param_spec_object ("web-page",
-                                                        "WebPage",
-                                                        "The overview WebPage",
-                                                        WEBKIT_TYPE_WEB_PAGE,
-                                                        G_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-  g_object_class_install_property (object_class,
-                                   PROP_MODEL,
-                                   g_param_spec_object ("model",
-                                                        "Model",
-                                                        "The overview model",
-                                                        EPHY_TYPE_WEB_OVERVIEW_MODEL,
-                                                        G_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_WEB_PAGE] =
+    g_param_spec_object ("web-page",
+                         "WebPage",
+                         "The overview WebPage",
+                         WEBKIT_TYPE_WEB_PAGE,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_MODEL] =
+    g_param_spec_object ("model",
+                         "Model",
+                         "The overview model",
+                         EPHY_TYPE_WEB_OVERVIEW_MODEL,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 static void
