@@ -36,7 +36,10 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-struct _EphyAboutHandlerPrivate {
+struct _EphyAboutHandler
+{
+  GObject parent_instance;
+
   EphySMaps *smaps;
 };
 
@@ -50,7 +53,7 @@ ephy_about_handler_finalize (GObject *object)
 {
   EphyAboutHandler *handler = EPHY_ABOUT_HANDLER (object);
 
-  g_clear_object (&handler->priv->smaps);
+  g_clear_object (&handler->smaps);
 
   G_OBJECT_CLASS (ephy_about_handler_parent_class)->finalize (object);
 }
@@ -58,7 +61,6 @@ ephy_about_handler_finalize (GObject *object)
 static void
 ephy_about_handler_init (EphyAboutHandler *handler)
 {
-  handler->priv = G_TYPE_INSTANCE_GET_PRIVATE (handler, EPHY_TYPE_ABOUT_HANDLER, EphyAboutHandlerPrivate);
 }
 
 static void
@@ -67,16 +69,15 @@ ephy_about_handler_class_init (EphyAboutHandlerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ephy_about_handler_finalize;
-  g_type_class_add_private (object_class, sizeof (EphyAboutHandlerPrivate));
 }
 
 static EphySMaps *
 ephy_about_handler_get_smaps (EphyAboutHandler *handler)
 {
-  if (!handler->priv->smaps)
-    handler->priv->smaps = ephy_smaps_new ();
+  if (!handler->smaps)
+    handler->smaps = ephy_smaps_new ();
 
-  return handler->priv->smaps;
+  return handler->smaps;
 }
 
 static void
