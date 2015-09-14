@@ -88,14 +88,17 @@ struct _EphyEmbed {
   gulong progress_update_handler_id;
 };
 
+G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
+
 enum
 {
   PROP_0,
   PROP_WEB_VIEW,
   PROP_TITLE,
+  LAST_PROP
 };
 
-G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
+static GParamSpec *obj_properties[LAST_PROP];
 
 /* Portions of the following code based on GTK+.
  * License block as follows:
@@ -262,7 +265,7 @@ ephy_embed_set_title (EphyEmbed *embed,
   g_free (embed->title);
   embed->title = ephy_string_shorten (new_title, MAX_TITLE_LENGTH);
 
-  g_object_notify (G_OBJECT (embed), "title");
+  g_object_notify_by_pspec (G_OBJECT (embed), obj_properties[PROP_TITLE]);
 }
 
 static void
@@ -485,21 +488,21 @@ ephy_embed_class_init (EphyEmbedClass *klass)
   object_class->get_property = ephy_embed_get_property;
   widget_class->grab_focus = ephy_embed_grab_focus;
 
-  g_object_class_install_property (object_class,
-                                   PROP_WEB_VIEW,
-                                   g_param_spec_object ("web-view",
-                                                        "Web View",
-                                                        "The WebView contained in the embed",
-                                                        EPHY_TYPE_WEB_VIEW,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class,
-                                   PROP_TITLE,
-                                   g_param_spec_string ("title",
-                                                        "Title",
-                                                        "The embed's title",
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_WEB_VIEW] =
+    g_param_spec_object ("web-view",
+                         "Web View",
+                         "The WebView contained in the embed",
+                         EPHY_TYPE_WEB_VIEW,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_TITLE] =
+    g_param_spec_string ("title",
+                         "Title",
+                         "The embed's title",
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 static gboolean
