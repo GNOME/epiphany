@@ -44,8 +44,6 @@ static void     ephy_embed_constructed         (GObject *object);
 static void     ephy_embed_restored_window_cb  (EphyEmbedShell *shell,
                                                 EphyEmbed *embed);
 
-#define EPHY_EMBED_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED, EphyEmbedPrivate))
-
 #define EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
 #define MAX_TITLE_LENGTH 512 /* characters */
 #define EMPTY_PAGE_TITLE _("Blank page") /* Title for the empty page */
@@ -56,8 +54,9 @@ typedef struct {
   guint message_id;
 } EphyEmbedStatusbarMsg;
 
-struct _EphyEmbedPrivate
-{
+struct _EphyEmbed {
+  GtkBox parent_instance;
+
   EphyFindToolbar *find_toolbar;
   GtkBox *top_widgets_vbox;
   GtkPaned *paned;
@@ -141,11 +140,9 @@ ephy_embed_statusbar_get_context_id (EphyEmbed *embed, const char  *context_desc
 
   id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (embed), string));
   if (id == 0) {
-    EphyEmbedPrivate *priv = embed->priv;
-
-    id = priv->seq_context_id++;
+    id = embed->seq_context_id++;
     g_object_set_data_full (G_OBJECT (embed), string, GUINT_TO_POINTER (id), NULL);
-    priv->keys = g_slist_prepend (priv->keys, string);
+    embed->keys = g_slist_prepend (embed->keys, string);
   } else
     g_free (string);
 
@@ -155,15 +152,13 @@ ephy_embed_statusbar_get_context_id (EphyEmbed *embed, const char  *context_desc
 static void
 ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
 {
-  EphyEmbedPrivate *priv = embed->priv;
-
-  nautilus_floating_bar_set_primary_label (NAUTILUS_FLOATING_BAR (priv->floating_bar), label);
+  nautilus_floating_bar_set_primary_label (NAUTILUS_FLOATING_BAR (embed->floating_bar), label);
 
   if (label == NULL || label[0] == '\0') {
-    gtk_widget_hide (priv->floating_bar);
-    gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
+    gtk_widget_hide (embed->floating_bar);
+    gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
   } else
-    gtk_widget_show (priv->floating_bar);
+    gtk_widget_show (embed->floating_bar);
 }
 
 static void
@@ -177,21 +172,18 @@ ephy_embed_statusbar_update (EphyEmbed *embed, const char *text)
 static guint
 ephy_embed_statusbar_push (EphyEmbed *embed, guint context_id, const char *text)
 {
-  EphyEmbedPrivate *priv;
   EphyEmbedStatusbarMsg *msg;
 
   g_return_val_if_fail (EPHY_IS_EMBED (embed), 0);
   g_return_val_if_fail (context_id != 0, 0);
   g_return_val_if_fail (text != NULL, 0);
 
-  priv = embed->priv;
-
   msg = g_slice_new (EphyEmbedStatusbarMsg);
   msg->text = g_strdup (text);
   msg->context_id = context_id;
-  msg->message_id = priv->seq_message_id++;
+  msg->message_id = embed->seq_message_id++;
 
-  priv->messages = g_slist_prepend (priv->messages, msg);
+  embed->messages = g_slist_prepend (embed->messages, msg);
 
   ephy_embed_statusbar_update (embed, text);
 
@@ -203,20 +195,17 @@ ephy_embed_statusbar_push (EphyEmbed *embed, guint context_id, const char *text)
 static void
 ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
 {
-  EphyEmbedPrivate *priv;
   EphyEmbedStatusbarMsg *msg;
   GSList *list;
 
   g_return_if_fail (EPHY_IS_EMBED (embed));
   g_return_if_fail (context_id != 0);
 
-  priv = embed->priv;
-
-  for (list = priv->messages; list; list = list->next) {
+  for (list = embed->messages; list; list = list->next) {
     EphyEmbedStatusbarMsg *msg = list->data;
 
     if (msg->context_id == context_id) {
-      priv->messages = g_slist_remove_link (priv->messages, list);
+      embed->messages = g_slist_remove_link (embed->messages, list);
       g_free (msg->text);
       g_slice_free (EphyEmbedStatusbarMsg, msg);
       g_slist_free_1 (list);
@@ -224,7 +213,7 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
     }
   }
 
-  msg = priv->messages ? priv->messages->data : NULL;
+  msg = embed->messages ? embed->messages->data : NULL;
   ephy_embed_statusbar_update (embed, msg ? msg->text : NULL);
 }
 
@@ -233,7 +222,7 @@ ephy_embed_destroy_top_widgets (EphyEmbed *embed)
 {
   GSList *iter;
 
-  for (iter = embed->priv->destroy_on_transition_list; iter; iter = iter->next)
+  for (iter = embed->destroy_on_transition_list; iter; iter = iter->next)
     gtk_widget_destroy (GTK_WIDGET (iter->data));
 }
 
@@ -242,16 +231,15 @@ remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
 {
   GSList *list;
 
-  list = embed->priv->destroy_on_transition_list;
+  list = embed->destroy_on_transition_list;
   list = g_slist_remove (list, widget);
-  embed->priv->destroy_on_transition_list = list;
+  embed->destroy_on_transition_list = list;
 }
 
 static void
 ephy_embed_set_title (EphyEmbed *embed,
                       const char *title)
 {
-  EphyEmbedPrivate *priv = embed->priv;
   char *new_title;
 
   new_title = g_strdup (title);
@@ -261,7 +249,7 @@ ephy_embed_set_title (EphyEmbed *embed,
     g_free (new_title);
     new_title = NULL;
 
-    address = ephy_web_view_get_address (EPHY_WEB_VIEW (priv->web_view));
+    address = ephy_web_view_get_address (EPHY_WEB_VIEW (embed->web_view));
     if (address && strcmp (address, "about:blank") != 0)
       new_title = ephy_embed_utils_get_title_from_address (address);
 
@@ -271,8 +259,8 @@ ephy_embed_set_title (EphyEmbed *embed,
     }
   }
 
-  g_free (priv->title);
-  priv->title = ephy_string_shorten (new_title, MAX_TITLE_LENGTH);
+  g_free (embed->title);
+  embed->title = ephy_string_shorten (new_title, MAX_TITLE_LENGTH);
 
   g_object_notify (G_OBJECT (embed), "title");
 }
@@ -319,10 +307,10 @@ ephy_embed_grab_focus (GtkWidget *widget)
 static gboolean
 fullscreen_message_label_hide (EphyEmbed *embed)
 {
-  if (embed->priv->fullscreen_message_id) {
-    gtk_widget_hide (embed->priv->fullscreen_message_label);
-    g_source_remove (embed->priv->fullscreen_message_id);
-    embed->priv->fullscreen_message_id = 0;
+  if (embed->fullscreen_message_id) {
+    gtk_widget_hide (embed->fullscreen_message_label);
+    g_source_remove (embed->fullscreen_message_id);
+    embed->fullscreen_message_id = 0;
   }
 
   return FALSE;
@@ -332,15 +320,15 @@ void
 ephy_embed_entering_fullscreen (EphyEmbed *embed)
 {
   if (!g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN, EPHY_PREFS_LOCKDOWN_FULLSCREEN)) {
-    gtk_widget_show (embed->priv->fullscreen_message_label);
+    gtk_widget_show (embed->fullscreen_message_label);
 
-    if (embed->priv->fullscreen_message_id)
-      g_source_remove (embed->priv->fullscreen_message_id);
+    if (embed->fullscreen_message_id)
+      g_source_remove (embed->fullscreen_message_id);
 
-    embed->priv->fullscreen_message_id = g_timeout_add_seconds (5,
+    embed->fullscreen_message_id = g_timeout_add_seconds (5,
                                                                 (GSourceFunc)fullscreen_message_label_hide,
                                                                 embed);
-    g_source_set_name_by_id (embed->priv->fullscreen_message_id, "[epiphany] fullscreen_message_label_hide");
+    g_source_set_name_by_id (embed->fullscreen_message_id, "[epiphany] fullscreen_message_label_hide");
   }
 }
 
@@ -354,41 +342,40 @@ static void
 ephy_embed_dispose (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
-  EphyEmbedPrivate *priv = embed->priv;
 
-  if (priv->pop_statusbar_later_source_id) {
-    g_source_remove (priv->pop_statusbar_later_source_id);
-    priv->pop_statusbar_later_source_id = 0;
+  if (embed->pop_statusbar_later_source_id) {
+    g_source_remove (embed->pop_statusbar_later_source_id);
+    embed->pop_statusbar_later_source_id = 0;
   }
 
-  if (priv->clear_progress_source_id) {
-    g_source_remove (priv->clear_progress_source_id);
-    priv->clear_progress_source_id = 0;
+  if (embed->clear_progress_source_id) {
+    g_source_remove (embed->clear_progress_source_id);
+    embed->clear_progress_source_id = 0;
   }
 
-  if (priv->delayed_request_source_id) {
-    g_source_remove (priv->delayed_request_source_id);
-    priv->delayed_request_source_id = 0;
+  if (embed->delayed_request_source_id) {
+    g_source_remove (embed->delayed_request_source_id);
+    embed->delayed_request_source_id = 0;
   }
 
   /* Do not listen to status message notifications anymore, if we try
    * to update the statusbar after dispose we might crash. */
-  if (priv->status_handler_id) {
-    g_signal_handler_disconnect (priv->web_view, priv->status_handler_id);
-    priv->status_handler_id = 0;
+  if (embed->status_handler_id) {
+    g_signal_handler_disconnect (embed->web_view, embed->status_handler_id);
+    embed->status_handler_id = 0;
   }
 
-  if (priv->progress_update_handler_id) {
-    g_signal_handler_disconnect (priv->web_view, priv->progress_update_handler_id);
-    priv->progress_update_handler_id = 0;
+  if (embed->progress_update_handler_id) {
+    g_signal_handler_disconnect (embed->web_view, embed->progress_update_handler_id);
+    embed->progress_update_handler_id = 0;
   }
 
-  if (priv->fullscreen_message_id) {
-    g_source_remove (priv->fullscreen_message_id);
-    priv->fullscreen_message_id = 0;
+  if (embed->fullscreen_message_id) {
+    g_source_remove (embed->fullscreen_message_id);
+    embed->fullscreen_message_id = 0;
   }
 
-  g_clear_object (&priv->delayed_request);
+  g_clear_object (&embed->delayed_request);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
 }
@@ -397,20 +384,19 @@ static void
 ephy_embed_finalize (GObject *object)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
-  EphyEmbedPrivate *priv = embed->priv;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GSList *list;
 
   g_signal_handlers_disconnect_by_func(shell, ephy_embed_restored_window_cb, embed);
 
-  list = priv->destroy_on_transition_list;
+  list = embed->destroy_on_transition_list;
   for (; list; list = list->next) {
     GtkWidget *widget = GTK_WIDGET (list->data);
     g_signal_handlers_disconnect_by_func (widget, remove_from_destroy_list_cb, embed);
   }
-  g_slist_free (priv->destroy_on_transition_list);
+  g_slist_free (embed->destroy_on_transition_list);
 
-  for (list = priv->messages; list; list = list->next) {
+  for (list = embed->messages; list; list = list->next) {
     EphyEmbedStatusbarMsg *msg;
 
     msg = list->data;
@@ -418,17 +404,17 @@ ephy_embed_finalize (GObject *object)
     g_slice_free (EphyEmbedStatusbarMsg, msg);
   }
 
-  g_slist_free (priv->messages);
-  priv->messages = NULL;
+  g_slist_free (embed->messages);
+  embed->messages = NULL;
 
-  for (list = priv->keys; list; list = list->next)
+  for (list = embed->keys; list; list = list->next)
     g_free (list->data);
 
-  g_slist_free (priv->keys);
-  priv->keys = NULL;
+  g_slist_free (embed->keys);
+  embed->keys = NULL;
 
-  g_free (embed->priv->fullscreen_string);
-  g_free (priv->title);
+  g_free (embed->fullscreen_string);
+  g_free (embed->title);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
 }
@@ -444,7 +430,7 @@ ephy_embed_set_property (GObject *object,
   switch (prop_id)
   {
   case PROP_WEB_VIEW:
-    embed->priv->web_view = g_value_get_object (value);
+    embed->web_view = g_value_get_object (value);
     break;
   case PROP_TITLE:
     ephy_embed_set_title (embed, g_value_get_string (value));
@@ -481,9 +467,7 @@ static void
 ephy_embed_find_toolbar_close_cb (EphyFindToolbar *toolbar,
                                   EphyEmbed *embed)
 {
-  EphyEmbedPrivate *priv = embed->priv;
-
-  ephy_find_toolbar_close (priv->find_toolbar);
+  ephy_find_toolbar_close (embed->find_toolbar);
 
   gtk_widget_grab_focus (GTK_WIDGET (embed));
 }
@@ -516,8 +500,6 @@ ephy_embed_class_init (EphyEmbedClass *klass)
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_type_class_add_private (G_OBJECT_CLASS (klass), sizeof(EphyEmbedPrivate));
 }
 
 static gboolean
@@ -528,11 +510,11 @@ ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
   int inspected_view_height;
   guint attached_height;
 
-  inspected_view_height = gtk_widget_get_allocated_height (GTK_WIDGET (embed->priv->web_view));
+  inspected_view_height = gtk_widget_get_allocated_height (GTK_WIDGET (embed->web_view));
   attached_height = webkit_web_inspector_get_attached_height (inspector);
-  gtk_paned_set_position (embed->priv->paned, inspected_view_height - attached_height);
+  gtk_paned_set_position (embed->paned, inspected_view_height - attached_height);
 
-  gtk_paned_add2 (embed->priv->paned, inspector_view);
+  gtk_paned_add2 (embed->paned, inspector_view);
   gtk_widget_show (inspector_view);
 
   return TRUE;
@@ -544,12 +526,12 @@ ephy_embed_set_fullscreen_message (EphyEmbed *embed,
 {
   char *message;
 
-  if (G_UNLIKELY (embed->priv->fullscreen_string == NULL))
-    embed->priv->fullscreen_string = g_strdup (_("Press %s to exit fullscreen"));
+  if (G_UNLIKELY (embed->fullscreen_string == NULL))
+    embed->fullscreen_string = g_strdup (_("Press %s to exit fullscreen"));
 
   /* Translators: 'ESC' and 'F11' are keyboard keys. */
-  message = g_strdup_printf (embed->priv->fullscreen_string, is_html5_fullscreen ? _("ESC") : _("F11"));
-  gtk_label_set_text (GTK_LABEL (embed->priv->fullscreen_message_label),
+  message = g_strdup_printf (embed->fullscreen_string, is_html5_fullscreen ? _("ESC") : _("F11"));
+  gtk_label_set_text (GTK_LABEL (embed->fullscreen_message_label),
                       message);
   g_free (message);
 }
@@ -574,10 +556,9 @@ static gboolean
 pop_statusbar_later_cb (gpointer data)
 {
   EphyEmbed *embed = EPHY_EMBED (data);
-  EphyEmbedPrivate *priv = embed->priv;
 
-  ephy_embed_statusbar_pop (embed, priv->tab_message_id);
-  priv->pop_statusbar_later_source_id = 0;
+  ephy_embed_statusbar_pop (embed, embed->tab_message_id);
+  embed->pop_statusbar_later_source_id = 0;
   return FALSE;
 }
 
@@ -585,26 +566,23 @@ static void
 status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
 {
   const char *message;
-  EphyEmbedPrivate *priv;
 
   message = ephy_web_view_get_status_message (view);
 
-  priv = embed->priv;
-
   if (message) {
-    if (priv->pop_statusbar_later_source_id) {
-      g_source_remove (priv->pop_statusbar_later_source_id);
-      priv->pop_statusbar_later_source_id = 0;
+    if (embed->pop_statusbar_later_source_id) {
+      g_source_remove (embed->pop_statusbar_later_source_id);
+      embed->pop_statusbar_later_source_id = 0;
     }
 
-    ephy_embed_statusbar_pop (embed, priv->tab_message_id);
-    ephy_embed_statusbar_push (embed, priv->tab_message_id, message);
+    ephy_embed_statusbar_pop (embed, embed->tab_message_id);
+    ephy_embed_statusbar_push (embed, embed->tab_message_id, message);
   } else {
     /* A short timeout before hiding the statusbar ensures that while moving
       over a series of links, the overlay widget doesn't flicker on and off. */
-    if (priv->pop_statusbar_later_source_id == 0) {
-      priv->pop_statusbar_later_source_id = g_timeout_add (250, pop_statusbar_later_cb, embed);
-      g_source_set_name_by_id (priv->pop_statusbar_later_source_id, "[epiphany] pop_statusbar_later_cb");
+    if (embed->pop_statusbar_later_source_id == 0) {
+      embed->pop_statusbar_later_source_id = g_timeout_add (250, pop_statusbar_later_cb, embed);
+      g_source_set_name_by_id (embed->pop_statusbar_later_source_id, "[epiphany] pop_statusbar_later_cb");
     }
   }
 }
@@ -612,8 +590,8 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
 static gboolean
 clear_progress_cb (EphyEmbed *embed)
 {
-  gtk_widget_hide (embed->priv->progress);
-  embed->priv->clear_progress_source_id = 0;
+  gtk_widget_hide (embed->progress);
+  embed->clear_progress_source_id = 0;
 
   return FALSE;
 }
@@ -625,32 +603,30 @@ progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
   gboolean loading;
   const char *uri;
 
-  EphyEmbedPrivate *priv = embed->priv;
-
-  if (priv->clear_progress_source_id) {
-    g_source_remove (priv->clear_progress_source_id);
-    priv->clear_progress_source_id = 0;
+  if (embed->clear_progress_source_id) {
+    g_source_remove (embed->clear_progress_source_id);
+    embed->clear_progress_source_id = 0;
   }
 
-  uri = webkit_web_view_get_uri (priv->web_view);
+  uri = webkit_web_view_get_uri (embed->web_view);
   if (!uri || g_str_has_prefix (uri, "ephy-about:") ||
       g_str_has_prefix (uri, "about:")) {
-    gtk_widget_hide (priv->progress);
+    gtk_widget_hide (embed->progress);
     return;
   }
 
-  progress = webkit_web_view_get_estimated_load_progress (priv->web_view);
-  loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (priv->web_view));
+  progress = webkit_web_view_get_estimated_load_progress (embed->web_view);
+  loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (embed->web_view));
 
   if (progress == 1.0 || !loading) {
-    priv->clear_progress_source_id = g_timeout_add (500,
-                                                    (GSourceFunc)clear_progress_cb,
-                                                    embed);
-    g_source_set_name_by_id (priv->clear_progress_source_id, "[epiphany] clear_progress_cb");
+    embed->clear_progress_source_id = g_timeout_add (500,
+                                                     (GSourceFunc)clear_progress_cb,
+                                                     embed);
+    g_source_set_name_by_id (embed->clear_progress_source_id, "[epiphany] clear_progress_cb");
   } else
-    gtk_widget_show (priv->progress);
+    gtk_widget_show (embed->progress);
 
-  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (priv->progress),
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (embed->progress),
                                  (loading || progress == 1.0) ? progress : 0.0);
 }
 
@@ -658,17 +634,16 @@ static gboolean
 load_delayed_request_if_mapped (gpointer user_data)
 {
   EphyEmbed *embed = EPHY_EMBED (user_data);
-  EphyEmbedPrivate *priv = embed->priv;
   EphyWebView *web_view;
 
-  priv->delayed_request_source_id = 0;
+  embed->delayed_request_source_id = 0;
 
   if (!gtk_widget_get_mapped (GTK_WIDGET (embed)))
     return G_SOURCE_REMOVE;
 
   web_view = ephy_embed_get_web_view (embed);
-  ephy_web_view_load_request (web_view, priv->delayed_request);
-  g_clear_object (&priv->delayed_request);
+  ephy_web_view_load_request (web_view, embed->delayed_request);
+  g_clear_object (&embed->delayed_request);
 
   /* This is to allow UI elements watching load status to show that the page is
    * loading as soon as possible.
@@ -681,17 +656,15 @@ load_delayed_request_if_mapped (gpointer user_data)
 static void
 ephy_embed_maybe_load_delayed_request (EphyEmbed *embed)
 {
-  EphyEmbedPrivate *priv = embed->priv;
-
-  if (!priv->delayed_request || priv->delayed_request_source_id != 0)
+  if (!embed->delayed_request || embed->delayed_request_source_id != 0)
     return;
 
   /* Add a very small delay before loading the request, so that if the user
    * is scrolling rapidly through a bunch of delayed tabs, we don't start
    * loading them all.
    */
-  priv->delayed_request_source_id = g_timeout_add (300, load_delayed_request_if_mapped, embed);
-  g_source_set_name_by_id (priv->delayed_request_source_id, "[epiphany] load_delayed_request_if_mapped");
+  embed->delayed_request_source_id = g_timeout_add (300, load_delayed_request_if_mapped, embed);
+  g_source_set_name_by_id (embed->delayed_request_source_id, "[epiphany] load_delayed_request_if_mapped");
 }
 
 static void
@@ -713,7 +686,6 @@ static void
 ephy_embed_constructed (GObject *object)
 {
   EphyEmbed *embed = (EphyEmbed*)object;
-  EphyEmbedPrivate *priv = embed->priv;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GtkWidget *paned;
   WebKitWebInspector *inspector;
@@ -731,70 +703,70 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_add_events (overlay, 
                          GDK_ENTER_NOTIFY_MASK |
                          GDK_LEAVE_NOTIFY_MASK);
-  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (priv->web_view));
+  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (embed->web_view));
 
   /* Floating message popup for fullscreen mode. */
-  priv->fullscreen_message_label = gtk_label_new (NULL);
-  gtk_widget_set_name (priv->fullscreen_message_label, "fullscreen-popup");
-  gtk_widget_set_halign (priv->fullscreen_message_label, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (priv->fullscreen_message_label, GTK_ALIGN_CENTER);
-  gtk_widget_set_no_show_all (priv->fullscreen_message_label, TRUE);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->fullscreen_message_label);
+  embed->fullscreen_message_label = gtk_label_new (NULL);
+  gtk_widget_set_name (embed->fullscreen_message_label, "fullscreen-popup");
+  gtk_widget_set_halign (embed->fullscreen_message_label, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (embed->fullscreen_message_label, GTK_ALIGN_CENTER);
+  gtk_widget_set_no_show_all (embed->fullscreen_message_label, TRUE);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), embed->fullscreen_message_label);
   ephy_embed_set_fullscreen_message (embed, FALSE);
 
   /* statusbar is hidden by default */
-  priv->floating_bar = nautilus_floating_bar_new (NULL, NULL, FALSE);
-  gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->floating_bar, GTK_ALIGN_END);
-  gtk_widget_set_no_show_all (priv->floating_bar, TRUE);
+  embed->floating_bar = nautilus_floating_bar_new (NULL, NULL, FALSE);
+  gtk_widget_set_halign (embed->floating_bar, GTK_ALIGN_START);
+  gtk_widget_set_valign (embed->floating_bar, GTK_ALIGN_END);
+  gtk_widget_set_no_show_all (embed->floating_bar, TRUE);
 
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->floating_bar);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), embed->floating_bar);
 
-  priv->progress = gtk_progress_bar_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->progress),
+  embed->progress = gtk_progress_bar_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (embed->progress),
                                GTK_STYLE_CLASS_OSD);
-  gtk_widget_set_halign (priv->progress, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (priv->progress, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), priv->progress);
+  gtk_widget_set_halign (embed->progress, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (embed->progress, GTK_ALIGN_START);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), embed->progress);
 
-  priv->find_toolbar = ephy_find_toolbar_new (priv->web_view);
-  g_signal_connect (priv->find_toolbar, "close",
+  embed->find_toolbar = ephy_find_toolbar_new (embed->web_view);
+  g_signal_connect (embed->find_toolbar, "close",
                     G_CALLBACK (ephy_embed_find_toolbar_close_cb),
                     embed);
 
   gtk_box_pack_start (GTK_BOX (embed),
-                      GTK_WIDGET (priv->find_toolbar),
+                      GTK_WIDGET (embed->find_toolbar),
                       FALSE, FALSE, 0);
 
-  paned = GTK_WIDGET (priv->paned);
+  paned = GTK_WIDGET (embed->paned);
 
-  priv->progress_update_handler_id = g_signal_connect (priv->web_view, "notify::estimated-load-progress",
-                                                       G_CALLBACK (progress_update), object);
+  embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
+                                                        G_CALLBACK (progress_update), object);
   gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (overlay),
                    TRUE, FALSE);
 
   gtk_box_pack_start (GTK_BOX (embed),
-                      GTK_WIDGET (priv->top_widgets_vbox),
+                      GTK_WIDGET (embed->top_widgets_vbox),
                       FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (embed), paned, TRUE, TRUE, 0);
 
-  gtk_widget_show (GTK_WIDGET (priv->top_widgets_vbox));
-  gtk_widget_show (GTK_WIDGET (priv->web_view));
+  gtk_widget_show (GTK_WIDGET (embed->top_widgets_vbox));
+  gtk_widget_show (GTK_WIDGET (embed->web_view));
   gtk_widget_show_all (paned);
 
-  g_object_connect (priv->web_view,
+  g_object_connect (embed->web_view,
                     "signal::notify::title", G_CALLBACK (web_view_title_changed_cb), embed,
                     "signal::load-changed", G_CALLBACK (load_changed_cb), embed,
                     "signal::enter-fullscreen", G_CALLBACK (entering_fullscreen_cb), embed,
                     "signal::leave-fullscreen", G_CALLBACK (leaving_fullscreen_cb), embed,
                     NULL);
 
-  priv->status_handler_id = g_signal_connect (priv->web_view, "notify::status-message",
-                                              G_CALLBACK (status_message_notify_cb),
-                                              embed);
+  embed->status_handler_id = g_signal_connect (embed->web_view, "notify::status-message",
+                                               G_CALLBACK (status_message_notify_cb),
+                                               embed);
 
   /* The inspector */
-  inspector = webkit_web_view_get_inspector (priv->web_view);
+  inspector = webkit_web_view_get_inspector (embed->web_view);
 
   g_signal_connect (inspector, "attach",
                     G_CALLBACK (ephy_embed_attach_inspector_cb),
@@ -804,18 +776,14 @@ ephy_embed_constructed (GObject *object)
 static void
 ephy_embed_init (EphyEmbed *embed)
 {
-  EphyEmbedPrivate *priv;
-
-  priv = embed->priv = EPHY_EMBED_GET_PRIVATE (embed);
-
   gtk_orientable_set_orientation (GTK_ORIENTABLE (embed),
                                   GTK_ORIENTATION_VERTICAL);
 
-  priv->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
-  priv->top_widgets_vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
-  priv->seq_context_id = 1;
-  priv->seq_message_id = 1;
-  priv->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
+  embed->paned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
+  embed->top_widgets_vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+  embed->seq_context_id = 1;
+  embed->seq_message_id = 1;
+  embed->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
 }
 
 /**
@@ -831,7 +799,7 @@ ephy_embed_get_web_view (EphyEmbed *embed)
 {
   g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
 
-  return EPHY_WEB_VIEW (embed->priv->web_view);
+  return EPHY_WEB_VIEW (embed->web_view);
 }
 
 /**
@@ -847,7 +815,7 @@ ephy_embed_get_find_toolbar (EphyEmbed *embed)
 {
   g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
 
-  return EPHY_FIND_TOOLBAR (embed->priv->find_toolbar);
+  return EPHY_FIND_TOOLBAR (embed->find_toolbar);
 }
 
 
@@ -866,14 +834,14 @@ ephy_embed_add_top_widget (EphyEmbed *embed, GtkWidget *widget, gboolean destroy
   GSList *list;
 
   if (destroy_on_transition) {
-    list = embed->priv->destroy_on_transition_list;
+    list = embed->destroy_on_transition_list;
     list = g_slist_prepend (list, widget);
-    embed->priv->destroy_on_transition_list = list;
+    embed->destroy_on_transition_list = list;
 
     g_signal_connect (widget, "destroy", G_CALLBACK (remove_from_destroy_list_cb), embed);
   }
 
-  gtk_box_pack_end (embed->priv->top_widgets_vbox,
+  gtk_box_pack_end (embed->top_widgets_vbox,
                     GTK_WIDGET (widget), FALSE, FALSE, 0);
 }
 
@@ -890,16 +858,16 @@ ephy_embed_add_top_widget (EphyEmbed *embed, GtkWidget *widget, gboolean destroy
 void
 ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget)
 {
-  if (g_slist_find (embed->priv->destroy_on_transition_list, widget)) {
+  if (g_slist_find (embed->destroy_on_transition_list, widget)) {
     GSList *list;
     g_signal_handlers_disconnect_by_func (widget, remove_from_destroy_list_cb, embed);
 
-    list = embed->priv->destroy_on_transition_list;
+    list = embed->destroy_on_transition_list;
     list = g_slist_remove (list, widget);
-    embed->priv->destroy_on_transition_list = list;
+    embed->destroy_on_transition_list = list;
   }
 
-  gtk_container_remove (GTK_CONTAINER (embed->priv->top_widgets_vbox),
+  gtk_container_remove (GTK_CONTAINER (embed->top_widgets_vbox),
                         GTK_WIDGET (widget));
 }
 
@@ -917,10 +885,10 @@ ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitURIRequest *request
   g_return_if_fail (EPHY_IS_EMBED (embed));
   g_return_if_fail (WEBKIT_IS_URI_REQUEST (request));
 
-  g_clear_object (&embed->priv->delayed_request);
+  g_clear_object (&embed->delayed_request);
 
   g_object_ref (request);
-  embed->priv->delayed_request = request;
+  embed->delayed_request = request;
 }
 
 /**
@@ -936,7 +904,7 @@ ephy_embed_has_load_pending (EphyEmbed *embed)
 {
   g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
 
-  return !!embed->priv->delayed_request;
+  return !!embed->delayed_request;
 }
 
 const char *
@@ -944,5 +912,5 @@ ephy_embed_get_title (EphyEmbed *embed)
 {
   g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
 
-  return embed->priv->title;
+  return embed->title;
 }

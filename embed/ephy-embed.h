@@ -29,29 +29,10 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_EMBED               (ephy_embed_get_type ())
-#define EPHY_EMBED(o)                 (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED, EphyEmbed))
-#define EPHY_EMBED_CLASS(k)           (G_TYPE_CHECK_CLASS_CAST ((k), EPHY_TYPE_EMBED, EphyEmbedClass))
-#define EPHY_IS_EMBED(o)              (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED))
-#define EPHY_IS_EMBED_CLASS(k)        (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED))
-#define EPHY_EMBED_GET_CLASS(o)       (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED, EphyEmbedClass))
+#define EPHY_TYPE_EMBED (ephy_embed_get_type ())
 
-typedef struct _EphyEmbedClass EphyEmbedClass;
-typedef struct _EphyEmbed EphyEmbed;
-typedef struct _EphyEmbedPrivate EphyEmbedPrivate;
+G_DECLARE_FINAL_TYPE (EphyEmbed, ephy_embed, EPHY, EMBED, GtkBox)
 
-struct _EphyEmbed {
-  GtkBox parent_instance;
-
-  /*< private >*/
-  EphyEmbedPrivate *priv;
-};
-
-struct _EphyEmbedClass {
-  GtkBoxClass parent_class;
-};
-
-GType            ephy_embed_get_type                 (void);
 EphyWebView*     ephy_embed_get_web_view             (EphyEmbed  *embed);
 EphyFindToolbar* ephy_embed_get_find_toolbar         (EphyEmbed  *embed);
 void             ephy_embed_add_top_widget           (EphyEmbed  *embed,
