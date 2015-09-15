@@ -32,15 +32,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_EMBED_CONTAINER               (ephy_embed_container_get_type ())
-#define EPHY_EMBED_CONTAINER(o)                 (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_CONTAINER, EphyEmbedContainer))
-#define EPHY_EMBED_CONTAINER_IFACE(k)           (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_CONTAINER, EphyEmbedContainerInterface))
-#define EPHY_IS_EMBED_CONTAINER(o)              (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_CONTAINER))
-#define EPHY_IS_EMBED_CONTAINER_IFACE(k)        (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_CONTAINER))
-#define EPHY_EMBED_CONTAINER_GET_IFACE(inst)    (G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_EMBED_CONTAINER, EphyEmbedContainerInterface))
+#define EPHY_TYPE_EMBED_CONTAINER (ephy_embed_container_get_type ())
 
-typedef struct _EphyEmbedContainer      EphyEmbedContainer;
-typedef struct _EphyEmbedContainerInterface EphyEmbedContainerInterface;
+G_DECLARE_INTERFACE (EphyEmbedContainer, ephy_embed_container, EPHY, EMBED_CONTAINER, GObject)
 
 struct _EphyEmbedContainerInterface
 {
@@ -64,7 +58,6 @@ struct _EphyEmbedContainerInterface
   gboolean (* get_is_popup)        (EphyEmbedContainer *container);
 };
 
-GType             ephy_embed_container_get_type         (void);
 gint              ephy_embed_container_add_child        (EphyEmbedContainer *container,
                                                          EphyEmbed          *child,
                                                          gint                position,
