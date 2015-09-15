@@ -33,31 +33,14 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_EMBED_DIALOG		(ephy_embed_dialog_get_type ())
-#define EPHY_EMBED_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialog))
-#define EPHY_EMBED_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialogClass))
-#define EPHY_IS_EMBED_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_DIALOG))
-#define EPHY_IS_EMBED_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_DIALOG))
-#define EPHY_EMBED_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialogClass))
+#define EPHY_TYPE_EMBED_DIALOG (ephy_embed_dialog_get_type ())
 
-typedef struct _EphyEmbedDialogClass	EphyEmbedDialogClass;
-typedef struct _EphyEmbedDialog		EphyEmbedDialog;
-typedef struct _EphyEmbedDialogPrivate	EphyEmbedDialogPrivate;
-
-struct _EphyEmbedDialog
-{
-        EphyDialog parent;
-
-	/*< private >*/
-        EphyEmbedDialogPrivate *priv;
-};
+G_DECLARE_DERIVABLE_TYPE (EphyEmbedDialog, ephy_embed_dialog, EPHY, EMBED_DIALOG, EphyDialog)
 
 struct _EphyEmbedDialogClass
 {
-        EphyDialogClass parent_class;
+	EphyDialogClass parent_class;
 };
-
-GType			ephy_embed_dialog_get_type		(void);
 
 EphyEmbedDialog	       *ephy_embed_dialog_new			(EphyEmbed *embed);
 
