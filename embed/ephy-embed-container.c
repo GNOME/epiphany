@@ -23,45 +23,20 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-type-builtins.h"
 
+G_DEFINE_INTERFACE (EphyEmbedContainer, ephy_embed_container, G_TYPE_OBJECT);
+
 static void
-ephy_embed_container_base_init (gpointer g_class)
+ephy_embed_container_default_init (EphyEmbedContainerInterface *iface)
 {
-  static gboolean initialized = FALSE;
+  g_object_interface_install_property (iface,
+                                       g_param_spec_boolean ("is-popup", NULL, NULL,
+                                                             FALSE,
+                                                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  if (!initialized) {
-    initialized = TRUE;
-
-    g_object_interface_install_property (g_class,
-                                         g_param_spec_boolean ("is-popup", NULL, NULL,
-                                                               FALSE,
-                                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-                                                               G_PARAM_CONSTRUCT_ONLY));
-    g_object_interface_install_property (g_class,
-                                         g_param_spec_object ("active-child", NULL, NULL,
-                                                              GTK_TYPE_WIDGET /* Can't use an interface type here */,
-                                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-  }
-}
-
-GType
-ephy_embed_container_get_type (void)
-{
-  static GType type = 0;
-
-  if (G_UNLIKELY (type == 0)) {
-    const GTypeInfo our_info =
-      {
-        sizeof (EphyEmbedContainerIface),
-        ephy_embed_container_base_init,
-        NULL,
-      };
-
-    type = g_type_register_static (G_TYPE_INTERFACE,
-                                   "EphyEmbedContainer",
-                                   &our_info, (GTypeFlags)0);
-  }
-
-  return type;
+  g_object_interface_install_property (iface,
+                                       g_param_spec_object ("active-child", NULL, NULL,
+                                                            GTK_TYPE_WIDGET /* Can't use an interface type here */,
+                                                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -82,7 +57,7 @@ ephy_embed_container_add_child (EphyEmbedContainer *container,
                                 gint position,
                                 gboolean set_active)
 {
-  EphyEmbedContainerIface *iface;
+  EphyEmbedContainerInterface *iface;
 
   g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), -1);
   g_return_val_if_fail (EPHY_IS_EMBED (child), -1);
@@ -102,7 +77,7 @@ void
 ephy_embed_container_set_active_child (EphyEmbedContainer *container,
                                        EphyEmbed *child)
 {
-  EphyEmbedContainerIface *iface;
+  EphyEmbedContainerInterface *iface;
 
   g_return_if_fail (EPHY_IS_EMBED_CONTAINER (container));
   g_return_if_fail (EPHY_IS_EMBED (child));
@@ -123,7 +98,7 @@ void
 ephy_embed_container_remove_child (EphyEmbedContainer *container,
                                    EphyEmbed *child)
 {
-  EphyEmbedContainerIface *iface;
+  EphyEmbedContainerInterface *iface;
 
   g_return_if_fail (EPHY_IS_EMBED_CONTAINER (container));
   g_return_if_fail (EPHY_IS_EMBED (child));
@@ -144,7 +119,7 @@ ephy_embed_container_remove_child (EphyEmbedContainer *container,
 EphyEmbed *
 ephy_embed_container_get_active_child (EphyEmbedContainer *container)
 {
-  EphyEmbedContainerIface *iface;
+  EphyEmbedContainerInterface *iface;
 
   g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), NULL);
 
@@ -164,7 +139,7 @@ ephy_embed_container_get_active_child (EphyEmbedContainer *container)
 GList *
 ephy_embed_container_get_children (EphyEmbedContainer *container)
 {
-  EphyEmbedContainerIface *iface;
+  EphyEmbedContainerInterface *iface;
 
   g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), NULL);
 
@@ -183,7 +158,7 @@ ephy_embed_container_get_children (EphyEmbedContainer *container)
 gboolean
 ephy_embed_container_get_is_popup (EphyEmbedContainer *container)
 {
-  EphyEmbedContainerIface *iface;
+  EphyEmbedContainerInterface *iface;
 
   g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), FALSE);
 

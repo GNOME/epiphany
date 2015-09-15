@@ -532,7 +532,7 @@ impl_get_is_popup (EphyEmbedContainer *container)
 }
 
 static void
-ephy_window_embed_container_iface_init (EphyEmbedContainerIface *iface)
+ephy_window_embed_container_iface_init (EphyEmbedContainerInterface *iface)
 {
 	iface->add_child = impl_add_child;
 	iface->set_active_child = impl_set_active_child;
