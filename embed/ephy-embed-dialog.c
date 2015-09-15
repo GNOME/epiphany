@@ -44,14 +44,12 @@ enum
 	PROP_EPHY_EMBED
 };
 
-#define EPHY_EMBED_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_DIALOG, EphyEmbedDialogPrivate))
-
-struct _EphyEmbedDialogPrivate
+typedef struct
 {
 	EphyEmbed *embed;
-};
+} EphyEmbedDialogPrivate;
 
-G_DEFINE_TYPE (EphyEmbedDialog, ephy_embed_dialog, EPHY_TYPE_DIALOG)
+G_DEFINE_TYPE_WITH_PRIVATE (EphyEmbedDialog, ephy_embed_dialog, EPHY_TYPE_DIALOG)
 
 static void
 ephy_embed_dialog_class_init (EphyEmbedDialogClass *klass)
@@ -69,24 +67,23 @@ ephy_embed_dialog_class_init (EphyEmbedDialogClass *klass)
                                                               "The dialog's embed",
                                                               G_TYPE_OBJECT,
                                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-	g_type_class_add_private (object_class, sizeof(EphyEmbedDialogPrivate));
 }
 
 static void
 ephy_embed_dialog_init (EphyEmbedDialog *dialog)
 {
-        dialog->priv = EPHY_EMBED_DIALOG_GET_PRIVATE (dialog);
 }
 
 static void
 unset_embed (EphyEmbedDialog *dialog)
 {
-	if (dialog->priv->embed != NULL)
+	EphyEmbedDialogPrivate *priv = ephy_embed_dialog_get_instance_private (dialog);
+
+	if (priv->embed != NULL)
 	{
 		EphyEmbed **embedptr;
-		embedptr = &dialog->priv->embed;
-		g_object_remove_weak_pointer (G_OBJECT (dialog->priv->embed),
+		embedptr = &priv->embed;
+		g_object_remove_weak_pointer (G_OBJECT (priv->embed),
 					      (gpointer *) embedptr);
 	}
 }
@@ -124,11 +121,12 @@ ephy_embed_dialog_get_property (GObject *object,
 				GParamSpec *pspec)
 {
         EphyEmbedDialog *d = EPHY_EMBED_DIALOG (object);
+	EphyEmbedDialogPrivate *priv = ephy_embed_dialog_get_instance_private (d);
 
         switch (prop_id)
         {
                 case PROP_EPHY_EMBED:
-                        g_value_set_object (value, d->priv->embed);
+                        g_value_set_object (value, priv->embed);
                         break;
         }
 }
@@ -156,13 +154,14 @@ void
 ephy_embed_dialog_set_embed (EphyEmbedDialog *dialog,
 			     EphyEmbed *embed)
 {
+	EphyEmbedDialogPrivate *priv = ephy_embed_dialog_get_instance_private (dialog);
 	EphyEmbed **embedptr;
 
 	unset_embed (dialog);
-	dialog->priv->embed = embed;
+	priv->embed = embed;
 
-	embedptr = &dialog->priv->embed;
-	g_object_add_weak_pointer (G_OBJECT (dialog->priv->embed),
+	embedptr = &priv->embed;
+	g_object_add_weak_pointer (G_OBJECT (priv->embed),
 				   (gpointer *) embedptr);
 	g_object_notify (G_OBJECT (dialog), "embed");
 }
@@ -170,5 +169,7 @@ ephy_embed_dialog_set_embed (EphyEmbedDialog *dialog,
 EphyEmbed *
 ephy_embed_dialog_get_embed (EphyEmbedDialog *dialog)
 {
-	return dialog->priv->embed;
+	EphyEmbedDialogPrivate *priv = ephy_embed_dialog_get_instance_private (dialog);
+
+	return priv->embed;
 }
