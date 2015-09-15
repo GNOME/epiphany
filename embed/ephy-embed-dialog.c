@@ -21,18 +21,21 @@
 
 #include "ephy-embed-dialog.h"
 
-enum
-{
-	PROP_0,
-	PROP_EPHY_EMBED
-};
-
 typedef struct
 {
 	EphyEmbed *embed;
 } EphyEmbedDialogPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (EphyEmbedDialog, ephy_embed_dialog, EPHY_TYPE_DIALOG)
+
+enum
+{
+	PROP_0,
+	PROP_EPHY_EMBED,
+	LAST_PROP
+};
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 static void
 unset_embed (EphyEmbedDialog *dialog)
@@ -100,13 +103,14 @@ ephy_embed_dialog_class_init (EphyEmbedDialogClass *klass)
 	object_class->set_property = ephy_embed_dialog_set_property;
 	object_class->get_property = ephy_embed_dialog_get_property;
 
-	g_object_class_install_property (object_class,
-					 PROP_EPHY_EMBED,
-                                         g_param_spec_object ("embed",
-                                                              "Embed",
-                                                              "The dialog's embed",
-                                                              G_TYPE_OBJECT,
-                                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_EPHY_EMBED] =
+		 g_param_spec_object ("embed",
+		                      "Embed",
+		                      "The dialog's embed",
+		                      G_TYPE_OBJECT,
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 static void
@@ -146,7 +150,7 @@ ephy_embed_dialog_set_embed (EphyEmbedDialog *dialog,
 	embedptr = &priv->embed;
 	g_object_add_weak_pointer (G_OBJECT (priv->embed),
 				   (gpointer *) embedptr);
-	g_object_notify (G_OBJECT (dialog), "embed");
+	g_object_notify_by_pspec (G_OBJECT (dialog), obj_properties[PROP_EPHY_EMBED]);
 }
 
 EphyEmbed *
