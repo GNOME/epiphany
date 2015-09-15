@@ -36,6 +36,8 @@ struct _EphyWebOverview
   GList *items;
 };
 
+G_DEFINE_TYPE (EphyWebOverview, ephy_web_overview, G_TYPE_OBJECT)
+
 enum
 {
   PROP_0,
@@ -45,8 +47,6 @@ enum
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
-
-G_DEFINE_TYPE (EphyWebOverview, ephy_web_overview, G_TYPE_OBJECT)
 
 typedef struct {
   char *url;
