@@ -31,6 +31,8 @@ struct _EphyWebOverviewModel
   GHashTable *thumbnails;
 };
 
+G_DEFINE_TYPE (EphyWebOverviewModel, ephy_web_overview_model, G_TYPE_OBJECT)
+
 enum
 {
   URLS_CHANGED,
@@ -41,8 +43,6 @@ enum
 };
 
 static guint signals[LAST_SIGNAL];
-
-G_DEFINE_TYPE (EphyWebOverviewModel, ephy_web_overview_model, G_TYPE_OBJECT)
 
 static void
 ephy_web_overview_model_dispose (GObject *object)
