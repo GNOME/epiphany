@@ -89,7 +89,7 @@ enum
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
-EphyEmbedShell *embed_shell = NULL;
+static EphyEmbedShell *embed_shell = NULL;
 
 G_DEFINE_TYPE (EphyEmbedShell, ephy_embed_shell, GTK_TYPE_APPLICATION)
 
