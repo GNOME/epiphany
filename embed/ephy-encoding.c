@@ -23,10 +23,6 @@
 
 #include <string.h>
 
-G_DEFINE_TYPE (EphyEncoding, ephy_encoding, G_TYPE_OBJECT)
-
-#define EPHY_ENCODING_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING, EphyEncodingPrivate))
-
 enum {
   PROP_0,
 
@@ -37,7 +33,10 @@ enum {
   PROP_LANGUAGE_GROUPS
 };
 
-struct _EphyEncodingPrivate {
+struct _EphyEncoding
+{
+  GObject parent_instance;
+
   char *title;
   char *title_elided;
   char *collation_key;
@@ -45,15 +44,17 @@ struct _EphyEncodingPrivate {
   int language_groups;
 };
 
+G_DEFINE_TYPE (EphyEncoding, ephy_encoding, G_TYPE_OBJECT)
+
 static void
 ephy_encoding_finalize (GObject *object)
 {
-  EphyEncodingPrivate *priv = EPHY_ENCODING (object)->priv;
+  EphyEncoding *encoding = EPHY_ENCODING (object);
 
-  g_free (priv->title);
-  g_free (priv->title_elided);
-  g_free (priv->collation_key);
-  g_free (priv->encoding);
+  g_free (encoding->title);
+  g_free (encoding->title_elided);
+  g_free (encoding->collation_key);
+  g_free (encoding->encoding);
 
   G_OBJECT_CLASS (ephy_encoding_parent_class)->finalize (object);
 }
@@ -64,23 +65,23 @@ ephy_encoding_get_property (GObject *object,
                             GValue *value,
                             GParamSpec *pspec)
 {
-  EphyEncodingPrivate *priv = EPHY_ENCODING (object)->priv;
+  EphyEncoding *encoding = EPHY_ENCODING (object);
 
   switch (prop_id) {
     case PROP_TITLE:
-      g_value_set_string (value, priv->title);
+      g_value_set_string (value, encoding->title);
       break;
     case PROP_TITLE_ELIDED:
-      g_value_set_string (value, priv->title_elided);
+      g_value_set_string (value, encoding->title_elided);
       break;
     case PROP_COLLATION_KEY:
-      g_value_set_string (value, priv->collation_key);
+      g_value_set_string (value, encoding->collation_key);
       break;
     case PROP_ENCODING:
-      g_value_set_string (value, priv->encoding);
+      g_value_set_string (value, encoding->encoding);
       break;
     case PROP_LANGUAGE_GROUPS:
-      g_value_set_int (value, priv->language_groups);
+      g_value_set_int (value, encoding->language_groups);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -120,16 +121,16 @@ ephy_encoding_set_property (GObject *object,
                             const GValue *value,
                             GParamSpec *pspec)
 {
-  EphyEncodingPrivate *priv = EPHY_ENCODING (object)->priv;
+  EphyEncoding *encoding = EPHY_ENCODING (object);
 
   switch (prop_id) {
   case PROP_TITLE: {
     char *elided, *collate_key, *normalised;
 
-    g_free (priv->title);
-    priv->title = g_strdup (g_value_get_string (value));
+    g_free (encoding->title);
+    encoding->title = g_strdup (g_value_get_string (value));
 
-    elided = elide_underscores (priv->title);
+    elided = elide_underscores (encoding->title);
     normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
     collate_key = g_utf8_collate_key (normalised, -1);
 
@@ -145,19 +146,19 @@ ephy_encoding_set_property (GObject *object,
     break;
   } 
   case PROP_TITLE_ELIDED:
-    g_free (priv->title_elided);
-    priv->title_elided = g_strdup (g_value_get_string (value));
+    g_free (encoding->title_elided);
+    encoding->title_elided = g_strdup (g_value_get_string (value));
     break;
   case PROP_COLLATION_KEY:
-    g_free (priv->collation_key);
-    priv->collation_key = g_strdup (g_value_get_string (value));
+    g_free (encoding->collation_key);
+    encoding->collation_key = g_strdup (g_value_get_string (value));
     break;
   case PROP_ENCODING:
-    g_free (priv->encoding);
-    priv->encoding = g_strdup (g_value_get_string (value));
+    g_free (encoding->encoding);
+    encoding->encoding = g_strdup (g_value_get_string (value));
     break;
   case PROP_LANGUAGE_GROUPS:
-    priv->language_groups = g_value_get_int (value);
+    encoding->language_groups = g_value_get_int (value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -213,14 +214,11 @@ ephy_encoding_class_init (EphyEncodingClass *klass)
                                                      LG_NONE, LG_ALL,
                                                      LG_NONE,
                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_type_class_add_private (gobject_class, sizeof (EphyEncodingPrivate));
 }
 
 static void
 ephy_encoding_init (EphyEncoding *encoding)
 {
-  encoding->priv = EPHY_ENCODING_GET_PRIVATE (encoding);
 }
 
 const char *
@@ -228,7 +226,7 @@ ephy_encoding_get_title (EphyEncoding *encoding)
 {
   g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
 
-  return encoding->priv->title;
+  return encoding->title;
 }
 
 const char *
@@ -236,7 +234,7 @@ ephy_encoding_get_title_elided (EphyEncoding *encoding)
 {
   g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
 
-  return encoding->priv->title_elided;
+  return encoding->title_elided;
 }
 
 const char *
@@ -244,7 +242,7 @@ ephy_encoding_get_collation_key (EphyEncoding *encoding)
 {
   g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
 
-  return encoding->priv->collation_key;
+  return encoding->collation_key;
 }
 
 const char *
@@ -252,7 +250,7 @@ ephy_encoding_get_encoding (EphyEncoding *encoding)
 {
   g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
 
-  return encoding->priv->encoding;
+  return encoding->encoding;
 }
 
 int
@@ -260,7 +258,7 @@ ephy_encoding_get_language_groups (EphyEncoding *encoding)
 {
   g_return_val_if_fail (EPHY_IS_ENCODING (encoding), LG_NONE);
 
-  return encoding->priv->language_groups;
+  return encoding->language_groups;
 }
 
 EphyEncoding *

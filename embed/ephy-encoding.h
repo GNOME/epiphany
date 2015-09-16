@@ -30,29 +30,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_ENCODING         (ephy_encoding_get_type ())
-#define EPHY_ENCODING(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_ENCODING, EphyEncoding))
-#define EPHY_ENCODING_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_ENCODING, EphyEncodingClass))
-#define EPHY_IS_ENCODING(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_ENCODING))
-#define EPHY_IS_ENCODING_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_ENCODING))
-#define EPHY_ENCODING_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_ENCODING, EphyEncodingClass))
+#define EPHY_TYPE_ENCODING (ephy_encoding_get_type ())
 
-typedef struct _EphyEncodingClass    EphyEncodingClass;
-typedef struct _EphyEncoding         EphyEncoding;
-typedef struct _EphyEncodingPrivate  EphyEncodingPrivate;
-
-struct _EphyEncoding
-{
-  GObject parent;
-
-  /*< private >*/
-  EphyEncodingPrivate *priv;
-};
-
-struct _EphyEncodingClass
-{
-  GObjectClass parent_class;
-};
+G_DECLARE_FINAL_TYPE (EphyEncoding, ephy_encoding, EPHY, ENCODING, GObject)
 
 typedef enum
 {
@@ -81,7 +61,6 @@ typedef enum
   LG_ALL      = 0x3fffff,
 } EphyLanguageGroup;
 
-GType          ephy_encoding_get_type             (void);
 EphyEncoding * ephy_encoding_new                  (const char *encoding,
                                                    const char *title,
                                                    int language_groups);
