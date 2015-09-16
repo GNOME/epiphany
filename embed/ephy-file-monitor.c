@@ -45,9 +45,11 @@ G_DEFINE_TYPE (EphyFileMonitor, ephy_file_monitor, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
-
-  PROP_VIEW
+  PROP_VIEW,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 static void
 ephy_file_monitor_cancel (EphyFileMonitor *monitor)
@@ -267,13 +269,14 @@ ephy_file_monitor_class_init (EphyFileMonitorClass *klass)
   gobject_class->get_property = ephy_file_monitor_get_property;
   gobject_class->set_property = ephy_file_monitor_set_property;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_VIEW,
-                                   g_param_spec_object ("view",
-                                                        "View",
-                                                        "The file monitor's associated view",
-                                                        EPHY_TYPE_WEB_VIEW,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
+  obj_properties[PROP_VIEW] =
+    g_param_spec_object ("view",
+                        "View",
+                        "The file monitor's associated view",
+                        EPHY_TYPE_WEB_VIEW,
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 }
 
 static void
