@@ -452,6 +452,9 @@ ephy_dialog_set_property (GObject *object,
 		case PROP_DEFAULT_HEIGHT:
 			priv->default_height = g_value_get_int (value);
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
 	}
 }
 
@@ -477,6 +480,9 @@ ephy_dialog_get_property (GObject *object,
 			break;
 		case PROP_DEFAULT_HEIGHT:
 			g_value_set_int (value, priv->default_height);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
 	}
 }
