@@ -63,9 +63,6 @@ struct _EphyDialogClass
 struct _EphyDialog
 {
 	GObject parent;
-
-	/*< private >*/
-	EphyDialogPrivate *priv;
 };
 
 GType		ephy_dialog_get_type		(void);

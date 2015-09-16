@@ -45,8 +45,6 @@ enum
 	PROP_DEFAULT_HEIGHT
 };
 
-#define EPHY_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_DIALOG, EphyDialogPrivate))
-
 struct _EphyDialogPrivate
 {
 	char *name;
@@ -64,6 +62,8 @@ struct _EphyDialogPrivate
 	int default_height;
 };
 
+G_DEFINE_TYPE_WITH_PRIVATE (EphyDialog, ephy_dialog, GTK_TYPE_DIALOG)
+
 enum
 {
 	CHANGED,
@@ -72,67 +72,38 @@ enum
 
 static guint signals [LAST_SIGNAL] = { 0, };
 
-static void ephy_dialog_class_init (EphyDialogClass *klass);
-static void ephy_dialog_init	   (EphyDialog *window);
-
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_dialog_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyDialogClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) ephy_dialog_class_init,
-			NULL,
-			NULL, /* class_data */
-			sizeof (EphyDialog),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_dialog_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyDialog",
-					       &our_info, 0);
-	}
-
-	return type;
-}
-
 static void
 setup_default_size (EphyDialog *dialog)
 {
-	if (dialog->priv->has_default_size == FALSE)
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
+
+	if (priv->has_default_size == FALSE)
 	{
 		EphyInitialStateWindowFlags flags;
 
 		flags = EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE;
 
-		if (dialog->priv->persist_position)
+		if (priv->persist_position)
 		{
 			flags |= EPHY_INITIAL_STATE_WINDOW_SAVE_POSITION;
 		}
 
-		ephy_initial_state_add_window (dialog->priv->dialog,
-                                               dialog->priv->name,
-                                               dialog->priv->default_width,
-                                               dialog->priv->default_height,
+		ephy_initial_state_add_window (priv->dialog,
+                                               priv->name,
+                                               priv->default_width,
+                                               priv->default_height,
                                                FALSE, flags);
 
-		dialog->priv->has_default_size = TRUE;
+		priv->has_default_size = TRUE;
 	}
 }
 
 static void
 dialog_destroy_cb (GtkWidget *widget, EphyDialog *dialog)
 {
-	if (dialog->priv->disposing == FALSE)
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
+
+	if (priv->disposing == FALSE)
 	{
 		g_object_unref (dialog);
 	}
@@ -144,7 +115,7 @@ impl_construct (EphyDialog *dialog,
 		const char *name,
 		const char *domain)
 {
-	EphyDialogPrivate *priv = dialog->priv;
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
 	GtkBuilder *builder;
 	GError *error = NULL;
 
@@ -180,7 +151,7 @@ impl_construct (EphyDialog *dialog,
 		priv->name = g_strdup (name);
 	}
 
-	g_signal_connect_object (dialog->priv->dialog, "destroy",
+	g_signal_connect_object (priv->dialog, "destroy",
 				 G_CALLBACK(dialog_destroy_cb), dialog, 0);
 
 	g_object_unref (builder);
@@ -189,18 +160,20 @@ impl_construct (EphyDialog *dialog,
 static void
 impl_show (EphyDialog *dialog)
 {
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
+
 	setup_default_size (dialog);
 
-	if (dialog->priv->parent != NULL)
+	if (priv->parent != NULL)
 	{
 		/* make the dialog transient again, because it seems to get
 		 * forgotten after gtk_widget_hide
 		 */
-		gtk_window_set_transient_for (GTK_WINDOW (dialog->priv->dialog),
-					      GTK_WINDOW (dialog->priv->parent));
+		gtk_window_set_transient_for (GTK_WINDOW (priv->dialog),
+					      GTK_WINDOW (priv->parent));
 	}
 
-	gtk_window_present (GTK_WINDOW (dialog->priv->dialog));
+	gtk_window_present (GTK_WINDOW (priv->dialog));
 }
 
 /**
@@ -289,10 +262,12 @@ ephy_dialog_show (EphyDialog *dialog)
 void
 ephy_dialog_hide (EphyDialog *dialog)
 {
-	g_return_if_fail (EPHY_IS_DIALOG (dialog));
-	g_return_if_fail (dialog->priv->dialog != NULL);
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
 
-	gtk_widget_hide (dialog->priv->dialog);
+	g_return_if_fail (EPHY_IS_DIALOG (dialog));
+	g_return_if_fail (priv->dialog != NULL);
+
+	gtk_widget_hide (priv->dialog);
 }
 
 /**
@@ -306,14 +281,16 @@ ephy_dialog_hide (EphyDialog *dialog)
 int
 ephy_dialog_run (EphyDialog *dialog)
 {
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
+
 	g_return_val_if_fail (EPHY_IS_DIALOG (dialog), 0);
 
 	ephy_dialog_show (dialog);
 
-	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (dialog->priv->parent)),
-				     GTK_WINDOW (dialog->priv->dialog));
+	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (priv->parent)),
+				     GTK_WINDOW (priv->dialog));
 
-	return gtk_dialog_run (GTK_DIALOG (dialog->priv->dialog));
+	return gtk_dialog_run (GTK_DIALOG (priv->dialog));
 }
 
 /**
@@ -329,11 +306,12 @@ GtkWidget *
 ephy_dialog_get_control (EphyDialog *dialog,
 			 const char *object_id)
 {
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
 	GtkWidget *widget;
 
 	g_return_val_if_fail (EPHY_IS_DIALOG (dialog), NULL);
 
-	widget = GTK_WIDGET (gtk_builder_get_object (dialog->priv->builder,
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder,
 						     object_id));
 
 	return widget;
@@ -375,37 +353,39 @@ ephy_dialog_get_controls (EphyDialog *dialog,
 static void
 ephy_dialog_init (EphyDialog *dialog)
 {
-	dialog->priv = EPHY_DIALOG_GET_PRIVATE (dialog);
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
 
-	dialog->priv->default_width = -1;
-	dialog->priv->default_height = -1;
+	priv->default_width = -1;
+	priv->default_height = -1;
 }
 
 static void
 ephy_dialog_dispose (GObject *object)
 {
 	EphyDialog *dialog = EPHY_DIALOG (object);
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
 
-	if (dialog->priv->dialog)
+	if (priv->dialog)
 	{
-		dialog->priv->disposing = TRUE;
-		gtk_widget_destroy (dialog->priv->dialog);
-		dialog->priv->dialog = NULL;
+		priv->disposing = TRUE;
+		gtk_widget_destroy (priv->dialog);
+		priv->dialog = NULL;
 	}
 
-	g_clear_object (&dialog->priv->builder);
+	g_clear_object (&priv->builder);
 
-	parent_class->dispose (object);
+	G_OBJECT_CLASS (ephy_dialog_parent_class)->dispose (object);
 }
 
 static void
 ephy_dialog_finalize (GObject *object)
 {
 	EphyDialog *dialog = EPHY_DIALOG (object);
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
 
-	g_free (dialog->priv->name);
+	g_free (priv->name);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_dialog_parent_class)->finalize (object);
 }
 
 /**
@@ -419,9 +399,11 @@ ephy_dialog_finalize (GObject *object)
 GtkWidget *
 ephy_dialog_get_parent (EphyDialog *dialog)
 {
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
+
 	g_return_val_if_fail (EPHY_IS_DIALOG (dialog), NULL);
 
-	return dialog->priv->parent;
+	return priv->parent;
 }
 
 /**
@@ -435,9 +417,11 @@ void
 ephy_dialog_set_parent (EphyDialog *dialog,
 			GtkWidget *parent)
 {
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
+
 	g_return_if_fail (EPHY_IS_DIALOG (dialog));
 
-	dialog->priv->parent = parent;
+	priv->parent = parent;
 
 	g_object_notify (G_OBJECT (dialog), "parent-window");
 }
@@ -449,6 +433,7 @@ ephy_dialog_set_property (GObject *object,
 			  GParamSpec *pspec)
 {
 	EphyDialog *dialog = EPHY_DIALOG (object);
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
 
 	switch (prop_id)
 	{
@@ -456,13 +441,13 @@ ephy_dialog_set_property (GObject *object,
 			ephy_dialog_set_parent (dialog, g_value_get_object (value));
 			break;
 		case PROP_PERSIST_POSITION:
-			dialog->priv->persist_position = g_value_get_boolean (value);
+			priv->persist_position = g_value_get_boolean (value);
 			break;
 		case PROP_DEFAULT_WIDTH:
-			dialog->priv->default_width = g_value_get_int (value);
+			priv->default_width = g_value_get_int (value);
 			break;
 		case PROP_DEFAULT_HEIGHT:
-			dialog->priv->default_height = g_value_get_int (value);
+			priv->default_height = g_value_get_int (value);
 			break;
 	}
 }
@@ -474,20 +459,21 @@ ephy_dialog_get_property (GObject *object,
 			  GParamSpec *pspec)
 {
 	EphyDialog *dialog = EPHY_DIALOG (object);
+	EphyDialogPrivate *priv = ephy_dialog_get_instance_private (dialog);
 
 	switch (prop_id)
 	{
 		case PROP_PARENT_WINDOW:
-			g_value_set_object (value, dialog->priv->parent);
+			g_value_set_object (value, priv->parent);
 			break;
 		case PROP_PERSIST_POSITION:
-			g_value_set_boolean (value, dialog->priv->persist_position);
+			g_value_set_boolean (value, priv->persist_position);
 			break;
 		case PROP_DEFAULT_WIDTH:
-			g_value_set_int (value, dialog->priv->default_width);
+			g_value_set_int (value, priv->default_width);
 			break;
 		case PROP_DEFAULT_HEIGHT:
-			g_value_set_int (value, dialog->priv->default_height);
+			g_value_set_int (value, priv->default_height);
 			break;
 	}
 }
@@ -496,8 +482,6 @@ static void
 ephy_dialog_class_init (EphyDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_dialog_finalize;
 	object_class->dispose = ephy_dialog_dispose;
@@ -584,8 +568,6 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 							   -1,
 							   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
 							   G_PARAM_CONSTRUCT_ONLY));
-
-	g_type_class_add_private (object_class, sizeof (EphyDialogPrivate));
 }
 
 /**
