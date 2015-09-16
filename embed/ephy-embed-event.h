@@ -31,30 +31,10 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_EMBED_EVENT               (ephy_embed_event_get_type ())
-#define EPHY_EMBED_EVENT(o)                 (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_EVENT, EphyEmbedEvent))
-#define EPHY_EMBED_EVENT_CLASS(k)           (G_TYPE_CHECK_CLASS_CAST ((k), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventClass))
-#define EPHY_IS_EMBED_EVENT(o)              (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_EVENT))
-#define EPHY_IS_EMBED_EVENT_CLASS(k)        (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_EVENT))
-#define EPHY_EMBED_EVENT_GET_CLASS(o)       (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_EVENT, EphyEmbedEventClass))
+#define EPHY_TYPE_EMBED_EVENT (ephy_embed_event_get_type ())
 
-typedef struct EphyEmbedEventClass EphyEmbedEventClass;
-typedef struct EphyEmbedEvent EphyEmbedEvent;
-typedef struct EphyEmbedEventPrivate EphyEmbedEventPrivate;
+G_DECLARE_FINAL_TYPE (EphyEmbedEvent, ephy_embed_event, EPHY, EMBED_EVENT, GObject)
 
-struct EphyEmbedEvent {
-  GObject parent_instance;
-
-  /*< private >*/
-  EphyEmbedEventPrivate *priv;
-};
-
-struct EphyEmbedEventClass {
-  GObjectClass parent_class;
-};
-
-
-GType                ephy_embed_event_get_type            (void);
 EphyEmbedEvent *     ephy_embed_event_new                 (GdkEventButton      *event,
                                                            WebKitHitTestResult *hit_test_result);
 guint                ephy_embed_event_get_context         (EphyEmbedEvent      *event);
