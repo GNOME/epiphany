@@ -74,6 +74,9 @@ ephy_embed_dialog_set_property (GObject *object,
                 case PROP_EPHY_EMBED:
                         ephy_embed_dialog_set_embed (d, g_value_get_object (value));
                         break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
         }
 }
 
@@ -91,6 +94,9 @@ ephy_embed_dialog_get_property (GObject *object,
                 case PROP_EPHY_EMBED:
                         g_value_set_object (value, priv->embed);
                         break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
         }
 }
 
