@@ -816,8 +816,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                        "The  global mode for this instance.",
                        EPHY_TYPE_EMBED_SHELL_MODE,
                        EPHY_EMBED_SHELL_MODE_BROWSER,
-                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
-                       G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY);
+                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   
   g_object_class_install_properties (object_class,
                                      N_PROPERTIES,
