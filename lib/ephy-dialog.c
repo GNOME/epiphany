@@ -507,8 +507,7 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 			      EPHY_TYPE_DIALOG,
 			      G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
 			      G_STRUCT_OFFSET (EphyDialogClass, changed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
+			      NULL, NULL, NULL,
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_POINTER);
