@@ -29,14 +29,19 @@
 #define RELOAD_DELAY            250 /* ms */
 #define RELOAD_DELAY_MAX_TICKS  40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
 
-struct _EphyFileMonitorPrivate {
+struct _EphyFileMonitor
+{
+  GObject parent;
+
   GFileMonitor *monitor;
   gboolean monitor_directory;
   guint reload_scheduled_id;
   guint reload_delay_ticks;
 
   EphyWebView *view;
-};    
+};
+
+G_DEFINE_TYPE (EphyFileMonitor, ephy_file_monitor, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -44,61 +49,51 @@ enum {
   PROP_VIEW
 };
 
-#define EPHY_FILE_MONITOR_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_FILE_MONITOR, EphyFileMonitorPrivate))
-
-G_DEFINE_TYPE (EphyFileMonitor, ephy_file_monitor, G_TYPE_OBJECT)
-
 static void
 ephy_file_monitor_cancel (EphyFileMonitor *monitor)
 {
-  EphyFileMonitorPrivate *priv;
-
   g_return_if_fail (EPHY_IS_FILE_MONITOR (monitor));
 
-  priv = monitor->priv;
-
-  if (priv->monitor != NULL) {
+  if (monitor->monitor != NULL) {
     LOG ("Cancelling file monitor");
 
-    g_file_monitor_cancel (G_FILE_MONITOR (priv->monitor));
-    g_object_unref (priv->monitor);
-    priv->monitor = NULL;
+    g_file_monitor_cancel (G_FILE_MONITOR (monitor->monitor));
+    g_object_unref (monitor->monitor);
+    monitor->monitor = NULL;
   }
 
-  if (priv->reload_scheduled_id != 0) {
+  if (monitor->reload_scheduled_id != 0) {
     LOG ("Cancelling scheduled reload");
 
-    g_source_remove (priv->reload_scheduled_id);
-    priv->reload_scheduled_id = 0;
+    g_source_remove (monitor->reload_scheduled_id);
+    monitor->reload_scheduled_id = 0;
   }
 
-  priv->reload_delay_ticks = 0;
+  monitor->reload_delay_ticks = 0;
 }
 
 static gboolean
 ephy_file_monitor_reload_cb (EphyFileMonitor *monitor)
 {
-  EphyFileMonitorPrivate *priv = monitor->priv;
-
-  if (priv->reload_delay_ticks > 0) {
-    priv->reload_delay_ticks--;
+  if (monitor->reload_delay_ticks > 0) {
+    monitor->reload_delay_ticks--;
 
     /* Run again. */
     return TRUE;
   }
 
-  if (ephy_web_view_is_loading (priv->view)) {
+  if (ephy_web_view_is_loading (monitor->view)) {
     /* Wait a bit to reload if we're still loading! */
-    priv->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
+    monitor->reload_delay_ticks = RELOAD_DELAY_MAX_TICKS / 2;
 
     /* Run again. */
     return TRUE;
   }
 
-  priv->reload_scheduled_id = 0;
+  monitor->reload_scheduled_id = 0;
 
-  LOG ("Reloading file '%s'", ephy_web_view_get_address (priv->view));
-  webkit_web_view_reload (WEBKIT_WEB_VIEW (priv->view));
+  LOG ("Reloading file '%s'", ephy_web_view_get_address (monitor->view));
+  webkit_web_view_reload (WEBKIT_WEB_VIEW (monitor->view));
 
   /* Don't run again. */
   return FALSE;
@@ -112,7 +107,6 @@ ephy_file_monitor_changed_cb (GFileMonitor *monitor,
                               EphyFileMonitor *file_monitor)
 {
   gboolean should_reload;
-  EphyFileMonitorPrivate *priv = file_monitor->priv;
 
   switch (event_type) {
     /* These events will always trigger a reload: */
@@ -124,7 +118,7 @@ ephy_file_monitor_changed_cb (GFileMonitor *monitor,
     /* These events will only trigger a reload for directories: */
     case G_FILE_MONITOR_EVENT_DELETED:
     case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
-      should_reload = priv->monitor_directory;
+      should_reload = file_monitor->monitor_directory;
       break;
 
     /* These events don't trigger a reload: */
@@ -142,19 +136,19 @@ ephy_file_monitor_changed_cb (GFileMonitor *monitor,
      * Delay the reload a little bit so we don't endlessly
      * reload while a file is written.
      */
-    if (priv->reload_delay_ticks == 0)
-      priv->reload_delay_ticks = 1;
+    if (file_monitor->reload_delay_ticks == 0)
+      file_monitor->reload_delay_ticks = 1;
     else {
       /* Exponential backoff. */
-      priv->reload_delay_ticks = MIN (priv->reload_delay_ticks * 2,
-                                      RELOAD_DELAY_MAX_TICKS);
+      file_monitor->reload_delay_ticks = MIN (file_monitor->reload_delay_ticks * 2,
+                                              RELOAD_DELAY_MAX_TICKS);
     }
 
-    if (priv->reload_scheduled_id == 0) {
-      priv->reload_scheduled_id =
+    if (file_monitor->reload_scheduled_id == 0) {
+      file_monitor->reload_scheduled_id =
         g_timeout_add (RELOAD_DELAY,
                        (GSourceFunc)ephy_file_monitor_reload_cb, file_monitor);
-      g_source_set_name_by_id (priv->reload_scheduled_id, "[epiphany] file_monitor");
+      g_source_set_name_by_id (file_monitor->reload_scheduled_id, "[epiphany] file_monitor");
     }
   }
 }
@@ -163,7 +157,6 @@ void
 ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
                                    const char *address)
 {
-  EphyFileMonitorPrivate *priv;
   gboolean local;
   char *anchor;
   char *url;
@@ -173,8 +166,6 @@ ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
 
   g_return_if_fail (EPHY_IS_FILE_MONITOR (file_monitor));
   g_return_if_fail (address != NULL);
-
-  priv = file_monitor->priv;
 
   ephy_file_monitor_cancel (file_monitor);
 
@@ -203,19 +194,19 @@ ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
   g_object_unref (file_info);
 
   if (file_type == G_FILE_TYPE_DIRECTORY) {
-    priv->monitor = g_file_monitor_directory (file, 0, NULL, NULL);
-    g_signal_connect (priv->monitor, "changed",
+    file_monitor->monitor = g_file_monitor_directory (file, 0, NULL, NULL);
+    g_signal_connect (file_monitor->monitor, "changed",
                       G_CALLBACK (ephy_file_monitor_changed_cb),
                       file_monitor);
-    priv->monitor_directory = TRUE;
+    file_monitor->monitor_directory = TRUE;
     LOG ("Installed monitor for directory '%s'", url);
   }
   else if (file_type == G_FILE_TYPE_REGULAR) {
-    priv->monitor = g_file_monitor_file (file, 0, NULL, NULL);
-    g_signal_connect (priv->monitor, "changed",
+    file_monitor->monitor = g_file_monitor_file (file, 0, NULL, NULL);
+    g_signal_connect (file_monitor->monitor, "changed",
                       G_CALLBACK (ephy_file_monitor_changed_cb),
                       file_monitor);
-    priv->monitor_directory = FALSE;
+    file_monitor->monitor_directory = FALSE;
     LOG ("Installed monitor for file '%s'", url);
   }
 
@@ -237,11 +228,11 @@ ephy_file_monitor_get_property (GObject *object,
                                 GValue *value,
                                 GParamSpec *pspec)
 {
-  EphyFileMonitorPrivate *priv = EPHY_FILE_MONITOR (object)->priv;
+  EphyFileMonitor *monitor = EPHY_FILE_MONITOR (object);
 
   switch (prop_id) {
     case PROP_VIEW:
-      g_value_set_object (value, priv->view);
+      g_value_set_object (value, monitor->view);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
@@ -255,11 +246,11 @@ ephy_file_monitor_set_property (GObject *object,
                                 const GValue *value,
                                 GParamSpec *pspec)
 {
-  EphyFileMonitorPrivate *priv = EPHY_FILE_MONITOR (object)->priv;
+  EphyFileMonitor *monitor = EPHY_FILE_MONITOR (object);
 
   switch (prop_id) {
     case PROP_VIEW:
-      priv->view = g_value_get_object (value);
+      monitor->view = g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
@@ -283,14 +274,11 @@ ephy_file_monitor_class_init (EphyFileMonitorClass *klass)
                                                         "The file monitor's associated view",
                                                         EPHY_TYPE_WEB_VIEW,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
-
-  g_type_class_add_private (gobject_class, sizeof (EphyFileMonitorPrivate));
 }
 
 static void
 ephy_file_monitor_init (EphyFileMonitor *monitor)
 {
-  monitor->priv = EPHY_FILE_MONITOR_GET_PRIVATE (monitor);
 }
 
 EphyFileMonitor *

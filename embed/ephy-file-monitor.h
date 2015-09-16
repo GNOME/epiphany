@@ -30,31 +30,10 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_FILE_MONITOR         (ephy_file_monitor_get_type ())
-#define EPHY_FILE_MONITOR(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_FILE_MONITOR, EphyFileMonitor))
-#define EPHY_FILE_MONITOR_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_FILE_MONITOR, EphyFileMonitorClass))
-#define EPHY_IS_FILE_MONITOR(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_FILE_MONITOR))
-#define EPHY_IS_FILE_MONITOR_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_FILE_MONITOR))
-#define EPHY_FILE_MONITOR_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FILE_MONITOR, EphyFileMonitorClass))
+#define EPHY_TYPE_FILE_MONITOR (ephy_file_monitor_get_type ())
 
-typedef struct _EphyFileMonitorClass   EphyFileMonitorClass;
-typedef struct _EphyFileMonitor        EphyFileMonitor;
-typedef struct _EphyFileMonitorPrivate EphyFileMonitorPrivate;
+G_DECLARE_FINAL_TYPE (EphyFileMonitor, ephy_file_monitor, EPHY, FILE_MONITOR, GObject)
 
-struct _EphyFileMonitor
-{
-  GObject parent;
-
-  /*< private >*/
-  EphyFileMonitorPrivate *priv;
-};
-
-struct _EphyFileMonitorClass
-{
-  GObjectClass parent_class;
-};
-
-GType             ephy_file_monitor_get_type        (void);
 EphyFileMonitor * ephy_file_monitor_new             (EphyWebView *view);
 void              ephy_file_monitor_update_location (EphyFileMonitor *monitor,
                                                      const char *address);
