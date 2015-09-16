@@ -46,8 +46,6 @@
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
 #define OVERVIEW_RELOAD_DELAY 500
 
-#define EPHY_EMBED_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellPrivate))
-
 struct _EphyEmbedShellPrivate
 {
   WebKitWebContext *web_context;
@@ -91,12 +89,12 @@ static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
 static EphyEmbedShell *embed_shell = NULL;
 
-G_DEFINE_TYPE (EphyEmbedShell, ephy_embed_shell, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE_WITH_PRIVATE (EphyEmbedShell, ephy_embed_shell, GTK_TYPE_APPLICATION)
 
 static void
 ephy_embed_shell_dispose (GObject *object)
 {
-  EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (object)->priv;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (object));
 
   if (priv->update_overview_timeout_id > 0) {
     g_source_remove (priv->update_overview_timeout_id);
@@ -126,9 +124,10 @@ static EphyWebExtensionProxy *
 ephy_embed_shell_find_web_extension (EphyEmbedShell *shell,
                                      const char *name_owner)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
 
-  l = g_list_find_custom (shell->priv->web_extensions, name_owner, (GCompareFunc)web_extension_compare);
+  l = g_list_find_custom (priv->web_extensions, name_owner, (GCompareFunc)web_extension_compare);
 
   if (!l)
     g_warning ("Could not find extension with name owner `%s´.", name_owner);
@@ -184,12 +183,13 @@ history_service_query_urls_cb (EphyHistoryService *service,
                                GList *urls,
                                EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
 
   if (!success)
     return;
 
-  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+  for (l = priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
 
     ephy_web_extension_proxy_history_set_urls (web_extension, urls);
@@ -199,6 +199,7 @@ history_service_query_urls_cb (EphyHistoryService *service,
 static void
 ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   EphyHistoryQuery *query;
 
   query = ephy_history_query_new ();
@@ -206,7 +207,7 @@ ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
   query->limit = EPHY_ABOUT_OVERVIEW_MAX_ITEMS;
   query->ignore_hidden = TRUE;
 
-  ephy_history_service_query_urls (shell->priv->global_history_service, query, NULL,
+  ephy_history_service_query_urls (priv->global_history_service, query, NULL,
                                    (EphyHistoryJobCallback) history_service_query_urls_cb,
                                    shell);
   ephy_history_query_free (query);
@@ -222,9 +223,11 @@ history_service_urls_visited_cb (EphyHistoryService *history,
 static gboolean
 ephy_embed_shell_update_overview_timeout_cb (EphyEmbedShell *shell)
 {
-  shell->priv->update_overview_timeout_id = 0;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  if (shell->priv->hiding_overview_item > 0)
+  priv->update_overview_timeout_id = 0;
+
+  if (priv->hiding_overview_item > 0)
     return FALSE;
 
   ephy_embed_shell_update_overview_urls (shell);
@@ -238,12 +241,14 @@ history_set_url_hidden_cb (EphyHistoryService *service,
                            gpointer result_data,
                            EphyEmbedShell *shell)
 {
-  shell->priv->hiding_overview_item--;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  priv->hiding_overview_item--;
 
   if (!success)
     return;
 
-  if (shell->priv->update_overview_timeout_id > 0)
+  if (priv->update_overview_timeout_id > 0)
     return;
 
   ephy_embed_shell_update_overview_urls (shell);
@@ -254,22 +259,23 @@ web_extension_overview_message_received_cb (WebKitUserContentManager *manager,
                                             WebKitJavascriptResult *message,
                                             EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   char *url_to_remove;
 
   url_to_remove = ephy_embed_utils_get_js_result_as_string (message);
 
-  shell->priv->hiding_overview_item++;
-  ephy_history_service_set_url_hidden (shell->priv->global_history_service,
+  priv->hiding_overview_item++;
+  ephy_history_service_set_url_hidden (priv->global_history_service,
                                        url_to_remove, TRUE, NULL,
                                        (EphyHistoryJobCallback) history_set_url_hidden_cb,
                                        shell);
   g_free (url_to_remove);
 
-  if (shell->priv->update_overview_timeout_id > 0)
-    g_source_remove (shell->priv->update_overview_timeout_id);
+  if (priv->update_overview_timeout_id > 0)
+    g_source_remove (priv->update_overview_timeout_id);
 
   /* Wait for the CSS animations to finish before refreshing */
-  shell->priv->update_overview_timeout_id =
+  priv->update_overview_timeout_id =
     g_timeout_add (OVERVIEW_RELOAD_DELAY, (GSourceFunc) ephy_embed_shell_update_overview_timeout_cb, shell);
 }
 
@@ -300,22 +306,25 @@ static void
 web_extension_destroyed (EphyEmbedShell *shell,
                          GObject *web_extension)
 {
-  shell->priv->web_extensions = g_list_remove (shell->priv->web_extensions, web_extension);
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  priv->web_extensions = g_list_remove (priv->web_extensions, web_extension);
 }
 
 static void
 ephy_embed_shell_watch_web_extension (EphyEmbedShell *shell,
                                       const char *web_extension_id)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   EphyWebExtensionProxy *web_extension;
   char *service_name;
 
-  if (!shell->priv->bus)
+  if (!priv->bus)
     return;
 
   service_name = g_strdup_printf ("%s-%s", EPHY_WEB_EXTENSION_SERVICE_NAME, web_extension_id);
-  web_extension = ephy_web_extension_proxy_new (shell->priv->bus, service_name);
-  shell->priv->web_extensions = g_list_prepend (shell->priv->web_extensions, web_extension);
+  web_extension = ephy_web_extension_proxy_new (priv->bus, service_name);
+  priv->web_extensions = g_list_prepend (priv->web_extensions, web_extension);
   g_object_weak_ref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
   g_free (service_name);
 }
@@ -333,9 +342,10 @@ history_service_url_title_changed_cb (EphyHistoryService *service,
                                       const char *title,
                                       EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
 
-  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+  for (l = priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
 
     ephy_web_extension_proxy_history_set_url_title (web_extension, url, title);
@@ -347,9 +357,10 @@ history_service_url_deleted_cb (EphyHistoryService *service,
                                 const char *url,
                                 EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
 
-  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+  for (l = priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
 
     ephy_web_extension_proxy_history_delete_url (web_extension, url);
@@ -361,12 +372,13 @@ history_service_host_deleted_cb (EphyHistoryService *service,
                                  const char *deleted_url,
                                  EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
   SoupURI *deleted_uri;
 
   deleted_uri = soup_uri_new (deleted_url);
 
-  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+  for (l = priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
 
     ephy_web_extension_proxy_history_delete_host (web_extension, soup_uri_get_host (deleted_uri));
@@ -379,9 +391,10 @@ static void
 history_service_cleared_cb (EphyHistoryService *service,
                             EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
 
-  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+  for (l = priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
 
     ephy_web_extension_proxy_history_clear (web_extension);
@@ -394,13 +407,14 @@ ephy_embed_shell_set_thumbnail_path (EphyEmbedShell *shell,
                                      time_t mtime,
                                      const char *path)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
 
-  ephy_history_service_set_url_thumbnail_time (shell->priv->global_history_service,
+  ephy_history_service_set_url_thumbnail_time (priv->global_history_service,
                                                url, mtime,
                                                NULL, NULL, NULL);
 
-  for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
+  for (l = priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
 
     ephy_web_extension_proxy_history_set_url_thumbnail (web_extension, url, path);
@@ -416,34 +430,36 @@ ephy_embed_shell_set_thumbnail_path (EphyEmbedShell *shell,
 GObject *
 ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-  if (shell->priv->global_history_service == NULL) {
+  if (priv->global_history_service == NULL) {
     char *filename;
 
     filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
-    shell->priv->global_history_service = ephy_history_service_new (filename,
-                                                                    shell->priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO);
+    priv->global_history_service = ephy_history_service_new (filename,
+                                                             priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO);
     g_free (filename);
-    g_return_val_if_fail (shell->priv->global_history_service, NULL);
-    g_signal_connect (shell->priv->global_history_service, "urls-visited",
+    g_return_val_if_fail (priv->global_history_service, NULL);
+    g_signal_connect (priv->global_history_service, "urls-visited",
                       G_CALLBACK (history_service_urls_visited_cb),
                       shell);
-    g_signal_connect (shell->priv->global_history_service, "url-title-changed",
+    g_signal_connect (priv->global_history_service, "url-title-changed",
                       G_CALLBACK (history_service_url_title_changed_cb),
                       shell);
-    g_signal_connect (shell->priv->global_history_service, "url-deleted",
+    g_signal_connect (priv->global_history_service, "url-deleted",
                       G_CALLBACK (history_service_url_deleted_cb),
                       shell);
-    g_signal_connect (shell->priv->global_history_service, "host-deleted",
+    g_signal_connect (priv->global_history_service, "host-deleted",
                       G_CALLBACK (history_service_host_deleted_cb),
                       shell);
-    g_signal_connect (shell->priv->global_history_service, "cleared",
+    g_signal_connect (priv->global_history_service, "cleared",
                       G_CALLBACK (history_service_cleared_cb),
                       shell);
   }
 
-  return G_OBJECT (shell->priv->global_history_service);
+  return G_OBJECT (priv->global_history_service);
 }
 
 /**
@@ -455,12 +471,14 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 GObject *
 ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
-  if (shell->priv->encodings == NULL)
-    shell->priv->encodings = ephy_encodings_new ();
+  if (priv->encodings == NULL)
+    priv->encodings = ephy_encodings_new ();
 
-  return G_OBJECT (shell->priv->encodings);
+  return G_OBJECT (priv->encodings);
 }
 
 void
@@ -479,7 +497,9 @@ static void
 about_request_cb (WebKitURISchemeRequest *request,
                   EphyEmbedShell *shell)
 {
-  ephy_about_handler_handle_request (shell->priv->about_handler, request);
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  ephy_about_handler_handle_request (priv->about_handler, request);
 }
 
 static void
@@ -511,6 +531,7 @@ static void
 initialize_web_extensions (WebKitWebContext* web_context,
                            EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GVariant *user_data;
   gboolean private_profile;
   char *web_extension_id;
@@ -521,7 +542,7 @@ initialize_web_extensions (WebKitWebContext* web_context,
   web_extension_id = g_strdup_printf ("%u-%u", getpid (), ++web_extension_count);
   ephy_embed_shell_watch_web_extension (shell, web_extension_id);
 
-  private_profile = EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (shell->priv->mode);
+  private_profile = EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode);
   user_data = g_variant_new ("(ssb)", web_extension_id, ephy_dot_dir (), private_profile);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, user_data);
 }
@@ -529,14 +550,16 @@ initialize_web_extensions (WebKitWebContext* web_context,
 static void
 ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
 {
-  shell->priv->bus = g_application_get_dbus_connection (G_APPLICATION (shell));
-  if (!shell->priv->bus) {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  priv->bus = g_application_get_dbus_connection (G_APPLICATION (shell));
+  if (!priv->bus) {
     g_warning ("Application not connected to session bus");
     return;
   }
 
-  shell->priv->web_extensions_page_created_signal_id =
-    g_dbus_connection_signal_subscribe (shell->priv->bus,
+  priv->web_extensions_page_created_signal_id =
+    g_dbus_connection_signal_subscribe (priv->bus,
                                         NULL,
                                         EPHY_WEB_EXTENSION_INTERFACE,
                                         "PageCreated",
@@ -551,6 +574,7 @@ ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
 static void
 ephy_embed_shell_setup_process_model (EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   EphyPrefsProcessModel process_model;
   guint max_processes;
 
@@ -568,17 +592,17 @@ ephy_embed_shell_setup_process_model (EphyEmbedShell *shell)
     break;
   }
 
-  webkit_web_context_set_process_model (shell->priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
-  webkit_web_context_set_web_process_count_limit (shell->priv->web_context, max_processes);
+  webkit_web_context_set_process_model (priv->web_context, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
+  webkit_web_context_set_web_process_count_limit (priv->web_context, max_processes);
 }
 
 static void
 ephy_embed_shell_create_web_context (EphyEmbedShell *embed_shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (embed_shell);
   WebKitWebsiteDataManager *manager;
   char *data_dir;
   char *cache_dir;
-  EphyEmbedShellPrivate *priv = embed_shell->priv;
 
   data_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
                                ephy_dot_dir () : g_get_user_data_dir (),
@@ -601,7 +625,7 @@ static void
 ephy_embed_shell_startup (GApplication* application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
-  EphyEmbedShellPrivate *priv = shell->priv;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   char *favicon_db_path;
   WebKitCookieManager *cookie_manager;
   char *filename;
@@ -618,29 +642,29 @@ ephy_embed_shell_startup (GApplication* application)
 
   /* User content manager */
   if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST)
-    shell->priv->user_content = webkit_user_content_manager_new ();
+    priv->user_content = webkit_user_content_manager_new ();
 
-  webkit_user_content_manager_register_script_message_handler (shell->priv->user_content,
+  webkit_user_content_manager_register_script_message_handler (priv->user_content,
                                                                "overview");
-  g_signal_connect (shell->priv->user_content, "script-message-received::overview",
+  g_signal_connect (priv->user_content, "script-message-received::overview",
                     G_CALLBACK (web_extension_overview_message_received_cb),
                     shell);
 
-  webkit_user_content_manager_register_script_message_handler (shell->priv->user_content,
+  webkit_user_content_manager_register_script_message_handler (priv->user_content,
                                                                "tlsErrorPage");
-  g_signal_connect (shell->priv->user_content, "script-message-received::tlsErrorPage",
+  g_signal_connect (priv->user_content, "script-message-received::tlsErrorPage",
                     G_CALLBACK (web_extension_tls_error_page_message_received_cb),
                     shell);
 
-  webkit_user_content_manager_register_script_message_handler (shell->priv->user_content,
+  webkit_user_content_manager_register_script_message_handler (priv->user_content,
                                                                "formAuthData");
-  g_signal_connect (shell->priv->user_content, "script-message-received::formAuthData",
+  g_signal_connect (priv->user_content, "script-message-received::formAuthData",
                     G_CALLBACK (web_extension_form_auth_data_message_received_cb),
                     shell);
 
-  webkit_user_content_manager_register_script_message_handler (shell->priv->user_content,
+  webkit_user_content_manager_register_script_message_handler (priv->user_content,
                                                                "aboutApps");
-  g_signal_connect (shell->priv->user_content, "script-message-received::aboutApps",
+  g_signal_connect (priv->user_content, "script-message-received::aboutApps",
                     G_CALLBACK (web_extension_about_apps_message_received_cb),
                     shell);
 
@@ -661,7 +685,7 @@ ephy_embed_shell_startup (GApplication* application)
 
 
   /* about: URIs handler */
-  shell->priv->about_handler = ephy_about_handler_new ();
+  priv->about_handler = ephy_about_handler_new ();
   webkit_web_context_register_uri_scheme (priv->web_context,
                                           EPHY_ABOUT_SCHEME,
                                           (WebKitURISchemeRequestCallback)about_request_cb,
@@ -692,7 +716,7 @@ ephy_embed_shell_startup (GApplication* application)
 static void
 ephy_embed_shell_shutdown (GApplication* application)
 {
-  EphyEmbedShellPrivate *priv = EPHY_EMBED_SHELL (application)->priv;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (application));
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->shutdown (application);
 
@@ -718,11 +742,11 @@ ephy_embed_shell_set_property (GObject *object,
                                const GValue *value,
                                GParamSpec *pspec)
 {
-  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (object));
 
   switch (prop_id) {
   case PROP_MODE:
-    embed_shell->priv->mode = g_value_get_enum (value);
+    priv->mode = g_value_get_enum (value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -735,11 +759,11 @@ ephy_embed_shell_get_property (GObject *object,
                                GValue *value,
                                GParamSpec *pspec)
 {
-  EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (object);
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (object));
 
   switch (prop_id) {
   case PROP_MODE:
-    g_value_set_enum (value, embed_shell->priv->mode);
+    g_value_set_enum (value, priv->mode);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -750,24 +774,24 @@ static void
 ephy_embed_shell_constructed (GObject *object)
 {
   EphyEmbedShell *embed_shell;
+  EphyEmbedShellPrivate *priv;
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->constructed (object);
 
   embed_shell = EPHY_EMBED_SHELL (object);
+  priv = ephy_embed_shell_get_instance_private (embed_shell);
   /* These do not run the EmbedShell application instance, so make sure that
      there is a web context and a user content manager for them. */
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_TEST ||
       ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
     ephy_embed_shell_create_web_context (embed_shell);
-    embed_shell->priv->user_content = webkit_user_content_manager_new ();
+    priv->user_content = webkit_user_content_manager_new ();
   }
 }
 
 static void
 ephy_embed_shell_init (EphyEmbedShell *shell)
 {
-  shell->priv = EPHY_EMBED_SHELL_GET_PRIVATE (shell);
-
   /* globally accessible singleton */
   g_assert (embed_shell == NULL);
   embed_shell = shell;
@@ -910,8 +934,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   G_TYPE_UINT64,
                   G_TYPE_STRING,
                   G_TYPE_STRING);
-
-  g_type_class_add_private (object_class, sizeof (EphyEmbedShellPrivate));
 }
 
 /**
@@ -931,11 +953,10 @@ void
 ephy_embed_shell_set_page_setup (EphyEmbedShell *shell,
                                  GtkPageSetup *page_setup)
 {
-  EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   char *path;
 
   g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
-  priv = shell->priv;
 
   if (page_setup != NULL)
     g_object_ref (page_setup);
@@ -960,10 +981,9 @@ ephy_embed_shell_set_page_setup (EphyEmbedShell *shell,
 GtkPageSetup *
 ephy_embed_shell_get_page_setup (EphyEmbedShell *shell)
 {
-  EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-  priv = shell->priv;
 
   if (priv->page_setup == NULL) {
     GError *error = NULL;
@@ -996,11 +1016,10 @@ void
 ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
                                      GtkPrintSettings *settings)
 {
-  EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   char *path;
 
   g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
-  priv = shell->priv;
 
   if (settings != NULL)
     g_object_ref (settings);
@@ -1026,10 +1045,9 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell *shell,
 GtkPrintSettings *
 ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 {
-  EphyEmbedShellPrivate *priv;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
-  priv = shell->priv;
 
   if (priv->print_settings == NULL) {
     GError *error = NULL;
@@ -1059,9 +1077,11 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 EphyEmbedShellMode
 ephy_embed_shell_get_mode (EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), EPHY_EMBED_SHELL_MODE_BROWSER);
   
-  return shell->priv->mode;
+  return priv->mode;
 }
 
 /**
@@ -1117,25 +1137,33 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
 void
 ephy_embed_shell_clear_cache (EphyEmbedShell *shell)
 {
-  webkit_web_context_clear_cache (shell->priv->web_context);
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  webkit_web_context_clear_cache (priv->web_context);
 }
 
 WebKitUserContentManager *
 ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell)
 {
-  return shell->priv->user_content;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  return priv->user_content;
 }
 
 WebKitWebContext *
 ephy_embed_shell_get_web_context (EphyEmbedShell *shell)
 {
-  return shell->priv->web_context;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  return priv->web_context;
 }
 
 EphyDownloadsManager *
 ephy_embed_shell_get_downloads_manager (EphyEmbedShell *shell)
 {
-  if (!shell->priv->downloads_manager)
-    shell->priv->downloads_manager = EPHY_DOWNLOADS_MANAGER (g_object_new (EPHY_TYPE_DOWNLOADS_MANAGER, NULL));
-  return shell->priv->downloads_manager;
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  if (!priv->downloads_manager)
+    priv->downloads_manager = EPHY_DOWNLOADS_MANAGER (g_object_new (EPHY_TYPE_DOWNLOADS_MANAGER, NULL));
+  return priv->downloads_manager;
 }
