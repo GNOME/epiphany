@@ -31,16 +31,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_EMBED_SHELL   (ephy_embed_shell_get_type ())
-#define EPHY_EMBED_SHELL(o)   (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_EMBED_SHELL, EphyEmbedShell))
-#define EPHY_EMBED_SHELL_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellClass))
-#define EPHY_IS_EMBED_SHELL(o)    (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_EMBED_SHELL))
-#define EPHY_IS_EMBED_SHELL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_EMBED_SHELL))
-#define EPHY_EMBED_SHELL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_EMBED_SHELL, EphyEmbedShellClass))
+#define EPHY_TYPE_EMBED_SHELL (ephy_embed_shell_get_type ())
 
-typedef struct _EphyEmbedShellClass EphyEmbedShellClass;
-typedef struct _EphyEmbedShell    EphyEmbedShell;
-typedef struct _EphyEmbedShellPrivate EphyEmbedShellPrivate;
+G_DECLARE_DERIVABLE_TYPE (EphyEmbedShell, ephy_embed_shell, EPHY, EMBED_SHELL, GtkApplication)
 
 typedef enum
 {
@@ -56,11 +49,6 @@ typedef enum
 #define EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE(mode) \
   (mode == EPHY_EMBED_SHELL_MODE_PRIVATE || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
 
-struct _EphyEmbedShell
-{
-  GtkApplication parent;
-};
-
 struct _EphyEmbedShellClass
 {
   GtkApplicationClass parent_class;
@@ -70,7 +58,6 @@ struct _EphyEmbedShellClass
   void    (* restored_window)  (EphyEmbedShell *shell);
 };
 
-GType              ephy_embed_shell_get_type                   (void);
 EphyEmbedShell    *ephy_embed_shell_get_default                (void);
 WebKitWebContext  *ephy_embed_shell_get_web_context            (EphyEmbedShell   *shell);
 GObject           *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);

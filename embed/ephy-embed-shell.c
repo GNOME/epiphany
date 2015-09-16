@@ -46,8 +46,7 @@
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
 #define OVERVIEW_RELOAD_DELAY 500
 
-struct _EphyEmbedShellPrivate
-{
+typedef struct {
   WebKitWebContext *web_context;
   EphyHistoryService *global_history_service;
   EphyEncodings *encodings;
@@ -62,7 +61,7 @@ struct _EphyEmbedShellPrivate
   GDBusConnection *bus;
   GList *web_extensions;
   guint web_extensions_page_created_signal_id;
-};
+} EphyEmbedShellPrivate;
 
 enum
 {
