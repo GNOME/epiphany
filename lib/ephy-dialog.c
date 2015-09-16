@@ -45,7 +45,7 @@ enum
 	PROP_DEFAULT_HEIGHT
 };
 
-struct _EphyDialogPrivate
+typedef struct
 {
 	char *name;
 
@@ -60,7 +60,7 @@ struct _EphyDialogPrivate
 	guint persist_position : 1;
 	int default_width;
 	int default_height;
-};
+} EphyDialogPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (EphyDialog, ephy_dialog, GTK_TYPE_DIALOG)
 

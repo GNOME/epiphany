@@ -31,17 +31,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_DIALOG		(ephy_dialog_get_type ())
-#define EPHY_DIALOG(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_DIALOG, EphyDialog))
-#define EPHY_DIALOG_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_DIALOG, EphyDialogClass))
-#define EPHY_IS_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_DIALOG))
-#define EPHY_IS_DIALOG_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_DIALOG))
-#define EPHY_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_DIALOG, EphyDialogClass))
+#define EPHY_TYPE_DIALOG (ephy_dialog_get_type ())
 
-typedef struct _EphyDialogClass		EphyDialogClass;
-typedef struct _EphyDialog		EphyDialog;
-typedef struct _EphyDialogPrivate	EphyDialogPrivate;
-typedef struct _EphyDialogProperty	EphyDialogProperty;
+G_DECLARE_DERIVABLE_TYPE (EphyDialog, ephy_dialog, EPHY, DIALOG, GtkDialog)
 
 struct _EphyDialogClass
 {
@@ -59,13 +51,6 @@ struct _EphyDialogClass
 				 const char *domain);
 	void	(* show)	(EphyDialog *dialog);
 };
-
-struct _EphyDialog
-{
-	GObject parent;
-};
-
-GType		ephy_dialog_get_type		(void);
 
 EphyDialog     *ephy_dialog_new			(void);
 
