@@ -33,31 +33,10 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_ENCODINGS         (ephy_encodings_get_type ())
-#define EPHY_ENCODINGS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_ENCODINGS, EphyEncodings))
-#define EPHY_ENCODINGS_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), EPHY_TYPE_ENCODINGS, EphyEncodingsClass))
-#define EPHY_IS_ENCODINGS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_ENCODINGS))
-#define EPHY_IS_ENCODINGS_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_ENCODINGS))
-#define EPHY_ENCODINGS_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_ENCODINGS, EphyEncodingsClass))
+#define EPHY_TYPE_ENCODINGS (ephy_encodings_get_type ())
 
-typedef struct _EphyEncodings        EphyEncodings;
-typedef struct _EphyEncodingsPrivate EphyEncodingsPrivate;
-typedef struct _EphyEncodingsClass   EphyEncodingsClass;
+G_DECLARE_FINAL_TYPE (EphyEncodings, ephy_encodings, EPHY, ENCODINGS, GObject)
 
-struct _EphyEncodings
-{
-  GObject parent;
-
-  /*< private >*/
-  EphyEncodingsPrivate *priv;
-};
-
-struct _EphyEncodingsClass
-{
-  GObjectClass parent_class;
-};
-
-GType          ephy_encodings_get_type      (void);
 EphyEncodings *ephy_encodings_new           (void);
 EphyEncoding  *ephy_encodings_get_encoding  (EphyEncodings     *encodings,
                                              const char        *code,

@@ -29,10 +29,10 @@
 
 #include <glib/gi18n.h>
 
-#define EPHY_ENCODINGS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODINGS, EphyEncodingsPrivate))
-
-struct _EphyEncodingsPrivate
+struct _EphyEncodings
 {
+  GObject parent_instance;
+
   GHashTable *hash;
   GSList *recent;
 };
@@ -145,10 +145,10 @@ ephy_encodings_finalize (GObject *object)
 {
   EphyEncodings *encodings = EPHY_ENCODINGS (object);
 
-  g_hash_table_destroy (encodings->priv->hash);
+  g_hash_table_destroy (encodings->hash);
 
-  g_slist_foreach (encodings->priv->recent, (GFunc)g_free, NULL);
-  g_slist_free (encodings->priv->recent);
+  g_slist_foreach (encodings->recent, (GFunc)g_free, NULL);
+  g_slist_free (encodings->recent);
 
   LOG ("EphyEncodings finalised");
 
@@ -175,8 +175,6 @@ ephy_encodings_class_init (EphyEncodingsClass *klass)
           g_cclosure_marshal_VOID__OBJECT,
           G_TYPE_NONE,
           1, G_TYPE_OBJECT);
-
-  g_type_class_add_private (object_class, sizeof (EphyEncodingsPrivate));
 }
 
 static EphyEncoding *
@@ -190,7 +188,7 @@ add_encoding (EphyEncodings *encodings,
   /* Create node. */
   encoding = ephy_encoding_new (code, title, groups);
   /* Add it. */
-  g_hash_table_insert (encodings->priv->hash, g_strdup (code), encoding);
+  g_hash_table_insert (encodings->hash, g_strdup (code), encoding);
 
   g_signal_emit_by_name (encodings, "encoding-added", encoding);
 
@@ -206,7 +204,7 @@ ephy_encodings_get_encoding (EphyEncodings *encodings,
 
   g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
 
-  encoding = g_hash_table_lookup (encodings->priv->hash, code);
+  encoding = g_hash_table_lookup (encodings->hash, code);
 
   /* if it doesn't exist, add a node for it */
   if (!EPHY_IS_ENCODING (encoding) && add_if_not_found) {
@@ -251,7 +249,7 @@ ephy_encodings_get_encodings (EphyEncodings *encodings,
   data.list = list;
   data.group_mask = group_mask;
 
-  g_hash_table_foreach (encodings->priv->hash, (GHFunc)get_encodings_foreach, &data);
+  g_hash_table_foreach (encodings->hash, (GHFunc)get_encodings_foreach, &data);
 
   return list;
 }
@@ -273,7 +271,7 @@ ephy_encodings_get_all (EphyEncodings *encodings)
 
   g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
 
-  g_hash_table_foreach (encodings->priv->hash, (GHFunc)get_all_encodings, &l);
+  g_hash_table_foreach (encodings->hash, (GHFunc)get_all_encodings, &l);
 
   return l;
 }
@@ -284,7 +282,6 @@ ephy_encodings_add_recent (EphyEncodings *encodings,
 {
   GSList *element, *l;
   GVariantBuilder builder;
-  EphyEncodingsPrivate *priv = encodings->priv;
 
   g_return_if_fail (EPHY_IS_ENCODINGS (encodings));
   g_return_if_fail (code != NULL);
@@ -293,30 +290,30 @@ ephy_encodings_add_recent (EphyEncodings *encodings,
     return;
 
   /* Keep the list elements unique. */
-  element = g_slist_find_custom (priv->recent, code,
+  element = g_slist_find_custom (encodings->recent, code,
                                  (GCompareFunc)strcmp);
   if (element != NULL) {
     g_free (element->data);
-    priv->recent =
-      g_slist_remove_link (priv->recent, element);
+    encodings->recent =
+      g_slist_remove_link (encodings->recent, element);
   }
 
   /* Add the new code upfront. */
-  priv->recent =
-    g_slist_prepend (priv->recent, g_strdup (code));
+  encodings->recent =
+    g_slist_prepend (encodings->recent, g_strdup (code));
 
   /* Truncate the list if necessary; it's at most 1 element too much. */
-  if (g_slist_length (priv->recent) > RECENT_MAX) {
+  if (g_slist_length (encodings->recent) > RECENT_MAX) {
     GSList *tail;
 
-    tail = g_slist_last (priv->recent);
+    tail = g_slist_last (encodings->recent);
     g_free (tail->data);
-    priv->recent =
-      g_slist_remove_link (priv->recent, tail);
+    encodings->recent =
+      g_slist_remove_link (encodings->recent, tail);
   }
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_STRING_ARRAY);
-  for (l = priv->recent; l; l = l->next)
+  for (l = encodings->recent; l; l = l->next)
     g_variant_builder_add (&builder, "s", l->data);
 
   g_settings_set (EPHY_SETTINGS_STATE,
@@ -332,7 +329,7 @@ ephy_encodings_get_recent (EphyEncodings *encodings)
 
   g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
 
-  for (l = encodings->priv->recent; l != NULL; l = l->next) {
+  for (l = encodings->recent; l != NULL; l = l->next) {
     EphyEncoding *encoding;
 
     encoding = ephy_encodings_get_encoding (encodings, (char *)l->data, FALSE);
@@ -350,13 +347,11 @@ ephy_encodings_init (EphyEncodings *encodings)
   char **list;
   int i;
 
-  encodings->priv = EPHY_ENCODINGS_GET_PRIVATE (encodings);
-
   LOG ("EphyEncodings initialising");
 
-  encodings->priv->hash = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                 (GDestroyNotify)g_free,
-                                                 (GDestroyNotify)g_object_unref);
+  encodings->hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                           (GDestroyNotify)g_free,
+                                           (GDestroyNotify)g_object_unref);
 
   /* Fill the db. */
   for (i = 0; i < G_N_ELEMENTS (encoding_entries); i++) {
@@ -373,20 +368,19 @@ ephy_encodings_init (EphyEncodings *encodings)
   /* Make sure the list has no duplicates (GtkUIManager goes
    * crazy otherwise), and only valid entries.
    */
-  encodings->priv->recent = NULL;
+  encodings->recent = NULL;
   for (i = 0; list[i]; i++) {
     char *item;
     item = list[i];
 
-    if (g_slist_find (encodings->priv->recent, item) == NULL
-        && g_slist_length (encodings->priv->recent) < RECENT_MAX
+    if (g_slist_find (encodings->recent, item) == NULL
+        && g_slist_length (encodings->recent) < RECENT_MAX
         && ephy_encodings_get_encoding (encodings, item, FALSE) != NULL) {
-      encodings->priv->recent = g_slist_prepend (encodings->priv->recent,
-                                                 g_strdup (item));
+      encodings->recent = g_slist_prepend (encodings->recent, g_strdup (item));
     }
   }
 
-  encodings->priv->recent = g_slist_reverse (encodings->priv->recent);
+  encodings->recent = g_slist_reverse (encodings->recent);
   g_strfreev (list);
 }
 
