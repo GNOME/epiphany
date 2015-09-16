@@ -36,15 +36,6 @@
  * A customized #GtkDialog for Epiphany.
  */
 
-enum
-{
-	PROP_0,
-	PROP_PARENT_WINDOW,
-	PROP_PERSIST_POSITION,
-	PROP_DEFAULT_WIDTH,
-	PROP_DEFAULT_HEIGHT
-};
-
 typedef struct
 {
 	char *name;
@@ -63,6 +54,18 @@ typedef struct
 } EphyDialogPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (EphyDialog, ephy_dialog, GTK_TYPE_DIALOG)
+
+enum
+{
+	PROP_0,
+	PROP_PARENT_WINDOW,
+	PROP_PERSIST_POSITION,
+	PROP_DEFAULT_WIDTH,
+	PROP_DEFAULT_HEIGHT,
+	LAST_PROP
+};
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 enum
 {
@@ -423,7 +426,7 @@ ephy_dialog_set_parent (EphyDialog *dialog,
 
 	priv->parent = parent;
 
-	g_object_notify (G_OBJECT (dialog), "parent-window");
+	g_object_notify_by_pspec (G_OBJECT (dialog), obj_properties[PROP_PARENT_WINDOW]);
 }
 
 static void
@@ -515,59 +518,54 @@ ephy_dialog_class_init (EphyDialogClass *klass)
 	*
 	* Dialog's parent window.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_PARENT_WINDOW,
-					 g_param_spec_object ("parent-window",
-							      "Parent window",
-							      "Parent window",
-							      GTK_TYPE_WINDOW,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_PARENT_WINDOW] =
+		 g_param_spec_object ("parent-window",
+				      "Parent window",
+				      "Parent window",
+				      GTK_TYPE_WINDOW,
+				      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 	/**
 	* EphyDialog:persist-position:
 	*
 	* If dialog position should be persistent.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_PERSIST_POSITION,
-					 g_param_spec_boolean ("persist-position",
-							       "Persist position",
-							       "Persist dialog position",
-							       FALSE,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							       G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_PERSIST_POSITION] =
+		 g_param_spec_boolean ("persist-position",
+				       "Persist position",
+				       "Persist dialog position",
+				       FALSE,
+				       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
 	/**
 	* EphyDialog:default-width:
 	*
 	* The dialog default width.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_DEFAULT_WIDTH,
-					 g_param_spec_int ("default-width",
-							   "Default width",
-							   "Default dialog width",
-							   -1,
-							   G_MAXINT,
-							   -1,
-							   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							   G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_DEFAULT_WIDTH] =
+		 g_param_spec_int ("default-width",
+				   "Default width",
+				   "Default dialog width",
+				   -1,
+				   G_MAXINT,
+				   -1,
+				   G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
 	/**
 	* EphyDialog:default-height:
 	*
 	* The dialog default height.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_DEFAULT_HEIGHT,
-					 g_param_spec_int ("default-height",
-							   "Default height",
-							   "Default dialog height",
-							   -1,
-							   G_MAXINT,
-							   -1,
-							   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							   G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_DEFAULT_HEIGHT] =
+		 g_param_spec_int ("default-height",
+				   "Default height",
+				   "Default dialog height",
+				   -1,
+				   G_MAXINT,
+				   -1,
+				   G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 /**
