@@ -37,6 +37,14 @@ struct _EphyEncodings
   GSList *recent;
 };
 
+enum
+{
+  ENCODING_ADDED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 /*
  * Translatable encodings titles.
  * NOTE: if you add/remove/change encodings, please also update the
@@ -167,14 +175,13 @@ ephy_encodings_class_init (EphyEncodingsClass *klass)
    *
    * The ::encoding-added signal is emitted when @encodings receives a new encoding.
    **/
-  g_signal_new ("encoding-added",
-          G_OBJECT_CLASS_TYPE (object_class),
-          G_SIGNAL_RUN_LAST,
-          0,
-          NULL, NULL,
-          g_cclosure_marshal_VOID__OBJECT,
-          G_TYPE_NONE,
-          1, G_TYPE_OBJECT);
+  signals[ENCODING_ADDED] =
+    g_signal_new ("encoding-added",
+                  EPHY_TYPE_ENCODINGS,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1, G_TYPE_OBJECT);
 }
 
 static EphyEncoding *
@@ -190,7 +197,7 @@ add_encoding (EphyEncodings *encodings,
   /* Add it. */
   g_hash_table_insert (encodings->hash, g_strdup (code), encoding);
 
-  g_signal_emit_by_name (encodings, "encoding-added", encoding);
+  g_signal_emit (encodings, signals[ENCODING_ADDED], 0, encoding);
 
   return encoding;
 }
