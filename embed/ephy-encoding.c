@@ -23,16 +23,6 @@
 
 #include <string.h>
 
-enum {
-  PROP_0,
-
-  PROP_TITLE,
-  PROP_TITLE_ELIDED,
-  PROP_COLLATION_KEY,
-  PROP_ENCODING,
-  PROP_LANGUAGE_GROUPS
-};
-
 struct _EphyEncoding
 {
   GObject parent_instance;
@@ -45,6 +35,20 @@ struct _EphyEncoding
 };
 
 G_DEFINE_TYPE (EphyEncoding, ephy_encoding, G_TYPE_OBJECT)
+
+enum {
+  PROP_0,
+
+  PROP_TITLE,
+  PROP_TITLE_ELIDED,
+  PROP_COLLATION_KEY,
+  PROP_ENCODING,
+  PROP_LANGUAGE_GROUPS,
+
+  LAST_PROP
+};
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 static void
 ephy_encoding_finalize (GObject *object)
@@ -175,45 +179,43 @@ ephy_encoding_class_init (EphyEncodingClass *klass)
   gobject_class->get_property = ephy_encoding_get_property;
   gobject_class->set_property = ephy_encoding_set_property;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_TITLE,
-                                   g_param_spec_string ("title",
-                                                        "Title",
-                                                        "The encoding's title",
-                                                        "",
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_TITLE] =
+    g_param_spec_string ("title",
+                         "Title",
+                         "The encoding's title",
+                         "",
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_TITLE_ELIDED,
-                                   g_param_spec_string ("title-elided",
-                                                        "Title Elided",
-                                                        "The encoding's elided title",
-                                                        "",
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_TITLE_ELIDED] =
+    g_param_spec_string ("title-elided",
+                         "Title Elided",
+                         "The encoding's elided title",
+                         "",
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_COLLATION_KEY,
-                                   g_param_spec_string ("collation-key",
-                                                        "Collation Key",
-                                                        "The encoding's collation key",
-                                                        "",
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_COLLATION_KEY] =
+    g_param_spec_string ("collation-key",
+                        "Collation Key",
+                        "The encoding's collation key",
+                        "",
+                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_ENCODING,
-                                   g_param_spec_string ("encoding",
-                                                        "Encoding",
-                                                        "The encoding's encoding",
-                                                        "",
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-  g_object_class_install_property (gobject_class,
-                                   PROP_LANGUAGE_GROUPS,
-                                   g_param_spec_int ("language-groups",
-                                                     "Language Groups",
-                                                     "The encoding's language groups",
-                                                     LG_NONE, LG_ALL,
-                                                     LG_NONE,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_ENCODING] =
+    g_param_spec_string ("encoding",
+                        "Encoding",
+                        "The encoding's encoding",
+                        "",
+                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_LANGUAGE_GROUPS] =
+    g_param_spec_int ("language-groups",
+                     "Language Groups",
+                     "The encoding's language groups",
+                     LG_NONE, LG_ALL,
+                     LG_NONE,
+                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 }
 
 static void
