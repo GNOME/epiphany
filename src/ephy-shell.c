@@ -67,7 +67,7 @@ struct _EphyShellPrivate {
   GSList *open_uris_idle_ids;
 };
 
-EphyShell *ephy_shell = NULL;
+static EphyShell *ephy_shell = NULL;
 
 static void ephy_shell_class_init (EphyShellClass *klass);
 static void ephy_shell_init   (EphyShell *shell);
