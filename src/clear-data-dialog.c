@@ -28,6 +28,7 @@
 #include <libsecret/secret.h>
 #include <webkit2/webkit2.h>
 
+#include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
 #include "ephy-embed-shell.h"
 
@@ -76,8 +77,8 @@ delete_all_passwords (ClearDataDialog *dialog)
 {
 	GHashTable *attributes;
 
-	attributes = secret_attributes_build (SECRET_SCHEMA_COMPAT_NETWORK, NULL);
-	secret_service_clear (NULL, SECRET_SCHEMA_COMPAT_NETWORK,
+	attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
+	secret_service_clear (NULL, EPHY_FORM_PASSWORD_SCHEMA,
 			      attributes, NULL,
 			      (GAsyncReadyCallback)secret_service_clear_finish,
 			      NULL);
