@@ -31,31 +31,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_FIND_TOOLBAR		(ephy_find_toolbar_get_type ())
-#define EPHY_FIND_TOOLBAR(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbar))
-#define EPHY_FIND_TOOLBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarClass))
-#define EPHY_IS_FIND_TOOLBAR(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_FIND_TOOLBAR))
-#define EPHY_IS_FIND_TOOLBAR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_FIND_TOOLBAR))
-#define EPHY_FIND_TOOLBAR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_FIND_TOOLBAR, EphyFindToolbarClass))
+#define EPHY_TYPE_FIND_TOOLBAR (ephy_find_toolbar_get_type ())
 
-typedef struct _EphyFindToolbar		EphyFindToolbar;
-typedef struct _EphyFindToolbarPrivate	EphyFindToolbarPrivate;
-typedef struct _EphyFindToolbarClass	EphyFindToolbarClass;
-
-struct _EphyFindToolbar
-{
-	GtkSearchBar parent;
-
-	/*< private >*/
-	EphyFindToolbarPrivate *priv;
-};
-
-struct _EphyFindToolbarClass
-{
-	GtkSearchBarClass parent_class;
-};
-
-GType		 ephy_find_toolbar_get_type	 (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (EphyFindToolbar, ephy_find_toolbar, EPHY, FIND_TOOLBAR, GtkSearchBar)
 
 EphyFindToolbar *ephy_find_toolbar_new		 (WebKitWebView *web_view);
 
