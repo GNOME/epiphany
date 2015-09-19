@@ -53,11 +53,6 @@ struct _EphyFindToolbar
 struct _EphyFindToolbarClass
 {
 	GtkSearchBarClass parent_class;
-
-	/* Signals */
-	void (* next)		(EphyFindToolbar *toolbar);
-	void (* previous)	(EphyFindToolbar *toolbar);
-	void (* close)		(EphyFindToolbar *toolbar);
 };
 
 GType		 ephy_find_toolbar_get_type	 (void) G_GNUC_CONST;

@@ -566,15 +566,11 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 	widget_class->draw = ephy_find_toolbar_draw;
 	widget_class->grab_focus = ephy_find_toolbar_grab_focus;
 
-	klass->next = ephy_find_toolbar_find_next;
-	klass->previous = ephy_find_toolbar_find_previous;
-
 	signals[NEXT] =
 		g_signal_new ("next",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyFindToolbarClass, next),
-			      NULL, NULL,
+			      0, NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 
@@ -582,8 +578,7 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 		g_signal_new ("previous",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyFindToolbarClass, previous),
-			      NULL, NULL,
+			      0, NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 
@@ -591,8 +586,7 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 		g_signal_new ("close",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-			      G_STRUCT_OFFSET (EphyFindToolbarClass, close),
-			      NULL, NULL,
+			      0, NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 
