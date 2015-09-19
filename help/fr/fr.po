@@ -4,13 +4,14 @@
 # naybnet <naybnet@gmail.com>, 2014.
 # Julien Hardelin <jhardlin@orange.fr>, 2014.
 # Guillaume Bernard <filorin@laposte.net>, 2014.
+# Alain Lojewski <allomervan@gmail.com>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
-"POT-Creation-Date: 2014-09-17 19:37+0000\n"
-"PO-Revision-Date: 2014-09-18 00:08+0200\n"
-"Last-Translator: Guillaume Bernard <filorin@laposte.net>\n"
+"POT-Creation-Date: 2015-09-12 03:47+0000\n"
+"PO-Revision-Date: 2015-09-12 16:30+0200\n"
+"Last-Translator: Alain Lojewski <allomervan@gmail.com>\n"
 "Language-Team: français <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +26,8 @@ msgid "translator-credits"
 msgstr ""
 "naybnet <naybnet@gmail.com>, 2014\n"
 "Julien Hardelin <jhardlin@orange.fr>, 2014\n"
-"Guillaume Bernard <filorin@laposte.net>, 2014"
+"Guillaume Bernard <filorin@laposte.net>, 2014\n"
+"Alain Lojewski <allomervan@gmail.com>, 2015"
 
 #. (itstool) path: info/title
 #: C/index.page:8
@@ -95,11 +97,13 @@ msgstr ""
 #: C/introduction.page:11 C/bookmark.page:15 C/bookmark-add.page:17
 #: C/bookmark-delete.page:17 C/bookmark-edit.page:17 C/bookmark-smart.page:12
 #: C/bookmark-topic.page:12 C/browse-local.page:11 C/browse-private.page:12
-#: C/browse-web.page:13 C/cookies.xml:12 C/data-cookies.page:11
-#: C/data-passwords.page:19 C/history.page:12 C/history-delete.page:11
-#: C/keyboard-shortcut.page:16 C/pref-cookies.page:13 C/pref-css.page:17
-#: C/pref-downloads.page:13 C/pref-do-not-track.page:17 C/pref-font.page:18
-#: C/pref-passwords.page:13 C/prob-restore-closed-page.page:16
+#: C/browse-tab.page:13 C/browse-web.page:14 C/browse-webapps.page:12
+#: C/browse-webapps-del.page:12 C/cert.page:11 C/cookies.xml:12
+#: C/data-cookies.page:11 C/data-passwords.page:19 C/history.page:12
+#: C/history-delete.page:11 C/keyboard-shortcut.page:16 C/pref-cookies.page:13
+#: C/pref-css.page:17 C/pref-downloads.page:13 C/pref-do-not-track.page:17
+#: C/pref-font.page:18 C/pref-passwords.page:13
+#: C/prob-restore-closed-page.page:16 C/proxy.page:12
 msgid "Ekaterina Gerasimova"
 msgstr "Ekaterina Gerasimova"
 
@@ -108,7 +112,7 @@ msgstr "Ekaterina Gerasimova"
 #: C/bookmark-add.page:14 C/bookmark-add.page:19 C/bookmark-delete.page:14
 #: C/bookmark-delete.page:19 C/bookmark-edit.page:14 C/bookmark-edit.page:19
 #: C/bookmark-smart.page:14 C/bookmark-topic.page:14 C/browse-local.page:13
-#: C/browse-private.page:14 C/browse-web.page:15 C/cookies.xml:14
+#: C/browse-private.page:14 C/browse-webapps.page:14 C/cookies.xml:14
 #: C/data-cookies.page:13 C/data-passwords.page:16 C/data-passwords.page:21
 #: C/history.page:14 C/history-delete.page:13 C/pref-cookies.page:15
 #: C/pref-css.page:14 C/pref-css.page:19 C/pref-downloads.page:15
@@ -662,18 +666,42 @@ msgstr ""
 "fenêtre de gauche et une session de navigation privée dans la fenêtre de "
 "droite"
 
+#. (itstool) path: credit/years
+#: C/browse-tab.page:15 C/data-cookies.page:18 C/data-passwords.page:26
+#: C/keyboard-shortcut.page:13 C/keyboard-shortcut.page:18
+#: C/pref-do-not-track.page:14 C/pref-do-not-track.page:19
+#: C/prob-restore-closed-page.page:13 C/prob-restore-closed-page.page:18
+#: C/proxy.page:14
+msgid "2014"
+msgstr "2014"
+
 #. (itstool) path: info/desc
-#: C/browse-web.page:25
+#: C/browse-tab.page:25
+msgid "Open another web page in a new tab in the same window."
+msgstr "Ouvrir une autre page Web dans un nouvel onglet de la même fenêtre."
+
+#. (itstool) path: page/title
+#: C/browse-tab.page:28
+msgid "Open a new tab"
+msgstr "Ouverture d'un nouvel onglet"
+
+#. (itstool) path: credit/years
+#: C/browse-web.page:16
+msgid "2013, 2014"
+msgstr "2013, 2014"
+
+#. (itstool) path: info/desc
+#: C/browse-web.page:26
 msgid "View web pages on the internet."
 msgstr "Afficher des pages Web sur Internet."
 
 #. (itstool) path: page/title
-#: C/browse-web.page:28
+#: C/browse-web.page:29
 msgid "Browse the web"
 msgstr "Navigation sur le Web"
 
 #. (itstool) path: page/p
-#: C/browse-web.page:30
+#: C/browse-web.page:31
 msgid ""
 "Web browsers can be used to view pages on the Internet when you have an "
 "Internet connection. To start browsing the web:"
@@ -683,7 +711,7 @@ msgstr ""
 "sur le Web :"
 
 #. (itstool) path: item/p
-#: C/browse-web.page:35
+#: C/browse-web.page:36
 msgid ""
 "When you start up <app xref=\"introduction\">Web</app>, your cursor should "
 "be in the text entry field at the top of the window. Type in the URL of the "
@@ -694,39 +722,40 @@ msgstr ""
 "l'URL de la page Web désirée ou un terme à rechercher."
 
 #. (itstool) path: item/p
-#: C/browse-web.page:40
+#: C/browse-web.page:41
 msgid "Press return to go to the web page or to search."
 msgstr ""
 "Appuyez sur la touche entrée pour aller à la page Web ou pour effectuer la "
 "recherche."
 
 #. (itstool) path: page/p
-#: C/browse-web.page:44
+#: C/browse-web.page:45
 msgid ""
-"When you first start up <app>Web</app>, you will not be shown any tabs. "
-"<em>Tabs</em> are used to view more than one web page in one window. To "
-"<em>open a new tab</em>, select the menu at the top-right of the screen, "
-"then <guiseq><gui style=\"menuitem\">New Tab</gui></guiseq>. Once the new "
-"tab is open, you can use it as you would normally use a new window."
+"<em>Tabs</em> are used to view more than one web page in one window. When "
+"you first start up <app>Web</app>, you will not be shown any tabs. To "
+"<em>open a new tab</em>, press the menu button at the top-right of the "
+"screen, then <guiseq><gui style=\"menuitem\">New Tab</gui></guiseq>. Once "
+"the new tab is open, you can use it as you would normally use a new window."
 msgstr ""
-"Lors du démarrage de <app>Web</app>, aucun onglet n'est affiché. Les "
-"<em>onglets</em> sont utilisés pour afficher plus d'une page Web dans une "
-"fenêtre. Pour <em>ouvrir un nouvel onglet</em>, sélectionnez le menu dans le "
-"coin supérieur droit de l'écran, puis cliquez sur <guiseq><gui style="
-"\"menuitem\">Nouvel onglet</gui></guiseq>. Une fois le nouvel onglet ouvert, "
-"vous pouvez l'utiliser comme on utilise une nouvelle fenêtre."
+"Les <em>onglets</em> sont utilisés pour afficher plus d'une page Web dans une fenêtre. Lors du démarrage de <app>Web</app>, aucun onglet n'est affiché. Pour <em>ouvrir un nouvel onglet</em>, sélectionnez le menu dans le coin supérieur droit de l'écran, puis cliquez sur <guiseq><gui style=\"menuitem\">Nouvel onglet</gui></guiseq>. Une fois le nouvel onglet ouvert, vous pouvez l'utiliser comme on utilise une nouvelle fenêtre."
 
 #. (itstool) path: page/p
-#: C/browse-web.page:51
+#: C/browse-web.page:52
 msgid ""
-"You can also <em>open a link in a new tab</em>. Right click on the link, "
-"then select <gui style=\"menuitem\">Open Link in New Tab</gui> or use the "
-"middle mouse button to click on the link."
+"You can also use the <keyseq><key>Ctrl</key><key>T</key></keyseq> keyboard "
+"shortcut to open a new tab or the new tab button in the top-left of the "
+"window."
 msgstr ""
-"Vous pouvez également <em>ouvrir le lien dans un nouvel onglet</em>. "
-"Effectuez un clic droit sur le lien puis sélectionnez <gui style=\"menuitem"
-"\">Ouverture dans un nouvel onglet</gui> ou utilisez le bouton du milieu de "
-"la souris pour cliquer sur le lien."
+"Vous pouvez aussi ouvrir un nouvel onglet ou afficher le bouton nouvel onglet dans le coin supérieur gauche de l'écran avec le raccourci clavier <keyseq><key>Ctrl</key><key>T</key></keyseq>."
+
+#. (itstool) path: page/p
+#: C/browse-web.page:56
+msgid ""
+"To <em>open a link in a new tab</em>, right click on the link, then select "
+"<gui style=\"menuitem\">Open Link in New Tab</gui> or use the middle mouse "
+"button to click on the link."
+msgstr ""
+"Vous pouvez également <em>ouvrir le lien dans un nouvel onglet</em> par un clic droit sur le lien et le choix <gui style=\"menuitem\">Ouverture dans un nouvel onglet</gui>, ou par un clic avec le bouton du milieu de la souris sur le lien."
 
 #. (itstool) path: info/desc
 #: C/browse-webapps.page:24
@@ -760,15 +789,13 @@ msgstr "Ouvrez la page Web à enregistrer."
 #. (itstool) path: item/p
 #: C/browse-webapps.page:39
 msgid ""
-"Open the menu at the top-right of the window, then <guiseq> <gui style="
-"\"menuitem\">Save as Web Application…</gui></guiseq>."
+"Open the menu at the top-right of the window, then select <gui style="
+"\"menuitem\">Save as Web Application…</gui>."
 msgstr ""
-"Ouvrez le menu dans le coin supérieur droit de la fenêtre, puis cliquez sur "
-"<guiseq><gui style=\"menuitem\">Enregistrer comme Application Web…</gui></"
-"guiseq>."
+"Ouvrez le menu dans le coin supérieur droit de la fenêtre, puis cliquez sur <gui style=\"menuitem\">Enregistrer comme Application Web…</gui>."
 
 #. (itstool) path: item/p
-#: C/browse-webapps.page:44
+#: C/browse-webapps.page:43
 msgid ""
 "Name your Web Application, then press <gui style=\"button\">Create</gui>."
 msgstr ""
@@ -776,7 +803,7 @@ msgstr ""
 "gui>."
 
 #. (itstool) path: page/p
-#: C/browse-webapps.page:49
+#: C/browse-webapps.page:48
 msgid ""
 "You can now launch the Web Application from the Activities overview. To "
 "search for your application, start typing the name and it will be shown with "
@@ -785,6 +812,85 @@ msgstr ""
 "Vous pouvez maintenant lancer l'application Web à partir de la vue "
 "d'ensemble des Activités. Pour rechercher votre application, commencez à "
 "taper son nom et elle s'affiche dans la liste des suggestions."
+
+#. (itstool) path: credit/years
+#: C/browse-webapps-del.page:14 C/cert.page:13
+msgid "2015"
+msgstr "2015"
+
+#. (itstool) path: info/desc
+#: C/browse-webapps-del.page:24
+msgid "How do I delete a <em>Web Application</em>?"
+msgstr "Comment supprimer une <em>Application Web</em> ?"
+
+#. (itstool) path: page/title
+#: C/browse-webapps-del.page:27
+msgid "Remove a Web Application"
+msgstr "Suppression d'une Application Web"
+
+#. (itstool) path: page/p
+#: C/browse-webapps-del.page:29
+msgid "You can delete a Web Application when you no longer need it."
+msgstr "Vous pouvez supprimer une Application Web dont vous n'avez plus besoin."
+
+#. (itstool) path: item/p
+#: C/browse-webapps-del.page:33
+msgid "Press on the window header and type <input>about:applications</input>."
+msgstr ""
+"Cliquez sur l'en-tête de la fenêtre et saisissez <input>about:applications</input>."
+
+#. (itstool) path: item/p
+#: C/browse-webapps-del.page:37
+msgid ""
+"Press <gui>Delete</gui> next to the application which you want to remove."
+msgstr ""
+"Cliquez sur <gui>Supprimer</gui> à côté de l'application à supprimer."
+
+#. (itstool) path: page/p
+#: C/browse-webapps-del.page:42
+msgid ""
+"If you have <app>Software</app> installed, you can also delete Web "
+"Applications from there."
+msgstr ""
+"Si vous avez installé <app>Logiciels</app>, vous pouvez aussi supprimer les applications depuis cet emplacement."
+
+#. (itstool) path: info/desc
+#: C/cert.page:18
+msgid "Certificate management in <app>Web</app>."
+msgstr "Gérer les certificats dans <app>Web</app>."
+
+#. (itstool) path: page/title
+#: C/cert.page:21
+msgid "Certificates"
+msgstr "Certificats"
+
+#. (itstool) path: page/p
+#: C/cert.page:23
+msgid ""
+"<app>Web</app> does not have built-in support for certificate management at "
+"this time."
+msgstr ""
+"<app>Web</app> ne peut pas prendre en charge la gestion des certificats pour l'instant."
+
+#. (itstool) path: note/p
+#: C/cert.page:27
+msgid ""
+"You can add certificates through the command line if you have p11-kit "
+"installed. To add a certificate, you need to download the certificate and "
+"run the following command to import it:"
+msgstr ""
+"Pour ajouter un certificat, installez p11-kit, téléchargez le certificat, et exécutez cette commande pour l'importer :" 
+
+#. (itstool) path: note/screen
+#: C/cert.page:30
+#, no-wrap
+msgid "<output>$ </output><input>sudo trust anchor <var>/home/user/Downloads/certificate.crt</var></input>"
+msgstr "<output>$ </output><input>sudo trust anchor <var>/home/user/Téléchargements/certificate.crt</var></input>"
+
+#. (itstool) path: note/p
+#: C/cert.page:31
+msgid "This will only work on recent systems."
+msgstr "Cela ne fonctionne qu'avec les systèmes récents."
 
 #. (itstool) path: page/title
 #: C/cookies.xml:20
@@ -813,14 +919,6 @@ msgstr ""
 #: C/prob-restore-closed-page.page:11
 msgid "Baptiste Mille-Mathias"
 msgstr "Baptiste Mille-Mathias"
-
-#. (itstool) path: credit/years
-#: C/data-cookies.page:18 C/data-passwords.page:26 C/keyboard-shortcut.page:13
-#: C/keyboard-shortcut.page:18 C/pref-do-not-track.page:14
-#: C/pref-do-not-track.page:19 C/prob-restore-closed-page.page:13
-#: C/prob-restore-closed-page.page:18
-msgid "2014"
-msgstr "2014"
 
 #. (itstool) path: info/desc
 #: C/data-cookies.page:23
@@ -961,7 +1059,7 @@ msgid ""
 "\"button\">Clear All</gui> button."
 msgstr ""
 "Vous pouvez également supprimer tous les mots de passe sauvegardés en "
-"utilisant le bouton <gui style=\"button\">Effacer tout</gui>"
+"utilisant le bouton <gui style=\"button\">Effacer tout</gui>."
 
 #. (itstool) path: section/title
 #: C/data-passwords.page:78
@@ -1129,7 +1227,9 @@ msgstr "Raccourcis clavier"
 msgid ""
 "You can use handy keyboard shortcuts to navigate around <app>Web</app> "
 "faster."
-msgstr "Vous pouvez utiliser des raccourcis clavier pratiques pour réaliser rapidement différentes actions dans <app>Web</app>."
+msgstr ""
+"Vous pouvez utiliser des raccourcis clavier pratiques pour réaliser "
+"rapidement différentes actions dans <app>Web</app>."
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:35
@@ -1773,7 +1873,7 @@ msgstr ""
 #: C/pref-do-not-track.page:24
 msgid ""
 "How do I tell websites that I do not want them to monitor my online "
-"activites?"
+"activities?"
 msgstr "Indiquer aux sites de ne pas surveiller mon activité en ligne."
 
 #. (itstool) path: page/title
@@ -1967,3 +2067,22 @@ msgid ""
 msgstr ""
 "Il n'est pas possible de restaurer un onglet fermé en mode de <link xref="
 "\"browse-private\">navigation privée</link>."
+
+#. (itstool) path: info/desc
+#: C/proxy.page:19
+msgid "Anonymize your web browsing by using a web proxy."
+msgstr "Naviguer anonymement sur le Web en passant par un serveur mandataire."
+
+#. (itstool) path: page/title
+#: C/proxy.page:22
+msgid "Use a proxy"
+msgstr "Utilisation d'un serveur mandataire"
+
+#. (itstool) path: page/p
+#: C/proxy.page:24
+msgid ""
+"You can use a proxy server for browsing the web. To use a web proxy when "
+"browsing, you need to <link href=\"help:gnome-help#net-proxy\">set it up in "
+"the GNOME <gui>Network</gui> settings panel</link>."
+msgstr ""
+"Vous pouvez naviguer anonymement sur le Web en passant par un serveur mandataire. Pour cela, <link href=\"help:gnome-help#net-proxy\">configurez-le dans le panneau des paramètres de l'application GNOME <gui>Réseau</gui></link>."
