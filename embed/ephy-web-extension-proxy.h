@@ -29,31 +29,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_WEB_EXTENSION_PROXY         (ephy_web_extension_proxy_get_type ())
-#define EPHY_WEB_EXTENSION_PROXY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_WEB_EXTENSION_PROXY, EphyWebExtensionProxy))
-#define EPHY_IS_WEB_EXTENSION_PROXY(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_WEB_EXTENSION_PROXY))
-#define EPHY_WEB_EXTENSION_PROXY_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_WEB_EXTENSION_PROXY, EphyWebExtensionProxyClass))
-#define EPHY_IS_WEB_EXTENSION_PROXY_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_WEB_EXTENSION_PROXY))
-#define EPHY_WEB_EXTENSION_PROXY_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_WEB_EXTENSION_PROXY, EphyWebExtensionProxyClass))
+#define EPHY_TYPE_WEB_EXTENSION_PROXY (ephy_web_extension_proxy_get_type ())
 
-typedef struct _EphyWebExtensionProxyClass   EphyWebExtensionProxyClass;
-typedef struct _EphyWebExtensionProxy        EphyWebExtensionProxy;
-typedef struct _EphyWebExtensionProxyPrivate EphyWebExtensionProxyPrivate;
-
-struct _EphyWebExtensionProxy
-{
-  GObject parent;
-
-  /*< private >*/
-  EphyWebExtensionProxyPrivate *priv;
-};
-
-struct _EphyWebExtensionProxyClass
-{
-  GObjectClass parent_class;
-};
-
-GType                  ephy_web_extension_proxy_get_type                                  (void);
+G_DECLARE_FINAL_TYPE (EphyWebExtensionProxy, ephy_web_extension_proxy, EPHY, WEB_EXTENSION_PROXY, GObject)
 
 EphyWebExtensionProxy *ephy_web_extension_proxy_new                                       (GDBusConnection       *bus,
                                                                                            const char            *service_name);
