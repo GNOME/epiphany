@@ -57,8 +57,11 @@ G_DEFINE_TYPE (EphyFindToolbar, ephy_find_toolbar, GTK_TYPE_SEARCH_BAR)
 enum
 {
 	PROP_0,
-	PROP_WEB_VIEW
+	PROP_WEB_VIEW,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 enum
 {
@@ -575,14 +578,14 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 
-	g_object_class_install_property
-		(object_class,
-		 PROP_WEB_VIEW,
+	obj_properties[PROP_WEB_VIEW] =
 		 g_param_spec_object ("web-view",
 				      "WebView",
 				      "Parent web view",
 				      WEBKIT_TYPE_WEB_VIEW,
-				      (GParamFlags) (G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY)));
+				      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+        g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 /* public functions */
