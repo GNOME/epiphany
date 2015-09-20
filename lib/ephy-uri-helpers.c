@@ -248,4 +248,19 @@ bail:
   soup_uri_free (uri);
   return ret;
 }
+
+char *
+ephy_uri_safe_unescape (const char *uri_string)
+{
+  char *decoded_uri;
+
+  /* This function is not null-safe since it is mostly used in scenarios where
+   * passing or returning null would typically lead to a security issue. */
+  g_return_val_if_fail (uri_string, g_strdup (""));
+
+  /* Protect against escaped null characters and escaped slashes. */
+  decoded_uri = g_uri_unescape_string (uri_string, "/");
+  return decoded_uri ? decoded_uri : g_strdup (uri_string);
+}
+
 /* vim: set sw=2 ts=2 sts=2 et: */

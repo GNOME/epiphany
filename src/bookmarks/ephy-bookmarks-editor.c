@@ -37,6 +37,7 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-initial-state.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-topic-action.h"
 #include "ephy-window.h"
 #include "popup-commands.h"
@@ -1484,7 +1485,7 @@ unescape_bookmark_uri (EphyNode *node,
 		       gpointer user_data)
 {
 	const char *url = g_value_get_string (value);
-	g_value_take_string (value, g_uri_unescape_string (url, NULL));
+	g_value_take_string (value, ephy_uri_safe_unescape (url));
 }
 
 

@@ -28,6 +28,7 @@
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
 #include "ephy-download.h"
+#include "ephy-uri-helpers.h"
 
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
@@ -91,7 +92,7 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
     return NULL;
 
   basename = g_filename_display_basename (dest);
-  unescaped = g_uri_unescape_string (basename, NULL);
+  unescaped = ephy_uri_safe_unescape (basename);
   g_free (basename);
 
   return unescaped;
@@ -361,7 +362,7 @@ add_popup_menu (EphyDownloadWidget *widget)
     return;
 
   basename = g_filename_display_basename (dest);
-  name = g_uri_unescape_string (basename, NULL);
+  name = ephy_uri_safe_unescape (basename);
 
   menu = gtk_menu_new ();
   gtk_widget_set_halign (menu, GTK_ALIGN_END);

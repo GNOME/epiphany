@@ -34,6 +34,7 @@
 #include "ephy-dnd.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-uri-helpers.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -372,7 +373,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
 	tmp = ephy_node_get_property_string (properties->priv->bookmark,
 					     EPHY_NODE_BMK_PROP_LOCATION);
-	unescaped_url = g_uri_unescape_string (tmp, NULL);
+	unescaped_url = ephy_uri_safe_unescape (tmp);
 	gtk_entry_set_text (GTK_ENTRY (entry), unescaped_url);
 	g_signal_connect (entry, "changed",
 			  G_CALLBACK (location_entry_changed_cb), properties);

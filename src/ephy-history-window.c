@@ -29,6 +29,7 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-time-helpers.h"
 #include "ephy-window.h"
 
@@ -781,7 +782,7 @@ convert_location_data_func (GtkTreeViewColumn *column,
 			    col_id,
 			    &url,
 			    -1);
-	unescaped_url = g_uri_unescape_string (url, NULL);
+	unescaped_url = ephy_uri_safe_unescape (url);
 
 	g_object_set (renderer, "text", unescaped_url, NULL);
 

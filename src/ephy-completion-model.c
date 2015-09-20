@@ -26,6 +26,7 @@
 #include "ephy-favicon-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-shell.h"
+#include "ephy-uri-helpers.h"
 
 #include <string.h>
 
@@ -247,7 +248,7 @@ get_row_text (const gchar *url, const gchar *title, const gchar *subtitle_color)
   if (!url)
     return g_markup_escape_text (title, -1);
 
-  unescaped_url = g_uri_unescape_string (url, NULL);
+  unescaped_url = ephy_uri_safe_unescape (url);
   if (g_strcmp0 (url, title) == 0)
     text = g_markup_escape_text (unescaped_url, -1);
   else

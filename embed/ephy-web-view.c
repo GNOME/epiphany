@@ -42,6 +42,7 @@
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-string.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-dom-utils.h"
 #include "ephy-web-extension-proxy.h"
@@ -857,7 +858,7 @@ ephy_web_view_set_address (EphyWebView *view,
   priv->address = g_strdup (address);
 
   g_free (priv->display_address);
-  priv->display_address = g_uri_unescape_string (priv->address, NULL);
+  priv->display_address = ephy_uri_safe_unescape (priv->address);
 
   is_blank = address == NULL ||
              strcmp (address, "about:blank") == 0;
@@ -1530,7 +1531,7 @@ ephy_web_view_set_loading_message (EphyWebView *view,
     char *decoded_address;
     char *title;
 
-    decoded_address = g_uri_unescape_string (address, NULL);
+    decoded_address = ephy_uri_safe_unescape (address);
     title = ephy_embed_utils_get_title_from_address (decoded_address);
 
     if (title != NULL && title[0] != '\0') {
@@ -2532,10 +2533,13 @@ ephy_web_view_set_link_message (EphyWebView *view,
 
   g_free (priv->link_message);
 
-  decoded_address = g_uri_unescape_string (address, NULL);
-  priv->link_message = ephy_embed_utils_link_message_parse (decoded_address);
-
-  g_free (decoded_address);
+  if (address) {
+    decoded_address = ephy_uri_safe_unescape (address);
+    priv->link_message = ephy_embed_utils_link_message_parse (decoded_address);
+    g_free (decoded_address);
+  } else {
+    priv->link_message = NULL;
+  }
 
   g_object_notify (G_OBJECT (view), "status-message");
   g_object_notify (G_OBJECT (view), "link-message");
