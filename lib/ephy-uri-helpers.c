@@ -256,7 +256,7 @@ ephy_uri_safe_unescape (const char *uri_string)
 
   /* This function is not null-safe since it is mostly used in scenarios where
    * passing or returning null would typically lead to a security issue. */
-  g_return_val_if_fail (uri_string, g_strdup (""));
+  g_assert (uri_string);
 
   /* Protect against escaped null characters and escaped slashes. */
   decoded_uri = g_uri_unescape_string (uri_string, "/");
