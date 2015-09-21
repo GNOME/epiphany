@@ -367,7 +367,7 @@ ephy_search_provider_init (EphySearchProvider *self)
   filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
   self->history_service = ephy_history_service_new (filename, TRUE);
   self->bookmarks = ephy_bookmarks_new ();
-  self->model = ephy_completion_model_new (self->history_service, self->bookmarks);
+  self->model = ephy_completion_model_new (self->history_service, self->bookmarks, FALSE);
   g_free (filename);
 
   self->cancellable = g_cancellable_new ();

@@ -33,7 +33,8 @@
 enum {
   PROP_0,
   PROP_HISTORY_SERVICE,
-  PROP_BOOKMARKS
+  PROP_BOOKMARKS,
+  PROP_USE_MARKUP
 };
 
 G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
@@ -47,6 +48,8 @@ struct _EphyCompletionModelPrivate {
   EphyNode *bookmarks;
   EphyNode *smart_bookmarks;
   GSList *search_terms;
+
+  gboolean use_markup;
 };
 
 static void
@@ -86,8 +89,11 @@ ephy_completion_model_set_property (GObject *object, guint property_id, const GV
 
     self->priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks);
     self->priv->smart_bookmarks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
+    }
     break;
-  }
+  case PROP_USE_MARKUP:
+    self->priv->use_markup = g_value_get_boolean (value);
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
     break;
@@ -132,6 +138,14 @@ ephy_completion_model_class_init (EphyCompletionModelClass *klass)
                                    g_param_spec_pointer ("bookmarks",
                                                          "Bookmarks",
                                                          "The bookmarks",
+                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property (object_class,
+                                   PROP_USE_MARKUP,
+                                   g_param_spec_boolean ("use-markup",
+                                                         "Whether we should be using markup",
+                                                         "Whether we should be using markup",
+                                                         TRUE,
                                                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (object_class, sizeof (EphyCompletionModelPrivate));
@@ -270,7 +284,11 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row, c
 
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
 
-  text = get_row_text (row->location, row->title, subtitle_color);
+  if (model->priv->use_markup)
+    text = get_row_text (row->location, row->title, subtitle_color);
+  else
+    text = g_strdup (row->title);
+
   gtk_list_store_insert_with_values (GTK_LIST_STORE (model), &iter, position,
                                      EPHY_COMPLETION_TEXT_COL, text ? text : "",
                                      EPHY_COMPLETION_URL_COL, row->location,
@@ -322,14 +340,15 @@ replace_rows_in_model (EphyCompletionModel *model, GSList *new_rows)
   /* This is by far the simplest way of doing, and yet it gives
    * basically the same result than the other methods... */
   int i;
-  gchar *subtitle_color;
+  gchar *subtitle_color = NULL;
 
   gtk_list_store_clear (GTK_LIST_STORE (model));
 
   if (!new_rows)
     return;
 
-  subtitle_color = get_text_column_subtitle_color ();
+  if (model->priv->use_markup)
+    subtitle_color = get_text_column_subtitle_color ();
 
   for (i = 0; new_rows != NULL; i++) {
     PotentialRow *row = (PotentialRow*)new_rows->data;
@@ -651,7 +670,8 @@ ephy_completion_model_update_for_string (EphyCompletionModel *model,
 
 EphyCompletionModel *
 ephy_completion_model_new (EphyHistoryService *history_service,
-                           EphyBookmarks      *bookmarks)
+                           EphyBookmarks      *bookmarks,
+                           gboolean            use_markup)
 {
   g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (history_service), NULL);
   g_return_val_if_fail (EPHY_IS_BOOKMARKS (bookmarks), NULL);
@@ -659,5 +679,6 @@ ephy_completion_model_new (EphyHistoryService *history_service,
   return g_object_new (EPHY_TYPE_COMPLETION_MODEL,
                        "history-service", history_service,
                        "bookmarks", bookmarks,
+                       "use-markup", use_markup,
                        NULL);
 }
