@@ -62,8 +62,17 @@ ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
       element = webkit_dom_html_collection_item (elements, j);
 
       if (WEBKIT_DOM_IS_HTML_TEXT_AREA_ELEMENT (element))
-        if (webkit_dom_html_text_area_element_is_edited (WEBKIT_DOM_HTML_TEXT_AREA_ELEMENT (element)))
-          return TRUE;
+        if (webkit_dom_html_text_area_element_is_edited (WEBKIT_DOM_HTML_TEXT_AREA_ELEMENT (element))) {
+          char *text;
+          gboolean has_data;
+
+          text = webkit_dom_html_text_area_element_get_value (WEBKIT_DOM_HTML_TEXT_AREA_ELEMENT (element));
+          has_data = text && *text;
+          g_free (text);
+
+          if (has_data)
+            return TRUE;
+        }
 
       if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
         if (webkit_dom_html_input_element_is_edited (WEBKIT_DOM_HTML_INPUT_ELEMENT (element))) {
