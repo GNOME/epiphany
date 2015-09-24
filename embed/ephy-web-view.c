@@ -1115,8 +1115,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("new-window",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-            0, NULL, NULL,
-            g_cclosure_marshal_VOID__OBJECT,
+            0, NULL, NULL, NULL,
             G_TYPE_NONE,
             1,
             GTK_TYPE_WIDGET);
@@ -1133,8 +1132,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_popup_blocked",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
-            0, NULL, NULL,
-            g_cclosure_marshal_generic,
+            0, NULL, NULL, NULL,
             G_TYPE_NONE,
             3,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -1154,8 +1152,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_search_link",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
-            0, NULL, NULL,
-            g_cclosure_marshal_generic,
+            0, NULL, NULL, NULL,
             G_TYPE_NONE,
             3,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -1175,8 +1172,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_feed_link",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
-            0, NULL, NULL,
-            g_cclosure_marshal_generic,
+            0, NULL, NULL, NULL,
             G_TYPE_NONE,
             3,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -1194,8 +1190,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_modal_alert",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_LAST,
-            0, g_signal_accumulator_true_handled, NULL,
-            g_cclosure_marshal_generic,
+            0, g_signal_accumulator_true_handled, NULL, NULL,
             G_TYPE_BOOLEAN,
             0);
 /**
@@ -1208,8 +1203,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_modal_alert_closed",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_LAST,
-            0, NULL, NULL,
-            g_cclosure_marshal_VOID__VOID,
+            0, NULL, NULL, NULL,
             G_TYPE_NONE,
             0);
 
@@ -1224,8 +1218,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("search-key-press",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_LAST,
-            0, g_signal_accumulator_true_handled, NULL,
-            g_cclosure_marshal_generic,
+            0, g_signal_accumulator_true_handled, NULL, NULL,
             G_TYPE_BOOLEAN,
             1,
             GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
@@ -1240,8 +1233,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("content-blocked",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_LAST,
-            0, NULL, NULL,
-            g_cclosure_marshal_VOID__STRING,
+            0, NULL, NULL, NULL,
             G_TYPE_NONE,
             1,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
@@ -1258,8 +1250,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("new-document-now",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
-            0, NULL, NULL,
-            g_cclosure_marshal_VOID__STRING,
+            0, NULL, NULL, NULL,
             G_TYPE_NONE,
             1,
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
@@ -1274,8 +1265,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("loading-homepage",
                   EPHY_TYPE_WEB_VIEW,
                   G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -1289,8 +1279,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("download-only-load",
                   EPHY_TYPE_WEB_VIEW,
                   G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
