@@ -66,7 +66,9 @@
 
 #define EPHY_PAGE_TEMPLATE_ERROR         "/org/gnome/epiphany/page-templates/error.html"
 
-struct _EphyWebViewPrivate {
+struct _EphyWebView {
+  WebKitWebView parent_instance;
+
   EphySecurityLevel security_level;
   EphyWebViewDocumentType document_type;
   EphyWebViewNavigationFlags nav_flags;
@@ -138,14 +140,12 @@ enum {
   PROP_IS_BLANK,
 };
 
-#define EPHY_WEB_VIEW_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WEB_VIEW, EphyWebViewPrivate))
-
 G_DEFINE_TYPE (EphyWebView, ephy_web_view, WEBKIT_TYPE_WEB_VIEW)
 
 static guint
 popup_blocker_n_hidden (EphyWebView *view)
 {
-  return g_slist_length (view->priv->hidden_popups);
+  return g_slist_length (view->hidden_popups);
 }
 
 static void
@@ -175,10 +175,10 @@ popups_manager_show_all (EphyWebView *view)
 {
   LOG ("popup_blocker_show_all: view %p", view);
 
-  g_slist_foreach (view->priv->hidden_popups,
+  g_slist_foreach (view->hidden_popups,
                    (GFunc)popups_manager_show, view);
-  g_slist_free (view->priv->hidden_popups);
-  view->priv->hidden_popups = NULL;
+  g_slist_free (view->hidden_popups);
+  view->hidden_popups = NULL;
 
   g_object_notify (G_OBJECT (view), "hidden-popup-count");
 }
@@ -214,7 +214,6 @@ popups_manager_add (EphyWebView *view,
                     const char *name,
                     const char *features)
 {
-  EphyWebViewPrivate *priv = view->priv;
   PopupInfo *popup;
 
   LOG ("popups_manager_add: view %p, url %s, features %s",
@@ -226,11 +225,11 @@ popups_manager_add (EphyWebView *view,
   popup->name = g_strdup (name);
   popup->features = g_strdup (features);
 
-  priv->hidden_popups = g_slist_prepend (priv->hidden_popups, popup);
+  view->hidden_popups = g_slist_prepend (view->hidden_popups, popup);
 
   if (popup_blocker_n_hidden (view) > MAX_HIDDEN_POPUPS) {/* bug #160863 */
     /* Remove the oldest popup */
-    GSList *l = view->priv->hidden_popups;
+    GSList *l = view->hidden_popups;
 
     while (l->next->next != NULL) {
       l = l->next;
@@ -273,10 +272,10 @@ popups_manager_hide_all (EphyWebView *view)
 {
   LOG ("popup_blocker_hide_all: view %p", view);
 
-  g_slist_foreach (view->priv->shown_popups,
+  g_slist_foreach (view->shown_popups,
                    (GFunc)popups_manager_hide, view);
-  g_slist_free (view->priv->shown_popups);
-  view->priv->shown_popups = NULL;
+  g_slist_free (view->shown_popups);
+  view->shown_popups = NULL;
 }
 
 static void
@@ -308,8 +307,7 @@ static gboolean
 popups_manager_remove_window (EphyWebView *view,
                               EphyEmbedContainer *container)
 {
-  view->priv->shown_popups = g_slist_remove (view->priv->shown_popups,
-                                              container);
+  view->shown_popups = g_slist_remove (view->shown_popups, container);
 
   return FALSE;
 }
@@ -320,7 +318,7 @@ popups_manager_add_window (EphyWebView *view,
 {
   LOG ("popups_manager_add_window: view %p, container %p", view, container);
 
-  view->priv->shown_popups = g_slist_prepend (view->priv->shown_popups, container);
+  view->shown_popups = g_slist_prepend (view->shown_popups, container);
 
   g_signal_connect_swapped (container, "destroy",
                             G_CALLBACK (popups_manager_remove_window),
@@ -344,15 +342,15 @@ disconnect_popup (EphyEmbedContainer *container,
 void
 ephy_web_view_popups_manager_reset (EphyWebView *view)
 {
-  g_slist_foreach (view->priv->hidden_popups,
+  g_slist_foreach (view->hidden_popups,
                    (GFunc)popups_manager_free_info, NULL);
-  g_slist_free (view->priv->hidden_popups);
-  view->priv->hidden_popups = NULL;
+  g_slist_free (view->hidden_popups);
+  view->hidden_popups = NULL;
 
-  g_slist_foreach (view->priv->shown_popups,
+  g_slist_foreach (view->shown_popups,
                    (GFunc)disconnect_popup, view);
-  g_slist_free (view->priv->shown_popups);
-  view->priv->shown_popups = NULL;
+  g_slist_free (view->shown_popups);
+  view->shown_popups = NULL;
 
   g_object_notify (G_OBJECT (view), "hidden-popup-count");
   g_object_notify (G_OBJECT (view), "popups-allowed");
@@ -364,43 +362,43 @@ ephy_web_view_get_property (GObject *object,
                             GValue *value,
                             GParamSpec *pspec)
 {
-  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
+  EphyWebView *view = EPHY_WEB_VIEW (object);
 
   switch (prop_id) {
     case PROP_ADDRESS:
-      g_value_set_string (value, priv->address);
+      g_value_set_string (value, view->address);
       break;
     case PROP_TYPED_ADDRESS:
-      g_value_set_string (value, priv->typed_address);
+      g_value_set_string (value, view->typed_address);
       break;
     case PROP_DOCUMENT_TYPE:
-      g_value_set_enum (value, priv->document_type);
+      g_value_set_enum (value, view->document_type);
       break;
     case PROP_HIDDEN_POPUP_COUNT:
       g_value_set_int (value, popup_blocker_n_hidden
                        (EPHY_WEB_VIEW (object)));
       break;
     case PROP_ICON:
-      g_value_set_object (value, priv->icon);
+      g_value_set_object (value, view->icon);
       break;
     case PROP_LINK_MESSAGE:
-      g_value_set_string (value, priv->link_message);
+      g_value_set_string (value, view->link_message);
       break;
     case PROP_NAVIGATION:
-      g_value_set_flags (value, priv->nav_flags);
+      g_value_set_flags (value, view->nav_flags);
       break;
     case PROP_POPUPS_ALLOWED:
       g_value_set_boolean (value, ephy_web_view_get_popups_allowed
                            (EPHY_WEB_VIEW (object)));
       break;
     case PROP_SECURITY:
-      g_value_set_enum (value, priv->security_level);
+      g_value_set_enum (value, view->security_level);
       break;
     case PROP_STATUS_MESSAGE:
       g_value_set_string (value, ephy_web_view_get_status_message (EPHY_WEB_VIEW (object)));
       break;
     case PROP_IS_BLANK:
-      g_value_set_boolean (value, priv->is_blank);
+      g_value_set_boolean (value, view->is_blank);
       break;
     default:
       break;
@@ -517,51 +515,50 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
                              info_bar, FALSE);
 
   /* We track the info_bar, so we only ever show one */
-  if (web_view->priv->password_info_bar)
-    gtk_widget_destroy (web_view->priv->password_info_bar);
+  if (web_view->password_info_bar)
+    gtk_widget_destroy (web_view->password_info_bar);
 
-  web_view->priv->password_info_bar = info_bar;
+  web_view->password_info_bar = info_bar;
   g_object_add_weak_pointer (G_OBJECT (info_bar),
-                             (gpointer *)&web_view->priv->password_info_bar);
+                             (gpointer *)&web_view->password_info_bar);
 
   return info_bar;
 }
 
 static void
-update_navigation_flags (WebKitWebView *web_view)
+update_navigation_flags (WebKitWebView *view)
 {
-  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (web_view)->priv;
   guint flags = 0;
 
-  if (webkit_web_view_can_go_back (web_view))
+  if (webkit_web_view_can_go_back (view))
     flags |= EPHY_WEB_VIEW_NAV_BACK;
 
-  if (webkit_web_view_can_go_forward (web_view))
+  if (webkit_web_view_can_go_forward (view))
     flags |= EPHY_WEB_VIEW_NAV_FORWARD;
 
-  if (priv->nav_flags != (EphyWebViewNavigationFlags)flags) {
-    priv->nav_flags = (EphyWebViewNavigationFlags)flags;
+  if (EPHY_WEB_VIEW (view)->nav_flags != (EphyWebViewNavigationFlags)flags) {
+    EPHY_WEB_VIEW (view)->nav_flags = (EphyWebViewNavigationFlags)flags;
 
-    g_object_notify (G_OBJECT (web_view), "navigation");
+    g_object_notify (G_OBJECT (view), "navigation");
   }
 }
 
 static void
 ephy_web_view_freeze_history (EphyWebView *view)
 {
-  view->priv->history_frozen = TRUE;
+  view->history_frozen = TRUE;
 }
 
 static void
 ephy_web_view_thaw_history (EphyWebView *view)
 {
-  view->priv->history_frozen = FALSE;
+  view->history_frozen = FALSE;
 }
 
 static gboolean
 ephy_web_view_is_history_frozen (EphyWebView *view)
 {
-  return view->priv->history_frozen;
+  return view->history_frozen;
 }
 
 
@@ -607,7 +604,7 @@ web_view_check_snapshot (WebKitWebView *web_view)
   const char *url = webkit_web_view_get_uri (web_view);
   GetSnapshotPathAsyncData *data;
 
-  view->priv->snapshot_timeout_id = 0;
+  view->snapshot_timeout_id = 0;
 
   if (ephy_snapshot_service_lookup_snapshot_path (service, url))
     return FALSE;
@@ -625,17 +622,15 @@ web_view_check_snapshot (WebKitWebView *web_view)
 static void
 _ephy_web_view_update_icon (EphyWebView *view)
 {
-  EphyWebViewPrivate *priv = view->priv;
-
-  if (priv->icon != NULL) {
-    g_object_unref (priv->icon);
-    priv->icon = NULL;
+  if (view->icon != NULL) {
+    g_object_unref (view->icon);
+    view->icon = NULL;
   }
 
-  if (priv->address) {
+  if (view->address) {
     cairo_surface_t *icon_surface = webkit_web_view_get_favicon (WEBKIT_WEB_VIEW (view));
     if (icon_surface)
-      priv->icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+      view->icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
   }
 
   g_object_notify (G_OBJECT (view), "icon");
@@ -646,8 +641,8 @@ icon_changed_cb (EphyWebView *view,
                  GParamSpec *pspec,
                  gpointer user_data)
 {
-  if (view->priv->snapshot_timeout_id == 0) {
-    view->priv->snapshot_timeout_id = g_timeout_add_full (G_PRIORITY_LOW, 0,
+  if (view->snapshot_timeout_id == 0) {
+    view->snapshot_timeout_id = g_timeout_add_full (G_PRIORITY_LOW, 0,
                                                           (GSourceFunc)web_view_check_snapshot,
                                                           view, NULL);
   }
@@ -666,8 +661,8 @@ form_auth_data_save_confirmation_response (GtkInfoBar *info_bar,
 {
   gtk_widget_destroy (GTK_WIDGET (info_bar));
 
-  if (data->web_view->priv->web_extension) {
-    ephy_web_extension_proxy_form_auth_data_save_confirmation_response (data->web_view->priv->web_extension,
+  if (data->web_view->web_extension) {
+    ephy_web_extension_proxy_form_auth_data_save_confirmation_response (data->web_view->web_extension,
                                                                         data->request_id,
                                                                         response_id == GTK_RESPONSE_YES);
   }
@@ -703,22 +698,21 @@ form_auth_data_save_requested (EphyEmbedShell *shell,
 static void
 allow_tls_certificate_cb (EphyEmbedShell *shell,
                           guint64 page_id,
-                          EphyWebView *web_view)
+                          EphyWebView *view)
 {
-  EphyWebViewPrivate *priv = web_view->priv;
   SoupURI *uri;
 
-  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
     return;
 
-  g_return_if_fail (G_IS_TLS_CERTIFICATE (priv->certificate));
-  g_return_if_fail (priv->tls_error_failing_uri != NULL);
+  g_return_if_fail (G_IS_TLS_CERTIFICATE (view->certificate));
+  g_return_if_fail (view->tls_error_failing_uri != NULL);
 
-  uri = soup_uri_new (priv->tls_error_failing_uri);
+  uri = soup_uri_new (view->tls_error_failing_uri);
   webkit_web_context_allow_tls_certificate_for_host (ephy_embed_shell_get_web_context (shell),
-                                                     priv->certificate,
+                                                     view->certificate,
                                                      uri->host);
-  ephy_web_view_load_url (web_view, ephy_web_view_get_address (web_view));
+  ephy_web_view_load_url (view, ephy_web_view_get_address (view));
   soup_uri_free (uri);
 }
 
@@ -726,61 +720,59 @@ static void
 page_created_cb (EphyEmbedShell *shell,
                  guint64 page_id,
                  EphyWebExtensionProxy *web_extension,
-                 EphyWebView *web_view)
+                 EphyWebView *view)
 {
-  EphyWebViewPrivate *priv = web_view->priv;
-
-  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
     return;
 
-  priv->web_extension = web_extension;
-  g_object_add_weak_pointer (G_OBJECT (priv->web_extension), (gpointer *)&priv->web_extension);
+  view->web_extension = web_extension;
+  g_object_add_weak_pointer (G_OBJECT (view->web_extension), (gpointer *)&view->web_extension);
 
   g_signal_connect_object (shell, "form-auth-data-save-requested",
                            G_CALLBACK (form_auth_data_save_requested),
-                           web_view, 0);
+                           view, 0);
 
   g_signal_connect_object (shell, "allow-tls-certificate",
                            G_CALLBACK (allow_tls_certificate_cb),
-                           web_view, 0);
+                           view, 0);
 }
 
 static void
 ephy_web_view_dispose (GObject *object)
 {
-  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
+  EphyWebView *view = EPHY_WEB_VIEW (object);
 
-  if (priv->web_extension)
+  if (view->web_extension)
     {
-      g_object_remove_weak_pointer (G_OBJECT (priv->web_extension), (gpointer *)&priv->web_extension);
-      priv->web_extension = NULL;
+      g_object_remove_weak_pointer (G_OBJECT (view->web_extension), (gpointer *)&view->web_extension);
+      view->web_extension = NULL;
     }
 
-  if (priv->password_info_bar)
+  if (view->password_info_bar)
     {
-      g_object_remove_weak_pointer (G_OBJECT (priv->password_info_bar), (gpointer *)&priv->password_info_bar);
-      priv->password_info_bar = NULL;
+      g_object_remove_weak_pointer (G_OBJECT (view->password_info_bar), (gpointer *)&view->password_info_bar);
+      view->password_info_bar = NULL;
     }
 
-  g_signal_handlers_disconnect_by_func (priv->history_service,
+  g_signal_handlers_disconnect_by_func (view->history_service,
                                         ephy_web_view_history_cleared_cb,
                                         EPHY_WEB_VIEW (object));
 
-  g_clear_object (&priv->file_monitor);
+  g_clear_object (&view->file_monitor);
 
-  g_clear_object (&priv->icon);
+  g_clear_object (&view->icon);
 
-  if (priv->history_service_cancellable) {
-    g_cancellable_cancel (priv->history_service_cancellable);
-    g_clear_object (&priv->history_service_cancellable);
+  if (view->history_service_cancellable) {
+    g_cancellable_cancel (view->history_service_cancellable);
+    g_clear_object (&view->history_service_cancellable);
   }
 
-  if (priv->snapshot_timeout_id) {
-    g_source_remove (priv->snapshot_timeout_id);
-    priv->snapshot_timeout_id = 0;
+  if (view->snapshot_timeout_id) {
+    g_source_remove (view->snapshot_timeout_id);
+    view->snapshot_timeout_id = 0;
   }
 
-  g_clear_object(&priv->certificate);
+  g_clear_object (&view->certificate);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->dispose (object);
 }
@@ -788,16 +780,16 @@ ephy_web_view_dispose (GObject *object)
 static void
 ephy_web_view_finalize (GObject *object)
 {
-  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (object)->priv;
+  EphyWebView *view = EPHY_WEB_VIEW (object);
 
-  ephy_web_view_popups_manager_reset (EPHY_WEB_VIEW (object));
+  ephy_web_view_popups_manager_reset (view);
 
-  g_free (priv->address);
-  g_free (priv->display_address);
-  g_free (priv->typed_address);
-  g_free (priv->link_message);
-  g_free (priv->loading_message);
-  g_free (priv->tls_error_failing_uri);
+  g_free (view->address);
+  g_free (view->display_address);
+  g_free (view->typed_address);
+  g_free (view->link_message);
+  g_free (view->loading_message);
+  g_free (view->tls_error_failing_uri);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
 }
@@ -806,10 +798,8 @@ static void
 _ephy_web_view_set_is_blank (EphyWebView *view,
                              gboolean is_blank)
 {
-  EphyWebViewPrivate *priv = view->priv;
-
-  if (priv->is_blank != is_blank) {
-    priv->is_blank = is_blank;
+  if (view->is_blank != is_blank) {
+    view->is_blank = is_blank;
     g_object_notify (G_OBJECT (view), "is-blank");
   }
 }
@@ -823,7 +813,7 @@ title_changed_cb (WebKitWebView *web_view,
   const char *title;
   char *title_from_address = NULL;
   EphyWebView *webview  = EPHY_WEB_VIEW (web_view);
-  EphyHistoryService *history = webview->priv->history_service;
+  EphyHistoryService *history = webview->history_service;
 
   uri = webkit_web_view_get_uri (web_view);
   title = webkit_web_view_get_title (web_view);
@@ -845,27 +835,26 @@ static void
 ephy_web_view_set_address (EphyWebView *view,
                            const char *address)
 {
-  EphyWebViewPrivate *priv = view->priv;
   GObject *object = G_OBJECT (view);
   gboolean is_blank;
   gboolean was_empty;
 
-  if (g_strcmp0 (priv->address, address) == 0)
+  if (g_strcmp0 (view->address, address) == 0)
     return;
 
-  was_empty = priv->address == NULL;
-  g_free (priv->address);
-  priv->address = g_strdup (address);
+  was_empty = view->address == NULL;
+  g_free (view->address);
+  view->address = g_strdup (address);
 
-  g_free (priv->display_address);
-  priv->display_address = ephy_uri_safe_unescape (priv->address);
+  g_free (view->display_address);
+  view->display_address = ephy_uri_safe_unescape (view->address);
 
   is_blank = address == NULL ||
              strcmp (address, "about:blank") == 0;
   _ephy_web_view_set_is_blank (view, is_blank);
 
   /* If the view was empty there is no need to clean the typed address. */
-  if (!was_empty && ephy_web_view_is_loading (view) && priv->typed_address != NULL)
+  if (!was_empty && ephy_web_view_is_loading (view) && view->typed_address != NULL)
     ephy_web_view_set_typed_address (view, NULL);
 
   g_object_notify (object, "address");
@@ -1282,8 +1271,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
-
-  g_type_class_add_private (gobject_class, sizeof (EphyWebViewPrivate));
 }
 
 static void
@@ -1355,8 +1342,8 @@ decide_policy_cb (WebKitWebView *web_view,
   /* FIXME: maybe it makes more sense to have an API to query the mime
    * type when the load of a page starts than doing this here.
    */
-  if (EPHY_WEB_VIEW (web_view)->priv->document_type != type) {
-    EPHY_WEB_VIEW (web_view)->priv->document_type = type;
+  if (EPHY_WEB_VIEW (web_view)->document_type != type) {
+    EPHY_WEB_VIEW (web_view)->document_type = type;
 
     g_object_notify (G_OBJECT (web_view), "document-type");
   }
@@ -1465,9 +1452,9 @@ get_host_for_url_cb (gpointer service,
   current_zoom = webkit_web_view_get_zoom_level (WEBKIT_WEB_VIEW (view));
 
   if (host->zoom_level != current_zoom) {
-    view->priv->is_setting_zoom = TRUE;
+    view->is_setting_zoom = TRUE;
     webkit_web_view_set_zoom_level (WEBKIT_WEB_VIEW (view), host->zoom_level);
-    view->priv->is_setting_zoom = FALSE;
+    view->is_setting_zoom = FALSE;
   }
 
   ephy_history_host_free (host);
@@ -1478,8 +1465,8 @@ restore_zoom_level (EphyWebView *view,
                     const char *address)
 {
   if (ephy_embed_utils_address_has_web_scheme (address))
-    ephy_history_service_get_host_for_url (view->priv->history_service,
-                                           address, view->priv->history_service_cancellable,
+    ephy_history_service_get_host_for_url (view->history_service,
+                                           address, view->history_service_cancellable,
                                            (EphyHistoryJobCallback)get_host_for_url_cb, view);
 }
 
@@ -1494,9 +1481,7 @@ static void
 ephy_web_view_set_loading_message (EphyWebView *view,
                                    const char *address)
 {
-  EphyWebViewPrivate *priv = view->priv;
-
-  g_clear_pointer (&priv->loading_message, g_free);
+  g_clear_pointer (&view->loading_message, g_free);
   if (address) {
     char *decoded_address;
     char *title;
@@ -1506,9 +1491,9 @@ ephy_web_view_set_loading_message (EphyWebView *view,
 
     if (title != NULL && title[0] != '\0') {
       /* translators: %s here is the address of the web page */
-      priv->loading_message = g_strdup_printf (_ ("Loading “%s”…"), title);
+      view->loading_message = g_strdup_printf (_ ("Loading “%s”…"), title);
     } else {
-      priv->loading_message = g_strdup (_("Loading…"));
+      view->loading_message = g_strdup (_("Loading…"));
     }
 
     g_free (decoded_address);
@@ -1523,12 +1508,11 @@ ephy_web_view_location_changed (EphyWebView *view,
                                 const char *location)
 {
   GObject *object = G_OBJECT (view);
-  EphyWebViewPrivate *priv = view->priv;
 
   g_object_freeze_notify (object);
 
   /* Do this up here so we still have the old address around. */
-  ephy_file_monitor_update_location (priv->file_monitor, location);
+  ephy_file_monitor_update_location (view->file_monitor, location);
 
   if (location == NULL || location[0] == '\0') {
     ephy_web_view_set_address (view, NULL);
@@ -1562,7 +1546,6 @@ load_changed_cb (WebKitWebView *web_view,
                  gpointer user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
-  EphyWebViewPrivate *priv = view->priv;
   GObject *object = G_OBJECT (web_view);
 
   g_object_freeze_notify (object);
@@ -1571,11 +1554,11 @@ load_changed_cb (WebKitWebView *web_view,
   case WEBKIT_LOAD_STARTED: {
     const char *loading_uri = NULL;
 
-    priv->load_failed = FALSE;
+    view->load_failed = FALSE;
 
-    if (priv->snapshot_timeout_id) {
-      g_source_remove (priv->snapshot_timeout_id);
-      priv->snapshot_timeout_id = 0;
+    if (view->snapshot_timeout_id) {
+      g_source_remove (view->snapshot_timeout_id);
+      view->snapshot_timeout_id = 0;
     }
 
     loading_uri = webkit_web_view_get_uri (web_view);
@@ -1584,7 +1567,7 @@ load_changed_cb (WebKitWebView *web_view,
     if (ephy_embed_utils_is_no_show_address (loading_uri))
       ephy_web_view_freeze_history (view);
 
-    if (priv->address == NULL || priv->address[0] == '\0')
+    if (view->address == NULL || view->address[0] == '\0')
       ephy_web_view_set_address (view, loading_uri);
 
     ephy_web_view_set_loading_message (view, loading_uri);
@@ -1601,22 +1584,22 @@ load_changed_cb (WebKitWebView *web_view,
     const char* uri;
     EphySecurityLevel security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
 
-    priv->ever_committed = TRUE;
+    view->ever_committed = TRUE;
 
     /* Title and location. */
     uri = webkit_web_view_get_uri (web_view);
     ephy_web_view_location_changed (view, uri);
 
     /* Security status. */
-    if (priv->loading_tls_error_page) {
-      priv->loading_tls_error_page = FALSE;
+    if (view->loading_tls_error_page) {
+      view->loading_tls_error_page = FALSE;
     } else {
-      g_clear_object (&priv->certificate);
-      g_clear_pointer (&priv->tls_error_failing_uri, g_free);
+      g_clear_object (&view->certificate);
+      g_clear_pointer (&view->tls_error_failing_uri, g_free);
 
-      if (webkit_web_view_get_tls_info (web_view, &priv->certificate, &priv->tls_errors)) {
-        g_object_ref (priv->certificate);
-        security_level = priv->tls_errors == 0 ?
+      if (webkit_web_view_get_tls_info (web_view, &view->certificate, &view->tls_errors)) {
+        g_object_ref (view->certificate);
+        security_level = view->tls_errors == 0 ?
           EPHY_SECURITY_LEVEL_STRONG_SECURITY : EPHY_SECURITY_LEVEL_BROKEN_SECURITY;
       }
 
@@ -1633,9 +1616,9 @@ load_changed_cb (WebKitWebView *web_view,
       else
         history_uri = g_strdup (uri);
 
-      ephy_history_service_visit_url (priv->history_service,
+      ephy_history_service_visit_url (view->history_service,
                                       history_uri,
-                                      priv->visit_type);
+                                      view->visit_type);
 
       g_free (history_uri);
     }
@@ -1649,7 +1632,7 @@ load_changed_cb (WebKitWebView *web_view,
     _ephy_web_view_update_icon (view);
 
     /* Reset visit type. */
-    priv->visit_type = EPHY_PAGE_VISIT_NONE;
+    view->visit_type = EPHY_PAGE_VISIT_NONE;
 
     if (!ephy_web_view_is_history_frozen (view) &&
         ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
@@ -1657,8 +1640,8 @@ load_changed_cb (WebKitWebView *web_view,
         /* If the snapshot check hasn't been scheduled already by the favicon callback,
          * check the snapshot if we don't get a favicon in 1 second
          */
-        if (priv->snapshot_timeout_id == 0) {
-          priv->snapshot_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_LOW, 1,
+        if (view->snapshot_timeout_id == 0) {
+          view->snapshot_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_LOW, 1,
                                                                   (GSourceFunc)web_view_check_snapshot,
                                                                   web_view, NULL);
         }
@@ -1788,14 +1771,13 @@ detailed_message_from_tls_errors (GTlsCertificateFlags tls_errors)
 static char *
 get_tls_error_page_message (EphyWebView *view, const char *hostname)
 {
-  EphyWebViewPrivate *priv = view->priv;
   char *msg;
   char *bold_hostname;
   char *details;
   char *warning;
 
   bold_hostname = g_strconcat ("<strong>", hostname, "</strong>", NULL);
-  details = detailed_message_from_tls_errors (priv->tls_errors);
+  details = detailed_message_from_tls_errors (view->tls_errors);
   /* Message when a site's TLS certificate is invalid. %s is the site's hostname. */
   warning = g_strdup_printf (_("This might not be the real %s."), bold_hostname);
 
@@ -1957,9 +1939,8 @@ load_failed_cb (WebKitWebView *web_view,
                 gpointer user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
-  EphyWebViewPrivate *priv = view->priv;
 
-  priv->load_failed = TRUE;
+  view->load_failed = TRUE;
   ephy_web_view_set_link_message (view, NULL);
 
   if (error->domain == SOUP_HTTP_ERROR ||
@@ -1990,7 +1971,7 @@ load_failed_cb (WebKitWebView *web_view,
     return TRUE;
   case WEBKIT_NETWORK_ERROR_CANCELLED:
     {
-      if (!priv->typed_address) {
+      if (!view->typed_address) {
         const char* prev_uri;
 
         prev_uri = webkit_web_view_get_uri (web_view);
@@ -2001,7 +1982,7 @@ load_failed_cb (WebKitWebView *web_view,
   case WEBKIT_POLICY_ERROR_FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE:
     /* If we are going to download something, and this is the first
      * page to load in this tab, we may want to close it down. */
-    if (!priv->ever_committed)
+    if (!view->ever_committed)
       g_signal_emit_by_name (view, "download-only-load", NULL);
     break;
   /* In case the resource is going to be showed with a plugin just let
@@ -2022,15 +2003,14 @@ load_failed_with_tls_error_cb (WebKitWebView *web_view,
                                gpointer user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
-  EphyWebViewPrivate *priv = view->priv;
 
-  g_clear_object (&priv->certificate);
-  g_clear_pointer (&priv->tls_error_failing_uri, g_free);
+  g_clear_object (&view->certificate);
+  g_clear_pointer (&view->tls_error_failing_uri, g_free);
 
-  priv->loading_tls_error_page = TRUE;
-  priv->certificate = g_object_ref (certificate);
-  priv->tls_errors = errors;
-  priv->tls_error_failing_uri = g_strdup (uri);
+  view->loading_tls_error_page = TRUE;
+  view->certificate = g_object_ref (certificate);
+  view->tls_errors = errors;
+  view->tls_error_failing_uri = g_strdup (uri);
   ephy_web_view_set_security_level (EPHY_WEB_VIEW (web_view), EPHY_SECURITY_LEVEL_BROKEN_SECURITY);
   ephy_web_view_load_error_page (EPHY_WEB_VIEW (web_view), uri,
                                  EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL);
@@ -2044,9 +2024,8 @@ mixed_content_detected_cb (WebKitWebView *web_view,
                            gpointer user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
-  EphyWebViewPrivate *priv = view->priv;
 
-  if (priv->security_level != EPHY_SECURITY_LEVEL_BROKEN_SECURITY)
+  if (view->security_level != EPHY_SECURITY_LEVEL_BROKEN_SECURITY)
     ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_MIXED_CONTENT);
 }
 
@@ -2074,16 +2053,15 @@ zoom_changed_cb (WebKitWebView *web_view,
 {
   const char *address;
   double zoom;
-  EphyWebViewPrivate *priv = EPHY_WEB_VIEW (web_view)->priv;
 
   zoom = webkit_web_view_get_zoom_level (web_view);
 
-  if (priv->is_setting_zoom)
+  if (EPHY_WEB_VIEW (web_view)->is_setting_zoom)
     return;
 
   address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
   if (ephy_embed_utils_address_has_web_scheme (address)) {
-    ephy_history_service_set_url_zoom_level (priv->history_service,
+    ephy_history_service_set_url_zoom_level (EPHY_WEB_VIEW (web_view)->history_service,
                                              address, zoom,
                                              NULL, NULL, NULL);
   }
@@ -2092,21 +2070,17 @@ zoom_changed_cb (WebKitWebView *web_view,
 static void
 ephy_web_view_init (EphyWebView *web_view)
 {
-  EphyWebViewPrivate *priv;
+  web_view->is_blank = TRUE;
+  web_view->ever_committed = FALSE;
+  web_view->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
+  web_view->security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
 
-  priv = web_view->priv = EPHY_WEB_VIEW_GET_PRIVATE (web_view);
+  web_view->file_monitor = ephy_file_monitor_new (web_view);
 
-  priv->is_blank = TRUE;
-  priv->ever_committed = FALSE;
-  priv->document_type = EPHY_WEB_VIEW_DOCUMENT_HTML;
-  priv->security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
+  web_view->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+  web_view->history_service_cancellable = g_cancellable_new ();
 
-  priv->file_monitor = ephy_file_monitor_new (web_view);
-
-  priv->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
-  priv->history_service_cancellable = g_cancellable_new ();
-
-  g_signal_connect_object (priv->history_service,
+  g_signal_connect_object (web_view->history_service,
                            "cleared", G_CALLBACK (ephy_web_view_history_cleared_cb),
                            web_view, 0);
 
@@ -2307,19 +2281,17 @@ ephy_web_view_load_url (EphyWebView *view,
 gboolean
 ephy_web_view_get_is_blank (EphyWebView *view)
 {
-  return view->priv->is_blank;
+  return view->is_blank;
 }
 
 gboolean
 ephy_web_view_is_overview (EphyWebView *view)
 {
-  EphyWebViewPrivate *priv = view->priv;
-
-  if (!priv->address)
+  if (!view->address)
     return FALSE;
 
-  return (!strcmp (priv->address, EPHY_ABOUT_SCHEME":overview") ||
-          !strcmp (priv->address, "about:overview"));
+  return (!strcmp (view->address, EPHY_ABOUT_SCHEME":overview") ||
+          !strcmp (view->address, "about:overview"));
 }
 
 /**
@@ -2335,8 +2307,7 @@ ephy_web_view_is_overview (EphyWebView *view)
 const char *
 ephy_web_view_get_address (EphyWebView *view)
 {
-  EphyWebViewPrivate *priv = view->priv;
-  return priv->address ? priv->address : "about:blank";
+  return view->address ? view->address : "about:blank";
 }
 
 /**
@@ -2353,8 +2324,7 @@ ephy_web_view_get_address (EphyWebView *view)
 const char *
 ephy_web_view_get_display_address (EphyWebView *view)
 {
-  EphyWebViewPrivate *priv = view->priv;
-  return priv->display_address ? priv->display_address : "about:blank";
+  return view->display_address ? view->display_address : "about:blank";
 }
 
 /**
@@ -2386,7 +2356,7 @@ ephy_web_view_is_loading (EphyWebView *view)
 gboolean
 ephy_web_view_load_failed (EphyWebView *view)
 {
-  return view->priv->load_failed;
+  return view->load_failed;
 }
 
 /**
@@ -2401,7 +2371,7 @@ ephy_web_view_load_failed (EphyWebView *view)
 GdkPixbuf *
 ephy_web_view_get_icon (EphyWebView *view)
 {
-  return view->priv->icon;
+  return view->icon;
 }
 
 /**
@@ -2415,7 +2385,7 @@ ephy_web_view_get_icon (EphyWebView *view)
 EphyWebViewDocumentType
 ephy_web_view_get_document_type (EphyWebView *view)
 {
-  return view->priv->document_type;
+  return view->document_type;
 }
 
 /**
@@ -2429,7 +2399,7 @@ ephy_web_view_get_document_type (EphyWebView *view)
 EphyWebViewNavigationFlags
 ephy_web_view_get_navigation_flags (EphyWebView *view)
 {
-  return view->priv->nav_flags;
+  return view->nav_flags;
 }
 
 /**
@@ -2450,17 +2420,13 @@ ephy_web_view_get_navigation_flags (EphyWebView *view)
 const char *
 ephy_web_view_get_status_message (EphyWebView *view)
 {
-  EphyWebViewPrivate *priv;
-
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
 
-  priv = view->priv;
+  if (view->link_message && view->link_message[0] != '\0')
+    return view->link_message;
 
-  if (priv->link_message && priv->link_message[0] != '\0')
-    return priv->link_message;
-
-  if (priv->loading_message)
-    return priv->loading_message;
+  if (view->loading_message)
+    return view->loading_message;
 
   return NULL;
 }
@@ -2479,7 +2445,7 @@ ephy_web_view_get_link_message (EphyWebView *view)
 {
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
 
-  return view->priv->link_message;
+  return view->link_message;
 }
 
 /**
@@ -2494,21 +2460,18 @@ void
 ephy_web_view_set_link_message (EphyWebView *view,
                                 const char *address)
 {
-  EphyWebViewPrivate *priv;
   char *decoded_address;
 
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
-  priv = view->priv;
-
-  g_free (priv->link_message);
+  g_free (view->link_message);
 
   if (address) {
     decoded_address = ephy_uri_safe_unescape (address);
-    priv->link_message = ephy_embed_utils_link_message_parse (decoded_address);
+    view->link_message = ephy_embed_utils_link_message_parse (decoded_address);
     g_free (decoded_address);
   } else {
-    priv->link_message = NULL;
+    view->link_message = NULL;
   }
 
   g_object_notify (G_OBJECT (view), "status-message");
@@ -2526,12 +2489,10 @@ void
 ephy_web_view_set_security_level (EphyWebView *view,
                                   EphySecurityLevel level)
 {
-  EphyWebViewPrivate *priv = view->priv;
-
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
-  if (priv->security_level != level) {
-    priv->security_level = level;
+  if (view->security_level != level) {
+    view->security_level = level;
 
     g_object_notify (G_OBJECT (view), "security-level");
   }
@@ -2564,7 +2525,7 @@ ephy_web_view_get_typed_address (EphyWebView *view)
 {
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
 
-  return view->priv->typed_address;
+  return view->typed_address;
 }
 
 /**
@@ -2579,14 +2540,10 @@ void
 ephy_web_view_set_typed_address (EphyWebView *view,
                                  const char *address)
 {
-  EphyWebViewPrivate *priv;
-
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
-  priv = EPHY_WEB_VIEW (view)->priv;
-
-  g_free (priv->typed_address);
-  priv->typed_address = g_strdup (address);
+  g_free (view->typed_address);
+  view->typed_address = g_strdup (address);
 
   g_object_notify (G_OBJECT (view), "typed-address");
 }
@@ -2629,8 +2586,8 @@ ephy_web_view_has_modified_forms (EphyWebView *view,
 
   task = g_task_new (view, cancellable, callback, user_data);
 
-  if (view->priv->web_extension) {
-    ephy_web_extension_proxy_web_page_has_modified_forms (view->priv->web_extension,
+  if (view->web_extension) {
+    ephy_web_extension_proxy_web_page_has_modified_forms (view->web_extension,
                                                           webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)),
                                                           cancellable,
                                                           (GAsyncReadyCallback)has_modified_forms_cb,
@@ -2702,8 +2659,8 @@ ephy_web_view_get_best_web_app_icon (EphyWebView *view,
 
   task = g_task_new (view, cancellable, callback, user_data);
 
-  if (view->priv->web_extension) {
-    ephy_web_extension_proxy_get_best_web_app_icon (view->priv->web_extension,
+  if (view->web_extension) {
+    ephy_web_extension_proxy_get_best_web_app_icon (view->web_extension,
                                                     webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)),
                                                     webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)),
                                                     cancellable,
@@ -2774,8 +2731,8 @@ ephy_web_view_get_web_app_title (EphyWebView *view,
 
   task = g_task_new (view, cancellable, callback, user_data);
 
-  if (view->priv->web_extension) {
-    ephy_web_extension_proxy_get_web_app_title (view->priv->web_extension,
+  if (view->web_extension) {
+    ephy_web_extension_proxy_get_web_app_title (view->web_extension,
                                                 webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)),
                                                 cancellable,
                                                 (GAsyncReadyCallback)get_web_app_title_cb,
@@ -2817,13 +2774,13 @@ ephy_web_view_get_security_level (EphyWebView *view,
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
   if (level)
-    *level = view->priv->security_level;
+    *level = view->security_level;
 
   if (certificate)
-    *certificate = view->priv->certificate;
+    *certificate = view->certificate;
 
   if (errors)
-    *errors = view->priv->tls_errors;
+    *errors = view->tls_errors;
 }
 
 static void
@@ -3015,7 +2972,7 @@ ephy_web_view_get_visit_type (EphyWebView *view)
 {
   g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), EPHY_PAGE_VISIT_NONE);
 
-  return view->priv->visit_type;
+  return view->visit_type;
 }
 
 /**
@@ -3031,5 +2988,5 @@ ephy_web_view_set_visit_type (EphyWebView *view, EphyHistoryPageVisitType visit_
 {
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
-  view->priv->visit_type = visit_type;
+  view->visit_type = visit_type;
 }

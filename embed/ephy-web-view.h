@@ -33,16 +33,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_WEB_VIEW         (ephy_web_view_get_type ())
-#define EPHY_WEB_VIEW(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_WEB_VIEW, EphyWebView))
-#define EPHY_WEB_VIEW_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_WEB_VIEW, EphyWebViewClass))
-#define EPHY_IS_WEB_VIEW(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_WEB_VIEW))
-#define EPHY_IS_WEB_VIEW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_WEB_VIEW))
-#define EPHY_WEB_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_WEB_VIEW, EphyWebViewClass))
+#define EPHY_TYPE_WEB_VIEW (ephy_web_view_get_type ())
 
-typedef struct _EphyWebViewClass  EphyWebViewClass;
-typedef struct _EphyWebView    EphyWebView;
-typedef struct _EphyWebViewPrivate  EphyWebViewPrivate;
+G_DECLARE_FINAL_TYPE (EphyWebView, ephy_web_view, EPHY, WEB_VIEW, WebKitWebView)
 
 typedef enum
 {
@@ -65,20 +58,6 @@ typedef enum {
   EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE
 } EphyWebViewErrorPage;
 
-struct _EphyWebView
-{
-  WebKitWebView parent;
-
-  /*< private >*/
-  EphyWebViewPrivate *priv;
-};
-
-struct _EphyWebViewClass
-{
-  WebKitWebViewClass parent_class;
-};
-
-GType                      ephy_web_view_get_type                 (void);
 GType                      ephy_web_view_chrome_get_type          (void);
 GType                      ephy_web_view_security_level_get_type  (void);
 GtkWidget *                ephy_web_view_new                      (void);
