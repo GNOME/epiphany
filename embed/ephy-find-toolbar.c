@@ -558,24 +558,21 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 		g_signal_new ("next",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_FIRST,
-			      0, NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
+			      0, NULL, NULL, NULL,
 			      G_TYPE_NONE, 0);
 
 	signals[PREVIOUS] =
 		g_signal_new ("previous",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_FIRST,
-			      0, NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
+			      0, NULL, NULL, NULL,
 			      G_TYPE_NONE, 0);
 
 	signals[CLOSE] =
 		g_signal_new ("close",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-			      0, NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
+			      0, NULL, NULL, NULL,
 			      G_TYPE_NONE, 0);
 
 	obj_properties[PROP_WEB_VIEW] =
