@@ -942,12 +942,6 @@ ephy_web_view_constructed (GObject *object)
 }
 
 static void
-impl_loading_homepage (EphyWebView *view)
-{
-  ephy_web_view_freeze_history (view);
-}
-
-static void
 ephy_web_view_class_init (EphyWebViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -961,8 +955,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
 
   widget_class->button_press_event = ephy_web_view_button_press_event;
   widget_class->key_press_event = ephy_web_view_key_press_event;
-
-  klass->loading_homepage = impl_loading_homepage;
 
 /**
  * EphyWebView:address:
@@ -1123,8 +1115,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("new-window",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET (EphyWebViewClass, new_window),
-            NULL, NULL,
+            0, NULL, NULL,
             g_cclosure_marshal_VOID__OBJECT,
             G_TYPE_NONE,
             1,
@@ -1142,8 +1133,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_popup_blocked",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
-            G_STRUCT_OFFSET (EphyWebViewClass, popup_blocked),
-            NULL, NULL,
+            0, NULL, NULL,
             g_cclosure_marshal_generic,
             G_TYPE_NONE,
             3,
@@ -1164,8 +1154,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_search_link",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
-            G_STRUCT_OFFSET (EphyWebViewClass, search_link),
-            NULL, NULL,
+            0, NULL, NULL,
             g_cclosure_marshal_generic,
             G_TYPE_NONE,
             3,
@@ -1186,8 +1175,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_feed_link",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
-            G_STRUCT_OFFSET (EphyWebViewClass, feed_link),
-            NULL, NULL,
+            0, NULL, NULL,
             g_cclosure_marshal_generic,
             G_TYPE_NONE,
             3,
@@ -1206,8 +1194,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_modal_alert",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET (EphyWebViewClass, modal_alert),
-            g_signal_accumulator_true_handled, NULL,
+            0, g_signal_accumulator_true_handled, NULL,
             g_cclosure_marshal_generic,
             G_TYPE_BOOLEAN,
             0);
@@ -1221,8 +1208,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("ge_modal_alert_closed",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET (EphyWebViewClass, modal_alert_closed),
-            NULL, NULL,
+            0, NULL, NULL,
             g_cclosure_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
@@ -1238,8 +1224,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("search-key-press",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET (EphyWebViewClass, search_key_press),
-            g_signal_accumulator_true_handled, NULL,
+            0, g_signal_accumulator_true_handled, NULL,
             g_cclosure_marshal_generic,
             G_TYPE_BOOLEAN,
             1,
@@ -1255,8 +1240,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("content-blocked",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET (EphyWebViewClass, content_blocked),
-            NULL, NULL,
+            0, NULL, NULL,
             g_cclosure_marshal_VOID__STRING,
             G_TYPE_NONE,
             1,
@@ -1274,8 +1258,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("new-document-now",
             EPHY_TYPE_WEB_VIEW,
             G_SIGNAL_RUN_FIRST,
-            G_STRUCT_OFFSET (EphyWebViewClass, new_document_now),
-            NULL, NULL,
+            0, NULL, NULL,
             g_cclosure_marshal_VOID__STRING,
             G_TYPE_NONE,
             1,
@@ -1291,8 +1274,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("loading-homepage",
                   EPHY_TYPE_WEB_VIEW,
                   G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (EphyWebViewClass, loading_homepage),
-                  NULL, NULL,
+                  0, NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
@@ -1307,8 +1289,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
     g_signal_new ("download-only-load",
                   EPHY_TYPE_WEB_VIEW,
                   G_SIGNAL_RUN_FIRST,
-                  0,
-                  NULL, NULL,
+                  0, NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
@@ -3024,6 +3005,7 @@ ephy_web_view_load_homepage (EphyWebView *view)
 
   g_signal_emit_by_name (view, "loading-homepage");
 
+  ephy_web_view_freeze_history (view);
   ephy_web_view_set_visit_type (view,
                                 EPHY_PAGE_VISIT_HOMEPAGE);
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ())

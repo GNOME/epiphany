@@ -76,31 +76,6 @@ struct _EphyWebView
 struct _EphyWebViewClass
 {
   WebKitWebViewClass parent_class;
-
-  /* Signals */
-  void   (* feed_link)          (EphyWebView *view,
-                                 const char *type,
-                                 const char *title,
-                                 const char *address);
-  void   (* search_link)        (EphyWebView *view,
-                                 const char *type,
-                                 const char *title,
-                                 const char *address);
-  void   (* popup_blocked)      (EphyWebView *view,
-                                 const char *address,
-                                 const char *target,
-                                 const char *features);
-  void   (* content_blocked)    (EphyWebView *view,
-                                 const char *uri);
-  gboolean (* modal_alert)      (EphyWebView *view);
-  void   (* modal_alert_closed) (EphyWebView *view);
-  void   (* new_window)         (EphyWebView *view,
-                                 EphyWebView *new_view);
-  gboolean (* search_key_press) (EphyWebView *view,
-                                 GdkEventKey *event);
-  void   (* new_document_now)   (EphyWebView *view,
-                                 const char *uri);
-  void   (* loading_homepage)   (EphyWebView *view);
 };
 
 GType                      ephy_web_view_get_type                 (void);
