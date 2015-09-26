@@ -802,7 +802,15 @@ ephy_window_key_press_event (GtkWidget *widget,
 	 * widget), otherwise the event follows the normal handling path.
 	 */
 
-	if (event->keyval == GDK_KEY_Escape && modifier == 0)
+	if ((event->state & GDK_CONTROL_MASK ||
+	     event->state & GDK_MOD1_MASK ||
+             event->state & GDK_SHIFT_MASK) &&
+             event->length > 0)
+        {
+		/* Pass (CTRL|ALT|SHIFT)+letter characters to the widget */
+		shortcircuit = TRUE;
+        }
+	else if (event->keyval == GDK_KEY_Escape && modifier == 0)
 	{
 		/* Always pass Escape to both the widget, and the parent */
 		shortcircuit = TRUE;
