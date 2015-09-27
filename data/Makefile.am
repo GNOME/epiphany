@@ -1,6 +1,6 @@
 SUBDIRS = icons pages
 
-desktop_in_files = epiphany.desktop.in
+desktop_in_files = org.gnome.Epiphany.desktop.in
 desktopdir = $(datadir)/applications
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
@@ -16,7 +16,7 @@ gsettings_ENUM_FILES = $(top_srcdir)/lib/ephy-prefs.h
 gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml
 @GSETTINGS_RULES@
 
-appstream_in_files = epiphany.appdata.xml.in
+appstream_in_files = org.gnome.Epiphany.appdata.xml.in
 appstream_XML = $(appstream_in_files:.xml.in=.xml)
 @APPSTREAM_XML_RULES@
 
