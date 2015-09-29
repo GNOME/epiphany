@@ -43,11 +43,15 @@ struct CookiesDialogPrivate
 {
 	GtkWidget *cookies_treeview;
 	GtkWidget *liststore;
+	GtkWidget *treemodelfilter;
+	GtkWidget *treemodelsort;
 	GtkWidget *remove_toolbutton;
 	GtkWidget *clear_button;
 
 	WebKitCookieManager *cookie_manager;
 	gboolean filled;
+
+	char *search_text;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (CookiesDialog, cookies_dialog, GTK_TYPE_DIALOG)
@@ -82,6 +86,17 @@ cookies_dialog_dispose (GObject *object)
 	g_signal_handlers_disconnect_by_func (priv->cookie_manager, cookie_changed_cb, object);
 
 	G_OBJECT_CLASS (cookies_dialog_parent_class)->dispose (object);
+}
+
+static void
+cookies_dialog_finalize (GObject *object)
+{
+	CookiesDialogPrivate *priv;
+
+	priv = EPHY_COOKIES_DIALOG (object)->priv;
+
+	g_free (priv->search_text);
+	G_OBJECT_CLASS (cookies_dialog_parent_class)->finalize (object);
 }
 
 static void
@@ -146,11 +161,24 @@ delete_selection (CookiesDialog *dialog)
 	{
 		GValue val = { 0, };
 
+		GtkTreeIter filter_iter;
+		GtkTreeIter child_iter;
+
 		path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)r->data);
 		gtk_tree_model_get_iter (model, &iter, path);
 		gtk_tree_model_get_value (model, &iter, COL_COOKIES_HOST, &val);
 		cookie_remove (dialog, (gpointer)g_value_get_string (&val));
 		g_value_unset (&val);
+
+		gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (dialog->priv->treemodelsort),
+								&filter_iter,
+								&iter);
+
+		gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (dialog->priv->treemodelfilter),
+								  &child_iter,
+								  &filter_iter);
+
+		gtk_list_store_remove (GTK_LIST_STORE (dialog->priv->liststore), &child_iter);
 
 		gtk_tree_row_reference_free ((GtkTreeRowReference *)r->data);
 		gtk_tree_path_free (path);
@@ -212,17 +240,32 @@ on_treeview_selection_changed (GtkTreeSelection *selection,
 }
 
 static void
+on_search_entry_changed (GtkSearchEntry *entry,
+			 CookiesDialog *dialog)
+{
+	const char *text;
+
+	text = gtk_entry_get_text (GTK_ENTRY (entry));
+	g_free (dialog->priv->search_text);
+	dialog->priv->search_text = g_strdup (text);
+	gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (dialog->priv->treemodelfilter));
+}
+
+static void
 cookies_dialog_class_init (CookiesDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->dispose = cookies_dialog_dispose;
+	object_class->finalize = cookies_dialog_finalize;
 
 	gtk_widget_class_set_template_from_resource (widget_class,
 	                                             "/org/gnome/epiphany/cookies-dialog.ui");
 
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, liststore);
+	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, treemodelfilter);
+	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, treemodelsort);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, cookies_treeview);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, clear_button);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, remove_toolbutton);
@@ -230,6 +273,7 @@ cookies_dialog_class_init (CookiesDialogClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_cookies_treeview_key_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_remove_toolbutton_clicked);
+	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 }
 
 static void
@@ -356,6 +400,29 @@ get_domains_with_cookies_cb (WebKitCookieManager *cookie_manager,
 	dialog->priv->filled = TRUE;
 }
 
+static gboolean
+row_visible_func (GtkTreeModel *model,
+		  GtkTreeIter  *iter,
+		  CookiesDialog *dialog)
+{
+	gboolean visible = FALSE;
+	gchar *host;
+
+	if (dialog->priv->search_text == NULL)
+		return TRUE;
+
+	gtk_tree_model_get (model, iter,
+			    COL_COOKIES_HOST, &host,
+			    -1);
+
+	if (host != NULL && strstr (host, dialog->priv->search_text) != NULL)
+		visible = TRUE;
+
+	g_free (host);
+
+	return visible;
+}
+
 static void
 populate_model (CookiesDialog *dialog)
 {
@@ -386,6 +453,11 @@ cookies_dialog_init (CookiesDialog *dialog)
 
 	dialog->priv = cookies_dialog_get_instance_private (dialog);
 	gtk_widget_init_template (GTK_WIDGET (dialog));
+
+	gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (dialog->priv->treemodelfilter),
+						(GtkTreeModelFilterVisibleFunc)row_visible_func,
+						dialog,
+						NULL);
 
 	web_context = ephy_embed_shell_get_web_context (shell);
 	dialog->priv->cookie_manager = webkit_web_context_get_cookie_manager (web_context);

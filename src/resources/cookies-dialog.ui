@@ -12,6 +12,12 @@
       <column type="SoupCookie"/>
     </columns>
   </object>
+  <object class="GtkTreeModelFilter" id="treemodelfilter">
+    <property name="child_model">liststore</property>
+  </object>
+  <object class="GtkTreeModelSort" id="treemodelsort">
+    <property name="model">treemodelfilter</property>
+  </object>
   <template class="CookiesDialog" parent="GtkDialog">
     <property name="height_request">500</property>
     <property name="can_focus">False</property>
@@ -73,82 +79,135 @@
             <property name="can_focus">False</property>
             <property name="border_width">5</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow1">
-                <property name="width_request">400</property>
-                <property name="height_request">300</property>
+              <object class="GtkSearchEntry" id="searchentry1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
-                <property name="min_content_width">300</property>
-                <property name="min_content_height">300</property>
-                <child>
-                  <object class="GtkTreeView" id="cookies_treeview">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="model">liststore</property>
-                    <property name="search_column">0</property>
-                    <signal name="key-press-event" handler="on_cookies_treeview_key_press_event" object="CookiesDialog" swapped="no"/>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection">
-                        <property name="mode">multiple</property>
-                        <signal name="changed" handler="on_treeview_selection_changed" object="CookiesDialog" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                        <property name="resizable">True</property>
-                        <property name="sizing">autosize</property>
-                        <property name="title" translatable="yes">Site</property>
-                        <property name="reorderable">True</property>
-                        <property name="sort_column_id">1</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <property name="primary_icon_name">edit-find-symbolic</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">False</property>
+                <property name="placeholder_text" translatable="yes">Search cookies</property>
+                <signal name="search-changed" handler="on_search_entry_changed" object="CookiesDialog" swapped="no"/>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolbar" id="toolbar1">
+              <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <style>
-                  <class name="inline-toolbar"/>
-                </style>
-                <property name="icon_size">1</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkToolButton" id="remove_toolbutton">
+                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="width_request">400</property>
+                    <property name="height_request">300</property>
                     <property name="visible">True</property>
-                    <property name="sensitive">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <property name="min_content_width">300</property>
+                    <property name="min_content_height">300</property>
+                    <child>
+                      <object class="GtkTreeView" id="cookies_treeview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="model">treemodelsort</property>
+                        <property name="enable_search">False</property>
+                        <property name="search_column">0</property>
+                        <signal name="key-press-event" handler="on_cookies_treeview_key_press_event" object="CookiesDialog" swapped="no"/>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection">
+                            <property name="mode">multiple</property>
+                            <signal name="changed" handler="on_treeview_selection_changed" object="CookiesDialog" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                            <property name="sizing">autosize</property>
+                            <property name="title" translatable="yes">Site</property>
+                            <property name="clickable">True</property>
+                            <property name="reorderable">True</property>
+                            <property name="sort_column_id">0</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolbar" id="toolbar1">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Remove</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">list-remove-symbolic</property>
-                    <property name="tooltip_text" translatable="yes">Delete the selected cookies</property>
-                    <signal name="clicked" handler="on_remove_toolbutton_clicked" object="CookiesDialog" swapped="no"/>
+                    <style>
+                      <class name="inline-toolbar"/>
+                    </style>
+                    <property name="icon_size">1</property>
+                    <child>
+                      <object class="GtkToolItem" id="toolitem1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkBox" id="remove_button_box">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkButton" id="remove_toolbutton">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="tooltip_text" translatable="yes">Delete the selected cookies</property>
+                                <property name="label" translatable="yes">Remove</property>
+                                <signal name="clicked" handler="on_remove_toolbutton_clicked" object="CookiesDialog" swapped="no"/>
+                                <child>
+                                  <object class="GtkImage" id="remove_cookie_image">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="icon_name">list-remove-symbolic</property>
+                                    <property name="icon-size">1</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="pack_type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
