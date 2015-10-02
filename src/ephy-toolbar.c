@@ -25,6 +25,7 @@
 #include "ephy-location-entry.h"
 #include "ephy-middle-clickable-button.h"
 #include "ephy-private.h"
+#include "ephy-downloads-popover.h"
 
 G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_HEADER_BAR)
 
@@ -45,7 +46,35 @@ struct _EphyToolbarPrivate {
   GtkWidget *navigation_box;
   GtkWidget *page_menu_button;
   GtkWidget *new_tab_button;
+  GtkWidget *downloads_revealer;
+  GtkWidget *downloads_button;
+  GtkWidget *downloads_popover;
 };
+
+static void
+download_added_cb (EphyDownloadsManager *manager,
+                   EphyDownload *download,
+                   EphyToolbar *toolbar)
+{
+  EphyToolbarPrivate *priv = toolbar->priv;
+
+  if (!priv->downloads_popover) {
+    priv->downloads_popover = ephy_downloads_popover_new (priv->downloads_button);
+    gtk_menu_button_set_popover (GTK_MENU_BUTTON (priv->downloads_button),
+                                 priv->downloads_popover);
+  }
+
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->downloads_revealer), TRUE);
+}
+
+static void
+download_removed_cb (EphyDownloadsManager *manager,
+                     EphyDownload *download,
+                     EphyToolbar *toolbar)
+{
+  if (!ephy_downloads_manager_get_downloads (manager))
+    gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->priv->downloads_revealer), FALSE);
+}
 
 static void
 ephy_toolbar_set_property (GObject *object,
@@ -103,6 +132,7 @@ ephy_toolbar_constructed (GObject *object)
   GtkAction *action;
   GtkUIManager *manager;
   GtkWidget *toolbar, *box, *button, *menu;
+  EphyDownloadsManager *downloads_manager;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
 
@@ -190,6 +220,37 @@ ephy_toolbar_constructed (GObject *object)
   gtk_widget_set_halign (menu, GTK_ALIGN_END);
   gtk_menu_button_set_popup (GTK_MENU_BUTTON (button), menu);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
+
+  /* Downloads */
+  downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
+
+  priv->downloads_revealer = gtk_revealer_new ();
+  gtk_revealer_set_transition_type (GTK_REVEALER (priv->downloads_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->downloads_revealer),
+                                 ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
+
+  priv->downloads_button = gtk_menu_button_new ();
+  gtk_button_set_image (GTK_BUTTON (priv->downloads_button),
+                        gtk_image_new_from_icon_name ("folder-download-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_widget_set_valign (priv->downloads_button, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (priv->downloads_revealer), priv->downloads_button);
+  gtk_widget_show (priv->downloads_button);
+
+  if (ephy_downloads_manager_get_downloads (downloads_manager)) {
+    priv->downloads_popover = ephy_downloads_popover_new (priv->downloads_button);
+    gtk_menu_button_set_popover (GTK_MENU_BUTTON (priv->downloads_button),
+                                 priv->downloads_popover);
+  }
+
+  g_signal_connect_object (downloads_manager, "download-added",
+                           G_CALLBACK (download_added_cb),
+                           object, 0);
+  g_signal_connect_object (downloads_manager, "download-removed",
+                           G_CALLBACK (download_removed_cb),
+                           object, 0);
+
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), priv->downloads_revealer);
+  gtk_widget_show (priv->downloads_revealer);
 }
 
 static void

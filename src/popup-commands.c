@@ -22,7 +22,7 @@
 #include "popup-commands.h"
 
 #include "ephy-bookmarks-ui.h"
-#include "ephy-download.h"
+#include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-chooser.h"
@@ -183,7 +183,8 @@ filename_suggested_cb (EphyDownload *download,
 		webkit_download = ephy_download_get_webkit_download (download);
 		webkit_download_set_allow_overwrite (webkit_download, TRUE);
 
-		ephy_window_add_download (window, download);
+		ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
+						     download);
 	}
 	else
 	{
@@ -280,7 +281,8 @@ popup_cmd_set_image_as_background (GtkAction *action,
 
 	ephy_download_set_destination_uri (download, dest_uri);
 	ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_DO_NOTHING);
-	ephy_window_add_download (window, download);
+	ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
+					     download);
 	g_object_unref (download);
 
 	g_signal_connect (download, "completed",

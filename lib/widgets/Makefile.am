@@ -68,6 +68,8 @@ libephywidgets_la_SOURCES = \
 	ephy-certificate-dialog.h		\
 	ephy-certificate-popover.c		\
 	ephy-certificate-popover.h		\
+	ephy-downloads-popover.h		\
+	ephy-downloads-popover.c		\
 	ephy-download-widget.c			\
 	ephy-download-widget.h			\
 	ephy-location-entry.c			\

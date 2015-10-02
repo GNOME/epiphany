@@ -4,7 +4,7 @@
  * ephy-download.c
  * This file is part of Epiphany
  *
- * Copyright © 2011 - Igalia S.L.
+ * Copyright © 2011, 2015 - Igalia S.L.
  *
  * Epiphany is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,23 +47,21 @@ typedef struct _EphyDownloadWidgetPrivate EphyDownloadWidgetPrivate;
 
 struct _EphyDownloadWidget
 {
-  GtkBox parent;
+  GtkGrid parent;
 
   EphyDownloadWidgetPrivate *priv;
 };
 
 struct _EphyDownloadWidgetClass
 {
-  GtkBoxClass parent_class;
+  GtkGridClass parent_class;
 };
 
-GType          ephy_download_widget_get_type             (void) G_GNUC_CONST;
+GType          ephy_download_widget_get_type     (void) G_GNUC_CONST;
 
-GtkWidget     *ephy_download_widget_new                  (EphyDownload *ephy_download);
+GtkWidget     *ephy_download_widget_new          (EphyDownload *ephy_download);
 
-EphyDownload  *ephy_download_widget_get_download         (EphyDownloadWidget *widget);
-
-gboolean       ephy_download_widget_download_is_finished (EphyDownloadWidget *widget);
+EphyDownload  *ephy_download_widget_get_download (EphyDownloadWidget *widget);
 
 G_END_DECLS
 

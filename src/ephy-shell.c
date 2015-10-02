@@ -26,7 +26,7 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
-#include "ephy-download.h"
+#include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
@@ -294,7 +294,8 @@ download_started_cb (WebKitWebContext *web_context,
     window = gtk_application_get_active_window (GTK_APPLICATION (shell));
 
   ephy_download = ephy_download_new (download, window);
-  ephy_window_add_download (EPHY_WINDOW (window), ephy_download);
+  ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell)),
+                                       ephy_download);
   g_object_unref (ephy_download);
 }
 
