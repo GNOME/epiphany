@@ -99,7 +99,8 @@ libephymisc_la_CFLAGS = \
 
 libephymisc_la_LIBADD = \
 	-lm \
-	$(CODE_COVERAGE_LDFLAGS)
+	$(CODE_COVERAGE_LDFLAGS) \
+	$(DEPENDENCIES_LIBS)
 
 bin_PROGRAMS = ephy-profile-migrator
 
