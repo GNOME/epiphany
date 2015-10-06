@@ -37,12 +37,13 @@ typedef struct _EphyDownloadsManager        EphyDownloadsManager;
 
 GType    ephy_downloads_manager_get_type             (void);
 
-void     ephy_downloads_manager_add_download         (EphyDownloadsManager *manager,
-                                                      EphyDownload         *download);
-void     ephy_downloads_manager_remove_download      (EphyDownloadsManager *manager,
-                                                      EphyDownload         *download);
-gboolean ephy_downloads_manager_has_active_downloads (EphyDownloadsManager *manager);
-GList   *ephy_downloads_manager_get_downloads        (EphyDownloadsManager *manager);
+void     ephy_downloads_manager_add_download           (EphyDownloadsManager *manager,
+                                                        EphyDownload         *download);
+void     ephy_downloads_manager_remove_download        (EphyDownloadsManager *manager,
+                                                        EphyDownload         *download);
+gboolean ephy_downloads_manager_has_active_downloads   (EphyDownloadsManager *manager);
+GList   *ephy_downloads_manager_get_downloads          (EphyDownloadsManager *manager);
+gdouble  ephy_downloads_manager_get_estimated_progress (EphyDownloadsManager *manager);
 
 G_END_DECLS
 

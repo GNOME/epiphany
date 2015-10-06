@@ -25,6 +25,8 @@ enum {
   DOWNLOAD_ADDED,
   DOWNLOAD_REMOVED,
 
+  ESTIMATED_PROGRESS_CHANGED,
+
   LAST_SIGNAL
 };
 
@@ -83,6 +85,21 @@ ephy_downloads_manager_class_init (EphyDownloadsManagerClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_DOWNLOAD);
+
+  signals[ESTIMATED_PROGRESS_CHANGED] =
+    g_signal_new ("estimated-progress-changed",
+                  EPHY_TYPE_DOWNLOADS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+}
+
+static void
+download_completed_cb (EphyDownload         *download,
+                       EphyDownloadsManager *manager)
+{
+  g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
 }
 
 static void
@@ -92,6 +109,13 @@ download_failed_cb (EphyDownload         *download,
 {
   if (g_error_matches (error, WEBKIT_DOWNLOAD_ERROR, WEBKIT_DOWNLOAD_ERROR_CANCELLED_BY_USER))
     ephy_downloads_manager_remove_download (manager, download);
+  g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
+}
+
+static void
+download_estimated_progress_changed_cb (EphyDownloadsManager *manager)
+{
+  g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
 }
 
 void
@@ -105,10 +129,17 @@ ephy_downloads_manager_add_download (EphyDownloadsManager *manager,
     return;
 
   manager->downloads = g_list_prepend (manager->downloads, g_object_ref (download));
+  g_signal_connect (download, "completed",
+                    G_CALLBACK (download_completed_cb),
+                    manager);
   g_signal_connect (download, "error",
                     G_CALLBACK (download_failed_cb),
                     manager);
+  g_signal_connect_swapped (ephy_download_get_webkit_download (download), "notify::estimated-progress",
+                            G_CALLBACK (download_estimated_progress_changed_cb),
+                            manager);
   g_signal_emit (manager, signals[DOWNLOAD_ADDED], 0, download);
+  g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
 }
 
 void
@@ -152,4 +183,26 @@ ephy_downloads_manager_get_downloads (EphyDownloadsManager *manager)
   g_return_val_if_fail (EPHY_IS_DOWNLOADS_MANAGER (manager), NULL);
 
   return manager->downloads;
+}
+
+gdouble
+ephy_downloads_manager_get_estimated_progress (EphyDownloadsManager *manager)
+{
+  GList *l;
+  guint n_active = 0;
+  gdouble progress = 0;
+
+  g_return_val_if_fail (EPHY_IS_DOWNLOADS_MANAGER (manager), 0);
+
+  for (l = manager->downloads; l; l = g_list_next (l)) {
+    EphyDownload *download = EPHY_DOWNLOAD (l->data);
+
+    if (!ephy_download_is_active (download))
+      continue;
+
+    n_active++;
+    progress += webkit_download_get_estimated_progress (ephy_download_get_webkit_download (download));
+  }
+
+  return n_active > 0 ? progress / n_active : 1;
 }

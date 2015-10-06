@@ -26,6 +26,7 @@
 #include "ephy-middle-clickable-button.h"
 #include "ephy-private.h"
 #include "ephy-downloads-popover.h"
+#include "ephy-downloads-progress-icon.h"
 
 G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_HEADER_BAR)
 
@@ -74,6 +75,13 @@ download_removed_cb (EphyDownloadsManager *manager,
 {
   if (!ephy_downloads_manager_get_downloads (manager))
     gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->priv->downloads_revealer), FALSE);
+}
+
+static void
+downloads_estimated_progress_cb (EphyDownloadsManager *manager,
+                                 EphyToolbar *toolbar)
+{
+  gtk_widget_queue_draw (gtk_button_get_image (toolbar->priv->downloads_button));
 }
 
 static void
@@ -230,8 +238,7 @@ ephy_toolbar_constructed (GObject *object)
                                  ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
 
   priv->downloads_button = gtk_menu_button_new ();
-  gtk_button_set_image (GTK_BUTTON (priv->downloads_button),
-                        gtk_image_new_from_icon_name ("folder-download-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_button_set_image (GTK_BUTTON (priv->downloads_button), ephy_downloads_progress_icon_new ());
   gtk_widget_set_valign (priv->downloads_button, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (priv->downloads_revealer), priv->downloads_button);
   gtk_widget_show (priv->downloads_button);
@@ -247,6 +254,9 @@ ephy_toolbar_constructed (GObject *object)
                            object, 0);
   g_signal_connect_object (downloads_manager, "download-removed",
                            G_CALLBACK (download_removed_cb),
+                           object, 0);
+  g_signal_connect_object (downloads_manager, "estimated-progress-changed",
+                           G_CALLBACK (downloads_estimated_progress_cb),
                            object, 0);
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), priv->downloads_revealer);

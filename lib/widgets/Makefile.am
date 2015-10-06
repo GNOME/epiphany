@@ -70,6 +70,8 @@ libephywidgets_la_SOURCES = \
 	ephy-certificate-popover.h		\
 	ephy-downloads-popover.h		\
 	ephy-downloads-popover.c		\
+	ephy-downloads-progress-icon.h		\
+	ephy-downloads-progress-icon.c		\
 	ephy-download-widget.c			\
 	ephy-download-widget.h			\
 	ephy-location-entry.c			\
