@@ -55,7 +55,6 @@ struct _EphyDownloadPrivate
   GError *error;
 
   GtkWindow *window;
-  GtkWidget *widget;
 
   guint inhibitor_cookie;
 };
@@ -67,8 +66,7 @@ enum
   PROP_DESTINATION,
   PROP_ACTION,
   PROP_START_TIME,
-  PROP_WINDOW,
-  PROP_WIDGET
+  PROP_WINDOW
 };
 
 enum
@@ -95,9 +93,6 @@ ephy_download_get_property (GObject    *object,
   priv = download->priv;
 
   switch (property_id) {
-    case PROP_WIDGET:
-      g_value_set_object (value, priv->widget);
-      break;
     case PROP_WINDOW:
       g_value_set_object (value, priv->window);
       break;
@@ -137,9 +132,6 @@ ephy_download_set_property (GObject      *object,
       break;
     case PROP_WINDOW:
       download->priv->window = g_value_dup_object (value);
-      break;
-    case PROP_WIDGET:
-      ephy_download_set_widget (download, g_value_get_object (value));
       break;
     case PROP_DOWNLOAD:
     case PROP_START_TIME:
@@ -391,46 +383,6 @@ ephy_download_set_action (EphyDownload *download,
 }
 
 /**
- * ephy_download_set_widget:
- * @download: an #EphyDownload
- * @widget: a #GtkWidget
- *
- * Sets @widget to be associated with @download as its UI.
- **/
-void
-ephy_download_set_widget (EphyDownload *download,
-                          GtkWidget *widget)
-{
-  g_return_if_fail (EPHY_IS_DOWNLOAD (download));
-
-  if (download->priv->widget != NULL)
-    g_object_unref (download->priv->widget);
-
-  download->priv->widget = NULL;
-
-  if (widget != NULL)
-    download->priv->widget = g_object_ref (widget);
-
-  g_object_notify (G_OBJECT (download), "widget");
-}
-
-/**
- * ephy_download_get_widget:
- * @download: an #EphyDownload
- *
- * Gets the #GtkWidget associated to this download.
- *
- * Returns: (transfer none): a #GtkWidget.
- **/
-GtkWidget *
-ephy_download_get_widget (EphyDownload *download)
-{
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
-
-  return download->priv->widget;
-}
-
-/**
  * ephy_download_get_webkit_download:
  * @download: an #EphyDownload
  *
@@ -675,11 +627,6 @@ ephy_download_dispose (GObject *object)
     priv->window = NULL;
   }
 
-  if (priv->widget) {
-    g_object_unref (priv->widget);
-    priv->widget = NULL;
-  }
-
   g_clear_error(&priv->error);
 
   G_OBJECT_CLASS (ephy_download_parent_class)->dispose (object);
@@ -778,22 +725,6 @@ ephy_download_class_init (EphyDownloadClass *klass)
                                                         G_PARAM_STATIC_BLURB));
 
   /**
-   * EphyDownload::widget:
-   *
-   * An EphyDownloadWidget -or any other GtkWidget- that is representing this
-   * EphyDownload to the user.
-   */
-  g_object_class_install_property (object_class, PROP_WIDGET,
-                                   g_param_spec_object ("widget",
-                                                        "A GtkWidget",
-                                                        "GtkWidget showing this download.",
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE |
-                                                        G_PARAM_STATIC_NAME |
-                                                        G_PARAM_STATIC_NICK |
-                                                        G_PARAM_STATIC_BLURB));
-
-  /**
    * EphyDownload::filename-suggested:
    *
    * The ::filename-suggested signal is emitted when we have received the
@@ -851,7 +782,6 @@ ephy_download_init (EphyDownload *download)
   download->priv->start_time = gtk_get_current_event_time ();
 
   download->priv->window = NULL;
-  download->priv->widget = NULL;
 }
 
 static void

@@ -97,10 +97,6 @@ void          ephy_download_set_action            (EphyDownload *download,
 gboolean      ephy_download_do_download_action    (EphyDownload *download,
                                                    EphyDownloadActionType action);
 
-GtkWidget    *ephy_download_get_widget            (EphyDownload *download);
-void          ephy_download_set_widget            (EphyDownload *download,
-                                                   GtkWidget *widget);
-
 G_END_DECLS
 
 #endif /* _EPHY_DOWNLOAD_H */

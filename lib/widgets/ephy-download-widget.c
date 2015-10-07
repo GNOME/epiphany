@@ -393,7 +393,6 @@ ephy_download_widget_dispose (GObject *object)
                                           NULL, NULL, widget);
     g_signal_handlers_disconnect_matched (widget->priv->download, G_SIGNAL_MATCH_DATA, 0, 0,
                                           NULL, NULL, widget);
-    ephy_download_set_widget (widget->priv->download, NULL);
     g_object_unref (widget->priv->download);
     widget->priv->download = NULL;
   }
@@ -491,7 +490,6 @@ ephy_download_widget_constructed (GObject *object)
   g_signal_connect (priv->download, "error",
                     G_CALLBACK (download_failed_cb),
                     widget);
-  ephy_download_set_widget (priv->download, GTK_WIDGET (widget));
 }
 
 static void
