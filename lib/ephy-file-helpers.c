@@ -829,8 +829,7 @@ ephy_file_open_uri_in_default_browser (const char *uri,
 	gdk_app_launch_context_set_screen (context, screen);
 	gdk_app_launch_context_set_timestamp (context, timestamp);
 
-	/* We assume the default application that supports HTML and URIs is the default browser */
-	appinfo = g_app_info_get_default_for_type ("text/html", TRUE);
+	appinfo = g_app_info_get_default_for_type ("x-scheme-handler/http", TRUE);
 	uris.data = (gpointer)uri;
 	uris.next = uris.prev = NULL;
 
