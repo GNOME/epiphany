@@ -51,6 +51,8 @@ struct _EphyDownloadPrivate
 
   EphyDownloadActionType action;
   guint32 start_time;
+  gboolean finished;
+  GError *error;
 
   GtkWindow *window;
   GtkWidget *widget;
@@ -68,6 +70,17 @@ enum
   PROP_WINDOW,
   PROP_WIDGET
 };
+
+enum
+{
+  FILENAME_SUGGESTED,
+  ERROR,
+  COMPLETED,
+
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
 
 static void
 ephy_download_get_property (GObject    *object,
@@ -550,6 +563,37 @@ ephy_download_cancel (EphyDownload *download)
   webkit_download_cancel (download->priv->download);
 }
 
+gboolean
+ephy_download_is_active (EphyDownload *download)
+{
+  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), FALSE);
+
+  return !download->priv->finished;
+}
+
+gboolean
+ephy_download_succeeded (EphyDownload *download)
+{
+  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), FALSE);
+
+  return download->priv->finished && !download->priv->error;
+}
+
+gboolean
+ephy_download_failed (EphyDownload *download,
+                      GError      **error)
+{
+  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), FALSE);
+
+  if (download->priv->finished && download->priv->error) {
+    if (error)
+      *error = download->priv->error;
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
 /**
  * ephy_download_do_download_action:
  * @download: an #EphyDownload
@@ -635,6 +679,8 @@ ephy_download_dispose (GObject *object)
     g_object_unref (priv->widget);
     priv->widget = NULL;
   }
+
+  g_clear_error(&priv->error);
 
   G_OBJECT_CLASS (ephy_download_parent_class)->dispose (object);
 }
@@ -748,15 +794,15 @@ ephy_download_class_init (EphyDownloadClass *klass)
                                                         G_PARAM_STATIC_BLURB));
 
   /**
-   * EphyDownload::completed:
+   * EphyDownload::filename-suggested:
    *
    * The ::filename-suggested signal is emitted when we have received the
    * suggested filename from WebKit.
    **/
-  g_signal_new ("filename-suggested",
+  signals[FILENAME_SUGGESTED] = g_signal_new ("filename-suggested",
                 G_OBJECT_CLASS_TYPE (object_class),
                 G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (EphyDownloadClass, filename_suggested),
+                0,
                 NULL, NULL,
                 g_cclosure_marshal_generic,
                 G_TYPE_NONE,
@@ -768,10 +814,10 @@ ephy_download_class_init (EphyDownloadClass *klass)
    *
    * The ::completed signal is emitted when @download has finished downloading.
    **/
-  g_signal_new ("completed",
+  signals[COMPLETED] = g_signal_new ("completed",
                 G_OBJECT_CLASS_TYPE (object_class),
                 G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (EphyDownloadClass, completed),
+                0,
                 NULL, NULL,
                 g_cclosure_marshal_VOID__VOID,
                 G_TYPE_NONE,
@@ -781,14 +827,14 @@ ephy_download_class_init (EphyDownloadClass *klass)
    *
    * The ::error signal wraps the @download ::error signal.
    **/
-  g_signal_new ("error",
+  signals[ERROR] = g_signal_new ("error",
                 G_OBJECT_CLASS_TYPE (object_class),
                 G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (EphyDownloadClass, error),
+                0,
                 NULL, NULL,
                 g_cclosure_marshal_generic,
                 G_TYPE_NONE,
-                0);
+                1, G_TYPE_POINTER);
 }
 
 static void
@@ -824,7 +870,7 @@ download_decide_destination_cb (WebKitDownload *wk_download,
   if (webkit_download_get_destination (wk_download))
     return TRUE;
 
-  g_signal_emit_by_name (download, "filename-suggested", suggested_filename);
+  g_signal_emit (download, signals[FILENAME_SUGGESTED], 0, suggested_filename);
 
   if (webkit_download_get_destination (wk_download))
     return TRUE;
@@ -840,7 +886,8 @@ download_finished_cb (WebKitDownload *wk_download,
 
   priv = download->priv;
 
-  g_signal_emit_by_name (download, "completed");
+  download->priv->finished = TRUE;
+  g_signal_emit (download, signals[COMPLETED], 0);
 
   if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_AUTO_DOWNLOADS) &&
       priv->action == EPHY_DOWNLOAD_ACTION_NONE)
@@ -856,12 +903,12 @@ download_failed_cb (WebKitDownload *wk_download,
                     GError *error,
                     EphyDownload *download)
 {
-  gboolean ret = FALSE;
-
   g_signal_handlers_disconnect_by_func (wk_download, download_finished_cb, download);
 
   LOG ("error (%d - %d)! %s", error->code, 0, error->message);
-  g_signal_emit_by_name (download, "error", 0, error->code, error->message, &ret);
+  download->priv->finished = TRUE;
+  download->priv->error = g_error_copy (error);
+  g_signal_emit (download, signals[ERROR], 0, download->priv->error);
 
   release_session_inhibitor (download);
 }

@@ -55,14 +55,6 @@ struct _EphyDownload
 struct _EphyDownloadClass
 {
   GObjectClass parent_class;
-
-  void (* filename_suggested) (EphyDownload *download,
-                               char *suggested_filename);
-  void (* completed)  (EphyDownload *download);
-  void (* error)      (EphyDownload *download,
-                       gint error_code,
-                       gint error_detail,
-                       char *reason);
 };
 
 typedef enum
@@ -82,6 +74,10 @@ EphyDownload *ephy_download_new_for_uri           (const char *uri,
                                                    GtkWindow *parent);
 
 void          ephy_download_cancel                (EphyDownload *download);
+gboolean      ephy_download_is_active             (EphyDownload *download);
+gboolean      ephy_download_succeeded             (EphyDownload *download);
+gboolean      ephy_download_failed                (EphyDownload *download,
+                                                   GError      **error);
 
 void          ephy_download_set_destination_uri   (EphyDownload *download,
                                                    const char *destination);
