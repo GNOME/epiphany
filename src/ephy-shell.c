@@ -260,7 +260,6 @@ download_started_cb (WebKitWebContext *web_context,
                      WebKitDownload *download,
                      EphyShell *shell)
 {
-  GtkWindow *window = NULL;
   WebKitWebView *web_view;
   EphyDownload *ephy_download;
   gboolean ephy_download_set;
@@ -281,19 +280,7 @@ download_started_cb (WebKitWebContext *web_context,
   if (ephy_download_set)
     return;
 
-  web_view = webkit_download_get_web_view (download);
-  if (web_view) {
-    GtkWidget *toplevel;
-
-    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
-    if (GTK_IS_WINDOW (toplevel))
-      window = GTK_WINDOW (toplevel);
-  }
-
-  if (!window)
-    window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-
-  ephy_download = ephy_download_new (download, window);
+  ephy_download = ephy_download_new (download);
   ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell)),
                                        ephy_download);
   g_object_unref (ephy_download);

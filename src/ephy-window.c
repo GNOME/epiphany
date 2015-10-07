@@ -1969,7 +1969,7 @@ save_target_uri (EphyWindow *window,
 		{
 			EphyDownload *download;
 
-			download = ephy_download_new_for_uri (location, GTK_WINDOW (window));
+			download = ephy_download_new_for_uri (location);
 			ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_OPEN);
 			ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ())),
 							     download);

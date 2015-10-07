@@ -53,8 +53,6 @@ struct _EphyDownloadPrivate
   guint32 start_time;
   gboolean finished;
   GError *error;
-
-  GtkWindow *window;
 };
 
 enum
@@ -63,8 +61,7 @@ enum
   PROP_DOWNLOAD,
   PROP_DESTINATION,
   PROP_ACTION,
-  PROP_START_TIME,
-  PROP_WINDOW
+  PROP_START_TIME
 };
 
 enum
@@ -84,16 +81,9 @@ ephy_download_get_property (GObject    *object,
                             GValue     *value,
                             GParamSpec *pspec)
 {
-  EphyDownload *download;
-  EphyDownloadPrivate *priv;
-
-  download = EPHY_DOWNLOAD (object);
-  priv = download->priv;
+  EphyDownload *download = EPHY_DOWNLOAD (object);
 
   switch (property_id) {
-    case PROP_WINDOW:
-      g_value_set_object (value, priv->window);
-      break;
     case PROP_DOWNLOAD:
       g_value_set_object (value, ephy_download_get_webkit_download (download));
       break;
@@ -127,9 +117,6 @@ ephy_download_set_property (GObject      *object,
       break;
     case PROP_ACTION:
       ephy_download_set_action (download, g_value_get_enum (value));
-      break;
-    case PROP_WINDOW:
-      download->priv->window = g_value_dup_object (value);
       break;
     case PROP_DOWNLOAD:
     case PROP_START_TIME:
@@ -397,23 +384,6 @@ ephy_download_get_webkit_download (EphyDownload *download)
 }
 
 /**
- * ephy_download_get_window:
- * @download: an #EphyDownload
- *
- * Gets the window set as the parent of @download, this can be %NULL if no
- * specific window generated this download.
- *
- * Returns: (transfer none): a #GtkWindow
- **/
-GtkWindow *
-ephy_download_get_window (EphyDownload *download)
-{
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
-
-  return download->priv->window;
-}
-
-/**
  * ephy_download_get_destination_uri:
  * @download: an #EphyDownload
  *
@@ -584,11 +554,6 @@ ephy_download_dispose (GObject *object)
     priv->download = NULL;
   }
 
-  if (priv->window) {
-    g_object_unref (priv->window);
-    priv->window = NULL;
-  }
-
   g_clear_error(&priv->error);
 
   G_OBJECT_CLASS (ephy_download_parent_class)->dispose (object);
@@ -670,23 +635,6 @@ ephy_download_class_init (EphyDownloadClass *klass)
                                                       G_PARAM_STATIC_BLURB));
 
   /**
-   * EphyDownload:window:
-   *
-   * Window that produced the download, the download will be shown in its
-   * parent window.
-   */
-  g_object_class_install_property (object_class, PROP_WINDOW,
-                                   g_param_spec_object ("window",
-                                                        "A GtkWindow",
-                                                        "Window that produced this download.",
-                                                        GTK_TYPE_WINDOW,
-                                                        G_PARAM_READWRITE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_NAME |
-                                                        G_PARAM_STATIC_NICK |
-                                                        G_PARAM_STATIC_BLURB));
-
-  /**
    * EphyDownload::filename-suggested:
    *
    * The ::filename-suggested signal is emitted when we have received the
@@ -742,8 +690,6 @@ ephy_download_init (EphyDownload *download)
   download->priv->action = EPHY_DOWNLOAD_ACTION_NONE;
 
   download->priv->start_time = gtk_get_current_event_time ();
-
-  download->priv->window = NULL;
 }
 
 static gboolean
@@ -796,21 +742,19 @@ download_failed_cb (WebKitDownload *wk_download,
 /**
  * ephy_download_new:
  * @download: a #WebKitDownload to wrap
- * @parent: the #GtkWindow parent of the download, or %NULL
  *
  * Wraps @download in an #EphyDownload.
  *
  * Returns: an #EphyDownload.
  **/
 EphyDownload *
-ephy_download_new (WebKitDownload *download,
-                   GtkWindow *parent)
+ephy_download_new (WebKitDownload *download)
 {
   EphyDownload *ephy_download;
 
   g_return_val_if_fail (WEBKIT_IS_DOWNLOAD (download), NULL);
 
-  ephy_download = g_object_new (EPHY_TYPE_DOWNLOAD, "window", parent, NULL);
+  ephy_download = g_object_new (EPHY_TYPE_DOWNLOAD, NULL);
 
   g_signal_connect (download, "decide-destination",
                     G_CALLBACK (download_decide_destination_cb),
@@ -831,15 +775,13 @@ ephy_download_new (WebKitDownload *download,
 /**
  * ephy_download_new_for_uri:
  * @uri: a source URI from where to download
- * @parent: the #GtkWindow parent of the download, or %NULL
  *
  * Creates an #EphyDownload to download @uri.
  *
  * Returns: an #EphyDownload.
  **/
 EphyDownload *
-ephy_download_new_for_uri (const char *uri,
-                           GtkWindow *parent)
+ephy_download_new_for_uri (const char *uri)
 {
   EphyDownload *ephy_download;
   WebKitDownload *download;
@@ -848,8 +790,7 @@ ephy_download_new_for_uri (const char *uri,
   g_return_val_if_fail (uri != NULL, NULL);
 
   download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell), uri);
-
-  ephy_download = ephy_download_new (download, parent);
+  ephy_download = ephy_download_new (download);
   g_object_unref (download);
 
   return ephy_download;

@@ -149,19 +149,21 @@ cancel_download_idle_cb (EphyDownload *download)
 	return FALSE;
 }
 
+typedef struct {
+	char *title;
+	EphyWindow *window;
+} SavePropertyURLData;
+
 static void
 filename_suggested_cb (EphyDownload *download,
 		       const char *suggested_filename,
-		       char *title)
+		       SavePropertyURLData *data)
 {
-	EphyWindow *window;
 	EphyFileChooser *dialog;
 	char *sanitized_filename;
 
-	window = EPHY_WINDOW (ephy_download_get_window (download));
-
-	dialog = ephy_file_chooser_new (title,
-					GTK_WIDGET (window),
+	dialog = ephy_file_chooser_new (data->title,
+					GTK_WIDGET (data->window),
 					GTK_FILE_CHOOSER_ACTION_SAVE,
 					EPHY_FILE_FILTER_NONE);
 	gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
@@ -195,7 +197,9 @@ filename_suggested_cb (EphyDownload *download,
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
-	g_free (title);
+	g_free (data->title);
+	g_object_unref (data->window);
+	g_free (data);
 
 	g_object_unref (download);
 }
@@ -208,6 +212,7 @@ save_property_url (const char *title,
 	EphyEmbedEvent *event;
 	const char *location;
 	EphyDownload *download;
+	SavePropertyURLData *data;
 	GValue value = { 0, };
 
 	event = ephy_window_get_context_event (window);
@@ -215,10 +220,13 @@ save_property_url (const char *title,
 
 	ephy_embed_event_get_property (event, property, &value);
 	location = g_value_get_string (&value);
-	download = ephy_download_new_for_uri (location, GTK_WINDOW (window));
+	download = ephy_download_new_for_uri (location);
+	data = g_new (SavePropertyURLData, 1);
+	data->title = g_strdup (title);
+	data->window = g_object_ref (window);
 	g_signal_connect (download, "filename-suggested",
 			  G_CALLBACK (filename_suggested_cb),
-			  g_strdup (title));
+			  data);
 
 	g_value_unset (&value);
 }
@@ -272,7 +280,7 @@ popup_cmd_set_image_as_background (GtkAction *action,
 	ephy_embed_event_get_property (event, "image-uri", &value);
 	location = g_value_get_string (&value);
 
-	download = ephy_download_new_for_uri (location, GTK_WINDOW (window));
+	download = ephy_download_new_for_uri (location);
 
 	base = g_path_get_basename (location);
 	base_converted = g_filename_from_utf8 (base, -1, NULL, NULL, NULL);
