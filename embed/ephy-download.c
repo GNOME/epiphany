@@ -47,7 +47,7 @@ struct _EphyDownloadPrivate
   WebKitDownload *download;
 
   char *destination;
-  char *source;
+  char *content_type;
 
   EphyDownloadActionType action;
   guint32 start_time;
@@ -61,7 +61,8 @@ enum
   PROP_DOWNLOAD,
   PROP_DESTINATION,
   PROP_ACTION,
-  PROP_START_TIME
+  PROP_START_TIME,
+  PROP_CONTENT_TYPE
 };
 
 enum
@@ -95,6 +96,9 @@ ephy_download_get_property (GObject    *object,
       break;
     case PROP_START_TIME:
       g_value_set_uint (value, ephy_download_get_start_time (download));
+      break;
+    case PROP_CONTENT_TYPE:
+      g_value_set_string (value, ephy_download_get_content_type (download));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -133,53 +137,15 @@ ephy_download_set_property (GObject      *object,
  * Gets content-type information for @download. If the server didn't
  * provide a content type, the destination file is queried.
  *
- * Returns: content-type for @download, must be freed with g_free()
+ * Returns: content-type for @download
  **/
-char *
+const char *
 ephy_download_get_content_type (EphyDownload *download)
 {
-  WebKitURIResponse *response;
-  const char *destination_uri;
-  GFile *destination;
-  GFileInfo *info;
-  char *content_type = NULL;
-  GError *error = NULL;
+  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
 
-  response = webkit_download_get_response (download->priv->download);
-  if (response) {
-    const char *mime_type = webkit_uri_response_get_mime_type (response);
-
-    LOG ("ephy_download_get_content_type: WebKit mime type: %s", mime_type);
-
-    if (mime_type) {
-      content_type = g_content_type_from_mime_type (mime_type);
-      if (content_type)
-        return content_type;
-    }
-  }
-
-  destination_uri = webkit_download_get_destination (download->priv->download);
-  if (!destination_uri)
-    return NULL;
-
-  destination = g_file_new_for_uri (destination_uri);
-  info = g_file_query_info (destination, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-                            G_FILE_QUERY_INFO_NONE, NULL, &error);
-  if (info) {
-    content_type = g_strdup (g_file_info_get_content_type (info));
-    LOG ("ephy_download_get_content_type: GIO: %s", content_type);
-    g_object_unref (info);
-  } else {
-    LOG ("ephy_download_get_content_type: error getting file "
-         "content-type: %s", error->message);
-    g_error_free (error);
-  }
-
-  g_object_unref (destination);
-
-  return content_type;
+  return download->priv->content_type;
 }
-
 
 /* Helper function to decide what EphyDownloadActionType should be the
  * default for the download. This implies that you want something to
@@ -555,6 +521,7 @@ ephy_download_dispose (GObject *object)
   }
 
   g_clear_error(&priv->error);
+  g_clear_pointer (&priv->content_type, g_free);
 
   G_OBJECT_CLASS (ephy_download_parent_class)->dispose (object);
 }
@@ -634,6 +601,16 @@ ephy_download_class_init (EphyDownloadClass *klass)
                                                       G_PARAM_STATIC_NICK |
                                                       G_PARAM_STATIC_BLURB));
 
+  g_object_class_install_property (object_class, PROP_CONTENT_TYPE,
+                                   g_param_spec_string ("content-type",
+                                                        "Content Type",
+                                                        "The download content type",
+                                                        NULL,
+                                                        G_PARAM_READABLE |
+                                                        G_PARAM_STATIC_NAME |
+                                                        G_PARAM_STATIC_NICK |
+                                                        G_PARAM_STATIC_BLURB));
+
   /**
    * EphyDownload::filename-suggested:
    *
@@ -692,6 +669,25 @@ ephy_download_init (EphyDownload *download)
   download->priv->start_time = gtk_get_current_event_time ();
 }
 
+static void
+download_response_changed_cb (WebKitDownload *wk_download,
+                              GParamSpec *spec,
+                              EphyDownload *download)
+{
+  WebKitURIResponse *response;
+  const char *mime_type;
+
+  response = webkit_download_get_response (download->priv->download);
+  mime_type = webkit_uri_response_get_mime_type (response);
+  if (!mime_type)
+    return;
+
+  download->priv->content_type = g_content_type_from_mime_type (mime_type);
+  if (download->priv->content_type)
+    g_object_notify (G_OBJECT (download), "content-type");
+
+}
+
 static gboolean
 download_decide_destination_cb (WebKitDownload *wk_download,
                                 const gchar *suggested_filename,
@@ -706,6 +702,51 @@ download_decide_destination_cb (WebKitDownload *wk_download,
     return TRUE;
 
   return set_destination_uri_for_suggested_filename (download, suggested_filename);
+}
+
+static void
+download_created_destination_cb (WebKitDownload *wk_download,
+                                 const char *destination,
+                                 EphyDownload *download)
+{
+  char *filename;
+  char *content_type;
+  EphyDownloadPrivate *priv = download->priv;
+
+  if (priv->content_type && !g_content_type_is_unknown (priv->content_type))
+    return;
+
+  /* The server didn't provide a valid content type, let's try to guess it from the
+   * destination filename. We use g_content_type_guess() here instead of g_file_query_info(),
+   * because we are only using the filename to guess the content type, since it doesn't make
+   * sense to sniff the destination URI that will be empty until the download is completed.
+   * We can't use g_file_query_info() with the partial download file either, because it will
+   * always return application/x-partial-download based on the .wkdownload extension.
+   */
+  filename = g_filename_from_uri (destination, NULL, NULL);
+  if (!filename)
+    return;
+
+  content_type = g_content_type_guess (filename, NULL, 0, NULL);
+  g_free (filename);
+
+  if (g_content_type_is_unknown (content_type)) {
+    /* We could try to connect to received-data signal and sniff the contents when we have
+     * enough data written in the file, but I don't think it's worth it.
+     */
+    g_free (content_type);
+    return;
+  }
+
+  if (!priv->content_type ||
+      (priv->content_type && !g_content_type_equals (priv->content_type, content_type))) {
+    g_free (priv->content_type);
+    priv->content_type = content_type;
+    g_object_notify (G_OBJECT (download), "content-type");
+    return;
+  }
+
+  g_free (content_type);
 }
 
 static void
@@ -756,8 +797,14 @@ ephy_download_new (WebKitDownload *download)
 
   ephy_download = g_object_new (EPHY_TYPE_DOWNLOAD, NULL);
 
+  g_signal_connect (download, "notify::response",
+                    G_CALLBACK (download_response_changed_cb),
+                    ephy_download);
   g_signal_connect (download, "decide-destination",
                     G_CALLBACK (download_decide_destination_cb),
+                    ephy_download);
+  g_signal_connect (download, "created-destination",
+                    G_CALLBACK (download_created_destination_cb),
                     ephy_download);
   g_signal_connect (download, "finished",
                     G_CALLBACK (download_finished_cb),

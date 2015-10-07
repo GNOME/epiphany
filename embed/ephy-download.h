@@ -83,7 +83,7 @@ void          ephy_download_set_destination_uri   (EphyDownload *download,
 WebKitDownload *ephy_download_get_webkit_download (EphyDownload *download);
 
 const char   *ephy_download_get_destination_uri   (EphyDownload *download);
-char         *ephy_download_get_content_type      (EphyDownload *download);
+const char   *ephy_download_get_content_type      (EphyDownload *download);
 
 guint32       ephy_download_get_start_time        (EphyDownload *download);
 

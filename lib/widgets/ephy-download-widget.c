@@ -55,25 +55,6 @@ enum
   PROP_DOWNLOAD
 };
 
-static GIcon *
-get_gicon_from_download (EphyDownload *ephy_download)
-{
-  char *content_type;
-  GIcon *gicon;
-
-  /* FIXME: this might do sync IO during downloads */
-  content_type = ephy_download_get_content_type (ephy_download);
-
-  if (content_type) {
-    gicon = g_content_type_get_icon (content_type);
-    g_free (content_type);
-  } else {
-    gicon = g_icon_new_for_string ("package-x-generic", NULL);
-  }
-
-  return gicon;
-}
-
 static char *
 get_destination_basename_from_download (EphyDownload *ephy_download)
 {
@@ -163,15 +144,17 @@ download_clicked_cb (GtkButton *button,
 static void
 update_download_icon (EphyDownloadWidget *widget)
 {
-  GIcon *new_icon, *old_icon;
+  GIcon *icon;
+  const char *content_type;
 
-  new_icon = get_gicon_from_download (widget->priv->download);
-  gtk_image_get_gicon (GTK_IMAGE (widget->priv->icon), &old_icon, NULL);
-  if (!g_icon_equal (new_icon, old_icon)) {
-    gtk_image_set_from_gicon (GTK_IMAGE (widget->priv->icon), new_icon,
-                              GTK_ICON_SIZE_DIALOG);
-  }
-  g_object_unref (new_icon);
+  content_type = ephy_download_get_content_type (widget->priv->download);
+  if (content_type)
+    icon = g_content_type_get_icon (content_type);
+  else
+    icon = g_icon_new_for_string ("package-x-generic", NULL);
+
+  gtk_image_set_from_gicon (GTK_IMAGE (widget->priv->icon), icon, GTK_ICON_SIZE_DIALOG);
+  g_object_unref (icon);
 }
 
 static void
@@ -226,7 +209,6 @@ download_progress_cb (WebKitDownload *download,
                       EphyDownloadWidget *widget)
 {
   gdouble progress;
-  int percentage;
   WebKitURIResponse *response;
   guint64 content_length;
   guint64 received_length;
@@ -236,10 +218,6 @@ download_progress_cb (WebKitDownload *download,
     return;
 
   progress = webkit_download_get_estimated_progress (download);
-  percentage = progress * 100;
-  if (percentage % 10 == 0)
-    update_download_icon (widget);
-
   response = webkit_download_get_response (download);
   content_length = webkit_uri_response_get_content_length (response);
   received_length = webkit_download_get_received_data_length (download);
@@ -302,6 +280,14 @@ download_failed_cb (EphyDownload *download,
   gtk_image_set_from_icon_name (GTK_IMAGE (gtk_button_get_image (GTK_BUTTON (widget->priv->action_button))),
                                 "list-remove-symbolic",
                                 GTK_ICON_SIZE_MENU);
+}
+
+static void
+download_content_type_changed_cb (EphyDownload *download,
+                                  GParamSpec *spec,
+                                  EphyDownloadWidget *widget)
+{
+  update_download_icon (widget);
 }
 
 static void
@@ -489,6 +475,9 @@ ephy_download_widget_constructed (GObject *object)
                     widget);
   g_signal_connect (priv->download, "error",
                     G_CALLBACK (download_failed_cb),
+                    widget);
+  g_signal_connect (priv->download, "notify::content-type",
+                    G_CALLBACK (download_content_type_changed_cb),
                     widget);
 }
 
