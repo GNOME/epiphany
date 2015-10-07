@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-downloads-manager.h"
 
+#include "ephy-embed-shell.h"
+
 enum {
   DOWNLOAD_ADDED,
   DOWNLOAD_REMOVED,
@@ -35,6 +37,9 @@ struct _EphyDownloadsManager
   GObject parent;
 
   GList *downloads;
+
+  guint inhibitors;
+  guint inhibitor_cookie;
 };
 
 struct _EphyDownloadsManagerClass
@@ -45,6 +50,31 @@ struct _EphyDownloadsManagerClass
 static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EphyDownloadsManager, ephy_downloads_manager, G_TYPE_OBJECT)
+
+static void
+ephy_downloads_manager_acquire_session_inhibitor (EphyDownloadsManager *manager)
+{
+  if (++manager->inhibitors > 1)
+    return;
+
+  g_assert (manager->inhibitor_cookie == 0);
+  manager->inhibitor_cookie = gtk_application_inhibit (GTK_APPLICATION (ephy_embed_shell_get_default ()),
+                                                       NULL,
+                                                       GTK_APPLICATION_INHIBIT_LOGOUT | GTK_APPLICATION_INHIBIT_SUSPEND,
+                                                      "Downloading");
+}
+
+static void
+ephy_downloads_manager_release_session_inhibitor (EphyDownloadsManager *manager)
+{
+  if (--manager->inhibitors > 0)
+    return;
+
+  g_assert (manager->inhibitor_cookie > 0);
+  gtk_application_uninhibit (GTK_APPLICATION (ephy_embed_shell_get_default ()),
+                             manager->inhibitor_cookie);
+  manager->inhibitor_cookie = 0;
+}
 
 static void
 ephy_downloads_manager_init (EphyDownloadsManager *manager)
@@ -100,6 +130,7 @@ download_completed_cb (EphyDownload         *download,
                        EphyDownloadsManager *manager)
 {
   g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
+  ephy_downloads_manager_release_session_inhibitor (manager);
 }
 
 static void
@@ -110,6 +141,7 @@ download_failed_cb (EphyDownload         *download,
   if (g_error_matches (error, WEBKIT_DOWNLOAD_ERROR, WEBKIT_DOWNLOAD_ERROR_CANCELLED_BY_USER))
     ephy_downloads_manager_remove_download (manager, download);
   g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
+  ephy_downloads_manager_release_session_inhibitor (manager);
 }
 
 static void
@@ -118,10 +150,18 @@ download_estimated_progress_changed_cb (EphyDownloadsManager *manager)
   g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
 }
 
+static void
+download_created_destination_cb (EphyDownloadsManager *manager)
+{
+  ephy_downloads_manager_acquire_session_inhibitor (manager);
+}
+
 void
 ephy_downloads_manager_add_download (EphyDownloadsManager *manager,
                                      EphyDownload         *download)
 {
+  WebKitDownload *wk_download;
+
   g_return_if_fail (EPHY_IS_DOWNLOADS_MANAGER (manager));
   g_return_if_fail (EPHY_IS_DOWNLOAD (download));
 
@@ -135,8 +175,13 @@ ephy_downloads_manager_add_download (EphyDownloadsManager *manager,
   g_signal_connect (download, "error",
                     G_CALLBACK (download_failed_cb),
                     manager);
-  g_signal_connect_swapped (ephy_download_get_webkit_download (download), "notify::estimated-progress",
+
+  wk_download = ephy_download_get_webkit_download (download);
+  g_signal_connect_swapped (wk_download, "notify::estimated-progress",
                             G_CALLBACK (download_estimated_progress_changed_cb),
+                            manager);
+  g_signal_connect_swapped (wk_download, "created-destination",
+                            G_CALLBACK (download_created_destination_cb),
                             manager);
   g_signal_emit (manager, signals[DOWNLOAD_ADDED], 0, download);
   g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);

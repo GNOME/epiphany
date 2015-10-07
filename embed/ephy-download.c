@@ -55,8 +55,6 @@ struct _EphyDownloadPrivate
   GError *error;
 
   GtkWindow *window;
-
-  guint inhibitor_cookie;
 };
 
 enum
@@ -467,40 +465,6 @@ ephy_download_get_start_time (EphyDownload *download)
   return download->priv->start_time;
 }
 
-static void
-acquire_session_inhibitor (EphyDownload *download)
-{
-  EphyDownloadPrivate *priv;
-  EphyEmbedShell *shell;
-
-  priv = download->priv;
-  shell = ephy_embed_shell_get_default ();
-
-  if (priv->inhibitor_cookie)
-    return;
-
-  priv->inhibitor_cookie = gtk_application_inhibit (GTK_APPLICATION (shell),
-                                                    priv->window,
-                                                    GTK_APPLICATION_INHIBIT_LOGOUT | GTK_APPLICATION_INHIBIT_SUSPEND,
-                                                    "Downloading");
-}
-
-static void
-release_session_inhibitor (EphyDownload *download)
-{
-  EphyDownloadPrivate *priv;
-  EphyEmbedShell *shell;
-
-  priv = download->priv;
-  shell = ephy_embed_shell_get_default ();
-
-  if (!priv->inhibitor_cookie)
-    return;
-
-  gtk_application_uninhibit (GTK_APPLICATION (shell), priv->inhibitor_cookie);
-  priv->inhibitor_cookie = 0;
-}
-
 /**
  * ephy_download_cancel:
  * @download: an #EphyDownload
@@ -613,8 +577,6 @@ ephy_download_dispose (GObject *object)
   LOG ("EphyDownload disposed %p", object);
 
   priv = download->priv;
-
-  release_session_inhibitor (download);
 
   if (priv->download) {
     g_signal_handlers_disconnect_matched (priv->download, G_SIGNAL_MATCH_DATA, 0, 0, 0, 0, download);
@@ -784,14 +746,6 @@ ephy_download_init (EphyDownload *download)
   download->priv->window = NULL;
 }
 
-static void
-download_created_destination_cb (WebKitDownload *wk_download,
-                                 const gchar *destination,
-                                 EphyDownload *download)
-{
-  acquire_session_inhibitor (download);
-}
-
 static gboolean
 download_decide_destination_cb (WebKitDownload *wk_download,
                                 const gchar *suggested_filename,
@@ -824,8 +778,6 @@ download_finished_cb (WebKitDownload *wk_download,
     ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_AUTO);
   else
     ephy_download_do_download_action (download, priv->action);
-
-  release_session_inhibitor (download);
 }
 
 static void
@@ -839,8 +791,6 @@ download_failed_cb (WebKitDownload *wk_download,
   download->priv->finished = TRUE;
   download->priv->error = g_error_copy (error);
   g_signal_emit (download, signals[ERROR], 0, download->priv->error);
-
-  release_session_inhibitor (download);
 }
 
 /**
@@ -862,9 +812,6 @@ ephy_download_new (WebKitDownload *download,
 
   ephy_download = g_object_new (EPHY_TYPE_DOWNLOAD, "window", parent, NULL);
 
-  g_signal_connect (download, "created-destination",
-                    G_CALLBACK (download_created_destination_cb),
-                    ephy_download);
   g_signal_connect (download, "decide-destination",
                     G_CALLBACK (download_decide_destination_cb),
                     ephy_download);
