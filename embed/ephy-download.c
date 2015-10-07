@@ -157,12 +157,15 @@ ephy_download_get_content_type (EphyDownload *download)
 
   response = webkit_download_get_response (download->priv->download);
   if (response) {
-    content_type = g_strdup (webkit_uri_response_get_mime_type (response));
+    const char *mime_type = webkit_uri_response_get_mime_type (response);
 
-    LOG ("ephy_download_get_content_type: WebKit: %s", content_type);
+    LOG ("ephy_download_get_content_type: WebKit mime type: %s", mime_type);
 
-    if (content_type)
-      return content_type;
+    if (mime_type) {
+      content_type = g_content_type_from_mime_type (mime_type);
+      if (content_type)
+        return content_type;
+    }
   }
 
   destination_uri = webkit_download_get_destination (download->priv->download);
