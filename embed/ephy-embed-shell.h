@@ -27,6 +27,7 @@
 #define EPHY_EMBED_SHELL_H
 
 #include <webkit2/webkit2.h>
+#include "ephy-downloads-manager.h"
 
 G_BEGIN_DECLS
 
@@ -96,6 +97,7 @@ void               ephy_embed_shell_set_thumbnail_path         (EphyEmbedShell  
                                                                 time_t            mtime,
                                                                 const char       *path);
 WebKitUserContentManager *ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell);
+EphyDownloadsManager     *ephy_embed_shell_get_downloads_manager    (EphyEmbedShell *shell);
 
 G_END_DECLS
 

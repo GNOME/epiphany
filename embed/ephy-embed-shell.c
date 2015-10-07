@@ -57,6 +57,7 @@ struct _EphyEmbedShellPrivate
   GtkPrintSettings *print_settings;
   EphyEmbedShellMode mode;
   WebKitUserContentManager *user_content;
+  EphyDownloadsManager *downloads_manager;
   EphyAboutHandler *about_handler;
   guint update_overview_timeout_id;
   guint hiding_overview_item;
@@ -108,6 +109,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->about_handler);
   g_clear_object (&priv->user_content);
+  g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->web_context);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
@@ -1128,4 +1130,12 @@ WebKitWebContext *
 ephy_embed_shell_get_web_context (EphyEmbedShell *shell)
 {
   return shell->priv->web_context;
+}
+
+EphyDownloadsManager *
+ephy_embed_shell_get_downloads_manager (EphyEmbedShell *shell)
+{
+  if (!shell->priv->downloads_manager)
+    shell->priv->downloads_manager = EPHY_DOWNLOADS_MANAGER (g_object_new (EPHY_TYPE_DOWNLOADS_MANAGER, NULL));
+  return shell->priv->downloads_manager;
 }

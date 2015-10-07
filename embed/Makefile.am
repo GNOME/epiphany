@@ -9,6 +9,7 @@ noinst_LTLIBRARIES = libephyembed.la
 
 NOINST_H_FILES = \
 	ephy-about-handler.h		\
+	ephy-downloads-manager.h
 	ephy-embed-dialog.h		\
 	ephy-embed-private.h		\
 	ephy-encoding.h			\
@@ -34,6 +35,7 @@ BUILT_SOURCES = \
 
 libephyembed_la_SOURCES = \
 	ephy-about-handler.c		\
+	ephy-downloads-manager.c	\
 	ephy-download.c			\
 	ephy-embed.c			\
 	ephy-embed-container.c          \
