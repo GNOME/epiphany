@@ -387,7 +387,7 @@ history_service_cleared_cb (EphyHistoryService *service,
 }
 
 void
-ephy_embed_shell_set_thumbanil_path (EphyEmbedShell *shell,
+ephy_embed_shell_set_thumbnail_path (EphyEmbedShell *shell,
                                      const char *url,
                                      time_t mtime,
                                      const char *path)

@@ -419,7 +419,7 @@ got_snapshot_path_for_url_cb (EphySnapshotService *service,
 
   snapshot = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, NULL);
   if (snapshot) {
-    ephy_embed_shell_set_thumbanil_path (ephy_embed_shell_get_default (), data->url, data->mtime, snapshot);
+    ephy_embed_shell_set_thumbnail_path (ephy_embed_shell_get_default (), data->url, data->mtime, snapshot);
     g_free (snapshot);
   }
   g_free (data->url);
