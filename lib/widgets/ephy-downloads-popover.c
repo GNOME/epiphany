@@ -31,6 +31,7 @@ struct _EphyDownloadsPopover
   GtkPopover parent;
 
   GtkWidget *downloads_box;
+  GtkWidget *clear_button;
 };
 
 struct _EphyDownloadsPopoverClass
@@ -58,12 +59,32 @@ download_box_row_activated_cb (EphyDownloadsPopover *popover,
 }
 
 static void
+download_completed_cb (EphyDownloadsPopover *popover)
+{
+  gtk_widget_set_sensitive (popover->clear_button, TRUE);
+}
+
+static void
+download_failed_cb (EphyDownloadsPopover *popover,
+                    GError               *error)
+{
+  if (!g_error_matches (error, WEBKIT_DOWNLOAD_ERROR, WEBKIT_DOWNLOAD_ERROR_CANCELLED_BY_USER))
+    gtk_widget_set_sensitive (popover->clear_button, TRUE);
+}
+
+static void
 download_added_cb (EphyDownloadsPopover *popover,
                    EphyDownload         *download)
 {
   GtkWidget *widget;
 
   widget = ephy_download_widget_new (download);
+  g_signal_connect_swapped (download, "completed",
+                            G_CALLBACK (download_completed_cb),
+                            popover);
+  g_signal_connect_swapped (download, "error",
+                            G_CALLBACK (download_failed_cb),
+                            popover);
   gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), widget);
   gtk_widget_show (widget);
 }
@@ -73,6 +94,7 @@ download_removed_cb (EphyDownloadsPopover *popover,
                      EphyDownload         *download)
 {
   GList *children, *l;
+  EphyDownloadsManager *manager;
 
   children = gtk_container_get_children (GTK_CONTAINER (popover->downloads_box));
   for (l = children; l; l = g_list_next (l)) {
@@ -91,6 +113,9 @@ download_removed_cb (EphyDownloadsPopover *popover,
     }
   }
   g_list_free (children);
+
+  manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
+  gtk_widget_set_sensitive (popover->clear_button, !ephy_downloads_manager_has_active_downloads (manager));
 }
 
 static void
@@ -121,6 +146,7 @@ clear_button_clicked_cb (EphyDownloadsPopover *popover)
     }
   }
   g_list_free (children);
+  gtk_widget_set_sensitive (popover->clear_button, FALSE);
 
   g_signal_handlers_unblock_by_func (manager, download_removed_cb, popover);
 }
@@ -134,11 +160,11 @@ static void
 ephy_downloads_popover_init (EphyDownloadsPopover *popover)
 {
   GtkWidget *scrolled_window;
-  GtkWidget *title, *clear_button;
+  GtkWidget *title;
   GtkWidget *vbox, *hbox;
   GList *downloads, *l;
   char *markup;
-  EphyDownloadsManager *manager;
+  EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
@@ -155,12 +181,13 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
   gtk_box_pack_start (GTK_BOX (hbox), title, TRUE, TRUE, 0);
   gtk_widget_show (title);
 
-  clear_button = gtk_button_new_with_label (_("Clear"));
-  g_signal_connect_swapped (clear_button, "clicked",
+  popover->clear_button = gtk_button_new_with_label (_("Clear"));
+  gtk_widget_set_sensitive (popover->clear_button, !ephy_downloads_manager_has_active_downloads (manager));
+  g_signal_connect_swapped (popover->clear_button, "clicked",
                             G_CALLBACK (clear_button_clicked_cb),
                             popover);
-  gtk_box_pack_end (GTK_BOX (hbox), clear_button, FALSE, FALSE, 0);
-  gtk_widget_show (clear_button);
+  gtk_box_pack_end (GTK_BOX (hbox), popover->clear_button, FALSE, FALSE, 0);
+  gtk_widget_show (popover->clear_button);
 
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
@@ -180,11 +207,17 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
   gtk_container_add (GTK_CONTAINER (scrolled_window), popover->downloads_box);
   gtk_widget_show (popover->downloads_box);
 
-  manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
   downloads = ephy_downloads_manager_get_downloads (manager);
   for (l = downloads; l != NULL; l = g_list_next (l)) {
     EphyDownload *download = (EphyDownload *)l->data;
     GtkWidget *widget;
+
+    g_signal_connect_swapped (download, "completed",
+                              G_CALLBACK (download_completed_cb),
+                              popover);
+    g_signal_connect_swapped (download, "error",
+                              G_CALLBACK (download_failed_cb),
+                              popover);
 
     widget = ephy_download_widget_new (download);
     gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), widget);
