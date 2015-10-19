@@ -646,6 +646,7 @@
                               <object class="GtkTreeView" id="lang_treeview">
                                 <property name="visible">True</property>
                                 <property name="headers-visible">False</property>
+                                <property name="fixed-height-mode">True</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection"/>
                                 </child>
@@ -654,10 +655,10 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkVButtonBox">
+                          <object class="GtkGrid">
                             <property name="visible">True</property>
-                            <property name="spacing">6</property>
-                            <property name="layout-style">start</property>
+                            <property name="row-spacing">6</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkButton" id="lang_add_button">
                                 <property name="label" translatable="yes">_Add</property>
