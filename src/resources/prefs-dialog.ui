@@ -206,7 +206,6 @@
                 <property name="border_width">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
-                <property name="valign">start</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
@@ -235,23 +234,44 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTable" id="custom_fonts_table">
+                          <object class="GtkGrid" id="custom_fonts_table">
                             <property name="visible">True</property>
-                            <property name="n_rows">3</property>
-                            <property name="n_columns">2</property>
                             <property name="column_spacing">12</property>
                             <property name="row_spacing">6</property>
                             <property name="margin_start">12</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Sans serif font:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
                             <child>
                               <object class="GtkFontButton" id="sans_fontbutton">
                                 <property name="visible">True</property>
                                 <property name="font">Sans 12</property>
                                 <property name="use_font">True</property>
+                                <!-- hexpands the grid -->
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Serif font:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                             <child>
@@ -262,10 +282,18 @@
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Monospace font:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
                               </packing>
                             </child>
                             <child>
@@ -276,44 +304,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes">Sans serif font:</property>
-                              </object>
-                              <packing>
-                                <property name="x_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes">Serif font:</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes">Monospace font:</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                           </object>
@@ -600,11 +591,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkTable">
+                      <object class="GtkGrid">
                         <property name="visible">True</property>
-                        <property name="n_columns">2</property>
                         <property name="column_spacing">12</property>
-                        <property name="row_spacing">6</property>
                         <property name="margin_start">12</property>
                         <child>
                           <object class="GtkLabel">
@@ -612,23 +601,14 @@
                             <property name="halign">start</property>
                             <property name="label" translatable="yes">De_fault:</property>
                             <property name="use_underline">True</property>
-                            <property name="justify">center</property>
                             <property name="mnemonic_widget">default_encoding_combo</property>
                           </object>
-                          <packing>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"/>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="default_encoding_combo">
                             <property name="visible">True</property>
+                            <property name="hexpand">True</property>
                           </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
