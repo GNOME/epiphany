@@ -53,7 +53,7 @@ get_cookie_manager (void)
 	WebKitWebContext *web_context;
 	EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-	web_context = ephy_embed_shell_get_web_context (shell);;
+	web_context = ephy_embed_shell_get_web_context (shell);
 	return webkit_web_context_get_cookie_manager (web_context);
 }
 
