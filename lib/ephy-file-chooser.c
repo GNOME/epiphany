@@ -199,6 +199,7 @@ ephy_file_chooser_new (const char *title,
 
 	preview = gtk_image_new ();
 	gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview);
+	gtk_file_chooser_set_preview_widget_active (GTK_FILE_CHOOSER (dialog), FALSE);
 	g_signal_connect (dialog, "update-preview", G_CALLBACK (ephy_file_chooser_image_preview), preview);
     
 	if (default_filter != EPHY_FILE_FILTER_NONE)
