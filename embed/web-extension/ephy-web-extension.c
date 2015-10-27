@@ -503,7 +503,7 @@ get_entry_style_context (void)
 
   path = gtk_widget_path_new ();
   gtk_widget_path_append_type (path, GTK_TYPE_ENTRY);
-  gtk_widget_path_iter_add_class (path, 0, GTK_STYLE_CLASS_ENTRY);
+  gtk_widget_path_iter_set_object_name (path, 0, "entry");
 
   global_entry_context = gtk_style_context_new ();
   gtk_style_context_set_path (global_entry_context, path);

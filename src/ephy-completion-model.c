@@ -310,6 +310,7 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row, c
                                        NULL, icon_loaded_cb, data);
 }
 
+/* FIXME: This should be in the view, not the model. */
 static gchar *
 get_text_column_subtitle_color (void)
 {
@@ -319,13 +320,12 @@ get_text_column_subtitle_color (void)
 
   path = gtk_widget_path_new ();
   gtk_widget_path_prepend_type (path, GTK_TYPE_ENTRY);
-  gtk_widget_path_iter_add_class (path, 0, GTK_STYLE_CLASS_ENTRY);
+  gtk_widget_path_iter_set_object_name (path, 0, "entry");
 
   style_context = gtk_style_context_new ();
   gtk_style_context_set_path (style_context, path);
   gtk_widget_path_free (path);
 
-  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_ENTRY);
   gtk_style_context_set_state (style_context, GTK_STATE_FLAG_INSENSITIVE);
   gtk_style_context_get_color (style_context, GTK_STATE_FLAG_INSENSITIVE, &rgba);
   g_object_unref (style_context);
