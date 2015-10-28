@@ -470,9 +470,7 @@ on_treeview_button_press_event (GtkWidget         *widget,
 		if (n == 0)
 			return FALSE;
 
-		gtk_widget_set_sensitive (self->priv->open_menuitem, (n > 0));
 		gtk_widget_set_sensitive (self->priv->copy_location_menuitem, (n > 0));
-		gtk_widget_set_sensitive (self->priv->delete_menuitem, (n > 0));
 
 		bookmarks_locked = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 							   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
@@ -719,10 +717,8 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_column);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_renderer);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, open_menuitem);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, copy_location_menuitem);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, bookmark_menuitem);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, delete_menuitem);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, treeview_popup_menu);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_row_activated);
