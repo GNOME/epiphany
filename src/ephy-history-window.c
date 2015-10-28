@@ -48,6 +48,7 @@ struct _EphyHistoryWindowPrivate
 	GCancellable *cancellable;
 
 	GtkWidget *treeview;
+	GtkTreeSelection *tree_selection;
 	GtkWidget *liststore;
 	GtkTreeViewColumn *date_column;
 	GtkTreeViewColumn *name_column;
@@ -349,11 +350,9 @@ get_selection_foreach (GtkTreeModel *model,
 static GList *
 get_selection (EphyHistoryWindow *self)
 {
-	GtkTreeSelection *selection;
 	GList *list = NULL;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->priv->treeview));
-	gtk_tree_selection_selected_foreach (selection,
+	gtk_tree_selection_selected_foreach (self->priv->tree_selection,
 					     (GtkTreeSelectionForeachFunc) get_selection_foreach,
 					     &list);
 
@@ -464,12 +463,10 @@ on_treeview_button_press_event (GtkWidget         *widget,
 				EphyHistoryWindow *self)
 {
 	if (event->button == 3) {
-		GtkTreeSelection *selection;
 		int n;
 		gboolean bookmarks_locked;
 
-		selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->priv->treeview));
-		n = gtk_tree_selection_count_selected_rows (selection);
+		n = gtk_tree_selection_count_selected_rows (self->priv->tree_selection);
 		if (n == 0)
 			return FALSE;
 
@@ -714,6 +711,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	                                             "/org/gnome/epiphany/history-dialog.ui");
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, liststore);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, treeview);
+	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, tree_selection);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, remove_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, open_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_column);

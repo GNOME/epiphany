@@ -83,7 +83,7 @@
                         <signal name="key-press-event" handler="on_treeview_key_press_event"/>
                         <signal name="row-activated" handler="on_treeview_row_activated"/>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="tree_selection"> <!-- TODO use this -->
+                          <object class="GtkTreeSelection" id="tree_selection">
                             <property name="mode">multiple</property>
                             <signal name="changed" handler="on_treeview_selection_changed"/>
                           </object>
