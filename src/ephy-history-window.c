@@ -467,10 +467,10 @@ on_treeview_button_press_event (GtkWidget         *widget,
 		gboolean bookmarks_locked;
 
 		n = gtk_tree_selection_count_selected_rows (self->priv->tree_selection);
-		if (n == 0)
+		if (n <= 0)
 			return FALSE;
 
-		gtk_widget_set_sensitive (self->priv->copy_location_menuitem, (n > 0));
+		gtk_widget_set_sensitive (self->priv->copy_location_menuitem, (n == 1));
 
 		bookmarks_locked = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 							   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
