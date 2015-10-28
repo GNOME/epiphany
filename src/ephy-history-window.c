@@ -94,7 +94,6 @@ typedef enum
 static gboolean
 add_urls_source (EphyHistoryWindow *self)
 {
-	GtkListStore *store = GTK_LIST_STORE (self->priv->liststore);
 	EphyHistoryURL *url;
 	GTimer *timer;
 	GList *element;
@@ -111,7 +110,7 @@ add_urls_source (EphyHistoryWindow *self)
 	do {
 		element = self->priv->urls;
 		url = element->data;
-		gtk_list_store_insert_with_values (store,
+		gtk_list_store_insert_with_values (GTK_LIST_STORE (self->priv->liststore),
 						   NULL, G_MAXINT,
 						   COLUMN_DATE, url->last_visit_time,
 						   COLUMN_NAME, url->title,
