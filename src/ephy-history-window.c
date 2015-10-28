@@ -216,7 +216,7 @@ filter_now (EphyHistoryWindow *self)
 	}
 
 	remove_pending_sorter_source (self);
-	
+
 	ephy_history_service_find_urls (self->priv->history_service,
 					from, to,
 					NUM_RESULTS_LIMIT, 0,
@@ -260,11 +260,11 @@ confirmation_dialog_construct (EphyHistoryWindow *self)
 
 	gtk_window_group_add_window (ephy_gui_ensure_window_group (GTK_WINDOW (self)),
 				     GTK_WINDOW (dialog));
-	
+
 	button = gtk_button_new_with_mnemonic (_("Cl_ear"));
 	gtk_widget_show (button);
 	gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, GTK_RESPONSE_ACCEPT);
-	
+
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
 
 	g_signal_connect (dialog, "response",
