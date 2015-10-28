@@ -57,9 +57,7 @@ struct _EphyHistoryWindowPrivate
 	GtkWidget *location_renderer;
 	GtkWidget *remove_button;
 	GtkWidget *open_button;
-	GtkWidget *open_menuitem;
 	GtkWidget *bookmark_menuitem;
-	GtkWidget *delete_menuitem;
 	GtkWidget *copy_location_menuitem;
 	GtkWidget *treeview_popup_menu;
 
