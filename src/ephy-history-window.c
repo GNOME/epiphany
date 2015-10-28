@@ -56,7 +56,6 @@ struct _EphyHistoryWindowPrivate
 	GtkWidget *location_renderer;
 	GtkWidget *remove_button;
 	GtkWidget *open_button;
-	GtkWidget *clear_button;
 	GtkWidget *open_menuitem;
 	GtkWidget *bookmark_menuitem;
 	GtkWidget *delete_menuitem;
@@ -715,7 +714,6 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	                                             "/org/gnome/epiphany/history-dialog.ui");
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, liststore);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, treeview);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, clear_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, remove_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, open_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_column);
