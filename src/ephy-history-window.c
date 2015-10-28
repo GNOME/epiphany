@@ -685,6 +685,19 @@ ephy_history_window_finalize (GObject *object)
 }
 
 static void
+response_cb (GtkDialog *widget,
+	     int response,
+	     EphyHistoryWindow *self)
+{
+	if (response == GTK_RESPONSE_REJECT) {
+		clear_all_history (self);
+		return;
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (self));
+}
+
+static void
 ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -733,6 +746,8 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_copy_location_menuitem_activate);
 	gtk_widget_class_bind_template_callback (widget_class, on_bookmark_menuitem_activate);
 	gtk_widget_class_bind_template_callback (widget_class, on_delete_menuitem_activate);
+
+	gtk_widget_class_bind_template_callback (widget_class, response_cb);
 }
 
 static void
@@ -779,19 +794,6 @@ convert_location_data_func (GtkTreeViewColumn *column,
 
 	g_free (url);
 	g_free (unescaped_url);
-}
-
-static void
-response_cb (GtkDialog *widget,
-	     int response,
-	     EphyHistoryWindow *self)
-{
-	if (response == GTK_RESPONSE_REJECT) {
-		clear_all_history (self);
-		return;
-	}
-
-	gtk_widget_destroy (GTK_WIDGET (self));
 }
 
 void
@@ -864,7 +866,4 @@ ephy_history_window_init (EphyHistoryWindow *self)
 						 (GtkTreeCellDataFunc) convert_location_data_func,
 						 GINT_TO_POINTER (COLUMN_LOCATION),
 						 NULL);
-
-	g_signal_connect (self, "response",
-			  G_CALLBACK (response_cb), self);
 }
