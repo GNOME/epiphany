@@ -55,11 +55,9 @@ struct _EphyHistoryWindowPrivate
 	GtkTreeViewColumn *location_column;
 	GtkWidget *date_renderer;
 	GtkWidget *location_renderer;
-	GtkWidget *remove_button;
-	GtkWidget *open_button;
-	GtkWidget *bookmark_menuitem;
-	GtkWidget *copy_location_menuitem;
 	GtkWidget *treeview_popup_menu;
+
+	GActionGroup *action_group;
 
 	GList *urls;
 	guint sorter_source;
@@ -367,7 +365,9 @@ delete_selected (EphyHistoryWindow *self)
 }
 
 static void
-open_selected (EphyHistoryWindow *self)
+open_selection (GSimpleAction     *action,
+                GVariant          *parameter,
+                EphyHistoryWindow *self)
 {
 	GList *selection;
 	GList *l;
@@ -389,15 +389,9 @@ open_selected (EphyHistoryWindow *self)
 }
 
 static void
-on_open_menuitem_activate (GtkMenuItem *menuitem,
-			   EphyHistoryWindow *self)
-{
-	open_selected (self);
-}
-
-static void
-on_copy_location_menuitem_activate (GtkMenuItem *menuitem,
-				    EphyHistoryWindow *self)
+copy_url (GSimpleAction     *action,
+          GVariant          *parameter,
+          EphyHistoryWindow *self)
 {
 	GList *selection;
 
@@ -413,8 +407,9 @@ on_copy_location_menuitem_activate (GtkMenuItem *menuitem,
 }
 
 static void
-on_bookmark_menuitem_activate (GtkMenuItem *menuitem,
-			       EphyHistoryWindow *self)
+bookmark (GSimpleAction     *action,
+          GVariant          *parameter,
+          EphyHistoryWindow *self)
 {
 	GList *selection;
 
@@ -433,8 +428,9 @@ on_bookmark_menuitem_activate (GtkMenuItem *menuitem,
 }
 
 static void
-on_delete_menuitem_activate (GtkMenuItem *menuitem,
-			     EphyHistoryWindow *self)
+forget (GSimpleAction     *action,
+        GVariant          *parameter,
+        EphyHistoryWindow *self)
 {
 	delete_selected (self);
 }
@@ -459,6 +455,9 @@ on_treeview_button_press_event (GtkWidget         *widget,
 				GdkEventButton    *event,
 				EphyHistoryWindow *self)
 {
+	GSimpleAction *copy_url_action;
+	GSimpleAction *bookmark_action;
+
 	if (event->button == 3) {
 		int n;
 		gboolean bookmarks_locked;
@@ -467,11 +466,14 @@ on_treeview_button_press_event (GtkWidget         *widget,
 		if (n <= 0)
 			return FALSE;
 
-		gtk_widget_set_sensitive (self->priv->copy_location_menuitem, (n == 1));
+		copy_url_action = g_action_map_lookup_action (G_ACTION_MAP (self->priv->action_group), "copy-url");
+		bookmark_action = g_action_map_lookup_action (G_ACTION_MAP (self->priv->action_group), "bookmark");
+
+		g_simple_action_set_enabled (copy_url_action, (n == 1));
 
 		bookmarks_locked = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 							   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
-		gtk_widget_set_sensitive (self->priv->bookmark_menuitem, (n == 1 && !bookmarks_locked));
+		g_simple_action_set_enabled (bookmark_action, (n == 1 && !bookmarks_locked));
 
 		gtk_menu_popup (GTK_MENU (self->priv->treeview_popup_menu),
 				NULL, NULL, NULL, NULL,
@@ -520,12 +522,17 @@ static void
 on_treeview_selection_changed (GtkTreeSelection *selection,
 			       EphyHistoryWindow *self)
 {
+	GSimpleAction *forget_action;
+	GSimpleAction *open_selection_action;
 	gboolean has_selection;
 
 	has_selection = gtk_tree_selection_count_selected_rows (selection) > 0;
 
-	gtk_widget_set_sensitive (self->priv->remove_button, has_selection);
-	gtk_widget_set_sensitive (self->priv->open_button, has_selection);
+	forget_action = g_action_map_lookup_action (G_ACTION_MAP (self->priv->action_group), "forget");
+	open_selection_action = g_action_map_lookup_action (G_ACTION_MAP (self->priv->action_group), "open-selection");
+
+	g_simple_action_set_enabled (forget_action, has_selection);
+	g_simple_action_set_enabled (open_selection_action, has_selection);
 }
 
 static void
@@ -551,23 +558,6 @@ on_treeview_column_clicked_event (GtkTreeViewColumn *column,
 	gtk_tree_view_column_set_sort_order (column, self->priv->sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
 	gtk_tree_view_column_set_sort_indicator (column, TRUE);
 	filter_now (self);
-}
-
-static void
-on_remove_button_clicked (GtkButton *button,
-			  EphyHistoryWindow *self)
-{
-	delete_selected (self);
-
-	/* Restore the focus to the button */
-	gtk_widget_grab_focus (GTK_WIDGET (button));
-}
-
-static void
-on_open_button_clicked (GtkButton *button,
-			EphyHistoryWindow *self)
-{
-	open_selected (self);
 }
 
 static gboolean
@@ -720,15 +710,11 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, liststore);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, treeview);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, tree_selection);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, remove_button);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, open_button);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_column);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, name_column);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_column);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_renderer);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, copy_location_menuitem);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, bookmark_menuitem);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, treeview_popup_menu);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_row_activated);
@@ -736,14 +722,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_button_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_column_clicked_event);
-	gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked);
-	gtk_widget_class_bind_template_callback (widget_class, on_open_button_clicked);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
-
-	gtk_widget_class_bind_template_callback (widget_class, on_open_menuitem_activate);
-	gtk_widget_class_bind_template_callback (widget_class, on_copy_location_menuitem_activate);
-	gtk_widget_class_bind_template_callback (widget_class, on_bookmark_menuitem_activate);
-	gtk_widget_class_bind_template_callback (widget_class, on_delete_menuitem_activate);
 
 	gtk_widget_class_bind_template_callback (widget_class, response_cb);
 }
@@ -831,6 +810,23 @@ ephy_history_window_new (EphyHistoryService *history_service)
 	return GTK_WIDGET (self);
 }
 
+static GActionGroup *
+create_action_group (EphyHistoryWindow *self)
+{
+	const GActionEntry entries[] = {
+		{ "open-selection", open_selection },
+		{ "copy-url",       copy_url },
+		{ "bookmark",       bookmark },
+		{ "forget",         forget }
+	};
+	GSimpleActionGroup *group;
+
+	group = g_simple_action_group_new ();
+	g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), self);
+
+	return G_ACTION_GROUP (group);
+}
+
 static void
 ephy_history_window_init (EphyHistoryWindow *self)
 {
@@ -864,4 +860,7 @@ ephy_history_window_init (EphyHistoryWindow *self)
 						 (GtkTreeCellDataFunc) convert_location_data_func,
 						 GINT_TO_POINTER (COLUMN_LOCATION),
 						 NULL);
+
+	self->priv->action_group = create_action_group (self);
+	gtk_widget_insert_action_group (self, "history", self->priv->action_group);
 }

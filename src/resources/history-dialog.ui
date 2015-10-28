@@ -147,11 +147,10 @@
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkButton" id="remove_button">
+                          <object class="GtkButton">
                             <property name="visible">True</property>
-                            <property name="sensitive">False</property>
                             <property name="tooltip_text" translatable="yes">Remove the selected pages from history</property>
-                            <signal name="clicked" handler="on_remove_button_clicked"/>
+                            <property name="action-name">history.forget</property>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
@@ -183,10 +182,10 @@
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkButton" id="open_button">
+                          <object class="GtkButton">
                             <property name="visible">True</property>
                             <property name="tooltip_text" translatable="yes">Open the selected pages in new tabs</property>
-                            <signal name="clicked" handler="on_open_button_clicked"/>
+                            <property name="action-name">history.open-selection</property>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
@@ -217,28 +216,29 @@
   </template>
   <object class="GtkMenu" id="treeview_popup_menu">
     <property name="visible">True</property>
+    <property name="attach-widget">treeview</property>
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
         <property name="label" translatable="yes">_Open</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_open_menuitem_activate"/>
+        <property name="action-name">history.open-selection</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="copy_location_menuitem">
+      <object class="GtkMenuItem">
         <property name="visible">True</property>
         <property name="label" translatable="yes">_Copy Location</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_copy_location_menuitem_activate"/>
+        <property name="action-name">history.copy-url</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="bookmark_menuitem">
+      <object class="GtkMenuItem">
         <property name="visible">True</property>
         <property name="label" translatable="yes">Add _Bookmark</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_bookmark_menuitem_activate"/>
+        <property name="action-name">history.bookmark</property>
       </object>
     </child>
     <child>
@@ -246,7 +246,7 @@
         <property name="visible">True</property>
         <property name="label" translatable="yes">_Delete</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="on_delete_menuitem_activate"/>
+        <property name="action-name">history.forget</property>
       </object>
     </child>
   </object>
