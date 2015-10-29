@@ -271,7 +271,9 @@ confirmation_dialog_construct (EphyHistoryWindow *self)
 }
 
 static void
-clear_all_history (EphyHistoryWindow *self)
+forget_all (GSimpleAction     *action,
+            GVariant          *parameter,
+            EphyHistoryWindow *self)
 {
 	if (self->priv->confirmation_dialog == NULL)
 	{
@@ -684,19 +686,6 @@ ephy_history_window_finalize (GObject *object)
 }
 
 static void
-response_cb (GtkDialog *widget,
-	     int response,
-	     EphyHistoryWindow *self)
-{
-	if (response == GTK_RESPONSE_REJECT) {
-		clear_all_history (self);
-		return;
-	}
-
-	gtk_widget_destroy (GTK_WIDGET (self));
-}
-
-static void
 ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -734,8 +723,6 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_column_clicked_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
-
-	gtk_widget_class_bind_template_callback (widget_class, response_cb);
 }
 
 static void
@@ -828,7 +815,8 @@ create_action_group (EphyHistoryWindow *self)
 		{ "open-selection", open_selection },
 		{ "copy-url",       copy_url },
 		{ "bookmark",       bookmark },
-		{ "forget",         forget }
+		{ "forget",         forget },
+		{ "forget-all",     forget_all }
 	};
 	GSimpleActionGroup *group;
 

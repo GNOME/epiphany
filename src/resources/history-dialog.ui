@@ -19,18 +19,18 @@
     <property name="default_height">600</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <signal name="response" handler="response_cb"/>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar">
         <property name="title" translatable="yes">History</property>
         <property name="visible">True</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkButton" id="clear_button">
+          <object class="GtkButton">
             <property name="label" translatable="yes">C_lear All</property>
             <property name="visible">True</property>
             <property name="use_underline">True</property>
             <property name="valign">center</property>
+            <property name="action-name">history.forget-all</property>
             <style>
               <class name="destructive-action"/>
               <class name="text-button"/>
@@ -210,9 +210,6 @@
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-2">clear_button</action-widget>
-    </action-widgets>
   </template>
   <object class="GtkMenu" id="treeview_popup_menu">
     <property name="visible">True</property>
