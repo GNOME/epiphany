@@ -450,30 +450,36 @@ on_treeview_key_press_event (GtkWidget         *widget,
 	return FALSE;
 }
 
+static void
+update_popup_menu_actions (GActionGroup *action_group,
+                           gboolean      only_one_selected_item)
+{
+	GSimpleAction *copy_url_action;
+	GSimpleAction *bookmark_action;
+	gboolean bookmarks_locked;
+
+	copy_url_action = g_action_map_lookup_action (action_group, "copy-url");
+	bookmark_action = g_action_map_lookup_action (action_group, "bookmark");
+	bookmarks_locked = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+	                                           EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
+
+	g_simple_action_set_enabled (copy_url_action, only_one_selected_item);
+	g_simple_action_set_enabled (bookmark_action, (only_one_selected_item && !bookmarks_locked));
+}
+
 static gboolean
 on_treeview_button_press_event (GtkWidget         *widget,
 				GdkEventButton    *event,
 				EphyHistoryWindow *self)
 {
-	GSimpleAction *copy_url_action;
-	GSimpleAction *bookmark_action;
-
 	if (event->button == 3) {
 		int n;
-		gboolean bookmarks_locked;
 
 		n = gtk_tree_selection_count_selected_rows (self->priv->tree_selection);
 		if (n <= 0)
 			return FALSE;
 
-		copy_url_action = g_action_map_lookup_action (G_ACTION_MAP (self->priv->action_group), "copy-url");
-		bookmark_action = g_action_map_lookup_action (G_ACTION_MAP (self->priv->action_group), "bookmark");
-
-		g_simple_action_set_enabled (copy_url_action, (n == 1));
-
-		bookmarks_locked = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-							   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
-		g_simple_action_set_enabled (bookmark_action, (n == 1 && !bookmarks_locked));
+		update_popup_menu_actions (G_ACTION_MAP (self->priv->action_group), (n == 1));
 
 		gtk_menu_popup (GTK_MENU (self->priv->treeview_popup_menu),
 				NULL, NULL, NULL, NULL,
