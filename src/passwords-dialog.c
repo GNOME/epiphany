@@ -48,6 +48,7 @@ typedef enum
 struct PasswordsDialogPrivate
 {
 	GtkWidget *passwords_treeview;
+	GtkTreeSelection *tree_selection;
 	GtkWidget *liststore;
 	GtkWidget *treemodelfilter;
 	GtkWidget *treemodelsort;
@@ -117,13 +118,11 @@ delete_selection (PasswordsDialog *dialog)
 {
 	GList *llist, *rlist = NULL, *l, *r;
 	GtkTreeModel *model;
-	GtkTreeSelection *selection;
 	GtkTreePath *path;
 	GtkTreeIter iter, iter2;
 	GtkTreeRowReference *row_ref = NULL;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->priv->passwords_treeview));
-	llist = gtk_tree_selection_get_selected_rows (selection, &model);
+	llist = gtk_tree_selection_get_selected_rows (dialog->priv->tree_selection, &model);
 
 	if (llist == NULL)
 	{
@@ -274,14 +273,12 @@ static char *
 get_selected_item (PasswordsDialog *dialog,
 		   PasswordsDialogColumn column)
 {
-	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GList *selected;
 	GtkTreeIter iter;
 	char *value;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->priv->passwords_treeview));
-	selected = gtk_tree_selection_get_selected_rows (selection, &model);
+	selected = gtk_tree_selection_get_selected_rows (dialog->priv->tree_selection, &model);
 	gtk_tree_model_get_iter (model, &iter, selected->data);
 	gtk_tree_model_get (model, &iter,
 			    column, &value,
@@ -327,11 +324,9 @@ on_passwords_treeview_button_press_event (GtkWidget       *widget,
 					  PasswordsDialog *dialog)
 {
 	if (event->button == 3) {
-		GtkTreeSelection *selection;
 		int n;
 
-		selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->priv->passwords_treeview));
-		n = gtk_tree_selection_count_selected_rows (selection);
+		n = gtk_tree_selection_count_selected_rows (dialog->priv->tree_selection);
 		if (n == 0)
 			return FALSE;
 
@@ -362,6 +357,7 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treemodelfilter);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treemodelsort);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, passwords_treeview);
+	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, tree_selection);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, remove_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, show_passwords_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_column);
