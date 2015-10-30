@@ -343,6 +343,19 @@ on_passwords_treeview_button_press_event (GtkWidget       *widget,
 }
 
 static void
+passwords_dialog_response_cb (GtkDialog *widget,
+			    int response,
+			    PasswordsDialog *dialog)
+{
+	if (response == GTK_RESPONSE_REJECT) {
+		delete_all_passwords (dialog);
+		return;
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
 passwords_dialog_class_init (PasswordsDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -374,6 +387,8 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_copy_password_menuitem_activate);
 	gtk_widget_class_bind_template_callback (widget_class, on_copy_username_menuitem_activate);
+
+	gtk_widget_class_bind_template_callback (widget_class, passwords_dialog_response_cb);
 }
 
 static void
@@ -398,19 +413,6 @@ delete_all_passwords (PasswordsDialog *dialog)
 			      (GAsyncReadyCallback)delete_all_passwords_ready_cb,
 			      dialog);
 	g_hash_table_unref (attributes);
-}
-
-static void
-passwords_dialog_response_cb (GtkDialog *widget,
-			    int response,
-			    PasswordsDialog *dialog)
-{
-	if (response == GTK_RESPONSE_REJECT) {
-		delete_all_passwords (dialog);
-		return;
-	}
-
-	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -528,7 +530,4 @@ passwords_dialog_init (PasswordsDialog *dialog)
 			    dialog->priv->ss_cancellable,
 			    (GAsyncReadyCallback)secrets_ready_cb,
 			    dialog);
-
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (passwords_dialog_response_cb), dialog);
 }
