@@ -53,7 +53,6 @@ struct PasswordsDialogPrivate
 	GtkWidget *treemodelsort;
 	GtkWidget *remove_button;
 	GtkWidget *show_passwords_button;
-	GtkWidget *clear_button;
 	GtkWidget *password_column;
 	GtkWidget *password_renderer;
 	GtkWidget *treeview_popup_menu;
@@ -363,7 +362,6 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treemodelfilter);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treemodelsort);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, passwords_treeview);
-	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, clear_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, remove_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, show_passwords_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_column);
