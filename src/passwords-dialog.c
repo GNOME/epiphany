@@ -52,13 +52,14 @@ struct PasswordsDialogPrivate
 	GtkWidget *liststore;
 	GtkWidget *treemodelfilter;
 	GtkWidget *treemodelsort;
-	GtkWidget *remove_button;
 	GtkWidget *show_passwords_button;
 	GtkWidget *password_column;
 	GtkWidget *password_renderer;
 	GtkWidget *treeview_popup_menu;
 	GtkWidget *copy_password_menuitem;
 	GtkWidget *copy_username_menuitem;
+
+	GActionGroup *action_group;
 
 	SecretService *ss;
 	GCancellable *ss_cancellable;
@@ -222,22 +223,21 @@ on_passwords_treeview_key_press_event (GtkWidget     *widget,
 }
 
 static void
-on_remove_button_clicked (GtkButton *button,
-			  PasswordsDialog *dialog)
+forget (GSimpleAction   *action,
+        GVariant        *parameter,
+        PasswordsDialog *dialog)
 {
 	delete_selection (dialog);
-
-	/* Restore the focus to the button */
-	gtk_widget_grab_focus (GTK_WIDGET (button));
 }
 
 static void
-on_show_passwords_button_toggled (GtkToggleButton *button,
-				  PasswordsDialog *dialog)
+show_passwords (GSimpleAction   *action,
+                GVariant        *parameter,
+                PasswordsDialog *dialog)
 {
 	gboolean active;
 
-	active = gtk_toggle_button_get_active (button);
+	active = gtk_toggle_button_get_active (dialog->priv->show_passwords_button);
 
 	gtk_tree_view_column_set_attributes (GTK_TREE_VIEW_COLUMN (dialog->priv->password_column),
 					     GTK_CELL_RENDERER (dialog->priv->password_renderer),
@@ -247,14 +247,21 @@ on_show_passwords_button_toggled (GtkToggleButton *button,
 }
 
 static void
+update_selection_actions (GActionMap *action_map,
+                          gboolean    has_selection)
+{
+	GSimpleAction *forget_action;
+
+	forget_action = g_action_map_lookup_action (action_map, "forget");
+	g_simple_action_set_enabled (forget_action, has_selection);
+}
+
+static void
 on_treeview_selection_changed (GtkTreeSelection *selection,
 			       PasswordsDialog    *dialog)
 {
-	gboolean has_selection;
-
-	has_selection = gtk_tree_selection_count_selected_rows (selection) > 0;
-
-	gtk_widget_set_sensitive (dialog->priv->remove_button, has_selection);
+	update_selection_actions (G_ACTION_MAP (dialog->priv->action_group),
+	                          gtk_tree_selection_count_selected_rows (selection) > 0);
 }
 
 static void
@@ -289,14 +296,15 @@ get_selected_item (PasswordsDialog *dialog,
 }
 
 static void
-on_copy_password_menuitem_activate (GtkMenuItem *menuitem,
-				    PasswordsDialog *dialog)
+copy_password (GSimpleAction   *action,
+               GVariant        *parameter,
+               PasswordsDialog *dialog)
 {
 	char *password;
 
 	password = get_selected_item (dialog, COL_PASSWORDS_PASSWORD);
 	if (password != NULL) {
-		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (menuitem),
+		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog->priv->copy_password_menuitem),
 								  GDK_SELECTION_CLIPBOARD),
 					password, -1);
 	}
@@ -304,18 +312,33 @@ on_copy_password_menuitem_activate (GtkMenuItem *menuitem,
 }
 
 static void
-on_copy_username_menuitem_activate (GtkMenuItem *menuitem,
-				    PasswordsDialog *dialog)
+copy_username (GSimpleAction   *action,
+               GVariant        *parameter,
+               PasswordsDialog *dialog)
 {
 	char *username;
 
 	username = get_selected_item (dialog, COL_PASSWORDS_USER);
 	if (username != NULL) {
-		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (menuitem),
+		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog->priv->copy_username_menuitem),
 								  GDK_SELECTION_CLIPBOARD),
 					username, -1);
 	}
 	g_free (username);
+}
+
+static void
+update_popup_menu_actions (GActionGroup *action_group,
+                           gboolean      only_one_selected_item)
+{
+	GSimpleAction *copy_password_action;
+	GSimpleAction *copy_username_action;
+
+	copy_password_action = g_action_map_lookup_action (action_group, "copy-password");
+	copy_username_action = g_action_map_lookup_action (action_group, "copy-username");
+
+	g_simple_action_set_enabled (copy_password_action, only_one_selected_item);
+	g_simple_action_set_enabled (copy_username_action, only_one_selected_item);
 }
 
 static gboolean
@@ -330,8 +353,7 @@ on_passwords_treeview_button_press_event (GtkWidget       *widget,
 		if (n == 0)
 			return FALSE;
 
-		gtk_widget_set_sensitive (dialog->priv->copy_password_menuitem, (n == 1));
-		gtk_widget_set_sensitive (dialog->priv->copy_username_menuitem, (n == 1));
+		update_popup_menu_actions (G_ACTION_MAP (dialog->priv->action_group), (n == 1));
 
 		gtk_menu_popup (GTK_MENU (dialog->priv->treeview_popup_menu),
 				NULL, NULL, NULL, NULL,
@@ -340,19 +362,6 @@ on_passwords_treeview_button_press_event (GtkWidget       *widget,
 	}
 
 	return FALSE;
-}
-
-static void
-passwords_dialog_response_cb (GtkDialog *widget,
-			    int response,
-			    PasswordsDialog *dialog)
-{
-	if (response == GTK_RESPONSE_REJECT) {
-		delete_all_passwords (dialog);
-		return;
-	}
-
-	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -371,7 +380,6 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treemodelsort);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, passwords_treeview);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, tree_selection);
-	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, remove_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, show_passwords_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_column);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_renderer);
@@ -382,13 +390,7 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_key_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_button_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
-	gtk_widget_class_bind_template_callback (widget_class, on_remove_button_clicked);
-	gtk_widget_class_bind_template_callback (widget_class, on_show_passwords_button_toggled);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
-	gtk_widget_class_bind_template_callback (widget_class, on_copy_password_menuitem_activate);
-	gtk_widget_class_bind_template_callback (widget_class, on_copy_username_menuitem_activate);
-
-	gtk_widget_class_bind_template_callback (widget_class, passwords_dialog_response_cb);
 }
 
 static void
@@ -401,7 +403,9 @@ delete_all_passwords_ready_cb (GObject *source_object,
 }
 
 static void
-delete_all_passwords (PasswordsDialog *dialog)
+forget_all (GSimpleAction   *action,
+            GVariant        *parameter,
+            PasswordsDialog *dialog)
 {
 	GHashTable *attributes;
 
@@ -514,6 +518,25 @@ row_visible_func (GtkTreeModel *model,
 	return visible;
 }
 
+static GActionGroup *
+create_action_group (PasswordsDialog *dialog)
+{
+	const GActionEntry entries[] = {
+		{ "copy-password", copy_password },
+		{ "copy-username", copy_username },
+		{ "forget", forget },
+		{ "forget-all", forget_all },
+		{ "show-passwords", show_passwords }
+	};
+
+	GSimpleActionGroup *group;
+
+	group = g_simple_action_group_new ();
+	g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), dialog);
+
+	return G_ACTION_GROUP (group);
+}
+
 static void
 passwords_dialog_init (PasswordsDialog *dialog)
 {
@@ -530,4 +553,9 @@ passwords_dialog_init (PasswordsDialog *dialog)
 			    dialog->priv->ss_cancellable,
 			    (GAsyncReadyCallback)secrets_ready_cb,
 			    dialog);
+
+	dialog->priv->action_group = create_action_group (dialog);
+	gtk_widget_insert_action_group (dialog, "passwords", dialog->priv->action_group);
+
+	update_selection_actions (G_ACTION_MAP (dialog->priv->action_group), FALSE);
 }
