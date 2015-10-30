@@ -113,7 +113,9 @@ secret_remove (PasswordsDialog *dialog,
 }
 
 static void
-delete_selection (PasswordsDialog *dialog)
+forget (GSimpleAction   *action,
+        GVariant        *parameter,
+        PasswordsDialog *dialog)
 {
 	GList *llist, *rlist = NULL, *l, *r;
 	GtkTreeModel *model;
@@ -203,29 +205,6 @@ delete_selection (PasswordsDialog *dialog)
 
 		gtk_tree_row_reference_free (row_ref);
 	}
-}
-
-static gboolean
-on_passwords_treeview_key_press_event (GtkWidget     *widget,
-				     GdkEventKey   *event,
-				     PasswordsDialog *dialog)
-{
-	if (event->keyval == GDK_KEY_Delete || event->keyval == GDK_KEY_KP_Delete)
-	{
-		delete_selection (dialog);
-
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-static void
-forget (GSimpleAction   *action,
-        GVariant        *parameter,
-        PasswordsDialog *dialog)
-{
-	delete_selection (dialog);
 }
 
 static void
@@ -384,7 +363,6 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treeview_popup_menu_model);
 
-	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_key_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_button_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
