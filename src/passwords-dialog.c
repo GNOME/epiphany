@@ -55,9 +55,7 @@ struct PasswordsDialogPrivate
 	GtkWidget *show_passwords_button;
 	GtkWidget *password_column;
 	GtkWidget *password_renderer;
-	GtkWidget *treeview_popup_menu;
-	GtkWidget *copy_password_menuitem;
-	GtkWidget *copy_username_menuitem;
+	GMenuModel *treeview_popup_menu_model;
 
 	GActionGroup *action_group;
 
@@ -304,7 +302,7 @@ copy_password (GSimpleAction   *action,
 
 	password = get_selected_item (dialog, COL_PASSWORDS_PASSWORD);
 	if (password != NULL) {
-		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog->priv->copy_password_menuitem),
+		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog),
 								  GDK_SELECTION_CLIPBOARD),
 					password, -1);
 	}
@@ -320,7 +318,7 @@ copy_username (GSimpleAction   *action,
 
 	username = get_selected_item (dialog, COL_PASSWORDS_USER);
 	if (username != NULL) {
-		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog->priv->copy_username_menuitem),
+		gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog),
 								  GDK_SELECTION_CLIPBOARD),
 					username, -1);
 	}
@@ -348,6 +346,7 @@ on_passwords_treeview_button_press_event (GtkWidget       *widget,
 {
 	if (event->button == 3) {
 		int n;
+		GtkMenu *menu;
 
 		n = gtk_tree_selection_count_selected_rows (dialog->priv->tree_selection);
 		if (n == 0)
@@ -355,9 +354,9 @@ on_passwords_treeview_button_press_event (GtkWidget       *widget,
 
 		update_popup_menu_actions (G_ACTION_MAP (dialog->priv->action_group), (n == 1));
 
-		gtk_menu_popup (GTK_MENU (dialog->priv->treeview_popup_menu),
-				NULL, NULL, NULL, NULL,
-				event->button, event->time);
+		menu = gtk_menu_new_from_model (dialog->priv->treeview_popup_menu_model);
+		gtk_menu_attach_to_widget (menu, dialog, NULL);
+		gtk_menu_popup (menu, NULL, NULL, NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 
@@ -383,9 +382,7 @@ passwords_dialog_class_init (PasswordsDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, show_passwords_button);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_column);
 	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, password_renderer);
-	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treeview_popup_menu);
-	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, copy_password_menuitem);
-	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, copy_username_menuitem);
+	gtk_widget_class_bind_template_child_private (widget_class, PasswordsDialog, treeview_popup_menu_model);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_key_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_passwords_treeview_button_press_event);
