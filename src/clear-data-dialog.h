@@ -36,15 +36,6 @@ typedef struct ClearDataDialog		ClearDataDialog;
 typedef struct ClearDataDialogClass		ClearDataDialogClass;
 typedef struct ClearDataDialogPrivate	ClearDataDialogPrivate;
 
-typedef enum
-{
-	CLEAR_DATA_NONE = 0,
-	CLEAR_DATA_CACHE = 1 << 0,
-	CLEAR_DATA_PASSWORDS = 1 << 1,
-	CLEAR_DATA_HISTORY = 1 << 2,
-	CLEAR_DATA_COOKIES = 1 << 4
-} ClearDataDialogFlags;
-
 struct ClearDataDialog
 {
         GtkDialog parent;
@@ -59,9 +50,6 @@ struct ClearDataDialogClass
 };
 
 GType         clear_data_dialog_get_type           (void);
-
-void          clear_data_dialog_set_flags (ClearDataDialog     *dialog,
-                                           ClearDataDialogFlags flags);
 
 G_END_DECLS
 

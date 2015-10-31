@@ -42,7 +42,6 @@ struct ClearDataDialogPrivate
 	GtkWidget *cookies_checkbutton;
 	GtkWidget *clear_button;
 
-	ClearDataDialogFlags flags;
 	guint num_checked;
 };
 
@@ -157,36 +156,11 @@ clear_data_dialog_class_init (ClearDataDialogClass *klass)
 }
 
 static void
-update_flags (ClearDataDialog *dialog)
-{
-	ClearDataDialogPrivate *priv = dialog->priv;
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->cookies_checkbutton),
-				      (priv->flags & CLEAR_DATA_COOKIES));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->passwords_checkbutton),
-				      (priv->flags & CLEAR_DATA_PASSWORDS));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->history_checkbutton),
-				      (priv->flags & CLEAR_DATA_HISTORY));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->cache_checkbutton),
-				      (priv->flags & CLEAR_DATA_CACHE));
-}
-
-static void
 clear_data_dialog_init (ClearDataDialog *dialog)
 {
 	dialog->priv = clear_data_dialog_get_instance_private (dialog);
 	gtk_widget_init_template (GTK_WIDGET (dialog));
 
-	update_flags (dialog);  // FIXME flags is unset at this moment...
-}
-
-void
-clear_data_dialog_set_flags (ClearDataDialog     *dialog,
-			     ClearDataDialogFlags flags)
-{
-	if (dialog->priv->flags != flags)
-	{
-		dialog->priv->flags = flags;
-		update_flags (dialog);
-	}
+	dialog->priv->num_checked = 0;
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->cache_checkbutton), TRUE);
 }
