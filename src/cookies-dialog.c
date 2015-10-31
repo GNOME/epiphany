@@ -250,6 +250,20 @@ on_search_entry_changed (GtkSearchEntry *entry,
 }
 
 static void
+cookies_dialog_response_cb (GtkDialog *widget,
+			    int response,
+			    CookiesDialog *dialog)
+{
+	if (response == GTK_RESPONSE_REJECT) {
+		webkit_cookie_manager_delete_all_cookies (dialog->priv->cookie_manager);
+		reload_model (dialog);
+		return;
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
 cookies_dialog_class_init (CookiesDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -272,20 +286,8 @@ cookies_dialog_class_init (CookiesDialogClass *klass)
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_remove_toolbutton_clicked);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
-}
 
-static void
-cookies_dialog_response_cb (GtkDialog *widget,
-			    int response,
-			    CookiesDialog *dialog)
-{
-	if (response == GTK_RESPONSE_REJECT) {
-		webkit_cookie_manager_delete_all_cookies (dialog->priv->cookie_manager);
-		reload_model (dialog);
-		return;
-	}
-
-	gtk_widget_destroy (GTK_WIDGET (dialog));
+	gtk_widget_class_bind_template_callback (widget_class, cookies_dialog_response_cb);
 }
 
 static gboolean
@@ -461,7 +463,4 @@ cookies_dialog_init (CookiesDialog *dialog)
 	dialog->priv->cookie_manager = webkit_web_context_get_cookie_manager (web_context);
 
 	setup_page (dialog);
-
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (cookies_dialog_response_cb), dialog);
 }
