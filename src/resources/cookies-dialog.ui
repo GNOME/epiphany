@@ -47,16 +47,22 @@
     </child>
     <child internal-child="vbox">
       <object class="GtkBox">
-        <property name="border_width">5</property>
-        <property name="spacing">6</property>
+        <property name="border_width">0</property>
         <child>
-          <object class="GtkSearchEntry">
+          <object class="GtkSearchBar">
             <property name="visible">True</property>
-            <property name="primary_icon_name">edit-find-symbolic</property>
-            <property name="primary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">False</property>
-            <property name="placeholder_text" translatable="yes">Search cookies</property>
-            <signal name="search-changed" handler="on_search_entry_changed"/>
+            <property name="search-mode-enabled">True</property>
+            <child>
+              <object class="GtkSearchEntry">
+                <property name="visible">True</property>
+                <property name="width-request">300</property> <!-- looks cool and same as passwords-dialog -->
+                <property name="primary_icon_name">edit-find-symbolic</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">False</property>
+                <property name="placeholder_text" translatable="yes">Search cookies</property>
+                <signal name="search-changed" handler="on_search_entry_changed"/>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -71,7 +77,6 @@
                 <property name="visible">True</property>
                 <property name="expand">True</property>
                 <property name="hscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
                 <property name="min_content_width">300</property>
                 <property name="min_content_height">300</property>
                 <child>
@@ -106,38 +111,25 @@
               </object>
             </child>
             <child>
-              <object class="GtkToolbar">
+              <object class="GtkActionBar">
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkToolItem">
+                  <object class="GtkButton">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="tooltip_text" translatable="yes">Delete the selected cookies</property>
+                    <property name="label" translatable="yes">Remove</property> <!-- TODO conflicts with the image -->
+                    <property name="action-name">cookies.forget</property>
+                    <accelerator key="Delete" signal="clicked"/>
+                    <accelerator key="KP_Delete" signal="clicked"/>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkImage">
                         <property name="visible">True</property>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="tooltip_text" translatable="yes">Delete the selected cookies</property>
-                            <property name="label" translatable="yes">Remove</property> <!-- TODO conflicts with the image -->
-                            <property name="action-name">cookies.forget</property>
-                            <accelerator key="Delete" signal="clicked"/>
-                            <accelerator key="KP_Delete" signal="clicked"/>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="visible">True</property>
-                                <property name="icon_name">list-remove-symbolic</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
+                        <property name="icon_name">list-remove-symbolic</property>
                       </object>
                     </child>
                   </object>
                 </child>
-                <style>
-                  <class name="inline-toolbar"/>
-                </style>
               </object>
             </child>
           </object>
