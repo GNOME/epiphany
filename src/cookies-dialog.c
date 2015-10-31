@@ -46,7 +46,6 @@ struct CookiesDialogPrivate
 	GtkWidget *treemodelfilter;
 	GtkWidget *treemodelsort;
 	GtkWidget *remove_toolbutton;
-	GtkWidget *clear_button;
 
 	WebKitCookieManager *cookie_manager;
 	gboolean filled;
@@ -267,7 +266,6 @@ cookies_dialog_class_init (CookiesDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, treemodelfilter);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, treemodelsort);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, cookies_treeview);
-	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, clear_button);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, remove_toolbutton);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_cookies_treeview_key_press_event);
