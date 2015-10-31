@@ -111,7 +111,9 @@ cookie_remove (CookiesDialog *dialog,
 }
 
 static void
-delete_selection (CookiesDialog *dialog)
+forget (GSimpleAction *action,
+        GVariant      *parameter,
+        CookiesDialog *dialog)
 {
 	GList *llist, *rlist = NULL, *l, *r;
 	GtkTreeModel *model;
@@ -202,29 +204,6 @@ delete_selection (CookiesDialog *dialog)
 	}
 }
 
-static gboolean
-on_cookies_treeview_key_press_event (GtkWidget     *widget,
-				     GdkEventKey   *event,
-				     CookiesDialog *dialog)
-{
-	if (event->keyval == GDK_KEY_Delete || event->keyval == GDK_KEY_KP_Delete)
-	{
-		delete_selection (dialog);
-
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-static void
-forget (GSimpleAction *action,
-        GVariant      *parameter,
-        CookiesDialog *dialog)
-{
-	delete_selection (dialog);
-}
-
 static void
 update_selection_actions (GActionMap *action_map,
                           gboolean    has_selection)
@@ -282,7 +261,6 @@ cookies_dialog_class_init (CookiesDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, cookies_treeview);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, tree_selection);
 
-	gtk_widget_class_bind_template_callback (widget_class, on_cookies_treeview_key_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
 }

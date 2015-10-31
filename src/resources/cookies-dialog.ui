@@ -36,6 +36,7 @@
             <property name="use_underline">True</property>
             <property name="valign">center</property>
             <property name="action-name">cookies.forget-all</property>
+            <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="clicked"/>
             <style>
               <class name="destructive-action"/>
               <class name="text-button"/>
@@ -79,7 +80,6 @@
                     <property name="model">treemodelsort</property>
                     <property name="enable_search">False</property>
                     <property name="search_column">0</property>
-                    <signal name="key-press-event" handler="on_cookies_treeview_key_press_event"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="tree_selection">
                         <property name="mode">multiple</property>
@@ -121,6 +121,8 @@
                             <property name="tooltip_text" translatable="yes">Delete the selected cookies</property>
                             <property name="label" translatable="yes">Remove</property> <!-- TODO conflicts with the image -->
                             <property name="action-name">cookies.forget</property>
+                            <accelerator key="Delete" signal="clicked"/>
+                            <accelerator key="KP_Delete" signal="clicked"/>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
