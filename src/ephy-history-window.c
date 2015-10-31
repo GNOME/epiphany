@@ -55,7 +55,7 @@ struct _EphyHistoryWindowPrivate
 	GtkTreeViewColumn *location_column;
 	GtkWidget *date_renderer;
 	GtkWidget *location_renderer;
-	GtkWidget *treeview_popup_menu;
+	GMenuModel *treeview_popup_menu_model;
 
 	GActionGroup *action_group;
 
@@ -476,6 +476,7 @@ on_treeview_button_press_event (GtkWidget         *widget,
 {
 	if (event->button == 3) {
 		int n;
+		GtkMenu *menu;
 
 		n = gtk_tree_selection_count_selected_rows (self->priv->tree_selection);
 		if (n <= 0)
@@ -483,9 +484,9 @@ on_treeview_button_press_event (GtkWidget         *widget,
 
 		update_popup_menu_actions (G_ACTION_MAP (self->priv->action_group), (n == 1));
 
-		gtk_menu_popup (GTK_MENU (self->priv->treeview_popup_menu),
-				NULL, NULL, NULL, NULL,
-				event->button, event->time);
+		menu = gtk_menu_new_from_model (self->priv->treeview_popup_menu_model);
+		gtk_menu_attach_to_widget (menu, self, NULL);
+		gtk_menu_popup (menu, NULL, NULL, NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 
@@ -715,7 +716,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_column);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_renderer);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, treeview_popup_menu);
+	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, treeview_popup_menu_model);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_row_activated);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_key_press_event);

@@ -11,6 +11,26 @@
       <column type="gchararray"/>
     </columns>
   </object>
+  <menu id="treeview_popup_menu_model">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Open</attribute>
+        <attribute name="action">history.open-selection</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Copy Location</attribute>
+        <attribute name="action">history.copy-url</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Add _Bookmark</attribute>
+        <attribute name="action">history.bookmark</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Delete</attribute>
+        <attribute name="action">history.forget</attribute>
+      </item>
+    </section>
+  </menu>
   <template class="EphyHistoryWindow" parent="GtkDialog">
     <property name="height_request">500</property>
     <property name="modal">True</property>
@@ -107,7 +127,7 @@
                         <property name="clickable">True</property>
                         <signal name="clicked" handler="on_treeview_column_clicked_event"/>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext2">
+                          <object class="GtkCellRendererText">
                             <property name="ellipsize">end</property>
                           </object>
                           <attributes>
@@ -211,40 +231,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkMenu" id="treeview_popup_menu">
-    <property name="visible">True</property>
-    <property name="attach-widget">treeview</property>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">_Open</property>
-        <property name="use_underline">True</property>
-        <property name="action-name">history.open-selection</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">_Copy Location</property>
-        <property name="use_underline">True</property>
-        <property name="action-name">history.copy-url</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">Add _Bookmark</property>
-        <property name="use_underline">True</property>
-        <property name="action-name">history.bookmark</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">_Delete</property>
-        <property name="use_underline">True</property>
-        <property name="action-name">history.forget</property>
-      </object>
-    </child>
-  </object>
 </interface>
