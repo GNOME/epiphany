@@ -42,6 +42,7 @@ enum
 struct CookiesDialogPrivate
 {
 	GtkWidget *cookies_treeview;
+	GtkTreeSelection *tree_selection;
 	GtkWidget *liststore;
 	GtkWidget *treemodelfilter;
 	GtkWidget *treemodelsort;
@@ -113,13 +114,11 @@ delete_selection (CookiesDialog *dialog)
 {
 	GList *llist, *rlist = NULL, *l, *r;
 	GtkTreeModel *model;
-	GtkTreeSelection *selection;
 	GtkTreePath *path;
 	GtkTreeIter iter, iter2;
 	GtkTreeRowReference *row_ref = NULL;
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->priv->cookies_treeview));
-	llist = gtk_tree_selection_get_selected_rows (selection, &model);
+	llist = gtk_tree_selection_get_selected_rows (dialog->priv->tree_selection, &model);
 
 	if (llist == NULL)
 	{
@@ -266,6 +265,7 @@ cookies_dialog_class_init (CookiesDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, treemodelfilter);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, treemodelsort);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, cookies_treeview);
+	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, tree_selection);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, remove_toolbutton);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_cookies_treeview_key_press_event);
