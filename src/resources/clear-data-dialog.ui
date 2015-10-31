@@ -2,7 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.10 -->
   <template class="ClearDataDialog" parent="GtkDialog">
-    <property name="border_width">10</property>
+    <property name="border_width">15</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
@@ -42,88 +42,80 @@
     </child>
     <child internal-child="vbox">
       <object class="GtkBox">
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Select the personal data you wish to clear</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="border_width">5</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Select the personal data you wish to clear</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <property name="label" translatable="yes">You are about to clear personal data that is stored about the web pages you have visited. Check the types of information that you want to remove:</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">50</property>
               </object>
             </child>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
+                <property name="margin">10</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
+                <property name="spacing">2</property>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkCheckButton" id="cookies_checkbutton">
+                    <property name="label" translatable="yes">Coo_kies</property>
                     <property name="visible">True</property>
+                    <property name="use_underline">True</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">You are about to clear personal data that is stored about the web pages you have visited. Check the types of information that you want to remove:</property>
-                    <property name="wrap">True</property>
-                    <property name="max_width_chars">50</property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkCheckButton" id="cache_checkbutton">
+                    <property name="label" translatable="yes">Cache and _temporary files</property>
                     <property name="visible">True</property>
-                    <property name="margin">10</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">2</property>
-                    <child>
-                      <object class="GtkCheckButton" id="cookies_checkbutton">
-                        <property name="label" translatable="yes">Coo_kies</property>
-                        <property name="visible">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="halign">start</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="cache_checkbutton">
-                        <property name="label" translatable="yes">Cache and _temporary files</property>
-                        <property name="visible">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="halign">start</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="history_checkbutton">
-                        <property name="label" translatable="yes">Browsing _history</property>
-                        <property name="visible">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="halign">start</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="passwords_checkbutton">
-                        <property name="label" translatable="yes">Saved _passwords</property>
-                        <property name="visible">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="halign">start</property>
-                      </object>
-                    </child>
+                    <property name="use_underline">True</property>
+                    <property name="halign">start</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="history_checkbutton">
+                    <property name="label" translatable="yes">Browsing _history</property>
+                    <property name="visible">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="halign">start</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="passwords_checkbutton">
+                    <property name="label" translatable="yes">Saved _passwords</property>
+                    <property name="visible">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="halign">start</property>
                   </object>
                 </child>
               </object>
             </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">You cannot undo this action. The data you are choosing to clear will be removed forever.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">50</property>
-              </object>
-            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">You cannot undo this action. The data you are choosing to clear will be removed forever.</property>
+            <property name="wrap">True</property>
+            <property name="max_width_chars">50</property>
           </object>
         </child>
       </object>
