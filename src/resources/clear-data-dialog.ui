@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.10 -->
-  <template class="ClearDataDialog" parent="GtkDialog"> <!-- TODO make non-resizable -->
+  <template class="ClearDataDialog" parent="GtkDialog">
     <property name="border_width">10</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
+    <property name="resizable">False</property>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar">
         <property name="title" translatable="yes">Clear Personal Data</property>
