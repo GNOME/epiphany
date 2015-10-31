@@ -519,20 +519,25 @@ on_search_entry_changed (GtkSearchEntry *entry,
 }
 
 static void
-on_treeview_selection_changed (GtkTreeSelection *selection,
-			       EphyHistoryWindow *self)
+update_selection_actions (GActionGroup *action_group,
+                          gboolean      has_selection)
 {
 	GSimpleAction *forget_action;
 	GSimpleAction *open_selection_action;
-	gboolean has_selection;
 
-	has_selection = gtk_tree_selection_count_selected_rows (selection) > 0;
-
-	forget_action = g_action_map_lookup_action (G_ACTION_MAP (self->priv->action_group), "forget");
-	open_selection_action = g_action_map_lookup_action (G_ACTION_MAP (self->priv->action_group), "open-selection");
+	forget_action = g_action_map_lookup_action (action_group, "forget");
+	open_selection_action = g_action_map_lookup_action (action_group, "open-selection");
 
 	g_simple_action_set_enabled (forget_action, has_selection);
 	g_simple_action_set_enabled (open_selection_action, has_selection);
+}
+
+static void
+on_treeview_selection_changed (GtkTreeSelection *selection,
+			       EphyHistoryWindow *self)
+{
+	update_selection_actions (G_ACTION_MAP (self->priv->action_group),
+	                          gtk_tree_selection_count_selected_rows (selection) > 0);
 }
 
 static void
@@ -863,4 +868,6 @@ ephy_history_window_init (EphyHistoryWindow *self)
 
 	self->priv->action_group = create_action_group (self);
 	gtk_widget_insert_action_group (self, "history", self->priv->action_group);
+
+	update_selection_actions (G_ACTION_MAP (self->priv->action_group), FALSE);
 }
