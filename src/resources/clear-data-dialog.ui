@@ -8,6 +8,7 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="resizable">False</property>
+    <signal name="response" handler="clear_data_dialog_response_cb"/>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar">
         <property name="title" translatable="yes">Clear Personal Data</property>
@@ -79,6 +80,7 @@
                     <property name="visible">True</property>
                     <property name="use_underline">True</property>
                     <property name="halign">start</property>
+                    <signal name="toggled" handler="checkbutton_toggled_cb"/>
                   </object>
                 </child>
                 <child>
@@ -87,6 +89,7 @@
                     <property name="visible">True</property>
                     <property name="use_underline">True</property>
                     <property name="halign">start</property>
+                    <signal name="toggled" handler="checkbutton_toggled_cb"/>
                   </object>
                 </child>
                 <child>
@@ -95,6 +98,7 @@
                     <property name="visible">True</property>
                     <property name="use_underline">True</property>
                     <property name="halign">start</property>
+                    <signal name="toggled" handler="checkbutton_toggled_cb"/>
                   </object>
                 </child>
                 <child>
@@ -103,6 +107,7 @@
                     <property name="visible">True</property>
                     <property name="use_underline">True</property>
                     <property name="halign">start</property>
+                    <signal name="toggled" handler="checkbutton_toggled_cb"/>
                   </object>
                 </child>
               </object>

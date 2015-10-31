@@ -48,21 +48,6 @@ struct ClearDataDialogPrivate
 
 G_DEFINE_TYPE_WITH_PRIVATE (ClearDataDialog, clear_data_dialog, GTK_TYPE_DIALOG)
 
-static void
-clear_data_dialog_class_init (ClearDataDialogClass *klass)
-{
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-	gtk_widget_class_set_template_from_resource (widget_class,
-	                                             "/org/gnome/epiphany/clear-data-dialog.ui");
-
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, cookies_checkbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, cache_checkbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, passwords_checkbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, history_checkbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, clear_button);
-}
-
 static WebKitCookieManager *
 get_cookie_manager (void)
 {
@@ -154,6 +139,24 @@ checkbutton_toggled_cb (GtkToggleButton *toggle,
 }
 
 static void
+clear_data_dialog_class_init (ClearDataDialogClass *klass)
+{
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+	gtk_widget_class_set_template_from_resource (widget_class,
+	                                             "/org/gnome/epiphany/clear-data-dialog.ui");
+
+	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, cookies_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, cache_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, passwords_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, history_checkbutton);
+	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, clear_button);
+
+	gtk_widget_class_bind_template_callback (widget_class, checkbutton_toggled_cb);
+	gtk_widget_class_bind_template_callback (widget_class, clear_data_dialog_response_cb);
+}
+
+static void
 update_flags (ClearDataDialog *dialog)
 {
 	ClearDataDialogPrivate *priv = dialog->priv;
@@ -169,40 +172,12 @@ update_flags (ClearDataDialog *dialog)
 }
 
 static void
-setup_page (ClearDataDialog *dialog)
-{
-	ClearDataDialogPrivate *priv = dialog->priv;
-
-	g_signal_connect (priv->cookies_checkbutton,
-			  "toggled",
-			  G_CALLBACK (checkbutton_toggled_cb),
-			  dialog);
-	g_signal_connect (priv->history_checkbutton,
-			  "toggled",
-			  G_CALLBACK (checkbutton_toggled_cb),
-			  dialog);
-	g_signal_connect (priv->cache_checkbutton,
-			  "toggled",
-			  G_CALLBACK (checkbutton_toggled_cb),
-			  dialog);
-	g_signal_connect (priv->passwords_checkbutton,
-			  "toggled",
-			  G_CALLBACK (checkbutton_toggled_cb),
-			  dialog);
-
-	update_flags (dialog);
-}
-
-static void
 clear_data_dialog_init (ClearDataDialog *dialog)
 {
 	dialog->priv = clear_data_dialog_get_instance_private (dialog);
 	gtk_widget_init_template (GTK_WIDGET (dialog));
 
-	setup_page (dialog);
-
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (clear_data_dialog_response_cb), dialog);
+	update_flags (dialog);  // FIXME flags is unset at this moment...
 }
 
 void
