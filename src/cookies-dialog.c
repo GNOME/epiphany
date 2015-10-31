@@ -46,7 +46,8 @@ struct CookiesDialogPrivate
 	GtkWidget *liststore;
 	GtkWidget *treemodelfilter;
 	GtkWidget *treemodelsort;
-	GtkWidget *remove_toolbutton;
+
+	GActionGroup *action_group;
 
 	WebKitCookieManager *cookie_manager;
 	gboolean filled;
@@ -217,24 +218,29 @@ on_cookies_treeview_key_press_event (GtkWidget     *widget,
 }
 
 static void
-on_remove_toolbutton_clicked (GtkToolButton *toolbutton,
-			      CookiesDialog *dialog)
+forget (GSimpleAction *action,
+        GVariant      *parameter,
+        CookiesDialog *dialog)
 {
 	delete_selection (dialog);
+}
 
-	/* Restore the focus to the button */
-	gtk_widget_grab_focus (GTK_WIDGET (toolbutton));
+static void
+update_selection_actions (GActionMap *action_map,
+                          gboolean    has_selection)
+{
+	GSimpleAction *forget_action;
+
+	forget_action = g_action_map_lookup_action (action_map, "forget");
+	g_simple_action_set_enabled (forget_action, has_selection);
 }
 
 static void
 on_treeview_selection_changed (GtkTreeSelection *selection,
 			       CookiesDialog    *dialog)
 {
-	gboolean has_selection;
-
-	has_selection = gtk_tree_selection_count_selected_rows (selection) > 0;
-
-	gtk_widget_set_sensitive (dialog->priv->remove_toolbutton, has_selection);
+	update_selection_actions (G_ACTION_MAP (dialog->priv->action_group),
+	                          gtk_tree_selection_count_selected_rows (selection) > 0);
 }
 
 static void
@@ -250,17 +256,12 @@ on_search_entry_changed (GtkSearchEntry *entry,
 }
 
 static void
-cookies_dialog_response_cb (GtkDialog *widget,
-			    int response,
-			    CookiesDialog *dialog)
+forget_all (GSimpleAction *action,
+            GVariant      *parameter,
+            CookiesDialog *dialog)
 {
-	if (response == GTK_RESPONSE_REJECT) {
-		webkit_cookie_manager_delete_all_cookies (dialog->priv->cookie_manager);
-		reload_model (dialog);
-		return;
-	}
-
-	gtk_widget_destroy (GTK_WIDGET (dialog));
+	webkit_cookie_manager_delete_all_cookies (dialog->priv->cookie_manager);
+	reload_model (dialog);
 }
 
 static void
@@ -280,14 +281,10 @@ cookies_dialog_class_init (CookiesDialogClass *klass)
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, treemodelsort);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, cookies_treeview);
 	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, tree_selection);
-	gtk_widget_class_bind_template_child_private (widget_class, CookiesDialog, remove_toolbutton);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_cookies_treeview_key_press_event);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
-	gtk_widget_class_bind_template_callback (widget_class, on_remove_toolbutton_clicked);
 	gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
-
-	gtk_widget_class_bind_template_callback (widget_class, cookies_dialog_response_cb);
 }
 
 static gboolean
@@ -445,6 +442,22 @@ setup_page (CookiesDialog *dialog)
 	populate_model (dialog);
 }
 
+static GActionGroup *
+create_action_group (CookiesDialog *dialog)
+{
+	const GActionEntry entries[] = {
+		{ "forget", forget },
+		{ "forget-all", forget_all }
+	};
+
+	GSimpleActionGroup *group;
+
+	group = g_simple_action_group_new ();
+	g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), dialog);
+
+	return G_ACTION_GROUP (group);
+}
+
 static void
 cookies_dialog_init (CookiesDialog *dialog)
 {
@@ -463,4 +476,9 @@ cookies_dialog_init (CookiesDialog *dialog)
 	dialog->priv->cookie_manager = webkit_web_context_get_cookie_manager (web_context);
 
 	setup_page (dialog);
+
+	dialog->priv->action_group = create_action_group (dialog);
+	gtk_widget_insert_action_group (dialog, "cookies", dialog->priv->action_group);
+
+	update_selection_actions (G_ACTION_MAP (dialog->priv->action_group), FALSE);
 }

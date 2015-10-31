@@ -25,17 +25,17 @@
     <property name="default_height">600</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <signal name="response" handler="cookies_dialog_response_cb"/>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar">
         <property name="title" translatable="yes">Cookies</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkButton" id="clear_button">
+          <object class="GtkButton">
             <property name="label" translatable="yes">C_lear All</property>
             <property name="visible">True</property>
             <property name="use_underline">True</property>
             <property name="valign">center</property>
+            <property name="action-name">cookies.forget-all</property>
             <style>
               <class name="destructive-action"/>
               <class name="text-button"/>
@@ -115,12 +115,12 @@
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkButton" id="remove_toolbutton">
+                          <object class="GtkButton">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="tooltip_text" translatable="yes">Delete the selected cookies</property>
                             <property name="label" translatable="yes">Remove</property> <!-- TODO conflicts with the image -->
-                            <signal name="clicked" handler="on_remove_toolbutton_clicked"/>
+                            <property name="action-name">cookies.forget</property>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
@@ -142,8 +142,5 @@
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-2">clear_button</action-widget>
-    </action-widgets>
   </template>
 </interface>
