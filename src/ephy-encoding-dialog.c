@@ -457,7 +457,5 @@ ephy_encoding_dialog_new (EphyWindow *parent)
 {
 	return g_object_new (EPHY_TYPE_ENCODING_DIALOG,
 			     "parent-window", parent,
-			     "default-width", 350,
-		             "default-height", 420,
 			     NULL);
 }
