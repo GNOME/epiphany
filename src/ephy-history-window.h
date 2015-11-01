@@ -56,9 +56,6 @@ GType		     ephy_history_window_get_type (void);
 
 GtkWidget	    *ephy_history_window_new        (EphyHistoryService *history_service);
 
-void		     ephy_history_window_set_parent (EphyHistoryWindow *ehw,
-						     GtkWidget *window);
-
 G_END_DECLS
 
 #endif /* EPHY_HISTORY_WINDOW_H */

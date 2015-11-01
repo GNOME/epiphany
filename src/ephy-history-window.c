@@ -772,28 +772,6 @@ convert_location_data_func (GtkTreeViewColumn *column,
 	g_free (unescaped_url);
 }
 
-void
-ephy_history_window_set_parent (EphyHistoryWindow *ebe,
-				GtkWidget *window)
-{
-	GtkWidget **widget;
-	if (ebe->priv->window)
-	{
-		widget = &ebe->priv->window;
-		g_object_remove_weak_pointer
-			(G_OBJECT(ebe->priv->window),
-			 (gpointer *)widget);
-	}
-
-	ebe->priv->window = window;
-	widget = &ebe->priv->window;
-
-	g_object_add_weak_pointer
-			(G_OBJECT(ebe->priv->window),
-			(gpointer *)widget);
-
-}
-
 GtkWidget *
 ephy_history_window_new (EphyHistoryService *history_service)
 {
