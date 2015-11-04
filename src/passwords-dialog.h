@@ -20,37 +20,13 @@
 #ifndef PASSWORDS_DIALOG_H
 #define PASSWORDS_DIALOG_H
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
-
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_PASSWORDS_DIALOG		(passwords_dialog_get_type ())
-#define EPHY_PASSWORDS_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_PASSWORDS_DIALOG, PasswordsDialog))
-#define EPHY_PASSWORDS_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PASSWORDS_DIALOG, PasswordsDialogClass))
-#define EPHY_IS_PASSWORDS_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_PASSWORDS_DIALOG))
-#define EPHY_IS_PASSWORDS_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PASSWORDS_DIALOG))
-#define EPHY_PASSWORDS_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_PASSWORDS_DIALOG, PasswordsDialogClass))
+#define EPHY_TYPE_PASSWORDS_DIALOG (ephy_passwords_dialog_get_type ())
+G_DECLARE_FINAL_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, EPHY, PASSWORDS_DIALOG, GtkDialog);
 
-typedef struct PasswordsDialog		PasswordsDialog;
-typedef struct PasswordsDialogClass		PasswordsDialogClass;
-typedef struct PasswordsDialogPrivate	PasswordsDialogPrivate;
-
-struct PasswordsDialog
-{
-        GtkDialog parent;
-
-	/*< private >*/
-        PasswordsDialogPrivate *priv;
-};
-
-struct PasswordsDialogClass
-{
-        GtkDialogClass parent_class;
-};
-
-GType         passwords_dialog_get_type  (void);
+EphyPasswordsDialog *ephy_passwords_dialog_new (void);
 
 G_END_DECLS
 
-#endif
+#endif /* PASSWORDS_DIALOG_H */

@@ -158,11 +158,10 @@ static void
 on_manage_passwords_button_clicked (GtkWidget *button,
 				    PrefsDialog *dialog)
 {
-	PasswordsDialog *passwords_dialog;
+	EphyPasswordsDialog *passwords_dialog;
 
-	passwords_dialog = g_object_new (EPHY_TYPE_PASSWORDS_DIALOG,
-					 "use-header-bar", TRUE,
-					 NULL);
+	passwords_dialog = ephy_passwords_dialog_new ();
+
 	gtk_window_set_transient_for (GTK_WINDOW (passwords_dialog), GTK_WINDOW (dialog));
 	gtk_window_set_modal (GTK_WINDOW (passwords_dialog), TRUE);
 	gtk_window_present (GTK_WINDOW (passwords_dialog));
