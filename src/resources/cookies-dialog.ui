@@ -25,6 +25,7 @@
     <property name="default_height">600</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
+    <signal name="key-press-event" handler="gtk_search_bar_handle_event" object="search_bar" swapped="true"/>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar">
         <property name="title" translatable="yes">Cookies</property>
@@ -43,15 +44,41 @@
             </style>
           </object>
         </child>
+        <child>
+          <object class="GtkToggleButton" id="search_button">
+            <property name="visible">True</property>
+            <property name="valign">center</property>
+            <accelerator key="F" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child internal-child="accessible">
+              <object class="AtkObject">
+                <property name="AtkObject::accessible-name" translatable="yes">Search</property>
+                <property name="AtkObject::accessible-description" translatable="yes">Filter cookies</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">edit-find-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
       </object>
     </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="border_width">0</property>
         <child>
-          <object class="GtkSearchBar">
+          <object class="GtkSearchBar" id="search_bar">
             <property name="visible">True</property>
-            <property name="search-mode-enabled">True</property>
+            <property name="search-mode-enabled" bind-source="search_button" bind-property="active" bind-flags="bidirectional|sync-create"/>
             <child>
               <object class="GtkSearchEntry">
                 <property name="visible">True</property>
