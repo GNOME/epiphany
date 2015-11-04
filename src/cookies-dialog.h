@@ -20,37 +20,13 @@
 #ifndef COOKIES_DIALOG_H
 #define COOKIES_DIALOG_H
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
-
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_COOKIES_DIALOG		(cookies_dialog_get_type ())
-#define EPHY_COOKIES_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_COOKIES_DIALOG, CookiesDialog))
-#define EPHY_COOKIES_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_COOKIES_DIALOG, CookiesDialogClass))
-#define EPHY_IS_COOKIES_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_COOKIES_DIALOG))
-#define EPHY_IS_COOKIES_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_COOKIES_DIALOG))
-#define EPHY_COOKIES_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_COOKIES_DIALOG, CookiesDialogClass))
+#define EPHY_TYPE_COOKIES_DIALOG (ephy_cookies_dialog_get_type ())
+G_DECLARE_FINAL_TYPE (EphyCookiesDialog, ephy_cookies_dialog, EPHY, COOKIES_DIALOG, GtkDialog);
 
-typedef struct CookiesDialog		CookiesDialog;
-typedef struct CookiesDialogClass		CookiesDialogClass;
-typedef struct CookiesDialogPrivate	CookiesDialogPrivate;
-
-struct CookiesDialog
-{
-        GtkDialog parent;
-
-	/*< private >*/
-        CookiesDialogPrivate *priv;
-};
-
-struct CookiesDialogClass
-{
-        GtkDialogClass parent_class;
-};
-
-GType         cookies_dialog_get_type  (void);
+EphyCookiesDialog *ephy_cookies_dialog_new (void);
 
 G_END_DECLS
 
-#endif
+#endif /* COOKIES_DIALOG_H */
