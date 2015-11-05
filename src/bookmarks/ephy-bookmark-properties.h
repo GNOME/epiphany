@@ -32,31 +32,8 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_BOOKMARK_PROPERTIES		(ephy_bookmark_properties_get_type ())
-#define EPHY_BOOKMARK_PROPERTIES(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkProperties))
-#define EPHY_BOOKMARK_PROPERTIES_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesClass))
-#define EPHY_IS_BOOKMARK_PROPERTIES(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_BOOKMARK_PROPERTIES))
-#define EPHY_IS_BOOKMARK_PROPERTIES_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_BOOKMARK_PROPERTIES))
-#define EPHY_BOOKMARK_PROPERTIES_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesClass))
-
-typedef struct _EphyBookmarkProperties		EphyBookmarkProperties;
-typedef struct _EphyBookmarkPropertiesPrivate	EphyBookmarkPropertiesPrivate;
-typedef struct _EphyBookmarkPropertiesClass	EphyBookmarkPropertiesClass;
-
-struct _EphyBookmarkProperties
-{
-	GtkDialog parent_instance;
-
-	/*< private >*/
-	EphyBookmarkPropertiesPrivate *priv;
-};
-
-struct _EphyBookmarkPropertiesClass
-{
-	GtkDialogClass parent_class;
-};
-
-GType		 ephy_bookmark_properties_get_type	(void);
+#define EPHY_TYPE_BOOKMARK_PROPERTIES (ephy_bookmark_properties_get_type ())
+G_DECLARE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, EPHY, BOOKMARK_PROPERTIES, GtkDialog);
 
 GtkWidget	*ephy_bookmark_properties_new		(EphyBookmarks *bookmarks,
 							 EphyNode *bookmark,

@@ -45,17 +45,17 @@ static const GtkTargetEntry dest_drag_types[] = {
   {EPHY_DND_URL_TYPE, 0, 0},
 };
 
-#define EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_BOOKMARK_PROPERTIES, EphyBookmarkPropertiesPrivate))
-
-struct _EphyBookmarkPropertiesPrivate
+struct _EphyBookmarkProperties
 {
+	GtkDialog parent_instance;
+
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;
 	gboolean creating;
-	
+
 	gint duplicate_count;
 	gint duplicate_idle;
-	
+
 	GtkWidget *warning;
 	GtkWidget *entry;
 };
@@ -73,17 +73,16 @@ G_DEFINE_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, GTK_TYPE_DIALOG
 static gboolean
 update_warning (EphyBookmarkProperties *properties)
 {
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 	char *label;
 
-	priv->duplicate_idle = 0;	
-	priv->duplicate_count = ephy_bookmarks_get_similar
-	  (priv->bookmarks, priv->bookmark, NULL, NULL);
-	
+	properties->duplicate_idle = 0;
+	properties->duplicate_count = ephy_bookmarks_get_similar
+	  (properties->bookmarks, properties->bookmark, NULL, NULL);
+
         /* Translators: This string is used when counting bookmarks that
          * are similar to each other */
-	label = g_strdup_printf (ngettext("%d bookmark is similar", "%d bookmarks are similar", priv->duplicate_count), priv->duplicate_count);
-	gtk_label_set_text (GTK_LABEL (priv->warning), label);
+	label = g_strdup_printf (ngettext("%d bookmark is similar", "%d bookmarks are similar", properties->duplicate_count), properties->duplicate_count);
+	gtk_label_set_text (GTK_LABEL (properties->warning), label);
 	g_free (label);
 
 	return FALSE;
@@ -92,16 +91,14 @@ update_warning (EphyBookmarkProperties *properties)
 static void
 update_warning_idle (EphyBookmarkProperties *properties)
 {
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-	
-	if(priv->duplicate_idle != 0)
+	if (properties->duplicate_idle != 0)
 	{
-		g_source_remove (priv->duplicate_idle);
+		g_source_remove (properties->duplicate_idle);
 	}
-	
-	priv->duplicate_idle = g_timeout_add 
+
+	properties->duplicate_idle = g_timeout_add
 	  (500, (GSourceFunc)update_warning, properties);
-	g_source_set_name_by_id (priv->duplicate_idle, "[epiphany] update_warning");
+	g_source_set_name_by_id (properties->duplicate_idle, "[epiphany] update_warning");
 }
 
 static void
@@ -137,7 +134,7 @@ static void
 node_destroy_cb (EphyNode *bookmark,
 		 GtkWidget *dialog)
 {
-	EPHY_BOOKMARK_PROPERTIES (dialog)->priv->creating = FALSE;
+	EPHY_BOOKMARK_PROPERTIES (dialog)->creating = FALSE;
 	gtk_widget_destroy (dialog);
 }
 
@@ -145,21 +142,19 @@ static void
 ephy_bookmark_properties_set_bookmark (EphyBookmarkProperties *properties,
 				       EphyNode *bookmark)
 {
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-
 	LOG ("Set bookmark");
-	
-	if (priv->bookmark)
+
+	if (properties->bookmark)
 	{
-		ephy_node_signal_disconnect_object (priv->bookmark,
+		ephy_node_signal_disconnect_object (properties->bookmark,
 						    EPHY_NODE_DESTROY,
 						    (EphyNodeCallback) node_destroy_cb,
 						    G_OBJECT (properties));
 	}
 
-	priv->bookmark = bookmark;
+	properties->bookmark = bookmark;
 
-	ephy_node_signal_connect_object (priv->bookmark,
+	ephy_node_signal_connect_object (properties->bookmark,
 					 EPHY_NODE_DESTROY,
 					 (EphyNodeCallback) node_destroy_cb,
 					 G_OBJECT (properties));
@@ -170,18 +165,17 @@ bookmark_properties_destroy_cb (GtkDialog *dialog,
 				gpointer data)
 {
 	EphyBookmarkProperties *properties = EPHY_BOOKMARK_PROPERTIES (dialog);
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 
-	if (priv->creating)
+	if (properties->creating)
 	{
-		ephy_node_unref (priv->bookmark);
-		priv->creating = FALSE;
+		ephy_node_unref (properties->bookmark);
+		properties->creating = FALSE;
 	}
-	
-	if(priv->duplicate_idle != 0)
+
+	if (properties->duplicate_idle != 0)
 	{
-		g_source_remove (priv->duplicate_idle);
-		priv->duplicate_idle = 0;
+		g_source_remove (properties->duplicate_idle);
+		properties->duplicate_idle = 0;
 	}
 }
 
@@ -191,12 +185,11 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 				 gpointer data)
 {
 	EphyBookmarkProperties *properties = EPHY_BOOKMARK_PROPERTIES (dialog);
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 
 	switch (response_id)
 	{
 	 	case GTK_RESPONSE_ACCEPT:
-			priv->creating = FALSE;
+			properties->creating = FALSE;
 			break;
 	 	default:
 			break;
@@ -206,7 +199,7 @@ bookmark_properties_response_cb (GtkDialog *dialog,
 }
 
 static void
-update_entry (EphyBookmarkProperties *props,
+update_entry (EphyBookmarkProperties *properties,
 	      GtkWidget *entry,
 	      guint prop)
 {
@@ -216,7 +209,7 @@ update_entry (EphyBookmarkProperties *props,
 	text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_take_string (&value, text);
-	ephy_node_set_property (props->priv->bookmark,
+	ephy_node_set_property (properties->bookmark,
 				prop,
 				&value);
 	g_value_unset (&value);
@@ -225,14 +218,13 @@ update_entry (EphyBookmarkProperties *props,
 static void
 update_window_title (EphyBookmarkProperties *properties)
 {
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 	char *title;
 	const char *tmp;
 
-	tmp = ephy_node_get_property_string (priv->bookmark,
+	tmp = ephy_node_get_property_string (properties->bookmark,
 					     EPHY_NODE_BMK_PROP_TITLE);
 
-	if (priv->creating)
+	if (properties->creating)
 		title = g_strdup (_("Add Bookmark"));
 	else
 		title = g_strdup_printf (_("“%s” Properties"), tmp);
@@ -242,21 +234,19 @@ update_window_title (EphyBookmarkProperties *properties)
 }
 
 static void
-title_entry_changed_cb (GtkWidget *entry,
-			EphyBookmarkProperties *props)
+title_entry_changed_cb (GtkWidget              *entry,
+                        EphyBookmarkProperties *properties)
 {
-	update_entry (props, entry, EPHY_NODE_BMK_PROP_TITLE);
-	update_window_title (props);
+	update_entry (properties, entry, EPHY_NODE_BMK_PROP_TITLE);
+	update_window_title (properties);
 }
 
 static void
 location_entry_changed_cb (GtkWidget *entry,
 			   EphyBookmarkProperties *properties)
 {
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
-
-	ephy_bookmarks_set_address (priv->bookmarks,
-				    priv->bookmark,
+	ephy_bookmarks_set_address (properties->bookmarks,
+				    properties->bookmark,
 				    gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
@@ -289,7 +279,6 @@ list_unmapped_cb (GtkWidget *widget,
 static void
 ephy_bookmark_properties_init (EphyBookmarkProperties *properties)
 {
-	properties->priv = EPHY_BOOKMARK_PROPERTIES_GET_PRIVATE (properties);
 	gtk_window_set_modal (GTK_WINDOW (properties), TRUE);
 }
 
@@ -300,7 +289,6 @@ ephy_bookmark_properties_constructor (GType type,
 {
 	GObject *object;
 	EphyBookmarkProperties *properties;
-	EphyBookmarkPropertiesPrivate *priv;
 	GtkWidget *widget, *grid, *label, *entry, *container;
 	GtkWidget *content_area;
 	GtkWindow *window;
@@ -317,7 +305,6 @@ ephy_bookmark_properties_constructor (GType type,
 	window = GTK_WINDOW (object);
 	dialog = GTK_DIALOG (object);
 	properties = EPHY_BOOKMARK_PROPERTIES (object);
-	priv = properties->priv;
 
 	gtk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_DIALOG);
 
@@ -327,7 +314,7 @@ ephy_bookmark_properties_constructor (GType type,
 	g_signal_connect (properties, "destroy",
 			  G_CALLBACK (bookmark_properties_destroy_cb), properties);
 
-	if (!priv->creating)
+	if (!properties->creating)
 	{
 		ephy_initial_state_add_window (widget,
                                                "bookmark_properties",
@@ -353,7 +340,7 @@ ephy_bookmark_properties_constructor (GType type,
 
 	entry = gtk_entry_new ();
 	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
-	tmp = ephy_node_get_property_string (properties->priv->bookmark,
+	tmp = ephy_node_get_property_string (properties->bookmark,
 					     EPHY_NODE_BMK_PROP_TITLE);
 	gtk_entry_set_text (GTK_ENTRY (entry), tmp);
 	g_signal_connect (entry, "changed",
@@ -371,7 +358,7 @@ ephy_bookmark_properties_constructor (GType type,
 
 	entry = gtk_entry_new ();
 	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
-	tmp = ephy_node_get_property_string (properties->priv->bookmark,
+	tmp = ephy_node_get_property_string (properties->bookmark,
 					     EPHY_NODE_BMK_PROP_LOCATION);
 	unescaped_url = ephy_uri_safe_unescape (tmp);
 	gtk_entry_set_text (GTK_ENTRY (entry), unescaped_url);
@@ -388,9 +375,9 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_widget_set_hexpand (entry, TRUE);
 	g_free (unescaped_url);
 
-	entry = ephy_topics_entry_new (priv->bookmarks, priv->bookmark);
+	entry = ephy_topics_entry_new (properties->bookmarks, properties->bookmark);
 	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
-	priv->entry = entry;
+	properties->entry = entry;
 	gtk_widget_show (entry);
 	label = gtk_label_new_with_mnemonic(_("T_opics:"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -400,7 +387,7 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_grid_attach (GTK_GRID (grid), entry, 1, 2, 1, 1);
 	gtk_widget_set_hexpand (entry, TRUE);
 
-	widget = ephy_topics_palette_new (priv->bookmarks, priv->bookmark);
+	widget = ephy_topics_palette_new (properties->bookmarks, properties->bookmark);
 	container = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
 				  "hadjustment", NULL,
 				  "vadjustment", NULL,
@@ -424,13 +411,13 @@ ephy_bookmark_properties_constructor (GType type,
 	gtk_widget_set_hexpand (widget, TRUE);
 	gtk_widget_set_vexpand (widget, TRUE);
 
-	priv->warning = gtk_label_new (NULL);
-	gtk_grid_attach (GTK_GRID (grid), priv->warning, 0, 4, 2, 1);
-	gtk_widget_show (priv->warning);
+	properties->warning = gtk_label_new (NULL);
+	gtk_grid_attach (GTK_GRID (grid), properties->warning, 0, 4, 2, 1);
+	gtk_widget_show (properties->warning);
 
 	gtk_box_pack_start (GTK_BOX (content_area), grid, TRUE, TRUE, 0);
 
-	if (priv->creating)
+	if (properties->creating)
 	{
 		gtk_dialog_add_button (dialog,
 				       _("_Cancel"),
@@ -453,14 +440,13 @@ ephy_bookmark_properties_set_property (GObject *object,
 				       GParamSpec *pspec)
 {
 	EphyBookmarkProperties *properties = EPHY_BOOKMARK_PROPERTIES (object);
-	EphyBookmarkPropertiesPrivate *priv = properties->priv;
 	EphyNode *bookmarks;
 
 	switch (prop_id)
 	{
 		case PROP_BOOKMARKS:
-			priv->bookmarks = g_value_get_object (value);
-			bookmarks = ephy_bookmarks_get_bookmarks (priv->bookmarks);
+			properties->bookmarks = g_value_get_object (value);
+			bookmarks = ephy_bookmarks_get_bookmarks (properties->bookmarks);
 			ephy_node_signal_connect_object (bookmarks,
 							 EPHY_NODE_CHILD_ADDED,
 							 (EphyNodeCallback) node_added_cb,
@@ -479,7 +465,7 @@ ephy_bookmark_properties_set_property (GObject *object,
 				(properties, g_value_get_pointer (value));
 			break;
 		case PROP_CREATING:
-			priv->creating = g_value_get_boolean (value);
+			properties->creating = g_value_get_boolean (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -537,8 +523,6 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 							       "creating",
 							       FALSE,
 							       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-	g_type_class_add_private (object_class, sizeof (EphyBookmarkPropertiesPrivate));
 }
 
 /* public API */
@@ -561,5 +545,5 @@ ephy_bookmark_properties_new (EphyBookmarks *bookmarks,
 EphyNode *
 ephy_bookmark_properties_get_node (EphyBookmarkProperties *properties)
 {
-	return properties->priv->bookmark;
+	return properties->bookmark;
 }
