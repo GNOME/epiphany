@@ -59,7 +59,8 @@ void	ephy_bookmarks_ui_add_bookmark		(GtkWindow *parent,
 						 const char *location,
 						 const char *title);
 
-void	ephy_bookmarks_ui_show_bookmark		(EphyNode *bookmark);
+void	ephy_bookmarks_ui_show_bookmark		(GtkWindow *parent,
+											 EphyNode  *bookmark);
 
 G_END_DECLS
 

@@ -898,7 +898,7 @@ cmd_bookmark_properties (GtkAction *action,
 	{
 		EphyNode *node = l->data;
 
-		ephy_bookmarks_ui_show_bookmark (node);
+		ephy_bookmarks_ui_show_bookmark (GTK_WINDOW (editor), node);
 	}
 
 	g_list_free (selection);

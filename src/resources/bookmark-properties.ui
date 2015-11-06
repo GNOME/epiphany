@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.10"/>
+  <template class="EphyBookmarkProperties" parent="GtkDialog">
+    <property name="modal">True</property>
+    <property name="resizable">False</property>
+    <property name="width-request">450</property>
+    <property name="type_hint">dialog</property>
+    <property name="border-width">5</property>
+    <signal name="response" handler="ephy_bookmark_properties_response_cb"/>
+    <signal name="destroy" handler="ephy_bookmark_properties_destroy_cb"/>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkGrid" id="grid"> <!-- TODO has (0,3) empty -->
+            <property name="visible">True</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
+            <property name="border-width">5</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="halign">start</property>
+                <property name="use-underline">True</property>
+                <property name="label" translatable="yes">_Title:</property>
+                <property name="mnemonic-widget">title_entry</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="title_entry">
+                <property name="visible">True</property>
+                <property name="hexpand">True</property>
+                <property name="width-request">200</property>
+                <property name="activates-default">True</property>
+                <signal name="changed" handler="title_entry_changed_cb"/>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="halign">start</property>
+                <property name="use-underline">True</property>
+                <property name="label" translatable="yes">A_ddress:</property>
+                <property name="mnemonic-widget">adress_entry</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="adress_entry">
+                <property name="visible">True</property>
+                <property name="hexpand">True</property>
+                <property name="width-request">200</property>
+                <property name="activates-default">True</property>
+                <signal name="changed" handler="location_entry_changed_cb"/>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="topics_label">
+                <property name="visible">True</property>
+                <property name="halign">start</property>
+                <property name="use-underline">True</property>
+                <property name="label" translatable="yes">T_opics:</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkExpander" id="topics_expander">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="use-underline">True</property>
+                <property name="label" translatable="yes">Sho_w all topics</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="topics_scrolled_window">
+                    <property name="visible">True</property>
+                    <property name="shadow-type">in</property>
+                    <property name="width-request">290</property>
+                    <property name="height-request">250</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="warning_label">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

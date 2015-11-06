@@ -328,7 +328,7 @@ ephy_bookmarks_ui_add_bookmark (GtkWindow *parent,
 }
 
 void
-ephy_bookmarks_ui_show_bookmark (EphyNode *bookmark)
+ephy_bookmarks_ui_show_bookmark (GtkWindow *parent, EphyNode *bookmark)
 {
 	EphyBookmarks *bookmarks;
 	GtkWidget *dialog;
@@ -354,6 +354,8 @@ ephy_bookmarks_ui_show_bookmark (EphyNode *bookmark)
 		g_hash_table_insert (properties_dialogs,
 				     bookmark, dialog);
 	}
+
+	gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 
 	gtk_window_present_with_time (GTK_WINDOW (dialog),
 				      gtk_get_current_event_time ());

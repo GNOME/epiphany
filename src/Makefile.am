@@ -104,6 +104,7 @@ libephymain_la_CFLAGS = \
 
 RESOURCE_FILES = \
 	resources/about.css			  \
+	resources/bookmark-properties.ui	  \
 	resources/clear-data-dialog.ui		  \
 	resources/cookies-dialog.ui		  \
 	resources/encoding-dialog.ui		  \

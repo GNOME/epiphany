@@ -49,15 +49,23 @@ struct _EphyBookmarkProperties
 {
 	GtkDialog parent_instance;
 
+	/* construct properties */
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;
 	gboolean creating;
 
+	/* counters */
 	gint duplicate_count;
 	gint duplicate_idle;
 
-	GtkWidget *warning;
-	GtkWidget *entry;
+	/* from UI file */
+	GtkGrid           *grid;
+	GtkEntry          *title_entry;
+	GtkEntry          *adress_entry;
+	GtkLabel          *topics_label;
+	GtkExpander       *topics_expander;
+	GtkScrolledWindow *topics_scrolled_window;
+	GtkLabel          *warning_label;
 };
 
 enum
@@ -82,7 +90,7 @@ update_warning (EphyBookmarkProperties *properties)
         /* Translators: This string is used when counting bookmarks that
          * are similar to each other */
 	label = g_strdup_printf (ngettext("%d bookmark is similar", "%d bookmarks are similar", properties->duplicate_count), properties->duplicate_count);
-	gtk_label_set_text (GTK_LABEL (properties->warning), label);
+	gtk_label_set_text (properties->warning_label, label);
 	g_free (label);
 
 	return FALSE;
@@ -161,8 +169,8 @@ ephy_bookmark_properties_set_bookmark (EphyBookmarkProperties *properties,
 }
 
 static void
-bookmark_properties_destroy_cb (GtkDialog *dialog,
-				gpointer data)
+ephy_bookmark_properties_destroy_cb (GtkDialog *dialog,
+                                     gpointer   data)
 {
 	EphyBookmarkProperties *properties = EPHY_BOOKMARK_PROPERTIES (dialog);
 
@@ -180,9 +188,9 @@ bookmark_properties_destroy_cb (GtkDialog *dialog,
 }
 
 static void
-bookmark_properties_response_cb (GtkDialog *dialog,
-				 int response_id,
-				 gpointer data)
+ephy_bookmark_properties_response_cb (GtkDialog *dialog,
+                                      int        response_id,
+                                      gpointer   data)
 {
 	EphyBookmarkProperties *properties = EPHY_BOOKMARK_PROPERTIES (dialog);
 
@@ -279,153 +287,75 @@ list_unmapped_cb (GtkWidget *widget,
 static void
 ephy_bookmark_properties_init (EphyBookmarkProperties *properties)
 {
-	gtk_window_set_modal (GTK_WINDOW (properties), TRUE);
 }
 
 static GObject *
-ephy_bookmark_properties_constructor (GType type,
-				      guint n_construct_properties,
-				      GObjectConstructParam *construct_params)
+ephy_bookmark_properties_constructor (GType                  type,
+                                      guint                  n_construct_properties,
+                                      GObjectConstructParam *construct_params)
 {
-	GObject *object;
+	GObject                *object;
 	EphyBookmarkProperties *properties;
-	GtkWidget *widget, *grid, *label, *entry, *container;
-	GtkWidget *content_area;
-	GtkWindow *window;
-	GtkDialog *dialog;
-	gboolean lockdown;
+
+	gboolean    lockdown;
 	const char *tmp;
-	char *unescaped_url;
+	char       *unescaped_url;
+	GtkWidget  *entry;
+	GtkWidget  *widget;
 
 	object = G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->constructor (type,
                                                                                       n_construct_properties,
                                                                                       construct_params);
-
-	widget = GTK_WIDGET (object);
-	window = GTK_WINDOW (object);
-	dialog = GTK_DIALOG (object);
 	properties = EPHY_BOOKMARK_PROPERTIES (object);
 
-	gtk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_DIALOG);
-
-	g_signal_connect (properties, "response",
-			  G_CALLBACK (bookmark_properties_response_cb), properties);
-
-	g_signal_connect (properties, "destroy",
-			  G_CALLBACK (bookmark_properties_destroy_cb), properties);
+	gtk_widget_init_template (GTK_WIDGET (properties));
 
 	if (!properties->creating)
 	{
-		ephy_initial_state_add_window (widget,
-                                               "bookmark_properties",
-                                               290, 280, FALSE,
-                                               EPHY_INITIAL_STATE_WINDOW_SAVE_POSITION |
-                                               EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE);
+		ephy_initial_state_add_window (GTK_WIDGET (properties),
+		                               "bookmark_properties",
+		                               290, 280, FALSE,
+		                               EPHY_INITIAL_STATE_WINDOW_SAVE_POSITION |
+		                               EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE);
 	}
 	/* Lockdown */
 	lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-					   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
+	                                   EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
 
 	update_window_title (properties);
-	content_area = gtk_dialog_get_content_area (dialog);
 
-	gtk_container_set_border_width (GTK_CONTAINER (properties), 5);
-	gtk_box_set_spacing (GTK_BOX (content_area), 2);
+	gtk_editable_set_editable (GTK_EDITABLE (properties->title_entry), !lockdown);
+	tmp = ephy_node_get_property_string (properties->bookmark, EPHY_NODE_BMK_PROP_TITLE);
+	gtk_entry_set_text (properties->title_entry, tmp);
 
-	grid = gtk_grid_new ();
-	gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
-	gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
-	gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
-	gtk_widget_show (grid);
-
-	entry = gtk_entry_new ();
-	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
-	tmp = ephy_node_get_property_string (properties->bookmark,
-					     EPHY_NODE_BMK_PROP_TITLE);
-	gtk_entry_set_text (GTK_ENTRY (entry), tmp);
-	g_signal_connect (entry, "changed",
-			  G_CALLBACK (title_entry_changed_cb), properties);
-	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-	gtk_widget_set_size_request (entry, 200, -1);
-	gtk_widget_show (entry);
-	label = gtk_label_new_with_mnemonic (_("_Title:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-	gtk_widget_show (label);
-	gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
-	gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
-	gtk_widget_set_hexpand (entry, TRUE);
-
-	entry = gtk_entry_new ();
-	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
-	tmp = ephy_node_get_property_string (properties->bookmark,
-					     EPHY_NODE_BMK_PROP_LOCATION);
+	gtk_editable_set_editable (GTK_EDITABLE (properties->adress_entry), !lockdown);
+	tmp = ephy_node_get_property_string (properties->bookmark, EPHY_NODE_BMK_PROP_LOCATION);
 	unescaped_url = ephy_uri_safe_unescape (tmp);
-	gtk_entry_set_text (GTK_ENTRY (entry), unescaped_url);
-	g_signal_connect (entry, "changed",
-			  G_CALLBACK (location_entry_changed_cb), properties);
-	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-	gtk_widget_show (entry);
-	label = gtk_label_new_with_mnemonic (_("A_ddress:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-	gtk_widget_show (label);
-	gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
-	gtk_grid_attach (GTK_GRID (grid), entry, 1, 1, 1, 1);
-	gtk_widget_set_hexpand (entry, TRUE);
+	gtk_entry_set_text (properties->adress_entry, unescaped_url);
 	g_free (unescaped_url);
 
 	entry = ephy_topics_entry_new (properties->bookmarks, properties->bookmark);
 	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
-	properties->entry = entry;
+	gtk_label_set_mnemonic_widget (properties->topics_label, entry);
 	gtk_widget_show (entry);
-	label = gtk_label_new_with_mnemonic(_("T_opics:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-	gtk_widget_show (label);
-	gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
-	gtk_grid_attach (GTK_GRID (grid), entry, 1, 2, 1, 1);
+	gtk_grid_attach (properties->grid, entry, 1, 2, 1, 1);
 	gtk_widget_set_hexpand (entry, TRUE);
 
 	widget = ephy_topics_palette_new (properties->bookmarks, properties->bookmark);
-	container = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-				  "hadjustment", NULL,
-				  "vadjustment", NULL,
-				  "hscrollbar_policy", GTK_POLICY_AUTOMATIC,
-				  "vscrollbar_policy", GTK_POLICY_AUTOMATIC,
-				  "shadow_type", GTK_SHADOW_IN,
-				  NULL);
-	gtk_container_add (GTK_CONTAINER (container), widget);
+	gtk_container_add (GTK_CONTAINER (properties->topics_scrolled_window), widget);
 	gtk_widget_show (widget);
-	gtk_widget_set_sensitive (container, !lockdown);
-	gtk_widget_show (container);
-	g_signal_connect (container, "map", G_CALLBACK (list_mapped_cb), properties);
-	g_signal_connect (container, "unmap", G_CALLBACK (list_unmapped_cb), properties);
+	gtk_widget_set_sensitive (GTK_WIDGET (properties->topics_scrolled_window), !lockdown);
+	/* TODO remove these hacks */
+	g_signal_connect (properties->topics_scrolled_window, "map", G_CALLBACK (list_mapped_cb), properties);
+	g_signal_connect (properties->topics_scrolled_window, "unmap", G_CALLBACK (list_unmapped_cb), properties);
 
-	widget = gtk_expander_new (_("Sho_w all topics"));
-	gtk_expander_set_use_underline (GTK_EXPANDER (widget), TRUE);
-	ephy_initial_state_add_expander (widget, "bookmark_properties_list", FALSE);
-	gtk_container_add (GTK_CONTAINER (widget), container);
-	gtk_widget_show (widget);
-	gtk_grid_attach (GTK_GRID (grid), widget, 1, 3, 1, 1);
-	gtk_widget_set_hexpand (widget, TRUE);
-	gtk_widget_set_vexpand (widget, TRUE);
-
-	properties->warning = gtk_label_new (NULL);
-	gtk_grid_attach (GTK_GRID (grid), properties->warning, 0, 4, 2, 1);
-	gtk_widget_show (properties->warning);
-
-	gtk_box_pack_start (GTK_BOX (content_area), grid, TRUE, TRUE, 0);
+	ephy_initial_state_add_expander (properties->topics_expander, "bookmark_properties_list", FALSE);
 
 	if (properties->creating)
 	{
-		gtk_dialog_add_button (dialog,
-				       _("_Cancel"),
-				       GTK_RESPONSE_CANCEL);
-		gtk_dialog_add_button (dialog,
-				       _("_Add"),
-				       GTK_RESPONSE_ACCEPT);
-		gtk_dialog_set_default_response (dialog, GTK_RESPONSE_ACCEPT);
+		gtk_dialog_add_button (GTK_DIALOG (properties), _("_Cancel"), GTK_RESPONSE_CANCEL);
+		gtk_dialog_add_button (GTK_DIALOG (properties), _("_Add"), GTK_RESPONSE_ACCEPT);
+		gtk_dialog_set_default_response (GTK_DIALOG (properties), GTK_RESPONSE_ACCEPT);
 	}
 
 	update_warning (properties);
@@ -496,6 +426,7 @@ static void
 ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->constructor = ephy_bookmark_properties_constructor;
 	object_class->set_property = ephy_bookmark_properties_set_property;
@@ -523,6 +454,23 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 							       "creating",
 							       FALSE,
 							       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	/* from UI file */
+	gtk_widget_class_set_template_from_resource (widget_class,
+	                                             "/org/gnome/epiphany/bookmark-properties.ui");
+
+	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, grid);
+	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, title_entry);
+	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, adress_entry);
+	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, topics_label);
+	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, topics_expander);
+	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, topics_scrolled_window);
+	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, warning_label);
+
+	gtk_widget_class_bind_template_callback (widget_class, title_entry_changed_cb);
+	gtk_widget_class_bind_template_callback (widget_class, location_entry_changed_cb);
+	gtk_widget_class_bind_template_callback (widget_class, ephy_bookmark_properties_response_cb);
+	gtk_widget_class_bind_template_callback (widget_class, ephy_bookmark_properties_destroy_cb);
 }
 
 /* public API */
