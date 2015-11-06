@@ -30,29 +30,8 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_TOPICS_ENTRY	 	(ephy_topics_entry_get_type ())
-#define EPHY_TOPICS_ENTRY(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_TOPICS_ENTRY, EphyTopicsEntry))
-#define EPHY_TOPICS_ENTRY_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_TOPICS_ENTRY, EphyTopicsEntryClass))
-#define EPHY_IS_TOPICS_ENTRY(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TOPICS_ENTRY))
-#define EPHY_IS_TOPICS_ENTRY_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TOPICS_ENTRY))
-#define EPHY_TOPICS_ENTRY_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TOPICS_ENTRY, EphyTopicsEntryClass))
-
-typedef struct _EphyTopicsEntryPrivate EphyTopicsEntryPrivate;
-
-typedef struct
-{
-	GtkEntry parent;
-
-	/*< private >*/
-	EphyTopicsEntryPrivate *priv;
-} EphyTopicsEntry;
-
-typedef struct
-{
-	GtkEntryClass parent;
-} EphyTopicsEntryClass;
-
-GType		     ephy_topics_entry_get_type        (void);
+#define EPHY_TYPE_TOPICS_ENTRY (ephy_topics_entry_get_type ())
+G_DECLARE_FINAL_TYPE (EphyTopicsEntry, ephy_topics_entry, EPHY, TOPICS_ENTRY, GtkEntry);
 
 GtkWidget	    *ephy_topics_entry_new             (EphyBookmarks *bookmarks,
 							EphyNode *bookmark);

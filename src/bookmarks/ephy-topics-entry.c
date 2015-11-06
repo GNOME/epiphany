@@ -29,13 +29,10 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-static void ephy_topics_entry_class_init (EphyTopicsEntryClass *klass);
-static void ephy_topics_entry_init       (EphyTopicsEntry *editor);
-
-#define EPHY_TOPICS_ENTRY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TOPICS_ENTRY, EphyTopicsEntryPrivate))
-
-struct _EphyTopicsEntryPrivate
+struct _EphyTopicsEntry
 {
+	GtkEntry parent_instance;
+
 	EphyBookmarks *bookmarks;
 	EphyNode *bookmark;
 	GtkListStore *store;
@@ -73,7 +70,7 @@ find_topic (EphyTopicsEntry *entry,
 	gboolean valid;
 	
 	/* Loop through our table and set/unset topics appropriately */
-	model = GTK_TREE_MODEL (entry->priv->store);
+	model = GTK_TREE_MODEL (entry->store);
 	valid = gtk_tree_model_get_iter_first (model, &iter);
 	while (valid && node == NULL)
 	{
@@ -128,7 +125,6 @@ insert_text (EphyTopicsEntry *entry,
 static void
 update_widget (EphyTopicsEntry *entry)
 {
-	EphyTopicsEntryPrivate *priv = entry->priv;
 	GtkEditable *editable = GTK_EDITABLE (entry);
 	
 	EphyNode *node;
@@ -140,10 +136,10 @@ update_widget (EphyTopicsEntry *entry)
 	gboolean is_focus;
 	
 	/* Prevent any changes to the database */
-	if(priv->lock) return;
-	priv->lock = TRUE;
+	if (entry->lock) return;
+	entry->lock = TRUE;
 	
-	node = ephy_bookmarks_get_keywords (priv->bookmarks);
+	node = ephy_bookmarks_get_keywords (entry->bookmarks);
 	children = ephy_node_get_children (node);
 	topics = g_ptr_array_sized_new (children->len);
 	
@@ -160,7 +156,7 @@ update_widget (EphyTopicsEntry *entry)
 	}
 	
 	g_ptr_array_sort (topics, ephy_bookmarks_compare_topic_pointers);
-	gtk_list_store_clear (priv->store);	
+	gtk_list_store_clear (entry->store);
 
 	g_object_get (entry, "is-focus", &is_focus, NULL);
 	if (!is_focus)
@@ -173,7 +169,7 @@ update_widget (EphyTopicsEntry *entry)
 		node = g_ptr_array_index (topics, i);
 		title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
 		  
-		if (!is_focus && ephy_node_has_child (node, priv->bookmark))
+		if (!is_focus && ephy_node_has_child (node, entry->bookmark))
 		{
 			if (pos > 0)
 				gtk_editable_insert_text (editable, ", ", -1, &pos);
@@ -182,9 +178,12 @@ update_widget (EphyTopicsEntry *entry)
 
 		tmp1 = g_utf8_casefold (title, -1);
 		tmp2 = g_utf8_normalize (tmp1, -1, G_NORMALIZE_DEFAULT);
-		gtk_list_store_append (priv->store, &iter);
-		gtk_list_store_set (priv->store, &iter, COLUMN_NODE, node,
-				    COLUMN_TITLE, title, COLUMN_KEY, tmp2, -1);
+		gtk_list_store_append (entry->store, &iter);
+		gtk_list_store_set (entry->store, &iter,
+		                    COLUMN_NODE, node,
+		                    COLUMN_TITLE, title,
+		                    COLUMN_KEY, tmp2,
+		                    -1);
 		g_free (tmp2);
 		g_free (tmp1);
 	}
@@ -197,15 +196,13 @@ update_widget (EphyTopicsEntry *entry)
 
 	g_ptr_array_free (topics, TRUE);
 
-	priv->lock = FALSE;
+	entry->lock = FALSE;
 }
 
 /* Updates the bookmarks database to match what is in the text entry */
 static void
 update_database (EphyTopicsEntry *entry)
 {
-	EphyTopicsEntryPrivate *priv = entry->priv;
-
 	EphyNode *node;
 	const char *text;
 	char **split;
@@ -218,8 +215,8 @@ update_database (EphyTopicsEntry *entry)
 	gboolean valid;
 
 	/* Prevent any changes to the text entry or completion model */
-	if(priv->lock) return;
-	priv->lock = TRUE;
+	if (entry->lock) return;
+	entry->lock = TRUE;
 	
 	/* Get the list of strings input by the user */
 	text = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -236,7 +233,7 @@ update_database (EphyTopicsEntry *entry)
 	}
 
 	/* Loop through the completion model and set/unset topics appropriately */
-	model = GTK_TREE_MODEL (priv->store);
+	model = GTK_TREE_MODEL (entry->store);
 	valid = gtk_tree_model_get_iter_first (model, &iter);
 	while (valid)
 	{
@@ -254,13 +251,11 @@ update_database (EphyTopicsEntry *entry)
 		if (split[i])
 		{
 			split[i][0] = 0;
-			ephy_bookmarks_set_keyword (priv->bookmarks, node,
-						    priv->bookmark);
+			ephy_bookmarks_set_keyword (entry->bookmarks, node, entry->bookmark);
 		}
 		else
 		{
-			ephy_bookmarks_unset_keyword (priv->bookmarks, node,
-						      priv->bookmark);
+			ephy_bookmarks_unset_keyword (entry->bookmarks, node, entry->bookmark);
 		}
 		
 		g_value_unset (&value);
@@ -269,14 +264,13 @@ update_database (EphyTopicsEntry *entry)
 
 	g_strfreev (split);
 
-	priv->lock = FALSE;
+	entry->lock = FALSE;
 }
 
 /* Updates the search key and topic creation action */
 static void
 update_key (EphyTopicsEntry *entry)
 {
-	EphyTopicsEntryPrivate *priv = entry->priv;
 	GtkEditable *editable = GTK_EDITABLE (entry);
 	char *input;
 	
@@ -296,39 +290,39 @@ update_key (EphyTopicsEntry *entry)
 	  end = text+strlen(text);
 
 	/* If there was something we could create, then delete the action. */
-	if (priv->create)
+	if (entry->create)
 	{
-		gtk_entry_completion_delete_action (priv->completion, 0);
+		gtk_entry_completion_delete_action (entry->completion, 0);
 	}
 	
-	g_free (priv->create);
-	g_free (priv->key);
-	priv->create = 0;
-	priv->key = 0;
+	g_free (entry->create);
+	g_free (entry->key);
+	entry->create = 0;
+	entry->key = 0;
 
-	/* Set the priv->create and priv->key appropriately. */
+	/* Set the entry->create and entry->key appropriately. */
 	if (start != end)
 	{
 		input = g_strndup (start, end-start);
 		g_strstrip (input);
-		priv->create = input;
+		entry->create = input;
 		
 		input = g_utf8_casefold (input, -1);
-		priv->key = g_utf8_normalize (input, -1, G_NORMALIZE_DEFAULT);
+		entry->key = g_utf8_normalize (input, -1, G_NORMALIZE_DEFAULT);
 		g_free (input);
 		
-		if (priv->create[0] == '\0' ||
-		    find_topic (entry, priv->key) != NULL)
+		if (entry->create[0] == '\0' ||
+		    find_topic (entry, entry->key) != NULL)
 		{
-			g_free (priv->create);
-			priv->create = 0;
+			g_free (entry->create);
+			entry->create = 0;
 		}
 
 		/* If there is something we can create, then setup the action. */
 		else
 		{
-			input = g_strdup_printf (_("Create topic “%s”"), priv->create);
-			gtk_entry_completion_insert_action_text (priv->completion, 0, input);
+			input = g_strdup_printf (_("Create topic “%s”"), entry->create);
+			gtk_entry_completion_insert_action_text (entry->completion, 0, input);
 			g_free (input);
 		}
 	}
@@ -341,14 +335,13 @@ match_func (GtkEntryCompletion *completion,
 	    gpointer user_data)
 {
 	EphyTopicsEntry *entry = EPHY_TOPICS_ENTRY (gtk_entry_completion_get_entry (completion));
-	EphyTopicsEntryPrivate *priv = entry->priv;
 	GtkTreeModel *model = gtk_entry_completion_get_model (completion);
 	
 	gboolean result;
 	GValue value = { 0, };
 	EphyNode *node;
 	
-	if (priv->key == NULL)
+	if (entry->key == NULL)
 	{
 		return FALSE;
 	}
@@ -363,10 +356,10 @@ match_func (GtkEntryCompletion *completion,
 	}
 
 	/* If it's already selected, don't show it unless we're editing it. */
-	else if (ephy_node_has_child (node, priv->bookmark))
+	else if (ephy_node_has_child (node, entry->bookmark))
 	{
 		gtk_tree_model_get_value (model, iter, COLUMN_KEY, &value);
-		result = (strcmp (g_value_get_string (&value), priv->key) == 0);
+		result = (strcmp (g_value_get_string (&value), entry->key) == 0);
 		g_value_unset (&value);
 	}
 	
@@ -374,7 +367,7 @@ match_func (GtkEntryCompletion *completion,
 	else
 	{
 		gtk_tree_model_get_value (model, iter, COLUMN_KEY, &value);
-		result = (g_str_has_prefix (g_value_get_string (&value), priv->key));
+		result = (g_str_has_prefix (g_value_get_string (&value), entry->key));
 		g_value_unset (&value);
 	}
 	
@@ -387,12 +380,11 @@ action_cb (GtkEntryCompletion *completion,
 	   gpointer user_data)
 {
 	EphyTopicsEntry *entry = EPHY_TOPICS_ENTRY (gtk_entry_completion_get_entry (completion));
-	EphyTopicsEntryPrivate *priv = entry->priv;
 	char *title;
 	
-	title = g_strdup (priv->create);
+	title = g_strdup (entry->create);
 	
-	ephy_bookmarks_add_keyword (priv->bookmarks, title);
+	ephy_bookmarks_add_keyword (entry->bookmarks, title);
 	update_widget (entry);
 	
 	insert_text (entry, title);
@@ -420,7 +412,6 @@ activate_cb (GtkEditable *editable,
 	     gpointer user_data)
 {	
 	EphyTopicsEntry *entry = EPHY_TOPICS_ENTRY (editable);
-	EphyTopicsEntryPrivate *priv = entry->priv;
 	GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (entry));
 
 	GValue value = { 0, };
@@ -428,7 +419,7 @@ activate_cb (GtkEditable *editable,
 	GtkTreeIter iter;
 	gboolean valid;
 	
-	if (priv->key == NULL || priv->key[0] == '\0')
+	if (entry->key == NULL || entry->key[0] == '\0')
 	{
 		gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 		return;
@@ -439,7 +430,7 @@ activate_cb (GtkEditable *editable,
 	}
 	
 	/* Loop through the completion model and find the first item to use, if any. */
-	model = GTK_TREE_MODEL (priv->store);
+	model = GTK_TREE_MODEL (entry->store);
 	valid = gtk_tree_model_get_iter_first (model, &iter);
 	while (valid && !match_func (completion, NULL, &iter, NULL))
 	{
@@ -510,20 +501,20 @@ ephy_topics_entry_set_property (GObject *object,
 	switch (prop_id)
 	{
 	case PROP_BOOKMARKS:
-		entry->priv->bookmarks = g_value_get_object (value);
-		node = ephy_bookmarks_get_keywords (entry->priv->bookmarks);
+		entry->bookmarks = g_value_get_object (value);
+		node = ephy_bookmarks_get_keywords (entry->bookmarks);
 		ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_ADDED,
 				   (EphyNodeCallback) node_added_cb, object);
 		ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_CHANGED,
 				   (EphyNodeCallback) node_changed_cb, object);
 		ephy_node_signal_connect_object (node, EPHY_NODE_CHILD_REMOVED,
 				   (EphyNodeCallback) node_removed_cb, object);
-		g_signal_connect_object (entry->priv->bookmarks, "tree-changed",
+		g_signal_connect_object (entry->bookmarks, "tree-changed",
 					 G_CALLBACK (tree_changed_cb), entry,
 					 G_CONNECT_AFTER);
 		break;
 	case PROP_BOOKMARK:
-		entry->priv->bookmark = g_value_get_pointer (value);
+		entry->bookmark = g_value_get_pointer (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -538,27 +529,25 @@ ephy_topics_entry_constructor (GType type,
 {
 	GObject *object;
 	EphyTopicsEntry *entry;
-	EphyTopicsEntryPrivate *priv;
 
 	object = G_OBJECT_CLASS (ephy_topics_entry_parent_class)->constructor (type,
                                                                                n_construct_properties,
                                                                                construct_params);
 	entry = EPHY_TOPICS_ENTRY (object);
-	priv = EPHY_TOPICS_ENTRY_GET_PRIVATE (object);
 
-	priv->store = gtk_list_store_new (3, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING);
-	priv->completion = gtk_entry_completion_new ();
+	entry->store = gtk_list_store_new (3, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING);
+	entry->completion = gtk_entry_completion_new ();
 	
-	gtk_entry_completion_set_model (priv->completion, GTK_TREE_MODEL (priv->store));
-	gtk_entry_completion_set_text_column (priv->completion, COLUMN_TITLE);
-	gtk_entry_completion_set_popup_completion (priv->completion, TRUE);
-	gtk_entry_completion_set_popup_single_match (priv->completion, TRUE);
-	gtk_entry_completion_set_match_func (priv->completion, match_func, NULL, NULL);
-	gtk_entry_set_completion (GTK_ENTRY (entry), priv->completion);
+	gtk_entry_completion_set_model (entry->completion, GTK_TREE_MODEL (entry->store));
+	gtk_entry_completion_set_text_column (entry->completion, COLUMN_TITLE);
+	gtk_entry_completion_set_popup_completion (entry->completion, TRUE);
+	gtk_entry_completion_set_popup_single_match (entry->completion, TRUE);
+	gtk_entry_completion_set_match_func (entry->completion, match_func, NULL, NULL);
+	gtk_entry_set_completion (GTK_ENTRY (entry), entry->completion);
 	
-	g_signal_connect (priv->completion, "match-selected",
+	g_signal_connect (entry->completion, "match-selected",
 			  G_CALLBACK (match_selected_cb), NULL);
-	g_signal_connect (priv->completion, "action-activated",
+	g_signal_connect (entry->completion, "action-activated",
 			  G_CALLBACK (action_cb), NULL);
 	
 	g_signal_connect (object, "activate",
@@ -582,8 +571,6 @@ ephy_topics_entry_constructor (GType type,
 static void
 ephy_topics_entry_init (EphyTopicsEntry *entry)
 {
-	entry->priv = EPHY_TOPICS_ENTRY_GET_PRIVATE (entry);
-
 }
 
 static void
@@ -591,8 +578,8 @@ ephy_topics_entry_finalize (GObject *object)
 {
 	EphyTopicsEntry *entry = EPHY_TOPICS_ENTRY (object);
 	
-	g_free (entry->priv->create);
-	g_free (entry->priv->key);
+	g_free (entry->create);
+	g_free (entry->key);
 
 	G_OBJECT_CLASS (ephy_topics_entry_parent_class)->finalize (object);
 }
@@ -641,6 +628,4 @@ ephy_topics_entry_class_init (EphyTopicsEntryClass *klass)
 							       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY |
 							       G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | 
 							       G_PARAM_STATIC_BLURB));
-
-	g_type_class_add_private (object_class, sizeof(EphyTopicsEntryPrivate));
 }
