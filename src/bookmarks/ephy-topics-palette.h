@@ -29,29 +29,8 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_TOPICS_PALETTE	 (ephy_topics_palette_get_type ())
-#define EPHY_TOPICS_PALETTE(o)		 (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_TOPICS_PALETTE, EphyTopicsPalette))
-#define EPHY_TOPICS_PALETTE_CLASS(k)	 (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_TOPICS_PALETTE, EphyTopicsPaletteClass))
-#define EPHY_IS_TOPICS_PALETTE(o)	 (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TOPICS_PALETTE))
-#define EPHY_IS_TOPICS_PALETTE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TOPICS_PALETTE))
-#define EPHY_TOPICS_PALETTE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TOPICS_PALETTE, EphyTopicsPaletteClass))
-
-typedef struct _EphyTopicsPalettePrivate EphyTopicsPalettePrivate;
-
-typedef struct
-{
-	GtkTreeView parent;
-
-	/*< private >*/
-	EphyTopicsPalettePrivate *priv;
-} EphyTopicsPalette;
-
-typedef struct
-{
-	GtkTreeViewClass parent;
-} EphyTopicsPaletteClass;
-
-GType		     ephy_topics_palette_get_type  (void);
+#define EPHY_TYPE_TOPICS_PALETTE (ephy_topics_palette_get_type ())
+G_DECLARE_FINAL_TYPE (EphyTopicsPalette, ephy_topics_palette, EPHY, TOPICS_PALETTE, GtkTreeView);
 
 GtkWidget	    *ephy_topics_palette_new       (EphyBookmarks *bookmarks,
 						    EphyNode *bookmark);
