@@ -26,39 +26,15 @@
 #define EPHY_ENCODING_DIALOG_H
 
 #include "ephy-window.h"
-
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_ENCODING_DIALOG		(ephy_encoding_dialog_get_type ())
-#define EPHY_ENCODING_DIALOG(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialog))
-#define EPHY_ENCODING_DIALOG_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogClass))
-#define EPHY_IS_ENCODING_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_ENCODING_DIALOG))
-#define EPHY_IS_ENCODING_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_ENCODING_DIALOG))
-#define EPHY_ENCODING_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogClass))
-
-typedef struct _EphyEncodingDialog		EphyEncodingDialog;
-typedef struct _EphyEncodingDialogClass		EphyEncodingDialogClass;
-typedef struct _EphyEncodingDialogPrivate	EphyEncodingDialogPrivate;
-
-struct _EphyEncodingDialog
-{
-	GtkDialog parent;
-
-	/*< private >*/
-	EphyEncodingDialogPrivate *priv;
-};
-
-struct _EphyEncodingDialogClass
-{
-	GtkDialogClass parent_class;
-};
-
-GType			 ephy_encoding_dialog_get_type	(void);
+#define EPHY_TYPE_ENCODING_DIALOG (ephy_encoding_dialog_get_type ())
+G_DECLARE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, EPHY, ENCODING_DIALOG, GtkDialog);
 
 EphyEncodingDialog	*ephy_encoding_dialog_new	(EphyWindow *window);
 
 G_END_DECLS
 
-#endif
+#endif /* EPHY_ENCODING_DIALOG_H */
