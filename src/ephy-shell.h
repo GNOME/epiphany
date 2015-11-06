@@ -136,8 +136,6 @@ GObject         *ephy_shell_get_prefs_dialog             (EphyShell *shell);
 
 guint           ephy_shell_get_n_windows                (EphyShell *shell);
 
-EphyWindow     *ephy_shell_get_main_window              (EphyShell *shell);
-
 gboolean        ephy_shell_close_all_windows            (EphyShell *shell);
 
 void            ephy_shell_open_uris                    (EphyShell *shell,

@@ -876,42 +876,6 @@ ephy_shell_get_n_windows (EphyShell *shell)
   return g_list_length (list);
 }
 
-EphyWindow*
-ephy_shell_get_main_window (EphyShell *shell)
-{
-  EphyWindow *window = NULL;
-  GList *windows;
-  GList *iter;
-
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-
-  /* Select the window with most tabs in the current workspace as the window to
-   * use for opening a new tab on, if that turns out to be the case.
-   */
-  windows = gtk_application_get_windows (GTK_APPLICATION (shell));
-
-  for (iter = windows; iter != NULL; iter = iter->next) {
-    EphyWindow *candidate = EPHY_WINDOW (iter->data);
-    GtkNotebook *cur_notebook;
-    GtkNotebook *cand_notebook;
-
-    if (!ephy_window_is_on_current_workspace (candidate))
-      continue;
-
-    if (!window) {
-      window = candidate;
-      continue;
-    }
-
-    cur_notebook = GTK_NOTEBOOK (ephy_window_get_notebook (window));
-    cand_notebook =  GTK_NOTEBOOK (ephy_window_get_notebook (candidate));
-    if (gtk_notebook_get_n_pages (cand_notebook) > gtk_notebook_get_n_pages (cur_notebook))
-      window = candidate;
-  }
-
-  return window;
-}
-
 gboolean
 ephy_shell_close_all_windows (EphyShell *shell)
 {
@@ -978,7 +942,7 @@ open_uris_data_new (EphyShell *shell,
     data->window = ephy_window_new ();
   } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {
     data->flags |= EPHY_NEW_TAB_JUMP;
-    data->window = ephy_shell_get_main_window (shell);
+    data->window = gtk_application_get_active_window (GTK_APPLICATION (shell));
     data->reuse_empty_tab = TRUE;
   } else if (!have_uris) {
     data->window = ephy_window_new ();
