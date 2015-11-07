@@ -34,17 +34,12 @@ enum {
 
 struct _EphyDownloadsManager
 {
-  GObject parent;
+  GObject parent_instance;
 
   GList *downloads;
 
   guint inhibitors;
   guint inhibitor_cookie;
-};
-
-struct _EphyDownloadsManagerClass
-{
-  GObjectClass parent_class;
 };
 
 static guint signals[LAST_SIGNAL];

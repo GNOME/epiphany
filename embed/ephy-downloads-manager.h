@@ -25,17 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_DOWNLOADS_MANAGER         (ephy_downloads_manager_get_type ())
-#define EPHY_DOWNLOADS_MANAGER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_DOWNLOADS_MANAGER, EphyDownloadsManager))
-#define EPHY_DOWNLOADS_MANAGER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_DOWNLOADS_MANAGER, EphyDownloadsManagerClass))
-#define EPHY_IS_DOWNLOADS_MANAGER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_DOWNLOADS_MANAGER))
-#define EPHY_IS_DOWNLOADS_MANAGER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_DOWNLOADS_MANAGER))
-#define EPHY_DOWNLOADS_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_DOWNLOADS_MANAGER, EphyDownloadsManagerClass))
+#define EPHY_TYPE_DOWNLOADS_MANAGER (ephy_downloads_manager_get_type ())
 
-typedef struct _EphyDownloadsManagerClass   EphyDownloadsManagerClass;
-typedef struct _EphyDownloadsManager        EphyDownloadsManager;
-
-GType    ephy_downloads_manager_get_type             (void);
+G_DECLARE_FINAL_TYPE (EphyDownloadsManager, ephy_downloads_manager, EPHY, DOWNLOADS_MANAGER, GObject)
 
 void     ephy_downloads_manager_add_download           (EphyDownloadsManager *manager,
                                                         EphyDownload         *download);
