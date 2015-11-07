@@ -34,28 +34,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_DOWNLOAD              ephy_download_get_type()
-#define EPHY_DOWNLOAD(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_DOWNLOAD, EphyDownload))
-#define EPHY_DOWNLOAD_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_DOWNLOAD, EphyDownloadClass))
-#define EPHY_IS_DOWNLOAD(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_DOWNLOAD))
-#define EPHY_IS_DOWNLOAD_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_DOWNLOAD))
-#define EPHY_DOWNLOAD_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_DOWNLOAD, EphyDownloadClass))
+#define EPHY_TYPE_DOWNLOAD ephy_download_get_type ()
 
-typedef struct _EphyDownload EphyDownload;
-typedef struct _EphyDownloadClass EphyDownloadClass;
-typedef struct _EphyDownloadPrivate EphyDownloadPrivate;
-
-struct _EphyDownload
-{
-  GObject parent;
-
-  EphyDownloadPrivate *priv;
-};
-
-struct _EphyDownloadClass
-{
-  GObjectClass parent_class;
-};
+G_DECLARE_FINAL_TYPE (EphyDownload, ephy_download, EPHY, DOWNLOAD, GObject)
 
 typedef enum
 {
@@ -65,8 +46,6 @@ typedef enum
   EPHY_DOWNLOAD_ACTION_OPEN,
   EPHY_DOWNLOAD_ACTION_DO_NOTHING
 } EphyDownloadActionType;
-
-GType         ephy_download_get_type              (void) G_GNUC_CONST;
 
 EphyDownload *ephy_download_new                   (WebKitDownload *download);
 EphyDownload *ephy_download_new_for_uri           (const char     *uri);

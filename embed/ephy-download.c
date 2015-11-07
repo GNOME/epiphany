@@ -37,13 +37,10 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-G_DEFINE_TYPE (EphyDownload, ephy_download, G_TYPE_OBJECT)
-
-#define EPHY_DOWNLOAD_GET_PRIVATE(o) \
-  (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_DOWNLOAD, EphyDownloadPrivate))
-
-struct _EphyDownloadPrivate
+struct _EphyDownload
 {
+  GObject parent_instance;
+
   WebKitDownload *download;
 
   char *destination;
@@ -54,6 +51,8 @@ struct _EphyDownloadPrivate
   gboolean finished;
   GError *error;
 };
+
+G_DEFINE_TYPE (EphyDownload, ephy_download, G_TYPE_OBJECT)
 
 enum
 {
@@ -144,7 +143,7 @@ ephy_download_get_content_type (EphyDownload *download)
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
 
-  return download->priv->content_type;
+  return download->content_type;
 }
 
 /* Helper function to decide what EphyDownloadActionType should be the
@@ -289,7 +288,7 @@ set_destination_uri_for_suggested_filename (EphyDownload *download, const char *
   g_free (destination_filename);
 
   g_assert (destination_uri);
-  webkit_download_set_destination (download->priv->download, destination_uri);
+  webkit_download_set_destination (download->download, destination_uri);
   g_free (destination_uri);
 
   return TRUE;
@@ -310,7 +309,7 @@ ephy_download_set_destination_uri (EphyDownload *download,
   g_return_if_fail (EPHY_IS_DOWNLOAD (download));
   g_return_if_fail (destination != NULL);
 
-  webkit_download_set_destination (download->priv->download, destination);
+  webkit_download_set_destination (download->download, destination);
   g_object_notify (G_OBJECT (download), "destination");
 }
 
@@ -329,7 +328,7 @@ ephy_download_set_action (EphyDownload *download,
 {
   g_return_if_fail (EPHY_IS_DOWNLOAD (download));
 
-  download->priv->action = action;
+  download->action = action;
   g_object_notify (G_OBJECT (download), "action");
 }
 
@@ -346,7 +345,7 @@ ephy_download_get_webkit_download (EphyDownload *download)
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
 
-  return download->priv->download;
+  return download->download;
 }
 
 /**
@@ -362,7 +361,7 @@ ephy_download_get_destination_uri (EphyDownload *download)
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
 
-  return webkit_download_get_destination (download->priv->download);
+  return webkit_download_get_destination (download->download);
 }
 
 /**
@@ -381,7 +380,7 @@ ephy_download_get_action (EphyDownload *download)
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), EPHY_DOWNLOAD_ACTION_NONE);
 
-  return download->priv->action;
+  return download->action;
 }
 
 /**
@@ -398,7 +397,7 @@ ephy_download_get_start_time (EphyDownload *download)
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), 0);
 
-  return download->priv->start_time;
+  return download->start_time;
 }
 
 /**
@@ -412,7 +411,7 @@ ephy_download_cancel (EphyDownload *download)
 {
   g_return_if_fail (EPHY_IS_DOWNLOAD (download));
 
-  webkit_download_cancel (download->priv->download);
+  webkit_download_cancel (download->download);
 }
 
 gboolean
@@ -420,7 +419,7 @@ ephy_download_is_active (EphyDownload *download)
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), FALSE);
 
-  return !download->priv->finished;
+  return !download->finished;
 }
 
 gboolean
@@ -428,7 +427,7 @@ ephy_download_succeeded (EphyDownload *download)
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), FALSE);
 
-  return download->priv->finished && !download->priv->error;
+  return download->finished && !download->error;
 }
 
 gboolean
@@ -437,9 +436,9 @@ ephy_download_failed (EphyDownload *download,
 {
   g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), FALSE);
 
-  if (download->priv->finished && download->priv->error) {
+  if (download->finished && download->error) {
     if (error)
-      *error = download->priv->error;
+      *error = download->error;
     return TRUE;
   }
 
@@ -464,27 +463,24 @@ ephy_download_do_download_action (EphyDownload *download,
 {
     GFile *destination;
     const char *destination_uri;
-    EphyDownloadPrivate *priv;
     gboolean ret = FALSE;
 
-    priv = download->priv;
-
-    destination_uri = webkit_download_get_destination (priv->download);
+    destination_uri = webkit_download_get_destination (download->download);
     destination = g_file_new_for_uri (destination_uri);
 
-    switch ((action ? action : priv->action)) {
+    switch ((action ? action : download->action)) {
       case EPHY_DOWNLOAD_ACTION_AUTO:
         LOG ("ephy_download_do_download_action: auto");
         ret = ephy_download_do_download_action (download, decide_action_from_mime (download));
         break;
       case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
         LOG ("ephy_download_do_download_action: browse_to");
-        ret = ephy_file_browse_to (destination, priv->start_time);
+        ret = ephy_file_browse_to (destination, download->start_time);
         break;
       case EPHY_DOWNLOAD_ACTION_OPEN:
         LOG ("ephy_download_do_download_action: open");
         ret = ephy_embed_shell_launch_handler (ephy_embed_shell_get_default (), 
-                                               destination, NULL, priv->start_time);
+                                               destination, NULL, download->start_time);
         break;
       case EPHY_DOWNLOAD_ACTION_NONE:
         LOG ("ephy_download_do_download_action: none");
@@ -508,20 +504,17 @@ static void
 ephy_download_dispose (GObject *object)
 {
   EphyDownload *download = EPHY_DOWNLOAD (object);
-  EphyDownloadPrivate *priv;
 
   LOG ("EphyDownload disposed %p", object);
 
-  priv = download->priv;
-
-  if (priv->download) {
-    g_signal_handlers_disconnect_matched (priv->download, G_SIGNAL_MATCH_DATA, 0, 0, 0, 0, download);
-    g_object_unref (priv->download);
-    priv->download = NULL;
+  if (download->download) {
+    g_signal_handlers_disconnect_matched (download->download, G_SIGNAL_MATCH_DATA, 0, 0, 0, 0, download);
+    g_object_unref (download->download);
+    download->download = NULL;
   }
 
-  g_clear_error(&priv->error);
-  g_clear_pointer (&priv->content_type, g_free);
+  g_clear_error(&download->error);
+  g_clear_pointer (&download->content_type, g_free);
 
   G_OBJECT_CLASS (ephy_download_parent_class)->dispose (object);
 }
@@ -530,8 +523,6 @@ static void
 ephy_download_class_init (EphyDownloadClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  g_type_class_add_private (klass, sizeof (EphyDownloadPrivate));
 
   object_class->get_property = ephy_download_get_property;
   object_class->set_property = ephy_download_set_property;
@@ -658,15 +649,13 @@ ephy_download_class_init (EphyDownloadClass *klass)
 static void
 ephy_download_init (EphyDownload *download)
 {
-  download->priv = EPHY_DOWNLOAD_GET_PRIVATE (download);
-
   LOG ("EphyDownload initialising %p", download);
 
-  download->priv->download = NULL;
+  download->download = NULL;
 
-  download->priv->action = EPHY_DOWNLOAD_ACTION_NONE;
+  download->action = EPHY_DOWNLOAD_ACTION_NONE;
 
-  download->priv->start_time = gtk_get_current_event_time ();
+  download->start_time = gtk_get_current_event_time ();
 }
 
 static void
@@ -677,13 +666,13 @@ download_response_changed_cb (WebKitDownload *wk_download,
   WebKitURIResponse *response;
   const char *mime_type;
 
-  response = webkit_download_get_response (download->priv->download);
+  response = webkit_download_get_response (download->download);
   mime_type = webkit_uri_response_get_mime_type (response);
   if (!mime_type)
     return;
 
-  download->priv->content_type = g_content_type_from_mime_type (mime_type);
-  if (download->priv->content_type)
+  download->content_type = g_content_type_from_mime_type (mime_type);
+  if (download->content_type)
     g_object_notify (G_OBJECT (download), "content-type");
 
 }
@@ -711,9 +700,8 @@ download_created_destination_cb (WebKitDownload *wk_download,
 {
   char *filename;
   char *content_type;
-  EphyDownloadPrivate *priv = download->priv;
 
-  if (priv->content_type && !g_content_type_is_unknown (priv->content_type))
+  if (download->content_type && !g_content_type_is_unknown (download->content_type))
     return;
 
   /* The server didn't provide a valid content type, let's try to guess it from the
@@ -738,10 +726,10 @@ download_created_destination_cb (WebKitDownload *wk_download,
     return;
   }
 
-  if (!priv->content_type ||
-      (priv->content_type && !g_content_type_equals (priv->content_type, content_type))) {
-    g_free (priv->content_type);
-    priv->content_type = content_type;
+  if (!download->content_type ||
+      (download->content_type && !g_content_type_equals (download->content_type, content_type))) {
+    g_free (download->content_type);
+    download->content_type = content_type;
     g_object_notify (G_OBJECT (download), "content-type");
     return;
   }
@@ -753,18 +741,14 @@ static void
 download_finished_cb (WebKitDownload *wk_download,
                       EphyDownload *download)
 {
-  EphyDownloadPrivate *priv;
-
-  priv = download->priv;
-
-  download->priv->finished = TRUE;
+  download->finished = TRUE;
   g_signal_emit (download, signals[COMPLETED], 0);
 
   if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_AUTO_DOWNLOADS) &&
-      priv->action == EPHY_DOWNLOAD_ACTION_NONE)
+      download->action == EPHY_DOWNLOAD_ACTION_NONE)
     ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_AUTO);
   else
-    ephy_download_do_download_action (download, priv->action);
+    ephy_download_do_download_action (download, download->action);
 }
 
 static void
@@ -775,9 +759,9 @@ download_failed_cb (WebKitDownload *wk_download,
   g_signal_handlers_disconnect_by_func (wk_download, download_finished_cb, download);
 
   LOG ("error (%d - %d)! %s", error->code, 0, error->message);
-  download->priv->finished = TRUE;
-  download->priv->error = g_error_copy (error);
-  g_signal_emit (download, signals[ERROR], 0, download->priv->error);
+  download->finished = TRUE;
+  download->error = g_error_copy (error);
+  g_signal_emit (download, signals[ERROR], 0, download->error);
 }
 
 /**
@@ -813,7 +797,7 @@ ephy_download_new (WebKitDownload *download)
                     G_CALLBACK (download_failed_cb),
                     ephy_download);
 
-  ephy_download->priv->download = g_object_ref (download);
+  ephy_download->download = g_object_ref (download);
   g_object_set_data (G_OBJECT (download), "ephy-download-set", GINT_TO_POINTER (TRUE));
 
   return ephy_download;
