@@ -612,8 +612,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
                 G_OBJECT_CLASS_TYPE (object_class),
                 G_SIGNAL_RUN_LAST,
                 0,
-                NULL, NULL,
-                g_cclosure_marshal_generic,
+                NULL, NULL, NULL,
                 G_TYPE_NONE,
                 1,
                 G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
@@ -627,8 +626,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
                 G_OBJECT_CLASS_TYPE (object_class),
                 G_SIGNAL_RUN_LAST,
                 0,
-                NULL, NULL,
-                g_cclosure_marshal_VOID__VOID,
+                NULL, NULL, NULL,
                 G_TYPE_NONE,
                 0);
   /**
@@ -640,8 +638,7 @@ ephy_download_class_init (EphyDownloadClass *klass)
                 G_OBJECT_CLASS_TYPE (object_class),
                 G_SIGNAL_RUN_LAST,
                 0,
-                NULL, NULL,
-                g_cclosure_marshal_generic,
+                NULL, NULL, NULL,
                 G_TYPE_NONE,
                 1, G_TYPE_POINTER);
 }
