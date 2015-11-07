@@ -487,7 +487,7 @@ ephy_smaps_class_init (EphySMapsClass *smaps_class)
   g_type_class_add_private (smaps_class, sizeof (EphySMapsPrivate));
 }
 
-EphySMaps *ephy_smaps_new ()
+EphySMaps *ephy_smaps_new (void)
 {
   return EPHY_SMAPS (g_object_new (EPHY_TYPE_SMAPS, NULL));
 }

@@ -82,7 +82,7 @@ ask_for_nss_password (PK11SlotInfo *slot,
   return password;
 }
 
-gboolean ephy_nss_glue_init ()
+gboolean ephy_nss_glue_init (void)
 {
   char *config_dir, *modspec;
   SECStatus rv;
@@ -115,7 +115,7 @@ gboolean ephy_nss_glue_init ()
   return TRUE;
 }
 
-void ephy_nss_glue_close ()
+void ephy_nss_glue_close (void)
 {
   if (db_slot) {
     PK11_FreeSlot (db_slot);

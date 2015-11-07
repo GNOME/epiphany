@@ -28,7 +28,7 @@
 #define PROFILE_MIGRATION_FILE ".migrated"
 
 int
-ephy_profile_utils_get_migration_version ()
+ephy_profile_utils_get_migration_version (void)
 {
   char *migrated_file, *contents = NULL;
   gsize size;

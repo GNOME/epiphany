@@ -364,7 +364,7 @@ out:
  * Returns: (transfer-full): a #GList of #EphyWebApplication objects
  **/
 GList *
-ephy_web_application_get_application_list ()
+ephy_web_application_get_application_list (void)
 {
   GFileEnumerator *children = NULL;
   GFileInfo *info;

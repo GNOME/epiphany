@@ -192,7 +192,7 @@ ephy_history_url_list_free (GList *list)
 }
 
 EphyHistoryQuery *
-ephy_history_query_new ()
+ephy_history_query_new (void)
 {
   return (EphyHistoryQuery*) g_slice_alloc0 (sizeof (EphyHistoryQuery));
 }

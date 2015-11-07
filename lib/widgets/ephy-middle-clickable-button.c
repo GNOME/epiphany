@@ -62,7 +62,7 @@ ephy_middle_clickable_button_init (EphyMiddleClickableButton *class)
 }
 
 GtkWidget *
-ephy_middle_clickable_button_new ()
+ephy_middle_clickable_button_new (void)
 {
   return gtk_widget_new (EPHY_TYPE_MIDDLE_CLICKABLE_BUTTON, NULL);
 }

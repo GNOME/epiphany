@@ -64,7 +64,7 @@ set_error_from_string (const char* string, GError **error)
 }
 
 EphySQLiteConnection *
-ephy_sqlite_connection_new ()
+ephy_sqlite_connection_new (void)
 {
   return EPHY_SQLITE_CONNECTION (g_object_new (EPHY_TYPE_SQLITE_CONNECTION, NULL));
 }
