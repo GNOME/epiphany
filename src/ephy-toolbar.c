@@ -81,7 +81,7 @@ static void
 downloads_estimated_progress_cb (EphyDownloadsManager *manager,
                                  EphyToolbar *toolbar)
 {
-  gtk_widget_queue_draw (gtk_button_get_image (toolbar->priv->downloads_button));
+  gtk_widget_queue_draw (gtk_button_get_image (GTK_BUTTON (toolbar->priv->downloads_button)));
 }
 
 static void

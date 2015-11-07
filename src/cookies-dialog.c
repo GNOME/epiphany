@@ -105,8 +105,9 @@ cookie_remove (EphyCookiesDialog *dialog,
 static void
 forget (GSimpleAction     *action,
         GVariant          *parameter,
-        EphyCookiesDialog *dialog)
+        gpointer           user_data)
 {
+	EphyCookiesDialog *dialog = EPHY_COOKIES_DIALOG (user_data);
 	GList *llist, *rlist = NULL, *l, *r;
 	GtkTreeModel *model;
 	GtkTreePath *path;
@@ -200,10 +201,10 @@ static void
 update_selection_actions (GActionMap *action_map,
                           gboolean    has_selection)
 {
-	GSimpleAction *forget_action;
+	GAction *forget_action;
 
 	forget_action = g_action_map_lookup_action (action_map, "forget");
-	g_simple_action_set_enabled (forget_action, has_selection);
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (forget_action), has_selection);
 }
 
 static void
@@ -229,8 +230,10 @@ on_search_entry_changed (GtkSearchEntry    *entry,
 static void
 forget_all (GSimpleAction     *action,
             GVariant          *parameter,
-            EphyCookiesDialog *dialog)
+            gpointer           user_data)
 {
+	EphyCookiesDialog *dialog = EPHY_COOKIES_DIALOG (user_data);
+
 	webkit_cookie_manager_delete_all_cookies (dialog->cookie_manager);
 	reload_model (dialog);
 }
@@ -445,7 +448,7 @@ ephy_cookies_dialog_init (EphyCookiesDialog *dialog)
 	setup_page (dialog);
 
 	dialog->action_group = create_action_group (dialog);
-	gtk_widget_insert_action_group (dialog, "cookies", dialog->action_group);
+	gtk_widget_insert_action_group (GTK_WIDGET (dialog), "cookies", dialog->action_group);
 
 	update_selection_actions (G_ACTION_MAP (dialog->action_group), FALSE);
 }

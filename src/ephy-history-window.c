@@ -273,8 +273,10 @@ confirmation_dialog_construct (EphyHistoryWindow *self)
 static void
 forget_all (GSimpleAction     *action,
             GVariant          *parameter,
-            EphyHistoryWindow *self)
+            gpointer           user_data)
 {
+	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
+
 	if (self->priv->confirmation_dialog == NULL)
 	{
 		GtkWidget **confirmation_dialog;
@@ -369,11 +371,12 @@ delete_selected (EphyHistoryWindow *self)
 static void
 open_selection (GSimpleAction     *action,
                 GVariant          *parameter,
-                EphyHistoryWindow *self)
+                gpointer           user_data)
 {
+	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
+	EphyWindow *window;
 	GList *selection;
 	GList *l;
-	EphyWindow *window;
 
 	selection = get_selection (self);
 
@@ -393,8 +396,9 @@ open_selection (GSimpleAction     *action,
 static void
 copy_url (GSimpleAction     *action,
           GVariant          *parameter,
-          EphyHistoryWindow *self)
+          gpointer           user_data)
 {
+	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
 	GList *selection;
 
 	selection = get_selection (self);
@@ -411,8 +415,9 @@ copy_url (GSimpleAction     *action,
 static void
 bookmark (GSimpleAction     *action,
           GVariant          *parameter,
-          EphyHistoryWindow *self)
+          gpointer           user_data)
 {
+	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
 	GList *selection;
 
 	selection = get_selection (self);
@@ -432,8 +437,10 @@ bookmark (GSimpleAction     *action,
 static void
 forget (GSimpleAction     *action,
         GVariant          *parameter,
-        EphyHistoryWindow *self)
+        gpointer           user_data)
 {
+	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
+
 	delete_selected (self);
 }
 
@@ -456,17 +463,17 @@ static void
 update_popup_menu_actions (GActionGroup *action_group,
                            gboolean      only_one_selected_item)
 {
-	GSimpleAction *copy_url_action;
-	GSimpleAction *bookmark_action;
+	GAction *copy_url_action;
+	GAction *bookmark_action;
 	gboolean bookmarks_locked;
 
-	copy_url_action = g_action_map_lookup_action (action_group, "copy-url");
-	bookmark_action = g_action_map_lookup_action (action_group, "bookmark");
+	copy_url_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "copy-url");
+	bookmark_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "bookmark");
 	bookmarks_locked = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 	                                           EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
 
-	g_simple_action_set_enabled (copy_url_action, only_one_selected_item);
-	g_simple_action_set_enabled (bookmark_action, (only_one_selected_item && !bookmarks_locked));
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (copy_url_action), only_one_selected_item);
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (bookmark_action), (only_one_selected_item && !bookmarks_locked));
 }
 
 static gboolean
@@ -476,17 +483,17 @@ on_treeview_button_press_event (GtkWidget         *widget,
 {
 	if (event->button == 3) {
 		int n;
-		GtkMenu *menu;
+		GtkWidget *menu;
 
 		n = gtk_tree_selection_count_selected_rows (self->priv->tree_selection);
 		if (n <= 0)
 			return FALSE;
 
-		update_popup_menu_actions (G_ACTION_MAP (self->priv->action_group), (n == 1));
+		update_popup_menu_actions (self->priv->action_group, (n == 1));
 
 		menu = gtk_menu_new_from_model (self->priv->treeview_popup_menu_model);
-		gtk_menu_attach_to_widget (menu, self, NULL);
-		gtk_menu_popup (menu, NULL, NULL, NULL, NULL, event->button, event->time);
+		gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (self), NULL);
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 
@@ -531,21 +538,21 @@ static void
 update_selection_actions (GActionGroup *action_group,
                           gboolean      has_selection)
 {
-	GSimpleAction *forget_action;
-	GSimpleAction *open_selection_action;
+	GAction *forget_action;
+	GAction *open_selection_action;
 
-	forget_action = g_action_map_lookup_action (action_group, "forget");
-	open_selection_action = g_action_map_lookup_action (action_group, "open-selection");
+	forget_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "forget");
+	open_selection_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-selection");
 
-	g_simple_action_set_enabled (forget_action, has_selection);
-	g_simple_action_set_enabled (open_selection_action, has_selection);
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (forget_action), has_selection);
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (open_selection_action), has_selection);
 }
 
 static void
 on_treeview_selection_changed (GtkTreeSelection *selection,
 			       EphyHistoryWindow *self)
 {
-	update_selection_actions (G_ACTION_MAP (self->priv->action_group),
+	update_selection_actions (self->priv->action_group,
 	                          gtk_tree_selection_count_selected_rows (selection) > 0);
 }
 
@@ -840,7 +847,7 @@ ephy_history_window_init (EphyHistoryWindow *self)
 						 NULL);
 
 	self->priv->action_group = create_action_group (self);
-	gtk_widget_insert_action_group (self, "history", self->priv->action_group);
+	gtk_widget_insert_action_group (GTK_WIDGET (self), "history", self->priv->action_group);
 
-	update_selection_actions (G_ACTION_MAP (self->priv->action_group), FALSE);
+	update_selection_actions (self->priv->action_group, FALSE);
 }

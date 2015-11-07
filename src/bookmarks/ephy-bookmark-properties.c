@@ -349,7 +349,7 @@ ephy_bookmark_properties_constructor (GType                  type,
 	g_signal_connect (properties->topics_scrolled_window, "map", G_CALLBACK (list_mapped_cb), properties);
 	g_signal_connect (properties->topics_scrolled_window, "unmap", G_CALLBACK (list_unmapped_cb), properties);
 
-	ephy_initial_state_add_expander (properties->topics_expander, "bookmark_properties_list", FALSE);
+	ephy_initial_state_add_expander (GTK_WIDGET (properties->topics_expander), "bookmark_properties_list", FALSE);
 
 	if (properties->creating)
 	{

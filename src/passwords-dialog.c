@@ -115,8 +115,9 @@ secret_remove (EphyPasswordsDialog *dialog,
 static void
 forget (GSimpleAction       *action,
         GVariant            *parameter,
-        EphyPasswordsDialog *dialog)
+        gpointer             user_data)
 {
+	EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
 	GList *llist, *rlist = NULL, *l, *r;
 	GtkTreeModel *model;
 	GtkTreePath *path;
@@ -210,11 +211,12 @@ forget (GSimpleAction       *action,
 static void
 show_passwords (GSimpleAction       *action,
                 GVariant            *parameter,
-                EphyPasswordsDialog *dialog)
+                gpointer             user_data)
 {
+	EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
 	gboolean active;
 
-	active = gtk_toggle_button_get_active (dialog->show_passwords_button);
+	active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->show_passwords_button));
 
 	gtk_tree_view_column_set_attributes (GTK_TREE_VIEW_COLUMN (dialog->password_column),
 					     GTK_CELL_RENDERER (dialog->password_renderer),
@@ -227,10 +229,10 @@ static void
 update_selection_actions (GActionMap *action_map,
                           gboolean    has_selection)
 {
-	GSimpleAction *forget_action;
+	GAction *forget_action;
 
 	forget_action = g_action_map_lookup_action (action_map, "forget");
-	g_simple_action_set_enabled (forget_action, has_selection);
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (forget_action), has_selection);
 }
 
 static void
@@ -275,8 +277,9 @@ get_selected_item (EphyPasswordsDialog *dialog,
 static void
 copy_password (GSimpleAction       *action,
                GVariant            *parameter,
-               EphyPasswordsDialog *dialog)
+               gpointer             user_data)
 {
+	EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
 	char *password;
 
 	password = get_selected_item (dialog, COL_PASSWORDS_PASSWORD);
@@ -291,8 +294,9 @@ copy_password (GSimpleAction       *action,
 static void
 copy_username (GSimpleAction       *action,
                GVariant            *parameter,
-               EphyPasswordsDialog *dialog)
+               gpointer             user_data)
 {
+	EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
 	char *username;
 
 	username = get_selected_item (dialog, COL_PASSWORDS_USER);
@@ -308,14 +312,14 @@ static void
 update_popup_menu_actions (GActionGroup *action_group,
                            gboolean      only_one_selected_item)
 {
-	GSimpleAction *copy_password_action;
-	GSimpleAction *copy_username_action;
+	GAction *copy_password_action;
+	GAction *copy_username_action;
 
-	copy_password_action = g_action_map_lookup_action (action_group, "copy-password");
-	copy_username_action = g_action_map_lookup_action (action_group, "copy-username");
+	copy_password_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "copy-password");
+	copy_username_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "copy-username");
 
-	g_simple_action_set_enabled (copy_password_action, only_one_selected_item);
-	g_simple_action_set_enabled (copy_username_action, only_one_selected_item);
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (copy_password_action), only_one_selected_item);
+	g_simple_action_set_enabled (G_SIMPLE_ACTION (copy_username_action), only_one_selected_item);
 }
 
 static gboolean
@@ -325,17 +329,17 @@ on_passwords_treeview_button_press_event (GtkWidget           *widget,
 {
 	if (event->button == 3) {
 		int n;
-		GtkMenu *menu;
+		GtkWidget *menu;
 
 		n = gtk_tree_selection_count_selected_rows (dialog->tree_selection);
 		if (n == 0)
 			return FALSE;
 
-		update_popup_menu_actions (G_ACTION_MAP (dialog->action_group), (n == 1));
+		update_popup_menu_actions (dialog->action_group, (n == 1));
 
 		menu = gtk_menu_new_from_model (dialog->treeview_popup_menu_model);
-		gtk_menu_attach_to_widget (menu, dialog, NULL);
-		gtk_menu_popup (menu, NULL, NULL, NULL, NULL, event->button, event->time);
+		gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (dialog), NULL);
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 
@@ -380,8 +384,9 @@ delete_all_passwords_ready_cb (GObject             *source_object,
 static void
 forget_all (GSimpleAction       *action,
             GVariant            *parameter,
-            EphyPasswordsDialog *dialog)
+            gpointer             user_data)
 {
+	EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
 	GHashTable *attributes;
 
 	attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
@@ -529,7 +534,7 @@ ephy_passwords_dialog_init (EphyPasswordsDialog *dialog)
 			    dialog);
 
 	dialog->action_group = create_action_group (dialog);
-	gtk_widget_insert_action_group (dialog, "passwords", dialog->action_group);
+	gtk_widget_insert_action_group (GTK_WIDGET (dialog), "passwords", dialog->action_group);
 
 	update_selection_actions (G_ACTION_MAP (dialog->action_group), FALSE);
 }
