@@ -765,7 +765,6 @@ static void
 ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, const char *fileuri)
 {
   GFile *file;
-  GFileInputStream *stream;
 
   file = g_file_new_for_uri (fileuri);
   g_file_read_async (file, G_PRIORITY_DEFAULT_IDLE, NULL, (GAsyncReadyCallback)file_read_cb, tester);

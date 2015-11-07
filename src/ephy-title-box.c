@@ -139,7 +139,6 @@ ephy_title_box_view_focus_in_cb (GtkWidget     *widget,
                                  gpointer       user_data)
 {
   EphyTitleBox        *title_box = EPHY_TITLE_BOX (user_data);
-  EphyTitleBoxPrivate *priv = ephy_title_box_get_instance_private (title_box);
 
   LOG ("focus-in-event web_view %p event %p title-box %p", widget, event, title_box);
 

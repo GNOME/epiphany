@@ -360,7 +360,6 @@ ephy_download_widget_constructed (GObject *object)
 {
   EphyDownloadWidget *widget = EPHY_DOWNLOAD_WIDGET (object);
   EphyDownloadWidgetPrivate *priv = widget->priv;
-  GtkWidget *title;
   WebKitDownload *download;
   const char *action_icon_name = NULL;
   GError *error = NULL;

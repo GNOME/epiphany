@@ -260,7 +260,6 @@ download_started_cb (WebKitWebContext *web_context,
                      WebKitDownload *download,
                      EphyShell *shell)
 {
-  WebKitWebView *web_view;
   EphyDownload *ephy_download;
   gboolean ephy_download_set;
 
