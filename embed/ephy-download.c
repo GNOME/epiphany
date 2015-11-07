@@ -61,15 +61,17 @@ enum
   PROP_DESTINATION,
   PROP_ACTION,
   PROP_START_TIME,
-  PROP_CONTENT_TYPE
+  PROP_CONTENT_TYPE,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 enum
 {
   FILENAME_SUGGESTED,
   ERROR,
   COMPLETED,
-
   LAST_SIGNAL
 };
 
@@ -310,7 +312,7 @@ ephy_download_set_destination_uri (EphyDownload *download,
   g_return_if_fail (destination != NULL);
 
   webkit_download_set_destination (download->download, destination);
-  g_object_notify (G_OBJECT (download), "destination");
+  g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_DESTINATION]);
 }
 
 /**
@@ -329,7 +331,7 @@ ephy_download_set_action (EphyDownload *download,
   g_return_if_fail (EPHY_IS_DOWNLOAD (download));
 
   download->action = action;
-  g_object_notify (G_OBJECT (download), "action");
+  g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_ACTION]);
 }
 
 /**
@@ -533,30 +535,26 @@ ephy_download_class_init (EphyDownloadClass *klass)
    *
    * Internal WebKitDownload.
    */
-  g_object_class_install_property (object_class, PROP_DOWNLOAD,
-                                   g_param_spec_object ("download",
-                                                        "Internal WebKitDownload",
-                                                        "The WebKitDownload used internally by EphyDownload",
-                                                        WEBKIT_TYPE_DOWNLOAD,
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_STATIC_NAME |
-                                                        G_PARAM_STATIC_NICK |
-                                                        G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_DOWNLOAD] =
+    g_param_spec_object ("download",
+                        "Internal WebKitDownload",
+                        "The WebKitDownload used internally by EphyDownload",
+                        WEBKIT_TYPE_DOWNLOAD,
+                        G_PARAM_READABLE |
+                        G_PARAM_STATIC_STRINGS);
 
   /**
    * EphyDownload::destination:
    *
    * The destination URI where to store the download.
    */
-  g_object_class_install_property (object_class, PROP_DESTINATION,
-                                   g_param_spec_string ("destination",
-                                                        "Destination",
-                                                        "Destination file URI",
-                                                        NULL,
-                                                        G_PARAM_READWRITE |
-                                                        G_PARAM_STATIC_NAME |
-                                                        G_PARAM_STATIC_NICK |
-                                                        G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_DESTINATION] =
+    g_param_spec_string ("destination",
+                        "Destination",
+                        "Destination file URI",
+                        NULL,
+                        G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS);
 
   /**
    * EphyDownload::action:
@@ -565,16 +563,14 @@ ephy_download_class_init (EphyDownloadClass *klass)
    * open files" is enabled, or when ephy_download_do_download_action () is
    * called.
    */
-  g_object_class_install_property (object_class, PROP_ACTION,
-                                   g_param_spec_enum ("action",
-                                                      "Download action",
-                                                      "Action to take when download finishes",
-                                                      EPHY_TYPE_DOWNLOAD_ACTION_TYPE,
-                                                      EPHY_DOWNLOAD_ACTION_NONE,
-                                                      G_PARAM_READABLE |
-                                                      G_PARAM_STATIC_NAME |
-                                                      G_PARAM_STATIC_NICK |
-                                                      G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_ACTION] =
+    g_param_spec_enum ("action",
+                      "Download action",
+                      "Action to take when download finishes",
+                      EPHY_TYPE_DOWNLOAD_ACTION_TYPE,
+                      EPHY_DOWNLOAD_ACTION_NONE,
+                      G_PARAM_READABLE |
+                      G_PARAM_STATIC_STRINGS);
 
   /**
    * EphyDownload::start-time:
@@ -582,25 +578,23 @@ ephy_download_class_init (EphyDownloadClass *klass)
    * User time when the download started, useful for launching applications
    * aware of focus stealing.
    */
-  g_object_class_install_property (object_class, PROP_START_TIME,
-                                   g_param_spec_uint ("start-time",
-                                                      "Event start time",
-                                                      "Time for focus-stealing prevention.",
-                                                      0, G_MAXUINT32, 0,
-                                                      G_PARAM_READABLE |
-                                                      G_PARAM_STATIC_NAME |
-                                                      G_PARAM_STATIC_NICK |
-                                                      G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_START_TIME] =
+    g_param_spec_uint ("start-time",
+                      "Event start time",
+                      "Time for focus-stealing prevention.",
+                      0, G_MAXUINT32, 0,
+                      G_PARAM_READABLE |
+                      G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (object_class, PROP_CONTENT_TYPE,
-                                   g_param_spec_string ("content-type",
-                                                        "Content Type",
-                                                        "The download content type",
-                                                        NULL,
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_STATIC_NAME |
-                                                        G_PARAM_STATIC_NICK |
-                                                        G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_CONTENT_TYPE] =
+    g_param_spec_string ("content-type",
+                        "Content Type",
+                        "The download content type",
+                        NULL,
+                        G_PARAM_READABLE |
+                        G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   /**
    * EphyDownload::filename-suggested:
@@ -670,8 +664,7 @@ download_response_changed_cb (WebKitDownload *wk_download,
 
   download->content_type = g_content_type_from_mime_type (mime_type);
   if (download->content_type)
-    g_object_notify (G_OBJECT (download), "content-type");
-
+    g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_CONTENT_TYPE]);
 }
 
 static gboolean
@@ -727,7 +720,7 @@ download_created_destination_cb (WebKitDownload *wk_download,
       (download->content_type && !g_content_type_equals (download->content_type, content_type))) {
     g_free (download->content_type);
     download->content_type = content_type;
-    g_object_notify (G_OBJECT (download), "content-type");
+    g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_CONTENT_TYPE]);
     return;
   }
 
