@@ -134,10 +134,6 @@ AC_CHECK_FUNCS([mkdtemp])
 # for backtrace()
 AC_CHECK_HEADERS([execinfo.h])
 AC_SEARCH_LIBS([backtrace], [c execinfo])
-AC_C_INLINE
-AC_FUNC_MKTIME
-AC_FUNC_STRTOD
-AC_TYPE_SIZE_T
 
 # ***************
 # Multimedia keys
