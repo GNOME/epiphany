@@ -85,11 +85,7 @@ ephy_file_tmp_dir (void)
 					    "-XXXXXX", NULL);
 		full_name = g_build_filename (g_get_tmp_dir (), partial_name,
 					      NULL);
-#ifdef HAVE_MKDTEMP
 		tmp_dir = mkdtemp (full_name);
-#else
-#error no mkdtemp implementation
-#endif
 		g_free (partial_name);
 
 		if (tmp_dir == NULL)

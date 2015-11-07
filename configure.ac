@@ -129,8 +129,6 @@ AC_SUBST([WEB_EXTENSION_LIBS])
 # Portability checks
 # ******************
 
-AC_CHECK_FUNCS([mkdtemp])
-
 # for backtrace()
 AC_CHECK_HEADERS([execinfo.h])
 AC_SEARCH_LIBS([backtrace], [c execinfo])
