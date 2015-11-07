@@ -282,8 +282,6 @@ parse_and_decrypt_signons (const char *signons,
        * exists in version 2 or above
        */
       if (version >= 2) {
-        if (begin < end)
-          /* Skip it */ ;
         begin++;
 
         /* Version 3 has an extra line for further use */
