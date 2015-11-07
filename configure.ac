@@ -129,10 +129,10 @@ AC_SUBST([WEB_EXTENSION_LIBS])
 # Portability checks
 # ******************
 
-AC_CHECK_FUNCS([localtime_r memchr memmove memset mkdir mkdtemp realpath sqrt strchr strcspn strdup strerror strrchr strtol strtoul strstr])
+AC_CHECK_FUNCS([mkdtemp])
 
 # for backtrace()
-AC_CHECK_HEADERS([execinfo.h fcntl.h])
+AC_CHECK_HEADERS([execinfo.h])
 AC_SEARCH_LIBS([backtrace], [c execinfo])
 AC_C_INLINE
 AC_FUNC_MKTIME
