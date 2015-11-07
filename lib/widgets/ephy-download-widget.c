@@ -131,17 +131,6 @@ get_remaining_time (guint64 content_length,
 }
 
 static void
-download_clicked_cb (GtkButton *button,
-                     EphyDownloadWidget *widget)
-{
-  EphyDownload *download;
-
-  download = widget->priv->download;
-  if (ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_AUTO))
-    gtk_widget_destroy (GTK_WIDGET (widget));
-}
-
-static void
 update_download_icon (EphyDownloadWidget *widget)
 {
   GIcon *icon;

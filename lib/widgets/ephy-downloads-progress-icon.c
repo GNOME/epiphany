@@ -37,12 +37,6 @@ struct _EphyDownloadsProgressIconClass
 
 G_DEFINE_TYPE (EphyDownloadsProgressIcon, ephy_downloads_progress_icon, GTK_TYPE_DRAWING_AREA)
 
-static void
-download_added_cb (EphyDownloadsProgressIcon *progress_icon,
-                   EphyDownload         *download)
-{
-}
-
 static gboolean
 ephy_downloads_progress_icon_draw (GtkWidget *widget,
                                    cairo_t   *cr)

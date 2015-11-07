@@ -95,11 +95,6 @@ static const GtkTargetEntry url_drag_types [] =
 
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);
 
-static void textcell_data_func (GtkCellLayout *cell_layout,
-				GtkCellRenderer *cell,
-				GtkTreeModel *tree_model,
-				GtkTreeIter *iter,
-				gpointer data);
 static void extracell_data_func (GtkCellLayout *cell_layout,
 				 GtkCellRenderer *cell,
 				 GtkTreeModel *tree_model,

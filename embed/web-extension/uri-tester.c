@@ -271,6 +271,9 @@ uri_tester_load_filters (UriTester *tester)
   uri_tester_set_filters (tester, g_slist_reverse(list));
 }
 
+#if 0
+TODO: Use this to create a filters dialog, or something.
+
 static void
 uri_tester_save_filters (UriTester *tester)
 {
@@ -294,6 +297,7 @@ uri_tester_save_filters (UriTester *tester)
     }
   g_free (filepath);
 }
+#endif
 
 static inline int
 uri_tester_check_rule (UriTester  *tester,
