@@ -43,6 +43,8 @@ ephy_downloads_progress_icon_draw (GtkWidget *widget,
 {
   gint width, height;
   EphyDownloadsManager *manager;
+  GtkStyleContext *style_context;
+  GdkRGBA color;
   gdouble progress;
 
   width = gtk_widget_get_allocated_width (widget);
@@ -51,7 +53,11 @@ ephy_downloads_progress_icon_draw (GtkWidget *widget,
   manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
   progress = ephy_downloads_manager_get_estimated_progress (manager);
 
-  cairo_set_source_rgba (cr, 0, 0, 0, progress == 1 ? 1 : 0.2);
+  style_context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_color (style_context, gtk_widget_get_state_flags (widget), &color);
+  color.alpha *= progress == 1 ? 1 : 0.2;
+
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_move_to (cr, width / 4., 0);
   cairo_line_to (cr, width - (width / 4.), 0);
   cairo_line_to (cr, width - (width / 4.), height / 2.);
@@ -65,7 +71,8 @@ ephy_downloads_progress_icon_draw (GtkWidget *widget,
   if (progress > 0 && progress < 1) {
     cairo_clip (cr);
 
-    cairo_set_source_rgba (cr, 0, 0, 0, 0.7);
+    color.alpha *= 0.7;
+    gdk_cairo_set_source_rgba (cr, &color);
     cairo_rectangle (cr, 0, 0, width, height * progress);
     cairo_fill (cr);
   }
