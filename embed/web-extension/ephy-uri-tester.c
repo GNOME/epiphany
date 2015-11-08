@@ -883,14 +883,14 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
     g_param_spec_pointer ("filters",
                           "filters",
                           "filters",
-                          G_PARAM_WRITABLE);
+                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS );
 
   obj_properties[PROP_BASE_DATA_DIR] =
     g_param_spec_string ("base-data-dir",
                          "Base data dir",
                          "The base dir where to create the adblock data dir",
                          NULL,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY);
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
