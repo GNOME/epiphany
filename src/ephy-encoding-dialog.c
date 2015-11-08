@@ -37,8 +37,6 @@
 #include <gtk/gtk.h>
 #include <webkit2/webkit2.h>
 
-#define EPHY_ENCODING_DIALOG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ENCODING_DIALOG, EphyEncodingDialogPrivate))
-
 struct _EphyEncodingDialogPrivate
 {
 	EphyEncodings *encodings;
@@ -47,6 +45,11 @@ struct _EphyEncodingDialogPrivate
 	GtkWidget *enc_view;
 	gboolean update_tag;
 	char *selected_encoding;
+
+	/* from the UI file */
+	GtkRadioButton    *automatic_button;
+	GtkRadioButton    *manual_button;
+	GtkScrolledWindow *scrolled_window;
 };
 
 enum {
@@ -54,8 +57,14 @@ enum {
 	COL_ENCODING,
 	NUM_COLS
 };
-	
-G_DEFINE_TYPE (EphyEncodingDialog, ephy_encoding_dialog, EPHY_TYPE_EMBED_DIALOG)
+
+enum
+{
+	PROP_0,
+	PROP_PARENT_WINDOW
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (EphyEncodingDialog, ephy_encoding_dialog, GTK_TYPE_DIALOG)
 
 static void
 select_encoding_row (GtkTreeView *view, EphyEncoding *encoding)
@@ -97,11 +106,9 @@ select_encoding_row (GtkTreeView *view, EphyEncoding *encoding)
 static void
 sync_encoding_against_embed (EphyEncodingDialog *dialog)
 {
-	EphyEmbed *embed;
-        GtkTreeSelection *selection;
-        GtkTreeModel *model;
-        GList *rows;
-	GtkWidget *button;
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GList *rows;
 	const char *encoding;
 	gboolean is_automatic = FALSE;
 	WebKitWebView *view;
@@ -109,10 +116,8 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 
 	dialog->priv->update_tag = TRUE;
 
-	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
-	g_return_if_fail (EPHY_IS_EMBED (embed));
-
-	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	g_return_if_fail (EPHY_IS_EMBED (dialog->priv->embed));
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->priv->embed);
 
 	encoding = webkit_web_view_get_custom_charset (view);
 	if (encoding == NULL) goto out;
@@ -140,13 +145,10 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 		g_list_free (rows);
 	}
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					  "automatic_button");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), is_automatic);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->automatic_button), is_automatic);
 out:
 	dialog->priv->update_tag = FALSE;
 }
-
 
 static void
 embed_net_stop_cb (EphyWebView *view,
@@ -158,74 +160,59 @@ embed_net_stop_cb (EphyWebView *view,
 }
 
 static void
-sync_embed_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
+ephy_encoding_dialog_detach_embed (EphyEncodingDialog *dialog)
+{
+	EphyEmbed **embedptr;
+
+	g_signal_handlers_disconnect_by_func (ephy_embed_get_web_view (dialog->priv->embed),
+	                                      G_CALLBACK (embed_net_stop_cb),
+	                                      dialog);
+
+	embedptr = &dialog->priv->embed;
+	g_object_remove_weak_pointer (G_OBJECT (dialog->priv->embed),
+	                              (gpointer *) embedptr);
+	dialog->priv->embed = NULL;
+}
+
+static void
+ephy_encoding_dialog_attach_embed (EphyEncodingDialog *dialog)
 {
 	EphyEmbed *embed;
-	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
+	EphyEmbed **embedptr;
 
-	if (dialog->priv->embed != NULL)
-	{
-		g_signal_handlers_disconnect_by_func (dialog->priv->embed,
-						      G_CALLBACK (embed_net_stop_cb),
-						      dialog);
-	}
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (dialog->priv->window));
+	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	g_signal_connect (G_OBJECT (ephy_embed_get_web_view (embed)), "load-changed",
 			  G_CALLBACK (embed_net_stop_cb), dialog);
 
 	dialog->priv->embed = embed;
 
+	embedptr = &dialog->priv->embed;
+	g_object_add_weak_pointer (G_OBJECT (dialog->priv->embed),
+	                           (gpointer *) embedptr);
+
 	sync_encoding_against_embed (dialog);
 }
 
 static void
-sync_active_tab (EphyWindow *window, GParamSpec *pspec, EphyEncodingDialog *dialog)
+ephy_encoding_dialog_sync_embed (EphyWindow *window, GParamSpec *pspec, EphyEncodingDialog *dialog)
 {
-	EphyEmbed *embed;
-
-	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (dialog->priv->window));
-
-	g_object_set (G_OBJECT (dialog), "embed", embed, NULL);
-}
-
-static void
-sync_parent_window_cb (EphyEncodingDialog *dialog, GParamSpec *pspec, gpointer dummy)
-{
-	EphyWindow *window;
-	GValue value = { 0, };
-
-	g_return_if_fail (dialog->priv->window == NULL);
-
-	g_value_init (&value, GTK_TYPE_WIDGET);
-	g_object_get_property (G_OBJECT (dialog), "parent-window", &value);
-	window = EPHY_WINDOW (g_value_get_object (&value));
-	g_value_unset (&value);
-
-	g_return_if_fail (EPHY_IS_WINDOW (window));
-
-	dialog->priv->window = window;
-
-	sync_active_tab (window, NULL, dialog);
-	g_signal_connect (G_OBJECT (window), "notify::active-child",
-			  G_CALLBACK (sync_active_tab), dialog);
+	ephy_encoding_dialog_detach_embed (dialog);
+	ephy_encoding_dialog_attach_embed (dialog);
 }
 
 static void
 activate_choice (EphyEncodingDialog *dialog)
 {
-	EphyEmbed *embed;
-	GtkWidget *button;
 	gboolean is_automatic;
 	WebKitWebView *view;
 
-	embed = ephy_embed_dialog_get_embed (EPHY_EMBED_DIALOG (dialog));
-	g_return_if_fail (EPHY_IS_EMBED (embed));
+	g_return_if_fail (EPHY_IS_EMBED (dialog->priv->embed));
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					  "automatic_button");
-	is_automatic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+	is_automatic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->automatic_button));
 
-	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->priv->embed);
 
 	if (is_automatic)
 	{
@@ -248,14 +235,13 @@ ephy_encoding_dialog_response_cb (GtkWidget *widget,
 				  int response,
 				  EphyEncodingDialog *dialog)
 {
-	g_object_unref (dialog);
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
 view_row_selected_cb (GtkTreeSelection *selection,
 		      EphyEncodingDialog *dialog)
 {
-	GtkWidget *button;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	EphyEncodingDialogPrivate *priv = dialog->priv;
@@ -275,8 +261,7 @@ view_row_selected_cb (GtkTreeSelection *selection,
 	if (dialog->priv->update_tag) 
 		return;
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), "manual_button");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->manual_button), TRUE);
 
 	activate_choice (dialog);
 }
@@ -287,7 +272,6 @@ view_row_activated_cb (GtkTreeView *treeview,
 		       GtkTreeViewColumn *column,
 		       EphyEncodingDialog *dialog)
 {
-	GtkWidget *button;
 	GtkTreeIter iter;
 	char *encoding;
 	GtkTreeModel *model;
@@ -306,8 +290,7 @@ view_row_activated_cb (GtkTreeView *treeview,
 	if (dialog->priv->update_tag) 
 		return;
 
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), "manual_button");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->manual_button), TRUE);
 
 	activate_choice (dialog);
 
@@ -327,28 +310,19 @@ automatic_toggled_cb (GtkToggleButton *button, EphyEncodingDialog *dialog)
 static void
 ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 {
-	GtkWidget *treeview, *scroller, *button, *window, *child;
+	GtkWidget *treeview;
 	GtkTreeSelection *selection;
 	GList *encodings, *p;
 	GtkListStore *store;
 	GtkTreeIter iter;
 	GtkCellRenderer *renderer;
 
-	dialog->priv = EPHY_ENCODING_DIALOG_GET_PRIVATE (dialog);
+	dialog->priv = ephy_encoding_dialog_get_instance_private (dialog);
+	gtk_widget_init_template (GTK_WIDGET (dialog));
 
 	dialog->priv->encodings =
 		EPHY_ENCODINGS (ephy_embed_shell_get_encodings
 				(EPHY_EMBED_SHELL (ephy_shell_get_default ())));
-
-	ephy_dialog_construct (EPHY_DIALOG (dialog),
-			       "/org/gnome/epiphany/encoding-dialog.ui",
-			       "encoding_dialog",
-			       NULL);
-
-	window = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					  "encoding_dialog");
-	g_signal_connect (window, "response",
-			  G_CALLBACK (ephy_encoding_dialog_response_cb), dialog);
 
 	encodings = ephy_encodings_get_all (dialog->priv->encodings);
 	store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_STRING);
@@ -395,27 +369,24 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 
 	gtk_widget_show (treeview);
 
-	scroller = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					    "scrolled_window");
-	gtk_container_add (GTK_CONTAINER (scroller), treeview);
-
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog),
-					  "automatic_button");
-	child = gtk_bin_get_child (GTK_BIN (button));
-	gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
-	g_signal_connect (button, "toggled",
-			  G_CALLBACK (automatic_toggled_cb), dialog);
-
-	button = ephy_dialog_get_control (EPHY_DIALOG (dialog), "manual_button");
-	child = gtk_bin_get_child (GTK_BIN (button));
-	gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
+	gtk_container_add (GTK_CONTAINER (dialog->priv->scrolled_window), treeview);
 
 	dialog->priv->enc_view = treeview;
+}
 
-	g_signal_connect (G_OBJECT (dialog), "notify::parent-window",
-			  G_CALLBACK (sync_parent_window_cb), NULL);
-	g_signal_connect (G_OBJECT (dialog), "notify::embed",
-			  G_CALLBACK (sync_embed_cb), NULL);
+static void
+ephy_encoding_dialog_dispose (GObject *object)
+{
+	EphyEncodingDialog *dialog = EPHY_ENCODING_DIALOG (object);
+
+	g_signal_handlers_disconnect_by_func (dialog->priv->window,
+	                                      G_CALLBACK (ephy_encoding_dialog_sync_embed),
+	                                      dialog);
+
+	if (dialog->priv->embed != NULL)
+		ephy_encoding_dialog_detach_embed (dialog);
+
+	G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->dispose (object);
 }
 
 static void
@@ -423,39 +394,96 @@ ephy_encoding_dialog_finalize (GObject *object)
 {
 	EphyEncodingDialog *dialog = EPHY_ENCODING_DIALOG (object);
 
-	if (dialog->priv->window != NULL)
-	{
-		g_signal_handlers_disconnect_by_func (dialog->priv->window,
-						      G_CALLBACK (sync_active_tab),
-						      dialog);
-	}
-
-	if (dialog->priv->embed)
-	{
-		g_signal_handlers_disconnect_by_func (ephy_embed_get_web_view (dialog->priv->embed),
-						      G_CALLBACK (embed_net_stop_cb),
-						      dialog);
-	}
-
 	g_free (dialog->priv->selected_encoding);
 
 	G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->finalize (object);
 }
 
 static void
+ephy_encoding_dialog_set_parent_window (EphyEncodingDialog *dialog,
+                                        EphyWindow *window)
+{
+	g_return_if_fail (EPHY_IS_WINDOW (window));
+
+	g_signal_connect (G_OBJECT (window), "notify::active-child",
+	                  G_CALLBACK (ephy_encoding_dialog_sync_embed), dialog);
+
+	dialog->priv->window = window;
+
+	ephy_encoding_dialog_attach_embed (dialog);
+}
+
+static void
+ephy_encoding_dialog_set_property (GObject      *object,
+                                   guint         prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
+{
+	switch (prop_id)
+	{
+	case PROP_PARENT_WINDOW:
+		ephy_encoding_dialog_set_parent_window (EPHY_ENCODING_DIALOG (object),
+		                                        g_value_get_object (value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+ephy_encoding_dialog_get_property (GObject    *object,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+	switch (prop_id)
+	{
+	case PROP_PARENT_WINDOW:
+		g_value_set_object (value, EPHY_ENCODING_DIALOG (object)->priv->window);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+	/* class creation */
 	object_class->finalize = ephy_encoding_dialog_finalize;
+	object_class->set_property = ephy_encoding_dialog_set_property;
+	object_class->get_property = ephy_encoding_dialog_get_property;
+	object_class->dispose = ephy_encoding_dialog_dispose;
 
-	g_type_class_add_private (object_class, sizeof(EphyEncodingDialogPrivate));
+	g_object_class_install_property (object_class,
+	                                 PROP_PARENT_WINDOW,
+	                                 g_param_spec_object ("parent-window",
+	                                                      "Parent window",
+	                                                      "Parent window",
+	                                                      EPHY_TYPE_WINDOW,
+	                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+	/* load from UI file */
+	gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/encoding-dialog.ui");
+
+	gtk_widget_class_bind_template_child_private (widget_class, EphyEncodingDialog, automatic_button);
+	gtk_widget_class_bind_template_child_private (widget_class, EphyEncodingDialog, manual_button);
+	gtk_widget_class_bind_template_child_private (widget_class, EphyEncodingDialog, scrolled_window);
+
+	gtk_widget_class_bind_template_callback (widget_class, automatic_toggled_cb);
+	gtk_widget_class_bind_template_callback (widget_class, ephy_encoding_dialog_response_cb);
 }
-		
+
 EphyEncodingDialog *
 ephy_encoding_dialog_new (EphyWindow *parent)
 {
 	return g_object_new (EPHY_TYPE_ENCODING_DIALOG,
+			     "use-header-bar" , TRUE,
 			     "parent-window", parent,
 			     NULL);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="encoding_dialog">
+  <template class="EphyEncodingDialog" parent="GtkDialog">
     <property name="border_width">5</property>
     <property name="role">epiphany-encoding-chooser</property>
     <property name="modal">True</property>
@@ -11,6 +11,7 @@
     <property name="type_hint">dialog</property>
     <property name="use_header_bar">1</property>
     <property name="title" translatable="yes">Text Encoding</property>
+    <signal name="response" handler="ephy_encoding_dialog_response_cb"/>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="spacing">18</property>
@@ -24,6 +25,7 @@
                 <property name="visible">True</property>
                 <property name="use_underline">True</property>
                 <property name="halign">start</property>
+                <signal name="toggled" handler="automatic_toggled_cb"/>
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
@@ -86,5 +88,5 @@
         </child>
       </object>
     </child>
-  </object>
+  </template>
 </interface>

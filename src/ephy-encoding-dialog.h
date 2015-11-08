@@ -25,11 +25,9 @@
 #ifndef EPHY_ENCODING_DIALOG_H
 #define EPHY_ENCODING_DIALOG_H
 
-#include "ephy-embed-dialog.h"
 #include "ephy-window.h"
 
-#include <glib.h>
-#include <glib-object.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -46,7 +44,7 @@ typedef struct _EphyEncodingDialogPrivate	EphyEncodingDialogPrivate;
 
 struct _EphyEncodingDialog
 {
-	EphyEmbedDialog parent;
+	GtkDialog parent;
 
 	/*< private >*/
 	EphyEncodingDialogPrivate *priv;
@@ -54,7 +52,7 @@ struct _EphyEncodingDialog
 
 struct _EphyEncodingDialogClass
 {
-	EphyEmbedDialogClass parent_class;
+	GtkDialogClass parent_class;
 };
 
 GType			 ephy_encoding_dialog_get_type	(void);
