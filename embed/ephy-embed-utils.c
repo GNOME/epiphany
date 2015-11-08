@@ -242,8 +242,12 @@ ephy_embed_utils_autosearch_address (const char *search_key)
   }
 
   query_param = soup_form_encode ("q", search_key, NULL);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+  /* Format string under control of user input... but gsettings is trusted input. */
   /* + 2 here is getting rid of 'q=' */
   effective_address = g_strdup_printf (url_search, query_param + 2);
+#pragma GCC diagnostic pop
   g_free (query_param);
   g_free (url_search);
 

@@ -150,8 +150,12 @@ eel_strdup_strftime (const char *format, struct tm *time_pieces)
 		}
 		code[i++] = *remainder;
 		code[i++] = '\0';
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+                /* Format string under control of caller, since this is a wrapper for strftime. */
 		string_length = strftime (buffer, sizeof (buffer),
 					  code, time_pieces);
+#pragma GCC diagnostic pop
 		if (string_length == 0) {
 			/* We could put a warning here, but there's no
 			 * way to tell a successful conversion to

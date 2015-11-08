@@ -1906,6 +1906,9 @@ ephy_web_view_load_error_page (EphyWebView *view,
   if (load_anyway_js == NULL)
     load_anyway_js = g_strdup_printf ("window.location = '%s';", uri);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+  /* The HTML file is trusted input. */
   g_string_printf (html,
                    g_bytes_get_data (html_file, NULL),
                    lang, lang,
@@ -1915,6 +1918,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
                    load_anyway_js,
                    custom_class,
                    msg_title, msg, button_label);
+#pragma GCC diagnostic pop
 
   g_bytes_unref (html_file);
   g_free (stylesheet);

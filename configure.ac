@@ -38,7 +38,7 @@ AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS], [$ax_is_release], [-Wdeclaratio
 	dnl TODO: Remove all of these! These warnings should be fixed, not
 	dnl silenced. At least, for the most part. -Wswitch-enum really does
 	dnl seem pretty dumb.
-	[-Wno-shadow -Wno-format-nonliteral -Wno-deprecated-declarations -Wno-switch-enum -Wno-switch-default -Wno-redundant-decls -Wno-discarded-qualifiers -Wno-sign-compare])
+	[-Wno-shadow -Wno-deprecated-declarations -Wno-switch-enum -Wno-switch-default -Wno-redundant-decls -Wno-discarded-qualifiers -Wno-sign-compare])
 
 AC_PROG_CC
 

@@ -60,7 +60,7 @@ static void
 set_error_from_string (const char* string, GError **error)
 {
   if (error)
-    *error = g_error_new (get_ephy_sqlite_quark (), 0, string, 0);
+    *error = g_error_new_literal (get_ephy_sqlite_quark (), 0, string);
 }
 
 EphySQLiteConnection *
@@ -102,7 +102,7 @@ void
 ephy_sqlite_connection_get_error (EphySQLiteConnection *self, GError **error)
 {
   if (error)
-    *error = g_error_new (get_ephy_sqlite_quark (), 0, sqlite3_errmsg (self->priv->database), 0);
+    *error = g_error_new_literal (get_ephy_sqlite_quark (), 0, sqlite3_errmsg (self->priv->database));
 }
 
 gboolean

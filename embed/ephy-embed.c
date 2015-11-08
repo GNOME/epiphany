@@ -65,7 +65,6 @@ struct _EphyEmbed {
   GtkWidget *floating_bar;
   GtkWidget *progress;
   GtkWidget *fullscreen_message_label;
-  char *fullscreen_string;
 
   char *title;
   WebKitURIRequest *delayed_request;
@@ -416,7 +415,6 @@ ephy_embed_finalize (GObject *object)
   g_slist_free (embed->keys);
   embed->keys = NULL;
 
-  g_free (embed->fullscreen_string);
   g_free (embed->title);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->finalize (object);
@@ -529,11 +527,8 @@ ephy_embed_set_fullscreen_message (EphyEmbed *embed,
 {
   char *message;
 
-  if (G_UNLIKELY (embed->fullscreen_string == NULL))
-    embed->fullscreen_string = g_strdup (_("Press %s to exit fullscreen"));
-
   /* Translators: 'ESC' and 'F11' are keyboard keys. */
-  message = g_strdup_printf (embed->fullscreen_string, is_html5_fullscreen ? _("ESC") : _("F11"));
+  message = g_strdup_printf (_("Press %s to exit fullscreen"), is_html5_fullscreen ? _("ESC") : _("F11"));
   gtk_label_set_text (GTK_LABEL (embed->fullscreen_message_label),
                       message);
   g_free (message);
