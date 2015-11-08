@@ -30,7 +30,7 @@
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_TOPICS_PALETTE (ephy_topics_palette_get_type ())
-G_DECLARE_FINAL_TYPE (EphyTopicsPalette, ephy_topics_palette, EPHY, TOPICS_PALETTE, GtkTreeView);
+G_DECLARE_FINAL_TYPE (EphyTopicsPalette, ephy_topics_palette, EPHY, TOPICS_PALETTE, GtkListStore);
 
 enum
 {
@@ -43,8 +43,7 @@ enum
 EphyTopicsPalette *ephy_topics_palette_new         (EphyBookmarks     *bookmarks,
                                                     EphyNode          *bookmark);
 
-void               ephy_topics_palette_update_list (EphyTopicsPalette *palette);
-GtkListStore      *ephy_topics_palette_get_store   (EphyTopicsPalette *palette);
+void               ephy_topics_palette_update_list (EphyTopicsPalette *self);
 
 G_END_DECLS
 

@@ -68,8 +68,8 @@ struct _EphyBookmarkProperties
 	GtkScrolledWindow *topics_scrolled_window;
 	GtkLabel          *warning_label;
 
-	/* slave */
-	EphyTopicsPalette *palette;
+	/* model */
+	EphyTopicsPalette *topics_model;
 };
 
 enum
@@ -267,7 +267,7 @@ on_topic_edited (GtkCellRendererText    *renderer,
 	}
 	else
 	{
-		ephy_topics_palette_update_list (EPHY_TOPICS_PALETTE (properties->topics_tree_view));   // TODO hack
+		ephy_topics_palette_update_list (properties->topics_model);
 	}
 }
 
@@ -381,8 +381,8 @@ ephy_bookmark_properties_constructor (GType                  type,
 
 	gtk_tree_view_set_row_separator_func (properties->topics_tree_view, is_separator, NULL, NULL);
 
-	properties->palette = ephy_topics_palette_new (properties->bookmarks, properties->bookmark);
-	gtk_tree_view_set_model (properties->topics_tree_view, GTK_TREE_MODEL (ephy_topics_palette_get_store (properties->palette)));
+	properties->topics_model = ephy_topics_palette_new (properties->bookmarks, properties->bookmark);
+	gtk_tree_view_set_model (properties->topics_tree_view, GTK_TREE_MODEL (properties->topics_model));
 
 	/* TODO bind; and the entry?! */
 	gtk_widget_set_sensitive (GTK_WIDGET (properties->topics_scrolled_window), !lockdown);
