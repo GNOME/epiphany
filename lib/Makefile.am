@@ -37,7 +37,6 @@ TYPES_H_FILES = \
 	ephy-security-levels.h
 
 INST_H_FILES = \
-	ephy-dialog.h				\
 	ephy-initial-state.h			\
 	ephy-node.h				\
 	ephy-node-db.h				\
@@ -45,7 +44,6 @@ INST_H_FILES = \
 
 libephymisc_la_SOURCES = \
 	ephy-debug.c				\
-	ephy-dialog.c				\
 	ephy-dnd.c				\
 	ephy-favicon-helpers.c			\
 	ephy-file-helpers.c			\

@@ -27,7 +27,6 @@
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
-#include "ephy-dialog.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-shell.h"
