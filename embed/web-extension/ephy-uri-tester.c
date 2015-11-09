@@ -699,7 +699,10 @@ ephy_uri_tester_parse_line (EphyUriTester *tester, char *line)
     {
       (void)*line++;
       (void)*line++;
-      ephy_uri_tester_add_url_pattern (tester, "", "fulluri", line);
+      /* set a regex prefix to ensure that '||' patterns are anchored at the
+       * start and that any characters (if any) preceding the domain specified
+       * by the rule is separated from it by a dot '.'  */
+      ephy_uri_tester_add_url_pattern (tester, "^[\\w\\-]+:\\/+(?!\\/)(?:[^\\/]+\\.)?", "fulluri", line);
       return;
     }
   if (line[0] == '|')
