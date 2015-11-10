@@ -84,7 +84,7 @@ desktop_filename_from_wm_class (char *wm_class)
 char *
 ephy_web_application_get_profile_directory (const char *name)
 {
-  char *app_dir, *wm_class, *profile_dir, *encoded;
+  char *dot_dir, *app_dir, *wm_class, *profile_dir, *encoded;
   GError *error = NULL;
 
   wm_class = get_wm_class_from_app_title (name);
@@ -97,10 +97,12 @@ ephy_web_application_get_profile_directory (const char *name)
     return NULL;
   }
 
+  dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
   app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, encoded, NULL);
-  profile_dir = g_build_filename (ephy_dot_dir (), app_dir, NULL);
+  profile_dir = g_build_filename (dot_dir ? dot_dir : ephy_dot_dir (), app_dir, NULL);
   g_free (encoded);
   g_free (app_dir);
+  g_free (dot_dir);
 
   return profile_dir;
 }
@@ -255,14 +257,17 @@ static SoupCookieJar *get_current_cookie_jar (void)
 {
   char *filename;
   SoupCookieJar *jar;
+  char *dot_dir;
 
   /* FIXME: There's no API in WebKit2 to get all cookies, so we create a
    * temp read-only jar for the current cookies to read from it.
    * It would be better to have an API in WebKit to get the cookies instead.
    */
-  filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
+  dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
+  filename = g_build_filename (dot_dir ? dot_dir : ephy_dot_dir (), "cookies.sqlite", NULL);
   jar = (SoupCookieJar*)soup_cookie_jar_db_new (filename, TRUE);
   g_free (filename);
+  g_free (dot_dir);
 
   return jar;
 }
@@ -370,8 +375,10 @@ ephy_web_application_get_application_list (void)
   GFileInfo *info;
   GList *applications = NULL;
   GFile *dot_dir;
+  char *default_dot_dir;
 
-  dot_dir = g_file_new_for_path (ephy_dot_dir ());
+  default_dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
+  dot_dir = g_file_new_for_path (default_dot_dir ? default_dot_dir : ephy_dot_dir ());
   children = g_file_enumerate_children (dot_dir,
                                         "standard::name",
                                         0, NULL, NULL);
@@ -394,7 +401,7 @@ ephy_web_application_get_application_list (void)
 
       app = g_slice_new0 (EphyWebApplication);
 
-      profile_dir = g_build_filename (ephy_dot_dir (), name, NULL);
+      profile_dir = g_build_filename (default_dot_dir ? default_dot_dir : ephy_dot_dir (), name, NULL);
       app->icon_url = g_build_filename (profile_dir, EPHY_WEB_APP_ICON_NAME, NULL);
 
       desktop_file = g_strconcat (name + prefix_length, ".desktop", NULL);
@@ -450,6 +457,7 @@ ephy_web_application_get_application_list (void)
   }
 
   g_object_unref (children);
+  g_free (default_dot_dir);
 
   return applications;
 }
