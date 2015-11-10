@@ -25,8 +25,11 @@
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 
+#include <errno.h>
+#include <gio/gio.h>
 #include <glib/gstdio.h>
 #include <libsoup/soup.h>
+#include <string.h>
 #include <webkit2/webkit2.h>
 
 #define EPHY_WEB_APP_DESKTOP_FILE_PREFIX "epiphany-"
@@ -147,12 +150,14 @@ ephy_web_application_delete (const char *name)
   g_free (wm_class);
   if (!desktop_file)
     goto out;
-  desktop_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file, NULL);
-  launcher = g_file_new_for_path (desktop_path);
-  if (!g_file_delete (launcher, NULL, NULL))
-    goto out;
-  LOG ("Deleted application launcher.\n");
 
+  desktop_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file, NULL);
+  if (g_file_test (desktop_path, G_FILE_TEST_IS_DIR)) {
+    launcher = g_file_new_for_path (desktop_path);
+    if (!g_file_delete (launcher, NULL, NULL))
+      goto out;
+    LOG ("Deleted application launcher.\n");
+  }
   return_value = TRUE;
 
 out:
@@ -357,6 +362,116 @@ out:
     g_free (profile_dir);
 
   return desktop_file_path;
+}
+
+char *
+ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
+{
+  char *profile_dir;
+  const char *cmd;
+  char *address;
+
+  profile_dir = ephy_web_application_get_profile_directory (g_app_info_get_name (app_info));
+  if (g_mkdir (profile_dir, 488) == -1) {
+    if (errno == EEXIST)
+      return profile_dir;
+
+    g_free (profile_dir);
+    return NULL;
+  }
+
+  /* The address should be the last command line argument in the desktop file */
+  cmd = g_app_info_get_commandline (app_info);
+  if (!cmd) {
+    g_free (profile_dir);
+    return NULL;
+  }
+
+  address = g_strrstr (cmd, " ");
+  if (!address) {
+    g_free (profile_dir);
+    return NULL;
+  }
+
+  address++;
+  if (*address == '\0') {
+    g_free (profile_dir);
+    return NULL;
+  }
+
+  create_cookie_jar_for_domain (address, profile_dir);
+
+  return profile_dir;
+}
+
+void
+ephy_web_application_setup_from_profile_directory (const char *profile_directory)
+{
+  char *app_name;
+  char *app_icon;
+
+  g_return_if_fail (profile_directory != NULL);
+
+  app_name = g_strrstr (profile_directory, EPHY_WEB_APP_PREFIX);
+  if (!app_name)
+    return;
+
+  /* Skip the 'app-' part */
+  app_name += strlen (EPHY_WEB_APP_PREFIX);
+  g_set_prgname (app_name);
+  g_set_application_name (app_name);
+
+  app_icon = g_build_filename (profile_directory, EPHY_WEB_APP_ICON_NAME, NULL);
+  gtk_window_set_default_icon_from_file (app_icon, NULL);
+  g_free (app_icon);
+
+  /* We need to re-set this because we have already parsed the
+   * options, which inits GTK+ and sets this as a side effect.
+   */
+  gdk_set_program_class (app_name);
+}
+
+void
+ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
+{
+  GAppInfo *app_info;
+  const char *app_name;
+  const char *wm_class;
+  GIcon *icon;
+
+  g_return_if_fail (G_IS_DESKTOP_APP_INFO (desktop_info));
+
+  app_info = G_APP_INFO (desktop_info);
+  app_name = g_app_info_get_name (app_info);
+  if (!app_name)
+    return;
+
+  g_set_prgname (app_name);
+  g_set_application_name (app_name);
+
+  icon = g_app_info_get_icon (app_info);
+  if (G_IS_FILE_ICON (icon)) {
+    GFile *file = g_file_icon_get_file (G_FILE_ICON (icon));
+    char *path = file ? g_file_get_path (file) : NULL;
+
+    if (path) {
+      gtk_window_set_default_icon_from_file (path, NULL);
+      g_free (path);
+    }
+    g_clear_object (&file);
+  } else if (G_IS_THEMED_ICON (icon)) {
+    const char *const *names = g_themed_icon_get_names (G_THEMED_ICON (icon));
+    if (names)
+      gtk_window_set_default_icon_name (names[0]);
+  }
+  g_clear_object (&icon);
+
+  /* We need to re-set this because we have already parsed the
+   * options, which inits GTK+ and sets this as a side effect.
+   */
+  wm_class = g_desktop_app_info_get_startup_wm_class (desktop_info);
+  if (wm_class)
+    gdk_set_program_class (wm_class);
 }
 
 /**

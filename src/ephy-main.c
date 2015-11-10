@@ -237,6 +237,7 @@ main (int argc,
   EphyShell *ephy_shell;
   int status;
   EphyFileHelpersFlags flags;
+  GDesktopAppInfo *desktop_info = NULL;
 
   /* Initialize the i18n stuff */
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -341,21 +342,32 @@ main (int argc,
     exit (1);
   }
 
+  if (application_mode && profile_directory && !g_file_test (profile_directory, G_FILE_TEST_IS_DIR)) {
+      g_print ("--profile must be an existing directory when --application-mode is requested\n");
+      exit (1);
+  }
+
+  if (application_mode && !profile_directory) {
+    const char *desktop_file_path = g_getenv ("GIO_LAUNCHED_DESKTOP_FILE");
+
+    if (desktop_file_path) {
+      desktop_info = g_desktop_app_info_new_from_filename (desktop_file_path);
+
+      if (desktop_info)
+        profile_directory = ephy_web_application_ensure_for_app_info (G_APP_INFO (desktop_info));
+    }
+  }
+
   if (application_mode && profile_directory == NULL) {
     g_print ("--profile must be used when --application-mode is requested\n");
     exit (1);
-  }
-
-  if (application_mode && !g_file_test (profile_directory, G_FILE_TEST_IS_DIR)) {
-      g_print ("--profile must be an existing directory when --application-mode is requested\n");
-      exit (1);
   }
 
   if (incognito_mode && profile_directory == NULL)
     profile_directory = g_strdup (ephy_dot_dir ());
 
   /* Start our services */
-  flags = EPHY_FILE_HELPERS_ENSURE_EXISTS;
+  flags = !application_mode ? EPHY_FILE_HELPERS_ENSURE_EXISTS : 0;
 
   if (incognito_mode || private_instance || application_mode)
     flags |= EPHY_FILE_HELPERS_PRIVATE_PROFILE;
@@ -432,29 +444,14 @@ main (int argc,
   } else if (incognito_mode) {
     mode = EPHY_EMBED_SHELL_MODE_INCOGNITO;
   } else if (application_mode) {
-    char *app_name;
-    char *app_icon;
-
     mode = EPHY_EMBED_SHELL_MODE_APPLICATION;
 
-    app_name = g_strrstr (profile_directory, EPHY_WEB_APP_PREFIX);
-    app_icon = g_build_filename (profile_directory, EPHY_WEB_APP_ICON_NAME, NULL);
-
-    if (app_name) {
-      /* Skip the 'app-' part */
-      app_name += strlen (EPHY_WEB_APP_PREFIX);
-
-      g_set_prgname (app_name);
-      g_set_application_name (app_name);
-
-      gtk_window_set_default_icon_from_file (app_icon, NULL);
-
-      /* We need to re-set this because we have already parsed the
-       * options, which inits GTK+ and sets this as a side effect. */
-      gdk_set_program_class (app_name);
+    if (desktop_info) {
+      ephy_web_application_setup_from_desktop_file (desktop_info);
+      g_object_unref (desktop_info);
+    } else {
+      ephy_web_application_setup_from_profile_directory (profile_directory);
     }
-
-    g_free (app_icon);
   } else if (profile_directory) {
     /* This mode exists purely for letting EphyShell know it should
      * not consider this instance part of the unique application

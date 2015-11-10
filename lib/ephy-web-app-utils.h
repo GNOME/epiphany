@@ -24,6 +24,7 @@
 #ifndef EPHY_WEB_APP_UTILS_H
 #define EPHY_WEB_APP_UTILS_H
 
+#include <gio/gdesktopappinfo.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <webkit2/webkit2.h>
@@ -43,7 +44,13 @@ typedef struct {
 
 char    *ephy_web_application_create (const char *address, const char *name, GdkPixbuf *icon);
 
+char    *ephy_web_application_ensure_for_app_info (GAppInfo *app_info);
+
 gboolean ephy_web_application_delete (const char *name);
+
+void     ephy_web_application_setup_from_profile_directory (const char *profile_directory);
+
+void     ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info);
 
 char    *ephy_web_application_get_profile_directory (const char *name);
 
