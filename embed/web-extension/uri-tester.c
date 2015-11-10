@@ -438,7 +438,9 @@ uri_tester_fixup_regexp (const char *prefix, char *src)
             g_string_append (str, "\\.");
             break;*/
         case '?':
-          g_string_append (str, "\\?");
+        case '[':
+        case ']':
+          g_string_append_printf (str, "\\%c", *src);
           break;
         case '|':
           /* FIXME: We actually need to match :[0-9]+ or '/'. Sign means
