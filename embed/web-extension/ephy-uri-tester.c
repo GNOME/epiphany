@@ -44,12 +44,10 @@ struct _EphyUriTester
   char *data_dir;
 
   GHashTable *pattern;
-  GHashTable *keys;
   GHashTable *optslist;
   GHashTable *urlcache;
 
   GHashTable *whitelisted_pattern;
-  GHashTable *whitelisted_keys;
   GHashTable *whitelisted_optslist;
   GHashTable *whitelisted_urlcache;
 
@@ -360,49 +358,6 @@ ephy_uri_tester_is_matched_by_pattern (EphyUriTester  *tester,
   return FALSE;
 }
 
-static inline gboolean
-ephy_uri_tester_is_matched_by_key (EphyUriTester  *tester,
-                                   const char *opts,
-                                   const char *req_uri,
-                                   const char *page_uri,
-                                   gboolean    whitelist)
-{
-  char *uri;
-  int len;
-  int pos = 0;
-  GList *regex_bl = NULL;
-  GString *guri;
-  gboolean ret = FALSE;
-  char sig[SIGNATURE_SIZE + 1];
-  GHashTable *keys = tester->keys;
-  if (whitelist)
-    keys = tester->whitelisted_keys;
-
-  memset (&sig[0], 0, sizeof (sig));
-  /* Signatures are made on pattern, so we need to convert url to a pattern as well */
-  guri = ephy_uri_tester_fixup_regexp ("", (char*)req_uri);
-  uri = guri->str;
-  len = guri->len;
-
-  for (pos = len - SIGNATURE_SIZE; pos >= 0; pos--)
-    {
-      GRegex *regex;
-      strncpy (sig, uri + pos, SIGNATURE_SIZE);
-      regex = g_hash_table_lookup (keys, sig);
-
-      /* Dont check if regex is already blacklisted */
-      if (!regex || g_list_find (regex_bl, regex))
-        continue;
-      ret = ephy_uri_tester_check_rule (tester, regex, sig, req_uri, page_uri, whitelist);
-      if (ret)
-        break;
-      regex_bl = g_list_prepend (regex_bl, regex);
-    }
-  g_string_free (guri, TRUE);
-  g_list_free (regex_bl);
-  return ret;
-}
-
 static gboolean
 ephy_uri_tester_is_matched (EphyUriTester  *tester,
                             const char *opts,
@@ -418,13 +373,6 @@ ephy_uri_tester_is_matched (EphyUriTester  *tester,
   /* Check cached URLs first. */
   if ((value = g_hash_table_lookup (urlcache, req_uri)))
     return (value[0] != '0') ? TRUE : FALSE;
-
-  /* Look for a match either by key or by pattern. */
-  if (ephy_uri_tester_is_matched_by_key (tester, opts, req_uri, page_uri, whitelist))
-    {
-      g_hash_table_insert (urlcache, g_strdup (req_uri), g_strdup ("1"));
-      return TRUE;
-    }
 
   /* Matching by pattern is pretty expensive, so do it if needed only. */
   if (ephy_uri_tester_is_matched_by_pattern (tester, req_uri, page_uri, whitelist))
@@ -499,18 +447,15 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
                                 gboolean   whitelist)
 {
   GHashTable *pattern;
-  GHashTable *keys;
   GHashTable *optslist;
   GRegex *regex;
   GError *error = NULL;
   char *patt;
-  int len;
 
   if (!gpatt)
     return;
 
   patt = gpatt->str;
-  len = gpatt->len;
 
   /* TODO: Play with optimization flags */
   regex = g_regex_new (patt, G_REGEX_OPTIMIZE | G_REGEX_JAVASCRIPT_COMPAT,
@@ -523,55 +468,16 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
     }
 
   pattern = tester->pattern;
-  keys = tester->keys;
   optslist = tester->optslist;
   if (whitelist)
     {
       pattern = tester->whitelisted_pattern;
-      keys = tester->whitelisted_keys;
       optslist = tester->whitelisted_optslist;
     }
 
-  if (!g_regex_match (tester->regex_pattern, patt, 0, NULL))
-    {
-      int signature_count = 0;
-      int pos = 0;
-      char *sig;
-
-      for (pos = len - SIGNATURE_SIZE; pos >= 0; pos--) {
-        sig = g_strndup (patt + pos, SIGNATURE_SIZE);
-        if (!strchr (sig, '*') &&
-            !g_hash_table_lookup (keys, sig))
-          {
-            LOG ("sig: %s %s", sig, patt);
-            g_hash_table_insert (keys, g_strdup (sig), g_regex_ref (regex));
-            g_hash_table_insert (optslist, g_strdup (sig), g_strdup (opts));
-            signature_count++;
-          }
-        else
-          {
-            if (sig[0] == '*' &&
-                !g_hash_table_lookup (pattern, patt))
-              {
-                LOG ("patt2: %s %s", sig, patt);
-                g_hash_table_insert (pattern, g_strdup (patt), g_regex_ref (regex));
-                g_hash_table_insert (optslist, g_strdup (patt), g_strdup (opts));
-              }
-          }
-        g_free (sig);
-      }
-      g_regex_unref (regex);
-
-      if (signature_count > 1 && g_hash_table_lookup (pattern, patt))
-        g_hash_table_remove (pattern, patt);
-    }
-  else
-    {
-      LOG ("patt: %s%s", patt, "");
-      /* Pattern is a regexp chars */
-      g_hash_table_insert (pattern, g_strdup (patt), regex);
-      g_hash_table_insert (optslist, g_strdup (patt), g_strdup (opts));
-    }
+  LOG ("patt: %s", patt);
+  g_hash_table_insert (pattern, g_strdup (patt), regex);
+  g_hash_table_insert (optslist, g_strdup (patt), g_strdup (opts));
 }
 
 static void
@@ -835,9 +741,6 @@ ephy_uri_tester_init (EphyUriTester *tester)
   tester->pattern = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify)g_free,
                                            (GDestroyNotify)g_regex_unref);
-  tester->keys = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                        (GDestroyNotify)g_free,
-                                        (GDestroyNotify)g_regex_unref);
   tester->optslist = g_hash_table_new_full (g_str_hash, g_str_equal,
                                             (GDestroyNotify)g_free,
                                             (GDestroyNotify)g_free);
@@ -848,9 +751,6 @@ ephy_uri_tester_init (EphyUriTester *tester)
   tester->whitelisted_pattern = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                        (GDestroyNotify)g_free,
                                                        (GDestroyNotify)g_regex_unref);
-  tester->whitelisted_keys = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                    (GDestroyNotify)g_free,
-                                                    (GDestroyNotify)g_regex_unref);
   tester->whitelisted_optslist = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                         (GDestroyNotify)g_free,
                                                         (GDestroyNotify)g_free);
@@ -923,12 +823,10 @@ ephy_uri_tester_finalize (GObject *object)
   g_free (tester->data_dir);
 
   g_hash_table_destroy (tester->pattern);
-  g_hash_table_destroy (tester->keys);
   g_hash_table_destroy (tester->optslist);
   g_hash_table_destroy (tester->urlcache);
 
   g_hash_table_destroy (tester->whitelisted_pattern);
-  g_hash_table_destroy (tester->whitelisted_keys);
   g_hash_table_destroy (tester->whitelisted_optslist);
   g_hash_table_destroy (tester->whitelisted_urlcache);
 
