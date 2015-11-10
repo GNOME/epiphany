@@ -291,6 +291,19 @@ ephy_dot_dir_is_default (void)
 }
 
 /**
+ * ephy_default_dot_dir:
+ *
+ * Get the path to the default dot directory found in ~/.config
+ *
+ * Returns: a new allocated string, free with g_free() when done.
+ */
+char *
+ephy_default_dot_dir (void)
+{
+	return g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
+}
+
+/**
  * ephy_file_helpers_init:
  * @profile_dir: directory to use as Epiphany's profile
  * @flags: the %EphyFileHelpersFlags for this session
@@ -343,9 +356,7 @@ ephy_file_helpers_init (const char *profile_dir,
 	}
 	else
 	{
-		dot_dir = g_build_filename (g_get_user_config_dir (),
-					    "epiphany",
-					    NULL);
+		dot_dir = ephy_default_dot_dir ();
 		is_default_dot_dir = TRUE;
 	}
 
