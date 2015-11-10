@@ -480,11 +480,14 @@ ephy_ensure_dir_exists (const char *dir,
 	{
 		if (g_mkdir_with_parents (dir, 488) == 0)
 		{
-			/* We need to set the .migrated file to the
-			 * current profile migration version,
-			 * otherwise the next time the browser runs
-			 * things might go awry. */
-			ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION);
+			if (dir == ephy_dot_dir ())
+			{
+				/* We need to set the .migrated file to the
+				 * current profile migration version,
+				 * otherwise the next time the browser runs
+				 * things might go awry. */
+				ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION);
+			}
 		}
 		else
 		{
