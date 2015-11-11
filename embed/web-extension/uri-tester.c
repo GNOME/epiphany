@@ -48,6 +48,11 @@ struct _UriTesterPrivate
   GHashTable *optslist;
   GHashTable *urlcache;
 
+  GHashTable *whitelisted_pattern;
+  GHashTable *whitelisted_keys;
+  GHashTable *whitelisted_optslist;
+  GHashTable *whitelisted_urlcache;
+
   GString *blockcss;
   GString *blockcssprivate;
 
@@ -300,36 +305,48 @@ uri_tester_check_rule (UriTester  *tester,
                        GRegex     *regex,
                        const char *patt,
                        const char *req_uri,
-                       const char *page_uri)
+                       const char *page_uri,
+                       gboolean whitelist)
 {
   char *opts;
+  GHashTable *optslist = tester->priv->optslist;
+  if (whitelist)
+    optslist = tester->priv->whitelisted_optslist;
 
   if (!g_regex_match_full (regex, req_uri, -1, 0, 0, NULL, NULL))
     return FALSE;
 
-  opts = g_hash_table_lookup (tester->priv->optslist, patt);
+  opts = g_hash_table_lookup (optslist, patt);
   if (opts && g_regex_match (tester->priv->regex_third_party, opts, 0, NULL))
     {
       if (page_uri && g_regex_match_full (regex, page_uri, -1, 0, 0, NULL, NULL))
         return FALSE;
     }
-  /* TODO: Domain opt check */
-  LOG ("blocked by pattern regexp=%s -- %s", g_regex_get_pattern (regex), req_uri);
+  /* TODO: Domain and document opt check */
+  if (whitelist)
+    LOG ("whitelisted by pattern regexp=%s -- %s", g_regex_get_pattern (regex), req_uri);
+  else
+    LOG ("blocked by pattern regexp=%s -- %s", g_regex_get_pattern (regex), req_uri);
   return TRUE;
 }
 
 static inline gboolean
 uri_tester_is_matched_by_pattern (UriTester  *tester,
                                   const char *req_uri,
-                                  const char *page_uri)
+                                  const char *page_uri,
+                                  gboolean whitelist)
 {
   GHashTableIter iter;
   gpointer patt, regex;
 
-  g_hash_table_iter_init (&iter, tester->priv->pattern);
+  GHashTable *pattern = tester->priv->pattern;
+  if (whitelist)
+    pattern = tester->priv->whitelisted_pattern;
+
+  g_hash_table_iter_init (&iter, pattern);
   while (g_hash_table_iter_next (&iter, &patt, &regex))
     {
-      if (uri_tester_check_rule(tester, regex, patt, req_uri, page_uri))
+      if (uri_tester_check_rule(tester, regex, patt, req_uri, page_uri, whitelist))
         return TRUE;
     }
   return FALSE;
@@ -339,7 +356,8 @@ static inline gboolean
 uri_tester_is_matched_by_key (UriTester  *tester,
                               const char *opts,
                               const char *req_uri,
-                              const char *page_uri)
+                              const char *page_uri,
+                              gboolean whitelist)
 {
   UriTesterPrivate *priv = NULL;
   char *uri;
@@ -349,8 +367,13 @@ uri_tester_is_matched_by_key (UriTester  *tester,
   GString *guri;
   gboolean ret = FALSE;
   char sig[SIGNATURE_SIZE + 1];
+  GHashTable *keys;
 
   priv = tester->priv;
+
+  keys = priv->keys;
+  if (whitelist)
+    keys = priv->whitelisted_keys;
 
   memset (&sig[0], 0, sizeof (sig));
   /* Signatures are made on pattern, so we need to convert url to a pattern as well */
@@ -362,12 +385,12 @@ uri_tester_is_matched_by_key (UriTester  *tester,
     {
       GRegex *regex;
       strncpy (sig, uri + pos, SIGNATURE_SIZE);
-      regex = g_hash_table_lookup (priv->keys, sig);
+      regex = g_hash_table_lookup (keys, sig);
 
       /* Dont check if regex is already blacklisted */
       if (!regex || g_list_find (regex_bl, regex))
         continue;
-      ret = uri_tester_check_rule (tester, regex, sig, req_uri, page_uri);
+      ret = uri_tester_check_rule (tester, regex, sig, req_uri, page_uri, whitelist);
       if (ret)
         break;
       regex_bl = g_list_prepend (regex_bl, regex);
@@ -381,32 +404,38 @@ static gboolean
 uri_tester_is_matched (UriTester  *tester,
                        const char *opts,
                        const char *req_uri,
-                       const char *page_uri)
+                       const char *page_uri,
+                       gboolean whitelist)
 {
   UriTesterPrivate *priv = NULL;
   char *value;
+  GHashTable *urlcache;
 
   priv = tester->priv;
 
+  urlcache = priv->urlcache;
+  if (whitelist)
+    urlcache = priv->whitelisted_urlcache;
+
   /* Check cached URLs first. */
-  if ((value = g_hash_table_lookup (priv->urlcache, req_uri)))
+  if ((value = g_hash_table_lookup (urlcache, req_uri)))
     return (value[0] != '0') ? TRUE : FALSE;
 
   /* Look for a match either by key or by pattern. */
-  if (uri_tester_is_matched_by_key (tester, opts, req_uri, page_uri))
+  if (uri_tester_is_matched_by_key (tester, opts, req_uri, page_uri, whitelist))
     {
-      g_hash_table_insert (priv->urlcache, g_strdup (req_uri), g_strdup("1"));
+      g_hash_table_insert (urlcache, g_strdup (req_uri), g_strdup("1"));
       return TRUE;
     }
 
   /* Matching by pattern is pretty expensive, so do it if needed only. */
-  if (uri_tester_is_matched_by_pattern (tester, req_uri, page_uri))
+  if (uri_tester_is_matched_by_pattern (tester, req_uri, page_uri, whitelist))
     {
-      g_hash_table_insert (priv->urlcache, g_strdup (req_uri), g_strdup("1"));
+      g_hash_table_insert (urlcache, g_strdup (req_uri), g_strdup("1"));
       return TRUE;
     }
 
-  g_hash_table_insert (priv->urlcache, g_strdup (req_uri), g_strdup("0"));
+  g_hash_table_insert (urlcache, g_strdup (req_uri), g_strdup("0"));
   return FALSE;
 }
 
@@ -468,8 +497,12 @@ uri_tester_fixup_regexp (const char *prefix, char *src)
 static void
 uri_tester_compile_regexp (UriTester *tester,
                            GString   *gpatt,
-                           char      *opts)
+                           char      *opts,
+                           gboolean   whitelist)
 {
+  GHashTable *pattern;
+  GHashTable *keys;
+  GHashTable *optslist;
   GRegex *regex;
   GError *error = NULL;
   char *patt;
@@ -491,6 +524,16 @@ uri_tester_compile_regexp (UriTester *tester,
       return;
     }
 
+  pattern = tester->priv->pattern;
+  keys = tester->priv->keys;
+  optslist = tester->priv->optslist;
+  if (whitelist)
+    {
+      pattern = tester->priv->whitelisted_pattern;
+      keys = tester->priv->whitelisted_keys;
+      optslist = tester->priv->whitelisted_optslist;
+    }
+
   if (!g_regex_match (tester->priv->regex_pattern, patt, 0, NULL))
     {
       int signature_count = 0;
@@ -500,36 +543,36 @@ uri_tester_compile_regexp (UriTester *tester,
       for (pos = len - SIGNATURE_SIZE; pos >= 0; pos--) {
         sig = g_strndup (patt + pos, SIGNATURE_SIZE);
         if (!strchr (sig, '*') &&
-            !g_hash_table_lookup (tester->priv->keys, sig))
+            !g_hash_table_lookup (keys, sig))
           {
             LOG ("sig: %s %s", sig, patt);
-            g_hash_table_insert (tester->priv->keys, g_strdup (sig), g_regex_ref (regex));
-            g_hash_table_insert (tester->priv->optslist, g_strdup (sig), g_strdup (opts));
+            g_hash_table_insert (keys, g_strdup (sig), g_regex_ref (regex));
+            g_hash_table_insert (optslist, g_strdup (sig), g_strdup (opts));
             signature_count++;
           }
         else
           {
             if (sig[0] == '*' &&
-                !g_hash_table_lookup (tester->priv->pattern, patt))
+                !g_hash_table_lookup (pattern, patt))
               {
                 LOG ("patt2: %s %s", sig, patt);
-                g_hash_table_insert (tester->priv->pattern, g_strdup (patt), g_regex_ref (regex));
-                g_hash_table_insert (tester->priv->optslist, g_strdup (patt), g_strdup (opts));
+                g_hash_table_insert (pattern, g_strdup (patt), g_regex_ref (regex));
+                g_hash_table_insert (optslist, g_strdup (patt), g_strdup (opts));
               }
           }
         g_free (sig);
       }
       g_regex_unref (regex);
 
-      if (signature_count > 1 && g_hash_table_lookup (tester->priv->pattern, patt))
-        g_hash_table_remove (tester->priv->pattern, patt);
+      if (signature_count > 1 && g_hash_table_lookup (pattern, patt))
+        g_hash_table_steal (pattern, patt);
     }
   else
     {
       LOG ("patt: %s%s", patt, "");
       /* Pattern is a regexp chars */
-      g_hash_table_insert (tester->priv->pattern, g_strdup (patt), regex);
-      g_hash_table_insert (tester->priv->optslist, g_strdup (patt), g_strdup (opts));
+      g_hash_table_insert (pattern, g_strdup (patt), regex);
+      g_hash_table_insert (optslist, g_strdup (patt), g_strdup (opts));
     }
 }
 
@@ -537,7 +580,8 @@ static void
 uri_tester_add_url_pattern (UriTester *tester,
                             char      *prefix,
                             char      *type,
-                            char      *line)
+                            char      *line,
+                            gboolean   whitelist)
 {
     char **data;
     char *patt;
@@ -579,8 +623,12 @@ uri_tester_add_url_pattern (UriTester *tester,
 
     format_patt = uri_tester_fixup_regexp (prefix, patt);
 
-    LOG ("got: %s opts %s", format_patt->str, opts);
-    uri_tester_compile_regexp (tester, format_patt, opts);
+    if (whitelist)
+      LOG ("whitelist: %s opts %s", format_patt->str, opts);
+    else
+      LOG ("blacklist: %s opts %s", format_patt->str, opts);
+
+    uri_tester_compile_regexp (tester, format_patt, opts, whitelist);
 
     if (data[1] && data[2])
         g_free (patt);
@@ -647,7 +695,7 @@ uri_tester_frame_add_private (UriTester  *tester,
 }
 
 static void
-uri_tester_parse_line (UriTester *tester, char *line)
+uri_tester_parse_line (UriTester *tester, char *line, gboolean whitelist)
 {
   if (!line)
     return;
@@ -656,12 +704,17 @@ uri_tester_parse_line (UriTester *tester, char *line)
   /* Ignore comments and new lines */
   if (line[0] == '!')
     return;
-  /* FIXME: No support for whitelisting */
-  if (line[0] == '@' && line[1] == '@')
-    return;
   /* FIXME: No support for [include] and [exclude] tags */
   if (line[0] == '[')
     return;
+
+  /* Whitelisted exception rules */
+  if (g_str_has_prefix (line, "@@"))
+    {
+      uri_tester_parse_line (tester, line+2, TRUE);
+      return;
+    }
+
   /* FIXME: No support for domain= */
   if (strstr (line, "domain="))
     return;
@@ -701,16 +754,16 @@ uri_tester_parse_line (UriTester *tester, char *line)
       /* set a regex prefix to ensure that '||' patterns are anchored at the
        * start and that any characters (if any) preceding the domain specified
        * by the rule is separated from it by a dot '.'  */
-      uri_tester_add_url_pattern (tester, "^[\\w\\-]+:\\/+(?!\\/)(?:[^\\/]+\\.)?", "fulluri", line);
+      uri_tester_add_url_pattern (tester, "^[\\w\\-]+:\\/+(?!\\/)(?:[^\\/]+\\.)?", "fulluri", line, whitelist);
       return;
     }
   if (line[0] == '|')
     {
       (void)*line++;
-      uri_tester_add_url_pattern (tester, "^", "fulluri", line);
+      uri_tester_add_url_pattern (tester, "^", "fulluri", line, whitelist);
       return;
     }
-  uri_tester_add_url_pattern (tester, "", "uri", line);
+  uri_tester_add_url_pattern (tester, "", "uri", line, whitelist);
 }
 
 static void
@@ -729,7 +782,7 @@ file_parse_cb (GDataInputStream *stream, GAsyncResult *result, UriTester *tester
     return;
   }
 
-  uri_tester_parse_line (tester, line);
+  uri_tester_parse_line (tester, line, FALSE);
   g_free (line);
 
   g_data_input_stream_read_line_async (stream, G_PRIORITY_DEFAULT_IDLE, NULL,
@@ -797,6 +850,19 @@ uri_tester_init (UriTester *tester)
   priv->urlcache = g_hash_table_new_full (g_str_hash, g_str_equal,
                                           (GDestroyNotify)g_free,
                                           (GDestroyNotify)g_free);
+
+  priv->whitelisted_pattern = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                       (GDestroyNotify)g_free,
+                                                       (GDestroyNotify)g_regex_unref);
+  priv->whitelisted_keys = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                    (GDestroyNotify)g_free,
+                                                    (GDestroyNotify)g_regex_unref);
+  priv->whitelisted_optslist = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                        (GDestroyNotify)g_free,
+                                                        (GDestroyNotify)g_free);
+  priv->whitelisted_urlcache = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                        (GDestroyNotify)g_free,
+                                                        (GDestroyNotify)g_free);
 
   priv->blockcss = g_string_new ("z-non-exist");
   priv->blockcssprivate = g_string_new ("");
@@ -868,6 +934,11 @@ uri_tester_finalize (GObject *object)
   g_hash_table_destroy (priv->optslist);
   g_hash_table_destroy (priv->urlcache);
 
+  g_hash_table_destroy (priv->whitelisted_pattern);
+  g_hash_table_destroy (priv->whitelisted_keys);
+  g_hash_table_destroy (priv->whitelisted_optslist);
+  g_hash_table_destroy (priv->whitelisted_urlcache);
+
   g_string_free (priv->blockcss, TRUE);
   g_string_free (priv->blockcssprivate, TRUE);
 
@@ -925,7 +996,10 @@ uri_tester_test_uri (UriTester *tester,
   if (type == AD_URI_CHECK_TYPE_DOCUMENT)
     return FALSE;
 
-  return uri_tester_is_matched (tester, NULL, req_uri, page_uri);
+  /* check whitelisting rules before the normal ones */
+  if (uri_tester_is_matched (tester, NULL, req_uri, page_uri, TRUE))
+    return FALSE;
+  return uri_tester_is_matched (tester, NULL, req_uri, page_uri, FALSE);
 }
 
 void
