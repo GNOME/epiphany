@@ -372,16 +372,16 @@ ephy_uri_tester_is_matched (EphyUriTester  *tester,
 
   /* Check cached URLs first. */
   if ((value = g_hash_table_lookup (urlcache, req_uri)))
-    return (value[0] != '0') ? TRUE : FALSE;
+    return GPOINTER_TO_INT (value);
 
   /* Matching by pattern is pretty expensive, so do it if needed only. */
   if (ephy_uri_tester_is_matched_by_pattern (tester, req_uri, page_uri, whitelist))
     {
-      g_hash_table_insert (urlcache, g_strdup (req_uri), g_strdup ("1"));
+      g_hash_table_insert (urlcache, g_strdup (req_uri), GINT_TO_POINTER (TRUE));
       return TRUE;
     }
 
-  g_hash_table_insert (urlcache, g_strdup (req_uri), g_strdup ("0"));
+  g_hash_table_insert (urlcache, g_strdup (req_uri), GINT_TO_POINTER (FALSE));
   return FALSE;
 }
 
@@ -746,7 +746,7 @@ ephy_uri_tester_init (EphyUriTester *tester)
                                             (GDestroyNotify)g_free);
   tester->urlcache = g_hash_table_new_full (g_str_hash, g_str_equal,
                                             (GDestroyNotify)g_free,
-                                            (GDestroyNotify)g_free);
+                                            NULL);
 
   tester->whitelisted_pattern = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                        (GDestroyNotify)g_free,
@@ -756,7 +756,7 @@ ephy_uri_tester_init (EphyUriTester *tester)
                                                         (GDestroyNotify)g_free);
   tester->whitelisted_urlcache = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                         (GDestroyNotify)g_free,
-                                                        (GDestroyNotify)g_free);
+                                                        NULL);
 
   tester->blockcss = g_string_new ("z-non-exist");
   tester->blockcssprivate = g_string_new ("");
