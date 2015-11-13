@@ -33,11 +33,7 @@ G_BEGIN_DECLS
 #define EPHY_TYPE_TOPICS_ENTRY (ephy_topics_entry_get_type ())
 G_DECLARE_FINAL_TYPE (EphyTopicsEntry, ephy_topics_entry, EPHY, TOPICS_ENTRY, GtkEntry);
 
-GtkWidget	    *ephy_topics_entry_new             (EphyBookmarks *bookmarks,
-							EphyNode *bookmark);
-
-void                 ephy_topics_entry_insert_topic    (EphyTopicsEntry *entry, 
-							const char *title);
+GtkWidget *ephy_topics_entry_new (EphyBookmarks *bookmarks, EphyNode *bookmark);
 
 G_END_DECLS
 
