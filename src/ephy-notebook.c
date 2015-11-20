@@ -547,7 +547,7 @@ tab_label_style_set_cb (GtkWidget *hbox,
 
 	context = gtk_widget_get_pango_context (hbox);
 	style = gtk_widget_get_style_context (hbox);
-	gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL,
+	gtk_style_context_get (style, gtk_style_context_get_state (style),
 			       "font", &font_desc, NULL);
 	metrics = pango_context_get_metrics (context,
 					     font_desc,
