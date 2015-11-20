@@ -290,8 +290,13 @@ launch_search (EphySearchProvider  *self,
 
   search_string = g_strjoinv (" ", terms);
   query_param = soup_form_encode ("q", search_string, NULL);
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+  /* Format string under control of user input... but gsettings is trusted input. */
   /* + 2 here is getting rid of 'q=' */
   effective_url = g_strdup_printf (url_search, query_param + 2);
+#pragma GCC diagnostic pop
 
   launch_uri (effective_url, timestamp);
 
