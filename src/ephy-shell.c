@@ -942,7 +942,7 @@ open_uris_data_new (EphyShell *shell,
     data->window = ephy_window_new ();
   } else if (startup_flags & EPHY_STARTUP_NEW_TAB || (new_windows_in_tabs && have_uris)) {
     data->flags |= EPHY_NEW_TAB_JUMP;
-    data->window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+    data->window = EPHY_WINDOW (gtk_application_get_active_window (GTK_APPLICATION (shell)));
     data->reuse_empty_tab = TRUE;
   } else if (!have_uris) {
     data->window = ephy_window_new ();
