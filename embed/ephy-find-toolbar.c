@@ -65,8 +65,6 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 enum
 {
-	NEXT,
-	PREVIOUS,
 	CLOSE,
 	LAST_SIGNAL
 };
@@ -167,18 +165,6 @@ tab_search_key_press_cb (WebKitWebView *web_view,
 	}
 
 	return FALSE;
-}
-
-static void
-find_next_cb (EphyFindToolbar *toolbar)
-{
-	g_signal_emit (toolbar, signals[NEXT], 0);
-}
-
-static void
-find_prev_cb (EphyFindToolbar *toolbar)
-{
-	g_signal_emit (toolbar, signals[PREVIOUS], 0);
 }
 
 static gboolean
@@ -317,7 +303,7 @@ entry_key_press_event_cb (GtkEntry *entry,
 		  event->keyval == GDK_KEY_ISO_Enter))
 	{
 		handled = TRUE;
-		g_signal_emit (toolbar, signals[PREVIOUS], 0);
+                ephy_find_toolbar_find_previous (toolbar);
 	}
 
 	return handled;
@@ -333,7 +319,7 @@ entry_activate_cb (GtkWidget *entry,
 	}
 	else
 	{
-		g_signal_emit (toolbar, signals[NEXT], 0);
+                ephy_find_toolbar_find_next (toolbar);
 	}
 }
 
@@ -470,9 +456,9 @@ ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 	g_signal_connect (toolbar->entry, "activate",
 			  G_CALLBACK (entry_activate_cb), toolbar);
 	g_signal_connect_swapped (toolbar->next, "clicked",
-				  G_CALLBACK (find_next_cb), toolbar);
+				  G_CALLBACK (ephy_find_toolbar_find_next), toolbar);
 	g_signal_connect_swapped (toolbar->prev, "clicked",
-				  G_CALLBACK (find_prev_cb), toolbar);
+				  G_CALLBACK (ephy_find_toolbar_find_previous), toolbar);
 	gtk_search_bar_connect_entry (GTK_SEARCH_BAR (toolbar),
 				      GTK_ENTRY (toolbar->entry));
 
@@ -553,20 +539,6 @@ ephy_find_toolbar_class_init (EphyFindToolbarClass *klass)
 
 	widget_class->draw = ephy_find_toolbar_draw;
 	widget_class->grab_focus = ephy_find_toolbar_grab_focus;
-
-	signals[NEXT] =
-		g_signal_new ("next",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      0, NULL, NULL, NULL,
-			      G_TYPE_NONE, 0);
-
-	signals[PREVIOUS] =
-		g_signal_new ("previous",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      0, NULL, NULL, NULL,
-			      G_TYPE_NONE, 0);
 
 	signals[CLOSE] =
 		g_signal_new ("close",
