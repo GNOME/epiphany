@@ -51,14 +51,6 @@ enum
 
 enum
 {
-	COLUMN_TITLE,
-        COLUMN_NODE,
-	COLUMN_SELECTED,
-	COLUMNS
-};
-
-enum
-{
 	MODE_GROUPED,
 	MODE_LIST,
 	MODES
@@ -86,8 +78,8 @@ append_topics (EphyTopicsPalette *palette,
 	{
 		if (!*valid) gtk_list_store_append (palette->store, iter);
 		gtk_list_store_set (palette->store, iter,
-		                    COLUMN_TITLE, NULL,
-		                    COLUMN_NODE, NULL,
+		                    EPHY_TOPICS_PALETTE_COLUMN_TITLE, NULL,
+		                    EPHY_TOPICS_PALETTE_COLUMN_NODE, NULL,
 		                    -1);
 		*valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (palette->store), iter);
 	}
@@ -99,17 +91,17 @@ append_topics (EphyTopicsPalette *palette,
 		
 		if (!*valid) gtk_list_store_append (palette->store, iter);
 		gtk_list_store_set (palette->store, iter,
-		                    COLUMN_TITLE, title,
-		                    COLUMN_NODE, node,
-		                    COLUMN_SELECTED, ephy_node_has_child (node, palette->bookmark),
+		                    EPHY_TOPICS_PALETTE_COLUMN_TITLE, title,
+		                    EPHY_TOPICS_PALETTE_COLUMN_NODE, node,
+		                    EPHY_TOPICS_PALETTE_COLUMN_SELECTED, ephy_node_has_child (node, palette->bookmark),
 		                    -1);
 		*valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (palette->store), iter);
 		*first = FALSE;
 	}
 }
 
-static void
-update_list (EphyTopicsPalette *palette)
+void
+ephy_topics_palette_update_list (EphyTopicsPalette *palette)
 {
 	GPtrArray *children, *bookmarks, *topics;
 	EphyNode *node;
@@ -228,7 +220,7 @@ static void
 tree_changed_cb (EphyBookmarks *bookmarks,
 		 EphyTopicsPalette *palette)
 {
-	update_list (palette);
+	ephy_topics_palette_update_list (palette);
 }
 
 static void
@@ -236,7 +228,7 @@ node_added_cb (EphyNode *parent,
 	       EphyNode *child,
 	       EphyTopicsPalette *palette)
 {
-	update_list (palette);
+	ephy_topics_palette_update_list (palette);
 }
 
 static void
@@ -245,7 +237,7 @@ node_changed_cb (EphyNode *parent,
 		 guint property_id,
 		 EphyTopicsPalette *palette)
 {
-	update_list (palette);
+	ephy_topics_palette_update_list (palette);
 }
 
 static void
@@ -254,7 +246,7 @@ node_removed_cb (EphyNode *parent,
 		 guint index,
 		 EphyTopicsPalette *palette)
 {
-	update_list (palette);
+	ephy_topics_palette_update_list (palette);
 }
 
 static void
@@ -286,7 +278,7 @@ ephy_topics_palette_set_property (GObject *object,
 		break;
 	case PROP_MODE:
 		palette->mode = g_value_get_int (value);
-		update_list (palette);
+		ephy_topics_palette_update_list (palette);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -294,64 +286,10 @@ ephy_topics_palette_set_property (GObject *object,
 	}
 }
 
-static void
-cell_edited (GtkCellRendererText *renderer,
-	     const char *path_str,
-	     const char *new_text,
-	     EphyTopicsPalette *palette)
+GtkListStore *
+ephy_topics_palette_get_store (EphyTopicsPalette *palette)
 {
-	if (*new_text != 0)
-	{
-		EphyNode *node;
-		node = ephy_bookmarks_add_keyword (palette->bookmarks, new_text);
-		ephy_bookmarks_set_keyword (palette->bookmarks, node, palette->bookmark);
-	}
-	else
-	{
-		update_list (palette);
-	}
-}
-
-static void
-toggled (GtkCellRendererToggle *cell_renderer,
-	 gchar *path,
-	 EphyTopicsPalette *palette)
-{
-	EphyNode *topic;
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-	
-	model = gtk_tree_view_get_model (GTK_TREE_VIEW (palette));
-
-	g_return_if_fail(gtk_tree_model_get_iter_from_string (model, &iter, path));
-
-	gtk_tree_model_get (model, &iter, COLUMN_NODE, &topic, -1);
-	
-	/* Need to protect against toggling separators. */
-	if (topic == NULL) return;
-	
-	if (ephy_node_has_child (topic, palette->bookmark))
-	{
-		ephy_bookmarks_unset_keyword (palette->bookmarks,
-		                              topic,
-		                              palette->bookmark);
-	}
-	else
-	{
-		ephy_bookmarks_set_keyword (palette->bookmarks,
-		                            topic,
-		                            palette->bookmark);
-	}
-}
-
-static gboolean
-is_separator (GtkTreeModel *model,
-	      GtkTreeIter *iter,
-	      gpointer data)
-{
-	EphyNode *node;
-	gtk_tree_model_get (model, iter, COLUMN_NODE, &node, -1);
-	return (node == NULL);
+	return palette->store;
 }
 
 static GObject *
@@ -362,39 +300,18 @@ ephy_topics_palette_constructor (GType type,
 {
 	GObject *object;
 	EphyTopicsPalette *palette;
-	GtkCellRenderer *renderer;
 
 	object = G_OBJECT_CLASS (ephy_topics_palette_parent_class)->constructor (type,
                                                                                  n_construct_properties,
                                                                                  construct_params);
 	palette = EPHY_TOPICS_PALETTE (object);
 
-	palette->store = gtk_list_store_new (COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
+	palette->store = gtk_list_store_new (EPHY_TOPICS_PALETTE_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (object), GTK_TREE_MODEL (palette->store));
 	g_object_unref (palette->store);
 
-	palette->column = gtk_tree_view_column_new ();
-	
-	renderer = gtk_cell_renderer_toggle_new ();
-	gtk_tree_view_column_pack_start (palette->column, renderer, FALSE);
-	gtk_tree_view_column_add_attribute (palette->column, renderer, "active", COLUMN_SELECTED);
-	g_signal_connect (renderer, "toggled", G_CALLBACK (toggled), palette);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_column_pack_start (palette->column, renderer, TRUE);
-	gtk_tree_view_column_add_attribute (palette->column, renderer, "text", COLUMN_TITLE);
-	g_signal_connect (renderer, "edited", G_CALLBACK (cell_edited), palette);
+	ephy_topics_palette_update_list (palette);
 
-	gtk_tree_view_append_column (GTK_TREE_VIEW (object), palette->column);
-
-	gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (object), is_separator, NULL, NULL);
-	gtk_tree_view_set_enable_search (GTK_TREE_VIEW (object), TRUE);
-	gtk_tree_view_set_search_column (GTK_TREE_VIEW (object), COLUMN_TITLE);
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (object), FALSE);
-	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (object)), GTK_SELECTION_NONE);
-	
-	update_list (palette);
-    
 	return object;
 }
 
@@ -403,21 +320,16 @@ ephy_topics_palette_init (EphyTopicsPalette *palette)
 {
 }
 
-GtkWidget *
+EphyTopicsPalette *
 ephy_topics_palette_new (EphyBookmarks *bookmarks,
-			 EphyNode *bookmark)
+                         EphyNode      *bookmark)
 {
-	EphyTopicsPalette *palette;
-
 	g_assert (bookmarks != NULL);
 
-	palette = EPHY_TOPICS_PALETTE (g_object_new
-				       (EPHY_TYPE_TOPICS_PALETTE,
-					"bookmarks", bookmarks,
-					"bookmark", bookmark,
-					NULL));
-
-	return GTK_WIDGET (palette);
+	return g_object_new (EPHY_TYPE_TOPICS_PALETTE,
+	                     "bookmarks", bookmarks,
+	                     "bookmark", bookmark,
+	                     NULL);
 }
 
 static void

@@ -32,10 +32,19 @@ G_BEGIN_DECLS
 #define EPHY_TYPE_TOPICS_PALETTE (ephy_topics_palette_get_type ())
 G_DECLARE_FINAL_TYPE (EphyTopicsPalette, ephy_topics_palette, EPHY, TOPICS_PALETTE, GtkTreeView);
 
-GtkWidget	    *ephy_topics_palette_new       (EphyBookmarks *bookmarks,
-						    EphyNode *bookmark);
+enum
+{
+	EPHY_TOPICS_PALETTE_COLUMN_TITLE,
+	EPHY_TOPICS_PALETTE_COLUMN_NODE,
+	EPHY_TOPICS_PALETTE_COLUMN_SELECTED,
+	EPHY_TOPICS_PALETTE_COLUMNS
+};
 
-void                 ephy_topics_palette_new_topic (EphyTopicsPalette *palette);
+EphyTopicsPalette *ephy_topics_palette_new         (EphyBookmarks     *bookmarks,
+                                                    EphyNode          *bookmark);
+
+void               ephy_topics_palette_update_list (EphyTopicsPalette *palette);
+GtkListStore      *ephy_topics_palette_get_store   (EphyTopicsPalette *palette);
 
 G_END_DECLS
 

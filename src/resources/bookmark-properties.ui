@@ -5,7 +5,7 @@
     <property name="modal">True</property>
     <property name="resizable">False</property>
     <property name="width-request">450</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <property name="border-width">5</property>
     <signal name="response" handler="ephy_bookmark_properties_response_cb"/>
     <signal name="destroy" handler="ephy_bookmark_properties_destroy_cb"/>
@@ -92,8 +92,45 @@
                   <object class="GtkScrolledWindow" id="topics_scrolled_window">
                     <property name="visible">True</property>
                     <property name="shadow-type">in</property>
-                    <property name="width-request">290</property>
                     <property name="height-request">250</property>
+                    <child>
+                      <object class="GtkTreeView" id="topics_tree_view">
+                        <property name="visible">True</property>
+                        <property name="search-column">0</property> <!-- COLUMN_TITLE -->
+                        <property name="headers-visible">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection">
+                            <property name="mode">none</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="topics_column">
+                            <property name="sizing">fixed</property>
+                            <property name="fixed-width">290</property>
+                            <property name="title" translatable="yes">Topics</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-order">descending</property>
+                            <child>
+                              <object class="GtkCellRendererToggle">
+                                <signal name="toggled" handler="on_topic_toggled"/>
+                              </object>
+                              <attributes>
+                                <attribute name="active">2</attribute> <!-- COLUMN_SELECTED -->
+                              </attributes>
+                            </child>
+                            <child>
+                              <object class="GtkCellRendererText">
+                                <signal name="edited" handler="on_topic_edited"/>
+                              </object>
+                              <attributes>
+                                <attribute name="text">0</attribute> <!-- COLUMN_TITLE -->
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>

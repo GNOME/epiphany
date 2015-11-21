@@ -64,8 +64,12 @@ struct _EphyBookmarkProperties
 	GtkEntry          *adress_entry;
 	GtkLabel          *topics_label;
 	GtkExpander       *topics_expander;
+	GtkTreeView       *topics_tree_view;
 	GtkScrolledWindow *topics_scrolled_window;
 	GtkLabel          *warning_label;
+
+	/* slave */
+	EphyTopicsPalette *palette;
 };
 
 enum
@@ -250,38 +254,73 @@ title_entry_changed_cb (GtkWidget              *entry,
 }
 
 static void
+on_topic_edited (GtkCellRendererText    *renderer,
+                 const char             *path_str,
+                 const char             *new_text,
+                 EphyBookmarkProperties *properties)
+{
+	if (*new_text != 0)
+	{
+		EphyNode *node;
+		node = ephy_bookmarks_add_keyword (properties->bookmarks, new_text);
+		ephy_bookmarks_set_keyword (properties->bookmarks, node, properties->bookmark);
+	}
+	else
+	{
+		ephy_topics_palette_update_list (EPHY_TOPICS_PALETTE (properties->topics_tree_view));   // TODO hack
+	}
+}
+
+static void
+on_topic_toggled (GtkCellRendererToggle  *cell_renderer,
+                  gchar                  *path,
+                  EphyBookmarkProperties *properties)
+{
+	EphyNode     *topic;
+	GtkTreeModel *model;
+	GtkTreeIter   iter;
+
+	model = gtk_tree_view_get_model (properties->topics_tree_view);
+
+	g_return_if_fail (gtk_tree_model_get_iter_from_string (model, &iter, path));
+
+	gtk_tree_model_get (model, &iter, EPHY_TOPICS_PALETTE_COLUMN_NODE, &topic, -1);
+
+	/* Protect against toggling separators. */
+	if (topic == NULL)
+		return;
+
+	if (ephy_node_has_child (topic, properties->bookmark))
+	{
+		ephy_bookmarks_unset_keyword (properties->bookmarks,
+		                              topic,
+		                              properties->bookmark);
+	}
+	else
+	{
+		ephy_bookmarks_set_keyword (properties->bookmarks,
+		                            topic,
+		                            properties->bookmark);
+	}
+}
+
+static gboolean
+is_separator (GtkTreeModel *model,
+              GtkTreeIter  *iter,
+              gpointer      data)
+{
+	EphyNode *node;
+	gtk_tree_model_get (model, iter, EPHY_TOPICS_PALETTE_COLUMN_NODE, &node, -1);
+	return (node == NULL);
+}
+
+static void
 location_entry_changed_cb (GtkWidget *entry,
 			   EphyBookmarkProperties *properties)
 {
 	ephy_bookmarks_set_address (properties->bookmarks,
 				    properties->bookmark,
 				    gtk_entry_get_text (GTK_ENTRY (entry)));
-}
-
-static void
-list_mapped_cb (GtkWidget *widget,
-		 EphyBookmarkProperties *properties)
-{
-	GdkGeometry geometry;
-	
-	geometry.min_width = -1;
-	geometry.min_height = 230;
-	gtk_window_set_geometry_hints (GTK_WINDOW (properties),
-				       widget, &geometry,
-				       GDK_HINT_MIN_SIZE);
-}
-
-static void
-list_unmapped_cb (GtkWidget *widget,
-		 EphyBookmarkProperties *properties)
-{
-	GdkGeometry geometry;
-	
-	geometry.max_height = -1;
-	geometry.max_width = G_MAXINT;
-	gtk_window_set_geometry_hints (GTK_WINDOW (properties),	
-				       GTK_WIDGET (properties),
-				       &geometry, GDK_HINT_MAX_SIZE);
 }
 
 static void
@@ -297,11 +336,10 @@ ephy_bookmark_properties_constructor (GType                  type,
 	GObject                *object;
 	EphyBookmarkProperties *properties;
 
-	gboolean    lockdown;
-	const char *tmp;
-	char       *unescaped_url;
-	GtkWidget  *entry;
-	GtkWidget  *widget;
+	gboolean      lockdown;
+	const char   *tmp;
+	char         *unescaped_url;
+	GtkWidget    *entry;
 
 	object = G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->constructor (type,
                                                                                       n_construct_properties,
@@ -341,13 +379,13 @@ ephy_bookmark_properties_constructor (GType                  type,
 	gtk_grid_attach (properties->grid, entry, 1, 2, 1, 1);
 	gtk_widget_set_hexpand (entry, TRUE);
 
-	widget = ephy_topics_palette_new (properties->bookmarks, properties->bookmark);
-	gtk_container_add (GTK_CONTAINER (properties->topics_scrolled_window), widget);
-	gtk_widget_show (widget);
+	gtk_tree_view_set_row_separator_func (properties->topics_tree_view, is_separator, NULL, NULL);
+
+	properties->palette = ephy_topics_palette_new (properties->bookmarks, properties->bookmark);
+	gtk_tree_view_set_model (properties->topics_tree_view, GTK_TREE_MODEL (ephy_topics_palette_get_store (properties->palette)));
+
+	/* TODO bind; and the entry?! */
 	gtk_widget_set_sensitive (GTK_WIDGET (properties->topics_scrolled_window), !lockdown);
-	/* TODO remove these hacks */
-	g_signal_connect (properties->topics_scrolled_window, "map", G_CALLBACK (list_mapped_cb), properties);
-	g_signal_connect (properties->topics_scrolled_window, "unmap", G_CALLBACK (list_unmapped_cb), properties);
 
 	ephy_initial_state_add_expander (GTK_WIDGET (properties->topics_expander), "bookmark_properties_list", FALSE);
 
@@ -464,10 +502,13 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, adress_entry);
 	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, topics_label);
 	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, topics_expander);
+	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, topics_tree_view);
 	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, topics_scrolled_window);
 	gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, warning_label);
 
 	gtk_widget_class_bind_template_callback (widget_class, title_entry_changed_cb);
+	gtk_widget_class_bind_template_callback (widget_class, on_topic_toggled);   // TODO make the row activatable instead of a little togglebutton
+	gtk_widget_class_bind_template_callback (widget_class, on_topic_edited);    // TODO topics’ names are not editable from there, they are synced with bookmarks... but this is used for... updating the entry \o/ yay \o/
 	gtk_widget_class_bind_template_callback (widget_class, location_entry_changed_cb);
 	gtk_widget_class_bind_template_callback (widget_class, ephy_bookmark_properties_response_cb);
 	gtk_widget_class_bind_template_callback (widget_class, ephy_bookmark_properties_destroy_cb);
