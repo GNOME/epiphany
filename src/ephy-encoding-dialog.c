@@ -239,33 +239,6 @@ ephy_encoding_dialog_response_cb (GtkWidget *widget,
 }
 
 static void
-view_row_selected_cb (GtkTreeSelection *selection,
-		      EphyEncodingDialog *dialog)
-{
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-
-	if (gtk_tree_selection_get_selected (selection, &model, &iter))
-	{
-		char *encoding;
-
-		gtk_tree_model_get (model, &iter,
-				    COL_ENCODING, &encoding,
-				    -1);
-
-		g_free (dialog->selected_encoding);
-		dialog->selected_encoding = encoding;
-	}
-
-	if (dialog->update_tag)
-		return;
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->manual_button), TRUE);
-
-	activate_choice (dialog);
-}
-
-static void
 view_row_activated_cb (GtkTreeView *treeview,
 		       GtkTreePath *path,
 		       GtkTreeViewColumn *column,
@@ -291,8 +264,6 @@ view_row_activated_cb (GtkTreeView *treeview,
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->manual_button), TRUE);
 
 	activate_choice (dialog);
-
-	g_object_unref (dialog);
 }
 
 static void
@@ -356,10 +327,8 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(treeview), FALSE);
+	gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (treeview), TRUE);
 
-	g_signal_connect (selection, "changed",
-			  G_CALLBACK (view_row_selected_cb),
-			  dialog);
 	g_signal_connect (treeview, "row-activated",
 			  G_CALLBACK (view_row_activated_cb),
 			  dialog);
