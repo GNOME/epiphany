@@ -1386,6 +1386,13 @@ permission_request_cb (WebKitWebView           *web_view,
       !WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision))
     return FALSE;
 
+  /* Application mode implies being OK with notifications. */
+  if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision) &&
+      ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    webkit_permission_request_allow (decision);
+    return TRUE;
+  }
+
   info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
                                             _("Allow"), GTK_RESPONSE_YES,
                                             NULL);
