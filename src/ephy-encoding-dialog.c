@@ -47,8 +47,7 @@ struct _EphyEncodingDialog
 	char *selected_encoding;
 
 	/* from the UI file */
-	GtkRadioButton    *automatic_button;
-	GtkRadioButton    *manual_button;
+	GtkSwitch         *default_switch;
 	GtkScrolledWindow *scrolled_window;
 };
 
@@ -106,13 +105,9 @@ select_encoding_row (GtkTreeView *view, EphyEncoding *encoding)
 static void
 sync_encoding_against_embed (EphyEncodingDialog *dialog)
 {
-	GtkTreeSelection *selection;
-	GtkTreeModel *model;
-	GList *rows;
 	const char *encoding;
 	gboolean is_automatic = FALSE;
 	WebKitWebView *view;
-	EphyEncoding *node;
 
 	dialog->update_tag = TRUE;
 
@@ -120,33 +115,42 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
 	encoding = webkit_web_view_get_custom_charset (view);
-	if (encoding == NULL) goto out;
+	is_automatic = encoding == NULL;
 
-	node = ephy_encodings_get_encoding (dialog->encodings, encoding, TRUE);
-	g_assert (EPHY_IS_ENCODING (node));
-
-	/* Select the current encoding in the list view. */
-	select_encoding_row (GTK_TREE_VIEW (dialog->enc_view), node);
-
-	/* scroll the view so the active encoding is visible */
-        selection = gtk_tree_view_get_selection
-                (GTK_TREE_VIEW (dialog->enc_view));
-	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->enc_view));
-        rows = gtk_tree_selection_get_selected_rows (selection, &model);
-        if (rows != NULL)
+	if (!is_automatic)
 	{
-		gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (dialog->enc_view),
-					      (GtkTreePath *) rows->data,
-					      NULL, /* column */
-					      TRUE,
-					      0.5,
-					      0.0);
-		g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
-		g_list_free (rows);
-	}
+		EphyEncoding *node;
+		GtkTreeSelection *selection;
+		GtkTreeModel *model;
+		GList *rows;
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->automatic_button), is_automatic);
-out:
+		node = ephy_encodings_get_encoding (dialog->encodings, encoding, TRUE);
+		g_assert (EPHY_IS_ENCODING (node));
+
+		/* Select the current encoding in the list view. */
+		select_encoding_row (GTK_TREE_VIEW (dialog->enc_view), node);
+
+		/* scroll the view so the active encoding is visible */
+		selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->enc_view));
+		model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->enc_view));
+		rows = gtk_tree_selection_get_selected_rows (selection, &model);
+
+		if (rows != NULL)
+		{
+			gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (dialog->enc_view),
+			                              (GtkTreePath *) rows->data,
+			                              NULL, /* column */
+			                              TRUE,
+			                              0.5,
+			                              0.0);
+			g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
+			g_list_free (rows);
+		}
+	}
+	gtk_switch_set_active (dialog->default_switch, is_automatic);
+	gtk_switch_set_state (dialog->default_switch, is_automatic);
+	gtk_widget_set_sensitive (GTK_WIDGET (dialog->scrolled_window), !is_automatic);
+
 	dialog->update_tag = FALSE;
 }
 
@@ -205,16 +209,12 @@ ephy_encoding_dialog_sync_embed (EphyWindow *window, GParamSpec *pspec, EphyEnco
 static void
 activate_choice (EphyEncodingDialog *dialog)
 {
-	gboolean is_automatic;
 	WebKitWebView *view;
 
 	g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
-
-	is_automatic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->automatic_button));
-
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
-	if (is_automatic)
+	if (gtk_switch_get_active (dialog->default_switch))
 	{
 		webkit_web_view_set_custom_charset (view, NULL);
 	}
@@ -261,19 +261,36 @@ view_row_activated_cb (GtkTreeView *treeview,
 	if (dialog->update_tag)
 		return;
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->manual_button), TRUE);
-
 	activate_choice (dialog);
 }
 
-static void
-automatic_toggled_cb (GtkToggleButton *button, EphyEncodingDialog *dialog)
+static gboolean
+default_switch_toggled_cb (GtkSwitch          *default_switch,
+                           gboolean            state,
+                           EphyEncodingDialog *dialog)
 {
-	if (gtk_toggle_button_get_active (button)
-	    && dialog->update_tag == FALSE)
+	if (dialog->update_tag)
 	{
+		gtk_switch_set_state (default_switch, !state);
+	}
+	else if (state)
+	{
+		gtk_switch_set_state (default_switch, TRUE);
+
+		if (dialog->selected_encoding != NULL)
+		{
+			g_free (dialog->selected_encoding);
+			dialog->selected_encoding = NULL;
+		}
 		activate_choice (dialog);
 	}
+	else
+	{
+		gtk_switch_set_state (default_switch, FALSE);
+
+		// TODO select safe default in list, or find another solution
+	}
+	return TRUE;
 }
 
 static void
@@ -288,6 +305,7 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 
 	gtk_widget_init_template (GTK_WIDGET (dialog));
 
+	dialog->selected_encoding = NULL;
 	dialog->encodings =
 		EPHY_ENCODINGS (ephy_embed_shell_get_encodings
 				(EPHY_EMBED_SHELL (ephy_shell_get_default ())));
@@ -437,11 +455,10 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 	/* load from UI file */
 	gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/encoding-dialog.ui");
 
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, automatic_button);
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, manual_button);
+	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, default_switch);
 	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, scrolled_window);
 
-	gtk_widget_class_bind_template_callback (widget_class, automatic_toggled_cb);
+	gtk_widget_class_bind_template_callback (widget_class, default_switch_toggled_cb);
 	gtk_widget_class_bind_template_callback (widget_class, ephy_encoding_dialog_response_cb);
 }
 
