@@ -245,8 +245,8 @@ test_ephy_web_view_non_search_regex (void)
 }
 
 typedef struct {
-  char *url;
-  char *expected;
+  const char *url;
+  const char *expected;
 } normalize_or_autosearch_t;
 
 normalize_or_autosearch_t normalize_or_autosearch_test_ddg[] = {
@@ -278,7 +278,8 @@ verify_normalize_or_autosearch_urls (EphyWebView *view,
   int i;
 
   for (i = 0; i < n_tests; i++) {
-    char *url, *result;
+    const char *url;
+    char *result;
 
     url = test[i].url;
 

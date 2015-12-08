@@ -442,7 +442,7 @@ ephy_uri_tester_fixup_regexp (const char *prefix, char *src)
 static void
 ephy_uri_tester_compile_regexp (EphyUriTester *tester,
                                 GString   *gpatt,
-                                char      *opts,
+                                const char *opts,
                                 gboolean   whitelist)
 {
   GHashTable *pattern;
@@ -481,15 +481,15 @@ ephy_uri_tester_compile_regexp (EphyUriTester *tester,
 
 static void
 ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
-                                 char      *prefix,
-                                 char      *type,
+                                 const char *prefix,
+                                 const char *type,
                                  char      *line,
                                  gboolean   whitelist)
 {
     char **data;
     char *patt;
     GString *format_patt;
-    char *opts;
+    const char *opts;
 
     data = g_strsplit (line, "$", -1);
     if (!data || !data[0])
@@ -519,7 +519,7 @@ ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
         if (data[1] && data[2])
             g_free (patt);
         if (data[1])
-            g_free (opts);
+            g_free ((char *)opts);
         g_strfreev (data);
         return;
     }
@@ -536,7 +536,7 @@ ephy_uri_tester_add_url_pattern (EphyUriTester *tester,
     if (data[1] && data[2])
         g_free (patt);
     if (data[1])
-        g_free (opts);
+        g_free ((char *)opts);
     g_strfreev (data);
 
     g_string_free (format_patt, TRUE);

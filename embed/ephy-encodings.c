@@ -51,8 +51,8 @@ static guint signals[LAST_SIGNAL];
 static const 
 struct
 {
-  char *title;
-  char *code;
+  const char *title;
+  const char *code;
   EphyLanguageGroup groups;
 }
 encoding_entries [] =

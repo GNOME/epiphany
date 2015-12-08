@@ -56,7 +56,7 @@ find_action_group (GtkUIManager *manager,
 
 static void
 arbitrary_url_cb (GSettings *settings,
-                  char *key,
+                  const char *key,
                   EphyWindow *window)
 {
   EphyEmbed *embed;
@@ -77,7 +77,7 @@ arbitrary_url_cb (GSettings *settings,
 
 static void
 fullscreen_cb (GSettings *settings,
-               char *key,
+               const char *key,
                EphyWindow *window)
 {
   if (g_settings_get_boolean (settings, key))
@@ -87,9 +87,9 @@ fullscreen_cb (GSettings *settings,
 }
 
 typedef struct {
-  char *key;
-  char *action;
-  char *prop;
+  const char *key;
+  const char *action;
+  const char *prop;
 } BindAction;
 
 static const BindAction window_actions[] = {

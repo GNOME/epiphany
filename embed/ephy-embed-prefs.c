@@ -32,10 +32,10 @@
 
 typedef struct
 {
-  char *schema;
-  char *key;
-  char *webkit_pref;
-  void (*callback) (GSettings *settings, char *key, gpointer data);
+  const char *schema;
+  const char *key;
+  const char *webkit_pref;
+  void (*callback) (GSettings *settings, const char *key, gpointer data);
 } PrefData;
 
 #define ENABLE_SCRIPTS_SETTING "enable-javascript"
@@ -88,7 +88,7 @@ user_style_seet_read_cb (GFile *file,
 
 static void
 webkit_pref_callback_user_stylesheet (GSettings *settings,
-                                      char *key,
+                                      const char *key,
                                       gpointer data)
 {
   gboolean value;
@@ -179,7 +179,7 @@ webkit_pref_get_internal_user_agent (void)
 
 static void
 webkit_pref_callback_user_agent (GSettings *settings,
-                                 char *key,
+                                 const char *key,
                                  gpointer data)
 {
   char *value;
@@ -235,7 +235,7 @@ normalize_font_size (gdouble font_size)
 
 static void
 webkit_pref_callback_font_size (GSettings *settings,
-                                char *key,
+                                const char *key,
                                 gpointer data)
 {
   char *webkit_pref = data;
@@ -273,7 +273,7 @@ webkit_pref_callback_font_size (GSettings *settings,
 
 static void
 webkit_pref_callback_font_family (GSettings *settings,
-                                  char *key,
+                                  const char *key,
                                   gpointer data)
 {
   char *webkit_pref = data;
@@ -337,7 +337,7 @@ normalize_languages (char **languages)
    (old transform_accept_languages_list() function) */
 static void
 webkit_pref_callback_accept_languages (GSettings *settings,
-                                       char *key,
+                                       const char *key,
                                        gpointer data)
 {
   GArray *array;
@@ -396,7 +396,7 @@ ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager *cookie_manager,
 
 static void
 webkit_pref_callback_cookie_accept_policy (GSettings *settings,
-                                           char *key,
+                                           const char *key,
                                            gpointer data)
 {
   WebKitCookieManager *cookie_manager;
@@ -414,7 +414,7 @@ webkit_pref_callback_cookie_accept_policy (GSettings *settings,
 }
 
 static void
-ephy_embed_prefs_update_font_settings (GSettings *ephy_settings, char *key)
+ephy_embed_prefs_update_font_settings (GSettings *ephy_settings, const char *key)
 {
   if (g_settings_get_boolean (ephy_settings, key)) {
     g_object_set (webkit_settings,
@@ -427,24 +427,24 @@ ephy_embed_prefs_update_font_settings (GSettings *ephy_settings, char *key)
   } else {
     /* Sync with Epiphany values */
     webkit_pref_callback_font_size (ephy_settings, EPHY_PREFS_WEB_SERIF_FONT,
-                                    "default-font-size");
+                                    (gpointer)"default-font-size");
     webkit_pref_callback_font_size (ephy_settings, EPHY_PREFS_WEB_MONOSPACE_FONT,
-                                    "default-monospace-font-size");
+                                    (gpointer)"default-monospace-font-size");
 
     webkit_pref_callback_font_family (ephy_settings, EPHY_PREFS_WEB_SERIF_FONT,
-                                      "default-font-family");
+                                      (gpointer)"default-font-family");
     webkit_pref_callback_font_family (ephy_settings, EPHY_PREFS_WEB_SANS_SERIF_FONT,
-                                      "sans-serif-font-family");
+                                      (gpointer)"sans-serif-font-family");
     webkit_pref_callback_font_family (ephy_settings, EPHY_PREFS_WEB_MONOSPACE_FONT,
-                                      "monospace-font-family");
+                                      (gpointer)"monospace-font-family");
     webkit_pref_callback_font_family (ephy_settings, EPHY_PREFS_WEB_SERIF_FONT,
-                                      "serif-font-family");
+                                      (gpointer)"serif-font-family");
   }
 }
 
 static void
 webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
-                                  char *key,
+                                  const char *key,
                                   gpointer data)
 {
   ephy_embed_prefs_update_font_settings (ephy_settings, key);
@@ -452,7 +452,7 @@ webkit_pref_callback_gnome_fonts (GSettings *ephy_settings,
 
 static void
 webkit_pref_callback_enable_spell_checking (GSettings *settings,
-                                            char *key,
+                                            const char *key,
                                             gpointer data)
 {
   WebKitWebContext *web_context;
@@ -562,11 +562,11 @@ ephy_embed_prefs_init (gpointer user_data)
 
     webkit_pref_entries[i].callback (settings,
                                      webkit_pref_entries[i].key,
-                                     webkit_pref_entries[i].webkit_pref);
+                                     (gpointer)webkit_pref_entries[i].webkit_pref);
 
     g_signal_connect (settings, key,
                       G_CALLBACK (webkit_pref_entries[i].callback),
-                      webkit_pref_entries[i].webkit_pref);
+                      (gpointer)webkit_pref_entries[i].webkit_pref);
     g_free (key);
   }
 

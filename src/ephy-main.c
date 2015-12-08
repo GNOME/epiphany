@@ -147,7 +147,7 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
     XSetWindowAttributes attrs;
     Atom atom_name;
     Atom atom_type;
-    char* name;
+    const char* name;
     
     attrs.override_redirect = True;
     attrs.event_mask = PropertyChangeMask | StructureNotifyMask;

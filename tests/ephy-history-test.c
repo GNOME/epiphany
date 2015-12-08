@@ -369,7 +369,7 @@ perform_complex_url_query (EphyHistoryService *service,
 
   /* Get the most visited site that contains 'k'. */
   query = ephy_history_query_new ();
-  query->substring_list = g_list_prepend (query->substring_list, "k");
+  query->substring_list = g_list_prepend (query->substring_list, (gpointer)"k");
   query->limit = 1;
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
 
@@ -408,7 +408,7 @@ perform_complex_url_query_with_time_range (EphyHistoryService *service,
 
   /* Get the most visited site that contains 'k' that was visited since timestamp 500. */
   query = ephy_history_query_new ();
-  query->substring_list = g_list_prepend (query->substring_list, "k");
+  query->substring_list = g_list_prepend (query->substring_list, (gpointer)"k");
   query->limit = 1;
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
   query->from = 500;
@@ -463,7 +463,7 @@ perform_query_after_clear (EphyHistoryService *service,
 
   /* Get 10 random sites, the query should fail. */
   query = ephy_history_query_new ();
-  query->substring_list = g_list_prepend (query->substring_list, "gnome");
+  query->substring_list = g_list_prepend (query->substring_list, (gpointer)"gnome");
   query->limit = 10;
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
 

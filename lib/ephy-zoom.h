@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 static const
 struct
 {
-  gchar *name;
+  const gchar *name;
   float level;
 }
 zoom_levels[] =

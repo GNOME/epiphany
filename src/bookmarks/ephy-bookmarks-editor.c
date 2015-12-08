@@ -48,19 +48,19 @@
 
 static const GtkTargetEntry topic_drag_dest_types [] =
 {
-	{ EPHY_DND_URI_LIST_TYPE,   0, 0 }
+	{ (char *)EPHY_DND_URI_LIST_TYPE,   0, 0 }
 };
 
 static const GtkTargetEntry bmk_drag_types [] =
 {
-	{ EPHY_DND_URL_TYPE,        0, 0 },
-	{ EPHY_DND_URI_LIST_TYPE,   0, 1 },
-	{ EPHY_DND_TEXT_TYPE,       0, 2 }
+	{ (char *)EPHY_DND_URL_TYPE,        0, 0 },
+	{ (char *)EPHY_DND_URI_LIST_TYPE,   0, 1 },
+	{ (char *)EPHY_DND_TEXT_TYPE,       0, 2 }
 };
 
 static const GtkTargetEntry topic_drag_types [] =
 {
-	{ EPHY_DND_TOPIC_TYPE,      0, 0 }
+	{ (char *)EPHY_DND_TOPIC_TYPE,      0, 0 }
 };
 
 static const struct

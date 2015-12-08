@@ -23,8 +23,8 @@
 #include <gtk/gtk.h>
 
 typedef struct {
-  char *uri;
-  char *hostname;
+  const char *uri;
+  const char *hostname;
 } HostnameTest;
 
 static const HostnameTest hostname_tests[] = {

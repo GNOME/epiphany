@@ -65,9 +65,9 @@ static void ephy_notebook_remove	 (GtkContainer *container,
 
 static const GtkTargetEntry url_drag_types [] = 
 {
-        { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
-	{ EPHY_DND_URI_LIST_TYPE,   0, 0 },
-	{ EPHY_DND_URL_TYPE,	    0, 1 },
+	{ (char *)"GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
+	{ (char *)EPHY_DND_URI_LIST_TYPE,   0, 0 },
+	{ (char *)EPHY_DND_URL_TYPE,        0, 1 },
 };
 
 enum

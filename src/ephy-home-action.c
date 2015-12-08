@@ -37,7 +37,7 @@ ephy_home_action_open (GtkAction *action,
 static void
 action_name_association (GtkAction *action,
 			 char *action_name,
-			 char *address)
+			 const char *address)
 {
 	EphyLinkFlags flags = EPHY_LINK_HOME_PAGE;
 

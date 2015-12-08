@@ -93,7 +93,7 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
   GError *error = NULL;
   char *index = NULL, *version = NULL;
   int status;
-  char *argv[6] = { EPHY_PROFILE_MIGRATOR, "-v" };
+  const char *argv[6] = { EPHY_PROFILE_MIGRATOR, "-v" };
   int i = 2; /* index for argv, start filling at 2. */
   char **envp;
 
@@ -128,7 +128,7 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
   if (debug)
     argv[0] = ABS_TOP_BUILD_DIR"/lib/"EPHY_PROFILE_MIGRATOR;
 
-  ret = g_spawn_sync (NULL, argv, envp, G_SPAWN_SEARCH_PATH,
+  ret = g_spawn_sync (NULL, (char **)argv, envp, G_SPAWN_SEARCH_PATH,
                       NULL, NULL, NULL, NULL,
                       &status, &error);
   g_free (index);

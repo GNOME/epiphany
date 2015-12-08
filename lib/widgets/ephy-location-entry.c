@@ -86,9 +86,9 @@ struct _EphyLocationEntryPrivate
 
 static const GtkTargetEntry url_drag_types [] =
 {
-	{ EPHY_DND_URL_TYPE,        0, 0 },
-	{ EPHY_DND_URI_LIST_TYPE,   0, 1 },
-	{ EPHY_DND_TEXT_TYPE,       0, 2 }
+	{ (char *)EPHY_DND_URL_TYPE,        0, 0 },
+	{ (char *)EPHY_DND_URI_LIST_TYPE,   0, 1 },
+	{ (char *)EPHY_DND_TEXT_TYPE,       0, 2 }
 };
 
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);

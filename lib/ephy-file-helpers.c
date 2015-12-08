@@ -360,7 +360,7 @@ ephy_file_helpers_init (const char *profile_dir,
 	if (steal_data_from_profile && profile_dir)
 	{
 		int i;
-		char *files_to_copy[] = { EPHY_HISTORY_FILE, EPHY_BOOKMARKS_FILE };
+		const char *files_to_copy[] = { EPHY_HISTORY_FILE, EPHY_BOOKMARKS_FILE };
 		
 		for (i = 0; i < G_N_ELEMENTS (files_to_copy); i++)
 		{

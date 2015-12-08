@@ -326,7 +326,7 @@ xbel_parse_folder (EphyBookmarks *eb, xmlTextReaderPtr reader, GList *folders)
 
 			for (l = folders; l != NULL; l=l->next)
 			{
-				char *title;
+				const char *title;
 				
 				title = l->data ? (char *) l->data : "";
 				
@@ -824,7 +824,7 @@ parse_rdf_lang_tag (xmlNode  *child,
 		    int      *best_match)
 {
 	const char * const *locales;
-	char *this_language;
+	const char *this_language;
 	xmlChar *lang;
 	xmlChar *content;
 	int i;
