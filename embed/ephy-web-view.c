@@ -1550,7 +1550,8 @@ update_security_status_for_committed_load (EphyWebView *view,
                                            const char *uri)
 {
   EphySecurityLevel security_level = EPHY_SECURITY_LEVEL_NO_SECURITY;
-  EphyEmbed *embed;
+  EphyEmbed *embed = NULL;
+  GtkWidget *toplevel;
   WebKitWebContext *web_context;
   WebKitSecurityManager *security_manager;
   SoupURI *soup_uri;
@@ -1560,7 +1561,9 @@ update_security_status_for_committed_load (EphyWebView *view,
     return;
   }
 
-  embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
+  if (EPHY_IS_EMBED_CONTAINER (toplevel))
+    embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
   web_context = webkit_web_view_get_context (WEBKIT_WEB_VIEW (view));
   security_manager = webkit_web_context_get_security_manager (web_context);
   soup_uri = soup_uri_new (uri);
@@ -1574,7 +1577,7 @@ update_security_status_for_committed_load (EphyWebView *view,
     g_object_ref (view->certificate);
     security_level = view->tls_errors == 0 ?
       EPHY_SECURITY_LEVEL_STRONG_SECURITY : EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE;
-  } else if (ephy_embed_has_load_pending (embed)) {
+  } else if (!embed || ephy_embed_has_load_pending (embed)) {
     security_level = EPHY_SECURITY_LEVEL_TO_BE_DETERMINED;
   }
 
