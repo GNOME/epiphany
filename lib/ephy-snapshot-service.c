@@ -566,7 +566,7 @@ ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
                                                       (GAsyncReadyCallback)got_snapshot_for_url,
                                                       task);
   else
-    g_idle_add (ephy_snapshot_service_take_from_webview, task);
+    g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, task);
 }
 
 /**
