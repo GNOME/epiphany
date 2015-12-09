@@ -379,6 +379,23 @@ snapshot_for_url_async_data_free (SnapshotForURLAsyncData *data)
   g_slice_free (SnapshotForURLAsyncData, data);
 }
 
+typedef struct {
+  GHashTable *cache;
+  char *url;
+  char *path;
+} CacheData;
+
+static gboolean
+idle_cache_snapshot_path (gpointer user_data)
+{
+  CacheData* data = (CacheData*)user_data;
+  g_hash_table_insert (data->cache, data->url, data->path);
+  g_hash_table_unref (data->cache);
+  g_free (data);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 get_snapshot_for_url_thread (GTask *task,
                              EphySnapshotService *service,
@@ -387,6 +404,7 @@ get_snapshot_for_url_thread (GTask *task,
 {
   GdkPixbuf *snapshot;
   GError *error = NULL;
+  CacheData *cache_data;
 
   data->path = gnome_desktop_thumbnail_factory_lookup (service->priv->factory, data->url, data->mtime);
   if (data->path == NULL) {
@@ -397,7 +415,11 @@ get_snapshot_for_url_thread (GTask *task,
     return;
   }
 
-  g_hash_table_insert (service->priv->cache, g_strdup (data->url), g_strdup (data->path));
+  cache_data = g_new (CacheData, 1);
+  cache_data->cache = g_hash_table_ref (service->priv->cache);
+  cache_data->url = g_strdup (data->url);
+  cache_data->path = g_strdup (data->path);
+  g_idle_add (idle_cache_snapshot_path, cache_data);
 
   snapshot = gdk_pixbuf_new_from_file (data->path, &error);
   if (snapshot == NULL) {
@@ -544,7 +566,7 @@ ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
                                                       (GAsyncReadyCallback)got_snapshot_for_url,
                                                       task);
   else
-    g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, task);
+    g_idle_add (ephy_snapshot_service_take_from_webview, task);
 }
 
 /**
@@ -622,6 +644,7 @@ save_snapshot_thread (GTask *task,
                       GCancellable *cancellable)
 {
   char *path;
+  CacheData *cache_data;
 
   gnome_desktop_thumbnail_factory_save_thumbnail (service->priv->factory,
                                                   data->snapshot,
@@ -629,7 +652,13 @@ save_snapshot_thread (GTask *task,
                                                   data->mtime);
 
   path = gnome_desktop_thumbnail_path_for_uri (data->url, GNOME_DESKTOP_THUMBNAIL_SIZE_LARGE);
-  g_hash_table_insert (service->priv->cache, g_strdup (data->url), g_strdup (path));
+
+  cache_data = g_new (CacheData, 1);
+  cache_data->cache = g_hash_table_ref (service->priv->cache);
+  cache_data->url = g_strdup (data->url);
+  cache_data->path = g_strdup (path);
+  g_idle_add (idle_cache_snapshot_path, cache_data);
+
   g_task_return_pointer (task, path, g_free);
 }
 
@@ -683,6 +712,7 @@ get_snapshot_path_for_url_thread (GTask *task,
                                   GCancellable *cancellable)
 {
   char *path;
+  CacheData *cache_data;
 
   path = gnome_desktop_thumbnail_factory_lookup (service->priv->factory, data->url, data->mtime);
   if (!path) {
@@ -693,7 +723,12 @@ get_snapshot_path_for_url_thread (GTask *task,
     return;
   }
 
-  g_hash_table_insert (service->priv->cache, g_strdup (data->url), g_strdup (path));
+  cache_data = g_new (CacheData, 1);
+  cache_data->cache = g_hash_table_ref (service->priv->cache);
+  cache_data->url = g_strdup (data->url);
+  cache_data->path = g_strdup (path);
+  g_idle_add (idle_cache_snapshot_path, cache_data);
+
   g_task_return_pointer (task, path, g_free);
 }
 
