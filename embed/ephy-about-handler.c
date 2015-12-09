@@ -363,9 +363,9 @@ handle_applications_finished_cb (EphyAboutHandler *handler,
                             "<tbody><tr id =\"%s\">"
                             "<td class=\"icon\"><img width=64 height=64 src=\"file://%s\"></img></td>"
                             "<td class=\"data\"><div class=\"appname\">%s</div><div class=\"appurl\">%s</div></td>"
-                            "<td class=\"input\"><input type=\"button\" value=\"Delete\" onclick=\"deleteWebApp('%s');\"></td>"
+                            "<td class=\"input\"><input type=\"button\" value=\"%s\" onclick=\"deleteWebApp('%s');\"></td>"
                             "<td class=\"date\">%s <br /> %s</td></tr></tbody>",
-                            app->name, app->icon_url, app->name, app->url, app->name,
+                            app->name, app->icon_url, app->name, app->url, _("Delete"), app->name,
                             /* Note for translators: this refers to the installation date. */
                             _("Installed on:"), app->install_date);
   }
