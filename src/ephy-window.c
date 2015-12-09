@@ -3283,28 +3283,16 @@ static const char* disabled_actions_for_app_mode[] = { "FileOpen",
 						       "EditHistory",
 						       "EditPreferences"};
 
-static gboolean
-_gtk_css_provider_load_from_resource (GtkCssProvider* provider,
-				      const char *resource_path,
-				      GError **error)
+static void
+parse_css_error (GtkCssProvider *provider,
+                 GtkCssSection *section,
+                 GError *error,
+                 gpointer user_data)
 {
-	GBytes *data;
-	gboolean res;
-	
-	g_return_val_if_fail (GTK_IS_CSS_PROVIDER (provider), FALSE);
-	g_return_val_if_fail (resource_path != NULL, FALSE);
-
-	data = g_resources_lookup_data (resource_path, 0, error);
-	if (data == NULL)
-		return FALSE;
-
-	res = gtk_css_provider_load_from_data (provider,
-					       g_bytes_get_data (data, NULL),
-					       g_bytes_get_size (data),
-					       error);
-	g_bytes_unref (data);
-	
-	return res;
+	g_warning ("CSS error in section beginning line %u at offset %u:\n %s",
+	           gtk_css_section_get_start_line (section) + 1,
+	           gtk_css_section_get_start_position (section),
+	           error->message);
 }
 
 static const gchar* app_actions[] = {
@@ -3412,21 +3400,13 @@ ephy_window_constructor (GType type,
 
 	/* Attach the CSS provider to the window. */
 	css_provider = gtk_css_provider_new ();
-	_gtk_css_provider_load_from_resource (css_provider,
-					      "/org/gnome/epiphany/epiphany.css",
-					      &error);
-	if (error == NULL)
-	{
-		gtk_style_context_add_provider_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)),
-		                                           GTK_STYLE_PROVIDER (css_provider),
-		                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-	}
-	else
-	{
-		g_warning ("Could not attach css style: %s", error->message);
-		g_error_free (error);
-	}
-
+	g_signal_connect (css_provider,
+	                  "parsing-error",
+	                  G_CALLBACK (parse_css_error), window);
+	gtk_css_provider_load_from_resource (css_provider, "/org/gnome/epiphany/epiphany.css");
+	gtk_style_context_add_provider_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)),
+	                                           GTK_STYLE_PROVIDER (css_provider),
+	                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	g_object_unref (css_provider);
 
 	/* Initialize the menus */
