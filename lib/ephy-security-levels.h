@@ -28,13 +28,11 @@
 
 G_BEGIN_DECLS
 
-#if 0
-TODO: EPHY_SECURITY_LEVEL_WEAK_SECURITY should be implemented for e.g. certs
-that use SHA1 or RSA 1024, connections that use RC4, connections that required
-protocol version fallback, servers that did not send the safe renegotiation
-extension, servers that picked weak DH primes, whatever else turns out to be bad
-next year, etc. etc.
-#endif
+/* TODO: EPHY_SECURITY_LEVEL_WEAK_SECURITY should be implemented for e.g. certs
+ * that use SHA1 or RSA 1024, connections that use RC4, connections that required
+ * protocol version fallback, servers that did not send the safe renegotiation
+ * extension, servers that picked weak DH primes, whatever else turns out to be bad
+ * next year, etc. etc. */
 
 typedef enum
 {
