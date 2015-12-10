@@ -29,8 +29,11 @@ struct _EphyWindowActionPrivate {
 
 enum {
     PROP_0,
-    PROP_WINDOW
+    PROP_WINDOW,
+    LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyWindowAction, ephy_window_action, GTK_TYPE_ACTION)
 
@@ -82,11 +85,14 @@ ephy_window_action_class_init (EphyWindowActionClass *class)
     object_class->set_property = ephy_window_action_set_property;
     object_class->get_property = ephy_window_action_get_property;
 
-    g_object_class_install_property (object_class,
-                                     PROP_WINDOW,
-                                     g_param_spec_object ("window", NULL, NULL,
-                                                          G_TYPE_OBJECT,
-                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT));
+    obj_properties[PROP_WINDOW] =
+        g_param_spec_object ("window",
+                             NULL,
+                             NULL,
+                             G_TYPE_OBJECT,
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT);
+
+    g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
     g_type_class_add_private (object_class, sizeof (EphyWindowActionPrivate));
 }
