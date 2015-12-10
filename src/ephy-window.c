@@ -354,7 +354,6 @@ static const struct
 
 struct _EphyWindowPrivate
 {
-	GtkWidget *main_vbox;
 	GtkWidget *toolbar;
 	GtkUIManager *manager;
 	GtkActionGroup *action_group;
@@ -1121,11 +1120,6 @@ setup_ui_manager (EphyWindow *window)
 	GtkAccelGroup *accel_group;
 	GtkAction *action;
 	GtkUIManager *manager;
-
-	window->priv->main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-	gtk_widget_show (window->priv->main_vbox);
-	gtk_container_add (GTK_CONTAINER (window),
-			   window->priv->main_vbox);
 
 	manager = gtk_ui_manager_new ();
 	accel_group = gtk_ui_manager_get_accel_group (manager);
@@ -3389,9 +3383,7 @@ ephy_window_constructor (GType type,
 	/* Setup the toolbar. */
 	priv->toolbar = setup_toolbar (window);
 	priv->location_controller = setup_location_controller (window, EPHY_TOOLBAR (priv->toolbar));
-	gtk_box_pack_start (GTK_BOX (priv->main_vbox),
-			    GTK_WIDGET (priv->notebook),
-			    TRUE, TRUE, 0);
+	gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (priv->notebook));
 	gtk_widget_show (GTK_WIDGET (priv->notebook));
 
 	/* Attach the CSS provider to the window. */
