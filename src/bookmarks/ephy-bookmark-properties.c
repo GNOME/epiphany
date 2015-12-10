@@ -39,10 +39,6 @@
 
 #include <string.h>
 
-static const GtkTargetEntry dest_drag_types[] = {
-  {EPHY_DND_URL_TYPE, 0, 0},
-};
-
 struct _EphyBookmarkProperties
 {
 	GtkDialog parent_instance;
