@@ -203,7 +203,7 @@ entry_activate_cb (GtkEntry *entry,
 	{
 		priv->sync_address_is_blocked = FALSE;
 		g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), entry);
-	}	
+	}
 
 	content = gtk_entry_get_text (entry);
 	if (content == NULL || content[0] == '\0') return;
@@ -309,8 +309,8 @@ get_location_cb (EphyLocationEntry *entry,
 {
 	EphyLocationControllerPrivate *priv = controller->priv;
 	EphyEmbed *embed;
-	
-	embed = ephy_embed_container_get_active_child 
+
+	embed = ephy_embed_container_get_active_child
 	  (EPHY_EMBED_CONTAINER (priv->window));
 
 	return g_strdup (ephy_web_view_get_address (ephy_embed_get_web_view (embed)));
@@ -322,7 +322,7 @@ get_title_cb (EphyLocationEntry *entry,
 {
 	EphyEmbed *embed;
 
-	embed = ephy_embed_container_get_active_child 
+	embed = ephy_embed_container_get_active_child
 	  (EPHY_EMBED_CONTAINER (controller->priv->window));
 
 	return g_strdup (ephy_embed_get_title (embed));
@@ -379,11 +379,11 @@ focus_in_event_cb (GtkWidget *entry,
 	EphyLocationControllerPrivate *priv = controller->priv;
 
 	if (!priv->sync_address_is_blocked)
-	{		
+	{
 		priv->sync_address_is_blocked = TRUE;
 		g_signal_handlers_block_by_func (controller, G_CALLBACK (sync_address), entry);
 	}
-	
+
 	return FALSE;
 }
 
@@ -399,7 +399,7 @@ focus_out_event_cb (GtkWidget *entry,
 		priv->sync_address_is_blocked = FALSE;
 		g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), entry);
 	}
-	
+
 	return FALSE;
 }
 
@@ -450,8 +450,8 @@ ephy_location_controller_constructed (GObject *object)
 					    EPHY_COMPLETION_FAVICON_COL);
 	g_object_unref (model);
 
-	ephy_location_entry_set_match_func (priv->location_entry, 
-					    match_func, 
+	ephy_location_entry_set_match_func (priv->location_entry,
+					    match_func,
 					    priv->location_entry,
 					    NULL);
 
@@ -818,7 +818,7 @@ ephy_location_controller_init (EphyLocationController *controller)
 	priv->sync_address_is_blocked = FALSE;
 
 	init_actions_list (controller);
-	
+
 	ephy_node_signal_connect_object (priv->smart_bmks,
 					 EPHY_NODE_CHILD_ADDED,
 					 (EphyNodeCallback)actions_child_added_cb,
