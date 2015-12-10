@@ -47,7 +47,7 @@ ephy_window_action_set_property (GObject *object,
                                  GParamSpec *pspec)
 {
     EphyWindowAction *action = EPHY_WINDOW_ACTION (object);
-    
+
     switch (property_id) {
     case PROP_WINDOW:
         action->priv->window = EPHY_WINDOW (g_value_get_object (value));
@@ -64,7 +64,7 @@ ephy_window_action_get_property (GObject *object,
                                  GParamSpec *pspec)
 {
     EphyWindowAction *action = EPHY_WINDOW_ACTION (object);
-    
+
     switch (property_id) {
     case PROP_WINDOW:
         g_value_set_object (value, action->priv->window);
@@ -78,16 +78,16 @@ static void
 ephy_window_action_class_init (EphyWindowActionClass *class)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (class);
-    
+
     object_class->set_property = ephy_window_action_set_property;
     object_class->get_property = ephy_window_action_get_property;
-    
+
     g_object_class_install_property (object_class,
                                      PROP_WINDOW,
                                      g_param_spec_object ("window", NULL, NULL,
                                                           G_TYPE_OBJECT,
                                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT));
-    
+
     g_type_class_add_private (object_class, sizeof (EphyWindowActionPrivate));
 }
 
