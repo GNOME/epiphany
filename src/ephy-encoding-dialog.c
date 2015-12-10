@@ -27,8 +27,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
 #include "ephy-encodings.h"
-#include "ephy-file-helpers.h"
-#include "ephy-gui.h"
+#include "ephy-encoding-row.h"
 #include "ephy-shell.h"
 
 #include <glib/gi18n.h>
@@ -43,12 +42,18 @@ struct _EphyEncodingDialog
 	EphyWindow *window;
 	EphyEmbed *embed;
 	GtkWidget *enc_view;
-	gboolean update_tag;
+	gboolean update_embed_tag;
+	gboolean update_view_tag;
 	char *selected_encoding;
 
 	/* from the UI file */
-	GtkSwitch         *default_switch;
-	GtkScrolledWindow *scrolled_window;
+	GtkStack *type_stack;
+	GtkSwitch *default_switch;
+	GtkListBox *list_box;
+	GtkListBox *recent_list_box;
+	GtkListBox *related_list_box;
+	GtkGrid *recent_grid;
+	GtkGrid *related_grid;
 };
 
 enum {
@@ -66,40 +71,36 @@ enum
 G_DEFINE_TYPE (EphyEncodingDialog, ephy_encoding_dialog, GTK_TYPE_DIALOG)
 
 static void
-select_encoding_row (GtkTreeView *view, EphyEncoding *encoding)
+select_encoding_row (GtkListBox   *list_box,
+                     EphyEncoding *encoding)
 {
-	GtkTreeIter iter;
-	GtkTreeModel *model;
-	gboolean valid_iter = FALSE;
 	const char *target_encoding;
-
-	model = gtk_tree_view_get_model (view);
-	valid_iter = gtk_tree_model_get_iter_first (model, &iter);
+	GList *rows, *r;
 
 	target_encoding = ephy_encoding_get_encoding (encoding);
+	rows = gtk_container_get_children (GTK_CONTAINER (list_box));
 
-	while (valid_iter)
+	for (r = rows; r != NULL; r = r->next)
 	{
-		char *encoding_string = NULL;
+		EphyEncodingRow *ephy_encoding_row;
+		EphyEncoding *ephy_encoding;
+		const char *encoding_string = NULL;
 
-		gtk_tree_model_get (model, &iter,
-				    COL_ENCODING, &encoding_string, -1);
+		ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (r->data)));
+		ephy_encoding = ephy_encoding_row_get_encoding (ephy_encoding_row);
+		encoding_string = ephy_encoding_get_encoding (ephy_encoding);
 
-		if (g_str_equal (encoding_string,
-				 target_encoding))
+		if (g_strcmp0 (encoding_string, target_encoding) == 0)
 		{
-			GtkTreeSelection *selection;
+			ephy_encoding_row_set_selected (ephy_encoding_row, TRUE);
 
-			selection = gtk_tree_view_get_selection (view);
-			gtk_tree_selection_select_iter (selection, &iter);
-			g_free (encoding_string);
+			gtk_list_box_select_row (list_box, GTK_LIST_BOX_ROW (r->data));
+			/* TODO scroll to row */
 
-			return;
+			break;
 		}
-
-		g_free (encoding_string);
-		valid_iter = gtk_tree_model_iter_next (model, &iter);
 	}
+	g_list_free (rows);
 }
 
 static void
@@ -109,7 +110,7 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	gboolean is_automatic = FALSE;
 	WebKitWebView *view;
 
-	dialog->update_tag = TRUE;
+	dialog->update_embed_tag = TRUE;
 
 	g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
 	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
@@ -120,38 +121,22 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 	if (!is_automatic)
 	{
 		EphyEncoding *node;
-		GtkTreeSelection *selection;
-		GtkTreeModel *model;
-		GList *rows;
 
 		node = ephy_encodings_get_encoding (dialog->encodings, encoding, TRUE);
 		g_assert (EPHY_IS_ENCODING (node));
 
-		/* Select the current encoding in the list view. */
-		select_encoding_row (GTK_TREE_VIEW (dialog->enc_view), node);
+		/* Select the current encoding in the lists. */
+		select_encoding_row (dialog->list_box, node);
+		select_encoding_row (dialog->recent_list_box, node);
+		select_encoding_row (dialog->related_list_box, node);
 
-		/* scroll the view so the active encoding is visible */
-		selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->enc_view));
-		model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->enc_view));
-		rows = gtk_tree_selection_get_selected_rows (selection, &model);
-
-		if (rows != NULL)
-		{
-			gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (dialog->enc_view),
-			                              (GtkTreePath *) rows->data,
-			                              NULL, /* column */
-			                              TRUE,
-			                              0.5,
-			                              0.0);
-			g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
-			g_list_free (rows);
-		}
+		/* TODO scroll the view so the active encoding is visible */
 	}
 	gtk_switch_set_active (dialog->default_switch, is_automatic);
 	gtk_switch_set_state (dialog->default_switch, is_automatic);
-	gtk_widget_set_sensitive (GTK_WIDGET (dialog->scrolled_window), !is_automatic);
+	gtk_widget_set_sensitive (GTK_WIDGET (dialog->type_stack), !is_automatic);
 
-	dialog->update_tag = FALSE;
+	dialog->update_embed_tag = FALSE;
 }
 
 static void
@@ -195,8 +180,6 @@ ephy_encoding_dialog_attach_embed (EphyEncodingDialog *dialog)
 	embedptr = &dialog->embed;
 	g_object_add_weak_pointer (G_OBJECT (dialog->embed),
 	                           (gpointer *) embedptr);
-
-	sync_encoding_against_embed (dialog);
 }
 
 static void
@@ -204,6 +187,7 @@ ephy_encoding_dialog_sync_embed (EphyWindow *window, GParamSpec *pspec, EphyEnco
 {
 	ephy_encoding_dialog_detach_embed (dialog);
 	ephy_encoding_dialog_attach_embed (dialog);
+	sync_encoding_against_embed (dialog);
 }
 
 static void
@@ -239,29 +223,56 @@ ephy_encoding_dialog_response_cb (GtkWidget *widget,
 }
 
 static void
-view_row_activated_cb (GtkTreeView *treeview,
-		       GtkTreePath *path,
-		       GtkTreeViewColumn *column,
-		       EphyEncodingDialog *dialog)
+clean_selected_row (gpointer row, gpointer null_pointer)
 {
-	GtkTreeIter iter;
-	char *encoding;
-	GtkTreeModel *model;
+	EphyEncodingRow *ephy_encoding_row;
+	ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (row)));
+	ephy_encoding_row_set_selected (ephy_encoding_row, FALSE);
+}
 
-	model = gtk_tree_view_get_model (treeview);
+static void
+clean_selected_list_box (GtkListBox *list_box)
+{
+	GList *rows;
+	rows = gtk_container_get_children (GTK_CONTAINER (list_box));
+	g_list_foreach (rows, (GFunc)clean_selected_row, NULL);
+	g_list_free (rows);
+}
 
-	gtk_tree_model_get_iter (model, &iter, path);
-	gtk_tree_model_get (model, &iter,
-			    COL_ENCODING, &encoding,
-			    -1);
+static void
+clean_selected (EphyEncodingDialog *dialog)
+{
+	clean_selected_list_box (dialog->list_box);
+	clean_selected_list_box (dialog->recent_list_box);
+	clean_selected_list_box (dialog->related_list_box);
+}
 
-	g_free (dialog->selected_encoding);
-	dialog->selected_encoding = encoding;
+static void
+row_activated_cb (GtkListBox         *box,
+                  GtkListBoxRow      *row,
+                  EphyEncodingDialog *dialog)
+{
+	EphyEncodingRow *ephy_encoding_row;
+	EphyEncoding *ephy_encoding;
+	const char *selected_encoding;
 
-	if (dialog->update_tag)
+	if (dialog->update_embed_tag || dialog->update_view_tag)
 		return;
 
+	dialog->update_view_tag = TRUE;
+
+	ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (row)));
+	ephy_encoding = ephy_encoding_row_get_encoding (ephy_encoding_row);
+	selected_encoding = ephy_encoding_get_encoding (ephy_encoding);
+
+	dialog->selected_encoding = selected_encoding;
+
+	clean_selected (dialog);
+	ephy_encoding_row_set_selected (ephy_encoding_row, TRUE);
+
 	activate_choice (dialog);
+
+	dialog->update_view_tag = FALSE;
 }
 
 static gboolean
@@ -269,93 +280,151 @@ default_switch_toggled_cb (GtkSwitch          *default_switch,
                            gboolean            state,
                            EphyEncodingDialog *dialog)
 {
-	if (dialog->update_tag)
+	if (dialog->update_embed_tag || dialog->update_view_tag)
 	{
-		gtk_switch_set_state (default_switch, !state);
+		gtk_switch_set_state (default_switch, !state);	// cancel switch change
+		return TRUE;
 	}
-	else if (state)
-	{
-		gtk_switch_set_state (default_switch, TRUE);
 
-		if (dialog->selected_encoding != NULL)
-		{
-			g_free (dialog->selected_encoding);
-			dialog->selected_encoding = NULL;
-		}
-		activate_choice (dialog);
-	}
-	else
-	{
-		gtk_switch_set_state (default_switch, FALSE);
+	dialog->update_view_tag = TRUE;
 
-		// TODO select safe default in list, or find another solution
-	}
+	gtk_switch_set_active (default_switch, state);
+	gtk_switch_set_state (default_switch, state);
+
+	// TODO if state == false && selected_encoding == NULL, select safe default in list, or find another solution
+	if (state)
+		clean_selected (dialog);
+	activate_choice (dialog);
+
+	dialog->update_view_tag = FALSE;
+
 	return TRUE;
+}
+
+static void
+show_all_button_clicked_cb (GtkButton          *show_all_button,
+                            EphyEncodingDialog *dialog)
+{
+	gtk_stack_set_visible_child_name (dialog->type_stack, "scrolled-window");
+}
+
+static gint
+sort_list_store (gconstpointer a,
+                 gconstpointer b,
+                 gpointer user_data)
+{
+	const char *encoding1 = ephy_encoding_get_title_elided (EPHY_ENCODING (a));
+	const char *encoding2 = ephy_encoding_get_title_elided (EPHY_ENCODING (b));
+
+	return g_strcmp0 (encoding1, encoding2);
+}
+
+static GtkWidget *
+create_list_box_row (gpointer object,
+                     gpointer user_data)
+{
+	return GTK_WIDGET (ephy_encoding_row_new (EPHY_ENCODING (object)));
+}
+
+static void
+add_list_item (EphyEncoding *encoding, GtkListBox* list_box)
+{
+	gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (ephy_encoding_row_new (encoding)));
+}
+
+static int
+sort_encodings (gconstpointer a, gconstpointer b)
+{
+	EphyEncoding *enc1 = (EphyEncoding *)a;
+	EphyEncoding *enc2 = (EphyEncoding *)b;
+	const char *key1, *key2;
+
+	key1 = ephy_encoding_get_collation_key (enc1);
+	key2 = ephy_encoding_get_collation_key (enc2);
+
+	return strcmp (key1, key2);
 }
 
 static void
 ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 {
-	GtkWidget *treeview;
-	GtkTreeSelection *selection;
 	GList *encodings, *p;
-	GtkListStore *store;
-	GtkTreeIter iter;
-	GtkCellRenderer *renderer;
+	GListStore *store;
 
 	gtk_widget_init_template (GTK_WIDGET (dialog));
 
-	dialog->selected_encoding = NULL;
+	dialog->update_embed_tag = FALSE;
+	dialog->update_view_tag = FALSE;
+
 	dialog->encodings =
 		EPHY_ENCODINGS (ephy_embed_shell_get_encodings
 				(EPHY_EMBED_SHELL (ephy_shell_get_default ())));
 
 	encodings = ephy_encodings_get_all (dialog->encodings);
-	store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_STRING);
-	for (p = encodings; p; p = p->next) 
+
+	store = g_list_store_new (EPHY_TYPE_ENCODING);
+	for (p = encodings; p; p = p->next)
 	{
 		EphyEncoding *encoding = EPHY_ENCODING (p->data);
-
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    COL_TITLE_ELIDED, 
-				    ephy_encoding_get_title_elided (encoding),
-				    -1);
-		gtk_list_store_set (store, &iter,
-				    COL_ENCODING, 
-				    ephy_encoding_get_encoding (encoding),
-				    -1);
+		g_list_store_insert_sorted (store, encoding, sort_list_store, NULL);
 	}
 	g_list_free (encodings);
 
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), COL_TITLE_ELIDED,
-					      GTK_SORT_ASCENDING);
+	gtk_list_box_bind_model (dialog->list_box, G_LIST_MODEL (store),
+	                         create_list_box_row,
+	                         NULL, NULL);
+}
 
-	treeview = gtk_tree_view_new ();
-	renderer = gtk_cell_renderer_text_new ();
+static void
+ephy_encoding_dialog_constructed (GObject *object)
+{
+	EphyEncodingDialog *dialog;
+	WebKitWebView *view;
+	EphyEncoding *enc_node;
+	EphyLanguageGroup groups;
+	GList *recent;
+	GList *related = NULL;
 
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
-						     -1,
-						     _("Encodings"),
-						     renderer,
-						     "text", COL_TITLE_ELIDED,
-						     NULL);
-	gtk_tree_view_set_model (GTK_TREE_VIEW (treeview), GTK_TREE_MODEL (store));
+	/* selected encoding */
+	dialog = EPHY_ENCODING_DIALOG (object);
 
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(treeview), FALSE);
-	gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (treeview), TRUE);
+	g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
+	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
-	g_signal_connect (treeview, "row-activated",
-			  G_CALLBACK (view_row_activated_cb),
-			  dialog);
+	dialog->selected_encoding = webkit_web_view_get_custom_charset (view);
 
-	gtk_widget_show (treeview);
+	/* recent */
+	recent = ephy_encodings_get_recent (dialog->encodings);
+	if (recent != NULL)
+	{
+		recent = g_list_sort (recent, (GCompareFunc)sort_encodings);
+		g_list_foreach (recent, (GFunc)add_list_item, dialog->recent_list_box);
+	}
+	else
+		gtk_widget_hide (GTK_WIDGET (dialog->recent_grid));
 
-	gtk_container_add (GTK_CONTAINER (dialog->scrolled_window), treeview);
+	/* related */
+	if (dialog->selected_encoding != NULL)
+	{
+		enc_node = ephy_encodings_get_encoding (dialog->encodings, dialog->selected_encoding, TRUE);
+		g_assert (EPHY_IS_ENCODING (enc_node));
+		groups = ephy_encoding_get_language_groups (enc_node);
 
-	dialog->enc_view = treeview;
+		related = ephy_encodings_get_encodings (dialog->encodings, groups);
+	}
+	if (related != NULL)
+	{
+		related = g_list_sort (related, (GCompareFunc)sort_encodings);
+		g_list_foreach (related, (GFunc)add_list_item, dialog->related_list_box);
+	}
+	else
+		gtk_widget_hide (GTK_WIDGET (dialog->related_grid));
+
+	/* update list_boxes */
+	sync_encoding_against_embed (dialog);
+
+	/* chaining */
+	G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->constructed (object);
 }
 
 static void
@@ -371,16 +440,6 @@ ephy_encoding_dialog_dispose (GObject *object)
 		ephy_encoding_dialog_detach_embed (dialog);
 
 	G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->dispose (object);
-}
-
-static void
-ephy_encoding_dialog_finalize (GObject *object)
-{
-	EphyEncodingDialog *dialog = EPHY_ENCODING_DIALOG (object);
-
-	g_free (dialog->selected_encoding);
-
-	G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->finalize (object);
 }
 
 static void
@@ -439,7 +498,7 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	/* class creation */
-	object_class->finalize = ephy_encoding_dialog_finalize;
+	object_class->constructed = ephy_encoding_dialog_constructed;
 	object_class->set_property = ephy_encoding_dialog_set_property;
 	object_class->get_property = ephy_encoding_dialog_get_property;
 	object_class->dispose = ephy_encoding_dialog_dispose;
@@ -455,11 +514,18 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 	/* load from UI file */
 	gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/encoding-dialog.ui");
 
+	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, type_stack);
 	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, default_switch);
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, scrolled_window);
+	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, list_box);
+	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, recent_list_box);
+	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_list_box);
+	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, recent_grid);
+	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_grid);
 
 	gtk_widget_class_bind_template_callback (widget_class, default_switch_toggled_cb);
 	gtk_widget_class_bind_template_callback (widget_class, ephy_encoding_dialog_response_cb);
+	gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
+	gtk_widget_class_bind_template_callback (widget_class, show_all_button_clicked_cb);
 }
 
 EphyEncodingDialog *

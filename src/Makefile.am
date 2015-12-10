@@ -19,7 +19,7 @@ NOINST_H_FILES = \
 	ephy-action-helper.h			\
 	ephy-combined-stop-reload-action.h	\
 	ephy-encoding-dialog.h			\
-	ephy-encoding-menu.h			\
+	ephy-encoding-row.h			\
 	ephy-history-window.h			\
 	ephy-home-action.h			\
 	ephy-link-action.h			\
@@ -53,7 +53,7 @@ libephymain_la_SOURCES = \
 	ephy-completion-model.h			\
 	ephy-combined-stop-reload-action.c	\
 	ephy-encoding-dialog.c			\
-	ephy-encoding-menu.c			\
+	ephy-encoding-row.c			\
 	ephy-home-action.c			\
 	ephy-history-window.c			\
 	ephy-link.c				\
@@ -108,6 +108,7 @@ RESOURCE_FILES = \
 	resources/clear-data-dialog.ui		  \
 	resources/cookies-dialog.ui		  \
 	resources/encoding-dialog.ui		  \
+	resources/encoding-row.ui		  \
 	resources/epiphany-application-menu.ui	  \
 	resources/epiphany-bookmark-editor-ui.xml \
 	resources/epiphany-ui.xml		  \

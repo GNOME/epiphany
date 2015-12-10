@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <template class="EphyEncodingRow" parent="GtkGrid">
+    <property name="visible">True</property> <!-- TODO remove when never called manually -->
+    <property name="halign">center</property>
+    <property name="height-request">30</property>
+    <child>
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="vexpand">True</property>
+        <property name="column-spacing">8</property>
+        <child>
+          <object class="GtkLabel" id="encoding_label">
+            <property name="visible">True</property>
+            <property name="vexpand">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage" id="selected_image">
+            <property name="icon-name">object-select-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

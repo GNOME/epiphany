@@ -39,15 +39,94 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="scrolled_window">
+          <object class="GtkStack" id="type_stack">
             <property name="visible">True</property>
-            <property name="expand">True</property>
-            <property name="hscrollbar_policy">never</property>
-            <property name="shadow_type">in</property>
-            <property name="min_content_height">300</property>
+            <property name="hhomogeneous">True</property>
+            <property name="interpolate-size">True</property>
+<!--            <property name="transition-type"></property> TODO -->
             <property name="sensitive" bind-source="default_switch" bind-property="active" bind-flags="invert-boolean"/>
+            <property name="visible-child">suggested_grid</property>
             <child>
-              <placeholder/>
+              <object class="GtkGrid" id="suggested_grid">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="row-spacing">16</property>
+                <child>
+                  <object class="GtkGrid" id="recent_grid">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="row-spacing">8</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">8</property>
+                        <property name="use-markup">True</property>
+                        <property name="label" translatable="yes">&#60;b&#62;Recent encodings&#60;/b&#62;</property> <!-- TODO better -->
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBox" id="recent_list_box">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+	                    <signal name="row-activated" handler="row_activated_cb"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="related_grid">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="row-spacing">8</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">8</property>
+                        <property name="use-markup">True</property>
+                        <property name="label" translatable="yes">&#60;b&#62;Related encodings&#60;/b&#62;</property> <!-- TODO better -->
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBox" id="related_list_box">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+	                    <signal name="row-activated" handler="row_activated_cb"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="visible">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Show all…</property>
+                    <signal name="clicked" handler="show_all_button_clicked_cb"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <property name="min_content_height">300</property>
+                <child>
+                  <object class="GtkListBox" id="list_box">
+                    <property name="visible">True</property>
+                    <property name="expand">True</property>
+<!--                    <property name="activate-on-single-click">True</property> TODO useful? -->
+                    <property name="selection-mode">browse</property>
+                    <signal name="row-activated" handler="row_activated_cb"/>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">scrolled-window</property>
+              </packing>
             </child>
           </object>
         </child>

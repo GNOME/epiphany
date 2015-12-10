@@ -30,6 +30,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-embed.h"
+#include "ephy-encoding-dialog.h"
 #include "ephy-favicon-helpers.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
@@ -1691,4 +1692,15 @@ window_cmd_browse_with_caret (GtkAction *action,
 
 	g_settings_set_boolean (EPHY_SETTINGS_MAIN,
 				EPHY_PREFS_ENABLE_CARET_BROWSING, active);
+}
+
+void
+window_cmd_view_encoding (GtkAction *action,
+                          EphyWindow *window)
+{
+	EphyEncodingDialog *dialog;
+
+	dialog = ephy_encoding_dialog_new (window);
+	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+	gtk_dialog_run (GTK_DIALOG (dialog));
 }

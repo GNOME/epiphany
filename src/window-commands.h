@@ -72,6 +72,8 @@ void window_cmd_edit_find_next            (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_edit_find_prev            (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_view_encoding             (GtkAction  *action,
+                                           EphyWindow *window);
 void window_cmd_view_fullscreen           (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_view_zoom_in              (GtkAction  *action,

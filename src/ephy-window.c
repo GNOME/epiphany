@@ -30,7 +30,6 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-type-builtins.h"
 #include "ephy-embed-utils.h"
-#include "ephy-encoding-menu.h"
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-gui.h"
@@ -154,7 +153,8 @@ static const GtkActionEntry ephy_menu_entries [] = {
 	  G_CALLBACK (window_cmd_view_zoom_out) },
 	{ "ViewZoomNormal", NULL, N_("_Normal Size"), "<control>0", NULL,
 	  G_CALLBACK (window_cmd_view_zoom_normal) },
-	{ "ViewEncoding", NULL, N_("Text _Encoding"), NULL, NULL, NULL },
+	{ "ViewEncoding", NULL, N_("Text _Encoding"), NULL, NULL,
+	  G_CALLBACK (window_cmd_view_encoding) },
 	{ "ViewPageSource", NULL, N_("_Page Source"), "<control>U", NULL,
 	  G_CALLBACK (window_cmd_view_page_source) },
 
@@ -361,7 +361,6 @@ struct _EphyWindowPrivate
 	GtkActionGroup *popups_action_group;
 	GtkActionGroup *toolbar_action_group;
 	GtkActionGroup *tab_accels_action_group;
-	EphyEncodingMenu *enc_menu;
 	GtkNotebook *notebook;
 	EphyEmbed *active_embed;
 	EphyWindowChrome chrome;
@@ -1161,7 +1160,7 @@ setup_ui_manager (EphyWindow *window)
 	g_object_set (action, "is_important", TRUE, NULL);
 
 	action = gtk_action_group_get_action (action_group, "ViewEncoding");
-	g_object_set (action, "hide_if_empty", FALSE, NULL);
+	g_object_set (action, "short_label", _("Encodings…"), NULL);
 	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
 	/* Translators: This refers to text size */
 	g_object_set (action, "short-label", _("Larger"), NULL);
@@ -2972,9 +2971,6 @@ ephy_window_dispose (GObject *object)
 		popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
 		g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
 		g_slist_free (popups);
-	
-		g_object_unref (priv->enc_menu);
-		priv->enc_menu = NULL;
 
 		priv->action_group = NULL;
 		priv->popups_action_group = NULL;
@@ -3410,8 +3406,6 @@ ephy_window_constructor (GType type,
 	g_object_unref (css_provider);
 
 	/* Initialize the menus */
-	priv->enc_menu = ephy_encoding_menu_new (window);
-
 	ephy_bookmarks_ui_attach_window (window);
 
 	/* other notifiers */
