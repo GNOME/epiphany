@@ -36,8 +36,6 @@ void window_cmd_go_location               (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_view_reload               (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_new                       (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_file_bookmark_page        (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_file_open                 (GtkAction  *action,

@@ -206,7 +206,7 @@ static const GtkActionEntry ephy_popups_entries [] = {
 
 	{ "ContextBookmarkPage", NULL, N_("Add Boo_kmark…"), "<control>D", NULL,
 	  G_CALLBACK (window_cmd_file_bookmark_page) },
-	
+
 	/* Links. */
 
 	{ "OpenLinkInNewWindow", NULL, N_("Open Link in New _Window"), NULL, NULL,
@@ -447,7 +447,7 @@ construct_confirm_close_dialog (EphyWindow *window,
 
 	gtk_message_dialog_format_secondary_text
 		(GTK_MESSAGE_DIALOG (dialog), "%s", info);
-	
+
 	gtk_dialog_add_button (GTK_DIALOG (dialog),
 			       action, GTK_RESPONSE_ACCEPT);
 
@@ -561,7 +561,7 @@ ephy_window_open_link (EphyLink *link,
 	else if (flags & EPHY_LINK_TYPED)
 		ephy_web_view_set_visit_type (ephy_embed_get_web_view (embed),
 					      EPHY_PAGE_VISIT_TYPED);
-		
+
 	if (flags  & (EPHY_LINK_JUMP_TO | 
 		      EPHY_LINK_NEW_TAB | 
 		      EPHY_LINK_NEW_WINDOW))
@@ -823,7 +823,7 @@ ephy_window_bound_accels (GtkWidget *widget,
 	return FALSE;
 }
 
-static gboolean 
+static gboolean
 ephy_window_key_press_event (GtkWidget *widget,
 			     GdkEventKey *event)
 {
@@ -1009,7 +1009,7 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 		gboolean has_selection;
 
 		entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->priv->toolbar));
-		
+
 		has_selection = gtk_editable_get_selection_bounds
 			(GTK_EDITABLE (widget), NULL, NULL);
 
@@ -1374,7 +1374,7 @@ sync_tab_document_type (EphyWebView *view,
 
 	/* update zoom actions */
 	sync_tab_zoom (WEBKIT_WEB_VIEW (view), NULL, window);
-	
+
 	type = ephy_web_view_get_document_type (view);
 	can_find = (type != EPHY_WEB_VIEW_DOCUMENT_IMAGE);
 	is_image = type == EPHY_WEB_VIEW_DOCUMENT_IMAGE;
@@ -2776,7 +2776,7 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 #if 0
 	g_signal_handlers_disconnect_by_func (G_OBJECT (embed),
 					      G_CALLBACK (ephy_link_open),
-					      window);	
+					      window);
 #endif
 
 	g_signal_handlers_disconnect_by_func
@@ -3002,7 +3002,7 @@ ephy_window_set_property (GObject *object,
 			ephy_window_set_is_popup (window, g_value_get_boolean (value));
 			break;
 	        default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
 	}
 }
@@ -3027,7 +3027,7 @@ ephy_window_get_property (GObject *object,
 			g_value_set_boolean (value, window->priv->is_popup);
 			break;
 	        default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
 	}
 }
