@@ -65,8 +65,11 @@ enum {
 enum
 {
 	PROP_0,
-	PROP_PARENT_WINDOW
+	PROP_PARENT_WINDOW,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyEncodingDialog, ephy_encoding_dialog, GTK_TYPE_DIALOG)
 
@@ -503,13 +506,14 @@ ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 	object_class->get_property = ephy_encoding_dialog_get_property;
 	object_class->dispose = ephy_encoding_dialog_dispose;
 
-	g_object_class_install_property (object_class,
-	                                 PROP_PARENT_WINDOW,
-	                                 g_param_spec_object ("parent-window",
-	                                                      "Parent window",
-	                                                      "Parent window",
-	                                                      EPHY_TYPE_WINDOW,
-	                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_PARENT_WINDOW] =
+		g_param_spec_object ("parent-window",
+		                     "Parent window",
+		                     "Parent window",
+		                     EPHY_TYPE_WINDOW,
+		                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	/* load from UI file */
 	gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/encoding-dialog.ui");
