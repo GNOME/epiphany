@@ -77,8 +77,10 @@ enum
 	PROP_SHOW_ICON,
 	PROP_WINDOW,
 	PROP_LOCATION_ENTRY,
-	PROP_TITLE_BOX
+	PROP_TITLE_BOX,
+	LAST_PROP
 };
+static GParamSpec *obj_properties[LAST_PROP];
 
 enum
 {
@@ -622,94 +624,86 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
 	*
 	* The address of the current location.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_ADDRESS,
-					 g_param_spec_string ("address",
-							      "Address",
-							      "The address of the current location",
-							      "",
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_ADDRESS] =
+		g_param_spec_string ("address",
+		                     "Address",
+		                     "The address of the current location",
+		                     "",
+		                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 	/**
 	* EphyLocationController:editable:
 	*
 	* Whether the location bar entry can be edited.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_EDITABLE,
-					 g_param_spec_boolean ("editable",
-							       "Editable",
-							       "Whether the location bar entry can be edited",
-							       TRUE,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_EDITABLE] =
+		g_param_spec_boolean ("editable",
+		                      "Editable",
+		                      "Whether the location bar entry can be edited",
+		                      TRUE,
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 	/**
 	* EphyLocationController:icon:
 	*
 	* The icon corresponding to the current location.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_ICON,
-					 g_param_spec_object ("icon",
-							      "Icon",
-							      "The icon corresponding to the current location",
-							      GDK_TYPE_PIXBUF,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_ICON] =
+		g_param_spec_object ("icon",
+		                     "Icon",
+		                     "The icon corresponding to the current location",
+		                     GDK_TYPE_PIXBUF,
+		                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 	/**
 	* EphyLocationController:show-icon:
 	*
 	* If we should show the page icon.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_SHOW_ICON,
-					 g_param_spec_boolean ("show-icon",
-							       "Show Icon",
-							       "Whether to show the favicon",
-							       TRUE,
-							       G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_SHOW_ICON] =
+		g_param_spec_boolean ("show-icon",
+		                      "Show Icon",
+		                      "Whether to show the favicon",
+		                      TRUE,
+		                      G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 	/**
 	* EphyLocationController:window:
 	*
 	* The parent window.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_WINDOW,
-					 g_param_spec_object ("window",
-							      "Window",
-							      "The parent window",
-							      G_TYPE_OBJECT,
-							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							      G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_WINDOW] =
+		g_param_spec_object ("window",
+		                     "Window",
+		                     "The parent window",
+		                     G_TYPE_OBJECT,
+		                     G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
 	/**
 	* EphyLocationController:location-entry:
 	*
 	* The controlled location entry.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_LOCATION_ENTRY,
-					 g_param_spec_object ("location-entry",
-							      "Location entry",
-							      "The controlled location entry",
-							      G_TYPE_OBJECT,
-							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							      G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_LOCATION_ENTRY] =
+		g_param_spec_object ("location-entry",
+		                     "Location entry",
+		                     "The controlled location entry",
+		                     G_TYPE_OBJECT,
+		                     G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
 	/**
 	* EphyLocationController:title-box:
 	*
 	* The #EphyLocationController sets the address of this title box.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_TITLE_BOX,
-					 g_param_spec_object ("title-box",
-							      "Title box",
-							      "The title box whose address will be managed",
-							      G_TYPE_OBJECT,
-							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							      G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_TITLE_BOX] =
+		g_param_spec_object ("title-box",
+		                     "Title box",
+		                     "The title box whose address will be managed",
+		                     G_TYPE_OBJECT,
+		                     G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	g_type_class_add_private (object_class, sizeof (EphyLocationControllerPrivate));
 }
@@ -894,5 +888,5 @@ ephy_location_controller_set_address (EphyLocationController *controller,
 	g_free (priv->address);
 	priv->address = g_strdup (address);
 
-	g_object_notify (G_OBJECT (controller), "address");
+	g_object_notify_by_pspec (G_OBJECT (controller), obj_properties[PROP_ADDRESS]);
 }
