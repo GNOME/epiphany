@@ -136,7 +136,10 @@ enum {
   PROP_STATUS_MESSAGE,
   PROP_TYPED_ADDRESS,
   PROP_IS_BLANK,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyWebView, ephy_web_view, WEBKIT_TYPE_WEB_VIEW)
 
@@ -178,7 +181,7 @@ popups_manager_show_all (EphyWebView *view)
   g_slist_free (view->hidden_popups);
   view->hidden_popups = NULL;
 
-  g_object_notify (G_OBJECT (view), "hidden-popup-count");
+  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_HIDDEN_POPUP_COUNT]);
 }
 
 static char *
@@ -238,7 +241,7 @@ popups_manager_add (EphyWebView *view,
 
     l->next = NULL;
   } else {
-    g_object_notify (G_OBJECT (view), "hidden-popup-count");
+    g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_HIDDEN_POPUP_COUNT]);
   }
 }
 
@@ -350,8 +353,8 @@ ephy_web_view_popups_manager_reset (EphyWebView *view)
   g_slist_free (view->shown_popups);
   view->shown_popups = NULL;
 
-  g_object_notify (G_OBJECT (view), "hidden-popup-count");
-  g_object_notify (G_OBJECT (view), "popups-allowed");
+  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_HIDDEN_POPUP_COUNT]);
+  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_POPUPS_ALLOWED]);
 }
 
 static void
@@ -537,7 +540,7 @@ update_navigation_flags (WebKitWebView *view)
   if (EPHY_WEB_VIEW (view)->nav_flags != (EphyWebViewNavigationFlags)flags) {
     EPHY_WEB_VIEW (view)->nav_flags = (EphyWebViewNavigationFlags)flags;
 
-    g_object_notify (G_OBJECT (view), "navigation");
+    g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_NAVIGATION]);
   }
 }
 
@@ -631,7 +634,7 @@ _ephy_web_view_update_icon (EphyWebView *view)
       view->icon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
   }
 
-  g_object_notify (G_OBJECT (view), "icon");
+  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_ICON]);
 }
 
 static void
@@ -798,7 +801,7 @@ _ephy_web_view_set_is_blank (EphyWebView *view,
 {
   if (view->is_blank != is_blank) {
     view->is_blank = is_blank;
-    g_object_notify (G_OBJECT (view), "is-blank");
+    g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_IS_BLANK]);
   }
 }
 
@@ -855,7 +858,7 @@ ephy_web_view_set_address (EphyWebView *view,
   if (!was_empty && ephy_web_view_is_loading (view) && view->typed_address != NULL)
     ephy_web_view_set_typed_address (view, NULL);
 
-  g_object_notify (object, "address");
+  g_object_notify_by_pspec (object, obj_properties[PROP_ADDRESS]);
 }
 
 static void
@@ -948,148 +951,139 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  *
  * View's current address. This is a percent-encoded URI.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_ADDRESS,
-                                   g_param_spec_string ("address",
-                                                        "Address",
-                                                        "The view's address",
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_ADDRESS] =
+    g_param_spec_string ("address",
+                         "Address",
+                         "The view's address",
+                         "",
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:typed-address:
  *
  * User typed address for the current view.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_TYPED_ADDRESS,
-                                   g_param_spec_string ("typed-address",
-                                                        "Typed Address",
-                                                        "The typed address",
-                                                        "",
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_TYPED_ADDRESS] =
+    g_param_spec_string ("typed-address",
+                         "Typed Address",
+                         "The typed address",
+                         "",
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:security-level:
  *
  * One of #EphySecurityLevel, determining view's current security level.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_SECURITY,
-                                   g_param_spec_enum ("security-level",
-                                                      "Security Level",
-                                                      "The view's security level",
-                                                      EPHY_TYPE_SECURITY_LEVEL,
-                                                      EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
-                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_SECURITY] =
+    g_param_spec_enum ("security-level",
+                       "Security Level",
+                       "The view's security level",
+                       EPHY_TYPE_SECURITY_LEVEL,
+                       EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:document-type:
  *
  * Document type determined for the view.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_DOCUMENT_TYPE,
-                                   g_param_spec_enum ("document-type",
-                                                      "Document Type",
-                                                      "The view's document type",
-                                                      EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE,
-                                                      EPHY_WEB_VIEW_DOCUMENT_HTML,
-                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_DOCUMENT_TYPE] =
+    g_param_spec_enum ("document-type",
+                       "Document Type",
+                       "The view's document type",
+                       EPHY_TYPE_WEB_VIEW_DOCUMENT_TYPE,
+                       EPHY_WEB_VIEW_DOCUMENT_HTML,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:navigation:
  *
  * View's navigation flags as #EphyWebViewNavigationFlags.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_NAVIGATION,
-                                   g_param_spec_flags ("navigation",
-                                                       "Navigation flags",
-                                                       "The view's navigation flags",
-                                                       EPHY_TYPE_WEB_VIEW_NAVIGATION_FLAGS,
-                                                       0,
-                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_NAVIGATION] =
+    g_param_spec_flags ("navigation",
+                        "Navigation flags",
+                        "The view's navigation flags",
+                        EPHY_TYPE_WEB_VIEW_NAVIGATION_FLAGS,
+                        0,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:status-message:
  *
  * Statusbar message corresponding to this view.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_STATUS_MESSAGE,
-                                   g_param_spec_string ("status-message",
-                                                        "Status Message",
-                                                        "The view's statusbar message",
-                                                        NULL,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_STATUS_MESSAGE] =
+    g_param_spec_string ("status-message",
+                         "Status Message",
+                         "The view's statusbar message",
+                         NULL,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:link-message:
  *
  * ???
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_LINK_MESSAGE,
-                                   g_param_spec_string ("link-message",
-                                                        "Link Message",
-                                                        "The view's link message",
-                                                        NULL,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_LINK_MESSAGE] =
+    g_param_spec_string ("link-message",
+                         "Link Message",
+                         "The view's link message",
+                         NULL,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:icon:
  *
  * View's favicon set by the loaded site.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_ICON,
-                                   g_param_spec_object ("icon",
-                                                        "Icon",
-                                                        "The view icon's",
-                                                        GDK_TYPE_PIXBUF,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_ICON] =
+    g_param_spec_object ("icon",
+                         "Icon",
+                         "The view icon's",
+                         GDK_TYPE_PIXBUF,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:hidden-popup-count:
  *
  * Number of hidden (blocked) popup windows.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_HIDDEN_POPUP_COUNT,
-                                   g_param_spec_int ("hidden-popup-count",
-                                                     "Number of Blocked Popups",
-                                                     "The view's number of blocked popup windows",
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_HIDDEN_POPUP_COUNT] =
+    g_param_spec_int ("hidden-popup-count",
+                      "Number of Blocked Popups",
+                      "The view's number of blocked popup windows",
+                      0,
+                      G_MAXINT,
+                      0,
+                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:popups-allowed:
  *
  * If popup windows from this view are to be displayed.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_POPUPS_ALLOWED,
-                                   g_param_spec_boolean ("popups-allowed",
-                                                         "Popups Allowed",
-                                                         "Whether popup windows are to be displayed",
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_POPUPS_ALLOWED] =
+    g_param_spec_boolean ("popups-allowed",
+                          "Popups Allowed",
+                          "Whether popup windows are to be displayed",
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 /**
  * EphyWebView:is-blank:
  *
  * Whether the view is showing the blank address.
  **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_IS_BLANK,
-                                   g_param_spec_boolean ("is-blank",
-                                                         "Is blank",
-                                                         "If the EphyWebView is blank",
-                                                         FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_IS_BLANK] =
+    g_param_spec_boolean ("is-blank",
+                          "Is blank",
+                          "If the EphyWebView is blank",
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 
 /**
  * EphyWebView::new-window:
@@ -1343,7 +1337,7 @@ decide_policy_cb (WebKitWebView *web_view,
   if (EPHY_WEB_VIEW (web_view)->document_type != type) {
     EPHY_WEB_VIEW (web_view)->document_type = type;
 
-    g_object_notify (G_OBJECT (web_view), "document-type");
+    g_object_notify_by_pspec (G_OBJECT (web_view), obj_properties[PROP_DOCUMENT_TYPE]);
   }
 
   webkit_policy_decision_download (decision);
@@ -1505,7 +1499,7 @@ ephy_web_view_set_loading_message (EphyWebView *view,
     g_free (title);
   }
 
-  g_object_notify (G_OBJECT (view), "status-message");
+  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_STATUS_MESSAGE]);
 }
 
 static void
@@ -2507,8 +2501,8 @@ ephy_web_view_set_link_message (EphyWebView *view,
     view->link_message = NULL;
   }
 
-  g_object_notify (G_OBJECT (view), "status-message");
-  g_object_notify (G_OBJECT (view), "link-message");
+  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_STATUS_MESSAGE]);
+  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_LINK_MESSAGE]);
 }
 
 /**
@@ -2527,7 +2521,7 @@ ephy_web_view_set_security_level (EphyWebView *view,
   if (view->security_level != level) {
     view->security_level = level;
 
-    g_object_notify (G_OBJECT (view), "security-level");
+    g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_SECURITY]);
   }
 }
 
@@ -2578,7 +2572,7 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   g_free (view->typed_address);
   view->typed_address = g_strdup (address);
 
-  g_object_notify (G_OBJECT (view), "typed-address");
+  g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_TYPED_ADDRESS]);
 }
 
 static void
