@@ -32,8 +32,11 @@ enum {
   PROP_0,
   PROP_HISTORY_SERVICE,
   PROP_BOOKMARKS,
-  PROP_USE_MARKUP
+  PROP_USE_MARKUP,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
 
@@ -125,26 +128,26 @@ ephy_completion_model_class_init (EphyCompletionModelClass *klass)
   object_class->constructed = ephy_completion_model_constructed;
   object_class->finalize = ephy_completion_model_finalize;
 
-  g_object_class_install_property (object_class,
-                                   PROP_HISTORY_SERVICE,
-                                   g_param_spec_pointer ("history-service",
-                                                         "History Service",
-                                                         "The history service",
-                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-  g_object_class_install_property (object_class,
-                                   PROP_BOOKMARKS,
-                                   g_param_spec_pointer ("bookmarks",
-                                                         "Bookmarks",
-                                                         "The bookmarks",
-                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_HISTORY_SERVICE] =
+    g_param_spec_pointer ("history-service",
+                          "History Service",
+                          "The history service",
+                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (object_class,
-                                   PROP_USE_MARKUP,
-                                   g_param_spec_boolean ("use-markup",
-                                                         "Whether we should be using markup",
-                                                         "Whether we should be using markup",
-                                                         TRUE,
-                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_BOOKMARKS] =
+    g_param_spec_pointer ("bookmarks",
+                          "Bookmarks",
+                          "The bookmarks",
+                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_USE_MARKUP] =
+    g_param_spec_boolean ("use-markup",
+                          "Whether we should be using markup",
+                          "Whether we should be using markup",
+                          TRUE,
+                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   g_type_class_add_private (object_class, sizeof (EphyCompletionModelPrivate));
 }
