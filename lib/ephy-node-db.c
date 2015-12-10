@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
  *  Copyright © 2003 Marco Pesenti Gritti
  *  Copyright © 2003 Christian Persch
@@ -94,8 +94,8 @@ ephy_node_db_set_property (GObject *object,
 static void
 ephy_node_db_free_func (EphyNode *node)
 {
-    if (node)
-	    ephy_node_unref (node);
+	if (node)
+		ephy_node_unref (node);
 }
 
 static void
@@ -318,8 +318,8 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 			if (subtree != NULL)
 			{
 				ephy_node_new_from_xml (db, subtree);
-			}			
-				
+			}
+
 			skip = TRUE;
 		}
 		else if (xmlStrEqual (name, xml_root)
@@ -412,9 +412,9 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 		for (i = 0; i < children->len; i++)
 		{
 			EphyNode *kid;
-		
+
 			kid = g_ptr_array_index (children, i);
-		
+
 			if (!filter || filter (kid, user_data))
 			{
 				ret = ephy_node_write_to_xml (kid, writer);
