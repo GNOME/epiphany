@@ -51,8 +51,11 @@ typedef enum {
 
 enum {
   PROP_0,
-  PROP_LOADING
+  PROP_LOADING,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 void
 ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *action,
@@ -133,11 +136,14 @@ ephy_combined_stop_reload_action_class_init (EphyCombinedStopReloadActionClass *
   object_class->get_property = ephy_combined_stop_reload_action_get_property;
   object_class->set_property = ephy_combined_stop_reload_action_set_property;
 
-  g_object_class_install_property (object_class,
-                                   PROP_LOADING,
-                                   g_param_spec_boolean ("loading", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_LOADING] =
+    g_param_spec_boolean ("loading",
+                          NULL,
+                          NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 static void
