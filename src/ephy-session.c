@@ -65,8 +65,11 @@ struct _EphySessionPrivate
 enum
 {
 	PROP_0,
-	PROP_CAN_UNDO_TAB_CLOSED
+	PROP_CAN_UNDO_TAB_CLOSED,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphySession, ephy_session, G_TYPE_OBJECT)
 
@@ -286,7 +289,7 @@ ephy_session_undo_close_tab (EphySession *session)
 	closed_tab_free (tab);
 
 	if (g_queue_is_empty (priv->closed_tabs))
-		g_object_notify (G_OBJECT (session), "can-undo-tab-closed");
+		g_object_notify_by_pspec (G_OBJECT (session), obj_properties[PROP_CAN_UNDO_TAB_CLOSED]);
 }
 
 static void
@@ -329,7 +332,7 @@ ephy_session_tab_closed (EphySession *session,
 	g_queue_push_head (priv->closed_tabs, tab);
 
 	if (g_queue_get_length (priv->closed_tabs) == 1)
-		g_object_notify (G_OBJECT (session), "can-undo-tab-closed");
+		g_object_notify_by_pspec (G_OBJECT (session), obj_properties[PROP_CAN_UNDO_TAB_CLOSED]);
 
 	LOG ("Added: %s to the list (%d elements)",
 	     address, g_queue_get_length (priv->closed_tabs));
@@ -511,13 +514,14 @@ ephy_session_class_init (EphySessionClass *class)
 	object_class->dispose = ephy_session_dispose;
 	object_class->get_property = ephy_session_get_property;
 
-	g_object_class_install_property (object_class,
-					 PROP_CAN_UNDO_TAB_CLOSED,
-					 g_param_spec_boolean ("can-undo-tab-closed",
-							       "Can undo tab close",
-							       "Session can undo a tab closure",
-							       FALSE,
-							       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+	obj_properties[PROP_CAN_UNDO_TAB_CLOSED] =
+		g_param_spec_boolean ("can-undo-tab-closed",
+		                      "Can undo tab close",
+		                      "Session can undo a tab closure",
+		                      FALSE,
+		                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	g_type_class_add_private (object_class, sizeof (EphySessionPrivate));
 }
