@@ -53,8 +53,11 @@ struct _EphyNavigationHistoryActionPrivate {
 
 enum {
   PROP_0,
-  PROP_DIRECTION
+  PROP_DIRECTION,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 #define MAX_LABEL_LENGTH 48
 #define HISTORY_ITEM_DATA_KEY "history-item-data-key"
@@ -539,13 +542,16 @@ ephy_navigation_history_action_class_init (EphyNavigationHistoryActionClass *kla
   action_class->connect_proxy = connect_proxy;
   action_class->disconnect_proxy = disconnect_proxy;
 
-  g_object_class_install_property (object_class,
-				   PROP_DIRECTION,
-				   g_param_spec_int ("direction", NULL, NULL,
-						     0,
-						     G_MAXINT,
-						     0,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_DIRECTION] =
+    g_param_spec_int ("direction",
+                      NULL,
+                      NULL,
+                      0,
+                      G_MAXINT,
+                      0,
+                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   g_type_class_add_private (object_class, sizeof (EphyNavigationHistoryActionPrivate));
 }
