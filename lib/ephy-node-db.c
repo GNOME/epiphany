@@ -37,7 +37,10 @@ enum
 	PROP_0,
 	PROP_NAME,
 	PROP_IMMUTABLE,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 #define EPHY_NODE_DB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_DB, EphyNodeDbPrivate))
 
@@ -192,7 +195,7 @@ ephy_node_db_set_immutable (EphyNodeDb *db, gboolean immutable)
 {
 	db->priv->immutable = immutable;
 
-	g_object_notify (G_OBJECT (db), "immutable");
+	g_object_notify_by_pspec (G_OBJECT (db), obj_properties[PROP_IMMUTABLE]);
 }
 
 /**
@@ -527,22 +530,21 @@ ephy_node_db_class_init (EphyNodeDbClass *klass)
 	object_class->set_property = ephy_node_db_set_property;
 	object_class->get_property = ephy_node_db_get_property;
 
-	g_object_class_install_property (object_class,
-					PROP_NAME,
-					g_param_spec_string  ("name",
-							      "Name",
-							      "Name",
-							      NULL,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							      G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_NAME] =
+		g_param_spec_string  ("name",
+		                      "Name",
+		                      "Name",
+		                      NULL,
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
-	g_object_class_install_property (object_class,
-					PROP_IMMUTABLE,
-					g_param_spec_boolean ("immutable",
-							      "Immutable",
-							      "Immutable",
-							      FALSE,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_IMMUTABLE] =
+		g_param_spec_boolean ("immutable",
+		                      "Immutable",
+		                      "Immutable",
+		                      FALSE,
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	g_type_class_add_private (object_class, sizeof (EphyNodeDbPrivate));
 }
