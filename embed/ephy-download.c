@@ -195,7 +195,7 @@ ephy_download_get_content_type (EphyDownload *download)
 static EphyDownloadActionType
 decide_action_from_mime (EphyDownload *ephy_download)
 {
-  const char *content_type;
+  char *content_type;
   GAppInfo *helper_app = NULL;
   EphyDownloadActionType action;
 
@@ -204,6 +204,8 @@ decide_action_from_mime (EphyDownload *ephy_download)
     helper_app = g_app_info_get_default_for_type (content_type, FALSE);
     if (helper_app)
       action = EPHY_DOWNLOAD_ACTION_OPEN;
+
+    g_free (content_type);
   }
 
   /* Downloads that have no content_type, or no helper_app, are
