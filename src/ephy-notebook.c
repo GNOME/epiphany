@@ -73,8 +73,11 @@ static const GtkTargetEntry url_drag_types [] =
 enum
 {
 	PROP_0,
-	PROP_TABS_ALLOWED
+	PROP_TABS_ALLOWED,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 enum
 {
@@ -147,11 +150,14 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 			      1,
 			      GTK_TYPE_WIDGET /* Can't use an interface type here */);
 
-	g_object_class_install_property (object_class,
-					 PROP_TABS_ALLOWED,
-					 g_param_spec_boolean ("tabs-allowed", NULL, NULL,
-							       TRUE,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_TABS_ALLOWED] =
+		g_param_spec_boolean ("tabs-allowed",
+		                      NULL,
+		                      NULL,
+		                      TRUE,
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	g_type_class_add_private (object_class, sizeof (EphyNotebookPrivate));
 }
@@ -670,7 +676,7 @@ ephy_notebook_set_tabs_allowed (EphyNotebook *nb,
 
 	update_tabs_visibility (nb, FALSE);
 
-	g_object_notify (G_OBJECT (nb), "tabs-allowed");
+	g_object_notify_by_pspec (G_OBJECT (nb), obj_properties[PROP_TABS_ALLOWED]);
 }
 
 static int
