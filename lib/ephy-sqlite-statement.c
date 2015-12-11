@@ -25,8 +25,11 @@ enum
 {
   PROP_0,
   PROP_PREPARED_STATEMENT,
-  PROP_CONNECTION
+  PROP_CONNECTION,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 struct _EphySQLiteStatementPrivate {
   sqlite3_stmt *prepared_statement;
@@ -81,20 +84,20 @@ ephy_sqlite_statement_class_init (EphySQLiteStatementClass *klass)
   gobject_class->set_property = ephy_sqlite_statement_set_property;
   g_type_class_add_private (gobject_class, sizeof (EphySQLiteStatementPrivate));
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_PREPARED_STATEMENT,
-                                   g_param_spec_pointer ("prepared-statement",
-                                                        "Prepared statement",
-                                                        "The statement's backing SQLite prepared statement",
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_PREPARED_STATEMENT] =
+    g_param_spec_pointer ("prepared-statement",
+                          "Prepared statement",
+                          "The statement's backing SQLite prepared statement",
+                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_CONNECTION,
-                                   g_param_spec_object ("connection",
-                                                        "Connection",
-                                                        "The statement's backing SQLite connection",
-                                                        EPHY_TYPE_SQLITE_CONNECTION,
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_CONNECTION] =
+    g_param_spec_object ("connection",
+                         "Connection",
+                         "The statement's backing SQLite connection",
+                         EPHY_TYPE_SQLITE_CONNECTION,
+                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 }
 
 static void
