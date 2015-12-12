@@ -95,8 +95,11 @@ enum
 {
 	PROP_0,
 	PROP_ROOT,
-	PROP_FILTER
+	PROP_FILTER,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 #define AUTO_SCROLL_MARGIN 20
 
@@ -1875,25 +1878,25 @@ ephy_node_view_class_init (EphyNodeViewClass *klass)
 	*
 	* A #gpointer to the root node of the #EphyNode elements of the view.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_ROOT,
-					 g_param_spec_pointer ("root",
-							       "Root node",
-							       "Root node",
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_ROOT] =
+		g_param_spec_pointer ("root",
+		                      "Root node",
+		                      "Root node",
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
 	/**
 	* EphyNodeView:filter:
 	*
 	* An #EphyNodeFilter object to use in the view.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_FILTER,
-					 g_param_spec_object ("filter",
-							      "Filter object",
-							      "Filter object",
-							      EPHY_TYPE_NODE_FILTER,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_FILTER] =
+		g_param_spec_object ("filter",
+		                     "Filter object",
+		                     "Filter object",
+		                     EPHY_TYPE_NODE_FILTER,
+		                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	/**
 	* EphyNodeView::node-toggled:
