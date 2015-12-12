@@ -105,8 +105,10 @@ enum
 	PROP_LOCATION,
 	PROP_FAVICON,
 	PROP_SECURITY_LEVEL,
-	PROP_SHOW_FAVICON
+	PROP_SHOW_FAVICON,
+	LAST_PROP
 };
+static GParamSpec *obj_properties[LAST_PROP];
 
 enum signalsEnum
 {
@@ -218,50 +220,48 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 	*
 	* The current location.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_LOCATION,
-					 g_param_spec_string ("location",
-							      "Location",
-							      "The current location",
-							      "",
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_LOCATION] =
+		g_param_spec_string ("location",
+		                     "Location",
+		                     "The current location",
+		                     "",
+		                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 	/**
 	* EphyLocationEntry:favicon:
 	*
 	* The icon corresponding to the current location.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_FAVICON,
-					 g_param_spec_object ("favicon",
-							      "Favicon",
-							      "The icon corresponding to the current location",
-							      GDK_TYPE_PIXBUF,
-							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_FAVICON] =
+		g_param_spec_object ("favicon",
+		                     "Favicon",
+		                     "The icon corresponding to the current location",
+		                     GDK_TYPE_PIXBUF,
+		                     G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
 	/**
 	* EphyLocationEntry:security-level:
 	*
 	* State of the security icon.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_SECURITY_LEVEL,
-					 g_param_spec_enum  ("security-level",
-							     "Security level",
-							     "State of the security icon",
-							     EPHY_TYPE_SECURITY_LEVEL,
-							     EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
-							     G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_SECURITY_LEVEL] =
+		g_param_spec_enum  ("security-level",
+		                    "Security level",
+		                    "State of the security icon",
+		                    EPHY_TYPE_SECURITY_LEVEL,
+		                    EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
+		                    G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-	g_object_class_install_property (object_class,
-					 PROP_SHOW_FAVICON,
-					 g_param_spec_boolean ("show-favicon",
-							       "Show Favicon",
-							       "Whether to show the favicon",
-							       TRUE,
-							       G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_SHOW_FAVICON] =
+		g_param_spec_boolean ("show-favicon",
+		                      "Show Favicon",
+		                      "Whether to show the favicon",
+		                      TRUE,
+		                      G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-       /**
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+
+	/**
 	* EphyLocationEntry::user-changed:
 	* @entry: the object on which the signal is emitted
 	*
