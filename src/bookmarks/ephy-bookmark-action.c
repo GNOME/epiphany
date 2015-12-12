@@ -166,14 +166,14 @@ ephy_bookmark_action_activate (EphyBookmarkAction *action,
 	location = ephy_node_get_property_string
 			(priv->node, EPHY_NODE_BMK_PROP_LOCATION);
 	g_return_if_fail (location != NULL);
-	
+
 	bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-	
+
 	if (GTK_IS_EDITABLE (widget))
 	{
 		text = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
 	}
-	
+
 	/* The entered search term is empty, and we have a smart bookmark */
 	if ((text == NULL || text[0] == '\0') && strstr (location, "%s") != NULL)
 	{
@@ -261,27 +261,27 @@ ephy_bookmark_action_updated (EphyBookmarkAction *action)
 	EphyNode *smart = ephy_bookmarks_get_smart_bookmarks (bookmarks);
 	EphyNode *node = action->priv->node;
 	const char *title;
-	
+
 	g_return_if_fail (action != NULL);
 	g_return_if_fail (node != NULL);
-	
+
 	g_object_freeze_notify (G_OBJECT (action));
 
 	/* Set smart_url */
 	action->priv->smart_url = ephy_node_has_child (smart, node);
 	g_object_notify (G_OBJECT (action), "smarturl");
-	
+
 	/* Set title */
 	title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_static_string (&value, title);
 	g_object_set_property (G_OBJECT (action), "label", &value);
 	g_value_unset (&value);
-	
+
 	/* Notify all other properties */
 	g_object_notify (G_OBJECT (action), "location");
 	g_object_notify (G_OBJECT (action), "icon");
-	
+
 	g_object_thaw_notify (G_OBJECT (action));
 
 	/* We could force a tooltip re-query with gtk_tooltip_trigger_tooltip_query
@@ -374,7 +374,7 @@ static void
 ephy_bookmark_action_init (EphyBookmarkAction *action)
 {
 	action->priv = EPHY_BOOKMARK_ACTION_GET_PRIVATE (action);
-	
+
 	action->priv->cache_handler = 0;
 }
 
@@ -422,7 +422,7 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 					 g_param_spec_string  ("tooltip", NULL, NULL,
 							       NULL,
 							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-	
+
 	g_object_class_install_property (object_class,
 					 PROP_LOCATION,
 					 g_param_spec_string  ("location", NULL, NULL,
