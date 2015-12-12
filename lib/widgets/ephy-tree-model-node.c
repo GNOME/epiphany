@@ -61,8 +61,11 @@ typedef struct
 enum
 {
 	PROP_0,
-	PROP_ROOT
+	PROP_ROOT,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 static GObjectClass *parent_class = NULL;
 
@@ -280,12 +283,13 @@ ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass)
 	*
 	* The root #EphyNode of the model.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_ROOT,
-					 g_param_spec_pointer ("root",
-							      "Root node",
-							      "Root node",
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_ROOT] =
+		g_param_spec_pointer ("root",
+		                      "Root node",
+		                      "Root node",
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	g_type_class_add_private (object_class, sizeof (EphyTreeModelNodePrivate));
 }
