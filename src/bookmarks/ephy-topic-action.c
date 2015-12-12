@@ -47,8 +47,11 @@ enum
 {
 	PROP_0,
 	PROP_TOPIC,
-	PROP_MANAGER
+	PROP_MANAGER,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyTopicAction, ephy_topic_action, GTK_TYPE_ACTION)
 
@@ -274,7 +277,7 @@ ephy_topic_action_set_topic (EphyTopicAction *action,
 	erase_popup (action);
 	
 	g_object_freeze_notify (object);
-	g_object_notify (object, "topic");
+	g_object_notify_by_pspec (object, obj_properties[PROP_TOPIC]);
 	ephy_topic_action_updated (action);
 	g_object_thaw_notify (object);
 }
@@ -336,23 +339,21 @@ ephy_topic_action_class_init (EphyTopicActionClass *class)
 	object_class->set_property = ephy_topic_action_set_property;
 	object_class->get_property = ephy_topic_action_get_property;
 
-	g_object_class_install_property (object_class,
-					 PROP_TOPIC,
-					 g_param_spec_pointer ("topic",
-							       "Topic",
-							       "Topic",
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							       G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_TOPIC] =
+		g_param_spec_pointer ("topic",
+		                      "Topic",
+		                      "Topic",
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
-	g_object_class_install_property (object_class,
-					 PROP_MANAGER,
-					 g_param_spec_object ("manager",
-							      "Manager",
-							      "UI Manager",
-							      GTK_TYPE_UI_MANAGER,
-							      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							      G_PARAM_CONSTRUCT_ONLY));
-	
+	obj_properties[PROP_MANAGER] =
+		g_param_spec_object ("manager",
+		                     "Manager",
+		                     "UI Manager",
+		                     GTK_TYPE_UI_MANAGER,
+		                     G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+
 	g_type_class_add_private (object_class, sizeof(EphyTopicActionPrivate));
 }
 
