@@ -45,8 +45,11 @@ enum
 {
 	PROP_0,
 	PROP_BOOKMARKS,
-	PROP_BOOKMARK
+	PROP_BOOKMARK,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 enum
 {
@@ -606,22 +609,18 @@ ephy_topics_entry_class_init (EphyTopicsEntryClass *klass)
 	object_class->constructor = ephy_topics_entry_constructor;
 	object_class->finalize = ephy_topics_entry_finalize;
 
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARKS,
-					 g_param_spec_object ("bookmarks",
-							      "Bookmarks set",
-							      "Bookmarks set",
-							      EPHY_TYPE_BOOKMARKS,
-							      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY |
-							      G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | 
-							      G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_BOOKMARKS] =
+		g_param_spec_object ("bookmarks",
+		                     "Bookmarks set",
+		                     "Bookmarks set",
+		                     EPHY_TYPE_BOOKMARKS,
+		                     G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARK,
-					 g_param_spec_pointer ("bookmark",
-							       "Bookmark",
-							       "Bookmark",
-							       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY |
-							       G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | 
-							       G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_BOOKMARK] =
+		g_param_spec_pointer ("bookmark",
+		                      "Bookmark",
+		                      "Bookmark",
+		                      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
