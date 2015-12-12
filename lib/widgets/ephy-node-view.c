@@ -189,7 +189,7 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 	int y;
 	int offset;
 	float value;
-	
+
 	window = gtk_tree_view_get_bin_window (tree_view);
 	vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree_view));
 
@@ -202,7 +202,7 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 	y += gtk_adjustment_get_value (vadjustment);
 
 	gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
-	
+
 	offset = y - (visible_rect.y + 2 * AUTO_SCROLL_MARGIN);
 	if (offset > 0)
 	{
@@ -222,7 +222,7 @@ static int
 scroll_timeout (gpointer data)
 {
 	GtkTreeView *tree_view = GTK_TREE_VIEW (data);
-	
+
 	gtk_tree_view_vertical_autoscroll (tree_view);
 
 	return TRUE;
@@ -269,7 +269,7 @@ get_drag_data (EphyNodeView *view,
 	       guint32 time)
 {
 	GdkAtom target;
-	
+
 	target = gtk_drag_dest_find_target (GTK_WIDGET (view), 
 					    context, 
 					    NULL);
@@ -307,7 +307,7 @@ drag_motion_cb (GtkWidget *widget,
 
 	gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
 					   x, y, &path, &pos);
-	
+
 	if (!view->priv->have_drag_data)
 	{
 		get_drag_data (view, context, time);
@@ -318,8 +318,7 @@ drag_motion_cb (GtkWidget *widget,
 
 	if (target != GDK_NONE && node != NULL)
 	{
-		priority = ephy_node_get_property_int
-				(node, view->priv->priority_prop_id);
+		priority = ephy_node_get_property_int (node, view->priv->priority_prop_id);
 
 		if (priority != EPHY_NODE_VIEW_ALL_PRIORITY &&
 		    priority != EPHY_NODE_VIEW_SPECIAL_PRIORITY &&
@@ -328,7 +327,7 @@ drag_motion_cb (GtkWidget *widget,
 			action = gdk_drag_context_get_suggested_action (context);
 		}
 	}
-	
+
 	if (action)
 	{
 		set_drag_dest_row (view, path);
@@ -337,12 +336,12 @@ drag_motion_cb (GtkWidget *widget,
 	{
 		clear_drag_dest_row (view);
 	}
-	
+
 	if (path)
 	{
 		gtk_tree_path_free (path);
 	}
-	
+
 	if (view->priv->scroll_id == 0)
 	{
 		view->priv->scroll_id = 
@@ -388,7 +387,7 @@ drag_data_received_cb (GtkWidget *widget,
 	    (gtk_selection_data_get_data (selection_data) == NULL))
 	{
 		return;
-	}	
+	}
 
 	/* appease GtkTreeView by preventing its drag_data_receive
 	* from being called */
@@ -397,8 +396,7 @@ drag_data_received_cb (GtkWidget *widget,
 	if (!view->priv->have_drag_data)
 	{
 		view->priv->have_drag_data = TRUE;
-		view->priv->drag_data = 
-			gtk_selection_data_copy (selection_data);
+		view->priv->drag_data = gtk_selection_data_copy (selection_data);
 	}
 
 	if (view->priv->drop_occurred)
@@ -453,7 +451,7 @@ drag_drop_cb (GtkWidget *widget,
 	get_drag_data (view, context, time);
 	remove_scroll_timeout (view);
 	clear_drag_dest_row (view);
-	
+
 	return TRUE;
 }
 
@@ -597,7 +595,7 @@ process_middle_click (GtkTreePath *path,
 {
 	EphyNode *node;
 	GtkTreeIter iter, iter2;
-	
+
 	gtk_tree_model_get_iter (view->priv->sortmodel, &iter, path);
 	gtk_tree_model_sort_convert_iter_to_child_iter
 		(GTK_TREE_MODEL_SORT (view->priv->sortmodel), &iter2, &iter);
@@ -605,7 +603,7 @@ process_middle_click (GtkTreePath *path,
 		(GTK_TREE_MODEL_FILTER (view->priv->filtermodel), &iter, &iter2);
 
 	node = ephy_tree_model_node_node_from_iter (view->priv->nodemodel, &iter);
-	
+
 	return node;
 }
 
@@ -626,8 +624,7 @@ ephy_node_view_key_press_cb (GtkTreeView *treeview,
 			GtkTreeSelection *selection;
 
 			selection = gtk_tree_view_get_selection (treeview);
-			gtk_tree_selection_selected_foreach
-					(selection, path_toggled, view);
+			gtk_tree_selection_selected_foreach (selection, path_toggled, view);
 			handled = TRUE;
 		}
 	}
@@ -645,8 +642,7 @@ selection_foreach (GtkTreeModel *model,
 
 	list = (GList**)data;
 
-	*list = g_list_prepend (*list,
-				gtk_tree_row_reference_new (model, path));
+	*list = g_list_prepend (*list, gtk_tree_row_reference_new (model, path));
 }
 
 static GList *
@@ -847,7 +843,7 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 	GtkTreeSelection *selection;
 	gboolean call_parent = TRUE, path_is_selected;
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
-	
+
 	if (event->window != gtk_tree_view_get_bin_window (GTK_TREE_VIEW (treeview)))
 	{
 		return GTK_WIDGET_CLASS (parent_class)->button_press_event (treeview, event);
@@ -892,7 +888,7 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 		else if (event->button == 2)
 		{
 			EphyNode *clicked_node;
-			
+
 			clicked_node = process_middle_click (path, view);
 			g_signal_emit (G_OBJECT (view),
 				       ephy_node_view_signals[NODE_MIDDLE_CLICKED], 0, clicked_node);
@@ -1372,7 +1368,7 @@ ephy_node_view_add_column_full (EphyNodeView *view,
 		gtk_tree_view_set_search_column (GTK_TREE_VIEW (view), column);
 		gtk_tree_view_set_enable_search (GTK_TREE_VIEW (view), TRUE);
 	}
-	
+
 	if (flags & EPHY_NODE_VIEW_ELLIPSIZED)
 	{
 		g_object_set (renderer, "ellipsize-set", TRUE,
@@ -1506,7 +1502,7 @@ ephy_node_view_get_selection (EphyNodeView *view)
 	GtkTreeSelection *selection;
 	gpointer data[2];
 
-	selection = gtk_tree_view_get_selection	(GTK_TREE_VIEW (view));
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 
 	data[0] = &list;
 	data[1] = view;
@@ -1591,7 +1587,7 @@ ephy_node_view_remove (EphyNodeView *view)
 		{
 			gtk_tree_view_set_cursor (GTK_TREE_VIEW (view), path, NULL, FALSE);
 			gtk_tree_path_free (path);
-		}	
+		}
 
 		gtk_tree_row_reference_free (row_ref);
 	}
