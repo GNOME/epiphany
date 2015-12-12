@@ -71,8 +71,11 @@ enum
 	PROP_0,
 	PROP_BOOKMARKS,
 	PROP_BOOKMARK,
-	PROP_CREATING
+	PROP_CREATING,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, GTK_TYPE_DIALOG)
 
@@ -464,28 +467,27 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
 	object_class->set_property = ephy_bookmark_properties_set_property;
 	object_class->get_property = ephy_bookmark_properties_get_property;
 
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARKS,
-					 g_param_spec_object ("bookmarks",
-							      "bookmarks",
-							      "bookmarks",
-							      EPHY_TYPE_BOOKMARKS,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_BOOKMARKS] =
+		g_param_spec_object ("bookmarks",
+		                     "bookmarks",
+		                     "bookmarks",
+		                     EPHY_TYPE_BOOKMARKS,
+		                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARK,
-					 g_param_spec_pointer ("bookmark",
-							       "bookmark",
-							       "bookmark",
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT));
+	obj_properties[PROP_BOOKMARK] =
+		g_param_spec_pointer ("bookmark",
+		                      "bookmark",
+		                      "bookmark",
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT);
 
-	g_object_class_install_property (object_class,
-					 PROP_CREATING,
-					 g_param_spec_boolean ("creating",
-							       "creating",
-							       "creating",
-							       FALSE,
-							       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_CREATING] =
+		g_param_spec_boolean ("creating",
+		                      "creating",
+		                      "creating",
+		                      FALSE,
+		                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	/* from UI file */
 	gtk_widget_class_set_template_from_resource (widget_class,
