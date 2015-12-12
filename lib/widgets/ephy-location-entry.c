@@ -176,7 +176,7 @@ ephy_location_entry_finalize (GObject *object)
 {
 	EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 	EphyLocationEntryPrivate *priv = entry->priv;
-	
+
 	g_free (priv->saved_text);
 
 	if (priv->drag_targets != NULL)
@@ -398,14 +398,14 @@ editable_changed_cb (GtkEditable *editable,
 
 	update_address_state (entry);
 
-	if (priv->block_update == TRUE) 
+	if (priv->block_update == TRUE)
 		return;
 	else
 	{
 		priv->user_changed = TRUE;
 		priv->can_redo = FALSE;
-	}	
-	
+	}
+
 	g_signal_emit (entry, signals[USER_CHANGED], 0);
 }
 
@@ -456,14 +456,14 @@ entry_key_press_after_cb (GtkEntry *entry,
 
 		return TRUE;
 	}
-	
+
 	if ((event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down)
 	    && state == 0)
 	{
 		/* If we are focusing the entry, with the cursor at the end of it
 		 * we emit the changed signal, so that the completion popup appears */
 		const char *string;
-		
+
 		string = gtk_entry_get_text (entry);
 		if (gtk_editable_get_position (GTK_EDITABLE (entry)) == strlen (string))
 		{
@@ -480,7 +480,7 @@ entry_activate_after_cb (GtkEntry *entry,
 			 EphyLocationEntry *lentry)
 {
 	EphyLocationEntryPrivate *priv = lentry->priv;
-	
+
 	priv->user_changed = FALSE;
 
 	if (priv->needs_reset)
@@ -613,21 +613,21 @@ entry_populate_popup_cb (GtkEntry *entry,
 	}
 
 	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), clear_menuitem, pos - 1);
-	
+
 	undo_menuitem = gtk_menu_item_new_with_mnemonic (_("_Undo"));
 	gtk_widget_set_sensitive (undo_menuitem, priv->user_changed);
 	g_signal_connect (undo_menuitem, "activate",
 			  G_CALLBACK (entry_undo_activate_cb), lentry);
 	gtk_widget_show (undo_menuitem);
 	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), undo_menuitem, 0);
-	
+
 	redo_menuitem = gtk_menu_item_new_with_mnemonic (_("_Redo"));
 	gtk_widget_set_sensitive (redo_menuitem, priv->can_redo);
 	g_signal_connect (redo_menuitem, "activate",
 			  G_CALLBACK (entry_redo_activate_cb), lentry);
 	gtk_widget_show (redo_menuitem);
 	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), redo_menuitem, 1);
-	
+
 	separator = gtk_separator_menu_item_new ();
 	gtk_widget_show (separator);
 	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), separator, 2);
@@ -810,7 +810,7 @@ favicon_drag_begin_cb (GtkWidget *widget,
 	gint index;
 
 	entry = GTK_ENTRY (widget);
-	
+
 	index = gtk_entry_get_current_icon_drag_source (entry);
 	if (index != GTK_ENTRY_ICON_PRIMARY)
 		return;
@@ -856,19 +856,18 @@ icon_button_press_event_cb (GtkWidget *entry,
 {
 	guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-	if (event->type == GDK_BUTTON_PRESS && 
+	if (event->type == GDK_BUTTON_PRESS &&
 	    event->button == 1 &&
 	    state == 0 /* left */)
 	{
 		if (position == GTK_ENTRY_ICON_PRIMARY)
 		{
 			GtkWidget *toplevel;
-		
+
 			toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
 			gtk_window_set_focus (GTK_WINDOW (toplevel), entry);
 
-			gtk_editable_select_region (GTK_EDITABLE (entry), 
-						    0, -1);
+			gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
 		}
 		else
 		{
@@ -1078,13 +1077,13 @@ extracell_data_func (GtkCellLayout *cell_layout,
  *
  **/
 void
-ephy_location_entry_set_match_func (EphyLocationEntry *entry, 
+ephy_location_entry_set_match_func (EphyLocationEntry *entry,
 				GtkEntryCompletionMatchFunc match_func,
 				gpointer user_data,
 				GDestroyNotify notify)
 {
 	GtkEntryCompletion *completion;
-	
+
 	completion = gtk_entry_get_completion (GTK_ENTRY (entry));
 	gtk_entry_completion_set_match_func (completion, match_func, user_data, notify);
 }
@@ -1204,10 +1203,10 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 	gtk_cell_renderer_set_alignment (cell, 0.0, 0.5);
 
         /*
-         * As the width of the entry completion is known in advance 
-         * (as big as the entry you are completing on), we can set 
-         * any fixed width (the 1 is just this random number here). 
-         * Since the height is known too, we avoid computing the actual 
+         * As the width of the entry completion is known in advance
+         * (as big as the entry you are completing on), we can set
+         * any fixed width (the 1 is just this random number here)
+         * Since the height is known too, we avoid computing the actual
          * sizes of the cells, which takes a lot of CPU time and does
          * not get used anyway.
          */
@@ -1267,7 +1266,7 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
 
 		if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (widget) &&
 		    gtk_editable_get_selection_bounds (GTK_EDITABLE (widget),
-	     					       &start, &end))
+		                                       &start, &end))
 		{
 			selection = gtk_editable_get_chars (GTK_EDITABLE (widget),
 							    start, end);
@@ -1322,7 +1321,7 @@ ephy_location_entry_set_location (EphyLocationEntry *entry,
  * ephy_location_entry_get_can_undo:
  * @entry: an #EphyLocationEntry widget
  *
- * Wheter @entry can restore the displayed user modified text to the unmodified 
+ * Wheter @entry can restore the displayed user modified text to the unmodified
  * previous text.
  *
  * Return value: TRUE or FALSE indicating if the text can be restored
@@ -1332,7 +1331,7 @@ gboolean
 ephy_location_entry_get_can_undo (EphyLocationEntry *entry)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
-	
+
 	return priv->user_changed;
 }
 
@@ -1350,7 +1349,7 @@ gboolean
 ephy_location_entry_get_can_redo (EphyLocationEntry *entry)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
-	
+
 	return priv->can_redo;
 }
 
@@ -1397,7 +1396,7 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
 	{
 		g_signal_emit (entry, signals[USER_CHANGED], 0);
 	}
-	
+
 	priv->user_changed = FALSE;
 
 	return retval;
@@ -1414,7 +1413,7 @@ void
 ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
-	
+
 	gtk_entry_set_text (GTK_ENTRY (entry), priv->saved_text);
 	priv->can_redo = FALSE;
 	priv->user_changed = TRUE;
@@ -1551,6 +1550,6 @@ GSList *
 ephy_location_entry_get_search_terms (EphyLocationEntry *entry)
 {
 	EphyLocationEntryPrivate *priv = entry->priv;
-	
+
 	return priv->search_terms;
 }
