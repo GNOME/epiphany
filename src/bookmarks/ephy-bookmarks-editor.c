@@ -142,8 +142,11 @@ struct _EphyBookmarksEditorPrivate
 enum
 {
 	PROP_0,
-	PROP_BOOKMARKS
+	PROP_BOOKMARKS,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 static const GtkActionEntry ephy_bookmark_popup_entries [] = {
 	/* Toplevel */
@@ -1006,13 +1009,14 @@ ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass)
 
 	widget_class->show = ephy_bookmarks_editor_show;
 
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARKS,
-					 g_param_spec_object ("bookmarks",
-							      "Bookmarks set",
-							      "Bookmarks set",
-							      EPHY_TYPE_BOOKMARKS,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_BOOKMARKS] =
+		g_param_spec_object ("bookmarks",
+		                     "Bookmarks set",
+		                     "Bookmarks set",
+		                     EPHY_TYPE_BOOKMARKS,
+		                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarksEditorPrivate));
 }
