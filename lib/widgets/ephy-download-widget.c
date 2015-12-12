@@ -50,8 +50,11 @@ struct _EphyDownloadWidgetPrivate
 enum
 {
   PROP_0,
-  PROP_DOWNLOAD
+  PROP_DOWNLOAD,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 static char *
 get_destination_basename_from_download (EphyDownload *ephy_download)
@@ -464,16 +467,14 @@ ephy_download_widget_class_init (EphyDownloadWidgetClass *klass)
    *
    * The EphyDownload that this widget is showing.
    */
-  g_object_class_install_property (object_class, PROP_DOWNLOAD,
-                                   g_param_spec_object ("download",
-                                                        "An EphyDownload object",
-                                                        "The EphyDownload shown by this widget",
-                                                        G_TYPE_OBJECT,
-                                                        G_PARAM_READWRITE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_NAME |
-                                                        G_PARAM_STATIC_NICK |
-                                                        G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_DOWNLOAD] =
+    g_param_spec_object ("download",
+                         "An EphyDownload object",
+                         "The EphyDownload shown by this widget",
+                         G_TYPE_OBJECT,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 static void
