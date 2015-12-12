@@ -53,8 +53,11 @@ enum
 	PROP_TOOLTIP,
 	PROP_LOCATION,
 	PROP_SMART_URL,
-	PROP_ICON
+	PROP_ICON,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 typedef struct
 {
@@ -80,7 +83,7 @@ favicon_changed_cb (WebKitFaviconDatabase *database,
                 g_signal_handler_disconnect (database, action->priv->cache_handler);
                 action->priv->cache_handler = 0;
 
-                g_object_notify (G_OBJECT (action), "icon");
+                g_object_notify_by_pspec (G_OBJECT (action), obj_properties[PROP_ICON]);
         }
 }
 
@@ -269,7 +272,7 @@ ephy_bookmark_action_updated (EphyBookmarkAction *action)
 
 	/* Set smart_url */
 	action->priv->smart_url = ephy_node_has_child (smart, node);
-	g_object_notify (G_OBJECT (action), "smarturl");
+	g_object_notify_by_pspec (G_OBJECT (action), obj_properties[PROP_SMART_URL]);
 
 	/* Set title */
 	title = ephy_node_get_property_string (node, EPHY_NODE_BMK_PROP_TITLE);
@@ -279,8 +282,8 @@ ephy_bookmark_action_updated (EphyBookmarkAction *action)
 	g_value_unset (&value);
 
 	/* Notify all other properties */
-	g_object_notify (G_OBJECT (action), "location");
-	g_object_notify (G_OBJECT (action), "icon");
+	g_object_notify_by_pspec (G_OBJECT (action), obj_properties[PROP_LOCATION]);
+	g_object_notify_by_pspec (G_OBJECT (action), obj_properties[PROP_ICON]);
 
 	g_object_thaw_notify (G_OBJECT (action));
 
@@ -309,7 +312,7 @@ ephy_bookmark_action_set_bookmark (EphyBookmarkAction *action,
 
 	g_object_freeze_notify (object);
 
-	g_object_notify (object, "bookmark");
+	g_object_notify_by_pspec (G_OBJECT (action), obj_properties[PROP_BOOKMARK]);
 	ephy_bookmark_action_updated (action);
 
 	g_object_thaw_notify (object);
@@ -410,34 +413,29 @@ ephy_bookmark_action_class_init (EphyBookmarkActionClass *class)
 	object_class->set_property = ephy_bookmark_action_set_property;
 	object_class->get_property = ephy_bookmark_action_get_property;
 
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARK,
-					 g_param_spec_pointer ("bookmark", NULL, NULL,
-							       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
-							       G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_BOOKMARK] =
+		g_param_spec_pointer ("bookmark", NULL, NULL,
+		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
 
 	/* overwrite GtkActionClass::tooltip, so we can use the url as tooltip */
-	g_object_class_install_property (object_class,
-					 PROP_TOOLTIP,
-					 g_param_spec_string  ("tooltip", NULL, NULL,
-							       NULL,
-							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_TOOLTIP] =
+		g_param_spec_string  ("tooltip", NULL, NULL,
+		                      NULL,
+		                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+	obj_properties[PROP_LOCATION] =
+		g_param_spec_string  ("location", NULL, NULL,
+		                      NULL,
+		                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+	obj_properties[PROP_SMART_URL] =
+		g_param_spec_boolean  ("smarturl", NULL, NULL,
+		                       FALSE,
+		                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+	obj_properties[PROP_ICON] =
+		g_param_spec_string  ("icon", NULL, NULL,
+		                      NULL,
+		                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-	g_object_class_install_property (object_class,
-					 PROP_LOCATION,
-					 g_param_spec_string  ("location", NULL, NULL,
-							       NULL,
-							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-	g_object_class_install_property (object_class,
-					 PROP_SMART_URL,
-					 g_param_spec_boolean  ("smarturl", NULL, NULL,
-								FALSE,
-								G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-	g_object_class_install_property (object_class,
-					 PROP_ICON,
-					 g_param_spec_string  ("icon", NULL, NULL,
-							       NULL,
-							       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	g_type_class_add_private (object_class, sizeof(EphyBookmarkActionPrivate));
 }
