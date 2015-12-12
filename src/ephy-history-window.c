@@ -76,7 +76,10 @@ enum
 {
 	PROP_0,
 	PROP_HISTORY_SERVICE,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 typedef enum
 {
@@ -701,15 +704,16 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 
 	object_class->set_property = ephy_history_window_set_property;
 	object_class->get_property = ephy_history_window_get_property;
-	object_class->dispose  = ephy_history_window_dispose;
+	object_class->dispose = ephy_history_window_dispose;
 
-	g_object_class_install_property (object_class,
-					 PROP_HISTORY_SERVICE,
-					 g_param_spec_object ("history-service",
-							      "History service",
-							      "History Service",
-							      EPHY_TYPE_HISTORY_SERVICE,
-							      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY));
+	obj_properties[PROP_HISTORY_SERVICE] =
+		g_param_spec_object ("history-service",
+		                     "History service",
+		                     "History Service",
+		                     EPHY_TYPE_HISTORY_SERVICE,
+		                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	gtk_widget_class_set_template_from_resource (widget_class,
 	                                             "/org/gnome/epiphany/history-dialog.ui");
