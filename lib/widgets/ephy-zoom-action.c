@@ -40,9 +40,11 @@ struct _EphyZoomActionPrivate
 enum
 {
 	PROP_0,
-	PROP_ZOOM
+	PROP_ZOOM,
+	LAST_PROP
 };
 
+static GParamSpec *obj_properties[LAST_PROP];
 
 static void ephy_zoom_action_init       (EphyZoomAction *action);
 static void ephy_zoom_action_class_init (EphyZoomActionClass *class);
@@ -164,13 +166,14 @@ ephy_zoom_action_class_init (EphyZoomActionClass *class)
 	*
 	* The current value of #EphyZoomAction, as a float.
 	*/
-	g_object_class_install_property (object_class,
-					 PROP_ZOOM,
-					 g_param_spec_float ("zoom", NULL, NULL,
-							     ZOOM_MINIMAL,
-							     ZOOM_MAXIMAL,
-							     1.0,
-							     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_ZOOM] =
+		g_param_spec_float ("zoom", NULL, NULL,
+		                    ZOOM_MINIMAL,
+		                    ZOOM_MAXIMAL,
+		                    1.0,
+		                    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	/**
 	* EphyZoomAction::zoom-to-level:
@@ -216,7 +219,7 @@ ephy_zoom_action_set_zoom_level (EphyZoomAction *action, float zoom)
 	if (zoom < ZOOM_MINIMAL || zoom > ZOOM_MAXIMAL) return;
 
 	action->priv->zoom = zoom;
-	g_object_notify (G_OBJECT (action), "zoom");
+	g_object_notify_by_pspec (G_OBJECT (action), obj_properties[PROP_ZOOM]);
 }
 
 /**
