@@ -79,8 +79,11 @@ static void ephy_history_service_quit             (EphyHistoryService *self, Eph
 enum {
   PROP_0,
   PROP_HISTORY_FILENAME,
-  PROP_READ_ONLY
+  PROP_READ_ONLY,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 #define EPHY_HISTORY_SERVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), EPHY_TYPE_HISTORY_SERVICE, EphyHistoryServicePrivate))
 
@@ -264,20 +267,21 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                   1,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_HISTORY_FILENAME,
-                                   g_param_spec_string ("history-filename",
-                                                        "History filename",
-                                                        "The filename of the SQLite file holding containing history",
-                                                        NULL,
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-    g_object_class_install_property (gobject_class,
-                                     PROP_READ_ONLY,
-                                     g_param_spec_boolean ("read-only",
-                                                           "Read only mode",
-                                                           "Whether the history service works in read only mode",
-                                                           FALSE,
-                                                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_HISTORY_FILENAME] =
+    g_param_spec_string ("history-filename",
+                         "History filename",
+                         "The filename of the SQLite file holding containing history",
+                         NULL,
+                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_READ_ONLY] =
+    g_param_spec_boolean ("read-only",
+                          "Read only mode",
+                          "Whether the history service works in read only mode",
+                          FALSE,
+                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 
   g_type_class_add_private (gobject_class, sizeof (EphyHistoryServicePrivate));
 }
