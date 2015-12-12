@@ -23,7 +23,7 @@
 #include "ephy-history-type-builtins.h"
 #include "ephy-sqlite-connection.h"
 
-typedef gboolean (*EphyHistoryServiceMethod)                              (EphyHistoryService *self, gpointer data, gpointer *result);
+typedef gboolean (*EphyHistoryServiceMethod)      (EphyHistoryService *self, gpointer data, gpointer *result);
 
 typedef enum {
   /* WRITE */
@@ -58,7 +58,7 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL];
-  
+
 typedef struct _EphyHistoryServiceMessage {
   EphyHistoryService *service;
   EphyHistoryServiceMessageType type;
@@ -71,10 +71,10 @@ typedef struct _EphyHistoryServiceMessage {
   EphyHistoryJobCallback callback;
 } EphyHistoryServiceMessage;
 
-static gpointer run_history_service_thread                                (EphyHistoryService *self);
-static void ephy_history_service_process_message                          (EphyHistoryService *self, EphyHistoryServiceMessage *message);
-static gboolean ephy_history_service_execute_quit                         (EphyHistoryService *self, gpointer data, gpointer *result);
-static void ephy_history_service_quit                                     (EphyHistoryService *self, EphyHistoryJobCallback callback, gpointer user_data);
+static gpointer run_history_service_thread        (EphyHistoryService *self);
+static void ephy_history_service_process_message  (EphyHistoryService *self, EphyHistoryServiceMessage *message);
+static gboolean ephy_history_service_execute_quit (EphyHistoryService *self, gpointer data, gpointer *result);
+static void ephy_history_service_quit             (EphyHistoryService *self, EphyHistoryJobCallback callback, gpointer user_data);
 
 enum {
   PROP_0,
@@ -193,8 +193,8 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
 
   klass->visit_url = impl_visit_url;
 
-	signals[VISIT_URL] =
-		g_signal_new ("visit-url",
+  signals[VISIT_URL] =
+    g_signal_new ("visit-url",
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (EphyHistoryServiceClass, visit_url),
@@ -298,7 +298,7 @@ ephy_history_service_new (const char *history_filename,
   return EPHY_HISTORY_SERVICE (g_object_new (EPHY_TYPE_HISTORY_SERVICE,
                                              "history-filename", history_filename,
                                              "read-only", read_only,
-                                              NULL));
+                                             NULL));
 }
 
 static gint
@@ -548,7 +548,7 @@ ephy_history_service_execute_job_callback (gpointer data)
 
   if (message->type == CLEAR)
     g_signal_emit (message->service, signals[CLEARED], 0);
-    
+
   ephy_history_service_message_free (message);
 
   return FALSE;
@@ -1188,7 +1188,7 @@ ephy_history_service_delete_urls (EphyHistoryService *self,
   g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
   g_return_if_fail (urls != NULL);
 
-  message = ephy_history_service_message_new (self, DELETE_URLS, 
+  message = ephy_history_service_message_new (self, DELETE_URLS,
                                               ephy_history_url_list_copy (urls), (GDestroyNotify)ephy_history_url_list_free,
                                               cancellable, callback, user_data);
   ephy_history_service_send_message (self, message);
@@ -1230,7 +1230,7 @@ ephy_history_service_quit (EphyHistoryService *self,
                            gpointer user_data)
 {
   EphyHistoryServiceMessage *message =
-    ephy_history_service_message_new (self, QUIT, 
+    ephy_history_service_message_new (self, QUIT,
                                       NULL, NULL, NULL,
                                       callback, user_data);
   ephy_history_service_send_message (self, message);
