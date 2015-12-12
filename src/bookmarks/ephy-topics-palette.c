@@ -45,8 +45,11 @@ enum
 	PROP_0,
 	PROP_BOOKMARKS,
 	PROP_BOOKMARK,
-	PROP_MODE
+	PROP_MODE,
+	LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 enum
 {
@@ -327,32 +330,25 @@ ephy_topics_palette_class_init (EphyTopicsPaletteClass *klass)
 	object_class->set_property = ephy_topics_palette_set_property;
 	object_class->constructor = ephy_topics_palette_constructor;
 	
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARKS,
-					 g_param_spec_object ("bookmarks",
-							      "Bookmarks set",
-							      "Bookmarks set",
-							      EPHY_TYPE_BOOKMARKS,
-							      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY |
-							      G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | 
-							      G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_BOOKMARKS] =
+		g_param_spec_object ("bookmarks",
+		                     "Bookmarks set",
+		                     "Bookmarks set",
+		                     EPHY_TYPE_BOOKMARKS,
+		                     G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-	g_object_class_install_property (object_class,
-					 PROP_BOOKMARK,
-					 g_param_spec_pointer ("bookmark",
-							       "Bookmark",
-							       "Bookmark",
-							       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY |
-							       G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | 
-							       G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_BOOKMARK] =
+		g_param_spec_pointer ("bookmark",
+		                      "Bookmark",
+		                      "Bookmark",
+		                      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-	g_object_class_install_property (object_class,
-					 PROP_MODE,
-					 g_param_spec_int ("mode",
-							   "Mode",
-							   "Mode",
-							   0, MODES-1, 0, 
-							   G_PARAM_WRITABLE |
-							   G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
-							   G_PARAM_STATIC_BLURB));
+	obj_properties[PROP_MODE] =
+		g_param_spec_int ("mode",
+		                  "Mode",
+		                  "Mode",
+		                  0, MODES-1, 0,
+		                  G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
