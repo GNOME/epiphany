@@ -70,12 +70,12 @@ append_topics (EphyTopicsPalette *self,
 	EphyNode *node;
 	const char *title;
 	gint i;
-	
+
 	if (topics->len == 0)
 	{
 		return;
 	}
-	 
+
 	if (!*first)
 	{
 		if (!*valid) gtk_list_store_append (GTK_LIST_STORE (self), iter);
@@ -90,7 +90,7 @@ append_topics (EphyTopicsPalette *self,
 	{
 		node = g_ptr_array_index (topics, i);
 		title = ephy_node_get_property_string (node, EPHY_NODE_KEYWORD_PROP_NAME);
-		
+
 		if (!*valid) gtk_list_store_append (GTK_LIST_STORE (self), iter);
 		gtk_list_store_set (GTK_LIST_STORE (self), iter,
 		                    EPHY_TOPICS_PALETTE_COLUMN_TITLE, title,
@@ -110,10 +110,10 @@ ephy_topics_palette_update_list (EphyTopicsPalette *self)
 	GtkTreeIter iter;
 	gint i, priority;
 	gboolean valid, first;
-	
+
 	valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self), &iter);
 	first = TRUE;
-	
+
 	if (self->mode == MODE_LIST)
 	{
 		/* Allocate and fill the suggestions array. */
@@ -123,22 +123,22 @@ ephy_topics_palette_update_list (EphyTopicsPalette *self)
 		for (i = 0; i < children->len; i++)
 		{
 			node = g_ptr_array_index (children, i);
-			
+
 			priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 			if (priority != EPHY_NODE_NORMAL_PRIORITY)
-			  continue;
+				continue;
 
 			g_ptr_array_add (topics, node);
 		}
 
-		g_ptr_array_sort (topics, ephy_bookmarks_compare_topic_pointers);		
+		g_ptr_array_sort (topics, ephy_bookmarks_compare_topic_pointers);
 		append_topics (self, &iter, &valid, &first, topics);
 		g_ptr_array_free (topics, TRUE);
 	}
 	else if (self->mode == MODE_GROUPED)
 	{
 		GPtrArray *suggested, *selected;
-		
+
 		/* Allocate and fill the bookmarks array. */
 		node = ephy_bookmarks_get_bookmarks (self->bookmarks);
 		children = ephy_node_get_children (node);
@@ -147,7 +147,7 @@ ephy_topics_palette_update_list (EphyTopicsPalette *self)
 		{
 			g_ptr_array_add(bookmarks, g_ptr_array_index (children, i));
 		}
-		
+
 		/* Allocate and fill the topics array. */
 		node = ephy_bookmarks_get_keywords (self->bookmarks);
 		children = ephy_node_get_children (node);
@@ -157,34 +157,34 @@ ephy_topics_palette_update_list (EphyTopicsPalette *self)
 		for (i = 0; i < children->len; i++)
 		{
 			node = g_ptr_array_index (children, i);
-			
+
 			priority = ephy_node_get_property_int (node, EPHY_NODE_KEYWORD_PROP_PRIORITY);
 			if (priority != EPHY_NODE_NORMAL_PRIORITY)
-			  continue;
-			
+				continue;
+
 			/* We'll consider only bookmarks covered by the same topics as our bookmark. */
 			if (ephy_node_has_child (node, self->bookmark))
 			{
 				ephy_nodes_remove_not_covered (node, bookmarks);
 				g_ptr_array_add (selected, node);
 			}
-			
+
 			/* We'll onsider only topics that are not already selected for our bookmark. */
 			else
 			{
 				g_ptr_array_add (topics, node);
 			}
 		}
-	
+
 		/* Get the minimum cover of topics for the bookmarks. */
 		suggested = ephy_nodes_get_covering (topics, bookmarks, suggested, 0, 0);
-		
+
 		for (i = 0; i < suggested->len; i++)
 		{
 			g_ptr_array_remove_fast (topics, g_ptr_array_index (suggested, i));
 		}
-		
-		/* Add any topics which cover the bookmarks completely in their own right, or 
+
+		/* Add any topics which cover the bookmarks completely in their own right, or
 		   have no bookmarks currently associated with it. */
 		for (i = 0; i < topics->len ; i++)
 		{
@@ -197,7 +197,6 @@ ephy_topics_palette_update_list (EphyTopicsPalette *self)
 				i--;
 			}
 		}
-	
 
 		g_ptr_array_sort (selected, ephy_bookmarks_compare_topic_pointers);
 		g_ptr_array_sort (suggested, ephy_bookmarks_compare_topic_pointers);
@@ -210,7 +209,7 @@ ephy_topics_palette_update_list (EphyTopicsPalette *self)
 		g_ptr_array_free (bookmarks, TRUE);
 		g_ptr_array_free (topics, TRUE);
 	}
-	
+
 	while (valid)
 	{
 		valid = gtk_list_store_remove (GTK_LIST_STORE (self), &iter);
@@ -326,10 +325,10 @@ static void
 ephy_topics_palette_class_init (EphyTopicsPaletteClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	
+
 	object_class->set_property = ephy_topics_palette_set_property;
 	object_class->constructor = ephy_topics_palette_constructor;
-	
+
 	obj_properties[PROP_BOOKMARKS] =
 		g_param_spec_object ("bookmarks",
 		                     "Bookmarks set",
