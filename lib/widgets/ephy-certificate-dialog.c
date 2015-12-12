@@ -38,8 +38,11 @@ enum
   PROP_ADDRESS,
   PROP_CERTIFICATE,
   PROP_SECURITY_LEVEL,
-  PROP_TLS_ERRORS
+  PROP_TLS_ERRORS,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 struct _EphyCertificateDialogPrivate
 {
@@ -219,70 +222,52 @@ ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
    *
    * The address of the website.
    */
-  g_object_class_install_property (object_class,
-				   PROP_ADDRESS,
-				   g_param_spec_string ("address",
-							"Address",
-							"The address of the website",
-							NULL,
-							G_PARAM_WRITABLE |
-							G_PARAM_CONSTRUCT_ONLY |
-							G_PARAM_STATIC_NAME |
-							G_PARAM_STATIC_NICK |
-							G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_ADDRESS] =
+    g_param_spec_string ("address",
+                         "Address",
+                         "The address of the website",
+                         NULL,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
    * EphyCertificateDialog:certificate:
    *
    * The certificate of the website.
    */
-  g_object_class_install_property (object_class,
-				   PROP_CERTIFICATE,
-				   g_param_spec_object ("certificate",
-							"Certificate",
-							"The certificate of the website",
-							G_TYPE_TLS_CERTIFICATE,
-							G_PARAM_WRITABLE |
-							G_PARAM_CONSTRUCT_ONLY |
-							G_PARAM_STATIC_NAME |
-							G_PARAM_STATIC_NICK |
-							G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_CERTIFICATE] =
+    g_param_spec_object ("certificate",
+                         "Certificate",
+                         "The certificate of the website",
+                         G_TYPE_TLS_CERTIFICATE,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
    * EphySecurityLevel:security-level:
    *
    * Indicates whether something is wrong with the connection.
    */
-  g_object_class_install_property (object_class,
-				   PROP_SECURITY_LEVEL,
-				   g_param_spec_enum ("security-level",
-						      "Security Level",
-						      "Indicates whether something is wrong with the connection",
-						      EPHY_TYPE_SECURITY_LEVEL,
-						      EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
-						      G_PARAM_WRITABLE |
-						      G_PARAM_CONSTRUCT_ONLY |
-						      G_PARAM_STATIC_NAME |
-						      G_PARAM_STATIC_NICK |
-						      G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_SECURITY_LEVEL] =
+    g_param_spec_enum ("security-level",
+                       "Security Level",
+                       "Indicates whether something is wrong with the connection",
+                       EPHY_TYPE_SECURITY_LEVEL,
+                       EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
+                       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
    * EphyCertificateDialog:tls-errors:
    *
    * The verification errors on the TLS certificate.
    */
-  g_object_class_install_property (object_class,
-				   PROP_TLS_ERRORS,
-				   g_param_spec_flags ("tls-errors",
-						       "TLS Errors",
-						       "The verification errors on the TLS certificate",
-						       G_TYPE_TLS_CERTIFICATE_FLAGS,
-						       0,
-						       G_PARAM_WRITABLE |
-						       G_PARAM_CONSTRUCT_ONLY |
-						       G_PARAM_STATIC_NAME |
-						       G_PARAM_STATIC_NICK |
-						       G_PARAM_STATIC_BLURB));
+  obj_properties[PROP_TLS_ERRORS] =
+    g_param_spec_flags ("tls-errors",
+                        "TLS Errors",
+                        "The verification errors on the TLS certificate",
+                        G_TYPE_TLS_CERTIFICATE_FLAGS,
+                        0,
+                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   g_type_class_add_private (object_class, sizeof (EphyCertificateDialogPrivate));
 }
