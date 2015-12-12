@@ -41,7 +41,10 @@ enum
   PROP_CERTIFICATE,
   PROP_SECURITY_LEVEL,
   PROP_TLS_ERRORS,
+  LAST_PROP
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 struct _EphySecurityPopoverPrivate
 {
@@ -273,62 +276,52 @@ ephy_security_popover_class_init (EphySecurityPopoverClass *klass)
    *
    * The address of the website.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ADDRESS,
-                                   g_param_spec_string ("address",
-                                                        "Address",
-                                                        "The address of the website",
-                                                        NULL,
-                                                        G_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
+  obj_properties[PROP_ADDRESS] =
+    g_param_spec_string ("address",
+                         "Address",
+                         "The address of the website",
+                         NULL,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
    * EphySecurityPopover:certificate:
    *
    * The certificate of the website.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_CERTIFICATE,
-                                   g_param_spec_object ("certificate",
-                                                        "Certificate",
-                                                        "The certificate of the website, if HTTPS",
-                                                        G_TYPE_TLS_CERTIFICATE,
-                                                        G_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
+  obj_properties[PROP_CERTIFICATE] =
+    g_param_spec_object ("certificate",
+                         "Certificate",
+                         "The certificate of the website, if HTTPS",
+                         G_TYPE_TLS_CERTIFICATE,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
    * EphySecurityPopover:tls-errors:
    *
    * Indicates issues with the security of the website.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TLS_ERRORS,
-                                   g_param_spec_flags ("tls-errors",
-                                                       "TLS Errors",
-                                                       "Issues with the security of the website, if HTTPS",
-                                                       G_TYPE_TLS_CERTIFICATE_FLAGS,
-                                                       0,
-                                                       G_PARAM_WRITABLE |
-                                                       G_PARAM_CONSTRUCT_ONLY |
-                                                       G_PARAM_STATIC_STRINGS));
+  obj_properties[PROP_TLS_ERRORS] =
+    g_param_spec_flags ("tls-errors",
+                        "TLS Errors",
+                        "Issues with the security of the website, if HTTPS",
+                        G_TYPE_TLS_CERTIFICATE_FLAGS,
+                        0,
+                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
    * EphySecurityPopover:security-level:
    *
    * The state of the lock displayed in the address bar.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SECURITY_LEVEL,
-                                   g_param_spec_enum ("security-level",
-                                                      "Security Level",
-                                                      "Determines what type of information to display",
-                                                      EPHY_TYPE_SECURITY_LEVEL,
-                                                      EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
-                                                      G_PARAM_WRITABLE |
-                                                      G_PARAM_CONSTRUCT_ONLY |
-                                                      G_PARAM_STATIC_STRINGS));
+  obj_properties[PROP_SECURITY_LEVEL] =
+    g_param_spec_enum ("security-level",
+                       "Security Level",
+                       "Determines what type of information to display",
+                       EPHY_TYPE_SECURITY_LEVEL,
+                       EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
+                       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 static void
