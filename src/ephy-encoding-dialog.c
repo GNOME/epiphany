@@ -44,7 +44,7 @@ struct _EphyEncodingDialog
 	GtkWidget *enc_view;
 	gboolean update_embed_tag;
 	gboolean update_view_tag;
-	char *selected_encoding;
+	const char *selected_encoding;
 
 	/* from the UI file */
 	GtkStack *type_stack;
