@@ -3530,9 +3530,7 @@ ephy_window_class_init (EphyWindowClass *klass)
 							     EPHY_TYPE_WINDOW_CHROME,
 							     EPHY_WINDOW_CHROME_DEFAULT,
 							     G_PARAM_READWRITE |
-							     G_PARAM_STATIC_NAME |
-							     G_PARAM_STATIC_NICK |
-							     G_PARAM_STATIC_BLURB));
+							     G_PARAM_STATIC_STRINGS));
 
 	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
 }
