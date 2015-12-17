@@ -265,7 +265,7 @@ ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
                         "The verification errors on the TLS certificate",
                         G_TYPE_TLS_CERTIFICATE_FLAGS,
                         0,
-                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
