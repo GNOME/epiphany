@@ -275,7 +275,7 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
                            "Window",
                            "The toolbar's EphyWindow",
                            EPHY_TYPE_WINDOW,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_CONSTRUCT_ONLY);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
     g_object_class_install_properties (gobject_class,
                                        N_PROPERTIES,
