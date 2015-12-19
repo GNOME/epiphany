@@ -110,7 +110,7 @@ struct _EphyWebView {
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
 
-  gboolean loading_tls_error_page;
+  gboolean loading_error_page;
   char *tls_error_failing_uri;
 
   /* Web Extension */
@@ -1550,8 +1550,8 @@ update_security_status_for_committed_load (EphyWebView *view,
   WebKitSecurityManager *security_manager;
   SoupURI *soup_uri;
 
-  if (view->loading_tls_error_page) {
-    view->loading_tls_error_page = FALSE;
+  if (view->loading_error_page) {
+    view->loading_error_page = FALSE;
     return;
   }
 
@@ -1855,6 +1855,13 @@ ephy_web_view_load_error_page (EphyWebView *view,
   const char *custom_class;
   GBytes *html_file;
 
+  view->loading_error_page = TRUE;
+
+  if (page == EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE)
+    ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE);
+  else
+    ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_LOCAL_PAGE);
+
   if (error)
     reason = error->message;
   else
@@ -2034,11 +2041,9 @@ load_failed_with_tls_error_cb (WebKitWebView *web_view,
   g_clear_object (&view->certificate);
   g_clear_pointer (&view->tls_error_failing_uri, g_free);
 
-  view->loading_tls_error_page = TRUE;
   view->certificate = g_object_ref (certificate);
   view->tls_errors = errors;
   view->tls_error_failing_uri = g_strdup (uri);
-  ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE);
   ephy_web_view_load_error_page (EPHY_WEB_VIEW (web_view), uri,
                                  EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL);
 
