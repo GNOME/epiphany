@@ -690,8 +690,6 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	GdkRGBA color;
 	GdkPixbuf *favicon;
 
-	state = gtk_widget_get_state_flags (widget);
-
 	g_signal_emit (entry, signals[GET_LOCATION], 0, &address);
 	sanitize_location (&address);
 	g_signal_emit (entry, signals[GET_TITLE], 0, &title);
@@ -729,8 +727,14 @@ favicon_create_drag_surface (EphyLocationEntry *entry,
 	layout = pango_layout_new (context);
 
 	style = gtk_widget_get_style_context (GTK_WIDGET (entry));
+	state = gtk_style_context_get_state (style);
+
+	gtk_style_context_save (style);
+	gtk_style_context_set_state (style, GTK_STATE_FLAG_NORMAL);
 	gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL,
 			       "font", &font_desc, NULL);
+	gtk_style_context_restore (style);
+
 	metrics = pango_context_get_metrics (context,
 		                             font_desc,
 					     pango_context_get_language (context));

@@ -326,6 +326,7 @@ get_text_column_subtitle_color (void)
   gtk_widget_path_free (path);
 
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_ENTRY);
+  gtk_style_context_set_state (style_context, GTK_STATE_FLAG_INSENSITIVE);
   gtk_style_context_get_color (style_context, GTK_STATE_FLAG_INSENSITIVE, &rgba);
   g_object_unref (style_context);
 
