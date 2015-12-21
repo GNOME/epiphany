@@ -32,7 +32,6 @@ enum {
   PROP_0,
   PROP_HISTORY_SERVICE,
   PROP_BOOKMARKS,
-  PROP_USE_MARKUP,
   LAST_PROP
 };
 
@@ -49,8 +48,6 @@ struct _EphyCompletionModelPrivate {
   EphyNode *bookmarks;
   EphyNode *smart_bookmarks;
   GSList *search_terms;
-
-  gboolean use_markup;
 };
 
 static void
@@ -91,9 +88,6 @@ ephy_completion_model_set_property (GObject *object, guint property_id, const GV
     self->priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks);
     self->priv->smart_bookmarks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
     }
-    break;
-  case PROP_USE_MARKUP:
-    self->priv->use_markup = g_value_get_boolean (value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
@@ -138,13 +132,6 @@ ephy_completion_model_class_init (EphyCompletionModelClass *klass)
     g_param_spec_pointer ("bookmarks",
                           "Bookmarks",
                           "The bookmarks",
-                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
-
-  obj_properties[PROP_USE_MARKUP] =
-    g_param_spec_boolean ("use-markup",
-                          "Whether we should be using markup",
-                          "Whether we should be using markup",
-                          TRUE,
                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
@@ -254,51 +241,25 @@ icon_loaded_cb (GObject *source, GAsyncResult *result, gpointer user_data)
   g_slice_free (IconLoadData, data);
 }
 
-static gchar *
-get_row_text (const gchar *url, const gchar *title, const gchar *subtitle_color)
-{
-  gchar *unescaped_url;
-  gchar *text;
-
-  if (!url)
-    return g_markup_escape_text (title, -1);
-
-  unescaped_url = ephy_uri_safe_unescape (url);
-  if (g_strcmp0 (url, title) == 0)
-    text = g_markup_escape_text (unescaped_url, -1);
-  else
-    text = g_markup_printf_escaped ("%s\n<span font-size=\"small\" color=\"%s\">%s</span>", title, subtitle_color, unescaped_url);
-  g_free (unescaped_url);
-
-  return text;
-}
-
 static void
-set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row, const gchar *subtitle_color)
+set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
 {
   GtkTreeIter iter;
   GtkTreePath *path;
   IconLoadData *data;
   WebKitFaviconDatabase* database;
-  gchar *text;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
 
-  if (model->priv->use_markup)
-    text = get_row_text (row->location, row->title, subtitle_color);
-  else
-    text = g_strdup (row->title);
-
   gtk_list_store_insert_with_values (GTK_LIST_STORE (model), &iter, position,
-                                     EPHY_COMPLETION_TEXT_COL, text ? text : "",
+                                     EPHY_COMPLETION_TEXT_COL, row->title ? row->title : "",
                                      EPHY_COMPLETION_URL_COL, row->location,
                                      EPHY_COMPLETION_ACTION_COL, row->location,
                                      EPHY_COMPLETION_KEYWORDS_COL, row->keywords ? row->keywords : "",
                                      EPHY_COMPLETION_EXTRA_COL, row->is_bookmark,
                                      EPHY_COMPLETION_RELEVANCE_COL, row->relevance,
                                      -1);
-  g_free (text);
 
   data = g_slice_new (IconLoadData);
   data->model = GTK_LIST_STORE (g_object_ref(model));
@@ -310,56 +271,24 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row, c
                                        NULL, icon_loaded_cb, data);
 }
 
-/* FIXME: This should be in the view, not the model. */
-static gchar *
-get_text_column_subtitle_color (void)
-{
-  GtkWidgetPath *path;
-  GtkStyleContext *style_context;
-  GdkRGBA rgba;
-
-  path = gtk_widget_path_new ();
-  gtk_widget_path_prepend_type (path, GTK_TYPE_ENTRY);
-  gtk_widget_path_iter_set_object_name (path, 0, "entry");
-
-  style_context = gtk_style_context_new ();
-  gtk_style_context_set_path (style_context, path);
-  gtk_widget_path_free (path);
-
-  gtk_style_context_set_state (style_context, GTK_STATE_FLAG_INSENSITIVE);
-  gtk_style_context_get_color (style_context, GTK_STATE_FLAG_INSENSITIVE, &rgba);
-  g_object_unref (style_context);
-
-  return g_strdup_printf ("#%04X%04X%04X",
-                          (guint)(rgba.red * (gdouble)65535),
-                          (guint)(rgba.green * (gdouble)65535),
-                          (guint)(rgba.blue * (gdouble)65535));
-}
-
 static void
 replace_rows_in_model (EphyCompletionModel *model, GSList *new_rows)
 {
   /* This is by far the simplest way of doing, and yet it gives
    * basically the same result than the other methods... */
   int i;
-  gchar *subtitle_color = NULL;
 
   gtk_list_store_clear (GTK_LIST_STORE (model));
 
   if (!new_rows)
     return;
 
-  if (model->priv->use_markup)
-    subtitle_color = get_text_column_subtitle_color ();
-
   for (i = 0; new_rows != NULL; i++) {
     PotentialRow *row = (PotentialRow*)new_rows->data;
 
-    set_row_in_model (model, i, row, subtitle_color);
+    set_row_in_model (model, i, row);
     new_rows = new_rows->next;
   }
-
-  g_free (subtitle_color);
 }
 
 static gboolean
@@ -672,8 +601,7 @@ ephy_completion_model_update_for_string (EphyCompletionModel *model,
 
 EphyCompletionModel *
 ephy_completion_model_new (EphyHistoryService *history_service,
-                           EphyBookmarks      *bookmarks,
-                           gboolean            use_markup)
+                           EphyBookmarks      *bookmarks)
 {
   g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (history_service), NULL);
   g_return_val_if_fail (EPHY_IS_BOOKMARKS (bookmarks), NULL);
@@ -681,6 +609,5 @@ ephy_completion_model_new (EphyHistoryService *history_service,
   return g_object_new (EPHY_TYPE_COMPLETION_MODEL,
                        "history-service", history_service,
                        "bookmarks", bookmarks,
-                       "use-markup", use_markup,
                        NULL);
 }

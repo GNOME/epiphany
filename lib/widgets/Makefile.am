@@ -98,6 +98,7 @@ libephywidgets_la_CPPFLAGS = \
 	-I$(top_srcdir)/embed		\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/history	\
+	-I$(top_builddir)/libgd		\
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	$(AM_CPPFLAGS)
 
@@ -105,5 +106,8 @@ libephywidgets_la_CFLAGS = \
 	$(DEPENDENCIES_CFLAGS)	\
 	$(CODE_COVERAGE_CFLAGS) \
 	$(AM_CFLAGS)
+
+libephywidgets_la_LIBADD = \
+	$(top_builddir)/libgd/libgd.la
 
 -include $(top_srcdir)/git.mk

@@ -33,6 +33,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <libgd/gd.h>
 #include <string.h>
 #if 0
 /* FIXME: Refactor the DNS prefetch, this is a layering violation */
@@ -1192,12 +1193,17 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 		 ICON_CONTENT_HEIGHT);
 	gtk_cell_renderer_set_alignment (cell, 0.0, 0.5);
 
-	cell = gtk_cell_renderer_text_new ();
-	g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+	cell = gd_two_lines_renderer_new ();
+	g_object_set (cell,
+                      "ellipsize", PANGO_ELLIPSIZE_END,
+                      "text-lines", 2,
+                      NULL);
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
 				    cell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
-				       cell, "markup", text_col);
+				       cell, "text", text_col);
+        gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
+                                       cell, "line-two", url_col);
 
 	/* Pixel-perfect aligment with the text in the location entry.
 	 * See above.

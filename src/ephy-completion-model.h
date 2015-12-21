@@ -66,8 +66,7 @@ typedef struct
 GType                ephy_completion_model_get_type	     (void);
 
 EphyCompletionModel *ephy_completion_model_new		     (EphyHistoryService *history_service,
-                                                              EphyBookmarks *bookmarks,
-                                                              gboolean use_markup);
+                                                              EphyBookmarks *bookmarks);
 
 void                 ephy_completion_model_update_for_string (EphyCompletionModel *model,
                                                               const char *string,

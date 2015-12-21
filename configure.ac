@@ -25,7 +25,7 @@ AX_IS_RELEASE([git-directory])
 AC_PREREQ([2.59])
 
 AC_CONFIG_AUX_DIR([build-aux])
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIRS([m4, libgd])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
@@ -92,6 +92,8 @@ AC_ARG_ENABLE([tests],
 AC_MSG_RESULT([$enable_tests])
 
 AM_CONDITIONAL([ENABLE_TESTS],[test "$enable_tests" = "yes"])
+
+LIBGD_INIT([_view-common])
 
 PKG_CHECK_MODULES([DEPENDENCIES], [
 		  glib-2.0 >= $GLIB_REQUIRED
@@ -218,6 +220,7 @@ data/Makefile
 data/pages/Makefile
 doc/Makefile
 help/Makefile
+libgd/Makefile
 lib/Makefile
 lib/egg/Makefile
 lib/history/Makefile
