@@ -124,6 +124,8 @@ clear_button_clicked_cb (EphyDownloadsPopover *popover)
   GList *children, *l;
   EphyDownloadsManager *manager;
 
+  gtk_widget_hide (GTK_WIDGET (popover));
+
   manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
   g_signal_handlers_block_by_func (manager, download_removed_cb, popover);
 
