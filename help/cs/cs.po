@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
-"POT-Creation-Date: 2015-12-09 17:02+0000\n"
-"PO-Revision-Date: 2015-04-02 22:02+0200\n"
+"POT-Creation-Date: 2015-12-22 04:54+0000\n"
+"PO-Revision-Date: 2015-12-22 09:33+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -285,7 +285,7 @@ msgid "To delete a bookmark:"
 msgstr "Pro smazání záložky:"
 
 #. (itstool) path: item/p
-#: C/bookmark-delete.page:34
+#: C/bookmark-delete.page:34 C/bookmark-edit.page:35
 msgid ""
 "Select <guiseq><gui style=\"menu\">Web</gui> <gui style=\"menuitem"
 "\">Bookmarks</gui></guiseq> to open the <gui>Bookmarks</gui> window."
@@ -335,15 +335,6 @@ msgstr "Stávající záložky můžete aktualizovat úpravou jejich vlastností
 #: C/bookmark-edit.page:33
 msgid "To edit a bookmark:"
 msgstr "Pro upravení záložky:"
-
-#. (itstool) path: item/p
-#: C/bookmark-edit.page:35
-msgid ""
-"Select <guiseq><gui style=\"menu\">Web</gui><gui style=\"menuitem"
-"\">Bookmarks</gui></guiseq> to open the <gui>Bookmarks</gui> window."
-msgstr ""
-"Zvolte <guiseq><gui style=\"menu\">WWW</gui> <gui style=\"menuitem"
-"\">Záložky</gui></guiseq>. Otevře se okno <gui>Záložky</gui>."
 
 #. (itstool) path: item/p
 #: C/bookmark-edit.page:44
@@ -447,7 +438,7 @@ msgstr ""
 #: C/bookmark-smart.page:57
 msgid ""
 "Apart from search engines, you can also use smart bookmarks for other "
-"queries, such as searching an online show for a product."
+"queries, such as searching an online shop for a product."
 msgstr ""
 "Krom vyhledávačů můžete používat chytré záložky i na jiné dotazy, například "
 "k vyhledání produktu v internetovém obchodě."
@@ -745,9 +736,9 @@ msgid ""
 "in a special type of window without the address bar or the menus."
 msgstr ""
 "Stránku WWW můžete uložit jako <em>webovou aplikaci</em>. Tím se odkaz na "
-"danou stránku přidá do <link href=\"help:gnome-help/shell-introduction#activities"
-"\">Přehledu činností</link>. Webové aplikace se otvírají ve zvláštním okně "
-"bez adresního řádku a nabídek."
+"danou stránku přidá do <link href=\"help:gnome-help/shell-"
+"introduction#activities\">Přehledu činností</link>. Webové aplikace se "
+"otvírají ve zvláštním okně bez adresního řádku a nabídek."
 
 #. (itstool) path: item/p
 #: C/browse-webapps.page:36
@@ -1579,7 +1570,7 @@ msgstr "<keyseq><key>Ctrl</key><key>S</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:351
-msgid "Go to back to the previous page"
+msgid "Go back to the previous page"
 msgstr "Přejít zpět na předchozí stránku"
 
 #. (itstool) path: td/p
@@ -1650,12 +1641,12 @@ msgstr ""
 #. (itstool) path: page/p
 #: C/pref-cookies.page:52
 msgid ""
-"If you chose to accept cookies from <gui>All websites</gui>, then websites "
-"that you have not visited will be able to leave <em>third party cookies</"
-"em>. Third party cookies are often used by advertisers and social media "
-"websites to track your activity across websites and offer targeted content. "
-"Note that some websites, such as Outlook.com, use third party cookies to "
-"monitor whether you are logged in."
+"If you choose to <gui>Always accept</gui> cookies, then websites that you "
+"have not visited will be able to leave <em>third party cookies</em>. Third "
+"party cookies are often used by advertisers and social media websites to "
+"track your activity across websites and offer targeted content. Note that "
+"some websites, such as Outlook.com, use third party cookies to monitor "
+"whether you are logged in."
 msgstr ""
 "Pokud si zvolíte cookies <gui>Vždy přijímat</gui>, pak budou servery, jež "
 "jste nenavštívili, schopny ukládat <em>cookies třetích stran</em>. Cookies "
@@ -1693,19 +1684,19 @@ msgstr "Vlastní CSS"
 #. (itstool) path: page/p
 #: C/pref-css.page:29
 msgid ""
-"Epiphany allows you to set a custom CSS to change the look and feel of every "
-"web page that you visit. You may want to do this to set a preferred font "
-"size or color scheme."
+"<app>Web</app> allows you to set a custom CSS to change the look and feel of "
+"every web page that you visit. You may want to do this to set a preferred "
+"font size or color scheme."
 msgstr ""
-"Epiphany vám umožňuje změnit vzhled všech navštívených stránek nastavením "
-"vlastního CSS. Můžete toho využít k nastavení velikosti písma nebo barevného "
-"motivu."
+"Aplikace <app>Web</app> vám umožňuje změnit vzhled všech navštívených stránek "
+"nastavením vlastního CSS. Můžete toho využít k nastavení velikosti písma nebo "
+"barevného motivu."
 
 #. (itstool) path: item/p
 #: C/pref-css.page:35 C/pref-font.page:37
 msgid ""
 "Open <guiseq><gui style=\"menu\">Web</gui><gui style=\"menuitem"
-"\">Preferences</gui><gui style=\"tab\">Fonts &amp; Styles</gui></guiseq>."
+"\">Preferences</gui><gui style=\"tab\">Fonts &amp; Style</gui></guiseq>."
 msgstr ""
 "Otevřete <guiseq><gui style=\"menu\">WWW</gui><gui style=\"menuitem"
 "\">Předvolby</gui><gui style=\"tab\">Písma a styl</gui></guiseq>."
@@ -1877,12 +1868,12 @@ msgstr "Změna písma"
 msgid ""
 "By default, your system font will be used to display web pages whenever "
 "possible. If you use the <gui href=\"help:gnome-help/a11y-font-size\">Large "
-"Font</gui> accessibility setting, this will be taken into account. You can "
+"Text</gui> accessibility setting, this will be taken into account. You can "
 "change this and use different fonts for viewing websites."
 msgstr ""
 "Ve výchozím nastavení jsou stránky zobrazovány, pokud možno, systémovým "
 "písmem. Používáte-li volbu zpřístupnění <gui href=\"help:gnome-help/a11y-"
-"font-size\">Velké písmo</gui>, je na to brán ohled. To můžete změnit a pro "
+"font-size\">Velký text</gui>, je na to brán ohled. To můžete změnit a pro "
 "zobrazení stránek používat jiná písma."
 
 #. (itstool) path: item/p
