@@ -18,10 +18,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-11-10 16:47+0000\n"
-"PO-Revision-Date: 2015-11-13 00:09+0800\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-23 13:15+0800\n"
+"PO-Revision-Date: 2015-12-23 13:15+0800\n"
 "Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
 "Language-Team: 汉语 <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -531,6 +530,10 @@ msgstr "应用程序"
 msgid "List of installed web applications"
 msgstr "已安装的 Web 应用程序列表"
 
+#: ../embed/ephy-about-handler.c:368
+msgid "Delete"
+msgstr "删除"
+
 #. Note for translators: this refers to the installation date.
 #: ../embed/ephy-about-handler.c:370
 msgid "Installed on:"
@@ -955,89 +958,89 @@ msgstr "保存(_S)"
 msgid "Do you want to save your password for “%s”?"
 msgstr "您想保存 “%s” 的密码？"
 
-#: ../embed/ephy-web-view.c:1434
+#: ../embed/ephy-web-view.c:1441
 msgid "Deny"
 msgstr "拒绝"
 
-#: ../embed/ephy-web-view.c:1435
+#: ../embed/ephy-web-view.c:1442
 msgid "Allow"
 msgstr "允许"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1447
+#: ../embed/ephy-web-view.c:1454
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "位于 <b>%s</b> 的页面想要了解您的地理位置。"
 
 #. Translators: Notification policy for a specific site.
-#: ../embed/ephy-web-view.c:1451
+#: ../embed/ephy-web-view.c:1458
 #, c-format
 msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgstr "位于 <b>%s</b> 的页面想要显示桌面通知。"
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1539
+#: ../embed/ephy-web-view.c:1546
 #, c-format
 msgid "Loading “%s”…"
 msgstr "正在加载“%s”..."
 
-#: ../embed/ephy-web-view.c:1541
+#: ../embed/ephy-web-view.c:1548
 msgid "Loading…"
 msgstr "正在载入...."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1764
+#: ../embed/ephy-web-view.c:1771
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "此站点给出了一个其他站点的证书。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1769
+#: ../embed/ephy-web-view.c:1776
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr "此站点的证书因太老而无法信任。请检查计算机的时间是否正确。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1774
+#: ../embed/ephy-web-view.c:1781
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "此站点的证书不是由可信的组织签发。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1779
+#: ../embed/ephy-web-view.c:1786
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "此站点的证书无法处理。可能已经损坏。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1784
+#: ../embed/ephy-web-view.c:1791
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr "此站点的证书已经被发布它的可信组织吊销。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1789
+#: ../embed/ephy-web-view.c:1796
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr "此站点的证书不受信任，因为使用了非常弱的加密。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1794
+#: ../embed/ephy-web-view.c:1801
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
 msgstr "此站点的证书尚未到生效时间。检查计算机的时间是不是正确。"
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1830
+#: ../embed/ephy-web-view.c:1837
 #, c-format
 msgid "This might not be the real %s."
 msgstr "这可能不是真的 %s。"
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1835
+#: ../embed/ephy-web-view.c:1842
 msgid ""
 "When you try to connect securely, websites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
@@ -1047,7 +1050,7 @@ msgstr ""
 "下问题："
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1841
+#: ../embed/ephy-web-view.c:1848
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this website does not use trusted "
@@ -1057,27 +1060,27 @@ msgstr ""
 "续。"
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1845
+#: ../embed/ephy-web-view.c:1852
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
 msgstr "正规的银行、商店和其他站点不会要求这么做。"
 
-#: ../embed/ephy-web-view.c:1886
+#: ../embed/ephy-web-view.c:1893
 msgid "None specified"
 msgstr "未指定"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1899 ../embed/ephy-web-view.c:1914
-#: ../embed/ephy-web-view.c:1934
+#: ../embed/ephy-web-view.c:1906 ../embed/ephy-web-view.c:1921
+#: ../embed/ephy-web-view.c:1941
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "载入“%s”出现问题"
 
-#: ../embed/ephy-web-view.c:1901
+#: ../embed/ephy-web-view.c:1908
 msgid "Oops! Unable to display this website."
 msgstr "糟糕！无法显示此网站。"
 
-#: ../embed/ephy-web-view.c:1902
+#: ../embed/ephy-web-view.c:1909
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1089,15 +1092,15 @@ msgstr ""
 "能是由于网站临时下线，或移到了新地址。同时也请您检查您的网络连接是否正常。</"
 "p>"
 
-#: ../embed/ephy-web-view.c:1910
+#: ../embed/ephy-web-view.c:1917
 msgid "Try again"
 msgstr "重试"
 
-#: ../embed/ephy-web-view.c:1916
+#: ../embed/ephy-web-view.c:1923
 msgid "Oops! There may be a problem."
 msgstr "糟糕！好像出问题了。"
 
-#: ../embed/ephy-web-view.c:1917
+#: ../embed/ephy-web-view.c:1924
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1107,36 +1110,36 @@ msgstr ""
 "<p>加载此网站时 Web 浏览器意外关闭。</p><p>如果您再次遇到此问题，请向 "
 "<strong>%s</strong> 开发者报告。</p>"
 
-#: ../embed/ephy-web-view.c:1922 ../embed/ephy-web-view.c:1929
+#: ../embed/ephy-web-view.c:1929 ../embed/ephy-web-view.c:1936
 msgid "Reload Anyway"
 msgstr "仍然重新载入"
 
-#: ../embed/ephy-web-view.c:1926
+#: ../embed/ephy-web-view.c:1933
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "显示“%s”时遇到问题"
 
-#: ../embed/ephy-web-view.c:1927
+#: ../embed/ephy-web-view.c:1934
 msgid "Oops!"
 msgstr "哎唷！"
 
-#: ../embed/ephy-web-view.c:1928
+#: ../embed/ephy-web-view.c:1935
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr "显示该页面时出现了错误。要继续浏览，请重新载入或转到其他网页。"
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1936
+#: ../embed/ephy-web-view.c:1943
 msgid "Look out!"
 msgstr "当心！"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1939
+#: ../embed/ephy-web-view.c:1946
 msgid "Load Anyway"
 msgstr "仍然载入"
 
-#: ../embed/ephy-web-view.c:2867
+#: ../embed/ephy-web-view.c:2874
 msgid "_OK"
 msgstr "确定(_O)"
 
@@ -1959,7 +1962,8 @@ msgid ""
 "removed forever."
 msgstr "您不能撤消该操作。您选择清除的数据将被永久删除。"
 
-#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:21
+#: ../src/resources/cookies-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -2590,17 +2594,14 @@ msgid "Close _Document"
 msgstr "关闭文档(_D)"
 
 #: ../src/ephy-window.c:491
-#| msgid "There are ongoing downloads"
 msgid "There are ongoing downloads in this window"
 msgstr "该窗口有正在进行的下载任务"
 
 #: ../src/ephy-window.c:492
-#| msgid "If you quit, the downloads will be cancelled"
 msgid "If you close this window, the downloads will be cancelled"
 msgstr "如果关闭此窗口，将取消当前下载任务"
 
 #: ../src/ephy-window.c:493
-#| msgid "Quit and cancel downloads"
 msgid "Close window and cancel downloads"
 msgstr "关闭窗口并取消下载"
 
