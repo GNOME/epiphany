@@ -9,30 +9,30 @@
 # liwei <lw124124@gmail.com>,2011.
 # bsfmig <bigslowfat@gmail.com>,2012.
 # 成羽丰 <onetwogoo@gmail.com>, 2012.
-# YunQiang Su <wzssyqa@gmail.com>, 2012.
 # 甘露(Lu Gan) <rhythm.gan@gmail.com>, 2013.
 # Sphinx Jiang <yishanj13@gmail.com>, 2013, 2014.
-# Tong Hui <tonghuix@gmail.com>, 2014.
+# Tong Hui <tonghuix@gmail.com>, 2014, 2015.
+# Jeff Bai <jeffbai@aosc.xyz>, 2025.
+# YunQiang Su <wzssyqa@gmail.com>, 2012, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-22 13:25+0000\n"
-"PO-Revision-Date: 2014-09-25 00:27+0800\n"
-"Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
-"Language-Team: Chinese Simplified <i18n-zh@googlegroups.com>\n"
+"POT-Creation-Date: 2015-12-23 04:49+0000\n"
+"PO-Revision-Date: 2015-12-23 13:19+0800\n"
+"Last-Translator: Dingzhong Chen <wsxy162@gmail.com>\n"
+"Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.6.9\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
-msgstr "搜索网络"
+msgstr "搜索互联网"
 
 #. Translators: you can use the regions listed in
 #. https://duckduckgo.com/params to boost a particular region
@@ -58,7 +58,7 @@ msgstr "https://duckduckgo.com/?t=epiphany"
 #. duckduckgo must be translated. For such case, the search url
 #. would be
 #. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:243
+#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:244
 #: ../src/ephy-search-provider.c:289
 #, no-c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -82,9 +82,9 @@ msgstr ""
 "GNOME 桌面的网页浏览器，与桌面紧密集成，用户界面简单直观，使您能够专注于网页"
 "浏览。"
 
-#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:290
-#: ../embed/ephy-about-handler.c:321 ../src/ephy-main.c:67
-#: ../src/ephy-main.c:314 ../src/ephy-main.c:472 ../src/window-commands.c:1514
+#: ../data/epiphany.desktop.in.in.h:1 ../embed/ephy-about-handler.c:292
+#: ../embed/ephy-about-handler.c:323 ../src/ephy-main.c:67
+#: ../src/ephy-main.c:314 ../src/ephy-main.c:470 ../src/window-commands.c:1519
 msgid "Web"
 msgstr "Web"
 
@@ -104,6 +104,10 @@ msgstr "浏览网络"
 #: ../data/epiphany.desktop.in.in.h:5
 msgid "web;browser;internet;"
 msgstr "web;browser;internet;网络;浏览器;互联网;"
+
+#: ../data/epiphany.desktop.in.in.h:6
+msgid "New Incognito Window"
+msgstr "新建无痕窗口"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:1
 msgid "Browse with caret"
@@ -165,7 +169,7 @@ msgid "Remember passwords"
 msgstr "记住密码"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:20
-msgid "Whether to store and prefill passwords in web sites."
+msgid "Whether to store and prefill passwords in websites."
 msgstr "是否储存并预先填充网页中的密码。"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:21
@@ -352,103 +356,95 @@ msgid ""
 msgstr "默认编码。只接受 WebKitGTK+ 能理解的值。"
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:57
-msgid "Size of disk cache"
-msgstr "磁盘缓存大小"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
-msgid "Size of disk cache, in MB."
-msgstr "磁盘缓存大小，单位为 MB。"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "Languages"
 msgstr "语言"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Preferred languages, two letter codes."
 msgstr "偏好语言，两个字母的编码。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Cookie accept"
 msgstr "接受 Cookie"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid ""
-"Where to accept cookies from. Possible values are \"anywhere\", \"current "
-"site\" and \"nowhere\"."
+"Where to accept cookies from. Possible values are \"always\", \"no-third-"
+"party\" and \"never\"."
 msgstr ""
-"接受哪里的 Cookie，可取的值有“anywhere”(任意站点)、“current site”(仅当前站点)"
-"和“nowhere”(拒绝)。"
+"接受哪里的 Cookie，可取的值有“always”(一直启用)、“no-third-party”(禁用第三方)"
+"和“never”(从不)。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Image animation mode"
 msgstr "动态图像显示方式"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
 msgstr ""
 "如何展示动态图像。可行的值有“normal”(正常)，“once”(一次)和“disable”(禁止)。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Allow popups"
 msgstr "允许弹出窗口"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr "允许网站使用 JavaScript 打开新窗口(若 JavaScript 已启用)。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Enable Plugins"
 msgstr "启用插件"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid "Enable JavaScript"
 msgstr "启用 JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "Enable WebGL"
 msgstr "启用 WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "Whether to enable support for WebGL contexts."
 msgstr "是否启用 WebGL 上下文的支持。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "Enable WebAudio"
 msgstr "启用网络音频"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Whether to enable support for WebAudio."
 msgstr "是否启用对网络音频的支持。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:73
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Do Not Track"
 msgstr "不跟踪"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:74
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
 msgstr "是否告诉网站我们不想被跟踪。请注意不强制网页遵循该设置。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:75
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Enable Adblock"
 msgstr "启用 Adblock"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:76
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "是否屏蔽可能不想显示的网页内置广告。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:77
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
 msgid "The downloads folder"
 msgstr "下载文件夹"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:78
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -456,11 +452,11 @@ msgstr ""
 "文件将被下载到的文件夹；“Downloads”表示使用默认文件夹，“Desktop”表示使用桌面"
 "文件夹。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:79
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
 msgid "Whether to show the title column in the bookmarks window."
 msgstr "是否在书签窗口中显示标题列。"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:80
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "是否在书签窗口中显示地址列。"
 
@@ -501,62 +497,70 @@ msgstr "描述"
 msgid "Suffixes"
 msgstr "后缀"
 
-#: ../embed/ephy-about-handler.c:218 ../embed/ephy-about-handler.c:220
+#: ../embed/ephy-about-handler.c:220 ../embed/ephy-about-handler.c:222
 msgid "Memory usage"
 msgstr "内存使用"
 
-#: ../embed/ephy-about-handler.c:268
+#: ../embed/ephy-about-handler.c:270
 #, c-format
 msgid "Version %s"
 msgstr "版本 %s "
 
-#: ../embed/ephy-about-handler.c:288
+#: ../embed/ephy-about-handler.c:290
 msgid "About Web"
 msgstr "关于 Web"
 
-#: ../embed/ephy-about-handler.c:292
+#: ../embed/ephy-about-handler.c:294
 msgid "A simple, clean, beautiful view of the web"
 msgstr "简单、干净、美观的网络体验。"
 
-#: ../embed/ephy-about-handler.c:343 ../embed/ephy-about-handler.c:344
+#: ../embed/ephy-about-handler.c:352 ../embed/ephy-about-handler.c:353
 msgid "Applications"
 msgstr "应用程序"
 
-#: ../embed/ephy-about-handler.c:345
+#: ../embed/ephy-about-handler.c:354
 msgid "List of installed web applications"
 msgstr "已安装的 Web 应用程序列表"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:362
+#: ../embed/ephy-about-handler.c:370
 msgid "Installed on:"
 msgstr "安装时间："
 
-#: ../embed/ephy-about-handler.c:466
-msgid "Remove from overview"
-msgstr "从概览中删除"
-
-#: ../embed/ephy-about-handler.c:481 ../embed/ephy-embed-utils.c:300
+#: ../embed/ephy-about-handler.c:474 ../embed/ephy-embed-utils.c:301
 msgid "Most Visited"
 msgstr "最常浏览"
 
-#: ../embed/ephy-about-handler.c:541 ../embed/ephy-about-handler.c:542
+#: ../embed/ephy-about-handler.c:507
+msgid "Remove from overview"
+msgstr "从概览中删除"
+
+#: ../embed/ephy-about-handler.c:573 ../embed/ephy-about-handler.c:574
 msgid "Private Browsing"
 msgstr "隐私浏览"
 
-#: ../embed/ephy-about-handler.c:543
+#: ../embed/ephy-about-handler.c:575
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
 "cleared when you close the window. Files you download will be kept."
 msgstr ""
 "您正在<em>无痕</em>浏览网页。在该模式下，访问过的页面不会显示在浏览历史中且储"
-"存的全部信息也将在该窗口关闭后清除。"
+"存的全部信息也将在该窗口关闭后清除。下载的文件将会保留。"
 
-#: ../embed/ephy-about-handler.c:547
+#: ../embed/ephy-about-handler.c:579
 msgid ""
-"Incognito mode will not hide your activity from your employer, your Internet "
-"Service Provider, your government, or the websites that you visit."
-msgstr "无痕模式不能使您对雇主、互联网服务提供商、政府或访问的网站隐身。"
+"Incognito mode hides your activity only from people using this computer."
+msgstr "无痕模式只能让使用此计算机的用户看不到您的活动。"
+
+#: ../embed/ephy-about-handler.c:581
+msgid ""
+"It will not hide your activity from your employer if you are at work. Your "
+"internet service provider, your government, other governments, the websites "
+"that you visit, and advertisers on these websites may still be tracking you."
+msgstr ""
+"无痕模式不能在工作中对雇主隐藏您的活动。您的互联网服务提供商、政府或其他政府"
+"机构，您访问的网站，以及广告提供商依然可以追踪您。"
 
 #. characters
 #: ../embed/ephy-embed.c:51
@@ -577,7 +581,7 @@ msgstr "ESC"
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed-utils.c:64
+#: ../embed/ephy-embed-utils.c:65
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "给“%s”发送电子邮件"
@@ -916,7 +920,7 @@ msgstr "搜索环绕回顶部"
 
 #: ../embed/ephy-find-toolbar.c:451
 msgid "Type to search…"
-msgstr "输入要搜索的内容…"
+msgstr "输入要搜索的内容..."
 
 #: ../embed/ephy-find-toolbar.c:457
 msgid "Find previous occurrence of the search string"
@@ -926,9 +930,13 @@ msgstr "查找所搜索字符串上次出现之处"
 msgid "Find next occurrence of the search string"
 msgstr "查找搜索字符串下次出现之处"
 
-#: ../embed/ephy-web-view.c:492 ../src/window-commands.c:330
-msgid "Save"
-msgstr "保存"
+#: ../embed/ephy-web-view.c:492 ../lib/ephy-file-chooser.c:194
+msgid "_Save"
+msgstr "保存(_S)"
+
+#: ../embed/ephy-web-view.c:493
+msgid "_Don’t Save"
+msgstr "不保存(_D)"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
@@ -938,123 +946,129 @@ msgstr "保存"
 msgid "Do you want to save your password for “%s”?"
 msgstr "您想保存 “%s” 的密码？"
 
-#: ../embed/ephy-web-view.c:1415
+#: ../embed/ephy-web-view.c:1428
 msgid "Deny"
 msgstr "拒绝"
 
-#: ../embed/ephy-web-view.c:1416
+#: ../embed/ephy-web-view.c:1429
 msgid "Allow"
 msgstr "允许"
 
-#: ../embed/ephy-web-view.c:1426
+#. Translators: Geolocation policy for a specific site.
+#: ../embed/ephy-web-view.c:1441
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "位于 <b>%s</b> 的页面想要了解您的地理位置。"
 
+#. Translators: Notification policy for a specific site.
+#: ../embed/ephy-web-view.c:1445
+#, c-format
+msgid "The page at <b>%s</b> wants to show desktop notifications."
+msgstr "位于 <b>%s</b> 的页面想要显示桌面通知。"
+
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1510
+#: ../embed/ephy-web-view.c:1531
 #, c-format
 msgid "Loading “%s”…"
-msgstr "正在载入“%s”..."
+msgstr "正在加载“%s”..."
 
-#: ../embed/ephy-web-view.c:1512
+#: ../embed/ephy-web-view.c:1533
 msgid "Loading…"
 msgstr "正在载入...."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1734
+#: ../embed/ephy-web-view.c:1755
 msgid ""
-"This web site presented identification that belongs to a different web site."
+"This website presented identification that belongs to a different website."
 msgstr "此站点给出了一个其他站点的证书。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1739
+#: ../embed/ephy-web-view.c:1760
 msgid ""
-"This web site’s identification is too old to trust. Check the date on your "
+"This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
-msgstr "此站点的证书因太老而无法受信任。请检查计算机的时间是否正确。"
+msgstr "此站点的证书因太老而无法信任。请检查计算机的时间是否正确。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1744
-msgid ""
-"This web site’s identification was not issued by a trusted organization."
+#: ../embed/ephy-web-view.c:1765
+msgid "This website’s identification was not issued by a trusted organization."
 msgstr "此站点的证书不是由可信的组织签发。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1770
 msgid ""
-"This web site’s identification could not be processed. It may be corrupted."
+"This website’s identification could not be processed. It may be corrupted."
 msgstr "此站点的证书无法处理。可能已经损坏。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1754
+#: ../embed/ephy-web-view.c:1775
 msgid ""
-"This web site’s identification has been revoked by the trusted organization "
+"This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr "此站点的证书已经被发布它的可信组织吊销。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1759
+#: ../embed/ephy-web-view.c:1780
 msgid ""
-"This web site’s identification cannot be trusted because it uses very weak "
+"This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr "此站点的证书不受信任，因为使用了非常弱的加密。"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1764
+#: ../embed/ephy-web-view.c:1785
 msgid ""
-"This web site’s identification is only valid for future dates. Check the "
-"date on your computer’s calendar."
+"This website’s identification is only valid for future dates. Check the date "
+"on your computer’s calendar."
 msgstr "此站点的证书尚未到生效时间。检查计算机的时间是不是正确。"
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1800
+#: ../embed/ephy-web-view.c:1821
 #, c-format
 msgid "This might not be the real %s."
 msgstr "这可能不是真的 %s。"
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1805
+#: ../embed/ephy-web-view.c:1826
 msgid ""
-"When you try to connect securely, web sites present identification to prove "
+"When you try to connect securely, websites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
-"something wrong with this site’s identification:"
+"something wrong with this website’s identification:"
 msgstr ""
-"当尝试安全连接时，网站会展示证书以证明连接没有被恶意拦截。站点的证书可能会出"
-"现如下问题："
+"当尝试安全连接时，网站会展示证书以证明连接没有被恶意拦截。站点的证书可能有如"
+"下问题："
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1811
+#: ../embed/ephy-web-view.c:1832
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
-"you know there is a good reason why this site does not use trusted "
+"you know there is a good reason why this website does not use trusted "
 "identification."
 msgstr ""
 "您的连接可能已经被第三人攻击。只有在有为何不使用可信证书的明确原因时才可以继"
 "续。"
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1815
+#: ../embed/ephy-web-view.c:1836
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
 msgstr "正规的银行、商店和其他站点不会要求这么做。"
 
-#: ../embed/ephy-web-view.c:1856
+#: ../embed/ephy-web-view.c:1877
 msgid "None specified"
 msgstr "未指定"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1869 ../embed/ephy-web-view.c:1884
-#: ../embed/ephy-web-view.c:1904
+#: ../embed/ephy-web-view.c:1890 ../embed/ephy-web-view.c:1905
+#: ../embed/ephy-web-view.c:1925
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "载入“%s”出现问题"
 
-#: ../embed/ephy-web-view.c:1871
+#: ../embed/ephy-web-view.c:1892
 msgid "Oops! Unable to display this website."
 msgstr "糟糕！无法显示此网站。"
 
-#: ../embed/ephy-web-view.c:1872
+#: ../embed/ephy-web-view.c:1893
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1066,15 +1080,15 @@ msgstr ""
 "能是由于网站临时下线，或移到了新地址。同时也请您检查您的网络连接是否正常。</"
 "p>"
 
-#: ../embed/ephy-web-view.c:1880
+#: ../embed/ephy-web-view.c:1901
 msgid "Try again"
 msgstr "重试"
 
-#: ../embed/ephy-web-view.c:1886
+#: ../embed/ephy-web-view.c:1907
 msgid "Oops! There may be a problem."
 msgstr "糟糕！好像出问题了。"
 
-#: ../embed/ephy-web-view.c:1887
+#: ../embed/ephy-web-view.c:1908
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1084,44 +1098,44 @@ msgstr ""
 "<p>加载此网站时 Web 浏览器意外关闭。</p><p>如果您再次遇到此问题，请向 "
 "<strong>%s</strong> 开发者报告。</p>"
 
-#: ../embed/ephy-web-view.c:1892 ../embed/ephy-web-view.c:1899
+#: ../embed/ephy-web-view.c:1913 ../embed/ephy-web-view.c:1920
 msgid "Reload Anyway"
 msgstr "仍然重新载入"
 
-#: ../embed/ephy-web-view.c:1896
+#: ../embed/ephy-web-view.c:1917
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "显示“%s”时遇到问题"
 
-#: ../embed/ephy-web-view.c:1897
+#: ../embed/ephy-web-view.c:1918
 msgid "Oops!"
 msgstr "哎唷！"
 
-#: ../embed/ephy-web-view.c:1898
+#: ../embed/ephy-web-view.c:1919
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
 msgstr "显示该页面时出现了错误。要继续浏览，请重新载入或转到其他网页。"
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1906
+#: ../embed/ephy-web-view.c:1927
 msgid "Look out!"
 msgstr "当心！"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1909
+#: ../embed/ephy-web-view.c:1930
 msgid "Load Anyway"
 msgstr "仍然载入"
 
-#: ../embed/ephy-web-view.c:2805
+#: ../embed/ephy-web-view.c:2831
 msgid "_OK"
 msgstr "确定(_O)"
 
 #: ../lib/ephy-file-chooser.c:184 ../lib/ephy-file-chooser.c:193
-#: ../src/bookmarks/ephy-bookmark-properties.c:428
+#: ../src/bookmarks/ephy-bookmark-properties.c:432
 #: ../src/bookmarks/ephy-bookmarks-editor.c:819
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:808
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:809
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -1129,47 +1143,43 @@ msgstr "取消(_C)"
 msgid "_Open"
 msgstr "打开(_O)"
 
-#: ../lib/ephy-file-chooser.c:194
-msgid "_Save"
-msgstr "保存(_S)"
-
 #: ../lib/ephy-file-chooser.c:209
 msgid "All supported types"
 msgstr "支持的全部类型"
 
-#: ../lib/ephy-file-chooser.c:221
+#: ../lib/ephy-file-chooser.c:223
 msgid "Web pages"
 msgstr "网页"
 
-#: ../lib/ephy-file-chooser.c:230
+#: ../lib/ephy-file-chooser.c:234
 msgid "Images"
 msgstr "图像"
 
-#: ../lib/ephy-file-chooser.c:238 ../src/bookmarks/ephy-bookmarks-editor.c:637
+#: ../lib/ephy-file-chooser.c:242 ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "All files"
 msgstr "全部文件"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:112 ../src/resources/prefs-dialog.ui.h:2
+#: ../lib/ephy-file-helpers.c:114 ../src/resources/prefs-dialog.ui.h:2
 msgid "Downloads"
 msgstr "下载"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:165
+#: ../lib/ephy-file-helpers.c:167
 msgid "Desktop"
 msgstr "桌面"
 
-#: ../lib/ephy-file-helpers.c:333
+#: ../lib/ephy-file-helpers.c:335
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "无法在“%s”中创建临时目录。"
 
-#: ../lib/ephy-file-helpers.c:469
+#: ../lib/ephy-file-helpers.c:466
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "文件“%s”已存在，请将其移出。"
 
-#: ../lib/ephy-file-helpers.c:490
+#: ../lib/ephy-file-helpers.c:487
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "创建目录“%s”失败。"
@@ -1406,7 +1416,7 @@ msgstr "页面的一部分不安全。"
 #. Label in certificate popover on secure sites.
 #: ../lib/widgets/ephy-certificate-popover.c:130
 msgid "Your connection is secure."
-msgstr "连接是安全的。"
+msgstr "您的连接是安全的。"
 
 #: ../lib/widgets/ephy-certificate-popover.c:318
 msgid "_View Certificate…"
@@ -1457,11 +1467,11 @@ msgstr "已完成"
 msgid "Error downloading: %s"
 msgstr "下载出错：%s"
 
-#: ../lib/widgets/ephy-download-widget.c:364 ../src/window-commands.c:712
+#: ../lib/widgets/ephy-download-widget.c:364 ../src/window-commands.c:713
 msgid "Cancel"
 msgstr "取消"
 
-#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1122
+#: ../lib/widgets/ephy-download-widget.c:372 ../src/ephy-window.c:1121
 #: ../src/window-commands.c:275
 msgid "Open"
 msgstr "打开"
@@ -1478,21 +1488,20 @@ msgstr "正在启动..."
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:603
-#: ../src/resources/prefs-dialog.ui.h:36 ../src/ephy-history-window.c:263
+#: ../lib/widgets/ephy-location-entry.c:606 ../src/ephy-history-window.c:263
 msgid "Cl_ear"
 msgstr "清除(_E)"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:622 ../src/ephy-window.c:121
+#: ../lib/widgets/ephy-location-entry.c:625 ../src/ephy-window.c:119
 msgid "_Undo"
 msgstr "撤消(_U)"
 
-#: ../lib/widgets/ephy-location-entry.c:629
+#: ../lib/widgets/ephy-location-entry.c:632
 msgid "_Redo"
 msgstr "重做(_R)"
 
-#: ../lib/widgets/ephy-location-entry.c:909
+#: ../lib/widgets/ephy-location-entry.c:912
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "拖曳此图标可创建到此页面的链接"
 
@@ -1504,29 +1513,33 @@ msgid "%d bookmark is similar"
 msgid_plural "%d bookmarks are similar"
 msgstr[0] "%d 个相同书签"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:234
+#: ../src/bookmarks/ephy-bookmark-properties.c:235
+msgid "Add Bookmark"
+msgstr "添加书签"
+
+#: ../src/bookmarks/ephy-bookmark-properties.c:237
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s”属性"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:358
+#: ../src/bookmarks/ephy-bookmark-properties.c:362
 msgid "_Title:"
 msgstr "标题(_T)："
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:375
+#: ../src/bookmarks/ephy-bookmark-properties.c:379
 msgid "A_ddress:"
 msgstr "地址(_D)："
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:387
+#: ../src/bookmarks/ephy-bookmark-properties.c:391
 msgid "T_opics:"
 msgstr "主题(_O)："
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:410
+#: ../src/bookmarks/ephy-bookmark-properties.c:414
 msgid "Sho_w all topics"
 msgstr "显示全部主题(_W)"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:431
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/bookmarks/ephy-bookmark-properties.c:435
+#: ../src/resources/prefs-dialog.ui.h:40
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "添加(_A)"
@@ -1556,26 +1569,26 @@ msgid "Work"
 msgstr "工作"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:926
+#: ../src/bookmarks/ephy-bookmarks.c:927
 msgctxt "bookmarks"
 msgid "All"
 msgstr "全部"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:930
+#: ../src/bookmarks/ephy-bookmarks.c:931
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "未分类"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:934
+#: ../src/bookmarks/ephy-bookmarks.c:935
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "本地网站"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1148
+#: ../src/bookmarks/ephy-bookmarks.c:1150
 #: ../src/bookmarks/ephy-bookmarks-import.c:270
 msgid "Untitled"
 msgstr "无标题"
@@ -1607,7 +1620,7 @@ msgstr "查看(_V)"
 
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:191
+#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:189
 msgid "_Help"
 msgstr "帮助(_H)"
 
@@ -1672,7 +1685,7 @@ msgstr "导出书签(_E)..."
 msgid "Export bookmarks to a file"
 msgstr "将书签导出至文件"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:114
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:112
 msgid "_Close"
 msgstr "关闭(_C)"
 
@@ -1681,7 +1694,7 @@ msgid "Close the bookmarks window"
 msgstr "关闭书签窗口"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183 ../src/ephy-window.c:125
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183 ../src/ephy-window.c:123
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
@@ -1690,7 +1703,7 @@ msgid "Cut the selection"
 msgstr "剪切所选内容"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1167 ../src/ephy-window.c:127
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1167 ../src/ephy-window.c:125
 msgid "_Copy"
 msgstr "复制(_C)"
 
@@ -1698,7 +1711,7 @@ msgstr "复制(_C)"
 msgid "Copy the selection"
 msgstr "复制所选内容"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189 ../src/ephy-window.c:129
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189 ../src/ephy-window.c:127
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
@@ -1715,7 +1728,7 @@ msgstr "删除(_D)"
 msgid "Delete the selected bookmark or topic"
 msgstr "删除所选书签或主题"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195 ../src/ephy-window.c:133
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195 ../src/ephy-window.c:131
 msgid "Select _All"
 msgstr "全选(_A)"
 
@@ -1733,7 +1746,7 @@ msgid "Display bookmarks help"
 msgstr "显示书签帮助"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:193
+#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:191
 msgid "_About"
 msgstr "关于(_A)"
 
@@ -1937,8 +1950,7 @@ msgid ""
 "removed forever."
 msgstr "您不能撤消该操作。您选择清除的数据将被永久删除。"
 
-#: ../src/resources/cookies-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:21
+#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:21
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -1961,12 +1973,28 @@ msgstr "移除"
 msgid "Delete the selected cookies"
 msgstr "删除所选的 Cookies"
 
+#: ../src/resources/encoding-dialog.ui.h:1
+msgid "Text Encoding"
+msgstr "文字编码"
+
+#: ../src/resources/encoding-dialog.ui.h:2 ../src/ephy-encoding-menu.c:327
+msgid "_Automatic"
+msgstr "自动(_A)"
+
+#: ../src/resources/encoding-dialog.ui.h:3 ../src/ephy-encoding-menu.c:328
+msgid "Use the encoding specified by the document"
+msgstr "使用文档指定的编码"
+
+#: ../src/resources/encoding-dialog.ui.h:4
+msgid "_Use a different encoding:"
+msgstr "使用不同的编码(_U)："
+
 #. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:100
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:98
 msgid "_New Window"
 msgstr "新建窗口(_N)"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:102
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:100
 msgid "New _Incognito Window"
 msgstr "新建无痕窗口(_I)"
 
@@ -1975,37 +2003,21 @@ msgid "Reopen Closed _Tab"
 msgstr "重新打开关闭的标签页(_T)"
 
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:93
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:91
 msgid "_Bookmarks"
 msgstr "书签(_B)"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:143
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:141
 msgid "_History"
 msgstr "历史(_H)"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:145
+#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:143
 msgid "Pr_eferences"
 msgstr "首选项(_E)"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:116
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:114
 msgid "_Quit"
 msgstr "退出(_Q)"
-
-#: ../src/resources/epiphany.ui.h:1
-msgid "Text Encoding"
-msgstr "文字编码"
-
-#: ../src/resources/epiphany.ui.h:2 ../src/ephy-encoding-menu.c:327
-msgid "_Automatic"
-msgstr "自动(_A)"
-
-#: ../src/resources/epiphany.ui.h:3 ../src/ephy-encoding-menu.c:328
-msgid "Use the encoding specified by the document"
-msgstr "使用文档指定的编码"
-
-#: ../src/resources/epiphany.ui.h:4
-msgid "_Use a different encoding:"
-msgstr "使用不同的编码(_U)："
 
 #: ../src/resources/history-dialog.ui.h:1
 msgid "History"
@@ -2153,8 +2165,8 @@ msgid "Fonts & Style"
 msgstr "字体和样式"
 
 #: ../src/resources/prefs-dialog.ui.h:22
-msgid "Manage _Cookies"
-msgstr "管理 _Cookie"
+msgid "Manage _Cookies…"
+msgstr "管理 _Cookie..."
 
 #: ../src/resources/prefs-dialog.ui.h:23
 msgid "_Always accept"
@@ -2178,62 +2190,62 @@ msgid "Tracking"
 msgstr "跟踪"
 
 #: ../src/resources/prefs-dialog.ui.h:29
-msgid "_Tell web sites I do not want to be tracked"
+msgid "_Tell websites I do not want to be tracked"
 msgstr "告诉网站我不想被跟踪(_T)"
 
 #: ../src/resources/prefs-dialog.ui.h:31
-msgid "Manage _Passwords"
-msgstr "管理密码(_P)"
+msgid "Manage _Passwords…"
+msgstr "管理密码(_P)..."
 
 #: ../src/resources/prefs-dialog.ui.h:32
 msgid "_Remember passwords"
 msgstr "记住密码(_R)"
 
 #: ../src/resources/prefs-dialog.ui.h:33
-msgid "Temporary Files"
-msgstr "临时文件"
+msgid "Stored Data"
+msgstr "已存储的数据"
 
 #: ../src/resources/prefs-dialog.ui.h:34
-msgid "_Disk space:"
-msgstr "磁盘空间(_D)："
+msgid "You can clear stored personal data."
+msgstr "你可以清除已存储的私人数据。"
 
 #: ../src/resources/prefs-dialog.ui.h:35
-msgid "MB"
-msgstr "MB"
+msgid "Cl_ear Personal Data…"
+msgstr "清除个人数据(_E)..."
 
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:36
 msgid "Privacy"
 msgstr "隐私"
 
-#: ../src/resources/prefs-dialog.ui.h:38 ../src/ephy-encoding-dialog.c:379
+#: ../src/resources/prefs-dialog.ui.h:37 ../src/ephy-encoding-dialog.c:379
 msgid "Encodings"
 msgstr "编码"
 
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:38
 msgid "De_fault:"
 msgstr "默认(_F)："
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "_Up"
 msgstr "向上(_U)"
 
-#: ../src/resources/prefs-dialog.ui.h:44
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Down"
 msgstr "向下(_D)"
 
-#: ../src/resources/prefs-dialog.ui.h:45
+#: ../src/resources/prefs-dialog.ui.h:44
 msgid "Spell checking"
 msgstr "拼写检查"
 
-#: ../src/resources/prefs-dialog.ui.h:46
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "_Enable spell checking"
 msgstr "启用拼写检查(_E)"
 
-#: ../src/resources/prefs-dialog.ui.h:47 ../src/prefs-dialog.c:840
+#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:840
 msgid "Language"
 msgstr "语言"
 
@@ -2253,7 +2265,7 @@ msgstr "停止"
 msgid "Stop current data transfer"
 msgstr "停止当前数据传送"
 
-#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:154
+#: ../src/ephy-combined-stop-reload-action.c:44 ../src/ephy-window.c:152
 msgid "_Reload"
 msgstr "重新载入(_R)"
 
@@ -2353,7 +2365,7 @@ msgstr ""
 msgid "Web options"
 msgstr "浏览器选项"
 
-#: ../src/ephy-notebook.c:602
+#: ../src/ephy-notebook.c:615
 msgid "Close tab"
 msgstr "关闭标签"
 
@@ -2362,279 +2374,279 @@ msgstr "关闭标签"
 msgid "Search the Web for %s"
 msgstr "上网搜索 %s"
 
-#: ../src/ephy-window.c:104
+#: ../src/ephy-window.c:102
 msgid "_Open…"
 msgstr "打开(_O)..."
 
-#: ../src/ephy-window.c:106
+#: ../src/ephy-window.c:104
 msgid "Save _As…"
 msgstr "另存为(_A)..."
 
-#: ../src/ephy-window.c:108
+#: ../src/ephy-window.c:106
 msgid "Save As _Web Application…"
 msgstr "保存为 _Web 应用程序"
 
-#: ../src/ephy-window.c:110
+#: ../src/ephy-window.c:108
 msgid "_Print…"
 msgstr "打印(_P)..."
 
-#: ../src/ephy-window.c:112
+#: ../src/ephy-window.c:110
 msgid "S_end Link by Email…"
 msgstr "用电子邮件发送链接(_E)..."
 
-#: ../src/ephy-window.c:123
+#: ../src/ephy-window.c:121
 msgid "Re_do"
 msgstr "重做(_D)"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:133
 msgid "_Find…"
 msgstr "查找(_F)..."
 
-#: ../src/ephy-window.c:137
+#: ../src/ephy-window.c:135
 msgid "Find Ne_xt"
 msgstr "查找下一个(_X)"
 
-#: ../src/ephy-window.c:139
+#: ../src/ephy-window.c:137
 msgid "Find Pre_vious"
 msgstr "查找上一个(_V)"
 
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:139
 msgid "Edit _Bookmarks"
 msgstr "编辑书签(_B)"
 
 #. View actions.
-#: ../src/ephy-window.c:150 ../src/ephy-window.c:152
+#: ../src/ephy-window.c:148 ../src/ephy-window.c:150
 msgid "_Stop"
 msgstr "停止(_S)"
 
-#: ../src/ephy-window.c:156
+#: ../src/ephy-window.c:154
 msgid "Zoom _In"
 msgstr "放大(_I)"
 
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:156
 msgid "Zoom O_ut"
 msgstr "缩小(_U)"
 
-#: ../src/ephy-window.c:160
+#: ../src/ephy-window.c:158
 msgid "_Normal Size"
 msgstr "普通大小(_N)"
 
-#: ../src/ephy-window.c:162
+#: ../src/ephy-window.c:160
 msgid "Text _Encoding"
 msgstr "文字编码(_E)"
 
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:161
 msgid "_Page Source"
 msgstr "页面源代码(_P)"
 
 #. Bookmarks actions.
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:166
 msgid "_Add Bookmark…"
 msgstr "添加书签(_A)..."
 
 #. Go actions.
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:171
 msgid "_Location…"
 msgstr "位置(_L)..."
 
 #. Tabs actions.
-#: ../src/ephy-window.c:178
+#: ../src/ephy-window.c:176
 msgid "_Previous Tab"
 msgstr "上个标签(_P)"
 
-#: ../src/ephy-window.c:180
+#: ../src/ephy-window.c:178
 msgid "_Next Tab"
 msgstr "下个标签(_N)"
 
-#: ../src/ephy-window.c:182
+#: ../src/ephy-window.c:180
 msgid "Move Tab _Left"
 msgstr "将标签左移(_L)"
 
-#: ../src/ephy-window.c:184
+#: ../src/ephy-window.c:182
 msgid "Move Tab _Right"
 msgstr "将标签右移(_R)"
 
-#: ../src/ephy-window.c:186
+#: ../src/ephy-window.c:184
 msgid "_Detach Tab"
 msgstr "分离标签页(_D)"
 
 #. View actions.
-#: ../src/ephy-window.c:201
+#: ../src/ephy-window.c:199
 msgid "_Downloads Bar"
 msgstr "下载栏(_D)"
 
-#: ../src/ephy-window.c:204
+#: ../src/ephy-window.c:202
 msgid "_Fullscreen"
 msgstr "全屏(_F)"
 
-#: ../src/ephy-window.c:206
+#: ../src/ephy-window.c:204
 msgid "Popup _Windows"
 msgstr "弹出窗口(_W)"
 
-#: ../src/ephy-window.c:208
+#: ../src/ephy-window.c:206
 msgid "Selection Caret"
 msgstr "选择光标"
 
 #. Document.
-#: ../src/ephy-window.c:215
+#: ../src/ephy-window.c:213
 msgid "Add Boo_kmark…"
 msgstr "添加书签(_K)..."
 
 #. Links.
-#: ../src/ephy-window.c:220
+#: ../src/ephy-window.c:218
 msgid "Open Link in New _Window"
 msgstr "在新窗口中打开链接(_W)"
 
-#: ../src/ephy-window.c:222
+#: ../src/ephy-window.c:220
 msgid "Open Link in New _Tab"
 msgstr "在新标签中打开链接(_T)"
 
-#: ../src/ephy-window.c:224
+#: ../src/ephy-window.c:222
 msgid "_Save Link As…"
 msgstr "链接另存为(_S)..."
 
-#: ../src/ephy-window.c:226
+#: ../src/ephy-window.c:224
 msgid "_Copy Link Address"
 msgstr "复制链接地址(_C)"
 
-#: ../src/ephy-window.c:228
+#: ../src/ephy-window.c:226
 msgid "_Copy E-mail Address"
 msgstr "复制电子邮件地址(_C)"
 
 #. Images.
-#: ../src/ephy-window.c:233
+#: ../src/ephy-window.c:231
 msgid "View _Image in New Tab"
 msgstr "在新标签中查看图像(_I)"
 
-#: ../src/ephy-window.c:235
+#: ../src/ephy-window.c:233
 msgid "Copy I_mage Address"
 msgstr "复制图像地址(_M)"
 
-#: ../src/ephy-window.c:237
+#: ../src/ephy-window.c:235
 msgid "_Save Image As…"
 msgstr "图像另存为(_S)..."
 
-#: ../src/ephy-window.c:239
+#: ../src/ephy-window.c:237
 msgid "Set as _Wallpaper"
 msgstr "设为墙纸(_W)"
 
 #. Video.
-#: ../src/ephy-window.c:244
+#: ../src/ephy-window.c:242
 msgid "Open Video in New _Window"
 msgstr "在新窗口中打开视频(_W)"
 
-#: ../src/ephy-window.c:246
+#: ../src/ephy-window.c:244
 msgid "Open Video in New _Tab"
 msgstr "在新标签中打开视频(_T)"
 
-#: ../src/ephy-window.c:248
+#: ../src/ephy-window.c:246
 msgid "_Save Video As…"
 msgstr "视频另存为(_S)..."
 
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:248
 msgid "_Copy Video Address"
 msgstr "复制视频地址(_C)"
 
 #. Audio.
-#: ../src/ephy-window.c:255
+#: ../src/ephy-window.c:253
 msgid "Open Audio in New _Window"
 msgstr "在新窗口中打开音频(_W)"
 
-#: ../src/ephy-window.c:257
+#: ../src/ephy-window.c:255
 msgid "Open Audio in New _Tab"
 msgstr "在新标签中打开音频(_T)"
 
-#: ../src/ephy-window.c:259
+#: ../src/ephy-window.c:257
 msgid "_Save Audio As…"
 msgstr "音频另存为(_S)..."
 
-#: ../src/ephy-window.c:261
+#: ../src/ephy-window.c:259
 msgid "_Copy Audio Address"
 msgstr "复制音频地址(_C)"
 
-#: ../src/ephy-window.c:468
+#: ../src/ephy-window.c:467
 msgid "There are unsubmitted changes to form elements"
 msgstr "有表单元素已被修改，但尚未提交"
 
-#: ../src/ephy-window.c:469
+#: ../src/ephy-window.c:468
 msgid "If you close the document anyway, you will lose that information."
 msgstr "如果您无论如何都要关闭该文档，您将丢失那些信息。"
 
-#: ../src/ephy-window.c:471
+#: ../src/ephy-window.c:470
 msgid "Close _Document"
 msgstr "关闭文档(_D)"
 
-#: ../src/ephy-window.c:486
+#: ../src/ephy-window.c:485
 msgid "There are ongoing downloads in this window"
 msgstr "该窗口中有正在进行的下载"
 
-#: ../src/ephy-window.c:487
+#: ../src/ephy-window.c:486
 msgid "If you close this window, the downloads will be cancelled"
-msgstr "如果关闭此窗口，下载将会被取消"
+msgstr "如果您关闭这个窗口，下载将会取消"
 
-#: ../src/ephy-window.c:488
+#: ../src/ephy-window.c:487
 msgid "Close window and cancel downloads"
 msgstr "关闭窗口并取消下载"
 
-#: ../src/ephy-window.c:1124
+#: ../src/ephy-window.c:1123
 msgid "Save As"
 msgstr "另存为"
 
-#: ../src/ephy-window.c:1126
+#: ../src/ephy-window.c:1125
 msgid "Save As Application"
 msgstr "保存为应用程序"
 
-#: ../src/ephy-window.c:1128
+#: ../src/ephy-window.c:1127
 msgid "Print"
 msgstr "打印"
 
-#: ../src/ephy-window.c:1130
+#: ../src/ephy-window.c:1129
 msgid "Bookmark"
 msgstr "书签"
 
-#: ../src/ephy-window.c:1132
+#: ../src/ephy-window.c:1131
 msgid "Find"
 msgstr "查找"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1141
+#: ../src/ephy-window.c:1140
 msgid "Larger"
 msgstr "更大"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1144
+#: ../src/ephy-window.c:1143
 msgid "Smaller"
 msgstr "更小"
 
-#: ../src/ephy-window.c:1166
+#: ../src/ephy-window.c:1165
 msgid "Back"
 msgstr "后退"
 
-#: ../src/ephy-window.c:1178
+#: ../src/ephy-window.c:1177
 msgid "Forward"
 msgstr "前进"
 
-#: ../src/ephy-window.c:1190
+#: ../src/ephy-window.c:1189
 msgid "Zoom"
 msgstr "缩放"
 
-#: ../src/ephy-window.c:1199
+#: ../src/ephy-window.c:1198
 msgid "New _Tab"
 msgstr "新建标签(_T)"
 
-#: ../src/ephy-window.c:1207
+#: ../src/ephy-window.c:1206
 msgid "Go to most visited"
 msgstr "转到最常浏览"
 
-#: ../src/popup-commands.c:225
+#: ../src/popup-commands.c:229
 msgid "Save Link As"
 msgstr "链接另存为"
 
-#: ../src/popup-commands.c:232
+#: ../src/popup-commands.c:236
 msgid "Save Image As"
 msgstr "图像另存为"
 
-#: ../src/popup-commands.c:239
+#: ../src/popup-commands.c:243
 msgid "Save Media As"
 msgstr "媒体另存为"
 
@@ -2676,84 +2688,88 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1023
+#: ../src/prefs-dialog.c:1024
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1025
+#: ../src/prefs-dialog.c:1026
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1027
+#: ../src/prefs-dialog.c:1029
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.com/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1029
+#: ../src/prefs-dialog.c:1031
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1031
+#: ../src/prefs-dialog.c:1034
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "http://cn.bing.com/search?q=%s"
 
-#: ../src/window-commands.c:709
+#: ../src/window-commands.c:330
+msgid "Save"
+msgstr "保存"
+
+#: ../src/window-commands.c:710
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "已存在名为“%s”的 Web 应用程序，是否要替换？"
 
-#: ../src/window-commands.c:714
+#: ../src/window-commands.c:715
 msgid "Replace"
 msgstr "替换"
 
-#: ../src/window-commands.c:718
+#: ../src/window-commands.c:719
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "已经存在一个具有相同名称的应用程序，如果进行替换，它的内容将会被覆盖。"
 
-#: ../src/window-commands.c:754
+#: ../src/window-commands.c:755
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "应用程序“%s”已就绪"
 
-#: ../src/window-commands.c:757
+#: ../src/window-commands.c:758
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "无法创建应用程序“%s”"
 
-#: ../src/window-commands.c:765
+#: ../src/window-commands.c:766
 msgid "Launch"
 msgstr "启动"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:805
+#: ../src/window-commands.c:806
 msgid "Create Web Application"
 msgstr "创建 Web 应用程序"
 
-#: ../src/window-commands.c:810
+#: ../src/window-commands.c:811
 msgid "C_reate"
 msgstr "创建(_R)"
 
-#: ../src/window-commands.c:1475 ../src/window-commands.c:1498
+#: ../src/window-commands.c:1480 ../src/window-commands.c:1503
 msgid "Contact us at:"
 msgstr "联系我们："
 
-#: ../src/window-commands.c:1478
+#: ../src/window-commands.c:1483
 msgid "Contributors:"
 msgstr "贡献者："
 
-#: ../src/window-commands.c:1481
+#: ../src/window-commands.c:1486
 msgid "Past developers:"
 msgstr "先前的开发者："
 
-#: ../src/window-commands.c:1507
+#: ../src/window-commands.c:1512
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2770,7 +2786,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1530
+#: ../src/window-commands.c:1535
 msgid "translator-credits"
 msgstr ""
 "Funda Wang <fundawang@linux.net.cn>, 2003, 2006\n"
@@ -2783,15 +2799,15 @@ msgstr ""
 "eternalhui <www.eternalhui@gmail.com>, 2013\n"
 "Tong Hui <tonghuix@gmail.com>, 2014"
 
-#: ../src/window-commands.c:1533
+#: ../src/window-commands.c:1538
 msgid "Web Website"
 msgstr "GNOME Web 网站"
 
-#: ../src/window-commands.c:1672
+#: ../src/window-commands.c:1677
 msgid "Enable caret browsing mode?"
 msgstr "启用光标导航吗？"
 
-#: ../src/window-commands.c:1675
+#: ../src/window-commands.c:1680
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2800,9 +2816,98 @@ msgstr ""
 "按 F7 键可以启用或停用光标导航功能。此功能在网页中放置一个可移动光标，从而允"
 "许您使用键盘在页面内导航。您是否要启用光标导航？"
 
-#: ../src/window-commands.c:1678
+#: ../src/window-commands.c:1683
 msgid "_Enable"
 msgstr "启用(_E)"
+
+#~ msgid "GNOME Web"
+#~ msgstr "GNOME Web"
+
+#~ msgid ""
+#~ "The web browser for GNOME, featuring tight integration with the desktop "
+#~ "and a simple and intuitive user interface that allows you to focus on "
+#~ "your web pages. If you’re looking for a simple, clean, beautiful view of "
+#~ "the web, this is the browser for you."
+#~ msgstr ""
+#~ "GNOME 桌面的网页浏览器，与桌面紧密集成，用户界面简单直观，使您能够专注于网"
+#~ "页浏览。如果需要的是简单，干净，美观的网页体验，这就是您的选择。"
+
+#~ msgid "GNOME Web is often referred to by its code name, Epiphany."
+#~ msgstr "人们一般用 GNOME Web 的代号将其称为 Epiphany。"
+
+#~ msgid ""
+#~ "Maximum number of web processes created at the same time when using 'one-"
+#~ "secondary-process-per-web-view' model"
+#~ msgstr ""
+#~ "使用 'one-secondary-process-per-web-view' 模式时可最多同时打开的网页进程"
+
+#~ msgid ""
+#~ "This option sets a limit to the number of web processes that will be used "
+#~ "at the same time for the 'one-secondary-process-per-web-view' model. The "
+#~ "default value is '0' and means no limit."
+#~ msgstr ""
+#~ "该选项限定 'one-secondary-process-per-web-view' 模式可最多同时打开的网页进"
+#~ "程。默认值为 '0'，即无限制。"
+
+#, fuzzy
+#~| msgid "_Delete"
+#~ msgid "Delete"
+#~ msgstr "删除(_D)"
+
+#~ msgid "Clear"
+#~ msgstr "清除"
+
+#~ msgid "Cancelling…"
+#~ msgstr "正在取消..."
+
+#, fuzzy
+#~| msgid "Your connection is secure."
+#~ msgid "Your connection seems to be secure."
+#~ msgstr "连接是安全的。"
+
+#~ msgid "Filter cookies"
+#~ msgstr "过滤 Cookies"
+
+#~ msgid "Search cookies"
+#~ msgstr "搜索 Cookies"
+
+#~ msgid "Filter passwords"
+#~ msgstr "过滤密码"
+
+#~ msgid "Open Link in I_ncognito Window"
+#~ msgstr "在无痕窗口中打开链接(_N)"
+
+#~ msgid "There are ongoing downloads"
+#~ msgstr "有正在进行的下载任务"
+
+#~ msgid "If you quit, the downloads will be cancelled"
+#~ msgstr "如果退出，将取消当前的下载任务"
+
+#~ msgid "Quit and cancel downloads"
+#~ msgstr "退出并取消下载"
+
+#, fuzzy
+#~| msgid "Encodings"
+#~ msgid "Encodings…"
+#~ msgstr "编码"
+
+#~ msgid "Search the Web for '%s'"
+#~ msgstr "上网搜索 '%s'"
+
+#~ msgid "Size of disk cache"
+#~ msgstr "磁盘缓存大小"
+
+#~ msgid "Size of disk cache, in MB."
+#~ msgstr "磁盘缓存大小，单位为 MB。"
+
+#~ msgid "Temporary Files"
+#~ msgstr "临时文件"
+
+#~ msgid "_Disk space:"
+#~ msgstr "磁盘空间(_D)："
+
+#~ msgid "MB"
+#~ msgstr "MB"
 
 #~ msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 #~ msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -3182,9 +3287,6 @@ msgstr "启用(_E)"
 #~ msgid "The bookmarked page has moved to “%s”."
 #~ msgstr "书签中的页面已经移动到“%s”。"
 
-#~ msgid "_Don't Update"
-#~ msgstr "不更新(_D)"
-
 #~ msgid "_Update"
 #~ msgstr "更新(_U)"
 
@@ -3361,9 +3463,6 @@ msgstr "启用(_E)"
 
 #~ msgid "Go"
 #~ msgstr "转到"
-
-#~ msgid "GNOME Web Browser"
-#~ msgstr "GNOME 网络浏览器"
 
 #~ msgid "GNOME Web Browser options"
 #~ msgstr "GNOME 网络浏览器选项"
