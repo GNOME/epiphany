@@ -1674,6 +1674,9 @@ load_changed_cb (WebKitWebView *web_view,
     ephy_web_view_thaw_history (view);
 
     break;
+
+  default:
+    break;
   }
 
   g_object_thaw_notify (object);

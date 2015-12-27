@@ -107,6 +107,9 @@ set_status (EphyFindToolbar *toolbar,
 			icon_name = "view-wrapped-symbolic";
 			tooltip = _("Search wrapped back to the top");
 			break;
+
+                default:
+                        g_assert_not_reached ();
 	}
 
 	gtk_widget_set_sensitive (toolbar->prev, result != EPHY_FIND_RESULT_NOTFOUND);
@@ -511,6 +514,8 @@ ephy_find_toolbar_set_property (GObject *object,
 		case PROP_WEB_VIEW:
 			ephy_find_toolbar_set_web_view (toolbar, (WebKitWebView *) g_value_get_object (value));
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 

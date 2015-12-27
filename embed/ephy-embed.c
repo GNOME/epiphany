@@ -287,6 +287,8 @@ load_changed_cb (WebKitWebView *web_view,
         !webkit_web_view_get_title (web_view))
       ephy_embed_set_title (embed, NULL);
     break;
+  case WEBKIT_LOAD_STARTED:
+  case WEBKIT_LOAD_REDIRECTED:
   default:
     break;
   }

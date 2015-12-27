@@ -159,6 +159,9 @@ callback (long id, EphyNodeSignalData *data, gpointer *dummy)
 		case EPHY_NODE_CHILDREN_REORDERED:
 			data->callback (data->node, va_arg (valist, int *), data->data);
 		break;
+
+		default:
+		break;
 	}
 
         va_end(valist);

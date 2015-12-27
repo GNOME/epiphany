@@ -128,6 +128,13 @@ ephy_file_monitor_changed_cb (GFileMonitor *monitor,
     default:
       should_reload = FALSE;
       break;
+
+    /* These events will never be sent: */
+    case G_FILE_MONITOR_EVENT_MOVED:
+    case G_FILE_MONITOR_EVENT_RENAMED:
+    case G_FILE_MONITOR_EVENT_MOVED_IN:
+    case G_FILE_MONITOR_EVENT_MOVED_OUT:
+      g_assert_not_reached ();
   }
 
   if (should_reload) {

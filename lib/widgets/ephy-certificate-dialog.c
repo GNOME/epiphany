@@ -175,6 +175,10 @@ ephy_certificate_dialog_constructed (GObject *object)
       gtk_label_set_text (GTK_LABEL (priv->text), _("This certificate is valid. However, "
                                                     "resources on this page were sent insecurely."));
       break;
+    case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
+    case EPHY_SECURITY_LEVEL_NO_SECURITY:
+    case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
+    case EPHY_SECURITY_LEVEL_LOCAL_PAGE:
     default:
       g_assert_not_reached ();
     }

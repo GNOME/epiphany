@@ -299,6 +299,8 @@ ephy_topic_action_set_property (GObject *object,
 		case PROP_MANAGER:
 			priv->manager = g_value_get_object (value);
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 
@@ -319,6 +321,8 @@ ephy_topic_action_get_property (GObject *object,
 		case PROP_MANAGER:
 			g_value_set_object (value, priv->manager);
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 

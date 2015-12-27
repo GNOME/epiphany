@@ -72,6 +72,8 @@ ephy_node_db_get_property (GObject *object,
 		case PROP_IMMUTABLE:
 			g_value_set_boolean (value, ephy_node_db_is_immutable (db));
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 
@@ -91,6 +93,8 @@ ephy_node_db_set_property (GObject *object,
 		case PROP_IMMUTABLE:
 			ephy_node_db_set_immutable (db, g_value_get_boolean (value));
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 

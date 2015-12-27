@@ -34,10 +34,8 @@ AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
 AX_CHECK_ENABLE_DEBUG([yes])
 AX_CODE_COVERAGE
 AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS], [$ax_is_release], [],
-	dnl TODO: Remove all of these! These warnings should be fixed, not
-	dnl silenced. At least, for the most part. -Wswitch-enum really does
-	dnl seem pretty dumb.
-	[-Wno-deprecated-declarations -Wno-switch-enum -Wno-switch-default])
+	dnl TODO: Remove! These warnings should be fixed, not silenced.
+	[-Wno-deprecated-declarations])
 
 AC_PROG_CC
 

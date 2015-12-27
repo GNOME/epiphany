@@ -337,6 +337,8 @@ ephy_bookmark_action_set_property (GObject *object,
 		case PROP_ICON:
 			/* not writable */
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 
@@ -370,6 +372,8 @@ ephy_bookmark_action_get_property (GObject *object,
 				ephy_node_get_property_string (priv->node,
 					EPHY_NODE_BMK_PROP_ICON));
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 

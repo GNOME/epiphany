@@ -280,6 +280,7 @@ ephy_node_filter_expression_new (EphyNodeFilterExpressionType type,
 		exp->args.prop_args.prop_id = va_arg (valist, int);
 		exp->args.prop_args.second_arg.number = va_arg (valist, int);
 		break;
+	case EPHY_NODE_FILTER_EXPRESSION_ALWAYS_TRUE:
 	default:
 		break;
 	}
@@ -300,6 +301,16 @@ ephy_node_filter_expression_free (EphyNodeFilterExpression *exp)
 	case EPHY_NODE_FILTER_EXPRESSION_KEY_PROP_EQUALS:
 		g_free (exp->args.prop_args.second_arg.string);
 		break;
+	case EPHY_NODE_FILTER_EXPRESSION_ALWAYS_TRUE:
+	case EPHY_NODE_FILTER_EXPRESSION_NODE_EQUALS:
+	case EPHY_NODE_FILTER_EXPRESSION_EQUALS:
+	case EPHY_NODE_FILTER_EXPRESSION_HAS_PARENT:
+	case EPHY_NODE_FILTER_EXPRESSION_HAS_CHILD:
+	case EPHY_NODE_FILTER_EXPRESSION_NODE_PROP_EQUALS:
+	case EPHY_NODE_FILTER_EXPRESSION_CHILD_PROP_EQUALS:
+	case EPHY_NODE_FILTER_EXPRESSION_INT_PROP_EQUALS:
+	case EPHY_NODE_FILTER_EXPRESSION_INT_PROP_BIGGER_THAN:
+	case EPHY_NODE_FILTER_EXPRESSION_INT_PROP_LESS_THAN:
 	default:
 		break;
 	}

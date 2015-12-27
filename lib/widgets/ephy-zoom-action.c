@@ -126,6 +126,8 @@ ephy_zoom_action_set_property (GObject *object,
 		case PROP_ZOOM:
 			action->priv->zoom = g_value_get_float (value);
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 
@@ -144,6 +146,8 @@ ephy_zoom_action_get_property (GObject *object,
 		case PROP_ZOOM:
 			g_value_set_float (value, action->priv->zoom);
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 

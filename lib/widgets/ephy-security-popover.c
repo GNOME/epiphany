@@ -136,6 +136,8 @@ ephy_security_popover_set_security_level (EphySecurityPopover *popover,
                         _("Your connection seems to be secure."));
     gtk_widget_show (priv->host_label);
     break;
+  case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
+  case EPHY_SECURITY_LEVEL_LOCAL_PAGE:
   default:
     g_assert_not_reached ();
   }

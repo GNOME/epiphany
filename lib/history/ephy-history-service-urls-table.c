@@ -299,6 +299,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
   case EPHY_HISTORY_SORT_URL_DESCENDING:
     statement_str = g_string_append (statement_str, "ORDER BY LOWER(urls.url) DESC ");
     break;
+  case EPHY_HISTORY_SORT_NONE:
   default:
     g_warning ("We don't support this sorting method yet.");
   }

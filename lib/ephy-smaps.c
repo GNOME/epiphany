@@ -75,6 +75,7 @@ static const char *get_ephy_process_name (EphyProcess process)
   case EPHY_PROCESS_PLUGIN:
     return "Plugin Process";
   case EPHY_PROCESS_OTHER:
+  default:
     g_assert_not_reached ();
   }
 

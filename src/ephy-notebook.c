@@ -105,6 +105,8 @@ ephy_notebook_get_property (GObject *object,
 		case PROP_TABS_ALLOWED:
 			g_value_set_boolean (value, priv->tabs_allowed);
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 
@@ -121,6 +123,8 @@ ephy_notebook_set_property (GObject *object,
 		case PROP_TABS_ALLOWED:
 			ephy_notebook_set_tabs_allowed (notebook, g_value_get_boolean (value));
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 	}
 }
 

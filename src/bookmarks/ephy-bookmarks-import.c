@@ -777,6 +777,9 @@ ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
 			g_free (parsedname);
 
 			break;
+                case NS_NOTES:
+                case NS_SEPARATOR:
+                case NS_UNKNOWN:
 		default:
 			break;
 		}
