@@ -614,38 +614,38 @@ import_dialog_response_cb (GtkDialog *dialog,
 
 		if (filename == NULL)
 		{
-			EphyFileChooser *dialog;
+			EphyFileChooser *chooser;
 			GtkFileFilter *filter;
 
-			dialog = ephy_file_chooser_new (_("Import Bookmarks from File"),
-							GTK_WIDGET (editor),
-							GTK_FILE_CHOOSER_ACTION_OPEN,
-							EPHY_FILE_FILTER_NONE);
+			chooser = ephy_file_chooser_new (_("Import Bookmarks from File"),
+							 GTK_WIDGET (editor),
+							 GTK_FILE_CHOOSER_ACTION_OPEN,
+							 EPHY_FILE_FILTER_NONE);
 
 			ephy_file_chooser_add_mime_filter
-				(dialog,
+				(chooser,
 				 _("Firefox/Mozilla bookmarks"),
 				 "application/x-mozilla-bookmarks", NULL);
 
 			ephy_file_chooser_add_mime_filter
-				(dialog, _("Galeon/Konqueror bookmarks"),
+				(chooser, _("Galeon/Konqueror bookmarks"),
 				 "application/x-xbel", NULL);
 
 			ephy_file_chooser_add_mime_filter
-				(dialog, _("Web bookmarks"),
+				(chooser, _("Web bookmarks"),
 				 "text/rdf", "application/rdf+xml", NULL);
 
-			filter = ephy_file_chooser_add_pattern_filter (dialog,
+			filter = ephy_file_chooser_add_pattern_filter (chooser,
 							      _("All files"),
 							      "*", NULL);
 
-			gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog),
+			gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (chooser),
 						     filter);
 
-			g_signal_connect (dialog, "response",
+			g_signal_connect (chooser, "response",
 					  G_CALLBACK (import_from_file_response_cb), editor);
 
-			gtk_widget_show (GTK_WIDGET (dialog));
+			gtk_widget_show (GTK_WIDGET (chooser));
 		}
 		else
 		{

@@ -104,10 +104,10 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
 
   g_object_unref (snapshot);
 
+  x_offset = 6;
   if (favicon) {
     GdkPixbuf* fav_pixbuf;
     int favicon_size = 16;
-    int x_offset = 6;
     int y_offset = gdk_pixbuf_get_height (scaled) - favicon_size - x_offset;
 
     fav_pixbuf = ephy_pixbuf_get_from_surface_scaled (favicon, favicon_size, favicon_size);

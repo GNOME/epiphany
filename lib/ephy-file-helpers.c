@@ -365,7 +365,7 @@ ephy_file_helpers_init (const char *profile_dir,
 		for (i = 0; i < G_N_ELEMENTS (files_to_copy); i++)
 		{
 			char *filename;
-			GError *error = NULL;
+			GError *err = NULL;
 			GFile *source, *destination;
 
 			filename = g_build_filename (profile_dir,
@@ -382,11 +382,11 @@ ephy_file_helpers_init (const char *profile_dir,
 
 			g_file_copy (source, destination,
 				     G_FILE_COPY_OVERWRITE,
-				     NULL, NULL, NULL, &error);
+				     NULL, NULL, NULL, &err);
 			if (error)
 			{
-				printf("Error stealing file %s from profile: %s\n", files_to_copy[i], error->message);
-				g_error_free (error);
+				printf("Error stealing file %s from profile: %s\n", files_to_copy[i], err->message);
+				g_error_free (err);
 			}
 				
 			g_object_unref (source);
@@ -614,10 +614,10 @@ load_mime_from_xml (void)
 		}
 		else if (xmlStrEqual (tag, (const xmlChar *)"mime-type"))
 		{
-			xmlChar *type;
+			xmlChar *t;
 
-			type = xmlTextReaderGetAttribute (reader, (const xmlChar *)"type");
-			g_hash_table_insert (mime_table, type,
+			t = xmlTextReaderGetAttribute (reader, (const xmlChar *)"type");
+			g_hash_table_insert (mime_table, t,
 					     GINT_TO_POINTER (permission));
 		}
 
@@ -665,7 +665,7 @@ ephy_file_check_mime (const char *mime_type)
 /**
  * ephy_file_launch_application:
  * @app: the application to launch
- * @files: files to pass to @app
+ * @list: files to pass to @app
  * @user_time: user time to prevent focus stealing
  * @widget: a relevant widget from where to get the #GdkScreen and #GdkDisplay
  *
@@ -677,7 +677,7 @@ ephy_file_check_mime (const char *mime_type)
  **/
 gboolean
 ephy_file_launch_application (GAppInfo *app,
-			      GList *files,
+			      GList *list,
 			      guint32 user_time,
 			      GtkWidget *widget)
 {
@@ -701,7 +701,7 @@ ephy_file_launch_application (GAppInfo *app,
 	gdk_app_launch_context_set_screen (context, screen);
 	gdk_app_launch_context_set_timestamp (context, user_time);
 
-	res = g_app_info_launch (app, files,
+	res = g_app_info_launch (app, list,
 				 G_APP_LAUNCH_CONTEXT (context), NULL);
 	g_object_unref (context);
 

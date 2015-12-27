@@ -51,7 +51,7 @@
 #include <sys/types.h>
 
 static int do_step_n = -1;
-static int version = -1;
+static int migration_version = -1;
 static char *profile_dir = NULL;
 static GMainLoop *loop = NULL;
 
@@ -205,7 +205,7 @@ parse_and_decrypt_signons (const char *signons,
     if (g_strstr_len (lines[begin], -1, realmBracketBegin)) {
       char *start_ptr, *end_ptr;
       char *full_url, *url;
-      glong start, end;
+      glong start, ending;
 
       /* In this case the scheme may not exist. We assume that the
        * scheme is HTTP.
@@ -224,8 +224,8 @@ parse_and_decrypt_signons (const char *signons,
 
       start += strlen (realmBracketBegin);
       end_ptr = g_strstr_len (full_url, -1, realmBracketEnd) -1;
-      end = g_utf8_pointer_to_offset (full_url, end_ptr);
-      realm = g_utf8_substring (full_url, start, end);
+      ending = g_utf8_pointer_to_offset (full_url, end_ptr);
+      realm = g_utf8_substring (full_url, start, ending);
 
       g_free (full_url);
     } else {
@@ -1060,7 +1060,7 @@ static const GOptionEntry option_entries[] =
 {
   { "do-step", 'd', 0, G_OPTION_ARG_INT, &do_step_n,
     N_("Executes only the n-th migration step"), NULL },
-  { "version", 'v', 0, G_OPTION_ARG_INT, &version,
+  { "version", 'v', 0, G_OPTION_ARG_INT, &migration_version,
     N_("Specifies the required version for the migrator"), NULL },
   { "profile-dir", 'p', 0, G_OPTION_ARG_FILENAME, &profile_dir,
     N_("Specifies the profile where the migrator should run"), NULL },
@@ -1096,8 +1096,9 @@ main (int argc, char *argv[])
         
   g_option_context_free (option_context);
 
-  if (version != -1 && version != EPHY_PROFILE_MIGRATION_VERSION) {
-    g_print ("Version mismatch, version %d requested but our version is %d\n", version, EPHY_PROFILE_MIGRATION_VERSION);
+  if (migration_version != -1 && migration_version != EPHY_PROFILE_MIGRATION_VERSION) {
+    g_print ("Version mismatch, version %d requested but our version is %d\n",
+             migration_version, EPHY_PROFILE_MIGRATION_VERSION);
     
     return 1;
   }

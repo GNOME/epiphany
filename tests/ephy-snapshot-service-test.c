@@ -206,7 +206,7 @@ test_snapshot_and_timed_cancellation (void)
 }
 
 static void
-server_callback (SoupServer *server, SoupMessage *msg,
+server_callback (SoupServer *s, SoupMessage *msg,
                  const char *path, GHashTable *query,
                  SoupClientContext *context, gpointer data)
 {

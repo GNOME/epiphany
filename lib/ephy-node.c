@@ -1361,8 +1361,8 @@ ephy_node_get_previous_child (EphyNode *node,
  * ephy_node_signal_connect_object:
  * @node: an #EphyNode
  * @type: signal type
- * @callback: (scope notified): the callback to connect
- * @object: data to pass to @callback
+ * @cb: (scope notified): the callback to connect
+ * @object: data to pass to @cb
  *
  * Connects a callback function to the @type signal of @node.
  *
@@ -1371,7 +1371,7 @@ ephy_node_get_previous_child (EphyNode *node,
 int
 ephy_node_signal_connect_object (EphyNode *node,
 				 EphyNodeSignalType type,
-				 EphyNodeCallback callback,
+				 EphyNodeCallback cb,
 				 GObject *object)
 {
 	EphyNodeSignalData *signal_data;
@@ -1384,7 +1384,7 @@ ephy_node_signal_connect_object (EphyNode *node,
 	signal_data = g_slice_new0 (EphyNodeSignalData);
 	signal_data->node = node;
 	signal_data->id = node->signal_id;
-	signal_data->callback = callback;
+	signal_data->callback = cb;
 	signal_data->type = type;
 	signal_data->data = object;
 
@@ -1433,10 +1433,10 @@ invalidate_matching_signal_data (gpointer key,
  * ephy_node_signal_disconnect_object:
  * @node: an #EphyNode
  * @type: signal type
- * @callback: (scope notified): the callback to disconnect
- * @object: data passed to @callback when it was connected
+ * @cb: (scope notified): the callback to disconnect
+ * @object: data passed to @cb when it was connected
  *
- * Disconnects @callback from @type in @node. @callback is identified by the
+ * Disconnects @cb from @type in @node. @cb is identified by the
  * @object previously passed in ephy_node_signal_connect_object.
  *
  * Returns: the number of signal handlers removed
@@ -1444,14 +1444,14 @@ invalidate_matching_signal_data (gpointer key,
 guint
 ephy_node_signal_disconnect_object (EphyNode *node,
                                     EphyNodeSignalType type,
-                                    EphyNodeCallback callback,
+                                    EphyNodeCallback cb,
                                     GObject *object)
 {
         EphyNodeSignalData user_data;
 
 	g_return_val_if_fail (EPHY_IS_NODE (node), 0);
 
-	user_data.callback = callback;
+	user_data.callback = cb;
 	user_data.type = type;
 	user_data.data = object;
 

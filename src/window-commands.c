@@ -1204,7 +1204,7 @@ view_source_embedded (const char *uri, EphyEmbed *embed)
 static void
 save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointer data)
 {
-	char *uri;
+	const char *uri;
 	GFile *file;
 	GError *error = NULL;
 
@@ -1216,14 +1216,13 @@ save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointe
 		return;
 	}
 
-	uri = (char*)g_object_get_data (G_OBJECT (ostream), "ephy-save-temp-source-uri");
+	uri = (const char*)g_object_get_data (G_OBJECT (ostream), "ephy-save-temp-source-uri");
 
 	file = g_file_new_for_uri (uri);
 
 	if (!ephy_file_launch_handler ("text/plain", file, gtk_get_current_event_time ()))
 	{
 		/* Fallback to view the source inside the browser */
-		const char *uri;
 		EphyEmbed *embed;
 
 		uri = (const char*) g_object_get_data (G_OBJECT (ostream),

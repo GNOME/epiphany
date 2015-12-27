@@ -202,7 +202,7 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
   g_return_if_fail (context_id != 0);
 
   for (list = embed->messages; list; list = list->next) {
-    EphyEmbedStatusbarMsg *msg = list->data;
+    msg = list->data;
 
     if (msg->context_id == context_id) {
       embed->messages = g_slist_remove_link (embed->messages, list);

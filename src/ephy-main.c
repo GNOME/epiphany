@@ -253,7 +253,7 @@ main (int argc,
   if (argc >= 2 && strcmp (argv[1], "-remote") == 0) {
     const char *opening, *closing;
     char *command, *argument;
-    char **arguments;
+    char **arg_list;
     
     if (argc != 3) {
       g_print ("-remote allows exactly one argument\n");
@@ -285,19 +285,19 @@ main (int argc,
     g_free (command);
     
     argument = g_strstrip (g_strndup (opening + 1, closing - opening - 1));
-    arguments = g_strsplit (argument, ",", -1);
+    arg_list = g_strsplit (argument, ",", -1);
     g_free (argument);
-    if (arguments == NULL) {
+    if (arg_list == NULL) {
       g_print ("Invalid argument for -remote\n");
       
       exit (1);
     }
     
     /* replace arguments */
-    argv[1] = g_strstrip (g_strdup (arguments[0]));
+    argv[1] = g_strstrip (g_strdup (arg_list[0]));
     argc = 2;
     
-    g_strfreev (arguments);
+    g_strfreev (arg_list);
   }
   
   /* Initialise our debug helpers */

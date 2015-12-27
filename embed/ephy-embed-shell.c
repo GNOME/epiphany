@@ -594,9 +594,9 @@ ephy_embed_shell_setup_process_model (EphyEmbedShell *shell)
 }
 
 static void
-ephy_embed_shell_create_web_context (EphyEmbedShell *embed_shell)
+ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 {
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (embed_shell);
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   WebKitWebsiteDataManager *manager;
   char *data_dir;
   char *cache_dir;
@@ -770,18 +770,18 @@ ephy_embed_shell_get_property (GObject *object,
 static void
 ephy_embed_shell_constructed (GObject *object)
 {
-  EphyEmbedShell *embed_shell;
+  EphyEmbedShell *shell;
   EphyEmbedShellPrivate *priv;
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->constructed (object);
 
-  embed_shell = EPHY_EMBED_SHELL (object);
-  priv = ephy_embed_shell_get_instance_private (embed_shell);
+  shell = EPHY_EMBED_SHELL (object);
+  priv = ephy_embed_shell_get_instance_private (shell);
   /* These do not run the EmbedShell application instance, so make sure that
      there is a web context and a user content manager for them. */
-  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_TEST ||
-      ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
-    ephy_embed_shell_create_web_context (embed_shell);
+  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_TEST ||
+      ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
+    ephy_embed_shell_create_web_context (shell);
     priv->user_content = webkit_user_content_manager_new ();
   }
 }
