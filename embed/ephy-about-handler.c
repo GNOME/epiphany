@@ -85,7 +85,7 @@ ephy_about_handler_finish_request (WebKitURISchemeRequest *request,
 {
   GInputStream *stream;
 
-  data_length = data_length != -1 ? data_length : strlen (data);
+  data_length = data_length != -1 ? data_length : (gssize)strlen (data);
   stream = g_memory_input_stream_new_from_data (data, data_length, g_free);
   webkit_uri_scheme_request_finish (request, stream, data_length, "text/html");
   g_object_unref (stream);

@@ -42,7 +42,7 @@ static const FileInitTest private_tests[] =
 static void
 test_ephy_file_helpers_init (void)
 {
-  int i;
+  guint i;
 
   for (i = 0; i < G_N_ELEMENTS (private_tests); i++) {
     FileInitTest test;
@@ -119,7 +119,7 @@ static const DownloadsDirTest downloads_tests[] =
 static void
 test_ephy_file_get_downloads_dir (void)
 {
-  int i;
+  guint i;
 
   ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL);
 
@@ -172,7 +172,7 @@ static const DirTest dir_tests[] =
 static void
 test_ephy_file_create_delete_dir (void)
 {
-  int i;
+  guint i;
 
   ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL);
 

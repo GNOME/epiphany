@@ -80,7 +80,7 @@ create_menu_item (GtkAction *action)
 	EphyZoomActionPrivate *p = EPHY_ZOOM_ACTION (action)->priv;
 	GtkWidget *menu, *menu_item;
 	GSList *group = NULL;
-	int i;
+	guint i;
 
 	menu = gtk_menu_new ();
 

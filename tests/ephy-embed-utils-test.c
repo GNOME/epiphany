@@ -126,7 +126,7 @@ test_is_empty (const IsEmptyTest *test)
 int
 main (int argc, char *argv[])
 {
-  int i;
+  guint i;
   gtk_test_init (&argc, &argv);
 
   for (i = 0; i < G_N_ELEMENTS (tests_has_scheme); i++) {

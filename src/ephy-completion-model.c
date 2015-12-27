@@ -488,7 +488,7 @@ query_completed_cb (EphyHistoryService *service,
   GList *p, *urls;
   GPtrArray *children;
   GSList *list = NULL;
-  int i;
+  guint i;
 
   /* Bookmarks */
   children = ephy_node_get_children (priv->bookmarks);

@@ -780,7 +780,7 @@ button_release_cb (GtkWidget *widget,
 		   GdkEventButton *event,
 		   EphyNodeView *view)
 {
-	if (event->button == view->priv->drag_button)
+	if ((int)event->button == view->priv->drag_button)
 	{
 		stop_drag_check (view);
 		if (!view->priv->drag_started)

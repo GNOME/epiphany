@@ -97,7 +97,7 @@ ephy_topic_action_group_new (EphyNode *node,
 {
 	GPtrArray *children;
 	GtkActionGroup *action_group;
-	int i;
+	guint i;
 	
 	children = ephy_node_get_children (node);
 	action_group = gtk_action_group_new ("TpAc");

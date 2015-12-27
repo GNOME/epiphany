@@ -137,7 +137,7 @@ static const URLTest test_load_url[] = {
 static void
 test_ephy_web_view_load_url (void)
 {
-  int i;
+  guint i;
 
   for (i = 0; i < G_N_ELEMENTS (test_load_url); i++) {
     URLTest test;
@@ -207,7 +207,7 @@ test_ephy_web_view_non_search_regex (void)
 {
   GRegex *regex_non_search, *regex_domain;
   GError *error = NULL;
-  int i;
+  guint i;
 
   regex_non_search = g_regex_new (EPHY_WEB_VIEW_NON_SEARCH_REGEX,
                                   0, G_REGEX_MATCH_NOTEMPTY, &error);

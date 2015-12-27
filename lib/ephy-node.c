@@ -191,7 +191,7 @@ ephy_node_emit_signal (EphyNode *node, EphyNodeSignalType type, ...)
 
 	if (G_UNLIKELY (--node->emissions == 0 && node->invalidated_signals))
 	{
-		int removed;
+		guint removed;
 
 		removed = g_hash_table_foreach_remove
 				(node->signals,
@@ -1153,7 +1153,7 @@ ephy_node_sort_children (EphyNode *node,
 			 GCompareFunc compare_func)
 {
 	GPtrArray *newkids;
-	int i, *new_order;
+	guint i, *new_order;
 
 	if (ephy_node_db_is_immutable (node->db)) return;
 
@@ -1171,8 +1171,8 @@ ephy_node_sort_children (EphyNode *node,
 
 	g_ptr_array_sort (newkids, compare_func);
 
-	new_order = g_new (int, newkids->len);
-	memset (new_order, -1, sizeof (int) * newkids->len);
+	new_order = g_new (guint, newkids->len);
+	memset (new_order, -1, sizeof (guint) * newkids->len);
 
 	for (i = 0; i < newkids->len; i++)
 	{
@@ -1199,7 +1199,7 @@ ephy_node_reorder_children (EphyNode *node,
 			    int *new_order)
 {
 	GPtrArray *newkids;
-	int i;
+	guint i;
 
 	g_return_if_fail (EPHY_IS_NODE (node));
 	g_return_if_fail (new_order != NULL);

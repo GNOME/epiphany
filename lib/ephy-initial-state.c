@@ -74,7 +74,7 @@ find_by_name (const char *name)
 {
   EphyNode *result = NULL;
   GPtrArray *children;
-  int i;
+  guint i;
 
   children = ephy_node_get_children (states);
   for (i = 0; i < children->len; i++) {

@@ -44,7 +44,7 @@ ephy_string_to_int (const char *string, gulong *integer)
   result = strtol (string, &parse_end, 0);
 
   /* Check that the result is in range. */
-  if ((result == G_MINLONG || result == G_MAXLONG) && errno == ERANGE)
+  if (errno == ERANGE)
     return FALSE;
 
   /* Check that all the trailing characters are spaces. */
@@ -108,7 +108,7 @@ ephy_string_shorten (char *str,
   
   /* if the string is already short enough, or if it's too short for
    * us to shorten it, return a new copy */
-  if (actual_length <= target_length)
+  if ((gsize)actual_length <= target_length)
     return str;
   
   /* create string */

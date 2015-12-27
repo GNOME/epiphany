@@ -3303,15 +3303,15 @@ ephy_window_toggle_visibility_for_app_menu (EphyWindow *window)
 	gboolean shows_app_menu;
 	GtkSettings *settings;
 	GtkAction *action;
-	gint idx;
+	guint i;
 
 	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)));
 	g_object_get (settings,
 		      "gtk-shell-shows-app-menu", &shows_app_menu,
 		      NULL);
 
-	for (idx = 0; idx < G_N_ELEMENTS (app_actions); idx++) {
-		action_name = app_actions[idx];
+	for (i = 0; i < G_N_ELEMENTS (app_actions); i++) {
+		action_name = app_actions[i];
 		action = gtk_action_group_get_action (window->priv->action_group, action_name);
 
 		gtk_action_set_visible (action, !shows_app_menu);
@@ -3332,7 +3332,7 @@ ephy_window_constructor (GType type,
 	GError *error = NULL;
 	guint settings_connection;
 	GtkCssProvider *css_provider;
-	int i;
+	guint i;
 	EphyEmbedShellMode mode;
 	EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
 

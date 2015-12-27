@@ -65,7 +65,7 @@ write_topics_list (EphyNode *topics,
 {
 	GPtrArray *children;
 	GList *keywords = NULL, *l;
-	int i;
+	guint i;
 	int ret = 0;
 
 	children = ephy_node_get_children (topics);
@@ -120,7 +120,8 @@ write_rdf (EphyBookmarks *bookmarks,
 	EphyNode *bmks, *topics, *smart_bmks;
 	GPtrArray *children;
 	char *file_uri;
-	int i, ret;
+	guint i;
+        gint ret;
 	xmlChar *safeString;
 #ifdef ENABLE_ZEROCONF
 	EphyNode *local;

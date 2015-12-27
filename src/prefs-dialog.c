@@ -605,7 +605,7 @@ setup_add_language_dialog (PrefsDialog *dialog)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 	GtkTreeIter iter;
-	int i;
+	guint i;
 	GtkBuilder *builder;
 
 	builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/prefs-lang-dialog.ui");
@@ -1004,7 +1004,7 @@ cookies_set_mapping (const GValue *value,
 static void
 search_engine_combo_add_default_engines (GtkListStore *store)
 {
-	int i;
+	guint i;
 	const char *default_engines[][3] = { /* Search engine option in the preferences dialog */
 					     { N_("DuckDuckGo"),
 					       "https://duckduckgo.com/?q=%s&t=epiphany",
@@ -1040,7 +1040,7 @@ search_engine_combo_add_default_engines (GtkListStore *store)
 static void
 search_engine_combo_add_smart_bookmarks (GtkListStore *store)
 {
-	int i;
+	guint i;
 	EphyBookmarks *bookmarks;
 	EphyNode *smart_bookmarks_parent_node;
 	GPtrArray *smart_bookmarks;

@@ -154,7 +154,7 @@ ephy_node_filter_add_expression (EphyNodeFilter *filter,
 			         EphyNodeFilterExpression *exp,
 			         int level)
 {
-	while (level >= filter->priv->levels->len)
+	while (level >= (int)filter->priv->levels->len)
 		g_ptr_array_add (filter->priv->levels, NULL);
 
 	/* FIXME bogosity! This only works because g_list_append (x, data) == x */
@@ -204,7 +204,7 @@ gboolean
 ephy_node_filter_evaluate (EphyNodeFilter *filter,
 			   EphyNode *node)
 {
-	int i;
+	guint i;
 
 	for (i = 0; i < filter->priv->levels->len; i++) {
 		GList *l, *list;
@@ -336,7 +336,7 @@ ephy_node_filter_expression_evaluate (EphyNodeFilterExpression *exp,
 	{
 		EphyNode *prop;
 		GPtrArray *children;
-		int i;
+		guint i;
 		
 		children = ephy_node_get_children (node);
 		for (i = 0; i < children->len; i++)

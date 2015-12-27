@@ -544,7 +544,7 @@ static gpointer
 ephy_embed_prefs_init (gpointer user_data)
 {
   GtkSettings *gtk_settings;
-  int i;
+  guint i;
 
   webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
                                                        "enable-fullscreen", TRUE,

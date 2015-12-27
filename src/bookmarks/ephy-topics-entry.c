@@ -132,7 +132,8 @@ update_widget (EphyTopicsEntry *entry)
 	EphyNode *node;
 	GPtrArray *children, *topics;
 	GtkTreeIter iter;
-	gint i, priority, pos;
+	guint i;
+        gint priority, pos;
 	const char *title;
 	char *tmp1, *tmp2;
 	gboolean is_focus;

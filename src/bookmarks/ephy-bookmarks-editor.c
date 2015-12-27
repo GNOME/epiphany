@@ -661,7 +661,8 @@ export_format_combo_changed_cb (GtkComboBox *combo,
 				GtkFileChooser *chooser)
 {
 	char *filename, *basename, *dot, *newname;
-	int i, format;
+	guint i;
+        gint format;
 
 	filename = gtk_file_chooser_get_filename (chooser);
 	if (filename == NULL) return;
@@ -675,7 +676,7 @@ export_format_combo_changed_cb (GtkComboBox *combo,
 	}
 
 	format = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
-	g_return_if_fail (format >= 0 && format < G_N_ELEMENTS (export_formats));
+	g_return_if_fail (format >= 0 && (guint)format < G_N_ELEMENTS (export_formats));
 
 	dot = strrchr (basename, '.');
 	if (dot != NULL)
@@ -729,7 +730,7 @@ export_dialog_response_cb (GtkWidget *dialog,
 	g_return_if_fail (combo != NULL);
 
 	format = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
-	g_return_if_fail (format >= 0 && format < G_N_ELEMENTS (export_formats));
+	g_return_if_fail (format >= 0 && (guint)format < G_N_ELEMENTS (export_formats));
 
 	gtk_widget_destroy (dialog);
 
@@ -751,7 +752,7 @@ cmd_bookmarks_export (GtkAction *action,
 		      EphyBookmarksEditor *editor)
 {
 	GtkWidget *dialog, *hbox, *label, *combo;
-	int format;
+	guint format;
 	char *filename;
 
 	dialog = GTK_WIDGET (ephy_file_chooser_new (_("Export Bookmarks"),

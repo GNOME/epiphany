@@ -617,7 +617,7 @@ static char *
 get_special_case_application_title_for_host (const char *host)
 {
 	char *title = NULL;
-	int i;
+	guint i;
 
 	for (i = 0; i < G_N_ELEMENTS (sites) && title == NULL; i++)
 	{
@@ -1256,7 +1256,7 @@ save_temp_source_write_cb (GOutputStream *ostream, GAsyncResult *result, GString
 		return;
 	}
 
-	if (written == data->len)
+	if (written == (gint)data->len)
 	{
 		g_string_free (data, TRUE);
 

@@ -744,7 +744,7 @@ static void
 init_actions_list (EphyLocationController *controller)
 {
 	GPtrArray *children;
-	int i;
+	guint i;
 
 	children = ephy_node_get_children (controller->priv->smart_bmks);
 	for (i = 0; i < children->len; i++)

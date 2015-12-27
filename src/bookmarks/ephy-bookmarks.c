@@ -110,7 +110,7 @@ G_DEFINE_TYPE (EphyBookmarks, ephy_bookmarks, G_TYPE_OBJECT)
 static void
 ephy_bookmarks_init_defaults (EphyBookmarks *eb)
 {
-	int i;
+	guint i;
 
 	for (i = 0; i < G_N_ELEMENTS (default_topics); i++)
 	{
@@ -252,7 +252,7 @@ static void
 update_bookmark_keywords (EphyBookmarks *eb, EphyNode *bookmark)
 {
 	GPtrArray *children;
-	int i;
+	guint i;
 	GString *list;
 	const char *title;
 	char *normalized_keywords, *case_normalized_keywords;
@@ -322,7 +322,7 @@ static gboolean
 bookmark_is_categorized (EphyBookmarks *eb, EphyNode *bookmark)
 {
 	GPtrArray *children;
-	int i;
+	guint i;
 
 	children = ephy_node_get_children (eb->priv->keywords);
 	for (i = 0; i < children->len; i++)
@@ -350,7 +350,7 @@ topics_removed_cb (EphyNode *node,
 		   EphyBookmarks *eb)
 {
 	GPtrArray *children;
-	int i;
+	guint i;
 
 	children = ephy_node_get_children (child);
 	for (i = 0; i < children->len; i++)
@@ -378,7 +378,7 @@ fix_hierarchy_topic (EphyBookmarks *eb,
 	EphyNode *bookmark;
 	const char *name;
 	char **split;
-	int i, j;
+	guint i, j;
 
 	children = ephy_node_get_children (topic);
 	name = ephy_node_get_property_string (topic, EPHY_NODE_KEYWORD_PROP_NAME);
@@ -463,7 +463,7 @@ static GHashTable *
 decode_txt_record (AvahiStringList *input_text)
 {
 	GHashTable *hash;
-	int i;
+	guint i;
 	int len;
 	char *key, *value, *end;
 	char *key_dup, *value_dup;
@@ -1186,7 +1186,7 @@ ephy_bookmarks_find_bookmark (EphyBookmarks *eb,
 			      const char *url)
 {
 	GPtrArray *children;
-	int i;
+	guint i;
 
 	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), NULL);
 	g_return_val_if_fail (eb->priv->bookmarks != NULL, NULL);
@@ -1241,7 +1241,7 @@ ephy_bookmarks_get_similar (EphyBookmarks *eb,
 {
 	GPtrArray *children;
 	const char *url;
-	int i, result;
+	guint i, result;
 
 	g_return_val_if_fail (EPHY_IS_BOOKMARKS (eb), -1);
 	g_return_val_if_fail (eb->priv->bookmarks != NULL, -1);
@@ -1521,7 +1521,7 @@ ephy_bookmarks_find_keyword (EphyBookmarks *eb,
 {
 	EphyNode *node;
 	GPtrArray *children;
-	int i;
+	guint i;
 	const char *topic_name;
 
 	g_return_val_if_fail (name != NULL, NULL);

@@ -39,7 +39,7 @@ ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
 {
   WebKitDOMHTMLCollection *forms;
   gulong forms_n;
-  int i;
+  guint i;
 
   forms = webkit_dom_document_get_forms (document);
   forms_n = webkit_dom_html_collection_get_length (forms);
@@ -48,7 +48,7 @@ ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
     WebKitDOMHTMLCollection *elements;
     WebKitDOMNode *form_element = webkit_dom_html_collection_item (forms, i);
     gulong elements_n;
-    int j;
+    guint j;
     gboolean modified_input_element = FALSE;
 
     elements = webkit_dom_html_form_element_get_elements (WEBKIT_DOM_HTML_FORM_ELEMENT (form_element));

@@ -153,7 +153,7 @@ parse_and_decrypt_signons (const char *signons,
 {
   int version;
   gchar **lines;
-  int i;
+  guint i;
   guint length;
 
   lines = g_strsplit (signons, "\r\n", -1);

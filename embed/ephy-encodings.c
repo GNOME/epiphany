@@ -350,7 +350,7 @@ static void
 ephy_encodings_init (EphyEncodings *encodings)
 {
   char **list;
-  int i;
+  guint i;
 
   LOG ("EphyEncodings initialising");
 

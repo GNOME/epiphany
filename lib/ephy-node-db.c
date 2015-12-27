@@ -406,7 +406,7 @@ ephy_node_db_write_to_xml_valist (EphyNodeDb *db,
 		GPtrArray *children;
 		EphyNodeFilterFunc filter;
 		gpointer user_data;
-		int i;
+		guint i;
 
 		filter = va_arg (argptr, EphyNodeFilterFunc);
 		user_data = va_arg (argptr, gpointer);

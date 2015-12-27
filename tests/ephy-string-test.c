@@ -42,7 +42,7 @@ static const HostnameTest hostname_tests[] = {
 static void
 test_ephy_string_get_hostname (void)
 {
-  int i;
+  guint i;
 
   for (i = 0; i < G_N_ELEMENTS (hostname_tests); i++) {
     char *host;

@@ -69,7 +69,7 @@ append_topics (EphyTopicsPalette *self,
 {
 	EphyNode *node;
 	const char *title;
-	gint i;
+	guint i;
 
 	if (topics->len == 0)
 	{
@@ -108,7 +108,8 @@ ephy_topics_palette_update_list (EphyTopicsPalette *self)
 	GPtrArray *children, *bookmarks, *topics;
 	EphyNode *node;
 	GtkTreeIter iter;
-	gint i, priority;
+	guint i;
+        gint priority;
 	gboolean valid, first;
 
 	valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self), &iter);

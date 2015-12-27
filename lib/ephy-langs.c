@@ -37,7 +37,7 @@ ephy_langs_sanitise (GArray *array)
 	int i, j;
 
 	/* if we have 'xy-ab' in list but not 'xy', append 'xy' */
-	for (i = 0; i < array->len; i++)
+	for (i = 0; i < (int) array->len; i++)
 	{
 		gboolean found = FALSE;
 		char *dash, *prefix;
@@ -47,7 +47,7 @@ ephy_langs_sanitise (GArray *array)
 		dash = strchr (lang1, '-');
 		if (dash == NULL) continue;
 
-		for (j = i + 1; j < array->len; j++)
+		for (j = i + 1; j < (int) array->len; j++)
 		{
 			lang2 = (char *) g_array_index (array, char *, j);
 			if (strchr (lang2, '-') == NULL &&

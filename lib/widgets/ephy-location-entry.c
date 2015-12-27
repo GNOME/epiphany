@@ -465,7 +465,7 @@ entry_key_press_after_cb (GtkEntry *entry,
 		const char *string;
 
 		string = gtk_entry_get_text (entry);
-		if (gtk_editable_get_position (GTK_EDITABLE (entry)) == strlen (string))
+		if (gtk_editable_get_position (GTK_EDITABLE (entry)) == (int)strlen (string))
 		{
 			g_signal_emit_by_name (entry, "changed", 0);
 			return TRUE;

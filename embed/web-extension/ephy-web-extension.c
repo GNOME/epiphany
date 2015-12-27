@@ -910,7 +910,7 @@ web_page_document_loaded (WebKitWebPage *web_page,
   WebKitDOMHTMLCollection *forms = NULL;
   WebKitDOMDocument *document = NULL;
   gulong forms_n;
-  int i;
+  guint i;
 
   if (!extension->form_auth_data_cache ||
       !g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_REMEMBER_PASSWORDS))

@@ -32,7 +32,7 @@ clear_bookmark_files (void)
 {
   GFile *file;
   char *path;
-  int i;
+  guint i;
 
   for (i = 0; i < G_N_ELEMENTS (bookmarks_paths); i++) {
 
