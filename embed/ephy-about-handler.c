@@ -82,7 +82,7 @@ ephy_about_handler_get_smaps (EphyAboutHandler *handler)
 static void
 ephy_about_handler_finish_request (WebKitURISchemeRequest *request,
                                    gchar *data,
-                                   gsize data_length)
+                                   gssize data_length)
 {
   GInputStream *stream;
 
