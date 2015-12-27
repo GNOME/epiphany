@@ -157,6 +157,10 @@ ephy_link_action_get_button (EphyLinkAction *action)
 	return action->priv->button;
 }
 
+G_DEFINE_TYPE_WITH_CODE (EphyLinkActionGroup, ephy_link_action_group, GTK_TYPE_ACTION_GROUP,
+			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+						NULL))
+
 static void
 ephy_link_action_group_class_init (EphyLinkActionGroupClass *klass)
 {
@@ -168,10 +172,6 @@ ephy_link_action_group_init (EphyLinkActionGroup *action_group)
 {
 	/* Empty, needed for G_DEFINE_TYPE macro */
 }
-
-G_DEFINE_TYPE_WITH_CODE (EphyLinkActionGroup, ephy_link_action_group, GTK_TYPE_ACTION_GROUP,
-			 G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
-						NULL))
 
 EphyLinkActionGroup *
 ephy_link_action_group_new (const char * name)

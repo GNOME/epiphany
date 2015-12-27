@@ -101,8 +101,6 @@ struct _EphyShellClass {
   EphyEmbedShellClass parent_class;
 };
 
-GType           ephy_new_tab_flags_get_type             (void) G_GNUC_CONST;
-
 GType           ephy_shell_get_type                     (void);
 
 EphyShell      *ephy_shell_get_default                  (void);

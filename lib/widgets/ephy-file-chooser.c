@@ -28,9 +28,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-static void ephy_file_chooser_class_init	(EphyFileChooserClass *klass);
-static void ephy_file_chooser_init		(EphyFileChooser *dialog);
-static void ephy_file_chooser_image_preview	(GtkFileChooser *file_chooser, 
+static void ephy_file_chooser_image_preview	(GtkFileChooser *file_chooser,
 				 		 gpointer user_data);
 
 #define PREVIEW_WIDTH 150

@@ -38,6 +38,7 @@
 #include "ephy-shell.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
+#include "languages.h"
 #include "passwords-dialog.h"
 
 #include <glib/gi18n.h>
@@ -45,11 +46,6 @@
 #include <string.h>
 
 #define DOWNLOAD_BUTTON_WIDTH	8
-
-static void prefs_dialog_class_init	(PrefsDialogClass *klass);
-static void prefs_dialog_init		(PrefsDialog *pd);
-
-#include "languages.h"
 
 enum
 {

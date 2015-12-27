@@ -67,10 +67,6 @@ typedef enum {
   WEBKIT_HISTORY_FORWARD
 } WebKitHistoryType;
 
-
-static void ephy_navigation_history_action_init       (EphyNavigationHistoryAction *action);
-static void ephy_navigation_history_action_class_init (EphyNavigationHistoryActionClass *klass);
-
 G_DEFINE_TYPE (EphyNavigationHistoryAction, ephy_navigation_history_action, EPHY_TYPE_LINK_ACTION)
 
 static void

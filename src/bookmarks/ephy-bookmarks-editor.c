@@ -75,8 +75,6 @@ export_formats [] =
 	{ N_("Mozilla (HTML)"), "html" }
 };
 
-static void ephy_bookmarks_editor_class_init (EphyBookmarksEditorClass *klass);
-static void ephy_bookmarks_editor_init (EphyBookmarksEditor *editor);
 static void ephy_bookmarks_editor_finalize (GObject *object);
 static void ephy_bookmarks_editor_dispose  (GObject *object);
 static void ephy_bookmarks_editor_set_property (GObject *object,

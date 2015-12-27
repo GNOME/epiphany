@@ -59,8 +59,6 @@ struct _EphyLocationControllerPrivate
 	gboolean sync_address_is_blocked;
 };
 
-static void ephy_location_controller_init	    (EphyLocationController *controller);
-static void ephy_location_controller_class_init (EphyLocationControllerClass *class);
 static void ephy_location_controller_finalize   (GObject *object);
 static void user_changed_cb		    (GtkWidget *widget,
 					     EphyLocationController *controller);

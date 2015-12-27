@@ -67,8 +67,6 @@ struct _EphyShellPrivate {
 
 static EphyShell *ephy_shell = NULL;
 
-static void ephy_shell_class_init (EphyShellClass *klass);
-static void ephy_shell_init   (EphyShell *shell);
 static void ephy_shell_dispose    (GObject *object);
 static void ephy_shell_finalize   (GObject *object);
 

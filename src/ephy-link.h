@@ -61,8 +61,6 @@ struct _EphyLinkIface
 				   EphyLinkFlags flags);
 };
 
-GType	 ephy_link_flags_get_type	(void);
-
 GType	 ephy_link_get_type		(void);
 
 EphyEmbed *ephy_link_open		(EphyLink *link,
