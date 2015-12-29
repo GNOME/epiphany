@@ -203,6 +203,7 @@ ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
   query->limit = EPHY_ABOUT_OVERVIEW_MAX_ITEMS;
   query->ignore_hidden = TRUE;
+  query->ignore_local = TRUE;
 
   ephy_history_service_query_urls (shell->priv->global_history_service, query, NULL,
                                    (EphyHistoryJobCallback) history_service_query_urls_cb,

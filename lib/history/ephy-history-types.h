@@ -95,6 +95,7 @@ typedef struct _EphyHistoryQuery
   guint limit;
   GList* substring_list;
   gboolean ignore_hidden;
+  gboolean ignore_local;
   gint host;
   EphyHistorySortType sort_type;
 } EphyHistoryQuery;

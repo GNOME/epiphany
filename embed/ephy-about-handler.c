@@ -534,6 +534,7 @@ ephy_about_handler_handle_html_overview (EphyAboutHandler *handler,
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
   query->limit = EPHY_ABOUT_OVERVIEW_MAX_ITEMS;
   query->ignore_hidden = TRUE;
+  query->ignore_local = TRUE;
   ephy_history_service_query_urls (history, query, NULL,
                                    (EphyHistoryJobCallback)history_service_query_urls_cb,
                                    g_object_ref (request));
