@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the epiphany package.
 # Christian Kirbach <Christian.Kirbach@gmail.com>, 2013.
 # Benjamin Steinwender <b@stbe.at>, 2014.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
-"POT-Creation-Date: 2015-06-20 03:44+0000\n"
-"PO-Revision-Date: 2015-06-20 08:29+0100\n"
-"Last-Translator: Benjamin Steinwender <b@stbe.at>\n"
+"POT-Creation-Date: 2015-12-25 16:53+0000\n"
+"PO-Revision-Date: 2015-12-29 23:44+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 1.8.5\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
@@ -102,8 +103,8 @@ msgstr "Ekaterina Gerasimova"
 #: C/bookmark-edit.page:19 C/bookmark-smart.page:14 C/bookmark-topic.page:14 C/browse-local.page:13
 #: C/browse-private.page:14 C/browse-webapps.page:14 C/cookies.xml:14 C/data-cookies.page:13
 #: C/data-passwords.page:16 C/data-passwords.page:21 C/history.page:14 C/history-delete.page:13
-#: C/pref-cookies.page:15 C/pref-css.page:14 C/pref-css.page:19 C/pref-downloads.page:15
-#: C/pref-font.page:15 C/pref-font.page:20 C/pref-passwords.page:15
+#: C/pref-cookies.page:15 C/pref-css.page:14 C/pref-css.page:19 C/pref-downloads.page:15 C/pref-font.page:15
+#: C/pref-font.page:20 C/pref-passwords.page:15
 msgid "2013"
 msgstr "2013"
 
@@ -266,7 +267,7 @@ msgid "To delete a bookmark:"
 msgstr "So löschen Sie ein Lesezeichen:"
 
 #. (itstool) path: item/p
-#: C/bookmark-delete.page:34
+#: C/bookmark-delete.page:34 C/bookmark-edit.page:35
 msgid ""
 "Select <guiseq><gui style=\"menu\">Web</gui> <gui style=\"menuitem\">Bookmarks</gui></guiseq> to open the "
 "<gui>Bookmarks</gui> window."
@@ -312,15 +313,6 @@ msgstr "Sie können bestehende Lesezeichen aktualisieren, indem Sie die Eigensch
 #: C/bookmark-edit.page:33
 msgid "To edit a bookmark:"
 msgstr "So bearbeiten Sie ein Lesezeichen:"
-
-#. (itstool) path: item/p
-#: C/bookmark-edit.page:35
-msgid ""
-"Select <guiseq><gui style=\"menu\">Web</gui><gui style=\"menuitem\">Bookmarks</gui></guiseq> to open the "
-"<gui>Bookmarks</gui> window."
-msgstr ""
-"Wählen Sie <guiseq><gui style=\"menu\">Internet</gui> <gui style=\"menuitem\">Lesezeichen</gui></guiseq>, "
-"um das Fenster mit den <gui>Lesezeichen</gui> zu öffnen."
 
 #. (itstool) path: item/p
 #: C/bookmark-edit.page:44
@@ -412,9 +404,9 @@ msgstr ""
 #: C/bookmark-smart.page:57
 msgid ""
 "Apart from search engines, you can also use smart bookmarks for other queries, such as searching an "
-"online show for a product."
+"online shop for a product."
 msgstr ""
-"Neben Suchmaschinen könne intelligente Lesezeichen für andere Anfragen wie die Suche in einem Online-"
+"Neben Suchmaschinen können intelligente Lesezeichen für andere Anfragen wie die Suche in einem Online-"
 "Katalog genutzt werden."
 
 #. (itstool) path: info/desc
@@ -676,13 +668,13 @@ msgstr "Eine Internet-Anwendung erstellen"
 #: C/browse-webapps.page:29
 msgid ""
 "You can save webpages as a <em>Web Application</em>. This will add a link to the page to the <link href="
-"\"help:gnome-help/shell-terminology\">Activities overview</link>. When you open a Web Application, it is "
-"shown in a special type of window without the address bar or the menus."
+"\"help:gnome-help/shell-introduction#activities\">Activities overview</link>. When you open a Web "
+"Application, it is shown in a special type of window without the address bar or the menus."
 msgstr ""
 "Sie können Internetseiten als <em>Internet-Anwendung</em> speichern. Damit wird ein Verweis auf die Seite "
-"in der <link href=\"help:gnome-help/shell-terminology\">Aktivitäten-Übersicht</link> angelegt. Wenn Sie "
-"eine <em>Internet-Anwendung</em> öffnen, wird diese in einem speziellen Fenster ohne Adresszeile und "
-"Menüs dargestellt."
+"in der <link href=\"help:gnome-help/shell-introduction#activities\">Aktivitäten-Übersicht</link> "
+"angelegt. Wenn Sie eine <em>Internet-Anwendung</em> öffnen, wird diese in einem speziellen Fenster ohne "
+"Adresszeile und Menüs dargestellt."
 
 #. (itstool) path: item/p
 #: C/browse-webapps.page:36
@@ -1475,7 +1467,7 @@ msgstr "<keyseq><key>Strg</key><key>S</key></keyseq>"
 
 #. (itstool) path: td/p
 #: C/keyboard-shortcut.page:351
-msgid "Go to back to the previous page"
+msgid "Go back to the previous page"
 msgstr "Zur vorherigen Seite wechseln"
 
 #. (itstool) path: td/p
@@ -1544,16 +1536,16 @@ msgstr ""
 #. (itstool) path: page/p
 #: C/pref-cookies.page:52
 msgid ""
-"If you chose to accept cookies from <gui>All websites</gui>, then websites that you have not visited will "
-"be able to leave <em>third party cookies</em>. Third party cookies are often used by advertisers and "
-"social media websites to track your activity across websites and offer targeted content. Note that some "
-"websites, such as Outlook.com, use third party cookies to monitor whether you are logged in."
+"If you choose to <gui>Always accept</gui> cookies, then websites that you have not visited will be able "
+"to leave <em>third party cookies</em>. Third party cookies are often used by advertisers and social media "
+"websites to track your activity across websites and offer targeted content. Note that some websites, such "
+"as Outlook.com, use third party cookies to monitor whether you are logged in."
 msgstr ""
-"Wenn Sie Cookies <gui>immer akzeptieren</gui> wählen, dann dürfen Internet-Seiten, die Sie noch nicht "
-"besucht haben, <em>Cookies von Dritten</em> hinterlassen. Cookies von Dritten werden oft von "
-"Werbeanbietern und sozialen Medien-Seiten zum Verfolgen Ihrer Aktivitäten eingesetzt und bieten "
-"zugeschnittene Inhalte. Bedenken Sie, dass einige Internet-Seiten wie z.B. outlook.com Cookies von "
-"Dritten einsetzen, um zu überwachen, ob Sie angemeldet sind."
+"Wenn Sie Cookies <gui>immer akzeptieren</gui>, dann dürfen Internet-Seiten, die Sie noch nicht besucht "
+"haben, <em>Cookies von Dritten</em> hinterlassen. Cookies von Dritten werden oft von Werbeanbietern und "
+"sozialen Medien-Seiten zum Verfolgen Ihrer Aktivitäten eingesetzt und bieten auf Sie zugeschnittene "
+"Inhalte an. Bedenken Sie, dass einige Internet-Seiten wie z.B. outlook.com Cookies von Dritten einsetzen, "
+"um zu überwachen, ob Sie angemeldet sind."
 
 #. (itstool) path: page/p
 #: C/pref-cookies.page:59
@@ -1583,17 +1575,18 @@ msgstr "Benutzerdefiniertes CSS"
 #. (itstool) path: page/p
 #: C/pref-css.page:29
 msgid ""
-"Epiphany allows you to set a custom CSS to change the look and feel of every web page that you visit. You "
-"may want to do this to set a preferred font size or color scheme."
+"<app>Web</app> allows you to set a custom CSS to change the look and feel of every web page that you "
+"visit. You may want to do this to set a preferred font size or color scheme."
 msgstr ""
-"Epiphany ermöglicht es Ihnen, dass ein eigenes CSS das Aussehen einer jeden Internet-Seite ändert, die "
-"Sie aufrufen. So können Sie eine bevorzugte Schriftgröße oder ein bevorzugtes Farbschema festlegen."
+"Der <app>Internet-Browser</app> ermöglicht es Ihnen, dass ein eigenes CSS das Aussehen einer jeden "
+"Internet-Seite ändert, die Sie aufrufen. So können Sie eine bevorzugte Schriftgröße oder ein bevorzugtes "
+"Farbschema festlegen."
 
 #. (itstool) path: item/p
 #: C/pref-css.page:35 C/pref-font.page:37
 msgid ""
 "Open <guiseq><gui style=\"menu\">Web</gui><gui style=\"menuitem\">Preferences</gui><gui style=\"tab"
-"\">Fonts &amp; Styles</gui></guiseq>."
+"\">Fonts &amp; Style</gui></guiseq>."
 msgstr ""
 "Öffnen Sie <guiseq><gui style=\"menu\">Internet</gui><gui style=\"menuitem\">Einstellungen</gui><gui "
 "style=\"tab\">Schriften und Stile</gui></guiseq>."
@@ -1745,7 +1738,7 @@ msgstr "Schriftart wechseln"
 #: C/pref-font.page:30
 msgid ""
 "By default, your system font will be used to display web pages whenever possible. If you use the <gui "
-"href=\"help:gnome-help/a11y-font-size\">Large Font</gui> accessibility setting, this will be taken into "
+"href=\"help:gnome-help/a11y-font-size\">Large Text</gui> accessibility setting, this will be taken into "
 "account. You can change this and use different fonts for viewing websites."
 msgstr ""
 "Per Voreinstellung wird wann immer möglich die Systemschrift verwendet, um Internet-Seiten anzuzeigen. "
@@ -1884,11 +1877,17 @@ msgstr "Proxy verwenden"
 #: C/proxy.page:24
 msgid ""
 "You can use a proxy server for browsing the web. To use a web proxy when browsing, you need to <link href="
-"\"help:gnome-help#net-proxy\">set it up in the GNOME <gui>Network</gui> settings panel</link>."
+"\"help:gnome-help/net-proxy\">set it up in the GNOME <gui>Network</gui> settings panel</link>."
 msgstr ""
-"Sie können einen Proxy-Server für Ihre Internetnutzung verwenden. Um einen Internet-Proxy zu verwenden, "
-"müssen Sie ihn <link href=\"help:gnome-help#net-proxy\">in den GNOME <gui>Netzwerk</gui>-Einstellungen "
-"einrichten</link>."
+"Sie können einen Proxy-Server für Ihre Internetnutzung verwenden. Dafür müssen Sie ihn <link href=\"help:"
+"gnome-help/net-proxy\">in den GNOME <gui>Netzwerk</gui>-Einstellungen einrichten</link>."
+
+#~ msgid ""
+#~ "Select <guiseq><gui style=\"menu\">Web</gui><gui style=\"menuitem\">Bookmarks</gui></guiseq> to open "
+#~ "the <gui>Bookmarks</gui> window."
+#~ msgstr ""
+#~ "Wählen Sie <guiseq><gui style=\"menu\">Internet</gui> <gui style=\"menuitem\">Lesezeichen</gui></"
+#~ "guiseq>, um das Fenster mit den <gui>Lesezeichen</gui> zu öffnen."
 
 #~ msgid ""
 #~ "Multiple keyboard shortcuts can be used to complete tasks when browsing the web. They are listed below:"
