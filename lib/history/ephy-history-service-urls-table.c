@@ -266,6 +266,9 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
   if (query->ignore_hidden)
     statement_str = g_string_append (statement_str, "urls.hidden_from_overview = 0 AND ");
 
+  if (query->ignore_local)
+    statement_str = g_string_append (statement_str, "urls.url LIKE 'http%' AND ");
+
   if (query->host > 0)
     statement_str = g_string_append (statement_str, "urls.host = ? AND ");
 

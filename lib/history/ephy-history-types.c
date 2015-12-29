@@ -213,6 +213,7 @@ ephy_history_query_copy (EphyHistoryQuery *query)
   copy->limit = query->limit;
   copy->sort_type = query->sort_type;
   copy->ignore_hidden = query->ignore_hidden;
+  copy->ignore_local = query->ignore_local;
   copy->host = query->host;
 
   for (iter = query->substring_list; iter != NULL; iter = iter->next) {
