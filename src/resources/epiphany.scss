@@ -72,7 +72,7 @@ $edge_color: lighten($incognito_color, 13%);
       &:active, &:checked, &#ephy-page-menu-button.active-menu {
         @include button(active, $incognito_color, $edge:$edge_color); }
       &:disabled {
-        @include button(disabled, $incognito_color, $edge:$edge_color); }
+        @include button(insensitive, $incognito_color, $edge:$edge_color); }
       &:backdrop {
         @include button(backdrop, $incognito_color, $edge:$edge_color);
         border-color: _border_color($incognito_color);
