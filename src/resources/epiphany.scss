@@ -71,8 +71,8 @@ $edge_color: lighten($incognito_color, 13%);
       &:hover { @include button(hover, $incognito_color, $edge:$edge_color); }
       &:active, &:checked, &#ephy-page-menu-button.active-menu {
         @include button(active, $incognito_color, $edge:$edge_color); }
-      &:insensitive {
-        @include button(insensitive, $incognito_color, $edge:$edge_color); }
+      &:disabled {
+        @include button(disabled, $incognito_color, $edge:$edge_color); }
       &:backdrop {
         @include button(backdrop, $incognito_color, $edge:$edge_color);
         border-color: _border_color($incognito_color);
@@ -81,8 +81,8 @@ $edge_color: lighten($incognito_color, 13%);
                           $edge:$edge_color);
           border-color: _border_color($incognito_color);
         }
-        &:insensitive {
-          @include button(backdrop-insensitive, $incognito_color,
+        &:disabled {
+          @include button(backdrop-disabled, $incognito_color,
                           $edge:$edge_color);
           border-color: _border_color($incognito_color);
         }

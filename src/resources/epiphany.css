@@ -80,15 +80,6 @@ button.active-menu {
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(241, 243, 245, 0); }
-    .incognito-mode.titlebar button:insensitive {
-      color: #8b8e8e;
-      border-color: #8192a3;
-      background-image: linear-gradient(to bottom, #d2d8de);
-      text-shadow: none;
-      -gtk-icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0); }
-      .incognito-mode.titlebar button:insensitive > .label {
-        color: inherit; }
     .incognito-mode.titlebar button:backdrop {
       color: #8b8e8e;
       border-color: #cbd2d9;
@@ -103,16 +94,8 @@ button.active-menu {
         background-image: linear-gradient(to bottom, #aeb8c3);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0);
         border-color: #8192a3; }
-      .incognito-mode.titlebar button:backdrop:insensitive {
-        color: #989ea3;
-        border-color: #d2d8de;
-        background-image: linear-gradient(to bottom, #d2d8de);
-        text-shadow: none;
-        -gtk-icon-shadow: none;
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0);
+      .incognito-mode.titlebar button:backdrop:disabled {
         border-color: #8192a3; }
-        .incognito-mode.titlebar button:backdrop:insensitive > .label {
-          color: inherit; }
     .incognito-mode.titlebar button.flat:backdrop, .incognito-mode.titlebar button.titlebutton:backdrop {
       border-color: transparent;
       background-color: transparent;
