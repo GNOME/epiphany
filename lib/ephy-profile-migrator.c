@@ -1075,6 +1075,11 @@ main (int argc, char *argv[])
   GError *error = NULL;
   EphyFileHelpersFlags file_helpers_flags = EPHY_FILE_HELPERS_NONE;
 
+  setlocale (LC_ALL, "");
+  bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
+
   option_group = g_option_group_new ("ephy-profile-migrator",
                                      N_("Web profile migrator"),
                                      N_("Web profile migrator options"),
