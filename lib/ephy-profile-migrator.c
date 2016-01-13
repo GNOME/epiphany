@@ -47,6 +47,7 @@
 #include <glib/gstdio.h>
 #include <libsecret/secret.h>
 #include <libsoup/soup.h>
+#include <locale.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
