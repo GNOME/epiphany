@@ -93,7 +93,7 @@ AC_MSG_RESULT([$enable_tests])
 
 AM_CONDITIONAL([ENABLE_TESTS],[test "$enable_tests" = "yes"])
 
-LIBGD_INIT([_view-common])
+LIBGD_INIT([_view-common static])
 
 PKG_CHECK_MODULES([DEPENDENCIES], [
 		  glib-2.0 >= $GLIB_REQUIRED
