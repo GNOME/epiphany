@@ -860,6 +860,7 @@ ephy_session_save (EphySession *session,
 	EphyShell *shell;
 	SaveData *data;
 	GTask *task;
+	EphyPrefsRestoreSessionPolicy policy;
 
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
@@ -873,6 +874,12 @@ ephy_session_save (EphySession *session,
 	}
 
 	if (priv->dont_save)
+	{
+		return;
+	}
+
+	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
+	if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
 	{
 		return;
 	}
