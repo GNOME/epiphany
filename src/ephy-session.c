@@ -382,6 +382,15 @@ notebook_page_reordered_cb (GtkWidget *notebook,
 }
 
 static void
+notebook_switch_page_cb (GtkNotebook *notebook,
+			 GtkWidget   *page,
+			 guint        page_num,
+			 EphySession *session)
+{
+	ephy_session_save (session);
+}
+
+static void
 session_maybe_open_window (EphySession *session,
 			   guint32 user_time)
 {
@@ -426,6 +435,8 @@ window_added_cb (GtkApplication *application,
 			  G_CALLBACK (notebook_page_removed_cb), session);
 	g_signal_connect (notebook, "page-reordered",
 			  G_CALLBACK (notebook_page_reordered_cb), session);
+	g_signal_connect_after (notebook, "switch-page",
+				G_CALLBACK (notebook_switch_page_cb), session);
 
 	/* Set unique identifier as role, so that on restore, the WM can
 	 * place the window on the right workspace
