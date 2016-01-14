@@ -41,7 +41,8 @@ void             ephy_embed_remove_top_widget        (EphyEmbed  *embed,
 void             ephy_embed_entering_fullscreen      (EphyEmbed *embed);
 void             ephy_embed_leaving_fullscreen       (EphyEmbed *embed);
 void             ephy_embed_set_delayed_load_request (EphyEmbed *embed,
-                                                      WebKitURIRequest     *request);
+                                                      WebKitURIRequest          *request,
+                                                      WebKitWebViewSessionState *state);
 gboolean         ephy_embed_has_load_pending         (EphyEmbed *embed);
 const char      *ephy_embed_get_title                (EphyEmbed *embed);
 

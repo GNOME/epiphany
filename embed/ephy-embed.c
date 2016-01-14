@@ -66,6 +66,7 @@ struct _EphyEmbed {
 
   char *title;
   WebKitURIRequest *delayed_request;
+  WebKitWebViewSessionState *delayed_state;
   guint delayed_request_source_id;
 
   GSList *messages;
@@ -378,6 +379,7 @@ ephy_embed_dispose (GObject *object)
   }
 
   g_clear_object (&embed->delayed_request);
+  g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
 
   G_OBJECT_CLASS (ephy_embed_parent_class)->dispose (object);
 }
@@ -633,6 +635,7 @@ load_delayed_request_if_mapped (gpointer user_data)
 {
   EphyEmbed *embed = EPHY_EMBED (user_data);
   EphyWebView *web_view;
+  WebKitBackForwardListItem *item;
 
   embed->delayed_request_source_id = 0;
 
@@ -640,8 +643,17 @@ load_delayed_request_if_mapped (gpointer user_data)
     return G_SOURCE_REMOVE;
 
   web_view = ephy_embed_get_web_view (embed);
-  ephy_web_view_load_request (web_view, embed->delayed_request);
+  if (embed->delayed_state)
+    webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (web_view), embed->delayed_state);
+
+  item = webkit_back_forward_list_get_current_item (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)));
+  if (item)
+    webkit_web_view_go_to_back_forward_list_item (WEBKIT_WEB_VIEW (web_view), item);
+  else
+    ephy_web_view_load_request (web_view, embed->delayed_request);
+
   g_clear_object (&embed->delayed_request);
+  g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
 
   /* This is to allow UI elements watching load status to show that the page is
    * loading as soon as possible.
@@ -873,20 +885,23 @@ ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget)
  * ephy_embed_set_delayed_load_request:
  * @embed: a #EphyEmbed
  * @request: a #WebKitNetworkRequest
+ * @state: (nullable): a #WebKitWebViewSessionState
  *
  * Sets the #WebKitNetworkRequest that should be loaded when the tab this embed
  * is on is switched to.
  */
 void
-ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitURIRequest *request)
+ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitURIRequest *request, WebKitWebViewSessionState *state)
 {
   g_return_if_fail (EPHY_IS_EMBED (embed));
   g_return_if_fail (WEBKIT_IS_URI_REQUEST (request));
 
+  g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
   g_clear_object (&embed->delayed_request);
 
-  g_object_ref (request);
-  embed->delayed_request = request;
+  embed->delayed_request = g_object_ref (request);
+  if (state)
+    embed->delayed_state = webkit_web_view_session_state_ref (state);
 }
 
 /**

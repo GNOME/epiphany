@@ -557,9 +557,8 @@ ephy_session_close (EphySession *session)
 		 */
 		g_source_remove (priv->save_source_id);
 		priv->save_source_id = 0;
-		ephy_session_save_idle_cb (session);
 	}
-
+	ephy_session_save_idle_cb (session);
 	session->priv->dont_save = TRUE;
 }
 
@@ -575,6 +574,7 @@ typedef struct {
 	char *url;
 	char *title;
 	gboolean loading;
+	WebKitWebViewSessionState *state;
 } SessionTab;
 
 static SessionTab *
@@ -599,6 +599,7 @@ session_tab_new (EphyEmbed *embed)
 
 	session_tab->title = g_strdup (ephy_embed_get_title (embed));
 	session_tab->loading = ephy_web_view_is_loading (web_view) && !ephy_embed_has_load_pending (embed);
+	session_tab->state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
 
 	return session_tab;
 }
@@ -608,6 +609,7 @@ session_tab_free (SessionTab *tab)
 {
 	g_free (tab->url);
 	g_free (tab->title);
+	g_clear_pointer (&tab->state, webkit_web_view_session_state_unref);
 
 	g_slice_free (SessionTab, tab);
 }
@@ -728,6 +730,27 @@ write_tab (xmlTextWriterPtr writer,
 						   (const xmlChar *) "loading",
 						   (const xmlChar *) "true");
 		if (ret < 0) return ret;
+	}
+
+	if (tab->state)
+	{
+		GBytes *bytes;
+
+		bytes = webkit_web_view_session_state_serialize (tab->state);
+		if (bytes)
+		{
+			gchar *base64;
+			gconstpointer data;
+			gsize data_length;
+
+			data = g_bytes_get_data (bytes, &data_length);
+			base64 = g_base64_encode (data, data_length);
+			ret = xmlTextWriterWriteAttribute (writer,
+							   (const xmlChar *) "history",
+							   (const xmlChar *) base64);
+			g_free (base64);
+			g_bytes_unref (bytes);
+		}
 	}
 
 	ret = xmlTextWriterEndElement (writer); /* embed */
@@ -880,6 +903,20 @@ out:
 	STOP_PROFILER ("Saving session")
 }
 
+static EphySession *
+ephy_session_save_idle_started (EphySession *session)
+{
+	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+	return g_object_ref (session);
+}
+
+static void
+ephy_session_save_idle_finished (EphySession *session)
+{
+	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
+	g_object_unref (session);
+}
+
 static gboolean
 ephy_session_save_idle_cb (EphySession *session)
 {
@@ -901,7 +938,6 @@ ephy_session_save_idle_cb (EphySession *session)
 	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
 	if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
 	{
-		g_application_release (G_APPLICATION (shell));
 		return G_SOURCE_REMOVE;
 	}
 
@@ -910,10 +946,10 @@ ephy_session_save_idle_cb (EphySession *session)
 	if (ephy_shell_get_n_windows (shell) == 0)
 	{
 		session_delete (session);
-		g_application_release (G_APPLICATION (shell));
 		return G_SOURCE_REMOVE;
 	}
 
+	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
 	priv->save_cancellable = g_cancellable_new ();
 	data = save_data_new (session);
 	task = g_task_new (session, priv->save_cancellable,
@@ -944,10 +980,10 @@ ephy_session_save (EphySession *session)
 		return;
 	}
 
-	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
 	priv->save_source_id = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE, 1,
 							   (GSourceFunc)ephy_session_save_idle_cb,
-							   g_object_ref (session), g_object_unref);
+							   ephy_session_save_idle_started (session),
+							   (GDestroyNotify)ephy_session_save_idle_finished);
 }
 
 static void
@@ -1069,6 +1105,7 @@ session_parse_embed (SessionParserContext *context,
 {
 	const char *url = NULL;
 	const char *title = NULL;
+	const char *history = NULL;
 	gboolean was_loading = FALSE;
 	gboolean is_blank_page = FALSE;
 	guint i;
@@ -1089,6 +1126,10 @@ session_parse_embed (SessionParserContext *context,
 		{
 			was_loading = strcmp (values[i], "true") == 0;
 		}
+		else if (strcmp (names[i], "history") == 0)
+		{
+			history = values[i];
+		}
 	}
 
 	/* In the case that crash happens before we receive the URL from the server,
@@ -1102,6 +1143,7 @@ session_parse_embed (SessionParserContext *context,
 		EphyEmbed *embed;
 		EphyWebView *web_view;
 		gboolean delay_loading;
+		WebKitWebViewSessionState* state = NULL;
 
 		delay_loading = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 							EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS);
@@ -1114,17 +1156,50 @@ session_parse_embed (SessionParserContext *context,
 						 0);
 
 		web_view = ephy_embed_get_web_view (embed);
+		if (history) {
+			guchar *data;
+			gsize data_length;
+			GBytes *history_data;
+
+			data = g_base64_decode (history, &data_length);
+			history_data = g_bytes_new_take (data, data_length);
+			state = webkit_web_view_session_state_new (history_data);
+			g_bytes_unref (history_data);
+		}
+
 		if (delay_loading)
 		{
 			WebKitURIRequest *request = webkit_uri_request_new (url);
 
-			ephy_embed_set_delayed_load_request (embed, request);
+			ephy_embed_set_delayed_load_request (embed, request, state);
 			ephy_web_view_set_placeholder (web_view, url, title);
 			g_object_unref (request);
 		}
 		else
 		{
-			ephy_web_view_load_url (web_view, url);
+			WebKitBackForwardList *bf_list;
+			WebKitBackForwardListItem *item;
+
+			if (state)
+			{
+				webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (web_view), state);
+			}
+
+			bf_list = webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view));
+			item = webkit_back_forward_list_get_current_item (bf_list);
+			if (item)
+			{
+				webkit_web_view_go_to_back_forward_list_item (WEBKIT_WEB_VIEW (web_view), item);
+			}
+			else
+			{
+				ephy_web_view_load_url (web_view, url);
+			}
+		}
+
+		if (state)
+		{
+			webkit_web_view_session_state_unref (state);
 		}
 	}
 	else if (was_loading && url != NULL)
