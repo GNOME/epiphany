@@ -288,7 +288,7 @@ open_uris_after_loading_session (const char** uris, int final_num_windows)
     /* Causing a session load here should not create new windows, since we
      * already have some.
      */
-    ephy_session_save (session, "type:session_state");
+    ephy_session_save (session);
 
     ephy_session_resume (session, user_time, NULL, NULL, NULL);
 

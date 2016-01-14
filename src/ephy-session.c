@@ -104,13 +104,11 @@ get_session_file (const char *filename)
 }
 
 static void
-session_delete (EphySession *session,
-		const char *filename)
+session_delete (EphySession *session)
 {
 	GFile *file;
 
-	file = get_session_file (filename);
-
+	file = get_session_file (SESSION_STATE);
 	g_file_delete (file, NULL, NULL);
 	g_object_unref (file);
 }
@@ -121,7 +119,7 @@ load_changed_cb (WebKitWebView *view,
 		 EphySession *session)
 {
 	if (!ephy_web_view_load_failed (EPHY_WEB_VIEW (view)))
-		ephy_session_save (session, SESSION_STATE);
+		ephy_session_save (session);
 }
 
 static gpointer *
@@ -362,7 +360,7 @@ notebook_page_removed_cb (GtkWidget *notebook,
 			  guint position,
 			  EphySession *session)
 {
-	ephy_session_save (session, SESSION_STATE);
+	ephy_session_save (session);
 
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (load_changed_cb),
@@ -377,7 +375,7 @@ notebook_page_reordered_cb (GtkWidget *notebook,
 			    guint position,
 			    EphySession *session)
 {
-	ephy_session_save (session, SESSION_STATE);
+	ephy_session_save (session);
 }
 
 static void
@@ -411,7 +409,7 @@ window_added_cb (GtkApplication *application,
 	GtkWidget *notebook;
 	EphyWindow *ephy_window;
 
-	ephy_session_save (session, SESSION_STATE);
+	ephy_session_save (session);
 
 	if (!EPHY_IS_WINDOW (window))
 		return;
@@ -448,7 +446,7 @@ window_removed_cb (GtkApplication *application,
 		   GtkWindow *window,
 		   EphySession *session)
 {
-	ephy_session_save (session, SESSION_STATE);
+	ephy_session_save (session);
 
 	/* NOTE: since the window will be destroyed anyway, we don't need to
 	 * disconnect our signal handlers from its components.
@@ -640,14 +638,12 @@ session_window_free (SessionWindow *session_window)
 
 typedef struct {
 	EphySession *session;
-	GFile *save_file;
 
 	GList *windows;
 } SaveData;
 
 static SaveData *
-save_data_new (EphySession *session,
-	       const char *filename)
+save_data_new (EphySession *session)
 {
 	SaveData *data;
 	EphyShell *shell = ephy_shell_get_default ();
@@ -655,7 +651,6 @@ save_data_new (EphySession *session,
 
 	data = g_slice_new0 (SaveData);
 	data->session = g_object_ref (session);
-	data->save_file = get_session_file (filename);
 
 	windows = gtk_application_get_windows (GTK_APPLICATION (shell));
 	for (w = windows; w != NULL ; w = w->next)
@@ -676,7 +671,6 @@ save_data_free (SaveData *data)
 {
 	g_list_free_full (data->windows, (GDestroyNotify)session_window_free);
 
-	g_object_unref (data->save_file);
 	g_object_unref (data->session);
 
 	g_slice_free (SaveData, data);
@@ -830,8 +824,11 @@ out:
 	if (ret >= 0 && !g_cancellable_is_cancelled (cancellable))
 	{
 		GError *error = NULL;
+		GFile *session_file;
 
-		if (!g_file_replace_contents (data->save_file,
+		session_file = get_session_file (SESSION_STATE);
+
+		if (!g_file_replace_contents (session_file,
 					      (const char *)buffer->content,
 					      buffer->use,
 					      NULL, TRUE, 0, NULL,
@@ -843,6 +840,8 @@ out:
 			}
 			g_error_free (error);
 		}
+
+		g_object_unref (session_file);
 	}
 
 	xmlBufferFree (buffer);
@@ -853,8 +852,7 @@ out:
 }
 
 void
-ephy_session_save (EphySession *session,
-		   const char *filename)
+ephy_session_save (EphySession *session)
 {
 	EphySessionPrivate *priv;
 	EphyShell *shell;
@@ -884,18 +882,18 @@ ephy_session_save (EphySession *session,
 		return;
 	}
 
-	LOG ("ephy_sesion_save %s", filename);
+	LOG ("ephy_sesion_save");
 
 	shell = ephy_shell_get_default ();
 
 	if (ephy_shell_get_n_windows (shell) == 0)
 	{
-		session_delete (session, filename);
+		session_delete (session);
 		return;
 	}
 
 	priv->save_cancellable = g_cancellable_new ();
-	data = save_data_new (session, filename);
+	data = save_data_new (session);
 	g_application_hold (G_APPLICATION (shell));
 
 	task = g_task_new (session, priv->save_cancellable,
@@ -1195,7 +1193,7 @@ load_stream_complete (GTask *task)
 	session = EPHY_SESSION (g_task_get_source_object (task));
 	session->priv->dont_save = FALSE;
 
-	ephy_session_save (session, SESSION_STATE);
+	ephy_session_save (session);
 
 	g_object_unref (task);
 
@@ -1217,7 +1215,7 @@ load_stream_complete_error (GTask *task,
 	/* If the session fails to load for whatever reason,
 	 * delete the file and open an empty window.
 	 */
-	session_delete (session, SESSION_STATE);
+	session_delete (session);
 
 	data = g_task_get_task_data (task);
 	context = (SessionParserContext *)g_markup_parse_context_get_user_data (data->parser);
@@ -1558,7 +1556,7 @@ ephy_session_resume (EphySession *session,
 		 * restore the session, clobber the session state
 		 * file. */
 		if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
-			session_delete (session, SESSION_STATE);
+			session_delete (session);
 
 		session_maybe_open_window (session, user_time);
 	}
@@ -1601,5 +1599,5 @@ ephy_session_clear (EphySession *session)
 			 (GFunc)closed_tab_free, NULL);
 	g_queue_clear (session->priv->closed_tabs);
 
-	ephy_session_save (session, SESSION_STATE);
+	ephy_session_save (session);
 }

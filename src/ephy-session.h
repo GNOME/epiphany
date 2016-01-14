@@ -61,8 +61,7 @@ struct _EphySessionClass
 
 GType            ephy_session_get_type                (void);
 
-void 	         ephy_session_save		      (EphySession *session,
-                                                       const char *filename);
+void 	         ephy_session_save		      (EphySession *session);
 void             ephy_session_load                    (EphySession *session,
                                                        const char *filename,
                                                        guint32 user_time,
