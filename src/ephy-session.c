@@ -531,18 +531,9 @@ ephy_session_class_init (EphySessionClass *class)
 void
 ephy_session_close (EphySession *session)
 {
-	EphyPrefsRestoreSessionPolicy policy;
-
 	LOG ("ephy_session_close");
 
-	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN,
-				      EPHY_PREFS_RESTORE_SESSION_POLICY);
-	if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_ALWAYS)
-	{
-		EphySessionPrivate *priv = session->priv;
-
-		priv->dont_save = TRUE;
-	}
+	session->priv->dont_save = TRUE;
 }
 
 static void
