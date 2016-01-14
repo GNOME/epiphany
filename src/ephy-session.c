@@ -55,6 +55,7 @@ typedef struct
 struct _EphySessionPrivate
 {
 	GQueue *closed_tabs;
+	guint save_source_id;
 	GCancellable *save_cancellable;
 	guint dont_save : 1;
 };
@@ -70,6 +71,8 @@ enum
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
+
+static gboolean ephy_session_save_idle_cb (EphySession *session);
 
 G_DEFINE_TYPE (EphySession, ephy_session, G_TYPE_OBJECT)
 
@@ -529,7 +532,22 @@ ephy_session_class_init (EphySessionClass *class)
 void
 ephy_session_close (EphySession *session)
 {
+	EphySessionPrivate *priv;
+
+	g_return_if_fail (EPHY_IS_SESSION (session));
+
 	LOG ("ephy_session_close");
+
+	priv = session->priv;
+	if (priv->save_source_id)
+	{
+		/* There's a save pending, cancel it and save the session now since
+		 * after closing the session the saving is no longer allowed.
+		 */
+		g_source_remove (priv->save_source_id);
+		priv->save_source_id = 0;
+		ephy_session_save_idle_cb (session);
+	}
 
 	session->priv->dont_save = TRUE;
 }
@@ -767,9 +785,9 @@ write_ephy_window (xmlTextWriterPtr writer,
 }
 
 static void
-save_session_in_thread_cb (GObject *source_object,
-			   GAsyncResult *res,
-			   gpointer user_data)
+save_session_in_thread_finished_cb (GObject *source_object,
+				    GAsyncResult *res,
+				    gpointer user_data)
 {
 	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
 }
@@ -851,18 +869,16 @@ out:
 	STOP_PROFILER ("Saving session")
 }
 
-void
-ephy_session_save (EphySession *session)
+static gboolean
+ephy_session_save_idle_cb (EphySession *session)
 {
-	EphySessionPrivate *priv;
-	EphyShell *shell;
+	EphySessionPrivate *priv = session->priv;
+	EphyShell *shell = ephy_shell_get_default ();
 	SaveData *data;
 	GTask *task;
 	EphyPrefsRestoreSessionPolicy policy;
 
-	g_return_if_fail (EPHY_IS_SESSION (session));
-
-	priv = session->priv;
+	priv->save_source_id = 0;
 
 	if (priv->save_cancellable)
 	{
@@ -871,36 +887,56 @@ ephy_session_save (EphySession *session)
 		priv->save_cancellable = NULL;
 	}
 
+	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
+	if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
+	{
+		g_application_release (G_APPLICATION (shell));
+		return G_SOURCE_REMOVE;
+	}
+
+	LOG ("ephy_sesion_save");
+
+	if (ephy_shell_get_n_windows (shell) == 0)
+	{
+		session_delete (session);
+		g_application_release (G_APPLICATION (shell));
+		return G_SOURCE_REMOVE;
+	}
+
+	priv->save_cancellable = g_cancellable_new ();
+	data = save_data_new (session);
+	task = g_task_new (session, priv->save_cancellable,
+			   save_session_in_thread_finished_cb, NULL);
+	g_task_set_task_data (task, data, (GDestroyNotify)save_data_free);
+	g_task_run_in_thread (task, save_session_sync);
+	g_object_unref (task);
+
+	return G_SOURCE_REMOVE;
+}
+
+void
+ephy_session_save (EphySession *session)
+{
+	EphySessionPrivate *priv;
+
+	g_return_if_fail (EPHY_IS_SESSION (session));
+
+	priv = session->priv;
+
+	if (priv->save_source_id)
+	{
+		return;
+	}
+
 	if (priv->dont_save)
 	{
 		return;
 	}
 
-	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
-	if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
-	{
-		return;
-	}
-
-	LOG ("ephy_sesion_save");
-
-	shell = ephy_shell_get_default ();
-
-	if (ephy_shell_get_n_windows (shell) == 0)
-	{
-		session_delete (session);
-		return;
-	}
-
-	priv->save_cancellable = g_cancellable_new ();
-	data = save_data_new (session);
-	g_application_hold (G_APPLICATION (shell));
-
-	task = g_task_new (session, priv->save_cancellable,
-			   save_session_in_thread_cb, NULL);
-	g_task_set_task_data (task, data, (GDestroyNotify)save_data_free);
-	g_task_run_in_thread (task, save_session_sync);
-	g_object_unref (task);
+	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
+	priv->save_source_id = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE, 1,
+							   (GSourceFunc)ephy_session_save_idle_cb,
+							   g_object_ref (session), g_object_unref);
 }
 
 static void
