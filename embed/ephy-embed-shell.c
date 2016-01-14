@@ -63,7 +63,6 @@ typedef struct {
 
 enum
 {
-  PREPARE_CLOSE,
   RESTORED_WINDOW,
   WEB_VIEW_CREATED,
   PAGE_CREATED,
@@ -479,12 +478,6 @@ ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 }
 
 void
-ephy_embed_shell_prepare_close (EphyEmbedShell *shell)
-{
-  g_signal_emit (shell, signals[PREPARE_CLOSE], 0);
-}
-
-void
 ephy_embed_shell_restored_window (EphyEmbedShell *shell)
 {
   g_signal_emit (shell, signals[RESTORED_WINDOW], 0);
@@ -821,22 +814,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
   g_object_class_install_properties (object_class,
                                      N_PROPERTIES,
                                      object_properties);
-
-/**
- * EphyEmbed::prepare-close:
- * @shell: the #EphyEmbedShell
- * 
- * The ::prepare-close signal is emitted when epiphany is preparing to
- * quit on command from the session manager. You can use it when you need
- * to do something special (shut down a service, for example).
- **/
-  signals[PREPARE_CLOSE] =
-    g_signal_new ("prepare-close",
-                  EPHY_TYPE_EMBED_SHELL,
-                  G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (EphyEmbedShellClass, prepare_close),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
 
 /**
  * EphyEmbedShell::finished-restoring-window:

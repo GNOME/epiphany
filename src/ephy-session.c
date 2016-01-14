@@ -542,8 +542,6 @@ ephy_session_close (EphySession *session)
 		EphySessionPrivate *priv = session->priv;
 
 		priv->dont_save = TRUE;
-
-		ephy_embed_shell_prepare_close (ephy_embed_shell_get_default ());
 	}
 }
 

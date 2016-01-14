@@ -51,8 +51,6 @@ struct _EphyEmbedShellClass
 {
   GtkApplicationClass parent_class;
 
-  void    (* prepare_close)    (EphyEmbedShell *shell);
-
   void    (* restored_window)  (EphyEmbedShell *shell);
 };
 
@@ -60,7 +58,6 @@ EphyEmbedShell    *ephy_embed_shell_get_default                (void);
 WebKitWebContext  *ephy_embed_shell_get_web_context            (EphyEmbedShell   *shell);
 GObject           *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);
 GObject           *ephy_embed_shell_get_encodings              (EphyEmbedShell   *shell);
-void               ephy_embed_shell_prepare_close              (EphyEmbedShell   *shell);
 void               ephy_embed_shell_restored_window            (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_page_setup             (EphyEmbedShell   *shell,
                                                                 GtkPageSetup     *page_setup);
