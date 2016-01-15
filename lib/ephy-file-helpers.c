@@ -383,7 +383,7 @@ ephy_file_helpers_init (const char *profile_dir,
 			g_file_copy (source, destination,
 				     G_FILE_COPY_OVERWRITE,
 				     NULL, NULL, NULL, &err);
-			if (error)
+			if (err)
 			{
 				printf("Error stealing file %s from profile: %s\n", files_to_copy[i], err->message);
 				g_error_free (err);
