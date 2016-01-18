@@ -153,6 +153,38 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="halign">start</property>
+                        <property name="label" translatable="yes">Session</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                          <object class="GtkCheckButton" id="restore_session_checkbutton">
+                            <property name="label" translatable="yes">_Remember previous tabs on startup</property>
+                            <property name="visible">True</property>
+                            <property name="use-underline">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">Web Content</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>

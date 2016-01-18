@@ -59,6 +59,7 @@ struct PrefsDialogPrivate
 	GtkWidget *download_button_label;
 	GtkWidget *automatic_downloads_checkbutton;
 	GtkWidget *search_engine_combo;
+	GtkWidget *restore_session_checkbutton;
 	GtkWidget *popups_allow_checkbutton;
 	GtkWidget *adblock_allow_checkbutton;
 	GtkWidget *enable_plugins_checkbutton;
@@ -166,6 +167,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 	/* general */
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, automatic_downloads_checkbutton);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, search_engine_combo);
+	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, restore_session_checkbutton);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, popups_allow_checkbutton);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, adblock_allow_checkbutton);
 	gtk_widget_class_bind_template_child_private (widget_class, PrefsDialog, enable_plugins_checkbutton);
@@ -1080,6 +1082,28 @@ create_search_engine_combo (GtkComboBox *combo)
 				      NULL);
 }
 
+static gboolean
+restore_session_get_mapping  (GValue   *value,
+			      GVariant *variant,
+			      gpointer  user_data)
+{
+	const char *policy = g_variant_get_string (variant, NULL);
+	/* FIXME: Is it possible to somehow use EPHY_PREFS_RESTORE_SESSION_POLICY_ALWAYS here? */
+	g_value_set_boolean (value, !strcmp (policy, "always"));
+	return TRUE;
+}
+
+static GVariant *
+restore_session_set_mapping (const GValue *value,
+			     const GVariantType *expected_type,
+			     gpointer user_data)
+{
+	/* FIXME: Is it possible to somehow use EphyPrefsRestoreSessionPolicy here? */
+	if (g_value_get_boolean (value))
+		return g_variant_new_string ("always");
+	return g_variant_new_string ("crashed");
+}
+
 static void
 setup_general_page (PrefsDialog *dialog)
 {
@@ -1095,6 +1119,14 @@ setup_general_page (PrefsDialog *dialog)
 			 priv->automatic_downloads_checkbutton,
 			 "active",
 			 G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind_with_mapping (settings,
+				      EPHY_PREFS_RESTORE_SESSION_POLICY,
+				      priv->restore_session_checkbutton,
+				      "active",
+				      G_SETTINGS_BIND_DEFAULT,
+				      restore_session_get_mapping,
+				      restore_session_set_mapping,
+				      NULL, NULL);
 	g_settings_bind (web_settings,
 			 EPHY_PREFS_WEB_ENABLE_POPUPS,
 			 priv->popups_allow_checkbutton,
