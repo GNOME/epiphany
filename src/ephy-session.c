@@ -49,7 +49,6 @@ typedef struct
 	gpointer* parent_location;
 	int position;
 	char *url;
-	GList *bflist;
 } ClosedTab;
 
 struct _EphySessionPrivate
@@ -152,12 +151,6 @@ parent_location_free (gpointer *location, gboolean last_reference)
 static void
 closed_tab_free (ClosedTab *tab)
 {
-	if (tab->bflist)
-	{
-		g_list_free_full (tab->bflist, g_object_unref);
-		tab->bflist = NULL;
-	}
-
 	if (tab->url)
 	{
 		g_free (tab->url);
@@ -183,7 +176,6 @@ find_tab_with_notebook (GQueue *queue, EphyNotebook *notebook)
 static ClosedTab *
 closed_tab_new (GQueue *closed_tabs,
 		const char *address,
-		GList *bflist,
 		int position,
 		EphyNotebook *parent_notebook)
 {
@@ -301,18 +293,17 @@ ephy_session_tab_closed (EphySession *session,
 {
 	EphySessionPrivate *priv = session->priv;
 	EphyWebView *view;
-	const char *address;
-	WebKitBackForwardList *source;
+	WebKitWebView *wk_view;
 	ClosedTab *tab;
-	GList *items = NULL;
 
 	view = ephy_embed_get_web_view (embed);
-	address = ephy_web_view_get_address (view);
+	wk_view = WEBKIT_WEB_VIEW (view);
 
-	source = webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view));
-	items = webkit_back_forward_list_get_back_list_with_limit (source, EPHY_WEBKIT_BACK_FORWARD_LIMIT);
-	if (items == NULL && g_strcmp0 (address, "ephy-about:overview") == 0)
+	if (!webkit_web_view_can_go_back (wk_view) && !webkit_web_view_can_go_forward (wk_view) &&
+	    (ephy_web_view_get_is_blank (view) || ephy_web_view_is_overview (view)))
+	{
 		return;
+	}
 
 	if (g_queue_get_length (priv->closed_tabs) == MAX_CLOSED_TABS)
 	{
@@ -326,9 +317,7 @@ ephy_session_tab_closed (EphySession *session,
 		tab = NULL;
 	}
 
-	items = g_list_reverse (items);
-	tab = closed_tab_new (priv->closed_tabs, address, items, position, notebook);
-	g_list_free (items);
+	tab = closed_tab_new (priv->closed_tabs, ephy_web_view_get_address (view), position, notebook);
 
 	g_queue_push_head (priv->closed_tabs, tab);
 
@@ -336,7 +325,7 @@ ephy_session_tab_closed (EphySession *session,
 		g_object_notify_by_pspec (G_OBJECT (session), obj_properties[PROP_CAN_UNDO_TAB_CLOSED]);
 
 	LOG ("Added: %s to the list (%d elements)",
-	     address, g_queue_get_length (priv->closed_tabs));
+	     ephy_web_view_get_address (view), g_queue_get_length (priv->closed_tabs));
 }
 
 gboolean
