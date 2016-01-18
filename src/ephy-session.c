@@ -46,7 +46,13 @@
 
 typedef struct
 {
-	gpointer* parent_location;
+	EphyNotebook *notebook;
+	gint ref_count;
+} NotebookTracker;
+
+typedef struct
+{
+	NotebookTracker *notebook_tracker;
 	int position;
 	char *url;
 } ClosedTab;
@@ -124,100 +130,97 @@ load_changed_cb (WebKitWebView *view,
 		ephy_session_save (session);
 }
 
-static gpointer *
-parent_location_new (EphyNotebook *notebook)
+static void
+notebook_tracker_set_notebook (NotebookTracker *tracker,
+			       EphyNotebook *notebook)
 {
-	gpointer *location = g_slice_new (gpointer);
-	*location = notebook;
-	g_object_add_weak_pointer (G_OBJECT (notebook), location);
+	if (tracker->notebook == notebook)
+	{
+		return;
+	}
 
-	return location;
+	if (tracker->notebook)
+	{
+		g_object_remove_weak_pointer (G_OBJECT (tracker->notebook), (gpointer *)&tracker->notebook);
+	}
+	tracker->notebook = notebook;
+	if (tracker->notebook)
+	{
+		g_object_add_weak_pointer (G_OBJECT (tracker->notebook), (gpointer *)&tracker->notebook);
+	}
+}
+
+static NotebookTracker *
+notebook_tracker_new (EphyNotebook *notebook)
+{
+	NotebookTracker *tracker = g_slice_new0 (NotebookTracker);
+
+	tracker->ref_count = 1;
+	notebook_tracker_set_notebook (tracker, notebook);
+
+	return tracker;
+}
+
+static NotebookTracker *
+notebook_tracker_ref (NotebookTracker *tracker)
+{
+	g_atomic_int_inc (&tracker->ref_count);
+
+	return tracker;
 }
 
 static void
-parent_location_free (gpointer *location, gboolean last_reference)
+notebook_tracker_unref (NotebookTracker *tracker)
 {
-	if (!location)
+	if (!g_atomic_int_dec_and_test (&tracker->ref_count))
 		return;
 
-	if (*location && last_reference)
-	{
-		g_object_remove_weak_pointer (G_OBJECT (*location), location);
-	}
-
-	g_slice_free (gpointer, location);
+	notebook_tracker_set_notebook (tracker, NULL);
+	g_slice_free (NotebookTracker, tracker);
 }
 
-static void
-closed_tab_free (ClosedTab *tab)
+static EphyNotebook *
+closed_tab_get_notebook (ClosedTab *tab)
 {
-	if (tab->url)
-	{
-		g_free (tab->url);
-		tab->url = NULL;
-	}
-
-	g_slice_free (ClosedTab, tab);
+	return tab->notebook_tracker->notebook;
 }
 
 static int
 compare_func (ClosedTab *iter, EphyNotebook *notebook)
 {
-	return (EphyNotebook *)*iter->parent_location - notebook;
+	return closed_tab_get_notebook (iter) - notebook;
 }
 
-static ClosedTab *
-find_tab_with_notebook (GQueue *queue, EphyNotebook *notebook)
+static NotebookTracker *
+ephy_session_ref_or_create_notebook_tracker (EphySession *session,
+					     EphyNotebook *notebook)
 {
-	GList *item = g_queue_find_custom (queue, notebook, (GCompareFunc)compare_func);
-	return item ? (ClosedTab*)item->data : NULL;
-}
-
-static ClosedTab *
-closed_tab_new (GQueue *closed_tabs,
-		const char *address,
-		int position,
-		EphyNotebook *parent_notebook)
-{
-	ClosedTab *tab = g_slice_new0 (ClosedTab);
-	ClosedTab *sibling_tab;
-
-	tab->url = g_strdup (address);
-	tab->position = position;
-
-	sibling_tab = find_tab_with_notebook (closed_tabs, parent_notebook);
-	if (sibling_tab)
-		tab->parent_location = sibling_tab->parent_location;
-	else
-		tab->parent_location = parent_location_new (parent_notebook);
-
-	return tab;
+	GList *item = g_queue_find_custom (session->priv->closed_tabs, notebook, (GCompareFunc)compare_func);
+	return item ? notebook_tracker_ref (((ClosedTab *)item->data)->notebook_tracker) : notebook_tracker_new (notebook);
 }
 
 static void
-post_restore_cleanup (GQueue *closed_tabs, ClosedTab *restored_tab, gboolean notebook_is_new)
+closed_tab_free (ClosedTab *tab)
 {
+	g_free (tab->url);
+	notebook_tracker_unref (tab->notebook_tracker);
 
-	if (find_tab_with_notebook (closed_tabs, *restored_tab->parent_location))
-	{
-		if (notebook_is_new == TRUE)
-		{
-			/* If this is a newly opened notebook and
-			   there are other tabs that must be restored
-			   here, add a weak poiner to keep track of
-			   the lifetime of it. */
-			g_object_add_weak_pointer (G_OBJECT (*restored_tab->parent_location),
-						   restored_tab->parent_location);
-		}
-	}
-	else
-	{
-		/* If there are no other tabs that must be restored to this notebook,
-		   we can remove the pointer keeping track of its location.
-		   If this is a new window, we don't need to remove any weak
-		   pointer, as no one has been added yet. */
-		parent_location_free (restored_tab->parent_location, !notebook_is_new);
-	}
+	g_slice_free (ClosedTab, tab);
+}
+
+static ClosedTab *
+closed_tab_new (const char *address,
+		int position,
+		NotebookTracker *notebook_tracker)
+{
+	ClosedTab *tab = g_slice_new0 (ClosedTab);
+
+	tab->url = g_strdup (address);
+	tab->position = position;
+	/* Takes the ownership of the tracker */
+	tab->notebook_tracker = notebook_tracker;
+
+	return tab;
 }
 
 void
@@ -227,6 +230,7 @@ ephy_session_undo_close_tab (EphySession *session)
 	EphyEmbed *embed, *new_tab;
 	ClosedTab *tab;
 	EphyWindow *window;
+	EphyNotebook *notebook;
 	EphyNewTabFlags flags = EPHY_NEW_TAB_JUMP;
 
 	g_return_if_fail (EPHY_IS_SESSION (session));
@@ -238,12 +242,13 @@ ephy_session_undo_close_tab (EphySession *session)
 		return;
 
 	LOG ("UNDO CLOSE TAB: %s", tab->url);
-	if (*tab->parent_location != NULL)
+	notebook = closed_tab_get_notebook (tab);
+	if (notebook)
 	{
 		if (tab->position > 0)
 		{
 			/* Append in the n-th position. */
-			embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (*tab->parent_location),
+			embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
 								       tab->position - 1));
 			flags |= EPHY_NEW_TAB_APPEND_AFTER;
 		}
@@ -254,25 +259,18 @@ ephy_session_undo_close_tab (EphySession *session)
 			flags |= EPHY_NEW_TAB_FIRST;
 		}
 
-		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (*tab->parent_location)));
+		window = EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (notebook)));
 		new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
 					      window, embed,
 					      flags);
-		post_restore_cleanup (priv->closed_tabs, tab, FALSE);
 	}
 	else
 	{
-		EphyNotebook *notebook;
-
 		window = ephy_window_new ();
 		new_tab = ephy_shell_new_tab (ephy_shell_get_default (),
 					      window, NULL, flags);
-
-		/* FIXME: This makes the assumption that the notebook
-		   is the parent of the returned EphyEmbed. */
-		notebook = EPHY_NOTEBOOK (gtk_widget_get_parent (GTK_WIDGET (new_tab)));
-		*tab->parent_location = notebook;
-		post_restore_cleanup (priv->closed_tabs, tab, TRUE);
+		notebook_tracker_set_notebook (tab->notebook_tracker,
+					       EPHY_NOTEBOOK (ephy_window_get_notebook (window)));
 	}
 
 	ephy_web_view_load_url (ephy_embed_get_web_view (new_tab), tab->url);
@@ -307,18 +305,12 @@ ephy_session_tab_closed (EphySession *session,
 
 	if (g_queue_get_length (priv->closed_tabs) == MAX_CLOSED_TABS)
 	{
-		tab = g_queue_pop_tail (priv->closed_tabs);
-		if (tab->parent_location && !find_tab_with_notebook (priv->closed_tabs, *tab->parent_location))
-		{
-			parent_location_free (tab->parent_location, TRUE);
-		}
-
-		closed_tab_free (tab);
-		tab = NULL;
+		closed_tab_free (g_queue_pop_tail (priv->closed_tabs));
 	}
 
-	tab = closed_tab_new (priv->closed_tabs, ephy_web_view_get_address (view), position, notebook);
-
+	tab = closed_tab_new (ephy_web_view_get_address (view),
+			      position,
+			      ephy_session_ref_or_create_notebook_tracker (session, notebook));
 	g_queue_push_head (priv->closed_tabs, tab);
 
 	if (g_queue_get_length (priv->closed_tabs) == 1)
