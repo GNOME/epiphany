@@ -55,6 +55,7 @@ typedef struct
 	NotebookTracker *notebook_tracker;
 	int position;
 	char *url;
+	WebKitWebViewSessionState *state;
 } ClosedTab;
 
 struct _EphySessionPrivate
@@ -204,21 +205,23 @@ closed_tab_free (ClosedTab *tab)
 {
 	g_free (tab->url);
 	notebook_tracker_unref (tab->notebook_tracker);
+	webkit_web_view_session_state_unref (tab->state);
 
 	g_slice_free (ClosedTab, tab);
 }
 
 static ClosedTab *
-closed_tab_new (const char *address,
+closed_tab_new (EphyWebView *web_view,
 		int position,
 		NotebookTracker *notebook_tracker)
 {
 	ClosedTab *tab = g_slice_new0 (ClosedTab);
 
-	tab->url = g_strdup (address);
+	tab->url = g_strdup (ephy_web_view_get_address (web_view));
 	tab->position = position;
 	/* Takes the ownership of the tracker */
 	tab->notebook_tracker = notebook_tracker;
+	tab->state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
 
 	return tab;
 }
@@ -228,6 +231,9 @@ ephy_session_undo_close_tab (EphySession *session)
 {
 	EphySessionPrivate *priv;
 	EphyEmbed *embed, *new_tab;
+	WebKitWebView *web_view;
+	WebKitBackForwardList *bf_list;
+	WebKitBackForwardListItem *item;
 	ClosedTab *tab;
 	EphyWindow *window;
 	EphyNotebook *notebook;
@@ -273,7 +279,19 @@ ephy_session_undo_close_tab (EphySession *session)
 					       EPHY_NOTEBOOK (ephy_window_get_notebook (window)));
 	}
 
-	ephy_web_view_load_url (ephy_embed_get_web_view (new_tab), tab->url);
+	web_view = WEBKIT_WEB_VIEW (ephy_embed_get_web_view (new_tab));
+	webkit_web_view_restore_session_state (web_view, tab->state);
+	bf_list = webkit_web_view_get_back_forward_list (web_view);
+	item = webkit_back_forward_list_get_current_item (bf_list);
+	if (item)
+	{
+		webkit_web_view_go_to_back_forward_list_item (web_view, item);
+	}
+	else
+	{
+		ephy_web_view_load_url (ephy_embed_get_web_view (new_tab), tab->url);
+	}
+
 	gtk_widget_grab_focus (GTK_WIDGET (new_tab));
 	gtk_window_present (GTK_WINDOW (window));
 
@@ -308,8 +326,7 @@ ephy_session_tab_closed (EphySession *session,
 		closed_tab_free (g_queue_pop_tail (priv->closed_tabs));
 	}
 
-	tab = closed_tab_new (ephy_web_view_get_address (view),
-			      position,
+	tab = closed_tab_new (view, position,
 			      ephy_session_ref_or_create_notebook_tracker (session, notebook));
 	g_queue_push_head (priv->closed_tabs, tab);
 
