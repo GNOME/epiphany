@@ -41,7 +41,6 @@ struct _EphyAboutHandler
   EphySMaps *smaps;
 };
 
-#define EPHY_PAGE_TEMPLATE_OVERVIEW         "/org/gnome/epiphany/page-templates/overview.html"
 #define EPHY_PAGE_TEMPLATE_ABOUT_CSS        "ephy-resource:///org/gnome/epiphany/page-templates/about.css"
 
 G_DEFINE_TYPE (EphyAboutHandler, ephy_about_handler, G_TYPE_OBJECT)
