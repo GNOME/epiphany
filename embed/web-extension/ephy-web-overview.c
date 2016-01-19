@@ -32,6 +32,8 @@ struct _EphyWebOverviewPrivate
   WebKitWebPage *web_page;
   EphyWebOverviewModel *model;
   GList *items;
+
+  GHashTable *delayed_thumbnail_changes;
 };
 
 enum
@@ -221,6 +223,28 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
   }
 }
 
+static gboolean
+apply_delayed_thumbnail_change (gpointer key,
+                                gpointer value,
+                                gpointer user_data)
+{
+  EphyWebOverview *overview = EPHY_WEB_OVERVIEW (user_data);
+  const char *url = key;
+  const char *path = value;
+  GList *l;
+
+  for (l = overview->priv->items; l; l = g_list_next (l)) {
+    OverviewItem *item = (OverviewItem *)l->data;
+
+    if (g_strcmp0 (item->url, url) == 0) {
+      update_thumbnail_element_style (item->thumbnail, path);
+      return TRUE;
+    }
+  }
+
+  g_assert_not_reached ();
+}
+
 static void
 ephy_web_overview_model_thumbnail_changed (EphyWebOverviewModel *model,
                                            const char *url,
@@ -232,9 +256,27 @@ ephy_web_overview_model_thumbnail_changed (EphyWebOverviewModel *model,
   for (l = overview->priv->items; l; l = g_list_next (l)) {
     OverviewItem *item = (OverviewItem *)l->data;
 
-    if (g_strcmp0 (item->url, url) == 0)
+    if (g_strcmp0 (item->url, url) == 0) {
       update_thumbnail_element_style (item->thumbnail, path);
+      return;
+    }
   }
+
+  if (!overview->priv->delayed_thumbnail_changes) {
+    overview->priv->delayed_thumbnail_changes = g_hash_table_new_full (g_str_hash,
+                                                                       g_str_equal,
+                                                                       g_free,
+                                                                       g_free);
+  }
+
+  /* We got the thumbnail change request before document-loaded. Save the
+   * request, else we will wind up with an overview showing placeholder icons.
+   * This isn't needed for title and URL changes because EphyAboutHandler is
+   * sure to have those right when creating the overview HTML. But thumbnail
+   * changes can arrive delayed if the snapshot service does not have the right
+   * snapshot on demand.
+   */
+  g_hash_table_insert (overview->priv->delayed_thumbnail_changes, g_strdup (url), g_strdup (path));
 }
 
 static void
@@ -327,6 +369,13 @@ ephy_web_overview_document_loaded (WebKitWebPage *web_page,
   }
   g_object_unref (nodes);
   overview->priv->items = g_list_reverse (overview->priv->items);
+
+  if (overview->priv->delayed_thumbnail_changes) {
+    g_hash_table_foreach_remove (overview->priv->delayed_thumbnail_changes,
+                                 apply_delayed_thumbnail_change,
+                                 overview);
+    g_clear_pointer (&overview->priv->delayed_thumbnail_changes, g_hash_table_unref);
+  }
 }
 
 static void
@@ -360,6 +409,8 @@ ephy_web_overview_dispose (GObject *object)
     g_list_free_full (overview->priv->items, (GDestroyNotify)overview_item_free);
     overview->priv->items = NULL;
   }
+
+  g_clear_pointer (&overview->priv->delayed_thumbnail_changes, g_hash_table_unref);
 
   G_OBJECT_CLASS (ephy_web_overview_parent_class)->dispose (object);
 }
