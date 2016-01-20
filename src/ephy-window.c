@@ -2303,8 +2303,10 @@ decide_policy_cb (WebKitWebView *web_view,
 		gint button;
 		gint state;
 		EphyEmbed *new_embed;
+		EphyWebView *new_view;
 		EphyNewTabFlags flags = 0;
 		EphyWindow *target_window = window;
+		gboolean inherit_session = FALSE;
 
 		button = webkit_navigation_action_get_mouse_button (navigation_action);
 		state = webkit_navigation_action_get_modifiers (navigation_action);
@@ -2324,6 +2326,7 @@ decide_policy_cb (WebKitWebView *web_view,
 		else if (button == 2 || (button == 1 && state == GDK_CONTROL_MASK))
 		{
 			flags |= EPHY_NEW_TAB_APPEND_AFTER;
+			inherit_session = TRUE;
 		}
 		/* Because we connect to button-press-event *after*
 		 * (G_CONNECT_AFTER) we need to prevent WebKit from browsing to
@@ -2351,7 +2354,17 @@ decide_policy_cb (WebKitWebView *web_view,
 						     embed,
 						     flags,
 						     0);
-		ephy_web_view_load_request (ephy_embed_get_web_view (new_embed), request);
+
+		new_view = ephy_embed_get_web_view (new_embed);
+		if (inherit_session)
+		{
+			WebKitWebViewSessionState *session_state;
+
+			session_state = webkit_web_view_get_session_state (web_view);
+			webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (new_view), session_state);
+			webkit_web_view_session_state_unref (session_state);
+		}
+		ephy_web_view_load_request (new_view, request);
 
 		webkit_policy_decision_ignore (decision);
 

@@ -36,29 +36,51 @@
 #include <string.h>
 #include <webkit2/webkit2.h>
 
+typedef enum {
+	NEW_WINDOW,
+	NEW_TAB
+} LinkDestination;
+
 static void
-popup_cmd_view_in_new_window (EphyWindow *window,
-			      const char *property_name)
+view_in_destination (EphyWindow *window,
+		     const char *property_name,
+		     LinkDestination destination)
 {
-	EphyWindow *new_window;
 	EphyEmbedEvent *event;
+	GValue value = { 0, };
 	EphyEmbed *embed;
 	EphyEmbed *new_embed;
-	GValue value = { 0, };
-
-	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+	EphyWebView *new_view;
+	WebKitWebViewSessionState *session_state;
+	EphyWindow *dest_window = window;
+	EphyNewTabFlags flags = 0;
 
 	event = ephy_window_get_context_event (window);
 	g_return_if_fail (event != NULL);
 
-	new_window = ephy_window_new ();
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+	g_return_if_fail (embed != NULL);
+
 	ephy_embed_event_get_property (event, property_name, &value);
+	switch (destination) {
+	case NEW_WINDOW:
+		dest_window = ephy_window_new ();
+		break;
+	case NEW_TAB:
+		flags |= EPHY_NEW_TAB_APPEND_AFTER;
+		break;
+	default:
+		g_assert_not_reached();
+	}
 
 	new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
-					new_window, embed,
-					0);
-	ephy_web_view_load_url (ephy_embed_get_web_view (new_embed),
-				g_value_get_string (&value));
+					dest_window, embed, flags);
+
+	new_view = ephy_embed_get_web_view (new_embed);
+	session_state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed)));
+	webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (new_view), session_state);
+	webkit_web_view_session_state_unref (session_state);
+	ephy_web_view_load_url (new_view, g_value_get_string (&value));
 	g_value_unset (&value);
 }
 
@@ -66,14 +88,14 @@ void
 popup_cmd_link_in_new_window (GtkAction *action,
 			      EphyWindow *window)
 {
-	popup_cmd_view_in_new_window (window, "link-uri");
+	view_in_destination (window, "link-uri", NEW_WINDOW);
 }
 
 void
 popup_cmd_media_in_new_window (GtkAction *action,
 			       EphyWindow *window)
 {
-	popup_cmd_view_in_new_window (window, "media-uri");
+	view_in_destination (window, "media-uri", NEW_WINDOW);
 }
 
 void
@@ -330,50 +352,25 @@ popup_cmd_copy_media_location (GtkAction *action,
 	popup_cmd_copy_location (window, "media-uri");
 }
 
-static void
-popup_cmd_view_in_new_tab (EphyWindow *window,
-			   const char *property_name)
-{
-	EphyEmbedEvent *event;
-	GValue value = { 0, };
-	EphyEmbed *embed;
-	EphyEmbed *new_embed;
-
-	event = ephy_window_get_context_event (window);
-	g_return_if_fail (event != NULL);
-
-	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-	g_return_if_fail (embed != NULL);
-
-	ephy_embed_event_get_property (event, property_name, &value);
-
-	new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
-					window, embed,
-					EPHY_NEW_TAB_APPEND_AFTER);
-	ephy_web_view_load_url (ephy_embed_get_web_view (new_embed),
-				g_value_get_string (&value));
-	g_value_unset (&value);
-}
-
 void
 popup_cmd_link_in_new_tab (GtkAction *action,
 			   EphyWindow *window)
 {
-	popup_cmd_view_in_new_tab (window, "link-uri");
+	view_in_destination (window, "link-uri", NEW_TAB);
 }
 
 void
 popup_cmd_view_image_in_new_tab (GtkAction *action,
 				 EphyWindow *window)
 {
-	popup_cmd_view_in_new_tab (window, "image-uri");
+	view_in_destination (window, "image-uri", NEW_TAB);
 }
 
 void
 popup_cmd_media_in_new_tab (GtkAction *action,
 			    EphyWindow *window)
 {
-	popup_cmd_view_in_new_tab (window, "media-uri");
+	view_in_destination (window, "media-uri", NEW_TAB);
 }
 
 void
