@@ -32,7 +32,7 @@ static void
 ephy_sqlite_connection_finalize (GObject *self)
 {
   ephy_sqlite_connection_close (EPHY_SQLITE_CONNECTION (self));
-  G_OBJECT_CLASS (ephy_sqlite_connection_parent_class)->dispose (self);
+  G_OBJECT_CLASS (ephy_sqlite_connection_parent_class)->finalize (self);
 }
 
 static void
