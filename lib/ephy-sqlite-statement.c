@@ -73,7 +73,7 @@ ephy_sqlite_statement_finalize (GObject *self)
     priv->connection = NULL;
   }
 
-  G_OBJECT_CLASS (ephy_sqlite_statement_parent_class)->dispose (self);
+  G_OBJECT_CLASS (ephy_sqlite_statement_parent_class)->finalize (self);
 }
 
 static void
