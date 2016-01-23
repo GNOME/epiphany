@@ -2102,7 +2102,6 @@ zoom_changed_cb (WebKitWebView *web_view,
   }
 }
 
-#if WEBKIT_CHECK_VERSION(2, 11, 3)
 static gboolean
 script_dialog_cb (WebKitWebView *web_view,
                   WebKitScriptDialog *dialog)
@@ -2117,7 +2116,6 @@ script_dialog_cb (WebKitWebView *web_view,
 
   return TRUE;
 }
-#endif
 
 static void
 ephy_web_view_init (EphyWebView *web_view)
@@ -2183,11 +2181,9 @@ ephy_web_view_init (EphyWebView *web_view)
                     G_CALLBACK (icon_changed_cb),
                     NULL);
 
-#if WEBKIT_CHECK_VERSION(2, 11, 3)
   g_signal_connect (web_view, "script-dialog",
                     G_CALLBACK (script_dialog_cb),
                     NULL);
-#endif
 
   g_signal_connect (web_view, "new-window",
                     G_CALLBACK (new_window_cb),
