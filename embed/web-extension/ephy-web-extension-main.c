@@ -32,8 +32,8 @@ name_acquired_cb (GDBusConnection *connection,
   ephy_web_extension_dbus_register (extension, connection);
 }
 
-#pragma gcc diagnostic push
-#pragma gcc diagnostic ignored "-Wmissing-prototype"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-prototypes"
 
 G_MODULE_EXPORT void
 webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
@@ -75,4 +75,4 @@ ephy_web_extension_shutdown (void)
   g_object_unref (ephy_web_extension_get ());
 }
 
-#pragma gcc diagnostic pop
+#pragma GCC diagnostic pop
