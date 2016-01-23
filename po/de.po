@@ -10,7 +10,7 @@
 # Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007, 2008.
 # Nathan-J. Hirschauer <nathanhirschauer@verfriemelt.org>, 2009.
 # Christian Kirbach <Christian.Kirbach@gmail.com>, 2009, 2012.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2009-2013.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2009-2013, 2016.
 # Tobias Endrigkeit <tobiasendrigkeit@googlemail.com>, 2012.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2013, 2015.
 # Bernd Homuth <dev@hmt.im>, 2015.
@@ -20,9 +20,9 @@ msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-12-27 07:04+0000\n"
-"PO-Revision-Date: 2015-12-27 11:40+0100\n"
-"Last-Translator: J.M. Ruetter <jm@jublo.net>\n"
+"POT-Creation-Date: 2016-01-23 16:54+0000\n"
+"PO-Revision-Date: 2016-01-23 18:01+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -90,8 +90,17 @@ msgstr ""
 msgid "GNOME Web is often referred to by its code name, Epiphany."
 msgstr "GNOME Web wird häufig auch mit seinem Codenamen, Epiphany, bezeichnet."
 
-#: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:291
-#: ../embed/ephy-about-handler.c:322 ../src/ephy-main.c:65
+#: ../data/epiphany.appdata.xml.in.h:5
+msgid "The GNOME web site displayed in GNOME web."
+msgstr "Die GNOME-Webseite, angezeigt im GNOME Webbrowser."
+
+#: ../data/epiphany.appdata.xml.in.h:6
+#| msgid "Use GNOME fonts"
+msgid "The GNOME Project"
+msgstr "Das GNOME-Projekt"
+
+#: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:290
+#: ../embed/ephy-about-handler.c:321 ../src/ephy-main.c:65
 #: ../src/ephy-main.c:311 ../src/ephy-main.c:463 ../src/window-commands.c:1514
 msgid "Web"
 msgstr "Internet"
@@ -401,7 +410,7 @@ msgstr ""
 "verstanden werden. "
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:57
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "Languages"
 msgstr "Sprachen"
 
@@ -515,90 +524,90 @@ msgid "Whether to show the address column in the bookmarks window."
 msgstr ""
 "Legt fest, ob die Datum-Zeit Spalte im Lesezeichenfenster angezeigt wird."
 
-#: ../embed/ephy-about-handler.c:138
+#: ../embed/ephy-about-handler.c:137
 msgid "Installed plugins"
 msgstr "Installierte Plugins"
 
-#: ../embed/ephy-about-handler.c:139
+#: ../embed/ephy-about-handler.c:138
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ../embed/ephy-about-handler.c:142
+#: ../embed/ephy-about-handler.c:141
 msgid "Plugins are disabled in the preferences"
 msgstr "Plugins sind in den Einstellungen ausgeschaltet."
 
-#: ../embed/ephy-about-handler.c:155
+#: ../embed/ephy-about-handler.c:154
 msgid "Enabled"
 msgstr "Aktiviert"
 
 #. webkit_plugin_get_enabled (plugin) &&
-#: ../embed/ephy-about-handler.c:155
+#: ../embed/ephy-about-handler.c:154
 msgid "Yes"
 msgstr "Ja"
 
-#: ../embed/ephy-about-handler.c:155
+#: ../embed/ephy-about-handler.c:154
 msgid "No"
 msgstr "Nein"
 
-#: ../embed/ephy-about-handler.c:156
+#: ../embed/ephy-about-handler.c:155
 msgid "MIME type"
 msgstr "MIME-Typ"
 
-#: ../embed/ephy-about-handler.c:156
+#: ../embed/ephy-about-handler.c:155
 msgid "Description"
 msgstr "Beschreibung"
 
-#: ../embed/ephy-about-handler.c:156
+#: ../embed/ephy-about-handler.c:155
 msgid "Suffixes"
 msgstr "Suffixes"
 
-#: ../embed/ephy-about-handler.c:219 ../embed/ephy-about-handler.c:221
+#: ../embed/ephy-about-handler.c:218 ../embed/ephy-about-handler.c:220
 msgid "Memory usage"
 msgstr "Speicherverbrauch"
 
-#: ../embed/ephy-about-handler.c:269
+#: ../embed/ephy-about-handler.c:268
 #, c-format
 msgid "Version %s"
 msgstr "Version %s"
 
-#: ../embed/ephy-about-handler.c:289
+#: ../embed/ephy-about-handler.c:288
 msgid "About Web"
 msgstr "Info zu Internet"
 
-#: ../embed/ephy-about-handler.c:293
+#: ../embed/ephy-about-handler.c:292
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Ein einfacher, klarer, wunderschöner Blick auf das Internet"
 
-#: ../embed/ephy-about-handler.c:351 ../embed/ephy-about-handler.c:352
+#: ../embed/ephy-about-handler.c:350 ../embed/ephy-about-handler.c:351
 msgid "Applications"
 msgstr "Anwendungen"
 
-#: ../embed/ephy-about-handler.c:353
+#: ../embed/ephy-about-handler.c:352
 msgid "List of installed web applications"
 msgstr "Liste der installierten Internet-Anwendungen"
 
-#: ../embed/ephy-about-handler.c:367
+#: ../embed/ephy-about-handler.c:366
 msgid "Delete"
 msgstr "Löschen"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:369
+#: ../embed/ephy-about-handler.c:368
 msgid "Installed on:"
 msgstr "Installiert am:"
 
-#: ../embed/ephy-about-handler.c:473 ../embed/ephy-embed-utils.c:310
+#: ../embed/ephy-about-handler.c:472 ../embed/ephy-embed-utils.c:310
 msgid "Most Visited"
 msgstr "Meistbesucht"
 
-#: ../embed/ephy-about-handler.c:506
+#: ../embed/ephy-about-handler.c:505
 msgid "Remove from overview"
 msgstr "Aus der Übersicht entfernen"
 
-#: ../embed/ephy-about-handler.c:572 ../embed/ephy-about-handler.c:573
+#: ../embed/ephy-about-handler.c:571 ../embed/ephy-about-handler.c:572
 msgid "Private Browsing"
 msgstr "Privater Modus"
 
-#: ../embed/ephy-about-handler.c:574
+#: ../embed/ephy-about-handler.c:573
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -609,14 +618,14 @@ msgstr ""
 "gespeicherten Informationen werden gelöscht, sobald Sie das Fenster "
 "schließen. Heruntergeladene Dateien werden behalten."
 
-#: ../embed/ephy-about-handler.c:578
+#: ../embed/ephy-about-handler.c:577
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Der Inkognito-Modus verbirgt Ihre Aktivitäten nur vor Personen, die diesen "
 "Rechner benützen."
 
-#: ../embed/ephy-about-handler.c:580
+#: ../embed/ephy-about-handler.c:579
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -633,16 +642,16 @@ msgid "Blank page"
 msgstr "Leere Seite"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:531
+#: ../embed/ephy-embed.c:533
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "%s drücken, um den Vollbildmodus zu verlassen"
 
-#: ../embed/ephy-embed.c:531
+#: ../embed/ephy-embed.c:533
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:531
+#: ../embed/ephy-embed.c:533
 msgid "F11"
 msgstr "F11"
 
@@ -1218,7 +1227,7 @@ msgstr "Vorsicht!"
 msgid "Load Anyway"
 msgstr "Trotzdem laden"
 
-#: ../embed/ephy-web-view.c:2829
+#: ../embed/ephy-web-view.c:2852
 msgid "_OK"
 msgstr "_OK"
 
@@ -1315,11 +1324,11 @@ msgstr ""
 "gesperrt. Wenn Sie diese importieren wollen, dann geben Sie bitte das Haupt-"
 "Passwort unten ein."
 
-#: ../lib/ephy-profile-migrator.c:98
+#: ../lib/ephy-profile-migrator.c:99
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Kopieren der Cookie-Datei von Mozilla fehlgeschlagen"
 
-#: ../lib/ephy-profile-migrator.c:648
+#: ../lib/ephy-profile-migrator.c:649
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -1327,23 +1336,23 @@ msgstr ""
 "Internet 3.6 lehnt diesen Ordner ab und versuchte diese Konfiguration nach "
 "~/.config/epiphany zu migrieren."
 
-#: ../lib/ephy-profile-migrator.c:1062
+#: ../lib/ephy-profile-migrator.c:1063
 msgid "Executes only the n-th migration step"
 msgstr "Nur den n-ten Migrationsschritt ausführen"
 
-#: ../lib/ephy-profile-migrator.c:1064
+#: ../lib/ephy-profile-migrator.c:1065
 msgid "Specifies the required version for the migrator"
 msgstr "Bestimmt die benötigte Version des Migrators"
 
-#: ../lib/ephy-profile-migrator.c:1066
+#: ../lib/ephy-profile-migrator.c:1067
 msgid "Specifies the profile where the migrator should run"
 msgstr "Bestimmt das Profil, wo der Migrator ausgeführt werden sollte"
 
-#: ../lib/ephy-profile-migrator.c:1079
+#: ../lib/ephy-profile-migrator.c:1085
 msgid "Web profile migrator"
 msgstr "Internet Profilmigrator"
 
-#: ../lib/ephy-profile-migrator.c:1080
+#: ../lib/ephy-profile-migrator.c:1086
 msgid "Web profile migrator options"
 msgstr "Einstellungen für den Internet Profilmigrator"
 
@@ -1578,20 +1587,20 @@ msgstr "Alle Dateien"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:598 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:599 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "_Leeren"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:617 ../src/ephy-window.c:115
+#: ../lib/widgets/ephy-location-entry.c:618 ../src/ephy-window.c:115
 msgid "_Undo"
 msgstr "_Rückgängig"
 
-#: ../lib/widgets/ephy-location-entry.c:624
+#: ../lib/widgets/ephy-location-entry.c:625
 msgid "_Redo"
 msgstr "_Wiederholen"
 
-#: ../lib/widgets/ephy-location-entry.c:907
+#: ../lib/widgets/ephy-location-entry.c:908
 msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
 "Ziehen Sie dieses Symbol und legen Sie es ab, um einen Verweis zu dieser "
@@ -1656,7 +1665,7 @@ msgid "“%s” Properties"
 msgstr "Eigenschaften von »%s«"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:392
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:38
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Hinzufügen"
@@ -2380,35 +2389,27 @@ msgstr "P_ersönlichen Daten löschen …"
 msgid "Privacy"
 msgstr "Privatsphäre"
 
-#: ../src/resources/prefs-dialog.ui.h:37
-msgid "Encodings"
-msgstr "Zeichenkodierungen"
-
-#: ../src/resources/prefs-dialog.ui.h:38
-msgid "De_fault:"
-msgstr "_Vorgabe:"
-
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "_Remove"
 msgstr "_Entfernen"
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:40
 msgid "_Up"
 msgstr "_Hoch"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "_Down"
 msgstr "_Runter"
 
-#: ../src/resources/prefs-dialog.ui.h:44
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "Spell checking"
 msgstr "Rechtschreibprüfung"
 
-#: ../src/resources/prefs-dialog.ui.h:45
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Enable spell checking"
 msgstr "R_echtschreibprüfung aktivieren"
 
-#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:832
+#: ../src/resources/prefs-dialog.ui.h:44 ../src/prefs-dialog.c:760
 msgid "Language"
 msgstr "Sprache"
 
@@ -2824,7 +2825,7 @@ msgstr "Medien speichern unter"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:545 ../src/prefs-dialog.c:551
+#: ../src/prefs-dialog.c:473 ../src/prefs-dialog.c:479
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2833,25 +2834,25 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:560
+#: ../src/prefs-dialog.c:488
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Benutzerdefiniert (%s)"
 
-#: ../src/prefs-dialog.c:582
+#: ../src/prefs-dialog.c:510
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Systemsprache (%s)"
 msgstr[1] "Systemsprachen (%s)"
 
-#: ../src/prefs-dialog.c:915
+#: ../src/prefs-dialog.c:843
 msgid "Select a Directory"
 msgstr "Wählen Sie einen Ordner"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1009
+#: ../src/prefs-dialog.c:937
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2859,29 +2860,29 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1015
+#: ../src/prefs-dialog.c:943
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1017
+#: ../src/prefs-dialog.c:945
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1020
+#: ../src/prefs-dialog.c:948
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.com/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1022
+#: ../src/prefs-dialog.c:950
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1025
+#: ../src/prefs-dialog.c:953
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
@@ -2999,6 +3000,12 @@ msgstr ""
 #: ../src/window-commands.c:1678
 msgid "_Enable"
 msgstr "_Aktivieren"
+
+#~ msgid "Encodings"
+#~ msgstr "Zeichenkodierungen"
+
+#~ msgid "De_fault:"
+#~ msgstr "_Vorgabe:"
 
 #~ msgid "Part of this page is insecure."
 #~ msgstr "Ein Teil dieser Seite ist unsicher."
