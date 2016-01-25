@@ -316,8 +316,8 @@ sort_list_store (gconstpointer a,
                  gconstpointer b,
                  gpointer user_data)
 {
-	const char *encoding1 = ephy_encoding_get_title_elided (EPHY_ENCODING (a));
-	const char *encoding2 = ephy_encoding_get_title_elided (EPHY_ENCODING (b));
+	const char *encoding1 = ephy_encoding_get_title_elided ((EphyEncoding *)a);
+	const char *encoding2 = ephy_encoding_get_title_elided ((EphyEncoding *)b);
 
 	return g_strcmp0 (encoding1, encoding2);
 }
