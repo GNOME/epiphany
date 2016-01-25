@@ -271,6 +271,9 @@ $(dbus_shell_search_provider_built_sources) : Makefile.am $(srcdir)/org.gnome.Sh
 		$(srcdir)/org.gnome.ShellSearchProvider2.xml		\
 		$(NULL)
 
-CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
+CLEANFILES = \
+	$(stamp_files) \
+	$(BUILT_SOURCES) \
+	resources/.sass-cache
 
 -include $(top_srcdir)/git.mk
