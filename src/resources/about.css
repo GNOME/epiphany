@@ -329,3 +329,21 @@ html[dir="rtl"] .overview-close-button {
 html[dir="rtl"] .overview-item {
     float: right;
 }
+
+#overview-grid li.overview-empty {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    height: 80%;
+    max-width: 800px;
+   -webkit-user-select: none;
+   -webkit-user-drag: none;
+}
+
+.overview-empty img {
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    filter: grayscale(100%);
+    opacity: 0.2;
+}

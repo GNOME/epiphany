@@ -475,36 +475,54 @@ history_service_query_urls_cb (EphyHistoryService *history,
   if (success) {
     EphySnapshotService *snapshot_service = ephy_snapshot_service_get_default ();
 
-    for (l = urls; l; l = g_list_next (l)) {
-      EphyHistoryURL *url = (EphyHistoryURL *)l->data;
-      const char *snapshot;
-      char *thumbnail_style = NULL;
+    if (g_list_length (urls) > 0) {
+      for (l = urls; l; l = g_list_next (l)) {
+        EphyHistoryURL *url = (EphyHistoryURL *)l->data;
+        const char *snapshot;
+        char *thumbnail_style = NULL;
 
-      snapshot = ephy_snapshot_service_lookup_snapshot_path (snapshot_service, url->url);
-      if (!snapshot) {
-        GetSnapshotPathAsyncData *data = g_new (GetSnapshotPathAsyncData, 1);
+        snapshot = ephy_snapshot_service_lookup_snapshot_path (snapshot_service, url->url);
+        if (!snapshot) {
+          GetSnapshotPathAsyncData *data = g_new (GetSnapshotPathAsyncData, 1);
 
-        data->url = g_strdup (url->url);
-        data->mtime = url->thumbnail_time;
-        ephy_snapshot_service_get_snapshot_path_for_url_async (ephy_snapshot_service_get_default (),
-                                                               url->url, url->thumbnail_time, NULL,
-                                                               (GAsyncReadyCallback)got_snapshot_path_for_url_cb,
-                                                               data);
-      } else {
-        thumbnail_style = g_strdup_printf (" style=\"background: url(file://%s) no-repeat;\"", snapshot);
+          data->url = g_strdup (url->url);
+          data->mtime = url->thumbnail_time;
+          ephy_snapshot_service_get_snapshot_path_for_url_async (ephy_snapshot_service_get_default (),
+                                                                 url->url, url->thumbnail_time, NULL,
+                                                                 (GAsyncReadyCallback)got_snapshot_path_for_url_cb,
+                                                                 data);
+        } else {
+          thumbnail_style = g_strdup_printf (" style=\"background: url(file://%s) no-repeat;\"", snapshot);
+        }
+
+        g_string_append_printf (data_str,
+                                "<li>"
+                                "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">"
+                                "    <div class=\"overview-close-button\" onclick=\"removeFromOverview(this.parentNode, event)\" title=\"%s\">&#10006;</div>"
+                                "    <span class=\"overview-thumbnail\"%s></span>"
+                                "    <span class=\"overview-title\">%s</span>"
+                                "  </a>"
+                                "</li>",
+                                g_markup_escape_text (url->title, -1), url->url, _("Remove from overview"),
+                                thumbnail_style ? thumbnail_style : "", url->title);
+        g_free (thumbnail_style);
       }
+    } else {
+      GtkIconInfo *icon_info;
+      icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+                                              "web-browser",
+                                              256,
+                                              GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-      g_string_append_printf (data_str,
-                              "<li>"
-                              "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">"
-                              "    <div class=\"overview-close-button\" onclick=\"removeFromOverview(this.parentNode, event)\" title=\"%s\">&#10006;</div>"
-                              "    <span class=\"overview-thumbnail\"%s></span>"
-                              "    <span class=\"overview-title\">%s</span>"
-                              "  </a>"
-                              "</li>",
-                              g_markup_escape_text (url->title, -1), url->url, _("Remove from overview"),
-                              thumbnail_style ? thumbnail_style : "", url->title);
-      g_free (thumbnail_style);
+        g_string_append_printf (data_str,
+                                "<li class=\"overview-empty\" >"
+                                "  <img src=\"file://%s\"/>"
+                                "  <h1>%s</h1>"
+                                "</li>",
+				icon_info ? gtk_icon_info_get_filename (icon_info) : "",
+                                /* Displayed when opening the browser for the first time. */
+				_("Start browsing and your most-visited sites will appear here"));
+        gtk_icon_info_free(icon_info);
     }
   }
 
