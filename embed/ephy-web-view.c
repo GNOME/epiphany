@@ -1927,8 +1927,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
                                         webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
       break;
     default:
-      return;
-      break;
+      g_assert_not_reached ();
   }
   g_free (hostname);
 
