@@ -1856,6 +1856,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
   char *stylesheet;
   char *load_anyway_js = NULL;
   const char *custom_class;
+  const char *accesskey;
   GBytes *html_file;
 
   view->loading_error_page = TRUE;
@@ -1892,8 +1893,10 @@ ephy_web_view_load_error_page (EphyWebView *view,
                                "address. You may wish to verify that your "
                                "internet connection is working correctly.</p>"),
                              uri, reason);
-      button_label = g_strdup (_("Try again"));
+      button_label = g_strdup (_("Try Again"));
       custom_class = "network-error";
+      /* Access key for the "Try Again" button on the network error page. */
+      accesskey = dgettext ("accesskey", "A");
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
       page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
@@ -1906,6 +1909,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
                              LSB_DISTRIBUTOR);
       button_label = g_strdup (_("Reload Anyway"));
       custom_class = "page-crash";
+      /* Access key for the "Reload Anyway" button on the crash error page. */
+      accesskey = dgettext ("accesskey", "A");
       break;
     case EPHY_WEB_VIEW_ERROR_PROCESS_CRASH:
       page_title = g_strdup_printf (_("Problem displaying “%s”"), hostname);
@@ -1913,6 +1918,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
       msg = g_strdup (_("Something went wrong while displaying this page. Please reload or visit a different page to continue."));
       button_label = g_strdup (_("Reload Anyway"));
       custom_class = "process-crash";
+      /* Access key for the "Reload Anyway" button on the crash error page. */
+      accesskey = dgettext ("accesskey", "A");
       break;
     case EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE:
       /* Page title when a site cannot be loaded. %s is the site's hostname. */
@@ -1923,6 +1930,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
       /* Button on error page when a website's TLS certificate is invalid. */
       button_label = g_strdup (_("Load Anyway"));
       custom_class = "tls-error";
+      /* Access key for the "Load Anyway" button on the TLS error page. */
+      accesskey = dgettext ("accesskey", "A");
       load_anyway_js = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT");",
                                         webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
       break;
@@ -1949,7 +1958,8 @@ ephy_web_view_load_error_page (EphyWebView *view,
                    stylesheet,
                    load_anyway_js,
                    custom_class,
-                   msg_title, msg, button_label);
+                   msg_title, msg,
+                   accesskey, button_label);
 #pragma GCC diagnostic pop
 
   g_bytes_unref (html_file);
