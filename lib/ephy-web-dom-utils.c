@@ -171,6 +171,9 @@ get_icon_from_mstile (WebKitDOMDocument *document,
   metas = webkit_dom_document_get_elements_by_tag_name (document, "meta");
   length = webkit_dom_node_list_get_length (metas);
 
+  /* FIXME: Ought to also search browserconfig.xml
+   * See: http://stackoverflow.com/questions/24625305/msapplication-tileimage-favicon-backup
+   */
   for (i = 0; i < length; i++) {
     WebKitDOMNode *node = webkit_dom_node_list_item (metas, i);
     char *name;
