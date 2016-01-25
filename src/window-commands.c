@@ -47,7 +47,6 @@
 #include "ephy-shell.h"
 #include "ephy-string.h"
 #include "ephy-web-app-utils.h"
-#include "ephy-web-dom-utils.h"
 #include "ephy-zoom.h"
 
 #include <gio/gio.h>

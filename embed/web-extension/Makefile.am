@@ -11,6 +11,8 @@ libephywebextension_la_SOURCES = \
 	ephy-embed-form-auth.h \
 	ephy-uri-tester.c \
 	ephy-uri-tester.h \
+	ephy-web-dom-utils.c \
+	ephy-web-dom-utils.h \
 	ephy-web-extension.c \
 	ephy-web-extension.h \
 	ephy-web-extension-main.c \
