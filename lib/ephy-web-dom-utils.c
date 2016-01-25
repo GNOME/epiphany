@@ -340,6 +340,9 @@ ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
   char *image = NULL;
   char *color = NULL;
 
+  /* FIXME: These functions could be improved considerably. See the first two answers at:
+   * http://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url
+   */
   ret = get_icon_from_mstile (document, &image, &color);
   if (! ret)
     ret = get_icon_from_ogp (document, &image, &color);
