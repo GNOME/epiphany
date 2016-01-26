@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-01-23 23:04+0000\n"
-"PO-Revision-Date: 2016-01-24 13:39+0100\n"
-"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
+"POT-Creation-Date: 2016-01-26 04:53+0000\n"
+"PO-Revision-Date: 2016-01-26 11:35+0100\n"
+"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -87,13 +87,12 @@ msgid "The GNOME web site displayed in GNOME web."
 msgstr "A GNOME weboldala a GNOME Webben."
 
 #: ../data/epiphany.appdata.xml.in.h:6
-#| msgid "Use GNOME fonts"
 msgid "The GNOME Project"
 msgstr "A GNOME projekt"
 
 #: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:290
 #: ../embed/ephy-about-handler.c:321 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:311 ../src/ephy-main.c:463 ../src/window-commands.c:1514
+#: ../src/ephy-main.c:311 ../src/ephy-main.c:463 ../src/window-commands.c:1513
 msgid "Web"
 msgstr "Web"
 
@@ -636,7 +635,7 @@ msgstr "F11"
 #: ../embed/ephy-embed-utils.c:63
 #, c-format
 msgid "Send an email message to “%s”"
-msgstr "E-mail küldése „%s” címre"
+msgstr "E-mail küldése a(z) „%s” címre"
 
 #: ../embed/ephy-encodings.c:60
 msgid "Arabic (_IBM-864)"
@@ -1095,7 +1094,7 @@ msgstr ""
 #: ../embed/ephy-web-view.c:1808
 #, c-format
 msgid "This might not be the real %s."
-msgstr "Ez nem biztos, hogy a valódi %s."
+msgstr "Ez nem biztos, hogy a valódi: %s."
 
 #. Message when a site's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1813
@@ -1128,22 +1127,22 @@ msgstr ""
 "A törvényes bankok, boltok és egyéb nyilvános oldalak nem fogják arra kérni, "
 "hogy ezt tegye."
 
-#: ../embed/ephy-web-view.c:1871
+#: ../embed/ephy-web-view.c:1872
 msgid "None specified"
 msgstr "Nincs megadva"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1884 ../embed/ephy-web-view.c:1899
-#: ../embed/ephy-web-view.c:1919
+#: ../embed/ephy-web-view.c:1885 ../embed/ephy-web-view.c:1902
+#: ../embed/ephy-web-view.c:1926
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Hiba a(z) „%s” betöltése közben"
 
-#: ../embed/ephy-web-view.c:1886
+#: ../embed/ephy-web-view.c:1887
 msgid "Oops! Unable to display this website."
 msgstr "Jaj! A weboldal tartalma nem jeleníthető meg."
 
-#: ../embed/ephy-web-view.c:1887
+#: ../embed/ephy-web-view.c:1888
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1156,15 +1155,23 @@ msgstr ""
 "költöztették. Érdemes lehet ellenőrizni, hogy internetkapcsolata megfelelően "
 "működik-e.</p>"
 
-#: ../embed/ephy-web-view.c:1895
-msgid "Try again"
+#: ../embed/ephy-web-view.c:1896
+msgid "Try Again"
 msgstr "Próbálja újra"
 
-#: ../embed/ephy-web-view.c:1901
+#. Access key for the "Try Again" button on the network error page.
+#. Access key for the "Reload Anyway" button on the crash error page.
+#. Access key for the "Load Anyway" button on the TLS error page.
+#: ../embed/ephy-web-view.c:1899 ../embed/ephy-web-view.c:1913
+#: ../embed/ephy-web-view.c:1922 ../embed/ephy-web-view.c:1934
+msgid "A"
+msgstr "L"
+
+#: ../embed/ephy-web-view.c:1904
 msgid "Oops! There may be a problem."
 msgstr "Jaj! Hiba történhetett."
 
-#: ../embed/ephy-web-view.c:1902
+#: ../embed/ephy-web-view.c:1905
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1175,20 +1182,20 @@ msgstr ""
 "újra megtörténik, akkor jelentse a problémát a(z) <strong>%s</strong> "
 "fejlesztőinek.</p>"
 
-#: ../embed/ephy-web-view.c:1907 ../embed/ephy-web-view.c:1914
+#: ../embed/ephy-web-view.c:1910 ../embed/ephy-web-view.c:1919
 msgid "Reload Anyway"
-msgstr "Betöltés mindenképp"
+msgstr "Újratöltés mindenképp"
 
-#: ../embed/ephy-web-view.c:1911
+#: ../embed/ephy-web-view.c:1916
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "A(z) „%s” megjelenítése közben probléma lépett fel"
 
-#: ../embed/ephy-web-view.c:1912
+#: ../embed/ephy-web-view.c:1917
 msgid "Oops!"
 msgstr "Hopp!"
 
-#: ../embed/ephy-web-view.c:1913
+#: ../embed/ephy-web-view.c:1918
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1197,16 +1204,16 @@ msgstr ""
 "másik oldalt a folytatáshoz."
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1921
+#: ../embed/ephy-web-view.c:1928
 msgid "Look out!"
 msgstr "Vigyázzon!"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1924
+#: ../embed/ephy-web-view.c:1931
 msgid "Load Anyway"
 msgstr "Betöltés mindenképp"
 
-#: ../embed/ephy-web-view.c:2848
+#: ../embed/ephy-web-view.c:2857
 msgid "_OK"
 msgstr "_OK"
 
@@ -1531,7 +1538,7 @@ msgstr "Indítás…"
 #: ../src/bookmarks/ephy-bookmark-properties.c:391
 #: ../src/bookmarks/ephy-bookmarks-editor.c:820
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:807
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:806
 msgid "_Cancel"
 msgstr "Mé_gse"
 
@@ -2718,7 +2725,7 @@ msgstr "Ha kilép, akkor a letöltések megszakadnak"
 msgid "Quit and cancel downloads"
 msgstr "Kilépés, és letöltések megszakítása"
 
-#: ../src/ephy-window.c:1141 ../src/window-commands.c:273
+#: ../src/ephy-window.c:1141 ../src/window-commands.c:272
 msgid "Open"
 msgstr "Megnyitás"
 
@@ -2859,66 +2866,66 @@ msgstr "Bing"
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
 
-#: ../src/window-commands.c:328
+#: ../src/window-commands.c:327
 msgid "Save"
 msgstr "Mentés"
 
-#: ../src/window-commands.c:708
+#: ../src/window-commands.c:707
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Már létezik „%s” nevű webalkalmazás. Le akarja cserélni?"
 
-#: ../src/window-commands.c:711
+#: ../src/window-commands.c:710
 msgid "Cancel"
 msgstr "Mégse"
 
-#: ../src/window-commands.c:713
+#: ../src/window-commands.c:712
 msgid "Replace"
 msgstr "Csere"
 
-#: ../src/window-commands.c:717
+#: ../src/window-commands.c:716
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Már létezik egy ugyanilyen nevű alkalmazás. A cserével felül fogja írni."
 
-#: ../src/window-commands.c:753
+#: ../src/window-commands.c:752
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "A(z) „%s” alkalmazás használatra kész"
 
-#: ../src/window-commands.c:756
+#: ../src/window-commands.c:755
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "A(z) „%s” alkalmazás nem hozható létre"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:763
 msgid "Launch"
 msgstr "Indítás"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:804
+#: ../src/window-commands.c:803
 msgid "Create Web Application"
 msgstr "Webalkalmazás létrehozása"
 
-#: ../src/window-commands.c:809
+#: ../src/window-commands.c:808
 msgid "C_reate"
 msgstr "_Létrehozás"
 
-#: ../src/window-commands.c:1475 ../src/window-commands.c:1498
+#: ../src/window-commands.c:1474 ../src/window-commands.c:1497
 msgid "Contact us at:"
 msgstr "Lépjen velünk kapcsolatba:"
 
-#: ../src/window-commands.c:1478
+#: ../src/window-commands.c:1477
 msgid "Contributors:"
 msgstr "Hozzájárultak:"
 
-#: ../src/window-commands.c:1481
+#: ../src/window-commands.c:1480
 msgid "Past developers:"
 msgstr "Korábbi fejlesztők:"
 
-#: ../src/window-commands.c:1507
+#: ../src/window-commands.c:1506
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2935,7 +2942,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1530
+#: ../src/window-commands.c:1529
 msgid "translator-credits"
 msgstr ""
 "Dvornik László <dvornik at gnome dot hu>\n"
@@ -2944,15 +2951,15 @@ msgstr ""
 "Meskó Balázs <meskobalazs at gmail dot com>\n"
 "Tímár András <timar at gnome dot hu>"
 
-#: ../src/window-commands.c:1533
+#: ../src/window-commands.c:1532
 msgid "Web Website"
 msgstr "A Web webhelye"
 
-#: ../src/window-commands.c:1672
+#: ../src/window-commands.c:1671
 msgid "Enable caret browsing mode?"
 msgstr "Engedélyezi a kurzoros böngészést?"
 
-#: ../src/window-commands.c:1675
+#: ../src/window-commands.c:1674
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2962,7 +2969,7 @@ msgstr ""
 "szolgáltatás egy mozgatható kurzort helyez el a weboldalakon, lehetővé téve "
 "a billentyűzettel való mozgást. Be szeretné kapcsolni a kurzoros böngészést?"
 
-#: ../src/window-commands.c:1678
+#: ../src/window-commands.c:1677
 msgid "_Enable"
 msgstr "_Engedélyezés"
 
