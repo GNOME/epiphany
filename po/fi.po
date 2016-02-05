@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-01-06 04:53+0000\n"
-"PO-Revision-Date: 2016-01-06 13:52+0200\n"
+"POT-Creation-Date: 2016-02-05 16:53+0000\n"
+"PO-Revision-Date: 2016-02-05 22:32+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <gnome-fi-laatu@lists.sourceforge.net>\n"
 "Language: fi\n"
@@ -89,9 +89,18 @@ msgstr ""
 "Gnomen verkkoselaimesta käytetään usein myös sen alkuperäistä nimeä; "
 "Epiphany."
 
-#: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:291
-#: ../embed/ephy-about-handler.c:322 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:311 ../src/ephy-main.c:463 ../src/window-commands.c:1514
+#: ../data/epiphany.appdata.xml.in.h:5
+msgid "The GNOME web site displayed in GNOME web."
+msgstr "Gnomen verkkosivusto esillä Gnomen verkkoselaimessa."
+
+#: ../data/epiphany.appdata.xml.in.h:6
+#| msgid "Use GNOME fonts"
+msgid "The GNOME Project"
+msgstr "Gnome-projekti"
+
+#: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:290
+#: ../embed/ephy-about-handler.c:321 ../src/ephy-main.c:65
+#: ../src/ephy-main.c:311 ../src/ephy-main.c:463 ../src/window-commands.c:1513
 msgid "Web"
 msgstr "Verkko"
 
@@ -369,7 +378,7 @@ msgstr ""
 "Oletusmerkistökoodaus. Hyväkstytyt arvot ovat ne, joita WebKitGTK+ ymmärtää."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:57
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "Languages"
 msgstr "Kielet"
 
@@ -472,91 +481,90 @@ msgstr "Näytetäänkö Otsikko-sarake kirjanmerkkien ikkunassa."
 msgid "Whether to show the address column in the bookmarks window."
 msgstr "Näytetäänkö Osoite-sarake kirjanmerkkien ikkunassa."
 
-#: ../embed/ephy-about-handler.c:138
+#: ../embed/ephy-about-handler.c:137
 msgid "Installed plugins"
 msgstr "Asennetut liitännäiset"
 
-#: ../embed/ephy-about-handler.c:139
+#: ../embed/ephy-about-handler.c:138
 msgid "Plugins"
 msgstr "Liitännäiset"
 
-#: ../embed/ephy-about-handler.c:142
+#: ../embed/ephy-about-handler.c:141
 msgid "Plugins are disabled in the preferences"
 msgstr "Liitännäiset on poistettu käytöstä asetuksista"
 
-#: ../embed/ephy-about-handler.c:155
+#: ../embed/ephy-about-handler.c:154
 msgid "Enabled"
 msgstr "Käytössä"
 
 #. webkit_plugin_get_enabled (plugin) &&
-#: ../embed/ephy-about-handler.c:155
+#: ../embed/ephy-about-handler.c:154
 msgid "Yes"
 msgstr "Kyllä"
 
-#: ../embed/ephy-about-handler.c:155
+#: ../embed/ephy-about-handler.c:154
 msgid "No"
 msgstr "Ei"
 
-#: ../embed/ephy-about-handler.c:156
+#: ../embed/ephy-about-handler.c:155
 msgid "MIME type"
 msgstr "MIME-tyyppi"
 
-#: ../embed/ephy-about-handler.c:156
+#: ../embed/ephy-about-handler.c:155
 msgid "Description"
 msgstr "Kuvaus"
 
-#: ../embed/ephy-about-handler.c:156
+#: ../embed/ephy-about-handler.c:155
 msgid "Suffixes"
 msgstr "Päätteet"
 
-#: ../embed/ephy-about-handler.c:219 ../embed/ephy-about-handler.c:221
+#: ../embed/ephy-about-handler.c:218 ../embed/ephy-about-handler.c:220
 msgid "Memory usage"
 msgstr "Muistinkulutus"
 
-#: ../embed/ephy-about-handler.c:269
+#: ../embed/ephy-about-handler.c:268
 #, c-format
 msgid "Version %s"
 msgstr "Versio %s"
 
-#: ../embed/ephy-about-handler.c:289
+#: ../embed/ephy-about-handler.c:288
 msgid "About Web"
 msgstr "Tietoja"
 
-#: ../embed/ephy-about-handler.c:293
+#: ../embed/ephy-about-handler.c:292
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Selkeä ja nätti näkymä internetiin"
 
-#: ../embed/ephy-about-handler.c:351 ../embed/ephy-about-handler.c:352
+#: ../embed/ephy-about-handler.c:350 ../embed/ephy-about-handler.c:351
 msgid "Applications"
 msgstr "Sovellukset"
 
-#: ../embed/ephy-about-handler.c:353
+#: ../embed/ephy-about-handler.c:352
 msgid "List of installed web applications"
 msgstr "Luettelo asennetuista www-sovelluksista"
 
-#: ../embed/ephy-about-handler.c:367
-#| msgid "_Delete"
+#: ../embed/ephy-about-handler.c:366
 msgid "Delete"
 msgstr "Poista"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:369
+#: ../embed/ephy-about-handler.c:368
 msgid "Installed on:"
 msgstr "Asennettu:"
 
-#: ../embed/ephy-about-handler.c:473 ../embed/ephy-embed-utils.c:310
+#: ../embed/ephy-about-handler.c:472 ../embed/ephy-embed-utils.c:310
 msgid "Most Visited"
 msgstr "Useimmin vieraillut"
 
-#: ../embed/ephy-about-handler.c:506
+#: ../embed/ephy-about-handler.c:505
 msgid "Remove from overview"
 msgstr "Poista yleisnäkymästä"
 
-#: ../embed/ephy-about-handler.c:572 ../embed/ephy-about-handler.c:573
+#: ../embed/ephy-about-handler.c:571 ../embed/ephy-about-handler.c:572
 msgid "Private Browsing"
 msgstr "Yksityinen selaus"
 
-#: ../embed/ephy-about-handler.c:574
+#: ../embed/ephy-about-handler.c:573
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -566,14 +574,14 @@ msgstr ""
 "sivut eivät näy selaushistoriassa, ja kaikki selaukseen liittyvät tiedot "
 "katoavat sulkiessasi selainikkunan. Lataamasi tiedostot säilyvät."
 
-#: ../embed/ephy-about-handler.c:578
+#: ../embed/ephy-about-handler.c:577
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Incognito-tila piilottaa tekemisesi vain muilta tämän tietokoneen "
 "käyttäjiltä."
 
-#: ../embed/ephy-about-handler.c:580
+#: ../embed/ephy-about-handler.c:579
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -588,16 +596,16 @@ msgid "Blank page"
 msgstr "Tyhjä sivu"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:531
+#: ../embed/ephy-embed.c:533
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Paina %s poistuaksesi koko näytön tilasta"
 
-#: ../embed/ephy-embed.c:531
+#: ../embed/ephy-embed.c:533
 msgid "ESC"
 msgstr "ESC"
 
-#: ../embed/ephy-embed.c:531
+#: ../embed/ephy-embed.c:533
 msgid "F11"
 msgstr "F11"
 
@@ -1085,22 +1093,22 @@ msgstr ""
 "Oikeat pankit, kaupat ja muut julkiset sivustot eivät pyydä sinua tekemään "
 "tätä."
 
-#: ../embed/ephy-web-view.c:1871
+#: ../embed/ephy-web-view.c:1872
 msgid "None specified"
 msgstr "Ei määritetty"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1884 ../embed/ephy-web-view.c:1899
-#: ../embed/ephy-web-view.c:1919
+#: ../embed/ephy-web-view.c:1885 ../embed/ephy-web-view.c:1902
+#: ../embed/ephy-web-view.c:1926
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Virhe ladatessa “%s”"
 
-#: ../embed/ephy-web-view.c:1886
+#: ../embed/ephy-web-view.c:1887
 msgid "Oops! Unable to display this website."
 msgstr "Oho! Tämän sivun esittäminen epäonnistui"
 
-#: ../embed/ephy-web-view.c:1887
+#: ../embed/ephy-web-view.c:1888
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1113,15 +1121,24 @@ msgstr ""
 "siirretty uuteen osoitteeseen. Varmistathan, että internetyhteytesi toimii "
 "oikein.</p>"
 
-#: ../embed/ephy-web-view.c:1895
-msgid "Try again"
+#: ../embed/ephy-web-view.c:1896
+#| msgid "Try again"
+msgid "Try Again"
 msgstr "Yritä uudelleen"
 
-#: ../embed/ephy-web-view.c:1901
+#. Access key for the "Try Again" button on the network error page.
+#. Access key for the "Reload Anyway" button on the crash error page.
+#. Access key for the "Load Anyway" button on the TLS error page.
+#: ../embed/ephy-web-view.c:1899 ../embed/ephy-web-view.c:1913
+#: ../embed/ephy-web-view.c:1922 ../embed/ephy-web-view.c:1934
+msgid "A"
+msgstr ""
+
+#: ../embed/ephy-web-view.c:1904
 msgid "Oops! There may be a problem."
 msgstr "Oho! Mahdollinen ongelma."
 
-#: ../embed/ephy-web-view.c:1902
+#: ../embed/ephy-web-view.c:1905
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1132,20 +1149,20 @@ msgstr ""
 "p><p>Selain saattaa sulkeutua uudestaan, kun sivu ladataan uudelleen. Jos "
 "näin tapahtuu, raportoi vika <strong>%s</strong>-kehittäjille.</p>"
 
-#: ../embed/ephy-web-view.c:1907 ../embed/ephy-web-view.c:1914
+#: ../embed/ephy-web-view.c:1910 ../embed/ephy-web-view.c:1919
 msgid "Reload Anyway"
 msgstr "Päivitä silti"
 
-#: ../embed/ephy-web-view.c:1911
+#: ../embed/ephy-web-view.c:1916
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Virhe näyttäessä “%s”"
 
-#: ../embed/ephy-web-view.c:1912
+#: ../embed/ephy-web-view.c:1917
 msgid "Oops!"
 msgstr "Hups!"
 
-#: ../embed/ephy-web-view.c:1913
+#: ../embed/ephy-web-view.c:1918
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1154,16 +1171,16 @@ msgstr ""
 "toiselle sivulle jatkaaksesi."
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1921
+#: ../embed/ephy-web-view.c:1928
 msgid "Look out!"
 msgstr "Varo!"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1924
+#: ../embed/ephy-web-view.c:1931
 msgid "Load Anyway"
 msgstr "Lataa silti"
 
-#: ../embed/ephy-web-view.c:2829
+#: ../embed/ephy-web-view.c:2857
 msgid "_OK"
 msgstr "_OK"
 
@@ -1257,11 +1274,11 @@ msgstr ""
 "Salasanat aiemmasta versiosta on lukittu pääsalasanalla. Jos tahdot tuoda "
 "ne, syötä tähän pääsalasanasi."
 
-#: ../lib/ephy-profile-migrator.c:98
+#: ../lib/ephy-profile-migrator.c:99
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Evästeiden kopiointi Mozillasta epäonnistui."
 
-#: ../lib/ephy-profile-migrator.c:648
+#: ../lib/ephy-profile-migrator.c:649
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -1269,23 +1286,23 @@ msgstr ""
 "Verkkoselainsovelluksen versio 3.6 hylkäsi tämän hakemiston ja yritti "
 "muuttaa asetuksia polkuun ~/.config/epiphany"
 
-#: ../lib/ephy-profile-migrator.c:1062
+#: ../lib/ephy-profile-migrator.c:1063
 msgid "Executes only the n-th migration step"
 msgstr ""
 
-#: ../lib/ephy-profile-migrator.c:1064
+#: ../lib/ephy-profile-migrator.c:1065
 msgid "Specifies the required version for the migrator"
 msgstr "Määrittää vaaditun version muuttajalle"
 
-#: ../lib/ephy-profile-migrator.c:1066
+#: ../lib/ephy-profile-migrator.c:1067
 msgid "Specifies the profile where the migrator should run"
 msgstr ""
 
-#: ../lib/ephy-profile-migrator.c:1079
+#: ../lib/ephy-profile-migrator.c:1085
 msgid "Web profile migrator"
 msgstr "Profiilin muuttaja"
 
-#: ../lib/ephy-profile-migrator.c:1080
+#: ../lib/ephy-profile-migrator.c:1086
 msgid "Web profile migrator options"
 msgstr "Profiilin muuttajan valinnat"
 
@@ -1490,7 +1507,7 @@ msgstr "Käynnistetään…"
 #: ../src/bookmarks/ephy-bookmark-properties.c:391
 #: ../src/bookmarks/ephy-bookmarks-editor.c:820
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:807
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:806
 msgid "_Cancel"
 msgstr "_Peru"
 
@@ -1520,20 +1537,20 @@ msgstr "Kaikki tiedostot"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:598 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:599 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "T_yhjennä"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:617 ../src/ephy-window.c:115
+#: ../lib/widgets/ephy-location-entry.c:618 ../src/ephy-window.c:115
 msgid "_Undo"
 msgstr "_Kumoa"
 
-#: ../lib/widgets/ephy-location-entry.c:624
+#: ../lib/widgets/ephy-location-entry.c:625
 msgid "_Redo"
 msgstr "_Tee uudelleen"
 
-#: ../lib/widgets/ephy-location-entry.c:907
+#: ../lib/widgets/ephy-location-entry.c:908
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Vedä ja pudota tämä kuvake tehdäksesi tähän sivuun osoittavan linkin"
 
@@ -1570,7 +1587,6 @@ msgstr "Tämä sivusto ei vaikuta turvaavan yhteyttä kunnollisesti."
 
 #. Label in certificate popover on secure sites.
 #: ../lib/widgets/ephy-security-popover.c:136
-#| msgid "Your connection is secure."
 msgid "Your connection seems to be secure."
 msgstr "Yhteys vaikuttaa turvalliselta."
 
@@ -1597,7 +1613,7 @@ msgid "“%s” Properties"
 msgstr "”%s” ominaisuudet"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:392
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:38
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Lisää"
@@ -2052,7 +2068,6 @@ msgid "Search"
 msgstr "Haku"
 
 #: ../src/resources/cookies-dialog.ui.h:4
-#| msgid "Search cookies"
 msgid "Filter cookies"
 msgstr "Suodata evästeitä"
 
@@ -2165,7 +2180,6 @@ msgid "Passwords"
 msgstr "Salasanat"
 
 #: ../src/resources/passwords-dialog.ui.h:4
-#| msgid "Search passwords"
 msgid "Filter passwords"
 msgstr "Suodata salasanoja"
 
@@ -2322,35 +2336,27 @@ msgstr "Tyhjennä yksityiset tiedot…"
 msgid "Privacy"
 msgstr "Yksityisyys"
 
-#: ../src/resources/prefs-dialog.ui.h:37
-msgid "Encodings"
-msgstr "Merkistöt"
-
-#: ../src/resources/prefs-dialog.ui.h:38
-msgid "De_fault:"
-msgstr "_Oletus:"
-
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "_Remove"
 msgstr "_Poista"
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:40
 msgid "_Up"
 msgstr "_Ylös"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "_Down"
 msgstr "_Alas"
 
-#: ../src/resources/prefs-dialog.ui.h:44
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "Spell checking"
 msgstr "Oikoluku"
 
-#: ../src/resources/prefs-dialog.ui.h:45
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Enable spell checking"
 msgstr "_Ota oikoluku käyttöön"
 
-#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:832
+#: ../src/resources/prefs-dialog.ui.h:44 ../src/prefs-dialog.c:760
 msgid "Language"
 msgstr "Kieli"
 
@@ -2686,7 +2692,7 @@ msgstr "Jos lopetat, lataukset perutaan"
 msgid "Quit and cancel downloads"
 msgstr "Lopeta ja peru lataukset"
 
-#: ../src/ephy-window.c:1141 ../src/window-commands.c:273
+#: ../src/ephy-window.c:1141 ../src/window-commands.c:272
 msgid "Open"
 msgstr "Avaa"
 
@@ -2711,7 +2717,6 @@ msgid "Find"
 msgstr "Etsi"
 
 #: ../src/ephy-window.c:1157
-#| msgid "Encodings"
 msgid "Encodings…"
 msgstr "Merkistöt…"
 
@@ -2766,7 +2771,7 @@ msgstr "Tallenna media nimellä"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:545 ../src/prefs-dialog.c:551
+#: ../src/prefs-dialog.c:473 ../src/prefs-dialog.c:479
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2775,25 +2780,25 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:560
+#: ../src/prefs-dialog.c:488
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Käyttäjän määrittelemä (%s)"
 
-#: ../src/prefs-dialog.c:582
+#: ../src/prefs-dialog.c:510
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Järjestelmän kieli (%s)"
 msgstr[1] "Järjestelmän kielet (%s)"
 
-#: ../src/prefs-dialog.c:915
+#: ../src/prefs-dialog.c:843
 msgid "Select a Directory"
 msgstr "Valitse kansio"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1009
+#: ../src/prefs-dialog.c:937
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2801,93 +2806,93 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1015
+#: ../src/prefs-dialog.c:943
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1017
+#: ../src/prefs-dialog.c:945
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1020
+#: ../src/prefs-dialog.c:948
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.fi/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1022
+#: ../src/prefs-dialog.c:950
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1025
+#: ../src/prefs-dialog.c:953
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.fi/search?q=%s"
 
-#: ../src/window-commands.c:328
+#: ../src/window-commands.c:327
 msgid "Save"
 msgstr "Tallenna"
 
-#: ../src/window-commands.c:708
+#: ../src/window-commands.c:707
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Verkkosovellus nimeltä ”%s” on jo olemassa. Korvataanko se?"
 
-#: ../src/window-commands.c:711
+#: ../src/window-commands.c:710
 msgid "Cancel"
 msgstr "Peru"
 
-#: ../src/window-commands.c:713
+#: ../src/window-commands.c:712
 msgid "Replace"
 msgstr "Korvaa"
 
-#: ../src/window-commands.c:717
+#: ../src/window-commands.c:716
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Tämän niminen sovellus on jo olemassa. Sen korvaaminen ylikirjoittaa sen."
 
-#: ../src/window-commands.c:753
+#: ../src/window-commands.c:752
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Sovellus ”%s” on valmiina käyttöön"
 
-#: ../src/window-commands.c:756
+#: ../src/window-commands.c:755
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Sovellusta ”%s” ei voitu luoda"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:763
 msgid "Launch"
 msgstr "Käynnistä"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:804
+#: ../src/window-commands.c:803
 msgid "Create Web Application"
 msgstr "Luo verkkosovellus"
 
-#: ../src/window-commands.c:809
+#: ../src/window-commands.c:808
 msgid "C_reate"
 msgstr "_Luo"
 
-#: ../src/window-commands.c:1475 ../src/window-commands.c:1498
+#: ../src/window-commands.c:1474 ../src/window-commands.c:1497
 msgid "Contact us at:"
 msgstr "Ota yhteyttä osoitteessa:"
 
-#: ../src/window-commands.c:1478
+#: ../src/window-commands.c:1477
 msgid "Contributors:"
 msgstr "Avustajat:"
 
-#: ../src/window-commands.c:1481
+#: ../src/window-commands.c:1480
 msgid "Past developers:"
 msgstr "Aikaisemmat kehittäjät:"
 
-#: ../src/window-commands.c:1507
+#: ../src/window-commands.c:1506
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2904,7 +2909,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1530
+#: ../src/window-commands.c:1529
 msgid "translator-credits"
 msgstr ""
 "Jiri Grönroos, 2012-2015\n"
@@ -2914,15 +2919,15 @@ msgstr ""
 "\n"
 "https://l10n.gnome.org/teams/fi/"
 
-#: ../src/window-commands.c:1533
+#: ../src/window-commands.c:1532
 msgid "Web Website"
 msgstr "Gnomen verkkoselaimen sivusto"
 
-#: ../src/window-commands.c:1672
+#: ../src/window-commands.c:1671
 msgid "Enable caret browsing mode?"
 msgstr "Käytetäänkö kohdistinselaintilaa?"
 
-#: ../src/window-commands.c:1675
+#: ../src/window-commands.c:1674
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2932,9 +2937,15 @@ msgstr ""
 "käytöstä. Näin sivuille asetetaan liikuteltava kursori, jonka avulla sivulla "
 "on mahdollista liikkua. Haluatko ottaa nuolilla liikkumisen käyttöön?"
 
-#: ../src/window-commands.c:1678
+#: ../src/window-commands.c:1677
 msgid "_Enable"
 msgstr "_Käytä"
+
+#~ msgid "Encodings"
+#~ msgstr "Merkistöt"
+
+#~ msgid "De_fault:"
+#~ msgstr "_Oletus:"
 
 #~ msgid "Part of this page is insecure."
 #~ msgstr "Osa tästä sivusta ei ole salattu."
