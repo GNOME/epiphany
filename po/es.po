@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-01-25 04:52+0000\n"
-"PO-Revision-Date: 2016-01-25 13:21+0100\n"
+"POT-Creation-Date: 2016-02-01 04:53+0000\n"
+"PO-Revision-Date: 2016-02-01 09:19+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -88,13 +88,12 @@ msgid "The GNOME web site displayed in GNOME web."
 msgstr "La página web de GNOME mostrada en GNOME Web"
 
 #: ../data/epiphany.appdata.xml.in.h:6
-#| msgid "Use GNOME fonts"
 msgid "The GNOME Project"
 msgstr "El proyecto GNOME"
 
 #: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:290
 #: ../embed/ephy-about-handler.c:321 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:311 ../src/ephy-main.c:463 ../src/window-commands.c:1514
+#: ../src/ephy-main.c:311 ../src/ephy-main.c:463 ../src/window-commands.c:1513
 msgid "Web"
 msgstr "Web"
 
@@ -1133,22 +1132,22 @@ msgstr ""
 "Los bancos legítimos, las tiendas y otros sitios públicos no le pedirán que "
 "hagan esto."
 
-#: ../embed/ephy-web-view.c:1871
+#: ../embed/ephy-web-view.c:1872
 msgid "None specified"
 msgstr "Ninguna espacificada"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1884 ../embed/ephy-web-view.c:1899
-#: ../embed/ephy-web-view.c:1919
+#: ../embed/ephy-web-view.c:1885 ../embed/ephy-web-view.c:1902
+#: ../embed/ephy-web-view.c:1926
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Hubo un problema al cargar «%s»"
 
-#: ../embed/ephy-web-view.c:1886
+#: ../embed/ephy-web-view.c:1887
 msgid "Oops! Unable to display this website."
 msgstr "No se ha podido cargar esta página web."
 
-#: ../embed/ephy-web-view.c:1887
+#: ../embed/ephy-web-view.c:1888
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1161,15 +1160,24 @@ msgstr ""
 "se haya movido a otra dirección. Puede querer comprobar que su conexión a "
 "Internet está funcionando correctamente.</p>"
 
-#: ../embed/ephy-web-view.c:1895
-msgid "Try again"
+#: ../embed/ephy-web-view.c:1896
+#| msgid "Try again"
+msgid "Try Again"
 msgstr "Intentarlo de nuevo"
 
-#: ../embed/ephy-web-view.c:1901
+#. Access key for the "Try Again" button on the network error page.
+#. Access key for the "Reload Anyway" button on the crash error page.
+#. Access key for the "Load Anyway" button on the TLS error page.
+#: ../embed/ephy-web-view.c:1899 ../embed/ephy-web-view.c:1913
+#: ../embed/ephy-web-view.c:1922 ../embed/ephy-web-view.c:1934
+msgid "A"
+msgstr "R"
+
+#: ../embed/ephy-web-view.c:1904
 msgid "Oops! There may be a problem."
 msgstr "Es posible que haya un problema."
 
-#: ../embed/ephy-web-view.c:1902
+#: ../embed/ephy-web-view.c:1905
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1180,20 +1188,20 @@ msgstr ""
 "a pasar, informe del problema a los desarrolladores de <strong>%s</strong>.</"
 "p>"
 
-#: ../embed/ephy-web-view.c:1907 ../embed/ephy-web-view.c:1914
+#: ../embed/ephy-web-view.c:1910 ../embed/ephy-web-view.c:1919
 msgid "Reload Anyway"
 msgstr "Recargar de todas formas"
 
-#: ../embed/ephy-web-view.c:1911
+#: ../embed/ephy-web-view.c:1916
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Hubo un problema al mostrar «%s»"
 
-#: ../embed/ephy-web-view.c:1912
+#: ../embed/ephy-web-view.c:1917
 msgid "Oops!"
 msgstr "¡Ups!"
 
-#: ../embed/ephy-web-view.c:1913
+#: ../embed/ephy-web-view.c:1918
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1202,16 +1210,16 @@ msgstr ""
 "diferente para continuar."
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1921
+#: ../embed/ephy-web-view.c:1928
 msgid "Look out!"
 msgstr "Esté atento."
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1924
+#: ../embed/ephy-web-view.c:1931
 msgid "Load Anyway"
 msgstr "Cargar de todas formas"
 
-#: ../embed/ephy-web-view.c:2847
+#: ../embed/ephy-web-view.c:2857
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -1538,7 +1546,7 @@ msgstr "Iniciando…"
 #: ../src/bookmarks/ephy-bookmark-properties.c:391
 #: ../src/bookmarks/ephy-bookmarks-editor.c:820
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:807
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:806
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2725,7 +2733,7 @@ msgstr "Si sale, se cancelarán las descargas"
 msgid "Quit and cancel downloads"
 msgstr "Salir y cancelar las descargas"
 
-#: ../src/ephy-window.c:1141 ../src/window-commands.c:273
+#: ../src/ephy-window.c:1141 ../src/window-commands.c:272
 msgid "Open"
 msgstr "Abrir"
 
@@ -2866,66 +2874,66 @@ msgstr "Bing"
 msgid "https://www.bing.com/search?q=%s"
 msgstr "http://www.bing.com/search?q=%s&cc=es"
 
-#: ../src/window-commands.c:328
+#: ../src/window-commands.c:327
 msgid "Save"
 msgstr "Guardar"
 
-#: ../src/window-commands.c:708
+#: ../src/window-commands.c:707
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Ya existe una aplicación web con nombre «%s». ¿Quiere reemplazarla?"
 
-#: ../src/window-commands.c:711
+#: ../src/window-commands.c:710
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../src/window-commands.c:713
+#: ../src/window-commands.c:712
 msgid "Replace"
 msgstr "Reemplazar"
 
-#: ../src/window-commands.c:717
+#: ../src/window-commands.c:716
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Ya existe una aplicación con el mismo nombre. Reemplazarla la sobrescribirá."
 
-#: ../src/window-commands.c:753
+#: ../src/window-commands.c:752
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "La aplicación «%s» está lista para usarse"
 
-#: ../src/window-commands.c:756
+#: ../src/window-commands.c:755
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "No se pudo crear la aplicación «%s»"
 
-#: ../src/window-commands.c:764
+#: ../src/window-commands.c:763
 msgid "Launch"
 msgstr "Lanzar"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:804
+#: ../src/window-commands.c:803
 msgid "Create Web Application"
 msgstr "Crear una aplicación web"
 
-#: ../src/window-commands.c:809
+#: ../src/window-commands.c:808
 msgid "C_reate"
 msgstr "C_rear"
 
-#: ../src/window-commands.c:1475 ../src/window-commands.c:1498
+#: ../src/window-commands.c:1474 ../src/window-commands.c:1497
 msgid "Contact us at:"
 msgstr "Contacte con nosotros en:"
 
-#: ../src/window-commands.c:1478
+#: ../src/window-commands.c:1477
 msgid "Contributors:"
 msgstr "Contribuyentes:"
 
-#: ../src/window-commands.c:1481
+#: ../src/window-commands.c:1480
 msgid "Past developers:"
 msgstr "Desarrolladores anteriores:"
 
-#: ../src/window-commands.c:1507
+#: ../src/window-commands.c:1506
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2942,22 +2950,22 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1530
+#: ../src/window-commands.c:1529
 msgid "translator-credits"
 msgstr ""
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/window-commands.c:1533
+#: ../src/window-commands.c:1532
 msgid "Web Website"
 msgstr "Sitio web de Web"
 
-#: ../src/window-commands.c:1672
+#: ../src/window-commands.c:1671
 msgid "Enable caret browsing mode?"
 msgstr "¿Activar el modo de navegación con cursor?"
 
-#: ../src/window-commands.c:1675
+#: ../src/window-commands.c:1674
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2967,7 +2975,7 @@ msgstr ""
 "característica ubica un cursor movible en las páginas web, permitiéndole "
 "moverse con su teclado. ¿Quiere activar el modo de navegación con cursor?"
 
-#: ../src/window-commands.c:1678
+#: ../src/window-commands.c:1677
 msgid "_Enable"
 msgstr "_Activar"
 
