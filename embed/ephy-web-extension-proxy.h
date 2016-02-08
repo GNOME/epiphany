@@ -27,9 +27,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyWebExtensionProxy, ephy_web_extension_proxy, EPHY, WEB_EXTENSION_PROXY, GObject)
 
-EphyWebExtensionProxy *ephy_web_extension_proxy_new                                       (GDBusConnection       *bus,
-                                                                                           const char            *service_name);
-const char *           ephy_web_extension_proxy_get_name_owner                            (EphyWebExtensionProxy *web_extension);
+EphyWebExtensionProxy *ephy_web_extension_proxy_new                                       (GDBusConnection       *connection);
 void                   ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExtensionProxy *web_extension,
                                                                                            guint                  request_id,
                                                                                            gboolean               response);

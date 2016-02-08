@@ -30,10 +30,9 @@ G_DECLARE_FINAL_TYPE (EphyWebExtension, ephy_web_extension, EPHY, WEB_EXTENSION,
 EphyWebExtension *ephy_web_extension_get            (void);
 void              ephy_web_extension_initialize     (EphyWebExtension   *extension,
                                                      WebKitWebExtension *wk_extension,
+                                                     const char         *server_address,
                                                      const char         *dot_dir,
                                                      gboolean            is_private_profile);
-void              ephy_web_extension_dbus_register  (EphyWebExtension   *extension,
-                                                     GDBusConnection    *connection);
 
 
 G_END_DECLS

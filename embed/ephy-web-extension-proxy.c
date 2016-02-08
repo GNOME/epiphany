@@ -26,37 +26,38 @@ struct _EphyWebExtensionProxy
 {
   GObject parent_instance;
 
-  GDBusProxy *proxy;
-  gchar *name_owner;
   GCancellable *cancellable;
-  guint watch_name_id;
+  GDBusProxy *proxy;
+  GDBusConnection *connection;
+
+  guint page_created_signal_id;
 };
 
-G_DEFINE_TYPE (EphyWebExtensionProxy, ephy_web_extension_proxy, G_TYPE_OBJECT)
-
-static void
-ephy_web_extension_proxy_finalize (GObject *object)
+enum
 {
-  EphyWebExtensionProxy *web_extension = EPHY_WEB_EXTENSION_PROXY (object);
+  PAGE_CREATED,
 
-  g_clear_object (&web_extension->proxy);
+  LAST_SIGNAL
+};
 
-  G_OBJECT_CLASS (ephy_web_extension_proxy_parent_class)->finalize (object);
-}
+static guint signals[LAST_SIGNAL];
+
+G_DEFINE_TYPE (EphyWebExtensionProxy, ephy_web_extension_proxy, G_TYPE_OBJECT)
 
 static void
 ephy_web_extension_proxy_dispose (GObject *object)
 {
   EphyWebExtensionProxy *web_extension = EPHY_WEB_EXTENSION_PROXY (object);
 
-  g_clear_object (&web_extension->cancellable);
-
-  if (web_extension->watch_name_id > 0) {
-    g_bus_unwatch_name (web_extension->watch_name_id);
-    web_extension->watch_name_id = 0;
+  if (web_extension->page_created_signal_id > 0) {
+    g_dbus_connection_signal_unsubscribe (web_extension->connection,
+                                          web_extension->page_created_signal_id);
+    web_extension->page_created_signal_id = 0;
   }
 
-  g_clear_pointer (&web_extension->name_owner, g_free);
+  g_clear_object (&web_extension->cancellable);
+  g_clear_object (&web_extension->proxy);
+  g_clear_object (&web_extension->connection);
 
   G_OBJECT_CLASS (ephy_web_extension_proxy_parent_class)->dispose (object);
 }
@@ -71,8 +72,36 @@ ephy_web_extension_proxy_class_init (EphyWebExtensionProxyClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ephy_web_extension_proxy_finalize;
   object_class->dispose = ephy_web_extension_proxy_dispose;
+
+  /**
+   * EphyWebExtensionProxy::page-created:
+   * @web_extension: the #EphyWebExtensionProxy
+   * @page_id: the identifier of the web page created
+   *
+   * Emitted when a web page is created in the web process.
+   */
+  signals[PAGE_CREATED] =
+    g_signal_new ("page-created",
+                  EPHY_TYPE_WEB_EXTENSION_PROXY,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_UINT64);
+}
+
+static void
+web_extension_page_created (GDBusConnection *connection,
+                            const char *sender_name,
+                            const char *object_path,
+                            const char *interface_name,
+                            const char *signal_name,
+                            GVariant *parameters,
+                            EphyWebExtensionProxy *web_extension)
+{
+  guint64 page_id;
+  g_variant_get (parameters, "(t)", &page_id);
+  g_signal_emit (web_extension, signals[PAGE_CREATED], 0, page_id);
 }
 
 static void
@@ -84,81 +113,72 @@ web_extension_proxy_created_cb (GDBusProxy *proxy,
 
   web_extension->proxy = g_dbus_proxy_new_finish (result, &error);
   if (!web_extension->proxy) {
-    g_warning ("Error creating web extension proxy: %s\n", error->message);
+    g_warning ("Error creating web extension proxy: %s", error->message);
     g_error_free (error);
+
+    /* Attempt to trigger connection_closed_cb, which will destroy us, and ensure that
+     * that EphyEmbedShell will remove us from its extensions list.
+     */
+    g_dbus_connection_close (web_extension->connection,
+                             web_extension->cancellable,
+                             NULL /* GAsyncReadyCallback */,
+                             NULL);
+    return;
+  }
+
+  web_extension->page_created_signal_id =
+    g_dbus_connection_signal_subscribe (web_extension->connection,
+                                        NULL,
+                                        EPHY_WEB_EXTENSION_INTERFACE,
+                                        "PageCreated",
+                                        EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                        NULL,
+                                        G_DBUS_SIGNAL_FLAGS_NONE,
+                                        (GDBusSignalCallback)web_extension_page_created,
+                                        web_extension,
+                                        NULL);
+}
+
+static void
+connection_closed_cb (GDBusConnection *connection,
+                      gboolean remote_peer_vanished,
+                      GError *error,
+                      EphyWebExtensionProxy *web_extension)
+{
+  if (error) {
+    if (!remote_peer_vanished)
+      g_warning ("Unexpectedly lost connection to web extension: %s", error->message);
   }
 
   g_object_unref (web_extension);
 }
 
-static void
-web_extension_appeared_cb (GDBusConnection *connection,
-                           const gchar *name,
-                           const gchar *name_owner,
-                           EphyWebExtensionProxy *web_extension)
+EphyWebExtensionProxy *
+ephy_web_extension_proxy_new (GDBusConnection *connection)
 {
-  web_extension->name_owner = g_strdup (name_owner);
+  EphyWebExtensionProxy *web_extension;
+
+  g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), NULL);
+
+  web_extension = g_object_new (EPHY_TYPE_WEB_EXTENSION_PROXY, NULL);
+
+  g_signal_connect (connection, "closed",
+                    G_CALLBACK (connection_closed_cb), web_extension);
+
   web_extension->cancellable = g_cancellable_new ();
+  web_extension->connection = g_object_ref (connection);
+
   g_dbus_proxy_new (connection,
-                    G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START |
-                    G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
-                    G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                    G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
                     NULL,
-                    name,
+                    NULL,
                     EPHY_WEB_EXTENSION_OBJECT_PATH,
                     EPHY_WEB_EXTENSION_INTERFACE,
                     web_extension->cancellable,
                     (GAsyncReadyCallback)web_extension_proxy_created_cb,
-                    /* Ref here because the web process could crash, triggering
-                     * web_extension_vanished_cb() before this finishes. */
-                    g_object_ref (web_extension));
-}
-
-static void
-web_extension_vanished_cb (GDBusConnection *connection,
-                           const gchar *name,
-                           EphyWebExtensionProxy *web_extension)
-{
-  if (web_extension->name_owner)
-    g_object_unref (web_extension);
-}
-
-static void
-ephy_web_extension_proxy_watch_name (EphyWebExtensionProxy *web_extension,
-                                     GDBusConnection* bus,
-                                     const char *service_name)
-{
-  web_extension->watch_name_id =
-    g_bus_watch_name_on_connection (bus,
-                                    service_name,
-                                    G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                    (GBusNameAppearedCallback)web_extension_appeared_cb,
-                                    (GBusNameVanishedCallback)web_extension_vanished_cb,
-                                    web_extension,
-                                    NULL);
-}
-
-EphyWebExtensionProxy *
-ephy_web_extension_proxy_new (GDBusConnection *bus,
-                              const char *service_name)
-{
-  EphyWebExtensionProxy *web_extension;
-
-  g_return_val_if_fail (G_IS_DBUS_CONNECTION (bus), NULL);
-  g_return_val_if_fail (service_name != NULL, NULL);
-
-  web_extension = g_object_new (EPHY_TYPE_WEB_EXTENSION_PROXY, NULL);
-  ephy_web_extension_proxy_watch_name (web_extension, bus, service_name);
+                    web_extension);
 
   return web_extension;
-}
-
-const char *
-ephy_web_extension_proxy_get_name_owner (EphyWebExtensionProxy *web_extension)
-{
-  g_return_val_if_fail (EPHY_IS_WEB_EXTENSION_PROXY (web_extension), NULL);
-
-  return web_extension->name_owner;
 }
 
 void

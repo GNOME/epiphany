@@ -20,59 +20,51 @@
 #include "config.h"
 
 #include "ephy-web-extension.h"
-#include "ephy-web-extension-names.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-
-static void
-name_acquired_cb (GDBusConnection *connection,
-                  const char *name,
-                  EphyWebExtension *extension)
-{
-  ephy_web_extension_dbus_register (extension, connection);
-}
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-prototypes"
 
+static EphyWebExtension *extension = NULL;
+
 G_MODULE_EXPORT void
-webkit_web_extension_initialize_with_user_data (WebKitWebExtension *extension,
+webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_extension,
                                                 GVariant *user_data)
 {
-  EphyWebExtension *web_extension;
-  char *service_name;
-  const char *extension_id;
+  const char *server_address;
   const char *dot_dir;
   gboolean private_profile;
   GError *error = NULL;
 
-  g_variant_get (user_data, "(&s&sb)", &extension_id, &dot_dir, &private_profile);
+  g_variant_get (user_data, "(m&s&sb)", &server_address, &dot_dir, &private_profile);
+
+  if (!server_address) {
+    g_warning ("UI process did not start D-Bus server, giving up.");
+    return;
+  }
 
   if (!ephy_file_helpers_init (dot_dir, 0, &error)) {
-    g_printerr ("Failed to initialize file helpers: %s\n", error->message);
+    g_warning ("Failed to initialize file helpers: %s", error->message);
     g_error_free (error);
   }
 
   ephy_debug_init ();
 
-  web_extension = ephy_web_extension_get ();
-  ephy_web_extension_initialize (web_extension, extension, dot_dir, private_profile);
+  extension = ephy_web_extension_get ();
 
-  service_name = g_strdup_printf ("%s-%s", EPHY_WEB_EXTENSION_SERVICE_NAME, extension_id);
-  g_bus_own_name (G_BUS_TYPE_SESSION,
-                  service_name,
-                  G_BUS_NAME_OWNER_FLAGS_NONE,
-                  NULL,
-                  (GBusNameAcquiredCallback)name_acquired_cb,
-                  NULL,
-                  web_extension, NULL);
-  g_free (service_name);
+  ephy_web_extension_initialize (extension,
+                                 webkit_extension,
+                                 server_address,
+                                 dot_dir,
+                                 private_profile);
 }
 
 static void __attribute__((destructor))
 ephy_web_extension_shutdown (void)
 {
-  g_object_unref (ephy_web_extension_get ());
+  if (extension)
+    g_object_unref (extension);
 }
 
 #pragma GCC diagnostic pop

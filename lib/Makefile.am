@@ -11,6 +11,8 @@ TYPES_H_FILES = \
 	ephy-security-levels.h
 
 libephymisc_la_SOURCES = \
+	ephy-dbus-util.c			\
+	ephy-dbus-util.h			\
 	ephy-debug.c				\
 	ephy-debug.h				\
 	ephy-dnd.c				\

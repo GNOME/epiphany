@@ -20,6 +20,7 @@
 #include "config.h"
 #include "ephy-web-extension.h"
 
+#include "ephy-dbus-util.h"
 #include "ephy-debug.h"
 #include "ephy-embed-form-auth.h"
 #include "ephy-file-helpers.h"
@@ -49,7 +50,7 @@ struct _EphyWebExtension
   gboolean initialized;
 
   GDBusConnection *dbus_connection;
-  guint registration_id;
+  GCancellable *cancellable;
   GArray *page_created_signals_pending;
 
   EphyUriTester *uri_tester;
@@ -1299,16 +1300,10 @@ ephy_web_extension_dispose (GObject *object)
   if (extension->page_created_signals_pending) {
       g_array_free (extension->page_created_signals_pending, TRUE);
       extension->page_created_signals_pending = NULL;
-    }
+   }
 
-  if (extension->dbus_connection) {
-    g_object_remove_weak_pointer (G_OBJECT (extension->dbus_connection),
-                                  (gpointer *)&extension->dbus_connection);
-    g_dbus_connection_unregister_object (extension->dbus_connection,
-                                         extension->registration_id);
-    extension->registration_id = 0;
-    extension->dbus_connection = NULL;
-  }
+  g_clear_object (&extension->cancellable);
+  g_clear_object (&extension->dbus_connection);
 
   g_clear_object (&extension->extension);
 
@@ -1342,12 +1337,63 @@ ephy_web_extension_get (void)
   return EPHY_WEB_EXTENSION (g_once (&once_init, ephy_web_extension_create_instance, NULL));
 }
 
+static void
+dbus_connection_created_cb (GObject *source_object,
+                            GAsyncResult *result,
+                            EphyWebExtension *extension)
+{
+  static GDBusNodeInfo *introspection_data = NULL;
+  GDBusConnection *connection;
+  guint registration_id;
+  GError *error = NULL;
+
+  if (!introspection_data)
+    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
+
+  connection = g_dbus_connection_new_for_address_finish (result, &error);
+  if (error) {
+    g_warning ("Failed to connect to UI process: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  registration_id =
+    g_dbus_connection_register_object (connection,
+                                       EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                       introspection_data->interfaces[0],
+                                       &interface_vtable,
+                                       extension,
+                                       NULL,
+                                       &error);
+  if (!registration_id) {
+    g_warning ("Failed to register web extension object: %s\n", error->message);
+    g_error_free (error);
+    g_object_unref (connection);
+    return;
+  }
+
+  extension->dbus_connection = connection;
+  ephy_web_extension_emit_page_created_signals_pending (extension);
+}
+
+static gboolean
+authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
+                                 GIOStream *stream,
+                                 GCredentials *credentials,
+                                 EphyWebExtension *extension)
+{
+  return ephy_dbus_peer_is_authorized (credentials);
+}
+
 void
 ephy_web_extension_initialize (EphyWebExtension *extension,
                                WebKitWebExtension *wk_extension,
+                               const char *server_address,
                                const char *dot_dir,
                                gboolean is_private_profile)
 {
+  GDBusAuthObserver *observer;
+
   g_return_if_fail (EPHY_IS_WEB_EXTENSION (extension));
 
   if (extension->initialized)
@@ -1363,35 +1409,18 @@ ephy_web_extension_initialize (EphyWebExtension *extension,
   g_signal_connect_swapped (extension->extension, "page-created",
                             G_CALLBACK (ephy_web_extension_page_created_cb),
                             extension);
-}
 
-void
-ephy_web_extension_dbus_register (EphyWebExtension *extension,
-                                  GDBusConnection *connection)
-{
-  GError *error = NULL;
-  static GDBusNodeInfo *introspection_data = NULL;
+  extension->cancellable = g_cancellable_new ();
 
-  g_return_if_fail (EPHY_IS_WEB_EXTENSION (extension));
-  g_return_if_fail (G_IS_DBUS_CONNECTION (connection));
+  observer = g_dbus_auth_observer_new ();
+  g_signal_connect (observer, "authorize-authenticated-peer",
+                    G_CALLBACK (authorize_authenticated_peer_cb), extension);
 
-  if (!introspection_data)
-    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
-
-  extension->registration_id =
-    g_dbus_connection_register_object (connection,
-                                       EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                       introspection_data->interfaces[0],
-                                       &interface_vtable,
-                                       extension,
-                                       NULL,
-                                       &error);
-  if (!extension->registration_id) {
-    g_warning ("Failed to register web extension object: %s\n", error->message);
-    g_error_free (error);
-  } else {
-    extension->dbus_connection = connection;
-    g_object_add_weak_pointer (G_OBJECT (connection), (gpointer *)&extension->dbus_connection);
-    ephy_web_extension_emit_page_created_signals_pending (extension);
-  }
+  g_dbus_connection_new_for_address (server_address,
+                                     G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
+                                     observer,
+                                     extension->cancellable,
+                                     (GAsyncReadyCallback)dbus_connection_created_cb,
+                                     extension);
+  g_object_unref (observer);
 }

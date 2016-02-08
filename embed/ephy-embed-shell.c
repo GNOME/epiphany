@@ -21,6 +21,7 @@
 #include "ephy-embed-shell.h"
 
 #include "ephy-about-handler.h"
+#include "ephy-dbus-util.h"
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-private.h"
@@ -56,9 +57,8 @@ typedef struct {
   EphyAboutHandler *about_handler;
   guint update_overview_timeout_id;
   guint hiding_overview_item;
-  GDBusConnection *bus;
+  GDBusServer *dbus_server;
   GList *web_extensions;
-  guint web_extensions_page_created_signal_id;
 } EphyEmbedShellPrivate;
 
 enum
@@ -105,30 +105,9 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->user_content);
   g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->web_context);
+  g_clear_object (&priv->dbus_server);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
-}
-
-static gint
-web_extension_compare (EphyWebExtensionProxy *proxy,
-                       const char *name_owner)
-{
-  return g_strcmp0 (ephy_web_extension_proxy_get_name_owner (proxy), name_owner);
-}
-
-static EphyWebExtensionProxy *
-ephy_embed_shell_find_web_extension (EphyEmbedShell *shell,
-                                     const char *name_owner)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  GList *l;
-
-  l = g_list_find_custom (priv->web_extensions, name_owner, (GCompareFunc)web_extension_compare);
-
-  if (!l)
-    g_warning ("Could not find extension with name owner `%s´.", name_owner);
-
-  return l ? EPHY_WEB_EXTENSION_PROXY (l->data) : NULL;
 }
 
 static void
@@ -151,26 +130,6 @@ web_extension_form_auth_data_message_received_cb (WebKitUserContentManager *mana
   g_signal_emit (shell, signals[FORM_AUTH_DATA_SAVE_REQUESTED], 0,
                  request_id, page_id, hostname, username);
   g_variant_unref (variant);
-}
-
-static void
-web_extension_page_created (GDBusConnection *connection,
-                            const char *sender_name,
-                            const char *object_path,
-                            const char *interface_name,
-                            const char *signal_name,
-                            GVariant *parameters,
-                            EphyEmbedShell *shell)
-{
-  EphyWebExtensionProxy *web_extension;
-  guint64 page_id;
-
-  g_variant_get (parameters, "(t)", &page_id);
-
-  web_extension = ephy_embed_shell_find_web_extension (shell, sender_name);
-  if (!web_extension)
-    return;
-  g_signal_emit (shell, signals[PAGE_CREATED], 0, page_id, web_extension);
 }
 
 static void
@@ -297,40 +256,6 @@ web_extension_about_apps_message_received_cb (WebKitUserContentManager *manager,
   app_id = ephy_embed_utils_get_js_result_as_string (message);
   ephy_web_application_delete (app_id);
   g_free (app_id);
-}
-
-static void
-web_extension_destroyed (EphyEmbedShell *shell,
-                         GObject *web_extension)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  priv->web_extensions = g_list_remove (priv->web_extensions, web_extension);
-}
-
-static void
-ephy_embed_shell_watch_web_extension (EphyEmbedShell *shell,
-                                      const char *web_extension_id)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  EphyWebExtensionProxy *web_extension;
-  char *service_name;
-
-  if (!priv->bus)
-    return;
-
-  service_name = g_strdup_printf ("%s-%s", EPHY_WEB_EXTENSION_SERVICE_NAME, web_extension_id);
-  web_extension = ephy_web_extension_proxy_new (priv->bus, service_name);
-  priv->web_extensions = g_list_prepend (priv->web_extensions, web_extension);
-  g_object_weak_ref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
-  g_free (service_name);
-}
-
-static void
-ephy_embed_shell_unwatch_web_extension (EphyWebExtensionProxy *web_extension,
-                                        EphyEmbedShell *shell)
-{
-  g_object_weak_unref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
 }
 
 static void
@@ -519,47 +444,129 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
 }
 
 static void
+web_extension_destroyed (EphyEmbedShell *shell,
+                         GObject *web_extension)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  priv->web_extensions = g_list_remove (priv->web_extensions, web_extension);
+}
+
+static void
+ephy_embed_shell_watch_web_extension (EphyEmbedShell *shell,
+                                      EphyWebExtensionProxy *web_extension)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  priv->web_extensions = g_list_prepend (priv->web_extensions, web_extension);
+  g_object_weak_ref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
+}
+
+static void
+ephy_embed_shell_unwatch_web_extension (EphyWebExtensionProxy *web_extension,
+                                        EphyEmbedShell *shell)
+{
+  g_object_weak_unref (G_OBJECT (web_extension), (GWeakNotify)web_extension_destroyed, shell);
+}
+
+static void
 initialize_web_extensions (WebKitWebContext* web_context,
                            EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GVariant *user_data;
   gboolean private_profile;
-  char *web_extension_id;
-  static guint web_extension_count = 0;
+  const char *address;
 
   webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_EXTENSIONS_DIR);
 
-  web_extension_id = g_strdup_printf ("%u-%u", getpid (), ++web_extension_count);
-  ephy_embed_shell_watch_web_extension (shell, web_extension_id);
+  address = priv->dbus_server ? g_dbus_server_get_client_address (priv->dbus_server) : NULL;
 
   private_profile = EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode);
-  user_data = g_variant_new ("(ssb)", web_extension_id, ephy_dot_dir (), private_profile);
+  user_data = g_variant_new ("(mssb)",
+                             address,
+                             ephy_dot_dir (),
+                             private_profile);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, user_data);
 }
 
 static void
-ephy_embed_shell_setup_web_extensions_connection (EphyEmbedShell *shell)
+web_extension_page_created (EphyWebExtensionProxy *extension,
+                            guint64 page_id,
+                            EphyEmbedShell *shell)
+{
+  g_signal_emit (shell, signals[PAGE_CREATED], 0, page_id, extension);
+}
+
+static gboolean
+new_connection_cb (GDBusServer *server,
+                   GDBusConnection *connection,
+                   EphyEmbedShell *shell)
+{
+  EphyWebExtensionProxy *extension = ephy_web_extension_proxy_new (connection);
+  ephy_embed_shell_watch_web_extension (shell, extension);
+
+  g_signal_connect_object (extension, "page-created",
+                           G_CALLBACK (web_extension_page_created), shell, 0);
+
+  return TRUE;
+}
+
+static gboolean
+authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
+                                 GIOStream *stream,
+                                 GCredentials *credentials,
+                                 EphyEmbedShell *shell)
+{
+  return ephy_dbus_peer_is_authorized (credentials);
+}
+
+static void
+ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  GDBusAuthObserver *observer;
+  char *address;
+  char *guid;
+  GError *error = NULL;
 
-  priv->bus = g_application_get_dbus_connection (G_APPLICATION (shell));
-  if (!priv->bus) {
-    g_warning ("Application not connected to session bus");
-    return;
+  /* On Linux, this creates an abstract socket with a name that unnecessarily
+   * begins with the tmp dir. Where abstract sockets are unavailable, it
+   * actually creates the socket under the tmp dir. */
+  address = g_strdup_printf ("unix:tmpdir=%s", g_get_tmp_dir ());
+
+  guid = g_dbus_generate_guid ();
+  observer = g_dbus_auth_observer_new ();
+
+  g_signal_connect (observer, "authorize-authenticated-peer",
+                    G_CALLBACK (authorize_authenticated_peer_cb), shell);
+
+  /* Why sync?
+   *
+   * (a) The server must be started before web extensions try to connect.
+   * (b) Gio actually has no async version. Don't know why.
+   */
+  priv->dbus_server = g_dbus_server_new_sync (address,
+                                              G_DBUS_SERVER_FLAGS_NONE,
+                                              guid,
+                                              observer,
+                                              NULL,
+                                              &error);
+
+  if (error) {
+    g_warning ("Failed to start web extension server on %s: %s", address, error->message);
+    g_error_free (error);
+    goto out;
   }
 
-  priv->web_extensions_page_created_signal_id =
-    g_dbus_connection_signal_subscribe (priv->bus,
-                                        NULL,
-                                        EPHY_WEB_EXTENSION_INTERFACE,
-                                        "PageCreated",
-                                        EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                        NULL,
-                                        G_DBUS_SIGNAL_FLAGS_NONE,
-                                        (GDBusSignalCallback)web_extension_page_created,
-                                        shell,
-                                        NULL);
+  g_signal_connect (priv->dbus_server, "new-connection",
+                    G_CALLBACK (new_connection_cb), shell);
+  g_dbus_server_start (priv->dbus_server);
+
+out:
+  g_free (address);
+  g_free (guid);
+  g_object_unref (observer);
 }
 
 static void
@@ -631,7 +638,7 @@ ephy_embed_shell_startup (GApplication* application)
   if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST)
     ephy_embed_shell_create_web_context (embed_shell);
 
-  ephy_embed_shell_setup_web_extensions_connection (shell);
+  ephy_embed_shell_setup_web_extensions_server (shell);
 
   /* User content manager */
   if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST)
@@ -713,15 +720,13 @@ ephy_embed_shell_shutdown (GApplication* application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->shutdown (application);
 
+  if (priv->dbus_server)
+    g_dbus_server_stop (priv->dbus_server);
+
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "overview");
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "tlsErrorPage");
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "formAuthData");
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "aboutApps");
-
-  if (priv->web_extensions_page_created_signal_id > 0) {
-    g_dbus_connection_signal_unsubscribe (priv->bus, priv->web_extensions_page_created_signal_id);
-    priv->web_extensions_page_created_signal_id = 0;
-  }
 
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
 
