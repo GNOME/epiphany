@@ -63,6 +63,7 @@ struct _EphySessionPrivate
 	GQueue *closed_tabs;
 	guint save_source_id;
 	GCancellable *save_cancellable;
+	guint closing : 1;
 	guint dont_save : 1;
 };
 
@@ -556,8 +557,9 @@ ephy_session_close (EphySession *session)
 		g_source_remove (priv->save_source_id);
 		priv->save_source_id = 0;
 	}
+	priv->closing = TRUE;
 	ephy_session_save_idle_cb (session);
-	session->priv->dont_save = TRUE;
+	priv->dont_save = TRUE;
 }
 
 static void
@@ -572,15 +574,18 @@ typedef struct {
 	char *url;
 	char *title;
 	gboolean loading;
+	gboolean crashed;
 	WebKitWebViewSessionState *state;
 } SessionTab;
 
 static SessionTab *
-session_tab_new (EphyEmbed *embed)
+session_tab_new (EphyEmbed *embed,
+		 EphySession *session)
 {
 	SessionTab *session_tab;
 	const char *address;
 	EphyWebView *web_view = ephy_embed_get_web_view (embed);
+	EphyWebViewErrorPage error_page = ephy_web_view_get_error_page (web_view);
 
 	session_tab = g_slice_new (SessionTab);
 
@@ -596,7 +601,11 @@ session_tab_new (EphyEmbed *embed)
 	}
 
 	session_tab->title = g_strdup (ephy_embed_get_title (embed));
-	session_tab->loading = ephy_web_view_is_loading (web_view) && !ephy_embed_has_load_pending (embed);
+	session_tab->loading = (ephy_web_view_is_loading (web_view) &&
+			        !ephy_embed_has_load_pending (embed) &&
+			        !session->priv->closing);
+	session_tab->crashed = (error_page == EPHY_WEB_VIEW_ERROR_PAGE_CRASH ||
+                                error_page == EPHY_WEB_VIEW_ERROR_PROCESS_CRASH);
 	session_tab->state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
 
 	return session_tab;
@@ -621,7 +630,8 @@ typedef struct {
 } SessionWindow;
 
 static SessionWindow *
-session_window_new (EphyWindow *window)
+session_window_new (EphyWindow *window,
+		    EphySession *session)
 {
 	SessionWindow *session_window;
 	GList *tabs, *l;
@@ -644,7 +654,7 @@ session_window_new (EphyWindow *window)
 	{
 		SessionTab *tab;
 
-		tab = session_tab_new (EPHY_EMBED (l->data));
+		tab = session_tab_new (EPHY_EMBED (l->data), session);
 		session_window->tabs = g_list_prepend (session_window->tabs, tab);
 	}
 	g_list_free (tabs);
@@ -686,7 +696,7 @@ save_data_new (EphySession *session)
 	{
 		SessionWindow *session_window;
 
-		session_window = session_window_new (EPHY_WINDOW (w->data));
+		session_window = session_window_new (EPHY_WINDOW (w->data), session);
 		if (session_window)
 			data->windows = g_list_prepend (data->windows, session_window);
 	}
@@ -726,6 +736,14 @@ write_tab (xmlTextWriterPtr writer,
 	{
 		ret = xmlTextWriterWriteAttribute (writer,
 						   (const xmlChar *) "loading",
+						   (const xmlChar *) "true");
+		if (ret < 0) return ret;
+	}
+
+	if (tab->crashed)
+	{
+		ret = xmlTextWriterWriteAttribute (writer,
+						   (const xmlChar *) "crashed",
 						   (const xmlChar *) "true");
 		if (ret < 0) return ret;
 	}
@@ -1105,6 +1123,7 @@ session_parse_embed (SessionParserContext *context,
 	const char *title = NULL;
 	const char *history = NULL;
 	gboolean was_loading = FALSE;
+	gboolean crashed = FALSE;
 	gboolean is_blank_page = FALSE;
 	guint i;
 
@@ -1124,6 +1143,10 @@ session_parse_embed (SessionParserContext *context,
 		{
 			was_loading = strcmp (values[i], "true") == 0;
 		}
+		else if (strcmp (names[i], "crashed") == 0)
+		{
+			crashed = strcmp (values[i], "true") == 0;
+		}
 		else if (strcmp (names[i], "history") == 0)
 		{
 			history = values[i];
@@ -1135,7 +1158,7 @@ session_parse_embed (SessionParserContext *context,
 	 * See http://bugzilla.gnome.org/show_bug.cgi?id=591294
 	 * Otherwise, if the web was fully loaded, it is reloaded again.
 	 */
-	if (!was_loading || is_blank_page)
+	if ((!was_loading || is_blank_page) && !crashed)
 	{
 		EphyNewTabFlags flags;
 		EphyEmbed *embed;
@@ -1200,11 +1223,11 @@ session_parse_embed (SessionParserContext *context,
 			webkit_web_view_session_state_unref (state);
 		}
 	}
-	else if (was_loading && url != NULL)
+	else if (url && (was_loading || crashed))
 	{
-		/* Shows a message to the user that warns that this page was
-		 * loading during crash and make Epiphany crash again,
-		 * in this case we know the URL.
+		/* This page was loading during a UI process crash
+		 * (was_loading == TRUE) or a web process crash
+		 * (crashed == TRUE) and might make Epiphany crash again.
 		 */
 		confirm_before_recover (context->window, url, title);
 	}
