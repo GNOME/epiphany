@@ -245,7 +245,7 @@ apply_delayed_thumbnail_change (gpointer key,
     }
   }
 
-  g_assert_not_reached ();
+  return FALSE;
 }
 
 static void
