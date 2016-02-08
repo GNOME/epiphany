@@ -113,6 +113,8 @@ struct _EphyWebView {
   gboolean loading_error_page;
   char *tls_error_failing_uri;
 
+  EphyWebViewErrorPage error_page;
+
   /* Web Extension */
   EphyWebExtensionProxy *web_extension;
 };
@@ -1407,10 +1409,8 @@ update_security_status_for_committed_load (EphyWebView *view,
   WebKitSecurityManager *security_manager;
   SoupURI *soup_uri;
 
-  if (view->loading_error_page) {
-    view->loading_error_page = FALSE;
+  if (view->loading_error_page)
     return;
-  }
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
   if (EPHY_IS_EMBED_CONTAINER (toplevel))
@@ -1501,6 +1501,11 @@ load_changed_cb (WebKitWebView *web_view,
 
       g_free (history_uri);
     }
+
+    if (view->loading_error_page)
+        view->loading_error_page = FALSE;
+    else
+        view->error_page = EPHY_WEB_VIEW_ERROR_PAGE_NONE;
 
     break;
   }
@@ -1686,6 +1691,22 @@ get_tls_error_page_message (EphyWebView *view, const char *hostname)
 }
 
 /**
+ * ephy_web_view_get_error_page:
+ * @view: an #EphyWebView
+ *
+ * Returns the error page currently displayed, or
+ * %EPHY_WEB_VIEW_ERROR_PAGE_NONE.
+ *
+ **/
+EphyWebViewErrorPage
+ephy_web_view_get_error_page (EphyWebView *view)
+{
+  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), EPHY_WEB_VIEW_ERROR_PAGE_NONE);
+
+  return view->error_page;
+}
+
+/**
  * ephy_web_view_load_error_page:
  * @view: an #EphyWebView
  * @uri: uri that caused the failure
@@ -1715,7 +1736,10 @@ ephy_web_view_load_error_page (EphyWebView *view,
   const char *accesskey;
   GBytes *html_file;
 
+  g_return_if_fail (page != EPHY_WEB_VIEW_ERROR_PAGE_NONE);
+
   view->loading_error_page = TRUE;
+  view->error_page = page;
 
   if (page == EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE)
     ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE);
@@ -1791,6 +1815,7 @@ ephy_web_view_load_error_page (EphyWebView *view,
       load_anyway_js = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT");",
                                         webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
       break;
+    case EPHY_WEB_VIEW_ERROR_PAGE_NONE:
     default:
       g_assert_not_reached ();
   }

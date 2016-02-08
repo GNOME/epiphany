@@ -46,6 +46,7 @@ typedef enum
 } EphyWebViewDocumentType;
 
 typedef enum {
+  EPHY_WEB_VIEW_ERROR_PAGE_NONE,
   EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR,
   EPHY_WEB_VIEW_ERROR_PAGE_CRASH,
   EPHY_WEB_VIEW_ERROR_PROCESS_CRASH,
@@ -93,7 +94,7 @@ const char *               ephy_web_view_get_display_address      (EphyWebView  
 void                       ephy_web_view_set_placeholder          (EphyWebView               *view,
                                                                    const char                *uri,
                                                                    const char                *title);
-
+EphyWebViewErrorPage       ephy_web_view_get_error_page           (EphyWebView               *view);
 void                       ephy_web_view_load_error_page          (EphyWebView               *view,
                                                                    const char                *uri,
                                                                    EphyWebViewErrorPage       page,
