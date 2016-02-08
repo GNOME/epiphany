@@ -23,10 +23,6 @@
 
 #include <webkit2/webkit2.h>
 
-#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
-#error "Only <epiphany/epiphany.h> can be included directly."
-#endif
-
 #define USER_STYLESHEET_FILENAME	"user-stylesheet.css"
 #define FAVICON_SIZE 16
 

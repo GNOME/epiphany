@@ -3,43 +3,40 @@ noinst_LTLIBRARIES = libephybookmarks.la
 AM_CFLAGS = $(WARN_CFLAGS)
 AM_LDFLAGS = $(WARN_LDFLAGS)
 
-INST_H_FILES = \
+TYPES_H_FILES = \
 	ephy-bookmarks.h
-
-NOINST_H_FILES =		 	\
-	ephy-bookmark-action.h		\
-	ephy-bookmarks-editor.h		\
-	ephy-bookmarks-export.h		\
-	ephy-bookmarks-import.h		\
-	ephy-bookmarks-ui.h		\
-	ephy-bookmarks-menu.h		\
-	ephy-bookmark-properties.h	\
-	ephy-topic-action.h		\
-	ephy-open-tabs-action.h		\
-	ephy-topic-action-group.h	\
-	ephy-bookmark-action-group.h	\
-	ephy-topics-entry.h  		\
-	ephy-topics-palette.h  		\
-	ephy-nodes-cover.h
 
 libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks.c		\
+	ephy-bookmarks.h		\
 	ephy-bookmark-action.c		\
+	ephy-bookmark-action.h		\
 	ephy-bookmarks-editor.c		\
+	ephy-bookmarks-editor.h		\
 	ephy-bookmarks-export.c		\
+	ephy-bookmarks-export.h		\
 	ephy-bookmarks-import.c 	\
+	ephy-bookmarks-import.h		\
 	ephy-bookmarks-ui.c		\
+	ephy-bookmarks-ui.h		\
 	ephy-bookmarks-menu.c		\
+	ephy-bookmarks-menu.h		\
 	ephy-bookmark-properties.c	\
+	ephy-bookmark-properties.h	\
 	ephy-topic-action.c		\
+	ephy-topic-action.h		\
 	ephy-open-tabs-action.c		\
+	ephy-open-tabs-action.h		\
 	ephy-topic-action-group.c	\
+	ephy-topic-action-group.h	\
 	ephy-bookmark-action-group.c	\
+	ephy-bookmark-action-group.h	\
 	ephy-topics-entry.c  		\
+	ephy-topics-entry.h		\
 	ephy-topics-palette.c  		\
-	ephy-nodes-cover.c      	\
-	$(NOINST_H_FILES)		\
-	$(INST_H_FILES)
+	ephy-topics-palette.h		\
+	ephy-nodes-cover.c		\
+	ephy-nodes-cover.h
 
 nodist_libephybookmarks_la_SOURCES = 	\
 	$(BUILT_SOURCES)
@@ -56,7 +53,7 @@ stamp_files = \
 
 ephy-bookmarks-type-builtins.c: stamp-ephy-bookmarks-type-builtins.c Makefile
 	@true
-stamp-ephy-bookmarks-type-builtins.c: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
+stamp-ephy-bookmarks-type-builtins.c: Makefile $(TYPES_H_FILES)
 	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#include <config.h>\n\n" \
 		--fhead "#include \"ephy-bookmarks-type-builtins.h\"\n\n" \
@@ -77,11 +74,8 @@ stamp-ephy-bookmarks-type-builtins.c: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
 
 ephy-bookmarks-type-builtins.h: stamp-ephy-bookmarks-type-builtins.h Makefile
 	@true
-stamp-ephy-bookmarks-type-builtins.h: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
+stamp-ephy-bookmarks-type-builtins.h: Makefile $(TYPES_H_FILES)
 	$(AM_V_GEN) $(GLIB_MKENUMS) \
-		--fhead "#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)\n" \
-		--fhead "#error Only <epiphany/epiphany.h> can be included directly.\n" \
-		--fhead "#endif\n\n" \
 		--fhead "#ifndef EPHY_BOOKMARKS_TYPE_BUILTINS_H\n" \
 		--fhead "#define EPHY_BOOKMARKS_TYPE_BUILTINS_H 1\n\n" \
 		--fhead "#include <glib-object.h>\n\n" \

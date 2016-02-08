@@ -67,9 +67,6 @@ ephy-history-type-builtins.h: stamp-ephy-history-type-builtins.h Makefile
 
 stamp-ephy-history-type-builtins.h: Makefile $(TYPES_H_FILES)
 	$(AM_V_GEN) $(GLIB_MKENUMS) \
-		--fhead "#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)\n" \
-		--fhead "#error Only <epiphany/epiphany.h> can be included directly.\n" \
-		--fhead "#endif\n\n" \
 		--fhead "#ifndef EPHY_HISTORY_TYPE_BUILTINS_H\n" \
 		--fhead "#define EPHY_HISTORY_TYPE_BUILTINS_H 1\n\n" \
 		--fhead "#include <glib-object.h>\n\n" \

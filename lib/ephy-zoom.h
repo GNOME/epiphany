@@ -16,10 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
-#error "Only <epiphany/epiphany.h> can be included directly."
-#endif
-
 #ifndef EPHY_ZOOM_H
 #define EPHY_ZOOM_H
 

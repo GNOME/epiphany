@@ -15,67 +15,69 @@ EXTRA_DIST = \
 	$(RESOURCE_FILES)      \
 	$(NULL)
 
-NOINST_H_FILES = \
-	ephy-action-helper.h			\
-	ephy-combined-stop-reload-action.h	\
-	ephy-encoding-dialog.h			\
-	ephy-encoding-row.h			\
-	ephy-history-window.h			\
-	ephy-home-action.h			\
-	ephy-link-action.h			\
-	ephy-lockdown.h				\
-	ephy-location-controller.h		\
+TYPES_H_FILES = \
+	ephy-link.h				\
+	ephy-session.h				\
+	ephy-shell.h				\
+	ephy-window.h				\
 	ephy-navigation-history-action.h	\
-	ephy-private.h				\
-	ephy-search-provider.h			\
 	ephy-title-box.h			\
-	ephy-toolbar.h				\
-	ephy-window-action.h			\
-	languages.h				\
-	clear-data-dialog.h			\
-	cookies-dialog.h			\
-	passwords-dialog.h			\
-	popup-commands.h			\
-	prefs-dialog.h				\
-	window-commands.h
-
-INST_H_FILES = \
-	ephy-link.h			\
-	ephy-notebook.h			\
-	ephy-session.h			\
-	ephy-shell.h			\
-	ephy-window.h			\
 	$(NULL)
 
 libephymain_la_SOURCES = \
+	clear-data-dialog.c			\
+	clear-data-dialog.h			\
+	cookies-dialog.c			\
+	cookies-dialog.h			\
 	ephy-action-helper.c			\
+	ephy-action-helper.h			\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
 	ephy-combined-stop-reload-action.c	\
+	ephy-combined-stop-reload-action.h	\
 	ephy-encoding-dialog.c			\
+	ephy-encoding-dialog.h			\
 	ephy-encoding-row.c			\
+	ephy-encoding-row.h			\
 	ephy-home-action.c			\
+	ephy-home-action.h			\
 	ephy-history-window.c			\
+	ephy-history-window.h			\
 	ephy-link.c				\
+	ephy-link.h				\
 	ephy-link-action.c			\
+	ephy-link-action.h			\
 	ephy-location-controller.c		\
+	ephy-location-controller.h		\
 	ephy-lockdown.c				\
+	ephy-lockdown.h				\
 	ephy-navigation-history-action.c	\
+	ephy-navigation-history-action.h	\
 	ephy-notebook.c				\
+	ephy-notebook.h				\
+	ephy-private.h				\
+	ephy-search-provider.h			\
 	ephy-session.c				\
+	ephy-session.h				\
 	ephy-shell.c				\
+	ephy-shell.h				\
 	ephy-title-box.c			\
+	ephy-title-box.h			\
 	ephy-toolbar.c				\
+	ephy-toolbar.h				\
 	ephy-window.c				\
+	ephy-window.h				\
 	ephy-window-action.c			\
-	clear-data-dialog.c			\
-	cookies-dialog.c			\
+	ephy-window-action.h			\
+	languages.h				\
 	passwords-dialog.c			\
+	passwords-dialog.h			\
 	popup-commands.c			\
+	popup-commands.h			\
 	prefs-dialog.c				\
+	prefs-dialog.h				\
 	window-commands.c			\
-	$(INST_H_FILES)				\
-	$(NOINST_H_FILES)			\
+	window-commands.h			\
 	$(NULL)
 
 nodist_libephymain_la_SOURCES = \
@@ -217,7 +219,7 @@ stamp_files = \
 
 ephy-type-builtins.c: stamp-ephy-type-builtins.c Makefile
 	@true
-stamp-ephy-type-builtins.c: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
+stamp-ephy-type-builtins.c: Makefile $(TYPES_H_FILES)
 	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#include <config.h>\n\n" \
 		--fhead "#include \"ephy-type-builtins.h\"\n\n" \
@@ -238,11 +240,8 @@ stamp-ephy-type-builtins.c: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
 
 ephy-type-builtins.h: stamp-ephy-type-builtins.h Makefile
 	@true
-stamp-ephy-type-builtins.h: Makefile $(INST_H_FILES) $(NOINST_H_FILES)
+stamp-ephy-type-builtins.h: Makefile $(TYPES_H_FILES)
 	$(AM_V_GEN) $(GLIB_MKENUMS) \
-		--fhead "#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)\n" \
-		--fhead "#error Only <epiphany/epiphany.h> can be included directly.\n" \
-		--fhead "#endif\n\n" \
 		--fhead "#ifndef EPHY_TYPE_BUILTINS_H\n" \
 		--fhead "#define EPHY_TYPE_BUILTINS_H 1\n\n" \
 		--fhead "#include <glib-object.h>\n\n" \

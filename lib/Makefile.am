@@ -5,73 +5,63 @@ AM_LDFLAGS = $(WARN_LDFLAGS)
 
 noinst_LTLIBRARIES = libephymisc.la
 
-NOINST_H_FILES = \
-	ephy-debug.h				\
-	ephy-dnd.h				\
-	ephy-favicon-helpers.h			\
-	ephy-file-helpers.h			\
-	ephy-form-auth-data.h			\
-	ephy-gui.h				\
-	ephy-langs.h				\
-	ephy-node-filter.h			\
-	ephy-node-common.h			\
-	ephy-prefs.h				\
-	ephy-profile-utils.h			\
-	ephy-security-levels.h			\
-	ephy-signal-accumulator.h		\
-	ephy-smaps.h				\
-	ephy-sqlite.h				\
-	ephy-sqlite-connection.h		\
-	ephy-sqlite-statement.h			\
-	ephy-string.h				\
-	ephy-snapshot-service.h			\
-	ephy-time-helpers.h			\
-	ephy-uri-helpers.h			\
-	ephy-web-app-utils.h			\
-	ephy-zoom.h
-
 TYPES_H_FILES = \
 	ephy-initial-state.h			\
 	ephy-node.h				\
 	ephy-security-levels.h
 
-INST_H_FILES = \
-	ephy-initial-state.h			\
-	ephy-node.h				\
-	ephy-node-db.h				\
-	ephy-settings.h
-
 libephymisc_la_SOURCES = \
 	ephy-debug.c				\
+	ephy-debug.h				\
 	ephy-dnd.c				\
+	ephy-dnd.h				\
 	ephy-favicon-helpers.c			\
+	ephy-favicon-helpers.h			\
 	ephy-file-helpers.c			\
+	ephy-file-helpers.h			\
 	ephy-form-auth-data.c			\
+	ephy-form-auth-data.h			\
 	ephy-gui.c				\
+	ephy-gui.h				\
 	ephy-initial-state.c			\
+	ephy-initial-state.h			\
 	ephy-langs.c				\
+	ephy-langs.h				\
 	ephy-node.c				\
 	ephy-node.h				\
-	ephy-node-filter.c			\
 	ephy-node-common.h			\
+	ephy-node-filter.c			\
+	ephy-node-filter.h			\
 	ephy-node-db.c				\
+	ephy-node-db.h				\
 	ephy-prefs.h				\
 	ephy-profile-utils.c			\
 	ephy-profile-utils.h			\
 	ephy-security-levels.c			\
+	ephy-security-levels.h			\
 	ephy-settings.c				\
+	ephy-settings.h				\
 	ephy-signal-accumulator.c		\
+	ephy-signal-accumulator.h		\
 	ephy-smaps.c				\
+	ephy-smaps.h				\
 	ephy-snapshot-service.c			\
+	ephy-snapshot-service.h			\
+	ephy-sqlite.h				\
 	ephy-sqlite-connection.c		\
+	ephy-sqlite-connection.h		\
 	ephy-sqlite-statement.c			\
+	ephy-sqlite-statement.h			\
 	ephy-string.c				\
+	ephy-string.h				\
 	ephy-time-helpers.c			\
+	ephy-time-helpers.h			\
 	ephy-uri-helpers.c			\
+	ephy-uri-helpers.h			\
 	ephy-web-app-utils.c			\
+	ephy-web-app-utils.h			\
 	ephy-zoom.c				\
-	$(INST_H_FILES)				\
-	$(NOINST_H_FILES)
+	ephy-zoom.h
 
 nodist_libephymisc_la_SOURCES = \
 	$(BUILT_SOURCES)
@@ -79,7 +69,7 @@ nodist_libephymisc_la_SOURCES = \
 libephymisc_la_CPPFLAGS = \
 	-I$(top_builddir)/lib			    \
 	-I$(top_srcdir)/lib/egg			    \
-	-DDATADIR="\"$(datadir)\""		    \
+	-DDATADIR=\"$(datadir)\"		    \
 	-DSHARE_DIR=\"$(pkgdatadir)\" 		    \
 	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"    \
 	-DABS_TOP_BUILD_DIR=\"$(abs_top_builddir)\" \
@@ -161,9 +151,6 @@ ephy-lib-type-builtins.h: stamp-ephy-lib-type-builtins.h Makefile
 	@true
 stamp-ephy-lib-type-builtins.h: Makefile $(TYPES_H_FILES)
 	$(AM_V_GEN) $(GLIB_MKENUMS) \
-		--fhead "#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)\n" \
-		--fhead "#error Only <epiphany/epiphany.h> can be included directly.\n" \
-		--fhead "#endif\n\n" \
 		--fhead "#ifndef EPHY_LIB_TYPE_BUILTINS_H\n" \
 		--fhead "#define EPHY_LIB_TYPE_BUILTINS_H 1\n\n" \
 		--fhead "#include <glib-object.h>\n\n" \

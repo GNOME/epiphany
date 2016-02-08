@@ -7,26 +7,10 @@ AM_LDFLAGS = $(WARN_LDFLAGS)
 
 noinst_LTLIBRARIES = libephyembed.la
 
-NOINST_H_FILES = \
-	ephy-about-handler.h		\
-	ephy-downloads-manager.h	\
-	ephy-embed-private.h		\
-	ephy-encoding.h			\
-	ephy-encodings.h		\
-	ephy-file-monitor.h
-
-INST_H_FILES = \
+TYPES_H_FILES = \
 	ephy-download.h			\
-	ephy-embed.h			\
-	ephy-embed-container.h          \
-	ephy-embed-event.h		\
-	ephy-embed-prefs.h		\
 	ephy-embed-shell.h		\
-	ephy-embed-utils.h              \
-	ephy-find-toolbar.h		\
-	ephy-web-view.h			\
-	ephy-web-extension-proxy.h
-
+	ephy-web-view.h
 
 BUILT_SOURCES = \
 	ephy-embed-type-builtins.c	\
@@ -34,22 +18,36 @@ BUILT_SOURCES = \
 
 libephyembed_la_SOURCES = \
 	ephy-about-handler.c		\
+	ephy-about-handler.h		\
 	ephy-downloads-manager.c	\
+	ephy-downloads-manager.h	\
 	ephy-download.c			\
+	ephy-download.h			\
 	ephy-embed.c			\
+	ephy-embed.h			\
 	ephy-embed-container.c          \
+	ephy-embed-container.h		\
 	ephy-embed-event.c		\
+	ephy-embed-event.h		\
+	ephy-embed-prefs.h		\
+	ephy-embed-private.h		\
 	ephy-embed-shell.c		\
+	ephy-embed-shell.h		\
 	ephy-embed-utils.c              \
+	ephy-embed-utils.h		\
 	ephy-encoding.c			\
+	ephy-encoding.h			\
 	ephy-encodings.c		\
+	ephy-encodings.h		\
 	ephy-file-monitor.c		\
+	ephy-file-monitor.h		\
 	ephy-find-toolbar.c		\
+	ephy-find-toolbar.h		\
 	ephy-embed-prefs.c		\
 	ephy-web-view.c			\
+	ephy-web-view.h			\
 	ephy-web-extension-proxy.c	\
-	$(INST_H_FILES)			\
-	$(NOINST_H_FILES)
+	ephy-web-extension-proxy.h
 
 nodist_libephyembed_la_SOURCES = \
 	$(BUILT_SOURCES)
@@ -80,7 +78,7 @@ stamp_files = \
 
 ephy-embed-type-builtins.c: stamp-ephy-embed-type-builtins.c Makefile
 	@true
-stamp-ephy-embed-type-builtins.c: Makefile $(INST_H_FILES)
+stamp-ephy-embed-type-builtins.c: Makefile $(TYPES_H_FILES)
 	$(AM_V_GEN) $(GLIB_MKENUMS) \
 		--fhead "#include <config.h>\n\n" \
 		--fhead "#include \"ephy-embed-type-builtins.h\"\n\n" \
@@ -101,11 +99,8 @@ stamp-ephy-embed-type-builtins.c: Makefile $(INST_H_FILES)
 
 ephy-embed-type-builtins.h: stamp-ephy-embed-type-builtins.h Makefile
 	@true
-stamp-ephy-embed-type-builtins.h: Makefile $(INST_H_FILES)
+stamp-ephy-embed-type-builtins.h: Makefile $(TYPES_H_FILES)
 	$(AM_V_GEN) $(GLIB_MKENUMS) \
-		--fhead "#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)\n" \
-		--fhead "#error Only <epiphany/epiphany.h> can be included directly.\n" \
-		--fhead "#endif\n\n" \
 		--fhead "#ifndef EPHY_EMBED_TYPE_BUILTINS_H\n" \
 		--fhead "#define EPHY_EMBED_TYPE_BUILTINS_H 1\n\n" \
 		--fhead "#include <glib-object.h>\n\n" \

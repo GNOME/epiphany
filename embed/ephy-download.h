@@ -20,10 +20,6 @@
  * along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
-#error "Only <epiphany/epiphany.h> can be included directly."
-#endif
-
 #ifndef _EPHY_DOWNLOAD_H
 #define _EPHY_DOWNLOAD_H
 

@@ -212,8 +212,6 @@ AC_DEFINE_UNQUOTED([LSB_DISTRIBUTOR],["$LSB_DISTRIBUTOR"],[Distributor name])
 # Output files
 # ************
 
-AC_DEFINE([EPIPHANY_COMPILATION],[1],[Compiling epiphany])
-
 AC_CONFIG_FILES([
 Makefile
 data/Makefile

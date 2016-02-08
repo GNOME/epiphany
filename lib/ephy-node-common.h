@@ -46,8 +46,4 @@ typedef enum
 	EPHY_NODE_NORMAL_PRIORITY
 } EphyNodePriority;
 
-#if !defined (__EPHY_EPIPHANY_H_INSIDE__) && !defined (EPIPHANY_COMPILATION)
-#error "Only <epiphany/epiphany.h> can be included directly."
-#endif
-
 #endif /* EPHY_NODE_COMMON_H */
