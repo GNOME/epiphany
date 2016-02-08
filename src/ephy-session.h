@@ -37,11 +37,6 @@ typedef struct _EphySession		EphySession;
 typedef struct _EphySessionPrivate	EphySessionPrivate;
 typedef struct _EphySessionClass	EphySessionClass;
 
-typedef enum
-{
-        EPHY_SESSION_CMD_LAST
-} EphySessionCommand;
-
 struct _EphySession
 {
         GObject parent;
