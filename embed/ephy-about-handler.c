@@ -519,10 +519,10 @@ history_service_query_urls_cb (EphyHistoryService *history,
                                 "  <img src=\"file://%s\"/>"
                                 "  <h1>%s</h1>"
                                 "</li>",
-				icon_info ? gtk_icon_info_get_filename (icon_info) : "",
+                                icon_info ? gtk_icon_info_get_filename (icon_info) : "",
                                 /* Displayed when opening the browser for the first time. */
-				_("Start browsing and your most-visited sites will appear here"));
-        gtk_icon_info_free(icon_info);
+                               _("Start browsing and your most-visited sites will appear here"));
+        gtk_icon_info_free (icon_info);
     }
   }
 
