@@ -1,20 +1,19 @@
 Some TODO items, in no particular order:
 
+- Use G_DECLARE_[FINAL,DERIVABLE]_TYPE
+- Pass NULL instead of manually choosing signal marshallers
+- Use g_signal_emit instead of g_signal_emit_by_name
 - Use g_clear_object in dispose/finalize
 - Get rid of object references in dispose, not finalize
 - Move all the old code to the new coding style 
 - embed/ does not make much sense anymore as a name. Rename to
   something else, perhaps core/? webview/?
+- Replace GtkAction and GtkUIManager with GAction
 - Use GtkBuilder instead of declaring the UIs with C
+- Kill EphyNode
 - We practically don't test any part of Epiphany, change that (how do
   you test UI code? There's like 3 or 4 frameworks for this, pick one?
   What does Chrome do?)
-- Do we want extensions that can mess with the internals? Or only
-  jetpack-like stuff
 - Come up with a C migration plan
   http://wingolog.org/archives/2011/10/13/whats-your-c-migration-plan
-
-Old (double check they still apply):
-
-- Port to new gtk+ uri-list DND APIs
-- Use GtkNotebook DnD
+  perhaps Rust?
