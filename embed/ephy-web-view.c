@@ -1118,24 +1118,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
- * EphyWebView::new-document-now:
- * @view: the #EphyWebView that received the signal
- * @uri: URI of the new content
- *
- * The ::new-document-now signal is emitted when a new page content
- * is being loaded into the browser. It's a good place to do view
- * related changes, for example to restore the zoom level of a page
- * or to set an user style sheet.
- **/
-    g_signal_new ("new-document-now",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_FIRST,
-            0, NULL, NULL, NULL,
-            G_TYPE_NONE,
-            1,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-/**
  * EphyWebView::loading-homepage:
  * @view: the #EphyWebView that received the signal
  *
@@ -1491,7 +1473,6 @@ load_changed_cb (WebKitWebView *web_view,
     }
 
     loading_uri = webkit_web_view_get_uri (web_view);
-    g_signal_emit_by_name (view, "new-document-now", loading_uri);
 
     if (ephy_embed_utils_is_no_show_address (loading_uri))
       ephy_web_view_freeze_history (view);
