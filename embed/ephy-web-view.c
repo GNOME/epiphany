@@ -1185,7 +1185,7 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                   0);
 
 /**
- * EphyWebView::donload-only-load:
+ * EphyWebView::download-only-load:
  * @view: the #EphyWebView that received the signal
  *
  * The ::download-only-load signal is emitted when the @view has its main load
