@@ -1121,45 +1121,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
- * EphyWebView::ge-search-link:
- * @view: the #EphyWebView that received the signal
- * @type: the mime-type of the search description
- * @title: the title of the news feed
- * @address: the URL to @embed's web site's search description
- *
- * The ::ge-search-link signal is emitted when @embed discovers that a
- * search description is available for the site it is visiting.
- **/
-    g_signal_new ("ge_search_link",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_FIRST,
-            0, NULL, NULL, NULL,
-            G_TYPE_NONE,
-            3,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-/**
- * EphyWebView::ge-feed-link:
- * @view: the #EphyWebView that received the signal
- * @type: the mime-type of the news feed
- * @title: the title of the news feed
- * @address: the URL to @embed's web site's news feed
- *
- * The ::ge-feed-link signal is emitted when @embed discovers that a
- * news feed is available for the site it is visiting.
- **/
-    g_signal_new ("ge_feed_link",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_FIRST,
-            0, NULL, NULL, NULL,
-            G_TYPE_NONE,
-            3,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
-/**
  * EphyWebView::ge-modal-alert:
  * @view: the #EphyWebView that received the signal
  *
@@ -1173,19 +1134,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_SIGNAL_RUN_LAST,
             0, g_signal_accumulator_true_handled, NULL, NULL,
             G_TYPE_BOOLEAN,
-            0);
-/**
- * EphyWebView::ge-modal-alert-closed:
- * @view: the #EphyWebView that received the signal
- *
- * The ::ge-modal-alert-closed signal is emitted when a modal alert put up by a
- * DOM event was closed.
- **/
-    g_signal_new ("ge_modal_alert_closed",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_LAST,
-            0, NULL, NULL, NULL,
-            G_TYPE_NONE,
             0);
 
 /**
@@ -1204,20 +1152,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             1,
             GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
-/**
- * EphyWebView::content-blocked:
- * @view: the #EphyWebView that received the signal
- * @uri: blocked URI
- *
- * The ::content-blocked signal is emitted when an url has been blocked.
- **/
-    g_signal_new ("content-blocked",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_LAST,
-            0, NULL, NULL, NULL,
-            G_TYPE_NONE,
-            1,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 /**
  * EphyWebView::new-document-now:
  * @view: the #EphyWebView that received the signal
