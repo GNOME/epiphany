@@ -1102,22 +1102,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             GTK_TYPE_WIDGET);
 
 /**
- * EphyWebView::ge-modal-alert:
- * @view: the #EphyWebView that received the signal
- *
- * The ::ge-modal-alert signal is emitted when a DOM event will open a
- * modal alert.
- *
- * Return %TRUE to prevent the dialog from being opened.
- **/
-    g_signal_new ("ge_modal_alert",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_LAST,
-            0, g_signal_accumulator_true_handled, NULL, NULL,
-            G_TYPE_BOOLEAN,
-            0);
-
-/**
  * EphyWebView::search-key-press:
  * @view: the #EphyWebView that received the signal
  * @event: the #GdkEventKey which triggered this signal

@@ -2537,27 +2537,6 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 		ephy_window_connect_active_embed (window);
 }
 
-static gboolean
-embed_modal_alert_cb (EphyEmbed *embed,
-		      EphyWindow *window)
-{
-	const char *address;
-
-	/* switch the window to the tab, and bring the window to the foreground
-	 * (since the alert is modal, the user won't be able to do anything
-	 * with his current window anyway :|)
-	 */
-	impl_set_active_child (EPHY_EMBED_CONTAINER (window), embed);
-	gtk_window_present (GTK_WINDOW (window));
-
-	/* make sure the location entry shows the real URL of the tab's page */
-	address = ephy_web_view_get_display_address (ephy_embed_get_web_view (embed));
-	ephy_window_set_location (window, address);
-
-	/* don't suppress alert */
-	return FALSE;
-}
-
 static void
 tab_accels_item_activate (GtkAction *action,
 			  EphyWindow *window)
@@ -2760,9 +2739,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	g_signal_connect_object (ephy_embed_get_web_view (embed), "download-only-load",
 				 G_CALLBACK (download_only_load_cb), window, G_CONNECT_AFTER);
 
-	g_signal_connect_object (ephy_embed_get_web_view (embed), "ge-modal-alert",
-				 G_CALLBACK (embed_modal_alert_cb), window, G_CONNECT_AFTER);
-
         if (priv->present_on_insert)
         {
                 priv->present_on_insert = FALSE;
@@ -2794,9 +2770,6 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 
 	g_signal_handlers_disconnect_by_func
 		(ephy_embed_get_web_view (embed), G_CALLBACK (download_only_load_cb), window);
-
-	g_signal_handlers_disconnect_by_func
-		(ephy_embed_get_web_view (embed), G_CALLBACK (embed_modal_alert_cb), window);
 
 	tab_accels_update (window);
 }
