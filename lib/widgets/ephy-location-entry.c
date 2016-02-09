@@ -31,6 +31,7 @@
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
+#include "ephy-uri-helpers.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
@@ -210,15 +211,56 @@ ephy_location_entry_get_preferred_width (GtkWidget       *widget,
 }
 
 static void
+ephy_location_entry_copy_clipboard (GtkEntry *entry)
+{
+	char *text;
+	gint start;
+	gint end;
+
+	if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
+		return;
+
+	text = gtk_editable_get_chars (GTK_EDITABLE (entry), start, end);
+
+	if (start == 0)
+	{
+		char *tmp = text;
+		text = ephy_uri_normalize (tmp);
+		g_free (tmp);
+	}
+
+	gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
+							  GDK_SELECTION_CLIPBOARD),
+							  text, -1);
+	g_free (text);
+}
+
+static void
+ephy_location_entry_cut_clipboard (GtkEntry *entry)
+{
+	if (!gtk_editable_get_editable (GTK_EDITABLE (entry)))
+	{
+		gtk_widget_error_bell (GTK_WIDGET (entry));
+		return;
+	}
+
+	ephy_location_entry_copy_clipboard (entry);
+	gtk_editable_delete_selection (GTK_EDITABLE (entry));
+}
+
+static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+	GtkEntryClass *entry_class = GTK_ENTRY_CLASS (klass);
 
 	object_class->get_property = ephy_location_entry_get_property;
 	object_class->set_property = ephy_location_entry_set_property;
 	object_class->finalize = ephy_location_entry_finalize;
 	widget_class->get_preferred_width = ephy_location_entry_get_preferred_width;
+	entry_class->copy_clipboard = ephy_location_entry_copy_clipboard;
+	entry_class->cut_clipboard = ephy_location_entry_cut_clipboard;
 
 	/**
 	* EphyLocationEntry:location:
