@@ -1118,20 +1118,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
- * EphyWebView::loading-homepage:
- * @view: the #EphyWebView that received the signal
- *
- * The ::loading-homepage signal is emitted when the @view is about to
- * load the homepage set by the user.
- **/
-    g_signal_new ("loading-homepage",
-                  EPHY_TYPE_WEB_VIEW,
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  0);
-
-/**
  * EphyWebView::download-only-load:
  * @view: the #EphyWebView that received the signal
  *
@@ -2877,8 +2863,6 @@ void
 ephy_web_view_load_homepage (EphyWebView *view)
 {
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-
-  g_signal_emit_by_name (view, "loading-homepage");
 
   ephy_web_view_freeze_history (view);
   ephy_web_view_set_visit_type (view,
