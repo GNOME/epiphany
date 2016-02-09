@@ -29,6 +29,7 @@
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
+#include "ephy-uri-helpers.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
@@ -220,9 +221,7 @@ ephy_location_entry_copy_clipboard (GtkEntry *entry)
 	if (start == 0)
 	{
 		char *tmp = text;
-		text = g_uri_escape_string (tmp,
-					    G_URI_RESERVED_CHARS_ALLOWED_IN_PATH,
-					    FALSE /* allow_utf8 */);
+		text = ephy_uri_normalize (tmp);
 		g_free (tmp);
 	}
 

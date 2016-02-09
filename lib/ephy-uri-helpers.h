@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 char *ephy_remove_tracking_from_uri (const char *uri);
 char *ephy_uri_decode (const char *uri);
+char *ephy_uri_normalize (const char *uri);
 
 G_END_DECLS
 

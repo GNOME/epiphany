@@ -261,4 +261,23 @@ ephy_uri_decode (const char *uri_string)
   return decoded_uri ? decoded_uri : g_strdup (uri_string);
 }
 
+char *
+ephy_uri_normalize (const char *uri_string)
+{
+  SoupURI *uri;
+  char *encoded_uri;
+
+  if (!uri_string || !*uri_string)
+    return NULL;
+
+  uri = soup_uri_new (uri_string);
+  if (!uri)
+    return g_strdup (uri_string);
+
+  encoded_uri = soup_uri_normalize (uri_string, NULL);
+  soup_uri_free (uri);
+
+  return encoded_uri;
+}
+
 /* vim: set sw=2 ts=2 sts=2 et: */
