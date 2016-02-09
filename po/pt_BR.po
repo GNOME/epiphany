@@ -28,16 +28,16 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-02 16:53+0000\n"
-"PO-Revision-Date: 2016-02-02 19:10-0300\n"
-"Last-Translator: Fábio Nogueira <fnogueira@gnome.org>\n"
+"POT-Creation-Date: 2016-02-09 04:53+0000\n"
+"PO-Revision-Date: 2016-02-09 05:25-0200\n"
+"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -100,8 +100,8 @@ msgid "GNOME Web is often referred to by its code name, Epiphany."
 msgstr "O GNOME Web é geralmente mencionado por seu codinome, Epiphany."
 
 #: ../data/epiphany.appdata.xml.in.h:5
-msgid "The GNOME web site displayed in GNOME web."
-msgstr "O site do GNOME exibido no GNOME web."
+msgid "The GNOME web site displayed in GNOME web"
+msgstr "O site do GNOME exibido no GNOME web"
 
 #: ../data/epiphany.appdata.xml.in.h:6
 msgid "The GNOME Project"
@@ -412,7 +412,7 @@ msgstr ""
 "entende."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:57
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "Languages"
 msgstr "Idiomas"
 
@@ -598,15 +598,20 @@ msgstr "Instalados em:"
 msgid "Most Visited"
 msgstr "Mais visitados"
 
-#: ../embed/ephy-about-handler.c:505
+#: ../embed/ephy-about-handler.c:506
 msgid "Remove from overview"
 msgstr "Remover da visão geral"
 
-#: ../embed/ephy-about-handler.c:571 ../embed/ephy-about-handler.c:572
+#. Displayed when opening the browser for the first time.
+#: ../embed/ephy-about-handler.c:524
+msgid "Start browsing and your most-visited sites will appear here"
+msgstr "Inicie a navegação e seus sites mais visitados aparecerá aqui"
+
+#: ../embed/ephy-about-handler.c:590 ../embed/ephy-about-handler.c:591
 msgid "Private Browsing"
 msgstr "Navegação privativa"
 
-#: ../embed/ephy-about-handler.c:573
+#: ../embed/ephy-about-handler.c:592
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -617,13 +622,13 @@ msgstr ""
 "informações armazenadas serão apagadas quando você fechar a janela. Os "
 "arquivos que você baixou serão mantidos."
 
-#: ../embed/ephy-about-handler.c:577
+#: ../embed/ephy-about-handler.c:596
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Modo anônimo oculta sua atividade apenas de pessoas usando este computador."
 
-#: ../embed/ephy-about-handler.c:579
+#: ../embed/ephy-about-handler.c:598
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1395,39 +1400,39 @@ msgstr "%d de %b de %Y"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../lib/ephy-zoom.h:43
+#: ../lib/ephy-zoom.h:39
 msgid "50%"
 msgstr "50%"
 
-#: ../lib/ephy-zoom.h:44
+#: ../lib/ephy-zoom.h:40
 msgid "75%"
 msgstr "75%"
 
-#: ../lib/ephy-zoom.h:45
+#: ../lib/ephy-zoom.h:41
 msgid "100%"
 msgstr "100%"
 
-#: ../lib/ephy-zoom.h:46
+#: ../lib/ephy-zoom.h:42
 msgid "125%"
 msgstr "125%"
 
-#: ../lib/ephy-zoom.h:47
+#: ../lib/ephy-zoom.h:43
 msgid "150%"
 msgstr "150%"
 
-#: ../lib/ephy-zoom.h:48
+#: ../lib/ephy-zoom.h:44
 msgid "175%"
 msgstr "175%"
 
-#: ../lib/ephy-zoom.h:49
+#: ../lib/ephy-zoom.h:45
 msgid "200%"
 msgstr "200%"
 
-#: ../lib/ephy-zoom.h:50
+#: ../lib/ephy-zoom.h:46
 msgid "300%"
 msgstr "300%"
 
-#: ../lib/ephy-zoom.h:51
+#: ../lib/ephy-zoom.h:47
 msgid "400%"
 msgstr "400%"
 
@@ -1588,20 +1593,20 @@ msgstr "Todos os arquivos"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:599 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:642 ../src/ephy-history-window.c:261
 msgid "Cl_ear"
 msgstr "_Limpar"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:618 ../src/ephy-window.c:115
+#: ../lib/widgets/ephy-location-entry.c:661 ../src/ephy-window.c:115
 msgid "_Undo"
 msgstr "Desfa_zer"
 
-#: ../lib/widgets/ephy-location-entry.c:625
+#: ../lib/widgets/ephy-location-entry.c:668
 msgid "_Redo"
 msgstr "_Refazer"
 
-#: ../lib/widgets/ephy-location-entry.c:908
+#: ../lib/widgets/ephy-location-entry.c:951
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arraste e solte esse ícone para criar um link para essa página"
 
@@ -1664,7 +1669,7 @@ msgid "“%s” Properties"
 msgstr "Propriedades de \"%s\""
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:392
-#: ../src/resources/prefs-dialog.ui.h:38
+#: ../src/resources/prefs-dialog.ui.h:40
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Adicionar"
@@ -2101,7 +2106,7 @@ msgstr ""
 "Você não pode desfazer esta ação. Os dados escolhidos para serem limpos "
 "serão excluídos permanentemente."
 
-#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:21
+#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:23
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -2226,7 +2231,7 @@ msgid "Open the selected pages in new tabs"
 msgstr "Abre as páginas selecionadas em novas abas"
 
 #: ../src/resources/passwords-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/prefs-dialog.ui.h:32
 msgid "Passwords"
 msgstr "Senhas"
 
@@ -2280,135 +2285,143 @@ msgid "_Engine:"
 msgstr "_Mecanismo:"
 
 #: ../src/resources/prefs-dialog.ui.h:7
+msgid "Session"
+msgstr "Sessão"
+
+#: ../src/resources/prefs-dialog.ui.h:8
+msgid "_Remember previous tabs on startup"
+msgstr "_Lembrar das abas anteriores na inicialização"
+
+#: ../src/resources/prefs-dialog.ui.h:9
 msgid "Web Content"
 msgstr "Conteúdo da web"
 
-#: ../src/resources/prefs-dialog.ui.h:8
+#: ../src/resources/prefs-dialog.ui.h:10
 msgid "Allow popup _windows"
 msgstr "Aceitar janelas _instantâneas"
 
-#: ../src/resources/prefs-dialog.ui.h:9
+#: ../src/resources/prefs-dialog.ui.h:11
 msgid "Allow _advertisements"
 msgstr "Permitir prop_agandas"
 
-#: ../src/resources/prefs-dialog.ui.h:10
+#: ../src/resources/prefs-dialog.ui.h:12
 msgid "Enable _plugins"
 msgstr "Habilitar _plug-ins"
 
-#: ../src/resources/prefs-dialog.ui.h:11
+#: ../src/resources/prefs-dialog.ui.h:13
 msgid "General"
 msgstr "Geral"
 
-#: ../src/resources/prefs-dialog.ui.h:12
+#: ../src/resources/prefs-dialog.ui.h:14
 msgid "Fonts"
 msgstr "Fontes"
 
-#: ../src/resources/prefs-dialog.ui.h:13
+#: ../src/resources/prefs-dialog.ui.h:15
 msgid "_Use system fonts"
 msgstr "_Usar fontes do sistema"
 
-#: ../src/resources/prefs-dialog.ui.h:14
+#: ../src/resources/prefs-dialog.ui.h:16
 msgid "Sans serif font:"
 msgstr "Fonte sem serifa:"
 
-#: ../src/resources/prefs-dialog.ui.h:15
+#: ../src/resources/prefs-dialog.ui.h:17
 msgid "Serif font:"
 msgstr "Fonte com serifa:"
 
-#: ../src/resources/prefs-dialog.ui.h:16
+#: ../src/resources/prefs-dialog.ui.h:18
 msgid "Monospace font:"
 msgstr "Fonte monoespaçada:"
 
-#: ../src/resources/prefs-dialog.ui.h:17
+#: ../src/resources/prefs-dialog.ui.h:19
 msgid "Style"
 msgstr "Estilo"
 
-#: ../src/resources/prefs-dialog.ui.h:18
+#: ../src/resources/prefs-dialog.ui.h:20
 msgid "Use custom _stylesheet"
 msgstr "Usar folha de e_stilos personalizada"
 
-#: ../src/resources/prefs-dialog.ui.h:19
+#: ../src/resources/prefs-dialog.ui.h:21
 msgid "_Edit Stylesheet…"
 msgstr "_Editar folha de estilo…"
 
-#: ../src/resources/prefs-dialog.ui.h:20
+#: ../src/resources/prefs-dialog.ui.h:22
 msgid "Fonts & Style"
 msgstr "Fontes e estilos"
 
-#: ../src/resources/prefs-dialog.ui.h:22
+#: ../src/resources/prefs-dialog.ui.h:24
 msgid "Manage _Cookies…"
 msgstr "Gerenciar _cookies…"
 
-#: ../src/resources/prefs-dialog.ui.h:23
+#: ../src/resources/prefs-dialog.ui.h:25
 msgid "_Always accept"
 msgstr "Sempre _aceitar"
 
-#: ../src/resources/prefs-dialog.ui.h:24
+#: ../src/resources/prefs-dialog.ui.h:26
 msgid "Only _from sites you visit"
 msgstr "Apenas de sites que você _visita"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../src/resources/prefs-dialog.ui.h:26
+#: ../src/resources/prefs-dialog.ui.h:28
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>Por exemplo, não de anunciantes nesses sites</small>"
 
-#: ../src/resources/prefs-dialog.ui.h:27
+#: ../src/resources/prefs-dialog.ui.h:29
 msgid "_Never accept"
 msgstr "_Nunca aceitar"
 
-#: ../src/resources/prefs-dialog.ui.h:28
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "Tracking"
 msgstr "Rastreamento"
 
-#: ../src/resources/prefs-dialog.ui.h:29
+#: ../src/resources/prefs-dialog.ui.h:31
 msgid "_Tell websites I do not want to be tracked"
 msgstr "_Avisar aos websites que eu não quero ser rastreado"
 
-#: ../src/resources/prefs-dialog.ui.h:31
+#: ../src/resources/prefs-dialog.ui.h:33
 msgid "Manage _Passwords…"
 msgstr "Gerenciar _senhas…"
 
-#: ../src/resources/prefs-dialog.ui.h:32
+#: ../src/resources/prefs-dialog.ui.h:34
 msgid "_Remember passwords"
 msgstr "_Lembrar senhas"
 
-#: ../src/resources/prefs-dialog.ui.h:33
+#: ../src/resources/prefs-dialog.ui.h:35
 msgid "Stored Data"
 msgstr "Dados armazenados"
 
-#: ../src/resources/prefs-dialog.ui.h:34
+#: ../src/resources/prefs-dialog.ui.h:36
 msgid "You can clear stored personal data."
 msgstr "Você pode limpar os dados pessoais armazenados."
 
-#: ../src/resources/prefs-dialog.ui.h:35
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "Cl_ear Personal Data…"
 msgstr "_Limpar dados pessoais…"
 
-#: ../src/resources/prefs-dialog.ui.h:36
+#: ../src/resources/prefs-dialog.ui.h:38
 msgid "Privacy"
 msgstr "Privacidade"
 
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "_Remove"
 msgstr "_Remover"
 
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "_Up"
 msgstr "_Cima"
 
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Down"
 msgstr "_Baixo"
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:44
 msgid "Spell checking"
 msgstr "Correção ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "_Enable spell checking"
 msgstr "_Habilitar correção ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:44 ../src/prefs-dialog.c:760
+#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:762
 msgid "Language"
 msgstr "Idioma"
 
@@ -2824,7 +2837,7 @@ msgstr "Salvar mídia como"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:473 ../src/prefs-dialog.c:479
+#: ../src/prefs-dialog.c:475 ../src/prefs-dialog.c:481
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2833,25 +2846,25 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:488
+#: ../src/prefs-dialog.c:490
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definido pelo usuário (%s)"
 
-#: ../src/prefs-dialog.c:510
+#: ../src/prefs-dialog.c:512
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma do sistema (%s)"
 msgstr[1] "Idiomas do sistema (%s)"
 
-#: ../src/prefs-dialog.c:843
+#: ../src/prefs-dialog.c:845
 msgid "Select a Directory"
 msgstr "Selecione um diretório"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:937
+#: ../src/prefs-dialog.c:939
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2860,29 +2873,29 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:943
+#: ../src/prefs-dialog.c:945
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany&kl=br-pt"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:945
+#: ../src/prefs-dialog.c:947
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:948
+#: ../src/prefs-dialog.c:950
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.com.br/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:950
+#: ../src/prefs-dialog.c:952
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:953
+#: ../src/prefs-dialog.c:955
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "http://br.bing.com/search?q=%s"
