@@ -767,18 +767,18 @@ convert_location_data_func (GtkTreeViewColumn *column,
 {
 	int col_id = GPOINTER_TO_INT (user_data);
 	char *url;
-	char *unescaped_url;
+	char *decoded_url;
 
 	gtk_tree_model_get (model, iter,
 			    col_id,
 			    &url,
 			    -1);
-	unescaped_url = ephy_uri_safe_unescape (url);
+	decoded_url = ephy_uri_decode (url);
 
-	g_object_set (renderer, "text", unescaped_url, NULL);
+	g_object_set (renderer, "text", decoded_url, NULL);
 
 	g_free (url);
-	g_free (unescaped_url);
+	g_free (decoded_url);
 }
 
 GtkWidget *

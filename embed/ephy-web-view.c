@@ -848,7 +848,7 @@ ephy_web_view_set_address (EphyWebView *view,
   view->address = g_strdup (address);
 
   g_free (view->display_address);
-  view->display_address = ephy_uri_safe_unescape (view->address);
+  view->display_address = ephy_uri_decode (view->address);
 
   is_blank = address == NULL ||
              strcmp (address, "about:blank") == 0;
@@ -1485,7 +1485,7 @@ ephy_web_view_set_loading_message (EphyWebView *view,
     char *decoded_address;
     char *title;
 
-    decoded_address = ephy_uri_safe_unescape (address);
+    decoded_address = ephy_uri_decode (address);
     title = ephy_embed_utils_get_title_from_address (decoded_address);
 
     if (title != NULL && title[0] != '\0') {
@@ -2530,7 +2530,7 @@ ephy_web_view_set_link_message (EphyWebView *view,
   g_free (view->link_message);
 
   if (address) {
-    decoded_address = ephy_uri_safe_unescape (address);
+    decoded_address = ephy_uri_decode (address);
     view->link_message = ephy_embed_utils_link_message_parse (decoded_address);
     g_free (decoded_address);
   } else {

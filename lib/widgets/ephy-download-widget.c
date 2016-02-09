@@ -62,7 +62,7 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
   WebKitDownload *download;
   const char *dest;
   char *basename;
-  char *unescaped;
+  char *decoded;
 
   download = ephy_download_get_webkit_download (ephy_download);
   dest = webkit_download_get_destination (download);
@@ -70,10 +70,10 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
     return NULL;
 
   basename = g_filename_display_basename (dest);
-  unescaped = ephy_uri_safe_unescape (basename);
+  decoded = ephy_uri_decode (basename);
   g_free (basename);
 
-  return unescaped;
+  return decoded;
 }
 
 /* modified from telepathy-account-widgets/tpaw-time.c */

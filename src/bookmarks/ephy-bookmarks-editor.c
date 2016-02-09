@@ -1481,12 +1481,12 @@ provide_keyword_uri (EphyNode *node, GValue *value, gpointer data)
 }
 
 static void
-unescape_bookmark_uri (EphyNode *node,
-		       GValue *value,
-		       gpointer user_data)
+decode_bookmark_uri (EphyNode *node,
+		     GValue *value,
+		     gpointer user_data)
 {
 	const char *url = g_value_get_string (value);
-	g_value_take_string (value, ephy_uri_safe_unescape (url));
+	g_value_take_string (value, ephy_uri_decode (url));
 }
 
 
@@ -1646,7 +1646,7 @@ ephy_bookmarks_editor_construct (EphyBookmarksEditor *editor)
 				   G_TYPE_STRING, EPHY_NODE_BMK_PROP_LOCATION,
 				   EPHY_NODE_VIEW_SORTABLE |
 				   EPHY_NODE_VIEW_ELLIPSIZED,
-				   unescape_bookmark_uri, NULL,
+				   decode_bookmark_uri, NULL,
 				   NULL, &(editor->priv->address_col));
 	gtk_tree_view_column_set_min_width (editor->priv->address_col, 300);
 	gtk_tree_view_column_set_resizable (editor->priv->address_col, TRUE);

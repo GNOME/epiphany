@@ -248,7 +248,7 @@ bail:
 }
 
 char *
-ephy_uri_safe_unescape (const char *uri_string)
+ephy_uri_decode (const char *uri_string)
 {
   char *decoded_uri;
 

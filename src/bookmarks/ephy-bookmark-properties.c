@@ -335,7 +335,7 @@ ephy_bookmark_properties_constructor (GType                  type,
 
 	gboolean      lockdown;
 	const char   *tmp;
-	char         *unescaped_url;
+	char         *decoded_url;
 	GtkWidget    *entry;
 
 	object = G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->constructor (type,
@@ -365,9 +365,9 @@ ephy_bookmark_properties_constructor (GType                  type,
 
 	gtk_editable_set_editable (GTK_EDITABLE (properties->adress_entry), !lockdown);
 	tmp = ephy_node_get_property_string (properties->bookmark, EPHY_NODE_BMK_PROP_LOCATION);
-	unescaped_url = ephy_uri_safe_unescape (tmp);
-	gtk_entry_set_text (properties->adress_entry, unescaped_url);
-	g_free (unescaped_url);
+	decoded_url = ephy_uri_decode (tmp);
+	gtk_entry_set_text (properties->adress_entry, decoded_url);
+	g_free (decoded_url);
 
 	entry = ephy_topics_entry_new (properties->bookmarks, properties->bookmark);
 	gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
