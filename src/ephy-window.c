@@ -3427,7 +3427,7 @@ ephy_window_constructor (GType type,
 	mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 	if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
-		g_object_set(priv->location_controller, "editable", FALSE, NULL);
+		g_object_set (priv->location_controller, "editable", FALSE, NULL);
 
 		/* We don't need to show the page menu in web application mode. */
 		action = gtk_action_group_get_action (toolbar_action_group, "PageMenu");
