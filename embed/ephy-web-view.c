@@ -1100,25 +1100,6 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
             G_TYPE_NONE,
             1,
             GTK_TYPE_WIDGET);
-/**
- * EphyWebView::ge-popup-blocked:
- * @view: the #EphyWebView that received the signal
- * @address: The requested URL
- * @target: The requested window name, e.g. "_blank"
- * @features: The requested features: for example, "height=400,width=200"
- *
- * The ::ge_popup_blocked signal is emitted when the viewed web page requests
- * a popup window (with javascript:open()) but popup windows are not allowed.
- **/
-    g_signal_new ("ge_popup_blocked",
-            EPHY_TYPE_WEB_VIEW,
-            G_SIGNAL_RUN_FIRST,
-            0, NULL, NULL, NULL,
-            G_TYPE_NONE,
-            3,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
  * EphyWebView::ge-modal-alert:
@@ -1212,16 +1193,6 @@ new_window_cb (EphyWebView *view,
   g_return_if_fail (container != NULL || !gtk_widget_is_toplevel (GTK_WIDGET (container)));
 
   popups_manager_add_window (view, container);
-}
-
-static void
-ge_popup_blocked_cb (EphyWebView *view,
-                     const char *url,
-                     const char *name,
-                     const char *features,
-                     gpointer user_data)
-{
-  popups_manager_add (view, url, name, features);
 }
 
 static gboolean
@@ -2130,10 +2101,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   g_signal_connect (web_view, "new-window",
                     G_CALLBACK (new_window_cb),
-                    NULL);
-
-  g_signal_connect (web_view, "ge_popup_blocked",
-                    G_CALLBACK (ge_popup_blocked_cb),
                     NULL);
 
   g_signal_connect_object (ephy_embed_shell_get_default (), "page-created",
