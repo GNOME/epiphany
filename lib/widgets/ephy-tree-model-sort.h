@@ -45,8 +45,6 @@ struct _EphyTreeModelSort
 struct _EphyTreeModelSortClass
 {
 	GtkTreeModelSortClass parent_class;
-
-	void (*node_from_iter) (EphyTreeModelSort *model, GtkTreeIter *iter, void **node);
 };
 
 GType		ephy_tree_model_sort_get_type		      (void);
