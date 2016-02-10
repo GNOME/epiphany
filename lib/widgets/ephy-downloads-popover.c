@@ -28,15 +28,10 @@
 
 struct _EphyDownloadsPopover
 {
-  GtkPopover parent;
+  GtkPopover parent_instance;
 
   GtkWidget *downloads_box;
   GtkWidget *clear_button;
-};
-
-struct _EphyDownloadsPopoverClass
-{
-  GtkPopoverClass parent_class;
 };
 
 G_DEFINE_TYPE (EphyDownloadsPopover, ephy_downloads_popover, GTK_TYPE_POPOVER)
