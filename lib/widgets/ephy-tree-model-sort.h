@@ -23,31 +23,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_TREE_MODEL_SORT         (ephy_tree_model_sort_get_type ())
-#define EPHY_TREE_MODEL_SORT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_TREE_MODEL_SORT, EphyTreeModelSort))
-#define EPHY_TREE_MODEL_SORT_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_TREE_MODEL_SORT, EphyTreeModelSortClass))
-#define EPHY_IS_TREE_MODEL_SORT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TREE_MODEL_SORT))
-#define EPHY_IS_TREE_MODEL_SORT_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TREE_MODEL_SORT))
-#define EPHY_TREE_MODEL_SORT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TREE_MODEL_SORT, EphyTreeModelSortClass))
+#define EPHY_TYPE_TREE_MODEL_SORT (ephy_tree_model_sort_get_type ())
 
-typedef struct _EphyTreeModelSort EphyTreeModelSort;
-typedef struct _EphyTreeModelSortClass EphyTreeModelSortClass;
-typedef struct _EphyTreeModelSortPrivate EphyTreeModelSortPrivate;
-
-struct _EphyTreeModelSort
-{
-	GtkTreeModelSort parent;
-
-	/*< private >*/
-	EphyTreeModelSortPrivate *priv;
-};
-
-struct _EphyTreeModelSortClass
-{
-	GtkTreeModelSortClass parent_class;
-};
-
-GType		ephy_tree_model_sort_get_type		      (void);
+G_DECLARE_FINAL_TYPE (EphyTreeModelSort, ephy_tree_model_sort, EPHY, TREE_MODEL_SORT, GtkTreeModelSort)
 
 GtkTreeModel   *ephy_tree_model_sort_new		      (GtkTreeModel *child_model);
 

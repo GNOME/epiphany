@@ -44,10 +44,9 @@ static gboolean ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource
 static gboolean ephy_tree_model_sort_multi_drag_data_delete (EggTreeMultiDragSource *drag_source,
 							     GList *path_list);
 
-#define EPHY_TREE_MODEL_SORT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TREE_MODEL_SORT, EphyTreeModelSortPrivate))
-
-struct _EphyTreeModelSortPrivate
+struct _EphyTreeModelSort
 {
+	GtkTreeModelSort parent_instance;
 	char *str_list;
 	int base_drag_column_id;
 	int extra_drag_column_id;
@@ -63,17 +62,13 @@ ephy_tree_model_sort_class_init (EphyTreeModelSortClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = ephy_tree_model_sort_finalize;
-
-	g_type_class_add_private (object_class, sizeof (EphyTreeModelSortPrivate));
 }
 
 static void
 ephy_tree_model_sort_init (EphyTreeModelSort *ma)
 {
-	ma->priv = EPHY_TREE_MODEL_SORT_GET_PRIVATE (ma);
-
-	ma->priv->base_drag_column_id = -1;
-	ma->priv->extra_drag_column_id = -1;
+	ma->base_drag_column_id = -1;
+	ma->extra_drag_column_id = -1;
 }
 
 static void
@@ -81,7 +76,7 @@ ephy_tree_model_sort_finalize (GObject *object)
 {
 	EphyTreeModelSort *model = EPHY_TREE_MODEL_SORT (object);
 
-	g_free (model->priv->str_list);
+	g_free (model->str_list);
 
 	G_OBJECT_CLASS (ephy_tree_model_sort_parent_class)->finalize (object);
 }
@@ -119,7 +114,7 @@ ephy_tree_model_sort_multi_drag_source_interface_init (EggTreeMultiDragSourceIfa
 static gboolean
 ephy_tree_model_sort_multi_row_draggable (EggTreeMultiDragSource *drag_source, GList *path_list)
 {
-	return (EPHY_TREE_MODEL_SORT (drag_source)->priv->base_drag_column_id >= 0);
+	return (EPHY_TREE_MODEL_SORT (drag_source)->base_drag_column_id >= 0);
 }
 
 /**
@@ -133,7 +128,7 @@ void
 ephy_tree_model_sort_set_base_drag_column_id (EphyTreeModelSort *ms,
 				              int id)
 {
-	ms->priv->base_drag_column_id = id;
+	ms->base_drag_column_id = id;
 }
 
 /**
@@ -147,7 +142,7 @@ void
 ephy_tree_model_sort_set_extra_drag_column_id (EphyTreeModelSort *ms,
 					       int id)
 {
-	ms->priv->extra_drag_column_id = id;
+	ms->extra_drag_column_id = id;
 }
 
 static gboolean
@@ -177,13 +172,13 @@ each_property_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
 
 		gtk_tree_model_get_value (GTK_TREE_MODEL (model), &iter,
-					  model->priv->base_drag_column_id,
+					  model->base_drag_column_id,
 					  &base_value);
 		base_data = g_value_get_string (&base_value);
 
-		if (model->priv->extra_drag_column_id >= 0) {
+		if (model->extra_drag_column_id >= 0) {
 			gtk_tree_model_get_value (GTK_TREE_MODEL (model), &iter,
-						  model->priv->extra_drag_column_id,
+						  model->extra_drag_column_id,
 						  &extra_value);
 			extra_data = g_value_get_string (&extra_value);
 		} else
@@ -198,7 +193,7 @@ each_property_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
 		gtk_tree_path_free (path);
 		g_value_unset (&base_value);
 
-		if (model->priv->extra_drag_column_id >= 0)
+		if (model->extra_drag_column_id >= 0)
 			g_value_unset (&extra_value);
 	}
 }
