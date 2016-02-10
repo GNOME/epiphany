@@ -25,13 +25,12 @@
 gboolean
 ephy_history_service_initialize_urls_table (EphyHistoryService *self)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   GError *error = NULL;
 
-  if (ephy_sqlite_connection_table_exists (priv->history_database, "visits")) {
+  if (ephy_sqlite_connection_table_exists (self->history_database, "visits")) {
     return TRUE;
   }
-  ephy_sqlite_connection_execute (priv->history_database,
+  ephy_sqlite_connection_execute (self->history_database,
     "CREATE TABLE urls ("
     "id INTEGER PRIMARY KEY,"
     "host INTEGER NOT NULL REFERENCES hosts(id) ON DELETE CASCADE,"
@@ -55,12 +54,11 @@ ephy_history_service_initialize_urls_table (EphyHistoryService *self)
 EphyHistoryURL *
 ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_string, EphyHistoryURL *url)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;  
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
   if (url_string == NULL && url != NULL)
     url_string = url->url;
@@ -68,11 +66,11 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
   g_return_val_if_fail (url_string || url->id != -1, NULL);
 
   if (url != NULL && url->id != -1) {
-    statement = ephy_sqlite_connection_create_statement (priv->history_database,
+    statement = ephy_sqlite_connection_create_statement (self->history_database,
       "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, thumbnail_update_time FROM urls "
       "WHERE id=?", &error);
   } else {
-    statement = ephy_sqlite_connection_create_statement (priv->history_database,
+    statement = ephy_sqlite_connection_create_statement (self->history_database,
       "SELECT id, url, title, visit_count, typed_count, last_visit_time, hidden_from_overview, thumbnail_update_time FROM urls "
       "WHERE url=?", &error);
   }
@@ -126,14 +124,13 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
 void
 ephy_history_service_add_url_row (EphyHistoryService *self, EphyHistoryURL *url)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;  
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
     "INSERT INTO urls (url, title, visit_count, typed_count, last_visit_time, host) "
     " VALUES (?, ?, ?, ?, ?, ?)", &error);
   if (error) {
@@ -159,7 +156,7 @@ ephy_history_service_add_url_row (EphyHistoryService *self, EphyHistoryURL *url)
     g_warning ("Could not insert URL into urls table: %s", error->message);
     g_error_free (error);
   } else {
-    url->id = ephy_sqlite_connection_get_last_insert_id (priv->history_database);
+    url->id = ephy_sqlite_connection_get_last_insert_id (self->history_database);
   }
 
   g_object_unref (statement);
@@ -168,14 +165,13 @@ ephy_history_service_add_url_row (EphyHistoryService *self, EphyHistoryURL *url)
 void
 ephy_history_service_update_url_row (EphyHistoryService *self, EphyHistoryURL *url)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement;
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
     "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=?, hidden_from_overview=?, thumbnail_update_time=? "
     "WHERE id=?", &error);
   if (error) {
@@ -226,7 +222,6 @@ create_url_from_statement (EphySQLiteStatement *statement)
 GList *
 ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *query)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;
   GList *substring;
   GString *statement_str;
@@ -248,8 +243,8 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
 
   int i = 0;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
   statement_str = g_string_new (base_statement);
 
@@ -311,7 +306,7 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
     statement_str = g_string_append (statement_str, "LIMIT ? ");
   }
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
 						       statement_str->str, &error);
   g_string_free (statement_str, TRUE);
 
@@ -392,13 +387,12 @@ ephy_history_service_find_url_rows (EphyHistoryService *self, EphyHistoryQuery *
 void
 ephy_history_service_delete_url (EphyHistoryService *self, EphyHistoryURL *url)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;
   gchar *sql_statement;
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
   g_return_if_fail (url->id != -1 || url->url);
 
@@ -407,7 +401,7 @@ ephy_history_service_delete_url (EphyHistoryService *self, EphyHistoryURL *url)
   else
     sql_statement = g_strdup ("DELETE FROM urls WHERE url=?");
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
                                                        sql_statement, &error);
   g_free (sql_statement);
 

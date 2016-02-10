@@ -21,7 +21,8 @@
 
 #include "ephy-sqlite-connection.h"
 
-struct _EphyHistoryServicePrivate {
+struct _EphyHistoryService {
+  GObject parent_instance;
   char *history_filename;
   EphySQLiteConnection *history_database;
   GThread *history_thread;

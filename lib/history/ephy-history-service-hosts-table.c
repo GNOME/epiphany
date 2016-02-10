@@ -27,13 +27,12 @@
 gboolean
 ephy_history_service_initialize_hosts_table (EphyHistoryService *self)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   GError *error = NULL;
 
-  if (ephy_sqlite_connection_table_exists (priv->history_database, "hosts")) {
+  if (ephy_sqlite_connection_table_exists (self->history_database, "hosts")) {
     return TRUE;
   }
-  ephy_sqlite_connection_execute (priv->history_database,
+  ephy_sqlite_connection_execute (self->history_database,
     "CREATE TABLE hosts ("
     "id INTEGER PRIMARY KEY,"
     "url LONGVARCAR,"
@@ -53,14 +52,13 @@ ephy_history_service_initialize_hosts_table (EphyHistoryService *self)
 void
 ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *host)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
     "INSERT INTO hosts (url, title, visit_count, zoom_level) "
     "VALUES (?, ?, ?, ?)", &error);
 
@@ -85,7 +83,7 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
     g_warning ("Could not insert host into hosts table: %s", error->message);
     g_error_free (error);
   } else {
-    host->id = ephy_sqlite_connection_get_last_insert_id (priv->history_database);
+    host->id = ephy_sqlite_connection_get_last_insert_id (self->history_database);
   }
 
   g_object_unref (statement);
@@ -94,14 +92,13 @@ ephy_history_service_add_host_row (EphyHistoryService *self, EphyHistoryHost *ho
 void
 ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost *host)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement;
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
     "UPDATE hosts SET url=?, title=?, visit_count=?, zoom_level=?"
     "WHERE id=?", &error);
   if (error) {
@@ -132,12 +129,11 @@ ephy_history_service_update_host_row (EphyHistoryService *self, EphyHistoryHost 
 EphyHistoryHost*
 ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_string, EphyHistoryHost *host)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
   if (host_string == NULL && host != NULL)
     host_string = host->url;
@@ -145,11 +141,11 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
   g_assert (host_string || host->id !=-1);
 
   if (host != NULL && host->id != -1) {
-    statement = ephy_sqlite_connection_create_statement (priv->history_database,
+    statement = ephy_sqlite_connection_create_statement (self->history_database,
         "SELECT id, url, title, visit_count, zoom_level FROM hosts "
         "WHERE id=?", &error);
   } else {
-    statement = ephy_sqlite_connection_create_statement (priv->history_database,
+    statement = ephy_sqlite_connection_create_statement (self->history_database,
         "SELECT id, url, title, visit_count, zoom_level FROM hosts "
         "WHERE url=?", &error);
   }
@@ -214,15 +210,14 @@ create_host_from_statement (EphySQLiteStatement *statement)
 GList*
 ephy_history_service_get_all_hosts (EphyHistoryService *self)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;
   GList *hosts = NULL;
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
       "SELECT id, url, title, visit_count, zoom_level FROM hosts", &error);
 
   if (error) {
@@ -248,7 +243,6 @@ ephy_history_service_get_all_hosts (EphyHistoryService *self)
 GList*
 ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery *query)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;
   GList *substring;
   GString *statement_str;
@@ -266,8 +260,8 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
 
   int i = 0;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
   statement_str = g_string_new (base_statement);
 
@@ -292,7 +286,7 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
 
   statement_str = g_string_append (statement_str, "1 ");
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
 						       statement_str->str, &error);
   g_string_free (statement_str, TRUE);
 
@@ -428,13 +422,12 @@ void
 ephy_history_service_delete_host_row (EphyHistoryService *self,
                                       EphyHistoryHost *host)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;
   gchar *sql_statement;
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
   g_assert (host->id != -1 || host->url);
 
@@ -443,7 +436,7 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
   else
     sql_statement = g_strdup ("DELETE FROM hosts WHERE url=?");
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
                                                        sql_statement, &error);
   g_free (sql_statement);
 
@@ -476,18 +469,17 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
 void
 ephy_history_service_delete_orphan_hosts (EphyHistoryService *self)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
   /* Where a JOIN would give us all hosts with urls associated, a LEFT
      JOIN also gives us those hosts for which there are no urls.  By
      means of urls.host == NULL we filter out anything else and
      retrieve only the ids of the hosts without associated urls. Then,
      we delete all these rows from the hosts table. */
-  ephy_sqlite_connection_execute (priv->history_database,
+  ephy_sqlite_connection_execute (self->history_database,
                                   "DELETE FROM hosts WHERE hosts.id IN "
                                   "  (SELECT hosts.id FROM hosts LEFT JOIN urls "
                                   "    ON hosts.id = urls.host WHERE urls.host is NULL);",

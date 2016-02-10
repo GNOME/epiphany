@@ -23,13 +23,12 @@
 gboolean
 ephy_history_service_initialize_visits_table (EphyHistoryService *self)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   GError *error = NULL;
 
-  if (ephy_sqlite_connection_table_exists (priv->history_database, "visits"))
+  if (ephy_sqlite_connection_table_exists (self->history_database, "visits"))
     return TRUE;
 
-  ephy_sqlite_connection_execute (priv->history_database,
+  ephy_sqlite_connection_execute (self->history_database,
     "CREATE TABLE visits ("
     "id INTEGER PRIMARY KEY,"
     "url INTEGER NOT NULL REFERENCES urls(id) ON DELETE CASCADE,"
@@ -49,15 +48,14 @@ ephy_history_service_initialize_visits_table (EphyHistoryService *self)
 void
 ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVisit *visit)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement;
   GError *error = NULL;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
   statement = ephy_sqlite_connection_create_statement (
-    priv->history_database,
+    self->history_database,
     "INSERT INTO visits (url, visit_time, visit_type) "
     " VALUES (?, ?, ?) ", &error);
   if (error) {
@@ -80,7 +78,7 @@ ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVis
     g_warning ("Could not insert URL into visits table: %s", error->message);
     g_error_free (error);
   } else {
-    visit->id = ephy_sqlite_connection_get_last_insert_id (priv->history_database);
+    visit->id = ephy_sqlite_connection_get_last_insert_id (self->history_database);
   }
 
   ephy_history_service_schedule_commit (self);
@@ -101,7 +99,6 @@ create_page_visit_from_statement (EphySQLiteStatement *statement)
 GList *
 ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery *query)
 {
-  EphyHistoryServicePrivate *priv = EPHY_HISTORY_SERVICE (self)->priv;
   EphySQLiteStatement *statement = NULL;
   GList *substring;
   GString *statement_str;
@@ -121,8 +118,8 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
 
   int i = 0;
 
-  g_assert (priv->history_thread == g_thread_self ());
-  g_assert (priv->history_database != NULL);
+  g_assert (self->history_thread == g_thread_self ());
+  g_assert (self->history_database != NULL);
 
   statement_str = g_string_new (base_statement);
 
@@ -147,7 +144,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
 
   statement_str = g_string_append (statement_str, "1");
 
-  statement = ephy_sqlite_connection_create_statement (priv->history_database,
+  statement = ephy_sqlite_connection_create_statement (self->history_database,
 						       statement_str->str, &error);
   g_string_free (statement_str, TRUE);
 

@@ -26,32 +26,12 @@
 
 G_BEGIN_DECLS
 
-/* convenience macros */
-#define EPHY_TYPE_HISTORY_SERVICE             (ephy_history_service_get_type())
-#define EPHY_HISTORY_SERVICE(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),EPHY_TYPE_HISTORY_SERVICE,EphyHistoryService))
-#define EPHY_HISTORY_SERVICE_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST((klass),EPHY_TYPE_HISTORY_SERVICE,EphyHistoryServiceClass))
-#define EPHY_IS_HISTORY_SERVICE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE((obj),EPHY_TYPE_HISTORY_SERVICE))
-#define EPHY_IS_HISTORY_SERVICE_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE((klass),EPHY_TYPE_HISTORY_SERVICE))
-#define EPHY_HISTORY_SERVICE_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj),EPHY_TYPE_HISTORY_SERVICE,EphyHistoryServiceClass))
+#define EPHY_TYPE_HISTORY_SERVICE (ephy_history_service_get_type())
 
-typedef struct _EphyHistoryService                EphyHistoryService;
-typedef struct _EphyHistoryServiceClass           EphyHistoryServiceClass;
-typedef struct _EphyHistoryServicePrivate         EphyHistoryServicePrivate;
+G_DECLARE_FINAL_TYPE (EphyHistoryService, ephy_history_service, EPHY, HISTORY_SERVICE, GObject)
 
 typedef void   (*EphyHistoryJobCallback)          (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data);
 
-struct _EphyHistoryService {
-     GObject parent;
-
-    /* private */
-    EphyHistoryServicePrivate *priv;
-};
-
-struct _EphyHistoryServiceClass {
-  GObjectClass parent_class;
-};
-
-GType                    ephy_history_service_get_type                (void);
 EphyHistoryService *     ephy_history_service_new                     (const char *history_filename, gboolean read_only);
 
 void                     ephy_history_service_add_visit               (EphyHistoryService *self, EphyHistoryPageVisit *visit, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
