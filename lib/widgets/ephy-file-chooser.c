@@ -34,6 +34,11 @@ static void ephy_file_chooser_image_preview	(GtkFileChooser *file_chooser,
 #define PREVIEW_WIDTH 150
 #define PREVIEW_HEIGHT 150
 
+struct _EphyFileChooser
+{
+	GtkFileChooserDialog parent_instance;
+};
+
 G_DEFINE_TYPE (EphyFileChooser, ephy_file_chooser, GTK_TYPE_FILE_CHOOSER_DIALOG)
 
 static void
