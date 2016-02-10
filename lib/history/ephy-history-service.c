@@ -144,6 +144,8 @@ ephy_history_service_dispose (GObject *object)
     g_source_remove (self->queue_urls_visited_id);
     self->queue_urls_visited_id = 0;
   }
+
+  G_OBJECT_CLASS (ephy_history_service_parent_class)->dispose (object);
 }
 
 static gboolean
