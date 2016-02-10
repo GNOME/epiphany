@@ -36,8 +36,6 @@
  * elements. It implements drag and dropping.
  */
 
-static void ephy_node_view_class_init (EphyNodeViewClass *klass);
-static void ephy_node_view_init (EphyNodeView *view);
 static void ephy_node_view_finalize (GObject *object);
 
 #define EPHY_NODE_VIEW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_VIEW, EphyNodeViewPrivate))
@@ -103,37 +101,9 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 #define AUTO_SCROLL_MARGIN 20
 
-static GObjectClass *parent_class = NULL;
-
 static guint ephy_node_view_signals[LAST_SIGNAL] = { 0 };
 
-GType
-ephy_node_view_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyNodeViewClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_node_view_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyNodeView),
-			0,
-			(GInstanceInitFunc) ephy_node_view_init
-		};
-
-		type = g_type_register_static (GTK_TYPE_TREE_VIEW,
-					       "EphyNodeView",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyNodeView, ephy_node_view, GTK_TYPE_TREE_VIEW)
 
 static void
 ephy_node_view_finalize (GObject *object)
@@ -154,7 +124,7 @@ ephy_node_view_finalize (GObject *object)
 		gtk_target_list_unref (view->priv->drag_targets);
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_node_view_parent_class)->finalize (object);
 }
 
 static EphyNode *
@@ -846,7 +816,7 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 
 	if (event->window != gtk_tree_view_get_bin_window (GTK_TREE_VIEW (treeview)))
 	{
-		return GTK_WIDGET_CLASS (parent_class)->button_press_event (treeview, event);
+		return GTK_WIDGET_CLASS (ephy_node_view_parent_class)->button_press_event (treeview, event);
 	}
 
 	if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (treeview),
@@ -876,7 +846,7 @@ ephy_node_view_button_press_cb (GtkWidget *treeview,
 
 		if (call_parent)
 		{
-			GTK_WIDGET_CLASS (parent_class)->button_press_event (treeview, event);
+			GTK_WIDGET_CLASS (ephy_node_view_parent_class)->button_press_event (treeview, event);
 		}
 
 		if (event->button == 3)
@@ -1743,8 +1713,9 @@ ephy_node_view_constructor (GType type, guint n_construct_properties,
 	EphyNodeViewPrivate *priv;
 	GtkTreeSelection *selection;
 
-	object = parent_class->constructor (type, n_construct_properties,
-					    construct_params);
+	object = G_OBJECT_CLASS (ephy_node_view_parent_class)->constructor (type,
+									    n_construct_properties,
+									    construct_params);
 	view = EPHY_NODE_VIEW (object);
 	priv = EPHY_NODE_VIEW_GET_PRIVATE (object);
 
@@ -1860,8 +1831,6 @@ static void
 ephy_node_view_class_init (EphyNodeViewClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->constructor = ephy_node_view_constructor;
 	object_class->finalize = ephy_node_view_finalize;
