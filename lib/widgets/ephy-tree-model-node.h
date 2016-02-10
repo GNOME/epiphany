@@ -24,33 +24,11 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_TREE_MODEL_NODE         (ephy_tree_model_node_get_type ())
-#define EPHY_TREE_MODEL_NODE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNode))
-#define EPHY_TREE_MODEL_NODE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNodeClass))
-#define EPHY_IS_TREE_MODEL_NODE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_TREE_MODEL_NODE))
-#define EPHY_IS_TREE_MODEL_NODE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_TREE_MODEL_NODE))
-#define EPHY_TREE_MODEL_NODE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNodeClass))
+#define EPHY_TYPE_TREE_MODEL_NODE (ephy_tree_model_node_get_type ())
+
+G_DECLARE_FINAL_TYPE (EphyTreeModelNode, ephy_tree_model_node, EPHY, TREE_MODEL_NODE, GObject)
 
 typedef void (*EphyTreeModelNodeValueFunc) (EphyNode *node, GValue *value, gpointer user_data);
-
-typedef struct _EphyTreeModelNode EphyTreeModelNode;
-typedef struct _EphyTreeModelNodeClass EphyTreeModelNodeClass;
-typedef struct _EphyTreeModelNodePrivate EphyTreeModelNodePrivate;
-
-struct _EphyTreeModelNode
-{
-	GObject parent;
-
-	/*< private >*/
-	EphyTreeModelNodePrivate *priv;
-};
-
-struct _EphyTreeModelNodeClass
-{
-	GObjectClass parent;
-};
-
-GType              ephy_tree_model_node_get_type         (void);
 
 EphyTreeModelNode *ephy_tree_model_node_new              (EphyNode *root);
 
