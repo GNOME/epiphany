@@ -27,31 +27,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_SECURITY_POPOVER            (ephy_security_popover_get_type())
-#define EPHY_SECURITY_POPOVER(object)         (G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_SECURITY_POPOVER, EphySecurityPopover))
-#define EPHY_IS_SECURITY_POPOVER(object)      (G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_SECURITY_POPOVER))
-#define EPHY_SECURITY_POPOVER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_SECURITY_POPOVER, EphySecurityPopoverClass))
-#define EPHY_IS_SECURITY_POPOVER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_SECURITY_POPOVER))
-#define EPHY_SECURITY_POPOVER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_SECURITY_POPOVER, EphySecurityPopoverClass))
+#define EPHY_TYPE_SECURITY_POPOVER (ephy_security_popover_get_type())
 
-typedef struct _EphySecurityPopover        EphySecurityPopover;
-typedef struct _EphySecurityPopoverClass   EphySecurityPopoverClass;
-typedef struct _EphySecurityPopoverPrivate EphySecurityPopoverPrivate;
-
-struct _EphySecurityPopover
-{
-  GtkPopover parent_object;
-
-  /*< private >*/
-  EphySecurityPopoverPrivate *priv;
-};
-
-struct _EphySecurityPopoverClass
-{
-  GtkPopoverClass parent_class;
-};
-
-GType      ephy_security_popover_get_type (void);
+G_DECLARE_FINAL_TYPE (EphySecurityPopover, ephy_security_popover, EPHY, SECURITY_POPOVER, GtkPopover)
 
 GtkWidget *ephy_security_popover_new      (GtkWidget *relative_to,
                                            const char *address,
