@@ -26,31 +26,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_LOCATION_ENTRY		(ephy_location_entry_get_type())
-#define EPHY_LOCATION_ENTRY(object)		(G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntry))
-#define EPHY_LOCATION_ENTRY_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntryClass))
-#define EPHY_IS_LOCATION_ENTRY(object)		(G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_LOCATION_ENTRY))
-#define EPHY_IS_LOCATION_ENTRY_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_LOCATION_ENTRY))
-#define EPHY_LOCATION_ENTRY_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_LOCATION_ENTRY, EphyLocationEntryClass))
+#define EPHY_TYPE_LOCATION_ENTRY (ephy_location_entry_get_type())
 
-typedef struct _EphyLocationEntryClass		EphyLocationEntryClass;
-typedef struct _EphyLocationEntry		EphyLocationEntry;
-typedef struct _EphyLocationEntryPrivate	EphyLocationEntryPrivate;
-
-struct _EphyLocationEntryClass
-{
-	GtkEntryClass parent_class;
-};
-
-struct _EphyLocationEntry
-{
-	GtkEntry parent_object;
-
-	/*< private >*/
-	EphyLocationEntryPrivate *priv;
-};
-
-GType		ephy_location_entry_get_type		(void);
+G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkEntry)
 
 GtkWidget      *ephy_location_entry_new			(void);
 
