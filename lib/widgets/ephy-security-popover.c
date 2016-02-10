@@ -332,8 +332,7 @@ ephy_security_popover_init (EphySecurityPopover *popover)
 
   popover->security_label = gtk_label_new (NULL);
   gtk_label_set_line_wrap (GTK_LABEL (popover->security_label), TRUE);
-  /* We must use deprecated GtkMisc, not halign, as GTK_ALIGN_START fails for labels with line wrap. */
-  gtk_misc_set_alignment (GTK_MISC (popover->security_label), 0.0, 0.5);
+  gtk_label_set_xalign (GTK_LABEL (popover->security_label), 0.0);
 
   gtk_grid_attach (GTK_GRID (popover->grid), popover->lock_image, 0, 0, 1, 2);
   gtk_grid_attach (GTK_GRID (popover->grid), popover->host_label, 1, 0, 1, 1);
