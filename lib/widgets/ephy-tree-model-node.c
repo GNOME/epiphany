@@ -33,10 +33,8 @@
  * It can be used with #EphyNodeView and #EphyTreeModelFilter.
  */
 
-static void ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass);
-static void ephy_tree_model_node_init (EphyTreeModelNode *model);
 static void ephy_tree_model_node_finalize (GObject *object);
-static void ephy_tree_model_node_tree_model_init (GtkTreeModelIface *iface);
+static void ephy_tree_model_node_tree_model_interface_init (GtkTreeModelIface *iface);
 
 #define EPHY_TREE_MODEL_NODE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_TREE_MODEL_NODE, EphyTreeModelNodePrivate))
 
@@ -67,46 +65,9 @@ enum
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_tree_model_node_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyTreeModelNodeClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_tree_model_node_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyTreeModelNode),
-			0,
-			(GInstanceInitFunc) ephy_tree_model_node_init
-		};
-
-		const GInterfaceInfo tree_model_info =
-		{
-			(GInterfaceInitFunc) ephy_tree_model_node_tree_model_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyTreeModelNode",
-					       &our_info, 0);
-
-		g_type_add_interface_static (type,
-					     GTK_TYPE_TREE_MODEL,
-					     &tree_model_info);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE_WITH_CODE (EphyTreeModelNode, ephy_tree_model_node, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
+                                                ephy_tree_model_node_tree_model_interface_init))
 
 static void
 root_child_removed_cb (EphyNode *node,
@@ -271,8 +232,6 @@ ephy_tree_model_node_class_init (EphyTreeModelNodeClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize = ephy_tree_model_node_finalize;
 
 	object_class->set_property = ephy_tree_model_node_set_property;
@@ -311,7 +270,7 @@ ephy_tree_model_node_finalize (GObject *object)
 	g_ptr_array_foreach (model->priv->columns, (GFunc) g_free, NULL);
 	g_ptr_array_free (model->priv->columns, TRUE);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_tree_model_node_parent_class)->finalize (object);
 }
 
 /**
@@ -670,7 +629,7 @@ ephy_tree_model_node_iter_from_node (EphyTreeModelNode *model,
 }
 
 static void
-ephy_tree_model_node_tree_model_init (GtkTreeModelIface *iface)
+ephy_tree_model_node_tree_model_interface_init (GtkTreeModelIface *iface)
 {
 	iface->get_flags       = ephy_tree_model_node_get_flags;
 	iface->get_iter        = ephy_tree_model_node_get_iter;
