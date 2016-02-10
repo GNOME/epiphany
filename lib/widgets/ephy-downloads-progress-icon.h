@@ -26,17 +26,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_DOWNLOADS_PROGRESS_ICON            (ephy_downloads_progress_icon_get_type())
-#define EPHY_DOWNLOADS_PROGRESS_ICON(object)         (G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_DOWNLOADS_PROGRESS_ICON, EphyDownloadsProgressIcon))
-#define EPHY_IS_DOWNLOADS_PROGRESS_ICON(object)      (G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_DOWNLOADS_PROGRESS_ICON))
-#define EPHY_DOWNLOADS_PROGRESS_ICON_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_DOWNLOADS_PROGRESS_ICON, EphyDownloadsProgressIconClass))
-#define EPHY_IS_DOWNLOADS_PROGRESS_ICON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_DOWNLOADS_PROGRESS_ICON))
-#define EPHY_DOWNLOADS_PROGRESS_ICON_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_DOWNLOADS_PROGRESS_ICON, EphyDownloadsProgressIconClass))
+#define EPHY_TYPE_DOWNLOADS_PROGRESS_ICON (ephy_downloads_progress_icon_get_type())
 
-typedef struct _EphyDownloadsProgressIcon        EphyDownloadsProgressIcon;
-typedef struct _EphyDownloadsProgressIconClass   EphyDownloadsProgressIconClass;
-
-GType      ephy_downloads_progress_icon_get_type (void);
+G_DECLARE_FINAL_TYPE (EphyDownloadsProgressIcon, ephy_downloads_progress_icon, EPHY, DOWNLOADS_PROGRESS_ICON, GtkDrawingArea)
 
 GtkWidget *ephy_downloads_progress_icon_new      (void);
 
