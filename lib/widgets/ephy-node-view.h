@@ -25,29 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_NODE_VIEW         (ephy_node_view_get_type ())
-#define EPHY_NODE_VIEW(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_NODE_VIEW, EphyNodeView))
-#define EPHY_NODE_VIEW_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_NODE_VIEW, EphyNodeViewClass))
-#define EPHY_IS_NODE_VIEW(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_NODE_VIEW))
-#define EPHY_IS_NODE_VIEW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NODE_VIEW))
-#define EPHY_NODE_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NODE_VIEW, EphyNodeViewClass))
+#define EPHY_TYPE_NODE_VIEW (ephy_node_view_get_type ())
 
-typedef struct _EphyNodeView		EphyNodeView;
-typedef struct _EphyNodeViewClass	EphyNodeViewClass;
-typedef struct _EphyNodeViewPrivate	EphyNodeViewPrivate;
-
-struct _EphyNodeView
-{
-	GtkTreeView parent;
-
-	/*< private >*/
-	EphyNodeViewPrivate *priv;
-};
-
-struct _EphyNodeViewClass
-{
-	GtkTreeViewClass parent;
-};
+G_DECLARE_FINAL_TYPE (EphyNodeView, ephy_node_view, EPHY, NODE_VIEW, GtkTreeView)
 
 typedef enum
 {
@@ -64,8 +44,6 @@ typedef enum
 	EPHY_NODE_VIEW_SEARCHABLE = 1 << 3,
 	EPHY_NODE_VIEW_ELLIPSIZED = 1 << 4
 } EphyNodeViewFlags;
-
-GType      ephy_node_view_get_type	      (void);
 
 GtkWidget *ephy_node_view_new                 (EphyNode *root,
 					       EphyNodeFilter *filter);
