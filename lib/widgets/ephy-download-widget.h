@@ -28,30 +28,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_DOWNLOAD_WIDGET              ephy_download_widget_get_type()
-#define EPHY_DOWNLOAD_WIDGET(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_DOWNLOAD_WIDGET, EphyDownloadWidget))
-#define EPHY_DOWNLOAD_WIDGET_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_DOWNLOAD_WIDGET, EphyDownloadWidgetClass))
-#define EPHY_IS_DOWNLOAD_WIDGET(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_DOWNLOAD_WIDGET))
-#define EPHY_IS_DOWNLOAD_WIDGET_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_DOWNLOAD_WIDGET))
-#define EPHY_DOWNLOAD_WIDGET_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_DOWNLOAD_WIDGET, EphyDownloadWidgetClass))
+#define EPHY_TYPE_DOWNLOAD_WIDGET ephy_download_widget_get_type()
 
-typedef struct _EphyDownloadWidget EphyDownloadWidget;
-typedef struct _EphyDownloadWidgetClass EphyDownloadWidgetClass;
-typedef struct _EphyDownloadWidgetPrivate EphyDownloadWidgetPrivate;
-
-struct _EphyDownloadWidget
-{
-  GtkGrid parent;
-
-  EphyDownloadWidgetPrivate *priv;
-};
-
-struct _EphyDownloadWidgetClass
-{
-  GtkGridClass parent_class;
-};
-
-GType          ephy_download_widget_get_type     (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (EphyDownloadWidget, ephy_download_widget, EPHY, DOWNLOAD_WIDGET, GtkGrid)
 
 GtkWidget     *ephy_download_widget_new          (EphyDownload *ephy_download);
 
