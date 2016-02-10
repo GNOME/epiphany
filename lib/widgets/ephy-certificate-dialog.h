@@ -25,31 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_CERTIFICATE_DIALOG            (ephy_certificate_dialog_get_type())
-#define EPHY_CERTIFICATE_DIALOG(object)         (G_TYPE_CHECK_INSTANCE_CAST((object), EPHY_TYPE_CERTIFICATE_DIALOG, EphyCertificateDialog))
-#define EPHY_IS_CERTIFICATE_DIALOG(object)      (G_TYPE_CHECK_INSTANCE_TYPE((object), EPHY_TYPE_CERTIFICATE_DIALOG))
-#define EPHY_CERTIFICATE_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), EPHY_TYPE_CERTIFICATE_DIALOG, EphyCertificateDialogClass))
-#define EPHY_IS_CERTIFICATE_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), EPHY_TYPE_CERTIFICATE_DIALOG))
-#define EPHY_CERTIFICATE_DIALOG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_CERTIFICATE_DIALOG, EphyCertificateDialogClass))
+#define EPHY_TYPE_CERTIFICATE_DIALOG (ephy_certificate_dialog_get_type())
 
-typedef struct _EphyCertificateDialog        EphyCertificateDialog;
-typedef struct _EphyCertificateDialogClass   EphyCertificateDialogClass;
-typedef struct _EphyCertificateDialogPrivate EphyCertificateDialogPrivate;
-
-struct _EphyCertificateDialog
-{
-        GtkDialog parent_object;
-
-        /*< private >*/
-        EphyCertificateDialogPrivate *priv;
-};
-
-struct _EphyCertificateDialogClass
-{
-        GtkDialogClass parent_class;
-};
-
-GType      ephy_certificate_dialog_get_type (void);
+G_DECLARE_FINAL_TYPE (EphyCertificateDialog, ephy_certificate_dialog, EPHY, CERTIFICATE_DIALOG, GtkDialog)
 
 GtkWidget *ephy_certificate_dialog_new      (GtkWindow           *parent,
                                              const char          *address,

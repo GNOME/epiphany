@@ -44,11 +44,14 @@ enum
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-struct _EphyCertificateDialogPrivate
+struct _EphyCertificateDialog
 {
+  GtkDialog parent_object;
+
   GtkWidget *icon;
   GtkWidget *title;
   GtkWidget *text;
+
   GTlsCertificateFlags tls_errors;
   EphySecurityLevel security_level;
 };
@@ -140,39 +143,38 @@ static void
 ephy_certificate_dialog_constructed (GObject *object)
 {
   EphyCertificateDialog *dialog = EPHY_CERTIFICATE_DIALOG (object);
-  EphyCertificateDialogPrivate *priv = dialog->priv;
   GIcon *icon;
   const char *icon_name;
   char *markup;
 
   G_OBJECT_CLASS (ephy_certificate_dialog_parent_class)->constructed (object);
 
-  icon_name = ephy_security_level_to_icon_name (priv->security_level);
+  icon_name = ephy_security_level_to_icon_name (dialog->security_level);
   if (icon_name) {
     icon = g_themed_icon_new_with_default_fallbacks (icon_name);
-    gtk_image_set_from_gicon (GTK_IMAGE (priv->icon), icon, GTK_ICON_SIZE_DIALOG);
+    gtk_image_set_from_gicon (GTK_IMAGE (dialog->icon), icon, GTK_ICON_SIZE_DIALOG);
     g_object_unref (icon);
   }
 
   markup = g_strdup_printf ("<span weight=\"bold\" size=\"large\">%s</span>",
-			    priv->tls_errors == 0 ?
+			    dialog->tls_errors == 0 ?
 			    _("The identity of this website has been verified.") :
 			    _("The identity of this website has not been verified."));
-  gtk_label_set_markup (GTK_LABEL (priv->title), markup);
+  gtk_label_set_markup (GTK_LABEL (dialog->title), markup);
   g_free (markup);
 
-  if (priv->tls_errors) {
-    char *text = get_error_messages_from_tls_errors (priv->tls_errors);
-    gtk_label_set_text (GTK_LABEL (priv->text), text);
+  if (dialog->tls_errors) {
+    char *text = get_error_messages_from_tls_errors (dialog->tls_errors);
+    gtk_label_set_text (GTK_LABEL (dialog->text), text);
     g_free (text);
   } else {
-    switch (priv->security_level) {
+    switch (dialog->security_level) {
     case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
       /* Message on certificte dialog ertificate dialog */
-      gtk_label_set_text (GTK_LABEL (priv->text), _("No problems have been detected with your connection."));
+      gtk_label_set_text (GTK_LABEL (dialog->text), _("No problems have been detected with your connection."));
       break;
     case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
-      gtk_label_set_text (GTK_LABEL (priv->text), _("This certificate is valid. However, "
+      gtk_label_set_text (GTK_LABEL (dialog->text), _("This certificate is valid. However, "
                                                     "resources on this page were sent insecurely."));
       break;
     case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
@@ -183,7 +185,7 @@ ephy_certificate_dialog_constructed (GObject *object)
       g_assert_not_reached ();
     }
   }
-  gtk_widget_show (priv->text);
+  gtk_widget_show (dialog->text);
 }
 
 static void
@@ -193,7 +195,6 @@ ephy_certificate_dialog_set_property (GObject *object,
                                       GParamSpec *pspec)
 {
   EphyCertificateDialog *dialog = EPHY_CERTIFICATE_DIALOG (object);
-  EphyCertificateDialogPrivate *priv = dialog->priv;
 
   switch (prop_id) {
   case PROP_ADDRESS:
@@ -203,10 +204,10 @@ ephy_certificate_dialog_set_property (GObject *object,
     ephy_certificate_dialog_set_certificate (dialog, g_value_get_object (value));
     break;
   case PROP_SECURITY_LEVEL:
-    priv->security_level = g_value_get_enum (value);
+    dialog->security_level = g_value_get_enum (value);
     break;
   case PROP_TLS_ERRORS:
-    priv->tls_errors = g_value_get_flags (value);
+    dialog->tls_errors = g_value_get_flags (value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -272,8 +273,6 @@ ephy_certificate_dialog_class_init (EphyCertificateDialogClass *klass)
                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
-
-  g_type_class_add_private (object_class, sizeof (EphyCertificateDialogPrivate));
 }
 
 static void
@@ -281,12 +280,6 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 {
   GtkWidget *grid;
   GtkWidget *content_area;
-  EphyCertificateDialogPrivate *priv;
-
-  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
-					      EPHY_TYPE_CERTIFICATE_DIALOG,
-					      EphyCertificateDialogPrivate);
-  priv = dialog->priv;
 
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 500);
 
@@ -297,33 +290,33 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 
-  priv->icon = gtk_image_new ();
-  gtk_widget_set_halign (priv->icon, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (priv->icon, GTK_ALIGN_START);
-  gtk_grid_attach (GTK_GRID (grid), priv->icon,
+  dialog->icon = gtk_image_new ();
+  gtk_widget_set_halign (dialog->icon, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (dialog->icon, GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (grid), dialog->icon,
                    0, 0, 1, 2);
-  gtk_widget_show (priv->icon);
+  gtk_widget_show (dialog->icon);
 
-  priv->title = gtk_label_new (NULL);
-  gtk_label_set_use_markup (GTK_LABEL (priv->title), TRUE);
-  gtk_label_set_line_wrap  (GTK_LABEL (priv->title), TRUE);
-  gtk_label_set_selectable (GTK_LABEL (priv->title), TRUE);
-  gtk_widget_set_halign (priv->title, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->title, GTK_ALIGN_CENTER);
-  gtk_misc_set_alignment (GTK_MISC (priv->title), 0.0, 0.5);
-  gtk_grid_attach_next_to (GTK_GRID (grid), priv->title,
-                           priv->icon, GTK_POS_RIGHT,
+  dialog->title = gtk_label_new (NULL);
+  gtk_label_set_use_markup (GTK_LABEL (dialog->title), TRUE);
+  gtk_label_set_line_wrap  (GTK_LABEL (dialog->title), TRUE);
+  gtk_label_set_selectable (GTK_LABEL (dialog->title), TRUE);
+  gtk_widget_set_halign (dialog->title, GTK_ALIGN_START);
+  gtk_widget_set_valign (dialog->title, GTK_ALIGN_CENTER);
+  gtk_misc_set_alignment (GTK_MISC (dialog->title), 0.0, 0.5);
+  gtk_grid_attach_next_to (GTK_GRID (grid), dialog->title,
+                           dialog->icon, GTK_POS_RIGHT,
                            1, 1);
-  gtk_widget_show (priv->title);
+  gtk_widget_show (dialog->title);
 
-  priv->text = gtk_label_new (NULL);
-  gtk_label_set_line_wrap  (GTK_LABEL (priv->text), TRUE);
-  gtk_label_set_selectable (GTK_LABEL (priv->text), TRUE);
-  gtk_widget_set_halign (priv->text, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->text, GTK_ALIGN_START);
-  gtk_misc_set_alignment (GTK_MISC (priv->text), 0.0, 0.0);
-  gtk_grid_attach_next_to (GTK_GRID (grid), priv->text,
-                           priv->title, GTK_POS_BOTTOM,
+  dialog->text = gtk_label_new (NULL);
+  gtk_label_set_line_wrap  (GTK_LABEL (dialog->text), TRUE);
+  gtk_label_set_selectable (GTK_LABEL (dialog->text), TRUE);
+  gtk_widget_set_halign (dialog->text, GTK_ALIGN_START);
+  gtk_widget_set_valign (dialog->text, GTK_ALIGN_START);
+  gtk_misc_set_alignment (GTK_MISC (dialog->text), 0.0, 0.0);
+  gtk_grid_attach_next_to (GTK_GRID (grid), dialog->text,
+                           dialog->title, GTK_POS_BOTTOM,
                            1, 1);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
