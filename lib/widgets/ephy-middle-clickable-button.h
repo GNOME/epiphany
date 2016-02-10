@@ -24,25 +24,10 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_MIDDLE_CLICKABLE_BUTTON             (ephy_middle_clickable_button_get_type ())
-#define EPHY_MIDDLE_CLICKABLE_BUTTON(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj),EPHY_TYPE_MIDDLE_CLICKABLE_BUTTN, EphyMiddleClickableButton))
-#define EPHY_MIDDLE_CLICKABLE_BUTTON_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_MIDDLE_CLICKABLE_BUTTN, EphyMiddleClickableButtonClass))
-#define EPHY_IS_MIDDLE_CLICKABLE_BUTTON(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_MIDDLE_CLICKABLE_BUTON))
-#define EPHY_IS_MIDDLE_CLICKABLE_BUTTON_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_MIDDLE_CLICKABLE_BUTTN))
-#define EPHY_MIDDLE_CLICKABLE_BUTTON_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_MIDDLE_CLICKABLE_BUTTN, EphyMiddleClickableButtonClass))
+#define EPHY_TYPE_MIDDLE_CLICKABLE_BUTTON  (ephy_middle_clickable_button_get_type ())
 
-typedef struct _EphyMiddleClickableButton       EphyMiddleClickableButton;
-typedef struct _EphyMiddleClickableButtonClass  EphyMiddleClickableButtonClass;
+G_DECLARE_FINAL_TYPE (EphyMiddleClickableButton, ephy_middle_clickable_button, EPHY, MIDDLE_CLICKABLE_BUTTON, GtkButton)
 
-struct _EphyMiddleClickableButton {
-  GtkButton parent;
-};
-
-struct _EphyMiddleClickableButtonClass {
-  GtkButtonClass parent_class;
-};
-
-GType      ephy_middle_clickable_button_get_type (void) G_GNUC_CONST;
 GtkWidget *ephy_middle_clickable_button_new      (void);
 
 G_END_DECLS

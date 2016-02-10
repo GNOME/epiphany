@@ -20,6 +20,11 @@
 #include "config.h"
 #include "ephy-middle-clickable-button.h"
 
+struct _EphyMiddleClickableButton
+{
+  GtkButton parent_instance;
+};
+
 G_DEFINE_TYPE (EphyMiddleClickableButton, ephy_middle_clickable_button, GTK_TYPE_BUTTON)
 
 static gboolean 
