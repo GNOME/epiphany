@@ -40,13 +40,6 @@ typedef struct _EphyLocationEntryPrivate	EphyLocationEntryPrivate;
 struct _EphyLocationEntryClass
 {
 	GtkEntryClass parent_class;
-
-	/* Signals */
-	void   (* user_changed)	(EphyLocationEntry *entry);
-	void   (* lock_clicked)	(EphyLocationEntry *entry);
-	/* for getting the drag data */
-	char * (* get_location)	(EphyLocationEntry *entry);
-	char * (* get_title)	(EphyLocationEntry *entry);
 };
 
 struct _EphyLocationEntry

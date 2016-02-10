@@ -314,9 +314,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 	signals[USER_CHANGED] = g_signal_new (
 		"user_changed", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-		G_STRUCT_OFFSET (EphyLocationEntryClass, user_changed),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
+		0, NULL, NULL, NULL,
 		G_TYPE_NONE,
 		0,
 		G_TYPE_NONE);
@@ -333,9 +331,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 		"lock-clicked",
 		EPHY_TYPE_LOCATION_ENTRY,
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-		G_STRUCT_OFFSET (EphyLocationEntryClass, lock_clicked),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
+		0, NULL, NULL, NULL,
 		G_TYPE_NONE,
 		0);
 
@@ -352,9 +348,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 	signals[GET_LOCATION] = g_signal_new (
 		"get-location", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-		G_STRUCT_OFFSET (EphyLocationEntryClass, get_location),
-		ephy_signal_accumulator_string, NULL,
-		g_cclosure_marshal_generic,
+		0, ephy_signal_accumulator_string,
+		NULL, NULL,
 		G_TYPE_STRING,
 		0,
 		G_TYPE_NONE);
@@ -372,9 +367,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 	signals[GET_TITLE] = g_signal_new (
 		"get-title", G_OBJECT_CLASS_TYPE (klass),
 		G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-		G_STRUCT_OFFSET (EphyLocationEntryClass, get_title),
-		ephy_signal_accumulator_string, NULL,
-		g_cclosure_marshal_generic,
+		0, ephy_signal_accumulator_string,
+		NULL, NULL,
 		G_TYPE_STRING,
 		0,
 		G_TYPE_NONE);
