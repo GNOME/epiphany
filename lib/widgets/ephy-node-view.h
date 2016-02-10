@@ -47,12 +47,6 @@ struct _EphyNodeView
 struct _EphyNodeViewClass
 {
 	GtkTreeViewClass parent;
-
-	void (*node_toggled)	    (EphyNodeView *view, EphyNode *node, gboolean checked);
-	void (*node_activated)      (EphyNodeView *view, EphyNode *node);
-	void (*node_selected)       (EphyNodeView *view, EphyNode *node);
-	void (*node_dropped)        (EphyNodeView *view, EphyNode *node, GList *uris);
-	void (*node_middle_clicked) (EphyNodeView *view, EphyNode *node);
 };
 
 typedef enum
