@@ -34,10 +34,8 @@
  * functionalities like drag and dropping, mostly relevant to Epiphany only.
  */
 
-static void ephy_tree_model_sort_class_init (EphyTreeModelSortClass *klass);
-static void ephy_tree_model_sort_init (EphyTreeModelSort *ma);
 static void ephy_tree_model_sort_finalize (GObject *object);
-static void ephy_tree_model_sort_multi_drag_source_init (EggTreeMultiDragSourceIface *iface);
+static void ephy_tree_model_sort_multi_drag_source_interface_init (EggTreeMultiDragSourceIface *iface);
 static gboolean ephy_tree_model_sort_multi_row_draggable (EggTreeMultiDragSource *drag_source,
 							  GList *path_list);
 static gboolean ephy_tree_model_sort_multi_drag_data_get (EggTreeMultiDragSource *drag_source,
@@ -55,52 +53,14 @@ struct _EphyTreeModelSortPrivate
 	int extra_drag_column_id;
 };
 
-static GObjectClass *parent_class = NULL;
-
-GType
-ephy_tree_model_sort_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyTreeModelSortClass),
-			NULL, /* base init */
-			NULL, /* base finalize */
-			(GClassInitFunc) ephy_tree_model_sort_class_init,
-			NULL, /* class finalize */
-			NULL, /* class data */
-			sizeof (EphyTreeModelSort),
-			0, /* n_preallocs */
-			(GInstanceInitFunc) ephy_tree_model_sort_init
-		};
-		const GInterfaceInfo multi_drag_source_info =
-		{
-			(GInterfaceInitFunc) ephy_tree_model_sort_multi_drag_source_init,
-			NULL,
-			NULL
-		};
-
-		type = g_type_register_static (GTK_TYPE_TREE_MODEL_SORT,
-					       "EphyTreeModelSort",
-					       &our_info, 0);
-
-		g_type_add_interface_static (type,
-					     EGG_TYPE_TREE_MULTI_DRAG_SOURCE,
-					     &multi_drag_source_info);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE_WITH_CODE (EphyTreeModelSort, ephy_tree_model_sort, GTK_TYPE_TREE_MODEL_SORT,
+                         G_IMPLEMENT_INTERFACE (EGG_TYPE_TREE_MULTI_DRAG_SOURCE,
+                                                ephy_tree_model_sort_multi_drag_source_interface_init))
 
 static void
 ephy_tree_model_sort_class_init (EphyTreeModelSortClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_tree_model_sort_finalize;
 
@@ -123,7 +83,7 @@ ephy_tree_model_sort_finalize (GObject *object)
 
 	g_free (model->priv->str_list);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_tree_model_sort_parent_class)->finalize (object);
 }
 
 /**
@@ -149,7 +109,7 @@ ephy_tree_model_sort_new (GtkTreeModel *child_model)
 }
 
 static void
-ephy_tree_model_sort_multi_drag_source_init (EggTreeMultiDragSourceIface *iface)
+ephy_tree_model_sort_multi_drag_source_interface_init (EggTreeMultiDragSourceIface *iface)
 {
 	iface->row_draggable    = ephy_tree_model_sort_multi_row_draggable;
 	iface->drag_data_get    = ephy_tree_model_sort_multi_drag_data_get;
