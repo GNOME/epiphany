@@ -5,6 +5,7 @@ SUBDIRS += tests
 endif
 
 AM_DISTCHECK_CONFIGURE_FLAGS = \
+	--enable-appdata-check	\
 	--enable-debug
 
 @CODE_COVERAGE_RULES@

@@ -55,8 +55,6 @@ $(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile $(INTLTOOL_MER
 searchproviderdir = $(datadir)/gnome-shell/search-providers
 dist_searchprovider_DATA = epiphany-search-provider.ini
 
-DISTCHECK_CONFIGURE_FLAGS == --enable-appdata-check
-
 EXTRA_DIST = \
 	$(aboutdialog_DATA)		\
 	$(appstream_in_files)		\
