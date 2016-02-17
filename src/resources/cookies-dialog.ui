@@ -140,14 +140,17 @@
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="tooltip_text" translatable="yes">Delete the selected cookies</property>
-                <property name="label" translatable="yes">Remove</property> <!-- TODO conflicts with the image -->
                 <property name="action-name">cookies.forget</property>
                 <accelerator key="Delete" signal="clicked"/>
                 <accelerator key="KP_Delete" signal="clicked"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
                     <property name="icon_name">list-remove-symbolic</property>
+                    <property name="icon_size">1</property>
                   </object>
                 </child>
               </object>
