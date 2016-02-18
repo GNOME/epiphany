@@ -183,7 +183,7 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 	/* Help. */
 
-	{ "HelpContents", NULL, N_("_Help"), NULL, NULL,
+	{ "HelpContents", NULL, N_("_Help"), "F1", NULL,
 	  G_CALLBACK (window_cmd_help_contents) },
 	{ "HelpAbout", NULL, N_("_About"), NULL, NULL,
 	  G_CALLBACK (window_cmd_help_about) }
