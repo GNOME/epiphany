@@ -138,11 +138,11 @@ update_download_icon (EphyDownloadWidget *widget)
 
   content_type = ephy_download_get_content_type (widget->download);
   if (content_type)
-    icon = g_content_type_get_icon (content_type);
+    icon = g_content_type_get_symbolic_icon (content_type);
   else
-    icon = g_icon_new_for_string ("package-x-generic", NULL);
+    icon = g_icon_new_for_string ("package-x-generic-symbolic", NULL);
 
-  gtk_image_set_from_gicon (GTK_IMAGE (widget->icon), icon, GTK_ICON_SIZE_DIALOG);
+  gtk_image_set_from_gicon (GTK_IMAGE (widget->icon), icon, GTK_ICON_SIZE_MENU);
   g_object_unref (icon);
 }
 
@@ -150,15 +150,14 @@ static void
 update_download_destination (EphyDownloadWidget *widget)
 {
   char *dest;
-  char *markup;
 
   dest = get_destination_basename_from_download (widget->download);
   if (!dest)
     return;
-  markup = g_markup_printf_escaped ("<b>%s</b>", dest);
+
+  gtk_label_set_label (GTK_LABEL (widget->filename), dest);
+
   g_free (dest);
-  gtk_label_set_markup (GTK_LABEL (widget->filename), markup);
-  g_free (markup);
 }
 
 static void
@@ -365,18 +364,21 @@ ephy_download_widget_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_download_widget_parent_class)->constructed (object);
 
-  gtk_widget_set_margin_start (GTK_WIDGET (widget), 5);
-  gtk_widget_set_margin_end (GTK_WIDGET (widget), 5);
+  gtk_widget_set_margin_start (GTK_WIDGET (widget), 12);
+  gtk_widget_set_margin_end (GTK_WIDGET (widget), 12);
+  gtk_widget_set_margin_top (GTK_WIDGET (widget), 12);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (widget), 12);
 
   widget->icon = gtk_image_new ();
-  gtk_widget_set_margin_end (widget->icon, 10);
+  gtk_widget_set_margin_end (widget->icon, 4);
+  gtk_widget_set_halign (widget->icon, GTK_ALIGN_START);
   update_download_icon (widget);
-  gtk_grid_attach (GTK_GRID (widget), widget->icon, 0, 0, 1, 3);
+  gtk_grid_attach (GTK_GRID (widget), widget->icon, 0, 0, 1, 1);
   gtk_widget_show (widget->icon);
 
   widget->filename = gtk_label_new (NULL);
+  gtk_widget_set_hexpand (widget->filename, true);
   gtk_widget_set_valign (widget->filename, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_bottom (widget->filename, 6);
   gtk_label_set_xalign (GTK_LABEL (widget->filename), 0);
   gtk_label_set_max_width_chars (GTK_LABEL (widget->filename), 30);
   gtk_label_set_ellipsize (GTK_LABEL (widget->filename), PANGO_ELLIPSIZE_END);
@@ -386,10 +388,10 @@ ephy_download_widget_constructed (GObject *object)
 
   widget->progress = gtk_progress_bar_new ();
   gtk_widget_set_valign (widget->progress, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_start (widget->progress, 2);
-  gtk_widget_set_margin_bottom (widget->progress, 4);
+  gtk_widget_set_margin_top (widget->progress, 6);
+  gtk_widget_set_margin_bottom (widget->progress, 6);
   gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (widget->progress), 0.05);
-  gtk_grid_attach (GTK_GRID (widget), widget->progress, 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (widget), widget->progress, 0, 1, 2, 1);
   if (ephy_download_is_active (widget->download))
           gtk_widget_show (widget->progress);
 
@@ -410,7 +412,7 @@ ephy_download_widget_constructed (GObject *object)
   } else {
           update_status_label (widget, _("Starting…"));
   }
-  gtk_grid_attach (GTK_GRID (widget), widget->status, 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (widget), widget->status, 0, 2, 2, 1);
   gtk_widget_show (widget->status);
 
   if (ephy_download_succeeded (widget->download))
@@ -426,7 +428,7 @@ ephy_download_widget_constructed (GObject *object)
   gtk_widget_set_valign (widget->action_button, GTK_ALIGN_CENTER);
   gtk_widget_set_margin_start (widget->action_button, 10);
   gtk_style_context_add_class (gtk_widget_get_style_context (widget->action_button),
-                               "download-circular-button");
+                               "circular");
   gtk_grid_attach (GTK_GRID (widget), widget->action_button, 3, 0, 1, 3);
   gtk_widget_show (widget->action_button);
 
