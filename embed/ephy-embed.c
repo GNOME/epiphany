@@ -294,9 +294,9 @@ load_changed_cb (WebKitWebView *web_view,
   case WEBKIT_LOAD_COMMITTED:
     ephy_embed_destroy_top_widgets (embed);
     break;
-  case WEBKIT_LOAD_FINISHED:
-    if (ephy_web_view_get_is_blank (EPHY_WEB_VIEW (web_view)) ||
-        !webkit_web_view_get_title (web_view))
+  case WEBKIT_LOAD_FINISHED: {
+    const char *title = webkit_web_view_get_title (web_view);
+    if (ephy_web_view_get_is_blank (EPHY_WEB_VIEW (web_view)) || !title || !*title)
       ephy_embed_set_title (embed, NULL);
     break;
   default:
