@@ -65,8 +65,7 @@ ephy_downloads_progress_icon_draw (GtkWidget *widget,
 
   if (progress > 0 && progress < 1) {
     cairo_clip (cr);
-
-    color.alpha *= 0.7;
+    color.alpha = 1;
     gdk_cairo_set_source_rgba (cr, &color);
     cairo_rectangle (cr, 0, 0, width, height * progress);
     cairo_fill (cr);
