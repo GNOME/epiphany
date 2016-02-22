@@ -20,11 +20,10 @@
 
 #include <sqlite3.h>
 
-struct _EphySQLiteConnectionPrivate {
+struct _EphySQLiteConnection {
+  GObject parent_instance;
   sqlite3 *database;
 };
-
-#define EPHY_SQLITE_CONNECTION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), EPHY_TYPE_SQLITE_CONNECTION, EphySQLiteConnectionPrivate))
 
 G_DEFINE_TYPE (EphySQLiteConnection, ephy_sqlite_connection, G_TYPE_OBJECT);
 
@@ -40,14 +39,12 @@ ephy_sqlite_connection_class_init (EphySQLiteConnectionClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = ephy_sqlite_connection_finalize;
-  g_type_class_add_private (object_class, sizeof (EphySQLiteConnectionPrivate));
 }
 
 static void
 ephy_sqlite_connection_init (EphySQLiteConnection *self)
 {
-  self->priv = EPHY_SQLITE_CONNECTION_GET_PRIVATE (self);
-  self->priv->database = NULL;
+  self->database = NULL;
 }
 
 static GQuark get_ephy_sqlite_quark (void)
@@ -71,16 +68,14 @@ ephy_sqlite_connection_new (void)
 gboolean
 ephy_sqlite_connection_open (EphySQLiteConnection *self, const gchar *filename, GError **error)
 {
-  EphySQLiteConnectionPrivate *priv = self->priv;
-
-  if (priv->database) {
+  if (self->database) {
     set_error_from_string ("Connection already open.", error);
     return FALSE;
   }
   
-  if (sqlite3_open (filename, &priv->database) != SQLITE_OK) {
+  if (sqlite3_open (filename, &self->database) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self, error);
-    priv->database = NULL;
+    self->database = NULL;
     return FALSE;
   }
 
@@ -90,10 +85,9 @@ ephy_sqlite_connection_open (EphySQLiteConnection *self, const gchar *filename, 
 void
 ephy_sqlite_connection_close (EphySQLiteConnection *self)
 {
-  EphySQLiteConnectionPrivate *priv = self->priv;
-  if (priv->database) {
-    sqlite3_close (priv->database);
-    priv->database = NULL;
+  if (self->database) {
+    sqlite3_close (self->database);
+    self->database = NULL;
   }
 }
 
@@ -101,34 +95,31 @@ void
 ephy_sqlite_connection_get_error (EphySQLiteConnection *self, GError **error)
 {
   if (error)
-    *error = g_error_new_literal (get_ephy_sqlite_quark (), 0, sqlite3_errmsg (self->priv->database));
+    *error = g_error_new_literal (get_ephy_sqlite_quark (), 0, sqlite3_errmsg (self->database));
 }
 
 gboolean
 ephy_sqlite_connection_execute (EphySQLiteConnection *self, const char *sql, GError **error)
 {
-  EphySQLiteConnectionPrivate *priv = self->priv;
-  
-  if (priv->database == NULL) {
+  if (self->database == NULL) {
     set_error_from_string ("Connection not open.", error);
     return FALSE;
   }
   
-  return sqlite3_exec (priv->database, sql, NULL, NULL, NULL) == SQLITE_OK;
+  return sqlite3_exec (self->database, sql, NULL, NULL, NULL) == SQLITE_OK;
 }
 
 EphySQLiteStatement *
 ephy_sqlite_connection_create_statement (EphySQLiteConnection *self, const char *sql, GError **error)
 {
-  EphySQLiteConnectionPrivate *priv = self->priv;
   sqlite3_stmt *prepared_statement;
 
-  if (priv->database == NULL) {
+  if (self->database == NULL) {
     set_error_from_string ("Connection not open.", error);
     return NULL;
   }
 
-  if (sqlite3_prepare_v2 (priv->database, sql, -1, &prepared_statement, NULL) != SQLITE_OK) {
+  if (sqlite3_prepare_v2 (self->database, sql, -1, &prepared_statement, NULL) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self, error);
     return NULL;
   }
@@ -142,7 +133,7 @@ ephy_sqlite_connection_create_statement (EphySQLiteConnection *self, const char 
 gint64
 ephy_sqlite_connection_get_last_insert_id (EphySQLiteConnection *self)
 {
-  return sqlite3_last_insert_rowid (self->priv->database);
+  return sqlite3_last_insert_rowid (self->database);
 }
 
 gboolean

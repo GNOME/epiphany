@@ -23,30 +23,9 @@
 
 G_BEGIN_DECLS
 
-/* convenience macros */
-#define EPHY_TYPE_SQLITE_CONNECTION             (ephy_sqlite_connection_get_type())
-#define EPHY_SQLITE_CONNECTION(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),EPHY_TYPE_SQLITE_CONNECTION,EphySQLiteConnection))
-#define EPHY_SQLITE_CONNECTION_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST((klass),EPHY_TYPE_SQLITE_CONNECTION,EphySQLiteConnectionClass))
-#define EPHY_IS_SQLITE_CONNECTION(obj)          (G_TYPE_CHECK_INSTANCE_TYPE((obj),EPHY_TYPE_SQLITE_CONNECTION))
-#define EPHY_IS_SQLITE_CONNECTION_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE((klass),EPHY_TYPE_SQLITE_CONNECTION))
-#define EPHY_SQLITE_CONNECTION_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj),EPHY_TYPE_SQLITE_CONNECTION,EphySQLiteConnectionClass))
+#define EPHY_TYPE_SQLITE_CONNECTION (ephy_sqlite_connection_get_type ())
 
-typedef struct _EphySQLiteConnection                EphySQLiteConnection;
-typedef struct _EphySQLiteConnectionClass           EphySQLiteConnectionClass;
-typedef struct _EphySQLiteConnectionPrivate         EphySQLiteConnectionPrivate;
-
-struct _EphySQLiteConnection {
-     GObject parent;
-
-    /* private */
-    EphySQLiteConnectionPrivate *priv;
-};
-
-struct _EphySQLiteConnectionClass {
-    GObjectClass parent_class;
-};
-
-GType                   ephy_sqlite_connection_get_type                (void);
+G_DECLARE_FINAL_TYPE (EphySQLiteConnection, ephy_sqlite_connection, EPHY, SQLITE_CONNECTION, GObject)
 
 EphySQLiteConnection *  ephy_sqlite_connection_new                     (void);
 
