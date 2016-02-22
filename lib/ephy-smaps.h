@@ -22,27 +22,10 @@
 
 #include <glib-object.h>
 
-#define EPHY_TYPE_SMAPS            (ephy_smaps_get_type ())
-#define EPHY_SMAPS(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), EPHY_TYPE_SMAPS, EphySMaps))
-#define EPHY_SMAPS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_SMAPS, EphySMapsClass))
-#define EPHY_IS_SMAPS(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), EPHY_TYPE_SMAPS))
-#define EPHY_IS_SMAPS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_SMAPS))
-#define EPHY_SMAPS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_SMAPS, EphySMapsClass))
+#define EPHY_TYPE_SMAPS (ephy_smaps_get_type ())
 
-typedef struct _EphySMapsPrivate EphySMapsPrivate;
+G_DECLARE_FINAL_TYPE (EphySMaps, ephy_smaps, EPHY, SMAPS, GObject)
 
-typedef struct {
-  GObject parent;
-
-  EphySMapsPrivate *priv;
-} EphySMaps;
-
-typedef struct {
-  GObjectClass parent;
-
-} EphySMapsClass;
-
-GType       ephy_smaps_get_type (void);
 EphySMaps * ephy_smaps_new      (void);
 char      * ephy_smaps_to_html  (EphySMaps *smaps);
 

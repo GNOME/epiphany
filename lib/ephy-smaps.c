@@ -25,12 +25,13 @@
 #include <stdio.h>
 #include <string.h>
 
-G_DEFINE_TYPE (EphySMaps, ephy_smaps, G_TYPE_OBJECT)
-
-struct _EphySMapsPrivate {
+struct _EphySMaps {
+  GObject parent_instance;
   GRegex *header;
   GRegex *detail;
 };
+
+G_DEFINE_TYPE (EphySMaps, ephy_smaps, G_TYPE_OBJECT)
 
 typedef struct {
   char *start;
@@ -198,7 +199,6 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
   VMA_t *vma = NULL;
   GHashTable *anon_hash, *mapped_hash;
   GSList *vma_entries = NULL, *p;
-  EphySMapsPrivate *priv = smaps->priv;
 
   path = g_strdup_printf ("/proc/%u/smaps", pid);
   file = g_file_new_for_path (path);
@@ -220,7 +220,7 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
     GMatchInfo *match_info = NULL;
     gboolean matched = FALSE;
 
-    g_regex_match (priv->header, line, 0, &match_info);
+    g_regex_match (smaps->header, line, 0, &match_info);
     if (g_match_info_matches (match_info)) {
       matched = TRUE;
 
@@ -244,7 +244,7 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
     if (matched)
       goto out;
 
-    g_regex_match (priv->detail, line, 0, &match_info);
+    g_regex_match (smaps->detail, line, 0, &match_info);
     if (g_match_info_matches (match_info)) {
       char *name = g_match_info_fetch (match_info, 1);
       char **size = NULL;
@@ -456,23 +456,21 @@ char* ephy_smaps_to_html (EphySMaps *smaps)
 static void
 ephy_smaps_init (EphySMaps *smaps)
 {
-  smaps->priv = G_TYPE_INSTANCE_GET_PRIVATE (smaps, EPHY_TYPE_SMAPS, EphySMapsPrivate);
-
   /* Prepare the regexps for the smaps file. */
-  smaps->priv->header = g_regex_new ("^([0-9a-f]+)-([0-9a-f]+) (....) ([0-9a-f]+) (..):(..) (\\d+) *(.*)$",
-                                     G_REGEX_OPTIMIZE,
-                                     0,
-                                     NULL);
-  smaps->priv->detail = g_regex_new ("^(.*): +(\\d+) kB", G_REGEX_OPTIMIZE, 0, NULL);
+  smaps->header = g_regex_new ("^([0-9a-f]+)-([0-9a-f]+) (....) ([0-9a-f]+) (..):(..) (\\d+) *(.*)$",
+                               G_REGEX_OPTIMIZE,
+                               0,
+                               NULL);
+  smaps->detail = g_regex_new ("^(.*): +(\\d+) kB", G_REGEX_OPTIMIZE, 0, NULL);
 }
 
 static void
 ephy_smaps_finalize (GObject *obj)
 {
-  EphySMapsPrivate *priv = EPHY_SMAPS (obj)->priv;
+  EphySMaps *smaps = EPHY_SMAPS (obj);
 
-  g_regex_unref (priv->header);
-  g_regex_unref (priv->detail);
+  g_regex_unref (smaps->header);
+  g_regex_unref (smaps->detail);
 
   G_OBJECT_CLASS (ephy_smaps_parent_class)->finalize (obj);
 }
@@ -483,8 +481,6 @@ ephy_smaps_class_init (EphySMapsClass *smaps_class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (smaps_class);
 
   gobject_class->finalize = ephy_smaps_finalize;
-
-  g_type_class_add_private (smaps_class, sizeof (EphySMapsPrivate));
 }
 
 EphySMaps *ephy_smaps_new (void)
