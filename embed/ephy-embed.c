@@ -299,6 +299,7 @@ load_changed_cb (WebKitWebView *web_view,
     if (ephy_web_view_get_is_blank (EPHY_WEB_VIEW (web_view)) || !title || !*title)
       ephy_embed_set_title (embed, NULL);
     break;
+  }
   default:
     break;
   }
