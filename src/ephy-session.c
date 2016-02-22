@@ -595,6 +595,13 @@ session_tab_new (EphyEmbed *embed,
 	{
 		session_tab->url = g_strconcat ("about", address + EPHY_ABOUT_SCHEME_LEN, NULL);
 	}
+	else if (g_str_equal (address, "about:blank"))
+	{
+		/* EphyWebView address is NULL between load_uri() and WEBKIT_LOAD_STARTED,
+		 * but WebKitWebView knows the pending API request URL, so use that instead of about:blank.
+		 */
+		session_tab->url = g_strdup (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (web_view)));
+	}
 	else
 	{
 		session_tab->url = g_strdup (address);
