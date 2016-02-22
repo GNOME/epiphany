@@ -23,30 +23,9 @@
 
 G_BEGIN_DECLS
 
-/* convenience macros */
-#define EPHY_TYPE_SQLITE_STATEMENT             (ephy_sqlite_statement_get_type())
-#define EPHY_SQLITE_STATEMENT(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),EPHY_TYPE_SQLITE_STATEMENT,EphySQLiteStatement))
-#define EPHY_SQLITE_STATEMENT_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST((klass),EPHY_TYPE_SQLITE_STATEMENT,EphySQLiteStatementClass))
-#define EPHY_IS_SQLITE_STATEMENT(obj)          (G_TYPE_CHECK_INSTANCE_TYPE((obj),EPHY_TYPE_SQLITE_STATEMENT))
-#define EPHY_IS_SQLITE_STATEMENT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE((klass),EPHY_TYPE_SQLITE_STATEMENT))
-#define EPHY_SQLITE_STATEMENT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj),EPHY_TYPE_SQLITE_STATEMENT,EphySQLiteStatementClass))
+#define EPHY_TYPE_SQLITE_STATEMENT (ephy_sqlite_statement_get_type ())
 
-typedef struct _EphySQLiteStatement                EphySQLiteStatement;
-typedef struct _EphySQLiteStatementClass           EphySQLiteStatementClass;
-typedef struct _EphySQLiteStatementPrivate         EphySQLiteStatementPrivate;
-
-struct _EphySQLiteStatement {
-     GObject parent;
-
-    /* private */
-    EphySQLiteStatementPrivate *priv;
-};
-
-struct _EphySQLiteStatementClass {
-    GObjectClass parent_class;
-};
-
-GType                    ephy_sqlite_statement_get_type              (void);
+G_DECLARE_FINAL_TYPE (EphySQLiteStatement, ephy_sqlite_statement, EPHY, SQLITE_STATEMENT, GObject)
 
 gboolean                 ephy_sqlite_statement_bind_null             (EphySQLiteStatement *statement, int column, GError **error);
 gboolean                 ephy_sqlite_statement_bind_boolean          (EphySQLiteStatement *statement, int column, gboolean value, GError **error);
