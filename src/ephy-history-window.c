@@ -386,7 +386,7 @@ open_selected (EphyHistoryWindow *self)
 		EphyEmbed *embed;
 
 		embed = ephy_shell_new_tab (ephy_shell_get_default (),
-					    window, NULL, 0);
+					    window, NULL, EPHY_NEW_TAB_JUMP);
 		ephy_web_view_load_url (ephy_embed_get_web_view (embed), url->url);
 	}
 
@@ -507,7 +507,7 @@ on_treeview_row_activated (GtkTreeView *view,
 	g_return_if_fail (url != NULL);
 
 	embed = ephy_shell_new_tab (ephy_shell_get_default (),
-				    window, NULL, 0);
+				    window, NULL, EPHY_NEW_TAB_JUMP);
 	ephy_web_view_load_url (ephy_embed_get_web_view (embed), url->url);
 	ephy_history_url_free (url);
 }
