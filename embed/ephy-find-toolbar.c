@@ -168,34 +168,15 @@ tab_search_key_press_cb (WebKitWebView *web_view,
 	return FALSE;
 }
 
-static gboolean
-str_has_uppercase (const char *str)
-{
-	while (str != NULL && *str != '\0') {
-		gunichar c;
-
-		c = g_utf8_get_char (str);
-
-		if (g_unichar_isupper (c))
-			return TRUE;
-
-		str = g_utf8_next_char (str);
-	}
-
-	return FALSE;
-}
-
 static void
 real_find (EphyFindToolbar *toolbar,
            EphyFindDirection direction)
 {
-        WebKitFindOptions options = WEBKIT_FIND_OPTIONS_NONE;
+        WebKitFindOptions options = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE;
 
         if (!g_strcmp0 (toolbar->find_string, ""))
                 return;
 
-        if (!str_has_uppercase (toolbar->find_string))
-                options |= WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE;
         if (direction == EPHY_FIND_DIRECTION_PREV)
                 options |= WEBKIT_FIND_OPTIONS_BACKWARDS;
 
