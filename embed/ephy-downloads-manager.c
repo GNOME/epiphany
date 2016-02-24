@@ -57,6 +57,9 @@ ephy_downloads_manager_acquire_session_inhibitor (EphyDownloadsManager *manager)
                                                        NULL,
                                                        GTK_APPLICATION_INHIBIT_LOGOUT | GTK_APPLICATION_INHIBIT_SUSPEND,
                                                       "Downloading");
+
+  if (manager->inhibitor_cookie == 0)
+    g_warning ("Failed to acquire session inhibitor for active download. Is gnome-session running?");
 }
 
 static void
@@ -65,10 +68,11 @@ ephy_downloads_manager_release_session_inhibitor (EphyDownloadsManager *manager)
   if (--manager->inhibitors > 0)
     return;
 
-  g_assert (manager->inhibitor_cookie > 0);
-  gtk_application_uninhibit (GTK_APPLICATION (ephy_embed_shell_get_default ()),
-                             manager->inhibitor_cookie);
-  manager->inhibitor_cookie = 0;
+  if (manager->inhibitor_cookie > 0) {
+    gtk_application_uninhibit (GTK_APPLICATION (ephy_embed_shell_get_default ()),
+                               manager->inhibitor_cookie);
+    manager->inhibitor_cookie = 0;
+  }
 }
 
 static void
