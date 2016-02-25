@@ -92,6 +92,12 @@ download_removed_cb (EphyDownloadsPopover *popover,
   EphyDownloadsManager *manager;
 
   children = gtk_container_get_children (GTK_CONTAINER (popover->downloads_box));
+
+  /* Hide the popover before removing the last download widget so it "crumples"
+   * more smoothly */
+  if (g_list_length (children) == 1)
+    gtk_widget_hide (GTK_WIDGET (popover));
+
   for (l = children; l; l = g_list_next (l)) {
     GtkWidget *widget;
 
