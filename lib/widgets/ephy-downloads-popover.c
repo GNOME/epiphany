@@ -103,7 +103,7 @@ download_removed_cb (EphyDownloadsPopover *popover,
       continue;
 
     if (ephy_download_widget_get_download (EPHY_DOWNLOAD_WIDGET (widget)) == download) {
-      gtk_widget_destroy (widget);
+      gtk_widget_destroy (l->data);
       break;
     }
   }
@@ -139,7 +139,7 @@ clear_button_clicked_cb (EphyDownloadsPopover *popover)
     download = ephy_download_widget_get_download (EPHY_DOWNLOAD_WIDGET (widget));
     if (!ephy_download_is_active (download)) {
       ephy_downloads_manager_remove_download (manager, download);
-      gtk_widget_destroy (widget);
+      gtk_widget_destroy (l->data);
     }
   }
   g_list_free (children);
