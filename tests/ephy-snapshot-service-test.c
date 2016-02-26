@@ -54,7 +54,7 @@ on_snapshot_ready (GObject *source,
   g_assert (GDK_IS_PIXBUF (pixbuf) || error != NULL);
 
   if (error) {
-    g_print ("Error loading pixbuf: %s\n", error->message);
+    g_warning ("Error loading pixbuf: %s", error->message);
     g_error_free (error);
     quit_when_test_done (NULL, NULL, tests);
     return;
