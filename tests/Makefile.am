@@ -11,7 +11,6 @@ noinst_PROGRAMS = \
 	test-ephy-history \
 	test-ephy-location-entry \
 	test-ephy-migration \
-	test-ephy-snapshot-service \
 	test-ephy-sqlite \
 	test-ephy-string \
 	test-ephy-uri-helpers \
@@ -165,8 +164,9 @@ test_ephy_migration_SOURCES = \
 # 	ephy-test-utils.c \
 # 	ephy-test-utils.h
 
-test_ephy_snapshot_service_SOURCES = \
-	ephy-snapshot-service-test.c
+# https://bugzilla.gnome.org/show_bug.cgi?id=762753
+#test_ephy_snapshot_service_SOURCES = \
+#	ephy-snapshot-service-test.c
 
 test_ephy_sqlite_SOURCES = \
 	ephy-sqlite-test.c
