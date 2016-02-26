@@ -332,9 +332,11 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
   EphyTitleBoxPrivate *priv = ephy_title_box_get_instance_private (title_box);
   GtkAllocation        lock_allocation;
 
-  if (priv->mode != EPHY_TITLE_BOX_MODE_TITLE
-      || event->button != GDK_BUTTON_PRIMARY)
+  if (priv->mode != EPHY_TITLE_BOX_MODE_TITLE)
     return GDK_EVENT_PROPAGATE;
+
+  if (event->button != GDK_BUTTON_PRIMARY)
+    return GDK_EVENT_STOP;
 
   LOG ("button-press-event title-box %p event %p", title_box, event);
 
@@ -352,7 +354,7 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
     ephy_title_box_cancel_switch_to_entry_after_double_click_time (title_box);
   }
 
-  return GDK_EVENT_PROPAGATE;
+  return GDK_EVENT_STOP;
 }
 
 static void
