@@ -150,6 +150,7 @@ test_ephy_location_entry_SOURCES = \
 test_ephy_migration_SOURCES = \
 	ephy-migration-test.c
 
+# https://bugzilla.gnome.org/show_bug.cgi?id=707220
 # test_ephy_session_SOURCES = \
 # 	ephy-session-test.c \
 # 	ephy-test-utils.c \
@@ -157,6 +158,9 @@ test_ephy_migration_SOURCES = \
 # 	$(top_builddir)/src/epiphany-resources.c \
 # 	$(top_builddir)/src/epiphany-resources.h
 
+# https://bugzilla.gnome.org/show_bug.cgi?id=693369
+# https://bugzilla.gnome.org/show_bug.cgi?id=695703
+# https://bugzilla.gnome.org/show_bug.cgi?id=707217
 # test_ephy_shell_SOURCES = \
 # 	$(top_builddir)/src/epiphany-resources.c \
 # 	$(top_builddir)/src/epiphany-resources.h \
@@ -177,6 +181,7 @@ test_ephy_string_SOURCES = \
 test_ephy_uri_helpers_SOURCES = \
 	ephy-uri-helpers-test.c
 
+# https://bugzilla.gnome.org/show_bug.cgi?id=759256
 # test_ephy_web_app_utils_SOURCES = \
 # 	ephy-web-app-utils-test.c
 
