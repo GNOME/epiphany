@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_DOWNLOAD ephy_download_get_type ()
+#define EPHY_TYPE_DOWNLOAD (ephy_download_get_type ())
 
 G_DECLARE_FINAL_TYPE (EphyDownload, ephy_download, EPHY, DOWNLOAD, GObject)
 
