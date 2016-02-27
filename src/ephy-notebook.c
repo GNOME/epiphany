@@ -44,10 +44,10 @@
 
 #define EPHY_NOTEBOOK_TAB_GROUP_ID "0x42"
 
-#define EPHY_NOTEBOOK_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NOTEBOOK, EphyNotebookPrivate))
-
-struct _EphyNotebookPrivate
+struct _EphyNotebook
 {
+	GtkNotebook parent_instance;
+
 	GList *focused_pages;
 	guint tabs_vis_notifier_id;
 
@@ -98,12 +98,11 @@ ephy_notebook_get_property (GObject *object,
 			    GParamSpec *pspec)
 {
 	EphyNotebook *notebook = EPHY_NOTEBOOK (object);
-	EphyNotebookPrivate *priv = notebook->priv;
 
 	switch (prop_id)
 	{
 		case PROP_TABS_ALLOWED:
-			g_value_set_boolean (value, priv->tabs_allowed);
+			g_value_set_boolean (value, notebook->tabs_allowed);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -147,9 +146,7 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 		g_signal_new ("tab-close-request",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNotebookClass, tab_close_req),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
+			      0, NULL, NULL, NULL,
 			      G_TYPE_NONE,
 			      1,
 			      GTK_TYPE_WIDGET /* Can't use an interface type here */);
@@ -162,8 +159,6 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
 		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
-
-	g_type_class_add_private (object_class, sizeof (EphyNotebookPrivate));
 }
 
 
@@ -295,20 +290,19 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
 			      gpointer data)
 {
 	EphyNotebook *nb = EPHY_NOTEBOOK (notebook);
-	EphyNotebookPrivate *priv = nb->priv;
 	GtkWidget *child;
 
 	child = gtk_notebook_get_nth_page (notebook, page_num);
 
 	/* Remove the old page, we dont want to grow unnecessarily
 	 * the list */
-	if (priv->focused_pages)
+	if (nb->focused_pages)
 	{
-		priv->focused_pages =
-			g_list_remove (priv->focused_pages, child);
+		nb->focused_pages =
+			g_list_remove (nb->focused_pages, child);
 	}
 
-	priv->focused_pages = g_list_append (priv->focused_pages, child);
+	nb->focused_pages = g_list_append (nb->focused_pages, child);
 }
 
 static void
@@ -414,7 +408,7 @@ update_tabs_visibility (EphyNotebook *nb,
 		show_tabs = TRUE;
 
 	/* Only show the tabs when the "tabs-allowed" property is TRUE. */
-	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), nb->priv->tabs_allowed && show_tabs);
+	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nb), nb->tabs_allowed && show_tabs);
 }
 
 static void
@@ -428,18 +422,15 @@ show_tabs_changed_cb (GSettings *settings,
 static void
 ephy_notebook_init (EphyNotebook *notebook)
 {
-	EphyNotebookPrivate *priv;
         GtkWidget *widget = GTK_WIDGET (notebook);
         GtkNotebook *gnotebook = GTK_NOTEBOOK (notebook);
-
-	priv = notebook->priv = EPHY_NOTEBOOK_GET_PRIVATE (notebook);
 
 	gtk_notebook_set_scrollable (gnotebook, TRUE);
 	gtk_notebook_set_show_border (gnotebook, FALSE);
 	gtk_notebook_set_show_tabs (gnotebook, FALSE);
 	gtk_notebook_set_group_name (gnotebook, EPHY_NOTEBOOK_TAB_GROUP_ID);
 
-	priv->tabs_allowed = TRUE;
+	notebook->tabs_allowed = TRUE;
 
 	g_signal_connect (notebook, "button-press-event",
 			  (GCallback)button_press_cb, NULL);
@@ -465,12 +456,11 @@ static void
 ephy_notebook_finalize (GObject *object)
 {
 	EphyNotebook *notebook = EPHY_NOTEBOOK (object);
-	EphyNotebookPrivate *priv = notebook->priv;
 
 	g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_UI,
 					      show_tabs_changed_cb,
 					      notebook);
-	g_list_free (priv->focused_pages);
+	g_list_free (notebook->focused_pages);
 
 	G_OBJECT_CLASS (ephy_notebook_parent_class)->finalize (object);
 }
@@ -674,9 +664,7 @@ void
 ephy_notebook_set_tabs_allowed (EphyNotebook *nb,
 				gboolean tabs_allowed)
 {
-	EphyNotebookPrivate *priv = nb->priv;
-
-	priv->tabs_allowed = tabs_allowed != FALSE;
+	nb->tabs_allowed = tabs_allowed != FALSE;
 
 	update_tabs_visibility (nb, FALSE);
 
@@ -755,13 +743,12 @@ static void
 smart_tab_switching_on_closure (EphyNotebook *notebook,
 				GtkWidget *tab)
 {
-	EphyNotebookPrivate *priv = notebook->priv;
 	gboolean jump_to;
 
 	jump_to = GPOINTER_TO_INT (g_object_get_data
 				   (G_OBJECT (tab), "jump_to"));
 
-	if (!jump_to || !priv->focused_pages)
+	if (!jump_to || !notebook->focused_pages)
 	{
 		gtk_notebook_next_page (GTK_NOTEBOOK (notebook));
 	}
@@ -772,7 +759,7 @@ smart_tab_switching_on_closure (EphyNotebook *notebook,
 		int page_num;
 
 		/* activate the last focused tab */
-		l = g_list_last (priv->focused_pages);
+		l = g_list_last (notebook->focused_pages);
 		child = GTK_WIDGET (l->data);
 		page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook),
 						  child);
@@ -787,7 +774,6 @@ ephy_notebook_remove (GtkContainer *container,
 {
 	GtkNotebook *gnotebook = GTK_NOTEBOOK (container);
 	EphyNotebook *notebook = EPHY_NOTEBOOK (container);
-	EphyNotebookPrivate *priv = notebook->priv;
 	GtkWidget *tab_label, *tab_label_label, *tab_label_icon, *tab_label_speaker_icon;
 	int position, curr;
 	EphyWebView *view;
@@ -796,7 +782,7 @@ ephy_notebook_remove (GtkContainer *container,
 		return;
 
 	/* Remove the page from the focused pages list */
-	priv->focused_pages =  g_list_remove (priv->focused_pages, tab_widget);
+	notebook->focused_pages =  g_list_remove (notebook->focused_pages, tab_widget);
 
 	position = gtk_notebook_page_num (gnotebook, tab_widget);
 	curr = gtk_notebook_get_current_page (gnotebook);

@@ -190,7 +190,7 @@ closed_tab_get_notebook (ClosedTab *tab)
 static int
 compare_func (ClosedTab *iter, EphyNotebook *notebook)
 {
-	return closed_tab_get_notebook (iter) - notebook;
+	return GTK_NOTEBOOK (closed_tab_get_notebook (iter)) - GTK_NOTEBOOK (notebook);
 }
 
 static NotebookTracker *

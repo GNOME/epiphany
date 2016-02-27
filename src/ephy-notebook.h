@@ -27,35 +27,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_NOTEBOOK		(ephy_notebook_get_type ())
-#define EPHY_NOTEBOOK(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_NOTEBOOK, EphyNotebook))
-#define EPHY_NOTEBOOK_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_NOTEBOOK, EphyNotebookClass))
-#define EPHY_IS_NOTEBOOK(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_NOTEBOOK))
-#define EPHY_IS_NOTEBOOK_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NOTEBOOK))
-#define EPHY_NOTEBOOK_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NOTEBOOK, EphyNotebookClass))
+#define EPHY_TYPE_NOTEBOOK (ephy_notebook_get_type ())
 
-typedef struct _EphyNotebookClass	EphyNotebookClass;
-typedef struct _EphyNotebook		EphyNotebook;
-typedef struct _EphyNotebookPrivate	EphyNotebookPrivate;
-
-struct _EphyNotebook
-{
-	GtkNotebook parent;
-
-	/*< private >*/
-        EphyNotebookPrivate *priv;
-};
-
-struct _EphyNotebookClass
-{
-        GtkNotebookClass parent_class;
-
-	/* Signals */
-	void	 (* tab_close_req)  (EphyNotebook *notebook,
-				     EphyEmbed *embed);
-};
-
-GType		ephy_notebook_get_type		(void);
+G_DECLARE_FINAL_TYPE (EphyNotebook, ephy_notebook, EPHY, NOTEBOOK, GtkNotebook)
 
 int		ephy_notebook_add_tab		(EphyNotebook *nb,
 						 EphyEmbed *embed,
