@@ -24,8 +24,6 @@
 
 #include "ephy-node-filter.h"
 
-static void ephy_node_filter_class_init (EphyNodeFilterClass *klass);
-static void ephy_node_filter_init (EphyNodeFilter *node);
 static void ephy_node_filter_finalize (GObject *object);
 static gboolean ephy_node_filter_expression_evaluate (EphyNodeFilterExpression *expression,
 						      EphyNode *node);
@@ -69,44 +67,14 @@ struct _EphyNodeFilterExpression
 	} args;
 };
 
-static GObjectClass *parent_class = NULL;
-
 static guint ephy_node_filter_signals[LAST_SIGNAL] = { 0 };
 
-GType
-ephy_node_filter_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyNodeFilterClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_node_filter_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyNodeFilter),
-			0,
-			(GInstanceInitFunc) ephy_node_filter_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyNodeFilter",
-					       &our_info, 0);
-	}
-
-	return type;
-}
+G_DEFINE_TYPE (EphyNodeFilter, ephy_node_filter, G_TYPE_OBJECT)
 
 static void
 ephy_node_filter_class_init (EphyNodeFilterClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = ephy_node_filter_finalize;
 
@@ -140,7 +108,7 @@ ephy_node_filter_finalize (GObject *object)
 
 	g_ptr_array_free (filter->priv->levels, TRUE);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_node_filter_parent_class)->finalize (object);
 }
 
 EphyNodeFilter *
