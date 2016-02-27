@@ -33,62 +33,35 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
+G_DEFINE_INTERFACE (EphyLink, ephy_link, G_TYPE_OBJECT)
+
 static void
-ephy_link_base_init (gpointer g_class)
+ephy_link_default_init (EphyLinkInterface *iface)
 {
-	static gboolean initialised = FALSE;
-
-	if (!initialised)
-	{
-		/**
-		 * EphyLink::open-link:
-		 * @address: the address of @link
-		 * @embed: #EphyEmbed associated with @link
-		 * @flags: flags for @link
-		 *
-		 * The ::open-link signal is emitted when @link is requested to
-		 * open it's associated @address.
-		 *
-		 * Returns: (transfer none): the #EphyEmbed where @address has
-		 * been handled.
-		 **/
-		signals[OPEN_LINK] = g_signal_new
-			("open-link",
-			 EPHY_TYPE_LINK,
-			 G_SIGNAL_RUN_LAST,
-			 G_STRUCT_OFFSET (EphyLinkInterface, open_link),
-			 ephy_signal_accumulator_object, ephy_embed_get_type,
-			 g_cclosure_marshal_generic,
-			 GTK_TYPE_WIDGET /* Can't use an interface type here */,
-			 3,
-			 G_TYPE_STRING,
-			 GTK_TYPE_WIDGET /* Can't use an interface type here */,
-			 EPHY_TYPE_LINK_FLAGS);
-
-		initialised = TRUE;
-	}
-}
-
-GType
-ephy_link_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyLinkInterface),
-			ephy_link_base_init,
-			NULL,
-		};
-
-		type = g_type_register_static (G_TYPE_INTERFACE,
-					       "EphyLink",
-					       &our_info, (GTypeFlags)0);
-	}
-
-	return type;
+	/**
+	 * EphyLink::open-link:
+	 * @address: the address of @link
+	 * @embed: #EphyEmbed associated with @link
+	 * @flags: flags for @link
+	 *
+	 * The ::open-link signal is emitted when @link is requested to
+	 * open it's associated @address.
+	 *
+	 * Returns: (transfer none): the #EphyEmbed where @address has
+	 * been handled.
+	 **/
+	signals[OPEN_LINK] = g_signal_new
+		("open-link",
+		 EPHY_TYPE_LINK,
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET (EphyLinkInterface, open_link),
+		 ephy_signal_accumulator_object, ephy_embed_get_type,
+		 g_cclosure_marshal_generic,
+		 GTK_TYPE_WIDGET /* Can't use an interface type here */,
+		 3,
+		 G_TYPE_STRING,
+		 GTK_TYPE_WIDGET /* Can't use an interface type here */,
+		 EPHY_TYPE_LINK_FLAGS);
 }
 
 /**
