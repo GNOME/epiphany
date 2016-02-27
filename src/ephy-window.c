@@ -350,10 +350,10 @@ static const struct
 
 #define SETTINGS_CONNECTION_DATA_KEY	"EphyWindowSettings"
 
-#define EPHY_WINDOW_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_WINDOW, EphyWindowPrivate))
-
-struct _EphyWindowPrivate
+struct _EphyWindow
 {
+	GtkApplicationWindow parent_instance;
+
 	GtkWidget *toolbar;
 	GtkUIManager *manager;
 	GtkActionGroup *action_group;
@@ -409,10 +409,10 @@ impl_add_child (EphyEmbedContainer *container,
 {
 	EphyWindow *window = EPHY_WINDOW (container);
 
-	g_return_val_if_fail (!window->priv->is_popup ||
-			      gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) < 1, -1);
+	g_return_val_if_fail (!window->is_popup ||
+			      gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->notebook)) < 1, -1);
 
-	return ephy_notebook_add_tab (EPHY_NOTEBOOK (window->priv->notebook),
+	return ephy_notebook_add_tab (EPHY_NOTEBOOK (window->notebook),
 				      child, position, jump_to);
 }
 
@@ -426,9 +426,9 @@ impl_set_active_child (EphyEmbedContainer *container,
 	window = EPHY_WINDOW (container);
 
 	page = gtk_notebook_page_num
-		(window->priv->notebook, GTK_WIDGET (child));
+		(window->notebook, GTK_WIDGET (child));
 	gtk_notebook_set_current_page
-		(window->priv->notebook, page);
+		(window->notebook, page);
 }
 
 static GtkWidget *
@@ -502,7 +502,7 @@ impl_remove_child (EphyEmbedContainer *container,
 	EphyWindow *window;
 
 	window = EPHY_WINDOW (container);
-	g_signal_emit_by_name (window->priv->notebook,
+	g_signal_emit_by_name (window->notebook,
 			       "tab-close-request",
 			       child, window);
 }
@@ -510,7 +510,7 @@ impl_remove_child (EphyEmbedContainer *container,
 static EphyEmbed *
 impl_get_active_child (EphyEmbedContainer *container)
 {
-	return EPHY_WINDOW (container)->priv->active_embed;
+	return EPHY_WINDOW (container)->active_embed;
 }
 
 static GList *
@@ -518,13 +518,13 @@ impl_get_children (EphyEmbedContainer *container)
 {
 	EphyWindow *window = EPHY_WINDOW (container);
 
-	return gtk_container_get_children (GTK_CONTAINER (window->priv->notebook));
+	return gtk_container_get_children (GTK_CONTAINER (window->notebook));
 }
 
 static gboolean
 impl_get_is_popup (EphyEmbedContainer *container)
 {
-	return EPHY_WINDOW (container)->priv->is_popup;
+	return EPHY_WINDOW (container)->is_popup;
 }
 
 static void
@@ -545,14 +545,13 @@ ephy_window_open_link (EphyLink *link,
 		       EphyLinkFlags flags)
 {
 	EphyWindow *window = EPHY_WINDOW (link);
-	EphyWindowPrivate *priv = window->priv;
 	EphyEmbed *new_embed;
 
 	g_return_val_if_fail (address != NULL, NULL);
 
 	if (embed == NULL)
 	{
-		embed = window->priv->active_embed;
+		embed = window->active_embed;
 	}
 
 	if (flags & EPHY_LINK_BOOKMARK)
@@ -575,7 +574,7 @@ ephy_window_open_link (EphyLink *link,
 		}
 
 		if (flags & EPHY_LINK_NEW_WINDOW ||
-		    (flags & EPHY_LINK_NEW_TAB && priv->is_popup))
+		    (flags & EPHY_LINK_NEW_TAB && window->is_popup))
 		{
 			target_window = ephy_window_new ();
 		}
@@ -636,14 +635,13 @@ static void
 settings_change_notify (GtkSettings *settings,
 			EphyWindow  *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	char *key_theme_name;
 
 	g_object_get (settings,
 		      "gtk-key-theme-name", &key_theme_name,
 		      NULL);
 
-	priv->key_theme_is_emacs =
+	window->key_theme_is_emacs =
 		key_theme_name &&
 		g_ascii_strcasecmp (key_theme_name, "Emacs") == 0;
 
@@ -672,27 +670,26 @@ settings_changed_cb (GtkSettings *settings)
 static void
 sync_chromes_visibility (EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	gboolean show_tabsbar;
 
-	if (priv->closing)
+	if (window->closing)
 		return;
 
-	show_tabsbar = (priv->chrome & EPHY_WINDOW_CHROME_TABSBAR);
+	show_tabsbar = (window->chrome & EPHY_WINDOW_CHROME_TABSBAR);
 
-	ephy_notebook_set_tabs_allowed (EPHY_NOTEBOOK (priv->notebook),
-					show_tabsbar && !(priv->is_popup || priv->fullscreen_mode));
+	ephy_notebook_set_tabs_allowed (EPHY_NOTEBOOK (window->notebook),
+					show_tabsbar && !(window->is_popup || window->fullscreen_mode));
 }
 
 static void
 ephy_window_set_chrome (EphyWindow *window,
 			EphyWindowChrome chrome)
 {
-	if (window->priv->chrome == chrome)
+	if (window->chrome == chrome)
 		return;
 
-	window->priv->chrome = chrome;
-	if (window->priv->closing)
+	window->chrome = chrome;
+	if (window->closing)
 		return;
 
 	g_object_notify (G_OBJECT (window), "chrome");
@@ -704,12 +701,11 @@ sync_tab_load_status (EphyWebView *view,
 		      WebKitLoadEvent load_event,
 		      EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-	GtkActionGroup *action_group = priv->action_group;
+	GtkActionGroup *action_group = window->action_group;
 	GtkAction *action;
 	gboolean loading;
 
-	if (window->priv->closing) return;
+	if (window->closing) return;
 
 	loading = ephy_web_view_is_loading (view);
 
@@ -720,7 +716,7 @@ sync_tab_load_status (EphyWebView *view,
 	action = gtk_action_group_get_action (action_group, "FilePrint");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
 
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
+	action = gtk_action_group_get_action (window->toolbar_action_group,
 					      "ViewCombinedStopReload");
 	ephy_combined_stop_reload_action_set_loading (EPHY_COMBINED_STOP_RELOAD_ACTION (action),
 						      loading);
@@ -731,43 +727,41 @@ sync_tab_security (EphyWebView *view,
 		   GParamSpec *pspec,
 		   EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	EphyTitleBox *title_box;
 	EphySecurityLevel security_level;
 
-	if (priv->closing) return;
+	if (window->closing) return;
 
 	ephy_web_view_get_security_level (view, &security_level, NULL, NULL);
-	title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (priv->toolbar));
+	title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (window->toolbar));
 	ephy_title_box_set_security_level (title_box, security_level);
 }
 
 static void
 ephy_window_fullscreen (EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	EphyEmbed *embed;
 
-	priv->fullscreen_mode = TRUE;
+	window->fullscreen_mode = TRUE;
 
 	/* sync status */
-	embed = window->priv->active_embed;
+	embed = window->active_embed;
 	sync_tab_load_status (ephy_embed_get_web_view (embed), WEBKIT_LOAD_STARTED, window);
 	sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
 	sync_chromes_visibility (window);
-	gtk_widget_hide (priv->toolbar);
+	gtk_widget_hide (window->toolbar);
 	ephy_embed_entering_fullscreen (embed);
 }
 
 static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
-	window->priv->fullscreen_mode = FALSE;
+	window->fullscreen_mode = FALSE;
 
-	gtk_widget_show (window->priv->toolbar);
+	gtk_widget_show (window->toolbar);
 	sync_chromes_visibility (window);
-	ephy_embed_leaving_fullscreen (window->priv->active_embed);
+	ephy_embed_leaving_fullscreen (window->active_embed);
 }
 
 static gboolean
@@ -775,7 +769,6 @@ ephy_window_bound_accels (GtkWidget *widget,
 			  GdkEventKey *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
-	EphyWindowPrivate *priv = window->priv;
 	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
 	guint i;
 
@@ -789,8 +782,8 @@ ephy_window_bound_accels (GtkWidget *widget,
 		{
 			GtkAction * action = gtk_action_group_get_action
 				(extra_keybindings[i].fromToolbar ? 
-					priv->toolbar_action_group :
-					priv->action_group,
+					window->toolbar_action_group :
+					window->action_group,
 				extra_keybindings[i].action);
 			if (gtk_action_is_sensitive (action))
 			{
@@ -808,8 +801,8 @@ ephy_window_bound_accels (GtkWidget *widget,
 		{
 			GtkAction * action = gtk_action_group_get_action
 				(navigation_keybindings_rtl_ltr[i].fromToolbar ?
-					priv->toolbar_action_group :
-					priv->action_group,
+					window->toolbar_action_group :
+					window->action_group,
 				navigation_keybindings_rtl_ltr[i].action);
 			if (gtk_action_is_sensitive (action))
 			{
@@ -828,7 +821,6 @@ ephy_window_key_press_event (GtkWidget *widget,
 			     GdkEventKey *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
-	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *focus_widget;
 	gboolean shortcircuit = FALSE, force_chain = FALSE, handled = FALSE;
 	guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
@@ -862,7 +854,7 @@ ephy_window_key_press_event (GtkWidget *widget,
 		shortcircuit = TRUE;
 		force_chain = TRUE;
 	}
-	else if (priv->key_theme_is_emacs && 
+	else if (window->key_theme_is_emacs && 
 		 (modifier == GDK_CONTROL_MASK) &&
 		 event->length > 0 &&
 		 /* But don't pass Ctrl+Enter twice */
@@ -925,7 +917,7 @@ update_link_actions_sensitivity (EphyWindow *window,
 	GtkAction *action;
 	GtkActionGroup *action_group;
 
-	action_group = window->priv->popups_action_group;
+	action_group = window->popups_action_group;
 
 	action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
 	gtk_action_set_sensitive (action, link_has_web_scheme);
@@ -942,7 +934,7 @@ update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gb
 {
 	GtkAction *action;
 
-	action = gtk_action_group_get_action (window->priv->action_group, action_name);
+	action = gtk_action_group_get_action (window->action_group, action_name);
 	gtk_action_set_sensitive (action, sensitive);
 	gtk_action_set_visible (action, !hide || sensitive);
 }
@@ -1008,7 +1000,7 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 		GtkWidget *entry;
 		gboolean has_selection;
 
-		entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->priv->toolbar));
+		entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
 
 		has_selection = gtk_editable_get_selection_bounds
 			(GTK_EDITABLE (widget), NULL, NULL);
@@ -1025,7 +1017,7 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 		WebKitWebView *view;
 		CanEditCommandAsyncData *data;
 
-		embed = window->priv->active_embed;
+		embed = window->active_embed;
 		g_return_if_fail (embed != NULL);
 
 		view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
@@ -1066,7 +1058,7 @@ enable_edit_actions_sensitivity (EphyWindow *window)
 	GtkActionGroup *action_group;
 	GtkAction *action;
 
-	action_group = window->priv->action_group;
+	action_group = window->action_group;
 
 	action = gtk_action_group_get_action (action_group, "EditCopy");
 	gtk_action_set_sensitive (action, TRUE);
@@ -1105,7 +1097,7 @@ init_menu_updaters (EphyWindow *window)
        GtkWidget *edit_menu;
 
        edit_menu = gtk_ui_manager_get_widget
-               (window->priv->manager, "/ui/PagePopup");
+               (window->manager, "/ui/PagePopup");
 
        g_signal_connect (edit_menu, "show",
                          G_CALLBACK (edit_menu_show_cb), window);
@@ -1134,7 +1126,7 @@ setup_ui_manager (EphyWindow *window)
 					     window);
 	gtk_action_group_set_accel_group (action_group, accel_group);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
-	window->priv->action_group = action_group;
+	window->action_group = action_group;
 	g_object_unref (action_group);
 
 	action = gtk_action_group_get_action (action_group, "FileOpen");
@@ -1168,14 +1160,14 @@ setup_ui_manager (EphyWindow *window)
 				      G_N_ELEMENTS (ephy_popups_entries), window);
 	gtk_action_group_set_accel_group (action_group, accel_group);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
-	window->priv->popups_action_group = action_group;
+	window->popups_action_group = action_group;
 	g_object_unref (action_group);
 
 	/* Tab accels */
 	action_group = gtk_action_group_new ("TabAccelsActions");
 	gtk_action_group_set_accel_group (action_group, accel_group);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
-	window->priv->tab_accels_action_group = action_group;
+	window->tab_accels_action_group = action_group;
 	g_object_unref (action_group);
 
 	action_group = gtk_action_group_new ("SpecialToolbarActions");
@@ -1240,10 +1232,10 @@ setup_ui_manager (EphyWindow *window)
 
 	gtk_action_group_set_accel_group (action_group, accel_group);
 	gtk_ui_manager_insert_action_group (manager, action_group, 0);
-	window->priv->toolbar_action_group = action_group;
+	window->toolbar_action_group = action_group;
 	g_object_unref (action_group);
 
-	window->priv->manager = manager;
+	window->manager = manager;
 	gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 }
 
@@ -1265,7 +1257,6 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
 					    guint flags,
 					    gboolean set)
 {
-	EphyWindowPrivate *priv = window->priv;
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	int i;
@@ -1275,7 +1266,7 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
 					       "ViewZoomIn", "ViewZoomOut", "ViewPageSource",
 					       NULL };
 
-	action_group = priv->action_group;
+	action_group = window->action_group;
 
 	/* Page menu */
 	for (i = 0; action_group_actions[i] != NULL; i++)
@@ -1287,13 +1278,13 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
 	}
 
 	/* Page context popup */
-	action = gtk_action_group_get_action (priv->popups_action_group,
+	action = gtk_action_group_get_action (window->popups_action_group,
 					      "ContextBookmarkPage");
 	ephy_action_change_sensitivity_flags (action,
 					      flags, set);
 
 	/* Toolbar */
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
+	action = gtk_action_group_get_action (window->toolbar_action_group,
 					      "ViewCombinedStopReload");
 	ephy_action_change_sensitivity_flags (action,
 					      flags, set);
@@ -1304,12 +1295,11 @@ sync_tab_address (EphyWebView *view,
 	          GParamSpec *pspec,
 		  EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	const char *address;
 	const char *typed_address;
 	char *location;
 
-	if (priv->closing) return;
+	if (window->closing) return;
 
 	address = ephy_web_view_get_display_address (view);
 	typed_address = ephy_web_view_get_typed_address (view);
@@ -1331,7 +1321,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 	gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
 	double zoom;
 
-	if (window->priv->closing) return;
+	if (window->closing) return;
 
 	zoom = webkit_web_view_get_zoom_level (web_view);
 
@@ -1350,7 +1340,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 		can_zoom_normal = TRUE;
 	}
 
-	action_group = window->priv->action_group;
+	action_group = window->action_group;
 	action = gtk_action_group_get_action (action_group, "ViewZoomIn");
 	gtk_action_set_sensitive (action, can_zoom_in);
 	action = gtk_action_group_get_action (action_group, "ViewZoomOut");
@@ -1364,13 +1354,12 @@ sync_tab_document_type (EphyWebView *view,
 			GParamSpec *pspec,
 			EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-	GtkActionGroup *action_group = priv->action_group;
+	GtkActionGroup *action_group = window->action_group;
 	GtkAction *action;
 	EphyWebViewDocumentType type;
 	gboolean can_find, disable, is_image;
 
-	if (priv->closing) return;
+	if (window->closing) return;
 
 	/* update zoom actions */
 	sync_tab_zoom (WEBKIT_WEB_VIEW (view), NULL, window);
@@ -1393,7 +1382,7 @@ sync_tab_document_type (EphyWebView *view,
 
 	if (!can_find)
 	{
-		ephy_find_toolbar_request_close (ephy_embed_get_find_toolbar (priv->active_embed));
+		ephy_find_toolbar_request_close (ephy_embed_get_find_toolbar (window->active_embed));
 	}
 }
 
@@ -1401,9 +1390,7 @@ static void
 _ephy_window_action_set_favicon (EphyWindow *window,
 				 GdkPixbuf *icon)
 {
-	EphyWindowPrivate *priv = window->priv;
-
-	g_object_set (priv->location_controller, "icon", icon, NULL);
+	g_object_set (window->location_controller, "icon", icon, NULL);
 }
 
 static void
@@ -1411,10 +1398,9 @@ sync_tab_icon (EphyWebView *view,
 	       GParamSpec *pspec,
 	       EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	GdkPixbuf *icon;
 
-	if (priv->closing) return;
+	if (window->closing) return;
 
 	icon = ephy_web_view_get_icon (view);
 
@@ -1427,9 +1413,9 @@ _ephy_window_set_navigation_flags (EphyWindow *window,
 {
 	GtkAction *action;
 
-	action = gtk_action_group_get_action (window->priv->toolbar_action_group, "NavigationBack");
+	action = gtk_action_group_get_action (window->toolbar_action_group, "NavigationBack");
 	gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_BACK);
-	action = gtk_action_group_get_action (window->priv->toolbar_action_group, "NavigationForward");
+	action = gtk_action_group_get_action (window->toolbar_action_group, "NavigationForward");
 	gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_FORWARD);
 }
 
@@ -1438,7 +1424,7 @@ sync_tab_navigation (EphyWebView *view,
 		     GParamSpec *pspec,
 		     EphyWindow *window)
 {
-	if (window->priv->closing) return;
+	if (window->closing) return;
 
 	_ephy_window_set_navigation_flags (window,
 					   ephy_web_view_get_navigation_flags (view));
@@ -1449,7 +1435,7 @@ sync_tab_is_blank (EphyWebView *view,
 		   GParamSpec *pspec,
 		   EphyWindow *window)
 {
-	if (window->priv->closing) return;
+	if (window->closing) return;
 
 	_ephy_window_set_default_actions_sensitive (window,
 						    SENS_FLAG_IS_BLANK,
@@ -1475,7 +1461,7 @@ sync_tab_popups_allowed (EphyWebView *view,
 	g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	action = gtk_action_group_get_action (window->priv->action_group,
+	action = gtk_action_group_get_action (window->action_group,
 					      "ViewPopupWindows");
 	g_return_if_fail (GTK_IS_ACTION (action));
 
@@ -1499,9 +1485,7 @@ sync_tab_title (EphyEmbed *embed,
 		GParamSpec *pspec,
 		EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-
-	if (priv->closing) return;
+	if (window->closing) return;
 
 	gtk_window_set_title (GTK_WINDOW(window),
 			      ephy_embed_get_title (embed));
@@ -1510,17 +1494,15 @@ sync_tab_title (EphyEmbed *embed,
 static gboolean
 idle_unref_context_event (EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
+	LOG ("Idle unreffing context event %p", window->context_event);
 
-	LOG ("Idle unreffing context event %p", priv->context_event);
-
-	if (priv->context_event != NULL)
+	if (window->context_event != NULL)
 	{
-		g_object_unref (priv->context_event);
-		priv->context_event = NULL;
+		g_object_unref (window->context_event);
+		window->context_event = NULL;
 	}
 
-	priv->idle_worker = 0;
+	window->idle_worker = 0;
 	return FALSE;
 }
 
@@ -1528,33 +1510,29 @@ static void
 _ephy_window_set_context_event (EphyWindow *window,
 				EphyEmbedEvent *event)
 {
-	EphyWindowPrivate *priv = window->priv;
-
-	if (priv->idle_worker != 0)
+	if (window->idle_worker != 0)
 	{
-		g_source_remove (priv->idle_worker);
-		priv->idle_worker = 0;
+		g_source_remove (window->idle_worker);
+		window->idle_worker = 0;
 	}
 
-	if (priv->context_event != NULL)
+	if (window->context_event != NULL)
 	{
-		g_object_unref (priv->context_event);
+		g_object_unref (window->context_event);
 	}
 
-	priv->context_event = event != NULL ? g_object_ref (event) : NULL;
+	window->context_event = event != NULL ? g_object_ref (event) : NULL;
 }
 
 static void
 _ephy_window_unset_context_event (EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-
 	/* Unref the event from idle since we still need it
 	 * from the action callbacks which will run before idle.
 	 */
-	if (priv->idle_worker == 0 && priv->context_event != NULL)
+	if (window->idle_worker == 0 && window->context_event != NULL)
 	{
-		priv->idle_worker =
+		window->idle_worker =
 			g_idle_add ((GSourceFunc) idle_unref_context_event, window);
 	}
 }
@@ -1683,7 +1661,6 @@ populate_context_menu (WebKitWebView *web_view,
 		       WebKitHitTestResult *hit_test_result,
 		       EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	WebKitContextMenuItem *input_methods_item = NULL;
 	WebKitContextMenuItem *unicode_item = NULL;
 	WebKitContextMenuItem *play_pause_item = NULL;
@@ -1750,7 +1727,7 @@ populate_context_menu (WebKitWebView *web_view,
 			GtkAction *action;
 
 			can_search_selection = TRUE;
-			action = gtk_action_group_get_action (priv->popups_action_group,
+			action = gtk_action_group_get_action (window->popups_action_group,
 							      "SearchSelection");
 			label = g_strdup_printf (_("Search the Web for '%s'"), ellipsized);
 			gtk_action_set_label (action, label);
@@ -1787,34 +1764,34 @@ populate_context_menu (WebKitWebView *web_view,
 		if (!app_mode)
 		{
 			add_action_to_context_menu (context_menu,
-						    priv->popups_action_group, "OpenLinkInNewTab");
+						    window->popups_action_group, "OpenLinkInNewTab");
 			add_action_to_context_menu (context_menu,
-						    priv->popups_action_group, "OpenLinkInNewWindow");
+						    window->popups_action_group, "OpenLinkInNewWindow");
 			if (!incognito_mode)
 				add_action_to_context_menu (context_menu,
-							    priv->popups_action_group, "OpenLinkInIncognitoWindow");
+							    window->popups_action_group, "OpenLinkInIncognitoWindow");
 			webkit_context_menu_append (context_menu,
 						    webkit_context_menu_item_new_separator ());
 		}
 		add_action_to_context_menu (context_menu,
-					    priv->action_group, "EditCopy");
+					    window->action_group, "EditCopy");
 		if (can_search_selection)
 			add_action_to_context_menu (context_menu,
-						    priv->popups_action_group, "SearchSelection");
+						    window->popups_action_group, "SearchSelection");
 		webkit_context_menu_append (context_menu,
 					    webkit_context_menu_item_new_separator ());
 		add_action_to_context_menu (context_menu,
-					    priv->popups_action_group, "DownloadLinkAs");
+					    window->popups_action_group, "DownloadLinkAs");
 
 		if (g_str_has_prefix (uri, "mailto:"))
 		{
 			add_action_to_context_menu (context_menu,
-						    priv->popups_action_group, "CopyEmailAddress");
+						    window->popups_action_group, "CopyEmailAddress");
 		}
 		else
 		{
 			add_action_to_context_menu (context_menu,
-						    priv->popups_action_group, "CopyLinkAddress");
+						    window->popups_action_group, "CopyLinkAddress");
 		}
 	}
 	else if (webkit_hit_test_result_context_is_editable (hit_test_result))
@@ -1841,21 +1818,21 @@ populate_context_menu (WebKitWebView *web_view,
 		update_edit_actions_sensitivity (window, FALSE);
 
 		add_action_to_context_menu (context_menu,
-					    priv->action_group, "EditUndo");
+					    window->action_group, "EditUndo");
 		add_action_to_context_menu (context_menu,
-					    priv->action_group, "EditRedo");
+					    window->action_group, "EditRedo");
 		webkit_context_menu_append (context_menu,
 					    webkit_context_menu_item_new_separator ());
 		add_action_to_context_menu (context_menu,
-					    priv->action_group, "EditCut");
+					    window->action_group, "EditCut");
 		add_action_to_context_menu (context_menu,
-					    priv->action_group, "EditCopy");
+					    window->action_group, "EditCopy");
 		add_action_to_context_menu (context_menu,
-					    priv->action_group, "EditPaste");
+					    window->action_group, "EditPaste");
 		webkit_context_menu_append (context_menu,
 					    webkit_context_menu_item_new_separator ());
 		add_action_to_context_menu (context_menu,
-					    priv->action_group, "EditSelectAll");
+					    window->action_group, "EditSelectAll");
 		if (input_methods_item || unicode_item)
 			webkit_context_menu_append (context_menu,
 						    webkit_context_menu_item_new_separator ());
@@ -1871,27 +1848,27 @@ populate_context_menu (WebKitWebView *web_view,
 		if (!is_image && !is_media)
 		{
 			add_action_to_context_menu (context_menu,
-						    priv->toolbar_action_group, "NavigationBack");
+						    window->toolbar_action_group, "NavigationBack");
 			add_action_to_context_menu (context_menu,
-						    priv->toolbar_action_group, "NavigationForward");
+						    window->toolbar_action_group, "NavigationForward");
 			add_action_to_context_menu (context_menu,
-						    priv->action_group, "ViewReload");
+						    window->action_group, "ViewReload");
 			webkit_context_menu_append (context_menu,
 						    webkit_context_menu_item_new_separator ());
 		}
 
 		add_action_to_context_menu (context_menu,
-					    priv->action_group, "EditCopy");
+					    window->action_group, "EditCopy");
 		if (can_search_selection)
 			add_action_to_context_menu (context_menu,
-						    priv->popups_action_group, "SearchSelection");
+						    window->popups_action_group, "SearchSelection");
 
 		if (!app_mode && !is_image && !is_media)
 		{
 			webkit_context_menu_append (context_menu,
 						    webkit_context_menu_item_new_separator ());
 			add_action_to_context_menu (context_menu,
-						    priv->popups_action_group, "ContextBookmarkPage");
+						    window->popups_action_group, "ContextBookmarkPage");
 		}
 	}
 
@@ -1900,13 +1877,13 @@ populate_context_menu (WebKitWebView *web_view,
 		webkit_context_menu_append (context_menu,
 					    webkit_context_menu_item_new_separator ());
 		add_action_to_context_menu (context_menu,
-					    priv->popups_action_group, "SaveImageAs");
+					    window->popups_action_group, "SaveImageAs");
 		add_action_to_context_menu (context_menu,
-					    priv->popups_action_group, "CopyImageLocation");
+					    window->popups_action_group, "CopyImageLocation");
 		add_action_to_context_menu (context_menu,
-					    priv->popups_action_group, "ViewImage");
+					    window->popups_action_group, "ViewImage");
 		add_action_to_context_menu (context_menu,
-					    priv->popups_action_group, "SetImageAsBackground");
+					    window->popups_action_group, "SetImageAsBackground");
 	}
 
 	if (is_media)
@@ -1920,24 +1897,24 @@ populate_context_menu (WebKitWebView *web_view,
 					    webkit_context_menu_item_new_separator ());
 		if (is_video)
 		{
-			add_action_to_context_menu (context_menu, priv->popups_action_group,
+			add_action_to_context_menu (context_menu, window->popups_action_group,
 						    "OpenVideoInNewWindow");
-			add_action_to_context_menu (context_menu, priv->popups_action_group,
+			add_action_to_context_menu (context_menu, window->popups_action_group,
 						    "OpenVideoInNewTab");
-			add_action_to_context_menu (context_menu, priv->popups_action_group,
+			add_action_to_context_menu (context_menu, window->popups_action_group,
 						    "SaveVideoAs");
-			add_action_to_context_menu (context_menu, priv->popups_action_group,
+			add_action_to_context_menu (context_menu, window->popups_action_group,
 						    "CopyVideoLocation");
 		}
 		else if (is_audio)
 		{
-			add_action_to_context_menu (context_menu, priv->popups_action_group,
+			add_action_to_context_menu (context_menu, window->popups_action_group,
 						    "OpenAudioInNewWindow");
-			add_action_to_context_menu (context_menu, priv->popups_action_group,
+			add_action_to_context_menu (context_menu, window->popups_action_group,
 						    "OpenAudioInNewTab");
-			add_action_to_context_menu (context_menu, priv->popups_action_group,
+			add_action_to_context_menu (context_menu, window->popups_action_group,
 						    "SaveAudioAs");
-			add_action_to_context_menu (context_menu, priv->popups_action_group,
+			add_action_to_context_menu (context_menu, window->popups_action_group,
 						    "CopyAudioLocation");
 		}
 	}
@@ -1954,7 +1931,7 @@ populate_context_menu (WebKitWebView *web_view,
 		webkit_context_menu_append (context_menu,
 					    webkit_context_menu_item_new_separator ());
 		add_action_to_context_menu (context_menu,
-					    priv->action_group, "FileSendTo");
+					    window->action_group, "FileSendTo");
 	}
 
 	webkit_context_menu_append (context_menu,
@@ -2032,7 +2009,7 @@ ephy_window_dom_mouse_click_cb (WebKitWebView *view,
 		return FALSE;
 	}
 
-	hit_test_result = g_object_ref (window->priv->hit_test_result);
+	hit_test_result = g_object_ref (window->hit_test_result);
 	handled = save_target_uri (window, view, event, hit_test_result);
 	g_object_unref (hit_test_result);
 
@@ -2045,20 +2022,16 @@ ephy_window_mouse_target_changed_cb (WebKitWebView *web_view,
 				     guint modifiers,
 				     EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-
-	if (priv->hit_test_result)
-		g_object_unref (priv->hit_test_result);
-	priv->hit_test_result = g_object_ref (hit_test_result);
+	if (window->hit_test_result)
+		g_object_unref (window->hit_test_result);
+	window->hit_test_result = g_object_ref (hit_test_result);
 }
 
 static void
 ephy_window_set_is_popup (EphyWindow *window,
 			  gboolean is_popup)
 {
-	EphyWindowPrivate *priv = window->priv;
-
-	priv->is_popup = is_popup;
+	window->is_popup = is_popup;
 
 	g_object_notify (G_OBJECT (window), "is-popup");
 }
@@ -2094,7 +2067,7 @@ ephy_window_configure_for_view (EphyWindow *window,
 	{
 		GtkWidget *entry;
 
-		entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->priv->toolbar));
+		entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
 		gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
 
 		if (webkit_window_properties_get_menubar_visible (properties))
@@ -2110,7 +2083,7 @@ ephy_window_configure_for_view (EphyWindow *window,
 	if (!webkit_window_properties_get_resizable (properties))
 		gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-	window->priv->is_popup = TRUE;
+	window->is_popup = TRUE;
 	ephy_window_set_chrome (window, chrome);
 	g_signal_connect (properties, "notify::geometry",
 			  G_CALLBACK (window_properties_geometry_changed),
@@ -2381,9 +2354,9 @@ ephy_window_connect_active_embed (EphyWindow *window)
 	WebKitWebView *web_view;
 	EphyWebView *view;
 
-	g_return_if_fail (window->priv->active_embed != NULL);
+	g_return_if_fail (window->active_embed != NULL);
 
-	embed = window->priv->active_embed;
+	embed = window->active_embed;
 	view = ephy_embed_get_web_view (embed);
 	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
@@ -2460,9 +2433,9 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 	WebKitWebView *web_view;
 	EphyWebView *view;
 
-	g_return_if_fail (window->priv->active_embed != NULL);
+	g_return_if_fail (window->active_embed != NULL);
 
-	embed = window->priv->active_embed;
+	embed = window->active_embed;
 	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 	view = EPHY_WEB_VIEW (web_view);
 
@@ -2524,14 +2497,14 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 	g_return_if_fail (gtk_widget_get_toplevel (GTK_WIDGET (new_embed)) == GTK_WIDGET (window));
 
-	old_embed = window->priv->active_embed;
+	old_embed = window->active_embed;
 
 	if (old_embed == new_embed) return;
 
 	if (old_embed != NULL)
 		ephy_window_disconnect_active_embed (window);
 
-	window->priv->active_embed = new_embed;
+	window->active_embed = new_embed;
 
 	if (new_embed != NULL)
 		ephy_window_connect_active_embed (window);
@@ -2541,25 +2514,23 @@ static void
 tab_accels_item_activate (GtkAction *action,
 			  EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	const char *name;
 	int tab_number;
 
 	name = gtk_action_get_name (action);
 	tab_number = atoi (name + strlen ("TabAccel"));
 
-	gtk_notebook_set_current_page (priv->notebook, tab_number);
+	gtk_notebook_set_current_page (window->notebook, tab_number);
 }
 
 static void
 tab_accels_update (EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	int pages, i = 0;
 	GList *actions, *l;
 
-	actions = gtk_action_group_list_actions (priv->tab_accels_action_group);
-	pages = gtk_notebook_get_n_pages (priv->notebook);
+	actions = gtk_action_group_list_actions (window->tab_accels_action_group);
+	pages = gtk_notebook_get_n_pages (window->notebook);
 	for (l = actions; l != NULL; l = l->next)
 	{
 		GtkAction *action = GTK_ACTION (l->data);
@@ -2576,11 +2547,10 @@ tab_accels_update (EphyWindow *window)
 static void
 setup_tab_accels (EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	guint id;
 	int i;
 
-	id = gtk_ui_manager_new_merge_id (priv->manager);
+	id = gtk_ui_manager_new_merge_id (window->manager);
 
 	for (i = 0; i < TAB_ACCELS_N; i++)
 	{
@@ -2592,12 +2562,12 @@ setup_tab_accels (EphyWindow *window)
 		accel = g_strdup_printf ("<alt>%d", (i + 1) % TAB_ACCELS_N);
 		action = gtk_action_new (name, NULL, NULL, NULL);
 
-		gtk_action_group_add_action_with_accel (priv->tab_accels_action_group,
+		gtk_action_group_add_action_with_accel (window->tab_accels_action_group,
 							action, accel);
 
 		g_signal_connect (action, "activate",
 				  G_CALLBACK (tab_accels_item_activate), window);
-		gtk_ui_manager_add_ui (priv->manager, id, "/",
+		gtk_ui_manager_add_ui (window->manager, id, "/",
 				       name, name,
 				       GTK_UI_MANAGER_ACCELERATOR,
 				       FALSE);
@@ -2616,11 +2586,11 @@ show_notebook_popup_menu (GtkNotebook *notebook,
 	GtkWidget *menu, *tab, *tab_label;
 	GtkAction *action;
 
-	menu = gtk_ui_manager_get_widget (window->priv->manager, "/EphyNotebookPopup");
+	menu = gtk_ui_manager_get_widget (window->manager, "/EphyNotebookPopup");
 	g_return_val_if_fail (menu != NULL, FALSE);
 
 	/* allow extensions to sync when showing the popup */
-	action = gtk_action_group_get_action (window->priv->action_group,
+	action = gtk_action_group_get_action (window->action_group,
 					      "NotebookPopupAction");
 	g_return_val_if_fail (action != NULL, FALSE);
 	gtk_action_activate (action);
@@ -2629,16 +2599,16 @@ show_notebook_popup_menu (GtkNotebook *notebook,
 	{
 		gint n_pages, page_num;
 
-		tab = GTK_WIDGET (window->priv->active_embed);
+		tab = GTK_WIDGET (window->active_embed);
 		n_pages = gtk_notebook_get_n_pages (notebook);
 		page_num = gtk_notebook_page_num (notebook, tab);
 
 		/* enable/disable move left/right items*/
-		action = gtk_action_group_get_action (window->priv->action_group,
+		action = gtk_action_group_get_action (window->action_group,
 						      "TabsMoveLeft");
 		gtk_action_set_sensitive (action, page_num > 0);
 
-		action = gtk_action_group_get_action (window->priv->action_group,
+		action = gtk_action_group_get_action (window->action_group,
 						      "TabsMoveRight");
 		gtk_action_set_sensitive (action, page_num < n_pages - 1);
 
@@ -2648,7 +2618,7 @@ show_notebook_popup_menu (GtkNotebook *notebook,
 	}
 	else
 	{
-		tab = GTK_WIDGET (window->priv->active_embed);
+		tab = GTK_WIDGET (window->active_embed);
 		tab_label = gtk_notebook_get_tab_label (notebook, tab);
 
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
@@ -2708,9 +2678,7 @@ static void
 download_only_load_cb (EphyWebView *view,
 		       EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-
-	if (gtk_notebook_get_n_pages (priv->notebook) == 1) {
+	if (gtk_notebook_get_n_pages (window->notebook) == 1) {
 		ephy_web_view_load_homepage (view);
 		return;
 	}
@@ -2724,8 +2692,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 			guint position,
 			EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-
 	LOG ("page-added notebook %p embed %p position %u\n", notebook, embed, position);
 
 	g_return_if_fail (EPHY_IS_EMBED (embed));
@@ -2739,9 +2705,9 @@ notebook_page_added_cb (EphyNotebook *notebook,
 	g_signal_connect_object (ephy_embed_get_web_view (embed), "download-only-load",
 				 G_CALLBACK (download_only_load_cb), window, G_CONNECT_AFTER);
 
-        if (priv->present_on_insert)
+        if (window->present_on_insert)
         {
-                priv->present_on_insert = FALSE;
+                window->present_on_insert = FALSE;
                 g_idle_add ((GSourceFunc) present_on_idle_cb, g_object_ref (window));
         }
 
@@ -2754,11 +2720,9 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 			  guint position,
 			  EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-
 	LOG ("page-removed notebook %p embed %p position %u\n", notebook, embed, position);
 
-	if (priv->closing) return;
+	if (window->closing) return;
 
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
@@ -2781,7 +2745,7 @@ ephy_window_close_tab (EphyWindow *window,
 	gtk_widget_destroy (GTK_WIDGET (tab));
 
 	/* If that was the last tab, destroy the window. */
-	if (gtk_notebook_get_n_pages (window->priv->notebook) == 0)
+	if (gtk_notebook_get_n_pages (window->notebook) == 0)
 	{
 		gtk_widget_destroy (GTK_WIDGET (window));
 	}
@@ -2806,9 +2770,7 @@ notebook_page_close_request_cb (EphyNotebook *notebook,
 				EphyEmbed *embed,
 				EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-
-	if (gtk_notebook_get_n_pages (priv->notebook) == 1)
+	if (gtk_notebook_get_n_pages (window->notebook) == 1)
 	{
 		if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 					    EPHY_PREFS_LOCKDOWN_QUIT))
@@ -2849,12 +2811,10 @@ notebook_create_window_cb (GtkNotebook *notebook,
                            EphyWindow *window)
 {
   EphyWindow *new_window;
-  EphyWindowPrivate *new_priv;
 
   new_window = ephy_window_new ();
-  new_priv = new_window->priv;
 
-  new_priv->present_on_insert = TRUE;
+  new_window->present_on_insert = TRUE;
 
   return ephy_window_get_notebook (new_window);
 }
@@ -2866,10 +2826,10 @@ real_get_active_tab (EphyWindow *window, int page_num)
 
 	if (page_num == -1)
 	{
-		page_num = gtk_notebook_get_current_page (window->priv->notebook);
+		page_num = gtk_notebook_get_current_page (window->notebook);
 	}
 
-	embed = gtk_notebook_get_nth_page (window->priv->notebook, page_num);
+	embed = gtk_notebook_get_nth_page (window->notebook, page_num);
 
 	g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
 
@@ -2882,12 +2842,11 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 			 guint page_num,
 			 EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	EphyEmbed *embed;
 
 	LOG ("switch-page notebook %p position %u\n", notebook, page_num);
 
-	if (priv->closing) return;
+	if (window->closing) return;
 
 	/* get the new tab */
 	embed = real_get_active_tab (window, page_num);
@@ -2895,7 +2854,7 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 	/* update new tab */
 	ephy_window_set_active_tab (window, embed);
 
-	ephy_title_box_set_web_view (ephy_toolbar_get_title_box (EPHY_TOOLBAR (priv->toolbar)),
+	ephy_title_box_set_web_view (ephy_toolbar_get_title_box (EPHY_TOOLBAR (window->toolbar)),
 				     EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
@@ -2935,33 +2894,32 @@ static void
 ephy_window_dispose (GObject *object)
 {
 	EphyWindow *window = EPHY_WINDOW (object);
-	EphyWindowPrivate *priv = window->priv;
 	GSList *popups;
 
 	LOG ("EphyWindow dispose %p", window);
 
 	/* Only do these once */
-	if (window->priv->closing == FALSE)
+	if (window->closing == FALSE)
 	{
-		window->priv->closing = TRUE;
+		window->closing = TRUE;
 
 		ephy_bookmarks_ui_detach_window (window);
 
 		/* Deactivate menus */
-		popups = gtk_ui_manager_get_toplevels (window->priv->manager, GTK_UI_MANAGER_POPUP);
+		popups = gtk_ui_manager_get_toplevels (window->manager, GTK_UI_MANAGER_POPUP);
 		g_slist_foreach (popups, (GFunc) gtk_menu_shell_deactivate, NULL);
 		g_slist_free (popups);
 
-		priv->action_group = NULL;
-		priv->popups_action_group = NULL;
-		priv->tab_accels_action_group = NULL;
+		window->action_group = NULL;
+		window->popups_action_group = NULL;
+		window->tab_accels_action_group = NULL;
 
-		g_object_unref (priv->manager);
-		priv->manager = NULL;
+		g_object_unref (window->manager);
+		window->manager = NULL;
 
 		_ephy_window_set_context_event (window, NULL);
 
-		g_clear_object (&priv->hit_test_result);
+		g_clear_object (&window->hit_test_result);
 	}
 
 	G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
@@ -3004,13 +2962,13 @@ ephy_window_get_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_ACTIVE_CHILD:
-			g_value_set_object (value, window->priv->active_embed);
+			g_value_set_object (value, window->active_embed);
 			break;
 		case PROP_CHROME:
-			g_value_set_flags (value, window->priv->chrome);
+			g_value_set_flags (value, window->chrome);
 			break;
 		case PROP_SINGLE_TAB_MODE:
-			g_value_set_boolean (value, window->priv->is_popup);
+			g_value_set_boolean (value, window->is_popup);
 			break;
 	        default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -3023,7 +2981,6 @@ ephy_window_state_event (GtkWidget *widget,
 			 GdkEventWindowState *event)
 {
 	EphyWindow *window = EPHY_WINDOW (widget);
-	EphyWindowPrivate *priv = window->priv;
 
 	if (GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event)
 	{
@@ -3047,7 +3004,7 @@ ephy_window_state_event (GtkWidget *widget,
 			ephy_window_unfullscreen (window);
 		}
 
-		action_group = priv->action_group;
+		action_group = window->action_group;
 
 		action = gtk_action_group_get_action (action_group, "ViewFullscreen");
 		g_signal_handlers_block_by_func
@@ -3064,11 +3021,10 @@ static void
 ephy_window_finalize (GObject *object)
 {
 	EphyWindow *window = EPHY_WINDOW (object);
-	EphyWindowPrivate *priv = window->priv;
 
-	if (priv->app_menu_visibility_handler != 0)
+	if (window->app_menu_visibility_handler != 0)
 		g_signal_handler_disconnect (gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window))),
-					     priv->app_menu_visibility_handler);
+					     window->app_menu_visibility_handler);
 
 	G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
@@ -3102,22 +3058,21 @@ sync_user_input_cb (EphyLocationController *action,
 		    GParamSpec *pspec,
 		    EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	EphyEmbed *embed;
 	const char *address;
 
 	LOG ("sync_user_input_cb");
 
-	if (priv->updating_address) return;
+	if (window->updating_address) return;
 
 	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_assert (EPHY_IS_EMBED (embed));
 
 	address = ephy_location_controller_get_address (action);
 
-	priv->updating_address = TRUE;
+	window->updating_address = TRUE;
 	ephy_web_view_set_typed_address (ephy_embed_get_web_view (embed), address);
-	priv->updating_address = FALSE;
+	window->updating_address = FALSE;
 }
 
 static void
@@ -3133,7 +3088,6 @@ open_security_popover (EphyWindow *window,
 		       GtkWidget *relative_to,
 		       GdkRectangle *lock_position)
 {
-	EphyWindowPrivate *priv = window->priv;
 	EphyWebView *view;
 	GTlsCertificate *certificate;
 	GTlsCertificateFlags tls_errors;
@@ -3141,9 +3095,9 @@ open_security_popover (EphyWindow *window,
 	GtkWidget *location_entry;
 	GtkWidget *security_popover;
 
-	view = ephy_embed_get_web_view (priv->active_embed);
+	view = ephy_embed_get_web_view (window->active_embed);
 	ephy_web_view_get_security_level (view, &security_level, &certificate, &tls_errors);
-	location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
+	location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
 
 	security_popover = ephy_security_popover_new (relative_to,
 						      ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (location_entry)),
@@ -3162,11 +3116,10 @@ location_controller_lock_clicked_cb (EphyLocationController *controller,
 				     gpointer user_data)
 {
 	EphyWindow *window = EPHY_WINDOW (user_data);
-	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *location_entry;
 	GdkRectangle lock_position;
 
-	location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
+	location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
 	gtk_entry_get_icon_area (GTK_ENTRY (location_entry), GTK_ENTRY_ICON_SECONDARY, &lock_position);
 	open_security_popover (window, location_entry, &lock_position);
 }
@@ -3186,7 +3139,6 @@ setup_toolbar (EphyWindow *window)
 {
 	GtkWidget *toolbar;
 	GtkAction *action;
-	EphyWindowPrivate *priv = window->priv;
 	EphyEmbedShellMode app_mode;
 	EphyTitleBox *title_box;
 
@@ -3198,22 +3150,22 @@ setup_toolbar (EphyWindow *window)
 	if (app_mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
 		gtk_style_context_add_class (gtk_widget_get_style_context (toolbar), "incognito-mode");
 
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
+	action = gtk_action_group_get_action (window->toolbar_action_group,
 					      "NavigationBack");
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
 
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
+	action = gtk_action_group_get_action (window->toolbar_action_group,
 					      "NavigationForward");
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
 
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
+	action = gtk_action_group_get_action (window->toolbar_action_group,
 					      "FileNewTab");
 	g_signal_connect_swapped (action, "open-link",
 				  G_CALLBACK (ephy_link_open), window);
 
-	action = gtk_action_group_get_action (priv->toolbar_action_group,
+	action = gtk_action_group_get_action (window->toolbar_action_group,
 					      "Zoom");
 	g_signal_connect (action, "zoom-to-level",
 			  G_CALLBACK (zoom_to_level_cb), window);
@@ -3298,7 +3250,7 @@ ephy_window_toggle_visibility_for_app_menu (EphyWindow *window)
 
 	for (i = 0; i < G_N_ELEMENTS (app_actions); i++) {
 		action_name = app_actions[i];
-		action = gtk_action_group_get_action (window->priv->action_group, action_name);
+		action = gtk_action_group_get_action (window->action_group, action_name);
 
 		gtk_action_set_visible (action, !shows_app_menu);
 	}
@@ -3311,7 +3263,6 @@ ephy_window_constructor (GType type,
 {
 	GObject *object;
 	EphyWindow *window;
-	EphyWindowPrivate *priv;
 	GtkSettings *settings;
 	GtkAction *action;
 	GtkActionGroup *toolbar_action_group;
@@ -3326,8 +3277,6 @@ ephy_window_constructor (GType type,
 		(type, n_construct_properties, construct_params);
 
 	window = EPHY_WINDOW (object);
-
-	priv = window->priv;
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (window));
 
@@ -3353,10 +3302,10 @@ ephy_window_constructor (GType type,
 	setup_ui_manager (window);
 	setup_tab_accels (window);
 
-	priv->notebook = setup_notebook (window);
+	window->notebook = setup_notebook (window);
 
 	/* Now load the UI definition (needed by EphyToolbar). */
-	gtk_ui_manager_add_ui_from_resource (priv->manager,
+	gtk_ui_manager_add_ui_from_resource (window->manager,
 					     "/org/gnome/epiphany/epiphany-ui.xml",
 					     &error);
 	if (error != NULL)
@@ -3367,10 +3316,10 @@ ephy_window_constructor (GType type,
 	}
 
 	/* Setup the toolbar. */
-	priv->toolbar = setup_toolbar (window);
-	priv->location_controller = setup_location_controller (window, EPHY_TOOLBAR (priv->toolbar));
-	gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (priv->notebook));
-	gtk_widget_show (GTK_WIDGET (priv->notebook));
+	window->toolbar = setup_toolbar (window);
+	window->location_controller = setup_location_controller (window, EPHY_TOOLBAR (window->toolbar));
+	gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (window->notebook));
+	gtk_widget_show (GTK_WIDGET (window->notebook));
 
 	/* Attach the CSS provider to the window. */
 	css_provider = gtk_css_provider_new ();
@@ -3387,7 +3336,7 @@ ephy_window_constructor (GType type,
 	ephy_bookmarks_ui_attach_window (window);
 
 	/* other notifiers */
-	action = gtk_action_group_get_action (window->priv->action_group,
+	action = gtk_action_group_get_action (window->action_group,
 					      "BrowseWithCaret");
 
 	g_settings_bind (EPHY_SETTINGS_MAIN,
@@ -3400,20 +3349,20 @@ ephy_window_constructor (GType type,
 			  G_CALLBACK (allow_popups_notifier), window);
 
 	/* Disable actions not needed for popup mode. */
-	toolbar_action_group = priv->toolbar_action_group;
+	toolbar_action_group = window->toolbar_action_group;
 	action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
-					      priv->is_popup);
+					      window->is_popup);
 
-	action = gtk_action_group_get_action (priv->popups_action_group, "OpenLinkInNewTab");
+	action = gtk_action_group_get_action (window->popups_action_group, "OpenLinkInNewTab");
 	ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
-					      priv->is_popup);
+					      window->is_popup);
 
 	/* Disabled actions not needed for application mode. */
 	mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
 	if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION)
 	{
-		g_object_set (priv->location_controller, "editable", FALSE, NULL);
+		g_object_set (window->location_controller, "editable", FALSE, NULL);
 
 		/* We don't need to show the page menu in web application mode. */
 		action = gtk_action_group_get_action (toolbar_action_group, "PageMenu");
@@ -3425,13 +3374,13 @@ ephy_window_constructor (GType type,
 						      TRUE);
 		gtk_action_set_visible (action, FALSE);
 
-		action = gtk_action_group_get_action (priv->popups_action_group, "ContextBookmarkPage");
+		action = gtk_action_group_get_action (window->popups_action_group, "ContextBookmarkPage");
 		ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
 		gtk_action_set_visible (action, FALSE);
 
 		for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_app_mode); i++)
 		{
-			action = gtk_action_group_get_action (priv->action_group,
+			action = gtk_action_group_get_action (window->action_group,
 							      disabled_actions_for_app_mode[i]);
 			ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
 			gtk_action_set_visible (action, FALSE);
@@ -3444,12 +3393,12 @@ ephy_window_constructor (GType type,
 	gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), FALSE);
 
 	ephy_window_toggle_visibility_for_app_menu (window);
-	priv->app_menu_visibility_handler =  g_signal_connect_swapped (gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window))),
-								       "notify::gtk-shell-shows-app-menu",
-								       G_CALLBACK (ephy_window_toggle_visibility_for_app_menu), window);
+	window->app_menu_visibility_handler =  g_signal_connect_swapped (gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window))),
+								         "notify::gtk-shell-shows-app-menu",
+								         G_CALLBACK (ephy_window_toggle_visibility_for_app_menu), window);
 
 	/* ensure the UI is updated */
-	gtk_ui_manager_ensure_update (priv->manager);
+	gtk_ui_manager_ensure_update (window->manager);
 
 	init_menu_updaters (window);
 
@@ -3461,23 +3410,22 @@ ephy_window_constructor (GType type,
 static void
 ephy_window_show (GtkWidget *widget)
 {
-	EphyWindow *window = EPHY_WINDOW(widget);
-	EphyWindowPrivate *priv = window->priv;
+	EphyWindow *window = EPHY_WINDOW (widget);
 
-	if (!priv->has_size)
+	if (!window->has_size)
 	{
 		EphyEmbed *embed;
 		int flags = 0;
 
-		embed = priv->active_embed;
+		embed = window->active_embed;
 		g_return_if_fail (EPHY_IS_EMBED (embed));
 
-		if (!priv->is_popup)
+		if (!window->is_popup)
 			flags = EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE;
 
 		ephy_initial_state_add_window (widget, "main_window", 600, 500,
 					       TRUE, flags);
-		priv->has_size = TRUE;
+		window->has_size = TRUE;
 	}
 
 	GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
@@ -3517,16 +3465,12 @@ ephy_window_class_init (EphyWindowClass *klass)
 							     EPHY_WINDOW_CHROME_DEFAULT,
 							     G_PARAM_READWRITE |
 							     G_PARAM_STATIC_STRINGS));
-
-	g_type_class_add_private (object_class, sizeof (EphyWindowPrivate));
 }
 
 static void
 ephy_window_init (EphyWindow *window)
 {
 	LOG ("EphyWindow initialising %p", window);
-
-	window->priv = EPHY_WINDOW_GET_PRIVATE (window);
 }
 
 /**
@@ -3559,7 +3503,7 @@ ephy_window_get_ui_manager (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-	return window->priv->manager;
+	return window->manager;
 }
 
 /**
@@ -3575,7 +3519,7 @@ ephy_window_get_notebook (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-	return GTK_WIDGET (window->priv->notebook);
+	return GTK_WIDGET (window->notebook);
 }
 
 /**
@@ -3591,7 +3535,7 @@ ephy_window_get_current_find_toolbar (EphyWindow *window)
 {
        g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-       return GTK_WIDGET (ephy_embed_get_find_toolbar (window->priv->active_embed));
+       return GTK_WIDGET (ephy_embed_get_find_toolbar (window->active_embed));
 }
 
 /**
@@ -3622,16 +3566,15 @@ ephy_window_load_url (EphyWindow *window,
 void
 ephy_window_activate_location (EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
 	GtkWidget *entry;
 
-	if (!(priv->chrome & EPHY_WINDOW_CHROME_LOCATION))
+	if (!(window->chrome & EPHY_WINDOW_CHROME_LOCATION))
 		return;
 
-	ephy_title_box_set_mode (ephy_toolbar_get_title_box (EPHY_TOOLBAR (priv->toolbar)),
+	ephy_title_box_set_mode (ephy_toolbar_get_title_box (EPHY_TOOLBAR (window->toolbar)),
 				 EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
 
-	entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
+	entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
 	ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
 }
 
@@ -3653,7 +3596,7 @@ ephy_window_set_zoom (EphyWindow *window,
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	embed = window->priv->active_embed;
+	embed = window->active_embed;
 	g_return_if_fail (embed != NULL);
 
 	web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
@@ -3684,7 +3627,7 @@ ephy_window_view_popup_windows_cb (GtkAction *action,
 
 	g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	embed = window->priv->active_embed;
+	embed = window->active_embed;
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
@@ -3713,7 +3656,7 @@ ephy_window_get_context_event (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-	return window->priv->context_event;
+	return window->context_event;
 }
 
 /**
@@ -3727,8 +3670,7 @@ ephy_window_get_context_event (EphyWindow *window)
 const char *
 ephy_window_get_location (EphyWindow *window)
 {
-	EphyWindowPrivate *priv = window->priv;
-	return ephy_location_controller_get_address (priv->location_controller);
+	return ephy_location_controller_get_address (window->location_controller);
 }
 
 /**
@@ -3742,13 +3684,11 @@ void
 ephy_window_set_location (EphyWindow *window,
 			  const char *address)
 {
-	EphyWindowPrivate *priv = window->priv;
+	if (window->updating_address) return;
 
-	if (priv->updating_address) return;
-
-	priv->updating_address = TRUE;
-	ephy_location_controller_set_address (priv->location_controller, address);
-	priv->updating_address = FALSE;
+	window->updating_address = TRUE;
+	ephy_location_controller_set_address (window->location_controller, address);
+	window->updating_address = FALSE;
 }
 
 /**
@@ -3765,7 +3705,7 @@ ephy_window_get_toolbar_action_group (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-	return window->priv->toolbar_action_group;
+	return window->toolbar_action_group;
 }
 
 /**
@@ -3781,7 +3721,7 @@ ephy_window_get_location_controller (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-	return window->priv->location_controller;
+	return window->location_controller;
 }
 
 /**
@@ -3843,7 +3783,7 @@ continue_window_close_after_modified_forms_check (ModifiedFormsData *data)
 {
 	gboolean should_close;
 
-	data->window->priv->checking_modified_forms = FALSE;
+	data->window->checking_modified_forms = FALSE;
 
 	if (data->modified_embed)
 	{
@@ -3854,9 +3794,9 @@ continue_window_close_after_modified_forms_check (ModifiedFormsData *data)
 			return;
 	}
 
-	data->window->priv->force_close = TRUE;
+	data->window->force_close = TRUE;
 	should_close = ephy_window_close (data->window);
-	data->window->priv->force_close = FALSE;
+	data->window->force_close = FALSE;
 	if (should_close)
 		gtk_widget_destroy (GTK_WIDGET (data->window));
 }
@@ -3890,12 +3830,12 @@ ephy_window_check_modified_forms (EphyWindow *window)
 	GList *tabs, *l;
 	ModifiedFormsData *data;
 
-	window->priv->checking_modified_forms = TRUE;
+	window->checking_modified_forms = TRUE;
 
 	data = g_slice_new0 (ModifiedFormsData);
 	data->window = window;
 	data->cancellable = g_cancellable_new ();
-	data->embeds_to_check = gtk_notebook_get_n_pages (window->priv->notebook);
+	data->embeds_to_check = gtk_notebook_get_n_pages (window->notebook);
 
 	tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
 	for (l = tabs; l != NULL; l = l->next)
@@ -3928,15 +3868,15 @@ ephy_window_close (EphyWindow *window)
 	if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
 				    EPHY_PREFS_LOCKDOWN_QUIT)) return FALSE;
 
-	if (window->priv->checking_modified_forms) {
+	if (window->checking_modified_forms) {
 		/* stop window close */
 		return FALSE;
 	}
 
-	if (!window->priv->force_close &&
+	if (!window->force_close &&
 	    g_settings_get_boolean (EPHY_SETTINGS_MAIN,
 				    EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA) &&
-	    gtk_notebook_get_n_pages (window->priv->notebook) > 0)
+	    gtk_notebook_get_n_pages (window->notebook) > 0)
 	{
 		ephy_window_check_modified_forms (window);
 		/* stop window close */
@@ -3969,5 +3909,5 @@ ephy_window_get_chrome (EphyWindow *window)
 {
 	g_return_val_if_fail (EPHY_IS_WINDOW (window), EPHY_WINDOW_CHROME_DEFAULT);
 
-	return window->priv->chrome;
+	return window->chrome;
 }

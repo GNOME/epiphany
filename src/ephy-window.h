@@ -24,12 +24,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_WINDOW	(ephy_window_get_type ())
-#define EPHY_WINDOW(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_WINDOW, EphyWindow))
-#define EPHY_WINDOW_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_WINDOW, EphyWindowClass))
-#define EPHY_IS_WINDOW(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_WINDOW))
-#define EPHY_IS_WINDOW_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_WINDOW))
-#define EPHY_WINDOW_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_WINDOW, EphyWindowClass))
+#define EPHY_TYPE_WINDOW (ephy_window_get_type ())
+
+G_DECLARE_FINAL_TYPE (EphyWindow, ephy_window, EPHY, WINDOW, GtkApplicationWindow)
 
 typedef enum
 {
@@ -39,25 +36,6 @@ typedef enum
         EPHY_WINDOW_CHROME_TABSBAR       = 1 << 3,
         EPHY_WINDOW_CHROME_DEFAULT       = (EPHY_WINDOW_CHROME_TOOLBAR | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_TABSBAR)
 } EphyWindowChrome;
-
-typedef struct _EphyWindowClass		EphyWindowClass;
-typedef struct _EphyWindow		EphyWindow;
-typedef struct _EphyWindowPrivate	EphyWindowPrivate;
-
-struct _EphyWindow
-{
-	GtkApplicationWindow parent;
-
-	/*< private >*/
-	EphyWindowPrivate *priv;
-};
-
-struct _EphyWindowClass
-{
-	GtkApplicationWindowClass parent_class;
-};
-
-GType		  ephy_window_get_type		  (void);
 
 EphyWindow	 *ephy_window_new		  (void);
 
