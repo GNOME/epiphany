@@ -54,7 +54,7 @@ struct _EphyNodeDbPrivate
 	GPtrArray *id_to_node;
 };
 
-static GObjectClass *parent_class = NULL;
+G_DEFINE_TYPE (EphyNodeDb, ephy_node_db, G_TYPE_OBJECT)
 
 static void
 ephy_node_db_get_property (GObject *object,
@@ -126,7 +126,7 @@ ephy_node_db_finalize (GObject *object)
 
 	g_free (db->priv->name);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (ephy_node_db_parent_class)->finalize (object);
 }
 
 /**
@@ -528,8 +528,6 @@ ephy_node_db_class_init (EphyNodeDbClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize = ephy_node_db_finalize;
 	object_class->set_property = ephy_node_db_set_property;
 	object_class->get_property = ephy_node_db_get_property;
@@ -551,32 +549,4 @@ ephy_node_db_class_init (EphyNodeDbClass *klass)
 	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
 	g_type_class_add_private (object_class, sizeof (EphyNodeDbPrivate));
-}
-
-GType
-ephy_node_db_get_type (void)
-{
-	static GType type = 0;
-
-	if (G_UNLIKELY (type == 0))
-	{
-		const GTypeInfo our_info =
-		{
-			sizeof (EphyNodeDbClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) ephy_node_db_class_init,
-			NULL,
-			NULL,
-			sizeof (EphyNodeDb),
-			0,
-			(GInstanceInitFunc) ephy_node_db_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EphyNodeDb",
-					       &our_info, 0);
-	}
-
-	return type;
 }
