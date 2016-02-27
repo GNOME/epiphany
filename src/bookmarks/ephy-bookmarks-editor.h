@@ -25,29 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_BOOKMARKS_EDITOR		(ephy_bookmarks_editor_get_type ())
-#define EPHY_BOOKMARKS_EDITOR(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_BOOKMARKS_EDITOR, EphyBookmarksEditor))
-#define EPHY_BOOKMARKS_EDITOR_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_BOOKMARKS_EDITOR, EphyBookmarksEditorClass))
-#define EPHY_IS_BOOKMARKS_EDITOR(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_BOOKMARKS_EDITOR))
-#define EPHY_IS_BOOKMARKS_EDITOR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_BOOKMARKS_EDITOR))
-#define EPHY_BOOKMARKS_EDITOR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_BOOKMARKS_EDITOR, EphyBookmarksEditorClass))
+#define EPHY_TYPE_BOOKMARKS_EDITOR (ephy_bookmarks_editor_get_type ())
 
-typedef struct _EphyBookmarksEditorPrivate EphyBookmarksEditorPrivate;
-
-typedef struct
-{
-	GtkWindow parent;
-
-	/*< private >*/
-	EphyBookmarksEditorPrivate *priv;
-} EphyBookmarksEditor;
-
-typedef struct
-{
-	GtkDialogClass parent;
-} EphyBookmarksEditorClass;
-
-GType		     ephy_bookmarks_editor_get_type (void);
+G_DECLARE_FINAL_TYPE (EphyBookmarksEditor, ephy_bookmarks_editor, EPHY, BOOKMARKS_EDITOR, GtkWindow)
 
 GtkWidget	    *ephy_bookmarks_editor_new        (EphyBookmarks *bookmarks);
 
