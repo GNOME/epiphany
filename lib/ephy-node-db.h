@@ -24,35 +24,13 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_NODE_DB	  (ephy_node_db_get_type ())
-#define EPHY_NODE_DB(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_NODE_DB, EphyNodeDb))
-#define EPHY_NODE_DB_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_NODE_DB, EphyNodeDbClass))
-#define EPHY_IS_NODE_DB(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_NODE_DB))
-#define EPHY_IS_NODE_DB_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NODE_DB))
-#define EPHY_NODE_DB_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NODE_DB, EphyNodeDbClass))
+#define EPHY_TYPE_NODE_DB (ephy_node_db_get_type ())
 
-typedef struct _EphyNodeDb EphyNodeDb;
-typedef struct _EphyNodeDbPrivate EphyNodeDbPrivate;
-
-struct _EphyNodeDb
-{
-	GObject parent;
-
-	/*< private >*/
-	EphyNodeDbPrivate *priv;
-};
-
-typedef struct
-{
-	GObjectClass parent;
-
-} EphyNodeDbClass;
-
-#include "ephy-node.h"
-
-GType         ephy_node_db_get_type		(void);
+G_DECLARE_FINAL_TYPE (EphyNodeDb, ephy_node_db, EPHY, NODE_DB, GObject)
 
 EphyNodeDb   *ephy_node_db_new			(const char *name);
+
+#include "ephy-node.h"
 
 gboolean      ephy_node_db_load_from_file	(EphyNodeDb *db,
 						 const char *xml_file,

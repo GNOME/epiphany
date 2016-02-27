@@ -42,10 +42,10 @@ enum
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-#define EPHY_NODE_DB_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_DB, EphyNodeDbPrivate))
-
-struct _EphyNodeDbPrivate
+struct _EphyNodeDb
 {
+	GObject parent_instance;
+
 	char *name;
 	gboolean immutable;
 
@@ -67,7 +67,7 @@ ephy_node_db_get_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_NAME:
-			g_value_set_string (value, db->priv->name);
+			g_value_set_string (value, db->name);
 			break;
 		case PROP_IMMUTABLE:
 			g_value_set_boolean (value, ephy_node_db_is_immutable (db));
@@ -88,7 +88,7 @@ ephy_node_db_set_property (GObject *object,
 	switch (prop_id)
 	{
 		case PROP_NAME:
-			db->priv->name = g_value_dup_string (value);
+			db->name = g_value_dup_string (value);
 			break;
 		case PROP_IMMUTABLE:
 			ephy_node_db_set_immutable (db, g_value_get_boolean (value));
@@ -108,13 +108,11 @@ ephy_node_db_free_func (EphyNode *node)
 static void
 ephy_node_db_init (EphyNodeDb *db)
 {
-	db->priv = EPHY_NODE_DB_GET_PRIVATE (db);
-
 	/* id to node */
-	db->priv->id_to_node = g_ptr_array_new_with_free_func ((GDestroyNotify)ephy_node_db_free_func);
+	db->id_to_node = g_ptr_array_new_with_free_func ((GDestroyNotify)ephy_node_db_free_func);
 
 	/* id factory */
-	db->priv->id_factory = RESERVED_IDS;
+	db->id_factory = RESERVED_IDS;
 }
 
 static void
@@ -122,9 +120,9 @@ ephy_node_db_finalize (GObject *object)
 {
 	EphyNodeDb *db = EPHY_NODE_DB (object);
 
-	g_ptr_array_free (db->priv->id_to_node, TRUE);
+	g_ptr_array_free (db->id_to_node, TRUE);
 
-	g_free (db->priv->name);
+	g_free (db->name);
 
 	G_OBJECT_CLASS (ephy_node_db_parent_class)->finalize (object);
 }
@@ -146,8 +144,6 @@ ephy_node_db_new (const char *name)
 					 "name", name,
 				         NULL));
 
-	g_return_val_if_fail (db->priv != NULL, NULL);
-
 	return db;
 }
 
@@ -156,8 +152,8 @@ node_from_id_real (EphyNodeDb *db, guint id)
 {
 	EphyNode *ret = NULL;
 
-	if (id < db->priv->id_to_node->len)
-		ret = g_ptr_array_index (db->priv->id_to_node, id);
+	if (id < db->id_to_node->len)
+		ret = g_ptr_array_index (db->id_to_node, id);
 
 	return ret;
 }
@@ -171,7 +167,7 @@ node_from_id_real (EphyNodeDb *db, guint id)
 const char *
 ephy_node_db_get_name (EphyNodeDb *db)
 {
-	return db->priv->name;
+	return db->name;
 }
 
 /**
@@ -183,7 +179,7 @@ ephy_node_db_get_name (EphyNodeDb *db)
 gboolean
 ephy_node_db_is_immutable (EphyNodeDb *db)
 {
-	return db->priv->immutable;
+	return db->immutable;
 }
 
 /**
@@ -197,7 +193,7 @@ ephy_node_db_is_immutable (EphyNodeDb *db)
 void
 ephy_node_db_set_immutable (EphyNodeDb *db, gboolean immutable)
 {
-	db->priv->immutable = immutable;
+	db->immutable = immutable;
 
 	g_object_notify_by_pspec (G_OBJECT (db), obj_properties[PROP_IMMUTABLE]);
 }
@@ -226,12 +222,12 @@ _ephy_node_db_new_id (EphyNodeDb *db)
 {
 	guint ret;
 
-	while (node_from_id_real (db, db->priv->id_factory) != NULL)
+	while (node_from_id_real (db, db->id_factory) != NULL)
 	{
-		db->priv->id_factory++;
+		db->id_factory++;
 	}
 
-	ret = db->priv->id_factory;
+	ret = db->id_factory;
 
 	return ret;
 }
@@ -242,20 +238,20 @@ _ephy_node_db_add_id (EphyNodeDb *db,
 		      EphyNode *node)
 {
 	/* resize array if needed */
-	if (id >= db->priv->id_to_node->len)
-		g_ptr_array_set_size (db->priv->id_to_node, id + 1);
+	if (id >= db->id_to_node->len)
+		g_ptr_array_set_size (db->id_to_node, id + 1);
 
-	g_ptr_array_index (db->priv->id_to_node, id) = node;
+	g_ptr_array_index (db->id_to_node, id) = node;
 }
 
 void
 _ephy_node_db_remove_id (EphyNodeDb *db,
 			 guint id)
 {
-	g_ptr_array_index (db->priv->id_to_node, id) = NULL;
+	g_ptr_array_index (db->id_to_node, id) = NULL;
 
 	/* reset id factory so we use the freed node id */
-	db->priv->id_factory = RESERVED_IDS;
+	db->id_factory = RESERVED_IDS;
 }
 
 /**
@@ -301,8 +297,8 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 		return FALSE;
 	}
 
-	was_immutable = db->priv->immutable;
-	db->priv->immutable = FALSE;
+	was_immutable = db->immutable;
+	db->immutable = FALSE;
 
 	ret = xmlTextReaderRead (reader);
 	while (ret == 1)
@@ -354,7 +350,7 @@ ephy_node_db_load_from_file (EphyNodeDb *db,
 
 	xmlFreeTextReader (reader);
 
-	db->priv->immutable = was_immutable;
+	db->immutable = was_immutable;
 
 	STOP_PROFILER ("loading node db")
 
@@ -547,6 +543,4 @@ ephy_node_db_class_init (EphyNodeDbClass *klass)
 		                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
 	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
-
-	g_type_class_add_private (object_class, sizeof (EphyNodeDbPrivate));
 }
