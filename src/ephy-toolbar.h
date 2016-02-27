@@ -26,29 +26,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_TOOLBAR            (ephy_toolbar_get_type())
-#define EPHY_TOOLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_TOOLBAR, EphyToolbar))
-#define EPHY_TOOLBAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  EPHY_TYPE_TOOLBAR, EphyToolbarClass))
-#define EPHY_IS_TOOLBAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_TOOLBAR))
-#define EPHY_IS_TOOLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  EPHY_TYPE_TOOLBAR))
-#define EPHY_TOOLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  EPHY_TYPE_TOOLBAR, EphyToolbarClass))
+#define EPHY_TYPE_TOOLBAR (ephy_toolbar_get_type())
 
-typedef struct _EphyToolbar EphyToolbar;
-typedef struct _EphyToolbarClass EphyToolbarClass;
-typedef struct _EphyToolbarPrivate EphyToolbarPrivate;
-
-struct _EphyToolbar {
-  GtkHeaderBar parent;
-
-  /*< private >*/
-  EphyToolbarPrivate *priv;
-};
-
-struct _EphyToolbarClass {
-  GtkHeaderBarClass parent_class;
-};
-
-GType      ephy_toolbar_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (EphyToolbar, ephy_toolbar, EPHY, TOOLBAR, GtkHeaderBar)
 
 GtkWidget *ephy_toolbar_new      (EphyWindow *window);
 

@@ -26,10 +26,6 @@
 #include "ephy-downloads-popover.h"
 #include "ephy-downloads-progress-icon.h"
 
-G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_HEADER_BAR)
-
-#define EPHY_TOOLBAR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_TOOLBAR, EphyToolbarPrivate))
-
 enum {
   PROP_0,
   PROP_WINDOW,
@@ -38,7 +34,9 @@ enum {
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
-struct _EphyToolbarPrivate {
+struct _EphyToolbar {
+  GtkHeaderBar parent_instance;
+
   EphyWindow *window;
   EphyTitleBox *title_box;
   GtkWidget *entry;
@@ -50,21 +48,21 @@ struct _EphyToolbarPrivate {
   GtkWidget *downloads_popover;
 };
 
+G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_HEADER_BAR)
+
 static void
 download_added_cb (EphyDownloadsManager *manager,
                    EphyDownload *download,
                    EphyToolbar *toolbar)
 {
-  EphyToolbarPrivate *priv = toolbar->priv;
-
-  if (!priv->downloads_popover) {
-    priv->downloads_popover = ephy_downloads_popover_new (priv->downloads_button);
-    gtk_menu_button_set_popover (GTK_MENU_BUTTON (priv->downloads_button),
-                                 priv->downloads_popover);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->downloads_button), TRUE);
+  if (!toolbar->downloads_popover) {
+    toolbar->downloads_popover = ephy_downloads_popover_new (toolbar->downloads_button);
+    gtk_menu_button_set_popover (GTK_MENU_BUTTON (toolbar->downloads_button),
+                                 toolbar->downloads_popover);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
   }
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->downloads_revealer), TRUE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->downloads_revealer), TRUE);
 }
 
 static void
@@ -73,14 +71,14 @@ download_removed_cb (EphyDownloadsManager *manager,
                      EphyToolbar *toolbar)
 {
   if (!ephy_downloads_manager_get_downloads (manager))
-    gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->priv->downloads_revealer), FALSE);
+    gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->downloads_revealer), FALSE);
 }
 
 static void
 downloads_estimated_progress_cb (EphyDownloadsManager *manager,
                                  EphyToolbar *toolbar)
 {
-  gtk_widget_queue_draw (gtk_button_get_image (GTK_BUTTON (toolbar->priv->downloads_button)));
+  gtk_widget_queue_draw (gtk_button_get_image (GTK_BUTTON (toolbar->downloads_button)));
 }
 
 static void
@@ -89,11 +87,11 @@ ephy_toolbar_set_property (GObject *object,
                            const GValue *value,
                            GParamSpec *pspec)
 {
-  EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
+  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
 
   switch (property_id) {
   case PROP_WINDOW:
-    priv->window = EPHY_WINDOW (g_value_get_object (value));
+    toolbar->window = EPHY_WINDOW (g_value_get_object (value));
     g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
     break;
   default:
@@ -107,11 +105,11 @@ ephy_toolbar_get_property (GObject *object,
                            GValue *value,
                            GParamSpec *pspec)
 {
-  EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
+  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
 
   switch (property_id) {
   case PROP_WINDOW:
-    g_value_set_object (value, priv->window);
+    g_value_set_object (value, toolbar->window);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -121,36 +119,33 @@ ephy_toolbar_get_property (GObject *object,
 static void
 sync_chromes_visibility (EphyToolbar *toolbar)
 {
-  EphyToolbarPrivate *priv = toolbar->priv;
   EphyWindowChrome chrome;
 
-  chrome = ephy_window_get_chrome (priv->window);
+  chrome = ephy_window_get_chrome (toolbar->window);
 
-  gtk_widget_set_visible (priv->navigation_box, chrome & EPHY_WINDOW_CHROME_TOOLBAR);
-  gtk_widget_set_visible (priv->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
-  gtk_widget_set_visible (priv->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
+  gtk_widget_set_visible (toolbar->navigation_box, chrome & EPHY_WINDOW_CHROME_TOOLBAR);
+  gtk_widget_set_visible (toolbar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
+  gtk_widget_set_visible (toolbar->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
 
 static void
 ephy_toolbar_constructed (GObject *object)
 {
-  EphyToolbarPrivate *priv = EPHY_TOOLBAR (object)->priv;
+  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
   GtkActionGroup *action_group;
   GtkAction *action;
   GtkUIManager *manager;
-  GtkWidget *toolbar, *box, *button, *menu;
+  GtkWidget *box, *button, *menu;
   EphyDownloadsManager *downloads_manager;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
 
-  toolbar = GTK_WIDGET (object);
-
-  g_signal_connect_swapped (priv->window, "notify::chrome",
+  g_signal_connect_swapped (toolbar->window, "notify::chrome",
                             G_CALLBACK (sync_chromes_visibility), toolbar);
 
   /* Back and Forward */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  priv->navigation_box = box;
+  toolbar->navigation_box = box;
 
   /* Back */
   button = ephy_middle_clickable_button_new ();
@@ -158,7 +153,7 @@ ephy_toolbar_constructed (GObject *object)
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  action_group = ephy_window_get_toolbar_action_group (priv->window);
+  action_group = ephy_window_get_toolbar_action_group (toolbar->window);
   action = gtk_action_group_get_action (action_group, "NavigationBack");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
                                       action);
@@ -199,7 +194,7 @@ ephy_toolbar_constructed (GObject *object)
 
   /* New Tab */
   button = gtk_button_new ();
-  priv->new_tab_button = button;
+  toolbar->new_tab_button = button;
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
   gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
@@ -212,17 +207,17 @@ ephy_toolbar_constructed (GObject *object)
 
 
   /* Location bar + Title */
-  priv->title_box = ephy_title_box_new (priv->window);
-  priv->entry = ephy_title_box_get_location_entry (priv->title_box);
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (toolbar), GTK_WIDGET (priv->title_box));
-  gtk_widget_show (GTK_WIDGET (priv->title_box));
+  toolbar->title_box = ephy_title_box_new (toolbar->window);
+  toolbar->entry = ephy_title_box_get_location_entry (toolbar->title_box);
+  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (toolbar), GTK_WIDGET (toolbar->title_box));
+  gtk_widget_show (GTK_WIDGET (toolbar->title_box));
 
   /* Page Menu */
   button = gtk_menu_button_new ();
-  priv->page_menu_button = button;
+  toolbar->page_menu_button = button;
   gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  manager = ephy_window_get_ui_manager (priv->window);
+  manager = ephy_window_get_ui_manager (toolbar->window);
   menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
   gtk_widget_set_halign (menu, GTK_ALIGN_END);
   gtk_menu_button_set_popup (GTK_MENU_BUTTON (button), menu);
@@ -231,21 +226,21 @@ ephy_toolbar_constructed (GObject *object)
   /* Downloads */
   downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
 
-  priv->downloads_revealer = gtk_revealer_new ();
-  gtk_revealer_set_transition_type (GTK_REVEALER (priv->downloads_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->downloads_revealer),
+  toolbar->downloads_revealer = gtk_revealer_new ();
+  gtk_revealer_set_transition_type (GTK_REVEALER (toolbar->downloads_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->downloads_revealer),
                                  ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
 
-  priv->downloads_button = gtk_menu_button_new ();
-  gtk_button_set_image (GTK_BUTTON (priv->downloads_button), ephy_downloads_progress_icon_new ());
-  gtk_widget_set_valign (priv->downloads_button, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (priv->downloads_revealer), priv->downloads_button);
-  gtk_widget_show (priv->downloads_button);
+  toolbar->downloads_button = gtk_menu_button_new ();
+  gtk_button_set_image (GTK_BUTTON (toolbar->downloads_button), ephy_downloads_progress_icon_new ());
+  gtk_widget_set_valign (toolbar->downloads_button, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (toolbar->downloads_revealer), toolbar->downloads_button);
+  gtk_widget_show (toolbar->downloads_button);
 
   if (ephy_downloads_manager_get_downloads (downloads_manager)) {
-    priv->downloads_popover = ephy_downloads_popover_new (priv->downloads_button);
-    gtk_menu_button_set_popover (GTK_MENU_BUTTON (priv->downloads_button),
-                                 priv->downloads_popover);
+    toolbar->downloads_popover = ephy_downloads_popover_new (toolbar->downloads_button);
+    gtk_menu_button_set_popover (GTK_MENU_BUTTON (toolbar->downloads_button),
+                                 toolbar->downloads_popover);
   }
 
   g_signal_connect_object (downloads_manager, "download-added",
@@ -258,8 +253,8 @@ ephy_toolbar_constructed (GObject *object)
                            G_CALLBACK (downloads_estimated_progress_cb),
                            object, 0);
 
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), priv->downloads_revealer);
-  gtk_widget_show (priv->downloads_revealer);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), toolbar->downloads_revealer);
+  gtk_widget_show (toolbar->downloads_revealer);
 }
 
 static void
@@ -281,14 +276,11 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
     g_object_class_install_properties (gobject_class,
                                        N_PROPERTIES,
                                        object_properties);
-
-    g_type_class_add_private (klass, sizeof (EphyToolbarPrivate));
 }
 
 static void
 ephy_toolbar_init (EphyToolbar *toolbar)
 {
-  toolbar->priv = EPHY_TOOLBAR_GET_PRIVATE (toolbar);
 }
 
 GtkWidget*
@@ -305,11 +297,11 @@ ephy_toolbar_new (EphyWindow *window)
 GtkWidget *
 ephy_toolbar_get_location_entry (EphyToolbar *toolbar)
 {
-  return toolbar->priv->entry;
+  return toolbar->entry;
 }
 
 EphyTitleBox *
 ephy_toolbar_get_title_box (EphyToolbar *toolbar)
 {
-  return toolbar->priv->title_box;
+  return toolbar->title_box;
 }
