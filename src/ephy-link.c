@@ -56,7 +56,7 @@ ephy_link_base_init (gpointer g_class)
 			("open-link",
 			 EPHY_TYPE_LINK,
 			 G_SIGNAL_RUN_LAST,
-			 G_STRUCT_OFFSET (EphyLinkIface, open_link),
+			 G_STRUCT_OFFSET (EphyLinkInterface, open_link),
 			 ephy_signal_accumulator_object, ephy_embed_get_type,
 			 g_cclosure_marshal_generic,
 			 GTK_TYPE_WIDGET /* Can't use an interface type here */,
@@ -78,7 +78,7 @@ ephy_link_get_type (void)
 	{
 		const GTypeInfo our_info =
 		{
-			sizeof (EphyLinkIface),
+			sizeof (EphyLinkInterface),
 			ephy_link_base_init,
 			NULL,
 		};

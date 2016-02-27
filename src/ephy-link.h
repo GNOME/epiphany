@@ -25,15 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_LINK			(ephy_link_get_type ())
-#define EPHY_LINK(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_LINK, EphyLink))
-#define EPHY_LINK_IFACE(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_LINK, EphyLinkIface))
-#define EPHY_IS_LINK(o)			(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_LINK))
-#define EPHY_IS_LINK_IFACE(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LINK))
-#define EPHY_LINK_GET_IFACE(inst)	(G_TYPE_INSTANCE_GET_INTERFACE ((inst), EPHY_TYPE_LINK, EphyLinkIface))
+#define EPHY_TYPE_LINK (ephy_link_get_type ())
 
-typedef struct _EphyLink	EphyLink;
-typedef struct _EphyLinkIface	EphyLinkIface;
+G_DECLARE_INTERFACE (EphyLink, ephy_link, EPHY, LINK, GObject)
 
 typedef enum
 {
@@ -46,7 +40,7 @@ typedef enum
 	EPHY_LINK_BOOKMARK	       = 1 << 6
 } EphyLinkFlags;
 
-struct _EphyLinkIface
+struct _EphyLinkInterface
 {
 	GTypeInterface base_iface;
 
@@ -56,8 +50,6 @@ struct _EphyLinkIface
 				   EphyEmbed *embed,
 				   EphyLinkFlags flags);
 };
-
-GType	 ephy_link_get_type		(void);
 
 EphyEmbed *ephy_link_open		(EphyLink *link,
 					 const char *address,

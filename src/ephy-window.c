@@ -621,7 +621,7 @@ ephy_window_open_link (EphyLink *link,
 }
 
 static void
-ephy_window_link_iface_init (EphyLinkIface *iface)
+ephy_window_link_iface_init (EphyLinkInterface *iface)
 {
 	iface->open_link = ephy_window_open_link;
 }
