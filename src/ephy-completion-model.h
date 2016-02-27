@@ -25,14 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_COMPLETION_MODEL         (ephy_completion_model_get_type ())
-#define EPHY_COMPLETION_MODEL(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_COMPLETION_MODEL, EphyCompletionModel))
-#define EPHY_COMPLETION_MODEL_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_COMPLETION_MODEL, EphyCompletionModelClass))
-#define EPHY_IS_COMPLETION_MODEL(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_COMPLETION_MODEL))
-#define EPHY_IS_COMPLETION_MODEL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_COMPLETION_MODEL))
-#define EPHY_COMPLETION_MODEL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_COMPLETION_MODEL, EphyCompletionModelClass))
+#define EPHY_TYPE_COMPLETION_MODEL (ephy_completion_model_get_type ())
 
-typedef struct _EphyCompletionModelPrivate EphyCompletionModelPrivate;
+G_DECLARE_FINAL_TYPE (EphyCompletionModel, ephy_completion_model, EPHY, COMPLETION_MODEL, GtkListStore)
 
 typedef enum
 {
@@ -45,21 +40,6 @@ typedef enum
 	EPHY_COMPLETION_FAVICON_COL,
 	N_COL
 } EphyCompletionColumn;
-
-typedef struct
-{
-	GtkListStore parent;
-
-	/*< private >*/
-	EphyCompletionModelPrivate *priv;
-} EphyCompletionModel;
-
-typedef struct
-{
-	GtkListStoreClass parent;
-} EphyCompletionModelClass;
-
-GType                ephy_completion_model_get_type	     (void);
 
 EphyCompletionModel *ephy_completion_model_new		     (EphyHistoryService *history_service,
                                                               EphyBookmarks *bookmarks);

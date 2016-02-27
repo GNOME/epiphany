@@ -35,13 +35,9 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *obj_properties[LAST_PROP];
+struct _EphyCompletionModel {
+  GtkListStore parent_instance;
 
-G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
-
-#define EPHY_COMPLETION_MODEL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_COMPLETION_MODEL, EphyCompletionModelPrivate))
-
-struct _EphyCompletionModelPrivate {
   EphyHistoryService *history_service;
   GCancellable *cancellable;
 
@@ -49,6 +45,10 @@ struct _EphyCompletionModelPrivate {
   EphyNode *smart_bookmarks;
   GSList *search_terms;
 };
+
+static GParamSpec *obj_properties[LAST_PROP];
+
+G_DEFINE_TYPE (EphyCompletionModel, ephy_completion_model, GTK_TYPE_LIST_STORE)
 
 static void
 ephy_completion_model_constructed (GObject *object)
@@ -80,13 +80,13 @@ ephy_completion_model_set_property (GObject *object, guint property_id, const GV
 
   switch (property_id) {
   case PROP_HISTORY_SERVICE:
-    self->priv->history_service = EPHY_HISTORY_SERVICE (g_value_get_pointer (value));
+    self->history_service = EPHY_HISTORY_SERVICE (g_value_get_pointer (value));
     break;
   case PROP_BOOKMARKS: {
     EphyBookmarks *bookmarks = EPHY_BOOKMARKS (g_value_get_pointer (value));
 
-    self->priv->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks);
-    self->priv->smart_bookmarks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
+    self->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks);
+    self->smart_bookmarks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
     }
     break;
   default:
@@ -98,16 +98,16 @@ ephy_completion_model_set_property (GObject *object, guint property_id, const GV
 static void
 ephy_completion_model_finalize (GObject *object)
 {
-  EphyCompletionModelPrivate *priv = EPHY_COMPLETION_MODEL (object)->priv;
+  EphyCompletionModel *model = EPHY_COMPLETION_MODEL (object);
 
-  if (priv->search_terms) {
-    free_search_terms (priv->search_terms);
-    priv->search_terms = NULL;
+  if (model->search_terms) {
+    free_search_terms (model->search_terms);
+    model->search_terms = NULL;
   }
 
-  if (priv->cancellable) {
-    g_cancellable_cancel (priv->cancellable);
-    g_clear_object (&priv->cancellable);
+  if (model->cancellable) {
+    g_cancellable_cancel (model->cancellable);
+    g_clear_object (&model->cancellable);
   }
 
   G_OBJECT_CLASS (ephy_completion_model_parent_class)->finalize (object);
@@ -135,14 +135,11 @@ ephy_completion_model_class_init (EphyCompletionModelClass *klass)
                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
-
-  g_type_class_add_private (object_class, sizeof (EphyCompletionModelPrivate));
 }
 
 static void
 ephy_completion_model_init (EphyCompletionModel *model)
 {
-  model->priv = EPHY_COMPLETION_MODEL_GET_PRIVATE (model);
 }
 
 static gboolean
@@ -299,13 +296,12 @@ should_add_bookmark_to_model (EphyCompletionModel *model,
                               const char *keywords)
 {
   gboolean ret = TRUE;
-  EphyCompletionModelPrivate *priv = model->priv;
 
-  if (priv->search_terms) {
+  if (model->search_terms) {
     GSList *iter;
     GRegex *current = NULL;
 
-    for (iter = priv->search_terms; iter != NULL; iter = iter->next) {
+    for (iter = model->search_terms; iter != NULL; iter = iter->next) {
       current = (GRegex*)iter->data;
       if ((!g_regex_match (current, title ? title : "", G_REGEX_MATCH_NOTEMPTY, NULL)) &&
           (!g_regex_match (current, location ? location : "", G_REGEX_MATCH_NOTEMPTY, NULL)) &&
@@ -413,14 +409,13 @@ query_completed_cb (EphyHistoryService *service,
                     FindURLsData *user_data)
 {
   EphyCompletionModel *model = user_data->model;
-  EphyCompletionModelPrivate *priv = model->priv;
   GList *p, *urls;
   GPtrArray *children;
   GSList *list = NULL;
   guint i;
 
   /* Bookmarks */
-  children = ephy_node_get_children (priv->bookmarks);
+  children = ephy_node_get_children (model->bookmarks);
 
   /* FIXME: perhaps this could be done in a service thread? There
    * should never be a ton of bookmarks, but seems a bit cleaner and
@@ -434,7 +429,7 @@ query_completed_cb (EphyHistoryService *service,
     location = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_LOCATION);
     title = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_TITLE);
     keywords = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_KEYWORDS);
-    is_smart = ephy_node_has_child (priv->smart_bookmarks, kid);
+    is_smart = ephy_node_has_child (model->smart_bookmarks, kid);
 
     /* Smart bookmarks are already added to the completion menu as completion actions */
     if (!is_smart && should_add_bookmark_to_model (model, user_data->search_string,
@@ -466,7 +461,7 @@ query_completed_cb (EphyHistoryService *service,
   g_slice_free (FindURLsData, user_data);
   g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
   g_slist_free_full (list, (GDestroyNotify)free_potential_row);
-  g_clear_object (&priv->cancellable);
+  g_clear_object (&model->cancellable);
 }
 
 static void
@@ -481,11 +476,10 @@ update_search_terms (EphyCompletionModel *model,
   GRegex *quote_regex;
   gint count;
   gboolean inside_quotes = FALSE;
-  EphyCompletionModelPrivate *priv = model->priv;
 
-  if (priv->search_terms) {
-    free_search_terms (priv->search_terms);
-    priv->search_terms = NULL;
+  if (model->search_terms) {
+    free_search_terms (model->search_terms);
+    model->search_terms = NULL;
   }
 
   quote_regex = g_regex_new ("\"", G_REGEX_OPTIMIZE,
@@ -537,7 +531,7 @@ update_search_terms (EphyCompletionModel *model,
         term_regex = g_regex_new (term,
                                   G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
                                   G_REGEX_MATCH_NOTEMPTY, NULL);
-        priv->search_terms = g_slist_append (priv->search_terms, term_regex);
+        model->search_terms = g_slist_append (model->search_terms, term_regex);
       }
       g_free (term);
 
@@ -558,7 +552,6 @@ ephy_completion_model_update_for_string (EphyCompletionModel *model,
                                          EphyHistoryJobCallback callback,
                                          gpointer data)
 {
-  EphyCompletionModelPrivate *priv;
   char **strings;
   int i;
   GList *query = NULL;
@@ -566,8 +559,6 @@ ephy_completion_model_update_for_string (EphyCompletionModel *model,
 
   g_return_if_fail (EPHY_IS_COMPLETION_MODEL (model));
   g_return_if_fail (search_string != NULL);
-
-  priv = model->priv;
 
   /* Split the search string. */
   strings = g_strsplit (search_string, " ", -1);
@@ -583,18 +574,18 @@ ephy_completion_model_update_for_string (EphyCompletionModel *model,
   user_data->callback = callback;
   user_data->user_data = data;
 
-  if (priv->cancellable) {
-    g_cancellable_cancel (priv->cancellable);
-    g_object_unref (priv->cancellable);
+  if (model->cancellable) {
+    g_cancellable_cancel (model->cancellable);
+    g_object_unref (model->cancellable);
   }
-  priv->cancellable = g_cancellable_new ();
+  model->cancellable = g_cancellable_new ();
 
-  ephy_history_service_find_urls (priv->history_service,
+  ephy_history_service_find_urls (model->history_service,
                                   0, 0,
                                   MAX_COMPLETION_HISTORY_URLS, 0,
                                   query,
                                   EPHY_HISTORY_SORT_MOST_VISITED,
-                                  priv->cancellable,
+                                  model->cancellable,
                                   (EphyHistoryJobCallback)query_completed_cb,
                                   user_data);
 }
