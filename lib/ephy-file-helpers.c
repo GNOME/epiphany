@@ -330,7 +330,16 @@ ephy_file_helpers_init (const char *profile_dir,
 
 	if (profile_dir != NULL && !steal_data_from_profile)
 	{
-		dot_dir = g_strdup (profile_dir);
+		if (g_path_is_absolute (profile_dir))
+		{
+			dot_dir = g_strdup (profile_dir);
+		}
+		else
+		{
+			GFile *file = g_file_new_for_path (profile_dir);
+			dot_dir = g_file_get_path (file);
+			g_object_unref (file);
+		}
 	}
 	else if (private_profile)
 	{
@@ -348,7 +357,8 @@ ephy_file_helpers_init (const char *profile_dir,
 					    "epiphany",
 					    NULL);
 	}
-	else
+
+	if (dot_dir == NULL)
 	{
 		dot_dir = ephy_default_dot_dir ();
 		is_default_dot_dir = TRUE;
