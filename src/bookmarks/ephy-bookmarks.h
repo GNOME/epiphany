@@ -30,16 +30,9 @@ G_BEGIN_DECLS
  * in default-bookmarks.rdf. */
 #define DEFAULT_SMART_BOOKMARK_TEXT	_("Search the web")
 
-#define EPHY_TYPE_BOOKMARKS		(ephy_bookmarks_get_type ())
-#define EPHY_BOOKMARKS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_BOOKMARKS, EphyBookmarks))
-#define EPHY_BOOKMARKS_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_BOOKMARKS, EphyBookmarksClass))
-#define EPHY_IS_BOOKMARKS(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_BOOKMARKS))
-#define EPHY_IS_BOOKMARKS_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_BOOKMARKS))
-#define EPHY_BOOKMARKS_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_BOOKMARKS, EphyBookmarksClass))
+#define EPHY_TYPE_BOOKMARKS (ephy_bookmarks_get_type ())
 
-typedef struct _EphyBookmarksClass	EphyBookmarksClass;
-typedef struct _EphyBookmarks		EphyBookmarks;
-typedef struct _EphyBookmarksPrivate	EphyBookmarksPrivate;
+G_DECLARE_FINAL_TYPE (EphyBookmarks, ephy_bookmarks, EPHY, BOOKMARKS, GObject)
 
 typedef enum
 {
@@ -53,21 +46,6 @@ typedef enum
 	EPHY_NODE_BMK_PROP_SERVICE_ID	= 14,
 	EPHY_NODE_BMK_PROP_IMMUTABLE	= 15
 } EphyBookmarkProperty;
-
-struct _EphyBookmarks
-{
-	GObject parent;
-
-	/*< private >*/
-	EphyBookmarksPrivate *priv;
-};
-
-struct _EphyBookmarksClass
-{
-	GObjectClass parent_class;
-};
-
-GType		  ephy_bookmarks_get_type		(void);
 
 EphyBookmarks    *ephy_bookmarks_new			(void);
 
