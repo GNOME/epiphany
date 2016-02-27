@@ -45,8 +45,6 @@ typedef struct
 typedef struct
 {
 	GObjectClass parent;
-
-	void (*changed) (EphyNodeFilter *filter);
 } EphyNodeFilterClass;
 
 typedef enum

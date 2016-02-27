@@ -82,9 +82,7 @@ ephy_node_filter_class_init (EphyNodeFilterClass *klass)
 		g_signal_new ("changed",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (EphyNodeFilterClass, changed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
+			      0, NULL, NULL, NULL,
 			      G_TYPE_NONE,
 			      0);
 
