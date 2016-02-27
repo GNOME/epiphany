@@ -24,31 +24,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_PREFS_DIALOG		(prefs_dialog_get_type ())
-#define EPHY_PREFS_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_PREFS_DIALOG, PrefsDialog))
-#define EPHY_PREFS_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_PREFS_DIALOG, PrefsDialogClass))
-#define EPHY_IS_PREFS_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_PREFS_DIALOG))
-#define EPHY_IS_PREFS_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_PREFS_DIALOG))
-#define EPHY_PREFS_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_PREFS_DIALOG, PrefsDialogClass))
+#define EPHY_TYPE_PREFS_DIALOG (prefs_dialog_get_type ())
 
-typedef struct PrefsDialog		PrefsDialog;
-typedef struct PrefsDialogClass		PrefsDialogClass;
-typedef struct PrefsDialogPrivate	PrefsDialogPrivate;
-
-struct PrefsDialog
-{
-        GtkDialog parent;
-
-	/*< private >*/
-        PrefsDialogPrivate *priv;
-};
-
-struct PrefsDialogClass
-{
-        GtkDialogClass parent_class;
-};
-
-GType         prefs_dialog_get_type           (void);
+G_DECLARE_FINAL_TYPE (PrefsDialog, prefs_dialog, EPHY, PREFS_DIALOG, GtkDialog)
 
 G_END_DECLS
 
