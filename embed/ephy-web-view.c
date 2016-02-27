@@ -650,11 +650,6 @@ icon_changed_cb (EphyWebView *view,
                  GParamSpec *pspec,
                  gpointer user_data)
 {
-  if (view->snapshot_timeout_id == 0) {
-    view->snapshot_timeout_id = g_timeout_add_full (G_PRIORITY_LOW, 0,
-                                                          (GSourceFunc)web_view_check_snapshot,
-                                                          view, NULL);
-  }
   _ephy_web_view_update_icon (view);
 }
 
@@ -1527,8 +1522,8 @@ load_changed_cb (WebKitWebView *web_view,
     if (!ephy_web_view_is_history_frozen (view) &&
         ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
       if (!ephy_snapshot_service_lookup_snapshot_path (ephy_snapshot_service_get_default (), webkit_web_view_get_uri (web_view))) {
-        /* If the snapshot check hasn't been scheduled already by the favicon callback,
-         * check the snapshot if we don't get a favicon in 1 second
+        /* FIXME: The 1s delay is a workaround to allow time to render the page and get a favicon.
+         * https://bugzilla.gnome.org/show_bug.cgi?id=761065
          */
         if (view->snapshot_timeout_id == 0) {
           view->snapshot_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_LOW, 1,
