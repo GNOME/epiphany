@@ -589,11 +589,16 @@ got_snapshot_path_cb (EphySnapshotService *service,
                       GetSnapshotPathAsyncData *data)
 {
   char *snapshot;
+  GError *error = NULL;
 
-  snapshot = ephy_snapshot_service_get_snapshot_path_finish (service, result, NULL);
+  snapshot = ephy_snapshot_service_get_snapshot_path_finish (service, result, &error);
   if (snapshot) {
     ephy_embed_shell_set_thumbnail_path (ephy_embed_shell_get_default (), data->url, data->mtime, snapshot);
     g_free (snapshot);
+  } else {
+    /* Bad luck, not something to warn about. */
+    g_info ("Failed to get snapshot for URL %s: %s", data->url, error->message);
+    g_error_free (error);
   }
   g_free (data->url);
   g_free (data);
