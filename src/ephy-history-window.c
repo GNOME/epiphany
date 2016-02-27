@@ -40,8 +40,10 @@
 /* 3/5 of gdkframeclockidle.c's FRAME_INTERVAL (16667 microsecs) */
 #define GTK_TREE_VIEW_TIME_MS_PER_IDLE 10
 
-struct _EphyHistoryWindowPrivate
+struct _EphyHistoryWindow
 {
+	GtkDialog parent_instance;
+
 	EphyHistoryService *history_service;
 	GCancellable *cancellable;
 
@@ -70,7 +72,7 @@ struct _EphyHistoryWindowPrivate
 	GtkWidget *confirmation_dialog;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (EphyHistoryWindow, ephy_history_window, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (EphyHistoryWindow, ephy_history_window, GTK_TYPE_DIALOG)
 
 enum
 {
@@ -95,9 +97,9 @@ add_urls_source (EphyHistoryWindow *self)
 	GTimer *timer;
 	GList *element;
 
-	if (self->priv->urls == NULL)
+	if (self->urls == NULL)
 	{
-		self->priv->sorter_source = 0;
+		self->sorter_source = 0;
 		return G_SOURCE_REMOVE;
 	}
 
@@ -105,19 +107,19 @@ add_urls_source (EphyHistoryWindow *self)
 	g_timer_start (timer);
 
 	do {
-		element = self->priv->urls;
+		element = self->urls;
 		url = element->data;
-		gtk_list_store_insert_with_values (GTK_LIST_STORE (self->priv->liststore),
+		gtk_list_store_insert_with_values (GTK_LIST_STORE (self->liststore),
 						   NULL, G_MAXINT,
 						   COLUMN_DATE, url->last_visit_time,
 						   COLUMN_NAME, url->title,
 						   COLUMN_LOCATION, url->url,
 						   -1);
-		self->priv->urls = g_list_remove_link (self->priv->urls, element);
+		self->urls = g_list_remove_link (self->urls, element);
 		ephy_history_url_free (url);
 		g_list_free_1 (element);
 
-	} while (self->priv->urls &&
+	} while (self->urls &&
 		 g_timer_elapsed (timer, NULL) < GTK_TREE_VIEW_TIME_MS_PER_IDLE / 1000.);
 
 	g_timer_destroy (timer);
@@ -137,17 +139,17 @@ on_find_urls_cb (gpointer service,
 	if (success != TRUE)
 		return;
 
-	self->priv->urls = (GList *)result_data;
+	self->urls = (GList *)result_data;
 
-	gtk_tree_view_set_model (GTK_TREE_VIEW (self->priv->treeview), NULL);
-	gtk_list_store_clear (GTK_LIST_STORE (self->priv->liststore));
-	gtk_tree_view_set_model (GTK_TREE_VIEW (self->priv->treeview), GTK_TREE_MODEL (self->priv->liststore));
+	gtk_tree_view_set_model (GTK_TREE_VIEW (self->treeview), NULL);
+	gtk_list_store_clear (GTK_LIST_STORE (self->liststore));
+	gtk_tree_view_set_model (GTK_TREE_VIEW (self->treeview), GTK_TREE_MODEL (self->liststore));
 
-	column = gtk_tree_view_get_column (GTK_TREE_VIEW (self->priv->treeview), self->priv->sort_column);
-	gtk_tree_view_column_set_sort_order (column, self->priv->sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
+	column = gtk_tree_view_get_column (GTK_TREE_VIEW (self->treeview), self->sort_column);
+	gtk_tree_view_column_set_sort_order (column, self->sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
 	gtk_tree_view_column_set_sort_indicator (column, TRUE);
 
-	self->priv->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
+	self->sorter_source = g_idle_add ((GSourceFunc)add_urls_source, self);
 
 }
 
@@ -157,10 +159,10 @@ substrings_filter (EphyHistoryWindow *self)
 	char **tokens, **p;
 	GList *substrings = NULL;
 
-	if (self->priv->search_text == NULL)
+	if (self->search_text == NULL)
 		return NULL;
 
-	tokens = p = g_strsplit (self->priv->search_text, " ", -1);
+	tokens = p = g_strsplit (self->search_text, " ", -1);
 
 	while (*p) {
 		substrings = g_list_prepend (substrings, *p++);
@@ -173,16 +175,16 @@ substrings_filter (EphyHistoryWindow *self)
 static void
 remove_pending_sorter_source (EphyHistoryWindow *self) {
 
-	if (self->priv->sorter_source != 0)
+	if (self->sorter_source != 0)
 	{
-		g_source_remove (self->priv->sorter_source);
-		self->priv->sorter_source = 0;
+		g_source_remove (self->sorter_source);
+		self->sorter_source = 0;
 	}
 
-	if (self->priv->urls != NULL)
+	if (self->urls != NULL)
 	{
-		g_list_free_full (self->priv->urls, (GDestroyNotify)ephy_history_url_free);
-		self->priv->urls = NULL;
+		g_list_free_full (self->urls, (GDestroyNotify)ephy_history_url_free);
+		self->urls = NULL;
 	}
 }
 
@@ -197,16 +199,16 @@ filter_now (EphyHistoryWindow *self)
 
 	from = to = -1; /* all */
 
-	switch (self->priv->sort_column)
+	switch (self->sort_column)
 	{
 	case COLUMN_DATE:
-		type = self->priv->sort_ascending ? EPHY_HISTORY_SORT_LEAST_RECENTLY_VISITED : EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED;
+		type = self->sort_ascending ? EPHY_HISTORY_SORT_LEAST_RECENTLY_VISITED : EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED;
 		break;
 	case COLUMN_NAME:
-		type = self->priv->sort_ascending ? EPHY_HISTORY_SORT_TITLE_ASCENDING : EPHY_HISTORY_SORT_TITLE_DESCENDING;
+		type = self->sort_ascending ? EPHY_HISTORY_SORT_TITLE_ASCENDING : EPHY_HISTORY_SORT_TITLE_DESCENDING;
 		break;
 	case COLUMN_LOCATION:
-		type = self->priv->sort_ascending ? EPHY_HISTORY_SORT_URL_ASCENDING : EPHY_HISTORY_SORT_URL_DESCENDING;
+		type = self->sort_ascending ? EPHY_HISTORY_SORT_URL_ASCENDING : EPHY_HISTORY_SORT_URL_DESCENDING;
 		break;
 	default:
 		type = EPHY_HISTORY_SORT_MOST_RECENTLY_VISITED;
@@ -214,12 +216,12 @@ filter_now (EphyHistoryWindow *self)
 
 	remove_pending_sorter_source (self);
 
-	ephy_history_service_find_urls (self->priv->history_service,
+	ephy_history_service_find_urls (self->history_service,
 					from, to,
 					NUM_RESULTS_LIMIT, 0,
 					substrings,
 					type,
-					self->priv->cancellable,
+					self->cancellable,
 					(EphyHistoryJobCallback)on_find_urls_cb, self);
 }
 
@@ -232,7 +234,7 @@ confirmation_dialog_response_cb (GtkWidget *dialog,
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		ephy_history_service_clear (self->priv->history_service,
+		ephy_history_service_clear (self->history_service,
 					    NULL, NULL, NULL);
 		filter_now (self);
 	}
@@ -278,25 +280,25 @@ forget_all (GSimpleAction     *action,
 {
 	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
 
-	if (self->priv->confirmation_dialog == NULL)
+	if (self->confirmation_dialog == NULL)
 	{
 		GtkWidget **confirmation_dialog;
 
-		self->priv->confirmation_dialog = confirmation_dialog_construct (self);
-		confirmation_dialog = &self->priv->confirmation_dialog;
-		g_object_add_weak_pointer (G_OBJECT (self->priv->confirmation_dialog),
+		self->confirmation_dialog = confirmation_dialog_construct (self);
+		confirmation_dialog = &self->confirmation_dialog;
+		g_object_add_weak_pointer (G_OBJECT (self->confirmation_dialog),
 					   (gpointer *) confirmation_dialog);
 	}
 
-	gtk_widget_show (self->priv->confirmation_dialog);
+	gtk_widget_show (self->confirmation_dialog);
 }
 
 static GtkWidget *
 get_target_window (EphyHistoryWindow *self)
 {
-	if (self->priv->window)
+	if (self->window)
 	{
-		return self->priv->window;
+		return self->window;
 	}
 	else
 	{
@@ -352,7 +354,7 @@ get_selection (EphyHistoryWindow *self)
 {
 	GList *list = NULL;
 
-	gtk_tree_selection_selected_foreach (self->priv->tree_selection,
+	gtk_tree_selection_selected_foreach (self->tree_selection,
 					     (GtkTreeSelectionForeachFunc) get_selection_foreach,
 					     &list);
 
@@ -365,7 +367,7 @@ delete_selected (EphyHistoryWindow *self)
 	GList *selected;
 
 	selected = get_selection (self);
-	ephy_history_service_delete_urls (self->priv->history_service, selected, self->priv->cancellable,
+	ephy_history_service_delete_urls (self->history_service, selected, self->cancellable,
 					  (EphyHistoryJobCallback)on_browse_history_deleted_cb, self);
 }
 
@@ -486,13 +488,13 @@ on_treeview_button_press_event (GtkWidget         *widget,
 		int n;
 		GtkWidget *menu;
 
-		n = gtk_tree_selection_count_selected_rows (self->priv->tree_selection);
+		n = gtk_tree_selection_count_selected_rows (self->tree_selection);
 		if (n <= 0)
 			return FALSE;
 
-		update_popup_menu_actions (self->priv->action_group, (n == 1));
+		update_popup_menu_actions (self->action_group, (n == 1));
 
-		menu = gtk_menu_new_from_model (self->priv->treeview_popup_menu_model);
+		menu = gtk_menu_new_from_model (self->treeview_popup_menu_model);
 		gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (self), NULL);
 		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, event->button, event->time);
 		return TRUE;
@@ -529,8 +531,8 @@ on_search_entry_changed (GtkSearchEntry *entry,
 	const char *text;
 
 	text = gtk_entry_get_text (GTK_ENTRY (entry));
-	g_free (self->priv->search_text);
-	self->priv->search_text = g_strdup (text);
+	g_free (self->search_text);
+	self->search_text = g_strdup (text);
 
 	filter_now (self);
 }
@@ -553,7 +555,7 @@ static void
 on_treeview_selection_changed (GtkTreeSelection *selection,
 			       EphyHistoryWindow *self)
 {
-	update_selection_actions (self->priv->action_group,
+	update_selection_actions (self->action_group,
 	                          gtk_tree_selection_count_selected_rows (selection) > 0);
 }
 
@@ -564,20 +566,20 @@ on_treeview_column_clicked_event (GtkTreeViewColumn *column,
 	GtkTreeViewColumn *previous_sortby;
 	gint new_sort_column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (column), "column"));
 
-	if (new_sort_column == self->priv->sort_column)
+	if (new_sort_column == self->sort_column)
 	{
-		self->priv->sort_ascending = !(self->priv->sort_ascending);
+		self->sort_ascending = !(self->sort_ascending);
 	}
 	else
 	{
-		previous_sortby = gtk_tree_view_get_column (GTK_TREE_VIEW (self->priv->treeview), self->priv->sort_column);
+		previous_sortby = gtk_tree_view_get_column (GTK_TREE_VIEW (self->treeview), self->sort_column);
 		gtk_tree_view_column_set_sort_indicator (previous_sortby, FALSE);
 
-		self->priv->sort_column = new_sort_column;
-		self->priv->sort_ascending = self->priv->sort_column == COLUMN_DATE ? FALSE : TRUE;
+		self->sort_column = new_sort_column;
+		self->sort_ascending = self->sort_column == COLUMN_DATE ? FALSE : TRUE;
 	}
 
-	gtk_tree_view_column_set_sort_order (column, self->priv->sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
+	gtk_tree_view_column_set_sort_order (column, self->sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
 	gtk_tree_view_column_set_sort_indicator (column, TRUE);
 	filter_now (self);
 }
@@ -595,19 +597,19 @@ static void
 set_history_service (EphyHistoryWindow *self,
 		     EphyHistoryService *history_service)
 {
-	if (history_service == self->priv->history_service)
+	if (history_service == self->history_service)
 		return;
 
-	if (self->priv->history_service != NULL) {
-		g_signal_handlers_disconnect_by_func (self->priv->history_service,
+	if (self->history_service != NULL) {
+		g_signal_handlers_disconnect_by_func (self->history_service,
 						      on_urls_visited_cb,
 						      self);
-		g_clear_object (&self->priv->history_service);
+		g_clear_object (&self->history_service);
 	}
 
 	if (history_service != NULL) {
-		self->priv->history_service = g_object_ref (history_service);
-		g_signal_connect_after (self->priv->history_service,
+		self->history_service = g_object_ref (history_service);
+		g_signal_connect_after (self->history_service,
 					"urls-visited", G_CALLBACK (on_urls_visited_cb),
 					self);
 	}
@@ -645,7 +647,7 @@ ephy_history_window_get_property (GObject *object,
 	switch (prop_id)
 	{
 	case PROP_HISTORY_SERVICE:
-		g_value_set_object (value, self->priv->history_service);
+		g_value_set_object (value, self->history_service);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -658,20 +660,20 @@ ephy_history_window_dispose (GObject *object)
 {
 	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (object);
 
-	g_free (self->priv->search_text);
-	self->priv->search_text = NULL;
+	g_free (self->search_text);
+	self->search_text = NULL;
 
-	if (self->priv->cancellable)
+	if (self->cancellable)
 	{
-		g_cancellable_cancel (self->priv->cancellable);
-		g_clear_object (&self->priv->cancellable);
+		g_cancellable_cancel (self->cancellable);
+		g_clear_object (&self->cancellable);
 	}
 
-	if (self->priv->history_service != NULL)
-		g_signal_handlers_disconnect_by_func (self->priv->history_service,
+	if (self->history_service != NULL)
+		g_signal_handlers_disconnect_by_func (self->history_service,
 						      on_urls_visited_cb,
 						      self);
-	g_clear_object (&self->priv->history_service);
+	g_clear_object (&self->history_service);
 
 	remove_pending_sorter_source (self);
 
@@ -683,11 +685,11 @@ ephy_history_window_finalize (GObject *object)
 {
 	EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (object);
 
-	if (self->priv->window)
+	if (self->window)
 	{
-		GtkWidget **window = &self->priv->window;
+		GtkWidget **window = &self->window;
 		g_object_remove_weak_pointer
-			(G_OBJECT(self->priv->window),
+			(G_OBJECT(self->window),
 			 (gpointer *)window);
 	}
 
@@ -717,15 +719,15 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 
 	gtk_widget_class_set_template_from_resource (widget_class,
 	                                             "/org/gnome/epiphany/history-dialog.ui");
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, liststore);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, treeview);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, tree_selection);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_column);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, name_column);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_column);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, date_renderer);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, location_renderer);
-	gtk_widget_class_bind_template_child_private (widget_class, EphyHistoryWindow, treeview_popup_menu_model);
+	gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, liststore);
+	gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, treeview);
+	gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, tree_selection);
+	gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, date_column);
+	gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, name_column);
+	gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, location_column);
+	gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, date_renderer);
+	gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, location_renderer);
+	gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, treeview_popup_menu_model);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_row_activated);
 	gtk_widget_class_bind_template_callback (widget_class, on_treeview_key_press_event);
@@ -817,39 +819,38 @@ create_action_group (EphyHistoryWindow *self)
 static void
 ephy_history_window_init (EphyHistoryWindow *self)
 {
-	self->priv = ephy_history_window_get_instance_private (self);
 	gtk_widget_init_template (GTK_WIDGET (self));
 
-	self->priv->cancellable = g_cancellable_new ();
+	self->cancellable = g_cancellable_new ();
 
-	self->priv->urls = NULL;
-	self->priv->sort_ascending = FALSE;
-	self->priv->sort_column = COLUMN_DATE;
-	self->priv->sorter_source = 0;
+	self->urls = NULL;
+	self->sort_ascending = FALSE;
+	self->sort_column = COLUMN_DATE;
+	self->sorter_source = 0;
 
 	ephy_gui_ensure_window_group (GTK_WINDOW (self));
 
-	g_object_set_data (G_OBJECT (self->priv->date_column),
+	g_object_set_data (G_OBJECT (self->date_column),
 			   "column", GINT_TO_POINTER (COLUMN_DATE));
-	g_object_set_data (G_OBJECT (self->priv->name_column),
+	g_object_set_data (G_OBJECT (self->name_column),
 			   "column", GINT_TO_POINTER (COLUMN_NAME));
-	g_object_set_data (G_OBJECT (self->priv->location_column),
+	g_object_set_data (G_OBJECT (self->location_column),
 			   "column", GINT_TO_POINTER (COLUMN_LOCATION));
 
-	gtk_tree_view_column_set_cell_data_func (GTK_TREE_VIEW_COLUMN (self->priv->date_column),
-						 GTK_CELL_RENDERER (self->priv->date_renderer),
+	gtk_tree_view_column_set_cell_data_func (GTK_TREE_VIEW_COLUMN (self->date_column),
+						 GTK_CELL_RENDERER (self->date_renderer),
 						 (GtkTreeCellDataFunc) convert_date_data_func,
 						 GINT_TO_POINTER (COLUMN_DATE),
 						 NULL);
 
-	gtk_tree_view_column_set_cell_data_func (GTK_TREE_VIEW_COLUMN (self->priv->location_column),
-						 GTK_CELL_RENDERER (self->priv->location_renderer),
+	gtk_tree_view_column_set_cell_data_func (GTK_TREE_VIEW_COLUMN (self->location_column),
+						 GTK_CELL_RENDERER (self->location_renderer),
 						 (GtkTreeCellDataFunc) convert_location_data_func,
 						 GINT_TO_POINTER (COLUMN_LOCATION),
 						 NULL);
 
-	self->priv->action_group = create_action_group (self);
-	gtk_widget_insert_action_group (GTK_WIDGET (self), "history", self->priv->action_group);
+	self->action_group = create_action_group (self);
+	gtk_widget_insert_action_group (GTK_WIDGET (self), "history", self->action_group);
 
-	update_selection_actions (self->priv->action_group, FALSE);
+	update_selection_actions (self->action_group, FALSE);
 }

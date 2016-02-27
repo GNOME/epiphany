@@ -24,29 +24,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_HISTORY_WINDOW     (ephy_history_window_get_type ())
-#define EPHY_HISTORY_WINDOW(o)       (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindow))
-#define EPHY_HISTORY_WINDOW_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindowClass))
-#define EPHY_IS_HISTORY_WINDOW(o)    (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_HISTORY_WINDOW))
-#define EPHY_IS_HISTORY_WINDOW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_HISTORY_WINDOW))
-#define EPHY_HISTORY_WINDOW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_HISTORY_WINDOW, EphyHistoryWindowClass))
+#define EPHY_TYPE_HISTORY_WINDOW (ephy_history_window_get_type ())
 
-typedef struct _EphyHistoryWindowPrivate EphyHistoryWindowPrivate;
-
-typedef struct
-{
-	GtkDialog parent;
-
-	/*< private >*/
-	EphyHistoryWindowPrivate *priv;
-} EphyHistoryWindow;
-
-typedef struct
-{
-	GtkDialogClass parent;
-} EphyHistoryWindowClass;
-
-GType		     ephy_history_window_get_type (void);
+G_DECLARE_FINAL_TYPE (EphyHistoryWindow, ephy_history_window, EPHY, HISTORY_WINDOW, GtkDialog)
 
 GtkWidget	    *ephy_history_window_new        (EphyHistoryService *history_service);
 
