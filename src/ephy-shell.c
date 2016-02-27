@@ -49,9 +49,9 @@
 #define WNCK_I_KNOW_THIS_IS_UNSTABLE
 #include <libwnck/libwnck.h>
 
-#define EPHY_SHELL_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SHELL, EphyShellPrivate))
+struct _EphyShell {
+  EphyEmbedShell parent_instance;
 
-struct _EphyShellPrivate {
   EphySession *session;
   GList *windows;
   GObject *lockdown;
@@ -342,7 +342,6 @@ static void
 ephy_shell_activate (GApplication *application)
 {
   EphyShell *shell = EPHY_SHELL (application);
-  EphyShellPrivate *priv = shell->priv;
 
   /*
    * We get here on each new instance (remote or not). Autoresume the
@@ -350,16 +349,16 @@ ephy_shell_activate (GApplication *application)
    * execute the commands immediately, before the remote startup context
    * can be invalidated by another remote instance.
    */
-  if (priv->remote_startup_context == NULL) {
+  if (shell->remote_startup_context == NULL) {
     if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
       ephy_session_resume (ephy_shell_get_session (shell),
-                           priv->local_startup_context->user_time,
-                           NULL, session_load_cb, priv->local_startup_context);
+                           shell->local_startup_context->user_time,
+                           NULL, session_load_cb, shell->local_startup_context);
     } else
-      ephy_shell_startup_continue (shell, priv->local_startup_context);
+      ephy_shell_startup_continue (shell, shell->local_startup_context);
   } else {
-    ephy_shell_startup_continue (shell, priv->remote_startup_context);
-    g_clear_pointer (&priv->remote_startup_context, ephy_shell_startup_context_free);
+    ephy_shell_startup_continue (shell, shell->remote_startup_context);
+    g_clear_pointer (&shell->remote_startup_context, ephy_shell_startup_context_free);
   }
 }
 
@@ -392,13 +391,13 @@ ephy_shell_add_platform_data (GApplication *application,
   G_APPLICATION_CLASS (ephy_shell_parent_class)->add_platform_data (application,
                                                                     builder);
 
-  if (app->priv->local_startup_context) {
+  if (app->local_startup_context) {
     /*
      * We create an array variant that contains only the elements in
      * ctx that are non-NULL.
      */
     ctx_builder = g_variant_builder_new (G_VARIANT_TYPE_ARRAY);
-    ctx = app->priv->local_startup_context;
+    ctx = app->local_startup_context;
 
     if (ctx->startup_flags)
       g_variant_builder_add (ctx_builder, "{iv}",
@@ -496,8 +495,8 @@ ephy_shell_before_emit (GApplication *application,
   }
 
   /* We have already processed and discarded any previous remote startup contexts. */
-  g_assert (shell->priv->remote_startup_context == NULL);
-  shell->priv->remote_startup_context = ctx;
+  g_assert (shell->remote_startup_context == NULL);
+  shell->remote_startup_context = ctx;
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->before_emit (application,
                                                               platform_data);
@@ -508,10 +507,10 @@ ephy_shell_get_lockdown (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
-  if (shell->priv->lockdown == NULL)
-    shell->priv->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
+  if (shell->lockdown == NULL)
+    shell->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
 
-  return G_OBJECT (shell->priv->session);
+  return G_OBJECT (shell->session);
 }
 
 static void
@@ -546,16 +545,12 @@ ephy_shell_class_init (EphyShellClass *klass)
   application_class->activate = ephy_shell_activate;
   application_class->before_emit = ephy_shell_before_emit;
   application_class->add_platform_data = ephy_shell_add_platform_data;
-
-  g_type_class_add_private (object_class, sizeof(EphyShellPrivate));
 }
 
 static void
 ephy_shell_init (EphyShell *shell)
 {
   EphyShell **ptr = &ephy_shell;
-
-  shell->priv = EPHY_SHELL_GET_PRIVATE (shell);
 
   /* globally accessible singleton */
   g_assert (ephy_shell == NULL);
@@ -573,20 +568,20 @@ remove_open_uris_idle_cb (gpointer data)
 static void
 ephy_shell_dispose (GObject *object)
 {
-  EphyShellPrivate *priv = EPHY_SHELL (object)->priv;
+  EphyShell *shell = EPHY_SHELL (object);
 
   LOG ("EphyShell disposing");
 
-  g_clear_object (&priv->session);
-  g_clear_object (&priv->lockdown);
-  g_clear_pointer (&priv->bme, gtk_widget_destroy);
-  g_clear_pointer (&priv->history_window, gtk_widget_destroy);
-  g_clear_object (&priv->prefs_dialog);
-  g_clear_object (&priv->bookmarks);
-  g_clear_object (&priv->network_monitor);
+  g_clear_object (&shell->session);
+  g_clear_object (&shell->lockdown);
+  g_clear_pointer (&shell->bme, gtk_widget_destroy);
+  g_clear_pointer (&shell->history_window, gtk_widget_destroy);
+  g_clear_object (&shell->prefs_dialog);
+  g_clear_object (&shell->bookmarks);
+  g_clear_object (&shell->network_monitor);
 
-  g_slist_free_full (priv->open_uris_idle_ids, remove_open_uris_idle_cb);
-  priv->open_uris_idle_ids = NULL;
+  g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
+  shell->open_uris_idle_ids = NULL;
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->dispose (object);
 }
@@ -595,10 +590,9 @@ static void
 ephy_shell_finalize (GObject *object)
 {
   EphyShell *shell = EPHY_SHELL (object);
-  EphyShellPrivate *priv = shell->priv;
 
-  g_clear_pointer (&priv->local_startup_context, ephy_shell_startup_context_free);
-  g_clear_pointer (&priv->remote_startup_context, ephy_shell_startup_context_free);
+  g_clear_pointer (&shell->local_startup_context, ephy_shell_startup_context_free);
+  g_clear_pointer (&shell->remote_startup_context, ephy_shell_startup_context_free);
 
   G_OBJECT_CLASS (ephy_shell_parent_class)->finalize (object);
 
@@ -726,10 +720,10 @@ ephy_shell_get_session (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
-  if (shell->priv->session == NULL)
-    shell->priv->session = g_object_new (EPHY_TYPE_SESSION, NULL);
+  if (shell->session == NULL)
+    shell->session = g_object_new (EPHY_TYPE_SESSION, NULL);
 
-  return shell->priv->session;
+  return shell->session;
 }
 
 /**
@@ -740,11 +734,11 @@ ephy_shell_get_session (EphyShell *shell)
 EphyBookmarks *
 ephy_shell_get_bookmarks (EphyShell *shell)
 {
-  if (shell->priv->bookmarks == NULL) {
-    shell->priv->bookmarks = ephy_bookmarks_new ();
+  if (shell->bookmarks == NULL) {
+    shell->bookmarks = ephy_bookmarks_new ();
   }
 
-  return shell->priv->bookmarks;
+  return shell->bookmarks;
 }
 
 /**
@@ -755,12 +749,10 @@ ephy_shell_get_bookmarks (EphyShell *shell)
 GNetworkMonitor *
 ephy_shell_get_net_monitor (EphyShell *shell)
 {
-  EphyShellPrivate *priv = shell->priv;
+  if (shell->network_monitor == NULL)
+    shell->network_monitor = g_network_monitor_get_default ();
 
-  if (priv->network_monitor == NULL)
-    priv->network_monitor = g_network_monitor_get_default ();
-
-  return priv->network_monitor;
+  return shell->network_monitor;
 }
 
 /**
@@ -773,13 +765,13 @@ ephy_shell_get_bookmarks_editor (EphyShell *shell)
 {
   EphyBookmarks *bookmarks;
 
-  if (shell->priv->bme == NULL) {
+  if (shell->bme == NULL) {
     bookmarks = ephy_shell_get_bookmarks (ephy_shell);
     g_assert (bookmarks != NULL);
-    shell->priv->bme = ephy_bookmarks_editor_new (bookmarks);
+    shell->bme = ephy_bookmarks_editor_new (bookmarks);
   }
 
-  return shell->priv->bme;
+  return shell->bme;
 }
 
 /**
@@ -795,17 +787,17 @@ ephy_shell_get_history_window (EphyShell *shell)
 
   embed_shell = ephy_embed_shell_get_default ();
 
-  if (shell->priv->history_window == NULL) {
+  if (shell->history_window == NULL) {
     service = EPHY_HISTORY_SERVICE
       (ephy_embed_shell_get_global_history_service (embed_shell));
-    shell->priv->history_window = ephy_history_window_new (service);
-    g_signal_connect (shell->priv->history_window,
+    shell->history_window = ephy_history_window_new (service);
+    g_signal_connect (shell->history_window,
                       "destroy",
                       G_CALLBACK (gtk_widget_destroyed),
-                      &shell->priv->history_window);
+                      &shell->history_window);
   }
 
-  return shell->priv->history_window;
+  return shell->history_window;
 }
 
 /**
@@ -816,17 +808,17 @@ ephy_shell_get_history_window (EphyShell *shell)
 GObject *
 ephy_shell_get_prefs_dialog (EphyShell *shell)
 {
-  if (shell->priv->prefs_dialog == NULL) {
-    shell->priv->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG,
-                                              "use-header-bar", TRUE,
-                                              NULL);
-    g_signal_connect (shell->priv->prefs_dialog,
+  if (shell->prefs_dialog == NULL) {
+    shell->prefs_dialog = g_object_new (EPHY_TYPE_PREFS_DIALOG,
+                                        "use-header-bar", TRUE,
+                                        NULL);
+    g_signal_connect (shell->prefs_dialog,
                       "destroy",
                       G_CALLBACK (gtk_widget_destroyed),
-                      &shell->priv->prefs_dialog);
+                      &shell->prefs_dialog);
   }
 
-  return shell->priv->prefs_dialog;
+  return shell->prefs_dialog;
 }
 
 void
@@ -856,9 +848,9 @@ ephy_shell_set_startup_context (EphyShell *shell,
 {
   g_return_if_fail (EPHY_IS_SHELL (shell));
 
-  g_assert (shell->priv->local_startup_context == NULL);
+  g_assert (shell->local_startup_context == NULL);
 
-  shell->priv->local_startup_context = ctx;
+  shell->local_startup_context = ctx;
 }
 
 guint
@@ -1011,8 +1003,8 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
 static void
 ephy_shell_open_uris_idle_done (OpenURIsData *data)
 {
-  data->shell->priv->open_uris_idle_ids = g_slist_remove (data->shell->priv->open_uris_idle_ids,
-                                                          GUINT_TO_POINTER (data->source_id));
+  data->shell->open_uris_idle_ids = g_slist_remove (data->shell->open_uris_idle_ids,
+                                                    GUINT_TO_POINTER (data->source_id));
   open_uris_data_free (data);
 }
 
@@ -1034,6 +1026,6 @@ ephy_shell_open_uris (EphyShell *shell,
                         (GDestroyNotify)ephy_shell_open_uris_idle_done);
   data->source_id = id;
 
-  shell->priv->open_uris_idle_ids = g_slist_prepend (shell->priv->open_uris_idle_ids, GUINT_TO_POINTER (id));
+  shell->open_uris_idle_ids = g_slist_prepend (shell->open_uris_idle_ids, GUINT_TO_POINTER (id));
 }
 

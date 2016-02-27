@@ -33,16 +33,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_SHELL         (ephy_shell_get_type ())
-#define EPHY_SHELL(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_SHELL, EphyShell))
-#define EPHY_SHELL_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_SHELL, EphyShellClass))
-#define EPHY_IS_SHELL(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SHELL))
-#define EPHY_IS_SHELL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SHELL))
-#define EPHY_SHELL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SHELL, EphyShellClass))
+#define EPHY_TYPE_SHELL (ephy_shell_get_type ())
 
-typedef struct _EphyShell   EphyShell;
-typedef struct _EphyShellClass    EphyShellClass;
-typedef struct _EphyShellPrivate  EphyShellPrivate;
+G_DECLARE_FINAL_TYPE (EphyShell, ephy_shell, EPHY, SHELL, EphyEmbedShell)
 
 /**
  * EphyNewTabFlags:
@@ -85,19 +78,6 @@ typedef struct {
   
   guint32 user_time;
 } EphyShellStartupContext;
-
-struct _EphyShell {
-  EphyEmbedShell parent;
-
-  /*< private >*/
-  EphyShellPrivate *priv;
-};
-
-struct _EphyShellClass {
-  EphyEmbedShellClass parent_class;
-};
-
-GType           ephy_shell_get_type                     (void);
 
 EphyShell      *ephy_shell_get_default                  (void);
 
