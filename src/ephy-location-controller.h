@@ -22,34 +22,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_LOCATION_CONTROLLER            (ephy_location_controller_get_type ())
-#define EPHY_LOCATION_CONTROLLER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_LOCATION_CONTROLLER, EphyLocationController))
-#define EPHY_LOCATION_CONTROLLER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_LOCATION_CONTROLLER, EphyLocationControllerClass))
-#define EPHY_IS_LOCATION_CONTROLLER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_LOCATION_CONTROLLER))
-#define EPHY_IS_LOCATION_CONTROLLER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EPHY_TYPE_LOCATION_CONTROLLER))
-#define EPHY_LOCATION_CONTROLLER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), EPHY_TYPE_LOCATION_CONTROLLER, EphyLocationControllerClass))
+#define EPHY_TYPE_LOCATION_CONTROLLER (ephy_location_controller_get_type ())
 
-typedef struct _EphyLocationController		EphyLocationController;
-typedef struct _EphyLocationControllerPrivate	EphyLocationControllerPrivate;
-typedef struct _EphyLocationControllerClass	EphyLocationControllerClass;
-
-struct _EphyLocationController
-{
-	GObject parent;
-
-	/*< private >*/
-	EphyLocationControllerPrivate *priv;
-};
-
-struct _EphyLocationControllerClass
-{
-	GObjectClass parent_class;
-
-	/* Signals */
-	void (* lock_clicked)	(EphyLocationController *controller);
-};
-
-GType		ephy_location_controller_get_type		(void);
+G_DECLARE_FINAL_TYPE (EphyLocationController, ephy_location_controller, EPHY, LOCATION_CONTROLLER, GObject)
 
 const char     *ephy_location_controller_get_address	(EphyLocationController *controller);
 
