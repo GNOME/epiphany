@@ -28,34 +28,15 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_TITLE_BOX             (ephy_title_box_get_type ())
-#define EPHY_TITLE_BOX(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_TITLE_BOX, EphyTitleBox))
-#define EPHY_TITLE_BOX_CONST(obj)       (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_TITLE_BOX, EphyTitleBox const))
-#define EPHY_TITLE_BOX_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_TITLE_BOX, EphyTitleBoxClass))
-#define EPHY_IS_TITLE_BOX(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_TITLE_BOX))
-#define EPHY_IS_TITLE_BOX_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_TITLE_BOX))
-#define EPHY_TITLE_BOX_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_TITLE_BOX, EphyTitleBoxClass))
+#define EPHY_TYPE_TITLE_BOX (ephy_title_box_get_type ())
 
-typedef struct _EphyTitleBox      EphyTitleBox;
-typedef struct _EphyTitleBoxClass EphyTitleBoxClass;
+G_DECLARE_FINAL_TYPE (EphyTitleBox, ephy_title_box, EPHY, TITLE_BOX, GtkStack)
 
 typedef enum
 {
   EPHY_TITLE_BOX_MODE_LOCATION_ENTRY,
   EPHY_TITLE_BOX_MODE_TITLE
 } EphyTitleBoxMode;
-
-struct _EphyTitleBox
-{
-  GtkStack parent;
-};
-
-struct _EphyTitleBoxClass
-{
-  GtkStackClass parent_class;
-};
-
-GType               ephy_title_box_get_type             (void) G_GNUC_CONST;
 
 EphyTitleBox       *ephy_title_box_new                  (EphyWindow           *window);
 
