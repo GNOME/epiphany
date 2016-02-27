@@ -67,9 +67,6 @@ struct _EphyBookmarksClass
 	GObjectClass parent_class;
 
 	void	(* tree_changed)	(EphyBookmarks *eb);
-	char *	(* resolve_address)	(EphyBookmarks *eb,
-					 const char *address,
-					 const char *argument);
 };
 
 GType		  ephy_bookmarks_get_type		(void);
