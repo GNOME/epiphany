@@ -614,7 +614,8 @@ web_view_check_snapshot (WebKitWebView *web_view)
 
   view->snapshot_timeout_id = 0;
 
-  if (ephy_snapshot_service_lookup_snapshot_path (service, url))
+  if (ephy_snapshot_service_lookup_snapshot_path (service, url) ||
+      view->error_page != EPHY_WEB_VIEW_ERROR_PAGE_NONE)
     return FALSE;
 
   data = g_new (GetSnapshotPathAsyncData, 1);
