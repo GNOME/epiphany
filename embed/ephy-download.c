@@ -586,6 +586,8 @@ ephy_download_do_download_action (EphyDownload *download,
         LOG ("ephy_download_do_download_action: open");
         ret = ephy_embed_shell_launch_handler (ephy_embed_shell_get_default (), 
                                                destination, NULL, priv->start_time);
+        if (!ret)
+          ret = ephy_file_browse_to (destination, priv->start_time);
         break;
       case EPHY_DOWNLOAD_ACTION_NONE:
         LOG ("ephy_download_do_download_action: none");
