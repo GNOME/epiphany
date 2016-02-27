@@ -42,8 +42,6 @@
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
 
-#define EPHY_SESSION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_SESSION, EphySessionPrivate))
-
 typedef struct
 {
 	EphyNotebook *notebook;
@@ -58,8 +56,10 @@ typedef struct
 	WebKitWebViewSessionState *state;
 } ClosedTab;
 
-struct _EphySessionPrivate
+struct _EphySession
 {
+	GObject parent_instance;
+
 	GQueue *closed_tabs;
 	guint save_source_id;
 	GCancellable *save_cancellable;
@@ -197,7 +197,7 @@ static NotebookTracker *
 ephy_session_ref_or_create_notebook_tracker (EphySession *session,
 					     EphyNotebook *notebook)
 {
-	GList *item = g_queue_find_custom (session->priv->closed_tabs, notebook, (GCompareFunc)compare_func);
+	GList *item = g_queue_find_custom (session->closed_tabs, notebook, (GCompareFunc)compare_func);
 	return item ? notebook_tracker_ref (((ClosedTab *)item->data)->notebook_tracker) : notebook_tracker_new (notebook);
 }
 
@@ -230,7 +230,6 @@ closed_tab_new (EphyWebView *web_view,
 void
 ephy_session_undo_close_tab (EphySession *session)
 {
-	EphySessionPrivate *priv;
 	EphyEmbed *embed, *new_tab;
 	WebKitWebView *web_view;
 	WebKitBackForwardList *bf_list;
@@ -242,9 +241,7 @@ ephy_session_undo_close_tab (EphySession *session)
 
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
-	priv = session->priv;
-
-	tab = g_queue_pop_head (priv->closed_tabs);
+	tab = g_queue_pop_head (session->closed_tabs);
 	if (tab == NULL)
 		return;
 
@@ -298,7 +295,7 @@ ephy_session_undo_close_tab (EphySession *session)
 
 	closed_tab_free (tab);
 
-	if (g_queue_is_empty (priv->closed_tabs))
+	if (g_queue_is_empty (session->closed_tabs))
 		g_object_notify_by_pspec (G_OBJECT (session), obj_properties[PROP_CAN_UNDO_TAB_CLOSED]);
 }
 
@@ -308,7 +305,6 @@ ephy_session_tab_closed (EphySession *session,
 			 EphyEmbed *embed,
 			 gint position)
 {
-	EphySessionPrivate *priv = session->priv;
 	EphyWebView *view;
 	WebKitWebView *wk_view;
 	ClosedTab *tab;
@@ -322,20 +318,20 @@ ephy_session_tab_closed (EphySession *session,
 		return;
 	}
 
-	if (g_queue_get_length (priv->closed_tabs) == MAX_CLOSED_TABS)
+	if (g_queue_get_length (session->closed_tabs) == MAX_CLOSED_TABS)
 	{
-		closed_tab_free (g_queue_pop_tail (priv->closed_tabs));
+		closed_tab_free (g_queue_pop_tail (session->closed_tabs));
 	}
 
 	tab = closed_tab_new (view, position,
 			      ephy_session_ref_or_create_notebook_tracker (session, notebook));
-	g_queue_push_head (priv->closed_tabs, tab);
+	g_queue_push_head (session->closed_tabs, tab);
 
-	if (g_queue_get_length (priv->closed_tabs) == 1)
+	if (g_queue_get_length (session->closed_tabs) == 1)
 		g_object_notify_by_pspec (G_OBJECT (session), obj_properties[PROP_CAN_UNDO_TAB_CLOSED]);
 
 	LOG ("Added: %s to the list (%d elements)",
-	     ephy_web_view_get_address (view), g_queue_get_length (priv->closed_tabs));
+	     ephy_web_view_get_address (view), g_queue_get_length (session->closed_tabs));
 }
 
 gboolean
@@ -343,7 +339,7 @@ ephy_session_get_can_undo_tab_closed (EphySession *session)
 {
 	g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
 
-	return g_queue_is_empty (session->priv->closed_tabs) == FALSE;
+	return g_queue_is_empty (session->closed_tabs) == FALSE;
 }
 
 static void
@@ -475,9 +471,7 @@ ephy_session_init (EphySession *session)
 
 	LOG ("EphySession initialising");
 
-	session->priv = EPHY_SESSION_GET_PRIVATE (session);
-
-	session->priv->closed_tabs = g_queue_new ();
+	session->closed_tabs = g_queue_new ();
 	shell = ephy_shell_get_default ();
 	g_signal_connect (shell, "window-added",
 			  G_CALLBACK (window_added_cb), session);
@@ -492,7 +486,7 @@ ephy_session_dispose (GObject *object)
 
 	LOG ("EphySession disposing");
 
-	g_queue_free_full (session->priv->closed_tabs,
+	g_queue_free_full (session->closed_tabs,
 			   (GDestroyNotify)closed_tab_free);
 
 	G_OBJECT_CLASS (ephy_session_parent_class)->dispose (object);
@@ -533,8 +527,6 @@ ephy_session_class_init (EphySessionClass *class)
 		                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
 	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
-
-	g_type_class_add_private (object_class, sizeof (EphySessionPrivate));
 }
 
 /* Implementation */
@@ -542,24 +534,21 @@ ephy_session_class_init (EphySessionClass *class)
 void
 ephy_session_close (EphySession *session)
 {
-	EphySessionPrivate *priv;
-
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
 	LOG ("ephy_session_close");
 
-	priv = session->priv;
-	if (priv->save_source_id)
+	if (session->save_source_id)
 	{
 		/* There's a save pending, cancel it and save the session now since
 		 * after closing the session the saving is no longer allowed.
 		 */
-		g_source_remove (priv->save_source_id);
-		priv->save_source_id = 0;
+		g_source_remove (session->save_source_id);
+		session->save_source_id = 0;
 	}
-	priv->closing = TRUE;
+	session->closing = TRUE;
 	ephy_session_save_idle_cb (session);
-	priv->dont_save = TRUE;
+	session->dont_save = TRUE;
 }
 
 static void
@@ -610,7 +599,7 @@ session_tab_new (EphyEmbed *embed,
 	session_tab->title = g_strdup (ephy_embed_get_title (embed));
 	session_tab->loading = (ephy_web_view_is_loading (web_view) &&
 			        !ephy_embed_has_load_pending (embed) &&
-			        !session->priv->closing);
+			        !session->closing);
 	session_tab->crashed = (error_page == EPHY_WEB_VIEW_ERROR_PAGE_CRASH ||
                                 error_page == EPHY_WEB_VIEW_ERROR_PROCESS_CRASH);
 	session_tab->state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
@@ -943,19 +932,18 @@ ephy_session_save_idle_finished (EphySession *session)
 static gboolean
 ephy_session_save_idle_cb (EphySession *session)
 {
-	EphySessionPrivate *priv = session->priv;
 	EphyShell *shell = ephy_shell_get_default ();
 	SaveData *data;
 	GTask *task;
 	EphyPrefsRestoreSessionPolicy policy;
 
-	priv->save_source_id = 0;
+	session->save_source_id = 0;
 
-	if (priv->save_cancellable)
+	if (session->save_cancellable)
 	{
-		g_cancellable_cancel (priv->save_cancellable);
-		g_object_unref (priv->save_cancellable);
-		priv->save_cancellable = NULL;
+		g_cancellable_cancel (session->save_cancellable);
+		g_object_unref (session->save_cancellable);
+		session->save_cancellable = NULL;
 	}
 
 	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
@@ -973,9 +961,9 @@ ephy_session_save_idle_cb (EphySession *session)
 	}
 
 	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
-	priv->save_cancellable = g_cancellable_new ();
+	session->save_cancellable = g_cancellable_new ();
 	data = save_data_new (session);
-	task = g_task_new (session, priv->save_cancellable,
+	task = g_task_new (session, session->save_cancellable,
 			   save_session_in_thread_finished_cb, NULL);
 	g_task_set_task_data (task, data, (GDestroyNotify)save_data_free);
 	g_task_run_in_thread (task, save_session_sync);
@@ -987,26 +975,22 @@ ephy_session_save_idle_cb (EphySession *session)
 void
 ephy_session_save (EphySession *session)
 {
-	EphySessionPrivate *priv;
-
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
-	priv = session->priv;
-
-	if (priv->save_source_id)
+	if (session->save_source_id)
 	{
 		return;
 	}
 
-	if (priv->dont_save)
+	if (session->dont_save)
 	{
 		return;
 	}
 
-	priv->save_source_id = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE, 1,
-							   (GSourceFunc)ephy_session_save_idle_cb,
-							   ephy_session_save_idle_started (session),
-							   (GDestroyNotify)ephy_session_save_idle_finished);
+	session->save_source_id = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE, 1,
+							      (GSourceFunc)ephy_session_save_idle_cb,
+							      ephy_session_save_idle_started (session),
+							      (GDestroyNotify)ephy_session_save_idle_finished);
 }
 
 static void
@@ -1341,7 +1325,7 @@ load_stream_complete (GTask *task)
 	g_task_return_boolean (task, TRUE);
 
 	session = EPHY_SESSION (g_task_get_source_object (task));
-	session->priv->dont_save = FALSE;
+	session->dont_save = FALSE;
 
 	ephy_session_save (session);
 
@@ -1361,7 +1345,7 @@ load_stream_complete_error (GTask *task,
 	g_task_return_error (task, error);
 
 	session = EPHY_SESSION (g_task_get_source_object (task));
-	session->priv->dont_save = FALSE;
+	session->dont_save = FALSE;
 	/* If the session fails to load for whatever reason,
 	 * delete the file and open an empty window.
 	 */
@@ -1458,7 +1442,7 @@ ephy_session_load_from_stream (EphySession *session,
 
 	g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
 
-	session->priv->dont_save = TRUE;
+	session->dont_save = TRUE;
 
 	task = g_task_new (session, cancellable, callback, user_data);
 	/* Use a priority lower than drawing events (HIGH_IDLE + 20) to make sure
@@ -1745,9 +1729,9 @@ ephy_session_clear (EphySession *session)
 	for (p = windows; p; p = p->next)
 		gtk_widget_destroy (GTK_WIDGET (p->data));
 	g_list_free (windows);
-	g_queue_foreach (session->priv->closed_tabs,
+	g_queue_foreach (session->closed_tabs,
 			 (GFunc)closed_tab_free, NULL);
-	g_queue_clear (session->priv->closed_tabs);
+	g_queue_clear (session->closed_tabs);
 
 	ephy_session_save (session);
 }

@@ -26,31 +26,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_SESSION		(ephy_session_get_type ())
-#define EPHY_SESSION(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_SESSION, EphySession))
-#define EPHY_SESSION_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_SESSION, EphySessionClass))
-#define EPHY_IS_SESSION(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_SESSION))
-#define EPHY_IS_SESSION_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_SESSION))
-#define EPHY_SESSION_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_SESSION, EphySessionClass))
+#define EPHY_TYPE_SESSION (ephy_session_get_type ())
 
-typedef struct _EphySession		EphySession;
-typedef struct _EphySessionPrivate	EphySessionPrivate;
-typedef struct _EphySessionClass	EphySessionClass;
-
-struct _EphySession
-{
-        GObject parent;
-
-	/*< private >*/
-        EphySessionPrivate *priv;
-};
-
-struct _EphySessionClass
-{
-        GObjectClass parent_class;
-};
-
-GType            ephy_session_get_type                (void);
+G_DECLARE_FINAL_TYPE (EphySession, ephy_session, EPHY, SESSION, GObject)
 
 void 	         ephy_session_save		      (EphySession *session);
 void             ephy_session_load                    (EphySession *session,
