@@ -34,10 +34,10 @@ enum
 	LAST_SIGNAL
 };
 
-#define EPHY_NODE_FILTER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_NODE_FILTER, EphyNodeFilterPrivate))
-
-struct _EphyNodeFilterPrivate
+struct _EphyNodeFilter
 {
+	GObject parent_instance;
+
 	GPtrArray *levels;
 };
 
@@ -85,16 +85,12 @@ ephy_node_filter_class_init (EphyNodeFilterClass *klass)
 			      0, NULL, NULL, NULL,
 			      G_TYPE_NONE,
 			      0);
-
-	g_type_class_add_private (object_class, sizeof (EphyNodeFilterPrivate));
 }
 
 static void
 ephy_node_filter_init (EphyNodeFilter *filter)
 {
-	filter->priv = EPHY_NODE_FILTER_GET_PRIVATE (filter);
-
-	filter->priv->levels = g_ptr_array_new ();
+	filter->levels = g_ptr_array_new ();
 }
 
 static void
@@ -104,7 +100,7 @@ ephy_node_filter_finalize (GObject *object)
 
 	ephy_node_filter_empty (filter);
 
-	g_ptr_array_free (filter->priv->levels, TRUE);
+	g_ptr_array_free (filter->levels, TRUE);
 
 	G_OBJECT_CLASS (ephy_node_filter_parent_class)->finalize (object);
 }
@@ -120,12 +116,12 @@ ephy_node_filter_add_expression (EphyNodeFilter *filter,
 			         EphyNodeFilterExpression *exp,
 			         int level)
 {
-	while (level >= (int)filter->priv->levels->len)
-		g_ptr_array_add (filter->priv->levels, NULL);
+	while (level >= (int)filter->levels->len)
+		g_ptr_array_add (filter->levels, NULL);
 
 	/* FIXME bogosity! This only works because g_list_append (x, data) == x */
-	g_ptr_array_index (filter->priv->levels, level) =
-		g_list_append (g_ptr_array_index (filter->priv->levels, level), exp);
+	g_ptr_array_index (filter->levels, level) =
+		g_list_append (g_ptr_array_index (filter->levels, level), exp);
 }
 
 void
@@ -133,11 +129,11 @@ ephy_node_filter_empty (EphyNodeFilter *filter)
 {
 	int i;
 	
-	for (i = filter->priv->levels->len - 1; i >= 0; i--)
+	for (i = filter->levels->len - 1; i >= 0; i--)
 	{
 		GList *list, *l;
 
-		list = g_ptr_array_index (filter->priv->levels, i);
+		list = g_ptr_array_index (filter->levels, i);
 
 		for (l = list; l != NULL; l = g_list_next (l))
 		{
@@ -150,7 +146,7 @@ ephy_node_filter_empty (EphyNodeFilter *filter)
 
 		g_list_free (list);
 
-		g_ptr_array_remove_index (filter->priv->levels, i);
+		g_ptr_array_remove_index (filter->levels, i);
 	}
 }
 
@@ -172,13 +168,13 @@ ephy_node_filter_evaluate (EphyNodeFilter *filter,
 {
 	guint i;
 
-	for (i = 0; i < filter->priv->levels->len; i++) {
+	for (i = 0; i < filter->levels->len; i++) {
 		GList *l, *list;
 		gboolean handled;
 
 		handled = FALSE;
 
-		list = g_ptr_array_index (filter->priv->levels, i);
+		list = g_ptr_array_index (filter->levels, i);
 
 		for (l = list; l != NULL; l = g_list_next (l)) {
 			if (ephy_node_filter_expression_evaluate (l->data, node) == TRUE) {

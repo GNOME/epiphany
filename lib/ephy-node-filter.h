@@ -25,27 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_NODE_FILTER         (ephy_node_filter_get_type ())
-#define EPHY_NODE_FILTER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_NODE_FILTER, EphyNodeFilter))
-#define EPHY_NODE_FILTER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_NODE_FILTER, EphyNodeFilterClass))
-#define EPHY_IS_NODE_FILTER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_NODE_FILTER))
-#define EPHY_IS_NODE_FILTER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_NODE_FILTER))
-#define EPHY_NODE_FILTER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_NODE_FILTER, EphyNodeFilterClass))
+#define EPHY_TYPE_NODE_FILTER (ephy_node_filter_get_type ())
 
-typedef struct _EphyNodeFilterPrivate EphyNodeFilterPrivate;
-
-typedef struct
-{
-	GObject parent;
-
-	/*< private >*/
-	EphyNodeFilterPrivate *priv;
-} EphyNodeFilter;
-
-typedef struct
-{
-	GObjectClass parent;
-} EphyNodeFilterClass;
+G_DECLARE_FINAL_TYPE (EphyNodeFilter, ephy_node_filter, EPHY, NODE_FILTER, GObject)
 
 typedef enum
 {
@@ -72,8 +54,6 @@ typedef struct _EphyNodeFilterExpression EphyNodeFilterExpression;
  * If it still has TRUE when there are no more expressions at the
  * next level, the result is TRUE. Otherwise, it's FALSE.
  */
-
-GType           ephy_node_filter_get_type       (void);
 
 EphyNodeFilter *ephy_node_filter_new            (void);
 
