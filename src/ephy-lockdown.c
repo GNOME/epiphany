@@ -34,6 +34,13 @@
 
 #define LOCKDOWN_FLAG 1 << 8
 
+struct _EphyLockdown
+{
+  GObject parent_instance;
+};
+
+G_DEFINE_TYPE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT)
+
 static int
 find_name (GtkActionGroup *action_group,
            const char *name)
@@ -241,8 +248,6 @@ window_added_cb (GtkApplication *application,
     bind_location_controller (EPHY_SETTINGS_LOCKDOWN, location_controller);
   }
 }
-
-G_DEFINE_TYPE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT)
 
 static void
 ephy_lockdown_init (EphyLockdown *lockdown)
