@@ -23,31 +23,9 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_CLEAR_DATA_DIALOG		(clear_data_dialog_get_type ())
-#define EPHY_CLEAR_DATA_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_CLEAR_DATA_DIALOG, ClearDataDialog))
-#define EPHY_CLEAR_DATA_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_CLEAR_DATA_DIALOG, ClearDataDialogClass))
-#define EPHY_IS_CLEAR_DATA_DIALOG(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_CLEAR_DATA_DIALOG))
-#define EPHY_IS_CLEAR_DATA_DIALOG_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_CLEAR_DATA_DIALOG))
-#define EPHY_CLEAR_DATA_DIALOG_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_CLEAR_DATA_DIALOG, ClearDataDialogClass))
+#define EPHY_TYPE_CLEAR_DATA_DIALOG (clear_data_dialog_get_type ())
 
-typedef struct ClearDataDialog		ClearDataDialog;
-typedef struct ClearDataDialogClass		ClearDataDialogClass;
-typedef struct ClearDataDialogPrivate	ClearDataDialogPrivate;
-
-struct ClearDataDialog
-{
-        GtkDialog parent;
-
-	/*< private >*/
-        ClearDataDialogPrivate *priv;
-};
-
-struct ClearDataDialogClass
-{
-        GtkDialogClass parent_class;
-};
-
-GType         clear_data_dialog_get_type           (void);
+G_DECLARE_FINAL_TYPE (ClearDataDialog, clear_data_dialog, EPHY, CLEAR_DATA_DIALOG, GtkDialog)
 
 G_END_DECLS
 

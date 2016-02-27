@@ -32,8 +32,10 @@
 
 #include "clear-data-dialog.h"
 
-struct ClearDataDialogPrivate
+struct _ClearDataDialog
 {
+	GtkDialog parent_instance;
+
 	GtkWidget *cache_checkbutton;
 	GtkWidget *history_checkbutton;
 	GtkWidget *passwords_checkbutton;
@@ -43,7 +45,7 @@ struct ClearDataDialogPrivate
 	guint num_checked;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ClearDataDialog, clear_data_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (ClearDataDialog, clear_data_dialog, GTK_TYPE_DIALOG)
 
 static WebKitCookieManager *
 get_cookie_manager (void)
@@ -73,12 +75,10 @@ clear_data_dialog_response_cb (GtkDialog *widget,
 			       int response,
 			       ClearDataDialog *dialog)
 {
-	ClearDataDialogPrivate *priv = dialog->priv;
-
 	if (response == GTK_RESPONSE_OK)
 	{
 		if (gtk_toggle_button_get_active
-			(GTK_TOGGLE_BUTTON (priv->history_checkbutton)))
+			(GTK_TOGGLE_BUTTON (dialog->history_checkbutton)))
 		{
 			EphyEmbedShell *shell;
 			EphyHistoryService *history;
@@ -88,7 +88,7 @@ clear_data_dialog_response_cb (GtkDialog *widget,
 			ephy_history_service_clear (history, NULL, NULL, NULL);
 		}
 		if (gtk_toggle_button_get_active
-			(GTK_TOGGLE_BUTTON (priv->cookies_checkbutton)))
+			(GTK_TOGGLE_BUTTON (dialog->cookies_checkbutton)))
 		{
 			WebKitCookieManager *cookie_manager;
 
@@ -96,12 +96,12 @@ clear_data_dialog_response_cb (GtkDialog *widget,
 			webkit_cookie_manager_delete_all_cookies (cookie_manager);
 		}
 		if (gtk_toggle_button_get_active
-			(GTK_TOGGLE_BUTTON (priv->passwords_checkbutton)))
+			(GTK_TOGGLE_BUTTON (dialog->passwords_checkbutton)))
 		{
 			delete_all_passwords (dialog);
 		}
 		if (gtk_toggle_button_get_active
-			(GTK_TOGGLE_BUTTON (priv->cache_checkbutton)))
+			(GTK_TOGGLE_BUTTON (dialog->cache_checkbutton)))
 		{
 			EphyEmbedShell *shell;
 			WebKitFaviconDatabase *database;
@@ -124,15 +124,15 @@ checkbutton_toggled_cb (GtkToggleButton *toggle,
 {
 	if (gtk_toggle_button_get_active (toggle) == TRUE)
 	{
-		dialog->priv->num_checked++;
+		dialog->num_checked++;
 	}
 	else
 	{
-		dialog->priv->num_checked--;
+		dialog->num_checked--;
 	}
 
-	gtk_widget_set_sensitive (dialog->priv->clear_button,
-				  dialog->priv->num_checked != 0);
+	gtk_widget_set_sensitive (dialog->clear_button,
+				  dialog->num_checked != 0);
 }
 
 static void
@@ -143,11 +143,11 @@ clear_data_dialog_class_init (ClearDataDialogClass *klass)
 	gtk_widget_class_set_template_from_resource (widget_class,
 	                                             "/org/gnome/epiphany/clear-data-dialog.ui");
 
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, cookies_checkbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, cache_checkbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, passwords_checkbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, history_checkbutton);
-	gtk_widget_class_bind_template_child_private (widget_class, ClearDataDialog, clear_button);
+	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, cookies_checkbutton);
+	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, cache_checkbutton);
+	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, passwords_checkbutton);
+	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, history_checkbutton);
+	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, clear_button);
 
 	gtk_widget_class_bind_template_callback (widget_class, checkbutton_toggled_cb);
 	gtk_widget_class_bind_template_callback (widget_class, clear_data_dialog_response_cb);
@@ -156,9 +156,8 @@ clear_data_dialog_class_init (ClearDataDialogClass *klass)
 static void
 clear_data_dialog_init (ClearDataDialog *dialog)
 {
-	dialog->priv = clear_data_dialog_get_instance_private (dialog);
 	gtk_widget_init_template (GTK_WIDGET (dialog));
 
-	dialog->priv->num_checked = 0;
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->priv->cache_checkbutton), TRUE);
+	dialog->num_checked = 0;
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->cache_checkbutton), TRUE);
 }
