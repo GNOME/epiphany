@@ -27,16 +27,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_SEARCH_PROVIDER (ephy_search_provider_get_type ())
 
-#define EPHY_SEARCH_PROVIDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), EPHY_TYPE_SEARCH_PROVIDER, EphySearchProvider))
-#define EPHY_SEARCH_PROVIDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EPHY_TYPE_SEARCH_PROVIDER, EphySearchProviderClass))
-#define EPHY_IS_SEARCH_PROVIDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EPHY_TYPE_SEARCH_PROVIDER))
-#define EPHY_IS_SEARCH_PROVIDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), EPHY_TYPE_SEARCH_PROVIDER))
-#define EPHY_SEARCH_PROVIDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), EPHY_TYPE_SEARCH_PROVIDER, EphySearchProviderClass))
-
-typedef struct _EphySearchProvider EphySearchProvider;
-typedef struct _EphySearchProviderClass EphySearchProviderClass;
-
-GType ephy_search_provider_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (EphySearchProvider, ephy_search_provider, EPHY, SEARCH_PROVIDER, GApplication)
 
 EphySearchProvider *ephy_search_provider_new (void);
 

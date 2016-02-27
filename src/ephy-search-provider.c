@@ -32,7 +32,7 @@
 
 struct _EphySearchProvider
 {
-  GApplication parent;
+  GApplication parent_instance;
 
   EphyShellSearchProvider2 *skeleton;
   GCancellable             *cancellable;
