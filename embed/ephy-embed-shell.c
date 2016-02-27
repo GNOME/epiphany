@@ -323,6 +323,52 @@ history_service_cleared_cb (EphyHistoryService *service,
   }
 }
 
+typedef struct {
+  EphyWebExtensionProxy *extension;
+  char *url;
+  char *path;
+} DelayedThumbnailUpdateData;
+
+static DelayedThumbnailUpdateData *
+delayed_thumbnail_update_data_new (EphyWebExtensionProxy *extension,
+                                   const char *url,
+                                   const char *path)
+{
+  DelayedThumbnailUpdateData *data = g_new (DelayedThumbnailUpdateData, 1);
+  data->extension = extension;
+  data->url = g_strdup (url);
+  data->path = g_strdup (path);
+  g_object_add_weak_pointer (G_OBJECT (extension), (gpointer *)&data->extension);
+  return data;
+}
+
+static void
+delayed_thumbnail_update_data_free (DelayedThumbnailUpdateData *data)
+{
+  g_object_remove_weak_pointer (G_OBJECT (data->extension), (gpointer *)&data->extension);
+  g_free (data->url);
+  g_free (data->path);
+  g_free (data);
+}
+
+static gboolean
+delayed_thumbnail_update_cb (DelayedThumbnailUpdateData *data)
+{
+  if (!data->extension) {
+    delayed_thumbnail_update_data_free (data);
+    return G_SOURCE_REMOVE;
+  }
+
+  if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (data->extension), "initialized"))) {
+    ephy_web_extension_proxy_history_set_url_thumbnail (data->extension, data->url, data->path);
+    delayed_thumbnail_update_data_free (data);
+    return G_SOURCE_REMOVE;
+  }
+
+  /* Web extension is not initialized yet, try again later.... */
+  return G_SOURCE_CONTINUE;
+}
+
 void
 ephy_embed_shell_set_thumbnail_path (EphyEmbedShell *shell,
                                      const char *url,
@@ -338,8 +384,12 @@ ephy_embed_shell_set_thumbnail_path (EphyEmbedShell *shell,
 
   for (l = priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
-
-    ephy_web_extension_proxy_history_set_url_thumbnail (web_extension, url, path);
+    if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (web_extension), "initialized"))) {
+      ephy_web_extension_proxy_history_set_url_thumbnail (web_extension, url, path);
+    } else {
+      DelayedThumbnailUpdateData *data = delayed_thumbnail_update_data_new (web_extension, url, path);
+      g_timeout_add (50, (GSourceFunc)delayed_thumbnail_update_cb, data);
+    }
   }
 }
 
@@ -495,6 +545,7 @@ web_extension_page_created (EphyWebExtensionProxy *extension,
                             guint64 page_id,
                             EphyEmbedShell *shell)
 {
+  g_object_set_data (G_OBJECT (extension), "initialized", GINT_TO_POINTER (TRUE));
   g_signal_emit (shell, signals[PAGE_CREATED], 0, page_id, extension);
 }
 
