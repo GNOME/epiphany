@@ -1773,10 +1773,10 @@ ephy_web_view_load_error_page (EphyWebView *view,
                                "address. You may wish to verify that your "
                                "internet connection is working correctly.</p>"),
                              uri, reason);
-      button_label = g_strdup (_("Try Again"));
+      button_label = g_strdup (_("Reload"));
       custom_class = "network-error";
-      /* Access key for the "Try Again" button on the network error page. */
-      accesskey = dgettext ("accesskey", "A");
+      /* Access key for the "Reload" button on the network error page. */
+      accesskey = C_("reload-access-key", "R");
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
       page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
@@ -1787,19 +1787,19 @@ ephy_web_view_load_error_page (EphyWebView *view,
                                "please report the problem to the "
                                "<strong>%s</strong> developers.</p>"),
                              LSB_DISTRIBUTOR);
-      button_label = g_strdup (_("Reload Anyway"));
+      button_label = g_strdup (_("Reload"));
       custom_class = "page-crash";
-      /* Access key for the "Reload Anyway" button on the crash error page. */
-      accesskey = dgettext ("accesskey", "A");
+      /* Access key for the "Reload" button on the crash error page. */
+      accesskey = C_("reload-access-key", "R");
       break;
     case EPHY_WEB_VIEW_ERROR_PROCESS_CRASH:
       page_title = g_strdup_printf (_("Problem displaying “%s”"), hostname);
       msg_title = g_strdup (_("Oops!"));
       msg = g_strdup (_("Something went wrong while displaying this page. Please reload or visit a different page to continue."));
-      button_label = g_strdup (_("Reload Anyway"));
+      button_label = g_strdup (_("Reload"));
       custom_class = "process-crash";
-      /* Access key for the "Reload Anyway" button on the crash error page. */
-      accesskey = dgettext ("accesskey", "A");
+      /* Access key for the "Reload" button on the crash error page. */
+      accesskey = C_("reload-access-key", "R");
       break;
     case EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE:
       /* Page title when a site cannot be loaded. %s is the site's hostname. */
@@ -1808,10 +1808,10 @@ ephy_web_view_load_error_page (EphyWebView *view,
       msg_title = g_strdup (_("Look out!"));
       msg = get_tls_error_page_message (view, hostname);
       /* Button on error page when a website's TLS certificate is invalid. */
-      button_label = g_strdup (_("Load Anyway"));
+      button_label = g_strdup (_("Accept Risk"));
       custom_class = "tls-error";
-      /* Access key for the "Load Anyway" button on the TLS error page. */
-      accesskey = dgettext ("accesskey", "A");
+      /* Access key for the "Accept Risk" button on the TLS error page. */
+      accesskey = C_("accept-risk-access-key", "R");
       load_anyway_js = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT");",
                                         webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
       break;
