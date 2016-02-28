@@ -430,6 +430,7 @@ history_service_query_urls_cb (EphyHistoryService *history,
                                GList *urls,
                                WebKitURISchemeRequest *request)
 {
+  EphySnapshotService *snapshot_service = ephy_snapshot_service_get_default ();
   GString *data_str;
   gsize data_length;
   char *lang;
@@ -464,66 +465,69 @@ history_service_query_urls_cb (EphyHistoryService *history,
                           "    }\n"
                           "  </script>\n"
                           "</head>\n"
-                          "<body>\n"
-                          "  <div id=\"overview\">\n"
-                          "    <div id=\"overview-grid\">\n"
-                          "      <ul id=\"overview-item-list\">\n", lang, lang,
+                          "<body>\n",
+                          lang, lang,
                           ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
                           _("Most Visited"));
   g_free (lang);
 
-  if (success) {
-    EphySnapshotService *snapshot_service = ephy_snapshot_service_get_default ();
+  if (g_list_length (urls) == 0 || !success) {
+    GtkIconInfo *icon_info;
 
-    if (g_list_length (urls) > 0) {
-      for (l = urls; l; l = g_list_next (l)) {
-        EphyHistoryURL *url = (EphyHistoryURL *)l->data;
-        const char *snapshot;
-        char *thumbnail_style = NULL;
+    icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+                                            "web-browser-symbolic",
+                                            128,
+                                            0);
+    g_string_append_printf (data_str,
+                            "  <div class=\"overview-empty\">\n"
+                            "    <img src=\"file://%s\"/>\n"
+                            "    <div><h1>%s</h1></div>\n"
+                            "    <div><p>%s</p></div>\n"
+                            "  </div>\n"
+                            "</body></html>\n",
+                            icon_info ? gtk_icon_info_get_filename (icon_info) : "",
+                            /* Displayed when opening the browser for the first time. */
+                            _("Welcome to Web"), _("Start browsing and your most-visited sites will appear here."));
+    if (icon_info)
+      g_object_unref (icon_info);
+    goto out;
+  }
 
-        snapshot = ephy_snapshot_service_lookup_snapshot_path (snapshot_service, url->url);
-        if (!snapshot) {
-          GetSnapshotPathAsyncData *data = g_new (GetSnapshotPathAsyncData, 1);
+  g_string_append (data_str,
+             "<div id=\"overview\">\n"
+             "  <div id=\"overview-grid\">\n"
+             "    <ul id=\"overview-item-list\">\n");
 
-          data->url = g_strdup (url->url);
-          data->mtime = url->thumbnail_time;
-          ephy_snapshot_service_get_snapshot_path_for_url_async (ephy_snapshot_service_get_default (),
-                                                                 url->url, url->thumbnail_time, NULL,
-                                                                 (GAsyncReadyCallback)got_snapshot_path_for_url_cb,
-                                                                 data);
-        } else {
-          thumbnail_style = g_strdup_printf (" style=\"background: url(file://%s) no-repeat;\"", snapshot);
-        }
+  for (l = urls; l; l = g_list_next (l)) {
+    EphyHistoryURL *url = (EphyHistoryURL *)l->data;
+    const char *snapshot;
+    char *thumbnail_style = NULL;
 
-        g_string_append_printf (data_str,
-                                "<li>"
-                                "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">"
-                                "    <div class=\"overview-close-button\" onclick=\"removeFromOverview(this.parentNode, event)\" title=\"%s\">&#10006;</div>"
-                                "    <span class=\"overview-thumbnail\"%s></span>"
-                                "    <span class=\"overview-title\">%s</span>"
-                                "  </a>"
-                                "</li>",
-                                g_markup_escape_text (url->title, -1), url->url, _("Remove from overview"),
-                                thumbnail_style ? thumbnail_style : "", url->title);
-        g_free (thumbnail_style);
-      }
+    snapshot = ephy_snapshot_service_lookup_snapshot_path (snapshot_service, url->url);
+    if (!snapshot) {
+      GetSnapshotPathAsyncData *data = g_new (GetSnapshotPathAsyncData, 1);
+
+      data->url = g_strdup (url->url);
+      data->mtime = url->thumbnail_time;
+      ephy_snapshot_service_get_snapshot_path_for_url_async (ephy_snapshot_service_get_default (),
+                                                             url->url, url->thumbnail_time, NULL,
+                                                             (GAsyncReadyCallback)got_snapshot_path_for_url_cb,
+                                                             data);
     } else {
-      GtkIconInfo *icon_info;
-      icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                              "web-browser",
-                                              256,
-                                              GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-
-        g_string_append_printf (data_str,
-                                "<li class=\"overview-empty\" >"
-                                "  <img src=\"file://%s\"/>"
-                                "  <h1>%s</h1>"
-                                "</li>",
-                                icon_info ? gtk_icon_info_get_filename (icon_info) : "",
-                                /* Displayed when opening the browser for the first time. */
-                               _("Start browsing and your most-visited sites will appear here"));
-        gtk_icon_info_free (icon_info);
+      thumbnail_style = g_strdup_printf (" style=\"background: url(file://%s) no-repeat;\"", snapshot);
     }
+
+    g_string_append_printf (data_str,
+                            "<li>"
+                            "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">"
+                            "    <div class=\"overview-close-button\" onclick=\"removeFromOverview(this.parentNode, event)\" title=\"%s\">&#10006;</div>"
+                            "    <span class=\"overview-thumbnail\"%s></span>"
+                            "    <span class=\"overview-title\">%s</span>"
+                            "  </a>"
+                            "</li>",
+                            g_markup_escape_text (url->title, -1), url->url, _("Remove from overview"),
+                            thumbnail_style ? thumbnail_style : "", url->title);
+    g_free (thumbnail_style);
   }
 
   data_str = g_string_append (data_str,
@@ -532,7 +536,7 @@ history_service_query_urls_cb (EphyHistoryService *history,
                               "  </div>\n"
                               "</body></html>\n");
 
-
+out:
   data_length = data_str->len;
   ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
   g_object_unref (request);

@@ -330,20 +330,29 @@ html[dir="rtl"] .overview-item {
     float: right;
 }
 
-#overview-grid li.overview-empty {
+.overview-empty {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     margin-left: auto;
     margin-right: auto;
     height: 80%;
     max-width: 800px;
-   -webkit-user-select: none;
-   -webkit-user-drag: none;
+    opacity: 0.55; /* Adwaita's dim-label */
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+}
+
+.overview-empty h1 {
+    color: black;
+    opacity: 0.55; /* Adwaita's dim-label */
+    text-shadow: none;
 }
 
 .overview-empty img {
     -webkit-user-select: none;
     -webkit-user-drag: none;
     filter: grayscale(100%);
-    opacity: 0.2;
+    width: 128px;
 }
