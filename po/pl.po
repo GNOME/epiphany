@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-27 21:17+0100\n"
-"PO-Revision-Date: 2016-02-27 21:18+0100\n"
+"POT-Creation-Date: 2016-02-29 00:35+0100\n"
+"PO-Revision-Date: 2016-02-29 00:37+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1159,17 +1159,18 @@ msgstr ""
 "nowy adres. Proszę także sprawdzić, czy połączenie internetowe działa "
 "poprawnie.</p>"
 
-#: ../embed/ephy-web-view.c:1776
-msgid "Try Again"
-msgstr "Spróbuj ponownie"
+#: ../embed/ephy-web-view.c:1776 ../embed/ephy-web-view.c:1790
+#: ../embed/ephy-web-view.c:1799
+msgid "Reload"
+msgstr "Wczytaj ponownie"
 
-#. Access key for the "Try Again" button on the network error page.
-#. Access key for the "Reload Anyway" button on the crash error page.
-#. Access key for the "Load Anyway" button on the TLS error page.
+#. Access key for the "Reload" button on the network error page.
+#. Access key for the "Reload" button on the crash error page.
 #: ../embed/ephy-web-view.c:1779 ../embed/ephy-web-view.c:1793
-#: ../embed/ephy-web-view.c:1802 ../embed/ephy-web-view.c:1814
-msgid "A"
-msgstr "o"
+#: ../embed/ephy-web-view.c:1802
+msgctxt "reload-access-key"
+msgid "R"
+msgstr "W"
 
 #: ../embed/ephy-web-view.c:1784
 msgid "Oops! There may be a problem."
@@ -1185,10 +1186,6 @@ msgstr ""
 "<p>Ta witryna była przyczyną niespodziewanego zamknięcia przeglądarki.</"
 "p><p>Jeśli to się wydarzy ponownie, proszę zgłosić ten problem programistom "
 "programu <strong>%s</strong>.</p>"
-
-#: ../embed/ephy-web-view.c:1790 ../embed/ephy-web-view.c:1799
-msgid "Reload Anyway"
-msgstr "Wczytaj ponownie mimo to"
 
 #: ../embed/ephy-web-view.c:1796
 #, c-format
@@ -1214,8 +1211,14 @@ msgstr "Uwaga!"
 
 #. Button on error page when a website's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1811
-msgid "Load Anyway"
-msgstr "Wczytaj mimo to"
+msgid "Accept Risk"
+msgstr "Akceptuję ryzyko"
+
+#. Access key for the "Accept Risk" button on the TLS error page.
+#: ../embed/ephy-web-view.c:1814
+msgctxt "accept-risk-access-key"
+msgid "R"
+msgstr "A"
 
 #: ../embed/ephy-web-view.c:2734
 msgid "_OK"
@@ -1579,7 +1582,7 @@ msgstr "Wszystkie pliki"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:620 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:620 ../src/ephy-history-window.c:263
 msgid "Cl_ear"
 msgstr "_Wyczyść"
 
@@ -1686,26 +1689,26 @@ msgid "Work"
 msgstr "Praca"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:923
+#: ../src/bookmarks/ephy-bookmarks.c:889
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Wszystkie"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:927
+#: ../src/bookmarks/ephy-bookmarks.c:893
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Niesklasyfikowane"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:931
+#: ../src/bookmarks/ephy-bookmarks.c:897
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Strony lokalne"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1146
+#: ../src/bookmarks/ephy-bookmarks.c:1109
 #: ../src/bookmarks/ephy-bookmarks-import.c:268
 msgid "Untitled"
 msgstr "Bez nazwy"
@@ -1718,7 +1721,7 @@ msgstr "Przeglądarka WWW (RDF)"
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:119
 msgid "Remove from this topic"
 msgstr "Usunięcie z tego tematu"
 
@@ -1751,7 +1754,7 @@ msgid "Create a new topic"
 msgstr "Tworzy nowy temat"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1157
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1155
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Otwórz w no_wym oknie"
@@ -1763,7 +1766,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Otwiera zaznaczoną zakładkę w nowym oknie"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:164
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1160
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Otwórz w nowej _karcie"
@@ -1824,7 +1827,7 @@ msgid "Cut the selection"
 msgstr "Wycina zaznaczenie"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1170 ../src/ephy-window.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1168 ../src/ephy-window.c:121
 msgid "_Copy"
 msgstr "S_kopiuj"
 
@@ -1885,7 +1888,7 @@ msgid "Show the title column"
 msgstr "Wyświetlanie kolumny tytułu"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1645
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1642
 msgid "Address"
 msgstr "Adres"
 
@@ -1982,7 +1985,7 @@ msgid "Export Bookmarks"
 msgstr "Eksportowanie zakładek"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:765
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1508
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1505
 #: ../src/bookmarks/ephy-topic-action.c:218
 msgid "Bookmarks"
 msgstr "Zakładki"
@@ -2008,16 +2011,16 @@ msgstr "Importowanie zakładek z:"
 msgid "File"
 msgstr "Plik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1164
 msgid "_Copy Address"
 msgstr "S_kopiuj adres"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1564
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1561
 #: ../src/resources/bookmark-properties.ui.h:5
 msgid "Topics"
 msgstr "Tematy"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1631
 msgid "Title"
 msgstr "Tytuł"
 
@@ -2432,11 +2435,11 @@ msgstr "W_czytaj ponownie"
 msgid "Display the latest content of the current page"
 msgstr "Wyświetla najnowszą treść bieżącej strony"
 
-#: ../src/ephy-history-window.c:251
+#: ../src/ephy-history-window.c:253
 msgid "Clear browsing history?"
 msgstr "Wyczyścić historię przeglądania?"
 
-#: ../src/ephy-history-window.c:255
+#: ../src/ephy-history-window.c:257
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2517,7 +2520,7 @@ msgstr ""
 msgid "Web options"
 msgstr "Opcje przeglądarki WWW"
 
-#: ../src/ephy-notebook.c:627
+#: ../src/ephy-notebook.c:617
 msgid "Close tab"
 msgstr "Zamyka kartę"
 
@@ -2740,65 +2743,65 @@ msgstr "Jeśli program zostanie zakończony, to pobierania zostaną anulowane"
 msgid "Quit and cancel downloads"
 msgstr "Zakończ działanie i anuluj pobierania"
 
-#: ../src/ephy-window.c:1141 ../src/window-commands.c:272
+#: ../src/ephy-window.c:1133 ../src/window-commands.c:272
 msgid "Open"
 msgstr "Otwórz"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1135
 msgid "Save As"
 msgstr "Zapisz jako"
 
-#: ../src/ephy-window.c:1145
+#: ../src/ephy-window.c:1137
 msgid "Save As Application"
 msgstr "Zapisz jako program"
 
-#: ../src/ephy-window.c:1147
+#: ../src/ephy-window.c:1139
 msgid "Print"
 msgstr "Wydrukuj"
 
-#: ../src/ephy-window.c:1149
+#: ../src/ephy-window.c:1141
 msgid "Bookmark"
 msgstr "Dodaj zakładkę"
 
-#: ../src/ephy-window.c:1151
+#: ../src/ephy-window.c:1143
 msgid "Find"
 msgstr "Znajdź"
 
-#: ../src/ephy-window.c:1157
+#: ../src/ephy-window.c:1149
 msgid "Encodings…"
 msgstr "Kodowania…"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1160
+#: ../src/ephy-window.c:1152
 msgid "Larger"
 msgstr "Większy"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1163
+#: ../src/ephy-window.c:1155
 msgid "Smaller"
 msgstr "Mniejszy"
 
-#: ../src/ephy-window.c:1185
+#: ../src/ephy-window.c:1177
 msgid "Back"
 msgstr "Wstecz"
 
-#: ../src/ephy-window.c:1197
+#: ../src/ephy-window.c:1189
 msgid "Forward"
 msgstr "Do przodu"
 
-#: ../src/ephy-window.c:1209
+#: ../src/ephy-window.c:1201
 msgid "Zoom"
 msgstr "Powiększenie"
 
-#: ../src/ephy-window.c:1218
+#: ../src/ephy-window.c:1210
 msgid "New _Tab"
 msgstr "Nowa _karta"
 
-#: ../src/ephy-window.c:1226
+#: ../src/ephy-window.c:1218
 msgid "Go to most visited"
 msgstr "Przejdź do najczęściej odwiedzanych"
 
-#: ../src/ephy-window.c:1755
+#: ../src/ephy-window.c:1732
 #, c-format
 msgid "Search the Web for '%s'"
 msgstr "Znajdź „%s” w sieci WWW"
@@ -2819,7 +2822,7 @@ msgstr "Zapis multimediów jako"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:475 ../src/prefs-dialog.c:481
+#: ../src/prefs-dialog.c:476 ../src/prefs-dialog.c:482
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2828,13 +2831,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:490
+#: ../src/prefs-dialog.c:491
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Określony przez użytkownika (%s)"
 
-#: ../src/prefs-dialog.c:512
+#: ../src/prefs-dialog.c:513
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
