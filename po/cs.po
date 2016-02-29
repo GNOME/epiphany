@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-28 04:52+0000\n"
-"PO-Revision-Date: 2016-02-28 09:43+0100\n"
+"POT-Creation-Date: 2016-02-29 04:52+0000\n"
+"PO-Revision-Date: 2016-02-29 15:48+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1152,16 +1152,17 @@ msgstr ""
 "adresu. Nezapomeňte se ujistit, jestli správně funguje vaše připojení k "
 "Internetu.</p>"
 
-#: ../embed/ephy-web-view.c:1776
-msgid "Try Again"
-msgstr "Zkusit znovu"
+#: ../embed/ephy-web-view.c:1776 ../embed/ephy-web-view.c:1790
+#: ../embed/ephy-web-view.c:1799
+msgid "Reload"
+msgstr "Znovu načíst"
 
-#. Access key for the "Try Again" button on the network error page.
-#. Access key for the "Reload Anyway" button on the crash error page.
-#. Access key for the "Load Anyway" button on the TLS error page.
+#. Access key for the "Reload" button on the network error page.
+#. Access key for the "Reload" button on the crash error page.
 #: ../embed/ephy-web-view.c:1779 ../embed/ephy-web-view.c:1793
-#: ../embed/ephy-web-view.c:1802 ../embed/ephy-web-view.c:1814
-msgid "A"
+#: ../embed/ephy-web-view.c:1802
+msgctxt "reload-access-key"
+msgid "R"
 msgstr "N"
 
 #: ../embed/ephy-web-view.c:1784
@@ -1178,10 +1179,6 @@ msgstr ""
 "<p>Tato stránka způsobila, že došlo k neočekávanému ukončení prohlížeče.</"
 "p><p>Pokud se to bude opakovat, nahlaste prosím problém vývojářům projektu "
 "<strong>%s</strong>.</p>"
-
-#: ../embed/ephy-web-view.c:1790 ../embed/ephy-web-view.c:1799
-msgid "Reload Anyway"
-msgstr "Přesto načíst znovu"
 
 #: ../embed/ephy-web-view.c:1796
 #, c-format
@@ -1207,8 +1204,14 @@ msgstr "Pozor!"
 
 #. Button on error page when a website's TLS certificate is invalid.
 #: ../embed/ephy-web-view.c:1811
-msgid "Load Anyway"
-msgstr "Přesto načíst"
+msgid "Accept Risk"
+msgstr "Přijmout riziko"
+
+#. Access key for the "Accept Risk" button on the TLS error page.
+#: ../embed/ephy-web-view.c:1814
+msgctxt "accept-risk-access-key"
+msgid "R"
+msgstr "R"
 
 #: ../embed/ephy-web-view.c:2734
 msgid "_OK"
@@ -2084,7 +2087,8 @@ msgid ""
 msgstr ""
 "Tuto akci nelze vrátit zpět. Data vybraná k vymazání budou odstraněna trvale."
 
-#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:23
+#: ../src/resources/cookies-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:23
 msgid "Cookies"
 msgstr "Cookies"
 
