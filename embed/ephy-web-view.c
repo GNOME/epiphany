@@ -688,6 +688,13 @@ form_auth_data_save_requested (EphyEmbedShell *shell,
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
     return;
 
+  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    ephy_web_extension_proxy_form_auth_data_save_confirmation_response (web_view->web_extension,
+                                                                        request_id,
+                                                                        TRUE);
+    return;
+  }
+
   info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, hostname, username);
   data = g_slice_new (FormAuthRequestData);
   data->web_view = web_view;
