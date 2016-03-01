@@ -101,8 +101,7 @@ ephy_downloads_manager_class_init (EphyDownloadsManagerClass *klass)
     g_signal_new ("download-added",
                   EPHY_TYPE_DOWNLOADS_MANAGER,
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_DOWNLOAD);
 
@@ -110,8 +109,7 @@ ephy_downloads_manager_class_init (EphyDownloadsManagerClass *klass)
     g_signal_new ("download-removed",
                   EPHY_TYPE_DOWNLOADS_MANAGER,
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_DOWNLOAD);
 
@@ -119,8 +117,7 @@ ephy_downloads_manager_class_init (EphyDownloadsManagerClass *klass)
     g_signal_new ("estimated-progress-changed",
                   EPHY_TYPE_DOWNLOADS_MANAGER,
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 }
 

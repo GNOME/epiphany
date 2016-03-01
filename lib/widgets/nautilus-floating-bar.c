@@ -392,8 +392,7 @@ nautilus_floating_bar_class_init (NautilusFloatingBarClass *klass)
 		g_signal_new ("action",
 			      G_TYPE_FROM_CLASS (klass),
 			      G_SIGNAL_RUN_LAST,
-			      0, NULL, NULL,
-			      g_cclosure_marshal_VOID__INT,
+			      0, NULL, NULL, NULL,
 			      G_TYPE_NONE, 1,
 			      G_TYPE_INT);
 

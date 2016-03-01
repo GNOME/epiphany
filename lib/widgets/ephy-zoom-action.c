@@ -188,8 +188,7 @@ ephy_zoom_action_class_init (EphyZoomActionClass *class)
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (EphyZoomActionClass, zoom_to_level),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__FLOAT,
+			      NULL, NULL, NULL,
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_FLOAT);

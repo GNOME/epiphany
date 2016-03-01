@@ -56,7 +56,7 @@ ephy_link_default_init (EphyLinkInterface *iface)
 		 G_SIGNAL_RUN_LAST,
 		 G_STRUCT_OFFSET (EphyLinkInterface, open_link),
 		 ephy_signal_accumulator_object, ephy_embed_get_type,
-		 g_cclosure_marshal_generic,
+		 NULL,
 		 GTK_TYPE_WIDGET /* Can't use an interface type here */,
 		 3,
 		 G_TYPE_STRING,

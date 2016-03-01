@@ -426,8 +426,7 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
   signals[LOCK_CLICKED] = g_signal_new ("lock-clicked",
                                         EPHY_TYPE_TITLE_BOX,
                                         G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                        0, NULL, NULL,
-                                        g_cclosure_marshal_generic,
+                                        0, NULL, NULL, NULL,
                                         G_TYPE_NONE,
                                         1,
                                         GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);

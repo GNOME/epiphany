@@ -201,8 +201,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
     g_signal_new ("urls-visited",
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -210,8 +209,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
     g_signal_new ("cleared",
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -219,8 +217,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
     g_signal_new ("url-title-changed",
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -230,8 +227,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
     g_signal_new ("url-deleted",
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__STRING,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
@@ -240,8 +236,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
     g_signal_new ("host-deleted",
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_VOID__STRING,
+                  0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
