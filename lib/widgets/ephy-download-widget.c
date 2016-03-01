@@ -137,9 +137,18 @@ update_download_icon (EphyDownloadWidget *widget)
   const char *content_type;
 
   content_type = ephy_download_get_content_type (widget->download);
-  if (content_type)
+  if (content_type) {
     icon = g_content_type_get_symbolic_icon (content_type);
-  else
+    /* g_content_type_get_symbolic_icon() always creates a GThemedIcon, but we check it
+     * here just in case that changes in GLib eventually.
+     */
+    if (G_IS_THEMED_ICON (icon)) {
+      /* Ensure we always fallback to package-x-generic-symbolic if all other icons are
+       * missing in the theme.
+       */
+      g_themed_icon_append_name (G_THEMED_ICON (icon), "package-x-generic-symbolic");
+    }
+  } else
     icon = g_icon_new_for_string ("package-x-generic-symbolic", NULL);
 
   gtk_image_set_from_gicon (GTK_IMAGE (widget->icon), icon, GTK_ICON_SIZE_MENU);
