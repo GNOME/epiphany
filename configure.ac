@@ -39,7 +39,6 @@ AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS], [$ax_is_release], [],
 
 AC_PROG_CC
 
-AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
 
 dnl Note: I want to enable subdir-objects here, to silence Automake's many
