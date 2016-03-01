@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany"
 "&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-04 04:53+0000\n"
-"PO-Revision-Date: 2016-02-06 21:03+0200\n"
+"POT-Creation-Date: 2016-03-01 16:53+0000\n"
+"PO-Revision-Date: 2016-03-01 20:51+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -84,11 +84,11 @@ msgid "GNOME Web is often referred to by its code name, Epiphany."
 msgstr "GNOME tīmekli dažkārt dēvē arī par Epiphany, kas ir tā koda nosaukums."
 
 #: ../data/epiphany.appdata.xml.in.h:5
-msgid "The GNOME web site displayed in GNOME web."
-msgstr "GNOME tīmekļa vietne attēlota GNOME tīmeklī."
+#| msgid "The GNOME web site displayed in GNOME web."
+msgid "The GNOME web site displayed in GNOME Web"
+msgstr "GNOME tīmekļa vietne attēlota GNOME tīmeklī"
 
 #: ../data/epiphany.appdata.xml.in.h:6
-#| msgid "Use GNOME fonts"
 msgid "The GNOME Project"
 msgstr "GNOME projekts"
 
@@ -386,7 +386,7 @@ msgstr ""
 "Noklusētais kodējums. Iespējamās vērtības ir tās, ko saprot WebKitGTK+."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:57
-#: ../src/resources/prefs-dialog.ui.h:37
+#: ../src/resources/prefs-dialog.ui.h:39
 msgid "Languages"
 msgstr "Valodas"
 
@@ -557,7 +557,6 @@ msgid "List of installed web applications"
 msgstr "Saraksts ar instalētajām tīmekļa lietotnēm"
 
 #: ../embed/ephy-about-handler.c:366
-#| msgid "_Delete"
 msgid "Delete"
 msgstr "Dzēst"
 
@@ -566,19 +565,28 @@ msgstr "Dzēst"
 msgid "Installed on:"
 msgstr "Instalēts:"
 
-#: ../embed/ephy-about-handler.c:472 ../embed/ephy-embed-utils.c:310
+#: ../embed/ephy-about-handler.c:471 ../embed/ephy-embed-utils.c:310
 msgid "Most Visited"
 msgstr "Biežāk apmeklētās"
 
-#: ../embed/ephy-about-handler.c:505
+#. Displayed when opening the browser for the first time.
+#: ../embed/ephy-about-handler.c:490
+msgid "Welcome to Web"
+msgstr "Laipni lūdzam Tīmeklī"
+
+#: ../embed/ephy-about-handler.c:490
+msgid "Start browsing and your most-visited sites will appear here."
+msgstr "Sāciet pārlūkot, un jūsu visvairāk apmeklētās vietnes parādīsies šeit."
+
+#: ../embed/ephy-about-handler.c:528
 msgid "Remove from overview"
 msgstr "Izņemt no pārskata"
 
-#: ../embed/ephy-about-handler.c:571 ../embed/ephy-about-handler.c:572
+#: ../embed/ephy-about-handler.c:594 ../embed/ephy-about-handler.c:595
 msgid "Private Browsing"
 msgstr "Privātā pārlūkošana"
 
-#: ../embed/ephy-about-handler.c:573
+#: ../embed/ephy-about-handler.c:596
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -588,14 +596,14 @@ msgstr ""
 "lapas neparādīsies pārlūkošanas vēsturē un visa uzglabātā informācija tiks "
 "izdzēsta līdz ar loga aizvēršanu. Jūsu lejupielādētās datnes tiks paturētas."
 
-#: ../embed/ephy-about-handler.c:577
+#: ../embed/ephy-about-handler.c:600
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Inkognito režīms slēpj jūsu aktivitātes no citiem cilvēkiem, kas izmanto šo "
 "datoru."
 
-#: ../embed/ephy-about-handler.c:579
+#: ../embed/ephy-about-handler.c:602
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -611,16 +619,16 @@ msgid "Blank page"
 msgstr "Tukša lapa"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:533
+#: ../embed/ephy-embed.c:534
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Spiediet %s, lai pamestu pilnekrānu"
 
-#: ../embed/ephy-embed.c:533
+#: ../embed/ephy-embed.c:534
 msgid "ESC"
 msgstr "Esc"
 
-#: ../embed/ephy-embed.c:533
+#: ../embed/ephy-embed.c:534
 msgid "F11"
 msgstr "F11"
 
@@ -961,73 +969,73 @@ msgstr "Teksts nav atrasts"
 msgid "Search wrapped back to the top"
 msgstr "Meklēšana atgriezās atpakaļ augšā"
 
-#: ../embed/ephy-find-toolbar.c:427
+#: ../embed/ephy-find-toolbar.c:408
 msgid "Type to search…"
 msgstr "Rakstiet, lai meklētu…"
 
-#: ../embed/ephy-find-toolbar.c:433
+#: ../embed/ephy-find-toolbar.c:414
 msgid "Find previous occurrence of the search string"
 msgstr "Meklēt iepriekšējo meklētās virknes parādīšanos"
 
-#: ../embed/ephy-find-toolbar.c:441
+#: ../embed/ephy-find-toolbar.c:422
 msgid "Find next occurrence of the search string"
 msgstr "Meklēt nākamo meklētās virknes parādīšanos"
 
-#: ../embed/ephy-web-view.c:493
+#: ../embed/ephy-web-view.c:495
 msgid "_Don’t Save"
 msgstr "_Nesaglabāt"
 
-#: ../embed/ephy-web-view.c:494 ../lib/widgets/ephy-file-chooser.c:190
+#: ../embed/ephy-web-view.c:496 ../lib/widgets/ephy-file-chooser.c:195
 msgid "_Save"
 msgstr "_Saglabāt"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:505
+#: ../embed/ephy-web-view.c:507
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Vai vēlaties saglabāt savu “%s” paroli?"
 
-#: ../embed/ephy-web-view.c:1390
+#: ../embed/ephy-web-view.c:1249
 msgid "Deny"
 msgstr "Liegt"
 
-#: ../embed/ephy-web-view.c:1391
+#: ../embed/ephy-web-view.c:1250
 msgid "Allow"
 msgstr "Atļaut"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1403
+#: ../embed/ephy-web-view.c:1262
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Vietnes <b>%s</b> lapa vēlas zināt jūsu atrašanās vietu."
 
 #. Translators: Notification policy for a specific site.
-#: ../embed/ephy-web-view.c:1407
+#: ../embed/ephy-web-view.c:1266
 #, c-format
 msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgstr "Vietnes <b>%s</b> lapa vēlas jums parādīt darbvirsmas paziņojumus."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1493
+#: ../embed/ephy-web-view.c:1352
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Ielādē “%s”..."
 
-#: ../embed/ephy-web-view.c:1495
+#: ../embed/ephy-web-view.c:1354
 msgid "Loading…"
 msgstr "Ielādē..."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1743
+#: ../embed/ephy-web-view.c:1604
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Šī tīmekļa vietne sniedza identifikāciju, kas pieder citai tīmekļa vietnei."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1748
+#: ../embed/ephy-web-view.c:1609
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1036,12 +1044,12 @@ msgstr ""
 "sava datora kalendāra datumu."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1753
+#: ../embed/ephy-web-view.c:1614
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Šīs tīmekļa vietnes identifikāciju neizdeva uzticama institūcija."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1758
+#: ../embed/ephy-web-view.c:1619
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1049,7 +1057,7 @@ msgstr ""
 "bojāta."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1763
+#: ../embed/ephy-web-view.c:1624
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1057,7 +1065,7 @@ msgstr ""
 "Šīs tīmekļa vietnes identifikāciju atsauca institūcija, kura to ir izdevusi."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1768
+#: ../embed/ephy-web-view.c:1629
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1066,7 +1074,7 @@ msgstr ""
 "šifrēšanu."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1773
+#: ../embed/ephy-web-view.c:1634
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1075,13 +1083,13 @@ msgstr ""
 "datumu sava datora kalendārā."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1808
+#: ../embed/ephy-web-view.c:1669
 #, c-format
 msgid "This might not be the real %s."
 msgstr "Šis varētu nebūt īstais %s."
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1813
+#: ../embed/ephy-web-view.c:1674
 msgid ""
 "When you try to connect securely, websites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
@@ -1092,7 +1100,7 @@ msgstr ""
 "šīs vietnes identifikāciju:"
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1819
+#: ../embed/ephy-web-view.c:1680
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this website does not use trusted "
@@ -1103,28 +1111,28 @@ msgstr ""
 "neizmanto uzticamu identifikāciju."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1823
+#: ../embed/ephy-web-view.c:1684
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
 msgstr ""
 "Likumīgas bankas, veikali un citas publiskās vietnes jums neprasīs to darīt."
 
-#: ../embed/ephy-web-view.c:1872
+#: ../embed/ephy-web-view.c:1752
 msgid "None specified"
 msgstr "Nav norādīts"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1885 ../embed/ephy-web-view.c:1902
-#: ../embed/ephy-web-view.c:1926
+#: ../embed/ephy-web-view.c:1765 ../embed/ephy-web-view.c:1782
+#: ../embed/ephy-web-view.c:1806
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Problēma, ielādējot “%s”"
 
-#: ../embed/ephy-web-view.c:1887
+#: ../embed/ephy-web-view.c:1767
 msgid "Oops! Unable to display this website."
 msgstr "Vai! Neizdevās parādīt šo tīmekļa vietni."
 
-#: ../embed/ephy-web-view.c:1888
+#: ../embed/ephy-web-view.c:1768
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1136,24 +1144,25 @@ msgstr ""
 "code></p> <p>Tā varētu būt uz laiku atslēgta vai pārvietota uz citu adresi. "
 "Neaizmirstiet pārbaudīt, vai jūsu interneta savienojums darbojas pareizi.</p>"
 
-#: ../embed/ephy-web-view.c:1896
-#| msgid "Try again"
-msgid "Try Again"
-msgstr "Mēģināt vēlreiz"
+#: ../embed/ephy-web-view.c:1776 ../embed/ephy-web-view.c:1790
+#: ../embed/ephy-web-view.c:1799
+#| msgid "_Reload"
+msgid "Reload"
+msgstr "Pārlādēt"
 
-#. Access key for the "Try Again" button on the network error page.
-#. Access key for the "Reload Anyway" button on the crash error page.
-#. Access key for the "Load Anyway" button on the TLS error page.
-#: ../embed/ephy-web-view.c:1899 ../embed/ephy-web-view.c:1913
-#: ../embed/ephy-web-view.c:1922 ../embed/ephy-web-view.c:1934
-msgid "A"
-msgstr "v"
+#. Access key for the "Reload" button on the network error page.
+#. Access key for the "Reload" button on the crash error page.
+#: ../embed/ephy-web-view.c:1779 ../embed/ephy-web-view.c:1793
+#: ../embed/ephy-web-view.c:1802
+msgctxt "reload-access-key"
+msgid "R"
+msgstr "R"
 
-#: ../embed/ephy-web-view.c:1904
+#: ../embed/ephy-web-view.c:1784
 msgid "Oops! There may be a problem."
 msgstr "Ak vai! Gadījās problēma."
 
-#: ../embed/ephy-web-view.c:1905
+#: ../embed/ephy-web-view.c:1785
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1164,20 +1173,16 @@ msgstr ""
 "atkal atkārtojas, lūdzu, ziņojiet par problēmu <strong>%s</strong> "
 "izstrādātājiem.</p>"
 
-#: ../embed/ephy-web-view.c:1910 ../embed/ephy-web-view.c:1919
-msgid "Reload Anyway"
-msgstr "Tomēr ielādēt atkal"
-
-#: ../embed/ephy-web-view.c:1916
+#: ../embed/ephy-web-view.c:1796
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Problēma, attēlojot “%s”"
 
-#: ../embed/ephy-web-view.c:1917
+#: ../embed/ephy-web-view.c:1797
 msgid "Oops!"
 msgstr "Ak vai!"
 
-#: ../embed/ephy-web-view.c:1918
+#: ../embed/ephy-web-view.c:1798
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1186,22 +1191,27 @@ msgstr ""
 "apmeklējiet citu lapu, lai turpinātu."
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1928
+#: ../embed/ephy-web-view.c:1808
 msgid "Look out!"
 msgstr "Uzmanies!"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1931
-msgid "Load Anyway"
-msgstr "Tomēr ielādēt"
+#: ../embed/ephy-web-view.c:1811
+msgid "Accept Risk"
+msgstr "Pieņemt risku"
 
-#: ../embed/ephy-web-view.c:2857
+#. Access key for the "Accept Risk" button on the TLS error page.
+#: ../embed/ephy-web-view.c:1814
+msgctxt "accept-risk-access-key"
+msgid "R"
+msgstr "R"
+
+#: ../embed/ephy-web-view.c:2734
 msgid "_OK"
 msgstr "_Labi"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:108 ../lib/widgets/ephy-downloads-popover.c:179
-#: ../src/resources/prefs-dialog.ui.h:2
+#: ../lib/ephy-file-helpers.c:108 ../src/resources/prefs-dialog.ui.h:2
 msgid "Downloads"
 msgstr "Lejupielādes"
 
@@ -1210,17 +1220,17 @@ msgstr "Lejupielādes"
 msgid "Desktop"
 msgstr "Darbvirsma"
 
-#: ../lib/ephy-file-helpers.c:342
+#: ../lib/ephy-file-helpers.c:351
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Neizdevās izveidot pagaidu direktoriju mapē “%s”."
 
-#: ../lib/ephy-file-helpers.c:471
+#: ../lib/ephy-file-helpers.c:481
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Datne “%s” jau eksistē. Lūdzu, pārvietojiet to citur."
 
-#: ../lib/ephy-file-helpers.c:495
+#: ../lib/ephy-file-helpers.c:505
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Neizdevās izveidot direktoriju “%s”."
@@ -1358,102 +1368,103 @@ msgstr "%Y. gada %d. %B"
 msgid "Unknown"
 msgstr "Nezināms"
 
-#: ../lib/ephy-zoom.h:43
+#: ../lib/ephy-zoom.h:39
 msgid "50%"
 msgstr "50%"
 
-#: ../lib/ephy-zoom.h:44
+#: ../lib/ephy-zoom.h:40
 msgid "75%"
 msgstr "75%"
 
-#: ../lib/ephy-zoom.h:45
+#: ../lib/ephy-zoom.h:41
 msgid "100%"
 msgstr "100%"
 
-#: ../lib/ephy-zoom.h:46
+#: ../lib/ephy-zoom.h:42
 msgid "125%"
 msgstr "125%"
 
-#: ../lib/ephy-zoom.h:47
+#: ../lib/ephy-zoom.h:43
 msgid "150%"
 msgstr "150%"
 
-#: ../lib/ephy-zoom.h:48
+#: ../lib/ephy-zoom.h:44
 msgid "175%"
 msgstr "175%"
 
-#: ../lib/ephy-zoom.h:49
+#: ../lib/ephy-zoom.h:45
 msgid "200%"
 msgstr "200%"
 
-#: ../lib/ephy-zoom.h:50
+#: ../lib/ephy-zoom.h:46
 msgid "300%"
 msgstr "300%"
 
-#: ../lib/ephy-zoom.h:51
+#: ../lib/ephy-zoom.h:47
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:362
+#: ../lib/history/ephy-history-service-hosts-table.c:356
 msgid "Others"
 msgstr "Citi"
 
-#: ../lib/history/ephy-history-service-hosts-table.c:366
+#: ../lib/history/ephy-history-service-hosts-table.c:360
 msgid "Local files"
 msgstr "Vietējās datnes"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:98
+#: ../lib/widgets/ephy-certificate-dialog.c:101
 msgid "The certificate does not match this website"
 msgstr "Sertifikāts neatbilst šai tīmekļa vietnei"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:101
+#: ../lib/widgets/ephy-certificate-dialog.c:104
 msgid "The certificate has expired"
 msgstr "Sertifikātam beidzies derīguma termiņš"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:104
+#: ../lib/widgets/ephy-certificate-dialog.c:107
 msgid "The signing certificate authority is not known"
 msgstr "Sertificēšanas institūcija nav pazīstama"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:107
+#: ../lib/widgets/ephy-certificate-dialog.c:110
 msgid "The certificate contains errors"
 msgstr "Sertifikātā ir kļūdas"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:110
+#: ../lib/widgets/ephy-certificate-dialog.c:113
 msgid "The certificate has been revoked"
 msgstr "Sertifikāts ir atsaukts"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:113
+#: ../lib/widgets/ephy-certificate-dialog.c:116
 msgid "The certificate is signed using a weak signature algorithm"
 msgstr "Sertifikāts ir parakstīts ar vāju parakstīšanas algoritmu"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:116
+#: ../lib/widgets/ephy-certificate-dialog.c:119
 msgid "The certificate activation time is still in the future"
 msgstr "Sertifikāta darbības laiks sākas nākotnē"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:159
+#: ../lib/widgets/ephy-certificate-dialog.c:161
 msgid "The identity of this website has been verified."
 msgstr "Šīs tīmekļa vietnes identitāte ir apstiprināta."
 
-#: ../lib/widgets/ephy-certificate-dialog.c:160
+#: ../lib/widgets/ephy-certificate-dialog.c:162
 msgid "The identity of this website has not been verified."
 msgstr "Šīs tīmekļa vietnes identitāte NAV apstiprināta."
 
 #. Message on certificte dialog ertificate dialog
-#: ../lib/widgets/ephy-certificate-dialog.c:172
+#: ../lib/widgets/ephy-certificate-dialog.c:174
 msgid "No problems have been detected with your connection."
 msgstr "Nav konstatētas problēmas ar jūsu savienojumu."
 
-#: ../lib/widgets/ephy-certificate-dialog.c:175
+#: ../lib/widgets/ephy-certificate-dialog.c:177
 msgid ""
 "This certificate is valid. However, resources on this page were sent "
 "insecurely."
 msgstr "Sertifikāts ir derīgs. Bet šīs lapas resursi ir nosūtīti nedroši."
 
-#: ../lib/widgets/ephy-downloads-popover.c:186
-msgid "Clear"
-msgstr "Attīrīt"
+#: ../lib/widgets/ephy-downloads-popover.c:223
+#| msgid "C_lear All"
+msgid "_Clear All"
+msgstr "Attīrīt _visu"
 
-#: ../lib/widgets/ephy-download-widget.c:85
+#: ../lib/widgets/ephy-download-widget.c:84
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
@@ -1461,7 +1472,7 @@ msgstr[0] "Atlikusi %d sekunde"
 msgstr[1] "Atlikušas %d sekundes"
 msgstr[2] "Atlikušas %d sekundes"
 
-#: ../lib/widgets/ephy-download-widget.c:91
+#: ../lib/widgets/ephy-download-widget.c:90
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
@@ -1469,7 +1480,7 @@ msgstr[0] "Atlikusi %d minūte"
 msgstr[1] "Atlikušas %d minūtes"
 msgstr[2] "Atlikušas %d minūtes"
 
-#: ../lib/widgets/ephy-download-widget.c:97
+#: ../lib/widgets/ephy-download-widget.c:96
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
@@ -1477,7 +1488,7 @@ msgstr[0] "Atlikusi %d stunda"
 msgstr[1] "Atlikušas %d stundas"
 msgstr[2] "Atlikušas %d stundas"
 
-#: ../lib/widgets/ephy-download-widget.c:103
+#: ../lib/widgets/ephy-download-widget.c:102
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
@@ -1485,7 +1496,7 @@ msgstr[0] "Atlikusi %d diena"
 msgstr[1] "Atlikušas %d dienas"
 msgstr[2] "Atlikušas %d dienas"
 
-#: ../lib/widgets/ephy-download-widget.c:109
+#: ../lib/widgets/ephy-download-widget.c:108
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
@@ -1493,7 +1504,7 @@ msgstr[0] "Atlikusi %d nedēļa"
 msgstr[1] "Atlikušas %d nedēļas"
 msgstr[2] "Atlikušas %d nedēļas"
 
-#: ../lib/widgets/ephy-download-widget.c:115
+#: ../lib/widgets/ephy-download-widget.c:114
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
@@ -1501,27 +1512,27 @@ msgstr[0] "Atlicis %d mēnesis"
 msgstr[1] "Atlikuši %d mēneši"
 msgstr[2] "Atlikuši %d mēneši"
 
-#: ../lib/widgets/ephy-download-widget.c:230
-#: ../lib/widgets/ephy-download-widget.c:411
+#: ../lib/widgets/ephy-download-widget.c:237
+#: ../lib/widgets/ephy-download-widget.c:420
 msgid "Finished"
 msgstr "Pabeigts"
 
-#: ../lib/widgets/ephy-download-widget.c:247
-#: ../lib/widgets/ephy-download-widget.c:407
+#: ../lib/widgets/ephy-download-widget.c:254
+#: ../lib/widgets/ephy-download-widget.c:416
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Kļūda lejupielādējot: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:274
+#: ../lib/widgets/ephy-download-widget.c:281
 msgid "Cancelling…"
 msgstr "Atceļ…"
 
-#: ../lib/widgets/ephy-download-widget.c:413
+#: ../lib/widgets/ephy-download-widget.c:422
 msgid "Starting…"
 msgstr "Uzsāk…"
 
-#: ../lib/widgets/ephy-file-chooser.c:180
-#: ../lib/widgets/ephy-file-chooser.c:189
+#: ../lib/widgets/ephy-file-chooser.c:185
+#: ../lib/widgets/ephy-file-chooser.c:194
 #: ../src/bookmarks/ephy-bookmark-properties.c:391
 #: ../src/bookmarks/ephy-bookmarks-editor.c:820
 #: ../src/resources/clear-data-dialog.ui.h:3
@@ -1529,24 +1540,24 @@ msgstr "Uzsāk…"
 msgid "_Cancel"
 msgstr "At_celt"
 
-#: ../lib/widgets/ephy-file-chooser.c:181
+#: ../lib/widgets/ephy-file-chooser.c:186
 #: ../src/resources/history-dialog.ui.h:1
 msgid "_Open"
 msgstr "_Atvērt"
 
-#: ../lib/widgets/ephy-file-chooser.c:206
+#: ../lib/widgets/ephy-file-chooser.c:211
 msgid "All supported types"
 msgstr "Visi atbalstītie tipi"
 
-#: ../lib/widgets/ephy-file-chooser.c:220
+#: ../lib/widgets/ephy-file-chooser.c:225
 msgid "Web pages"
 msgstr "Tīmekļa lapas"
 
-#: ../lib/widgets/ephy-file-chooser.c:231
+#: ../lib/widgets/ephy-file-chooser.c:236
 msgid "Images"
 msgstr "Attēli"
 
-#: ../lib/widgets/ephy-file-chooser.c:239
+#: ../lib/widgets/ephy-file-chooser.c:244
 #: ../src/bookmarks/ephy-bookmarks-editor.c:637
 msgid "All files"
 msgstr "Visas datnes"
@@ -1555,20 +1566,20 @@ msgstr "Visas datnes"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:599 ../src/ephy-history-window.c:261
+#: ../lib/widgets/ephy-location-entry.c:620 ../src/ephy-history-window.c:263
 msgid "Cl_ear"
 msgstr "N_otīrīt"
 
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:618 ../src/ephy-window.c:115
+#: ../lib/widgets/ephy-location-entry.c:639 ../src/ephy-window.c:115
 msgid "_Undo"
 msgstr "_Atsaukt"
 
-#: ../lib/widgets/ephy-location-entry.c:625
+#: ../lib/widgets/ephy-location-entry.c:646
 msgid "_Redo"
 msgstr "Ata_tsaukt"
 
-#: ../lib/widgets/ephy-location-entry.c:908
+#: ../lib/widgets/ephy-location-entry.c:927
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Velciet un nometiet šo ikonu, lai izveidotu saiti uz šo lapu"
 
@@ -1579,7 +1590,7 @@ msgid "You are connected to %s"
 msgstr "Ir savienojums ar %s"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
-#: ../lib/widgets/ephy-security-popover.c:113
+#: ../lib/widgets/ephy-security-popover.c:110
 #, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
@@ -1589,7 +1600,7 @@ msgstr ""
 "savienojies ar uzbrucēju, kas izliekas par %s."
 
 #. Label in certificate popover when site uses HTTP. %s is a URL.
-#: ../lib/widgets/ephy-security-popover.c:121
+#: ../lib/widgets/ephy-security-popover.c:118
 #, c-format
 msgid ""
 "%s has no security. An attacker could see any information you send, or "
@@ -1599,17 +1610,16 @@ msgstr ""
 "kontrolēt saturu, kuru jūs saņemat."
 
 #. Label in certificate popover when site sends mixed content.
-#: ../lib/widgets/ephy-security-popover.c:130
+#: ../lib/widgets/ephy-security-popover.c:127
 msgid "This web site did not properly secure your connection."
 msgstr "Tīmekļa vietne nenodrošināja kārtīgu savienojuma drošību."
 
 #. Label in certificate popover on secure sites.
-#: ../lib/widgets/ephy-security-popover.c:136
-#| msgid "Your connection is secure."
+#: ../lib/widgets/ephy-security-popover.c:133
 msgid "Your connection seems to be secure."
 msgstr "Jūsu savienojums izskatās drošs."
 
-#: ../lib/widgets/ephy-security-popover.c:187
+#: ../lib/widgets/ephy-security-popover.c:182
 msgid "_View Certificate…"
 msgstr "_Skatīt sertifikātu…"
 
@@ -1633,7 +1643,7 @@ msgid "“%s” Properties"
 msgstr "“%s” īpašības"
 
 #: ../src/bookmarks/ephy-bookmark-properties.c:392
-#: ../src/resources/prefs-dialog.ui.h:38
+#: ../src/resources/prefs-dialog.ui.h:40
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Pievienot"
@@ -1663,26 +1673,26 @@ msgid "Work"
 msgstr "Darbs"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:923
+#: ../src/bookmarks/ephy-bookmarks.c:889
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Visas"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:927
+#: ../src/bookmarks/ephy-bookmarks.c:893
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Bez kategorijas"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:931
+#: ../src/bookmarks/ephy-bookmarks.c:897
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Tuvējās vietnes"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1146
+#: ../src/bookmarks/ephy-bookmarks.c:1109
 #: ../src/bookmarks/ephy-bookmarks-import.c:268
 msgid "Untitled"
 msgstr "Bez nosaukuma"
@@ -1695,7 +1705,7 @@ msgstr "Tīmeklis (RDF)"
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:119
 msgid "Remove from this topic"
 msgstr "Izņemt no šī temata"
 
@@ -1728,7 +1738,7 @@ msgid "Create a new topic"
 msgstr "Izveidot jaunu tematu"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1157
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1155
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Atvērt jaunā _logā"
@@ -1740,7 +1750,7 @@ msgid "Open the selected bookmark in a new window"
 msgstr "Atvērt izvēlēto grāmatzīmi jaunā logā"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:164
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1160
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Atvērt jaunā _cilnē"
@@ -1801,7 +1811,7 @@ msgid "Cut the selection"
 msgstr "Izgriezt izvēlēto"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:186
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1170 ../src/ephy-window.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1168 ../src/ephy-window.c:121
 msgid "_Copy"
 msgstr "_Kopēt"
 
@@ -1862,7 +1872,7 @@ msgid "Show the title column"
 msgstr "Rādīt nosaukuma kolonnu"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1645
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1642
 msgid "Address"
 msgstr "Adrese"
 
@@ -1958,7 +1968,7 @@ msgid "Export Bookmarks"
 msgstr "Eksportēt grāmatzīmes"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:765
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1508
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1505
 #: ../src/bookmarks/ephy-topic-action.c:218
 msgid "Bookmarks"
 msgstr "Grāmatzīmes"
@@ -1984,16 +1994,16 @@ msgstr "Importēt grāmatzīmes no:"
 msgid "File"
 msgstr "Datne"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1164
 msgid "_Copy Address"
 msgstr "_Kopēt adresi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1564
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1561
 #: ../src/resources/bookmark-properties.ui.h:5
 msgid "Topics"
 msgstr "Temati"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1634
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1631
 msgid "Title"
 msgstr "Nosaukums"
 
@@ -2071,7 +2081,7 @@ msgstr ""
 "Jūs nevarat atsaukt šo darbību. Datus, kurus jūs norādāt kā attīrāmus, "
 "nevarēs atgriezt."
 
-#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:21
+#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:23
 msgid "Cookies"
 msgstr "Sīkdatnes"
 
@@ -2103,10 +2113,6 @@ msgstr "Vietne"
 #: ../src/resources/cookies-dialog.ui.h:7
 msgid "Delete the selected cookies"
 msgstr "Dzēst izvēlēto sīkdatni"
-
-#: ../src/resources/cookies-dialog.ui.h:8
-msgid "Remove"
-msgstr "Izņemt"
 
 #: ../src/resources/encoding-dialog.ui.h:1
 msgid "Text Encoding"
@@ -2195,7 +2201,7 @@ msgid "Open the selected pages in new tabs"
 msgstr "Atvērt izvēlētās lapas jaunās cilnēs"
 
 #: ../src/resources/passwords-dialog.ui.h:1
-#: ../src/resources/prefs-dialog.ui.h:30
+#: ../src/resources/prefs-dialog.ui.h:32
 msgid "Passwords"
 msgstr "Paroles"
 
@@ -2248,135 +2254,143 @@ msgid "_Engine:"
 msgstr "_Dzinis:"
 
 #: ../src/resources/prefs-dialog.ui.h:7
+msgid "Session"
+msgstr "Sesija"
+
+#: ../src/resources/prefs-dialog.ui.h:8
+msgid "_Remember previous tabs on startup"
+msgstr "Palaižot atce_rēties iepriekšējās cilnes"
+
+#: ../src/resources/prefs-dialog.ui.h:9
 msgid "Web Content"
 msgstr "Tīmekļa saturs"
 
-#: ../src/resources/prefs-dialog.ui.h:8
+#: ../src/resources/prefs-dialog.ui.h:10
 msgid "Allow popup _windows"
 msgstr "Atļaut izlecošos _logus"
 
-#: ../src/resources/prefs-dialog.ui.h:9
+#: ../src/resources/prefs-dialog.ui.h:11
 msgid "Allow _advertisements"
 msgstr "_Atļaut reklāmas"
 
-#: ../src/resources/prefs-dialog.ui.h:10
+#: ../src/resources/prefs-dialog.ui.h:12
 msgid "Enable _plugins"
 msgstr "Ieslēgt s_praudņus"
 
-#: ../src/resources/prefs-dialog.ui.h:11
+#: ../src/resources/prefs-dialog.ui.h:13
 msgid "General"
 msgstr "Vispārīgi"
 
-#: ../src/resources/prefs-dialog.ui.h:12
+#: ../src/resources/prefs-dialog.ui.h:14
 msgid "Fonts"
 msgstr "Fonti"
 
-#: ../src/resources/prefs-dialog.ui.h:13
+#: ../src/resources/prefs-dialog.ui.h:15
 msgid "_Use system fonts"
 msgstr "Lietot sistēmas font_us"
 
-#: ../src/resources/prefs-dialog.ui.h:14
+#: ../src/resources/prefs-dialog.ui.h:16
 msgid "Sans serif font:"
 msgstr "Bezrēdzes fonts:"
 
-#: ../src/resources/prefs-dialog.ui.h:15
+#: ../src/resources/prefs-dialog.ui.h:17
 msgid "Serif font:"
 msgstr "Rēdzes fonts:"
 
-#: ../src/resources/prefs-dialog.ui.h:16
+#: ../src/resources/prefs-dialog.ui.h:18
 msgid "Monospace font:"
 msgstr "Fiksēta platuma fonts:"
 
-#: ../src/resources/prefs-dialog.ui.h:17
+#: ../src/resources/prefs-dialog.ui.h:19
 msgid "Style"
 msgstr "Stils"
 
-#: ../src/resources/prefs-dialog.ui.h:18
+#: ../src/resources/prefs-dialog.ui.h:20
 msgid "Use custom _stylesheet"
 msgstr "Lietot pielāgotu _stila lapu"
 
-#: ../src/resources/prefs-dialog.ui.h:19
+#: ../src/resources/prefs-dialog.ui.h:21
 msgid "_Edit Stylesheet…"
 msgstr "R_ediģēt stila lapu..."
 
-#: ../src/resources/prefs-dialog.ui.h:20
+#: ../src/resources/prefs-dialog.ui.h:22
 msgid "Fonts & Style"
 msgstr "Fonti un stils"
 
-#: ../src/resources/prefs-dialog.ui.h:22
+#: ../src/resources/prefs-dialog.ui.h:24
 msgid "Manage _Cookies…"
 msgstr "Pārvaldīt _sīkdatnes…"
 
-#: ../src/resources/prefs-dialog.ui.h:23
+#: ../src/resources/prefs-dialog.ui.h:25
 msgid "_Always accept"
 msgstr "_Vienmēr pieņemt"
 
-#: ../src/resources/prefs-dialog.ui.h:24
+#: ../src/resources/prefs-dialog.ui.h:26
 msgid "Only _from sites you visit"
 msgstr "Tikai _no vietnēm, kuras jūs apmeklējat"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: ../src/resources/prefs-dialog.ui.h:26
+#: ../src/resources/prefs-dialog.ui.h:28
 msgid "<small>For example, not from advertisers on these sites</small>"
 msgstr "<small>Piemēram, ne no reklāmu servisiem šajās vietnēs</small>"
 
-#: ../src/resources/prefs-dialog.ui.h:27
+#: ../src/resources/prefs-dialog.ui.h:29
 msgid "_Never accept"
 msgstr "_Nekad nepieņemt"
 
-#: ../src/resources/prefs-dialog.ui.h:28
+#: ../src/resources/prefs-dialog.ui.h:30
 msgid "Tracking"
 msgstr "Izsekošana"
 
-#: ../src/resources/prefs-dialog.ui.h:29
+#: ../src/resources/prefs-dialog.ui.h:31
 msgid "_Tell websites I do not want to be tracked"
 msgstr "_Informēt tīmekļa vietnes, ka mani nevajadzētu izsekot"
 
-#: ../src/resources/prefs-dialog.ui.h:31
+#: ../src/resources/prefs-dialog.ui.h:33
 msgid "Manage _Passwords…"
 msgstr "Pārvaldīt _paroles…"
 
-#: ../src/resources/prefs-dialog.ui.h:32
+#: ../src/resources/prefs-dialog.ui.h:34
 msgid "_Remember passwords"
 msgstr "Atce_rēties paroles"
 
-#: ../src/resources/prefs-dialog.ui.h:33
+#: ../src/resources/prefs-dialog.ui.h:35
 msgid "Stored Data"
 msgstr "Saglabātie dati"
 
-#: ../src/resources/prefs-dialog.ui.h:34
+#: ../src/resources/prefs-dialog.ui.h:36
 msgid "You can clear stored personal data."
 msgstr "Jūs varat attīrīt saglabātos personiskos datus."
 
-#: ../src/resources/prefs-dialog.ui.h:35
+#: ../src/resources/prefs-dialog.ui.h:37
 msgid "Cl_ear Personal Data…"
 msgstr "Dzēst visus p_ersoniskos datus…"
 
-#: ../src/resources/prefs-dialog.ui.h:36
+#: ../src/resources/prefs-dialog.ui.h:38
 msgid "Privacy"
 msgstr "Privātums"
 
-#: ../src/resources/prefs-dialog.ui.h:39
+#: ../src/resources/prefs-dialog.ui.h:41
 msgid "_Remove"
 msgstr "_Izņemt"
 
-#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-dialog.ui.h:42
 msgid "_Up"
 msgstr "_Augšup"
 
-#: ../src/resources/prefs-dialog.ui.h:41
+#: ../src/resources/prefs-dialog.ui.h:43
 msgid "_Down"
 msgstr "_Lejup"
 
-#: ../src/resources/prefs-dialog.ui.h:42
+#: ../src/resources/prefs-dialog.ui.h:44
 msgid "Spell checking"
 msgstr "Pareizrakstības pārbaude"
 
-#: ../src/resources/prefs-dialog.ui.h:43
+#: ../src/resources/prefs-dialog.ui.h:45
 msgid "_Enable spell checking"
 msgstr "Ieslēgt par_eizrakstības pārbaudi"
 
-#: ../src/resources/prefs-dialog.ui.h:44 ../src/prefs-dialog.c:760
+#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:762
 msgid "Language"
 msgstr "Valoda"
 
@@ -2404,11 +2418,11 @@ msgstr "_Pārlādēt"
 msgid "Display the latest content of the current page"
 msgstr "Rādīt esošās lapas jaunāko saturu"
 
-#: ../src/ephy-history-window.c:251
+#: ../src/ephy-history-window.c:253
 msgid "Clear browsing history?"
 msgstr "Attīrīt pārlūkošanas vēsturi?"
 
-#: ../src/ephy-history-window.c:255
+#: ../src/ephy-history-window.c:257
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2489,7 +2503,7 @@ msgstr ""
 msgid "Web options"
 msgstr "Tīmekļa pārlūka opcijas"
 
-#: ../src/ephy-notebook.c:627
+#: ../src/ephy-notebook.c:617
 msgid "Close tab"
 msgstr "Aizvērt cilni"
 
@@ -2712,79 +2726,78 @@ msgstr "Ja iziesiet, visas lejupielādes tiks atceltas"
 msgid "Quit and cancel downloads"
 msgstr "Iziet un atcelt lejupielādes"
 
-#: ../src/ephy-window.c:1141 ../src/window-commands.c:272
+#: ../src/ephy-window.c:1133 ../src/window-commands.c:272
 msgid "Open"
 msgstr "Atvērt"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1135
 msgid "Save As"
 msgstr "Saglabāt kā"
 
-#: ../src/ephy-window.c:1145
+#: ../src/ephy-window.c:1137
 msgid "Save As Application"
 msgstr "Saglabāt kā lietotni"
 
-#: ../src/ephy-window.c:1147
+#: ../src/ephy-window.c:1139
 msgid "Print"
 msgstr "Drukāt"
 
-#: ../src/ephy-window.c:1149
+#: ../src/ephy-window.c:1141
 msgid "Bookmark"
 msgstr "Grāmatzīme"
 
-#: ../src/ephy-window.c:1151
+#: ../src/ephy-window.c:1143
 msgid "Find"
 msgstr "Meklēt"
 
-#: ../src/ephy-window.c:1157
-#| msgid "Encodings"
+#: ../src/ephy-window.c:1149
 msgid "Encodings…"
 msgstr "Kodējumi…"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1160
+#: ../src/ephy-window.c:1152
 msgid "Larger"
 msgstr "Lielāks"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1163
+#: ../src/ephy-window.c:1155
 msgid "Smaller"
 msgstr "Mazāks"
 
-#: ../src/ephy-window.c:1185
+#: ../src/ephy-window.c:1177
 msgid "Back"
 msgstr "Atpakaļ"
 
-#: ../src/ephy-window.c:1197
+#: ../src/ephy-window.c:1189
 msgid "Forward"
 msgstr "Uz priekšu"
 
-#: ../src/ephy-window.c:1209
+#: ../src/ephy-window.c:1201
 msgid "Zoom"
 msgstr "Tālummaiņa"
 
-#: ../src/ephy-window.c:1218
+#: ../src/ephy-window.c:1210
 msgid "New _Tab"
 msgstr "Jauna _cilne"
 
-#: ../src/ephy-window.c:1226
+#: ../src/ephy-window.c:1218
 msgid "Go to most visited"
 msgstr "Doties uz biežāk apmeklēto"
 
-#: ../src/ephy-window.c:1755
+#: ../src/ephy-window.c:1732
 #, c-format
 msgid "Search the Web for '%s'"
 msgstr "Meklēt “%s” tīmeklī"
 
-#: ../src/popup-commands.c:236
+#: ../src/popup-commands.c:258
 msgid "Save Link As"
 msgstr "Saglabāt saiti kā"
 
-#: ../src/popup-commands.c:243
+#: ../src/popup-commands.c:265
 msgid "Save Image As"
 msgstr "Saglabāt attēlu kā"
 
-#: ../src/popup-commands.c:250
+#: ../src/popup-commands.c:272
 msgid "Save Media As"
 msgstr "Saglabāt mediju kā"
 
@@ -2792,7 +2805,7 @@ msgstr "Saglabāt mediju kā"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:473 ../src/prefs-dialog.c:479
+#: ../src/prefs-dialog.c:476 ../src/prefs-dialog.c:482
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2801,13 +2814,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:488
+#: ../src/prefs-dialog.c:491
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Lietotāja noteikta (%s)"
 
-#: ../src/prefs-dialog.c:510
+#: ../src/prefs-dialog.c:513
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2815,12 +2828,12 @@ msgstr[0] "Sistēmas valoda (%s)"
 msgstr[1] "Sistēmas valodas (%s)"
 msgstr[2] "Sistēmas valodas (%s)"
 
-#: ../src/prefs-dialog.c:843
+#: ../src/prefs-dialog.c:845
 msgid "Select a Directory"
 msgstr "Izvēlieties direktoriju"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:937
+#: ../src/prefs-dialog.c:939
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2828,29 +2841,29 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:943
+#: ../src/prefs-dialog.c:945
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany&kl=lv-lv"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:945
+#: ../src/prefs-dialog.c:947
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:948
+#: ../src/prefs-dialog.c:950
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.com/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:950
+#: ../src/prefs-dialog.c:952
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:953
+#: ../src/prefs-dialog.c:955
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
