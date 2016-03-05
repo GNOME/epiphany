@@ -302,7 +302,6 @@ popup_cmd_set_image_as_background (GtkAction  *action,
   dest_uri = g_filename_to_uri (dest, NULL, NULL);
 
   ephy_download_set_destination_uri (download, dest_uri);
-  ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_DO_NOTHING);
   ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ()),
                                        download);
   g_object_unref (download);

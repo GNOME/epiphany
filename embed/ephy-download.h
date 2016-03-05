@@ -37,8 +37,7 @@ typedef enum
   EPHY_DOWNLOAD_ACTION_NONE,
   EPHY_DOWNLOAD_ACTION_AUTO,
   EPHY_DOWNLOAD_ACTION_BROWSE_TO,
-  EPHY_DOWNLOAD_ACTION_OPEN,
-  EPHY_DOWNLOAD_ACTION_DO_NOTHING
+  EPHY_DOWNLOAD_ACTION_OPEN
 } EphyDownloadActionType;
 
 EphyDownload *ephy_download_new                   (WebKitDownload *download);

@@ -483,10 +483,6 @@ ephy_download_do_download_action (EphyDownload          *download,
       LOG ("ephy_download_do_download_action: none");
       ret = TRUE;
       break;
-    case EPHY_DOWNLOAD_ACTION_DO_NOTHING:
-      LOG ("ephy_download_do_download_action: nothing");
-      ret = TRUE;
-      break;
     default:
       LOG ("ephy_download_do_download_action: unhandled action");
       ret = FALSE;
