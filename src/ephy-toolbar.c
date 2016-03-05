@@ -66,6 +66,14 @@ download_added_cb (EphyDownloadsManager *manager,
 }
 
 static void
+download_completed_cb (EphyDownloadsManager *manager,
+                       EphyDownload *download,
+                       EphyToolbar *toolbar)
+{
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
+}
+
+static void
 download_removed_cb (EphyDownloadsManager *manager,
                      EphyDownload *download,
                      EphyToolbar *toolbar)
@@ -245,6 +253,9 @@ ephy_toolbar_constructed (GObject *object)
 
   g_signal_connect_object (downloads_manager, "download-added",
                            G_CALLBACK (download_added_cb),
+                           object, 0);
+  g_signal_connect_object (downloads_manager, "download-completed",
+                           G_CALLBACK (download_completed_cb),
                            object, 0);
   g_signal_connect_object (downloads_manager, "download-removed",
                            G_CALLBACK (download_removed_cb),

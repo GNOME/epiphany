@@ -25,6 +25,7 @@
 
 enum {
   DOWNLOAD_ADDED,
+  DOWNLOAD_COMPLETED,
   DOWNLOAD_REMOVED,
 
   ESTIMATED_PROGRESS_CHANGED,
@@ -105,6 +106,14 @@ ephy_downloads_manager_class_init (EphyDownloadsManagerClass *klass)
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_DOWNLOAD);
 
+  signals[DOWNLOAD_COMPLETED] =
+    g_signal_new ("download-completed",
+                  EPHY_TYPE_DOWNLOADS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  EPHY_TYPE_DOWNLOAD);
+
   signals[DOWNLOAD_REMOVED] =
     g_signal_new ("download-removed",
                   EPHY_TYPE_DOWNLOADS_MANAGER,
@@ -126,6 +135,7 @@ download_completed_cb (EphyDownload         *download,
                        EphyDownloadsManager *manager)
 {
   g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
+  g_signal_emit (manager, signals[DOWNLOAD_COMPLETED], 0, download);
   ephy_downloads_manager_release_session_inhibitor (manager);
 }
 
