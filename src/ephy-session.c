@@ -534,6 +534,8 @@ ephy_session_class_init (EphySessionClass *class)
 void
 ephy_session_close (EphySession *session)
 {
+	EphyPrefsRestoreSessionPolicy policy;
+
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
 	LOG ("ephy_session_close");
@@ -546,8 +548,19 @@ ephy_session_close (EphySession *session)
 		g_source_remove (session->save_source_id);
 		session->save_source_id = 0;
 	}
+
 	session->closing = TRUE;
-	ephy_session_save_idle_cb (session);
+
+	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
+	if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_ALWAYS)
+	{
+		ephy_session_save_idle_cb (session);
+	}
+	else
+	{
+		session_delete (session);
+	}
+
 	session->dont_save = TRUE;
 }
 
