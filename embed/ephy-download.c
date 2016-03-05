@@ -450,9 +450,7 @@ ephy_download_do_download_action (EphyDownload          *download,
       ret = TRUE;
       break;
     default:
-      LOG ("ephy_download_do_download_action: unhandled action");
-      ret = FALSE;
-      break;
+      g_assert_not_reached ();
   }
   g_object_unref (destination);
 
