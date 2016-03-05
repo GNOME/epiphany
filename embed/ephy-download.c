@@ -143,35 +143,6 @@ ephy_download_get_content_type (EphyDownload *download)
   return download->content_type;
 }
 
-/* Helper function to decide what EphyDownloadActionType should be the
- * default for the download. This implies that you want something to
- * happen, this function will never return EPHY_DOWNLOAD_ACTION_NONE.
- */
-static EphyDownloadActionType
-decide_action_from_mime (EphyDownload *ephy_download)
-{
-  const char *content_type;
-  GAppInfo *helper_app = NULL;
-  EphyDownloadActionType action;
-
-  content_type = ephy_download_get_content_type (ephy_download);
-  if (content_type) {
-    helper_app = g_app_info_get_default_for_type (content_type, FALSE);
-    if (helper_app)
-      action = EPHY_DOWNLOAD_ACTION_OPEN;
-  }
-
-  /* Downloads that have no content_type, or no helper_app, are
-   * considered unsafe/unable to open. Default them to BROWSE_TO.
-   */
-  if (helper_app == NULL)
-    action = EPHY_DOWNLOAD_ACTION_BROWSE_TO;
-  else
-    g_object_unref (helper_app);
-
-  return action;
-}
-
 /* From the old embed/mozilla/MozDownload.cpp */
 static const char *
 file_is_compressed (const char *filename)
@@ -446,8 +417,7 @@ ephy_download_failed (EphyDownload *download,
  * @action: one of #EphyDownloadActionType
  *
  * Executes the given @action for @download, this can be any of
- * #EphyDownloadActionType, including #EPHY_DOWNLOAD_ACTION_AUTO which decides
- * the default action from the mime type of @download.
+ * #EphyDownloadActionType.
  *
  * Returns: %TRUE if the action was executed succesfully.
  *
@@ -464,10 +434,6 @@ ephy_download_do_download_action (EphyDownload          *download,
   destination = g_file_new_for_uri (destination_uri);
 
   switch ((action ? action : download->action)) {
-    case EPHY_DOWNLOAD_ACTION_AUTO:
-      LOG ("ephy_download_do_download_action: auto");
-      ret = ephy_download_do_download_action (download, decide_action_from_mime (download));
-      break;
     case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
       LOG ("ephy_download_do_download_action: browse_to");
       ret = ephy_file_browse_to (destination, download->start_time);
@@ -727,7 +693,7 @@ download_finished_cb (WebKitDownload *wk_download,
 
   if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_AUTO_DOWNLOADS) &&
       download->action == EPHY_DOWNLOAD_ACTION_NONE)
-    ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_AUTO);
+    ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_OPEN);
   else
     ephy_download_do_download_action (download, download->action);
 }
