@@ -59,9 +59,9 @@ download_added_cb (EphyDownloadsManager *manager,
     toolbar->downloads_popover = ephy_downloads_popover_new (toolbar->downloads_button);
     gtk_menu_button_set_popover (GTK_MENU_BUTTON (toolbar->downloads_button),
                                  toolbar->downloads_popover);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
   }
 
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
   gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->downloads_revealer), TRUE);
 }
 
