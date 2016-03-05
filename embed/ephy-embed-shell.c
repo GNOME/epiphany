@@ -1090,9 +1090,9 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
   /* Do not allow recursive calls into the browser, they can lead to
    * infinite loops and they should never happen anyway. */
 
-  /* FIXME: eventually there should be a nice and safe way of getting
-   * the app ID from the GApplication itself, but for now let's
-   * hardcode the .desktop file name and use it here. */
+  /* FIXME: Should use g_application_get_application_id() here instead of
+   * hardcoding epiphany.desktop. But first, we have to rename the desktop file.
+   */
   if (!app || g_strcmp0 (g_app_info_get_id (app), "epiphany.desktop") == 0)
     return ret;
 

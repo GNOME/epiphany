@@ -788,7 +788,6 @@ ephy_file_launcher_get_app_info_for_file (GFile *file,
 		if (type != NULL && type[0] != '\0' &&
 		    ephy_file_check_mime (type) == EPHY_MIME_PERMISSION_SAFE)
 		{
-			/* FIXME rename tmp file to right extension ? */
 			app = g_app_info_get_default_for_type (type, FALSE);
 		}
 		g_free (type);
