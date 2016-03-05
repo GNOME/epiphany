@@ -948,7 +948,6 @@ ephy_session_save_idle_cb (EphySession *session)
 	EphyShell *shell = ephy_shell_get_default ();
 	SaveData *data;
 	GTask *task;
-	EphyPrefsRestoreSessionPolicy policy;
 
 	session->save_source_id = 0;
 
@@ -957,12 +956,6 @@ ephy_session_save_idle_cb (EphySession *session)
 		g_cancellable_cancel (session->save_cancellable);
 		g_object_unref (session->save_cancellable);
 		session->save_cancellable = NULL;
-	}
-
-	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
-	if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
-	{
-		return G_SOURCE_REMOVE;
 	}
 
 	LOG ("ephy_sesion_save");
@@ -988,6 +981,8 @@ ephy_session_save_idle_cb (EphySession *session)
 void
 ephy_session_save (EphySession *session)
 {
+	EphyPrefsRestoreSessionPolicy policy;
+
 	g_return_if_fail (EPHY_IS_SESSION (session));
 
 	if (session->save_source_id)
@@ -996,6 +991,12 @@ ephy_session_save (EphySession *session)
 	}
 
 	if (session->dont_save)
+	{
+		return;
+	}
+
+	policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
+	if (policy == EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER)
 	{
 		return;
 	}
