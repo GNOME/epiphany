@@ -177,6 +177,8 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_tabs_move_left) },
   { "TabsMoveRight", NULL, N_("Move Tab _Right"), "<shift><control>Page_Down", NULL,
     G_CALLBACK (window_cmd_tabs_move_right) },
+  { "TabsDuplicate", NULL, N_("Du_plicate"), "<shift><control>D", NULL,
+    G_CALLBACK (window_cmd_tabs_duplicate) },
   { "TabsDetach", NULL, N_("_Detach Tab"), NULL, NULL,
     G_CALLBACK (window_cmd_tabs_detach) },
 

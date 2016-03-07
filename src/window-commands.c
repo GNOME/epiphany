@@ -1534,6 +1534,30 @@ void window_cmd_tabs_move_right (GtkAction  *action,
 }
 
 void
+window_cmd_tabs_duplicate (GtkAction  *action,
+                           EphyWindow *window)
+{
+  EphyEmbed *embed, *new_embed;
+  EphyWebView *view, *new_view;
+  WebKitWebViewSessionState *session_state;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  view = ephy_embed_get_web_view (embed);
+  session_state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (view));
+
+  new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  window,
+                                  embed,
+                                  EPHY_NEW_TAB_APPEND_AFTER | EPHY_NEW_TAB_JUMP);
+
+  new_view = ephy_embed_get_web_view (new_embed);
+
+  webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (new_view), session_state);
+  webkit_web_view_session_state_unref (session_state);
+  ephy_web_view_load_url (new_view, webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+}
+
+void
 window_cmd_tabs_detach (GtkAction  *action,
                         EphyWindow *window)
 {

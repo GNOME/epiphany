@@ -90,6 +90,8 @@ void window_cmd_tabs_move_left            (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_tabs_move_right           (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_tabs_duplicate            (GtkAction  *action,
+                                           EphyWindow *window);
 void window_cmd_tabs_detach               (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_load_location             (GtkAction  *action,
