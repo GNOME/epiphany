@@ -13,23 +13,23 @@
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2009-2013, 2016.
 # Tobias Endrigkeit <tobiasendrigkeit@googlemail.com>, 2012.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2013, 2015.
-# Bernd Homuth <dev@hmt.im>, 2015.
+# Bernd Homuth <dev@hmt.im>, 2015, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-28 17:40+0000\n"
-"PO-Revision-Date: 2016-02-28 19:33+0100\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2016-03-12 04:53+0000\n"
+"PO-Revision-Date: 2016-03-12 12:16+0100\n"
+"Last-Translator: Bernd Homuth <dev@hmt.im>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: ../data/default-bookmarks.rdf.in.h:1
 msgid "Search the web"
@@ -594,26 +594,31 @@ msgstr "Löschen"
 msgid "Installed on:"
 msgstr "Installiert am:"
 
-#: ../embed/ephy-about-handler.c:472 ../embed/ephy-embed-utils.c:310
+#: ../embed/ephy-about-handler.c:476 ../embed/ephy-embed-utils.c:310
 msgid "Most Visited"
 msgstr "Meistbesucht"
 
-#: ../embed/ephy-about-handler.c:506
+#. Displayed when opening the browser for the first time.
+#: ../embed/ephy-about-handler.c:495
+msgid "Welcome to Web"
+msgstr "Willkommen bei »Web«"
+
+#: ../embed/ephy-about-handler.c:495
+#| msgid "Start browsing and your most-visited sites will appear here"
+msgid "Start browsing and your most-visited sites will appear here."
+msgstr ""
+"Beginnen Sie mit dem Surfen und die Webseiten, die Sie am meisten besuchen, "
+"werden hier angezeigt."
+
+#: ../embed/ephy-about-handler.c:533
 msgid "Remove from overview"
 msgstr "Aus der Übersicht entfernen"
 
-#. Displayed when opening the browser for the first time.
-#: ../embed/ephy-about-handler.c:524
-msgid "Start browsing and your most-visited sites will appear here"
-msgstr ""
-"Beginnen Sie mit dem Surfen und Ihre am meisten besuchten Webseiten werden "
-"hier angezeigt"
-
-#: ../embed/ephy-about-handler.c:590 ../embed/ephy-about-handler.c:591
+#: ../embed/ephy-about-handler.c:599 ../embed/ephy-about-handler.c:600
 msgid "Private Browsing"
 msgstr "Privater Modus"
 
-#: ../embed/ephy-about-handler.c:592
+#: ../embed/ephy-about-handler.c:601
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -624,14 +629,14 @@ msgstr ""
 "gespeicherten Informationen werden gelöscht, sobald Sie das Fenster "
 "schließen. Heruntergeladene Dateien werden behalten."
 
-#: ../embed/ephy-about-handler.c:596
+#: ../embed/ephy-about-handler.c:605
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Der Inkognito-Modus verbirgt Ihre Aktivitäten nur vor Personen, die diesen "
 "Rechner benützen."
 
-#: ../embed/ephy-about-handler.c:598
+#: ../embed/ephy-about-handler.c:607
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1026,22 +1031,22 @@ msgstr "_Speichern"
 msgid "Do you want to save your password for “%s”?"
 msgstr "Sollen Ihre Passwörter für »%s« gespeichert werden?"
 
-#: ../embed/ephy-web-view.c:1249
+#: ../embed/ephy-web-view.c:1250
 msgid "Deny"
 msgstr "Ablehnen"
 
-#: ../embed/ephy-web-view.c:1250
+#: ../embed/ephy-web-view.c:1251
 msgid "Allow"
 msgstr "Erlauben"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1262
+#: ../embed/ephy-web-view.c:1263
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Die Seite <b>%s</b> möchte Ihren Aufenthaltsort wissen."
 
 #. Translators: Notification policy for a specific site.
-#: ../embed/ephy-web-view.c:1266
+#: ../embed/ephy-web-view.c:1267
 #, c-format
 msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgstr ""
@@ -1049,17 +1054,17 @@ msgstr ""
 "anzeigen."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1352
+#: ../embed/ephy-web-view.c:1353
 #, c-format
 msgid "Loading “%s”…"
 msgstr "»%s« wird geladen …"
 
-#: ../embed/ephy-web-view.c:1354
+#: ../embed/ephy-web-view.c:1355
 msgid "Loading…"
 msgstr "Laden …"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1604
+#: ../embed/ephy-web-view.c:1605
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1067,7 +1072,7 @@ msgstr ""
 "anderen Webseite."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1609
+#: ../embed/ephy-web-view.c:1610
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1076,14 +1081,14 @@ msgstr ""
 "Ihrem Rechner."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1614
+#: ../embed/ephy-web-view.c:1615
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Die Identifikation dieser Webseite wurde nicht durch eine vertrauenswürdige "
 "Organisation bereitgestellt."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1619
+#: ../embed/ephy-web-view.c:1620
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1091,7 +1096,7 @@ msgstr ""
 "könnte beschädigt sein."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1624
+#: ../embed/ephy-web-view.c:1625
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1100,7 +1105,7 @@ msgstr ""
 "vertrauenswürdige Organisation zurückgezogen."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1629
+#: ../embed/ephy-web-view.c:1630
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1109,7 +1114,7 @@ msgstr ""
 "nicht ausreichende Verschlüsselung verwendet."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1634
+#: ../embed/ephy-web-view.c:1635
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1118,13 +1123,13 @@ msgstr ""
 "Überprüfen Sie das Datum auf Ihrem Rechner."
 
 #. Message when a site's TLS certificate is invalid. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1669
+#: ../embed/ephy-web-view.c:1670
 #, c-format
 msgid "This might not be the real %s."
 msgstr "Das scheint nicht die echte Seite von %s zu sein."
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1674
+#: ../embed/ephy-web-view.c:1675
 msgid ""
 "When you try to connect securely, websites present identification to prove "
 "that your connection has not been maliciously intercepted. There is "
@@ -1136,7 +1141,7 @@ msgstr ""
 "gibt ein Problem mit dem Nachweis dieser Webseite:"
 
 #. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1680
+#: ../embed/ephy-web-view.c:1681
 msgid ""
 "A third party may have hijacked your connection. You should continue only if "
 "you know there is a good reason why this website does not use trusted "
@@ -1147,29 +1152,29 @@ msgstr ""
 "Identifikation verwendet."
 
 #. Good advice from Firefox; displays when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1684
+#: ../embed/ephy-web-view.c:1685
 msgid ""
 "Legitimate banks, stores, and other public sites will not ask you to do this."
 msgstr ""
 "Banken, Geschäfte und andere öffentliche Seiten werden Sie nicht auffordern "
 "das zu tun."
 
-#: ../embed/ephy-web-view.c:1752
+#: ../embed/ephy-web-view.c:1753
 msgid "None specified"
 msgstr "Nichts angegeben"
 
 #. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1765 ../embed/ephy-web-view.c:1782
-#: ../embed/ephy-web-view.c:1806
+#: ../embed/ephy-web-view.c:1766 ../embed/ephy-web-view.c:1783
+#: ../embed/ephy-web-view.c:1807
 #, c-format
 msgid "Problem loading “%s”"
 msgstr "Probleme beim Laden von »%s«"
 
-#: ../embed/ephy-web-view.c:1767
+#: ../embed/ephy-web-view.c:1768
 msgid "Oops! Unable to display this website."
 msgstr "Hoppla, es ist nicht möglich, diese Internetseite zu laden"
 
-#: ../embed/ephy-web-view.c:1768
+#: ../embed/ephy-web-view.c:1769
 #, c-format
 msgid ""
 "<p>The site at “%s” seems to be unavailable. The precise error was:</"
@@ -1183,24 +1188,24 @@ msgstr ""
 "umgezogen sein.</p><p>Falls das Problem weiterhin besteht, sollten Sie Ihre "
 "Internetverbindung überprüfen.</p>"
 
-#: ../embed/ephy-web-view.c:1776 ../embed/ephy-web-view.c:1790
-#: ../embed/ephy-web-view.c:1799
+#: ../embed/ephy-web-view.c:1777 ../embed/ephy-web-view.c:1791
+#: ../embed/ephy-web-view.c:1800
 msgid "Reload"
 msgstr "Neu laden"
 
 #. Access key for the "Reload" button on the network error page.
 #. Access key for the "Reload" button on the crash error page.
-#: ../embed/ephy-web-view.c:1779 ../embed/ephy-web-view.c:1793
-#: ../embed/ephy-web-view.c:1802
+#: ../embed/ephy-web-view.c:1780 ../embed/ephy-web-view.c:1794
+#: ../embed/ephy-web-view.c:1803
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
-#: ../embed/ephy-web-view.c:1784
+#: ../embed/ephy-web-view.c:1785
 msgid "Oops! There may be a problem."
 msgstr "Hoppla, möglicherweise gibt es ein Problem."
 
-#: ../embed/ephy-web-view.c:1785
+#: ../embed/ephy-web-view.c:1786
 #, c-format
 msgid ""
 "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
@@ -1211,16 +1216,16 @@ msgstr ""
 "dies erneut passiert, melden Sie bitte das Problem den <strong>%s</strong>-"
 "Entwicklern.</p>"
 
-#: ../embed/ephy-web-view.c:1796
+#: ../embed/ephy-web-view.c:1797
 #, c-format
 msgid "Problem displaying “%s”"
 msgstr "Problem beim Anzeigen von »%s«"
 
-#: ../embed/ephy-web-view.c:1797
+#: ../embed/ephy-web-view.c:1798
 msgid "Oops!"
 msgstr "Hoppla!"
 
-#: ../embed/ephy-web-view.c:1798
+#: ../embed/ephy-web-view.c:1799
 msgid ""
 "Something went wrong while displaying this page. Please reload or visit a "
 "different page to continue."
@@ -1229,22 +1234,22 @@ msgstr ""
 "besuchen Sie eine andere Seite, um fortzufahren."
 
 #. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1808
+#: ../embed/ephy-web-view.c:1809
 msgid "Look out!"
 msgstr "Vorsicht!"
 
 #. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1811
+#: ../embed/ephy-web-view.c:1812
 msgid "Accept Risk"
 msgstr "Risiko akzeptieren"
 
 #. Access key for the "Accept Risk" button on the TLS error page.
-#: ../embed/ephy-web-view.c:1814
+#: ../embed/ephy-web-view.c:1815
 msgctxt "accept-risk-access-key"
 msgid "R"
 msgstr "R"
 
-#: ../embed/ephy-web-view.c:2734
+#: ../embed/ephy-web-view.c:2735
 msgid "_OK"
 msgstr "_OK"
 
@@ -1258,17 +1263,17 @@ msgstr "Downloads"
 msgid "Desktop"
 msgstr "Schreibtisch"
 
-#: ../lib/ephy-file-helpers.c:342
+#: ../lib/ephy-file-helpers.c:351
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Temporärer Ordner konnte nicht in »%s« angelegt werden."
 
-#: ../lib/ephy-file-helpers.c:471
+#: ../lib/ephy-file-helpers.c:481
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Die Datei »%s« existiert, bitte entfernen Sie sie von dort."
 
-#: ../lib/ephy-file-helpers.c:495
+#: ../lib/ephy-file-helpers.c:505
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Ordner »%s« konnte nicht angelegt werden."
@@ -1549,22 +1554,22 @@ msgid_plural "%d months left"
 msgstr[0] "%d Monat verbleibend"
 msgstr[1] "%d Monate verbleibend"
 
-#: ../lib/widgets/ephy-download-widget.c:228
-#: ../lib/widgets/ephy-download-widget.c:411
+#: ../lib/widgets/ephy-download-widget.c:237
+#: ../lib/widgets/ephy-download-widget.c:420
 msgid "Finished"
 msgstr "Abgeschlossen"
 
-#: ../lib/widgets/ephy-download-widget.c:245
-#: ../lib/widgets/ephy-download-widget.c:407
+#: ../lib/widgets/ephy-download-widget.c:254
+#: ../lib/widgets/ephy-download-widget.c:416
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Fehler beim Herunterladen: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:272
+#: ../lib/widgets/ephy-download-widget.c:281
 msgid "Cancelling…"
 msgstr "Wird abgebrochen …"
 
-#: ../lib/widgets/ephy-download-widget.c:413
+#: ../lib/widgets/ephy-download-widget.c:422
 msgid "Starting…"
 msgstr "Wird gestartet …"
 
@@ -2120,7 +2125,8 @@ msgstr ""
 "Sie können diesen Schritt nicht rückgängig machen. Daten, die Sie zum "
 "Löschen auswählen, werden unwiderruflich gelöscht."
 
-#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:23
+#: ../src/resources/cookies-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:23
 msgid "Cookies"
 msgstr "Cookies"
 
