@@ -1654,41 +1654,6 @@ detailed_message_from_tls_errors (GTlsCertificateFlags tls_errors)
   return retval;
 }
 
-static char *
-get_tls_error_page_message (EphyWebView *view, const char *hostname)
-{
-  char *msg;
-  char *bold_hostname;
-  char *details;
-  char *warning;
-
-  bold_hostname = g_strconcat ("<strong>", hostname, "</strong>", NULL);
-  details = detailed_message_from_tls_errors (view->tls_errors);
-  /* Message when a site's TLS certificate is invalid. %s is the site's hostname. */
-  warning = g_strdup_printf (_("This might not be the real %s."), bold_hostname);
-
-  msg = g_strdup_printf ("<p>%s</p><p>%s</p><p>%s</p><p>%s <strong>%s</strong></p>",
-                         warning,
-                         /* Message when a site's TLS certificate is invalid. */
-                         _("When you try to connect securely, websites present "
-                           "identification to prove that your connection has not been "
-                           "maliciously intercepted. There is something wrong with "
-                           "this website’s identification:"),
-                         details,
-                         /* Message when a site's TLS certificate is invalid. */
-                         _("A third party may have hijacked your connection. You should "
-                           "continue only if you know there is a good reason why this "
-                           "website does not use trusted identification."),
-                         /* Good advice from Firefox; displays when a site's TLS certificate is invalid. */
-                         _("Legitimate banks, stores, and other public sites will "
-                           "not ask you to do this."));
-  g_free (bold_hostname);
-  g_free (details);
-  g_free (warning);
-
-  return msg;
-}
-
 /**
  * ephy_web_view_get_error_page:
  * @view: an #EphyWebView
@@ -1721,19 +1686,22 @@ ephy_web_view_load_error_page (EphyWebView         *view,
                                EphyWebViewErrorPage page,
                                GError              *error)
 {
-  GString *html = g_string_new ("");
-  const char *reason;
-  char *hostname;
-  char *lang;
-  char *page_title;
-  char *msg_title;
-  char *msg;
-  char *button_label;
-  char *stylesheet;
-  char *load_anyway_js = NULL;
-  const char *custom_class;
-  const char *accesskey;
   GBytes *html_file;
+  GString *html = g_string_new ("");
+  char *hostname = NULL;
+  char *lang = NULL;
+  char *page_title = NULL;
+  char *msg_title = NULL;
+  char *msg_body = NULL;
+  char *msg_details = NULL;
+  char *button_label = NULL;
+  char *hidden_button_label = NULL;
+  char *button_action = NULL;
+  char *hidden_button_action = NULL;
+  const char *button_accesskey = NULL;
+  const char *hidden_button_accesskey = NULL;
+  const char *icon_name = NULL;
+  const char *reason = NULL;
 
   g_return_if_fail (page != EPHY_WEB_VIEW_ERROR_PAGE_NONE);
 
@@ -1745,10 +1713,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
   else
     ephy_web_view_set_security_level (view, EPHY_SECURITY_LEVEL_LOCAL_PAGE);
 
-  if (error)
-    reason = error->message;
-  else
-    reason = _("None specified");
+  reason = error ? error->message : _("None specified");
 
   hostname = ephy_string_get_host_name (uri);
   if (hostname == NULL)
@@ -1761,71 +1726,103 @@ ephy_web_view_load_error_page (EphyWebView         *view,
 
   switch (page) {
     case EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR:
-      page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
+      /* Page title when a site cannot be loaded due to a network error. */
+      page_title = g_strdup_printf (_("Problem Loading Page"));
 
-      msg_title = g_strdup (_("Oops! Unable to display this website."));
-      msg = g_strdup_printf (_("<p>The site at “%s” seems "
-                               "to be unavailable. The precise error was:</p>"
-                               "<p><code>%s</code></p>"
-                               "<p>It may be "
-                               "temporarily unavailable or moved to a new "
-                               "address. You may wish to verify that your "
-                               "internet connection is working correctly.</p>"),
-                             uri, reason);
+      /* Message title when a site cannot be loaded due to a network error. */
+      msg_title = g_strdup (_("Oops! Unable to display this website"));
+
+      /* Message body when a site cannot be loaded due to a network error. */
+      msg_body = g_strdup_printf (_("<p>The site at <strong>%s</strong> seems "
+                                    "to be unavailable.</p>"
+                                    "<p>It may be temporarily inaccessible or "
+                                    "moved to a new address. You may wish to "
+                                    "verify that your internet connection is "
+                                    "working correctly.</p>"),
+                                  uri);
+
+      /* Message details when a site cannot be loaded due to a network error. */
+      msg_details = g_strdup_printf (_("<p>The precise error was: <i>%s</i></p>"),
+                                     reason);
+
+      /* The button on the network error page. */
       button_label = g_strdup (_("Reload"));
-      custom_class = "network-error";
-      /* Access key for the "Reload" button on the network error page. */
-      accesskey = C_("reload-access-key", "R");
+      button_action = g_strdup_printf ("window.location = '%s';", uri);
+      button_accesskey = C_("reload-access-key", "R");
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
-      page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
+      /* Page title when a site cannot be loaded due to a page crash error. */
+      page_title = g_strdup_printf (_("Problem Loading Page"));
 
-      msg_title = g_strdup (_("Oops! There may be a problem."));
-      msg = g_strdup_printf (_("<p>This site may have caused Web to close unexpectedly.</p>"
-                               "<p>If this happens again, "
-                               "please report the problem to the "
-                               "<strong>%s</strong> developers.</p>"),
-                             LSB_DISTRIBUTOR);
+      /* Message title when a site cannot be loaded due to a page crash error. */
+      msg_title = g_strdup (_("Oops! There may be a problem"));
+
+      /* Message body when a site cannot be loaded due to a page crash error. */
+      msg_body = g_strdup_printf (_("<p>The site at <strong>%s</strong> may "
+                                    "have caused Web to close unexpectedly.</p>"
+                                    "<p>If this happens again, please report "
+                                    "the problem to the <strong>%s</strong> "
+                                    " developers.</p>"),
+                                  uri,
+                                  LSB_DISTRIBUTOR);
+
+      /* The button on the page crash error page. */
       button_label = g_strdup (_("Reload"));
-      custom_class = "page-crash";
-      /* Access key for the "Reload" button on the crash error page. */
-      accesskey = C_("reload-access-key", "R");
+      button_action = g_strdup_printf ("window.location = '%s';", uri);
+      button_accesskey = C_("reload-access-key", "R");
       break;
     case EPHY_WEB_VIEW_ERROR_PROCESS_CRASH:
-      page_title = g_strdup_printf (_("Problem displaying “%s”"), hostname);
+      /* Page title when a site cannot be loaded due to a process crash error. */
+      page_title = g_strdup_printf (_("Problem Displaying Page"));
+
+      /* Message title when a site cannot be loaded due to a process crash error. */
       msg_title = g_strdup (_("Oops!"));
-      msg = g_strdup (_("Something went wrong while displaying this page. Please reload or visit a different page to continue."));
+
+      /* Message body when a site cannot be loaded due to a process crash error. */
+      msg_body = g_strdup (_("<p>Something went wrong while displaying this page.</p>"
+                             "<p>Please reload or visit a different page to continue.</p>"));
+
+      /* The button on the process crash error page. */
       button_label = g_strdup (_("Reload"));
-      custom_class = "process-crash";
-      /* Access key for the "Reload" button on the crash error page. */
-      accesskey = C_("reload-access-key", "R");
+      button_action = g_strdup_printf ("window.location = '%s';", uri);
+      button_accesskey = C_("reload-access-key", "R");
       break;
     case EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE:
-      /* Page title when a site cannot be loaded. %s is the site's hostname. */
-      page_title = g_strdup_printf (_("Problem loading “%s”"), hostname);
-      /* Title of error page when a website's TLS certificate is invalid. */
-      msg_title = g_strdup (_("Look out!"));
-      msg = get_tls_error_page_message (view, hostname);
-      /* Button on error page when a website's TLS certificate is invalid. */
-      button_label = g_strdup (_("Accept Risk"));
-      custom_class = "tls-error";
-      /* Access key for the "Accept Risk" button on the TLS error page. */
-      accesskey = C_("accept-risk-access-key", "R");
-      load_anyway_js = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT ");",
-                                        webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
+      /* Page title when a site is not loaded due to an invalid TLS certificate. */
+      page_title = g_strdup_printf (_("Security Violation"));
+
+      /* Message title when a site is not loaded due to an invalid TLS certificate. */
+      msg_title = g_strdup (_("This Connection is Not Secure"));
+
+      /* Message body when a site is not loaded due to an invalid TLS certificate. */
+      msg_body = g_strdup_printf (_("<p>This does not look like the real <strong>"
+                                    "%s</strong>. Attackers might be trying to "
+                                    "steal or alter information going to or from "
+                                    "this site (for example, private messages, "
+                                    "credit card information, or passwords)."),
+                                  hostname);
+      /* Message details when a site is not loaded due to an invalid TLS certificate. */
+      msg_details = detailed_message_from_tls_errors (view->tls_errors);
+
+      /* The button on the invalid TLS certificate error page. */
+      button_label = g_strdup (_("Go Back"));
+      button_action = g_strdup ("window.history.back();");
+      button_accesskey = C_("back-access-key", "B");
+
+      /* The hidden button on the invalid TLS certificate error page. */
+      hidden_button_label = g_strdup (_("Accept Risk and Proceed"));
+      hidden_button_action = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT ");",
+                                              webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
+      hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
+
+      icon_name = "channel-insecure-symbolic.png";
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_NONE:
     default:
       g_assert_not_reached ();
   }
-  g_free (hostname);
 
   _ephy_web_view_update_icon (view);
-
-  stylesheet = get_style_sheet ();
-
-  if (load_anyway_js == NULL)
-    load_anyway_js = g_strdup_printf ("window.location = '%s';", uri);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
@@ -1835,21 +1832,29 @@ ephy_web_view_load_error_page (EphyWebView         *view,
                    lang, lang,
                    ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
                    page_title,
-                   stylesheet,
-                   load_anyway_js,
-                   custom_class,
-                   msg_title, msg,
-                   accesskey, button_label);
+                   get_style_sheet (),
+                   button_action, hidden_button_action,
+                   icon_name ? icon_name : "computer-fail-symbolic.png",
+                   page == EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE ? "danger" : "default",
+                   msg_title, msg_body,
+                   msg_details ? "visible" : "hidden",
+                   msg_details,
+                   hidden_button_label ? "visible" : "hidden",
+                   hidden_button_accesskey, hidden_button_label,
+                   button_accesskey, button_label);
 #pragma GCC diagnostic pop
 
   g_bytes_unref (html_file);
-  g_free (stylesheet);
+  g_free (hostname);
   g_free (lang);
   g_free (page_title);
-  g_free (load_anyway_js);
   g_free (msg_title);
-  g_free (msg);
+  g_free (msg_body);
+  g_free (msg_details);
   g_free (button_label);
+  g_free (button_action);
+  g_free (hidden_button_label);
+  g_free (hidden_button_action);
 
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);

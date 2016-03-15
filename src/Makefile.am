@@ -119,6 +119,8 @@ RESOURCE_FILES = \
 	resources/history-dialog.ui		  \
 	resources/incognito.png                   \
 	resources/missing-thumbnail.png		  \
+	resources/channel-insecure-symbolic.png	  \
+	resources/computer-fail-symbolic.png	  \
 	resources/passwords-dialog.ui		  \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \

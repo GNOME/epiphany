@@ -1,49 +1,138 @@
 /* Global CSS for error pages */
 
-h1 {
-        color: #babdb6;
-        text-shadow: 0 1px 0 white;
-        margin-bottom: 0;
-}
-
 html {
-        font-family: Cantarell, sans-serif;
-        font: 11pt cantarell;
-        color: #2e3436;
-        padding: 20px 20px 0 20px;
-        background-color: #f6f6f4;
-        background-image: -webkit-gradient(
-                linear,
-                left top,
-                left bottom,
-                color-stop(0, #eeeeec),
-                color-stop(1, #f6f6f4)
-        );
-        background-size: 100% 5em;
-        background-repeat: no-repeat;
+    font-family: Cantarell, sans-serif;
+    font: 12pt cantarell;
+    padding: 40px 20px 0 20px;
 }
 
 #container {
     padding: 2em;
     margin: 2em auto;
     background-color: #fff;
-    border-radius: 1em;
-    border: 2px solid #d3d7cf;
-    max-width: 650px;
+    max-width: 500px;
 }
 
-#content {
+#leftpanel {
     vertical-align: top;
+    display: inline-block;
+    margin-right: 5px;
+    width: 10%;
 }
 
-#content h1 {
+#rightpanel {
+    vertical-align: top;
+    display: inline-block;
+    margin-left: 5px;
+    width: 80%;
+}
+
+#rightpanel .hidden {
+    display: none;
+}
+
+#rightpanel .visible {
+    display: block;
+}
+
+#rightpanel .clickable {
+    cursor: pointer;
+    color: #888a85;
+}
+
+#rightpanel .clickable:hover,
+#rightpanel .clickable:focus {
+    color: #a6ad9c;
+}
+
+#msg-title {
+    font-size: 16pt;
+    font-weight: bold;
     margin-top: 0;
+    margin-bottom: 10px;
 }
 
-#content .buttonbox {
-    text-align: right;
+#msg-title.default {
+    color: #2e3436;
 }
 
-html[dir="rtl"] #content .buttonbox {
-    text-align: left;
+#msg-title.danger {
+    color: #cc0000;
+}
+
+#msg-body {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#msg-details {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#msg-details div {
+    font-size: 11pt;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#footer {
+    margin-top: 35px;
+    margin-bottom: 0;
+}
+
+.btn {
+    width: 200px;
+    height: 32px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+    outline: thin dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.btn:hover,
+.btn:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+.suggested-action {
+    color: #fff;
+    border-color: #1c5187;
+    background-image: linear-gradient(to bottom, #86add6, #538ac5 60%, #2a76c6);
+}
+
+.suggested-action:hover,
+.suggested-action:focus,
+.suggested-action:active,
+.suggested-action.active {
+    color: #fff;
+    background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5);
+}
+
+.destructive-action {
+    color: #fff;
+    border-color: #8e0b0b;
+    background-image: linear-gradient(to bottom, #ef2929, #ee1616 60%, #d51010);
+}
+
+.destructive-action:hover,
+.destructive-action:focus,
+.destructive-action:active,
+.destructive-action.active {
+    color: #fff;
+    background-image: linear-gradient(to bottom, #f14545, #ef2929 60%, #ee1616);
 }

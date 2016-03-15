@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <!--
   Copyright © 2010, 2011 Vinicius Depizzol
+  Copyright © 2016 Gabriel Ivascu
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,26 +21,56 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>%s</title>
   <style type="text/css">%s</style>
-  </style>
   <script type="text/javascript">
-    function load_anyway()
-    {
+    function buttonAction() {
       %s
+    }
+    function hiddenButtonAction() {
+      %s
+    }
+    function toggleDetailsBox() {
+      let div = document.getElementById('reveal');
+      if (div.className == "hidden") {
+        div.className = "visible";
+        document.getElementById('pointer').innerHTML = "&#9660;";
+      }
+      else if (div.className == "visible") {
+        div.className = "hidden";
+        document.getElementById('pointer').innerHTML = "&#9658;";
+      }
     }
   </script>
 </head>
-<body class="%s">
+<body>
   <div id="container">
-      <div id="content">
-          <h1>%s</h1>
-          <div class="explanation">
-            %s
-          </div>
-
-          <div class="buttonbox">
-            <button accesskey="%s" onclick="javascript:load_anyway()">%s</button>
-          </div>
+    <div id="leftpanel">
+      <img src="ephy-resource:///org/gnome/epiphany/%s"/>
+    </div>
+    <div id="rightpanel">
+      <div id="msg-title" class="%s">
+        %s
       </div>
+      <div id="msg-body">
+        %s
+      </div>
+      <div id="msg-details" class="%s">
+        <span class="clickable" onclick="javascript:toggleDetailsBox()">
+          <span id="pointer" style="color: black;">&#9658;</span>
+          Technical information
+        </span>
+        <div id="reveal" class="hidden">
+          %s
+          <button class="btn destructive-action %s" accesskey="%s" onclick="javascript:hiddenButtonAction()">
+            <strong>%s</strong>
+          </button>
+        </div>
+      </div>
+      <div id="footer">
+        <button class="btn suggested-action visible" accesskey="%s" onclick="javascript:buttonAction()">
+          <strong>%s</strong>
+        </button>
+      </div>
+    </div>
   </div>
 </body>
 </html>
