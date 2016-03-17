@@ -58,6 +58,8 @@ struct _EphyLocationEntry {
 
   GSList *search_terms;
 
+  GBinding *paste_binding;
+
   char *before_completion;
   char *saved_text;
 
@@ -568,6 +570,29 @@ entry_clear_activate_cb (GtkMenuItem       *item,
 }
 
 static void
+paste_received (GtkClipboard      *clipboard,
+                const gchar       *text,
+                EphyLocationEntry *entry)
+{
+  if (text) {
+    gtk_entry_set_text (GTK_ENTRY (entry), text);
+    g_signal_emit_by_name (entry, "activate");
+  }
+}
+
+static void
+entry_paste_and_go_activate_cb (GtkMenuItem       *item,
+                                EphyLocationEntry *entry)
+{
+  GtkClipboard *clipboard;
+
+  clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_request_text (clipboard,
+                              (GtkClipboardTextReceivedFunc)paste_received,
+                              entry);
+}
+
+static void
 entry_redo_activate_cb (GtkMenuItem       *item,
                         EphyLocationEntry *entry)
 {
@@ -586,7 +611,12 @@ entry_populate_popup_cb (GtkEntry          *entry,
                          GtkMenu           *menu,
                          EphyLocationEntry *lentry)
 {
-  GtkWidget *clear_menuitem, *undo_menuitem, *redo_menuitem, *separator;
+  GtkWidget *clear_menuitem;
+  GtkWidget *undo_menuitem;
+  GtkWidget *redo_menuitem;
+  GtkWidget *paste_and_go_menuitem;
+  GtkWidget *separator;
+  GtkWidget *paste_menuitem;
   GList *children, *item;
   int pos = 0, sep = 0;
   gboolean is_editable;
@@ -608,10 +638,30 @@ entry_populate_popup_cb (GtkEntry          *entry,
    */
   children = gtk_container_get_children (GTK_CONTAINER (menu));
   for (item = children; item != NULL && sep < 2; item = item->next, pos++) {
-    if (GTK_IS_SEPARATOR_MENU_ITEM (item->data)) sep++;
+    if (GTK_IS_SEPARATOR_MENU_ITEM (item->data))
+      sep++;
   }
 
   gtk_menu_shell_insert (GTK_MENU_SHELL (menu), clear_menuitem, pos - 1);
+
+  paste_and_go_menuitem = gtk_menu_item_new_with_mnemonic (_("Paste and _Go"));
+
+  /* Search for the Paste menu item and insert right after it. */
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+  for (item = children, pos = 0; item != NULL; item = item->next, pos++) {
+    if (g_strcmp0 (gtk_menu_item_get_label (item->data), "_Paste") == 0) {
+      paste_menuitem = item->data;
+      break;
+    }
+  }
+
+  g_signal_connect (paste_and_go_menuitem, "activate",
+                    G_CALLBACK (entry_paste_and_go_activate_cb), lentry);
+  lentry->paste_binding = g_object_bind_property (paste_menuitem, "sensitive",
+                                                  paste_and_go_menuitem, "sensitive",
+                                                  G_BINDING_SYNC_CREATE);
+  gtk_widget_show (paste_and_go_menuitem);
+  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), paste_and_go_menuitem, pos + 1);
 
   undo_menuitem = gtk_menu_item_new_with_mnemonic (_("_Undo"));
   gtk_widget_set_sensitive (undo_menuitem, lentry->user_changed);
