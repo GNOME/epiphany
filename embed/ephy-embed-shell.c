@@ -581,9 +581,6 @@ ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
   char *guid;
   GError *error = NULL;
 
-  /* On Linux, this creates an abstract socket with a name that unnecessarily
-   * begins with the tmp dir. Where abstract sockets are unavailable, it
-   * actually creates the socket under the tmp dir. */
   address = g_strdup_printf ("unix:tmpdir=%s", g_get_tmp_dir ());
 
   guid = g_dbus_generate_guid ();
