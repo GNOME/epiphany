@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for DIR in ../embed ../lib ../src ../tests
+do
+    # Aligning prototypes is not working yet, so avoid headers
+    #uncrustify -c kr-gnome-indent.cfg --no-backup $(find $DIR -name "*.[ch]")
+    uncrustify -c kr-gnome-indent.cfg --no-backup $(find $DIR -name "*.c")
+done
