@@ -29,8 +29,7 @@ G_DEFINE_TYPE (EphyCombinedStopReloadAction, ephy_combined_stop_reload_action, E
 #define COMBINED_STOP_RELOAD_ACTION_PRIVATE(o) \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_COMBINED_STOP_RELOAD_ACTION, EphyCombinedStopReloadActionPrivate))
 
-struct _EphyCombinedStopReloadActionPrivate
-{
+struct _EphyCombinedStopReloadActionPrivate {
   gboolean loading;
   gulong action_handler_id;
 };
@@ -59,7 +58,7 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 void
 ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *action,
-                                              gboolean loading)
+                                              gboolean                      loading)
 {
   EphyCombinedStopReloadActionEnum action_enum;
   EphyCombinedStopReloadActionPrivate *priv;
@@ -72,7 +71,7 @@ ephy_combined_stop_reload_action_set_loading (EphyCombinedStopReloadAction *acti
     return;
 
   action_enum = loading ?
-    EPHY_COMBINED_STOP_RELOAD_ACTION_STOP : EPHY_COMBINED_STOP_RELOAD_ACTION_REFRESH;
+                EPHY_COMBINED_STOP_RELOAD_ACTION_STOP : EPHY_COMBINED_STOP_RELOAD_ACTION_REFRESH;
 
   g_object_set (action,
                 "icon-name", combined_stop_reload_action_entries[action_enum].stock_id,
@@ -97,14 +96,13 @@ ephy_combined_stop_reload_action_get_property (GObject    *object,
 {
   EphyCombinedStopReloadAction *action = EPHY_COMBINED_STOP_RELOAD_ACTION (object);
 
-  switch (property_id)
-    {
+  switch (property_id) {
     case PROP_LOADING:
       g_value_set_boolean (value, action->priv->loading);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-    }
+  }
 }
 
 static void
@@ -115,14 +113,13 @@ ephy_combined_stop_reload_action_set_property (GObject      *object,
 {
   EphyCombinedStopReloadAction *action = EPHY_COMBINED_STOP_RELOAD_ACTION (object);
 
-  switch (property_id)
-  {
-  case PROP_LOADING:
-    ephy_combined_stop_reload_action_set_loading (action,
-                                      g_value_get_boolean (value));
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+  switch (property_id) {
+    case PROP_LOADING:
+      ephy_combined_stop_reload_action_set_loading (action,
+                                                    g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
   }
 }
 

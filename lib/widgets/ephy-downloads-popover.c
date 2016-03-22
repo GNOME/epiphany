@@ -26,8 +26,7 @@
 
 #include <glib/gi18n.h>
 
-struct _EphyDownloadsPopover
-{
+struct _EphyDownloadsPopover {
   GtkPopover parent_instance;
 
   GtkWidget *downloads_box;

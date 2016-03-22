@@ -48,7 +48,7 @@ ephy_zoom_get_changed_zoom_level (float level, int steps)
   int index;
 
   index = ephy_zoom_get_zoom_level_index (level);
-  return zoom_levels[CLAMP(index + steps, 0, (int) n_zoom_levels - 1)].level;
+  return zoom_levels[CLAMP (index + steps, 0, (int)n_zoom_levels - 1)].level;
 }
 
 float

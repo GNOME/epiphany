@@ -34,8 +34,7 @@
  * can also be used to show that a connection does not use TLS at all.
  */
 
-enum
-{
+enum {
   PROP_0,
   PROP_ADDRESS,
   PROP_CERTIFICATE,
@@ -46,8 +45,7 @@ enum
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-struct _EphySecurityPopover
-{
+struct _EphySecurityPopover {
   GtkPopover parent_instance;
   char *address;
   char *hostname;
@@ -64,7 +62,7 @@ G_DEFINE_TYPE (EphySecurityPopover, ephy_security_popover, GTK_TYPE_POPOVER)
 
 static void
 ephy_security_popover_set_address (EphySecurityPopover *popover,
-                                   const char *address)
+                                   const char          *address)
 {
   SoupURI *uri;
   char *label_text;
@@ -86,7 +84,7 @@ ephy_security_popover_set_address (EphySecurityPopover *popover,
 
 static void
 ephy_security_popover_set_certificate (EphySecurityPopover *popover,
-                                       GTlsCertificate *certificate)
+                                       GTlsCertificate     *certificate)
 {
   if (certificate)
     popover->certificate = g_object_ref (certificate);
@@ -94,7 +92,7 @@ ephy_security_popover_set_certificate (EphySecurityPopover *popover,
 
 static void
 ephy_security_popover_set_security_level (EphySecurityPopover *popover,
-                                          EphySecurityLevel security_level)
+                                          EphySecurityLevel    security_level)
 {
   GIcon *icon;
   char *address_text;
@@ -105,38 +103,38 @@ ephy_security_popover_set_security_level (EphySecurityPopover *popover,
   address_text = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>", popover->hostname);
 
   switch (security_level) {
-  case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
-    /* Label in certificate popover when site is untrusted. %s is a URL. */
-    label_text = g_strdup_printf (_("This web site’s digital identification is not trusted. "
-                                    "You may have connected to an attacker pretending to be %s."),
-                                  address_text);
-    gtk_label_set_markup (GTK_LABEL (popover->security_label), label_text);
-    gtk_widget_hide (popover->host_label);
-    break;
-  case EPHY_SECURITY_LEVEL_NO_SECURITY:
-    /* Label in certificate popover when site uses HTTP. %s is a URL. */
-    label_text = g_strdup_printf (_("%s has no security. An attacker could see any information "
-                                    "you send, or control the content that you see."),
-                                  address_text);
-    gtk_label_set_markup (GTK_LABEL (popover->security_label), label_text);
-    gtk_widget_hide (popover->host_label);
-    break;
-  case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
-    gtk_label_set_text (GTK_LABEL (popover->security_label),
-                        /* Label in certificate popover when site sends mixed content. */
-                        _("This web site did not properly secure your connection."));
-    gtk_widget_show (popover->host_label);
-    break;
-  case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
-    gtk_label_set_text (GTK_LABEL (popover->security_label),
-                        /* Label in certificate popover on secure sites. */
-                        _("Your connection seems to be secure."));
-    gtk_widget_show (popover->host_label);
-    break;
-  case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
-  case EPHY_SECURITY_LEVEL_LOCAL_PAGE:
-  default:
-    g_assert_not_reached ();
+    case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
+      /* Label in certificate popover when site is untrusted. %s is a URL. */
+      label_text = g_strdup_printf (_("This web site’s digital identification is not trusted. "
+                                      "You may have connected to an attacker pretending to be %s."),
+                                    address_text);
+      gtk_label_set_markup (GTK_LABEL (popover->security_label), label_text);
+      gtk_widget_hide (popover->host_label);
+      break;
+    case EPHY_SECURITY_LEVEL_NO_SECURITY:
+      /* Label in certificate popover when site uses HTTP. %s is a URL. */
+      label_text = g_strdup_printf (_("%s has no security. An attacker could see any information "
+                                      "you send, or control the content that you see."),
+                                    address_text);
+      gtk_label_set_markup (GTK_LABEL (popover->security_label), label_text);
+      gtk_widget_hide (popover->host_label);
+      break;
+    case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
+      gtk_label_set_text (GTK_LABEL (popover->security_label),
+                          /* Label in certificate popover when site sends mixed content. */
+                          _("This web site did not properly secure your connection."));
+      gtk_widget_show (popover->host_label);
+      break;
+    case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
+      gtk_label_set_text (GTK_LABEL (popover->security_label),
+                          /* Label in certificate popover on secure sites. */
+                          _("Your connection seems to be secure."));
+      gtk_widget_show (popover->host_label);
+      break;
+    case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
+    case EPHY_SECURITY_LEVEL_LOCAL_PAGE:
+    default:
+      g_assert_not_reached ();
   }
 
   icon = g_themed_icon_new_with_default_fallbacks (ephy_security_level_to_icon_name (security_level));
@@ -149,7 +147,7 @@ ephy_security_popover_set_security_level (EphySecurityPopover *popover,
 
 static void
 certificate_button_clicked_cb (GtkButton *button,
-                               gpointer user_data)
+                               gpointer   user_data)
 {
   EphySecurityPopover *popover = EPHY_SECURITY_POPOVER (user_data);
   GtkWidget *dialog;
@@ -214,42 +212,42 @@ ephy_security_popover_finalize (GObject *object)
 }
 
 static void
-ephy_security_popover_set_property (GObject *object,
-                                    guint prop_id,
+ephy_security_popover_set_property (GObject      *object,
+                                    guint         prop_id,
                                     const GValue *value,
-                                    GParamSpec *pspec)
+                                    GParamSpec   *pspec)
 {
   EphySecurityPopover *popover = EPHY_SECURITY_POPOVER (object);
 
   switch (prop_id) {
-  case PROP_ADDRESS:
-    ephy_security_popover_set_address (popover, g_value_get_string (value));
-    break;
-  case PROP_CERTIFICATE:
-    ephy_security_popover_set_certificate (popover, g_value_get_object (value));
-    break;
-  case PROP_SECURITY_LEVEL:
-    ephy_security_popover_set_security_level (popover, g_value_get_enum (value));
-    break;
-  case PROP_TLS_ERRORS:
-    popover->tls_errors = g_value_get_flags (value);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    case PROP_ADDRESS:
+      ephy_security_popover_set_address (popover, g_value_get_string (value));
+      break;
+    case PROP_CERTIFICATE:
+      ephy_security_popover_set_certificate (popover, g_value_get_object (value));
+      break;
+    case PROP_SECURITY_LEVEL:
+      ephy_security_popover_set_security_level (popover, g_value_get_enum (value));
+      break;
+    case PROP_TLS_ERRORS:
+      popover->tls_errors = g_value_get_flags (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
 static void
 ephy_security_popover_get_preferred_width (GtkWidget *widget,
-                                           gint *minimum_width,
-                                           gint *natural_width)
+                                           gint      *minimum_width,
+                                           gint      *natural_width)
 {
   GTK_WIDGET_CLASS (ephy_security_popover_parent_class)->get_preferred_width (widget,
-                                                                                 minimum_width,
-                                                                                 natural_width);
+                                                                              minimum_width,
+                                                                              natural_width);
 
   if (*natural_width > 600)
-    *natural_width = MAX(600, *minimum_width);
+    *natural_width = MAX (600, *minimum_width);
 }
 
 static void
@@ -342,11 +340,11 @@ ephy_security_popover_init (EphySecurityPopover *popover)
   gtk_widget_show_all (popover->grid);
 }
 
-GtkWidget *ephy_security_popover_new (GtkWidget *relative_to,
-                                      const char *address,
-                                      GTlsCertificate *certificate,
+GtkWidget *ephy_security_popover_new (GtkWidget           *relative_to,
+                                      const char          *address,
+                                      GTlsCertificate     *certificate,
                                       GTlsCertificateFlags tls_errors,
-                                      EphySecurityLevel security_level)
+                                      EphySecurityLevel    security_level)
 {
   g_return_val_if_fail (address != NULL, NULL);
 

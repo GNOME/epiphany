@@ -41,7 +41,7 @@ ephy_profile_utils_get_migration_version (void)
     g_file_get_contents (migrated_file, &contents, &size, NULL);
 
     if (contents != NULL)
-      result = sscanf(contents, "%d", &latest);
+      result = sscanf (contents, "%d", &latest);
 
     g_free (contents);
 
@@ -126,7 +126,7 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
   argv[i++] = NULL;
 
   if (debug)
-    argv[0] = ABS_TOP_BUILD_DIR"/lib/"EPHY_PROFILE_MIGRATOR;
+    argv[0] = ABS_TOP_BUILD_DIR "/lib/"EPHY_PROFILE_MIGRATOR;
 
   ret = g_spawn_sync (NULL, (char **)argv, envp, G_SPAWN_SEARCH_PATH,
                       NULL, NULL, NULL, NULL,
@@ -134,7 +134,7 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
   g_free (index);
   g_free (version);
   g_strfreev (envp);
-    
+
   if (error) {
     LOG ("Failed to run migrator: %s", error->message);
     g_error_free (error);

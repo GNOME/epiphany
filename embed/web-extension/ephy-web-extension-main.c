@@ -30,7 +30,7 @@ static EphyWebExtension *extension = NULL;
 
 G_MODULE_EXPORT void
 webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_extension,
-                                                GVariant *user_data)
+                                                GVariant           *user_data)
 {
   const char *server_address;
   const char *dot_dir;

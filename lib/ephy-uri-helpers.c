@@ -127,7 +127,7 @@ query_concat (GList *items)
   }
   g_ptr_array_add (array, NULL);
 
-  ret = g_strjoinv ("&", (char **) array->pdata);
+  ret = g_strjoinv ("&", (char **)array->pdata);
   g_ptr_array_free (array, TRUE);
 
   return ret;
@@ -142,31 +142,31 @@ is_garbage (const char *name,
     const char *host;
   } const fields[] = {
     /* analytics.google.com */
-    { "utm_source",		NULL },
-    { "utm_medium",		NULL },
-    { "utm_term",		NULL },
-    { "utm_content",	NULL },
-    { "utm_campaign",	NULL },
-    { "utm_reader",	NULL },
+    { "utm_source", NULL },
+    { "utm_medium", NULL },
+    { "utm_term", NULL },
+    { "utm_content", NULL },
+    { "utm_campaign", NULL },
+    { "utm_reader", NULL },
     /* metrika.yandex.ru */
-    { "yclid",		NULL },
+    { "yclid", NULL },
     /* youtube.com */
-    { "feature",		"youtube.com" },
+    { "feature", "youtube.com" },
     /* facebook.com */
-    { "fb_action_ids",	NULL},
-    { "fb_action_types",	NULL },
-    { "fb_ref",		NULL },
-    { "fb_source",		NULL },
-    { "action_object_map",	NULL },
-    { "action_type_map",	NULL },
-    { "action_ref_map",	NULL },
-    { "ref",		"facebook.com" },
-    { "fref",		"facebook.com" },
-    { "hc_location",	"facebook.com" },
+    { "fb_action_ids", NULL },
+    { "fb_action_types", NULL },
+    { "fb_ref", NULL },
+    { "fb_source", NULL },
+    { "action_object_map", NULL },
+    { "action_type_map", NULL },
+    { "action_ref_map", NULL },
+    { "ref", "facebook.com" },
+    { "fref", "facebook.com" },
+    { "hc_location", "facebook.com" },
     /* imdb.com */
-    { "ref_",		"imdb.com" },
+    { "ref_", "imdb.com" },
     /* addons.mozilla.org */
-    { "src",		"addons.mozilla.org" }
+    { "src", "addons.mozilla.org" }
   };
   guint i;
 
@@ -239,10 +239,10 @@ ephy_remove_tracking_from_uri (const char *uri_string)
     ret = soup_uri_to_string (uri, FALSE);
   }
 
-  g_list_free_full (items, (GDestroyNotify) query_item_free);
+  g_list_free_full (items, (GDestroyNotify)query_item_free);
   g_list_free (new_items);
 
-bail:
+ bail:
   soup_uri_free (uri);
   return ret;
 }

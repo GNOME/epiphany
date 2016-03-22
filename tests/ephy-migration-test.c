@@ -32,19 +32,19 @@
 static void
 test_do_migration_simple (void)
 {
-    gboolean ret;
+  gboolean ret;
 
-    ret = ephy_profile_utils_do_migration (NULL, -1, TRUE);
-    g_assert (ret);
+  ret = ephy_profile_utils_do_migration (NULL, -1, TRUE);
+  g_assert (ret);
 }
 
 static void
 test_do_migration_invalid (void)
 {
-    gboolean ret;
+  gboolean ret;
 
-    ret = ephy_profile_utils_do_migration (NULL, EPHY_PROFILE_MIGRATION_VERSION + 1, TRUE);
-    g_assert (ret == FALSE);
+  ret = ephy_profile_utils_do_migration (NULL, EPHY_PROFILE_MIGRATION_VERSION + 1, TRUE);
+  g_assert (ret == FALSE);
 }
 
 int

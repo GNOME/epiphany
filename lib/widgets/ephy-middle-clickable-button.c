@@ -20,16 +20,15 @@
 #include "config.h"
 #include "ephy-middle-clickable-button.h"
 
-struct _EphyMiddleClickableButton
-{
+struct _EphyMiddleClickableButton {
   GtkButton parent_instance;
 };
 
 G_DEFINE_TYPE (EphyMiddleClickableButton, ephy_middle_clickable_button, GTK_TYPE_BUTTON)
 
-static gboolean 
-ephy_middle_clickable_button_handle_event (GtkWidget * widget,
-                                           GdkEventButton * event)
+static gboolean
+ephy_middle_clickable_button_handle_event (GtkWidget      *widget,
+                                           GdkEventButton *event)
 {
   gboolean ret;
   int actual_button;
@@ -44,7 +43,7 @@ ephy_middle_clickable_button_handle_event (GtkWidget * widget,
     ret = widget_class->button_press_event (widget, event);
   else
     ret = widget_class->button_release_event (widget, event);
-  
+
   event->button = actual_button;
 
   return ret;

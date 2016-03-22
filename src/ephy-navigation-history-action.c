@@ -40,10 +40,10 @@
 #include <gtk/gtk.h>
 #include <webkit2/webkit2.h>
 
-#define EPHY_NAVIGATION_HISTORY_ACTION_GET_PRIVATE(object)		\
-  (G_TYPE_INSTANCE_GET_PRIVATE ((object),				\
-				EPHY_TYPE_NAVIGATION_HISTORY_ACTION,	\
-				EphyNavigationHistoryActionPrivate))
+#define EPHY_NAVIGATION_HISTORY_ACTION_GET_PRIVATE(object)              \
+  (G_TYPE_INSTANCE_GET_PRIVATE ((object),                               \
+                                EPHY_TYPE_NAVIGATION_HISTORY_ACTION,    \
+                                EphyNavigationHistoryActionPrivate))
 
 struct _EphyNavigationHistoryActionPrivate {
   EphyNavigationHistoryDirection direction;
@@ -70,7 +70,7 @@ typedef enum {
 G_DEFINE_TYPE (EphyNavigationHistoryAction, ephy_navigation_history_action, EPHY_TYPE_LINK_ACTION)
 
 static void
-ephy_history_cleared_cb (EphyHistoryService *history,
+ephy_history_cleared_cb (EphyHistoryService          *history,
                          EphyNavigationHistoryAction *action)
 {
   ephy_action_change_sensitivity_flags (GTK_ACTION (action), SENS_FLAG, TRUE);
@@ -180,44 +180,44 @@ ephy_navigation_history_action_finalize (GObject *object)
 }
 
 static void
-ephy_navigation_history_action_set_property (GObject *object,
-					     guint prop_id,
-					     const GValue *value,
-					     GParamSpec *pspec)
+ephy_navigation_history_action_set_property (GObject      *object,
+                                             guint         prop_id,
+                                             const GValue *value,
+                                             GParamSpec   *pspec)
 {
   EphyNavigationHistoryAction *nav = EPHY_NAVIGATION_HISTORY_ACTION (object);
 
   switch (prop_id) {
-  case PROP_DIRECTION:
-    nav->priv->direction = g_value_get_int (value);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    break;
+    case PROP_DIRECTION:
+      nav->priv->direction = g_value_get_int (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 
 static void
-ephy_navigation_history_action_get_property (GObject *object,
-					     guint prop_id,
-					     GValue *value,
-					     GParamSpec *pspec)
+ephy_navigation_history_action_get_property (GObject    *object,
+                                             guint       prop_id,
+                                             GValue     *value,
+                                             GParamSpec *pspec)
 {
   EphyNavigationHistoryAction *nav = EPHY_NAVIGATION_HISTORY_ACTION (object);
 
   switch (prop_id) {
-  case PROP_DIRECTION:
-    g_value_set_int (value, nav->priv->direction);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    break;
+    case PROP_DIRECTION:
+      g_value_set_int (value, nav->priv->direction);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 
 static gboolean
-item_enter_notify_event_cb (GtkWidget *widget,
-                            GdkEvent *event,
+item_enter_notify_event_cb (GtkWidget   *widget,
+                            GdkEvent    *event,
                             EphyWebView *view)
 {
   char *text;
@@ -229,8 +229,8 @@ item_enter_notify_event_cb (GtkWidget *widget,
 }
 
 static gboolean
-item_leave_notify_event_cb (GtkWidget *widget,
-                            GdkEvent *event,
+item_leave_notify_event_cb (GtkWidget   *widget,
+                            GdkEvent    *event,
                             EphyWebView *view)
 {
   ephy_web_view_set_link_message (view, NULL);
@@ -238,8 +238,8 @@ item_leave_notify_event_cb (GtkWidget *widget,
 }
 
 static void
-icon_loaded_cb (GObject *source,
-                GAsyncResult *result,
+icon_loaded_cb (GObject          *source,
+                GAsyncResult     *result,
                 GtkImageMenuItem *item)
 {
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
@@ -266,12 +266,12 @@ icon_loaded_cb (GObject *source,
 
 static GtkWidget *
 new_history_menu_item (EphyWebView *view,
-                       const char *origtext,
-                       const char *address)
+                       const char  *origtext,
+                       const char  *address)
 {
   GtkWidget *item;
   GtkLabel *label;
-  WebKitFaviconDatabase* database;
+  WebKitFaviconDatabase *database;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   g_return_val_if_fail (address != NULL && origtext != NULL, NULL);
@@ -288,7 +288,7 @@ new_history_menu_item (EphyWebView *view,
                                        (GAsyncReadyCallback)icon_loaded_cb,
                                        g_object_ref (item));
 
-  g_object_set_data_full (G_OBJECT (item), "link-message", g_strdup (address), (GDestroyNotify) g_free);
+  g_object_set_data_full (G_OBJECT (item), "link-message", g_strdup (address), (GDestroyNotify)g_free);
 
   g_signal_connect (item, "enter-notify-event",
                     G_CALLBACK (item_enter_notify_event_cb), view);
@@ -303,15 +303,15 @@ new_history_menu_item (EphyWebView *view,
 static void
 set_new_back_history (EphyEmbed *source,
                       EphyEmbed *dest,
-                      gint offset)
+                      gint       offset)
 {
   /* TODO: WebKitBackForwardList: In WebKit2 WebKitBackForwardList can't be modified */
 }
 
 static void
 middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
-                                          EphyEmbed *embed,
-                                          WebKitBackForwardListItem *item)
+                                          EphyEmbed                   *embed,
+                                          WebKitBackForwardListItem   *item)
 {
   EphyEmbed *new_embed = NULL;
   const gchar *url;
@@ -337,7 +337,7 @@ middle_click_handle_on_history_menu_item (EphyNavigationHistoryAction *action,
 }
 
 static void
-activate_menu_item_cb (GtkWidget *menuitem,
+activate_menu_item_cb (GtkWidget                   *menuitem,
                        EphyNavigationHistoryAction *action)
 {
   WebKitBackForwardListItem *item;
@@ -348,7 +348,7 @@ activate_menu_item_cb (GtkWidget *menuitem,
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_return_if_fail (embed != NULL);
 
-  item = (WebKitBackForwardListItem *) g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
+  item = (WebKitBackForwardListItem *)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
   g_return_if_fail (item != NULL);
 
   if (ephy_gui_is_middle_click ())
@@ -362,16 +362,16 @@ activate_menu_item_cb (GtkWidget *menuitem,
 }
 
 static GList *
-construct_webkit_history_list (WebKitWebView *web_view,
+construct_webkit_history_list (WebKitWebView    *web_view,
                                WebKitHistoryType hist_type,
-                               int limit)
+                               int               limit)
 {
   WebKitBackForwardList *back_forward_list;
 
   back_forward_list = webkit_web_view_get_back_forward_list (web_view);
   return hist_type == WEBKIT_HISTORY_FORWARD ?
-    g_list_reverse (webkit_back_forward_list_get_forward_list_with_limit (back_forward_list, limit)) :
-    webkit_back_forward_list_get_back_list_with_limit (back_forward_list, limit);
+         g_list_reverse (webkit_back_forward_list_get_forward_list_with_limit (back_forward_list, limit)) :
+         webkit_back_forward_list_get_back_list_with_limit (back_forward_list, limit);
 }
 
 static GtkWidget *
@@ -404,7 +404,7 @@ build_dropdown_menu (EphyNavigationHistoryAction *action)
     const char *uri;
     char *title;
 
-    hitem = (WebKitBackForwardListItem *) l->data;
+    hitem = (WebKitBackForwardListItem *)l->data;
     uri = webkit_back_forward_list_item_get_uri (hitem);
     title = g_strdup (webkit_back_forward_list_item_get_title (hitem));
 
@@ -438,18 +438,18 @@ typedef struct {
 
 static GtkWidget *
 popup_history_menu (EphyNavigationHistoryAction *action,
-                    GtkWidget *widget,
-                    GdkEventButton *event)
+                    GtkWidget                   *widget,
+                    GdkEventButton              *event)
 {
-    GtkWidget *menu;
+  GtkWidget *menu;
 
-    menu = build_dropdown_menu (action);
-    gtk_menu_popup (GTK_MENU (menu),
-                    NULL, NULL,
-                    ephy_gui_menu_position_under_widget, widget,
-                    event->button, event->time);
+  menu = build_dropdown_menu (action);
+  gtk_menu_popup (GTK_MENU (menu),
+                  NULL, NULL,
+                  ephy_gui_menu_position_under_widget, widget,
+                  event->button, event->time);
 
-    return menu;
+  return menu;
 }
 
 static gboolean
@@ -462,8 +462,8 @@ menu_timeout_cb (PopupData *data)
 }
 
 static gboolean
-tool_button_press_event_cb (GtkButton *button,
-                            GdkEventButton *event,
+tool_button_press_event_cb (GtkButton                   *button,
+                            GdkEventButton              *event,
                             EphyNavigationHistoryAction *action)
 {
   if (event->button == 1) {
@@ -475,9 +475,9 @@ tool_button_press_event_cb (GtkButton *button,
     data->widget = GTK_WIDGET (button);
 
     action->priv->menu_timeout = g_timeout_add_full (G_PRIORITY_DEFAULT, 500,
-                                                     (GSourceFunc) menu_timeout_cb,
+                                                     (GSourceFunc)menu_timeout_cb,
                                                      data,
-                                                     (GDestroyNotify) g_free);
+                                                     (GDestroyNotify)g_free);
     g_source_set_name_by_id (action->priv->menu_timeout, "[epiphany] menu_timeout_cb");
   } else if (event->button == 3) {
     popup_history_menu (action, GTK_WIDGET (button), event);
@@ -487,8 +487,8 @@ tool_button_press_event_cb (GtkButton *button,
 }
 
 static gboolean
-tool_leave_notify_event_cb (GtkButton *button,
-                            GdkEvent *event,
+tool_leave_notify_event_cb (GtkButton                   *button,
+                            GdkEvent                    *event,
                             EphyNavigationHistoryAction *action)
 {
   if (action->priv->menu_timeout > 0)
@@ -517,9 +517,9 @@ disconnect_proxy (GtkAction *gaction,
                   GtkWidget *proxy)
 {
   g_signal_handlers_disconnect_by_func (proxy,
-                    G_CALLBACK (tool_button_press_event_cb), gaction);
+                                        G_CALLBACK (tool_button_press_event_cb), gaction);
   g_signal_handlers_disconnect_by_func (proxy,
-                    G_CALLBACK (tool_leave_notify_event_cb), gaction);
+                                        G_CALLBACK (tool_leave_notify_event_cb), gaction);
 
   GTK_ACTION_CLASS (ephy_navigation_history_action_parent_class)->disconnect_proxy (gaction, proxy);
 }

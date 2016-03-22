@@ -29,8 +29,8 @@ SoupServer *server;
 
 static gboolean
 quit_when_test_done (GtkWidget *w,
-                     GdkEvent *event,
-                     gint *tests)
+                     GdkEvent  *event,
+                     gint      *tests)
 {
   if (--(*tests) == 0)
     gtk_main_quit ();
@@ -39,13 +39,13 @@ quit_when_test_done (GtkWidget *w,
 }
 
 static void
-on_snapshot_ready (GObject *source,
+on_snapshot_ready (GObject      *source,
                    GAsyncResult *res,
-                   gint *tests)
+                   gint         *tests)
 {
   GdkPixbuf *pixbuf;
 #if 0
-  GtkWidget *w,*i;
+  GtkWidget *w, *i;
 #endif
   GError *error = NULL;
 
@@ -61,14 +61,14 @@ on_snapshot_ready (GObject *source,
   } else
 
 #if 0
-  w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   i = gtk_image_new_from_pixbuf (pixbuf);
   gtk_container_add (GTK_CONTAINER (w), i);
   gtk_widget_show_all (w);
   g_signal_connect (w, "delete-event",
                     G_CALLBACK (quit_when_test_done), tests);
 #else
-  quit_when_test_done (NULL, NULL, tests);
+    quit_when_test_done (NULL, NULL, tests);
 #endif
 }
 
@@ -213,12 +213,11 @@ server_callback (SoupServer *s, SoupMessage *msg,
   const char *response = "<html><h1>This is a header</h1></html>";
 
   if (msg->method == SOUP_METHOD_GET) {
-		soup_message_set_status (msg, SOUP_STATUS_OK);
-		soup_message_body_append (msg->response_body, SOUP_MEMORY_STATIC,
+    soup_message_set_status (msg, SOUP_STATUS_OK);
+    soup_message_body_append (msg->response_body, SOUP_MEMORY_STATIC,
                               response, strlen (response));
-		soup_message_body_complete (msg->response_body);
-  }
-  else
+    soup_message_body_complete (msg->response_body);
+  } else
     soup_message_set_status (msg, SOUP_STATUS_NOT_IMPLEMENTED);
 }
 
@@ -230,12 +229,12 @@ main (int argc, char *argv[])
 
   server = soup_server_new (SOUP_SERVER_SERVER_HEADER, "snapshot-service-test-server",
                             NULL);
-	soup_server_add_handler (server, NULL,
+  soup_server_add_handler (server, NULL,
                            server_callback, NULL, NULL);
   soup_server_listen_local (server, 45716,
                             SOUP_SERVER_LISTEN_IPV4_ONLY,
                             NULL);
-  mtime = time(NULL);
+  mtime = time (NULL);
 
   g_test_add_func ("/lib/ephy-snapshot-service/test_snapshot",
                    test_snapshot);

@@ -138,7 +138,7 @@ main (int argc, char *argv[])
                              test.name, NULL);
 
     g_test_add_data_func (test_name, test.test,
-                          (GTestDataFunc) test_address_has_web_scheme);
+                          (GTestDataFunc)test_address_has_web_scheme);
 
     g_free (test_name);
   }
@@ -152,7 +152,7 @@ main (int argc, char *argv[])
                              test.name, NULL);
 
     g_test_add_data_func (test_name, test.test,
-                          (GTestDataFunc) test_address_no_web_scheme);
+                          (GTestDataFunc)test_address_no_web_scheme);
 
     g_free (test_name);
   }

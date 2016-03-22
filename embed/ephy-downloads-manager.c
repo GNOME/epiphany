@@ -33,8 +33,7 @@ enum {
   LAST_SIGNAL
 };
 
-struct _EphyDownloadsManager
-{
+struct _EphyDownloadsManager {
   GObject parent_instance;
 
   GList *downloads;
@@ -57,7 +56,7 @@ ephy_downloads_manager_acquire_session_inhibitor (EphyDownloadsManager *manager)
   manager->inhibitor_cookie = gtk_application_inhibit (GTK_APPLICATION (ephy_embed_shell_get_default ()),
                                                        NULL,
                                                        GTK_APPLICATION_INHIBIT_LOGOUT | GTK_APPLICATION_INHIBIT_SUSPEND,
-                                                      "Downloading");
+                                                       "Downloading");
 
   if (manager->inhibitor_cookie == 0)
     g_warning ("Failed to acquire session inhibitor for active download. Is gnome-session running?");

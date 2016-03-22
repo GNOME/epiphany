@@ -64,7 +64,7 @@ ephy_history_page_visit_list_copy (GList *original)
   GList *new = g_list_copy (original);
   GList *current = new;
   while (current) {
-    current->data = ephy_history_page_visit_copy ((EphyHistoryPageVisit *) current->data);
+    current->data = ephy_history_page_visit_copy ((EphyHistoryPageVisit *)current->data);
     current = current->next;
   }
   return new;
@@ -73,7 +73,7 @@ ephy_history_page_visit_list_copy (GList *original)
 void
 ephy_history_page_visit_list_free (GList *list)
 {
-  g_list_free_full (list, (GDestroyNotify) ephy_history_page_visit_free);
+  g_list_free_full (list, (GDestroyNotify)ephy_history_page_visit_free);
 }
 
 EphyHistoryHost *
@@ -187,13 +187,13 @@ ephy_history_url_list_copy (GList *original)
 void
 ephy_history_url_list_free (GList *list)
 {
-  g_list_free_full (list, (GDestroyNotify) ephy_history_url_free);
+  g_list_free_full (list, (GDestroyNotify)ephy_history_url_free);
 }
 
 EphyHistoryQuery *
 ephy_history_query_new (void)
 {
-  return (EphyHistoryQuery*) g_slice_alloc0 (sizeof (EphyHistoryQuery));
+  return (EphyHistoryQuery *)g_slice_alloc0 (sizeof (EphyHistoryQuery));
 }
 
 void

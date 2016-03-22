@@ -21,8 +21,7 @@
 #include "ephy-sqlite-connection.h"
 #include <sqlite3.h>
 
-enum
-{
+enum {
   PROP_0,
   PROP_PREPARED_STATEMENT,
   PROP_CONNECTION,
@@ -236,13 +235,13 @@ ephy_sqlite_statement_get_column_as_double (EphySQLiteStatement *self, int colum
   return sqlite3_column_double (self->prepared_statement, column);
 }
 
-const char*
+const char *
 ephy_sqlite_statement_get_column_as_string (EphySQLiteStatement *self, int column)
 {
-  return (const char*) sqlite3_column_text (self->prepared_statement, column);
+  return (const char *)sqlite3_column_text (self->prepared_statement, column);
 }
 
-const void*
+const void *
 ephy_sqlite_statement_get_column_as_blob (EphySQLiteStatement *self, int column)
 {
   return sqlite3_column_blob (self->prepared_statement, column);

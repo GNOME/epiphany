@@ -32,24 +32,21 @@
 
 #define EPHY_ZOOM_ACTION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), EPHY_TYPE_ZOOM_ACTION, EphyZoomActionPrivate))
 
-struct _EphyZoomActionPrivate
-{
-	float zoom;
+struct _EphyZoomActionPrivate {
+  float zoom;
 };
 
-enum
-{
-	PROP_0,
-	PROP_ZOOM,
-	LAST_PROP
+enum {
+  PROP_0,
+  PROP_ZOOM,
+  LAST_PROP
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-enum
-{
-	ZOOM_TO_LEVEL_SIGNAL,
-	LAST_SIGNAL
+enum {
+  ZOOM_TO_LEVEL_SIGNAL,
+  LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -59,149 +56,145 @@ G_DEFINE_TYPE (EphyZoomAction, ephy_zoom_action, GTK_TYPE_ACTION)
 static void
 proxy_menu_activate_cb (GtkMenuItem *menu_item, EphyZoomAction *action)
 {
-	gint index;
-	float zoom;
+  gint index;
+  float zoom;
 
-	/* menu item was toggled OFF */
-	if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item))) return;
+  /* menu item was toggled OFF */
+  if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item))) return;
 
-	index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menu_item), "zoom-level"));
-	zoom = zoom_levels[index].level;
+  index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menu_item), "zoom-level"));
+  zoom = zoom_levels[index].level;
 
-	if (zoom != action->priv->zoom)
-	{
-		g_signal_emit (action, signals[ZOOM_TO_LEVEL_SIGNAL], 0, zoom);
-	}
+  if (zoom != action->priv->zoom) {
+    g_signal_emit (action, signals[ZOOM_TO_LEVEL_SIGNAL], 0, zoom);
+  }
 }
 
 static GtkWidget *
 create_menu_item (GtkAction *action)
 {
-	EphyZoomActionPrivate *p = EPHY_ZOOM_ACTION (action)->priv;
-	GtkWidget *menu, *menu_item;
-	GSList *group = NULL;
-	guint i;
+  EphyZoomActionPrivate *p = EPHY_ZOOM_ACTION (action)->priv;
+  GtkWidget *menu, *menu_item;
+  GSList *group = NULL;
+  guint i;
 
-	menu = gtk_menu_new ();
+  menu = gtk_menu_new ();
 
-	for (i = 0; i < n_zoom_levels; i++)
-	{
-		menu_item = gtk_radio_menu_item_new_with_label (group, _(zoom_levels[i].name));
-		group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
+  for (i = 0; i < n_zoom_levels; i++) {
+    menu_item = gtk_radio_menu_item_new_with_label (group, _(zoom_levels[i].name));
+    group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
 
-		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
-						p->zoom == zoom_levels[i].level);
+    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
+                                    p->zoom == zoom_levels[i].level);
 
-		gtk_widget_show (menu_item);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+    gtk_widget_show (menu_item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
-		g_object_set_data (G_OBJECT (menu_item), "zoom-level", GINT_TO_POINTER (i));
-		g_signal_connect_object (G_OBJECT (menu_item), "activate",
-					 G_CALLBACK (proxy_menu_activate_cb), action, 0);
-	}
+    g_object_set_data (G_OBJECT (menu_item), "zoom-level", GINT_TO_POINTER (i));
+    g_signal_connect_object (G_OBJECT (menu_item), "activate",
+                             G_CALLBACK (proxy_menu_activate_cb), action, 0);
+  }
 
-	gtk_widget_show (menu);
+  gtk_widget_show (menu);
 
-        menu_item = GTK_ACTION_CLASS (ephy_zoom_action_parent_class)->create_menu_item (action);
+  menu_item = GTK_ACTION_CLASS (ephy_zoom_action_parent_class)->create_menu_item (action);
 
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), menu);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), menu);
 
-	gtk_widget_show (menu_item);
+  gtk_widget_show (menu_item);
 
-	return menu_item;
+  return menu_item;
 }
 
 static void
-ephy_zoom_action_set_property (GObject *object,
-			       guint prop_id,
-			       const GValue *value,
-			       GParamSpec *pspec)
+ephy_zoom_action_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
 {
-	EphyZoomAction *action;
+  EphyZoomAction *action;
 
-	action = EPHY_ZOOM_ACTION (object);
+  action = EPHY_ZOOM_ACTION (object);
 
-	switch (prop_id)
-	{
-		case PROP_ZOOM:
-			action->priv->zoom = g_value_get_float (value);
-			break;
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-	}
+  switch (prop_id) {
+    case PROP_ZOOM:
+      action->priv->zoom = g_value_get_float (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
 }
 
 static void
-ephy_zoom_action_get_property (GObject *object,
-			       guint prop_id,
-			       GValue *value,
-			       GParamSpec *pspec)
+ephy_zoom_action_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
 {
-	EphyZoomAction *action;
+  EphyZoomAction *action;
 
-	action = EPHY_ZOOM_ACTION (object);
+  action = EPHY_ZOOM_ACTION (object);
 
-	switch (prop_id)
-	{
-		case PROP_ZOOM:
-			g_value_set_float (value, action->priv->zoom);
-			break;
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-	}
+  switch (prop_id) {
+    case PROP_ZOOM:
+      g_value_set_float (value, action->priv->zoom);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
 }
 
 static void
 ephy_zoom_action_class_init (EphyZoomActionClass *class)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (class);
-	GtkActionClass *action_class = GTK_ACTION_CLASS (class);
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkActionClass *action_class = GTK_ACTION_CLASS (class);
 
-	object_class->set_property = ephy_zoom_action_set_property;
-	object_class->get_property = ephy_zoom_action_get_property;
+  object_class->set_property = ephy_zoom_action_set_property;
+  object_class->get_property = ephy_zoom_action_get_property;
 
-	action_class->create_menu_item = create_menu_item;
+  action_class->create_menu_item = create_menu_item;
 
-	/**
-	* EphyZoomAction:zoom:
-	*
-	* The current value of #EphyZoomAction, as a float.
-	*/
-	obj_properties[PROP_ZOOM] =
-		g_param_spec_float ("zoom", NULL, NULL,
-		                    ZOOM_MINIMAL,
-		                    ZOOM_MAXIMAL,
-		                    1.0,
-		                    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  /**
+   * EphyZoomAction:zoom:
+   *
+   * The current value of #EphyZoomAction, as a float.
+   */
+  obj_properties[PROP_ZOOM] =
+    g_param_spec_float ("zoom", NULL, NULL,
+                        ZOOM_MINIMAL,
+                        ZOOM_MAXIMAL,
+                        1.0,
+                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
-	/**
-	* EphyZoomAction::zoom-to-level:
-	* @action: the object on which the signal is emitted
-	* @level: new zoom level
-	*
-	* Emitted when the user changes the value of the #EphyZoomAction.
-	*/
-	signals[ZOOM_TO_LEVEL_SIGNAL] =
-		g_signal_new ("zoom-to-level",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (EphyZoomActionClass, zoom_to_level),
-			      NULL, NULL, NULL,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_FLOAT);
+  /**
+   * EphyZoomAction::zoom-to-level:
+   * @action: the object on which the signal is emitted
+   * @level: new zoom level
+   *
+   * Emitted when the user changes the value of the #EphyZoomAction.
+   */
+  signals[ZOOM_TO_LEVEL_SIGNAL] =
+    g_signal_new ("zoom-to-level",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (EphyZoomActionClass, zoom_to_level),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_FLOAT);
 
-	g_type_class_add_private (object_class, sizeof (EphyZoomActionPrivate));
+  g_type_class_add_private (object_class, sizeof (EphyZoomActionPrivate));
 }
 
 static void
 ephy_zoom_action_init (EphyZoomAction *action)
 {
-	action->priv = EPHY_ZOOM_ACTION_GET_PRIVATE (action);
+  action->priv = EPHY_ZOOM_ACTION_GET_PRIVATE (action);
 
-	action->priv->zoom = 1.0;
+  action->priv->zoom = 1.0;
 }
 
 /**
@@ -214,12 +207,12 @@ ephy_zoom_action_init (EphyZoomAction *action)
 void
 ephy_zoom_action_set_zoom_level (EphyZoomAction *action, float zoom)
 {
-	g_return_if_fail (EPHY_IS_ZOOM_ACTION (action));
-	
-	if (zoom < ZOOM_MINIMAL || zoom > ZOOM_MAXIMAL) return;
+  g_return_if_fail (EPHY_IS_ZOOM_ACTION (action));
 
-	action->priv->zoom = zoom;
-	g_object_notify_by_pspec (G_OBJECT (action), obj_properties[PROP_ZOOM]);
+  if (zoom < ZOOM_MINIMAL || zoom > ZOOM_MAXIMAL) return;
+
+  action->priv->zoom = zoom;
+  g_object_notify_by_pspec (G_OBJECT (action), obj_properties[PROP_ZOOM]);
 }
 
 /**
@@ -233,7 +226,7 @@ ephy_zoom_action_set_zoom_level (EphyZoomAction *action, float zoom)
 float
 ephy_zoom_action_get_zoom_level (EphyZoomAction *action)
 {
-	g_return_val_if_fail (EPHY_IS_ZOOM_ACTION (action), 1.0);
-	
-	return action->priv->zoom;
+  g_return_val_if_fail (EPHY_IS_ZOOM_ACTION (action), 1.0);
+
+  return action->priv->zoom;
 }

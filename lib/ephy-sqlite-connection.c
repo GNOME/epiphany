@@ -53,7 +53,7 @@ static GQuark get_ephy_sqlite_quark (void)
 }
 
 static void
-set_error_from_string (const char* string, GError **error)
+set_error_from_string (const char *string, GError **error)
 {
   if (error)
     *error = g_error_new_literal (get_ephy_sqlite_quark (), 0, string);
@@ -72,7 +72,7 @@ ephy_sqlite_connection_open (EphySQLiteConnection *self, const gchar *filename, 
     set_error_from_string ("Connection already open.", error);
     return FALSE;
   }
-  
+
   if (sqlite3_open (filename, &self->database) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self, error);
     self->database = NULL;
@@ -105,7 +105,7 @@ ephy_sqlite_connection_execute (EphySQLiteConnection *self, const char *sql, GEr
     set_error_from_string ("Connection not open.", error);
     return FALSE;
   }
-  
+
   return sqlite3_exec (self->database, sql, NULL, NULL, NULL) == SQLITE_OK;
 }
 
@@ -161,7 +161,7 @@ ephy_sqlite_connection_table_exists (EphySQLiteConnection *self, const char *tab
   gboolean table_exists = FALSE;
 
   EphySQLiteStatement *statement = ephy_sqlite_connection_create_statement (self,
-    "SELECT COUNT(type) FROM sqlite_master WHERE type='table' and name=?", &error);
+                                                                            "SELECT COUNT(type) FROM sqlite_master WHERE type='table' and name=?", &error);
   if (error) {
     g_warning ("Could not detect table existence: %s", error->message);
     g_error_free (error);

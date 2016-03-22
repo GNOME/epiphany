@@ -67,8 +67,8 @@ struct _EphyShell {
 
 static EphyShell *ephy_shell = NULL;
 
-static void ephy_shell_dispose    (GObject *object);
-static void ephy_shell_finalize   (GObject *object);
+static void ephy_shell_dispose (GObject *object);
+static void ephy_shell_finalize (GObject *object);
 
 G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
@@ -150,40 +150,40 @@ ephy_shell_startup_continue (EphyShell *shell, EphyShellStartupContext *ctx)
 
 static void
 new_window (GSimpleAction *action,
-            GVariant *parameter,
-            gpointer user_data)
+            GVariant      *parameter,
+            gpointer       user_data)
 {
   window_cmd_file_new_window (NULL, NULL);
 }
 
 static void
 new_incognito_window (GSimpleAction *action,
-                      GVariant *parameter,
-                      gpointer user_data)
+                      GVariant      *parameter,
+                      gpointer       user_data)
 {
   window_cmd_file_new_incognito_window (NULL, NULL);
 }
 
 static void
 reopen_closed_tab (GSimpleAction *action,
-                   GVariant *parameter,
-                   gpointer user_data)
+                   GVariant      *parameter,
+                   gpointer       user_data)
 {
   window_cmd_undo_close_tab (NULL, NULL);
 }
 
 static void
 show_bookmarks (GSimpleAction *action,
-                GVariant *parameter,
-                gpointer user_data)
+                GVariant      *parameter,
+                gpointer       user_data)
 {
   window_cmd_edit_bookmarks (NULL, NULL);
 }
 
 static void
 show_history (GSimpleAction *action,
-              GVariant *parameter,
-              gpointer user_data)
+              GVariant      *parameter,
+              gpointer       user_data)
 {
   GtkWindow *window;
 
@@ -194,8 +194,8 @@ show_history (GSimpleAction *action,
 
 static void
 show_preferences (GSimpleAction *action,
-                  GVariant *parameter,
-                  gpointer user_data)
+                  GVariant      *parameter,
+                  gpointer       user_data)
 {
   GtkWindow *window;
 
@@ -206,8 +206,8 @@ show_preferences (GSimpleAction *action,
 
 static void
 show_help (GSimpleAction *action,
-           GVariant *parameter,
-           gpointer user_data)
+           GVariant      *parameter,
+           gpointer       user_data)
 {
   GtkWindow *window;
 
@@ -218,8 +218,8 @@ show_help (GSimpleAction *action,
 
 static void
 show_about (GSimpleAction *action,
-            GVariant *parameter,
-            gpointer user_data)
+            GVariant      *parameter,
+            gpointer       user_data)
 {
   GtkWindow *window;
 
@@ -230,8 +230,8 @@ show_about (GSimpleAction *action,
 
 static void
 quit_application (GSimpleAction *action,
-                  GVariant *parameter,
-                  gpointer user_data)
+                  GVariant      *parameter,
+                  gpointer       user_data)
 {
   window_cmd_file_quit (NULL, NULL);
 }
@@ -253,8 +253,8 @@ static GActionEntry app_normal_mode_entries[] = {
 
 static void
 download_started_cb (WebKitWebContext *web_context,
-                     WebKitDownload *download,
-                     EphyShell *shell)
+                     WebKitDownload   *download,
+                     EphyShell        *shell)
 {
   EphyDownload *ephy_download;
   gboolean ephy_download_set;
@@ -282,7 +282,7 @@ download_started_cb (WebKitWebContext *web_context,
 }
 
 static void
-ephy_shell_startup (GApplication* application)
+ephy_shell_startup (GApplication *application)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
   EphyEmbedShellMode mode;
@@ -327,9 +327,9 @@ ephy_shell_startup (GApplication* application)
 }
 
 static void
-session_load_cb (GObject *object,
+session_load_cb (GObject      *object,
                  GAsyncResult *result,
-                 gpointer user_data)
+                 gpointer      user_data)
 {
   EphySession *session = EPHY_SESSION (object);
   EphyShellStartupContext *ctx = (EphyShellStartupContext *)user_data;
@@ -377,14 +377,14 @@ typedef enum {
 } CtxEnum;
 
 static void
-ephy_shell_add_platform_data (GApplication *application,
+ephy_shell_add_platform_data (GApplication    *application,
                               GVariantBuilder *builder)
 {
   EphyShell *app;
   EphyShellStartupContext *ctx;
   GVariantBuilder *ctx_builder;
   static const char *empty_arguments[] = { "", NULL };
-  const char* const * arguments;
+  const char * const *arguments;
 
   app = EPHY_SHELL (application);
 
@@ -446,7 +446,7 @@ ephy_shell_add_platform_data (GApplication *application,
 
 static void
 ephy_shell_before_emit (GApplication *application,
-                        GVariant *platform_data)
+                        GVariant     *platform_data)
 {
   GVariantIter iter, ctx_iter;
   const char *key;
@@ -468,27 +468,27 @@ ephy_shell_before_emit (GApplication *application,
       g_variant_iter_init (&ctx_iter, value);
       while (g_variant_iter_loop (&ctx_iter, "{iv}", &ctx_key, &ctx_value)) {
         switch (ctx_key) {
-        case CTX_STARTUP_FLAGS:
-          ctx->startup_flags = g_variant_get_byte (ctx_value);
-          break;
-        case CTX_BOOKMARKS_FILENAME:
-          ctx->bookmarks_filename = g_variant_dup_string (ctx_value, NULL);
-          break;
-        case CTX_SESSION_FILENAME:
-          ctx->session_filename = g_variant_dup_string (ctx_value, NULL);
-          break;
-        case CTX_BOOKMARK_URL:
-          ctx->bookmark_url = g_variant_dup_string (ctx_value, NULL);
-          break;
-        case CTX_ARGUMENTS:
-          ctx->arguments = g_variant_dup_strv (ctx_value, NULL);
-          break;
-        case CTX_USER_TIME:
-          ctx->user_time = g_variant_get_uint32 (ctx_value);
-          break;
-        default:
-          g_assert_not_reached ();
-          break;
+          case CTX_STARTUP_FLAGS:
+            ctx->startup_flags = g_variant_get_byte (ctx_value);
+            break;
+          case CTX_BOOKMARKS_FILENAME:
+            ctx->bookmarks_filename = g_variant_dup_string (ctx_value, NULL);
+            break;
+          case CTX_SESSION_FILENAME:
+            ctx->session_filename = g_variant_dup_string (ctx_value, NULL);
+            break;
+          case CTX_BOOKMARK_URL:
+            ctx->bookmark_url = g_variant_dup_string (ctx_value, NULL);
+            break;
+          case CTX_ARGUMENTS:
+            ctx->arguments = g_variant_dup_strv (ctx_value, NULL);
+            break;
+          case CTX_USER_TIME:
+            ctx->user_time = g_variant_get_uint32 (ctx_value);
+            break;
+          default:
+            g_assert_not_reached ();
+            break;
         }
       }
     }
@@ -625,13 +625,13 @@ ephy_shell_get_default (void)
  * Return value: (transfer none): the created #EphyEmbed
  **/
 EphyEmbed *
-ephy_shell_new_tab_full (EphyShell *shell,
-                         const char *title,
-                         WebKitWebView *related_view,
-                         EphyWindow *window,
-                         EphyEmbed *previous_embed,
+ephy_shell_new_tab_full (EphyShell      *shell,
+                         const char     *title,
+                         WebKitWebView  *related_view,
+                         EphyWindow     *window,
+                         EphyEmbed      *previous_embed,
                          EphyNewTabFlags flags,
-                         guint32 user_time)
+                         guint32         user_time)
 {
   EphyEmbedShell *embed_shell;
   GtkWidget *web_view;
@@ -697,9 +697,9 @@ ephy_shell_new_tab_full (EphyShell *shell,
  * Return value: (transfer none): the created #EphyEmbed
  **/
 EphyEmbed *
-ephy_shell_new_tab (EphyShell *shell,
-                    EphyWindow *parent_window,
-                    EphyEmbed *previous_embed,
+ephy_shell_new_tab (EphyShell      *shell,
+                    EphyWindow     *parent_window,
+                    EphyEmbed      *previous_embed,
                     EphyNewTabFlags flags)
 {
   return ephy_shell_new_tab_full (shell, NULL, NULL, parent_window,
@@ -789,7 +789,7 @@ ephy_shell_get_history_window (EphyShell *shell)
 
   if (shell->history_window == NULL) {
     service = EPHY_HISTORY_SERVICE
-      (ephy_embed_shell_get_global_history_service (embed_shell));
+                (ephy_embed_shell_get_global_history_service (embed_shell));
     shell->history_window = ephy_history_window_new (service);
     g_signal_connect (shell->history_window,
                       "destroy",
@@ -843,7 +843,7 @@ _ephy_shell_create_instance (EphyEmbedShellMode mode)
  * See ephy_shell_set_startup_new().
  **/
 void
-ephy_shell_set_startup_context (EphyShell *shell,
+ephy_shell_set_startup_context (EphyShell               *shell,
                                 EphyShellStartupContext *ctx)
 {
   g_return_if_fail (EPHY_IS_SHELL (shell));
@@ -903,10 +903,10 @@ typedef struct {
 } OpenURIsData;
 
 static OpenURIsData *
-open_uris_data_new (EphyShell *shell,
-                    const char **uris,
+open_uris_data_new (EphyShell       *shell,
+                    const char     **uris,
                     EphyStartupFlags startup_flags,
-                    guint32 user_time)
+                    guint32          user_time)
 {
   OpenURIsData *data;
   gboolean new_windows_in_tabs;
@@ -924,7 +924,7 @@ open_uris_data_new (EphyShell *shell,
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                                 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
 
-  have_uris = ! (g_strv_length ((char **)uris) == 1 && g_str_equal (uris[0], ""));
+  have_uris = !(g_strv_length ((char **)uris) == 1 && g_str_equal (uris[0], ""));
 
   if (startup_flags & EPHY_STARTUP_NEW_WINDOW && !fullscreen_lockdown) {
     data->window = ephy_window_new ();
@@ -1009,10 +1009,10 @@ ephy_shell_open_uris_idle_done (OpenURIsData *data)
 }
 
 void
-ephy_shell_open_uris (EphyShell *shell,
-                      const char **uris,
+ephy_shell_open_uris (EphyShell       *shell,
+                      const char     **uris,
                       EphyStartupFlags startup_flags,
-                      guint32 user_time)
+                      guint32          user_time)
 {
   OpenURIsData *data;
   guint id;

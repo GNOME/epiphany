@@ -27,7 +27,7 @@
 #include <gtk/gtk.h>
 
 static EphySQLiteConnection *
-ensure_empty_database (const char* filename)
+ensure_empty_database (const char *filename)
 {
   EphySQLiteConnection *connection = ephy_sqlite_connection_new ();
   GError *error = NULL;
@@ -49,9 +49,9 @@ test_create_connection (void)
   EphySQLiteConnection *connection = ensure_empty_database (temporary_file);
   ephy_sqlite_connection_close (connection);
 
-  g_assert ( g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
+  g_assert (g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
   g_unlink (temporary_file);
-  g_assert ( !g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
+  g_assert (!g_file_test (temporary_file, G_FILE_TEST_IS_REGULAR));
   g_free (temporary_file);
 
   temporary_file = g_build_filename (g_get_tmp_dir (), "directory-that-does-not-exist", "epiphany_sqlite_test.db", NULL);
@@ -66,7 +66,7 @@ static void
 test_create_statement (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-sqlite-test.db", NULL);
-  EphySQLiteConnection* connection = ensure_empty_database (temporary_file);
+  EphySQLiteConnection *connection = ensure_empty_database (temporary_file);
   GError *error = NULL;
   EphySQLiteStatement *statement = NULL;
 
@@ -132,7 +132,7 @@ static void
 test_create_table_and_insert_row (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-sqlite-test.db", NULL);
-  EphySQLiteConnection* connection = ensure_empty_database (temporary_file);
+  EphySQLiteConnection *connection = ensure_empty_database (temporary_file);
 
   create_table_and_insert_row (connection);
 
@@ -145,7 +145,7 @@ static void
 test_bind_data (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-sqlite-test.db", NULL);
-  EphySQLiteConnection* connection = ensure_empty_database (temporary_file);
+  EphySQLiteConnection *connection = ensure_empty_database (temporary_file);
   GError *error = NULL;
   EphySQLiteStatement *statement = NULL;
 
@@ -183,7 +183,7 @@ static void
 test_table_exists (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-sqlite-test.db", NULL);
-  EphySQLiteConnection* connection = ensure_empty_database (temporary_file);
+  EphySQLiteConnection *connection = ensure_empty_database (temporary_file);
 
   g_assert (!ephy_sqlite_connection_table_exists (connection, "test"));
   g_assert (!ephy_sqlite_connection_table_exists (connection, "something_fakey"));

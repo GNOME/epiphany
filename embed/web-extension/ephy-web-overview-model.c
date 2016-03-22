@@ -21,8 +21,7 @@
 
 #include <libsoup/soup.h>
 
-struct _EphyWebOverviewModel
-{
+struct _EphyWebOverviewModel {
   GObject parent_instance;
 
   GList *items;
@@ -31,8 +30,7 @@ struct _EphyWebOverviewModel
 
 G_DEFINE_TYPE (EphyWebOverviewModel, ephy_web_overview_model, G_TYPE_OBJECT)
 
-enum
-{
+enum {
   URLS_CHANGED,
   THUMBNAIL_CHANGED,
   TITLE_CHANGED,
@@ -110,7 +108,7 @@ ephy_web_overview_model_new (void)
 
 void
 ephy_web_overview_model_set_urls (EphyWebOverviewModel *model,
-                                  GList *urls)
+                                  GList                *urls)
 {
   g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
@@ -129,8 +127,8 @@ ephy_web_overview_model_get_urls (EphyWebOverviewModel *model)
 
 void
 ephy_web_overview_model_set_url_thumbnail (EphyWebOverviewModel *model,
-                                           const char *url,
-                                           const char *path)
+                                           const char           *url,
+                                           const char           *path)
 {
   const char *thumbnail_path;
 
@@ -146,7 +144,7 @@ ephy_web_overview_model_set_url_thumbnail (EphyWebOverviewModel *model,
 
 const char *
 ephy_web_overview_model_get_url_thumbnail (EphyWebOverviewModel *model,
-                                           const char *url)
+                                           const char           *url)
 {
   g_return_val_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model), NULL);
 
@@ -155,8 +153,8 @@ ephy_web_overview_model_get_url_thumbnail (EphyWebOverviewModel *model,
 
 void
 ephy_web_overview_model_set_url_title (EphyWebOverviewModel *model,
-                                       const char *url,
-                                       const char *title)
+                                       const char           *url,
+                                       const char           *title)
 {
   GList *l;
   gboolean changed = FALSE;
@@ -183,7 +181,7 @@ ephy_web_overview_model_set_url_title (EphyWebOverviewModel *model,
 
 void
 ephy_web_overview_model_delete_url (EphyWebOverviewModel *model,
-                                    const char *url)
+                                    const char           *url)
 {
   GList *l;
   gboolean changed = FALSE;
@@ -211,7 +209,7 @@ ephy_web_overview_model_delete_url (EphyWebOverviewModel *model,
 
 void
 ephy_web_overview_model_delete_host (EphyWebOverviewModel *model,
-                                     const char *host)
+                                     const char           *host)
 {
   GList *l;
   gboolean changed = FALSE;

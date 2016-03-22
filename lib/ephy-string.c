@@ -68,7 +68,7 @@ ephy_string_blank_chr (char *source)
 
   p = source;
   while (*p != '\0') {
-    if ((guchar) *p < 0x20)
+    if ((guchar) * p < 0x20)
       *p = ' ';
 
     p++;
@@ -81,10 +81,10 @@ ephy_string_blank_chr (char *source)
  * ephy_string_shorten: shortens a string
  * @str: the string to shorten, in UTF-8
  * @target_length: the length of the shortened string (in characters)
- * 
+ *
  * If @str is already short enough, it is returned. Otherwise a new string
  * is allocated and @str is consumed.
- * 
+ *
  * Return value: a newly allocated string, not longer than target_length
  * characters.
  */
@@ -105,23 +105,23 @@ ephy_string_shorten (char *str,
    * it can still split a sequence of combining characters.
    */
   actual_length = g_utf8_strlen (str, -1);
-  
+
   /* if the string is already short enough, or if it's too short for
    * us to shorten it, return a new copy */
   if ((gsize)actual_length <= target_length)
     return str;
-  
+
   /* create string */
   bytes = GPOINTER_TO_UINT (g_utf8_offset_to_pointer (str, target_length - 1) - str);
-  
-  new_str = g_new (gchar, bytes + strlen(ELLIPSIS) + 1);
-  
+
+  new_str = g_new (gchar, bytes + strlen (ELLIPSIS) + 1);
+
   strncpy (new_str, str, bytes);
   strncpy (new_str + bytes, ELLIPSIS, strlen (ELLIPSIS));
   new_str[bytes + strlen (ELLIPSIS)] = '\0';
-  
+
   g_free (str);
-  
+
   return new_str;
 }
 
@@ -136,12 +136,12 @@ ephy_string_shorten (char *str,
  * ephy_string_collate_key_for_domain:
  * @host:
  * @len: the length of @host, or -1 to use the entire null-terminated @host string
- * 
+ *
  * Return value: a collation key for @host.
  */
-char*
+char *
 ephy_string_collate_key_for_domain (const char *str,
-                                    gssize len)
+                                    gssize      len)
 {
   GString *result;
   const char *dot;
@@ -176,7 +176,7 @@ ephy_string_get_host_name (const char *url)
 {
   SoupURI *uri;
   char *ret;
-  
+
   if (url == NULL ||
       g_str_has_prefix (url, "file://") ||
       g_str_has_prefix (url, "about:") ||
@@ -188,9 +188,9 @@ ephy_string_get_host_name (const char *url)
    * something without a scheme, let's try to prepend
    * 'http://' */
   if (uri == NULL) {
-      char *effective_url = g_strconcat ("http://", url, NULL);
-      uri = soup_uri_new (effective_url);
-      g_free (effective_url);
+    char *effective_url = g_strconcat ("http://", url, NULL);
+    uri = soup_uri_new (effective_url);
+    g_free (effective_url);
   }
 
   if (uri == NULL) return NULL;
@@ -229,7 +229,7 @@ ephy_string_commandline_args_to_uris (char **arguments, GError **error)
       args[i] = g_file_get_uri (file);
     } else {
       args[i] = g_locale_to_utf8 (arguments [i], -1,
-                NULL, NULL, error);
+                                  NULL, NULL, error);
       if (error && *error) {
         g_strfreev (args);
         return NULL;

@@ -50,8 +50,8 @@
  * atomically.
  */
 
-#define DELAY_MAX_TICKS	64
-#define INITIAL_TICKS	2
+#define DELAY_MAX_TICKS 64
+#define INITIAL_TICKS   2
 
 static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
@@ -74,38 +74,36 @@ GQuark ephy_file_helpers_error_quark;
 const char *
 ephy_file_tmp_dir (void)
 {
-	if (tmp_dir == NULL)
-	{
-		char *partial_name;
-		char *full_name;
+  if (tmp_dir == NULL) {
+    char *partial_name;
+    char *full_name;
 
-		partial_name = g_strconcat ("epiphany-", g_get_user_name (),
-					    "-XXXXXX", NULL);
-		full_name = g_build_filename (g_get_tmp_dir (), partial_name,
-					      NULL);
-		tmp_dir = mkdtemp (full_name);
-		g_free (partial_name);
+    partial_name = g_strconcat ("epiphany-", g_get_user_name (),
+                                "-XXXXXX", NULL);
+    full_name = g_build_filename (g_get_tmp_dir (), partial_name,
+                                  NULL);
+    tmp_dir = mkdtemp (full_name);
+    g_free (partial_name);
 
-		if (tmp_dir == NULL)
-		{
-			g_free (full_name);
-		}
-	}
+    if (tmp_dir == NULL) {
+      g_free (full_name);
+    }
+  }
 
-	return tmp_dir;
+  return tmp_dir;
 }
 
 static char *
 ephy_file_download_dir (void)
 {
-	const char *xdg_download_dir;
+  const char *xdg_download_dir;
 
-	xdg_download_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
-	if (xdg_download_dir != NULL)
-		return g_strdup (xdg_download_dir);
+  xdg_download_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
+  if (xdg_download_dir != NULL)
+    return g_strdup (xdg_download_dir);
 
-	/* If we don't have XDG user dirs info, return an educated guess. */
-	return g_build_filename	(g_get_home_dir (), _("Downloads"), NULL);
+  /* If we don't have XDG user dirs info, return an educated guess. */
+  return g_build_filename (g_get_home_dir (), _("Downloads"), NULL);
 }
 
 /**
@@ -127,18 +125,18 @@ ephy_file_download_dir (void)
 char *
 ephy_file_get_downloads_dir (void)
 {
-	char *download_dir;
+  char *download_dir;
 
-	download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
-					      EPHY_PREFS_STATE_DOWNLOAD_DIR);
+  download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
+                                        EPHY_PREFS_STATE_DOWNLOAD_DIR);
 
-	if (g_str_equal (download_dir, "Desktop"))
-		download_dir = ephy_file_desktop_dir ();
-	if (g_str_equal (download_dir, "Downloads") ||
-	    g_path_is_absolute (download_dir) != TRUE)
-		download_dir = ephy_file_download_dir ();
+  if (g_str_equal (download_dir, "Desktop"))
+    download_dir = ephy_file_desktop_dir ();
+  if (g_str_equal (download_dir, "Downloads") ||
+      g_path_is_absolute (download_dir) != TRUE)
+    download_dir = ephy_file_download_dir ();
 
-	return download_dir;
+  return download_dir;
 }
 
 /**
@@ -151,14 +149,14 @@ ephy_file_get_downloads_dir (void)
 char *
 ephy_file_desktop_dir (void)
 {
-	const char *xdg_desktop_dir;
+  const char *xdg_desktop_dir;
 
-	xdg_desktop_dir = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
-	if (xdg_desktop_dir != NULL)
-		return g_strdup (xdg_desktop_dir);
+  xdg_desktop_dir = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+  if (xdg_desktop_dir != NULL)
+    return g_strdup (xdg_desktop_dir);
 
-	/* If we don't have XDG user dirs info, return an educated guess. */
-	return g_build_filename	(g_get_home_dir (), _("Desktop"), NULL);
+  /* If we don't have XDG user dirs info, return an educated guess. */
+  return g_build_filename (g_get_home_dir (), _("Desktop"), NULL);
 }
 
 /**
@@ -177,35 +175,31 @@ ephy_file_desktop_dir (void)
  **/
 char *
 ephy_file_tmp_filename (const char *base,
-			const char *extension)
+                        const char *extension)
 {
-	int fd;
-	char *name = g_strdup (base);
+  int fd;
+  char *name = g_strdup (base);
 
-	fd = g_mkstemp (name);
+  fd = g_mkstemp (name);
 
-	if (fd != -1)
-	{
-		unlink (name);
-		close (fd);
-	}
-	else
-	{
-		g_free (name);
+  if (fd != -1) {
+    unlink (name);
+    close (fd);
+  } else {
+    g_free (name);
 
-		return NULL;
-	}
+    return NULL;
+  }
 
-	if (extension)
-	{
-		char *tmp;
-		tmp = g_strconcat (name, ".",
-				   extension, NULL);
-		g_free (name);
-		name = tmp;
-	}
+  if (extension) {
+    char *tmp;
+    tmp = g_strconcat (name, ".",
+                       extension, NULL);
+    g_free (name);
+    name = tmp;
+  }
 
-	return name;
+  return name;
 }
 
 /**
@@ -219,41 +213,39 @@ ephy_file_tmp_filename (const char *base,
 const char *
 ephy_file (const char *filename)
 {
-	char *ret;
-	guint i;
+  char *ret;
+  guint i;
 
-	static const char * const paths[] =
-	{
+  static const char * const paths[] =
+  {
 #ifndef NDEBUG
-		TOP_SRC_DATADIR "/",
-		TOP_SRC_DATADIR "/icons/",
-		TOP_SRC_DATADIR "/pages/",
+    TOP_SRC_DATADIR "/",
+    TOP_SRC_DATADIR "/icons/",
+    TOP_SRC_DATADIR "/pages/",
 #endif
-		SHARE_DIR "/",
-		SHARE_DIR "/icons/",
-		SHARE_DIR "/pages/"
-	};
+    SHARE_DIR "/",
+    SHARE_DIR "/icons/",
+    SHARE_DIR "/pages/"
+  };
 
-	g_assert (files != NULL);
+  g_assert (files != NULL);
 
-	ret = g_hash_table_lookup (files, filename);
-	if (ret != NULL)
-		return ret;
+  ret = g_hash_table_lookup (files, filename);
+  if (ret != NULL)
+    return ret;
 
-	for (i = 0; i < G_N_ELEMENTS (paths); i++)
-	{
-		ret = g_strconcat (paths[i], filename, NULL);
-		if (g_file_test (ret, G_FILE_TEST_EXISTS) == TRUE)
-		{
-			g_hash_table_insert (files, g_strdup (filename), ret);
-			return (const char *) ret;
-		}
-		g_free (ret);
-	}
+  for (i = 0; i < G_N_ELEMENTS (paths); i++) {
+    ret = g_strconcat (paths[i], filename, NULL);
+    if (g_file_test (ret, G_FILE_TEST_EXISTS) == TRUE) {
+      g_hash_table_insert (files, g_strdup (filename), ret);
+      return (const char *)ret;
+    }
+    g_free (ret);
+  }
 
-	g_warning ("Failed to find %s\n", filename);
+  g_warning ("Failed to find %s\n", filename);
 
-	return NULL;
+  return NULL;
 }
 
 /**
@@ -267,7 +259,7 @@ ephy_file (const char *filename)
 const char *
 ephy_dot_dir (void)
 {
-	return dot_dir;
+  return dot_dir;
 }
 
 /**
@@ -281,7 +273,7 @@ ephy_dot_dir (void)
 gboolean
 ephy_dot_dir_is_default (void)
 {
-	return is_default_dot_dir;
+  return is_default_dot_dir;
 }
 
 /**
@@ -294,7 +286,7 @@ ephy_dot_dir_is_default (void)
 char *
 ephy_default_dot_dir (void)
 {
-	return g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
+  return g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
 }
 
 /**
@@ -309,111 +301,99 @@ ephy_default_dot_dir (void)
  * Returns: %FALSE if the profile dir couldn't be created or accessed
  **/
 gboolean
-ephy_file_helpers_init (const char *profile_dir,
-			EphyFileHelpersFlags flags,
-			GError **error)
+ephy_file_helpers_init (const char          *profile_dir,
+                        EphyFileHelpersFlags flags,
+                        GError             **error)
 {
-	gboolean ret = TRUE;
-	gboolean private_profile;
-	gboolean steal_data_from_profile;
+  gboolean ret = TRUE;
+  gboolean private_profile;
+  gboolean steal_data_from_profile;
 
-	ephy_file_helpers_error_quark = g_quark_from_static_string ("ephy-file-helpers-error");
+  ephy_file_helpers_error_quark = g_quark_from_static_string ("ephy-file-helpers-error");
 
-	files = g_hash_table_new_full (g_str_hash,
-				       g_str_equal,
-				       (GDestroyNotify) g_free,
-				       (GDestroyNotify) g_free);
+  files = g_hash_table_new_full (g_str_hash,
+                                 g_str_equal,
+                                 (GDestroyNotify)g_free,
+                                 (GDestroyNotify)g_free);
 
-	keep_directory = flags & EPHY_FILE_HELPERS_KEEP_DIR;
-	private_profile = flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE;
-	steal_data_from_profile = flags & EPHY_FILE_HELPERS_STEAL_DATA;
+  keep_directory = flags & EPHY_FILE_HELPERS_KEEP_DIR;
+  private_profile = flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE;
+  steal_data_from_profile = flags & EPHY_FILE_HELPERS_STEAL_DATA;
 
-	if (profile_dir != NULL && !steal_data_from_profile)
-	{
-		if (g_path_is_absolute (profile_dir))
-		{
-			dot_dir = g_strdup (profile_dir);
-		}
-		else
-		{
-			GFile *file = g_file_new_for_path (profile_dir);
-			dot_dir = g_file_get_path (file);
-			g_object_unref (file);
-		}
-	}
-	else if (private_profile)
-	{
-		if (ephy_file_tmp_dir () == NULL)
-		{
-			g_set_error (error,
-				     EPHY_FILE_HELPERS_ERROR_QUARK,
-				     0,
-				     _("Could not create a temporary directory in “%s”."),
-				     g_get_tmp_dir ());
-			return FALSE;
-		}
+  if (profile_dir != NULL && !steal_data_from_profile) {
+    if (g_path_is_absolute (profile_dir)) {
+      dot_dir = g_strdup (profile_dir);
+    } else {
+      GFile *file = g_file_new_for_path (profile_dir);
+      dot_dir = g_file_get_path (file);
+      g_object_unref (file);
+    }
+  } else if (private_profile) {
+    if (ephy_file_tmp_dir () == NULL) {
+      g_set_error (error,
+                   EPHY_FILE_HELPERS_ERROR_QUARK,
+                   0,
+                   _("Could not create a temporary directory in “%s”."),
+                   g_get_tmp_dir ());
+      return FALSE;
+    }
 
-		dot_dir = g_build_filename (ephy_file_tmp_dir (),
-					    "epiphany",
-					    NULL);
-	}
+    dot_dir = g_build_filename (ephy_file_tmp_dir (),
+                                "epiphany",
+                                NULL);
+  }
 
-	if (dot_dir == NULL)
-	{
-		dot_dir = ephy_default_dot_dir ();
-		is_default_dot_dir = TRUE;
-	}
+  if (dot_dir == NULL) {
+    dot_dir = ephy_default_dot_dir ();
+    is_default_dot_dir = TRUE;
+  }
 
-	if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS)
-		ret = ephy_ensure_dir_exists (ephy_dot_dir (), error);
+  if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS)
+    ret = ephy_ensure_dir_exists (ephy_dot_dir (), error);
 
-	if (steal_data_from_profile && profile_dir)
-	{
-		guint i;
-		const char *files_to_copy[] = { EPHY_HISTORY_FILE, EPHY_BOOKMARKS_FILE };
-		
-		for (i = 0; i < G_N_ELEMENTS (files_to_copy); i++)
-		{
-			char *filename;
-			GError *err = NULL;
-			GFile *source, *destination;
+  if (steal_data_from_profile && profile_dir) {
+    guint i;
+    const char *files_to_copy[] = { EPHY_HISTORY_FILE, EPHY_BOOKMARKS_FILE };
 
-			filename = g_build_filename (profile_dir,
-						     files_to_copy[i],
-						     NULL);
-			source = g_file_new_for_path (filename);
-			g_free (filename);
-			
-			filename = g_build_filename (dot_dir,
-						     files_to_copy[i],
-						     NULL);
-			destination = g_file_new_for_path (filename);
-			g_free (filename);
+    for (i = 0; i < G_N_ELEMENTS (files_to_copy); i++) {
+      char *filename;
+      GError *err = NULL;
+      GFile *source, *destination;
 
-			g_file_copy (source, destination,
-				     G_FILE_COPY_OVERWRITE,
-				     NULL, NULL, NULL, &err);
-			if (err)
-			{
-				printf("Error stealing file %s from profile: %s\n", files_to_copy[i], err->message);
-				g_error_free (err);
-			}
-				
-			g_object_unref (source);
-			g_object_unref (destination);
-		}
-	}
+      filename = g_build_filename (profile_dir,
+                                   files_to_copy[i],
+                                   NULL);
+      source = g_file_new_for_path (filename);
+      g_free (filename);
 
-	return ret;
+      filename = g_build_filename (dot_dir,
+                                   files_to_copy[i],
+                                   NULL);
+      destination = g_file_new_for_path (filename);
+      g_free (filename);
+
+      g_file_copy (source, destination,
+                   G_FILE_COPY_OVERWRITE,
+                   NULL, NULL, NULL, &err);
+      if (err) {
+        printf ("Error stealing file %s from profile: %s\n", files_to_copy[i], err->message);
+        g_error_free (err);
+      }
+
+      g_object_unref (source);
+      g_object_unref (destination);
+    }
+  }
+
+  return ret;
 }
 
 static void
 delete_files (GList *l)
 {
-	for (; l != NULL; l = l->next)
-	{
-		unlink (l->data);
-	}
+  for (; l != NULL; l = l->next) {
+    unlink (l->data);
+  }
 }
 
 /**
@@ -424,37 +404,34 @@ delete_files (GList *l)
 void
 ephy_file_helpers_shutdown (void)
 {
-	g_hash_table_destroy (files);
+  g_hash_table_destroy (files);
 
-	del_on_exit = g_list_reverse (del_on_exit);
-	delete_files (del_on_exit);
-	g_list_foreach (del_on_exit, (GFunc)g_free, NULL);
-	g_list_free (del_on_exit);
-	del_on_exit = NULL;
+  del_on_exit = g_list_reverse (del_on_exit);
+  delete_files (del_on_exit);
+  g_list_foreach (del_on_exit, (GFunc)g_free, NULL);
+  g_list_free (del_on_exit);
+  del_on_exit = NULL;
 
-	if (mime_table != NULL)
-	{
-		LOG ("Destroying mime type hashtable");
-		g_hash_table_destroy (mime_table);
-		mime_table = NULL;
-	}
+  if (mime_table != NULL) {
+    LOG ("Destroying mime type hashtable");
+    g_hash_table_destroy (mime_table);
+    mime_table = NULL;
+  }
 
-	g_free (dot_dir);
-	dot_dir = NULL;
+  g_free (dot_dir);
+  dot_dir = NULL;
 
-	if (tmp_dir != NULL)
-	{
-		if (!keep_directory)
-		{
-			/* recursively delete the contents and the
-			 * directory */
-			LOG ("shutdown: delete tmp_dir %s", tmp_dir);
-			ephy_file_delete_dir_recursively (tmp_dir, NULL);
-		}
+  if (tmp_dir != NULL) {
+    if (!keep_directory) {
+      /* recursively delete the contents and the
+       * directory */
+      LOG ("shutdown: delete tmp_dir %s", tmp_dir);
+      ephy_file_delete_dir_recursively (tmp_dir, NULL);
+    }
 
-		g_free (tmp_dir);
-		tmp_dir = NULL;
-	}
+    g_free (tmp_dir);
+    tmp_dir = NULL;
+  }
 }
 
 /**
@@ -470,79 +447,69 @@ ephy_file_helpers_shutdown (void)
  **/
 gboolean
 ephy_ensure_dir_exists (const char *dir,
-		        GError **error)
+                        GError    **error)
 {
-	if (g_file_test (dir, G_FILE_TEST_EXISTS) &&
-	    !g_file_test (dir, G_FILE_TEST_IS_DIR))
-	{
-		g_set_error (error,
-			     EPHY_FILE_HELPERS_ERROR_QUARK,
-			     0,
-			     _("The file “%s” exists. Please move it out of the way."),
-			     dir);
+  if (g_file_test (dir, G_FILE_TEST_EXISTS) &&
+      !g_file_test (dir, G_FILE_TEST_IS_DIR)) {
+    g_set_error (error,
+                 EPHY_FILE_HELPERS_ERROR_QUARK,
+                 0,
+                 _("The file “%s” exists. Please move it out of the way."),
+                 dir);
 
-		return FALSE;
-	}
+    return FALSE;
+  }
 
-	if (!g_file_test (dir, G_FILE_TEST_EXISTS))
-	{
-		if (g_mkdir_with_parents (dir, 488) == 0)
-		{
-			if (dir == ephy_dot_dir ())
-			{
-				/* We need to set the .migrated file to the
-				 * current profile migration version,
-				 * otherwise the next time the browser runs
-				 * things might go awry. */
-				ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION);
-			}
-		}
-		else
-		{
-			g_set_error (error,
-				     EPHY_FILE_HELPERS_ERROR_QUARK,
-				     0,
-				     _("Failed to create directory “%s”."),
-				     dir);
+  if (!g_file_test (dir, G_FILE_TEST_EXISTS)) {
+    if (g_mkdir_with_parents (dir, 488) == 0) {
+      if (dir == ephy_dot_dir ()) {
+        /* We need to set the .migrated file to the
+         * current profile migration version,
+         * otherwise the next time the browser runs
+         * things might go awry. */
+        ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION);
+      }
+    } else {
+      g_set_error (error,
+                   EPHY_FILE_HELPERS_ERROR_QUARK,
+                   0,
+                   _("Failed to create directory “%s”."),
+                   dir);
 
-			return FALSE;
-		}
-	}
+      return FALSE;
+    }
+  }
 
-	return TRUE;
+  return TRUE;
 }
 
 static void
 ephy_find_file_recursive (const char *path,
-			  const char *fname,
-			  GSList **list,
-			  gint depth,
-			  gint maxdepth)
+                          const char *fname,
+                          GSList    **list,
+                          gint        depth,
+                          gint        maxdepth)
 {
-	GDir *dir;
-	const gchar *file;
+  GDir *dir;
+  const gchar *file;
 
-	dir = g_dir_open (path, 0, NULL);
-	if (dir != NULL)
-	{
-		while ((file = g_dir_read_name (dir)))
-		{
-			if (depth < maxdepth)
-			{
-				char *new_path = g_build_filename (path, file, NULL);
-				ephy_find_file_recursive (new_path, fname, list,
-							  depth + 1, maxdepth);
-				g_free (new_path);
-			}
-			if (strcmp (file, fname) == 0)
-			{
-				char *new_path = g_build_filename (path, file, NULL);
-				*list = g_slist_prepend (*list, new_path);
-			}
-		}
+  dir = g_dir_open (path, 0, NULL);
+  if (dir != NULL) {
+    while ((file = g_dir_read_name (dir))) {
+      if (depth < maxdepth) {
+        char *new_path = g_build_filename (path, file, NULL);
+        ephy_find_file_recursive (new_path, fname, list,
+                                  depth + 1, maxdepth);
+        g_free (new_path);
+      }
+      if (strcmp (file, fname) == 0) {
+        char *new_path = g_build_filename (path, file, NULL);
+        *list = g_slist_prepend (*list, new_path);
+      }
+    }
 
-		g_dir_close (dir);
-	}
+    g_dir_close (dir);
+  }
 }
 
 /**
@@ -557,12 +524,12 @@ ephy_find_file_recursive (const char *path,
  **/
 GSList *
 ephy_file_find (const char *path,
-	        const char *fname,
-	        gint maxdepth)
+                const char *fname,
+                gint        maxdepth)
 {
-	GSList *ret = NULL;
-	ephy_find_file_recursive (path, fname, &ret, 0, maxdepth);
-	return ret;
+  GSList *ret = NULL;
+  ephy_find_file_recursive (path, fname, &ret, 0, maxdepth);
+  return ret;
 }
 
 /**
@@ -575,66 +542,58 @@ ephy_file_find (const char *path,
 void
 ephy_file_delete_on_exit (GFile *file)
 {
-	/* does nothing now */
+  /* does nothing now */
 }
 
 static void
 load_mime_from_xml (void)
 {
-	xmlTextReaderPtr reader;
-	const char *xml_file;
-	int ret;
-	EphyMimePermission permission = EPHY_MIME_PERMISSION_UNKNOWN;
+  xmlTextReaderPtr reader;
+  const char *xml_file;
+  int ret;
+  EphyMimePermission permission = EPHY_MIME_PERMISSION_UNKNOWN;
 
-	g_return_if_fail (mime_table == NULL);
+  g_return_if_fail (mime_table == NULL);
 
-	mime_table = g_hash_table_new_full (g_str_hash, g_str_equal,
-					    xmlFree, NULL);
+  mime_table = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                      xmlFree, NULL);
 
-	xml_file = ephy_file ("mime-types-permissions.xml");
-	if (xml_file == NULL)
-	{
-		g_warning ("MIME types permissions file not found!\n");
-		return;
-	}
+  xml_file = ephy_file ("mime-types-permissions.xml");
+  if (xml_file == NULL) {
+    g_warning ("MIME types permissions file not found!\n");
+    return;
+  }
 
-	reader = xmlNewTextReaderFilename (xml_file);
-	if (reader == NULL)
-	{
-		g_warning ("Could not load MIME types permissions file!\n");
-		return;
-	}
+  reader = xmlNewTextReaderFilename (xml_file);
+  if (reader == NULL) {
+    g_warning ("Could not load MIME types permissions file!\n");
+    return;
+  }
 
-	ret = xmlTextReaderRead (reader);
-	while (ret == 1)
-	{
-		const xmlChar *tag;
-		xmlReaderTypes type;
+  ret = xmlTextReaderRead (reader);
+  while (ret == 1) {
+    const xmlChar *tag;
+    xmlReaderTypes type;
 
-		tag = xmlTextReaderConstName (reader);
-		type = xmlTextReaderNodeType (reader);
+    tag = xmlTextReaderConstName (reader);
+    type = xmlTextReaderNodeType (reader);
 
-		if (xmlStrEqual (tag, (const xmlChar *)"safe") && type == XML_READER_TYPE_ELEMENT)
-		{
-			permission = EPHY_MIME_PERMISSION_SAFE;
-		}
-		else if (xmlStrEqual (tag, (const xmlChar *)"unsafe") && type == XML_READER_TYPE_ELEMENT)
-		{
-			permission = EPHY_MIME_PERMISSION_UNSAFE;
-		}
-		else if (xmlStrEqual (tag, (const xmlChar *)"mime-type"))
-		{
-			xmlChar *t;
+    if (xmlStrEqual (tag, (const xmlChar *)"safe") && type == XML_READER_TYPE_ELEMENT) {
+      permission = EPHY_MIME_PERMISSION_SAFE;
+    } else if (xmlStrEqual (tag, (const xmlChar *)"unsafe") && type == XML_READER_TYPE_ELEMENT) {
+      permission = EPHY_MIME_PERMISSION_UNSAFE;
+    } else if (xmlStrEqual (tag, (const xmlChar *)"mime-type")) {
+      xmlChar *t;
 
-			t = xmlTextReaderGetAttribute (reader, (const xmlChar *)"type");
-			g_hash_table_insert (mime_table, t,
-					     GINT_TO_POINTER (permission));
-		}
+      t = xmlTextReaderGetAttribute (reader, (const xmlChar *)"type");
+      g_hash_table_insert (mime_table, t,
+                           GINT_TO_POINTER (permission));
+    }
 
-		ret = xmlTextReaderRead (reader);
-	}
+    ret = xmlTextReaderRead (reader);
+  }
 
-	xmlFreeTextReader (reader);
+  xmlFreeTextReader (reader);
 }
 
 /**
@@ -649,27 +608,23 @@ load_mime_from_xml (void)
 EphyMimePermission
 ephy_file_check_mime (const char *mime_type)
 {
-	EphyMimePermission permission;
-	gpointer tmp;
+  EphyMimePermission permission;
+  gpointer tmp;
 
-	g_return_val_if_fail (mime_type != NULL, EPHY_MIME_PERMISSION_UNKNOWN);
+  g_return_val_if_fail (mime_type != NULL, EPHY_MIME_PERMISSION_UNKNOWN);
 
-	if (mime_table == NULL)
-	{
-		load_mime_from_xml ();
-	}
+  if (mime_table == NULL) {
+    load_mime_from_xml ();
+  }
 
-	tmp = g_hash_table_lookup (mime_table, mime_type);
-	if (tmp == NULL)
-	{
-		permission = EPHY_MIME_PERMISSION_UNKNOWN;
-	}
-	else
-	{
-		permission = GPOINTER_TO_INT (tmp);
-	}
+  tmp = g_hash_table_lookup (mime_table, mime_type);
+  if (tmp == NULL) {
+    permission = EPHY_MIME_PERMISSION_UNKNOWN;
+  } else {
+    permission = GPOINTER_TO_INT (tmp);
+  }
 
-	return permission;
+  return permission;
 }
 
 /**
@@ -686,36 +641,33 @@ ephy_file_check_mime (const char *mime_type)
  * Returns: %TRUE if g_app_info_launch() succeeded
  **/
 gboolean
-ephy_file_launch_application (GAppInfo *app,
-			      GList *list,
-			      guint32 user_time,
-			      GtkWidget *widget)
+ephy_file_launch_application (GAppInfo  *app,
+                              GList     *list,
+                              guint32    user_time,
+                              GtkWidget *widget)
 {
-	GdkAppLaunchContext *context;
-	GdkDisplay *display;
-	GdkScreen *screen;
-	gboolean res;
+  GdkAppLaunchContext *context;
+  GdkDisplay *display;
+  GdkScreen *screen;
+  gboolean res;
 
-	if (widget)
-	{
-		display = gtk_widget_get_display (widget);
-		screen = gtk_widget_get_screen (widget);
-	}
-	else
-	{
-		display = gdk_display_get_default ();
-		screen = gdk_screen_get_default ();
-	}
+  if (widget) {
+    display = gtk_widget_get_display (widget);
+    screen = gtk_widget_get_screen (widget);
+  } else {
+    display = gdk_display_get_default ();
+    screen = gdk_screen_get_default ();
+  }
 
-	context = gdk_display_get_app_launch_context (display);
-	gdk_app_launch_context_set_screen (context, screen);
-	gdk_app_launch_context_set_timestamp (context, user_time);
+  context = gdk_display_get_app_launch_context (display);
+  gdk_app_launch_context_set_screen (context, screen);
+  gdk_app_launch_context_set_timestamp (context, user_time);
 
-	res = g_app_info_launch (app, list,
-				 G_APP_LAUNCH_CONTEXT (context), NULL);
-	g_object_unref (context);
+  res = g_app_info_launch (app, list,
+                           G_APP_LAUNCH_CONTEXT (context), NULL);
+  g_object_unref (context);
 
-	return res;
+  return res;
 }
 
 /**
@@ -732,68 +684,62 @@ ephy_file_launch_application (GAppInfo *app,
  **/
 gboolean
 ephy_file_launch_desktop_file (const char *filename,
-			       const char *parameter,
-			       guint32 user_time,
-			       GtkWidget *widget)
+                               const char *parameter,
+                               guint32     user_time,
+                               GtkWidget  *widget)
 {
-	GDesktopAppInfo *app;
-	GFile *file = NULL;
-	GList *list = NULL;
-	gboolean ret;
+  GDesktopAppInfo *app;
+  GFile *file = NULL;
+  GList *list = NULL;
+  gboolean ret;
 
-	app = g_desktop_app_info_new (filename);
-	if (parameter)
-	{
-		file = g_file_new_for_path (parameter);
-		list = g_list_append (list, file);
-	}
-	
-	ret = ephy_file_launch_application (G_APP_INFO (app), list, user_time, widget);
-	g_list_free (list);
-	if (file)
-		g_object_unref (file);
-	return ret;
+  app = g_desktop_app_info_new (filename);
+  if (parameter) {
+    file = g_file_new_for_path (parameter);
+    list = g_list_append (list, file);
+  }
+
+  ret = ephy_file_launch_application (G_APP_INFO (app), list, user_time, widget);
+  g_list_free (list);
+  if (file)
+    g_object_unref (file);
+  return ret;
 }
 
 GAppInfo *
-ephy_file_launcher_get_app_info_for_file (GFile *file,
-					  const char *mime_type)
+ephy_file_launcher_get_app_info_for_file (GFile      *file,
+                                          const char *mime_type)
 {
-	GAppInfo *app = NULL;
+  GAppInfo *app = NULL;
 
-	g_return_val_if_fail (file || mime_type, FALSE);
+  g_return_val_if_fail (file || mime_type, FALSE);
 
-	if (mime_type != NULL)
-	{
-		app = g_app_info_get_default_for_type (mime_type,
-						       FALSE);
-	}
-	else
-	{
-		GFileInfo *file_info;
-		char *type;
+  if (mime_type != NULL) {
+    app = g_app_info_get_default_for_type (mime_type,
+                                           FALSE);
+  } else {
+    GFileInfo *file_info;
+    char *type;
 
-		/* Sniff mime type and check if it's safe to open */
-		file_info = g_file_query_info (file,
-					       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-					       0, NULL, NULL);
-		if (file_info == NULL)
-		{
-			return FALSE;
-		}
-		type = g_strdup (g_file_info_get_content_type (file_info));
-		
-		g_object_unref (file_info);
+    /* Sniff mime type and check if it's safe to open */
+    file_info = g_file_query_info (file,
+                                   G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                                   0, NULL, NULL);
+    if (file_info == NULL) {
+      return FALSE;
+    }
+    type = g_strdup (g_file_info_get_content_type (file_info));
 
-		if (type != NULL && type[0] != '\0' &&
-		    ephy_file_check_mime (type) == EPHY_MIME_PERMISSION_SAFE)
-		{
-			app = g_app_info_get_default_for_type (type, FALSE);
-		}
-		g_free (type);
-	}
+    g_object_unref (file_info);
 
-	return app;
+    if (type != NULL && type[0] != '\0' &&
+        ephy_file_check_mime (type) == EPHY_MIME_PERMISSION_SAFE) {
+      app = g_app_info_get_default_for_type (type, FALSE);
+    }
+    g_free (type);
+  }
+
+  return app;
 }
 
 /**
@@ -809,58 +755,56 @@ ephy_file_launcher_get_app_info_for_file (GFile *file,
  **/
 gboolean
 ephy_file_launch_handler (const char *mime_type,
-			  GFile *file,
-			  guint32 user_time)
+                          GFile      *file,
+                          guint32     user_time)
 {
-	GAppInfo *app = NULL;
-	gboolean ret = FALSE;
+  GAppInfo *app = NULL;
+  gboolean ret = FALSE;
 
-	g_return_val_if_fail (file != NULL, FALSE);
+  g_return_val_if_fail (file != NULL, FALSE);
 
-	app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
+  app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
 
-	if (app != NULL)
-	{
-		GList *list = NULL;
-		
-		list = g_list_append (list, file);
-		ret = ephy_file_launch_application (app, list, user_time, NULL);
-		g_list_free (list);
-	}
+  if (app != NULL) {
+    GList *list = NULL;
 
-	return ret;
+    list = g_list_append (list, file);
+    ret = ephy_file_launch_application (app, list, user_time, NULL);
+    g_list_free (list);
+  }
+
+  return ret;
 }
 
 gboolean
 ephy_file_open_uri_in_default_browser (const char *uri,
-				       guint32 timestamp,
-				       GdkScreen *screen)
+                                       guint32     timestamp,
+                                       GdkScreen  *screen)
 {
-	GdkAppLaunchContext *context;
-	GAppInfo *appinfo;
-	GList uris;
-	gboolean retval = TRUE;
-	GError *error = NULL;
+  GdkAppLaunchContext *context;
+  GAppInfo *appinfo;
+  GList uris;
+  gboolean retval = TRUE;
+  GError *error = NULL;
 
-	context = gdk_display_get_app_launch_context (screen ? gdk_screen_get_display (screen) : gdk_display_get_default ());
-	gdk_app_launch_context_set_screen (context, screen);
-	gdk_app_launch_context_set_timestamp (context, timestamp);
+  context = gdk_display_get_app_launch_context (screen ? gdk_screen_get_display (screen) : gdk_display_get_default ());
+  gdk_app_launch_context_set_screen (context, screen);
+  gdk_app_launch_context_set_timestamp (context, timestamp);
 
-	appinfo = g_app_info_get_default_for_type ("x-scheme-handler/http", TRUE);
-	uris.data = (gpointer)uri;
-	uris.next = uris.prev = NULL;
+  appinfo = g_app_info_get_default_for_type ("x-scheme-handler/http", TRUE);
+  uris.data = (gpointer)uri;
+  uris.next = uris.prev = NULL;
 
-	if (!g_app_info_launch_uris (appinfo, &uris, G_APP_LAUNCH_CONTEXT (context), &error))
-	{
-		g_warning ("Failed to launch %s: %s", uri, error->message);
-		g_error_free (error);
-		retval = FALSE;
-	}
+  if (!g_app_info_launch_uris (appinfo, &uris, G_APP_LAUNCH_CONTEXT (context), &error)) {
+    g_warning ("Failed to launch %s: %s", uri, error->message);
+    g_error_free (error);
+    retval = FALSE;
+  }
 
-	g_object_unref (context);
-	g_object_unref (appinfo);
+  g_object_unref (context);
+  g_object_unref (appinfo);
 
-	return retval;
+  return retval;
 }
 
 /**
@@ -875,10 +819,10 @@ ephy_file_open_uri_in_default_browser (const char *uri,
  * Returns: %TRUE if the launch succeeded
  **/
 gboolean
-ephy_file_browse_to (GFile *file,
-		     guint32 user_time)
+ephy_file_browse_to (GFile  *file,
+                     guint32 user_time)
 {
-	return ephy_file_launch_handler ("inode/directory", file, user_time);
+  return ephy_file_launch_handler ("inode/directory", file, user_time);
 }
 
 /**
@@ -893,60 +837,54 @@ ephy_file_browse_to (GFile *file,
 gboolean
 ephy_file_delete_dir_recursively (const char *directory, GError **error)
 {
-	GDir* dir;
-	const char* file_name;
-	gboolean failed = FALSE;
+  GDir *dir;
+  const char *file_name;
+  gboolean failed = FALSE;
 
-	dir = g_dir_open (directory, 0, error);
-	if (!dir)
-		return FALSE;
+  dir = g_dir_open (directory, 0, error);
+  if (!dir)
+    return FALSE;
 
-	file_name = g_dir_read_name (dir);
-	while (file_name && !failed) {
-		char *file_path;
+  file_name = g_dir_read_name (dir);
+  while (file_name && !failed) {
+    char *file_path;
 
-		file_path = g_build_filename (directory, file_name, NULL);
-		if (g_file_test (file_path, G_FILE_TEST_IS_DIR))
-		{
-			failed = !ephy_file_delete_dir_recursively (file_path, error);
-		}
-		else
-		{
-			int result = g_unlink (file_path);
+    file_path = g_build_filename (directory, file_name, NULL);
+    if (g_file_test (file_path, G_FILE_TEST_IS_DIR)) {
+      failed = !ephy_file_delete_dir_recursively (file_path, error);
+    } else {
+      int result = g_unlink (file_path);
 
-			if (result == -1)
-			{
-				int errsv = errno;
+      if (result == -1) {
+        int errsv = errno;
 
-				g_set_error (error, G_IO_ERROR,
-					     g_io_error_from_errno (errsv),
-					     "Error removing file %s: %s",
-					     file_path, g_strerror (errsv));
-				failed = TRUE;
-			}
-		}
-		g_free (file_path);
-		file_name = g_dir_read_name (dir);
-	}
-	g_dir_close (dir);
+        g_set_error (error, G_IO_ERROR,
+                     g_io_error_from_errno (errsv),
+                     "Error removing file %s: %s",
+                     file_path, g_strerror (errsv));
+        failed = TRUE;
+      }
+    }
+    g_free (file_path);
+    file_name = g_dir_read_name (dir);
+  }
+  g_dir_close (dir);
 
-	if (!failed)
-	{
-		int result = g_rmdir (directory);
+  if (!failed) {
+    int result = g_rmdir (directory);
 
-		if (result == -1)
-		{
-			int errsv = errno;
+    if (result == -1) {
+      int errsv = errno;
 
-			g_set_error (error, G_IO_ERROR,
-				     g_io_error_from_errno (errsv),
-				     "Error removing directory %s: %s",
-				     directory, g_strerror (errsv));
-			failed = TRUE;
-		}
-	}
+      g_set_error (error, G_IO_ERROR,
+                   g_io_error_from_errno (errsv),
+                   "Error removing directory %s: %s",
+                   directory, g_strerror (errsv));
+      failed = TRUE;
+    }
+  }
 
-	return !failed;
+  return !failed;
 }
 
 /**
@@ -958,24 +896,21 @@ ephy_file_delete_dir_recursively (const char *directory, GError **error)
 void
 ephy_file_delete_uri (const char *uri)
 {
-	GFile *file;
-	gboolean ret;
+  GFile *file;
+  gboolean ret;
 
-	g_return_if_fail (uri);
+  g_return_if_fail (uri);
 
-	file = g_file_new_for_uri (uri);
+  file = g_file_new_for_uri (uri);
 
-	ret = g_file_delete (file, NULL, NULL);
+  ret = g_file_delete (file, NULL, NULL);
 
-	if (ret == TRUE)
-	{
-		LOG ("Deleted file at URI '%s'", uri);
-	}
-	else
-	{
-		LOG ("Couldn't file at URI '%s'", uri);
-	}
-	g_object_unref (file);
+  if (ret == TRUE) {
+    LOG ("Deleted file at URI '%s'", uri);
+  } else {
+    LOG ("Couldn't file at URI '%s'", uri);
+  }
+  g_object_unref (file);
 }
 
 /**
@@ -990,29 +925,26 @@ ephy_file_delete_uri (const char *uri)
 gboolean
 ephy_file_move_uri (const char *source_uri, const char *dest_uri)
 {
-	GFile *src;
-	GFile *dest;
-	gboolean ret;
+  GFile *src;
+  GFile *dest;
+  gboolean ret;
 
-	g_return_val_if_fail (source_uri && dest_uri, FALSE);
+  g_return_val_if_fail (source_uri && dest_uri, FALSE);
 
-	src = g_file_new_for_uri (source_uri);
-	dest = g_file_new_for_uri (dest_uri);
+  src = g_file_new_for_uri (source_uri);
+  dest = g_file_new_for_uri (dest_uri);
 
-	ret = g_file_move (src, dest, G_FILE_COPY_OVERWRITE | G_FILE_COPY_ALL_METADATA,
-			   NULL, NULL, NULL, NULL);
+  ret = g_file_move (src, dest, G_FILE_COPY_OVERWRITE | G_FILE_COPY_ALL_METADATA,
+                     NULL, NULL, NULL, NULL);
 
-	if (ret == TRUE)
-	{
-		LOG ("Moved file '%s' to '%s'", source_uri, dest_uri);
-	}
-	else
-	{
-		LOG ("Couldn't move file '%s' to '%s'", source_uri, dest_uri);
-	}
-	g_object_unref (src);
-	g_object_unref (dest);
-	return ret;
+  if (ret == TRUE) {
+    LOG ("Moved file '%s' to '%s'", source_uri, dest_uri);
+  } else {
+    LOG ("Couldn't move file '%s' to '%s'", source_uri, dest_uri);
+  }
+  g_object_unref (src);
+  g_object_unref (dest);
+  return ret;
 }
 
 /**
@@ -1029,42 +961,42 @@ ephy_file_move_uri (const char *source_uri, const char *dest_uri)
  */
 char *
 ephy_file_create_data_uri_for_filename (const char *filename,
-					const char *mime_type)
+                                        const char *mime_type)
 {
-	gchar *data;
-	gsize data_length;
-	gchar *base64;
-	gchar *uri = NULL;
-	GFileInfo *file_info = NULL;
+  gchar *data;
+  gsize data_length;
+  gchar *base64;
+  gchar *uri = NULL;
+  GFileInfo *file_info = NULL;
 
-	g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (filename != NULL, NULL);
 
-	if (!g_file_get_contents (filename, &data, &data_length, NULL))
-		return NULL;
+  if (!g_file_get_contents (filename, &data, &data_length, NULL))
+    return NULL;
 
-	base64 = g_base64_encode ((const guchar *)data, data_length);
-	g_free (data);
+  base64 = g_base64_encode ((const guchar *)data, data_length);
+  g_free (data);
 
-	if (!mime_type) {
-		GFile *file;
+  if (!mime_type) {
+    GFile *file;
 
-		file = g_file_new_for_path (filename);
-		file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-					       G_FILE_QUERY_INFO_NONE, NULL, NULL);
-		if (file_info)
-			mime_type = g_file_info_get_content_type (file_info);
+    file = g_file_new_for_path (filename);
+    file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                                   G_FILE_QUERY_INFO_NONE, NULL, NULL);
+    if (file_info)
+      mime_type = g_file_info_get_content_type (file_info);
 
-		g_object_unref (file);
-	}
+    g_object_unref (file);
+  }
 
-	if (mime_type)
-		uri = g_strdup_printf ("data:%s;charset=utf8;base64,%s", mime_type, base64);
-	g_free(base64);
+  if (mime_type)
+    uri = g_strdup_printf ("data:%s;charset=utf8;base64,%s", mime_type, base64);
+  g_free (base64);
 
-	if (file_info)
-		g_object_unref (file_info);
+  if (file_info)
+    g_object_unref (file_info);
 
-	return uri;
+  return uri;
 }
 
 /**
@@ -1083,31 +1015,31 @@ ephy_file_create_data_uri_for_filename (const char *filename,
 char *
 ephy_sanitize_filename (char *filename)
 {
-	g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (filename != NULL, NULL);
 
-	return g_strdelimit (filename, G_DIR_SEPARATOR_S, '_');
+  return g_strdelimit (filename, G_DIR_SEPARATOR_S, '_');
 }
 
 void
 ephy_open_incognito_window (const char *uri)
 {
-	char *command;
-	GError *error = NULL;
+  char *command;
+  GError *error = NULL;
 
-	command = g_strdup_printf ("epiphany --incognito-mode --profile %s ", ephy_dot_dir ());
+  command = g_strdup_printf ("epiphany --incognito-mode --profile %s ", ephy_dot_dir ());
 
-	if (uri) {
-		char *str = g_strconcat (command, uri, NULL);
-		g_free (command);
-		command = str;
-	}
+  if (uri) {
+    char *str = g_strconcat (command, uri, NULL);
+    g_free (command);
+    command = str;
+  }
 
-	g_spawn_command_line_async (command, &error);
+  g_spawn_command_line_async (command, &error);
 
-	if (error) {
-		g_warning ("Couldn't open link in incognito window: %s", error->message);
-		g_error_free (error);
-	}
+  if (error) {
+    g_warning ("Couldn't open link in incognito window: %s", error->message);
+    g_error_free (error);
+  }
 
-	g_free (command);
+  g_free (command);
 }

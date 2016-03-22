@@ -26,22 +26,20 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-struct _EphyEncodingRow
-{
-	GtkGrid parent_instance;
+struct _EphyEncodingRow {
+  GtkGrid parent_instance;
 
-	EphyEncoding *encoding;
+  EphyEncoding *encoding;
 
-	/* from the UI file */
-	GtkLabel *encoding_label;
-	GtkImage *selected_image;
+  /* from the UI file */
+  GtkLabel *encoding_label;
+  GtkImage *selected_image;
 };
 
-enum
-{
-	PROP_0,
-	PROP_ENCODING,
-	LAST_PROP
+enum {
+  PROP_0,
+  PROP_ENCODING,
+  LAST_PROP
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
@@ -52,35 +50,35 @@ void
 ephy_encoding_row_set_selected (EphyEncodingRow *row,
                                 gboolean         selected)
 {
-	g_return_if_fail (EPHY_IS_ENCODING_ROW (row));
+  g_return_if_fail (EPHY_IS_ENCODING_ROW (row));
 
-	if (selected)
-		gtk_widget_show (GTK_WIDGET (row->selected_image));
-	else
-		gtk_widget_hide (GTK_WIDGET (row->selected_image));
+  if (selected)
+    gtk_widget_show (GTK_WIDGET (row->selected_image));
+  else
+    gtk_widget_hide (GTK_WIDGET (row->selected_image));
 }
 
 static void
 ephy_encoding_row_init (EphyEncodingRow *self)
 {
-	gtk_widget_init_template (GTK_WIDGET (self));
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
 ephy_encoding_row_set_encoding (EphyEncodingRow *self,
                                 EphyEncoding    *encoding)
 {
-	g_return_if_fail (EPHY_IS_ENCODING (encoding));
+  g_return_if_fail (EPHY_IS_ENCODING (encoding));
 
-	self->encoding = encoding;
-	gtk_label_set_text (self->encoding_label,
-	                    ephy_encoding_get_title_elided (encoding));
+  self->encoding = encoding;
+  gtk_label_set_text (self->encoding_label,
+                      ephy_encoding_get_title_elided (encoding));
 }
 
 EphyEncoding *
 ephy_encoding_row_get_encoding (EphyEncodingRow *row)
 {
-	return row->encoding;
+  return row->encoding;
 }
 
 static void
@@ -89,16 +87,15 @@ ephy_encoding_row_set_property (GObject      *object,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-	switch (prop_id)
-	{
-	case PROP_ENCODING:
-		ephy_encoding_row_set_encoding (EPHY_ENCODING_ROW (object),
-		                                g_value_get_object (value));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
+  switch (prop_id) {
+    case PROP_ENCODING:
+      ephy_encoding_row_set_encoding (EPHY_ENCODING_ROW (object),
+                                      g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
 }
 
 static void
@@ -107,47 +104,46 @@ ephy_encoding_row_get_property (GObject    *object,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-	switch (prop_id)
-	{
-	case PROP_ENCODING:
-		g_value_set_object (value, EPHY_ENCODING_ROW (object)->encoding);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
+  switch (prop_id) {
+    case PROP_ENCODING:
+      g_value_set_object (value, EPHY_ENCODING_ROW (object)->encoding);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
 }
 
 static void
 ephy_encoding_row_class_init (EphyEncodingRowClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-	/* class creation */
-	object_class->set_property = ephy_encoding_row_set_property;
-	object_class->get_property = ephy_encoding_row_get_property;
+  /* class creation */
+  object_class->set_property = ephy_encoding_row_set_property;
+  object_class->get_property = ephy_encoding_row_get_property;
 
-	obj_properties[PROP_ENCODING] =
-		g_param_spec_object ("encoding",
-		                     "encoding",
-		                     "encoding",
-		                     EPHY_TYPE_ENCODING,
-		                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+  obj_properties[PROP_ENCODING] =
+    g_param_spec_object ("encoding",
+                         "encoding",
+                         "encoding",
+                         EPHY_TYPE_ENCODING,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
-	/* load from UI file */
-	gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/encoding-row.ui");
+  /* load from UI file */
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/encoding-row.ui");
 
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingRow, encoding_label);
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingRow, selected_image);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingRow, encoding_label);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingRow, selected_image);
 }
 
 EphyEncodingRow *
 ephy_encoding_row_new (EphyEncoding *encoding)
 {
-	return g_object_new (EPHY_TYPE_ENCODING_ROW,
-	                     "encoding", encoding,
-	                     NULL);
+  return g_object_new (EPHY_TYPE_ENCODING_ROW,
+                       "encoding", encoding,
+                       NULL);
 }

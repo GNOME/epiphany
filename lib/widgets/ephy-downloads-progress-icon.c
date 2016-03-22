@@ -23,8 +23,7 @@
 #include "ephy-downloads-manager.h"
 #include "ephy-embed-shell.h"
 
-struct _EphyDownloadsProgressIcon
-{
+struct _EphyDownloadsProgressIcon {
   GtkDrawingArea parent_instance;
 
   GtkWidget *downloads_box;

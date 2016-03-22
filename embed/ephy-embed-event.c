@@ -116,10 +116,10 @@ ephy_embed_event_get_coords (EphyEmbedEvent *event,
  * @name: the name of the property
  * @value: (out): a variable to hold its value
  */
-void 
-ephy_embed_event_get_property   (EphyEmbedEvent *event,
-                                 const char *name,
-                                 GValue *value)
+void
+ephy_embed_event_get_property (EphyEmbedEvent *event,
+                               const char     *name,
+                               GValue         *value)
 {
   g_return_if_fail (EPHY_IS_EMBED_EVENT (event));
   g_return_if_fail (name);
@@ -132,27 +132,26 @@ ephy_embed_event_get_property   (EphyEmbedEvent *event,
 }
 
 gboolean
-ephy_embed_event_has_property   (EphyEmbedEvent *event,
-                                 const char *name)
+ephy_embed_event_has_property (EphyEmbedEvent *event,
+                               const char     *name)
 {
   g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), FALSE);
   g_return_val_if_fail (name, FALSE);
 
   return g_object_class_find_property (G_OBJECT_GET_CLASS (event->hit_test_result),
                                        name) != NULL;
-                                                           
 }
 
 /**
  * ephy_embed_event_get_hit_test_result:
  * @event: an #EphyEmbedEvent
- * 
+ *
  * Returns: (transfer none): returns the #WebKitHitTestResult associated with @event
  **/
 WebKitHitTestResult *
 ephy_embed_event_get_hit_test_result (EphyEmbedEvent *event)
 {
   g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), NULL);
-  
+
   return event->hit_test_result;
 }

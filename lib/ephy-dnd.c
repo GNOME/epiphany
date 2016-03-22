@@ -32,82 +32,73 @@
 static void
 add_one_netscape_url (const char *url, const char *title, gpointer data)
 {
-        GString *result;
+  GString *result;
 
-        result = (GString *) data;
-        if (result->len == 0)
-	{
-                g_string_append (result, url);
-		if (title)
-		{
-			g_string_append (result, "\n");
-	                g_string_append (result, title);
-		}
-        }
+  result = (GString *)data;
+  if (result->len == 0) {
+    g_string_append (result, url);
+    if (title) {
+      g_string_append (result, "\n");
+      g_string_append (result, title);
+    }
+  }
 }
 
 static void
 add_one_uri (const char *uri, const char *title, gpointer data)
 {
-        GString *result;
+  GString *result;
 
-        result = (GString *) data;
+  result = (GString *)data;
 
-        g_string_append (result, uri);
-        g_string_append (result, "\r\n");
+  g_string_append (result, uri);
+  g_string_append (result, "\r\n");
 }
 
 static void
 add_one_topic (const char *uri, const char *title, gpointer data)
 {
-        GString *result;
+  GString *result;
 
-        result = (GString *) data;
+  result = (GString *)data;
 
-        g_string_append (result, uri);
-        g_string_append (result, "\r\n");
+  g_string_append (result, uri);
+  g_string_append (result, "\r\n");
 }
 
 gboolean
-ephy_dnd_drag_data_get (GtkWidget *widget,
-                        GdkDragContext *context,
-                        GtkSelectionData *selection_data,
-                        guint32 time,
-                        gpointer container_context,
+ephy_dnd_drag_data_get (GtkWidget                       *widget,
+                        GdkDragContext                  *context,
+                        GtkSelectionData                *selection_data,
+                        guint32                          time,
+                        gpointer                         container_context,
                         EphyDragEachSelectedItemIterator each_selected_item_iterator)
 {
-        GString *result = NULL;
-	GdkAtom target;
+  GString *result = NULL;
+  GdkAtom target;
 
-	target = gtk_selection_data_get_target (selection_data);
+  target = gtk_selection_data_get_target (selection_data);
 
-	if (target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE) ||
-	    target == gdk_atom_intern (EPHY_DND_TEXT_TYPE, FALSE))
-	{
-		result = g_string_new (NULL);
-                (* each_selected_item_iterator) (add_one_uri, container_context, result);
-	}
-	else if (target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE))
-	{
-		result = g_string_new (NULL);
-                (* each_selected_item_iterator) (add_one_netscape_url, container_context, result);
-	}
-	else if (target == gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE))
-	{
-		result = g_string_new (NULL);
-                (* each_selected_item_iterator) (add_one_topic, container_context, result);
-		g_string_erase (result, result->len - 2, -1);
-	}
-	else
-	{
-		g_assert_not_reached ();
-	}
+  if (target == gdk_atom_intern (EPHY_DND_URI_LIST_TYPE, FALSE) ||
+      target == gdk_atom_intern (EPHY_DND_TEXT_TYPE, FALSE)) {
+    result = g_string_new (NULL);
+    (*each_selected_item_iterator)(add_one_uri, container_context, result);
+  } else if (target == gdk_atom_intern (EPHY_DND_URL_TYPE, FALSE)) {
+    result = g_string_new (NULL);
+    (*each_selected_item_iterator)(add_one_netscape_url, container_context, result);
+  } else if (target == gdk_atom_intern (EPHY_DND_TOPIC_TYPE, FALSE)) {
+    result = g_string_new (NULL);
+    (*each_selected_item_iterator)(add_one_topic, container_context, result);
+    g_string_erase (result, result->len - 2, -1);
+  } else {
+    g_assert_not_reached ();
+  }
 
-        gtk_selection_data_set (selection_data,
-                                target,
-                                8, (const guchar *) result->str, result->len);
+  gtk_selection_data_set (selection_data,
+                          target,
+                          8, (const guchar *)result->str, result->len);
 
-	g_string_free (result, TRUE);
+  g_string_free (result, TRUE);
 
-        return TRUE;
+  return TRUE;
 }

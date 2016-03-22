@@ -42,12 +42,12 @@
 #define SERVER_PORT 12321
 
 static void
-server_callback (SoupServer *server,
-                 SoupMessage *msg,
-                 const char *path,
-                 GHashTable *query,
+server_callback (SoupServer        *server,
+                 SoupMessage       *msg,
+                 const char        *path,
+                 GHashTable        *query,
                  SoupClientContext *context,
-                 gpointer data)
+                 gpointer           data)
 {
   if (g_str_equal (path, "/cancelled"))
     soup_message_set_status (msg, SOUP_STATUS_CANT_CONNECT);
@@ -271,9 +271,9 @@ normalize_or_autosearch_t normalize_or_autosearch_test_google[] = {
 };
 
 static void
-verify_normalize_or_autosearch_urls (EphyWebView *view,
+verify_normalize_or_autosearch_urls (EphyWebView               *view,
                                      normalize_or_autosearch_t *test,
-                                     gint n_tests)
+                                     gint                       n_tests)
 {
   int i;
 
@@ -295,7 +295,7 @@ test_ephy_web_view_normalize_or_autosearch (void)
 {
   char *default_engine_url;
   EphyWebView *view;
-  
+
   view = EPHY_WEB_VIEW (ephy_web_view_new ());
   default_engine_url = g_settings_get_string (EPHY_SETTINGS_MAIN,
                                               EPHY_PREFS_KEYWORD_SEARCH_URL);
@@ -333,10 +333,10 @@ quit_main_loop_when_load_finished (WebKitWebView *view, WebKitLoadEvent load_eve
 static guint back_forward_list_counter = 0;
 
 static void
-back_forward_list_changed (WebKitBackForwardList *list,
+back_forward_list_changed (WebKitBackForwardList     *list,
                            WebKitBackForwardListItem *added_item,
-                           GList *removed_items,
-                           GMainLoop *loop)
+                           GList                     *removed_items,
+                           GMainLoop                 *loop)
 {
   back_forward_list_counter--;
 
@@ -346,13 +346,13 @@ back_forward_list_changed (WebKitBackForwardList *list,
 
 static void
 wait_until_back_forward_list_changes (WebKitWebView *view,
-                                      GMainLoop *loop)
+                                      GMainLoop     *loop)
 {
-    WebKitBackForwardList *back_forward_list = webkit_web_view_get_back_forward_list (view);
-    g_signal_connect (back_forward_list, "changed", G_CALLBACK (back_forward_list_changed), loop);
+  WebKitBackForwardList *back_forward_list = webkit_web_view_get_back_forward_list (view);
+  g_signal_connect (back_forward_list, "changed", G_CALLBACK (back_forward_list_changed), loop);
 }
 
-static GMainLoop*
+static GMainLoop *
 setup_ensure_back_forward_list_changes (EphyWebView *view)
 {
   GMainLoop *loop;
@@ -378,70 +378,70 @@ ensure_back_forward_list_changes (GMainLoop *loop)
 static void
 test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
 {
-    GMainLoop *loop;
-    EphyWebView *view;
-    const char *bad_url;
+  GMainLoop *loop;
+  EphyWebView *view;
+  const char *bad_url;
 
-    view = EPHY_WEB_VIEW (ephy_web_view_new ());
+  view = EPHY_WEB_VIEW (ephy_web_view_new ());
 
-    loop = setup_ensure_back_forward_list_changes (view);
-    bad_url = "http://localhost:2984375932/";
+  loop = setup_ensure_back_forward_list_changes (view);
+  bad_url = "http://localhost:2984375932/";
 
-    ephy_web_view_load_url (view, bad_url);
+  ephy_web_view_load_url (view, bad_url);
 
-    ensure_back_forward_list_changes (loop);
+  ensure_back_forward_list_changes (loop);
 
-    g_assert (webkit_back_forward_list_get_current_item (
-      webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view))));
+  g_assert (webkit_back_forward_list_get_current_item (
+              webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view))));
 
-    g_assert_cmpstr (bad_url, ==, webkit_back_forward_list_item_get_uri (
-      webkit_back_forward_list_get_current_item (
-        webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view)))));
+  g_assert_cmpstr (bad_url, ==, webkit_back_forward_list_item_get_uri (
+                     webkit_back_forward_list_get_current_item (
+                       webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view)))));
 
-    g_object_unref (g_object_ref_sink (view));
+  g_object_unref (g_object_ref_sink (view));
 }
 
 static gboolean
-visit_url_cb (EphyHistoryService *service,
-              const char *url,
+visit_url_cb (EphyHistoryService  *service,
+              const char          *url,
               EphyHistoryPageVisit visit_type,
-              gpointer user_data)
+              gpointer             user_data)
 {
-    /* We are only loading an error page, this code should never be
-     * reached. */
-    g_assert_not_reached ();
+  /* We are only loading an error page, this code should never be
+   * reached. */
+  g_assert_not_reached ();
 
-    return FALSE;
+  return FALSE;
 }
 
 static void
 test_ephy_web_view_error_pages_not_stored_in_history (void)
 {
-    GMainLoop *loop;
-    EphyWebView *view;
-    const char *bad_url;
-    EphyHistoryService *history_service;
-    EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
+  GMainLoop *loop;
+  EphyWebView *view;
+  const char *bad_url;
+  EphyHistoryService *history_service;
+  EphyEmbedShell *embed_shell = ephy_embed_shell_get_default ();
 
-    view = EPHY_WEB_VIEW (ephy_web_view_new ());
-    loop = g_main_loop_new (NULL, FALSE);
-    bad_url = "http://localhost:2984375932/";
+  view = EPHY_WEB_VIEW (ephy_web_view_new ());
+  loop = g_main_loop_new (NULL, FALSE);
+  bad_url = "http://localhost:2984375932/";
 
-    history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
-    g_assert (history_service);
-    g_signal_connect (history_service, "visit-url",
-                      G_CALLBACK (visit_url_cb), NULL);
-    
-    ephy_web_view_load_url (view, bad_url);
+  history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
+  g_assert (history_service);
+  g_signal_connect (history_service, "visit-url",
+                    G_CALLBACK (visit_url_cb), NULL);
 
-    g_signal_connect (view, "load-changed",
-                      G_CALLBACK (quit_main_loop_when_load_finished), loop);
+  ephy_web_view_load_url (view, bad_url);
 
-    g_main_loop_run (loop);
-    g_main_loop_unref (loop);
-    g_signal_handlers_disconnect_by_func (history_service, G_CALLBACK (visit_url_cb), NULL);
+  g_signal_connect (view, "load-changed",
+                    G_CALLBACK (quit_main_loop_when_load_finished), loop);
 
-    g_object_unref (g_object_ref_sink (view));
+  g_main_loop_run (loop);
+  g_main_loop_unref (loop);
+  g_signal_handlers_disconnect_by_func (history_service, G_CALLBACK (visit_url_cb), NULL);
+
+  g_object_unref (g_object_ref_sink (view));
 }
 
 int
@@ -466,7 +466,7 @@ main (int argc, char *argv[])
   server = soup_server_new (NULL, NULL);
   soup_server_add_handler (server, NULL, server_callback, NULL, NULL);
   soup_server_listen_local (server, SERVER_PORT,
-			    SOUP_SERVER_LISTEN_IPV4_ONLY, NULL);
+                            SOUP_SERVER_LISTEN_IPV4_ONLY, NULL);
 
   g_test_add_func ("/embed/ephy-web-view/non_search_regex",
                    test_ephy_web_view_non_search_regex);

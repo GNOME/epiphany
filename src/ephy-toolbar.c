@@ -52,8 +52,8 @@ G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_HEADER_BAR)
 
 static void
 download_added_cb (EphyDownloadsManager *manager,
-                   EphyDownload *download,
-                   EphyToolbar *toolbar)
+                   EphyDownload         *download,
+                   EphyToolbar          *toolbar)
 {
   if (!toolbar->downloads_popover) {
     toolbar->downloads_popover = ephy_downloads_popover_new (toolbar->downloads_button);
@@ -67,16 +67,16 @@ download_added_cb (EphyDownloadsManager *manager,
 
 static void
 download_completed_cb (EphyDownloadsManager *manager,
-                       EphyDownload *download,
-                       EphyToolbar *toolbar)
+                       EphyDownload         *download,
+                       EphyToolbar          *toolbar)
 {
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
 }
 
 static void
 download_removed_cb (EphyDownloadsManager *manager,
-                     EphyDownload *download,
-                     EphyToolbar *toolbar)
+                     EphyDownload         *download,
+                     EphyToolbar          *toolbar)
 {
   if (!ephy_downloads_manager_get_downloads (manager))
     gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->downloads_revealer), FALSE);
@@ -84,43 +84,43 @@ download_removed_cb (EphyDownloadsManager *manager,
 
 static void
 downloads_estimated_progress_cb (EphyDownloadsManager *manager,
-                                 EphyToolbar *toolbar)
+                                 EphyToolbar          *toolbar)
 {
   gtk_widget_queue_draw (gtk_button_get_image (GTK_BUTTON (toolbar->downloads_button)));
 }
 
 static void
-ephy_toolbar_set_property (GObject *object,
-                           guint property_id,
+ephy_toolbar_set_property (GObject      *object,
+                           guint         property_id,
                            const GValue *value,
-                           GParamSpec *pspec)
+                           GParamSpec   *pspec)
 {
   EphyToolbar *toolbar = EPHY_TOOLBAR (object);
 
   switch (property_id) {
-  case PROP_WINDOW:
-    toolbar->window = EPHY_WINDOW (g_value_get_object (value));
-    g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    case PROP_WINDOW:
+      toolbar->window = EPHY_WINDOW (g_value_get_object (value));
+      g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
   }
 }
 
 static void
-ephy_toolbar_get_property (GObject *object,
-                           guint property_id,
-                           GValue *value,
+ephy_toolbar_get_property (GObject    *object,
+                           guint       property_id,
+                           GValue     *value,
                            GParamSpec *pspec)
 {
   EphyToolbar *toolbar = EPHY_TOOLBAR (object);
 
   switch (property_id) {
-  case PROP_WINDOW:
-    g_value_set_object (value, toolbar->window);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    case PROP_WINDOW:
+      g_value_set_object (value, toolbar->window);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
   }
 }
 
@@ -271,22 +271,22 @@ ephy_toolbar_constructed (GObject *object)
 static void
 ephy_toolbar_class_init (EphyToolbarClass *klass)
 {
-    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-    gobject_class->set_property = ephy_toolbar_set_property;
-    gobject_class->get_property = ephy_toolbar_get_property;
-    gobject_class->constructed = ephy_toolbar_constructed;
+  gobject_class->set_property = ephy_toolbar_set_property;
+  gobject_class->get_property = ephy_toolbar_get_property;
+  gobject_class->constructed = ephy_toolbar_constructed;
 
-    object_properties[PROP_WINDOW] =
-      g_param_spec_object ("window",
-                           "Window",
-                           "The toolbar's EphyWindow",
-                           EPHY_TYPE_WINDOW,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+  object_properties[PROP_WINDOW] =
+    g_param_spec_object ("window",
+                         "Window",
+                         "The toolbar's EphyWindow",
+                         EPHY_TYPE_WINDOW,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-    g_object_class_install_properties (gobject_class,
-                                       N_PROPERTIES,
-                                       object_properties);
+  g_object_class_install_properties (gobject_class,
+                                     N_PROPERTIES,
+                                     object_properties);
 }
 
 static void
@@ -294,15 +294,15 @@ ephy_toolbar_init (EphyToolbar *toolbar)
 {
 }
 
-GtkWidget*
+GtkWidget *
 ephy_toolbar_new (EphyWindow *window)
 {
-    g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-    return GTK_WIDGET (g_object_new (EPHY_TYPE_TOOLBAR,
-                                     "show-close-button", TRUE,
-                                     "window", window,
-                                     NULL));
+  return GTK_WIDGET (g_object_new (EPHY_TYPE_TOOLBAR,
+                                   "show-close-button", TRUE,
+                                   "window", window,
+                                   NULL));
 }
 
 GtkWidget *

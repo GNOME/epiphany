@@ -21,8 +21,7 @@
 
 #include <string.h>
 
-struct _EphyEncoding
-{
+struct _EphyEncoding {
   GObject parent_instance;
 
   char *title;
@@ -62,9 +61,9 @@ ephy_encoding_finalize (GObject *object)
 }
 
 static void
-ephy_encoding_get_property (GObject *object,
-                            guint prop_id,
-                            GValue *value,
+ephy_encoding_get_property (GObject    *object,
+                            guint       prop_id,
+                            GValue     *value,
                             GParamSpec *pspec)
 {
   EphyEncoding *encoding = EPHY_ENCODING (object);
@@ -105,8 +104,7 @@ elide_underscores (const char *original)
   for (p = original; *p; p++) {
     if (!last_underscore && *p == '_') {
       last_underscore = TRUE;
-    }
-    else {
+    } else {
       last_underscore = FALSE;
       *q++ = *p;
     }
@@ -118,53 +116,53 @@ elide_underscores (const char *original)
 }
 
 static void
-ephy_encoding_set_property (GObject *object,
-                            guint prop_id,
+ephy_encoding_set_property (GObject      *object,
+                            guint         prop_id,
                             const GValue *value,
-                            GParamSpec *pspec)
+                            GParamSpec   *pspec)
 {
   EphyEncoding *encoding = EPHY_ENCODING (object);
 
   switch (prop_id) {
-  case PROP_TITLE: {
-    char *elided, *collate_key, *normalised;
+    case PROP_TITLE: {
+      char *elided, *collate_key, *normalised;
 
-    g_free (encoding->title);
-    encoding->title = g_strdup (g_value_get_string (value));
+      g_free (encoding->title);
+      encoding->title = g_strdup (g_value_get_string (value));
 
-    elided = elide_underscores (encoding->title);
-    normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
-    collate_key = g_utf8_collate_key (normalised, -1);
+      elided = elide_underscores (encoding->title);
+      normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
+      collate_key = g_utf8_collate_key (normalised, -1);
 
-    g_object_set (object,
-                  "title-elided", elided,
-                  "collation-key", collate_key,
-                  NULL);
+      g_object_set (object,
+                    "title-elided", elided,
+                    "collation-key", collate_key,
+                    NULL);
 
-    g_free (collate_key);
-    g_free (normalised);
-    g_free (elided);
+      g_free (collate_key);
+      g_free (normalised);
+      g_free (elided);
 
-    break;
-  } 
-  case PROP_TITLE_ELIDED:
-    g_free (encoding->title_elided);
-    encoding->title_elided = g_strdup (g_value_get_string (value));
-    break;
-  case PROP_COLLATION_KEY:
-    g_free (encoding->collation_key);
-    encoding->collation_key = g_strdup (g_value_get_string (value));
-    break;
-  case PROP_ENCODING:
-    g_free (encoding->encoding);
-    encoding->encoding = g_strdup (g_value_get_string (value));
-    break;
-  case PROP_LANGUAGE_GROUPS:
-    encoding->language_groups = g_value_get_int (value);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    break;
+      break;
+    }
+    case PROP_TITLE_ELIDED:
+      g_free (encoding->title_elided);
+      encoding->title_elided = g_strdup (g_value_get_string (value));
+      break;
+    case PROP_COLLATION_KEY:
+      g_free (encoding->collation_key);
+      encoding->collation_key = g_strdup (g_value_get_string (value));
+      break;
+    case PROP_ENCODING:
+      g_free (encoding->encoding);
+      encoding->encoding = g_strdup (g_value_get_string (value));
+      break;
+    case PROP_LANGUAGE_GROUPS:
+      encoding->language_groups = g_value_get_int (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 
@@ -193,25 +191,25 @@ ephy_encoding_class_init (EphyEncodingClass *klass)
 
   obj_properties[PROP_COLLATION_KEY] =
     g_param_spec_string ("collation-key",
-                        "Collation Key",
-                        "The encoding's collation key",
-                        "",
-                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         "Collation Key",
+                         "The encoding's collation key",
+                         "",
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_ENCODING] =
     g_param_spec_string ("encoding",
-                        "Encoding",
-                        "The encoding's encoding",
-                        "",
-                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         "Encoding",
+                         "The encoding's encoding",
+                         "",
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_LANGUAGE_GROUPS] =
     g_param_spec_int ("language-groups",
-                     "Language Groups",
-                     "The encoding's language groups",
-                     LG_NONE, LG_ALL,
-                     LG_NONE,
-                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                      "Language Groups",
+                      "The encoding's language groups",
+                      LG_NONE, LG_ALL,
+                      LG_NONE,
+                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 }

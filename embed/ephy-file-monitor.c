@@ -27,8 +27,7 @@
 #define RELOAD_DELAY            250 /* ms */
 #define RELOAD_DELAY_MAX_TICKS  40  /* RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s */
 
-struct _EphyFileMonitor
-{
+struct _EphyFileMonitor {
   GObject parent;
 
   GFileMonitor *monitor;
@@ -100,11 +99,11 @@ ephy_file_monitor_reload_cb (EphyFileMonitor *monitor)
 }
 
 static void
-ephy_file_monitor_changed_cb (GFileMonitor *monitor,
-                              GFile *file,
-                              GFile *other_file,
+ephy_file_monitor_changed_cb (GFileMonitor     *monitor,
+                              GFile            *file,
+                              GFile            *other_file,
                               GFileMonitorEvent event_type,
-                              EphyFileMonitor *file_monitor)
+                              EphyFileMonitor  *file_monitor)
 {
   gboolean should_reload;
 
@@ -162,7 +161,7 @@ ephy_file_monitor_changed_cb (GFileMonitor *monitor,
 
 void
 ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
-                                   const char *address)
+                                   const char      *address)
 {
   gboolean local;
   char *anchor;
@@ -207,8 +206,7 @@ ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
                       file_monitor);
     file_monitor->monitor_directory = TRUE;
     LOG ("Installed monitor for directory '%s'", url);
-  }
-  else if (file_type == G_FILE_TYPE_REGULAR) {
+  } else if (file_type == G_FILE_TYPE_REGULAR) {
     file_monitor->monitor = g_file_monitor_file (file, 0, NULL, NULL);
     g_signal_connect (file_monitor->monitor, "changed",
                       G_CALLBACK (ephy_file_monitor_changed_cb),
@@ -230,9 +228,9 @@ ephy_file_monitor_dispose (GObject *object)
 }
 
 static void
-ephy_file_monitor_get_property (GObject *object,
-                                guint prop_id,
-                                GValue *value,
+ephy_file_monitor_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
                                 GParamSpec *pspec)
 {
   EphyFileMonitor *monitor = EPHY_FILE_MONITOR (object);
@@ -242,16 +240,16 @@ ephy_file_monitor_get_property (GObject *object,
       g_value_set_object (value, monitor->view);
       break;
     default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }
 
 static void
-ephy_file_monitor_set_property (GObject *object,
-                                guint prop_id,
+ephy_file_monitor_set_property (GObject      *object,
+                                guint         prop_id,
                                 const GValue *value,
-                                GParamSpec *pspec)
+                                GParamSpec   *pspec)
 {
   EphyFileMonitor *monitor = EPHY_FILE_MONITOR (object);
 
@@ -260,7 +258,7 @@ ephy_file_monitor_set_property (GObject *object,
       monitor->view = g_value_get_object (value);
       break;
     default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec); 
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }
@@ -276,10 +274,10 @@ ephy_file_monitor_class_init (EphyFileMonitorClass *klass)
 
   obj_properties[PROP_VIEW] =
     g_param_spec_object ("view",
-                        "View",
-                        "The file monitor's associated view",
-                        EPHY_TYPE_WEB_VIEW,
-                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                         "View",
+                         "The file monitor's associated view",
+                         EPHY_TYPE_WEB_VIEW,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 }

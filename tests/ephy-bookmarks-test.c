@@ -25,7 +25,7 @@
 #include "ephy-profile-utils.h"
 #include "ephy-shell.h"
 
-const char* bookmarks_paths[] = { EPHY_BOOKMARKS_FILE, EPHY_BOOKMARKS_FILE_RDF };
+const char *bookmarks_paths[] = { EPHY_BOOKMARKS_FILE, EPHY_BOOKMARKS_FILE_RDF };
 
 static void
 clear_bookmark_files (void)
@@ -35,7 +35,6 @@ clear_bookmark_files (void)
   guint i;
 
   for (i = 0; i < G_N_ELEMENTS (bookmarks_paths); i++) {
-
     path = g_build_filename (ephy_dot_dir (),
                              bookmarks_paths[i],
                              NULL);
@@ -66,12 +65,12 @@ test_ephy_bookmarks_add (void)
 
   bookmarks = ephy_bookmarks_new ();
   g_assert (bookmarks);
-  
+
   node = ephy_bookmarks_add (bookmarks, "GNOME", "http://www.gnome.org");
   g_assert (node);
   result = ephy_bookmarks_find_bookmark (bookmarks, "http://www.gnome.org");
   g_assert (node == result);
-  
+
   g_object_unref (bookmarks);
 
   clear_bookmark_files ();

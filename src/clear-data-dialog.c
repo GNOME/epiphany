@@ -32,17 +32,16 @@
 
 #include "clear-data-dialog.h"
 
-struct _ClearDataDialog
-{
-	GtkDialog parent_instance;
+struct _ClearDataDialog {
+  GtkDialog parent_instance;
 
-	GtkWidget *cache_checkbutton;
-	GtkWidget *history_checkbutton;
-	GtkWidget *passwords_checkbutton;
-	GtkWidget *cookies_checkbutton;
-	GtkWidget *clear_button;
+  GtkWidget *cache_checkbutton;
+  GtkWidget *history_checkbutton;
+  GtkWidget *passwords_checkbutton;
+  GtkWidget *cookies_checkbutton;
+  GtkWidget *clear_button;
 
-	guint num_checked;
+  guint num_checked;
 };
 
 G_DEFINE_TYPE (ClearDataDialog, clear_data_dialog, GTK_TYPE_DIALOG)
@@ -50,114 +49,106 @@ G_DEFINE_TYPE (ClearDataDialog, clear_data_dialog, GTK_TYPE_DIALOG)
 static WebKitCookieManager *
 get_cookie_manager (void)
 {
-	WebKitWebContext *web_context;
-	EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitWebContext *web_context;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-	web_context = ephy_embed_shell_get_web_context (shell);
-	return webkit_web_context_get_cookie_manager (web_context);
+  web_context = ephy_embed_shell_get_web_context (shell);
+  return webkit_web_context_get_cookie_manager (web_context);
 }
 
 static void
 delete_all_passwords (ClearDataDialog *dialog)
 {
-	GHashTable *attributes;
+  GHashTable *attributes;
 
-	attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
-	secret_service_clear (NULL, EPHY_FORM_PASSWORD_SCHEMA,
-			      attributes, NULL,
-			      (GAsyncReadyCallback)secret_service_clear_finish,
-			      NULL);
-	g_hash_table_unref (attributes);
+  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
+  secret_service_clear (NULL, EPHY_FORM_PASSWORD_SCHEMA,
+                        attributes, NULL,
+                        (GAsyncReadyCallback)secret_service_clear_finish,
+                        NULL);
+  g_hash_table_unref (attributes);
 }
 
 static void
-clear_data_dialog_response_cb (GtkDialog *widget,
-			       int response,
-			       ClearDataDialog *dialog)
+clear_data_dialog_response_cb (GtkDialog       *widget,
+                               int              response,
+                               ClearDataDialog *dialog)
 {
-	if (response == GTK_RESPONSE_OK)
-	{
-		if (gtk_toggle_button_get_active
-			(GTK_TOGGLE_BUTTON (dialog->history_checkbutton)))
-		{
-			EphyEmbedShell *shell;
-			EphyHistoryService *history;
+  if (response == GTK_RESPONSE_OK) {
+    if (gtk_toggle_button_get_active
+          (GTK_TOGGLE_BUTTON (dialog->history_checkbutton))) {
+      EphyEmbedShell *shell;
+      EphyHistoryService *history;
 
-			shell = ephy_embed_shell_get_default ();
-			history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (shell));
-			ephy_history_service_clear (history, NULL, NULL, NULL);
-		}
-		if (gtk_toggle_button_get_active
-			(GTK_TOGGLE_BUTTON (dialog->cookies_checkbutton)))
-		{
-			WebKitCookieManager *cookie_manager;
+      shell = ephy_embed_shell_get_default ();
+      history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (shell));
+      ephy_history_service_clear (history, NULL, NULL, NULL);
+    }
+    if (gtk_toggle_button_get_active
+          (GTK_TOGGLE_BUTTON (dialog->cookies_checkbutton))) {
+      WebKitCookieManager *cookie_manager;
 
-			cookie_manager = get_cookie_manager ();
-			webkit_cookie_manager_delete_all_cookies (cookie_manager);
-		}
-		if (gtk_toggle_button_get_active
-			(GTK_TOGGLE_BUTTON (dialog->passwords_checkbutton)))
-		{
-			delete_all_passwords (dialog);
-		}
-		if (gtk_toggle_button_get_active
-			(GTK_TOGGLE_BUTTON (dialog->cache_checkbutton)))
-		{
-			EphyEmbedShell *shell;
-			WebKitFaviconDatabase *database;
+      cookie_manager = get_cookie_manager ();
+      webkit_cookie_manager_delete_all_cookies (cookie_manager);
+    }
+    if (gtk_toggle_button_get_active
+          (GTK_TOGGLE_BUTTON (dialog->passwords_checkbutton))) {
+      delete_all_passwords (dialog);
+    }
+    if (gtk_toggle_button_get_active
+          (GTK_TOGGLE_BUTTON (dialog->cache_checkbutton))) {
+      EphyEmbedShell *shell;
+      WebKitFaviconDatabase *database;
 
-			shell = ephy_embed_shell_get_default ();
+      shell = ephy_embed_shell_get_default ();
 
-			ephy_embed_shell_clear_cache (shell);
+      ephy_embed_shell_clear_cache (shell);
 
-			database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
-			webkit_favicon_database_clear (database);
-		}
-	}
+      database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
+      webkit_favicon_database_clear (database);
+    }
+  }
 
-	gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
 checkbutton_toggled_cb (GtkToggleButton *toggle,
-			ClearDataDialog *dialog)
+                        ClearDataDialog *dialog)
 {
-	if (gtk_toggle_button_get_active (toggle) == TRUE)
-	{
-		dialog->num_checked++;
-	}
-	else
-	{
-		dialog->num_checked--;
-	}
+  if (gtk_toggle_button_get_active (toggle) == TRUE) {
+    dialog->num_checked++;
+  } else {
+    dialog->num_checked--;
+  }
 
-	gtk_widget_set_sensitive (dialog->clear_button,
-				  dialog->num_checked != 0);
+  gtk_widget_set_sensitive (dialog->clear_button,
+                            dialog->num_checked != 0);
 }
 
 static void
 clear_data_dialog_class_init (ClearDataDialogClass *klass)
 {
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-	gtk_widget_class_set_template_from_resource (widget_class,
-	                                             "/org/gnome/epiphany/clear-data-dialog.ui");
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/org/gnome/epiphany/clear-data-dialog.ui");
 
-	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, cookies_checkbutton);
-	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, cache_checkbutton);
-	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, passwords_checkbutton);
-	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, history_checkbutton);
-	gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, clear_button);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, cookies_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, cache_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, passwords_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, history_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, clear_button);
 
-	gtk_widget_class_bind_template_callback (widget_class, checkbutton_toggled_cb);
-	gtk_widget_class_bind_template_callback (widget_class, clear_data_dialog_response_cb);
+  gtk_widget_class_bind_template_callback (widget_class, checkbutton_toggled_cb);
+  gtk_widget_class_bind_template_callback (widget_class, clear_data_dialog_response_cb);
 }
 
 static void
 clear_data_dialog_init (ClearDataDialog *dialog)
 {
-	gtk_widget_init_template (GTK_WIDGET (dialog));
+  gtk_widget_init_template (GTK_WIDGET (dialog));
 
-	dialog->num_checked = 0;
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->cache_checkbutton), TRUE);
+  dialog->num_checked = 0;
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->cache_checkbutton), TRUE);
 }

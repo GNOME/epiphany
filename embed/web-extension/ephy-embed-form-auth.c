@@ -19,8 +19,7 @@
 #include <config.h>
 #include "ephy-embed-form-auth.h"
 
-struct _EphyEmbedFormAuth
-{
+struct _EphyEmbedFormAuth {
   GObject parent_instance;
 
   guint64 page_id;
@@ -62,7 +61,7 @@ EphyEmbedFormAuth *
 ephy_embed_form_auth_new (WebKitWebPage *web_page,
                           WebKitDOMNode *username_node,
                           WebKitDOMNode *password_node,
-                          const char* username)
+                          const char    *username)
 {
   EphyEmbedFormAuth *form_auth;
 
@@ -103,7 +102,7 @@ ephy_embed_form_auth_get_page_id (EphyEmbedFormAuth *form_auth)
   return form_auth->page_id;
 }
 
-const char*
+const char *
 ephy_embed_form_auth_get_username (EphyEmbedFormAuth *form_auth)
 {
   return form_auth->username;

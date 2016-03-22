@@ -69,21 +69,21 @@ typedef enum {
 static const char *get_ephy_process_name (EphyProcess process)
 {
   switch (process) {
-  case EPHY_PROCESS_EPIPHANY:
-    return "Browser";
-  case EPHY_PROCESS_WEB:
-    return "Web Process";
-  case EPHY_PROCESS_PLUGIN:
-    return "Plugin Process";
-  case EPHY_PROCESS_OTHER:
-  default:
-    g_assert_not_reached ();
+    case EPHY_PROCESS_EPIPHANY:
+      return "Browser";
+    case EPHY_PROCESS_WEB:
+      return "Web Process";
+    case EPHY_PROCESS_PLUGIN:
+      return "Plugin Process";
+    case EPHY_PROCESS_OTHER:
+    default:
+      g_assert_not_reached ();
   }
 
   return NULL;
 }
 
-static void vma_free (VMA_t* vma)
+static void vma_free (VMA_t *vma)
 {
   g_free (vma->start);
   g_free (vma->end);
@@ -207,7 +207,7 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
   stream = g_file_read (file, NULL, &error);
   g_object_unref (file);
 
-  if (error && error->code == G_IO_ERROR_NOT_FOUND ) {
+  if (error && error->code == G_IO_ERROR_NOT_FOUND) {
     /* This is not GNU/Linux, do nothing. */
     g_error_free (error);
     return;
@@ -238,7 +238,7 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
       vma->inode = g_match_info_fetch (match_info, 7);
       vma->filename = g_match_info_fetch (match_info, 8);
     }
-    
+
     g_match_info_free (match_info);
 
     if (matched)
@@ -271,7 +271,7 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
     }
 
     g_match_info_free (match_info);
-  out:
+ out:
     g_free (line);
   }
 
@@ -292,7 +292,7 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
                                        (GDestroyNotify)perm_entry_free);
 
   for (p = vma_entries; p; p = p->next) {
-    VMA_t *entry = (VMA_t*)p->data;
+    VMA_t *entry = (VMA_t *)p->data;
 
     if (g_strcmp0 (entry->major, "00") && g_strcmp0 (entry->minor, "00"))
       add_to_perm_entry (anon_hash, entry);
@@ -438,7 +438,7 @@ static void ephy_smaps_pid_children_to_html (EphySMaps *smaps, GString *str, pid
   g_dir_close (proc);
 }
 
-char* ephy_smaps_to_html (EphySMaps *smaps)
+char *ephy_smaps_to_html (EphySMaps *smaps)
 {
   GString *str = g_string_new ("");
   pid_t pid = getpid ();

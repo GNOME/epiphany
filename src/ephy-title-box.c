@@ -42,16 +42,14 @@ enum {
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 
-enum
-{
+enum {
   LOCK_CLICKED,
   LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL];
 
-struct _EphyTitleBox
-{
+struct _EphyTitleBox {
   GtkStack parent_instance;
 
   EphyWindow    *window;
@@ -83,8 +81,7 @@ ephy_title_box_get_property (GObject    *object,
 {
   EphyTitleBox *title_box = EPHY_TITLE_BOX (object);
 
-  switch (prop_id)
-  {
+  switch (prop_id) {
     case PROP_MODE:
       g_value_set_enum (value, ephy_title_box_get_mode (title_box));
       break;
@@ -101,8 +98,7 @@ ephy_title_box_set_property (GObject      *object,
 {
   EphyTitleBox        *title_box = EPHY_TITLE_BOX (object);
 
-  switch (prop_id)
-  {
+  switch (prop_id) {
     case PROP_WINDOW:
       title_box->window = EPHY_WINDOW (g_value_get_object (value));
       break;
@@ -120,7 +116,7 @@ ephy_title_box_entry_key_press_cb (GtkWidget   *widget,
                                    gpointer     user_data)
 {
   EphyTitleBox *title_box = EPHY_TITLE_BOX (user_data);
-  guint         state = event->state & gtk_accelerator_get_default_mod_mask ();
+  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
   LOG ("key-press-event entry %p event %p title-box %p", widget, event, title_box);
 
@@ -199,7 +195,7 @@ ephy_title_box_add_title_bar (EphyTitleBox *title_box)
 static void
 sync_chromes_visibility (EphyTitleBox *title_box)
 {
-  EphyWindowChrome     chrome;
+  EphyWindowChrome chrome;
 
   chrome = ephy_window_get_chrome (title_box->window);
   title_box->location_disabled = !(chrome & EPHY_WINDOW_CHROME_LOCATION);
@@ -213,7 +209,7 @@ static void
 ephy_title_box_constructed (GObject *object)
 {
   EphyTitleBox        *title_box = EPHY_TITLE_BOX (object);
-  EphyWindowChrome     chrome;
+  EphyWindowChrome chrome;
 
   LOG ("EphyTitleBox constructed");
 
@@ -248,7 +244,7 @@ ephy_title_box_switch_to_entry_timeout_cb (gpointer user_data)
   EphyTitleBox        *title_box = EPHY_TITLE_BOX (user_data);
 
   LOG ("switch_to_entry_timeout_cb title-box %p switch_to_entry_timeout_id %u",
-    title_box, title_box->switch_to_entry_timeout_id);
+       title_box, title_box->switch_to_entry_timeout_id);
 
   title_box->switch_to_entry_timeout_id = 0;
   ephy_title_box_set_mode (title_box, EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
@@ -260,13 +256,13 @@ ephy_title_box_switch_to_entry_timeout_cb (gpointer user_data)
 static void
 ephy_title_box_switch_to_entry_after_double_click_time (EphyTitleBox *title_box)
 {
-  gint                 double_click_time;
+  gint double_click_time;
 
   if (title_box->switch_to_entry_timeout_id > 0)
     return;
 
   LOG ("switch_to_entry_after_double_click_time title-box %p switch_to_entry_timeout_id %u",
-    title_box, title_box->switch_to_entry_timeout_id);
+       title_box, title_box->switch_to_entry_timeout_id);
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (title_box)),
                 "gtk-double-click-time", &double_click_time,
@@ -287,7 +283,7 @@ ephy_title_box_cancel_switch_to_entry_after_double_click_time (EphyTitleBox *tit
     return;
 
   LOG ("cancel_switch_to_entry_after_double_click_time title-box %p switch_to_entry_timeout_id %u",
-    title_box, title_box->switch_to_entry_timeout_id);
+       title_box, title_box->switch_to_entry_timeout_id);
 
   g_source_remove (title_box->switch_to_entry_timeout_id);
   title_box->switch_to_entry_timeout_id = 0;
@@ -317,7 +313,7 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
                                    GdkEventButton *event)
 {
   EphyTitleBox        *title_box = EPHY_TITLE_BOX (widget);
-  GtkAllocation        lock_allocation;
+  GtkAllocation lock_allocation;
 
   if (title_box->mode != EPHY_TITLE_BOX_MODE_TITLE)
     return GDK_EVENT_PROPAGATE;
@@ -527,7 +523,7 @@ ephy_title_box_set_web_view (EphyTitleBox  *title_box,
   title = webkit_web_view_get_title (web_view);
 
   ephy_title_box_set_mode (title_box, title && *title != '\0' ?
-                                      EPHY_TITLE_BOX_MODE_TITLE : EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
+                           EPHY_TITLE_BOX_MODE_TITLE : EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
 
   title_box->title_binding = g_object_bind_property (title_box->web_view, "title",
                                                      title_box->title, "label",
@@ -614,8 +610,8 @@ ephy_title_box_set_mode (EphyTitleBox    *title_box,
  * Sets the lock icon to be displayed by the title box and location entry
  **/
 void
-ephy_title_box_set_security_level (EphyTitleBox         *title_box,
-                                   EphySecurityLevel     security_level)
+ephy_title_box_set_security_level (EphyTitleBox     *title_box,
+                                   EphySecurityLevel security_level)
 {
   const char *icon_name;
 
@@ -657,7 +653,7 @@ ephy_title_box_get_location_entry (EphyTitleBox *title_box)
  */
 void
 ephy_title_box_set_address (EphyTitleBox *title_box,
-                            const char *address)
+                            const char   *address)
 {
   EphyEmbedShellMode mode;
 

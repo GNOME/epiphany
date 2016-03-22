@@ -24,13 +24,13 @@
 #define EPHY_WINDOW_ACTION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EPHY_TYPE_WINDOW_ACTION, EphyWindowActionPrivate))
 
 struct _EphyWindowActionPrivate {
-    EphyWindow *window;
+  EphyWindow *window;
 };
 
 enum {
-    PROP_0,
-    PROP_WINDOW,
-    LAST_PROP
+  PROP_0,
+  PROP_WINDOW,
+  LAST_PROP
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
@@ -40,67 +40,67 @@ G_DEFINE_TYPE (EphyWindowAction, ephy_window_action, GTK_TYPE_ACTION)
 static void
 ephy_window_action_init (EphyWindowAction *action)
 {
-    action->priv = EPHY_WINDOW_ACTION_GET_PRIVATE (action);
+  action->priv = EPHY_WINDOW_ACTION_GET_PRIVATE (action);
 }
 
 static void
-ephy_window_action_set_property (GObject *object,
-                                 guint property_id,
+ephy_window_action_set_property (GObject      *object,
+                                 guint         property_id,
                                  const GValue *value,
-                                 GParamSpec *pspec)
+                                 GParamSpec   *pspec)
 {
-    EphyWindowAction *action = EPHY_WINDOW_ACTION (object);
+  EphyWindowAction *action = EPHY_WINDOW_ACTION (object);
 
-    switch (property_id) {
+  switch (property_id) {
     case PROP_WINDOW:
-        action->priv->window = EPHY_WINDOW (g_value_get_object (value));
-        break;
+      action->priv->window = EPHY_WINDOW (g_value_get_object (value));
+      break;
     default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-    }
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+  }
 }
 
 static void
-ephy_window_action_get_property (GObject *object,
-                                 guint property_id,
-                                 GValue *value,
+ephy_window_action_get_property (GObject    *object,
+                                 guint       property_id,
+                                 GValue     *value,
                                  GParamSpec *pspec)
 {
-    EphyWindowAction *action = EPHY_WINDOW_ACTION (object);
+  EphyWindowAction *action = EPHY_WINDOW_ACTION (object);
 
-    switch (property_id) {
+  switch (property_id) {
     case PROP_WINDOW:
-        g_value_set_object (value, action->priv->window);
-        break;
+      g_value_set_object (value, action->priv->window);
+      break;
     default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-    }
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+  }
 }
 
 static void
 ephy_window_action_class_init (EphyWindowActionClass *class)
 {
-    GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-    object_class->set_property = ephy_window_action_set_property;
-    object_class->get_property = ephy_window_action_get_property;
+  object_class->set_property = ephy_window_action_set_property;
+  object_class->get_property = ephy_window_action_get_property;
 
-    obj_properties[PROP_WINDOW] =
-        g_param_spec_object ("window",
-                             NULL,
-                             NULL,
-                             G_TYPE_OBJECT,
-                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT);
+  obj_properties[PROP_WINDOW] =
+    g_param_spec_object ("window",
+                         NULL,
+                         NULL,
+                         G_TYPE_OBJECT,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT);
 
-    g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
-    g_type_class_add_private (object_class, sizeof (EphyWindowActionPrivate));
+  g_type_class_add_private (object_class, sizeof (EphyWindowActionPrivate));
 }
 
 EphyWindow *
 ephy_window_action_get_window (EphyWindowAction *action)
 {
-    g_return_val_if_fail (EPHY_IS_WINDOW_ACTION (action), NULL);
+  g_return_val_if_fail (EPHY_IS_WINDOW_ACTION (action), NULL);
 
-    return action->priv->window;
+  return action->priv->window;
 }

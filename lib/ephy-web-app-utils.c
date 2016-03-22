@@ -111,10 +111,10 @@ ephy_web_application_get_profile_directory (const char *name)
 /**
  * ephy_web_application_delete:
  * @name: the name of the web application do delete
- * 
+ *
  * Deletes all the data associated with a Web Application created by
  * Epiphany.
- * 
+ *
  * Returns: %TRUE if the web app was succesfully deleted, %FALSE otherwise
  **/
 gboolean
@@ -158,7 +158,7 @@ ephy_web_application_delete (const char *name)
   }
   return_value = TRUE;
 
-out:
+ out:
 
   g_free (profile_dir);
 
@@ -174,7 +174,7 @@ static char *
 create_desktop_file (const char *address,
                      const char *profile_dir,
                      const char *title,
-                     GdkPixbuf *icon)
+                     GdkPixbuf  *icon)
 {
   GKeyFile *file = NULL;
   char *exec_string;
@@ -213,7 +213,7 @@ create_desktop_file (const char *address,
     path = g_build_filename (profile_dir, EPHY_WEB_APP_ICON_NAME, NULL);
     image = g_file_new_for_path (path);
 
-    stream = (GOutputStream*)g_file_create (image, 0, NULL, NULL);
+    stream = (GOutputStream *)g_file_create (image, 0, NULL, NULL);
     gdk_pixbuf_save_to_stream (icon, stream, "png", NULL, NULL, NULL);
     g_key_file_set_value (file, "Desktop Entry", "Icon", path);
 
@@ -248,7 +248,7 @@ create_desktop_file (const char *address,
   g_free (apps_path);
   g_free (filename);
 
-out:
+ out:
   g_free (wm_class);
   g_free (data);
   g_key_file_free (file);
@@ -268,7 +268,7 @@ static SoupCookieJar *get_current_cookie_jar (void)
    */
   dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
   filename = g_build_filename (dot_dir ? dot_dir : ephy_dot_dir (), "cookies.sqlite", NULL);
-  jar = (SoupCookieJar*)soup_cookie_jar_db_new (filename, TRUE);
+  jar = (SoupCookieJar *)soup_cookie_jar_db_new (filename, TRUE);
   g_free (filename);
   g_free (dot_dir);
 
@@ -285,7 +285,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
 
   /* Create the new cookie jar */
   filename = g_build_filename (directory, "cookies.sqlite", NULL);
-  new_jar = (SoupCookieJar*)soup_cookie_jar_db_new (filename, FALSE);
+  new_jar = (SoupCookieJar *)soup_cookie_jar_db_new (filename, FALSE);
   g_free (filename);
 
   /* The app domain for the current view */
@@ -302,7 +302,7 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
   cookies = soup_cookie_jar_all_cookies (current_jar);
 
   for (p = cookies; p; p = p->next) {
-    SoupCookie *cookie = (SoupCookie*)p->data;
+    SoupCookie *cookie = (SoupCookie *)p->data;
 
     if (soup_cookie_domain_matches (cookie, domain))
       soup_cookie_jar_add_cookie (new_jar, cookie);
@@ -321,9 +321,9 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
  * @address: the address of the new web application
  * @name: the name for the new web application
  * @icon: the icon for the new web application
- * 
+ *
  * Creates a new Web Application for @address.
- * 
+ *
  * Returns: (transfer-full): the path to the desktop file representing the new application
  **/
 char *
@@ -349,13 +349,13 @@ ephy_web_application_create (const char *address, const char *name, GdkPixbuf *i
   /* Things we need in a WebApp's profile:
      - Our own cookies file, copying the relevant cookies for the
        app's domain.
-  */
+   */
   create_cookie_jar_for_domain (address, profile_dir);
 
   /* Create the deskop file. */
   desktop_file_path = create_desktop_file (address, profile_dir, name, icon);
 
-out:
+ out:
   if (profile_dir)
     g_free (profile_dir);
 
@@ -458,7 +458,7 @@ ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
     }
     g_clear_object (&file);
   } else if (G_IS_THEMED_ICON (icon)) {
-    const char *const *names = g_themed_icon_get_names (G_THEMED_ICON (icon));
+    const char * const *names = g_themed_icon_get_names (G_THEMED_ICON (icon));
     if (names)
       gtk_window_set_default_icon_name (names[0]);
   }
@@ -597,7 +597,7 @@ ephy_web_application_free_application_list (GList *list)
   GList *p;
 
   for (p = list; p; p = p->next)
-    ephy_web_application_free ((EphyWebApplication*)p->data);
+    ephy_web_application_free ((EphyWebApplication *)p->data);
 
   g_list_free (list);
 }

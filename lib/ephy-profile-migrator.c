@@ -110,7 +110,7 @@ migrate_cookies (void)
     cookies = soup_cookie_jar_all_cookies (txt);
 
     for (p = cookies; p; p = p->next) {
-      SoupCookie *cookie = (SoupCookie*)p->data;
+      SoupCookie *cookie = (SoupCookie *)p->data;
       /* Cookie is stolen, so we won't free it */
       soup_cookie_jar_add_cookie (sqlite, cookie);
     }
@@ -127,7 +127,7 @@ migrate_cookies (void)
 }
 
 #ifdef ENABLE_NSS
-static char*
+static char *
 decrypt (const char *data)
 {
   unsigned char *plain;
@@ -142,15 +142,15 @@ decrypt (const char *data)
 
     decrypted = ephy_nss_glue_decrypt (plain, out_len);
     g_free (plain);
-    plain = (unsigned char*)decrypted;
+    plain = (unsigned char *)decrypted;
   }
 
-  return (char*)plain;
+  return (char *)plain;
 }
 
 static void
 parse_and_decrypt_signons (const char *signons,
-                           gboolean handle_forms)
+                           gboolean    handle_forms)
 {
   int version;
   gchar **lines;
@@ -224,7 +224,7 @@ parse_and_decrypt_signons (const char *signons,
       g_free (url);
 
       start += strlen (realmBracketBegin);
-      end_ptr = g_strstr_len (full_url, -1, realmBracketEnd) -1;
+      end_ptr = g_strstr_len (full_url, -1, realmBracketEnd) - 1;
       ending = g_utf8_pointer_to_offset (full_url, end_ptr);
       realm = g_utf8_substring (full_url, start, ending);
 
@@ -297,7 +297,7 @@ parse_and_decrypt_signons (const char *signons,
         /* We skip the '*' at the beginning of form_password. */
         ephy_form_auth_data_store (u,
                                    form_username,
-                                   form_password+1,
+                                   form_password + 1,
                                    username,
                                    password,
                                    NULL, NULL);
@@ -470,7 +470,7 @@ history_parse_text (GMarkupParseContext *context,
 {
   HistoryParseData *parse_data = user_data;
 
-  if (!parse_data || ! parse_data->current)
+  if (!parse_data || !parse_data->current)
     return;
 
   if (g_str_equal (parse_data->current, "2")) {
@@ -691,7 +691,7 @@ migrate_profile_gnome2_to_xdg (void)
 static char *
 fix_desktop_file_and_return_new_location (const char *dir)
 {
-  GRegex * regex;
+  GRegex *regex;
   char *result, *old_profile_dir, *replacement, *contents, *new_contents;
   gsize length;
 
@@ -729,40 +729,40 @@ migrate_web_app_links (void)
   apps = ephy_web_application_get_application_list ();
   for (p = apps; p; p = p->next) {
     char *desktop_file, *app_link;
-    EphyWebApplication *app = (EphyWebApplication*)p->data;
+    EphyWebApplication *app = (EphyWebApplication *)p->data;
 
     desktop_file = app->desktop_file;
 
     /* Update the link in applications. */
     app_link = g_build_filename (g_get_user_data_dir (), "applications", desktop_file, NULL);
     if (g_file_test (app_link, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_SYMLINK)) {
-        /* Change the link to point to the new profile dir. */
-        GFileInfo *info;
-        const char *target;
-        GFile *file = g_file_new_for_path (app_link);
-        
-        info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET,
-                                  0, NULL, NULL);
-        if (info) {
-          char *new_target;
+      /* Change the link to point to the new profile dir. */
+      GFileInfo *info;
+      const char *target;
+      GFile *file = g_file_new_for_path (app_link);
 
-          target = g_file_info_get_symlink_target (info);
-          new_target = fix_desktop_file_and_return_new_location (target);
+      info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET,
+                                0, NULL, NULL);
+      if (info) {
+        char *new_target;
 
-          /* FIXME: Updating the file info and setting it again should
-           * work, but it does not? Just delete and create the link
-           * again. */
-          g_file_delete (file, 0, 0);
-          g_object_unref (file);
+        target = g_file_info_get_symlink_target (info);
+        new_target = fix_desktop_file_and_return_new_location (target);
 
-          file = g_file_new_for_path (app_link);
-          g_file_make_symbolic_link (file, new_target, NULL, NULL);
-
-          g_object_unref (info);
-          g_free (new_target);
-        }
-
+        /* FIXME: Updating the file info and setting it again should
+         * work, but it does not? Just delete and create the link
+         * again. */
+        g_file_delete (file, 0, 0);
         g_object_unref (file);
+
+        file = g_file_new_for_path (app_link);
+        g_file_make_symbolic_link (file, new_target, NULL, NULL);
+
+        g_object_unref (info);
+        g_free (new_target);
+      }
+
+      g_object_unref (file);
     }
 
     g_free (app_link);
@@ -821,8 +821,8 @@ static int form_passwords_migrating = 0;
 
 static void
 password_cleared_cb (SecretService *service,
-                     GAsyncResult *res,
-                     gpointer userdata)
+                     GAsyncResult  *res,
+                     gpointer       userdata)
 {
   secret_service_clear_finish (service, res, NULL);
 
@@ -831,9 +831,9 @@ password_cleared_cb (SecretService *service,
 }
 
 static void
-store_form_auth_data_cb (GObject *object,
+store_form_auth_data_cb (GObject      *object,
                          GAsyncResult *res,
-                         GHashTable *attributes)
+                         GHashTable   *attributes)
 {
   GError *error = NULL;
 
@@ -848,7 +848,7 @@ store_form_auth_data_cb (GObject *object,
                         attributes, NULL, (GAsyncReadyCallback)password_cleared_cb,
                         NULL);
 
-out:
+ out:
   if (g_atomic_int_dec_and_test (&form_passwords_migrating))
     g_main_loop_quit (loop);
 
@@ -857,8 +857,8 @@ out:
 
 static void
 load_collection_items_cb (SecretCollection *collection,
-                          GAsyncResult *res,
-                          gpointer data)
+                          GAsyncResult     *res,
+                          gpointer          data)
 {
   SecretItem *item;
   SecretValue *secret;
@@ -880,7 +880,7 @@ load_collection_items_cb (SecretCollection *collection,
   items = secret_collection_get_items (collection);
 
   for (l = items; l; l = l->next) {
-    item = (SecretItem*)l->data;
+    item = (SecretItem *)l->data;
 
     attributes = secret_item_get_attributes (item);
     server = g_hash_table_lookup (attributes, "server");
@@ -940,7 +940,7 @@ migrate_form_passwords_to_libsecret (void)
 
   for (c = collections; c; c = c->next) {
     g_atomic_int_inc (&form_passwords_migrating);
-    secret_collection_load_items ((SecretCollection*)c->data, NULL, (GAsyncReadyCallback)load_collection_items_cb,
+    secret_collection_load_items ((SecretCollection *)c->data, NULL, (GAsyncReadyCallback)load_collection_items_cb,
                                   NULL);
   }
 
@@ -959,7 +959,7 @@ migrate_app_desktop_file_categories (void)
   web_apps = ephy_web_application_get_application_list ();
 
   for (l = web_apps; l; l = l->next) {
-    EphyWebApplication *app = (EphyWebApplication *) l->data;
+    EphyWebApplication *app = (EphyWebApplication *)l->data;
     GKeyFile *file;
     char *data = NULL;
     char *app_path;
@@ -989,8 +989,8 @@ migrate_app_desktop_file_categories (void)
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
- /* Yes, again! Version 2 had some bugs, so we need to run
-    migrate_passwords again to possibly migrate more passwords*/
+  /* Yes, again! Version 2 had some bugs, so we need to run
+     migrate_passwords again to possibly migrate more passwords*/
   migrate_passwords,
   /* Very similar to migrate_passwords, but this migrates
    * login/passwords for page forms, which we previously ignored */
@@ -1025,7 +1025,7 @@ ephy_migrator (void)
 
     LOG ("Running only migrator: %d", do_step_n);
     m = migrators[do_step_n];
-    m();
+    m ();
 
     return TRUE;
   }
@@ -1046,7 +1046,7 @@ ephy_migrator (void)
       continue;
 
     m = migrators[i];
-    m();
+    m ();
   }
 
   if (ephy_profile_utils_set_migration_version (EPHY_PROFILE_MIGRATION_VERSION) != TRUE) {
@@ -1099,13 +1099,13 @@ main (int argc, char *argv[])
 
     return 1;
   }
-        
+
   g_option_context_free (option_context);
 
   if (migration_version != -1 && migration_version != EPHY_PROFILE_MIGRATION_VERSION) {
     g_print ("Version mismatch, version %d requested but our version is %d\n",
              migration_version, EPHY_PROFILE_MIGRATION_VERSION);
-    
+
     return 1;
   }
 
@@ -1113,7 +1113,7 @@ main (int argc, char *argv[])
 
   if (profile_dir != NULL)
     file_helpers_flags = EPHY_FILE_HELPERS_PRIVATE_PROFILE |
-      EPHY_FILE_HELPERS_KEEP_DIR;
+                         EPHY_FILE_HELPERS_KEEP_DIR;
 
   if (!ephy_file_helpers_init (profile_dir, file_helpers_flags, NULL)) {
     LOG ("Something wrong happened with ephy_file_helpers_init()");

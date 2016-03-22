@@ -159,8 +159,8 @@ resolve_uri (const char *base_uri,
 
 static gboolean
 get_icon_from_mstile (WebKitDOMDocument *document,
-                      char              **uri_out,
-                      char              **color_out)
+                      char             **uri_out,
+                      char             **color_out)
 {
   gboolean ret;
   WebKitDOMNodeList *metas;
@@ -203,8 +203,8 @@ get_icon_from_mstile (WebKitDOMDocument *document,
 
 static gboolean
 get_icon_from_ogp (WebKitDOMDocument *document,
-                   char         **uri_out,
-                   char         **color_out)
+                   char             **uri_out,
+                   char             **color_out)
 {
   gboolean ret;
   WebKitDOMNodeList *metas;
@@ -242,8 +242,8 @@ get_icon_from_ogp (WebKitDOMDocument *document,
 
 static gboolean
 get_icon_from_touch_icon (WebKitDOMDocument *document,
-                          char         **uri_out,
-                          char         **color_out)
+                          char             **uri_out,
+                          char             **color_out)
 {
   gboolean ret;
   WebKitDOMNodeList *links;
@@ -279,8 +279,8 @@ get_icon_from_touch_icon (WebKitDOMDocument *document,
 
 static gboolean
 get_icon_from_favicon (WebKitDOMDocument *document,
-                       char         **uri_out,
-                       char         **color_out)
+                       char             **uri_out,
+                       char             **color_out)
 {
   gboolean ret;
   WebKitDOMNodeList *links;
@@ -344,11 +344,11 @@ ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
    * http://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url
    */
   ret = get_icon_from_mstile (document, &image, &color);
-  if (! ret)
+  if (!ret)
     ret = get_icon_from_ogp (document, &image, &color);
-  if (! ret)
+  if (!ret)
     ret = get_icon_from_touch_icon (document, &image, &color);
-  if (! ret)
+  if (!ret)
     ret = get_icon_from_favicon (document, &image, &color);
 
   if (uri_out != NULL)
@@ -364,8 +364,8 @@ ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
 
 gboolean
 ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
-                                            WebKitDOMNode **username,
-                                            WebKitDOMNode **password)
+                                            WebKitDOMNode           **username,
+                                            WebKitDOMNode           **password)
 {
   WebKitDOMHTMLCollection *elements;
   WebKitDOMNode *username_node = NULL;
@@ -421,7 +421,7 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
     g_free (element_name);
   }
 
-  g_object_unref(elements);
+  g_object_unref (elements);
 
   if (found_auth_no_username_elements && password_node) {
     g_clear_object (&username_node);
@@ -457,8 +457,8 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
  **/
 void
 ephy_web_dom_utils_get_absolute_position_for_element (WebKitDOMElement *element,
-                                                      double *x,
-                                                      double *y)
+                                                      double           *x,
+                                                      double           *y)
 {
   WebKitDOMElement *parent;
   double offset_top, offset_left;
@@ -492,8 +492,8 @@ ephy_web_dom_utils_get_absolute_position_for_element (WebKitDOMElement *element,
  **/
 void
 ephy_web_dom_utils_get_absolute_bottom_for_element (WebKitDOMElement *element,
-                                                    double *x,
-                                                    double *y)
+                                                    double           *x,
+                                                    double           *y)
 {
   double offset_height;
 
@@ -513,7 +513,7 @@ ephy_web_dom_utils_get_absolute_bottom_for_element (WebKitDOMElement *element,
  * Returns: a newly allocated string with the selection or %NULL.
  **/
 char *
-ephy_web_dom_utils_get_selection_as_string   (WebKitDOMDOMSelection *selection)
+ephy_web_dom_utils_get_selection_as_string (WebKitDOMDOMSelection *selection)
 {
   char *string;
   WebKitDOMRange *range = webkit_dom_dom_selection_get_range_at (selection, 0, NULL);

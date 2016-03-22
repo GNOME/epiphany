@@ -42,8 +42,8 @@ ephy_form_auth_data_get_password_schema (void)
 }
 
 static void
-normalize_and_prepare_uri (SoupURI  *uri,
-                           gboolean  remove_path)
+normalize_and_prepare_uri (SoupURI *uri,
+                           gboolean remove_path)
 {
   g_assert (uri != NULL);
 
@@ -81,8 +81,8 @@ ephy_form_auth_data_get_secret_attributes_table (const char *uri,
 
 static void
 store_form_password_cb (SecretService *service,
-                        GAsyncResult *res,
-                        GTask *task)
+                        GAsyncResult  *res,
+                        GTask         *task)
 {
   GError *error = NULL;
 
@@ -96,13 +96,13 @@ store_form_password_cb (SecretService *service,
 }
 
 void
-ephy_form_auth_data_store (const char *uri,
-                           const char *form_username,
-                           const char *form_password,
-                           const char *username,
-                           const char *password,
+ephy_form_auth_data_store (const char         *uri,
+                           const char         *form_username,
+                           const char         *form_password,
+                           const char         *username,
+                           const char         *password,
                            GAsyncReadyCallback callback,
-                           gpointer userdata)
+                           gpointer            userdata)
 {
   SoupURI *fake_uri;
   char *fake_uri_str;
@@ -160,7 +160,7 @@ ephy_form_auth_data_store (const char *uri,
 
 gboolean
 ephy_form_auth_data_store_finish (GAsyncResult *result,
-                                  GError **error)
+                                  GError      **error)
 {
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
   g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
@@ -168,8 +168,7 @@ ephy_form_auth_data_store_finish (GAsyncResult *result,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
-typedef struct
-{
+typedef struct {
   EphyFormAuthDataQueryCallback callback;
   gpointer data;
   GDestroyNotify destroy_data;
@@ -185,13 +184,13 @@ ephy_form_auth_data_query_closure_free (EphyFormAuthDataQueryClosure *closure)
 }
 
 static void
-search_form_data_cb (SecretService *service,
-                     GAsyncResult *res,
+search_form_data_cb (SecretService                *service,
+                     GAsyncResult                 *res,
                      EphyFormAuthDataQueryClosure *closure)
 {
   GList *results;
   SecretItem *item;
-  const char* username = NULL, *password = NULL;
+  const char *username = NULL, *password = NULL;
   SecretValue *value = NULL;
   GHashTable *attributes = NULL;
   GError *error = NULL;
@@ -206,7 +205,7 @@ search_form_data_cb (SecretService *service,
   if (!results)
     goto out;
 
-  item = (SecretItem*)results->data;
+  item = (SecretItem *)results->data;
   attributes = secret_item_get_attributes (item);
   username = g_hash_table_lookup (attributes, USERNAME_KEY);
   value = secret_item_get_secret (item);
@@ -214,7 +213,7 @@ search_form_data_cb (SecretService *service,
 
   g_list_free_full (results, (GDestroyNotify)g_object_unref);
 
-out:
+ out:
   if (closure->callback)
     closure->callback (username, password, closure->data);
 
@@ -227,13 +226,13 @@ out:
 }
 
 void
-ephy_form_auth_data_query (const char *uri,
-                           const char *form_username,
-                           const char *form_password,
-                           const char *username,
+ephy_form_auth_data_query (const char                   *uri,
+                           const char                   *form_username,
+                           const char                   *form_password,
+                           const char                   *username,
                            EphyFormAuthDataQueryCallback callback,
-                           gpointer user_data,
-                           GDestroyNotify destroy_data)
+                           gpointer                      user_data,
+                           GDestroyNotify                destroy_data)
 {
   SoupURI *key;
   char *key_str;
@@ -301,8 +300,8 @@ ephy_form_auth_data_free (EphyFormAuthData *data)
 }
 
 static void
-screcet_service_search_finished (SecretService *service,
-                                 GAsyncResult *result,
+screcet_service_search_finished (SecretService         *service,
+                                 GAsyncResult          *result,
                                  EphyFormAuthDataCache *cache)
 {
   GList *results, *p;
@@ -391,10 +390,10 @@ ephy_form_auth_data_cache_free (EphyFormAuthDataCache *cache)
 
 void
 ephy_form_auth_data_cache_add (EphyFormAuthDataCache *cache,
-                               const char *uri,
-                               const char *form_username,
-                               const char *form_password,
-                               const char *username)
+                               const char            *uri,
+                               const char            *form_username,
+                               const char            *form_password,
+                               const char            *username)
 {
   EphyFormAuthData *data;
   GSList *l;
@@ -412,7 +411,7 @@ ephy_form_auth_data_cache_add (EphyFormAuthDataCache *cache,
 
 GSList *
 ephy_form_auth_data_cache_get_list (EphyFormAuthDataCache *cache,
-                                    const char *uri)
+                                    const char            *uri)
 {
   g_return_val_if_fail (cache, NULL);
   g_return_val_if_fail (uri, NULL);

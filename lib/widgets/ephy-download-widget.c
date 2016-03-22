@@ -31,8 +31,7 @@
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
 
-struct _EphyDownloadWidget
-{
+struct _EphyDownloadWidget {
   GtkGrid parent_instance;
 
   EphyDownload *download;
@@ -46,8 +45,7 @@ struct _EphyDownloadWidget
 
 G_DEFINE_TYPE (EphyDownloadWidget, ephy_download_widget, GTK_TYPE_GRID)
 
-enum
-{
+enum {
   PROP_0,
   PROP_DOWNLOAD,
   LAST_PROP
@@ -79,41 +77,30 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
 static gchar *
 duration_to_string (guint seconds)
 {
-  if (seconds < 60)
-    {
-      return g_strdup_printf (ngettext ("%d second left",
-        "%d seconds left", seconds), seconds);
-    }
-  else if (seconds < (60 * 60))
-    {
-      seconds /= 60;
-      return g_strdup_printf (ngettext ("%d minute left",
-        "%d minutes left", seconds), seconds);
-    }
-  else if (seconds < (60 * 60 * 24))
-    {
-      seconds /= 60 * 60;
-      return g_strdup_printf (ngettext ("%d hour left",
-        "%d hours left", seconds), seconds);
-    }
-  else if (seconds < (60 * 60 * 24 * 7))
-    {
-      seconds /= 60 * 60 * 24;
-      return g_strdup_printf (ngettext ("%d day left",
-        "%d days left", seconds), seconds);
-    }
-  else if (seconds < (60 * 60 * 24 * 30))
-    {
-      seconds /= 60 * 60 * 24 * 7;
-      return g_strdup_printf (ngettext ("%d week left",
-        "%d weeks left", seconds), seconds);
-    }
-  else
-    {
-      seconds /= 60 * 60 * 24 * 30;
-      return g_strdup_printf (ngettext ("%d month left",
-        "%d months left", seconds), seconds);
-    }
+  if (seconds < 60) {
+    return g_strdup_printf (ngettext ("%d second left",
+                                      "%d seconds left", seconds), seconds);
+  } else if (seconds < (60 * 60)) {
+    seconds /= 60;
+    return g_strdup_printf (ngettext ("%d minute left",
+                                      "%d minutes left", seconds), seconds);
+  } else if (seconds < (60 * 60 * 24)) {
+    seconds /= 60 * 60;
+    return g_strdup_printf (ngettext ("%d hour left",
+                                      "%d hours left", seconds), seconds);
+  } else if (seconds < (60 * 60 * 24 * 7)) {
+    seconds /= 60 * 60 * 24;
+    return g_strdup_printf (ngettext ("%d day left",
+                                      "%d days left", seconds), seconds);
+  } else if (seconds < (60 * 60 * 24 * 30)) {
+    seconds /= 60 * 60 * 24 * 7;
+    return g_strdup_printf (ngettext ("%d week left",
+                                      "%d weeks left", seconds), seconds);
+  } else {
+    seconds /= 60 * 60 * 24 * 30;
+    return g_strdup_printf (ngettext ("%d month left",
+                                      "%d months left", seconds), seconds);
+  }
 }
 
 static gdouble
@@ -171,7 +158,7 @@ update_download_destination (EphyDownloadWidget *widget)
 
 static void
 update_status_label (EphyDownloadWidget *widget,
-                     const char *download_label)
+                     const char         *download_label)
 {
   char *markup;
 
@@ -181,8 +168,8 @@ update_status_label (EphyDownloadWidget *widget,
 }
 
 static void
-download_progress_cb (WebKitDownload *download,
-                      GParamSpec *pspec,
+download_progress_cb (WebKitDownload     *download,
+                      GParamSpec         *pspec,
                       EphyDownloadWidget *widget)
 {
   gdouble progress;
@@ -200,24 +187,24 @@ download_progress_cb (WebKitDownload *download,
   received_length = webkit_download_get_received_data_length (download);
 
   if (content_length > 0 && received_length > 0) {
-      gdouble time;
-      char *remaining;
-      char *received;
-      char *total;
+    gdouble time;
+    char *remaining;
+    char *received;
+    char *total;
 
-      received = g_format_size (received_length);
-      total = g_format_size (content_length);
+    received = g_format_size (received_length);
+    total = g_format_size (content_length);
 
-      time = get_remaining_time (content_length, received_length,
-                                 webkit_download_get_elapsed_time (download));
-      remaining = duration_to_string ((guint)time);
-      download_label = g_strdup_printf ("%s / %s — %s", received, total, remaining);
-      g_free (received);
-      g_free (total);
-      g_free (remaining);
+    time = get_remaining_time (content_length, received_length,
+                               webkit_download_get_elapsed_time (download));
+    remaining = duration_to_string ((guint)time);
+    download_label = g_strdup_printf ("%s / %s — %s", received, total, remaining);
+    g_free (received);
+    g_free (total);
+    g_free (remaining);
 
-      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget->progress),
-                                     progress);
+    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget->progress),
+                                   progress);
   } else if (received_length > 0) {
     download_label = g_format_size (received_length);
     gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget->progress));
@@ -230,7 +217,7 @@ download_progress_cb (WebKitDownload *download,
 }
 
 static void
-download_finished_cb (EphyDownload *download,
+download_finished_cb (EphyDownload       *download,
                       EphyDownloadWidget *widget)
 {
   gtk_widget_hide (widget->progress);
@@ -241,8 +228,8 @@ download_finished_cb (EphyDownload *download,
 }
 
 static void
-download_failed_cb (EphyDownload *download,
-                    GError *error,
+download_failed_cb (EphyDownload       *download,
+                    GError             *error,
                     EphyDownloadWidget *widget)
 {
   char *error_msg;
@@ -260,8 +247,8 @@ download_failed_cb (EphyDownload *download,
 }
 
 static void
-download_content_type_changed_cb (EphyDownload *download,
-                                  GParamSpec *spec,
+download_content_type_changed_cb (EphyDownload       *download,
+                                  GParamSpec         *spec,
                                   EphyDownloadWidget *widget)
 {
   update_download_icon (widget);
@@ -294,8 +281,8 @@ widget_action_button_clicked_cb (EphyDownloadWidget *widget)
 }
 
 static void
-download_destination_changed_cb (WebKitDownload *download,
-                                 GParamSpec *pspec,
+download_destination_changed_cb (WebKitDownload     *download,
+                                 GParamSpec         *pspec,
                                  EphyDownloadWidget *widget)
 {
   update_download_destination (widget);
@@ -402,7 +389,7 @@ ephy_download_widget_constructed (GObject *object)
   gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (widget->progress), 0.05);
   gtk_grid_attach (GTK_GRID (widget), widget->progress, 0, 1, 2, 1);
   if (ephy_download_is_active (widget->download))
-          gtk_widget_show (widget->progress);
+    gtk_widget_show (widget->progress);
 
   widget->status = gtk_label_new (NULL);
   gtk_widget_set_valign (widget->status, GTK_ALIGN_CENTER);
@@ -411,15 +398,15 @@ ephy_download_widget_constructed (GObject *object)
   gtk_label_set_max_width_chars (GTK_LABEL (widget->status), 30);
   gtk_label_set_ellipsize (GTK_LABEL (widget->status), PANGO_ELLIPSIZE_END);
   if (ephy_download_failed (widget->download, &error)) {
-          char *error_msg;
+    char *error_msg;
 
-          error_msg = g_strdup_printf (_("Error downloading: %s"), error->message);
-          update_status_label (widget, error_msg);
-          g_free (error_msg);
+    error_msg = g_strdup_printf (_("Error downloading: %s"), error->message);
+    update_status_label (widget, error_msg);
+    g_free (error_msg);
   } else if (ephy_download_succeeded (widget->download)) {
-          update_status_label (widget, _("Finished"));
+    update_status_label (widget, _("Finished"));
   } else {
-          update_status_label (widget, _("Starting…"));
+    update_status_label (widget, _("Starting…"));
   }
   gtk_grid_attach (GTK_GRID (widget), widget->status, 0, 2, 2, 1);
   gtk_widget_show (widget->status);

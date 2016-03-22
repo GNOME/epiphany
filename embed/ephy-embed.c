@@ -38,9 +38,9 @@
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
 
-static void     ephy_embed_constructed         (GObject *object);
-static void     ephy_embed_restored_window_cb  (EphyEmbedShell *shell,
-                                                EphyEmbed *embed);
+static void     ephy_embed_constructed (GObject *object);
+static void     ephy_embed_restored_window_cb (EphyEmbedShell *shell,
+                                               EphyEmbed      *embed);
 
 #define EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
 #define MAX_TITLE_LENGTH 512 /* characters */
@@ -88,8 +88,7 @@ struct _EphyEmbed {
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
 
-enum
-{
+enum {
   PROP_0,
   PROP_WEB_VIEW,
   PROP_TITLE,
@@ -238,7 +237,7 @@ remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
 }
 
 static void
-ephy_embed_set_title (EphyEmbed *embed,
+ephy_embed_set_title (EphyEmbed  *embed,
                       const char *title)
 {
   char *new_title;
@@ -268,31 +267,31 @@ ephy_embed_set_title (EphyEmbed *embed,
 
 static void
 web_view_title_changed_cb (WebKitWebView *web_view,
-                           GParamSpec *spec,
-                           EphyEmbed *embed)
+                           GParamSpec    *spec,
+                           EphyEmbed     *embed)
 {
   ephy_embed_set_title (embed, webkit_web_view_get_title (web_view));
 }
 
 static void
-load_changed_cb (WebKitWebView *web_view,
+load_changed_cb (WebKitWebView  *web_view,
                  WebKitLoadEvent load_event,
-                 EphyEmbed *embed)
+                 EphyEmbed      *embed)
 {
   switch (load_event) {
-  case WEBKIT_LOAD_COMMITTED:
-    ephy_embed_destroy_top_widgets (embed);
-    break;
-  case WEBKIT_LOAD_FINISHED: {
-    const char *title = webkit_web_view_get_title (web_view);
-    if (ephy_web_view_get_is_blank (EPHY_WEB_VIEW (web_view)) || !title || !*title)
-      ephy_embed_set_title (embed, NULL);
-    break;
-  }
-  case WEBKIT_LOAD_STARTED:
-  case WEBKIT_LOAD_REDIRECTED:
-  default:
-    break;
+    case WEBKIT_LOAD_COMMITTED:
+      ephy_embed_destroy_top_widgets (embed);
+      break;
+    case WEBKIT_LOAD_FINISHED: {
+      const char *title = webkit_web_view_get_title (web_view);
+      if (ephy_web_view_get_is_blank (EPHY_WEB_VIEW (web_view)) || !title || !*title)
+        ephy_embed_set_title (embed, NULL);
+      break;
+    }
+    case WEBKIT_LOAD_STARTED:
+    case WEBKIT_LOAD_REDIRECTED:
+    default:
+      break;
   }
 }
 
@@ -330,8 +329,8 @@ ephy_embed_entering_fullscreen (EphyEmbed *embed)
       g_source_remove (embed->fullscreen_message_id);
 
     embed->fullscreen_message_id = g_timeout_add_seconds (5,
-                                                                (GSourceFunc)fullscreen_message_label_hide,
-                                                                embed);
+                                                          (GSourceFunc)fullscreen_message_label_hide,
+                                                          embed);
     g_source_set_name_by_id (embed->fullscreen_message_id, "[epiphany] fullscreen_message_label_hide");
   }
 }
@@ -392,7 +391,7 @@ ephy_embed_finalize (GObject *object)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GSList *list;
 
-  g_signal_handlers_disconnect_by_func(shell, ephy_embed_restored_window_cb, embed);
+  g_signal_handlers_disconnect_by_func (shell, ephy_embed_restored_window_cb, embed);
 
   list = embed->destroy_on_transition_list;
   for (; list; list = list->next) {
@@ -424,52 +423,50 @@ ephy_embed_finalize (GObject *object)
 }
 
 static void
-ephy_embed_set_property (GObject *object,
-                         guint prop_id,
+ephy_embed_set_property (GObject      *object,
+                         guint         prop_id,
                          const GValue *value,
-                         GParamSpec *pspec)
+                         GParamSpec   *pspec)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
 
-  switch (prop_id)
-  {
-  case PROP_WEB_VIEW:
-    embed->web_view = g_value_get_object (value);
-    break;
-  case PROP_TITLE:
-    ephy_embed_set_title (embed, g_value_get_string (value));
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    break;
+  switch (prop_id) {
+    case PROP_WEB_VIEW:
+      embed->web_view = g_value_get_object (value);
+      break;
+    case PROP_TITLE:
+      ephy_embed_set_title (embed, g_value_get_string (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 
 static void
-ephy_embed_get_property (GObject *object,
-                         guint prop_id,
-                         GValue *value,
+ephy_embed_get_property (GObject    *object,
+                         guint       prop_id,
+                         GValue     *value,
                          GParamSpec *pspec)
 {
   EphyEmbed *embed = EPHY_EMBED (object);
 
-  switch (prop_id)
-  {
-  case PROP_WEB_VIEW:
-    g_value_set_object (value, ephy_embed_get_web_view (embed));
-    break;
-  case PROP_TITLE:
-    g_value_set_string (value, ephy_embed_get_title (embed));
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    break;
+  switch (prop_id) {
+    case PROP_WEB_VIEW:
+      g_value_set_object (value, ephy_embed_get_web_view (embed));
+      break;
+    case PROP_TITLE:
+      g_value_set_string (value, ephy_embed_get_title (embed));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 
 static void
 ephy_embed_find_toolbar_close_cb (EphyFindToolbar *toolbar,
-                                  EphyEmbed *embed)
+                                  EphyEmbed       *embed)
 {
   ephy_find_toolbar_close (embed->find_toolbar);
 
@@ -508,7 +505,7 @@ ephy_embed_class_init (EphyEmbedClass *klass)
 
 static gboolean
 ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
-                                EphyEmbed *embed)
+                                EphyEmbed          *embed)
 {
   GtkWidget *inspector_view = GTK_WIDGET (webkit_web_inspector_get_web_view (inspector));
   int inspected_view_height;
@@ -526,7 +523,7 @@ ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
 
 static void
 ephy_embed_set_fullscreen_message (EphyEmbed *embed,
-                                   gboolean is_html5_fullscreen)
+                                   gboolean   is_html5_fullscreen)
 {
   char *message;
 
@@ -539,7 +536,7 @@ ephy_embed_set_fullscreen_message (EphyEmbed *embed,
 
 static gboolean
 entering_fullscreen_cb (WebKitWebView *web_view,
-                        EphyEmbed *embed)
+                        EphyEmbed     *embed)
 {
   ephy_embed_set_fullscreen_message (embed, TRUE);
   return FALSE;
@@ -547,7 +544,7 @@ entering_fullscreen_cb (WebKitWebView *web_view,
 
 static gboolean
 leaving_fullscreen_cb (WebKitWebView *web_view,
-                       EphyEmbed *embed)
+                       EphyEmbed     *embed)
 {
   ephy_embed_set_fullscreen_message (embed, FALSE);
   return FALSE;
@@ -580,7 +577,7 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
     ephy_embed_statusbar_push (embed, embed->tab_message_id, message);
   } else {
     /* A short timeout before hiding the statusbar ensures that while moving
-      over a series of links, the overlay widget doesn't flicker on and off. */
+       over a series of links, the overlay widget doesn't flicker on and off. */
     if (embed->pop_statusbar_later_source_id == 0) {
       embed->pop_statusbar_later_source_id = g_timeout_add (250, pop_statusbar_later_cb, embed);
       g_source_set_name_by_id (embed->pop_statusbar_later_source_id, "[epiphany] pop_statusbar_later_cb");
@@ -690,13 +687,13 @@ ephy_embed_restored_window_cb (EphyEmbedShell *shell, EphyEmbed *embed)
 static void
 ephy_embed_mapped_cb (GtkWidget *widget, gpointer data)
 {
-  ephy_embed_maybe_load_delayed_request ((EphyEmbed*)widget);
+  ephy_embed_maybe_load_delayed_request ((EphyEmbed *)widget);
 }
 
 static void
 ephy_embed_constructed (GObject *object)
 {
-  EphyEmbed *embed = (EphyEmbed*)object;
+  EphyEmbed *embed = (EphyEmbed *)object;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GtkWidget *paned;
   WebKitWebInspector *inspector;
@@ -711,7 +708,7 @@ ephy_embed_constructed (GObject *object)
   /* Skeleton */
   overlay = gtk_overlay_new ();
 
-  gtk_widget_add_events (overlay, 
+  gtk_widget_add_events (overlay,
                          GDK_ENTER_NOTIFY_MASK |
                          GDK_LEAVE_NOTIFY_MASK);
   gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (embed->web_view));
@@ -800,12 +797,12 @@ ephy_embed_init (EphyEmbed *embed)
 /**
  * ephy_embed_get_web_view:
  * @embed: and #EphyEmbed
- * 
+ *
  * Returns the #EphyWebView wrapped by @embed.
- * 
+ *
  * Returns: (transfer none): an #EphyWebView
  **/
-EphyWebView*
+EphyWebView *
 ephy_embed_get_web_view (EphyEmbed *embed)
 {
   g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
@@ -816,12 +813,12 @@ ephy_embed_get_web_view (EphyEmbed *embed)
 /**
  * ephy_embed_get_find_toolbar:
  * @embed: and #EphyEmbed
- * 
+ *
  * Returns the #EphyFindToolbar wrapped by @embed.
- * 
+ *
  * Returns: (transfer none): an #EphyFindToolbar
  **/
-EphyFindToolbar*
+EphyFindToolbar *
 ephy_embed_get_find_toolbar (EphyEmbed *embed)
 {
   g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);

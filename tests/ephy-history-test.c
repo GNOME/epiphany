@@ -27,7 +27,7 @@
 #include <gtk/gtk.h>
 
 static EphyHistoryService *
-ensure_empty_history (const char* filename, gboolean readonly)
+ensure_empty_history (const char *filename, gboolean readonly)
 {
   if (g_file_test (filename, G_FILE_TEST_IS_REGULAR))
     g_unlink (filename);
@@ -71,7 +71,7 @@ test_create_history_service_and_destroy_later (void)
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
   EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
   g_free (temporary_file);
-  g_timeout_add (100, (GSourceFunc) destroy_history_service_and_end_main_loop, service);
+  g_timeout_add (100, (GSourceFunc)destroy_history_service_and_end_main_loop, service);
 
   gtk_main ();
 }
@@ -117,7 +117,7 @@ create_test_page_visit_list (void)
 static void
 verify_create_history_entry_cb (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
-  GList *visits = (GList *) result_data;
+  GList *visits = (GList *)result_data;
   GList *baseline_visits = create_test_page_visit_list ();
   GList *current = visits;
   GList *current_baseline = baseline_visits;
@@ -131,8 +131,8 @@ verify_create_history_entry_cb (EphyHistoryService *service, gboolean success, g
     EphyHistoryPageVisit *visit, *baseline_visit;
 
     g_assert (current);
-    visit = (EphyHistoryPageVisit *) current->data;
-    baseline_visit = (EphyHistoryPageVisit *) current_baseline->data;
+    visit = (EphyHistoryPageVisit *)current->data;
+    baseline_visit = (EphyHistoryPageVisit *)current_baseline->data;
 
     g_assert_cmpstr (visit->url->url, ==, baseline_visit->url->url);
     g_assert_cmpstr (visit->url->title, ==, baseline_visit->url->title);
@@ -154,7 +154,7 @@ static void
 verify_create_history_entry (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
   g_assert (result_data == NULL);
-  g_assert_cmpint (42, ==, GPOINTER_TO_INT(user_data)); 
+  g_assert_cmpint (42, ==, GPOINTER_TO_INT (user_data));
   g_assert (success);
   ephy_history_service_find_visits_in_time (service, 0, 8, NULL, verify_create_history_entry_cb, NULL);
 }
@@ -168,7 +168,7 @@ test_create_history_entries (void)
   GList *visits = create_test_page_visit_list ();
 
   /* We use 42 here just to verify that user_data is passed properly to the callback */
-  ephy_history_service_add_visits (service, visits, NULL, verify_create_history_entry, GINT_TO_POINTER(42));
+  ephy_history_service_add_visits (service, visits, NULL, verify_create_history_entry, GINT_TO_POINTER (42));
   ephy_history_page_visit_list_free (visits);
   g_free (temporary_file);
 
@@ -178,7 +178,7 @@ test_create_history_entries (void)
 static void
 get_url (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
-  EphyHistoryURL *url = (EphyHistoryURL *) result_data;
+  EphyHistoryURL *url = (EphyHistoryURL *)result_data;
 
   g_assert (success == TRUE);
   g_assert (url != NULL);
@@ -186,7 +186,7 @@ get_url (EphyHistoryService *service, gboolean success, gpointer result_data, gp
 
   ephy_history_url_free (url);
   g_object_unref (service);
-  gtk_main_quit();
+  gtk_main_quit ();
 }
 
 static void
@@ -251,7 +251,7 @@ test_set_url_title_url_not_existent (void)
 
   ephy_history_service_set_url_title (service, "http://www.gnome.org", "GNOME", NULL, set_url_title_url_not_existent, NULL);
 
-  gtk_main();
+  gtk_main ();
 }
 
 static void
@@ -298,7 +298,7 @@ test_get_url_helper (gboolean add_entry)
   } else
     ephy_history_service_get_url (service, "http://www.gnome.org", NULL, test_get_url_done, GINT_TO_POINTER (add_entry));
 
-  gtk_main();
+  gtk_main ();
 }
 
 static void
@@ -335,32 +335,32 @@ create_visits_for_complex_tests (void)
 
 static void
 verify_complex_url_query (EphyHistoryService *service,
-                          gboolean success,
-                          gpointer result_data,
-                          gpointer user_data)
+                          gboolean            success,
+                          gpointer            result_data,
+                          gpointer            user_data)
 {
   EphyHistoryURL *url, *baseline;
-  GList *urls = (GList*) result_data;
+  GList *urls = (GList *)result_data;
 
   /* Only one result expected. */
   g_assert_cmpint (g_list_length (urls), ==, 1);
 
-  url = (EphyHistoryURL *) urls->data;
-  baseline = (EphyHistoryURL *) user_data;
+  url = (EphyHistoryURL *)urls->data;
+  baseline = (EphyHistoryURL *)user_data;
 
   g_assert_cmpstr (url->url, ==, baseline->url);
   g_assert_cmpuint (url->visit_count, ==, baseline->visit_count);
 
   g_object_unref (service);
 
-  gtk_main_quit();
+  gtk_main_quit ();
 }
 
 static void
 perform_complex_url_query (EphyHistoryService *service,
-                           gboolean success,
-                           gpointer result_data,
-                           gpointer user_data)
+                           gboolean            success,
+                           gpointer            result_data,
+                           gpointer            user_data)
 {
   EphyHistoryQuery *query;
   EphyHistoryURL *url;
@@ -397,9 +397,9 @@ test_complex_url_query (void)
 
 static void
 perform_complex_url_query_with_time_range (EphyHistoryService *service,
-                                           gboolean success,
-                                           gpointer result_data,
-                                           gpointer user_data)
+                                           gboolean            success,
+                                           gpointer            result_data,
+                                           gpointer            user_data)
 {
   EphyHistoryQuery *query;
   EphyHistoryURL *url;
@@ -437,25 +437,25 @@ test_complex_url_query_with_time_range (void)
 
 static void
 verify_query_after_clear (EphyHistoryService *service,
-                          gboolean success,
-                          gpointer result_data,
-                          gpointer user_data)
+                          gboolean            success,
+                          gpointer            result_data,
+                          gpointer            user_data)
 {
-  GList *urls = (GList*)result_data;
+  GList *urls = (GList *)result_data;
 
   /* No results expected. */
   g_assert_cmpint (g_list_length (urls), ==, 0);
 
   g_object_unref (service);
 
-  gtk_main_quit();
+  gtk_main_quit ();
 }
 
 static void
 perform_query_after_clear (EphyHistoryService *service,
-                           gboolean success,
-                           gpointer result_data,
-                           gpointer user_data)
+                           gboolean            success,
+                           gpointer            result_data,
+                           gpointer            user_data)
 {
   EphyHistoryQuery *query;
 

@@ -28,47 +28,47 @@
 static void
 test_ephy_completion_model_create (void)
 {
-    EphyCompletionModel *model;
-    model = ephy_completion_model_new (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ())),
-                                       ephy_shell_get_bookmarks (ephy_shell_get_default ()));
-    g_assert (model);
-    g_object_unref (model);
+  EphyCompletionModel *model;
+  model = ephy_completion_model_new (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ())),
+                                     ephy_shell_get_bookmarks (ephy_shell_get_default ()));
+  g_assert (model);
+  g_object_unref (model);
 }
 
 static void
 update_empty_cb (EphyHistoryService *service,
-                 gboolean success,
-                 gpointer result_data,
-                 GMainLoop *loop)
+                 gboolean            success,
+                 gpointer            result_data,
+                 GMainLoop          *loop)
 {
-    GList *results = (GList*)result_data;
+  GList *results = (GList *)result_data;
 
-    g_assert (success);
-    g_assert (results == NULL);
+  g_assert (success);
+  g_assert (results == NULL);
 
-    g_main_loop_quit (loop);
+  g_main_loop_quit (loop);
 }
 
 static void
 test_ephy_completion_model_update_empty (void)
 {
-    EphyCompletionModel *model;
-    GMainLoop *loop = NULL;
+  EphyCompletionModel *model;
+  GMainLoop *loop = NULL;
 
-    model = ephy_completion_model_new (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ())),
-                                       ephy_shell_get_bookmarks (ephy_shell_get_default ()));
-    g_assert (model);
+  model = ephy_completion_model_new (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ())),
+                                     ephy_shell_get_bookmarks (ephy_shell_get_default ()));
+  g_assert (model);
 
-    loop = g_main_loop_new (NULL, FALSE);
+  loop = g_main_loop_new (NULL, FALSE);
 
-    ephy_completion_model_update_for_string (model, "hello",
-                                             (EphyHistoryJobCallback)update_empty_cb,
-                                             loop);
+  ephy_completion_model_update_for_string (model, "hello",
+                                           (EphyHistoryJobCallback)update_empty_cb,
+                                           loop);
 
-    g_main_loop_run (loop);
+  g_main_loop_run (loop);
 
-    g_object_unref (model);
-    g_main_loop_unref (loop);
+  g_object_unref (model);
+  g_main_loop_unref (loop);
 }
 
 int

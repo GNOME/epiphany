@@ -32,8 +32,7 @@
  * #EphyCertificateDialog shows information about SSL certificates.
  */
 
-enum
-{
+enum {
   PROP_0,
   PROP_ADDRESS,
   PROP_CERTIFICATE,
@@ -44,8 +43,7 @@ enum
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-struct _EphyCertificateDialog
-{
+struct _EphyCertificateDialog {
   GtkDialog parent_object;
 
   GtkWidget *icon;
@@ -60,7 +58,7 @@ G_DEFINE_TYPE (EphyCertificateDialog, ephy_certificate_dialog, GTK_TYPE_DIALOG)
 
 static void
 ephy_certificate_dialog_set_address (EphyCertificateDialog *dialog,
-                                     const char *address)
+                                     const char            *address)
 {
   SoupURI *uri;
 
@@ -71,7 +69,7 @@ ephy_certificate_dialog_set_address (EphyCertificateDialog *dialog,
 
 static void
 ephy_certificate_dialog_set_certificate (EphyCertificateDialog *dialog,
-                                         GTlsCertificate *certificate)
+                                         GTlsCertificate       *certificate)
 {
   GcrCertificate *simple_certificate;
   GByteArray *certificate_data;
@@ -80,7 +78,7 @@ ephy_certificate_dialog_set_certificate (EphyCertificateDialog *dialog,
 
   g_object_get (certificate, "certificate", &certificate_data, NULL);
   simple_certificate = gcr_simple_certificate_new ((const guchar *)certificate_data->data,
-						   certificate_data->len);
+                                                   certificate_data->len);
   g_byte_array_unref (certificate_data);
 
   certificate_widget = GTK_WIDGET (gcr_certificate_widget_new (simple_certificate));
@@ -126,9 +124,9 @@ get_error_messages_from_tls_errors (GTlsCertificateFlags tls_errors)
 
     for (i = 0; i < errors->len; i++) {
       g_string_append_printf (message, "• %s",
-			      (char *)g_ptr_array_index (errors, i));
+                              (char *)g_ptr_array_index (errors, i));
       if (i < errors->len - 1)
-	g_string_append_c (message, '\n');
+        g_string_append_c (message, '\n');
     }
 
     retval = g_string_free (message, FALSE);
@@ -157,9 +155,9 @@ ephy_certificate_dialog_constructed (GObject *object)
   }
 
   markup = g_strdup_printf ("<span weight=\"bold\" size=\"large\">%s</span>",
-			    dialog->tls_errors == 0 ?
-			    _("The identity of this website has been verified.") :
-			    _("The identity of this website has not been verified."));
+                            dialog->tls_errors == 0 ?
+                            _("The identity of this website has been verified.") :
+                            _("The identity of this website has not been verified."));
   gtk_label_set_markup (GTK_LABEL (dialog->title), markup);
   g_free (markup);
 
@@ -169,48 +167,48 @@ ephy_certificate_dialog_constructed (GObject *object)
     g_free (text);
   } else {
     switch (dialog->security_level) {
-    case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
-      /* Message on certificte dialog ertificate dialog */
-      gtk_label_set_text (GTK_LABEL (dialog->text), _("No problems have been detected with your connection."));
-      break;
-    case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
-      gtk_label_set_text (GTK_LABEL (dialog->text), _("This certificate is valid. However, "
-                                                    "resources on this page were sent insecurely."));
-      break;
-    case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
-    case EPHY_SECURITY_LEVEL_NO_SECURITY:
-    case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
-    case EPHY_SECURITY_LEVEL_LOCAL_PAGE:
-    default:
-      g_assert_not_reached ();
+      case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
+        /* Message on certificte dialog ertificate dialog */
+        gtk_label_set_text (GTK_LABEL (dialog->text), _("No problems have been detected with your connection."));
+        break;
+      case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
+        gtk_label_set_text (GTK_LABEL (dialog->text), _("This certificate is valid. However, "
+                                                        "resources on this page were sent insecurely."));
+        break;
+      case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
+      case EPHY_SECURITY_LEVEL_NO_SECURITY:
+      case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
+      case EPHY_SECURITY_LEVEL_LOCAL_PAGE:
+      default:
+        g_assert_not_reached ();
     }
   }
   gtk_widget_show (dialog->text);
 }
 
 static void
-ephy_certificate_dialog_set_property (GObject *object,
-                                      guint prop_id,
+ephy_certificate_dialog_set_property (GObject      *object,
+                                      guint         prop_id,
                                       const GValue *value,
-                                      GParamSpec *pspec)
+                                      GParamSpec   *pspec)
 {
   EphyCertificateDialog *dialog = EPHY_CERTIFICATE_DIALOG (object);
 
   switch (prop_id) {
-  case PROP_ADDRESS:
-    ephy_certificate_dialog_set_address (dialog, g_value_get_string (value));
-    break;
-  case PROP_CERTIFICATE:
-    ephy_certificate_dialog_set_certificate (dialog, g_value_get_object (value));
-    break;
-  case PROP_SECURITY_LEVEL:
-    dialog->security_level = g_value_get_enum (value);
-    break;
-  case PROP_TLS_ERRORS:
-    dialog->tls_errors = g_value_get_flags (value);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    case PROP_ADDRESS:
+      ephy_certificate_dialog_set_address (dialog, g_value_get_string (value));
+      break;
+    case PROP_CERTIFICATE:
+      ephy_certificate_dialog_set_certificate (dialog, g_value_get_object (value));
+      break;
+    case PROP_SECURITY_LEVEL:
+      dialog->security_level = g_value_get_enum (value);
+      break;
+    case PROP_TLS_ERRORS:
+      dialog->tls_errors = g_value_get_flags (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
 }
 
@@ -299,7 +297,7 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 
   dialog->title = gtk_label_new (NULL);
   gtk_label_set_use_markup (GTK_LABEL (dialog->title), TRUE);
-  gtk_label_set_line_wrap  (GTK_LABEL (dialog->title), TRUE);
+  gtk_label_set_line_wrap (GTK_LABEL (dialog->title), TRUE);
   gtk_label_set_selectable (GTK_LABEL (dialog->title), TRUE);
   gtk_widget_set_halign (dialog->title, GTK_ALIGN_START);
   gtk_widget_set_valign (dialog->title, GTK_ALIGN_CENTER);
@@ -310,7 +308,7 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
   gtk_widget_show (dialog->title);
 
   dialog->text = gtk_label_new (NULL);
-  gtk_label_set_line_wrap  (GTK_LABEL (dialog->text), TRUE);
+  gtk_label_set_line_wrap (GTK_LABEL (dialog->text), TRUE);
   gtk_label_set_selectable (GTK_LABEL (dialog->text), TRUE);
   gtk_widget_set_halign (dialog->text, GTK_ALIGN_START);
   gtk_widget_set_valign (dialog->text, GTK_ALIGN_START);
@@ -326,11 +324,11 @@ ephy_certificate_dialog_init (EphyCertificateDialog *dialog)
 }
 
 GtkWidget *
-ephy_certificate_dialog_new (GtkWindow *parent,
-                             const char *address,
-                             GTlsCertificate *certificate,
+ephy_certificate_dialog_new (GtkWindow           *parent,
+                             const char          *address,
+                             GTlsCertificate     *certificate,
                              GTlsCertificateFlags tls_errors,
-                             EphySecurityLevel security_level)
+                             EphySecurityLevel    security_level)
 {
   GtkWidget *dialog;
 
@@ -338,13 +336,13 @@ ephy_certificate_dialog_new (GtkWindow *parent,
   g_return_val_if_fail (G_IS_TLS_CERTIFICATE (certificate), NULL);
 
   dialog = GTK_WIDGET (g_object_new (EPHY_TYPE_CERTIFICATE_DIALOG,
-				     "address", address,
-				     "certificate", certificate,
-				     "security-level", security_level,
-				     "tls-errors", tls_errors,
+                                     "address", address,
+                                     "certificate", certificate,
+                                     "security-level", security_level,
+                                     "tls-errors", tls_errors,
                                      "modal", TRUE,
                                      "use-header-bar", TRUE,
-				     NULL));
+                                     NULL));
   if (parent)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 

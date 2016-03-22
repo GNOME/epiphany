@@ -51,12 +51,12 @@ get_uri_for_path (const char *path)
 }
 
 static void
-server_callback (SoupServer *server,
-                 SoupMessage *msg,
-                 const char *path,
-                 GHashTable *query,
+server_callback (SoupServer        *server,
+                 SoupMessage       *msg,
+                 const char        *path,
+                 GHashTable        *query,
                  SoupClientContext *context,
-                 gpointer data)
+                 gpointer           data)
 {
   soup_message_set_status (msg, SOUP_STATUS_OK);
 
@@ -124,7 +124,7 @@ test_file_was_downloaded (EphyDownload *download)
 
 static void
 completed_cb (EphyDownload *download,
-              Fixture *fixture)
+              Fixture      *fixture)
 {
   g_assert (test_file_was_downloaded (download));
   g_main_loop_quit (fixture->loop);
@@ -142,7 +142,7 @@ test_ephy_download_new_for_uri (Fixture *fixture, gconstpointer data)
   WebKitDownload *download = ephy_download_get_webkit_download (fixture->download);
   WebKitURIRequest *request = webkit_download_get_request (download);
 
-  g_assert(request);
+  g_assert (request);
   g_assert_cmpstr (fixture->source, ==, webkit_uri_request_get_uri (request));
 }
 
@@ -160,7 +160,7 @@ int
 main (int argc, char *argv[])
 {
   int ret;
-  GSList* uris;
+  GSList *uris;
   SoupServer *server;
 
   gtk_test_init (&argc, &argv);
@@ -182,7 +182,7 @@ main (int argc, char *argv[])
                             SOUP_SERVER_LISTEN_IPV4_ONLY,
                             NULL);
   uris = soup_server_get_uris (server);
-  base_uri = (SoupURI*)uris->data;
+  base_uri = (SoupURI *)uris->data;
   g_slist_free (uris);
 
   soup_server_add_handler (server, NULL, server_callback, NULL, NULL);

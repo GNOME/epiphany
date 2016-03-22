@@ -1,5 +1,5 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
-/* 
+/*
  *  Copyright © 2012 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -66,10 +66,10 @@ static void
 free_search_terms (GSList *search_terms)
 {
   GSList *iter;
-  
+
   for (iter = search_terms; iter != NULL; iter = iter->next)
-    g_regex_unref ((GRegex*)iter->data);
-  
+    g_regex_unref ((GRegex *)iter->data);
+
   g_slist_free (search_terms);
 }
 
@@ -79,19 +79,19 @@ ephy_completion_model_set_property (GObject *object, guint property_id, const GV
   EphyCompletionModel *self = EPHY_COMPLETION_MODEL (object);
 
   switch (property_id) {
-  case PROP_HISTORY_SERVICE:
-    self->history_service = EPHY_HISTORY_SERVICE (g_value_get_pointer (value));
-    break;
-  case PROP_BOOKMARKS: {
-    EphyBookmarks *bookmarks = EPHY_BOOKMARKS (g_value_get_pointer (value));
+    case PROP_HISTORY_SERVICE:
+      self->history_service = EPHY_HISTORY_SERVICE (g_value_get_pointer (value));
+      break;
+    case PROP_BOOKMARKS: {
+      EphyBookmarks *bookmarks = EPHY_BOOKMARKS (g_value_get_pointer (value));
 
-    self->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks);
-    self->smart_bookmarks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
+      self->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks);
+      self->smart_bookmarks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
     }
     break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
-    break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
+      break;
   }
 }
 
@@ -152,7 +152,7 @@ is_base_address (const char *address)
    * Neither scheme nor host contain a slash, so we can use slashes
    * figure out if it's a base address.
    *
-   * Note: previous code was using a GRegExp to do the same thing. 
+   * Note: previous code was using a GRegExp to do the same thing.
    * While regexps are much nicer to read, they're also a lot
    * slower.
    */
@@ -172,8 +172,8 @@ is_base_address (const char *address)
 
 static int
 get_relevance (const char *location,
-               int visit_count,
-               gboolean is_bookmark)
+               int         visit_count,
+               gboolean    is_bookmark)
 {
   /* FIXME: use frecency. */
   int relevance = 0;
@@ -190,7 +190,7 @@ get_relevance (const char *location,
     else
       relevance = visit_count;
   }
-  
+
   return relevance;
 }
 
@@ -212,7 +212,7 @@ icon_loaded_cb (GObject *source, GAsyncResult *result, gpointer user_data)
 {
   GtkTreeIter iter;
   GtkTreePath *path;
-  IconLoadData *data = (IconLoadData *) user_data;
+  IconLoadData *data = (IconLoadData *)user_data;
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   GdkPixbuf *favicon = NULL;
   cairo_surface_t *icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
@@ -244,7 +244,7 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
   GtkTreeIter iter;
   GtkTreePath *path;
   IconLoadData *data;
-  WebKitFaviconDatabase* database;
+  WebKitFaviconDatabase *database;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
@@ -259,7 +259,7 @@ set_row_in_model (EphyCompletionModel *model, int position, PotentialRow *row)
                                      -1);
 
   data = g_slice_new (IconLoadData);
-  data->model = GTK_LIST_STORE (g_object_ref(model));
+  data->model = GTK_LIST_STORE (g_object_ref (model));
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &iter);
   data->row_reference = gtk_tree_row_reference_new (GTK_TREE_MODEL (model), path);
   gtk_tree_path_free (path);
@@ -281,7 +281,7 @@ replace_rows_in_model (EphyCompletionModel *model, GSList *new_rows)
     return;
 
   for (i = 0; new_rows != NULL; i++) {
-    PotentialRow *row = (PotentialRow*)new_rows->data;
+    PotentialRow *row = (PotentialRow *)new_rows->data;
 
     set_row_in_model (model, i, row);
     new_rows = new_rows->next;
@@ -290,10 +290,10 @@ replace_rows_in_model (EphyCompletionModel *model, GSList *new_rows)
 
 static gboolean
 should_add_bookmark_to_model (EphyCompletionModel *model,
-                              const char *search_string,
-                              const char *title,
-                              const char *location,
-                              const char *keywords)
+                              const char          *search_string,
+                              const char          *title,
+                              const char          *location,
+                              const char          *keywords)
 {
   gboolean ret = TRUE;
 
@@ -302,7 +302,7 @@ should_add_bookmark_to_model (EphyCompletionModel *model,
     GRegex *current = NULL;
 
     for (iter = model->search_terms; iter != NULL; iter = iter->next) {
-      current = (GRegex*)iter->data;
+      current = (GRegex *)iter->data;
       if ((!g_regex_match (current, title ? title : "", G_REGEX_MATCH_NOTEMPTY, NULL)) &&
           (!g_regex_match (current, location ? location : "", G_REGEX_MATCH_NOTEMPTY, NULL)) &&
           (!g_regex_match (current, keywords ? keywords : "", G_REGEX_MATCH_NOTEMPTY, NULL))) {
@@ -326,7 +326,7 @@ static int
 find_url (gconstpointer a,
           gconstpointer b)
 {
-  return g_strcmp0 (((PotentialRow*)a)->location,
+  return g_strcmp0 (((PotentialRow *)a)->location,
                     ((char *)b));
 }
 
@@ -352,18 +352,18 @@ free_potential_row (PotentialRow *row)
   g_free (row->title);
   g_free (row->location);
   g_free (row->keywords);
-  
+
   g_slice_free (PotentialRow, row);
 }
 
 static GSList *
-add_to_potential_rows (GSList *rows,
+add_to_potential_rows (GSList     *rows,
                        const char *title,
                        const char *location,
                        const char *keywords,
-                       int visit_count,
-                       gboolean is_bookmark,
-                       gboolean search_for_duplicates)
+                       int         visit_count,
+                       gboolean    is_bookmark,
+                       gboolean    search_for_duplicates)
 {
   gboolean found = FALSE;
   PotentialRow *row = potential_row_new (title, location, keywords, visit_count, is_bookmark);
@@ -373,10 +373,10 @@ add_to_potential_rows (GSList *rows,
 
     p = g_slist_find_custom (rows, location, find_url);
     if (p) {
-      PotentialRow *match = (PotentialRow*)p->data;
+      PotentialRow *match = (PotentialRow *)p->data;
       if (row->relevance > match->relevance)
         match->relevance = row->relevance;
-      
+
       found = TRUE;
       free_potential_row (row);
     }
@@ -391,8 +391,8 @@ add_to_potential_rows (GSList *rows,
 static int
 sort_by_relevance (gconstpointer a, gconstpointer b)
 {
-  PotentialRow *r1 = (PotentialRow*)a;
-  PotentialRow *r2 = (PotentialRow*)b;
+  PotentialRow *r1 = (PotentialRow *)a;
+  PotentialRow *r2 = (PotentialRow *)b;
 
   if (r1->relevance < r2->relevance)
     return 1;
@@ -404,9 +404,9 @@ sort_by_relevance (gconstpointer a, gconstpointer b)
 
 static void
 query_completed_cb (EphyHistoryService *service,
-                    gboolean success,
-                    gpointer result_data,
-                    FindURLsData *user_data)
+                    gboolean            success,
+                    gpointer            result_data,
+                    FindURLsData       *user_data)
 {
   EphyCompletionModel *model = user_data->model;
   GList *p, *urls;
@@ -438,10 +438,10 @@ query_completed_cb (EphyHistoryService *service,
   }
 
   /* History */
-  urls = (GList*)result_data;
+  urls = (GList *)result_data;
 
   for (p = urls; p != NULL; p = p->next) {
-    EphyHistoryURL *url = (EphyHistoryURL*)p->data;
+    EphyHistoryURL *url = (EphyHistoryURL *)p->data;
 
     list = add_to_potential_rows (list, url->title, url->url, NULL, url->visit_count, FALSE, TRUE);
   }
@@ -466,7 +466,7 @@ query_completed_cb (EphyHistoryService *service,
 
 static void
 update_search_terms (EphyCompletionModel *model,
-                     const char *text)
+                     const char          *text)
 {
   const char *current;
   const char *ptr;
@@ -484,7 +484,7 @@ update_search_terms (EphyCompletionModel *model,
 
   quote_regex = g_regex_new ("\"", G_REGEX_OPTIMIZE,
                              G_REGEX_MATCH_NOTEMPTY, NULL);
-    
+
   /*
    * This code loops through the string using pointer arythmetics.
    * Although the string we are handling may contain UTF-8 chars
@@ -493,7 +493,7 @@ update_search_terms (EphyCompletionModel *model,
    */
   for (count = 0, current = ptr = text; ptr[0] != '\0'; ptr++, count++) {
     /*
-     * If we found a double quote character; we will 
+     * If we found a double quote character; we will
      * consume bytes up until the next quote, or
      * end of line;
      */
@@ -515,7 +515,7 @@ update_search_terms (EphyCompletionModel *model,
        */
       if (ptr[1] == '\0')
         count++;
-        
+
       /*
        * remove quotes, and quote any regex-sensitive
        * characters
@@ -547,10 +547,10 @@ update_search_terms (EphyCompletionModel *model,
 #define MAX_COMPLETION_HISTORY_URLS 8
 
 void
-ephy_completion_model_update_for_string (EphyCompletionModel *model,
-                                         const char *search_string,
+ephy_completion_model_update_for_string (EphyCompletionModel   *model,
+                                         const char            *search_string,
                                          EphyHistoryJobCallback callback,
-                                         gpointer data)
+                                         gpointer               data)
 {
   char **strings;
   int i;

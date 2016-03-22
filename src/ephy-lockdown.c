@@ -34,8 +34,7 @@
 
 #define LOCKDOWN_FLAG 1 << 8
 
-struct _EphyLockdown
-{
+struct _EphyLockdown {
   GObject parent_instance;
 };
 
@@ -43,26 +42,26 @@ G_DEFINE_TYPE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT)
 
 static int
 find_name (GtkActionGroup *action_group,
-           const char *name)
+           const char     *name)
 {
   return g_strcmp0 (gtk_action_group_get_name (action_group), name);
 }
 
 static GtkActionGroup *
 find_action_group (GtkUIManager *manager,
-                   const char *name)
+                   const char   *name)
 {
   GList *list, *element;
 
   list = gtk_ui_manager_get_action_groups (manager);
-  element = g_list_find_custom (list, name, (GCompareFunc) find_name);
+  element = g_list_find_custom (list, name, (GCompareFunc)find_name);
   g_return_val_if_fail (element != NULL, NULL);
 
   return GTK_ACTION_GROUP (element->data);
 }
 
 static void
-arbitrary_url_cb (GSettings *settings,
+arbitrary_url_cb (GSettings  *settings,
                   const char *key,
                   EphyWindow *window)
 {
@@ -83,7 +82,7 @@ arbitrary_url_cb (GSettings *settings,
 }
 
 static void
-fullscreen_cb (GSettings *settings,
+fullscreen_cb (GSettings  *settings,
                const char *key,
                EphyWindow *window)
 {
@@ -129,9 +128,9 @@ static const BindAction special_toolbar_actions[] = {
 };
 
 static gboolean
-sensitive_get_mapping (GValue *value,
+sensitive_get_mapping (GValue   *value,
                        GVariant *variant,
-                       gpointer data)
+                       gpointer  data)
 {
   GtkAction *action;
   gboolean active, before, after;
@@ -151,10 +150,10 @@ sensitive_get_mapping (GValue *value,
 }
 
 static void
-bind_settings_and_actions (GSettings *settings,
-                           GtkActionGroup *action_group,
+bind_settings_and_actions (GSettings        *settings,
+                           GtkActionGroup   *action_group,
                            const BindAction *actions,
-                           int actions_n)
+                           int               actions_n)
 {
   int i;
 
@@ -162,7 +161,7 @@ bind_settings_and_actions (GSettings *settings,
     GtkAction *action;
 
     action = gtk_action_group_get_action (action_group,
-                  actions[i].action);
+                                          actions[i].action);
 
     if (g_strcmp0 (actions[i].prop, "visible") == 0) {
       g_settings_bind (settings, actions[i].key,
@@ -185,7 +184,7 @@ bind_settings_and_actions (GSettings *settings,
 }
 
 static void
-bind_location_controller (GSettings *settings,
+bind_location_controller (GSettings              *settings,
                           EphyLocationController *controller)
 {
   g_settings_bind (settings, EPHY_PREFS_LOCKDOWN_ARBITRARY_URL,
@@ -196,8 +195,8 @@ bind_location_controller (GSettings *settings,
 
 static void
 window_added_cb (GtkApplication *application,
-                 GtkWindow *window,
-                 EphyLockdown *lockdown)
+                 GtkWindow      *window,
+                 EphyLockdown   *lockdown)
 {
   GtkUIManager *manager;
   GtkActionGroup *action_group;

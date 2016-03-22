@@ -33,20 +33,20 @@ ephy_security_level_to_icon_name (EphySecurityLevel level)
   const char *result;
 
   switch (level) {
-  case EPHY_SECURITY_LEVEL_LOCAL_PAGE:
-  case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
-    result = NULL;
-    break;
-  case EPHY_SECURITY_LEVEL_NO_SECURITY:
-  case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
-  case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
-    result = "channel-insecure-symbolic";
-    break;
-  case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
-    result = "channel-secure-symbolic";
-    break;
-  default:
-    g_assert_not_reached ();
+    case EPHY_SECURITY_LEVEL_LOCAL_PAGE:
+    case EPHY_SECURITY_LEVEL_TO_BE_DETERMINED:
+      result = NULL;
+      break;
+    case EPHY_SECURITY_LEVEL_NO_SECURITY:
+    case EPHY_SECURITY_LEVEL_MIXED_CONTENT:
+    case EPHY_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
+      result = "channel-insecure-symbolic";
+      break;
+    case EPHY_SECURITY_LEVEL_STRONG_SECURITY:
+      result = "channel-secure-symbolic";
+      break;
+    default:
+      g_assert_not_reached ();
   }
 
   return result;

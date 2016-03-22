@@ -30,8 +30,7 @@
 /* Update snapshots after one week. */
 #define SNAPSHOT_UPDATE_THRESHOLD (60 * 60 * 24 * 7)
 
-struct _EphySnapshotService
-{
+struct _EphySnapshotService {
   GObject parent_instance;
   GnomeDesktopThumbnailFactory *factory;
   GHashTable *cache;
@@ -103,7 +102,7 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
 
   x_offset = 6;
   if (favicon) {
-    GdkPixbuf* fav_pixbuf;
+    GdkPixbuf *fav_pixbuf;
     int favicon_size = 16;
     int y_offset = gdk_pixbuf_get_height (scaled) - favicon_size - x_offset;
 
@@ -129,7 +128,7 @@ typedef struct {
 
 static SnapshotAsyncData *
 snapshot_async_data_new (WebKitWebView *web_view,
-                         time_t mtime)
+                         time_t         mtime)
 {
   SnapshotAsyncData *data;
 
@@ -144,7 +143,7 @@ snapshot_async_data_new (WebKitWebView *web_view,
 
 static SnapshotAsyncData *
 snapshot_async_data_new_for_snapshot (WebKitWebView *web_view,
-                                      time_t mtime)
+                                      time_t         mtime)
 {
   SnapshotAsyncData *data = snapshot_async_data_new (web_view, mtime);
 
@@ -158,7 +157,7 @@ snapshot_async_data_free (SnapshotAsyncData *data)
 {
   if (data->web_view)
     g_object_remove_weak_pointer (G_OBJECT (data->web_view), (gpointer *)&data->web_view);
-  g_clear_object(&data->snapshot);
+  g_clear_object (&data->snapshot);
   g_free (data->path);
 
   g_slice_free (SnapshotAsyncData, data);
@@ -166,8 +165,8 @@ snapshot_async_data_free (SnapshotAsyncData *data)
 
 static void
 snapshot_saved (EphySnapshotService *service,
-                GAsyncResult *result,
-                GTask *task)
+                GAsyncResult        *result,
+                GTask               *task)
 {
   SnapshotAsyncData *data = g_task_get_task_data (task);
   char *path;
@@ -184,7 +183,7 @@ snapshot_saved (EphySnapshotService *service,
 
 static void
 save_snapshot (cairo_surface_t *surface,
-               GTask *task)
+               GTask           *task)
 {
   SnapshotAsyncData *data = g_task_get_task_data (task);
 
@@ -202,8 +201,8 @@ save_snapshot (cairo_surface_t *surface,
 
 static void
 on_snapshot_ready (WebKitWebView *web_view,
-                   GAsyncResult *result,
-                   GTask *task)
+                   GAsyncResult  *result,
+                   GTask         *task)
 {
   cairo_surface_t *surface;
   GError *error = NULL;
@@ -244,7 +243,7 @@ retrieve_snapshot_from_web_view (GTask *task)
 
 static void
 webview_destroyed_cb (GtkWidget *web_view,
-                      GTask *task)
+                      GTask     *task)
 {
   g_task_return_new_error (task,
                            EPHY_SNAPSHOT_SERVICE_ERROR,
@@ -254,16 +253,16 @@ webview_destroyed_cb (GtkWidget *web_view,
 }
 
 static void
-webview_load_changed_cb (WebKitWebView *web_view,
+webview_load_changed_cb (WebKitWebView  *web_view,
                          WebKitLoadEvent load_event,
-                         GTask *task)
+                         GTask          *task)
 {
   if (load_event != WEBKIT_LOAD_FINISHED)
     return;
 
   /* Load finished doesn't ensure that we actually have visible content yet,
      so hold a bit before retrieving the snapshot. */
-  g_idle_add ((GSourceFunc) retrieve_snapshot_from_web_view, task);
+  g_idle_add ((GSourceFunc)retrieve_snapshot_from_web_view, task);
 
   /* Some pages might end up causing this condition to happen twice, so remove
      the handler in order to avoid calling the above idle function twice. */
@@ -272,11 +271,11 @@ webview_load_changed_cb (WebKitWebView *web_view,
 }
 
 static gboolean
-webview_load_failed_cb (WebKitWebView *web_view,
+webview_load_failed_cb (WebKitWebView  *web_view,
                         WebKitLoadEvent load_event,
-                        const char failing_uri,
-                        GError *error,
-                        GTask *task)
+                        const char      failing_uri,
+                        GError         *error,
+                        GTask          *task)
 {
   g_signal_handlers_disconnect_by_func (web_view, webview_load_changed_cb, task);
   g_signal_handlers_disconnect_by_func (web_view, webview_load_failed_cb, task);
@@ -356,7 +355,7 @@ typedef struct {
 
 static SnapshotForURLAsyncData *
 snapshot_for_url_async_data_new (const char *url,
-                                 time_t mtime)
+                                 time_t      mtime)
 {
   SnapshotForURLAsyncData *data;
 
@@ -385,7 +384,7 @@ typedef struct {
 static gboolean
 idle_cache_snapshot_path (gpointer user_data)
 {
-  CacheData* data = (CacheData*)user_data;
+  CacheData *data = (CacheData *)user_data;
   g_hash_table_insert (data->cache, data->url, data->path);
   g_hash_table_unref (data->cache);
   g_free (data);
@@ -394,10 +393,10 @@ idle_cache_snapshot_path (gpointer user_data)
 }
 
 static void
-get_snapshot_for_url_thread (GTask *task,
-                             EphySnapshotService *service,
+get_snapshot_for_url_thread (GTask                   *task,
+                             EphySnapshotService     *service,
                              SnapshotForURLAsyncData *data,
-                             GCancellable *cancellable)
+                             GCancellable            *cancellable)
 {
   GdkPixbuf *snapshot;
   GError *error = NULL;
@@ -445,11 +444,11 @@ get_snapshot_for_url_thread (GTask *task,
  **/
 void
 ephy_snapshot_service_get_snapshot_for_url_async (EphySnapshotService *service,
-                                                  const char *url,
-                                                  const time_t mtime,
-                                                  GCancellable *cancellable,
-                                                  GAsyncReadyCallback callback,
-                                                  gpointer user_data)
+                                                  const char          *url,
+                                                  const time_t         mtime,
+                                                  GCancellable        *cancellable,
+                                                  GAsyncReadyCallback  callback,
+                                                  gpointer             user_data)
 {
   GTask *task;
 
@@ -479,9 +478,9 @@ ephy_snapshot_service_get_snapshot_for_url_async (EphySnapshotService *service,
  **/
 GdkPixbuf *
 ephy_snapshot_service_get_snapshot_for_url_finish (EphySnapshotService *service,
-                                                   GAsyncResult *result,
-                                                   gchar **path,
-                                                   GError **error)
+                                                   GAsyncResult        *result,
+                                                   gchar              **path,
+                                                   GError             **error)
 {
   GTask *task = G_TASK (result);
   GdkPixbuf *snapshot;
@@ -505,8 +504,8 @@ ephy_snapshot_service_get_snapshot_for_url_finish (EphySnapshotService *service,
 
 static void
 got_snapshot_for_url (EphySnapshotService *service,
-                      GAsyncResult *result,
-                      GTask *task)
+                      GAsyncResult        *result,
+                      GTask               *task)
 {
   GdkPixbuf *snapshot;
   SnapshotAsyncData *data;
@@ -537,11 +536,11 @@ got_snapshot_for_url (EphySnapshotService *service,
  **/
 void
 ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
-                                          WebKitWebView *web_view,
-                                          const time_t mtime,
-                                          GCancellable *cancellable,
-                                          GAsyncReadyCallback callback,
-                                          gpointer user_data)
+                                          WebKitWebView       *web_view,
+                                          const time_t         mtime,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
 {
   GTask *task;
   const char *uri;
@@ -580,9 +579,9 @@ ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
  **/
 GdkPixbuf *
 ephy_snapshot_service_get_snapshot_finish (EphySnapshotService *service,
-                                           GAsyncResult *result,
-                                           gchar **path,
-                                           GError **error)
+                                           GAsyncResult        *result,
+                                           gchar              **path,
+                                           GError             **error)
 {
   GTask *task = G_TASK (result);
   GdkPixbuf *snapshot;
@@ -611,9 +610,9 @@ typedef struct {
 } SaveSnapshotAsyncData;
 
 static SaveSnapshotAsyncData *
-save_snapshot_async_data_new (GdkPixbuf *snapshot,
+save_snapshot_async_data_new (GdkPixbuf  *snapshot,
                               const char *url,
-                              time_t mtime)
+                              time_t      mtime)
 {
   SaveSnapshotAsyncData *data;
 
@@ -635,10 +634,10 @@ save_snapshot_async_data_free (SaveSnapshotAsyncData *data)
 }
 
 static void
-save_snapshot_thread (GTask *task,
-                      EphySnapshotService *service,
+save_snapshot_thread (GTask                 *task,
+                      EphySnapshotService   *service,
                       SaveSnapshotAsyncData *data,
-                      GCancellable *cancellable)
+                      GCancellable          *cancellable)
 {
   char *path;
   CacheData *cache_data;
@@ -661,12 +660,12 @@ save_snapshot_thread (GTask *task,
 
 void
 ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
-                                           GdkPixbuf *snapshot,
-                                           const char *url,
-                                           time_t mtime,
-                                           GCancellable *cancellable,
-                                           GAsyncReadyCallback callback,
-                                           gpointer user_data)
+                                           GdkPixbuf           *snapshot,
+                                           const char          *url,
+                                           time_t               mtime,
+                                           GCancellable        *cancellable,
+                                           GAsyncReadyCallback  callback,
+                                           gpointer             user_data)
 {
   GTask *task;
 
@@ -685,8 +684,8 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
 
 char *
 ephy_snapshot_service_save_snapshot_finish (EphySnapshotService *service,
-                                            GAsyncResult *result,
-                                            GError **error)
+                                            GAsyncResult        *result,
+                                            GError             **error)
 {
   g_return_val_if_fail (g_task_is_valid (result, service), NULL);
 
@@ -695,7 +694,7 @@ ephy_snapshot_service_save_snapshot_finish (EphySnapshotService *service,
 
 const char *
 ephy_snapshot_service_lookup_snapshot_path (EphySnapshotService *service,
-                                            const char *url)
+                                            const char          *url)
 {
   g_return_val_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service), NULL);
 
@@ -703,10 +702,10 @@ ephy_snapshot_service_lookup_snapshot_path (EphySnapshotService *service,
 }
 
 static void
-get_snapshot_path_for_url_thread (GTask *task,
-                                  EphySnapshotService *service,
+get_snapshot_path_for_url_thread (GTask                   *task,
+                                  EphySnapshotService     *service,
                                   SnapshotForURLAsyncData *data,
-                                  GCancellable *cancellable)
+                                  GCancellable            *cancellable)
 {
   char *path;
   CacheData *cache_data;
@@ -731,11 +730,11 @@ get_snapshot_path_for_url_thread (GTask *task,
 
 void
 ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *service,
-                                                       const char *url,
-                                                       const time_t mtime,
-                                                       GCancellable *cancellable,
-                                                       GAsyncReadyCallback callback,
-                                                       gpointer user_data)
+                                                       const char          *url,
+                                                       const time_t         mtime,
+                                                       GCancellable        *cancellable,
+                                                       GAsyncReadyCallback  callback,
+                                                       gpointer             user_data)
 {
   GTask *task;
   const char *path;
@@ -762,8 +761,8 @@ ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *serv
 
 char *
 ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService *service,
-                                                        GAsyncResult *result,
-                                                        GError **error)
+                                                        GAsyncResult        *result,
+                                                        GError             **error)
 {
   g_return_val_if_fail (g_task_is_valid (result, service), NULL);
 
@@ -772,8 +771,8 @@ ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService *ser
 
 static void
 got_snapshot_path_for_url (EphySnapshotService *service,
-                           GAsyncResult *result,
-                           GTask *task)
+                           GAsyncResult        *result,
+                           GTask               *task)
 {
   char *path;
 
@@ -788,11 +787,11 @@ got_snapshot_path_for_url (EphySnapshotService *service,
 
 void
 ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
-                                               WebKitWebView *web_view,
-                                               const time_t mtime,
-                                               GCancellable *cancellable,
-                                               GAsyncReadyCallback callback,
-                                               gpointer user_data)
+                                               WebKitWebView       *web_view,
+                                               const time_t         mtime,
+                                               GCancellable        *cancellable,
+                                               GAsyncReadyCallback  callback,
+                                               gpointer             user_data)
 {
   GTask *task;
   const char *uri;
@@ -829,8 +828,8 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
 
 char *
 ephy_snapshot_service_get_snapshot_path_finish (EphySnapshotService *service,
-                                                GAsyncResult *result,
-                                                GError **error)
+                                                GAsyncResult        *result,
+                                                GError             **error)
 {
   g_return_val_if_fail (g_task_is_valid (result, service), NULL);
 

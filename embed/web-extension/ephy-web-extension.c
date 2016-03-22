@@ -42,8 +42,7 @@
 #include <webkitdom/WebKitDOMDOMWindowUnstable.h>
 #include <JavaScriptCore/JavaScript.h>
 
-struct _EphyWebExtension
-{
+struct _EphyWebExtension {
   GObject parent_instance;
 
   WebKitWebExtension *extension;
@@ -108,10 +107,10 @@ static const char introspection_xml[] =
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 static gboolean
-web_page_send_request (WebKitWebPage *web_page,
-                       WebKitURIRequest *request,
+web_page_send_request (WebKitWebPage     *web_page,
+                       WebKitURIRequest  *request,
                        WebKitURIResponse *redirected_response,
-                       EphyWebExtension *extension)
+                       EphyWebExtension  *extension)
 {
   const char *request_uri;
   const char *page_uri;
@@ -140,7 +139,7 @@ web_page_send_request (WebKitWebPage *web_page,
   }
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
-      return FALSE;
+    return FALSE;
 
   page_uri = webkit_web_page_get_uri (web_page);
 
@@ -150,7 +149,7 @@ web_page_send_request (WebKitWebPage *web_page,
 
   /* Always load data requests, as uri_tester won't do any good here. */
   if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_DATA))
-      return FALSE;
+    return FALSE;
 
   ret = ephy_uri_tester_test_uri (extension->uri_tester, request_uri, page_uri);
   if (ret)
@@ -275,7 +274,7 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
 static void
 should_store_cb (const char *username,
                  const char *password,
-                 gpointer user_data)
+                 gpointer    user_data)
 {
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (user_data);
 
@@ -310,8 +309,8 @@ should_store_cb (const char *username,
 
 static gboolean
 form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
-                   WebKitDOMEvent *dom_event,
-                   WebKitWebPage *web_page)
+                   WebKitDOMEvent           *dom_event,
+                   WebKitWebPage            *web_page)
 {
   EphyEmbedFormAuth *form_auth;
   SoupURI *uri;
@@ -360,7 +359,7 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
 static void
 fill_form_cb (const char *username,
               const char *password,
-              gpointer user_data)
+              gpointer    user_data)
 {
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (user_data);
   WebKitDOMNode *username_node;
@@ -380,7 +379,7 @@ fill_form_cb (const char *username,
 }
 
 static gint
-ephy_form_auth_data_compare (EphyFormAuthData *form_data,
+ephy_form_auth_data_compare (EphyFormAuthData  *form_data,
                              EphyEmbedFormAuth *form_auth)
 {
   WebKitDOMNode *username_node;
@@ -395,7 +394,7 @@ ephy_form_auth_data_compare (EphyFormAuthData *form_data,
                 "name", &password_field_name, NULL);
 
   retval = g_strcmp0 (username_field_name, form_data->form_username) == 0 &&
-    g_strcmp0 (password_field_name, form_data->form_password) == 0;
+           g_strcmp0 (password_field_name, form_data->form_password) == 0;
 
   g_free (username_field_name);
   g_free (password_field_name);
@@ -444,7 +443,7 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
                              username,
                              fill_form_cb,
                              g_object_ref (form_auth),
-                             (GDestroyNotify) g_object_unref);
+                             (GDestroyNotify)g_object_unref);
 
   g_free (username);
   g_free (uri_str);
@@ -467,8 +466,8 @@ remove_user_choices (WebKitDOMDocument *document)
 }
 
 static gboolean
-username_changed_cb (WebKitDOMNode *username_node,
-                     WebKitDOMEvent *dom_event,
+username_changed_cb (WebKitDOMNode     *username_node,
+                     WebKitDOMEvent    *dom_event,
                      EphyEmbedFormAuth *form_auth)
 {
   pre_fill_form (form_auth);
@@ -481,7 +480,7 @@ user_chosen_cb (WebKitDOMNode  *li,
                 WebKitDOMNode  *username_node)
 {
   WebKitDOMElement *anchor;
-  const char* username;
+  const char *username;
 
   anchor = webkit_dom_element_get_first_element_child (WEBKIT_DOM_ELEMENT (li));
 
@@ -494,7 +493,7 @@ user_chosen_cb (WebKitDOMNode  *li,
 }
 
 GtkStyleContext *global_entry_context = NULL;
-static GtkStyleContext*
+static GtkStyleContext *
 get_entry_style_context (void)
 {
   GtkWidgetPath *path;
@@ -513,7 +512,7 @@ get_entry_style_context (void)
   return global_entry_context;
 }
 
-static char*
+static char *
 get_selected_bgcolor (void)
 {
   GdkRGBA color;
@@ -525,7 +524,7 @@ get_selected_bgcolor (void)
   return gdk_rgba_to_string (&color);
 }
 
-static char*
+static char *
 get_selected_fgcolor (void)
 {
   GdkRGBA color;
@@ -537,7 +536,7 @@ get_selected_fgcolor (void)
   return gdk_rgba_to_string (&color);
 }
 
-static char*
+static char *
 get_bgcolor (void)
 {
   GdkRGBA color;
@@ -549,7 +548,7 @@ get_bgcolor (void)
   return gdk_rgba_to_string (&color);
 }
 
-static char*
+static char *
 get_fgcolor (void)
 {
   GdkRGBA color;
@@ -561,7 +560,7 @@ get_fgcolor (void)
   return gdk_rgba_to_string (&color);
 }
 
-static char*
+static char *
 get_user_choice_style (gboolean selected)
 {
   char *style_attribute;
@@ -581,7 +580,7 @@ get_user_choice_style (gboolean selected)
   return style_attribute;
 }
 
-static char*
+static char *
 get_user_choice_anchor_style (gboolean selected)
 {
   char *style_attribute;
@@ -613,7 +612,7 @@ show_user_choices (WebKitDOMDocument *document,
   double x, y;
   double input_width;
   char *style_attribute;
-  char* username;
+  char *username;
 
   g_object_get (username_node,
                 "value", &username,
@@ -654,8 +653,8 @@ show_user_choices (WebKitDOMDocument *document,
                                     "padding: 0;",
                                     NULL);
 
-  auth_data_list = (GSList*)g_object_get_data (G_OBJECT (username_node),
-                                               "ephy-auth-data-list");
+  auth_data_list = (GSList *)g_object_get_data (G_OBJECT (username_node),
+                                                "ephy-auth-data-list");
 
   username_node_ever_edited =
     GPOINTER_TO_INT (g_object_get_data (G_OBJECT (username_node),
@@ -668,13 +667,13 @@ show_user_choices (WebKitDOMDocument *document,
     char *child_style;
     gboolean is_selected;
 
-    data = (EphyFormAuthData*)iter->data;
+    data = (EphyFormAuthData *)iter->data;
 
     /* Filter out the available names that do not match, but show all options in
      * case we have been triggered by something other than the user editing the
      * input.
      */
-    if (username_node_ever_edited && !g_str_has_prefix(data->username, username))
+    if (username_node_ever_edited && !g_str_has_prefix (data->username, username))
       continue;
 
     is_selected = !g_strcmp0 (username, data->username);
@@ -713,7 +712,7 @@ show_user_choices (WebKitDOMDocument *document,
                                       NULL);
   }
 
-  g_free  (username);
+  g_free (username);
   body = WEBKIT_DOM_NODE (webkit_dom_document_get_body (document));
   webkit_dom_node_append_child (WEBKIT_DOM_NODE (body),
                                 WEBKIT_DOM_NODE (main_div),
@@ -755,8 +754,8 @@ clear_password_field (WebKitDOMNode *username_node)
   EphyEmbedFormAuth *form_auth;
   WebKitDOMNode *password_node;
 
-  form_auth = (EphyEmbedFormAuth*)g_object_get_data (G_OBJECT (username_node),
-                                                     "ephy-form-auth");
+  form_auth = (EphyEmbedFormAuth *)g_object_get_data (G_OBJECT (username_node),
+                                                      "ephy-form-auth");
 
   password_node = ephy_embed_form_auth_get_password_node (form_auth);
   webkit_dom_html_input_element_set_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (password_node), "");
@@ -767,8 +766,8 @@ pre_fill_password (WebKitDOMNode *username_node)
 {
   EphyEmbedFormAuth *form_auth;
 
-  form_auth = (EphyEmbedFormAuth*)g_object_get_data (G_OBJECT (username_node),
-                                                     "ephy-form-auth");
+  form_auth = (EphyEmbedFormAuth *)g_object_get_data (G_OBJECT (username_node),
+                                                      "ephy-form-auth");
 
   pre_fill_form (form_auth);
 }
@@ -781,7 +780,7 @@ username_node_keydown_cb (WebKitDOMNode  *username_node,
   WebKitDOMDocument *document;
   WebKitDOMElement *main_div;
   WebKitDOMElement *container;
-  WebKitDOMElement *selected= NULL;
+  WebKitDOMElement *selected = NULL;
   WebKitDOMElement *to_select = NULL;
   WebKitDOMElement *anchor;
   WebKitDOMKeyboardEvent *keyboard_event;
@@ -883,7 +882,7 @@ username_node_input_cb (WebKitDOMNode  *username_node,
   WebKitDOMDocument *document;
   WebKitDOMElement *main_div;
 
-  g_object_set_data (G_OBJECT (username_node), "ephy-user-ever-edited", GINT_TO_POINTER(TRUE));
+  g_object_set_data (G_OBJECT (username_node), "ephy-user-ever-edited", GINT_TO_POINTER (TRUE));
   document = webkit_web_page_get_dom_document (web_page);
   remove_user_choices (document);
   show_user_choices (document, username_node);
@@ -905,7 +904,7 @@ form_destroyed_cb (gpointer form_auth, GObject *form)
 }
 
 static void
-web_page_document_loaded (WebKitWebPage *web_page,
+web_page_document_loaded (WebKitWebPage    *web_page,
                           EphyWebExtension *extension)
 {
   WebKitDOMHTMLCollection *forms = NULL;
@@ -923,7 +922,7 @@ web_page_document_loaded (WebKitWebPage *web_page,
 
   if (forms_n == 0) {
     LOG ("No forms found.");
-    g_object_unref(forms);
+    g_object_unref (forms);
     return;
   }
 
@@ -992,12 +991,12 @@ web_page_document_loaded (WebKitWebPage *web_page,
       LOG ("No pre-fillable/hookable form found");
   }
 
-  g_object_unref(forms);
+  g_object_unref (forms);
 }
 
 static void
-web_page_uri_changed (WebKitWebPage *web_page,
-                      GParamSpec *param_spec,
+web_page_uri_changed (WebKitWebPage    *web_page,
+                      GParamSpec       *param_spec,
                       EphyWebExtension *extension)
 {
   EphyWebOverview *overview = NULL;
@@ -1009,10 +1008,10 @@ web_page_uri_changed (WebKitWebPage *web_page,
 }
 
 static gboolean
-web_page_context_menu (WebKitWebPage *web_page,
-                       WebKitContextMenu *context_menu,
+web_page_context_menu (WebKitWebPage          *web_page,
+                       WebKitContextMenu      *context_menu,
                        WebKitWebHitTestResult *hit_test_result,
-                       gpointer user_data)
+                       gpointer                user_data)
 {
   char *string;
   GVariantBuilder builder;
@@ -1028,8 +1027,7 @@ web_page_context_menu (WebKitWebPage *web_page,
   string = ephy_web_dom_utils_get_selection_as_string (selection);
   g_object_unref (selection);
 
-  if (!string || *string == '\0')
-  {
+  if (!string || *string == '\0') {
     g_free (string);
     return FALSE;
   }
@@ -1046,7 +1044,7 @@ web_page_context_menu (WebKitWebPage *web_page,
 
 static void
 ephy_web_extension_emit_page_created (EphyWebExtension *extension,
-                                      guint64 page_id)
+                                      guint64           page_id)
 {
   GError *error = NULL;
 
@@ -1084,7 +1082,7 @@ ephy_web_extension_emit_page_created_signals_pending (EphyWebExtension *extensio
 
 static void
 ephy_web_extension_queue_page_created_signal_emission (EphyWebExtension *extension,
-                                                       guint64 page_id)
+                                                       guint64           page_id)
 {
   if (!extension->page_created_signals_pending)
     extension->page_created_signals_pending = g_array_new (FALSE, FALSE, sizeof (guint64));
@@ -1093,7 +1091,7 @@ ephy_web_extension_queue_page_created_signal_emission (EphyWebExtension *extensi
 
 static void
 ephy_web_extension_page_created_cb (EphyWebExtension *extension,
-                                    WebKitWebPage *web_page)
+                                    WebKitWebPage    *web_page)
 {
   guint64 page_id;
 
@@ -1119,8 +1117,8 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
 
 static WebKitWebPage *
 get_webkit_web_page_or_return_dbus_error (GDBusMethodInvocation *invocation,
-                                          WebKitWebExtension *web_extension,
-                                          guint64 page_id)
+                                          WebKitWebExtension    *web_extension,
+                                          guint64                page_id)
 {
   WebKitWebPage *web_page = webkit_web_extension_get_page (web_extension, page_id);
   if (!web_page) {
@@ -1131,14 +1129,14 @@ get_webkit_web_page_or_return_dbus_error (GDBusMethodInvocation *invocation,
 }
 
 static void
-handle_method_call (GDBusConnection *connection,
-                    const char *sender,
-                    const char *object_path,
-                    const char *interface_name,
-                    const char *method_name,
-                    GVariant *parameters,
+handle_method_call (GDBusConnection       *connection,
+                    const char            *sender,
+                    const char            *object_path,
+                    const char            *interface_name,
+                    const char            *method_name,
+                    GVariant              *parameters,
                     GDBusMethodInvocation *invocation,
-                    gpointer user_data)
+                    gpointer               user_data)
 {
   EphyWebExtension *extension = EPHY_WEB_EXTENSION (user_data);
 
@@ -1195,7 +1193,7 @@ handle_method_call (GDBusConnection *connection,
       return;
     }
 
-    document= webkit_web_page_get_dom_document (web_page);
+    document = webkit_web_page_get_dom_document (web_page);
     result = ephy_web_dom_utils_get_best_icon (document, base_uri, &uri, &color);
 
     g_dbus_method_invocation_return_value (invocation,
@@ -1298,9 +1296,9 @@ ephy_web_extension_dispose (GObject *object)
   }
 
   if (extension->page_created_signals_pending) {
-      g_array_free (extension->page_created_signals_pending, TRUE);
-      extension->page_created_signals_pending = NULL;
-   }
+    g_array_free (extension->page_created_signals_pending, TRUE);
+    extension->page_created_signals_pending = NULL;
+  }
 
   g_clear_object (&extension->cancellable);
   g_clear_object (&extension->dbus_connection);
@@ -1325,7 +1323,7 @@ ephy_web_extension_init (EphyWebExtension *extension)
 }
 
 static gpointer
-ephy_web_extension_create_instance(gpointer data)
+ephy_web_extension_create_instance (gpointer data)
 {
   return g_object_new (EPHY_TYPE_WEB_EXTENSION, NULL);
 }
@@ -1338,8 +1336,8 @@ ephy_web_extension_get (void)
 }
 
 static void
-dbus_connection_created_cb (GObject *source_object,
-                            GAsyncResult *result,
+dbus_connection_created_cb (GObject          *source_object,
+                            GAsyncResult     *result,
                             EphyWebExtension *extension)
 {
   static GDBusNodeInfo *introspection_data = NULL;
@@ -1378,19 +1376,19 @@ dbus_connection_created_cb (GObject *source_object,
 
 static gboolean
 authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
-                                 GIOStream *stream,
-                                 GCredentials *credentials,
-                                 EphyWebExtension *extension)
+                                 GIOStream         *stream,
+                                 GCredentials      *credentials,
+                                 EphyWebExtension  *extension)
 {
   return ephy_dbus_peer_is_authorized (credentials);
 }
 
 void
-ephy_web_extension_initialize (EphyWebExtension *extension,
+ephy_web_extension_initialize (EphyWebExtension   *extension,
                                WebKitWebExtension *wk_extension,
-                               const char *server_address,
-                               const char *dot_dir,
-                               gboolean is_private_profile)
+                               const char         *server_address,
+                               const char         *dot_dir,
+                               gboolean            is_private_profile)
 {
   GDBusAuthObserver *observer;
 

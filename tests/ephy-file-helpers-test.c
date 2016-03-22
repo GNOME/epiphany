@@ -190,7 +190,7 @@ test_ephy_file_create_delete_dir (void)
 
     g_assert (ephy_file_delete_dir_recursively (test.dir, &error) == test.can_delete);
     if (error)
-            g_error_free (error);
+      g_error_free (error);
 
     if (test.exists)
       g_assert (g_file_test (test.dir, G_FILE_TEST_EXISTS) != test.can_delete);

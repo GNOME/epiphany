@@ -29,12 +29,12 @@ ephy_history_service_initialize_visits_table (EphyHistoryService *self)
     return TRUE;
 
   ephy_sqlite_connection_execute (self->history_database,
-    "CREATE TABLE visits ("
-    "id INTEGER PRIMARY KEY,"
-    "url INTEGER NOT NULL REFERENCES urls(id) ON DELETE CASCADE,"
-    "visit_time INTEGER NOT NULL,"
-    "visit_type INTEGER NOT NULL,"
-    "referring_visit INTEGER)", &error);
+                                  "CREATE TABLE visits ("
+                                  "id INTEGER PRIMARY KEY,"
+                                  "url INTEGER NOT NULL REFERENCES urls(id) ON DELETE CASCADE,"
+                                  "visit_time INTEGER NOT NULL,"
+                                  "visit_type INTEGER NOT NULL,"
+                                  "referring_visit INTEGER)", &error);
 
   if (error) {
     g_warning ("Could not create visits table: %s", error->message);
@@ -66,7 +66,7 @@ ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVis
 
   if (ephy_sqlite_statement_bind_int (statement, 0, visit->url->id, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 1, visit->visit_time, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 2, visit->visit_type, &error) == FALSE ) {
+      ephy_sqlite_statement_bind_int (statement, 2, visit->visit_type, &error) == FALSE) {
     g_warning ("Could not build visits table addition statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
@@ -88,7 +88,7 @@ ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVis
 static EphyHistoryPageVisit *
 create_page_visit_from_statement (EphySQLiteStatement *statement)
 {
-  EphyHistoryPageVisit *visit = 
+  EphyHistoryPageVisit *visit =
     ephy_history_page_visit_new (NULL,
                                  ephy_sqlite_statement_get_column_as_int (statement, 1),
                                  ephy_sqlite_statement_get_column_as_int (statement, 2));
@@ -105,16 +105,16 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   GList *visits = NULL;
   GError *error = NULL;
   const char *base_statement = ""
-    "SELECT "
-      "visits.url, "
-      "visits.visit_time, "
-      "visits.visit_type ";
+                               "SELECT "
+                               "visits.url, "
+                               "visits.visit_time, "
+                               "visits.visit_type ";
   const char *from_join_statement = ""
-    "FROM "
-      "visits JOIN urls ON visits.url = urls.id ";
+                                    "FROM "
+                                    "visits JOIN urls ON visits.url = urls.id ";
   const char *from_visits_statement = ""
-    "FROM "
-      "visits ";
+                                      "FROM "
+                                      "visits ";
 
   int i = 0;
 
@@ -145,7 +145,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   statement_str = g_string_append (statement_str, "1");
 
   statement = ephy_sqlite_connection_create_statement (self->history_database,
-						       statement_str->str, &error);
+                                                       statement_str->str, &error);
   g_string_free (statement_str, TRUE);
 
   if (error) {

@@ -54,13 +54,13 @@ test_ephy_shell_basic_embeds (void)
 
   /* Embed should be created. */
   embed1 = ephy_shell_new_tab_full
-                  (ephy_shell,
-                   NULL, /* title */
-                   NULL, /* related view */
-                   window,
-                   NULL, /* embed */
-                   EPHY_NEW_TAB_DONT_SHOW_WINDOW, /* flags */
-                   gtk_get_current_event_time ());
+             (ephy_shell,
+             NULL,       /* title */
+             NULL,       /* related view */
+             window,
+             NULL,       /* embed */
+             EPHY_NEW_TAB_DONT_SHOW_WINDOW,       /* flags */
+             gtk_get_current_event_time ());
   g_assert (EPHY_IS_EMBED (embed1));
 
   g_assert (gtk_widget_get_toplevel (GTK_WIDGET (embed1)) == GTK_WIDGET (window));
@@ -71,13 +71,13 @@ test_ephy_shell_basic_embeds (void)
 
   /* Another embed should be created */
   embed2 = ephy_shell_new_tab_full
-                  (ephy_shell,
-                   NULL, /* title */
-                   NULL, /* related view */
-                   window, /* window */
-                   NULL, /* embed */
-                   EPHY_NEW_TAB_DONT_SHOW_WINDOW, /* flags */
-                   gtk_get_current_event_time ());
+             (ephy_shell,
+             NULL,       /* title */
+             NULL,       /* related view */
+             window,       /* window */
+             NULL,       /* embed */
+             EPHY_NEW_TAB_DONT_SHOW_WINDOW,       /* flags */
+             gtk_get_current_event_time ());
   g_assert (EPHY_IS_EMBED (embed2));
 
   /* A second children should exist now. */
@@ -101,8 +101,8 @@ test_ephy_shell_parent_windows (void)
 
   /* parent-window provided */
   embed = ephy_shell_new_tab
-                  (ephy_shell, EPHY_WINDOW (window), NULL,
-                   EPHY_NEW_TAB_DONT_SHOW_WINDOW);
+            (ephy_shell, EPHY_WINDOW (window), NULL,
+            EPHY_NEW_TAB_DONT_SHOW_WINDOW);
 
   g_assert (EPHY_IS_EMBED (embed));
   g_assert (gtk_widget_get_toplevel (GTK_WIDGET (embed)) == window);
@@ -112,8 +112,8 @@ test_ephy_shell_parent_windows (void)
   /* Another new-window */
   window2 = GTK_WIDGET (ephy_window_new ());
   embed = ephy_shell_new_tab
-                  (ephy_shell, EPHY_WINDOW (window2), NULL,
-                   EPHY_NEW_TAB_DONT_SHOW_WINDOW);
+            (ephy_shell, EPHY_WINDOW (window2), NULL,
+            EPHY_NEW_TAB_DONT_SHOW_WINDOW);
 
   /* The parent window should be a completely new one. */
   g_assert (EPHY_IS_EMBED (embed));
@@ -140,8 +140,8 @@ test_ephy_shell_tab_load (void)
 
   /* homepage is "about:blank" for now, see embed/ephy-web-view.c */
   embed = ephy_shell_new_tab
-                  (ephy_shell, EPHY_WINDOW (window), NULL,
-                   EPHY_NEW_TAB_DONT_SHOW_WINDOW);
+            (ephy_shell, EPHY_WINDOW (window), NULL,
+            EPHY_NEW_TAB_DONT_SHOW_WINDOW);
   ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
 
   g_assert (EPHY_IS_EMBED (embed));
@@ -159,8 +159,8 @@ test_ephy_shell_tab_load (void)
 
   /* open-page "about:epiphany" for testing. */
   embed = ephy_shell_new_tab
-                  (ephy_shell, EPHY_WINDOW (window), NULL,
-                   EPHY_NEW_TAB_DONT_SHOW_WINDOW);
+            (ephy_shell, EPHY_WINDOW (window), NULL,
+            EPHY_NEW_TAB_DONT_SHOW_WINDOW);
   ephy_web_view_load_url (ephy_embed_get_web_view (embed), "about:epiphany");
 
   g_assert (EPHY_IS_EMBED (embed));
@@ -248,7 +248,7 @@ test_ephy_shell_tab_from_external (void)
   loop = ephy_test_utils_setup_ensure_web_views_are_loaded ();
 
   embed = ephy_shell_new_tab (ephy_shell, NULL, NULL, "about:epiphany",
-                               EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_OPEN_PAGE);
+                              EPHY_NEW_TAB_DONT_SHOW_WINDOW | EPHY_NEW_TAB_OPEN_PAGE);
   window = gtk_widget_get_toplevel (GTK_WIDGET (embed));
   notebook = ephy_window_get_notebook (EPHY_WINDOW (window));
 
@@ -289,7 +289,7 @@ test_ephy_shell_tab_from_external (void)
   /* This should work */
   ephy_test_utils_check_ephy_embed_address (embed2, "ephy-about:overview");
   g_assert_cmpint (gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook)), ==, 1);
-  
+
   loop = ephy_test_utils_setup_wait_until_load_is_committed (ephy_embed_get_web_view (embed2));
 
   embed5 = ephy_shell_new_tab (ephy_shell, EPHY_WINDOW (window), NULL, "about:applications",

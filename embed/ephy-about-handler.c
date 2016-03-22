@@ -34,8 +34,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-struct _EphyAboutHandler
-{
+struct _EphyAboutHandler {
   GObject parent_instance;
 
   EphySMaps *smaps;
@@ -79,8 +78,8 @@ ephy_about_handler_get_smaps (EphyAboutHandler *handler)
 
 static void
 ephy_about_handler_finish_request (WebKitURISchemeRequest *request,
-                                   gchar *data,
-                                   gssize data_length)
+                                   gchar                  *data,
+                                   gssize                  data_length)
 {
   GInputStream *stream;
 
@@ -96,7 +95,7 @@ typedef struct {
 } EphyAboutRequest;
 
 static EphyAboutRequest *
-ephy_about_request_new (EphyAboutHandler *handler,
+ephy_about_request_new (EphyAboutHandler       *handler,
                         WebKitURISchemeRequest *request)
 {
   EphyAboutRequest *about_request;
@@ -119,7 +118,7 @@ ephy_about_request_free (EphyAboutRequest *about_request)
 
 static void
 get_plugins_cb (WebKitWebContext *web_context,
-                GAsyncResult *result,
+                GAsyncResult     *result,
                 EphyAboutRequest *about_request)
 {
   GString *data_str;
@@ -132,7 +131,7 @@ get_plugins_cb (WebKitWebContext *web_context,
   data_str = g_string_new ("<html>");
   g_string_append_printf (data_str, "<head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                           "</head><body>",
                           _("Installed plugins"));
   g_string_append_printf (data_str, "<h1>%s</h1>", _("Plugins"));
@@ -157,7 +156,7 @@ get_plugins_cb (WebKitWebContext *web_context,
     mime_types = webkit_plugin_get_mime_info_list (plugin);
 
     for (m = mime_types; m; m = m->next) {
-      WebKitMimeInfo *mime_info = (WebKitMimeInfo *) m->data;
+      WebKitMimeInfo *mime_info = (WebKitMimeInfo *)m->data;
       const gchar * const *extensions;
       guint i;
 
@@ -185,7 +184,7 @@ get_plugins_cb (WebKitWebContext *web_context,
 }
 
 static gboolean
-ephy_about_handler_handle_plugins (EphyAboutHandler *handler,
+ephy_about_handler_handle_plugins (EphyAboutHandler       *handler,
                                    WebKitURISchemeRequest *request)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
@@ -199,8 +198,8 @@ ephy_about_handler_handle_plugins (EphyAboutHandler *handler,
 }
 
 static void
-handle_memory_finished_cb (EphyAboutHandler *handler,
-                           GAsyncResult *result,
+handle_memory_finished_cb (EphyAboutHandler       *handler,
+                           GAsyncResult           *result,
                            WebKitURISchemeRequest *request)
 {
   GString *data_str;
@@ -213,7 +212,7 @@ handle_memory_finished_cb (EphyAboutHandler *handler,
   if (memory) {
     g_string_append_printf (data_str, "<head><title>%s</title>"
                             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                            "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                            "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                             "</head><body>",
                             _("Memory usage"));
 
@@ -230,9 +229,9 @@ handle_memory_finished_cb (EphyAboutHandler *handler,
 }
 
 static void
-handle_memory_sync (GTask *task,
-                    gpointer source_object,
-                    gpointer task_data,
+handle_memory_sync (GTask        *task,
+                    gpointer      source_object,
+                    gpointer      task_data,
                     GCancellable *cancellable)
 {
   EphyAboutHandler *handler = EPHY_ABOUT_HANDLER (source_object);
@@ -243,7 +242,7 @@ handle_memory_sync (GTask *task,
 }
 
 static gboolean
-ephy_about_handler_handle_memory (EphyAboutHandler *handler,
+ephy_about_handler_handle_memory (EphyAboutHandler       *handler,
                                   WebKitURISchemeRequest *request)
 {
   GTask *task;
@@ -258,7 +257,7 @@ ephy_about_handler_handle_memory (EphyAboutHandler *handler,
 }
 
 static gboolean
-ephy_about_handler_handle_about (EphyAboutHandler *handler,
+ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                                  WebKitURISchemeRequest *request)
 {
   char *data;
@@ -274,7 +273,7 @@ ephy_about_handler_handle_about (EphyAboutHandler *handler,
 
   data = g_strdup_printf ("<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                           "</head><body>"
                           "<div class=\"dialog\">"
                           "<img src=\"file://%s\"/>"
@@ -301,14 +300,14 @@ ephy_about_handler_handle_about (EphyAboutHandler *handler,
 }
 
 static gboolean
-ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
+ephy_about_handler_handle_epiphany (EphyAboutHandler       *handler,
                                     WebKitURISchemeRequest *request)
 {
   char *data;
 
   data = g_strdup_printf ("<html class=\"epiphany-html\"><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                           "</head><body class=\"epiphany-body\">"
                           "<div id=\"ephytext\">"
                           "“Il semble que la perfection soit atteinte non quand il n'y a plus rien à"
@@ -326,8 +325,8 @@ ephy_about_handler_handle_epiphany (EphyAboutHandler *handler,
 }
 
 static void
-handle_applications_finished_cb (EphyAboutHandler *handler,
-                                 GAsyncResult *result,
+handle_applications_finished_cb (EphyAboutHandler       *handler,
+                                 GAsyncResult           *result,
                                  WebKitURISchemeRequest *request)
 {
   GString *data_str;
@@ -337,7 +336,7 @@ handle_applications_finished_cb (EphyAboutHandler *handler,
   data_str = g_string_new (NULL);
   g_string_append_printf (data_str, "<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
                           "<script>"
                           "  function deleteWebApp(appID) {"
                           "    window.webkit.messageHandlers.aboutApps.postMessage(appID);"
@@ -355,7 +354,7 @@ handle_applications_finished_cb (EphyAboutHandler *handler,
 
   applications = g_task_propagate_pointer (G_TASK (result), NULL);
   for (p = applications; p; p = p->next) {
-    EphyWebApplication *app = (EphyWebApplication*)p->data;
+    EphyWebApplication *app = (EphyWebApplication *)p->data;
 
     g_string_append_printf (data_str,
                             "<tbody><tr id =\"%s\">"
@@ -378,9 +377,9 @@ handle_applications_finished_cb (EphyAboutHandler *handler,
 }
 
 static void
-handle_applications_sync (GTask *task,
-                          gpointer source_object,
-                          gpointer task_data,
+handle_applications_sync (GTask        *task,
+                          gpointer      source_object,
+                          gpointer      task_data,
                           GCancellable *cancellable)
 {
   g_task_return_pointer (task,
@@ -389,7 +388,7 @@ handle_applications_sync (GTask *task,
 }
 
 static gboolean
-ephy_about_handler_handle_applications (EphyAboutHandler *handler,
+ephy_about_handler_handle_applications (EphyAboutHandler       *handler,
                                         WebKitURISchemeRequest *request)
 {
   GTask *task;
@@ -409,8 +408,8 @@ typedef struct {
 } GetSnapshotPathAsyncData;
 
 static void
-got_snapshot_path_for_url_cb (EphySnapshotService *service,
-                              GAsyncResult *result,
+got_snapshot_path_for_url_cb (EphySnapshotService      *service,
+                              GAsyncResult             *result,
                               GetSnapshotPathAsyncData *data)
 {
   char *snapshot;
@@ -430,9 +429,9 @@ got_snapshot_path_for_url_cb (EphySnapshotService *service,
 }
 
 static void
-history_service_query_urls_cb (EphyHistoryService *history,
-                               gboolean success,
-                               GList *urls,
+history_service_query_urls_cb (EphyHistoryService     *history,
+                               gboolean                success,
+                               GList                  *urls,
                                WebKitURISchemeRequest *request)
 {
   EphySnapshotService *snapshot_service = ephy_snapshot_service_get_default ();
@@ -451,7 +450,7 @@ history_service_query_urls_cb (EphyHistoryService *history,
                           "<head>\n"
                           "  <title>%s</title>\n"
                           "  <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n"
-                          "  <link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">\n"
+                          "  <link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">\n"
                           "  <script>\n"
                           "    document.onkeypress = function listenKeypress(event) {\n"
                           "      // Remove from overview when Del is pressed\n"
@@ -499,9 +498,9 @@ history_service_query_urls_cb (EphyHistoryService *history,
   }
 
   g_string_append (data_str,
-             "<div id=\"overview\">\n"
-             "  <div id=\"overview-grid\">\n"
-             "    <ul id=\"overview-item-list\">\n");
+                   "<div id=\"overview\">\n"
+                   "  <div id=\"overview-grid\">\n"
+                   "    <ul id=\"overview-item-list\">\n");
 
   for (l = urls; l; l = g_list_next (l)) {
     EphyHistoryURL *url = (EphyHistoryURL *)l->data;
@@ -541,14 +540,14 @@ history_service_query_urls_cb (EphyHistoryService *history,
                               "  </div>\n"
                               "</body></html>\n");
 
-out:
+ out:
   data_length = data_str->len;
   ephy_about_handler_finish_request (request, g_string_free (data_str, FALSE), data_length);
   g_object_unref (request);
 }
 
 static gboolean
-ephy_about_handler_handle_html_overview (EphyAboutHandler *handler,
+ephy_about_handler_handle_html_overview (EphyAboutHandler       *handler,
                                          WebKitURISchemeRequest *request)
 {
   EphyHistoryService *history;
@@ -569,7 +568,7 @@ ephy_about_handler_handle_html_overview (EphyAboutHandler *handler,
 }
 
 static gboolean
-ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
+ephy_about_handler_handle_incognito (EphyAboutHandler       *handler,
                                      WebKitURISchemeRequest *request)
 {
   char *data;
@@ -582,7 +581,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
                           "<head>\n"
                           "<title>%s</title>\n"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS"\" rel=\"stylesheet\" type=\"text/css\">\n"
+                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">\n"
                           "</head>\n"
                           "<body class=\"incognito-body\">\n"
                           "  <div id=\"mainblock\">\n"
@@ -604,7 +603,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
                             "download will be kept."),
                           _("Incognito mode hides your activity only from people using this "
                             "computer."),
-                         _("It will not hide your activity from your employer if you are at "
+                          _("It will not hide your activity from your employer if you are at "
                             "work. Your internet service provider, your government, other "
                             "governments, the websites that you visit, and advertisers on "
                             "these websites may still be tracking you."));
@@ -615,7 +614,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler *handler,
 }
 
 static void
-ephy_about_handler_handle_blank (EphyAboutHandler *handler,
+ephy_about_handler_handle_blank (EphyAboutHandler       *handler,
                                  WebKitURISchemeRequest *request)
 {
   ephy_about_handler_finish_request (request, g_strdup ("<html></html>"), -1);
@@ -628,11 +627,11 @@ ephy_about_handler_new (void)
 }
 
 void
-ephy_about_handler_handle_request (EphyAboutHandler *handler,
+ephy_about_handler_handle_request (EphyAboutHandler       *handler,
                                    WebKitURISchemeRequest *request)
 {
   const char *path;
-  gboolean    handled = FALSE;
+  gboolean handled = FALSE;
 
   path = webkit_uri_scheme_request_get_path (request);
 
@@ -641,7 +640,7 @@ ephy_about_handler_handle_request (EphyAboutHandler *handler,
   else if (!g_strcmp0 (path, "memory"))
     handled = ephy_about_handler_handle_memory (handler, request);
   else if (!g_strcmp0 (path, "epiphany"))
-    handled =  ephy_about_handler_handle_epiphany (handler, request);
+    handled = ephy_about_handler_handle_epiphany (handler, request);
   else if (!g_strcmp0 (path, "applications"))
     handled = ephy_about_handler_handle_applications (handler, request);
   else if (!g_strcmp0 (path, "overview"))

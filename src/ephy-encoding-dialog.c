@@ -34,39 +34,37 @@
 #include <gtk/gtk.h>
 #include <webkit2/webkit2.h>
 
-struct _EphyEncodingDialog
-{
-	GtkDialog parent_instance;
+struct _EphyEncodingDialog {
+  GtkDialog parent_instance;
 
-	EphyEncodings *encodings;
-	EphyWindow *window;
-	EphyEmbed *embed;
-	GtkWidget *enc_view;
-	gboolean update_embed_tag;
-	gboolean update_view_tag;
-	const char *selected_encoding;
+  EphyEncodings *encodings;
+  EphyWindow *window;
+  EphyEmbed *embed;
+  GtkWidget *enc_view;
+  gboolean update_embed_tag;
+  gboolean update_view_tag;
+  const char *selected_encoding;
 
-	/* from the UI file */
-	GtkStack *type_stack;
-	GtkSwitch *default_switch;
-	GtkListBox *list_box;
-	GtkListBox *recent_list_box;
-	GtkListBox *related_list_box;
-	GtkGrid *recent_grid;
-	GtkGrid *related_grid;
+  /* from the UI file */
+  GtkStack *type_stack;
+  GtkSwitch *default_switch;
+  GtkListBox *list_box;
+  GtkListBox *recent_list_box;
+  GtkListBox *related_list_box;
+  GtkGrid *recent_grid;
+  GtkGrid *related_grid;
 };
 
 enum {
-	COL_TITLE_ELIDED,
-	COL_ENCODING,
-	NUM_COLS
+  COL_TITLE_ELIDED,
+  COL_ENCODING,
+  NUM_COLS
 };
 
-enum
-{
-	PROP_0,
-	PROP_PARENT_WINDOW,
-	LAST_PROP
+enum {
+  PROP_0,
+  PROP_PARENT_WINDOW,
+  LAST_PROP
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
@@ -77,177 +75,171 @@ static void
 select_encoding_row (GtkListBox   *list_box,
                      EphyEncoding *encoding)
 {
-	const char *target_encoding;
-	GList *rows, *r;
+  const char *target_encoding;
+  GList *rows, *r;
 
-	target_encoding = ephy_encoding_get_encoding (encoding);
-	rows = gtk_container_get_children (GTK_CONTAINER (list_box));
+  target_encoding = ephy_encoding_get_encoding (encoding);
+  rows = gtk_container_get_children (GTK_CONTAINER (list_box));
 
-	for (r = rows; r != NULL; r = r->next)
-	{
-		EphyEncodingRow *ephy_encoding_row;
-		EphyEncoding *ephy_encoding;
-		const char *encoding_string = NULL;
+  for (r = rows; r != NULL; r = r->next) {
+    EphyEncodingRow *ephy_encoding_row;
+    EphyEncoding *ephy_encoding;
+    const char *encoding_string = NULL;
 
-		ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (r->data)));
-		ephy_encoding = ephy_encoding_row_get_encoding (ephy_encoding_row);
-		encoding_string = ephy_encoding_get_encoding (ephy_encoding);
+    ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (r->data)));
+    ephy_encoding = ephy_encoding_row_get_encoding (ephy_encoding_row);
+    encoding_string = ephy_encoding_get_encoding (ephy_encoding);
 
-		if (g_strcmp0 (encoding_string, target_encoding) == 0)
-		{
-			ephy_encoding_row_set_selected (ephy_encoding_row, TRUE);
+    if (g_strcmp0 (encoding_string, target_encoding) == 0) {
+      ephy_encoding_row_set_selected (ephy_encoding_row, TRUE);
 
-			gtk_list_box_select_row (list_box, GTK_LIST_BOX_ROW (r->data));
-			/* TODO scroll to row */
+      gtk_list_box_select_row (list_box, GTK_LIST_BOX_ROW (r->data));
+      /* TODO scroll to row */
 
-			break;
-		}
-	}
-	g_list_free (rows);
+      break;
+    }
+  }
+  g_list_free (rows);
 }
 
 static void
 sync_encoding_against_embed (EphyEncodingDialog *dialog)
 {
-	const char *encoding;
-	gboolean is_automatic = FALSE;
-	WebKitWebView *view;
+  const char *encoding;
+  gboolean is_automatic = FALSE;
+  WebKitWebView *view;
 
-	dialog->update_embed_tag = TRUE;
+  dialog->update_embed_tag = TRUE;
 
-	g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
-	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
+  g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
+  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
-	encoding = webkit_web_view_get_custom_charset (view);
-	is_automatic = encoding == NULL;
+  encoding = webkit_web_view_get_custom_charset (view);
+  is_automatic = encoding == NULL;
 
-	if (!is_automatic)
-	{
-		EphyEncoding *node;
+  if (!is_automatic) {
+    EphyEncoding *node;
 
-		node = ephy_encodings_get_encoding (dialog->encodings, encoding, TRUE);
-		g_assert (EPHY_IS_ENCODING (node));
+    node = ephy_encodings_get_encoding (dialog->encodings, encoding, TRUE);
+    g_assert (EPHY_IS_ENCODING (node));
 
-		/* Select the current encoding in the lists. */
-		select_encoding_row (dialog->list_box, node);
-		select_encoding_row (dialog->recent_list_box, node);
-		select_encoding_row (dialog->related_list_box, node);
+    /* Select the current encoding in the lists. */
+    select_encoding_row (dialog->list_box, node);
+    select_encoding_row (dialog->recent_list_box, node);
+    select_encoding_row (dialog->related_list_box, node);
 
-		/* TODO scroll the view so the active encoding is visible */
-	}
-	gtk_switch_set_active (dialog->default_switch, is_automatic);
-	gtk_switch_set_state (dialog->default_switch, is_automatic);
-	gtk_widget_set_sensitive (GTK_WIDGET (dialog->type_stack), !is_automatic);
+    /* TODO scroll the view so the active encoding is visible */
+  }
+  gtk_switch_set_active (dialog->default_switch, is_automatic);
+  gtk_switch_set_state (dialog->default_switch, is_automatic);
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog->type_stack), !is_automatic);
 
-	dialog->update_embed_tag = FALSE;
+  dialog->update_embed_tag = FALSE;
 }
 
 static void
-embed_net_stop_cb (EphyWebView *view,
-		   WebKitLoadEvent load_event,
-		   EphyEncodingDialog *dialog)
+embed_net_stop_cb (EphyWebView        *view,
+                   WebKitLoadEvent     load_event,
+                   EphyEncodingDialog *dialog)
 {
-	if (ephy_web_view_is_loading (view) == FALSE)
-		sync_encoding_against_embed (dialog);
+  if (ephy_web_view_is_loading (view) == FALSE)
+    sync_encoding_against_embed (dialog);
 }
 
 static void
 ephy_encoding_dialog_detach_embed (EphyEncodingDialog *dialog)
 {
-	EphyEmbed **embedptr;
+  EphyEmbed **embedptr;
 
-	g_signal_handlers_disconnect_by_func (ephy_embed_get_web_view (dialog->embed),
-	                                      G_CALLBACK (embed_net_stop_cb),
-	                                      dialog);
+  g_signal_handlers_disconnect_by_func (ephy_embed_get_web_view (dialog->embed),
+                                        G_CALLBACK (embed_net_stop_cb),
+                                        dialog);
 
-	embedptr = &dialog->embed;
-	g_object_remove_weak_pointer (G_OBJECT (dialog->embed),
-	                              (gpointer *) embedptr);
-	dialog->embed = NULL;
+  embedptr = &dialog->embed;
+  g_object_remove_weak_pointer (G_OBJECT (dialog->embed),
+                                (gpointer *)embedptr);
+  dialog->embed = NULL;
 }
 
 static void
 ephy_encoding_dialog_attach_embed (EphyEncodingDialog *dialog)
 {
-	EphyEmbed *embed;
-	EphyEmbed **embedptr;
+  EphyEmbed *embed;
+  EphyEmbed **embedptr;
 
-	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (dialog->window));
-	g_return_if_fail (EPHY_IS_EMBED (embed));
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (dialog->window));
+  g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	g_signal_connect (G_OBJECT (ephy_embed_get_web_view (embed)), "load-changed",
-			  G_CALLBACK (embed_net_stop_cb), dialog);
+  g_signal_connect (G_OBJECT (ephy_embed_get_web_view (embed)), "load-changed",
+                    G_CALLBACK (embed_net_stop_cb), dialog);
 
-	dialog->embed = embed;
+  dialog->embed = embed;
 
-	embedptr = &dialog->embed;
-	g_object_add_weak_pointer (G_OBJECT (dialog->embed),
-	                           (gpointer *) embedptr);
+  embedptr = &dialog->embed;
+  g_object_add_weak_pointer (G_OBJECT (dialog->embed),
+                             (gpointer *)embedptr);
 }
 
 static void
 ephy_encoding_dialog_sync_embed (EphyWindow *window, GParamSpec *pspec, EphyEncodingDialog *dialog)
 {
-	ephy_encoding_dialog_detach_embed (dialog);
-	ephy_encoding_dialog_attach_embed (dialog);
-	sync_encoding_against_embed (dialog);
+  ephy_encoding_dialog_detach_embed (dialog);
+  ephy_encoding_dialog_attach_embed (dialog);
+  sync_encoding_against_embed (dialog);
 }
 
 static void
 activate_choice (EphyEncodingDialog *dialog)
 {
-	WebKitWebView *view;
+  WebKitWebView *view;
 
-	g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
-	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
+  g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
+  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
-	if (gtk_switch_get_active (dialog->default_switch))
-	{
-		webkit_web_view_set_custom_charset (view, NULL);
-	}
-	else if (dialog->selected_encoding != NULL)
-	{
-		const char *code;
+  if (gtk_switch_get_active (dialog->default_switch)) {
+    webkit_web_view_set_custom_charset (view, NULL);
+  } else if (dialog->selected_encoding != NULL) {
+    const char *code;
 
-		code = dialog->selected_encoding;
+    code = dialog->selected_encoding;
 
-		webkit_web_view_set_custom_charset (view, code);
+    webkit_web_view_set_custom_charset (view, code);
 
-		ephy_encodings_add_recent (dialog->encodings, code);
-	}
+    ephy_encodings_add_recent (dialog->encodings, code);
+  }
 }
 
 static void
-ephy_encoding_dialog_response_cb (GtkWidget *widget,
-				  int response,
-				  EphyEncodingDialog *dialog)
+ephy_encoding_dialog_response_cb (GtkWidget          *widget,
+                                  int                 response,
+                                  EphyEncodingDialog *dialog)
 {
-	gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
 clean_selected_row (gpointer row, gpointer null_pointer)
 {
-	EphyEncodingRow *ephy_encoding_row;
-	ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (row)));
-	ephy_encoding_row_set_selected (ephy_encoding_row, FALSE);
+  EphyEncodingRow *ephy_encoding_row;
+  ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (row)));
+  ephy_encoding_row_set_selected (ephy_encoding_row, FALSE);
 }
 
 static void
 clean_selected_list_box (GtkListBox *list_box)
 {
-	GList *rows;
-	rows = gtk_container_get_children (GTK_CONTAINER (list_box));
-	g_list_foreach (rows, (GFunc)clean_selected_row, NULL);
-	g_list_free (rows);
+  GList *rows;
+  rows = gtk_container_get_children (GTK_CONTAINER (list_box));
+  g_list_foreach (rows, (GFunc)clean_selected_row, NULL);
+  g_list_free (rows);
 }
 
 static void
 clean_selected (EphyEncodingDialog *dialog)
 {
-	clean_selected_list_box (dialog->list_box);
-	clean_selected_list_box (dialog->recent_list_box);
-	clean_selected_list_box (dialog->related_list_box);
+  clean_selected_list_box (dialog->list_box);
+  clean_selected_list_box (dialog->recent_list_box);
+  clean_selected_list_box (dialog->related_list_box);
 }
 
 static void
@@ -255,27 +247,27 @@ row_activated_cb (GtkListBox         *box,
                   GtkListBoxRow      *row,
                   EphyEncodingDialog *dialog)
 {
-	EphyEncodingRow *ephy_encoding_row;
-	EphyEncoding *ephy_encoding;
-	const char *selected_encoding;
+  EphyEncodingRow *ephy_encoding_row;
+  EphyEncoding *ephy_encoding;
+  const char *selected_encoding;
 
-	if (dialog->update_embed_tag || dialog->update_view_tag)
-		return;
+  if (dialog->update_embed_tag || dialog->update_view_tag)
+    return;
 
-	dialog->update_view_tag = TRUE;
+  dialog->update_view_tag = TRUE;
 
-	ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (row)));
-	ephy_encoding = ephy_encoding_row_get_encoding (ephy_encoding_row);
-	selected_encoding = ephy_encoding_get_encoding (ephy_encoding);
+  ephy_encoding_row = EPHY_ENCODING_ROW (gtk_bin_get_child (GTK_BIN (row)));
+  ephy_encoding = ephy_encoding_row_get_encoding (ephy_encoding_row);
+  selected_encoding = ephy_encoding_get_encoding (ephy_encoding);
 
-	dialog->selected_encoding = selected_encoding;
+  dialog->selected_encoding = selected_encoding;
 
-	clean_selected (dialog);
-	ephy_encoding_row_set_selected (ephy_encoding_row, TRUE);
+  clean_selected (dialog);
+  ephy_encoding_row_set_selected (ephy_encoding_row, TRUE);
 
-	activate_choice (dialog);
+  activate_choice (dialog);
 
-	dialog->update_view_tag = FALSE;
+  dialog->update_view_tag = FALSE;
 }
 
 static gboolean
@@ -283,180 +275,173 @@ default_switch_toggled_cb (GtkSwitch          *default_switch,
                            gboolean            state,
                            EphyEncodingDialog *dialog)
 {
-	if (dialog->update_embed_tag || dialog->update_view_tag)
-	{
-		gtk_switch_set_state (default_switch, !state);	// cancel switch change
-		return TRUE;
-	}
+  if (dialog->update_embed_tag || dialog->update_view_tag) {
+    gtk_switch_set_state (default_switch, !state);              /* cancel switch change */
+    return TRUE;
+  }
 
-	dialog->update_view_tag = TRUE;
+  dialog->update_view_tag = TRUE;
 
-	gtk_switch_set_active (default_switch, state);
-	gtk_switch_set_state (default_switch, state);
+  gtk_switch_set_active (default_switch, state);
+  gtk_switch_set_state (default_switch, state);
 
-	// TODO if state == false && selected_encoding == NULL, select safe default in list, or find another solution
-	if (state)
-		clean_selected (dialog);
-	activate_choice (dialog);
+  /* TODO if state == false && selected_encoding == NULL, select safe default in list, or find another solution */
+  if (state)
+    clean_selected (dialog);
+  activate_choice (dialog);
 
-	dialog->update_view_tag = FALSE;
+  dialog->update_view_tag = FALSE;
 
-	return TRUE;
+  return TRUE;
 }
 
 static void
 show_all_button_clicked_cb (GtkButton          *show_all_button,
                             EphyEncodingDialog *dialog)
 {
-	gtk_stack_set_visible_child_name (dialog->type_stack, "scrolled-window");
+  gtk_stack_set_visible_child_name (dialog->type_stack, "scrolled-window");
 }
 
 static gint
 sort_list_store (gconstpointer a,
                  gconstpointer b,
-                 gpointer user_data)
+                 gpointer      user_data)
 {
-	const char *encoding1 = ephy_encoding_get_title_elided ((EphyEncoding *)a);
-	const char *encoding2 = ephy_encoding_get_title_elided ((EphyEncoding *)b);
+  const char *encoding1 = ephy_encoding_get_title_elided ((EphyEncoding *)a);
+  const char *encoding2 = ephy_encoding_get_title_elided ((EphyEncoding *)b);
 
-	return g_strcmp0 (encoding1, encoding2);
+  return g_strcmp0 (encoding1, encoding2);
 }
 
 static GtkWidget *
 create_list_box_row (gpointer object,
                      gpointer user_data)
 {
-	return GTK_WIDGET (ephy_encoding_row_new (EPHY_ENCODING (object)));
+  return GTK_WIDGET (ephy_encoding_row_new (EPHY_ENCODING (object)));
 }
 
 static void
-add_list_item (EphyEncoding *encoding, GtkListBox* list_box)
+add_list_item (EphyEncoding *encoding, GtkListBox *list_box)
 {
-	gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (ephy_encoding_row_new (encoding)));
+  gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (ephy_encoding_row_new (encoding)));
 }
 
 static int
 sort_encodings (gconstpointer a, gconstpointer b)
 {
-	EphyEncoding *enc1 = (EphyEncoding *)a;
-	EphyEncoding *enc2 = (EphyEncoding *)b;
-	const char *key1, *key2;
+  EphyEncoding *enc1 = (EphyEncoding *)a;
+  EphyEncoding *enc2 = (EphyEncoding *)b;
+  const char *key1, *key2;
 
-	key1 = ephy_encoding_get_collation_key (enc1);
-	key2 = ephy_encoding_get_collation_key (enc2);
+  key1 = ephy_encoding_get_collation_key (enc1);
+  key2 = ephy_encoding_get_collation_key (enc2);
 
-	return strcmp (key1, key2);
+  return strcmp (key1, key2);
 }
 
 static void
 ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
 {
-	GList *encodings, *p;
-	GListStore *store;
+  GList *encodings, *p;
+  GListStore *store;
 
-	gtk_widget_init_template (GTK_WIDGET (dialog));
+  gtk_widget_init_template (GTK_WIDGET (dialog));
 
-	dialog->update_embed_tag = FALSE;
-	dialog->update_view_tag = FALSE;
+  dialog->update_embed_tag = FALSE;
+  dialog->update_view_tag = FALSE;
 
-	dialog->encodings =
-		EPHY_ENCODINGS (ephy_embed_shell_get_encodings
-				(EPHY_EMBED_SHELL (ephy_shell_get_default ())));
+  dialog->encodings =
+    EPHY_ENCODINGS (ephy_embed_shell_get_encodings
+                      (EPHY_EMBED_SHELL (ephy_shell_get_default ())));
 
-	encodings = ephy_encodings_get_all (dialog->encodings);
+  encodings = ephy_encodings_get_all (dialog->encodings);
 
-	store = g_list_store_new (EPHY_TYPE_ENCODING);
-	for (p = encodings; p; p = p->next)
-	{
-		EphyEncoding *encoding = EPHY_ENCODING (p->data);
-		g_list_store_insert_sorted (store, encoding, sort_list_store, NULL);
-	}
-	g_list_free (encodings);
+  store = g_list_store_new (EPHY_TYPE_ENCODING);
+  for (p = encodings; p; p = p->next) {
+    EphyEncoding *encoding = EPHY_ENCODING (p->data);
+    g_list_store_insert_sorted (store, encoding, sort_list_store, NULL);
+  }
+  g_list_free (encodings);
 
-	gtk_list_box_bind_model (dialog->list_box, G_LIST_MODEL (store),
-	                         create_list_box_row,
-	                         NULL, NULL);
+  gtk_list_box_bind_model (dialog->list_box, G_LIST_MODEL (store),
+                           create_list_box_row,
+                           NULL, NULL);
 }
 
 static void
 ephy_encoding_dialog_constructed (GObject *object)
 {
-	EphyEncodingDialog *dialog;
-	WebKitWebView *view;
-	EphyEncoding *enc_node;
-	EphyLanguageGroup groups;
-	GList *recent;
-	GList *related = NULL;
+  EphyEncodingDialog *dialog;
+  WebKitWebView *view;
+  EphyEncoding *enc_node;
+  EphyLanguageGroup groups;
+  GList *recent;
+  GList *related = NULL;
 
-	/* selected encoding */
-	dialog = EPHY_ENCODING_DIALOG (object);
+  /* selected encoding */
+  dialog = EPHY_ENCODING_DIALOG (object);
 
-	g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
-	view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
+  g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
+  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
-	dialog->selected_encoding = webkit_web_view_get_custom_charset (view);
+  dialog->selected_encoding = webkit_web_view_get_custom_charset (view);
 
-	/* recent */
-	recent = ephy_encodings_get_recent (dialog->encodings);
-	if (recent != NULL)
-	{
-		recent = g_list_sort (recent, (GCompareFunc)sort_encodings);
-		g_list_foreach (recent, (GFunc)add_list_item, dialog->recent_list_box);
-	}
-	else
-		gtk_widget_hide (GTK_WIDGET (dialog->recent_grid));
+  /* recent */
+  recent = ephy_encodings_get_recent (dialog->encodings);
+  if (recent != NULL) {
+    recent = g_list_sort (recent, (GCompareFunc)sort_encodings);
+    g_list_foreach (recent, (GFunc)add_list_item, dialog->recent_list_box);
+  } else
+    gtk_widget_hide (GTK_WIDGET (dialog->recent_grid));
 
-	/* related */
-	if (dialog->selected_encoding != NULL)
-	{
-		enc_node = ephy_encodings_get_encoding (dialog->encodings, dialog->selected_encoding, TRUE);
-		g_assert (EPHY_IS_ENCODING (enc_node));
-		groups = ephy_encoding_get_language_groups (enc_node);
+  /* related */
+  if (dialog->selected_encoding != NULL) {
+    enc_node = ephy_encodings_get_encoding (dialog->encodings, dialog->selected_encoding, TRUE);
+    g_assert (EPHY_IS_ENCODING (enc_node));
+    groups = ephy_encoding_get_language_groups (enc_node);
 
-		related = ephy_encodings_get_encodings (dialog->encodings, groups);
-	}
-	if (related != NULL)
-	{
-		related = g_list_sort (related, (GCompareFunc)sort_encodings);
-		g_list_foreach (related, (GFunc)add_list_item, dialog->related_list_box);
-	}
-	else
-		gtk_widget_hide (GTK_WIDGET (dialog->related_grid));
+    related = ephy_encodings_get_encodings (dialog->encodings, groups);
+  }
+  if (related != NULL) {
+    related = g_list_sort (related, (GCompareFunc)sort_encodings);
+    g_list_foreach (related, (GFunc)add_list_item, dialog->related_list_box);
+  } else
+    gtk_widget_hide (GTK_WIDGET (dialog->related_grid));
 
-	/* update list_boxes */
-	sync_encoding_against_embed (dialog);
+  /* update list_boxes */
+  sync_encoding_against_embed (dialog);
 
-	/* chaining */
-	G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->constructed (object);
+  /* chaining */
+  G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->constructed (object);
 }
 
 static void
 ephy_encoding_dialog_dispose (GObject *object)
 {
-	EphyEncodingDialog *dialog = EPHY_ENCODING_DIALOG (object);
+  EphyEncodingDialog *dialog = EPHY_ENCODING_DIALOG (object);
 
-	g_signal_handlers_disconnect_by_func (dialog->window,
-	                                      G_CALLBACK (ephy_encoding_dialog_sync_embed),
-	                                      dialog);
+  g_signal_handlers_disconnect_by_func (dialog->window,
+                                        G_CALLBACK (ephy_encoding_dialog_sync_embed),
+                                        dialog);
 
-	if (dialog->embed != NULL)
-		ephy_encoding_dialog_detach_embed (dialog);
+  if (dialog->embed != NULL)
+    ephy_encoding_dialog_detach_embed (dialog);
 
-	G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_encoding_dialog_parent_class)->dispose (object);
 }
 
 static void
 ephy_encoding_dialog_set_parent_window (EphyEncodingDialog *dialog,
-                                        EphyWindow *window)
+                                        EphyWindow         *window)
 {
-	g_return_if_fail (EPHY_IS_WINDOW (window));
+  g_return_if_fail (EPHY_IS_WINDOW (window));
 
-	g_signal_connect (G_OBJECT (window), "notify::active-child",
-	                  G_CALLBACK (ephy_encoding_dialog_sync_embed), dialog);
+  g_signal_connect (G_OBJECT (window), "notify::active-child",
+                    G_CALLBACK (ephy_encoding_dialog_sync_embed), dialog);
 
-	dialog->window = window;
+  dialog->window = window;
 
-	ephy_encoding_dialog_attach_embed (dialog);
+  ephy_encoding_dialog_attach_embed (dialog);
 }
 
 static void
@@ -465,16 +450,15 @@ ephy_encoding_dialog_set_property (GObject      *object,
                                    const GValue *value,
                                    GParamSpec   *pspec)
 {
-	switch (prop_id)
-	{
-	case PROP_PARENT_WINDOW:
-		ephy_encoding_dialog_set_parent_window (EPHY_ENCODING_DIALOG (object),
-		                                        g_value_get_object (value));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
+  switch (prop_id) {
+    case PROP_PARENT_WINDOW:
+      ephy_encoding_dialog_set_parent_window (EPHY_ENCODING_DIALOG (object),
+                                              g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
 }
 
 static void
@@ -483,60 +467,59 @@ ephy_encoding_dialog_get_property (GObject    *object,
                                    GValue     *value,
                                    GParamSpec *pspec)
 {
-	switch (prop_id)
-	{
-	case PROP_PARENT_WINDOW:
-		g_value_set_object (value, EPHY_ENCODING_DIALOG (object)->window);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
+  switch (prop_id) {
+    case PROP_PARENT_WINDOW:
+      g_value_set_object (value, EPHY_ENCODING_DIALOG (object)->window);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
 }
 
 static void
 ephy_encoding_dialog_class_init (EphyEncodingDialogClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-	/* class creation */
-	object_class->constructed = ephy_encoding_dialog_constructed;
-	object_class->set_property = ephy_encoding_dialog_set_property;
-	object_class->get_property = ephy_encoding_dialog_get_property;
-	object_class->dispose = ephy_encoding_dialog_dispose;
+  /* class creation */
+  object_class->constructed = ephy_encoding_dialog_constructed;
+  object_class->set_property = ephy_encoding_dialog_set_property;
+  object_class->get_property = ephy_encoding_dialog_get_property;
+  object_class->dispose = ephy_encoding_dialog_dispose;
 
-	obj_properties[PROP_PARENT_WINDOW] =
-		g_param_spec_object ("parent-window",
-		                     "Parent window",
-		                     "Parent window",
-		                     EPHY_TYPE_WINDOW,
-		                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+  obj_properties[PROP_PARENT_WINDOW] =
+    g_param_spec_object ("parent-window",
+                         "Parent window",
+                         "Parent window",
+                         EPHY_TYPE_WINDOW,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-	g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
-	/* load from UI file */
-	gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/encoding-dialog.ui");
+  /* load from UI file */
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/encoding-dialog.ui");
 
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, type_stack);
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, default_switch);
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, list_box);
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, recent_list_box);
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_list_box);
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, recent_grid);
-	gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_grid);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, type_stack);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, default_switch);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, list_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, recent_list_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_list_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, recent_grid);
+  gtk_widget_class_bind_template_child (widget_class, EphyEncodingDialog, related_grid);
 
-	gtk_widget_class_bind_template_callback (widget_class, default_switch_toggled_cb);
-	gtk_widget_class_bind_template_callback (widget_class, ephy_encoding_dialog_response_cb);
-	gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
-	gtk_widget_class_bind_template_callback (widget_class, show_all_button_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, default_switch_toggled_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ephy_encoding_dialog_response_cb);
+  gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, show_all_button_clicked_cb);
 }
 
 EphyEncodingDialog *
 ephy_encoding_dialog_new (EphyWindow *parent)
 {
-	return g_object_new (EPHY_TYPE_ENCODING_DIALOG,
-			     "use-header-bar" , TRUE,
-			     "parent-window", parent,
-			     NULL);
+  return g_object_new (EPHY_TYPE_ENCODING_DIALOG,
+                       "use-header-bar", TRUE,
+                       "parent-window", parent,
+                       NULL);
 }

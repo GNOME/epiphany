@@ -38,7 +38,6 @@ static GRegex *domain_regex;
 char *
 ephy_embed_utils_link_message_parse (const char *message)
 {
-  
   char *status_message;
   char **splitted_message;
   int i = 1;
@@ -46,7 +45,7 @@ ephy_embed_utils_link_message_parse (const char *message)
   GString *tmp;
 
   status_message = ephy_string_blank_chr (g_strdup (message));
-  
+
   if (!status_message || !g_str_has_prefix (status_message, "mailto:"))
     return status_message;
 
@@ -55,14 +54,14 @@ ephy_embed_utils_link_message_parse (const char *message)
    */
   p = strchr (status_message, '?');
   if (p != NULL) *p = '\0';
-    
+
   /* Then we also want to check if there is more than an email address
    * in the mailto: list.
    */
   splitted_message = g_strsplit_set (status_message, ";", -1);
   tmp = g_string_new (g_strdup_printf (_("Send an email message to “%s”"),
                                        (splitted_message[0] + 7)));
-    
+
   while (splitted_message [i] != NULL) {
     g_string_append_printf (tmp, ", “%s”", splitted_message[i]);
     i++;
@@ -137,7 +136,7 @@ gboolean
 ephy_embed_utils_address_is_existing_absolute_filename (const char *address)
 {
   return g_path_is_absolute (address) &&
-    g_file_test (address, G_FILE_TEST_EXISTS);
+         g_file_test (address, G_FILE_TEST_EXISTS);
 }
 
 static gboolean
@@ -179,16 +178,16 @@ ephy_embed_utils_address_is_valid (const char *address)
   scheme = g_uri_parse_scheme (address);
 
   retval = scheme ||
-    ephy_embed_utils_address_is_existing_absolute_filename (address) ||
-    g_regex_match (get_non_search_regex (), address, 0, NULL) ||
-    is_public_domain (address);
+           ephy_embed_utils_address_is_existing_absolute_filename (address) ||
+           g_regex_match (get_non_search_regex (), address, 0, NULL) ||
+           is_public_domain (address);
 
   g_free (scheme);
 
   return retval;
 }
 
-char*
+char *
 ephy_embed_utils_normalize_address (const char *address)
 {
   char *effective_address = NULL;
@@ -250,7 +249,6 @@ ephy_embed_utils_autosearch_address (const char *search_key)
   g_free (url_search);
 
   return effective_address;
-
 }
 
 char *
@@ -267,17 +265,17 @@ ephy_embed_utils_url_is_empty (const char *location)
 {
   gboolean is_empty = FALSE;
 
-  if (location == NULL || 
-      location[0] == '\0' || 
+  if (location == NULL ||
+      location[0] == '\0' ||
       strcmp (location, "about:blank") == 0)
     is_empty = TRUE;
-  
+
   return is_empty;
 }
 
 /* This is the list of addresses that should never be shown in the
  * window's location entry. */
-static const char * do_not_show_address[] = {
+static const char *do_not_show_address[] = {
   "about:blank",
   "ephy-about:incognito",
   "ephy-about:overview",
@@ -305,7 +303,7 @@ ephy_embed_utils_get_title_from_address (const char *address)
   if (g_str_has_prefix (address, "file://"))
     return g_strdup (address + 7);
 
-  if (!strcmp (address, EPHY_ABOUT_SCHEME":overview") ||
+  if (!strcmp (address, EPHY_ABOUT_SCHEME ":overview") ||
       !strcmp (address, "about:overview"))
     return g_strdup (_("Most Visited"));
 

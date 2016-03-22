@@ -36,48 +36,48 @@
 static void
 test_ephy_embed_shell_launch_handler (void)
 {
-    EphyEmbedShell *embed_shell;
-    gboolean ret;
-    GFile *file;
+  EphyEmbedShell *embed_shell;
+  gboolean ret;
+  GFile *file;
 
-    embed_shell = ephy_embed_shell_get_default ();
+  embed_shell = ephy_embed_shell_get_default ();
 
-    ret = ephy_embed_shell_launch_handler (embed_shell, NULL, "text/html", 0);
-    g_assert (ret == FALSE);
+  ret = ephy_embed_shell_launch_handler (embed_shell, NULL, "text/html", 0);
+  g_assert (ret == FALSE);
 
-    file = g_file_new_for_path (TEST_DIR"/data/test.html");
-    g_assert (file);
+  file = g_file_new_for_path (TEST_DIR "/data/test.html");
+  g_assert (file);
 
-    ret = ephy_embed_shell_launch_handler (embed_shell, file, NULL, 0);
-    g_assert (ret == FALSE);
+  ret = ephy_embed_shell_launch_handler (embed_shell, file, NULL, 0);
+  g_assert (ret == FALSE);
 
-    ret = ephy_embed_shell_launch_handler (embed_shell, file, "text/html", 0);
-    g_assert (ret == FALSE);
+  ret = ephy_embed_shell_launch_handler (embed_shell, file, "text/html", 0);
+  g_assert (ret == FALSE);
 
-    g_object_unref (file);
+  g_object_unref (file);
 }
 
 static void
 web_view_created_cb (EphyEmbedShell *shell, EphyWebView *view, gpointer user_data)
 {
-    gboolean *web_view_created = (gboolean*)user_data;
-    *web_view_created = TRUE;
+  gboolean *web_view_created = (gboolean *)user_data;
+  *web_view_created = TRUE;
 }
 
 static void
 test_ephy_embed_shell_web_view_created (void)
 {
-    EphyEmbedShell *embed_shell;
-    GtkWidget *view;
-    gboolean web_view_created = FALSE;
+  EphyEmbedShell *embed_shell;
+  GtkWidget *view;
+  gboolean web_view_created = FALSE;
 
-    embed_shell = ephy_embed_shell_get_default ();
-    g_signal_connect (embed_shell, "web-view-created",
-                      G_CALLBACK (web_view_created_cb), &web_view_created);
+  embed_shell = ephy_embed_shell_get_default ();
+  g_signal_connect (embed_shell, "web-view-created",
+                    G_CALLBACK (web_view_created_cb), &web_view_created);
 
-    view = ephy_web_view_new ();
-    g_assert (web_view_created);
-    gtk_widget_destroy (view);
+  view = ephy_web_view_new ();
+  g_assert (web_view_created);
+  gtk_widget_destroy (view);
 }
 
 int

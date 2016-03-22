@@ -51,9 +51,9 @@ ephy_embed_container_default_init (EphyEmbedContainerInterface *iface)
  **/
 gint
 ephy_embed_container_add_child (EphyEmbedContainer *container,
-                                EphyEmbed *child,
-                                gint position,
-                                gboolean set_active)
+                                EphyEmbed          *child,
+                                gint                position,
+                                gboolean            set_active)
 {
   EphyEmbedContainerInterface *iface;
 
@@ -73,7 +73,7 @@ ephy_embed_container_add_child (EphyEmbedContainer *container,
  **/
 void
 ephy_embed_container_set_active_child (EphyEmbedContainer *container,
-                                       EphyEmbed *child)
+                                       EphyEmbed          *child)
 {
   EphyEmbedContainerInterface *iface;
 
@@ -94,7 +94,7 @@ ephy_embed_container_set_active_child (EphyEmbedContainer *container,
  **/
 void
 ephy_embed_container_remove_child (EphyEmbedContainer *container,
-                                   EphyEmbed *child)
+                                   EphyEmbed          *child)
 {
   EphyEmbedContainerInterface *iface;
 

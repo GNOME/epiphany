@@ -22,8 +22,7 @@
 #include "ephy-web-extension-names.h"
 #include "ephy-history-service.h"
 
-struct _EphyWebExtensionProxy
-{
+struct _EphyWebExtensionProxy {
   GObject parent_instance;
 
   GCancellable *cancellable;
@@ -33,8 +32,7 @@ struct _EphyWebExtensionProxy
   guint page_created_signal_id;
 };
 
-enum
-{
+enum {
   PAGE_CREATED,
 
   LAST_SIGNAL
@@ -91,12 +89,12 @@ ephy_web_extension_proxy_class_init (EphyWebExtensionProxyClass *klass)
 }
 
 static void
-web_extension_page_created (GDBusConnection *connection,
-                            const char *sender_name,
-                            const char *object_path,
-                            const char *interface_name,
-                            const char *signal_name,
-                            GVariant *parameters,
+web_extension_page_created (GDBusConnection       *connection,
+                            const char            *sender_name,
+                            const char            *object_path,
+                            const char            *interface_name,
+                            const char            *signal_name,
+                            GVariant              *parameters,
                             EphyWebExtensionProxy *web_extension)
 {
   guint64 page_id;
@@ -105,8 +103,8 @@ web_extension_page_created (GDBusConnection *connection,
 }
 
 static void
-web_extension_proxy_created_cb (GDBusProxy *proxy,
-                                GAsyncResult *result,
+web_extension_proxy_created_cb (GDBusProxy            *proxy,
+                                GAsyncResult          *result,
                                 EphyWebExtensionProxy *web_extension)
 {
   GError *error = NULL;
@@ -140,9 +138,9 @@ web_extension_proxy_created_cb (GDBusProxy *proxy,
 }
 
 static void
-connection_closed_cb (GDBusConnection *connection,
-                      gboolean remote_peer_vanished,
-                      GError *error,
+connection_closed_cb (GDBusConnection       *connection,
+                      gboolean               remote_peer_vanished,
+                      GError                *error,
                       EphyWebExtensionProxy *web_extension)
 {
   if (error) {
@@ -183,8 +181,8 @@ ephy_web_extension_proxy_new (GDBusConnection *connection)
 
 void
 ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExtensionProxy *web_extension,
-                                                                    guint request_id,
-                                                                    gboolean response)
+                                                                    guint                  request_id,
+                                                                    gboolean               response)
 {
   g_return_if_fail (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
 
@@ -201,9 +199,9 @@ ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExten
 }
 
 static void
-has_modified_forms_cb (GDBusProxy *proxy,
+has_modified_forms_cb (GDBusProxy   *proxy,
                        GAsyncResult *result,
-                       GTask *task)
+                       GTask        *task)
 {
   GVariant *return_value;
   gboolean retval = FALSE;
@@ -220,10 +218,10 @@ has_modified_forms_cb (GDBusProxy *proxy,
 
 void
 ephy_web_extension_proxy_web_page_has_modified_forms (EphyWebExtensionProxy *web_extension,
-                                                      guint64 page_id,
-                                                      GCancellable *cancellable,
-                                                      GAsyncReadyCallback callback,
-                                                      gpointer user_data)
+                                                      guint64                page_id,
+                                                      GCancellable          *cancellable,
+                                                      GAsyncReadyCallback    callback,
+                                                      gpointer               user_data)
 {
   GTask *task;
 
@@ -249,8 +247,8 @@ ephy_web_extension_proxy_web_page_has_modified_forms (EphyWebExtensionProxy *web
 
 gboolean
 ephy_web_extension_proxy_web_page_has_modified_forms_finish (EphyWebExtensionProxy *web_extension,
-                                                             GAsyncResult *result,
-                                                             GError **error)
+                                                             GAsyncResult          *result,
+                                                             GError               **error)
 {
   g_return_val_if_fail (g_task_is_valid (result, web_extension), FALSE);
 
@@ -258,9 +256,9 @@ ephy_web_extension_proxy_web_page_has_modified_forms_finish (EphyWebExtensionPro
 }
 
 static void
-get_best_web_app_icon_cb (GDBusProxy *proxy,
+get_best_web_app_icon_cb (GDBusProxy   *proxy,
                           GAsyncResult *result,
-                          GTask *task)
+                          GTask        *task)
 {
   GVariant *retval;
   GError *error = NULL;
@@ -276,11 +274,11 @@ get_best_web_app_icon_cb (GDBusProxy *proxy,
 
 void
 ephy_web_extension_proxy_get_best_web_app_icon (EphyWebExtensionProxy *web_extension,
-                                                guint64 page_id,
-                                                const char *base_uri,
-                                                GCancellable *cancellable,
-                                                GAsyncReadyCallback callback,
-                                                gpointer user_data)
+                                                guint64                page_id,
+                                                const char            *base_uri,
+                                                GCancellable          *cancellable,
+                                                GAsyncReadyCallback    callback,
+                                                gpointer               user_data)
 {
   GTask *task;
 
@@ -291,7 +289,7 @@ ephy_web_extension_proxy_get_best_web_app_icon (EphyWebExtensionProxy *web_exten
   if (web_extension->proxy) {
     g_dbus_proxy_call (web_extension->proxy,
                        "GetBestWebAppIcon",
-                       g_variant_new("(ts)", page_id, base_uri),
+                       g_variant_new ("(ts)", page_id, base_uri),
                        G_DBUS_CALL_FLAGS_NONE,
                        -1,
                        web_extension->cancellable,
@@ -306,11 +304,11 @@ ephy_web_extension_proxy_get_best_web_app_icon (EphyWebExtensionProxy *web_exten
 
 gboolean
 ephy_web_extension_proxy_get_best_web_app_icon_finish (EphyWebExtensionProxy *web_extension,
-                                                       GAsyncResult *result,
-                                                       gboolean *icon_result,
-                                                       char **icon_uri,
-                                                       char **icon_color,
-                                                       GError **error)
+                                                       GAsyncResult          *result,
+                                                       gboolean              *icon_result,
+                                                       char                 **icon_uri,
+                                                       char                 **icon_color,
+                                                       GError               **error)
 {
   GVariant *variant;
   GTask *task = G_TASK (result);
@@ -328,9 +326,9 @@ ephy_web_extension_proxy_get_best_web_app_icon_finish (EphyWebExtensionProxy *we
 }
 
 static void
-get_web_app_title_cb (GDBusProxy *proxy,
+get_web_app_title_cb (GDBusProxy   *proxy,
                       GAsyncResult *result,
-                      GTask *task)
+                      GTask        *task)
 {
   GVariant *retval;
   GError *error = NULL;
@@ -350,10 +348,10 @@ get_web_app_title_cb (GDBusProxy *proxy,
 
 void
 ephy_web_extension_proxy_get_web_app_title (EphyWebExtensionProxy *web_extension,
-                                            guint64 page_id,
-                                            GCancellable *cancellable,
-                                            GAsyncReadyCallback callback,
-                                            gpointer user_data)
+                                            guint64                page_id,
+                                            GCancellable          *cancellable,
+                                            GAsyncReadyCallback    callback,
+                                            gpointer               user_data)
 {
   GTask *task;
 
@@ -364,7 +362,7 @@ ephy_web_extension_proxy_get_web_app_title (EphyWebExtensionProxy *web_extension
   if (web_extension->proxy) {
     g_dbus_proxy_call (web_extension->proxy,
                        "GetWebAppTitle",
-                       g_variant_new("(t)", page_id),
+                       g_variant_new ("(t)", page_id),
                        G_DBUS_CALL_FLAGS_NONE,
                        -1,
                        web_extension->cancellable,
@@ -379,8 +377,8 @@ ephy_web_extension_proxy_get_web_app_title (EphyWebExtensionProxy *web_extension
 
 char *
 ephy_web_extension_proxy_get_web_app_title_finish (EphyWebExtensionProxy *web_extension,
-                                                   GAsyncResult *result,
-                                                   GError **error)
+                                                   GAsyncResult          *result,
+                                                   GError               **error)
 {
   g_return_val_if_fail (g_task_is_valid (result, web_extension), FALSE);
 
@@ -389,7 +387,7 @@ ephy_web_extension_proxy_get_web_app_title_finish (EphyWebExtensionProxy *web_ex
 
 void
 ephy_web_extension_proxy_history_set_urls (EphyWebExtensionProxy *web_extension,
-                                           GList *urls)
+                                           GList                 *urls)
 {
   GList *l;
   GVariantBuilder builder;
@@ -415,8 +413,8 @@ ephy_web_extension_proxy_history_set_urls (EphyWebExtensionProxy *web_extension,
 
 void
 ephy_web_extension_proxy_history_set_url_thumbnail (EphyWebExtensionProxy *web_extension,
-                                                    const char *url,
-                                                    const char *path)
+                                                    const char            *url,
+                                                    const char            *path)
 {
   if (!web_extension->proxy)
     return;
@@ -432,8 +430,8 @@ ephy_web_extension_proxy_history_set_url_thumbnail (EphyWebExtensionProxy *web_e
 
 void
 ephy_web_extension_proxy_history_set_url_title (EphyWebExtensionProxy *web_extension,
-                                                const char *url,
-                                                const char *title)
+                                                const char            *url,
+                                                const char            *title)
 {
   if (!web_extension->proxy)
     return;
@@ -449,7 +447,7 @@ ephy_web_extension_proxy_history_set_url_title (EphyWebExtensionProxy *web_exten
 
 void
 ephy_web_extension_proxy_history_delete_url (EphyWebExtensionProxy *web_extension,
-                                             const char *url)
+                                             const char            *url)
 {
   if (!web_extension->proxy)
     return;
@@ -465,7 +463,7 @@ ephy_web_extension_proxy_history_delete_url (EphyWebExtensionProxy *web_extensio
 
 void
 ephy_web_extension_proxy_history_delete_host (EphyWebExtensionProxy *web_extension,
-                                              const char *host)
+                                              const char            *host)
 {
   if (!web_extension->proxy)
     return;

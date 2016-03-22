@@ -25,8 +25,7 @@
 #include <webkitdom/WebKitDOMElementUnstable.h>
 #include <webkitdom/WebKitDOMDOMTokenList.h>
 
-struct _EphyWebOverview
-{
+struct _EphyWebOverview {
   GObject parent_instance;
 
   WebKitWebPage *web_page;
@@ -38,8 +37,7 @@ struct _EphyWebOverview
 
 G_DEFINE_TYPE (EphyWebOverview, ephy_web_overview, G_TYPE_OBJECT)
 
-enum
-{
+enum {
   PROP_0,
   PROP_WEB_PAGE,
   PROP_MODEL,
@@ -70,7 +68,7 @@ overview_item_new (WebKitDOMElement *anchor)
   nodes = webkit_dom_node_get_child_nodes (WEBKIT_DOM_NODE (anchor));
   n_nodes = webkit_dom_node_list_get_length (nodes);
   for (i = 0; i < n_nodes; i++) {
-    WebKitDOMNode* node = webkit_dom_node_list_item (nodes, i);
+    WebKitDOMNode *node = webkit_dom_node_list_item (nodes, i);
     WebKitDOMElement *element;
     char *tag;
 
@@ -111,7 +109,7 @@ overview_item_free (OverviewItem *item)
 
 static void
 update_thumbnail_element_style (WebKitDOMElement *thumbnail,
-                                const char *path)
+                                const char       *path)
 {
   char *style;
 
@@ -122,12 +120,12 @@ update_thumbnail_element_style (WebKitDOMElement *thumbnail,
 
 static void
 ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
-                                      EphyWebOverview *overview)
+                                      EphyWebOverview      *overview)
 {
   GList *urls;
   GList *l;
   GList *items;
-  OverviewItem* item;
+  OverviewItem *item;
 
   urls = ephy_web_overview_model_get_urls (model);
 
@@ -250,9 +248,9 @@ apply_delayed_thumbnail_change (gpointer key,
 
 static void
 ephy_web_overview_model_thumbnail_changed (EphyWebOverviewModel *model,
-                                           const char *url,
-                                           const char *path,
-                                           EphyWebOverview *overview)
+                                           const char           *url,
+                                           const char           *path,
+                                           EphyWebOverview      *overview)
 {
   GList *l;
   for (l = overview->items; l; l = g_list_next (l)) {
@@ -283,9 +281,9 @@ ephy_web_overview_model_thumbnail_changed (EphyWebOverviewModel *model,
 
 static void
 ephy_web_overview_model_title_changed (EphyWebOverviewModel *model,
-                                       const char *url,
-                                       const char *title,
-                                       EphyWebOverview *overview)
+                                       const char           *url,
+                                       const char           *title,
+                                       EphyWebOverview      *overview)
 {
   GList *l;
 
@@ -301,8 +299,8 @@ ephy_web_overview_model_title_changed (EphyWebOverviewModel *model,
 }
 
 static void
-ephy_web_overview_update_thumbnail_in_model_from_element (EphyWebOverview *overview,
-                                                          const char *url,
+ephy_web_overview_update_thumbnail_in_model_from_element (EphyWebOverview  *overview,
+                                                          const char       *url,
                                                           WebKitDOMElement *thumbnail)
 {
   WebKitDOMCSSStyleDeclaration *style;
@@ -342,7 +340,7 @@ ephy_web_overview_update_thumbnail_in_model_from_element (EphyWebOverview *overv
 }
 
 static void
-ephy_web_overview_document_loaded (WebKitWebPage *web_page,
+ephy_web_overview_document_loaded (WebKitWebPage   *web_page,
                                    EphyWebOverview *overview)
 {
   WebKitDOMDocument *document;
@@ -353,7 +351,7 @@ ephy_web_overview_document_loaded (WebKitWebPage *web_page,
   nodes = webkit_dom_document_get_elements_by_tag_name (document, "a");
   n_nodes = webkit_dom_node_list_get_length (nodes);
   for (i = 0; i < n_nodes; i++) {
-    WebKitDOMElement* element = WEBKIT_DOM_ELEMENT (webkit_dom_node_list_item (nodes, i));
+    WebKitDOMElement *element = WEBKIT_DOM_ELEMENT (webkit_dom_node_list_item (nodes, i));
     char *class;
 
     class = webkit_dom_element_get_class_name (element);
@@ -381,24 +379,23 @@ ephy_web_overview_document_loaded (WebKitWebPage *web_page,
 }
 
 static void
-ephy_web_overview_set_property (GObject *object,
-                                guint prop_id,
+ephy_web_overview_set_property (GObject      *object,
+                                guint         prop_id,
                                 const GValue *value,
-                                GParamSpec *pspec)
+                                GParamSpec   *pspec)
 {
   EphyWebOverview *overview = EPHY_WEB_OVERVIEW (object);
 
-  switch (prop_id)
-  {
-  case PROP_WEB_PAGE:
-    overview->web_page = g_value_get_object (value);
-    break;
-  case PROP_MODEL:
-    overview->model = g_value_get_object (value);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    break;
+  switch (prop_id) {
+    case PROP_WEB_PAGE:
+      overview->web_page = g_value_get_object (value);
+      break;
+    case PROP_MODEL:
+      overview->model = g_value_get_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
   }
 }
 
@@ -471,7 +468,7 @@ ephy_web_overview_init (EphyWebOverview *overview)
 }
 
 EphyWebOverview *
-ephy_web_overview_new (WebKitWebPage *web_page,
+ephy_web_overview_new (WebKitWebPage        *web_page,
                        EphyWebOverviewModel *model)
 {
   g_return_val_if_fail (WEBKIT_IS_WEB_PAGE (web_page), NULL);

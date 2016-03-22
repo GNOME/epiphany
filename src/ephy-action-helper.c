@@ -19,7 +19,7 @@
 
 #include "ephy-action-helper.h"
 
-#define SENSITIVITY_KEY	"EphyAction::Sensitivity"
+#define SENSITIVITY_KEY "EphyAction::Sensitivity"
 
 /**
  * ephy_action_change_sensitivity_flags:
@@ -35,32 +35,28 @@
  * set. This means you can stack @flags for different events or
  * conditions at the same time.
  */
-void 
+void
 ephy_action_change_sensitivity_flags (GtkAction *action,
-				      guint flags,
-				      gboolean set)
+                                      guint      flags,
+                                      gboolean   set)
 {
-	static GQuark sensitivity_quark = 0;
-	GObject *object = (GObject *) action;
-	guint value;
+  static GQuark sensitivity_quark = 0;
+  GObject *object = (GObject *)action;
+  guint value;
 
-	if (G_UNLIKELY (sensitivity_quark == 0))
-	{
-		sensitivity_quark = g_quark_from_static_string (SENSITIVITY_KEY);
-	}
+  if (G_UNLIKELY (sensitivity_quark == 0)) {
+    sensitivity_quark = g_quark_from_static_string (SENSITIVITY_KEY);
+  }
 
-	value = GPOINTER_TO_UINT (g_object_get_qdata (object, sensitivity_quark));
+  value = GPOINTER_TO_UINT (g_object_get_qdata (object, sensitivity_quark));
 
-	if (set)
-	{
-		value |= flags;
-	}
-	else
-	{
-		value &= ~flags;
-	}
+  if (set) {
+    value |= flags;
+  } else {
+    value &= ~flags;
+  }
 
-	g_object_set_qdata (object, sensitivity_quark, GUINT_TO_POINTER (value));
+  g_object_set_qdata (object, sensitivity_quark, GUINT_TO_POINTER (value));
 
-	gtk_action_set_sensitive (GTK_ACTION (action), value == 0);
+  gtk_action_set_sensitive (GTK_ACTION (action), value == 0);
 }

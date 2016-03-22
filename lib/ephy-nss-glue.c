@@ -40,10 +40,10 @@
 static gboolean nss_initialized = FALSE;
 static PK11SlotInfo *db_slot = NULL;
 
-static char*
+static char *
 ask_for_nss_password (PK11SlotInfo *slot,
-                      PRBool retry,
-                      void *arg)
+                      PRBool        retry,
+                      void         *arg)
 {
   GtkWidget *dialog;
   GtkWidget *entry;
@@ -69,11 +69,11 @@ ask_for_nss_password (PK11SlotInfo *slot,
   result = gtk_dialog_run (GTK_DIALOG (dialog));
 
   switch (result) {
-  case GTK_RESPONSE_OK:
-    password = PL_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
-    break;
-  default:
-    break;
+    case GTK_RESPONSE_OK:
+      password = PL_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+      break;
+    default:
+      break;
   }
 
   gtk_widget_destroy (dialog);
@@ -127,8 +127,7 @@ void ephy_nss_glue_close (void)
   nss_initialized = FALSE;
 }
 
-typedef struct SDRResult
-{
+typedef struct SDRResult {
   SECItem keyid;
   SECAlgorithmID alg;
   SECItem data;
@@ -136,15 +135,15 @@ typedef struct SDRResult
 
 static SEC_ASN1Template g_template[] = {
   { SEC_ASN1_SEQUENCE, 0, NULL, sizeof (SDRResult) },
-  { SEC_ASN1_OCTET_STRING, offsetof(SDRResult, keyid) },
-  { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(SDRResult, alg),
-    SEC_ASN1_SUB(SECOID_AlgorithmIDTemplate) },
-  { SEC_ASN1_OCTET_STRING, offsetof(SDRResult, data) },
+  { SEC_ASN1_OCTET_STRING, offsetof (SDRResult, keyid) },
+  { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof (SDRResult, alg),
+    SEC_ASN1_SUB (SECOID_AlgorithmIDTemplate) },
+  { SEC_ASN1_OCTET_STRING, offsetof (SDRResult, data) },
   { 0 }
 };
 
 static SECStatus
-unpadBlock(SECItem *data, int blockSize, SECItem *result)
+unpadBlock (SECItem *data, int blockSize, SECItem *result)
 {
   SECStatus rv = SECSuccess;
   int padLength;
@@ -154,24 +153,30 @@ unpadBlock(SECItem *data, int blockSize, SECItem *result)
   result->len = 0;
 
   /* Remove the padding from the end if the input data */
-  if (data->len == 0 || data->len % blockSize  != 0) { rv = SECFailure; goto loser; }
+  if (data->len == 0 || data->len % blockSize != 0) {
+    rv = SECFailure; goto loser;
+  }
 
-  padLength = data->data[data->len-1];
-  if (padLength > blockSize) { rv = SECFailure; goto loser; }
+  padLength = data->data[data->len - 1];
+  if (padLength > blockSize) {
+    rv = SECFailure; goto loser;
+  }
 
   /* verify padding */
-  for (i=data->len - padLength; (uint32)i < data->len; i++) {
+  for (i = data->len - padLength; (uint32)i < data->len; i++) {
     if (data->data[i] != padLength) {
-        rv = SECFailure;
-        goto loser;
+      rv = SECFailure;
+      goto loser;
     }
   }
 
   result->len = data->len - padLength;
-  result->data = (unsigned char *)PORT_Alloc(result->len);
-  if (!result->data) { rv = SECFailure; goto loser; }
+  result->data = (unsigned char *)PORT_Alloc (result->len);
+  if (!result->data) {
+    rv = SECFailure; goto loser;
+  }
 
-  PORT_Memcpy(result->data, data->data, result->len);
+  PORT_Memcpy (result->data, data->data, result->len);
 
   if (padLength < 2) {
     /* Chromium returns an error here, but it seems to be harmless and
@@ -180,13 +185,13 @@ unpadBlock(SECItem *data, int blockSize, SECItem *result)
     /* return SECWouldBlock; */
   }
 
-loser:
+ loser:
   return rv;
 }
 
 static SECStatus
-pk11Decrypt (PK11SlotInfo *slot, PLArenaPool *arena, 
-             CK_MECHANISM_TYPE type, PK11SymKey *key, 
+pk11Decrypt (PK11SlotInfo *slot, PLArenaPool *arena,
+             CK_MECHANISM_TYPE type, PK11SymKey *key,
              SECItem *params, SECItem *in, SECItem *result)
 {
   PK11Context *ctx = 0;
@@ -203,22 +208,22 @@ pk11Decrypt (PK11SlotInfo *slot, PLArenaPool *arena,
   }
 
   paddedResult.len = in->len;
-  paddedResult.data = (unsigned char*)PORT_ArenaAlloc (arena, paddedResult.len);
+  paddedResult.data = (unsigned char *)PORT_ArenaAlloc (arena, paddedResult.len);
 
-  rv = PK11_CipherOp (ctx, paddedResult.data, 
-                      (int*)&paddedResult.len, paddedResult.len,
+  rv = PK11_CipherOp (ctx, paddedResult.data,
+                      (int *)&paddedResult.len, paddedResult.len,
                       in->data, in->len);
   if (rv != SECSuccess)
     goto loser;
 
-  PK11_Finalize(ctx);
+  PK11_Finalize (ctx);
 
   /* Remove the padding */
-  rv = unpadBlock (&paddedResult, PK11_GetBlockSize(type, 0), result);
+  rv = unpadBlock (&paddedResult, PK11_GetBlockSize (type, 0), result);
   if (rv)
     goto loser;
 
-loser:
+ loser:
   if (ctx)
     PK11_DestroyContext (ctx, PR_TRUE);
 
@@ -258,10 +263,10 @@ PK11SDR_DecryptWithSlot (PK11SlotInfo *slot, SECItem *data, SECItem *result, voi
   /* Use triple-DES (Should look up the algorithm) */
   type = CKM_DES3_CBC;
   key = PK11_FindFixedKey (slot, type, &sdrResult.keyid, cx);
-  if (!key) { 
-    rv = SECFailure;  
+  if (!key) {
+    rv = SECFailure;
   } else {
-    rv = pk11Decrypt (slot, arena, type, key, params, 
+    rv = pk11Decrypt (slot, arena, type, key, params,
                       &sdrResult.data, result);
   }
 
@@ -270,18 +275,18 @@ PK11SDR_DecryptWithSlot (PK11SlotInfo *slot, SECItem *data, SECItem *result, voi
     PORT_FreeArena (arena, PR_TRUE);
 
   if (key)
-    PK11_FreeSymKey(key);
+    PK11_FreeSymKey (key);
 
   if (params)
-    SECITEM_ZfreeItem(params, PR_TRUE);
+    SECITEM_ZfreeItem (params, PR_TRUE);
 
   if (possibleResult.data)
-    SECITEM_ZfreeItem(&possibleResult, PR_FALSE);
+    SECITEM_ZfreeItem (&possibleResult, PR_FALSE);
 
   return rv;
 }
 
-char * ephy_nss_glue_decrypt (const unsigned char *data, gsize length)
+char *ephy_nss_glue_decrypt (const unsigned char *data, gsize length)
 {
   char *plain = NULL;
   SECItem request, reply;
@@ -291,14 +296,14 @@ char * ephy_nss_glue_decrypt (const unsigned char *data, gsize length)
   if (result != SECSuccess)
     return NULL;
 
-  request.data = (unsigned char*)data;
+  request.data = (unsigned char *)data;
   request.len = length;
   reply.data = NULL;
   reply.len = 0;
 
   result = PK11SDR_DecryptWithSlot (db_slot, &request, &reply, NULL);
   if (result == SECSuccess)
-    plain = g_strndup ((const char*)reply.data, reply.len);
+    plain = g_strndup ((const char *)reply.data, reply.len);
 
   SECITEM_FreeItem (&reply, PR_FALSE);
 

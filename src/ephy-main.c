@@ -67,7 +67,7 @@ option_version_cb (const gchar *option_name,
   exit (EXIT_SUCCESS);
   return FALSE;
 }
- 
+
 static const GOptionEntry option_entries[] =
 {
   { "new-tab", 'n', 0, G_OPTION_ARG_NONE, &open_in_new_tab,
@@ -91,8 +91,8 @@ static const GOptionEntry option_entries[] =
   { "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
     N_("Profile directory to use in the private instance"), N_("DIR") },
   { G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &arguments,
-    "", N_("URL …")},
-  { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, 
+    "", N_("URL …") },
+  { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
     G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
   { "delete-application", 0, 0, G_OPTION_ARG_STRING | G_OPTION_FLAG_HIDDEN,
     &application_to_delete, NULL, NULL },
@@ -117,13 +117,13 @@ get_startup_id (void)
     gulong value;
     gchar *end;
     errno = 0;
-    
+
     /* Skip past the "_TIME" part */
     time_str += 5;
-    
+
     value = strtoul (time_str, &end, 0);
     if (end != time_str && errno == 0)
-      retval = (guint32) value;
+      retval = (guint32)value;
   }
 
   return retval;
@@ -142,16 +142,16 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 {
   Window xwindow;
   XEvent event;
-  
+
   {
     XSetWindowAttributes attrs;
     Atom atom_name;
     Atom atom_type;
-    const char* name;
-    
+    const char *name;
+
     attrs.override_redirect = True;
     attrs.event_mask = PropertyChangeMask | StructureNotifyMask;
-    
+
     xwindow =
       XCreateWindow (xdisplay,
                      RootWindow (xdisplay, 0),
@@ -162,26 +162,26 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
                      CopyFromParent,
                      CWOverrideRedirect | CWEventMask,
                      &attrs);
-    
+
     atom_name = XInternAtom (xdisplay, "WM_NAME", TRUE);
     g_assert (atom_name != None);
     atom_type = XInternAtom (xdisplay, "STRING", TRUE);
     g_assert (atom_type != None);
-    
+
     name = "Fake Window";
-    XChangeProperty (xdisplay, 
+    XChangeProperty (xdisplay,
                      xwindow, atom_name,
                      atom_type,
                      8, PropModeReplace, (unsigned char *)name, strlen (name));
   }
-  
+
   XWindowEvent (xdisplay,
                 xwindow,
                 PropertyChangeMask,
                 &event);
-  
-  XDestroyWindow(xdisplay, xwindow);
-  
+
+  XDestroyWindow (xdisplay, xwindow);
+
   return event.xproperty.time;
 }
 #endif
@@ -199,8 +199,8 @@ show_error_message (GError **error)
                                    _("Could not start Web"));
   gtk_message_dialog_format_secondary_text
     (GTK_MESSAGE_DIALOG (dialog),
-     _("Startup failed because of the following error:\n%s"),
-     (*error)->message);
+    _("Startup failed because of the following error:\n%s"),
+    (*error)->message);
 
   g_clear_error (error);
 
@@ -221,7 +221,7 @@ get_startup_flags (void)
 }
 
 int
-main (int argc,
+main (int   argc,
       char *argv[])
 {
   GOptionContext *option_context;
@@ -254,15 +254,15 @@ main (int argc,
     const char *opening, *closing;
     char *command, *argument;
     char **arg_list;
-    
+
     if (argc != 3) {
       g_print ("-remote allows exactly one argument\n");
       exit (1);
     }
-    
+
     opening = strchr (argv[2], '(');
     closing = strchr (argv[2], ')');
-    
+
     if (opening == NULL ||
         closing == NULL ||
         opening == argv[2] ||
@@ -270,9 +270,9 @@ main (int argc,
       g_print ("Invalid argument for -remote\n");
       exit (1);
     }
-    
+
     command = g_strstrip (g_strndup (argv[2], opening - argv[2]));
-    
+
     /* See http://lxr.mozilla.org/seamonkey/source/xpfe/components/xremote/src/XRemoteService.cpp
      * for the commands that mozilla supports; we'll just support openURL here.
      */
@@ -281,28 +281,28 @@ main (int argc,
       g_free (command);
       exit (1);
     }
-    
+
     g_free (command);
-    
+
     argument = g_strstrip (g_strndup (opening + 1, closing - opening - 1));
     arg_list = g_strsplit (argument, ",", -1);
     g_free (argument);
     if (arg_list == NULL) {
       g_print ("Invalid argument for -remote\n");
-      
+
       exit (1);
     }
-    
+
     /* replace arguments */
     argv[1] = g_strstrip (g_strdup (arg_list[0]));
     argc = 2;
-    
+
     g_strfreev (arg_list);
   }
-  
+
   /* Initialise our debug helpers */
   ephy_debug_init ();
-  
+
   /* get this early, since gdk will unset the env var */
   user_time = get_startup_id ();
 
@@ -326,7 +326,7 @@ main (int argc,
     g_option_context_free (option_context);
     exit (1);
   }
-        
+
   g_option_context_free (option_context);
 
   /* Some argument sanity checks*/
@@ -341,8 +341,8 @@ main (int argc,
   }
 
   if (application_mode && profile_directory && !g_file_test (profile_directory, G_FILE_TEST_IS_DIR)) {
-      g_print ("--profile must be an existing directory when --application-mode is requested\n");
-      exit (1);
+    g_print ("--profile must be an existing directory when --application-mode is requested\n");
+    exit (1);
   }
 
   if (application_mode && !profile_directory) {
@@ -416,7 +416,7 @@ main (int argc,
 #ifdef GDK_WINDOWING_X11
   /* Get a timestamp manually if need be */
   if (user_time == 0) {
-    GdkDisplay* display =
+    GdkDisplay *display =
       gdk_display_manager_get_default_display (gdk_display_manager_get ());
     if (GDK_IS_X11_DISPLAY (display))
       user_time =
