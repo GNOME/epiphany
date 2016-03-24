@@ -523,6 +523,9 @@ ephy_session_close (EphySession *session)
     session->save_source_id = 0;
   }
 
+  if (session->closing)
+    return;
+
   session->closing = TRUE;
 
   policy = g_settings_get_enum (EPHY_SETTINGS_MAIN, EPHY_PREFS_RESTORE_SESSION_POLICY);
