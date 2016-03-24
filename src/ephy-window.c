@@ -2966,6 +2966,7 @@ open_security_popover (EphyWindow   *window,
   g_signal_connect (security_popover, "closed",
                     G_CALLBACK (gtk_widget_destroy), NULL);
   gtk_popover_set_pointing_to (GTK_POPOVER (security_popover), lock_position);
+  gtk_popover_set_position (GTK_POPOVER (security_popover), GTK_POS_BOTTOM);
   gtk_widget_show (security_popover);
 }
 
