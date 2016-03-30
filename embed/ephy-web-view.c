@@ -609,9 +609,6 @@ web_view_check_snapshot (WebKitWebView *web_view)
 
   view->priv->snapshot_timeout_id = 0;
 
-  if (ephy_snapshot_service_lookup_snapshot_path (service, url))
-    return FALSE;
-
   data = g_new (GetSnapshotPathAsyncData, 1);
   data->url = g_strdup (url);
   data->mtime = time (NULL);
@@ -1685,15 +1682,13 @@ load_changed_cb (WebKitWebView *web_view,
 
     if (!ephy_web_view_is_history_frozen (view) &&
         ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
-      if (!ephy_snapshot_service_lookup_snapshot_path (ephy_snapshot_service_get_default (), webkit_web_view_get_uri (web_view))) {
-        /* FIXME: The 1s delay is a workaround to allow time to render the page and get a favicon.
-         * https://bugzilla.gnome.org/show_bug.cgi?id=761065
-         */
-        if (priv->snapshot_timeout_id == 0) {
-          priv->snapshot_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_LOW, 1,
-                                                                  (GSourceFunc)web_view_check_snapshot,
-                                                                  web_view, NULL);
-        }
+      /* FIXME: The 1s delay is a workaround to allow time to render the page and get a favicon.
+       * https://bugzilla.gnome.org/show_bug.cgi?id=761065
+       */
+      if (priv->snapshot_timeout_id == 0) {
+        priv->snapshot_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_LOW, 1,
+                                                                (GSourceFunc)web_view_check_snapshot,
+                                                                web_view, NULL);
       }
     }
 
