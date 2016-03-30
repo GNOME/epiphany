@@ -66,8 +66,6 @@ struct _EphyHistoryWindow {
   gboolean sort_ascending;
   gint sort_column;
 
-  GtkWidget *window;
-
   GtkWidget *confirmation_dialog;
 };
 
@@ -286,11 +284,7 @@ forget_all (GSimpleAction *action,
 static GtkWidget *
 get_target_window (EphyHistoryWindow *self)
 {
-  if (self->window) {
-    return self->window;
-  } else {
     return GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ())));
-  }
 }
 
 static void
@@ -660,27 +654,10 @@ ephy_history_window_dispose (GObject *object)
 }
 
 static void
-ephy_history_window_finalize (GObject *object)
-{
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (object);
-
-  if (self->window) {
-    GtkWidget **window = &self->window;
-    g_object_remove_weak_pointer
-      (G_OBJECT (self->window),
-      (gpointer *)window);
-  }
-
-  G_OBJECT_CLASS (ephy_history_window_parent_class)->finalize (object);
-}
-
-static void
 ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  object_class->finalize = ephy_history_window_finalize;
 
   object_class->set_property = ephy_history_window_set_property;
   object_class->get_property = ephy_history_window_get_property;
