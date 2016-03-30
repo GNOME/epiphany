@@ -27,9 +27,6 @@
 #include <libgnome-desktop/gnome-desktop-thumbnail.h>
 #include <webkit2/webkit2.h>
 
-/* Update snapshots after one week. */
-#define SNAPSHOT_UPDATE_THRESHOLD (60 * 60 * 24 * 7)
-
 struct _EphySnapshotService {
   GObject parent_instance;
   GnomeDesktopThumbnailFactory *factory;
@@ -544,7 +541,6 @@ ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
 {
   GTask *task;
   const char *uri;
-  time_t current_time = time (NULL);
 
   g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
   g_return_if_fail (WEBKIT_IS_WEB_VIEW (web_view));
@@ -556,7 +552,7 @@ ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
 
   /* Try to get the snapshot from the cache first if we have a URL */
   uri = webkit_web_view_get_uri (web_view);
-  if (uri && current_time - mtime <= SNAPSHOT_UPDATE_THRESHOLD)
+  if (uri)
     ephy_snapshot_service_get_snapshot_for_url_async (service,
                                                       uri, mtime, cancellable,
                                                       (GAsyncReadyCallback)got_snapshot_for_url,
@@ -795,7 +791,6 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
 {
   GTask *task;
   const char *uri;
-  time_t current_time = time (NULL);
 
   g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
   g_return_if_fail (WEBKIT_IS_WEB_VIEW (web_view));
@@ -803,7 +798,7 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
   task = g_task_new (service, cancellable, callback, user_data);
 
   uri = webkit_web_view_get_uri (web_view);
-  if (uri && current_time - mtime <= SNAPSHOT_UPDATE_THRESHOLD) {
+  if (uri) {
     const char *path = g_hash_table_lookup (service->cache, uri);
 
     if (path) {
