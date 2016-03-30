@@ -398,6 +398,27 @@ show_tabs_changed_cb (GSettings    *settings,
   update_tabs_visibility (nb, FALSE);
 }
 
+static GtkPositionType
+ephy_settings_get_tabs_bar_position (void)
+{
+  EphyPrefsUITabsBarPosition position;
+  position = g_settings_get_enum (EPHY_SETTINGS_UI,
+                                  EPHY_PREFS_UI_TABS_BAR_POSITION);
+
+  switch (position) {
+    case EPHY_PREFS_UI_TABS_BAR_POSITION_TOP:
+      return GTK_POS_TOP;
+    case EPHY_PREFS_UI_TABS_BAR_POSITION_BOTTOM:
+      return GTK_POS_BOTTOM;
+    case EPHY_PREFS_UI_TABS_BAR_POSITION_LEFT:
+      return GTK_POS_LEFT;
+    case EPHY_PREFS_UI_TABS_BAR_POSITION_RIGHT:
+      return GTK_POS_RIGHT;
+    default:
+      g_assert_not_reached ();
+  }
+}
+
 static void
 ephy_notebook_init (EphyNotebook *notebook)
 {
@@ -408,6 +429,7 @@ ephy_notebook_init (EphyNotebook *notebook)
   gtk_notebook_set_show_border (gnotebook, FALSE);
   gtk_notebook_set_show_tabs (gnotebook, FALSE);
   gtk_notebook_set_group_name (gnotebook, EPHY_NOTEBOOK_TAB_GROUP_ID);
+  gtk_notebook_set_tab_pos (gnotebook, ephy_settings_get_tabs_bar_position ());
 
   notebook->tabs_allowed = TRUE;
 
@@ -678,7 +700,8 @@ ephy_notebook_insert_page (GtkNotebook *gnotebook,
   gtk_notebook_set_tab_detachable (gnotebook, tab_widget, TRUE);
   gtk_container_child_set (GTK_CONTAINER (gnotebook),
                            GTK_WIDGET (tab_widget),
-                           "tab-expand", TRUE,
+                           "tab-expand", g_settings_get_boolean (EPHY_SETTINGS_UI,
+                                                                 EPHY_PREFS_UI_EXPAND_TABS_BAR),
                            NULL);
 
   return position;
@@ -701,7 +724,8 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
 
   gtk_container_child_set (GTK_CONTAINER (notebook),
                            GTK_WIDGET (embed),
-                           "tab-expand", TRUE,
+                           "tab-expand", g_settings_get_boolean (EPHY_SETTINGS_UI,
+                                                                 EPHY_PREFS_UI_EXPAND_TABS_BAR),
                            NULL);
 
   if (jump_to) {

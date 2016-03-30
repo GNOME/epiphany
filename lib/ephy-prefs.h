@@ -24,6 +24,14 @@ G_BEGIN_DECLS
 
 typedef enum
 {
+  EPHY_PREFS_UI_TABS_BAR_POSITION_TOP,
+  EPHY_PREFS_UI_TABS_BAR_POSITION_BOTTOM,
+  EPHY_PREFS_UI_TABS_BAR_POSITION_LEFT,
+  EPHY_PREFS_UI_TABS_BAR_POSITION_RIGHT
+} EphyPrefsUITabsBarPosition;
+
+typedef enum
+{
   EPHY_PREFS_RESTORE_SESSION_POLICY_ALWAYS,
   EPHY_PREFS_RESTORE_SESSION_POLICY_NEVER,
   EPHY_PREFS_RESTORE_SESSION_POLICY_CRASHED
@@ -52,6 +60,8 @@ typedef enum
 #define EPHY_PREFS_UI_SCHEMA                     "org.gnome.Epiphany.ui"
 #define EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR       "always-show-tabs-bar"
 #define EPHY_PREFS_UI_DOWNLOADS_HIDDEN           "downloads-hidden"
+#define EPHY_PREFS_UI_EXPAND_TABS_BAR            "expand-tabs-bar"
+#define EPHY_PREFS_UI_TABS_BAR_POSITION          "tabs-bar-position"
 #define EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY "tabs-bar-visibility-policy"
 
 #define EPHY_PREFS_STATE_SCHEMA                 "org.gnome.Epiphany.state"
