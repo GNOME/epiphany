@@ -522,6 +522,19 @@ on_search_entry_changed (GtkSearchEntry    *entry,
   filter_now (self);
 }
 
+static gboolean
+on_search_key_press_event (GtkWidget        *widget,
+                          GdkEventKey       *event,
+                          EphyHistoryWindow *self)
+{
+  if (event->keyval == GDK_KEY_Escape) {
+    g_signal_emit_by_name (self, "close", NULL);
+    return GDK_EVENT_STOP;
+  }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 update_selection_actions (GActionGroup *action_group,
                           gboolean      has_selection)
@@ -713,6 +726,7 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_treeview_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_treeview_column_clicked_event);
   gtk_widget_class_bind_template_callback (widget_class, on_search_entry_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_key_press_event);
 }
 
 static void
