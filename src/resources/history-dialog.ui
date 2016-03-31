@@ -70,6 +70,7 @@
             <property name="primary_icon_sensitive">False</property>
             <property name="placeholder_text" translatable="yes">Search history</property>
             <signal name="search-changed" handler="on_search_entry_changed"/>
+            <signal name="key-press-event" handler="on_search_key_press_event"/>
           </object>
         </child>
         <child>
