@@ -391,11 +391,27 @@ update_tabs_visibility (EphyNotebook *nb,
 }
 
 static void
-show_tabs_changed_cb (GSettings    *settings,
-                      char         *key,
-                      EphyNotebook *nb)
+expand_tabs_changed_cb (GSettings    *settings,
+                        char         *key,
+                        EphyNotebook *nb)
 {
-  update_tabs_visibility (nb, FALSE);
+  GList *tabs;
+  GList *l;
+  gboolean expand;
+
+  expand = g_settings_get_boolean (EPHY_SETTINGS_UI,
+                                   EPHY_PREFS_UI_EXPAND_TABS_BAR),
+
+  tabs = gtk_container_get_children (GTK_CONTAINER (nb));
+
+  for (l = tabs; l != NULL; l = l->next) {
+    gtk_container_child_set (GTK_CONTAINER (nb),
+                             l->data,
+                             "tab-expand", expand,
+                             NULL);
+  }
+
+  g_list_free (tabs);
 }
 
 static GtkPositionType
@@ -417,6 +433,22 @@ ephy_settings_get_tabs_bar_position (void)
     default:
       g_assert_not_reached ();
   }
+}
+
+static void
+position_changed_cb (GSettings    *settings,
+                     char         *key,
+                     EphyNotebook *nb)
+{
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (nb), ephy_settings_get_tabs_bar_position ());
+}
+
+static void
+show_tabs_changed_cb (GSettings    *settings,
+                      char         *key,
+                      EphyNotebook *nb)
+{
+  update_tabs_visibility (nb, FALSE);
 }
 
 static void
@@ -449,6 +481,12 @@ ephy_notebook_init (EphyNotebook *notebook)
   gtk_drag_dest_add_text_targets (widget);
 
   g_signal_connect (EPHY_SETTINGS_UI,
+                    "changed::" EPHY_PREFS_UI_EXPAND_TABS_BAR,
+                    G_CALLBACK (expand_tabs_changed_cb), notebook);
+  g_signal_connect (EPHY_SETTINGS_UI,
+                    "changed::" EPHY_PREFS_UI_TABS_BAR_POSITION,
+                    G_CALLBACK (position_changed_cb), notebook);
+  g_signal_connect (EPHY_SETTINGS_UI,
                     "changed::" EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY,
                     G_CALLBACK (show_tabs_changed_cb), notebook);
 }
@@ -459,8 +497,15 @@ ephy_notebook_finalize (GObject *object)
   EphyNotebook *notebook = EPHY_NOTEBOOK (object);
 
   g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_UI,
+                                        expand_tabs_changed_cb,
+                                        notebook);
+  g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_UI,
+                                        position_changed_cb,
+                                        notebook);
+  g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_UI,
                                         show_tabs_changed_cb,
                                         notebook);
+
   g_list_free (notebook->focused_pages);
 
   G_OBJECT_CLASS (ephy_notebook_parent_class)->finalize (object);
