@@ -210,6 +210,7 @@ ephy_file_chooser_new (const char           *title,
         "image/png",
         "image/jpeg",
         "image/gif",
+        "image/webp",
         NULL);
 
     filter[EPHY_FILE_FILTER_WEBPAGES] =
@@ -229,6 +230,7 @@ ephy_file_chooser_new (const char           *title,
         "image/png",
         "image/jpeg",
         "image/gif",
+        "image/webp",
         NULL);
 
     filter[EPHY_FILE_FILTER_ALL] =
