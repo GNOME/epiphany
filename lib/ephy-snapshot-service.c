@@ -596,6 +596,28 @@ got_snapshot_for_url (EphySnapshotService *service,
   ephy_snapshot_service_take_from_webview (task);
 }
 
+/* We want to return an existing snapshot immediately, even if it is stale,
+ * because snapshot creation is best-effort and often fails (e.g. if the user
+ * navigates away from the page too soon), and we must be sure to return an old
+ * result if a new one does not yet exist.
+ */
+static void
+ensure_snapshot_freshness_for_web_view (EphySnapshotService *service,
+                                        WebKitWebView       *web_view)
+{
+  GTask *task;
+  const char *uri;
+
+  uri = webkit_web_view_get_uri (web_view);
+  if (ephy_snapshot_service_lookup_snapshot_freshness (service, uri) != SNAPSHOT_FRESH) {
+    task = g_task_new (service, NULL, NULL, NULL);
+    g_task_set_task_data (task,
+                          snapshot_async_data_new (web_view, time (NULL)),
+                          (GDestroyNotify)snapshot_async_data_free);
+    g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, task);
+  }
+}
+
 /**
  * ephy_snapshot_service_get_snapshot_async:
  * @service: a #EphySnapshotService
@@ -632,11 +654,12 @@ ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
    * the snapshot path is in memory cache; this is an indication that the
    * snapshot is fresh. */
   uri = webkit_web_view_get_uri (web_view);
-  if (uri && ephy_snapshot_service_lookup_snapshot_freshness (service, uri) == SNAPSHOT_FRESH) {
+  if (uri) {
     ephy_snapshot_service_get_snapshot_for_url_async (service,
                                                       uri, mtime, cancellable,
                                                       (GAsyncReadyCallback)got_snapshot_for_url,
                                                       task);
+    ensure_snapshot_freshness_for_web_view (service, web_view);
   } else {
     g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, task);
   }
@@ -885,7 +908,7 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
   task = g_task_new (service, cancellable, callback, user_data);
 
   uri = webkit_web_view_get_uri (web_view);
-  if (uri && ephy_snapshot_service_lookup_snapshot_freshness (service, uri) == SNAPSHOT_FRESH) {
+  if (uri) {
     const char *path = ephy_snapshot_service_lookup_snapshot_path (service, uri);
 
     if (path) {
@@ -900,6 +923,8 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
                                                              (GAsyncReadyCallback)got_snapshot_path_for_url,
                                                              task);
     }
+
+    ensure_snapshot_freshness_for_web_view (service, web_view);
   } else {
     g_task_set_task_data (task,
                           snapshot_async_data_new (web_view, mtime),
