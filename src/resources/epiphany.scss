@@ -45,7 +45,7 @@ $edge_color: lighten($incognito_color, 13%);
 .incognito-mode {
   &.titlebar {
     @include headerbar_fill($incognito_color, $hc:$edge_color);
-    background-image: -gtk-icontheme($incognito_icon), $incognito_color;
+    background-image: -gtk-icontheme($incognito_icon);
     background-size: 64px 64px, 100% 100%;
     background-position: 160px 0, 0 0;
     background-repeat: no-repeat, no-repeat;
@@ -56,8 +56,7 @@ $edge_color: lighten($incognito_color, 13%);
       &:backdrop { color: $backdrop_fg_color }
     }
     &:backdrop {
-      background-image: -gtk-icontheme($incognito_icon),
-                          linear-gradient(to bottom, $incognito_color);
+      background-image: -gtk-icontheme($incognito_icon);
       box-shadow: inset 0 1px $edge_color;
       color: transparentize($backdrop_fg_color, 0.9); // color of the overlayed icon in backdrop
     }
