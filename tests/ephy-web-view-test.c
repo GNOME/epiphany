@@ -401,7 +401,7 @@ test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
   g_object_unref (g_object_ref_sink (view));
 }
 
-static gboolean
+static void
 visit_url_cb (EphyHistoryService  *service,
               const char          *url,
               EphyHistoryPageVisit visit_type,
@@ -410,8 +410,6 @@ visit_url_cb (EphyHistoryService  *service,
   /* We are only loading an error page, this code should never be
    * reached. */
   g_assert_not_reached ();
-
-  return FALSE;
 }
 
 static void
