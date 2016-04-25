@@ -520,7 +520,7 @@ get_snapshot_for_url_thread (GTask                   *task,
 void
 ephy_snapshot_service_get_snapshot_for_url_async (EphySnapshotService *service,
                                                   const char          *url,
-                                                  const time_t         mtime,
+                                                  time_t               mtime,
                                                   GCancellable        *cancellable,
                                                   GAsyncReadyCallback  callback,
                                                   gpointer             user_data)
@@ -634,7 +634,7 @@ ensure_snapshot_freshness_for_web_view (EphySnapshotService *service,
 void
 ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
                                           WebKitWebView       *web_view,
-                                          const time_t         mtime,
+                                          time_t               mtime,
                                           GCancellable        *cancellable,
                                           GAsyncReadyCallback  callback,
                                           gpointer             user_data)
@@ -837,7 +837,7 @@ get_snapshot_path_for_url_thread (GTask                   *task,
 void
 ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *service,
                                                        const char          *url,
-                                                       const time_t         mtime,
+                                                       time_t               mtime,
                                                        GCancellable        *cancellable,
                                                        GAsyncReadyCallback  callback,
                                                        gpointer             user_data)
@@ -894,7 +894,7 @@ got_snapshot_path_for_url (EphySnapshotService *service,
 void
 ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
                                                WebKitWebView       *web_view,
-                                               const time_t         mtime,
+                                               time_t               mtime,
                                                GCancellable        *cancellable,
                                                GAsyncReadyCallback  callback,
                                                gpointer             user_data)

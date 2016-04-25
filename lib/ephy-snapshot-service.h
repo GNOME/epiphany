@@ -48,7 +48,7 @@ EphySnapshotService *ephy_snapshot_service_get_default                 (void);
 
 void                 ephy_snapshot_service_get_snapshot_for_url_async  (EphySnapshotService *service,
                                                                         const char *url,
-                                                                        const time_t mtime,
+                                                                        time_t mtime,
                                                                         GCancellable *cancellable,
                                                                         GAsyncReadyCallback callback,
                                                                         gpointer user_data);
@@ -60,7 +60,7 @@ GdkPixbuf           *ephy_snapshot_service_get_snapshot_for_url_finish (EphySnap
 
 void                 ephy_snapshot_service_get_snapshot_async          (EphySnapshotService *service,
                                                                         WebKitWebView *web_view,
-                                                                        const time_t mtime,
+                                                                        time_t mtime,
                                                                         GCancellable *cancellable,
                                                                         GAsyncReadyCallback callback,
                                                                         gpointer user_data);
@@ -87,7 +87,7 @@ const char          *ephy_snapshot_service_lookup_snapshot_path        (EphySnap
 
 void             ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *service,
                                                                         const char *url,
-                                                                        const time_t mtime,
+                                                                        time_t mtime,
                                                                         GCancellable *cancellable,
                                                                         GAsyncReadyCallback callback,
                                                                         gpointer user_data);
@@ -96,7 +96,7 @@ char           *ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnap
                                                                         GError **error);
 void           ephy_snapshot_service_get_snapshot_path_async           (EphySnapshotService *service,
                                                                         WebKitWebView *web_view,
-                                                                        const time_t mtime,
+                                                                        time_t mtime,
                                                                         GCancellable *cancellable,
                                                                         GAsyncReadyCallback callback,
                                                                         gpointer user_data);
