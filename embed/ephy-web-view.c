@@ -1803,7 +1803,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
                                     "%s</strong>. Attackers might be trying to "
                                     "steal or alter information going to or from "
                                     "this site (for example, private messages, "
-                                    "credit card information, or passwords)."),
+                                    "credit card information, or passwords).</p>"),
                                   hostname);
       /* Message details when a site is not loaded due to an invalid TLS certificate. */
       msg_details = detailed_message_from_tls_errors (view->tls_errors);
