@@ -486,7 +486,7 @@ get_snapshot_for_url_thread (GTask                   *task,
     g_task_return_new_error (task,
                              EPHY_SNAPSHOT_SERVICE_ERROR,
                              EPHY_SNAPSHOT_SERVICE_ERROR_NOT_FOUND,
-                             "Snapshot for url \"%s\" not found in cache", data->url);
+                             "Snapshot for url \"%s\" not found in disk cache", data->url);
     return;
   }
 
@@ -825,7 +825,7 @@ get_snapshot_path_for_url_thread (GTask                   *task,
     g_task_return_new_error (task,
                              EPHY_SNAPSHOT_SERVICE_ERROR,
                              EPHY_SNAPSHOT_SERVICE_ERROR_NOT_FOUND,
-                             "Snapshot for url \"%s\" not found in cache", data->url);
+                             "Snapshot for url \"%s\" not found in disk cache", data->url);
     return;
   }
 
