@@ -395,10 +395,6 @@ ephy_embed_shell_set_thumbanil_path (EphyEmbedShell *shell,
 {
   GList *l;
 
-  ephy_history_service_set_url_thumbnail_time (shell->priv->global_history_service,
-                                               url, mtime,
-                                               NULL, NULL, NULL);
-
   for (l = shell->priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
 
@@ -443,6 +439,17 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
   }
 
   return G_OBJECT (shell->priv->global_history_service);
+}
+
+static void
+snapshot_saved_cb (EphySnapshotService *service,
+                   const char          *url,
+                   gint64               mtime,
+                   EphyEmbedShell      *shell)
+{
+  ephy_history_service_set_url_thumbnail_time (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (shell)),
+                                               url, mtime,
+                                               NULL, NULL, NULL);
 }
 
 /**
@@ -760,6 +767,10 @@ ephy_embed_shell_constructed (GObject *object)
     ephy_embed_shell_create_web_context (embed_shell);
     embed_shell->priv->user_content = webkit_user_content_manager_new ();
   }
+
+  g_signal_connect_object (ephy_snapshot_service_get_default (),
+                           "snapshot-saved", G_CALLBACK (snapshot_saved_cb),
+                           embed_shell, 0);
 }
 
 static void
