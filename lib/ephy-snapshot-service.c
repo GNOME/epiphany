@@ -39,6 +39,13 @@ struct _EphySnapshotService {
 
 G_DEFINE_TYPE (EphySnapshotService, ephy_snapshot_service, G_TYPE_OBJECT)
 
+enum {
+  SNAPSHOT_SAVED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 typedef enum {
   SNAPSHOT_STALE,
   SNAPSHOT_FRESH
@@ -59,6 +66,24 @@ snapshot_path_cached_data_free (SnapshotPathCachedData *data)
 static void
 ephy_snapshot_service_class_init (EphySnapshotServiceClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  /**
+   * EphySnapshotService::snapshot-saved:
+   * @url: the URL the snapshot was saved for
+   * @mtime: the mtime embedded in the snapshot, needed to retrieve it
+   *
+   * The ::snapshot-saved signal is emitted when a new snapshot is saved.
+   **/
+  signals[SNAPSHOT_SAVED] = g_signal_new ("snapshot-saved",
+                                          G_OBJECT_CLASS_TYPE (object_class),
+                                          G_SIGNAL_RUN_LAST,
+                                          0,
+                                          NULL, NULL, NULL,
+                                          G_TYPE_NONE,
+                                          2,
+                                          G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
+                                          G_TYPE_INT64);
 }
 
 static void
@@ -656,33 +681,58 @@ ephy_snapshot_service_get_snapshot_finish (EphySnapshotService *service,
 }
 
 typedef struct {
+  EphySnapshotService *service;
   GdkPixbuf *snapshot;
   char *url;
   time_t mtime;
+  gint refcount;
 } SaveSnapshotAsyncData;
 
 static SaveSnapshotAsyncData *
-save_snapshot_async_data_new (GdkPixbuf  *snapshot,
-                              const char *url,
-                              time_t      mtime)
+save_snapshot_async_data_new (EphySnapshotService *service,
+                              GdkPixbuf           *snapshot,
+                              const char          *url,
+                              time_t               mtime)
 {
   SaveSnapshotAsyncData *data;
 
   data = g_slice_new0 (SaveSnapshotAsyncData);
+  data->service = g_object_ref (service);
   data->snapshot = g_object_ref (snapshot);
   data->url = g_strdup (url);
   data->mtime = mtime;
+  data->refcount = 1;
 
   return data;
 }
 
-static void
-save_snapshot_async_data_free (SaveSnapshotAsyncData *data)
+static SaveSnapshotAsyncData *
+save_snapshot_async_data_ref (SaveSnapshotAsyncData *data)
 {
-  g_object_unref (data->snapshot);
-  g_free (data->url);
+  g_atomic_int_add (&data->refcount, 1);
+  return data;
+}
 
-  g_slice_free (SaveSnapshotAsyncData, data);
+static void
+save_snapshot_async_data_unref (SaveSnapshotAsyncData *data)
+{
+  if (g_atomic_int_dec_and_test (&data->refcount)) {
+    g_object_unref (data->service);
+    g_object_unref (data->snapshot);
+    g_free (data->url);
+    g_slice_free (SaveSnapshotAsyncData, data);
+  }
+}
+
+static gboolean
+idle_emit_snapshot_saved (gpointer user_data)
+{
+  SaveSnapshotAsyncData *data = (SaveSnapshotAsyncData *)user_data;
+
+  g_signal_emit (data->service, signals[SNAPSHOT_SAVED], 0, data->url, data->mtime);
+
+  save_snapshot_async_data_unref (data);
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -697,9 +747,9 @@ save_snapshot_thread (GTask                 *task,
                                                   data->snapshot,
                                                   data->url,
                                                   data->mtime);
+  g_idle_add (idle_emit_snapshot_saved, save_snapshot_async_data_ref (data));
 
   path = gnome_desktop_thumbnail_path_for_uri (data->url, GNOME_DESKTOP_THUMBNAIL_SIZE_LARGE);
-
   cache_snapshot_data_in_idle (service, data->url, path, SNAPSHOT_FRESH);
 
   g_task_return_pointer (task, path, g_free);
@@ -723,8 +773,8 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
   task = g_task_new (service, cancellable, callback, user_data);
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task,
-                        save_snapshot_async_data_new (snapshot, url, mtime),
-                        (GDestroyNotify)save_snapshot_async_data_free);
+                        save_snapshot_async_data_new (service, snapshot, url, mtime),
+                        (GDestroyNotify)save_snapshot_async_data_unref);
   g_task_run_in_thread (task, (GTaskThreadFunc)save_snapshot_thread);
   g_object_unref (task);
 }

@@ -376,10 +376,6 @@ ephy_embed_shell_set_thumbnail_path (EphyEmbedShell *shell,
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GList *l;
 
-  ephy_history_service_set_url_thumbnail_time (priv->global_history_service,
-                                               url, mtime,
-                                               NULL, NULL, NULL);
-
   for (l = priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
     if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (web_extension), "initialized"))) {
@@ -430,6 +426,17 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
   }
 
   return G_OBJECT (priv->global_history_service);
+}
+
+static void
+snapshot_saved_cb (EphySnapshotService *service,
+                   const char          *url,
+                   gint64               mtime,
+                   EphyEmbedShell      *shell)
+{
+  ephy_history_service_set_url_thumbnail_time (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (shell)),
+                                               url, mtime,
+                                               NULL, NULL, NULL);
 }
 
 /**
@@ -831,6 +838,10 @@ ephy_embed_shell_constructed (GObject *object)
     ephy_embed_shell_create_web_context (shell);
     priv->user_content = webkit_user_content_manager_new ();
   }
+
+  g_signal_connect_object (ephy_snapshot_service_get_default (),
+                           "snapshot-saved", G_CALLBACK (snapshot_saved_cb),
+                           shell, 0);
 }
 
 static void
