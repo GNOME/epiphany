@@ -42,31 +42,34 @@ typedef enum {
 #define EPHY_THUMBNAIL_WIDTH 180
 #define EPHY_THUMBNAIL_HEIGHT 135
 
-GQuark               ephy_snapshot_service_error_quark                 (void);
+GQuark               ephy_snapshot_service_error_quark                      (void);
 
-EphySnapshotService *ephy_snapshot_service_get_default                 (void);
+EphySnapshotService *ephy_snapshot_service_get_default                      (void);
 
-const char          *ephy_snapshot_service_lookup_snapshot_path        (EphySnapshotService *service,
-                                                                        const char *url);
+const char          *ephy_snapshot_service_lookup_snapshot_path             (EphySnapshotService *service,
+                                                                             const char *url);
 
-void             ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *service,
-                                                                        const char *url,
-                                                                        time_t mtime,
-                                                                        GCancellable *cancellable,
-                                                                        GAsyncReadyCallback callback,
-                                                                        gpointer user_data);
-char           *ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService *service,
-                                                                        GAsyncResult *result,
-                                                                        GError **error);
-void           ephy_snapshot_service_get_snapshot_path_async           (EphySnapshotService *service,
-                                                                        WebKitWebView *web_view,
-                                                                        time_t mtime,
-                                                                        GCancellable *cancellable,
-                                                                        GAsyncReadyCallback callback,
-                                                                        gpointer user_data);
-char                *ephy_snapshot_service_get_snapshot_path_finish    (EphySnapshotService *service,
-                                                                        GAsyncResult *result,
-                                                                        GError **error);
+void                 ephy_snapshot_service_get_snapshot_path_for_url_async  (EphySnapshotService *service,
+                                                                             const char *url,
+                                                                             time_t mtime,
+                                                                             GCancellable *cancellable,
+                                                                             GAsyncReadyCallback callback,
+                                                                             gpointer user_data);
+
+char                *ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService *service,
+                                                                             GAsyncResult *result,
+                                                                             GError **error);
+
+void                 ephy_snapshot_service_get_snapshot_path_async          (EphySnapshotService *service,
+                                                                             WebKitWebView *web_view,
+                                                                             time_t mtime,
+                                                                             GCancellable *cancellable,
+                                                                             GAsyncReadyCallback callback,
+                                                                             gpointer user_data);
+
+char                *ephy_snapshot_service_get_snapshot_path_finish         (EphySnapshotService *service,
+                                                                             GAsyncResult *result,
+                                                                             GError **error);
 
 G_END_DECLS
 
