@@ -46,18 +46,6 @@ GQuark               ephy_snapshot_service_error_quark                 (void);
 
 EphySnapshotService *ephy_snapshot_service_get_default                 (void);
 
-void                 ephy_snapshot_service_save_snapshot_async         (EphySnapshotService *service,
-                                                                        GdkPixbuf *snapshot,
-                                                                        const char *url,
-                                                                        time_t mtime,
-                                                                        GCancellable *cancellable,
-                                                                        GAsyncReadyCallback callback,
-                                                                        gpointer user_data);
-
-char                *ephy_snapshot_service_save_snapshot_finish        (EphySnapshotService *service,
-                                                                        GAsyncResult *result,
-                                                                        GError **error);
-
 const char          *ephy_snapshot_service_lookup_snapshot_path        (EphySnapshotService *service,
                                                                         const char *url);
 
