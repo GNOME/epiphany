@@ -160,24 +160,35 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
 typedef struct {
   WebKitWebView *web_view;
   time_t mtime;
-
+  char *url;
   GdkPixbuf *snapshot;
   char *path;
 } SnapshotAsyncData;
 
 static SnapshotAsyncData *
 snapshot_async_data_new (WebKitWebView *web_view,
-                         time_t         mtime)
+                         time_t         mtime,
+                         const char    *url)
 {
   SnapshotAsyncData *data;
 
   data = g_slice_new0 (SnapshotAsyncData);
   data->web_view = web_view;
   data->mtime = mtime;
+  data->url = g_strdup (url);
 
   g_object_add_weak_pointer (G_OBJECT (web_view), (gpointer *)&data->web_view);
 
   return data;
+}
+
+static SnapshotAsyncData *
+snapshot_async_data_copy (SnapshotAsyncData *data)
+{
+  SnapshotAsyncData *copy = snapshot_async_data_new (data->web_view, data->mtime, data->url);
+  copy->snapshot = data->snapshot;
+  copy->path = g_strdup (data->path);
+  return copy;
 }
 
 static void
@@ -185,6 +196,7 @@ snapshot_async_data_free (SnapshotAsyncData *data)
 {
   if (data->web_view)
     g_object_remove_weak_pointer (G_OBJECT (data->web_view), (gpointer *)&data->web_view);
+  g_free (data->url);
   g_clear_object (&data->snapshot);
   g_free (data->path);
 
@@ -564,28 +576,6 @@ snapshot_for_url_async_data_free (SnapshotForURLAsyncData *data)
   g_slice_free (SnapshotForURLAsyncData, data);
 }
 
-/* We want to return an existing snapshot immediately, even if it is stale,
- * because snapshot creation is best-effort and often fails (e.g. if the user
- * navigates away from the page too soon), and we must be sure to return an old
- * result if a new one does not yet exist.
- */
-static void
-ensure_snapshot_freshness_for_web_view (EphySnapshotService *service,
-                                        WebKitWebView       *web_view)
-{
-  GTask *task;
-  const char *uri;
-
-  uri = webkit_web_view_get_uri (web_view);
-  if (ephy_snapshot_service_lookup_snapshot_freshness (service, uri) != SNAPSHOT_FRESH) {
-    task = g_task_new (service, NULL, NULL, NULL);
-    g_task_set_task_data (task,
-                          snapshot_async_data_new (web_view, time (NULL)),
-                          (GDestroyNotify)snapshot_async_data_free);
-    g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, task);
-  }
-}
-
 static void
 get_snapshot_path_for_url_thread (GTask                   *task,
                                   EphySnapshotService     *service,
@@ -654,15 +644,25 @@ got_snapshot_path_for_url (EphySnapshotService *service,
                            GAsyncResult        *result,
                            GTask               *task)
 {
+  SnapshotAsyncData *data = g_task_get_task_data (task);
   char *path;
 
   path = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, NULL);
   if (path) {
     g_task_return_pointer (task, path, g_free);
     g_object_unref (task);
-  } else {
-    ephy_snapshot_service_take_from_webview (task);
+
+    if (ephy_snapshot_service_lookup_snapshot_freshness (service, data->url) == SNAPSHOT_FRESH)
+      return;
+
+    /* Take a fresh snapshot in the background. */
+    task = g_task_new (service, NULL, NULL, NULL);
+    g_task_set_task_data (task,
+                          snapshot_async_data_copy (data),
+                          (GDestroyNotify)snapshot_async_data_free);
   }
+
+  ephy_snapshot_service_take_from_webview (task);
 }
 
 void
@@ -691,15 +691,13 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
     g_object_unref (task);
   } else {
     g_task_set_task_data (task,
-                          snapshot_async_data_new (web_view, mtime),
+                          snapshot_async_data_new (web_view, mtime, uri),
                           (GDestroyNotify)snapshot_async_data_free);
     ephy_snapshot_service_get_snapshot_path_for_url_async (service,
                                                            uri, mtime, cancellable,
                                                            (GAsyncReadyCallback)got_snapshot_path_for_url,
                                                            task);
   }
-
-  ensure_snapshot_freshness_for_web_view (service, web_view);
 }
 
 char *
