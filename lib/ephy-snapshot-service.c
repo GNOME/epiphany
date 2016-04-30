@@ -158,26 +158,31 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
 }
 
 typedef struct {
+  EphySnapshotService *service;
+  GdkPixbuf *snapshot;
   WebKitWebView *web_view;
   time_t mtime;
   char *url;
-  GdkPixbuf *snapshot;
-  char *path;
 } SnapshotAsyncData;
 
 static SnapshotAsyncData *
-snapshot_async_data_new (WebKitWebView *web_view,
-                         time_t         mtime,
-                         const char    *url)
+snapshot_async_data_new (EphySnapshotService *service,
+                         GdkPixbuf           *snapshot,
+                         WebKitWebView       *web_view,
+                         time_t               mtime,
+                         const char          *url)
 {
   SnapshotAsyncData *data;
 
   data = g_slice_new0 (SnapshotAsyncData);
+  data->service = g_object_ref (service);
+  data->snapshot = snapshot ? g_object_ref (snapshot) : NULL;
   data->web_view = web_view;
   data->mtime = mtime;
   data->url = g_strdup (url);
 
-  g_object_add_weak_pointer (G_OBJECT (web_view), (gpointer *)&data->web_view);
+  if (web_view)
+    g_object_add_weak_pointer (G_OBJECT (web_view), (gpointer *)&data->web_view);
 
   return data;
 }
@@ -185,20 +190,24 @@ snapshot_async_data_new (WebKitWebView *web_view,
 static SnapshotAsyncData *
 snapshot_async_data_copy (SnapshotAsyncData *data)
 {
-  SnapshotAsyncData *copy = snapshot_async_data_new (data->web_view, data->mtime, data->url);
-  copy->snapshot = data->snapshot;
-  copy->path = g_strdup (data->path);
+  SnapshotAsyncData *copy = snapshot_async_data_new (data->service,
+                                                     data->snapshot,
+                                                     data->web_view,
+                                                     data->mtime,
+                                                     data->url);
   return copy;
 }
 
 static void
 snapshot_async_data_free (SnapshotAsyncData *data)
 {
+  g_clear_object (&data->service);
+  g_clear_object (&data->snapshot);
+
   if (data->web_view)
     g_object_remove_weak_pointer (G_OBJECT (data->web_view), (gpointer *)&data->web_view);
+
   g_free (data->url);
-  g_clear_object (&data->snapshot);
-  g_free (data->path);
 
   g_slice_free (SnapshotAsyncData, data);
 }
@@ -236,66 +245,22 @@ cache_snapshot_data_in_idle (EphySnapshotService  *service,
   g_idle_add (idle_cache_snapshot_path, data);
 }
 
-typedef struct {
-  EphySnapshotService *service;
-  GdkPixbuf *snapshot;
-  char *url;
-  time_t mtime;
-  gint refcount;
-} SaveSnapshotAsyncData;
-
-static SaveSnapshotAsyncData *
-save_snapshot_async_data_new (EphySnapshotService *service,
-                              GdkPixbuf           *snapshot,
-                              const char          *url,
-                              time_t               mtime)
-{
-  SaveSnapshotAsyncData *data;
-
-  data = g_slice_new0 (SaveSnapshotAsyncData);
-  data->service = g_object_ref (service);
-  data->snapshot = g_object_ref (snapshot);
-  data->url = g_strdup (url);
-  data->mtime = mtime;
-  data->refcount = 1;
-
-  return data;
-}
-
-static SaveSnapshotAsyncData *
-save_snapshot_async_data_ref (SaveSnapshotAsyncData *data)
-{
-  g_atomic_int_add (&data->refcount, 1);
-  return data;
-}
-
-static void
-save_snapshot_async_data_unref (SaveSnapshotAsyncData *data)
-{
-  if (g_atomic_int_dec_and_test (&data->refcount)) {
-    g_object_unref (data->service);
-    g_object_unref (data->snapshot);
-    g_free (data->url);
-    g_slice_free (SaveSnapshotAsyncData, data);
-  }
-}
-
 static gboolean
 idle_emit_snapshot_saved (gpointer user_data)
 {
-  SaveSnapshotAsyncData *data = (SaveSnapshotAsyncData *)user_data;
+  SnapshotAsyncData *data = (SnapshotAsyncData *)user_data;
 
   g_signal_emit (data->service, signals[SNAPSHOT_SAVED], 0, data->url, data->mtime);
 
-  save_snapshot_async_data_unref (data);
+  snapshot_async_data_free (data);
   return G_SOURCE_REMOVE;
 }
 
 static void
-save_snapshot_thread (GTask                 *task,
-                      EphySnapshotService   *service,
-                      SaveSnapshotAsyncData *data,
-                      GCancellable          *cancellable)
+save_snapshot_thread (GTask               *task,
+                      EphySnapshotService *service,
+                      SnapshotAsyncData   *data,
+                      GCancellable        *cancellable)
 {
   char *path;
 
@@ -303,7 +268,7 @@ save_snapshot_thread (GTask                 *task,
                                                   data->snapshot,
                                                   data->url,
                                                   data->mtime);
-  g_idle_add (idle_emit_snapshot_saved, save_snapshot_async_data_ref (data));
+  g_idle_add (idle_emit_snapshot_saved, snapshot_async_data_copy (data));
 
   path = gnome_desktop_thumbnail_path_for_uri (data->url, GNOME_DESKTOP_THUMBNAIL_SIZE_LARGE);
   cache_snapshot_data_in_idle (service, data->url, path, SNAPSHOT_FRESH);
@@ -329,8 +294,8 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
   task = g_task_new (service, cancellable, callback, user_data);
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task,
-                        save_snapshot_async_data_new (service, snapshot, url, mtime),
-                        (GDestroyNotify)save_snapshot_async_data_unref);
+                        snapshot_async_data_new (service, snapshot, NULL, mtime, url),
+                        (GDestroyNotify)snapshot_async_data_free);
   g_task_run_in_thread (task, (GTaskThreadFunc)save_snapshot_thread);
   g_object_unref (task);
 }
@@ -547,40 +512,11 @@ ephy_snapshot_service_lookup_snapshot_freshness (EphySnapshotService *service,
   return data == NULL ? SNAPSHOT_STALE : data->freshness;
 }
 
-typedef struct {
-  char *url;
-  time_t mtime;
-
-  char *path;
-} SnapshotForURLAsyncData;
-
-static SnapshotForURLAsyncData *
-snapshot_for_url_async_data_new (const char *url,
-                                 time_t      mtime)
-{
-  SnapshotForURLAsyncData *data;
-
-  data = g_slice_new0 (SnapshotForURLAsyncData);
-  data->url = g_strdup (url);
-  data->mtime = mtime;
-
-  return data;
-}
-
 static void
-snapshot_for_url_async_data_free (SnapshotForURLAsyncData *data)
-{
-  g_free (data->url);
-  g_free (data->path);
-
-  g_slice_free (SnapshotForURLAsyncData, data);
-}
-
-static void
-get_snapshot_path_for_url_thread (GTask                   *task,
-                                  EphySnapshotService     *service,
-                                  SnapshotForURLAsyncData *data,
-                                  GCancellable            *cancellable)
+get_snapshot_path_for_url_thread (GTask               *task,
+                                  EphySnapshotService *service,
+                                  SnapshotAsyncData   *data,
+                                  GCancellable        *cancellable)
 {
   char *path;
 
@@ -623,8 +559,8 @@ ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *serv
 
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task,
-                        snapshot_for_url_async_data_new (url, mtime),
-                        (GDestroyNotify)snapshot_for_url_async_data_free);
+                        snapshot_async_data_new (service, NULL, NULL, mtime, url),
+                        (GDestroyNotify)snapshot_async_data_free);
   g_task_run_in_thread (task, (GTaskThreadFunc)get_snapshot_path_for_url_thread);
   g_object_unref (task);
 }
@@ -691,7 +627,7 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
     g_object_unref (task);
   } else {
     g_task_set_task_data (task,
-                          snapshot_async_data_new (web_view, mtime, uri),
+                          snapshot_async_data_new (service, NULL, web_view, mtime, uri),
                           (GDestroyNotify)snapshot_async_data_free);
     ephy_snapshot_service_get_snapshot_path_for_url_async (service,
                                                            uri, mtime, cancellable,
