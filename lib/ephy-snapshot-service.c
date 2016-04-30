@@ -675,36 +675,31 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
 {
   GTask *task;
   const char *uri;
+  const char *path;
 
   g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
   g_return_if_fail (WEBKIT_IS_WEB_VIEW (web_view));
+  g_return_if_fail (webkit_web_view_get_uri (web_view));
 
   task = g_task_new (service, cancellable, callback, user_data);
 
   uri = webkit_web_view_get_uri (web_view);
-  if (uri) {
-    const char *path = ephy_snapshot_service_lookup_snapshot_path (service, uri);
+  path = ephy_snapshot_service_lookup_snapshot_path (service, uri);
 
-    if (path) {
-      g_task_return_pointer (task, g_strdup (path), g_free);
-      g_object_unref (task);
-    } else {
-      g_task_set_task_data (task,
-                            snapshot_async_data_new (web_view, mtime),
-                            (GDestroyNotify)snapshot_async_data_free);
-      ephy_snapshot_service_get_snapshot_path_for_url_async (service,
-                                                             uri, mtime, cancellable,
-                                                             (GAsyncReadyCallback)got_snapshot_path_for_url,
-                                                             task);
-    }
-
-    ensure_snapshot_freshness_for_web_view (service, web_view);
+  if (path) {
+    g_task_return_pointer (task, g_strdup (path), g_free);
+    g_object_unref (task);
   } else {
     g_task_set_task_data (task,
                           snapshot_async_data_new (web_view, mtime),
                           (GDestroyNotify)snapshot_async_data_free);
-    g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, task);
+    ephy_snapshot_service_get_snapshot_path_for_url_async (service,
+                                                           uri, mtime, cancellable,
+                                                           (GAsyncReadyCallback)got_snapshot_path_for_url,
+                                                           task);
   }
+
+  ensure_snapshot_freshness_for_web_view (service, web_view);
 }
 
 char *
