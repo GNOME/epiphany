@@ -46,7 +46,7 @@ GQuark               ephy_snapshot_service_error_quark                      (voi
 
 EphySnapshotService *ephy_snapshot_service_get_default                      (void);
 
-const char          *ephy_snapshot_service_lookup_snapshot_path             (EphySnapshotService *service,
+const char          *ephy_snapshot_service_lookup_cached_snapshot_path      (EphySnapshotService *service,
                                                                              const char *url);
 
 void                 ephy_snapshot_service_get_snapshot_path_for_url_async  (EphySnapshotService *service,

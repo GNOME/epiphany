@@ -512,8 +512,8 @@ ephy_snapshot_service_get_default (void)
 }
 
 const char *
-ephy_snapshot_service_lookup_snapshot_path (EphySnapshotService *service,
-                                            const char          *url)
+ephy_snapshot_service_lookup_cached_snapshot_path (EphySnapshotService *service,
+                                                   const char          *url)
 {
   SnapshotPathCachedData *data;
 
@@ -624,7 +624,7 @@ ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *serv
 
   task = g_task_new (service, cancellable, callback, user_data);
 
-  path = ephy_snapshot_service_lookup_snapshot_path (service, url);
+  path = ephy_snapshot_service_lookup_cached_snapshot_path (service, url);
   if (path) {
     g_task_return_pointer (task, g_strdup (path), g_free);
     g_object_unref (task);
@@ -684,7 +684,7 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
   task = g_task_new (service, cancellable, callback, user_data);
 
   uri = webkit_web_view_get_uri (web_view);
-  path = ephy_snapshot_service_lookup_snapshot_path (service, uri);
+  path = ephy_snapshot_service_lookup_cached_snapshot_path (service, uri);
 
   if (path) {
     g_task_return_pointer (task, g_strdup (path), g_free);

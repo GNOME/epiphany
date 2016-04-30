@@ -507,7 +507,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
     const char *snapshot;
     char *thumbnail_style = NULL;
 
-    snapshot = ephy_snapshot_service_lookup_snapshot_path (snapshot_service, url->url);
+    snapshot = ephy_snapshot_service_lookup_cached_snapshot_path (snapshot_service, url->url);
     if (!snapshot) {
       GetSnapshotPathAsyncData *data = g_new (GetSnapshotPathAsyncData, 1);
 
