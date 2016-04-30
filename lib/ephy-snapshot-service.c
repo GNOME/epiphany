@@ -160,7 +160,6 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
 typedef struct {
   WebKitWebView *web_view;
   time_t mtime;
-  gboolean for_snapshot;
 
   GdkPixbuf *snapshot;
   char *path;
@@ -181,17 +180,6 @@ snapshot_async_data_new (WebKitWebView *web_view,
   return data;
 }
 
-static SnapshotAsyncData *
-snapshot_async_data_new_for_snapshot (WebKitWebView *web_view,
-                                      time_t         mtime)
-{
-  SnapshotAsyncData *data = snapshot_async_data_new (web_view, mtime);
-
-  data->for_snapshot = TRUE;
-
-  return data;
-}
-
 static void
 snapshot_async_data_free (SnapshotAsyncData *data)
 {
@@ -208,16 +196,10 @@ snapshot_saved (EphySnapshotService *service,
                 GAsyncResult        *result,
                 GTask               *task)
 {
-  SnapshotAsyncData *data = g_task_get_task_data (task);
   char *path;
 
   path = ephy_snapshot_service_save_snapshot_finish (service, result, NULL);
-  if (data->for_snapshot) {
-    data->path = path;
-    g_task_return_pointer (task, g_object_ref (data->snapshot), g_object_unref);
-  } else {
-    g_task_return_pointer (task, path, g_free);
-  }
+  g_task_return_pointer (task, path, g_free);
   g_object_unref (task);
 }
 
@@ -472,130 +454,6 @@ cache_snapshot_data_in_idle (EphySnapshotService  *service,
   g_idle_add (idle_cache_snapshot_path, data);
 }
 
-static void
-get_snapshot_for_url_thread (GTask                   *task,
-                             EphySnapshotService     *service,
-                             SnapshotForURLAsyncData *data,
-                             GCancellable            *cancellable)
-{
-  GdkPixbuf *snapshot;
-  GError *error = NULL;
-
-  data->path = gnome_desktop_thumbnail_factory_lookup (service->factory, data->url, data->mtime);
-  if (data->path == NULL) {
-    g_task_return_new_error (task,
-                             EPHY_SNAPSHOT_SERVICE_ERROR,
-                             EPHY_SNAPSHOT_SERVICE_ERROR_NOT_FOUND,
-                             "Snapshot for url \"%s\" not found in disk cache", data->url);
-    return;
-  }
-
-  cache_snapshot_data_in_idle (service, data->url, data->path, SNAPSHOT_STALE);
-
-  snapshot = gdk_pixbuf_new_from_file (data->path, &error);
-  if (snapshot == NULL) {
-    g_task_return_new_error (task,
-                             EPHY_SNAPSHOT_SERVICE_ERROR,
-                             EPHY_SNAPSHOT_SERVICE_ERROR_INVALID,
-                             "Error creating pixbuf for snapshot file \"%s\": %s",
-                             data->path, error->message);
-    g_error_free (error);
-  }
-
-  g_task_return_pointer (task, snapshot, g_object_unref);
-}
-
-/**
- * ephy_snapshot_service_get_snapshot_for_url:
- * @service: a #EphySnapshotService
- * @url: the URL for which a snapshot is needed
- * @mtime: @the last
- * @callback: a #EphySnapshotServiceCallback
- * @user_data: user data to pass to @callback
- *
- * Schedules a query for a snapshot of @url. If there is an up-to-date
- * snapshot in the cache, this will be retrieved.
- *
- **/
-void
-ephy_snapshot_service_get_snapshot_for_url_async (EphySnapshotService *service,
-                                                  const char          *url,
-                                                  time_t               mtime,
-                                                  GCancellable        *cancellable,
-                                                  GAsyncReadyCallback  callback,
-                                                  gpointer             user_data)
-{
-  GTask *task;
-
-  g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
-  g_return_if_fail (url != NULL);
-
-  task = g_task_new (service, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task,
-                        snapshot_for_url_async_data_new (url, mtime),
-                        (GDestroyNotify)snapshot_for_url_async_data_free);
-  g_task_run_in_thread (task, (GTaskThreadFunc)get_snapshot_for_url_thread);
-  g_object_unref (task);
-}
-
-/**
- * ephy_snapshot_service_get_snapshot_for_url_finish:
- * @service: a #EphySnapshotService
- * @result: a #GAsyncResult
- * @error: a location to store a #GError or %NULL
- *
- * Finishes the retrieval of a snapshot. Call from the
- * #GAsyncReadyCallback passed to
- * ephy_snapshot_service_get_snapshot_for_url_async().
- *
- * Returns: (transfer full): the snapshot.
- **/
-GdkPixbuf *
-ephy_snapshot_service_get_snapshot_for_url_finish (EphySnapshotService *service,
-                                                   GAsyncResult        *result,
-                                                   gchar              **path,
-                                                   GError             **error)
-{
-  GTask *task = G_TASK (result);
-  GdkPixbuf *snapshot;
-
-  g_return_val_if_fail (g_task_is_valid (result, service), NULL);
-
-  snapshot = g_task_propagate_pointer (task, error);
-  if (!snapshot)
-    return NULL;
-
-  if (path) {
-    SnapshotForURLAsyncData *data;
-
-    data = g_task_get_task_data (task);
-    *path = data->path;
-    data->path = NULL;
-  }
-
-  return snapshot;
-}
-
-static void
-got_snapshot_for_url (EphySnapshotService *service,
-                      GAsyncResult        *result,
-                      GTask               *task)
-{
-  GdkPixbuf *snapshot;
-  SnapshotAsyncData *data;
-
-  data = g_task_get_task_data (task);
-  snapshot = ephy_snapshot_service_get_snapshot_for_url_finish (service, result, &data->path, NULL);
-  if (snapshot) {
-    g_task_return_pointer (task, snapshot, g_object_unref);
-    g_object_unref (task);
-    return;
-  }
-
-  ephy_snapshot_service_take_from_webview (task);
-}
-
 /* We want to return an existing snapshot immediately, even if it is stale,
  * because snapshot creation is best-effort and often fails (e.g. if the user
  * navigates away from the page too soon), and we must be sure to return an old
@@ -616,91 +474,6 @@ ensure_snapshot_freshness_for_web_view (EphySnapshotService *service,
                           (GDestroyNotify)snapshot_async_data_free);
     g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, task);
   }
-}
-
-/**
- * ephy_snapshot_service_get_snapshot_async:
- * @service: a #EphySnapshotService
- * @web_view: the #WebKitWebView for which a snapshot is needed
- * @mtime: @the last
- * @callback: a #EphySnapshotServiceCallback
- * @user_data: user data to pass to @callback
- *
- * Schedules a query for a snapshot of @url. If there is an up-to-date
- * snapshot in the cache, this will be retrieved. Otherwise, this
- * the snapshot will be taken, cached, and retrieved.
- *
- **/
-void
-ephy_snapshot_service_get_snapshot_async (EphySnapshotService *service,
-                                          WebKitWebView       *web_view,
-                                          time_t               mtime,
-                                          GCancellable        *cancellable,
-                                          GAsyncReadyCallback  callback,
-                                          gpointer             user_data)
-{
-  GTask *task;
-  const char *uri;
-
-  g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
-  g_return_if_fail (WEBKIT_IS_WEB_VIEW (web_view));
-
-  task = g_task_new (service, cancellable, callback, user_data);
-  g_task_set_task_data (task,
-                        snapshot_async_data_new_for_snapshot (web_view, mtime),
-                        (GDestroyNotify)snapshot_async_data_free);
-
-  /* Try to get the snapshot from the cache first if we have a URL, but only if
-   * the snapshot path is in memory cache; this is an indication that the
-   * snapshot is fresh. */
-  uri = webkit_web_view_get_uri (web_view);
-  if (uri) {
-    ephy_snapshot_service_get_snapshot_for_url_async (service,
-                                                      uri, mtime, cancellable,
-                                                      (GAsyncReadyCallback)got_snapshot_for_url,
-                                                      task);
-    ensure_snapshot_freshness_for_web_view (service, web_view);
-  } else {
-    g_idle_add ((GSourceFunc)ephy_snapshot_service_take_from_webview, task);
-  }
-}
-
-/**
- * ephy_snapshot_service_get_snapshot_finish:
- * @service: a #EphySnapshotService
- * @result: a #GAsyncResult
- * @error: a location to store a #GError or %NULL
- *
- * Finishes the retrieval of a snapshot. Call from the
- * #GAsyncReadyCallback passed to
- * ephy_snapshot_service_get_snapshot_async().
- *
- * Returns: (transfer full): the snapshot.
- **/
-GdkPixbuf *
-ephy_snapshot_service_get_snapshot_finish (EphySnapshotService *service,
-                                           GAsyncResult        *result,
-                                           gchar              **path,
-                                           GError             **error)
-{
-  GTask *task = G_TASK (result);
-  GdkPixbuf *snapshot;
-
-  g_return_val_if_fail (g_task_is_valid (result, service), NULL);
-
-  snapshot = g_task_propagate_pointer (task, error);
-  if (!snapshot)
-    return NULL;
-
-  if (path) {
-    SnapshotAsyncData *data;
-
-    data = g_task_get_task_data (task);
-    *path = data->path;
-    data->path = NULL;
-  }
-
-  return snapshot;
 }
 
 typedef struct {

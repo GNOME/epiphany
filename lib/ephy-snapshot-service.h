@@ -46,30 +46,6 @@ GQuark               ephy_snapshot_service_error_quark                 (void);
 
 EphySnapshotService *ephy_snapshot_service_get_default                 (void);
 
-void                 ephy_snapshot_service_get_snapshot_for_url_async  (EphySnapshotService *service,
-                                                                        const char *url,
-                                                                        time_t mtime,
-                                                                        GCancellable *cancellable,
-                                                                        GAsyncReadyCallback callback,
-                                                                        gpointer user_data);
-
-GdkPixbuf           *ephy_snapshot_service_get_snapshot_for_url_finish (EphySnapshotService *service,
-                                                                        GAsyncResult *result,
-                                                                        gchar **path,
-                                                                        GError **error);
-
-void                 ephy_snapshot_service_get_snapshot_async          (EphySnapshotService *service,
-                                                                        WebKitWebView *web_view,
-                                                                        time_t mtime,
-                                                                        GCancellable *cancellable,
-                                                                        GAsyncReadyCallback callback,
-                                                                        gpointer user_data);
-
-GdkPixbuf           *ephy_snapshot_service_get_snapshot_finish         (EphySnapshotService *service,
-                                                                        GAsyncResult *result,
-                                                                        gchar **path,
-                                                                        GError **error);
-
 void                 ephy_snapshot_service_save_snapshot_async         (EphySnapshotService *service,
                                                                         GdkPixbuf *snapshot,
                                                                         const char *url,
