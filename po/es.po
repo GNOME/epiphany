@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-04-26 03:57+0000\n"
-"PO-Revision-Date: 2016-04-26 15:24+0200\n"
+"POT-Creation-Date: 2016-05-03 03:57+0000\n"
+"PO-Revision-Date: 2016-05-03 13:04+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -270,15 +270,10 @@ msgstr ""
 "disponible en la barra de pestañas."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:38
-#| msgid "The visibility policy for the tabs bar."
 msgid "The position of the tabs bar."
 msgstr "La posición de la barra de pestañas."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:39
-#| msgid ""
-#| "Controls when the tabs bar is shown. Possible values are 'always' (the "
-#| "tabs bar is always shown), 'more-than-one' (the tabs bar is only shown if "
-#| "there's two or more tabs) and 'never' (the tabs bar is never shown)."
 msgid ""
 "Controls where the tabs bar is shown. Possible values are 'top' (the "
 "default), 'bottom', 'left' (vertical tabs with bar on the left) and "
@@ -1118,24 +1113,17 @@ msgstr "Ninguna espacificada"
 #. Page title when a site cannot be loaded due to a page crash error.
 #: ../embed/ephy-web-view.c:1734 ../embed/ephy-web-view.c:1759
 #, c-format
-#| msgid "Problem loading “%s”"
 msgid "Problem Loading Page"
 msgstr "Problema al cargar la página"
 
 #. Message title when a site cannot be loaded due to a network error.
 #: ../embed/ephy-web-view.c:1737
-#| msgid "Oops! Unable to display this website."
 msgid "Oops! Unable to display this website"
 msgstr "No se ha podido mostrar esta página web"
 
 #. Message body when a site cannot be loaded due to a network error.
 #: ../embed/ephy-web-view.c:1740
 #, c-format
-#| msgid ""
-#| "<p>The site at “%s” seems to be unavailable. The precise error was:</"
-#| "p><p><code>%s</code></p><p>It may be temporarily unavailable or moved to "
-#| "a new address. You may wish to verify that your internet connection is "
-#| "working correctly.</p>"
 msgid ""
 "<p>The site at <strong>%s</strong> seems to be unavailable.</p><p>It may be "
 "temporarily inaccessible or moved to a new address. You may wish to verify "
@@ -1168,17 +1156,12 @@ msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
 #: ../embed/ephy-web-view.c:1762
-#| msgid "Oops! There may be a problem."
 msgid "Oops! There may be a problem"
 msgstr "Es posible que haya un problema"
 
 #. Message body when a site cannot be loaded due to a page crash error.
 #: ../embed/ephy-web-view.c:1765
 #, c-format
-#| msgid ""
-#| "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
-#| "happens again, please report the problem to the <strong>%s</strong> "
-#| "developers.</p>"
 msgid ""
 "<p>The site at <strong>%s</strong> may have caused Web to close unexpectedly."
 "</p><p>If this happens again, please report the problem to the <strong>%s</"
@@ -1191,7 +1174,6 @@ msgstr ""
 #. Page title when a site cannot be loaded due to a process crash error.
 #: ../embed/ephy-web-view.c:1780
 #, c-format
-#| msgid "Problem displaying “%s”"
 msgid "Problem Displaying Page"
 msgstr "Problema al mostrar la página"
 
@@ -1202,9 +1184,6 @@ msgstr "¡Ups!"
 
 #. Message body when a site cannot be loaded due to a process crash error.
 #: ../embed/ephy-web-view.c:1786
-#| msgid ""
-#| "Something went wrong while displaying this page. Please reload or visit a "
-#| "different page to continue."
 msgid ""
 "<p>Something went wrong while displaying this page.</p><p>Please reload or "
 "visit a different page to continue.</p>"
@@ -1215,44 +1194,43 @@ msgstr ""
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: ../embed/ephy-web-view.c:1796
 #, c-format
-#| msgid "Page _Security Information"
 msgid "Security Violation"
 msgstr "Violación de seguridad"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
 #: ../embed/ephy-web-view.c:1799
-#| msgid "Your connection seems to be secure."
 msgid "This Connection is Not Secure"
 msgstr "Esta conexión no es segura"
 
 #. Message body when a site is not loaded due to an invalid TLS certificate.
 #: ../embed/ephy-web-view.c:1802
 #, c-format
+#| msgid ""
+#| "<p>This does not look like the real <strong>%s</strong>. Attackers might "
+#| "be trying to steal or alter information going to or from this site (for "
+#| "example, private messages, credit card information, or passwords)."
 msgid ""
 "<p>This does not look like the real <strong>%s</strong>. Attackers might be "
 "trying to steal or alter information going to or from this site (for "
-"example, private messages, credit card information, or passwords)."
+"example, private messages, credit card information, or passwords).</p>"
 msgstr ""
 "<p>Este no parece ser el sitio <strong>%s</strong> real. Los atacantes puede "
 "estar intentando robar o alterar la información que recibe este sitio (por "
 "ejemplo, mensajes privados, información de tarjetas de crédito o "
-"contraseñas)."
+"contraseñas).</p>"
 
 #. The button on the invalid TLS certificate error page.
 #: ../embed/ephy-web-view.c:1812
-#| msgid "Back"
 msgid "Go Back"
 msgstr "Atrás"
 
 #: ../embed/ephy-web-view.c:1814
-#| msgid "MB"
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page.
 #: ../embed/ephy-web-view.c:1817
-#| msgid "Accept Risk"
 msgid "Accept Risk and Proceed"
 msgstr "Aceptar riesgo y seguir"
 
