@@ -5,7 +5,7 @@ button.active-menu {
   background-image: linear-gradient(to bottom, #c8c8c5, #dcdcda);
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-  box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(255, 255, 255, 0); }
+  box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
 
 .floating-bar {
   background-color: @theme_base_color;
@@ -24,35 +24,31 @@ button.active-menu {
     border-color: @unfocused_borders; }
 
 .incognito-mode.titlebar {
-  background-image: linear-gradient(to top, #a5b1bd, #c5cdd5 2px, #cbd2d9 3px);
+  background: #cbd2d9 -gtk-icontheme("user-not-tracked-symbolic") 160px 0/64px 64px no-repeat, linear-gradient(to top, #a5b1bd, #c5cdd5 2px, #cbd2d9 3px);
   box-shadow: inset 0 1px #f1f3f5;
-  background-image: -gtk-icontheme("user-not-tracked-symbolic"), linear-gradient(#cbd2d9);
-  background-size: 64px 64px, 100% 100%;
-  background-position: 160px 0, 0 0;
-  background-repeat: no-repeat, no-repeat;
   border-color: #8192a3;
   color: rgba(46, 52, 54, 0.2); }
   .incognito-mode.titlebar > * {
     color: #2e3436; }
     .incognito-mode.titlebar > *:backdrop {
-      color: #8b8e8e; }
+      color: #8b8e8f; }
   .incognito-mode.titlebar:backdrop {
-    background-image: -gtk-icontheme("user-not-tracked-symbolic"), linear-gradient(to bottom, #cbd2d9);
+    background-image: -gtk-icontheme("user-not-tracked-symbolic"), image(#cbd2d9);
     box-shadow: inset 0 1px #f1f3f5;
-    color: rgba(139, 142, 142, 0.1); }
+    color: rgba(139, 142, 143, 0.1); }
   .incognito-mode.titlebar button {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #8192a3;
-    background-image: linear-gradient(to bottom, #cbd2d9, #bfc8d0 60%, #aeb8c3);
+    background-image: linear-gradient(to bottom, #cbd2d9, #bfc8d0 60%, #aeb9c3);
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.6), 0 1px rgba(241, 243, 245, 0); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.6); }
     .incognito-mode.titlebar button.flat, .incognito-mode.titlebar button.titlebutton {
       border-color: transparent;
       background-color: transparent;
       background-image: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
       text-shadow: none;
       -gtk-icon-shadow: none; }
     .incognito-mode.titlebar button.titlebutton {
@@ -62,16 +58,10 @@ button.active-menu {
       color: #2e3436;
       outline-color: rgba(46, 52, 54, 0.3);
       border-color: #8192a3;
-      /*
-      background-image: linear-gradient(to bottom,
-                                        lighten($c, 16%),
-                                        lighten($c, 6%) 40%,
-                                        lighten($c, 2%));
-      */
       background-image: linear-gradient(to bottom, #dde1e6, #cbd2d9 60%, #bfc8d0);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.6), 0 1px rgba(241, 243, 245, 0); }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.6); }
     .incognito-mode.titlebar button:active, .incognito-mode.titlebar button:checked, .incognito-mode.titlebar button#ephy-page-menu-button.active-menu {
       color: #2e3436;
       outline-color: rgba(46, 52, 54, 0.3);
@@ -79,52 +69,51 @@ button.active-menu {
       background-image: linear-gradient(to bottom, #a5b1bd, #bcc5ce);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(241, 243, 245, 0); }
+      box-shadow: inset 0 2px 1px -2px rgba(0, 0, 0, 0.6); }
     .incognito-mode.titlebar button:disabled {
-      color: #8b8e8e;
       border-color: #8192a3;
-      background-image: linear-gradient(to bottom, #d2d8de);
+      background-image: linear-gradient(to bottom, #d3d9df);
       text-shadow: none;
       -gtk-icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0); }
-      .incognito-mode.titlebar button:disabled > .label {
-        color: inherit; }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+      .incognito-mode.titlebar button:disabled label, .incognito-mode.titlebar button:disabled {
+        color: #8b8e8f; }
     .incognito-mode.titlebar button:backdrop {
-      color: #8b8e8e;
       border-color: #cbd2d9;
       background-image: linear-gradient(to bottom, #cbd2d9);
       text-shadow: none;
       -gtk-icon-shadow: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
       border-color: #8192a3; }
+      .incognito-mode.titlebar button:backdrop label, .incognito-mode.titlebar button:backdrop {
+        color: #8b8e8f; }
       .incognito-mode.titlebar button:backdrop:active {
-        color: #8b8e8e;
-        border-color: #aeb8c3;
-        background-image: linear-gradient(to bottom, #aeb8c3);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0);
+        border-color: #aeb9c3;
+        background-image: linear-gradient(to bottom, #aeb9c3);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0);
         border-color: #8192a3; }
+        .incognito-mode.titlebar button:backdrop:active label, .incognito-mode.titlebar button:backdrop:active {
+          color: #8b8e8f; }
       .incognito-mode.titlebar button:backdrop:disabled {
-        color: #989ea3;
-        border-color: #d2d8de;
-        background-image: linear-gradient(to bottom, #d2d8de);
+        border-color: #d3d9df;
+        background-image: linear-gradient(to bottom, #d3d9df);
         text-shadow: none;
         -gtk-icon-shadow: none;
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(241, 243, 245, 0);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0);
         border-color: #8192a3; }
-        .incognito-mode.titlebar button:backdrop:disabled > .label {
-          color: inherit; }
+        .incognito-mode.titlebar button:backdrop:disabled label, .incognito-mode.titlebar button:backdrop:disabled {
+          color: #999fa4; }
     .incognito-mode.titlebar button.flat:backdrop, .incognito-mode.titlebar button.titlebutton:backdrop {
       border-color: transparent;
       background-color: transparent;
       background-image: none;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
       text-shadow: none;
       -gtk-icon-shadow: none; }
   .incognito-mode.titlebar entry {
-    box-shadow: inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px rgba(241, 243, 245, 0);
     border-color: #8192a3; }
     .incognito-mode.titlebar entry:focus {
       border-color: #4a90d9;
-      box-shadow: inset 0 0 0 1px #4a90d9, 0 1px rgba(241, 243, 245, 0); }
+      box-shadow: inset 0 0 0 1px #4a90d9; }
     .incognito-mode.titlebar entry:backdrop {
       box-shadow: none; }
