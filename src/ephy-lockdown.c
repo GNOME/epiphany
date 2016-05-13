@@ -99,8 +99,6 @@ typedef struct {
 } BindAction;
 
 static const BindAction window_actions[] = {
-  { EPHY_PREFS_LOCKDOWN_PRINTING, "FilePrint", "sensitive" },
-
   { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "FileBookmarkPage", "sensitive" },
 
   { EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "GoLocation", "sensitive" },
@@ -110,6 +108,10 @@ static const BindAction window_actions[] = {
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "TabsDetach", "sensitive" },
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "FileNewWindow", "sensitive" },
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "FileNewWindowIncognito", "sensitive" }
+};
+
+static const BindAction new_window_actions[] = {
+  { EPHY_PREFS_LOCKDOWN_PRINTING, "print", "enabled" }
 };
 
 static const BindAction popup_actions[] = {
@@ -149,6 +151,28 @@ sensitive_get_mapping (GValue   *value,
   return TRUE;
 }
 
+static gboolean
+new_sensitive_get_mapping (GValue   *value,
+                       GVariant *variant,
+                       gpointer  data)
+{
+  GAction *action;
+  gboolean active, before, after;
+
+  action = G_ACTION (data);
+  active = g_variant_get_boolean (variant);
+
+  before = g_action_get_enabled (action);
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), LOCKDOWN_FLAG, active);
+  after = g_action_get_enabled (action);
+
+  /* Set (GAction::enabled) to the value in GSettings _only if_
+   * the LOCKDOWN_FLAG had some real effect in the GtkAction */
+  g_value_set_boolean (value, (before != after) ? after : before);
+
+  return TRUE;
+}
+
 static void
 bind_settings_and_actions (GSettings        *settings,
                            GtkActionGroup   *action_group,
@@ -177,6 +201,40 @@ bind_settings_and_actions (GSettings        *settings,
                                     action, actions[i].prop,
                                     G_SETTINGS_BIND_GET,
                                     sensitive_get_mapping,
+                                    NULL,
+                                    action, NULL);
+    }
+  }
+}
+
+static void
+new_bind_settings_and_actions (GSettings        *settings,
+                           GActionGroup     *action_group,
+                           const BindAction *actions,
+                           int               actions_n)
+{
+  int i;
+
+  for (i = 0; i < actions_n; i++) {
+    GAction *action;
+
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         actions[i].action);
+
+    if (g_strcmp0 (actions[i].prop, "visible") == 0) {
+      g_settings_bind (settings, actions[i].key,
+                       action, actions[i].prop,
+                       G_SETTINGS_BIND_GET |
+                       G_SETTINGS_BIND_INVERT_BOOLEAN);
+    } else {
+      /* We need a custom get_mapping for 'sensitive'
+       * properties, see usage of
+       * ephy_action_change_sensitivity_flags in
+       * ephy-window.c. */
+      g_settings_bind_with_mapping (settings, actions[i].key,
+                                    action, actions[i].prop,
+                                    G_SETTINGS_BIND_GET,
+                                    new_sensitive_get_mapping,
                                     NULL,
                                     action, NULL);
     }
@@ -226,6 +284,10 @@ window_added_cb (GtkApplication *application,
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              action_group, window_actions,
                              G_N_ELEMENTS (window_actions));
+
+  new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                             G_ACTION_GROUP (window), new_window_actions,
+                             G_N_ELEMENTS (new_window_actions));
 
   action_group = find_action_group (manager, "PopupsActions");
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,

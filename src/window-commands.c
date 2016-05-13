@@ -62,21 +62,6 @@
 #define FAVICON_SIZE 16
 
 void
-window_cmd_file_print (GtkAction  *action,
-                       EphyWindow *window)
-{
-  EphyEmbed *embed;
-  EphyWebView *view;
-
-  embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (EPHY_IS_EMBED (embed));
-  view = ephy_embed_get_web_view (embed);
-
-  ephy_web_view_print (view);
-}
-
-void
 window_cmd_undo_close_tab (GtkAction  *action,
                            EphyWindow *window)
 {
@@ -1028,36 +1013,6 @@ window_cmd_edit_select_all (GtkAction  *action,
 }
 
 void
-window_cmd_edit_find (GtkAction  *action,
-                      EphyWindow *window)
-{
-  EphyFindToolbar *toolbar;
-
-  toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
-  ephy_find_toolbar_toggle_state (toolbar);
-}
-
-void
-window_cmd_edit_find_next (GtkAction  *action,
-                           EphyWindow *window)
-{
-  EphyFindToolbar *toolbar;
-
-  toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
-  ephy_find_toolbar_find_next (toolbar);
-}
-
-void
-window_cmd_edit_find_prev (GtkAction  *action,
-                           EphyWindow *window)
-{
-  EphyFindToolbar *toolbar;
-
-  toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
-  ephy_find_toolbar_find_previous (toolbar);
-}
-
-void
 window_cmd_edit_bookmarks (GtkAction  *action,
                            EphyWindow *window)
 {
@@ -1107,11 +1062,66 @@ window_cmd_view_fullscreen (GtkAction  *action,
 }
 
 void
+window_cmd_file_print (GSimpleAction *action,
+                       GVariant      *value,
+                       gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyEmbed *embed;
+  EphyWebView *view;
+
+  embed = ephy_embed_container_get_active_child
+            (EPHY_EMBED_CONTAINER (window));
+  g_return_if_fail (EPHY_IS_EMBED (embed));
+  view = ephy_embed_get_web_view (embed);
+
+  ephy_web_view_print (view);
+}
+
+void
+window_cmd_edit_find (GSimpleAction *action,
+                      GVariant      *value,
+                      gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyFindToolbar *toolbar;
+
+  toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
+  ephy_find_toolbar_toggle_state (toolbar);
+}
+
+void
+window_cmd_edit_find_prev (GSimpleAction *action,
+                           GVariant      *value,
+                           gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyFindToolbar *toolbar;
+
+  toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
+  ephy_find_toolbar_find_previous (toolbar);
+}
+
+void
+window_cmd_edit_find_next (GSimpleAction *action,
+                           GVariant      *value,
+                           gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyFindToolbar *toolbar;
+
+  toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
+  ephy_find_toolbar_find_next (toolbar);
+}
+
+void
 window_cmd_view_zoom_in (GSimpleAction *action,
                          GVariant      *value,
                          gpointer       user_data)
 {
-  ephy_window_set_zoom (EPHY_WINDOW (user_data), ZOOM_IN);
+  EphyWindow *window = user_data;
+
+  ephy_window_set_zoom (window, ZOOM_IN);
 }
 
 void
@@ -1119,7 +1129,9 @@ window_cmd_view_zoom_out (GSimpleAction *action,
                           GVariant      *value,
                           gpointer       user_data)
 {
-  ephy_window_set_zoom (EPHY_WINDOW (user_data), ZOOM_OUT);
+  EphyWindow *window = user_data;
+
+  ephy_window_set_zoom (window, ZOOM_OUT);
 }
 
 void
@@ -1127,7 +1139,8 @@ window_cmd_view_zoom_normal (GSimpleAction *action,
                              GVariant      *value,
                              gpointer       user_data)
 {
-  ephy_window_set_zoom (EPHY_WINDOW (user_data), 1.0);
+  EphyWindow *window = user_data;
+  ephy_window_set_zoom (window, 1.0);
 }
 
 static void
