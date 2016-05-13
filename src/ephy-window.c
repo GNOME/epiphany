@@ -49,7 +49,6 @@
 #include "ephy-toolbar.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
-#include "ephy-zoom-action.h"
 #include "ephy-zoom.h"
 #include "popup-commands.h"
 #include "window-commands.h"
@@ -143,12 +142,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     NULL, G_CALLBACK (window_cmd_view_stop) },
   { "ViewReload", NULL, N_("_Reload"), "<control>R", NULL,
     G_CALLBACK (window_cmd_view_reload) },
-  { "ViewZoomIn", NULL, N_("Zoom _In"), "<control>plus", NULL,
-    G_CALLBACK (window_cmd_view_zoom_in) },
-  { "ViewZoomOut", NULL, N_("Zoom O_ut"), "<control>minus", NULL,
-    G_CALLBACK (window_cmd_view_zoom_out) },
-  { "ViewZoomNormal", NULL, N_("_Normal Size"), "<control>0", NULL,
-    G_CALLBACK (window_cmd_view_zoom_normal) },
   { "ViewEncoding", NULL, N_("Text _Encoding"), NULL, NULL,
     G_CALLBACK (window_cmd_view_encoding) },
   { "ViewPageSource", NULL, N_("_Page Source"), "<control>U", NULL,
@@ -273,9 +266,6 @@ static const struct {
   { GDK_KEY_Home, GDK_MOD1_MASK, "FileHome", TRUE },
   /* FIXME: these are not in any menu for now, so add them here. */
   { GDK_KEY_F11, 0, "ViewFullscreen", FALSE },
-  { GDK_KEY_plus, GDK_CONTROL_MASK, "ViewZoomIn", FALSE },
-  { GDK_KEY_minus, GDK_CONTROL_MASK, "ViewZoomOut", FALSE },
-  { GDK_KEY_0, GDK_CONTROL_MASK, "ViewZoomNormal", FALSE },
   { GDK_KEY_g, GDK_CONTROL_MASK, "EditFindNext", FALSE },
   { GDK_KEY_G, GDK_CONTROL_MASK |
     GDK_SHIFT_MASK, "EditFindPrev", FALSE },
@@ -305,10 +295,6 @@ static const struct {
   { GDK_KEY_F5, GDK_SHIFT_MASK, "ViewReload", FALSE },
   { GDK_KEY_F5, GDK_CONTROL_MASK |
     GDK_SHIFT_MASK, "ViewReload", FALSE },
-  { GDK_KEY_KP_Add, GDK_CONTROL_MASK, "ViewZoomIn", FALSE },
-  { GDK_KEY_KP_Subtract, GDK_CONTROL_MASK, "ViewZoomOut", FALSE },
-  { GDK_KEY_equal, GDK_CONTROL_MASK, "ViewZoomIn", FALSE },
-  { GDK_KEY_KP_0, GDK_CONTROL_MASK, "ViewZoomNormal", FALSE },
   /* These keys are a bit strange: when pressed with no modifiers, they emit
    * KP_PageUp/Down Control; when pressed with Control+Shift they are KP_9/3,
    * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
@@ -335,8 +321,6 @@ static const struct {
   { XF86XK_Search, 0, "EditFind", FALSE },
   { XF86XK_Send, 0, "FileSendTo", FALSE },
   { XF86XK_Stop, 0, "ViewStop", FALSE },
-  { XF86XK_ZoomIn, 0, "ViewZoomIn", FALSE },
-  { XF86XK_ZoomOut, 0, "ViewZoomOut", FALSE }
   /* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
 #endif /* HAVE_X11_XF86KEYSYM_H */
 }, navigation_keybindings_ltr [] = {
@@ -350,6 +334,15 @@ static const struct {
   { GDK_KEY_Right, GDK_MOD1_MASK /*Alt*/, "NavigationBack", TRUE },
   { GDK_KEY_KP_Right, GDK_MOD1_MASK /*Alt*/, "NavigationBack", TRUE }
 }, *navigation_keybindings_rtl_ltr;
+
+const struct {
+  const gchar *action_and_target;
+  const gchar *accelerators[5];
+} accels [] = {
+  { "win.zoom-in", { "<control>plus", "<control>KP_Add", "<control>equal", "ZoomIn", NULL } },
+  { "win.zoom-out", { "<control>minus", "<control>KP_Subtract", "ZoomOut", NULL } },
+  { "win.zoom-normal", { "<control>0", "<control>KP_0", NULL } }
+};
 
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
 
@@ -1108,12 +1101,6 @@ setup_ui_manager (EphyWindow *window)
 
   action = gtk_action_group_get_action (action_group, "ViewEncoding");
   g_object_set (action, "short_label", _("Encodings…"), NULL);
-  action = gtk_action_group_get_action (action_group, "ViewZoomIn");
-  /* Translators: This refers to text size */
-  g_object_set (action, "short-label", _("Larger"), NULL);
-  action = gtk_action_group_get_action (action_group, "ViewZoomOut");
-  /* Translators: This refers to text size */
-  g_object_set (action, "short-label", _("Smaller"), NULL);
 
   action_group = gtk_action_group_new ("PopupsActions");
   gtk_action_group_set_translation_domain (action_group, NULL);
@@ -1154,15 +1141,6 @@ setup_ui_manager (EphyWindow *window)
                   NULL);
   gtk_action_group_add_action_with_accel (action_group, action,
                                           "<alt>Right");
-  g_object_unref (action);
-
-  action =
-    g_object_new (EPHY_TYPE_ZOOM_ACTION,
-                  "name", "Zoom",
-                  "label", _("Zoom"),
-                  "zoom", 1.0,
-                  NULL);
-  gtk_action_group_add_action (action_group, action);
   g_object_unref (action);
 
   action = g_object_new (EPHY_TYPE_HOME_ACTION,
@@ -1220,11 +1198,15 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
 {
   GtkActionGroup *action_group;
   GtkAction *action;
+  GAction *new_action;
   int i;
   const char *action_group_actions[] = { "FileSaveAs", "FileSaveAsApplication", "FilePrint",
                                          "FileSendTo", "FileBookmarkPage", "EditFind",
                                          "EditFindPrev", "EditFindNext", "ViewEncoding",
-                                         "ViewZoomIn", "ViewZoomOut", "ViewPageSource",
+                                         "ViewPageSource",
+                                         NULL };
+
+  const char *new_action_group_actions[] = { "zoom-in", "zoom-out",
                                          NULL };
 
   action_group = window->action_group;
@@ -1234,6 +1216,13 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
     action = gtk_action_group_get_action (action_group,
                                           action_group_actions[i]);
     ephy_action_change_sensitivity_flags (action,
+                                          flags, set);
+  }
+
+  for (i = 0; new_action_group_actions[i] != NULL; i++) {
+    new_action = g_action_map_lookup_action (G_ACTION_MAP (window),
+                                         new_action_group_actions[i]);
+    new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                           flags, set);
   }
 
@@ -1276,8 +1265,7 @@ sync_tab_address (EphyWebView *view,
 static void
 sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 {
-  GtkActionGroup *action_group;
-  GtkAction *action;
+  GAction *action;
   gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
   double zoom;
 
@@ -1297,13 +1285,12 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
     can_zoom_normal = TRUE;
   }
 
-  action_group = window->action_group;
-  action = gtk_action_group_get_action (action_group, "ViewZoomIn");
-  gtk_action_set_sensitive (action, can_zoom_in);
-  action = gtk_action_group_get_action (action_group, "ViewZoomOut");
-  gtk_action_set_sensitive (action, can_zoom_out);
-  action = gtk_action_group_get_action (action_group, "ViewZoomNormal");
-  gtk_action_set_sensitive (action, can_zoom_normal);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "zoom-in");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_zoom_in);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "zoom-out");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_zoom_out);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "zoom-normal");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_zoom_normal);
 }
 
 static void
@@ -2939,11 +2926,11 @@ sync_user_input_cb (EphyLocationController *action,
 }
 
 static void
-zoom_to_level_cb (GtkAction  *action,
-                  float       zoom,
-                  EphyWindow *window)
+zoom_to_level_cb (GSimpleAction *action,
+                  GVariant      *value,
+                  gpointer       user_data)
 {
-  ephy_window_set_zoom (window, zoom);
+  ephy_window_set_zoom (EPHY_WINDOW (user_data), g_variant_get_double (user_data));
 }
 
 static void
@@ -3028,11 +3015,6 @@ setup_toolbar (EphyWindow *window)
                                         "FileNewTab");
   g_signal_connect_swapped (action, "open-link",
                             G_CALLBACK (ephy_link_open), window);
-
-  action = gtk_action_group_get_action (window->toolbar_action_group,
-                                        "Zoom");
-  g_signal_connect (action, "zoom-to-level",
-                    G_CALLBACK (zoom_to_level_cb), window);
 
   title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (toolbar));
   g_signal_connect (title_box, "lock-clicked",
@@ -3121,6 +3103,30 @@ ephy_window_toggle_visibility_for_app_menu (EphyWindow *window)
   }
 }
 
+static const GActionEntry new_ephy_page_menu_entries [] =
+{
+  // { "new-tab", },
+  // { "open", },
+  // { "save-as", }
+  // { "save-as-application", }
+  // { "undo", },
+  // { "redo", },
+  // { "cut", },
+  // { "copy", },
+  // { "paste", },
+  { "zoom-in", window_cmd_view_zoom_in },
+  { "zoom-out", window_cmd_view_zoom_out },
+  { "zoom-normal", window_cmd_view_zoom_normal },
+  { "zoom", NULL, "d", "1.0", zoom_to_level_cb }
+  // { "print", },
+  // { "find", },
+  // { "bookmarks", },
+  // { "bookmark-page", },
+  // { "view-encoding", },
+  // { "view-page-source", },
+  // { "close-tab", }
+};
+
 static GObject *
 ephy_window_constructor (GType                  type,
                          guint                  n_construct_properties,
@@ -3137,11 +3143,23 @@ ephy_window_constructor (GType                  type,
   guint i;
   EphyEmbedShellMode mode;
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
+  GApplication *app;
 
   object = G_OBJECT_CLASS (ephy_window_parent_class)->constructor
              (type, n_construct_properties, construct_params);
 
   window = EPHY_WINDOW (object);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (window),
+                                   new_ephy_page_menu_entries,
+                                   G_N_ELEMENTS (new_ephy_page_menu_entries),
+                                   window);
+
+  app = g_application_get_default ();
+  for (i = 0; i < G_N_ELEMENTS (accels); i++)
+    gtk_application_set_accels_for_action (GTK_APPLICATION (app),
+                                           accels[i].action_and_target,
+                                           accels[i].accelerators);
 
   ephy_gui_ensure_window_group (GTK_WINDOW (window));
 
@@ -3176,6 +3194,7 @@ ephy_window_constructor (GType                  type,
     g_error_free (error);
     error = NULL;
   }
+
 
   /* Setup the toolbar. */
   window->toolbar = setup_toolbar (window);
@@ -3447,7 +3466,7 @@ ephy_window_activate_location (EphyWindow *window)
  **/
 void
 ephy_window_set_zoom (EphyWindow *window,
-                      float       zoom)
+                      double      zoom)
 {
   EphyEmbed *embed;
   double current_zoom = 1.0;

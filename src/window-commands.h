@@ -70,12 +70,15 @@ void window_cmd_view_encoding             (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_view_fullscreen           (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_view_zoom_in              (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_view_zoom_out             (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_view_zoom_normal          (GtkAction  *action,
-                                           EphyWindow *window);
+void window_cmd_view_zoom_in              (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_view_zoom_out             (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_view_zoom_normal          (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
 void window_cmd_view_page_source          (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_view_toggle_inspector     (GtkAction  *action,

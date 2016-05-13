@@ -31,6 +31,10 @@ void ephy_action_change_sensitivity_flags (GtkAction *action,
 					   guint flags,
 					   gboolean set);
 
+void new_ephy_action_change_sensitivity_flags (GSimpleAction *action,
+                                           guint    	  flags,
+                                           gboolean       set);
+
 G_END_DECLS
 
 #endif /* !EPHY_ACTION_HELPER_H */
