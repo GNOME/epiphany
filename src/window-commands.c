@@ -1107,24 +1107,27 @@ window_cmd_view_fullscreen (GtkAction  *action,
 }
 
 void
-window_cmd_view_zoom_in (GtkAction  *action,
-                         EphyWindow *window)
+window_cmd_view_zoom_in (GSimpleAction *action,
+                         GVariant      *value,
+                         gpointer       user_data)
 {
-  ephy_window_set_zoom (window, ZOOM_IN);
+  ephy_window_set_zoom (EPHY_WINDOW (user_data), ZOOM_IN);
 }
 
 void
-window_cmd_view_zoom_out (GtkAction  *action,
-                          EphyWindow *window)
+window_cmd_view_zoom_out (GSimpleAction *action,
+                          GVariant      *value,
+                          gpointer       user_data)
 {
-  ephy_window_set_zoom (window, ZOOM_OUT);
+  ephy_window_set_zoom (EPHY_WINDOW (user_data), ZOOM_OUT);
 }
 
 void
-window_cmd_view_zoom_normal (GtkAction  *action,
-                             EphyWindow *window)
+window_cmd_view_zoom_normal (GSimpleAction *action,
+                             GVariant      *value,
+                             gpointer       user_data)
 {
-  ephy_window_set_zoom (window, 1.0);
+  ephy_window_set_zoom (EPHY_WINDOW (user_data), 1.0);
 }
 
 static void

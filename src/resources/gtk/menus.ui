@@ -2,48 +2,46 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <menu id="page-menu">
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">_New Window</attribute>
-        <attribute name="action">win.file-new-window</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">New _Incognito Window</attribute>
-        <attribute name="action">win.file-new-window-incognito</attribute>
-      </item>
+    <!-- <section>
       <item>
         <attribute name="label" translatable="yes">New Tab</attribute>
-        <attribute name="action">win.file-new-tab</attribute>
+        <attribute name="action">win.new-tab</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Open…</attribute>
-        <attribute name="action">win.file-open</attribute>
+        <attribute name="action">win.open</attribute>
       </item>
+    </section>
+    <section>
+      <attribute name="label" translatable="yes">Save _As…</attribute>
+      <attribute name="action">win.save-as</attribute>
+      <attribute name="label" translatable="yes">Save As _Web Application…</attribute>
+      <attribute name="action">win.save-as-application</attribute>
     </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">_Undo</attribute>
-        <attribute name="action">win.edit-undo</attribute>
+        <attribute name="action">win.undo</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Re_do</attribute>
-        <attribute name="action">win.edit-redo</attribute>
+        <attribute name="action">win.redo</attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">Cu_t</attribute>
-        <attribute name="action">win.edit-cut</attribute>
+        <attribute name="action">win.cut</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Copy</attribute>
-        <attribute name="action">win.edit-copy</attribute>
+        <attribute name="action">win.copy</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Paste</attribute>
-        <attribute name="action">win</attribute>
+        <attribute name="action">win.paste</attribute>
       </item>
-    </section>
+    </section> -->
     <section>
       <item>
         <attribute name="label" translatable="yes">Zoom _In</attribute>
@@ -54,43 +52,43 @@
         <attribute name="action">win.zoom-out</attribute>
       </item>
     </section>
-    <section>
+<!--     <section>
       <item>
         <attribute name="label" translatable="yes">Print…</attribute>
         <attribute name="action">win.file-print</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Find…</attribute>
-        <attribute name="action">win.edit-find</attribute>
+        <attribute name="action">win.find</attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">Edit _Bookmarks</attribute>
-        <attribute name="action">win.edit-bookmarks</attribute>
+        <attribute name="action">win.bookmarks</attribute>
       </item>
       <submenu id="bookmarkks-menu">
         <item>
           <attribute name="label" translatable="yes">_Add Bookmark…</attribute>
-          <attribute name="action">win.file-bookmark-page</attribute>
+          <attribute name="action">win.bookmark-page</attribute>
         </item>
       </submenu>
     </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">Text _Encoding</attribute>
-        <attribute name="action">win.view-encoding</attribute>
+        <attribute name="action">win.encoding</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Page Source</attribute>
-        <attribute name="action">win.view-page-source</attribute>
+        <attribute name="action">win.page-source</attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">_Close</attribute>
-        <attribute name="action">win.file-close-tab</attribute>
+        <attribute name="action">win.close-tab</attribute>
       </item>
-    </section>
+    </section> -->
   </menu>
 </interface>

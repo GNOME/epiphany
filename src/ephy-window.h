@@ -46,8 +46,8 @@ GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 void		  ephy_window_load_url		  (EphyWindow *window,
 						   const char *url);
 
-void		  ephy_window_set_zoom		  (EphyWindow *window,
-						   float zoom);
+void              ephy_window_set_zoom            (EphyWindow *window,
+                                                   double zoom);
 
 void		  ephy_window_activate_location	  (EphyWindow *window);
 const char       *ephy_window_get_location        (EphyWindow *window);

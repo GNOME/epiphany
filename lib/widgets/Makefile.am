@@ -83,8 +83,6 @@ libephywidgets_la_SOURCES = \
 	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\
 	ephy-tree-model-sort.h			\
-	ephy-zoom-action.h			\
-	ephy-zoom-action.c			\
 	nautilus-floating-bar.c			\
 	nautilus-floating-bar.h
 
