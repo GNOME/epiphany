@@ -24,8 +24,6 @@
 
 G_BEGIN_DECLS
 
-void window_cmd_edit_find                 (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_view_stop                 (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_go_location               (GtkAction  *action,
@@ -39,8 +37,6 @@ void window_cmd_file_open                 (GtkAction  *action,
 void window_cmd_file_save_as              (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_file_save_as_application  (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_file_print                (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_undo_close_tab            (GtkAction *action,
                                            EphyWindow *window);
@@ -62,14 +58,22 @@ void window_cmd_edit_delete               (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_edit_select_all           (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_edit_find_next            (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_find_prev            (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_view_encoding             (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_view_fullscreen           (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_file_print                (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_edit_find                 (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_edit_find_prev            (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_edit_find_next            (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
 void window_cmd_view_zoom_in              (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);

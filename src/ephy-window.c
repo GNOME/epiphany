@@ -96,8 +96,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_file_save_as) },
   { "FileSaveAsApplication", NULL, N_("Save As _Web Application…"), "<shift><control>A", NULL,
     G_CALLBACK (window_cmd_file_save_as_application) },
-  { "FilePrint", NULL, N_("_Print…"), "<control>P", NULL,
-    G_CALLBACK (window_cmd_file_print) },
   { "FileSendTo", NULL, N_("S_end Link by Email…"), NULL, NULL,
     G_CALLBACK (window_cmd_file_send_to) },
   { "FileCloseTab", NULL, N_("_Close"), "<control>W", NULL,
@@ -121,12 +119,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_edit_delete) },
   { "EditSelectAll", NULL, N_("Select _All"), "<control>A", NULL,
     G_CALLBACK (window_cmd_edit_select_all) },
-  { "EditFind", NULL, N_("_Find…"), "<control>F", NULL,
-    G_CALLBACK (window_cmd_edit_find) },
-  { "EditFindNext", NULL, N_("Find Ne_xt"), "<control>G", NULL,
-    G_CALLBACK (window_cmd_edit_find_next) },
-  { "EditFindPrev", NULL, N_("Find Pre_vious"), "<shift><control>G", NULL,
-    G_CALLBACK (window_cmd_edit_find_prev) },
   { "EditBookmarks", NULL, N_("Edit _Bookmarks"), "<control>B", NULL,
     G_CALLBACK (window_cmd_edit_bookmarks) },
   { "EditHistory", NULL, N_("_History"), "<control>H", NULL,
@@ -266,9 +258,6 @@ static const struct {
   { GDK_KEY_Home, GDK_MOD1_MASK, "FileHome", TRUE },
   /* FIXME: these are not in any menu for now, so add them here. */
   { GDK_KEY_F11, 0, "ViewFullscreen", FALSE },
-  { GDK_KEY_g, GDK_CONTROL_MASK, "EditFindNext", FALSE },
-  { GDK_KEY_G, GDK_CONTROL_MASK |
-    GDK_SHIFT_MASK, "EditFindPrev", FALSE },
 
   { GDK_KEY_s, GDK_CONTROL_MASK, "FileSaveAs", FALSE },
   { GDK_KEY_r, GDK_CONTROL_MASK, "ViewReload", FALSE },
@@ -318,7 +307,6 @@ static const struct {
   { XF86XK_AddFavorite, 0, "FileBookmarkPage", FALSE },
   { XF86XK_Refresh, 0, "ViewReload", FALSE },
   { XF86XK_Reload, 0, "ViewReload", FALSE },
-  { XF86XK_Search, 0, "EditFind", FALSE },
   { XF86XK_Send, 0, "FileSendTo", FALSE },
   { XF86XK_Stop, 0, "ViewStop", FALSE },
   /* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
@@ -341,7 +329,11 @@ const struct {
 } accels [] = {
   { "win.zoom-in", { "<control>plus", "<control>KP_Add", "<control>equal", "ZoomIn", NULL } },
   { "win.zoom-out", { "<control>minus", "<control>KP_Subtract", "ZoomOut", NULL } },
-  { "win.zoom-normal", { "<control>0", "<control>KP_0", NULL } }
+  { "win.zoom-normal", { "<control>0", "<control>KP_0", NULL } },
+  { "win.print", { "<control>P", NULL } },
+  { "win.find", { "<control>F", "Search", NULL } },
+  { "win.find-prev", { "<shift><control>G", "Search", NULL } },
+  { "win.find-next", { "<control>G", NULL } }
 };
 
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
@@ -681,6 +673,7 @@ sync_tab_load_status (EphyWebView    *view,
 {
   GtkActionGroup *action_group = window->action_group;
   GtkAction *action;
+  GAction *new_action;
   gboolean loading;
 
   if (window->closing) return;
@@ -691,8 +684,8 @@ sync_tab_load_status (EphyWebView    *view,
   gtk_action_set_sensitive (action, loading);
 
   /* disable print while loading, see bug #116344 */
-  action = gtk_action_group_get_action (action_group, "FilePrint");
-  ephy_action_change_sensitivity_flags (action, SENS_FLAG_LOADING, loading);
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "print");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_LOADING, loading);
 
   action = gtk_action_group_get_action (window->toolbar_action_group,
                                         "ViewCombinedStopReload");
@@ -1089,15 +1082,8 @@ setup_ui_manager (EphyWindow *window)
   g_object_set (action, "short_label", _("Save As"), NULL);
   action = gtk_action_group_get_action (action_group, "FileSaveAsApplication");
   g_object_set (action, "short_label", _("Save As Application"), NULL);
-  action = gtk_action_group_get_action (action_group, "FilePrint");
-  g_object_set (action, "short_label", _("Print"), NULL);
   action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
   g_object_set (action, "short_label", _("Bookmark"), NULL);
-  action = gtk_action_group_get_action (action_group, "EditFind");
-  g_object_set (action, "short_label", _("Find"), NULL);
-
-  action = gtk_action_group_get_action (action_group, "EditFind");
-  g_object_set (action, "is_important", TRUE, NULL);
 
   action = gtk_action_group_get_action (action_group, "ViewEncoding");
   g_object_set (action, "short_label", _("Encodings…"), NULL);
@@ -1200,13 +1186,12 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   GtkAction *action;
   GAction *new_action;
   int i;
-  const char *action_group_actions[] = { "FileSaveAs", "FileSaveAsApplication", "FilePrint",
-                                         "FileSendTo", "FileBookmarkPage", "EditFind",
-                                         "EditFindPrev", "EditFindNext", "ViewEncoding",
-                                         "ViewPageSource",
+  const char *action_group_actions[] = { "FileSaveAs", "FileSaveAsApplication", "FileSendTo",
+                                         "FileBookmarkPage", "ViewEncoding", "ViewPageSource",
                                          NULL };
 
-  const char *new_action_group_actions[] = { "zoom-in", "zoom-out",
+  const char *new_action_group_actions[] = { "zoom-in", "zoom-out", "print",
+                                         "find", "find-prev", "find-next",
                                          NULL };
 
   action_group = window->action_group;
@@ -1300,6 +1285,7 @@ sync_tab_document_type (EphyWebView *view,
 {
   GtkActionGroup *action_group = window->action_group;
   GtkAction *action;
+  GAction *new_action;
   EphyWebViewDocumentType type;
   gboolean can_find, disable, is_image;
 
@@ -1317,12 +1303,12 @@ sync_tab_document_type (EphyWebView *view,
   ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, disable);
   action = gtk_action_group_get_action (action_group, "ViewPageSource");
   ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, is_image);
-  action = gtk_action_group_get_action (action_group, "EditFind");
-  ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, !can_find);
-  action = gtk_action_group_get_action (action_group, "EditFindNext");
-  ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, !can_find);
-  action = gtk_action_group_get_action (action_group, "EditFindPrev");
-  ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, !can_find);
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "find");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_DOCUMENT, !can_find);
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "find-prev");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_DOCUMENT, !can_find);
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "find-next");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_DOCUMENT, !can_find);
 
   if (!can_find) {
     ephy_find_toolbar_request_close (ephy_embed_get_find_toolbar (window->active_embed));
@@ -3117,9 +3103,11 @@ static const GActionEntry new_ephy_page_menu_entries [] =
   { "zoom-in", window_cmd_view_zoom_in },
   { "zoom-out", window_cmd_view_zoom_out },
   { "zoom-normal", window_cmd_view_zoom_normal },
-  { "zoom", NULL, "d", "1.0", zoom_to_level_cb }
-  // { "print", },
-  // { "find", },
+  { "zoom", NULL, "d", "1.0", zoom_to_level_cb },
+  { "print", window_cmd_file_print },
+  { "find", window_cmd_edit_find },
+  { "find-prev", window_cmd_edit_find_prev },
+  { "find-next", window_cmd_edit_find_next }
   // { "bookmarks", },
   // { "bookmark-page", },
   // { "view-encoding", },
