@@ -312,13 +312,19 @@ const struct {
   const gchar *action_and_target;
   const gchar *accelerators[5];
 } accels [] = {
-  { "win.zoom-in", { "<control>plus", "<control>KP_Add", "<control>equal", "ZoomIn", NULL } },
-  { "win.zoom-out", { "<control>minus", "<control>KP_Subtract", "ZoomOut", NULL } },
-  { "win.zoom-normal", { "<control>0", "<control>KP_0", NULL } },
-  { "win.print", { "<control>P", NULL } },
-  { "win.find", { "<control>F", "Search", NULL } },
-  { "win.find-prev", { "<shift><control>G", "Search", NULL } },
-  { "win.find-next", { "<control>G", NULL } }
+  { "win.undo", { "<Primary>Z", NULL } },
+  { "win.redo", { "<shift><Primary>Z", NULL } },
+  { "win.copy", { "<Primary>C", NULL } },
+  { "win.cut", { "<Primary>X", NULL } },
+  { "win.paste", { "<Primary>V", NULL } },
+  { "win.select-all", { "<Primary>A", NULL } },
+  { "win.zoom-in", { "<Primary>plus", "<Primary>KP_Add", "<Primary>equal", "ZoomIn", NULL } },
+  { "win.zoom-out", { "<Primary>minus", "<Primary>KP_Subtract", "ZoomOut", NULL } },
+  { "win.zoom-normal", { "<Primary>0", "<Primary>KP_0", NULL } },
+  { "win.print", { "<Primary>P", NULL } },
+  { "win.find", { "<Primary>F", "Search", NULL } },
+  { "win.find-prev", { "<shift><Primary>G", "Search", NULL } },
+  { "win.find-next", { "<Primary>G", NULL } }
 };
 
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
@@ -877,6 +883,8 @@ update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gb
   action = g_action_map_lookup_action (G_ACTION_MAP (window), action_name);
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), sensitive);
   // TODO: do something with hide
+  // TODO: see why PageMenu Actions don't have their sensitivity changed
+  // (probably because it's set back to enabled in 'context-menu-dismissed''s callback)
 }
 
 typedef struct {
