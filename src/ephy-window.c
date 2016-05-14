@@ -92,10 +92,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_file_new_incognito_window) },
   { "FileOpen", NULL, N_("_Open…"), "<control>O", NULL,
     G_CALLBACK (window_cmd_file_open) },
-  { "FileSaveAs", NULL, N_("Save _As…"), "<shift><control>S", NULL,
-    G_CALLBACK (window_cmd_file_save_as) },
-  { "FileSaveAsApplication", NULL, N_("Save As _Web Application…"), "<shift><control>A", NULL,
-    G_CALLBACK (window_cmd_file_save_as_application) },
   { "FileSendTo", NULL, N_("S_end Link by Email…"), NULL, NULL,
     G_CALLBACK (window_cmd_file_send_to) },
   { "FileCloseTab", NULL, N_("_Close"), "<control>W", NULL,
@@ -244,7 +240,6 @@ static const struct {
   /* FIXME: these are not in any menu for now, so add them here. */
   { GDK_KEY_F11, 0, "ViewFullscreen", FALSE },
 
-  { GDK_KEY_s, GDK_CONTROL_MASK, "FileSaveAs", FALSE },
   { GDK_KEY_r, GDK_CONTROL_MASK, "ViewReload", FALSE },
   { GDK_KEY_R, GDK_CONTROL_MASK, "ViewReload", FALSE },
   { GDK_KEY_R, GDK_CONTROL_MASK |
@@ -312,6 +307,8 @@ const struct {
   const gchar *action_and_target;
   const gchar *accelerators[5];
 } accels [] = {
+  { "win.save-as", { "<shift><Primary>S", "<Primary>s", NULL } },
+  { "win.save-as-application", { "<shift><Primary>A", NULL } },
   { "win.undo", { "<Primary>Z", NULL } },
   { "win.redo", { "<shift><Primary>Z", NULL } },
   { "win.copy", { "<Primary>C", NULL } },
@@ -1063,10 +1060,6 @@ setup_ui_manager (EphyWindow *window)
 
   action = gtk_action_group_get_action (action_group, "FileOpen");
   g_object_set (action, "short_label", _("Open"), NULL);
-  action = gtk_action_group_get_action (action_group, "FileSaveAs");
-  g_object_set (action, "short_label", _("Save As"), NULL);
-  action = gtk_action_group_get_action (action_group, "FileSaveAsApplication");
-  g_object_set (action, "short_label", _("Save As Application"), NULL);
   action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
   g_object_set (action, "short_label", _("Bookmark"), NULL);
 
@@ -1171,11 +1164,12 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   GtkAction *action;
   GAction *new_action;
   int i;
-  const char *action_group_actions[] = { "FileSaveAs", "FileSaveAsApplication", "FileSendTo",
-                                         "FileBookmarkPage", "ViewEncoding", "ViewPageSource",
+  const char *action_group_actions[] = { "FileSendTo", "FileBookmarkPage",
+                                         "ViewEncoding", "ViewPageSource",
                                          NULL };
 
-  const char *new_action_group_actions[] = { "zoom-in", "zoom-out", "print",
+  const char *new_action_group_actions[] = { "save-as", "save-as-application",
+                                         "zoom-in", "zoom-out", "print",
                                          "find", "find-prev", "find-next",
                                          NULL };
 
@@ -3095,8 +3089,6 @@ setup_location_controller (EphyWindow  *window,
 static const char *disabled_actions_for_app_mode[] = { "FileOpen",
                                                        "FileNewWindow",
                                                        "FileNewWindowIncognito",
-                                                       "FileSaveAs",
-                                                       "FileSaveAsApplication",
                                                        "ViewEncoding",
                                                        "ViewPageSource",
                                                        "ViewToggleInspector",
@@ -3104,6 +3096,9 @@ static const char *disabled_actions_for_app_mode[] = { "FileOpen",
                                                        "EditBookmarks",
                                                        "EditHistory",
                                                        "EditPreferences" };
+
+static const char *new_disabled_actions_for_app_mode[] = { "save-as",
+                                                       "save-as-application" };
 
 static void
 parse_css_error (GtkCssProvider *provider,
@@ -3153,9 +3148,8 @@ ephy_window_toggle_visibility_for_app_menu (EphyWindow *window)
 static const GActionEntry new_ephy_page_menu_entries [] =
 {
   // { "new-tab", },
-  // { "open", },
-  // { "save-as", }
-  // { "save-as-application", }
+  { "save-as", window_cmd_file_save_as },
+  { "save-as-application", window_cmd_file_save_as_application },
   { "undo", window_cmd_edit_undo },
   { "redo", window_cmd_edit_redo },
   { "cut", window_cmd_edit_cut },
@@ -3170,12 +3164,12 @@ static const GActionEntry new_ephy_page_menu_entries [] =
   { "print", window_cmd_file_print },
   { "find", window_cmd_edit_find },
   { "find-prev", window_cmd_edit_find_prev },
-  { "find-next", window_cmd_edit_find_next }
-  // { "bookmarks", },
-  // { "bookmark-page", },
-  // { "view-encoding", },
-  // { "view-page-source", },
-  // { "close-tab", }
+  { "find-next", window_cmd_edit_find_next },
+  { "bookmarks", },
+  { "bookmark-page", },
+  { "view-encoding", },
+  { "view-page-source", },
+  { "close-tab", }
 };
 
 static GObject *
@@ -3187,6 +3181,7 @@ ephy_window_constructor (GType                  type,
   EphyWindow *window;
   GtkSettings *settings;
   GtkAction *action;
+  GAction *new_action;
   GtkActionGroup *toolbar_action_group;
   GError *error = NULL;
   guint settings_connection;
@@ -3207,10 +3202,11 @@ ephy_window_constructor (GType                  type,
                                    window);
 
   app = g_application_get_default ();
-  for (i = 0; i < G_N_ELEMENTS (accels); i++)
+  for (i = 0; i < G_N_ELEMENTS (accels); i++) {
     gtk_application_set_accels_for_action (GTK_APPLICATION (app),
                                            accels[i].action_and_target,
                                            accels[i].accelerators);
+  }
 
   ephy_gui_ensure_window_group (GTK_WINDOW (window));
 
@@ -3310,10 +3306,18 @@ ephy_window_constructor (GType                  type,
     gtk_action_set_visible (action, FALSE);
 
     for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_app_mode); i++) {
+      printf("Disabled\n");
       action = gtk_action_group_get_action (window->action_group,
                                             disabled_actions_for_app_mode[i]);
       ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
       gtk_action_set_visible (action, FALSE);
+    }
+
+    for (i = 0; i < G_N_ELEMENTS (new_disabled_actions_for_app_mode); i++) {
+      new_action = g_action_map_lookup_action (G_ACTION_MAP (window),
+                                       new_disabled_actions_for_app_mode[i]);
+      new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+                                            SENS_FLAG_CHROME, TRUE);
     }
     chrome &= ~(EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR);
   }

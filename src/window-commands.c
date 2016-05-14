@@ -251,62 +251,102 @@ window_cmd_file_open (GtkAction  *action,
   gtk_widget_show (GTK_WIDGET (dialog));
 }
 
-static char *
-get_suggested_filename (EphyEmbed *embed)
-{
-  EphyWebView *view;
-  char *suggested_filename = NULL;
-  const char *mimetype;
-  WebKitURIResponse *response;
-  WebKitWebResource *web_resource;
-
-  view = ephy_embed_get_web_view (embed);
-  web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
-  response = webkit_web_resource_get_response (web_resource);
-  mimetype = webkit_uri_response_get_mime_type (response);
-
-  if ((g_ascii_strncasecmp (mimetype, "text/html", 9)) == 0) {
-    /* Web Title will be used as suggested filename */
-    suggested_filename = g_strconcat (ephy_embed_get_title (embed), ".mhtml", NULL);
-  } else {
-    suggested_filename = g_strdup (webkit_uri_response_get_suggested_filename (response));
-    if (!suggested_filename) {
-      SoupURI *soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
-      suggested_filename = g_path_get_basename (soup_uri->path);
-      soup_uri_free (soup_uri);
-    }
-  }
-
-  return suggested_filename;
-}
-
 void
-window_cmd_file_save_as (GtkAction  *action,
-                         EphyWindow *window)
+window_cmd_file_close_window (GtkAction  *action,
+                              EphyWindow *window)
 {
+  GtkWidget *notebook;
   EphyEmbed *embed;
-  EphyFileChooser *dialog;
-  char *suggested_filename;
+
+  notebook = ephy_window_get_notebook (window);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                              EPHY_PREFS_LOCKDOWN_QUIT) &&
+      gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1) {
+    return;
+  }
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_return_if_fail (embed != NULL);
 
-  dialog = ephy_file_chooser_new (_("Save"),
-                                  GTK_WIDGET (window),
-                                  GTK_FILE_CHOOSER_ACTION_SAVE,
-                                  EPHY_FILE_FILTER_NONE);
+  g_signal_emit_by_name (notebook, "tab-close-request", embed);
+}
 
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+void
+window_cmd_file_quit (GtkAction  *action,
+                      EphyWindow *window)
+{
+  if (ephy_shell_close_all_windows (ephy_shell_get_default ()))
+    g_application_quit (g_application_get_default ());
+}
 
-  suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
+void
+window_cmd_file_new_window (GtkAction  *action,
+                            EphyWindow *window)
+{
+  EphyEmbed *embed;
+  EphyWindow *new_window = ephy_window_new ();
 
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
-  g_free (suggested_filename);
+  embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                              new_window, NULL, 0);
+  ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
+  ephy_window_activate_location (new_window);
+}
 
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (save_response_cb), embed);
+void
+window_cmd_file_new_incognito_window (GtkAction  *action,
+                                      EphyWindow *window)
+{
+  ephy_open_incognito_window (NULL);
+}
 
-  gtk_widget_show (GTK_WIDGET (dialog));
+void
+window_cmd_edit_bookmarks (GtkAction  *action,
+                           EphyWindow *window)
+{
+  GtkWidget *bwindow;
+
+  bwindow = ephy_shell_get_bookmarks_editor (ephy_shell_get_default ());
+  gtk_window_present (GTK_WINDOW (bwindow));
+}
+
+void
+window_cmd_edit_history (GtkAction  *action,
+                         EphyWindow *window)
+{
+  GtkWidget *hwindow;
+
+  hwindow = ephy_shell_get_history_window (ephy_shell_get_default ());
+
+  if (GTK_WINDOW (window) != gtk_window_get_transient_for (GTK_WINDOW (hwindow)))
+    gtk_window_set_transient_for (GTK_WINDOW (hwindow),
+                                  GTK_WINDOW (window));
+  gtk_window_present (GTK_WINDOW (hwindow));
+}
+
+void
+window_cmd_edit_preferences (GtkAction  *action,
+                             EphyWindow *window)
+{
+  GtkWindow *dialog;
+
+  dialog = GTK_WINDOW (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+
+  if (GTK_WINDOW (window) != gtk_window_get_transient_for (dialog))
+    gtk_window_set_transient_for (dialog,
+                                  GTK_WINDOW (window));
+
+  gtk_window_present (dialog);
+}
+
+void
+window_cmd_view_fullscreen (GtkAction  *action,
+                            EphyWindow *window)
+{
+  if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
+    gtk_window_fullscreen (GTK_WINDOW (window));
+  else
+    gtk_window_unfullscreen (GTK_WINDOW (window));
 }
 
 typedef struct {
@@ -737,9 +777,11 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
 }
 
 void
-window_cmd_file_save_as_application (GtkAction  *action,
-                                     EphyWindow *window)
+window_cmd_file_save_as_application (GSimpleAction *action,
+                                     GVariant      *value,
+                                     gpointer       user_data)
 {
+  EphyWindow *window = user_data;
   EphyEmbed *embed;
   GtkWidget *dialog, *box, *image, *entry, *content_area;
   GtkWidget *label;
@@ -827,102 +869,64 @@ window_cmd_file_save_as_application (GtkAction  *action,
   gtk_widget_show_all (dialog);
 }
 
-void
-window_cmd_file_close_window (GtkAction  *action,
-                              EphyWindow *window)
+static char *
+get_suggested_filename (EphyEmbed *embed)
 {
-  GtkWidget *notebook;
-  EphyEmbed *embed;
+  EphyWebView *view;
+  char *suggested_filename = NULL;
+  const char *mimetype;
+  WebKitURIResponse *response;
+  WebKitWebResource *web_resource;
 
-  notebook = ephy_window_get_notebook (window);
+  view = ephy_embed_get_web_view (embed);
+  web_resource = webkit_web_view_get_main_resource (WEBKIT_WEB_VIEW (view));
+  response = webkit_web_resource_get_response (web_resource);
+  mimetype = webkit_uri_response_get_mime_type (response);
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_QUIT) &&
-      gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1) {
-    return;
+  if ((g_ascii_strncasecmp (mimetype, "text/html", 9)) == 0) {
+    /* Web Title will be used as suggested filename */
+    suggested_filename = g_strconcat (ephy_embed_get_title (embed), ".mhtml", NULL);
+  } else {
+    suggested_filename = g_strdup (webkit_uri_response_get_suggested_filename (response));
+    if (!suggested_filename) {
+      SoupURI *soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
+      suggested_filename = g_path_get_basename (soup_uri->path);
+      soup_uri_free (soup_uri);
+    }
   }
+
+  return suggested_filename;
+}
+
+void
+window_cmd_file_save_as (GSimpleAction *action,
+                         GVariant      *value,
+                         gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyEmbed *embed;
+  EphyFileChooser *dialog;
+  char *suggested_filename;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_return_if_fail (embed != NULL);
 
-  g_signal_emit_by_name (notebook, "tab-close-request", embed);
-}
+  dialog = ephy_file_chooser_new (_("Save"),
+                                  GTK_WIDGET (window),
+                                  GTK_FILE_CHOOSER_ACTION_SAVE,
+                                  EPHY_FILE_FILTER_NONE);
 
-void
-window_cmd_file_quit (GtkAction  *action,
-                      EphyWindow *window)
-{
-  if (ephy_shell_close_all_windows (ephy_shell_get_default ()))
-    g_application_quit (g_application_get_default ());
-}
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
-void
-window_cmd_file_new_window (GtkAction  *action,
-                            EphyWindow *window)
-{
-  EphyEmbed *embed;
-  EphyWindow *new_window = ephy_window_new ();
+  suggested_filename = ephy_sanitize_filename (get_suggested_filename (embed));
 
-  embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                              new_window, NULL, 0);
-  ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
-  ephy_window_activate_location (new_window);
-}
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), suggested_filename);
+  g_free (suggested_filename);
 
-void
-window_cmd_file_new_incognito_window (GtkAction  *action,
-                                      EphyWindow *window)
-{
-  ephy_open_incognito_window (NULL);
-}
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (save_response_cb), embed);
 
-void
-window_cmd_edit_bookmarks (GtkAction  *action,
-                           EphyWindow *window)
-{
-  GtkWidget *bwindow;
-
-  bwindow = ephy_shell_get_bookmarks_editor (ephy_shell_get_default ());
-  gtk_window_present (GTK_WINDOW (bwindow));
-}
-
-void
-window_cmd_edit_history (GtkAction  *action,
-                         EphyWindow *window)
-{
-  GtkWidget *hwindow;
-
-  hwindow = ephy_shell_get_history_window (ephy_shell_get_default ());
-
-  if (GTK_WINDOW (window) != gtk_window_get_transient_for (GTK_WINDOW (hwindow)))
-    gtk_window_set_transient_for (GTK_WINDOW (hwindow),
-                                  GTK_WINDOW (window));
-  gtk_window_present (GTK_WINDOW (hwindow));
-}
-
-void
-window_cmd_edit_preferences (GtkAction  *action,
-                             EphyWindow *window)
-{
-  GtkWindow *dialog;
-
-  dialog = GTK_WINDOW (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
-
-  if (GTK_WINDOW (window) != gtk_window_get_transient_for (dialog))
-    gtk_window_set_transient_for (dialog,
-                                  GTK_WINDOW (window));
-
-  gtk_window_present (dialog);
-}
-
-void
-window_cmd_view_fullscreen (GtkAction  *action,
-                            EphyWindow *window)
-{
-  if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
-    gtk_window_fullscreen (GTK_WINDOW (window));
-  else
-    gtk_window_unfullscreen (GTK_WINDOW (window));
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 void
