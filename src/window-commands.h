@@ -38,10 +38,6 @@ void window_cmd_undo_close_tab            (GtkAction *action,
                                            EphyWindow *window);
 void window_cmd_file_send_to              (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_file_close_window         (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_view_encoding             (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_view_fullscreen           (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_file_save_as              (GSimpleAction *action,
@@ -92,10 +88,17 @@ void window_cmd_view_zoom_out             (GSimpleAction *action,
 void window_cmd_view_zoom_normal          (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
-void window_cmd_view_page_source          (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_view_toggle_inspector     (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_view_encoding             (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_view_page_source          (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_file_close_window         (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
 void window_cmd_help_contents             (GtkAction  *action,
                                            GtkWidget  *window);
 void window_cmd_help_about                (GtkAction  *action,
