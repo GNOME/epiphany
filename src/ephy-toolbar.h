@@ -36,6 +36,8 @@ GtkWidget *ephy_toolbar_get_location_entry (EphyToolbar *toolbar);
 
 EphyTitleBox *ephy_toolbar_get_title_box (EphyToolbar *toolbar);
 
+GMenu *ephy_toolbar_get_page_menu (EphyToolbar *toolbar);
+
 G_END_DECLS
 
 #endif /* EPHY_TOOLBAR_H */

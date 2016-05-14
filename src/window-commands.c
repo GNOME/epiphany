@@ -877,142 +877,6 @@ window_cmd_file_new_incognito_window (GtkAction  *action,
 }
 
 void
-window_cmd_edit_undo (GtkAction  *action,
-                      EphyWindow *window)
-{
-  GtkWidget *widget;
-  GtkWidget *embed;
-  GtkWidget *location_entry;
-
-  widget = gtk_window_get_focus (GTK_WINDOW (window));
-  location_entry = gtk_widget_get_ancestor (widget, EPHY_TYPE_LOCATION_ENTRY);
-
-  if (location_entry) {
-    ephy_location_entry_reset (EPHY_LOCATION_ENTRY (location_entry));
-  } else {
-    embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
-
-    if (embed) {
-      webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)), "Undo");
-    }
-  }
-}
-
-void
-window_cmd_edit_redo (GtkAction  *action,
-                      EphyWindow *window)
-{
-  GtkWidget *widget;
-  GtkWidget *embed;
-  GtkWidget *location_entry;
-
-  widget = gtk_window_get_focus (GTK_WINDOW (window));
-  location_entry = gtk_widget_get_ancestor (widget, EPHY_TYPE_LOCATION_ENTRY);
-
-  if (location_entry) {
-    ephy_location_entry_undo_reset (EPHY_LOCATION_ENTRY (location_entry));
-  } else {
-    embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
-    if (embed) {
-      webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)), "Redo");
-    }
-  }
-}
-void
-window_cmd_edit_cut (GtkAction  *action,
-                     EphyWindow *window)
-{
-  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-
-  if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_cut_clipboard (GTK_EDITABLE (widget));
-  } else {
-    EphyEmbed *embed;
-    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
-
-    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_CUT);
-  }
-}
-
-void
-window_cmd_edit_copy (GtkAction  *action,
-                      EphyWindow *window)
-{
-  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-
-  if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_copy_clipboard (GTK_EDITABLE (widget));
-  } else {
-    EphyEmbed *embed;
-
-    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
-
-    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_COPY);
-  }
-}
-
-void
-window_cmd_edit_paste (GtkAction  *action,
-                       EphyWindow *window)
-{
-  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-
-  if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_paste_clipboard (GTK_EDITABLE (widget));
-  } else {
-    EphyEmbed *embed;
-
-    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
-
-    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_PASTE);
-  }
-}
-
-void
-window_cmd_edit_delete (GtkAction  *action,
-                        EphyWindow *window)
-{
-  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-
-  if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_delete_text (GTK_EDITABLE (widget), 0, -1);
-  } else {
-    EphyEmbed *embed;
-
-    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
-
-    /* FIXME: TODO */
-#if 0
-    ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
-                                     "cmd_delete");
-#endif
-  }
-}
-
-void
-window_cmd_edit_select_all (GtkAction  *action,
-                            EphyWindow *window)
-{
-  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-
-  if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
-  } else {
-    EphyEmbed *embed;
-
-    embed = ephy_embed_container_get_active_child
-              (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
-
-    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "SelectAll");
-  }
-}
-
-void
 window_cmd_edit_bookmarks (GtkAction  *action,
                            EphyWindow *window)
 {
@@ -1059,6 +923,157 @@ window_cmd_view_fullscreen (GtkAction  *action,
     gtk_window_fullscreen (GTK_WINDOW (window));
   else
     gtk_window_unfullscreen (GTK_WINDOW (window));
+}
+
+void
+window_cmd_edit_undo (GSimpleAction *action,
+                      GVariant      *value,
+                      gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  GtkWidget *widget;
+  GtkWidget *embed;
+  GtkWidget *location_entry;
+
+  widget = gtk_window_get_focus (GTK_WINDOW (window));
+  location_entry = gtk_widget_get_ancestor (widget, EPHY_TYPE_LOCATION_ENTRY);
+
+  if (location_entry) {
+    ephy_location_entry_reset (EPHY_LOCATION_ENTRY (location_entry));
+  } else {
+    embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
+
+    if (embed) {
+      webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)), "Undo");
+    }
+  }
+}
+
+void
+window_cmd_edit_redo (GSimpleAction *action,
+                      GVariant      *value,
+                      gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  GtkWidget *widget;
+  GtkWidget *embed;
+  GtkWidget *location_entry;
+
+  widget = gtk_window_get_focus (GTK_WINDOW (window));
+  location_entry = gtk_widget_get_ancestor (widget, EPHY_TYPE_LOCATION_ENTRY);
+
+  if (location_entry) {
+    ephy_location_entry_undo_reset (EPHY_LOCATION_ENTRY (location_entry));
+  } else {
+    embed = gtk_widget_get_ancestor (widget, EPHY_TYPE_EMBED);
+    if (embed) {
+      webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (EPHY_EMBED (embed)), "Redo");
+    }
+  }
+}
+void
+window_cmd_edit_cut (GSimpleAction *action,
+                     GVariant      *value,
+                     gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_cut_clipboard (GTK_EDITABLE (widget));
+  } else {
+    EphyEmbed *embed;
+    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+    g_return_if_fail (embed != NULL);
+
+    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_CUT);
+  }
+}
+
+void
+window_cmd_edit_copy (GSimpleAction *action,
+                      GVariant      *value,
+                      gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_copy_clipboard (GTK_EDITABLE (widget));
+  } else {
+    EphyEmbed *embed;
+
+    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+    g_return_if_fail (embed != NULL);
+
+    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_COPY);
+  }
+}
+
+void
+window_cmd_edit_paste (GSimpleAction *action,
+                       GVariant      *value,
+                       gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_paste_clipboard (GTK_EDITABLE (widget));
+  } else {
+    EphyEmbed *embed;
+
+    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+    g_return_if_fail (embed != NULL);
+
+    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_PASTE);
+  }
+}
+
+void
+window_cmd_edit_delete (GSimpleAction *action,
+                        GVariant      *value,
+                        gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_delete_text (GTK_EDITABLE (widget), 0, -1);
+  } else {
+    EphyEmbed *embed;
+
+    embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+    g_return_if_fail (embed != NULL);
+
+    /* FIXME: TODO */
+#if 0
+    ephy_command_manager_do_command (EPHY_COMMAND_MANAGER (embed),
+                                     "cmd_delete");
+#endif
+  }
+}
+
+void
+window_cmd_edit_select_all (GSimpleAction *action,
+                            GVariant      *value,
+                            gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
+  } else {
+    EphyEmbed *embed;
+
+    embed = ephy_embed_container_get_active_child
+              (EPHY_EMBED_CONTAINER (window));
+    g_return_if_fail (embed != NULL);
+
+    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "SelectAll");
+  }
 }
 
 void

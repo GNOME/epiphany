@@ -44,24 +44,31 @@ void window_cmd_file_send_to              (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_file_close_window         (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_edit_undo                 (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_redo                 (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_cut                  (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_copy                 (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_paste                (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_delete               (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_select_all           (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_view_encoding             (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_view_fullscreen           (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_edit_undo                 (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_edit_redo                 (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_edit_cut                  (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_edit_copy                 (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_edit_paste                (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_edit_delete               (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_edit_select_all           (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
 void window_cmd_file_print                (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
