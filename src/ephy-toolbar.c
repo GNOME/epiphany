@@ -43,7 +43,6 @@ struct _EphyToolbar {
   GtkWidget *entry;
   GtkWidget *navigation_box;
   GtkWidget *page_menu_button;
-  GtkWidget *new_page_menu_button;
   GtkWidget *new_tab_button;
   GtkWidget *downloads_revealer;
   GtkWidget *downloads_button;
@@ -151,7 +150,6 @@ sync_chromes_visibility (EphyToolbar *toolbar)
 
   gtk_widget_set_visible (toolbar->navigation_box, chrome & EPHY_WINDOW_CHROME_TOOLBAR);
   gtk_widget_set_visible (toolbar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
-  gtk_widget_set_visible (toolbar->new_page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
   gtk_widget_set_visible (toolbar->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
 
@@ -161,8 +159,8 @@ ephy_toolbar_constructed (GObject *object)
   EphyToolbar *toolbar = EPHY_TOOLBAR (object);
   GtkActionGroup *action_group;
   GtkAction *action;
-  GtkUIManager *manager;
-  GtkWidget *box, *button, *menu;
+  GtkWidget *box, *button;
+  GtkMenu *menu;
   EphyDownloadsManager *downloads_manager;
   GtkBuilder *builder;
 
@@ -243,24 +241,16 @@ ephy_toolbar_constructed (GObject *object)
   /* Page Menu */
   button = gtk_menu_button_new ();
   toolbar->page_menu_button = button;
-  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  manager = ephy_window_get_ui_manager (toolbar->window);
-  menu = gtk_ui_manager_get_widget (manager, "/ui/PagePopup");
-  gtk_widget_set_halign (menu, GTK_ALIGN_END);
-  gtk_menu_button_set_popup (GTK_MENU_BUTTON (button), menu);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
-
-  /* Page Menu */
-  button = gtk_menu_button_new ();
-  toolbar->new_page_menu_button = button;
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/menus.ui");
   toolbar->page_menu = G_MENU (gtk_builder_get_object (builder, "page-menu"));
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (toolbar->new_page_menu_button),
+  gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), FALSE);
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button),
                                   G_MENU_MODEL (toolbar->page_menu));
+  menu = gtk_menu_button_get_popup (GTK_MENU_BUTTON (button));
+  gtk_widget_set_halign (GTK_WIDGET (menu), GTK_ALIGN_END);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
 
   /* Downloads */
