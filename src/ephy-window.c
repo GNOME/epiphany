@@ -94,8 +94,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_file_open) },
   { "FileSendTo", NULL, N_("S_end Link by Email…"), NULL, NULL,
     G_CALLBACK (window_cmd_file_send_to) },
-  { "FileCloseTab", NULL, N_("_Close"), "<control>W", NULL,
-    G_CALLBACK (window_cmd_file_close_window) },
   { "FileQuit", NULL, N_("_Quit"), "<control>Q", NULL,
     G_CALLBACK (window_cmd_file_quit) },
 
@@ -115,10 +113,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     NULL, G_CALLBACK (window_cmd_view_stop) },
   { "ViewReload", NULL, N_("_Reload"), "<control>R", NULL,
     G_CALLBACK (window_cmd_view_reload) },
-  { "ViewEncoding", NULL, N_("Text _Encoding"), NULL, NULL,
-    G_CALLBACK (window_cmd_view_encoding) },
-  { "ViewPageSource", NULL, N_("_Page Source"), "<control>U", NULL,
-    G_CALLBACK (window_cmd_view_page_source) },
   { "ViewToggleInspector", NULL, N_("_Toggle Inspector"), "<shift><control>I", NULL,
     G_CALLBACK (window_cmd_view_toggle_inspector) },
 
@@ -307,7 +301,7 @@ const struct {
   const gchar *action_and_target;
   const gchar *accelerators[5];
 } accels [] = {
-  { "win.save-as", { "<shift><Primary>S", "<Primary>s", NULL } },
+  { "win.save-as", { "<shift><Primary>S", "<Primary>S", NULL } },
   { "win.save-as-application", { "<shift><Primary>A", NULL } },
   { "win.undo", { "<Primary>Z", NULL } },
   { "win.redo", { "<shift><Primary>Z", NULL } },
@@ -320,8 +314,11 @@ const struct {
   { "win.zoom-normal", { "<Primary>0", "<Primary>KP_0", NULL } },
   { "win.print", { "<Primary>P", NULL } },
   { "win.find", { "<Primary>F", "Search", NULL } },
-  { "win.find-prev", { "<shift><Primary>G", "Search", NULL } },
-  { "win.find-next", { "<Primary>G", NULL } }
+  { "win.find-prev", { "<shift><Primary>G", NULL } },
+  { "win.find-next", { "<Primary>G", NULL } },
+  { "win.encoding", { NULL } },
+  { "win.page-source", { "<Primary>U", NULL } },
+  { "win.close", { "<Primary>W", NULL } }
 };
 
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
@@ -1063,9 +1060,6 @@ setup_ui_manager (EphyWindow *window)
   action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
   g_object_set (action, "short_label", _("Bookmark"), NULL);
 
-  action = gtk_action_group_get_action (action_group, "ViewEncoding");
-  g_object_set (action, "short_label", _("Encodings…"), NULL);
-
   action_group = gtk_action_group_new ("PopupsActions");
   gtk_action_group_set_translation_domain (action_group, NULL);
   gtk_action_group_add_actions (action_group, ephy_popups_entries,
@@ -1165,12 +1159,12 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   GAction *new_action;
   int i;
   const char *action_group_actions[] = { "FileSendTo", "FileBookmarkPage",
-                                         "ViewEncoding", "ViewPageSource",
                                          NULL };
 
   const char *new_action_group_actions[] = { "save-as", "save-as-application",
                                          "zoom-in", "zoom-out", "print",
                                          "find", "find-prev", "find-next",
+                                         "encoding", "page-source",
                                          NULL };
 
   action_group = window->action_group;
@@ -1262,9 +1256,7 @@ sync_tab_document_type (EphyWebView *view,
                         GParamSpec  *pspec,
                         EphyWindow  *window)
 {
-  GtkActionGroup *action_group = window->action_group;
-  GtkAction *action;
-  GAction *new_action;
+  GAction *action;
   EphyWebViewDocumentType type;
   gboolean can_find, disable, is_image;
 
@@ -1278,16 +1270,16 @@ sync_tab_document_type (EphyWebView *view,
   is_image = type == EPHY_WEB_VIEW_DOCUMENT_IMAGE;
   disable = (type != EPHY_WEB_VIEW_DOCUMENT_HTML);
 
-  action = gtk_action_group_get_action (action_group, "ViewEncoding");
-  ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, disable);
-  action = gtk_action_group_get_action (action_group, "ViewPageSource");
-  ephy_action_change_sensitivity_flags (action, SENS_FLAG_DOCUMENT, is_image);
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "find");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_DOCUMENT, !can_find);
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "find-prev");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_DOCUMENT, !can_find);
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "find-next");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_DOCUMENT, !can_find);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "encoding");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, disable);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "page-source");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, is_image);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "find");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "find-prev");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "find-next");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
 
   if (!can_find) {
     ephy_find_toolbar_request_close (ephy_embed_get_find_toolbar (window->active_embed));
@@ -3089,8 +3081,6 @@ setup_location_controller (EphyWindow  *window,
 static const char *disabled_actions_for_app_mode[] = { "FileOpen",
                                                        "FileNewWindow",
                                                        "FileNewWindowIncognito",
-                                                       "ViewEncoding",
-                                                       "ViewPageSource",
                                                        "ViewToggleInspector",
                                                        "FileBookmarkPage",
                                                        "EditBookmarks",
@@ -3098,7 +3088,9 @@ static const char *disabled_actions_for_app_mode[] = { "FileOpen",
                                                        "EditPreferences" };
 
 static const char *new_disabled_actions_for_app_mode[] = { "save-as",
-                                                       "save-as-application" };
+                                                       "save-as-application",
+                                                       "encoding",
+                                                       "page-source" };
 
 static void
 parse_css_error (GtkCssProvider *provider,
@@ -3165,11 +3157,11 @@ static const GActionEntry new_ephy_page_menu_entries [] =
   { "find", window_cmd_edit_find },
   { "find-prev", window_cmd_edit_find_prev },
   { "find-next", window_cmd_edit_find_next },
-  { "bookmarks", },
-  { "bookmark-page", },
-  { "view-encoding", },
-  { "view-page-source", },
-  { "close-tab", }
+  // { "bookmarks", },
+  // { "bookmark-page", },
+  { "encoding", window_cmd_view_encoding },
+  { "page-source", window_cmd_view_page_source },
+  { "close-tab", window_cmd_file_close_window }
 };
 
 static GObject *

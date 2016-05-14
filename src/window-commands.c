@@ -252,27 +252,6 @@ window_cmd_file_open (GtkAction  *action,
 }
 
 void
-window_cmd_file_close_window (GtkAction  *action,
-                              EphyWindow *window)
-{
-  GtkWidget *notebook;
-  EphyEmbed *embed;
-
-  notebook = ephy_window_get_notebook (window);
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_QUIT) &&
-      gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1) {
-    return;
-  }
-
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
-
-  g_signal_emit_by_name (notebook, "tab-close-request", embed);
-}
-
-void
 window_cmd_file_quit (GtkAction  *action,
                       EphyWindow *window)
 {
@@ -1162,6 +1141,19 @@ window_cmd_view_zoom_normal (GSimpleAction *action,
   ephy_window_set_zoom (window, 1.0);
 }
 
+void
+window_cmd_view_encoding (GSimpleAction *action,
+                          GVariant      *value,
+                          gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyEncodingDialog *dialog;
+
+  dialog = ephy_encoding_dialog_new (window);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+  gtk_dialog_run (GTK_DIALOG (dialog));
+}
+
 static void
 view_source_embedded (const char *uri, EphyEmbed *embed)
 {
@@ -1352,9 +1344,11 @@ save_temp_source (EphyEmbed *embed,
 }
 
 void
-window_cmd_view_page_source (GtkAction  *action,
-                             EphyWindow *window)
+window_cmd_view_page_source (GSimpleAction *action,
+                             GVariant      *value,
+                             gpointer       user_data)
 {
+  EphyWindow *window = user_data;
   EphyEmbed *embed;
   const char *address;
   guint32 user_time;
@@ -1438,6 +1432,29 @@ window_cmd_help_shortcuts (GtkAction *action,
     gtk_window_set_transient_for (GTK_WINDOW (shortcuts_window), GTK_WINDOW (window));
 
   gtk_window_present (GTK_WINDOW (shortcuts_window));
+}
+
+void
+window_cmd_file_close_window (GSimpleAction *action,
+                              GVariant      *value,
+                              gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  GtkWidget *notebook;
+  EphyEmbed *embed;
+
+  notebook = ephy_window_get_notebook (window);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                              EPHY_PREFS_LOCKDOWN_QUIT) &&
+      gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1) {
+    return;
+  }
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_return_if_fail (embed != NULL);
+
+  g_signal_emit_by_name (notebook, "tab-close-request", embed);
 }
 
 void
@@ -1733,15 +1750,4 @@ window_cmd_browse_with_caret (GtkAction  *action,
 
   g_settings_set_boolean (EPHY_SETTINGS_MAIN,
                           EPHY_PREFS_ENABLE_CARET_BROWSING, active);
-}
-
-void
-window_cmd_view_encoding (GtkAction  *action,
-                          EphyWindow *window)
-{
-  EphyEncodingDialog *dialog;
-
-  dialog = ephy_encoding_dialog_new (window);
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
-  gtk_dialog_run (GTK_DIALOG (dialog));
 }
