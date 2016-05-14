@@ -102,7 +102,6 @@ static const BindAction window_actions[] = {
   { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "FileBookmarkPage", "sensitive" },
 
   { EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "GoLocation", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "FileSaveAs", "sensitive" },
 
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "ViewFullscreen", "sensitive" },
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "TabsDetach", "sensitive" },
@@ -111,6 +110,8 @@ static const BindAction window_actions[] = {
 };
 
 static const BindAction new_window_actions[] = {
+  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "save-as", "enabled" },
+
   { EPHY_PREFS_LOCKDOWN_PRINTING, "print", "enabled" }
 };
 
@@ -167,7 +168,7 @@ new_sensitive_get_mapping (GValue   *value,
   after = g_action_get_enabled (action);
 
   /* Set (GAction::enabled) to the value in GSettings _only if_
-   * the LOCKDOWN_FLAG had some real effect in the GtkAction */
+   * the LOCKDOWN_FLAG had some real effect in the GAction */
   g_value_set_boolean (value, (before != after) ? after : before);
 
   return TRUE;
@@ -227,7 +228,7 @@ new_bind_settings_and_actions (GSettings        *settings,
                        G_SETTINGS_BIND_GET |
                        G_SETTINGS_BIND_INVERT_BOOLEAN);
     } else {
-      /* We need a custom get_mapping for 'sensitive'
+      /* We need a custom get_mapping for 'enabled'
        * properties, see usage of
        * ephy_action_change_sensitivity_flags in
        * ephy-window.c. */

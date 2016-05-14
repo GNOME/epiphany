@@ -11,14 +11,20 @@
         <attribute name="label" translatable="yes">_Open…</attribute>
         <attribute name="action">win.open</attribute>
       </item>
+    </section> -->
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Save _As…</attribute>
+        <attribute name="action">win.save-as</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Save As _Web Application…</attribute>
+        <attribute name="action">win.save-as-application</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
     </section>
     <section>
-      <attribute name="label" translatable="yes">Save _As…</attribute>
-      <attribute name="action">win.save-as</attribute>
-      <attribute name="label" translatable="yes">Save As _Web Application…</attribute>
-      <attribute name="action">win.save-as-application</attribute>
-    </section> -->
-    <section id="undo-redo">
       <item>
         <attribute name="label" translatable="yes">_Undo</attribute>
         <attribute name="action">win.undo</attribute>

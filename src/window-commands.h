@@ -34,10 +34,6 @@ void window_cmd_file_bookmark_page        (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_file_open                 (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_file_save_as              (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_file_save_as_application  (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_undo_close_tab            (GtkAction *action,
                                            EphyWindow *window);
 void window_cmd_file_send_to              (GtkAction  *action,
@@ -48,6 +44,12 @@ void window_cmd_view_encoding             (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_view_fullscreen           (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_file_save_as              (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_file_save_as_application  (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
 void window_cmd_edit_undo                 (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
