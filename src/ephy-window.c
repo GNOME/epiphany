@@ -90,8 +90,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_file_new_window) },
   { "FileNewWindowIncognito", NULL, N_("New _Incognito Window"), "<control><shift>N", NULL,
     G_CALLBACK (window_cmd_file_new_incognito_window) },
-  { "FileOpen", NULL, N_("_Open…"), "<control>O", NULL,
-    G_CALLBACK (window_cmd_file_open) },
   { "FileSendTo", NULL, N_("S_end Link by Email…"), NULL, NULL,
     G_CALLBACK (window_cmd_file_send_to) },
   { "FileQuit", NULL, N_("_Quit"), "<control>Q", NULL,
@@ -301,6 +299,7 @@ const struct {
   const gchar *action_and_target;
   const gchar *accelerators[5];
 } accels [] = {
+  { "win.open", { "<Primary>O", NULL } },
   { "win.save-as", { "<shift><Primary>S", "<Primary>S", NULL } },
   { "win.save-as-application", { "<shift><Primary>A", NULL } },
   { "win.undo", { "<Primary>Z", NULL } },
@@ -1055,8 +1054,6 @@ setup_ui_manager (EphyWindow *window)
   window->action_group = action_group;
   g_object_unref (action_group);
 
-  action = gtk_action_group_get_action (action_group, "FileOpen");
-  g_object_set (action, "short_label", _("Open"), NULL);
   action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
   g_object_set (action, "short_label", _("Bookmark"), NULL);
 
@@ -3078,8 +3075,7 @@ setup_location_controller (EphyWindow  *window,
   return location_controller;
 }
 
-static const char *disabled_actions_for_app_mode[] = { "FileOpen",
-                                                       "FileNewWindow",
+static const char *disabled_actions_for_app_mode[] = { "FileNewWindow",
                                                        "FileNewWindowIncognito",
                                                        "ViewToggleInspector",
                                                        "FileBookmarkPage",
@@ -3087,7 +3083,8 @@ static const char *disabled_actions_for_app_mode[] = { "FileOpen",
                                                        "EditHistory",
                                                        "EditPreferences" };
 
-static const char *new_disabled_actions_for_app_mode[] = { "save-as",
+static const char *new_disabled_actions_for_app_mode[] = { "open",
+                                                       "save-as",
                                                        "save-as-application",
                                                        "encoding",
                                                        "page-source" };
@@ -3140,6 +3137,7 @@ ephy_window_toggle_visibility_for_app_menu (EphyWindow *window)
 static const GActionEntry new_ephy_page_menu_entries [] =
 {
   // { "new-tab", },
+  { "open", window_cmd_file_open },
   { "save-as", window_cmd_file_save_as },
   { "save-as-application", window_cmd_file_save_as_application },
   { "undo", window_cmd_edit_undo },

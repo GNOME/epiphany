@@ -189,68 +189,6 @@ window_cmd_file_bookmark_page (GtkAction  *action,
                                   ephy_embed_get_title (embed));
 }
 
-static void
-open_response_cb (GtkDialog *dialog, int response, EphyWindow *window)
-{
-  if (response == GTK_RESPONSE_ACCEPT) {
-    char *uri, *converted;
-
-    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-    if (uri != NULL) {
-      converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
-
-      if (converted != NULL) {
-        ephy_window_load_url (window, converted);
-      }
-
-      g_free (converted);
-      g_free (uri);
-    }
-  }
-
-  gtk_widget_destroy (GTK_WIDGET (dialog));
-}
-
-static void
-save_response_cb (GtkDialog *dialog, int response, EphyEmbed *embed)
-{
-  if (response == GTK_RESPONSE_ACCEPT) {
-    char *uri, *converted;
-
-    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-    if (uri != NULL) {
-      converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
-
-      if (converted != NULL) {
-        EphyWebView *web_view = ephy_embed_get_web_view (embed);
-        ephy_web_view_save (web_view, converted);
-      }
-
-      g_free (converted);
-      g_free (uri);
-    }
-  }
-
-  gtk_widget_destroy (GTK_WIDGET (dialog));
-}
-
-void
-window_cmd_file_open (GtkAction  *action,
-                      EphyWindow *window)
-{
-  EphyFileChooser *dialog;
-
-  dialog = ephy_file_chooser_new (_("Open"),
-                                  GTK_WIDGET (window),
-                                  GTK_FILE_CHOOSER_ACTION_OPEN,
-                                  EPHY_FILE_FILTER_ALL_SUPPORTED);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (open_response_cb), window);
-
-  gtk_widget_show (GTK_WIDGET (dialog));
-}
-
 void
 window_cmd_file_quit (GtkAction  *action,
                       EphyWindow *window)
@@ -326,6 +264,47 @@ window_cmd_view_fullscreen (GtkAction  *action,
     gtk_window_fullscreen (GTK_WINDOW (window));
   else
     gtk_window_unfullscreen (GTK_WINDOW (window));
+}
+
+static void
+open_response_cb (GtkDialog *dialog, int response, EphyWindow *window)
+{
+  if (response == GTK_RESPONSE_ACCEPT) {
+    char *uri, *converted;
+
+    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+    if (uri != NULL) {
+      converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
+
+      if (converted != NULL) {
+        ephy_window_load_url (window, converted);
+      }
+
+      g_free (converted);
+      g_free (uri);
+    }
+  }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+void
+window_cmd_file_open (GSimpleAction *action,
+                      GVariant      *value,
+                      gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyFileChooser *dialog;
+
+  dialog = ephy_file_chooser_new (_("Open"),
+                                  GTK_WIDGET (window),
+                                  GTK_FILE_CHOOSER_ACTION_OPEN,
+                                  EPHY_FILE_FILTER_ALL_SUPPORTED);
+
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (open_response_cb), window);
+
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 typedef struct {
@@ -875,6 +854,29 @@ get_suggested_filename (EphyEmbed *embed)
   }
 
   return suggested_filename;
+}
+
+static void
+save_response_cb (GtkDialog *dialog, int response, EphyEmbed *embed)
+{
+  if (response == GTK_RESPONSE_ACCEPT) {
+    char *uri, *converted;
+
+    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+    if (uri != NULL) {
+      converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
+
+      if (converted != NULL) {
+        EphyWebView *web_view = ephy_embed_get_web_view (embed);
+        ephy_web_view_save (web_view, converted);
+      }
+
+      g_free (converted);
+      g_free (uri);
+    }
+  }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 void
