@@ -348,3 +348,9 @@ ephy_toolbar_get_title_box (EphyToolbar *toolbar)
 {
   return toolbar->title_box;
 }
+
+GMenu *
+ephy_toolbar_get_page_menu (EphyToolbar *toolbar)
+{
+  return toolbar->page_menu;
+}

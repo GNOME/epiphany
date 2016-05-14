@@ -104,21 +104,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_file_quit) },
 
   /* Edit actions. */
-
-  { "EditUndo", NULL, N_("_Undo"), "<control>Z", NULL,
-    G_CALLBACK (window_cmd_edit_undo) },
-  { "EditRedo", NULL, N_("Re_do"), "<shift><control>Z", NULL,
-    G_CALLBACK (window_cmd_edit_redo) },
-  { "EditCut", NULL, N_("Cu_t"), "<control>X", NULL,
-    G_CALLBACK (window_cmd_edit_cut) },
-  { "EditCopy", NULL, N_("_Copy"), "<control>C", NULL,
-    G_CALLBACK (window_cmd_edit_copy) },
-  { "EditPaste", NULL, N_("_Paste"), "<control>V", NULL,
-    G_CALLBACK (window_cmd_edit_paste) },
-  { "EditDelete", NULL, NULL, NULL, NULL,
-    G_CALLBACK (window_cmd_edit_delete) },
-  { "EditSelectAll", NULL, N_("Select _All"), "<control>A", NULL,
-    G_CALLBACK (window_cmd_edit_select_all) },
   { "EditBookmarks", NULL, N_("Edit _Bookmarks"), "<control>B", NULL,
     G_CALLBACK (window_cmd_edit_bookmarks) },
   { "EditHistory", NULL, N_("_History"), "<control>H", NULL,
@@ -887,11 +872,11 @@ update_link_actions_sensitivity (EphyWindow *window,
 static void
 update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gboolean sensitive, gboolean hide)
 {
-  GtkAction *action;
+  GAction *action;
 
-  action = gtk_action_group_get_action (window->action_group, action_name);
-  gtk_action_set_sensitive (action, sensitive);
-  gtk_action_set_visible (action, !hide || sensitive);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), action_name);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), sensitive);
+  // TODO: do something with hide
 }
 
 typedef struct {
@@ -969,59 +954,51 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 
     view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-    data = can_edit_command_async_data_new (window, "EditCopy", hide);
+    data = can_edit_command_async_data_new (window, "copy", hide);
     webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_COPY, NULL,
                                                  (GAsyncReadyCallback)can_edit_command_callback,
                                                  data);
-    data = can_edit_command_async_data_new (window, "EditCut", hide);
+    data = can_edit_command_async_data_new (window, "cut", hide);
     webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_CUT, NULL,
                                                  (GAsyncReadyCallback)can_edit_command_callback,
                                                  data);
-    data = can_edit_command_async_data_new (window, "EditPaste", hide);
+    data = can_edit_command_async_data_new (window, "paste", hide);
     webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_PASTE, NULL,
                                                  (GAsyncReadyCallback)can_edit_command_callback,
                                                  data);
-    data = can_edit_command_async_data_new (window, "EditUndo", hide);
-    webkit_web_view_can_execute_editing_command (view, "Undo", NULL,
+    data = can_edit_command_async_data_new (window, "undo", hide);
+    webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_UNDO, NULL,
                                                  (GAsyncReadyCallback)can_edit_command_callback,
                                                  data);
-    data = can_edit_command_async_data_new (window, "EditRedo", hide);
-    webkit_web_view_can_execute_editing_command (view, "Redo", NULL,
+    data = can_edit_command_async_data_new (window, "redo", hide);
+    webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_REDO, NULL,
                                                  (GAsyncReadyCallback)can_edit_command_callback,
                                                  data);
     return;
   }
 
-  update_edit_action_sensitivity (window, "EditCopy", can_copy, hide);
-  update_edit_action_sensitivity (window, "EditCut", can_cut, hide);
-  update_edit_action_sensitivity (window, "EditPaste", can_paste, hide);
-  update_edit_action_sensitivity (window, "EditUndo", can_undo, hide);
-  update_edit_action_sensitivity (window, "EditRedo", can_redo, hide);
+  update_edit_action_sensitivity (window, "cut", can_cut, hide);
+  update_edit_action_sensitivity (window, "copy", can_copy, hide);
+  update_edit_action_sensitivity (window, "paste", can_paste, hide);
+  update_edit_action_sensitivity (window, "undo", can_undo, hide);
+  update_edit_action_sensitivity (window, "redo", can_redo, hide);
 }
 
 static void
 enable_edit_actions_sensitivity (EphyWindow *window)
 {
-  GtkActionGroup *action_group;
-  GtkAction *action;
+  GAction *action;
 
-  action_group = window->action_group;
-
-  action = gtk_action_group_get_action (action_group, "EditCopy");
-  gtk_action_set_sensitive (action, TRUE);
-  gtk_action_set_visible (action, TRUE);
-  action = gtk_action_group_get_action (action_group, "EditCut");
-  gtk_action_set_sensitive (action, TRUE);
-  gtk_action_set_visible (action, TRUE);
-  action = gtk_action_group_get_action (action_group, "EditPaste");
-  gtk_action_set_sensitive (action, TRUE);
-  gtk_action_set_visible (action, TRUE);
-  action = gtk_action_group_get_action (action_group, "EditUndo");
-  gtk_action_set_sensitive (action, TRUE);
-  gtk_action_set_visible (action, TRUE);
-  action = gtk_action_group_get_action (action_group, "EditRedo");
-  gtk_action_set_sensitive (action, TRUE);
-  gtk_action_set_visible (action, TRUE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "cut");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "copy");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "paste");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "undo");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), "redo");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 }
 
 static void
@@ -1487,6 +1464,82 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
   webkit_context_menu_append (context_menu, webkit_context_menu_item_new (action));
 }
 
+static const gchar *
+action_name_to_label_for_model (GMenuModel *menu_model, const gchar *action_name)
+{
+  GMenuLinkIter *link_iter;
+  gint n_items;
+  gint i, j;
+
+  printf("Finding %s\n", action_name);
+  n_items = g_menu_model_get_n_items (menu_model);
+
+  for (i = 0; i < n_items; i++) {
+    link_iter = g_menu_model_iterate_item_links (menu_model, i);
+    while (g_menu_link_iter_next (link_iter)) {
+      GMenuModel *link_model = NULL;
+      GVariant *action;
+      gint link_model_n_items;
+
+      link_model = g_menu_link_iter_get_value (link_iter);
+      link_model_n_items = g_menu_model_get_n_items (link_model);
+
+      for (j = 0; j < link_model_n_items; j++) {
+        action = g_menu_model_get_item_attribute_value (link_model, j, G_MENU_ATTRIBUTE_ACTION, G_VARIANT_TYPE_STRING);
+        printf("g_variant_get_string %s\n", g_variant_get_string (action, NULL));
+        if (g_strcmp0 (strchr (g_variant_get_string (action, NULL), '.') + 1, action_name) == 0) {
+          GVariant *label;
+
+          label = g_menu_model_get_item_attribute_value (link_model, j, G_MENU_ATTRIBUTE_LABEL, G_VARIANT_TYPE_STRING);
+
+          return g_variant_get_string (label, NULL);
+        }
+      }
+    }
+  }
+
+  g_assert_not_reached ();
+  return NULL;
+}
+
+static void
+action_activate_cb (GtkAction *action, gpointer user_data)
+{
+  g_action_activate (G_ACTION (user_data), NULL);
+}
+
+static WebKitContextMenuItem*
+webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
+{
+  GtkAction *gtk_action;
+  WebKitContextMenuItem *item;
+
+  gtk_action = gtk_action_new (g_action_get_name (action), label, NULL, NULL);
+  g_signal_connect (gtk_action, "activate",
+                            G_CALLBACK (action_activate_cb), action);
+
+  g_object_bind_property (action, "enabled", gtk_action, "sensitive", G_BINDING_BIDIRECTIONAL);
+
+  item = webkit_context_menu_item_new (gtk_action);
+
+  return item;
+}
+
+static void
+new_add_action_to_context_menu (WebKitContextMenu *context_menu,
+                            GActionGroup      *action_group,
+                            const char        *action_name)
+{
+  GAction *action;
+  EphyToolbar *toolbar;
+  const gchar *label;
+
+  toolbar = EPHY_TOOLBAR (EPHY_WINDOW (action_group)->toolbar);
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), action_name);
+  label = action_name_to_label_for_model (G_MENU_MODEL (ephy_toolbar_get_page_menu (toolbar)), action_name);
+  webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, label));
+}
+
 static void
 add_item_to_context_menu (WebKitContextMenu     *context_menu,
                           WebKitContextMenuItem *item)
@@ -1681,8 +1734,8 @@ populate_context_menu (WebKitWebView       *web_view,
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
     }
-    add_action_to_context_menu (context_menu,
-                                window->action_group, "EditCopy");
+    new_add_action_to_context_menu (context_menu,
+                                G_ACTION_GROUP (window), "copy");
     if (can_search_selection)
       add_action_to_context_menu (context_menu,
                                   window->popups_action_group, "SearchSelection");
@@ -1718,22 +1771,22 @@ populate_context_menu (WebKitWebView       *web_view,
 
     update_edit_actions_sensitivity (window, FALSE);
 
-    add_action_to_context_menu (context_menu,
-                                window->action_group, "EditUndo");
-    add_action_to_context_menu (context_menu,
-                                window->action_group, "EditRedo");
+    new_add_action_to_context_menu (context_menu,
+                                G_ACTION_GROUP (window), "undo");
+    new_add_action_to_context_menu (context_menu,
+                                G_ACTION_GROUP (window), "redo");
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    add_action_to_context_menu (context_menu,
-                                window->action_group, "EditCut");
-    add_action_to_context_menu (context_menu,
-                                window->action_group, "EditCopy");
-    add_action_to_context_menu (context_menu,
-                                window->action_group, "EditPaste");
+    new_add_action_to_context_menu (context_menu,
+                                G_ACTION_GROUP (window), "cut");
+    new_add_action_to_context_menu (context_menu,
+                                G_ACTION_GROUP (window), "copy");
+    new_add_action_to_context_menu (context_menu,
+                                G_ACTION_GROUP (window), "paste");
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    add_action_to_context_menu (context_menu,
-                                window->action_group, "EditSelectAll");
+    new_add_action_to_context_menu (context_menu,
+                                G_ACTION_GROUP (window), "select-all");
     if (input_methods_item || unicode_item)
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
@@ -1755,8 +1808,8 @@ populate_context_menu (WebKitWebView       *web_view,
                                   webkit_context_menu_item_new_separator ());
     }
 
-    add_action_to_context_menu (context_menu,
-                                window->action_group, "EditCopy");
+    new_add_action_to_context_menu (context_menu,
+                                G_ACTION_GROUP (window), "copy");
     if (can_search_selection)
       add_action_to_context_menu (context_menu,
                                   window->popups_action_group, "SearchSelection");
@@ -3095,11 +3148,13 @@ static const GActionEntry new_ephy_page_menu_entries [] =
   // { "open", },
   // { "save-as", }
   // { "save-as-application", }
-  // { "undo", },
-  // { "redo", },
-  // { "cut", },
-  // { "copy", },
-  // { "paste", },
+  { "undo", window_cmd_edit_undo },
+  { "redo", window_cmd_edit_redo },
+  { "cut", window_cmd_edit_cut },
+  { "copy", window_cmd_edit_copy },
+  { "paste", window_cmd_edit_paste },
+  { "delete", window_cmd_edit_delete },
+  { "select-all", window_cmd_edit_select_all },
   { "zoom-in", window_cmd_view_zoom_in },
   { "zoom-out", window_cmd_view_zoom_out },
   { "zoom-normal", window_cmd_view_zoom_normal },
