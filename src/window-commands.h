@@ -38,6 +38,9 @@ void window_cmd_file_send_to              (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_view_fullscreen           (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_file_new_tab              (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
 void window_cmd_file_open                 (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
