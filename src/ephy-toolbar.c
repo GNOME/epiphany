@@ -221,13 +221,10 @@ ephy_toolbar_constructed (GObject *object)
   /* New Tab */
   button = gtk_button_new ();
   toolbar->new_tab_button = button;
-  /* FIXME: apparently we need an image inside the button for the action
-   * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  action = gtk_action_group_get_action (action_group, "FileNewTab");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-                                      action);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
   gtk_button_set_label (GTK_BUTTON (button), NULL);
   gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), button);
 

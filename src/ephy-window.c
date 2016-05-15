@@ -299,6 +299,7 @@ const struct {
   const gchar *action_and_target;
   const gchar *accelerators[5];
 } accels [] = {
+  { "win.new-tab", { "<Primary>T", NULL } },
   { "win.open", { "<Primary>O", NULL } },
   { "win.save-as", { "<shift><Primary>S", "<Primary>S", NULL } },
   { "win.save-as-application", { "<shift><Primary>A", NULL } },
@@ -1096,14 +1097,6 @@ setup_ui_manager (EphyWindow *window)
                   NULL);
   gtk_action_group_add_action_with_accel (action_group, action,
                                           "<alt>Right");
-  g_object_unref (action);
-
-  action = g_object_new (EPHY_TYPE_HOME_ACTION,
-                         "name", "FileNewTab",
-                         "icon-name", "tab-new-symbolic",
-                         "label", _("New _Tab"),
-                         NULL);
-  gtk_action_group_add_action_with_accel (action_group, action, "<control>T");
   g_object_unref (action);
 
   action =
@@ -3041,11 +3034,6 @@ setup_toolbar (EphyWindow *window)
   g_signal_connect_swapped (action, "open-link",
                             G_CALLBACK (ephy_link_open), window);
 
-  action = gtk_action_group_get_action (window->toolbar_action_group,
-                                        "FileNewTab");
-  g_signal_connect_swapped (action, "open-link",
-                            G_CALLBACK (ephy_link_open), window);
-
   title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (toolbar));
   g_signal_connect (title_box, "lock-clicked",
                     G_CALLBACK (title_box_lock_clicked_cb), window);
@@ -3136,7 +3124,7 @@ ephy_window_toggle_visibility_for_app_menu (EphyWindow *window)
 
 static const GActionEntry new_ephy_page_menu_entries [] =
 {
-  // { "new-tab", },
+  { "new-tab", window_cmd_file_new_tab },
   { "open", window_cmd_file_open },
   { "save-as", window_cmd_file_save_as },
   { "save-as-application", window_cmd_file_save_as_application },
@@ -3268,8 +3256,9 @@ ephy_window_constructor (GType                  type,
 
   /* Disable actions not needed for popup mode. */
   toolbar_action_group = window->toolbar_action_group;
-  action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
-  ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "new-tab");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+                                        SENS_FLAG_CHROME,
                                         window->is_popup);
 
   action = gtk_action_group_get_action (window->popups_action_group, "OpenLinkInNewTab");

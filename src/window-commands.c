@@ -266,6 +266,19 @@ window_cmd_view_fullscreen (GtkAction  *action,
     gtk_window_unfullscreen (GTK_WINDOW (window));
 }
 
+void
+window_cmd_file_new_tab (GSimpleAction *action,
+                         GVariant      *value,
+                         gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+
+  ephy_link_open (EPHY_LINK (window),
+                  "about:overview",
+                  NULL,
+                  EPHY_LINK_HOME_PAGE | EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
+}
+
 static void
 open_response_cb (GtkDialog *dialog, int response, EphyWindow *window)
 {
