@@ -136,24 +136,6 @@ AC_SEARCH_LIBS([backtrace], [c execinfo])
 
 AC_CHECK_HEADERS([X11/XF86keysym.h])
 
-# ***
-# NSS
-# ***
-
-AC_MSG_CHECKING([whether NSS support is requested])
-AC_ARG_ENABLE([nss],
-        [AS_HELP_STRING([--enable-nss], [Enable NSS support (default: enabled)])],
-        [], [enable_nss=yes])
-AC_MSG_RESULT([$enable_nss])
-
-if test "$enable_nss" = "yes"; then
-   PKG_CHECK_MODULES([NSS], [nss])
-
-   AC_DEFINE([ENABLE_NSS], [1], [Define to compile with NSS support])
-fi
-
-AM_CONDITIONAL([ENABLE_NSS],[test "$enable_nss" = "yes"])
-
 # *******************************
 # Internationalization
 # ******************************* 

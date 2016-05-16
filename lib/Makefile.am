@@ -103,13 +103,6 @@ ephy_profile_migrator_LDADD = \
 	libephymisc.la \
 	$(DEPENDENCIES_LIBS)
 
-if ENABLE_NSS
-ephy_profile_migrator_SOURCES += \
-	ephy-nss-glue.c \
-	ephy-nss-glue.h
-ephy_profile_migrator_LDADD += $(NSS_LIBS)
-endif # ENABLE_NSS
-
 ephy_profile_migrator_CPPFLAGS = \
 	-I$(top_builddir)/lib \
 	-I$(srcdir)/history \
