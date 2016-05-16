@@ -46,9 +46,6 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
-#define WNCK_I_KNOW_THIS_IS_UNSTABLE
-#include <libwnck/libwnck.h>
-
 struct _EphyShell {
   EphyEmbedShell parent_instance;
 
@@ -139,13 +136,6 @@ ephy_shell_startup_continue (EphyShell *shell, EphyShellStartupContext *ctx)
     ephy_shell_open_uris (shell, (const char **)ctx->arguments,
                           ctx->startup_flags, ctx->user_time);
   }
-
-  /* Get an initial update on our windows and their workspaces,
-   * otherwise our first call to ephy_window_is_on_current_workspace
-   * will be unreliable.
-   */
-  if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
-    wnck_screen_force_update (wnck_screen_get_default ());
 }
 
 static void

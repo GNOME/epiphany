@@ -101,7 +101,6 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gtk+-3.0 >= $GTK_REQUIRED
 		  gtk+-unix-print-3.0 >= $GTK_REQUIRED
 		  x11
-		  libwnck-3.0
 		  libxml-2.0 >= $LIBXML_REQUIRED
 		  libxslt >= $LIBXSLT_REQUIRED
 		  webkit2gtk-4.0 >= $WEBKIT_GTK_REQUIRED

@@ -56,8 +56,6 @@ gboolean          ephy_window_close               (EphyWindow *window);
 
 EphyWindowChrome  ephy_window_get_chrome          (EphyWindow *window);
 
-gboolean      ephy_window_is_on_current_workspace (EphyWindow *window);
-
 G_END_DECLS
 
 #endif
