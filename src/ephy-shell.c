@@ -335,7 +335,7 @@ ephy_shell_activate (GApplication *application)
 
   /*
    * We get here on each new instance (remote or not). Autoresume the
-   * session and queue the commands if we are a local instance. Otherwise,
+   * session and queue the commands if we are a secondary instance. Otherwise,
    * execute the commands immediately, before the remote startup context
    * can be invalidated by another remote instance.
    */
