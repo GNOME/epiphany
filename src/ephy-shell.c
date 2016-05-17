@@ -987,8 +987,12 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
     if (reusing_empty_tab || data->flags & EPHY_NEW_TAB_JUMP)
       gtk_widget_grab_focus (GTK_WIDGET (embed));
 
-    if (data->flags & EPHY_NEW_TAB_JUMP && ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (data->shell)) != EPHY_EMBED_SHELL_MODE_TEST)
-      gtk_window_present_with_time (GTK_WINDOW (data->window), data->user_time);
+    if (data->flags & EPHY_NEW_TAB_JUMP && ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (data->shell)) != EPHY_EMBED_SHELL_MODE_TEST) {
+      if (data->user_time)
+        gtk_window_present_with_time (GTK_WINDOW (data->window), data->user_time);
+      else
+        gtk_window_present_with_time (GTK_WINDOW (data->window), time (NULL));
+    }
   } else {
     ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
     ephy_window_activate_location (data->window);
