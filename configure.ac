@@ -82,6 +82,8 @@ LIBNOTIFY_REQUIRED=0.5.1
 GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
 GVDB_REQUIRED="glib-2.0 >= $GLIB_REQUIRED"
+NETTLE_REQUIRED=3.2
+JSON_GLIB_MIN_VERSION=0.14
 
 # Tests
 
@@ -114,6 +116,8 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gcr-3 >= $GCR_REQUIRED
 		  avahi-gobject >= $AVAHI_REQUIRED
 		  avahi-client >= $AVAHI_REQUIRED
+		  nettle >= NETTLE_REQUIRED
+		  json-glib-1.0 >= $JSON_GLIB_MIN_VERSION
 		  ])
 
 # Check requirements for gvdb
