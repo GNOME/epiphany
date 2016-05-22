@@ -31,6 +31,12 @@ libephymain_la_SOURCES = \
 	ephy-header-bar.h			\
 	ephy-history-window.c			\
 	ephy-history-window.h			\
+	ephy-sync-window.c			\
+	ephy-sync-window.h			\
+	ephy-sync-service.c			\
+	ephy-sync-service.h			\
+	ephy-sync-crypto.c			\
+	ephy-sync-crypto.h			\
 	ephy-link.c				\
 	ephy-link.h				\
 	ephy-location-controller.c		\
@@ -76,6 +82,7 @@ libephymain_la_CPPFLAGS = \
 	$(GIO_CFLAGS)			\
 	$(GLIB_CFLAGS)			\
 	$(GTK_CFLAGS)			\
+	$(JSON_GLIB_CFLAGS)		\
 	$(LIBNOTIFY_CFLAGS)		\
 	$(LIBSECRET_CFLAGS)		\
 	$(LIBSOUP_CFLAGS)		\
@@ -97,6 +104,7 @@ libephymain_la_LIBADD = \
 	$(GIO_LIBS)		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
+	$(JSON_GLIB_CFLAGS)	\
 	$(LIBNOTIFY_LIBS)	\
 	$(LIBSECRET_LIBS)	\
 	$(LIBSOUP_LIBS)		\

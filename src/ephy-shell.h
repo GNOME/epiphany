@@ -97,11 +97,13 @@ EphySession     *ephy_shell_get_session                  (EphyShell *shell);
 
 GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
 
-GtkWidget       *ephy_shell_get_bookmarks_editor         (EphyShell *shell);
-
 EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
 
+GObject         *ephy_shell_get_global_sync_service      (EphyShell *shell);
+
 GtkWidget       *ephy_shell_get_history_window           (EphyShell *shell);
+
+GtkWidget       *ephy_shell_get_sync_window              (EphyShell *shell);
 
 GObject         *ephy_shell_get_prefs_dialog             (EphyShell *shell);
 
