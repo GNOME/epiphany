@@ -44,6 +44,7 @@ void             ephy_embed_set_delayed_load_request (EphyEmbed *embed,
                                                       WebKitURIRequest          *request,
                                                       WebKitWebViewSessionState *state);
 gboolean         ephy_embed_has_load_pending         (EphyEmbed *embed);
+gboolean         ephy_embed_inspector_is_loaded      (EphyEmbed *embed);
 const char      *ephy_embed_get_title                (EphyEmbed *embed);
 
 G_END_DECLS

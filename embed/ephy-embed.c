@@ -84,6 +84,7 @@ struct _EphyEmbed {
 
   gulong status_handler_id;
   gulong progress_update_handler_id;
+  gboolean inspector_loaded;
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -517,6 +518,16 @@ ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
 
   gtk_paned_add2 (embed->paned, inspector_view);
   gtk_widget_show (inspector_view);
+  embed->inspector_loaded = TRUE;
+
+  return TRUE;
+}
+
+static gboolean
+ephy_embed_close_inspector_cb (WebKitWebInspector *inspector,
+                                EphyEmbed          *embed)
+{
+  embed->inspector_loaded = FALSE;
 
   return TRUE;
 }
@@ -779,6 +790,9 @@ ephy_embed_constructed (GObject *object)
   g_signal_connect (inspector, "attach",
                     G_CALLBACK (ephy_embed_attach_inspector_cb),
                     embed);
+  g_signal_connect (inspector, "closed",
+                    G_CALLBACK (ephy_embed_close_inspector_cb),
+                    embed);
 }
 
 static void
@@ -792,6 +806,7 @@ ephy_embed_init (EphyEmbed *embed)
   embed->seq_context_id = 1;
   embed->seq_message_id = 1;
   embed->tab_message_id = ephy_embed_statusbar_get_context_id (embed, EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION);
+  embed->inspector_loaded = FALSE;
 }
 
 /**
@@ -924,4 +939,21 @@ ephy_embed_get_title (EphyEmbed *embed)
   g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
 
   return embed->title;
+}
+
+
+/**
+ * ephy_embed_inspector_is_loaded:
+ * @embed: a #EphyEmbed
+ *
+ * Checks if the Web Inspector is loaded in this #EphyEmbed.
+ *
+ * Returns: %TRUE or %FALSE
+ */
+gboolean
+ephy_embed_inspector_is_loaded (EphyEmbed *embed)
+{
+  g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+
+  return embed->inspector_loaded;
 }

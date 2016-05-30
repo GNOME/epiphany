@@ -78,6 +78,8 @@ void window_cmd_view_zoom_normal          (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_view_page_source          (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_view_toggle_inspector     (GtkAction  *action,
+                                           EphyWindow *window);
 void window_cmd_help_contents             (GtkAction  *action,
                                            GtkWidget  *window);
 void window_cmd_help_about                (GtkAction  *action,

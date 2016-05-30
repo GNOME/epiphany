@@ -153,6 +153,8 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_view_encoding) },
   { "ViewPageSource", NULL, N_("_Page Source"), "<control>U", NULL,
     G_CALLBACK (window_cmd_view_page_source) },
+  { "ViewToggleInspector", NULL, N_("_Toggle Inspector"), "<shift><control>I", NULL,
+    G_CALLBACK (window_cmd_view_toggle_inspector) },
 
   /* Bookmarks actions. */
 
@@ -283,6 +285,10 @@ static const struct {
   { GDK_KEY_R, GDK_CONTROL_MASK, "ViewReload", FALSE },
   { GDK_KEY_R, GDK_CONTROL_MASK |
     GDK_SHIFT_MASK, "ViewReload", FALSE },
+  { GDK_KEY_F12, 0, "ViewToggleInspector", FALSE },
+  { GDK_KEY_I, GDK_CONTROL_MASK |
+    GDK_SHIFT_MASK, "ViewToggleInspector", FALSE },
+
   /* Tab navigation */
   { GDK_KEY_Page_Up, GDK_CONTROL_MASK, "TabsPrevious", FALSE },
   { GDK_KEY_Page_Down, GDK_CONTROL_MASK, "TabsNext", FALSE },
@@ -3064,6 +3070,7 @@ static const char *disabled_actions_for_app_mode[] = { "FileOpen",
                                                        "FileSaveAsApplication",
                                                        "ViewEncoding",
                                                        "ViewPageSource",
+                                                       "ViewToggleInspector",
                                                        "FileBookmarkPage",
                                                        "EditBookmarks",
                                                        "EditHistory",

@@ -1356,6 +1356,31 @@ window_cmd_view_page_source (GtkAction  *action,
 }
 
 void
+window_cmd_view_toggle_inspector (GtkAction  *action,
+                                  EphyWindow *window)
+{
+
+  EphyEmbed *embed;
+  WebKitWebView *view;
+  WebKitWebInspector *inspector_window;
+
+  embed = ephy_embed_container_get_active_child
+            (EPHY_EMBED_CONTAINER (window));
+  g_return_if_fail (embed != NULL);
+
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
+
+  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+  inspector_window = webkit_web_view_get_inspector (view);
+
+  if (!ephy_embed_inspector_is_loaded (embed))
+    webkit_web_inspector_show (inspector_window);
+  else
+    webkit_web_inspector_close (inspector_window);
+}
+
+void
 window_cmd_help_contents (GtkAction *action,
                           GtkWidget *window)
 {
