@@ -54,7 +54,19 @@ static char *application_to_delete = NULL;
 static gboolean private_instance = FALSE;
 static gboolean incognito_mode = FALSE;
 static gboolean application_mode = FALSE;
+static char *desktop_file_path = NULL;
 static char *profile_directory = NULL;
+
+static gboolean
+application_mode_cb (const gchar *option_name,
+                     const gchar *value,
+                     gpointer     data,
+                     GError     **error)
+{
+  application_mode = TRUE;
+  desktop_file_path = g_strdup (value);
+  return TRUE;
+}
 
 static gboolean
 option_version_cb (const gchar *option_name,
@@ -86,7 +98,8 @@ static const GOptionEntry option_entries[] =
     N_("Start an instance in incognito mode"), NULL },
   { "netbank-mode", 0, 0, G_OPTION_ARG_NONE, &incognito_mode,
     N_("Start an instance in netbank mode"), NULL },
-  { "application-mode", 'a', 0, G_OPTION_ARG_NONE, &application_mode,
+  { "application-mode", 'a', G_OPTION_FLAG_FILENAME | G_OPTION_FLAG_OPTIONAL_ARG,
+    G_OPTION_ARG_CALLBACK, application_mode_cb,
     N_("Start the browser in application mode"), NULL },
   { "profile", 0, 0, G_OPTION_ARG_STRING, &profile_directory,
     N_("Profile directory to use in the private instance"), N_("DIR") },
@@ -346,18 +359,21 @@ main (int   argc,
   }
 
   if (application_mode && !profile_directory) {
-    const char *desktop_file_path = g_getenv ("GIO_LAUNCHED_DESKTOP_FILE");
-
     if (desktop_file_path) {
       desktop_info = g_desktop_app_info_new_from_filename (desktop_file_path);
 
       if (desktop_info)
         profile_directory = ephy_web_application_ensure_for_app_info (G_APP_INFO (desktop_info));
+
+      if (!profile_directory) {
+        g_print ("Invalid desktop file passed to --application-mode\n");
+        exit (1);
+      }
     }
   }
 
   if (application_mode && profile_directory == NULL) {
-    g_print ("--profile must be used when --application-mode is requested\n");
+    g_print ("--profile must be used when --application-mode is requested without desktop file path\n");
     exit (1);
   }
 
@@ -480,6 +496,7 @@ main (int   argc,
 
   /* Shutdown */
   g_object_unref (ephy_shell);
+  g_free (desktop_file_path);
   g_free (profile_directory);
 
   if (notify_is_initted ())
