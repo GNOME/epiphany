@@ -165,13 +165,15 @@ webkit_pref_get_internal_user_agent (void)
   initialized = TRUE;
 
   vendor_user_agent = webkit_pref_get_vendor_user_agent ();
-  if (!vendor_user_agent)
-    return NULL;
-
   webkit_user_agent = webkit_settings_get_user_agent (webkit_settings);
-  user_agent = g_strdup_printf ("%s %s Epiphany/%s", webkit_user_agent,
-                                vendor_user_agent, VERSION);
-  g_free (vendor_user_agent);
+
+  if (vendor_user_agent) {
+    user_agent = g_strdup_printf ("%s %s Epiphany/%s", webkit_user_agent,
+                                  vendor_user_agent, VERSION);
+    g_free (vendor_user_agent);
+  } else {
+    user_agent = g_strdup_printf ("%s Epiphany/%s", webkit_user_agent, VERSION);
+  }
 
   return user_agent;
 }
@@ -181,6 +183,7 @@ webkit_pref_callback_user_agent (GSettings  *settings,
                                  const char *key,
                                  gpointer    data)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   char *value;
   char *user_agent;
   const char *internal_user_agent;
@@ -194,19 +197,10 @@ webkit_pref_callback_user_agent (GSettings  *settings,
   g_free (value);
 
   internal_user_agent = webkit_pref_get_internal_user_agent ();
-  if (internal_user_agent)
-    user_agent = g_strdup (internal_user_agent);
-  else
-    user_agent = g_strdup_printf ("%s Epiphany/%s",
-                                  webkit_settings_get_user_agent (webkit_settings),
-                                  VERSION);
 
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) ==
-      EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    char *user_agent_old = user_agent;
-    user_agent = g_strdup_printf ("%s (WebappShell)", user_agent);
-    g_free (user_agent_old);
-  }
+  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+    user_agent = g_strdup_printf ("%s (WebappShell)", internal_user_agent);
+
   webkit_settings_set_user_agent (webkit_settings, user_agent);
   g_free (user_agent);
 }
