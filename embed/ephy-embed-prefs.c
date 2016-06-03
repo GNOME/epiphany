@@ -200,6 +200,8 @@ webkit_pref_callback_user_agent (GSettings  *settings,
 
   if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
     user_agent = g_strdup_printf ("%s (WebappShell)", internal_user_agent);
+  else
+    user_agent = g_strdup (internal_user_agent);
 
   webkit_settings_set_user_agent (webkit_settings, user_agent);
   g_free (user_agent);
