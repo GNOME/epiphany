@@ -121,10 +121,13 @@ ephy_web_dom_utils_get_application_title (WebKitDOMDocument *document)
     char *property;
     WebKitDOMNode *node = webkit_dom_node_list_item (metas, i);
 
+    /* og:site_name is read from the property attribute (standard), but is
+     * commonly seen on the web in the name attribute. Both are supported. */
     name = webkit_dom_html_meta_element_get_name (WEBKIT_DOM_HTML_META_ELEMENT (node));
     property = webkit_dom_element_get_attribute (WEBKIT_DOM_ELEMENT (node), "property");
-    if (g_strcmp0 (name, "application-name") == 0
-        || g_strcmp0 (property, "og:site_name") == 0) {
+    if ((name != NULL && g_ascii_strcasecmp (name, "application-name") == 0) ||
+        (property != NULL && g_ascii_strcasecmp (property, "og:site_name") == 0) ||
+        (name != NULL && g_ascii_strcasecmp (name, "og:site_name") == 0)) {
       title = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
     }
     g_free (property);
