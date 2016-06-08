@@ -385,7 +385,7 @@ get_icon_from_favicon (WebKitDOMDocument *document,
 
   /* Last ditch effort: just fallback to the default favicon location. */
   if (image == NULL)
-    image = g_strdup("/favicon.ico");
+    image = g_strdup ("/favicon.ico");
 
   if (uri_out != NULL)
     *uri_out = image;
