@@ -58,7 +58,7 @@
 #include <string.h>
 #include <webkit2/webkit2.h>
 
-#define DEFAULT_ICON_SIZE 144
+#define DEFAULT_ICON_SIZE 192
 #define FAVICON_SIZE 16
 
 void
