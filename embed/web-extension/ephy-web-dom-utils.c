@@ -356,7 +356,7 @@ get_icon_from_touch_icon (WebKitDOMDocument *document,
   return ret;
 }
 
-static gboolean
+static void
 get_icon_from_favicon (WebKitDOMDocument *document,
                        char             **uri_out)
 {
@@ -389,8 +389,6 @@ get_icon_from_favicon (WebKitDOMDocument *document,
 
   if (uri_out != NULL)
     *uri_out = image;
-
-  return TRUE;
 }
 
 /**
@@ -427,7 +425,7 @@ ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
   if (!found_icon)
     found_icon = get_icon_from_ogp (document, &image);
   if (!found_icon)
-    found_icon = get_icon_from_favicon (document, &image);
+    get_icon_from_favicon (document, &image);
 
   if (uri_out != NULL)
     *uri_out = resolve_uri (base_uri, image);
