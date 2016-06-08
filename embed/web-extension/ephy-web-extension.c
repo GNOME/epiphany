@@ -75,7 +75,6 @@ static const char introspection_xml[] =
   "  <method name='GetBestWebAppIcon'>"
   "   <arg type='t' name='page_id' direction='in'/>"
   "   <arg type='s' name='base_uri' direction='in'/>"
-  "   <arg type='b' name='result' direction='out'/>"
   "   <arg type='s' name='uri' direction='out'/>"
   "   <arg type='s' name='color' direction='out'/>"
   "  </method>"
@@ -1180,7 +1179,6 @@ handle_method_call (GDBusConnection       *connection,
     char *uri = NULL;
     char *color = NULL;
     guint64 page_id;
-    gboolean result;
 
     g_variant_get (parameters, "(ts)", &page_id, &base_uri);
     web_page = get_webkit_web_page_or_return_dbus_error (invocation, extension->extension, page_id);
@@ -1194,10 +1192,10 @@ handle_method_call (GDBusConnection       *connection,
     }
 
     document = webkit_web_page_get_dom_document (web_page);
-    result = ephy_web_dom_utils_get_best_icon (document, base_uri, &uri, &color);
+    ephy_web_dom_utils_get_best_icon (document, base_uri, &uri, &color);
 
     g_dbus_method_invocation_return_value (invocation,
-                                           g_variant_new ("(bss)", result, uri ? uri : "", color ? color : ""));
+                                           g_variant_new ("(ss)", uri ? uri : "", color ? color : ""));
   } else if (g_strcmp0 (method_name, "FormAuthDataSaveConfirmationResponse") == 0) {
     EphyEmbedFormAuth *form_auth;
     guint request_id;

@@ -2558,7 +2558,6 @@ ephy_web_view_has_modified_forms_finish (EphyWebView  *view,
 }
 
 typedef struct {
-  gboolean icon_result;
   char *icon_uri;
   char *icon_color;
 } GetBestWebAppIconAsyncData;
@@ -2577,17 +2576,14 @@ get_best_web_app_icon_cb (EphyWebExtensionProxy *web_extension,
                           GAsyncResult          *result,
                           GTask                 *task)
 {
-  gboolean retval = FALSE;
   char *uri = NULL;
   char *color = NULL;
   GError *error = NULL;
 
-  if (!ephy_web_extension_proxy_get_best_web_app_icon_finish (web_extension, result, &retval, &uri, &color, &error)) {
+  if (!ephy_web_extension_proxy_get_best_web_app_icon_finish (web_extension, result, &uri, &color, &error)) {
     g_task_return_error (task, error);
   } else {
     GetBestWebAppIconAsyncData *data = g_slice_new0 (GetBestWebAppIconAsyncData);
-
-    data->icon_result = retval;
     data->icon_uri = uri;
     data->icon_color = color;
     g_task_return_pointer (task, data, (GDestroyNotify)get_best_web_app_icon_async_data_free);
@@ -2624,7 +2620,6 @@ ephy_web_view_get_best_web_app_icon (EphyWebView        *view,
 gboolean
 ephy_web_view_get_best_web_app_icon_finish (EphyWebView  *view,
                                             GAsyncResult *result,
-                                            gboolean     *icon_result,
                                             char        **icon_uri,
                                             GdkRGBA      *icon_color,
                                             GError      **error)

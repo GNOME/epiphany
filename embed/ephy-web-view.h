@@ -105,7 +105,6 @@ void                       ephy_web_view_get_best_web_app_icon    (EphyWebView  
                                                                    gpointer                   user_data);
 gboolean               ephy_web_view_get_best_web_app_icon_finish (EphyWebView               *view,
                                                                    GAsyncResult              *result,
-                                                                   gboolean                  *icon_result,
                                                                    char                     **icon_uri,
                                                                    GdkRGBA                   *icon_color,
                                                                    GError                   **error);

@@ -485,7 +485,7 @@ set_app_icon_from_filename (EphyApplicationDialogData *data,
   GdkPixbuf *pixbuf;
   GdkPixbuf *framed;
 
-  pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+  pixbuf = gdk_pixbuf_new_from_file_at_size (filename, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE, NULL);
   if (pixbuf == NULL)
     return;
 
@@ -558,15 +558,14 @@ fill_default_application_image_cb (GObject      *source,
   EphyApplicationDialogData *data = user_data;
   char *uri = NULL;
   GdkRGBA color = { 0.5, 0.5, 0.5, 0.3 };
-  gboolean res = FALSE;
 
-  ephy_web_view_get_best_web_app_icon_finish (EPHY_WEB_VIEW (source), async_result, &res, &uri, &color, NULL);
+  ephy_web_view_get_best_web_app_icon_finish (EPHY_WEB_VIEW (source), async_result, &uri, &color, NULL);
 
   data->icon_href = uri;
   data->icon_rgba = color;
-  if (res) {
+  if (data->icon_href != NULL)
     download_icon_and_set_image (data);
-  } else {
+  else {
     gtk_widget_show (data->image);
     set_image_from_favicon (data);
   }

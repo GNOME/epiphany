@@ -47,7 +47,6 @@ void                   ephy_web_extension_proxy_get_best_web_app_icon           
                                                                                            gpointer               user_data);
 gboolean               ephy_web_extension_proxy_get_best_web_app_icon_finish              (EphyWebExtensionProxy *web_extension,
                                                                                            GAsyncResult          *result,
-                                                                                           gboolean              *icon_result,
                                                                                            char                 **icon_uri,
                                                                                            char                 **icon_color,
                                                                                            GError               **error);

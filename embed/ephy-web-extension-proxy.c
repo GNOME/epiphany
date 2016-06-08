@@ -305,7 +305,6 @@ ephy_web_extension_proxy_get_best_web_app_icon (EphyWebExtensionProxy *web_exten
 gboolean
 ephy_web_extension_proxy_get_best_web_app_icon_finish (EphyWebExtensionProxy *web_extension,
                                                        GAsyncResult          *result,
-                                                       gboolean              *icon_result,
                                                        char                 **icon_uri,
                                                        char                 **icon_color,
                                                        GError               **error)
@@ -319,7 +318,7 @@ ephy_web_extension_proxy_get_best_web_app_icon_finish (EphyWebExtensionProxy *we
   if (!variant)
     return FALSE;
 
-  g_variant_get (variant, "(bss)", icon_result, icon_uri, icon_color);
+  g_variant_get (variant, "(ss)", icon_uri, icon_color);
   g_variant_unref (variant);
 
   return TRUE;

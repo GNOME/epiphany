@@ -21,6 +21,7 @@
 #include "ephy-web-dom-utils.h"
 
 #include <libsoup/soup.h>
+#include <stdio.h>
 
 /**
  * ephy_web_dom_utils_has_modified_forms:
@@ -125,9 +126,13 @@ ephy_web_dom_utils_get_application_title (WebKitDOMDocument *document)
      * commonly seen on the web in the name attribute. Both are supported. */
     name = webkit_dom_html_meta_element_get_name (WEBKIT_DOM_HTML_META_ELEMENT (node));
     property = webkit_dom_element_get_attribute (WEBKIT_DOM_ELEMENT (node), "property");
-    if ((name != NULL && g_ascii_strcasecmp (name, "application-name") == 0) ||
-        (property != NULL && g_ascii_strcasecmp (property, "og:site_name") == 0) ||
-        (name != NULL && g_ascii_strcasecmp (name, "og:site_name") == 0)) {
+    if (name != NULL && g_ascii_strcasecmp (name, "application-name") == 0) {
+      g_free (title);
+      title = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
+      break;  /* Best name candidate. */
+    } else if ((property != NULL && g_ascii_strcasecmp (property, "og:site_name") == 0) ||
+               (name != NULL && g_ascii_strcasecmp (name, "og:site_name") == 0)) {
+      g_free (title);
       title = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
     }
     g_free (property);
@@ -161,6 +166,76 @@ resolve_uri (const char *base_uri,
 }
 
 static gboolean
+get_icon_from_html_icon (WebKitDOMDocument *document,
+                         char             **uri_out)
+{
+  gboolean ret;
+  WebKitDOMNodeList *links;
+  gulong length, i;
+  char *image = NULL;
+  int largest_icon = 0;
+
+  links = webkit_dom_document_get_elements_by_tag_name (document, "link");
+  length = webkit_dom_node_list_get_length (links);
+
+  for (i = 0; i < length; i++) {
+    char *rel;
+    WebKitDOMNode *node = webkit_dom_node_list_item (links, i);
+
+    rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+    if (rel != NULL && (
+        g_ascii_strcasecmp (rel, "icon") == 0 ||
+        g_ascii_strcasecmp (rel, "shortcut icon") == 0 ||
+        g_ascii_strcasecmp (rel, "icon shortcut") == 0 ||
+        g_ascii_strcasecmp (rel, "shortcut-icon") == 0)) {
+      char *sizes;
+      int width;
+      int height;
+
+      g_free (rel);
+
+      sizes = webkit_dom_element_get_attribute (WEBKIT_DOM_ELEMENT (node), "sizes");
+      if (sizes != NULL) {
+        if (g_ascii_strcasecmp (sizes, "any") == 0) {
+          g_free (sizes);
+          g_free (image);
+
+          /* TODO: Keep the SVG rather than rasterizing it to PNG. */
+          image = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+          /* "any" means a vector, and thus it will always be the largest icon. */
+          break;
+        }
+
+        /* Only accept square icons. */
+        if (sscanf (sizes, "%ix%i", &width, &height) != 2 || width != height) {
+          g_free (sizes);
+          continue;
+        }
+
+        /* Only accept icons of 96 px (smallest GNOME HIG app icon) or larger.
+         * It's better to defer to other icon discovery methods if smaller
+         * icons are returned here. */
+        if (width >= 96 && width > largest_icon) {
+          g_free (image);
+          image = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+          largest_icon = width;  /* Keep largest candidate if multiple are found. */
+        }
+        g_free (sizes);
+      }
+    }
+    else
+      g_free (rel);
+  }
+
+  ret = (image != NULL && *image != '\0');
+
+  if (uri_out != NULL)
+    *uri_out = image;
+
+  return ret;
+}
+
+static gboolean
 get_icon_from_mstile (WebKitDOMDocument *document,
                       char             **uri_out,
                       char             **color_out)
@@ -182,38 +257,36 @@ get_icon_from_mstile (WebKitDOMDocument *document,
     char *name;
 
     name = webkit_dom_html_meta_element_get_name (WEBKIT_DOM_HTML_META_ELEMENT (node));
-    if (g_strcmp0 (name, "msapplication-TileImage") == 0) {
-      if (image == NULL)
+    if (name != NULL) {
+      if (g_ascii_strcasecmp (name, "msapplication-TileImage") == 0) {
+        g_free (image);
         image = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
-    } else if (g_strcmp0 (name, "msapplication-TileColor") == 0) {
-      if (color == NULL)
+      }
+      else if (g_ascii_strcasecmp (name, "msapplication-TileColor") == 0) {
+        g_free (color);
         color = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
+      }
     }
   }
 
   ret = (image != NULL && *image != '\0');
 
   if (uri_out != NULL)
-    *uri_out = g_strdup (image);
+    *uri_out = image;
   if (color_out != NULL)
-    *color_out = g_strdup (color);
-
-  g_free (image);
-  g_free (color);
+    *color_out = color;
 
   return ret;
 }
 
 static gboolean
 get_icon_from_ogp (WebKitDOMDocument *document,
-                   char             **uri_out,
-                   char             **color_out)
+                   char             **uri_out)
 {
   gboolean ret;
   WebKitDOMNodeList *metas;
   gulong length, i;
   char *image = NULL;
-  char *color = NULL;
 
   metas = webkit_dom_document_get_elements_by_tag_name (document, "meta");
   length = webkit_dom_node_list_get_length (metas);
@@ -225,8 +298,9 @@ get_icon_from_ogp (WebKitDOMDocument *document,
 
     property = webkit_dom_element_get_attribute (WEBKIT_DOM_ELEMENT (node), "property");
     itemprop = webkit_dom_element_get_attribute (WEBKIT_DOM_ELEMENT (node), "itemprop");
-    if (g_strcmp0 (property, "og:image") == 0 ||
-        g_strcmp0 (itemprop, "image") == 0) {
+    if ((property != NULL && g_ascii_strcasecmp (property, "og:image") == 0) ||
+        (itemprop != NULL && g_ascii_strcasecmp (itemprop, "image") == 0)) {
+      g_free (image);
       image = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
     }
     g_free (property);
@@ -236,23 +310,19 @@ get_icon_from_ogp (WebKitDOMDocument *document,
   ret = (image != NULL && *image != '\0');
 
   if (uri_out != NULL)
-    *uri_out = g_strdup (image);
-  if (color_out != NULL)
-    *color_out = g_strdup (color);
+    *uri_out = image;
 
   return ret;
 }
 
 static gboolean
 get_icon_from_touch_icon (WebKitDOMDocument *document,
-                          char             **uri_out,
-                          char             **color_out)
+                          char             **uri_out)
 {
   gboolean ret;
   WebKitDOMNodeList *links;
   gulong length, i;
   char *image = NULL;
-  char *color = NULL;
 
   links = webkit_dom_document_get_elements_by_tag_name (document, "link");
   length = webkit_dom_node_list_get_length (links);
@@ -263,33 +333,36 @@ get_icon_from_touch_icon (WebKitDOMDocument *document,
 
     rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
     /* TODO: support more than one possible icon. */
-    if (g_strcmp0 (rel, "apple-touch-icon") == 0 ||
-        g_strcmp0 (rel, "apple-touch-icon-precomposed") == 0) {
-      image = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+    if (rel != NULL) {
+      if (g_ascii_strcasecmp (rel, "apple-touch-icon") == 0) {
+        g_free (image);
+        image = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+        break;  /* Best touch-icon candidate. */
+      } else if (g_ascii_strcasecmp (rel, "apple-touch-icon-precomposed") == 0) {
+        g_free (image);
+        image = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
+      }
     }
     g_free (rel);
   }
 
+  /* TODO: Try to retrieve /apple-touch-icon.png, and return it if it exist. */
+
   ret = (image != NULL && *image != '\0');
 
   if (uri_out != NULL)
-    *uri_out = g_strdup (image);
-  if (color_out != NULL)
-    *color_out = g_strdup (color);
+    *uri_out = image;
 
   return ret;
 }
 
 static gboolean
 get_icon_from_favicon (WebKitDOMDocument *document,
-                       char             **uri_out,
-                       char             **color_out)
+                       char             **uri_out)
 {
-  gboolean ret;
   WebKitDOMNodeList *links;
   gulong length, i;
   char *image = NULL;
-  char *color = NULL;
 
   links = webkit_dom_document_get_elements_by_tag_name (document, "link");
   length = webkit_dom_node_list_get_length (links);
@@ -299,25 +372,25 @@ get_icon_from_favicon (WebKitDOMDocument *document,
     WebKitDOMNode *node = webkit_dom_node_list_item (links, i);
 
     rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
-    if (g_strcmp0 (rel, "shortcut-icon") == 0 ||
-        g_strcmp0 (rel, "shortcut icon") == 0 ||
-        g_strcmp0 (rel, "SHORTCUT ICON") == 0 ||
-        g_strcmp0 (rel, "Shortcut Icon") == 0 ||
-        g_strcmp0 (rel, "icon shortcut") == 0 ||
-        g_strcmp0 (rel, "icon") == 0) {
+    if (rel != NULL && (
+        g_ascii_strcasecmp (rel, "icon") == 0 ||
+        g_ascii_strcasecmp (rel, "shortcut icon") == 0 ||
+        g_ascii_strcasecmp (rel, "icon shortcut") == 0 ||
+        g_ascii_strcasecmp (rel, "shortcut-icon") == 0)) {
+      g_free (image);
       image = webkit_dom_html_link_element_get_href (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
     }
     g_free (rel);
   }
 
-  ret = (image != NULL && *image != '\0');
+  /* Last ditch effort: just fallback to the default favicon location. */
+  if (image == NULL)
+    image = g_strdup("/favicon.ico");
 
   if (uri_out != NULL)
-    *uri_out = g_strdup (image);
-  if (color_out != NULL)
-    *color_out = g_strdup (color);
+    *uri_out = image;
 
-  return ret;
+  return TRUE;
 }
 
 /**
@@ -328,41 +401,40 @@ get_icon_from_favicon (WebKitDOMDocument *document,
  * @color_out: Icon background color.
  *
  * Tries to get the icon (and its background color if any) for a web application
- * from the @document meta data. First try to get a mstile, then OGP, then touch
- * icon and finally favicon.
+ * from the @document meta data. First try to get a large standard icon, then mstile,
+ * then OpenGraph, then touch icon, and finally use the favicon.
  *
  * Returns %TRUE if it finds an icon in the @document.
  **/
-gboolean
+void
 ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
                                   const char        *base_uri,
                                   char             **uri_out,
                                   char             **color_out)
 {
-  gboolean ret = FALSE;
+  gboolean found_icon = FALSE;
   char *image = NULL;
   char *color = NULL;
 
   /* FIXME: These functions could be improved considerably. See the first two answers at:
    * http://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url
    */
-  ret = get_icon_from_mstile (document, &image, &color);
-  if (!ret)
-    ret = get_icon_from_ogp (document, &image, &color);
-  if (!ret)
-    ret = get_icon_from_touch_icon (document, &image, &color);
-  if (!ret)
-    ret = get_icon_from_favicon (document, &image, &color);
+  found_icon = get_icon_from_html_icon (document, &image);
+  if (!found_icon)
+    found_icon = get_icon_from_mstile (document, &image, &color);
+  if (!found_icon)
+    found_icon = get_icon_from_touch_icon (document, &image);
+  if (!found_icon)
+    found_icon = get_icon_from_ogp (document, &image);
+  if (!found_icon)
+    found_icon = get_icon_from_favicon (document, &image);
 
   if (uri_out != NULL)
     *uri_out = resolve_uri (base_uri, image);
   if (color_out != NULL)
-    *color_out = g_strdup (color);
+    *color_out = color;
 
   g_free (image);
-  g_free (color);
-
-  return ret;
 }
 
 gboolean
