@@ -1749,9 +1749,10 @@ ephy_web_view_load_error_page (EphyWebView         *view,
       msg_details = g_strdup_printf (_("<p>The precise error was: <i>%s</i></p>"),
                                      reason);
 
-      /* The button on the network error page. */
+      /* The button on the network error page. Do not add mnemonics here. */
       button_label = g_strdup (_("Reload"));
       button_action = g_strdup_printf ("window.location = '%s';", uri);
+      /* Mnemonic for the Reload button on browser error pages. */
       button_accesskey = C_("reload-access-key", "R");
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
@@ -1770,9 +1771,10 @@ ephy_web_view_load_error_page (EphyWebView         *view,
                                   uri,
                                   LSB_DISTRIBUTOR);
 
-      /* The button on the page crash error page. */
+      /* The button on the page crash error page. Do not add mnemonics here. */
       button_label = g_strdup (_("Reload"));
       button_action = g_strdup_printf ("window.location = '%s';", uri);
+      /* Mnemonic for the Reload button on browser error pages. */
       button_accesskey = C_("reload-access-key", "R");
       break;
     case EPHY_WEB_VIEW_ERROR_PROCESS_CRASH:
@@ -1786,9 +1788,10 @@ ephy_web_view_load_error_page (EphyWebView         *view,
       msg_body = g_strdup (_("<p>Something went wrong while displaying this page.</p>"
                              "<p>Please reload or visit a different page to continue.</p>"));
 
-      /* The button on the process crash error page. */
+      /* The button on the process crash error page. Do not add mnemonics here. */
       button_label = g_strdup (_("Reload"));
       button_action = g_strdup_printf ("window.location = '%s';", uri);
+      /* Mnemonic for the Reload button on browser error pages. */
       button_accesskey = C_("reload-access-key", "R");
       break;
     case EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE:
@@ -1808,15 +1811,17 @@ ephy_web_view_load_error_page (EphyWebView         *view,
       /* Message details when a site is not loaded due to an invalid TLS certificate. */
       msg_details = detailed_message_from_tls_errors (view->tls_errors);
 
-      /* The button on the invalid TLS certificate error page. */
+      /* The button on the invalid TLS certificate error page. Do not add mnemonics here. */
       button_label = g_strdup (_("Go Back"));
       button_action = g_strdup ("window.history.back();");
+      /* Mnemonic for the Go Back button on the invalid TLS certificate error page. */
       button_accesskey = C_("back-access-key", "B");
 
-      /* The hidden button on the invalid TLS certificate error page. */
+      /* The hidden button on the invalid TLS certificate error page. Do not add mnemonics here. */
       hidden_button_label = g_strdup (_("Accept Risk and Proceed"));
       hidden_button_action = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT ");",
                                               webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
+      /* Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page. */
       hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
 
       icon_name = "channel-insecure-symbolic.png";
