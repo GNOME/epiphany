@@ -20,11 +20,12 @@
 #include "config.h"
 #include "ephy-toolbar.h"
 
+#include "ephy-downloads-popover.h"
+#include "ephy-downloads-progress-icon.h"
 #include "ephy-location-entry.h"
 #include "ephy-middle-clickable-button.h"
 #include "ephy-private.h"
-#include "ephy-downloads-popover.h"
-#include "ephy-downloads-progress-icon.h"
+#include "ephy-shell.h"
 
 enum {
   PROP_0,
@@ -50,6 +51,17 @@ struct _EphyToolbar {
 
 G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_HEADER_BAR)
 
+static gboolean
+toolbar_is_for_active_window (EphyToolbar *toolbar)
+{
+  EphyShell *shell = ephy_shell_get_default ();
+  GtkWindow *active_window;
+
+  active_window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+
+  return active_window == GTK_WINDOW (toolbar->window);
+}
+
 static void
 download_added_cb (EphyDownloadsManager *manager,
                    EphyDownload         *download,
@@ -61,8 +73,10 @@ download_added_cb (EphyDownloadsManager *manager,
                                  toolbar->downloads_popover);
   }
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
   gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->downloads_revealer), TRUE);
+
+  if (toolbar_is_for_active_window (toolbar))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
 }
 
 static void
@@ -70,7 +84,8 @@ download_completed_cb (EphyDownloadsManager *manager,
                        EphyDownload         *download,
                        EphyToolbar          *toolbar)
 {
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
+  if (toolbar_is_for_active_window (toolbar))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
 }
 
 static void
