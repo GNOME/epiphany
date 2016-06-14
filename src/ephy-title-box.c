@@ -315,7 +315,7 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
   EphyTitleBox        *title_box = EPHY_TITLE_BOX (widget);
   GtkAllocation lock_allocation;
 
-  if (title_box->mode != EPHY_TITLE_BOX_MODE_TITLE)
+  if (title_box->mode != EPHY_TITLE_BOX_MODE_TITLE || event->button != GDK_BUTTON_PRIMARY)
     return GDK_EVENT_PROPAGATE;
 
   LOG ("button-press-event title-box %p event %p", title_box, event);
