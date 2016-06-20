@@ -16,20 +16,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SYNC_WINDOW_H
-#define EPHY_SYNC_WINDOW_H
+#ifndef EPHY_SYNC_UTILS_H
+#define EPHY_SYNC_UTILS_H
 
-#include <gtk/gtk.h>
-
-#include "ephy-sync-service.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_SYNC_WINDOW (ephy_sync_window_get_type ())
+#define EPHY_SYNC_TOKEN_LENGTH 32
 
-G_DECLARE_FINAL_TYPE (EphySyncWindow, ephy_sync_window, EPHY, SYNC_WINDOW, GtkDialog)
+gchar *ephy_sync_utils_kw          (const gchar *name);
 
-GtkWidget *ephy_sync_window_new (EphySyncService *sync_service);
+gchar *ephy_sync_utils_kwe         (const gchar *name,
+                                    const gchar *emailUTF8);
+
+gchar *ephy_sync_utils_encode_hex  (guint8 *data,
+                                    gsize   data_length);
+
+/* FIXME: Only for debugging, remove when no longer needed */
+void   ephy_sync_utils_display_hex (const gchar *data_name,
+                                    guint8      *data,
+                                    gsize        data_length);
+
 
 G_END_DECLS
 

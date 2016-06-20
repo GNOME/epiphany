@@ -18,7 +18,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-gui.h"
-#include "ephy-sync-crypto.h"
+#include "ephy-sync-utils.h"
 #include "ephy-sync-window.h"
 
 #include <gtk/gtk.h>
@@ -71,26 +71,26 @@ LOG ("password: %s", passwordUTF8);
     passwordUTF8 = g_strdup ("pässwörd");
   }
 
-  authPW = g_malloc (EPHY_SYNC_SERVICE_TOKEN_LENGTH);
-  unwrapBKey = g_malloc (EPHY_SYNC_SERVICE_TOKEN_LENGTH);
+  authPW = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  unwrapBKey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
   ephy_sync_service_stretch (self->sync_service,
                              emailUTF8,
                              passwordUTF8,
                              authPW,
                              unwrapBKey);
-ephy_sync_crypto_display_hex (authPW, EPHY_SYNC_SERVICE_TOKEN_LENGTH, "authPW");
-ephy_sync_crypto_display_hex (unwrapBKey, EPHY_SYNC_SERVICE_TOKEN_LENGTH, "unwrapBKey");
+ephy_sync_utils_display_hex ("authPW", authPW, EPHY_SYNC_TOKEN_LENGTH);
+ephy_sync_utils_display_hex ("unwrapBKey", unwrapBKey, EPHY_SYNC_TOKEN_LENGTH);
 
-  sessionToken = g_malloc (EPHY_SYNC_SERVICE_TOKEN_LENGTH);
-  keyFetchToken = g_malloc (EPHY_SYNC_SERVICE_TOKEN_LENGTH);
+  sessionToken = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  keyFetchToken = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
   ephy_sync_service_try_login (self->sync_service,
                                FALSE,
                                emailUTF8,
                                authPW,
                                sessionToken,
                                keyFetchToken);
-ephy_sync_crypto_display_hex (sessionToken, EPHY_SYNC_SERVICE_TOKEN_LENGTH, "sessionToken");
-ephy_sync_crypto_display_hex (keyFetchToken, EPHY_SYNC_SERVICE_TOKEN_LENGTH, "keyFetchToken");
+ephy_sync_utils_display_hex ("sessionToken", sessionToken, EPHY_SYNC_TOKEN_LENGTH);
+ephy_sync_utils_display_hex ("keyFetchToken", keyFetchToken, EPHY_SYNC_TOKEN_LENGTH);
 
   g_free (authPW);
   g_free (unwrapBKey);

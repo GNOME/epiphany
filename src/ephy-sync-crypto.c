@@ -16,45 +16,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ephy-debug.h"
 #include "ephy-sync-crypto.h"
 
 #include <nettle/hmac.h>
 #include <nettle/pbkdf2.h>
 #include <string.h>
-
-static const gchar hex_digits[] = "0123456789abcdef";
-
-gchar *
-ephy_sync_crypto_kw (const gchar *name)
-{
-  return g_strconcat ("identity.mozilla.com/picl/v1/", name, NULL);
-}
-
-gchar *
-ephy_sync_crypto_kwe (const gchar *name,
-                      const gchar *emailUTF8)
-{
-  return g_strconcat ("identity.mozilla.com/picl/v1/", name, ":", emailUTF8, NULL);
-}
-
-gchar *
-ephy_sync_crypto_encode_hex (guint8 *data,
-                             gsize   data_length)
-{
-  gchar *retval = g_malloc (data_length * 2 + 1);
-
-  for (gsize i = 0; i < data_length; i++) {
-    guint8 byte = data[i];
-
-    retval[2 * i] = hex_digits[byte >> 4];
-    retval[2 * i + 1] = hex_digits[byte & 0xf];
-  }
-
-  retval[data_length * 2] = 0;
-
-  return retval;
-}
 
 /*
  * Runs 1000 iterations of PBKDF2.
@@ -127,15 +93,4 @@ ephy_sync_crypto_hkdf (guint8 *in,
   g_free (salt);
   g_free (tmp);
   g_free (prk);
-}
-
-/* FIXME: Only for debugging, remove when no longer needed */
-void
-ephy_sync_crypto_display_hex (guint8      *data,
-                              gsize        data_length,
-                              const gchar *data_name)
-{
-LOG ("%s:", data_name);
-for (gsize i = 0; i < data_length; i++)
-  LOG ("%02x", data[i]);
 }
