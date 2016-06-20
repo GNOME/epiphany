@@ -16,7 +16,7 @@
 
 m4_define([epiphany_version_major],[3])
 m4_define([epiphany_version_minor],[20])
-m4_define([epiphany_version_micro],[2])
+m4_define([epiphany_version_micro],[3])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
