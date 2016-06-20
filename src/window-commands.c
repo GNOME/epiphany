@@ -1399,10 +1399,11 @@ window_cmd_view_page_source (GSimpleAction *action,
 }
 
 void
-window_cmd_view_toggle_inspector (GtkAction  *action,
-                                  EphyWindow *window)
+window_cmd_view_toggle_inspector (GSimpleAction *action,
+                                  GVariant      *value,
+                                  gpointer       user_data)
 {
-
+  EphyWindow *window = user_data;
   EphyEmbed *embed;
   WebKitWebView *view;
   WebKitWebInspector *inspector_window;

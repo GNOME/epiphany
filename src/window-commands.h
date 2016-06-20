@@ -92,12 +92,13 @@ void window_cmd_view_zoom_out             (GSimpleAction *action,
 void window_cmd_view_zoom_normal          (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
-void window_cmd_view_toggle_inspector     (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_view_encoding             (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
 void window_cmd_view_page_source          (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_view_toggle_inspector     (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
 void window_cmd_file_close_window         (GSimpleAction *action,
