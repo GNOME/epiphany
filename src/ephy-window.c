@@ -111,8 +111,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     NULL, G_CALLBACK (window_cmd_view_stop) },
   { "ViewReload", NULL, N_("_Reload"), "<control>R", NULL,
     G_CALLBACK (window_cmd_view_reload) },
-  { "ViewToggleInspector", NULL, N_("_Toggle Inspector"), "<shift><control>I", NULL,
-    G_CALLBACK (window_cmd_view_toggle_inspector) },
 
   /* Bookmarks actions. */
 
@@ -236,9 +234,6 @@ static const struct {
   { GDK_KEY_R, GDK_CONTROL_MASK, "ViewReload", FALSE },
   { GDK_KEY_R, GDK_CONTROL_MASK |
     GDK_SHIFT_MASK, "ViewReload", FALSE },
-  { GDK_KEY_F12, 0, "ViewToggleInspector", FALSE },
-  { GDK_KEY_I, GDK_CONTROL_MASK |
-    GDK_SHIFT_MASK, "ViewToggleInspector", FALSE },
 
   /* Tab navigation */
   { GDK_KEY_Page_Up, GDK_CONTROL_MASK, "TabsPrevious", FALSE },
@@ -318,6 +313,7 @@ const struct {
   { "win.find-next", { "<Primary>G", NULL } },
   { "win.encoding", { NULL } },
   { "win.page-source", { "<Primary>U", NULL } },
+  { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
   { "win.close", { "<Primary>W", NULL } }
 };
 
@@ -3065,7 +3061,6 @@ setup_location_controller (EphyWindow  *window,
 
 static const char *disabled_actions_for_app_mode[] = { "FileNewWindow",
                                                        "FileNewWindowIncognito",
-                                                       "ViewToggleInspector",
                                                        "FileBookmarkPage",
                                                        "EditBookmarks",
                                                        "EditHistory",
@@ -3075,7 +3070,8 @@ static const char *new_disabled_actions_for_app_mode[] = { "open",
                                                        "save-as",
                                                        "save-as-application",
                                                        "encoding",
-                                                       "page-source" };
+                                                       "page-source",
+                                                       "toggle-inspector" };
 
 static void
 parse_css_error (GtkCssProvider *provider,
@@ -3147,6 +3143,7 @@ static const GActionEntry new_ephy_page_menu_entries [] =
   // { "bookmark-page", },
   { "encoding", window_cmd_view_encoding },
   { "page-source", window_cmd_view_page_source },
+  { "toggle-inspector", window_cmd_view_toggle_inspector },
   { "close-tab", window_cmd_file_close_window }
 };
 
