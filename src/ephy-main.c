@@ -54,7 +54,7 @@ static char *application_to_delete = NULL;
 static gboolean private_instance = FALSE;
 static gboolean incognito_mode = FALSE;
 static gboolean application_mode = FALSE;
-static char *desktop_file_path = NULL;
+static char *desktop_file_basename = NULL;
 static char *profile_directory = NULL;
 
 static gboolean
@@ -64,7 +64,7 @@ application_mode_cb (const gchar *option_name,
                      GError     **error)
 {
   application_mode = TRUE;
-  desktop_file_path = g_strdup (value);
+  desktop_file_basename = g_strdup (value);
   return TRUE;
 }
 
@@ -359,8 +359,8 @@ main (int   argc,
   }
 
   if (application_mode && !profile_directory) {
-    if (desktop_file_path) {
-      desktop_info = g_desktop_app_info_new_from_filename (desktop_file_path);
+    if (desktop_file_basename) {
+      desktop_info = g_desktop_app_info_new (desktop_file_basename);
 
       if (desktop_info)
         profile_directory = ephy_web_application_ensure_for_app_info (G_APP_INFO (desktop_info));
@@ -495,8 +495,9 @@ main (int   argc,
   status = g_application_run (G_APPLICATION (ephy_shell), argc, argv);
 
   /* Shutdown */
+  /* FIXME: should free this stuff even when exiting early */
   g_object_unref (ephy_shell);
-  g_free (desktop_file_path);
+  g_free (desktop_file_basename);
   g_free (profile_directory);
 
   if (notify_is_initted ())
