@@ -23,29 +23,21 @@
 
 G_BEGIN_DECLS
 
-gchar *ephy_sync_crypto_kw          (const gchar *name);
-gchar *ephy_sync_crypto_kwe         (const gchar *name,
-                                     const gchar *emailUTF8);
-gchar *ephy_sync_crypto_encode_hex  (guint8 *data,
-                                     gsize   data_length);
-void   ephy_sync_crypto_pbkdf2_1k   (guint8 *key,
-                                     gsize   key_length,
-                                     guint8 *salt,
-                                     gsize   salt_length,
-                                     guint8 *out,
-                                     gsize   out_length);
-void   ephy_sync_crypto_hkdf        (guint8 *in,
-                                     gsize   in_length,
-                                     guint8 *salt,
-                                     gsize   salt_length,
-                                     guint8 *info,
-                                     gsize   info_length,
-                                     guint8 *out,
-                                     gsize   out_length);
-/* FIXME: Only for debugging, remove when no longer needed */
-void   ephy_sync_crypto_display_hex (guint8      *data,
-                                     gsize        data_length,
-                                     const gchar *data_name);
+void ephy_sync_crypto_pbkdf2_1k (guint8 *key,
+                                 gsize   key_length,
+                                 guint8 *salt,
+                                 gsize   salt_length,
+                                 guint8 *out,
+                                 gsize   out_length);
+
+void ephy_sync_crypto_hkdf      (guint8 *in,
+                                 gsize   in_length,
+                                 guint8 *salt,
+                                 gsize   salt_length,
+                                 guint8 *info,
+                                 gsize   info_length,
+                                 guint8 *out,
+                                 gsize   out_length);
 
 G_END_DECLS
 

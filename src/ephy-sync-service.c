@@ -19,6 +19,7 @@
 #include "ephy-debug.h"
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-service.h"
+#include "ephy-sync-utils.h"
 
 #include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
@@ -92,7 +93,7 @@ LOG ("%s:%d", __func__, __LINE__);
   message = soup_message_new (SOUP_METHOD_POST,
                               "https://api.accounts.firefox.com/v1/account/login");
 
-  authPW_hex = ephy_sync_crypto_encode_hex (authPW, EPHY_SYNC_SERVICE_TOKEN_LENGTH);
+  authPW_hex = ephy_sync_utils_encode_hex (authPW, EPHY_SYNC_TOKEN_LENGTH);
   request_body = g_strconcat ("{\"authPW\": \"",
                               authPW_hex,
                               "\", \"email\": \"",
@@ -128,34 +129,34 @@ ephy_sync_service_stretch (EphySyncService *self,
 
 LOG ("%s:%d", __func__, __LINE__);
 
-  salt_stretch = ephy_sync_crypto_kwe ("quickStretch", emailUTF8);
-  quickStretchedPW = g_malloc (EPHY_SYNC_SERVICE_TOKEN_LENGTH);
+  salt_stretch = ephy_sync_utils_kwe ("quickStretch", emailUTF8);
+  quickStretchedPW = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
   ephy_sync_crypto_pbkdf2_1k ((guint8 *) passwordUTF8,
                               strlen (passwordUTF8),
                               (guint8 *) salt_stretch,
                               strlen (salt_stretch),
                               quickStretchedPW,
-                              EPHY_SYNC_SERVICE_TOKEN_LENGTH);
+                              EPHY_SYNC_TOKEN_LENGTH);
 
-ephy_sync_crypto_display_hex (quickStretchedPW, EPHY_SYNC_SERVICE_TOKEN_LENGTH, "quickStretchedPW");
+ephy_sync_utils_display_hex ("quickStretchedPW", quickStretchedPW, EPHY_SYNC_TOKEN_LENGTH);
 
-  info_auth = ephy_sync_crypto_kw ("authPW");
+  info_auth = ephy_sync_utils_kw ("authPW");
   ephy_sync_crypto_hkdf (quickStretchedPW,
-                         EPHY_SYNC_SERVICE_TOKEN_LENGTH,
+                         EPHY_SYNC_TOKEN_LENGTH,
                          NULL, 0,
                          (guint8 *) info_auth,
                          strlen (info_auth),
                          authPW,
-                         EPHY_SYNC_SERVICE_TOKEN_LENGTH);
+                         EPHY_SYNC_TOKEN_LENGTH);
 
-  info_unwrap = ephy_sync_crypto_kw ("unwrapBkey");
+  info_unwrap = ephy_sync_utils_kw ("unwrapBkey");
   ephy_sync_crypto_hkdf (quickStretchedPW,
-                         EPHY_SYNC_SERVICE_TOKEN_LENGTH,
+                         EPHY_SYNC_TOKEN_LENGTH,
                          NULL, 0,
                          (guint8 *) info_unwrap,
                          strlen (info_unwrap),
                          unwrapBKey,
-                         EPHY_SYNC_SERVICE_TOKEN_LENGTH);
+                         EPHY_SYNC_TOKEN_LENGTH);
 
   g_free (salt_stretch);
   g_free (info_unwrap);
