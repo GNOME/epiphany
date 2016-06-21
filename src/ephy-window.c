@@ -654,6 +654,7 @@ sync_tab_load_status (EphyWebView    *view,
 {
   GtkActionGroup *action_group = window->action_group;
   GtkAction *action;
+  GActionGroup *new_action_group;
   GAction *new_action;
   gboolean loading;
 
@@ -661,11 +662,15 @@ sync_tab_load_status (EphyWebView    *view,
 
   loading = ephy_web_view_is_loading (view);
 
+  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                              "win");
+
   action = gtk_action_group_get_action (action_group, "ViewStop");
   gtk_action_set_sensitive (action, loading);
 
   /* disable print while loading, see bug #116344 */
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "print");
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group),
+                                       "print");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_LOADING, loading);
 
   action = gtk_action_group_get_action (window->toolbar_action_group,
@@ -868,9 +873,14 @@ update_link_actions_sensitivity (EphyWindow *window,
 static void
 update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gboolean sensitive, gboolean hide)
 {
+  GActionGroup *action_group;
   GAction *action;
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), action_name);
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                              "win");
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                   action_name);
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), sensitive);
   // TODO: do something with hide
   // TODO: see why PageMenu Actions don't have their sensitivity changed
@@ -985,17 +995,21 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 static void
 enable_edit_actions_sensitivity (EphyWindow *window)
 {
+  GActionGroup *action_group;
   GAction *action;
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "cut");
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                              "win");
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "cut");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "copy");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "copy");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "paste");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "paste");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "undo");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "undo");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "redo");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "redo");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 }
 
@@ -1026,6 +1040,43 @@ init_menu_updaters (EphyWindow *window)
   g_signal_connect (edit_menu, "hide",
                     G_CALLBACK (edit_menu_hide_cb), window);
 }
+
+static void
+zoom_to_level_cb (GSimpleAction *action,
+                  GVariant      *value,
+                  gpointer       user_data)
+{
+  ephy_window_set_zoom (EPHY_WINDOW (user_data), g_variant_get_double (user_data));
+}
+
+static const GActionEntry new_ephy_page_menu_entries [] =
+{
+  { "new-tab", window_cmd_file_new_tab },
+  { "open", window_cmd_file_open },
+  { "save-as", window_cmd_file_save_as },
+  { "save-as-application", window_cmd_file_save_as_application },
+  { "undo", window_cmd_edit_undo },
+  { "redo", window_cmd_edit_redo },
+  { "cut", window_cmd_edit_cut },
+  { "copy", window_cmd_edit_copy },
+  { "paste", window_cmd_edit_paste },
+  { "delete", window_cmd_edit_delete },
+  { "select-all", window_cmd_edit_select_all },
+  { "zoom-in", window_cmd_view_zoom_in },
+  { "zoom-out", window_cmd_view_zoom_out },
+  { "zoom-normal", window_cmd_view_zoom_normal },
+  { "zoom", NULL, "d", "1.0", zoom_to_level_cb },
+  { "print", window_cmd_file_print },
+  { "find", window_cmd_edit_find },
+  { "find-prev", window_cmd_edit_find_prev },
+  { "find-next", window_cmd_edit_find_next },
+  // { "bookmarks", },
+  // { "bookmark-page", },
+  { "encoding", window_cmd_view_encoding },
+  { "page-source", window_cmd_view_page_source },
+  { "toggle-inspector", window_cmd_view_toggle_inspector },
+  { "close-tab", window_cmd_file_close_window }
+};
 
 static void
 setup_ui_manager (EphyWindow *window)
@@ -1140,6 +1191,7 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
                                             guint       flags,
                                             gboolean    set)
 {
+  GActionGroup *new_action_group;
   GtkActionGroup *action_group;
   GtkAction *action;
   GAction *new_action;
@@ -1163,8 +1215,12 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
                                           flags, set);
   }
 
+  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                              "win");
+
+  /* Page menu */
   for (i = 0; new_action_group_actions[i] != NULL; i++) {
-    new_action = g_action_map_lookup_action (G_ACTION_MAP (window),
+    new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group),
                                          new_action_group_actions[i]);
     new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                           flags, set);
@@ -1209,6 +1265,7 @@ sync_tab_address (EphyWebView *view,
 static void
 sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 {
+  GActionGroup *action_group;
   GAction *action;
   gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
   double zoom;
@@ -1229,11 +1286,14 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
     can_zoom_normal = TRUE;
   }
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "zoom-in");
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                              "win");
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "zoom-in");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_zoom_in);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "zoom-out");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "zoom-out");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_zoom_out);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "zoom-normal");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "zoom-normal");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), can_zoom_normal);
 }
 
@@ -1242,6 +1302,7 @@ sync_tab_document_type (EphyWebView *view,
                         GParamSpec  *pspec,
                         EphyWindow  *window)
 {
+  GActionGroup *action_group;
   GAction *action;
   EphyWebViewDocumentType type;
   gboolean can_find, disable, is_image;
@@ -1256,15 +1317,18 @@ sync_tab_document_type (EphyWebView *view,
   is_image = type == EPHY_WEB_VIEW_DOCUMENT_IMAGE;
   disable = (type != EPHY_WEB_VIEW_DOCUMENT_HTML);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "encoding");
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                              "win");
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "encoding");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, disable);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "page-source");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "page-source");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, is_image);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "find");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "find");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "find-prev");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "find-prev");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
-  action = g_action_map_lookup_action (G_ACTION_MAP (window), "find-next");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "find-next");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
 
   if (!can_find) {
@@ -1618,6 +1682,7 @@ populate_context_menu (WebKitWebView       *web_view,
   WebKitContextMenuItem *toggle_controls_item = NULL;
   WebKitContextMenuItem *toggle_loop_item = NULL;
   WebKitContextMenuItem *fullscreen_item = NULL;
+  GActionGroup *window_action_group;
   GList *spelling_guess_items = NULL;
   EphyEmbedEvent *embed_event;
   gboolean is_document = FALSE;
@@ -1628,6 +1693,9 @@ populate_context_menu (WebKitWebView       *web_view,
   gboolean is_audio = FALSE;
   gboolean can_search_selection = FALSE;
   const char *selected_text = NULL;
+
+  window_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                                     "win");
 
   is_image = webkit_hit_test_result_context_is_image (hit_test_result);
 
@@ -1715,7 +1783,7 @@ populate_context_menu (WebKitWebView       *web_view,
                                   webkit_context_menu_item_new_separator ());
     }
     new_add_action_to_context_menu (context_menu,
-                                G_ACTION_GROUP (window), "copy");
+                                window_action_group, "copy");
     if (can_search_selection)
       add_action_to_context_menu (context_menu,
                                   window->popups_action_group, "SearchSelection");
@@ -1752,21 +1820,21 @@ populate_context_menu (WebKitWebView       *web_view,
     update_edit_actions_sensitivity (window, FALSE);
 
     new_add_action_to_context_menu (context_menu,
-                                G_ACTION_GROUP (window), "undo");
+                                window_action_group, "undo");
     new_add_action_to_context_menu (context_menu,
-                                G_ACTION_GROUP (window), "redo");
+                                window_action_group, "redo");
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
     new_add_action_to_context_menu (context_menu,
-                                G_ACTION_GROUP (window), "cut");
+                                window_action_group, "cut");
     new_add_action_to_context_menu (context_menu,
-                                G_ACTION_GROUP (window), "copy");
+                                window_action_group, "copy");
     new_add_action_to_context_menu (context_menu,
-                                G_ACTION_GROUP (window), "paste");
+                                window_action_group, "paste");
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
     new_add_action_to_context_menu (context_menu,
-                                G_ACTION_GROUP (window), "select-all");
+                                window_action_group, "select-all");
     if (input_methods_item || unicode_item)
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
@@ -1789,7 +1857,7 @@ populate_context_menu (WebKitWebView       *web_view,
     }
 
     new_add_action_to_context_menu (context_menu,
-                                G_ACTION_GROUP (window), "copy");
+                                window_action_group, "copy");
     if (can_search_selection)
       add_action_to_context_menu (context_menu,
                                   window->popups_action_group, "SearchSelection");
@@ -2945,14 +3013,6 @@ sync_user_input_cb (EphyLocationController *action,
 }
 
 static void
-zoom_to_level_cb (GSimpleAction *action,
-                  GVariant      *value,
-                  gpointer       user_data)
-{
-  ephy_window_set_zoom (EPHY_WINDOW (user_data), g_variant_get_double (user_data));
-}
-
-static void
 open_security_popover (EphyWindow   *window,
                        GtkWidget    *relative_to,
                        GdkRectangle *lock_position)
@@ -3118,35 +3178,6 @@ ephy_window_toggle_visibility_for_app_menu (EphyWindow *window)
   }
 }
 
-static const GActionEntry new_ephy_page_menu_entries [] =
-{
-  { "new-tab", window_cmd_file_new_tab },
-  { "open", window_cmd_file_open },
-  { "save-as", window_cmd_file_save_as },
-  { "save-as-application", window_cmd_file_save_as_application },
-  { "undo", window_cmd_edit_undo },
-  { "redo", window_cmd_edit_redo },
-  { "cut", window_cmd_edit_cut },
-  { "copy", window_cmd_edit_copy },
-  { "paste", window_cmd_edit_paste },
-  { "delete", window_cmd_edit_delete },
-  { "select-all", window_cmd_edit_select_all },
-  { "zoom-in", window_cmd_view_zoom_in },
-  { "zoom-out", window_cmd_view_zoom_out },
-  { "zoom-normal", window_cmd_view_zoom_normal },
-  { "zoom", NULL, "d", "1.0", zoom_to_level_cb },
-  { "print", window_cmd_file_print },
-  { "find", window_cmd_edit_find },
-  { "find-prev", window_cmd_edit_find_prev },
-  { "find-next", window_cmd_edit_find_next },
-  // { "bookmarks", },
-  // { "bookmark-page", },
-  { "encoding", window_cmd_view_encoding },
-  { "page-source", window_cmd_view_page_source },
-  { "toggle-inspector", window_cmd_view_toggle_inspector },
-  { "close-tab", window_cmd_file_close_window }
-};
-
 static GObject *
 ephy_window_constructor (GType                  type,
                          guint                  n_construct_properties,
@@ -3157,6 +3188,8 @@ ephy_window_constructor (GType                  type,
   GtkSettings *settings;
   GtkAction *action;
   GAction *new_action;
+  GActionGroup *new_action_group;
+  GSimpleActionGroup *new_simple_action_group;
   GtkActionGroup *toolbar_action_group;
   GError *error = NULL;
   guint settings_connection;
@@ -3171,11 +3204,17 @@ ephy_window_constructor (GType                  type,
 
   window = EPHY_WINDOW (object);
 
-  g_action_map_add_action_entries (G_ACTION_MAP (window),
+  /* Add actions */
+  new_simple_action_group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (new_simple_action_group),
                                    new_ephy_page_menu_entries,
                                    G_N_ELEMENTS (new_ephy_page_menu_entries),
                                    window);
+  gtk_widget_insert_action_group (GTK_WIDGET (window),
+                                  "win",
+                                  G_ACTION_GROUP (new_simple_action_group));
 
+  /* Set accels for actions */
   app = g_application_get_default ();
   for (i = 0; i < G_N_ELEMENTS (accels); i++) {
     gtk_application_set_accels_for_action (GTK_APPLICATION (app),
@@ -3251,9 +3290,12 @@ ephy_window_constructor (GType                  type,
                     "changed::" EPHY_PREFS_WEB_ENABLE_POPUPS,
                     G_CALLBACK (allow_popups_notifier), window);
 
+  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                              "win");
+
   /* Disable actions not needed for popup mode. */
   toolbar_action_group = window->toolbar_action_group;
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (window), "new-tab");
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group), "new-tab");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                         SENS_FLAG_CHROME,
                                         window->is_popup);
@@ -3290,7 +3332,7 @@ ephy_window_constructor (GType                  type,
     }
 
     for (i = 0; i < G_N_ELEMENTS (new_disabled_actions_for_app_mode); i++) {
-      new_action = g_action_map_lookup_action (G_ACTION_MAP (window),
+      new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group),
                                        new_disabled_actions_for_app_mode[i]);
       new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                             SENS_FLAG_CHROME, TRUE);

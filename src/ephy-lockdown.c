@@ -259,6 +259,7 @@ window_added_cb (GtkApplication *application,
 {
   GtkUIManager *manager;
   GtkActionGroup *action_group;
+  GActionGroup *new_action_group;
   GtkAction *action;
   GSettings *settings;
   EphyLocationController *location_controller;
@@ -286,8 +287,11 @@ window_added_cb (GtkApplication *application,
                              action_group, window_actions,
                              G_N_ELEMENTS (window_actions));
 
+  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                                  "win");
   new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             G_ACTION_GROUP (window), new_window_actions,
+                             G_ACTION_GROUP (new_action_group),
+                             new_window_actions,
                              G_N_ELEMENTS (new_window_actions));
 
   action_group = find_action_group (manager, "PopupsActions");
