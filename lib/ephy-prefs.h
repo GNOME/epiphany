@@ -111,6 +111,7 @@ typedef enum
 #define EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS "restore-session-delaying-loads"
 #define EPHY_PREFS_PROCESS_MODEL                  "process-model"
 #define EPHY_PREFS_MAX_PROCESSES                  "max-processes"
+#define EPHY_PREFS_SYNC_USER                      "sync-user"
 
 #define EPHY_PREFS_LOCKDOWN_SCHEMA            "org.gnome.Epiphany.lockdown"
 #define EPHY_PREFS_LOCKDOWN_FULLSCREEN        "disable-fullscreen"
