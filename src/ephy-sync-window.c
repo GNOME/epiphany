@@ -18,6 +18,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-gui.h"
+#include "ephy-sync-secret.h"
 #include "ephy-sync-utils.h"
 #include "ephy-sync-window.h"
 
@@ -32,7 +33,8 @@ struct _EphySyncWindow {
 
   GtkWidget *entry_email;
   GtkWidget *entry_password;
-  GtkButton *btn_submit;
+  GtkButton *btn_login;
+  GtkButton *btn_logout;
 
   GActionGroup *action_group;
 };
@@ -48,16 +50,12 @@ enum {
 static GParamSpec *obj_properties[PROP_LAST];
 
 static void
-submit_action (GSimpleAction *action,
-               GVariant      *parameter,
-               gpointer       user_data)
+login_action (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
 {
   const gchar *emailUTF8;
   const gchar *passwordUTF8;
-  guint8 *authPW;
-  guint8 *unwrapBKey;
-  guint8 *sessionToken;
-  guint8 *keyFetchToken;
   EphySyncWindow *self = EPHY_SYNC_WINDOW (user_data);
 
   emailUTF8 = gtk_entry_get_text (GTK_ENTRY (self->entry_email));
@@ -71,31 +69,20 @@ LOG ("password: %s", passwordUTF8);
     passwordUTF8 = g_strdup ("pässwörd");
   }
 
-  authPW = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  unwrapBKey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
   ephy_sync_service_stretch (self->sync_service,
                              emailUTF8,
-                             passwordUTF8,
-                             authPW,
-                             unwrapBKey);
-ephy_sync_utils_display_hex ("authPW", authPW, EPHY_SYNC_TOKEN_LENGTH);
-ephy_sync_utils_display_hex ("unwrapBKey", unwrapBKey, EPHY_SYNC_TOKEN_LENGTH);
+                             passwordUTF8);
 
-  sessionToken = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  keyFetchToken = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  ephy_sync_service_try_login (self->sync_service,
-                               FALSE,
-                               emailUTF8,
-                               authPW,
-                               sessionToken,
-                               keyFetchToken);
-ephy_sync_utils_display_hex ("sessionToken", sessionToken, EPHY_SYNC_TOKEN_LENGTH);
-ephy_sync_utils_display_hex ("keyFetchToken", keyFetchToken, EPHY_SYNC_TOKEN_LENGTH);
+  ephy_sync_service_login (self->sync_service);
+}
 
-  g_free (authPW);
-  g_free (unwrapBKey);
-  g_free (sessionToken);
-  g_free (keyFetchToken);
+/* FIXME: Only for debugging, remove when no longer needed */
+static void
+logout_action (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  ephy_sync_secret_forget_all_tokens (NULL, NULL);
 }
 
 static void
@@ -158,7 +145,8 @@ create_action_group (EphySyncWindow *self)
   GSimpleActionGroup *group;
 
   const GActionEntry entries[] = {
-    { "submit_action", submit_action }
+    { "login_action", login_action },
+    { "logout_action", logout_action }
   };
 
   group = g_simple_action_group_new ();
@@ -193,7 +181,8 @@ LOG ("%s:%d", __func__, __LINE__);
 
   gtk_widget_class_bind_template_child (widget_class, EphySyncWindow, entry_email);
   gtk_widget_class_bind_template_child (widget_class, EphySyncWindow, entry_password);
-  gtk_widget_class_bind_template_child (widget_class, EphySyncWindow, btn_submit);
+  gtk_widget_class_bind_template_child (widget_class, EphySyncWindow, btn_login);
+  gtk_widget_class_bind_template_child (widget_class, EphySyncWindow, btn_logout);
 }
 
 static void
