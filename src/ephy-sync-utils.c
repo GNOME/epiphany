@@ -19,6 +19,9 @@
 #include "ephy-debug.h"
 #include "ephy-sync-utils.h"
 
+#include <glib/gstdio.h>
+#include <string.h>
+
 static const gchar hex_digits[] = "0123456789abcdef";
 
 gchar *
@@ -48,6 +51,23 @@ ephy_sync_utils_encode_hex (guint8 *data,
   }
 
   retval[data_length * 2] = 0;
+
+  return retval;
+}
+
+guint8 *
+ephy_sync_utils_decode_hex (const gchar *hex_string)
+{
+  guint8 *retval;
+  gsize hex_length = strlen (hex_string);
+
+  g_return_val_if_fail (hex_length % 2 == 0, NULL);
+
+  retval = g_malloc (hex_length / 2);
+
+  for (gsize i = 0, j = 0; i < hex_length; i += 2, j++) {
+    sscanf(hex_string + i, "%2hhx", retval + j);
+  }
 
   return retval;
 }
