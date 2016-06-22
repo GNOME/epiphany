@@ -50,7 +50,7 @@ struct _EphyShell {
   EphyEmbedShell parent_instance;
 
   EphySession *session;
-  EphySyncService *global_sync_service;
+  EphySyncService *sync_service;
   GList *windows;
   GObject *lockdown;
   EphyBookmarks *bookmarks;
@@ -578,6 +578,8 @@ ephy_shell_init (EphyShell *shell)
   ephy_shell = shell;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
+
+  shell->sync_service = ephy_sync_service_new ();
 }
 
 static void
@@ -600,6 +602,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->prefs_dialog);
   g_clear_object (&shell->bookmarks);
   g_clear_object (&shell->network_monitor);
+  g_clear_object (&shell->sync_service);
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
   shell->open_uris_idle_ids = NULL;
@@ -618,6 +621,19 @@ ephy_shell_finalize (GObject *object)
   G_OBJECT_CLASS (ephy_shell_parent_class)->finalize (object);
 
   LOG ("Ephy shell finalised");
+}
+
+/**
+ * ephy_shell_get_global_sync_service:
+ *
+ * Retrieve the default #EphySyncService object
+ *
+ * Return value: (transfer none):
+ **/
+EphySyncService *
+ephy_shell_get_global_sync_service (void)
+{
+  return ephy_shell->sync_service;
 }
 
 /**
@@ -815,26 +831,6 @@ ephy_shell_get_bookmarks_editor (EphyShell *shell)
 }
 
 /**
- * ephy_shell_get_global_sync_service:
- *
- * Return value: (transfer none):
- **/
-GObject *
-ephy_shell_get_global_sync_service (EphyShell *shell)
-{
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-
-  if (shell->global_sync_service == NULL) {
-LOG ("%s:%d", __func__, __LINE__);
-    shell->global_sync_service = ephy_sync_service_new ();
-    g_return_val_if_fail (shell->global_sync_service, NULL);
-  }
-
-LOG ("%s:%d", __func__, __LINE__);
-  return G_OBJECT (shell->global_sync_service);
-}
-
-/**
  * ephy_shell_get_history_window:
  *
  * Return value: (transfer none):
@@ -867,7 +863,7 @@ ephy_shell_get_sync_window (EphyShell *shell)
 
   if (shell->sync_window == NULL) {
 LOG ("%s:%d", __func__, __LINE__);
-    sync_service = EPHY_SYNC_SERVICE (ephy_shell_get_global_sync_service (shell));
+    sync_service = ephy_shell_get_global_sync_service ();
     shell->sync_window = ephy_sync_window_new (sync_service);
     g_signal_connect (shell->sync_window,
                       "destroy",

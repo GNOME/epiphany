@@ -87,13 +87,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btn_submit">
-                <property name="label" translatable="yes">_Submit</property>
+              <object class="GtkButton" id="btn_login">
+                <property name="label" translatable="yes">_Login</property>
                 <property name="visible">True</property>
                 <property name="use-underline">True</property>
                 <property name="sensitive">True</property>
                 <property name="valign">center</property>
-                <property name="action-name">sync.submit_action</property>
+                <property name="action-name">sync.login_action</property>
                 <style>
                   <class name="suggested-action"/>
                   <class name="text-button"/>
@@ -101,6 +101,24 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btn_logout">
+                <property name="label" translatable="yes">Logout</property>
+                <property name="visible">True</property>
+                <property name="use-underline">True</property>
+                <property name="sensitive">True</property>
+                <property name="valign">center</property>
+                <property name="action-name">sync.logout_action</property>
+                <style>
+                  <class name="suggested-action"/>
+                  <class name="text-button"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
                 <property name="top-attach">2</property>
               </packing>
             </child>
