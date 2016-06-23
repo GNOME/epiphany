@@ -95,6 +95,20 @@ struct _PrefsDialog {
 
   GHashTable *iso_639_table;
   GHashTable *iso_3166_table;
+
+  /* sync */
+  GtkWidget *sync_top_box;
+  GtkWidget *sync_authenticate_box;
+  GtkWidget *sync_login_grid;
+  GtkWidget *sync_logout_box;
+  GtkWidget *sync_email_entry;
+  GtkWidget *sync_password_entry;
+  GtkWidget *sync_login_button;
+  GtkWidget *sync_logout_button;
+  GtkWidget *sync_logout_details_label;
+  GtkWidget *sync_email_details_label;
+  GtkWidget *sync_password_details_label;
+  GtkWidget *sync_extra_details_label;
 };
 
 enum {
@@ -152,6 +166,72 @@ on_manage_passwords_button_clicked (GtkWidget   *button,
 }
 
 static void
+on_sync_login_button_clicked (GtkWidget   *button,
+                              PrefsDialog *dialog)
+{
+  const gchar *emailUTF8;
+  const gchar *passwordUTF8;
+
+  gtk_label_set_markup (GTK_LABEL (dialog->sync_email_details_label), NULL);
+  gtk_label_set_markup (GTK_LABEL (dialog->sync_password_details_label), NULL);
+  gtk_label_set_markup (GTK_LABEL (dialog->sync_extra_details_label), NULL);
+
+  emailUTF8 = gtk_entry_get_text (GTK_ENTRY (dialog->sync_email_entry));
+  passwordUTF8 = gtk_entry_get_text (GTK_ENTRY (dialog->sync_password_entry));
+
+  if (emailUTF8 && !emailUTF8[0]) {
+    gtk_label_set_markup (GTK_LABEL (dialog->sync_email_details_label),
+                          _("<span fgcolor='#e6780b'>Please insert your email</span>"));
+LOG ("[%d] empty email field", __LINE__);
+    return;
+  }
+
+  if (passwordUTF8 && !passwordUTF8[0]) {
+    gtk_label_set_markup (GTK_LABEL (dialog->sync_password_details_label),
+                          _("<span fgcolor='#e6780b'>Please insert your password</span>"));
+LOG ("[%d] empty password field", __LINE__);
+    return;
+  }
+
+LOG ("[%d] email: %s", __LINE__, emailUTF8);
+LOG ("[%d] password: %s", __LINE__, passwordUTF8);
+
+  /* TODO: Call /account/login endpoint and handle server response */
+
+  g_settings_set_string (EPHY_SETTINGS_MAIN,
+                         EPHY_PREFS_SYNC_USER,
+                         emailUTF8);
+  /* Translators: the %s refers to the email of the currently logged in user. */
+  gtk_label_set_markup (GTK_LABEL (dialog->sync_logout_details_label),
+                        g_strdup_printf (_("Currently logged in as <b>%s</b>"), emailUTF8));
+  gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
+                        dialog->sync_login_grid);
+  gtk_box_pack_start (GTK_BOX (dialog->sync_authenticate_box),
+                      dialog->sync_logout_box,
+                      TRUE, TRUE, 0);
+}
+
+static void
+on_sync_logout_button_clicked (GtkWidget   *button,
+                               PrefsDialog *dialog)
+{
+  gtk_entry_set_text (GTK_ENTRY (dialog->sync_email_entry), "");
+  gtk_entry_set_text (GTK_ENTRY (dialog->sync_password_entry), "");
+
+  /* TODO: Call /session/destroy endpoint and forget tokens */
+
+  g_settings_set_string (EPHY_SETTINGS_MAIN,
+                         EPHY_PREFS_SYNC_USER,
+                         "");
+  gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
+                        dialog->sync_logout_box);
+  gtk_box_pack_start (GTK_BOX (dialog->sync_authenticate_box),
+                      dialog->sync_login_grid,
+                      TRUE, TRUE, 0);
+LOG ("[%d] logged out", __LINE__);
+}
+
+static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -196,8 +276,24 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_down_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_spell_checking_checkbutton);
 
+  /* sync */
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_top_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_authenticate_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_login_grid);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_logout_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_email_entry);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_password_entry);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_login_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_logout_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_logout_details_label);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_email_details_label);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_password_details_label);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_extra_details_label);
+
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_login_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_logout_button_clicked);
 }
 
 static void
@@ -1227,6 +1323,54 @@ setup_language_page (PrefsDialog *dialog)
 }
 
 static void
+setup_sync_page (PrefsDialog *dialog)
+{
+  GtkWidget *sync_main_label;
+  GtkWidget *sync_secondary_label;
+  gchar *sync_user = NULL;
+  gboolean logged_in;
+
+  sync_main_label = gtk_label_new (NULL);
+  gtk_widget_set_visible (sync_main_label, TRUE);
+  gtk_widget_set_halign (sync_main_label, GTK_ALIGN_START);
+  gtk_label_set_markup (GTK_LABEL (sync_main_label),
+                        _("Log in with your "
+                          "<a href=\"https://www.mozilla.org/en-US/firefox/accounts/\" "
+                          "title=\"Get a Firefox Account\">Firefox Account</a> "
+                          "and have your data synced across all your devices.\n"));
+
+  sync_secondary_label = gtk_label_new (NULL);
+  gtk_widget_set_visible (sync_secondary_label, TRUE);
+  gtk_widget_set_halign (sync_secondary_label, GTK_ALIGN_START);
+  gtk_label_set_markup (GTK_LABEL (sync_secondary_label),
+                        _("Note that you must own an <b>already verified account</b> "
+                          "to be able to login."));
+
+  gtk_box_pack_start (GTK_BOX (dialog->sync_top_box),
+                      sync_main_label,
+                      TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (dialog->sync_top_box),
+                      sync_secondary_label,
+                      TRUE, TRUE, 0);
+
+  sync_user = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER);
+  logged_in = sync_user && sync_user[0];
+
+  if (logged_in) {
+LOG ("[%d] Setup sync page, already logged in as %s", __LINE__, sync_user);
+    gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
+                          dialog->sync_login_grid);
+    /* Translators: the %s refers to the email of the currently logged in user. */
+    gtk_label_set_markup (GTK_LABEL (dialog->sync_logout_details_label),
+                          g_strdup_printf (_("Currently logged in as <b>%s</b>"), sync_user));
+  } else {
+LOG ("[%d] Setup sync page, not logged in", __LINE__);
+    gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
+                          dialog->sync_logout_box);
+  }
+}
+
+static void
 prefs_dialog_init (PrefsDialog *dialog)
 {
   gtk_widget_init_template (GTK_WIDGET (dialog));
@@ -1235,6 +1379,7 @@ prefs_dialog_init (PrefsDialog *dialog)
   setup_fonts_page (dialog);
   setup_privacy_page (dialog);
   setup_language_page (dialog);
+  setup_sync_page (dialog);
 
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
   g_signal_connect (dialog, "response",

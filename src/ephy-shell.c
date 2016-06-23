@@ -30,7 +30,6 @@
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-history-window.h"
-#include "ephy-sync-window.h"
 #include "ephy-lockdown.h"
 #include "ephy-prefs.h"
 #include "ephy-private.h"
@@ -58,7 +57,6 @@ struct _EphyShell {
   GNetworkMonitor *network_monitor;
   GtkWidget *bme;
   GtkWidget *history_window;
-  GtkWidget *sync_window;
   GObject *prefs_dialog;
   EphyShellStartupContext *local_startup_context;
   EphyShellStartupContext *remote_startup_context;
@@ -186,20 +184,6 @@ show_history (GSimpleAction *action,
 }
 
 static void
-show_sync (GSimpleAction *action,
-           GVariant      *parameter,
-           gpointer      user_data)
-{
-  GtkWindow *window;
-
-LOG ("%s:%d", __func__, __LINE__);
-
-  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
-
-  window_cmd_edit_sync (NULL, EPHY_WINDOW (window));
-}
-
-static void
 show_preferences (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
@@ -260,7 +244,6 @@ static GActionEntry app_entries[] = {
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
   { "bookmarks", show_bookmarks, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
-  { "sync", show_sync, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "shortcuts", show_shortcuts, NULL, NULL, NULL },
   { "help", show_help, NULL, NULL, NULL },
@@ -854,25 +837,6 @@ ephy_shell_get_history_window (EphyShell *shell)
   }
 
   return shell->history_window;
-}
-
-GtkWidget *
-ephy_shell_get_sync_window (EphyShell *shell)
-{
-  EphySyncService *sync_service;
-
-  if (shell->sync_window == NULL) {
-LOG ("%s:%d", __func__, __LINE__);
-    sync_service = ephy_shell_get_global_sync_service ();
-    shell->sync_window = ephy_sync_window_new (sync_service);
-    g_signal_connect (shell->sync_window,
-                      "destroy",
-                      G_CALLBACK (gtk_widget_destroyed),
-                      &shell->sync_window);
-  }
-
-LOG ("%s:%d", __func__, __LINE__);
-  return shell->sync_window;
 }
 
 /**

@@ -732,6 +732,200 @@
                 <property name="tab_fill">False</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="border-width">12</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">18</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Sync</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="sync_top_box">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">0</property>
+                            <property name="margin-start">12</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkBox" id="sync_authenticate_box">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Authenticate</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="sync_login_grid">
+                            <property name="visible">True</property>
+                            <property name="margin-start">12</property>
+                            <property name="row-spacing">6</property>
+                            <property name="column-spacing">12</property>
+                            <child>
+                              <object class="GtkEntry" id="sync_email_entry">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="max-length">80</property>
+                                <property name="width_request">230</property>
+                                <property name="activates-default">True</property>
+                                <property name="placeholder-text">Email</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="sync_email_details_label">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="use-markup">True</property>
+                                <property name="label" translatable="yes"></property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="sync_password_entry">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="max-length">80</property>
+                                <property name="width_request">230</property>
+                                <property name="activates-default">True</property>
+                                <property name="visibility">False</property>
+                                <property name="caps-lock-warning">True</property>
+                                <property name="placeholder-text">Password</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="sync_password_details_label">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="use-markup">True</property>
+                                <property name="label" translatable="yes"></property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="sync_login_button">
+                                <property name="label" translatable="yes">_Login</property>
+                                <property name="visible">True</property>
+                                <property name="use-underline">True</property>
+                                <property name="halign">start</property>
+                                <property name="width-request">100</property>
+                                <signal name="clicked" handler="on_sync_login_button_clicked"/>
+                                <style>
+                                  <class name="suggested-action"/>
+                                  <class name="text-button"/>
+                                </style>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="sync_extra_details_label">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="use-markup">True</property>
+                                <property name="label" translatable="yes"></property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">3</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="sync_logout_box">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">12</property>
+                            <property name="margin-start">12</property>
+                            <child>
+                              <object class="GtkLabel" id="sync_logout_details_label">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes"></property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="sync_logout_button">
+                                <property name="label" translatable="yes">Lo_gout</property>
+                                <property name="visible">True</property>
+                                <property name="use-underline">True</property>
+                                <property name="halign">start</property>
+                                <property name="width-request">100</property>
+                                <signal name="clicked" handler="on_sync_logout_button_clicked"/>
+                                <style>
+                                  <class name="destructive-action"/>
+                                  <class name="text-button"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Sync</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>

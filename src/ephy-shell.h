@@ -110,8 +110,6 @@ EphySyncService *ephy_shell_get_global_sync_service      (void);
 
 GtkWidget       *ephy_shell_get_history_window           (EphyShell *shell);
 
-GtkWidget       *ephy_shell_get_sync_window              (EphyShell *shell);
-
 GObject         *ephy_shell_get_prefs_dialog             (EphyShell *shell);
 
 guint           ephy_shell_get_n_windows                (EphyShell *shell);

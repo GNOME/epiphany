@@ -177,8 +177,6 @@ void window_cmd_tabs_detach                     (GSimpleAction *action,
 void window_cmd_tabs_close                      (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
-void window_cmd_edit_sync                 (GtkAction  *action,
-                                           EphyWindow *window);
 
 G_END_DECLS
 

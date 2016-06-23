@@ -77,8 +77,6 @@ libephymain_la_SOURCES = \
 	ephy-sync-service.h			\
 	ephy-sync-utils.c			\
 	ephy-sync-utils.h			\
-	ephy-sync-window.c			\
-	ephy-sync-window.h			\
 	ephy-title-box.c			\
 	ephy-title-box.h			\
 	ephy-toolbar.c				\
