@@ -19,35 +19,40 @@
 #ifndef EPHY_SYNC_SERVICE_H
 #define EPHY_SYNC_SERVICE_H
 
+#include "ephy-sync-utils.h"
+
 #include <glib-object.h>
 
 G_BEGIN_DECLS
-
-struct _EphySyncService {
-  GObject parent_instance;
-
-  gchar *user_email;
-  GHashTable *tokens;
-};
 
 #define EPHY_TYPE_SYNC_SERVICE (ephy_sync_service_get_type ())
 
 G_DECLARE_FINAL_TYPE (EphySyncService, ephy_sync_service, EPHY, SYNC_SERVICE, GObject)
 
-EphySyncService *ephy_sync_service_new       (void);
+EphySyncService *ephy_sync_service_new               (void);
 
-gchar           *ephy_sync_service_get_token (EphySyncService *self,
-                                              const gchar     *token_name);
+gchar           *ephy_sync_service_get_user_email    (EphySyncService *self);
 
-void             ephy_sync_service_set_token (EphySyncService *self,
-                                              const gchar     *token_name,
-                                              const gchar     *token_value_hex);
+void             ephy_sync_service_set_user_email    (EphySyncService *self,
+                                                      const gchar     *emailUTF8);
 
-void             ephy_sync_service_stretch   (EphySyncService *self,
-                                              const gchar     *emailUTF8,
-                                              const gchar     *passwordUTF8);
+gchar           *ephy_sync_service_get_token         (EphySyncService   *self,
+                                                      EphySyncTokenType  token_type);
 
-void             ephy_sync_service_login     (EphySyncService *self);
+void             ephy_sync_service_save_token        (EphySyncService   *self,
+                                                      EphySyncTokenType  token_type,
+                                                      gchar             *token_value);
+
+void             ephy_sync_service_delete_token      (EphySyncService   *self,
+                                                      EphySyncTokenType  token_type);
+
+void             ephy_sync_service_delete_all_tokens (EphySyncService *self);
+
+void             ephy_sync_service_stretch           (EphySyncService *self,
+                                                      const gchar     *emailUTF8,
+                                                      const gchar     *passwordUTF8);
+
+void             ephy_sync_service_login             (EphySyncService *self);
 
 G_END_DECLS
 
