@@ -72,6 +72,23 @@ ephy_sync_utils_decode_hex (const gchar *hex_string)
   return retval;
 }
 
+const gchar *
+ephy_sync_utils_token_name_from_type (EphySyncTokenType token_type)
+{
+  switch (token_type) {
+  case EPHY_SYNC_TOKEN_AUTHPW:
+    return "authPw";
+  case EPHY_SYNC_TOKEN_SESSIONTOKEN:
+    return "sessionToken";
+  case EPHY_SYNC_TOKEN_UNWRAPBKEY:
+    return "unwrapBKey";
+  case EPHY_SYNC_TOKEN_QUICKSTRETCHEDPW:
+    return "quickStretchedPW";
+  default:
+    g_assert_not_reached ();
+  }
+}
+
 /* FIXME: Only for debugging, remove when no longer needed */
 void
 ephy_sync_utils_display_hex (const gchar *data_name,

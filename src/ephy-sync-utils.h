@@ -25,20 +25,29 @@ G_BEGIN_DECLS
 
 #define EPHY_SYNC_TOKEN_LENGTH 32
 
-gchar  *ephy_sync_utils_kw          (const gchar *name);
+typedef enum {
+  EPHY_SYNC_TOKEN_AUTHPW,
+  EPHY_SYNC_TOKEN_SESSIONTOKEN,
+  EPHY_SYNC_TOKEN_UNWRAPBKEY,
+  EPHY_SYNC_TOKEN_QUICKSTRETCHEDPW
+} EphySyncTokenType;
 
-gchar  *ephy_sync_utils_kwe         (const gchar *name,
-                                     const gchar *emailUTF8);
+gchar       *ephy_sync_utils_kw                   (const gchar *name);
 
-gchar  *ephy_sync_utils_encode_hex  (guint8 *data,
-                                     gsize   data_length);
+gchar       *ephy_sync_utils_kwe                  (const gchar *name,
+                                                   const gchar *emailUTF8);
 
-guint8 *ephy_sync_utils_decode_hex  (const gchar *hex_string);
+gchar       *ephy_sync_utils_encode_hex           (guint8 *data,
+                                                   gsize   data_length);
+
+guint8      *ephy_sync_utils_decode_hex           (const gchar *hex_string);
+
+const gchar *ephy_sync_utils_token_name_from_type (EphySyncTokenType token_type);
 
 /* FIXME: Only for debugging, remove when no longer needed */
-void    ephy_sync_utils_display_hex (const gchar *data_name,
-                                     guint8      *data,
-                                     gsize        data_length);
+void         ephy_sync_utils_display_hex          (const gchar *data_name,
+                                                   guint8      *data,
+                                                   gsize        data_length);
 
 G_END_DECLS
 
