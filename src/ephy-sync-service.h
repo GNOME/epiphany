@@ -52,7 +52,9 @@ void             ephy_sync_service_stretch           (EphySyncService *self,
                                                       const gchar     *emailUTF8,
                                                       const gchar     *passwordUTF8);
 
-void             ephy_sync_service_login             (EphySyncService *self);
+gboolean         ephy_sync_service_login             (EphySyncService  *self,
+                                                      guint            *error_code,
+                                                      gchar           **error_message);
 
 G_END_DECLS
 

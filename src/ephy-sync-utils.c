@@ -78,8 +78,12 @@ ephy_sync_utils_token_name_from_type (EphySyncTokenType token_type)
   switch (token_type) {
   case EPHY_SYNC_TOKEN_AUTHPW:
     return "authPw";
+  case EPHY_SYNC_TOKEN_KEYFETCHTOKEN:
+    return "keyFetchToken";
   case EPHY_SYNC_TOKEN_SESSIONTOKEN:
     return "sessionToken";
+  case EPHY_SYNC_TOKEN_UID:
+    return "uid";
   case EPHY_SYNC_TOKEN_UNWRAPBKEY:
     return "unwrapBKey";
   case EPHY_SYNC_TOKEN_QUICKSTRETCHEDPW:

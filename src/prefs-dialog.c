@@ -35,6 +35,7 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-sync-service.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
 #include "languages.h"
@@ -169,12 +170,16 @@ static void
 on_sync_login_button_clicked (GtkWidget   *button,
                               PrefsDialog *dialog)
 {
+  EphySyncService *sync_service;
   const gchar *emailUTF8;
   const gchar *passwordUTF8;
+  gboolean login_ok;
+  guint error_code = 0;
+  gchar *error_message = NULL;
 
-  gtk_label_set_markup (GTK_LABEL (dialog->sync_email_details_label), NULL);
-  gtk_label_set_markup (GTK_LABEL (dialog->sync_password_details_label), NULL);
-  gtk_label_set_markup (GTK_LABEL (dialog->sync_extra_details_label), NULL);
+  gtk_label_set_markup (GTK_LABEL (dialog->sync_email_details_label), "");
+  gtk_label_set_markup (GTK_LABEL (dialog->sync_password_details_label), "");
+  gtk_label_set_markup (GTK_LABEL (dialog->sync_extra_details_label), "");
 
   emailUTF8 = gtk_entry_get_text (GTK_ENTRY (dialog->sync_email_entry));
   passwordUTF8 = gtk_entry_get_text (GTK_ENTRY (dialog->sync_password_entry));
@@ -182,28 +187,38 @@ on_sync_login_button_clicked (GtkWidget   *button,
   if (emailUTF8 && !emailUTF8[0]) {
     gtk_label_set_markup (GTK_LABEL (dialog->sync_email_details_label),
                           _("<span fgcolor='#e6780b'>Please insert your email</span>"));
-LOG ("[%d] empty email field", __LINE__);
     return;
   }
 
   if (passwordUTF8 && !passwordUTF8[0]) {
     gtk_label_set_markup (GTK_LABEL (dialog->sync_password_details_label),
                           _("<span fgcolor='#e6780b'>Please insert your password</span>"));
-LOG ("[%d] empty password field", __LINE__);
     return;
   }
 
 LOG ("[%d] email: %s", __LINE__, emailUTF8);
 LOG ("[%d] password: %s", __LINE__, passwordUTF8);
 
-  /* TODO: Call /account/login endpoint and handle server response */
+  sync_service = ephy_shell_get_global_sync_service ();
+  ephy_sync_service_stretch (sync_service, emailUTF8, passwordUTF8);
+  login_ok = ephy_sync_service_login (sync_service, &error_code, &error_message);
+
+  if (login_ok == FALSE) {
+    /* Translators: the %s refers to the error message. */
+    gtk_label_set_markup (GTK_LABEL (dialog->sync_extra_details_label),
+                          g_strdup_printf (_("<span fgcolor='#e6780b'>Error: %s</span>"),
+                                           error_message));
+    g_free (error_message);
+    return;
+  }
 
   g_settings_set_string (EPHY_SETTINGS_MAIN,
                          EPHY_PREFS_SYNC_USER,
                          emailUTF8);
   /* Translators: the %s refers to the email of the currently logged in user. */
   gtk_label_set_markup (GTK_LABEL (dialog->sync_logout_details_label),
-                        g_strdup_printf (_("Currently logged in as <b>%s</b>"), emailUTF8));
+                        g_strdup_printf (_("Currently logged in as <b>%s</b>"),
+                                         emailUTF8));
   gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
                         dialog->sync_login_grid);
   gtk_box_pack_start (GTK_BOX (dialog->sync_authenticate_box),

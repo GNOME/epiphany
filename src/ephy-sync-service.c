@@ -28,8 +28,12 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
+#define BASEURL     "https://api.accounts.firefox.com/v1"
+
 struct _EphySyncService {
   GObject parent_instance;
+
+  SoupSession *soup_session;
 
   gchar *user_email;
   GHashTable *tokens;
@@ -44,7 +48,8 @@ ephy_sync_service_finalize (GObject *object)
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
   g_free (self->user_email);
-  g_hash_table_destroy (self->tokens);
+  g_clear_object (&self->tokens);
+  g_clear_object (&self->soup_session);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
 }
@@ -64,6 +69,7 @@ ephy_sync_service_init (EphySyncService *self)
 
   self->tokens = g_hash_table_new_full (NULL, g_str_equal,
                                         NULL, g_free);
+  self->soup_session = soup_session_new ();
 
   sync_user = g_settings_get_string (EPHY_SETTINGS_MAIN,
                                      EPHY_PREFS_SYNC_USER);
@@ -76,17 +82,24 @@ ephy_sync_service_init (EphySyncService *self)
 LOG ("[%d] sync service inited", __LINE__);
 }
 
-static void
-server_response_cb (SoupSession *session,
-                    SoupMessage *message,
-                    gpointer     user_data)
+static SoupMessage *
+synchronous_post_request (EphySyncService *self,
+                          const gchar     *endpoint,
+                          gchar           *request_body)
 {
-  if (message->status_code == 200) {
-LOG ("[%d] response body: %s", __LINE__, message->response_body->data);
-    // TODO: parse response data using JsonParser
-  } else {
-LOG ("[%d] Error response from server: [%u] %s", __LINE__, message->status_code, message->reason_phrase);
-  }
+  SoupMessage *message;
+
+  message = soup_message_new (SOUP_METHOD_POST,
+                              g_strdup_printf ("%s/%s", BASEURL, endpoint));
+  soup_message_set_request (message,
+                            "application/json",
+                            SOUP_MEMORY_TAKE,
+                            request_body,
+                            strlen (request_body));
+LOG ("[%d] Sending synchronous POST request to %s endpoint", __LINE__, endpoint);
+  soup_session_send_message (self->soup_session, message);
+
+  return message;
 }
 
 EphySyncService *
@@ -161,44 +174,92 @@ ephy_sync_service_delete_all_tokens (EphySyncService *self)
 LOG ("[%d] Deleted all tokens", __LINE__);
 }
 
-void
-ephy_sync_service_login (EphySyncService *self)
+gboolean
+ephy_sync_service_login (EphySyncService  *self,
+                         guint            *error_code,
+                         gchar           **error_message)
 {
-  SoupSession *session;
   SoupMessage *message;
+  JsonParser *parser;
+  JsonNode *root;
+  JsonObject *object;
   gchar *request_body;
+  gchar *quickStretchedPW;
   gchar *authPW;
-
-
-LOG ("[%d] Preparing soup message", __LINE__);
-
-  session = soup_session_new_with_options (SOUP_SESSION_USER_AGENT,
-                                           "test-json",
-                                           NULL);
-  message = soup_message_new (SOUP_METHOD_POST,
-                              "https://api.accounts.firefox.com/v1/account/login");
+  gchar *unwrapBKey;
+  gchar *uid;
+  gchar *sessionToken;
+  gchar *keyFetchToken;
 
   authPW = ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_AUTHPW);
-  g_assert (authPW != NULL);
+  g_return_val_if_fail (authPW, FALSE);
 
-  request_body = g_strconcat ("{\"authPW\": \"",
-                              authPW,
-                              "\", \"email\": \"",
-                              self->user_email,
-                              "\"}",
-                              NULL);
+  request_body = g_strconcat ("{\"authPW\": \"", authPW,
+                              "\", \"email\": \"", self->user_email,
+                              "\"}", NULL);
 
-  soup_message_set_request (message,
-                            "application/json",
-                            SOUP_MEMORY_COPY,
-                            request_body,
-                            strlen (request_body));
+  message = synchronous_post_request (self,
+                                      "account/login?keys=true",
+                                      request_body);
+LOG ("[%d] status code: %u", __LINE__, message->status_code);
 
-  soup_session_queue_message (session, message, server_response_cb, NULL);
-LOG ("[%d] Queued the soup message", __LINE__);
+  parser = json_parser_new ();
+  json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
+  root = json_parser_get_root (parser);
+  g_assert (JSON_NODE_HOLDS_OBJECT (root));
+  object = json_node_get_object (root);
 
-  // TODO: find a way to safely free request_body
-  // TODO: find a way to safely destroy session, message
+  if (message->status_code != 200) {
+    *error_message = g_strdup (json_object_get_string_member (object, "message"));
+    *error_code = json_object_get_int_member (object, "errno");
+
+LOG ("[%d] errno: %u, errmsg: %s", __LINE__, *error_code, *error_message);
+
+    ephy_sync_service_delete_all_tokens (self);
+    ephy_sync_service_set_user_email (self, NULL);
+
+    return FALSE;
+  }
+
+  /* Extract uid, sesionToken, keyFetchToken */
+  uid = g_strdup (json_object_get_string_member (object, "uid"));
+  sessionToken = g_strdup (json_object_get_string_member (object, "sessionToken"));
+  keyFetchToken = g_strdup (json_object_get_string_member (object, "keyFetchToken"));
+
+  /* Save tokens in memory */
+  ephy_sync_service_save_token (self,
+                                EPHY_SYNC_TOKEN_UID,
+                                uid);
+  ephy_sync_service_save_token (self,
+                                EPHY_SYNC_TOKEN_SESSIONTOKEN,
+                                sessionToken);
+  ephy_sync_service_save_token (self,
+                                EPHY_SYNC_TOKEN_KEYFETCHTOKEN,
+                                keyFetchToken);
+
+  /* Store tokens on disk */
+  quickStretchedPW = ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_QUICKSTRETCHEDPW);
+  unwrapBKey = ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_UNWRAPBKEY);
+  ephy_sync_secret_store_token (self->user_email,
+                                EPHY_SYNC_TOKEN_AUTHPW,
+                                authPW);
+  ephy_sync_secret_store_token (self->user_email,
+                                EPHY_SYNC_TOKEN_KEYFETCHTOKEN,
+                                keyFetchToken);
+  ephy_sync_secret_store_token (self->user_email,
+                                EPHY_SYNC_TOKEN_SESSIONTOKEN,
+                                sessionToken);
+  ephy_sync_secret_store_token (self->user_email,
+                                EPHY_SYNC_TOKEN_UID,
+                                uid);
+  ephy_sync_secret_store_token (self->user_email,
+                                EPHY_SYNC_TOKEN_UNWRAPBKEY,
+                                unwrapBKey);
+  ephy_sync_secret_store_token (self->user_email,
+                                EPHY_SYNC_TOKEN_QUICKSTRETCHEDPW,
+                                quickStretchedPW);
+
+  return TRUE;
 }
 
 void
@@ -212,8 +273,6 @@ ephy_sync_service_stretch (EphySyncService *self,
   guint8 *quickStretchedPW;
   guint8 *authPW;
   guint8 *unwrapBKey;
-
-  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
 
   salt_stretch = ephy_sync_utils_kwe ("quickStretch", emailUTF8);
   quickStretchedPW = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
@@ -247,6 +306,20 @@ ephy_sync_utils_display_hex ("quickStretchedPW", quickStretchedPW, EPHY_SYNC_TOK
                          EPHY_SYNC_TOKEN_LENGTH);
 
 LOG ("[%d] Stretching done", __LINE__);
+
+  ephy_sync_service_set_user_email (self, emailUTF8);
+  ephy_sync_service_save_token (self,
+                                EPHY_SYNC_TOKEN_QUICKSTRETCHEDPW,
+                                ephy_sync_utils_encode_hex (quickStretchedPW,
+                                                            EPHY_SYNC_TOKEN_LENGTH));
+  ephy_sync_service_save_token (self,
+                                EPHY_SYNC_TOKEN_AUTHPW,
+                                ephy_sync_utils_encode_hex (authPW,
+                                                            EPHY_SYNC_TOKEN_LENGTH));
+  ephy_sync_service_save_token (self,
+                                EPHY_SYNC_TOKEN_UNWRAPBKEY,
+                                ephy_sync_utils_encode_hex (unwrapBKey,
+                                                            EPHY_SYNC_TOKEN_LENGTH));
 
   g_free (salt_stretch);
   g_free (info_unwrap);
