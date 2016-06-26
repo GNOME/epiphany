@@ -93,6 +93,42 @@ ephy_sync_utils_token_name_from_type (EphySyncTokenType token_type)
   }
 }
 
+gchar *
+ephy_sync_utils_build_json_string (const gchar *first_key,
+                                   const gchar *first_value,
+                                   ...)
+{
+  va_list args;
+  gchar *json;
+  gchar *key;
+  gchar *value;
+  gchar *tmp;
+
+  json = g_strconcat ("{\"",
+                      first_key, "\": \"",
+                      first_value, "\"",
+                      NULL);
+
+  va_start (args, first_value);
+  while ((key = va_arg (args, gchar *)) != NULL) {
+    value = va_arg (args, gchar *);
+
+    tmp = json;
+    json = g_strconcat (json, ", \"",
+                        key, "\": \"",
+                        value, "\"",
+                        NULL);
+    g_free (tmp);
+  }
+  va_end (args);
+
+  tmp = json;
+  json = g_strconcat (json, "}", NULL);
+  g_free (tmp);
+
+  return json;
+}
+
 /* FIXME: Only for debugging, remove when no longer needed */
 void
 ephy_sync_utils_display_hex (const gchar *data_name,

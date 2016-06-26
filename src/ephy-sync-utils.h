@@ -46,6 +46,10 @@ guint8      *ephy_sync_utils_decode_hex           (const gchar *hex_string);
 
 const gchar *ephy_sync_utils_token_name_from_type (EphySyncTokenType token_type);
 
+gchar       *ephy_sync_utils_build_json_string    (const gchar *first_key,
+                                                   const gchar *first_value,
+                                                   ...) G_GNUC_NULL_TERMINATED;
+
 /* FIXME: Only for debugging, remove when no longer needed */
 void         ephy_sync_utils_display_hex          (const gchar *data_name,
                                                    guint8      *data,
