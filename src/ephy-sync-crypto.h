@@ -23,21 +23,72 @@
 
 G_BEGIN_DECLS
 
-void ephy_sync_crypto_pbkdf2_1k (guint8 *key,
-                                 gsize   key_length,
-                                 guint8 *salt,
-                                 gsize   salt_length,
-                                 guint8 *out,
-                                 gsize   out_length);
+typedef struct {
+  gchar *app;
+  gchar *dlg;
+  gchar *ext;
+  gchar *content_type;
+  gchar *hash;
+  gchar *local_time_offset;
+  gchar *nonce;
+  gchar *payload;
+  gchar *timestamp;
+} EphySyncCryptoHawkOptions;
 
-void ephy_sync_crypto_hkdf      (guint8 *in,
-                                 gsize   in_length,
-                                 guint8 *salt,
-                                 gsize   salt_length,
-                                 guint8 *info,
-                                 gsize   info_length,
-                                 guint8 *out,
-                                 gsize   out_length);
+typedef struct {
+  gchar *app;
+  gchar *dlg;
+  gchar *ext;
+  gchar *hash;
+  gchar *host;
+  gchar *method;
+  gchar *nonce;
+  gchar *port;
+  gchar *resource;
+  gchar *ts;
+} EphySyncCryptoHawkArtifacts;
+
+typedef struct {
+  gchar *header;
+  EphySyncCryptoHawkArtifacts *artifacts;
+} EphySyncCryptoHawkHeader;
+
+void                       ephy_sync_crypto_pbkdf2_1k           (guint8 *key,
+                                                                 gsize   key_length,
+                                                                 guint8 *salt,
+                                                                 gsize   salt_length,
+                                                                 guint8 *out,
+                                                                 gsize   out_length);
+
+void                       ephy_sync_crypto_hkdf                (guint8 *in,
+                                                                 gsize   in_length,
+                                                                 guint8 *salt,
+                                                                 gsize   salt_length,
+                                                                 guint8 *info,
+                                                                 gsize   info_length,
+                                                                 guint8 *out,
+                                                                 gsize   out_length);
+
+EphySyncCryptoHawkHeader  *ephy_sync_crypto_compute_hawk_header (const gchar               *url,
+                                                                 const gchar               *method,
+                                                                 const gchar               *id,
+                                                                 guint8                    *key,
+                                                                 gsize                      key_length,
+                                                                 EphySyncCryptoHawkOptions *options);
+
+EphySyncCryptoHawkOptions *ephy_sync_crypto_hawk_options_new    (gchar *app,
+                                                                 gchar *dlg,
+                                                                 gchar *ext,
+                                                                 gchar *content_type,
+                                                                 gchar *hash,
+                                                                 gchar *local_time_offset,
+                                                                 gchar *nonce,
+                                                                 gchar *payload,
+                                                                 gchar *timestamp);
+
+void                       ephy_sync_crypto_hawk_options_free   (EphySyncCryptoHawkOptions *hawk_options);
+
+void                       ephy_sync_crypto_hawk_header_free    (EphySyncCryptoHawkHeader *hawk_header);
 
 G_END_DECLS
 

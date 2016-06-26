@@ -28,7 +28,8 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#define BASEURL     "https://api.accounts.firefox.com/v1"
+#define FXA_BASEURL   "https://api.accounts.firefox.com/"
+#define FXA_VERSION   "v1/"
 
 struct _EphySyncService {
   GObject parent_instance;
@@ -42,13 +43,107 @@ struct _EphySyncService {
 
 G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
+static SoupMessage *
+synchronous_hawk_get_request (EphySyncService *self,
+                              const gchar     *endpoint,
+                              const gchar     *id,
+                              guint8          *key,
+                              gsize            key_length)
+{
+  EphySyncCryptoHawkHeader *hawk_header;
+  SoupMessage *message;
+  gchar *url;
+
+  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
+  message = soup_message_new (SOUP_METHOD_GET, url);
+  hawk_header = ephy_sync_crypto_compute_hawk_header (url, "GET",
+                                                      id,
+                                                      key, key_length,
+                                                      NULL);
+  soup_message_headers_append (message->request_headers,
+                               "authorization", hawk_header->header);
+LOG ("[%d] Sending synchronous HAWK GET request to %s endpoint", __LINE__, endpoint);
+  soup_session_send_message (self->soup_session, message);
+
+  g_free (url);
+  ephy_sync_crypto_hawk_header_free (hawk_header);
+
+  return message;
+}
+
+static SoupMessage *
+synchronous_hawk_post_request (EphySyncService *self,
+                               const gchar     *endpoint,
+                               const gchar     *id,
+                               guint8          *key,
+                               gsize            key_length,
+                               gchar           *request_body)
+{
+  EphySyncCryptoHawkHeader *hawk_header;
+  EphySyncCryptoHawkOptions *hawk_options;
+  SoupMessage *message;
+  gchar *url;
+
+  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
+  message = soup_message_new (SOUP_METHOD_POST, url);
+  soup_message_set_request (message,
+                            "application/json",
+                            SOUP_MEMORY_TAKE,
+                            request_body,
+                            strlen (request_body));
+  hawk_options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL,
+                                                    g_strdup ("application/json"),
+                                                    NULL, NULL, NULL,
+                                                    g_strdup (request_body),
+                                                    NULL);
+  hawk_header = ephy_sync_crypto_compute_hawk_header (url, "POST",
+                                                      id,
+                                                      key, key_length,
+                                                      hawk_options);
+  soup_message_headers_append (message->request_headers,
+                               "authorization", hawk_header->header);
+  soup_message_headers_append (message->request_headers,
+                               "content-type", "application/json");
+LOG ("[%d] Sending synchronous HAWK POST request to %s endpoint", __LINE__, endpoint);
+  soup_session_send_message (self->soup_session, message);
+
+  g_free (url);
+  ephy_sync_crypto_hawk_options_free (hawk_options);
+  ephy_sync_crypto_hawk_header_free (hawk_header);
+
+  return message;
+}
+
+static SoupMessage *
+synchronous_fxa_post_request (EphySyncService *self,
+                              const gchar     *endpoint,
+                              gchar           *request_body)
+{
+  SoupMessage *message;
+  gchar *url;
+
+  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
+  message = soup_message_new (SOUP_METHOD_POST, url);
+  soup_message_set_request (message,
+                            "application/json",
+                            SOUP_MEMORY_TAKE,
+                            request_body,
+                            strlen (request_body));
+LOG ("[%d] Sending synchronous POST request to %s endpoint", __LINE__, endpoint);
+  soup_session_send_message (self->soup_session, message);
+
+  g_free (url);
+
+  return message;
+}
+
 static void
 ephy_sync_service_finalize (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
   g_free (self->user_email);
-  g_clear_object (&self->tokens);
+  g_hash_table_destroy (self->tokens);
   g_clear_object (&self->soup_session);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
@@ -67,7 +162,7 @@ ephy_sync_service_init (EphySyncService *self)
 {
   gchar *sync_user = NULL;
 
-  self->tokens = g_hash_table_new_full (NULL, g_str_equal,
+  self->tokens = g_hash_table_new_full (g_str_hash, g_str_equal,
                                         NULL, g_free);
   self->soup_session = soup_session_new ();
 
@@ -80,26 +175,6 @@ ephy_sync_service_init (EphySyncService *self)
   }
 
 LOG ("[%d] sync service inited", __LINE__);
-}
-
-static SoupMessage *
-synchronous_post_request (EphySyncService *self,
-                          const gchar     *endpoint,
-                          gchar           *request_body)
-{
-  SoupMessage *message;
-
-  message = soup_message_new (SOUP_METHOD_POST,
-                              g_strdup_printf ("%s/%s", BASEURL, endpoint));
-  soup_message_set_request (message,
-                            "application/json",
-                            SOUP_MEMORY_TAKE,
-                            request_body,
-                            strlen (request_body));
-LOG ("[%d] Sending synchronous POST request to %s endpoint", __LINE__, endpoint);
-  soup_session_send_message (self->soup_session, message);
-
-  return message;
 }
 
 EphySyncService *
@@ -194,13 +269,12 @@ ephy_sync_service_login (EphySyncService  *self,
   authPW = ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_AUTHPW);
   g_return_val_if_fail (authPW, FALSE);
 
-  request_body = g_strconcat ("{\"authPW\": \"", authPW,
-                              "\", \"email\": \"", self->user_email,
-                              "\"}", NULL);
-
-  message = synchronous_post_request (self,
-                                      "account/login?keys=true",
-                                      request_body);
+  request_body = ephy_sync_utils_build_json_string ("authPW", authPW,
+                                                    "email", self->user_email,
+                                                    NULL);
+  message = synchronous_fxa_post_request (self,
+                                          "account/login?keys=true",
+                                          request_body);
 LOG ("[%d] status code: %u", __LINE__, message->status_code);
 
   parser = json_parser_new ();
