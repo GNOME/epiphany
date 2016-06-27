@@ -314,8 +314,6 @@ struct _EphyWindow {
 
   EphyLocationController *location_controller;
 
-  gulong app_menu_visibility_handler;
-
   guint closing : 1;
   guint has_size : 1;
   guint fullscreen_mode : 1;
@@ -2918,10 +2916,6 @@ ephy_window_finalize (GObject *object)
 {
   EphyWindow *window = EPHY_WINDOW (object);
 
-  if (window->app_menu_visibility_handler != 0)
-    g_signal_handler_disconnect (gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window))),
-                                 window->app_menu_visibility_handler);
-
   G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
   LOG ("EphyWindow finalised %p", object);
@@ -3182,7 +3176,6 @@ ephy_window_constructor (GType                  type,
     g_error_free (error);
     error = NULL;
   }
-
 
   /* Setup the toolbar. */
   window->toolbar = setup_toolbar (window);
