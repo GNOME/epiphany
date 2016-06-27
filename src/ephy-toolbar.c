@@ -35,6 +35,7 @@
 #include "ephy-private.h"
 #include "ephy-shell.h"
 
+#include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
 
 enum {
@@ -55,8 +56,9 @@ struct _EphyToolbar {
   EphyTitleBox *title_box;
   GtkWidget *entry;
   GtkWidget *navigation_box;
-  GtkWidget *page_menu_button;
   GtkWidget *new_tab_button;
+  GtkWidget *combined_stop_reload_button;
+  GtkWidget *page_menu_button;
   GtkWidget *downloads_revealer;
   GtkWidget *downloads_button;
   GtkWidget *downloads_popover;
@@ -545,12 +547,31 @@ navigation_leave_notify_event_cb (GtkButton *button,
   return G_SOURCE_REMOVE;
 }
 
+void
+ephy_toolbar_change_combined_stop_reload_state (GSimpleAction *action,
+                                                GVariant      *loading,
+                                                gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyToolbar *toolbar;
+  GtkWidget *image;
+
+  if (g_variant_get_boolean (loading))
+    image = gtk_image_new_from_icon_name ("process-stop-symbolic",
+                                          GTK_ICON_SIZE_BUTTON);
+  else
+    image = gtk_image_new_from_icon_name ("view-refresh-symbolic",
+                                          GTK_ICON_SIZE_BUTTON);
+
+  toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
+  gtk_button_set_image (GTK_BUTTON (toolbar->combined_stop_reload_button),
+                        image);
+}
+
 static void
 ephy_toolbar_constructed (GObject *object)
 {
   EphyToolbar *toolbar = EPHY_TOOLBAR (object);
-  GtkActionGroup *action_group;
-  GtkAction *action;
   GtkWidget *box, *button;
   GtkMenu *menu;
   EphyDownloadsManager *downloads_manager;
@@ -616,16 +637,14 @@ ephy_toolbar_constructed (GObject *object)
   gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), box);
 
   /* Reload/Stop */
-  action_group = ephy_window_get_toolbar_action_group (toolbar->window);
-
   button = gtk_button_new ();
-  /* FIXME: apparently we need an image inside the button for the action
-   * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  toolbar->combined_stop_reload_button = button;
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_icon_name ("view-refresh-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  action = gtk_action_group_get_action (action_group, "ViewCombinedStopReload");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-                                      action);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
+                                  "toolbar.combined-stop-reload");
+  gtk_widget_show (GTK_WIDGET (button));
   gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), button);
 
   /* New Tab */
@@ -637,7 +656,6 @@ ephy_toolbar_constructed (GObject *object)
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
   gtk_button_set_label (GTK_BUTTON (button), NULL);
   gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), button);
-
 
   /* Location bar + Title */
   toolbar->title_box = ephy_title_box_new (toolbar->window);
