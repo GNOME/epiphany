@@ -62,6 +62,84 @@
 #define FAVICON_SIZE 16
 
 void
+window_cmd_navigation (GSimpleAction *action,
+                       GVariant      *value,
+                       gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  const gchar *direction = g_variant_get_string (value, 0);
+  EphyEmbed *embed;
+  WebKitWebView *web_view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_return_if_fail (embed != NULL);
+
+  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+  if (g_strcmp0 (direction, "back") == 0) {
+    webkit_web_view_go_back (web_view);
+    gtk_widget_grab_focus (GTK_WIDGET (embed));
+  } else {
+    webkit_web_view_go_forward (web_view);
+    gtk_widget_grab_focus (GTK_WIDGET (embed));
+  }
+}
+
+void
+window_cmd_navigation_new_tab (GSimpleAction *action,
+                               GVariant      *value,
+                               gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  const gchar *direction = g_variant_get_string (value, 0);
+  EphyEmbed *embed;
+  WebKitWebView *web_view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_return_if_fail (embed != NULL);
+
+  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+  if (g_strcmp0 (direction, "back") == 0) {
+      const char *back_uri;
+      WebKitBackForwardList *history;
+      WebKitBackForwardListItem *back_item;
+
+      history = webkit_web_view_get_back_forward_list (web_view);
+      back_item = webkit_back_forward_list_get_back_item (history);
+      back_uri = webkit_back_forward_list_item_get_original_uri (back_item);
+
+      embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                                  NULL,
+                                  0);
+
+      web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+      webkit_web_view_load_uri (web_view, back_uri);
+      gtk_widget_grab_focus (GTK_WIDGET (embed));
+  } else {
+      const char *forward_uri;
+      WebKitBackForwardList *history;
+      WebKitBackForwardListItem *forward_item;
+
+      /* Forward history is not copied when opening
+         a new tab, so get the forward URI manually
+         and load it */
+      history = webkit_web_view_get_back_forward_list (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+      forward_item = webkit_back_forward_list_get_forward_item (history);
+      forward_uri = webkit_back_forward_list_item_get_original_uri (forward_item);
+
+      embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                                  embed,
+                                  0);
+
+      web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+      webkit_web_view_load_uri (web_view, forward_uri);
+  }
+}
+
+void
 window_cmd_undo_close_tab (GtkAction  *action,
                            EphyWindow *window)
 {

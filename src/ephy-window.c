@@ -37,7 +37,6 @@
 #include "ephy-initial-state.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
-#include "ephy-navigation-history-action.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
 #include "ephy-private.h"
@@ -256,8 +255,6 @@ static const struct {
    * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
    * They're KP_PageUp/Down again!
    */
-  { GDK_KEY_KP_4, GDK_MOD1_MASK /*Alt*/, "NavigationBack", TRUE },
-  { GDK_KEY_KP_6, GDK_MOD1_MASK /*Alt*/, "NavigationForward", TRUE },
   { GDK_KEY_KP_Page_Up, GDK_CONTROL_MASK, "TabsPrevious", FALSE },
   { GDK_KEY_KP_9, GDK_CONTROL_MASK, "TabsPrevious", FALSE },
   { GDK_KEY_KP_Page_Down, GDK_CONTROL_MASK, "TabsNext", FALSE },
@@ -267,8 +264,6 @@ static const struct {
   { GDK_KEY_KP_Page_Down, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "TabsMoveRight", FALSE },
   { GDK_KEY_KP_3, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "TabsMoveRight", FALSE },
 #ifdef HAVE_X11_XF86KEYSYM_H
-  { XF86XK_Back, 0, "NavigationBack", TRUE },
-  { XF86XK_Forward, 0, "NavigationForward", TRUE },
   { XF86XK_Go, 0, "GoLocation", FALSE },
   { XF86XK_OpenURL, 0, "GoLocation", FALSE },
   { XF86XK_AddFavorite, 0, "FileBookmarkPage", FALSE },
@@ -278,22 +273,13 @@ static const struct {
   { XF86XK_Stop, 0, "ViewStop", FALSE },
   /* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
 #endif /* HAVE_X11_XF86KEYSYM_H */
-}, navigation_keybindings_ltr [] = {
-  { GDK_KEY_Left, GDK_MOD1_MASK /*Alt*/, "NavigationBack", TRUE },
-  { GDK_KEY_KP_Left, GDK_MOD1_MASK /*Alt*/, "NavigationBack", TRUE },
-  { GDK_KEY_Right, GDK_MOD1_MASK /*Alt*/, "NavigationForward", TRUE },
-  { GDK_KEY_KP_Right, GDK_MOD1_MASK /*Alt*/, "NavigationForward", TRUE }
-}, navigation_keybindings_rtl [] = {
-  { GDK_KEY_Left, GDK_MOD1_MASK /*Alt*/, "NavigationForward", TRUE },
-  { GDK_KEY_KP_Left, GDK_MOD1_MASK /*Alt*/, "NavigationForward", TRUE },
-  { GDK_KEY_Right, GDK_MOD1_MASK /*Alt*/, "NavigationBack", TRUE },
-  { GDK_KEY_KP_Right, GDK_MOD1_MASK /*Alt*/, "NavigationBack", TRUE }
-}, *navigation_keybindings_rtl_ltr;
+};
 
 const struct {
   const gchar *action_and_target;
   const gchar *accelerators[5];
 } accels [] = {
+  /* Window accels */
   { "win.new-tab", { "<Primary>T", NULL } },
   { "win.open", { "<Primary>O", NULL } },
   { "win.save-as", { "<shift><Primary>S", "<Primary>S", NULL } },
@@ -314,8 +300,14 @@ const struct {
   { "win.encoding", { NULL } },
   { "win.page-source", { "<Primary>U", NULL } },
   { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
-  { "win.close", { "<Primary>W", NULL } }
-};
+  { "win.close", { "<Primary>W", NULL } },
+}, accels_navigation_ltr [] = {
+  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_LEFT", "KP_4", "Back", NULL } },
+  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_RIGHT", "KP_6", "Forward", NULL } }
+}, accels_navigation_rtl [] = {
+  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_LEFT", "KP_6", "Back", NULL } },
+  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_RIGHT", "KP_4", "Forward", NULL } }
+}, *accels_navigation_ltr_rtl;
 
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
 
@@ -729,9 +721,6 @@ ephy_window_bound_accels (GtkWidget   *widget,
   guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
   guint i;
 
-  navigation_keybindings_rtl_ltr = gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ?
-                                   navigation_keybindings_rtl : navigation_keybindings_ltr;
-
   for (i = 0; i < G_N_ELEMENTS (extra_keybindings); i++) {
     if (event->keyval == extra_keybindings[i].keyval &&
         modifier == extra_keybindings[i].modifier) {
@@ -740,22 +729,6 @@ ephy_window_bound_accels (GtkWidget   *widget,
                             window->toolbar_action_group :
                             window->action_group,
                             extra_keybindings[i].action);
-      if (gtk_action_is_sensitive (action)) {
-        gtk_action_activate (action);
-        return TRUE;
-      }
-      break;
-    }
-  }
-
-  for (i = 0; i < G_N_ELEMENTS (navigation_keybindings_rtl); i++) {
-    if (event->keyval == navigation_keybindings_rtl_ltr[i].keyval &&
-        modifier == navigation_keybindings_rtl_ltr[i].modifier) {
-      GtkAction *action = gtk_action_group_get_action
-                            (navigation_keybindings_rtl_ltr[i].fromToolbar ?
-                            window->toolbar_action_group :
-                            window->action_group,
-                            navigation_keybindings_rtl_ltr[i].action);
       if (gtk_action_is_sensitive (action)) {
         gtk_action_activate (action);
         return TRUE;
@@ -1078,6 +1051,13 @@ static const GActionEntry new_ephy_page_menu_entries [] =
   { "close-tab", window_cmd_file_close_window }
 };
 
+static const GActionEntry ephy_toolbar_entries [] = {
+  { "navigation-back", window_cmd_navigation, "s" },
+  { "navigation-back-new-tab", window_cmd_navigation_new_tab, "s" },
+  { "navigation-forward", window_cmd_navigation, "s" },
+  { "navigation-forward-new-tab", window_cmd_navigation_new_tab, "s" }
+};
+
 static void
 setup_ui_manager (EphyWindow *window)
 {
@@ -1122,29 +1102,6 @@ setup_ui_manager (EphyWindow *window)
   g_object_unref (action_group);
 
   action_group = gtk_action_group_new ("SpecialToolbarActions");
-  action =
-    g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
-                  "name", "NavigationBack",
-                  "label", _("Back"),
-                  "icon-name", "go-previous-symbolic",
-                  "window", window,
-                  "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,
-                  NULL);
-  gtk_action_group_add_action_with_accel (action_group, action,
-                                          "<alt>Left");
-  g_object_unref (action);
-
-  action =
-    g_object_new (EPHY_TYPE_NAVIGATION_HISTORY_ACTION,
-                  "name", "NavigationForward",
-                  "label", _("Forward"),
-                  "icon-name", "go-next-symbolic",
-                  "window", window,
-                  "direction", EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD,
-                  NULL);
-  gtk_action_group_add_action_with_accel (action_group, action,
-                                          "<alt>Right");
-  g_object_unref (action);
 
   action =
     g_object_new (EPHY_TYPE_HOME_ACTION,
@@ -1361,12 +1318,15 @@ static void
 _ephy_window_set_navigation_flags (EphyWindow                *window,
                                    EphyWebViewNavigationFlags flags)
 {
-  GtkAction *action;
+  GActionGroup *action_group;
+  GAction *action;
 
-  action = gtk_action_group_get_action (window->toolbar_action_group, "NavigationBack");
-  gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_BACK);
-  action = gtk_action_group_get_action (window->toolbar_action_group, "NavigationForward");
-  gtk_action_set_sensitive (action, flags & EPHY_WEB_VIEW_NAV_FORWARD);
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "toolbar");
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "navigation-back");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), flags & EPHY_WEB_VIEW_NAV_BACK);
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "navigation-forward");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), flags & EPHY_WEB_VIEW_NAV_FORWARD);
 }
 
 static void
@@ -1546,10 +1506,18 @@ action_name_to_label_for_model (GMenuModel *menu_model, const gchar *action_name
   return NULL;
 }
 
+typedef struct {
+  GAction *action;
+  GVariant *parameter;
+} GActionData;
+
 static void
 action_activate_cb (GtkAction *action, gpointer user_data)
 {
-  g_action_activate (G_ACTION (user_data), NULL);
+  GActionData *action_data = (GActionData *) user_data;
+
+  printf("%s\n", g_variant_get_string (action_data->parameter, NULL));
+  g_action_activate (G_ACTION (action_data->action), action_data->parameter);
 }
 
 static WebKitContextMenuItem*
@@ -1557,10 +1525,12 @@ webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
 {
   GtkAction *gtk_action;
   WebKitContextMenuItem *item;
+  GActionData *action_data;
 
+  action_data = g_slice_new (GActionData);
   gtk_action = gtk_action_new (g_action_get_name (action), label, NULL, NULL);
   g_signal_connect (gtk_action, "activate",
-                            G_CALLBACK (action_activate_cb), action);
+                    G_CALLBACK (action_activate_cb), action_data);
 
   g_object_bind_property (action, "enabled", gtk_action, "sensitive", G_BINDING_BIDIRECTIONAL);
 
@@ -1572,15 +1542,15 @@ webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
 static void
 new_add_action_to_context_menu (WebKitContextMenu *context_menu,
                             GActionGroup      *action_group,
-                            const char        *action_name)
+                            const char        *action_name,
+                            GtkWidget         *toolbar)
 {
   GAction *action;
-  EphyToolbar *toolbar;
   const gchar *label;
 
-  toolbar = EPHY_TOOLBAR (EPHY_WINDOW (action_group)->toolbar);
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), action_name);
-  label = action_name_to_label_for_model (G_MENU_MODEL (ephy_toolbar_get_page_menu (toolbar)), action_name);
+  label = action_name_to_label_for_model (G_MENU_MODEL (ephy_toolbar_get_page_menu (EPHY_TOOLBAR (toolbar))),
+                                          action_name);
   webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, label));
 }
 
@@ -1683,6 +1653,7 @@ populate_context_menu (WebKitWebView       *web_view,
   WebKitContextMenuItem *toggle_loop_item = NULL;
   WebKitContextMenuItem *fullscreen_item = NULL;
   GActionGroup *window_action_group;
+  GActionGroup *toolbar_action_group;
   GList *spelling_guess_items = NULL;
   EphyEmbedEvent *embed_event;
   gboolean is_document = FALSE;
@@ -1696,6 +1667,8 @@ populate_context_menu (WebKitWebView       *web_view,
 
   window_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                      "win");
+  toolbar_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                                      "toolbar");
 
   is_image = webkit_hit_test_result_context_is_image (hit_test_result);
 
@@ -1783,7 +1756,7 @@ populate_context_menu (WebKitWebView       *web_view,
                                   webkit_context_menu_item_new_separator ());
     }
     new_add_action_to_context_menu (context_menu,
-                                window_action_group, "copy");
+                                window_action_group, "copy", window->toolbar);
     if (can_search_selection)
       add_action_to_context_menu (context_menu,
                                   window->popups_action_group, "SearchSelection");
@@ -1820,21 +1793,21 @@ populate_context_menu (WebKitWebView       *web_view,
     update_edit_actions_sensitivity (window, FALSE);
 
     new_add_action_to_context_menu (context_menu,
-                                window_action_group, "undo");
+                                window_action_group, "undo", window->toolbar);
     new_add_action_to_context_menu (context_menu,
-                                window_action_group, "redo");
+                                window_action_group, "redo", window->toolbar);
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
     new_add_action_to_context_menu (context_menu,
-                                window_action_group, "cut");
+                                window_action_group, "cut", window->toolbar);
     new_add_action_to_context_menu (context_menu,
-                                window_action_group, "copy");
+                                window_action_group, "copy", window->toolbar);
     new_add_action_to_context_menu (context_menu,
-                                window_action_group, "paste");
+                                window_action_group, "paste", window->toolbar);
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
     new_add_action_to_context_menu (context_menu,
-                                window_action_group, "select-all");
+                                window_action_group, "select-all", window->toolbar);
     if (input_methods_item || unicode_item)
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
@@ -1846,10 +1819,10 @@ populate_context_menu (WebKitWebView       *web_view,
     update_edit_actions_sensitivity (window, TRUE);
 
     if (!is_image && !is_media) {
-      add_action_to_context_menu (context_menu,
-                                  window->toolbar_action_group, "NavigationBack");
-      add_action_to_context_menu (context_menu,
-                                  window->toolbar_action_group, "NavigationForward");
+      new_add_action_to_context_menu (context_menu, toolbar_action_group,
+                                      "navigation-back", window->toolbar);
+      new_add_action_to_context_menu (context_menu, toolbar_action_group,
+                                      "navigation-forward", window->toolbar);
       add_action_to_context_menu (context_menu,
                                   window->action_group, "ViewReload");
       webkit_context_menu_append (context_menu,
@@ -1857,7 +1830,7 @@ populate_context_menu (WebKitWebView       *web_view,
     }
 
     new_add_action_to_context_menu (context_menu,
-                                window_action_group, "copy");
+                                window_action_group, "copy", window->toolbar);
     if (can_search_selection)
       add_action_to_context_menu (context_menu,
                                   window->popups_action_group, "SearchSelection");
@@ -3068,7 +3041,6 @@ static GtkWidget *
 setup_toolbar (EphyWindow *window)
 {
   GtkWidget *toolbar;
-  GtkAction *action;
   EphyEmbedShellMode app_mode;
   EphyTitleBox *title_box;
 
@@ -3079,16 +3051,6 @@ setup_toolbar (EphyWindow *window)
   app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
   if (app_mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     gtk_style_context_add_class (gtk_widget_get_style_context (toolbar), "incognito-mode");
-
-  action = gtk_action_group_get_action (window->toolbar_action_group,
-                                        "NavigationBack");
-  g_signal_connect_swapped (action, "open-link",
-                            G_CALLBACK (ephy_link_open), window);
-
-  action = gtk_action_group_get_action (window->toolbar_action_group,
-                                        "NavigationForward");
-  g_signal_connect_swapped (action, "open-link",
-                            G_CALLBACK (ephy_link_open), window);
 
   title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (toolbar));
   g_signal_connect (title_box, "lock-clicked",
@@ -3214,12 +3176,30 @@ ephy_window_constructor (GType                  type,
                                   "win",
                                   G_ACTION_GROUP (new_simple_action_group));
 
+  new_simple_action_group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (new_simple_action_group),
+                                   ephy_toolbar_entries,
+                                   G_N_ELEMENTS (ephy_toolbar_entries),
+                                   window);
+  gtk_widget_insert_action_group (GTK_WIDGET (window),
+                                  "toolbar",
+                                  G_ACTION_GROUP (new_simple_action_group));
+
   /* Set accels for actions */
   app = g_application_get_default ();
   for (i = 0; i < G_N_ELEMENTS (accels); i++) {
     gtk_application_set_accels_for_action (GTK_APPLICATION (app),
                                            accels[i].action_and_target,
                                            accels[i].accelerators);
+  }
+
+  accels_navigation_ltr_rtl = gtk_widget_get_default_direction () == GTK_TEXT_DIR_LTR ?
+                              accels_navigation_ltr : accels_navigation_rtl;
+
+  for (i = 0; i < G_N_ELEMENTS (accels_navigation_ltr_rtl); i++) {
+    gtk_application_set_accels_for_action (GTK_APPLICATION (app),
+                                           accels_navigation_ltr_rtl[i].action_and_target,
+                                           accels_navigation_ltr_rtl[i].accelerators);
   }
 
   ephy_gui_ensure_window_group (GTK_WINDOW (window));

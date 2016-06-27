@@ -24,6 +24,12 @@
 
 G_BEGIN_DECLS
 
+void window_cmd_navigation                (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_navigation_new_tab        (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
 void window_cmd_view_stop                 (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_go_location               (GtkAction  *action,
