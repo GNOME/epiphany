@@ -769,3 +769,15 @@ ephy_toolbar_get_page_menu (EphyToolbar *toolbar)
 {
   return toolbar->page_menu;
 }
+
+GtkWidget *
+ephy_toolbar_get_page_menu_button (EphyToolbar *toolbar)
+{
+  return toolbar->page_menu_button;
+}
+
+GtkWidget *
+ephy_toolbar_get_new_tab_button (EphyToolbar *toolbar)
+{
+  return toolbar->new_tab_button;
+}

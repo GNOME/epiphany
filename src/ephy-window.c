@@ -2914,8 +2914,6 @@ ephy_window_state_event (GtkWidget           *widget,
 static void
 ephy_window_finalize (GObject *object)
 {
-  EphyWindow *window = EPHY_WINDOW (object);
-
   G_OBJECT_CLASS (ephy_window_parent_class)->finalize (object);
 
   LOG ("EphyWindow finalised %p", object);
@@ -3088,6 +3086,7 @@ ephy_window_constructor (GType                  type,
 {
   GObject *object;
   EphyWindow *window;
+  EphyToolbar *toolbar;
   GtkSettings *settings;
   GtkAction *action;
   GAction *new_action;
@@ -3229,22 +3228,17 @@ ephy_window_constructor (GType                  type,
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     g_object_set (window->location_controller, "editable", FALSE, NULL);
 
-    /* We don't need to show the page menu in web application mode. */
-    action = gtk_action_group_get_action (toolbar_action_group, "PageMenu");
-    ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
-    gtk_action_set_visible (action, FALSE);
-
-    action = gtk_action_group_get_action (toolbar_action_group, "FileNewTab");
-    ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
-                                          TRUE);
-    gtk_action_set_visible (action, FALSE);
+    /* We don't need to show the page menu and the new tab button in web
+     * application mode.
+     */
+    gtk_widget_set_visible (ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (window->toolbar)), FALSE);
+    gtk_widget_set_visible (ephy_toolbar_get_new_tab_button (EPHY_TOOLBAR (window->toolbar)), FALSE);
 
     action = gtk_action_group_get_action (window->popups_action_group, "ContextBookmarkPage");
     ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
     gtk_action_set_visible (action, FALSE);
 
     for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_app_mode); i++) {
-      printf("Disabled\n");
       action = gtk_action_group_get_action (window->action_group,
                                             disabled_actions_for_app_mode[i]);
       ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);

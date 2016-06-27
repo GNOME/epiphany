@@ -33,10 +33,10 @@ G_DECLARE_FINAL_TYPE (EphyToolbar, ephy_toolbar, EPHY, TOOLBAR, GtkHeaderBar)
 GtkWidget *ephy_toolbar_new      (EphyWindow *window);
 
 GtkWidget *ephy_toolbar_get_location_entry (EphyToolbar *toolbar);
-
 EphyTitleBox *ephy_toolbar_get_title_box (EphyToolbar *toolbar);
-
 GMenu *ephy_toolbar_get_page_menu (EphyToolbar *toolbar);
+GtkWidget * ephy_toolbar_get_page_menu_button (EphyToolbar *toolbar);
+GtkWidget * ephy_toolbar_get_new_tab_button (EphyToolbar *toolbar);
 
 G_END_DECLS
 
