@@ -20,12 +20,22 @@
 #include "config.h"
 #include "ephy-toolbar.h"
 
+#include "ephy-action-helper.h"
 #include "ephy-downloads-popover.h"
 #include "ephy-downloads-progress-icon.h"
+#include "ephy-embed.h"
+#include "ephy-embed-container.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-utils.h"
+#include "ephy-favicon-helpers.h"
+#include "ephy-gui.h"
+#include "ephy-history-service.h"
 #include "ephy-location-entry.h"
 #include "ephy-middle-clickable-button.h"
 #include "ephy-private.h"
 #include "ephy-shell.h"
+
+#include <webkit2/webkit2.h>
 
 enum {
   PROP_0,
@@ -34,6 +44,9 @@ enum {
 };
 
 static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
+
+#define MAX_LABEL_LENGTH 48
+#define HISTORY_ITEM_DATA_KEY "history-item-data-key"
 
 struct _EphyToolbar {
   GtkHeaderBar parent_instance;
@@ -49,6 +62,8 @@ struct _EphyToolbar {
   GtkWidget *downloads_popover;
 
   GMenu *page_menu;
+
+  guint navigation_buttons_menu_timeout;
 };
 
 G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_HEADER_BAR)
@@ -153,6 +168,383 @@ sync_chromes_visibility (EphyToolbar *toolbar)
   gtk_widget_set_visible (toolbar->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
 
+typedef enum {
+  EPHY_NAVIGATION_HISTORY_DIRECTION_BACK,
+  EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD
+} EphyNavigationHistoryDirection;
+
+typedef enum {
+  WEBKIT_HISTORY_BACKWARD,
+  WEBKIT_HISTORY_FORWARD
+} WebKitHistoryType;
+
+static void
+ephy_history_cleared_cb (EphyHistoryService *history,
+                         gpointer           user_data)
+{
+  GActionGroup *action_group;
+  GAction *action;
+  guint i;
+  gchar **actions;
+
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (user_data), "toolbar");
+  actions = g_action_group_list_actions (action_group);
+  for (i = 0; actions[i] != NULL; i++) {
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), actions[i]);
+    new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG, TRUE);
+
+    g_free (actions[i]);
+  }
+
+  g_free (actions);
+}
+
+static gboolean
+item_enter_notify_event_cb (GtkWidget   *widget,
+                            GdkEvent    *event,
+                            EphyWebView *view)
+{
+  char *text;
+
+  text = g_object_get_data (G_OBJECT (widget), "link-message");
+  ephy_web_view_set_link_message (view, text);
+
+  return FALSE;
+}
+
+static gboolean
+item_leave_notify_event_cb (GtkWidget   *widget,
+                            GdkEvent    *event,
+                            EphyWebView *view)
+{
+  ephy_web_view_set_link_message (view, NULL);
+  return FALSE;
+}
+
+static void
+icon_loaded_cb (GObject          *source,
+                GAsyncResult     *result,
+                GtkImageMenuItem *item)
+{
+  WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
+  GdkPixbuf *favicon = NULL;
+  cairo_surface_t *icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+
+  if (icon_surface) {
+    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+    cairo_surface_destroy (icon_surface);
+  }
+
+  if (favicon) {
+    GtkWidget *image;
+
+    image = gtk_image_new_from_pixbuf (favicon);
+    gtk_image_menu_item_set_image (item, image);
+    gtk_image_menu_item_set_always_show_image (item, TRUE);
+
+    g_object_unref (favicon);
+  }
+
+  g_object_unref (item);
+}
+
+static GtkWidget *
+new_history_menu_item (EphyWebView *view,
+                       const char  *origtext,
+                       const char  *address)
+{
+  GtkWidget *item;
+  GtkLabel *label;
+  WebKitFaviconDatabase *database;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
+  g_return_val_if_fail (address != NULL && origtext != NULL, NULL);
+
+  item = gtk_image_menu_item_new_with_label (origtext);
+
+  label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (item)));
+  gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+  gtk_label_set_max_width_chars (label, MAX_LABEL_LENGTH);
+
+  database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
+  webkit_favicon_database_get_favicon (database, address,
+                                       NULL,
+                                       (GAsyncReadyCallback)icon_loaded_cb,
+                                       g_object_ref (item));
+
+  g_object_set_data_full (G_OBJECT (item), "link-message", g_strdup (address), (GDestroyNotify)g_free);
+
+  g_signal_connect (item, "enter-notify-event",
+                    G_CALLBACK (item_enter_notify_event_cb), view);
+  g_signal_connect (item, "leave-notify-event",
+                    G_CALLBACK (item_leave_notify_event_cb), view);
+
+  gtk_widget_show (item);
+
+  return item;
+}
+
+static void
+set_new_back_history (EphyEmbed *source,
+                      EphyEmbed *dest,
+                      gint       offset)
+{
+  /* TODO: WebKitBackForwardList: In WebKit2 WebKitBackForwardList can't be modified */
+}
+
+static void
+middle_click_handle_on_history_menu_item (EphyEmbed                 *embed,
+                                          WebKitBackForwardListItem *item)
+{
+  EphyEmbed *new_embed = NULL;
+  const gchar *url;
+  gint offset;
+
+  /* TODO: WebKitBackForwardList is read-only in WebKit2 */
+  offset = 0;
+
+  new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                  EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
+                                  embed,
+                                  0);
+  g_return_if_fail (new_embed != NULL);
+
+  /* We manually set the back history instead of trusting
+     ephy_shell_new_tab because the logic is more complex than
+     usual, due to handling also the forward history */
+  set_new_back_history (embed, new_embed, offset);
+
+  /* Load the new URL */
+  url = webkit_back_forward_list_item_get_original_uri (item);
+  ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), url);
+}
+
+static gboolean
+navigation_menu_item_pressed_cb (GtkWidget *menuitem,
+                                 GdkEvent  *event,
+                                 gpointer   user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  WebKitBackForwardListItem *item;
+  EphyEmbed *embed;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+
+  item = (WebKitBackForwardListItem *)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
+
+  if (((GdkEventButton *)event)->button == 2) {
+    middle_click_handle_on_history_menu_item (embed, item);
+  } else {
+    WebKitWebView *web_view;
+
+    web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+    webkit_web_view_go_to_back_forward_list_item (web_view, item);
+  }
+
+  return G_SOURCE_REMOVE;
+}
+
+static GList *
+construct_webkit_history_list (WebKitWebView    *web_view,
+                               WebKitHistoryType hist_type,
+                               int               limit)
+{
+  WebKitBackForwardList *back_forward_list;
+
+  back_forward_list = webkit_web_view_get_back_forward_list (web_view);
+  return hist_type == WEBKIT_HISTORY_FORWARD ?
+         g_list_reverse (webkit_back_forward_list_get_forward_list_with_limit (back_forward_list, limit)) :
+         webkit_back_forward_list_get_back_list_with_limit (back_forward_list, limit);
+}
+
+static GtkWidget *
+build_dropdown_menu (EphyWindow                    *window,
+                     EphyNavigationHistoryDirection direction)
+{
+  GtkMenuShell *menu;
+  EphyEmbed *embed;
+  GList *list, *l;
+  WebKitWebView *web_view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_return_val_if_fail (embed != NULL, NULL);
+
+  menu = GTK_MENU_SHELL (gtk_menu_new ());
+
+  web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+
+  if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK)
+    list = construct_webkit_history_list (web_view,
+                                          WEBKIT_HISTORY_BACKWARD, 10);
+  else
+    list = construct_webkit_history_list (web_view,
+                                          WEBKIT_HISTORY_FORWARD, 10);
+
+  for (l = list; l != NULL; l = l->next) {
+    GtkWidget *item;
+    WebKitBackForwardListItem *hitem;
+    const char *uri;
+    char *title;
+
+    hitem = (WebKitBackForwardListItem *)l->data;
+    uri = webkit_back_forward_list_item_get_uri (hitem);
+    title = g_strdup (webkit_back_forward_list_item_get_title (hitem));
+
+    if (title == NULL || g_strstrip (title)[0] == '\0')
+      item = new_history_menu_item (EPHY_WEB_VIEW (web_view), uri, uri);
+    else
+      item = new_history_menu_item (EPHY_WEB_VIEW (web_view), title, uri);
+
+    g_free (title);
+
+    g_object_set_data_full (G_OBJECT (item), HISTORY_ITEM_DATA_KEY,
+                            g_object_ref (hitem), g_object_unref);
+
+    g_signal_connect (item, "button-release-event",
+                      G_CALLBACK (navigation_menu_item_pressed_cb), window);
+
+    gtk_menu_shell_append (menu, item);
+    gtk_widget_show_all (item);
+  }
+
+  g_list_free (list);
+
+  return GTK_WIDGET (menu);
+}
+
+static void
+popup_history_menu (GtkWidget                     *widget,
+                    EphyWindow                    *window,
+                    EphyNavigationHistoryDirection direction,
+                    GdkEventButton                *event)
+{
+  GtkWidget *menu;
+
+  menu = build_dropdown_menu (window, direction);
+  gtk_menu_popup (GTK_MENU (menu),
+                  NULL, NULL,
+                  ephy_gui_menu_position_under_widget, widget,
+                  event->button, event->time);
+}
+
+typedef struct {
+  GtkWidget *button;
+  EphyWindow *window;
+  EphyNavigationHistoryDirection direction;
+  GdkEventButton *event;
+} PopupData;
+
+static gboolean
+menu_timeout_cb (PopupData *data)
+{
+  if (data != NULL && data->window)
+    popup_history_menu (data->button, data->window, data->direction, data->event);
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+navigation_button_press_event_cb (GtkButton *button,
+                                  GdkEvent  *event,
+                                  gpointer   user_data)
+{
+  EphyToolbar *toolbar = EPHY_TOOLBAR (user_data);
+  EphyNavigationHistoryDirection direction;
+  GVariant *variant;
+
+  variant = gtk_actionable_get_action_target_value (GTK_ACTIONABLE (button));
+
+  direction = g_strcmp0 (g_variant_get_string (variant, NULL), "back") == 0 ?
+              EPHY_NAVIGATION_HISTORY_DIRECTION_BACK : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
+
+  if (((GdkEventButton *)event)->button == 3) {
+    popup_history_menu (GTK_WIDGET (button), toolbar->window,
+                        direction, (GdkEventButton *)event);
+  } else {
+    PopupData *data;
+
+    data = g_new (PopupData, 1);
+    data->button = GTK_WIDGET (button);
+    data->window = toolbar->window;
+    data->direction = direction;
+    data->event = (GdkEventButton *)event;
+
+    toolbar->navigation_buttons_menu_timeout = g_timeout_add_full (G_PRIORITY_DEFAULT, 500,
+                                                                   (GSourceFunc)menu_timeout_cb,
+                                                                   data,
+                                                                   (GDestroyNotify)g_free);
+    g_source_set_name_by_id (toolbar->navigation_buttons_menu_timeout, "[epiphany] menu_timeout_cb");
+  }
+
+  return FALSE;
+}
+
+static gboolean
+navigation_button_release_event_cb (GtkButton *button,
+                                    GdkEvent  *event,
+                                    gpointer   user_data)
+{
+  EphyToolbar *toolbar = EPHY_TOOLBAR (user_data);
+  GActionGroup *action_group;
+  GAction *action;
+  GVariant *variant;
+  EphyNavigationHistoryDirection direction;
+
+  variant = gtk_actionable_get_action_target_value (GTK_ACTIONABLE (button));
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (toolbar->window), "toolbar");
+
+  direction = g_strcmp0 (g_variant_get_string (variant, NULL), "back") == 0 ?
+              EPHY_NAVIGATION_HISTORY_DIRECTION_BACK : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
+
+  switch (((GdkEventButton *)event)->button) {
+    case 1:
+      if (direction == 0) {
+        action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                             "navigation-back");
+        g_action_activate (action, variant);
+      } else if (direction == 1) {
+        action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                             "navigation-forward");
+        g_action_activate (action, variant);
+      }
+      break;
+    case 2:
+      if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
+        action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                             "navigation-back-new-tab");
+        g_action_activate (action, variant);
+      } else if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD) {
+        action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                             "navigation-forward-new-tab");
+        g_action_activate (action, variant);
+      }
+      break;
+    case 3:
+      popup_history_menu (GTK_WIDGET (button), toolbar->window,
+                          direction, (GdkEventButton *)event);
+      break;
+    default:
+      break;
+  }
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+navigation_leave_notify_event_cb (GtkButton *button,
+                                  GdkEvent  *event,
+                                  gpointer   user_data)
+{
+  EphyToolbar *toolbar = EPHY_TOOLBAR (user_data);
+
+  if (toolbar->navigation_buttons_menu_timeout > 0)
+    g_source_remove (toolbar->navigation_buttons_menu_timeout);
+
+  toolbar->navigation_buttons_menu_timeout = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ephy_toolbar_constructed (GObject *object)
 {
@@ -163,6 +555,7 @@ ephy_toolbar_constructed (GObject *object)
   GtkMenu *menu;
   EphyDownloadsManager *downloads_manager;
   GtkBuilder *builder;
+  EphyHistoryService *history_service;
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
 
@@ -174,30 +567,45 @@ ephy_toolbar_constructed (GObject *object)
   toolbar->navigation_box = box;
 
   /* Back */
-  button = ephy_middle_clickable_button_new ();
-  /* FIXME: apparently we need an image inside the button for the action
-   * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  button = gtk_button_new ();
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_icon_name ("go-previous-symbolic",
+                        GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  action_group = ephy_window_get_toolbar_action_group (toolbar->window);
-  action = gtk_action_group_get_action (action_group, "NavigationBack");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-                                      action);
-  gtk_button_set_label (GTK_BUTTON (button), NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
+                                  "toolbar.navigation-back");
+  gtk_actionable_set_action_target_value (GTK_ACTIONABLE (button),
+                                          g_variant_new ("s", "back"));
+  gtk_style_context_add_class (gtk_widget_get_style_context (button),
+                               "image-button");
+  g_signal_connect (button, "button-press-event",
+                    G_CALLBACK (navigation_button_press_event_cb), toolbar);
+  g_signal_connect (button, "button-release-event",
+                    G_CALLBACK (navigation_button_release_event_cb), toolbar);
+  g_signal_connect (button, "leave-notify-event",
+                    G_CALLBACK (navigation_leave_notify_event_cb), toolbar);
+  gtk_widget_show (GTK_WIDGET (button));
   gtk_container_add (GTK_CONTAINER (box), button);
 
   /* Forward */
-  button = ephy_middle_clickable_button_new ();
-  /* FIXME: apparently we need an image inside the button for the action
-   * icon to appear. */
-  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new ());
+  button = gtk_button_new ();
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_icon_name ("go-next-symbolic",
+                        GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  action = gtk_action_group_get_action (action_group, "NavigationForward");
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-                                      action);
-  gtk_button_set_label (GTK_BUTTON (button), NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
+                                  "toolbar.navigation-forward");
+  gtk_actionable_set_action_target_value (GTK_ACTIONABLE (button),
+                                          g_variant_new ("s", "forward"));
+  gtk_style_context_add_class (gtk_widget_get_style_context (button),
+                               "image-button");
+  g_signal_connect (button, "button-press-event",
+                    G_CALLBACK (navigation_button_press_event_cb), toolbar);
+  g_signal_connect (button, "button-release-event",
+                    G_CALLBACK (navigation_button_release_event_cb), toolbar);
+  g_signal_connect (button, "leave-notify-event",
+                    G_CALLBACK (navigation_leave_notify_event_cb), toolbar);
+  gtk_widget_show (GTK_WIDGET (button));
   gtk_container_add (GTK_CONTAINER (box), button);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
@@ -208,6 +616,8 @@ ephy_toolbar_constructed (GObject *object)
   gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), box);
 
   /* Reload/Stop */
+  action_group = ephy_window_get_toolbar_action_group (toolbar->window);
+
   button = gtk_button_new ();
   /* FIXME: apparently we need an image inside the button for the action
    * icon to appear. */
@@ -285,6 +695,28 @@ ephy_toolbar_constructed (GObject *object)
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), toolbar->downloads_revealer);
   gtk_widget_show (toolbar->downloads_revealer);
+
+  history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+
+  toolbar->navigation_buttons_menu_timeout = 0;
+
+  g_signal_connect (history_service,
+                    "cleared", G_CALLBACK (ephy_history_cleared_cb),
+                    toolbar->window);
+}
+
+static void
+ephy_toolbar_init (EphyToolbar *toolbar)
+{
+}
+
+static void
+ephy_toolbar_finalize (GObject *object)
+{
+  if (EPHY_TOOLBAR (object)->navigation_buttons_menu_timeout > 0)
+    g_source_remove (EPHY_TOOLBAR (object)->navigation_buttons_menu_timeout);
+
+  G_OBJECT_CLASS (ephy_toolbar_parent_class)->finalize (object);
 }
 
 static void
@@ -292,6 +724,7 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  gobject_class->finalize = ephy_toolbar_finalize;
   gobject_class->set_property = ephy_toolbar_set_property;
   gobject_class->get_property = ephy_toolbar_get_property;
   gobject_class->constructed = ephy_toolbar_constructed;
@@ -306,11 +739,6 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
   g_object_class_install_properties (gobject_class,
                                      N_PROPERTIES,
                                      object_properties);
-}
-
-static void
-ephy_toolbar_init (EphyToolbar *toolbar)
-{
 }
 
 GtkWidget *

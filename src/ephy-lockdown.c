@@ -123,11 +123,9 @@ static const BindAction popup_actions[] = {
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "OpenLinkInNewWindow", "sensitive" }
 };
 
-static const BindAction special_toolbar_actions[] = {
-  { EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationBack", "visible" },
-  { EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationBack", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationForward", "visible" },
-  { EPHY_PREFS_LOCKDOWN_HISTORY, "NavigationForward", "sensitive" },
+static const BindAction toolbar_actions[] = {
+  { EPHY_PREFS_LOCKDOWN_HISTORY, "navigation-back", "enabled" },
+  { EPHY_PREFS_LOCKDOWN_HISTORY, "navigation-forward", "enabled" }
 };
 
 static gboolean
@@ -290,7 +288,7 @@ window_added_cb (GtkApplication *application,
   new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                   "win");
   new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             G_ACTION_GROUP (new_action_group),
+                             new_action_group,
                              new_window_actions,
                              G_N_ELEMENTS (new_window_actions));
 
@@ -305,10 +303,13 @@ window_added_cb (GtkApplication *application,
   g_settings_bind_writable (settings, "picture-filename",
                             action, "sensitive", FALSE);
 
-  action_group = find_action_group (manager, "SpecialToolbarActions");
-  bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             action_group, special_toolbar_actions,
-                             G_N_ELEMENTS (special_toolbar_actions));
+  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                                  "toolbar");
+  new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                             new_action_group,
+                             toolbar_actions,
+                             G_N_ELEMENTS (toolbar_actions));
+
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     location_controller = ephy_window_get_location_controller (EPHY_WINDOW (window));
     bind_location_controller (EPHY_SETTINGS_LOCKDOWN, location_controller);

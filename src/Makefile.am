@@ -20,7 +20,6 @@ TYPES_H_FILES = \
 	ephy-session.h				\
 	ephy-shell.h				\
 	ephy-window.h				\
-	ephy-navigation-history-action.h	\
 	ephy-title-box.h			\
 	$(NULL)
 
@@ -51,8 +50,6 @@ libephymain_la_SOURCES = \
 	ephy-location-controller.h		\
 	ephy-lockdown.c				\
 	ephy-lockdown.h				\
-	ephy-navigation-history-action.c	\
-	ephy-navigation-history-action.h	\
 	ephy-notebook.c				\
 	ephy-notebook.h				\
 	ephy-private.h				\
