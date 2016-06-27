@@ -140,6 +140,90 @@ window_cmd_navigation_new_tab (GSimpleAction *action,
 }
 
 void
+window_cmd_view_stop (GSimpleAction *action,
+                      GVariant      *value,
+                      gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+
+  embed = ephy_embed_container_get_active_child
+            (EPHY_EMBED_CONTAINER (window));
+  g_return_if_fail (embed != NULL);
+
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
+
+  webkit_web_view_stop_loading (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
+}
+
+static gboolean
+event_with_shift (void)
+{
+  GdkEvent *event;
+  GdkEventType type = 0;
+  guint state = 0;
+
+  event = gtk_get_current_event ();
+  if (event) {
+    type = event->type;
+
+    if (type == GDK_BUTTON_RELEASE) {
+      state = event->button.state;
+    } else if (type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE) {
+      state = event->key.state;
+    }
+
+    gdk_event_free (event);
+  }
+
+  return (state & GDK_SHIFT_MASK) != 0;
+}
+
+void
+window_cmd_view_reload (GSimpleAction *action,
+                        GVariant      *value,
+                        gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  WebKitWebView *view;
+
+  embed = ephy_embed_container_get_active_child
+            (EPHY_EMBED_CONTAINER (window));
+  g_return_if_fail (embed != NULL);
+
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
+
+  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+  if (event_with_shift ())
+    webkit_web_view_reload_bypass_cache (view);
+  else
+    webkit_web_view_reload (view);
+}
+
+void window_cmd_combined_stop_reload (GSimpleAction *action,
+                                      GVariant      *parameter,
+                                      gpointer       user_data)
+{
+  GActionGroup *action_group;
+  GAction *gaction;
+  GVariant *state;
+
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (user_data), "toolbar");
+
+  state = g_action_get_state (G_ACTION (action));
+  /* If loading */
+  if (g_variant_get_boolean (state))
+    gaction = g_action_map_lookup_action (G_ACTION_MAP (action_group), "stop");
+  else
+    gaction = g_action_map_lookup_action (G_ACTION_MAP (action_group), "reload");
+
+  g_action_activate (gaction, NULL);
+
+  g_variant_unref (state);
+}
+
+void
 window_cmd_undo_close_tab (GtkAction  *action,
                            EphyWindow *window)
 {
@@ -187,69 +271,11 @@ window_cmd_file_send_to (GtkAction  *action,
   g_free (command);
 }
 
-static gboolean
-event_with_shift (void)
-{
-  GdkEvent *event;
-  GdkEventType type = 0;
-  guint state = 0;
-
-  event = gtk_get_current_event ();
-  if (event) {
-    type = event->type;
-
-    if (type == GDK_BUTTON_RELEASE) {
-      state = event->button.state;
-    } else if (type == GDK_KEY_PRESS || type == GDK_KEY_RELEASE) {
-      state = event->key.state;
-    }
-
-    gdk_event_free (event);
-  }
-
-  return (state & GDK_SHIFT_MASK) != 0;
-}
-
 void
 window_cmd_go_location (GtkAction  *action,
                         EphyWindow *window)
 {
   ephy_window_activate_location (window);
-}
-
-void
-window_cmd_view_stop (GtkAction  *action,
-                      EphyWindow *window)
-{
-  EphyEmbed *embed;
-
-  embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
-
-  gtk_widget_grab_focus (GTK_WIDGET (embed));
-
-  webkit_web_view_stop_loading (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
-}
-
-void
-window_cmd_view_reload (GtkAction  *action,
-                        EphyWindow *window)
-{
-  EphyEmbed *embed;
-  WebKitWebView *view;
-
-  embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
-
-  gtk_widget_grab_focus (GTK_WIDGET (embed));
-
-  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
-  if (event_with_shift ())
-    webkit_web_view_reload_bypass_cache (view);
-  else
-    webkit_web_view_reload (view);
 }
 
 void

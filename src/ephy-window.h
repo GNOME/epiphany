@@ -52,6 +52,8 @@ void              ephy_window_set_zoom            (EphyWindow *window,
 void		  ephy_window_activate_location	  (EphyWindow *window);
 const char       *ephy_window_get_location        (EphyWindow *window);
 
+GtkWidget        *ephy_window_get_toolbar         (EphyWindow *window);
+
 gboolean          ephy_window_close               (EphyWindow *window);
 
 EphyWindowChrome  ephy_window_get_chrome          (EphyWindow *window);

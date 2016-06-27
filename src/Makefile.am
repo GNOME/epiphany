@@ -32,8 +32,6 @@ libephymain_la_SOURCES = \
 	ephy-action-helper.h			\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
-	ephy-combined-stop-reload-action.c	\
-	ephy-combined-stop-reload-action.h	\
 	ephy-encoding-dialog.c			\
 	ephy-encoding-dialog.h			\
 	ephy-encoding-row.c			\

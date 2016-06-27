@@ -23,7 +23,6 @@
 
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-ui.h"
-#include "ephy-combined-stop-reload-action.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -93,15 +92,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_edit_history) },
   { "EditPreferences", NULL, N_("Pr_eferences"), "<control>e", NULL,
     G_CALLBACK (window_cmd_edit_preferences) },
-
-  /* View actions. */
-
-  { "ViewStop", NULL, N_("_Stop"), "Escape", NULL,
-    G_CALLBACK (window_cmd_view_stop) },
-  { "ViewAlwaysStop", NULL, N_("_Stop"), "Escape",
-    NULL, G_CALLBACK (window_cmd_view_stop) },
-  { "ViewReload", NULL, N_("_Reload"), "<control>R", NULL,
-    G_CALLBACK (window_cmd_view_reload) },
 
   /* Bookmarks actions. */
 
@@ -214,11 +204,6 @@ static const struct {
   /* FIXME: these are not in any menu for now, so add them here. */
   { GDK_KEY_F11, 0, "ViewFullscreen", FALSE },
 
-  { GDK_KEY_r, GDK_CONTROL_MASK, "ViewReload", FALSE },
-  { GDK_KEY_R, GDK_CONTROL_MASK, "ViewReload", FALSE },
-  { GDK_KEY_R, GDK_CONTROL_MASK |
-    GDK_SHIFT_MASK, "ViewReload", FALSE },
-
   /* Tab navigation */
   { GDK_KEY_Page_Up, GDK_CONTROL_MASK, "TabsPrevious", FALSE },
   { GDK_KEY_Page_Down, GDK_CONTROL_MASK, "TabsNext", FALSE },
@@ -230,11 +215,6 @@ static const struct {
   { GDK_KEY_l, GDK_CONTROL_MASK, "GoLocation", FALSE },
   { GDK_KEY_F6, 0, "GoLocation", FALSE },
   /* Support all the MSIE tricks as well ;) */
-  { GDK_KEY_F5, 0, "ViewReload", FALSE },
-  { GDK_KEY_F5, GDK_CONTROL_MASK, "ViewReload", FALSE },
-  { GDK_KEY_F5, GDK_SHIFT_MASK, "ViewReload", FALSE },
-  { GDK_KEY_F5, GDK_CONTROL_MASK |
-    GDK_SHIFT_MASK, "ViewReload", FALSE },
   /* These keys are a bit strange: when pressed with no modifiers, they emit
    * KP_PageUp/Down Control; when pressed with Control+Shift they are KP_9/3,
    * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
@@ -252,19 +232,16 @@ static const struct {
   { XF86XK_Go, 0, "GoLocation", FALSE },
   { XF86XK_OpenURL, 0, "GoLocation", FALSE },
   { XF86XK_AddFavorite, 0, "FileBookmarkPage", FALSE },
-  { XF86XK_Refresh, 0, "ViewReload", FALSE },
-  { XF86XK_Reload, 0, "ViewReload", FALSE },
   { XF86XK_Send, 0, "FileSendTo", FALSE },
-  { XF86XK_Stop, 0, "ViewStop", FALSE },
   /* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
 #endif /* HAVE_X11_XF86KEYSYM_H */
 };
 
 const struct {
   const gchar *action_and_target;
-  const gchar *accelerators[5];
+  const gchar *accelerators[9];
 } accels [] = {
-  /* Window accels */
+  /* Page Menu accels */
   { "win.new-tab", { "<Primary>T", NULL } },
   { "win.open", { "<Primary>O", NULL } },
   { "win.save-as", { "<shift><Primary>S", "<Primary>S", NULL } },
@@ -274,7 +251,6 @@ const struct {
   { "win.copy", { "<Primary>C", NULL } },
   { "win.cut", { "<Primary>X", NULL } },
   { "win.paste", { "<Primary>V", NULL } },
-  { "win.select-all", { "<Primary>A", NULL } },
   { "win.zoom-in", { "<Primary>plus", "<Primary>KP_Add", "<Primary>equal", "ZoomIn", NULL } },
   { "win.zoom-out", { "<Primary>minus", "<Primary>KP_Subtract", "ZoomOut", NULL } },
   { "win.zoom-normal", { "<Primary>0", "<Primary>KP_0", NULL } },
@@ -286,6 +262,13 @@ const struct {
   { "win.page-source", { "<Primary>U", NULL } },
   { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
   { "win.close", { "<Primary>W", NULL } },
+
+  { "win.select-all", { "<Primary>A", NULL } },
+
+  /* Navigation */
+  { "toolbar.stop", { "Escape", "Stop", NULL } },
+  { "toolbar.reload", { "<Primary>R", "<shift><Primary>R", "F5", "<Primary>F5", "<shift>F5", "<shift><Primary>F5", "Refresh", "Reload", NULL } },
+  { "toolbar.combined-stop-reload", { NULL } }
 }, accels_navigation_ltr [] = {
   { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "KP_4", "Back", NULL } },
   { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "KP_6", "Forward", NULL } }
@@ -627,31 +610,31 @@ sync_tab_load_status (EphyWebView    *view,
                       WebKitLoadEvent load_event,
                       EphyWindow     *window)
 {
-  GtkActionGroup *action_group = window->action_group;
-  GtkAction *action;
-  GActionGroup *new_action_group;
-  GAction *new_action;
+  GActionGroup *action_group;
+  GAction *action;
   gboolean loading;
 
   if (window->closing) return;
 
   loading = ephy_web_view_is_loading (view);
 
-  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
-                                              "win");
-
-  action = gtk_action_group_get_action (action_group, "ViewStop");
-  gtk_action_set_sensitive (action, loading);
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
 
   /* disable print while loading, see bug #116344 */
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group),
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "print");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_LOADING, loading);
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+                                        SENS_FLAG_LOADING, loading);
 
-  action = gtk_action_group_get_action (window->toolbar_action_group,
-                                        "ViewCombinedStopReload");
-  ephy_combined_stop_reload_action_set_loading (EPHY_COMBINED_STOP_RELOAD_ACTION (action),
-                                                loading);
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "toolbar");
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "stop");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), loading);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "combined-stop-reload");
+  g_action_change_state (action, g_variant_new_boolean (loading));
 }
 
 static void
@@ -1038,7 +1021,12 @@ static const GActionEntry ephy_toolbar_entries [] = {
   { "navigation-back", window_cmd_navigation, "s" },
   { "navigation-back-new-tab", window_cmd_navigation_new_tab, "s" },
   { "navigation-forward", window_cmd_navigation, "s" },
-  { "navigation-forward-new-tab", window_cmd_navigation_new_tab, "s" }
+  { "navigation-forward-new-tab", window_cmd_navigation_new_tab, "s" },
+
+  { "stop", window_cmd_view_stop },
+  { "reload", window_cmd_view_reload },
+  { "always-stop", window_cmd_view_stop },
+  { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", ephy_toolbar_change_combined_stop_reload_state }
 };
 
 static void
@@ -1094,14 +1082,6 @@ setup_ui_manager (EphyWindow *window)
   gtk_action_group_add_action_with_accel (action_group, action, "<alt>Home");
   g_signal_connect_swapped (action, "open-link",
                             G_CALLBACK (ephy_link_open), window);
-  g_object_unref (action);
-
-  action = g_object_new (EPHY_TYPE_COMBINED_STOP_RELOAD_ACTION,
-                         "name", "ViewCombinedStopReload",
-                         "loading", FALSE,
-                         "window", window,
-                         NULL);
-  gtk_action_group_add_action (action_group, action);
   g_object_unref (action);
 
   gtk_action_group_set_accel_group (action_group, accel_group);
@@ -1173,9 +1153,10 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
                                         flags, set);
 
   /* Toolbar */
-  action = gtk_action_group_get_action (window->toolbar_action_group,
-                                        "ViewCombinedStopReload");
-  ephy_action_change_sensitivity_flags (action,
+  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "toolbar");
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group),
+                                       "combined-stop-reload");
+  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                         flags, set);
 }
 
@@ -1806,8 +1787,8 @@ populate_context_menu (WebKitWebView       *web_view,
                                       "navigation-back", window->toolbar);
       new_add_action_to_context_menu (context_menu, toolbar_action_group,
                                       "navigation-forward", window->toolbar);
-      add_action_to_context_menu (context_menu,
-                                  window->action_group, "ViewReload");
+      new_add_action_to_context_menu (context_menu, toolbar_action_group,
+                                      "reload", window->toolbar);
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
     }
@@ -3086,13 +3067,11 @@ ephy_window_constructor (GType                  type,
 {
   GObject *object;
   EphyWindow *window;
-  EphyToolbar *toolbar;
   GtkSettings *settings;
   GtkAction *action;
   GAction *new_action;
   GActionGroup *new_action_group;
   GSimpleActionGroup *new_simple_action_group;
-  GtkActionGroup *toolbar_action_group;
   GError *error = NULL;
   guint settings_connection;
   GtkCssProvider *css_provider;
@@ -3213,7 +3192,6 @@ ephy_window_constructor (GType                  type,
                                               "win");
 
   /* Disable actions not needed for popup mode. */
-  toolbar_action_group = window->toolbar_action_group;
   new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group), "new-tab");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                         SENS_FLAG_CHROME,
@@ -3575,6 +3553,20 @@ ephy_window_get_location_controller (EphyWindow *window)
   g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
   return window->location_controller;
+}
+
+/**
+ * ephy_window_get_toolbar:
+ * @window: an #EphyWindow
+ *
+ * Returns the @window #EphyToolbar
+ *
+ * Returns: (transfer none): the @window #EphyToolbar
+ **/
+GtkWidget *
+ephy_window_get_toolbar (EphyWindow *window)
+{
+  return window->toolbar;
 }
 
 typedef struct {

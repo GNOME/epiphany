@@ -30,11 +30,16 @@ void window_cmd_navigation                (GSimpleAction *action,
 void window_cmd_navigation_new_tab        (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
-void window_cmd_view_stop                 (GtkAction  *action,
-                                           EphyWindow *window);
+void window_cmd_view_stop                 (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_view_reload               (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_combined_stop_reload      (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
 void window_cmd_go_location               (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_view_reload               (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_file_bookmark_page        (GtkAction  *action,
                                            EphyWindow *window);
