@@ -105,8 +105,11 @@ static const BindAction window_actions[] = {
 
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "ViewFullscreen", "sensitive" },
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "TabsDetach", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "FileNewWindow", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "FileNewWindowIncognito", "sensitive" }
+};
+
+static const BindAction app_actions[] = {
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "new-window", "enabled" },
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "new-incognito", "enabled" }
 };
 
 static const BindAction new_window_actions[] = {
@@ -284,6 +287,11 @@ window_added_cb (GtkApplication *application,
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              action_group, window_actions,
                              G_N_ELEMENTS (window_actions));
+
+  new_action_group = G_ACTION_GROUP (G_APPLICATION (gtk_window_get_application (GTK_WINDOW (window))));
+  new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                             new_action_group, app_actions,
+                             G_N_ELEMENTS (app_actions));
 
   new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                   "win");
