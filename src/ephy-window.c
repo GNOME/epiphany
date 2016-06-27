@@ -85,18 +85,10 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
   /* File actions. */
 
-  { "FileNewWindow", NULL, N_("_New Window"), "<control>N", NULL,
-    G_CALLBACK (window_cmd_file_new_window) },
-  { "FileNewWindowIncognito", NULL, N_("New _Incognito Window"), "<control><shift>N", NULL,
-    G_CALLBACK (window_cmd_file_new_incognito_window) },
   { "FileSendTo", NULL, N_("S_end Link by Email…"), NULL, NULL,
     G_CALLBACK (window_cmd_file_send_to) },
-  { "FileQuit", NULL, N_("_Quit"), "<control>Q", NULL,
-    G_CALLBACK (window_cmd_file_quit) },
 
   /* Edit actions. */
-  { "EditBookmarks", NULL, N_("Edit _Bookmarks"), "<control>B", NULL,
-    G_CALLBACK (window_cmd_edit_bookmarks) },
   { "EditHistory", NULL, N_("_History"), "<control>H", NULL,
     G_CALLBACK (window_cmd_edit_history) },
   { "EditPreferences", NULL, N_("Pr_eferences"), "<control>e", NULL,
@@ -135,13 +127,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
     G_CALLBACK (window_cmd_tabs_duplicate) },
   { "TabsDetach", NULL, N_("_Detach Tab"), NULL, NULL,
     G_CALLBACK (window_cmd_tabs_detach) },
-
-  /* Help. */
-
-  { "HelpContents", NULL, N_("_Help"), "F1", NULL,
-    G_CALLBACK (window_cmd_help_contents) },
-  { "HelpAbout", NULL, N_("_About"), NULL, NULL,
-    G_CALLBACK (window_cmd_help_about) }
 };
 
 static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
@@ -302,11 +287,11 @@ const struct {
   { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
   { "win.close", { "<Primary>W", NULL } },
 }, accels_navigation_ltr [] = {
-  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_LEFT", "KP_4", "Back", NULL } },
-  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_RIGHT", "KP_6", "Forward", NULL } }
+  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "KP_4", "Back", NULL } },
+  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "KP_6", "Forward", NULL } }
 }, accels_navigation_rtl [] = {
-  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_LEFT", "KP_6", "Back", NULL } },
-  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_RIGHT", "KP_4", "Forward", NULL } }
+  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "KP_6", "Back", NULL } },
+  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "KP_4", "Forward", NULL } }
 }, *accels_navigation_ltr_rtl;
 
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
@@ -3081,12 +3066,7 @@ setup_location_controller (EphyWindow  *window,
   return location_controller;
 }
 
-static const char *disabled_actions_for_app_mode[] = { "FileNewWindow",
-                                                       "FileNewWindowIncognito",
-                                                       "FileBookmarkPage",
-                                                       "EditBookmarks",
-                                                       "EditHistory",
-                                                       "EditPreferences" };
+static const char *disabled_actions_for_app_mode[] = { "FileBookmarkPage" };
 
 static const char *new_disabled_actions_for_app_mode[] = { "open",
                                                        "save-as",
@@ -3105,39 +3085,6 @@ parse_css_error (GtkCssProvider *provider,
              gtk_css_section_get_start_line (section) + 1,
              gtk_css_section_get_start_position (section),
              error->message);
-}
-
-static const gchar *app_actions[] = {
-  "FileNewWindow",
-  "FileNewWindowIncognito",
-  "EditPreferences",
-  "EditBookmarks",
-  "EditHistory",
-  "FileQuit",
-  "HelpContents",
-  "HelpAbout"
-};
-
-static void
-ephy_window_toggle_visibility_for_app_menu (EphyWindow *window)
-{
-  const gchar *action_name;
-  gboolean shows_app_menu;
-  GtkSettings *settings;
-  GtkAction *action;
-  guint i;
-
-  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)));
-  g_object_get (settings,
-                "gtk-shell-shows-app-menu", &shows_app_menu,
-                NULL);
-
-  for (i = 0; i < G_N_ELEMENTS (app_actions); i++) {
-    action_name = app_actions[i];
-    action = gtk_action_group_get_action (window->action_group, action_name);
-
-    gtk_action_set_visible (action, !shows_app_menu);
-  }
 }
 
 static GObject *
@@ -3196,7 +3143,7 @@ ephy_window_constructor (GType                  type,
   accels_navigation_ltr_rtl = gtk_widget_get_default_direction () == GTK_TEXT_DIR_LTR ?
                               accels_navigation_ltr : accels_navigation_rtl;
 
-  for (i = 0; i < G_N_ELEMENTS (accels_navigation_ltr_rtl); i++) {
+  for (i = 0; i < G_N_ELEMENTS (accels_navigation_ltr); i++) {
     gtk_application_set_accels_for_action (GTK_APPLICATION (app),
                                            accels_navigation_ltr_rtl[i].action_and_target,
                                            accels_navigation_ltr_rtl[i].accelerators);
@@ -3323,11 +3270,6 @@ ephy_window_constructor (GType                  type,
   /* We never want the menubar shown, we merge the app menu into
    * our super menu manually when running outside the Shell. */
   gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), FALSE);
-
-  ephy_window_toggle_visibility_for_app_menu (window);
-  window->app_menu_visibility_handler = g_signal_connect_swapped (gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window))),
-                                                                  "notify::gtk-shell-shows-app-menu",
-                                                                  G_CALLBACK (ephy_window_toggle_visibility_for_app_menu), window);
 
   /* ensure the UI is updated */
   gtk_ui_manager_ensure_update (window->manager);
