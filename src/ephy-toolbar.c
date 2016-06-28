@@ -597,16 +597,14 @@ ephy_toolbar_constructed (GObject *object)
                                   "toolbar.navigation-back");
   gtk_actionable_set_action_target_value (GTK_ACTIONABLE (button),
                                           g_variant_new ("s", "back"));
-  gtk_style_context_add_class (gtk_widget_get_style_context (button),
-                               "image-button");
   g_signal_connect (button, "button-press-event",
                     G_CALLBACK (navigation_button_press_event_cb), toolbar);
   g_signal_connect (button, "button-release-event",
                     G_CALLBACK (navigation_button_release_event_cb), toolbar);
   g_signal_connect (button, "leave-notify-event",
                     G_CALLBACK (navigation_leave_notify_event_cb), toolbar);
-  gtk_widget_show (GTK_WIDGET (button));
   gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_widget_show (GTK_WIDGET (button));
 
   /* Forward */
   button = gtk_button_new ();
@@ -618,16 +616,14 @@ ephy_toolbar_constructed (GObject *object)
                                   "toolbar.navigation-forward");
   gtk_actionable_set_action_target_value (GTK_ACTIONABLE (button),
                                           g_variant_new ("s", "forward"));
-  gtk_style_context_add_class (gtk_widget_get_style_context (button),
-                               "image-button");
   g_signal_connect (button, "button-press-event",
                     G_CALLBACK (navigation_button_press_event_cb), toolbar);
   g_signal_connect (button, "button-release-event",
                     G_CALLBACK (navigation_button_release_event_cb), toolbar);
   g_signal_connect (button, "leave-notify-event",
                     G_CALLBACK (navigation_leave_notify_event_cb), toolbar);
-  gtk_widget_show (GTK_WIDGET (button));
   gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_widget_show (GTK_WIDGET (button));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                "raised");
@@ -644,6 +640,8 @@ ephy_toolbar_constructed (GObject *object)
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                   "toolbar.combined-stop-reload");
+  gtk_style_context_add_class (gtk_widget_get_style_context (button),
+                               "image-button");
   gtk_widget_show (GTK_WIDGET (button));
   gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), button);
 
@@ -654,7 +652,6 @@ ephy_toolbar_constructed (GObject *object)
                         gtk_image_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
-  gtk_button_set_label (GTK_BUTTON (button), NULL);
   gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), button);
 
   /* Location bar + Title */
