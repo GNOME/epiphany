@@ -981,14 +981,6 @@ init_menu_updaters (EphyWindow *window)
 }
 
 static void
-zoom_to_level_cb (GSimpleAction *action,
-                  GVariant      *value,
-                  gpointer       user_data)
-{
-  ephy_window_set_zoom (EPHY_WINDOW (user_data), g_variant_get_double (user_data));
-}
-
-static void
 activate_toggle (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
@@ -1015,7 +1007,6 @@ static const GActionEntry window_entries [] =
   { "zoom-in", window_cmd_view_zoom_in },
   { "zoom-out", window_cmd_view_zoom_out },
   { "zoom-normal", window_cmd_view_zoom_normal },
-  { "zoom", NULL, "d", "1.0", zoom_to_level_cb },
   { "print", window_cmd_file_print },
   { "find", window_cmd_edit_find },
   { "find-prev", window_cmd_edit_find_prev },
