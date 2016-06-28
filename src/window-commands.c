@@ -1157,28 +1157,6 @@ window_cmd_edit_delete (GSimpleAction *action,
 }
 
 void
-window_cmd_edit_select_all (GSimpleAction *action,
-                            GVariant      *value,
-                            gpointer       user_data)
-{
-  EphyWindow *window = user_data;
-
-  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-
-  if (GTK_IS_EDITABLE (widget)) {
-    gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
-  } else {
-    EphyEmbed *embed;
-
-    embed = ephy_embed_container_get_active_child
-              (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
-
-    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "SelectAll");
-  }
-}
-
-void
 window_cmd_file_print (GSimpleAction *action,
                        GVariant      *value,
                        gpointer       user_data)
@@ -1827,22 +1805,38 @@ window_cmd_load_location (GtkAction  *action,
 }
 
 void
-window_cmd_browse_with_caret (GtkAction  *action,
-                              EphyWindow *window)
+window_cmd_edit_select_all (GSimpleAction *action,
+                            GVariant      *value,
+                            gpointer       user_data)
 {
+  EphyWindow *window = user_data;
+
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
+  } else {
+    EphyEmbed *embed;
+
+    embed = ephy_embed_container_get_active_child
+              (EPHY_EMBED_CONTAINER (window));
+    g_return_if_fail (embed != NULL);
+
+    webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "SelectAll");
+  }
+}
+
+void
+window_cmd_change_browse_with_caret (GSimpleAction *action,
+                                     GVariant      *state,
+                                     gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
   gboolean active;
-  EphyEmbed *embed;
 
-  embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (window));
+  active = g_variant_get_boolean (state);
 
-  active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
-
-  /* FIXME: perhaps a bit of a kludge; we check if there's an
-   * active embed because we don't want to show the dialog on
-   * startup when we sync the GtkAction with our GConf
-   * preference */
-  if (active && embed) {
+  if (active) {
     GtkWidget *dialog;
     int response;
 
@@ -1863,11 +1857,12 @@ window_cmd_browse_with_caret (GtkAction  *action,
     gtk_widget_destroy (dialog);
 
     if (response == GTK_RESPONSE_CANCEL) {
-      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), FALSE);
+      g_simple_action_set_state (action, g_variant_new_boolean (FALSE));
       return;
     }
   }
 
+  g_simple_action_set_state (action, g_variant_new_boolean (active));
   g_settings_set_boolean (EPHY_SETTINGS_MAIN,
                           EPHY_PREFS_ENABLE_CARET_BROWSING, active);
 }

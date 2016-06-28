@@ -127,8 +127,6 @@ static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
     G_CALLBACK (window_cmd_view_fullscreen), FALSE },
   { "ViewPopupWindows", NULL, N_("Popup _Windows"), NULL, NULL,
     G_CALLBACK (ephy_window_view_popup_windows_cb), FALSE },
-  { "BrowseWithCaret", NULL, N_("Selection Caret"), "F7", NULL,
-    G_CALLBACK (window_cmd_browse_with_caret), FALSE }
 };
 
 static const GtkActionEntry ephy_popups_entries [] = {
@@ -264,6 +262,8 @@ const struct {
   { "win.close", { "<Primary>W", NULL } },
 
   { "win.select-all", { "<Primary>A", NULL } },
+
+  { "win.browse-with-caret", { "F7", NULL } },
 
   /* Navigation */
   { "toolbar.stop", { "Escape", "Stop", NULL } },
@@ -988,7 +988,19 @@ zoom_to_level_cb (GSimpleAction *action,
   ephy_window_set_zoom (EPHY_WINDOW (user_data), g_variant_get_double (user_data));
 }
 
-static const GActionEntry new_ephy_page_menu_entries [] =
+static void
+activate_toggle (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  GVariant *state;
+
+  state = g_action_get_state (G_ACTION (action));
+  g_action_change_state (G_ACTION (action), g_variant_new_boolean (!g_variant_get_boolean (state)));
+  g_variant_unref (state);
+}
+
+static const GActionEntry window_entries [] =
 {
   { "new-tab", window_cmd_file_new_tab },
   { "open", window_cmd_file_open },
@@ -1000,7 +1012,6 @@ static const GActionEntry new_ephy_page_menu_entries [] =
   { "copy", window_cmd_edit_copy },
   { "paste", window_cmd_edit_paste },
   { "delete", window_cmd_edit_delete },
-  { "select-all", window_cmd_edit_select_all },
   { "zoom-in", window_cmd_view_zoom_in },
   { "zoom-out", window_cmd_view_zoom_out },
   { "zoom-normal", window_cmd_view_zoom_normal },
@@ -1014,10 +1025,14 @@ static const GActionEntry new_ephy_page_menu_entries [] =
   { "encoding", window_cmd_view_encoding },
   { "page-source", window_cmd_view_page_source },
   { "toggle-inspector", window_cmd_view_toggle_inspector },
-  { "close-tab", window_cmd_file_close_window }
+  { "close-tab", window_cmd_file_close_window },
+
+  { "select-all", window_cmd_edit_select_all },
+
+  { "browse-with-caret", activate_toggle, NULL, "false", window_cmd_change_browse_with_caret }
 };
 
-static const GActionEntry ephy_toolbar_entries [] = {
+static const GActionEntry toolbar_entries [] = {
   { "navigation-back", window_cmd_navigation, "s" },
   { "navigation-back-new-tab", window_cmd_navigation_new_tab, "s" },
   { "navigation-forward", window_cmd_navigation, "s" },
@@ -3060,6 +3075,16 @@ parse_css_error (GtkCssProvider *provider,
              error->message);
 }
 
+static gboolean
+browse_with_caret_get_mapping (GValue   *value,
+                               GVariant *variant,
+                               gpointer  user_data)
+{
+  g_value_set_variant (value, variant);
+
+  return TRUE;
+}
+
 static GObject *
 ephy_window_constructor (GType                  type,
                          guint                  n_construct_properties,
@@ -3070,8 +3095,8 @@ ephy_window_constructor (GType                  type,
   GtkSettings *settings;
   GtkAction *action;
   GAction *new_action;
-  GActionGroup *new_action_group;
-  GSimpleActionGroup *new_simple_action_group;
+  GActionGroup *action_group;
+  GSimpleActionGroup *simple_action_group;
   GError *error = NULL;
   guint settings_connection;
   GtkCssProvider *css_provider;
@@ -3086,23 +3111,23 @@ ephy_window_constructor (GType                  type,
   window = EPHY_WINDOW (object);
 
   /* Add actions */
-  new_simple_action_group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (new_simple_action_group),
-                                   new_ephy_page_menu_entries,
-                                   G_N_ELEMENTS (new_ephy_page_menu_entries),
+  simple_action_group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (simple_action_group),
+                                   window_entries,
+                                   G_N_ELEMENTS (window_entries),
                                    window);
   gtk_widget_insert_action_group (GTK_WIDGET (window),
                                   "win",
-                                  G_ACTION_GROUP (new_simple_action_group));
+                                  G_ACTION_GROUP (simple_action_group));
 
-  new_simple_action_group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (new_simple_action_group),
-                                   ephy_toolbar_entries,
-                                   G_N_ELEMENTS (ephy_toolbar_entries),
+  simple_action_group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (simple_action_group),
+                                   toolbar_entries,
+                                   G_N_ELEMENTS (toolbar_entries),
                                    window);
   gtk_widget_insert_action_group (GTK_WIDGET (window),
                                   "toolbar",
-                                  G_ACTION_GROUP (new_simple_action_group));
+                                  G_ACTION_GROUP (simple_action_group));
 
   /* Set accels for actions */
   app = g_application_get_default ();
@@ -3176,23 +3201,27 @@ ephy_window_constructor (GType                  type,
   ephy_bookmarks_ui_attach_window (window);
 
   /* other notifiers */
-  action = gtk_action_group_get_action (window->action_group,
-                                        "BrowseWithCaret");
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "browse-with-caret");
 
-  g_settings_bind (EPHY_SETTINGS_MAIN,
-                   EPHY_PREFS_ENABLE_CARET_BROWSING,
-                   action, "active",
-                   G_SETTINGS_BIND_GET);
+  g_settings_bind_with_mapping (EPHY_SETTINGS_MAIN,
+                                EPHY_PREFS_ENABLE_CARET_BROWSING,
+                                G_SIMPLE_ACTION (new_action), "state",
+                                G_SETTINGS_BIND_GET|G_SETTINGS_BIND_GET_NO_CHANGES,
+                                browse_with_caret_get_mapping,
+                                NULL,
+                                new_action, NULL);
 
   g_signal_connect (EPHY_SETTINGS_WEB,
                     "changed::" EPHY_PREFS_WEB_ENABLE_POPUPS,
                     G_CALLBACK (allow_popups_notifier), window);
 
-  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                               "win");
 
   /* Disable actions not needed for popup mode. */
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group), "new-tab");
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "new-tab");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                         SENS_FLAG_CHROME,
                                         window->is_popup);
@@ -3224,7 +3253,7 @@ ephy_window_constructor (GType                  type,
     }
 
     for (i = 0; i < G_N_ELEMENTS (new_disabled_actions_for_app_mode); i++) {
-      new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group),
+      new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        new_disabled_actions_for_app_mode[i]);
       new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                             SENS_FLAG_CHROME, TRUE);

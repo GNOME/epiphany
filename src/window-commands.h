@@ -79,9 +79,6 @@ void window_cmd_edit_paste                (GSimpleAction *action,
 void window_cmd_edit_delete               (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
-void window_cmd_edit_select_all           (GSimpleAction *action,
-                                           GVariant      *value,
-                                           gpointer       user_data);
 void window_cmd_file_print                (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
@@ -135,8 +132,6 @@ void window_cmd_tabs_detach               (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_load_location             (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_browse_with_caret         (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_file_quit                 (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_edit_bookmarks            (GtkAction  *action,
@@ -149,6 +144,12 @@ void window_cmd_file_new_incognito_window (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_edit_preferences          (GtkAction  *action,
                                            EphyWindow *window);
+void window_cmd_edit_select_all           (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_change_browse_with_caret  (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data);
 
 G_END_DECLS
 
