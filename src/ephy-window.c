@@ -257,7 +257,6 @@ struct _EphyWindow {
   GtkActionGroup *action_group;
   GtkActionGroup *popups_action_group;
   GtkActionGroup *toolbar_action_group;
-  GtkActionGroup *tab_accels_action_group;
   GtkNotebook *notebook;
   EphyEmbed *active_embed;
   EphyWindowChrome chrome;
@@ -1048,13 +1047,6 @@ setup_ui_manager (EphyWindow *window)
   gtk_action_group_set_accel_group (action_group, accel_group);
   gtk_ui_manager_insert_action_group (manager, action_group, 0);
   window->popups_action_group = action_group;
-  g_object_unref (action_group);
-
-  /* Tab accels */
-  action_group = gtk_action_group_new ("TabAccelsActions");
-  gtk_action_group_set_accel_group (action_group, accel_group);
-  gtk_ui_manager_insert_action_group (manager, action_group, 0);
-  window->tab_accels_action_group = action_group;
   g_object_unref (action_group);
 
   action_group = gtk_action_group_new ("SpecialToolbarActions");
@@ -2408,8 +2400,6 @@ tab_accels_item_activate (GSimpleAction *action,
   tab_number = atoi (action_name + strlen ("accel-"));
 
   gtk_notebook_set_current_page (EPHY_WINDOW (user_data)->notebook, tab_number);
-
-  g_free (action_name);
 }
 
 static void
@@ -2491,7 +2481,7 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
 
   menu_model = G_MENU (gtk_builder_get_object (builder, "notebook-menu"));
   menu = gtk_menu_new_from_model (G_MENU_MODEL (menu_model));
-  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (window), NULL);
+  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (window->active_embed), NULL);
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
 
@@ -2798,7 +2788,6 @@ ephy_window_dispose (GObject *object)
 
     window->action_group = NULL;
     window->popups_action_group = NULL;
-    window->tab_accels_action_group = NULL;
 
     g_object_unref (window->manager);
     window->manager = NULL;
