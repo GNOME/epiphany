@@ -80,7 +80,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
   { "Bookmarks", NULL, N_("_Bookmarks") },
   { "PopupAction", NULL, "" },
   { "PagePopupAction", NULL, "" },
-  { "NotebookPopupAction", NULL, "" },
 
   /* File actions. */
 
@@ -102,21 +101,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
   { "GoLocation", NULL, N_("_Location…"), "<control>L", NULL,
     G_CALLBACK (window_cmd_go_location) },
-
-  /* Tabs actions. */
-
-  { "TabsPrevious", NULL, N_("_Previous Tab"), "<control>Page_Up", NULL,
-    G_CALLBACK (window_cmd_tabs_previous) },
-  { "TabsNext", NULL, N_("_Next Tab"), "<control>Page_Down", NULL,
-    G_CALLBACK (window_cmd_tabs_next) },
-  { "TabsMoveLeft", NULL, N_("Move Tab _Left"), "<shift><control>Page_Up", NULL,
-    G_CALLBACK (window_cmd_tabs_move_left) },
-  { "TabsMoveRight", NULL, N_("Move Tab _Right"), "<shift><control>Page_Down", NULL,
-    G_CALLBACK (window_cmd_tabs_move_right) },
-  { "TabsDuplicate", NULL, N_("Du_plicate"), "<shift><control>D", NULL,
-    G_CALLBACK (window_cmd_tabs_duplicate) },
-  { "TabsDetach", NULL, N_("_Detach Tab"), NULL, NULL,
-    G_CALLBACK (window_cmd_tabs_detach) },
 };
 
 static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
@@ -202,30 +186,9 @@ static const struct {
   /* FIXME: these are not in any menu for now, so add them here. */
   { GDK_KEY_F11, 0, "ViewFullscreen", FALSE },
 
-  /* Tab navigation */
-  { GDK_KEY_Page_Up, GDK_CONTROL_MASK, "TabsPrevious", FALSE },
-  { GDK_KEY_Page_Down, GDK_CONTROL_MASK, "TabsNext", FALSE },
-  { GDK_KEY_Page_Up, GDK_CONTROL_MASK |
-    GDK_SHIFT_MASK, "TabsMoveLeft", FALSE },
-  { GDK_KEY_Page_Down, GDK_CONTROL_MASK |
-    GDK_SHIFT_MASK, "TabsMoveRight", FALSE },
   /* Go */
   { GDK_KEY_l, GDK_CONTROL_MASK, "GoLocation", FALSE },
   { GDK_KEY_F6, 0, "GoLocation", FALSE },
-  /* Support all the MSIE tricks as well ;) */
-  /* These keys are a bit strange: when pressed with no modifiers, they emit
-   * KP_PageUp/Down Control; when pressed with Control+Shift they are KP_9/3,
-   * when NumLock is on they are KP_9/3 and with NumLock and Control+Shift
-   * They're KP_PageUp/Down again!
-   */
-  { GDK_KEY_KP_Page_Up, GDK_CONTROL_MASK, "TabsPrevious", FALSE },
-  { GDK_KEY_KP_9, GDK_CONTROL_MASK, "TabsPrevious", FALSE },
-  { GDK_KEY_KP_Page_Down, GDK_CONTROL_MASK, "TabsNext", FALSE },
-  { GDK_KEY_KP_3, GDK_CONTROL_MASK, "TabsNext", FALSE },
-  { GDK_KEY_KP_Page_Up, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "TabsMoveLeft", FALSE },
-  { GDK_KEY_KP_9, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "TabsMoveLeft", FALSE },
-  { GDK_KEY_KP_Page_Down, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "TabsMoveRight", FALSE },
-  { GDK_KEY_KP_3, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "TabsMoveRight", FALSE },
 #ifdef HAVE_X11_XF86KEYSYM_H
   { XF86XK_Go, 0, "GoLocation", FALSE },
   { XF86XK_OpenURL, 0, "GoLocation", FALSE },
@@ -259,7 +222,6 @@ const struct {
   { "win.encoding", { NULL } },
   { "win.page-source", { "<Primary>U", NULL } },
   { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
-  { "win.close", { "<Primary>W", NULL } },
 
   { "win.select-all", { "<Primary>A", NULL } },
 
@@ -268,7 +230,15 @@ const struct {
   /* Navigation */
   { "toolbar.stop", { "Escape", "Stop", NULL } },
   { "toolbar.reload", { "<Primary>R", "<shift><Primary>R", "F5", "<Primary>F5", "<shift>F5", "<shift><Primary>F5", "Refresh", "Reload", NULL } },
-  { "toolbar.combined-stop-reload", { NULL } }
+  { "toolbar.combined-stop-reload", { NULL } },
+
+  /* Tabs */
+  { "tab.previous", { "<Primary>Page_Up", "<Primary>KP_9", NULL } },
+  { "tab.next", { "<Primary>Page_Down", "<Primary>KP_3", NULL } },
+  { "tab.move-left", { "<shift><Primary>Page_Up", "<shift><Primary>Page_Up", NULL } },
+  { "tab.move-right", { "<shift><Primary>Page_Down", "<shift><Primary>Page_Down", NULL } },
+  { "tab.duplicate", { "<shift><Primary>D", NULL } },
+  { "tab.close", { "<Primary>W", NULL } }
 }, accels_navigation_ltr [] = {
   { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "KP_4", "Back", NULL } },
   { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "KP_6", "Forward", NULL } }
@@ -1016,11 +986,20 @@ static const GActionEntry window_entries [] =
   { "encoding", window_cmd_view_encoding },
   { "page-source", window_cmd_view_page_source },
   { "toggle-inspector", window_cmd_view_toggle_inspector },
-  { "close-tab", window_cmd_file_close_window },
 
   { "select-all", window_cmd_edit_select_all },
 
   { "browse-with-caret", activate_toggle, NULL, "false", window_cmd_change_browse_with_caret }
+};
+
+static const GActionEntry tab_entries [] = {
+  { "previous", window_cmd_tabs_previous },
+  { "next", window_cmd_tabs_next },
+  { "move-left", window_cmd_tabs_move_left },
+  { "move-right", window_cmd_tabs_move_right },
+  { "duplicate", window_cmd_tabs_duplicate },
+  { "detach", window_cmd_tabs_detach },
+  { "close", window_cmd_tabs_close }
 };
 
 static const GActionEntry toolbar_entries [] = {
@@ -2417,34 +2396,44 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 }
 
 static void
-tab_accels_item_activate (GtkAction  *action,
-                          EphyWindow *window)
+tab_accels_item_activate (GSimpleAction *action,
+                          GVariant      *parameter,
+                          gpointer       user_data)
 {
-  const char *name;
+  const gchar *action_name;
   int tab_number;
 
-  name = gtk_action_get_name (action);
-  tab_number = atoi (name + strlen ("TabAccel"));
+  action_name = g_action_get_name (G_ACTION (action));
 
-  gtk_notebook_set_current_page (window->notebook, tab_number);
+  tab_number = atoi (action_name + strlen ("accel-"));
+
+  gtk_notebook_set_current_page (EPHY_WINDOW (user_data)->notebook, tab_number);
+
+  g_free (action_name);
 }
 
 static void
 tab_accels_update (EphyWindow *window)
 {
-  int pages, i = 0;
-  GList *actions, *l;
+  gint n_pages, i = 0;
+  GActionGroup *action_group;
+  gchar **actions;
 
-  actions = gtk_action_group_list_actions (window->tab_accels_action_group);
-  pages = gtk_notebook_get_n_pages (window->notebook);
-  for (l = actions; l != NULL; l = l->next) {
-    GtkAction *action = GTK_ACTION (l->data);
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
+  actions = g_action_group_list_actions (action_group);
 
-    gtk_action_set_sensitive (action, (i < pages));
+  n_pages = gtk_notebook_get_n_pages (window->notebook);
+  for (i = 0; actions[i] != NULL; i++) {
+    if (strstr (actions[i], "accel-") != NULL) {
+      GAction *action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                                    actions[i]);
+      int tab_number = atoi (actions[i] + strlen ("accel-"));
 
-    i++;
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (tab_number < n_pages));
+    }
   }
-  g_list_free (actions);
+
+  g_strfreev (actions);
 }
 
 #define TAB_ACCELS_N 10
@@ -2452,33 +2441,34 @@ tab_accels_update (EphyWindow *window)
 static void
 setup_tab_accels (EphyWindow *window)
 {
-  guint id;
-  int i;
+  GActionGroup *action_group;
+  GApplication *app;
+  guint i;
 
-  id = gtk_ui_manager_new_merge_id (window->manager);
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
+  app = g_application_get_default ();
 
   for (i = 0; i < TAB_ACCELS_N; i++) {
-    GtkAction *action;
-    char *name;
+    GSimpleAction *simple_action;
+    char *action_name;
     char *accel;
 
-    name = g_strdup_printf ("TabAccel%d", i);
+    action_name = g_strdup_printf ("accel-%d", i);
     accel = g_strdup_printf ("<alt>%d", (i + 1) % TAB_ACCELS_N);
-    action = gtk_action_new (name, NULL, NULL, NULL);
 
-    gtk_action_group_add_action_with_accel (window->tab_accels_action_group,
-                                            action, accel);
+    simple_action = g_simple_action_new (action_name, NULL);
 
-    g_signal_connect (action, "activate",
+    g_action_map_add_action (G_ACTION_MAP (action_group), G_ACTION (simple_action));
+    gtk_application_set_accels_for_action (GTK_APPLICATION (app),
+                                           g_strconcat ("tab.", action_name, NULL),
+                                           (const gchar*[]) {accel, NULL});
+
+    g_signal_connect (G_ACTION (simple_action), "activate",
                       G_CALLBACK (tab_accels_item_activate), window);
-    gtk_ui_manager_add_ui (window->manager, id, "/",
-                           name, name,
-                           GTK_UI_MANAGER_ACCELERATOR,
-                           FALSE);
 
-    g_object_unref (action);
+    g_object_unref (simple_action);
     g_free (accel);
-    g_free (name);
+    g_free (action_name);
   }
 }
 
@@ -2488,16 +2478,22 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
                           GdkEventButton *event)
 {
   GtkWidget *menu, *tab, *tab_label;
-  GtkAction *action;
+  GMenu *menu_model;
+  GtkBuilder *builder;
+  GActionGroup *action_group;
+  GAction *action;
 
-  menu = gtk_ui_manager_get_widget (window->manager, "/EphyNotebookPopup");
-  g_return_val_if_fail (menu != NULL, FALSE);
+  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/menus.ui");
+  if (!builder) {
+    g_object_unref (builder);
+    return FALSE;
+  }
 
-  /* allow extensions to sync when showing the popup */
-  action = gtk_action_group_get_action (window->action_group,
-                                        "NotebookPopupAction");
-  g_return_val_if_fail (action != NULL, FALSE);
-  gtk_action_activate (action);
+  menu_model = G_MENU (gtk_builder_get_object (builder, "notebook-menu"));
+  menu = gtk_menu_new_from_model (G_MENU_MODEL (menu_model));
+  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (window), NULL);
+
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
 
   if (event != NULL) {
     gint n_pages, page_num;
@@ -2507,13 +2503,13 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
     page_num = gtk_notebook_page_num (notebook, tab);
 
     /* enable/disable move left/right items*/
-    action = gtk_action_group_get_action (window->action_group,
-                                          "TabsMoveLeft");
-    gtk_action_set_sensitive (action, page_num > 0);
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "move-left");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), page_num > 0);
 
-    action = gtk_action_group_get_action (window->action_group,
-                                          "TabsMoveRight");
-    gtk_action_set_sensitive (action, page_num < n_pages - 1);
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "move-right");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), page_num < n_pages - 1);
 
     gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
                     NULL, NULL,
@@ -2527,6 +2523,8 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
                     0, gtk_get_current_event_time ());
     gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
   }
+
+  g_object_unref (builder);
 
   return TRUE;
 }
@@ -3109,6 +3107,14 @@ ephy_window_constructor (GType                  type,
                                    window);
   gtk_widget_insert_action_group (GTK_WIDGET (window),
                                   "win",
+                                  G_ACTION_GROUP (simple_action_group));
+
+  simple_action_group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (simple_action_group),
+                                   tab_entries,
+                                   G_N_ELEMENTS (tab_entries),
+                                   window);
+  gtk_widget_insert_action_group (GTK_WIDGET (window), "tab",
                                   G_ACTION_GROUP (simple_action_group));
 
   simple_action_group = g_simple_action_group_new ();

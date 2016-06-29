@@ -109,27 +109,12 @@ void window_cmd_view_page_source          (GSimpleAction *action,
 void window_cmd_view_toggle_inspector     (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
-void window_cmd_file_close_window         (GSimpleAction *action,
-                                           GVariant      *value,
-                                           gpointer       user_data);
 void window_cmd_help_contents             (GtkAction  *action,
                                            GtkWidget  *window);
 void window_cmd_help_about                (GtkAction  *action,
                                            GtkWidget  *window);
 void window_cmd_help_shortcuts            (GtkAction  *action,
                                            GtkWidget  *window);
-void window_cmd_tabs_next                 (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_tabs_previous             (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_tabs_move_left            (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_tabs_move_right           (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_tabs_duplicate            (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_tabs_detach               (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_load_location             (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_file_quit                 (GtkAction  *action,
@@ -150,7 +135,27 @@ void window_cmd_edit_select_all           (GSimpleAction *action,
 void window_cmd_change_browse_with_caret  (GSimpleAction *action,
                                            GVariant      *state,
                                            gpointer       user_data);
-
+void window_cmd_tabs_previous             (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data);
+void window_cmd_tabs_next                 (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data);
+void window_cmd_tabs_move_left            (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data);
+void window_cmd_tabs_move_right           (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data);
+void window_cmd_tabs_duplicate            (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data);
+void window_cmd_tabs_detach               (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data);
+void window_cmd_tabs_close                (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
 G_END_DECLS
 
 #endif

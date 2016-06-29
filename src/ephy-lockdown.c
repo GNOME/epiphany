@@ -104,7 +104,6 @@ static const BindAction window_actions[] = {
   { EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "GoLocation", "sensitive" },
 
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "ViewFullscreen", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "TabsDetach", "sensitive" },
 };
 
 static const BindAction app_actions[] = {
@@ -124,6 +123,10 @@ static const BindAction popup_actions[] = {
   { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "ContextBookmarkPage", "sensitive" },
 
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "OpenLinkInNewWindow", "sensitive" }
+};
+
+static const BindAction tab_actions[] = {
+  EPHY_PREFS_LOCKDOWN_FULLSCREEN, "detach", "enabled"
 };
 
 static const BindAction toolbar_actions[] = {
@@ -310,6 +313,13 @@ window_added_cb (GtkApplication *application,
   settings = ephy_settings_get ("org.gnome.desktop.background");
   g_settings_bind_writable (settings, "picture-filename",
                             action, "sensitive", FALSE);
+
+  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                                  "tab");
+  new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                             new_action_group,
+                             tab_actions,
+                             G_N_ELEMENTS (tab_actions));
 
   new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                   "toolbar");
