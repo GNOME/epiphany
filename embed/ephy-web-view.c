@@ -1427,7 +1427,7 @@ update_security_status_for_committed_load (EphyWebView *view,
   g_clear_object (&view->certificate);
   g_clear_pointer (&view->tls_error_failing_uri, g_free);
 
-  if (webkit_security_manager_uri_scheme_is_local (security_manager, soup_uri->scheme)) {
+  if (!soup_uri || webkit_security_manager_uri_scheme_is_local (security_manager, soup_uri->scheme)) {
     security_level = EPHY_SECURITY_LEVEL_LOCAL_PAGE;
   } else if (webkit_web_view_get_tls_info (WEBKIT_WEB_VIEW (view), &view->certificate, &view->tls_errors)) {
     g_object_ref (view->certificate);
@@ -1439,7 +1439,8 @@ update_security_status_for_committed_load (EphyWebView *view,
 
   ephy_web_view_set_security_level (view, security_level);
 
-  soup_uri_free (soup_uri);
+  if (soup_uri)
+    soup_uri_free (soup_uri);
 }
 
 static void
