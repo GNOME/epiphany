@@ -25,6 +25,6 @@
 
 #include <gtk/gtk.h>
 
-void ephy_bookmarks_menu_build (GString *string, EphyNode *parent);
+void ephy_bookmarks_menu_build (GMenu *menu, EphyNode *parent);
 
 #endif

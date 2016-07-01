@@ -41,8 +41,6 @@ void window_cmd_combined_stop_reload      (GSimpleAction *action,
                                            gpointer       user_data);
 void window_cmd_go_location               (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_file_bookmark_page        (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_undo_close_tab            (GtkAction *action,
                                            EphyWindow *window);
 void window_cmd_file_send_to              (GtkAction  *action,
@@ -89,6 +87,12 @@ void window_cmd_edit_find_prev            (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
 void window_cmd_edit_find_next            (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_open_bookmark             (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_file_bookmark_page        (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
 void window_cmd_view_zoom_in              (GSimpleAction *action,

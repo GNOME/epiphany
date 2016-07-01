@@ -92,11 +92,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
   { "EditPreferences", NULL, N_("Pr_eferences"), "<control>e", NULL,
     G_CALLBACK (window_cmd_edit_preferences) },
 
-  /* Bookmarks actions. */
-
-  { "FileBookmarkPage", NULL, N_("_Add Bookmark…"), "<control>D", NULL,
-    G_CALLBACK (window_cmd_file_bookmark_page) },
-
   /* Go actions. */
 
   { "GoLocation", NULL, N_("_Location…"), "<control>L", NULL,
@@ -192,7 +187,6 @@ static const struct {
 #ifdef HAVE_X11_XF86KEYSYM_H
   { XF86XK_Go, 0, "GoLocation", FALSE },
   { XF86XK_OpenURL, 0, "GoLocation", FALSE },
-  { XF86XK_AddFavorite, 0, "FileBookmarkPage", FALSE },
   { XF86XK_Send, 0, "FileSendTo", FALSE },
   /* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
 #endif /* HAVE_X11_XF86KEYSYM_H */
@@ -219,6 +213,7 @@ const struct {
   { "win.find", { "<Primary>F", "Search", NULL } },
   { "win.find-prev", { "<shift><Primary>G", NULL } },
   { "win.find-next", { "<Primary>G", NULL } },
+  { "win.bookmark-page", { "<Primary>D", "AddFavorite", NULL } },
   { "win.encoding", { NULL } },
   { "win.page-source", { "<Primary>U", NULL } },
   { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
@@ -938,6 +933,8 @@ edit_menu_hide_cb (GtkWidget  *menu,
 static void
 init_menu_updaters (EphyWindow *window)
 {
+  return;
+
   GtkWidget *edit_menu;
 
   edit_menu = gtk_ui_manager_get_widget
@@ -980,8 +977,8 @@ static const GActionEntry window_entries [] =
   { "find", window_cmd_edit_find },
   { "find-prev", window_cmd_edit_find_prev },
   { "find-next", window_cmd_edit_find_next },
-  // { "bookmarks", },
-  // { "bookmark-page", },
+  { "open-bookmark", window_cmd_open_bookmark, "s" },
+  { "bookmark-page", window_cmd_file_bookmark_page },
   { "encoding", window_cmd_view_encoding },
   { "page-source", window_cmd_view_page_source },
   { "toggle-inspector", window_cmd_view_toggle_inspector },
@@ -1037,9 +1034,6 @@ setup_ui_manager (EphyWindow *window)
   window->action_group = action_group;
   g_object_unref (action_group);
 
-  action = gtk_action_group_get_action (action_group, "FileBookmarkPage");
-  g_object_set (action, "short_label", _("Bookmark"), NULL);
-
   action_group = gtk_action_group_new ("PopupsActions");
   gtk_action_group_set_translation_domain (action_group, NULL);
   gtk_action_group_add_actions (action_group, ephy_popups_entries,
@@ -1093,13 +1087,13 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   GtkAction *action;
   GAction *new_action;
   int i;
-  const char *action_group_actions[] = { "FileSendTo", "FileBookmarkPage",
+  const char *action_group_actions[] = { "FileSendTo",
                                          NULL };
 
   const char *new_action_group_actions[] = { "save-as", "save-as-application",
                                          "zoom-in", "zoom-out", "print",
                                          "find", "find-prev", "find-next",
-                                         "encoding", "page-source",
+                                         "bookmark-page", "encoding", "page-source",
                                          NULL };
 
   action_group = window->action_group;
@@ -3032,12 +3026,11 @@ setup_location_controller (EphyWindow  *window,
   return location_controller;
 }
 
-static const char *disabled_actions_for_app_mode[] = { "FileBookmarkPage" };
-
-static const char *new_disabled_actions_for_app_mode[] = { "open",
+static const char *disabled_actions_for_app_mode[] = { "open",
                                                        "save-as",
                                                        "save-as-application",
                                                        "encoding",
+                                                       "bookmark-page",
                                                        "page-source",
                                                        "toggle-inspector" };
 
@@ -3075,7 +3068,7 @@ ephy_window_constructor (GType                  type,
   GAction *new_action;
   GActionGroup *action_group;
   GSimpleActionGroup *simple_action_group;
-  GError *error = NULL;
+
   guint settings_connection;
   GtkCssProvider *css_provider;
   guint i;
@@ -3156,16 +3149,6 @@ ephy_window_constructor (GType                  type,
 
   window->notebook = setup_notebook (window);
 
-  /* Now load the UI definition (needed by EphyToolbar). */
-  gtk_ui_manager_add_ui_from_resource (window->manager,
-                                       "/org/gnome/epiphany/epiphany-ui.xml",
-                                       &error);
-  if (error != NULL) {
-    g_warning ("Could not merge epiphany-ui.xml: %s", error->message);
-    g_error_free (error);
-    error = NULL;
-  }
-
   /* Setup the toolbar. */
   window->toolbar = setup_toolbar (window);
   window->location_controller = setup_location_controller (window, EPHY_TOOLBAR (window->toolbar));
@@ -3232,15 +3215,8 @@ ephy_window_constructor (GType                  type,
     gtk_action_set_visible (action, FALSE);
 
     for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_app_mode); i++) {
-      action = gtk_action_group_get_action (window->action_group,
-                                            disabled_actions_for_app_mode[i]);
-      ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
-      gtk_action_set_visible (action, FALSE);
-    }
-
-    for (i = 0; i < G_N_ELEMENTS (new_disabled_actions_for_app_mode); i++) {
       new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                       new_disabled_actions_for_app_mode[i]);
+                                           disabled_actions_for_app_mode[i]);
       new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                             SENS_FLAG_CHROME, TRUE);
     }

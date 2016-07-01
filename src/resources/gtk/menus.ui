@@ -66,18 +66,20 @@
         <attribute name="action">win.find</attribute>
       </item>
     </section>
-    <!-- <section>
-      <item>
-        <attribute name="label" translatable="yes">Edit _Bookmarks</attribute>
-        <attribute name="action">win.bookmarks</attribute>
-      </item>
+    <section id="bookmarks-section">
+      <attribute name="id">bookmarks-section</attribute>
       <submenu id="bookmarks-menu">
-        <item>
-          <attribute name="label" translatable="yes">_Add Bookmark…</attribute>
-          <attribute name="action">win.bookmark-page</attribute>
-        </item>
+        <attribute name="label" translatable="yes">_Bookmarks</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">_Add Bookmark…</attribute>
+            <attribute name="action">win.bookmark-page</attribute>
+          </item>
+        </section>
+        <section id="bookmarks-section">
+        </section>
       </submenu>
-    </section> -->
+    </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">Text _Encoding</attribute>
