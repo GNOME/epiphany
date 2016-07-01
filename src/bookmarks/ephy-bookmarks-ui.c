@@ -37,6 +37,7 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
+#include "ephy-toolbar.h"
 #include "ephy-topic-action-group.h"
 #include "ephy-topic-action.h"
 
@@ -47,7 +48,7 @@
 #define BM_WINDOW_DATA_KEY "bookmarks-window-data"
 
 typedef struct {
-  guint bookmarks_menu;
+  GMenu *bookmarks_menu;
   guint toolbar_menu;
 } BookmarksWindowData;
 
@@ -56,7 +57,6 @@ enum {
   RESPONSE_NEW_BOOKMARK = 2
 };
 
-static GString *bookmarks_menu_string = 0;
 static GHashTable *properties_dialogs = 0;
 
 static GtkAction *
@@ -74,43 +74,74 @@ find_action (GtkUIManager *manager, const char *name)
   return NULL;
 }
 
-static void
-activate_bookmarks_menu (GtkAction *action, EphyWindow *window)
+static GMenu *
+find_bookmarks_menu (EphyWindow *window)
 {
-  BookmarksWindowData *data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
-  if (data && !data->bookmarks_menu) {
-    GtkUIManager *manager = ephy_window_get_ui_manager (window);
-    gtk_ui_manager_ensure_update (manager);
+  GMenu *page_menu;
+  gint n_items, i;
 
-    if (!bookmarks_menu_string->len) {
-      g_string_append (bookmarks_menu_string,
-                       "<ui><popup name=\"PagePopup\" action=\"PagePopupAction\"><menu name=\"BookmarksMenu\" action=\"Bookmarks\">");
-      ephy_bookmarks_menu_build (bookmarks_menu_string, 0);
-      g_string_append (bookmarks_menu_string, "</menu></popup></ui>");
+  /* Page menu */
+  page_menu = ephy_toolbar_get_page_menu (EPHY_TOOLBAR (ephy_window_get_toolbar (window)));
+
+  /* Number of sections in the model */
+  n_items = g_menu_model_get_n_items (G_MENU_MODEL (page_menu));
+
+  for (i = 0; i < n_items; i++) {
+    GVariant *section_label;
+
+    /* Looking for the bookmarks section */
+    section_label = g_menu_model_get_item_attribute_value (G_MENU_MODEL (page_menu), i, "id", G_VARIANT_TYPE_STRING);
+    if (section_label != NULL && g_strcmp0 (g_variant_get_string (section_label, NULL), "bookmarks-section") == 0) {
+      GMenuModel *bookmarks_section_model, *bookmarks_menu_model;
+
+      /* Bookmarks section should contain the bookmarks menu */
+      bookmarks_section_model = g_menu_model_get_item_link (G_MENU_MODEL (page_menu), i, G_MENU_LINK_SECTION);
+      bookmarks_menu_model = g_menu_model_get_item_link (bookmarks_section_model, 0, G_MENU_LINK_SUBMENU);
+
+      return G_MENU (bookmarks_menu_model);
     }
-
-    data->bookmarks_menu = gtk_ui_manager_add_ui_from_string
-                             (manager, bookmarks_menu_string->str, bookmarks_menu_string->len, 0);
-
-    gtk_ui_manager_ensure_update (manager);
   }
+
+  return NULL;
+}
+
+static bool
+activate_bookmarks_menu (GSimpleAction *action,
+                         GdkEvent      *event,
+                         gpointer       user_data)
+{
+  GMenu *menu;
+  BookmarksWindowData *data = g_object_get_data (G_OBJECT (user_data), BM_WINDOW_DATA_KEY);
+
+  if (event->type != GDK_BUTTON_PRESS)
+    return G_SOURCE_REMOVE;
+
+  if (data && !data->bookmarks_menu) {
+    menu = g_menu_new ();
+    ephy_bookmarks_menu_build (menu, 0);
+
+    data->bookmarks_menu = G_MENU(find_bookmarks_menu (EPHY_WINDOW (user_data)));
+    if (data->bookmarks_menu == NULL)
+      return G_SOURCE_REMOVE;
+
+    g_menu_append_section (data->bookmarks_menu, NULL, G_MENU_MODEL (menu));
+  }
+
+  return G_SOURCE_REMOVE;
 }
 
 static void
 erase_bookmarks_menu (EphyWindow *window)
 {
   BookmarksWindowData *data;
-  GtkUIManager *manager;
 
-  manager = ephy_window_get_ui_manager (window);
   data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
 
-  if (data != NULL && data->bookmarks_menu != 0) {
-    gtk_ui_manager_remove_ui (manager, data->bookmarks_menu);
-    data->bookmarks_menu = 0;
+  if (data != NULL && data->bookmarks_menu != NULL) {
+    g_menu_remove_all (data->bookmarks_menu);
+    g_object_unref (data->bookmarks_menu);
+    data->bookmarks_menu = NULL;
   }
-
-  g_string_truncate (bookmarks_menu_string, 0);
 }
 
 static void
@@ -158,7 +189,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
   BookmarksWindowData *data;
   GtkUIManager *manager;
   GtkActionGroup *actions;
-  GtkAction *action;
+  GtkWidget *page_menu_button;
 
   eb = ephy_shell_get_bookmarks (ephy_shell_get_default ());
   bookmarks = ephy_bookmarks_get_bookmarks (eb);
@@ -216,14 +247,8 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
                            G_CALLBACK (tree_changed_cb),
                            G_OBJECT (window), 0);
 
-  /* Setup empty menu strings and add signal handlers to build the menus on demand */
-  if (!bookmarks_menu_string)
-    bookmarks_menu_string = g_string_new ("");
-
-  action = find_action (manager, "Bookmarks");
-  g_signal_connect_object (action, "activate",
-                           G_CALLBACK (activate_bookmarks_menu),
-                           G_OBJECT (window), 0);
+  page_menu_button = ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (ephy_window_get_toolbar (window)));
+  g_signal_connect (GTK_WIDGET (page_menu_button), "button-press-event", G_CALLBACK (activate_bookmarks_menu), window);
 }
 
 void
@@ -239,8 +264,11 @@ ephy_bookmarks_ui_detach_window (EphyWindow *window)
 
   g_return_if_fail (data != 0);
 
-  if (data->bookmarks_menu)
-    gtk_ui_manager_remove_ui (manager, data->bookmarks_menu);
+  if (data->bookmarks_menu) {
+    g_menu_remove_all (data->bookmarks_menu);
+    g_object_unref (data->bookmarks_menu);
+    data->bookmarks_menu = NULL;
+  }
 
   g_object_set_data (G_OBJECT (window), BM_WINDOW_DATA_KEY, 0);
 
@@ -348,6 +376,3 @@ ephy_bookmarks_ui_show_bookmark (GtkWindow *parent, EphyNode *bookmark)
   gtk_window_present_with_time (GTK_WINDOW (dialog),
                                 gtk_get_current_event_time ());
 }
-
-
-

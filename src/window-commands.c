@@ -279,21 +279,6 @@ window_cmd_go_location (GtkAction  *action,
 }
 
 void
-window_cmd_file_bookmark_page (GtkAction  *action,
-                               EphyWindow *window)
-{
-  EphyEmbed *embed;
-
-  embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
-
-  ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window),
-                                  ephy_web_view_get_address (ephy_embed_get_web_view (embed)),
-                                  ephy_embed_get_title (embed));
-}
-
-void
 window_cmd_file_quit (GtkAction  *action,
                       EphyWindow *window)
 {
@@ -1207,6 +1192,36 @@ window_cmd_edit_find_next (GSimpleAction *action,
 
   toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
   ephy_find_toolbar_find_next (toolbar);
+}
+
+void
+window_cmd_open_bookmark (GSimpleAction *action,
+                          GVariant      *value,
+                          gpointer       user_data)
+{
+  const gchar *address;
+  EphyLinkFlags flags;
+
+  address = g_variant_get_string (value, NULL);
+  flags = ephy_link_flags_from_current_event () | EPHY_LINK_BOOKMARK;
+
+  ephy_link_open (EPHY_LINK (user_data), address, NULL, flags);
+}
+
+void
+window_cmd_file_bookmark_page (GSimpleAction *action,
+                               GVariant      *value,
+                               gpointer       user_data)
+{
+  EphyEmbed *embed;
+
+  embed = ephy_embed_container_get_active_child
+            (EPHY_EMBED_CONTAINER (user_data));
+  g_return_if_fail (embed != NULL);
+
+  ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (user_data),
+                                  ephy_web_view_get_address (ephy_embed_get_web_view (embed)),
+                                  ephy_embed_get_title (embed));
 }
 
 void

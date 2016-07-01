@@ -99,8 +99,6 @@ typedef struct {
 } BindAction;
 
 static const BindAction window_actions[] = {
-  { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "FileBookmarkPage", "sensitive" },
-
   { EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "GoLocation", "sensitive" },
 
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "ViewFullscreen", "sensitive" },
@@ -112,6 +110,8 @@ static const BindAction app_actions[] = {
 };
 
 static const BindAction new_window_actions[] = {
+  { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "bookmark-page", "enabled" },
+
   { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "save-as", "enabled" },
 
   { EPHY_PREFS_LOCKDOWN_PRINTING, "print", "enabled" }
@@ -126,7 +126,7 @@ static const BindAction popup_actions[] = {
 };
 
 static const BindAction tab_actions[] = {
-  EPHY_PREFS_LOCKDOWN_FULLSCREEN, "detach", "enabled"
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "detach", "enabled" }
 };
 
 static const BindAction toolbar_actions[] = {
