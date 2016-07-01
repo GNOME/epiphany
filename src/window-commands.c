@@ -63,11 +63,11 @@
 
 void
 window_cmd_navigation (GSimpleAction *action,
-                       GVariant      *value,
+                       GVariant      *parameter,
                        gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  const gchar *direction = g_variant_get_string (value, 0);
+  const gchar *direction = g_variant_get_string (parameter, 0);
   EphyEmbed *embed;
   WebKitWebView *web_view;
 
@@ -87,11 +87,11 @@ window_cmd_navigation (GSimpleAction *action,
 
 void
 window_cmd_navigation_new_tab (GSimpleAction *action,
-                               GVariant      *value,
+                               GVariant      *parameter,
                                gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  const gchar *direction = g_variant_get_string (value, 0);
+  const gchar *direction = g_variant_get_string (parameter, 0);
   EphyEmbed *embed;
   WebKitWebView *web_view;
 
@@ -141,7 +141,7 @@ window_cmd_navigation_new_tab (GSimpleAction *action,
 
 void
 window_cmd_view_stop (GSimpleAction *action,
-                      GVariant      *value,
+                      GVariant      *parameter,
                       gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
@@ -181,7 +181,7 @@ event_with_shift (void)
 
 void
 window_cmd_view_reload (GSimpleAction *action,
-                        GVariant      *value,
+                        GVariant      *parameter,
                         gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
@@ -299,7 +299,7 @@ window_cmd_edit_preferences (GtkAction  *action,
 
 void
 window_cmd_file_new_tab (GSimpleAction *action,
-                         GVariant      *value,
+                         GVariant      *parameter,
                          gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -334,7 +334,7 @@ open_response_cb (GtkDialog *dialog, int response, EphyWindow *window)
 
 void
 window_cmd_file_open (GSimpleAction *action,
-                      GVariant      *value,
+                      GVariant      *parameter,
                       gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -780,7 +780,7 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
 
 void
 window_cmd_file_save_as_application (GSimpleAction *action,
-                                     GVariant      *value,
+                                     GVariant      *parameter,
                                      gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -925,7 +925,7 @@ save_response_cb (GtkDialog *dialog, int response, EphyEmbed *embed)
 
 void
 window_cmd_file_save_as (GSimpleAction *action,
-                         GVariant      *value,
+                         GVariant      *parameter,
                          gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -956,7 +956,7 @@ window_cmd_file_save_as (GSimpleAction *action,
 
 void
 window_cmd_edit_undo (GSimpleAction *action,
-                      GVariant      *value,
+                      GVariant      *parameter,
                       gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -980,7 +980,7 @@ window_cmd_edit_undo (GSimpleAction *action,
 
 void
 window_cmd_edit_redo (GSimpleAction *action,
-                      GVariant      *value,
+                      GVariant      *parameter,
                       gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1002,7 +1002,7 @@ window_cmd_edit_redo (GSimpleAction *action,
 }
 void
 window_cmd_edit_cut (GSimpleAction *action,
-                     GVariant      *value,
+                     GVariant      *parameter,
                      gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1021,7 +1021,7 @@ window_cmd_edit_cut (GSimpleAction *action,
 
 void
 window_cmd_edit_copy (GSimpleAction *action,
-                      GVariant      *value,
+                      GVariant      *parameter,
                       gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1041,7 +1041,7 @@ window_cmd_edit_copy (GSimpleAction *action,
 
 void
 window_cmd_edit_paste (GSimpleAction *action,
-                       GVariant      *value,
+                       GVariant      *parameter,
                        gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1061,7 +1061,7 @@ window_cmd_edit_paste (GSimpleAction *action,
 
 void
 window_cmd_edit_delete (GSimpleAction *action,
-                        GVariant      *value,
+                        GVariant      *parameter,
                         gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1085,7 +1085,7 @@ window_cmd_edit_delete (GSimpleAction *action,
 
 void
 window_cmd_file_print (GSimpleAction *action,
-                       GVariant      *value,
+                       GVariant      *parameter,
                        gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1102,7 +1102,7 @@ window_cmd_file_print (GSimpleAction *action,
 
 void
 window_cmd_edit_find (GSimpleAction *action,
-                      GVariant      *value,
+                      GVariant      *parameter,
                       gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1114,7 +1114,7 @@ window_cmd_edit_find (GSimpleAction *action,
 
 void
 window_cmd_edit_find_prev (GSimpleAction *action,
-                           GVariant      *value,
+                           GVariant      *parameter,
                            gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1126,7 +1126,7 @@ window_cmd_edit_find_prev (GSimpleAction *action,
 
 void
 window_cmd_edit_find_next (GSimpleAction *action,
-                           GVariant      *value,
+                           GVariant      *parameter,
                            gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1138,13 +1138,13 @@ window_cmd_edit_find_next (GSimpleAction *action,
 
 void
 window_cmd_open_bookmark (GSimpleAction *action,
-                          GVariant      *value,
+                          GVariant      *parameter,
                           gpointer       user_data)
 {
   const gchar *address;
   EphyLinkFlags flags;
 
-  address = g_variant_get_string (value, NULL);
+  address = g_variant_get_string (parameter, NULL);
   flags = ephy_link_flags_from_current_event () | EPHY_LINK_BOOKMARK;
 
   ephy_link_open (EPHY_LINK (user_data), address, NULL, flags);
@@ -1152,7 +1152,7 @@ window_cmd_open_bookmark (GSimpleAction *action,
 
 void
 window_cmd_file_bookmark_page (GSimpleAction *action,
-                               GVariant      *value,
+                               GVariant      *parameter,
                                gpointer       user_data)
 {
   EphyEmbed *embed;
@@ -1168,7 +1168,7 @@ window_cmd_file_bookmark_page (GSimpleAction *action,
 
 void
 window_cmd_view_zoom_in (GSimpleAction *action,
-                         GVariant      *value,
+                         GVariant      *parameter,
                          gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1178,7 +1178,7 @@ window_cmd_view_zoom_in (GSimpleAction *action,
 
 void
 window_cmd_view_zoom_out (GSimpleAction *action,
-                          GVariant      *value,
+                          GVariant      *parameter,
                           gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1188,7 +1188,7 @@ window_cmd_view_zoom_out (GSimpleAction *action,
 
 void
 window_cmd_view_zoom_normal (GSimpleAction *action,
-                             GVariant      *value,
+                             GVariant      *parameter,
                              gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1197,7 +1197,7 @@ window_cmd_view_zoom_normal (GSimpleAction *action,
 
 void
 window_cmd_view_encoding (GSimpleAction *action,
-                          GVariant      *value,
+                          GVariant      *parameter,
                           gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1399,7 +1399,7 @@ save_temp_source (EphyEmbed *embed,
 
 void
 window_cmd_view_page_source (GSimpleAction *action,
-                             GVariant      *value,
+                             GVariant      *parameter,
                              gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1439,7 +1439,7 @@ window_cmd_view_page_source (GSimpleAction *action,
 
 void
 window_cmd_view_toggle_inspector (GSimpleAction *action,
-                                  GVariant      *value,
+                                  GVariant      *parameter,
                                   gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1636,7 +1636,7 @@ window_cmd_load_location (GtkAction  *action,
 
 void
 window_cmd_edit_select_all (GSimpleAction *action,
-                            GVariant      *value,
+                            GVariant      *parameter,
                             gpointer       user_data)
 {
   EphyWindow *window = user_data;
@@ -1658,7 +1658,7 @@ window_cmd_edit_select_all (GSimpleAction *action,
 
 void
 window_cmd_file_send_to (GSimpleAction *action,
-                         GVariant      *value,
+                         GVariant      *parameter,
                          gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
@@ -1701,7 +1701,7 @@ window_cmd_file_send_to (GSimpleAction *action,
 
 void
 window_cmd_go_location (GSimpleAction *action,
-                        GVariant      *value,
+                        GVariant      *parameter,
                         gpointer       user_data)
 {
   ephy_window_activate_location (user_data);
@@ -1876,7 +1876,7 @@ window_cmd_tabs_detach (GSimpleAction *action,
 
 void
 window_cmd_tabs_close (GSimpleAction *action,
-                              GVariant      *value,
+                              GVariant      *parameter,
                               gpointer       user_data)
 {
   EphyWindow *window = user_data;
