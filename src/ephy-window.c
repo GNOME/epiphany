@@ -71,14 +71,9 @@
  * #EphyWindow is Epiphany's main widget.
  */
 
-static void ephy_window_view_popup_windows_cb (GtkAction  *action,
-                                               EphyWindow *window);
-
-static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
-{
-  { "ViewPopupWindows", NULL, N_("Popup _Windows"), NULL, NULL,
-    G_CALLBACK (ephy_window_view_popup_windows_cb), FALSE },
-};
+static void ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
+                                                          GVariant      *state,
+                                                          gpointer       user_data);
 
 static const GtkActionEntry ephy_popups_entries [] = {
   /* Document. */
@@ -182,6 +177,7 @@ const struct {
   /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
   { "win.fullscreen", { "F11", NULL } },
+  { "win.allow-popup-windows", { NULL} },
 
   /* Navigation */
   { "toolbar.stop", { "Escape", "Stop", NULL } },
@@ -210,7 +206,6 @@ struct _EphyWindow {
 
   GtkWidget *toolbar;
   GtkUIManager *manager;
-  GtkActionGroup *action_group;
   GtkActionGroup *popups_action_group;
   GtkActionGroup *toolbar_action_group;
   GtkNotebook *notebook;
@@ -616,9 +611,7 @@ ephy_window_bound_accels (GtkWidget   *widget,
     if (event->keyval == extra_keybindings[i].keyval &&
         modifier == extra_keybindings[i].modifier) {
       GtkAction *action = gtk_action_group_get_action
-                            (extra_keybindings[i].fromToolbar ?
-                            window->toolbar_action_group :
-                            window->action_group,
+                            (window->toolbar_action_group,
                             extra_keybindings[i].action);
       if (gtk_action_is_sensitive (action)) {
         gtk_action_activate (action);
@@ -951,7 +944,8 @@ static const GActionEntry window_entries [] =
 
   /* Toggle actions */
   { "browse-with-caret", activate_toggle, NULL, "false", window_cmd_change_browse_with_caret },
-  { "fullscreen", activate_toggle, NULL, "false", window_cmd_change_fullscreen_state }
+  { "fullscreen", activate_toggle, NULL, "false", window_cmd_change_fullscreen_state },
+  { "allow-popup-windows", NULL, NULL, "true", ephy_window_change_allow_popup_windows_state }
 };
 
 static const GActionEntry tab_entries [] = {
@@ -986,17 +980,6 @@ setup_ui_manager (EphyWindow *window)
 
   manager = gtk_ui_manager_new ();
   accel_group = gtk_ui_manager_get_accel_group (manager);
-
-  action_group = gtk_action_group_new ("WindowActions");
-  gtk_action_group_set_translation_domain (action_group, NULL);
-  gtk_action_group_add_toggle_actions (action_group,
-                                       ephy_menu_toggle_entries,
-                                       G_N_ELEMENTS (ephy_menu_toggle_entries),
-                                       window);
-  gtk_action_group_set_accel_group (action_group, accel_group);
-  gtk_ui_manager_insert_action_group (manager, action_group, 0);
-  window->action_group = action_group;
-  g_object_unref (action_group);
 
   action_group = gtk_action_group_new ("PopupsActions");
   gtk_action_group_set_translation_domain (action_group, NULL);
@@ -1252,29 +1235,20 @@ sync_tab_popups_allowed (EphyWebView *view,
                          GParamSpec  *pspec,
                          EphyWindow  *window)
 {
-  GtkAction *action;
+  GActionGroup *action_group;
+  GAction *action;
   gboolean allow;
 
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
   g_return_if_fail (EPHY_IS_WINDOW (window));
 
-  action = gtk_action_group_get_action (window->action_group,
-                                        "ViewPopupWindows");
-  g_return_if_fail (GTK_IS_ACTION (action));
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "allow-popup-windows");
 
   g_object_get (view, "popups-allowed", &allow, NULL);
 
-  g_signal_handlers_block_by_func
-    (G_OBJECT (action),
-    G_CALLBACK (ephy_window_view_popup_windows_cb),
-    window);
-
-  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), allow);
-
-  g_signal_handlers_unblock_by_func
-    (G_OBJECT (action),
-    G_CALLBACK (ephy_window_view_popup_windows_cb),
-    window);
+  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (allow));
 }
 
 static void
@@ -2732,7 +2706,6 @@ ephy_window_dispose (GObject *object)
     g_slist_foreach (popups, (GFunc)gtk_menu_shell_deactivate, NULL);
     g_slist_free (popups);
 
-    window->action_group = NULL;
     window->popups_action_group = NULL;
 
     g_object_unref (window->manager);
@@ -3394,9 +3367,11 @@ ephy_window_set_zoom (EphyWindow *window,
 }
 
 static void
-ephy_window_view_popup_windows_cb (GtkAction  *action,
-                                   EphyWindow *window)
+ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
+                                              GVariant      *state,
+                                              gpointer       user_data)
 {
+  EphyWindow *window = EPHY_WINDOW (user_data);
   EphyEmbed *embed;
   gboolean allow;
 
@@ -3405,13 +3380,10 @@ ephy_window_view_popup_windows_cb (GtkAction  *action,
   embed = window->active_embed;
   g_return_if_fail (EPHY_IS_EMBED (embed));
 
-  if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action))) {
-    allow = TRUE;
-  } else {
-    allow = FALSE;
-  }
+  allow = g_variant_get_boolean (state);
 
   g_object_set (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed", allow, NULL);
+  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (allow));
 }
 
 /**
