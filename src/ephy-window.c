@@ -75,11 +75,6 @@ static void ephy_window_view_popup_windows_cb (GtkAction  *action,
                                                EphyWindow *window);
 
 static const GtkActionEntry ephy_menu_entries [] = {
-  /* File actions. */
-
-  { "FileSendTo", NULL, N_("S_end Link by Email…"), NULL, NULL,
-    G_CALLBACK (window_cmd_file_send_to) },
-
   /* Go actions. */
 
   { "GoLocation", NULL, N_("_Location…"), "<control>L", NULL,
@@ -164,7 +159,6 @@ static const struct {
 #ifdef HAVE_X11_XF86KEYSYM_H
   { XF86XK_Go, 0, "GoLocation", FALSE },
   { XF86XK_OpenURL, 0, "GoLocation", FALSE },
-  { XF86XK_Send, 0, "FileSendTo", FALSE },
 #endif /* HAVE_X11_XF86KEYSYM_H */
 };
 
@@ -195,6 +189,8 @@ const struct {
   { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
 
   { "win.select-all", { "<Primary>A", NULL } },
+
+  { "win.send-to", { "Send", NULL } },
 
   /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
@@ -963,6 +959,8 @@ static const GActionEntry window_entries [] =
 
   { "select-all", window_cmd_edit_select_all },
 
+  { "send-to", window_cmd_file_send_to },
+
   /* Toggle actions */
   { "browse-with-caret", activate_toggle, NULL, "false", window_cmd_change_browse_with_caret },
   { "fullscreen", activate_toggle, NULL, "false", window_cmd_change_fullscreen_state }
@@ -1062,37 +1060,25 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
                                             guint       flags,
                                             gboolean    set)
 {
-  GActionGroup *new_action_group;
-  GtkActionGroup *action_group;
+  GActionGroup *action_group;
   GtkAction *action;
   GAction *new_action;
   int i;
-  const char *action_group_actions[] = { "FileSendTo",
-                                         NULL };
 
-  const char *new_action_group_actions[] = { "save-as", "save-as-application",
+  const char *action_group_actions[] = { "save-as", "save-as-application",
                                          "zoom-in", "zoom-out", "print",
                                          "find", "find-prev", "find-next",
                                          "bookmark-page", "encoding", "page-source",
+                                         "send-to",
                                          NULL };
 
-  action_group = window->action_group;
-
-  /* Page menu */
-  for (i = 0; action_group_actions[i] != NULL; i++) {
-    action = gtk_action_group_get_action (action_group,
-                                          action_group_actions[i]);
-    ephy_action_change_sensitivity_flags (action,
-                                          flags, set);
-  }
-
-  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                               "win");
 
   /* Page menu */
-  for (i = 0; new_action_group_actions[i] != NULL; i++) {
-    new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group),
-                                         new_action_group_actions[i]);
+  for (i = 0; action_group_actions[i] != NULL; i++) {
+    new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                             action_group_actions[i]);
     new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                           flags, set);
   }
@@ -1104,8 +1090,8 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
                                         flags, set);
 
   /* Toolbar */
-  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "toolbar");
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (new_action_group),
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "toolbar");
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "combined-stop-reload");
   new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                         flags, set);
@@ -1810,8 +1796,8 @@ populate_context_menu (WebKitWebView       *web_view,
   if (is_document && !is_image && !is_media) {
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    add_action_to_context_menu (context_menu,
-                                window->action_group, "FileSendTo");
+    new_add_action_to_context_menu (context_menu, window_action_group,
+                                    "send-to", window->toolbar);
   }
 
   webkit_context_menu_append (context_menu,
