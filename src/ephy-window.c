@@ -2780,11 +2780,10 @@ ephy_window_state_event (GtkWidget           *widget,
     }
 
     action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
-
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-    g_action_change_state (action, g_variant_new_boolean (fullscreen));
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
+
+    g_simple_action_set_state (G_SIMPLE_ACTION (action),
+                               g_variant_new_boolean (fullscreen));
   }
 
   return FALSE;
