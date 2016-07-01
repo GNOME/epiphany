@@ -931,7 +931,7 @@ static const GActionEntry window_entries [] =
   { "location", window_cmd_go_location },
 
   /* Toggle actions */
-  { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret },
+  { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret_state },
   { "fullscreen", NULL, NULL, "false", window_cmd_change_fullscreen_state },
   { "allow-popup-windows", NULL, NULL, "true", ephy_window_change_allow_popup_windows_state }
 };
