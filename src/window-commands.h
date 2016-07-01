@@ -24,6 +24,36 @@
 
 G_BEGIN_DECLS
 
+void window_cmd_new_window                (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_new_incognito_window      (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_show_bookmarks            (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_show_history              (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_show_preferences          (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_show_shortcuts            (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_show_help                 (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_show_about                (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_quit                      (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_reopen_closed_tab         (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
 void window_cmd_navigation                (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
@@ -39,8 +69,6 @@ void window_cmd_view_reload               (GSimpleAction *action,
 void window_cmd_combined_stop_reload      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_undo_close_tab            (GtkAction *action,
-                                           EphyWindow *window);
 void window_cmd_file_new_tab              (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
@@ -107,25 +135,7 @@ void window_cmd_view_page_source          (GSimpleAction *action,
 void window_cmd_view_toggle_inspector     (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_help_contents             (GtkAction  *action,
-                                           GtkWidget  *window);
-void window_cmd_help_about                (GtkAction  *action,
-                                           GtkWidget  *window);
-void window_cmd_help_shortcuts            (GtkAction  *action,
-                                           GtkWidget  *window);
 void window_cmd_load_location             (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_file_quit                 (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_bookmarks            (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_history              (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_file_new_window           (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_file_new_incognito_window (GtkAction  *action,
-                                           EphyWindow *window);
-void window_cmd_edit_preferences          (GtkAction  *action,
                                            EphyWindow *window);
 void window_cmd_edit_select_all           (GSimpleAction *action,
                                            GVariant      *parameter,

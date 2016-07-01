@@ -62,6 +62,240 @@
 #define FAVICON_SIZE 16
 
 void
+window_cmd_new_window (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       user_data)
+{
+  EphyEmbed *embed;
+  EphyWindow *new_window = ephy_window_new ();
+
+  embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                              new_window, NULL, 0);
+  ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
+  ephy_window_activate_location (new_window);
+}
+
+void
+window_cmd_new_incognito_window (GSimpleAction *action,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
+{
+  ephy_open_incognito_window (NULL);
+}
+
+void
+window_cmd_show_bookmarks (GSimpleAction *action,
+                           GVariant      *parameter,
+                           gpointer       user_data)
+{
+  GtkWidget *bwindow;
+
+  bwindow = ephy_shell_get_bookmarks_editor (ephy_shell_get_default ());
+  gtk_window_present (GTK_WINDOW (bwindow));
+}
+
+void
+window_cmd_show_history (GSimpleAction *action,
+                         GVariant      *parameter,
+                         gpointer       user_data)
+{
+  GtkWidget *hwindow;
+
+  hwindow = ephy_shell_get_history_window (ephy_shell_get_default ());
+
+  if (GTK_WINDOW (user_data) != gtk_window_get_transient_for (GTK_WINDOW (hwindow)))
+    gtk_window_set_transient_for (GTK_WINDOW (hwindow),
+                                  GTK_WINDOW (user_data));
+  gtk_window_present (GTK_WINDOW (hwindow));
+}
+
+void
+window_cmd_show_preferences (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+  GtkWindow *dialog;
+
+  dialog = GTK_WINDOW (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
+
+  if (GTK_WINDOW (user_data) != gtk_window_get_transient_for (dialog))
+    gtk_window_set_transient_for (dialog,
+                                  GTK_WINDOW (user_data));
+
+  gtk_window_present (dialog);
+}
+
+void
+window_cmd_show_shortcuts (GSimpleAction *action,
+                           GVariant      *parameter,
+                           gpointer       user_data)
+{
+  static GtkWidget *shortcuts_window;
+
+  if (shortcuts_window == NULL) {
+    GtkBuilder *builder;
+
+    builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/shortcuts-dialog.ui");
+    shortcuts_window = GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-dialog"));
+
+    g_signal_connect (shortcuts_window,
+                      "destroy",
+                      G_CALLBACK (gtk_widget_destroyed),
+                      &shortcuts_window);
+
+    g_object_unref (builder);
+  }
+
+  if (gtk_window_get_transient_for (GTK_WINDOW (shortcuts_window)) != GTK_WINDOW (window))
+    gtk_window_set_transient_for (GTK_WINDOW (shortcuts_window), GTK_WINDOW (window));
+
+  gtk_window_present (GTK_WINDOW (shortcuts_window));
+}
+
+void
+window_cmd_show_help (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  ephy_gui_help (GTK_WIDGET (user_data), NULL);
+}
+
+#define ABOUT_GROUP "About"
+
+void
+window_cmd_show_about (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  char *comments = NULL;
+  GKeyFile *key_file;
+  GError *error = NULL;
+  char **list, **authors, **contributors, **past_authors, **artists, **documenters;
+  gsize n_authors, n_contributors, n_past_authors, n_artists, n_documenters, i, j;
+
+  key_file = g_key_file_new ();
+  if (!g_key_file_load_from_file (key_file, DATADIR G_DIR_SEPARATOR_S "about.ini",
+                                  0, &error)) {
+    g_warning ("Couldn't load about data: %s\n", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors",
+                                     &n_authors, NULL);
+  contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors",
+                                             &n_contributors, NULL);
+  past_authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "PastAuthors",
+                                             &n_past_authors, NULL);
+
+#define APPEND(_to, _from) \
+  _to[i++] = g_strdup (_from);
+
+#define APPEND_STRV_AND_FREE(_to, _from) \
+  if (_from) \
+  { \
+    for (j = 0; _from[j] != NULL; ++j) \
+    { \
+      _to[i++] = _from[j]; \
+    } \
+    g_free (_from); \
+  }
+
+  authors = g_new (char *, (list ? n_authors : 0) +
+                   (contributors ? n_contributors : 0) +
+                   (past_authors ? n_past_authors : 0) + 7 + 1);
+  i = 0;
+  APPEND_STRV_AND_FREE (authors, list);
+  APPEND (authors, "");
+  APPEND (authors, _("Contact us at:"));
+  APPEND (authors, "<epiphany-list@gnome.org>");
+  APPEND (authors, "");
+  APPEND (authors, _("Contributors:"));
+  APPEND_STRV_AND_FREE (authors, contributors);
+  APPEND (authors, "");
+  APPEND (authors, _("Past developers:"));
+  APPEND_STRV_AND_FREE (authors, past_authors);
+  authors[i++] = NULL;
+
+  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
+
+  artists = g_new (char *, (list ? n_artists : 0) + 4 + 1);
+  i = 0;
+  APPEND_STRV_AND_FREE (artists, list);
+  artists[i++] = NULL;
+
+  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
+
+  documenters = g_new (char *, (list ? n_documenters : 0) + 3 + 1);
+  i = 0;
+  APPEND_STRV_AND_FREE (documenters, list);
+  APPEND (documenters, "");
+  APPEND (documenters, _("Contact us at:"));
+  APPEND (documenters, "<gnome-doc-list@gnome.org>");
+  documenters[i++] = NULL;
+
+#undef APPEND
+#undef APPEND_STRV_AND_FREE
+
+  g_key_file_free (key_file);
+
+  comments = g_strdup_printf (_("A simple, clean, beautiful view of the web.\n"
+                                "Powered by WebKit %d.%d.%d"),
+                              webkit_get_major_version (),
+                              webkit_get_minor_version (),
+                              webkit_get_micro_version ());
+
+  gtk_show_about_dialog (window ? GTK_WINDOW (window) : NULL,
+                         "program-name", _("Web"),
+                         "version", VERSION,
+                         "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
+                         "Copyright © 2003–2014 The Web Developers",
+                         "artists", artists,
+                         "authors", authors,
+                         "comments", comments,
+                         "documenters", documenters,
+                         /* Translators: This is a special message that shouldn't be translated
+                          * literally. It is used in the about box to give credits to
+                          * the translators.
+                          * Thus, you should translate it to your name and email address.
+                          * You should also include other translators who have contributed to
+                          * this translation; in that case, please write each of them on a separate
+                          * line seperated by newlines (\n).
+                          */
+                         "translator-credits", _("translator-credits"),
+                         "logo-icon-name", "web-browser",
+                         "website", "https://wiki.gnome.org/Apps/Web",
+                         "website-label", _("Web Website"),
+                         "license-type", GTK_LICENSE_GPL_2_0,
+                         "wrap-license", TRUE,
+                         NULL);
+
+  g_free (comments);
+  g_strfreev (artists);
+  g_strfreev (authors);
+  g_strfreev (documenters);
+}
+
+void
+window_cmd_quit (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  if (ephy_shell_close_all_windows (ephy_shell_get_default ()))
+    g_application_quit (g_application_get_default ());
+}
+
+void
+window_cmd_reopen_closed_tab (GSimpleAction *action,
+                              GVariant      *parameter,
+                              gpointer       user_data)
+{
+  ephy_session_undo_close_tab (ephy_shell_get_session (ephy_shell_get_default ()));
+}
+
+
+void
 window_cmd_navigation (GSimpleAction *action,
                        GVariant      *parameter,
                        gpointer       user_data)
@@ -221,80 +455,6 @@ void window_cmd_combined_stop_reload (GSimpleAction *action,
   g_action_activate (gaction, NULL);
 
   g_variant_unref (state);
-}
-
-void
-window_cmd_undo_close_tab (GtkAction  *action,
-                           EphyWindow *window)
-{
-  ephy_session_undo_close_tab (ephy_shell_get_session (ephy_shell_get_default ()));
-}
-
-void
-window_cmd_file_quit (GtkAction  *action,
-                      EphyWindow *window)
-{
-  if (ephy_shell_close_all_windows (ephy_shell_get_default ()))
-    g_application_quit (g_application_get_default ());
-}
-
-void
-window_cmd_file_new_window (GtkAction  *action,
-                            EphyWindow *window)
-{
-  EphyEmbed *embed;
-  EphyWindow *new_window = ephy_window_new ();
-
-  embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                              new_window, NULL, 0);
-  ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
-  ephy_window_activate_location (new_window);
-}
-
-void
-window_cmd_file_new_incognito_window (GtkAction  *action,
-                                      EphyWindow *window)
-{
-  ephy_open_incognito_window (NULL);
-}
-
-void
-window_cmd_edit_bookmarks (GtkAction  *action,
-                           EphyWindow *window)
-{
-  GtkWidget *bwindow;
-
-  bwindow = ephy_shell_get_bookmarks_editor (ephy_shell_get_default ());
-  gtk_window_present (GTK_WINDOW (bwindow));
-}
-
-void
-window_cmd_edit_history (GtkAction  *action,
-                         EphyWindow *window)
-{
-  GtkWidget *hwindow;
-
-  hwindow = ephy_shell_get_history_window (ephy_shell_get_default ());
-
-  if (GTK_WINDOW (window) != gtk_window_get_transient_for (GTK_WINDOW (hwindow)))
-    gtk_window_set_transient_for (GTK_WINDOW (hwindow),
-                                  GTK_WINDOW (window));
-  gtk_window_present (GTK_WINDOW (hwindow));
-}
-
-void
-window_cmd_edit_preferences (GtkAction  *action,
-                             EphyWindow *window)
-{
-  GtkWindow *dialog;
-
-  dialog = GTK_WINDOW (ephy_shell_get_prefs_dialog (ephy_shell_get_default ()));
-
-  if (GTK_WINDOW (window) != gtk_window_get_transient_for (dialog))
-    gtk_window_set_transient_for (dialog,
-                                  GTK_WINDOW (window));
-
-  gtk_window_present (dialog);
 }
 
 void
@@ -1461,154 +1621,6 @@ window_cmd_view_toggle_inspector (GSimpleAction *action,
     webkit_web_inspector_show (inspector_window);
   else
     webkit_web_inspector_close (inspector_window);
-}
-
-void
-window_cmd_help_shortcuts (GtkAction *action,
-                           GtkWidget *window)
-{
-  static GtkWidget *shortcuts_window;
-
-  if (shortcuts_window == NULL) {
-    GtkBuilder *builder;
-
-    builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/shortcuts-dialog.ui");
-    shortcuts_window = GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-dialog"));
-
-    g_signal_connect (shortcuts_window,
-                      "destroy",
-                      G_CALLBACK (gtk_widget_destroyed),
-                      &shortcuts_window);
-
-    g_object_unref (builder);
-  }
-
-  if (gtk_window_get_transient_for (GTK_WINDOW (shortcuts_window)) != GTK_WINDOW (window))
-    gtk_window_set_transient_for (GTK_WINDOW (shortcuts_window), GTK_WINDOW (window));
-
-  gtk_window_present (GTK_WINDOW (shortcuts_window));
-}
-
-void
-window_cmd_help_contents (GtkAction *action,
-                          GtkWidget *window)
-{
-  ephy_gui_help (window, NULL);
-}
-
-#define ABOUT_GROUP "About"
-
-void
-window_cmd_help_about (GtkAction *action,
-                       GtkWidget *window)
-{
-  char *comments = NULL;
-  GKeyFile *key_file;
-  GError *error = NULL;
-  char **list, **authors, **contributors, **past_authors, **artists, **documenters;
-  gsize n_authors, n_contributors, n_past_authors, n_artists, n_documenters, i, j;
-
-  key_file = g_key_file_new ();
-  if (!g_key_file_load_from_file (key_file, DATADIR G_DIR_SEPARATOR_S "about.ini",
-                                  0, &error)) {
-    g_warning ("Couldn't load about data: %s\n", error->message);
-    g_error_free (error);
-    return;
-  }
-
-  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors",
-                                     &n_authors, NULL);
-  contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors",
-                                             &n_contributors, NULL);
-  past_authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "PastAuthors",
-                                             &n_past_authors, NULL);
-
-#define APPEND(_to, _from) \
-  _to[i++] = g_strdup (_from);
-
-#define APPEND_STRV_AND_FREE(_to, _from) \
-  if (_from) \
-  { \
-    for (j = 0; _from[j] != NULL; ++j) \
-    { \
-      _to[i++] = _from[j]; \
-    } \
-    g_free (_from); \
-  }
-
-  authors = g_new (char *, (list ? n_authors : 0) +
-                   (contributors ? n_contributors : 0) +
-                   (past_authors ? n_past_authors : 0) + 7 + 1);
-  i = 0;
-  APPEND_STRV_AND_FREE (authors, list);
-  APPEND (authors, "");
-  APPEND (authors, _("Contact us at:"));
-  APPEND (authors, "<epiphany-list@gnome.org>");
-  APPEND (authors, "");
-  APPEND (authors, _("Contributors:"));
-  APPEND_STRV_AND_FREE (authors, contributors);
-  APPEND (authors, "");
-  APPEND (authors, _("Past developers:"));
-  APPEND_STRV_AND_FREE (authors, past_authors);
-  authors[i++] = NULL;
-
-  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
-
-  artists = g_new (char *, (list ? n_artists : 0) + 4 + 1);
-  i = 0;
-  APPEND_STRV_AND_FREE (artists, list);
-  artists[i++] = NULL;
-
-  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
-
-  documenters = g_new (char *, (list ? n_documenters : 0) + 3 + 1);
-  i = 0;
-  APPEND_STRV_AND_FREE (documenters, list);
-  APPEND (documenters, "");
-  APPEND (documenters, _("Contact us at:"));
-  APPEND (documenters, "<gnome-doc-list@gnome.org>");
-  documenters[i++] = NULL;
-
-#undef APPEND
-#undef APPEND_STRV_AND_FREE
-
-  g_key_file_free (key_file);
-
-  comments = g_strdup_printf (_("A simple, clean, beautiful view of the web.\n"
-                                "Powered by WebKit %d.%d.%d"),
-                              webkit_get_major_version (),
-                              webkit_get_minor_version (),
-                              webkit_get_micro_version ());
-
-  gtk_show_about_dialog (window ? GTK_WINDOW (window) : NULL,
-                         "program-name", _("Web"),
-                         "version", VERSION,
-                         "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-                         "Copyright © 2003–2014 The Web Developers",
-                         "artists", artists,
-                         "authors", authors,
-                         "comments", comments,
-                         "documenters", documenters,
-                         /* Translators: This is a special message that shouldn't be translated
-                          * literally. It is used in the about box to give credits to
-                          * the translators.
-                          * Thus, you should translate it to your name and email address.
-                          * You should also include other translators who have contributed to
-                          * this translation; in that case, please write each of them on a separate
-                          * line seperated by newlines (\n).
-                          */
-                         "translator-credits", _("translator-credits"),
-                         "logo-icon-name", "web-browser",
-                         "website", "https://wiki.gnome.org/Apps/Web",
-                         "website-label", _("Web Website"),
-                         "license-type", GTK_LICENSE_GPL_2_0,
-                         "wrap-license", TRUE,
-                         NULL);
-
-  g_free (comments);
-  g_strfreev (artists);
-  g_strfreev (authors);
-  g_strfreev (documenters);
 }
 
 void
