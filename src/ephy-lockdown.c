@@ -98,23 +98,21 @@ typedef struct {
   const char *prop;
 } BindAction;
 
-static const BindAction window_actions[] = {
-  { EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "GoLocation", "sensitive" },
-};
-
 static const BindAction app_actions[] = {
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "new-window", "enabled" },
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "new-incognito", "enabled" }
 };
 
-static const BindAction new_window_actions[] = {
+static const BindAction window_actions[] = {
+  { EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "location", "enabled"},
+
   { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "bookmark-page", "enabled" },
 
-  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "save-as", "enabled" },
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "fullscreen", "enabled" },
 
   { EPHY_PREFS_LOCKDOWN_PRINTING, "print", "enabled" },
 
-  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "fullscreen", "enabled" }
+  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "save-as", "enabled" }
 };
 
 static const BindAction popup_actions[] = {
@@ -286,11 +284,6 @@ window_added_cb (GtkApplication *application,
 
   manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (EPHY_WINDOW (window)));
 
-  action_group = find_action_group (manager, "WindowActions");
-  bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             action_group, window_actions,
-                             G_N_ELEMENTS (window_actions));
-
   new_action_group = G_ACTION_GROUP (G_APPLICATION (gtk_window_get_application (GTK_WINDOW (window))));
   new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              new_action_group, app_actions,
@@ -300,8 +293,8 @@ window_added_cb (GtkApplication *application,
                                                   "win");
   new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              new_action_group,
-                             new_window_actions,
-                             G_N_ELEMENTS (new_window_actions));
+                             window_actions,
+                             G_N_ELEMENTS (window_actions));
 
   action_group = find_action_group (manager, "PopupsActions");
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,

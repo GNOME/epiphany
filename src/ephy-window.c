@@ -74,13 +74,6 @@
 static void ephy_window_view_popup_windows_cb (GtkAction  *action,
                                                EphyWindow *window);
 
-static const GtkActionEntry ephy_menu_entries [] = {
-  /* Go actions. */
-
-  { "GoLocation", NULL, N_("_Location…"), "<control>L", NULL,
-    G_CALLBACK (window_cmd_go_location) },
-};
-
 static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 {
   { "ViewPopupWindows", NULL, N_("Popup _Windows"), NULL, NULL,
@@ -153,13 +146,6 @@ static const struct {
   gboolean fromToolbar;
 } extra_keybindings [] = {
   { GDK_KEY_Home, GDK_MOD1_MASK, "FileHome", TRUE },
-  /* Go */
-  { GDK_KEY_l, GDK_CONTROL_MASK, "GoLocation", FALSE },
-  { GDK_KEY_F6, 0, "GoLocation", FALSE },
-#ifdef HAVE_X11_XF86KEYSYM_H
-  { XF86XK_Go, 0, "GoLocation", FALSE },
-  { XF86XK_OpenURL, 0, "GoLocation", FALSE },
-#endif /* HAVE_X11_XF86KEYSYM_H */
 };
 
 const struct {
@@ -191,6 +177,7 @@ const struct {
   { "win.select-all", { "<Primary>A", NULL } },
 
   { "win.send-to", { "Send", NULL } },
+  { "win.location", { "<Primary>L", "F6", "Go", "OpenURL", NULL } },
 
   /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
@@ -960,6 +947,7 @@ static const GActionEntry window_entries [] =
   { "select-all", window_cmd_edit_select_all },
 
   { "send-to", window_cmd_file_send_to },
+  { "location", window_cmd_go_location },
 
   /* Toggle actions */
   { "browse-with-caret", activate_toggle, NULL, "false", window_cmd_change_browse_with_caret },
@@ -1001,8 +989,6 @@ setup_ui_manager (EphyWindow *window)
 
   action_group = gtk_action_group_new ("WindowActions");
   gtk_action_group_set_translation_domain (action_group, NULL);
-  gtk_action_group_add_actions (action_group, ephy_menu_entries,
-                                G_N_ELEMENTS (ephy_menu_entries), window);
   gtk_action_group_add_toggle_actions (action_group,
                                        ephy_menu_toggle_entries,
                                        G_N_ELEMENTS (ephy_menu_toggle_entries),
@@ -2842,7 +2828,6 @@ ephy_window_state_event (GtkWidget           *widget,
 
   return FALSE;
 }
-
 
 static void
 ephy_window_finalize (GObject *object)
