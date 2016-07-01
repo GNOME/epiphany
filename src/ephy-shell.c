@@ -143,7 +143,7 @@ new_window (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
-  window_cmd_file_new_window (NULL, NULL);
+  window_cmd_new_window (NULL, NULL, NULL);
 }
 
 static void
@@ -151,7 +151,7 @@ new_incognito_window (GSimpleAction *action,
                       GVariant      *parameter,
                       gpointer       user_data)
 {
-  window_cmd_file_new_incognito_window (NULL, NULL);
+  window_cmd_new_incognito_window (NULL, NULL, NULL);
 }
 
 static void
@@ -159,7 +159,7 @@ reopen_closed_tab (GSimpleAction *action,
                    GVariant      *parameter,
                    gpointer       user_data)
 {
-  window_cmd_undo_close_tab (NULL, NULL);
+  window_cmd_reopen_closed_tab (NULL, NULL, NULL);
 }
 
 static void
@@ -167,7 +167,7 @@ show_bookmarks (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       user_data)
 {
-  window_cmd_edit_bookmarks (NULL, NULL);
+  window_cmd_show_bookmarks (NULL, NULL, NULL);
 }
 
 static void
@@ -179,7 +179,7 @@ show_history (GSimpleAction *action,
 
   window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
 
-  window_cmd_edit_history (NULL, EPHY_WINDOW (window));
+  window_cmd_show_history (NULL, NULL, EPHY_WINDOW (window));
 }
 
 static void
@@ -191,7 +191,7 @@ show_preferences (GSimpleAction *action,
 
   window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
 
-  window_cmd_edit_preferences (NULL, EPHY_WINDOW (window));
+  window_cmd_show_preferences (NULL, NULL, EPHY_WINDOW (window));
 }
 
 static void
@@ -215,7 +215,7 @@ show_help (GSimpleAction *action,
 
   window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
 
-  window_cmd_help_contents (NULL, GTK_WIDGET (window));
+  window_cmd_show_help (NULL, NULL, GTK_WIDGET (window));
 }
 
 static void
@@ -227,7 +227,7 @@ show_about (GSimpleAction *action,
 
   window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
 
-  window_cmd_help_about (NULL, GTK_WIDGET (window));
+  window_cmd_show_about (NULL, NULL, GTK_WIDGET (window));
 }
 
 static void
@@ -235,7 +235,7 @@ quit_application (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  window_cmd_file_quit (NULL, NULL);
+  window_cmd_quit (NULL, NULL, NULL);
 }
 
 static GActionEntry app_entries[] = {

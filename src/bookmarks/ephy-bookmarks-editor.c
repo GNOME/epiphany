@@ -143,6 +143,12 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
+static void
+help_about (GtkAction *action, EphyWindow *window)
+{
+  window_cmd_show_about (NULL, NULL, window);
+}
+
 static const GtkActionEntry ephy_bookmark_popup_entries [] = {
   /* Toplevel */
   { "File", NULL, N_("_File") },
@@ -199,7 +205,7 @@ static const GtkActionEntry ephy_bookmark_popup_entries [] = {
     G_CALLBACK (cmd_help_contents) },
   { "HelpAbout", NULL, N_("_About"), NULL,
     N_("Display credits for the web browser creators"),
-    G_CALLBACK (window_cmd_help_about) },
+    G_CALLBACK (help_about) },
 };
 
 static const GtkToggleActionEntry ephy_bookmark_toggle_entries [] = {
