@@ -84,7 +84,7 @@ static const GtkActionEntry ephy_popups_entries [] = {
   /* Document. */
 
   { "ContextBookmarkPage", NULL, N_("Add Boo_kmark…"), "<control>D", NULL,
-    G_CALLBACK (window_cmd_file_bookmark_page) },
+    G_CALLBACK (window_cmd_bookmark_page) },
 
   /* Links. */
 
@@ -921,32 +921,32 @@ activate_toggle (GSimpleAction *action,
 
 static const GActionEntry window_entries [] =
 {
-  { "new-tab", window_cmd_file_new_tab },
-  { "open", window_cmd_file_open },
-  { "save-as", window_cmd_file_save_as },
-  { "save-as-application", window_cmd_file_save_as_application },
-  { "undo", window_cmd_edit_undo },
-  { "redo", window_cmd_edit_redo },
-  { "cut", window_cmd_edit_cut },
-  { "copy", window_cmd_edit_copy },
-  { "paste", window_cmd_edit_paste },
-  { "delete", window_cmd_edit_delete },
-  { "zoom-in", window_cmd_view_zoom_in },
-  { "zoom-out", window_cmd_view_zoom_out },
-  { "zoom-normal", window_cmd_view_zoom_normal },
-  { "print", window_cmd_file_print },
-  { "find", window_cmd_edit_find },
-  { "find-prev", window_cmd_edit_find_prev },
-  { "find-next", window_cmd_edit_find_next },
+  { "new-tab", window_cmd_new_tab },
+  { "open", window_cmd_open },
+  { "save-as", window_cmd_save_as },
+  { "save-as-application", window_cmd_save_as_application },
+  { "undo", window_cmd_undo },
+  { "redo", window_cmd_redo },
+  { "cut", window_cmd_cut },
+  { "copy", window_cmd_copy },
+  { "paste", window_cmd_paste },
+  { "delete", window_cmd_delete },
+  { "zoom-in", window_cmd_zoom_in },
+  { "zoom-out", window_cmd_zoom_out },
+  { "zoom-normal", window_cmd_zoom_normal },
+  { "print", window_cmd_print },
+  { "find", window_cmd_find },
+  { "find-prev", window_cmd_find_prev },
+  { "find-next", window_cmd_find_next },
   { "open-bookmark", window_cmd_open_bookmark, "s" },
-  { "bookmark-page", window_cmd_file_bookmark_page },
-  { "encoding", window_cmd_view_encoding },
-  { "page-source", window_cmd_view_page_source },
-  { "toggle-inspector", window_cmd_view_toggle_inspector },
+  { "bookmark-page", window_cmd_bookmark_page },
+  { "encoding", window_cmd_encoding },
+  { "page-source", window_cmd_page_source },
+  { "toggle-inspector", window_cmd_toggle_inspector },
 
-  { "select-all", window_cmd_edit_select_all },
+  { "select-all", window_cmd_select_all },
 
-  { "send-to", window_cmd_file_send_to },
+  { "send-to", window_cmd_send_to },
   { "location", window_cmd_go_location },
 
   /* Toggle actions */
@@ -970,9 +970,9 @@ static const GActionEntry toolbar_entries [] = {
   { "navigation-forward", window_cmd_navigation, "s" },
   { "navigation-forward-new-tab", window_cmd_navigation_new_tab, "s" },
 
-  { "stop", window_cmd_view_stop },
-  { "reload", window_cmd_view_reload },
-  { "always-stop", window_cmd_view_stop },
+  { "stop", window_cmd_stop },
+  { "reload", window_cmd_reload },
+  { "always-stop", window_cmd_stop },
   { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", ephy_toolbar_change_combined_stop_reload_state }
 };
 

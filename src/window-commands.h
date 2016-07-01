@@ -60,85 +60,85 @@ void window_cmd_navigation                (GSimpleAction *action,
 void window_cmd_navigation_new_tab        (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_view_stop                 (GSimpleAction *action,
+void window_cmd_stop                      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_view_reload               (GSimpleAction *action,
+void window_cmd_reload                    (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
 void window_cmd_combined_stop_reload      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_file_new_tab              (GSimpleAction *action,
+void window_cmd_new_tab                   (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_file_open                 (GSimpleAction *action,
+void window_cmd_open                      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_file_save_as              (GSimpleAction *action,
+void window_cmd_save_as                   (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_file_save_as_application  (GSimpleAction *action,
+void window_cmd_save_as_application       (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_undo                 (GSimpleAction *action,
+void window_cmd_undo                      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_redo                 (GSimpleAction *action,
+void window_cmd_redo                      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_cut                  (GSimpleAction *action,
+void window_cmd_cut                       (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_copy                 (GSimpleAction *action,
+void window_cmd_copy                      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_paste                (GSimpleAction *action,
+void window_cmd_paste                     (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_delete               (GSimpleAction *action,
+void window_cmd_delete                    (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_file_print                (GSimpleAction *action,
+void window_cmd_print                     (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_find                 (GSimpleAction *action,
+void window_cmd_find                      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_find_prev            (GSimpleAction *action,
+void window_cmd_find_prev                 (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_find_next            (GSimpleAction *action,
+void window_cmd_find_next                 (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
 void window_cmd_open_bookmark             (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_file_bookmark_page        (GSimpleAction *action,
+void window_cmd_bookmark_page             (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_view_zoom_in              (GSimpleAction *action,
+void window_cmd_zoom_in                   (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_view_zoom_out             (GSimpleAction *action,
+void window_cmd_zoom_out                  (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_view_zoom_normal          (GSimpleAction *action,
+void window_cmd_zoom_normal               (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_view_encoding             (GSimpleAction *action,
+void window_cmd_encoding                  (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_view_page_source          (GSimpleAction *action,
+void window_cmd_page_source               (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_view_toggle_inspector     (GSimpleAction *action,
+void window_cmd_toggle_inspector          (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_edit_select_all           (GSimpleAction *action,
+void window_cmd_select_all                (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_file_send_to              (GSimpleAction *action,
+void window_cmd_send_to                   (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
 void window_cmd_go_location               (GSimpleAction *action,
