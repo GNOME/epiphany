@@ -100,8 +100,6 @@ typedef struct {
 
 static const BindAction window_actions[] = {
   { EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, "GoLocation", "sensitive" },
-
-  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "ViewFullscreen", "sensitive" },
 };
 
 static const BindAction app_actions[] = {
@@ -114,7 +112,9 @@ static const BindAction new_window_actions[] = {
 
   { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "save-as", "enabled" },
 
-  { EPHY_PREFS_LOCKDOWN_PRINTING, "print", "enabled" }
+  { EPHY_PREFS_LOCKDOWN_PRINTING, "print", "enabled" },
+
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "fullscreen", "enabled" }
 };
 
 static const BindAction popup_actions[] = {

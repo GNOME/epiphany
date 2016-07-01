@@ -346,16 +346,6 @@ window_cmd_edit_preferences (GtkAction  *action,
 }
 
 void
-window_cmd_view_fullscreen (GtkAction  *action,
-                            EphyWindow *window)
-{
-  if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)))
-    gtk_window_fullscreen (GTK_WINDOW (window));
-  else
-    gtk_window_unfullscreen (GTK_WINDOW (window));
-}
-
-void
 window_cmd_file_new_tab (GSimpleAction *action,
                          GVariant      *value,
                          gpointer       user_data)
@@ -1753,6 +1743,22 @@ window_cmd_change_browse_with_caret (GSimpleAction *action,
   g_simple_action_set_state (action, g_variant_new_boolean (active));
   g_settings_set_boolean (EPHY_SETTINGS_MAIN,
                           EPHY_PREFS_ENABLE_CARET_BROWSING, active);
+}
+
+void
+window_cmd_change_fullscreen_state (GSimpleAction *action,
+                                    GVariant      *state,
+                                    gpointer       user_data)
+{
+  gboolean active;
+
+  active = g_variant_get_boolean (state);
+  if (active)
+    gtk_window_fullscreen (GTK_WINDOW (user_data));
+  else
+    gtk_window_unfullscreen (GTK_WINDOW (user_data));
+
+  g_simple_action_set_state (action, g_variant_new_boolean (active));
 }
 
 void

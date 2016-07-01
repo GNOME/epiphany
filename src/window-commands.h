@@ -45,8 +45,6 @@ void window_cmd_undo_close_tab            (GtkAction *action,
                                            EphyWindow *window);
 void window_cmd_file_send_to              (GtkAction  *action,
                                            EphyWindow *window);
-void window_cmd_view_fullscreen           (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_file_new_tab              (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
@@ -137,6 +135,9 @@ void window_cmd_edit_select_all           (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
 void window_cmd_change_browse_with_caret  (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data);
+void window_cmd_change_fullscreen_state   (GSimpleAction *action,
                                            GVariant      *state,
                                            gpointer       user_data);
 void window_cmd_tabs_previous             (GSimpleAction *action,
