@@ -1720,9 +1720,9 @@ window_cmd_load_location (GSimpleAction *action,
 }
 
 void
-window_cmd_change_browse_with_caret (GSimpleAction *action,
-                                     GVariant      *state,
-                                     gpointer       user_data)
+window_cmd_change_browse_with_caret_state (GSimpleAction *action,
+                                           GVariant      *state,
+                                           gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   gboolean active;
