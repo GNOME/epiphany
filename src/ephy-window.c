@@ -94,10 +94,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
 
 static const GtkToggleActionEntry ephy_menu_toggle_entries [] =
 {
-  /* View actions. */
-
-  { "ViewFullscreen", NULL, N_("_Fullscreen"), "F11", NULL,
-    G_CALLBACK (window_cmd_view_fullscreen), FALSE },
   { "ViewPopupWindows", NULL, N_("Popup _Windows"), NULL, NULL,
     G_CALLBACK (ephy_window_view_popup_windows_cb), FALSE },
 };
@@ -168,9 +164,6 @@ static const struct {
   gboolean fromToolbar;
 } extra_keybindings [] = {
   { GDK_KEY_Home, GDK_MOD1_MASK, "FileHome", TRUE },
-  /* FIXME: these are not in any menu for now, so add them here. */
-  { GDK_KEY_F11, 0, "ViewFullscreen", FALSE },
-
   /* Go */
   { GDK_KEY_l, GDK_CONTROL_MASK, "GoLocation", FALSE },
   { GDK_KEY_F6, 0, "GoLocation", FALSE },
@@ -209,7 +202,9 @@ const struct {
 
   { "win.select-all", { "<Primary>A", NULL } },
 
+  /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
+  { "win.fullscreen", { "F11", NULL } },
 
   /* Navigation */
   { "toolbar.stop", { "Escape", "Stop", NULL } },
@@ -974,7 +969,9 @@ static const GActionEntry window_entries [] =
 
   { "select-all", window_cmd_edit_select_all },
 
-  { "browse-with-caret", activate_toggle, NULL, "false", window_cmd_change_browse_with_caret }
+  /* Toggle actions */
+  { "browse-with-caret", activate_toggle, NULL, "false", window_cmd_change_browse_with_caret },
+  { "fullscreen", activate_toggle, NULL, "false", window_cmd_change_fullscreen_state }
 };
 
 static const GActionEntry tab_entries [] = {
@@ -2843,8 +2840,8 @@ ephy_window_state_event (GtkWidget           *widget,
   }
 
   if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN) {
-    GtkActionGroup *action_group;
-    GtkAction *action;
+    GActionGroup *action_group;
+    GAction *action;
     gboolean fullscreen;
 
     fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
@@ -2855,18 +2852,17 @@ ephy_window_state_event (GtkWidget           *widget,
       ephy_window_unfullscreen (window);
     }
 
-    action_group = window->action_group;
+    action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
 
-    action = gtk_action_group_get_action (action_group, "ViewFullscreen");
-    g_signal_handlers_block_by_func
-      (action, G_CALLBACK (window_cmd_view_fullscreen), window);
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), fullscreen);
-    g_signal_handlers_unblock_by_func
-      (action, G_CALLBACK (window_cmd_view_fullscreen), window);
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+    g_action_change_state (action, g_variant_new_boolean (fullscreen));
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
   }
 
   return FALSE;
 }
+
 
 static void
 ephy_window_finalize (GObject *object)
