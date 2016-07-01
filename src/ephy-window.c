@@ -80,12 +80,6 @@ static const GtkActionEntry ephy_menu_entries [] = {
   { "FileSendTo", NULL, N_("S_end Link by Email…"), NULL, NULL,
     G_CALLBACK (window_cmd_file_send_to) },
 
-  /* Edit actions. */
-  { "EditHistory", NULL, N_("_History"), "<control>H", NULL,
-    G_CALLBACK (window_cmd_edit_history) },
-  { "EditPreferences", NULL, N_("Pr_eferences"), "<control>e", NULL,
-    G_CALLBACK (window_cmd_edit_preferences) },
-
   /* Go actions. */
 
   { "GoLocation", NULL, N_("_Location…"), "<control>L", NULL,
