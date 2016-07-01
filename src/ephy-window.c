@@ -900,18 +900,6 @@ init_menu_updaters (EphyWindow *window)
                     G_CALLBACK (edit_menu_hide_cb), window);
 }
 
-static void
-activate_toggle (GSimpleAction *action,
-                 GVariant      *parameter,
-                 gpointer       user_data)
-{
-  GVariant *state;
-
-  state = g_action_get_state (G_ACTION (action));
-  g_action_change_state (G_ACTION (action), g_variant_new_boolean (!g_variant_get_boolean (state)));
-  g_variant_unref (state);
-}
-
 static const GActionEntry window_entries [] =
 {
   { "new-tab", window_cmd_new_tab },
@@ -943,8 +931,8 @@ static const GActionEntry window_entries [] =
   { "location", window_cmd_go_location },
 
   /* Toggle actions */
-  { "browse-with-caret", activate_toggle, NULL, "false", window_cmd_change_browse_with_caret },
-  { "fullscreen", activate_toggle, NULL, "false", window_cmd_change_fullscreen_state },
+  { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret },
+  { "fullscreen", NULL, NULL, "false", window_cmd_change_fullscreen_state },
   { "allow-popup-windows", NULL, NULL, "true", ephy_window_change_allow_popup_windows_state }
 };
 
