@@ -135,8 +135,6 @@ void window_cmd_view_page_source          (GSimpleAction *action,
 void window_cmd_view_toggle_inspector     (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_load_location             (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_edit_select_all           (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
@@ -144,6 +142,9 @@ void window_cmd_file_send_to              (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
 void window_cmd_go_location               (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data);
+void window_cmd_load_location             (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
 void window_cmd_change_browse_with_caret  (GSimpleAction *action,
