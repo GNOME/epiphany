@@ -75,12 +75,6 @@ static void ephy_window_view_popup_windows_cb (GtkAction  *action,
                                                EphyWindow *window);
 
 static const GtkActionEntry ephy_menu_entries [] = {
-  /* Toplevel */
-
-  { "Bookmarks", NULL, N_("_Bookmarks") },
-  { "PopupAction", NULL, "" },
-  { "PagePopupAction", NULL, "" },
-
   /* File actions. */
 
   { "FileSendTo", NULL, N_("S_end Link by Email…"), NULL, NULL,
@@ -173,10 +167,6 @@ static const struct {
   const gchar *action;
   gboolean fromToolbar;
 } extra_keybindings [] = {
-  /* FIXME: PageMenu should have its accel without being in the
-   * extra keybindings, but does not seem to work for some
-   * reason. */
-  { GDK_KEY_F10, 0, "PageMenu", TRUE },
   { GDK_KEY_Home, GDK_MOD1_MASK, "FileHome", TRUE },
   /* FIXME: these are not in any menu for now, so add them here. */
   { GDK_KEY_F11, 0, "ViewFullscreen", FALSE },
@@ -188,7 +178,6 @@ static const struct {
   { XF86XK_Go, 0, "GoLocation", FALSE },
   { XF86XK_OpenURL, 0, "GoLocation", FALSE },
   { XF86XK_Send, 0, "FileSendTo", FALSE },
-  /* FIXME: what about ScrollUp, ScrollDown, Menu*, Option, LogOff, Save,.. any others? */
 #endif /* HAVE_X11_XF86KEYSYM_H */
 };
 
