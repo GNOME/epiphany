@@ -231,13 +231,6 @@ window_cmd_undo_close_tab (GtkAction  *action,
 }
 
 void
-window_cmd_go_location (GtkAction  *action,
-                        EphyWindow *window)
-{
-  ephy_window_activate_location (window);
-}
-
-void
 window_cmd_file_quit (GtkAction  *action,
                       EphyWindow *window)
 {
@@ -1704,6 +1697,14 @@ window_cmd_file_send_to (GSimpleAction *action,
   }
 
   g_free (command);
+}
+
+void
+window_cmd_go_location (GSimpleAction *action,
+                        GVariant      *value,
+                        gpointer       user_data)
+{
+  ephy_window_activate_location (user_data);
 }
 
 void

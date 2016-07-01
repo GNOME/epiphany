@@ -39,8 +39,6 @@ void window_cmd_view_reload               (GSimpleAction *action,
 void window_cmd_combined_stop_reload      (GSimpleAction *action,
                                            GVariant      *parameter,
                                            gpointer       user_data);
-void window_cmd_go_location               (GtkAction  *action,
-                                           EphyWindow *window);
 void window_cmd_undo_close_tab            (GtkAction *action,
                                            EphyWindow *window);
 void window_cmd_file_new_tab              (GSimpleAction *action,
@@ -133,6 +131,9 @@ void window_cmd_edit_select_all           (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
 void window_cmd_file_send_to              (GSimpleAction *action,
+                                           GVariant      *value,
+                                           gpointer       user_data);
+void window_cmd_go_location               (GSimpleAction *action,
                                            GVariant      *value,
                                            gpointer       user_data);
 void window_cmd_change_browse_with_caret  (GSimpleAction *action,
