@@ -1380,6 +1380,32 @@ window_cmd_view_toggle_inspector (GtkAction  *action,
 }
 
 void
+window_cmd_help_shortcuts (GtkAction *action,
+                           GtkWidget *window)
+{
+  static GtkWidget *shortcuts_window;
+
+  if (shortcuts_window == NULL) {
+    GtkBuilder *builder;
+
+    builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/shortcuts-dialog.ui");
+    shortcuts_window = GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts-dialog"));
+
+    g_signal_connect (shortcuts_window,
+                      "destroy",
+                      G_CALLBACK (gtk_widget_destroyed),
+                      &shortcuts_window);
+
+    g_object_unref (builder);
+  }
+
+  if (gtk_window_get_transient_for (GTK_WINDOW (shortcuts_window)) != GTK_WINDOW (window))
+    gtk_window_set_transient_for (GTK_WINDOW (shortcuts_window), GTK_WINDOW (window));
+
+  gtk_window_present (GTK_WINDOW (shortcuts_window));
+}
+
+void
 window_cmd_help_contents (GtkAction *action,
                           GtkWidget *window)
 {

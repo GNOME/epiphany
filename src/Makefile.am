@@ -113,6 +113,7 @@ RESOURCE_FILES = \
 	resources/encoding-row.ui		  \
 	resources/epiphany-application-menu.ui	  \
 	resources/epiphany-bookmark-editor-ui.xml \
+	resources/shortcuts-dialog.ui		  \
 	resources/epiphany-ui.xml		  \
 	resources/epiphany.css                    \
 	resources/error.html			  \
