@@ -40,20 +40,17 @@ gchar           *ephy_sync_service_get_token         (EphySyncService   *self,
                                                       EphySyncTokenType  token_type);
 
 void             ephy_sync_service_save_token        (EphySyncService   *self,
-                                                      EphySyncTokenType  token_type,
-                                                      gchar             *token_value);
+                                                      gchar             *token_value,
+                                                      EphySyncTokenType  token_type);
 
 void             ephy_sync_service_delete_token      (EphySyncService   *self,
                                                       EphySyncTokenType  token_type);
 
 void             ephy_sync_service_delete_all_tokens (EphySyncService *self);
 
-void             ephy_sync_service_stretch           (EphySyncService *self,
-                                                      const gchar     *emailUTF8,
-                                                      const gchar     *passwordUTF8);
-
 gboolean         ephy_sync_service_login             (EphySyncService  *self,
-                                                      guint            *error_code,
+                                                      const gchar      *emailUTF8,
+                                                      const gchar      *passwordUTF8,
                                                       gchar           **error_message);
 
 G_END_DECLS

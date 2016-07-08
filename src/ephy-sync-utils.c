@@ -41,16 +41,20 @@ gchar *
 ephy_sync_utils_encode_hex (guint8 *data,
                             gsize   data_length)
 {
-  gchar *retval = g_malloc (data_length * 2 + 1);
+  gchar *retval;
+  gsize length;
 
-  for (gsize i = 0; i < data_length; i++) {
+  length = data_length == 0 ? EPHY_SYNC_TOKEN_LENGTH : data_length;
+  retval = g_malloc (length * 2 + 1);
+
+  for (gsize i = 0; i < length; i++) {
     guint8 byte = data[i];
 
     retval[2 * i] = hex_digits[byte >> 4];
     retval[2 * i + 1] = hex_digits[byte & 0xf];
   }
 
-  retval[data_length * 2] = 0;
+  retval[length * 2] = 0;
 
   return retval;
 }
@@ -59,8 +63,9 @@ guint8 *
 ephy_sync_utils_decode_hex (const gchar *hex_string)
 {
   guint8 *retval;
-  gsize hex_length = strlen (hex_string);
+  gsize hex_length;
 
+  hex_length = strlen (hex_string);
   g_return_val_if_fail (hex_length % 2 == 0, NULL);
 
   retval = g_malloc (hex_length / 2);
@@ -77,17 +82,21 @@ ephy_sync_utils_token_name_from_type (EphySyncTokenType token_type)
 {
   switch (token_type) {
   case EPHY_SYNC_TOKEN_AUTHPW:
-    return "authPw";
-  case EPHY_SYNC_TOKEN_KEYFETCHTOKEN:
-    return "keyFetchToken";
-  case EPHY_SYNC_TOKEN_SESSIONTOKEN:
-    return "sessionToken";
-  case EPHY_SYNC_TOKEN_UID:
-    return "uid";
+    return "authPW";
   case EPHY_SYNC_TOKEN_UNWRAPBKEY:
     return "unwrapBKey";
-  case EPHY_SYNC_TOKEN_QUICKSTRETCHEDPW:
-    return "quickStretchedPW";
+  case EPHY_SYNC_TOKEN_UID:
+    return "uid";
+  case EPHY_SYNC_TOKEN_SESSIONTOKEN:
+    return "sessionToken";
+  case EPHY_SYNC_TOKEN_KEYFETCHTOKEN:
+    return "keyFetchToken";
+  case EPHY_SYNC_TOKEN_KA:
+    return "kA";
+  case EPHY_SYNC_TOKEN_KB:
+    return "kB";
+  case EPHY_SYNC_TOKEN_WRAPKB:
+    return "wrapKB";
   default:
     g_assert_not_reached ();
   }

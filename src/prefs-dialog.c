@@ -35,6 +35,7 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-sync-secret.h"
 #include "ephy-sync-service.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
@@ -174,7 +175,6 @@ on_sync_login_button_clicked (GtkWidget   *button,
   const gchar *emailUTF8;
   const gchar *passwordUTF8;
   gboolean login_ok;
-  guint error_code = 0;
   gchar *error_message = NULL;
 
   gtk_label_set_markup (GTK_LABEL (dialog->sync_email_details_label), "");
@@ -200,8 +200,10 @@ LOG ("[%d] email: %s", __LINE__, emailUTF8);
 LOG ("[%d] password: %s", __LINE__, passwordUTF8);
 
   sync_service = ephy_shell_get_global_sync_service ();
-  ephy_sync_service_stretch (sync_service, emailUTF8, passwordUTF8);
-  login_ok = ephy_sync_service_login (sync_service, &error_code, &error_message);
+  login_ok = ephy_sync_service_login (sync_service,
+                                      emailUTF8,
+                                      passwordUTF8,
+                                      &error_message);
 
   if (login_ok == FALSE) {
     /* Translators: the %s refers to the error message. */
@@ -230,10 +232,17 @@ static void
 on_sync_logout_button_clicked (GtkWidget   *button,
                                PrefsDialog *dialog)
 {
+  EphySyncService *sync_service;
+
+  sync_service = ephy_shell_get_global_sync_service ();
+
   gtk_entry_set_text (GTK_ENTRY (dialog->sync_email_entry), "");
   gtk_entry_set_text (GTK_ENTRY (dialog->sync_password_entry), "");
 
-  /* TODO: Call /session/destroy endpoint and forget tokens */
+  /* TODO: Call session/destroy endpoint */
+
+  ephy_sync_service_delete_all_tokens (sync_service);
+  ephy_sync_secret_forget_all_tokens ();
 
   g_settings_set_string (EPHY_SETTINGS_MAIN,
                          EPHY_PREFS_SYNC_USER,

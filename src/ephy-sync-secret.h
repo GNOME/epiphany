@@ -39,8 +39,8 @@ void ephy_sync_secret_forget_all_tokens (void);
 void ephy_sync_secret_load_tokens       (EphySyncService *sync_service);
 
 void ephy_sync_secret_store_token       (const gchar       *emailUTF8,
-                                         EphySyncTokenType  token_type,
-                                         gchar             *token_value);
+                                         gchar             *token_value,
+                                         EphySyncTokenType  token_type);
 
 G_END_DECLS
 
