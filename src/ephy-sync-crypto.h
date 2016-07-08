@@ -53,42 +53,61 @@ typedef struct {
   EphySyncCryptoHawkArtifacts *artifacts;
 } EphySyncCryptoHawkHeader;
 
-void                       ephy_sync_crypto_pbkdf2_1k           (guint8 *key,
-                                                                 gsize   key_length,
-                                                                 guint8 *salt,
-                                                                 gsize   salt_length,
-                                                                 guint8 *out,
-                                                                 gsize   out_length);
+typedef struct {
+  guint8 *quickStretchedPW;
+  guint8 *authPW;
+  guint8 *unwrapBKey;
+} EphySyncCryptoStretchedCredentials;
 
-void                       ephy_sync_crypto_hkdf                (guint8 *in,
-                                                                 gsize   in_length,
-                                                                 guint8 *salt,
-                                                                 gsize   salt_length,
-                                                                 guint8 *info,
-                                                                 gsize   info_length,
-                                                                 guint8 *out,
-                                                                 gsize   out_length);
+typedef struct {
+  guint8 *tokenID;
+  guint8 *reqHMACkey;
+  guint8 *respHMACkey;
+  guint8 *respXORkey;
+} EphySyncCryptoProcessedKFT;
 
-EphySyncCryptoHawkHeader  *ephy_sync_crypto_compute_hawk_header (const gchar               *url,
-                                                                 const gchar               *method,
-                                                                 const gchar               *id,
-                                                                 guint8                    *key,
-                                                                 gsize                      key_length,
-                                                                 EphySyncCryptoHawkOptions *options);
+typedef struct {
+  guint8 *kA;
+  guint8 *kB;
+  guint8 *wrapKB;
+} EphySyncCryptoSyncKeys;
 
-EphySyncCryptoHawkOptions *ephy_sync_crypto_hawk_options_new    (gchar *app,
-                                                                 gchar *dlg,
-                                                                 gchar *ext,
-                                                                 gchar *content_type,
-                                                                 gchar *hash,
-                                                                 gchar *local_time_offset,
-                                                                 gchar *nonce,
-                                                                 gchar *payload,
-                                                                 gchar *timestamp);
+EphySyncCryptoHawkOptions          *ephy_sync_crypto_hawk_options_new           (gchar *app,
+                                                                                 gchar *dlg,
+                                                                                 gchar *ext,
+                                                                                 gchar *content_type,
+                                                                                 gchar *hash,
+                                                                                 gchar *local_time_offset,
+                                                                                 gchar *nonce,
+                                                                                 gchar *payload,
+                                                                                 gchar *timestamp);
 
-void                       ephy_sync_crypto_hawk_options_free   (EphySyncCryptoHawkOptions *hawk_options);
+void                                ephy_sync_crypto_hawk_options_free          (EphySyncCryptoHawkOptions *hawk_options);
 
-void                       ephy_sync_crypto_hawk_header_free    (EphySyncCryptoHawkHeader *hawk_header);
+void                                ephy_sync_crypto_hawk_header_free           (EphySyncCryptoHawkHeader *hawk_header);
+
+void                                ephy_sync_crypto_stretched_credentials_free (EphySyncCryptoStretchedCredentials *stretched_credentials);
+
+void                                ephy_sync_crypto_processed_kft_free         (EphySyncCryptoProcessedKFT *processed_kft);
+
+void                                ephy_sync_crypto_sync_keys_free             (EphySyncCryptoSyncKeys *sync_keys);
+
+EphySyncCryptoStretchedCredentials *ephy_sync_crypto_stretch                    (const gchar *emailUTF8,
+                                                                                 const gchar *passwordUTF8);
+
+EphySyncCryptoProcessedKFT         *ephy_sync_crypto_process_key_fetch_token    (const gchar  *keyFetchToken);
+
+EphySyncCryptoSyncKeys             *ephy_sync_crypto_retrieve_sync_keys         (const gchar *bundle,
+                                                                                 guint8      *respHMACkey,
+                                                                                 guint8      *respXORkey,
+                                                                                 guint8      *unwrapBKey);
+
+EphySyncCryptoHawkHeader           *ephy_sync_crypto_compute_hawk_header        (const gchar               *url,
+                                                                                 const gchar               *method,
+                                                                                 const gchar               *id,
+                                                                                 guint8                    *key,
+                                                                                 gsize                      key_length,
+                                                                                 EphySyncCryptoHawkOptions *options);
 
 G_END_DECLS
 

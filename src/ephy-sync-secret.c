@@ -123,7 +123,7 @@ ephy_sync_secret_load_tokens (EphySyncService *sync_service)
     if (g_strcmp0 (emailUTF8, user_email))
       continue;
 
-    ephy_sync_service_save_token (sync_service, token_type, g_strdup (token_value));
+    ephy_sync_service_save_token (sync_service, g_strdup (token_value), token_type);
 LOG ("[%d] Loaded token %s with value %s for email %s", __LINE__, token_name, token_value, emailUTF8);
 
     g_hash_table_unref (attributes);
@@ -134,8 +134,8 @@ LOG ("[%d] Loaded token %s with value %s for email %s", __LINE__, token_name, to
 
 void
 ephy_sync_secret_store_token (const gchar       *emailUTF8,
-                              EphySyncTokenType  token_type,
-                              gchar             *token_value)
+                              gchar             *token_value,
+                              EphySyncTokenType  token_type)
 {
   SecretValue *secret_value;
   GHashTable *attributes;
