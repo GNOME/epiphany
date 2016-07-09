@@ -17,7 +17,7 @@ distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache
 ChangeLog:
 	@if test -f $(top_srcdir)/.git/HEAD; then \
 		pushd $(top_srcdir); \
-		git log --max-count=500 --no-decorate --stat > $@; \
+		git log --max-count=500 --no-decorate --stat > $(abs_top_builddir)/$@; \
 		popd; \
 	fi
 
