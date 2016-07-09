@@ -107,24 +107,24 @@ libephymain_la_CFLAGS = \
 RESOURCE_FILES = \
 	resources/about.css			  \
 	resources/bookmark-properties.ui	  \
+	resources/channel-insecure-symbolic.png	  \
+	resources/computer-fail-symbolic.png	  \
 	resources/clear-data-dialog.ui		  \
 	resources/cookies-dialog.ui		  \
 	resources/encoding-dialog.ui		  \
 	resources/encoding-row.ui		  \
 	resources/epiphany-application-menu.ui	  \
 	resources/epiphany-bookmark-editor-ui.xml \
-	resources/shortcuts-dialog.ui		  \
 	resources/epiphany-ui.xml		  \
 	resources/epiphany.css                    \
 	resources/error.html			  \
 	resources/history-dialog.ui		  \
 	resources/incognito.png                   \
 	resources/missing-thumbnail.png		  \
-	resources/channel-insecure-symbolic.png	  \
-	resources/computer-fail-symbolic.png	  \
 	resources/passwords-dialog.ui		  \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \
+	resources/shortcuts-dialog.ui		  \
 	$(NULL)
 
 epiphany-resources.c: epiphany.gresource.xml $(RESOURCE_FILES)
