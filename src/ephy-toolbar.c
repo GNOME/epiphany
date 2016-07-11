@@ -492,6 +492,10 @@ navigation_button_release_event_cb (GtkButton *button,
   EphyNavigationHistoryDirection direction;
   const gchar *action_name;
 
+  if (toolbar->navigation_buttons_menu_timeout > 0)
+    g_source_remove (toolbar->navigation_buttons_menu_timeout);
+  toolbar->navigation_buttons_menu_timeout = 0;
+
   action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
   action_group = gtk_widget_get_action_group (GTK_WIDGET (toolbar->window), "toolbar");
 
@@ -698,6 +702,8 @@ ephy_toolbar_constructed (GObject *object)
 
   history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
 
+  if (toolbar->navigation_buttons_menu_timeout > 0)
+    g_source_remove (toolbar->navigation_buttons_menu_timeout);
   toolbar->navigation_buttons_menu_timeout = 0;
 
   g_signal_connect (history_service,
