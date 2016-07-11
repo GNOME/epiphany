@@ -193,7 +193,7 @@ ephy_history_cleared_cb (EphyHistoryService *history,
   actions = g_action_group_list_actions (action_group);
   for (i = 0; actions[i] != NULL; i++) {
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), actions[i]);
-    new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG, TRUE);
+    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG, TRUE);
 
     g_free (actions[i]);
   }
@@ -452,12 +452,12 @@ navigation_button_press_event_cb (GtkButton *button,
 {
   EphyToolbar *toolbar = EPHY_TOOLBAR (user_data);
   EphyNavigationHistoryDirection direction;
-  GVariant *variant;
+  const gchar *action_name;
 
-  variant = gtk_actionable_get_action_target_value (GTK_ACTIONABLE (button));
+  action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
 
-  direction = g_strcmp0 (g_variant_get_string (variant, NULL), "back") == 0 ?
-              EPHY_NAVIGATION_HISTORY_DIRECTION_BACK : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
+  direction = strstr (action_name, "back") ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
+                                           : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
 
   if (((GdkEventButton *)event)->button == 3) {
     popup_history_menu (GTK_WIDGET (button), toolbar->window,
@@ -489,39 +489,28 @@ navigation_button_release_event_cb (GtkButton *button,
   EphyToolbar *toolbar = EPHY_TOOLBAR (user_data);
   GActionGroup *action_group;
   GAction *action;
-  GVariant *variant;
   EphyNavigationHistoryDirection direction;
+  const gchar *action_name;
 
-  variant = gtk_actionable_get_action_target_value (GTK_ACTIONABLE (button));
+  action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
   action_group = gtk_widget_get_action_group (GTK_WIDGET (toolbar->window), "toolbar");
 
-  direction = g_strcmp0 (g_variant_get_string (variant, NULL), "back") == 0 ?
-              EPHY_NAVIGATION_HISTORY_DIRECTION_BACK : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
+  direction = strstr (action_name, "back") == 0 ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
+                                                : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
 
   switch (((GdkEventButton *)event)->button) {
-    case 1:
-      if (direction == 0) {
-        action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                             "navigation-back");
-        g_action_activate (action, variant);
-      } else if (direction == 1) {
-        action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                             "navigation-forward");
-        g_action_activate (action, variant);
-      }
-      break;
-    case 2:
+    case GDK_BUTTON_MIDDLE:
       if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_BACK) {
         action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                              "navigation-back-new-tab");
-        g_action_activate (action, variant);
+        g_action_activate (action, NULL);
       } else if (direction == EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD) {
         action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                              "navigation-forward-new-tab");
-        g_action_activate (action, variant);
+        g_action_activate (action, NULL);
       }
       break;
-    case 3:
+    case GDK_BUTTON_SECONDARY:
       popup_history_menu (GTK_WIDGET (button), toolbar->window,
                           direction, (GdkEventButton *)event);
       break;
@@ -595,8 +584,6 @@ ephy_toolbar_constructed (GObject *object)
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                   "toolbar.navigation-back");
-  gtk_actionable_set_action_target_value (GTK_ACTIONABLE (button),
-                                          g_variant_new ("s", "back"));
   g_signal_connect (button, "button-press-event",
                     G_CALLBACK (navigation_button_press_event_cb), toolbar);
   g_signal_connect (button, "button-release-event",
@@ -614,8 +601,6 @@ ephy_toolbar_constructed (GObject *object)
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                   "toolbar.navigation-forward");
-  gtk_actionable_set_action_target_value (GTK_ACTIONABLE (button),
-                                          g_variant_new ("s", "forward"));
   g_signal_connect (button, "button-press-event",
                     G_CALLBACK (navigation_button_press_event_cb), toolbar);
   g_signal_connect (button, "button-release-event",

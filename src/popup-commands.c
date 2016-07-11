@@ -85,29 +85,32 @@ view_in_destination (EphyWindow     *window,
 }
 
 void
-popup_cmd_link_in_new_window (GtkAction  *action,
-                              EphyWindow *window)
+popup_cmd_link_in_new_window (GSimpleAction *action,
+                              GVariant      *parameter,
+                              gpointer       user_data)
 {
-  view_in_destination (window, "link-uri", NEW_WINDOW);
+  view_in_destination (EPHY_WINDOW (user_data), "link-uri", NEW_WINDOW);
 }
 
 void
-popup_cmd_media_in_new_window (GtkAction  *action,
-                               EphyWindow *window)
+popup_cmd_media_in_new_window (GSimpleAction *action,
+                               GVariant      *parameter,
+                               gpointer       user_data)
 {
-  view_in_destination (window, "media-uri", NEW_WINDOW);
+  view_in_destination (EPHY_WINDOW (user_data), "media-uri", NEW_WINDOW);
 }
 
 void
-popup_cmd_bookmark_link (GtkAction  *action,
-                         EphyWindow *window)
+popup_cmd_bookmark_link (GSimpleAction *action,
+                         GVariant      *parameter,
+                         gpointer       user_data)
 {
   EphyEmbedEvent *event;
   WebKitHitTestResult *result;
   const char *title;
   const char *location;
 
-  event = ephy_window_get_context_event (window);
+  event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
 
   result = ephy_embed_event_get_hit_test_result (event);
   if (!webkit_hit_test_result_context_is_link (result)) {
@@ -120,7 +123,7 @@ popup_cmd_bookmark_link (GtkAction  *action,
     title = webkit_hit_test_result_get_link_label (result);
   }
 
-  ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (window), location, title);
+  ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (user_data), location, title);
 }
 
 static void
@@ -133,15 +136,16 @@ popup_cmd_copy_to_clipboard (EphyWindow *window, const char *text)
 }
 
 void
-popup_cmd_copy_link_address (GtkAction  *action,
-                             EphyWindow *window)
+popup_cmd_copy_link_address (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
 {
   EphyEmbedEvent *event;
   guint context;
   const char *address;
   GValue value = { 0, };
 
-  event = ephy_window_get_context_event (window);
+  event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
   g_return_if_fail (event != NULL);
 
   context = ephy_embed_event_get_context (event);
@@ -153,7 +157,7 @@ popup_cmd_copy_link_address (GtkAction  *action,
     if (g_str_has_prefix (address, "mailto:"))
       address = address + 7;
 
-    popup_cmd_copy_to_clipboard (window, address);
+    popup_cmd_copy_to_clipboard (EPHY_WINDOW (user_data), address);
     g_value_unset (&value);
   }
 }
@@ -227,7 +231,7 @@ save_property_url (const char *title,
   const char *location;
   EphyDownload *download;
   SavePropertyURLData *data;
-  GValue value = { 0, };
+  GValue value = G_VALUE_INIT;
 
   event = ephy_window_get_context_event (window);
   g_return_if_fail (event != NULL);
@@ -246,24 +250,27 @@ save_property_url (const char *title,
 }
 
 void
-popup_cmd_download_link_as (GtkAction  *action,
-                            EphyWindow *window)
+popup_cmd_download_link_as (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
 {
-  save_property_url (_("Save Link As"), window, "link-uri");
+  save_property_url (_("Save Link As"), EPHY_WINDOW (user_data), "link-uri");
 }
 
 void
-popup_cmd_save_image_as (GtkAction  *action,
-                         EphyWindow *window)
+popup_cmd_save_image_as (GSimpleAction *action,
+                         GVariant      *parameter,
+                         gpointer       user_data)
 {
-  save_property_url (_("Save Image As"), window, "image-uri");
+  save_property_url (_("Save Image As"), EPHY_WINDOW (user_data), "image-uri");
 }
 
 void
-popup_cmd_save_media_as (GtkAction  *action,
-                         EphyWindow *window)
+popup_cmd_save_media_as (GSimpleAction *action,
+                         GVariant      *parameter,
+                         gpointer       user_data)
 {
-  save_property_url (_("Save Media As"), window, "media-uri");
+  save_property_url (_("Save Media As"), EPHY_WINDOW (user_data), "media-uri");
 }
 
 static void
@@ -279,8 +286,9 @@ background_download_completed (EphyDownload *download,
 }
 
 void
-popup_cmd_set_image_as_background (GtkAction  *action,
-                                   EphyWindow *window)
+popup_cmd_set_image_as_background (GSimpleAction *action,
+                                   GVariant      *parameter,
+                                   gpointer       user_data)
 {
   EphyEmbedEvent *event;
   const char *location;
@@ -288,7 +296,7 @@ popup_cmd_set_image_as_background (GtkAction  *action,
   GValue value = { 0, };
   EphyDownload *download;
 
-  event = ephy_window_get_context_event (window);
+  event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
   g_return_if_fail (event != NULL);
 
   ephy_embed_event_get_property (event, "image-uri", &value);
@@ -307,7 +315,7 @@ popup_cmd_set_image_as_background (GtkAction  *action,
   g_object_unref (download);
 
   g_signal_connect (download, "completed",
-                    G_CALLBACK (background_download_completed), window);
+                    G_CALLBACK (background_download_completed), user_data);
 
   g_value_unset (&value);
   g_free (base);
@@ -332,48 +340,54 @@ popup_cmd_copy_location (EphyWindow *window,
 }
 
 void
-popup_cmd_copy_image_location (GtkAction  *action,
-                               EphyWindow *window)
+popup_cmd_copy_image_location (GSimpleAction *action,
+                               GVariant      *parameter,
+                               gpointer       user_data)
 {
-  popup_cmd_copy_location (window, "image-uri");
+  popup_cmd_copy_location (EPHY_WINDOW (user_data), "image-uri");
 }
 
 void
-popup_cmd_copy_media_location (GtkAction  *action,
-                               EphyWindow *window)
+popup_cmd_copy_media_location (GSimpleAction *action,
+                               GVariant      *parameter,
+                               gpointer       user_data)
 {
-  popup_cmd_copy_location (window, "media-uri");
+  popup_cmd_copy_location (EPHY_WINDOW (user_data), "media-uri");
 }
 
 void
-popup_cmd_link_in_new_tab (GtkAction  *action,
-                           EphyWindow *window)
+popup_cmd_link_in_new_tab (GSimpleAction *action,
+                           GVariant      *parameter,
+                           gpointer       user_data)
 {
-  view_in_destination (window, "link-uri", NEW_TAB);
+  view_in_destination (EPHY_WINDOW (user_data), "link-uri", NEW_TAB);
 }
 
 void
-popup_cmd_view_image_in_new_tab (GtkAction  *action,
-                                 EphyWindow *window)
+popup_cmd_view_image_in_new_tab (GSimpleAction *action,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
 {
-  view_in_destination (window, "image-uri", NEW_TAB);
+  view_in_destination (EPHY_WINDOW (user_data), "image-uri", NEW_TAB);
 }
 
 void
-popup_cmd_media_in_new_tab (GtkAction  *action,
-                            EphyWindow *window)
+popup_cmd_media_in_new_tab (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
 {
-  view_in_destination (window, "media-uri", NEW_TAB);
+  view_in_destination (EPHY_WINDOW (user_data), "media-uri", NEW_TAB);
 }
 
 void
-popup_cmd_link_in_incognito_window (GtkAction  *action,
-                                    EphyWindow *window)
+popup_cmd_link_in_incognito_window (GSimpleAction *action,
+                                    GVariant      *parameter,
+                                    gpointer       user_data)
 {
   EphyEmbedEvent *event;
   GValue value = { 0, };
 
-  event = ephy_window_get_context_event (window);
+  event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
   g_assert (event != NULL);
 
   ephy_embed_event_get_property (event, "link-uri", &value);
@@ -381,22 +395,36 @@ popup_cmd_link_in_incognito_window (GtkAction  *action,
   g_value_unset (&value);
 }
 
+static gchar *
+get_search_term (const gchar *text)
+{
+  gchar *search_term;
+
+  search_term = strchr (text, '\'') + 1;
+  search_term[strlen (search_term) - 1] = '\0';
+
+  return search_term;
+}
+
 void
-popup_cmd_search_selection (GtkAction  *action,
-                            EphyWindow *window)
+popup_cmd_search_selection (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
 {
   EphyEmbed *embed, *new_embed;
   const char *text;
+  const char *search_term;
   char *search_url;
 
   embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (window));
+            (EPHY_EMBED_CONTAINER (user_data));
   g_assert (EPHY_IS_EMBED (embed));
 
-  text = g_object_get_data (G_OBJECT (action), "selection");
-  search_url = ephy_embed_utils_autosearch_address (text);
+  text = g_variant_get_string (parameter, NULL);
+  search_term = get_search_term (text);
+  search_url = ephy_embed_utils_autosearch_address (search_term);
   new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                                  window, embed, EPHY_NEW_TAB_APPEND_AFTER);
+                                  EPHY_WINDOW (user_data), embed, EPHY_NEW_TAB_APPEND_AFTER);
   ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), search_url);
   g_free (search_url);
 }

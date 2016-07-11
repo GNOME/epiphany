@@ -40,26 +40,6 @@ struct _EphyLockdown {
 
 G_DEFINE_TYPE (EphyLockdown, ephy_lockdown, G_TYPE_OBJECT)
 
-static int
-find_name (GtkActionGroup *action_group,
-           const char     *name)
-{
-  return g_strcmp0 (gtk_action_group_get_name (action_group), name);
-}
-
-static GtkActionGroup *
-find_action_group (GtkUIManager *manager,
-                   const char   *name)
-{
-  GList *list, *element;
-
-  list = gtk_ui_manager_get_action_groups (manager);
-  element = g_list_find_custom (list, name, (GCompareFunc)find_name);
-  g_return_val_if_fail (element != NULL, NULL);
-
-  return GTK_ACTION_GROUP (element->data);
-}
-
 static void
 arbitrary_url_cb (GSettings  *settings,
                   const char *key,
@@ -116,11 +96,11 @@ static const BindAction window_actions[] = {
 };
 
 static const BindAction popup_actions[] = {
-  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "DownloadLinkAs", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "SaveImageAs", "sensitive" },
-  { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "ContextBookmarkPage", "sensitive" },
+  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "download-link-as", "enabled" },
+  { EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK, "save-image-as", "enabled" },
+  { EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING, "context-bookmark-page", "enabled" },
 
-  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "OpenLinkInNewWindow", "sensitive" }
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "open-link-in-new-window", "enabled" }
 };
 
 static const BindAction tab_actions[] = {
@@ -137,28 +117,6 @@ sensitive_get_mapping (GValue   *value,
                        GVariant *variant,
                        gpointer  data)
 {
-  GtkAction *action;
-  gboolean active, before, after;
-
-  action = GTK_ACTION (data);
-  active = g_variant_get_boolean (variant);
-
-  before = gtk_action_get_sensitive (action);
-  ephy_action_change_sensitivity_flags (action, LOCKDOWN_FLAG, active);
-  after = gtk_action_get_sensitive (action);
-
-  /* Set (GtkAction::sensitive) to the value in GSettings _only if_
-   * the LOCKDOWN_FLAG had some real effect in the GtkAction */
-  g_value_set_boolean (value, (before != after) ? after : before);
-
-  return TRUE;
-}
-
-static gboolean
-new_sensitive_get_mapping (GValue   *value,
-                       GVariant *variant,
-                       gpointer  data)
-{
   GAction *action;
   gboolean active, before, after;
 
@@ -166,7 +124,7 @@ new_sensitive_get_mapping (GValue   *value,
   active = g_variant_get_boolean (variant);
 
   before = g_action_get_enabled (action);
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), LOCKDOWN_FLAG, active);
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), LOCKDOWN_FLAG, active);
   after = g_action_get_enabled (action);
 
   /* Set (GAction::enabled) to the value in GSettings _only if_
@@ -178,40 +136,6 @@ new_sensitive_get_mapping (GValue   *value,
 
 static void
 bind_settings_and_actions (GSettings        *settings,
-                           GtkActionGroup   *action_group,
-                           const BindAction *actions,
-                           int               actions_n)
-{
-  int i;
-
-  for (i = 0; i < actions_n; i++) {
-    GtkAction *action;
-
-    action = gtk_action_group_get_action (action_group,
-                                          actions[i].action);
-
-    if (g_strcmp0 (actions[i].prop, "visible") == 0) {
-      g_settings_bind (settings, actions[i].key,
-                       action, actions[i].prop,
-                       G_SETTINGS_BIND_GET |
-                       G_SETTINGS_BIND_INVERT_BOOLEAN);
-    } else {
-      /* We need a custom get_mapping for 'sensitive'
-       * properties, see usage of
-       * ephy_action_change_sensitivity_flags in
-       * ephy-window.c. */
-      g_settings_bind_with_mapping (settings, actions[i].key,
-                                    action, actions[i].prop,
-                                    G_SETTINGS_BIND_GET,
-                                    sensitive_get_mapping,
-                                    NULL,
-                                    action, NULL);
-    }
-  }
-}
-
-static void
-new_bind_settings_and_actions (GSettings        *settings,
                            GActionGroup     *action_group,
                            const BindAction *actions,
                            int               actions_n)
@@ -237,7 +161,7 @@ new_bind_settings_and_actions (GSettings        *settings,
       g_settings_bind_with_mapping (settings, actions[i].key,
                                     action, actions[i].prop,
                                     G_SETTINGS_BIND_GET,
-                                    new_sensitive_get_mapping,
+                                    sensitive_get_mapping,
                                     NULL,
                                     action, NULL);
     }
@@ -259,10 +183,8 @@ window_added_cb (GtkApplication *application,
                  GtkWindow      *window,
                  EphyLockdown   *lockdown)
 {
-  GtkUIManager *manager;
-  GtkActionGroup *action_group;
-  GActionGroup *new_action_group;
-  GtkAction *action;
+  GActionGroup *action_group;
+  GAction *action;
   GSettings *settings;
   EphyLocationController *location_controller;
 
@@ -282,44 +204,43 @@ window_added_cb (GtkApplication *application,
   arbitrary_url_cb (EPHY_SETTINGS_LOCKDOWN,
                     EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, EPHY_WINDOW (window));
 
-  manager = GTK_UI_MANAGER (ephy_window_get_ui_manager (EPHY_WINDOW (window)));
-
-  new_action_group = G_ACTION_GROUP (G_APPLICATION (gtk_window_get_application (GTK_WINDOW (window))));
-  new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             new_action_group, app_actions,
+  action_group = G_ACTION_GROUP (G_APPLICATION (gtk_window_get_application (GTK_WINDOW (window))));
+  bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                             action_group, app_actions,
                              G_N_ELEMENTS (app_actions));
 
-  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                   "win");
-  new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             new_action_group,
+  bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                             action_group,
                              window_actions,
                              G_N_ELEMENTS (window_actions));
 
-  action_group = find_action_group (manager, "PopupsActions");
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                                  "tab");
+  bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                             action_group,
+                             tab_actions,
+                             G_N_ELEMENTS (tab_actions));
+
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                                  "toolbar");
+  bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                             action_group,
+                             toolbar_actions,
+                             G_N_ELEMENTS (toolbar_actions));
+
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                              "popup");
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              action_group, popup_actions,
                              G_N_ELEMENTS (popup_actions));
 
-  action = gtk_action_group_get_action (action_group,
-                                        "SetImageAsBackground");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                        "set-image-as-background");
   settings = ephy_settings_get ("org.gnome.desktop.background");
   g_settings_bind_writable (settings, "picture-filename",
-                            action, "sensitive", FALSE);
-
-  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
-                                                  "tab");
-  new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             new_action_group,
-                             tab_actions,
-                             G_N_ELEMENTS (tab_actions));
-
-  new_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
-                                                  "toolbar");
-  new_bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             new_action_group,
-                             toolbar_actions,
-                             G_N_ELEMENTS (toolbar_actions));
+                            action, "enabled", FALSE);
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     location_controller = ephy_window_get_location_controller (EPHY_WINDOW (window));

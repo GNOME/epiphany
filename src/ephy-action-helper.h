@@ -27,11 +27,7 @@ enum
 	SENS_FLAG = 1 << 0
 };
 
-void ephy_action_change_sensitivity_flags (GtkAction *action,
-					   guint flags,
-					   gboolean set);
-
-void new_ephy_action_change_sensitivity_flags (GSimpleAction *action,
+void ephy_action_change_sensitivity_flags (GSimpleAction *action,
                                            guint    	  flags,
                                            gboolean       set);
 

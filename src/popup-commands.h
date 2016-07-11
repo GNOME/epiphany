@@ -24,59 +24,60 @@
 
 G_BEGIN_DECLS
 
-void popup_cmd_link_in_new_window	(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_link_in_new_tab		(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_link_in_incognito_window (GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_bookmark_link		(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_view_source		(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_copy_link_address	(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_copy_link_location       (GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_download_link_as		(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_set_image_as_background  (GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_copy_image_location	(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_view_image_in_new_tab	(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_download_link		(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_save_image_as		(GtkAction *action,
-					 EphyWindow *window);
-
-void popup_cmd_media_in_new_window      (GtkAction *action,
-                                         EphyWindow *window);
-
-void popup_cmd_media_in_new_tab         (GtkAction *action,
-                                         EphyWindow *window);
-
-void popup_cmd_copy_media_location      (GtkAction *action,
-                                         EphyWindow *window);
-
-void popup_cmd_save_media_as            (GtkAction *action,
-                                         EphyWindow *window);
-
-void popup_cmd_search_selection         (GtkAction *action,
-					 EphyWindow *window);
+void popup_cmd_link_in_new_window	      (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_link_in_new_tab		      (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_link_in_incognito_window (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_bookmark_link		        (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_view_source		          (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_copy_link_address	      (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_copy_link_location       (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_download_link_as		      (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_set_image_as_background  (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_copy_image_location	    (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_view_image_in_new_tab	  (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_download_link		        (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_save_image_as		        (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_media_in_new_window      (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_media_in_new_tab         (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_copy_media_location      (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_save_media_as            (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
+void popup_cmd_search_selection         (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data);
 
 G_END_DECLS
 
