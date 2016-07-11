@@ -75,65 +75,6 @@ static void ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
                                                           GVariant      *state,
                                                           gpointer       user_data);
 
-static const GtkActionEntry ephy_popups_entries [] = {
-  /* Document. */
-
-  { "ContextBookmarkPage", NULL, N_("Add Boo_kmark…"), "<control>D", NULL,
-    G_CALLBACK (window_cmd_bookmark_page) },
-
-  /* Links. */
-
-  { "OpenLinkInNewWindow", NULL, N_("Open Link in New _Window"), NULL, NULL,
-    G_CALLBACK (popup_cmd_link_in_new_window) },
-  { "OpenLinkInNewTab", NULL, N_("Open Link in New _Tab"), NULL, NULL,
-    G_CALLBACK (popup_cmd_link_in_new_tab) },
-  { "OpenLinkInIncognitoWindow", NULL, N_("Open Link in I_ncognito Window"), NULL, NULL,
-    G_CALLBACK (popup_cmd_link_in_incognito_window) },
-  { "DownloadLinkAs", NULL, N_("_Save Link As…"), NULL, NULL,
-    G_CALLBACK (popup_cmd_download_link_as) },
-  { "CopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
-    NULL, G_CALLBACK (popup_cmd_copy_link_address) },
-  { "CopyEmailAddress", NULL, N_("_Copy E-mail Address"), NULL,
-    NULL, G_CALLBACK (popup_cmd_copy_link_address) },
-
-  /* Images. */
-
-  { "ViewImage", NULL, N_("View _Image in New Tab"), NULL,
-    NULL, G_CALLBACK (popup_cmd_view_image_in_new_tab) },
-  { "CopyImageLocation", NULL, N_("Copy I_mage Address"), NULL,
-    NULL, G_CALLBACK (popup_cmd_copy_image_location) },
-  { "SaveImageAs", NULL, N_("_Save Image As…"), NULL,
-    NULL, G_CALLBACK (popup_cmd_save_image_as) },
-  { "SetImageAsBackground", NULL, N_("Set as _Wallpaper"), NULL,
-    NULL, G_CALLBACK (popup_cmd_set_image_as_background) },
-
-  /* Video. */
-
-  { "OpenVideoInNewWindow", NULL, N_("Open Video in New _Window"), NULL, NULL,
-    G_CALLBACK (popup_cmd_media_in_new_window) },
-  { "OpenVideoInNewTab", NULL, N_("Open Video in New _Tab"), NULL, NULL,
-    G_CALLBACK (popup_cmd_media_in_new_tab) },
-  { "SaveVideoAs", NULL, N_("_Save Video As…"), NULL,
-    NULL, G_CALLBACK (popup_cmd_save_media_as) },
-  { "CopyVideoLocation", NULL, N_("_Copy Video Address"), NULL,
-    NULL, G_CALLBACK (popup_cmd_copy_media_location) },
-
-  /* Audio. */
-
-  { "OpenAudioInNewWindow", NULL, N_("Open Audio in New _Window"), NULL, NULL,
-    G_CALLBACK (popup_cmd_media_in_new_window) },
-  { "OpenAudioInNewTab", NULL, N_("Open Audio in New _Tab"), NULL, NULL,
-    G_CALLBACK (popup_cmd_media_in_new_tab) },
-  { "SaveAudioAs", NULL, N_("_Save Audio As…"), NULL,
-    NULL, G_CALLBACK (popup_cmd_save_media_as) },
-  { "CopyAudioLocation", NULL, N_("_Copy Audio Address"), NULL,
-    NULL, G_CALLBACK (popup_cmd_copy_media_location) },
-
-  /* Selection */
-  { "SearchSelection", NULL, "_Search Selection", NULL, NULL,
-    G_CALLBACK (popup_cmd_search_selection) },
-};
-
 static const struct {
   guint keyval;
   GdkModifierType modifier;
@@ -206,7 +147,7 @@ struct _EphyWindow {
 
   GtkWidget *toolbar;
   GtkUIManager *manager;
-  GtkActionGroup *popups_action_group;
+  GHashTable *action_labels;
   GtkActionGroup *toolbar_action_group;
   GtkNotebook *notebook;
   EphyEmbed *active_embed;
@@ -543,7 +484,7 @@ sync_tab_load_status (EphyWebView    *view,
   /* disable print while loading, see bug #116344 */
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "print");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                         SENS_FLAG_LOADING, loading);
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "toolbar");
@@ -712,19 +653,22 @@ static void
 update_link_actions_sensitivity (EphyWindow *window,
                                  gboolean    link_has_web_scheme)
 {
-  GtkAction *action;
-  GtkActionGroup *action_group;
+  GAction *action;
+  GActionGroup *action_group;
 
-  action_group = window->popups_action_group;
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "popup");
 
-  action = gtk_action_group_get_action (action_group, "OpenLinkInNewWindow");
-  gtk_action_set_sensitive (action, link_has_web_scheme);
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "open-link-in-new-window");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), link_has_web_scheme);
 
-  action = gtk_action_group_get_action (action_group, "OpenLinkInNewTab");
-  ephy_action_change_sensitivity_flags (action, SENS_FLAG_CONTEXT, !link_has_web_scheme);
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "open-link-in-new-tab");
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_CONTEXT, !link_has_web_scheme);
 
-  action = gtk_action_group_get_action (action_group, "OpenLinkInIncognitoWindow");
-  gtk_action_set_sensitive (action, link_has_web_scheme);
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "open-link-in-incognito-window");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), link_has_web_scheme);
 }
 
 static void
@@ -737,11 +681,8 @@ update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gb
                                               "win");
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                   action_name);
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), sensitive);
-  // TODO: do something with hide
-  // TODO: see why PageMenu Actions don't have their sensitivity changed
-  // (probably because it's set back to enabled in 'context-menu-dismissed''s callback)
+                                       action_name);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), sensitive || hide);
 }
 
 typedef struct {
@@ -871,33 +812,24 @@ enable_edit_actions_sensitivity (EphyWindow *window)
 }
 
 static void
-edit_menu_show_cb (GtkWidget  *menu,
-                   EphyWindow *window)
+edit_menu_toggle_cb (GtkWidget  *menu,
+                     EphyWindow *window)
 {
-  update_edit_actions_sensitivity (window, FALSE);
-}
-
-static void
-edit_menu_hide_cb (GtkWidget  *menu,
-                   EphyWindow *window)
-{
-  enable_edit_actions_sensitivity (window);
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (menu)))
+    update_edit_actions_sensitivity (window, FALSE);
+  else
+    enable_edit_actions_sensitivity (window);
 }
 
 static void
 init_menu_updaters (EphyWindow *window)
 {
-  return;
+  GtkWidget *page_menu;
 
-  GtkWidget *edit_menu;
+  page_menu = ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (window->toolbar));
 
-  edit_menu = gtk_ui_manager_get_widget
-                (window->manager, "/ui/PagePopup");
-
-  g_signal_connect (edit_menu, "show",
-                    G_CALLBACK (edit_menu_show_cb), window);
-  g_signal_connect (edit_menu, "hide",
-                    G_CALLBACK (edit_menu_hide_cb), window);
+  g_signal_connect (page_menu, "toggled",
+                    G_CALLBACK (edit_menu_toggle_cb), window);
 }
 
 static const GActionEntry window_entries [] =
@@ -947,15 +879,108 @@ static const GActionEntry tab_entries [] = {
 };
 
 static const GActionEntry toolbar_entries [] = {
-  { "navigation-back", window_cmd_navigation, "s" },
-  { "navigation-back-new-tab", window_cmd_navigation_new_tab, "s" },
-  { "navigation-forward", window_cmd_navigation, "s" },
-  { "navigation-forward-new-tab", window_cmd_navigation_new_tab, "s" },
+  { "navigation-back", window_cmd_navigation },
+  { "navigation-back-new-tab", window_cmd_navigation_new_tab },
+  { "navigation-forward", window_cmd_navigation },
+  { "navigation-forward-new-tab", window_cmd_navigation_new_tab },
 
   { "stop", window_cmd_stop },
   { "reload", window_cmd_reload },
   { "always-stop", window_cmd_stop },
   { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", ephy_toolbar_change_combined_stop_reload_state }
+};
+
+static const GActionEntry popup_entries [] = {
+  { "context-bookmark-page", window_cmd_bookmark_page },
+  /* Links. */
+
+  { "open-link-in-new-window", popup_cmd_link_in_new_window },
+  { "open-link-in-new-tab", popup_cmd_link_in_new_tab },
+  { "open-link-in-incognito-window", popup_cmd_link_in_incognito_window },
+  { "download-link-as", popup_cmd_download_link_as },
+  { "copy-link-address", popup_cmd_copy_link_address },
+  { "copy-email-address", popup_cmd_copy_link_address },
+
+  /* Images. */
+
+  { "view-image", popup_cmd_view_image_in_new_tab },
+  { "copy-image-location", popup_cmd_copy_image_location },
+  { "save-image-as", popup_cmd_save_image_as },
+  { "set-image-as-background", popup_cmd_set_image_as_background },
+
+  /* Video. */
+
+  { "open-video-in-new-window", popup_cmd_media_in_new_window },
+  { "open-video-in-new-tab", popup_cmd_media_in_new_tab },
+  { "save-video-as", popup_cmd_save_media_as },
+  { "copy-video-location", popup_cmd_copy_media_location },
+
+  /* Audio. */
+
+  { "open-audio-in-new-window", popup_cmd_media_in_new_window },
+  { "open-audio-in-new-tab", popup_cmd_media_in_new_tab },
+  { "save-audios-as", popup_cmd_save_media_as },
+  { "copy-audio-location", popup_cmd_copy_media_location },
+
+  /* Selection */
+  { "search-selection", popup_cmd_search_selection, "s" }
+};
+
+const struct {
+  const gchar *action;
+  const gchar *label;
+} action_label [] = {
+  /* Undo, redo. */
+  { "undo", N_("_Undo") },
+  { "redo", N_("Re_do") },
+
+  /* Edit. */
+  { "cut", N_("Cu_t") },
+  { "copy", N_("_Copy") },
+  { "paste", N_("_Paste") },
+  { "select-all", N_("Select _All") },
+
+  { "send-to", N_("S_end Link by Email…") },
+
+  { "reload", N_("_Reload") },
+  { "navigation-back", N_("_Back") },
+  { "navigation-forward", N_("_Forward") },
+
+  /* Bookmarks */
+  { "context-bookmark-page", N_("Add Boo_kmark…") },
+
+  /* Links. */
+
+  { "open-link-in-new-window", N_("Open Link in New _Window") },
+  { "open-link-in-new-tab", N_("Open Link in New _Tab") },
+  { "open-link-in-incognito-window", N_("Open Link in I_ncognito Window") },
+  { "download-link-as", N_("_Save Link As…") },
+  { "copy-link-address", N_("_Copy Link Address") },
+  { "copy-email-address", N_("_Copy E-mail Address") },
+
+  /* Images. */
+
+  { "view-image", N_("View _Image in New Tab") },
+  { "copy-image-location", N_("Copy I_mage Address") },
+  { "save-image-as", N_("_Save Image As…") },
+  { "set-image-as-background", N_("Set as _Wallpaper") },
+
+  /* Video. */
+
+  { "open-video-in-new-window", N_("Open Video in New _Window") },
+  { "open-video-in-new-tab", N_("Open Video in New _Tab") },
+  { "save-video-as", N_("_Save Video As…") },
+  { "copy-video-location", N_("_Copy Video Address") },
+
+  /* Audio. */
+
+  { "open-audio-in-new-window", N_("Open Audio in New _Window") },
+  { "open-audio-in-new-tab", N_("Open Audio in New _Tab") },
+  { "save-audios-as", N_("_Save Audio As…") },
+  { "copy-audio-location", N_("_Copy Audio Address") },
+
+  /* Selection */
+  { "search-selection", NULL }
 };
 
 static void
@@ -968,15 +993,6 @@ setup_ui_manager (EphyWindow *window)
 
   manager = gtk_ui_manager_new ();
   accel_group = gtk_ui_manager_get_accel_group (manager);
-
-  action_group = gtk_action_group_new ("PopupsActions");
-  gtk_action_group_set_translation_domain (action_group, NULL);
-  gtk_action_group_add_actions (action_group, ephy_popups_entries,
-                                G_N_ELEMENTS (ephy_popups_entries), window);
-  gtk_action_group_set_accel_group (action_group, accel_group);
-  gtk_ui_manager_insert_action_group (manager, action_group, 0);
-  window->popups_action_group = action_group;
-  g_object_unref (action_group);
 
   action_group = gtk_action_group_new ("SpecialToolbarActions");
 
@@ -1018,8 +1034,7 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
                                             gboolean    set)
 {
   GActionGroup *action_group;
-  GtkAction *action;
-  GAction *new_action;
+  GAction *action;
   int i;
 
   const char *action_group_actions[] = { "save-as", "save-as-application",
@@ -1029,28 +1044,28 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
                                          "send-to",
                                          NULL };
 
-  action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
-                                              "win");
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
 
   /* Page menu */
   for (i = 0; action_group_actions[i] != NULL; i++) {
-    new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                             action_group_actions[i]);
-    new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         action_group_actions[i]);
+    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                           flags, set);
   }
 
   /* Page context popup */
-  action = gtk_action_group_get_action (window->popups_action_group,
-                                        "ContextBookmarkPage");
-  ephy_action_change_sensitivity_flags (action,
-                                        flags, set);
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "popup");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                           "context-bookmark-page");
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
+                                            flags, set);
 
   /* Toolbar */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "toolbar");
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "combined-stop-reload");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                         flags, set);
 }
 
@@ -1136,15 +1151,15 @@ sync_tab_document_type (EphyWebView *view,
                                               "win");
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "encoding");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, disable);
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, disable);
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "page-source");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, is_image);
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, is_image);
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "find");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "find-prev");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "find-next");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_DOCUMENT, !can_find);
 
   if (!can_find) {
     ephy_find_toolbar_request_close (ephy_embed_get_find_toolbar (window->active_embed));
@@ -1306,55 +1321,6 @@ context_menu_dismissed_cb (WebKitWebView *webView,
   _ephy_window_unset_context_event (window);
 }
 
-static void
-add_action_to_context_menu (WebKitContextMenu *context_menu,
-                            GtkActionGroup    *action_group,
-                            const char        *action_name)
-{
-  GtkAction *action;
-
-  action = gtk_action_group_get_action (action_group, action_name);
-  webkit_context_menu_append (context_menu, webkit_context_menu_item_new (action));
-}
-
-static const gchar *
-action_name_to_label_for_model (GMenuModel *menu_model, const gchar *action_name)
-{
-  GMenuLinkIter *link_iter;
-  gint n_items;
-  gint i, j;
-
-  printf("Finding %s\n", action_name);
-  n_items = g_menu_model_get_n_items (menu_model);
-
-  for (i = 0; i < n_items; i++) {
-    link_iter = g_menu_model_iterate_item_links (menu_model, i);
-    while (g_menu_link_iter_next (link_iter)) {
-      GMenuModel *link_model = NULL;
-      GVariant *action;
-      gint link_model_n_items;
-
-      link_model = g_menu_link_iter_get_value (link_iter);
-      link_model_n_items = g_menu_model_get_n_items (link_model);
-
-      for (j = 0; j < link_model_n_items; j++) {
-        action = g_menu_model_get_item_attribute_value (link_model, j, G_MENU_ATTRIBUTE_ACTION, G_VARIANT_TYPE_STRING);
-        printf("g_variant_get_string %s\n", g_variant_get_string (action, NULL));
-        if (g_strcmp0 (strchr (g_variant_get_string (action, NULL), '.') + 1, action_name) == 0) {
-          GVariant *label;
-
-          label = g_menu_model_get_item_attribute_value (link_model, j, G_MENU_ATTRIBUTE_LABEL, G_VARIANT_TYPE_STRING);
-
-          return g_variant_get_string (label, NULL);
-        }
-      }
-    }
-  }
-
-  g_assert_not_reached ();
-  return NULL;
-}
-
 typedef struct {
   GAction *action;
   GVariant *parameter;
@@ -1363,10 +1329,11 @@ typedef struct {
 static void
 action_activate_cb (GtkAction *action, gpointer user_data)
 {
-  GActionData *action_data = (GActionData *) user_data;
+  GActionData *action_data = (GActionData *)user_data;
 
-  printf("%s\n", g_variant_get_string (action_data->parameter, NULL));
-  g_action_activate (G_ACTION (action_data->action), action_data->parameter);
+  g_action_activate (action_data->action, action_data->parameter);
+
+  g_slice_free (GActionData, action_data);
 }
 
 static WebKitContextMenuItem*
@@ -1377,29 +1344,50 @@ webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
   GActionData *action_data;
 
   action_data = g_slice_new (GActionData);
+  action_data->action = action;
+  if (g_action_get_parameter_type (action) != NULL
+      && g_variant_type_equal (g_action_get_parameter_type (action), G_VARIANT_TYPE_STRING)) {
+    action_data->parameter = g_variant_new_string (label);
+  }
+  else {
+    action_data->parameter = NULL;
+  }
+
   gtk_action = gtk_action_new (g_action_get_name (action), label, NULL, NULL);
   g_signal_connect (gtk_action, "activate",
                     G_CALLBACK (action_activate_cb), action_data);
 
-  g_object_bind_property (action, "enabled", gtk_action, "sensitive", G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (action, "enabled",
+                          gtk_action, "sensitive",
+                          G_BINDING_SYNC_CREATE);
 
   item = webkit_context_menu_item_new (gtk_action);
+
+  g_object_unref (gtk_action);
 
   return item;
 }
 
 static void
-new_add_action_to_context_menu (WebKitContextMenu *context_menu,
+add_action_to_context_menu (WebKitContextMenu *context_menu,
                             GActionGroup      *action_group,
                             const char        *action_name,
-                            GtkWidget         *toolbar)
+                            EphyWindow        *window)
 {
   GAction *action;
   const gchar *label;
+  gchar *name;
+  GVariant *target;
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), action_name);
-  label = action_name_to_label_for_model (G_MENU_MODEL (ephy_toolbar_get_page_menu (EPHY_TOOLBAR (toolbar))),
-                                          action_name);
+  g_action_parse_detailed_name (action_name, &name, &target, NULL);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), name);
+  label = g_hash_table_lookup (window->action_labels, name);
+  if (label == NULL)
+    label = g_variant_get_string (target, NULL);
+
+  g_return_if_fail (label != NULL);
+
   webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, label));
 }
 
@@ -1503,21 +1491,25 @@ populate_context_menu (WebKitWebView       *web_view,
   WebKitContextMenuItem *fullscreen_item = NULL;
   GActionGroup *window_action_group;
   GActionGroup *toolbar_action_group;
+  GActionGroup *popup_action_group;
   GList *spelling_guess_items = NULL;
   EphyEmbedEvent *embed_event;
-  gboolean is_document = FALSE;
   gboolean app_mode, incognito_mode;
+  gboolean is_document = FALSE;
   gboolean is_image;
   gboolean is_media = FALSE;
   gboolean is_video = FALSE;
   gboolean is_audio = FALSE;
   gboolean can_search_selection = FALSE;
-  const char *selected_text = NULL;
+  gchar *search_selection_action_name = NULL;
+  const gchar *selected_text = NULL;
 
   window_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                      "win");
   toolbar_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                       "toolbar");
+  popup_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
+                                                    "popup");
 
   is_image = webkit_hit_test_result_context_is_image (hit_test_result);
 
@@ -1556,19 +1548,14 @@ populate_context_menu (WebKitWebView       *web_view,
   if (selected_text) {
     char *ellipsized = ellipsize_string (selected_text, 32);
     if (ellipsized) {
-      char *label;
-      GtkAction *action;
+      gchar *label;
 
-      can_search_selection = TRUE;
-      action = gtk_action_group_get_action (window->popups_action_group,
-                                            "SearchSelection");
       label = g_strdup_printf (_("Search the Web for '%s'"), ellipsized);
-      gtk_action_set_label (action, label);
-      g_object_set_data_full (G_OBJECT (action), "selection", g_strdup (selected_text),
-                              (GDestroyNotify)g_free);
-      g_free (ellipsized);
-      g_free (label);
+      search_selection_action_name = g_action_print_detailed_name ("search-selection",
+                                                                   g_variant_new_string (label)),
       can_search_selection = TRUE;
+
+      g_free (label);
     }
   }
 
@@ -1594,32 +1581,32 @@ populate_context_menu (WebKitWebView       *web_view,
     update_link_actions_sensitivity (window, link_has_web_scheme);
 
     if (!app_mode) {
-      add_action_to_context_menu (context_menu,
-                                  window->popups_action_group, "OpenLinkInNewTab");
-      add_action_to_context_menu (context_menu,
-                                  window->popups_action_group, "OpenLinkInNewWindow");
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "open-link-in-new-tab", window);
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "open-link-in-new-window", window);
       if (!incognito_mode)
-        add_action_to_context_menu (context_menu,
-                                    window->popups_action_group, "OpenLinkInIncognitoWindow");
+        add_action_to_context_menu (context_menu, popup_action_group,
+                                    "open-link-in-incognito-window", window);
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
     }
-    new_add_action_to_context_menu (context_menu,
-                                window_action_group, "copy", window->toolbar);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "copy", window);
     if (can_search_selection)
-      add_action_to_context_menu (context_menu,
-                                  window->popups_action_group, "SearchSelection");
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  search_selection_action_name, window);
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    add_action_to_context_menu (context_menu,
-                                window->popups_action_group, "DownloadLinkAs");
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "download-link-as", window);
 
     if (g_str_has_prefix (uri, "mailto:")) {
-      add_action_to_context_menu (context_menu,
-                                  window->popups_action_group, "CopyEmailAddress");
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "copy-email-address", window);
     } else {
-      add_action_to_context_menu (context_menu,
-                                  window->popups_action_group, "CopyLinkAddress");
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "copy-link-address", window);
     }
   } else if (webkit_hit_test_result_context_is_editable (hit_test_result)) {
     GList *l;
@@ -1641,22 +1628,22 @@ populate_context_menu (WebKitWebView       *web_view,
 
     update_edit_actions_sensitivity (window, FALSE);
 
-    new_add_action_to_context_menu (context_menu,
-                                window_action_group, "undo", window->toolbar);
-    new_add_action_to_context_menu (context_menu,
-                                window_action_group, "redo", window->toolbar);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "undo", window);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "redo", window);
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    new_add_action_to_context_menu (context_menu,
-                                window_action_group, "cut", window->toolbar);
-    new_add_action_to_context_menu (context_menu,
-                                window_action_group, "copy", window->toolbar);
-    new_add_action_to_context_menu (context_menu,
-                                window_action_group, "paste", window->toolbar);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "cut", window);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "copy", window);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "paste", window);
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    new_add_action_to_context_menu (context_menu,
-                                window_action_group, "select-all", window->toolbar);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "select-all", window);
     if (input_methods_item || unicode_item)
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
@@ -1668,41 +1655,41 @@ populate_context_menu (WebKitWebView       *web_view,
     update_edit_actions_sensitivity (window, TRUE);
 
     if (!is_image && !is_media) {
-      new_add_action_to_context_menu (context_menu, toolbar_action_group,
-                                      "navigation-back", window->toolbar);
-      new_add_action_to_context_menu (context_menu, toolbar_action_group,
-                                      "navigation-forward", window->toolbar);
-      new_add_action_to_context_menu (context_menu, toolbar_action_group,
-                                      "reload", window->toolbar);
+      add_action_to_context_menu (context_menu, toolbar_action_group,
+                                  "navigation-back", window);
+      add_action_to_context_menu (context_menu, toolbar_action_group,
+                                  "navigation-forward", window);
+      add_action_to_context_menu (context_menu, toolbar_action_group,
+                                  "reload", window);
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
     }
 
-    new_add_action_to_context_menu (context_menu,
-                                window_action_group, "copy", window->toolbar);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "copy", window);
     if (can_search_selection)
-      add_action_to_context_menu (context_menu,
-                                  window->popups_action_group, "SearchSelection");
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  search_selection_action_name, window);
 
     if (!app_mode && !is_image && !is_media) {
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
-      add_action_to_context_menu (context_menu,
-                                  window->popups_action_group, "ContextBookmarkPage");
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "context-bookmark-page", window);
     }
   }
 
   if (is_image) {
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    add_action_to_context_menu (context_menu,
-                                window->popups_action_group, "SaveImageAs");
-    add_action_to_context_menu (context_menu,
-                                window->popups_action_group, "CopyImageLocation");
-    add_action_to_context_menu (context_menu,
-                                window->popups_action_group, "ViewImage");
-    add_action_to_context_menu (context_menu,
-                                window->popups_action_group, "SetImageAsBackground");
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "save-image-as", window);
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "copy-image-location", window);
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "view-image", window);
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "set-image-as-background", window);
   }
 
   if (is_media) {
@@ -1714,23 +1701,23 @@ populate_context_menu (WebKitWebView       *web_view,
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
     if (is_video) {
-      add_action_to_context_menu (context_menu, window->popups_action_group,
-                                  "OpenVideoInNewWindow");
-      add_action_to_context_menu (context_menu, window->popups_action_group,
-                                  "OpenVideoInNewTab");
-      add_action_to_context_menu (context_menu, window->popups_action_group,
-                                  "SaveVideoAs");
-      add_action_to_context_menu (context_menu, window->popups_action_group,
-                                  "CopyVideoLocation");
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "open-video-in-new-window", window);
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "open-video-in-new-tab", window);
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "save-video-as", window);
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "copy-video-location", window);
     } else if (is_audio) {
-      add_action_to_context_menu (context_menu, window->popups_action_group,
-                                  "OpenAudioInNewWindow");
-      add_action_to_context_menu (context_menu, window->popups_action_group,
-                                  "OpenAudioInNewTab");
-      add_action_to_context_menu (context_menu, window->popups_action_group,
-                                  "SaveAudioAs");
-      add_action_to_context_menu (context_menu, window->popups_action_group,
-                                  "CopyAudioLocation");
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "open-audio-in-new-window", window);
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "open-audio-in-new-tab", window);
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "save-audios-as", window);
+      add_action_to_context_menu (context_menu, popup_action_group,
+                                  "copy-audio-location", window);
     }
   }
 
@@ -1738,14 +1725,16 @@ populate_context_menu (WebKitWebView       *web_view,
                     G_CALLBACK (context_menu_dismissed_cb),
                     window);
 
+  g_free (search_selection_action_name);
+
   if (app_mode)
     return FALSE;
 
   if (is_document && !is_image && !is_media) {
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
-    new_add_action_to_context_menu (context_menu, window_action_group,
-                                    "send-to", window->toolbar);
+    add_action_to_context_menu (context_menu, window_action_group,
+                                "send-to", window);
   }
 
   webkit_context_menu_append (context_menu,
@@ -2694,14 +2683,14 @@ ephy_window_dispose (GObject *object)
     g_slist_foreach (popups, (GFunc)gtk_menu_shell_deactivate, NULL);
     g_slist_free (popups);
 
-    window->popups_action_group = NULL;
-
     g_object_unref (window->manager);
     window->manager = NULL;
 
     _ephy_window_set_context_event (window, NULL);
 
     g_clear_object (&window->hit_test_result);
+
+    g_hash_table_unref (window->action_labels);
   }
 
   G_OBJECT_CLASS (ephy_window_parent_class)->dispose (object);
@@ -2974,7 +2963,6 @@ ephy_window_constructor (GType                  type,
   GObject *object;
   EphyWindow *window;
   GtkSettings *settings;
-  GtkAction *action;
   GAction *new_action;
   GActionGroup *action_group;
   GSimpleActionGroup *simple_action_group;
@@ -3017,6 +3005,25 @@ ephy_window_constructor (GType                  type,
   gtk_widget_insert_action_group (GTK_WIDGET (window),
                                   "toolbar",
                                   G_ACTION_GROUP (simple_action_group));
+
+  simple_action_group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (simple_action_group),
+                                   popup_entries,
+                                   G_N_ELEMENTS (popup_entries),
+                                   window);
+  gtk_widget_insert_action_group (GTK_WIDGET (window),
+                                  "popup",
+                                  G_ACTION_GROUP (simple_action_group));
+
+  window->action_labels = g_hash_table_new_full (g_str_hash,
+                                                 g_str_equal,
+                                                 (GDestroyNotify)g_free,
+                                                 (GDestroyNotify)g_free);
+  for (i = 0; i < G_N_ELEMENTS (action_label); i++) {
+    g_hash_table_insert (window->action_labels,
+                         g_strdup (action_label[i].action),
+                         g_strdup (action_label[i].label));
+  }
 
   /* Set accels for actions */
   app = g_application_get_default ();
@@ -3101,12 +3108,15 @@ ephy_window_constructor (GType                  type,
 
   /* Disable actions not needed for popup mode. */
   new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "new-tab");
-  new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                         SENS_FLAG_CHROME,
                                         window->is_popup);
 
-  action = gtk_action_group_get_action (window->popups_action_group, "OpenLinkInNewTab");
-  ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME,
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "popup");
+  new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                       "open-link-in-new-tab");
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+                                        SENS_FLAG_CHROME,
                                         window->is_popup);
 
   /* Disabled actions not needed for application mode. */
@@ -3120,14 +3130,13 @@ ephy_window_constructor (GType                  type,
     gtk_widget_set_visible (ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (window->toolbar)), FALSE);
     gtk_widget_set_visible (ephy_toolbar_get_new_tab_button (EPHY_TOOLBAR (window->toolbar)), FALSE);
 
-    action = gtk_action_group_get_action (window->popups_action_group, "ContextBookmarkPage");
-    ephy_action_change_sensitivity_flags (action, SENS_FLAG_CHROME, TRUE);
-    gtk_action_set_visible (action, FALSE);
+    new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "context-bookmark-page");
+    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_CHROME, TRUE);
 
     for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_app_mode); i++) {
       new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                            disabled_actions_for_app_mode[i]);
-      new_ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+      ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                             SENS_FLAG_CHROME, TRUE);
     }
     chrome &= ~(EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR);

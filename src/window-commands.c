@@ -294,14 +294,12 @@ window_cmd_reopen_closed_tab (GSimpleAction *action,
   ephy_session_undo_close_tab (ephy_shell_get_session (ephy_shell_get_default ()));
 }
 
-
 void
 window_cmd_navigation (GSimpleAction *action,
                        GVariant      *parameter,
                        gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  const gchar *direction = g_variant_get_string (parameter, 0);
   EphyEmbed *embed;
   WebKitWebView *web_view;
 
@@ -310,7 +308,7 @@ window_cmd_navigation (GSimpleAction *action,
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-  if (g_strcmp0 (direction, "back") == 0) {
+  if (strstr (g_action_get_name (G_ACTION (action)), "back")) {
     webkit_web_view_go_back (web_view);
     gtk_widget_grab_focus (GTK_WIDGET (embed));
   } else {
@@ -325,7 +323,6 @@ window_cmd_navigation_new_tab (GSimpleAction *action,
                                gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  const gchar *direction = g_variant_get_string (parameter, 0);
   EphyEmbed *embed;
   WebKitWebView *web_view;
 
@@ -334,7 +331,7 @@ window_cmd_navigation_new_tab (GSimpleAction *action,
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
-  if (g_strcmp0 (direction, "back") == 0) {
+  if (strstr (g_action_get_name (G_ACTION (action)), "back")) {
       const char *back_uri;
       WebKitBackForwardList *history;
       WebKitBackForwardListItem *back_item;
