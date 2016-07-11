@@ -140,7 +140,6 @@ struct _EphyWindow {
   GtkWidget *toolbar;
   GtkUIManager *manager;
   GHashTable *action_labels;
-  GtkActionGroup *toolbar_action_group;
   GtkNotebook *notebook;
   EphyEmbed *active_embed;
   EphyWindowChrome chrome;
