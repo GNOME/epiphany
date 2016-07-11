@@ -202,7 +202,7 @@ show_shortcuts (GSimpleAction *action,
 
   window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
 
-  window_cmd_help_shortcuts (NULL, GTK_WIDGET (window));
+  window_cmd_show_shortcuts (NULL, NULL, EPHY_WINDOW (window));
 }
 
 static void

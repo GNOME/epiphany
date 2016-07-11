@@ -146,8 +146,8 @@ window_cmd_show_shortcuts (GSimpleAction *action,
     g_object_unref (builder);
   }
 
-  if (gtk_window_get_transient_for (GTK_WINDOW (shortcuts_window)) != GTK_WINDOW (window))
-    gtk_window_set_transient_for (GTK_WINDOW (shortcuts_window), GTK_WINDOW (window));
+  if (gtk_window_get_transient_for (GTK_WINDOW (shortcuts_window)) != GTK_WINDOW (user_data))
+    gtk_window_set_transient_for (GTK_WINDOW (shortcuts_window), GTK_WINDOW (user_data));
 
   gtk_window_present (GTK_WINDOW (shortcuts_window));
 }
