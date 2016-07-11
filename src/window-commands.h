@@ -144,6 +144,9 @@ void window_cmd_send_to                         (GSimpleAction *action,
 void window_cmd_go_location                     (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_go_home                         (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_load_location                   (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

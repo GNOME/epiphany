@@ -32,9 +32,9 @@
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-gui.h"
-#include "ephy-home-action.h"
 #include "ephy-initial-state.h"
 #include "ephy-link.h"
+#include "ephy-link-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
@@ -75,15 +75,6 @@ static void ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
                                                           GVariant      *state,
                                                           gpointer       user_data);
 
-static const struct {
-  guint keyval;
-  GdkModifierType modifier;
-  const gchar *action;
-  gboolean fromToolbar;
-} extra_keybindings [] = {
-  { GDK_KEY_Home, GDK_MOD1_MASK, "FileHome", TRUE },
-};
-
 const struct {
   const gchar *action_and_target;
   const gchar *accelerators[9];
@@ -114,11 +105,12 @@ const struct {
 
   { "win.send-to", { "Send", NULL } },
   { "win.location", { "<Primary>L", "F6", "Go", "OpenURL", NULL } },
+  { "win.home", { "<alt>Home", NULL } },
 
   /* Toggle actions */
   { "win.browse-with-caret", { "F7", NULL } },
   { "win.fullscreen", { "F11", NULL } },
-  { "win.allow-popup-windows", { NULL} },
+  { "win.allow-popup-windows", { NULL } },
 
   /* Navigation */
   { "toolbar.stop", { "Escape", "Stop", NULL } },
@@ -541,31 +533,6 @@ ephy_window_unfullscreen (EphyWindow *window)
 }
 
 static gboolean
-ephy_window_bound_accels (GtkWidget   *widget,
-                          GdkEventKey *event)
-{
-  EphyWindow *window = EPHY_WINDOW (widget);
-  guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (extra_keybindings); i++) {
-    if (event->keyval == extra_keybindings[i].keyval &&
-        modifier == extra_keybindings[i].modifier) {
-      GtkAction *action = gtk_action_group_get_action
-                            (window->toolbar_action_group,
-                            extra_keybindings[i].action);
-      if (gtk_action_is_sensitive (action)) {
-        gtk_action_activate (action);
-        return TRUE;
-      }
-      break;
-    }
-  }
-
-  return FALSE;
-}
-
-static gboolean
 ephy_window_key_press_event (GtkWidget   *widget,
                              GdkEventKey *event)
 {
@@ -621,12 +588,6 @@ ephy_window_key_press_event (GtkWidget   *widget,
     if (handled && !force_chain) {
       return handled;
     }
-  }
-
-  /* Handle accelerators that we want bound, but aren't associated with
-   * an action */
-  if (ephy_window_bound_accels (widget, event)) {
-    return TRUE;
   }
 
   return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
@@ -861,6 +822,7 @@ static const GActionEntry window_entries [] =
 
   { "send-to", window_cmd_send_to },
   { "location", window_cmd_go_location },
+  { "home", window_cmd_go_home },
 
   /* Toggle actions */
   { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret_state },
@@ -986,33 +948,19 @@ const struct {
 static void
 setup_ui_manager (EphyWindow *window)
 {
-  GtkActionGroup *action_group;
-  GtkAccelGroup *accel_group;
   GtkAction *action;
   GtkUIManager *manager;
 
   manager = gtk_ui_manager_new ();
-  accel_group = gtk_ui_manager_get_accel_group (manager);
-
-  action_group = gtk_action_group_new ("SpecialToolbarActions");
 
   action =
-    g_object_new (EPHY_TYPE_HOME_ACTION,
+    g_object_new (EPHY_TYPE_LINK_ACTION,
                   "name", "FileHome",
                   "label", _("Go to most visited"),
                   NULL);
-  gtk_action_group_add_action_with_accel (action_group, action, "<alt>Home");
-  g_signal_connect_swapped (action, "open-link",
-                            G_CALLBACK (ephy_link_open), window);
   g_object_unref (action);
 
-  gtk_action_group_set_accel_group (action_group, accel_group);
-  gtk_ui_manager_insert_action_group (manager, action_group, 0);
-  window->toolbar_action_group = action_group;
-  g_object_unref (action_group);
-
   window->manager = manager;
-  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 }
 
 static char *
@@ -3429,23 +3377,6 @@ ephy_window_set_location (EphyWindow *window,
   window->updating_address = TRUE;
   ephy_location_controller_set_address (window->location_controller, address);
   window->updating_address = FALSE;
-}
-
-/**
- * ephy_window_get_toolbar_action_group:
- * @window: an #EphyWindow
- *
- * Returns the toolbar #GtkActionGroup for this @window
- *
- * Returns: (transfer none): the #GtkActionGroup for this @window's
- * toolbar actions
- **/
-GtkActionGroup *
-ephy_window_get_toolbar_action_group (EphyWindow *window)
-{
-  g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
-
-  return window->toolbar_action_group;
 }
 
 /**
