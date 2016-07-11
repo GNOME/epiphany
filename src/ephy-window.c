@@ -1107,13 +1107,6 @@ sync_tab_document_type (EphyWebView *view,
 }
 
 static void
-_ephy_window_action_set_favicon (EphyWindow *window,
-                                 GdkPixbuf  *icon)
-{
-  g_object_set (window->location_controller, "icon", icon, NULL);
-}
-
-static void
 sync_tab_icon (EphyWebView *view,
                GParamSpec  *pspec,
                EphyWindow  *window)
@@ -1124,7 +1117,7 @@ sync_tab_icon (EphyWebView *view,
 
   icon = ephy_web_view_get_icon (view);
 
-  _ephy_window_action_set_favicon (window, icon);
+  g_object_set (window->location_controller, "icon", icon, NULL);
 }
 
 static void
