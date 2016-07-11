@@ -1717,6 +1717,17 @@ window_cmd_load_location (GSimpleAction *action,
 }
 
 void
+window_cmd_go_home (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       user_data)
+{
+  ephy_link_open (EPHY_LINK (user_data),
+                  "about:overview",
+                  NULL,
+                  EPHY_LINK_HOME_PAGE);
+}
+
+void
 window_cmd_change_browse_with_caret_state (GSimpleAction *action,
                                            GVariant      *state,
                                            gpointer       user_data)

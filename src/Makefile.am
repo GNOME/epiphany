@@ -36,8 +36,6 @@ libephymain_la_SOURCES = \
 	ephy-encoding-dialog.h			\
 	ephy-encoding-row.c			\
 	ephy-encoding-row.h			\
-	ephy-home-action.c			\
-	ephy-home-action.h			\
 	ephy-history-window.c			\
 	ephy-history-window.h			\
 	ephy-link.c				\
