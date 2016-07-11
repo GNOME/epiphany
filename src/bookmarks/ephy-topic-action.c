@@ -83,6 +83,7 @@ ephy_topic_action_sync_label (GtkAction  *action,
   g_value_unset (&value);
 }
 
+#if 0
 static GtkWidget *
 get_popup (EphyTopicAction *action)
 {
@@ -110,6 +111,7 @@ get_popup (EphyTopicAction *action)
 
   return gtk_ui_manager_get_widget (priv->manager, path);
 }
+#endif
 
 static void
 erase_popup (EphyTopicAction *action)
@@ -165,10 +167,13 @@ menu_init_cb (GtkWidget       *menuitem,
               EphyTopicAction *action)
 {
   if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (menuitem)) == NULL) {
+    #if 0
     GtkWidget *popup;
 
+    /* Disabled. Will be removed in the upcoming bookmarks subsystem update */
     popup = get_popup (action);
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), popup);
+    #endif
     g_signal_connect (menuitem, "destroy",
                       G_CALLBACK (menu_destroy_cb), NULL);
   }
