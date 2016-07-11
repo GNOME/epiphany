@@ -59,21 +59,6 @@ enum {
 
 static GHashTable *properties_dialogs = 0;
 
-static GtkAction *
-find_action (GtkUIManager *manager, const char *name)
-{
-  GList *l = gtk_ui_manager_get_action_groups (manager);
-  GtkAction *action;
-
-  while (l != NULL) {
-    action = gtk_action_group_get_action (GTK_ACTION_GROUP (l->data), name);
-    if (action) return action;
-    l = l->next;
-  }
-
-  return NULL;
-}
-
 static GMenu *
 find_bookmarks_menu (EphyWindow *window)
 {
@@ -259,8 +244,7 @@ ephy_bookmarks_ui_detach_window (EphyWindow *window)
   EphyNode *topics = ephy_bookmarks_get_keywords (eb);
 
   BookmarksWindowData *data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
-  GtkUIManager *manager = ephy_window_get_ui_manager (window);
-  GtkAction *action;
+  GtkWidget *page_menu_button;
 
   g_return_if_fail (data != 0);
 
@@ -296,9 +280,8 @@ ephy_bookmarks_ui_detach_window (EphyWindow *window)
   g_signal_handlers_disconnect_by_func
     (G_OBJECT (eb), G_CALLBACK (tree_changed_cb), G_OBJECT (window));
 
-  action = find_action (manager, "Bookmarks");
-  g_signal_handlers_disconnect_by_func
-    (G_OBJECT (action), G_CALLBACK (activate_bookmarks_menu), G_OBJECT (window));
+  page_menu_button = ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (ephy_window_get_toolbar (window)));
+  g_signal_handlers_disconnect_by_func (GTK_WIDGET (page_menu_button), G_CALLBACK (activate_bookmarks_menu), window);
 }
 
 static void
