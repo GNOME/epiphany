@@ -948,17 +948,9 @@ const struct {
 static void
 setup_ui_manager (EphyWindow *window)
 {
-  GtkAction *action;
   GtkUIManager *manager;
 
   manager = gtk_ui_manager_new ();
-
-  action =
-    g_object_new (EPHY_TYPE_LINK_ACTION,
-                  "name", "FileHome",
-                  "label", _("Go to most visited"),
-                  NULL);
-  g_object_unref (action);
 
   window->manager = manager;
 }

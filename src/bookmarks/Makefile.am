@@ -23,6 +23,8 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks-menu.h		\
 	ephy-bookmark-properties.c	\
 	ephy-bookmark-properties.h	\
+	ephy-link-action.c		\
+	ephy-link-action.h		\
 	ephy-topic-action.c		\
 	ephy-topic-action.h		\
 	ephy-open-tabs-action.c		\
@@ -36,7 +38,9 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-topics-palette.c  		\
 	ephy-topics-palette.h		\
 	ephy-nodes-cover.c		\
-	ephy-nodes-cover.h
+	ephy-nodes-cover.h		\
+	ephy-window-action.c		\
+	ephy-window-action.h
 
 nodist_libephybookmarks_la_SOURCES = 	\
 	$(BUILT_SOURCES)

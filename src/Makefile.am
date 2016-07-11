@@ -40,8 +40,6 @@ libephymain_la_SOURCES = \
 	ephy-history-window.h			\
 	ephy-link.c				\
 	ephy-link.h				\
-	ephy-link-action.c			\
-	ephy-link-action.h			\
 	ephy-location-controller.c		\
 	ephy-location-controller.h		\
 	ephy-lockdown.c				\
@@ -60,8 +58,6 @@ libephymain_la_SOURCES = \
 	ephy-toolbar.h				\
 	ephy-window.c				\
 	ephy-window.h				\
-	ephy-window-action.c			\
-	ephy-window-action.h			\
 	languages.h				\
 	passwords-dialog.c			\
 	passwords-dialog.h			\
