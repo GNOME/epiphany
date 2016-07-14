@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 3.21.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-02 12:11+0200\n"
-"PO-Revision-Date: 2016-07-02 12:15+0200\n"
+"POT-Creation-Date: 2016-07-14 08:25+0200\n"
+"PO-Revision-Date: 2016-07-14 08:31+0200\n"
 "Last-Translator: Åka Sikrom <a4@hush.com>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -56,7 +56,7 @@ msgstr "GNOME prosjektet"
 
 #: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:289
 #: ../embed/ephy-about-handler.c:320 ../src/ephy-main.c:77
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1474
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1500
 msgid "Web"
 msgstr "Internett"
 
@@ -266,7 +266,10 @@ msgid ""
 "Controls where the tabs bar is shown. Possible values are 'top' (the "
 "default), 'bottom', 'left' (vertical tabs with bar on the left) and "
 "'right' (vertical tabs with bar on the right)."
-msgstr "Bestemmer hvor fanelinjen vises. Mulige verdier er «top» (forvalg), «bottom», «left» (vertikale faner med linjen til venstre) og «right» (vertikale faner med linjen til høyre)."
+msgstr ""
+"Bestemmer hvor fanelinjen vises. Mulige verdier er «top» (forvalg), "
+"«bottom», «left» (vertikale faner med linjen til venstre) og "
+"«right» (vertikale faner med linjen til høyre)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "The visibility policy for the tabs bar."
@@ -1139,7 +1142,10 @@ msgid ""
 "<p>The site at <strong>%s</strong> may have caused Web to close unexpectedly."
 "</p><p>If this happens again, please report the problem to the <strong>%s</"
 "strong>  developers.</p>"
-msgstr "<p>Nettstedet på <strong>%s</strong> fikk nettleseren til å lukkes uventet.</p><p>Rapporter problemet til utviklerene av <strong>%s</strong> hvis dette skjer igjen.</p>"
+msgstr ""
+"<p>Nettstedet på <strong>%s</strong> fikk nettleseren til å lukkes uventet.</"
+"p><p>Rapporter problemet til utviklerene av <strong>%s</strong> hvis dette "
+"skjer igjen.</p>"
 
 #. Page title when a site cannot be loaded due to a process crash error.
 #: ../embed/ephy-web-view.c:1783
@@ -1157,7 +1163,9 @@ msgstr "Oops!"
 msgid ""
 "<p>Something went wrong while displaying this page.</p><p>Please reload or "
 "visit a different page to continue.</p>"
-msgstr "<p>Noe gikk galt ved visning av denne siden.</p><p>Vennligst last den på nytt eller gå til et annet nettsted for å fortsette.</p>"
+msgstr ""
+"<p>Noe gikk galt ved visning av denne siden.</p><p>Vennligst last den på "
+"nytt eller gå til et annet nettsted for å fortsette.</p>"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: ../embed/ephy-web-view.c:1800
@@ -1177,7 +1185,7 @@ msgid ""
 "<p>This does not look like the real <strong>%s</strong>. Attackers might be "
 "trying to steal or alter information going to or from this site (for "
 "example, private messages, credit card information, or passwords).</p>"
-msgstr ""
+msgstr "<p>Dette ser ikke ut som den virkelige <strong>%s</strong>. Det kan hende at noen prøver å stjele eller forandre informasjonen mellom nettstedet (for eksempel private meldinger, kredittkortinformasjon eller passord).</p>"
 
 #. The button on the invalid TLS certificate error page. Do not add mnemonics here.
 #: ../embed/ephy-web-view.c:1816
@@ -1707,7 +1715,7 @@ msgstr "_Vis"
 
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:151
-#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:186
+#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:186
 msgid "_Help"
 msgstr "_Hjelp"
 
@@ -1836,7 +1844,7 @@ msgid "Display bookmarks help"
 msgstr "Vis hjelp for bokmerker"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:188
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:188
 msgid "_About"
 msgstr "_Om"
 
@@ -2142,7 +2150,11 @@ msgstr "_Historikk"
 msgid "Pr_eferences"
 msgstr "_Brukervalg"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:106
+#: ../src/resources/epiphany-application-menu.ui.h:7
+msgid "_Keyboard Shortcuts"
+msgstr "_Tastatursnarveier"
+
+#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:106
 msgid "_Quit"
 msgstr "A_vslutt"
 
@@ -2384,6 +2396,247 @@ msgstr "Legg til språk"
 #: ../src/resources/prefs-lang-dialog.ui.h:4
 msgid "Choose a l_anguage:"
 msgstr "Velg et spr_åk"
+
+#: ../src/resources/shortcuts-dialog.ui.h:1
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Generelt"
+
+#: ../src/resources/shortcuts-dialog.ui.h:2
+msgctxt "shortcut window"
+msgid "New window"
+msgstr "Nytt vindu"
+
+#: ../src/resources/shortcuts-dialog.ui.h:3
+msgctxt "shortcut window"
+msgid "New incognito window"
+msgstr "Nytt inkognitovindu"
+
+#: ../src/resources/shortcuts-dialog.ui.h:4
+msgctxt "shortcut window"
+msgid "Open file"
+msgstr "Åpne fil"
+
+#: ../src/resources/shortcuts-dialog.ui.h:5
+msgctxt "shortcut window"
+msgid "Save page"
+msgstr "Lagre side"
+
+#: ../src/resources/shortcuts-dialog.ui.h:6
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Save page as web app"
+msgstr "Lagre side som"
+
+#: ../src/resources/shortcuts-dialog.ui.h:7
+msgctxt "shortcut window"
+msgid "Print page"
+msgstr "Skriv ut siden"
+
+#: ../src/resources/shortcuts-dialog.ui.h:8
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Avslutt"
+
+#: ../src/resources/shortcuts-dialog.ui.h:9
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "Hjelp"
+
+#: ../src/resources/shortcuts-dialog.ui.h:10
+msgctxt "shortcut window"
+msgid "Shortcuts"
+msgstr "Snarveier"
+
+#: ../src/resources/shortcuts-dialog.ui.h:11
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Navigasjon"
+
+#: ../src/resources/shortcuts-dialog.ui.h:12
+msgctxt "shortcut window"
+msgid "Reload current page"
+msgstr "Last denne siden på nytt"
+
+#: ../src/resources/shortcuts-dialog.ui.h:13
+msgctxt "shortcut window"
+msgid "Stop loading current page"
+msgstr "Stopp lasting av denne siden"
+
+#: ../src/resources/shortcuts-dialog.ui.h:14
+msgctxt "shortcut window"
+msgid "Go back to the previous page"
+msgstr "Gå tilbake til forrige side"
+
+#: ../src/resources/shortcuts-dialog.ui.h:15
+msgctxt "shortcut window"
+msgid "Go forward to the next page"
+msgstr "Gå frem til neste side"
+
+#: ../src/resources/shortcuts-dialog.ui.h:16
+msgctxt "shortcut window"
+msgid "Tabs"
+msgstr "Faner"
+
+#: ../src/resources/shortcuts-dialog.ui.h:17
+msgctxt "shortcut window"
+msgid "New tab"
+msgstr "Ny fane"
+
+#: ../src/resources/shortcuts-dialog.ui.h:18
+msgctxt "shortcut window"
+msgid "Duplicate current tab"
+msgstr "Dupliser denne fanen"
+
+#: ../src/resources/shortcuts-dialog.ui.h:19
+msgctxt "shortcut window"
+msgid "Close current tab"
+msgstr "Lukk denne fanen"
+
+#: ../src/resources/shortcuts-dialog.ui.h:20
+msgctxt "shortcut window"
+msgid "Reopen closed tab"
+msgstr "Gjenåpne lukket fane"
+
+#: ../src/resources/shortcuts-dialog.ui.h:21
+msgctxt "shortcut window"
+msgid "Go to the next tab"
+msgstr "Gå til neste fane"
+
+#: ../src/resources/shortcuts-dialog.ui.h:22
+msgctxt "shortcut window"
+msgid "Go to the previous tab"
+msgstr "Gå til forrige fane"
+
+#: ../src/resources/shortcuts-dialog.ui.h:23
+msgctxt "shortcut window"
+msgid "Move current tab to the left"
+msgstr "Flytt denne fanen til venstre"
+
+#: ../src/resources/shortcuts-dialog.ui.h:24
+msgctxt "shortcut window"
+msgid "Move current tab to the right"
+msgstr "Flytt denne fanen til høyre"
+
+#: ../src/resources/shortcuts-dialog.ui.h:25
+msgctxt "shortcut window"
+msgid "Miscellaneous"
+msgstr "Forskjellig"
+
+#: ../src/resources/shortcuts-dialog.ui.h:26
+msgctxt "shortcut window"
+msgid "History"
+msgstr "Historikk"
+
+#: ../src/resources/shortcuts-dialog.ui.h:27
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Brukervalg"
+
+#: ../src/resources/shortcuts-dialog.ui.h:28
+msgctxt "shortcut window"
+msgid "Bookmarks"
+msgstr "Bokmerker"
+
+#: ../src/resources/shortcuts-dialog.ui.h:29
+msgctxt "shortcut window"
+msgid "Bookmark current page"
+msgstr "Lag bokkerme for denne siden"
+
+#: ../src/resources/shortcuts-dialog.ui.h:30
+msgctxt "shortcut window"
+msgid "Toggle caret browsing"
+msgstr "Slå på markør i nettleser"
+
+#: ../src/resources/shortcuts-dialog.ui.h:31
+msgctxt "shortcut window"
+msgid "View"
+msgstr "Vis"
+
+#: ../src/resources/shortcuts-dialog.ui.h:32
+msgctxt "shortcut window"
+msgid "Zoom in"
+msgstr "Zoom inn"
+
+#: ../src/resources/shortcuts-dialog.ui.h:33
+msgctxt "shortcut window"
+msgid "Zoom out"
+msgstr "Zoom ut"
+
+#: ../src/resources/shortcuts-dialog.ui.h:34
+msgctxt "shortcut window"
+msgid "Reset zoom"
+msgstr "Nullstill zoom"
+
+#: ../src/resources/shortcuts-dialog.ui.h:35
+msgctxt "shortcut window"
+msgid "Fullscreen"
+msgstr "Fullskjerm"
+
+#: ../src/resources/shortcuts-dialog.ui.h:36
+msgctxt "shortcut window"
+msgid "View page source"
+msgstr "Vis sidens kildekode"
+
+#: ../src/resources/shortcuts-dialog.ui.h:37
+msgctxt "shortcut window"
+msgid "Toggle inspector"
+msgstr "Slå av/på inspeksjon"
+
+#: ../src/resources/shortcuts-dialog.ui.h:38
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Rediger"
+
+#: ../src/resources/shortcuts-dialog.ui.h:39
+msgctxt "shortcut window"
+msgid "Cut"
+msgstr "Klipp ut"
+
+#: ../src/resources/shortcuts-dialog.ui.h:40
+msgctxt "shortcut window"
+msgid "Copy"
+msgstr "Kopier"
+
+#: ../src/resources/shortcuts-dialog.ui.h:41
+msgctxt "shortcut window"
+msgid "Paste"
+msgstr "Lim inn"
+
+#: ../src/resources/shortcuts-dialog.ui.h:42
+msgctxt "shortcut window"
+msgid "Undo"
+msgstr "Angre"
+
+#: ../src/resources/shortcuts-dialog.ui.h:43
+msgctxt "shortcut window"
+msgid "Redo"
+msgstr "Gjenta"
+
+#: ../src/resources/shortcuts-dialog.ui.h:44
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Velg alt"
+
+#: ../src/resources/shortcuts-dialog.ui.h:45
+msgctxt "shortcut window"
+msgid "Select page URL"
+msgstr "Velg sidens URL"
+
+#: ../src/resources/shortcuts-dialog.ui.h:46
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Søk"
+
+#: ../src/resources/shortcuts-dialog.ui.h:47
+msgctxt "shortcut window"
+msgid "Next search result"
+msgstr "Neste søkeresultat"
+
+#: ../src/resources/shortcuts-dialog.ui.h:48
+msgctxt "shortcut window"
+msgid "Previous search result"
+msgstr "Forrige søkeresultat"
 
 #: ../src/ephy-combined-stop-reload-action.c:38
 msgid "Stop"
@@ -2904,19 +3157,19 @@ msgstr "Lag nettsideprogram"
 msgid "C_reate"
 msgstr "_Lag"
 
-#: ../src/window-commands.c:1435 ../src/window-commands.c:1458
+#: ../src/window-commands.c:1461 ../src/window-commands.c:1484
 msgid "Contact us at:"
 msgstr "Kontakt oss her:"
 
-#: ../src/window-commands.c:1438
+#: ../src/window-commands.c:1464
 msgid "Contributors:"
 msgstr "Bidragsytere:"
 
-#: ../src/window-commands.c:1441
+#: ../src/window-commands.c:1467
 msgid "Past developers:"
 msgstr "Tidligere utviklere:"
 
-#: ../src/window-commands.c:1467
+#: ../src/window-commands.c:1493
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2933,21 +3186,21 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1490
+#: ../src/window-commands.c:1516
 msgid "translator-credits"
 msgstr ""
 "Kjartan Maraas <kmaraas@gnome.org>\n"
 "Torstein Adolf Winterseth <kvikende@fsfe.org>"
 
-#: ../src/window-commands.c:1493
+#: ../src/window-commands.c:1519
 msgid "Web Website"
 msgstr "Nettsted for GNOME Nettleser"
 
-#: ../src/window-commands.c:1654
+#: ../src/window-commands.c:1680
 msgid "Enable caret browsing mode?"
 msgstr "Slå på markør i nettleser?"
 
-#: ../src/window-commands.c:1657
+#: ../src/window-commands.c:1683
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2957,6 +3210,6 @@ msgstr ""
 "bevegelig markør på nettsidene som lar deg flytte rundt med tastaturet. Vil "
 "du slå på markørmodus?"
 
-#: ../src/window-commands.c:1660
+#: ../src/window-commands.c:1686
 msgid "_Enable"
 msgstr "_Slå på"
