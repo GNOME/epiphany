@@ -60,6 +60,7 @@ struct _EphyHeaderBar {
   GtkWidget *navigation_box;
   GtkWidget *new_tab_button;
   GtkWidget *combined_stop_reload_button;
+  GtkWidget *bookmarks_button;
   GtkWidget *page_menu_button;
   GtkWidget *downloads_revealer;
   GtkWidget *downloads_button;
@@ -166,6 +167,7 @@ sync_chromes_visibility (EphyHeaderBar *header_bar)
   chrome = ephy_window_get_chrome (header_bar->window);
 
   gtk_widget_set_visible (header_bar->navigation_box, chrome & EPHY_WINDOW_CHROME_HEADER_BAR);
+  gtk_widget_set_visible (header_bar->bookmarks_button, chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
   gtk_widget_set_visible (header_bar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
   gtk_widget_set_visible (header_bar->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
@@ -650,6 +652,14 @@ ephy_header_bar_constructed (GObject *object)
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
   g_object_unref (builder);
 
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
+
+  /* Bookmarks button */
+  button = gtk_menu_button_new ();
+  header_bar->bookmarks_button = button;
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
   /* Downloads */
