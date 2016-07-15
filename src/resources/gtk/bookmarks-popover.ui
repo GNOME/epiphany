@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="EphyBookmarksPopover" parent="GtkPopover">
+    <child>
+      <object class="GtkBox">
+        <property name="border-width">12</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkStackSwitcher">
+            <property name="stack">stack</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkListBox" id="bookmarks_list_box">
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">all</property>
+                <property name="title" translatable="yes">All</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkListBox" id="tags_list_box">
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">tags</property>
+                <property name="title" translatable="yes">Tags</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
