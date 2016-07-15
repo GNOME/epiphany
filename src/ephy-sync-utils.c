@@ -31,13 +31,6 @@ ephy_sync_utils_kw (const gchar *name)
 }
 
 gchar *
-ephy_sync_utils_kwe (const gchar *name,
-                     const gchar *emailUTF8)
-{
-  return g_strconcat ("identity.mozilla.com/picl/v1/", name, ":", emailUTF8, NULL);
-}
-
-gchar *
 ephy_sync_utils_encode_hex (guint8 *data,
                             gsize   data_length)
 {
@@ -81,22 +74,18 @@ const gchar *
 ephy_sync_utils_token_name_from_type (EphySyncTokenType token_type)
 {
   switch (token_type) {
-  case EPHY_SYNC_TOKEN_AUTHPW:
-    return "authPW";
-  case EPHY_SYNC_TOKEN_UNWRAPBKEY:
-    return "unwrapBKey";
   case EPHY_SYNC_TOKEN_UID:
     return "uid";
   case EPHY_SYNC_TOKEN_SESSIONTOKEN:
     return "sessionToken";
   case EPHY_SYNC_TOKEN_KEYFETCHTOKEN:
     return "keyFetchToken";
+  case EPHY_SYNC_TOKEN_UNWRAPBKEY:
+    return "unwrapBKey";
   case EPHY_SYNC_TOKEN_KA:
     return "kA";
   case EPHY_SYNC_TOKEN_KB:
     return "kB";
-  case EPHY_SYNC_TOKEN_WRAPKB:
-    return "wrapKB";
   default:
     g_assert_not_reached ();
   }
