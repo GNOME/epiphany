@@ -123,7 +123,7 @@ ephy_sync_secret_load_tokens (EphySyncService *sync_service)
     if (g_strcmp0 (emailUTF8, user_email))
       continue;
 
-    ephy_sync_service_save_token (sync_service, g_strdup (token_value), token_type);
+    ephy_sync_service_set_token (sync_service, g_strdup (token_value), token_type);
 LOG ("[%d] Loaded token %s with value %s for email %s", __LINE__, token_name, token_value, emailUTF8);
 
     g_hash_table_unref (attributes);

@@ -290,10 +290,10 @@ server_message_received_cb (WebKitUserContentManager *manager,
 
     /* Everything is okay, save the tokens. */
     g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, email);
-    ephy_sync_service_save_store_tokens (service,
-                                         g_strdup (uid), EPHY_SYNC_TOKEN_UID,
-                                         g_strdup (sessionToken), EPHY_SYNC_TOKEN_SESSIONTOKEN,
-                                         NULL);
+    ephy_sync_service_set_and_store_tokens (service,
+                                            g_strdup (uid), EPHY_SYNC_TOKEN_UID,
+                                            g_strdup (sessionToken), EPHY_SYNC_TOKEN_SESSIONTOKEN,
+                                            NULL);
 
     /* Translators: the %s refers to the email of the currently logged in user. */
     gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details),
