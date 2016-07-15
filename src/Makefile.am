@@ -21,6 +21,8 @@ libephymain_la_SOURCES = \
 	cookies-dialog.h			\
 	ephy-action-helper.c			\
 	ephy-action-helper.h			\
+	ephy-bookmarks-popover.c 		\
+	ephy-bookmarks-popover.h 		\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
 	ephy-encoding-dialog.c			\
@@ -127,6 +129,9 @@ RESOURCE_FILES = \
 	resources/prism.css			  \
 	resources/prism.js			  \
 	resources/shortcuts-dialog.ui
+	resources/gtk/bookmarks-popover.ui	  \
+	resources/gtk/menus.ui			  \
+	$(NULL)
 
 epiphany-resources.c: epiphany.gresource.xml $(RESOURCE_FILES)
 	$(AM_V_GEN) glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
