@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-26 16:17+0300\n"
-"PO-Revision-Date: 2016-06-26 16:19+0300\n"
+"POT-Creation-Date: 2016-07-15 15:26+0300\n"
+"PO-Revision-Date: 2016-07-15 15:35+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -55,7 +55,7 @@ msgstr "מיזם GNOME"
 
 #: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:289
 #: ../embed/ephy-about-handler.c:320 ../src/ephy-main.c:77
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1474
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1500
 msgid "Web"
 msgstr "דפדפן"
 
@@ -1024,13 +1024,13 @@ msgid "Loading…"
 msgstr "בטעינה…"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1607
+#: ../embed/ephy-web-view.c:1608
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "אתר אינטרנט זה מציג מזהה השייך לאתר אינטרנט אחר."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1612
+#: ../embed/ephy-web-view.c:1613
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1039,25 +1039,25 @@ msgstr ""
 "המחשב שלך."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1617
+#: ../embed/ephy-web-view.c:1618
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "מזהה אתר אינטרנט זה לא הונפק על ידי מנפיק מהימן."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1622
+#: ../embed/ephy-web-view.c:1623
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "מזהה אתר אינטרנט זה לא ניתן לעיבוד. יתכן והוא פגום."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1627
+#: ../embed/ephy-web-view.c:1628
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr "מזהה אתר אינטרנט זה נשלל על ידי הארגון המהימן שהנפיק אותו."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1632
+#: ../embed/ephy-web-view.c:1633
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1065,7 +1065,7 @@ msgstr ""
 "לא ניתן לבטוח במזהה אתר אינטרנט זה כיוון שהוא עושה שימוש בהצפנה חלשה מאוד."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1637
+#: ../embed/ephy-web-view.c:1638
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1073,24 +1073,24 @@ msgstr ""
 "מזהה אתה אינטרנט זה תקף לתאריכים עתידיים בלבד. יש לבדוק את התאריך בלוח השנה "
 "של המחשב שלך."
 
-#: ../embed/ephy-web-view.c:1720
+#: ../embed/ephy-web-view.c:1721
 msgid "None specified"
 msgstr "לא צוינה"
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: ../embed/ephy-web-view.c:1734 ../embed/ephy-web-view.c:1760
+#: ../embed/ephy-web-view.c:1735 ../embed/ephy-web-view.c:1761
 #, c-format
 msgid "Problem Loading Page"
 msgstr "בעיה בטעינת העמוד"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: ../embed/ephy-web-view.c:1737
+#: ../embed/ephy-web-view.c:1738
 msgid "Oops! Unable to display this website"
 msgstr "אופס! לא ניתן להציג אתר זה"
 
 #. Message body when a site cannot be loaded due to a network error.
-#: ../embed/ephy-web-view.c:1740
+#: ../embed/ephy-web-view.c:1741
 #, c-format
 msgid ""
 "<p>The site at <strong>%s</strong> seems to be unavailable.</p><p>It may be "
@@ -1102,7 +1102,7 @@ msgstr ""
 "כראוי.</p>"
 
 #. Message details when a site cannot be loaded due to a network error.
-#: ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1750
 #, c-format
 msgid "<p>The precise error was: <i>%s</i></p>"
 msgstr "<p>השגיאה המדויקת היתה: <i>%s</i></p>"
@@ -1110,25 +1110,25 @@ msgstr "<p>השגיאה המדויקת היתה: <i>%s</i></p>"
 #. The button on the network error page. Do not add mnemonics here.
 #. The button on the page crash error page. Do not add mnemonics here.
 #. The button on the process crash error page. Do not add mnemonics here.
-#: ../embed/ephy-web-view.c:1753 ../embed/ephy-web-view.c:1775
-#: ../embed/ephy-web-view.c:1792
+#: ../embed/ephy-web-view.c:1754 ../embed/ephy-web-view.c:1776
+#: ../embed/ephy-web-view.c:1793
 msgid "Reload"
 msgstr "רענון"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: ../embed/ephy-web-view.c:1756 ../embed/ephy-web-view.c:1778
-#: ../embed/ephy-web-view.c:1795
+#: ../embed/ephy-web-view.c:1757 ../embed/ephy-web-view.c:1779
+#: ../embed/ephy-web-view.c:1796
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: ../embed/ephy-web-view.c:1763
+#: ../embed/ephy-web-view.c:1764
 msgid "Oops! There may be a problem"
 msgstr "אופס! יתכן ויש בעיה"
 
 #. Message body when a site cannot be loaded due to a page crash error.
-#: ../embed/ephy-web-view.c:1766
+#: ../embed/ephy-web-view.c:1767
 #, c-format
 msgid ""
 "<p>The site at <strong>%s</strong> may have caused Web to close unexpectedly."
@@ -1139,18 +1139,18 @@ msgstr ""
 "p><p>Iאם זה יקראה שוב, נא לדווח על התקלה למפתח האתר <strong>%s</strong>.</p>"
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: ../embed/ephy-web-view.c:1782
+#: ../embed/ephy-web-view.c:1783
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "בעיה בהצגת העמוד"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: ../embed/ephy-web-view.c:1785
+#: ../embed/ephy-web-view.c:1786
 msgid "Oops!"
 msgstr "אופס!"
 
 #. Message body when a site cannot be loaded due to a process crash error.
-#: ../embed/ephy-web-view.c:1788
+#: ../embed/ephy-web-view.c:1789
 msgid ""
 "<p>Something went wrong while displaying this page.</p><p>Please reload or "
 "visit a different page to continue.</p>"
@@ -1159,18 +1159,18 @@ msgstr ""
 "להמשיך.</p>"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: ../embed/ephy-web-view.c:1799
+#: ../embed/ephy-web-view.c:1800
 #, c-format
 msgid "Security Violation"
 msgstr "הפרת אבטחה"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: ../embed/ephy-web-view.c:1802
+#: ../embed/ephy-web-view.c:1803
 msgid "This Connection is Not Secure"
 msgstr "התחברות זו אינה בטוחה"
 
 #. Message body when a site is not loaded due to an invalid TLS certificate.
-#: ../embed/ephy-web-view.c:1805
+#: ../embed/ephy-web-view.c:1806
 #, c-format
 msgid ""
 "<p>This does not look like the real <strong>%s</strong>. Attackers might be "
@@ -1182,28 +1182,28 @@ msgstr ""
 "אשראי או ססמות).</p>"
 
 #. The button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: ../embed/ephy-web-view.c:1815
+#: ../embed/ephy-web-view.c:1816
 msgid "Go Back"
 msgstr "לחזור"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
-#: ../embed/ephy-web-view.c:1818
+#: ../embed/ephy-web-view.c:1819
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: ../embed/ephy-web-view.c:1821
+#: ../embed/ephy-web-view.c:1822
 msgid "Accept Risk and Proceed"
 msgstr "לקחת סיכון ולהתקדם"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: ../embed/ephy-web-view.c:1825
+#: ../embed/ephy-web-view.c:1826
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
-#: ../embed/ephy-web-view.c:2742
+#: ../embed/ephy-web-view.c:2743
 msgid "_OK"
 msgstr "_אישור"
 
@@ -1708,7 +1708,7 @@ msgstr "ת_צוגה"
 
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:151
-#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:186
+#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:186
 msgid "_Help"
 msgstr "ע_זרה"
 
@@ -1838,7 +1838,7 @@ msgid "Display bookmarks help"
 msgstr "הצגת העזרה של הסימניות"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:188
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:188
 msgid "_About"
 msgstr "על _אודות"
 
@@ -2141,7 +2141,11 @@ msgstr "היס_טוריה"
 msgid "Pr_eferences"
 msgstr "ה_עדפות"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:106
+#: ../src/resources/epiphany-application-menu.ui.h:7
+msgid "_Keyboard Shortcuts"
+msgstr "_צירופי מקשים"
+
+#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:106
 msgid "_Quit"
 msgstr "י_ציאה"
 
@@ -2383,6 +2387,246 @@ msgstr "הוספת שפה"
 #: ../src/resources/prefs-lang-dialog.ui.h:4
 msgid "Choose a l_anguage:"
 msgstr "בחירת _שפה:"
+
+#: ../src/resources/shortcuts-dialog.ui.h:1
+msgctxt "shortcut window"
+msgid "General"
+msgstr "כללי"
+
+#: ../src/resources/shortcuts-dialog.ui.h:2
+msgctxt "shortcut window"
+msgid "New window"
+msgstr "חלון חדש"
+
+#: ../src/resources/shortcuts-dialog.ui.h:3
+msgctxt "shortcut window"
+msgid "New incognito window"
+msgstr "חלון גלישת סתר חדש"
+
+#: ../src/resources/shortcuts-dialog.ui.h:4
+msgctxt "shortcut window"
+msgid "Open file"
+msgstr "פתיחת קובץ"
+
+#: ../src/resources/shortcuts-dialog.ui.h:5
+msgctxt "shortcut window"
+msgid "Save page"
+msgstr "שמירת העמוד"
+
+#: ../src/resources/shortcuts-dialog.ui.h:6
+msgctxt "shortcut window"
+msgid "Save page as web app"
+msgstr "שמירת העמוד כיישום רשת"
+
+#: ../src/resources/shortcuts-dialog.ui.h:7
+msgctxt "shortcut window"
+msgid "Print page"
+msgstr "הדפסת העמוד"
+
+#: ../src/resources/shortcuts-dialog.ui.h:8
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "יציאה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:9
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "עזרה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:10
+msgctxt "shortcut window"
+msgid "Shortcuts"
+msgstr "צירופי מקשים"
+
+#: ../src/resources/shortcuts-dialog.ui.h:11
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "ניווט"
+
+#: ../src/resources/shortcuts-dialog.ui.h:12
+msgctxt "shortcut window"
+msgid "Reload current page"
+msgstr "טעינה מחדש של הדף הנוכחי"
+
+#: ../src/resources/shortcuts-dialog.ui.h:13
+msgctxt "shortcut window"
+msgid "Stop loading current page"
+msgstr "הפסקת טעינת הדף הנוכחי"
+
+#: ../src/resources/shortcuts-dialog.ui.h:14
+msgctxt "shortcut window"
+msgid "Go back to the previous page"
+msgstr "מעבר אל הדף הקודם"
+
+#: ../src/resources/shortcuts-dialog.ui.h:15
+msgctxt "shortcut window"
+msgid "Go forward to the next page"
+msgstr "מעבר אל הדף הבא"
+
+#: ../src/resources/shortcuts-dialog.ui.h:16
+msgctxt "shortcut window"
+msgid "Tabs"
+msgstr "לשוניות"
+
+#: ../src/resources/shortcuts-dialog.ui.h:17
+msgctxt "shortcut window"
+msgid "New tab"
+msgstr "לשונית חדשה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:18
+msgctxt "shortcut window"
+msgid "Duplicate current tab"
+msgstr "שכפול הלשונית הנוכחית"
+
+#: ../src/resources/shortcuts-dialog.ui.h:19
+msgctxt "shortcut window"
+msgid "Close current tab"
+msgstr "סגירת הלשונית הנוכחית"
+
+#: ../src/resources/shortcuts-dialog.ui.h:20
+msgctxt "shortcut window"
+msgid "Reopen closed tab"
+msgstr "פתיחה מחודשת של לשונית שנסגרה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:21
+msgctxt "shortcut window"
+msgid "Go to the next tab"
+msgstr "מעבר אל הלשונית הבאה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:22
+msgctxt "shortcut window"
+msgid "Go to the previous tab"
+msgstr "מעבר אל הלשונית הקודמת"
+
+#: ../src/resources/shortcuts-dialog.ui.h:23
+msgctxt "shortcut window"
+msgid "Move current tab to the left"
+msgstr "העברת הלשונית הנוכחית שמאלה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:24
+msgctxt "shortcut window"
+msgid "Move current tab to the right"
+msgstr "העברת הלשונית הנוכחית ימינה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:25
+msgctxt "shortcut window"
+msgid "Miscellaneous"
+msgstr "שונות"
+
+#: ../src/resources/shortcuts-dialog.ui.h:26
+msgctxt "shortcut window"
+msgid "History"
+msgstr "היסטוריה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:27
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "העדפות"
+
+#: ../src/resources/shortcuts-dialog.ui.h:28
+msgctxt "shortcut window"
+msgid "Bookmarks"
+msgstr "סימניות"
+
+#: ../src/resources/shortcuts-dialog.ui.h:29
+msgctxt "shortcut window"
+msgid "Bookmark current page"
+msgstr "הוספת סימנייה לדף הנוכחי"
+
+#: ../src/resources/shortcuts-dialog.ui.h:30
+msgctxt "shortcut window"
+msgid "Toggle caret browsing"
+msgstr "ניווט באמצעות הסמן"
+
+#: ../src/resources/shortcuts-dialog.ui.h:31
+msgctxt "shortcut window"
+msgid "View"
+msgstr "תצוגה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:32
+msgctxt "shortcut window"
+msgid "Zoom in"
+msgstr "התקרבות"
+
+#: ../src/resources/shortcuts-dialog.ui.h:33
+msgctxt "shortcut window"
+msgid "Zoom out"
+msgstr "התרחקות"
+
+#: ../src/resources/shortcuts-dialog.ui.h:34
+msgctxt "shortcut window"
+msgid "Reset zoom"
+msgstr "איפוס התקריב"
+
+#: ../src/resources/shortcuts-dialog.ui.h:35
+msgctxt "shortcut window"
+msgid "Fullscreen"
+msgstr "מסך מלא"
+
+#: ../src/resources/shortcuts-dialog.ui.h:36
+msgctxt "shortcut window"
+msgid "View page source"
+msgstr "הצגת קוד המקור של הדף"
+
+#: ../src/resources/shortcuts-dialog.ui.h:37
+msgctxt "shortcut window"
+msgid "Toggle inspector"
+msgstr "הצגת המנתח"
+
+#: ../src/resources/shortcuts-dialog.ui.h:38
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "עריכה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:39
+msgctxt "shortcut window"
+msgid "Cut"
+msgstr "גזירה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:40
+msgctxt "shortcut window"
+msgid "Copy"
+msgstr "העתקה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:41
+msgctxt "shortcut window"
+msgid "Paste"
+msgstr "הדבקה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:42
+msgctxt "shortcut window"
+msgid "Undo"
+msgstr "ביטול פעולה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:43
+msgctxt "shortcut window"
+msgid "Redo"
+msgstr "ביצוע חוזר"
+
+#: ../src/resources/shortcuts-dialog.ui.h:44
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "בחירת הכל"
+
+#: ../src/resources/shortcuts-dialog.ui.h:45
+msgctxt "shortcut window"
+msgid "Select page URL"
+msgstr "בחירת כתובת הדף"
+
+#: ../src/resources/shortcuts-dialog.ui.h:46
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "חיפוש"
+
+#: ../src/resources/shortcuts-dialog.ui.h:47
+msgctxt "shortcut window"
+msgid "Next search result"
+msgstr "מעבר לתוצאה הבאה"
+
+#: ../src/resources/shortcuts-dialog.ui.h:48
+msgctxt "shortcut window"
+msgid "Previous search result"
+msgstr "מעבר לתוצאה הקודמת"
 
 #: ../src/ephy-combined-stop-reload-action.c:38
 msgid "Stop"
@@ -2902,19 +3146,19 @@ msgstr "יצירת יישום רשת"
 msgid "C_reate"
 msgstr "י_צירה"
 
-#: ../src/window-commands.c:1435 ../src/window-commands.c:1458
+#: ../src/window-commands.c:1461 ../src/window-commands.c:1484
 msgid "Contact us at:"
 msgstr "ניתן ליצור אתנו קשר דרך:"
 
-#: ../src/window-commands.c:1438
+#: ../src/window-commands.c:1464
 msgid "Contributors:"
 msgstr "תורמים:"
 
-#: ../src/window-commands.c:1441
+#: ../src/window-commands.c:1467
 msgid "Past developers:"
 msgstr "מפתחים בעבר:"
 
-#: ../src/window-commands.c:1467
+#: ../src/window-commands.c:1493
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2931,7 +3175,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1490
+#: ../src/window-commands.c:1516
 msgid "translator-credits"
 msgstr ""
 "רועי קרשטיין <sf_kersteinroie@bezeqint.net>\n"
@@ -2943,15 +3187,15 @@ msgstr ""
 "מיזם תרגום GNOME לעברית:\n"
 "‏http://gnome-il.berlios.de"
 
-#: ../src/window-commands.c:1493
+#: ../src/window-commands.c:1519
 msgid "Web Website"
 msgstr "אתר אינטרנט בדפדפן"
 
-#: ../src/window-commands.c:1654
+#: ../src/window-commands.c:1680
 msgid "Enable caret browsing mode?"
 msgstr "האם לאפשר מצב ניווט באמצעות סמן?"
 
-#: ../src/window-commands.c:1657
+#: ../src/window-commands.c:1683
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2961,7 +3205,7 @@ msgstr ""
 "באתרי אינטרנט המאפשר לך לנווט באמצעות המקלדת. האם ברצונך להפעיל גלישה "
 "באמצעות סמן?"
 
-#: ../src/window-commands.c:1660
+#: ../src/window-commands.c:1686
 msgid "_Enable"
 msgstr "ה_פעלה"
 
@@ -3541,9 +3785,6 @@ msgstr "ה_פעלה"
 #~ msgid "MD5 Fingerprint:"
 #~ msgstr "טביעת אצבע MD5:"
 
-#~ msgid "Organization:"
-#~ msgstr "ארגון:"
-
 #~ msgid "Organizational Unit:"
 #~ msgstr "יחידה ארגונית:"
 
@@ -3632,12 +3873,6 @@ msgstr "ה_פעלה"
 #~ msgid "_Toolbars"
 #~ msgstr "_סרגלי כלים"
 
-#~ msgid "Open a file"
-#~ msgstr "פתיחת קובץ"
-
-#~ msgid "Save the current page"
-#~ msgstr "שמירת הדף הנוכחי"
-
 #~ msgid "Save the current page as a Web Application"
 #~ msgstr "שמירת הדף הנוכחי כיישום רשת"
 
@@ -3719,9 +3954,6 @@ msgstr "ה_פעלה"
 #~ msgid "Display security information for the web page"
 #~ msgstr "הצגת פרטי האבטחה של דף זה"
 
-#~ msgid "Add a bookmark for the current page"
-#~ msgstr "הוספת סימנייה לדף הנוכחי"
-
 #~ msgid "Open the bookmarks window"
 #~ msgstr "פתיחת חלון הסימניות"
 
@@ -3736,15 +3968,6 @@ msgstr "ה_פעלה"
 
 #~ msgid "Activate next tab"
 #~ msgstr "הפעלת הלשונית הבאה"
-
-#~ msgid "Move current tab to left"
-#~ msgstr "הזזת הלשונית הנוכחית שמאלה"
-
-#~ msgid "Move current tab to right"
-#~ msgstr "הזזת הלשונית הנוכחית ימינה"
-
-#~ msgid "Detach current tab"
-#~ msgstr "ניתוק הלשונית הנוכחית"
 
 #~ msgid "Display web browser help"
 #~ msgstr "הצגת העזרה של הדפדפן"
@@ -3915,9 +4138,6 @@ msgstr "ה_פעלה"
 #~ msgid "Home page"
 #~ msgstr "דף הבית"
 
-#~ msgid "Set to Current _Page"
-#~ msgstr "הגדרה לדף ה_נוכחי"
-
 #~ msgid "Set to _Blank Page"
 #~ msgstr "הגדרה לדף _ריק"
 
@@ -3971,9 +4191,6 @@ msgstr "ה_פעלה"
 
 #~ msgid "_Go"
 #~ msgstr "מ_עבר"
-
-#~ msgid "_Tabs"
-#~ msgstr "לשוניו_ת"
 
 #~ msgid "Certificate_s"
 #~ msgstr "_אישורים"
@@ -4430,14 +4647,8 @@ msgstr "ה_פעלה"
 #~ msgid "Previous"
 #~ msgstr "הקודם"
 
-#~ msgid "Go to the previous page"
-#~ msgstr "עבור אל הדף הקודם"
-
 #~ msgid "Next"
 #~ msgstr "הבא"
-
-#~ msgid "Go to next page"
-#~ msgstr "עבור אל הדף הבא"
 
 #~ msgid "Close"
 #~ msgstr "סגור"
@@ -4736,9 +4947,6 @@ msgstr "ה_פעלה"
 
 #~ msgid "_Sign text"
 #~ msgstr "_חתום על הטקסט"
-
-#~ msgid "Print this page?"
-#~ msgstr "האם להדפיס דף זה?"
 
 #~ msgid "Preparing to print"
 #~ msgstr "מתכונן להדפסה"
