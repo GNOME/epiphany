@@ -21,7 +21,6 @@
 
 #include <libsoup/soup.h>
 #include <nettle/hmac.h>
-#include <nettle/pbkdf2.h>
 #include <nettle/sha2.h>
 #include <string.h>
 
@@ -96,21 +95,6 @@ ephy_sync_crypto_hawk_header_new (gchar                       *header,
   return hawk_header;
 }
 
-static EphySyncCryptoStretchedCredentials *
-ephy_sync_crypto_stretched_credentials_new (guint8 *quickStretchedPW,
-                                            guint8 *authPW,
-                                            guint8 *unwrapBKey)
-{
-  EphySyncCryptoStretchedCredentials *stretched_credentials;
-
-  stretched_credentials = g_slice_new (EphySyncCryptoStretchedCredentials);
-  stretched_credentials->quickStretchedPW = quickStretchedPW;
-  stretched_credentials->authPW = authPW;
-  stretched_credentials->unwrapBKey = unwrapBKey;
-
-  return stretched_credentials;
-}
-
 static EphySyncCryptoProcessedKFT *
 ephy_sync_crypto_processed_kft_new (guint8 *tokenID,
                                     guint8 *reqHMACkey,
@@ -126,6 +110,21 @@ ephy_sync_crypto_processed_kft_new (guint8 *tokenID,
   processed_kft->respXORkey = respXORkey;
 
   return processed_kft;
+}
+
+static EphySyncCryptoProcessedST *
+ephy_sync_crypto_processed_st_new (guint8 *tokenID,
+                                   guint8 *reqHMACkey,
+                                   guint8 *requestKey)
+{
+  EphySyncCryptoProcessedST *processed_st;
+
+  processed_st = g_slice_new (EphySyncCryptoProcessedST);
+  processed_st->tokenID = tokenID;
+  processed_st->reqHMACkey = reqHMACkey;
+  processed_st->requestKey = requestKey;
+
+  return processed_st;
 }
 
 static EphySyncCryptoSyncKeys *
@@ -192,18 +191,6 @@ ephy_sync_crypto_hawk_header_free (EphySyncCryptoHawkHeader *hawk_header)
 }
 
 void
-ephy_sync_crypto_stretched_credentials_free (EphySyncCryptoStretchedCredentials *stretched_credentials)
-{
-  g_return_if_fail (stretched_credentials != NULL);
-
-  g_free (stretched_credentials->quickStretchedPW);
-  g_free (stretched_credentials->authPW);
-  g_free (stretched_credentials->unwrapBKey);
-
-  g_slice_free (EphySyncCryptoStretchedCredentials, stretched_credentials);
-}
-
-void
 ephy_sync_crypto_processed_kft_free (EphySyncCryptoProcessedKFT *processed_kft)
 {
   g_return_if_fail (processed_kft != NULL);
@@ -214,6 +201,18 @@ ephy_sync_crypto_processed_kft_free (EphySyncCryptoProcessedKFT *processed_kft)
   g_free (processed_kft->respXORkey);
 
   g_slice_free (EphySyncCryptoProcessedKFT, processed_kft);
+}
+
+void
+ephy_sync_crypto_processed_st_free (EphySyncCryptoProcessedST *processed_st)
+{
+  g_return_if_fail (processed_st != NULL);
+
+  g_free (processed_st->tokenID);
+  g_free (processed_st->reqHMACkey);
+  g_free (processed_st->requestKey);
+
+  g_slice_free (EphySyncCryptoProcessedST, processed_st);
 }
 
 void
@@ -468,21 +467,6 @@ append_token_to_header (gchar       *header,
 }
 
 /*
- * Runs 1000 iterations of PBKDF2.
- * Uses sha256 as hash function.
- */
-static void
-pbkdf2_1k (guint8 *key,
-           gsize   key_length,
-           guint8 *salt,
-           gsize   salt_length,
-           guint8 *out,
-           gsize   out_length)
-{
-  pbkdf2_hmac_sha256 (key_length, key, 1000, salt_length, salt, out_length, out);
-}
-
-/*
  * HMAC-based Extract-and-Expand Key Derivation Function.
  * Uses sha256 as hash function.
  * https://tools.ietf.org/html/rfc5869
@@ -540,46 +524,6 @@ hkdf (guint8 *in,
   g_free (prk);
 }
 
-EphySyncCryptoStretchedCredentials *
-ephy_sync_crypto_stretch (const gchar *emailUTF8,
-                          const gchar *passwordUTF8)
-{
-  gchar *salt_stretch;
-  gchar *info_auth;
-  gchar *info_unwrap;
-  guint8 *quickStretchedPW;
-  guint8 *authPW;
-  guint8 *unwrapBKey;
-
-  salt_stretch = ephy_sync_utils_kwe ("quickStretch", emailUTF8);
-  quickStretchedPW = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  pbkdf2_1k ((guint8 *) passwordUTF8, strlen (passwordUTF8),
-             (guint8 *) salt_stretch, strlen (salt_stretch),
-             quickStretchedPW, EPHY_SYNC_TOKEN_LENGTH);
-
-  info_auth = ephy_sync_utils_kw ("authPW");
-  authPW = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  hkdf (quickStretchedPW, EPHY_SYNC_TOKEN_LENGTH,
-        NULL, 0,
-        (guint8 *) info_auth, strlen (info_auth),
-        authPW, EPHY_SYNC_TOKEN_LENGTH);
-
-  info_unwrap = ephy_sync_utils_kw ("unwrapBkey");
-  unwrapBKey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  hkdf (quickStretchedPW, EPHY_SYNC_TOKEN_LENGTH,
-        NULL, 0,
-        (guint8 *) info_unwrap, strlen (info_unwrap),
-        unwrapBKey, EPHY_SYNC_TOKEN_LENGTH);
-
-  g_free (salt_stretch);
-  g_free (info_unwrap);
-  g_free (info_auth);
-
-  return ephy_sync_crypto_stretched_credentials_new (quickStretchedPW,
-                                                     authPW,
-                                                     unwrapBKey);
-}
-
 EphySyncCryptoProcessedKFT *
 ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken)
 {
@@ -633,6 +577,41 @@ ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken)
                                              reqHMACkey,
                                              respHMACkey,
                                              respXORkey);
+}
+
+EphySyncCryptoProcessedST *
+ephy_sync_crypto_process_session_token (const gchar *sessionToken)
+{
+  guint8 *st;
+  guint8 *out;
+  guint8 *tokenID;
+  guint8 *reqHMACkey;
+  guint8 *requestKey;
+  gchar *info;
+
+  st = ephy_sync_utils_decode_hex (sessionToken);
+  info = ephy_sync_utils_kw ("sessionToken");
+  out = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
+
+  hkdf (st, EPHY_SYNC_TOKEN_LENGTH,
+        NULL, 0,
+        (guint8 *) info, strlen (info),
+        out, 3 * EPHY_SYNC_TOKEN_LENGTH);
+
+  tokenID = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  reqHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  requestKey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (tokenID, out, EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (reqHMACkey, out + EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (requestKey, out + 2 * EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
+
+  g_free (st);
+  g_free (out);
+  g_free (info);
+
+  return ephy_sync_crypto_processed_st_new (tokenID,
+                                            reqHMACkey,
+                                            requestKey);
 }
 
 EphySyncCryptoSyncKeys *

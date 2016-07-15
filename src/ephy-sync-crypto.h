@@ -54,12 +54,6 @@ typedef struct {
 } EphySyncCryptoHawkHeader;
 
 typedef struct {
-  guint8 *quickStretchedPW;
-  guint8 *authPW;
-  guint8 *unwrapBKey;
-} EphySyncCryptoStretchedCredentials;
-
-typedef struct {
   guint8 *tokenID;
   guint8 *reqHMACkey;
   guint8 *respHMACkey;
@@ -67,47 +61,52 @@ typedef struct {
 } EphySyncCryptoProcessedKFT;
 
 typedef struct {
+  guint8 *tokenID;
+  guint8 *reqHMACkey;
+  guint8 *requestKey;
+} EphySyncCryptoProcessedST;
+
+typedef struct {
   guint8 *kA;
   guint8 *kB;
   guint8 *wrapKB;
 } EphySyncCryptoSyncKeys;
 
-EphySyncCryptoHawkOptions          *ephy_sync_crypto_hawk_options_new           (gchar *app,
-                                                                                 gchar *dlg,
-                                                                                 gchar *ext,
-                                                                                 gchar *content_type,
-                                                                                 gchar *hash,
-                                                                                 gchar *local_time_offset,
-                                                                                 gchar *nonce,
-                                                                                 gchar *payload,
-                                                                                 gchar *timestamp);
+EphySyncCryptoHawkOptions   *ephy_sync_crypto_hawk_options_new       (gchar *app,
+                                                                      gchar *dlg,
+                                                                      gchar *ext,
+                                                                      gchar *content_type,
+                                                                      gchar *hash,
+                                                                      gchar *local_time_offset,
+                                                                      gchar *nonce,
+                                                                      gchar *payload,
+                                                                      gchar *timestamp);
 
-void                                ephy_sync_crypto_hawk_options_free          (EphySyncCryptoHawkOptions *hawk_options);
+void                        ephy_sync_crypto_hawk_options_free       (EphySyncCryptoHawkOptions *hawk_options);
 
-void                                ephy_sync_crypto_hawk_header_free           (EphySyncCryptoHawkHeader *hawk_header);
+void                        ephy_sync_crypto_hawk_header_free        (EphySyncCryptoHawkHeader *hawk_header);
 
-void                                ephy_sync_crypto_stretched_credentials_free (EphySyncCryptoStretchedCredentials *stretched_credentials);
+void                        ephy_sync_crypto_processed_kft_free      (EphySyncCryptoProcessedKFT *processed_kft);
 
-void                                ephy_sync_crypto_processed_kft_free         (EphySyncCryptoProcessedKFT *processed_kft);
+void                        ephy_sync_crypto_processed_st_free       (EphySyncCryptoProcessedST *processed_st);
 
-void                                ephy_sync_crypto_sync_keys_free             (EphySyncCryptoSyncKeys *sync_keys);
+void                        ephy_sync_crypto_sync_keys_free          (EphySyncCryptoSyncKeys *sync_keys);
 
-EphySyncCryptoStretchedCredentials *ephy_sync_crypto_stretch                    (const gchar *emailUTF8,
-                                                                                 const gchar *passwordUTF8);
+EphySyncCryptoProcessedKFT *ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken);
 
-EphySyncCryptoProcessedKFT         *ephy_sync_crypto_process_key_fetch_token    (const gchar  *keyFetchToken);
+EphySyncCryptoProcessedST  *ephy_sync_crypto_process_session_token   (const gchar *sessionToken);
 
-EphySyncCryptoSyncKeys             *ephy_sync_crypto_retrieve_sync_keys         (const gchar *bundle,
-                                                                                 guint8      *respHMACkey,
-                                                                                 guint8      *respXORkey,
-                                                                                 guint8      *unwrapBKey);
+EphySyncCryptoSyncKeys     *ephy_sync_crypto_retrieve_sync_keys      (const gchar *bundle,
+                                                                      guint8      *respHMACkey,
+                                                                      guint8      *respXORkey,
+                                                                      guint8      *unwrapBKey);
 
-EphySyncCryptoHawkHeader           *ephy_sync_crypto_compute_hawk_header        (const gchar               *url,
-                                                                                 const gchar               *method,
-                                                                                 const gchar               *id,
-                                                                                 guint8                    *key,
-                                                                                 gsize                      key_length,
-                                                                                 EphySyncCryptoHawkOptions *options);
+EphySyncCryptoHawkHeader   *ephy_sync_crypto_compute_hawk_header     (const gchar               *url,
+                                                                      const gchar               *method,
+                                                                      const gchar               *id,
+                                                                      guint8                    *key,
+                                                                      gsize                      key_length,
+                                                                      EphySyncCryptoHawkOptions *options);
 
 G_END_DECLS
 

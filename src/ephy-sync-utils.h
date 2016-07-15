@@ -26,20 +26,15 @@ G_BEGIN_DECLS
 #define EPHY_SYNC_TOKEN_LENGTH 32
 
 typedef enum {
-  EPHY_SYNC_TOKEN_AUTHPW,
-  EPHY_SYNC_TOKEN_UNWRAPBKEY,
   EPHY_SYNC_TOKEN_UID,
   EPHY_SYNC_TOKEN_SESSIONTOKEN,
   EPHY_SYNC_TOKEN_KEYFETCHTOKEN,
+  EPHY_SYNC_TOKEN_UNWRAPBKEY,
   EPHY_SYNC_TOKEN_KA,
   EPHY_SYNC_TOKEN_KB,
-  EPHY_SYNC_TOKEN_WRAPKB
 } EphySyncTokenType;
 
 gchar       *ephy_sync_utils_kw                   (const gchar *name);
-
-gchar       *ephy_sync_utils_kwe                  (const gchar *name,
-                                                   const gchar *emailUTF8);
 
 gchar       *ephy_sync_utils_encode_hex           (guint8 *data,
                                                    gsize   data_length);
