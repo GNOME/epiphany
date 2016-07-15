@@ -50,7 +50,7 @@ void             ephy_sync_service_save_store_tokens (EphySyncService   *self,
 
 void             ephy_sync_service_delete_all_tokens (EphySyncService *self);
 
-gboolean         ephy_sync_service_destroy_session   (EphySyncService *self,
+void             ephy_sync_service_destroy_session   (EphySyncService *self,
                                                       const gchar     *sessionToken);
 
 gboolean         ephy_sync_service_fetch_sync_keys   (EphySyncService *self,

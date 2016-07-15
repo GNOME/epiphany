@@ -85,59 +85,30 @@ LOG ("[%d] Got response from server: %u", __LINE__, message->status_code);
   return message->status_code;
 }
 
-static guint
-synchronous_hawk_post_request (EphySyncService  *self,
-                               const gchar      *endpoint,
-                               const gchar      *id,
-                               guint8           *key,
-                               gsize             key_length,
-                               gchar            *request_body,
-                               JsonObject      **jobject)
+static void
+session_destroyed_cb (SoupSession *session,
+                      SoupMessage *message,
+                      gpointer     user_data)
 {
-  EphySyncCryptoHawkHeader *hawk_header;
-  EphySyncCryptoHawkOptions *hawk_options;
-  SoupMessage *message;
+  JsonParser *parser;
   JsonNode *root;
-  gchar *url;
+  JsonObject *object;
 
-  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
-  message = soup_message_new (SOUP_METHOD_POST, url);
-  soup_message_set_request (message,
-                            "application/json",
-                            SOUP_MEMORY_TAKE,
-                            request_body,
-                            strlen (request_body));
-  hawk_options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL,
-                                                    g_strdup ("application/json"),
-                                                    NULL, NULL, NULL,
-                                                    g_strdup (request_body),
-                                                    NULL);
-  hawk_header = ephy_sync_crypto_compute_hawk_header (url, "POST",
-                                                      id,
-                                                      key, key_length,
-                                                      hawk_options);
-  soup_message_headers_append (message->request_headers,
-                               "authorization", hawk_header->header);
-  soup_message_headers_append (message->request_headers,
-                               "content-type", "application/json");
-LOG ("[%d] Sending synchronous HAWK POST request to %s endpoint", __LINE__, endpoint);
-  soup_session_send_message (self->soup_session, message);
-LOG ("[%d] Got response from server: %u", __LINE__, message->status_code);
-
-  if (jobject != NULL) {
-    json_parser_load_from_data (self->parser,
-                                message->response_body->data,
-                                -1, NULL);
-    root = json_parser_get_root (self->parser);
-    g_assert (JSON_NODE_HOLDS_OBJECT (root));
-    *jobject = json_node_get_object (root);
+  if (message->status_code == STATUS_OK) {
+    LOG ("Session destroyed");
+    return;
   }
 
-  g_free (url);
-  ephy_sync_crypto_hawk_options_free (hawk_options);
-  ephy_sync_crypto_hawk_header_free (hawk_header);
+  parser = json_parser_new ();
+  json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
+  root = json_parser_get_root (parser);
+  object = json_node_get_object (root);
 
-  return message->status_code;
+  g_warning ("Failed to destroy session: errno: %ld, errmsg: %s",
+             json_object_get_int_member (object, "errno"),
+             json_object_get_string_member (object, "message"));
+
+  g_object_unref (parser);
 }
 
 static void
@@ -264,32 +235,52 @@ ephy_sync_service_delete_all_tokens (EphySyncService *self)
 LOG ("[%d] Deleted all tokens", __LINE__);
 }
 
-gboolean
+void
 ephy_sync_service_destroy_session (EphySyncService *self,
                                    const gchar     *sessionToken)
 {
   EphySyncCryptoProcessedST *processed_st;
+  EphySyncCryptoHawkOptions *hawk_options;
+  EphySyncCryptoHawkHeader *hawk_header;
+  SoupMessage *message;
   gchar *tokenID;
-  guint status_code;
+  gchar *url;
+  const gchar *content_type = "application/json";
+  const gchar *endpoint = "session/destroy";
+  const gchar *request_body = "{}";
 
-  g_return_val_if_fail (sessionToken != NULL, FALSE);
+  g_return_if_fail (sessionToken != NULL);
 
+  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
   processed_st = ephy_sync_crypto_process_session_token (sessionToken);
   tokenID = ephy_sync_utils_encode_hex (processed_st->tokenID, 0);
 
-  /* FIXME: Do this asynchronously, there is no need to wait for this. */
-  status_code = synchronous_hawk_post_request (self,
-                                               "session/destroy",
-                                               tokenID,
-                                               processed_st->reqHMACkey,
-                                               EPHY_SYNC_TOKEN_LENGTH,
-                                               g_strdup ("{}"),
-                                               NULL);
+  message = soup_message_new (SOUP_METHOD_POST, url);
+  soup_message_set_request (message, content_type,
+                            SOUP_MEMORY_STATIC,
+                            request_body, strlen (request_body));
+  hawk_options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL,
+                                                    g_strdup (content_type),
+                                                    NULL, NULL, NULL,
+                                                    g_strdup (request_body),
+                                                    NULL);
+  hawk_header = ephy_sync_crypto_compute_hawk_header (url, "POST",
+                                                      tokenID,
+                                                      processed_st->reqHMACkey,
+                                                      EPHY_SYNC_TOKEN_LENGTH,
+                                                      hawk_options);
+  soup_message_headers_append (message->request_headers,
+                               "authorization", hawk_header->header);
+  soup_message_headers_append (message->request_headers,
+                               "content-type", content_type);
+  soup_session_queue_message (self->soup_session, message,
+                              session_destroyed_cb, NULL);
 
-  g_free (tokenID);
+  ephy_sync_crypto_hawk_options_free (hawk_options);
+  ephy_sync_crypto_hawk_header_free (hawk_header);
   ephy_sync_crypto_processed_st_free (processed_st);
-
-  return status_code == STATUS_OK;
+  g_free (tokenID);
+  g_free (url);
 }
 
 gboolean

@@ -353,11 +353,10 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
   sessionToken = ephy_sync_service_get_token (service, EPHY_SYNC_TOKEN_SESSIONTOKEN);
 
   /* Destroy session and delete tokens. */
-  if (ephy_sync_service_destroy_session (service, sessionToken) == FALSE)
-    g_warning ("Failed to destroy session");
-
+  ephy_sync_service_destroy_session (service, sessionToken);
   ephy_sync_service_delete_all_tokens (service);
   ephy_sync_secret_forget_all_tokens ();
+
   g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, "");
 
   /* Show sign in box. */
