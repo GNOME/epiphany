@@ -29,34 +29,34 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySyncService, ephy_sync_service, EPHY, SYNC_SERVICE, GObject)
 
-EphySyncService *ephy_sync_service_new               (void);
+EphySyncService *ephy_sync_service_new                  (void);
 
-gchar           *ephy_sync_service_get_user_email    (EphySyncService *self);
+gchar           *ephy_sync_service_get_user_email       (EphySyncService *self);
 
-void             ephy_sync_service_set_user_email    (EphySyncService *self,
-                                                      const gchar     *email);
+void             ephy_sync_service_set_user_email       (EphySyncService *self,
+                                                         const gchar     *email);
 
-gchar           *ephy_sync_service_get_token         (EphySyncService   *self,
-                                                      EphySyncTokenType  token_type);
+gchar           *ephy_sync_service_get_token            (EphySyncService   *self,
+                                                         EphySyncTokenType  token_type);
 
-void             ephy_sync_service_save_token        (EphySyncService   *self,
-                                                      gchar             *token_value,
-                                                      EphySyncTokenType  token_type);
+void             ephy_sync_service_set_token            (EphySyncService   *self,
+                                                         gchar             *token_value,
+                                                         EphySyncTokenType  token_type);
 
-void             ephy_sync_service_save_store_tokens (EphySyncService   *self,
-                                                      gchar             *token_value,
-                                                      EphySyncTokenType  token_type,
-                                                      ...) G_GNUC_NULL_TERMINATED;
+void             ephy_sync_service_set_and_store_tokens (EphySyncService   *self,
+                                                         gchar             *token_value,
+                                                         EphySyncTokenType  token_type,
+                                                         ...) G_GNUC_NULL_TERMINATED;
 
-void             ephy_sync_service_delete_all_tokens (EphySyncService *self);
+void             ephy_sync_service_delete_all_tokens    (EphySyncService *self);
 
-void             ephy_sync_service_destroy_session   (EphySyncService *self,
-                                                      const gchar     *sessionToken);
+void             ephy_sync_service_destroy_session      (EphySyncService *self,
+                                                         const gchar     *sessionToken);
 
-gboolean         ephy_sync_service_fetch_sync_keys   (EphySyncService *self,
-                                                      const gchar     *email,
-                                                      const gchar     *keyFetchToken,
-                                                      const gchar     *unwrapBKey);
+gboolean         ephy_sync_service_fetch_sync_keys      (EphySyncService *self,
+                                                         const gchar     *email,
+                                                         const gchar     *keyFetchToken,
+                                                         const gchar     *unwrapBKey);
 
 G_END_DECLS
 

@@ -190,9 +190,9 @@ LOG ("[%d] Returning token %s with value %s", __LINE__, token_name, token_value)
 }
 
 void
-ephy_sync_service_save_token (EphySyncService   *self,
-                              gchar             *token_value,
-                              EphySyncTokenType  token_type)
+ephy_sync_service_set_token (EphySyncService   *self,
+                             gchar             *token_value,
+                             EphySyncTokenType  token_type)
 {
   const gchar *token_name;
 
@@ -206,22 +206,22 @@ LOG ("[%d] Saved token %s with value %s", __LINE__, token_name, token_value);
 }
 
 void
-ephy_sync_service_save_store_tokens (EphySyncService   *self,
-                                     gchar             *token_value,
-                                     EphySyncTokenType  token_type,
-                                     ...)
+ephy_sync_service_set_and_store_tokens (EphySyncService   *self,
+                                        gchar             *token_value,
+                                        EphySyncTokenType  token_type,
+                                        ...)
 {
   EphySyncTokenType type;
   gchar *value;
   va_list args;
 
-  ephy_sync_service_save_token (self, token_value, token_type);
+  ephy_sync_service_set_token (self, token_value, token_type);
   ephy_sync_secret_store_token (self->user_email, token_value, token_type);
 
   va_start (args, token_type);
   while ((value = va_arg (args, gchar *)) != NULL) {
     type = va_arg (args, EphySyncTokenType);
-    ephy_sync_service_save_token (self, value, type);
+    ephy_sync_service_set_token (self, value, type);
     ephy_sync_secret_store_token (self->user_email, value, type);
   }
   va_end (args);
@@ -323,12 +323,12 @@ ephy_sync_service_fetch_sync_keys (EphySyncService *self,
 
   /* Everything is okay, save the tokens. */
   ephy_sync_service_set_user_email (self, email);
-  ephy_sync_service_save_store_tokens (self,
-                                       g_strdup (keyFetchToken), EPHY_SYNC_TOKEN_KEYFETCHTOKEN,
-                                       g_strdup (unwrapBKey), EPHY_SYNC_TOKEN_UNWRAPBKEY,
-                                       ephy_sync_utils_encode_hex (sync_keys->kA, 0), EPHY_SYNC_TOKEN_KA,
-                                       ephy_sync_utils_encode_hex (sync_keys->kB, 0), EPHY_SYNC_TOKEN_KB,
-                                       NULL);
+  ephy_sync_service_set_and_store_tokens (self,
+                                          g_strdup (keyFetchToken), EPHY_SYNC_TOKEN_KEYFETCHTOKEN,
+                                          g_strdup (unwrapBKey), EPHY_SYNC_TOKEN_UNWRAPBKEY,
+                                          ephy_sync_utils_encode_hex (sync_keys->kA, 0), EPHY_SYNC_TOKEN_KA,
+                                          ephy_sync_utils_encode_hex (sync_keys->kB, 0), EPHY_SYNC_TOKEN_KB,
+                                          NULL);
   retval = TRUE;
 
 LOG ("kA: %s", ephy_sync_utils_encode_hex (sync_keys->kA, 0));
