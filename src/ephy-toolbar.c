@@ -21,6 +21,7 @@
 #include "ephy-toolbar.h"
 
 #include "ephy-action-helper.h"
+#include "ephy-bookmarks-popover.h"
 #include "ephy-downloads-popover.h"
 #include "ephy-downloads-progress-icon.h"
 #include "ephy-embed.h"
@@ -672,6 +673,8 @@ ephy_toolbar_constructed (GObject *object)
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (ephy_bookmarks_popover_new ()));
+
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
 
   /* Downloads */

@@ -30,6 +30,8 @@ libephymain_la_SOURCES = \
 	cookies-dialog.h			\
 	ephy-action-helper.c			\
 	ephy-action-helper.h			\
+	ephy-bookmarks-popover.c 		\
+	ephy-bookmarks-popover.h 		\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
 	ephy-encoding-dialog.c			\
@@ -113,6 +115,7 @@ RESOURCE_FILES = \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \
 	resources/shortcuts-dialog.ui		  \
+	resources/gtk/bookmarks-popover.ui	  \
 	resources/gtk/menus.ui			  \
 	$(NULL)
 
