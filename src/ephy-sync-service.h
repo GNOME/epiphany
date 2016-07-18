@@ -58,6 +58,8 @@ gboolean         ephy_sync_service_fetch_sync_keys      (EphySyncService *self,
                                                          const gchar     *keyFetchToken,
                                                          const gchar     *unwrapBKey);
 
+const gchar     *ephy_sync_service_sign_certificate     (EphySyncService *self);
+
 G_END_DECLS
 
 #endif

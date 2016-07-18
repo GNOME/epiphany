@@ -46,6 +46,59 @@ struct _EphySyncService {
 G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
 static guint
+synchronous_hawk_post_request (EphySyncService  *self,
+                              const gchar      *endpoint,
+                              const gchar      *id,
+                              guint8           *key,
+                              gsize             key_length,
+                              gchar            *request_body,
+                              JsonObject      **jobject)
+{
+  EphySyncCryptoHawkOptions *hawk_options;
+  EphySyncCryptoHawkHeader *hawk_header;
+  SoupMessage *message;
+  JsonNode *root;
+  gchar *url;
+  const gchar *content_type = "application/json";
+
+  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
+  message = soup_message_new (SOUP_METHOD_POST, url);
+  soup_message_set_request (message, content_type,
+                            SOUP_MEMORY_COPY,
+                            request_body, strlen (request_body));
+
+  hawk_options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL,
+                                                    g_strdup (content_type),
+                                                    NULL, NULL, NULL,
+                                                    g_strdup (request_body),
+                                                    NULL);
+  hawk_header = ephy_sync_crypto_compute_hawk_header (url, "POST",
+                                                      id,
+                                                      key, key_length,
+                                                      hawk_options);
+  soup_message_headers_append (message->request_headers,
+                               "authorization", hawk_header->header);
+  soup_message_headers_append (message->request_headers,
+                               "content-type", content_type);
+  soup_session_send_message (self->soup_session, message);
+
+  if (jobject != NULL) {
+    json_parser_load_from_data (self->parser,
+                                message->response_body->data,
+                                -1, NULL);
+    root = json_parser_get_root (self->parser);
+    g_assert (JSON_NODE_HOLDS_OBJECT (root));
+    *jobject = json_node_get_object (root);
+  }
+
+  g_free (url);
+  ephy_sync_crypto_hawk_options_free (hawk_options);
+  ephy_sync_crypto_hawk_header_free (hawk_header);
+
+  return message->status_code;
+}
+
+static guint
 synchronous_hawk_get_request (EphySyncService  *self,
                               const gchar      *endpoint,
                               const gchar      *id,
@@ -341,4 +394,66 @@ out:
   g_free (unwrapKB);
 
   return retval;
+}
+
+const gchar *
+ephy_sync_service_sign_certificate (EphySyncService *self)
+{
+  EphySyncCryptoProcessedST *processed_st;
+  EphySyncCryptoRSAKeyPair *kpair;
+  JsonObject *jobject;
+  gchar *sessionToken;
+  gchar *tokenID;
+  gchar *public_key_json;
+  gchar *request_body;
+  gchar *n_str;
+  gchar *e_str;
+  guint status_code;
+  const gchar *certificate = NULL;
+
+  sessionToken = ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_SESSIONTOKEN);
+  g_return_val_if_fail (sessionToken != NULL, NULL);
+
+  kpair = ephy_sync_crypto_generate_rsa_key_pair ();
+  g_return_val_if_fail (kpair != NULL, NULL);
+
+  processed_st = ephy_sync_crypto_process_session_token (sessionToken);
+  tokenID = ephy_sync_utils_encode_hex (processed_st->tokenID, 0);
+
+  n_str = mpz_get_str (NULL, 10, kpair->public_key.n);
+  e_str = mpz_get_str (NULL, 10, kpair->public_key.e);
+  public_key_json = ephy_sync_utils_build_json_string ("algorithm", "RS",
+                                                       "n", n_str,
+                                                       "e", e_str,
+                                                       NULL);
+  /* The server allows a maximum certificate lifespan of 24 hours == 86400000 ms */
+  request_body = g_strdup_printf ("{\"publicKey\": %s, \"duration\": 86400000}",
+                                  public_key_json);
+  status_code = synchronous_hawk_post_request (self,
+                                               "certificate/sign",
+                                               tokenID,
+                                               processed_st->reqHMACkey,
+                                               EPHY_SYNC_TOKEN_LENGTH,
+                                               request_body,
+                                               &jobject);
+
+  if (status_code != STATUS_OK) {
+    g_warning ("FxA server errno: %ld, errmsg: %s",
+               json_object_get_int_member (jobject, "errno"),
+               json_object_get_string_member (jobject, "message"));
+    goto out;
+  }
+
+  certificate = json_object_get_string_member (jobject, "cert");
+
+out:
+  ephy_sync_crypto_processed_st_free (processed_st);
+  ephy_sync_crypto_rsa_key_pair_free (kpair);
+  g_free (tokenID);
+  g_free (public_key_json);
+  g_free (request_body);
+  g_free (n_str);
+  g_free (e_str);
+
+  return certificate;
 }
