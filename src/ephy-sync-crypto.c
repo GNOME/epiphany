@@ -142,6 +142,19 @@ ephy_sync_crypto_sync_keys_new (guint8 *kA,
   return sync_keys;
 }
 
+static EphySyncCryptoRSAKeyPair *
+ephy_sync_crypto_rsa_key_pair_new (struct rsa_public_key  public_key,
+                                   struct rsa_private_key private_key)
+{
+  EphySyncCryptoRSAKeyPair *key_pair;
+
+  key_pair = g_slice_new (EphySyncCryptoRSAKeyPair);
+  key_pair->public_key = public_key;
+  key_pair->private_key = private_key;
+
+  return key_pair;
+}
+
 void
 ephy_sync_crypto_hawk_options_free (EphySyncCryptoHawkOptions *hawk_options)
 {
@@ -225,6 +238,17 @@ ephy_sync_crypto_sync_keys_free (EphySyncCryptoSyncKeys *sync_keys)
   g_free (sync_keys->wrapKB);
 
   g_slice_free (EphySyncCryptoSyncKeys, sync_keys);
+}
+
+void
+ephy_sync_crypto_rsa_key_pair_free (EphySyncCryptoRSAKeyPair *key_pair)
+{
+  g_return_if_fail (key_pair != NULL);
+
+  rsa_public_key_clear (&key_pair->public_key);
+  rsa_private_key_clear (&key_pair->private_key);
+
+  g_slice_free (EphySyncCryptoRSAKeyPair, key_pair);
 }
 
 static guint8 *
@@ -524,6 +548,15 @@ hkdf (guint8 *in,
   g_free (prk);
 }
 
+static void
+random_func (void   *ctx,
+             gsize   length,
+             guint8 *dst)
+{
+  for (gsize i = 0; i < length; i++)
+    dst[i] = g_random_int ();
+}
+
 EphySyncCryptoProcessedKFT *
 ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken)
 {
@@ -764,4 +797,31 @@ ephy_sync_crypto_compute_hawk_header (const gchar               *url,
   }
 
   return ephy_sync_crypto_hawk_header_new (header, artifacts);
+}
+
+EphySyncCryptoRSAKeyPair *
+ephy_sync_crypto_generate_rsa_key_pair (void)
+{
+  struct rsa_public_key public;
+  struct rsa_private_key private;
+  gint retval;
+
+  rsa_public_key_init (&public);
+  rsa_private_key_init (&private);
+
+  /* The public exponent, usually one of the small Fermat primes 3, 5, 17, 257, 65537 */
+  mpz_set_ui (public.e, 65537);
+
+  /* Key sizes below 2048 are considered breakable and should not be used */
+  retval = rsa_generate_keypair (&public, &private,
+                                 NULL, random_func,
+                                 NULL, NULL, 2048, 0);
+  if (retval == 0) {
+    g_warning ("Failed to generate RSA key pair");
+    rsa_public_key_clear (&public);
+    rsa_private_key_clear (&private);
+    return NULL;
+  }
+
+  return ephy_sync_crypto_rsa_key_pair_new (public, private);
 }

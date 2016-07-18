@@ -20,6 +20,7 @@
 #define EPHY_SYNC_CRYPTO_H
 
 #include <glib-object.h>
+#include <nettle/rsa.h>
 
 G_BEGIN_DECLS
 
@@ -72,6 +73,11 @@ typedef struct {
   guint8 *wrapKB;
 } EphySyncCryptoSyncKeys;
 
+typedef struct {
+  struct rsa_public_key public_key;
+  struct rsa_private_key private_key;
+} EphySyncCryptoRSAKeyPair;
+
 EphySyncCryptoHawkOptions   *ephy_sync_crypto_hawk_options_new       (gchar *app,
                                                                       gchar *dlg,
                                                                       gchar *ext,
@@ -92,6 +98,8 @@ void                        ephy_sync_crypto_processed_st_free       (EphySyncCr
 
 void                        ephy_sync_crypto_sync_keys_free          (EphySyncCryptoSyncKeys *sync_keys);
 
+void                        ephy_sync_crypto_rsa_key_pair_free       (EphySyncCryptoRSAKeyPair *key_pair);
+
 EphySyncCryptoProcessedKFT *ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken);
 
 EphySyncCryptoProcessedST  *ephy_sync_crypto_process_session_token   (const gchar *sessionToken);
@@ -107,6 +115,8 @@ EphySyncCryptoHawkHeader   *ephy_sync_crypto_compute_hawk_header     (const gcha
                                                                       guint8                    *key,
                                                                       gsize                      key_length,
                                                                       EphySyncCryptoHawkOptions *options);
+
+EphySyncCryptoRSAKeyPair   *ephy_sync_crypto_generate_rsa_key_pair   (void);
 
 G_END_DECLS
 
