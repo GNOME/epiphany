@@ -38,7 +38,6 @@ void          ephy_toolbar_change_combined_stop_reload_state (GSimpleAction *act
 
 GtkWidget    *ephy_toolbar_get_location_entry                (EphyToolbar *toolbar);
 EphyTitleBox *ephy_toolbar_get_title_box                     (EphyToolbar *toolbar);
-GMenu        *ephy_toolbar_get_page_menu                     (EphyToolbar *toolbar);
 GtkWidget    *ephy_toolbar_get_page_menu_button              (EphyToolbar *toolbar);
 GtkWidget    *ephy_toolbar_get_new_tab_button                (EphyToolbar *toolbar);
 

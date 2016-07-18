@@ -63,8 +63,6 @@ struct _EphyToolbar {
   GtkWidget *downloads_button;
   GtkWidget *downloads_popover;
 
-  GMenu *page_menu;
-
   guint navigation_buttons_menu_timeout;
 };
 
@@ -567,6 +565,7 @@ ephy_toolbar_constructed (GObject *object)
   EphyToolbar *toolbar = EPHY_TOOLBAR (object);
   GtkWidget *box, *button;
   GtkMenu *menu;
+  GMenu *page_menu;
   EphyDownloadsManager *downloads_manager;
   GtkBuilder *builder;
   EphyHistoryService *history_service;
@@ -656,10 +655,10 @@ ephy_toolbar_constructed (GObject *object)
                         gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/menus.ui");
-  toolbar->page_menu = G_MENU (gtk_builder_get_object (builder, "page-menu"));
+  page_menu = G_MENU (gtk_builder_get_object (builder, "page-menu"));
   gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), FALSE);
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button),
-                                  G_MENU_MODEL (toolbar->page_menu));
+                                  G_MENU_MODEL (page_menu));
   menu = gtk_menu_button_get_popup (GTK_MENU_BUTTON (button));
   gtk_widget_set_halign (GTK_WIDGET (menu), GTK_ALIGN_END);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
@@ -768,12 +767,6 @@ EphyTitleBox *
 ephy_toolbar_get_title_box (EphyToolbar *toolbar)
 {
   return toolbar->title_box;
-}
-
-GMenu *
-ephy_toolbar_get_page_menu (EphyToolbar *toolbar)
-{
-  return toolbar->page_menu;
 }
 
 GtkWidget *

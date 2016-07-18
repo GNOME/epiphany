@@ -62,25 +62,27 @@ static GHashTable *properties_dialogs = 0;
 static GMenu *
 find_bookmarks_menu (EphyWindow *window)
 {
-  GMenu *page_menu;
+  GtkWidget *page_menu_button;
+  GMenuModel *page_menu;
   gint n_items, i;
 
   /* Page menu */
-  page_menu = ephy_toolbar_get_page_menu (EPHY_TOOLBAR (ephy_window_get_toolbar (window)));
+  page_menu_button = ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (ephy_window_get_toolbar (window)));
+  page_menu = gtk_menu_button_get_menu_model (GTK_MENU_BUTTON (page_menu_button));
 
   /* Number of sections in the model */
-  n_items = g_menu_model_get_n_items (G_MENU_MODEL (page_menu));
+  n_items = g_menu_model_get_n_items (page_menu);
 
   for (i = 0; i < n_items; i++) {
     GVariant *section_label;
 
     /* Looking for the bookmarks section */
-    section_label = g_menu_model_get_item_attribute_value (G_MENU_MODEL (page_menu), i, "id", G_VARIANT_TYPE_STRING);
+    section_label = g_menu_model_get_item_attribute_value (page_menu, i, "id", G_VARIANT_TYPE_STRING);
     if (section_label != NULL && g_strcmp0 (g_variant_get_string (section_label, NULL), "bookmarks-section") == 0) {
       GMenuModel *bookmarks_section_model, *bookmarks_menu_model;
 
       /* Bookmarks section should contain the bookmarks menu */
-      bookmarks_section_model = g_menu_model_get_item_link (G_MENU_MODEL (page_menu), i, G_MENU_LINK_SECTION);
+      bookmarks_section_model = g_menu_model_get_item_link (page_menu, i, G_MENU_LINK_SECTION);
       bookmarks_menu_model = g_menu_model_get_item_link (bookmarks_section_model, 0, G_MENU_LINK_SUBMENU);
 
       return G_MENU (bookmarks_menu_model);
