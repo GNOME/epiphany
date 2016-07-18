@@ -180,7 +180,7 @@ typedef enum {
 
 static void
 ephy_history_cleared_cb (EphyHistoryService *history,
-                         gpointer           user_data)
+                         gpointer            user_data)
 {
   GActionGroup *action_group;
   GAction *action;
@@ -192,11 +192,9 @@ ephy_history_cleared_cb (EphyHistoryService *history,
   for (i = 0; actions[i] != NULL; i++) {
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), actions[i]);
     ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG, TRUE);
-
-    g_free (actions[i]);
   }
 
-  g_free (actions);
+  g_strfreev (actions);
 }
 
 static gboolean
@@ -490,9 +488,10 @@ navigation_button_release_event_cb (GtkButton *button,
   EphyNavigationHistoryDirection direction;
   const gchar *action_name;
 
-  if (toolbar->navigation_buttons_menu_timeout > 0)
+  if (toolbar->navigation_buttons_menu_timeout > 0) {
     g_source_remove (toolbar->navigation_buttons_menu_timeout);
-  toolbar->navigation_buttons_menu_timeout = 0;
+    toolbar->navigation_buttons_menu_timeout = 0;
+  }
 
   action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
   action_group = gtk_widget_get_action_group (GTK_WIDGET (toolbar->window), "toolbar");
@@ -530,10 +529,10 @@ navigation_leave_notify_event_cb (GtkButton *button,
 {
   EphyToolbar *toolbar = EPHY_TOOLBAR (user_data);
 
-  if (toolbar->navigation_buttons_menu_timeout > 0)
+  if (toolbar->navigation_buttons_menu_timeout > 0) {
     g_source_remove (toolbar->navigation_buttons_menu_timeout);
-
-  toolbar->navigation_buttons_menu_timeout = 0;
+    toolbar->navigation_buttons_menu_timeout = 0;
+  }
 
   return G_SOURCE_REMOVE;
 }
@@ -659,6 +658,7 @@ ephy_toolbar_constructed (GObject *object)
   gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), FALSE);
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button),
                                   G_MENU_MODEL (page_menu));
+  g_object_unref (builder);
   menu = gtk_menu_button_get_popup (GTK_MENU_BUTTON (button));
   gtk_widget_set_halign (GTK_WIDGET (menu), GTK_ALIGN_END);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
@@ -701,10 +701,6 @@ ephy_toolbar_constructed (GObject *object)
 
   history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
 
-  if (toolbar->navigation_buttons_menu_timeout > 0)
-    g_source_remove (toolbar->navigation_buttons_menu_timeout);
-  toolbar->navigation_buttons_menu_timeout = 0;
-
   g_signal_connect (history_service,
                     "cleared", G_CALLBACK (ephy_history_cleared_cb),
                     toolbar->window);
@@ -716,10 +712,25 @@ ephy_toolbar_init (EphyToolbar *toolbar)
 }
 
 static void
+ephy_toolbar_dispose (GObject *object)
+{
+  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
+
+  g_clear_object (&toolbar->window);
+  g_clear_object (&toolbar->title_box);
+
+  G_OBJECT_CLASS (ephy_toolbar_parent_class)->dispose (object);
+}
+
+static void
 ephy_toolbar_finalize (GObject *object)
 {
-  if (EPHY_TOOLBAR (object)->navigation_buttons_menu_timeout > 0)
-    g_source_remove (EPHY_TOOLBAR (object)->navigation_buttons_menu_timeout);
+  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
+
+  if (toolbar->navigation_buttons_menu_timeout > 0) {
+    g_source_remove (toolbar->navigation_buttons_menu_timeout);
+    toolbar->navigation_buttons_menu_timeout = 0;
+  }
 
   G_OBJECT_CLASS (ephy_toolbar_parent_class)->finalize (object);
 }
@@ -729,6 +740,7 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  gobject_class->dispose = ephy_toolbar_dispose;
   gobject_class->finalize = ephy_toolbar_finalize;
   gobject_class->set_property = ephy_toolbar_set_property;
   gobject_class->get_property = ephy_toolbar_get_property;
