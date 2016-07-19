@@ -136,6 +136,7 @@ struct _EphyWindow {
   GtkApplicationWindow parent_instance;
 
   GtkWidget *header_bar;
+  EphyBookmarksManager *bookmarks_manager;
   GHashTable *action_labels;
   GtkNotebook *notebook;
   EphyEmbed *active_embed;
@@ -2600,6 +2601,7 @@ ephy_window_dispose (GObject *object)
 
     _ephy_window_set_context_event (window, NULL);
 
+    g_clear_object (&window->bookmarks_manager);
     g_clear_object (&window->hit_test_result);
 
     g_hash_table_unref (window->action_labels);
