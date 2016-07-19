@@ -78,6 +78,9 @@ libephymain_la_SOURCES = \
 nodist_libephymain_la_SOURCES = \
 	$(TYPES_SOURCE)
 
+libephymain_la_LIBADD = \
+	$(top_builddir)/gvdb/libgvdb.la
+
 libephymain_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/embed		\
@@ -88,6 +91,7 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/src/bookmarks   \
+	-I$(top_srcdir)/gvdb		\
 	-DLOADER_DIR=\""$(pkglibdir)/$(EPIPHANY_MAJOR)/loaders"\"		\
 	-DDATADIR=\""$(pkgdatadir)"\" 	\
 	-DLOCALEDIR=\"$(localedir)\"	\

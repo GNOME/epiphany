@@ -81,6 +81,7 @@ GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.0.1
 LIBNOTIFY_REQUIRED=0.5.1
 GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
+GVDB_REQUIRED="glib-2.0 >= $GLIB_REQUIRED"
 
 # Tests
 
@@ -114,6 +115,9 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  avahi-gobject >= $AVAHI_REQUIRED
 		  avahi-client >= $AVAHI_REQUIRED
 		  ])
+
+# Check requirements for gvdb
+PKG_CHECK_MODULES(GVDB, [$GVDB_REQUIRED])
 
 PKG_CHECK_MODULES([WEB_EXTENSION], [
                   webkit2gtk-web-extension-4.0 >= $WEBKIT_GTK_REQUIRED
@@ -197,6 +201,7 @@ Makefile
 data/Makefile
 data/pages/Makefile
 doc/Makefile
+gvdb/Makefile
 help/Makefile
 libgd/Makefile
 lib/Makefile
