@@ -114,6 +114,7 @@ PKG_CHECK_MODULES([GSETTINGS_DESKTOP_SCHEMAS], [gsettings-desktop-schemas])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0 >= $GLIB_REQUIRED])
 PKG_CHECK_MODULES([GTK], [gtk+-3.0 >= $GTK_REQUIRED])
 PKG_CHECK_MODULES([GTK_UNIX_PRINT], [gtk+-unix-print-3.0 >= $GTK_REQUIRED])
+PKG_CHECK_MODULES([GVDB], [glib-2.0 >= $GLIB_REQUIRED])
 PKG_CHECK_MODULES([LIBNOTIFY], [libnotify >= 0.5.1])
 PKG_CHECK_MODULES([LIBSECRET], [libsecret-1 >= 0.14])
 PKG_CHECK_MODULES([LIBSOUP], [libsoup-2.4 >= 2.48.0])
@@ -200,6 +201,7 @@ data/Makefile
 data/icons/Makefile
 data/pages/Makefile
 doc/Makefile
+gvdb/Makefile
 help/Makefile
 libgd/Makefile
 lib/Makefile
