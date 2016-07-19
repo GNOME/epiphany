@@ -21,6 +21,7 @@
 #pragma once
 
 #include "ephy-bookmarks.h"
+#include "ephy-bookmarks-manager.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed.h"
 #include "ephy-session.h"
@@ -100,6 +101,8 @@ GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
 EphyBookmarks   *ephy_shell_get_bookmarks                (EphyShell *shell);
 
 GtkWidget       *ephy_shell_get_bookmarks_editor         (EphyShell *shell);
+
+EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
 
 GtkWidget       *ephy_shell_get_history_window           (EphyShell *shell);
 

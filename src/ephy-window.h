@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include "ephy-bookmarks-manager.h"
 #include "ephy-web-view.h"
 
 #include <gtk/gtk.h>
