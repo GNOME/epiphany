@@ -17,6 +17,7 @@
 
 #include "ephy-bookmark.h"
 #include "ephy-bookmark-row.h"
+#include "ephy-bookmarks-manager.h"
 #include "ephy-bookmarks-popover.h"
 
 #include <glib/gi18n.h>
@@ -28,6 +29,18 @@ struct _EphyBookmarksPopover {
 };
 
 G_DEFINE_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, GTK_TYPE_POPOVER)
+
+
+static void
+bookmark_added_cb (EphyBookmarksPopover *popover,
+                   EphyBookmark         *bookmark)
+{
+  GtkWidget *bookmark_row;
+
+  bookmark_row = ephy_bookmark_row_new (bookmark);
+
+  gtk_list_box_prepend (GTK_LIST_BOX (popover->bookmarks_list_box), bookmark_row);
+}
 
 static void
 ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
@@ -41,14 +54,32 @@ ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
 static void
 ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 {
-  EphyBookmark *bookmark;
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GList *bookmarks;
+  GList *l;
+  EphyBookmark *dummy_bookmark;
   GtkWidget *row;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  bookmark = ephy_bookmark_new (g_strdup ("https://duckduckgo.com"), g_strdup ("Test title"));
-  row = ephy_bookmark_row_new (bookmark);
-  gtk_list_box_insert (GTK_LIST_BOX (self->bookmarks_list_box), row, -1);
+  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://duckduckgo.com"), g_strdup ("Test title"));
+  ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
+
+  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://wikipedia.com"), g_strdup ("wikipedia"));
+  ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
+
+  bookmarks = ephy_bookmarks_manager_get_bookmarks (manager);
+  for (l = bookmarks; l != NULL; l = g_list_next (l)) {
+    EphyBookmark *bookmark = (EphyBookmark *)l->data;
+    GtkWidget *bookmark_row;
+
+    bookmark_row = ephy_bookmark_row_new (bookmark);
+    gtk_list_box_prepend (GTK_LIST_BOX (popover->bookmarks_list_box), bookmark_row);
+  }
+
+  g_signal_connect_object (manager, "bookmark-added",
+                           G_CALLBACK (bookmark_added_cb),
+                           popover, G_CONNECT_SWAPPED);
 }
 
 EphyBookmarksPopover *

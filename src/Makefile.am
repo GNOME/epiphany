@@ -24,6 +24,14 @@ TYPES_H_FILES = \
 	$(NULL)
 
 libephymain_la_SOURCES = \
+	ephy-bookmark.c				\
+	ephy-bookmark.h				\
+	ephy-bookmark-row.c 			\
+	ephy-bookmark-row.h 			\
+	ephy-bookmarks-manager.c		\
+	ephy-bookmarks-manager.h		\
+	ephy-bookmarks-popover.c 		\
+	ephy-bookmarks-popover.h 		\
 	clear-data-dialog.c			\
 	clear-data-dialog.h			\
 	cookies-dialog.c			\

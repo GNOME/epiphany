@@ -52,6 +52,7 @@ struct _EphyShell {
   GList *windows;
   GObject *lockdown;
   EphyBookmarks *bookmarks;
+  EphyBookmarksManager *bookmarks_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *bme;
   GtkWidget *history_window;
@@ -741,6 +742,25 @@ ephy_shell_get_bookmarks (EphyShell *shell)
   }
 
   return shell->bookmarks;
+}
+
+/**
+ * ephy_shell_get_bookmarks_manager:
+ * @shell: the #EphyShell
+ *
+ * Returns bookmarks manager.
+ *
+ * Return value: (transfer none): An #EphyBookmarksManager.
+ */
+EphyBookmarksManager *
+ephy_shell_get_bookmarks_manager (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->bookmarks_manager == NULL)
+    shell->bookmarks_manager = EPHY_BOOKMARKS_MANAGER (g_object_new (EPHY_TYPE_BOOKMARKS_MANAGER, NULL));
+
+  return shell->bookmarks_manager;
 }
 
 /**
