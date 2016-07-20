@@ -29,9 +29,10 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#define FXA_BASEURL   "https://api.accounts.firefox.com/"
-#define FXA_VERSION   "v1/"
-#define STATUS_OK     200
+#define TOKEN_SERVER_URL  "https://token.services.mozilla.com/1.0/sync/1.5"
+#define FXA_BASEURL       "https://api.accounts.firefox.com/"
+#define FXA_VERSION       "v1/"
+#define STATUS_OK         200
 
 struct _EphySyncService {
   GObject parent_instance;
@@ -39,20 +40,29 @@ struct _EphySyncService {
   SoupSession *soup_session;
   JsonParser *parser;
 
-  gchar *user_email;
   GHashTable *tokens;
+
+  gchar *user_email;
+  gint64 last_auth_at;
+
+  gchar *certificate;
+  gchar *storage_endpoint;
+  gchar *token_server_id;
+  gchar *token_server_key;
+
+  EphySyncCryptoRSAKeyPair *keypair;
 };
 
 G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
 static guint
 synchronous_hawk_post_request (EphySyncService  *self,
-                              const gchar      *endpoint,
-                              const gchar      *id,
-                              guint8           *key,
-                              gsize             key_length,
-                              gchar            *request_body,
-                              JsonObject      **jobject)
+                              const gchar       *endpoint,
+                              const gchar       *id,
+                              guint8            *key,
+                              gsize              key_length,
+                              gchar             *request_body,
+                              JsonObject       **jobject)
 {
   EphySyncCryptoHawkOptions *hawk_options;
   EphySyncCryptoHawkHeader *hawk_header;
@@ -164,15 +174,211 @@ session_destroyed_cb (SoupSession *session,
   g_object_unref (parser);
 }
 
+static gchar *
+get_audience_for_url (const gchar *url)
+{
+  SoupURI *uri;
+  const gchar *scheme;
+  const gchar *host;
+  gchar *port_str;
+  guint port;
+  gchar *audience;
+
+  uri = soup_uri_new (url);
+
+  if (uri == NULL) {
+    g_warning ("Failed to build SoupURI, invalid url: %s", url);
+    return NULL;
+  }
+
+  scheme = soup_uri_get_scheme (uri);
+  host = soup_uri_get_host (uri);
+  port = soup_uri_get_port (uri);
+  port_str = g_strdup_printf (":%u", port);
+
+  /* Even if the url doesn't contain the port, soup_uri_get_port() will return
+   * the default port for the url's scheme so we need to check if the port was
+   * really present in the url.
+   */
+  if (g_strstr_len (url, -1, port_str) != NULL)
+    audience = g_strdup_printf ("%s://%s:%u", scheme, host, port);
+  else
+    audience = g_strdup_printf ("%s://%s", scheme, host);
+
+  soup_uri_free (uri);
+  g_free (port_str);
+
+  return audience;
+}
+
+static guchar *
+base64_parse (const gchar *string,
+              gsize       *out_len)
+{
+  gchar *suffix;
+  gchar *full;
+  guchar *decoded;
+  gsize len;
+
+  len = ((4 - strlen (string) % 4) % 4);
+  suffix = g_strnfill (len, '=');
+  full = g_strconcat (string, suffix, NULL);
+  decoded = g_base64_decode (full, out_len);
+
+  g_free (suffix);
+  g_free (full);
+
+  return decoded;
+}
+
+static gboolean
+check_certificate (EphySyncService *self,
+                   const gchar     *certificate)
+{
+  JsonParser *parser;
+  JsonNode *root;
+  JsonObject *object;
+  JsonObject *principal;
+  gchar **pieces;
+  gchar *header;
+  gchar *payload;
+  gchar *uid_email;
+  const gchar *algorithm;
+  const gchar *email;
+  gsize header_len;
+  gsize payload_len;
+  gboolean retval = FALSE;
+
+  g_return_val_if_fail (certificate != NULL, FALSE);
+
+  pieces = g_strsplit (certificate, ".", 0);
+  header = (gchar *) base64_parse (pieces[0], &header_len);
+  payload = (gchar *) base64_parse (pieces[1], &payload_len);
+
+  parser = json_parser_new ();
+  json_parser_load_from_data (parser, header, -1, NULL);
+  root = json_parser_get_root (parser);
+  object = json_node_get_object (root);
+  algorithm = json_object_get_string_member (object, "alg");
+
+  if (g_str_equal (algorithm, "RS256") == FALSE) {
+    g_warning ("Expected algorithm RS256, found %s. Giving up.", algorithm);
+    goto out;
+  }
+
+  json_parser_load_from_data (parser, payload, -1, NULL);
+  root = json_parser_get_root (parser);
+  object = json_node_get_object (root);
+  principal = json_object_get_object_member (object, "principal");
+  email = json_object_get_string_member (principal, "email");
+  uid_email = g_strdup_printf ("%s@%s",
+                               ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_UID),
+                               soup_uri_get_host (soup_uri_new (FXA_BASEURL)));
+
+  if (g_str_equal (uid_email, email) == FALSE) {
+    g_warning ("Expected email %s, found %s. Giving up.", uid_email, email);
+    goto out;
+  }
+
+  self->last_auth_at = json_object_get_int_member (object, "fxa-lastAuthAt");
+  retval = TRUE;
+
+out:
+  g_free (header);
+  g_free (payload);
+  g_free (uid_email);
+  g_strfreev (pieces);
+  g_object_unref (parser);
+
+  return retval;
+}
+
+static gboolean
+query_token_server (EphySyncService *self,
+                    const gchar     *assertion)
+{
+  SoupMessage *message;
+  JsonParser *parser;
+  JsonNode *root;
+  JsonObject *object;
+  gchar *authorization;
+  gboolean retval = FALSE;
+
+  g_return_val_if_fail (assertion != NULL, FALSE);
+
+  message = soup_message_new (SOUP_METHOD_GET, TOKEN_SERVER_URL);
+  authorization = g_strdup_printf ("BrowserID %s", assertion);
+  soup_message_headers_append (message->request_headers,
+                               "authorization", authorization);
+  soup_session_send_message (self->soup_session, message);
+
+  parser = json_parser_new ();
+  json_parser_load_from_data (parser,
+                              message->response_body->data,
+                              -1, NULL);
+  root = json_parser_get_root (parser);
+  object = json_node_get_object (root);
+
+  if (message->status_code == STATUS_OK) {
+    self->storage_endpoint = g_strdup (json_object_get_string_member (object, "api_endpoint"));
+    self->token_server_id = g_strdup (json_object_get_string_member (object, "id"));
+    self->token_server_key = g_strdup (json_object_get_string_member (object, "key"));
+  } else if (message->status_code == 400) {
+    g_warning ("Failed to talk to the Token Server: malformed request");
+    goto out;
+  } else if (message->status_code == 401) {
+    JsonArray *array;
+    JsonNode *node;
+    JsonObject *errors;
+    const gchar *status;
+    const gchar *description;
+
+    status = json_object_get_string_member (object, "status");
+    array = json_object_get_array_member (object, "errors");
+    node = json_array_get_element (array, 0);
+    errors = json_node_get_object (node);
+    description = json_object_get_string_member (errors, "description");
+
+    g_warning ("Failed to talk to the Token Server: %s: %s",
+               status, description);
+    goto out;
+  } else if (message->status_code == 404) {
+    g_warning ("Failed to talk to the Token Server: unknown URL");
+    goto out;
+  } else if (message->status_code == 405) {
+    g_warning ("Failed to talk to the Token Server: unsupported method");
+    goto out;
+  } else if (message->status_code == 406) {
+    g_warning ("Failed to talk to the Token Server: unacceptable");
+    goto out;
+  } else if (message->status_code == 503) {
+    g_warning ("Failed to talk to the Token Server: service unavailable");
+    goto out;
+  }
+
+  retval = TRUE;
+
+out:
+  g_free (authorization);
+  g_object_unref (parser);
+
+  return retval;
+}
+
 static void
 ephy_sync_service_finalize (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
   g_free (self->user_email);
+  g_free (self->certificate);
+  g_free (self->storage_endpoint);
+  g_free (self->token_server_id);
+  g_free (self->token_server_key);
   g_hash_table_destroy (self->tokens);
   g_clear_object (&self->soup_session);
   g_clear_object (&self->parser);
+  ephy_sync_crypto_rsa_key_pair_free (self->keypair);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
 }
@@ -396,11 +602,11 @@ out:
   return retval;
 }
 
-const gchar *
+gboolean
 ephy_sync_service_sign_certificate (EphySyncService *self)
 {
   EphySyncCryptoProcessedST *processed_st;
-  EphySyncCryptoRSAKeyPair *kpair;
+  EphySyncCryptoRSAKeyPair *keypair;
   JsonObject *jobject;
   gchar *sessionToken;
   gchar *tokenID;
@@ -408,20 +614,21 @@ ephy_sync_service_sign_certificate (EphySyncService *self)
   gchar *request_body;
   gchar *n_str;
   gchar *e_str;
+  const gchar *certificate;
   guint status_code;
-  const gchar *certificate = NULL;
+  gboolean retval = FALSE;
 
   sessionToken = ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_SESSIONTOKEN);
-  g_return_val_if_fail (sessionToken != NULL, NULL);
+  g_return_val_if_fail (sessionToken != NULL, FALSE);
 
-  kpair = ephy_sync_crypto_generate_rsa_key_pair ();
-  g_return_val_if_fail (kpair != NULL, NULL);
+  keypair = ephy_sync_crypto_generate_rsa_key_pair ();
+  g_return_val_if_fail (keypair != NULL, FALSE);
 
   processed_st = ephy_sync_crypto_process_session_token (sessionToken);
   tokenID = ephy_sync_utils_encode_hex (processed_st->tokenID, 0);
 
-  n_str = mpz_get_str (NULL, 10, kpair->public_key.n);
-  e_str = mpz_get_str (NULL, 10, kpair->public_key.e);
+  n_str = mpz_get_str (NULL, 10, keypair->public.n);
+  e_str = mpz_get_str (NULL, 10, keypair->public.e);
   public_key_json = ephy_sync_utils_build_json_string ("algorithm", "RS",
                                                        "n", n_str,
                                                        "e", e_str,
@@ -444,16 +651,24 @@ ephy_sync_service_sign_certificate (EphySyncService *self)
     goto out;
   }
 
+  /* Check if the certificate is valid */
   certificate = json_object_get_string_member (jobject, "cert");
+  if (check_certificate (self, certificate) == FALSE) {
+    ephy_sync_crypto_rsa_key_pair_free (keypair);
+    goto out;
+  }
+
+  self->certificate = g_strdup (certificate);
+  self->keypair = keypair;
+  retval = TRUE;
 
 out:
   ephy_sync_crypto_processed_st_free (processed_st);
-  ephy_sync_crypto_rsa_key_pair_free (kpair);
   g_free (tokenID);
   g_free (public_key_json);
   g_free (request_body);
   g_free (n_str);
   g_free (e_str);
 
-  return certificate;
+  return retval;
 }

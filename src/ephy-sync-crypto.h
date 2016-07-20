@@ -74,8 +74,8 @@ typedef struct {
 } EphySyncCryptoSyncKeys;
 
 typedef struct {
-  struct rsa_public_key public_key;
-  struct rsa_private_key private_key;
+  struct rsa_public_key public;
+  struct rsa_private_key private;
 } EphySyncCryptoRSAKeyPair;
 
 EphySyncCryptoHawkOptions   *ephy_sync_crypto_hawk_options_new       (gchar *app,
@@ -98,7 +98,7 @@ void                        ephy_sync_crypto_processed_st_free       (EphySyncCr
 
 void                        ephy_sync_crypto_sync_keys_free          (EphySyncCryptoSyncKeys *sync_keys);
 
-void                        ephy_sync_crypto_rsa_key_pair_free       (EphySyncCryptoRSAKeyPair *key_pair);
+void                        ephy_sync_crypto_rsa_key_pair_free       (EphySyncCryptoRSAKeyPair *keypair);
 
 EphySyncCryptoProcessedKFT *ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken);
 
@@ -117,6 +117,11 @@ EphySyncCryptoHawkHeader   *ephy_sync_crypto_compute_hawk_header     (const gcha
                                                                       EphySyncCryptoHawkOptions *options);
 
 EphySyncCryptoRSAKeyPair   *ephy_sync_crypto_generate_rsa_key_pair   (void);
+
+gchar                      *ephy_sync_crypto_create_assertion        (const gchar              *certificate,
+                                                                      const gchar              *audience,
+                                                                      guint64                   duration,
+                                                                      EphySyncCryptoRSAKeyPair *keypair);
 
 G_END_DECLS
 

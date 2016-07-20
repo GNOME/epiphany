@@ -143,16 +143,16 @@ ephy_sync_crypto_sync_keys_new (guint8 *kA,
 }
 
 static EphySyncCryptoRSAKeyPair *
-ephy_sync_crypto_rsa_key_pair_new (struct rsa_public_key  public_key,
-                                   struct rsa_private_key private_key)
+ephy_sync_crypto_rsa_key_pair_new (struct rsa_public_key  public,
+                                   struct rsa_private_key private)
 {
-  EphySyncCryptoRSAKeyPair *key_pair;
+  EphySyncCryptoRSAKeyPair *keypair;
 
-  key_pair = g_slice_new (EphySyncCryptoRSAKeyPair);
-  key_pair->public_key = public_key;
-  key_pair->private_key = private_key;
+  keypair = g_slice_new (EphySyncCryptoRSAKeyPair);
+  keypair->public = public;
+  keypair->private = private;
 
-  return key_pair;
+  return keypair;
 }
 
 void
@@ -241,14 +241,45 @@ ephy_sync_crypto_sync_keys_free (EphySyncCryptoSyncKeys *sync_keys)
 }
 
 void
-ephy_sync_crypto_rsa_key_pair_free (EphySyncCryptoRSAKeyPair *key_pair)
+ephy_sync_crypto_rsa_key_pair_free (EphySyncCryptoRSAKeyPair *keypair)
 {
-  g_return_if_fail (key_pair != NULL);
+  g_return_if_fail (keypair != NULL);
 
-  rsa_public_key_clear (&key_pair->public_key);
-  rsa_private_key_clear (&key_pair->private_key);
+  rsa_public_key_clear (&keypair->public);
+  rsa_private_key_clear (&keypair->private);
 
-  g_slice_free (EphySyncCryptoRSAKeyPair, key_pair);
+  g_slice_free (EphySyncCryptoRSAKeyPair, keypair);
+}
+
+static gchar *
+base64_urlsafe_strip (guint8 *data,
+                      gsize   data_length)
+{
+  gchar *encoded;
+  gchar *base64;
+  gsize start;
+  gssize end;
+
+  base64 = g_base64_encode (data, data_length);
+
+  start = 0;
+  while (start < strlen (base64) && base64[start] == '=')
+    start++;
+
+  end = strlen (base64) - 1;
+  while (end >= 0 && base64[end] == '=')
+    end--;
+
+  encoded = g_strndup (base64 + start, end - start + 1);
+
+  /* Replace '+' with '-' */
+  g_strcanon (encoded, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/", '-');
+  /* Replace '/' with '_' */
+  g_strcanon (encoded, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-", '_');
+
+  g_free (base64);
+
+  return encoded;
 }
 
 static guint8 *
@@ -824,4 +855,66 @@ ephy_sync_crypto_generate_rsa_key_pair (void)
   }
 
   return ephy_sync_crypto_rsa_key_pair_new (public, private);
+}
+
+gchar *
+ephy_sync_crypto_create_assertion (const gchar              *certificate,
+                                   const gchar              *audience,
+                                   guint64                   duration,
+                                   EphySyncCryptoRSAKeyPair *keypair)
+{
+  struct sha256_ctx sha256;
+  mpz_t signature;
+  const gchar *header = "{\"alg\": \"RS256\"}";
+  gchar *body;
+  gchar *body_b64;
+  gchar *header_b64;
+  gchar *to_sign;
+  gchar *sig_b64 = NULL;
+  gchar *assertion = NULL;
+  guint8 *sig = NULL;
+  guint64 expires_at;
+  gsize expected_size;
+  gsize count;
+
+  expires_at = g_get_real_time () / 1000 + duration * 1000;
+  body = g_strdup_printf ("{\"exp\": %lu, \"aud\": \"%s\"}", expires_at, audience);
+  body_b64 = base64_urlsafe_strip ((guint8 *) body, strlen (body));
+  header_b64 = base64_urlsafe_strip ((guint8 *) header, strlen (header));
+  to_sign = g_strdup_printf ("%s.%s", header_b64, body_b64);
+
+  mpz_init (signature);
+  sha256_init (&sha256);
+  sha256_update (&sha256, strlen (to_sign), (guint8 *) to_sign);
+
+  if (rsa_sha256_sign_tr (&keypair->public, &keypair->private,
+                          NULL, random_func,
+                          &sha256, signature) == 0) {
+    g_warning ("Failed to sign the message. Giving up.");
+    goto out;
+  }
+
+  expected_size = (mpz_sizeinbase (signature, 2) + 7) / 8;
+  sig = g_malloc (expected_size);
+  mpz_export (sig, &count, 1, sizeof (guint8), 0, 0, signature);
+
+  if (count != expected_size) {
+    g_warning ("Expected %lu bytes, got %lu. Giving up.", count, expected_size);
+    goto out;
+  }
+
+  sig_b64 = base64_urlsafe_strip (sig, count);
+  assertion = g_strdup_printf ("%s~%s.%s.%s",
+                               certificate, header_b64, body_b64, sig_b64);
+
+out:
+  g_free (body);
+  g_free (body_b64);
+  g_free (header_b64);
+  g_free (to_sign);
+  g_free (sig_b64);
+  g_free (sig);
+  mpz_clear (signature);
+
+  return assertion;
 }
