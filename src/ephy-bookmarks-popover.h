@@ -18,6 +18,8 @@
 #ifndef EPHY_BOOKMARKS_POPOVER_H
 #define EPHY_BOOKMARKS_POPOVER_H
 
+#include "ephy-window.h"
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -26,7 +28,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, EPHY, BOOKMARKS_POPOVER, GtkPopover)
 
-EphyBookmarksPopover*       ephy_bookmarks_popover_new      (void);
+EphyBookmarksPopover*       ephy_bookmarks_popover_new      (EphyWindow *window);
+
 
 G_END_DECLS
 

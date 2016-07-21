@@ -64,7 +64,7 @@ void
 ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                      EphyBookmark         *bookmark)
 {
-  g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (manager));
+  g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
 
   if (g_list_find (self->bookmarks, bookmark))
@@ -72,13 +72,13 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
 
   self->bookmarks = g_list_prepend (self->bookmarks, bookmark);
 
-  g_signal_emit (manager, signals[BOOKMARK_ADDED], 0, bookmark);
+  g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
 }
 
 GList *
 ephy_bookmarks_manager_get_bookmarks (EphyBookmarksManager *self)
 {
-  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (manager), NULL);
+  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self), NULL);
 
   return self->bookmarks;
 }
