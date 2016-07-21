@@ -66,7 +66,7 @@ ephy_bookmark_row_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_BOOKMARK:
-      g_value_set_object (value, self->bookmark);
+      g_value_set_object (value, ephy_bookmark_row_get_bookmark (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -131,4 +131,12 @@ ephy_bookmark_row_new (EphyBookmark *bookmark)
   return g_object_new (EPHY_TYPE_BOOKMARK_ROW,
                        "bookmark", bookmark,
                        NULL);
+}
+
+EphyBookmark *
+ephy_bookmark_row_get_bookmark (EphyBookmarkRow *self)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK_ROW (self), NULL);
+
+  return self->bookmark;
 }
