@@ -301,13 +301,24 @@ query_token_server (EphySyncService *self,
   JsonParser *parser;
   JsonNode *root;
   JsonObject *object;
+  guint8 *kB;
+  gchar *hashed_kB;
+  gchar *client_state;
   gchar *authorization;
   gboolean retval = FALSE;
 
   g_return_val_if_fail (assertion != NULL, FALSE);
 
-  message = soup_message_new (SOUP_METHOD_GET, TOKEN_SERVER_URL);
+  kB = ephy_sync_utils_decode_hex (ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_KB));
+  hashed_kB = g_compute_checksum_for_data (G_CHECKSUM_SHA256, kB, EPHY_SYNC_TOKEN_LENGTH);
+  client_state = g_strndup (hashed_kB, EPHY_SYNC_TOKEN_LENGTH);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
+
+  message = soup_message_new (SOUP_METHOD_GET, TOKEN_SERVER_URL);
+  /* We need to add the X-Client-State header so that the Token Server will
+   * recognize accounts that were previously used to sync Firefox data too. */
+  soup_message_headers_append (message->request_headers,
+                               "X-Client-State", client_state);
   soup_message_headers_append (message->request_headers,
                                "authorization", authorization);
   soup_session_send_message (self->soup_session, message);
@@ -359,6 +370,9 @@ query_token_server (EphySyncService *self,
   retval = TRUE;
 
 out:
+  g_free (kB);
+  g_free (hashed_kB);
+  g_free (client_state);
   g_free (authorization);
   g_object_unref (parser);
 
