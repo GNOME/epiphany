@@ -29,6 +29,8 @@ G_DECLARE_FINAL_TYPE (EphyBookmark, ephy_bookmark, EPHY, BOOKMARK, GObject)
 EphyBookmark        *ephy_bookmark_new          (char *url,
                                                  char *title);
 
+const char          *ephy_bookmark_get_url      (EphyBookmark *self);
+
 G_END_DECLS
 
 #endif /* _EPHY_BOOKMARK_H */

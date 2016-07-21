@@ -20,10 +20,10 @@
 #include "ephy-bookmark.h"
 
 struct _EphyBookmark {
-  GObject parent_instance;
+  GObject      parent_instance;
 
-  char *url;
-  char *title;
+  char        *url;
+  char        *title;
 };
 
 G_DEFINE_TYPE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT)
@@ -36,17 +36,6 @@ enum {
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
-
-static void
-ephy_bookmark_finalize (GObject *object)
-{
-  EphyBookmark *self = EPHY_BOOKMARK (object);
-
-  g_clear_pointer (&self->url, g_free);
-  g_clear_pointer (&self->title, g_free);
-
-  G_OBJECT_CLASS (ephy_bookmark_parent_class)->finalize (object);
-}
 
 static void
 ephy_bookmark_set_property (GObject      *object,
@@ -81,11 +70,22 @@ ephy_bookmark_get_property (GObject      *object,
       g_value_set_string (value, self->title);
       break;
     case PROP_URL:
-      g_value_set_string (value, self->url);
+      g_value_set_string (value, ephy_bookmark_get_url (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
+}
+
+static void
+ephy_bookmark_finalize (GObject *object)
+{
+  EphyBookmark *self = EPHY_BOOKMARK (object);
+
+  g_clear_pointer (&self->url, g_free);
+  g_clear_pointer (&self->title, g_free);
+
+  G_OBJECT_CLASS (ephy_bookmark_parent_class)->finalize (object);
 }
 
 static void
@@ -126,4 +126,12 @@ ephy_bookmark_new (char *url, char *title)
                        "url", url,
                        "title", title,
                        NULL);
+}
+
+const char *
+ephy_bookmark_get_url (EphyBookmark *self)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
+
+  return self->url;
 }
