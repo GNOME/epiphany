@@ -22,7 +22,6 @@
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-secret.h"
 #include "ephy-sync-service.h"
-#include "ephy-sync-utils.h"
 
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
@@ -38,9 +37,13 @@ struct _EphySyncService {
   GObject parent_instance;
 
   SoupSession *soup_session;
-  JsonParser *parser;
 
-  GHashTable *tokens;
+  gchar *uid;
+  gchar *sessionToken;
+  gchar *keyFetchToken;
+  gchar *unwrapBKey;
+  gchar *kA;
+  gchar *kB;
 
   gchar *user_email;
   gint64 last_auth_at;
@@ -55,6 +58,11 @@ struct _EphySyncService {
 
 G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
+static gchar *
+build_json_string (const gchar *first_key,
+                   const gchar *first_value,
+                   ...) G_GNUC_NULL_TERMINATED;
+
 static guint
 synchronous_hawk_post_request (EphySyncService  *self,
                               const gchar       *endpoint,
@@ -62,12 +70,12 @@ synchronous_hawk_post_request (EphySyncService  *self,
                               guint8            *key,
                               gsize              key_length,
                               gchar             *request_body,
-                              JsonObject       **jobject)
+                              JsonNode         **node)
 {
   EphySyncCryptoHawkOptions *hawk_options;
   EphySyncCryptoHawkHeader *hawk_header;
   SoupMessage *message;
-  JsonNode *root;
+  JsonParser *parser;
   gchar *url;
   const gchar *content_type = "application/json";
 
@@ -92,13 +100,13 @@ synchronous_hawk_post_request (EphySyncService  *self,
                                "content-type", content_type);
   soup_session_send_message (self->soup_session, message);
 
-  if (jobject != NULL) {
-    json_parser_load_from_data (self->parser,
+  if (node != NULL) {
+    parser = json_parser_new ();
+    json_parser_load_from_data (parser,
                                 message->response_body->data,
                                 -1, NULL);
-    root = json_parser_get_root (self->parser);
-    g_assert (JSON_NODE_HOLDS_OBJECT (root));
-    *jobject = json_node_get_object (root);
+    *node = json_node_copy (json_parser_get_root (parser));
+    g_object_unref (parser);
   }
 
   g_free (url);
@@ -114,11 +122,11 @@ synchronous_hawk_get_request (EphySyncService  *self,
                               const gchar      *id,
                               guint8           *key,
                               gsize             key_length,
-                              JsonObject      **jobject)
+                              JsonNode        **node)
 {
   EphySyncCryptoHawkHeader *hawk_header;
   SoupMessage *message;
-  JsonNode *root;
+  JsonParser *parser;
   gchar *url;
 
   url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
@@ -129,17 +137,15 @@ synchronous_hawk_get_request (EphySyncService  *self,
                                                       NULL);
   soup_message_headers_append (message->request_headers,
                                "authorization", hawk_header->header);
-LOG ("[%d] Sending synchronous HAWK GET request to %s endpoint", __LINE__, endpoint);
   soup_session_send_message (self->soup_session, message);
-LOG ("[%d] Got response from server: %u", __LINE__, message->status_code);
 
-  if (jobject != NULL) {
-    json_parser_load_from_data (self->parser,
+  if (node != NULL) {
+    parser = json_parser_new ();
+    json_parser_load_from_data (parser,
                                 message->response_body->data,
                                 -1, NULL);
-    root = json_parser_get_root (self->parser);
-    g_assert (JSON_NODE_HOLDS_OBJECT (root));
-    *jobject = json_node_get_object (root);
+    *node = json_node_copy (json_parser_get_root (parser));
+    g_object_unref (parser);
   }
 
   g_free (url);
@@ -155,7 +161,7 @@ session_destroyed_cb (SoupSession *session,
 {
   JsonParser *parser;
   JsonNode *root;
-  JsonObject *object;
+  JsonObject *json;
 
   if (message->status_code == STATUS_OK) {
     LOG ("Session destroyed");
@@ -165,13 +171,49 @@ session_destroyed_cb (SoupSession *session,
   parser = json_parser_new ();
   json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
   root = json_parser_get_root (parser);
-  object = json_node_get_object (root);
+  json = json_node_get_object (root);
 
   g_warning ("Failed to destroy session: errno: %ld, errmsg: %s",
-             json_object_get_int_member (object, "errno"),
-             json_object_get_string_member (object, "message"));
+             json_object_get_int_member (json, "errno"),
+             json_object_get_string_member (json, "message"));
 
   g_object_unref (parser);
+}
+
+static gchar *
+build_json_string (const gchar *first_key,
+                   const gchar *first_value,
+                   ...)
+{
+  va_list args;
+  gchar *json;
+  gchar *key;
+  gchar *value;
+  gchar *tmp;
+
+  json = g_strconcat ("{\"",
+                      first_key, "\": \"",
+                      first_value, "\"",
+                      NULL);
+
+  va_start (args, first_value);
+  while ((key = va_arg (args, gchar *)) != NULL) {
+    value = va_arg (args, gchar *);
+
+    tmp = json;
+    json = g_strconcat (json, ", \"",
+                        key, "\": \"",
+                        value, "\"",
+                        NULL);
+    g_free (tmp);
+  }
+  va_end (args);
+
+  tmp = json;
+  json = g_strconcat (json, "}", NULL);
+  g_free (tmp);
+
+  return json;
 }
 
 static gchar *
@@ -237,7 +279,7 @@ check_certificate (EphySyncService *self,
 {
   JsonParser *parser;
   JsonNode *root;
-  JsonObject *object;
+  JsonObject *json;
   JsonObject *principal;
   gchar **pieces;
   gchar *header;
@@ -258,8 +300,8 @@ check_certificate (EphySyncService *self,
   parser = json_parser_new ();
   json_parser_load_from_data (parser, header, -1, NULL);
   root = json_parser_get_root (parser);
-  object = json_node_get_object (root);
-  algorithm = json_object_get_string_member (object, "alg");
+  json = json_node_get_object (root);
+  algorithm = json_object_get_string_member (json, "alg");
 
   if (g_str_equal (algorithm, "RS256") == FALSE) {
     g_warning ("Expected algorithm RS256, found %s. Giving up.", algorithm);
@@ -268,11 +310,11 @@ check_certificate (EphySyncService *self,
 
   json_parser_load_from_data (parser, payload, -1, NULL);
   root = json_parser_get_root (parser);
-  object = json_node_get_object (root);
-  principal = json_object_get_object_member (object, "principal");
+  json = json_node_get_object (root);
+  principal = json_object_get_object_member (json, "principal");
   email = json_object_get_string_member (principal, "email");
   uid_email = g_strdup_printf ("%s@%s",
-                               ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_UID),
+                               self->uid,
                                soup_uri_get_host (soup_uri_new (FXA_BASEURL)));
 
   if (g_str_equal (uid_email, email) == FALSE) {
@@ -280,7 +322,7 @@ check_certificate (EphySyncService *self,
     goto out;
   }
 
-  self->last_auth_at = json_object_get_int_member (object, "fxa-lastAuthAt");
+  self->last_auth_at = json_object_get_int_member (json, "fxa-lastAuthAt");
   retval = TRUE;
 
 out:
@@ -300,7 +342,7 @@ query_token_server (EphySyncService *self,
   SoupMessage *message;
   JsonParser *parser;
   JsonNode *root;
-  JsonObject *object;
+  JsonObject *json;
   guint8 *kB;
   gchar *hashed_kB;
   gchar *client_state;
@@ -309,7 +351,7 @@ query_token_server (EphySyncService *self,
 
   g_return_val_if_fail (assertion != NULL, FALSE);
 
-  kB = ephy_sync_utils_decode_hex (ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_KB));
+  kB = ephy_sync_crypto_decode_hex (self->kB);
   hashed_kB = g_compute_checksum_for_data (G_CHECKSUM_SHA256, kB, EPHY_SYNC_TOKEN_LENGTH);
   client_state = g_strndup (hashed_kB, EPHY_SYNC_TOKEN_LENGTH);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
@@ -328,12 +370,12 @@ query_token_server (EphySyncService *self,
                               message->response_body->data,
                               -1, NULL);
   root = json_parser_get_root (parser);
-  object = json_node_get_object (root);
+  json = json_node_get_object (root);
 
   if (message->status_code == STATUS_OK) {
-    self->storage_endpoint = g_strdup (json_object_get_string_member (object, "api_endpoint"));
-    self->token_server_id = g_strdup (json_object_get_string_member (object, "id"));
-    self->token_server_key = g_strdup (json_object_get_string_member (object, "key"));
+    self->storage_endpoint = g_strdup (json_object_get_string_member (json, "api_endpoint"));
+    self->token_server_id = g_strdup (json_object_get_string_member (json, "id"));
+    self->token_server_key = g_strdup (json_object_get_string_member (json, "key"));
   } else if (message->status_code == 400) {
     g_warning ("Failed to talk to the Token Server: malformed request");
     goto out;
@@ -344,8 +386,8 @@ query_token_server (EphySyncService *self,
     const gchar *status;
     const gchar *description;
 
-    status = json_object_get_string_member (object, "status");
-    array = json_object_get_array_member (object, "errors");
+    status = json_object_get_string_member (json, "status");
+    array = json_object_get_array_member (json, "errors");
     node = json_array_get_element (array, 0);
     errors = json_node_get_object (node);
     description = json_object_get_string_member (errors, "description");
@@ -384,17 +426,25 @@ ephy_sync_service_finalize (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
-  g_free (self->user_email);
-  g_free (self->certificate);
-  g_free (self->storage_endpoint);
-  g_free (self->token_server_id);
-  g_free (self->token_server_key);
-  g_hash_table_destroy (self->tokens);
-  g_clear_object (&self->soup_session);
-  g_clear_object (&self->parser);
   ephy_sync_crypto_rsa_key_pair_free (self->keypair);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
+}
+
+static void
+ephy_sync_service_dispose (GObject *object)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (object);
+
+  g_clear_object (&self->soup_session);
+  g_clear_pointer (&self->user_email, g_free);
+  g_clear_pointer (&self->certificate, g_free);
+  g_clear_pointer (&self->storage_endpoint, g_free);
+  g_clear_pointer (&self->token_server_id, g_free);
+  g_clear_pointer (&self->token_server_key, g_free);
+  ephy_sync_service_delete_all_tokens (self);
+
+  G_OBJECT_CLASS (ephy_sync_service_parent_class)->dispose (object);
 }
 
 static void
@@ -403,6 +453,7 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ephy_sync_service_finalize;
+  object_class->dispose = ephy_sync_service_dispose;
 }
 
 static void
@@ -410,10 +461,7 @@ ephy_sync_service_init (EphySyncService *self)
 {
   gchar *sync_user = NULL;
 
-  self->tokens = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                        NULL, g_free);
   self->soup_session = soup_session_new ();
-  self->parser = json_parser_new ();
 
   sync_user = g_settings_get_string (EPHY_SETTINGS_MAIN,
                                      EPHY_PREFS_SYNC_USER);
@@ -422,8 +470,6 @@ ephy_sync_service_init (EphySyncService *self)
     ephy_sync_service_set_user_email (self, sync_user);
     ephy_sync_secret_load_tokens (self);
   }
-
-LOG ("[%d] sync service inited", __LINE__);
 }
 
 EphySyncService *
@@ -431,6 +477,27 @@ ephy_sync_service_new (void)
 {
   return EPHY_SYNC_SERVICE (g_object_new (EPHY_TYPE_SYNC_SERVICE,
                                           NULL));
+}
+
+const gchar *
+ephy_sync_service_token_name_from_type (EphySyncServiceTokenType token_type)
+{
+  switch (token_type) {
+    case TOKEN_UID:
+      return "uid";
+    case TOKEN_SESSIONTOKEN:
+      return "sessionToken";
+    case TOKEN_KEYFETCHTOKEN:
+      return "keyFetchToken";
+    case TOKEN_UNWRAPBKEY:
+      return "unwrapBKey";
+    case TOKEN_KA:
+      return "kA";
+    case TOKEN_KB:
+      return "kB";
+  default:
+    g_assert_not_reached ();
+  }
 }
 
 gchar *
@@ -448,52 +515,78 @@ ephy_sync_service_set_user_email (EphySyncService *self,
 }
 
 gchar *
-ephy_sync_service_get_token (EphySyncService   *self,
-                             EphySyncTokenType  token_type)
+ephy_sync_service_get_token (EphySyncService          *self,
+                             EphySyncServiceTokenType  type)
 {
-  const gchar *token_name;
-  gchar *token_value;
-
-  token_name = ephy_sync_utils_token_name_from_type (token_type);
-  token_value = (gchar *) g_hash_table_lookup (self->tokens, token_name);
-
-LOG ("[%d] Returning token %s with value %s", __LINE__, token_name, token_value);
-
-  return token_value;
+  switch (type) {
+    case TOKEN_UID:
+      return self->uid;
+    case TOKEN_SESSIONTOKEN:
+      return self->sessionToken;
+    case TOKEN_KEYFETCHTOKEN:
+      return self->keyFetchToken;
+    case TOKEN_UNWRAPBKEY:
+      return self->unwrapBKey;
+    case TOKEN_KA:
+      return self->kA;
+    case TOKEN_KB:
+      return self->kB;
+    default:
+      g_assert_not_reached ();
+  }
 }
 
 void
-ephy_sync_service_set_token (EphySyncService   *self,
-                             gchar             *token_value,
-                             EphySyncTokenType  token_type)
+ephy_sync_service_set_token (EphySyncService          *self,
+                             gchar                    *value,
+                             EphySyncServiceTokenType  type)
 {
-  const gchar *token_name;
-
-LOG ("[%d] token_type: %d", __LINE__, token_type);
-  token_name = ephy_sync_utils_token_name_from_type (token_type);
-  g_hash_table_insert (self->tokens,
-                       (gpointer) token_name,
-                       (gpointer) token_value);
-
-LOG ("[%d] Saved token %s with value %s", __LINE__, token_name, token_value);
+  switch (type) {
+    case TOKEN_UID:
+      g_free (self->uid);
+      self->uid = value;
+      break;
+    case TOKEN_SESSIONTOKEN:
+      g_free (self->sessionToken);
+      self->sessionToken = value;
+      break;
+    case TOKEN_KEYFETCHTOKEN:
+      g_free (self->keyFetchToken);
+      self->keyFetchToken = value;
+      break;
+    case TOKEN_UNWRAPBKEY:
+      g_free (self->unwrapBKey);
+      self->unwrapBKey = value;
+      break;
+    case TOKEN_KA:
+      g_free (self->kA);
+      self->kA = value;
+      break;
+    case TOKEN_KB:
+      g_free (self->kB);
+      self->kB = value;
+      break;
+    default:
+      g_assert_not_reached ();
+  }
 }
 
 void
-ephy_sync_service_set_and_store_tokens (EphySyncService   *self,
-                                        gchar             *token_value,
-                                        EphySyncTokenType  token_type,
+ephy_sync_service_set_and_store_tokens (EphySyncService          *self,
+                                        gchar                    *first_value,
+                                        EphySyncServiceTokenType  first_type,
                                         ...)
 {
-  EphySyncTokenType type;
+  EphySyncServiceTokenType type;
   gchar *value;
   va_list args;
 
-  ephy_sync_service_set_token (self, token_value, token_type);
-  ephy_sync_secret_store_token (self->user_email, token_value, token_type);
+  ephy_sync_service_set_token (self, first_value, first_type);
+  ephy_sync_secret_store_token (self->user_email, first_value, first_type);
 
-  va_start (args, token_type);
+  va_start (args, first_type);
   while ((value = va_arg (args, gchar *)) != NULL) {
-    type = va_arg (args, EphySyncTokenType);
+    type = va_arg (args, EphySyncServiceTokenType);
     ephy_sync_service_set_token (self, value, type);
     ephy_sync_secret_store_token (self->user_email, value, type);
   }
@@ -503,9 +596,12 @@ ephy_sync_service_set_and_store_tokens (EphySyncService   *self,
 void
 ephy_sync_service_delete_all_tokens (EphySyncService *self)
 {
-  g_hash_table_remove_all (self->tokens);
-
-LOG ("[%d] Deleted all tokens", __LINE__);
+  g_clear_pointer (&self->uid, g_free);
+  g_clear_pointer (&self->sessionToken, g_free);
+  g_clear_pointer (&self->keyFetchToken, g_free);
+  g_clear_pointer (&self->unwrapBKey, g_free);
+  g_clear_pointer (&self->kA, g_free);
+  g_clear_pointer (&self->kB, g_free);
 }
 
 void
@@ -526,7 +622,7 @@ ephy_sync_service_destroy_session (EphySyncService *self,
 
   url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
   processed_st = ephy_sync_crypto_process_session_token (sessionToken);
-  tokenID = ephy_sync_utils_encode_hex (processed_st->tokenID, 0);
+  tokenID = ephy_sync_crypto_encode_hex (processed_st->tokenID, 0);
 
   message = soup_message_new (SOUP_METHOD_POST, url);
   soup_message_set_request (message, content_type,
@@ -564,29 +660,32 @@ ephy_sync_service_fetch_sync_keys (EphySyncService *self,
 {
   EphySyncCryptoProcessedKFT *processed_kft = NULL;
   EphySyncCryptoSyncKeys *sync_keys = NULL;
-  JsonObject *jobject;
+  JsonNode *node;
+  JsonObject *json;
   guint8 *unwrapKB;
   gchar *tokenID;
   guint status_code;
   gboolean retval = FALSE;
 
-  unwrapKB = ephy_sync_utils_decode_hex (unwrapBKey);
+  unwrapKB = ephy_sync_crypto_decode_hex (unwrapBKey);
   processed_kft = ephy_sync_crypto_process_key_fetch_token (keyFetchToken);
-  tokenID = ephy_sync_utils_encode_hex (processed_kft->tokenID, 0);
+  tokenID = ephy_sync_crypto_encode_hex (processed_kft->tokenID, 0);
   status_code = synchronous_hawk_get_request (self,
                                               "account/keys",
                                               tokenID,
                                               processed_kft->reqHMACkey,
                                               EPHY_SYNC_TOKEN_LENGTH,
-                                              &jobject);
+                                              &node);
+  json = json_node_get_object (node);
+
   if (status_code != STATUS_OK) {
     g_warning ("FxA server errno: %ld, errmsg: %s",
-               json_object_get_int_member (jobject, "errno"),
-               json_object_get_string_member (jobject, "message"));
+               json_object_get_int_member (json, "errno"),
+               json_object_get_string_member (json, "message"));
     goto out;
   }
 
-  sync_keys = ephy_sync_crypto_retrieve_sync_keys (json_object_get_string_member (jobject, "bundle"),
+  sync_keys = ephy_sync_crypto_retrieve_sync_keys (json_object_get_string_member (json, "bundle"),
                                                    processed_kft->respHMACkey,
                                                    processed_kft->respXORkey,
                                                    unwrapKB);
@@ -597,19 +696,17 @@ ephy_sync_service_fetch_sync_keys (EphySyncService *self,
   /* Everything is okay, save the tokens. */
   ephy_sync_service_set_user_email (self, email);
   ephy_sync_service_set_and_store_tokens (self,
-                                          g_strdup (keyFetchToken), EPHY_SYNC_TOKEN_KEYFETCHTOKEN,
-                                          g_strdup (unwrapBKey), EPHY_SYNC_TOKEN_UNWRAPBKEY,
-                                          ephy_sync_utils_encode_hex (sync_keys->kA, 0), EPHY_SYNC_TOKEN_KA,
-                                          ephy_sync_utils_encode_hex (sync_keys->kB, 0), EPHY_SYNC_TOKEN_KB,
+                                          g_strdup (keyFetchToken), TOKEN_KEYFETCHTOKEN,
+                                          g_strdup (unwrapBKey), TOKEN_UNWRAPBKEY,
+                                          ephy_sync_crypto_encode_hex (sync_keys->kA, 0), TOKEN_KA,
+                                          ephy_sync_crypto_encode_hex (sync_keys->kB, 0), TOKEN_KB,
                                           NULL);
   retval = TRUE;
-
-LOG ("kA: %s", ephy_sync_utils_encode_hex (sync_keys->kA, 0));
-LOG ("kB: %s", ephy_sync_utils_encode_hex (sync_keys->kB, 0));
 
 out:
   ephy_sync_crypto_processed_kft_free (processed_kft);
   ephy_sync_crypto_sync_keys_free (sync_keys);
+  json_node_free (node);
   g_free (tokenID);
   g_free (unwrapKB);
 
@@ -621,8 +718,8 @@ ephy_sync_service_sign_certificate (EphySyncService *self)
 {
   EphySyncCryptoProcessedST *processed_st;
   EphySyncCryptoRSAKeyPair *keypair;
-  JsonObject *jobject;
-  gchar *sessionToken;
+  JsonNode *node;
+  JsonObject *json;
   gchar *tokenID;
   gchar *public_key_json;
   gchar *request_body;
@@ -632,21 +729,20 @@ ephy_sync_service_sign_certificate (EphySyncService *self)
   guint status_code;
   gboolean retval = FALSE;
 
-  sessionToken = ephy_sync_service_get_token (self, EPHY_SYNC_TOKEN_SESSIONTOKEN);
-  g_return_val_if_fail (sessionToken != NULL, FALSE);
+  g_return_val_if_fail (self->sessionToken != NULL, FALSE);
 
   keypair = ephy_sync_crypto_generate_rsa_key_pair ();
   g_return_val_if_fail (keypair != NULL, FALSE);
 
-  processed_st = ephy_sync_crypto_process_session_token (sessionToken);
-  tokenID = ephy_sync_utils_encode_hex (processed_st->tokenID, 0);
+  processed_st = ephy_sync_crypto_process_session_token (self->sessionToken);
+  tokenID = ephy_sync_crypto_encode_hex (processed_st->tokenID, 0);
 
   n_str = mpz_get_str (NULL, 10, keypair->public.n);
   e_str = mpz_get_str (NULL, 10, keypair->public.e);
-  public_key_json = ephy_sync_utils_build_json_string ("algorithm", "RS",
-                                                       "n", n_str,
-                                                       "e", e_str,
-                                                       NULL);
+  public_key_json = build_json_string ("algorithm", "RS",
+                                       "n", n_str,
+                                       "e", e_str,
+                                       NULL);
   /* The server allows a maximum certificate lifespan of 24 hours == 86400000 ms */
   request_body = g_strdup_printf ("{\"publicKey\": %s, \"duration\": 86400000}",
                                   public_key_json);
@@ -656,17 +752,18 @@ ephy_sync_service_sign_certificate (EphySyncService *self)
                                                processed_st->reqHMACkey,
                                                EPHY_SYNC_TOKEN_LENGTH,
                                                request_body,
-                                               &jobject);
+                                               &node);
+  json = json_node_get_object (node);
 
   if (status_code != STATUS_OK) {
     g_warning ("FxA server errno: %ld, errmsg: %s",
-               json_object_get_int_member (jobject, "errno"),
-               json_object_get_string_member (jobject, "message"));
+               json_object_get_int_member (json, "errno"),
+               json_object_get_string_member (json, "message"));
     goto out;
   }
 
   /* Check if the certificate is valid */
-  certificate = json_object_get_string_member (jobject, "cert");
+  certificate = json_object_get_string_member (json, "cert");
   if (check_certificate (self, certificate) == FALSE) {
     ephy_sync_crypto_rsa_key_pair_free (keypair);
     goto out;
@@ -678,6 +775,7 @@ ephy_sync_service_sign_certificate (EphySyncService *self)
 
 out:
   ephy_sync_crypto_processed_st_free (processed_st);
+  json_node_free (node);
   g_free (tokenID);
   g_free (public_key_json);
   g_free (request_body);

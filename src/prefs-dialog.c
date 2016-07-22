@@ -291,8 +291,8 @@ server_message_received_cb (WebKitUserContentManager *manager,
     /* Everything is okay, save the tokens. */
     g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, email);
     ephy_sync_service_set_and_store_tokens (service,
-                                            g_strdup (uid), EPHY_SYNC_TOKEN_UID,
-                                            g_strdup (sessionToken), EPHY_SYNC_TOKEN_SESSIONTOKEN,
+                                            g_strdup (uid), TOKEN_UID,
+                                            g_strdup (sessionToken), TOKEN_SESSIONTOKEN,
                                             NULL);
 
     /* Translators: the %s refers to the email of the currently logged in user. */
@@ -350,7 +350,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
   gchar *sessionToken;
 
   service = ephy_shell_get_global_sync_service ();
-  sessionToken = ephy_sync_service_get_token (service, EPHY_SYNC_TOKEN_SESSIONTOKEN);
+  sessionToken = ephy_sync_service_get_token (service, TOKEN_SESSIONTOKEN);
 
   /* Destroy session and delete tokens. */
   ephy_sync_service_destroy_session (service, sessionToken);

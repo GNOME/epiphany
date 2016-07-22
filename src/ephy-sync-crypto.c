@@ -17,14 +17,16 @@
  */
 
 #include "ephy-sync-crypto.h"
-#include "ephy-sync-utils.h"
 
+#include <glib/gstdio.h>
 #include <libsoup/soup.h>
 #include <nettle/hmac.h>
 #include <nettle/sha2.h>
 #include <string.h>
 
 #define HAWK_VERSION  1
+
+static const gchar hex_digits[] = "0123456789abcdef";
 
 EphySyncCryptoHawkOptions *
 ephy_sync_crypto_hawk_options_new (gchar *app,
@@ -252,6 +254,12 @@ ephy_sync_crypto_rsa_key_pair_free (EphySyncCryptoRSAKeyPair *keypair)
 }
 
 static gchar *
+kw (const gchar *name)
+{
+  return g_strconcat ("identity.mozilla.com/picl/v1/", name, NULL);
+}
+
+static gchar *
 base64_urlsafe_strip (guint8 *data,
                       gsize   data_length)
 {
@@ -304,8 +312,8 @@ are_equal (guint8 *a,
   gchar *b_hex;
   gboolean retval;
 
-  a_hex = ephy_sync_utils_encode_hex (a, 0);
-  b_hex = ephy_sync_utils_encode_hex (b, 0);
+  a_hex = ephy_sync_crypto_encode_hex (a, 0);
+  b_hex = ephy_sync_crypto_encode_hex (b, 0);
   retval = g_str_equal (a_hex, b_hex);
 
   g_free (a_hex);
@@ -602,9 +610,9 @@ ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken)
   gchar *info_kft;
   gchar *info_keys;
 
-  kft = ephy_sync_utils_decode_hex (keyFetchToken);
-  info_kft = ephy_sync_utils_kw ("keyFetchToken");
-  info_keys = ephy_sync_utils_kw ("account/keys");
+  kft = ephy_sync_crypto_decode_hex (keyFetchToken);
+  info_kft = kw ("keyFetchToken");
+  info_keys = kw ("account/keys");
   out1 = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
   out2 = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
 
@@ -653,8 +661,8 @@ ephy_sync_crypto_process_session_token (const gchar *sessionToken)
   guint8 *requestKey;
   gchar *info;
 
-  st = ephy_sync_utils_decode_hex (sessionToken);
-  info = ephy_sync_utils_kw ("sessionToken");
+  st = ephy_sync_crypto_decode_hex (sessionToken);
+  info = kw ("sessionToken");
   out = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
 
   hkdf (st, EPHY_SYNC_TOKEN_LENGTH,
@@ -694,7 +702,7 @@ ephy_sync_crypto_retrieve_sync_keys (const gchar *bundle,
   guint8 *kB;
   EphySyncCryptoSyncKeys *retval = NULL;
 
-  bdl = ephy_sync_utils_decode_hex (bundle);
+  bdl = ephy_sync_crypto_decode_hex (bundle);
   ciphertext = g_malloc (2 * EPHY_SYNC_TOKEN_LENGTH);
   respMAC = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
   wrapKB = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
@@ -917,4 +925,44 @@ out:
   mpz_clear (signature);
 
   return assertion;
+}
+
+gchar *
+ephy_sync_crypto_encode_hex (guint8 *data,
+                             gsize   data_length)
+{
+  gchar *retval;
+  gsize length;
+
+  length = data_length == 0 ? EPHY_SYNC_TOKEN_LENGTH : data_length;
+  retval = g_malloc (length * 2 + 1);
+
+  for (gsize i = 0; i < length; i++) {
+    guint8 byte = data[i];
+
+    retval[2 * i] = hex_digits[byte >> 4];
+    retval[2 * i + 1] = hex_digits[byte & 0xf];
+  }
+
+  retval[length * 2] = 0;
+
+  return retval;
+}
+
+guint8 *
+ephy_sync_crypto_decode_hex (const gchar *hex_string)
+{
+  guint8 *retval;
+  gsize hex_length;
+
+  hex_length = strlen (hex_string);
+  g_return_val_if_fail (hex_length % 2 == 0, NULL);
+
+  retval = g_malloc (hex_length / 2);
+
+  for (gsize i = 0, j = 0; i < hex_length; i += 2, j++) {
+    sscanf(hex_string + i, "%2hhx", retval + j);
+  }
+
+  return retval;
 }
