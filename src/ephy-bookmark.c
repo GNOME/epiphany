@@ -133,8 +133,7 @@ ephy_bookmark_new (char *url, char *title)
 }
 
 const char *
-ephy_bookmark_get_url (EphyBookmark *self)
-{
+ephy_bookmark_get_url (EphyBookmark *self) {
   g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
 
   return self->url;
@@ -146,4 +145,12 @@ ephy_bookmark_set_tags (EphyBookmark *self, GList *tags)
   g_return_if_fail (EPHY_IS_BOOKMARK (self));
 
   self->tags = tags;
+}
+
+GList *
+ephy_bookmark_get_tags (EphyBookmark *self)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
+
+  return self->tags;
 }
