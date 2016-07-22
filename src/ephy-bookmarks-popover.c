@@ -138,12 +138,16 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   GList *bookmarks;
+  GList *tags = NULL;
   GList *l;
   EphyBookmark *dummy_bookmark;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
   dummy_bookmark = ephy_bookmark_new (g_strdup ("https://duckduckgo.com"), g_strdup ("Test title"));
+  tags = g_list_append (tags, g_strdup ("Fun"));
+  tags = g_list_append (tags, g_strdup ("Work"));
+  ephy_bookmark_set_tags (dummy_bookmark, tags);
   ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
 
   dummy_bookmark = ephy_bookmark_new (g_strdup ("https://wikipedia.com"), g_strdup ("wikipedia"));

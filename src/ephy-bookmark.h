@@ -30,6 +30,8 @@ EphyBookmark        *ephy_bookmark_new          (char *url,
                                                  char *title);
 
 const char          *ephy_bookmark_get_url      (EphyBookmark *self);
+void                 ephy_bookmark_set_tags     (EphyBookmark *self,
+                                                 GList        *tags);
 
 G_END_DECLS
 

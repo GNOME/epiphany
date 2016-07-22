@@ -24,6 +24,7 @@ struct _EphyBookmark {
 
   char        *url;
   char        *title;
+  GList       *tags;
 };
 
 G_DEFINE_TYPE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT)
@@ -85,6 +86,9 @@ ephy_bookmark_finalize (GObject *object)
   g_clear_pointer (&self->url, g_free);
   g_clear_pointer (&self->title, g_free);
 
+  g_list_free_full (self->tags, g_object_unref);
+  self->tags = NULL;
+
   G_OBJECT_CLASS (ephy_bookmark_parent_class)->finalize (object);
 }
 
@@ -134,4 +138,12 @@ ephy_bookmark_get_url (EphyBookmark *self)
   g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
 
   return self->url;
+}
+
+void
+ephy_bookmark_set_tags (EphyBookmark *self, GList *tags)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+
+  self->tags = tags;
 }
