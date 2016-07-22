@@ -82,3 +82,30 @@ ephy_bookmarks_manager_get_bookmarks (EphyBookmarksManager *self)
 
   return self->bookmarks;
 }
+
+GList *
+ephy_bookmarks_manager_get_tags (EphyBookmarksManager *self)
+{
+  GHashTable *tags_set;
+  GList *l;
+  GList *tags;
+
+  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self), NULL);
+
+  tags_set = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  for (l = self->bookmarks; l != NULL; l = l->next) {
+    EphyBookmark *bookmark = EPHY_BOOKMARK (l->data);
+    GList *ll;
+
+    for (ll = ephy_bookmark_get_tags (bookmark); ll != NULL; ll = ll->next)
+      g_hash_table_add (tags_set, g_strdup (ll->data));
+  }
+
+  tags = g_list_copy_deep (g_hash_table_get_values (tags_set),
+                           (GCopyFunc)g_strdup,
+                           NULL);
+  g_hash_table_destroy (tags_set);
+
+  return tags;
+}

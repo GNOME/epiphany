@@ -28,7 +28,9 @@ G_DECLARE_FINAL_TYPE (EphyBookmarksManager, ephy_bookmarks_manager, EPHY, BOOKMA
 
 void    ephy_bookmarks_manager_add_bookmark         (EphyBookmarksManager *self,
                                                      EphyBookmark         *bookmark);
+
 GList  *ephy_bookmarks_manager_get_bookmarks        (EphyBookmarksManager *self);
+GList  *ephy_bookmarks_manager_get_tags             (EphyBookmarksManager *manager);
 
 G_END_DECLS
 

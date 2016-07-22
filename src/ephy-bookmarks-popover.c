@@ -30,6 +30,7 @@ struct _EphyBookmarksPopover {
   GtkPopover      parent_instance;
 
   GtkWidget      *bookmarks_list_box;
+  GtkWidget      *tags_list_box;
 
   EphyWindow     *window;
 };
@@ -82,6 +83,29 @@ bookmarks_list_box_row_activated_cb (EphyBookmarksPopover   *self,
   g_action_activate (action, g_variant_new_string (url));
 }
 
+static GtkWidget *
+build_tag_box (const gchar *tag)
+{
+  GtkWidget *box;
+  GtkWidget *image;
+  GtkWidget *label;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_widget_set_halign (box, GTK_ALIGN_START);
+
+  image = gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 6);
+  gtk_widget_show (image);
+
+  label = gtk_label_new (tag);
+  gtk_box_pack_start (GTK_BOX (box),label, TRUE, FALSE, 6);
+  gtk_widget_show (label);
+
+  gtk_widget_show (box);
+
+  return box;
+}
+
 static void
 ephy_bookmarks_popover_set_property (GObject      *object,
                                      guint         prop_id,
@@ -131,6 +155,7 @@ ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmarks-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, bookmarks_list_box);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, tags_list_box);
 }
 
 static void
@@ -160,6 +185,15 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 
     bookmark_row = ephy_bookmark_row_new (bookmark);
     gtk_list_box_prepend (GTK_LIST_BOX (self->bookmarks_list_box), bookmark_row);
+  }
+
+  tags = ephy_bookmarks_manager_get_tags (manager);
+  for (l = tags; l != NULL; l = g_list_next (l)) {
+    GtkWidget *tag_box;
+    gchar *tag = (gchar *)l->data;
+
+    tag_box = build_tag_box (tag);
+    gtk_list_box_prepend (GTK_LIST_BOX (self->tags_list_box), tag_box);
   }
 
   g_signal_connect_object (manager, "bookmark-added",
