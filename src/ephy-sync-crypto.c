@@ -20,13 +20,16 @@
 
 #include <glib/gstdio.h>
 #include <libsoup/soup.h>
-#include <nettle/hmac.h>
-#include <nettle/sha2.h>
 #include <string.h>
 
 #define HAWK_VERSION  1
 
 static const gchar hex_digits[] = "0123456789abcdef";
+
+static guint8 *
+concatenate_bytes (guint8 *first_data,
+                   gsize   first_length,
+                   ...) G_GNUC_NULL_TERMINATED;
 
 EphySyncCryptoHawkOptions *
 ephy_sync_crypto_hawk_options_new (gchar *app,
@@ -322,24 +325,6 @@ are_equal (guint8 *a,
   return retval;
 }
 
-static guint8 *
-sha256_hmac (guint8 *data,
-             gsize   data_length,
-             guint8 *key,
-             gsize   key_length)
-{
-  struct hmac_sha256_ctx ctx;
-  guint8 *digest;
-
-  digest = g_malloc (SHA256_DIGEST_SIZE);
-
-  hmac_sha256_set_key (&ctx, key_length, key);
-  hmac_sha256_update (&ctx, data_length, data);
-  hmac_sha256_digest (&ctx, SHA256_DIGEST_SIZE, digest);
-
-  return digest;
-}
-
 static gchar *
 generate_random_string (gsize length)
 {
@@ -458,11 +443,11 @@ static gchar *
 calculate_payload_hash (const gchar *payload,
                         const gchar *content_type)
 {
-  struct sha256_ctx ctx;
   guint8 *digest;
+  gchar *digest_hex;
   gchar *content;
   gchar *update;
-  gchar *retval;
+  gchar *hash;
 
   g_return_val_if_fail (payload, NULL);
   g_return_val_if_fail (content_type, NULL);
@@ -472,18 +457,17 @@ calculate_payload_hash (const gchar *payload,
                             HAWK_VERSION,
                             content,
                             payload);
-  digest = g_malloc (SHA256_DIGEST_SIZE);
 
-  sha256_init (&ctx);
-  sha256_update (&ctx, strlen (update), (guint8 *) update);
-  sha256_digest (&ctx, SHA256_DIGEST_SIZE, digest);
-  retval = g_base64_encode (digest, SHA256_DIGEST_SIZE);
+  digest_hex = g_compute_checksum_for_string (G_CHECKSUM_SHA256, update, -1);
+  digest = ephy_sync_crypto_decode_hex (digest_hex);
+  hash = g_base64_encode (digest, g_checksum_type_get_length (G_CHECKSUM_SHA256));
 
   g_free (content);
   g_free (update);
+  g_free (digest_hex);
   g_free (digest);
 
-  return retval;
+  return hash;
 }
 
 static gchar *
@@ -493,6 +477,7 @@ calculate_mac (const gchar                 *mac_type,
                EphySyncCryptoHawkArtifacts *artifacts)
 {
   guint8 *digest;
+  gchar *digest_hex;
   gchar *normalized;
   gchar *mac;
 
@@ -501,11 +486,14 @@ calculate_mac (const gchar                 *mac_type,
   g_return_val_if_fail (artifacts, NULL);
 
   normalized = normalize_string (mac_type, artifacts);
-  digest = sha256_hmac ((guint8 *) normalized, strlen (normalized),
-                        key, key_length);
-  mac = g_base64_encode (digest, SHA256_DIGEST_SIZE);
+  digest_hex = g_compute_hmac_for_string (G_CHECKSUM_SHA256,
+                                          key, key_length,
+                                          normalized, -1);
+  digest = ephy_sync_crypto_decode_hex (digest_hex);
+  mac = g_base64_encode (digest, g_checksum_type_get_length (G_CHECKSUM_SHA256));
 
   g_free (normalized);
+  g_free (digest_hex);
   g_free (digest);
 
   return mac;
@@ -529,6 +517,35 @@ append_token_to_header (gchar       *header,
   return new_header;
 }
 
+static guint8 *
+concatenate_bytes (guint8 *first_data,
+                   gsize   first_length,
+                   ...)
+{
+  va_list args;
+  guint8 *data;
+  guint8 *out;
+  gsize length;
+  gsize out_length;
+
+  out_length = first_length;
+  out = g_malloc (out_length);
+  memcpy (out, first_data, out_length);
+
+  va_start (args, first_length);
+
+  while ((data = va_arg (args, guint8 *)) != NULL) {
+    length = va_arg (args, gsize);
+    out = g_realloc (out, out_length + length);
+    memcpy (out + out_length, data, length);
+    out_length += length;
+  }
+
+  va_end (args);
+
+  return out;
+}
+
 /*
  * HMAC-based Extract-and-Expand Key Derivation Function.
  * Uses sha256 as hash function.
@@ -544,14 +561,19 @@ hkdf (guint8 *in,
       guint8 *out,
       gsize   out_length)
 {
-  struct hmac_sha256_ctx ctx;
-  const gsize hash_length = 32;
-  gsize i, offset = 0;
-  guint8 *tmp, *prk;
+  gchar *prk_hex;
+  gchar *tmp_hex;
+  guint8 *tmp;
+  guint8 *prk;
+  guint8 *out_full;
+  guint8 *data;
   guint8 counter;
+  gsize hash_length;
+  gsize data_length;
+  gsize n;
 
-  if (out_length > hash_length * 255)
-    return;
+  hash_length = g_checksum_type_get_length (G_CHECKSUM_SHA256);
+  g_assert (out_length <= hash_length * 255);
 
   /* If salt value was not provided, use an array of hash_length zeros */
   if (salt == NULL) {
@@ -559,32 +581,48 @@ hkdf (guint8 *in,
     salt_length = hash_length;
   }
 
-  tmp = g_malloc0 (hash_length + info_length + 1);
-  prk = g_malloc0 (hash_length);
-
   /* Step 1: Extract */
-  hmac_sha256_set_key (&ctx, salt_length, salt);
-  hmac_sha256_update (&ctx, in_length, in);
-  hmac_sha256_digest (&ctx, hash_length, prk);
+  prk_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
+                                     salt, salt_length,
+                                     in, in_length);
+  prk = ephy_sync_crypto_decode_hex (prk_hex);
 
   /* Step 2: Expand */
-  hmac_sha256_set_key (&ctx, hash_length, prk);
+  counter = 1;
+  n = (out_length + hash_length - 1) / hash_length;
+  out_full = g_malloc (n * hash_length);
 
-  for (i = 0, counter = 1; i < out_length; i += hash_length, counter++) {
-    memcpy (tmp + offset, info, info_length);
-    tmp[offset + info_length] = counter;
+  for (gsize i = 0; i < n; i++, counter++) {
+    if (i == 0) {
+      data = concatenate_bytes (info, info_length,
+                                &counter, 1,
+                                NULL);
+      data_length = info_length + 1;
+    } else {
+      data = concatenate_bytes (out_full + (i - 1) * hash_length, hash_length,
+                                info, info_length,
+                                &counter, 1,
+                                NULL);
+      data_length = hash_length + info_length + 1;
+    }
 
-    hmac_sha256_update (&ctx, offset + info_length + 1, tmp);
-    hmac_sha256_digest (&ctx, hash_length, tmp);
+    tmp_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
+                                       prk, hash_length,
+                                       data, data_length);
+    tmp = ephy_sync_crypto_decode_hex (tmp_hex);
+    memcpy (out_full + i * hash_length, tmp, hash_length);
 
-    offset = hash_length;
-
-    memcpy (out + i, tmp, hash_length);
+    g_free (data);
+    g_free (tmp);
+    g_free (tmp_hex);
   }
 
+  memcpy (out, out_full, out_length);
+
+  g_free (prk_hex);
   g_free (salt);
-  g_free (tmp);
   g_free (prk);
+  g_free (out_full);
 }
 
 static void
@@ -700,6 +738,7 @@ ephy_sync_crypto_retrieve_sync_keys (const gchar *bundle,
   guint8 *wrapKB;
   guint8 *kA;
   guint8 *kB;
+  gchar *respMAC2_hex;
   EphySyncCryptoSyncKeys *retval = NULL;
 
   bdl = ephy_sync_crypto_decode_hex (bundle);
@@ -710,8 +749,10 @@ ephy_sync_crypto_retrieve_sync_keys (const gchar *bundle,
 
   memcpy (ciphertext, bdl, 2 * EPHY_SYNC_TOKEN_LENGTH);
   memcpy (respMAC, bdl + 2 * EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
-  respMAC2 = sha256_hmac (ciphertext, 2 * EPHY_SYNC_TOKEN_LENGTH,
-                          respHMACkey, EPHY_SYNC_TOKEN_LENGTH);
+  respMAC2_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
+                                          respHMACkey, EPHY_SYNC_TOKEN_LENGTH,
+                                          ciphertext, 2 * EPHY_SYNC_TOKEN_LENGTH);
+  respMAC2 = ephy_sync_crypto_decode_hex (respMAC2_hex);
 
   if (are_equal (respMAC, respMAC2) == FALSE) {
     g_warning ("respMAC and respMAC2 differ");
@@ -729,6 +770,7 @@ out:
   g_free (ciphertext);
   g_free (respMAC);
   g_free (respMAC2);
+  g_free (respMAC2_hex);
   g_free (xored);
 
   return retval;
@@ -871,7 +913,6 @@ ephy_sync_crypto_create_assertion (const gchar              *certificate,
                                    guint64                   duration,
                                    EphySyncCryptoRSAKeyPair *keypair)
 {
-  struct sha256_ctx sha256;
   mpz_t signature;
   const gchar *header = "{\"alg\": \"RS256\"}";
   gchar *body;
@@ -880,6 +921,8 @@ ephy_sync_crypto_create_assertion (const gchar              *certificate,
   gchar *to_sign;
   gchar *sig_b64 = NULL;
   gchar *assertion = NULL;
+  gchar *digest_hex;
+  guint8 *digest;
   guint8 *sig = NULL;
   guint64 expires_at;
   gsize expected_size;
@@ -892,12 +935,12 @@ ephy_sync_crypto_create_assertion (const gchar              *certificate,
   to_sign = g_strdup_printf ("%s.%s", header_b64, body_b64);
 
   mpz_init (signature);
-  sha256_init (&sha256);
-  sha256_update (&sha256, strlen (to_sign), (guint8 *) to_sign);
+  digest_hex = g_compute_checksum_for_string (G_CHECKSUM_SHA256, to_sign, -1);
+  digest = ephy_sync_crypto_decode_hex (digest_hex);
 
-  if (rsa_sha256_sign_tr (&keypair->public, &keypair->private,
-                          NULL, random_func,
-                          &sha256, signature) == 0) {
+  if (rsa_sha256_sign_digest_tr (&keypair->public, &keypair->private,
+                                 NULL, random_func,
+                                 digest, signature) == 0) {
     g_warning ("Failed to sign the message. Giving up.");
     goto out;
   }
@@ -922,6 +965,8 @@ out:
   g_free (to_sign);
   g_free (sig_b64);
   g_free (sig);
+  g_free (digest_hex);
+  g_free (digest);
   mpz_clear (signature);
 
   return assertion;
