@@ -100,7 +100,7 @@ GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
 
 EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
 
-EphySyncService *ephy_shell_get_global_sync_service      (void);
+EphySyncService *ephy_shell_get_global_sync_service      (EphyShell *shell);
 
 GtkWidget       *ephy_shell_get_history_window           (EphyShell *shell);
 

@@ -475,8 +475,7 @@ ephy_sync_service_init (EphySyncService *self)
 EphySyncService *
 ephy_sync_service_new (void)
 {
-  return EPHY_SYNC_SERVICE (g_object_new (EPHY_TYPE_SYNC_SERVICE,
-                                          NULL));
+  return EPHY_SYNC_SERVICE (g_object_new (EPHY_TYPE_SYNC_SERVICE, NULL));
 }
 
 const gchar *
