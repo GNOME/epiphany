@@ -50,8 +50,6 @@ libephymain_la_SOURCES = \
 	ephy-sync-secret.h			\
 	ephy-sync-service.c			\
 	ephy-sync-service.h			\
-	ephy-sync-utils.c			\
-	ephy-sync-utils.h			\
 	ephy-window.c				\
 	ephy-window.h				\
 	languages.h				\

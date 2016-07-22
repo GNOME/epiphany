@@ -24,6 +24,8 @@
 
 G_BEGIN_DECLS
 
+#define EPHY_SYNC_TOKEN_LENGTH 32
+
 typedef struct {
   gchar *app;
   gchar *dlg;
@@ -122,6 +124,11 @@ gchar                      *ephy_sync_crypto_create_assertion        (const gcha
                                                                       const gchar              *audience,
                                                                       guint64                   duration,
                                                                       EphySyncCryptoRSAKeyPair *keypair);
+
+gchar                      *ephy_sync_crypto_encode_hex              (guint8 *data,
+                                                                      gsize   data_length);
+
+guint8                     *ephy_sync_crypto_decode_hex              (const gchar *hex_string);
 
 G_END_DECLS
 

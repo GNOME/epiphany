@@ -16,7 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ephy-debug.h"
 #include "ephy-sync-secret.h"
 
 #include <glib/gi18n.h>
@@ -45,10 +44,8 @@ forget_all_tokens_cb (SecretService *service,
 
   secret_service_clear_finish (service, result, &error);
 
-  if (error)
-LOG ("[%d] Error clearing token secret schema: %s", __LINE__, error->message);
-  else
-LOG ("[%d] Successfully cleared token secret schema", __LINE__);
+  if (error != NULL)
+    g_warning ("Failed to clear token secret schema: %s", error->message);
 }
 
 static void
@@ -60,10 +57,8 @@ store_token_cb (SecretService *service,
 
   secret_service_store_finish (service, result, &error);
 
-  if (error)
-LOG ("[%d] Error storing token in secret schema: %s", __LINE__, error->message);
-  else
-LOG ("[%d] Successfully stored token in secret schema", __LINE__);
+  if (error != NULL)
+    g_warning ("Failed to store token in secret schema: %s", error->message);
 }
 
 void
@@ -91,10 +86,9 @@ ephy_sync_secret_load_tokens (EphySyncService *sync_service)
   GError *error = NULL;
   GList *matches;
   GList *tmp;
-  EphySyncTokenType token_type;
+  EphySyncServiceTokenType type;
   const gchar *emailUTF8;
-  const gchar *token_value;
-  const gchar *token_name;
+  const gchar *value;
   gchar *user_email;
 
   user_email = ephy_sync_service_get_user_email (sync_service);
@@ -113,18 +107,16 @@ ephy_sync_secret_load_tokens (EphySyncService *sync_service)
 
     attributes = secret_item_get_attributes (secret_item);
     emailUTF8 = g_hash_table_lookup (attributes, EMAIL_KEY);
-    token_type = g_ascii_strtoull (g_hash_table_lookup (attributes, TOKEN_TYPE_KEY),
-                                   NULL, 10);
-    token_name = g_hash_table_lookup (attributes, TOKEN_NAME_KEY);
+    type = g_ascii_strtoull (g_hash_table_lookup (attributes, TOKEN_TYPE_KEY),
+                             NULL, 10);
     secret_value = secret_item_get_secret (secret_item);
-    token_value = secret_value_get_text (secret_value);
+    value = secret_value_get_text (secret_value);
 
     /* Sanity check */
     if (g_strcmp0 (emailUTF8, user_email))
       continue;
 
-    ephy_sync_service_set_token (sync_service, g_strdup (token_value), token_type);
-LOG ("[%d] Loaded token %s with value %s for email %s", __LINE__, token_name, token_value, emailUTF8);
+    ephy_sync_service_set_token (sync_service, g_strdup (value), type);
 
     g_hash_table_unref (attributes);
   }
@@ -133,31 +125,29 @@ LOG ("[%d] Loaded token %s with value %s for email %s", __LINE__, token_name, to
 }
 
 void
-ephy_sync_secret_store_token (const gchar       *emailUTF8,
-                              gchar             *token_value,
-                              EphySyncTokenType  token_type)
+ephy_sync_secret_store_token (const gchar              *emailUTF8,
+                              gchar                    *value,
+                              EphySyncServiceTokenType  type)
 {
   SecretValue *secret_value;
   GHashTable *attributes;
-  const gchar *token_name;
+  const gchar *name;
   gchar *label;
 
   g_return_if_fail (emailUTF8);
-  g_return_if_fail (token_value);
+  g_return_if_fail (value);
 
-LOG ("[%d] Storing token %s with value %s for email %s ", __LINE__, ephy_sync_utils_token_name_from_type (token_type), token_value, emailUTF8);
-
-  token_name = ephy_sync_utils_token_name_from_type (token_type);
-  secret_value = secret_value_new (token_value, -1, "text/plain");
+  name = ephy_sync_service_token_name_from_type (type);
+  secret_value = secret_value_new (value, -1, "text/plain");
   attributes = secret_attributes_build (EPHY_SYNC_TOKEN_SCHEMA,
                                         EMAIL_KEY, emailUTF8,
-                                        TOKEN_TYPE_KEY, token_type,
-                                        TOKEN_NAME_KEY, token_name,
+                                        TOKEN_TYPE_KEY, type,
+                                        TOKEN_NAME_KEY, name,
                                         NULL);
   /* Translators: The %s is the name of the token whose value is stored.
    * Example: quickStretchedPW or authPW
    */
-  label = g_strdup_printf (_("Token value for %s token"), token_name);
+  label = g_strdup_printf (_("Token value for %s token"), name);
 
   secret_service_store (NULL,
                         EPHY_SYNC_TOKEN_SCHEMA,

@@ -19,8 +19,6 @@
 #ifndef EPHY_SYNC_SERVICE_H
 #define EPHY_SYNC_SERVICE_H
 
-#include "ephy-sync-utils.h"
-
 #include <glib-object.h>
 
 G_BEGIN_DECLS
@@ -29,23 +27,34 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySyncService, ephy_sync_service, EPHY, SYNC_SERVICE, GObject)
 
+typedef enum {
+  TOKEN_UID,
+  TOKEN_SESSIONTOKEN,
+  TOKEN_KEYFETCHTOKEN,
+  TOKEN_UNWRAPBKEY,
+  TOKEN_KA,
+  TOKEN_KB
+} EphySyncServiceTokenType;
+
 EphySyncService *ephy_sync_service_new                  (void);
+
+const gchar     *ephy_sync_service_token_name_from_type (EphySyncServiceTokenType token_type);
 
 gchar           *ephy_sync_service_get_user_email       (EphySyncService *self);
 
 void             ephy_sync_service_set_user_email       (EphySyncService *self,
                                                          const gchar     *email);
 
-gchar           *ephy_sync_service_get_token            (EphySyncService   *self,
-                                                         EphySyncTokenType  token_type);
+gchar           *ephy_sync_service_get_token            (EphySyncService          *self,
+                                                         EphySyncServiceTokenType  token_type);
 
-void             ephy_sync_service_set_token            (EphySyncService   *self,
-                                                         gchar             *token_value,
-                                                         EphySyncTokenType  token_type);
+void             ephy_sync_service_set_token            (EphySyncService          *self,
+                                                         gchar                    *token_value,
+                                                         EphySyncServiceTokenType  token_type);
 
-void             ephy_sync_service_set_and_store_tokens (EphySyncService   *self,
-                                                         gchar             *token_value,
-                                                         EphySyncTokenType  token_type,
+void             ephy_sync_service_set_and_store_tokens (EphySyncService          *self,
+                                                         gchar                    *token_value,
+                                                         EphySyncServiceTokenType  token_type,
                                                          ...) G_GNUC_NULL_TERMINATED;
 
 void             ephy_sync_service_delete_all_tokens    (EphySyncService *self);
