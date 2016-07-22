@@ -243,7 +243,7 @@ server_message_received_cb (WebKitUserContentManager *manager,
     inject_data_to_server (dialog, "message", "login", NULL);
     gtk_widget_set_visible (dialog->sync_sign_in_details, FALSE);
 
-    service = ephy_shell_get_global_sync_service ();
+    service = ephy_shell_get_global_sync_service (ephy_shell_get_default ());
 
     /* Extract tokens. */
     data = json_object_get_object_member (detail, "data");
@@ -349,7 +349,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
   EphySyncService *service;
   gchar *sessionToken;
 
-  service = ephy_shell_get_global_sync_service ();
+  service = ephy_shell_get_global_sync_service (ephy_shell_get_default ());
   sessionToken = ephy_sync_service_get_token (service, TOKEN_SESSIONTOKEN);
 
   /* Destroy session and delete tokens. */

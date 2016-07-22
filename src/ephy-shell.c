@@ -561,8 +561,6 @@ ephy_shell_init (EphyShell *shell)
   ephy_shell = shell;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
-
-  shell->sync_service = ephy_sync_service_new ();
 }
 
 static void
@@ -614,9 +612,14 @@ ephy_shell_finalize (GObject *object)
  * Return value: (transfer none):
  **/
 EphySyncService *
-ephy_shell_get_global_sync_service (void)
+ephy_shell_get_global_sync_service (EphyShell *shell)
 {
-  return ephy_shell->sync_service;
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->sync_service == NULL)
+    shell->sync_service = ephy_sync_service_new ();
+
+  return shell->sync_service;
 }
 
 /**
