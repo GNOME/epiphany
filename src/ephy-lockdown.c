@@ -148,23 +148,16 @@ bind_settings_and_actions (GSettings        *settings,
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          actions[i].action);
 
-    if (g_strcmp0 (actions[i].prop, "visible") == 0) {
-      g_settings_bind (settings, actions[i].key,
-                       action, actions[i].prop,
-                       G_SETTINGS_BIND_GET |
-                       G_SETTINGS_BIND_INVERT_BOOLEAN);
-    } else {
-      /* We need a custom get_mapping for 'enabled'
-       * properties, see usage of
-       * ephy_action_change_sensitivity_flags in
-       * ephy-window.c. */
-      g_settings_bind_with_mapping (settings, actions[i].key,
-                                    action, actions[i].prop,
-                                    G_SETTINGS_BIND_GET,
-                                    sensitive_get_mapping,
-                                    NULL,
-                                    action, NULL);
-    }
+    /* We need a custom get_mapping for 'enabled'
+     * properties, see usage of
+     * ephy_action_change_sensitivity_flags in
+     * ephy-window.c. */
+    g_settings_bind_with_mapping (settings, actions[i].key,
+                                  action, actions[i].prop,
+                                  G_SETTINGS_BIND_GET,
+                                  sensitive_get_mapping,
+                                  NULL,
+                                  action, NULL);
   }
 }
 
