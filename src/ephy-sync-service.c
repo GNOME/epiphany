@@ -228,11 +228,7 @@ get_audience_for_url (const gchar *url)
   gchar *audience;
 
   uri = soup_uri_new (url);
-
-  if (uri == NULL) {
-    g_warning ("Failed to build SoupURI, invalid url: %s", url);
-    return NULL;
-  }
+  g_assert (uri != NULL);
 
   scheme = soup_uri_get_scheme (uri);
   host = soup_uri_get_host (uri);
@@ -337,20 +333,32 @@ out:
 }
 
 static gboolean
-query_token_server (EphySyncService *self,
-                    const gchar     *assertion)
+query_token_server (EphySyncService *self)
 {
   SoupMessage *message;
   JsonParser *parser;
   JsonNode *root;
   JsonObject *json;
-  guint8 *kB;
-  gchar *hashed_kB;
-  gchar *client_state;
-  gchar *authorization;
+  guint8 *kB = NULL;
+  gchar *hashed_kB = NULL;
+  gchar *client_state = NULL;
+  gchar *audience = NULL;
+  gchar *assertion = NULL;
+  gchar *authorization = NULL;
   gboolean retval = FALSE;
 
-  g_return_val_if_fail (assertion != NULL, FALSE);
+  g_return_val_if_fail (self->certificate != NULL, FALSE);
+  g_return_val_if_fail (self->keypair != NULL, FALSE);
+
+  audience = get_audience_for_url (TOKEN_SERVER_URL);
+  assertion = ephy_sync_crypto_create_assertion (self->certificate,
+                                                 audience,
+                                                 5 * 60,
+                                                 self->keypair);
+  if (assertion == NULL) {
+    g_warning ("Failed to create assertion");
+    goto out;
+  }
 
   kB = ephy_sync_crypto_decode_hex (self->kB);
   hashed_kB = g_compute_checksum_for_data (G_CHECKSUM_SHA256, kB, EPHY_SYNC_TOKEN_LENGTH);
@@ -379,7 +387,7 @@ query_token_server (EphySyncService *self,
     self->token_server_key = g_strdup (json_object_get_string_member (json, "key"));
   } else if (message->status_code == 400) {
     g_warning ("Failed to talk to the Token Server: malformed request");
-    goto out;
+    goto unref;
   } else if (message->status_code == 401) {
     JsonArray *array;
     JsonNode *node;
@@ -395,29 +403,33 @@ query_token_server (EphySyncService *self,
 
     g_warning ("Failed to talk to the Token Server: %s: %s",
                status, description);
-    goto out;
+    goto unref;
   } else if (message->status_code == 404) {
     g_warning ("Failed to talk to the Token Server: unknown URL");
-    goto out;
+    goto unref;
   } else if (message->status_code == 405) {
     g_warning ("Failed to talk to the Token Server: unsupported method");
-    goto out;
+    goto unref;
   } else if (message->status_code == 406) {
     g_warning ("Failed to talk to the Token Server: unacceptable");
-    goto out;
+    goto unref;
   } else if (message->status_code == 503) {
     g_warning ("Failed to talk to the Token Server: service unavailable");
-    goto out;
+    goto unref;
   }
 
   retval = TRUE;
+
+unref:
+  g_object_unref (parser);
 
 out:
   g_free (kB);
   g_free (hashed_kB);
   g_free (client_state);
+  g_free (audience);
+  g_free (assertion);
   g_free (authorization);
-  g_object_unref (parser);
 
   return retval;
 }
