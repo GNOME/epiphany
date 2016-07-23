@@ -113,7 +113,7 @@ ephy_sync_secret_load_tokens (EphySyncService *sync_service)
     value = secret_value_get_text (secret_value);
 
     /* Sanity check */
-    if (g_strcmp0 (emailUTF8, user_email))
+    if (g_str_equal (emailUTF8, user_email) == FALSE)
       continue;
 
     ephy_sync_service_set_token (sync_service, g_strdup (value), type);
