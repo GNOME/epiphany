@@ -120,7 +120,7 @@ ephy_bookmark_init (EphyBookmark *self)
 }
 
 EphyBookmark *
-ephy_bookmark_new (const char *url, const char *title)
+ephy_bookmark_new (char *url, char *title)
 {
   return g_object_new (EPHY_TYPE_BOOKMARK,
                        "url", url,

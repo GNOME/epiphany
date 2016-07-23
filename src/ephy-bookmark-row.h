@@ -15,20 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_BOOKMARK_H
-#define _EPHY_BOOKMARK_H
+#ifndef _EPHY_BOOKMARK_ROW_H
+#define _EPHY_BOOKMARK_ROW_H
 
-#include <glib-object.h>
+#include "ephy-bookmark.h"
+
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_BOOKMARK (ephy_bookmark_get_type ())
+#define EPHY_TYPE_BOOKMARK_ROW (ephy_bookmark_row_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyBookmark, ephy_bookmark, EPHY, BOOKMARK, GObject)
+G_DECLARE_FINAL_TYPE (EphyBookmarkRow, ephy_bookmark_row, EPHY, BOOKMARK_ROW, GtkListBoxRow)
 
-EphyBookmark        *ephy_bookmark_new          (char *url,
-                                                 char *title);
+GtkWidget           *ephy_bookmark_row_new            (EphyBookmark *bookmark);
 
 G_END_DECLS
 
-#endif /* _EPHY_BOOKMARK_H */
+#endif /* _EPHY_BOOKMARK_ROW_H */
