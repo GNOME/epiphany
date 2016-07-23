@@ -356,6 +356,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
   ephy_sync_service_destroy_session (service, sessionToken);
   ephy_sync_service_delete_all_tokens (service);
   ephy_sync_secret_forget_all_tokens ();
+  ephy_sync_service_set_user_email (service, NULL);
 
   g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, "");
 
@@ -1485,13 +1486,13 @@ setup_language_page (PrefsDialog *dialog)
 static void
 setup_sync_page (PrefsDialog *dialog)
 {
-  gchar *sync_user = NULL;
-  gboolean logged_in;
+  EphySyncService *service;
+  gchar *email = NULL;
 
-  sync_user = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER);
-  logged_in = sync_user && sync_user[0];
+  service = ephy_shell_get_global_sync_service (ephy_shell_get_default ());
+  email = ephy_sync_service_get_user_email (service);
 
-  if (logged_in == FALSE) {
+  if (email == NULL) {
     setup_fxa_sign_in_view (dialog);
     gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
                           dialog->sync_sign_out_box);
@@ -1500,7 +1501,7 @@ setup_sync_page (PrefsDialog *dialog)
                           dialog->sync_sign_in_box);
     /* Translators: the %s refers to the email of the currently logged in user. */
     gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details),
-                          g_strdup_printf (_("Currently logged in as <b>%s</b>"), sync_user));
+                          g_strdup_printf (_("Currently logged in as <b>%s</b>"), email));
   }
 }
 

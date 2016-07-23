@@ -28,6 +28,7 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
+#define EMAIL_REGEX       "^[a-z0-9]([a-z0-9.]+[a-z0-9])?@[a-z0-9.-]+$"
 #define TOKEN_SERVER_URL  "https://token.services.mozilla.com/1.0/sync/1.5"
 #define FXA_BASEURL       "https://api.accounts.firefox.com/"
 #define FXA_VERSION       "v1/"
@@ -459,16 +460,19 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
 static void
 ephy_sync_service_init (EphySyncService *self)
 {
-  gchar *sync_user = NULL;
+  gchar *email;
 
   self->soup_session = soup_session_new ();
 
-  sync_user = g_settings_get_string (EPHY_SETTINGS_MAIN,
-                                     EPHY_PREFS_SYNC_USER);
+  email = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER);
 
-  if (sync_user && sync_user[0]) {
-    ephy_sync_service_set_user_email (self, sync_user);
-    ephy_sync_secret_load_tokens (self);
+  if (g_str_equal (email, "") == FALSE) {
+    if (g_regex_match_simple (EMAIL_REGEX, email, 0, 0) == TRUE) {
+      ephy_sync_service_set_user_email (self, email);
+      ephy_sync_secret_load_tokens (self);
+    } else {
+      g_warning ("Invalid email");
+    }
   }
 }
 
