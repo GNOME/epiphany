@@ -83,36 +83,6 @@ ephy_topic_action_sync_label (GtkAction  *action,
   g_value_unset (&value);
 }
 
-#if 0
-static GtkWidget *
-get_popup (EphyTopicAction *action)
-{
-  EphyTopicActionPrivate *priv = action->priv;
-  char path[40];
-
-  g_snprintf (path, sizeof (path), "/PopupTopic%ld",
-              (long int)ephy_node_get_id (action->priv->node));
-
-  if (priv->merge_id == 0) {
-    GString *popup_menu_string;
-
-    popup_menu_string = g_string_new (NULL);
-    g_string_append_printf (popup_menu_string, "<ui><popup name=\"%s\">", path + 1);
-
-    ephy_bookmarks_menu_build (popup_menu_string, priv->node);
-    g_string_append (popup_menu_string, "</popup></ui>");
-
-    priv->merge_id = gtk_ui_manager_add_ui_from_string
-                       (priv->manager, popup_menu_string->str,
-                       popup_menu_string->len, 0);
-
-    g_string_free (popup_menu_string, TRUE);
-  }
-
-  return gtk_ui_manager_get_widget (priv->manager, path);
-}
-#endif
-
 static void
 erase_popup (EphyTopicAction *action)
 {
@@ -167,13 +137,6 @@ menu_init_cb (GtkWidget       *menuitem,
               EphyTopicAction *action)
 {
   if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (menuitem)) == NULL) {
-    #if 0
-    GtkWidget *popup;
-
-    /* Disabled. Will be removed in the upcoming bookmarks subsystem update */
-    popup = get_popup (action);
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), popup);
-    #endif
     g_signal_connect (menuitem, "destroy",
                       G_CALLBACK (menu_destroy_cb), NULL);
   }

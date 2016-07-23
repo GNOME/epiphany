@@ -4,6 +4,7 @@
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *  Copyright © 2009 Collabora Ltd.
  *  Copyright © 2011 Igalia S.L.
+ *  Copyright © 2016 Iulian-Gabriel Radu
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -250,7 +251,7 @@ window_cmd_show_about (GSimpleAction *action,
                          "program-name", _("Web"),
                          "version", VERSION,
                          "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-                         "Copyright © 2003–2014 The Web Developers",
+                         "Copyright © 2003–2016 The Web Developers",
                          "artists", artists,
                          "authors", authors,
                          "comments", comments,

@@ -210,21 +210,21 @@ window_added_cb (GtkApplication *application,
                              G_N_ELEMENTS (app_actions));
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
-                                                  "win");
+                                              "win");
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              action_group,
                              window_actions,
                              G_N_ELEMENTS (window_actions));
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
-                                                  "tab");
+                                              "tab");
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              action_group,
                              tab_actions,
                              G_N_ELEMENTS (tab_actions));
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
-                                                  "toolbar");
+                                              "toolbar");
   bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                              action_group,
                              toolbar_actions,
@@ -237,7 +237,7 @@ window_added_cb (GtkApplication *application,
                              G_N_ELEMENTS (popup_actions));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                        "set-image-as-background");
+                                       "set-image-as-background");
   settings = ephy_settings_get ("org.gnome.desktop.background");
   g_settings_bind_writable (settings, "picture-filename",
                             action, "enabled", FALSE);

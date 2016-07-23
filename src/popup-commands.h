@@ -24,43 +24,43 @@
 
 G_BEGIN_DECLS
 
-void popup_cmd_link_in_new_window	      (GSimpleAction *action,
+void popup_cmd_link_in_new_window       (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_link_in_new_tab		      (GSimpleAction *action,
+void popup_cmd_link_in_new_tab          (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
 void popup_cmd_link_in_incognito_window (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_bookmark_link		        (GSimpleAction *action,
+void popup_cmd_bookmark_link            (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_view_source		          (GSimpleAction *action,
+void popup_cmd_view_source              (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_copy_link_address	      (GSimpleAction *action,
+void popup_cmd_copy_link_address        (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
 void popup_cmd_copy_link_location       (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_download_link_as		      (GSimpleAction *action,
+void popup_cmd_download_link_as         (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
 void popup_cmd_set_image_as_background  (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_copy_image_location	    (GSimpleAction *action,
+void popup_cmd_copy_image_location      (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_view_image_in_new_tab	  (GSimpleAction *action,
+void popup_cmd_view_image_in_new_tab    (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_download_link		        (GSimpleAction *action,
+void popup_cmd_download_link            (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_save_image_as		        (GSimpleAction *action,
+void popup_cmd_save_image_as            (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
 void popup_cmd_media_in_new_window      (GSimpleAction *action,

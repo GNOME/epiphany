@@ -997,9 +997,9 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   /* Page context popup */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "popup");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                           "context-bookmark-page");
+                                       "context-bookmark-page");
   ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
-                                            flags, set);
+                                        flags, set);
 
   /* Toolbar */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "toolbar");
@@ -1269,7 +1269,7 @@ action_activate_cb (GtkAction *action, gpointer user_data)
   g_slice_free (GActionData, action_data);
 }
 
-static WebKitContextMenuItem*
+static WebKitContextMenuItem *
 webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
 {
   GtkAction *gtk_action;
@@ -1281,8 +1281,7 @@ webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
   if (g_action_get_parameter_type (action) != NULL
       && g_variant_type_equal (g_action_get_parameter_type (action), G_VARIANT_TYPE_STRING)) {
     action_data->parameter = g_variant_new_string (label);
-  }
-  else {
+  } else {
     action_data->parameter = NULL;
   }
 
@@ -2304,10 +2303,6 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
   GAction *action;
 
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/menus.ui");
-  if (!builder) {
-    g_object_unref (builder);
-    return FALSE;
-  }
 
   menu_model = G_MENU (gtk_builder_get_object (builder, "notebook-menu"));
   menu = gtk_menu_new_from_model (G_MENU_MODEL (menu_model));
@@ -3022,7 +3017,7 @@ ephy_window_constructor (GType                  type,
   /* other notifiers */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
   new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                       "browse-with-caret");
+                                           "browse-with-caret");
 
   g_settings_bind_with_mapping (EPHY_SETTINGS_MAIN,
                                 EPHY_PREFS_ENABLE_CARET_BROWSING,

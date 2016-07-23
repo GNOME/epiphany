@@ -2,6 +2,7 @@
 /*
  *  Copyright © 2012 Igalia S.L
  *  Copyright © 2013 Yosef Or Boczko <yoseforb@gmail.com>
+ *  Copyright © 2016 Iulian-Gabriel Radu <iulian.radu67@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -283,34 +284,17 @@ new_history_menu_item (EphyWebView *view,
 }
 
 static void
-set_new_back_history (EphyEmbed *source,
-                      EphyEmbed *dest,
-                      gint       offset)
-{
-  /* TODO: WebKitBackForwardList: In WebKit2 WebKitBackForwardList can't be modified */
-}
-
-static void
 middle_click_handle_on_history_menu_item (EphyEmbed                 *embed,
                                           WebKitBackForwardListItem *item)
 {
   EphyEmbed *new_embed = NULL;
   const gchar *url;
-  gint offset;
-
-  /* TODO: WebKitBackForwardList is read-only in WebKit2 */
-  offset = 0;
 
   new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   embed,
                                   0);
   g_return_if_fail (new_embed != NULL);
-
-  /* We manually set the back history instead of trusting
-     ephy_shell_new_tab because the logic is more complex than
-     usual, due to handling also the forward history */
-  set_new_back_history (embed, new_embed, offset);
 
   /* Load the new URL */
   url = webkit_back_forward_list_item_get_original_uri (item);
@@ -330,7 +314,7 @@ navigation_menu_item_pressed_cb (GtkWidget *menuitem,
 
   item = (WebKitBackForwardListItem *)g_object_get_data (G_OBJECT (menuitem), HISTORY_ITEM_DATA_KEY);
 
-  if (((GdkEventButton *)event)->button == 2) {
+  if (((GdkEventButton *)event)->button == GDK_BUTTON_MIDDLE) {
     middle_click_handle_on_history_menu_item (embed, item);
   } else {
     WebKitWebView *web_view;
@@ -455,7 +439,7 @@ navigation_button_press_event_cb (GtkButton *button,
   direction = strstr (action_name, "back") ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
                                            : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
 
-  if (((GdkEventButton *)event)->button == 3) {
+  if (((GdkEventButton *)event)->button == GDK_BUTTON_SECONDARY) {
     popup_history_menu (GTK_WIDGET (button), toolbar->window,
                         direction, (GdkEventButton *)event);
   } else {
@@ -659,6 +643,7 @@ ephy_toolbar_constructed (GObject *object)
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button),
                                   G_MENU_MODEL (page_menu));
   g_object_unref (builder);
+
   menu = gtk_menu_button_get_popup (GTK_MENU_BUTTON (button));
   gtk_widget_set_halign (GTK_WIDGET (menu), GTK_ALIGN_END);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
@@ -719,20 +704,12 @@ ephy_toolbar_dispose (GObject *object)
   g_clear_object (&toolbar->window);
   g_clear_object (&toolbar->title_box);
 
-  G_OBJECT_CLASS (ephy_toolbar_parent_class)->dispose (object);
-}
-
-static void
-ephy_toolbar_finalize (GObject *object)
-{
-  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
-
   if (toolbar->navigation_buttons_menu_timeout > 0) {
     g_source_remove (toolbar->navigation_buttons_menu_timeout);
     toolbar->navigation_buttons_menu_timeout = 0;
   }
 
-  G_OBJECT_CLASS (ephy_toolbar_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ephy_toolbar_parent_class)->dispose (object);
 }
 
 static void
@@ -741,7 +718,6 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->dispose = ephy_toolbar_dispose;
-  gobject_class->finalize = ephy_toolbar_finalize;
   gobject_class->set_property = ephy_toolbar_set_property;
   gobject_class->get_property = ephy_toolbar_get_property;
   gobject_class->constructed = ephy_toolbar_constructed;

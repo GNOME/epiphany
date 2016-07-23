@@ -79,7 +79,8 @@ find_bookmarks_menu (EphyWindow *window)
     /* Looking for the bookmarks section */
     section_label = g_menu_model_get_item_attribute_value (page_menu, i, "id", G_VARIANT_TYPE_STRING);
     if (section_label != NULL && g_strcmp0 (g_variant_get_string (section_label, NULL), "bookmarks-section") == 0) {
-      GMenuModel *bookmarks_section_model, *bookmarks_menu_model;
+      GMenuModel *bookmarks_section_model;
+      GMenuModel *bookmarks_menu_model;
 
       /* Bookmarks section should contain the bookmarks menu */
       bookmarks_section_model = g_menu_model_get_item_link (page_menu, i, G_MENU_LINK_SECTION);
@@ -107,7 +108,7 @@ activate_bookmarks_menu (GSimpleAction *action,
     menu = g_menu_new ();
     ephy_bookmarks_menu_build (menu, 0);
 
-    data->bookmarks_menu = G_MENU(find_bookmarks_menu (EPHY_WINDOW (user_data)));
+    data->bookmarks_menu = G_MENU (find_bookmarks_menu (EPHY_WINDOW (user_data)));
     if (data->bookmarks_menu == NULL)
       return G_SOURCE_REMOVE;
 
@@ -126,8 +127,7 @@ erase_bookmarks_menu (EphyWindow *window)
 
   if (data != NULL && data->bookmarks_menu != NULL) {
     g_menu_remove_all (data->bookmarks_menu);
-    g_object_unref (data->bookmarks_menu);
-    data->bookmarks_menu = NULL;
+    g_clear_object (&data->bookmarks_menu);
   }
 }
 

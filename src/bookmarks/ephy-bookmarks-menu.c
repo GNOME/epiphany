@@ -47,7 +47,7 @@ enum {
 /* Construct a block of bookmark actions. Note that no bookmark action appears
  * more than once in a menu, so no need to supply names. */
 static void
-append_bookmarks (GMenu         *menu,
+append_bookmarks (GMenu           *menu,
                   const GPtrArray *bookmarks)
 {
   EphyNode *child;
