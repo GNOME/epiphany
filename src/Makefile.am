@@ -30,6 +30,8 @@ libephymain_la_SOURCES = \
 	cookies-dialog.h			\
 	ephy-action-helper.c			\
 	ephy-action-helper.h			\
+	ephy-bookmark.c				\
+	ephy-bookmark.h				\
 	ephy-bookmarks-popover.c 		\
 	ephy-bookmarks-popover.h 		\
 	ephy-completion-model.c			\
