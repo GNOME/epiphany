@@ -32,6 +32,8 @@ libephymain_la_SOURCES = \
 	ephy-action-helper.h			\
 	ephy-bookmark.c				\
 	ephy-bookmark.h				\
+	ephy-bookmark-row.c			\
+	ephy-bookmark-row.h			\
 	ephy-bookmarks-popover.c 		\
 	ephy-bookmarks-popover.h 		\
 	ephy-completion-model.c			\

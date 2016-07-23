@@ -15,12 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glib/gi18n.h>
-
+#include "ephy-bookmark.h"
+#include "ephy-bookmark-row.h"
 #include "ephy-bookmarks-popover.h"
+
+#include <glib/gi18n.h>
 
 struct _EphyBookmarksPopover {
   GtkPopover      parent_instance;
+
+  GtkWidget      *bookmarks_list_box;
 };
 
 G_DEFINE_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, GTK_TYPE_POPOVER)
@@ -31,12 +35,20 @@ ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmarks-popover.ui");
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, bookmarks_list_box);
 }
 
 static void
 ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 {
+  EphyBookmark *bookmark;
+  GtkWidget *row;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  bookmark = ephy_bookmark_new (g_strdup ("https://duckduckgo.com"), g_strdup ("Test title"));
+  row = ephy_bookmark_row_new (bookmark);
+  gtk_list_box_insert (GTK_LIST_BOX (self->bookmarks_list_box), row, -1);
 }
 
 EphyBookmarksPopover *
