@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="EphyBookmarkPropertiesGrid" parent="GtkGrid">
+    <property name="margin">12</property>
+    <!-- <property name="border-width">12</property> -->
+    <property name="column-spacing">12</property>
+    <property name="row-spacing">12</property>
+    <property name="visible">true</property>
+    <child>
+      <object class="GtkLabel" id="popover_bookmark_label">
+        <property name="label" translatable="yes">Bookmark</property>
+        <property name="visible">false</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="width">2</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">end</property>
+        <property name="valign">center</property>
+        <property name="label" translatable="yes">Name</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="name_entry">
+        <property name="visible">true</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">end</property>
+        <property name="valign">center</property>
+        <property name="label" translatable="yes">Address</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="address_entry">
+        <property name="visible">true</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="popover_tags_label">
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="label" translatable="yes">Tags</property>
+        <property name="visible">false</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">end</property>
+        <property name="valign">start</property>
+        <property name="label" translatable="yes">Tags</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="valign">start</property>
+        <property name="height-request">100</property>
+        <property name="min-content-height">100</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">automatic</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkFlowBox" id="tags_box">
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">6</property>
+            <property name="selection-mode">none</property>
+            <property name="homogeneous">true</property>
+            <property name="valign">start</property>
+            <property name="min-children-per-line">2</property>
+            <property name="max-children-per-line">3</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GtkEntry" id="add_tag_entry">
+            <property name="placeholder-text">Add Tag…</property>
+            <property name="activates-default">true</property>
+            <property name="hexpand">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="add_tag_button">
+            <property name="label" translatable="yes">_Add</property>
+            <property name="can-default">true</property>
+            <property name="sensitive">false</property>
+            <property name="use-underline">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="remove_bookmark_button">
+        <property name="label" translatable="yes">_Remove Bookmark</property>
+        <property name="use-underline">true</property>
+        <property name="halign">end</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="destructive-action"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">6</property>
+      </packing>
+    </child>
+  </template>
+</interface>

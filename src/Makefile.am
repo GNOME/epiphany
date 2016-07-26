@@ -10,6 +10,7 @@ dist_noinst_DATA = \
 
 TYPES_H_FILES = \
 	ephy-link.h				\
+	ephy-bookmark-properties-grid.h		\
 	ephy-session.h				\
 	ephy-shell.h				\
 	ephy-window.h
@@ -23,8 +24,12 @@ libephymain_la_SOURCES = \
 	ephy-action-helper.h			\
 	ephy-bookmark.c				\
 	ephy-bookmark.h				\
+	ephy-bookmark-properties-grid.c		\
+	ephy-bookmark-properties-grid.h		\
 	ephy-bookmark-row.c			\
 	ephy-bookmark-row.h			\
+	ephy-bookmarks-manager.c		\
+	ephy-bookmarks-manager.h		\
 	ephy-bookmarks-popover.c 		\
 	ephy-bookmarks-popover.h 		\
 	ephy-completion-model.c			\
@@ -136,7 +141,9 @@ RESOURCE_FILES = \
 	resources/prefs-lang-dialog.ui		  \
 	resources/prism.css			  \
 	resources/prism.js			  \
-	resources/shortcuts-dialog.ui
+	resources/shortcuts-dialog.ui		  \
+	resources/gtk/bookmark-properties-grid.ui \
+	resources/gtk/bookmark-row.ui		  \
 	resources/gtk/bookmarks-popover.ui	  \
 	resources/gtk/menus.ui			  \
 	$(NULL)

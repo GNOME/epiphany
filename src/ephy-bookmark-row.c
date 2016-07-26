@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "ephy-bookmark-properties-grid.h"
 #include "ephy-bookmark-row.h"
 
 struct _EphyBookmarkRow {
@@ -25,6 +26,7 @@ struct _EphyBookmarkRow {
   EphyBookmark    *bookmark;
 
   GtkWidget       *title_label;
+  GtkWidget       *properties_button;
 };
 
 G_DEFINE_TYPE (EphyBookmarkRow, ephy_bookmark_row, GTK_TYPE_LIST_BOX_ROW)
@@ -36,6 +38,35 @@ enum {
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
+
+static void
+ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
+                                     GtkButton       *button)
+{
+  GtkWidget *dialog;
+  GtkWidget *content_area;
+  GtkWidget *grid;
+
+  g_assert (EPHY_IS_BOOKMARK_ROW (row));
+  g_assert (GTK_IS_BUTTON (button));
+
+  dialog = gtk_dialog_new_with_buttons ("Bookmark Properties",
+                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (row))),
+                                        GTK_DIALOG_USE_HEADER_BAR,
+                                        NULL, NULL);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+
+  grid = ephy_bookmark_properties_grid_new (ephy_bookmark_row_get_bookmark (row),
+                                            EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG);
+  gtk_window_set_default (GTK_WINDOW (dialog),
+                          ephy_bookmark_properties_grid_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES_GRID (grid)));
+
+  gtk_container_add (GTK_CONTAINER (content_area), grid);
+
+  gtk_widget_show (dialog);
+}
 
 static void
 ephy_bookmark_row_set_property (GObject      *object,
@@ -117,12 +148,19 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-row.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, title_label);
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, properties_button);
 }
 
 static void
 ephy_bookmark_row_init (EphyBookmarkRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->properties_button,
+                           "clicked",
+                           G_CALLBACK (ephy_bookmark_row_button_clicked_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 GtkWidget *
