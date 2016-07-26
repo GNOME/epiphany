@@ -186,7 +186,6 @@ session_destroyed_cb (SoupSession *session,
                       gpointer     user_data)
 {
   JsonParser *parser;
-  JsonNode *root;
   JsonObject *json;
 
   if (message->status_code == STATUS_OK) {
@@ -196,8 +195,7 @@ session_destroyed_cb (SoupSession *session,
 
   parser = json_parser_new ();
   json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
-  root = json_parser_get_root (parser);
-  json = json_node_get_object (root);
+  json = json_node_get_object (json_parser_get_root (parser));
 
   g_warning ("Failed to destroy session: errno: %ld, errmsg: %s",
              json_object_get_int_member (json, "errno"),
@@ -300,7 +298,6 @@ check_certificate (EphySyncService *self,
                    const gchar     *certificate)
 {
   JsonParser *parser;
-  JsonNode *root;
   JsonObject *json;
   JsonObject *principal;
   gchar **pieces;
@@ -321,8 +318,7 @@ check_certificate (EphySyncService *self,
 
   parser = json_parser_new ();
   json_parser_load_from_data (parser, header, -1, NULL);
-  root = json_parser_get_root (parser);
-  json = json_node_get_object (root);
+  json = json_node_get_object (json_parser_get_root (parser));
   algorithm = json_object_get_string_member (json, "alg");
 
   if (g_str_equal (algorithm, "RS256") == FALSE) {
@@ -331,8 +327,7 @@ check_certificate (EphySyncService *self,
   }
 
   json_parser_load_from_data (parser, payload, -1, NULL);
-  root = json_parser_get_root (parser);
-  json = json_node_get_object (root);
+  json = json_node_get_object (json_parser_get_root (parser));
   principal = json_object_get_object_member (json, "principal");
   email = json_object_get_string_member (principal, "email");
   uid_email = g_strdup_printf ("%s@%s",
