@@ -28,11 +28,13 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#define EMAIL_REGEX       "^[a-z0-9]([a-z0-9.]+[a-z0-9])?@[a-z0-9.-]+$"
-#define TOKEN_SERVER_URL  "https://token.services.mozilla.com/1.0/sync/1.5"
-#define FXA_BASEURL       "https://api.accounts.firefox.com/"
-#define FXA_VERSION       "v1/"
-#define STATUS_OK         200
+#define EMAIL_REGEX             "^[a-z0-9]([a-z0-9.]+[a-z0-9])?@[a-z0-9.-]+$"
+#define TOKEN_SERVER_URL        "https://token.services.mozilla.com/1.0/sync/1.5"
+#define FXA_BASEURL             "https://api.accounts.firefox.com/"
+#define FXA_VERSION             "v1/"
+#define STATUS_OK               200
+#define CERTIFICATE_DURATION    (12 * 60 * 60)
+#define current_time_in_seconds (g_get_real_time () / 1000000)
 
 struct _EphySyncService {
   GObject parent_instance;
@@ -50,9 +52,12 @@ struct _EphySyncService {
   gint64 last_auth_at;
 
   gchar *certificate;
+  gint64 certificate_expiry_time;
+
   gchar *storage_endpoint;
-  gchar *token_server_id;
-  gchar *token_server_key;
+  gchar *storage_token_id;
+  gchar *storage_token_key;
+  gint64 storage_token_expiry_time;
 
   EphySyncCryptoRSAKeyPair *keypair;
 };
@@ -64,14 +69,34 @@ build_json_string (const gchar *first_key,
                    const gchar *first_value,
                    ...) G_GNUC_NULL_TERMINATED;
 
+static gboolean
+storage_token_is_expired (EphySyncService *self)
+{
+  if (self->storage_token_expiry_time == 0)
+    return TRUE;
+
+  /* Don't use storage tokens that are going to expire in less than 1 minute */
+  return self->certificate_expiry_time < current_time_in_seconds - 60;
+}
+
+static gboolean
+certificate_is_expired (EphySyncService *self)
+{
+  if (self->certificate_expiry_time == 0)
+    return TRUE;
+
+  /* Don't use certificates that are going to expire in less than 1 minute */
+  return self->certificate_expiry_time < current_time_in_seconds - 60;
+}
+
 static guint
 synchronous_hawk_post_request (EphySyncService  *self,
-                              const gchar       *endpoint,
-                              const gchar       *id,
-                              guint8            *key,
-                              gsize              key_length,
-                              gchar             *request_body,
-                              JsonNode         **node)
+                               const gchar       *endpoint,
+                               const gchar       *id,
+                               guint8            *key,
+                               gsize              key_length,
+                               gchar             *request_body,
+                               JsonNode         **node)
 {
   EphySyncCryptoHawkOptions *hawk_options;
   EphySyncCryptoHawkHeader *hawk_header;
@@ -320,6 +345,7 @@ check_certificate (EphySyncService *self,
   }
 
   self->last_auth_at = json_object_get_int_member (json, "fxa-lastAuthAt");
+  self->certificate_expiry_time = json_object_get_int_member (json, "exp") / 1000;
   retval = TRUE;
 
 out:
@@ -332,33 +358,144 @@ out:
   return retval;
 }
 
-static gboolean
-query_token_server (EphySyncService *self)
+static void
+sign_certificate (EphySyncService *self)
+{
+  EphySyncCryptoProcessedST *processed_st;
+  EphySyncCryptoRSAKeyPair *keypair;
+  JsonNode *node;
+  JsonObject *json;
+  gchar *tokenID;
+  gchar *public_key_json;
+  gchar *request_body;
+  gchar *n_str;
+  gchar *e_str;
+  const gchar *certificate;
+  guint status_code;
+
+  g_return_if_fail (self->sessionToken != NULL);
+
+  keypair = ephy_sync_crypto_generate_rsa_key_pair ();
+  g_return_if_fail (keypair != NULL);
+
+  processed_st = ephy_sync_crypto_process_session_token (self->sessionToken);
+  tokenID = ephy_sync_crypto_encode_hex (processed_st->tokenID, 0);
+
+  n_str = mpz_get_str (NULL, 10, keypair->public.n);
+  e_str = mpz_get_str (NULL, 10, keypair->public.e);
+  public_key_json = build_json_string ("algorithm", "RS",
+                                       "n", n_str,
+                                       "e", e_str,
+                                       NULL);
+  /* Duration is the lifetime of the certificate in milliseconds.
+   * The FxA server limits the duration to 24 hours.
+   */
+  request_body = g_strdup_printf ("{\"publicKey\": %s, \"duration\": %d}",
+                                  public_key_json, CERTIFICATE_DURATION * 1000);
+  status_code = synchronous_hawk_post_request (self,
+                                               "certificate/sign",
+                                               tokenID,
+                                               processed_st->reqHMACkey,
+                                               EPHY_SYNC_TOKEN_LENGTH,
+                                               request_body,
+                                               &node);
+  json = json_node_get_object (node);
+
+  if (status_code != STATUS_OK) {
+    g_warning ("FxA server errno: %ld, errmsg: %s",
+               json_object_get_int_member (json, "errno"),
+               json_object_get_string_member (json, "message"));
+    goto out;
+  }
+
+  /* Check if the certificate is valid */
+  certificate = json_object_get_string_member (json, "cert");
+  if (check_certificate (self, certificate) == FALSE) {
+    ephy_sync_crypto_rsa_key_pair_free (keypair);
+    goto out;
+  }
+
+  self->certificate = g_strdup (certificate);
+  self->keypair = keypair;
+
+out:
+  ephy_sync_crypto_processed_st_free (processed_st);
+  json_node_free (node);
+  g_free (tokenID);
+  g_free (public_key_json);
+  g_free (request_body);
+  g_free (n_str);
+  g_free (e_str);
+}
+
+static void
+token_server_response_cb (SoupSession *session,
+                          SoupMessage *message,
+                          gpointer     user_data)
+{
+  EphySyncService *self;
+  JsonParser *parser;
+  JsonObject *json;
+  JsonObject *errors;
+  JsonArray *array;
+
+  self = EPHY_SYNC_SERVICE (user_data);
+
+  parser = json_parser_new ();
+  json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
+  json = json_node_get_object (json_parser_get_root (parser));
+
+  if (message->status_code == STATUS_OK) {
+    self->storage_endpoint = g_strdup (json_object_get_string_member (json, "api_endpoint"));
+    self->storage_token_id = g_strdup (json_object_get_string_member (json, "id"));
+    self->storage_token_key = g_strdup (json_object_get_string_member (json, "key"));
+    self->storage_token_expiry_time = json_object_get_int_member (json, "duration") + current_time_in_seconds;
+  } else if (message->status_code == 401) {
+    array = json_object_get_array_member (json, "errors");
+    errors = json_node_get_object (json_array_get_element (array, 0));
+
+    g_warning ("Failed to talk to the Token Server: %s: %s",
+               json_object_get_string_member (json, "status"),
+               json_object_get_string_member (errors, "description"));
+  } else {
+    g_warning ("Failed to talk to the Token Server, status code %u. "
+               "See https://docs.services.mozilla.com/token/apis.html#error-responses",
+               message->status_code);
+  }
+
+  g_object_unref (parser);
+}
+
+static void
+get_storage_token_from_token_server (EphySyncService *self)
 {
   SoupMessage *message;
-  JsonParser *parser;
-  JsonNode *root;
-  JsonObject *json;
   guint8 *kB = NULL;
   gchar *hashed_kB = NULL;
   gchar *client_state = NULL;
   gchar *audience = NULL;
   gchar *assertion = NULL;
   gchar *authorization = NULL;
-  gboolean retval = FALSE;
 
-  g_return_val_if_fail (self->certificate != NULL, FALSE);
-  g_return_val_if_fail (self->keypair != NULL, FALSE);
+  if (storage_token_is_expired (self) == FALSE)
+    return;
+
+  /* Sign another certificate is the current one has expired */
+  if (certificate_is_expired (self) == TRUE) {
+    g_free (self->certificate);
+    self->certificate_expiry_time = 0;
+    sign_certificate (self);
+  }
+
+  g_return_if_fail (self->certificate != NULL);
+  g_return_if_fail (self->keypair != NULL);
 
   audience = get_audience_for_url (TOKEN_SERVER_URL);
   assertion = ephy_sync_crypto_create_assertion (self->certificate,
                                                  audience,
                                                  5 * 60,
                                                  self->keypair);
-  if (assertion == NULL) {
-    g_warning ("Failed to create assertion");
-    goto out;
-  }
+  g_return_if_fail (assertion != NULL);
 
   kB = ephy_sync_crypto_decode_hex (self->kB);
   hashed_kB = g_compute_checksum_for_data (G_CHECKSUM_SHA256, kB, EPHY_SYNC_TOKEN_LENGTH);
@@ -367,71 +504,21 @@ query_token_server (EphySyncService *self)
 
   message = soup_message_new (SOUP_METHOD_GET, TOKEN_SERVER_URL);
   /* We need to add the X-Client-State header so that the Token Server will
-   * recognize accounts that were previously used to sync Firefox data too. */
+   * recognize accounts that were previously used to sync Firefox data too.
+   */
   soup_message_headers_append (message->request_headers,
                                "X-Client-State", client_state);
   soup_message_headers_append (message->request_headers,
                                "authorization", authorization);
-  soup_session_send_message (self->soup_session, message);
+  soup_session_queue_message (self->soup_session, message,
+                              token_server_response_cb, self);
 
-  parser = json_parser_new ();
-  json_parser_load_from_data (parser,
-                              message->response_body->data,
-                              -1, NULL);
-  root = json_parser_get_root (parser);
-  json = json_node_get_object (root);
-
-  if (message->status_code == STATUS_OK) {
-    self->storage_endpoint = g_strdup (json_object_get_string_member (json, "api_endpoint"));
-    self->token_server_id = g_strdup (json_object_get_string_member (json, "id"));
-    self->token_server_key = g_strdup (json_object_get_string_member (json, "key"));
-  } else if (message->status_code == 400) {
-    g_warning ("Failed to talk to the Token Server: malformed request");
-    goto unref;
-  } else if (message->status_code == 401) {
-    JsonArray *array;
-    JsonNode *node;
-    JsonObject *errors;
-    const gchar *status;
-    const gchar *description;
-
-    status = json_object_get_string_member (json, "status");
-    array = json_object_get_array_member (json, "errors");
-    node = json_array_get_element (array, 0);
-    errors = json_node_get_object (node);
-    description = json_object_get_string_member (errors, "description");
-
-    g_warning ("Failed to talk to the Token Server: %s: %s",
-               status, description);
-    goto unref;
-  } else if (message->status_code == 404) {
-    g_warning ("Failed to talk to the Token Server: unknown URL");
-    goto unref;
-  } else if (message->status_code == 405) {
-    g_warning ("Failed to talk to the Token Server: unsupported method");
-    goto unref;
-  } else if (message->status_code == 406) {
-    g_warning ("Failed to talk to the Token Server: unacceptable");
-    goto unref;
-  } else if (message->status_code == 503) {
-    g_warning ("Failed to talk to the Token Server: service unavailable");
-    goto unref;
-  }
-
-  retval = TRUE;
-
-unref:
-  g_object_unref (parser);
-
-out:
   g_free (kB);
   g_free (hashed_kB);
   g_free (client_state);
   g_free (audience);
   g_free (assertion);
   g_free (authorization);
-
-  return retval;
 }
 
 static void
@@ -439,7 +526,8 @@ ephy_sync_service_finalize (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
-  ephy_sync_crypto_rsa_key_pair_free (self->keypair);
+  if (self->keypair != NULL)
+    ephy_sync_crypto_rsa_key_pair_free (self->keypair);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
 }
@@ -453,8 +541,8 @@ ephy_sync_service_dispose (GObject *object)
   g_clear_pointer (&self->user_email, g_free);
   g_clear_pointer (&self->certificate, g_free);
   g_clear_pointer (&self->storage_endpoint, g_free);
-  g_clear_pointer (&self->token_server_id, g_free);
-  g_clear_pointer (&self->token_server_key, g_free);
+  g_clear_pointer (&self->storage_token_id, g_free);
+  g_clear_pointer (&self->storage_token_key, g_free);
   ephy_sync_service_delete_all_tokens (self);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->dispose (object);
@@ -724,78 +812,6 @@ out:
   json_node_free (node);
   g_free (tokenID);
   g_free (unwrapKB);
-
-  return retval;
-}
-
-gboolean
-ephy_sync_service_sign_certificate (EphySyncService *self)
-{
-  EphySyncCryptoProcessedST *processed_st;
-  EphySyncCryptoRSAKeyPair *keypair;
-  JsonNode *node;
-  JsonObject *json;
-  gchar *tokenID;
-  gchar *public_key_json;
-  gchar *request_body;
-  gchar *n_str;
-  gchar *e_str;
-  const gchar *certificate;
-  guint status_code;
-  gboolean retval = FALSE;
-
-  g_return_val_if_fail (self->sessionToken != NULL, FALSE);
-
-  keypair = ephy_sync_crypto_generate_rsa_key_pair ();
-  g_return_val_if_fail (keypair != NULL, FALSE);
-
-  processed_st = ephy_sync_crypto_process_session_token (self->sessionToken);
-  tokenID = ephy_sync_crypto_encode_hex (processed_st->tokenID, 0);
-
-  n_str = mpz_get_str (NULL, 10, keypair->public.n);
-  e_str = mpz_get_str (NULL, 10, keypair->public.e);
-  public_key_json = build_json_string ("algorithm", "RS",
-                                       "n", n_str,
-                                       "e", e_str,
-                                       NULL);
-  /* The server allows a maximum certificate lifespan of 24 hours == 86400000 ms */
-  request_body = g_strdup_printf ("{\"publicKey\": %s, \"duration\": 86400000}",
-                                  public_key_json);
-  status_code = synchronous_hawk_post_request (self,
-                                               "certificate/sign",
-                                               tokenID,
-                                               processed_st->reqHMACkey,
-                                               EPHY_SYNC_TOKEN_LENGTH,
-                                               request_body,
-                                               &node);
-  json = json_node_get_object (node);
-
-  if (status_code != STATUS_OK) {
-    g_warning ("FxA server errno: %ld, errmsg: %s",
-               json_object_get_int_member (json, "errno"),
-               json_object_get_string_member (json, "message"));
-    goto out;
-  }
-
-  /* Check if the certificate is valid */
-  certificate = json_object_get_string_member (json, "cert");
-  if (check_certificate (self, certificate) == FALSE) {
-    ephy_sync_crypto_rsa_key_pair_free (keypair);
-    goto out;
-  }
-
-  self->certificate = g_strdup (certificate);
-  self->keypair = keypair;
-  retval = TRUE;
-
-out:
-  ephy_sync_crypto_processed_st_free (processed_st);
-  json_node_free (node);
-  g_free (tokenID);
-  g_free (public_key_json);
-  g_free (request_body);
-  g_free (n_str);
-  g_free (e_str);
 
   return retval;
 }
