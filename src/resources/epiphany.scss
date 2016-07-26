@@ -110,3 +110,45 @@ $edge_color: lighten($incognito_color, 13%);
     }
   }
 }
+
+/* Bookmarks */
+.bookmarks-row {
+  button {
+    opacity: 0;
+  }
+
+  &:hover {
+    button {
+      opacity: 1;
+    }
+  }
+}
+
+.bookmark-tag-widget {
+  padding-left: 8px;
+  padding-right: 8px;
+  background-color: darken($bg_color, 7%);
+
+  label {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  button {
+    color: white;
+  }
+}
+
+.bookmark-tag-widget-selected {
+  background-color: $selected_bg_color;
+  color: white;
+
+  button {
+    color: white;
+
+    &:hover {
+      @include button(hover, $selected_bg_color);
+      color: white;
+    }
+  }
+}

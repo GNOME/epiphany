@@ -29,11 +29,15 @@ G_DECLARE_FINAL_TYPE (EphyBookmark, ephy_bookmark, EPHY, BOOKMARK, GObject)
 EphyBookmark        *ephy_bookmark_new          (char *url,
                                                  char *title);
 
-
 const char          *ephy_bookmark_get_url      (EphyBookmark *self);
+const char          *ephy_bookmark_get_title    (EphyBookmark *self);
+void                 ephy_bookmark_add_tag      (EphyBookmark *self,
+                                                 const char *tag);
+void                 ephy_bookmark_remove_tag   (EphyBookmark *self,
+                                                 const char *tag);
 void                 ephy_bookmark_set_tags     (EphyBookmark *self,
-                                                 GList        *tags);
-GList               *ephy_bookmark_get_tags     (EphyBookmark *self);
+                                                 GSequence    *tags);
+GSequence           *ephy_bookmark_get_tags     (EphyBookmark *self);
 
 G_END_DECLS
 
