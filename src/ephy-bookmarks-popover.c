@@ -45,18 +45,13 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
-static void
-bookmark_added_cb (EphyBookmarksPopover *self,
-                   EphyBookmark         *bookmark)
+static GtkWidget *
+create_bookmark_row (gpointer item,
+                     gpointer user_data)
 {
-  GtkWidget *bookmark_row;
+  EphyBookmark *bookmark = EPHY_BOOKMARK (item);
 
-  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
-  g_assert (EPHY_IS_BOOKMARK (bookmark));
-
-  bookmark_row = ephy_bookmark_row_new (bookmark);
-
-  gtk_list_box_prepend (GTK_LIST_BOX (self->bookmarks_list_box), bookmark_row);
+  return ephy_bookmark_row_new (bookmark);
 }
 
 static void
@@ -67,12 +62,11 @@ bookmarks_list_box_row_activated_cb (EphyBookmarksPopover   *self,
   EphyBookmark *bookmark;
   GActionGroup *action_group;
   GAction *action;
-  const gchar *url;
+  const char *url;
 
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
   g_assert (EPHY_IS_BOOKMARK_ROW (row));
   g_assert (GTK_IS_LIST_BOX (box));
-
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (self->window), "win");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-bookmark");
@@ -84,7 +78,7 @@ bookmarks_list_box_row_activated_cb (EphyBookmarksPopover   *self,
 }
 
 static GtkWidget *
-build_tag_box (const gchar *tag)
+create_tag_box (const char *tag)
 {
   GtkWidget *box;
   GtkWidget *image;
@@ -162,43 +156,42 @@ static void
 ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  GList *bookmarks;
-  GList *tags = NULL;
-  GList *l;
+  GSequence *tags, *tags1, *tags2;
+  GSequenceIter *iter;
   EphyBookmark *dummy_bookmark;
+  gint i;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://duckduckgo.com"), g_strdup ("Test title"));
-  tags = g_list_append (tags, g_strdup ("Fun"));
-  tags = g_list_append (tags, g_strdup ("Work"));
-  ephy_bookmark_set_tags (dummy_bookmark, tags);
+  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://duckduckgo.com/asdasdas/asdas"), g_strdup ("Test title"));
+  tags1 = g_sequence_new (g_free);
+  for (i = 0; i < 20; i++)
+    g_sequence_insert_sorted (tags1, g_strdup_printf ("Fun %d", i), (GCompareDataFunc)g_strcmp0, NULL);
+
+  ephy_bookmark_set_tags (dummy_bookmark, tags1);
   ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
 
   dummy_bookmark = ephy_bookmark_new (g_strdup ("https://wikipedia.com"), g_strdup ("wikipedia"));
   ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
+  tags2 = g_sequence_new (g_free);
+  g_sequence_insert_sorted (tags2, g_strdup_printf ("Not Fun %d", 1), (GCompareDataFunc)g_strcmp0, NULL);
+  ephy_bookmark_set_tags (dummy_bookmark, tags2);
 
-  bookmarks = ephy_bookmarks_manager_get_bookmarks (manager);
-  for (l = bookmarks; l != NULL; l = g_list_next (l)) {
-    EphyBookmark *bookmark = (EphyBookmark *)l->data;
-    GtkWidget *bookmark_row;
-
-    bookmark_row = ephy_bookmark_row_new (bookmark);
-    gtk_list_box_prepend (GTK_LIST_BOX (self->bookmarks_list_box), bookmark_row);
-  }
+  gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
+                           G_LIST_MODEL (manager),
+                           create_bookmark_row,
+                           NULL, NULL);
 
   tags = ephy_bookmarks_manager_get_tags (manager);
-  for (l = tags; l != NULL; l = g_list_next (l)) {
+  for (iter = g_sequence_get_begin_iter (tags);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
     GtkWidget *tag_box;
-    gchar *tag = (gchar *)l->data;
+    const char *tag = g_sequence_get (iter);
 
-    tag_box = build_tag_box (tag);
+    tag_box = create_tag_box (tag);
     gtk_list_box_prepend (GTK_LIST_BOX (self->tags_list_box), tag_box);
   }
-
-  g_signal_connect_object (manager, "bookmark-added",
-                           G_CALLBACK (bookmark_added_cb),
-                           self, G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->bookmarks_list_box, "row-activated",
                            G_CALLBACK (bookmarks_list_box_row_activated_cb),

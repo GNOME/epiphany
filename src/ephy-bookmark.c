@@ -24,7 +24,7 @@ struct _EphyBookmark {
 
   char        *url;
   char        *title;
-  GList       *tags;
+  GSequence   *tags;
 };
 
 G_DEFINE_TYPE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT)
@@ -36,7 +36,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  REMOVED,
+  LAST_SIGNAL
+};
+
 static GParamSpec *obj_properties[LAST_PROP];
+static guint       signals[LAST_SIGNAL];
 
 static void
 ephy_bookmark_set_property (GObject      *object,
@@ -68,7 +74,7 @@ ephy_bookmark_get_property (GObject      *object,
 
   switch (prop_id) {
     case PROP_TITLE:
-      g_value_set_string (value, self->title);
+      g_value_set_string (value, ephy_bookmark_get_title (self));
       break;
     case PROP_URL:
       g_value_set_string (value, ephy_bookmark_get_url (self));
@@ -86,8 +92,7 @@ ephy_bookmark_finalize (GObject *object)
   g_clear_pointer (&self->url, g_free);
   g_clear_pointer (&self->title, g_free);
 
-  g_list_free_full (self->tags, g_object_unref);
-  self->tags = NULL;
+  g_sequence_free (self->tags);
 
   G_OBJECT_CLASS (ephy_bookmark_parent_class)->finalize (object);
 }
@@ -116,6 +121,14 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+
+  signals[REMOVED] =
+    g_signal_new ("removed",
+                  EPHY_TYPE_BOOKMARK,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 }
 
 static void
@@ -139,15 +152,61 @@ ephy_bookmark_get_url (EphyBookmark *self) {
   return self->url;
 }
 
+const char *
+ephy_bookmark_get_title (EphyBookmark *bookmark)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (bookmark), NULL);
+
+  return bookmark->title;
+}
+
 void
-ephy_bookmark_set_tags (EphyBookmark *self, GList *tags)
+ephy_bookmark_add_tag (EphyBookmark *self,
+                       const char   *tag)
+{
+  GSequenceIter *tag_iter;
+  GSequenceIter *prev_tag_iter;
+
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+
+  tag_iter = g_sequence_search (self->tags,
+                                (gpointer)tag,
+                                (GCompareDataFunc)g_strcmp0,
+                                NULL);
+
+  prev_tag_iter = g_sequence_iter_prev (tag_iter);
+  if (g_strcmp0 (g_sequence_get (prev_tag_iter), tag) != 0)
+    g_sequence_insert_before (tag_iter, g_strdup (tag));
+}
+
+void
+ephy_bookmark_remove_tag (EphyBookmark *self,
+                          const char   *tag)
+{
+  GSequenceIter *tag_iter;
+
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+
+  tag_iter = g_sequence_lookup (self->tags,
+                                (gpointer)tag,
+                                (GCompareDataFunc)g_strcmp0,
+                                NULL);
+
+  g_assert (tag_iter != NULL);
+
+  g_sequence_remove (tag_iter);
+}
+
+void
+ephy_bookmark_set_tags (EphyBookmark *self, GSequence *tags)
 {
   g_return_if_fail (EPHY_IS_BOOKMARK (self));
+  g_return_if_fail (tags != NULL);
 
   self->tags = tags;
 }
 
-GList *
+GSequence *
 ephy_bookmark_get_tags (EphyBookmark *self)
 {
   g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);

@@ -17,6 +17,7 @@ EXTRA_DIST = \
 
 TYPES_H_FILES = \
 	ephy-link.h				\
+	ephy-bookmark-properties-grid.h		\
 	ephy-session.h				\
 	ephy-shell.h				\
 	ephy-window.h				\
@@ -26,6 +27,8 @@ TYPES_H_FILES = \
 libephymain_la_SOURCES = \
 	ephy-bookmark.c				\
 	ephy-bookmark.h				\
+	ephy-bookmark-properties-grid.c		\
+	ephy-bookmark-properties-grid.c		\
 	ephy-bookmark-row.c 			\
 	ephy-bookmark-row.h 			\
 	ephy-bookmarks-manager.c		\
@@ -131,6 +134,8 @@ RESOURCE_FILES = \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \
 	resources/shortcuts-dialog.ui		  \
+	resources/gtk/bookmark-properties-grid.ui \
+	resources/gtk/bookmark-row.ui		  \
 	resources/gtk/bookmarks-popover.ui	  \
 	resources/gtk/menus.ui			  \
 	$(NULL)
