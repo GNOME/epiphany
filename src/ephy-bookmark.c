@@ -19,6 +19,8 @@
 
 #include "ephy-bookmark.h"
 
+#include <json-glib/json-glib.h>
+
 struct _EphyBookmark {
   GObject      parent_instance;
 
@@ -28,7 +30,12 @@ struct _EphyBookmark {
   gint64       time_added;
 };
 
-G_DEFINE_TYPE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT)
+static JsonSerializableIface *serializable_iface = NULL;
+
+static void json_serializable_iface_init (gpointer g_iface);
+
+G_DEFINE_TYPE_EXTENDED (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE, json_serializable_iface_init))
 
 enum {
   PROP_0,
@@ -174,6 +181,43 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 static void
 ephy_bookmark_init (EphyBookmark *self)
 {
+}
+
+static JsonNode *
+ephy_bookmark_json_serializable_serialize_property (JsonSerializable *serializable,
+                                                    const gchar *property_name,
+                                                    const GValue *value,
+                                                    GParamSpec *pspec)
+{
+  return serializable_iface->serialize_property (serializable,
+                                                 property_name,
+                                                 value,
+                                                 pspec);
+}
+
+static gboolean
+ephy_bookmark_json_serializable_deserialize_property (JsonSerializable *serializable,
+                                                      const gchar *property_name,
+                                                      GValue *value,
+                                                      GParamSpec *pspec,
+                                                      JsonNode *property_node)
+{
+  return serializable_iface->deserialize_property (serializable,
+                                                   property_name,
+                                                   value,
+                                                   pspec,
+                                                   property_node);
+}
+
+static void
+json_serializable_iface_init (gpointer g_iface)
+{
+  JsonSerializableIface *iface = g_iface;
+
+  serializable_iface = g_type_default_interface_peek (JSON_TYPE_SERIALIZABLE);
+
+  iface->serialize_property = ephy_bookmark_json_serializable_serialize_property;
+  iface->deserialize_property = ephy_bookmark_json_serializable_deserialize_property;
 }
 
 EphyBookmark *
