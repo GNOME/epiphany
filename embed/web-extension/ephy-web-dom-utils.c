@@ -40,6 +40,7 @@ ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
   WebKitDOMHTMLCollection *forms;
   gulong forms_n;
   guint i;
+  gboolean modified_forms = FALSE;
 
   forms = webkit_dom_document_get_forms (document);
   forms_n = webkit_dom_html_collection_get_length (forms);
@@ -68,8 +69,11 @@ ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
           has_data = text && *text;
           g_free (text);
 
-          if (has_data)
-            return TRUE;
+          if (has_data) {
+            g_object_unref (elements);
+            modified_forms = TRUE;
+            goto out;
+          }
         }
 
       if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
@@ -81,8 +85,11 @@ ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
            * modified and it does not have a lot of text the user is
            * likely not very interested in saving this work, so do
            * nothing (eg, google search input). */
-          if (modified_input_element)
-            return TRUE;
+          if (modified_input_element) {
+            g_object_unref (elements);
+            modified_forms = TRUE;
+            goto out;
+          }
 
           modified_input_element = TRUE;
 
@@ -90,13 +97,19 @@ ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
           length = g_utf8_strlen (text, -1);
           g_free (text);
 
-          if (length > 50)
-            return TRUE;
+          if (length > 50) {
+            g_object_unref (elements);
+            modified_forms = TRUE;
+            goto out;
+          }
         }
     }
+    g_object_unref (elements);
   }
 
-  return FALSE;
+ out:
+  g_object_unref (forms);
+  return modified_forms;
 }
 
 /**
@@ -130,6 +143,7 @@ ephy_web_dom_utils_get_application_title (WebKitDOMDocument *document)
     g_free (property);
     g_free (name);
   }
+  g_object_unref (metas);
 
   return title;
 }
@@ -187,6 +201,7 @@ get_icon_from_mstile (WebKitDOMDocument *document,
         color = webkit_dom_html_meta_element_get_content (WEBKIT_DOM_HTML_META_ELEMENT (node));
     }
   }
+  g_object_unref (metas);
 
   ret = (image != NULL && *image != '\0');
 
@@ -229,6 +244,7 @@ get_icon_from_ogp (WebKitDOMDocument *document,
     g_free (property);
     g_free (itemprop);
   }
+  g_object_unref (metas);
 
   ret = (image != NULL && *image != '\0');
 
@@ -266,6 +282,7 @@ get_icon_from_touch_icon (WebKitDOMDocument *document,
     }
     g_free (rel);
   }
+  g_object_unref (links);
 
   ret = (image != NULL && *image != '\0');
 
@@ -306,6 +323,7 @@ get_icon_from_favicon (WebKitDOMDocument *document,
     }
     g_free (rel);
   }
+  g_object_unref (links);
 
   ret = (image != NULL && *image != '\0');
 
