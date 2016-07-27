@@ -125,6 +125,14 @@ gchar                      *ephy_sync_crypto_create_assertion        (const gcha
                                                                       guint64                   duration,
                                                                       EphySyncCryptoRSAKeyPair *keypair);
 
+guint8                     *ephy_sync_crypto_encode_aes_256          (const guint8 *key,
+                                                                      const guint8 *data,
+                                                                      gsize         data_length);
+
+guint8                     *ephy_sync_crypto_decode_aes_256          (const guint8 *key,
+                                                                      const guint8 *data,
+                                                                      gsize         data_length);
+
 gchar                      *ephy_sync_crypto_encode_hex              (guint8 *data,
                                                                       gsize   data_length);
 
