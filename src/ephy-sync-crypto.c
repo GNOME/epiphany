@@ -20,6 +20,7 @@
 
 #include <glib/gstdio.h>
 #include <libsoup/soup.h>
+#include <nettle/aes.h>
 #include <string.h>
 
 #define HAWK_VERSION  1
@@ -970,6 +971,40 @@ out:
   mpz_clear (signature);
 
   return assertion;
+}
+
+guint8 *
+ephy_sync_crypto_encode_aes_256 (const guint8 *key,
+                                 const guint8 *data,
+                                 gsize         data_length)
+{
+  struct aes256_ctx aes;
+  guint8 *out;
+
+  g_assert (data_length % AES_BLOCK_SIZE == 0);
+
+  out = g_malloc (data_length);
+  aes256_set_encrypt_key (&aes, key);
+  aes256_encrypt (&aes, data_length, out, data);
+
+  return out;
+}
+
+guint8 *
+ephy_sync_crypto_decode_aes_256 (const guint8 *key,
+                                 const guint8 *data,
+                                 gsize         data_length)
+{
+  struct aes256_ctx aes;
+  guint8 *out;
+
+  g_assert (data_length % AES_BLOCK_SIZE == 0);
+
+  out = g_malloc (data_length);
+  aes256_set_decrypt_key (&aes, key);
+  aes256_decrypt (&aes, data_length, out, data);
+
+  return out;
 }
 
 gchar *
