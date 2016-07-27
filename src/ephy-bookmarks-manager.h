@@ -34,6 +34,9 @@ void         ephy_bookmarks_manager_remove_bookmark      (EphyBookmarksManager *
 GList       *ephy_bookmarks_manager_get_bookmarks        (EphyBookmarksManager *self);
 GSequence   *ephy_bookmarks_manager_get_tags             (EphyBookmarksManager *self);
 
+void         ephy_bookmarks_manager_save_to_file         (EphyBookmarksManager *self);
+void         ephy_bookmarks_manager_load_from_file       (EphyBookmarksManager *self);
+
 G_END_DECLS
 
 #endif /* EPHY_BOOKMARKS_MANAGER_H */

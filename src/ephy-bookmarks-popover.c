@@ -156,26 +156,10 @@ static void
 ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  GSequence *tags, *tags1, *tags2;
+  GSequence *tags;
   GSequenceIter *iter;
-  EphyBookmark *dummy_bookmark;
-  gint i;
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://duckduckgo.com/asdasdas/asdas"), g_strdup ("Test title"));
-  tags1 = g_sequence_new (g_free);
-  for (i = 0; i < 20; i++)
-    g_sequence_insert_sorted (tags1, g_strdup_printf ("Fun %d", i), (GCompareDataFunc)g_strcmp0, NULL);
-
-  ephy_bookmark_set_tags (dummy_bookmark, tags1);
-  ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
-
-  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://wikipedia.com"), g_strdup ("wikipedia"));
-  ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
-  tags2 = g_sequence_new (g_free);
-  g_sequence_insert_sorted (tags2, g_strdup_printf ("Not Fun %d", 1), (GCompareDataFunc)g_strcmp0, NULL);
-  ephy_bookmark_set_tags (dummy_bookmark, tags2);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
                            G_LIST_MODEL (manager),
