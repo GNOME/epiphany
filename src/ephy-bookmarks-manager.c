@@ -20,6 +20,8 @@
 #include "ephy-bookmarks-manager.h"
 
 #include "ephy-file-helpers.h"
+#include "gvdb-builder.h"
+#include "gvdb-reader.h"
 
 #define EPHY_BOOKMARKS_FILE "bookmarks.gvdb"
 
@@ -28,13 +30,44 @@ struct _EphyBookmarksManager {
 
   GList      *bookmarks;
 
-  gchar      *gvdb_file;
+  gchar      *gvdb_filename;
 };
 
 static void list_model_iface_init     (GListModelInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+
+static void
+gvdb_hash_table_insert_variant (GHashTable *table,
+                                const char *key,
+                                GVariant   *value)
+{
+  GvdbItem *item;
+
+  item = gvdb_hash_table_insert (table, key);
+  gvdb_item_set_value (item, value);
+}
+
+static GVariant *
+build_variant (EphyBookmark *bookmark)
+{
+  GVariantBuilder builder;
+  GSequence *tags;
+  GSequenceIter *iter;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("as"));
+  g_variant_builder_add (&builder, "s", ephy_bookmark_get_title (bookmark));
+
+  tags = ephy_bookmark_get_tags (bookmark);
+  for (iter = g_sequence_get_begin_iter (tags);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    g_variant_builder_add (&builder, "s", g_sequence_get (iter));
+  }
+
+  return g_variant_builder_end (&builder);
+}
 
 static void
 ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
@@ -44,9 +77,11 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
 static void
 ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 {
-  self->gvdb_file = g_build_filename (ephy_dot_dir (),
-                                         EPHY_BOOKMARKS_FILE,
-                                         NULL);
+  self->gvdb_filename = g_build_filename (ephy_dot_dir (),
+                                          EPHY_BOOKMARKS_FILE,
+                                          NULL);
+
+  ephy_bookmarks_manager_load_from_file (self);
 }
 
 static GType
@@ -157,4 +192,69 @@ ephy_bookmarks_manager_get_tags (EphyBookmarksManager *self)
   }
 
   return tags;
+}
+
+void
+ephy_bookmarks_manager_save_to_file (EphyBookmarksManager *self)
+{
+  GHashTable *table;
+  GList *l;
+
+  table = gvdb_hash_table_new (NULL, "bookmarks");
+
+  for (l = self->bookmarks; l != NULL; l = l->next) {
+    gvdb_hash_table_insert_variant (table,
+                                    ephy_bookmark_get_url (l->data),
+                                    build_variant (l->data));
+  }
+
+  gvdb_table_write_contents (table, self->gvdb_filename, FALSE, NULL);
+
+  g_hash_table_unref (table);
+}
+
+void
+ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
+{
+  GvdbTable *table;
+  char **list;
+  int length;
+  int i;
+
+  /* Create a new table to hold data stored in file. */
+  table = gvdb_table_new (self->gvdb_filename, TRUE, NULL);
+
+  /* Iterate over all keys (url's) in the table. */
+  list = gvdb_table_get_names (table, &length);
+  for (i = 0; i < length; i++) {
+    EphyBookmark *bookmark;
+    GVariant *value;
+    GVariantIter iter;
+    GSequence *tags;
+    char *tag;
+    char *title;
+
+    /* Obtain the correspoding GVariant. */
+    value = gvdb_table_get_value (table, list[i]);
+
+    g_variant_iter_init (&iter, value);
+
+    /* The first string in the array is the bookmark's title. */
+    g_variant_iter_next (&iter, "s", &title);
+
+    /* Add all stored tags in a GSequence. */
+    tags = g_sequence_new (g_free);
+    while (g_variant_iter_next (&iter, "s", &tag)) {
+      g_sequence_insert_sorted (tags, tag,
+                                (GCompareDataFunc)g_strcmp0,
+                                NULL);
+    }
+
+    /* Create the new bookmark. */
+    bookmark = ephy_bookmark_new (g_strdup (list[i]), title);
+    ephy_bookmark_set_tags (bookmark, tags);
+    ephy_bookmarks_manager_add_bookmark (self, bookmark);
+  }
+
+  gvdb_table_free (table);
 }
