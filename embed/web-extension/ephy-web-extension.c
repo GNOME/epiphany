@@ -266,6 +266,7 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
     g_warning ("Error sending formAuthData message");
   }
 
+  g_object_unref (dom_window);
   g_free (message);
   g_object_unref (form_auth);
 }

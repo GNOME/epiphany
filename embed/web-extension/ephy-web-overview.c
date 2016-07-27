@@ -161,6 +161,7 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       } else {
         webkit_dom_element_remove_attribute (item->thumbnail, "style");
       }
+      g_clear_object (&class_list);
     } else {
       WebKitDOMDocument *document;
       WebKitDOMElement *item_list, *anchor;
@@ -308,12 +309,16 @@ ephy_web_overview_update_thumbnail_in_model_from_element (EphyWebOverview  *over
   char *thumbnail_path;
 
   style = webkit_dom_element_get_style (thumbnail);
-  if (webkit_dom_css_style_declaration_is_property_implicit (style, "background"))
+  if (webkit_dom_css_style_declaration_is_property_implicit (style, "background")) {
+    g_object_unref (style);
     return;
+  }
 
   background = webkit_dom_css_style_declaration_get_property_value (style, "background");
-  if (!background)
+  if (!background) {
+    g_object_unref (style);
     return;
+  }
 
   thumbnail_path = g_strrstr (background, "file://");
   if (thumbnail_path) {
@@ -337,6 +342,7 @@ ephy_web_overview_update_thumbnail_in_model_from_element (EphyWebOverview  *over
       update_thumbnail_element_style (thumbnail, path);
   }
   g_free (background);
+  g_object_unref (style);
 }
 
 static void
