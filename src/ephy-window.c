@@ -1481,10 +1481,13 @@ populate_context_menu (WebKitWebView       *web_view,
     char *ellipsized = ellipsize_string (selected_text, 32);
     if (ellipsized) {
       gchar *label;
+      GVariant *value;
 
       label = g_strdup_printf (_("Search the Web for '%s'"), ellipsized);
+      value = g_variant_new_string (label);
       search_selection_action_name = g_action_print_detailed_name ("search-selection",
-                                                                   g_variant_new_string (label)),
+                                                                   value);
+      g_variant_unref (value);
       can_search_selection = TRUE;
 
       g_free (label);
@@ -2270,16 +2273,18 @@ setup_tab_accels (EphyWindow *window)
   for (i = 0; i < TAB_ACCELS_N; i++) {
     GSimpleAction *simple_action;
     char *action_name;
+    char *action_name_with_tab;
     char *accel;
 
     action_name = g_strdup_printf ("accel-%d", i);
+    action_name_with_tab = g_strconcat ("tab.", action_name, NULL);
     accel = g_strdup_printf ("<alt>%d", (i + 1) % TAB_ACCELS_N);
 
     simple_action = g_simple_action_new (action_name, NULL);
 
     g_action_map_add_action (G_ACTION_MAP (action_group), G_ACTION (simple_action));
     gtk_application_set_accels_for_action (GTK_APPLICATION (app),
-                                           g_strconcat ("tab.", action_name, NULL),
+                                           action_name_with_tab,
                                            (const gchar*[]) {accel, NULL});
 
     g_signal_connect (G_ACTION (simple_action), "activate",
@@ -2288,6 +2293,7 @@ setup_tab_accels (EphyWindow *window)
     g_object_unref (simple_action);
     g_free (accel);
     g_free (action_name);
+    g_free (action_name_with_tab);
   }
 }
 

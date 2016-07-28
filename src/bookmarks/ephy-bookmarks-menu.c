@@ -52,18 +52,21 @@ append_bookmarks (GMenu           *menu,
 {
   EphyNode *child;
   const gchar *action_name;
+  GVariant *location;
 
   long i;
 
   for (i = 0; i < bookmarks->len; i++) {
     child = g_ptr_array_index (bookmarks, i);
 
-    action_name = g_action_print_detailed_name ("win.open-bookmark",
-                                                g_variant_new_string (ephy_node_get_property_string (child, EPHY_NODE_BMK_PROP_LOCATION)));
+    location = g_variant_new_string (ephy_node_get_property_string (child, EPHY_NODE_BMK_PROP_LOCATION));
+    action_name = g_action_print_detailed_name ("win.open-bookmark", location);
+    g_variant_unref (location);
 
     g_menu_append (menu,
                    ephy_node_get_property_string (child, EPHY_NODE_BMK_PROP_TITLE),
                    action_name);
+
   }
 }
 
