@@ -67,119 +67,6 @@ build_json_string (const gchar *first_key,
                    const gchar *first_value,
                    ...) G_GNUC_NULL_TERMINATED;
 
-static gboolean
-storage_credentials_is_expired (EphySyncService *self)
-{
-  if (self->storage_credentials_expiry_time == 0)
-    return TRUE;
-
-  /* Don't use storage credentials that are going to expire in less than 1 minute */
-  return self->storage_credentials_expiry_time < current_time_in_seconds - 60;
-}
-
-static void
-asynchronous_hawk_post_request (EphySyncService     *self,
-                                const gchar         *endpoint,
-                                const gchar         *id,
-                                guint8              *key,
-                                gsize                key_length,
-                                gchar               *request_body,
-                                SoupSessionCallback  callback)
-{
-  EphySyncCryptoHawkOptions *hawk_options;
-  EphySyncCryptoHawkHeader *hawk_header;
-  SoupMessage *message;
-  gchar *url;
-  const gchar *content_type = "application/json";
-
-  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
-  message = soup_message_new (SOUP_METHOD_POST, url);
-  soup_message_set_request (message, content_type,
-                            SOUP_MEMORY_COPY,
-                            request_body, strlen (request_body));
-
-  hawk_options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL,
-                                                    g_strdup (content_type),
-                                                    NULL, NULL, NULL,
-                                                    g_strdup (request_body),
-                                                    NULL);
-  hawk_header = ephy_sync_crypto_compute_hawk_header (url, "POST",
-                                                      id,
-                                                      key, key_length,
-                                                      hawk_options);
-  soup_message_headers_append (message->request_headers,
-                               "authorization", hawk_header->header);
-  soup_message_headers_append (message->request_headers,
-                               "content-type", content_type);
-  soup_session_queue_message (self->soup_session, message, callback, self);
-
-  g_free (url);
-  ephy_sync_crypto_hawk_options_free (hawk_options);
-  ephy_sync_crypto_hawk_header_free (hawk_header);
-}
-
-static guint
-synchronous_hawk_get_request (EphySyncService  *self,
-                              const gchar      *endpoint,
-                              const gchar      *id,
-                              guint8           *key,
-                              gsize             key_length,
-                              JsonNode        **node)
-{
-  EphySyncCryptoHawkHeader *hawk_header;
-  SoupMessage *message;
-  JsonParser *parser;
-  gchar *url;
-
-  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
-  message = soup_message_new (SOUP_METHOD_GET, url);
-  hawk_header = ephy_sync_crypto_compute_hawk_header (url, "GET",
-                                                      id,
-                                                      key, key_length,
-                                                      NULL);
-  soup_message_headers_append (message->request_headers,
-                               "authorization", hawk_header->header);
-  soup_session_send_message (self->soup_session, message);
-
-  if (node != NULL) {
-    parser = json_parser_new ();
-    json_parser_load_from_data (parser,
-                                message->response_body->data,
-                                -1, NULL);
-    *node = json_node_copy (json_parser_get_root (parser));
-    g_object_unref (parser);
-  }
-
-  g_free (url);
-  ephy_sync_crypto_hawk_header_free (hawk_header);
-
-  return message->status_code;
-}
-
-static void
-session_destroyed_cb (SoupSession *session,
-                      SoupMessage *message,
-                      gpointer     user_data)
-{
-  JsonParser *parser;
-  JsonObject *json;
-
-  if (message->status_code == STATUS_OK) {
-    LOG ("Session destroyed");
-    return;
-  }
-
-  parser = json_parser_new ();
-  json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
-  json = json_node_get_object (json_parser_get_root (parser));
-
-  g_warning ("Failed to destroy session: errno: %ld, errmsg: %s",
-             json_object_get_int_member (json, "errno"),
-             json_object_get_string_member (json, "message"));
-
-  g_object_unref (parser);
-}
-
 static gchar *
 build_json_string (const gchar *first_key,
                    const gchar *first_value,
@@ -191,24 +78,17 @@ build_json_string (const gchar *first_key,
   gchar *value;
   gchar *tmp;
 
-  json = g_strconcat ("{\"",
-                      first_key, "\": \"",
-                      first_value, "\"",
-                      NULL);
-
+  json = g_strconcat ("{\"", first_key, "\": \"", first_value, "\"", NULL);
   va_start (args, first_value);
+
   while ((key = va_arg (args, gchar *)) != NULL) {
     value = va_arg (args, gchar *);
-
     tmp = json;
-    json = g_strconcat (json, ", \"",
-                        key, "\": \"",
-                        value, "\"",
-                        NULL);
+    json = g_strconcat (json, ", \"", key, "\": \"", value, "\"", NULL);
     g_free (tmp);
   }
-  va_end (args);
 
+  va_end (args);
   tmp = json;
   json = g_strconcat (json, "}", NULL);
   g_free (tmp);
@@ -269,9 +149,125 @@ base64_parse (const gchar *string,
   return decoded;
 }
 
+static void
+destroy_session_response_cb (SoupSession *session,
+                             SoupMessage *message,
+                             gpointer     user_data)
+{
+  JsonParser *parser;
+  JsonObject *json;
+
+  if (message->status_code == STATUS_OK) {
+    LOG ("Session destroyed");
+    return;
+  }
+
+  parser = json_parser_new ();
+  json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
+  json = json_node_get_object (json_parser_get_root (parser));
+
+  g_warning ("Failed to destroy session: errno: %ld, errmsg: %s",
+             json_object_get_int_member (json, "errno"),
+             json_object_get_string_member (json, "message"));
+
+  g_object_unref (parser);
+}
+
 static gboolean
-check_certificate (EphySyncService *self,
-                   const gchar     *certificate)
+ephy_sync_service_storage_credentials_is_expired (EphySyncService *self)
+{
+  if (self->storage_credentials_id == NULL || self->storage_credentials_key == NULL)
+    return TRUE;
+
+  if (self->storage_credentials_expiry_time == 0)
+    return TRUE;
+
+  /* Consider a 60 seconds safety interval. */
+  return self->storage_credentials_expiry_time < current_time_in_seconds - 60;
+}
+
+static void
+ephy_sync_service_fxa_hawk_post_async (EphySyncService     *self,
+                                       const gchar         *endpoint,
+                                       const gchar         *id,
+                                       guint8              *key,
+                                       gsize                key_length,
+                                       gchar               *request_body,
+                                       SoupSessionCallback  callback)
+{
+  EphySyncCryptoHawkOptions *hawk_options;
+  EphySyncCryptoHawkHeader *hawk_header;
+  SoupMessage *message;
+  gchar *url;
+  const gchar *content_type = "application/json";
+
+  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
+  message = soup_message_new (SOUP_METHOD_POST, url);
+  soup_message_set_request (message, content_type,
+                            SOUP_MEMORY_COPY,
+                            request_body, strlen (request_body));
+
+  hawk_options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL,
+                                                    g_strdup (content_type),
+                                                    NULL, NULL, NULL,
+                                                    g_strdup (request_body),
+                                                    NULL);
+  hawk_header = ephy_sync_crypto_compute_hawk_header (url, "POST",
+                                                      id,
+                                                      key, key_length,
+                                                      hawk_options);
+  soup_message_headers_append (message->request_headers,
+                               "authorization", hawk_header->header);
+  soup_message_headers_append (message->request_headers,
+                               "content-type", content_type);
+  soup_session_queue_message (self->soup_session, message, callback, self);
+
+  g_free (url);
+  ephy_sync_crypto_hawk_options_free (hawk_options);
+  ephy_sync_crypto_hawk_header_free (hawk_header);
+}
+
+static guint
+ephy_sync_service_fxa_hawk_get_sync (EphySyncService  *self,
+                                     const gchar      *endpoint,
+                                     const gchar      *id,
+                                     guint8           *key,
+                                     gsize             key_length,
+                                     JsonNode        **node)
+{
+  EphySyncCryptoHawkHeader *hawk_header;
+  SoupMessage *message;
+  JsonParser *parser;
+  gchar *url;
+
+  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
+  message = soup_message_new (SOUP_METHOD_GET, url);
+  hawk_header = ephy_sync_crypto_compute_hawk_header (url, "GET",
+                                                      id,
+                                                      key, key_length,
+                                                      NULL);
+  soup_message_headers_append (message->request_headers,
+                               "authorization", hawk_header->header);
+  soup_session_send_message (self->soup_session, message);
+
+  if (node != NULL) {
+    parser = json_parser_new ();
+    json_parser_load_from_data (parser,
+                                message->response_body->data,
+                                -1, NULL);
+    *node = json_node_copy (json_parser_get_root (parser));
+    g_object_unref (parser);
+  }
+
+  g_free (url);
+  ephy_sync_crypto_hawk_header_free (hawk_header);
+
+  return message->status_code;
+}
+
+static gboolean
+ephy_sync_service_certificate_is_valid (EphySyncService *self,
+                                        const gchar     *certificate)
 {
   JsonParser *parser;
   JsonObject *json;
@@ -329,9 +325,9 @@ out:
 }
 
 static void
-token_server_response_cb (SoupSession *session,
-                          SoupMessage *message,
-                          gpointer     user_data)
+obtain_storage_credentials_response_cb (SoupSession *session,
+                                        SoupMessage *message,
+                                        gpointer     user_data)
 {
   EphySyncService *self;
   JsonParser *parser;
@@ -367,7 +363,7 @@ token_server_response_cb (SoupSession *session,
 }
 
 static void
-send_get_request_to_token_server (EphySyncService *self)
+ephy_sync_service_obtain_storage_credentials (EphySyncService *self)
 {
   SoupMessage *message;
   guint8 *kB = NULL;
@@ -401,7 +397,7 @@ send_get_request_to_token_server (EphySyncService *self)
   soup_message_headers_append (message->request_headers,
                                "authorization", authorization);
   soup_session_queue_message (self->soup_session, message,
-                              token_server_response_cb, self);
+                              obtain_storage_credentials_response_cb, self);
 
   g_free (kB);
   g_free (hashed_kB);
@@ -412,9 +408,9 @@ send_get_request_to_token_server (EphySyncService *self)
 }
 
 static void
-sign_certificate_response_cb (SoupSession *session,
-                              SoupMessage *message,
-                              gpointer     user_data)
+obtain_signed_certificate_response_cb (SoupSession *session,
+                                       SoupMessage *message,
+                                       gpointer     user_data)
 {
   EphySyncService *self;
   JsonParser *parser;
@@ -436,22 +432,22 @@ sign_certificate_response_cb (SoupSession *session,
 
   certificate = json_object_get_string_member (json, "cert");
 
-  if (check_certificate (self, certificate) == FALSE) {
+  if (ephy_sync_service_certificate_is_valid (self, certificate) == FALSE) {
     ephy_sync_crypto_rsa_key_pair_free (self->keypair);
     goto out;
   }
 
   self->certificate = g_strdup (certificate);
 
-  /* See the comment in get_storage_credentials_from_token_server() */
-  send_get_request_to_token_server (self);
+  /* See the comment in ephy_sync_service_send_storage_message(). */
+  ephy_sync_service_obtain_storage_credentials (self);
 
 out:
   g_object_unref (parser);
 }
 
 static void
-sign_certificate (EphySyncService *self)
+ephy_sync_service_obtain_signed_certificate (EphySyncService *self)
 {
   EphySyncCryptoProcessedST *processed_st;
   gchar *tokenID;
@@ -483,13 +479,13 @@ sign_certificate (EphySyncService *self)
    */
   request_body = g_strdup_printf ("{\"publicKey\": %s, \"duration\": %d}",
                                   public_key_json, 30 * 60 * 1000);
-  asynchronous_hawk_post_request (self,
-                                  "certificate/sign",
-                                  tokenID,
-                                  processed_st->reqHMACkey,
-                                  EPHY_SYNC_TOKEN_LENGTH,
-                                  request_body,
-                                  sign_certificate_response_cb);
+  ephy_sync_service_fxa_hawk_post_async (self,
+                                         "certificate/sign",
+                                         tokenID,
+                                         processed_st->reqHMACkey,
+                                         EPHY_SYNC_TOKEN_LENGTH,
+                                         request_body,
+                                         obtain_signed_certificate_response_cb);
 
   ephy_sync_crypto_processed_st_free (processed_st);
   g_free (tokenID);
@@ -499,21 +495,23 @@ sign_certificate (EphySyncService *self)
   g_free (e_str);
 }
 
+/* FIXME: Pass the data to be sent to the storage server. */
 static void
-get_storage_credentials_from_token_server (EphySyncService *self)
+ephy_sync_service_send_storage_message (EphySyncService *self)
 {
-  if (storage_credentials_is_expired (self) == FALSE)
+  if (ephy_sync_service_storage_credentials_is_expired (self) == FALSE)
     return;
 
   /* Drop the old certificate. */
   g_clear_pointer (&self->certificate, g_free);
 
   /* The only purpose of certificates is to obtain a signed BrowserID that is
-   * needed to talk to the Token Server. Since sign_certificate() completes
-   * asynchronously (and we can't know when that happens), we will trust it to
-   * send a GET request to the Token Server.
+   * needed to talk to the Token Server.
+   * Since ephy_sync_service_obtain_signed_certificate() completes asynchronously
+   * (and we can't know when that happens), we will trust it to send a request to
+   * the Token Server.
    */
-  sign_certificate (self);
+  ephy_sync_service_obtain_signed_certificate (self);
 }
 
 static void
@@ -741,7 +739,7 @@ ephy_sync_service_destroy_session (EphySyncService *self,
   soup_message_headers_append (message->request_headers,
                                "content-type", content_type);
   soup_session_queue_message (self->soup_session, message,
-                              session_destroyed_cb, NULL);
+                              destroy_session_response_cb, NULL);
 
   ephy_sync_crypto_hawk_options_free (hawk_options);
   ephy_sync_crypto_hawk_header_free (hawk_header);
@@ -768,12 +766,12 @@ ephy_sync_service_fetch_sync_keys (EphySyncService *self,
   unwrapKB = ephy_sync_crypto_decode_hex (unwrapBKey);
   processed_kft = ephy_sync_crypto_process_key_fetch_token (keyFetchToken);
   tokenID = ephy_sync_crypto_encode_hex (processed_kft->tokenID, 0);
-  status_code = synchronous_hawk_get_request (self,
-                                              "account/keys",
-                                              tokenID,
-                                              processed_kft->reqHMACkey,
-                                              EPHY_SYNC_TOKEN_LENGTH,
-                                              &node);
+  status_code = ephy_sync_service_fxa_hawk_get_sync (self,
+                                                     "account/keys",
+                                                     tokenID,
+                                                     processed_kft->reqHMACkey,
+                                                     EPHY_SYNC_TOKEN_LENGTH,
+                                                     &node);
   json = json_node_get_object (node);
 
   if (status_code != STATUS_OK) {
