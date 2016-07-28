@@ -33,7 +33,6 @@
 #define FXA_BASEURL             "https://api.accounts.firefox.com/"
 #define FXA_VERSION             "v1/"
 #define STATUS_OK               200
-#define CERTIFICATE_DURATION    (12 * 60 * 60)
 #define current_time_in_seconds (g_get_real_time () / 1000000)
 
 struct _EphySyncService {
@@ -52,7 +51,6 @@ struct _EphySyncService {
   gint64 last_auth_at;
 
   gchar *certificate;
-  gint64 certificate_expiry_time;
 
   gchar *storage_endpoint;
   gchar *storage_token_id;
@@ -76,17 +74,7 @@ storage_token_is_expired (EphySyncService *self)
     return TRUE;
 
   /* Don't use storage tokens that are going to expire in less than 1 minute */
-  return self->certificate_expiry_time < current_time_in_seconds - 60;
-}
-
-static gboolean
-certificate_is_expired (EphySyncService *self)
-{
-  if (self->certificate_expiry_time == 0)
-    return TRUE;
-
-  /* Don't use certificates that are going to expire in less than 1 minute */
-  return self->certificate_expiry_time < current_time_in_seconds - 60;
+  return self->storage_token_expiry_time < current_time_in_seconds - 60;
 }
 
 static void
@@ -328,7 +316,6 @@ check_certificate (EphySyncService *self,
   }
 
   self->last_auth_at = json_object_get_int_member (json, "fxa-lastAuthAt");
-  self->certificate_expiry_time = json_object_get_int_member (json, "exp") / 1000;
   retval = TRUE;
 
 out:
@@ -490,11 +477,12 @@ sign_certificate (EphySyncService *self)
                                        "n", n_str,
                                        "e", e_str,
                                        NULL);
-  /* Duration is the lifetime of the certificate in milliseconds.
-   * The FxA server limits the duration to 24 hours.
+  /* Duration is the lifetime of the certificate in milliseconds. The FxA server
+   * limits the duration to 24 hours. For our purposes, a duration of 30 minutes
+   * will suffice.
    */
   request_body = g_strdup_printf ("{\"publicKey\": %s, \"duration\": %d}",
-                                  public_key_json, CERTIFICATE_DURATION * 1000);
+                                  public_key_json, 30 * 60 * 1000);
   asynchronous_hawk_post_request (self,
                                   "certificate/sign",
                                   tokenID,
@@ -517,14 +505,8 @@ get_storage_token_from_token_server (EphySyncService *self)
   if (storage_token_is_expired (self) == FALSE)
     return;
 
-  if (certificate_is_expired (self) == FALSE) {
-    send_get_request_to_token_server (self);
-    return;
-  }
-
   /* Drop the old certificate. */
   g_clear_pointer (&self->certificate, g_free);
-  self->certificate_expiry_time = 0;
 
   /* The only purpose of certificates is to obtain a signed BrowserID that is
    * needed to talk to the Token Server. Since sign_certificate() completes
