@@ -124,10 +124,11 @@ $edge_color: lighten($incognito_color, 13%);
   }
 }
 
+$close_button_fg_color: lighten($fg_color, 10%);
 .bookmark-tag-widget {
   padding-left: 8px;
   padding-right: 8px;
-  background-color: darken($bg_color, 7%);
+  background-color: darken($bg_color, 10%);
 
   label {
     padding-left: 8px;
@@ -135,20 +136,60 @@ $edge_color: lighten($incognito_color, 13%);
   }
 
   button {
-    color: white;
+    background: none;
+    border: none;
+    box-shadow: none;
+
+    &:last-child {
+      image {
+        color: $close_button_fg_color;
+      }
+
+      &:hover {
+        image {
+          border: 1px solid;
+          border-radius: 3px;
+          @include button(normal, $bg_color, $close_button_fg_color);
+          @include button(hover, $bg_color, $close_button_fg_color);
+        }
+      }
+
+      &:active {
+        image {
+          @include button(normal, $bg_color, $close_button_fg_color);
+          @include button(active, $bg_color, $close_button_fg_color);
+        }
+      }
+    }
   }
 }
 
 .bookmark-tag-widget-selected {
   background-color: $selected_bg_color;
-  color: white;
+
+  label {
+    color: white;
+  }
 
   button {
-    color: white;
+    &:last-child {
+      image {
+        color: white;
+      }
 
-    &:hover {
-      @include button(hover, $selected_bg_color);
-      color: white;
+      &:hover {
+        image {
+          @include button(normal, $selected_bg_color, white);
+          @include button(hover, $selected_bg_color, white);
+        }
+      }
+
+      &:active {
+        image {
+          @include button(normal, $selected_bg_color, white);
+          @include button(active, $selected_bg_color, white);
+        }
+      }
     }
   }
 }

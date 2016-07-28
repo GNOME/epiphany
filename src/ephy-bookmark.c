@@ -168,14 +168,16 @@ ephy_bookmark_add_tag (EphyBookmark *self,
   GSequenceIter *prev_tag_iter;
 
   g_return_if_fail (EPHY_IS_BOOKMARK (self));
+  g_return_if_fail (tag != NULL);
 
   tag_iter = g_sequence_search (self->tags,
                                 (gpointer)tag,
-                                (GCompareDataFunc)g_strcmp0,
+                                (GCompareDataFunc)ephy_bookmark_tags_compare,
                                 NULL);
 
   prev_tag_iter = g_sequence_iter_prev (tag_iter);
-  if (g_strcmp0 (g_sequence_get (prev_tag_iter), tag) != 0)
+  if (g_sequence_iter_is_end (prev_tag_iter)
+      || g_strcmp0 (g_sequence_get (prev_tag_iter), tag) != 0)
     g_sequence_insert_before (tag_iter, g_strdup (tag));
 }
 
@@ -186,15 +188,15 @@ ephy_bookmark_remove_tag (EphyBookmark *self,
   GSequenceIter *tag_iter;
 
   g_return_if_fail (EPHY_IS_BOOKMARK (self));
+  g_return_if_fail (tag != NULL);
 
   tag_iter = g_sequence_lookup (self->tags,
                                 (gpointer)tag,
-                                (GCompareDataFunc)g_strcmp0,
+                                (GCompareDataFunc)ephy_bookmark_tags_compare,
                                 NULL);
 
-  g_assert (tag_iter != NULL);
-
-  g_sequence_remove (tag_iter);
+  if (tag_iter)
+    g_sequence_remove (tag_iter);
 }
 
 void
@@ -212,4 +214,25 @@ ephy_bookmark_get_tags (EphyBookmark *self)
   g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
 
   return self->tags;
+}
+
+int
+ephy_bookmark_tags_compare (const char *tag1, const char *tag2)
+{
+  int result;
+
+  g_assert (tag1 != NULL);
+  g_assert (tag2 != NULL);
+
+  result = g_strcmp0 (tag1, tag2);
+
+  if (result == 0)
+    return 0;
+
+  if (g_strcmp0 (tag1, "Favorites") == 0)
+    return -1;
+  if (g_strcmp0 (tag2, "Favorites") == 0)
+    return 1;
+
+  return result;
 }

@@ -135,25 +135,90 @@ button.active-menu {
 .bookmark-tag-widget {
   padding-left: 8px;
   padding-right: 8px;
-  background-color: #d7d7d5; }
+  background-color: #cfcfcd; }
   .bookmark-tag-widget label {
     padding-left: 8px;
     padding-right: 8px; }
   .bookmark-tag-widget button {
-    color: white; }
-
-.bookmark-tag-widget-selected {
-  background-color: #4a90d9;
-  color: white; }
-  .bookmark-tag-widget-selected button {
-    color: white; }
-    .bookmark-tag-widget-selected button:hover {
-      color: #2e3436;
-      outline-color: rgba(46, 52, 54, 0.3);
-      border-color: #215d9c;
-      border-bottom-color: #184472;
-      background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5);
+    background: none;
+    border: none;
+    box-shadow: none; }
+    .bookmark-tag-widget button:last-child image {
+      color: #454f52; }
+    .bookmark-tag-widget button:last-child:hover image {
+      border: 1px solid;
+      border-radius: 3px;
+      color: #454f52;
+      outline-color: rgba(69, 79, 82, 0.3);
+      border-color: #b6b6b3;
+      border-bottom-color: #91918c;
+      background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
       text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
       -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.4);
-      color: white; }
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.8);
+      color: #454f52;
+      outline-color: rgba(69, 79, 82, 0.3);
+      border-color: #b6b6b3;
+      border-bottom-color: #91918c;
+      background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd);
+      text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+      -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+      box-shadow: inset 0 1px white; }
+    .bookmark-tag-widget button:last-child:active image {
+      color: #454f52;
+      outline-color: rgba(69, 79, 82, 0.3);
+      border-color: #b6b6b3;
+      border-bottom-color: #91918c;
+      background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
+      text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+      -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.8);
+      color: #454f52;
+      outline-color: rgba(69, 79, 82, 0.3);
+      border-color: #b6b6b3;
+      background-image: none;
+      background-color: #d9d9d7;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+      text-shadow: none;
+      -gtk-icon-shadow: none; }
+
+.bookmark-tag-widget-selected {
+  background-color: #4a90d9; }
+  .bookmark-tag-widget-selected label {
+    color: white; }
+  .bookmark-tag-widget-selected button:last-child image {
+    color: white; }
+  .bookmark-tag-widget-selected button:last-child:hover image {
+    color: white;
+    outline-color: rgba(255, 255, 255, 0.3);
+    border-color: #215d9c;
+    border-bottom-color: #184472;
+    background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4);
+    color: white;
+    outline-color: rgba(255, 255, 255, 0.3);
+    border-color: #215d9c;
+    border-bottom-color: #184472;
+    background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.49553);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4); }
+  .bookmark-tag-widget-selected button:last-child:active image {
+    color: white;
+    outline-color: rgba(255, 255, 255, 0.3);
+    border-color: #215d9c;
+    border-bottom-color: #184472;
+    background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.54353);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4);
+    color: white;
+    outline-color: rgba(255, 255, 255, 0.3);
+    border-color: #215d9c;
+    background-image: none;
+    background-color: #3180d4;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
+    text-shadow: none;
+    -gtk-icon-shadow: none; }
