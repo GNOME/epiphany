@@ -28,14 +28,16 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#define EPHY_BOOKMARKS_DUMMY_BSO      "000000000000"
-#define EPHY_BOOKMARKS_BSO_COLLECTION "ephy-bookmarks"
-#define EMAIL_REGEX                   "^[a-z0-9]([a-z0-9.]+[a-z0-9])?@[a-z0-9.-]+$"
-#define TOKEN_SERVER_URL              "https://token.services.mozilla.com/1.0/sync/1.5"
-#define FXA_BASEURL                   "https://api.accounts.firefox.com/"
-#define FXA_VERSION                   "v1/"
-#define STATUS_OK                     200
-#define current_time_in_seconds       (g_get_real_time () / 1000000)
+#define EPHY_BOOKMARKS_DUMMY_BSO       "000000000000"
+#define EPHY_BOOKMARKS_BSO_COLLECTION  "ephy-bookmarks"
+
+#define MOZILLA_TOKEN_SERVER_URL           "https://token.services.mozilla.com/1.0/sync/1.5"
+#define MOZILLA_FIREFOX_ACCOUNTS_BASE_URL  "https://api.accounts.firefox.com/"
+#define MOZILLA_FIREFOX_ACCOUNTS_VERSION   "v1/"
+
+#define EMAIL_REGEX              "^[a-z0-9]([a-z0-9.]+[a-z0-9])?@[a-z0-9.-]+$"
+#define CURRENT_TIME_IN_SECONDS  (g_get_real_time () / 1000000)
+#define HTTP_STATUS_OK           200
 
 struct _EphySyncService {
   GObject parent_instance;
@@ -207,7 +209,7 @@ destroy_session_response_cb (SoupSession *session,
   JsonParser *parser;
   JsonObject *json;
 
-  if (message->status_code == STATUS_OK) {
+  if (message->status_code == HTTP_STATUS_OK) {
     LOG ("Session destroyed");
     return;
   }
@@ -233,7 +235,7 @@ ephy_sync_service_storage_credentials_is_expired (EphySyncService *self)
     return TRUE;
 
   /* Consider a 60 seconds safety interval. */
-  return self->storage_credentials_expiry_time < current_time_in_seconds - 60;
+  return self->storage_credentials_expiry_time < CURRENT_TIME_IN_SECONDS - 60;
 }
 
 static void
@@ -252,7 +254,10 @@ ephy_sync_service_fxa_hawk_post_async (EphySyncService     *self,
   gchar *url;
   const gchar *content_type = "application/json";
 
-  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
+  url = g_strdup_printf ("%s%s%s",
+                         MOZILLA_FIREFOX_ACCOUNTS_BASE_URL,
+                         MOZILLA_FIREFOX_ACCOUNTS_VERSION,
+                         endpoint);
   message = soup_message_new (SOUP_METHOD_POST, url);
   soup_message_set_request (message, content_type,
                             SOUP_MEMORY_COPY,
@@ -291,7 +296,10 @@ ephy_sync_service_fxa_hawk_get_sync (EphySyncService  *self,
   JsonParser *parser;
   gchar *url;
 
-  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
+  url = g_strdup_printf ("%s%s%s",
+                         MOZILLA_FIREFOX_ACCOUNTS_BASE_URL,
+                         MOZILLA_FIREFOX_ACCOUNTS_VERSION,
+                         endpoint);
   message = soup_message_new (SOUP_METHOD_GET, url);
   hawk_header = ephy_sync_crypto_compute_hawk_header (url, "GET",
                                                       id,
@@ -382,6 +390,7 @@ static gboolean
 ephy_sync_service_certificate_is_valid (EphySyncService *self,
                                         const gchar     *certificate)
 {
+  SoupURI *uri;
   JsonParser *parser;
   JsonObject *json;
   JsonObject *principal;
@@ -397,6 +406,7 @@ ephy_sync_service_certificate_is_valid (EphySyncService *self,
 
   g_return_val_if_fail (certificate != NULL, FALSE);
 
+  uri = soup_uri_new (MOZILLA_FIREFOX_ACCOUNTS_BASE_URL);
   pieces = g_strsplit (certificate, ".", 0);
   header = (gchar *) base64_parse (pieces[0], &header_len);
   payload = (gchar *) base64_parse (pieces[1], &payload_len);
@@ -417,7 +427,7 @@ ephy_sync_service_certificate_is_valid (EphySyncService *self,
   email = json_object_get_string_member (principal, "email");
   uid_email = g_strdup_printf ("%s@%s",
                                self->uid,
-                               soup_uri_get_host (soup_uri_new (FXA_BASEURL)));
+                               soup_uri_get_host (uri));
 
   if (g_str_equal (uid_email, email) == FALSE) {
     g_warning ("Expected email %s, found %s. Giving up.", uid_email, email);
@@ -433,6 +443,7 @@ out:
   g_free (uid_email);
   g_strfreev (pieces);
   g_object_unref (parser);
+  soup_uri_free (uri);
 
   return retval;
 }
@@ -462,11 +473,11 @@ obtain_storage_credentials_response_cb (SoupSession *session,
    * password since the last time he signed in. If this happens, the user needs
    * to be asked to sign in again with the new password.
    */
-  if (message->status_code == STATUS_OK) {
+  if (message->status_code == HTTP_STATUS_OK) {
     service->storage_endpoint = g_strdup (json_object_get_string_member (json, "api_endpoint"));
     service->storage_credentials_id = g_strdup (json_object_get_string_member (json, "id"));
     service->storage_credentials_key = g_strdup (json_object_get_string_member (json, "key"));
-    service->storage_credentials_expiry_time = json_object_get_int_member (json, "duration") + current_time_in_seconds;
+    service->storage_credentials_expiry_time = json_object_get_int_member (json, "duration") + CURRENT_TIME_IN_SECONDS;
   } else if (message->status_code == 401) {
     array = json_object_get_array_member (json, "errors");
     errors = json_node_get_object (json_array_get_element (array, 0));
@@ -504,7 +515,7 @@ ephy_sync_service_obtain_storage_credentials (EphySyncService *self,
   g_return_if_fail (self->certificate != NULL);
   g_return_if_fail (self->keypair != NULL);
 
-  audience = get_audience_for_url (TOKEN_SERVER_URL);
+  audience = get_audience_for_url (MOZILLA_TOKEN_SERVER_URL);
   assertion = ephy_sync_crypto_create_assertion (self->certificate,
                                                  audience,
                                                  5 * 60,
@@ -516,7 +527,7 @@ ephy_sync_service_obtain_storage_credentials (EphySyncService *self,
   client_state = g_strndup (hashed_kB, EPHY_SYNC_TOKEN_LENGTH);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
 
-  message = soup_message_new (SOUP_METHOD_GET, TOKEN_SERVER_URL);
+  message = soup_message_new (SOUP_METHOD_GET, MOZILLA_TOKEN_SERVER_URL);
   /* We need to add the X-Client-State header so that the Token Server will
    * recognize accounts that were previously used to sync Firefox data too.
    */
@@ -553,7 +564,7 @@ obtain_signed_certificate_response_cb (SoupSession *session,
   json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
   json = json_node_get_object (json_parser_get_root (parser));
 
-  if (message->status_code != STATUS_OK) {
+  if (message->status_code != HTTP_STATUS_OK) {
     g_warning ("FxA server errno: %ld, errmsg: %s",
                json_object_get_int_member (json, "errno"),
                json_object_get_string_member (json, "message"));
@@ -902,7 +913,10 @@ ephy_sync_service_destroy_session (EphySyncService *self,
 
   g_return_if_fail (sessionToken != NULL);
 
-  url = g_strdup_printf ("%s%s%s", FXA_BASEURL, FXA_VERSION, endpoint);
+  url = g_strdup_printf ("%s%s%s",
+                         MOZILLA_FIREFOX_ACCOUNTS_BASE_URL,
+                         MOZILLA_FIREFOX_ACCOUNTS_VERSION,
+                         endpoint);
   processed_st = ephy_sync_crypto_process_session_token (sessionToken);
   tokenID = ephy_sync_crypto_encode_hex (processed_st->tokenID, 0);
 
@@ -960,7 +974,7 @@ ephy_sync_service_fetch_sync_keys (EphySyncService *self,
                                                      &node);
   json = json_node_get_object (node);
 
-  if (status_code != STATUS_OK) {
+  if (status_code != HTTP_STATUS_OK) {
     g_warning ("FxA server errno: %ld, errmsg: %s",
                json_object_get_int_member (json, "errno"),
                json_object_get_string_member (json, "message"));
