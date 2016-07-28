@@ -28,12 +28,14 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#define EMAIL_REGEX             "^[a-z0-9]([a-z0-9.]+[a-z0-9])?@[a-z0-9.-]+$"
-#define TOKEN_SERVER_URL        "https://token.services.mozilla.com/1.0/sync/1.5"
-#define FXA_BASEURL             "https://api.accounts.firefox.com/"
-#define FXA_VERSION             "v1/"
-#define STATUS_OK               200
-#define current_time_in_seconds (g_get_real_time () / 1000000)
+#define EPHY_BOOKMARKS_DUMMY_BSO      "000000000000"
+#define EPHY_BOOKMARKS_BSO_COLLECTION "ephy-bookmarks"
+#define EMAIL_REGEX                   "^[a-z0-9]([a-z0-9.]+[a-z0-9])?@[a-z0-9.-]+$"
+#define TOKEN_SERVER_URL              "https://token.services.mozilla.com/1.0/sync/1.5"
+#define FXA_BASEURL                   "https://api.accounts.firefox.com/"
+#define FXA_VERSION                   "v1/"
+#define STATUS_OK                     200
+#define current_time_in_seconds       (g_get_real_time () / 1000000)
 
 struct _EphySyncService {
   GObject parent_instance;
@@ -64,7 +66,7 @@ G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
 typedef struct {
   EphySyncService *service;
-  const gchar *endpoint;
+  gchar *endpoint;
   const gchar *method;
   gchar *request_body;
   gint64 modified_since;
@@ -80,7 +82,7 @@ build_json_string (const gchar *first_key,
 
 static StorageServerRequestAsyncData *
 storage_server_request_async_data_new (EphySyncService     *service,
-                                       const gchar         *endpoint,
+                                       gchar               *endpoint,
                                        const gchar         *method,
                                        gchar               *request_body,
                                        gint64               modified_since,
@@ -92,7 +94,7 @@ storage_server_request_async_data_new (EphySyncService     *service,
 
   data = g_slice_new (StorageServerRequestAsyncData);
   data->service = g_object_ref (service);
-  data->endpoint = endpoint;
+  data->endpoint = g_strdup (endpoint);
   data->method = method;
   data->request_body = g_strdup (request_body);
   data->modified_since = modified_since;
@@ -110,6 +112,7 @@ storage_server_request_async_data_free (StorageServerRequestAsyncData *data)
     return;
 
   g_object_unref (data->service);
+  g_free (data->endpoint);
   g_free (data->request_body);
   g_slice_free (StorageServerRequestAsyncData, data);
 }
@@ -628,7 +631,7 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self,
 
 static void
 ephy_sync_service_send_storage_message (EphySyncService     *self,
-                                        const gchar         *endpoint,
+                                        gchar               *endpoint,
                                         const gchar         *method,
                                         gchar               *request_body,
                                         gint64               modified_since,
@@ -662,6 +665,39 @@ ephy_sync_service_send_storage_message (EphySyncService     *self,
    * need to entrust them the task of sending the request to the Storage Server.
    */
   ephy_sync_service_obtain_signed_certificate (self, data);
+}
+
+static void
+create_bookmarks_bso_collection_response_cb (SoupSession *session,
+                                             SoupMessage *message,
+                                             gpointer     user_data)
+{
+  EphySyncService *service;
+  gchar *endpoint;
+
+  service = EPHY_SYNC_SERVICE (user_data);
+
+  /* Status code 412 means the BSO already exists. Since we will delete it
+   * anyway, we don't treat this as an error.
+   */
+  if (message->status_code != HTTP_STATUS_OK && message->status_code != 412) {
+    g_warning ("Failed to add dummy BSO to collection, status code: %u, response: %s",
+               message->status_code, message->response_body->data);
+    return;
+  }
+
+  /* The EPHY_BOOKMARKS_BSO_COLLECTION collection is now created. We can safely
+   * delete the dummy BSO that we've uploaded. No need to check for response.
+   */
+  endpoint = g_strdup_printf ("storage/%s/%s",
+                              EPHY_BOOKMARKS_BSO_COLLECTION,
+                              EPHY_BOOKMARKS_DUMMY_BSO);
+  ephy_sync_service_send_storage_message (service,
+                                          endpoint, SOUP_METHOD_DELETE,
+                                          NULL, -1, -1,
+                                          NULL, NULL);
+
+  g_free (endpoint);
 }
 
 static void
@@ -957,4 +993,31 @@ out:
   g_free (unwrapKB);
 
   return retval;
+}
+
+void
+ephy_sync_service_create_bookmarks_bso_collection (EphySyncService *self)
+{
+  gchar *endpoint;
+  gchar *request_body;
+
+  endpoint = g_strdup_printf ("storage/%s/%s",
+                              EPHY_BOOKMARKS_BSO_COLLECTION,
+                              EPHY_BOOKMARKS_DUMMY_BSO);
+  request_body = build_json_string ("id", EPHY_BOOKMARKS_DUMMY_BSO,
+                                    "payload", EPHY_BOOKMARKS_DUMMY_BSO,
+                                    NULL);
+
+  /* Send a dummy BSO to the Storage Server so it will create the
+   * EPHY_BOOKMARKS_BSO_COLLECTION collection if it doesn't exist already.
+   * In the response callback we will delete the dummy BSO.
+   */
+  ephy_sync_service_send_storage_message (self,
+                                          endpoint, SOUP_METHOD_PUT,
+                                          request_body, -1, 0,
+                                          create_bookmarks_bso_collection_response_cb,
+                                          self);
+
+  g_free (endpoint);
+  g_free (request_body);
 }

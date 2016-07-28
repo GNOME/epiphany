@@ -295,6 +295,9 @@ server_message_received_cb (WebKitUserContentManager *manager,
                                             g_strdup (sessionToken), TOKEN_SESSIONTOKEN,
                                             NULL);
 
+    /* Create our own bookmarks BSO collection on the Storage Server. */
+    ephy_sync_service_create_bookmarks_bso_collection (service);
+
     /* Translators: the %s refers to the email of the currently logged in user. */
     gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details),
                           g_strdup_printf (_("Currently logged in as <b>%s</b>"), email));
