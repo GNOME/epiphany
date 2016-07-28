@@ -701,9 +701,6 @@ ephy_toolbar_dispose (GObject *object)
 {
   EphyToolbar *toolbar = EPHY_TOOLBAR (object);
 
-  g_clear_object (&toolbar->window);
-  g_clear_object (&toolbar->title_box);
-
   if (toolbar->navigation_buttons_menu_timeout > 0) {
     g_source_remove (toolbar->navigation_buttons_menu_timeout);
     toolbar->navigation_buttons_menu_timeout = 0;
