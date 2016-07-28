@@ -62,10 +62,57 @@ struct _EphySyncService {
 
 G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
+typedef struct {
+  EphySyncService *service;
+  const gchar *endpoint;
+  const gchar *method;
+  gchar *request_body;
+  gint64 modified_since;
+  gint64 unmodified_since;
+  SoupSessionCallback callback;
+  gpointer user_data;
+} StorageServerRequestAsyncData;
+
 static gchar *
 build_json_string (const gchar *first_key,
                    const gchar *first_value,
                    ...) G_GNUC_NULL_TERMINATED;
+
+static StorageServerRequestAsyncData *
+storage_server_request_async_data_new (EphySyncService     *service,
+                                       const gchar         *endpoint,
+                                       const gchar         *method,
+                                       gchar               *request_body,
+                                       gint64               modified_since,
+                                       gint64               unmodified_since,
+                                       SoupSessionCallback  callback,
+                                       gpointer             user_data)
+{
+  StorageServerRequestAsyncData *data;
+
+  data = g_slice_new (StorageServerRequestAsyncData);
+  data->service = g_object_ref (service);
+  data->endpoint = endpoint;
+  data->method = method;
+  data->request_body = g_strdup (request_body);
+  data->modified_since = modified_since;
+  data->unmodified_since = unmodified_since;
+  data->callback = callback;
+  data->user_data = user_data;
+
+  return data;
+}
+
+static void
+storage_server_request_async_data_free (StorageServerRequestAsyncData *data)
+{
+  if (G_UNLIKELY (!data))
+    return;
+
+  g_object_unref (data->service);
+  g_free (data->request_body);
+  g_slice_free (StorageServerRequestAsyncData, data);
+}
 
 static gchar *
 build_json_string (const gchar *first_key,
@@ -193,7 +240,8 @@ ephy_sync_service_fxa_hawk_post_async (EphySyncService     *self,
                                        guint8              *key,
                                        gsize                key_length,
                                        gchar               *request_body,
-                                       SoupSessionCallback  callback)
+                                       SoupSessionCallback  callback,
+                                       gpointer             user_data)
 {
   EphySyncCryptoHawkOptions *hawk_options;
   EphySyncCryptoHawkHeader *hawk_header;
@@ -220,7 +268,7 @@ ephy_sync_service_fxa_hawk_post_async (EphySyncService     *self,
                                "authorization", hawk_header->header);
   soup_message_headers_append (message->request_headers,
                                "content-type", content_type);
-  soup_session_queue_message (self->soup_session, message, callback, self);
+  soup_session_queue_message (self->soup_session, message, callback, user_data);
 
   g_free (url);
   ephy_sync_crypto_hawk_options_free (hawk_options);
@@ -263,6 +311,68 @@ ephy_sync_service_fxa_hawk_get_sync (EphySyncService  *self,
   ephy_sync_crypto_hawk_header_free (hawk_header);
 
   return message->status_code;
+}
+
+static void
+ephy_sync_service_send_storage_request (EphySyncService               *self,
+                                        StorageServerRequestAsyncData *data)
+{
+  EphySyncCryptoHawkOptions *hawk_options = NULL;
+  EphySyncCryptoHawkHeader *hawk_header;
+  SoupMessage *message;
+  gchar *url;
+  gchar *if_modified_since = NULL;
+  gchar *if_unmodified_since = NULL;
+  const gchar *content_type = "application/json";
+
+  url = g_strdup_printf ("%s/%s", self->storage_endpoint, data->endpoint);
+  message = soup_message_new (data->method, url);
+
+  if (data->request_body != NULL) {
+    hawk_options = ephy_sync_crypto_hawk_options_new (NULL, NULL, NULL,
+                                                      g_strdup (content_type),
+                                                      NULL, NULL, NULL,
+                                                      g_strdup (data->request_body),
+                                                      NULL);
+    soup_message_set_request (message, content_type,
+                              SOUP_MEMORY_COPY,
+                              data->request_body, strlen (data->request_body));
+  }
+
+  if (g_strcmp0 (data->method, SOUP_METHOD_POST) == 0) {
+    soup_message_headers_append (message->request_headers,
+                                 "content-type", content_type);
+  }
+
+  if (data->modified_since >= 0) {
+    if_modified_since = g_strdup_printf ("%ld", data->modified_since);
+    soup_message_headers_append (message->request_headers,
+                                 "X-If-Modified-Since", if_modified_since);
+  }
+
+  if (data->unmodified_since >= 0) {
+    if_unmodified_since = g_strdup_printf ("%ld", data->unmodified_since);
+    soup_message_headers_append (message->request_headers,
+                                 "X-If-Unmodified-Since", if_unmodified_since);
+  }
+
+  hawk_header = ephy_sync_crypto_compute_hawk_header (url, data->method,
+                                                      self->storage_credentials_id,
+                                                      (guint8 *) self->storage_credentials_key,
+                                                      strlen (self->storage_credentials_key),
+                                                      hawk_options);
+  soup_message_headers_append (message->request_headers,
+                               "authorization", hawk_header->header);
+  soup_session_queue_message (self->soup_session, message,
+                              data->callback, data->user_data);
+
+  if (hawk_options != NULL)
+    ephy_sync_crypto_hawk_options_free (hawk_options);
+
+  g_free (url);
+  g_free (if_modified_since);
+  g_free (if_unmodified_since);
+  storage_server_request_async_data_free (data);
 }
 
 static gboolean
@@ -329,41 +439,50 @@ obtain_storage_credentials_response_cb (SoupSession *session,
                                         SoupMessage *message,
                                         gpointer     user_data)
 {
-  EphySyncService *self;
+  StorageServerRequestAsyncData *data;
+  EphySyncService *service;
   JsonParser *parser;
   JsonObject *json;
   JsonObject *errors;
   JsonArray *array;
 
-  self = EPHY_SYNC_SERVICE (user_data);
+  data = (StorageServerRequestAsyncData *) user_data;
+  service = EPHY_SYNC_SERVICE (data->service);
 
   parser = json_parser_new ();
   json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
   json = json_node_get_object (json_parser_get_root (parser));
 
   if (message->status_code == STATUS_OK) {
-    self->storage_endpoint = g_strdup (json_object_get_string_member (json, "api_endpoint"));
-    self->storage_credentials_id = g_strdup (json_object_get_string_member (json, "id"));
-    self->storage_credentials_key = g_strdup (json_object_get_string_member (json, "key"));
-    self->storage_credentials_expiry_time = json_object_get_int_member (json, "duration") + current_time_in_seconds;
+    service->storage_endpoint = g_strdup (json_object_get_string_member (json, "api_endpoint"));
+    service->storage_credentials_id = g_strdup (json_object_get_string_member (json, "id"));
+    service->storage_credentials_key = g_strdup (json_object_get_string_member (json, "key"));
+    service->storage_credentials_expiry_time = json_object_get_int_member (json, "duration") + current_time_in_seconds;
   } else if (message->status_code == 401) {
     array = json_object_get_array_member (json, "errors");
     errors = json_node_get_object (json_array_get_element (array, 0));
-
     g_warning ("Failed to talk to the Token Server: %s: %s",
                json_object_get_string_member (json, "status"),
                json_object_get_string_member (errors, "description"));
+    storage_server_request_async_data_free (data);
+    goto out;
   } else {
     g_warning ("Failed to talk to the Token Server, status code %u. "
                "See https://docs.services.mozilla.com/token/apis.html#error-responses",
                message->status_code);
+    storage_server_request_async_data_free (data);
+    goto out;
   }
 
+  ephy_sync_service_send_storage_request (service, data);
+
+out:
   g_object_unref (parser);
 }
 
 static void
-ephy_sync_service_obtain_storage_credentials (EphySyncService *self)
+ephy_sync_service_obtain_storage_credentials (EphySyncService *self,
+                                              gpointer         user_data)
 {
   SoupMessage *message;
   guint8 *kB = NULL;
@@ -397,7 +516,7 @@ ephy_sync_service_obtain_storage_credentials (EphySyncService *self)
   soup_message_headers_append (message->request_headers,
                                "authorization", authorization);
   soup_session_queue_message (self->soup_session, message,
-                              obtain_storage_credentials_response_cb, self);
+                              obtain_storage_credentials_response_cb, user_data);
 
   g_free (kB);
   g_free (hashed_kB);
@@ -412,12 +531,14 @@ obtain_signed_certificate_response_cb (SoupSession *session,
                                        SoupMessage *message,
                                        gpointer     user_data)
 {
-  EphySyncService *self;
+  StorageServerRequestAsyncData *data;
+  EphySyncService *service;
   JsonParser *parser;
   JsonObject *json;
   const gchar *certificate;
 
-  self = EPHY_SYNC_SERVICE (user_data);
+  data = (StorageServerRequestAsyncData *) user_data;
+  service = EPHY_SYNC_SERVICE (data->service);
 
   parser = json_parser_new ();
   json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
@@ -427,27 +548,30 @@ obtain_signed_certificate_response_cb (SoupSession *session,
     g_warning ("FxA server errno: %ld, errmsg: %s",
                json_object_get_int_member (json, "errno"),
                json_object_get_string_member (json, "message"));
+    storage_server_request_async_data_free (data);
     goto out;
   }
 
   certificate = json_object_get_string_member (json, "cert");
 
-  if (ephy_sync_service_certificate_is_valid (self, certificate) == FALSE) {
-    ephy_sync_crypto_rsa_key_pair_free (self->keypair);
+  if (ephy_sync_service_certificate_is_valid (service, certificate) == FALSE) {
+    ephy_sync_crypto_rsa_key_pair_free (service->keypair);
+    storage_server_request_async_data_free (data);
     goto out;
   }
 
-  self->certificate = g_strdup (certificate);
+  service->certificate = g_strdup (certificate);
 
   /* See the comment in ephy_sync_service_send_storage_message(). */
-  ephy_sync_service_obtain_storage_credentials (self);
+  ephy_sync_service_obtain_storage_credentials (service, user_data);
 
 out:
   g_object_unref (parser);
 }
 
 static void
-ephy_sync_service_obtain_signed_certificate (EphySyncService *self)
+ephy_sync_service_obtain_signed_certificate (EphySyncService *self,
+                                             gpointer         user_data)
 {
   EphySyncCryptoProcessedST *processed_st;
   gchar *tokenID;
@@ -485,7 +609,8 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self)
                                          processed_st->reqHMACkey,
                                          EPHY_SYNC_TOKEN_LENGTH,
                                          request_body,
-                                         obtain_signed_certificate_response_cb);
+                                         obtain_signed_certificate_response_cb,
+                                         user_data);
 
   ephy_sync_crypto_processed_st_free (processed_st);
   g_free (tokenID);
@@ -495,23 +620,42 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self)
   g_free (e_str);
 }
 
-/* FIXME: Pass the data to be sent to the storage server. */
 static void
-ephy_sync_service_send_storage_message (EphySyncService *self)
+ephy_sync_service_send_storage_message (EphySyncService     *self,
+                                        const gchar         *endpoint,
+                                        const gchar         *method,
+                                        gchar               *request_body,
+                                        gint64               modified_since,
+                                        gint64               unmodified_since,
+                                        SoupSessionCallback  callback,
+                                        gpointer             user_data)
 {
-  if (ephy_sync_service_storage_credentials_is_expired (self) == FALSE)
-    return;
+  StorageServerRequestAsyncData *data;
 
-  /* Drop the old certificate. */
+  data = storage_server_request_async_data_new (self, endpoint,
+                                                method, request_body,
+                                                modified_since, unmodified_since,
+                                                callback, user_data);
+
+  if (ephy_sync_service_storage_credentials_is_expired (self) == FALSE) {
+    ephy_sync_service_send_storage_request (self, data);
+    return;
+  }
+
+  /* Drop the old certificate and storage credentials. */
   g_clear_pointer (&self->certificate, g_free);
+  g_clear_pointer (&self->storage_credentials_id, g_free);
+  g_clear_pointer (&self->storage_credentials_key, g_free);
+  self->storage_credentials_expiry_time = 0;
 
   /* The only purpose of certificates is to obtain a signed BrowserID that is
-   * needed to talk to the Token Server.
-   * Since ephy_sync_service_obtain_signed_certificate() completes asynchronously
-   * (and we can't know when that happens), we will trust it to send a request to
-   * the Token Server.
+   * needed to talk to the Token Server. From the Token Server we will obtain
+   * the credentials needed to talk to the Storage Server. Since both
+   * ephy_sync_service_obtain_signed_certificate() and
+   * ephy_sync_service_obtain_storage_credentials() complete asynchronously, we
+   * need to entrust them the task of sending the request to the Storage Server.
    */
-  ephy_sync_service_obtain_signed_certificate (self);
+  ephy_sync_service_obtain_signed_certificate (self, data);
 }
 
 static void
