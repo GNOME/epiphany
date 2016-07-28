@@ -453,6 +453,12 @@ obtain_storage_credentials_response_cb (SoupSession *session,
   json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
   json = json_node_get_object (json_parser_get_root (parser));
 
+  /* FIXME: Since a new Firefox Account password means a new kB, and a new kB
+   * means a new "X-Client-State" header, this will fail with a 401 error status
+   * code and an "invalid-client-state" status string if the user has changed his
+   * password since the last time he signed in. If this happens, the user needs
+   * to be asked to sign in again with the new password.
+   */
   if (message->status_code == STATUS_OK) {
     service->storage_endpoint = g_strdup (json_object_get_string_member (json, "api_endpoint"));
     service->storage_credentials_id = g_strdup (json_object_get_string_member (json, "id"));
