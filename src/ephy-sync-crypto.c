@@ -879,6 +879,8 @@ ephy_sync_crypto_compute_hawk_header (const gchar               *url,
       header = append_token_to_header (header, "dlg", artifacts->dlg);
   }
 
+  soup_uri_free (uri);
+
   return ephy_sync_crypto_hawk_header_new (header, artifacts);
 }
 
