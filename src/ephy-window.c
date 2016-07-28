@@ -77,8 +77,8 @@ static void ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
                                                           gpointer       user_data);
 
 const struct {
-  const gchar *action_and_target;
-  const gchar *accelerators[9];
+  const char *action_and_target;
+  const char *accelerators[9];
 } accels [] = {
   /* Page Menu accels */
   { "win.new-tab", { "<Primary>T", NULL } },
@@ -633,7 +633,7 @@ update_link_actions_sensitivity (EphyWindow *window,
 }
 
 static void
-update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gboolean sensitive, gboolean hide)
+update_edit_action_sensitivity (EphyWindow *window, const char *action_name, gboolean sensitive, gboolean hide)
 {
   GActionGroup *action_group;
   GAction *action;
@@ -648,7 +648,7 @@ update_edit_action_sensitivity (EphyWindow *window, const gchar *action_name, gb
 
 typedef struct {
   EphyWindow *window;
-  const gchar *action_name;
+  const char *action_name;
   gboolean hide;
 } CanEditCommandAsyncData;
 
@@ -889,8 +889,8 @@ static const GActionEntry popup_entries [] = {
 };
 
 const struct {
-  const gchar *action;
-  const gchar *label;
+  const char *action;
+  const char *label;
 } action_label [] = {
   /* Undo, redo. */
   { "undo", N_("_Undo") },
@@ -1307,8 +1307,8 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
                             EphyWindow        *window)
 {
   GAction *action;
-  const gchar *label;
-  gchar *name;
+  const char *label;
+  char *name;
   GVariant *target;
 
   g_action_parse_detailed_name (action_name, &name, &target, NULL);
@@ -1433,8 +1433,8 @@ populate_context_menu (WebKitWebView       *web_view,
   gboolean is_video = FALSE;
   gboolean is_audio = FALSE;
   gboolean can_search_selection = FALSE;
-  gchar *search_selection_action_name = NULL;
-  const gchar *selected_text = NULL;
+  char *search_selection_action_name = NULL;
+  const char *selected_text = NULL;
 
   window_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                      "win");
@@ -1480,7 +1480,7 @@ populate_context_menu (WebKitWebView       *web_view,
   if (selected_text) {
     char *ellipsized = ellipsize_string (selected_text, 32);
     if (ellipsized) {
-      gchar *label;
+      char *label;
       GVariant *value;
 
       label = g_strdup_printf (_("Search the Web for '%s'"), ellipsized);
@@ -2224,7 +2224,7 @@ tab_accels_item_activate (GSimpleAction *action,
                           GVariant      *parameter,
                           gpointer       user_data)
 {
-  const gchar *action_name;
+  const char *action_name;
   int tab_number;
 
   action_name = g_action_get_name (G_ACTION (action));
@@ -2237,9 +2237,10 @@ tab_accels_item_activate (GSimpleAction *action,
 static void
 tab_accels_update (EphyWindow *window)
 {
-  gint n_pages, i = 0;
+  int n_pages;
+  int i = 0;
   GActionGroup *action_group;
-  gchar **actions;
+  char **actions;
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
   actions = g_action_group_list_actions (action_group);
@@ -2317,7 +2318,8 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "tab");
 
   if (event != NULL) {
-    gint n_pages, page_num;
+    int n_pages;
+    int page_num;
 
     tab = GTK_WIDGET (window->active_embed);
     n_pages = gtk_notebook_get_n_pages (notebook);
