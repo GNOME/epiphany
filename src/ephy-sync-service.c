@@ -53,9 +53,9 @@ struct _EphySyncService {
   gchar *certificate;
 
   gchar *storage_endpoint;
-  gchar *storage_token_id;
-  gchar *storage_token_key;
-  gint64 storage_token_expiry_time;
+  gchar *storage_credentials_id;
+  gchar *storage_credentials_key;
+  gint64 storage_credentials_expiry_time;
 
   EphySyncCryptoRSAKeyPair *keypair;
 };
@@ -68,13 +68,13 @@ build_json_string (const gchar *first_key,
                    ...) G_GNUC_NULL_TERMINATED;
 
 static gboolean
-storage_token_is_expired (EphySyncService *self)
+storage_credentials_is_expired (EphySyncService *self)
 {
-  if (self->storage_token_expiry_time == 0)
+  if (self->storage_credentials_expiry_time == 0)
     return TRUE;
 
-  /* Don't use storage tokens that are going to expire in less than 1 minute */
-  return self->storage_token_expiry_time < current_time_in_seconds - 60;
+  /* Don't use storage credentials that are going to expire in less than 1 minute */
+  return self->storage_credentials_expiry_time < current_time_in_seconds - 60;
 }
 
 static void
@@ -347,9 +347,9 @@ token_server_response_cb (SoupSession *session,
 
   if (message->status_code == STATUS_OK) {
     self->storage_endpoint = g_strdup (json_object_get_string_member (json, "api_endpoint"));
-    self->storage_token_id = g_strdup (json_object_get_string_member (json, "id"));
-    self->storage_token_key = g_strdup (json_object_get_string_member (json, "key"));
-    self->storage_token_expiry_time = json_object_get_int_member (json, "duration") + current_time_in_seconds;
+    self->storage_credentials_id = g_strdup (json_object_get_string_member (json, "id"));
+    self->storage_credentials_key = g_strdup (json_object_get_string_member (json, "key"));
+    self->storage_credentials_expiry_time = json_object_get_int_member (json, "duration") + current_time_in_seconds;
   } else if (message->status_code == 401) {
     array = json_object_get_array_member (json, "errors");
     errors = json_node_get_object (json_array_get_element (array, 0));
@@ -443,7 +443,7 @@ sign_certificate_response_cb (SoupSession *session,
 
   self->certificate = g_strdup (certificate);
 
-  /* See the comment in get_storage_token_from_token_server() */
+  /* See the comment in get_storage_credentials_from_token_server() */
   send_get_request_to_token_server (self);
 
 out:
@@ -500,9 +500,9 @@ sign_certificate (EphySyncService *self)
 }
 
 static void
-get_storage_token_from_token_server (EphySyncService *self)
+get_storage_credentials_from_token_server (EphySyncService *self)
 {
-  if (storage_token_is_expired (self) == FALSE)
+  if (storage_credentials_is_expired (self) == FALSE)
     return;
 
   /* Drop the old certificate. */
@@ -536,8 +536,8 @@ ephy_sync_service_dispose (GObject *object)
   g_clear_pointer (&self->user_email, g_free);
   g_clear_pointer (&self->certificate, g_free);
   g_clear_pointer (&self->storage_endpoint, g_free);
-  g_clear_pointer (&self->storage_token_id, g_free);
-  g_clear_pointer (&self->storage_token_key, g_free);
+  g_clear_pointer (&self->storage_credentials_id, g_free);
+  g_clear_pointer (&self->storage_credentials_key, g_free);
   ephy_sync_service_delete_all_tokens (self);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->dispose (object);
