@@ -39,6 +39,9 @@ void                 ephy_bookmark_set_tags     (EphyBookmark *self,
                                                  GSequence    *tags);
 GSequence           *ephy_bookmark_get_tags     (EphyBookmark *self);
 
+int                  ephy_bookmark_tags_compare (const char *tag1,
+                                                 const char *tag2);
+
 G_END_DECLS
 
 #endif /* _EPHY_BOOKMARK_H */
