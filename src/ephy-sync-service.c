@@ -16,14 +16,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+#include "ephy-sync-service.h"
+
 #include "ephy-debug.h"
-#include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-secret.h"
-#include "ephy-sync-service.h"
 
-#include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
 #include <string.h>
