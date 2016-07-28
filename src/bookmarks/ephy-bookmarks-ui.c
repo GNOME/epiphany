@@ -184,7 +184,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
   data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
   g_return_if_fail (data == NULL);
 
-  manager = ephy_window_get_ui_manager (window);
+  manager = gtk_ui_manager_new ();
 
   data = g_new0 (BookmarksWindowData, 1);
   g_object_set_data_full (G_OBJECT (window), BM_WINDOW_DATA_KEY, data, g_free);

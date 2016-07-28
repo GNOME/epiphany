@@ -139,7 +139,6 @@ struct _EphyWindow {
   GtkApplicationWindow parent_instance;
 
   GtkWidget *toolbar;
-  GtkUIManager *manager;
   GHashTable *action_labels;
   GtkNotebook *notebook;
   EphyEmbed *active_embed;
@@ -944,16 +943,6 @@ const struct {
   /* Selection */
   { "search-selection", NULL }
 };
-
-static void
-setup_ui_manager (EphyWindow *window)
-{
-  GtkUIManager *manager;
-
-  manager = gtk_ui_manager_new ();
-
-  window->manager = manager;
-}
 
 static char *
 calculate_location (const char *typed_address, const char *address)
@@ -2604,7 +2593,6 @@ static void
 ephy_window_dispose (GObject *object)
 {
   EphyWindow *window = EPHY_WINDOW (object);
-  GSList *popups;
 
   LOG ("EphyWindow dispose %p", window);
 
@@ -2613,14 +2601,6 @@ ephy_window_dispose (GObject *object)
     window->closing = TRUE;
 
     ephy_bookmarks_ui_detach_window (window);
-
-    /* Deactivate menus */
-    popups = gtk_ui_manager_get_toplevels (window->manager, GTK_UI_MANAGER_POPUP);
-    g_slist_foreach (popups, (GFunc)gtk_menu_shell_deactivate, NULL);
-    g_slist_free (popups);
-
-    g_object_unref (window->manager);
-    window->manager = NULL;
 
     _ephy_window_set_context_event (window, NULL);
 
@@ -2996,8 +2976,7 @@ ephy_window_constructor (GType                  type,
 
   settings_change_notify (settings, window);
 
-  /* Setup the UI manager and connect verbs */
-  setup_ui_manager (window);
+  /* Setup tab accels */
   setup_tab_accels (window);
 
   window->notebook = setup_notebook (window);
@@ -3081,9 +3060,6 @@ ephy_window_constructor (GType                  type,
   /* We never want the menubar shown, we merge the app menu into
    * our super menu manually when running outside the Shell. */
   gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), FALSE);
-
-  /* ensure the UI is updated */
-  gtk_ui_manager_ensure_update (window->manager);
 
   init_menu_updaters (window);
 
@@ -3172,22 +3148,6 @@ ephy_window_new (void)
                        "application", GTK_APPLICATION (ephy_shell_get_default ()),
                        "icon-name", "web-browser",
                        NULL);
-}
-
-/**
- * ephy_window_get_ui_manager:
- * @window: an #EphyWindow
- *
- * Returns this window's UI manager.
- *
- * Return value: (transfer none): an #GtkUIManager
- **/
-GtkUIManager *
-ephy_window_get_ui_manager (EphyWindow *window)
-{
-  g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
-
-  return window->manager;
 }
 
 /**
