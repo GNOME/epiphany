@@ -26,23 +26,25 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyBookmarksManager, ephy_bookmarks_manager, EPHY, BOOKMARKS_MANAGER, GObject)
 
-void         ephy_bookmarks_manager_add_bookmark         (EphyBookmarksManager *self,
-                                                          EphyBookmark         *bookmark);
-void         ephy_bookmarks_manager_remove_bookmark      (EphyBookmarksManager *self,
-                                                          EphyBookmark         *bookmark);
+void         ephy_bookmarks_manager_add_bookmark           (EphyBookmarksManager *self,
+                                                            EphyBookmark         *bookmark);
+void         ephy_bookmarks_manager_remove_bookmark        (EphyBookmarksManager *self,
+                                                            EphyBookmark         *bookmark);
 
-void         ephy_bookmarks_manager_add_tag              (EphyBookmarksManager *self,
-                                                          const char           *tag);
-void         ephy_bookmarks_manager_remove_tag           (EphyBookmarksManager *self,
-                                                          const char           *tag);
-gboolean     ephy_bookmarks_manager_tag_exists           (EphyBookmarksManager *self,
-                                                          const char           *tag);
+void         ephy_bookmarks_manager_add_tag                (EphyBookmarksManager *self,
+                                                            const char           *tag);
+void         ephy_bookmarks_manager_remove_tag             (EphyBookmarksManager *self,
+                                                            const char           *tag);
+gboolean     ephy_bookmarks_manager_tag_exists             (EphyBookmarksManager *self,
+                                                            const char           *tag);
 
-GList       *ephy_bookmarks_manager_get_bookmarks        (EphyBookmarksManager *self);
-GSequence   *ephy_bookmarks_manager_get_tags             (EphyBookmarksManager *self);
+GList       *ephy_bookmarks_manager_get_bookmarks          (EphyBookmarksManager *self);
+GList       *ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
+                                                            const char           *tag);
+GSequence   *ephy_bookmarks_manager_get_tags               (EphyBookmarksManager *self);
 
-void         ephy_bookmarks_manager_save_to_file         (EphyBookmarksManager *self);
-void         ephy_bookmarks_manager_load_from_file       (EphyBookmarksManager *self);
+void         ephy_bookmarks_manager_save_to_file           (EphyBookmarksManager *self);
+void         ephy_bookmarks_manager_load_from_file         (EphyBookmarksManager *self);
 
 G_END_DECLS
 

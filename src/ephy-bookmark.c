@@ -199,6 +199,22 @@ ephy_bookmark_remove_tag (EphyBookmark *self,
     g_sequence_remove (tag_iter);
 }
 
+gboolean
+ephy_bookmark_has_tag (EphyBookmark *self, const char *tag)
+{
+  GSequenceIter *tag_iter;
+
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), FALSE);
+  g_return_val_if_fail (tag != NULL, FALSE);
+
+  tag_iter = g_sequence_lookup (self->tags,
+                                (gpointer)tag,
+                                (GCompareDataFunc)g_strcmp0,
+                                NULL);
+
+  return tag_iter != NULL;
+}
+
 void
 ephy_bookmark_set_tags (EphyBookmark *self, GSequence *tags)
 {

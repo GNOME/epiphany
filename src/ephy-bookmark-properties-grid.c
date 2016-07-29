@@ -302,7 +302,6 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   /* Create tag widgets */
   tags = ephy_bookmarks_manager_get_tags (manager);
   bookmark_tags = ephy_bookmark_get_tags (self->bookmark);
-  g_sequence_sort (bookmark_tags, (GCompareDataFunc)ephy_bookmark_tags_compare, NULL);
   for (iter = g_sequence_get_begin_iter (tags);
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter)) {
