@@ -34,6 +34,7 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-sync-bookmarks.h"
 #include "ephy-sync-secret.h"
 #include "ephy-sync-service.h"
 #include "clear-data-dialog.h"
@@ -295,7 +296,7 @@ server_message_received_cb (WebKitUserContentManager *manager,
                                             NULL);
 
     /* Create our own bookmarks BSO collection on the Storage Server. */
-    ephy_sync_service_create_bookmarks_bso_collection (service);
+    ephy_sync_bookmarks_create_storage_collection ();
 
     /* Translators: the %s refers to the email of the currently logged in user. */
     gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details),
@@ -1450,12 +1451,10 @@ static void
 setup_sync_page (PrefsDialog *dialog)
 {
   EphySyncService *service;
-  gchar *email = NULL;
 
   service = ephy_shell_get_global_sync_service (ephy_shell_get_default ());
-  email = ephy_sync_service_get_user_email (service);
 
-  if (email == NULL) {
+  if (ephy_sync_service_is_signed_in (service) == FALSE) {
     setup_fxa_sign_in_view (dialog);
     gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
                           dialog->sync_sign_out_box);
@@ -1464,7 +1463,8 @@ setup_sync_page (PrefsDialog *dialog)
                           dialog->sync_sign_in_box);
     /* Translators: the %s refers to the email of the currently logged in user. */
     gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details),
-                          g_strdup_printf (_("Currently logged in as <b>%s</b>"), email));
+                          g_strdup_printf (_("Currently logged in as <b>%s</b>"),
+                                           ephy_sync_service_get_user_email (service)));
   }
 }
 

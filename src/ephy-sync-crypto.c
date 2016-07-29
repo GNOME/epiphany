@@ -264,37 +264,6 @@ kw (const gchar *name)
   return g_strconcat ("identity.mozilla.com/picl/v1/", name, NULL);
 }
 
-static gchar *
-base64_urlsafe_strip (guint8 *data,
-                      gsize   data_length)
-{
-  gchar *encoded;
-  gchar *base64;
-  gsize start;
-  gssize end;
-
-  base64 = g_base64_encode (data, data_length);
-
-  start = 0;
-  while (start < strlen (base64) && base64[start] == '=')
-    start++;
-
-  end = strlen (base64) - 1;
-  while (end >= 0 && base64[end] == '=')
-    end--;
-
-  encoded = g_strndup (base64 + start, end - start + 1);
-
-  /* Replace '+' with '-' */
-  g_strcanon (encoded, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/", '-');
-  /* Replace '/' with '_' */
-  g_strcanon (encoded, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-", '_');
-
-  g_free (base64);
-
-  return encoded;
-}
-
 static guint8 *
 xor (guint8 *a,
      guint8 *b,
@@ -325,26 +294,6 @@ are_equal (guint8 *a,
   g_free (b_hex);
 
   return retval;
-}
-
-static gchar *
-generate_random_string (gsize length)
-{
-  guchar *bytes;
-  gchar *base64_string;
-  gchar *string;
-
-  bytes = g_malloc (length);
-  for (gsize i = 0; i < length; i++)
-    bytes[i] = g_random_int ();
-
-  base64_string = g_base64_encode (bytes, length);
-  string = g_strndup (base64_string, length);
-
-  g_free (bytes);
-  g_free (base64_string);
-
-  return string;
 }
 
 static gchar *
@@ -636,6 +585,22 @@ random_func (void   *ctx,
     dst[i] = g_random_int ();
 }
 
+static void
+base64_to_base64_urlsafe (gchar *text)
+{
+  /* Replace '+' with '-' and '/' with '_' */
+  g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=/", '-');
+  g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=-", '_');
+}
+
+static void
+base64_urlsafe_to_base64 (gchar *text)
+{
+  /* Replace '-' with '+' and '_' with '/' */
+  g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=_", '+');
+  g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=+", '/');
+}
+
 EphySyncCryptoProcessedKFT *
 ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken)
 {
@@ -820,7 +785,7 @@ ephy_sync_crypto_compute_hawk_header (const gchar               *url,
   }
 
   nonce = has_options ? options->nonce : NULL;
-  nonce = nonce ? nonce : generate_random_string (6);
+  nonce = nonce ? nonce : ephy_sync_crypto_generate_random_string (6);
   hash = has_options ? options->hash : NULL;
   payload = has_options ? options->payload : NULL;
 
@@ -934,8 +899,8 @@ ephy_sync_crypto_create_assertion (const gchar              *certificate,
 
   expires_at = g_get_real_time () / 1000 + duration * 1000;
   body = g_strdup_printf ("{\"exp\": %lu, \"aud\": \"%s\"}", expires_at, audience);
-  body_b64 = base64_urlsafe_strip ((guint8 *) body, strlen (body));
-  header_b64 = base64_urlsafe_strip ((guint8 *) header, strlen (header));
+  body_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *) body, strlen (body), TRUE);
+  header_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *) header, strlen (header), TRUE);
   to_sign = g_strdup_printf ("%s.%s", header_b64, body_b64);
 
   mpz_init (signature);
@@ -958,7 +923,7 @@ ephy_sync_crypto_create_assertion (const gchar              *certificate,
     goto out;
   }
 
-  sig_b64 = base64_urlsafe_strip (sig, count);
+  sig_b64 = ephy_sync_crypto_base64_urlsafe_encode (sig, count, TRUE);
   assertion = g_strdup_printf ("%s~%s.%s.%s",
                                certificate, header_b64, body_b64, sig_b64);
 
@@ -976,36 +941,120 @@ out:
   return assertion;
 }
 
-guint8 *
-ephy_sync_crypto_encode_aes_256 (const guint8 *key,
-                                 const guint8 *data,
-                                 gsize         data_length)
+gchar *
+ephy_sync_crypto_generate_random_string (gsize length)
 {
-  struct aes256_ctx aes;
-  guint8 *out;
+  guchar *bytes;
+  gchar *base64_string;
+  gchar *string;
 
-  g_assert (data_length % AES_BLOCK_SIZE == 0);
+  bytes = g_malloc (length);
+  for (gsize i = 0; i < length; i++)
+    bytes[i] = g_random_int ();
 
-  out = g_malloc (data_length);
-  aes256_set_encrypt_key (&aes, key);
-  aes256_encrypt (&aes, data_length, out, data);
+  base64_string = g_base64_encode (bytes, length);
+  base64_to_base64_urlsafe (base64_string);
+  string = g_strndup (base64_string, length);
 
-  return out;
+  g_free (bytes);
+  g_free (base64_string);
+
+  return string;
+}
+
+gchar *
+ephy_sync_crypto_base64_urlsafe_encode (guint8   *data,
+                                        gsize     data_length,
+                                        gboolean  strip)
+{
+  gchar *encoded;
+  gchar *base64;
+  gsize start;
+  gssize end;
+
+  base64 = g_base64_encode (data, data_length);
+
+  if (strip == FALSE) {
+    base64_to_base64_urlsafe (base64);
+    return base64;
+  }
+
+  /* Strip all the '=' */
+  start = 0;
+  while (start < strlen (base64) && base64[start] == '=')
+    start++;
+
+  end = strlen (base64) - 1;
+  while (end >= 0 && base64[end] == '=')
+    end--;
+
+  encoded = g_strndup (base64 + start, end - start + 1);
+  base64_to_base64_urlsafe (encoded);
+
+  g_free (base64);
+
+  return encoded;
 }
 
 guint8 *
-ephy_sync_crypto_decode_aes_256 (const guint8 *key,
-                                 const guint8 *data,
-                                 gsize         data_length)
+ephy_sync_crypto_base64_urlsafe_decode (gchar *text,
+                                        gsize *out_length)
+{
+  guint8 *decoded;
+  gchar *text_copy;
+
+  text_copy = g_strdup (text);
+  base64_urlsafe_to_base64 (text_copy);
+  decoded = g_base64_decode (text_copy, out_length);
+
+  g_free (text_copy);
+
+  return decoded;
+}
+
+guint8 *
+ephy_sync_crypto_aes_256 (EphySyncCryptoAES256Mode  mode,
+                          const guint8             *key,
+                          const guint8             *data,
+                          gsize                     data_length,
+                          gsize                    *out_length)
 {
   struct aes256_ctx aes;
+  gsize padded_length;
+  guint8 *padded_data;
   guint8 *out;
 
-  g_assert (data_length % AES_BLOCK_SIZE == 0);
+  g_return_val_if_fail (key != NULL, NULL);
+  g_return_val_if_fail (data != NULL, NULL);
 
-  out = g_malloc (data_length);
-  aes256_set_decrypt_key (&aes, key);
-  aes256_decrypt (&aes, data_length, out, data);
+  if (mode == AES_256_MODE_DECRYPT)
+    g_assert (data_length % AES_BLOCK_SIZE == 0);
+
+  padded_length = data_length;
+  if (data_length % AES_BLOCK_SIZE != 0)
+    padded_length = data_length + (AES_BLOCK_SIZE - data_length % AES_BLOCK_SIZE);
+
+  out = g_malloc (padded_length);
+  padded_data = g_malloc0 (padded_length);
+  memcpy (padded_data, data, data_length);
+
+  switch (mode) {
+    case AES_256_MODE_ENCRYPT:
+      aes256_set_encrypt_key (&aes, key);
+      aes256_encrypt (&aes, padded_length, out, padded_data);
+      break;
+    case AES_256_MODE_DECRYPT:
+      aes256_set_decrypt_key (&aes, key);
+      aes256_decrypt (&aes, padded_length, out, padded_data);
+      break;
+    default:
+      g_assert_not_reached ();
+  }
+
+  if (out_length != NULL)
+    *out_length = padded_length;
+
+  g_free (padded_data);
 
   return out;
 }

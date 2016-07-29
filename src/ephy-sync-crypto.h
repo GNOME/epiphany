@@ -26,6 +26,11 @@ G_BEGIN_DECLS
 
 #define EPHY_SYNC_TOKEN_LENGTH 32
 
+typedef enum {
+  AES_256_MODE_ENCRYPT,
+  AES_256_MODE_DECRYPT
+} EphySyncCryptoAES256Mode;
+
 typedef struct {
   gchar *app;
   gchar *dlg;
@@ -125,13 +130,20 @@ gchar                      *ephy_sync_crypto_create_assertion        (const gcha
                                                                       guint64                   duration,
                                                                       EphySyncCryptoRSAKeyPair *keypair);
 
-guint8                     *ephy_sync_crypto_encode_aes_256          (const guint8 *key,
-                                                                      const guint8 *data,
-                                                                      gsize         data_length);
+gchar                      *ephy_sync_crypto_generate_random_string  (gsize length);
 
-guint8                     *ephy_sync_crypto_decode_aes_256          (const guint8 *key,
-                                                                      const guint8 *data,
-                                                                      gsize         data_length);
+gchar                      *ephy_sync_crypto_base64_urlsafe_encode   (guint8   *data,
+                                                                      gsize     data_length,
+                                                                      gboolean  strip);
+
+guint8                     *ephy_sync_crypto_base64_urlsafe_decode   (gchar *text,
+                                                                      gsize *out_length);
+
+guint8                     *ephy_sync_crypto_aes_256                 (EphySyncCryptoAES256Mode  mode,
+                                                                      const guint8             *key,
+                                                                      const guint8             *data,
+                                                                      gsize                     data_length,
+                                                                      gsize                    *out_length);
 
 gchar                      *ephy_sync_crypto_encode_hex              (guint8 *data,
                                                                       gsize   data_length);
