@@ -23,13 +23,10 @@
 #include "ephy-settings.h"
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-secret.h"
+#include "ephy-sync-utils.h"
 
 #include <json-glib/json-glib.h>
-#include <libsoup/soup.h>
 #include <string.h>
-
-#define EPHY_BOOKMARKS_DUMMY_BSO       "000000000000"
-#define EPHY_BOOKMARKS_BSO_COLLECTION  "ephy-bookmarks"
 
 #define MOZILLA_TOKEN_SERVER_URL           "https://token.services.mozilla.com/1.0/sync/1.5"
 #define MOZILLA_FIREFOX_ACCOUNTS_BASE_URL  "https://api.accounts.firefox.com/"
@@ -37,7 +34,6 @@
 
 #define EMAIL_REGEX              "^[a-z0-9]([a-z0-9.]+[a-z0-9])?@[a-z0-9.-]+$"
 #define CURRENT_TIME_IN_SECONDS  (g_get_real_time () / 1000000)
-#define HTTP_STATUS_OK           200
 
 struct _EphySyncService {
   GObject parent_instance;
@@ -68,28 +64,23 @@ struct _EphySyncService {
 G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
 typedef struct {
-  EphySyncService *service;
-  gchar *endpoint;
-  const gchar *method;
-  gchar *request_body;
-  gint64 modified_since;
-  gint64 unmodified_since;
-  SoupSessionCallback callback;
-  gpointer user_data;
+  EphySyncService     *service;
+  gchar               *endpoint;
+  const gchar         *method;
+  gchar               *request_body;
+  double               modified_since;
+  double               unmodified_since;
+  SoupSessionCallback  callback;
+  gpointer             user_data;
 } StorageServerRequestAsyncData;
-
-static gchar *
-build_json_string (const gchar *first_key,
-                   const gchar *first_value,
-                   ...) G_GNUC_NULL_TERMINATED;
 
 static StorageServerRequestAsyncData *
 storage_server_request_async_data_new (EphySyncService     *service,
                                        gchar               *endpoint,
                                        const gchar         *method,
                                        gchar               *request_body,
-                                       gint64               modified_since,
-                                       gint64               unmodified_since,
+                                       double               modified_since,
+                                       double               unmodified_since,
                                        SoupSessionCallback  callback,
                                        gpointer             user_data)
 {
@@ -118,35 +109,6 @@ storage_server_request_async_data_free (StorageServerRequestAsyncData *data)
   g_free (data->endpoint);
   g_free (data->request_body);
   g_slice_free (StorageServerRequestAsyncData, data);
-}
-
-static gchar *
-build_json_string (const gchar *first_key,
-                   const gchar *first_value,
-                   ...)
-{
-  va_list args;
-  gchar *json;
-  gchar *key;
-  gchar *value;
-  gchar *tmp;
-
-  json = g_strconcat ("{\"", first_key, "\": \"", first_value, "\"", NULL);
-  va_start (args, first_value);
-
-  while ((key = va_arg (args, gchar *)) != NULL) {
-    value = va_arg (args, gchar *);
-    tmp = json;
-    json = g_strconcat (json, ", \"", key, "\": \"", value, "\"", NULL);
-    g_free (tmp);
-  }
-
-  va_end (args);
-  tmp = json;
-  json = g_strconcat (json, "}", NULL);
-  g_free (tmp);
-
-  return json;
 }
 
 static gchar *
@@ -210,7 +172,7 @@ destroy_session_response_cb (SoupSession *session,
   JsonParser *parser;
   JsonObject *json;
 
-  if (message->status_code == HTTP_STATUS_OK) {
+  if (message->status_code == 200) {
     LOG ("Session destroyed");
     return;
   }
@@ -357,13 +319,13 @@ ephy_sync_service_send_storage_request (EphySyncService               *self,
   }
 
   if (data->modified_since >= 0) {
-    if_modified_since = g_strdup_printf ("%ld", data->modified_since);
+    if_modified_since = g_strdup_printf ("%.2lf", data->modified_since);
     soup_message_headers_append (message->request_headers,
                                  "X-If-Modified-Since", if_modified_since);
   }
 
   if (data->unmodified_since >= 0) {
-    if_unmodified_since = g_strdup_printf ("%ld", data->unmodified_since);
+    if_unmodified_since = g_strdup_printf ("%.2lf", data->unmodified_since);
     soup_message_headers_append (message->request_headers,
                                  "X-If-Unmodified-Since", if_unmodified_since);
   }
@@ -485,7 +447,7 @@ obtain_storage_credentials_response_cb (SoupSession *session,
    * password since the last time he signed in. If this happens, the user needs
    * to be asked to sign in again with the new password.
    */
-  if (message->status_code == HTTP_STATUS_OK) {
+  if (message->status_code == 200) {
     service->storage_endpoint = g_strdup (json_object_get_string_member (json, "api_endpoint"));
     service->storage_credentials_id = g_strdup (json_object_get_string_member (json, "id"));
     service->storage_credentials_key = g_strdup (json_object_get_string_member (json, "key"));
@@ -580,7 +542,7 @@ obtain_signed_certificate_response_cb (SoupSession *session,
   json_parser_load_from_data (parser, message->response_body->data, -1, NULL);
   json = json_node_get_object (json_parser_get_root (parser));
 
-  if (message->status_code != HTTP_STATUS_OK) {
+  if (message->status_code != 200) {
     g_warning ("FxA server errno: %ld, errmsg: %s",
                json_object_get_int_member (json, "errno"),
                json_object_get_string_member (json, "message"));
@@ -629,10 +591,10 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self,
 
   n_str = mpz_get_str (NULL, 10, self->keypair->public.n);
   e_str = mpz_get_str (NULL, 10, self->keypair->public.e);
-  public_key_json = build_json_string ("algorithm", "RS",
-                                       "n", n_str,
-                                       "e", e_str,
-                                       NULL);
+  public_key_json = ephy_sync_utils_build_json_string ("algorithm", "RS",
+                                                       "n", n_str,
+                                                       "e", e_str,
+                                                       NULL);
   /* Duration is the lifetime of the certificate in milliseconds. The FxA server
    * limits the duration to 24 hours. For our purposes, a duration of 30 minutes
    * will suffice.
@@ -654,88 +616,6 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self,
   g_free (request_body);
   g_free (n_str);
   g_free (e_str);
-}
-
-static void
-ephy_sync_service_send_storage_message (EphySyncService     *self,
-                                        gchar               *endpoint,
-                                        const gchar         *method,
-                                        gchar               *request_body,
-                                        gint64               modified_since,
-                                        gint64               unmodified_since,
-                                        SoupSessionCallback  callback,
-                                        gpointer             user_data)
-{
-  StorageServerRequestAsyncData *data;
-
-  data = storage_server_request_async_data_new (self, endpoint,
-                                                method, request_body,
-                                                modified_since, unmodified_since,
-                                                callback, user_data);
-
-  if (ephy_sync_service_storage_credentials_is_expired (self) == FALSE) {
-    ephy_sync_service_send_storage_request (self, data);
-    return;
-  }
-
-  /* If we are currently obtaining the storage credentials for another message,
-   * then the new message is enqueued and will be sent after the credentials are
-   * retrieved.
-   */
-  if (self->is_obtaining_storage_credentials == TRUE) {
-    g_queue_push_tail (self->storage_message_queue, data);
-    return;
-  }
-
-  /* This message is the one that will obtain the storage credentials. */
-  self->is_obtaining_storage_credentials = TRUE;
-
-  /* Drop the old certificate and storage credentials. */
-  g_clear_pointer (&self->certificate, g_free);
-  g_clear_pointer (&self->storage_credentials_id, g_free);
-  g_clear_pointer (&self->storage_credentials_key, g_free);
-  self->storage_credentials_expiry_time = 0;
-
-  /* The only purpose of certificates is to obtain a signed BrowserID that is
-   * needed to talk to the Token Server. From the Token Server we will obtain
-   * the credentials needed to talk to the Storage Server. Since both
-   * ephy_sync_service_obtain_signed_certificate() and
-   * ephy_sync_service_obtain_storage_credentials() complete asynchronously, we
-   * need to entrust them the task of sending the request to the Storage Server.
-   */
-  ephy_sync_service_obtain_signed_certificate (self, data);
-}
-
-static void
-create_bookmarks_bso_collection_response_cb (SoupSession *session,
-                                             SoupMessage *message,
-                                             gpointer     user_data)
-{
-  EphySyncService *service;
-  gchar *endpoint;
-
-  service = EPHY_SYNC_SERVICE (user_data);
-
-  /* Status code 412 means the BSO already exists. Since we will delete it
-   * anyway, we don't treat this as an error.
-   */
-  if (message->status_code != HTTP_STATUS_OK && message->status_code != 412) {
-    g_warning ("Failed to add dummy BSO to collection, status code: %u, response: %s",
-               message->status_code, message->response_body->data);
-    return;
-  }
-
-  /* The EPHY_BOOKMARKS_BSO_COLLECTION collection is now created. We can safely
-   * delete the dummy BSO that we've uploaded. No need to check for response.
-   */
-  endpoint = g_strdup_printf ("storage/%s/%s",
-                              EPHY_BOOKMARKS_BSO_COLLECTION,
-                              EPHY_BOOKMARKS_DUMMY_BSO);
-  ephy_sync_service_send_storage_message (service,
-                                          endpoint, SOUP_METHOD_DELETE,
-                                          NULL, -1, -1,
-                                          NULL, NULL);
-  g_free (endpoint);
 }
 
 static void
@@ -821,6 +701,12 @@ ephy_sync_service_token_name_from_type (EphySyncServiceTokenType token_type)
   default:
     g_assert_not_reached ();
   }
+}
+
+gboolean
+ephy_sync_service_is_signed_in (EphySyncService *self)
+{
+  return self->user_email != NULL;
 }
 
 gchar *
@@ -1004,7 +890,7 @@ ephy_sync_service_fetch_sync_keys (EphySyncService *self,
                                                      &node);
   json = json_node_get_object (node);
 
-  if (status_code != HTTP_STATUS_OK) {
+  if (status_code != 200) {
     g_warning ("FxA server errno: %ld, errmsg: %s",
                json_object_get_int_member (json, "errno"),
                json_object_get_string_member (json, "message"));
@@ -1040,28 +926,51 @@ out:
 }
 
 void
-ephy_sync_service_create_bookmarks_bso_collection (EphySyncService *self)
+ephy_sync_service_send_storage_message (EphySyncService     *self,
+                                        gchar               *endpoint,
+                                        const gchar         *method,
+                                        gchar               *request_body,
+                                        double               modified_since,
+                                        double               unmodified_since,
+                                        SoupSessionCallback  callback,
+                                        gpointer             user_data)
 {
-  gchar *endpoint;
-  gchar *request_body;
+  StorageServerRequestAsyncData *data;
 
-  endpoint = g_strdup_printf ("storage/%s/%s",
-                              EPHY_BOOKMARKS_BSO_COLLECTION,
-                              EPHY_BOOKMARKS_DUMMY_BSO);
-  request_body = build_json_string ("id", EPHY_BOOKMARKS_DUMMY_BSO,
-                                    "payload", EPHY_BOOKMARKS_DUMMY_BSO,
-                                    NULL);
+  data = storage_server_request_async_data_new (self, endpoint,
+                                                method, request_body,
+                                                modified_since, unmodified_since,
+                                                callback, user_data);
 
-  /* Send a dummy BSO to the Storage Server so it will create the
-   * EPHY_BOOKMARKS_BSO_COLLECTION collection if it doesn't exist already.
-   * In the response callback we will delete the dummy BSO.
+  if (ephy_sync_service_storage_credentials_is_expired (self) == FALSE) {
+    ephy_sync_service_send_storage_request (self, data);
+    return;
+  }
+
+  /* If we are currently obtaining the storage credentials for another message,
+   * then the new message is enqueued and will be sent after the credentials are
+   * retrieved.
    */
-  ephy_sync_service_send_storage_message (self,
-                                          endpoint, SOUP_METHOD_PUT,
-                                          request_body, -1, 0,
-                                          create_bookmarks_bso_collection_response_cb,
-                                          self);
+  if (self->is_obtaining_storage_credentials == TRUE) {
+    g_queue_push_tail (self->storage_message_queue, data);
+    return;
+  }
 
-  g_free (endpoint);
-  g_free (request_body);
+  /* This message is the one that will obtain the storage credentials. */
+  self->is_obtaining_storage_credentials = TRUE;
+
+  /* Drop the old certificate and storage credentials. */
+  g_clear_pointer (&self->certificate, g_free);
+  g_clear_pointer (&self->storage_credentials_id, g_free);
+  g_clear_pointer (&self->storage_credentials_key, g_free);
+  self->storage_credentials_expiry_time = 0;
+
+  /* The only purpose of certificates is to obtain a signed BrowserID that is
+   * needed to talk to the Token Server. From the Token Server we will obtain
+   * the credentials needed to talk to the Storage Server. Since both
+   * ephy_sync_service_obtain_signed_certificate() and
+   * ephy_sync_service_obtain_storage_credentials() complete asynchronously, we
+   * need to entrust them the task of sending the request to the Storage Server.
+   */
+  ephy_sync_service_obtain_signed_certificate (self, data);
 }

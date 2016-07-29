@@ -20,6 +20,7 @@
 #define EPHY_SYNC_SERVICE_H
 
 #include <glib-object.h>
+#include <libsoup/soup.h>
 
 G_BEGIN_DECLS
 
@@ -36,38 +37,47 @@ typedef enum {
   TOKEN_KB
 } EphySyncServiceTokenType;
 
-EphySyncService *ephy_sync_service_new                             (void);
+EphySyncService *ephy_sync_service_new                  (void);
 
-const gchar     *ephy_sync_service_token_name_from_type            (EphySyncServiceTokenType token_type);
+const gchar     *ephy_sync_service_token_name_from_type (EphySyncServiceTokenType token_type);
 
-gchar           *ephy_sync_service_get_user_email                  (EphySyncService *self);
+gboolean         ephy_sync_service_is_signed_in         (EphySyncService *self);
 
-void             ephy_sync_service_set_user_email                  (EphySyncService *self,
-                                                                    const gchar     *email);
+gchar           *ephy_sync_service_get_user_email       (EphySyncService *self);
 
-gchar           *ephy_sync_service_get_token                       (EphySyncService          *self,
-                                                                    EphySyncServiceTokenType  token_type);
+void             ephy_sync_service_set_user_email       (EphySyncService *self,
+                                                         const gchar     *email);
 
-void             ephy_sync_service_set_token                       (EphySyncService          *self,
-                                                                    gchar                    *token_value,
-                                                                    EphySyncServiceTokenType  token_type);
+gchar           *ephy_sync_service_get_token            (EphySyncService          *self,
+                                                         EphySyncServiceTokenType  token_type);
 
-void             ephy_sync_service_set_and_store_tokens            (EphySyncService          *self,
-                                                                    gchar                    *token_value,
-                                                                    EphySyncServiceTokenType  token_type,
-                                                                    ...) G_GNUC_NULL_TERMINATED;
+void             ephy_sync_service_set_token            (EphySyncService          *self,
+                                                         gchar                    *token_value,
+                                                         EphySyncServiceTokenType  token_type);
 
-void             ephy_sync_service_delete_all_tokens               (EphySyncService *self);
+void             ephy_sync_service_set_and_store_tokens (EphySyncService          *self,
+                                                         gchar                    *token_value,
+                                                         EphySyncServiceTokenType  token_type,
+                                                         ...) G_GNUC_NULL_TERMINATED;
 
-void             ephy_sync_service_destroy_session                 (EphySyncService *self,
-                                                                    const gchar     *sessionToken);
+void             ephy_sync_service_delete_all_tokens    (EphySyncService *self);
 
-gboolean         ephy_sync_service_fetch_sync_keys                 (EphySyncService *self,
-                                                                    const gchar     *email,
-                                                                    const gchar     *keyFetchToken,
-                                                                    const gchar     *unwrapBKey);
+void             ephy_sync_service_destroy_session      (EphySyncService *self,
+                                                         const gchar     *sessionToken);
 
-void             ephy_sync_service_create_bookmarks_bso_collection (EphySyncService *self);
+gboolean         ephy_sync_service_fetch_sync_keys      (EphySyncService *self,
+                                                         const gchar     *email,
+                                                         const gchar     *keyFetchToken,
+                                                         const gchar     *unwrapBKey);
+
+void             ephy_sync_service_send_storage_message (EphySyncService     *self,
+                                                         gchar               *endpoint,
+                                                         const gchar         *method,
+                                                         gchar               *request_body,
+                                                         double               modified_since,
+                                                         double               unmodified_since,
+                                                         SoupSessionCallback  callback,
+                                                         gpointer             user_data);
 
 G_END_DECLS
 
