@@ -54,13 +54,14 @@ struct _EphySyncService {
   gchar *user_email;
   gint64 last_auth_at;
 
-  gchar *certificate;
-
   gchar *storage_endpoint;
   gchar *storage_credentials_id;
   gchar *storage_credentials_key;
   gint64 storage_credentials_expiry_time;
+  gboolean is_obtaining_storage_credentials;
+  GQueue *storage_message_queue;
 
+  gchar *certificate;
   EphySyncCryptoRSAKeyPair *keypair;
 };
 
@@ -386,6 +387,17 @@ ephy_sync_service_send_storage_request (EphySyncService               *self,
   storage_server_request_async_data_free (data);
 }
 
+static void
+ephy_sync_service_send_enqueued_storage_messages (EphySyncService *self)
+{
+  StorageServerRequestAsyncData *qdata;
+
+  while (g_queue_is_empty (self->storage_message_queue) == FALSE) {
+    qdata = g_queue_pop_head (self->storage_message_queue);
+    ephy_sync_service_send_storage_request (self, qdata);
+  }
+}
+
 static gboolean
 ephy_sync_service_certificate_is_valid (EphySyncService *self,
                                         const gchar     *certificate)
@@ -485,18 +497,22 @@ obtain_storage_credentials_response_cb (SoupSession *session,
                json_object_get_string_member (json, "status"),
                json_object_get_string_member (errors, "description"));
     storage_server_request_async_data_free (data);
-    goto out;
+    g_object_unref (parser);
   } else {
     g_warning ("Failed to talk to the Token Server, status code %u. "
                "See https://docs.services.mozilla.com/token/apis.html#error-responses",
                message->status_code);
     storage_server_request_async_data_free (data);
-    goto out;
+    g_object_unref (parser);
   }
 
-  ephy_sync_service_send_storage_request (service, data);
+  /* Signal that we are done with obtaining the storage credentials. */
+  service->is_obtaining_storage_credentials = FALSE;
 
-out:
+  /* Send the current message and the ones that were waiting in the queue. */
+  ephy_sync_service_send_storage_request (service, data);
+  ephy_sync_service_send_enqueued_storage_messages (service);
+
   g_object_unref (parser);
 }
 
@@ -662,6 +678,18 @@ ephy_sync_service_send_storage_message (EphySyncService     *self,
     return;
   }
 
+  /* If we are currently obtaining the storage credentials for another message,
+   * then the new message is enqueued and will be sent after the credentials are
+   * retrieved.
+   */
+  if (self->is_obtaining_storage_credentials == TRUE) {
+    g_queue_push_tail (self->storage_message_queue, data);
+    return;
+  }
+
+  /* This message is the one that will obtain the storage credentials. */
+  self->is_obtaining_storage_credentials = TRUE;
+
   /* Drop the old certificate and storage credentials. */
   g_clear_pointer (&self->certificate, g_free);
   g_clear_pointer (&self->storage_credentials_id, g_free);
@@ -707,7 +735,6 @@ create_bookmarks_bso_collection_response_cb (SoupSession *session,
                                           endpoint, SOUP_METHOD_DELETE,
                                           NULL, -1, -1,
                                           NULL, NULL);
-
   g_free (endpoint);
 }
 
@@ -718,6 +745,8 @@ ephy_sync_service_finalize (GObject *object)
 
   if (self->keypair != NULL)
     ephy_sync_crypto_rsa_key_pair_free (self->keypair);
+
+  g_queue_free_full (self->storage_message_queue, (GDestroyNotify) storage_server_request_async_data_free);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
 }
@@ -753,6 +782,7 @@ ephy_sync_service_init (EphySyncService *self)
   gchar *email;
 
   self->soup_session = soup_session_new ();
+  self->storage_message_queue = g_queue_new ();
 
   email = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER);
 
