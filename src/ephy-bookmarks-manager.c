@@ -242,6 +242,34 @@ ephy_bookmarks_manager_get_bookmarks (EphyBookmarksManager *self)
   return self->bookmarks;
 }
 
+GList *
+ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
+                                               const char           *tag)
+{
+  GList *bookmarks = NULL;
+  GList *l;
+
+  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self), NULL);
+
+  if (tag == NULL) {
+    for (l = self->bookmarks; l != NULL; l = l->next) {
+      EphyBookmark *bookmark = EPHY_BOOKMARK (l->data);
+
+      if (g_sequence_get_length (ephy_bookmark_get_tags (bookmark)) == 0)
+        bookmarks = g_list_prepend (bookmarks, bookmark);
+    }
+  } else {
+    for (l = self->bookmarks; l != NULL; l = l->next) {
+      EphyBookmark *bookmark = EPHY_BOOKMARK (l->data);
+
+      if (ephy_bookmark_has_tag (bookmark, tag))
+        bookmarks = g_list_prepend (bookmarks, bookmark);
+    }
+  }
+
+  return bookmarks;
+}
+
 GSequence *
 ephy_bookmarks_manager_get_tags (EphyBookmarksManager *self)
 {
