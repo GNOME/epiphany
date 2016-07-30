@@ -180,16 +180,17 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
 }
 
 static void
-ephy_bookmark_properties_grid_add_tag_button_clicked_cb (EphyBookmarkPropertiesGrid *self,
-                                                         GtkButton                  *button)
+ephy_bookmarks_properties_grid_actions_add_tag (GSimpleAction *action,
+                                                GVariant      *value,
+                                                gpointer       user_data)
 {
+  EphyBookmarkPropertiesGrid *self = user_data;
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   GtkEntryBuffer *buffer;
   GtkWidget *widget;
   const char *text;
 
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES_GRID (self));
-  g_assert (GTK_IS_BUTTON (button));
 
   buffer = gtk_entry_get_buffer (GTK_ENTRY (self->add_tag_entry));
   text = gtk_entry_buffer_get_text (buffer);
@@ -205,15 +206,17 @@ ephy_bookmark_properties_grid_add_tag_button_clicked_cb (EphyBookmarkPropertiesG
   gtk_flow_box_insert (GTK_FLOW_BOX (self->tags_box), widget, -1);
 
   gtk_entry_set_text (GTK_ENTRY (self->add_tag_entry), "");
-  gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->add_tag_button), FALSE);
 }
 
 static void
-ephy_bookmark_properties_grid_remove_bookmark_button_clicked_cb (EphyBookmarkPropertiesGrid *self,
-                                                                 GtkButton *button)
+ephy_bookmarks_properties_grid_actions_remove_bookmark (GSimpleAction *action,
+                                                        GVariant      *value,
+                                                        gpointer       user_data)
 {
+  EphyBookmarkPropertiesGrid *self = user_data;
+
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES_GRID (self));
-  g_assert (GTK_IS_BUTTON (button));
 
   g_signal_emit_by_name (self->bookmark, "removed");
 
@@ -363,9 +366,16 @@ ephy_bookmark_properties_grid_class_init (EphyBookmarkPropertiesGridClass *klass
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkPropertiesGrid, remove_bookmark_button);
 }
 
+static const GActionEntry entries[] = {
+  { "add-tag", ephy_bookmarks_properties_grid_actions_add_tag },
+  { "remove-bookmark", ephy_bookmarks_properties_grid_actions_remove_bookmark }
+};
+
 static void
 ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
 {
+  GSimpleActionGroup *group;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
@@ -379,19 +389,16 @@ ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
                               (GtkFlowBoxSortFunc)flow_box_sort_func,
                               NULL, NULL);
 
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), entries,
+                                   G_N_ELEMENTS (entries), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "grid",
+                                  G_ACTION_GROUP (group));
+  g_object_unref (group);
+
   g_signal_connect_object (gtk_entry_get_buffer (GTK_ENTRY (self->add_tag_entry)),
                            "notify::text",
                            G_CALLBACK (ephy_bookmark_properties_grid_buffer_text_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->add_tag_button,
-                           "clicked",
-                           G_CALLBACK (ephy_bookmark_properties_grid_add_tag_button_clicked_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->remove_bookmark_button,
-                           "clicked",
-                           G_CALLBACK (ephy_bookmark_properties_grid_remove_bookmark_button_clicked_cb),
                            self,
                            G_CONNECT_SWAPPED);
 }
