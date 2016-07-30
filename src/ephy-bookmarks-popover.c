@@ -279,7 +279,7 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
                                   G_ACTION_GROUP (group));
   g_object_unref (group);
 
-  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://facebook.com"),
+  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://www.facebook.com/"),
                                       g_strdup ("Facebook"),
                                       g_sequence_new (g_free));
   ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);

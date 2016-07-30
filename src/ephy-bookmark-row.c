@@ -19,12 +19,16 @@
 
 #include "ephy-bookmark-properties-grid.h"
 #include "ephy-bookmark-row.h"
+#include "ephy-embed-prefs.h"
+#include "ephy-embed-shell.h"
+#include "ephy-favicon-helpers.h"
 
 struct _EphyBookmarkRow {
   GtkListBoxRow    parent_instance;
 
   EphyBookmark    *bookmark;
 
+  GtkWidget       *favicon_image;
   GtkWidget       *title_label;
   GtkWidget       *properties_button;
 };
@@ -66,6 +70,30 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
   gtk_container_add (GTK_CONTAINER (content_area), grid);
 
   gtk_widget_show (dialog);
+}
+
+static void
+ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  EphyBookmarkRow *self = user_data;
+  WebKitFaviconDatabase *database = (WebKitFaviconDatabase *)source;
+  cairo_surface_t *icon_surface;
+  GdkPixbuf *favicon;
+
+  g_assert (EPHY_IS_BOOKMARK_ROW (self));
+
+  icon_surface = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  if (icon_surface) {
+    favicon = ephy_pixbuf_get_from_surface_scaled (icon_surface, FAVICON_SIZE, FAVICON_SIZE);
+    cairo_surface_destroy (icon_surface);
+  }
+
+  if (favicon) {
+    gtk_image_set_from_pixbuf (GTK_IMAGE (self->favicon_image), favicon);
+    g_object_unref (favicon);
+  }
 }
 
 static void
@@ -118,10 +146,19 @@ static void
 ephy_bookmark_row_constructed (GObject *object)
 {
   EphyBookmarkRow *self = EPHY_BOOKMARK_ROW (object);
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitFaviconDatabase *database;
 
   g_object_bind_property (self->bookmark, "title",
                           self->title_label, "label",
                           G_BINDING_SYNC_CREATE);
+
+  database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
+  webkit_favicon_database_get_favicon (database,
+                                       ephy_bookmark_get_url (self->bookmark),
+                                       NULL,
+                                       (GAsyncReadyCallback)ephy_bookmark_row_favicon_loaded_cb,
+                                       self);
 
   G_OBJECT_CLASS (ephy_bookmark_row_parent_class)->constructed (object);
 }
@@ -147,6 +184,7 @@ ephy_bookmark_row_class_init (EphyBookmarkRowClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-row.ui");
+  gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, favicon_image);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, title_label);
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkRow, properties_button);
 }

@@ -9,7 +9,16 @@
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
         <property name="visible">true</property>
+        <child>
+          <object class="GtkImage" id="favicon_image">
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkLabel" id="title_label">
             <property name="expand">true</property>
