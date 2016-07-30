@@ -96,10 +96,14 @@ create_bookmark_row (gpointer item,
 }
 
 static void
-ephy_bookmarks_popover_show_tags (EphyBookmarksPopover *self,
-                                  GtkButton            *button)
+ephy_bookmarks_popover_actions_tag_detail_back (GSimpleAction *action,
+                                                GVariant      *value,
+                                                gpointer       user_data)
 {
+  EphyBookmarksPopover *self = user_data;
   GList *l;
+
+  g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack),
                                     "default");
@@ -129,10 +133,6 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
   }
 
   gtk_label_set_label (GTK_LABEL (self->tag_detail_label), tag);
-  g_signal_connect_object (GTK_BUTTON (self->tag_detail_back_button),
-                           "clicked",
-                           G_CALLBACK (ephy_bookmarks_popover_show_tags),
-                           self, G_CONNECT_SWAPPED);
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack),
                                     "tag_detail");
@@ -254,6 +254,10 @@ ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, tag_detail_label);
 }
 
+static const GActionEntry entries[] = {
+  { "tag-detail-back", ephy_bookmarks_popover_actions_tag_detail_back }
+};
+
 static void
 ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 {
@@ -264,8 +268,16 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   GList *l;
   EphyBookmark *dummy_bookmark;
   GSequence *dummy_tags;
+  GSimpleActionGroup *group;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), entries,
+                                   G_N_ELEMENTS (entries), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "popover",
+                                  G_ACTION_GROUP (group));
+  g_object_unref (group);
 
   dummy_bookmark = ephy_bookmark_new (g_strdup ("https://facebook.com"),
                                       g_strdup ("Facebook"),
