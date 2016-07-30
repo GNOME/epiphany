@@ -26,21 +26,20 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyBookmark, ephy_bookmark, EPHY, BOOKMARK, GObject)
 
-EphyBookmark        *ephy_bookmark_new          (char *url,
-                                                 char *title);
+EphyBookmark        *ephy_bookmark_new          (char      *url,
+                                                 char      *title,
+                                                 GSequence *tags);
 
 const char          *ephy_bookmark_get_url      (EphyBookmark *self);
 const char          *ephy_bookmark_get_title    (EphyBookmark *self);
-void                 ephy_bookmark_add_tag      (EphyBookmark *self,
-                                                 const char *tag);
-void                 ephy_bookmark_remove_tag   (EphyBookmark *self,
-                                                 const char *tag);
-gboolean             ephy_bookmark_has_tag      (EphyBookmark *self,
-                                                 const char *tag);
-void                 ephy_bookmark_set_tags     (EphyBookmark *self,
-                                                 GSequence    *tags);
-GSequence           *ephy_bookmark_get_tags     (EphyBookmark *self);
 
+void                 ephy_bookmark_add_tag      (EphyBookmark *self,
+                                                 const char   *tag);
+void                 ephy_bookmark_remove_tag   (EphyBookmark *self,
+                                                 const char   *tag);
+gboolean             ephy_bookmark_has_tag      (EphyBookmark *self,
+                                                 const char   *tag);
+GSequence           *ephy_bookmark_get_tags     (EphyBookmark *self);
 int                  ephy_bookmark_tags_compare (const char *tag1,
                                                  const char *tag2);
 
