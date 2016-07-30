@@ -267,8 +267,9 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://facebook.com"), g_strdup ("Facebook"));
-  ephy_bookmark_set_tags (dummy_bookmark, g_sequence_new (g_free));
+  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://facebook.com"),
+                                      g_strdup ("Facebook"),
+                                      g_sequence_new (g_free));
   ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
