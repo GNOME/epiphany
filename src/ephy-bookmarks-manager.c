@@ -353,8 +353,7 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
     }
 
     /* Create the new bookmark. */
-    bookmark = ephy_bookmark_new (g_strdup (list[i]), title);
-    ephy_bookmark_set_tags (bookmark, tags);
+    bookmark = ephy_bookmark_new (g_strdup (list[i]), title, tags);
     ephy_bookmarks_manager_add_bookmark (self, bookmark);
   }
   gvdb_table_free (table);

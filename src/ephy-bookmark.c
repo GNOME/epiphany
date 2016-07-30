@@ -31,6 +31,7 @@ G_DEFINE_TYPE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_TAGS,
   PROP_TITLE,
   PROP_URL,
   LAST_PROP
@@ -53,6 +54,9 @@ ephy_bookmark_set_property (GObject      *object,
   EphyBookmark *self = EPHY_BOOKMARK (object);
 
   switch (prop_id) {
+    case PROP_TAGS:
+      self->tags = g_value_get_pointer (value);
+      break;
     case PROP_TITLE:
       self->title = g_value_dup_string (value);
       break;
@@ -73,6 +77,9 @@ ephy_bookmark_get_property (GObject      *object,
   EphyBookmark *self = EPHY_BOOKMARK (object);
 
   switch (prop_id) {
+    case PROP_TAGS:
+      g_value_set_pointer (value, ephy_bookmark_get_tags (self));
+      break;
     case PROP_TITLE:
       g_value_set_string (value, ephy_bookmark_get_title (self));
       break;
@@ -106,6 +113,12 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
   object_class->get_property = ephy_bookmark_get_property;
   object_class->finalize = ephy_bookmark_finalize;
 
+  obj_properties[PROP_TAGS] =
+    g_param_spec_pointer ("tags",
+                          "Tags",
+                          "The bookmark's tags",
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
@@ -137,11 +150,12 @@ ephy_bookmark_init (EphyBookmark *self)
 }
 
 EphyBookmark *
-ephy_bookmark_new (char *url, char *title)
+ephy_bookmark_new (char *url, char *title, GSequence *tags)
 {
   return g_object_new (EPHY_TYPE_BOOKMARK,
                        "url", url,
                        "title", title,
+                       "tags", tags,
                        NULL);
 }
 
@@ -213,15 +227,6 @@ ephy_bookmark_has_tag (EphyBookmark *self, const char *tag)
                                 NULL);
 
   return tag_iter != NULL;
-}
-
-void
-ephy_bookmark_set_tags (EphyBookmark *self, GSequence *tags)
-{
-  g_return_if_fail (EPHY_IS_BOOKMARK (self));
-  g_return_if_fail (tags != NULL);
-
-  self->tags = tags;
 }
 
 GSequence *
