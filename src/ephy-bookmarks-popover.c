@@ -267,7 +267,6 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   GList *bookmarks;
   GList *l;
   EphyBookmark *dummy_bookmark;
-  GSequence *dummy_tags;
   GSimpleActionGroup *group;
 
   gtk_widget_init_template (GTK_WIDGET (self));

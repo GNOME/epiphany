@@ -101,8 +101,6 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
                                           NULL);
 
   self->tags = g_sequence_new (g_free);
-
-  ephy_bookmarks_manager_load_from_file (self);
 }
 
 static GType
