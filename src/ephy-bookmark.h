@@ -30,7 +30,12 @@ EphyBookmark        *ephy_bookmark_new          (char      *url,
                                                  char      *title,
                                                  GSequence *tags);
 
+void                 ephy_bookmark_set_url      (EphyBookmark *self,
+                                                 const char   *url);
 const char          *ephy_bookmark_get_url      (EphyBookmark *self);
+
+void                 ephy_bookmark_set_title    (EphyBookmark *self,
+                                                 const char   *title);
 const char          *ephy_bookmark_get_title    (EphyBookmark *self);
 
 void                 ephy_bookmark_add_tag      (EphyBookmark *self,

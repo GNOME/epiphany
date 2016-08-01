@@ -159,11 +159,29 @@ ephy_bookmark_new (char *url, char *title, GSequence *tags)
                        NULL);
 }
 
+void
+ephy_bookmark_set_url (EphyBookmark *self, const char *url)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+
+  self->url = g_strdup (url);
+}
+
 const char *
-ephy_bookmark_get_url (EphyBookmark *self) {
+ephy_bookmark_get_url (EphyBookmark *self)
+{
   g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
 
   return self->url;
+}
+
+void
+ephy_bookmark_set_title (EphyBookmark *self, const char *title)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+
+  self->title = g_strdup (title);
+  g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_TITLE]);
 }
 
 const char *
