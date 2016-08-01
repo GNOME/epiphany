@@ -50,12 +50,12 @@ struct _EphySyncService {
   gchar *user_email;
   gint64 last_auth_at;
 
+  gboolean is_locked;
   gchar *storage_endpoint;
   gchar *storage_credentials_id;
   gchar *storage_credentials_key;
   gint64 storage_credentials_expiry_time;
-  gboolean is_obtaining_storage_credentials;
-  GQueue *storage_message_queue;
+  GQueue *storage_queue;
 
   gchar *certificate;
   EphySyncCryptoRSAKeyPair *keypair;
@@ -186,6 +186,18 @@ destroy_session_response_cb (SoupSession *session,
              json_object_get_string_member (json, "message"));
 
   g_object_unref (parser);
+}
+
+static void
+ephy_sync_service_clear_storage_credentials (EphySyncService *self)
+{
+  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
+
+  g_clear_pointer (&self->certificate, g_free);
+  g_clear_pointer (&self->storage_endpoint, g_free);
+  g_clear_pointer (&self->storage_credentials_id, g_free);
+  g_clear_pointer (&self->storage_credentials_key, g_free);
+  self->storage_credentials_expiry_time = 0;
 }
 
 static gboolean
@@ -349,17 +361,6 @@ ephy_sync_service_send_storage_request (EphySyncService               *self,
   storage_server_request_async_data_free (data);
 }
 
-static void
-ephy_sync_service_send_enqueued_storage_messages (EphySyncService *self)
-{
-  StorageServerRequestAsyncData *qdata;
-
-  while (g_queue_is_empty (self->storage_message_queue) == FALSE) {
-    qdata = g_queue_pop_head (self->storage_message_queue);
-    ephy_sync_service_send_storage_request (self, qdata);
-  }
-}
-
 static gboolean
 ephy_sync_service_certificate_is_valid (EphySyncService *self,
                                         const gchar     *certificate)
@@ -459,22 +460,18 @@ obtain_storage_credentials_response_cb (SoupSession *session,
                json_object_get_string_member (json, "status"),
                json_object_get_string_member (errors, "description"));
     storage_server_request_async_data_free (data);
-    g_object_unref (parser);
+    goto out;
   } else {
     g_warning ("Failed to talk to the Token Server, status code %u. "
                "See https://docs.services.mozilla.com/token/apis.html#error-responses",
                message->status_code);
     storage_server_request_async_data_free (data);
-    g_object_unref (parser);
+    goto out;
   }
 
-  /* Signal that we are done with obtaining the storage credentials. */
-  service->is_obtaining_storage_credentials = FALSE;
-
-  /* Send the current message and the ones that were waiting in the queue. */
   ephy_sync_service_send_storage_request (service, data);
-  ephy_sync_service_send_enqueued_storage_messages (service);
 
+out:
   g_object_unref (parser);
 }
 
@@ -619,6 +616,30 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self,
 }
 
 static void
+ephy_sync_service_issue_storage_request (EphySyncService               *self,
+                                         StorageServerRequestAsyncData *data)
+{
+  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
+  g_return_if_fail (data != NULL);
+
+  if (ephy_sync_service_storage_credentials_is_expired (self) == TRUE) {
+    ephy_sync_service_clear_storage_credentials (self);
+
+    /* The only purpose of certificates is to obtain a signed BrowserID that is
+     * needed to talk to the Token Server. From the Token Server we will obtain
+     * the credentials needed to talk to the Storage Server. Since both
+     * ephy_sync_service_obtain_signed_certificate() and
+     * ephy_sync_service_obtain_storage_credentials() complete asynchronously,
+     * we need to entrust them the task of sending the request to the Storage
+     * Server.
+     */
+    ephy_sync_service_obtain_signed_certificate (self, data);
+  } else {
+    ephy_sync_service_send_storage_request (self, data);
+  }
+}
+
+static void
 ephy_sync_service_finalize (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
@@ -626,7 +647,7 @@ ephy_sync_service_finalize (GObject *object)
   if (self->keypair != NULL)
     ephy_sync_crypto_rsa_key_pair_free (self->keypair);
 
-  g_queue_free_full (self->storage_message_queue, (GDestroyNotify) storage_server_request_async_data_free);
+  g_queue_free_full (self->storage_queue, (GDestroyNotify) storage_server_request_async_data_free);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
 }
@@ -638,10 +659,7 @@ ephy_sync_service_dispose (GObject *object)
 
   g_clear_object (&self->soup_session);
   g_clear_pointer (&self->user_email, g_free);
-  g_clear_pointer (&self->certificate, g_free);
-  g_clear_pointer (&self->storage_endpoint, g_free);
-  g_clear_pointer (&self->storage_credentials_id, g_free);
-  g_clear_pointer (&self->storage_credentials_key, g_free);
+  ephy_sync_service_clear_storage_credentials (self);
   ephy_sync_service_delete_all_tokens (self);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->dispose (object);
@@ -662,7 +680,7 @@ ephy_sync_service_init (EphySyncService *self)
   gchar *email;
 
   self->soup_session = soup_session_new ();
-  self->storage_message_queue = g_queue_new ();
+  self->storage_queue = g_queue_new ();
 
   email = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER);
 
@@ -942,35 +960,29 @@ ephy_sync_service_send_storage_message (EphySyncService     *self,
                                                 modified_since, unmodified_since,
                                                 callback, user_data);
 
-  if (ephy_sync_service_storage_credentials_is_expired (self) == FALSE) {
-    ephy_sync_service_send_storage_request (self, data);
-    return;
-  }
-
-  /* If we are currently obtaining the storage credentials for another message,
-   * then the new message is enqueued and will be sent after the credentials are
-   * retrieved.
+  /* If there is currently another message being transmitted, then the new
+   * message has to wait in the queue, otherwise, it is free to go.
    */
-  if (self->is_obtaining_storage_credentials == TRUE) {
-    g_queue_push_tail (self->storage_message_queue, data);
-    return;
+  if (self->is_locked == FALSE) {
+    self->is_locked = TRUE;
+    ephy_sync_service_issue_storage_request (self, data);
+  } else {
+    g_queue_push_tail (self->storage_queue, data);
   }
+}
 
-  /* This message is the one that will obtain the storage credentials. */
-  self->is_obtaining_storage_credentials = TRUE;
+void
+ephy_sync_service_release_next_storage_message (EphySyncService *self)
+{
+  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
+  /* We should never reach this with the service not being locked. */
+  g_assert (self->is_locked == TRUE);
 
-  /* Drop the old certificate and storage credentials. */
-  g_clear_pointer (&self->certificate, g_free);
-  g_clear_pointer (&self->storage_credentials_id, g_free);
-  g_clear_pointer (&self->storage_credentials_key, g_free);
-  self->storage_credentials_expiry_time = 0;
-
-  /* The only purpose of certificates is to obtain a signed BrowserID that is
-   * needed to talk to the Token Server. From the Token Server we will obtain
-   * the credentials needed to talk to the Storage Server. Since both
-   * ephy_sync_service_obtain_signed_certificate() and
-   * ephy_sync_service_obtain_storage_credentials() complete asynchronously, we
-   * need to entrust them the task of sending the request to the Storage Server.
+  /* If there are other messages waiting in the queue, we release the next one
+   * and keep the service locked, else, we mark the service as not locked.
    */
-  ephy_sync_service_obtain_signed_certificate (self, data);
+  if (g_queue_is_empty (self->storage_queue) == FALSE)
+    ephy_sync_service_issue_storage_request (self, g_queue_pop_head (self->storage_queue));
+  else
+    self->is_locked = FALSE;
 }
