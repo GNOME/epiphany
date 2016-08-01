@@ -266,19 +266,21 @@ get_address (const char *url)
 {
   SoupURI *uri;
   char *address;
-  int len;
 
   uri = soup_uri_new (url);
+  if (!uri) {
+    url = g_strconcat (SOUP_URI_SCHEME_HTTP,
+                       "://",
+                       url,
+                       NULL);
+    uri = soup_uri_new (url);
+  }
   address = g_strconcat (soup_uri_get_host (uri),
                          soup_uri_get_path (uri),
                          soup_uri_get_query (uri),
                          soup_uri_get_fragment (uri),
                          NULL);
   soup_uri_free (uri);
-
-  len = strlen (address);
-  if (address[len - 1] == '/')
-    address[len - 1] = '\0';
 
   return address;
 }
@@ -297,10 +299,18 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   gtk_entry_set_text (GTK_ENTRY (self->name_entry),
                       ephy_bookmark_get_title (self->bookmark));
 
+  g_object_bind_property (GTK_ENTRY (self->name_entry), "text",
+                          self->bookmark, "title",
+                          G_BINDING_DEFAULT);
+
   /* Set text for address entry */
   address = get_address (ephy_bookmark_get_url (self->bookmark));
   gtk_entry_set_text (GTK_ENTRY (self->address_entry), address);
   g_free (address);
+
+  g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
+                          self->bookmark, "url",
+                          G_BINDING_DEFAULT);
 
   /* Create tag widgets */
   tags = ephy_bookmarks_manager_get_tags (manager);
@@ -330,6 +340,16 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
 }
 
 static void
+ephy_bookmark_properties_grid_destroy (GtkWidget *widget)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+
+  ephy_bookmarks_manager_save_to_file_async (manager, NULL, NULL, NULL);
+
+  GTK_WIDGET_CLASS (ephy_bookmark_properties_grid_parent_class)->destroy (widget);
+}
+
+static void
 ephy_bookmark_properties_grid_class_init (EphyBookmarkPropertiesGridClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -337,6 +357,8 @@ ephy_bookmark_properties_grid_class_init (EphyBookmarkPropertiesGridClass *klass
 
   object_class->set_property = ephy_bookmark_properties_grid_set_property;
   object_class->constructed = ephy_bookmark_properties_grid_constructed;
+
+  widget_class->destroy = ephy_bookmark_properties_grid_destroy;
 
   obj_properties[PROP_BOOKMARK] =
     g_param_spec_object ("bookmark",
