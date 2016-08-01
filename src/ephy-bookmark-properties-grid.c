@@ -344,6 +344,10 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
                             G_BINDING_DEFAULT);
   }
 
+  g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
+                          self->bookmark, "url",
+                          G_BINDING_DEFAULT);
+
   /* Create tag widgets */
   tags = ephy_bookmarks_manager_get_tags (self->manager);
   bookmark_tags = ephy_bookmark_get_tags (self->bookmark);
