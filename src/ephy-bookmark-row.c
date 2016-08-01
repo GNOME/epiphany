@@ -80,7 +80,7 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
   EphyBookmarkRow *self = user_data;
   WebKitFaviconDatabase *database = (WebKitFaviconDatabase *)source;
   cairo_surface_t *icon_surface;
-  GdkPixbuf *favicon;
+  GdkPixbuf *favicon = NULL;
 
   g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
