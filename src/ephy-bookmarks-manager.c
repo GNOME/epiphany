@@ -19,6 +19,7 @@
 
 #include "ephy-bookmarks-manager.h"
 
+#include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "gvdb-builder.h"
 #include "gvdb-reader.h"
@@ -71,6 +72,54 @@ build_variant (EphyBookmark *bookmark)
 }
 
 static void
+data_saved_cb (GObject      *object,
+               GAsyncResult *result,
+               gpointer      user_data)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (object);
+  gboolean ret;
+
+  ret = ephy_bookmarks_manager_save_to_file_finish (self, result, NULL);
+  if (ret)
+    LOG ("Bookmarks data saved");
+}
+
+static void
+add_tag_to_table (const char *tag, GHashTable *table)
+{
+  gvdb_hash_table_insert (table, tag);
+}
+
+
+static gboolean
+ephy_bookmarks_manager_save_to_file (EphyBookmarksManager *self)
+{
+  GHashTable *root_table;
+  GHashTable *table;
+  GList *l;
+  gboolean result;
+
+  root_table = gvdb_hash_table_new (NULL, NULL);
+
+  table = gvdb_hash_table_new (root_table, "bookmarks");
+  for (l = self->bookmarks; l != NULL; l = l->next) {
+    gvdb_hash_table_insert_variant (table,
+                                    ephy_bookmark_get_url (l->data),
+                                    build_variant (l->data));
+  }
+  g_hash_table_unref (table);
+
+  table = gvdb_hash_table_new (root_table, "tags");
+  g_sequence_foreach (self->tags, (GFunc)add_tag_to_table, table);
+  g_hash_table_unref (table);
+
+  result = gvdb_table_write_contents (root_table, self->gvdb_filename, FALSE, NULL);
+  g_hash_table_unref (root_table);
+
+  return result;
+}
+
+static void
 ephy_bookmarks_manager_finalize (GObject *object)
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (object);
@@ -101,6 +150,12 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
                                           NULL);
 
   self->tags = g_sequence_new (g_free);
+
+  /* Create DB file if it doesn't already exists */
+  if (!g_file_test (self->gvdb_filename, G_FILE_TEST_EXISTS))
+    ephy_bookmarks_manager_save_to_file (self);
+
+  ephy_bookmarks_manager_load_from_file (self);
 }
 
 static GType
@@ -139,6 +194,20 @@ list_model_iface_init (GListModelInterface *iface)
   iface->get_item = ephy_bookmarks_manager_get_item;
 }
 
+static int
+bookmark_url_compare (gpointer a, gpointer b)
+{
+  EphyBookmark *bookmark1 = EPHY_BOOKMARK (a);
+  EphyBookmark *bookmark2 = EPHY_BOOKMARK (b);
+  const char *url1;
+  const char *url2;
+
+  url1 = ephy_bookmark_get_url (bookmark1);
+  url2 = ephy_bookmark_get_url (bookmark2);
+
+  return g_strcmp0 (url1, url2);
+}
+
 void
 ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                      EphyBookmark         *bookmark)
@@ -146,7 +215,9 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
 
-  if (g_list_find (self->bookmarks, bookmark))
+  if (g_list_find_custom (self->bookmarks,
+                          bookmark,
+                          (GCompareFunc)bookmark_url_compare))
     return;
 
   g_signal_connect_object (bookmark,
@@ -156,6 +227,10 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                            G_CONNECT_SWAPPED);
 
   self->bookmarks = g_list_prepend (self->bookmarks, bookmark);
+
+  ephy_bookmarks_manager_save_to_file_async (self, NULL,
+                                             (GAsyncReadyCallback) data_saved_cb,
+                                             NULL);
 }
 
 void
@@ -172,6 +247,10 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
 
   self->bookmarks = g_list_remove (self->bookmarks, bookmark);
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+
+  ephy_bookmarks_manager_save_to_file_async (self, NULL,
+                                             (GAsyncReadyCallback) data_saved_cb,
+                                             NULL);
 }
 
 void
@@ -277,34 +356,44 @@ ephy_bookmarks_manager_get_tags (EphyBookmarksManager *self)
 }
 
 static void
-add_tag_to_table (const char *tag, GHashTable *table)
+ephy_bookmarks_manager_save_to_file_thread (GTask        *task,
+                                            gpointer      source_object,
+                                            gpointer      task_data,
+                                            GCancellable *cancellable)
 {
-  gvdb_hash_table_insert (table, tag);
+  EphyBookmarksManager *self = source_object;
+  gboolean result;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  result = ephy_bookmarks_manager_save_to_file (self);
+
+  g_task_return_boolean (task, result);
 }
 
 void
-ephy_bookmarks_manager_save_to_file (EphyBookmarksManager *self)
+ephy_bookmarks_manager_save_to_file_async (EphyBookmarksManager *self,
+                                           GCancellable         *cancellable,
+                                           GAsyncReadyCallback   callback,
+                                           gpointer              user_data)
 {
-  GHashTable *root_table;
-  GHashTable *table;
-  GList *l;
+  GTask *task;
 
-  root_table = gvdb_hash_table_new (NULL, NULL);
+  task = g_task_new (self, cancellable, callback, user_data);
 
-  table = gvdb_hash_table_new (root_table, "bookmarks");
-  for (l = self->bookmarks; l != NULL; l = l->next) {
-    gvdb_hash_table_insert_variant (table,
-                                    ephy_bookmark_get_url (l->data),
-                                    build_variant (l->data));
-  }
-  g_hash_table_unref (table);
+  g_task_run_in_thread (task, ephy_bookmarks_manager_save_to_file_thread);
+  g_object_unref (task);
+}
 
-  table = gvdb_hash_table_new (root_table, "tags");
-  g_sequence_foreach (self->tags, (GFunc)add_tag_to_table, table);
-  g_hash_table_unref (table);
+gboolean
+ephy_bookmarks_manager_save_to_file_finish (EphyBookmarksManager *self,
+                                            GAsyncResult         *result,
+                                            GError              **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
 
-  gvdb_table_write_contents (root_table, self->gvdb_filename, FALSE, NULL);
-  g_hash_table_unref (root_table);
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 void

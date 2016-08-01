@@ -20,6 +20,8 @@
 
 #include "ephy-bookmark.h"
 
+#include <gio/gio.h>
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_BOOKMARKS_MANAGER (ephy_bookmarks_manager_get_type ())
@@ -43,7 +45,13 @@ GList       *ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager
                                                             const char           *tag);
 GSequence   *ephy_bookmarks_manager_get_tags               (EphyBookmarksManager *self);
 
-void         ephy_bookmarks_manager_save_to_file           (EphyBookmarksManager *self);
+void        ephy_bookmarks_manager_save_to_file_async      (EphyBookmarksManager *self,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+gboolean     ephy_bookmarks_manager_save_to_file_finish    (EphyBookmarksManager *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
 void         ephy_bookmarks_manager_load_from_file         (EphyBookmarksManager *self);
 
 G_END_DECLS

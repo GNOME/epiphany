@@ -22,6 +22,7 @@
 #include "ephy-bookmark.h"
 #include "ephy-bookmark-row.h"
 #include "ephy-bookmarks-manager.h"
+#include "ephy-debug.h"
 #include "ephy-shell.h"
 
 #include <glib/gi18n.h>
@@ -268,6 +269,7 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   GList *l;
   EphyBookmark *dummy_bookmark;
   GSimpleActionGroup *group;
+  int i;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -278,10 +280,14 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
                                   G_ACTION_GROUP (group));
   g_object_unref (group);
 
-  dummy_bookmark = ephy_bookmark_new (g_strdup ("https://www.facebook.com/"),
-                                      g_strdup ("Facebook"),
+  for (i = 0; i < 1; i++) {
+    dummy_bookmark = ephy_bookmark_new (g_strdup_printf ("https://www.duckduckgo.com/%d", i),
+                                      g_strdup_printf ("DuckDuckGo %d", i),
                                       g_sequence_new (g_free));
-  ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
+    ephy_bookmarks_manager_add_tag (manager, g_strdup_printf ("Tag %d", i));
+    ephy_bookmarks_manager_add_tag (manager, g_strdup_printf ("Favorite %d", i));
+    ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
+  }
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
                            G_LIST_MODEL (manager),
