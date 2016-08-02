@@ -141,6 +141,8 @@ RESOURCE_FILES = \
 	resources/prism.css			  \
 	resources/prism.js			  \
 	resources/shortcuts-dialog.ui		  \
+	resources/icons/ephy-bookmark-empty.svg	  \
+	resources/icons/ephy-bookmark-full.svg	  \
 	resources/gtk/bookmark-properties-grid.ui \
 	resources/gtk/bookmark-row.ui		  \
 	resources/gtk/bookmarks-popover.ui	  \

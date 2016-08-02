@@ -253,6 +253,36 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
                                              NULL);
 }
 
+static int
+bookmark_with_url_compare (gpointer *ebookmark, gconstpointer url)
+{
+  EphyBookmark *bookmark = EPHY_BOOKMARK (ebookmark);
+  const char *bookmark_url;
+
+  bookmark_url = ephy_bookmark_get_url (bookmark);
+
+  return g_strcmp0 (bookmark_url, url);
+}
+
+EphyBookmark *
+ephy_bookmarks_manager_get_bookmark_by_url (EphyBookmarksManager *self,
+                                            const char           *url)
+{
+  GList *bookmark_node;
+
+  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self), FALSE);
+  g_return_val_if_fail (url != NULL, FALSE);
+
+  bookmark_node = g_list_find_custom (self->bookmarks,
+                                      url,
+                                      (GCompareFunc)bookmark_with_url_compare);
+
+  if (!bookmark_node)
+    return NULL;
+
+  return bookmark_node->data;
+}
+
 void
 ephy_bookmarks_manager_add_tag (EphyBookmarksManager *self, const char *tag)
 {

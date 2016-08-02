@@ -60,11 +60,8 @@ void            ephy_location_entry_undo_reset          (EphyLocationEntry *entr
 
 void            ephy_location_entry_activate            (EphyLocationEntry *entry);
 
-void            ephy_location_entry_set_favicon         (EphyLocationEntry *entry,
-                                                         GdkPixbuf *pixbuf);
-
-void            ephy_location_entry_set_show_favicon    (EphyLocationEntry *entry,
-                                                         gboolean show_favicon);
+void          ephy_location_entry_set_bookmarked_status (EphyLocationEntry *entry,
+                                                         gboolean           is_bookmarked);
 
 void            ephy_location_entry_set_lock_tooltip    (EphyLocationEntry *entry,
                                                          const char *tooltip);

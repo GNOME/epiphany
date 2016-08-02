@@ -10,7 +10,10 @@
     <child>
       <object class="GtkLabel" id="popover_bookmark_label">
         <property name="label" translatable="yes">Bookmark</property>
-        <property name="visible">false</property>
+        <property name="visible">true</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -35,6 +38,9 @@
     </child>
     <child>
       <object class="GtkEntry" id="name_entry">
+        <property name="max-length">40</property>
+        <property name="max-width-chars">40</property>
+        <property name="width-chars">40</property>
         <property name="visible">true</property>
       </object>
       <packing>
@@ -71,7 +77,10 @@
         <property name="halign">start</property>
         <property name="valign">center</property>
         <property name="label" translatable="yes">Tags</property>
-        <property name="visible">false</property>
+        <property name="visible">true</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
         <style>
           <class name="dim-label"/>
         </style>
@@ -99,7 +108,7 @@
     <child>
       <object class="GtkScrolledWindow">
         <property name="valign">start</property>
-        <property name="min-content-height">40</property>
+        <property name="min-content-height">38</property>
         <property name="max-content-height">132</property>
         <property name="hscrollbar-policy">never</property>
         <property name="visible">true</property>
@@ -110,7 +119,7 @@
             <property name="selection-mode">none</property>
             <property name="homogeneous">true</property>
             <property name="valign">start</property>
-            <property name="min-children-per-line">2</property>
+            <property name="min-children-per-line">3</property>
             <property name="max-children-per-line">3</property>
             <property name="visible">true</property>
           </object>
@@ -158,6 +167,7 @@
         <property name="action-name">grid.remove-bookmark</property>
         <property name="use-underline">true</property>
         <property name="halign">end</property>
+        <property name="valign">end</property>
         <property name="visible">true</property>
         <style>
           <class name="destructive-action"/>
