@@ -55,7 +55,6 @@
 struct _EphyLocationEntry {
   GtkEntry parent_instance;
 
-  GdkPixbuf *favicon;
   GtkTreeModel *model;
 
   GSList *search_terms;
@@ -83,19 +82,8 @@ struct _EphyLocationEntry {
   guint original_address : 1;
   guint apply_colors : 1;
   guint needs_reset : 1;
-  guint show_favicon : 1;
-
-  GtkTargetList *drag_targets;
-  GdkDragAction drag_actions;
 
   EphySecurityLevel security_level;
-};
-
-static const GtkTargetEntry url_drag_types [] =
-{
-  { (char *)EPHY_DND_URL_TYPE, 0, 0 },
-  { (char *)EPHY_DND_URI_LIST_TYPE, 0, 1 },
-  { (char *)EPHY_DND_TEXT_TYPE, 0, 2 }
 };
 
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);
@@ -109,14 +97,13 @@ static void extracell_data_func (GtkCellLayout   *cell_layout,
 enum {
   PROP_0,
   PROP_ADDRESS,
-  PROP_FAVICON,
   PROP_SECURITY_LEVEL,
-  PROP_SHOW_FAVICON,
   LAST_PROP
 };
 
 enum signalsEnum {
   USER_CHANGED,
+  BOOKMARK_CLICKED,
   GET_LOCATION,
   GET_TITLE,
   LAST_SIGNAL
@@ -138,41 +125,6 @@ update_address_state (EphyLocationEntry *entry)
   entry->original_address = text != NULL &&
                             g_str_hash (text) == entry->hash;
 }
-
-static void
-update_favicon (EphyLocationEntry *lentry)
-{
-  GtkEntry *entry = GTK_ENTRY (lentry);
-
-  /* Only show the favicon if the entry's text is the
-   * address of the current page.
-   */
-  if (lentry->show_favicon && lentry->favicon != NULL && lentry->original_address) {
-    gtk_entry_set_icon_from_pixbuf (entry,
-                                    GTK_ENTRY_ICON_PRIMARY,
-                                    lentry->favicon);
-  } else if (lentry->show_favicon) {
-    const char *icon_name;
-
-    /* Here we could consider using fallback favicon that matches
-     * the page MIME type, though text/html should be good enough
-     * most of the time. See #337140
-     */
-    if (gtk_entry_get_text_length (entry) > 0)
-      icon_name = "text-x-generic-symbolic";
-    else
-      icon_name = "edit-find-symbolic";
-
-    gtk_entry_set_icon_from_icon_name (entry,
-                                       GTK_ENTRY_ICON_PRIMARY,
-                                       icon_name);
-  } else {
-    gtk_entry_set_icon_from_icon_name (entry,
-                                       GTK_ENTRY_ICON_PRIMARY,
-                                       NULL);
-  }
-}
-
 
 static const char *
 ephy_location_entry_title_widget_get_address (EphyTitleWidget *widget)
@@ -219,16 +171,8 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
       effective_text = g_strdup_printf ("about:%s",
                                         address + strlen (EPHY_ABOUT_SCHEME) + 1);
     text = address;
-    gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
-                                    GTK_ENTRY_ICON_PRIMARY,
-                                    entry->drag_targets,
-                                    entry->drag_actions);
   } else {
     text = "";
-    gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
-                                    GTK_ENTRY_ICON_PRIMARY,
-                                    NULL,
-                                    GDK_ACTION_DEFAULT);
   }
 
   /* First record the new hash, then update the entry text */
@@ -242,7 +186,6 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   /* We need to call update_address_state() here, as the 'changed' signal
    * may not get called if the user has typed in the exact correct url */
   update_address_state (entry);
-  update_favicon (entry);
 
   /* Now restore the selection.
    * Note that it's not owned by the entry anymore!
@@ -276,7 +219,7 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
 
   icon_name = ephy_security_level_to_icon_name (security_level);
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (widget),
-                                     GTK_ENTRY_ICON_SECONDARY,
+                                     GTK_ENTRY_ICON_PRIMARY,
                                      icon_name);
 
   entry->security_level = security_level;
@@ -295,17 +238,9 @@ ephy_location_entry_set_property (GObject      *object,
       ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry),
                                      g_value_get_string (value));
       break;
-    case PROP_FAVICON:
-      ephy_location_entry_set_favicon (entry,
-                                       g_value_get_object (value));
-      break;
     case PROP_SECURITY_LEVEL:
       ephy_title_widget_set_security_level (EPHY_TITLE_WIDGET (entry),
                                             g_value_get_enum (value));
-      break;
-    case PROP_SHOW_FAVICON:
-      ephy_location_entry_set_show_favicon (entry,
-                                            g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -338,14 +273,6 @@ ephy_location_entry_finalize (GObject *object)
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 
   g_free (entry->saved_text);
-
-  if (entry->drag_targets != NULL) {
-    gtk_target_list_unref (entry->drag_targets);
-  }
-
-  if (entry->favicon != NULL) {
-    g_object_unref (entry->favicon);
-  }
 
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->finalize (object);
 }
@@ -421,27 +348,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   entry_class->copy_clipboard = ephy_location_entry_copy_clipboard;
   entry_class->cut_clipboard = ephy_location_entry_cut_clipboard;
 
-  /**
-   * EphyLocationEntry:favicon:
-   *
-   * The icon corresponding to the current location.
-   */
-  g_object_class_install_property (object_class,
-                                   PROP_FAVICON,
-                                   g_param_spec_object ("favicon",
-                                                        "Favicon",
-                                                        "The icon corresponding to the current location",
-                                                        GDK_TYPE_PIXBUF,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_property (object_class,
-                                   PROP_SHOW_FAVICON,
-                                   g_param_spec_boolean ("show-favicon",
-                                                         "Show Favicon",
-                                                         "Whether to show the favicon",
-                                                         TRUE,
-                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
 
@@ -458,6 +364,20 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                         G_TYPE_NONE,
                                         0,
                                         G_TYPE_NONE);
+
+  /**
+   * EphyLocationEntry::bookmark-clicked:
+   * @entry: the object on which the signal is emitted
+   *
+   * Emitted when the user clicks the bookmark icon inside the
+   * #EphyLocationEntry.
+   *
+   */
+  signals[BOOKMARK_CLICKED] = g_signal_new ("bookmark-clicked", G_OBJECT_CLASS_TYPE (klass),
+                                            G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                            0, NULL, NULL, NULL,
+                                            G_TYPE_NONE,
+                                            0);
 
   /**
    * EphyLocationEntry::get-location:
@@ -625,26 +545,6 @@ action_activated_after_cb (GtkEntryCompletion *completion,
   }
 }
 
-static gboolean
-entry_drag_motion_cb (GtkWidget      *widget,
-                      GdkDragContext *context,
-                      gint            x,
-                      gint            y,
-                      guint           time)
-{
-  return FALSE;
-}
-
-static gboolean
-entry_drag_drop_cb (GtkWidget      *widget,
-                    GdkDragContext *context,
-                    gint            x,
-                    gint            y,
-                    guint           time)
-{
-  return FALSE;
-}
-
 static void
 entry_clear_activate_cb (GtkMenuItem       *item,
                          EphyLocationEntry *entry)
@@ -768,217 +668,6 @@ entry_populate_popup_cb (GtkEntry          *entry,
   gtk_menu_shell_insert (GTK_MENU_SHELL (menu), separator, 2);
 }
 
-static void
-each_url_get_data_binder (EphyDragEachSelectedItemDataGet iteratee,
-                          gpointer                        iterator_context,
-                          gpointer                        return_data)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (iterator_context);
-  char *title = NULL, *address = NULL;
-
-  g_signal_emit (entry, signals[GET_LOCATION], 0, &address);
-  g_signal_emit (entry, signals[GET_TITLE], 0, &title);
-  g_return_if_fail (address != NULL && title != NULL);
-
-  iteratee (address, title, return_data);
-
-  g_free (address);
-  g_free (title);
-}
-
-static void
-sanitize_location (char **url)
-{
-  char *str;
-
-  /* Do not show internal ephy-about: protocol to users */
-  if (g_str_has_prefix (*url, EPHY_ABOUT_SCHEME)) {
-    str = g_strdup_printf ("about:%s", *url + strlen (EPHY_ABOUT_SCHEME) + 1);
-    g_free (*url);
-    *url = str;
-  }
-}
-
-#define DRAG_ICON_LAYOUT_PADDING        5
-#define DRAG_ICON_ICON_PADDING          10
-#define DRAG_ICON_MAX_WIDTH_CHARS       32
-
-static cairo_surface_t *
-favicon_create_drag_surface (EphyLocationEntry *entry,
-                             GtkWidget         *widget)
-{
-  char *title = NULL, *address = NULL;
-  GString *text;
-  GtkStyleContext *style;
-  const PangoFontDescription *font_desc;
-  cairo_surface_t *surface;
-  PangoContext *context;
-  PangoLayout  *layout;
-  PangoFontMetrics *metrics;
-  int surface_height, surface_width;
-  int layout_width, layout_height;
-  int icon_width = 0, icon_height = 0, favicon_offset_x = 0;
-  int char_width;
-  cairo_t *cr;
-  GtkStateFlags state;
-  GdkRGBA color;
-  GdkPixbuf *favicon;
-
-  g_signal_emit (entry, signals[GET_LOCATION], 0, &address);
-  sanitize_location (&address);
-  g_signal_emit (entry, signals[GET_TITLE], 0, &title);
-  if (address == NULL || title == NULL) return NULL;
-
-  /* Compute text */
-  title = g_strstrip (title);
-
-  text = g_string_sized_new (strlen (address) + strlen (title) + 2);
-  if (title[0] != '\0') {
-    g_string_append (text, title);
-    g_string_append (text, "\n");
-  }
-
-  if (address[0] != '\0') {
-    g_string_append (text, address);
-  }
-
-  if (entry->favicon != NULL)
-    favicon = g_object_ref (entry->favicon);
-  else
-    favicon = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-                                        "text-x-generic-symbolic",
-                                        16,
-                                        0, NULL);
-  if (favicon != NULL) {
-    icon_width = gdk_pixbuf_get_width (favicon);
-    icon_height = gdk_pixbuf_get_height (favicon);
-  }
-
-  context = gtk_widget_get_pango_context (widget);
-  layout = pango_layout_new (context);
-
-  style = gtk_widget_get_style_context (GTK_WIDGET (entry));
-  state = gtk_style_context_get_state (style);
-
-  gtk_style_context_save (style);
-  gtk_style_context_set_state (style, GTK_STATE_FLAG_NORMAL);
-  gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL,
-                         "font", &font_desc, NULL);
-  gtk_style_context_restore (style);
-
-  metrics = pango_context_get_metrics (context,
-                                       font_desc,
-                                       pango_context_get_language (context));
-
-  char_width = pango_font_metrics_get_approximate_digit_width (metrics);
-  pango_font_metrics_unref (metrics);
-
-  pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
-  pango_layout_set_width (layout, char_width * DRAG_ICON_MAX_WIDTH_CHARS);
-  pango_layout_set_text (layout, text->str, text->len);
-
-  pango_layout_get_pixel_size (layout, &layout_width, &layout_height);
-
-  if (favicon != NULL) {
-    favicon_offset_x = icon_width + (2 * DRAG_ICON_ICON_PADDING);
-  }
-
-  surface_width = layout_width + favicon_offset_x +
-                  (DRAG_ICON_LAYOUT_PADDING * 3);
-  surface_height = MAX (layout_height, icon_height) +
-                   (DRAG_ICON_LAYOUT_PADDING * 2);
-
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               surface_width + 2,
-                                               surface_height + 2);
-  cr = cairo_create (surface);
-
-  cairo_rectangle (cr, 1, 1, surface_width, surface_height);
-  cairo_set_line_width (cr, 1.0);
-
-  cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
-  cairo_stroke_preserve (cr);
-
-  gtk_style_context_get_background_color (style, state, &color);
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_fill (cr);
-
-  if (favicon != NULL) {
-    double x;
-    double y;
-
-    x = 1 + DRAG_ICON_LAYOUT_PADDING + DRAG_ICON_ICON_PADDING;
-    y = (surface_height - icon_height) / 2;
-    gdk_cairo_set_source_pixbuf (cr, favicon, x, y);
-    cairo_rectangle (cr, x, y, icon_width, icon_height);
-    cairo_fill (cr);
-  }
-
-  cairo_move_to (cr,
-                 1 + DRAG_ICON_LAYOUT_PADDING + favicon_offset_x,
-                 1 + DRAG_ICON_LAYOUT_PADDING);
-  gtk_style_context_get_color (style, state, &color);
-  gdk_cairo_set_source_rgba (cr, &color);
-  pango_cairo_show_layout (cr, layout);
-
-  cairo_destroy (cr);
-  g_object_unref (layout);
-
-  g_free (address);
-  g_free (title);
-  g_string_free (text, TRUE);
-  g_clear_object (&favicon);
-
-  return surface;
-}
-
-static void
-favicon_drag_begin_cb (GtkWidget         *widget,
-                       GdkDragContext    *context,
-                       EphyLocationEntry *lentry)
-{
-  cairo_surface_t *surface;
-  GtkEntry *entry;
-  gint index;
-
-  entry = GTK_ENTRY (widget);
-
-  index = gtk_entry_get_current_icon_drag_source (entry);
-  if (index != GTK_ENTRY_ICON_PRIMARY)
-    return;
-
-  surface = favicon_create_drag_surface (lentry, widget);
-
-  if (surface != NULL) {
-    gtk_drag_set_icon_surface (context, surface);
-    cairo_surface_destroy (surface);
-  }
-}
-
-static void
-favicon_drag_data_get_cb (GtkWidget         *widget,
-                          GdkDragContext    *context,
-                          GtkSelectionData  *selection_data,
-                          guint              info,
-                          guint32            time,
-                          EphyLocationEntry *lentry)
-{
-  gint index;
-  GtkEntry *entry;
-
-  g_assert (widget != NULL);
-  g_return_if_fail (context != NULL);
-
-  entry = GTK_ENTRY (widget);
-
-  index = gtk_entry_get_current_icon_drag_source (entry);
-  if (index == GTK_ENTRY_ICON_PRIMARY) {
-    ephy_dnd_drag_data_get (widget, context, selection_data,
-                            time, lentry, each_url_get_data_binder);
-  }
-}
-
 static gboolean
 icon_button_press_event_cb (GtkWidget           *entry,
                             GtkEntryIconPosition position,
@@ -991,18 +680,12 @@ icon_button_press_event_cb (GtkWidget           *entry,
       event->button == 1 &&
       state == 0 /* left */) {
     if (position == GTK_ENTRY_ICON_PRIMARY) {
-      GtkWidget *toplevel;
-
-      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
-      gtk_window_set_focus (GTK_WINDOW (toplevel), entry);
-
-      gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-    } else {
       GdkRectangle lock_position;
-      gtk_entry_get_icon_area (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY, &lock_position);
+      gtk_entry_get_icon_area (GTK_ENTRY (entry), GTK_ENTRY_ICON_PRIMARY, &lock_position);
       g_signal_emit_by_name (entry, "lock-clicked", &lock_position);
+    } else {
+      g_signal_emit (entry, signals[BOOKMARK_CLICKED], 0);
     }
-
     return TRUE;
   }
 
@@ -1016,42 +699,24 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 
   LOG ("EphyLocationEntry constructing contents %p", lentry);
 
-  /* Favicon */
-  lentry->drag_targets = gtk_target_list_new (url_drag_types,
-                                              G_N_ELEMENTS (url_drag_types));
-  lentry->drag_actions = GDK_ACTION_ASK | GDK_ACTION_COPY | GDK_ACTION_LINK;
+  gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (),
+                                    "/org/gnome/epiphany/icons/");
 
-  gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
-                                  GTK_ENTRY_ICON_PRIMARY,
-                                  lentry->drag_targets,
-                                  lentry->drag_actions);
-
-  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
-                                   GTK_ENTRY_ICON_PRIMARY,
-                                   _("Drag and drop this icon to create a link to this page"));
-
-  gtk_drag_dest_set (entry,
-                     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-                     url_drag_types,
-                     G_N_ELEMENTS (url_drag_types),
-                     GDK_ACTION_MOVE | GDK_ACTION_COPY);
+  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                     GTK_ENTRY_ICON_SECONDARY,
+                                     "ephy-bookmark-empty");
 
   g_object_connect (entry,
                     "signal::icon-press", G_CALLBACK (icon_button_press_event_cb), lentry,
                     "signal::populate-popup", G_CALLBACK (entry_populate_popup_cb), lentry,
                     "signal::key-press-event", G_CALLBACK (entry_key_press_cb), lentry,
                     "signal::changed", G_CALLBACK (editable_changed_cb), lentry,
-                    "signal::drag-motion", G_CALLBACK (entry_drag_motion_cb), lentry,
-                    "signal::drag-drop", G_CALLBACK (entry_drag_drop_cb), lentry,
-                    "signal::drag-data-get", G_CALLBACK (favicon_drag_data_get_cb), lentry,
                     NULL);
 
   g_signal_connect_after (entry, "key-press-event",
                           G_CALLBACK (entry_key_press_after_cb), lentry);
   g_signal_connect_after (entry, "activate",
                           G_CALLBACK (entry_activate_after_cb), lentry);
-  g_signal_connect_after (entry, "drag-begin",
-                          G_CALLBACK (favicon_drag_begin_cb), lentry);
 }
 
 static void
@@ -1062,7 +727,6 @@ ephy_location_entry_init (EphyLocationEntry *le)
   le->user_changed = FALSE;
   le->block_update = FALSE;
   le->saved_text = NULL;
-  le->show_favicon = TRUE;
   le->dns_prefetch_handler = 0;
 
   ephy_location_entry_construct_contents (le);
@@ -1477,36 +1141,21 @@ ephy_location_entry_activate (EphyLocationEntry *entry)
                         widget);
 }
 
-/**
- * ephy_location_entry_set_favicon:
- * @entry: an #EphyLocationEntry widget
- * @pixbuf: a #GdkPixbuf to be set as the icon of the entry
- *
- * Sets the icon in the internal #EphyIconEntry of @entry
- *
- **/
 void
-ephy_location_entry_set_favicon (EphyLocationEntry *entry,
-                                 GdkPixbuf         *pixbuf)
-{
-  if (entry->favicon != NULL) {
-    g_object_unref (entry->favicon);
-  }
-
-  entry->favicon = pixbuf ? g_object_ref (pixbuf) : NULL;
-
-  update_favicon (entry);
-}
-
-void
-ephy_location_entry_set_show_favicon (EphyLocationEntry *entry,
-                                      gboolean           show_favicon)
+ephy_location_entry_set_bookmarked_status (EphyLocationEntry *entry,
+                                           gboolean           is_bookmarked)
 {
   g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
 
-  entry->show_favicon = show_favicon != FALSE;
-
-  update_favicon (entry);
+  if (is_bookmarked) {
+    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                       GTK_ENTRY_ICON_SECONDARY,
+                                       "ephy-bookmark-full");
+  } else {
+    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                       GTK_ENTRY_ICON_SECONDARY,
+                                       "ephy-bookmark-empty");
+  }
 }
 
 /**
@@ -1522,7 +1171,7 @@ ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
                                       const char        *tooltip)
 {
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
-                                   GTK_ENTRY_ICON_SECONDARY,
+                                   GTK_ENTRY_ICON_PRIMARY,
                                    tooltip);
 }
 

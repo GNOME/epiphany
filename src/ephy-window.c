@@ -24,6 +24,7 @@
 
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-ui.h"
+#include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -1003,6 +1004,7 @@ sync_tab_address (EphyWebView *view,
 
   location = calculate_location (typed_address, address);
   ephy_window_set_location (window, location);
+
   g_free (location);
 }
 
@@ -1095,21 +1097,6 @@ sync_tab_document_type (EphyWebView *view,
 }
 
 static void
-sync_tab_icon (EphyWebView *view,
-               GParamSpec  *pspec,
-               EphyWindow  *window)
-{
-  GdkPixbuf *icon;
-
-  if (window->closing)
-    return;
-
-  icon = ephy_web_view_get_icon (view);
-
-  g_object_set (window->location_controller, "icon", icon, NULL);
-}
-
-static void
 _ephy_window_set_navigation_flags (EphyWindow                *window,
                                    EphyWebViewNavigationFlags flags)
 {
@@ -1147,6 +1134,30 @@ sync_tab_is_blank (EphyWebView *view,
   _ephy_window_set_default_actions_sensitive (window,
                                               SENS_FLAG_IS_BLANK,
                                               ephy_web_view_get_is_blank (view));
+}
+
+static void
+sync_tab_bookmarked_status (EphyWebView   *view,
+                            GParamSpec    *pspec,
+                            EphyWindow    *window)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkWidget *widget;
+  EphyBookmark *bookmark;
+  const char *address;
+
+  widget = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
+
+  if (!EPHY_IS_LOCATION_ENTRY (widget))
+    return;
+
+  address = ephy_web_view_get_address (view);
+
+  if (address) {
+    bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
+    ephy_location_entry_set_bookmarked_status (EPHY_LOCATION_ENTRY (widget),
+                                               bookmark != NULL);
+  }
 }
 
 static void
@@ -2074,8 +2085,8 @@ ephy_window_connect_active_embed (EphyWindow *window)
   sync_tab_is_blank (view, NULL, window);
   sync_tab_navigation (view, NULL, window);
   sync_tab_title (embed, NULL, window);
+  sync_tab_bookmarked_status (view, NULL, window);
   sync_tab_address (view, NULL, window);
-  sync_tab_icon (view, NULL, window);
   sync_tab_popup_windows (view, NULL, window);
   sync_tab_popups_allowed (view, NULL, window);
 
@@ -2091,6 +2102,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
   g_signal_connect_object (web_view, "decide-policy",
                            G_CALLBACK (decide_policy_cb),
                            window, 0);
+
   g_signal_connect_object (view, "notify::hidden-popup-count",
                            G_CALLBACK (sync_tab_popup_windows),
                            window, 0);
@@ -2101,10 +2113,10 @@ ephy_window_connect_active_embed (EphyWindow *window)
                            G_CALLBACK (sync_tab_title),
                            window, 0);
   g_signal_connect_object (view, "notify::address",
-                           G_CALLBACK (sync_tab_address),
+                           G_CALLBACK (sync_tab_bookmarked_status),
                            window, 0);
-  g_signal_connect_object (view, "notify::icon",
-                           G_CALLBACK (sync_tab_icon),
+  g_signal_connect_object (view, "notify::address",
+                           G_CALLBACK (sync_tab_address),
                            window, 0);
   g_signal_connect_object (view, "notify::security-level",
                            G_CALLBACK (sync_tab_security),
@@ -2182,9 +2194,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
                                         window);
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (sync_tab_address),
-                                        window);
-  g_signal_handlers_disconnect_by_func (view,
-                                        G_CALLBACK (sync_tab_icon),
                                         window);
 
   g_signal_handlers_disconnect_by_func

@@ -23,6 +23,7 @@
 
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-popover.h"
+#include "ephy-bookmark-properties-grid.h"
 #include "ephy-downloads-popover.h"
 #include "ephy-downloads-progress-icon.h"
 #include "ephy-embed.h"
@@ -38,6 +39,7 @@
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
+#include "ephy-type-builtins.h"
 
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
@@ -547,6 +549,40 @@ ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
 }
 
 static void
+add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
+                                gpointer          *user_data)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (user_data);
+  EphyEmbed *embed;
+  GtkWidget *popover;
+  GdkRectangle rectangle;
+  EphyBookmark *bookmark;
+  const char *location;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (header_bar->window));
+
+  location = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
+  bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, location);
+  if (!bookmark) {
+    bookmark = ephy_bookmark_new (g_strdup (location),
+                                  g_strdup (ephy_embed_get_title (embed)),
+                                  g_sequence_new (g_free));
+    ephy_bookmarks_manager_add_bookmark (manager, bookmark);
+    ephy_location_entry_set_bookmarked_status (entry, TRUE);
+  }
+
+  popover = gtk_popover_new (GTK_WIDGET (entry));
+  gtk_entry_get_icon_area (GTK_ENTRY (entry),
+                           GTK_ENTRY_ICON_SECONDARY,
+                           &rectangle);
+  gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rectangle);
+  gtk_container_add (GTK_CONTAINER (popover),
+                     ephy_bookmark_properties_grid_new (bookmark, EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER));
+  gtk_widget_show (popover);
+}
+
+static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
@@ -640,6 +676,14 @@ ephy_header_bar_constructed (GObject *object)
   gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_widget));
   gtk_widget_show (GTK_WIDGET (header_bar->title_widget));
 
+  if (EPHY_IS_LOCATION_ENTRY (header_bar->title_widget)) {
+    g_signal_connect_object (header_bar->title_widget,
+                             "bookmark-clicked",
+                             G_CALLBACK (add_bookmark_button_clicked_cb),
+                             header_bar,
+                             0);
+  }
+
   /* Page Menu */
   button = gtk_menu_button_new ();
   header_bar->page_menu_button = button;
@@ -661,7 +705,7 @@ ephy_header_bar_constructed (GObject *object)
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (ephy_bookmarks_popover_new (toolbar->window)));
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (ephy_bookmarks_popover_new (header_bar->window)));
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
