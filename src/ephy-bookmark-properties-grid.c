@@ -139,27 +139,44 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
   GtkWidget *widget;
   GtkWidget *box;
   GtkWidget *label;
-  GtkWidget *button;
   GtkStyleContext *context;
+  gboolean default_tag;
+
+  default_tag = (g_strcmp0 (tag, "Favorites") == 0);
 
   widget = gtk_flow_box_child_new ();
+  gtk_widget_set_can_focus (widget, FALSE);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
+  if (default_tag) {
+    GtkWidget *image;
+
+    image = gtk_image_new_from_icon_name ("user-bookmarks-symbolic",
+                                          GTK_ICON_SIZE_BUTTON);
+    gtk_widget_set_margin_bottom (image, 8);
+    gtk_widget_set_margin_top (image, 8);
+    gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
+  }
 
   label = gtk_label_new (tag);
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
 
-  button = gtk_button_new ();
-  gtk_button_set_image (GTK_BUTTON (button),
-                        gtk_image_new_from_icon_name ("window-close-symbolic",
-                                                      GTK_ICON_SIZE_MENU));
-  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-  gtk_widget_set_can_focus (button, FALSE);
-  gtk_box_pack_end (GTK_BOX (box), button, FALSE, FALSE, 0);
-  g_signal_connect_object (button, "clicked",
-                           G_CALLBACK (ephy_bookmark_properties_grid_tag_widget_button_clicked_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  if (!default_tag) {
+    GtkWidget *button;
+
+    button = gtk_button_new ();
+    gtk_button_set_image (GTK_BUTTON (button),
+                          gtk_image_new_from_icon_name ("window-close-symbolic",
+                                                        GTK_ICON_SIZE_MENU));
+    gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+    gtk_widget_set_can_focus (button, FALSE);
+    gtk_box_pack_end (GTK_BOX (box), button, FALSE, FALSE, 0);
+    g_signal_connect_object (button, "clicked",
+                             G_CALLBACK (ephy_bookmark_properties_grid_tag_widget_button_clicked_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
+  }
 
   g_object_set_data (G_OBJECT (box), "label", label);
 
