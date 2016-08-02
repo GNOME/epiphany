@@ -267,9 +267,7 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   GSequenceIter *iter;
   GList *bookmarks;
   GList *l;
-  EphyBookmark *dummy_bookmark;
   GSimpleActionGroup *group;
-  int i;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -279,15 +277,6 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self), "popover",
                                   G_ACTION_GROUP (group));
   g_object_unref (group);
-
-  for (i = 0; i < 1; i++) {
-    dummy_bookmark = ephy_bookmark_new (g_strdup_printf ("https://www.duckduckgo.com/%d", i),
-                                      g_strdup_printf ("DuckDuckGo %d", i),
-                                      g_sequence_new (g_free));
-    ephy_bookmarks_manager_add_tag (manager, g_strdup_printf ("Tag %d", i));
-    ephy_bookmarks_manager_add_tag (manager, g_strdup_printf ("Favorite %d", i));
-    ephy_bookmarks_manager_add_bookmark (manager, dummy_bookmark);
-  }
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
                            G_LIST_MODEL (manager),

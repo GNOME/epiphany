@@ -207,6 +207,7 @@ ephy_bookmarks_properties_grid_actions_add_tag (GSimpleAction *action,
 
   gtk_entry_set_text (GTK_ENTRY (self->add_tag_entry), "");
   gtk_widget_set_sensitive (GTK_WIDGET (self->add_tag_button), FALSE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->add_tag_entry));
 }
 
 static void
@@ -220,7 +221,10 @@ ephy_bookmarks_properties_grid_actions_remove_bookmark (GSimpleAction *action,
 
   g_signal_emit_by_name (self->bookmark, "removed");
 
-  gtk_widget_destroy (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (self))));
+  if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER)
+    gtk_widget_destroy (gtk_widget_get_parent (GTK_WIDGET (self)));
+  else
+    gtk_widget_destroy (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (self))));
 }
 
 static void
@@ -295,6 +299,15 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   GSequenceIter *iter;
   char *address;
 
+  /* Set appearance based on type */
+  if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
+    gtk_container_remove (GTK_CONTAINER (self), self->popover_bookmark_label);
+    gtk_container_remove (GTK_CONTAINER (self), self->popover_tags_label);
+  } else if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER) {
+    gtk_grid_remove_column (GTK_GRID (self), 0);
+    gtk_container_remove (GTK_CONTAINER (self), self->address_entry);
+  }
+
   /* Set text for name entry */
   gtk_entry_set_text (GTK_ENTRY (self->name_entry),
                       ephy_bookmark_get_title (self->bookmark));
@@ -304,13 +317,15 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
                           G_BINDING_DEFAULT);
 
   /* Set text for address entry */
-  address = get_address (ephy_bookmark_get_url (self->bookmark));
-  gtk_entry_set_text (GTK_ENTRY (self->address_entry), address);
-  g_free (address);
+  if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
+    address = get_address (ephy_bookmark_get_url (self->bookmark));
+    gtk_entry_set_text (GTK_ENTRY (self->address_entry), address);
+    g_free (address);
 
-  g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
-                          self->bookmark, "url",
-                          G_BINDING_DEFAULT);
+    g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
+                            self->bookmark, "url",
+                            G_BINDING_DEFAULT);
+  }
 
   /* Create tag widgets */
   tags = ephy_bookmarks_manager_get_tags (manager);
@@ -399,13 +414,6 @@ ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
   GSimpleActionGroup *group;
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
-    gtk_container_remove (GTK_CONTAINER (self), self->popover_bookmark_label);
-    gtk_container_remove (GTK_CONTAINER (self), self->popover_tags_label);
-  } else if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
-    gtk_grid_remove_column (GTK_GRID (self), 0);
-  }
 
   gtk_flow_box_set_sort_func (GTK_FLOW_BOX (self->tags_box),
                               (GtkFlowBoxSortFunc)flow_box_sort_func,

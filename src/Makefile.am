@@ -134,6 +134,8 @@ RESOURCE_FILES = \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \
 	resources/shortcuts-dialog.ui		  \
+	resources/icons/ephy-bookmark-empty.svg	  \
+	resources/icons/ephy-bookmark-full.svg	  \
 	resources/gtk/bookmark-properties-grid.ui \
 	resources/gtk/bookmark-row.ui		  \
 	resources/gtk/bookmarks-popover.ui	  \

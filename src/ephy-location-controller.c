@@ -52,9 +52,7 @@ struct _EphyLocationController {
   char *address;
   EphyNode *smart_bmks;
   EphyBookmarks *bookmarks;
-  GdkPixbuf *icon;
   guint editable : 1;
-  guint show_icon : 1;
   gboolean sync_address_is_blocked;
 };
 
@@ -69,8 +67,6 @@ enum {
   PROP_0,
   PROP_ADDRESS,
   PROP_EDITABLE,
-  PROP_ICON,
-  PROP_SHOW_ICON,
   PROP_WINDOW,
   PROP_LOCATION_ENTRY,
   PROP_TITLE_BOX,
@@ -439,14 +435,6 @@ ephy_location_controller_constructed (GObject *object)
                           controller->location_entry, "editable",
                           G_BINDING_SYNC_CREATE);
 
-  g_object_bind_property (controller, "icon",
-                          controller->location_entry, "favicon",
-                          G_BINDING_SYNC_CREATE);
-
-  g_object_bind_property (controller, "show-icon",
-                          controller->location_entry, "show-favicon",
-                          G_BINDING_SYNC_CREATE);
-
   g_signal_connect_object (widget, "drag-data-received",
                            G_CALLBACK (entry_drag_data_received_cb),
                            controller, 0);
@@ -482,15 +470,6 @@ ephy_location_controller_set_property (GObject      *object,
     case PROP_EDITABLE:
       controller->editable = g_value_get_boolean (value);
       break;
-    case PROP_ICON:
-      if (controller->icon != NULL) {
-        g_object_unref (controller->icon);
-      }
-      controller->icon = GDK_PIXBUF (g_value_dup_object (value));
-      break;
-    case PROP_SHOW_ICON:
-      controller->show_icon = g_value_get_boolean (value);
-      break;
     case PROP_WINDOW:
       controller->window = EPHY_WINDOW (g_value_get_object (value));
       break;
@@ -519,12 +498,6 @@ ephy_location_controller_get_property (GObject    *object,
       break;
     case PROP_EDITABLE:
       g_value_set_boolean (value, controller->editable);
-      break;
-    case PROP_ICON:
-      g_value_set_object (value, controller->icon);
-      break;
-    case PROP_SHOW_ICON:
-      g_value_set_boolean (value, controller->show_icon);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -606,30 +579,6 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
                           "Whether the location bar entry can be edited",
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * EphyLocationController:icon:
-   *
-   * The icon corresponding to the current location.
-   */
-  obj_properties[PROP_ICON] =
-    g_param_spec_object ("icon",
-                         "Icon",
-                         "The icon corresponding to the current location",
-                         GDK_TYPE_PIXBUF,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * EphyLocationController:show-icon:
-   *
-   * If we should show the page icon.
-   */
-  obj_properties[PROP_SHOW_ICON] =
-    g_param_spec_boolean ("show-icon",
-                          "Show Icon",
-                          "Whether to show the favicon",
-                          TRUE,
-                          G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   /**
    * EphyLocationController:window:
@@ -787,10 +736,6 @@ static void
 ephy_location_controller_finalize (GObject *object)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
-
-  if (controller->icon != NULL) {
-    g_object_unref (controller->icon);
-  }
 
   g_list_free (controller->actions);
   g_free (controller->address);
