@@ -187,7 +187,10 @@ create_tag_row (const char *tag)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_halign (box, GTK_ALIGN_START);
 
-  image = gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_MENU);
+  if (g_strcmp0 (tag, "Favorites") == 0)
+    image = gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_MENU);
+  else
+    image = gtk_image_new_from_icon_name ("ephy-bookmark-tag", GTK_ICON_SIZE_MENU);
   gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 6);
 
   label = gtk_label_new (tag);
@@ -270,6 +273,9 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   GSimpleActionGroup *group;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (),
+                                    "/org/gnome/epiphany/icons/");
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), entries,

@@ -136,6 +136,8 @@ RESOURCE_FILES = \
 	resources/shortcuts-dialog.ui		  \
 	resources/icons/ephy-bookmark-empty.svg	  \
 	resources/icons/ephy-bookmark-full.svg	  \
+	resources/icons/ephy-bookmark-tag.svg     \
+	resources/icons/ephy-bookmarks.svg        \
 	resources/gtk/bookmark-properties-grid.ui \
 	resources/gtk/bookmark-row.ui		  \
 	resources/gtk/bookmarks-popover.ui	  \

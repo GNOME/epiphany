@@ -1159,10 +1159,11 @@ sync_tab_bookmarked_status (EphyWebView   *view,
   entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
   address = ephy_web_view_get_address (view);
 
-  if (address)
+  if (address) {
     bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
     ephy_location_entry_set_bookmarked_status (EPHY_LOCATION_ENTRY (entry),
                                                bookmark != NULL);
+  }
 }
 
 static void

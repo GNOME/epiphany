@@ -150,6 +150,10 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
                                           NULL);
 
   self->tags = g_sequence_new (g_free);
+  g_sequence_insert_sorted (self->tags,
+                            g_strdup ("Favorites"),
+                            (GCompareDataFunc)ephy_bookmark_tags_compare,
+                            NULL);
 
   /* Create DB file if it doesn't already exists */
   if (!g_file_test (self->gvdb_filename, G_FILE_TEST_EXISTS))
