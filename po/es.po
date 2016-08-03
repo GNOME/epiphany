@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-07-15 22:41+0000\n"
-"PO-Revision-Date: 2016-07-18 14:29+0200\n"
+"POT-Creation-Date: 2016-07-28 17:03+0000\n"
+"PO-Revision-Date: 2016-08-03 13:54+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -59,7 +59,7 @@ msgstr "El proyecto GNOME"
 
 #: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:289
 #: ../embed/ephy-about-handler.c:320 ../src/ephy-main.c:77
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1500
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:251
 msgid "Web"
 msgstr "Web"
 
@@ -1549,9 +1549,9 @@ msgstr "Iniciando…"
 #: ../lib/widgets/ephy-file-chooser.c:180
 #: ../lib/widgets/ephy-file-chooser.c:187
 #: ../src/bookmarks/ephy-bookmark-properties.c:375
-#: ../src/bookmarks/ephy-bookmarks-editor.c:766
+#: ../src/bookmarks/ephy-bookmarks-editor.c:772
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:778
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:965
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1573,7 +1573,7 @@ msgid "Images"
 msgstr "Imágenes"
 
 #: ../lib/widgets/ephy-file-chooser.c:238
-#: ../src/bookmarks/ephy-bookmarks-editor.c:595
+#: ../src/bookmarks/ephy-bookmarks-editor.c:601
 msgid "All files"
 msgstr "Todos los archivos"
 
@@ -1589,8 +1589,9 @@ msgstr "_Limpiar"
 msgid "Paste and _Go"
 msgstr "Pegar e _ir"
 
-#. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:666 ../src/ephy-window.c:111
+#. Undo, redo.
+#: ../lib/widgets/ephy-location-entry.c:666 ../src/ephy-window.c:895
+#: ../src/resources/gtk/menus.ui.h:5
 msgid "_Undo"
 msgstr "_Deshacer"
 
@@ -1728,188 +1729,192 @@ msgid "Remove from this topic"
 msgstr "Quiere quitarlo de este tema"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:148
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
 msgid "_File"
 msgstr "_Archivo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:149
+#: ../src/bookmarks/ephy-bookmarks-editor.c:155
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:150
+#: ../src/bookmarks/ephy-bookmarks-editor.c:156
 msgid "_View"
 msgstr "_Ver"
 
-#. Help.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:151
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:157
+#: ../src/resources/epiphany-application-menu.ui.h:8
 msgid "_Help"
 msgstr "Ay_uda"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:155
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
 msgid "_New Topic"
 msgstr "Tema _nuevo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:156
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
 msgid "Create a new topic"
 msgstr "Crear un tema nuevo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1084
+#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1090
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Abrir en una _ventana nueva"
 msgstr[1] "Abrir en _ventanas nuevas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "Open the selected bookmark in a new window"
 msgstr "Abre el marcador seleccionado en una ventana nueva"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1087
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1093
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Abrir en una _pestaña nueva"
 msgstr[1] "Abrir en _pestañas nuevas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "Open the selected bookmark in a new tab"
 msgstr "Abre el marcador seleccionado en una pestaña nueva"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "_Rename…"
 msgstr "_Renombrar…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "Rename the selected bookmark or topic"
 msgstr "Renombra el marcador seleccionado o el tema"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "_Properties"
 msgstr "_Propiedades"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Ver o modificar las propiedades del marcador seleccionado"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "_Import Bookmarks…"
 msgstr "_Importar marcadores…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Importar marcadores desde otro navegador o un archivo de marcadores"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
 msgid "_Export Bookmarks…"
 msgstr "_Exportar marcadores…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Export bookmarks to a file"
 msgstr "Exportar marcadores de un archivo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:175 ../src/ephy-window.c:104
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/resources/gtk/menus.ui.h:18
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Close the bookmarks window"
 msgstr "Cerrar la ventana de marcadores"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180 ../src/ephy-window.c:115
+#. Edit.
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186 ../src/ephy-window.c:899
+#: ../src/resources/gtk/menus.ui.h:7
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Cut the selection"
 msgstr "Corta la selección"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1094 ../src/ephy-window.c:117
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1100 ../src/ephy-window.c:900
+#: ../src/resources/gtk/menus.ui.h:8
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Copy the selection"
 msgstr "Copiar la selección"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186 ../src/ephy-window.c:119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192 ../src/ephy-window.c:901
+#: ../src/resources/gtk/menus.ui.h:9
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Paste the clipboard"
 msgstr "Pegar del portapapeles"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
 #: ../src/resources/history-dialog.ui.h:4
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Delete the selected bookmark or topic"
 msgstr "Eliminar el marcador seleccionado o el tema"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192 ../src/ephy-window.c:123
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198 ../src/ephy-window.c:902
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
 msgid "Select all bookmarks or text"
 msgstr "Seleccionar todos los marcadores o texto"
 
 #. Help Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "_Contents"
 msgstr "Índ_ice"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "Display bookmarks help"
 msgstr "Mostrar ayuda de los marcadores"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/resources/epiphany-application-menu.ui.h:9
 msgid "_About"
 msgstr "Acerca _de"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "Display credits for the web browser creators"
 msgstr "Mostrar créditos de los creadores del navegador web"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
 msgid "_Title"
 msgstr "_Título"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
 msgid "Show the title column"
 msgstr "Mostrar la columna de título"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1559
+#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1565
 msgid "Address"
 msgstr "Dirección"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 msgid "Show the address column"
 msgstr "Mostrar  la columna de dirección"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:252
+#: ../src/bookmarks/ephy-bookmarks-editor.c:258
 msgid "Type a topic"
 msgstr "Escriba un asunto"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:365
+#: ../src/bookmarks/ephy-bookmarks-editor.c:371
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "¿Quiere eliminar el tema «%s»?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:368
+#: ../src/bookmarks/ephy-bookmarks-editor.c:374
 msgid "Delete this topic?"
 msgstr "¿Quiere eliminar el tema?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:370
+#: ../src/bookmarks/ephy-bookmarks-editor.c:376
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -1918,44 +1923,44 @@ msgstr ""
 "categoría», a no ser que pertenezcan a otros temas. Los marcadores no se "
 "eliminarán."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:373
+#: ../src/bookmarks/ephy-bookmarks-editor.c:379
 msgid "_Delete Topic"
 msgstr "_Eliminar tema"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:471
-#: ../src/bookmarks/ephy-bookmarks-editor.c:473
+#: ../src/bookmarks/ephy-bookmarks-editor.c:477
+#: ../src/bookmarks/ephy-bookmarks-editor.c:479
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:476
-#: ../src/bookmarks/ephy-bookmarks-editor.c:478
+#: ../src/bookmarks/ephy-bookmarks-editor.c:482
+#: ../src/bookmarks/ephy-bookmarks-editor.c:484
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:481
+#: ../src/bookmarks/ephy-bookmarks-editor.c:487
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Perfil de «%s» de Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:483
+#: ../src/bookmarks/ephy-bookmarks-editor.c:489
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:485
+#: ../src/bookmarks/ephy-bookmarks-editor.c:491
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:512
+#: ../src/bookmarks/ephy-bookmarks-editor.c:518
 msgid "Import failed"
 msgstr "Ha fallado la importación"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:514
+#: ../src/bookmarks/ephy-bookmarks-editor.c:520
 msgid "Import Failed"
 msgstr "Ha fallado la importación"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:517
+#: ../src/bookmarks/ephy-bookmarks-editor.c:523
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -1964,63 +1969,63 @@ msgstr ""
 "No se pudieron importar los marcadores de «%s» debido a que el archivo está "
 "corrompido o es de un tipo no soportado."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:576
+#: ../src/bookmarks/ephy-bookmarks-editor.c:582
 msgid "Import Bookmarks from File"
 msgstr "Importar marcadores del archivo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:583
+#: ../src/bookmarks/ephy-bookmarks-editor.c:589
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Marcadores de Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:587
+#: ../src/bookmarks/ephy-bookmarks-editor.c:593
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Marcadores de Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:591
+#: ../src/bookmarks/ephy-bookmarks-editor.c:597
 msgid "Web bookmarks"
 msgstr "Marcadores web"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:705
+#: ../src/bookmarks/ephy-bookmarks-editor.c:711
 msgid "Export Bookmarks"
 msgstr "Exportar marcadores"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:712
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1422
-#: ../src/bookmarks/ephy-topic-action.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:718
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1428
+#: ../src/bookmarks/ephy-topic-action.c:175
 msgid "Bookmarks"
 msgstr "Marcadores"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:718
+#: ../src/bookmarks/ephy-bookmarks-editor.c:724
 msgid "File f_ormat:"
 msgstr "_Formato de archivo:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:769
 msgid "Import Bookmarks"
 msgstr "Importar marcadores"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../src/bookmarks/ephy-bookmarks-editor.c:774
 msgid "I_mport"
 msgstr "I_mportar"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:784
+#: ../src/bookmarks/ephy-bookmarks-editor.c:790
 msgid "Import bookmarks from:"
 msgstr "Importar marcadores de un archivo:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:804
+#: ../src/bookmarks/ephy-bookmarks-editor.c:810
 msgid "File"
 msgstr "Archivo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1092
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1098
 msgid "_Copy Address"
 msgstr "_Copiar dirección"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1478
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1484
 #: ../src/resources/bookmark-properties.ui.h:5
 msgid "Topics"
 msgstr "Temas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1548
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1554
 msgid "Title"
 msgstr "Título"
 
@@ -2037,6 +2042,315 @@ msgstr "Abre los marcadores de este tema en pestañas nuevas"
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Crear tema «%s»"
+
+#: ../src/ephy-history-window.c:242
+msgid "Clear browsing history?"
+msgstr "¿Quiere limpiar el histórico de navegación?"
+
+#: ../src/ephy-history-window.c:246
+msgid ""
+"Clearing the browsing history will cause all history links to be permanently "
+"deleted."
+msgstr ""
+"Limpiar del histórico de navegación hará que todos enlaces del histórico se "
+"eliminen permanentemente."
+
+#: ../src/ephy-main.c:86
+msgid "Open a new tab in an existing browser window"
+msgstr "Abre una pestaña nueva en una ventana existente del navegador"
+
+#: ../src/ephy-main.c:88
+msgid "Open a new browser window"
+msgstr "Abre una ventana nueva del navegador"
+
+#: ../src/ephy-main.c:90
+msgid "Import bookmarks from the given file"
+msgstr "Importar marcadores desde el archivo dado"
+
+#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
+msgid "FILE"
+msgstr "ARCHIVO"
+
+#: ../src/ephy-main.c:92
+msgid "Load the given session file"
+msgstr "Cargar el archivo de sesiones dado"
+
+#: ../src/ephy-main.c:94
+msgid "Add a bookmark"
+msgstr "Añadir un marcador"
+
+#: ../src/ephy-main.c:94
+msgid "URL"
+msgstr "URL"
+
+#: ../src/ephy-main.c:96
+msgid "Start a private instance"
+msgstr "Iniciar una instancia privada"
+
+#: ../src/ephy-main.c:98
+msgid "Start an instance in incognito mode"
+msgstr "Iniciar una instancia en modo incógnito"
+
+#: ../src/ephy-main.c:100
+msgid "Start an instance in netbank mode"
+msgstr "Iniciar una instancia en modo «netbank»"
+
+#: ../src/ephy-main.c:103
+msgid "Start the browser in application mode"
+msgstr "Iniciar el navegador en modo aplicación"
+
+#: ../src/ephy-main.c:105
+msgid "Profile directory to use in the private instance"
+msgstr "Carpeta de perfiles que usar en la instancia privada"
+
+#: ../src/ephy-main.c:105
+msgid "DIR"
+msgstr "DIR"
+
+#: ../src/ephy-main.c:107
+msgid "URL …"
+msgstr "URL …"
+
+#: ../src/ephy-main.c:212
+msgid "Could not start Web"
+msgstr "No se pudo iniciar Web"
+
+#: ../src/ephy-main.c:215
+#, c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr ""
+"El inicio ha fallado debido al siguiente error:\n"
+"%s"
+
+#: ../src/ephy-main.c:325
+msgid "Web options"
+msgstr "Opciones de Web"
+
+#: ../src/ephy-notebook.c:660
+msgid "Close tab"
+msgstr "Cerrar pestaña"
+
+#: ../src/ephy-search-provider.c:195
+#, c-format
+msgid "Search the Web for %s"
+msgstr "Buscar %s en la web"
+
+#: ../src/ephy-window.c:246
+msgid "There are unsubmitted changes to form elements"
+msgstr "Hay cambios no enviados en los elementos del formulario"
+
+#: ../src/ephy-window.c:247
+msgid "If you close the document anyway, you will lose that information."
+msgstr "Si cierra el documento, perderá esa información."
+
+#: ../src/ephy-window.c:249
+msgid "Close _Document"
+msgstr "Cerrar _documento"
+
+#: ../src/ephy-window.c:264
+msgid "There are ongoing downloads"
+msgstr "Hay descargas en curso"
+
+#: ../src/ephy-window.c:265
+msgid "If you quit, the downloads will be cancelled"
+msgstr "Si sale, se cancelarán las descargas"
+
+#: ../src/ephy-window.c:266
+msgid "Quit and cancel downloads"
+msgstr "Salir y cancelar las descargas"
+
+#: ../src/ephy-window.c:896 ../src/resources/gtk/menus.ui.h:6
+msgid "Re_do"
+msgstr "_Rehacer"
+
+# Añadimos enlace para mantener el léxico igual a Galeon y Mozilla
+#: ../src/ephy-window.c:904
+msgid "S_end Link by Email…"
+msgstr "_Enviar enlace por correo-e…"
+
+#: ../src/ephy-window.c:906
+msgid "_Reload"
+msgstr "Re_cargar"
+
+#: ../src/ephy-window.c:907
+#| msgid "Back"
+msgid "_Back"
+msgstr "_Atrás"
+
+#: ../src/ephy-window.c:908
+#| msgid "Forward"
+msgid "_Forward"
+msgstr "A_delante"
+
+#. Bookmarks
+#: ../src/ephy-window.c:911
+msgid "Add Boo_kmark…"
+msgstr "Añadir _marcador…"
+
+#. Links.
+#: ../src/ephy-window.c:915
+msgid "Open Link in New _Window"
+msgstr "Abrir enlace en una _ventana nueva"
+
+#: ../src/ephy-window.c:916
+msgid "Open Link in New _Tab"
+msgstr "Abrir enlace en una pe_staña nueva"
+
+#: ../src/ephy-window.c:917
+msgid "Open Link in I_ncognito Window"
+msgstr "Abrir enlace en una ventana de i_ncógnito"
+
+#: ../src/ephy-window.c:918
+msgid "_Save Link As…"
+msgstr "Guardar _enlace como…"
+
+#: ../src/ephy-window.c:919
+msgid "_Copy Link Address"
+msgstr "_Copiar dirección del enlace"
+
+#: ../src/ephy-window.c:920
+msgid "_Copy E-mail Address"
+msgstr "_Copiar dirección de correo-e"
+
+#. Images.
+#: ../src/ephy-window.c:924
+msgid "View _Image in New Tab"
+msgstr "Ver _imagen en una pestaña nueva"
+
+#: ../src/ephy-window.c:925
+msgid "Copy I_mage Address"
+msgstr "Copiar dirección de la i_magen"
+
+#: ../src/ephy-window.c:926
+msgid "_Save Image As…"
+msgstr "_Guardar imagen como…"
+
+#: ../src/ephy-window.c:927
+msgid "Set as _Wallpaper"
+msgstr "Establecer como _fondo"
+
+#. Video.
+#: ../src/ephy-window.c:931
+msgid "Open Video in New _Window"
+msgstr "Abrir vídeo en una _ventana nueva"
+
+#: ../src/ephy-window.c:932
+msgid "Open Video in New _Tab"
+msgstr "Abrir vídeo en una _pestaña nueva"
+
+#: ../src/ephy-window.c:933
+msgid "_Save Video As…"
+msgstr "Guardar _vídeo como…"
+
+#: ../src/ephy-window.c:934
+msgid "_Copy Video Address"
+msgstr "_Copiar la dirección del vídeo"
+
+#. Audio.
+#: ../src/ephy-window.c:938
+msgid "Open Audio in New _Window"
+msgstr "Abrir sonido en una _ventana nueva"
+
+#: ../src/ephy-window.c:939
+msgid "Open Audio in New _Tab"
+msgstr "Abrir sonido en una _pestaña nueva"
+
+#: ../src/ephy-window.c:940
+msgid "_Save Audio As…"
+msgstr "Guardar _sonido como…"
+
+#: ../src/ephy-window.c:941
+msgid "_Copy Audio Address"
+msgstr "_Copiar la dirección del sonido"
+
+#: ../src/ephy-window.c:1475
+#, c-format
+msgid "Search the Web for '%s'"
+msgstr "Buscar «%s» en la web"
+
+#: ../src/popup-commands.c:257
+msgid "Save Link As"
+msgstr "Guardar enlace como"
+
+#: ../src/popup-commands.c:265
+msgid "Save Image As"
+msgstr "Guardar imagen como"
+
+#: ../src/popup-commands.c:273
+msgid "Save Media As"
+msgstr "Abrir medio como"
+
+#. Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: ../src/prefs-dialog.c:454 ../src/prefs-dialog.c:458
+#, c-format
+msgctxt "language"
+msgid "%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:465
+#, c-format
+msgctxt "language"
+msgid "User defined (%s)"
+msgstr "Definido por el usuario (%s)"
+
+#: ../src/prefs-dialog.c:487
+#, c-format
+msgid "System language (%s)"
+msgid_plural "System languages (%s)"
+msgstr[0] "Idioma del sistema (%s)"
+msgstr[1] "Idiomas del sistema (%s)"
+
+#: ../src/prefs-dialog.c:730 ../src/resources/prefs-dialog.ui.h:46
+msgid "Language"
+msgstr "Idioma"
+
+#: ../src/prefs-dialog.c:809
+msgid "Select a Directory"
+msgstr "Seleccione una carpeta"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:903
+msgid "DuckDuckGo"
+msgstr "DuckDuckGo"
+
+#. For the preferences dialog. Must exactly match the URL
+#. * you chose in the gschema, but with & instead of &amp;
+#. * If the match is not exact, there will be a spurious, ugly
+#. * entry in the preferences combo, so please test this.
+#: ../src/prefs-dialog.c:909
+#, c-format
+msgid "https://duckduckgo.com/?q=%s&t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:911
+msgid "Google"
+msgstr "Google"
+
+#. For the preferences dialog. Consider a regional variant, like google.co.uk
+#: ../src/prefs-dialog.c:914
+#, c-format
+msgid "https://google.com/search?q=%s"
+msgstr "https://google.com/search?q=%s"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:916
+msgid "Bing"
+msgstr "Bing"
+
+#. For the preferences dialog. Consider a regional variant, like uk.bing.com
+#: ../src/prefs-dialog.c:919
+#, c-format
+msgid "https://www.bing.com/search?q=%s"
+msgstr "http://www.bing.com/search?q=%s&cc=es"
 
 #: ../src/resources/bookmark-properties.ui.h:1
 msgid "_Title:"
@@ -2152,12 +2466,11 @@ msgstr "&#60;b&#62;Codificaciones relacionadas&#60;/b&#62;"
 msgid "Show all…"
 msgstr "Mostrar todas…"
 
-#. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:90
+#: ../src/resources/epiphany-application-menu.ui.h:1
 msgid "_New Window"
 msgstr "_Ventana nueva"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:92
+#: ../src/resources/epiphany-application-menu.ui.h:2
 msgid "New _Incognito Window"
 msgstr "_Ventana nueva de incógnito"
 
@@ -2165,16 +2478,16 @@ msgstr "_Ventana nueva de incógnito"
 msgid "Reopen Closed _Tab"
 msgstr "_Volver a abrir la pestaña cerrada"
 
-#. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:83
+#: ../src/resources/epiphany-application-menu.ui.h:4
+#: ../src/resources/gtk/menus.ui.h:14
 msgid "_Bookmarks"
 msgstr "_Marcadores"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:133
+#: ../src/resources/epiphany-application-menu.ui.h:5
 msgid "_History"
 msgstr "_Histórico"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:135
+#: ../src/resources/epiphany-application-menu.ui.h:6
 msgid "Pr_eferences"
 msgstr "Prefere_ncias"
 
@@ -2182,9 +2495,68 @@ msgstr "Prefere_ncias"
 msgid "_Keyboard Shortcuts"
 msgstr "_Atajos del teclado"
 
-#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:106
+#: ../src/resources/epiphany-application-menu.ui.h:10
 msgid "_Quit"
 msgstr "_Salir"
+
+#: ../src/resources/gtk/menus.ui.h:1
+#| msgid "New _Tab"
+msgid "New Tab"
+msgstr "Pestaña nueva"
+
+#: ../src/resources/gtk/menus.ui.h:2
+msgid "_Open…"
+msgstr "_Abrir…"
+
+#: ../src/resources/gtk/menus.ui.h:3
+msgid "Save _As…"
+msgstr "Guardar _como…"
+
+#: ../src/resources/gtk/menus.ui.h:4
+msgid "Save As _Web Application…"
+msgstr "Guardar como aplicación _web…"
+
+#: ../src/resources/gtk/menus.ui.h:10
+msgid "Zoom _In"
+msgstr "_Ampliar"
+
+#: ../src/resources/gtk/menus.ui.h:11
+#| msgid "Zoom O_ut"
+msgid "Zoom _Out"
+msgstr "_Reducir"
+
+#: ../src/resources/gtk/menus.ui.h:12
+#| msgid "_Print…"
+msgid "Print…"
+msgstr "Imprimir…"
+
+#: ../src/resources/gtk/menus.ui.h:13
+msgid "_Find…"
+msgstr "_Buscar…"
+
+#: ../src/resources/gtk/menus.ui.h:15
+msgid "_Add Bookmark…"
+msgstr "_Añadir marcador…"
+
+#: ../src/resources/gtk/menus.ui.h:16
+msgid "Text _Encoding"
+msgstr "Codificación del te_xto"
+
+#: ../src/resources/gtk/menus.ui.h:17
+msgid "_Page Source"
+msgstr "Código _fuente"
+
+#: ../src/resources/gtk/menus.ui.h:19
+msgid "Move Tab _Left"
+msgstr "Mover la pestaña a la _izquierda"
+
+#: ../src/resources/gtk/menus.ui.h:20
+msgid "Move Tab _Right"
+msgstr "Mover la pestaña a la de_recha"
+
+#: ../src/resources/gtk/menus.ui.h:21
+msgid "Du_plicate"
+msgstr "Du_plicar"
 
 #: ../src/resources/history-dialog.ui.h:2
 msgid "_Copy Location"
@@ -2413,10 +2785,6 @@ msgstr "Corrección ortográfica"
 msgid "_Enable spell checking"
 msgstr "_Activar corrección ortográfica"
 
-#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:730
-msgid "Language"
-msgstr "Idioma"
-
 #: ../src/resources/prefs-lang-dialog.ui.h:1
 msgid "Add Language"
 msgstr "Añadir idioma"
@@ -2426,55 +2794,46 @@ msgid "Choose a l_anguage:"
 msgstr "Elija un _idioma:"
 
 #: ../src/resources/shortcuts-dialog.ui.h:1
-#| msgid "General"
 msgctxt "shortcut window"
 msgid "General"
 msgstr "General"
 
 #: ../src/resources/shortcuts-dialog.ui.h:2
-#| msgid "_New Window"
 msgctxt "shortcut window"
 msgid "New window"
 msgstr "Ventana nueva"
 
 #: ../src/resources/shortcuts-dialog.ui.h:3
-#| msgid "New Incognito Window"
 msgctxt "shortcut window"
 msgid "New incognito window"
 msgstr "Nueva ventana de incógnito"
 
 #: ../src/resources/shortcuts-dialog.ui.h:4
-#| msgid "Open a file"
 msgctxt "shortcut window"
 msgid "Open file"
 msgstr "Abrir archivo"
 
 #: ../src/resources/shortcuts-dialog.ui.h:5
-#| msgid "Save Image As"
 msgctxt "shortcut window"
 msgid "Save page"
 msgstr "Guardar página"
 
 #: ../src/resources/shortcuts-dialog.ui.h:6
-#| msgid "Save Image As"
 msgctxt "shortcut window"
 msgid "Save page as web app"
 msgstr "Guardar página como app web"
 
 #: ../src/resources/shortcuts-dialog.ui.h:7
-#| msgid "Print preview"
 msgctxt "shortcut window"
 msgid "Print page"
 msgstr "Imprimir página"
 
 #: ../src/resources/shortcuts-dialog.ui.h:8
-#| msgid "_Quit"
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Salir"
 
 #: ../src/resources/shortcuts-dialog.ui.h:9
-#| msgid "_Help"
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Ayuda"
@@ -2485,85 +2844,71 @@ msgid "Shortcuts"
 msgstr "Atajos"
 
 #: ../src/resources/shortcuts-dialog.ui.h:11
-#| msgid "Organization:"
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegación"
 
 #: ../src/resources/shortcuts-dialog.ui.h:12
-#| msgid "Save the current page"
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Recargar la página actual"
 
 #: ../src/resources/shortcuts-dialog.ui.h:13
-#| msgid "Set to Current _Page"
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Detener la carga de la página actual"
 
 #: ../src/resources/shortcuts-dialog.ui.h:14
-#| msgid "Go to the previous page"
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Ir a la página anterior"
 
 #: ../src/resources/shortcuts-dialog.ui.h:15
-#| msgid "Go to next page"
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Ir a la siguiente página"
 
 #: ../src/resources/shortcuts-dialog.ui.h:16
-#| msgid "_Tabs"
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Pestañas"
 
 #: ../src/resources/shortcuts-dialog.ui.h:17
-#| msgid "New _Tab"
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Pestaña nueva"
 
 #: ../src/resources/shortcuts-dialog.ui.h:18
-#| msgid "Detach current tab"
 msgctxt "shortcut window"
 msgid "Duplicate current tab"
 msgstr "Duplicar la pestaña actual"
 
 #: ../src/resources/shortcuts-dialog.ui.h:19
-#| msgid "Detach current tab"
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Cerrar la pestaña actual"
 
 #: ../src/resources/shortcuts-dialog.ui.h:20
-#| msgid "Reopen Closed _Tab"
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Volver a abrir la pestaña cerrada"
 
 #: ../src/resources/shortcuts-dialog.ui.h:21
-#| msgid "Go to next page"
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Ir a la siguiente pestaña"
 
 #: ../src/resources/shortcuts-dialog.ui.h:22
-#| msgid "Go to the previous page"
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Ir a la pestaña anterior"
 
 #: ../src/resources/shortcuts-dialog.ui.h:23
-#| msgid "Move current tab to left"
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Mover la pestaña actual a la izquierda"
 
 #: ../src/resources/shortcuts-dialog.ui.h:24
-#| msgid "Move current tab to right"
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Mover la pestaña actual a la derecha"
@@ -2574,49 +2919,41 @@ msgid "Miscellaneous"
 msgstr "Miscelánea"
 
 #: ../src/resources/shortcuts-dialog.ui.h:26
-#| msgid "History"
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Histórico"
 
 #: ../src/resources/shortcuts-dialog.ui.h:27
-#| msgid "Preferences"
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
 
 #: ../src/resources/shortcuts-dialog.ui.h:28
-#| msgid "Bookmarks"
 msgctxt "shortcut window"
 msgid "Bookmarks"
 msgstr "Marcadores"
 
 #: ../src/resources/shortcuts-dialog.ui.h:29
-#| msgid "Add a bookmark for the current page"
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Añadir la página actual a marcadores"
 
 #: ../src/resources/shortcuts-dialog.ui.h:30
-#| msgid "Enable caret browsing mode?"
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Conmutar el modo de navegación con cursor"
 
 #: ../src/resources/shortcuts-dialog.ui.h:31
-#| msgid "_View"
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Ver"
 
 #: ../src/resources/shortcuts-dialog.ui.h:32
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Ampliar"
 
 #: ../src/resources/shortcuts-dialog.ui.h:33
-#| msgid "Zoom O_ut"
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Reducir"
@@ -2627,73 +2964,61 @@ msgid "Reset zoom"
 msgstr "Restablecer ampliación"
 
 #: ../src/resources/shortcuts-dialog.ui.h:35
-#| msgid "_Fullscreen"
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
 #: ../src/resources/shortcuts-dialog.ui.h:36
-#| msgid "_Page Source"
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Ver código fuente"
 
 #: ../src/resources/shortcuts-dialog.ui.h:37
-#| msgid "_Toggle Inspector"
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Conmutar inspector"
 
 #: ../src/resources/shortcuts-dialog.ui.h:38
-#| msgid "_Edit"
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Edición"
 
 #: ../src/resources/shortcuts-dialog.ui.h:39
-#| msgid "Cu_t"
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Cortar"
 
 #: ../src/resources/shortcuts-dialog.ui.h:40
-#| msgid "_Copy"
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Copiar"
 
 #: ../src/resources/shortcuts-dialog.ui.h:41
-#| msgid "_Paste"
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Pegar"
 
 #: ../src/resources/shortcuts-dialog.ui.h:42
-#| msgid "_Undo"
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Deshacer"
 
 #: ../src/resources/shortcuts-dialog.ui.h:43
-#| msgid "_Redo"
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Rehacer"
 
 #: ../src/resources/shortcuts-dialog.ui.h:44
-#| msgid "Select _All"
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
 #: ../src/resources/shortcuts-dialog.ui.h:45
-#| msgid "Selection Caret"
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Seleccionar el URL de la página"
 
 #: ../src/resources/shortcuts-dialog.ui.h:46
-#| msgid "Search"
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Buscar"
@@ -2708,540 +3033,19 @@ msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Resultado de búsqueda anterior"
 
-#: ../src/ephy-combined-stop-reload-action.c:38
-msgid "Stop"
-msgstr "Detener"
-
-#: ../src/ephy-combined-stop-reload-action.c:39
-msgid "Stop current data transfer"
-msgstr "Detener la transferencia de datos actual"
-
-#: ../src/ephy-combined-stop-reload-action.c:41 ../src/ephy-window.c:144
-msgid "_Reload"
-msgstr "Re_cargar"
-
-#: ../src/ephy-combined-stop-reload-action.c:42
-msgid "Display the latest content of the current page"
-msgstr "Mostrar el último contenido de la página actual"
-
-#: ../src/ephy-history-window.c:242
-msgid "Clear browsing history?"
-msgstr "¿Quiere limpiar el histórico de navegación?"
-
-#: ../src/ephy-history-window.c:246
-msgid ""
-"Clearing the browsing history will cause all history links to be permanently "
-"deleted."
-msgstr ""
-"Limpiar del histórico de navegación hará que todos enlaces del histórico se "
-"eliminen permanentemente."
-
-#: ../src/ephy-main.c:86
-msgid "Open a new tab in an existing browser window"
-msgstr "Abre una pestaña nueva en una ventana existente del navegador"
-
-#: ../src/ephy-main.c:88
-msgid "Open a new browser window"
-msgstr "Abre una ventana nueva del navegador"
-
-#: ../src/ephy-main.c:90
-msgid "Import bookmarks from the given file"
-msgstr "Importar marcadores desde el archivo dado"
-
-#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
-msgid "FILE"
-msgstr "ARCHIVO"
-
-#: ../src/ephy-main.c:92
-msgid "Load the given session file"
-msgstr "Cargar el archivo de sesiones dado"
-
-#: ../src/ephy-main.c:94
-msgid "Add a bookmark"
-msgstr "Añadir un marcador"
-
-#: ../src/ephy-main.c:94
-msgid "URL"
-msgstr "URL"
-
-#: ../src/ephy-main.c:96
-msgid "Start a private instance"
-msgstr "Iniciar una instancia privada"
-
-#: ../src/ephy-main.c:98
-msgid "Start an instance in incognito mode"
-msgstr "Iniciar una instancia en modo incógnito"
-
-#: ../src/ephy-main.c:100
-msgid "Start an instance in netbank mode"
-msgstr "Iniciar una instancia en modo «netbank»"
-
-#: ../src/ephy-main.c:103
-msgid "Start the browser in application mode"
-msgstr "Iniciar el navegador en modo aplicación"
-
-#: ../src/ephy-main.c:105
-msgid "Profile directory to use in the private instance"
-msgstr "Carpeta de perfiles que usar en la instancia privada"
-
-#: ../src/ephy-main.c:105
-msgid "DIR"
-msgstr "DIR"
-
-#: ../src/ephy-main.c:107
-msgid "URL …"
-msgstr "URL …"
-
-#: ../src/ephy-main.c:212
-msgid "Could not start Web"
-msgstr "No se pudo iniciar Web"
-
-#: ../src/ephy-main.c:215
-#, c-format
-msgid ""
-"Startup failed because of the following error:\n"
-"%s"
-msgstr ""
-"El inicio ha fallado debido al siguiente error:\n"
-"%s"
-
-#: ../src/ephy-main.c:325
-msgid "Web options"
-msgstr "Opciones de Web"
-
-#: ../src/ephy-notebook.c:660
-msgid "Close tab"
-msgstr "Cerrar pestaña"
-
-#: ../src/ephy-search-provider.c:195
-#, c-format
-msgid "Search the Web for %s"
-msgstr "Buscar %s en la web"
-
-#: ../src/ephy-window.c:94
-msgid "_Open…"
-msgstr "_Abrir…"
-
-#: ../src/ephy-window.c:96
-msgid "Save _As…"
-msgstr "Guardar _como…"
-
-#: ../src/ephy-window.c:98
-msgid "Save As _Web Application…"
-msgstr "Guardar como aplicación _web…"
-
-#: ../src/ephy-window.c:100
-msgid "_Print…"
-msgstr "_Imprimir…"
-
-# Añadimos enlace para mantener el léxico igual a Galeon y Mozilla
-#: ../src/ephy-window.c:102
-msgid "S_end Link by Email…"
-msgstr "_Enviar enlace por correo-e…"
-
-#: ../src/ephy-window.c:113
-msgid "Re_do"
-msgstr "_Rehacer"
-
-#: ../src/ephy-window.c:125
-msgid "_Find…"
-msgstr "_Buscar…"
-
-#: ../src/ephy-window.c:127
-msgid "Find Ne_xt"
-msgstr "Buscar _siguiente"
-
-#: ../src/ephy-window.c:129
-msgid "Find Pre_vious"
-msgstr "Buscar _anterior"
-
-#: ../src/ephy-window.c:131
-msgid "Edit _Bookmarks"
-msgstr "_Editar marcadores"
-
-#. View actions.
-#: ../src/ephy-window.c:140 ../src/ephy-window.c:142
-msgid "_Stop"
-msgstr "_Detener"
-
-#: ../src/ephy-window.c:146
-msgid "Zoom _In"
-msgstr "_Ampliar"
-
-#: ../src/ephy-window.c:148
-msgid "Zoom O_ut"
-msgstr "_Reducir"
-
-#: ../src/ephy-window.c:150
-msgid "_Normal Size"
-msgstr "Tamaño n_ormal"
-
-#: ../src/ephy-window.c:152
-msgid "Text _Encoding"
-msgstr "Codificación del te_xto"
-
-#: ../src/ephy-window.c:154
-msgid "_Page Source"
-msgstr "Código _fuente"
-
-#: ../src/ephy-window.c:156
-msgid "_Toggle Inspector"
-msgstr "Conmun_tar inspector"
-
-#. Bookmarks actions.
-#: ../src/ephy-window.c:161
-msgid "_Add Bookmark…"
-msgstr "_Añadir marcador…"
-
-#. Go actions.
-#: ../src/ephy-window.c:166
-msgid "_Location…"
-msgstr "Di_rección…"
-
-#. Tabs actions.
-#: ../src/ephy-window.c:171
-msgid "_Previous Tab"
-msgstr "Pestaña _anterior"
-
-#: ../src/ephy-window.c:173
-msgid "_Next Tab"
-msgstr "_Siguiente pestaña"
-
-#: ../src/ephy-window.c:175
-msgid "Move Tab _Left"
-msgstr "Mover la pestaña a la _izquierda"
-
-#: ../src/ephy-window.c:177
-msgid "Move Tab _Right"
-msgstr "Mover la pestaña a la de_recha"
-
-#: ../src/ephy-window.c:179
-msgid "Du_plicate"
-msgstr "Du_plicar"
-
-#: ../src/ephy-window.c:181
-msgid "_Detach Tab"
-msgstr "_Desprender pestaña"
-
-#. View actions.
-#: ../src/ephy-window.c:196
-msgid "_Fullscreen"
-msgstr "_Pantalla completa"
-
-#: ../src/ephy-window.c:198
-msgid "Popup _Windows"
-msgstr "Ventanas _emergentes"
-
-#: ../src/ephy-window.c:200
-msgid "Selection Caret"
-msgstr "Cursor de selección"
-
-#. Document.
-#: ../src/ephy-window.c:207
-msgid "Add Boo_kmark…"
-msgstr "Añadir _marcador…"
-
-#. Links.
-#: ../src/ephy-window.c:212
-msgid "Open Link in New _Window"
-msgstr "Abrir enlace en una _ventana nueva"
-
-#: ../src/ephy-window.c:214
-msgid "Open Link in New _Tab"
-msgstr "Abrir enlace en una pe_staña nueva"
-
-#: ../src/ephy-window.c:216
-msgid "Open Link in I_ncognito Window"
-msgstr "Abrir enlace en una ventana de i_ncógnito"
-
-#: ../src/ephy-window.c:218
-msgid "_Save Link As…"
-msgstr "Guardar _enlace como…"
-
-#: ../src/ephy-window.c:220
-msgid "_Copy Link Address"
-msgstr "_Copiar dirección del enlace"
-
-#: ../src/ephy-window.c:222
-msgid "_Copy E-mail Address"
-msgstr "_Copiar dirección de correo-e"
-
-#. Images.
-#: ../src/ephy-window.c:227
-msgid "View _Image in New Tab"
-msgstr "Ver _imagen en una pestaña nueva"
-
-#: ../src/ephy-window.c:229
-msgid "Copy I_mage Address"
-msgstr "Copiar dirección de la i_magen"
-
-#: ../src/ephy-window.c:231
-msgid "_Save Image As…"
-msgstr "_Guardar imagen como…"
-
-#: ../src/ephy-window.c:233
-msgid "Set as _Wallpaper"
-msgstr "Establecer como _fondo"
-
-#. Video.
-#: ../src/ephy-window.c:238
-msgid "Open Video in New _Window"
-msgstr "Abrir vídeo en una _ventana nueva"
-
-#: ../src/ephy-window.c:240
-msgid "Open Video in New _Tab"
-msgstr "Abrir vídeo en una _pestaña nueva"
-
-#: ../src/ephy-window.c:242
-msgid "_Save Video As…"
-msgstr "Guardar _vídeo como…"
-
-#: ../src/ephy-window.c:244
-msgid "_Copy Video Address"
-msgstr "_Copiar la dirección del vídeo"
-
-#. Audio.
-#: ../src/ephy-window.c:249
-msgid "Open Audio in New _Window"
-msgstr "Abrir sonido en una _ventana nueva"
-
-#: ../src/ephy-window.c:251
-msgid "Open Audio in New _Tab"
-msgstr "Abrir sonido en una _pestaña nueva"
-
-#: ../src/ephy-window.c:253
-msgid "_Save Audio As…"
-msgstr "Guardar _sonido como…"
-
-#: ../src/ephy-window.c:255
-msgid "_Copy Audio Address"
-msgstr "_Copiar la dirección del sonido"
-
-#: ../src/ephy-window.c:470
-msgid "There are unsubmitted changes to form elements"
-msgstr "Hay cambios no enviados en los elementos del formulario"
-
-#: ../src/ephy-window.c:471
-msgid "If you close the document anyway, you will lose that information."
-msgstr "Si cierra el documento, perderá esa información."
-
-#: ../src/ephy-window.c:473
-msgid "Close _Document"
-msgstr "Cerrar _documento"
-
-#: ../src/ephy-window.c:488
-msgid "There are ongoing downloads"
-msgstr "Hay descargas en curso"
-
-#: ../src/ephy-window.c:489
-msgid "If you quit, the downloads will be cancelled"
-msgstr "Si sale, se cancelarán las descargas"
-
-#: ../src/ephy-window.c:490
-msgid "Quit and cancel downloads"
-msgstr "Salir y cancelar las descargas"
-
-#: ../src/ephy-window.c:1094 ../src/window-commands.c:258
-msgid "Open"
-msgstr "Abrir"
-
-#: ../src/ephy-window.c:1096
-msgid "Save As"
-msgstr "Guardar como"
-
-#: ../src/ephy-window.c:1098
-msgid "Save As Application"
-msgstr "Guardar como aplicación"
-
-#: ../src/ephy-window.c:1100
-msgid "Print"
-msgstr "Imprimir"
-
-#: ../src/ephy-window.c:1102
-msgid "Bookmark"
-msgstr "Marcador"
-
-#: ../src/ephy-window.c:1104
-msgid "Find"
-msgstr "Buscar"
-
-#: ../src/ephy-window.c:1110
-msgid "Encodings…"
-msgstr "Codificaciones…"
-
-#. Translators: This refers to text size
-#: ../src/ephy-window.c:1113
-msgid "Larger"
-msgstr "Más grande"
-
-#. Translators: This refers to text size
-#: ../src/ephy-window.c:1116
-msgid "Smaller"
-msgstr "Más pequeño"
-
-#: ../src/ephy-window.c:1138
-msgid "Back"
-msgstr "Atrás"
-
-#: ../src/ephy-window.c:1150
-msgid "Forward"
-msgstr "Adelante"
-
-#: ../src/ephy-window.c:1162
-msgid "Zoom"
-msgstr "Ampliación"
-
-#: ../src/ephy-window.c:1171
-msgid "New _Tab"
-msgstr "Pe_staña nueva"
-
-#: ../src/ephy-window.c:1179
-msgid "Go to most visited"
-msgstr "Ir a los más visitados"
-
-#: ../src/ephy-window.c:1669
-#, c-format
-msgid "Search the Web for '%s'"
-msgstr "Buscar «%s» en la web"
-
-#: ../src/popup-commands.c:252
-msgid "Save Link As"
-msgstr "Guardar enlace como"
-
-#: ../src/popup-commands.c:259
-msgid "Save Image As"
-msgstr "Guardar imagen como"
-
-#: ../src/popup-commands.c:266
-msgid "Save Media As"
-msgstr "Abrir medio como"
-
-#. Translators: the first %s is the language name, and the
-#. * second %s is the locale name. Example:
-#. * "French (France)"
-#.
-#: ../src/prefs-dialog.c:454 ../src/prefs-dialog.c:458
-#, c-format
-msgctxt "language"
-msgid "%s (%s)"
-msgstr "%s (%s)"
-
-#. Translators: this refers to a user-define language code
-#. * (one which isn't in our built-in list).
-#.
-#: ../src/prefs-dialog.c:465
-#, c-format
-msgctxt "language"
-msgid "User defined (%s)"
-msgstr "Definido por el usuario (%s)"
-
-#: ../src/prefs-dialog.c:487
-#, c-format
-msgid "System language (%s)"
-msgid_plural "System languages (%s)"
-msgstr[0] "Idioma del sistema (%s)"
-msgstr[1] "Idiomas del sistema (%s)"
-
-#: ../src/prefs-dialog.c:809
-msgid "Select a Directory"
-msgstr "Seleccione una carpeta"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:903
-msgid "DuckDuckGo"
-msgstr "DuckDuckGo"
-
-#. For the preferences dialog. Must exactly match the URL
-#. * you chose in the gschema, but with & instead of &amp;
-#. * If the match is not exact, there will be a spurious, ugly
-#. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:909
-#, c-format
-msgid "https://duckduckgo.com/?q=%s&t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:911
-msgid "Google"
-msgstr "Google"
-
-#. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:914
-#, c-format
-msgid "https://google.com/search?q=%s"
-msgstr "https://google.com/search?q=%s"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:916
-msgid "Bing"
-msgstr "Bing"
-
-#. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:919
-#, c-format
-msgid "https://www.bing.com/search?q=%s"
-msgstr "http://www.bing.com/search?q=%s&cc=es"
-
-#: ../src/window-commands.c:309
-msgid "Save"
-msgstr "Guardar"
-
-#: ../src/window-commands.c:680
-#, c-format
-msgid "A web application named '%s' already exists. Do you want to replace it?"
-msgstr "Ya existe una aplicación web con nombre «%s». ¿Quiere reemplazarla?"
-
-#: ../src/window-commands.c:683
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: ../src/window-commands.c:685
-msgid "Replace"
-msgstr "Reemplazar"
-
-#: ../src/window-commands.c:689
-msgid ""
-"An application with the same name already exists. Replacing it will "
-"overwrite it."
-msgstr ""
-"Ya existe una aplicación con el mismo nombre. Reemplazarla la sobrescribirá."
-
-#: ../src/window-commands.c:724
-#, c-format
-msgid "The application '%s' is ready to be used"
-msgstr "La aplicación «%s» está lista para usarse"
-
-#: ../src/window-commands.c:727
-#, c-format
-msgid "The application '%s' could not be created"
-msgstr "No se pudo crear la aplicación «%s»"
-
-#: ../src/window-commands.c:735
-msgid "Launch"
-msgstr "Lanzar"
-
-#. Show dialog with icon, title.
-#: ../src/window-commands.c:775
-msgid "Create Web Application"
-msgstr "Crear una aplicación web"
-
-#: ../src/window-commands.c:780
-msgid "C_reate"
-msgstr "C_rear"
-
-#: ../src/window-commands.c:1461 ../src/window-commands.c:1484
+#: ../src/window-commands.c:212 ../src/window-commands.c:235
 msgid "Contact us at:"
 msgstr "Contacte con nosotros en:"
 
-#: ../src/window-commands.c:1464
+#: ../src/window-commands.c:215
 msgid "Contributors:"
 msgstr "Contribuyentes:"
 
-#: ../src/window-commands.c:1467
+#: ../src/window-commands.c:218
 msgid "Past developers:"
 msgstr "Desarrolladores anteriores:"
 
-#: ../src/window-commands.c:1493
+#: ../src/window-commands.c:244
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3258,22 +3062,73 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1516
+#: ../src/window-commands.c:267
 msgid "translator-credits"
 msgstr ""
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/window-commands.c:1519
+#: ../src/window-commands.c:270
 msgid "Web Website"
 msgstr "Sitio web de Web"
 
-#: ../src/window-commands.c:1680
+#: ../src/window-commands.c:501
+msgid "Open"
+msgstr "Abrir"
+
+#: ../src/window-commands.c:865
+#, c-format
+msgid "A web application named '%s' already exists. Do you want to replace it?"
+msgstr "Ya existe una aplicación web con nombre «%s». ¿Quiere reemplazarla?"
+
+#: ../src/window-commands.c:868
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../src/window-commands.c:870
+msgid "Replace"
+msgstr "Reemplazar"
+
+#: ../src/window-commands.c:874
+msgid ""
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
+msgstr ""
+"Ya existe una aplicación con el mismo nombre. Reemplazarla la sobrescribirá."
+
+#: ../src/window-commands.c:909
+#, c-format
+msgid "The application '%s' is ready to be used"
+msgstr "La aplicación «%s» está lista para usarse"
+
+#: ../src/window-commands.c:912
+#, c-format
+msgid "The application '%s' could not be created"
+msgstr "No se pudo crear la aplicación «%s»"
+
+#: ../src/window-commands.c:920
+msgid "Launch"
+msgstr "Lanzar"
+
+#. Show dialog with icon, title.
+#: ../src/window-commands.c:962
+msgid "Create Web Application"
+msgstr "Crear una aplicación web"
+
+#: ../src/window-commands.c:967
+msgid "C_reate"
+msgstr "C_rear"
+
+#: ../src/window-commands.c:1097
+msgid "Save"
+msgstr "Guardar"
+
+#: ../src/window-commands.c:1748
 msgid "Enable caret browsing mode?"
 msgstr "¿Activar el modo de navegación con cursor?"
 
-#: ../src/window-commands.c:1683
+#: ../src/window-commands.c:1751
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3283,9 +3138,87 @@ msgstr ""
 "característica ubica un cursor movible en las páginas web, permitiéndole "
 "moverse con su teclado. ¿Quiere activar el modo de navegación con cursor?"
 
-#: ../src/window-commands.c:1686
+#: ../src/window-commands.c:1754
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Stop"
+#~ msgstr "Detener"
+
+#~ msgid "Stop current data transfer"
+#~ msgstr "Detener la transferencia de datos actual"
+
+#~ msgid "Display the latest content of the current page"
+#~ msgstr "Mostrar el último contenido de la página actual"
+
+#~ msgid "Find Ne_xt"
+#~ msgstr "Buscar _siguiente"
+
+#~ msgid "Find Pre_vious"
+#~ msgstr "Buscar _anterior"
+
+#~ msgid "Edit _Bookmarks"
+#~ msgstr "_Editar marcadores"
+
+#~ msgid "_Stop"
+#~ msgstr "_Detener"
+
+#~ msgid "_Normal Size"
+#~ msgstr "Tamaño n_ormal"
+
+#~ msgid "_Toggle Inspector"
+#~ msgstr "Conmun_tar inspector"
+
+#~ msgid "_Location…"
+#~ msgstr "Di_rección…"
+
+#~ msgid "_Previous Tab"
+#~ msgstr "Pestaña _anterior"
+
+#~ msgid "_Next Tab"
+#~ msgstr "_Siguiente pestaña"
+
+#~ msgid "_Detach Tab"
+#~ msgstr "_Desprender pestaña"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "_Pantalla completa"
+
+#~ msgid "Popup _Windows"
+#~ msgstr "Ventanas _emergentes"
+
+#~ msgid "Selection Caret"
+#~ msgstr "Cursor de selección"
+
+#~ msgid "Save As"
+#~ msgstr "Guardar como"
+
+#~ msgid "Save As Application"
+#~ msgstr "Guardar como aplicación"
+
+#~ msgid "Print"
+#~ msgstr "Imprimir"
+
+#~ msgid "Bookmark"
+#~ msgstr "Marcador"
+
+#~ msgid "Find"
+#~ msgstr "Buscar"
+
+#~ msgid "Encodings…"
+#~ msgstr "Codificaciones…"
+
+#~ msgid "Larger"
+#~ msgstr "Más grande"
+
+#~ msgid "Smaller"
+#~ msgstr "Más pequeño"
+
+#~ msgid "Zoom"
+#~ msgstr "Ampliación"
+
+#~ msgid "Go to most visited"
+#~ msgstr "Ir a los más visitados"
 
 #~ msgid "Master password needed"
 #~ msgstr "Se necesita la contraseña maestra"
