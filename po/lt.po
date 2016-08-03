@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-07-11 09:39+0000\n"
-"PO-Revision-Date: 2016-07-24 16:23+0300\n"
+"POT-Creation-Date: 2016-07-28 17:03+0000\n"
+"PO-Revision-Date: 2016-08-03 21:35+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -57,7 +57,7 @@ msgstr "GNOME projektas"
 
 #: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:289
 #: ../embed/ephy-about-handler.c:320 ../src/ephy-main.c:77
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1500
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:251
 msgid "Web"
 msgstr "Žiniatinklis"
 
@@ -1529,9 +1529,9 @@ msgstr "Pradedama..."
 #: ../lib/widgets/ephy-file-chooser.c:180
 #: ../lib/widgets/ephy-file-chooser.c:187
 #: ../src/bookmarks/ephy-bookmark-properties.c:375
-#: ../src/bookmarks/ephy-bookmarks-editor.c:766
+#: ../src/bookmarks/ephy-bookmarks-editor.c:772
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:778
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:965
 msgid "_Cancel"
 msgstr "A_tsisakyti"
 
@@ -1553,7 +1553,7 @@ msgid "Images"
 msgstr "Paveikslėliai"
 
 #: ../lib/widgets/ephy-file-chooser.c:238
-#: ../src/bookmarks/ephy-bookmarks-editor.c:595
+#: ../src/bookmarks/ephy-bookmarks-editor.c:601
 msgid "All files"
 msgstr "Visi failai"
 
@@ -1569,8 +1569,9 @@ msgstr "Išva_lyti"
 msgid "Paste and _Go"
 msgstr "Įdėti ir _tęsti"
 
-#. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:666 ../src/ephy-window.c:111
+#. Undo, redo.
+#: ../lib/widgets/ephy-location-entry.c:666 ../src/ephy-window.c:895
+#: ../src/resources/gtk/menus.ui.h:5
 msgid "_Undo"
 msgstr "_Atšaukti"
 
@@ -1711,190 +1712,194 @@ msgid "Remove from this topic"
 msgstr "Ištrinti iš šios temos"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:148
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
 msgid "_File"
 msgstr "_Failas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:149
+#: ../src/bookmarks/ephy-bookmarks-editor.c:155
 msgid "_Edit"
 msgstr "_Keisti"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:150
+#: ../src/bookmarks/ephy-bookmarks-editor.c:156
 msgid "_View"
 msgstr "Ro_dymas"
 
-#. Help.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:151
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:157
+#: ../src/resources/epiphany-application-menu.ui.h:8
 msgid "_Help"
 msgstr "_Žinynas"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:155
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
 msgid "_New Topic"
 msgstr "_Nauja tema"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:156
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
 msgid "Create a new topic"
 msgstr "Sukurti naują temą"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1084
+#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1090
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Atverti naujame _lange"
 msgstr[1] "Atverti naujuose _languose"
 msgstr[2] "Atverti naujuose _languose"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "Open the selected bookmark in a new window"
 msgstr "Atverti pasirinktą žymelę naujame lange"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1087
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1093
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Atverti naujoje _kortelėje"
 msgstr[1] "Atverti naujose _kortelėse"
 msgstr[2] "Atverti naujose _kortelėse"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "Open the selected bookmark in a new tab"
 msgstr "Atverti pasirinktą žymelę naujoje kortelėje"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "_Rename…"
 msgstr "_Pervadinti…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "Rename the selected bookmark or topic"
 msgstr "Pervadinti pasirinktą žymelę arba temą"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "_Properties"
 msgstr "_Savybės"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Žiūrėti arba keisti pasirinktos žymelės savybes"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "_Import Bookmarks…"
 msgstr "_Importuoti žymeles…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Importuoti žymeles iš kitos naršyklės arba žymelių failo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
 msgid "_Export Bookmarks…"
 msgstr "_Eksportuoti žymeles…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Export bookmarks to a file"
 msgstr "Eksportuoti žymeles į failą"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:175 ../src/ephy-window.c:104
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/resources/gtk/menus.ui.h:18
 msgid "_Close"
 msgstr "_Užverti"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Close the bookmarks window"
 msgstr "Užverti žymelių langą"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180 ../src/ephy-window.c:115
+#. Edit.
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186 ../src/ephy-window.c:899
+#: ../src/resources/gtk/menus.ui.h:7
 msgid "Cu_t"
 msgstr "Iškirp_ti"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Cut the selection"
 msgstr "Iškirpti pažymėjimą"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1094 ../src/ephy-window.c:117
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1100 ../src/ephy-window.c:900
+#: ../src/resources/gtk/menus.ui.h:8
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Copy the selection"
 msgstr "Kopijuoti pažymėjimą"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186 ../src/ephy-window.c:119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192 ../src/ephy-window.c:901
+#: ../src/resources/gtk/menus.ui.h:9
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Paste the clipboard"
 msgstr "Įdėti iš atmintinės"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
 #: ../src/resources/history-dialog.ui.h:4
 msgid "_Delete"
 msgstr "_Trinti"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Delete the selected bookmark or topic"
 msgstr "Trinti pasirinktą žymelę arba temą"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192 ../src/ephy-window.c:123
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198 ../src/ephy-window.c:902
 msgid "Select _All"
 msgstr "Pažymėti _viską"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
 msgid "Select all bookmarks or text"
 msgstr "Pažymėti visas žymeles arba tekstą"
 
 #. Help Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "_Contents"
 msgstr "_Turinys"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "Display bookmarks help"
 msgstr "Rodyti žymelių žinyną"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/resources/epiphany-application-menu.ui.h:9
 msgid "_About"
 msgstr "_Apie"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "Display credits for the web browser creators"
 msgstr "Rodyti padėkas naršyklės kūrėjams"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
 msgid "_Title"
 msgstr "_Antraštė"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
 msgid "Show the title column"
 msgstr "Rodyti antraštės stulpelį"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1559
+#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1565
 msgid "Address"
 msgstr "Adresas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 msgid "Show the address column"
 msgstr "Rodyti adreso stulpelį"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:252
+#: ../src/bookmarks/ephy-bookmarks-editor.c:258
 msgid "Type a topic"
 msgstr "Parašykite temą"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:365
+#: ../src/bookmarks/ephy-bookmarks-editor.c:371
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Ištrinti temą „%s“?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:368
+#: ../src/bookmarks/ephy-bookmarks-editor.c:374
 msgid "Delete this topic?"
 msgstr "Ištrinti šią temą?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:370
+#: ../src/bookmarks/ephy-bookmarks-editor.c:376
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -1903,44 +1908,44 @@ msgstr ""
 "kategorijos, nebent jos taip pat priklauso kitoms temoms. Žymelės nebus "
 "ištrintos."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:373
+#: ../src/bookmarks/ephy-bookmarks-editor.c:379
 msgid "_Delete Topic"
 msgstr "_Trinti temą"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:471
-#: ../src/bookmarks/ephy-bookmarks-editor.c:473
+#: ../src/bookmarks/ephy-bookmarks-editor.c:477
+#: ../src/bookmarks/ephy-bookmarks-editor.c:479
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:476
-#: ../src/bookmarks/ephy-bookmarks-editor.c:478
+#: ../src/bookmarks/ephy-bookmarks-editor.c:482
+#: ../src/bookmarks/ephy-bookmarks-editor.c:484
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:481
+#: ../src/bookmarks/ephy-bookmarks-editor.c:487
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla profilis „%s“"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:483
+#: ../src/bookmarks/ephy-bookmarks-editor.c:489
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:485
+#: ../src/bookmarks/ephy-bookmarks-editor.c:491
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:512
+#: ../src/bookmarks/ephy-bookmarks-editor.c:518
 msgid "Import failed"
 msgstr "Importuoti nepavyko"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:514
+#: ../src/bookmarks/ephy-bookmarks-editor.c:520
 msgid "Import Failed"
 msgstr "Importuoti nepavyko"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:517
+#: ../src/bookmarks/ephy-bookmarks-editor.c:523
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -1949,63 +1954,63 @@ msgstr ""
 "Žymelių iš „%s“ nepavyko importuoti, nes failas yra sugadintas arba "
 "nepalaikomo tipo."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:576
+#: ../src/bookmarks/ephy-bookmarks-editor.c:582
 msgid "Import Bookmarks from File"
 msgstr "Importuoti žymeles iš failo"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:583
+#: ../src/bookmarks/ephy-bookmarks-editor.c:589
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla žymelės"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:587
+#: ../src/bookmarks/ephy-bookmarks-editor.c:593
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror žymelės"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:591
+#: ../src/bookmarks/ephy-bookmarks-editor.c:597
 msgid "Web bookmarks"
 msgstr "Žiniatinklio žymelės"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:705
+#: ../src/bookmarks/ephy-bookmarks-editor.c:711
 msgid "Export Bookmarks"
 msgstr "Eksportuoti žymeles"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:712
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1422
-#: ../src/bookmarks/ephy-topic-action.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:718
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1428
+#: ../src/bookmarks/ephy-topic-action.c:175
 msgid "Bookmarks"
 msgstr "Žymelės"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:718
+#: ../src/bookmarks/ephy-bookmarks-editor.c:724
 msgid "File f_ormat:"
 msgstr "Failo f_ormatas:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:769
 msgid "Import Bookmarks"
 msgstr "Importuoti žymeles"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../src/bookmarks/ephy-bookmarks-editor.c:774
 msgid "I_mport"
 msgstr "I_mportuoti"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:784
+#: ../src/bookmarks/ephy-bookmarks-editor.c:790
 msgid "Import bookmarks from:"
 msgstr "Importuoti žymeles iš:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:804
+#: ../src/bookmarks/ephy-bookmarks-editor.c:810
 msgid "File"
 msgstr "Failas"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1092
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1098
 msgid "_Copy Address"
 msgstr "_Kopijuoti adresą"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1478
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1484
 #: ../src/resources/bookmark-properties.ui.h:5
 msgid "Topics"
 msgstr "Temos"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1548
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1554
 msgid "Title"
 msgstr "Antraštė"
 
@@ -2022,6 +2027,315 @@ msgstr "Atverti šios temos žymeles naujose kortelėse"
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Sukurti temą „%s“"
+
+#: ../src/ephy-history-window.c:242
+msgid "Clear browsing history?"
+msgstr "Išvalyti naršymo retrospektyvą?"
+
+#: ../src/ephy-history-window.c:246
+msgid ""
+"Clearing the browsing history will cause all history links to be permanently "
+"deleted."
+msgstr ""
+"Naršymo retrospektyvos išvalymas reiškia visų retrospektyvos nuorodų visišką "
+"ištrynimą."
+
+#: ../src/ephy-main.c:86
+msgid "Open a new tab in an existing browser window"
+msgstr "Atverti naują kortelę esamame naršyklės lange"
+
+#: ../src/ephy-main.c:88
+msgid "Open a new browser window"
+msgstr "Atverti naują naršyklės langą"
+
+#: ../src/ephy-main.c:90
+msgid "Import bookmarks from the given file"
+msgstr "Importuoti žymeles iš nurodyto failo"
+
+#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
+msgid "FILE"
+msgstr "FAILAS"
+
+#: ../src/ephy-main.c:92
+msgid "Load the given session file"
+msgstr "Įkelti nurodytą seanso failą"
+
+#: ../src/ephy-main.c:94
+msgid "Add a bookmark"
+msgstr "Pridėti žymelę"
+
+#: ../src/ephy-main.c:94
+msgid "URL"
+msgstr "URL"
+
+#: ../src/ephy-main.c:96
+msgid "Start a private instance"
+msgstr "Paleisti privačią instanciją"
+
+#: ../src/ephy-main.c:98
+msgid "Start an instance in incognito mode"
+msgstr "Paleisti naršyklę incognito veiksena"
+
+#: ../src/ephy-main.c:100
+msgid "Start an instance in netbank mode"
+msgstr "Paleisti naršyklę internetinio banko veiksena"
+
+#: ../src/ephy-main.c:103
+msgid "Start the browser in application mode"
+msgstr "Paleisti naršyklę programos veiksena"
+
+#: ../src/ephy-main.c:105
+msgid "Profile directory to use in the private instance"
+msgstr "Privačioje instancijoje naudotinas profilio aplankas"
+
+#: ../src/ephy-main.c:105
+msgid "DIR"
+msgstr "APL"
+
+#: ../src/ephy-main.c:107
+msgid "URL …"
+msgstr "URL…"
+
+#: ../src/ephy-main.c:212
+msgid "Could not start Web"
+msgstr "Nepavyko paleisti žiniatinklio naršyklės"
+
+#: ../src/ephy-main.c:215
+#, c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr ""
+"Nepavyko paleisti dėl šios klaidos:\n"
+"%s"
+
+#: ../src/ephy-main.c:325
+msgid "Web options"
+msgstr "Žiniatinklio parametrai"
+
+#: ../src/ephy-notebook.c:660
+msgid "Close tab"
+msgstr "Užverti kortelę"
+
+#: ../src/ephy-search-provider.c:195
+#, c-format
+msgid "Search the Web for %s"
+msgstr "Ieškoti internete %s"
+
+#: ../src/ephy-window.c:246
+msgid "There are unsubmitted changes to form elements"
+msgstr "Formų elementuose yra dar nepateiktų pakeitimų."
+
+#: ../src/ephy-window.c:247
+msgid "If you close the document anyway, you will lose that information."
+msgstr "Jeigu vis tiek uždarysite dokumentą, prarasite šią informaciją."
+
+#: ../src/ephy-window.c:249
+msgid "Close _Document"
+msgstr "Užverti _dokumentą"
+
+#: ../src/ephy-window.c:264
+msgid "There are ongoing downloads"
+msgstr "Yra aktyvių parsiuntimų"
+
+#: ../src/ephy-window.c:265
+msgid "If you quit, the downloads will be cancelled"
+msgstr "Jei užversite langą, parsiuntimai bus atmesti"
+
+#: ../src/ephy-window.c:266
+msgid "Quit and cancel downloads"
+msgstr "Išeiti ir atmesti parsiuntimus"
+
+#: ../src/ephy-window.c:896 ../src/resources/gtk/menus.ui.h:6
+msgid "Re_do"
+msgstr "Pa_kartoti"
+
+#: ../src/ephy-window.c:904
+msgid "S_end Link by Email…"
+msgstr "Siųsti nuorodą _el.paštu…"
+
+#: ../src/ephy-window.c:906
+msgid "_Reload"
+msgstr "Įk_elti iš naujo"
+
+#: ../src/ephy-window.c:907
+#| msgid "Back"
+msgid "_Back"
+msgstr "_Atgal"
+
+#: ../src/ephy-window.c:908
+#| msgid "Forward"
+msgid "_Forward"
+msgstr "_Pirmyn"
+
+#. Bookmarks
+#: ../src/ephy-window.c:911
+msgid "Add Boo_kmark…"
+msgstr "Pridėti ž_ymelę…"
+
+#. Links.
+#: ../src/ephy-window.c:915
+msgid "Open Link in New _Window"
+msgstr "Atverti nuorodą naujame _lange"
+
+#: ../src/ephy-window.c:916
+msgid "Open Link in New _Tab"
+msgstr "Atverti nuorodą naujoje _kortelėje"
+
+#: ../src/ephy-window.c:917
+msgid "Open Link in I_ncognito Window"
+msgstr "Atverti nuorodą i_nkognito lange"
+
+#: ../src/ephy-window.c:918
+msgid "_Save Link As…"
+msgstr "Į_rašyti nuorodą kaip…"
+
+#: ../src/ephy-window.c:919
+msgid "_Copy Link Address"
+msgstr "_Kopijuoti nuorodos adresą"
+
+#: ../src/ephy-window.c:920
+msgid "_Copy E-mail Address"
+msgstr "_Kopijuoti el. pašto adresą"
+
+#. Images.
+#: ../src/ephy-window.c:924
+msgid "View _Image in New Tab"
+msgstr "Rodyti pave_ikslėlį naujoje kortelėje"
+
+#: ../src/ephy-window.c:925
+msgid "Copy I_mage Address"
+msgstr "Kopi_juoti paveikslėlio adresą"
+
+#: ../src/ephy-window.c:926
+msgid "_Save Image As…"
+msgstr "Į_rašyti paveikslėlį kaip…"
+
+#: ../src/ephy-window.c:927
+msgid "Set as _Wallpaper"
+msgstr "Nustatyti kaip _foną"
+
+#. Video.
+#: ../src/ephy-window.c:931
+msgid "Open Video in New _Window"
+msgstr "Atverti vaizdo įrašą naujame _lange"
+
+#: ../src/ephy-window.c:932
+msgid "Open Video in New _Tab"
+msgstr "Atverti vaizdo įrašą naujoje _kortelėje"
+
+#: ../src/ephy-window.c:933
+msgid "_Save Video As…"
+msgstr "Į_rašyti vaizdo įrašą taip…"
+
+#: ../src/ephy-window.c:934
+msgid "_Copy Video Address"
+msgstr "_Kopijuoti vaizdo įrašo adresą"
+
+#. Audio.
+#: ../src/ephy-window.c:938
+msgid "Open Audio in New _Window"
+msgstr "Atverti garso įrašą naujame _lange"
+
+#: ../src/ephy-window.c:939
+msgid "Open Audio in New _Tab"
+msgstr "Atverti garso įrašą naujoje _kortelėje"
+
+#: ../src/ephy-window.c:940
+msgid "_Save Audio As…"
+msgstr "Į_rašyti garso įrašą taip…"
+
+#: ../src/ephy-window.c:941
+msgid "_Copy Audio Address"
+msgstr "_Kopijuoti garso įrašą adresą"
+
+#: ../src/ephy-window.c:1475
+#, c-format
+msgid "Search the Web for '%s'"
+msgstr "Ieškoti internete „%s“"
+
+#: ../src/popup-commands.c:257
+msgid "Save Link As"
+msgstr "Įrašyti nuorodą taip"
+
+#: ../src/popup-commands.c:265
+msgid "Save Image As"
+msgstr "Įrašyti paveikslėlį taip"
+
+#: ../src/popup-commands.c:273
+msgid "Save Media As"
+msgstr "Įrašyti įrašą taip"
+
+#. Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: ../src/prefs-dialog.c:454 ../src/prefs-dialog.c:458
+#, c-format
+msgctxt "language"
+msgid "%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:465
+#, c-format
+msgctxt "language"
+msgid "User defined (%s)"
+msgstr "Nurodyta naudotojo (%s)"
+
+#: ../src/prefs-dialog.c:487
+#, c-format
+msgid "System language (%s)"
+msgid_plural "System languages (%s)"
+msgstr[0] "Sistemos kalba (%s)"
+msgstr[1] "Sistemos kalbos (%s)"
+msgstr[2] "Sistemos kalbų (%s)"
+
+#: ../src/prefs-dialog.c:730 ../src/resources/prefs-dialog.ui.h:46
+msgid "Language"
+msgstr "Kalba"
+
+#: ../src/prefs-dialog.c:809
+msgid "Select a Directory"
+msgstr "Pasirinkite aplanką"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:903
+msgid "DuckDuckGo"
+msgstr "DuckDuckGo"
+
+#. For the preferences dialog. Must exactly match the URL
+#. * you chose in the gschema, but with & instead of &amp;
+#. * If the match is not exact, there will be a spurious, ugly
+#. * entry in the preferences combo, so please test this.
+#: ../src/prefs-dialog.c:909
+#, c-format
+msgid "https://duckduckgo.com/?q=%s&t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:911
+msgid "Google"
+msgstr "Google"
+
+#. For the preferences dialog. Consider a regional variant, like google.co.uk
+#: ../src/prefs-dialog.c:914
+#, c-format
+msgid "https://google.com/search?q=%s"
+msgstr "https://google.lt/search?q=%s"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:916
+msgid "Bing"
+msgstr "Bing"
+
+#. For the preferences dialog. Consider a regional variant, like uk.bing.com
+#: ../src/prefs-dialog.c:919
+#, c-format
+msgid "https://www.bing.com/search?q=%s"
+msgstr "https://www.bing.com/search?q=%s"
 
 #: ../src/resources/bookmark-properties.ui.h:1
 msgid "_Title:"
@@ -2137,12 +2451,11 @@ msgstr "&#60;b&#62;Susiję koduotės&#60;/b&#62;"
 msgid "Show all…"
 msgstr "Rodyti visas…"
 
-#. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:90
+#: ../src/resources/epiphany-application-menu.ui.h:1
 msgid "_New Window"
 msgstr "_Naujas langas"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:92
+#: ../src/resources/epiphany-application-menu.ui.h:2
 msgid "New _Incognito Window"
 msgstr "Naujas _incognito langas"
 
@@ -2150,16 +2463,16 @@ msgstr "Naujas _incognito langas"
 msgid "Reopen Closed _Tab"
 msgstr "Vėl atverti užvertą _kortelę"
 
-#. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:83
+#: ../src/resources/epiphany-application-menu.ui.h:4
+#: ../src/resources/gtk/menus.ui.h:14
 msgid "_Bookmarks"
 msgstr "Ž_ymelės"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:133
+#: ../src/resources/epiphany-application-menu.ui.h:5
 msgid "_History"
 msgstr "_Retrospektyva"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:135
+#: ../src/resources/epiphany-application-menu.ui.h:6
 msgid "Pr_eferences"
 msgstr "_Nuostatos"
 
@@ -2167,9 +2480,68 @@ msgstr "_Nuostatos"
 msgid "_Keyboard Shortcuts"
 msgstr "_Klaviatūros trumpiniai"
 
-#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:106
+#: ../src/resources/epiphany-application-menu.ui.h:10
 msgid "_Quit"
 msgstr "_Išeiti"
+
+#: ../src/resources/gtk/menus.ui.h:1
+#| msgid "New _Tab"
+msgid "New Tab"
+msgstr "Nauja kortelė"
+
+#: ../src/resources/gtk/menus.ui.h:2
+msgid "_Open…"
+msgstr "_Atverti…"
+
+#: ../src/resources/gtk/menus.ui.h:3
+msgid "Save _As…"
+msgstr "Įrašyti _kaip…"
+
+#: ../src/resources/gtk/menus.ui.h:4
+msgid "Save As _Web Application…"
+msgstr "Įrašyti kaip _internetinę programą..."
+
+#: ../src/resources/gtk/menus.ui.h:10
+msgid "Zoom _In"
+msgstr "_Didinti"
+
+#: ../src/resources/gtk/menus.ui.h:11
+#| msgid "Zoom O_ut"
+msgid "Zoom _Out"
+msgstr "_Mažinti"
+
+#: ../src/resources/gtk/menus.ui.h:12
+#| msgid "_Print…"
+msgid "Print…"
+msgstr "Spausdinti…"
+
+#: ../src/resources/gtk/menus.ui.h:13
+msgid "_Find…"
+msgstr "_Rasti…"
+
+#: ../src/resources/gtk/menus.ui.h:15
+msgid "_Add Bookmark…"
+msgstr "_Pridėti žymelę…"
+
+#: ../src/resources/gtk/menus.ui.h:16
+msgid "Text _Encoding"
+msgstr "Teksto _koduotė"
+
+#: ../src/resources/gtk/menus.ui.h:17
+msgid "_Page Source"
+msgstr "P_uslapio išeities tekstas"
+
+#: ../src/resources/gtk/menus.ui.h:19
+msgid "Move Tab _Left"
+msgstr "Perkelti kortelę _kairėn"
+
+#: ../src/resources/gtk/menus.ui.h:20
+msgid "Move Tab _Right"
+msgstr "Perkelti kortelę _dešinėn"
+
+#: ../src/resources/gtk/menus.ui.h:21
+msgid "Du_plicate"
+msgstr "_Dubliuoti"
 
 #: ../src/resources/history-dialog.ui.h:2
 msgid "_Copy Location"
@@ -2397,10 +2769,6 @@ msgstr "Rašybos tikrinimas"
 msgid "_Enable spell checking"
 msgstr "Įjungti _rašybos tikrinimą"
 
-#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:730
-msgid "Language"
-msgstr "Kalba"
-
 #: ../src/resources/prefs-lang-dialog.ui.h:1
 msgid "Add Language"
 msgstr "Pridėti kalbą"
@@ -2410,55 +2778,46 @@ msgid "Choose a l_anguage:"
 msgstr "Pasirinkite k_albą:"
 
 #: ../src/resources/shortcuts-dialog.ui.h:1
-#| msgid "General"
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Pagrindiniai"
 
 #: ../src/resources/shortcuts-dialog.ui.h:2
-#| msgid "_New Window"
 msgctxt "shortcut window"
 msgid "New window"
 msgstr "Naujas langas"
 
 #: ../src/resources/shortcuts-dialog.ui.h:3
-#| msgid "New Incognito Window"
 msgctxt "shortcut window"
 msgid "New incognito window"
 msgstr "Naujas incognito langas"
 
 #: ../src/resources/shortcuts-dialog.ui.h:4
-#| msgid "Open"
 msgctxt "shortcut window"
 msgid "Open file"
 msgstr "Atverti failą"
 
 #: ../src/resources/shortcuts-dialog.ui.h:5
-#| msgid "Save Image As"
 msgctxt "shortcut window"
 msgid "Save page"
 msgstr "Įrašyti puslapį"
 
 #: ../src/resources/shortcuts-dialog.ui.h:6
-#| msgid "Save Image As"
 msgctxt "shortcut window"
 msgid "Save page as web app"
 msgstr "Įrašyti puslapį kaip internetinę programą"
 
 #: ../src/resources/shortcuts-dialog.ui.h:7
-#| msgid "Print"
 msgctxt "shortcut window"
 msgid "Print page"
 msgstr "Spausdinti puslapį"
 
 #: ../src/resources/shortcuts-dialog.ui.h:8
-#| msgid "_Quit"
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Išeiti"
 
 #: ../src/resources/shortcuts-dialog.ui.h:9
-#| msgid "_Help"
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Žinynas"
@@ -2499,7 +2858,6 @@ msgid "Tabs"
 msgstr "Kortelės"
 
 #: ../src/resources/shortcuts-dialog.ui.h:17
-#| msgid "New _Tab"
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Nauja kortelė"
@@ -2510,13 +2868,11 @@ msgid "Duplicate current tab"
 msgstr "Dubliuoti dabartinę kortelę"
 
 #: ../src/resources/shortcuts-dialog.ui.h:19
-#| msgid "Close tab"
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Užverti dabartinę kortelę"
 
 #: ../src/resources/shortcuts-dialog.ui.h:20
-#| msgid "Reopen Closed _Tab"
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Vėl atverti užvertą kortelę"
@@ -2527,7 +2883,6 @@ msgid "Go to the next tab"
 msgstr "Eiti į kitą kortelę"
 
 #: ../src/resources/shortcuts-dialog.ui.h:22
-#| msgid "Go to most visited"
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Eiti į ankstesnę kortelę"
@@ -2548,19 +2903,16 @@ msgid "Miscellaneous"
 msgstr "Įvairūs"
 
 #: ../src/resources/shortcuts-dialog.ui.h:26
-#| msgid "History"
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Retrospektyva"
 
 #: ../src/resources/shortcuts-dialog.ui.h:27
-#| msgid "Preferences"
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Nuostatos"
 
 #: ../src/resources/shortcuts-dialog.ui.h:28
-#| msgid "Bookmarks"
 msgctxt "shortcut window"
 msgid "Bookmarks"
 msgstr "Žymelės"
@@ -2571,25 +2923,21 @@ msgid "Bookmark current page"
 msgstr "Įtraukti į žymeles dabartinį puslapį"
 
 #: ../src/resources/shortcuts-dialog.ui.h:30
-#| msgid "Enable caret browsing mode?"
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Perjungti naršymą naudojant rodyklių klavišus"
 
 #: ../src/resources/shortcuts-dialog.ui.h:31
-#| msgid "_View"
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Rodymas"
 
 #: ../src/resources/shortcuts-dialog.ui.h:32
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Didinti"
 
 #: ../src/resources/shortcuts-dialog.ui.h:33
-#| msgid "Zoom O_ut"
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Mažinti"
@@ -2600,13 +2948,11 @@ msgid "Reset zoom"
 msgstr "Atstatyti dydį"
 
 #: ../src/resources/shortcuts-dialog.ui.h:35
-#| msgid "_Fullscreen"
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Visame ekrane"
 
 #: ../src/resources/shortcuts-dialog.ui.h:36
-#| msgid "_Page Source"
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Rodyti puslapio išeities tekstą"
@@ -2617,55 +2963,46 @@ msgid "Toggle inspector"
 msgstr "Perjungti inspektorių"
 
 #: ../src/resources/shortcuts-dialog.ui.h:38
-#| msgid "_Edit"
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Redagavimas"
 
 #: ../src/resources/shortcuts-dialog.ui.h:39
-#| msgid "Cu_t"
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Iškirpti"
 
 #: ../src/resources/shortcuts-dialog.ui.h:40
-#| msgid "_Copy"
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopijuoti"
 
 #: ../src/resources/shortcuts-dialog.ui.h:41
-#| msgid "_Paste"
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Įdėti"
 
 #: ../src/resources/shortcuts-dialog.ui.h:42
-#| msgid "_Undo"
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Atšaukti"
 
 #: ../src/resources/shortcuts-dialog.ui.h:43
-#| msgid "_Redo"
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Pakartoti"
 
 #: ../src/resources/shortcuts-dialog.ui.h:44
-#| msgid "Select _All"
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Pažymėti viską"
 
 #: ../src/resources/shortcuts-dialog.ui.h:45
-#| msgid "Selection Caret"
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Pažymėti puslapio URL"
 
 #: ../src/resources/shortcuts-dialog.ui.h:46
-#| msgid "Search"
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Ieškoti"
@@ -2680,539 +3017,19 @@ msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Ankstesnis paieškos rezultatas"
 
-#: ../src/ephy-combined-stop-reload-action.c:38
-msgid "Stop"
-msgstr "Stop"
-
-#: ../src/ephy-combined-stop-reload-action.c:39
-msgid "Stop current data transfer"
-msgstr "Stabdyti dabartinį duomenų perdavimą"
-
-#: ../src/ephy-combined-stop-reload-action.c:41 ../src/ephy-window.c:144
-msgid "_Reload"
-msgstr "Įk_elti iš naujo"
-
-#: ../src/ephy-combined-stop-reload-action.c:42
-msgid "Display the latest content of the current page"
-msgstr "Rodyti naujausią šio puslapio turinį"
-
-#: ../src/ephy-history-window.c:242
-msgid "Clear browsing history?"
-msgstr "Išvalyti naršymo retrospektyvą?"
-
-#: ../src/ephy-history-window.c:246
-msgid ""
-"Clearing the browsing history will cause all history links to be permanently "
-"deleted."
-msgstr ""
-"Naršymo retrospektyvos išvalymas reiškia visų retrospektyvos nuorodų visišką "
-"ištrynimą."
-
-#: ../src/ephy-main.c:86
-msgid "Open a new tab in an existing browser window"
-msgstr "Atverti naują kortelę esamame naršyklės lange"
-
-#: ../src/ephy-main.c:88
-msgid "Open a new browser window"
-msgstr "Atverti naują naršyklės langą"
-
-#: ../src/ephy-main.c:90
-msgid "Import bookmarks from the given file"
-msgstr "Importuoti žymeles iš nurodyto failo"
-
-#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
-msgid "FILE"
-msgstr "FAILAS"
-
-#: ../src/ephy-main.c:92
-msgid "Load the given session file"
-msgstr "Įkelti nurodytą seanso failą"
-
-#: ../src/ephy-main.c:94
-msgid "Add a bookmark"
-msgstr "Pridėti žymelę"
-
-#: ../src/ephy-main.c:94
-msgid "URL"
-msgstr "URL"
-
-#: ../src/ephy-main.c:96
-msgid "Start a private instance"
-msgstr "Paleisti privačią instanciją"
-
-#: ../src/ephy-main.c:98
-msgid "Start an instance in incognito mode"
-msgstr "Paleisti naršyklę incognito veiksena"
-
-#: ../src/ephy-main.c:100
-msgid "Start an instance in netbank mode"
-msgstr "Paleisti naršyklę internetinio banko veiksena"
-
-#: ../src/ephy-main.c:103
-msgid "Start the browser in application mode"
-msgstr "Paleisti naršyklę programos veiksena"
-
-#: ../src/ephy-main.c:105
-msgid "Profile directory to use in the private instance"
-msgstr "Privačioje instancijoje naudotinas profilio aplankas"
-
-#: ../src/ephy-main.c:105
-msgid "DIR"
-msgstr "APL"
-
-#: ../src/ephy-main.c:107
-msgid "URL …"
-msgstr "URL…"
-
-#: ../src/ephy-main.c:212
-msgid "Could not start Web"
-msgstr "Nepavyko paleisti žiniatinklio naršyklės"
-
-#: ../src/ephy-main.c:215
-#, c-format
-msgid ""
-"Startup failed because of the following error:\n"
-"%s"
-msgstr ""
-"Nepavyko paleisti dėl šios klaidos:\n"
-"%s"
-
-#: ../src/ephy-main.c:325
-msgid "Web options"
-msgstr "Žiniatinklio parametrai"
-
-#: ../src/ephy-notebook.c:660
-msgid "Close tab"
-msgstr "Užverti kortelę"
-
-#: ../src/ephy-search-provider.c:195
-#, c-format
-msgid "Search the Web for %s"
-msgstr "Ieškoti internete %s"
-
-#: ../src/ephy-window.c:94
-msgid "_Open…"
-msgstr "_Atverti…"
-
-#: ../src/ephy-window.c:96
-msgid "Save _As…"
-msgstr "Įrašyti _kaip…"
-
-#: ../src/ephy-window.c:98
-msgid "Save As _Web Application…"
-msgstr "Įrašyti kaip _internetinę programą..."
-
-#: ../src/ephy-window.c:100
-msgid "_Print…"
-msgstr "S_pausdinti…"
-
-#: ../src/ephy-window.c:102
-msgid "S_end Link by Email…"
-msgstr "Siųsti nuorodą _el.paštu…"
-
-#: ../src/ephy-window.c:113
-msgid "Re_do"
-msgstr "Pa_kartoti"
-
-#: ../src/ephy-window.c:125
-msgid "_Find…"
-msgstr "_Rasti…"
-
-#: ../src/ephy-window.c:127
-msgid "Find Ne_xt"
-msgstr "Rasti _kitą"
-
-#: ../src/ephy-window.c:129
-msgid "Find Pre_vious"
-msgstr "Rasti _ankstesnį"
-
-#: ../src/ephy-window.c:131
-msgid "Edit _Bookmarks"
-msgstr "Keisti ž_ymeles"
-
-#. View actions.
-#: ../src/ephy-window.c:140 ../src/ephy-window.c:142
-msgid "_Stop"
-msgstr "_Stop"
-
-#: ../src/ephy-window.c:146
-msgid "Zoom _In"
-msgstr "_Didinti"
-
-#: ../src/ephy-window.c:148
-msgid "Zoom O_ut"
-msgstr "_Mažinti"
-
-#: ../src/ephy-window.c:150
-msgid "_Normal Size"
-msgstr "_Normalus dydis"
-
-#: ../src/ephy-window.c:152
-msgid "Text _Encoding"
-msgstr "Teksto _koduotė"
-
-#: ../src/ephy-window.c:154
-msgid "_Page Source"
-msgstr "P_uslapio išeities tekstas"
-
-#: ../src/ephy-window.c:156
-msgid "_Toggle Inspector"
-msgstr "_Perjungti inspektorių"
-
-#. Bookmarks actions.
-#: ../src/ephy-window.c:161
-msgid "_Add Bookmark…"
-msgstr "_Pridėti žymelę…"
-
-#. Go actions.
-#: ../src/ephy-window.c:166
-msgid "_Location…"
-msgstr "Vi_eta…"
-
-#. Tabs actions.
-#: ../src/ephy-window.c:171
-msgid "_Previous Tab"
-msgstr "_Ankstesnė kortelė"
-
-#: ../src/ephy-window.c:173
-msgid "_Next Tab"
-msgstr "_Kita kortelė"
-
-#: ../src/ephy-window.c:175
-msgid "Move Tab _Left"
-msgstr "Perkelti kortelę _kairėn"
-
-#: ../src/ephy-window.c:177
-msgid "Move Tab _Right"
-msgstr "Perkelti kortelę _dešinėn"
-
-#: ../src/ephy-window.c:179
-msgid "Du_plicate"
-msgstr "_Dubliuoti"
-
-#: ../src/ephy-window.c:181
-msgid "_Detach Tab"
-msgstr "_Atkabinti kortelę"
-
-#. View actions.
-#: ../src/ephy-window.c:196
-msgid "_Fullscreen"
-msgstr "_Visame ekrane"
-
-#: ../src/ephy-window.c:198
-msgid "Popup _Windows"
-msgstr "Iššokantys _langai"
-
-#: ../src/ephy-window.c:200
-msgid "Selection Caret"
-msgstr "Pažymėjimo žymeklis"
-
-#. Document.
-#: ../src/ephy-window.c:207
-msgid "Add Boo_kmark…"
-msgstr "Pridėti ž_ymelę…"
-
-#. Links.
-#: ../src/ephy-window.c:212
-msgid "Open Link in New _Window"
-msgstr "Atverti nuorodą naujame _lange"
-
-#: ../src/ephy-window.c:214
-msgid "Open Link in New _Tab"
-msgstr "Atverti nuorodą naujoje _kortelėje"
-
-#: ../src/ephy-window.c:216
-msgid "Open Link in I_ncognito Window"
-msgstr "Atverti nuorodą i_nkognito lange"
-
-#: ../src/ephy-window.c:218
-msgid "_Save Link As…"
-msgstr "Į_rašyti nuorodą kaip…"
-
-#: ../src/ephy-window.c:220
-msgid "_Copy Link Address"
-msgstr "_Kopijuoti nuorodos adresą"
-
-#: ../src/ephy-window.c:222
-msgid "_Copy E-mail Address"
-msgstr "_Kopijuoti el. pašto adresą"
-
-#. Images.
-#: ../src/ephy-window.c:227
-msgid "View _Image in New Tab"
-msgstr "Rodyti pave_ikslėlį naujoje kortelėje"
-
-#: ../src/ephy-window.c:229
-msgid "Copy I_mage Address"
-msgstr "Kopi_juoti paveikslėlio adresą"
-
-#: ../src/ephy-window.c:231
-msgid "_Save Image As…"
-msgstr "Į_rašyti paveikslėlį kaip…"
-
-#: ../src/ephy-window.c:233
-msgid "Set as _Wallpaper"
-msgstr "Nustatyti kaip _foną"
-
-#. Video.
-#: ../src/ephy-window.c:238
-msgid "Open Video in New _Window"
-msgstr "Atverti vaizdo įrašą naujame _lange"
-
-#: ../src/ephy-window.c:240
-msgid "Open Video in New _Tab"
-msgstr "Atverti vaizdo įrašą naujoje _kortelėje"
-
-#: ../src/ephy-window.c:242
-msgid "_Save Video As…"
-msgstr "Į_rašyti vaizdo įrašą taip…"
-
-#: ../src/ephy-window.c:244
-msgid "_Copy Video Address"
-msgstr "_Kopijuoti vaizdo įrašo adresą"
-
-#. Audio.
-#: ../src/ephy-window.c:249
-msgid "Open Audio in New _Window"
-msgstr "Atverti garso įrašą naujame _lange"
-
-#: ../src/ephy-window.c:251
-msgid "Open Audio in New _Tab"
-msgstr "Atverti garso įrašą naujoje _kortelėje"
-
-#: ../src/ephy-window.c:253
-msgid "_Save Audio As…"
-msgstr "Į_rašyti garso įrašą taip…"
-
-#: ../src/ephy-window.c:255
-msgid "_Copy Audio Address"
-msgstr "_Kopijuoti garso įrašą adresą"
-
-#: ../src/ephy-window.c:470
-msgid "There are unsubmitted changes to form elements"
-msgstr "Formų elementuose yra dar nepateiktų pakeitimų."
-
-#: ../src/ephy-window.c:471
-msgid "If you close the document anyway, you will lose that information."
-msgstr "Jeigu vis tiek uždarysite dokumentą, prarasite šią informaciją."
-
-#: ../src/ephy-window.c:473
-msgid "Close _Document"
-msgstr "Užverti _dokumentą"
-
-#: ../src/ephy-window.c:488
-msgid "There are ongoing downloads"
-msgstr "Yra aktyvių parsiuntimų"
-
-#: ../src/ephy-window.c:489
-msgid "If you quit, the downloads will be cancelled"
-msgstr "Jei užversite langą, parsiuntimai bus atmesti"
-
-#: ../src/ephy-window.c:490
-msgid "Quit and cancel downloads"
-msgstr "Išeiti ir atmesti parsiuntimus"
-
-#: ../src/ephy-window.c:1094 ../src/window-commands.c:258
-msgid "Open"
-msgstr "Atverti"
-
-#: ../src/ephy-window.c:1096
-msgid "Save As"
-msgstr "Įrašyti kaip"
-
-#: ../src/ephy-window.c:1098
-msgid "Save As Application"
-msgstr "Įrašyti kaip programą"
-
-#: ../src/ephy-window.c:1100
-msgid "Print"
-msgstr "Spausdinti"
-
-#: ../src/ephy-window.c:1102
-msgid "Bookmark"
-msgstr "Žymelė"
-
-#: ../src/ephy-window.c:1104
-msgid "Find"
-msgstr "Rasti"
-
-#: ../src/ephy-window.c:1110
-msgid "Encodings…"
-msgstr "Koduotės…"
-
-#. Translators: This refers to text size
-#: ../src/ephy-window.c:1113
-msgid "Larger"
-msgstr "Didesnis"
-
-#. Translators: This refers to text size
-#: ../src/ephy-window.c:1116
-msgid "Smaller"
-msgstr "Mažesnis"
-
-#: ../src/ephy-window.c:1138
-msgid "Back"
-msgstr "Atgal"
-
-#: ../src/ephy-window.c:1150
-msgid "Forward"
-msgstr "Pirmyn"
-
-#: ../src/ephy-window.c:1162
-msgid "Zoom"
-msgstr "Mastelis"
-
-#: ../src/ephy-window.c:1171
-msgid "New _Tab"
-msgstr "Nauja kor_telė"
-
-#: ../src/ephy-window.c:1179
-msgid "Go to most visited"
-msgstr "Eiti į dažniausiai lankytus"
-
-#: ../src/ephy-window.c:1669
-#, c-format
-msgid "Search the Web for '%s'"
-msgstr "Ieškoti internete „%s“"
-
-#: ../src/popup-commands.c:252
-msgid "Save Link As"
-msgstr "Įrašyti nuorodą taip"
-
-#: ../src/popup-commands.c:259
-msgid "Save Image As"
-msgstr "Įrašyti paveikslėlį taip"
-
-#: ../src/popup-commands.c:266
-msgid "Save Media As"
-msgstr "Įrašyti įrašą taip"
-
-#. Translators: the first %s is the language name, and the
-#. * second %s is the locale name. Example:
-#. * "French (France)"
-#.
-#: ../src/prefs-dialog.c:454 ../src/prefs-dialog.c:458
-#, c-format
-msgctxt "language"
-msgid "%s (%s)"
-msgstr "%s (%s)"
-
-#. Translators: this refers to a user-define language code
-#. * (one which isn't in our built-in list).
-#.
-#: ../src/prefs-dialog.c:465
-#, c-format
-msgctxt "language"
-msgid "User defined (%s)"
-msgstr "Nurodyta naudotojo (%s)"
-
-#: ../src/prefs-dialog.c:487
-#, c-format
-msgid "System language (%s)"
-msgid_plural "System languages (%s)"
-msgstr[0] "Sistemos kalba (%s)"
-msgstr[1] "Sistemos kalbos (%s)"
-msgstr[2] "Sistemos kalbų (%s)"
-
-#: ../src/prefs-dialog.c:809
-msgid "Select a Directory"
-msgstr "Pasirinkite aplanką"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:903
-msgid "DuckDuckGo"
-msgstr "DuckDuckGo"
-
-#. For the preferences dialog. Must exactly match the URL
-#. * you chose in the gschema, but with & instead of &amp;
-#. * If the match is not exact, there will be a spurious, ugly
-#. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:909
-#, c-format
-msgid "https://duckduckgo.com/?q=%s&t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:911
-msgid "Google"
-msgstr "Google"
-
-#. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:914
-#, c-format
-msgid "https://google.com/search?q=%s"
-msgstr "https://google.lt/search?q=%s"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:916
-msgid "Bing"
-msgstr "Bing"
-
-#. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:919
-#, c-format
-msgid "https://www.bing.com/search?q=%s"
-msgstr "https://www.bing.com/search?q=%s"
-
-#: ../src/window-commands.c:309
-msgid "Save"
-msgstr "Įrašyti"
-
-#: ../src/window-commands.c:680
-#, c-format
-msgid "A web application named '%s' already exists. Do you want to replace it?"
-msgstr "Internetinė programa „%s“ jau yra. Ar norite ją pakeisti?"
-
-#: ../src/window-commands.c:683
-msgid "Cancel"
-msgstr "Atmesti"
-
-#: ../src/window-commands.c:685
-msgid "Replace"
-msgstr "Pakeisti"
-
-#: ../src/window-commands.c:689
-msgid ""
-"An application with the same name already exists. Replacing it will "
-"overwrite it."
-msgstr "Failas tokiu pavadinimu jau yra. Pakeitimas ją perrašys."
-
-#: ../src/window-commands.c:724
-#, c-format
-msgid "The application '%s' is ready to be used"
-msgstr "Programa „%s“ pasiruošusi naudojimui"
-
-#: ../src/window-commands.c:727
-#, c-format
-msgid "The application '%s' could not be created"
-msgstr "Nepavyko sukurti programos „%s“"
-
-#: ../src/window-commands.c:735
-msgid "Launch"
-msgstr "Paleisti"
-
-#. Show dialog with icon, title.
-#: ../src/window-commands.c:775
-msgid "Create Web Application"
-msgstr "Sukurti internetinę programą"
-
-#: ../src/window-commands.c:780
-msgid "C_reate"
-msgstr "Suku_rti"
-
-#: ../src/window-commands.c:1461 ../src/window-commands.c:1484
+#: ../src/window-commands.c:212 ../src/window-commands.c:235
 msgid "Contact us at:"
 msgstr "Susisiekite su mumis:"
 
-#: ../src/window-commands.c:1464
+#: ../src/window-commands.c:215
 msgid "Contributors:"
 msgstr "Prisidėjo:"
 
-#: ../src/window-commands.c:1467
+#: ../src/window-commands.c:218
 msgid "Past developers:"
 msgstr "Ankstesnieji kūrėjai:"
 
-#: ../src/window-commands.c:1493
+#: ../src/window-commands.c:244
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3229,7 +3046,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1516
+#: ../src/window-commands.c:267
 msgid "translator-credits"
 msgstr ""
 "išvertė:\n"
@@ -3237,15 +3054,65 @@ msgstr ""
 "Žygimantas Beručka <zygis@gnome.org>,\n"
 "Justina Klingaitė <justina.klingaite@gmail.com>"
 
-#: ../src/window-commands.c:1519
+#: ../src/window-commands.c:270
 msgid "Web Website"
 msgstr "Žiniatinklio naršyklės svetainė"
 
-#: ../src/window-commands.c:1680
+#: ../src/window-commands.c:501
+msgid "Open"
+msgstr "Atverti"
+
+#: ../src/window-commands.c:865
+#, c-format
+msgid "A web application named '%s' already exists. Do you want to replace it?"
+msgstr "Internetinė programa „%s“ jau yra. Ar norite ją pakeisti?"
+
+#: ../src/window-commands.c:868
+msgid "Cancel"
+msgstr "Atmesti"
+
+#: ../src/window-commands.c:870
+msgid "Replace"
+msgstr "Pakeisti"
+
+#: ../src/window-commands.c:874
+msgid ""
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
+msgstr "Failas tokiu pavadinimu jau yra. Pakeitimas ją perrašys."
+
+#: ../src/window-commands.c:909
+#, c-format
+msgid "The application '%s' is ready to be used"
+msgstr "Programa „%s“ pasiruošusi naudojimui"
+
+#: ../src/window-commands.c:912
+#, c-format
+msgid "The application '%s' could not be created"
+msgstr "Nepavyko sukurti programos „%s“"
+
+#: ../src/window-commands.c:920
+msgid "Launch"
+msgstr "Paleisti"
+
+#. Show dialog with icon, title.
+#: ../src/window-commands.c:962
+msgid "Create Web Application"
+msgstr "Sukurti internetinę programą"
+
+#: ../src/window-commands.c:967
+msgid "C_reate"
+msgstr "Suku_rti"
+
+#: ../src/window-commands.c:1097
+msgid "Save"
+msgstr "Įrašyti"
+
+#: ../src/window-commands.c:1748
 msgid "Enable caret browsing mode?"
 msgstr "Įjungti naršymą naudojant rodyklių klavišus?"
 
-#: ../src/window-commands.c:1683
+#: ../src/window-commands.c:1751
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3255,9 +3122,87 @@ msgstr ""
 "puslapiuose stumdomą žymiklį, leidžiantį jums judėti naudojant klaviatūrą. "
 "Ar norite dabar įjungti naršymą naudojant rodyklių klavišus?"
 
-#: ../src/window-commands.c:1686
+#: ../src/window-commands.c:1754
 msgid "_Enable"
 msgstr "_Įjungti"
+
+#~ msgid "Stop"
+#~ msgstr "Stop"
+
+#~ msgid "Stop current data transfer"
+#~ msgstr "Stabdyti dabartinį duomenų perdavimą"
+
+#~ msgid "Display the latest content of the current page"
+#~ msgstr "Rodyti naujausią šio puslapio turinį"
+
+#~ msgid "Find Ne_xt"
+#~ msgstr "Rasti _kitą"
+
+#~ msgid "Find Pre_vious"
+#~ msgstr "Rasti _ankstesnį"
+
+#~ msgid "Edit _Bookmarks"
+#~ msgstr "Keisti ž_ymeles"
+
+#~ msgid "_Stop"
+#~ msgstr "_Stop"
+
+#~ msgid "_Normal Size"
+#~ msgstr "_Normalus dydis"
+
+#~ msgid "_Toggle Inspector"
+#~ msgstr "_Perjungti inspektorių"
+
+#~ msgid "_Location…"
+#~ msgstr "Vi_eta…"
+
+#~ msgid "_Previous Tab"
+#~ msgstr "_Ankstesnė kortelė"
+
+#~ msgid "_Next Tab"
+#~ msgstr "_Kita kortelė"
+
+#~ msgid "_Detach Tab"
+#~ msgstr "_Atkabinti kortelę"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "_Visame ekrane"
+
+#~ msgid "Popup _Windows"
+#~ msgstr "Iššokantys _langai"
+
+#~ msgid "Selection Caret"
+#~ msgstr "Pažymėjimo žymeklis"
+
+#~ msgid "Save As"
+#~ msgstr "Įrašyti kaip"
+
+#~ msgid "Save As Application"
+#~ msgstr "Įrašyti kaip programą"
+
+#~ msgid "Print"
+#~ msgstr "Spausdinti"
+
+#~ msgid "Bookmark"
+#~ msgstr "Žymelė"
+
+#~ msgid "Find"
+#~ msgstr "Rasti"
+
+#~ msgid "Encodings…"
+#~ msgstr "Koduotės…"
+
+#~ msgid "Larger"
+#~ msgstr "Didesnis"
+
+#~ msgid "Smaller"
+#~ msgstr "Mažesnis"
+
+#~ msgid "Zoom"
+#~ msgstr "Mastelis"
+
+#~ msgid "Go to most visited"
+#~ msgstr "Eiti į dažniausiai lankytus"
 
 #~ msgid "Master password needed"
 #~ msgstr "Reikalingas pagrindinis slaptažodis"
