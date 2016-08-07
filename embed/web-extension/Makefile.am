@@ -1,9 +1,7 @@
 AM_CFLAGS = $(WARN_CFLAGS)
 AM_LDFLAGS = $(WARN_LDFLAGS)
 
-webextension_LTLIBRARIES = libephywebextension.la
-
-webextensiondir = $(libdir)/epiphany/$(EPIPHANY_MAJOR)/web-extensions
+pkglib_LTLIBRARIES = libephywebextension.la
 
 libephywebextension_la_SOURCES = \
 	ephy-embed-form-auth.c		\
