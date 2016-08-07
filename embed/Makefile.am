@@ -1,11 +1,10 @@
-NULL =
-
 SUBDIRS = web-extension
 
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
+AM_CFLAGS = $(CODE_COVERAGE_CFLAGS) $(WARN_CFLAGS)
+AM_LDFLAGS = $(CODE_COVERAGE_LDFLAGS) $(WARN_LDFLAGS)
 
-noinst_LTLIBRARIES = libephyembed.la
+noinst_LTLIBRARIES = \
+	libephyembed.la
 
 TYPES_H_FILES = \
 	ephy-download.h			\
@@ -52,23 +51,41 @@ libephyembed_la_SOURCES = \
 nodist_libephyembed_la_SOURCES = \
 	$(BUILT_SOURCES)
 
+libephyembed_la_CFLAGS = \
+	$(GDK_CFLAGS)		\
+	$(GIO_CFLAGS)		\
+	$(GLIB_CFLAGS)		\
+	$(GTK_CFLAGS)		\
+	$(LIBSECRET_CFLAGS)	\
+	$(LIBSOUP_CFLAGS)	\
+	$(WEBKIT2GTK_CFLAGS)	\
+	$(AM_CFLAGS)
+
 libephyembed_la_CPPFLAGS = \
-	-I$(top_srcdir)/embed/web-extension \
-	-I$(top_builddir)/lib       	    \
-	-I$(top_srcdir)/lib       	    \
-	-I$(top_srcdir)/lib/egg       	    \
-	-I$(top_srcdir)/lib/history	    \
-	-I$(top_srcdir)/lib/widgets         \
-	-I$(top_builddir)/lib/widgets       \
+	-I$(top_builddir)/lib			\
+	-I$(top_builddir)/lib/widgets		\
+	-I$(top_srcdir)/embed/web-extension	\
+	-I$(top_srcdir)/lib			\
+	-I$(top_srcdir)/lib/egg			\
+	-I$(top_srcdir)/lib/history		\
+	-I$(top_srcdir)/lib/widgets		\
+	-DDATADIR=\"$(datadir)\"		\
+	-DSHARE_DIR=\"$(pkgdatadir)\"		\
+	-DEPHY_WEB_EXTENSIONS_DIR=\"$(libdir)/epiphany/$(EPIPHANY_MAJOR)/web-extensions\" \
 	$(AM_CPPFLAGS)
 
-libephyembed_la_CFLAGS = \
-	-DDATADIR="\"$(datadir)\""	\
-	-DSHARE_DIR=\"$(pkgdatadir)\"	\
-	-DEPHY_WEB_EXTENSIONS_DIR=\""$(libdir)/epiphany/$(EPIPHANY_MAJOR)/web-extensions"\" \
-	$(DEPENDENCIES_CFLAGS) 	\
-	$(CODE_COVERAGE_CFLAGS) \
-	$(AM_CFLAGS)
+libephyembed_la_LDFLAGS = \
+	$(AM_LDFLAGS)
+
+libephyembed_la_LIBADD = \
+	$(GDK_LIBS)		\
+	$(GIO_LIBS)		\
+	$(GLIB_LIBS)		\
+	$(GTK_LIBS)		\
+	$(LIBM)			\
+	$(LIBSECRET_LIBS)	\
+	$(LIBSOUP_LIBS)		\
+	$(WEBKIT2GTK_LIBS)
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 

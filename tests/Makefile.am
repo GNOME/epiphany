@@ -89,33 +89,35 @@ test-report perf-report full-report: ${TEST_PROGS}
 check-local: test-nonrecursive
 
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/embed    \
-	-I$(top_srcdir)/lib      \
-	-I$(top_srcdir)/lib/history \
-	-I$(top_srcdir)/lib/widgets \
-	-I$(top_builddir)/lib/widgets \
-	-I$(top_srcdir)/src      \
-	-I$(top_srcdir)/src/bookmarks
+	-I$(top_srcdir)/embed		\
+	-I$(top_srcdir)/lib		\
+	-I$(top_srcdir)/lib/history	\
+	-I$(top_srcdir)/lib/widgets	\
+	-I$(top_builddir)/lib/widgets	\
+	-I$(top_srcdir)/src		\
+	-I$(top_srcdir)/src/bookmarks	\
+	-DTEST_DIR=\"$(srcdir)\"
 
 AM_CFLAGS = \
-	-DTEST_DIR=\"$(srcdir)\"\
-	$(DEPENDENCIES_CFLAGS)  \
 	$(CODE_COVERAGE_CFLAGS) \
-	$(WARN_CFLAGS)
+	$(GDK_CFLAGS)		\
+	$(GLIB_CFLAGS)		\
+	$(GTK_CFLAGS)		\
+	$(LIBSOUP_CFLAGS)	\
+	$(WARN_CFLAGS)		\
+	$(WEBKIT2GTK_CFLAGS)
 
-AM_LDFLAGS = $(WARN_LDFLAGS)
+AM_LDFLAGS = \
+	$(CODE_COVERAGE_LDFLAGS) \
+	$(WARN_LDFLAGS)
 
 LDADD = \
 	$(top_builddir)/src/libephymain.la \
-	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/libephyembed.la \
-	$(top_builddir)/lib/widgets/libephywidgets.la \
-	$(top_builddir)/lib/history/libephyhistory.la \
-	$(top_builddir)/lib/libephymisc.la \
-	$(top_builddir)/lib/egg/libegg.la \
-	$(DBUS_LIBS) \
-	$(CODE_COVERAGE_LDFLAGS) \
-	$(DEPENDENCIES_LIBS) 
+	$(GDK_LIBS)		\
+	$(GLIB_LIBS)		\
+	$(GTK_LIBS)		\
+	$(LIBSOUP_LIBS)		\
+	$(WEBKIT2GTK_LIBS)
 
 test_ephy_bookmarks_SOURCES = \
 	ephy-bookmarks-test.c

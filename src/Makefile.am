@@ -1,9 +1,7 @@
 SUBDIRS = bookmarks
 
-NULL =
-
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
+AM_CFLAGS = $(CODE_COVERAGE_CFLAGS) $(WARN_CFLAGS)
+AM_LDFLAGS = $(CODE_COVERAGE_LDFLAGS) $(WARN_LDFLAGS)
 
 noinst_LTLIBRARIES = libephymain.la
 
@@ -12,16 +10,14 @@ bin_PROGRAMS = epiphany
 EXTRA_DIST = \
 	org.gnome.ShellSearchProvider2.xml \
 	epiphany.gresource.xml \
-	$(RESOURCE_FILES)      \
-	$(NULL)
+	$(RESOURCE_FILES)
 
 TYPES_H_FILES = \
 	ephy-link.h				\
 	ephy-session.h				\
 	ephy-shell.h				\
 	ephy-window.h				\
-	ephy-title-box.h			\
-	$(NULL)
+	ephy-title-box.h
 
 libephymain_la_SOURCES = \
 	clear-data-dialog.c			\
@@ -66,32 +62,57 @@ libephymain_la_SOURCES = \
 	prefs-dialog.c				\
 	prefs-dialog.h				\
 	window-commands.c			\
-	window-commands.h			\
-	$(NULL)
+	window-commands.h
 
 nodist_libephymain_la_SOURCES = \
 	$(TYPES_SOURCE)
 
 libephymain_la_CPPFLAGS = \
-	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/embed		\
+	-I$(top_builddir)/lib		\
+	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/embed 		\
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/widgets   	\
-	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DLOADER_DIR=\""$(pkglibdir)/$(EPIPHANY_MAJOR)/loaders"\"		\
-	-DDATADIR=\""$(pkgdatadir)"\" 	\
+	-DLOADER_DIR=\"$(pkglibdir)/$(EPIPHANY_MAJOR)/loaders\"		\
+	-DDATADIR=\"$(pkgdatadir)\" 	\
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)
 
 libephymain_la_CFLAGS = \
-	$(DEPENDENCIES_CFLAGS) 	  \
-	$(WEBKIT_CFLAGS)	  \
-	$(CODE_COVERAGE_CFLAGS)   \
+	$(GDK_CFLAGS)		\
+	$(GIO_CFLAGS)		\
+	$(GLIB_CFLAGS)		\
+	$(GTK_CFLAGS)		\
+	$(LIBNOTIFY_CFLAGS)	\
+	$(LIBSECRET_CFLAGS)	\
+	$(LIBSOUP_CFLAGS)	\
+	$(LIBXML_CFLAGS)	\
+	$(WEBKIT2GTK_CFLAGS)	\
 	$(AM_CFLAGS)
+
+libephymain_la_LDFLAGS = \
+	$(AM_LDFLAGS)
+
+libephymain_la_LIBADD = \
+	$(top_builddir)/src/bookmarks/libephybookmarks.la	\
+	$(top_builddir)/embed/libephyembed.la			\
+	$(top_builddir)/lib/widgets/libephywidgets.la		\
+	$(top_builddir)/lib/history/libephyhistory.la		\
+	$(top_builddir)/lib/libephymisc.la			\
+	$(top_builddir)/lib/egg/libegg.la			\
+	$(GDK_LIBS)		\
+	$(GIO_LIBS)		\
+	$(GLIB_LIBS)		\
+	$(GTK_LIBS)		\
+	$(LIBNOTIFY_LIBS)	\
+	$(LIBSECRET_LIBS)	\
+	$(LIBSOUP_LIBS)		\
+	$(LIBXML_LIBS)		\
+	$(WEBKIT2GTK_LIBS)
 
 RESOURCE_FILES = \
 	resources/about.css			  \
@@ -113,29 +134,29 @@ RESOURCE_FILES = \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \
 	resources/shortcuts-dialog.ui		  \
-	resources/gtk/menus.ui			  \
-	$(NULL)
+	resources/gtk/menus.ui
 
 epiphany-resources.c: epiphany.gresource.xml $(RESOURCE_FILES)
-	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
+	$(AM_V_GEN) glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
 
 epiphany-resources.h: epiphany.gresource.xml $(RESOURCE_FILES)
-	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
+	$(AM_V_GEN) glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
 
 EPIPHANY_RESOURCES = \
 	epiphany-resources.c \
-	epiphany-resources.h \
-	$(NULL)
+	epiphany-resources.h
 
 BUILT_SOURCES = \
 	$(dbus_shell_search_provider_built_sources) \
 	$(EPIPHANY_RESOURCES) \
-	$(TYPES_SOURCE)       \
-	$(NULL)
+	$(TYPES_SOURCE)
 
 epiphany_SOURCES = ephy-main.c \
-	$(EPIPHANY_RESOURCES)  \
-	$(NULL)
+	$(EPIPHANY_RESOURCES)
+
+epiphany_CFLAGS = \
+	$(libephymain_la_CFLAGS)	\
+	$(AM_CFLAGS)
 
 epiphany_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
@@ -146,29 +167,22 @@ epiphany_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DDATADIR=\""$(datadir)"\" 	\
+	-DDATADIR=\"$(datadir)\" 	\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)
 
-epiphany_CFLAGS = \
-	$(DEPENDENCIES_CFLAGS) 	\
-	$(AM_CFLAGS)
+epiphany_LDADD = \
+	libephymain.la		\
+	$(GLIB_LIBS)		\
+	$(GTK_LIBS)		\
+	$(LIBNOTIFY_LIBS)	\
+	$(LIBXML_LIBS)		\
+	$(X11_LIBS)
 
 epiphany_LDFLAGS = \
-	-dlopen self \
+	-dlopen self	\
 	$(AM_LDFLAGS)
-
-epiphany_LDADD = \
-	libephymain.la \
-	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/libephyembed.la \
-	$(top_builddir)/lib/widgets/libephywidgets.la \
-	$(top_builddir)/lib/history/libephyhistory.la \
-	$(top_builddir)/lib/libephymisc.la \
-	$(top_builddir)/lib/egg/libegg.la \
-	$(DEPENDENCIES_LIBS) \
-	$(CODE_COVERAGE_LDFLAGS)
 
 libexec_PROGRAMS = epiphany-search-provider
 
@@ -176,6 +190,10 @@ epiphany_search_provider_SOURCES = \
 	$(dbus_shell_search_provider_built_sources) \
 	ephy-search-provider.c \
 	ephy-search-provider-main.c
+
+epiphany_search_provider_CFLAGS = \
+	$(libephymain_la_CFLAGS)	\
+	$(AM_CFLAGS)
 
 epiphany_search_provider_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
@@ -188,18 +206,18 @@ epiphany_search_provider_CPPFLAGS = \
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)
 
-epiphany_search_provider_CFLAGS = $(epiphany_CFLAGS)
-
 epiphany_search_provider_LDADD = \
-	libephymain.la \
-	$(top_builddir)/src/bookmarks/libephybookmarks.la \
-	$(top_builddir)/embed/libephyembed.la \
-	$(top_builddir)/lib/widgets/libephywidgets.la \
-	$(top_builddir)/lib/history/libephyhistory.la \
-	$(top_builddir)/lib/libephymisc.la \
-	$(top_builddir)/lib/egg/libegg.la \
-	$(DEPENDENCIES_LIBS) \
-	$(CODE_COVERAGE_LDFLAGS)
+	libephymain.la		\
+	$(GIO_LIBS)		\
+	$(GLIB_LIBS)		\
+	$(GTK_LIBS)		\
+	$(LIBSECRET_LIBS)	\
+	$(LIBSOUP_LIBS)		\
+	$(LIBXML_LIBS)
+
+epiphany_search_provider_LDFLAGS = \
+	-dlopen self	\
+	$(AM_LDFLAGS)
 
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\
@@ -259,8 +277,7 @@ $(dbus_shell_search_provider_built_sources) : Makefile.am $(srcdir)/org.gnome.Sh
 		--interface-prefix org.gnome.				\
 		--c-namespace Ephy					\
 		--generate-c-code ephy-shell-search-provider-generated	\
-		$(srcdir)/org.gnome.ShellSearchProvider2.xml		\
-		$(NULL)
+		$(srcdir)/org.gnome.ShellSearchProvider2.xml
 
 CLEANFILES = \
 	$(stamp_files) \

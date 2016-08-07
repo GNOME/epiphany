@@ -1,7 +1,7 @@
 noinst_LTLIBRARIES = libephywidgets.la
 
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
+AM_CFLAGS = $(CODE_COVERAGE_CFLAGS) $(WARN_CFLAGS)
+AM_LDFLAGS = $(CODE_COVERAGE_LIBS) $(WARN_LDFLAGS)
 
 BUILT_SOURCES = \
 	ephy-widgets-type-builtins.c	\
@@ -89,8 +89,8 @@ libephywidgets_la_SOURCES = \
 libephywidgets_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/widgets	\
-	-I$(top_srcdir)/lib		\
 	-I$(top_srcdir)/embed		\
+	-I$(top_srcdir)/lib		\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/libgd		\
@@ -98,11 +98,28 @@ libephywidgets_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 libephywidgets_la_CFLAGS = \
-	$(DEPENDENCIES_CFLAGS)	\
-	$(CODE_COVERAGE_CFLAGS) \
+	$(GCR_CFLAGS)		\
+	$(GDK_CFLAGS)		\
+	$(GDK_PIXBUF_CFLAGS)	\
+	$(GIO_CFLAGS)		\
+	$(GLIB_CFLAGS)		\
+	$(GTK_CFLAGS)		\
+	$(LIBSOUP_CFLAGS)	\
+	$(WEBKIT2GTK_CFLAGS)	\
 	$(AM_CFLAGS)
 
+libephywidgets_la_LDFLAGS = \
+	$(AM_LDFLAGS)
+
 libephywidgets_la_LIBADD = \
-	$(top_builddir)/libgd/libgd.la
+	$(top_builddir)/libgd/libgd.la	\
+	$(GCR_LIBS)		\
+	$(GDK_LIBS)		\
+	$(GDK_PIXBUF_LIBS)	\
+	$(GIO_LIBS)		\
+	$(GLIB_LIBS)		\
+	$(GTK_LIBS)		\
+	$(LIBSOUP_LIBS)		\
+	$(WEBKIT2GTK_LIBS)
 
 -include $(top_srcdir)/git.mk

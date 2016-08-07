@@ -74,19 +74,6 @@ GLIB_GSETTINGS
 AX_REQUIRE_DEFINED([YELP_HELP_INIT])
 YELP_HELP_INIT
 
-GLIB_REQUIRED=2.44.0
-GTK_REQUIRED=3.19.1
-LIBXML_REQUIRED=2.6.12
-LIBXSLT_REQUIRED=1.1.7
-WEBKIT_GTK_REQUIRED=2.13.2
-LIBSOUP_REQUIRED=2.48.0
-GNOME_DESKTOP_REQUIRED=2.91.2
-LIBSECRET_REQUIRED=0.14
-GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.0.1
-LIBNOTIFY_REQUIRED=0.5.1
-GCR_REQUIRED=3.5.5
-AVAHI_REQUIRED=0.6.22
-
 # Tests
 
 AC_MSG_CHECKING([whether to build tests])
@@ -97,35 +84,44 @@ AC_MSG_RESULT([$enable_tests])
 
 AM_CONDITIONAL([ENABLE_TESTS],[test "$enable_tests" = "yes"])
 
+# ************
+# Dependencies
+# ************
+
 LIBGD_INIT([_view-common static])
 
-PKG_CHECK_MODULES([DEPENDENCIES], [
-		  glib-2.0 >= $GLIB_REQUIRED
-		  gthread-2.0
-		  gio-unix-2.0 >= $GLIB_REQUIRED
-		  gtk+-3.0 >= $GTK_REQUIRED
-		  gtk+-unix-print-3.0 >= $GTK_REQUIRED
-		  x11
-		  libxml-2.0 >= $LIBXML_REQUIRED
-		  libxslt >= $LIBXSLT_REQUIRED
-		  webkit2gtk-4.0 >= $WEBKIT_GTK_REQUIRED
-		  libsoup-2.4 >= $LIBSOUP_REQUIRED
-		  libsecret-1 >= $LIBSECRET_REQUIRED
-		  gnome-desktop-3.0 >= $GNOME_DESKTOP_REQUIRED
-		  gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
-		  libnotify >= $LIBNOTIFY_REQUIRED
-		  sqlite3
-		  gcr-3 >= $GCR_REQUIRED
-		  avahi-gobject >= $AVAHI_REQUIRED
-		  avahi-client >= $AVAHI_REQUIRED
-		  ])
+LT_LIB_M
 
-PKG_CHECK_MODULES([WEB_EXTENSION], [
-                  webkit2gtk-web-extension-4.0 >= $WEBKIT_GTK_REQUIRED
-                  libsecret-1 >= $LIBSECRET_REQUIRED
-                  ])
-AC_SUBST([WEB_EXTENSION_CFLAGS])
-AC_SUBST([WEB_EXTENSION_LIBS])
+AVAHI_REQUIRED=0.6.22
+GLIB_REQUIRED=2.44.0
+GTK_REQUIRED=3.19.1
+WEBKITGTK_REQUIRED=2.13.2
+
+PKG_CHECK_MODULES([AVAHI_CLIENT], [avahi-client >= $AVAHI_REQUIRED])
+PKG_CHECK_MODULES([AVAHI_GOBJECT], [avahi-gobject >= $AVAHI_REQUIRED])
+PKG_CHECK_MODULES([CAIRO], [cairo])
+PKG_CHECK_MODULES([GCR], [gcr-3 >= 3.5.5])
+PKG_CHECK_MODULES([GDK], [gdk-3.0 >= $GTK_REQUIRED])
+PKG_CHECK_MODULES([GDK_PIXBUF], [gdk-pixbuf-2.0])
+dnl FIXME: x11 should not be mandatory.
+PKG_CHECK_MODULES([GDK_X11], [gdk-x11-3.0 >= $GTK_REQUIRED])
+PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= $GLIB_REQUIRED])
+PKG_CHECK_MODULES([GLIB], [glib-2.0 >= $GLIB_REQUIRED])
+PKG_CHECK_MODULES([GNOME_DESKTOP], [gnome-desktop-3.0 >= 2.91.2])
+PKG_CHECK_MODULES([GSETTINGS_DESKTOP_SCHEMAS], [gsettings-desktop-schemas])
+PKG_CHECK_MODULES([GTHREAD], [gthread-2.0 >= $GLIB_REQUIRED])
+PKG_CHECK_MODULES([GTK], [gtk+-3.0 >= $GTK_REQUIRED])
+PKG_CHECK_MODULES([GTK_UNIX_PRINT], [gtk+-unix-print-3.0 >= $GTK_REQUIRED])
+PKG_CHECK_MODULES([LIBNOTIFY], [libnotify >= 0.5.1])
+PKG_CHECK_MODULES([LIBSECRET], [libsecret-1 >= 0.14])
+PKG_CHECK_MODULES([LIBSOUP], [libsoup-2.4 >= 2.48.0])
+PKG_CHECK_MODULES([LIBXML], [libxml-2.0 >= 2.6.12])
+PKG_CHECK_MODULES([LIBXSLT], [libxslt >= 1.1.7])
+PKG_CHECK_MODULES([SQLITE3], [sqlite3])
+PKG_CHECK_MODULES([WEBKIT2GTK], [webkit2gtk-4.0 >= $WEBKITGTK_REQUIRED])
+PKG_CHECK_MODULES([WEBKIT2GTK_WEB_EXTENSION], [webkit2gtk-web-extension-4.0 >= $WEBKITGTK_REQUIRED])
+dnl FIXME: x11 should not be mandatory.
+PKG_CHECK_MODULES([X11], [x11])
 
 # ******************
 # Portability checks

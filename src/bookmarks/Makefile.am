@@ -1,7 +1,7 @@
 noinst_LTLIBRARIES = libephybookmarks.la
 
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
+AM_CFLAGS = $(CODE_COVERAGE_CFLAGS) $(WARN_CFLAGS)
+AM_LDFLAGS = $(CODE_COVERAGE_LIBS) $(WARN_LDFLAGS)
 
 TYPES_H_FILES = \
 	ephy-bookmarks.h
@@ -94,24 +94,43 @@ stamp-ephy-bookmarks-type-builtins.h: Makefile $(TYPES_H_FILES)
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
 
+libephybookmarks_la_CFLAGS = \
+	$(AVAHI_CLIENT_CFLAGS)	\
+	$(AVAHI_GOBJECT_CFLAGS)	\
+	$(GDK_CFLAGS)		\
+	$(GIO_CFLAGS)		\
+	$(GLIB_CFLAGS)		\
+	$(GTK_CFLAGS) 		\
+	$(LIBXML_CFLAGS)	\
+	$(LIBXSLT_CFLAGS)	\
+	$(WEBKIT2GTK_CFLAGS)	\
+	$(AM_CFLAGS)
+
 libephybookmarks_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
+	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/lib		\
 	-I$(top_srcdir)/src		\
 	-I$(top_srcdir)/embed		\
 	-I$(top_srcdir)/lib/widgets	\
-	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/egg		\
-	-DDATADIR=\""$(pkgdatadir)"\" 	\
+	-DDATADIR=\"$(pkgdatadir)\" 	\
 	$(AM_CPPFLAGS)
 
-libephybookmarks_la_CFLAGS = \
-	$(DEPENDENCIES_CFLAGS) 	\
-	$(CODE_COVERAGE_CFLAGS) \
-	$(AM_CFLAGS)
+libephybookmarks_la_LDFLAGS = \
+	$(AM_LDFLAGS)
 
-libephybookmarks_la_LIBADD =
+libephybookmarks_la_LIBADD = \
+	$(AVAHI_CLIENT_LIBS)	\
+	$(AVAHI_GOBJECT_LIBS)	\
+	$(GDK_LIBS)		\
+	$(GIO_LIBS)		\
+	$(GLIB_LIBS)		\
+	$(GTK_LIBS) 		\
+	$(LIBXML_LIBS)		\
+	$(LIBXSLT_LIBS)		\
+	$(WEBKIT2GTK_LIBS)
 
 CLEANFILES = $(stamp_files) $(BUILT_SOURCES)
 

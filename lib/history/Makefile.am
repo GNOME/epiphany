@@ -1,5 +1,5 @@
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
+AM_CFLAGS = $(CODE_COVERAGE_CFLAGS) $(WARN_CFLAGS)
+AM_LDFLAGS = $(CODE_COVERAGE_CFLAGS) $(WARN_LDFLAGS)
 
 noinst_LTLIBRARIES = libephyhistory.la
 
@@ -16,19 +16,27 @@ libephyhistory_la_SOURCES = \
 nodist_libephyhistory_la_SOURCES = \
 	$(BUILT_SOURCES)
 
+libephyhistory_la_CFLAGS = \
+	$(GLIB_CFLAGS)		\
+	$(GIO_CFLAGS)		\
+	$(AM_CFLAGS)
+
 libephyhistory_la_CPPFLAGS = \
-	-I$(top_builddir)/lib/history	\
 	-I$(top_builddir)/lib		\
+	-I$(top_builddir)/lib/history	\
 	-I$(top_srcdir)/lib		\
 	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	$(AM_CPPFLAGS)
 
-libephyhistory_la_CFLAGS = \
-	$(DEPENDENCIES_CFLAGS)	\
-	$(CODE_COVERAGE_CFLAGS) \
-	$(AM_CFLAGS)
+libephyhistory_la_LDFLAGS = \
+	$(AM_LDFLAGS)
 
-TYPES_H_FILES = ephy-history-types.h
+libephyhistory_la_LIBADD = \
+	$(GLIB_LIBS)	\
+	$(GIO_LIBS)
+
+TYPES_H_FILES = \
+	ephy-history-types.h
 
 BUILT_SOURCES = \
 	ephy-history-type-builtins.c	\

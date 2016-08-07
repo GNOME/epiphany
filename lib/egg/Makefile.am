@@ -1,31 +1,13 @@
-NULL =
-
-EGGSOURCES = \
-	eggtreemultidnd.c \
-        $(NULL)
-
-EGGHEADERS = \
-	eggtreemultidnd.h \
-        $(NULL)
-
-noinst_HEADERS = \
-	$(EGGHEADERS) \
-	$(NULL)
-
 noinst_LTLIBRARIES = libegg.la
 
 libegg_la_SOURCES = \
-	$(EGGSOURCES) \
-	$(EGGHEADERS)
+	eggtreemultidnd.c	\
+	eggtreemultidnd.h
 
-libegg_la_CPPFLAGS = \
-	-DG_LOG_DOMAIN=\""Egg"\"		\
-	$(AM_CPPFLAGS)
+libegg_la_CFLAGS = $(GTK_CFLAGS)
 
-libegg_la_CFLAGS = \
-	$(DEPENDENCIES_CFLAGS)		\
-	$(CODE_COVERAGE_CFLAGS)		\
-	$(AM_CFLAGS)
+libegg_la_CPPFLAGS = -DG_LOG_DOMAIN=\""Egg"\"
 
+libegg_la_LIBADD = $(GTK_LIBS)
 
 -include $(top_srcdir)/git.mk
