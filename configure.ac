@@ -165,7 +165,8 @@ else
 	AC_MSG_ERROR([iso-codes is required])
 fi
 
-IT_PROG_INTLTOOL([0.50.0])
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.19.8])
 AC_SUBST([GETTEXT_PACKAGE], [epiphany])
 
 # ****************

@@ -24,7 +24,6 @@ fi
 git submodule update --init --recursive
 
 aclocal --install || exit 1
-intltoolize --force --copy --automake || exit 1
 autoreconf --verbose --force --install -Wno-portability || exit 1
 
 cd $olddir

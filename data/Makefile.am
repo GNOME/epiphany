@@ -1,12 +1,11 @@
 SUBDIRS = pages
 
-@INTLTOOL_SERVER_RULE@
-@INTLTOOL_DESKTOP_RULE@
-@INTLTOOL_XML_RULE@
-
 desktop_in_files = epiphany.desktop.in
 desktopdir = $(datadir)/applications
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+
+$(desktop_DATA): $(desktop_in_files)
+	$(AM_V_GEN) $(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
 
 convertdir = $(datarootdir)/GConf/gsettings
 convert_DATA = epiphany.convert
@@ -20,6 +19,9 @@ gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml
 appstream_in_files = epiphany.appdata.xml.in
 appstream_XML = $(appstream_in_files:.xml.in=.xml)
 @APPSTREAM_XML_RULES@
+
+$(appstream_XML): $(appstream_in_files)
+	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
 aboutdialogdir = $(pkgdatadir)
 dist_aboutdialog_DATA = about.ini
@@ -38,19 +40,14 @@ service_DATA = $(service_in_files:.service.in=.service)
  
 # Rule to make the service file with bindir expanded
 $(service_DATA): $(service_in_files) Makefile
-	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
+	sed -e "s|\@libexecdir[@]|$(libexecdir)|g" $< > $@
 
 # Default bookmarks
-# We don't put translations in the resulting rdf since the code can get
-# the translations via gettext (although it can also get translations
-# from the rdf if they are there and not available via gettext)
 default_bookmarksdir = $(pkgdatadir)
 default_bookmarks_in_files = default-bookmarks.rdf.in
 default_bookmarks_DATA = $(default_bookmarks_in_files:.rdf.in=.rdf)
-$(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile $(INTLTOOL_MERGE)
-	LC_ALL=C $(INTLTOOL_MERGE) -x -u /tmp $< $@.tmp
-	sed -e "s|\@pkgdatadir\@|$(pkgdatadir)|g" $@.tmp > $@ || rm -f $@.tmp
-	rm -f $@.tmp
+$(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile
+	sed -e "s|\@pkgdatadir[@]|$(pkgdatadir)|g" $< > $@
 
 searchproviderdir = $(datadir)/gnome-shell/search-providers
 dist_searchprovider_DATA = epiphany-search-provider.ini
