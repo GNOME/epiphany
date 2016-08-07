@@ -15,6 +15,7 @@ distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache
 
 @GENERATE_CHANGELOG_RULES@
 CHANGELOG_START = $(EPIPHANY_CHANGELOG_START)
+CHANGELOG_GIT_FLAGS = --stat --no-color --no-decorate
 dist-hook: dist-ChangeLog
 
 MAINTAINERCLEANFILES = \
