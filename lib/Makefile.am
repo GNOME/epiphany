@@ -3,7 +3,7 @@ SUBDIRS = widgets egg history
 AM_CFLAGS = $(CODE_COVERAGE_CFLAGS) $(WARN_CFLAGS)
 AM_LDFLAGS = $(CODE_COVERAGE_LDFLAGS) $(WARN_LDFLAGS)
 
-noinst_LTLIBRARIES = libephymisc.la
+pkglib_LTLIBRARIES = libephymisc.la
 
 TYPES_H_FILES = \
 	ephy-initial-state.h			\
@@ -94,7 +94,7 @@ libephymisc_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 libephymisc_la_LDFLAGS = \
-	$(AM_LDFLAGS)
+	$(AM_LDFLAGS) -avoid-version -no-undefined
 
 libephymisc_la_LIBADD = \
 	$(CAIRO_LIBS)		\
