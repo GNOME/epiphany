@@ -231,5 +231,4 @@ Epiphany was configured with the following options:
 	Extra debugging support	   : $enable_debug
 	Build tests		   : $enable_tests
 	Code coverage		   : $enable_code_coverage
-	NSS support		   : $enable_nss
 "
