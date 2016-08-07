@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: epiphany gnome-3-20\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-07-11 09:39+0000\n"
-"PO-Revision-Date: 2016-07-11 16:23+0200\n"
+"POT-Creation-Date: 2016-07-28 17:03+0000\n"
+"PO-Revision-Date: 2016-08-07 18:09+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -54,7 +54,7 @@ msgstr "Il progjet GNOME"
 
 #: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:289
 #: ../embed/ephy-about-handler.c:320 ../src/ephy-main.c:77
-#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1500
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:251
 msgid "Web"
 msgstr "Web"
 
@@ -1534,9 +1534,9 @@ msgstr "Daûr a tacâ..."
 #: ../lib/widgets/ephy-file-chooser.c:180
 #: ../lib/widgets/ephy-file-chooser.c:187
 #: ../src/bookmarks/ephy-bookmark-properties.c:375
-#: ../src/bookmarks/ephy-bookmarks-editor.c:766
+#: ../src/bookmarks/ephy-bookmarks-editor.c:772
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:778
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:965
 msgid "_Cancel"
 msgstr "_Anule"
 
@@ -1558,7 +1558,7 @@ msgid "Images"
 msgstr "Figuris"
 
 #: ../lib/widgets/ephy-file-chooser.c:238
-#: ../src/bookmarks/ephy-bookmarks-editor.c:595
+#: ../src/bookmarks/ephy-bookmarks-editor.c:601
 msgid "All files"
 msgstr "Ducj i files"
 
@@ -1574,8 +1574,9 @@ msgstr "Ne_te"
 msgid "Paste and _Go"
 msgstr "Tache e _va"
 
-#. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:666 ../src/ephy-window.c:111
+#. Undo, redo.
+#: ../lib/widgets/ephy-location-entry.c:666 ../src/ephy-window.c:895
+#: ../src/resources/gtk/menus.ui.h:5
 msgid "_Undo"
 msgstr "_Disfe"
 
@@ -1714,188 +1715,192 @@ msgid "Remove from this topic"
 msgstr "Gjave da chest argoment"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:148
+#: ../src/bookmarks/ephy-bookmarks-editor.c:154
 msgid "_File"
 msgstr "_File"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:149
+#: ../src/bookmarks/ephy-bookmarks-editor.c:155
 msgid "_Edit"
 msgstr "_Modifiche"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:150
+#: ../src/bookmarks/ephy-bookmarks-editor.c:156
 msgid "_View"
 msgstr "_Viodude"
 
-#. Help.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:151
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:157
+#: ../src/resources/epiphany-application-menu.ui.h:8
 msgid "_Help"
 msgstr "_Jutori"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:155
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
 msgid "_New Topic"
 msgstr "_Gnûf argoment"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:156
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
 msgid "Create a new topic"
 msgstr "Cree un gnûf argoment"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:158
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1084
+#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1090
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Vierç intun gnûf _barcon"
 msgstr[1] "Vierç in gnûfs _barcons"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "Open the selected bookmark in a new window"
 msgstr "Vierç il segnelibri selezionât intun gnûf barcon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1087
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1093
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Vierç intune gnove _schede"
 msgstr[1] "Vierç in gnovis _schedis"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:168
 msgid "Open the selected bookmark in a new tab"
 msgstr "Vierç il segnelibri selezionât intune gnove schede"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "_Rename…"
 msgstr "_Cambie non..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "Rename the selected bookmark or topic"
 msgstr "Cambie non al segnelibri o al argoment selezionât"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "_Properties"
 msgstr "_Propietâts"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Viôt o modifiche lis proprietâts dal segnelibri selezionât"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175
 msgid "_Import Bookmarks…"
 msgstr "_Impuarte segnelibris..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Impuarte segnelibris di altris navigadôrs o file di segnelibris"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:178
 msgid "_Export Bookmarks…"
 msgstr "_Espuarte segnelibris..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "Export bookmarks to a file"
 msgstr "Espuarte segnelibris suntun file"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:175 ../src/ephy-window.c:104
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/resources/gtk/menus.ui.h:18
 msgid "_Close"
 msgstr "_Siere"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:182
 msgid "Close the bookmarks window"
 msgstr "Siere il barcon dai segnelibris"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180 ../src/ephy-window.c:115
+#. Edit.
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186 ../src/ephy-window.c:899
+#: ../src/resources/gtk/menus.ui.h:7
 msgid "Cu_t"
 msgstr "Ta_ie"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Cut the selection"
 msgstr "Taie la selezion"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1094 ../src/ephy-window.c:117
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1100 ../src/ephy-window.c:900
+#: ../src/resources/gtk/menus.ui.h:8
 msgid "_Copy"
 msgstr "_Copie"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Copy the selection"
 msgstr "Copie la selezion"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186 ../src/ephy-window.c:119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192 ../src/ephy-window.c:901
+#: ../src/resources/gtk/menus.ui.h:9
 msgid "_Paste"
 msgstr "_Tache"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Paste the clipboard"
 msgstr "Tache la selezion"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/bookmarks/ephy-bookmarks-editor.c:195
 #: ../src/resources/history-dialog.ui.h:4
 msgid "_Delete"
 msgstr "_Elimine"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:196
 msgid "Delete the selected bookmark or topic"
 msgstr "Elimine il segnelibri o l'argoment selezionât"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192 ../src/ephy-window.c:123
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198 ../src/ephy-window.c:902
 msgid "Select _All"
 msgstr "Selezione _Dut"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:199
 msgid "Select all bookmarks or text"
 msgstr "Selezione ducj i segnelibris o dut il test"
 
 #. Help Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
+#: ../src/bookmarks/ephy-bookmarks-editor.c:203
 msgid "_Contents"
 msgstr "_Contignûts"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
+#: ../src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "Display bookmarks help"
 msgstr "Mostre il jutori pai segnelibris"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:206
+#: ../src/resources/epiphany-application-menu.ui.h:9
 msgid "_About"
 msgstr "_Informazions"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "Display credits for the web browser creators"
 msgstr "Mostre i ringraciaments pai creatôrs dal navigadôr web"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:213
 msgid "_Title"
 msgstr "_Titul"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+#: ../src/bookmarks/ephy-bookmarks-editor.c:214
 msgid "Show the title column"
 msgstr "Mostre la colone dal titul"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1559
+#: ../src/bookmarks/ephy-bookmarks-editor.c:215
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1565
 msgid "Address"
 msgstr "Direzion"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/bookmarks/ephy-bookmarks-editor.c:216
 msgid "Show the address column"
 msgstr "Mostre la colone de direzion"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:252
+#: ../src/bookmarks/ephy-bookmarks-editor.c:258
 msgid "Type a topic"
 msgstr "Scrîf un argoment"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:365
+#: ../src/bookmarks/ephy-bookmarks-editor.c:371
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Eliminâ argoment \"%s\"?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:368
+#: ../src/bookmarks/ephy-bookmarks-editor.c:374
 msgid "Delete this topic?"
 msgstr "Eliminâ chest argoment?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:370
+#: ../src/bookmarks/ephy-bookmarks-editor.c:376
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -1904,44 +1909,44 @@ msgstr ""
 "categorie, se no fasin part di un altri argoment. I segnelibris no vegnaran "
 "eliminâts."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:373
+#: ../src/bookmarks/ephy-bookmarks-editor.c:379
 msgid "_Delete Topic"
 msgstr "_Elimine argoment"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:471
-#: ../src/bookmarks/ephy-bookmarks-editor.c:473
+#: ../src/bookmarks/ephy-bookmarks-editor.c:477
+#: ../src/bookmarks/ephy-bookmarks-editor.c:479
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:476
-#: ../src/bookmarks/ephy-bookmarks-editor.c:478
+#: ../src/bookmarks/ephy-bookmarks-editor.c:482
+#: ../src/bookmarks/ephy-bookmarks-editor.c:484
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:481
+#: ../src/bookmarks/ephy-bookmarks-editor.c:487
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Profîl \"%s\" di Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:483
+#: ../src/bookmarks/ephy-bookmarks-editor.c:489
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:485
+#: ../src/bookmarks/ephy-bookmarks-editor.c:491
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:512
+#: ../src/bookmarks/ephy-bookmarks-editor.c:518
 msgid "Import failed"
 msgstr "Importazion falide"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:514
+#: ../src/bookmarks/ephy-bookmarks-editor.c:520
 msgid "Import Failed"
 msgstr "Importazion Falide"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:517
+#: ../src/bookmarks/ephy-bookmarks-editor.c:523
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -1950,63 +1955,63 @@ msgstr ""
 "I segnelibris di \"%s\" no puedin jessi impuartâts parcè che il file al è "
 "ruvinât o al è di un gjenar no supuartât."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:576
+#: ../src/bookmarks/ephy-bookmarks-editor.c:582
 msgid "Import Bookmarks from File"
 msgstr "Impuarte segnelibris da file"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:583
+#: ../src/bookmarks/ephy-bookmarks-editor.c:589
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Segnelibris Firefox/Mozilla"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:587
+#: ../src/bookmarks/ephy-bookmarks-editor.c:593
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Segnelibris Galeon/Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:591
+#: ../src/bookmarks/ephy-bookmarks-editor.c:597
 msgid "Web bookmarks"
 msgstr "Segnelibris Web"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:705
+#: ../src/bookmarks/ephy-bookmarks-editor.c:711
 msgid "Export Bookmarks"
 msgstr "Espuarte segnelibris"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:712
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1422
-#: ../src/bookmarks/ephy-topic-action.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:718
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1428
+#: ../src/bookmarks/ephy-topic-action.c:175
 msgid "Bookmarks"
 msgstr "Segnelibris"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:718
+#: ../src/bookmarks/ephy-bookmarks-editor.c:724
 msgid "File f_ormat:"
 msgstr "F_ormât file:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:763
+#: ../src/bookmarks/ephy-bookmarks-editor.c:769
 msgid "Import Bookmarks"
 msgstr "Impuarte segnelibris"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:768
+#: ../src/bookmarks/ephy-bookmarks-editor.c:774
 msgid "I_mport"
 msgstr "I_mpuarte"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:784
+#: ../src/bookmarks/ephy-bookmarks-editor.c:790
 msgid "Import bookmarks from:"
 msgstr "Impuarte segnelibris di:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:804
+#: ../src/bookmarks/ephy-bookmarks-editor.c:810
 msgid "File"
 msgstr "File"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1092
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1098
 msgid "_Copy Address"
 msgstr "_Copie direzion"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1478
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1484
 #: ../src/resources/bookmark-properties.ui.h:5
 msgid "Topics"
 msgstr "Argoments"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1548
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1554
 msgid "Title"
 msgstr "Titul"
 
@@ -2023,6 +2028,313 @@ msgstr "Vierç i segnelibris di chest argoment in gnovis schedis"
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Cree argoment \"%s\""
+
+#: ../src/ephy-history-window.c:242
+msgid "Clear browsing history?"
+msgstr "Netâ la cronologjie di navigazion?"
+
+#: ../src/ephy-history-window.c:246
+msgid ""
+"Clearing the browsing history will cause all history links to be permanently "
+"deleted."
+msgstr ""
+"Netant la cronologjie di navigazion tu eliminarâs par simpri i colegaments "
+"de cronologjie."
+
+#: ../src/ephy-main.c:86
+msgid "Open a new tab in an existing browser window"
+msgstr "Vierç une gnove schede intal barcon di navigazion esistent"
+
+#: ../src/ephy-main.c:88
+msgid "Open a new browser window"
+msgstr "Vierç un gnûf barcon di navigazion"
+
+#: ../src/ephy-main.c:90
+msgid "Import bookmarks from the given file"
+msgstr "Impuarte i segnelibris di un file furnît"
+
+#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
+msgid "FILE"
+msgstr "FILE"
+
+#: ../src/ephy-main.c:92
+msgid "Load the given session file"
+msgstr "Cjarie il file di session specificât"
+
+#: ../src/ephy-main.c:94
+msgid "Add a bookmark"
+msgstr "Zonte un segnelibri"
+
+#: ../src/ephy-main.c:94
+msgid "URL"
+msgstr "URL"
+
+#: ../src/ephy-main.c:96
+msgid "Start a private instance"
+msgstr "Tache une gnove istance privade"
+
+#: ../src/ephy-main.c:98
+msgid "Start an instance in incognito mode"
+msgstr "Tache une istance in modalitât incognit"
+
+#: ../src/ephy-main.c:100
+msgid "Start an instance in netbank mode"
+msgstr "Tache une istance in modalitât netbank"
+
+#: ../src/ephy-main.c:103
+msgid "Start the browser in application mode"
+msgstr "Invie il navigadôr in modalitât aplicazion"
+
+#: ../src/ephy-main.c:105
+msgid "Profile directory to use in the private instance"
+msgstr "Cartele di profîi di doprâ te istance privade"
+
+#: ../src/ephy-main.c:105
+msgid "DIR"
+msgstr "DIR"
+
+#: ../src/ephy-main.c:107
+msgid "URL …"
+msgstr "URL …"
+
+#: ../src/ephy-main.c:212
+msgid "Could not start Web"
+msgstr "Impussibil inviâ Web"
+
+#: ../src/ephy-main.c:215
+#, c-format
+msgid ""
+"Startup failed because of the following error:\n"
+"%s"
+msgstr ""
+"Inviament falît par vie di chest erôr:\n"
+"%s"
+
+#: ../src/ephy-main.c:325
+msgid "Web options"
+msgstr "Opzions Web"
+
+#: ../src/ephy-notebook.c:660
+msgid "Close tab"
+msgstr "Siere schede"
+
+#: ../src/ephy-search-provider.c:195
+#, c-format
+msgid "Search the Web for %s"
+msgstr "Cîr %s tal web"
+
+#: ../src/ephy-window.c:246
+msgid "There are unsubmitted changes to form elements"
+msgstr "Modifichis no inviadis in cualchi element dal modul"
+
+#: ../src/ephy-window.c:247
+msgid "If you close the document anyway, you will lose that information."
+msgstr ""
+"Se dut câs tu sieris il document distès, tu larâs a pierdi chê informazion."
+
+#: ../src/ephy-window.c:249
+msgid "Close _Document"
+msgstr "Siere _document"
+
+#: ../src/ephy-window.c:264
+msgid "There are ongoing downloads"
+msgstr "A son discjariaments in vore"
+
+#: ../src/ephy-window.c:265
+msgid "If you quit, the downloads will be cancelled"
+msgstr "Se tu jessis i scjariaments a vegnaran anulâts"
+
+#: ../src/ephy-window.c:266
+msgid "Quit and cancel downloads"
+msgstr "Jes e anule discjariaments"
+
+#: ../src/ephy-window.c:896 ../src/resources/gtk/menus.ui.h:6
+msgid "Re_do"
+msgstr "_Torne fâs"
+
+#: ../src/ephy-window.c:904
+msgid "S_end Link by Email…"
+msgstr "Invi_e colegament par e-mail..."
+
+#: ../src/ephy-window.c:906
+msgid "_Reload"
+msgstr "_Torne cjarie"
+
+#: ../src/ephy-window.c:907
+msgid "_Back"
+msgstr "_Indaûr"
+
+#: ../src/ephy-window.c:908
+msgid "_Forward"
+msgstr "In_denant"
+
+#. Bookmarks
+#: ../src/ephy-window.c:911
+msgid "Add Boo_kmark…"
+msgstr "Zonte segne_libri..."
+
+#. Links.
+#: ../src/ephy-window.c:915
+msgid "Open Link in New _Window"
+msgstr "Vierç colegament intun gnûf _barcon"
+
+#: ../src/ephy-window.c:916
+msgid "Open Link in New _Tab"
+msgstr "Vierç colegament intun gnove _schede"
+
+#: ../src/ephy-window.c:917
+msgid "Open Link in I_ncognito Window"
+msgstr "Vierç colegament intun barcon se_gret"
+
+#: ../src/ephy-window.c:918
+msgid "_Save Link As…"
+msgstr "_Salve colegament come..."
+
+#: ../src/ephy-window.c:919
+msgid "_Copy Link Address"
+msgstr "_Copie direzion colegament"
+
+#: ../src/ephy-window.c:920
+msgid "_Copy E-mail Address"
+msgstr "_Copie direzion e-mail"
+
+#. Images.
+#: ../src/ephy-window.c:924
+msgid "View _Image in New Tab"
+msgstr "Vierç _imagjin intune gnove schede"
+
+#: ../src/ephy-window.c:925
+msgid "Copy I_mage Address"
+msgstr "Copie direzion i_magjin"
+
+#: ../src/ephy-window.c:926
+msgid "_Save Image As…"
+msgstr "_Salve imagjin come..."
+
+#: ../src/ephy-window.c:927
+msgid "Set as _Wallpaper"
+msgstr "Dopre come _fondâl"
+
+#. Video.
+#: ../src/ephy-window.c:931
+msgid "Open Video in New _Window"
+msgstr "Vierç video intun gnûf _barcon"
+
+#: ../src/ephy-window.c:932
+msgid "Open Video in New _Tab"
+msgstr "Vierç video intune gnove _schede"
+
+#: ../src/ephy-window.c:933
+msgid "_Save Video As…"
+msgstr "_Salve video come..."
+
+#: ../src/ephy-window.c:934
+msgid "_Copy Video Address"
+msgstr "_Copie direzion video"
+
+#. Audio.
+#: ../src/ephy-window.c:938
+msgid "Open Audio in New _Window"
+msgstr "Vierç audio intun gnûf _barcon"
+
+#: ../src/ephy-window.c:939
+msgid "Open Audio in New _Tab"
+msgstr "Vierç audio intune gnove _schede"
+
+#: ../src/ephy-window.c:940
+msgid "_Save Audio As…"
+msgstr "_Salve audio come..."
+
+#: ../src/ephy-window.c:941
+msgid "_Copy Audio Address"
+msgstr "_Copie direzion audio"
+
+#: ../src/ephy-window.c:1475
+#, c-format
+msgid "Search the Web for '%s'"
+msgstr "Cîr '%s' tal web"
+
+#: ../src/popup-commands.c:257
+msgid "Save Link As"
+msgstr "Salve colegament come"
+
+#: ../src/popup-commands.c:265
+msgid "Save Image As"
+msgstr "Salve imagjin come"
+
+#: ../src/popup-commands.c:273
+msgid "Save Media As"
+msgstr "Salve file multimediâl come"
+
+#. Translators: the first %s is the language name, and the
+#. * second %s is the locale name. Example:
+#. * "French (France)"
+#.
+#: ../src/prefs-dialog.c:454 ../src/prefs-dialog.c:458
+#, c-format
+msgctxt "language"
+msgid "%s (%s)"
+msgstr "%s (%s)"
+
+#. Translators: this refers to a user-define language code
+#. * (one which isn't in our built-in list).
+#.
+#: ../src/prefs-dialog.c:465
+#, c-format
+msgctxt "language"
+msgid "User defined (%s)"
+msgstr "Definide dal utent (%s)"
+
+#: ../src/prefs-dialog.c:487
+#, c-format
+msgid "System language (%s)"
+msgid_plural "System languages (%s)"
+msgstr[0] "Lenghe di sisteme (%s)"
+msgstr[1] "Lenghis di sisteme (%s)"
+
+#: ../src/prefs-dialog.c:730 ../src/resources/prefs-dialog.ui.h:46
+msgid "Language"
+msgstr "Lenghe"
+
+#: ../src/prefs-dialog.c:809
+msgid "Select a Directory"
+msgstr "Selezione une cartele"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:903
+msgid "DuckDuckGo"
+msgstr "DuckDuckGo"
+
+#. For the preferences dialog. Must exactly match the URL
+#. * you chose in the gschema, but with & instead of &amp;
+#. * If the match is not exact, there will be a spurious, ugly
+#. * entry in the preferences combo, so please test this.
+#: ../src/prefs-dialog.c:909
+#, c-format
+msgid "https://duckduckgo.com/?q=%s&t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=it-it"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:911
+msgid "Google"
+msgstr "Google"
+
+#. For the preferences dialog. Consider a regional variant, like google.co.uk
+#: ../src/prefs-dialog.c:914
+#, c-format
+msgid "https://google.com/search?q=%s"
+msgstr "https://google.it/search?q=%s"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:916
+msgid "Bing"
+msgstr "Bing"
+
+#. For the preferences dialog. Consider a regional variant, like uk.bing.com
+#: ../src/prefs-dialog.c:919
+#, c-format
+msgid "https://www.bing.com/search?q=%s"
+msgstr "http://www.bing.it/search?q=%s"
 
 #: ../src/resources/bookmark-properties.ui.h:1
 msgid "_Title:"
@@ -2137,12 +2449,11 @@ msgstr "&#60;b&#62;Codifichis coreladis&#60;/b&#62;"
 msgid "Show all…"
 msgstr "Mostre dutis..."
 
-#. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:90
+#: ../src/resources/epiphany-application-menu.ui.h:1
 msgid "_New Window"
 msgstr "_Gnûf Barcon"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:92
+#: ../src/resources/epiphany-application-menu.ui.h:2
 msgid "New _Incognito Window"
 msgstr "Gnûf barcon _segret"
 
@@ -2150,16 +2461,16 @@ msgstr "Gnûf barcon _segret"
 msgid "Reopen Closed _Tab"
 msgstr "Torne vierç _schede sierade"
 
-#. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:83
+#: ../src/resources/epiphany-application-menu.ui.h:4
+#: ../src/resources/gtk/menus.ui.h:14
 msgid "_Bookmarks"
 msgstr "_Segnelibris"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:133
+#: ../src/resources/epiphany-application-menu.ui.h:5
 msgid "_History"
 msgstr "_Cronologjie"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:135
+#: ../src/resources/epiphany-application-menu.ui.h:6
 msgid "Pr_eferences"
 msgstr "Pr_eferencis"
 
@@ -2167,9 +2478,65 @@ msgstr "Pr_eferencis"
 msgid "_Keyboard Shortcuts"
 msgstr "_Scurtis tastiere"
 
-#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:106
+#: ../src/resources/epiphany-application-menu.ui.h:10
 msgid "_Quit"
 msgstr "_Jes"
+
+#: ../src/resources/gtk/menus.ui.h:1
+msgid "New Tab"
+msgstr "Gnove schede"
+
+#: ../src/resources/gtk/menus.ui.h:2
+msgid "_Open…"
+msgstr "_Vierç..."
+
+#: ../src/resources/gtk/menus.ui.h:3
+msgid "Save _As…"
+msgstr "S_alve Come..."
+
+#: ../src/resources/gtk/menus.ui.h:4
+msgid "Save As _Web Application…"
+msgstr "Salve come aplicazion _web..."
+
+#: ../src/resources/gtk/menus.ui.h:10
+msgid "Zoom _In"
+msgstr "_Ingrandìs"
+
+#: ../src/resources/gtk/menus.ui.h:11
+msgid "Zoom _Out"
+msgstr "Impiç_ulìs"
+
+#: ../src/resources/gtk/menus.ui.h:12
+msgid "Print…"
+msgstr "Stampe..."
+
+#: ../src/resources/gtk/menus.ui.h:13
+msgid "_Find…"
+msgstr "_Cjate..."
+
+#: ../src/resources/gtk/menus.ui.h:15
+msgid "_Add Bookmark…"
+msgstr "_Zonte Segnelibri..."
+
+#: ../src/resources/gtk/menus.ui.h:16
+msgid "Text _Encoding"
+msgstr "_Codifiche dal test"
+
+#: ../src/resources/gtk/menus.ui.h:17
+msgid "_Page Source"
+msgstr "Sorzint _pagjine"
+
+#: ../src/resources/gtk/menus.ui.h:19
+msgid "Move Tab _Left"
+msgstr "Sposte schede a _çampe"
+
+#: ../src/resources/gtk/menus.ui.h:20
+msgid "Move Tab _Right"
+msgstr "Sposte schede a _drete"
+
+#: ../src/resources/gtk/menus.ui.h:21
+msgid "Du_plicate"
+msgstr "Do_plee"
 
 #: ../src/resources/history-dialog.ui.h:2
 msgid "_Copy Location"
@@ -2396,10 +2763,6 @@ msgstr "Control ortografic"
 #: ../src/resources/prefs-dialog.ui.h:45
 msgid "_Enable spell checking"
 msgstr "_Abilitâ il control ortografic"
-
-#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:730
-msgid "Language"
-msgstr "Lenghe"
 
 #: ../src/resources/prefs-lang-dialog.ui.h:1
 msgid "Add Language"
@@ -2649,540 +3012,19 @@ msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Risultât precedent de ricercje"
 
-#: ../src/ephy-combined-stop-reload-action.c:38
-msgid "Stop"
-msgstr "Ferme"
-
-#: ../src/ephy-combined-stop-reload-action.c:39
-msgid "Stop current data transfer"
-msgstr "Ferme il trasferiment dâts atuâl"
-
-#: ../src/ephy-combined-stop-reload-action.c:41 ../src/ephy-window.c:144
-msgid "_Reload"
-msgstr "_Torne cjarie"
-
-#: ../src/ephy-combined-stop-reload-action.c:42
-msgid "Display the latest content of the current page"
-msgstr "Mostre l'ultin contignût de pagjine atuâl"
-
-#: ../src/ephy-history-window.c:242
-msgid "Clear browsing history?"
-msgstr "Netâ la cronologjie di navigazion?"
-
-#: ../src/ephy-history-window.c:246
-msgid ""
-"Clearing the browsing history will cause all history links to be permanently "
-"deleted."
-msgstr ""
-"Netant la cronologjie di navigazion tu eliminarâs par simpri i colegaments "
-"de cronologjie."
-
-#: ../src/ephy-main.c:86
-msgid "Open a new tab in an existing browser window"
-msgstr "Vierç une gnove schede intal barcon di navigazion esistent"
-
-#: ../src/ephy-main.c:88
-msgid "Open a new browser window"
-msgstr "Vierç un gnûf barcon di navigazion"
-
-#: ../src/ephy-main.c:90
-msgid "Import bookmarks from the given file"
-msgstr "Impuarte i segnelibris di un file furnît"
-
-#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
-msgid "FILE"
-msgstr "FILE"
-
-#: ../src/ephy-main.c:92
-msgid "Load the given session file"
-msgstr "Cjarie il file di session specificât"
-
-#: ../src/ephy-main.c:94
-msgid "Add a bookmark"
-msgstr "Zonte un segnelibri"
-
-#: ../src/ephy-main.c:94
-msgid "URL"
-msgstr "URL"
-
-#: ../src/ephy-main.c:96
-msgid "Start a private instance"
-msgstr "Tache une gnove istance privade"
-
-#: ../src/ephy-main.c:98
-msgid "Start an instance in incognito mode"
-msgstr "Tache une istance in modalitât incognit"
-
-#: ../src/ephy-main.c:100
-msgid "Start an instance in netbank mode"
-msgstr "Tache une istance in modalitât netbank"
-
-#: ../src/ephy-main.c:103
-msgid "Start the browser in application mode"
-msgstr "Invie il navigadôr in modalitât aplicazion"
-
-#: ../src/ephy-main.c:105
-msgid "Profile directory to use in the private instance"
-msgstr "Cartele di profîi di doprâ te istance privade"
-
-#: ../src/ephy-main.c:105
-msgid "DIR"
-msgstr "DIR"
-
-#: ../src/ephy-main.c:107
-msgid "URL …"
-msgstr "URL …"
-
-#: ../src/ephy-main.c:212
-msgid "Could not start Web"
-msgstr "Impussibil inviâ Web"
-
-#: ../src/ephy-main.c:215
-#, c-format
-msgid ""
-"Startup failed because of the following error:\n"
-"%s"
-msgstr ""
-"Inviament falît par vie di chest erôr:\n"
-"%s"
-
-#: ../src/ephy-main.c:325
-msgid "Web options"
-msgstr "Opzions Web"
-
-#: ../src/ephy-notebook.c:660
-msgid "Close tab"
-msgstr "Siere schede"
-
-#: ../src/ephy-search-provider.c:195
-#, c-format
-msgid "Search the Web for %s"
-msgstr "Cîr %s tal web"
-
-#: ../src/ephy-window.c:94
-msgid "_Open…"
-msgstr "_Vierç..."
-
-#: ../src/ephy-window.c:96
-msgid "Save _As…"
-msgstr "S_alve Come..."
-
-#: ../src/ephy-window.c:98
-msgid "Save As _Web Application…"
-msgstr "Salve come aplicazion _web..."
-
-#: ../src/ephy-window.c:100
-msgid "_Print…"
-msgstr "_Stampe..."
-
-#: ../src/ephy-window.c:102
-msgid "S_end Link by Email…"
-msgstr "Invi_e colegament par e-mail..."
-
-#: ../src/ephy-window.c:113
-msgid "Re_do"
-msgstr "_Torne fâs"
-
-#: ../src/ephy-window.c:125
-msgid "_Find…"
-msgstr "_Cjate..."
-
-#: ../src/ephy-window.c:127
-msgid "Find Ne_xt"
-msgstr "Cjate _sucessîf"
-
-#: ../src/ephy-window.c:129
-msgid "Find Pre_vious"
-msgstr "Cjate preced_ent"
-
-#: ../src/ephy-window.c:131
-msgid "Edit _Bookmarks"
-msgstr "Modifiche _segnelibris"
-
-#. View actions.
-#: ../src/ephy-window.c:140 ../src/ephy-window.c:142
-msgid "_Stop"
-msgstr "_Ferme"
-
-#: ../src/ephy-window.c:146
-msgid "Zoom _In"
-msgstr "_Ingrandìs"
-
-#: ../src/ephy-window.c:148
-msgid "Zoom O_ut"
-msgstr "Impiç_ulìs"
-
-#: ../src/ephy-window.c:150
-msgid "_Normal Size"
-msgstr "Dimension _normâl"
-
-#: ../src/ephy-window.c:152
-msgid "Text _Encoding"
-msgstr "_Codifiche dal test"
-
-#: ../src/ephy-window.c:154
-msgid "_Page Source"
-msgstr "Sorzint _pagjine"
-
-#: ../src/ephy-window.c:156
-msgid "_Toggle Inspector"
-msgstr "_Cambie inspector"
-
-#. Bookmarks actions.
-#: ../src/ephy-window.c:161
-msgid "_Add Bookmark…"
-msgstr "_Zonte Segnelibri..."
-
-#. Go actions.
-#: ../src/ephy-window.c:166
-msgid "_Location…"
-msgstr "_Posizion..."
-
-#. Tabs actions.
-#: ../src/ephy-window.c:171
-msgid "_Previous Tab"
-msgstr "Schede _precedente"
-
-#: ../src/ephy-window.c:173
-msgid "_Next Tab"
-msgstr "Schede sucessi_ve"
-
-#: ../src/ephy-window.c:175
-msgid "Move Tab _Left"
-msgstr "Sposte schede a _çampe"
-
-#: ../src/ephy-window.c:177
-msgid "Move Tab _Right"
-msgstr "Sposte schede a _drete"
-
-#: ../src/ephy-window.c:179
-msgid "Du_plicate"
-msgstr "Do_plee"
-
-#: ../src/ephy-window.c:181
-msgid "_Detach Tab"
-msgstr "_Distache schede"
-
-#. View actions.
-#: ../src/ephy-window.c:196
-msgid "_Fullscreen"
-msgstr "_A plen visôr"
-
-#: ../src/ephy-window.c:198
-msgid "Popup _Windows"
-msgstr "_Barcons popup"
-
-#: ../src/ephy-window.c:200
-msgid "Selection Caret"
-msgstr "Cursôr di selezion"
-
-#. Document.
-#: ../src/ephy-window.c:207
-msgid "Add Boo_kmark…"
-msgstr "Zonte segne_libri..."
-
-#. Links.
-#: ../src/ephy-window.c:212
-msgid "Open Link in New _Window"
-msgstr "Vierç colegament intun gnûf _barcon"
-
-#: ../src/ephy-window.c:214
-msgid "Open Link in New _Tab"
-msgstr "Vierç colegament intun gnove _schede"
-
-#: ../src/ephy-window.c:216
-msgid "Open Link in I_ncognito Window"
-msgstr "Vierç colegament intun barcon se_gret"
-
-#: ../src/ephy-window.c:218
-msgid "_Save Link As…"
-msgstr "_Salve colegament come..."
-
-#: ../src/ephy-window.c:220
-msgid "_Copy Link Address"
-msgstr "_Copie direzion colegament"
-
-#: ../src/ephy-window.c:222
-msgid "_Copy E-mail Address"
-msgstr "_Copie direzion e-mail"
-
-#. Images.
-#: ../src/ephy-window.c:227
-msgid "View _Image in New Tab"
-msgstr "Vierç _imagjin intune gnove schede"
-
-#: ../src/ephy-window.c:229
-msgid "Copy I_mage Address"
-msgstr "Copie direzion i_magjin"
-
-#: ../src/ephy-window.c:231
-msgid "_Save Image As…"
-msgstr "_Salve imagjin come..."
-
-#: ../src/ephy-window.c:233
-msgid "Set as _Wallpaper"
-msgstr "Dopre come _fondâl"
-
-#. Video.
-#: ../src/ephy-window.c:238
-msgid "Open Video in New _Window"
-msgstr "Vierç video intun gnûf _barcon"
-
-#: ../src/ephy-window.c:240
-msgid "Open Video in New _Tab"
-msgstr "Vierç video intune gnove _schede"
-
-#: ../src/ephy-window.c:242
-msgid "_Save Video As…"
-msgstr "_Salve video come..."
-
-#: ../src/ephy-window.c:244
-msgid "_Copy Video Address"
-msgstr "_Copie direzion video"
-
-#. Audio.
-#: ../src/ephy-window.c:249
-msgid "Open Audio in New _Window"
-msgstr "Vierç audio intun gnûf _barcon"
-
-#: ../src/ephy-window.c:251
-msgid "Open Audio in New _Tab"
-msgstr "Vierç audio intune gnove _schede"
-
-#: ../src/ephy-window.c:253
-msgid "_Save Audio As…"
-msgstr "_Salve audio come..."
-
-#: ../src/ephy-window.c:255
-msgid "_Copy Audio Address"
-msgstr "_Copie direzion audio"
-
-#: ../src/ephy-window.c:470
-msgid "There are unsubmitted changes to form elements"
-msgstr "Modifichis no inviadis in cualchi element dal modul"
-
-#: ../src/ephy-window.c:471
-msgid "If you close the document anyway, you will lose that information."
-msgstr ""
-"Se dut câs tu sieris il document distès, tu larâs a pierdi chê informazion."
-
-#: ../src/ephy-window.c:473
-msgid "Close _Document"
-msgstr "Siere _document"
-
-#: ../src/ephy-window.c:488
-msgid "There are ongoing downloads"
-msgstr "A son discjariaments in vore"
-
-#: ../src/ephy-window.c:489
-msgid "If you quit, the downloads will be cancelled"
-msgstr "Se tu jessis i scjariaments a vegnaran anulâts"
-
-#: ../src/ephy-window.c:490
-msgid "Quit and cancel downloads"
-msgstr "Jes e anule discjariaments"
-
-#: ../src/ephy-window.c:1094 ../src/window-commands.c:258
-msgid "Open"
-msgstr "Vierç"
-
-#: ../src/ephy-window.c:1096
-msgid "Save As"
-msgstr "Salve come"
-
-#: ../src/ephy-window.c:1098
-msgid "Save As Application"
-msgstr "Salve come aplicazion"
-
-#: ../src/ephy-window.c:1100
-msgid "Print"
-msgstr "Stampe"
-
-#: ../src/ephy-window.c:1102
-msgid "Bookmark"
-msgstr "Segnelibri"
-
-#: ../src/ephy-window.c:1104
-msgid "Find"
-msgstr "Cjate"
-
-#: ../src/ephy-window.c:1110
-msgid "Encodings…"
-msgstr "Codifichis..."
-
-#. Translators: This refers to text size
-#: ../src/ephy-window.c:1113
-msgid "Larger"
-msgstr "Aumente"
-
-#. Translators: This refers to text size
-#: ../src/ephy-window.c:1116
-msgid "Smaller"
-msgstr "Ridûs"
-
-#: ../src/ephy-window.c:1138
-msgid "Back"
-msgstr "Indaûr"
-
-#: ../src/ephy-window.c:1150
-msgid "Forward"
-msgstr "Indenant"
-
-#: ../src/ephy-window.c:1162
-msgid "Zoom"
-msgstr "Ingrandiment"
-
-#: ../src/ephy-window.c:1171
-msgid "New _Tab"
-msgstr "Gnove _Schede"
-
-#: ../src/ephy-window.c:1179
-msgid "Go to most visited"
-msgstr "Va ai plui visitâts"
-
-#: ../src/ephy-window.c:1669
-#, c-format
-msgid "Search the Web for '%s'"
-msgstr "Cîr '%s' tal web"
-
-#: ../src/popup-commands.c:252
-msgid "Save Link As"
-msgstr "Salve colegament come"
-
-#: ../src/popup-commands.c:259
-msgid "Save Image As"
-msgstr "Salve imagjin come"
-
-#: ../src/popup-commands.c:266
-msgid "Save Media As"
-msgstr "Salve file multimediâl come"
-
-#. Translators: the first %s is the language name, and the
-#. * second %s is the locale name. Example:
-#. * "French (France)"
-#.
-#: ../src/prefs-dialog.c:454 ../src/prefs-dialog.c:458
-#, c-format
-msgctxt "language"
-msgid "%s (%s)"
-msgstr "%s (%s)"
-
-#. Translators: this refers to a user-define language code
-#. * (one which isn't in our built-in list).
-#.
-#: ../src/prefs-dialog.c:465
-#, c-format
-msgctxt "language"
-msgid "User defined (%s)"
-msgstr "Definide dal utent (%s)"
-
-#: ../src/prefs-dialog.c:487
-#, c-format
-msgid "System language (%s)"
-msgid_plural "System languages (%s)"
-msgstr[0] "Lenghe di sisteme (%s)"
-msgstr[1] "Lenghis di sisteme (%s)"
-
-#: ../src/prefs-dialog.c:809
-msgid "Select a Directory"
-msgstr "Selezione une cartele"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:903
-msgid "DuckDuckGo"
-msgstr "DuckDuckGo"
-
-#. For the preferences dialog. Must exactly match the URL
-#. * you chose in the gschema, but with & instead of &amp;
-#. * If the match is not exact, there will be a spurious, ugly
-#. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:909
-#, c-format
-msgid "https://duckduckgo.com/?q=%s&t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=it-it"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:911
-msgid "Google"
-msgstr "Google"
-
-#. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:914
-#, c-format
-msgid "https://google.com/search?q=%s"
-msgstr "https://google.it/search?q=%s"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:916
-msgid "Bing"
-msgstr "Bing"
-
-#. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:919
-#, c-format
-msgid "https://www.bing.com/search?q=%s"
-msgstr "http://www.bing.it/search?q=%s"
-
-#: ../src/window-commands.c:309
-msgid "Save"
-msgstr "Salve"
-
-#: ../src/window-commands.c:680
-#, c-format
-msgid "A web application named '%s' already exists. Do you want to replace it?"
-msgstr "Une aplicazion web clamade '%s' e esist za. Sostituîle?"
-
-#: ../src/window-commands.c:683
-msgid "Cancel"
-msgstr "Anule"
-
-#: ../src/window-commands.c:685
-msgid "Replace"
-msgstr "Sostituìs"
-
-#: ../src/window-commands.c:689
-msgid ""
-"An application with the same name already exists. Replacing it will "
-"overwrite it."
-msgstr ""
-"Une aplicazion cul stes non e esist za. Sostituî al significhe sorescrivile."
-
-#: ../src/window-commands.c:724
-#, c-format
-msgid "The application '%s' is ready to be used"
-msgstr "La aplicazion '%s' e je pronte par jessi doprade"
-
-#: ../src/window-commands.c:727
-#, c-format
-msgid "The application '%s' could not be created"
-msgstr "Impussibil creâ la aplicazion '%s'"
-
-#: ../src/window-commands.c:735
-msgid "Launch"
-msgstr "Eseguìs"
-
-#. Show dialog with icon, title.
-#: ../src/window-commands.c:775
-msgid "Create Web Application"
-msgstr "Cree aplicazion web"
-
-#: ../src/window-commands.c:780
-msgid "C_reate"
-msgstr "C_ree"
-
-#: ../src/window-commands.c:1461 ../src/window-commands.c:1484
+#: ../src/window-commands.c:212 ../src/window-commands.c:235
 msgid "Contact us at:"
 msgstr "Contatinus a:"
 
-#: ../src/window-commands.c:1464
+#: ../src/window-commands.c:215
 msgid "Contributors:"
 msgstr "Colaboradôrs:"
 
-#: ../src/window-commands.c:1467
+#: ../src/window-commands.c:218
 msgid "Past developers:"
 msgstr "Svilupadôrs passats:"
 
-#: ../src/window-commands.c:1493
+#: ../src/window-commands.c:244
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3199,19 +3041,70 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1516
+#: ../src/window-commands.c:267
 msgid "translator-credits"
 msgstr "Fabio Tomat <f.t.public@gmail.com>"
 
-#: ../src/window-commands.c:1519
+#: ../src/window-commands.c:270
 msgid "Web Website"
 msgstr "Sît web di Web"
 
-#: ../src/window-commands.c:1680
+#: ../src/window-commands.c:501
+msgid "Open"
+msgstr "Vierç"
+
+#: ../src/window-commands.c:865
+#, c-format
+msgid "A web application named '%s' already exists. Do you want to replace it?"
+msgstr "Une aplicazion web clamade '%s' e esist za. Sostituîle?"
+
+#: ../src/window-commands.c:868
+msgid "Cancel"
+msgstr "Anule"
+
+#: ../src/window-commands.c:870
+msgid "Replace"
+msgstr "Sostituìs"
+
+#: ../src/window-commands.c:874
+msgid ""
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
+msgstr ""
+"Une aplicazion cul stes non e esist za. Sostituî al significhe sorescrivile."
+
+#: ../src/window-commands.c:909
+#, c-format
+msgid "The application '%s' is ready to be used"
+msgstr "La aplicazion '%s' e je pronte par jessi doprade"
+
+#: ../src/window-commands.c:912
+#, c-format
+msgid "The application '%s' could not be created"
+msgstr "Impussibil creâ la aplicazion '%s'"
+
+#: ../src/window-commands.c:920
+msgid "Launch"
+msgstr "Eseguìs"
+
+#. Show dialog with icon, title.
+#: ../src/window-commands.c:962
+msgid "Create Web Application"
+msgstr "Cree aplicazion web"
+
+#: ../src/window-commands.c:967
+msgid "C_reate"
+msgstr "C_ree"
+
+#: ../src/window-commands.c:1097
+msgid "Save"
+msgstr "Salve"
+
+#: ../src/window-commands.c:1748
 msgid "Enable caret browsing mode?"
 msgstr "Abilitâ la modalitât di navigazion cun cursôr?"
 
-#: ../src/window-commands.c:1683
+#: ../src/window-commands.c:1751
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3221,9 +3114,87 @@ msgstr ""
 "funzionalitât al place un cursôr mobil te pagjine web, permetint di movisi "
 "tor ator cun la tastiere. Abilitâ la navigazion cun cursôr?"
 
-#: ../src/window-commands.c:1686
+#: ../src/window-commands.c:1754
 msgid "_Enable"
 msgstr "_Abilite"
+
+#~ msgid "Stop"
+#~ msgstr "Ferme"
+
+#~ msgid "Stop current data transfer"
+#~ msgstr "Ferme il trasferiment dâts atuâl"
+
+#~ msgid "Display the latest content of the current page"
+#~ msgstr "Mostre l'ultin contignût de pagjine atuâl"
+
+#~ msgid "Find Ne_xt"
+#~ msgstr "Cjate _sucessîf"
+
+#~ msgid "Find Pre_vious"
+#~ msgstr "Cjate preced_ent"
+
+#~ msgid "Edit _Bookmarks"
+#~ msgstr "Modifiche _segnelibris"
+
+#~ msgid "_Stop"
+#~ msgstr "_Ferme"
+
+#~ msgid "_Normal Size"
+#~ msgstr "Dimension _normâl"
+
+#~ msgid "_Toggle Inspector"
+#~ msgstr "_Cambie inspector"
+
+#~ msgid "_Location…"
+#~ msgstr "_Posizion..."
+
+#~ msgid "_Previous Tab"
+#~ msgstr "Schede _precedente"
+
+#~ msgid "_Next Tab"
+#~ msgstr "Schede sucessi_ve"
+
+#~ msgid "_Detach Tab"
+#~ msgstr "_Distache schede"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "_A plen visôr"
+
+#~ msgid "Popup _Windows"
+#~ msgstr "_Barcons popup"
+
+#~ msgid "Selection Caret"
+#~ msgstr "Cursôr di selezion"
+
+#~ msgid "Save As"
+#~ msgstr "Salve come"
+
+#~ msgid "Save As Application"
+#~ msgstr "Salve come aplicazion"
+
+#~ msgid "Print"
+#~ msgstr "Stampe"
+
+#~ msgid "Bookmark"
+#~ msgstr "Segnelibri"
+
+#~ msgid "Find"
+#~ msgstr "Cjate"
+
+#~ msgid "Encodings…"
+#~ msgstr "Codifichis..."
+
+#~ msgid "Larger"
+#~ msgstr "Aumente"
+
+#~ msgid "Smaller"
+#~ msgstr "Ridûs"
+
+#~ msgid "Zoom"
+#~ msgstr "Ingrandiment"
+
+#~ msgid "Go to most visited"
+#~ msgstr "Va ai plui visitâts"
 
 #~ msgid "Master password needed"
 #~ msgstr "E je domandade la password principâl"
