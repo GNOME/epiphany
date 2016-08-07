@@ -77,8 +77,8 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DDATADIR=\"$(pkgdatadir)\" 	\
 	-DLOCALEDIR=\"$(localedir)\"	\
+	-DPKGDATADIR=\"$(pkgdatadir)\" 	\
 	$(AM_CPPFLAGS)
 
 libephymain_la_CFLAGS = \

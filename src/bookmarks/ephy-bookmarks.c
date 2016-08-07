@@ -112,7 +112,7 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
     ephy_bookmarks_add_keyword (eb, _(default_topics[i]));
   }
 
-  ephy_bookmarks_import_rdf (eb, DATADIR "/default-bookmarks.rdf");
+  ephy_bookmarks_import_rdf (eb, PKGDATADIR "/default-bookmarks.rdf");
 }
 
 static void

@@ -115,7 +115,7 @@ libephybookmarks_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/egg		\
-	-DDATADIR=\"$(pkgdatadir)\" 	\
+	-DPKGDATADIR=\"$(pkgdatadir)\" 	\
 	$(AM_CPPFLAGS)
 
 libephybookmarks_la_LDFLAGS = \

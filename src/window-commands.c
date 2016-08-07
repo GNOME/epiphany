@@ -176,7 +176,7 @@ window_cmd_show_about (GSimpleAction *action,
   gsize n_authors, n_contributors, n_past_authors, n_artists, n_documenters, i, j;
 
   key_file = g_key_file_new ();
-  if (!g_key_file_load_from_file (key_file, DATADIR G_DIR_SEPARATOR_S "about.ini",
+  if (!g_key_file_load_from_file (key_file, PKGDATADIR G_DIR_SEPARATOR_S "about.ini",
                                   0, &error)) {
     g_warning ("Couldn't load about data: %s\n", error->message);
     g_error_free (error);
