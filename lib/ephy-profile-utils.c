@@ -93,7 +93,7 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
   GError *error = NULL;
   char *index = NULL, *version = NULL;
   int status;
-  const char *argv[6] = { EPHY_PROFILE_MIGRATOR, "-v" };
+  const char *argv[6] = { PKGLIBEXECDIR "/" EPHY_PROFILE_MIGRATOR, "-v" };
   int i = 2; /* index for argv, start filling at 2. */
   char **envp;
 

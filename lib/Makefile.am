@@ -69,13 +69,14 @@ nodist_libephymisc_la_SOURCES = \
 	$(BUILT_SOURCES)
 
 libephymisc_la_CPPFLAGS = \
-	-DABS_TOP_BUILD_DIR=\"$(abs_top_builddir)\" \
-	-DDATADIR=\"$(datadir)\"		    \
-	-DLOCALEDIR=\"$(localedir)\"		    \
-	-DSHARE_DIR=\"$(pkgdatadir)\" 		    \
-	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"    \
-	-I$(top_builddir)/lib			    \
-	-I$(top_srcdir)/lib/egg			    \
+	-DABS_TOP_BUILD_DIR=\"$(abs_top_builddir)\"	\
+	-DDATADIR=\"$(datadir)\"			\
+	-DLOCALEDIR=\"$(localedir)\"			\
+	-DPKGLIBEXECDIR=\"$(pkglibexecdir)\"		\
+	-DSHARE_DIR=\"$(pkgdatadir)\"			\
+	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"	\
+	-I$(top_builddir)/lib				\
+	-I$(top_srcdir)/lib/egg				\
 	$(AM_CPPFLAGS)
 
 libephymisc_la_CFLAGS = \
@@ -111,7 +112,7 @@ libephymisc_la_LIBADD = \
 	$(SQLITE3_LIBS)		\
 	$(WEBKIT2GTK_LIBS)
 
-bin_PROGRAMS = ephy-profile-migrator
+pkglibexec_PROGRAMS = ephy-profile-migrator
 
 ephy_profile_migrator_SOURCES = \
 	ephy-profile-migrator.c
