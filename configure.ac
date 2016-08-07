@@ -25,7 +25,7 @@ m4_define([epiphany_previous_version_minor],[20])
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 AX_IS_RELEASE([git-directory])
 
-AC_PREREQ([2.59])
+AC_PREREQ([2.69])
 
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIRS([m4 libgd])
