@@ -25,7 +25,6 @@ libephyhistory_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/history	\
 	-I$(top_srcdir)/lib		\
-	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	$(AM_CPPFLAGS)
 
 libephyhistory_la_LDFLAGS = \

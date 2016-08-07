@@ -72,8 +72,8 @@ libephymisc_la_CPPFLAGS = \
 	-DABS_TOP_BUILD_DIR=\"$(abs_top_builddir)\"	\
 	-DDATADIR=\"$(datadir)\"			\
 	-DLOCALEDIR=\"$(localedir)\"			\
+	-DPKGDATADIR=\"$(pkgdatadir)\"			\
 	-DPKGLIBEXECDIR=\"$(pkglibexecdir)\"		\
-	-DSHARE_DIR=\"$(pkgdatadir)\"			\
 	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"	\
 	-I$(top_builddir)/lib				\
 	-I$(top_srcdir)/lib/egg				\
@@ -126,11 +126,10 @@ ephy_profile_migrator_CFLAGS = \
 	$(AM_CFLAGS)
 
 ephy_profile_migrator_CPPFLAGS = \
-	-I$(top_builddir)/lib \
-	-I$(srcdir)/history \
-	-DSHARE_DIR=\"$(pkgdatadir)\" \
+	-I$(top_builddir)/lib		\
+	-I$(srcdir)/history		\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DLOCALEDIR=\"$(localedir)\" \
+	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)
 
 ephy_profile_migrator_LDADD = \

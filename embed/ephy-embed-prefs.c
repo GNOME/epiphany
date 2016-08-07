@@ -118,7 +118,7 @@ webkit_pref_get_vendor_user_agent (void)
 
   branding_keyfile = g_key_file_new ();
 
-  if (g_key_file_load_from_file (branding_keyfile, SHARE_DIR "/branding.conf",
+  if (g_key_file_load_from_file (branding_keyfile, PKGDATADIR "/branding.conf",
                                  G_KEY_FILE_NONE, NULL)) {
     char *vendor;
     char *vendor_sub;

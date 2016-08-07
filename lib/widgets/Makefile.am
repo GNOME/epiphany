@@ -94,7 +94,6 @@ libephywidgets_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/libgd		\
-	-DSHARE_DIR=\"$(pkgdatadir)\"	\
 	$(AM_CPPFLAGS)
 
 libephywidgets_la_CFLAGS = \

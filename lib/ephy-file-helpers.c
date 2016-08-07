@@ -223,9 +223,9 @@ ephy_file (const char *filename)
     TOP_SRC_DATADIR "/icons/",
     TOP_SRC_DATADIR "/pages/",
 #endif
-    SHARE_DIR "/",
-    SHARE_DIR "/icons/",
-    SHARE_DIR "/pages/"
+    PKGDATADIR "/",
+    PKGDATADIR "/icons/",
+    PKGDATADIR "/pages/"
   };
 
   g_assert (files != NULL);
