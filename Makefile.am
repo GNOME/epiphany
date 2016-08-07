@@ -13,17 +13,9 @@ AM_DISTCHECK_CONFIGURE_FLAGS = \
 # Ignore gtk theme cache files on distcheck
 distuninstallcheck_listfiles = find . -type f -print | grep -v 'icon-theme.cache'
 
-# Build ChangeLog from git history
-ChangeLog:
-	@if test -f $(top_srcdir)/.git/HEAD; then \
-		pushd $(top_srcdir); \
-		git log --max-count=500 --no-decorate --stat > $(abs_top_builddir)/$@; \
-		popd; \
-	fi
-
-dist: ChangeLog
-
-.PHONY: ChangeLog
+@GENERATE_CHANGELOG_RULES@
+CHANGELOG_START = $(EPIPHANY_CHANGELOG_START)
+dist-hook: dist-ChangeLog
 
 MAINTAINERCLEANFILES = \
         $(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \
