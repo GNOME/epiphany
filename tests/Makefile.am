@@ -191,7 +191,7 @@ test_ephy_web_view_SOURCES = \
 	$(top_builddir)/src/epiphany-resources.c \
 	ephy-web-view-test.c
 
-EXTRA_DIST = \
+dist_noinst_DATA = \
 	data/test.html \
 	applications/epiphany.desktop \
 	applications/defaults.list

@@ -1,11 +1,7 @@
-NULL =
+dist_man_MANS = epiphany.1
 
-man_MANS = epiphany.1
-
-EXTRA_DIST = 		\
-	$(man_MANS)	\
+dist_noinst_DATA = \
 	bookmarks.txt	\
-	debugging.txt	\
-	$(NULL)
+	debugging.txt
 
 -include $(top_srcdir)/git.mk

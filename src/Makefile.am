@@ -7,7 +7,7 @@ noinst_LTLIBRARIES = libephymain.la
 
 bin_PROGRAMS = epiphany
 
-EXTRA_DIST = \
+dist_noinst_DATA = \
 	org.gnome.ShellSearchProvider2.xml \
 	epiphany.gresource.xml \
 	$(RESOURCE_FILES)

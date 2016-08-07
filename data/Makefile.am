@@ -22,13 +22,13 @@ appstream_XML = $(appstream_in_files:.xml.in=.xml)
 @APPSTREAM_XML_RULES@
 
 aboutdialogdir = $(pkgdatadir)
-aboutdialog_DATA = about.ini
+dist_aboutdialog_DATA = about.ini
 
 mimepermissiondir = $(pkgdatadir)
-mimepermission_DATA = mime-types-permissions.xml
+dist_mimepermission_DATA = mime-types-permissions.xml
 
 xsldir = $(pkgdatadir)
-xsl_DATA = \
+dist_xsl_DATA = \
 	epiphany-bookmarks-html.xsl
 
 # Dbus service file
@@ -56,14 +56,9 @@ searchproviderdir = $(datadir)/gnome-shell/search-providers
 dist_searchprovider_DATA = epiphany-search-provider.ini
 
 EXTRA_DIST = \
-	$(aboutdialog_DATA)		\
 	$(appstream_in_files)		\
 	$(service_in_files)		\
 	$(desktop_in_files)		\
-	$(about_DATA)			\
-	$(mimepermission_DATA)		\
-	$(xsl_DATA)			\
-	$(service_in_files)		\
 	$(default_bookmarks_in_files)	\
 	$(gsettings_SCHEMAS)		\
 	$(convert_DATA)			\
