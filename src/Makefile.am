@@ -3,7 +3,7 @@ SUBDIRS = bookmarks
 AM_CFLAGS = $(CODE_COVERAGE_CFLAGS) $(WARN_CFLAGS)
 AM_LDFLAGS = $(CODE_COVERAGE_LDFLAGS) $(WARN_LDFLAGS)
 
-noinst_LTLIBRARIES = libephymain.la
+pkglib_LTLIBRARIES = libephymain.la
 
 bin_PROGRAMS = epiphany
 
@@ -94,7 +94,7 @@ libephymain_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 libephymain_la_LDFLAGS = \
-	$(AM_LDFLAGS)
+	$(AM_LDFLAGS) -avoid-version -no-undefined
 
 libephymain_la_LIBADD = \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la	\
