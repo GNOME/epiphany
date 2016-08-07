@@ -69,7 +69,6 @@ libephyembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/egg			\
 	-I$(top_srcdir)/lib/history		\
 	-I$(top_srcdir)/lib/widgets		\
-	-DDATADIR=\"$(datadir)\"		\
 	-DPKGDATADIR=\"$(pkgdatadir)\"		\
 	-DEPHY_WEB_EXTENSIONS_DIR=\"$(libdir)/epiphany/$(EPIPHANY_MAJOR)/web-extensions\" \
 	$(AM_CPPFLAGS)

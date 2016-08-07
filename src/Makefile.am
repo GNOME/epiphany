@@ -77,7 +77,6 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DLOADER_DIR=\"$(pkglibdir)/$(EPIPHANY_MAJOR)/loaders\"		\
 	-DDATADIR=\"$(pkgdatadir)\" 	\
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)
@@ -167,7 +166,6 @@ epiphany_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DDATADIR=\"$(datadir)\" 	\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)
@@ -201,7 +199,6 @@ epiphany_search_provider_CPPFLAGS = \
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/src/bookmarks   \
-	-DDATADIR=\""$(datadir)"\" 	\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(AM_CPPFLAGS)

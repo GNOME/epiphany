@@ -70,7 +70,6 @@ nodist_libephymisc_la_SOURCES = \
 
 libephymisc_la_CPPFLAGS = \
 	-DABS_TOP_BUILD_DIR=\"$(abs_top_builddir)\"	\
-	-DDATADIR=\"$(datadir)\"			\
 	-DLOCALEDIR=\"$(localedir)\"			\
 	-DPKGDATADIR=\"$(pkgdatadir)\"			\
 	-DPKGLIBEXECDIR=\"$(pkglibexecdir)\"		\

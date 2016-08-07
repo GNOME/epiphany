@@ -23,7 +23,6 @@ libephywebextension_la_SOURCES = \
 
 libephywebextension_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib	\
-	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"	\
 	$(AM_CPPFLAGS)
 
 libephywebextension_la_CFLAGS = \
