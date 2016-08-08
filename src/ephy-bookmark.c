@@ -25,6 +25,7 @@ struct _EphyBookmark {
   char        *url;
   char        *title;
   GSequence   *tags;
+  gint64       time_added;
 };
 
 G_DEFINE_TYPE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT)
@@ -32,6 +33,7 @@ G_DEFINE_TYPE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_TAGS,
+  PROP_TIME_ADDED,
   PROP_TITLE,
   PROP_URL,
   LAST_PROP
@@ -57,6 +59,9 @@ ephy_bookmark_set_property (GObject      *object,
     case PROP_TAGS:
       self->tags = g_value_get_pointer (value);
       break;
+    case PROP_TIME_ADDED:
+      ephy_bookmark_set_time_added (self, g_value_get_int64 (value));
+      break;
     case PROP_TITLE:
       self->title = g_value_dup_string (value);
       break;
@@ -79,6 +84,9 @@ ephy_bookmark_get_property (GObject      *object,
   switch (prop_id) {
     case PROP_TAGS:
       g_value_set_pointer (value, ephy_bookmark_get_tags (self));
+      break;
+    case PROP_TIME_ADDED:
+      g_value_set_int64 (value, ephy_bookmark_get_time_added (self));
       break;
     case PROP_TITLE:
       g_value_set_string (value, ephy_bookmark_get_title (self));
@@ -119,6 +127,15 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
                           "The bookmark's tags",
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+  obj_properties[PROP_TIME_ADDED] =
+    g_param_spec_int64 ("time-added",
+                        "Time added",
+                        "The bookmark's creation time",
+                        0,
+                        G_MAXINT64,
+                        0,
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
@@ -156,8 +173,28 @@ ephy_bookmark_new (char *url, char *title, GSequence *tags)
                        "url", url,
                        "title", title,
                        "tags", tags,
+                       "time-added", g_get_real_time (),
                        NULL);
 }
+
+void
+ephy_bookmark_set_time_added (EphyBookmark *self,
+                              gint64        time_added)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+  g_assert (time_added >= 0);
+
+  self->time_added = time_added;
+}
+
+gint64
+ephy_bookmark_get_time_added (EphyBookmark *self)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), 0);
+
+  return self->time_added;
+}
+
 
 void
 ephy_bookmark_set_url (EphyBookmark *self, const char *url)
