@@ -34,6 +34,9 @@ struct _EphyBookmarkPropertiesGrid {
 
   EphyBookmark                   *bookmark;
   EphyBookmarkPropertiesGridType  type;
+  GtkWidget                      *parent;
+
+  EphyBookmarksManager           *manager;
 
   GtkWidget                      *popover_bookmark_label;
   GtkWidget                      *name_entry;
@@ -51,6 +54,7 @@ enum {
   PROP_0,
   PROP_BOOKMARK,
   PROP_TYPE,
+  PROP_PARENT,
   LAST_PROP
 };
 
@@ -113,7 +117,6 @@ static void
 ephy_bookmark_properties_grid_tag_widget_button_clicked_cb (EphyBookmarkPropertiesGrid *self,
                                                             GtkButton                  *button)
 {
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   GtkWidget *box;
   GtkWidget *flow_box_child;
   GtkLabel *label;
@@ -125,7 +128,7 @@ ephy_bookmark_properties_grid_tag_widget_button_clicked_cb (EphyBookmarkProperti
   g_assert (GTK_IS_BOX (box));
   label = g_object_get_data (G_OBJECT (box), "label");
 
-  ephy_bookmarks_manager_remove_tag (manager, gtk_label_get_text (label));
+  ephy_bookmarks_manager_remove_tag (self->manager, gtk_label_get_text (label));
 
   flow_box_child = gtk_widget_get_parent (box);
   gtk_widget_destroy (flow_box_child);
@@ -202,7 +205,6 @@ ephy_bookmarks_properties_grid_actions_add_tag (GSimpleAction *action,
                                                 gpointer       user_data)
 {
   EphyBookmarkPropertiesGrid *self = user_data;
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   GtkEntryBuffer *buffer;
   GtkWidget *widget;
   const char *text;
@@ -213,7 +215,7 @@ ephy_bookmarks_properties_grid_actions_add_tag (GSimpleAction *action,
   text = gtk_entry_buffer_get_text (buffer);
 
   /* Add tag to the list of all tags. */
-  ephy_bookmarks_manager_add_tag (manager, text);
+  ephy_bookmarks_manager_add_tag (self->manager, text);
 
   /* Add tag to the bookmark's list of tags. */
   ephy_bookmark_add_tag (self->bookmark, text);
@@ -238,10 +240,9 @@ ephy_bookmarks_properties_grid_actions_remove_bookmark (GSimpleAction *action,
 
   g_signal_emit_by_name (self->bookmark, "removed");
 
-  if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER)
-    gtk_widget_destroy (gtk_widget_get_parent (GTK_WIDGET (self)));
-  else
-    gtk_widget_destroy (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (self))));
+  ephy_bookmarks_manager_remove_bookmark (self->manager,  self->bookmark);
+
+  gtk_widget_destroy (self->parent);
 }
 
 static void
@@ -249,14 +250,13 @@ ephy_bookmark_properties_grid_buffer_text_changed_cb (EphyBookmarkPropertiesGrid
                                                       GParamSpec                 *pspec,
                                                       GtkEntryBuffer             *buffer)
 {
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   const char *text;
 
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES_GRID (self));
   g_assert (GTK_IS_ENTRY_BUFFER (buffer));
 
   text = gtk_entry_buffer_get_text (buffer);
-  if (strlen (text) >= 3 && !ephy_bookmarks_manager_tag_exists (manager, text))
+  if (strlen (text) >= 3 && !ephy_bookmarks_manager_tag_exists (self->manager, text))
     gtk_widget_set_sensitive (self->add_tag_button, TRUE);
   else
     gtk_widget_set_sensitive (self->add_tag_button, FALSE);
@@ -276,6 +276,9 @@ ephy_bookmark_properties_grid_set_property (GObject      *object,
       break;
     case PROP_TYPE:
       self->type = g_value_get_enum (value);
+      break;
+    case PROP_PARENT:
+      self->parent = g_value_dup_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -310,7 +313,6 @@ static void
 ephy_bookmark_properties_grid_constructed (GObject *object)
 {
   EphyBookmarkPropertiesGrid *self = EPHY_BOOKMARK_PROPERTIES_GRID (object);
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   GSequence *tags;
   GSequence *bookmark_tags;
   GSequenceIter *iter;
@@ -345,7 +347,7 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   }
 
   /* Create tag widgets */
-  tags = ephy_bookmarks_manager_get_tags (manager);
+  tags = ephy_bookmarks_manager_get_tags (self->manager);
   bookmark_tags = ephy_bookmark_get_tags (self->bookmark);
   for (iter = g_sequence_get_begin_iter (tags);
        !g_sequence_iter_is_end (iter);
@@ -374,9 +376,9 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
 static void
 ephy_bookmark_properties_grid_destroy (GtkWidget *widget)
 {
-  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  EphyBookmarkPropertiesGrid *self = EPHY_BOOKMARK_PROPERTIES_GRID (widget);
 
-  ephy_bookmarks_manager_save_to_file_async (manager, NULL, NULL, NULL);
+  ephy_bookmarks_manager_save_to_file_async (self->manager, NULL, NULL, NULL);
 
   GTK_WIDGET_CLASS (ephy_bookmark_properties_grid_parent_class)->destroy (widget);
 }
@@ -407,6 +409,13 @@ ephy_bookmark_properties_grid_class_init (EphyBookmarkPropertiesGridClass *klass
                        EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG,
                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
+  obj_properties[PROP_PARENT] =
+    g_param_spec_object ("parent",
+                         "A GtkWidget",
+                         "The dialog or popover that needs to be destroyed when the bookmark is removed",
+                         GTK_TYPE_WIDGET,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmark-properties-grid.ui");
@@ -432,6 +441,8 @@ ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  self->manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+
   gtk_flow_box_set_sort_func (GTK_FLOW_BOX (self->tags_box),
                               (GtkFlowBoxSortFunc)flow_box_sort_func,
                               NULL, NULL);
@@ -451,14 +462,17 @@ ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
 }
 
 GtkWidget *
-ephy_bookmark_properties_grid_new (EphyBookmark *bookmark,
-                                   EphyBookmarkPropertiesGridType type)
+ephy_bookmark_properties_grid_new (EphyBookmark                   *bookmark,
+                                   EphyBookmarkPropertiesGridType  type,
+                                   GtkWidget                      *parent)
 {
   g_return_val_if_fail (EPHY_IS_BOOKMARK (bookmark), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (parent), NULL);
 
   return g_object_new (EPHY_TYPE_BOOKMARK_PROPERTIES_GRID,
                        "bookmark", bookmark,
                        "type", type,
+                       "parent", parent,
                        NULL);
 }
 

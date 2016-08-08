@@ -566,6 +566,37 @@ ephy_toolbar_change_combined_stop_reload_state (GSimpleAction *action,
                         image);
 }
 
+/**
+ * update_bookmarked_status_cb:
+ * @bookmark: an #EphyBookmark pbject
+ * @toolbar: an #EphyToolbar widget
+ *
+ * Remove bookmarked status if the @bookmark was removed.
+ *
+ **/
+static void
+update_bookmarked_status_cb (EphyBookmark *bookmark,
+                             EphyToolbar  *toolbar)
+{
+  EphyEmbed *embed;
+  EphyWebView *view;
+  const char *address;
+
+  g_assert (EPHY_IS_BOOKMARK (bookmark));
+  g_assert (EPHY_IS_TOOLBAR (toolbar));
+
+  embed = ephy_embed_container_get_active_child
+            (EPHY_EMBED_CONTAINER (toolbar->window));
+  view = ephy_embed_get_web_view (embed);
+
+  address = ephy_web_view_get_address (view);
+
+  if (g_strcmp0 (ephy_bookmark_get_url (bookmark), address) == 0) {
+    ephy_location_entry_set_bookmarked_status (EPHY_LOCATION_ENTRY (toolbar->entry),
+                                               FALSE);
+  }
+}
+
 static void
 add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
                                 gpointer          *user_data)
@@ -587,6 +618,10 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
     bookmark = ephy_bookmark_new (g_strdup (location),
                                   g_strdup (ephy_embed_get_title (embed)),
                                   g_sequence_new (g_free));
+
+    g_signal_connect_object (bookmark, "removed",
+                             G_CALLBACK (update_bookmarked_status_cb),
+                             toolbar, 0);
     ephy_bookmarks_manager_add_bookmark (manager, bookmark);
     ephy_location_entry_set_bookmarked_status (entry, TRUE);
   }
@@ -597,7 +632,9 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
                            &rectangle);
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rectangle);
   gtk_container_add (GTK_CONTAINER (popover),
-                     ephy_bookmark_properties_grid_new (bookmark, EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER));
+                     ephy_bookmark_properties_grid_new (bookmark,
+                                                        EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER,
+                                                        popover));
   gtk_widget_show (popover);
 }
 
