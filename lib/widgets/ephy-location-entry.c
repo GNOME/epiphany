@@ -701,7 +701,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
                                      GTK_ENTRY_ICON_SECONDARY,
-                                     "ephy-bookmark-empty");
+                                     "non-starred-symbolic");
 
   g_object_connect (entry,
                     "signal::icon-press", G_CALLBACK (icon_button_press_event_cb), lentry,
@@ -1142,16 +1142,23 @@ void
 ephy_location_entry_set_bookmarked_status (EphyLocationEntry *entry,
                                            gboolean           is_bookmarked)
 {
+  GtkStyleContext *context;
+
   g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
 
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
   if (is_bookmarked) {
     gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
                                        GTK_ENTRY_ICON_SECONDARY,
-                                       "ephy-bookmark-full");
+                                       "starred-symbolic");
+    gtk_style_context_remove_class (context, "non-starred");
+    gtk_style_context_add_class (context, "starred");
   } else {
     gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
                                        GTK_ENTRY_ICON_SECONDARY,
-                                       "ephy-bookmark-empty");
+                                       "non-starred-symbolic");
+    gtk_style_context_remove_class (context, "starred");
+    gtk_style_context_add_class (context, "non-starred");
   }
 }
 
