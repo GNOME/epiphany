@@ -220,12 +220,6 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
   if (g_sequence_iter_is_end (prev_iter)
       || ephy_bookmark_get_time_added (g_sequence_get (prev_iter)) != ephy_bookmark_get_time_added (bookmark)) {
 
-      g_signal_connect_object (bookmark,
-                               "removed",
-                               G_CALLBACK (ephy_bookmarks_manager_remove_bookmark),
-                               self,
-                               G_CONNECT_SWAPPED);
-
       g_sequence_insert_before (iter, bookmark);
 
       /* Update list */

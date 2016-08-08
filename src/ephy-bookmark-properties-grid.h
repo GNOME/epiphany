@@ -35,8 +35,9 @@ typedef enum {
   EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER
 } EphyBookmarkPropertiesGridType;
 
-GtkWidget *ephy_bookmark_properties_grid_new                (EphyBookmark *bookmark,
-                                                             EphyBookmarkPropertiesGridType type);
+GtkWidget *ephy_bookmark_properties_grid_new                (EphyBookmark                   *bookmark,
+                                                             EphyBookmarkPropertiesGridType  type,
+                                                             GtkWidget                      *parent);
 
 GtkWidget *ephy_bookmark_properties_grid_get_add_tag_button (EphyBookmarkPropertiesGrid *self);
 
