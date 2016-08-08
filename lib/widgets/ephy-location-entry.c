@@ -625,9 +625,6 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 
   LOG ("EphyLocationEntry constructing contents %p", lentry);
 
-  gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (),
-                                    "/org/gnome/epiphany/icons/");
-
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
                                      GTK_ENTRY_ICON_SECONDARY,
                                      "ephy-bookmark-empty");
