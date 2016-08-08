@@ -19,8 +19,8 @@ m4_define([epiphany_version_minor],[21])
 m4_define([epiphany_version_micro],[4])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
-m4_define([epiphany_previous_version_major],[3])
-m4_define([epiphany_previous_version_minor],[20])
+dnl Must be a valid git tag
+m4_define([epiphany_changelog_start],[3.20.0])
 
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 AX_IS_RELEASE([git-directory])
@@ -32,14 +32,14 @@ AC_CONFIG_MACRO_DIRS([m4 libgd])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-AC_SUBST([EPIPHANY_CHANGELOG_START],[epiphany_previous_version_major.epiphany_previous_version_minor.0])
-
 AX_CHECK_ENABLE_DEBUG([yes])
 AX_CODE_COVERAGE
 AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS], [$ax_is_release], [],
 	dnl TODO: Remove! These warnings should be fixed, not silenced.
 	[-Wno-deprecated-declarations])
+
 AX_GENERATE_CHANGELOG
+AC_SUBST([EPIPHANY_CHANGELOG_START],[epiphany_changelog_start])
 
 AC_PROG_CC
 
