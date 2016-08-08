@@ -22,6 +22,15 @@ m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epip
 dnl Must be a valid git tag
 m4_define([epiphany_changelog_start],[3.20.0])
 
+AX_REQUIRE_DEFINED([APPSTREAM_XML])
+AX_REQUIRE_DEFINED([AX_CHECK_ENABLE_DEBUG])
+AX_REQUIRE_DEFINED([AX_CODE_COVERAGE])
+AX_REQUIRE_DEFINED([AX_COMPILER_FLAGS])
+AX_REQUIRE_DEFINED([AX_GENERATE_CHANGELOG])
+AX_REQUIRE_DEFINED([AX_IS_RELEASE])
+AX_REQUIRE_DEFINED([GLIB_GSETTINGS])
+AX_REQUIRE_DEFINED([YELP_HELP_INIT])
+
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 AX_IS_RELEASE([git-directory])
 
@@ -64,13 +73,10 @@ AM_MAINTAINER_MODE([enable])
 LT_PREREQ([2.2])
 LT_INIT([dlopen disable-static])
 
-AX_REQUIRE_DEFINED([APPSTREAM_XML])
 APPSTREAM_XML
 
-AX_REQUIRE_DEFINED([GLIB_GSETTINGS])
 GLIB_GSETTINGS
 
-AX_REQUIRE_DEFINED([YELP_HELP_INIT])
 YELP_HELP_INIT
 
 # Tests
