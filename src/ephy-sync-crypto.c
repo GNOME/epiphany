@@ -793,7 +793,10 @@ ephy_sync_crypto_compute_hawk_header (const gchar               *url,
   g_return_val_if_fail (uri, NULL);
   hostname = soup_uri_get_host (uri);
   port = soup_uri_get_port (uri);
-  resource = soup_uri_get_path (uri);
+  if (soup_uri_get_query (uri) != NULL)
+    resource = g_strdup_printf ("%s?%s", soup_uri_get_path (uri), soup_uri_get_query (uri));
+  else
+    resource = soup_uri_get_path (uri);
 
   if (!hash && payload) {
     const gchar *content_type;
