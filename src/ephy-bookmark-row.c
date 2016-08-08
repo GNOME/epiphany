@@ -63,7 +63,8 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   grid = ephy_bookmark_properties_grid_new (ephy_bookmark_row_get_bookmark (row),
-                                            EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG);
+                                            EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG,
+                                            dialog);
   gtk_window_set_default (GTK_WINDOW (dialog),
                           ephy_bookmark_properties_grid_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES_GRID (grid)));
 
