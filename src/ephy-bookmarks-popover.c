@@ -192,7 +192,7 @@ create_tag_row (const char *tag)
   if (g_strcmp0 (tag, "Favorites") == 0)
     image = gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_MENU);
   else
-    image = gtk_image_new_from_icon_name ("ephy-bookmark-tag", GTK_ICON_SIZE_MENU);
+    image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic", GTK_ICON_SIZE_MENU);
   gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 6);
 
   label = gtk_label_new (tag);

@@ -751,7 +751,7 @@ ephy_toolbar_constructed (GObject *object)
   button = gtk_menu_button_new ();
   toolbar->bookmarks_button = button;
   gtk_button_set_image (GTK_BUTTON (button),
-                        gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_BUTTON));
+                        gtk_image_new_from_icon_name ("ephy-bookmarks-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (ephy_bookmarks_popover_new (toolbar->window)));
 
