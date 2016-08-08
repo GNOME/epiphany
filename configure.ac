@@ -32,7 +32,6 @@ AC_CONFIG_MACRO_DIRS([m4 libgd])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([configure.ac])
 
-AC_SUBST([EPIPHANY_MAJOR],[epiphany_version_major.epiphany_version_minor])
 AC_SUBST([EPIPHANY_CHANGELOG_START],[epiphany_previous_version_major.epiphany_previous_version_minor.0])
 
 AX_CHECK_ENABLE_DEBUG([yes])
