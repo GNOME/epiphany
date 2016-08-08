@@ -58,15 +58,19 @@ build_variant (EphyBookmark *bookmark)
   GSequence *tags;
   GSequenceIter *iter;
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("as"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(xsas)"));
+
+  g_variant_builder_add (&builder, "x", ephy_bookmark_get_time_added (bookmark));
   g_variant_builder_add (&builder, "s", ephy_bookmark_get_title (bookmark));
 
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("as"));
   tags = ephy_bookmark_get_tags (bookmark);
   for (iter = g_sequence_get_begin_iter (tags);
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter)) {
     g_variant_builder_add (&builder, "s", g_sequence_get (iter));
   }
+  g_variant_builder_close (&builder);
 
   return g_variant_builder_end (&builder);
 }
@@ -452,29 +456,29 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
   for (i = 0; i < length; i++) {
     EphyBookmark *bookmark;
     GVariant *value;
-    GVariantIter iter;
+    GVariantIter *iter;
     GSequence *tags;
     char *tag;
     char *title;
+    gint64 time_added;
 
     /* Obtain the correspoding GVariant. */
     value = gvdb_table_get_value (table, list[i]);
 
-    g_variant_iter_init (&iter, value);
-
-    /* The first string in the array is the bookmark's title. */
-    g_variant_iter_next (&iter, "s", &title);
+    g_variant_get (value, "(x&sas)", &time_added, &title, &iter);
 
     /* Add all stored tags in a GSequence. */
     tags = g_sequence_new (g_free);
-    while (g_variant_iter_next (&iter, "s", &tag)) {
+    while (g_variant_iter_next (iter, "s", &tag)) {
       g_sequence_insert_sorted (tags, tag,
                                 (GCompareDataFunc)ephy_bookmark_tags_compare,
                                 NULL);
     }
+    g_variant_iter_free (iter);
 
     /* Create the new bookmark. */
     bookmark = ephy_bookmark_new (g_strdup (list[i]), title, tags);
+    ephy_bookmark_set_time_added (bookmark, time_added);
     ephy_bookmarks_manager_add_bookmark (self, bookmark);
   }
   gvdb_table_free (table);
