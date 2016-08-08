@@ -2156,48 +2156,6 @@ ephy_web_view_load_request (EphyWebView      *view,
   webkit_web_view_load_request (WEBKIT_WEB_VIEW (view), request);
 }
 
-#if 0
-typedef struct {
-  EphyWebView *view;
-  char *original_uri;
-} HEADAttemptData;
-
-static void
-effective_url_head_cb (SoupSession *session,
-                       SoupMessage *message,
-                       gpointer     user_data)
-{
-  HEADAttemptData *data = (HEADAttemptData *)user_data;
-
-  EphyWebView *view = data->view;
-
-  if (message->status_code == SOUP_STATUS_OK) {
-    char *uri = soup_uri_to_string (soup_message_get_uri (message), FALSE);
-
-    webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), uri);
-
-    g_free (uri);
-  } else {
-    GError *error = NULL;
-    GdkScreen *screen;
-
-    screen = gtk_widget_get_screen (GTK_WIDGET (view));
-    gtk_show_uri (screen, data->original_uri, GDK_CURRENT_TIME, &error);
-
-    if (error) {
-      LOG ("failed to handle non web scheme: %s", error->message);
-      g_error_free (error);
-
-      /* Load the original URI to trigger an error in the view. */
-      webkit_web_view_load_uri (WEBKIT_WEB_VIEW (view), data->original_uri);
-    }
-  }
-
-  g_free (data->original_uri);
-  g_slice_free (HEADAttemptData, data);
-}
-#endif
-
 /**
  * ephy_web_view_load_url:
  * @view: an #EphyWebView
