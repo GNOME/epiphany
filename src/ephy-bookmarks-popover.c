@@ -275,9 +275,6 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (),
-                                    "/org/gnome/epiphany/icons/");
-
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), entries,
                                    G_N_ELEMENTS (entries), self);
