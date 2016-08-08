@@ -62,93 +62,63 @@ typedef struct {
 } EphySyncCryptoHawkHeader;
 
 typedef struct {
-  guint8 *tokenID;
-  guint8 *reqHMACkey;
-  guint8 *respHMACkey;
-  guint8 *respXORkey;
-} EphySyncCryptoProcessedKFT;
-
-typedef struct {
-  guint8 *tokenID;
-  guint8 *reqHMACkey;
-  guint8 *requestKey;
-} EphySyncCryptoProcessedST;
-
-typedef struct {
-  guint8 *kA;
-  guint8 *kB;
-  guint8 *wrapKB;
-} EphySyncCryptoSyncKeys;
-
-typedef struct {
   struct rsa_public_key public;
   struct rsa_private_key private;
 } EphySyncCryptoRSAKeyPair;
 
-EphySyncCryptoHawkOptions   *ephy_sync_crypto_hawk_options_new       (gchar *app,
-                                                                      gchar *dlg,
-                                                                      gchar *ext,
-                                                                      gchar *content_type,
-                                                                      gchar *hash,
-                                                                      gchar *local_time_offset,
-                                                                      gchar *nonce,
-                                                                      gchar *payload,
-                                                                      gchar *timestamp);
-
-void                        ephy_sync_crypto_hawk_options_free       (EphySyncCryptoHawkOptions *hawk_options);
-
-void                        ephy_sync_crypto_hawk_header_free        (EphySyncCryptoHawkHeader *hawk_header);
-
-void                        ephy_sync_crypto_processed_kft_free      (EphySyncCryptoProcessedKFT *processed_kft);
-
-void                        ephy_sync_crypto_processed_st_free       (EphySyncCryptoProcessedST *processed_st);
-
-void                        ephy_sync_crypto_sync_keys_free          (EphySyncCryptoSyncKeys *sync_keys);
-
-void                        ephy_sync_crypto_rsa_key_pair_free       (EphySyncCryptoRSAKeyPair *keypair);
-
-EphySyncCryptoProcessedKFT *ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken);
-
-EphySyncCryptoProcessedST  *ephy_sync_crypto_process_session_token   (const gchar *sessionToken);
-
-EphySyncCryptoSyncKeys     *ephy_sync_crypto_retrieve_sync_keys      (const gchar *bundle,
-                                                                      guint8      *respHMACkey,
-                                                                      guint8      *respXORkey,
-                                                                      guint8      *unwrapBKey);
-
-EphySyncCryptoHawkHeader   *ephy_sync_crypto_compute_hawk_header     (const gchar               *url,
-                                                                      const gchar               *method,
-                                                                      const gchar               *id,
-                                                                      guint8                    *key,
-                                                                      gsize                      key_length,
-                                                                      EphySyncCryptoHawkOptions *options);
-
-EphySyncCryptoRSAKeyPair   *ephy_sync_crypto_generate_rsa_key_pair   (void);
-
-gchar                      *ephy_sync_crypto_create_assertion        (const gchar              *certificate,
-                                                                      const gchar              *audience,
-                                                                      guint64                   duration,
-                                                                      EphySyncCryptoRSAKeyPair *keypair);
-
-gchar                      *ephy_sync_crypto_generate_random_string  (gsize length);
-
-gchar                      *ephy_sync_crypto_base64_urlsafe_encode   (guint8   *data,
-                                                                      gsize     data_length,
-                                                                      gboolean  strip);
-
-guint8                     *ephy_sync_crypto_base64_urlsafe_decode   (gchar *text,
-                                                                      gsize *out_length);
-
-guint8                     *ephy_sync_crypto_aes_256                 (EphySyncCryptoAES256Mode  mode,
-                                                                      const guint8             *key,
-                                                                      const guint8             *data,
-                                                                      gsize                     data_length,
-                                                                      gsize                    *out_length);
-
-gchar                      *ephy_sync_crypto_encode_hex              (guint8 *data,
-                                                                      gsize   data_length);
-
-guint8                     *ephy_sync_crypto_decode_hex              (const gchar *hex_string);
+EphySyncCryptoHawkOptions *ephy_sync_crypto_hawk_options_new        (const gchar *app,
+                                                                     const gchar *dlg,
+                                                                     const gchar *ext,
+                                                                     const gchar *content_type,
+                                                                     const gchar *hash,
+                                                                     const gchar *local_time_offset,
+                                                                     const gchar *nonce,
+                                                                     const gchar *payload,
+                                                                     const gchar *timestamp);
+void                       ephy_sync_crypto_hawk_options_free       (EphySyncCryptoHawkOptions *options);
+void                       ephy_sync_crypto_hawk_header_free        (EphySyncCryptoHawkHeader *header);
+void                       ephy_sync_crypto_rsa_key_pair_free       (EphySyncCryptoRSAKeyPair *keypair);
+void                       ephy_sync_crypto_process_key_fetch_token (const gchar  *keyFetchToken,
+                                                                     guint8      **tokenID,
+                                                                     guint8      **reqHMACkey,
+                                                                     guint8      **respHMACkey,
+                                                                     guint8      **respXORkey);
+void                       ephy_sync_crypto_process_session_token   (const gchar  *sessionToken,
+                                                                     guint8      **tokenID,
+                                                                     guint8      **reqHMACkey,
+                                                                     guint8      **requestKey);
+void                       ephy_sync_crypto_compute_sync_keys       (const gchar  *bundle,
+                                                                     guint8       *respHMACkey,
+                                                                     guint8       *respXORkey,
+                                                                     guint8       *unwrapBKey,
+                                                                     guint8      **kA,
+                                                                     guint8      **kB);
+EphySyncCryptoHawkHeader  *ephy_sync_crypto_compute_hawk_header     (const gchar               *url,
+                                                                     const gchar               *method,
+                                                                     const gchar               *id,
+                                                                     guint8                    *key,
+                                                                     gsize                      key_len,
+                                                                     EphySyncCryptoHawkOptions *options);
+EphySyncCryptoRSAKeyPair  *ephy_sync_crypto_generate_rsa_key_pair   (void);
+gchar                     *ephy_sync_crypto_create_assertion        (const gchar              *certificate,
+                                                                     const gchar              *audience,
+                                                                     guint64                   duration,
+                                                                     EphySyncCryptoRSAKeyPair *keypair);
+gchar                     *ephy_sync_crypto_generate_random_hex     (gsize length);
+gchar                     *ephy_sync_crypto_base64_urlsafe_encode   (guint8   *data,
+                                                                     gsize     data_len,
+                                                                     gboolean  strip);
+guint8                    *ephy_sync_crypto_base64_urlsafe_decode   (const gchar *text,
+                                                                     gsize       *out_len,
+                                                                     gboolean     fill);
+guint8                    *ephy_sync_crypto_aes_256                 (EphySyncCryptoAES256Mode  mode,
+                                                                     const guint8             *key,
+                                                                     const guint8             *data,
+                                                                     gsize                     data_len,
+                                                                     gsize                    *out_len);
+gchar                     *ephy_sync_crypto_encode_hex              (guint8 *data,
+                                                                     gsize   data_len);
+guint8                    *ephy_sync_crypto_decode_hex              (const gchar *hex_string);
 
 G_END_DECLS
 

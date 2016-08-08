@@ -36,6 +36,8 @@ void         ephy_bookmarks_manager_remove_bookmark               (EphyBookmarks
                                                                    EphyBookmark         *bookmark);
 EphyBookmark *ephy_bookmarks_manager_get_bookmark_by_url          (EphyBookmarksManager *self,
                                                                    const char           *url);
+EphyBookmark *ephy_bookmarks_manager_get_bookmark_by_id           (EphyBookmarksManager *self,
+                                                                   const char           *id);
 
 void         ephy_bookmarks_manager_create_tag                    (EphyBookmarksManager *self,
                                                                    const char           *tag);

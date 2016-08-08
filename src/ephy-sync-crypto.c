@@ -19,6 +19,8 @@
 #include "config.h"
 #include "ephy-sync-crypto.h"
 
+#include "ephy-sync-utils.h"
+
 #include <glib/gstdio.h>
 #include <libsoup/soup.h>
 #include <nettle/aes.h>
@@ -28,125 +30,74 @@
 
 static const gchar hex_digits[] = "0123456789abcdef";
 
-static guint8 *
-concatenate_bytes (guint8 *first_data,
-                   gsize   first_length,
-                   ...) G_GNUC_NULL_TERMINATED;
-
 EphySyncCryptoHawkOptions *
-ephy_sync_crypto_hawk_options_new (gchar *app,
-                                   gchar *dlg,
-                                   gchar *ext,
-                                   gchar *content_type,
-                                   gchar *hash,
-                                   gchar *local_time_offset,
-                                   gchar *nonce,
-                                   gchar *payload,
-                                   gchar *timestamp)
+ephy_sync_crypto_hawk_options_new (const gchar *app,
+                                   const gchar *dlg,
+                                   const gchar *ext,
+                                   const gchar *content_type,
+                                   const gchar *hash,
+                                   const gchar *local_time_offset,
+                                   const gchar *nonce,
+                                   const gchar *payload,
+                                   const gchar *timestamp)
 {
-  EphySyncCryptoHawkOptions *hawk_options;
+  EphySyncCryptoHawkOptions *options;
 
-  hawk_options = g_slice_new (EphySyncCryptoHawkOptions);
-  hawk_options->app = app;
-  hawk_options->dlg = dlg;
-  hawk_options->ext = ext;
-  hawk_options->content_type = content_type;
-  hawk_options->hash = hash;
-  hawk_options->local_time_offset = local_time_offset;
-  hawk_options->nonce = nonce;
-  hawk_options->payload = payload;
-  hawk_options->timestamp = timestamp;
+  options = g_slice_new (EphySyncCryptoHawkOptions);
+  options->app = g_strdup (app);
+  options->dlg = g_strdup (dlg);
+  options->ext = g_strdup (ext);
+  options->content_type = g_strdup (content_type);
+  options->hash = g_strdup (hash);
+  options->local_time_offset = g_strdup (local_time_offset);
+  options->nonce = g_strdup (nonce);
+  options->payload = g_strdup (payload);
+  options->timestamp = g_strdup (timestamp);
 
-  return hawk_options;
+  return options;
 }
 
 static EphySyncCryptoHawkArtifacts *
-ephy_sync_crypto_hawk_artifacts_new (gchar *app,
-                                     gchar *dlg,
-                                     gchar *ext,
-                                     gchar *hash,
-                                     gchar *host,
-                                     gchar *method,
-                                     gchar *nonce,
-                                     gchar *port,
-                                     gchar *resource,
-                                     gchar *ts)
+
+ephy_sync_crypto_hawk_artifacts_new (const gchar *app,
+                                     const gchar *dlg,
+                                     const gchar *ext,
+                                     const gchar *hash,
+                                     const gchar *host,
+                                     const gchar *method,
+                                     const gchar *nonce,
+                                     guint        port,
+                                     const gchar *resource,
+                                     gint64       ts)
 {
-  EphySyncCryptoHawkArtifacts *hawk_artifacts;
+  EphySyncCryptoHawkArtifacts *artifacts;
 
-  hawk_artifacts = g_slice_new (EphySyncCryptoHawkArtifacts);
-  hawk_artifacts->app = app;
-  hawk_artifacts->dlg = dlg;
-  hawk_artifacts->ext = ext;
-  hawk_artifacts->hash = hash;
-  hawk_artifacts->host = host;
-  hawk_artifacts->method = method;
-  hawk_artifacts->nonce = nonce;
-  hawk_artifacts->port = port;
-  hawk_artifacts->resource = resource;
-  hawk_artifacts->ts = ts;
+  artifacts = g_slice_new (EphySyncCryptoHawkArtifacts);
+  artifacts->app = g_strdup (app);
+  artifacts->dlg = g_strdup (dlg);
+  artifacts->ext = g_strdup (ext);
+  artifacts->hash = g_strdup (hash);
+  artifacts->host = g_strdup (host);
+  artifacts->method = g_strdup (method);
+  artifacts->nonce = g_strdup (nonce);
+  artifacts->port = g_strdup_printf ("%u", port);
+  artifacts->resource = g_strdup (resource);
+  artifacts->ts = g_strdup_printf ("%ld", ts);
 
-  return hawk_artifacts;
+  return artifacts;
 }
 
 static EphySyncCryptoHawkHeader *
 ephy_sync_crypto_hawk_header_new (gchar                       *header,
                                   EphySyncCryptoHawkArtifacts *artifacts)
 {
-  EphySyncCryptoHawkHeader *hawk_header;
+  EphySyncCryptoHawkHeader *hheader;
 
-  hawk_header = g_slice_new (EphySyncCryptoHawkHeader);
-  hawk_header->header = header;
-  hawk_header->artifacts = artifacts;
+  hheader = g_slice_new (EphySyncCryptoHawkHeader);
+  hheader->header = header;
+  hheader->artifacts = artifacts;
 
-  return hawk_header;
-}
-
-static EphySyncCryptoProcessedKFT *
-ephy_sync_crypto_processed_kft_new (guint8 *tokenID,
-                                    guint8 *reqHMACkey,
-                                    guint8 *respHMACkey,
-                                    guint8 *respXORkey)
-{
-  EphySyncCryptoProcessedKFT *processed_kft;
-
-  processed_kft = g_slice_new (EphySyncCryptoProcessedKFT);
-  processed_kft->tokenID = tokenID;
-  processed_kft->reqHMACkey = reqHMACkey;
-  processed_kft->respHMACkey = respHMACkey;
-  processed_kft->respXORkey = respXORkey;
-
-  return processed_kft;
-}
-
-static EphySyncCryptoProcessedST *
-ephy_sync_crypto_processed_st_new (guint8 *tokenID,
-                                   guint8 *reqHMACkey,
-                                   guint8 *requestKey)
-{
-  EphySyncCryptoProcessedST *processed_st;
-
-  processed_st = g_slice_new (EphySyncCryptoProcessedST);
-  processed_st->tokenID = tokenID;
-  processed_st->reqHMACkey = reqHMACkey;
-  processed_st->requestKey = requestKey;
-
-  return processed_st;
-}
-
-static EphySyncCryptoSyncKeys *
-ephy_sync_crypto_sync_keys_new (guint8 *kA,
-                                guint8 *kB,
-                                guint8 *wrapKB)
-{
-  EphySyncCryptoSyncKeys *sync_keys;
-
-  sync_keys = g_slice_new (EphySyncCryptoSyncKeys);
-  sync_keys->kA = kA;
-  sync_keys->kB = kB;
-  sync_keys->wrapKB = wrapKB;
-
-  return sync_keys;
+  return hheader;
 }
 
 static EphySyncCryptoRSAKeyPair *
@@ -163,88 +114,51 @@ ephy_sync_crypto_rsa_key_pair_new (struct rsa_public_key  public,
 }
 
 void
-ephy_sync_crypto_hawk_options_free (EphySyncCryptoHawkOptions *hawk_options)
+ephy_sync_crypto_hawk_options_free (EphySyncCryptoHawkOptions *options)
 {
-  g_return_if_fail (hawk_options != NULL);
+  g_return_if_fail (options != NULL);
 
-  g_free (hawk_options->app);
-  g_free (hawk_options->dlg);
-  g_free (hawk_options->ext);
-  g_free (hawk_options->content_type);
-  g_free (hawk_options->hash);
-  g_free (hawk_options->local_time_offset);
-  g_free (hawk_options->nonce);
-  g_free (hawk_options->payload);
-  g_free (hawk_options->timestamp);
+  g_free (options->app);
+  g_free (options->dlg);
+  g_free (options->ext);
+  g_free (options->content_type);
+  g_free (options->hash);
+  g_free (options->local_time_offset);
+  g_free (options->nonce);
+  g_free (options->payload);
+  g_free (options->timestamp);
 
-  g_slice_free (EphySyncCryptoHawkOptions, hawk_options);
+  g_slice_free (EphySyncCryptoHawkOptions, options);
 }
 
 static void
-ephy_sync_crypto_hawk_artifacts_free (EphySyncCryptoHawkArtifacts *hawk_artifacts)
+ephy_sync_crypto_hawk_artifacts_free (EphySyncCryptoHawkArtifacts *artifacts)
 {
-  g_return_if_fail (hawk_artifacts != NULL);
+  g_return_if_fail (artifacts != NULL);
 
-  g_free (hawk_artifacts->app);
-  g_free (hawk_artifacts->dlg);
-  g_free (hawk_artifacts->ext);
-  g_free (hawk_artifacts->hash);
-  g_free (hawk_artifacts->host);
-  g_free (hawk_artifacts->method);
-  g_free (hawk_artifacts->nonce);
-  g_free (hawk_artifacts->port);
-  g_free (hawk_artifacts->resource);
-  g_free (hawk_artifacts->ts);
+  g_free (artifacts->app);
+  g_free (artifacts->dlg);
+  g_free (artifacts->ext);
+  g_free (artifacts->hash);
+  g_free (artifacts->host);
+  g_free (artifacts->method);
+  g_free (artifacts->nonce);
+  g_free (artifacts->port);
+  g_free (artifacts->resource);
+  g_free (artifacts->ts);
 
-  g_slice_free (EphySyncCryptoHawkArtifacts, hawk_artifacts);
+  g_slice_free (EphySyncCryptoHawkArtifacts, artifacts);
 }
 
 void
-ephy_sync_crypto_hawk_header_free (EphySyncCryptoHawkHeader *hawk_header)
+ephy_sync_crypto_hawk_header_free (EphySyncCryptoHawkHeader *hheader)
 {
-  g_return_if_fail (hawk_header != NULL);
+  g_return_if_fail (hheader != NULL);
 
-  g_free (hawk_header->header);
-  ephy_sync_crypto_hawk_artifacts_free (hawk_header->artifacts);
+  g_free (hheader->header);
+  ephy_sync_crypto_hawk_artifacts_free (hheader->artifacts);
 
-  g_slice_free (EphySyncCryptoHawkHeader, hawk_header);
-}
-
-void
-ephy_sync_crypto_processed_kft_free (EphySyncCryptoProcessedKFT *processed_kft)
-{
-  g_return_if_fail (processed_kft != NULL);
-
-  g_free (processed_kft->tokenID);
-  g_free (processed_kft->reqHMACkey);
-  g_free (processed_kft->respHMACkey);
-  g_free (processed_kft->respXORkey);
-
-  g_slice_free (EphySyncCryptoProcessedKFT, processed_kft);
-}
-
-void
-ephy_sync_crypto_processed_st_free (EphySyncCryptoProcessedST *processed_st)
-{
-  g_return_if_fail (processed_st != NULL);
-
-  g_free (processed_st->tokenID);
-  g_free (processed_st->reqHMACkey);
-  g_free (processed_st->requestKey);
-
-  g_slice_free (EphySyncCryptoProcessedST, processed_st);
-}
-
-void
-ephy_sync_crypto_sync_keys_free (EphySyncCryptoSyncKeys *sync_keys)
-{
-  g_return_if_fail (sync_keys != NULL);
-
-  g_free (sync_keys->kA);
-  g_free (sync_keys->kB);
-  g_free (sync_keys->wrapKB);
-
-  g_slice_free (EphySyncCryptoSyncKeys, sync_keys);
+  g_slice_free (EphySyncCryptoHawkHeader, hheader);
 }
 
 void
@@ -259,17 +173,22 @@ ephy_sync_crypto_rsa_key_pair_free (EphySyncCryptoRSAKeyPair *keypair)
 }
 
 static gchar *
-kw (const gchar *name)
+ephy_sync_crypto_kw (const gchar *name)
 {
+  g_return_val_if_fail (name != NULL, NULL);
+
   return g_strconcat ("identity.mozilla.com/picl/v1/", name, NULL);
 }
 
 static guint8 *
-xor (guint8 *a,
-     guint8 *b,
-     gsize   length)
+ephy_sync_crypto_xor (guint8 *a,
+                      guint8 *b,
+                      gsize   length)
 {
   guint8 *xored;
+
+  g_return_val_if_fail (a != NULL, NULL);
+  g_return_val_if_fail (b != NULL, NULL);
 
   xored = g_malloc (length);
   for (gsize i = 0; i < length; i++)
@@ -279,54 +198,23 @@ xor (guint8 *a,
 }
 
 static gboolean
-are_equal (guint8 *a,
-           guint8 *b)
+ephy_sync_crypto_equals (guint8 *a,
+                         guint8 *b,
+                         gsize   length)
 {
-  gchar *a_hex;
-  gchar *b_hex;
-  gboolean retval;
+  g_return_val_if_fail (a != NULL, FALSE);
+  g_return_val_if_fail (b != NULL, FALSE);
 
-  a_hex = ephy_sync_crypto_encode_hex (a, 0);
-  b_hex = ephy_sync_crypto_encode_hex (b, 0);
-  retval = g_str_equal (a_hex, b_hex);
+  for (gsize i = 0; i < length; i++)
+    if (a[i] != b[i])
+      return FALSE;
 
-  g_free (a_hex);
-  g_free (b_hex);
-
-  return retval;
+  return TRUE;
 }
 
 static gchar *
-find_and_replace_string (const gchar *src,
-                         const gchar *find,
-                         const gchar *repl)
-{
-  const gchar *haystack = src;
-  const gchar *needle = NULL;
-  gsize haystack_length = strlen (src);
-  gsize find_length = strlen (find);
-  gsize repl_length = strlen (repl);
-  gsize new_length = 0;
-  gsize skip_length = 0;
-  gchar *new = g_malloc (haystack_length + 1);
-
-  while ((needle = g_strstr_len (haystack, -1, find)) != NULL) {
-    haystack_length += find_length - repl_length;
-    new = g_realloc (new, haystack_length + 1);
-    skip_length = needle - haystack;
-    memcpy (new + new_length, haystack, skip_length);
-    memcpy (new + new_length + skip_length, repl, repl_length);
-    new_length += skip_length + repl_length;
-    haystack = needle + find_length;
-  }
-  strcpy (new + new_length, haystack);
-
-  return new;
-}
-
-static gchar *
-normalize_string (const gchar                 *mac_type,
-                  EphySyncCryptoHawkArtifacts *artifacts)
+ephy_sync_crypto_normalize_string (const gchar                 *type,
+                                   EphySyncCryptoHawkArtifacts *artifacts)
 {
   gchar *host;
   gchar *info;
@@ -335,27 +223,22 @@ normalize_string (const gchar                 *mac_type,
   gchar *normalized;
   gchar *tmp;
 
-  g_return_val_if_fail (mac_type, NULL);
-  g_return_val_if_fail (artifacts, NULL);
+  g_return_val_if_fail (type != NULL, NULL);
+  g_return_val_if_fail (artifacts != NULL, NULL);
 
-  info = g_strdup_printf ("hawk.%d.%s", HAWK_VERSION, mac_type);
+  info = g_strdup_printf ("hawk.%d.%s", HAWK_VERSION, type);
   method = g_ascii_strup (artifacts->method, -1);
   host = g_ascii_strdown (artifacts->host, -1);
 
   normalized = g_strjoin ("\n",
-                          info,
-                          artifacts->ts,
-                          artifacts->nonce,
-                          method,
-                          artifacts->resource,
-                          host,
-                          artifacts->port,
-                          artifacts->hash ? artifacts->hash : "",
+                          info, artifacts->ts, artifacts->nonce,
+                          method, artifacts->resource, host,
+                          artifacts->port, artifacts->hash ? artifacts->hash : "",
                           NULL);
 
   if (artifacts->ext && strlen (artifacts->ext) > 0) {
-    tmp = find_and_replace_string (artifacts->ext, "\\", "\\\\");
-    n_ext = find_and_replace_string (tmp, "\n", "\\n");
+    tmp = ephy_sync_utils_find_and_replace (artifacts->ext, "\\", "\\\\");
+    n_ext = ephy_sync_utils_find_and_replace (tmp, "\n", "\\n");
     g_free (tmp);
   }
 
@@ -378,10 +261,12 @@ normalize_string (const gchar                 *mac_type,
 }
 
 static gchar *
-parse_content_type (const gchar *content_type)
+ephy_sync_crypto_parse_content_type (const gchar *content_type)
 {
   gchar **tokens;
   gchar *retval;
+
+  g_return_val_if_fail (content_type != NULL, NULL);
 
   tokens = g_strsplit (content_type, ";", -1);
   retval = g_ascii_strdown (g_strstrip (tokens[0]), -1);
@@ -391,8 +276,8 @@ parse_content_type (const gchar *content_type)
 }
 
 static gchar *
-calculate_payload_hash (const gchar *payload,
-                        const gchar *content_type)
+ephy_sync_crypto_calculate_payload_hash (const gchar *payload,
+                                         const gchar *content_type)
 {
   guint8 *digest;
   gchar *digest_hex;
@@ -400,14 +285,12 @@ calculate_payload_hash (const gchar *payload,
   gchar *update;
   gchar *hash;
 
-  g_return_val_if_fail (payload, NULL);
-  g_return_val_if_fail (content_type, NULL);
+  g_return_val_if_fail (payload != NULL, NULL);
+  g_return_val_if_fail (content_type != NULL, NULL);
 
-  content = parse_content_type (content_type);
+  content = ephy_sync_crypto_parse_content_type (content_type);
   update = g_strdup_printf ("hawk.%d.payload\n%s\n%s\n",
-                            HAWK_VERSION,
-                            content,
-                            payload);
+                            HAWK_VERSION, content, payload);
 
   digest_hex = g_compute_checksum_for_string (G_CHECKSUM_SHA256, update, -1);
   digest = ephy_sync_crypto_decode_hex (digest_hex);
@@ -422,24 +305,22 @@ calculate_payload_hash (const gchar *payload,
 }
 
 static gchar *
-calculate_mac (const gchar                 *mac_type,
-               guint8                      *key,
-               gsize                        key_length,
-               EphySyncCryptoHawkArtifacts *artifacts)
+ephy_sync_crypto_calculate_mac (const gchar                 *type,
+                                guint8                      *key,
+                                gsize                        key_len,
+                                EphySyncCryptoHawkArtifacts *artifacts)
 {
   guint8 *digest;
   gchar *digest_hex;
   gchar *normalized;
   gchar *mac;
 
-  g_return_val_if_fail (mac_type, NULL);
-  g_return_val_if_fail (key, NULL);
-  g_return_val_if_fail (artifacts, NULL);
+  g_return_val_if_fail (type != NULL, NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+  g_return_val_if_fail (artifacts != NULL, NULL);
 
-  normalized = normalize_string (mac_type, artifacts);
-  digest_hex = g_compute_hmac_for_string (G_CHECKSUM_SHA256,
-                                          key, key_length,
-                                          normalized, -1);
+  normalized = ephy_sync_crypto_normalize_string (type, artifacts);
+  digest_hex = g_compute_hmac_for_string (G_CHECKSUM_SHA256, key, key_len, normalized, -1);
   digest = ephy_sync_crypto_decode_hex (digest_hex);
   mac = g_base64_encode (digest, g_checksum_type_get_length (G_CHECKSUM_SHA256));
 
@@ -451,66 +332,33 @@ calculate_mac (const gchar                 *mac_type,
 }
 
 static gchar *
-append_token_to_header (gchar       *header,
-                        const gchar *token_name,
-                        gchar       *token_value)
+ephy_sync_crypto_append_to_header (gchar       *header,
+                                   const gchar *name,
+                                   gchar       *value)
 {
   gchar *new_header;
   gchar *tmp;
 
+  g_return_val_if_fail (header != NULL, NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+  g_return_val_if_fail (value != NULL, NULL);
+
   tmp = header;
-  new_header = g_strconcat (header, ", ",
-                            token_name, "=\"",
-                            token_value, "\"",
-                            NULL);
+  new_header = g_strconcat (header, ", ", name, "=\"", value, "\"", NULL);
   g_free (tmp);
 
   return new_header;
 }
 
-static guint8 *
-concatenate_bytes (guint8 *first_data,
-                   gsize   first_length,
-                   ...)
-{
-  va_list args;
-  guint8 *data;
-  guint8 *out;
-  gsize length;
-  gsize out_length;
-
-  out_length = first_length;
-  out = g_malloc (out_length);
-  memcpy (out, first_data, out_length);
-
-  va_start (args, first_length);
-
-  while ((data = va_arg (args, guint8 *)) != NULL) {
-    length = va_arg (args, gsize);
-    out = g_realloc (out, out_length + length);
-    memcpy (out + out_length, data, length);
-    out_length += length;
-  }
-
-  va_end (args);
-
-  return out;
-}
-
-/*
- * HMAC-based Extract-and-Expand Key Derivation Function.
- * Uses sha256 as hash function.
- * https://tools.ietf.org/html/rfc5869
- */
 static void
-hkdf (guint8 *in,
-      gsize   in_length,
-      guint8 *salt,
-      gsize   salt_length,
-      guint8 *info,
-      gsize   info_length,
-      guint8 *out,
-      gsize   out_length)
+ephy_sync_crypto_hkdf (guint8 *in,
+                       gsize   in_len,
+                       guint8 *salt,
+                       gsize   salt_len,
+                       guint8 *info,
+                       gsize   info_len,
+                       guint8 *out,
+                       gsize   out_len)
 {
   gchar *prk_hex;
   gchar *tmp_hex;
@@ -519,56 +367,53 @@ hkdf (guint8 *in,
   guint8 *out_full;
   guint8 *data;
   guint8 counter;
-  gsize hash_length;
-  gsize data_length;
+  gsize hash_len;
+  gsize data_len;
   gsize n;
 
-  hash_length = g_checksum_type_get_length (G_CHECKSUM_SHA256);
-  g_assert (out_length <= hash_length * 255);
+  g_return_if_fail (in != NULL);
+  g_return_if_fail (info != NULL);
+  g_return_if_fail (out != NULL);
 
-  /* If salt value was not provided, use an array of hash_length zeros */
+  hash_len = g_checksum_type_get_length (G_CHECKSUM_SHA256);
+  g_assert (out_len <= hash_len * 255);
+
+  /* If salt value was not provided, use an array of hash_len zeros */
   if (salt == NULL) {
-    salt = g_malloc0 (hash_length);
-    salt_length = hash_length;
+    salt = g_malloc0 (hash_len);
+    salt_len = hash_len;
   }
 
   /* Step 1: Extract */
-  prk_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
-                                     salt, salt_length,
-                                     in, in_length);
+  prk_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256, salt, salt_len, in, in_len);
   prk = ephy_sync_crypto_decode_hex (prk_hex);
 
   /* Step 2: Expand */
   counter = 1;
-  n = (out_length + hash_length - 1) / hash_length;
-  out_full = g_malloc (n * hash_length);
+  n = (out_len + hash_len - 1) / hash_len;
+  out_full = g_malloc (n * hash_len);
 
   for (gsize i = 0; i < n; i++, counter++) {
     if (i == 0) {
-      data = concatenate_bytes (info, info_length,
-                                &counter, 1,
-                                NULL);
-      data_length = info_length + 1;
+      data = ephy_sync_utils_concatenate_bytes (info, info_len, &counter, 1, NULL);
+      data_len = info_len + 1;
     } else {
-      data = concatenate_bytes (out_full + (i - 1) * hash_length, hash_length,
-                                info, info_length,
-                                &counter, 1,
-                                NULL);
-      data_length = hash_length + info_length + 1;
+      data = ephy_sync_utils_concatenate_bytes (out_full + (i - 1) * hash_len, hash_len,
+                                                info, info_len, &counter, 1,
+                                                NULL);
+      data_len = hash_len + info_len + 1;
     }
 
-    tmp_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
-                                       prk, hash_length,
-                                       data, data_length);
+    tmp_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256, prk, hash_len, data, data_len);
     tmp = ephy_sync_crypto_decode_hex (tmp_hex);
-    memcpy (out_full + i * hash_length, tmp, hash_length);
+    memcpy (out_full + i * hash_len, tmp, hash_len);
 
     g_free (data);
     g_free (tmp);
     g_free (tmp_hex);
   }
 
-  memcpy (out, out_full, out_length);
+  memcpy (out, out_full, out_len);
 
   g_free (prk_hex);
   g_free (salt);
@@ -577,71 +422,81 @@ hkdf (guint8 *in,
 }
 
 static void
-random_func (void   *ctx,
-             gsize   length,
-             guint8 *dst)
+ephy_sync_crypto_random_gen (void   *ctx,
+                             gsize   length,
+                             guint8 *dst)
 {
   for (gsize i = 0; i < length; i++)
     dst[i] = g_random_int ();
 }
 
 static void
-base64_to_base64_urlsafe (gchar *text)
+ephy_sync_crypto_b64_to_b64_urlsafe (gchar *text)
 {
+  g_return_if_fail (text != NULL);
+
   /* Replace '+' with '-' and '/' with '_' */
   g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=/", '-');
   g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=-", '_');
 }
 
 static void
-base64_urlsafe_to_base64 (gchar *text)
+ephy_sync_crypto_b64_urlsafe_to_b64 (gchar *text)
 {
+  g_return_if_fail (text != NULL);
+
   /* Replace '-' with '+' and '_' with '/' */
   g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=_", '+');
   g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=+", '/');
 }
 
-EphySyncCryptoProcessedKFT *
-ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken)
+void
+ephy_sync_crypto_process_key_fetch_token (const gchar  *keyFetchToken,
+                                          guint8      **tokenID,
+                                          guint8      **reqHMACkey,
+                                          guint8      **respHMACkey,
+                                          guint8      **respXORkey)
 {
   guint8 *kft;
   guint8 *out1;
   guint8 *out2;
-  guint8 *tokenID;
-  guint8 *reqHMACkey;
-  guint8 *respHMACkey;
-  guint8 *respXORkey;
   guint8 *keyRequestKey;
   gchar *info_kft;
   gchar *info_keys;
 
+  g_return_if_fail (keyFetchToken != NULL);
+  g_return_if_fail (tokenID != NULL);
+  g_return_if_fail (reqHMACkey != NULL);
+  g_return_if_fail (respHMACkey != NULL);
+  g_return_if_fail (respXORkey != NULL);
+
   kft = ephy_sync_crypto_decode_hex (keyFetchToken);
-  info_kft = kw ("keyFetchToken");
-  info_keys = kw ("account/keys");
+  info_kft = ephy_sync_crypto_kw ("keyFetchToken");
+  info_keys = ephy_sync_crypto_kw ("account/keys");
   out1 = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
   out2 = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
 
-  hkdf (kft, EPHY_SYNC_TOKEN_LENGTH,
-        NULL, 0,
-        (guint8 *) info_kft, strlen (info_kft),
-        out1, 3 * EPHY_SYNC_TOKEN_LENGTH);
+  ephy_sync_crypto_hkdf (kft, EPHY_SYNC_TOKEN_LENGTH,
+                         NULL, 0,
+                         (guint8 *) info_kft, strlen (info_kft),
+                         out1, 3 * EPHY_SYNC_TOKEN_LENGTH);
 
-  tokenID = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  reqHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  *tokenID = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  *reqHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
   keyRequestKey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (tokenID, out1, EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (reqHMACkey, out1 + EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (*tokenID, out1, EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (*reqHMACkey, out1 + EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
   memcpy (keyRequestKey, out1 + 2 * EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
 
-  hkdf (keyRequestKey, EPHY_SYNC_TOKEN_LENGTH,
-        NULL, 0,
-        (guint8 *) info_keys, strlen (info_keys),
-        out2, 3 * EPHY_SYNC_TOKEN_LENGTH);
+  ephy_sync_crypto_hkdf (keyRequestKey, EPHY_SYNC_TOKEN_LENGTH,
+                         NULL, 0,
+                         (guint8 *) info_keys, strlen (info_keys),
+                         out2, 3 * EPHY_SYNC_TOKEN_LENGTH);
 
-  respHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  respXORkey = g_malloc (2 * EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (respHMACkey, out2, EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (respXORkey, out2 + EPHY_SYNC_TOKEN_LENGTH, 2 * EPHY_SYNC_TOKEN_LENGTH);
+  *respHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  *respXORkey = g_malloc (2 * EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (*respHMACkey, out2, EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (*respXORkey, out2 + EPHY_SYNC_TOKEN_LENGTH, 2 * EPHY_SYNC_TOKEN_LENGTH);
 
   g_free (kft);
   g_free (out1);
@@ -649,53 +504,51 @@ ephy_sync_crypto_process_key_fetch_token (const gchar *keyFetchToken)
   g_free (info_kft);
   g_free (info_keys);
   g_free (keyRequestKey);
-
-  return ephy_sync_crypto_processed_kft_new (tokenID,
-                                             reqHMACkey,
-                                             respHMACkey,
-                                             respXORkey);
 }
 
-EphySyncCryptoProcessedST *
-ephy_sync_crypto_process_session_token (const gchar *sessionToken)
+void
+ephy_sync_crypto_process_session_token (const gchar  *sessionToken,
+                                        guint8      **tokenID,
+                                        guint8      **reqHMACkey,
+                                        guint8      **requestKey)
 {
   guint8 *st;
   guint8 *out;
-  guint8 *tokenID;
-  guint8 *reqHMACkey;
-  guint8 *requestKey;
   gchar *info;
 
+  g_return_if_fail (sessionToken != NULL);
+  g_return_if_fail (tokenID != NULL);
+  g_return_if_fail (reqHMACkey != NULL);
+  g_return_if_fail (requestKey != NULL);
+
   st = ephy_sync_crypto_decode_hex (sessionToken);
-  info = kw ("sessionToken");
+  info = ephy_sync_crypto_kw ("sessionToken");
   out = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
 
-  hkdf (st, EPHY_SYNC_TOKEN_LENGTH,
-        NULL, 0,
-        (guint8 *) info, strlen (info),
-        out, 3 * EPHY_SYNC_TOKEN_LENGTH);
+  ephy_sync_crypto_hkdf (st, EPHY_SYNC_TOKEN_LENGTH,
+                         NULL, 0,
+                         (guint8 *) info, strlen (info),
+                         out, 3 * EPHY_SYNC_TOKEN_LENGTH);
 
-  tokenID = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  reqHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  requestKey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (tokenID, out, EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (reqHMACkey, out + EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (requestKey, out + 2 * EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
+  *tokenID = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  *reqHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  *requestKey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (*tokenID, out, EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (*reqHMACkey, out + EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (*requestKey, out + 2 * EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
 
   g_free (st);
   g_free (out);
   g_free (info);
-
-  return ephy_sync_crypto_processed_st_new (tokenID,
-                                            reqHMACkey,
-                                            requestKey);
 }
 
-EphySyncCryptoSyncKeys *
-ephy_sync_crypto_retrieve_sync_keys (const gchar *bundle,
-                                     guint8      *respHMACkey,
-                                     guint8      *respXORkey,
-                                     guint8      *unwrapBKey)
+void
+ephy_sync_crypto_compute_sync_keys (const gchar  *bundle,
+                                    guint8       *respHMACkey,
+                                    guint8       *respXORkey,
+                                    guint8       *unwrapBKey,
+                                    guint8      **kA,
+                                    guint8      **kB)
 {
   guint8 *bdl;
   guint8 *ciphertext;
@@ -703,16 +556,20 @@ ephy_sync_crypto_retrieve_sync_keys (const gchar *bundle,
   guint8 *respMAC2;
   guint8 *xored;
   guint8 *wrapKB;
-  guint8 *kA;
-  guint8 *kB;
   gchar *respMAC2_hex;
-  EphySyncCryptoSyncKeys *retval = NULL;
+
+  g_return_if_fail (bundle != NULL);
+  g_return_if_fail (respHMACkey != NULL);
+  g_return_if_fail (respXORkey != NULL);
+  g_return_if_fail (unwrapBKey != NULL);
+  g_return_if_fail (kA != NULL);
+  g_return_if_fail (kB != NULL);
 
   bdl = ephy_sync_crypto_decode_hex (bundle);
   ciphertext = g_malloc (2 * EPHY_SYNC_TOKEN_LENGTH);
   respMAC = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
   wrapKB = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  kA = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
+  *kA = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
 
   memcpy (ciphertext, bdl, 2 * EPHY_SYNC_TOKEN_LENGTH);
   memcpy (respMAC, bdl + 2 * EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
@@ -720,27 +577,20 @@ ephy_sync_crypto_retrieve_sync_keys (const gchar *bundle,
                                           respHMACkey, EPHY_SYNC_TOKEN_LENGTH,
                                           ciphertext, 2 * EPHY_SYNC_TOKEN_LENGTH);
   respMAC2 = ephy_sync_crypto_decode_hex (respMAC2_hex);
+  g_assert (ephy_sync_crypto_equals (respMAC, respMAC2, EPHY_SYNC_TOKEN_LENGTH) == TRUE);
 
-  if (are_equal (respMAC, respMAC2) == FALSE) {
-    g_warning ("respMAC and respMAC2 differ");
-    goto out;
-  }
-
-  xored = xor (ciphertext, respXORkey, 2 * EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (kA, xored, EPHY_SYNC_TOKEN_LENGTH);
+  xored = ephy_sync_crypto_xor (ciphertext, respXORkey, 2 * EPHY_SYNC_TOKEN_LENGTH);
+  memcpy (*kA, xored, EPHY_SYNC_TOKEN_LENGTH);
   memcpy (wrapKB, xored + EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
-  kB = xor (unwrapBKey, wrapKB, EPHY_SYNC_TOKEN_LENGTH);
-  retval = ephy_sync_crypto_sync_keys_new (kA, kB, wrapKB);
+  *kB = ephy_sync_crypto_xor (unwrapBKey, wrapKB, EPHY_SYNC_TOKEN_LENGTH);
 
-out:
   g_free (bdl);
   g_free (ciphertext);
   g_free (respMAC);
   g_free (respMAC2);
-  g_free (respMAC2_hex);
   g_free (xored);
-
-  return retval;
+  g_free (wrapKB);
+  g_free (respMAC2_hex);
 }
 
 EphySyncCryptoHawkHeader *
@@ -748,14 +598,12 @@ ephy_sync_crypto_compute_hawk_header (const gchar               *url,
                                       const gchar               *method,
                                       const gchar               *id,
                                       guint8                    *key,
-                                      gsize                      key_length,
+                                      gsize                      key_len,
                                       EphySyncCryptoHawkOptions *options)
 {
   EphySyncCryptoHawkArtifacts *artifacts;
   SoupURI *uri;
-  gboolean has_options;
-  const gchar *hostname;
-  const gchar *resource;
+  gchar *resource;
   gchar *hash;
   gchar *header;
   gchar *mac;
@@ -763,91 +611,86 @@ ephy_sync_crypto_compute_hawk_header (const gchar               *url,
   gchar *payload;
   gchar *timestamp;
   gint64 ts;
-  guint port;
 
-  g_return_val_if_fail (url && strlen (url) > 0, NULL);
-  g_return_val_if_fail (method && strlen (method) > 0, NULL);
-  g_return_val_if_fail (id && strlen (id) > 0, NULL);
-  g_return_val_if_fail (key, NULL);
+  g_return_val_if_fail (url != NULL, NULL);
+  g_return_val_if_fail (method != NULL, NULL);
+  g_return_val_if_fail (id != NULL, NULL);
+  g_return_val_if_fail (key != NULL, NULL);
 
-  has_options = options != NULL;
-  ts = g_get_real_time () / 1000000;
+  ts = ephy_sync_utils_current_time_seconds ();
+  nonce = options && options->nonce ? options->nonce : ephy_sync_crypto_generate_random_hex (6);
+  hash = options ? options->hash : NULL;
+  payload = options ? options->payload : NULL;
+  timestamp = options ? options->timestamp : NULL;
+  uri = soup_uri_new (url);
+  resource = (gchar *) soup_uri_get_path (uri);
 
-  timestamp = has_options ? options->timestamp : NULL;
-  if (timestamp) {
+  if (soup_uri_get_query (uri) != NULL)
+    resource = g_strconcat (resource, "?", soup_uri_get_query (uri), NULL);
+
+  if (timestamp != NULL) {
     gchar *local_time_offset;
     gint64 offset;
 
-    local_time_offset = has_options ? options->local_time_offset : NULL;
+    local_time_offset = options ? options->local_time_offset : NULL;
     offset = local_time_offset ? g_ascii_strtoll (local_time_offset, NULL, 10) : 0;
-
     ts = g_ascii_strtoll (timestamp, NULL, 10) + offset;
   }
 
-  nonce = has_options ? options->nonce : NULL;
-  nonce = nonce ? nonce : ephy_sync_crypto_generate_random_string (6);
-  hash = has_options ? options->hash : NULL;
-  payload = has_options ? options->payload : NULL;
-
-  uri = soup_uri_new (url);
-  g_return_val_if_fail (uri, NULL);
-  hostname = soup_uri_get_host (uri);
-  port = soup_uri_get_port (uri);
-  if (soup_uri_get_query (uri) != NULL)
-    resource = g_strdup_printf ("%s?%s", soup_uri_get_path (uri), soup_uri_get_query (uri));
-  else
-    resource = soup_uri_get_path (uri);
-
-  if (!hash && payload) {
-    const gchar *content_type;
-
-    content_type = has_options ? options->content_type : "text/plain";
-    hash = calculate_payload_hash (payload, content_type);
+  if (hash == NULL && payload != NULL) {
+    const gchar *content_type = options ? options->content_type : "text/plain";
+    hash = ephy_sync_crypto_calculate_payload_hash (payload, content_type);
   }
 
-  artifacts = ephy_sync_crypto_hawk_artifacts_new (has_options ? options->app : NULL,
-                                                   has_options ? options->dlg : NULL,
-                                                   has_options ? options->ext : NULL,
+  artifacts = ephy_sync_crypto_hawk_artifacts_new (options ? options->app : NULL,
+                                                   options ? options->dlg : NULL,
+                                                   options ? options->ext : NULL,
                                                    hash,
-                                                   g_strdup (hostname),
-                                                   g_strdup (method),
+                                                   soup_uri_get_host (uri),
+                                                   method,
                                                    nonce,
-                                                   g_strdup_printf ("%u", port),
-                                                   g_strdup (resource),
-                                                   g_strdup_printf ("%ld", ts));
+                                                   soup_uri_get_port (uri),
+                                                   resource,
+                                                   ts);
 
-  mac = calculate_mac ("header", key, key_length, artifacts);
+  mac = ephy_sync_crypto_calculate_mac ("header", key, key_len, artifacts);
 
   header = g_strconcat ("Hawk id=\"", id, "\"",
                         ", ts=\"", artifacts->ts, "\"",
                         ", nonce=\"", artifacts->nonce, "\"",
                         NULL);
 
-  if (artifacts->hash && strlen (artifacts->hash) > 0)
-    header = append_token_to_header (header, "hash", artifacts->hash);
+  if (artifacts->hash != NULL && strlen (artifacts->hash) > 0)
+    header = ephy_sync_crypto_append_to_header (header, "hash", artifacts->hash);
 
-  if (artifacts->ext && strlen (artifacts->ext) > 0) {
+  if (artifacts->ext != NULL && strlen (artifacts->ext) > 0) {
     gchar *h_ext;
     gchar *tmp_ext;
 
-    tmp_ext = find_and_replace_string (artifacts->ext, "\\", "\\\\");
-    h_ext = find_and_replace_string (tmp_ext, "\n", "\\n");
-    header = append_token_to_header (header, "ext", h_ext);
+    tmp_ext = ephy_sync_utils_find_and_replace (artifacts->ext, "\\", "\\\\");
+    h_ext = ephy_sync_utils_find_and_replace (tmp_ext, "\n", "\\n");
+    header = ephy_sync_crypto_append_to_header (header, "ext", h_ext);
 
     g_free (h_ext);
     g_free (tmp_ext);
   }
 
-  header = append_token_to_header (header, "mac", mac);
+  header = ephy_sync_crypto_append_to_header (header, "mac", mac);
 
-  if (artifacts->app) {
-    header = append_token_to_header (header, "app", artifacts->app);
+  if (artifacts->app != NULL) {
+    header = ephy_sync_crypto_append_to_header (header, "app", artifacts->app);
 
-    if (artifacts->dlg)
-      header = append_token_to_header (header, "dlg", artifacts->dlg);
+    if (artifacts->dlg != NULL)
+      header = ephy_sync_crypto_append_to_header (header, "dlg", artifacts->dlg);
   }
 
   soup_uri_free (uri);
+
+  if (options == NULL || options->nonce == NULL)
+    g_free (nonce);
+
+  if (soup_uri_get_query (uri) != NULL)
+    g_free (resource);
 
   return ephy_sync_crypto_hawk_header_new (header, artifacts);
 }
@@ -867,7 +710,7 @@ ephy_sync_crypto_generate_rsa_key_pair (void)
 
   /* Key sizes below 2048 are considered breakable and should not be used */
   retval = rsa_generate_keypair (&public, &private,
-                                 NULL, random_func,
+                                 NULL, ephy_sync_crypto_random_gen,
                                  NULL, NULL, 2048, 0);
   if (retval == 0) {
     g_warning ("Failed to generate RSA key pair");
@@ -900,6 +743,10 @@ ephy_sync_crypto_create_assertion (const gchar              *certificate,
   gsize expected_size;
   gsize count;
 
+  g_return_val_if_fail (certificate != NULL, NULL);
+  g_return_val_if_fail (audience != NULL, NULL);
+  g_return_val_if_fail (keypair != NULL, NULL);
+
   expires_at = g_get_real_time () / 1000 + duration * 1000;
   body = g_strdup_printf ("{\"exp\": %lu, \"aud\": \"%s\"}", expires_at, audience);
   body_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *) body, strlen (body), TRUE);
@@ -911,7 +758,7 @@ ephy_sync_crypto_create_assertion (const gchar              *certificate,
   digest = ephy_sync_crypto_decode_hex (digest_hex);
 
   if (rsa_sha256_sign_digest_tr (&keypair->public, &keypair->private,
-                                 NULL, random_func,
+                                 NULL, ephy_sync_crypto_random_gen,
                                  digest, signature) == 0) {
     g_warning ("Failed to sign the message. Giving up.");
     goto out;
@@ -927,8 +774,7 @@ ephy_sync_crypto_create_assertion (const gchar              *certificate,
   }
 
   sig_b64 = ephy_sync_crypto_base64_urlsafe_encode (sig, count, TRUE);
-  assertion = g_strdup_printf ("%s~%s.%s.%s",
-                               certificate, header_b64, body_b64, sig_b64);
+  assertion = g_strdup_printf ("%s~%s.%s.%s", certificate, header_b64, body_b64, sig_b64);
 
 out:
   g_free (body);
@@ -945,117 +791,120 @@ out:
 }
 
 gchar *
-ephy_sync_crypto_generate_random_string (gsize length)
+ephy_sync_crypto_generate_random_hex (gsize length)
 {
-  guchar *bytes;
-  gchar *base64_string;
-  gchar *string;
+  FILE *fp;
+  gsize num_bytes;
+  guint8 *bytes;
+  gchar *hex;
+  gchar *out;
 
-  bytes = g_malloc (length);
-  for (gsize i = 0; i < length; i++)
-    bytes[i] = g_random_int ();
+  g_assert (length > 0);
+  num_bytes = (length + 1) / 2;
+  bytes = g_malloc (num_bytes);
 
-  base64_string = g_base64_encode (bytes, length);
-  base64_to_base64_urlsafe (base64_string);
-  string = g_strndup (base64_string, length);
+  fp = fopen ("/dev/urandom", "r");
+  fread (bytes, sizeof (guint8), num_bytes, fp);
+  hex = ephy_sync_crypto_encode_hex (bytes, num_bytes);
+  out = g_strndup (hex, length);
 
   g_free (bytes);
-  g_free (base64_string);
+  g_free (hex);
+  fclose (fp);
 
-  return string;
+  return out;
 }
 
 gchar *
 ephy_sync_crypto_base64_urlsafe_encode (guint8   *data,
-                                        gsize     data_length,
+                                        gsize     data_len,
                                         gboolean  strip)
 {
-  gchar *encoded;
   gchar *base64;
-  gsize start;
+  gchar *out;
+  gsize start = 0;
   gssize end;
 
-  base64 = g_base64_encode (data, data_length);
+  g_return_val_if_fail (data != NULL, NULL);
 
-  if (strip == FALSE) {
-    base64_to_base64_urlsafe (base64);
-    return base64;
+  base64 = g_base64_encode (data, data_len);
+  end = strlen (base64) - 1;
+
+  if (strip == TRUE) {
+    while (start < strlen (base64) && base64[start] == '=')
+      start++;
+
+    while (end >= 0 && base64[end] == '=')
+      end--;
   }
 
-  /* Strip all the '=' */
-  start = 0;
-  while (start < strlen (base64) && base64[start] == '=')
-    start++;
-
-  end = strlen (base64) - 1;
-  while (end >= 0 && base64[end] == '=')
-    end--;
-
-  encoded = g_strndup (base64 + start, end - start + 1);
-  base64_to_base64_urlsafe (encoded);
+  out = g_strndup (base64 + start, end - start + 1);
+  ephy_sync_crypto_b64_to_b64_urlsafe (out);
 
   g_free (base64);
 
-  return encoded;
+  return out;
 }
 
 guint8 *
-ephy_sync_crypto_base64_urlsafe_decode (gchar *text,
-                                        gsize *out_length)
+ephy_sync_crypto_base64_urlsafe_decode (const gchar *text,
+                                        gsize       *out_len,
+                                        gboolean     fill)
 {
-  guint8 *decoded;
-  gchar *text_copy;
+  guint8 *out;
+  gchar *to_decode;
+  gchar *suffix = NULL;
 
-  text_copy = g_strdup (text);
-  base64_urlsafe_to_base64 (text_copy);
-  decoded = g_base64_decode (text_copy, out_length);
+  g_return_val_if_fail (text != NULL, NULL);
+  g_return_val_if_fail (out_len != NULL, NULL);
 
-  g_free (text_copy);
+  if (fill == TRUE)
+    suffix = g_strnfill ((4 - strlen (text) % 4) % 4, '=');
 
-  return decoded;
+  to_decode = g_strconcat (text, suffix, NULL);
+  ephy_sync_crypto_b64_urlsafe_to_b64 (to_decode);
+  out = g_base64_decode (to_decode, out_len);
+
+  g_free (suffix);
+  g_free (to_decode);
+
+  return out;
 }
 
 guint8 *
 ephy_sync_crypto_aes_256 (EphySyncCryptoAES256Mode  mode,
                           const guint8             *key,
                           const guint8             *data,
-                          gsize                     data_length,
-                          gsize                    *out_length)
+                          gsize                     data_len,
+                          gsize                    *out_len)
 {
   struct aes256_ctx aes;
-  gsize padded_length;
+  gsize padded_len = data_len;
   guint8 *padded_data;
   guint8 *out;
 
   g_return_val_if_fail (key != NULL, NULL);
   g_return_val_if_fail (data != NULL, NULL);
 
-  if (mode == AES_256_MODE_DECRYPT)
-    g_assert (data_length % AES_BLOCK_SIZE == 0);
+  if (mode == AES_256_MODE_ENCRYPT)
+    padded_len = data_len + (AES_BLOCK_SIZE - data_len % AES_BLOCK_SIZE);
+  else if (mode == AES_256_MODE_DECRYPT)
+    g_assert (data_len % AES_BLOCK_SIZE == 0);
 
-  padded_length = data_length;
-  if (data_length % AES_BLOCK_SIZE != 0)
-    padded_length = data_length + (AES_BLOCK_SIZE - data_length % AES_BLOCK_SIZE);
+  out = g_malloc0 (padded_len);
+  padded_data = g_malloc0 (padded_len);
+  memcpy (padded_data, data, data_len);
 
-  out = g_malloc (padded_length);
-  padded_data = g_malloc0 (padded_length);
-  memcpy (padded_data, data, data_length);
-
-  switch (mode) {
-    case AES_256_MODE_ENCRYPT:
-      aes256_set_encrypt_key (&aes, key);
-      aes256_encrypt (&aes, padded_length, out, padded_data);
-      break;
-    case AES_256_MODE_DECRYPT:
-      aes256_set_decrypt_key (&aes, key);
-      aes256_decrypt (&aes, padded_length, out, padded_data);
-      break;
-    default:
-      g_assert_not_reached ();
+  if (mode == AES_256_MODE_ENCRYPT) {
+    aes256_set_encrypt_key (&aes, key);
+    aes256_encrypt (&aes, padded_len, out, padded_data);
+  } else if (mode == AES_256_MODE_DECRYPT) {
+    aes256_set_decrypt_key (&aes, key);
+    aes256_decrypt (&aes, padded_len, out, padded_data);
   }
 
-  if (out_length != NULL)
-    *out_length = padded_length;
+  if (out_len != NULL)
+    *out_len = padded_len;
 
   g_free (padded_data);
 
@@ -1064,12 +913,14 @@ ephy_sync_crypto_aes_256 (EphySyncCryptoAES256Mode  mode,
 
 gchar *
 ephy_sync_crypto_encode_hex (guint8 *data,
-                             gsize   data_length)
+                             gsize   data_len)
 {
   gchar *retval;
   gsize length;
 
-  length = data_length == 0 ? EPHY_SYNC_TOKEN_LENGTH : data_length;
+  g_return_val_if_fail (data != NULL, NULL);
+
+  length = data_len == 0 ? EPHY_SYNC_TOKEN_LENGTH : data_len;
   retval = g_malloc (length * 2 + 1);
 
   for (gsize i = 0; i < length; i++) {
@@ -1085,19 +936,17 @@ ephy_sync_crypto_encode_hex (guint8 *data,
 }
 
 guint8 *
-ephy_sync_crypto_decode_hex (const gchar *hex_string)
+ephy_sync_crypto_decode_hex (const gchar *hex)
 {
   guint8 *retval;
-  gsize hex_length;
+  gsize hex_len = strlen (hex);
 
-  hex_length = strlen (hex_string);
-  g_return_val_if_fail (hex_length % 2 == 0, NULL);
+  g_return_val_if_fail (hex != NULL, NULL);
+  g_return_val_if_fail (hex_len % 2 == 0, NULL);
 
-  retval = g_malloc (hex_length / 2);
-
-  for (gsize i = 0, j = 0; i < hex_length; i += 2, j++) {
-    sscanf(hex_string + i, "%2hhx", retval + j);
-  }
+  retval = g_malloc (hex_len / 2);
+  for (gsize i = 0, j = 0; i < hex_len; i += 2, j++)
+    sscanf(hex + i, "%2hhx", retval + j);
 
   return retval;
 }

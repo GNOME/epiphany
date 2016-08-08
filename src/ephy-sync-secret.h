@@ -28,19 +28,17 @@ G_BEGIN_DECLS
 
 const SecretSchema *ephy_sync_secret_get_token_schema (void) G_GNUC_CONST;
 
-#define EMAIL_KEY      "email_utf8"
-#define TOKEN_TYPE_KEY "token_type"
-#define TOKEN_NAME_KEY "token_name"
+#define EMAIL_KEY       "email_utf8"
+#define TOKEN_TYPE_KEY  "token_type"
+#define TOKEN_NAME_KEY  "token_name"
 
 #define EPHY_SYNC_TOKEN_SCHEMA (ephy_sync_secret_get_token_schema ())
 
-void ephy_sync_secret_forget_all_tokens (void);
-
-void ephy_sync_secret_load_tokens       (EphySyncService *sync_service);
-
-void ephy_sync_secret_store_token       (const gchar              *emailUTF8,
-                                         gchar                    *value,
-                                         EphySyncServiceTokenType  type);
+void ephy_sync_secret_forget_tokens (void);
+void ephy_sync_secret_load_tokens   (EphySyncService *service);
+void ephy_sync_secret_store_token   (const gchar       *email,
+                                     gchar             *value,
+                                     EphySyncTokenType  type);
 
 G_END_DECLS
 
