@@ -293,6 +293,22 @@ ephy_bookmark_get_tags (EphyBookmark *self)
 }
 
 int
+ephy_bookmark_bookmarks_sort_func (EphyBookmark *bookmark1,
+                                   EphyBookmark *bookmark2)
+{
+  gint64 time1;
+  gint64 time2;
+
+  g_assert (bookmark1 != NULL);
+  g_assert (bookmark2 != NULL);
+
+  time1 = ephy_bookmark_get_time_added (bookmark1);
+  time2 = ephy_bookmark_get_time_added (bookmark2);
+
+  return time2 - time1;
+}
+
+int
 ephy_bookmark_tags_compare (const char *tag1, const char *tag2)
 {
   int result;

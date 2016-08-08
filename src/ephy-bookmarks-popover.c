@@ -120,13 +120,15 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
                                         const char           *tag)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  GList *bookmarks;
-  GList *l;
+  GSequence *bookmarks;
+  GSequenceIter *iter;
 
   bookmarks = ephy_bookmarks_manager_get_bookmarks_with_tag (manager, tag);
 
-  for (l = bookmarks; l != NULL; l = l->next) {
-    EphyBookmark *bookmark = EPHY_BOOKMARK (l->data);
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
     GtkWidget *row;
 
     row = create_bookmark_row (bookmark, NULL);
@@ -267,9 +269,8 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   GSequence *tags;
+  GSequence *bookmarks;
   GSequenceIter *iter;
-  GList *bookmarks;
-  GList *l;
   GSimpleActionGroup *group;
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -305,8 +306,10 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   }
 
   bookmarks = ephy_bookmarks_manager_get_bookmarks_with_tag (manager, NULL);
-  for (l = bookmarks; l != NULL; l = l->next) {
-    EphyBookmark *bookmark = EPHY_BOOKMARK (l->data);
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
     GtkWidget *bookmark_row;
 
     bookmark_row = create_bookmark_row (bookmark, NULL);
