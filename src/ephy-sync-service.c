@@ -32,7 +32,7 @@
 #define MOZILLA_FIREFOX_ACCOUNTS_BASE_URL  "https://api.accounts.firefox.com/"
 #define MOZILLA_FIREFOX_ACCOUNTS_VERSION   "v1/"
 
-#define EMAIL_REGEX              "^[a-z0-9]([a-z0-9.]+[a-z0-9])?@[a-z0-9.-]+$"
+#define EMAIL_REGEX              "^[a-zA-Z0-9_]([a-zA-Z0-9._]+[a-zA-Z0-9_])?@[a-z0-9.-]+$"
 #define CURRENT_TIME_IN_SECONDS  (g_get_real_time () / 1000000)
 
 struct _EphySyncService {
