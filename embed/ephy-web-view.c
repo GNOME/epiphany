@@ -95,6 +95,8 @@ struct _EphyWebViewPrivate {
   GSList *hidden_popups;
   GSList *shown_popups;
 
+  GtkWidget *geolocation_info_bar;
+  GtkWidget *notification_info_bar;
   GtkWidget *password_info_bar;
 
   EphyHistoryService *history_service;
@@ -478,6 +480,26 @@ ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
   return GTK_WIDGET_CLASS (ephy_web_view_parent_class)->button_press_event (widget, event);
 }
 
+static void
+ephy_web_view_track_info_bar (GtkWidget  *new_info_bar,
+                              GtkWidget **tracked_info_bar)
+{
+  g_assert (GTK_IS_INFO_BAR (new_info_bar));
+  g_assert (tracked_info_bar);
+  g_assert (!*tracked_info_bar || GTK_IS_INFO_BAR (*tracked_info_bar));
+
+  /* We track info bars so we only ever show one of a kind. */
+  if (*tracked_info_bar) {
+    g_object_remove_weak_pointer (G_OBJECT (*tracked_info_bar),
+                                  (gpointer *)tracked_info_bar);
+    gtk_widget_destroy (*tracked_info_bar);
+  }
+
+  *tracked_info_bar = new_info_bar;
+  g_object_add_weak_pointer (G_OBJECT (new_info_bar),
+                             (gpointer *)tracked_info_bar);
+}
+
 static GtkWidget *
 ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view,
                                                            const char *hostname,
@@ -513,19 +535,10 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
   gtk_container_add (GTK_CONTAINER (content_area), label);
   gtk_widget_show (label);
 
+  ephy_web_view_track_info_bar (info_bar, &web_view->priv->password_info_bar);
+
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar, FALSE);
-
-  if (web_view->priv->password_info_bar) {
-    g_object_remove_weak_pointer (G_OBJECT (web_view->priv->password_info_bar),
-                                  (gpointer *)&web_view->priv->password_info_bar);
-    gtk_widget_destroy (web_view->priv->password_info_bar);
-  }
-
-  /* We track the info_bar, so we only ever show one */
-  web_view->priv->password_info_bar = info_bar;
-  g_object_add_weak_pointer (G_OBJECT (info_bar),
-                             (gpointer *)&web_view->priv->password_info_bar);
 
   return info_bar;
 }
@@ -754,11 +767,20 @@ ephy_web_view_dispose (GObject *object)
       priv->web_extension = NULL;
     }
 
-  if (priv->password_info_bar)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (priv->password_info_bar), (gpointer *)&priv->password_info_bar);
-      priv->password_info_bar = NULL;
-    }
+  if (priv->geolocation_info_bar) {
+    g_object_remove_weak_pointer (G_OBJECT (priv->geolocation_info_bar), (gpointer *)&priv->geolocation_info_bar);
+    priv->geolocation_info_bar = NULL;
+  }
+
+  if (priv->notification_info_bar) {
+    g_object_remove_weak_pointer (G_OBJECT (priv->notification_info_bar), (gpointer *)&priv->notification_info_bar);
+    priv->notification_info_bar = NULL;
+  }
+
+  if (priv->password_info_bar) {
+    g_object_remove_weak_pointer (G_OBJECT (priv->password_info_bar), (gpointer *)&priv->password_info_bar);
+    priv->password_info_bar = NULL;
+  }
 
   g_signal_handlers_disconnect_by_func (priv->history_service,
                                         ephy_web_view_history_cleared_cb,
@@ -1474,6 +1496,11 @@ permission_request_cb (WebKitWebView           *web_view,
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (decide_on_permission_request),
                     g_object_ref (decision));
+
+  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision))
+    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->priv->geolocation_info_bar);
+  else
+    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->priv->notification_info_bar);
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar, TRUE);
