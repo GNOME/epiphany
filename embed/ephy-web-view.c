@@ -517,10 +517,13 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar, FALSE);
 
-  /* We track the info_bar, so we only ever show one */
-  if (web_view->password_info_bar)
+  if (web_view->password_info_bar) {
+    g_object_remove_weak_pointer (G_OBJECT (web_view->password_info_bar),
+                                  (gpointer *)&web_view->password_info_bar);
     gtk_widget_destroy (web_view->password_info_bar);
+  }
 
+  /* We track the info_bar, so we only ever show one */
   web_view->password_info_bar = info_bar;
   g_object_add_weak_pointer (G_OBJECT (info_bar),
                              (gpointer *)&web_view->password_info_bar);
