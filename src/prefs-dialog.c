@@ -35,7 +35,6 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-sync-bookmarks.h"
 #include "ephy-sync-secret.h"
 #include "ephy-sync-service.h"
 #include "clear-data-dialog.h"
@@ -244,7 +243,7 @@ server_message_received_cb (WebKitUserContentManager *manager,
     inject_data_to_server (dialog, "message", "login", NULL);
     gtk_widget_set_visible (dialog->sync_sign_in_details, FALSE);
 
-    service = ephy_shell_get_global_sync_service (ephy_shell_get_default ());
+    service = ephy_shell_get_sync_service (ephy_shell_get_default ());
 
     /* Extract tokens. */
     data = json_object_get_object_member (detail, "data");
@@ -296,8 +295,13 @@ server_message_received_cb (WebKitUserContentManager *manager,
                                             g_strdup (sessionToken), TOKEN_SESSIONTOKEN,
                                             NULL);
 
-    /* Create our own bookmarks BSO collection on the Storage Server. */
-    ephy_sync_bookmarks_create_storage_collection ();
+    /* Do a first time sync. */
+    ephy_sync_service_sync_bookmarks (service, TRUE);
+
+    /* Set a periodical sync. */
+    g_timeout_add_seconds (ephy_sync_service_get_sync_frequency (service),
+                           (GSourceFunc) ephy_sync_service_do_periodical_sync,
+                           service);
 
     /* Translators: the %s refers to the email of the currently logged in user. */
     gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details),
@@ -351,15 +355,14 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
                                  PrefsDialog *dialog)
 {
   EphySyncService *service;
-  gchar *sessionToken;
 
-  service = ephy_shell_get_global_sync_service (ephy_shell_get_default ());
-  sessionToken = ephy_sync_service_get_token (service, TOKEN_SESSIONTOKEN);
+  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
 
   /* Destroy session and delete tokens. */
-  ephy_sync_service_destroy_session (service, sessionToken);
-  ephy_sync_service_delete_all_tokens (service);
-  ephy_sync_secret_forget_all_tokens ();
+  ephy_sync_service_destroy_session (service, NULL);
+  ephy_sync_service_clear_storage_credentials (service);
+  ephy_sync_service_clear_tokens (service);
+  ephy_sync_secret_forget_tokens ();
   ephy_sync_service_set_user_email (service, NULL);
 
   g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, "");
@@ -1492,7 +1495,7 @@ setup_sync_page (PrefsDialog *dialog)
 {
   EphySyncService *service;
 
-  service = ephy_shell_get_global_sync_service (ephy_shell_get_default ());
+  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
 
   if (ephy_sync_service_is_signed_in (service) == FALSE) {
     setup_fxa_sign_in_view (dialog);

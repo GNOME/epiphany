@@ -68,10 +68,13 @@ build_variant (EphyBookmark *bookmark)
   GSequence *tags;
   GSequenceIter *iter;
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(xsas)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(xssdbas)"));
 
   g_variant_builder_add (&builder, "x", ephy_bookmark_get_time_added (bookmark));
   g_variant_builder_add (&builder, "s", ephy_bookmark_get_title (bookmark));
+  g_variant_builder_add (&builder, "s", ephy_bookmark_get_id (bookmark));
+  g_variant_builder_add (&builder, "d", ephy_bookmark_get_modified (bookmark));
+  g_variant_builder_add (&builder, "b", ephy_bookmark_is_uploaded (bookmark));
 
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("as"));
   tags = ephy_bookmark_get_tags (bookmark);
@@ -361,6 +364,27 @@ ephy_bookmarks_manager_get_bookmark_by_url (EphyBookmarksManager *self,
   return NULL;
 }
 
+EphyBookmark *
+ephy_bookmarks_manager_get_bookmark_by_id (EphyBookmarksManager *self,
+                                           const char           *id)
+{
+  GSequenceIter *iter;
+
+  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self), FALSE);
+  g_return_val_if_fail (id != NULL, FALSE);
+
+  for (iter = g_sequence_get_begin_iter (self->bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
+
+    if (g_strcmp0 (ephy_bookmark_get_id (bookmark), id) == 0)
+      return bookmark;
+  }
+
+  return NULL;
+}
+
 void
 ephy_bookmarks_manager_add_tag (EphyBookmarksManager *self, const char *tag)
 {
@@ -536,11 +560,14 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
     char *tag;
     char *title;
     gint64 time_added;
+    char *id;
+    double modified;
+    gboolean uploaded;
 
     /* Obtain the correspoding GVariant. */
     value = gvdb_table_get_value (table, list[i]);
 
-    g_variant_get (value, "(x&sas)", &time_added, &title, &iter);
+    g_variant_get (value, "(x&s&sdbas)", &time_added, &title, &id, &modified, &uploaded, &iter);
 
     /* Add all stored tags in a GSequence. */
     tags = g_sequence_new (g_free);
@@ -554,6 +581,9 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
     /* Create the new bookmark. */
     bookmark = ephy_bookmark_new (g_strdup (list[i]), title, tags);
     ephy_bookmark_set_time_added (bookmark, time_added);
+    ephy_bookmark_set_id (bookmark, id);
+    ephy_bookmark_set_modified (bookmark, modified);
+    ephy_bookmark_set_uploaded (bookmark, uploaded);
     g_sequence_prepend (bookmarks, bookmark);
   }
   ephy_bookmarks_manager_add_bookmarks (self, bookmarks);

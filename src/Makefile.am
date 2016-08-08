@@ -69,8 +69,6 @@ libephymain_la_SOURCES = \
 	ephy-session.h				\
 	ephy-shell.c				\
 	ephy-shell.h				\
-	ephy-sync-bookmarks.c			\
-	ephy-sync-bookmarks.h			\
 	ephy-sync-crypto.c			\
 	ephy-sync-crypto.h			\
 	ephy-sync-secret.c			\

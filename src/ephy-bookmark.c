@@ -23,7 +23,6 @@
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-utils.h"
 
-#include <json-glib/json-glib.h>
 #include <string.h>
 
 struct _EphyBookmark {
@@ -36,6 +35,7 @@ struct _EphyBookmark {
 
   char        *id;
   double       modified;
+  gboolean     uploaded;
 };
 
 static JsonSerializableIface *serializable_iface = NULL;
@@ -189,7 +189,7 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 static void
 ephy_bookmark_init (EphyBookmark *self)
 {
-  self->id = ephy_sync_crypto_generate_random_string (12);
+  self->id = ephy_sync_crypto_generate_random_hex (32);
 }
 
 static JsonNode *
@@ -329,6 +329,17 @@ ephy_bookmark_get_title (EphyBookmark *bookmark)
   return bookmark->title;
 }
 
+void
+ephy_bookmark_set_id (EphyBookmark *self,
+                      const char   *id)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+  g_return_if_fail (id != NULL);
+
+  g_free (self->id);
+  self->id = g_strdup (id);
+}
+
 const char *
 ephy_bookmark_get_id (EphyBookmark *self)
 {
@@ -352,6 +363,23 @@ ephy_bookmark_get_modified (EphyBookmark *self)
   g_return_val_if_fail (EPHY_IS_BOOKMARK (self), -1);
 
   return self->modified;
+}
+
+void
+ephy_bookmark_set_uploaded (EphyBookmark *self,
+                            gboolean      uploaded)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+
+  self->uploaded = uploaded;
+}
+
+gboolean
+ephy_bookmark_is_uploaded (EphyBookmark *self)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), FALSE);
+
+  return self->uploaded;
 }
 
 void
@@ -471,7 +499,7 @@ ephy_bookmark_to_bso (EphyBookmark *self)
 
   g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
 
-  service = ephy_shell_get_global_sync_service (ephy_shell_get_default ());
+  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
   sync_key = ephy_sync_crypto_decode_hex (ephy_sync_service_get_token (service, TOKEN_KB));
   serialized = json_gobject_to_data (G_OBJECT (self), NULL);
   encrypted = ephy_sync_crypto_aes_256 (AES_256_MODE_ENCRYPT, sync_key,
@@ -485,4 +513,44 @@ ephy_bookmark_to_bso (EphyBookmark *self)
   g_free (payload);
 
   return bso;
+}
+
+EphyBookmark *
+ephy_bookmark_from_bso (JsonObject *bso)
+{
+  EphySyncService *service;
+  EphyBookmark *bookmark = NULL;
+  GObject *object;
+  GError *error = NULL;
+  guint8 *sync_key;
+  guint8 *decoded;
+  gsize decoded_len;
+  char *decrypted;
+
+  g_return_val_if_fail (bso != NULL, NULL);
+
+  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  sync_key = ephy_sync_crypto_decode_hex (ephy_sync_service_get_token (service, TOKEN_KB));
+  decoded = ephy_sync_crypto_base64_urlsafe_decode (json_object_get_string_member (bso, "payload"),
+                                                    &decoded_len, FALSE);
+  decrypted = (char *) ephy_sync_crypto_aes_256 (AES_256_MODE_DECRYPT, sync_key,
+                                                 decoded, decoded_len, NULL);
+  object = json_gobject_from_data (EPHY_TYPE_BOOKMARK, decrypted, strlen (decrypted), &error);
+
+  if (object == NULL) {
+    g_warning ("Failed to create GObject from data: %s", error->message);
+    g_error_free (error);
+    goto out;
+  }
+
+  bookmark = EPHY_BOOKMARK (object);
+  ephy_bookmark_set_id (bookmark, json_object_get_string_member (bso, "id"));
+  ephy_bookmark_set_modified (bookmark, json_object_get_double_member (bso, "modified"));
+  ephy_bookmark_set_uploaded (bookmark, TRUE);
+
+out:
+  g_free (decoded);
+  g_free (decrypted);
+
+  return bookmark;
 }

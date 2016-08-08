@@ -561,6 +561,15 @@ ephy_shell_init (EphyShell *shell)
   ephy_shell = shell;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
+
+  ephy_shell->sync_service = ephy_sync_service_new ();
+  /* Do a start up sync and set a periodical sync afterwards. */
+  if (ephy_sync_service_is_signed_in (ephy_shell->sync_service) == TRUE) {
+    ephy_sync_service_do_periodical_sync (ephy_shell->sync_service);
+    g_timeout_add_seconds (ephy_sync_service_get_sync_frequency (ephy_shell->sync_service),
+                           (GSourceFunc)ephy_sync_service_do_periodical_sync,
+                           ephy_shell->sync_service);
+  }
 }
 
 static void
@@ -605,19 +614,16 @@ ephy_shell_finalize (GObject *object)
 }
 
 /**
- * ephy_shell_get_global_sync_service:
+ * ephy_shell_get_sync_service:
  *
  * Retrieve the default #EphySyncService object
  *
- * Return value: (transfer none):
+ * Return value: (transfer none): the default #EphySyncService
  **/
 EphySyncService *
-ephy_shell_get_global_sync_service (EphyShell *shell)
+ephy_shell_get_sync_service (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-
-  if (shell->sync_service == NULL)
-    shell->sync_service = ephy_sync_service_new ();
 
   return shell->sync_service;
 }

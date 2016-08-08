@@ -63,62 +63,51 @@ store_token_cb (SecretService *service,
 }
 
 void
-ephy_sync_secret_forget_all_tokens (void)
+ephy_sync_secret_forget_tokens (void)
 {
   GHashTable *attributes;
 
   attributes = secret_attributes_build (EPHY_SYNC_TOKEN_SCHEMA, NULL);
-  secret_service_clear (NULL,
-                        EPHY_SYNC_TOKEN_SCHEMA,
-                        attributes,
-                        NULL,
-                        (GAsyncReadyCallback) forget_all_tokens_cb,
-                        NULL);
+  secret_service_clear (NULL, EPHY_SYNC_TOKEN_SCHEMA, attributes,
+                        NULL, (GAsyncReadyCallback) forget_all_tokens_cb, NULL);
 
   g_hash_table_unref (attributes);
 }
 
 void
-ephy_sync_secret_load_tokens (EphySyncService *sync_service)
+ephy_sync_secret_load_tokens (EphySyncService *service)
 {
   SecretItem *secret_item;
   SecretValue *secret_value;
   GHashTable *attributes;
   GError *error = NULL;
   GList *matches;
-  GList *tmp;
-  EphySyncServiceTokenType type;
-  const gchar *emailUTF8;
+  EphySyncTokenType type;
+  const gchar *email;
   const gchar *value;
   gchar *user_email;
 
-  user_email = ephy_sync_service_get_user_email (sync_service);
+  user_email = ephy_sync_service_get_user_email (service);
   attributes = secret_attributes_build (EPHY_SYNC_TOKEN_SCHEMA, NULL);
 
   /* Do this synchronously so the tokens will be available immediately */
-  matches = secret_service_search_sync (NULL,
-                                        EPHY_SYNC_TOKEN_SCHEMA,
-                                        attributes,
+  matches = secret_service_search_sync (NULL, EPHY_SYNC_TOKEN_SCHEMA, attributes,
                                         SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
-                                        NULL,
-                                        &error);
+                                        NULL, &error);
 
-  for (tmp = matches; tmp != NULL; tmp = tmp->next) {
-    secret_item = tmp->data;
-
+  for (GList *m = matches; m != NULL; m = m->next) {
+    secret_item = m->data;
     attributes = secret_item_get_attributes (secret_item);
-    emailUTF8 = g_hash_table_lookup (attributes, EMAIL_KEY);
-    type = g_ascii_strtoull (g_hash_table_lookup (attributes, TOKEN_TYPE_KEY),
-                             NULL, 10);
+    email = g_hash_table_lookup (attributes, EMAIL_KEY);
+    type = g_ascii_strtoull (g_hash_table_lookup (attributes, TOKEN_TYPE_KEY), NULL, 10);
     secret_value = secret_item_get_secret (secret_item);
     value = secret_value_get_text (secret_value);
 
     /* Sanity check */
-    if (g_str_equal (emailUTF8, user_email) == FALSE)
+    if (g_strcmp0 (email, user_email) != 0)
       continue;
 
-    ephy_sync_service_set_token (sync_service, g_strdup (value), type);
-
+    ephy_sync_service_set_token (service, g_strdup (value), type);
     g_hash_table_unref (attributes);
   }
 
@@ -126,22 +115,22 @@ ephy_sync_secret_load_tokens (EphySyncService *sync_service)
 }
 
 void
-ephy_sync_secret_store_token (const gchar              *emailUTF8,
-                              gchar                    *value,
-                              EphySyncServiceTokenType  type)
+ephy_sync_secret_store_token (const gchar       *email,
+                              gchar             *value,
+                              EphySyncTokenType  type)
 {
   SecretValue *secret_value;
   GHashTable *attributes;
   const gchar *name;
   gchar *label;
 
-  g_return_if_fail (emailUTF8);
+  g_return_if_fail (email);
   g_return_if_fail (value);
 
-  name = ephy_sync_service_token_name_from_type (type);
+  name = ephy_sync_utils_token_name_from_type (type);
   secret_value = secret_value_new (value, -1, "text/plain");
   attributes = secret_attributes_build (EPHY_SYNC_TOKEN_SCHEMA,
-                                        EMAIL_KEY, emailUTF8,
+                                        EMAIL_KEY, email,
                                         TOKEN_TYPE_KEY, type,
                                         TOKEN_NAME_KEY, name,
                                         NULL);
@@ -150,15 +139,9 @@ ephy_sync_secret_store_token (const gchar              *emailUTF8,
    */
   label = g_strdup_printf (_("Token value for %s token"), name);
 
-  secret_service_store (NULL,
-                        EPHY_SYNC_TOKEN_SCHEMA,
-                        attributes,
-                        NULL,
-                        label,
-                        secret_value,
-                        NULL,
-                        (GAsyncReadyCallback) store_token_cb,
-                        NULL);
+  secret_service_store (NULL, EPHY_SYNC_TOKEN_SCHEMA, attributes,
+                        NULL, label, secret_value, NULL,
+                        (GAsyncReadyCallback) store_token_cb, NULL);
 
   g_free (label);
   secret_value_unref (secret_value);
