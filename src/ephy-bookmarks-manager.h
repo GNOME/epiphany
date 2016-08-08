@@ -42,8 +42,8 @@ void         ephy_bookmarks_manager_remove_tag             (EphyBookmarksManager
 gboolean     ephy_bookmarks_manager_tag_exists             (EphyBookmarksManager *self,
                                                             const char           *tag);
 
-GList       *ephy_bookmarks_manager_get_bookmarks          (EphyBookmarksManager *self);
-GList       *ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
+GSequence   *ephy_bookmarks_manager_get_bookmarks          (EphyBookmarksManager *self);
+GSequence   *ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
                                                             const char           *tag);
 GSequence   *ephy_bookmarks_manager_get_tags               (EphyBookmarksManager *self);
 
