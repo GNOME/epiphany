@@ -102,8 +102,8 @@ add_tag_to_table (const char *tag, GHashTable *table)
   gvdb_hash_table_insert (table, tag);
 }
 
-static gboolean
-ephy_bookmarks_manager_save_to_file (EphyBookmarksManager *self)
+static void
+ephy_bookmarks_manager_save_to_file (EphyBookmarksManager *self, GTask *task)
 {
   GHashTable *root_table;
   GHashTable *table;
@@ -122,7 +122,8 @@ ephy_bookmarks_manager_save_to_file (EphyBookmarksManager *self)
   result = gvdb_table_write_contents (root_table, self->gvdb_filename, FALSE, NULL);
   g_hash_table_unref (root_table);
 
-  return result;
+  if (task)
+    g_task_return_boolean (task, result);
 }
 
 static void
@@ -161,7 +162,7 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 
   /* Create DB file if it doesn't already exists */
   if (!g_file_test (self->gvdb_filename, G_FILE_TEST_EXISTS))
-    ephy_bookmarks_manager_save_to_file (self);
+    ephy_bookmarks_manager_save_to_file (self, NULL);
 
   ephy_bookmarks_manager_load_from_file (self);
 }
@@ -232,7 +233,6 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
   }
 }
 
-
 static int
 bookmarks_url_compare (EphyBookmark *bookmark1,
                        EphyBookmark *bookmark2)
@@ -247,6 +247,36 @@ bookmarks_url_compare (EphyBookmark *bookmark1,
   url2 = ephy_bookmark_get_url (bookmark2);
 
   return g_strcmp0 (url1, url2);
+}
+
+void
+ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
+                                      GSequence            *bookmarks)
+{
+  GSequenceIter *iter;
+
+  g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
+  g_return_if_fail (bookmarks != NULL);
+
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
+
+    if (!g_sequence_lookup (self->bookmarks,
+                            bookmark,
+                            (GCompareDataFunc)bookmarks_url_compare,
+                            NULL))
+      g_sequence_prepend (self->bookmarks, g_object_ref (bookmark));
+  }
+
+  g_sequence_sort (self->bookmarks,
+                   (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
+                   NULL);
+
+  ephy_bookmarks_manager_save_to_file_async (self, NULL,
+                                             (GAsyncReadyCallback)data_saved_cb,
+                                             NULL);
 }
 
 void
@@ -417,23 +447,6 @@ ephy_bookmarks_manager_get_tags (EphyBookmarksManager *self)
   return self->tags;
 }
 
-static void
-ephy_bookmarks_manager_save_to_file_thread (GTask        *task,
-                                            gpointer      source_object,
-                                            gpointer      task_data,
-                                            GCancellable *cancellable)
-{
-  EphyBookmarksManager *self = source_object;
-  gboolean result;
-
-  g_assert (G_IS_TASK (task));
-  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
-
-  result = ephy_bookmarks_manager_save_to_file (self);
-
-  g_task_return_boolean (task, result);
-}
-
 void
 ephy_bookmarks_manager_save_to_file_async (EphyBookmarksManager *self,
                                            GCancellable         *cancellable,
@@ -444,7 +457,8 @@ ephy_bookmarks_manager_save_to_file_async (EphyBookmarksManager *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  g_task_run_in_thread (task, ephy_bookmarks_manager_save_to_file_thread);
+  ephy_bookmarks_manager_save_to_file (self, task);
+
   g_object_unref (task);
 }
 
@@ -463,6 +477,7 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
 {
   GvdbTable *root_table;
   GvdbTable *table;
+  GSequence *bookmarks;
   char **list;
   int length;
   int i;
@@ -474,6 +489,8 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
   /* Get bookmarks table */
   table = gvdb_table_get_table (root_table, "bookmarks");
   g_assert (table);
+
+  bookmarks = g_sequence_new (g_object_unref);
 
   /* Iterate over all keys (url's) in the table. */
   list = gvdb_table_get_names (table, &length);
@@ -503,9 +520,12 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
     /* Create the new bookmark. */
     bookmark = ephy_bookmark_new (g_strdup (list[i]), title, tags);
     ephy_bookmark_set_time_added (bookmark, time_added);
-    ephy_bookmarks_manager_add_bookmark (self, bookmark);
+    g_sequence_prepend (bookmarks, bookmark);
   }
+  ephy_bookmarks_manager_add_bookmarks (self, bookmarks);
+
   gvdb_table_free (table);
+  g_sequence_free (bookmarks);
 
   /* Also add tags to the bookmark manager's sequence. */
   table = gvdb_table_get_table (root_table, "tags");

@@ -30,6 +30,8 @@ G_DECLARE_FINAL_TYPE (EphyBookmarksManager, ephy_bookmarks_manager, EPHY, BOOKMA
 
 void         ephy_bookmarks_manager_add_bookmark           (EphyBookmarksManager *self,
                                                             EphyBookmark         *bookmark);
+void         ephy_bookmarks_manager_add_bookmarks          (EphyBookmarksManager *self,
+                                                            GSequence            *bookmarks);
 void         ephy_bookmarks_manager_remove_bookmark        (EphyBookmarksManager *self,
                                                             EphyBookmark         *bookmark);
 EphyBookmark *ephy_bookmarks_manager_get_bookmark_by_url   (EphyBookmarksManager *self,
