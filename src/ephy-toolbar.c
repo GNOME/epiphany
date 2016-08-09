@@ -575,13 +575,15 @@ ephy_toolbar_change_combined_stop_reload_state (GSimpleAction *action,
  *
  **/
 static void
-update_bookmarked_status_cb (EphyBookmark *bookmark,
-                             EphyToolbar  *toolbar)
+update_bookmarked_status_cb (EphyBookmarksManager *manager,
+                             EphyBookmark         *bookmark,
+                             EphyToolbar          *toolbar)
 {
   EphyEmbed *embed;
   EphyWebView *view;
   const char *address;
 
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_TOOLBAR (toolbar));
 
@@ -619,7 +621,7 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
                                   g_strdup (ephy_embed_get_title (embed)),
                                   g_sequence_new (g_free));
 
-    g_signal_connect_object (bookmark, "removed",
+    g_signal_connect_object (manager, "bookmark-removed",
                              G_CALLBACK (update_bookmarked_status_cb),
                              toolbar, 0);
     ephy_bookmarks_manager_add_bookmark (manager, bookmark);
