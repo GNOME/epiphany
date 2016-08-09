@@ -550,31 +550,33 @@ ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
 
 /**
  * update_bookmarked_status_cb:
- * @bookmark: an #EphyBookmark pbject
- * @toolbar: an #EphyToolbar widget
+ * @bookmark: an #EphyBookmark object
+ * @header_bar: an #EphyHeaderBar widget
  *
  * Remove bookmarked status if the @bookmark was removed.
  *
  **/
 static void
-update_bookmarked_status_cb (EphyBookmark *bookmark,
-                             EphyToolbar  *toolbar)
+update_bookmarked_status_cb (EphyBookmarksManager   *manager,
+                             EphyBookmark           *bookmark,
+                             EphyHeaderBar          *header_bar)
 {
   EphyEmbed *embed;
   EphyWebView *view;
   const char *address;
 
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (manager));
   g_assert (EPHY_IS_BOOKMARK (bookmark));
-  g_assert (EPHY_IS_TOOLBAR (toolbar));
+  g_assert (EPHY_IS_HEADER_BAR (header_bar));
 
   embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (toolbar->window));
+            (EPHY_EMBED_CONTAINER (header_bar->window));
   view = ephy_embed_get_web_view (embed);
 
   address = ephy_web_view_get_address (view);
 
   if (g_strcmp0 (ephy_bookmark_get_url (bookmark), address) == 0) {
-    ephy_location_entry_set_bookmarked_status (EPHY_LOCATION_ENTRY (toolbar->entry),
+    ephy_location_entry_set_bookmarked_status (EPHY_LOCATION_ENTRY (header_bar->entry),
                                                FALSE);
   }
 }
@@ -600,9 +602,9 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
                                   g_strdup (ephy_embed_get_title (embed)),
                                   g_sequence_new (g_free));
 
-    g_signal_connect_object (bookmark, "removed",
+    g_signal_connect_object (manager, "bookmark-removed",
                              G_CALLBACK (update_bookmarked_status_cb),
-                             toolbar, 0);
+                             header_bar, 0);
     ephy_bookmarks_manager_add_bookmark (manager, bookmark);
     ephy_location_entry_set_bookmarked_status (entry, TRUE);
   }

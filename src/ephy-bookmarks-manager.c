@@ -40,6 +40,16 @@ static void list_model_iface_init     (GListModelInterface *iface);
 G_DEFINE_TYPE_EXTENDED (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
+enum {
+  BOOKMARK_ADDED,
+  BOOKMARK_REMOVED,
+  TAG_ADDED,
+  TAG_REMOVED,
+  LAST_SIGNAL
+};
+
+static guint       signals[LAST_SIGNAL];
+
 static void
 gvdb_hash_table_insert_variant (GHashTable *table,
                                 const char *key,
@@ -143,6 +153,42 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ephy_bookmarks_manager_finalize;
+
+  signals[BOOKMARK_ADDED] =
+      g_signal_new ("bookmark-added",
+                  EPHY_TYPE_BOOKMARKS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  EPHY_TYPE_BOOKMARK);
+
+  signals[BOOKMARK_REMOVED] =
+    g_signal_new ("bookmark-removed",
+                  EPHY_TYPE_BOOKMARKS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  EPHY_TYPE_BOOKMARK);
+
+  signals[TAG_ADDED] =
+    g_signal_new ("tag-added",
+                  EPHY_TYPE_BOOKMARKS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
+
+  signals[TAG_REMOVED] =
+    g_signal_new ("tag-removed",
+                  EPHY_TYPE_BOOKMARKS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_INT);
 }
 
 static void
@@ -231,6 +277,8 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                                  (GAsyncReadyCallback)data_saved_cb,
                                                  NULL);
   }
+
+  g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
 }
 
 void
@@ -281,6 +329,8 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
       break;
   }
 
+  g_signal_emit (self, signals[BOOKMARK_REMOVED], 0, bookmark);
+
   position = g_sequence_iter_get_position (iter);
   g_sequence_remove (iter);
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
@@ -329,12 +379,15 @@ ephy_bookmarks_manager_add_tag (EphyBookmarksManager *self, const char *tag)
   if (g_sequence_iter_is_end (prev_tag_iter)
       || g_strcmp0 (g_sequence_get (prev_tag_iter), tag) != 0)
     g_sequence_insert_before (tag_iter, g_strdup (tag));
+
+  g_signal_emit (self, signals[TAG_ADDED], 0, tag);
 }
 
 void
 ephy_bookmarks_manager_remove_tag (EphyBookmarksManager *self, const char *tag)
 {
   GSequenceIter *iter = NULL;
+  int position;
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (tag != NULL);
@@ -345,10 +398,14 @@ ephy_bookmarks_manager_remove_tag (EphyBookmarksManager *self, const char *tag)
                             NULL);
   g_assert (iter != NULL);
 
+  position = g_sequence_iter_get_position (iter);
+
   g_sequence_remove (iter);
 
   /* Also remove the tag from each bookmark if they have it */
   g_sequence_foreach (self->bookmarks, (GFunc)ephy_bookmark_remove_tag, (gpointer)tag);
+
+  g_signal_emit (self, signals[TAG_REMOVED], 0, position);
 }
 
 gboolean

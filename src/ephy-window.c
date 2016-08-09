@@ -2782,6 +2782,32 @@ title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
   gtk_widget_show (security_popover);
 }
 
+<<<<<<< 1e82cb5ec66b886ceb75c078fbd20f2fd7d5f89f
+=======
+static void
+location_controller_lock_clicked_cb (EphyLocationController *controller,
+                                     gpointer                user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  GtkWidget *location_entry;
+  GdkRectangle lock_position;
+
+  location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
+  gtk_entry_get_icon_area (GTK_ENTRY (location_entry), GTK_ENTRY_ICON_PRIMARY, &lock_position);
+  open_security_popover (window, location_entry, &lock_position);
+}
+
+static void
+title_box_lock_clicked_cb (EphyTitleBox *title_box,
+                           GdkRectangle *lock_position,
+                           gpointer      user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+
+  open_security_popover (window, GTK_WIDGET (title_box), lock_position);
+}
+
+>>>>>>> bookmarks-popover: Update all stacks accordingly when a bookmark/tag is added/modified/removed
 static GtkWidget *
 setup_header_bar (EphyWindow *window)
 {
