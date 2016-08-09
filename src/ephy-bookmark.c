@@ -40,7 +40,8 @@ enum {
 };
 
 enum {
-  REMOVED,
+  TAG_ADDED,
+  TAG_REMOVED,
   LAST_SIGNAL
 };
 
@@ -152,13 +153,22 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
-  signals[REMOVED] =
-    g_signal_new ("removed",
+  signals[TAG_ADDED] =
+    g_signal_new ("tag-added",
                   EPHY_TYPE_BOOKMARK,
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
+
+  signals[TAG_REMOVED] =
+    g_signal_new ("tag-removed",
+                  EPHY_TYPE_BOOKMARK,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
 }
 
 static void
@@ -248,6 +258,8 @@ ephy_bookmark_add_tag (EphyBookmark *self,
   if (g_sequence_iter_is_end (prev_tag_iter)
       || g_strcmp0 (g_sequence_get (prev_tag_iter), tag) != 0)
     g_sequence_insert_before (tag_iter, g_strdup (tag));
+
+  g_signal_emit (self, signals[TAG_ADDED], 0);
 }
 
 void
@@ -266,6 +278,8 @@ ephy_bookmark_remove_tag (EphyBookmark *self,
 
   if (tag_iter)
     g_sequence_remove (tag_iter);
+
+  g_signal_emit (self, signals[TAG_REMOVED], 0, tag);
 }
 
 gboolean
@@ -278,7 +292,7 @@ ephy_bookmark_has_tag (EphyBookmark *self, const char *tag)
 
   tag_iter = g_sequence_lookup (self->tags,
                                 (gpointer)tag,
-                                (GCompareDataFunc)g_strcmp0,
+                                (GCompareDataFunc)ephy_bookmark_tags_compare,
                                 NULL);
 
   return tag_iter != NULL;
