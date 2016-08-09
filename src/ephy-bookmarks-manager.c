@@ -233,22 +233,6 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
   }
 }
 
-static int
-bookmarks_url_compare (EphyBookmark *bookmark1,
-                       EphyBookmark *bookmark2)
-{
-  const char *url1;
-  const char *url2;
-
-  g_assert (bookmark1 != NULL);
-  g_assert (bookmark2 != NULL);
-
-  url1 = ephy_bookmark_get_url (bookmark1);
-  url2 = ephy_bookmark_get_url (bookmark2);
-
-  return g_strcmp0 (url1, url2);
-}
-
 void
 ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
                                       GSequence            *bookmarks)
@@ -265,7 +249,7 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
 
     if (!g_sequence_lookup (self->bookmarks,
                             bookmark,
-                            (GCompareDataFunc)bookmarks_url_compare,
+                            (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
                             NULL))
       g_sequence_prepend (self->bookmarks, g_object_ref (bookmark));
   }
@@ -289,10 +273,13 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
 
-  iter = g_sequence_lookup (self->bookmarks,
-                            bookmark,
-                            (GCompareDataFunc)bookmarks_url_compare,
-                            NULL);
+  for (iter = g_sequence_get_begin_iter (self->bookmarks);
+         !g_sequence_iter_is_end (iter);
+         iter = g_sequence_iter_next (iter)) {
+    if (g_strcmp0 (ephy_bookmark_get_url (g_sequence_get (iter)),
+                   ephy_bookmark_get_url (bookmark)) == 0)
+      break;
+  }
 
   position = g_sequence_iter_get_position (iter);
   g_sequence_remove (iter);
@@ -301,17 +288,6 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                              (GAsyncReadyCallback)data_saved_cb,
                                              NULL);
-}
-
-static int
-bookmark_with_url_compare (gpointer *ebookmark, gconstpointer url)
-{
-  EphyBookmark *bookmark = EPHY_BOOKMARK (ebookmark);
-  const char *bookmark_url;
-
-  bookmark_url = ephy_bookmark_get_url (bookmark);
-
-  return g_strcmp0 (bookmark_url, url);
 }
 
 EphyBookmark *
@@ -323,15 +299,16 @@ ephy_bookmarks_manager_get_bookmark_by_url (EphyBookmarksManager *self,
   g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self), FALSE);
   g_return_val_if_fail (url != NULL, FALSE);
 
-  iter = g_sequence_lookup (self->bookmarks,
-                            (gpointer)url,
-                            (GCompareDataFunc)bookmark_with_url_compare,
-                            NULL);
+  for (iter = g_sequence_get_begin_iter (self->bookmarks);
+         !g_sequence_iter_is_end (iter);
+         iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
 
-  if (iter == NULL)
-    return NULL;
+    if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0)
+      return bookmark;
+  }
 
-  return g_sequence_get (iter);
+  return NULL;
 }
 
 void
