@@ -582,6 +582,13 @@ update_bookmarked_status_cb (EphyBookmarksManager   *manager,
 }
 
 static void
+popover_closed_cb (GtkPopover  *popover,
+                   EphyBookmarksManager *manager)
+{
+  ephy_bookmarks_manager_save_to_file_async (manager, NULL, NULL, NULL);
+}
+
+static void
 add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
                                 gpointer          *user_data)
 {
@@ -618,6 +625,9 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
                      ephy_bookmark_properties_grid_new (bookmark,
                                                         EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER,
                                                         popover));
+  g_signal_connect_object (popover, "closed",
+                           G_CALLBACK (popover_closed_cb),
+                           manager, 0);
   gtk_widget_show (popover);
 }
 
