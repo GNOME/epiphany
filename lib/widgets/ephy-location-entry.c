@@ -649,7 +649,7 @@ entry_populate_popup_cb (GtkEntry          *entry,
   /* Search for the Paste menu item and insert right after it. */
   children = gtk_container_get_children (GTK_CONTAINER (menu));
   for (item = children, pos = 0; item != NULL; item = item->next, pos++) {
-    if (g_strcmp0 (gtk_menu_item_get_label (item->data), "_Paste") == 0) {
+    if (g_strcmp0 (gtk_menu_item_get_label (item->data), _("_Paste")) == 0) {
       paste_menuitem = item->data;
       break;
     }
