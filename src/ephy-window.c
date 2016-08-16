@@ -123,7 +123,7 @@ const struct {
   { "tab.next", { "<Primary>Page_Down", "<Primary>KP_3", NULL } },
   { "tab.move-left", { "<shift><Primary>Page_Up", "<shift><Primary>Page_Up", NULL } },
   { "tab.move-right", { "<shift><Primary>Page_Down", "<shift><Primary>Page_Down", NULL } },
-  { "tab.duplicate", { "<shift><Primary>D", NULL } },
+  { "tab.duplicate", { NULL } },
   { "tab.close", { "<Primary>W", NULL } }
 }, accels_navigation_ltr [] = {
   { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "KP_4", "Back", NULL } },
