@@ -137,16 +137,22 @@ create_bookmark_row (gpointer item,
   GtkWidget *row;
 
   row = ephy_bookmark_row_new (bookmark);
-  g_object_set_data (G_OBJECT (row), "type", g_strdup (EPHY_LIST_BOX_ROW_TYPE_BOOKMARK));
-  g_object_set_data (G_OBJECT (row), "title", g_strdup (ephy_bookmark_get_title (bookmark)));
-  g_object_set_data (G_OBJECT (row), "url", g_strdup (ephy_bookmark_get_url (bookmark)));
+  g_object_set_data_full (G_OBJECT (row), "type",
+                          g_strdup (EPHY_LIST_BOX_ROW_TYPE_BOOKMARK),
+                          (GDestroyNotify)g_free);
+  g_object_set_data_full (G_OBJECT (row), "title",
+                          g_strdup (ephy_bookmark_get_title (bookmark)),
+                          (GDestroyNotify)g_free);
+  g_object_set_data_full (G_OBJECT (row), "url",
+                          g_strdup (ephy_bookmark_get_url (bookmark)),
+                          (GDestroyNotify)g_free);
 
-  g_signal_connect (bookmark, "tag-added",
-                    G_CALLBACK (bookmark_tag_added_cb),
-                    user_data);
-  g_signal_connect (bookmark, "tag-removed",
-                    G_CALLBACK (bookmark_tag_removed_cb),
-                    user_data);
+  g_signal_connect_object (bookmark, "tag-added",
+                           G_CALLBACK (bookmark_tag_added_cb),
+                           user_data, 0);
+  g_signal_connect_object (bookmark, "tag-removed",
+                           G_CALLBACK (bookmark_tag_removed_cb),
+                           user_data, 0);
 
   return row;
 }
@@ -160,8 +166,12 @@ create_tag_row (const char *tag)
   GtkWidget *label;
 
   row = gtk_list_box_row_new ();
-  g_object_set_data (G_OBJECT (row), "type", g_strdup (EPHY_LIST_BOX_ROW_TYPE_TAG));
-  g_object_set_data (G_OBJECT (row), "title", g_strdup (tag));
+  g_object_set_data_full (G_OBJECT (row), "type",
+                          g_strdup (EPHY_LIST_BOX_ROW_TYPE_TAG),
+                          (GDestroyNotify)g_free);
+  g_object_set_data_full (G_OBJECT (row), "title",
+                          g_strdup (tag),
+                          (GDestroyNotify)g_free);
   g_object_set (G_OBJECT (row), "height-request", 40, NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
