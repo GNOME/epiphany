@@ -331,7 +331,7 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
     GtkWidget *row;
 
     row = create_bookmark_row (bookmark, self);
-    gtk_list_box_prepend (GTK_LIST_BOX (self->tag_detail_list_box), row);
+    gtk_container_add (GTK_CONTAINER (self->tag_detail_list_box), row);
   }
 
   gtk_label_set_label (GTK_LABEL (self->tag_detail_label), tag);
@@ -459,6 +459,9 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tags_list_box),
                               (GtkListBoxSortFunc)tags_list_box_sort_func,
                               NULL, NULL);
+  gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tag_detail_list_box),
+                              (GtkListBoxSortFunc)tags_list_box_sort_func,
+                              NULL, NULL);
 
   tags = ephy_bookmarks_manager_get_tags (self->manager);
   for (iter = g_sequence_get_begin_iter (tags);
@@ -500,6 +503,9 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
                            G_CALLBACK (ephy_bookmarks_popover_list_box_row_activated_cb),
                            self, G_CONNECT_SWAPPED);
   g_signal_connect_object (self->tags_list_box, "row-activated",
+                           G_CALLBACK (ephy_bookmarks_popover_list_box_row_activated_cb),
+                           self, G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->tag_detail_list_box, "row-activated",
                            G_CALLBACK (ephy_bookmarks_popover_list_box_row_activated_cb),
                            self, G_CONNECT_SWAPPED);
 }
