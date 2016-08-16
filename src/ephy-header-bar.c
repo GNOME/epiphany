@@ -596,6 +596,7 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (user_data);
   EphyEmbed *embed;
   GtkWidget *popover;
+  GtkWidget *grid;
   GdkRectangle rectangle;
   EphyBookmark *bookmark;
   const char *location;
@@ -621,10 +622,13 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
                            GTK_ENTRY_ICON_SECONDARY,
                            &rectangle);
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rectangle);
-  gtk_container_add (GTK_CONTAINER (popover),
-                     ephy_bookmark_properties_grid_new (bookmark,
-                                                        EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER,
-                                                        popover));
+  grid = ephy_bookmark_properties_grid_new (bookmark,
+                                            EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER,
+                                            popover);
+  gtk_container_add (GTK_CONTAINER (popover), grid);
+  gtk_popover_set_default_widget (GTK_POPOVER (popover),
+                                  ephy_bookmark_properties_grid_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES_GRID (grid)));
+
   g_signal_connect_object (popover, "closed",
                            G_CALLBACK (popover_closed_cb),
                            manager, 0);
