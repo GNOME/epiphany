@@ -54,11 +54,12 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
   g_assert (EPHY_IS_BOOKMARK_ROW (row));
   g_assert (GTK_IS_BUTTON (button));
 
-  dialog = gtk_dialog_new_with_buttons ("Bookmark Properties",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (row))),
-                                        GTK_DIALOG_USE_HEADER_BAR,
-                                        NULL, NULL);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  dialog = g_object_new (GTK_TYPE_DIALOG,
+                         "title", "Bookmark Properties",
+                         "transient-for", GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (row))),
+                         "use-header-bar", TRUE,
+                         "modal", TRUE,
+                         NULL);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
