@@ -555,6 +555,7 @@ static void
 ephy_shell_init (EphyShell *shell)
 {
   EphyShell **ptr = &ephy_shell;
+  EphySyncService *service;
 
   /* globally accessible singleton */
   g_assert (ephy_shell == NULL);
@@ -562,14 +563,10 @@ ephy_shell_init (EphyShell *shell)
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
 
-  ephy_shell->sync_service = ephy_sync_service_new ();
-  /* Do a start up sync and set a periodical sync afterwards. */
-  if (ephy_sync_service_is_signed_in (ephy_shell->sync_service) == TRUE) {
-    ephy_sync_service_do_periodical_sync (ephy_shell->sync_service);
-    g_timeout_add_seconds (ephy_sync_service_get_sync_frequency (ephy_shell->sync_service),
-                           (GSourceFunc)ephy_sync_service_do_periodical_sync,
-                           ephy_shell->sync_service);
-  }
+  /* Start the periodical sync now. */
+  service = ephy_sync_service_new ();
+  ephy_sync_service_start_periodical_sync (service, TRUE);
+  ephy_shell->sync_service = service;
 }
 
 static void

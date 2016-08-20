@@ -272,9 +272,7 @@ server_message_received_cb (WebKitUserContentManager *manager,
 
     /* Do a first time sync and set a periodical sync afterwards. */
     ephy_sync_service_sync_bookmarks (service, TRUE);
-    g_timeout_add_seconds (ephy_sync_service_get_sync_frequency (service),
-                           (GSourceFunc) ephy_sync_service_do_periodical_sync,
-                           service);
+    ephy_sync_service_start_periodical_sync (service, FALSE);
 
     /* Translators: the %s refers to the email of the currently logged in user. */
     text = g_strdup_printf (_("Currently logged in as <b>%s</b>"), email);
@@ -340,6 +338,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
 
   /* Destroy session and delete tokens. */
+  ephy_sync_service_stop_periodical_sync (service);
   ephy_sync_service_destroy_session (service, NULL);
   ephy_sync_service_clear_storage_credentials (service);
   ephy_sync_service_clear_tokens (service);

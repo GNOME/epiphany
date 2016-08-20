@@ -34,12 +34,13 @@
 #define MOZILLA_FXA_SERVER_URL    "https://api.accounts.firefox.com/v1/"
 #define EPHY_BOOKMARKS_COLLECTION "ephy-bookmarks"
 #define EMAIL_REGEX               "^[a-zA-Z0-9_]([a-zA-Z0-9._]+[a-zA-Z0-9_])?@[a-z0-9.-]+$"
+#define SYNC_FREQUENCY            (15 * 60)
 
 struct _EphySyncService {
   GObject      parent_instance;
 
   SoupSession *session;
-  guint        sync_frequency;
+  guint        source_id;
 
   char        *uid;
   char        *sessionToken;
@@ -560,6 +561,7 @@ ephy_sync_service_finalize (GObject *object)
   if (self->keypair != NULL)
     ephy_sync_crypto_rsa_key_pair_free (self->keypair);
 
+  ephy_sync_service_stop_periodical_sync (self);
   g_queue_free_full (self->storage_queue, (GDestroyNotify) storage_server_request_async_data_free);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
@@ -594,7 +596,6 @@ ephy_sync_service_init (EphySyncService *self)
 
   self->session = soup_session_new ();
   self->storage_queue = g_queue_new ();
-  self->sync_frequency = 15 * 60;
 
   email = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER);
 
@@ -661,23 +662,6 @@ ephy_sync_service_set_sync_time (EphySyncService *self,
 
   self->sync_time = time;
   g_settings_set_double (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_TIME, time);
-}
-
-guint
-ephy_sync_service_get_sync_frequency (EphySyncService *self)
-{
-  g_return_val_if_fail (EPHY_IS_SYNC_SERVICE (self), G_MAXUINT);
-
-  return self->sync_frequency;
-}
-
-void
-ephy_sync_service_set_sync_frequency (EphySyncService *self,
-                                      guint            sync_frequency)
-{
-  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
-
-  self->sync_frequency = sync_frequency;
 }
 
 char *
@@ -1384,12 +1368,38 @@ ephy_sync_service_sync_bookmarks (EphySyncService *self,
   g_free (endpoint);
 }
 
-gboolean
-ephy_sync_service_do_periodical_sync (EphySyncService *self)
+static gboolean
+do_periodical_sync (gpointer user_data)
 {
-  g_return_val_if_fail (EPHY_IS_SYNC_SERVICE (self), G_SOURCE_REMOVE);
+  EphySyncService *service = EPHY_SYNC_SERVICE (user_data);
 
-  ephy_sync_service_sync_bookmarks (self, FALSE);
+  ephy_sync_service_sync_bookmarks (service, FALSE);
 
   return G_SOURCE_CONTINUE;
+}
+
+void
+ephy_sync_service_start_periodical_sync (EphySyncService *self,
+                                         gboolean         now)
+{
+  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
+
+  if (ephy_sync_service_is_signed_in (self) == FALSE)
+    return;
+
+  if (now == TRUE)
+    do_periodical_sync (self);
+
+  self->source_id = g_timeout_add_seconds (SYNC_FREQUENCY, do_periodical_sync, self);
+}
+
+void
+ephy_sync_service_stop_periodical_sync (EphySyncService *self)
+{
+  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
+
+  if (ephy_sync_service_is_signed_in (self) == FALSE)
+    return;
+
+  g_source_remove (self->source_id);
 }
