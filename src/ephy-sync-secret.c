@@ -83,9 +83,9 @@ ephy_sync_secret_load_tokens (EphySyncService *service)
   GError *error = NULL;
   GList *matches;
   EphySyncTokenType type;
-  const gchar *email;
-  const gchar *value;
-  gchar *user_email;
+  const char *email;
+  const char *value;
+  char *user_email;
 
   user_email = ephy_sync_service_get_user_email (service);
   attributes = secret_attributes_build (EPHY_SYNC_TOKEN_SCHEMA, NULL);
@@ -115,14 +115,14 @@ ephy_sync_secret_load_tokens (EphySyncService *service)
 }
 
 void
-ephy_sync_secret_store_token (const gchar       *email,
-                              gchar             *value,
+ephy_sync_secret_store_token (const char        *email,
+                              char              *value,
                               EphySyncTokenType  type)
 {
   SecretValue *secret_value;
   GHashTable *attributes;
-  const gchar *name;
-  gchar *label;
+  const char *name;
+  char *label;
 
   g_return_if_fail (email);
   g_return_if_fail (value);

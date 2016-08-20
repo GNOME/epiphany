@@ -28,18 +28,18 @@
 
 #define HAWK_VERSION  1
 
-static const gchar hex_digits[] = "0123456789abcdef";
+static const char hex_digits[] = "0123456789abcdef";
 
 EphySyncCryptoHawkOptions *
-ephy_sync_crypto_hawk_options_new (const gchar *app,
-                                   const gchar *dlg,
-                                   const gchar *ext,
-                                   const gchar *content_type,
-                                   const gchar *hash,
-                                   const gchar *local_time_offset,
-                                   const gchar *nonce,
-                                   const gchar *payload,
-                                   const gchar *timestamp)
+ephy_sync_crypto_hawk_options_new (const char *app,
+                                   const char *dlg,
+                                   const char *ext,
+                                   const char *content_type,
+                                   const char *hash,
+                                   const char *local_time_offset,
+                                   const char *nonce,
+                                   const char *payload,
+                                   const char *timestamp)
 {
   EphySyncCryptoHawkOptions *options;
 
@@ -59,16 +59,16 @@ ephy_sync_crypto_hawk_options_new (const gchar *app,
 
 static EphySyncCryptoHawkArtifacts *
 
-ephy_sync_crypto_hawk_artifacts_new (const gchar *app,
-                                     const gchar *dlg,
-                                     const gchar *ext,
-                                     const gchar *hash,
-                                     const gchar *host,
-                                     const gchar *method,
-                                     const gchar *nonce,
-                                     guint        port,
-                                     const gchar *resource,
-                                     gint64       ts)
+ephy_sync_crypto_hawk_artifacts_new (const char *app,
+                                     const char *dlg,
+                                     const char *ext,
+                                     const char *hash,
+                                     const char *host,
+                                     const char *method,
+                                     const char *nonce,
+                                     guint       port,
+                                     const char *resource,
+                                     gint64      ts)
 {
   EphySyncCryptoHawkArtifacts *artifacts;
 
@@ -88,7 +88,7 @@ ephy_sync_crypto_hawk_artifacts_new (const gchar *app,
 }
 
 static EphySyncCryptoHawkHeader *
-ephy_sync_crypto_hawk_header_new (gchar                       *header,
+ephy_sync_crypto_hawk_header_new (char                        *header,
                                   EphySyncCryptoHawkArtifacts *artifacts)
 {
   EphySyncCryptoHawkHeader *hheader;
@@ -172,8 +172,8 @@ ephy_sync_crypto_rsa_key_pair_free (EphySyncCryptoRSAKeyPair *keypair)
   g_slice_free (EphySyncCryptoRSAKeyPair, keypair);
 }
 
-static gchar *
-ephy_sync_crypto_kw (const gchar *name)
+static char *
+ephy_sync_crypto_kw (const char *name)
 {
   g_return_val_if_fail (name != NULL, NULL);
 
@@ -212,16 +212,16 @@ ephy_sync_crypto_equals (guint8 *a,
   return TRUE;
 }
 
-static gchar *
-ephy_sync_crypto_normalize_string (const gchar                 *type,
+static char *
+ephy_sync_crypto_normalize_string (const char                  *type,
                                    EphySyncCryptoHawkArtifacts *artifacts)
 {
-  gchar *host;
-  gchar *info;
-  gchar *method;
-  gchar *n_ext = NULL;
-  gchar *normalized;
-  gchar *tmp;
+  char *host;
+  char *info;
+  char *method;
+  char *n_ext = NULL;
+  char *normalized;
+  char *tmp;
 
   g_return_val_if_fail (type != NULL, NULL);
   g_return_val_if_fail (artifacts != NULL, NULL);
@@ -260,11 +260,11 @@ ephy_sync_crypto_normalize_string (const gchar                 *type,
   return normalized;
 }
 
-static gchar *
-ephy_sync_crypto_parse_content_type (const gchar *content_type)
+static char *
+ephy_sync_crypto_parse_content_type (const char *content_type)
 {
-  gchar **tokens;
-  gchar *retval;
+  char **tokens;
+  char *retval;
 
   g_return_val_if_fail (content_type != NULL, NULL);
 
@@ -275,15 +275,15 @@ ephy_sync_crypto_parse_content_type (const gchar *content_type)
   return retval;
 }
 
-static gchar *
-ephy_sync_crypto_calculate_payload_hash (const gchar *payload,
-                                         const gchar *content_type)
+static char *
+ephy_sync_crypto_calculate_payload_hash (const char *payload,
+                                         const char *content_type)
 {
   guint8 *digest;
-  gchar *digest_hex;
-  gchar *content;
-  gchar *update;
-  gchar *hash;
+  char *digest_hex;
+  char *content;
+  char *update;
+  char *hash;
 
   g_return_val_if_fail (payload != NULL, NULL);
   g_return_val_if_fail (content_type != NULL, NULL);
@@ -304,16 +304,16 @@ ephy_sync_crypto_calculate_payload_hash (const gchar *payload,
   return hash;
 }
 
-static gchar *
-ephy_sync_crypto_calculate_mac (const gchar                 *type,
+static char *
+ephy_sync_crypto_calculate_mac (const char                  *type,
                                 guint8                      *key,
                                 gsize                        key_len,
                                 EphySyncCryptoHawkArtifacts *artifacts)
 {
   guint8 *digest;
-  gchar *digest_hex;
-  gchar *normalized;
-  gchar *mac;
+  char *digest_hex;
+  char *normalized;
+  char *mac;
 
   g_return_val_if_fail (type != NULL, NULL);
   g_return_val_if_fail (key != NULL, NULL);
@@ -331,13 +331,13 @@ ephy_sync_crypto_calculate_mac (const gchar                 *type,
   return mac;
 }
 
-static gchar *
-ephy_sync_crypto_append_to_header (gchar       *header,
-                                   const gchar *name,
-                                   gchar       *value)
+static char *
+ephy_sync_crypto_append_to_header (char       *header,
+                                   const char *name,
+                                   char       *value)
 {
-  gchar *new_header;
-  gchar *tmp;
+  char *new_header;
+  char *tmp;
 
   g_return_val_if_fail (header != NULL, NULL);
   g_return_val_if_fail (name != NULL, NULL);
@@ -360,8 +360,8 @@ ephy_sync_crypto_hkdf (guint8 *in,
                        guint8 *out,
                        gsize   out_len)
 {
-  gchar *prk_hex;
-  gchar *tmp_hex;
+  char *prk_hex;
+  char *tmp_hex;
   guint8 *tmp;
   guint8 *prk;
   guint8 *out_full;
@@ -431,7 +431,7 @@ ephy_sync_crypto_random_gen (void   *ctx,
 }
 
 static void
-ephy_sync_crypto_b64_to_b64_urlsafe (gchar *text)
+ephy_sync_crypto_b64_to_b64_urlsafe (char *text)
 {
   g_return_if_fail (text != NULL);
 
@@ -441,7 +441,7 @@ ephy_sync_crypto_b64_to_b64_urlsafe (gchar *text)
 }
 
 static void
-ephy_sync_crypto_b64_urlsafe_to_b64 (gchar *text)
+ephy_sync_crypto_b64_urlsafe_to_b64 (char *text)
 {
   g_return_if_fail (text != NULL);
 
@@ -451,18 +451,18 @@ ephy_sync_crypto_b64_urlsafe_to_b64 (gchar *text)
 }
 
 void
-ephy_sync_crypto_process_key_fetch_token (const gchar  *keyFetchToken,
-                                          guint8      **tokenID,
-                                          guint8      **reqHMACkey,
-                                          guint8      **respHMACkey,
-                                          guint8      **respXORkey)
+ephy_sync_crypto_process_key_fetch_token (const char  *keyFetchToken,
+                                          guint8     **tokenID,
+                                          guint8     **reqHMACkey,
+                                          guint8     **respHMACkey,
+                                          guint8     **respXORkey)
 {
   guint8 *kft;
   guint8 *out1;
   guint8 *out2;
   guint8 *keyRequestKey;
-  gchar *info_kft;
-  gchar *info_keys;
+  char *info_kft;
+  char *info_keys;
 
   g_return_if_fail (keyFetchToken != NULL);
   g_return_if_fail (tokenID != NULL);
@@ -507,14 +507,14 @@ ephy_sync_crypto_process_key_fetch_token (const gchar  *keyFetchToken,
 }
 
 void
-ephy_sync_crypto_process_session_token (const gchar  *sessionToken,
-                                        guint8      **tokenID,
-                                        guint8      **reqHMACkey,
-                                        guint8      **requestKey)
+ephy_sync_crypto_process_session_token (const char  *sessionToken,
+                                        guint8     **tokenID,
+                                        guint8     **reqHMACkey,
+                                        guint8     **requestKey)
 {
   guint8 *st;
   guint8 *out;
-  gchar *info;
+  char *info;
 
   g_return_if_fail (sessionToken != NULL);
   g_return_if_fail (tokenID != NULL);
@@ -543,12 +543,12 @@ ephy_sync_crypto_process_session_token (const gchar  *sessionToken,
 }
 
 void
-ephy_sync_crypto_compute_sync_keys (const gchar  *bundle,
-                                    guint8       *respHMACkey,
-                                    guint8       *respXORkey,
-                                    guint8       *unwrapBKey,
-                                    guint8      **kA,
-                                    guint8      **kB)
+ephy_sync_crypto_compute_sync_keys (const char  *bundle,
+                                    guint8      *respHMACkey,
+                                    guint8      *respXORkey,
+                                    guint8      *unwrapBKey,
+                                    guint8     **kA,
+                                    guint8     **kB)
 {
   guint8 *bdl;
   guint8 *ciphertext;
@@ -556,7 +556,7 @@ ephy_sync_crypto_compute_sync_keys (const gchar  *bundle,
   guint8 *respMAC2;
   guint8 *xored;
   guint8 *wrapKB;
-  gchar *respMAC2_hex;
+  char *respMAC2_hex;
 
   g_return_if_fail (bundle != NULL);
   g_return_if_fail (respHMACkey != NULL);
@@ -594,22 +594,22 @@ ephy_sync_crypto_compute_sync_keys (const gchar  *bundle,
 }
 
 EphySyncCryptoHawkHeader *
-ephy_sync_crypto_compute_hawk_header (const gchar               *url,
-                                      const gchar               *method,
-                                      const gchar               *id,
+ephy_sync_crypto_compute_hawk_header (const char                *url,
+                                      const char                *method,
+                                      const char                *id,
                                       guint8                    *key,
                                       gsize                      key_len,
                                       EphySyncCryptoHawkOptions *options)
 {
   EphySyncCryptoHawkArtifacts *artifacts;
   SoupURI *uri;
-  gchar *resource;
-  gchar *hash;
-  gchar *header;
-  gchar *mac;
-  gchar *nonce;
-  gchar *payload;
-  gchar *timestamp;
+  char *resource;
+  char *hash;
+  char *header;
+  char *mac;
+  char *nonce;
+  char *payload;
+  char *timestamp;
   gint64 ts;
 
   g_return_val_if_fail (url != NULL, NULL);
@@ -623,13 +623,13 @@ ephy_sync_crypto_compute_hawk_header (const gchar               *url,
   payload = options ? options->payload : NULL;
   timestamp = options ? options->timestamp : NULL;
   uri = soup_uri_new (url);
-  resource = (gchar *) soup_uri_get_path (uri);
+  resource = (char *) soup_uri_get_path (uri);
 
   if (soup_uri_get_query (uri) != NULL)
     resource = g_strconcat (resource, "?", soup_uri_get_query (uri), NULL);
 
   if (timestamp != NULL) {
-    gchar *local_time_offset;
+    char *local_time_offset;
     gint64 offset;
 
     local_time_offset = options ? options->local_time_offset : NULL;
@@ -638,7 +638,7 @@ ephy_sync_crypto_compute_hawk_header (const gchar               *url,
   }
 
   if (hash == NULL && payload != NULL) {
-    const gchar *content_type = options ? options->content_type : "text/plain";
+    const char *content_type = options ? options->content_type : "text/plain";
     hash = ephy_sync_crypto_calculate_payload_hash (payload, content_type);
   }
 
@@ -664,8 +664,8 @@ ephy_sync_crypto_compute_hawk_header (const gchar               *url,
     header = ephy_sync_crypto_append_to_header (header, "hash", artifacts->hash);
 
   if (artifacts->ext != NULL && strlen (artifacts->ext) > 0) {
-    gchar *h_ext;
-    gchar *tmp_ext;
+    char *h_ext;
+    char *tmp_ext;
 
     tmp_ext = ephy_sync_utils_find_and_replace (artifacts->ext, "\\", "\\\\");
     h_ext = ephy_sync_utils_find_and_replace (tmp_ext, "\n", "\\n");
@@ -700,7 +700,7 @@ ephy_sync_crypto_generate_rsa_key_pair (void)
 {
   struct rsa_public_key public;
   struct rsa_private_key private;
-  gint retval;
+  int retval;
 
   rsa_public_key_init (&public);
   rsa_private_key_init (&private);
@@ -722,21 +722,21 @@ ephy_sync_crypto_generate_rsa_key_pair (void)
   return ephy_sync_crypto_rsa_key_pair_new (public, private);
 }
 
-gchar *
-ephy_sync_crypto_create_assertion (const gchar              *certificate,
-                                   const gchar              *audience,
+char *
+ephy_sync_crypto_create_assertion (const char               *certificate,
+                                   const char               *audience,
                                    guint64                   duration,
                                    EphySyncCryptoRSAKeyPair *keypair)
 {
   mpz_t signature;
-  const gchar *header = "{\"alg\": \"RS256\"}";
-  gchar *body;
-  gchar *body_b64;
-  gchar *header_b64;
-  gchar *to_sign;
-  gchar *sig_b64 = NULL;
-  gchar *assertion = NULL;
-  gchar *digest_hex;
+  const char *header = "{\"alg\": \"RS256\"}";
+  char *body;
+  char *body_b64;
+  char *header_b64;
+  char *to_sign;
+  char *sig_b64 = NULL;
+  char *assertion = NULL;
+  char *digest_hex;
   guint8 *digest;
   guint8 *sig = NULL;
   guint64 expires_at;
@@ -790,14 +790,14 @@ out:
   return assertion;
 }
 
-gchar *
+char *
 ephy_sync_crypto_generate_random_hex (gsize length)
 {
   FILE *fp;
   gsize num_bytes;
   guint8 *bytes;
-  gchar *hex;
-  gchar *out;
+  char *hex;
+  char *out;
 
   g_assert (length > 0);
   num_bytes = (length + 1) / 2;
@@ -815,13 +815,13 @@ ephy_sync_crypto_generate_random_hex (gsize length)
   return out;
 }
 
-gchar *
+char *
 ephy_sync_crypto_base64_urlsafe_encode (guint8   *data,
                                         gsize     data_len,
                                         gboolean  strip)
 {
-  gchar *base64;
-  gchar *out;
+  char *base64;
+  char *out;
   gsize start = 0;
   gssize end;
 
@@ -847,13 +847,13 @@ ephy_sync_crypto_base64_urlsafe_encode (guint8   *data,
 }
 
 guint8 *
-ephy_sync_crypto_base64_urlsafe_decode (const gchar *text,
+ephy_sync_crypto_base64_urlsafe_decode (const char  *text,
                                         gsize       *out_len,
                                         gboolean     fill)
 {
   guint8 *out;
-  gchar *to_decode;
-  gchar *suffix = NULL;
+  char *to_decode;
+  char *suffix = NULL;
 
   g_return_val_if_fail (text != NULL, NULL);
   g_return_val_if_fail (out_len != NULL, NULL);
@@ -911,11 +911,11 @@ ephy_sync_crypto_aes_256 (EphySyncCryptoAES256Mode  mode,
   return out;
 }
 
-gchar *
+char *
 ephy_sync_crypto_encode_hex (guint8 *data,
                              gsize   data_len)
 {
-  gchar *retval;
+  char *retval;
   gsize length;
 
   g_return_val_if_fail (data != NULL, NULL);
@@ -936,7 +936,7 @@ ephy_sync_crypto_encode_hex (guint8 *data,
 }
 
 guint8 *
-ephy_sync_crypto_decode_hex (const gchar *hex)
+ephy_sync_crypto_decode_hex (const char *hex)
 {
   guint8 *retval;
   gsize hex_len = strlen (hex);

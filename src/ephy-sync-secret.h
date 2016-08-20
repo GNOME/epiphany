@@ -36,8 +36,8 @@ const SecretSchema *ephy_sync_secret_get_token_schema (void) G_GNUC_CONST;
 
 void ephy_sync_secret_forget_tokens (void);
 void ephy_sync_secret_load_tokens   (EphySyncService *service);
-void ephy_sync_secret_store_token   (const gchar       *email,
-                                     gchar             *value,
+void ephy_sync_secret_store_token   (const char        *email,
+                                     char              *value,
                                      EphySyncTokenType  type);
 
 G_END_DECLS
