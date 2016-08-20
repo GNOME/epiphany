@@ -41,25 +41,25 @@ struct _EphySyncService {
   SoupSession *session;
   guint        sync_frequency;
 
-  gchar       *uid;
-  gchar       *sessionToken;
-  gchar       *keyFetchToken;
-  gchar       *unwrapBKey;
-  gchar       *kA;
-  gchar       *kB;
+  char        *uid;
+  char        *sessionToken;
+  char        *keyFetchToken;
+  char        *unwrapBKey;
+  char        *kA;
+  char        *kB;
 
-  gchar       *user_email;
+  char        *user_email;
   double       sync_time;
   gint64       auth_at;
 
   gboolean     locked;
-  gchar       *storage_endpoint;
-  gchar       *storage_credentials_id;
-  gchar       *storage_credentials_key;
+  char        *storage_endpoint;
+  char        *storage_credentials_id;
+  char        *storage_credentials_key;
   gint64       storage_credentials_expiry_time;
   GQueue      *storage_queue;
 
-  gchar                    *certificate;
+  char                     *certificate;
   EphySyncCryptoRSAKeyPair *keypair;
 };
 
@@ -67,9 +67,9 @@ G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
 typedef struct {
   EphySyncService     *service;
-  gchar               *endpoint;
-  const gchar         *method;
-  gchar               *request_body;
+  char                *endpoint;
+  const char          *method;
+  char                *request_body;
   double               modified_since;
   double               unmodified_since;
   SoupSessionCallback  callback;
@@ -78,9 +78,9 @@ typedef struct {
 
 static StorageServerRequestAsyncData *
 storage_server_request_async_data_new (EphySyncService     *service,
-                                       gchar               *endpoint,
-                                       const gchar         *method,
-                                       gchar               *request_body,
+                                       char                *endpoint,
+                                       const char          *method,
+                                       char                *request_body,
                                        double               modified_since,
                                        double               unmodified_since,
                                        SoupSessionCallback  callback,
@@ -154,19 +154,19 @@ ephy_sync_service_storage_credentials_is_expired (EphySyncService *self)
 
 static void
 ephy_sync_service_fxa_hawk_post_async (EphySyncService     *self,
-                                       const gchar         *endpoint,
-                                       const gchar         *id,
+                                       const char          *endpoint,
+                                       const char          *id,
                                        guint8              *key,
                                        gsize                key_length,
-                                       gchar               *request_body,
+                                       char                *request_body,
                                        SoupSessionCallback  callback,
                                        gpointer             user_data)
 {
   EphySyncCryptoHawkOptions *hoptions;
   EphySyncCryptoHawkHeader *hheader;
   SoupMessage *msg;
-  gchar *url;
-  const gchar *content_type = "application/json";
+  char *url;
+  const char *content_type = "application/json";
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (endpoint != NULL);
@@ -193,8 +193,8 @@ ephy_sync_service_fxa_hawk_post_async (EphySyncService     *self,
 
 static guint
 ephy_sync_service_fxa_hawk_get_sync (EphySyncService  *self,
-                                     const gchar      *endpoint,
-                                     const gchar      *id,
+                                     const char       *endpoint,
+                                     const char       *id,
                                      guint8           *key,
                                      gsize             key_length,
                                      JsonNode        **node)
@@ -202,7 +202,7 @@ ephy_sync_service_fxa_hawk_get_sync (EphySyncService  *self,
   EphySyncCryptoHawkHeader *hheader;
   SoupMessage *msg;
   JsonParser *parser;
-  gchar *url;
+  char *url;
 
   g_return_val_if_fail (EPHY_IS_SYNC_SERVICE (self), 0);
   g_return_val_if_fail (endpoint != NULL, 0);
@@ -235,10 +235,10 @@ ephy_sync_service_send_storage_request (EphySyncService               *self,
   EphySyncCryptoHawkOptions *hoptions = NULL;
   EphySyncCryptoHawkHeader *hheader;
   SoupMessage *msg;
-  gchar *url;
-  gchar *if_modified_since = NULL;
-  gchar *if_unmodified_since = NULL;
-  const gchar *content_type = "application/json";
+  char *url;
+  char *if_modified_since = NULL;
+  char *if_unmodified_since = NULL;
+  const char *content_type = "application/json";
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (data != NULL);
@@ -285,18 +285,18 @@ ephy_sync_service_send_storage_request (EphySyncService               *self,
 
 static gboolean
 ephy_sync_service_certificate_is_valid (EphySyncService *self,
-                                        const gchar     *certificate)
+                                        const char      *certificate)
 {
   JsonParser *parser;
   JsonObject *json;
   JsonObject *principal;
   SoupURI *uri;
-  gchar **pieces;
-  gchar *header;
-  gchar *payload;
-  gchar *uid_email = NULL;
-  const gchar *alg;
-  const gchar *email;
+  char **pieces;
+  char *header;
+  char *payload;
+  char *uid_email = NULL;
+  const char *alg;
+  const char *email;
   gsize len;
   gboolean retval = FALSE;
 
@@ -305,8 +305,8 @@ ephy_sync_service_certificate_is_valid (EphySyncService *self,
 
   uri = soup_uri_new (MOZILLA_FXA_SERVER_URL);
   pieces = g_strsplit (certificate, ".", 0);
-  header = (gchar *) ephy_sync_crypto_base64_urlsafe_decode (pieces[0], &len, TRUE);
-  payload = (gchar *) ephy_sync_crypto_base64_urlsafe_decode (pieces[1], &len, TRUE);
+  header = (char *) ephy_sync_crypto_base64_urlsafe_decode (pieces[0], &len, TRUE);
+  payload = (char *) ephy_sync_crypto_base64_urlsafe_decode (pieces[1], &len, TRUE);
 
   parser = json_parser_new ();
   json_parser_load_from_data (parser, header, -1, NULL);
@@ -402,11 +402,11 @@ ephy_sync_service_obtain_storage_credentials (EphySyncService *self,
 {
   SoupMessage *msg;
   guint8 *kB;
-  gchar *hashed_kB;
-  gchar *client_state;
-  gchar *audience;
-  gchar *assertion;
-  gchar *authorization;
+  char *hashed_kB;
+  char *client_state;
+  char *audience;
+  char *assertion;
+  char *authorization;
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (self->certificate != NULL);
@@ -446,7 +446,7 @@ obtain_signed_certificate_response_cb (SoupSession *session,
   EphySyncService *service;
   JsonParser *parser;
   JsonObject *json;
-  const gchar *certificate;
+  const char *certificate;
 
   data = (StorageServerRequestAsyncData *) user_data;
   service = EPHY_SYNC_SERVICE (data->service);
@@ -487,11 +487,11 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self,
   guint8 *tokenID;
   guint8 *reqHMACkey;
   guint8 *requestKey;
-  gchar *tokenID_hex;
-  gchar *public_key_json;
-  gchar *request_body;
-  gchar *n;
-  gchar *e;
+  char *tokenID_hex;
+  char *public_key_json;
+  char *request_body;
+  char *n;
+  char *e;
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (self->sessionToken != NULL);
@@ -590,7 +590,7 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
 static void
 ephy_sync_service_init (EphySyncService *self)
 {
-  gchar *email;
+  char *email;
 
   self->session = soup_session_new ();
   self->storage_queue = g_queue_new ();
@@ -622,7 +622,7 @@ ephy_sync_service_is_signed_in (EphySyncService *self)
   return self->user_email != NULL;
 }
 
-gchar *
+char *
 ephy_sync_service_get_user_email (EphySyncService *self)
 {
   g_return_val_if_fail (EPHY_IS_SYNC_SERVICE (self), NULL);
@@ -632,7 +632,7 @@ ephy_sync_service_get_user_email (EphySyncService *self)
 
 void
 ephy_sync_service_set_user_email (EphySyncService *self,
-                                  const gchar     *email)
+                                  const char      *email)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
 
@@ -680,7 +680,7 @@ ephy_sync_service_set_sync_frequency (EphySyncService *self,
   self->sync_frequency = sync_frequency;
 }
 
-gchar *
+char *
 ephy_sync_service_get_token (EphySyncService   *self,
                              EphySyncTokenType  type)
 {
@@ -706,7 +706,7 @@ ephy_sync_service_get_token (EphySyncService   *self,
 
 void
 ephy_sync_service_set_token (EphySyncService   *self,
-                             gchar             *value,
+                             char              *value,
                              EphySyncTokenType  type)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
@@ -744,12 +744,12 @@ ephy_sync_service_set_token (EphySyncService   *self,
 
 void
 ephy_sync_service_set_and_store_tokens (EphySyncService   *self,
-                                        gchar             *value,
+                                        char              *value,
                                         EphySyncTokenType  type,
                                         ...)
 {
   EphySyncTokenType next_type;
-  gchar *next_value;
+  char *next_value;
   va_list args;
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
@@ -759,7 +759,7 @@ ephy_sync_service_set_and_store_tokens (EphySyncService   *self,
   ephy_sync_secret_store_token (self->user_email, value, type);
 
   va_start (args, type);
-  while ((next_value = va_arg (args, gchar *)) != NULL) {
+  while ((next_value = va_arg (args, char *)) != NULL) {
     next_type = va_arg (args, EphySyncTokenType);
     ephy_sync_service_set_token (self, next_value, next_type);
     ephy_sync_secret_store_token (self->user_email, next_value, next_type);
@@ -794,7 +794,7 @@ ephy_sync_service_clear_tokens (EphySyncService *self)
 
 void
 ephy_sync_service_destroy_session (EphySyncService *self,
-                                   const gchar     *sessionToken)
+                                   const char      *sessionToken)
 {
   EphySyncCryptoHawkOptions *hoptions;
   EphySyncCryptoHawkHeader *hheader;
@@ -802,11 +802,11 @@ ephy_sync_service_destroy_session (EphySyncService *self,
   guint8 *tokenID;
   guint8 *reqHMACkey;
   guint8 *requestKey;
-  gchar *tokenID_hex;
-  gchar *url;
-  const gchar *content_type = "application/json";
-  const gchar *endpoint = "session/destroy";
-  const gchar *request_body = "{}";
+  char *tokenID_hex;
+  char *url;
+  const char *content_type = "application/json";
+  const char *endpoint = "session/destroy";
+  const char *request_body = "{}";
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
 
@@ -841,9 +841,9 @@ ephy_sync_service_destroy_session (EphySyncService *self,
 
 gboolean
 ephy_sync_service_fetch_sync_keys (EphySyncService *self,
-                                   const gchar     *email,
-                                   const gchar     *keyFetchToken,
-                                   const gchar     *unwrapBKey)
+                                   const char      *email,
+                                   const char      *keyFetchToken,
+                                   const char      *unwrapBKey)
 {
   JsonNode *node;
   JsonObject *json;
@@ -854,7 +854,7 @@ ephy_sync_service_fetch_sync_keys (EphySyncService *self,
   guint8 *respXORkey;
   guint8 *kA;
   guint8 *kB;
-  gchar *tokenID_hex;
+  char *tokenID_hex;
   guint status_code;
   gboolean retval = FALSE;
 
@@ -909,9 +909,9 @@ out:
 
 void
 ephy_sync_service_send_storage_message (EphySyncService     *self,
-                                        gchar               *endpoint,
-                                        const gchar         *method,
-                                        gchar               *request_body,
+                                        char                *endpoint,
+                                        const char          *method,
+                                        char                *request_body,
                                         double               modified_since,
                                         double               unmodified_since,
                                         SoupSessionCallback  callback,
@@ -990,8 +990,8 @@ ephy_sync_service_upload_bookmark (EphySyncService *self,
                                    EphyBookmark    *bookmark,
                                    gboolean         force)
 {
-  gchar *endpoint;
-  gchar *bso;
+  char *endpoint;
+  char *bso;
   double modified;
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
@@ -1024,7 +1024,7 @@ download_bookmark_response_cb (SoupSession *session,
   GSequenceIter *iter;
   JsonParser *parser;
   JsonObject *bso;
-  const gchar *id;
+  const char *id;
 
   if (msg->status_code != 200) {
     LOG ("Failed to download from server. Status code: %u, response: %s",
@@ -1060,7 +1060,7 @@ void
 ephy_sync_service_download_bookmark (EphySyncService *self,
                                      EphyBookmark    *bookmark)
 {
-  gchar *endpoint;
+  char *endpoint;
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (ephy_sync_service_is_signed_in (self));
@@ -1123,7 +1123,7 @@ ephy_sync_service_delete_bookmark (EphySyncService *self,
                                    EphyBookmark    *bookmark,
                                    gboolean         conditional)
 {
-  gchar *endpoint;
+  char *endpoint;
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (ephy_sync_service_is_signed_in (self));
@@ -1161,7 +1161,7 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
   GHashTable *marked;
   JsonParser *parser;
   JsonArray *array;
-  const gchar *timestamp;
+  const char *timestamp;
   double server_time;
 
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
@@ -1278,7 +1278,7 @@ sync_bookmarks_response_cb (SoupSession *session,
   GSequenceIter *iter;
   JsonParser *parser;
   JsonArray *array;
-  const gchar *timestamp;
+  const char *timestamp;
   double server_time;
 
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
@@ -1363,7 +1363,7 @@ void
 ephy_sync_service_sync_bookmarks (EphySyncService *self,
                                   gboolean         first)
 {
-  gchar *endpoint;
+  char *endpoint;
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (ephy_sync_service_is_signed_in (self));

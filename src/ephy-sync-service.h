@@ -33,36 +33,36 @@ G_DECLARE_FINAL_TYPE (EphySyncService, ephy_sync_service, EPHY, SYNC_SERVICE, GO
 
 EphySyncService *ephy_sync_service_new                          (void);
 gboolean         ephy_sync_service_is_signed_in                 (EphySyncService *self);
-gchar           *ephy_sync_service_get_user_email               (EphySyncService *self);
+char            *ephy_sync_service_get_user_email               (EphySyncService *self);
 void             ephy_sync_service_set_user_email               (EphySyncService *self,
-                                                                 const gchar     *email);
+                                                                 const char      *email);
 double           ephy_sync_service_get_sync_time                (EphySyncService *self);
 void             ephy_sync_service_set_sync_time                (EphySyncService *self,
                                                                  double           time);
 guint            ephy_sync_service_get_sync_frequency           (EphySyncService *self);
 void             ephy_sync_service_set_sync_frequency           (EphySyncService *self,
                                                                  guint            sync_frequency);
-gchar           *ephy_sync_service_get_token                    (EphySyncService   *self,
+char            *ephy_sync_service_get_token                    (EphySyncService   *self,
                                                                  EphySyncTokenType  type);
 void             ephy_sync_service_set_token                    (EphySyncService   *self,
-                                                                 gchar             *value,
+                                                                 char              *value,
                                                                  EphySyncTokenType  type);
 void             ephy_sync_service_set_and_store_tokens         (EphySyncService   *self,
-                                                                 gchar             *value,
+                                                                 char              *value,
                                                                  EphySyncTokenType  type,
                                                                  ...) G_GNUC_NULL_TERMINATED;
 void             ephy_sync_service_clear_storage_credentials    (EphySyncService *self);
 void             ephy_sync_service_clear_tokens                 (EphySyncService *self);
 void             ephy_sync_service_destroy_session              (EphySyncService *self,
-                                                                 const gchar     *sessionToken);
+                                                                 const char      *sessionToken);
 gboolean         ephy_sync_service_fetch_sync_keys              (EphySyncService *self,
-                                                                 const gchar     *email,
-                                                                 const gchar     *keyFetchToken,
-                                                                 const gchar     *unwrapBKey);
+                                                                 const char      *email,
+                                                                 const char      *keyFetchToken,
+                                                                 const char      *unwrapBKey);
 void             ephy_sync_service_send_storage_message         (EphySyncService     *self,
-                                                                 gchar               *endpoint,
-                                                                 const gchar         *method,
-                                                                 gchar               *request_body,
+                                                                 char                *endpoint,
+                                                                 const char          *method,
+                                                                 char                *request_body,
                                                                  double               modified_since,
                                                                  double               unmodified_since,
                                                                  SoupSessionCallback  callback,

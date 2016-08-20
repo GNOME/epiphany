@@ -32,20 +32,20 @@ typedef enum {
 
 G_BEGIN_DECLS
 
-gchar       *ephy_sync_utils_build_json_string    (const gchar *key,
-                                                   const gchar *value,
-                                                   ...) G_GNUC_NULL_TERMINATED;
-gchar       *ephy_sync_utils_create_bso_json      (const gchar *id,
-                                                   const gchar *payload);
-gchar       *ephy_sync_utils_make_audience        (const gchar *url);
-const gchar *ephy_sync_utils_token_name_from_type (EphySyncTokenType type);
-gchar       *ephy_sync_utils_find_and_replace     (const gchar *src,
-                                                   const gchar *find,
-                                                   const gchar *repl);
-guint8      *ephy_sync_utils_concatenate_bytes    (guint8 *bytes,
-                                                   gsize   bytes_len,
-                                                   ...) G_GNUC_NULL_TERMINATED;
-gint64       ephy_sync_utils_current_time_seconds  (void);
+char       *ephy_sync_utils_build_json_string    (const char *key,
+                                                  const char *value,
+                                                  ...) G_GNUC_NULL_TERMINATED;
+char       *ephy_sync_utils_create_bso_json      (const char *id,
+                                                  const char *payload);
+char       *ephy_sync_utils_make_audience        (const char *url);
+const char *ephy_sync_utils_token_name_from_type (EphySyncTokenType type);
+char       *ephy_sync_utils_find_and_replace     (const char *src,
+                                                  const char *find,
+                                                  const char *repl);
+guint8     *ephy_sync_utils_concatenate_bytes    (guint8 *bytes,
+                                                  gsize   bytes_len,
+                                                  ...) G_GNUC_NULL_TERMINATED;
+gint64      ephy_sync_utils_current_time_seconds  (void);
 
 G_END_DECLS
 

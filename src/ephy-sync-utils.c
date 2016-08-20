@@ -22,22 +22,22 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-gchar *
-ephy_sync_utils_build_json_string (const gchar *key,
-                                   const gchar *value,
+char *
+ephy_sync_utils_build_json_string (const char *key,
+                                   const char *value,
                                    ...)
 {
   va_list args;
-  gchar *json;
-  gchar *next_key;
-  gchar *next_value;
-  gchar *tmp;
+  char *json;
+  char *next_key;
+  char *next_value;
+  char *tmp;
 
   json = g_strconcat ("{\"", key, "\": \"", value, "\"", NULL);
   va_start (args, value);
 
-  while ((next_key = va_arg (args, gchar *)) != NULL) {
-    next_value = va_arg (args, gchar *);
+  while ((next_key = va_arg (args, char *)) != NULL) {
+    next_value = va_arg (args, char *);
     tmp = json;
     json = g_strconcat (json, ", \"", next_key, "\": \"", next_value, "\"", NULL);
     g_free (tmp);
@@ -51,21 +51,21 @@ ephy_sync_utils_build_json_string (const gchar *key,
   return json;
 }
 
-gchar *
-ephy_sync_utils_create_bso_json (const gchar *id,
-                                 const gchar *payload)
+char *
+ephy_sync_utils_create_bso_json (const char *id,
+                                 const char *payload)
 {
   return ephy_sync_utils_build_json_string ("id", id, "payload", payload, NULL);
 }
 
-gchar *
-ephy_sync_utils_make_audience (const gchar *url)
+char *
+ephy_sync_utils_make_audience (const char *url)
 {
   SoupURI *uri;
-  const gchar *scheme;
-  const gchar *host;
-  gchar *audience;
-  gchar *port;
+  const char *scheme;
+  const char *host;
+  char *audience;
+  char *port;
 
   g_return_val_if_fail (url != NULL, NULL);
 
@@ -89,7 +89,7 @@ ephy_sync_utils_make_audience (const gchar *url)
   return audience;
 }
 
-const gchar *
+const char *
 ephy_sync_utils_token_name_from_type (EphySyncTokenType type)
 {
   switch (type) {
@@ -110,19 +110,19 @@ ephy_sync_utils_token_name_from_type (EphySyncTokenType type)
   }
 }
 
-gchar *
-ephy_sync_utils_find_and_replace (const gchar *src,
-                                  const gchar *find,
-                                  const gchar *repl)
+char *
+ephy_sync_utils_find_and_replace (const char *src,
+                                  const char *find,
+                                  const char *repl)
 {
-  const gchar *haystack = src;
-  const gchar *needle = NULL;
+  const char *haystack = src;
+  const char *needle = NULL;
   gsize haystack_len = strlen (src);
   gsize find_len = strlen (find);
   gsize repl_len = strlen (repl);
   gsize new_len = 0;
   gsize skip_len = 0;
-  gchar *out = g_malloc (haystack_len + 1);
+  char *out = g_malloc (haystack_len + 1);
 
   while ((needle = g_strstr_len (haystack, -1, find)) != NULL) {
     haystack_len += find_len - repl_len;

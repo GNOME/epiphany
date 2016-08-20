@@ -150,12 +150,12 @@ prefs_dialog_finalize (GObject *object)
 
 static void
 inject_data_to_server (PrefsDialog *dialog,
-                       const gchar *type,
-                       const gchar *status,
-                       const gchar *data)
+                       const char  *type,
+                       const char  *status,
+                       const char  *data)
 {
-  gchar *json;
-  gchar *script;
+  char *json;
+  char *script;
 
   if (data == NULL)
     json = g_strdup_printf ("{'type': '%s', 'content': {'status': '%s'}}",
@@ -192,9 +192,9 @@ server_message_received_cb (WebKitUserContentManager *manager,
   JsonParser *parser;
   JsonObject *object;
   JsonObject *detail;
-  gchar *json_string;
-  const gchar *type;
-  const gchar *command;
+  char *json_string;
+  const char *type;
+  const char *command;
 
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
   json_string = ephy_embed_utils_get_js_result_as_string (result);
@@ -219,12 +219,12 @@ server_message_received_cb (WebKitUserContentManager *manager,
     inject_data_to_server (dialog, "message", "can_link_account", "{'ok': true}");
   } else if (g_strcmp0 (command, "login") == 0) {
     JsonObject *data = json_object_get_object_member (detail, "data");
-    const gchar *email = json_object_get_string_member (data, "email");
-    const gchar *uid = json_object_get_string_member (data, "uid");
-    const gchar *sessionToken = json_object_get_string_member (data, "sessionToken");
-    const gchar *keyFetchToken = json_object_get_string_member (data, "keyFetchToken");
-    const gchar *unwrapBKey = json_object_get_string_member (data, "unwrapBKey");
-    gchar *text;
+    const char *email = json_object_get_string_member (data, "email");
+    const char *uid = json_object_get_string_member (data, "uid");
+    const char *sessionToken = json_object_get_string_member (data, "sessionToken");
+    const char *keyFetchToken = json_object_get_string_member (data, "keyFetchToken");
+    const char *unwrapBKey = json_object_get_string_member (data, "unwrapBKey");
+    char *text;
 
     inject_data_to_server (dialog, "message", "login", NULL);
     gtk_widget_set_visible (dialog->sync_sign_in_details, FALSE);
@@ -301,12 +301,12 @@ out:
 static void
 setup_fxa_sign_in_view (PrefsDialog *dialog)
 {
-  const gchar *js = "\"use strict\";"
-                    "function handleAccountsCommand(evt) {"
-                    "  let j = {type: evt.type, detail: evt.detail};"
-                    "  window.webkit.messageHandlers.accountsCommandHandler.postMessage(JSON.stringify(j));"
-                    "};"
-                    "window.addEventListener(\"FirefoxAccountsCommand\", handleAccountsCommand);";
+  const char *js = "\"use strict\";"
+                   "function handleAccountsCommand(evt) {"
+                   "  let j = {type: evt.type, detail: evt.detail};"
+                   "  window.webkit.messageHandlers.accountsCommandHandler.postMessage(JSON.stringify(j));"
+                   "};"
+                   "window.addEventListener(\"FirefoxAccountsCommand\", handleAccountsCommand);";
 
   dialog->fxa_script = webkit_user_script_new (js,
                                                WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
@@ -1475,7 +1475,7 @@ static void
 setup_sync_page (PrefsDialog *dialog)
 {
   EphySyncService *service;
-  gchar *text;
+  char *text;
 
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
 
