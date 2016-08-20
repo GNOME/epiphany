@@ -39,9 +39,6 @@ void             ephy_sync_service_set_user_email               (EphySyncService
 double           ephy_sync_service_get_sync_time                (EphySyncService *self);
 void             ephy_sync_service_set_sync_time                (EphySyncService *self,
                                                                  double           time);
-guint            ephy_sync_service_get_sync_frequency           (EphySyncService *self);
-void             ephy_sync_service_set_sync_frequency           (EphySyncService *self,
-                                                                 guint            sync_frequency);
 char            *ephy_sync_service_get_token                    (EphySyncService   *self,
                                                                  EphySyncTokenType  type);
 void             ephy_sync_service_set_token                    (EphySyncService   *self,
@@ -78,7 +75,9 @@ void             ephy_sync_service_delete_bookmark              (EphySyncService
                                                                  gboolean         conditional);
 void             ephy_sync_service_sync_bookmarks               (EphySyncService *self,
                                                                  gboolean         first);
-gboolean         ephy_sync_service_do_periodical_sync           (EphySyncService *self);
+void             ephy_sync_service_start_periodical_sync        (EphySyncService *self,
+                                                                 gboolean         now);
+void             ephy_sync_service_stop_periodical_sync         (EphySyncService *self);
 
 G_END_DECLS
 
