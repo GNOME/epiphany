@@ -92,7 +92,7 @@ AM_CONDITIONAL([ENABLE_TESTS],[test "$enable_tests" = "yes"])
 # Dependencies
 # ************
 
-LIBGD_INIT([_view-common static])
+LIBGD_INIT([_view-common notification static])
 
 LT_LIB_M
 

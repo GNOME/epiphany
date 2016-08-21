@@ -40,8 +40,12 @@ libephyembed_la_SOURCES = \
 	ephy-file-monitor.h		\
 	ephy-find-toolbar.c		\
 	ephy-find-toolbar.h		\
+	ephy-fx-password-notification.c	\
+	ephy-fx-password-notification.h	\
 	ephy-hosts-manager.c		\
 	ephy-hosts-manager.h		\
+	ephy-notification-manager.c	\
+	ephy-notification-manager.h	\
 	ephy-view-source-handler.c	\
 	ephy-view-source-handler.h	\
 	ephy-web-view.c			\
@@ -63,6 +67,7 @@ libephyembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/egg			\
 	-I$(top_srcdir)/lib/history		\
 	-I$(top_srcdir)/lib/widgets		\
+	-I$(top_srcdir)/libgd			\
 	-DPKGDATADIR=\"$(pkgdatadir)\"		\
 	-DEPHY_WEB_EXTENSIONS_DIR=\"$(pkglibdir)/web-extensions\"	\
 	$(GDK_CFLAGS)				\
