@@ -97,6 +97,7 @@ libephymisc_la_LDFLAGS = \
 	$(AM_LDFLAGS) -avoid-version -no-undefined
 
 libephymisc_la_LIBADD = \
+	$(top_builddir)/lib/history/libephyhistory.la \
 	$(CAIRO_LIBS)		\
 	$(GDK_PIXBUF_LIBS)	\
 	$(GDK_X11_LIBS)		\
@@ -132,7 +133,6 @@ ephy_profile_migrator_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
 ephy_profile_migrator_LDADD = \
-	$(top_builddir)/lib/history/libephyhistory.la \
 	libephymisc.la		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
