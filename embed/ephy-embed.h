@@ -31,21 +31,23 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyEmbed, ephy_embed, EPHY, EMBED, GtkBox)
 
-EphyWebView*     ephy_embed_get_web_view             (EphyEmbed  *embed);
-EphyFindToolbar* ephy_embed_get_find_toolbar         (EphyEmbed  *embed);
-void             ephy_embed_add_top_widget           (EphyEmbed  *embed,
-                                                      GtkWidget  *widget,
-                                                      gboolean    destroy_on_transition);
-void             ephy_embed_remove_top_widget        (EphyEmbed  *embed,
-                                                      GtkWidget  *widget);
-void             ephy_embed_entering_fullscreen      (EphyEmbed *embed);
-void             ephy_embed_leaving_fullscreen       (EphyEmbed *embed);
-void             ephy_embed_set_delayed_load_request (EphyEmbed *embed,
-                                                      WebKitURIRequest          *request,
-                                                      WebKitWebViewSessionState *state);
-gboolean         ephy_embed_has_load_pending         (EphyEmbed *embed);
-gboolean         ephy_embed_inspector_is_loaded      (EphyEmbed *embed);
-const char      *ephy_embed_get_title                (EphyEmbed *embed);
+EphyWebView*     ephy_embed_get_web_view                (EphyEmbed  *embed);
+EphyFindToolbar* ephy_embed_get_find_toolbar            (EphyEmbed  *embed);
+void             ephy_embed_add_top_widget              (EphyEmbed  *embed,
+                                                         GtkWidget  *widget,
+                                                         gboolean    destroy_on_transition);
+void             ephy_embed_remove_top_widget           (EphyEmbed  *embed,
+                                                         GtkWidget  *widget);
+void             ephy_embed_entering_fullscreen         (EphyEmbed *embed);
+void             ephy_embed_leaving_fullscreen          (EphyEmbed *embed);
+void             ephy_embed_set_delayed_load_request    (EphyEmbed *embed,
+                                                         WebKitURIRequest          *request,
+                                                         WebKitWebViewSessionState *state);
+gboolean         ephy_embed_has_load_pending            (EphyEmbed *embed);
+gboolean         ephy_embed_inspector_is_loaded         (EphyEmbed *embed);
+const char      *ephy_embed_get_title                   (EphyEmbed *embed);
+void             ephy_embed_attach_notification_manager (EphyEmbed *embed);
+void             ephy_embed_detach_notification_manager (EphyEmbed *embed);
 
 G_END_DECLS
 

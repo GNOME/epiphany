@@ -26,6 +26,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed.h"
 #include "ephy-session.h"
+#include "ephy-sync-service.h"
 #include "ephy-window.h"
 
 #include <webkit2/webkit2.h>
@@ -104,6 +105,8 @@ EphyBookmarks   *ephy_shell_get_bookmarks                (EphyShell *shell);
 GtkWidget       *ephy_shell_get_bookmarks_editor         (EphyShell *shell);
 
 EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
+
+EphySyncService *ephy_shell_get_sync_service             (EphyShell *shell);
 
 GtkWidget       *ephy_shell_get_history_window           (EphyShell *shell);
 

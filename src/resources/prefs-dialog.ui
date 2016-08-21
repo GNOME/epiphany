@@ -732,6 +732,151 @@
                 <property name="tab_fill">False</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="border-width">12</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">18</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Sync</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="sync_top_box">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="margin-start">12</property>
+                            <property name="spacing">8</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="use-markup">True</property>
+                                <property name="label" translatable="yes">Sign in with your &lt;b&gt;Firefox Account&lt;/b&gt; and have your bookmarks synced across all your devices.</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="halign">start</property>
+                                <property name="use-markup">True</property>
+                                <property name="label" translatable="yes">Note that you must own an already &lt;b&gt;verified&lt;/b&gt; account to be able to login.</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Authenticate</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="sync_authenticate_box">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="margin-start">12</property>
+                            <child>
+                              <object class="GtkBox" id="sync_sign_in_box">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="halign">center</property>
+                                <property name="spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="sync_sign_in_details">
+                                    <property name="visible">False</property>
+                                    <property name="halign">start</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="sync_sign_out_box">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">8</property>
+                                <child>
+                                  <object class="GtkLabel" id="sync_sign_out_details">
+                                    <property name="visible">True</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes"></property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Sign out if you wish to stop syncing.</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="sync_sign_out_button">
+                                    <property name="label" translatable="yes">Sign _out</property>
+                                    <property name="visible">True</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="halign">start</property>
+                                    <property name="width-request">100</property>
+                                    <signal name="clicked" handler="on_sync_sign_out_button_clicked"/>
+                                    <style>
+                                      <class name="destructive-action"/>
+                                      <class name="text-button"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Sync</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>

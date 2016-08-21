@@ -14,11 +14,11 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-06-01 14:48+0000\n"
-"PO-Revision-Date: 2016-06-02 09:18+0200\n"
+"POT-Creation-Date: 2016-07-15 22:41+0000\n"
+"PO-Revision-Date: 2016-07-18 14:29+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
-"Language: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -58,8 +58,8 @@ msgid "The GNOME Project"
 msgstr "El proyecto GNOME"
 
 #: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:289
-#: ../embed/ephy-about-handler.c:320 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:311 ../src/ephy-main.c:463 ../src/window-commands.c:1475
+#: ../embed/ephy-about-handler.c:320 ../src/ephy-main.c:77
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1500
 msgid "Web"
 msgstr "Web"
 
@@ -1047,7 +1047,7 @@ msgid "Loading…"
 msgstr "Cargando…"
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1607
+#: ../embed/ephy-web-view.c:1608
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1055,7 +1055,7 @@ msgstr ""
 "diferente."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1612
+#: ../embed/ephy-web-view.c:1613
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1064,14 +1064,14 @@ msgstr ""
 "Compruebe la fecha en el calendario de su equipo."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1617
+#: ../embed/ephy-web-view.c:1618
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "La identificación de este sitio web no la ha emitido una organización de "
 "confianza."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1622
+#: ../embed/ephy-web-view.c:1623
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1079,7 +1079,7 @@ msgstr ""
 "corrupta."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1627
+#: ../embed/ephy-web-view.c:1628
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1088,7 +1088,7 @@ msgstr ""
 "revocado."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1632
+#: ../embed/ephy-web-view.c:1633
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1097,7 +1097,7 @@ msgstr ""
 "cifrado muy débil."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1637
+#: ../embed/ephy-web-view.c:1638
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1105,24 +1105,24 @@ msgstr ""
 "La identificación de este sitio web sólo es válida para fechas futuras. "
 "Compruebe la fecha en el calendario de su equipo."
 
-#: ../embed/ephy-web-view.c:1720
+#: ../embed/ephy-web-view.c:1721
 msgid "None specified"
 msgstr "Ninguna espacificada"
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: ../embed/ephy-web-view.c:1734 ../embed/ephy-web-view.c:1759
+#: ../embed/ephy-web-view.c:1735 ../embed/ephy-web-view.c:1761
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problema al cargar la página"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: ../embed/ephy-web-view.c:1737
+#: ../embed/ephy-web-view.c:1738
 msgid "Oops! Unable to display this website"
 msgstr "No se ha podido mostrar esta página web"
 
 #. Message body when a site cannot be loaded due to a network error.
-#: ../embed/ephy-web-view.c:1740
+#: ../embed/ephy-web-view.c:1741
 #, c-format
 msgid ""
 "<p>The site at <strong>%s</strong> seems to be unavailable.</p><p>It may be "
@@ -1135,32 +1135,33 @@ msgstr ""
 "funcionando correctamente.</p>"
 
 #. Message details when a site cannot be loaded due to a network error.
-#: ../embed/ephy-web-view.c:1749
+#: ../embed/ephy-web-view.c:1750
 #, c-format
 msgid "<p>The precise error was: <i>%s</i></p>"
 msgstr "<p>El error concreto es: <i>%s</i></p>"
 
-#. The button on the network error page.
-#. The button on the page crash error page.
-#. The button on the process crash error page.
-#: ../embed/ephy-web-view.c:1753 ../embed/ephy-web-view.c:1774
-#: ../embed/ephy-web-view.c:1790
+#. The button on the network error page. Do not add mnemonics here.
+#. The button on the page crash error page. Do not add mnemonics here.
+#. The button on the process crash error page. Do not add mnemonics here.
+#: ../embed/ephy-web-view.c:1754 ../embed/ephy-web-view.c:1776
+#: ../embed/ephy-web-view.c:1793
 msgid "Reload"
 msgstr "Recargar"
 
-#: ../embed/ephy-web-view.c:1755 ../embed/ephy-web-view.c:1776
-#: ../embed/ephy-web-view.c:1792
+#. Mnemonic for the Reload button on browser error pages.
+#: ../embed/ephy-web-view.c:1757 ../embed/ephy-web-view.c:1779
+#: ../embed/ephy-web-view.c:1796
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: ../embed/ephy-web-view.c:1762
+#: ../embed/ephy-web-view.c:1764
 msgid "Oops! There may be a problem"
 msgstr "Es posible que haya un problema"
 
 #. Message body when a site cannot be loaded due to a page crash error.
-#: ../embed/ephy-web-view.c:1765
+#: ../embed/ephy-web-view.c:1767
 #, c-format
 msgid ""
 "<p>The site at <strong>%s</strong> may have caused Web to close unexpectedly."
@@ -1172,18 +1173,18 @@ msgstr ""
 "desarrolladores de <strong>%s</strong>.</p>"
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: ../embed/ephy-web-view.c:1780
+#: ../embed/ephy-web-view.c:1783
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problema al mostrar la página"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: ../embed/ephy-web-view.c:1783
+#: ../embed/ephy-web-view.c:1786
 msgid "Oops!"
 msgstr "¡Ups!"
 
 #. Message body when a site cannot be loaded due to a process crash error.
-#: ../embed/ephy-web-view.c:1786
+#: ../embed/ephy-web-view.c:1789
 msgid ""
 "<p>Something went wrong while displaying this page.</p><p>Please reload or "
 "visit a different page to continue.</p>"
@@ -1192,18 +1193,18 @@ msgstr ""
 "una página diferente para continuar.</p>"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: ../embed/ephy-web-view.c:1796
+#: ../embed/ephy-web-view.c:1800
 #, c-format
 msgid "Security Violation"
 msgstr "Violación de seguridad"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: ../embed/ephy-web-view.c:1799
+#: ../embed/ephy-web-view.c:1803
 msgid "This Connection is Not Secure"
 msgstr "Esta conexión no es segura"
 
 #. Message body when a site is not loaded due to an invalid TLS certificate.
-#: ../embed/ephy-web-view.c:1802
+#: ../embed/ephy-web-view.c:1806
 #, c-format
 msgid ""
 "<p>This does not look like the real <strong>%s</strong>. Attackers might be "
@@ -1215,27 +1216,29 @@ msgstr ""
 "ejemplo, mensajes privados, información de tarjetas de crédito o "
 "contraseñas).</p>"
 
-#. The button on the invalid TLS certificate error page.
-#: ../embed/ephy-web-view.c:1812
+#. The button on the invalid TLS certificate error page. Do not add mnemonics here.
+#: ../embed/ephy-web-view.c:1816
 msgid "Go Back"
 msgstr "Atrás"
 
-#: ../embed/ephy-web-view.c:1814
+#. Mnemonic for the Go Back button on the invalid TLS certificate error page.
+#: ../embed/ephy-web-view.c:1819
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
-#. The hidden button on the invalid TLS certificate error page.
-#: ../embed/ephy-web-view.c:1817
+#. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
+#: ../embed/ephy-web-view.c:1822
 msgid "Accept Risk and Proceed"
 msgstr "Aceptar riesgo y seguir"
 
-#: ../embed/ephy-web-view.c:1820
+#. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
+#: ../embed/ephy-web-view.c:1826
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
-#: ../embed/ephy-web-view.c:2742
+#: ../embed/ephy-web-view.c:2743
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -1548,7 +1551,7 @@ msgstr "Iniciando…"
 #: ../src/bookmarks/ephy-bookmark-properties.c:375
 #: ../src/bookmarks/ephy-bookmarks-editor.c:766
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:779
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:778
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1739,7 +1742,7 @@ msgstr "_Ver"
 
 #. Help.
 #: ../src/bookmarks/ephy-bookmarks-editor.c:151
-#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:186
+#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:186
 msgid "_Help"
 msgstr "Ay_uda"
 
@@ -1867,7 +1870,7 @@ msgid "Display bookmarks help"
 msgstr "Mostrar ayuda de los marcadores"
 
 #: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:188
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:188
 msgid "_About"
 msgstr "Acerca _de"
 
@@ -2175,7 +2178,11 @@ msgstr "_Histórico"
 msgid "Pr_eferences"
 msgstr "Prefere_ncias"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:106
+#: ../src/resources/epiphany-application-menu.ui.h:7
+msgid "_Keyboard Shortcuts"
+msgstr "_Atajos del teclado"
+
+#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:106
 msgid "_Quit"
 msgstr "_Salir"
 
@@ -2418,6 +2425,289 @@ msgstr "Añadir idioma"
 msgid "Choose a l_anguage:"
 msgstr "Elija un _idioma:"
 
+#: ../src/resources/shortcuts-dialog.ui.h:1
+#| msgid "General"
+msgctxt "shortcut window"
+msgid "General"
+msgstr "General"
+
+#: ../src/resources/shortcuts-dialog.ui.h:2
+#| msgid "_New Window"
+msgctxt "shortcut window"
+msgid "New window"
+msgstr "Ventana nueva"
+
+#: ../src/resources/shortcuts-dialog.ui.h:3
+#| msgid "New Incognito Window"
+msgctxt "shortcut window"
+msgid "New incognito window"
+msgstr "Nueva ventana de incógnito"
+
+#: ../src/resources/shortcuts-dialog.ui.h:4
+#| msgid "Open a file"
+msgctxt "shortcut window"
+msgid "Open file"
+msgstr "Abrir archivo"
+
+#: ../src/resources/shortcuts-dialog.ui.h:5
+#| msgid "Save Image As"
+msgctxt "shortcut window"
+msgid "Save page"
+msgstr "Guardar página"
+
+#: ../src/resources/shortcuts-dialog.ui.h:6
+#| msgid "Save Image As"
+msgctxt "shortcut window"
+msgid "Save page as web app"
+msgstr "Guardar página como app web"
+
+#: ../src/resources/shortcuts-dialog.ui.h:7
+#| msgid "Print preview"
+msgctxt "shortcut window"
+msgid "Print page"
+msgstr "Imprimir página"
+
+#: ../src/resources/shortcuts-dialog.ui.h:8
+#| msgid "_Quit"
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Salir"
+
+#: ../src/resources/shortcuts-dialog.ui.h:9
+#| msgid "_Help"
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "Ayuda"
+
+#: ../src/resources/shortcuts-dialog.ui.h:10
+msgctxt "shortcut window"
+msgid "Shortcuts"
+msgstr "Atajos"
+
+#: ../src/resources/shortcuts-dialog.ui.h:11
+#| msgid "Organization:"
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Navegación"
+
+#: ../src/resources/shortcuts-dialog.ui.h:12
+#| msgid "Save the current page"
+msgctxt "shortcut window"
+msgid "Reload current page"
+msgstr "Recargar la página actual"
+
+#: ../src/resources/shortcuts-dialog.ui.h:13
+#| msgid "Set to Current _Page"
+msgctxt "shortcut window"
+msgid "Stop loading current page"
+msgstr "Detener la carga de la página actual"
+
+#: ../src/resources/shortcuts-dialog.ui.h:14
+#| msgid "Go to the previous page"
+msgctxt "shortcut window"
+msgid "Go back to the previous page"
+msgstr "Ir a la página anterior"
+
+#: ../src/resources/shortcuts-dialog.ui.h:15
+#| msgid "Go to next page"
+msgctxt "shortcut window"
+msgid "Go forward to the next page"
+msgstr "Ir a la siguiente página"
+
+#: ../src/resources/shortcuts-dialog.ui.h:16
+#| msgid "_Tabs"
+msgctxt "shortcut window"
+msgid "Tabs"
+msgstr "Pestañas"
+
+#: ../src/resources/shortcuts-dialog.ui.h:17
+#| msgid "New _Tab"
+msgctxt "shortcut window"
+msgid "New tab"
+msgstr "Pestaña nueva"
+
+#: ../src/resources/shortcuts-dialog.ui.h:18
+#| msgid "Detach current tab"
+msgctxt "shortcut window"
+msgid "Duplicate current tab"
+msgstr "Duplicar la pestaña actual"
+
+#: ../src/resources/shortcuts-dialog.ui.h:19
+#| msgid "Detach current tab"
+msgctxt "shortcut window"
+msgid "Close current tab"
+msgstr "Cerrar la pestaña actual"
+
+#: ../src/resources/shortcuts-dialog.ui.h:20
+#| msgid "Reopen Closed _Tab"
+msgctxt "shortcut window"
+msgid "Reopen closed tab"
+msgstr "Volver a abrir la pestaña cerrada"
+
+#: ../src/resources/shortcuts-dialog.ui.h:21
+#| msgid "Go to next page"
+msgctxt "shortcut window"
+msgid "Go to the next tab"
+msgstr "Ir a la siguiente pestaña"
+
+#: ../src/resources/shortcuts-dialog.ui.h:22
+#| msgid "Go to the previous page"
+msgctxt "shortcut window"
+msgid "Go to the previous tab"
+msgstr "Ir a la pestaña anterior"
+
+#: ../src/resources/shortcuts-dialog.ui.h:23
+#| msgid "Move current tab to left"
+msgctxt "shortcut window"
+msgid "Move current tab to the left"
+msgstr "Mover la pestaña actual a la izquierda"
+
+#: ../src/resources/shortcuts-dialog.ui.h:24
+#| msgid "Move current tab to right"
+msgctxt "shortcut window"
+msgid "Move current tab to the right"
+msgstr "Mover la pestaña actual a la derecha"
+
+#: ../src/resources/shortcuts-dialog.ui.h:25
+msgctxt "shortcut window"
+msgid "Miscellaneous"
+msgstr "Miscelánea"
+
+#: ../src/resources/shortcuts-dialog.ui.h:26
+#| msgid "History"
+msgctxt "shortcut window"
+msgid "History"
+msgstr "Histórico"
+
+#: ../src/resources/shortcuts-dialog.ui.h:27
+#| msgid "Preferences"
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: ../src/resources/shortcuts-dialog.ui.h:28
+#| msgid "Bookmarks"
+msgctxt "shortcut window"
+msgid "Bookmarks"
+msgstr "Marcadores"
+
+#: ../src/resources/shortcuts-dialog.ui.h:29
+#| msgid "Add a bookmark for the current page"
+msgctxt "shortcut window"
+msgid "Bookmark current page"
+msgstr "Añadir la página actual a marcadores"
+
+#: ../src/resources/shortcuts-dialog.ui.h:30
+#| msgid "Enable caret browsing mode?"
+msgctxt "shortcut window"
+msgid "Toggle caret browsing"
+msgstr "Conmutar el modo de navegación con cursor"
+
+#: ../src/resources/shortcuts-dialog.ui.h:31
+#| msgid "_View"
+msgctxt "shortcut window"
+msgid "View"
+msgstr "Ver"
+
+#: ../src/resources/shortcuts-dialog.ui.h:32
+#| msgid "Zoom _In"
+msgctxt "shortcut window"
+msgid "Zoom in"
+msgstr "Ampliar"
+
+#: ../src/resources/shortcuts-dialog.ui.h:33
+#| msgid "Zoom O_ut"
+msgctxt "shortcut window"
+msgid "Zoom out"
+msgstr "Reducir"
+
+#: ../src/resources/shortcuts-dialog.ui.h:34
+msgctxt "shortcut window"
+msgid "Reset zoom"
+msgstr "Restablecer ampliación"
+
+#: ../src/resources/shortcuts-dialog.ui.h:35
+#| msgid "_Fullscreen"
+msgctxt "shortcut window"
+msgid "Fullscreen"
+msgstr "Pantalla completa"
+
+#: ../src/resources/shortcuts-dialog.ui.h:36
+#| msgid "_Page Source"
+msgctxt "shortcut window"
+msgid "View page source"
+msgstr "Ver código fuente"
+
+#: ../src/resources/shortcuts-dialog.ui.h:37
+#| msgid "_Toggle Inspector"
+msgctxt "shortcut window"
+msgid "Toggle inspector"
+msgstr "Conmutar inspector"
+
+#: ../src/resources/shortcuts-dialog.ui.h:38
+#| msgid "_Edit"
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Edición"
+
+#: ../src/resources/shortcuts-dialog.ui.h:39
+#| msgid "Cu_t"
+msgctxt "shortcut window"
+msgid "Cut"
+msgstr "Cortar"
+
+#: ../src/resources/shortcuts-dialog.ui.h:40
+#| msgid "_Copy"
+msgctxt "shortcut window"
+msgid "Copy"
+msgstr "Copiar"
+
+#: ../src/resources/shortcuts-dialog.ui.h:41
+#| msgid "_Paste"
+msgctxt "shortcut window"
+msgid "Paste"
+msgstr "Pegar"
+
+#: ../src/resources/shortcuts-dialog.ui.h:42
+#| msgid "_Undo"
+msgctxt "shortcut window"
+msgid "Undo"
+msgstr "Deshacer"
+
+#: ../src/resources/shortcuts-dialog.ui.h:43
+#| msgid "_Redo"
+msgctxt "shortcut window"
+msgid "Redo"
+msgstr "Rehacer"
+
+#: ../src/resources/shortcuts-dialog.ui.h:44
+#| msgid "Select _All"
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+#: ../src/resources/shortcuts-dialog.ui.h:45
+#| msgid "Selection Caret"
+msgctxt "shortcut window"
+msgid "Select page URL"
+msgstr "Seleccionar el URL de la página"
+
+#: ../src/resources/shortcuts-dialog.ui.h:46
+#| msgid "Search"
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Buscar"
+
+#: ../src/resources/shortcuts-dialog.ui.h:47
+msgctxt "shortcut window"
+msgid "Next search result"
+msgstr "Siguiente resultado de búsqueda"
+
+#: ../src/resources/shortcuts-dialog.ui.h:48
+msgctxt "shortcut window"
+msgid "Previous search result"
+msgstr "Resultado de búsqueda anterior"
+
 #: ../src/ephy-combined-stop-reload-action.c:38
 msgid "Stop"
 msgstr "Detener"
@@ -2446,67 +2736,67 @@ msgstr ""
 "Limpiar del histórico de navegación hará que todos enlaces del histórico se "
 "eliminen permanentemente."
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:86
 msgid "Open a new tab in an existing browser window"
 msgstr "Abre una pestaña nueva en una ventana existente del navegador"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:88
 msgid "Open a new browser window"
 msgstr "Abre una ventana nueva del navegador"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:90
 msgid "Import bookmarks from the given file"
 msgstr "Importar marcadores desde el archivo dado"
 
-#: ../src/ephy-main.c:78 ../src/ephy-main.c:80
+#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
 msgid "FILE"
 msgstr "ARCHIVO"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:92
 msgid "Load the given session file"
 msgstr "Cargar el archivo de sesiones dado"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:94
 msgid "Add a bookmark"
 msgstr "Añadir un marcador"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:94
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:96
 msgid "Start a private instance"
 msgstr "Iniciar una instancia privada"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:98
 msgid "Start an instance in incognito mode"
 msgstr "Iniciar una instancia en modo incógnito"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:100
 msgid "Start an instance in netbank mode"
 msgstr "Iniciar una instancia en modo «netbank»"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:103
 msgid "Start the browser in application mode"
 msgstr "Iniciar el navegador en modo aplicación"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:105
 msgid "Profile directory to use in the private instance"
 msgstr "Carpeta de perfiles que usar en la instancia privada"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:105
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:107
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:199
+#: ../src/ephy-main.c:212
 msgid "Could not start Web"
 msgstr "No se pudo iniciar Web"
 
-#: ../src/ephy-main.c:202
+#: ../src/ephy-main.c:215
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2515,7 +2805,7 @@ msgstr ""
 "El inicio ha fallado debido al siguiente error:\n"
 "%s"
 
-#: ../src/ephy-main.c:312
+#: ../src/ephy-main.c:325
 msgid "Web options"
 msgstr "Opciones de Web"
 
@@ -2595,7 +2885,6 @@ msgid "_Page Source"
 msgstr "Código _fuente"
 
 #: ../src/ephy-window.c:156
-#| msgid "Web Inspector"
 msgid "_Toggle Inspector"
 msgstr "Conmun_tar inspector"
 
@@ -2897,62 +3186,62 @@ msgstr "http://www.bing.com/search?q=%s&cc=es"
 msgid "Save"
 msgstr "Guardar"
 
-#: ../src/window-commands.c:681
+#: ../src/window-commands.c:680
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Ya existe una aplicación web con nombre «%s». ¿Quiere reemplazarla?"
 
-#: ../src/window-commands.c:684
+#: ../src/window-commands.c:683
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../src/window-commands.c:686
+#: ../src/window-commands.c:685
 msgid "Replace"
 msgstr "Reemplazar"
 
-#: ../src/window-commands.c:690
+#: ../src/window-commands.c:689
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Ya existe una aplicación con el mismo nombre. Reemplazarla la sobrescribirá."
 
-#: ../src/window-commands.c:725
+#: ../src/window-commands.c:724
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "La aplicación «%s» está lista para usarse"
 
-#: ../src/window-commands.c:728
+#: ../src/window-commands.c:727
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "No se pudo crear la aplicación «%s»"
 
-#: ../src/window-commands.c:736
+#: ../src/window-commands.c:735
 msgid "Launch"
 msgstr "Lanzar"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:776
+#: ../src/window-commands.c:775
 msgid "Create Web Application"
 msgstr "Crear una aplicación web"
 
-#: ../src/window-commands.c:781
+#: ../src/window-commands.c:780
 msgid "C_reate"
 msgstr "C_rear"
 
-#: ../src/window-commands.c:1436 ../src/window-commands.c:1459
+#: ../src/window-commands.c:1461 ../src/window-commands.c:1484
 msgid "Contact us at:"
 msgstr "Contacte con nosotros en:"
 
-#: ../src/window-commands.c:1439
+#: ../src/window-commands.c:1464
 msgid "Contributors:"
 msgstr "Contribuyentes:"
 
-#: ../src/window-commands.c:1442
+#: ../src/window-commands.c:1467
 msgid "Past developers:"
 msgstr "Desarrolladores anteriores:"
 
-#: ../src/window-commands.c:1468
+#: ../src/window-commands.c:1493
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2969,22 +3258,22 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1491
+#: ../src/window-commands.c:1516
 msgid "translator-credits"
 msgstr ""
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012\n"
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/window-commands.c:1494
+#: ../src/window-commands.c:1519
 msgid "Web Website"
 msgstr "Sitio web de Web"
 
-#: ../src/window-commands.c:1655
+#: ../src/window-commands.c:1680
 msgid "Enable caret browsing mode?"
 msgstr "¿Activar el modo de navegación con cursor?"
 
-#: ../src/window-commands.c:1658
+#: ../src/window-commands.c:1683
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2994,7 +3283,7 @@ msgstr ""
 "característica ubica un cursor movible en las páginas web, permitiéndole "
 "moverse con su teclado. ¿Quiere activar el modo de navegación con cursor?"
 
-#: ../src/window-commands.c:1661
+#: ../src/window-commands.c:1686
 msgid "_Enable"
 msgstr "_Activar"
 
@@ -3607,9 +3896,6 @@ msgstr "_Activar"
 #~ msgid "MD5 Fingerprint:"
 #~ msgstr "Huella MD5:"
 
-#~ msgid "Organization:"
-#~ msgstr "Organización:"
-
 #~ msgid "Organizational Unit:"
 #~ msgstr "Unidad organizativa:"
 
@@ -3686,12 +3972,6 @@ msgstr "_Activar"
 #~ msgid "_Toolbars"
 #~ msgstr "Barra de _herramientas"
 
-#~ msgid "Open a file"
-#~ msgstr "Abrir un archivo"
-
-#~ msgid "Save the current page"
-#~ msgstr "Guardar la página actual"
-
 #~ msgid "Save the current page as a Web Application"
 #~ msgstr "Guardar la página actual como una aplicación web"
 
@@ -3703,9 +3983,6 @@ msgstr "_Activar"
 
 #~ msgid "Print Pre_view"
 #~ msgstr "Vista p_revia de impresión"
-
-#~ msgid "Print preview"
-#~ msgstr "Vista previa de impresión"
 
 #~ msgid "Print the current page"
 #~ msgstr "Imprime la página actual"
@@ -3755,9 +4032,6 @@ msgstr "_Activar"
 #~ msgid "View the source code of the page"
 #~ msgstr "Ver el código fuente de la página"
 
-#~ msgid "Add a bookmark for the current page"
-#~ msgstr "Añadir un marcador para la página actual"
-
 #~ msgid "Go to a specified location"
 #~ msgstr "Ir a una dirección especificada"
 
@@ -3766,15 +4040,6 @@ msgstr "_Activar"
 
 #~ msgid "Activate next tab"
 #~ msgstr "Activar siguiente pestaña"
-
-#~ msgid "Move current tab to left"
-#~ msgstr "Mover la pestaña actual a la izquierda"
-
-#~ msgid "Move current tab to right"
-#~ msgstr "Mover la pestaña actual a la derecha"
-
-#~ msgid "Detach current tab"
-#~ msgstr "Desprender la pestaña actual"
 
 #~ msgid "Switch to offline mode"
 #~ msgstr "Cambiar a modo desconectado"
@@ -3910,9 +4175,6 @@ msgstr "_Activar"
 #~ msgid "Home page"
 #~ msgstr "Página inicial"
 
-#~ msgid "Set to Current _Page"
-#~ msgstr "Establecer a la página ac_tual"
-
 #~ msgid "Set to _Blank Page"
 #~ msgstr "Definir a página en _blanco"
 
@@ -4011,9 +4273,6 @@ msgstr "_Activar"
 
 #~ msgid "_Go"
 #~ msgstr "_Ir"
-
-#~ msgid "_Tabs"
-#~ msgstr "Pestaña_s"
 
 #~ msgid "Certificate_s"
 #~ msgstr "Cer_tificados"
@@ -4474,14 +4733,8 @@ msgstr "_Activar"
 #~ msgid "Previous"
 #~ msgstr "Anterior"
 
-#~ msgid "Go to the previous page"
-#~ msgstr "Ir a la página anterior"
-
 #~ msgid "Next"
 #~ msgstr "Siguiente"
-
-#~ msgid "Go to next page"
-#~ msgstr "Ir a la siguiente página"
 
 #~ msgid "Close"
 #~ msgstr "Cerrar"

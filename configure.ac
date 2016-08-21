@@ -16,7 +16,7 @@
 
 m4_define([epiphany_version_major],[3])
 m4_define([epiphany_version_minor],[21])
-m4_define([epiphany_version_micro],[3])
+m4_define([epiphany_version_micro],[4])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 AC_INIT([GNOME Web Browser],[epiphany_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
@@ -82,6 +82,9 @@ LIBNOTIFY_REQUIRED=0.5.1
 GCR_REQUIRED=3.5.5
 AVAHI_REQUIRED=0.6.22
 GVDB_REQUIRED="glib-2.0 >= $GLIB_REQUIRED"
+JSON_GLIB_REQUIRED=1.2.0
+NETTLE_REQUIRED=3.2
+HOGWEED_REQUIRED=3.2
 
 # Tests
 
@@ -93,7 +96,7 @@ AC_MSG_RESULT([$enable_tests])
 
 AM_CONDITIONAL([ENABLE_TESTS],[test "$enable_tests" = "yes"])
 
-LIBGD_INIT([_view-common static])
+LIBGD_INIT([_view-common notification static])
 
 PKG_CHECK_MODULES([DEPENDENCIES], [
 		  glib-2.0 >= $GLIB_REQUIRED
@@ -114,6 +117,9 @@ PKG_CHECK_MODULES([DEPENDENCIES], [
 		  gcr-3 >= $GCR_REQUIRED
 		  avahi-gobject >= $AVAHI_REQUIRED
 		  avahi-client >= $AVAHI_REQUIRED
+		  json-glib-1.0 >= $JSON_GLIB_REQUIRED
+		  nettle >= $NETTLE_REQUIRED
+		  hogweed >= $HOGWEED_REQUIRED
 		  ])
 
 # Check requirements for gvdb

@@ -19,6 +19,7 @@
 #define _EPHY_BOOKMARK_H
 
 #include <glib-object.h>
+#include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
@@ -42,6 +43,18 @@ void                 ephy_bookmark_set_title           (EphyBookmark *self,
                                                         const char   *title);
 const char          *ephy_bookmark_get_title           (EphyBookmark *self);
 
+void                 ephy_bookmark_set_id              (EphyBookmark *self,
+                                                        const char   *id);
+const char          *ephy_bookmark_get_id              (EphyBookmark *self);
+
+void                 ephy_bookmark_set_modified        (EphyBookmark *self,
+                                                        double        modified);
+double               ephy_bookmark_get_modified        (EphyBookmark *self);
+
+void                 ephy_bookmark_set_uploaded        (EphyBookmark *self,
+                                                        gboolean      uploaded);
+gboolean             ephy_bookmark_is_uploaded         (EphyBookmark *self);
+
 void                 ephy_bookmark_add_tag             (EphyBookmark *self,
                                                         const char   *tag);
 void                 ephy_bookmark_remove_tag          (EphyBookmark *self,
@@ -54,6 +67,9 @@ int                  ephy_bookmark_bookmarks_sort_func (EphyBookmark *bookmark1,
                                                         EphyBookmark *bookmark2);
 int                  ephy_bookmark_tags_compare        (const char *tag1,
                                                         const char *tag2);
+
+char                *ephy_bookmark_to_bso              (EphyBookmark *self);
+EphyBookmark        *ephy_bookmark_from_bso            (JsonObject *bso);
 
 G_END_DECLS
 

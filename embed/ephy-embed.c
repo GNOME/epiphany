@@ -29,6 +29,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-find-toolbar.h"
+#include "ephy-notification-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
@@ -60,6 +61,7 @@ struct _EphyEmbed {
   GtkPaned *paned;
   WebKitWebView *web_view;
   GSList *destroy_on_transition_list;
+  GtkWidget *overlay;
   GtkWidget *floating_bar;
   GtkWidget *progress;
   GtkWidget *fullscreen_message_label;
@@ -708,7 +710,6 @@ ephy_embed_constructed (GObject *object)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GtkWidget *paned;
   WebKitWebInspector *inspector;
-  GtkWidget *overlay;
 
   g_signal_connect (shell, "window-restored",
                     G_CALLBACK (ephy_embed_restored_window_cb), embed);
@@ -717,12 +718,12 @@ ephy_embed_constructed (GObject *object)
                     G_CALLBACK (ephy_embed_mapped_cb), NULL);
 
   /* Skeleton */
-  overlay = gtk_overlay_new ();
+  embed->overlay = gtk_overlay_new ();
 
-  gtk_widget_add_events (overlay,
+  gtk_widget_add_events (embed->overlay,
                          GDK_ENTER_NOTIFY_MASK |
                          GDK_LEAVE_NOTIFY_MASK);
-  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (embed->web_view));
+  gtk_container_add (GTK_CONTAINER (embed->overlay), GTK_WIDGET (embed->web_view));
 
   /* Floating message popup for fullscreen mode. */
   embed->fullscreen_message_label = gtk_label_new (NULL);
@@ -730,7 +731,7 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_set_halign (embed->fullscreen_message_label, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (embed->fullscreen_message_label, GTK_ALIGN_CENTER);
   gtk_widget_set_no_show_all (embed->fullscreen_message_label, TRUE);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), embed->fullscreen_message_label);
+  gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->fullscreen_message_label);
   ephy_embed_set_fullscreen_message (embed, FALSE);
 
   /* statusbar is hidden by default */
@@ -739,14 +740,14 @@ ephy_embed_constructed (GObject *object)
   gtk_widget_set_valign (embed->floating_bar, GTK_ALIGN_END);
   gtk_widget_set_no_show_all (embed->floating_bar, TRUE);
 
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), embed->floating_bar);
+  gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->floating_bar);
 
   embed->progress = gtk_progress_bar_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (embed->progress),
                                GTK_STYLE_CLASS_OSD);
   gtk_widget_set_halign (embed->progress, GTK_ALIGN_FILL);
   gtk_widget_set_valign (embed->progress, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), embed->progress);
+  gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->progress);
 
   embed->find_toolbar = ephy_find_toolbar_new (embed->web_view);
   g_signal_connect (embed->find_toolbar, "close",
@@ -761,7 +762,7 @@ ephy_embed_constructed (GObject *object)
 
   embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
                                                         G_CALLBACK (progress_update), object);
-  gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (overlay),
+  gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (embed->overlay),
                    TRUE, FALSE);
 
   gtk_box_pack_start (GTK_BOX (embed),
@@ -956,4 +957,29 @@ ephy_embed_inspector_is_loaded (EphyEmbed *embed)
   g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
 
   return embed->inspector_loaded;
+}
+
+void
+ephy_embed_attach_notification_manager (EphyEmbed *embed)
+{
+  EphyNotificationManager *manager;
+
+  g_return_if_fail (EPHY_IS_EMBED (embed));
+
+  manager = ephy_notification_manager_dup_singleton ();
+  gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), GTK_WIDGET (manager));
+
+  if (ephy_notification_manager_get_children_num (manager) == 0)
+    gtk_widget_hide (GTK_WIDGET (manager));
+}
+
+void
+ephy_embed_detach_notification_manager (EphyEmbed *embed)
+{
+  EphyNotificationManager *manager;
+
+  g_return_if_fail (EPHY_IS_EMBED (embed));
+
+  manager = ephy_notification_manager_dup_singleton ();
+  gtk_container_remove (GTK_CONTAINER (embed->overlay), GTK_WIDGET (manager));
 }

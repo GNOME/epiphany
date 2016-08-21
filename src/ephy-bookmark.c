@@ -19,6 +19,12 @@
 
 #include "ephy-bookmark.h"
 
+#include "ephy-shell.h"
+#include "ephy-sync-crypto.h"
+#include "ephy-sync-utils.h"
+
+#include <string.h>
+
 struct _EphyBookmark {
   GObject      parent_instance;
 
@@ -26,9 +32,18 @@ struct _EphyBookmark {
   char        *title;
   GSequence   *tags;
   gint64       time_added;
+
+  char        *id;
+  double       modified;
+  gboolean     uploaded;
 };
 
-G_DEFINE_TYPE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT)
+static JsonSerializableIface *serializable_iface = NULL;
+
+static void json_serializable_iface_init (gpointer g_iface);
+
+G_DEFINE_TYPE_EXTENDED (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE, json_serializable_iface_init))
 
 enum {
   PROP_0,
@@ -126,7 +141,7 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
     g_param_spec_pointer ("tags",
                           "Tags",
                           "The bookmark's tags",
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 
   obj_properties[PROP_TIME_ADDED] =
     g_param_spec_int64 ("time-added",
@@ -174,6 +189,81 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 static void
 ephy_bookmark_init (EphyBookmark *self)
 {
+  self->id = ephy_sync_crypto_generate_random_hex (32);
+}
+
+static JsonNode *
+ephy_bookmark_json_serializable_serialize_property (JsonSerializable *serializable,
+                                                    const gchar *name,
+                                                    const GValue *value,
+                                                    GParamSpec *pspec)
+{
+  JsonNode *node = NULL;
+
+  if (g_strcmp0 (name, "tags") == 0) {
+    GSequence *tags;
+    GSequenceIter *iter;
+    JsonArray *array;
+
+    node = json_node_new (JSON_NODE_ARRAY);
+    array = json_array_new ();
+    tags = g_value_get_pointer (value);
+
+    for (iter = g_sequence_get_begin_iter (tags);
+         !g_sequence_iter_is_end (iter);
+         iter = g_sequence_iter_next (iter)) {
+      json_array_add_string_element (array, g_sequence_get (iter));
+    }
+
+    json_node_set_array (node, array);
+  } else {
+    node = serializable_iface->serialize_property (serializable, name,
+                                                   value, pspec);
+  }
+
+  return node;
+}
+
+static gboolean
+ephy_bookmark_json_serializable_deserialize_property (JsonSerializable *serializable,
+                                                      const gchar *name,
+                                                      GValue *value,
+                                                      GParamSpec *pspec,
+                                                      JsonNode *node)
+{
+  if (g_strcmp0 (name, "tags") == 0) {
+    GSequence *tags;
+    JsonArray *array;
+    const char *tag;
+
+    g_assert (JSON_NODE_HOLDS_ARRAY (node));
+    array = json_node_get_array (node);
+    tags = g_sequence_new (g_free);
+
+    for (gsize i = 0; i < json_array_get_length (array); i++) {
+      tag = json_node_get_string (json_array_get_element (array, i));
+      g_sequence_insert_sorted (tags, g_strdup (tag),
+                                (GCompareDataFunc)ephy_bookmark_tags_compare, NULL);
+    }
+
+    g_value_set_pointer (value, tags);
+  } else {
+    serializable_iface->deserialize_property (serializable, name,
+                                              value, pspec, node);
+  }
+
+  return TRUE;
+}
+
+static void
+json_serializable_iface_init (gpointer g_iface)
+{
+  JsonSerializableIface *iface = g_iface;
+
+  serializable_iface = g_type_default_interface_peek (JSON_TYPE_SERIALIZABLE);
+
+  iface->serialize_property = ephy_bookmark_json_serializable_serialize_property;
+  iface->deserialize_property = ephy_bookmark_json_serializable_deserialize_property;
 }
 
 EphyBookmark *
@@ -237,6 +327,59 @@ ephy_bookmark_get_title (EphyBookmark *bookmark)
   g_return_val_if_fail (EPHY_IS_BOOKMARK (bookmark), NULL);
 
   return bookmark->title;
+}
+
+void
+ephy_bookmark_set_id (EphyBookmark *self,
+                      const char   *id)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+  g_return_if_fail (id != NULL);
+
+  g_free (self->id);
+  self->id = g_strdup (id);
+}
+
+const char *
+ephy_bookmark_get_id (EphyBookmark *self)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
+
+  return self->id;
+}
+
+void
+ephy_bookmark_set_modified (EphyBookmark *self,
+                            double        modified)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+
+  self->modified = modified;
+}
+
+double
+ephy_bookmark_get_modified (EphyBookmark *self)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), -1);
+
+  return self->modified;
+}
+
+void
+ephy_bookmark_set_uploaded (EphyBookmark *self,
+                            gboolean      uploaded)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
+
+  self->uploaded = uploaded;
+}
+
+gboolean
+ephy_bookmark_is_uploaded (EphyBookmark *self)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), FALSE);
+
+  return self->uploaded;
 }
 
 void
@@ -341,4 +484,73 @@ ephy_bookmark_tags_compare (const char *tag1, const char *tag2)
     return 1;
 
   return result;
+}
+
+char *
+ephy_bookmark_to_bso (EphyBookmark *self)
+{
+  EphySyncService *service;
+  guint8 *encrypted;
+  guint8 *sync_key;
+  char *serialized;
+  char *payload;
+  char *bso;
+  gsize length;
+
+  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
+
+  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  sync_key = ephy_sync_crypto_decode_hex (ephy_sync_service_get_token (service, TOKEN_KB));
+  serialized = json_gobject_to_data (G_OBJECT (self), NULL);
+  encrypted = ephy_sync_crypto_aes_256 (AES_256_MODE_ENCRYPT, sync_key,
+                                        (guint8 *)serialized, strlen (serialized), &length);
+  payload = ephy_sync_crypto_base64_urlsafe_encode (encrypted, length, FALSE);
+  bso = ephy_sync_utils_create_bso_json (self->id, payload);
+
+  g_free (sync_key);
+  g_free (serialized);
+  g_free (encrypted);
+  g_free (payload);
+
+  return bso;
+}
+
+EphyBookmark *
+ephy_bookmark_from_bso (JsonObject *bso)
+{
+  EphySyncService *service;
+  EphyBookmark *bookmark = NULL;
+  GObject *object;
+  GError *error = NULL;
+  guint8 *sync_key;
+  guint8 *decoded;
+  gsize decoded_len;
+  char *decrypted;
+
+  g_return_val_if_fail (bso != NULL, NULL);
+
+  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  sync_key = ephy_sync_crypto_decode_hex (ephy_sync_service_get_token (service, TOKEN_KB));
+  decoded = ephy_sync_crypto_base64_urlsafe_decode (json_object_get_string_member (bso, "payload"),
+                                                    &decoded_len, FALSE);
+  decrypted = (char *) ephy_sync_crypto_aes_256 (AES_256_MODE_DECRYPT, sync_key,
+                                                 decoded, decoded_len, NULL);
+  object = json_gobject_from_data (EPHY_TYPE_BOOKMARK, decrypted, strlen (decrypted), &error);
+
+  if (object == NULL) {
+    g_warning ("Failed to create GObject from data: %s", error->message);
+    g_error_free (error);
+    goto out;
+  }
+
+  bookmark = EPHY_BOOKMARK (object);
+  ephy_bookmark_set_id (bookmark, json_object_get_string_member (bso, "id"));
+  ephy_bookmark_set_modified (bookmark, json_object_get_double_member (bso, "modified"));
+  ephy_bookmark_set_uploaded (bookmark, TRUE);
+
+out:
+  g_free (decoded);
+  g_free (decrypted);
+
+  return bookmark;
 }

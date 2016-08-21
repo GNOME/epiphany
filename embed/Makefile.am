@@ -43,6 +43,10 @@ libephyembed_la_SOURCES = \
 	ephy-file-monitor.h		\
 	ephy-find-toolbar.c		\
 	ephy-find-toolbar.h		\
+	ephy-fx-password-notification.c	\
+	ephy-fx-password-notification.h	\
+	ephy-notification-manager.c	\
+	ephy-notification-manager.h	\
 	ephy-embed-prefs.c		\
 	ephy-web-view.c			\
 	ephy-web-view.h			\
@@ -60,6 +64,7 @@ libephyembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	    \
 	-I$(top_srcdir)/lib/widgets         \
 	-I$(top_builddir)/lib/widgets       \
+	-I$(top_srcdir)/libgd		    \
 	$(AM_CPPFLAGS)
 
 libephyembed_la_CFLAGS = \

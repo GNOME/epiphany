@@ -24,6 +24,7 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
+#include "ephy-sync-service.h"
 #include "ephy-type-builtins.h"
 
 #include <libsoup/soup.h>
@@ -46,6 +47,10 @@ struct _EphyBookmarkPropertiesGrid {
   GtkWidget                      *add_tag_entry;
   GtkWidget                      *add_tag_button;
   GtkWidget                      *remove_bookmark_button;
+
+  char                           *prev_name;
+  char                           *prev_address;
+  GSequence                      *prev_tags;
 };
 
 G_DEFINE_TYPE (EphyBookmarkPropertiesGrid, ephy_bookmark_properties_grid, GTK_TYPE_GRID)
@@ -234,10 +239,13 @@ ephy_bookmarks_properties_grid_actions_remove_bookmark (GSimpleAction *action,
                                                         GVariant      *value,
                                                         gpointer       user_data)
 {
+  EphySyncService *service;
   EphyBookmarkPropertiesGrid *self = user_data;
 
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES_GRID (self));
 
+  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  ephy_sync_service_delete_bookmark (service, self->bookmark, FALSE);
   ephy_bookmarks_manager_remove_bookmark (self->manager,  self->bookmark);
 
   gtk_widget_destroy (self->parent);
@@ -328,6 +336,7 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   /* Set text for name entry */
   gtk_entry_set_text (GTK_ENTRY (self->name_entry),
                       ephy_bookmark_get_title (self->bookmark));
+  self->prev_name = g_strdup (gtk_entry_get_text (GTK_ENTRY (self->name_entry)));
 
   g_object_bind_property (GTK_ENTRY (self->name_entry), "text",
                           self->bookmark, "title",
@@ -337,6 +346,7 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
     address = get_address (ephy_bookmark_get_url (self->bookmark));
     gtk_entry_set_text (GTK_ENTRY (self->address_entry), address);
+    self->prev_address = g_strdup (gtk_entry_get_text (GTK_ENTRY (self->address_entry)));
     g_free (address);
 
     g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
@@ -344,7 +354,12 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
                             G_BINDING_DEFAULT);
   }
 
+  g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
+                          self->bookmark, "url",
+                          G_BINDING_DEFAULT);
+
   /* Create tag widgets */
+  self->prev_tags = g_sequence_new (g_free);
   tags = ephy_bookmarks_manager_get_tags (self->manager);
   bookmark_tags = ephy_bookmark_get_tags (self->bookmark);
   for (iter = g_sequence_get_begin_iter (tags);
@@ -357,8 +372,11 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
     if (g_sequence_lookup (bookmark_tags,
                            (gpointer)tag,
                            (GCompareDataFunc)ephy_bookmark_tags_compare,
-                           NULL))
+                           NULL)) {
       selected = TRUE;
+      g_sequence_insert_sorted (self->prev_tags, g_strdup (tag),
+                                (GCompareDataFunc)ephy_bookmark_tags_compare, NULL);
+    }
 
     widget = ephy_bookmark_properties_grid_create_tag_widget (self, tag, selected);
     gtk_flow_box_insert (GTK_FLOW_BOX (self->tags_box), widget, -1);
@@ -376,7 +394,57 @@ ephy_bookmark_properties_grid_destroy (GtkWidget *widget)
 {
   EphyBookmarkPropertiesGrid *self = EPHY_BOOKMARK_PROPERTIES_GRID (widget);
 
+  if (ephy_bookmark_is_uploaded (self->bookmark) == FALSE)
+    goto out;
+
+  /* Check if any actual changes were made to the name, address or tags. If yes,
+   * set the uploaded flag to FALSE. */
+
+  if (self->prev_name != NULL) {
+    if (g_strcmp0 (self->prev_name, ephy_bookmark_get_title (self->bookmark)) != 0) {
+      ephy_bookmark_set_uploaded (self->bookmark, FALSE);
+      goto out;
+    }
+  }
+
+  if (self->prev_address != NULL) {
+    if (g_strcmp0 (self->prev_address, ephy_bookmark_get_url (self->bookmark)) != 0) {
+      ephy_bookmark_set_uploaded (self->bookmark, FALSE);
+      goto out;
+    }
+  }
+
+  if (self->prev_tags != NULL) {
+    GSequence *tags = ephy_bookmark_get_tags (self->bookmark);
+    GSequenceIter *iter;
+
+    /* Check for added tags. */
+    for (iter = g_sequence_get_begin_iter (tags);
+         !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
+      if (!g_sequence_lookup (self->prev_tags, g_sequence_get (iter),
+                              (GCompareDataFunc)ephy_bookmark_tags_compare, NULL)) {
+        ephy_bookmark_set_uploaded (self->bookmark, FALSE);
+        goto out;
+      }
+    }
+
+    /* Check for deleted tags. */
+    for (iter = g_sequence_get_begin_iter (self->prev_tags);
+         !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
+      if (!g_sequence_lookup (tags, g_sequence_get (iter),
+                              (GCompareDataFunc)ephy_bookmark_tags_compare, NULL)) {
+        ephy_bookmark_set_uploaded (self->bookmark, FALSE);
+        goto out;
+      }
+    }
+  }
+
+out:
   ephy_bookmarks_manager_save_to_file_async (self->manager, NULL, NULL, NULL);
+
+  g_clear_pointer (&self->prev_name, g_free);
+  g_clear_pointer (&self->prev_address, g_free);
+  g_clear_pointer (&self->prev_tags, g_sequence_free);
 
   GTK_WIDGET_CLASS (ephy_bookmark_properties_grid_parent_class)->destroy (widget);
 }

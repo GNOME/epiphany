@@ -49,6 +49,7 @@ struct _EphyShell {
   EphyEmbedShell parent_instance;
 
   EphySession *session;
+  EphySyncService *sync_service;
   GList *windows;
   GObject *lockdown;
   EphyBookmarks *bookmarks;
@@ -554,12 +555,18 @@ static void
 ephy_shell_init (EphyShell *shell)
 {
   EphyShell **ptr = &ephy_shell;
+  EphySyncService *service;
 
   /* globally accessible singleton */
   g_assert (ephy_shell == NULL);
   ephy_shell = shell;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
+
+  /* Start the periodical sync now. */
+  service = ephy_sync_service_new ();
+  ephy_sync_service_start_periodical_sync (service, TRUE);
+  ephy_shell->sync_service = service;
 }
 
 static void
@@ -582,6 +589,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->prefs_dialog);
   g_clear_object (&shell->bookmarks);
   g_clear_object (&shell->network_monitor);
+  g_clear_object (&shell->sync_service);
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
   shell->open_uris_idle_ids = NULL;
@@ -600,6 +608,21 @@ ephy_shell_finalize (GObject *object)
   G_OBJECT_CLASS (ephy_shell_parent_class)->finalize (object);
 
   LOG ("Ephy shell finalised");
+}
+
+/**
+ * ephy_shell_get_sync_service:
+ *
+ * Retrieve the default #EphySyncService object
+ *
+ * Return value: (transfer none): the default #EphySyncService
+ **/
+EphySyncService *
+ephy_shell_get_sync_service (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  return shell->sync_service;
 }
 
 /**

@@ -83,8 +83,10 @@ libephymisc_la_CFLAGS = \
 	$(CODE_COVERAGE_CFLAGS) \
 	$(AM_CFLAGS)
 
+# FIXME: This is not right. We should find another way to link libgmp.
 libephymisc_la_LIBADD = \
 	-lm \
+	-lgmp \
 	$(CODE_COVERAGE_LDFLAGS) \
 	$(DEPENDENCIES_LIBS)
 
