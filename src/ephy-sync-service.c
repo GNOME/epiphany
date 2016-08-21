@@ -377,12 +377,14 @@ obtain_storage_credentials_response_cb (SoupSession *session,
                json_object_get_string_member (json, "status"),
                json_object_get_string_member (errors, "description"));
     storage_server_request_async_data_free (data);
+    service->locked = FALSE;
     goto out;
   } else {
     g_warning ("Failed to talk to the Token Server, status code %u. "
                "See https://docs.services.mozilla.com/token/apis.html#error-responses",
                msg->status_code);
     storage_server_request_async_data_free (data);
+    service->locked = FALSE;
     goto out;
   }
 
@@ -460,6 +462,7 @@ obtain_signed_certificate_response_cb (SoupSession *session,
     notification = ephy_fx_password_notification_new (ephy_sync_service_get_user_email (service));
     ephy_fx_password_notification_show (notification);
     storage_server_request_async_data_free (data);
+    service->locked = FALSE;
     goto out;
   }
 
@@ -468,6 +471,7 @@ obtain_signed_certificate_response_cb (SoupSession *session,
                json_object_get_int_member (json, "errno"),
                json_object_get_string_member (json, "message"));
     storage_server_request_async_data_free (data);
+    service->locked = FALSE;
     goto out;
   }
 
@@ -476,6 +480,7 @@ obtain_signed_certificate_response_cb (SoupSession *session,
   if (ephy_sync_service_certificate_is_valid (service, certificate) == FALSE) {
     ephy_sync_crypto_rsa_key_pair_free (service->keypair);
     storage_server_request_async_data_free (data);
+    service->locked = FALSE;
     goto out;
   }
 
