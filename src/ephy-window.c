@@ -2075,6 +2075,8 @@ ephy_window_connect_active_embed (EphyWindow *window)
   view = ephy_embed_get_web_view (embed);
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
+  ephy_embed_attach_notification_manager (window->active_embed);
+
   sync_tab_security (view, NULL, window);
   sync_tab_document_type (view, NULL, window);
   sync_tab_load_status (view, WEBKIT_LOAD_STARTED, window);
@@ -2154,6 +2156,8 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
   embed = window->active_embed;
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
   view = EPHY_WEB_VIEW (web_view);
+
+  ephy_embed_detach_notification_manager (window->active_embed);
 
   g_signal_handlers_disconnect_by_func (web_view,
                                         G_CALLBACK (sync_tab_zoom),
