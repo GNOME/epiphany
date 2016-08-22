@@ -621,6 +621,12 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
   gtk_entry_get_icon_area (GTK_ENTRY (entry),
                            GTK_ENTRY_ICON_SECONDARY,
                            &rectangle);
+
+  /* FIXME: GTK+ sets "margin-left: 6px" for the icon. Add 3px to the
+   * rectangle so the popover is centered on the star.
+   */
+  rectangle.x = rectangle.x + 3;
+
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rectangle);
   grid = ephy_bookmark_properties_grid_new (bookmark,
                                             EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER,
