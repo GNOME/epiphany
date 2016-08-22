@@ -377,10 +377,10 @@ ephy_bookmarks_manager_add_tag (EphyBookmarksManager *self, const char *tag)
 
   prev_tag_iter = g_sequence_iter_prev (tag_iter);
   if (g_sequence_iter_is_end (prev_tag_iter)
-      || g_strcmp0 (g_sequence_get (prev_tag_iter), tag) != 0)
+      || g_strcmp0 (g_sequence_get (prev_tag_iter), tag) != 0) {
     g_sequence_insert_before (tag_iter, g_strdup (tag));
-
-  g_signal_emit (self, signals[TAG_ADDED], 0, tag);
+    g_signal_emit (self, signals[TAG_ADDED], 0, tag);
+  }
 }
 
 void
