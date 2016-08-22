@@ -273,12 +273,12 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
       position = g_sequence_iter_get_position (iter);
       g_list_model_items_changed (G_LIST_MODEL (self), position - 1, 0, 1);
 
+      g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
+
       ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                                  (GAsyncReadyCallback)data_saved_cb,
                                                  NULL);
   }
-
-  g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
 }
 
 void
