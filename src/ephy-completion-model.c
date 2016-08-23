@@ -31,7 +31,7 @@
 enum {
   PROP_0,
   PROP_HISTORY_SERVICE,
-  PROP_BOOKMARKS,
+  PROP_BOOKMARKS_MANAGER,
   LAST_PROP
 };
 
@@ -41,8 +41,7 @@ struct _EphyCompletionModel {
   EphyHistoryService *history_service;
   GCancellable *cancellable;
 
-  EphyNode *bookmarks;
-  EphyNode *smart_bookmarks;
+  EphyBookmarksManager *bookmarks_manager;
   GSList *search_terms;
 };
 
@@ -82,13 +81,9 @@ ephy_completion_model_set_property (GObject *object, guint property_id, const GV
     case PROP_HISTORY_SERVICE:
       self->history_service = EPHY_HISTORY_SERVICE (g_value_get_pointer (value));
       break;
-    case PROP_BOOKMARKS: {
-      EphyBookmarks *bookmarks = EPHY_BOOKMARKS (g_value_get_pointer (value));
-
-      self->bookmarks = ephy_bookmarks_get_bookmarks (bookmarks);
-      self->smart_bookmarks = ephy_bookmarks_get_smart_bookmarks (bookmarks);
-    }
-    break;
+    case PROP_BOOKMARKS_MANAGER:
+      self->bookmarks_manager = EPHY_BOOKMARKS_MANAGER (g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
       break;
@@ -128,11 +123,12 @@ ephy_completion_model_class_init (EphyCompletionModelClass *klass)
                           "The history service",
                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  obj_properties[PROP_BOOKMARKS] =
-    g_param_spec_pointer ("bookmarks",
-                          "Bookmarks",
-                          "The bookmarks",
-                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+  obj_properties[PROP_BOOKMARKS_MANAGER] =
+    g_param_spec_object ("bookmarks-manager",
+                         "Bookmarks manager",
+                         "The bookmarks manager",
+                         EPHY_TYPE_BOOKMARKS_MANAGER,
+                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
@@ -292,8 +288,7 @@ static gboolean
 should_add_bookmark_to_model (EphyCompletionModel *model,
                               const char          *search_string,
                               const char          *title,
-                              const char          *location,
-                              const char          *keywords)
+                              const char          *location)
 {
   gboolean ret = TRUE;
 
@@ -304,8 +299,7 @@ should_add_bookmark_to_model (EphyCompletionModel *model,
     for (iter = model->search_terms; iter != NULL; iter = iter->next) {
       current = (GRegex *)iter->data;
       if ((!g_regex_match (current, title ? title : "", G_REGEX_MATCH_NOTEMPTY, NULL)) &&
-          (!g_regex_match (current, location ? location : "", G_REGEX_MATCH_NOTEMPTY, NULL)) &&
-          (!g_regex_match (current, keywords ? keywords : "", G_REGEX_MATCH_NOTEMPTY, NULL))) {
+          (!g_regex_match (current, location ? location : "", G_REGEX_MATCH_NOTEMPTY, NULL))) {
         ret = FALSE;
         break;
       }
@@ -410,31 +404,30 @@ query_completed_cb (EphyHistoryService *service,
 {
   EphyCompletionModel *model = user_data->model;
   GList *p, *urls;
-  GPtrArray *children;
+  GSequence *bookmarks;
+  GSequenceIter *iter;
   GSList *list = NULL;
-  guint i;
 
   /* Bookmarks */
-  children = ephy_node_get_children (model->bookmarks);
+  bookmarks = ephy_bookmarks_manager_get_bookmarks (model->bookmarks_manager);
 
   /* FIXME: perhaps this could be done in a service thread? There
    * should never be a ton of bookmarks, but seems a bit cleaner and
    * consistent with what we do for the history. */
-  for (i = 0; i < children->len; i++) {
-    EphyNode *kid;
-    const char *keywords, *location, *title;
-    gboolean is_smart;
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark;
+    const char *url, *title;
 
-    kid = g_ptr_array_index (children, i);
-    location = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_LOCATION);
-    title = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_TITLE);
-    keywords = ephy_node_get_property_string (kid, EPHY_NODE_BMK_PROP_KEYWORDS);
-    is_smart = ephy_node_has_child (model->smart_bookmarks, kid);
+    bookmark = g_sequence_get (iter);
 
-    /* Smart bookmarks are already added to the completion menu as completion actions */
-    if (!is_smart && should_add_bookmark_to_model (model, user_data->search_string,
-                                                   title, location, keywords))
-      list = add_to_potential_rows (list, title, location, keywords, 0, TRUE, FALSE);
+    url = ephy_bookmark_get_url (bookmark);
+    title = ephy_bookmark_get_title (bookmark);
+
+    if (should_add_bookmark_to_model (model, user_data->search_string,
+                                      title, url))
+      list = add_to_potential_rows (list, title, url, NULL, 0, TRUE, FALSE);
   }
 
   /* History */
@@ -591,14 +584,14 @@ ephy_completion_model_update_for_string (EphyCompletionModel   *model,
 }
 
 EphyCompletionModel *
-ephy_completion_model_new (EphyHistoryService *history_service,
-                           EphyBookmarks      *bookmarks)
+ephy_completion_model_new (EphyHistoryService   *history_service,
+                           EphyBookmarksManager *bookmarks_manager)
 {
   g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (history_service), NULL);
-  g_return_val_if_fail (EPHY_IS_BOOKMARKS (bookmarks), NULL);
+  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (bookmarks_manager), NULL);
 
   return g_object_new (EPHY_TYPE_COMPLETION_MODEL,
                        "history-service", history_service,
-                       "bookmarks", bookmarks,
+                       "bookmarks-manager", bookmarks_manager,
                        NULL);
 }

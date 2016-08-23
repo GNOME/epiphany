@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "ephy-bookmarks.h"
+#include "ephy-bookmarks-manager.h"
 #include "ephy-history-service.h"
 
 #include <gtk/gtk.h>
@@ -41,8 +41,8 @@ typedef enum
   N_COL
 } EphyCompletionColumn;
 
-EphyCompletionModel *ephy_completion_model_new               (EphyHistoryService *history_service,
-                                                              EphyBookmarks *bookmarks);
+EphyCompletionModel *ephy_completion_model_new               (EphyHistoryService   *history_service,
+                                                              EphyBookmarksManager *bookmarks_manager);
 
 void                 ephy_completion_model_update_for_string (EphyCompletionModel *model,
                                                               const char *string,
