@@ -224,8 +224,10 @@ ephy_bookmarks_properties_grid_actions_add_tag (GSimpleAction *action,
   widget = ephy_bookmark_properties_grid_create_tag_widget (self, text, TRUE);
   gtk_flow_box_insert (GTK_FLOW_BOX (self->tags_box), widget, -1);
 
+  /* Empty entry and disable button's action until new text is inserted */
   gtk_entry_set_text (GTK_ENTRY (self->add_tag_entry), "");
-  gtk_widget_set_sensitive (GTK_WIDGET (self->add_tag_button), FALSE);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
   gtk_widget_grab_focus (GTK_WIDGET (self->add_tag_entry));
 }
 
@@ -248,16 +250,20 @@ ephy_bookmark_properties_grid_buffer_text_changed_cb (EphyBookmarkPropertiesGrid
                                                       GParamSpec                 *pspec,
                                                       GtkEntryBuffer             *buffer)
 {
+  GActionGroup *group;
+  GAction *action;
   const char *text;
 
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES_GRID (self));
   g_assert (GTK_IS_ENTRY_BUFFER (buffer));
 
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "grid");
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), "add-tag");
   text = gtk_entry_buffer_get_text (buffer);
-  if (strlen (text) >= 3 && !ephy_bookmarks_manager_tag_exists (self->manager, text))
-    gtk_widget_set_sensitive (self->add_tag_button, TRUE);
+  if (ephy_bookmarks_manager_tag_exists (self->manager, text))
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
   else
-    gtk_widget_set_sensitive (self->add_tag_button, FALSE);
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 }
 
 static void
@@ -436,6 +442,7 @@ static void
 ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
 {
   GSimpleActionGroup *group;
+  GAction *action;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -450,6 +457,12 @@ ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
                                    G_N_ELEMENTS (entries), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "grid",
                                   G_ACTION_GROUP (group));
+
+  /* Disable the "add-tag" action until text is inserted in the corresponding
+   * entry */
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), "add-tag");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
   g_object_unref (group);
 
   g_signal_connect_object (gtk_entry_get_buffer (GTK_ENTRY (self->add_tag_entry)),
