@@ -17,13 +17,13 @@
  */
 
 #include "config.h"
-#include "ephy-fx-password-notification.h"
+#include "ephy-password-notification.h"
 
 #include "ephy-notification-manager.h"
 
 #include <glib/gi18n.h>
 
-struct _EphyFxPasswordNotification {
+struct _EphyPasswordNotification {
   GtkGrid                  parent_instance;
 
   GtkWidget               *note;
@@ -32,7 +32,7 @@ struct _EphyFxPasswordNotification {
   const char              *user;
 };
 
-struct _EphyFxPasswordNotificationClass {
+struct _EphyPasswordNotificationClass {
   GtkGridClass parent_class;
 };
 
@@ -41,12 +41,13 @@ enum {
   PROP_USER
 };
 
-G_DEFINE_TYPE (EphyFxPasswordNotification, ephy_fx_password_notification, GTK_TYPE_GRID);
+G_DEFINE_TYPE (EphyPasswordNotification, ephy_password_notification, GTK_TYPE_GRID);
 
 static void
-ephy_fx_password_notification_constructed (GObject *object)
+ephy_password_notification_constructed (GObject *object)
 {
-  EphyFxPasswordNotification *self = EPHY_FX_PASSWORD_NOTIFICATION (object);
+  EphyPasswordNotification *self = EPHY_PASSWORD_NOTIFICATION (object);
+  char *account;
   char *text;
 
   text = g_strdup_printf (_("We noticed that the password of your Firefox "
@@ -58,26 +59,26 @@ ephy_fx_password_notification_constructed (GObject *object)
                         "password to continue the sync process."));
   g_free (text);
 
-  G_OBJECT_CLASS (ephy_fx_password_notification_parent_class)->constructed (object);
+  G_OBJECT_CLASS (ephy_password_notification_parent_class)->constructed (object);
 }
 
 static void
-ephy_fx_password_notification_dispose (GObject *object)
+ephy_password_notification_dispose (GObject *object)
 {
-  EphyFxPasswordNotification *self = EPHY_FX_PASSWORD_NOTIFICATION (object);
+  EphyPasswordNotification *self = EPHY_PASSWORD_NOTIFICATION (object);
 
   g_clear_pointer (&self->user, g_free);
 
-  G_OBJECT_CLASS (ephy_fx_password_notification_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_password_notification_parent_class)->dispose (object);
 }
 
 static void
-ephy_fx_password_notification_set_property (GObject      *object,
-                                            guint         prop_id,
-                                            const GValue *value,
-                                            GParamSpec   *pspec)
+ephy_password_notification_set_property (GObject      *object,
+                                         guint         prop_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec)
 {
-  EphyFxPasswordNotification *self = EPHY_FX_PASSWORD_NOTIFICATION (object);
+  EphyPasswordNotification *self = EPHY_PASSWORD_NOTIFICATION (object);
 
   switch (prop_id) {
     case PROP_USER:
@@ -90,12 +91,12 @@ ephy_fx_password_notification_set_property (GObject      *object,
 }
 
 static void
-ephy_fx_password_notification_get_property (GObject      *object,
-                                            guint         prop_id,
-                                            GValue       *value,
-                                            GParamSpec   *pspec)
+ephy_password_notification_get_property (GObject      *object,
+                                         guint         prop_id,
+                                         GValue       *value,
+                                         GParamSpec   *pspec)
 {
-  EphyFxPasswordNotification *self = EPHY_FX_PASSWORD_NOTIFICATION (object);
+  EphyPasswordNotification *self = EPHY_PASSWORD_NOTIFICATION (object);
 
   switch (prop_id) {
     case PROP_USER:
@@ -108,9 +109,9 @@ ephy_fx_password_notification_get_property (GObject      *object,
 }
 
 static void
-ephy_fx_password_notification_init (EphyFxPasswordNotification *self)
+ephy_password_notification_init (EphyPasswordNotification *self)
 {
-  g_return_if_fail (EPHY_IS_FX_PASSWORD_NOTIFICATION (self));
+  g_return_if_fail (EPHY_IS_PASSWORD_NOTIFICATION (self));
 
   self->note = gtk_label_new (NULL);
   gtk_widget_set_halign (self->note, GTK_ALIGN_CENTER);
@@ -124,14 +125,14 @@ ephy_fx_password_notification_init (EphyFxPasswordNotification *self)
 }
 
 static void
-ephy_fx_password_notification_class_init (EphyFxPasswordNotificationClass *klass)
+ephy_password_notification_class_init (EphyPasswordNotificationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = ephy_fx_password_notification_constructed;
-  object_class->dispose = ephy_fx_password_notification_dispose;
-  object_class->set_property = ephy_fx_password_notification_set_property;
-  object_class->get_property = ephy_fx_password_notification_get_property;
+  object_class->constructed = ephy_password_notification_constructed;
+  object_class->dispose = ephy_password_notification_dispose;
+  object_class->set_property = ephy_password_notification_set_property;
+  object_class->get_property = ephy_password_notification_get_property;
 
   g_object_class_install_property (object_class,
                                    PROP_USER,
@@ -142,10 +143,10 @@ ephy_fx_password_notification_class_init (EphyFxPasswordNotificationClass *klass
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
 }
 
-EphyFxPasswordNotification *
-ephy_fx_password_notification_new (const char *user)
+EphyPasswordNotification *
+ephy_password_notification_new (const char *user)
 {
-  return g_object_new (EPHY_TYPE_FX_PASSWORD_NOTIFICATION,
+  return g_object_new (EPHY_TYPE_PASSWORD_NOTIFICATION,
                        "column-spacing", 12,
                        "orientation", GTK_ORIENTATION_HORIZONTAL,
                        "user", user,
@@ -153,9 +154,9 @@ ephy_fx_password_notification_new (const char *user)
 }
 
 void
-ephy_fx_password_notification_show (EphyFxPasswordNotification *self)
+ephy_password_notification_show (EphyPasswordNotification *self)
 {
-  g_return_if_fail (EPHY_IS_FX_PASSWORD_NOTIFICATION (self));
+  g_return_if_fail (EPHY_IS_PASSWORD_NOTIFICATION (self));
 
   ephy_notification_manager_add_notification (ephy_notification_manager_dup_singleton (),
                                               GTK_WIDGET (self));

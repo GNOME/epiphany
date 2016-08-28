@@ -40,8 +40,6 @@ libephyembed_la_SOURCES = \
 	ephy-file-monitor.h		\
 	ephy-find-toolbar.c		\
 	ephy-find-toolbar.h		\
-	ephy-fx-password-notification.c	\
-	ephy-fx-password-notification.h	\
 	ephy-hosts-manager.c		\
 	ephy-hosts-manager.h		\
 	ephy-notification-manager.c	\

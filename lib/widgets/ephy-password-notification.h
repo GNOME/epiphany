@@ -16,31 +16,31 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_FX_PASSWORD_NOTIFICATION_H
-#define EPHY_FX_PASSWORD_NOTIFICATION_H
+#ifndef EPHY_PASSWORD_NOTIFICATION_H
+#define EPHY_PASSWORD_NOTIFICATION_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_FX_PASSWORD_NOTIFICATION (ephy_fx_password_notification_get_type ())
+#define EPHY_TYPE_PASSWORD_NOTIFICATION (ephy_password_notification_get_type ())
 
-#define EPHY_FX_PASSWORD_NOTIFICATION(obj) \
+#define EPHY_PASSWORD_NOTIFICATION(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-   EPHY_TYPE_FX_PASSWORD_NOTIFICATION, EphyFxPasswordNotification))
+   EPHY_TYPE_PASSWORD_NOTIFICATION, EphyPasswordNotification))
 
-#define EPHY_IS_FX_PASSWORD_NOTIFICATION(obj) \
+#define EPHY_IS_PASSWORD_NOTIFICATION(obj) \
   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-   EPHY_TYPE_FX_PASSWORD_NOTIFICATION))
+   EPHY_TYPE_PASSWORD_NOTIFICATION))
 
-typedef struct _EphyFxPasswordNotification      EphyFxPasswordNotification;
-typedef struct _EphyFxPasswordNotificationClass EphyFxPasswordNotificationClass;
+typedef struct _EphyPasswordNotification      EphyPasswordNotification;
+typedef struct _EphyPasswordNotificationClass EphyPasswordNotificationClass;
 
-GType                       ephy_fx_password_notification_get_type (void) G_GNUC_CONST;
+GType                     ephy_password_notification_get_type (void) G_GNUC_CONST;
 
-EphyFxPasswordNotification *ephy_fx_password_notification_new      (const char *user);
+EphyPasswordNotification *ephy_password_notification_new      (const char *user);
 
-void                        ephy_fx_password_notification_show     (EphyFxPasswordNotification *self);
+void                      ephy_password_notification_show     (EphyPasswordNotification *self);
 
 G_END_DECLS
 

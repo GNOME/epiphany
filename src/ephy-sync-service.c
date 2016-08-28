@@ -22,7 +22,7 @@
 #include "ephy-bookmark.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
-#include "ephy-fx-password-notification.h"
+#include "ephy-password-notification.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-sync-crypto.h"
@@ -442,7 +442,7 @@ obtain_signed_certificate_response_cb (SoupSession *session,
 {
   StorageServerRequestAsyncData *data;
   EphySyncService *service;
-  EphyFxPasswordNotification *notification;
+  EphyPasswordNotification *notification;
   JsonParser *parser;
   JsonObject *json;
   const char *certificate;
@@ -459,8 +459,8 @@ obtain_signed_certificate_response_cb (SoupSession *session,
    * if the user has changed his password since the last time he signed in.
    * When this happens, notify the user to sign in with the new password. */
   if (msg->status_code == 401 && json_object_get_int_member (json, "errno") == 110) {
-    notification = ephy_fx_password_notification_new (ephy_sync_service_get_user_email (service));
-    ephy_fx_password_notification_show (notification);
+    notification = ephy_password_notification_new (ephy_sync_service_get_user_email (service));
+    ephy_password_notification_show (notification);
     storage_server_request_async_data_free (data);
     service->locked = FALSE;
     goto out;
