@@ -19,28 +19,18 @@
 #ifndef EPHY_PASSWORD_NOTIFICATION_H
 #define EPHY_PASSWORD_NOTIFICATION_H
 
+#include <glib-object.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_PASSWORD_NOTIFICATION (ephy_password_notification_get_type ())
 
-#define EPHY_PASSWORD_NOTIFICATION(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-   EPHY_TYPE_PASSWORD_NOTIFICATION, EphyPasswordNotification))
+G_DECLARE_FINAL_TYPE (EphyPasswordNotification, ephy_password_notification, EPHY, PASSWORD_NOTIFICATION, GtkGrid)
 
-#define EPHY_IS_PASSWORD_NOTIFICATION(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-   EPHY_TYPE_PASSWORD_NOTIFICATION))
+EphyPasswordNotification *ephy_password_notification_new  (const char *user);
 
-typedef struct _EphyPasswordNotification      EphyPasswordNotification;
-typedef struct _EphyPasswordNotificationClass EphyPasswordNotificationClass;
-
-GType                     ephy_password_notification_get_type (void) G_GNUC_CONST;
-
-EphyPasswordNotification *ephy_password_notification_new      (const char *user);
-
-void                      ephy_password_notification_show     (EphyPasswordNotification *self);
+void                      ephy_password_notification_show (EphyPasswordNotification *self);
 
 G_END_DECLS
 

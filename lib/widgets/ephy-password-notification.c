@@ -24,12 +24,12 @@
 #include <glib/gi18n.h>
 
 struct _EphyPasswordNotification {
-  GtkGrid                  parent_instance;
+  GtkGrid    parent_instance;
 
-  GtkWidget               *note;
-  GtkWidget               *suggestion;
+  GtkWidget *note;
+  GtkWidget *suggestion;
 
-  const char              *user;
+  char      *user;
 };
 
 struct _EphyPasswordNotificationClass {
@@ -67,13 +67,13 @@ ephy_password_notification_constructed (GObject *object)
 }
 
 static void
-ephy_password_notification_dispose (GObject *object)
+ephy_password_notification_finalize (GObject *object)
 {
   EphyPasswordNotification *self = EPHY_PASSWORD_NOTIFICATION (object);
 
-  g_clear_pointer (&self->user, g_free);
+  g_free (self->user);
 
-  G_OBJECT_CLASS (ephy_password_notification_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_password_notification_parent_class)->finalize (object);
 }
 
 static void
@@ -115,8 +115,6 @@ ephy_password_notification_get_property (GObject      *object,
 static void
 ephy_password_notification_init (EphyPasswordNotification *self)
 {
-  g_return_if_fail (EPHY_IS_PASSWORD_NOTIFICATION (self));
-
   self->note = gtk_label_new (NULL);
   gtk_widget_set_halign (self->note, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (self->note, TRUE);
@@ -134,7 +132,7 @@ ephy_password_notification_class_init (EphyPasswordNotificationClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = ephy_password_notification_constructed;
-  object_class->dispose = ephy_password_notification_dispose;
+  object_class->finalize = ephy_password_notification_finalize;
   object_class->set_property = ephy_password_notification_set_property;
   object_class->get_property = ephy_password_notification_get_property;
 
@@ -144,7 +142,7 @@ ephy_password_notification_class_init (EphyPasswordNotificationClass *klass)
                                                         "User",
                                                         "The email of the signed in user",
                                                         "",
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
+                                                        G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
 }
 
 EphyPasswordNotification *
