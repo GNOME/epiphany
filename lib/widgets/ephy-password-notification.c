@@ -50,13 +50,17 @@ ephy_password_notification_constructed (GObject *object)
   char *account;
   char *text;
 
-  text = g_strdup_printf (_("We noticed that the password of your Firefox "
-                            "Account <b>%s</b> has been changed."),
-                          self->user);
+  account = g_strdup_printf ("<b>%s</b>", self->user);
+  text = g_strdup_printf (_("The password of your Firefox account %s "
+                            "seems to have been changed."),
+                          account);
+
   gtk_label_set_markup (GTK_LABEL (self->note), text);
   gtk_label_set_text (GTK_LABEL (self->suggestion),
                       _("Please visit Preferences and sign in with the new "
                         "password to continue the sync process."));
+
+  g_free (account);
   g_free (text);
 
   G_OBJECT_CLASS (ephy_password_notification_parent_class)->constructed (object);

@@ -223,6 +223,7 @@ server_message_received_cb (WebKitUserContentManager *manager,
     const char *sessionToken = json_object_get_string_member (data, "sessionToken");
     const char *keyFetchToken = json_object_get_string_member (data, "keyFetchToken");
     const char *unwrapBKey = json_object_get_string_member (data, "unwrapBKey");
+    char *account;
     char *text;
 
     inject_data_to_server (dialog, "message", "login", NULL);
@@ -233,10 +234,14 @@ server_message_received_cb (WebKitUserContentManager *manager,
       g_warning ("Ignoring login with keyFetchToken or unwrapBKey missing!"
                  "Cannot retrieve sync keys with one of them missing.");
       ephy_sync_service_destroy_session (service, sessionToken);
-      gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details),
-                          _("<span fgcolor='#e6780b'>Something went wrong, please try again.</span>"));
+
+      text = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>",
+                              _("Something went wrong, please try again."));
+      gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details), text);
       gtk_widget_set_visible (dialog->sync_sign_in_details, TRUE);
       g_timeout_add_seconds (3, (GSourceFunc) sync_fxa_load_sign_in_url, dialog);
+
+      g_free (text);
       goto out;
     }
 
@@ -244,10 +249,14 @@ server_message_received_cb (WebKitUserContentManager *manager,
     if (json_object_get_boolean_member (data, "verified") == FALSE) {
       g_warning ("Attempt to operate on an unverified account, giving up.");
       ephy_sync_service_destroy_session (service, sessionToken);
-      gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details),
-                          _("<span fgcolor='#e6780b'>Please verify your account before you sign in.</span>"));
+
+      text = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>",
+                              _("Please verify your account before you sign in."));
+      gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details), text);
       gtk_widget_set_visible (dialog->sync_sign_in_details, TRUE);
       g_timeout_add_seconds (3, (GSourceFunc) sync_fxa_load_sign_in_url, dialog);
+
+      g_free (text);
       goto out;
     }
 
@@ -255,10 +264,14 @@ server_message_received_cb (WebKitUserContentManager *manager,
     if (ephy_sync_service_fetch_sync_keys (service, email, keyFetchToken, unwrapBKey) == FALSE) {
       g_warning ("Failed to retrieve the sync keys, giving up.");
       ephy_sync_service_destroy_session (service, sessionToken);
-      gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details),
-                          _("<span fgcolor='#e6780b'>Something went wrong, please try again.</span>"));
+
+      text = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>",
+                              _("Something went wrong, please try again."));
+      gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details), text);
       gtk_widget_set_visible (dialog->sync_sign_in_details, TRUE);
       g_timeout_add_seconds (3, (GSourceFunc) sync_fxa_load_sign_in_url, dialog);
+
+      g_free (text);
       goto out;
     }
 
@@ -273,15 +286,19 @@ server_message_received_cb (WebKitUserContentManager *manager,
     ephy_sync_service_sync_bookmarks (service, TRUE);
     ephy_sync_service_start_periodical_sync (service, FALSE);
 
+    account = g_strdup_printf ("<b>%s</b>", email);
     /* Translators: the %s refers to the email of the currently logged in user. */
-    text = g_strdup_printf (_("Currently logged in as <b>%s</b>"), email);
+    text = g_strdup_printf (_("Currently logged in as %s"), account);
     gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details), text);
-    g_free (text);
+
     gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
                           dialog->sync_sign_in_box);
     gtk_box_pack_start (GTK_BOX (dialog->sync_authenticate_box),
                         dialog->sync_sign_out_box,
                         TRUE, TRUE, 0);
+
+    g_free (text);
+    g_free (account);
   } else if (g_strcmp0 (command, "session_status") == 0) {
     /* We are not signed in at this time, which we signal by returning an error. */
     inject_data_to_server (dialog, "message", "error", NULL);
@@ -1434,6 +1451,7 @@ static void
 setup_sync_page (PrefsDialog *dialog)
 {
   EphySyncService *service;
+  char *account;
   char *text;
 
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
@@ -1445,11 +1463,14 @@ setup_sync_page (PrefsDialog *dialog)
   } else {
     gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
                           dialog->sync_sign_in_box);
+
+    account = g_strdup_printf ("<b>%s</b>", ephy_sync_service_get_user_email (service));
     /* Translators: the %s refers to the email of the currently logged in user. */
-    text = g_strdup_printf (_("Currently logged in as <b>%s</b>"),
-                            ephy_sync_service_get_user_email (service));
+    text = g_strdup_printf (_("Currently logged in as %s"), account);
     gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details), text);
+
     g_free (text);
+    g_free (account);
   }
 }
 
