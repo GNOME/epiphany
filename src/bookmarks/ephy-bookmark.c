@@ -34,6 +34,8 @@ struct _EphyBookmark {
   GSequence   *tags;
   gint64       time_added;
 
+  /* Keep the modified timestamp as double, and not float, to
+   * preserve the precision enforced by the Storage Server. */
   char        *id;
   double       modified;
   gboolean     uploaded;
