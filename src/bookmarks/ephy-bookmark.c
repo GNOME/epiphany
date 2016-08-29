@@ -200,9 +200,9 @@ ephy_bookmark_init (EphyBookmark *self)
 
 static JsonNode *
 ephy_bookmark_json_serializable_serialize_property (JsonSerializable *serializable,
-                                                    const gchar *name,
-                                                    const GValue *value,
-                                                    GParamSpec *pspec)
+                                                    const char       *name,
+                                                    const GValue     *value,
+                                                    GParamSpec       *pspec)
 {
   JsonNode *node = NULL;
 
@@ -232,10 +232,10 @@ ephy_bookmark_json_serializable_serialize_property (JsonSerializable *serializab
 
 static gboolean
 ephy_bookmark_json_serializable_deserialize_property (JsonSerializable *serializable,
-                                                      const gchar *name,
-                                                      GValue *value,
-                                                      GParamSpec *pspec,
-                                                      JsonNode *node)
+                                                      const char       *name,
+                                                      GValue           *value,
+                                                      GParamSpec       *pspec,
+                                                      JsonNode         *node)
 {
   if (g_strcmp0 (name, "tags") == 0) {
     GSequence *tags;
