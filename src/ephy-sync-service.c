@@ -269,7 +269,7 @@ ephy_sync_service_send_storage_request (EphySyncService               *self,
   }
 
   hheader = ephy_sync_crypto_compute_hawk_header (url, data->method, self->storage_credentials_id,
-                                                 (guint8 *) self->storage_credentials_key,
+                                                 (guint8 *)self->storage_credentials_key,
                                                  strlen (self->storage_credentials_key),
                                                  hoptions);
   soup_message_headers_append (msg->request_headers, "authorization", hheader->header);
@@ -307,8 +307,8 @@ ephy_sync_service_certificate_is_valid (EphySyncService *self,
 
   uri = soup_uri_new (MOZILLA_FXA_SERVER_URL);
   pieces = g_strsplit (certificate, ".", 0);
-  header = (char *) ephy_sync_crypto_base64_urlsafe_decode (pieces[0], &len, TRUE);
-  payload = (char *) ephy_sync_crypto_base64_urlsafe_decode (pieces[1], &len, TRUE);
+  header = (char *)ephy_sync_crypto_base64_urlsafe_decode (pieces[0], &len, TRUE);
+  payload = (char *)ephy_sync_crypto_base64_urlsafe_decode (pieces[1], &len, TRUE);
 
   parser = json_parser_new ();
   json_parser_load_from_data (parser, header, -1, NULL);
@@ -357,7 +357,7 @@ obtain_storage_credentials_response_cb (SoupSession *session,
   JsonObject *errors;
   JsonArray *array;
 
-  data = (StorageServerRequestAsyncData *) user_data;
+  data = (StorageServerRequestAsyncData *)user_data;
   service = EPHY_SYNC_SERVICE (data->service);
 
   parser = json_parser_new ();
@@ -447,7 +447,7 @@ obtain_signed_certificate_response_cb (SoupSession *session,
   JsonObject *json;
   const char *certificate;
 
-  data = (StorageServerRequestAsyncData *) user_data;
+  data = (StorageServerRequestAsyncData *)user_data;
   service = EPHY_SYNC_SERVICE (data->service);
 
   parser = json_parser_new ();

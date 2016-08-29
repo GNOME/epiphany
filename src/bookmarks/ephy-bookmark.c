@@ -541,8 +541,8 @@ ephy_bookmark_from_bso (JsonObject *bso)
   sync_key = ephy_sync_crypto_decode_hex (ephy_sync_service_get_token (service, TOKEN_KB));
   decoded = ephy_sync_crypto_base64_urlsafe_decode (json_object_get_string_member (bso, "payload"),
                                                     &decoded_len, FALSE);
-  decrypted = (char *) ephy_sync_crypto_aes_256 (AES_256_MODE_DECRYPT, sync_key,
-                                                 decoded, decoded_len, NULL);
+  decrypted = (char *)ephy_sync_crypto_aes_256 (AES_256_MODE_DECRYPT, sync_key,
+                                                decoded, decoded_len, NULL);
   object = json_gobject_from_data (EPHY_TYPE_BOOKMARK, decrypted, strlen (decrypted), &error);
 
   if (object == NULL) {

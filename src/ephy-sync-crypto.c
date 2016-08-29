@@ -478,7 +478,7 @@ ephy_sync_crypto_process_key_fetch_token (const char  *keyFetchToken,
 
   ephy_sync_crypto_hkdf (kft, EPHY_SYNC_TOKEN_LENGTH,
                          NULL, 0,
-                         (guint8 *) info_kft, strlen (info_kft),
+                         (guint8 *)info_kft, strlen (info_kft),
                          out1, 3 * EPHY_SYNC_TOKEN_LENGTH);
 
   *tokenID = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
@@ -490,7 +490,7 @@ ephy_sync_crypto_process_key_fetch_token (const char  *keyFetchToken,
 
   ephy_sync_crypto_hkdf (keyRequestKey, EPHY_SYNC_TOKEN_LENGTH,
                          NULL, 0,
-                         (guint8 *) info_keys, strlen (info_keys),
+                         (guint8 *)info_keys, strlen (info_keys),
                          out2, 3 * EPHY_SYNC_TOKEN_LENGTH);
 
   *respHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
@@ -527,7 +527,7 @@ ephy_sync_crypto_process_session_token (const char  *sessionToken,
 
   ephy_sync_crypto_hkdf (st, EPHY_SYNC_TOKEN_LENGTH,
                          NULL, 0,
-                         (guint8 *) info, strlen (info),
+                         (guint8 *)info, strlen (info),
                          out, 3 * EPHY_SYNC_TOKEN_LENGTH);
 
   *tokenID = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
@@ -623,7 +623,7 @@ ephy_sync_crypto_compute_hawk_header (const char                *url,
   payload = options ? options->payload : NULL;
   timestamp = options ? options->timestamp : NULL;
   uri = soup_uri_new (url);
-  resource = (char *) soup_uri_get_path (uri);
+  resource = (char *)soup_uri_get_path (uri);
 
   if (soup_uri_get_query (uri) != NULL)
     resource = g_strconcat (resource, "?", soup_uri_get_query (uri), NULL);
@@ -749,8 +749,8 @@ ephy_sync_crypto_create_assertion (const char               *certificate,
 
   expires_at = g_get_real_time () / 1000 + duration * 1000;
   body = g_strdup_printf ("{\"exp\": %lu, \"aud\": \"%s\"}", expires_at, audience);
-  body_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *) body, strlen (body), TRUE);
-  header_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *) header, strlen (header), TRUE);
+  body_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *)body, strlen (body), TRUE);
+  header_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *)header, strlen (header), TRUE);
   to_sign = g_strdup_printf ("%s.%s", header_b64, body_b64);
 
   mpz_init (signature);
