@@ -1905,15 +1905,12 @@ load_failed_cb (WebKitWebView  *web_view,
   view->load_failed = TRUE;
   ephy_web_view_set_link_message (view, NULL);
 
-  if (error->domain == SOUP_HTTP_ERROR ||
-      error->domain == G_TLS_ERROR) {
+  if (error->domain != WEBKIT_NETWORK_ERROR &&
+      error->domain != WEBKIT_POLICY_ERROR &&
+      error->domain != WEBKIT_PLUGIN_ERROR) {
     ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
     return TRUE;
   }
-
-  g_return_val_if_fail ((error->domain == WEBKIT_NETWORK_ERROR) ||
-                        (error->domain == WEBKIT_POLICY_ERROR) ||
-                        (error->domain == WEBKIT_PLUGIN_ERROR), FALSE);
 
   switch (error->code) {
     case WEBKIT_NETWORK_ERROR_FAILED:
