@@ -1,8 +1,5 @@
 SUBDIRS = widgets egg history
 
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
-
 pkglib_LTLIBRARIES = libephymisc.la
 
 TYPES_H_FILES = \
@@ -91,10 +88,10 @@ libephymisc_la_CFLAGS = \
 	$(LIBXML_CFLAGS)	\
 	$(SQLITE3_CFLAGS)	\
 	$(WEBKIT2GTK_CFLAGS)	\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
 
 libephymisc_la_LDFLAGS = \
-	$(AM_LDFLAGS) -avoid-version -no-undefined
+	$(WARN_LDFLAGS) -avoid-version -no-undefined
 
 libephymisc_la_LIBADD = \
 	$(top_builddir)/lib/history/libephyhistory.la \
@@ -123,14 +120,13 @@ ephy_profile_migrator_CFLAGS = \
 	$(LIBSECRET_CFLAGS)	\
 	$(LIBSOUP_CFLAGS)	\
 	$(WEBKIT2GTK_CFLAGS)	\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
 
 ephy_profile_migrator_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(srcdir)/history		\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DLOCALEDIR=\"$(localedir)\"	\
-	$(AM_CPPFLAGS)
+	-DLOCALEDIR=\"$(localedir)\"
 
 ephy_profile_migrator_LDADD = \
 	libephymisc.la		\
@@ -141,7 +137,7 @@ ephy_profile_migrator_LDADD = \
 	$(WEBKIT2GTK_LIBS)
 
 ephy_profile_migrator_LDFLAGS = \
-	$(AM_LDFLAGS)
+	$(WARN_LDFLAGS)
 
 BUILT_SOURCES = \
 	ephy-lib-type-builtins.c	\

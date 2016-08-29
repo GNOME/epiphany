@@ -1,8 +1,5 @@
 SUBDIRS = bookmarks
 
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
-
 pkglib_LTLIBRARIES = libephymain.la
 
 bin_PROGRAMS = epiphany
@@ -78,8 +75,7 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DLOCALEDIR=\"$(localedir)\"	\
-	-DPKGDATADIR=\"$(pkgdatadir)\" 	\
-	$(AM_CPPFLAGS)
+	-DPKGDATADIR=\"$(pkgdatadir)\"
 
 libephymain_la_CFLAGS = \
 	$(GDK_CFLAGS)		\
@@ -91,10 +87,10 @@ libephymain_la_CFLAGS = \
 	$(LIBSOUP_CFLAGS)	\
 	$(LIBXML_CFLAGS)	\
 	$(WEBKIT2GTK_CFLAGS)	\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
 
 libephymain_la_LDFLAGS = \
-	$(AM_LDFLAGS) -avoid-version -no-undefined
+	$(WARN_LDFLAGS) -avoid-version -no-undefined
 
 libephymain_la_LIBADD = \
 	$(top_builddir)/src/bookmarks/libephybookmarks.la	\
@@ -154,7 +150,7 @@ epiphany_SOURCES = ephy-main.c \
 
 epiphany_CFLAGS = \
 	$(libephymain_la_CFLAGS)	\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
 
 epiphany_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
@@ -166,8 +162,7 @@ epiphany_CPPFLAGS = \
 	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DLOCALEDIR=\"$(localedir)\"	\
-	$(AM_CPPFLAGS)
+	-DLOCALEDIR=\"$(localedir)\"
 
 epiphany_LDADD = \
 	libephymain.la		\
@@ -179,7 +174,7 @@ epiphany_LDADD = \
 
 epiphany_LDFLAGS = \
 	-dlopen self	\
-	$(AM_LDFLAGS)
+	$(WARN_LDFLAGS)
 
 libexec_PROGRAMS = epiphany-search-provider
 
@@ -190,7 +185,7 @@ epiphany_search_provider_SOURCES = \
 
 epiphany_search_provider_CFLAGS = \
 	$(libephymain_la_CFLAGS)	\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
 
 epiphany_search_provider_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
@@ -199,8 +194,7 @@ epiphany_search_provider_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DLOCALEDIR=\"$(localedir)\"	\
-	$(AM_CPPFLAGS)
+	-DLOCALEDIR=\"$(localedir)\"
 
 epiphany_search_provider_LDADD = \
 	libephymain.la		\
@@ -213,7 +207,7 @@ epiphany_search_provider_LDADD = \
 
 epiphany_search_provider_LDFLAGS = \
 	-dlopen self	\
-	$(AM_LDFLAGS)
+	$(WARN_LDFLAGS)
 
 TYPES_SOURCE = \
 	ephy-type-builtins.c	\

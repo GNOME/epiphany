@@ -1,6 +1,3 @@
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
-
 noinst_LTLIBRARIES = libephyhistory.la
 
 libephyhistory_la_SOURCES = \
@@ -19,16 +16,15 @@ nodist_libephyhistory_la_SOURCES = \
 libephyhistory_la_CFLAGS = \
 	$(GLIB_CFLAGS)		\
 	$(GIO_CFLAGS)		\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
 
 libephyhistory_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/history	\
-	-I$(top_srcdir)/lib		\
-	$(AM_CPPFLAGS)
+	-I$(top_srcdir)/lib
 
 libephyhistory_la_LDFLAGS = \
-	$(AM_LDFLAGS)
+	$(WARN_LDFLAGS)
 
 libephyhistory_la_LIBADD = \
 	$(GLIB_LIBS)	\

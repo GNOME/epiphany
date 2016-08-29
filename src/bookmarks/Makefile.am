@@ -1,8 +1,5 @@
 noinst_LTLIBRARIES = libephybookmarks.la
 
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
-
 TYPES_H_FILES = \
 	ephy-bookmarks.h
 
@@ -104,7 +101,7 @@ libephybookmarks_la_CFLAGS = \
 	$(LIBXML_CFLAGS)	\
 	$(LIBXSLT_CFLAGS)	\
 	$(WEBKIT2GTK_CFLAGS)	\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
 
 libephybookmarks_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
@@ -115,11 +112,10 @@ libephybookmarks_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/egg		\
-	-DPKGDATADIR=\"$(pkgdatadir)\" 	\
-	$(AM_CPPFLAGS)
+	-DPKGDATADIR=\"$(pkgdatadir)\"
 
 libephybookmarks_la_LDFLAGS = \
-	$(AM_LDFLAGS)
+	$(WARN_LDFLAGS)
 
 libephybookmarks_la_LIBADD = \
 	$(AVAHI_CLIENT_LIBS)	\

@@ -1,8 +1,5 @@
 SUBDIRS = web-extension
 
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
-
 noinst_LTLIBRARIES = \
 	libephyembed.la
 
@@ -59,7 +56,7 @@ libephyembed_la_CFLAGS = \
 	$(LIBSECRET_CFLAGS)	\
 	$(LIBSOUP_CFLAGS)	\
 	$(WEBKIT2GTK_CFLAGS)	\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
 
 libephyembed_la_CPPFLAGS = \
 	-I$(top_builddir)/lib			\
@@ -70,11 +67,10 @@ libephyembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history		\
 	-I$(top_srcdir)/lib/widgets		\
 	-DPKGDATADIR=\"$(pkgdatadir)\"		\
-	-DEPHY_WEB_EXTENSIONS_DIR=\"$(pkglibdir)/web-extensions\" \
-	$(AM_CPPFLAGS)
+	-DEPHY_WEB_EXTENSIONS_DIR=\"$(pkglibdir)/web-extensions\"
 
 libephyembed_la_LDFLAGS = \
-	$(AM_LDFLAGS)
+	$(WARN_LDFLAGS)
 
 libephyembed_la_LIBADD = \
 	$(GDK_LIBS)		\

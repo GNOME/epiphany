@@ -1,8 +1,5 @@
 noinst_LTLIBRARIES = libephywidgets.la
 
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
-
 BUILT_SOURCES = \
 	ephy-widgets-type-builtins.c	\
 	ephy-widgets-type-builtins.h
@@ -86,16 +83,6 @@ libephywidgets_la_SOURCES = \
 	nautilus-floating-bar.c			\
 	nautilus-floating-bar.h
 
-libephywidgets_la_CPPFLAGS = \
-	-I$(top_builddir)/lib		\
-	-I$(top_builddir)/lib/widgets	\
-	-I$(top_srcdir)/embed		\
-	-I$(top_srcdir)/lib		\
-	-I$(top_srcdir)/lib/egg		\
-	-I$(top_srcdir)/lib/history	\
-	-I$(top_srcdir)/libgd		\
-	$(AM_CPPFLAGS)
-
 libephywidgets_la_CFLAGS = \
 	$(GCR_CFLAGS)		\
 	$(GDK_CFLAGS)		\
@@ -105,10 +92,19 @@ libephywidgets_la_CFLAGS = \
 	$(GTK_CFLAGS)		\
 	$(LIBSOUP_CFLAGS)	\
 	$(WEBKIT2GTK_CFLAGS)	\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
+
+libephywidgets_la_CPPFLAGS = \
+	-I$(top_builddir)/lib		\
+	-I$(top_builddir)/lib/widgets	\
+	-I$(top_srcdir)/embed		\
+	-I$(top_srcdir)/lib		\
+	-I$(top_srcdir)/lib/egg		\
+	-I$(top_srcdir)/lib/history	\
+	-I$(top_srcdir)/libgd
 
 libephywidgets_la_LDFLAGS = \
-	$(AM_LDFLAGS)
+	$(WARN_LDFLAGS)
 
 libephywidgets_la_LIBADD = \
 	$(top_builddir)/libgd/libgd.la	\

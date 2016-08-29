@@ -1,6 +1,3 @@
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_LDFLAGS = $(WARN_LDFLAGS)
-
 webextension_LTLIBRARIES = libephywebextension.la
 
 webextensiondir = $(pkglibdir)/web-extensions
@@ -22,8 +19,7 @@ libephywebextension_la_SOURCES = \
 	ephy-web-overview-model.c
 
 libephywebextension_la_CPPFLAGS = \
-	-I$(top_srcdir)/lib	\
-	$(AM_CPPFLAGS)
+	-I$(top_srcdir)/lib
 
 libephywebextension_la_CFLAGS = \
 	$(GIO_CFLAGS)					\
@@ -32,10 +28,10 @@ libephywebextension_la_CFLAGS = \
 	$(LIBSECRET_CFLAGS)				\
 	$(LIBSOUP_CFLAGS)				\
 	$(WEBKIT2GTK_WEB_EXTENSION_CFLAGS)		\
-	$(AM_CFLAGS)
+	$(WARN_CFLAGS)
 
 libephywebextension_la_LDFLAGS = \
-	$(AM_LDFLAGS) -module -avoid-version -no-undefined
+	$(WARN_LDFLAGS) -module -avoid-version -no-undefined
 
 libephywebextension_la_LIBADD = \
 	$(top_builddir)/lib/libephymisc.la \
