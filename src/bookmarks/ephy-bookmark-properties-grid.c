@@ -369,24 +369,22 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
 }
 
 static void
-ephy_bookmark_properties_grid_finalize (GObject *object)
+ephy_bookmark_properties_grid_check_prev_values (EphyBookmarkPropertiesGrid *self)
 {
-  EphyBookmarkPropertiesGrid *self = EPHY_BOOKMARK_PROPERTIES_GRID (object);
-
   if (ephy_bookmark_is_uploaded (self->bookmark) == FALSE)
-    goto out;
+    return;
 
   /* Check if any actual changes were made to the name, address or tags. If yes,
    * set the uploaded flag to FALSE. */
 
   if (g_strcmp0 (self->prev_name, ephy_bookmark_get_title (self->bookmark)) != 0) {
     ephy_bookmark_set_uploaded (self->bookmark, FALSE);
-    goto out;
+    return;
   }
 
   if (g_strcmp0 (self->prev_address, ephy_bookmark_get_url (self->bookmark)) != 0) {
     ephy_bookmark_set_uploaded (self->bookmark, FALSE);
-    goto out;
+    return;
   }
 
   if (self->prev_tags != NULL) {
@@ -399,7 +397,7 @@ ephy_bookmark_properties_grid_finalize (GObject *object)
       if (!g_sequence_lookup (self->prev_tags, g_sequence_get (iter),
                               (GCompareDataFunc)ephy_bookmark_tags_compare, NULL)) {
         ephy_bookmark_set_uploaded (self->bookmark, FALSE);
-        goto out;
+        return;
       }
     }
 
@@ -409,19 +407,21 @@ ephy_bookmark_properties_grid_finalize (GObject *object)
       if (!g_sequence_lookup (tags, g_sequence_get (iter),
                               (GCompareDataFunc)ephy_bookmark_tags_compare, NULL)) {
         ephy_bookmark_set_uploaded (self->bookmark, FALSE);
-        goto out;
+        return;
       }
     }
   }
+}
 
-out:
+static void
+ephy_bookmark_properties_grid_finalize (GObject *object)
+{
+  EphyBookmarkPropertiesGrid *self = EPHY_BOOKMARK_PROPERTIES_GRID (object);
+
+  ephy_bookmark_properties_grid_check_prev_values (self);
   ephy_bookmarks_manager_save_to_file_async (self->manager, NULL,
                                              ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                              NULL);
-
-  g_clear_pointer (&self->prev_name, g_free);
-  g_clear_pointer (&self->prev_address, g_free);
-  g_clear_pointer (&self->prev_tags, g_sequence_free);
 
   G_OBJECT_CLASS (ephy_bookmark_properties_grid_parent_class)->finalize (object);
 }
