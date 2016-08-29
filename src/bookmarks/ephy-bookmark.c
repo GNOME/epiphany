@@ -45,8 +45,9 @@ static JsonSerializableIface *serializable_iface = NULL;
 
 static void json_serializable_iface_init (gpointer g_iface);
 
-G_DEFINE_TYPE_EXTENDED (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE, json_serializable_iface_init))
+G_DEFINE_TYPE_WITH_CODE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT,
+                        G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE,
+                                               json_serializable_iface_init))
 
 enum {
   PROP_0,
