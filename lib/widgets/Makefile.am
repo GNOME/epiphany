@@ -1,7 +1,7 @@
 noinst_LTLIBRARIES = libephywidgets.la
 
-AM_CFLAGS = $(CODE_COVERAGE_CFLAGS) $(WARN_CFLAGS)
-AM_LDFLAGS = $(CODE_COVERAGE_LIBS) $(WARN_LDFLAGS)
+AM_CFLAGS = $(WARN_CFLAGS)
+AM_LDFLAGS = $(WARN_LDFLAGS)
 
 BUILT_SOURCES = \
 	ephy-widgets-type-builtins.c	\
