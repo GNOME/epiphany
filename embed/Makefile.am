@@ -49,13 +49,6 @@ nodist_libephyembed_la_SOURCES = \
 	$(BUILT_SOURCES)
 
 libephyembed_la_CFLAGS = \
-	$(GDK_CFLAGS)		\
-	$(GIO_CFLAGS)		\
-	$(GLIB_CFLAGS)		\
-	$(GTK_CFLAGS)		\
-	$(LIBSECRET_CFLAGS)	\
-	$(LIBSOUP_CFLAGS)	\
-	$(WEBKIT2GTK_CFLAGS)	\
 	$(WARN_CFLAGS)
 
 libephyembed_la_CPPFLAGS = \
@@ -67,7 +60,14 @@ libephyembed_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history		\
 	-I$(top_srcdir)/lib/widgets		\
 	-DPKGDATADIR=\"$(pkgdatadir)\"		\
-	-DEPHY_WEB_EXTENSIONS_DIR=\"$(pkglibdir)/web-extensions\"
+	-DEPHY_WEB_EXTENSIONS_DIR=\"$(pkglibdir)/web-extensions\"	\
+	$(GDK_CFLAGS)				\
+	$(GIO_CFLAGS)				\
+	$(GLIB_CFLAGS)				\
+	$(GTK_CFLAGS)				\
+	$(LIBSECRET_CFLAGS)			\
+	$(LIBSOUP_CFLAGS)			\
+	$(WEBKIT2GTK_CFLAGS)
 
 libephyembed_la_LDFLAGS = \
 	$(WARN_LDFLAGS)

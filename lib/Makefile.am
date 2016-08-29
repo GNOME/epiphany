@@ -73,21 +73,20 @@ libephymisc_la_CPPFLAGS = \
 	-DTOP_SRC_DATADIR=\"$(top_srcdir)/data\"	\
 	-I$(top_builddir)/lib				\
 	-I$(top_srcdir)/lib/egg				\
-	$(AM_CPPFLAGS)
+	$(CAIRO_CFLAGS)					\
+	$(GDK_PIXBUF_CFLAGS)				\
+	$(GDK_X11_CFLAGS)				\
+	$(GIO_CFLAGS)					\
+	$(GLIB_CFLAGS)					\
+	$(GNOME_DESKTOP_CFLAGS)				\
+	$(GTK_CFLAGS)					\
+	$(LIBSECRET_CFLAGS)				\
+	$(LIBSOUP_CFLAGS)				\
+	$(LIBXML_CFLAGS)				\
+	$(SQLITE3_CFLAGS)				\
+	$(WEBKIT2GTK_CFLAGS)
 
 libephymisc_la_CFLAGS = \
-	$(CAIRO_CFLAGS)		\
-	$(GDK_PIXBUF_CFLAGS)	\
-	$(GDK_X11_CFLAGS)	\
-	$(GIO_CFLAGS)		\
-	$(GLIB_CFLAGS)		\
-	$(GNOME_DESKTOP_CFLAGS)	\
-	$(GTK_CFLAGS)		\
-	$(LIBSECRET_CFLAGS)	\
-	$(LIBSOUP_CFLAGS)	\
-	$(LIBXML_CFLAGS)	\
-	$(SQLITE3_CFLAGS)	\
-	$(WEBKIT2GTK_CFLAGS)	\
 	$(WARN_CFLAGS)
 
 libephymisc_la_LDFLAGS = \
@@ -115,18 +114,18 @@ ephy_profile_migrator_SOURCES = \
 	ephy-profile-migrator.c
 
 ephy_profile_migrator_CFLAGS = \
-	$(GLIB_CFLAGS)		\
-	$(GTK_CFLAGS)		\
-	$(LIBSECRET_CFLAGS)	\
-	$(LIBSOUP_CFLAGS)	\
-	$(WEBKIT2GTK_CFLAGS)	\
 	$(WARN_CFLAGS)
 
 ephy_profile_migrator_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(srcdir)/history		\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DLOCALEDIR=\"$(localedir)\"
+	-DLOCALEDIR=\"$(localedir)\"	\
+	$(GLIB_CFLAGS)			\
+	$(GTK_CFLAGS)			\
+	$(LIBSECRET_CFLAGS)		\
+	$(LIBSOUP_CFLAGS)		\
+	$(WEBKIT2GTK_CFLAGS)
 
 ephy_profile_migrator_LDADD = \
 	libephymisc.la		\

@@ -14,14 +14,14 @@ nodist_libephyhistory_la_SOURCES = \
 	$(BUILT_SOURCES)
 
 libephyhistory_la_CFLAGS = \
-	$(GLIB_CFLAGS)		\
-	$(GIO_CFLAGS)		\
 	$(WARN_CFLAGS)
 
 libephyhistory_la_CPPFLAGS = \
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/history	\
-	-I$(top_srcdir)/lib
+	-I$(top_srcdir)/lib		\
+	$(GLIB_CFLAGS)			\
+	$(GIO_CFLAGS)
 
 libephyhistory_la_LDFLAGS = \
 	$(WARN_LDFLAGS)

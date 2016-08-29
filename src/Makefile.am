@@ -75,18 +75,18 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DLOCALEDIR=\"$(localedir)\"	\
-	-DPKGDATADIR=\"$(pkgdatadir)\"
+	-DPKGDATADIR=\"$(pkgdatadir)\"	\
+	$(GDK_CFLAGS)			\
+	$(GIO_CFLAGS)			\
+	$(GLIB_CFLAGS)			\
+	$(GTK_CFLAGS)			\
+	$(LIBNOTIFY_CFLAGS)		\
+	$(LIBSECRET_CFLAGS)		\
+	$(LIBSOUP_CFLAGS)		\
+	$(LIBXML_CFLAGS)		\
+	$(WEBKIT2GTK_CFLAGS)
 
 libephymain_la_CFLAGS = \
-	$(GDK_CFLAGS)		\
-	$(GIO_CFLAGS)		\
-	$(GLIB_CFLAGS)		\
-	$(GTK_CFLAGS)		\
-	$(LIBNOTIFY_CFLAGS)	\
-	$(LIBSECRET_CFLAGS)	\
-	$(LIBSOUP_CFLAGS)	\
-	$(LIBXML_CFLAGS)	\
-	$(WEBKIT2GTK_CFLAGS)	\
 	$(WARN_CFLAGS)
 
 libephymain_la_LDFLAGS = \
@@ -162,7 +162,13 @@ epiphany_CPPFLAGS = \
 	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DLOCALEDIR=\"$(localedir)\"
+	-DLOCALEDIR=\"$(localedir)\"	\
+	$(GLIB_CFLAGS)			\
+	$(GTK_CFLAGS)			\
+	$(LIBNOTIFY_CFLAGS)		\
+	$(LIBXML_CFLAGS)		\
+	$(X11_CFLAGS)			\
+	$(WEBKIT2GTK_CFLAGS)
 
 epiphany_LDADD = \
 	libephymain.la		\
@@ -170,7 +176,8 @@ epiphany_LDADD = \
 	$(GTK_LIBS)		\
 	$(LIBNOTIFY_LIBS)	\
 	$(LIBXML_LIBS)		\
-	$(X11_LIBS)
+	$(X11_LIBS)		\
+	$(WEBKIT2GTK_LIBS)
 
 epiphany_LDFLAGS = \
 	-dlopen self	\
@@ -194,7 +201,14 @@ epiphany_search_provider_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/src/bookmarks   \
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DLOCALEDIR=\"$(localedir)\"
+	-DLOCALEDIR=\"$(localedir)\"	\
+	$(GIO_CFLAGS)			\
+	$(GLIB_CFLAGS)			\
+	$(GTK_CFLAGS)			\
+	$(LIBSECRET_CFLAGS)		\
+	$(LIBSOUP_CFLAGS)		\
+	$(LIBXML_CFLAGS)		\
+	$(WEBKIT2GTK_CFLAGS)
 
 epiphany_search_provider_LDADD = \
 	libephymain.la		\
@@ -203,7 +217,8 @@ epiphany_search_provider_LDADD = \
 	$(GTK_LIBS)		\
 	$(LIBSECRET_LIBS)	\
 	$(LIBSOUP_LIBS)		\
-	$(LIBXML_LIBS)
+	$(LIBXML_LIBS)		\
+	$(WEBKIT2GTK_LIBS)
 
 epiphany_search_provider_LDFLAGS = \
 	-dlopen self	\

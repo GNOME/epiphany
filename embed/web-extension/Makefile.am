@@ -19,15 +19,15 @@ libephywebextension_la_SOURCES = \
 	ephy-web-overview-model.c
 
 libephywebextension_la_CPPFLAGS = \
-	-I$(top_srcdir)/lib
+	-I$(top_srcdir)/lib	\
+	$(GIO_CFLAGS)		\
+	$(GLIB_CFLAGS)		\
+	$(GTK_CFLAGS)		\
+	$(LIBSECRET_CFLAGS)	\
+	$(LIBSOUP_CFLAGS)	\
+	$(WEBKIT2GTK_WEB_EXTENSION_CFLAGS)
 
 libephywebextension_la_CFLAGS = \
-	$(GIO_CFLAGS)					\
-	$(GLIB_CFLAGS)					\
-	$(GTK_CFLAGS)					\
-	$(LIBSECRET_CFLAGS)				\
-	$(LIBSOUP_CFLAGS)				\
-	$(WEBKIT2GTK_WEB_EXTENSION_CFLAGS)		\
 	$(WARN_CFLAGS)
 
 libephywebextension_la_LDFLAGS = \

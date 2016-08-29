@@ -84,14 +84,6 @@ libephywidgets_la_SOURCES = \
 	nautilus-floating-bar.h
 
 libephywidgets_la_CFLAGS = \
-	$(GCR_CFLAGS)		\
-	$(GDK_CFLAGS)		\
-	$(GDK_PIXBUF_CFLAGS)	\
-	$(GIO_CFLAGS)		\
-	$(GLIB_CFLAGS)		\
-	$(GTK_CFLAGS)		\
-	$(LIBSOUP_CFLAGS)	\
-	$(WEBKIT2GTK_CFLAGS)	\
 	$(WARN_CFLAGS)
 
 libephywidgets_la_CPPFLAGS = \
@@ -101,7 +93,15 @@ libephywidgets_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib		\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/history	\
-	-I$(top_srcdir)/libgd
+	-I$(top_srcdir)/libgd		\
+	$(GCR_CFLAGS)			\
+	$(GDK_CFLAGS)			\
+	$(GDK_PIXBUF_CFLAGS)		\
+	$(GIO_CFLAGS)			\
+	$(GLIB_CFLAGS)			\
+	$(GTK_CFLAGS)			\
+	$(LIBSOUP_CFLAGS)		\
+	$(WEBKIT2GTK_CFLAGS)
 
 libephywidgets_la_LDFLAGS = \
 	$(WARN_LDFLAGS)

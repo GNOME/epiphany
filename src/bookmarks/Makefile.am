@@ -92,15 +92,6 @@ stamp-ephy-bookmarks-type-builtins.h: Makefile $(TYPES_H_FILES)
 	&& echo timestamp > $(@F)
 
 libephybookmarks_la_CFLAGS = \
-	$(AVAHI_CLIENT_CFLAGS)	\
-	$(AVAHI_GOBJECT_CFLAGS)	\
-	$(GDK_CFLAGS)		\
-	$(GIO_CFLAGS)		\
-	$(GLIB_CFLAGS)		\
-	$(GTK_CFLAGS) 		\
-	$(LIBXML_CFLAGS)	\
-	$(LIBXSLT_CFLAGS)	\
-	$(WEBKIT2GTK_CFLAGS)	\
 	$(WARN_CFLAGS)
 
 libephybookmarks_la_CPPFLAGS = \
@@ -112,7 +103,16 @@ libephybookmarks_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/egg		\
-	-DPKGDATADIR=\"$(pkgdatadir)\"
+	-DPKGDATADIR=\"$(pkgdatadir)\"	\
+	$(AVAHI_CLIENT_CFLAGS)		\
+	$(AVAHI_GOBJECT_CFLAGS)		\
+	$(GDK_CFLAGS)			\
+	$(GIO_CFLAGS)			\
+	$(GLIB_CFLAGS)			\
+	$(GTK_CFLAGS) 			\
+	$(LIBXML_CFLAGS)		\
+	$(LIBXSLT_CFLAGS)		\
+	$(WEBKIT2GTK_CFLAGS)
 
 libephybookmarks_la_LDFLAGS = \
 	$(WARN_LDFLAGS)
