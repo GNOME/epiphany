@@ -108,7 +108,7 @@ ephy_sync_crypto_hawk_artifacts_new (const char *app,
 static void
 ephy_sync_crypto_hawk_artifacts_free (EphySyncCryptoHawkArtifacts *artifacts)
 {
-  g_return_if_fail (artifacts != NULL);
+  g_assert (artifacts != NULL);
 
   g_free (artifacts->app);
   g_free (artifacts->dlg);
@@ -175,7 +175,7 @@ ephy_sync_crypto_rsa_key_pair_free (EphySyncCryptoRSAKeyPair *keypair)
 static char *
 ephy_sync_crypto_kw (const char *name)
 {
-  g_return_val_if_fail (name != NULL, NULL);
+  g_assert (name != NULL);
 
   return g_strconcat ("identity.mozilla.com/picl/v1/", name, NULL);
 }
@@ -187,8 +187,8 @@ ephy_sync_crypto_xor (guint8 *a,
 {
   guint8 *xored;
 
-  g_return_val_if_fail (a != NULL, NULL);
-  g_return_val_if_fail (b != NULL, NULL);
+  g_assert (a != NULL);
+  g_assert (b != NULL);
 
   xored = g_malloc (length);
   for (gsize i = 0; i < length; i++)
@@ -202,8 +202,8 @@ ephy_sync_crypto_equals (guint8 *a,
                          guint8 *b,
                          gsize   length)
 {
-  g_return_val_if_fail (a != NULL, FALSE);
-  g_return_val_if_fail (b != NULL, FALSE);
+  g_assert (a != NULL);
+  g_assert (b != NULL);
 
   for (gsize i = 0; i < length; i++)
     if (a[i] != b[i])
@@ -223,8 +223,8 @@ ephy_sync_crypto_normalize_string (const char                  *type,
   char *normalized;
   char *tmp;
 
-  g_return_val_if_fail (type != NULL, NULL);
-  g_return_val_if_fail (artifacts != NULL, NULL);
+  g_assert (type != NULL);
+  g_assert (artifacts != NULL);
 
   info = g_strdup_printf ("hawk.%d.%s", HAWK_VERSION, type);
   method = g_ascii_strup (artifacts->method, -1);
@@ -266,7 +266,7 @@ ephy_sync_crypto_parse_content_type (const char *content_type)
   char **tokens;
   char *retval;
 
-  g_return_val_if_fail (content_type != NULL, NULL);
+  g_assert (content_type != NULL);
 
   tokens = g_strsplit (content_type, ";", -1);
   retval = g_ascii_strdown (g_strstrip (tokens[0]), -1);
@@ -285,8 +285,8 @@ ephy_sync_crypto_calculate_payload_hash (const char *payload,
   char *update;
   char *hash;
 
-  g_return_val_if_fail (payload != NULL, NULL);
-  g_return_val_if_fail (content_type != NULL, NULL);
+  g_assert (payload != NULL);
+  g_assert (content_type != NULL);
 
   content = ephy_sync_crypto_parse_content_type (content_type);
   update = g_strdup_printf ("hawk.%d.payload\n%s\n%s\n",
@@ -315,9 +315,9 @@ ephy_sync_crypto_calculate_mac (const char                  *type,
   char *normalized;
   char *mac;
 
-  g_return_val_if_fail (type != NULL, NULL);
-  g_return_val_if_fail (key != NULL, NULL);
-  g_return_val_if_fail (artifacts != NULL, NULL);
+  g_assert (type != NULL);
+  g_assert (key != NULL);
+  g_assert (artifacts != NULL);
 
   normalized = ephy_sync_crypto_normalize_string (type, artifacts);
   digest_hex = g_compute_hmac_for_string (G_CHECKSUM_SHA256, key, key_len, normalized, -1);
@@ -339,9 +339,9 @@ ephy_sync_crypto_append_to_header (char       *header,
   char *new_header;
   char *tmp;
 
-  g_return_val_if_fail (header != NULL, NULL);
-  g_return_val_if_fail (name != NULL, NULL);
-  g_return_val_if_fail (value != NULL, NULL);
+  g_assert (header != NULL);
+  g_assert (name != NULL);
+  g_assert (value != NULL);
 
   tmp = header;
   new_header = g_strconcat (header, ", ", name, "=\"", value, "\"", NULL);
@@ -371,9 +371,9 @@ ephy_sync_crypto_hkdf (guint8 *in,
   gsize data_len;
   gsize n;
 
-  g_return_if_fail (in != NULL);
-  g_return_if_fail (info != NULL);
-  g_return_if_fail (out != NULL);
+  g_assert (in != NULL);
+  g_assert (info != NULL);
+  g_assert (out != NULL);
 
   hash_len = g_checksum_type_get_length (G_CHECKSUM_SHA256);
   g_assert (out_len <= hash_len * 255);
@@ -433,7 +433,7 @@ ephy_sync_crypto_random_gen (void   *ctx,
 static void
 ephy_sync_crypto_b64_to_b64_urlsafe (char *text)
 {
-  g_return_if_fail (text != NULL);
+  g_assert (text != NULL);
 
   /* Replace '+' with '-' and '/' with '_' */
   g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=/", '-');
@@ -443,7 +443,7 @@ ephy_sync_crypto_b64_to_b64_urlsafe (char *text)
 static void
 ephy_sync_crypto_b64_urlsafe_to_b64 (char *text)
 {
-  g_return_if_fail (text != NULL);
+  g_assert (text != NULL);
 
   /* Replace '-' with '+' and '_' with '/' */
   g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=_", '+');
