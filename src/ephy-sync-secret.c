@@ -45,8 +45,10 @@ forget_all_tokens_cb (SecretService *service,
 
   secret_service_clear_finish (service, result, &error);
 
-  if (error != NULL)
+  if (error != NULL) {
     g_warning ("Failed to clear token secret schema: %s", error->message);
+    g_error_free (error);
+  }
 }
 
 static void
@@ -58,8 +60,10 @@ store_token_cb (SecretService *service,
 
   secret_service_store_finish (service, result, &error);
 
-  if (error != NULL)
+  if (error != NULL) {
     g_warning ("Failed to store token in secret schema: %s", error->message);
+    g_error_free (error);
+  }
 }
 
 void
@@ -94,6 +98,12 @@ ephy_sync_secret_load_tokens (EphySyncService *service)
   matches = secret_service_search_sync (NULL, EPHY_SYNC_TOKEN_SCHEMA, attributes,
                                         SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
                                         NULL, &error);
+
+  if (error != NULL) {
+    g_warning ("Failed to search for attributes: %s", error->message);
+    g_error_free (error);
+    return;
+  }
 
   for (GList *m = matches; m != NULL; m = m->next) {
     secret_item = m->data;
@@ -134,9 +144,8 @@ ephy_sync_secret_store_token (const char        *email,
                                         TOKEN_TYPE_KEY, type,
                                         TOKEN_NAME_KEY, name,
                                         NULL);
-  /* Translators: The %s is the name of the token whose value is stored.
-   * Example: quickStretchedPW or authPW
-   */
+  /* Translators: secret token description stored in gnome-keyring.
+   * The %s represents the name of the token, e.g. sessionToken. */
   label = g_strdup_printf (_("Token value for %s token"), name);
 
   secret_service_store (NULL, EPHY_SYNC_TOKEN_SCHEMA, attributes,
