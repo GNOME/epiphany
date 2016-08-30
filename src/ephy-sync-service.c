@@ -966,8 +966,8 @@ upload_bookmark_response_cb (SoupSession *session,
 
   if (msg->status_code == 200) {
     last_modified = g_ascii_strtod (msg->response_body->data, NULL);
-    ephy_bookmark_set_modified (bookmark, last_modified);
-    ephy_bookmark_set_uploaded (bookmark, TRUE);
+    ephy_bookmark_set_modification_time (bookmark, last_modified);
+    ephy_bookmark_set_is_uploaded (bookmark, TRUE);
     ephy_bookmarks_manager_save_to_file_async (manager, NULL, NULL, NULL);
 
     LOG ("Successfully uploaded to server");
@@ -998,7 +998,7 @@ ephy_sync_service_upload_bookmark (EphySyncService *self,
                               EPHY_BOOKMARKS_COLLECTION,
                               ephy_bookmark_get_id (bookmark));
   bso = ephy_bookmark_to_bso (bookmark);
-  modified = ephy_bookmark_get_modified (bookmark);
+  modified = ephy_bookmark_get_modification_time (bookmark);
   ephy_sync_service_send_storage_message (self, endpoint,
                                           SOUP_METHOD_PUT, bso, -1,
                                           force ? -1 : modified,
@@ -1219,7 +1219,7 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
      * bookmark has been synced before in the past. Keep the one with the most
      * recent modified timestamp. */
     else {
-      if (ephy_bookmark_get_modified (remote) > ephy_bookmark_get_modified (local)) {
+      if (ephy_bookmark_get_modification_time (remote) > ephy_bookmark_get_modification_time (local)) {
         ephy_bookmarks_manager_remove_bookmark (manager, local);
         ephy_bookmarks_manager_add_bookmark (manager, remote);
 
@@ -1230,7 +1230,7 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
 
         g_hash_table_add (marked, remote);
       } else {
-        if (ephy_bookmark_get_modified (local) > ephy_bookmark_get_modified (remote))
+        if (ephy_bookmark_get_modification_time (local) > ephy_bookmark_get_modification_time (remote))
           ephy_sync_service_upload_bookmark (service, local, TRUE);
 
         g_hash_table_add (marked, local);
@@ -1313,7 +1313,7 @@ sync_bookmarks_response_cb (SoupSession *session,
            !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
         ephy_bookmarks_manager_add_tag (manager, g_sequence_get (iter));
     } else {
-      if (ephy_bookmark_get_modified (remote) > ephy_bookmark_get_modified (local)) {
+      if (ephy_bookmark_get_modification_time (remote) > ephy_bookmark_get_modification_time (local)) {
         ephy_bookmarks_manager_remove_bookmark (manager, local);
         ephy_bookmarks_manager_add_bookmark (manager, remote);
 
@@ -1322,7 +1322,7 @@ sync_bookmarks_response_cb (SoupSession *session,
              !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
           ephy_bookmarks_manager_add_tag (manager, g_sequence_get (iter));
       } else {
-        if (ephy_bookmark_get_modified (local) > ephy_bookmark_get_modified (remote))
+        if (ephy_bookmark_get_modification_time (local) > ephy_bookmark_get_modification_time (remote))
           ephy_sync_service_upload_bookmark (service, local, TRUE);
 
         g_object_unref (remote);

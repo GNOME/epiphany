@@ -74,7 +74,7 @@ build_variant (EphyBookmark *bookmark)
   g_variant_builder_add (&builder, "x", ephy_bookmark_get_time_added (bookmark));
   g_variant_builder_add (&builder, "s", ephy_bookmark_get_title (bookmark));
   g_variant_builder_add (&builder, "s", ephy_bookmark_get_id (bookmark));
-  g_variant_builder_add (&builder, "d", ephy_bookmark_get_modified (bookmark));
+  g_variant_builder_add (&builder, "d", ephy_bookmark_get_modification_time (bookmark));
   g_variant_builder_add (&builder, "b", ephy_bookmark_is_uploaded (bookmark));
 
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("as"));
@@ -581,8 +581,8 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
     bookmark = ephy_bookmark_new (list[i], title, tags);
     ephy_bookmark_set_time_added (bookmark, time_added);
     ephy_bookmark_set_id (bookmark, id);
-    ephy_bookmark_set_modified (bookmark, modified);
-    ephy_bookmark_set_uploaded (bookmark, uploaded);
+    ephy_bookmark_set_modification_time (bookmark, modified);
+    ephy_bookmark_set_is_uploaded (bookmark, uploaded);
     g_sequence_prepend (bookmarks, bookmark);
   }
   ephy_bookmarks_manager_add_bookmarks (self, bookmarks);

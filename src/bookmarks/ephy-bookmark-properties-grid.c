@@ -378,12 +378,12 @@ ephy_bookmark_properties_grid_check_prev_values (EphyBookmarkPropertiesGrid *sel
    * set the uploaded flag to FALSE. */
 
   if (g_strcmp0 (self->prev_name, ephy_bookmark_get_title (self->bookmark)) != 0) {
-    ephy_bookmark_set_uploaded (self->bookmark, FALSE);
+    ephy_bookmark_set_is_uploaded (self->bookmark, FALSE);
     return;
   }
 
   if (g_strcmp0 (self->prev_address, ephy_bookmark_get_url (self->bookmark)) != 0) {
-    ephy_bookmark_set_uploaded (self->bookmark, FALSE);
+    ephy_bookmark_set_is_uploaded (self->bookmark, FALSE);
     return;
   }
 
@@ -396,7 +396,7 @@ ephy_bookmark_properties_grid_check_prev_values (EphyBookmarkPropertiesGrid *sel
          !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
       if (!g_sequence_lookup (self->prev_tags, g_sequence_get (iter),
                               (GCompareDataFunc)ephy_bookmark_tags_compare, NULL)) {
-        ephy_bookmark_set_uploaded (self->bookmark, FALSE);
+        ephy_bookmark_set_is_uploaded (self->bookmark, FALSE);
         return;
       }
     }
@@ -406,7 +406,7 @@ ephy_bookmark_properties_grid_check_prev_values (EphyBookmarkPropertiesGrid *sel
          !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
       if (!g_sequence_lookup (tags, g_sequence_get (iter),
                               (GCompareDataFunc)ephy_bookmark_tags_compare, NULL)) {
-        ephy_bookmark_set_uploaded (self->bookmark, FALSE);
+        ephy_bookmark_set_is_uploaded (self->bookmark, FALSE);
         return;
       }
     }
