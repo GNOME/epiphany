@@ -302,6 +302,8 @@ ephy_shell_startup (GApplication *application)
 
   mode = ephy_embed_shell_get_mode (embed_shell);
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    EphySyncService *service;
+
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_entries, G_N_ELEMENTS (app_entries),
                                      application);
@@ -318,7 +320,15 @@ ephy_shell_startup (GApplication *application)
                               G_BINDING_SYNC_CREATE);
     }
 
+    /* Start the periodical sync now. */
+    service = ephy_sync_service_new ();
+    ephy_sync_service_start_periodical_sync (service, TRUE);
+    ephy_shell->sync_service = service;
 
+    builder = gtk_builder_new ();
+    gtk_builder_add_from_resource (builder,
+                                   "/org/gnome/epiphany/epiphany-application-menu.ui",
+                                   NULL);
     gtk_application_set_app_menu (GTK_APPLICATION (application),
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   } else {
@@ -557,18 +567,12 @@ static void
 ephy_shell_init (EphyShell *shell)
 {
   EphyShell **ptr = &ephy_shell;
-  EphySyncService *service;
 
   /* globally accessible singleton */
   g_assert (ephy_shell == NULL);
   ephy_shell = shell;
   g_object_add_weak_pointer (G_OBJECT (ephy_shell),
                              (gpointer *)ptr);
-
-  /* Start the periodical sync now. */
-  service = ephy_sync_service_new ();
-  ephy_sync_service_start_periodical_sync (service, TRUE);
-  ephy_shell->sync_service = service;
 }
 
 static void
@@ -608,21 +612,6 @@ ephy_shell_finalize (GObject *object)
   G_OBJECT_CLASS (ephy_shell_parent_class)->finalize (object);
 
   LOG ("Ephy shell finalised");
-}
-
-/**
- * ephy_shell_get_sync_service:
- *
- * Retrieve the default #EphySyncService object
- *
- * Return value: (transfer none): the default #EphySyncService
- **/
-EphySyncService *
-ephy_shell_get_sync_service (EphyShell *shell)
-{
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-
-  return shell->sync_service;
 }
 
 /**
@@ -748,6 +737,22 @@ ephy_shell_get_session (EphyShell *shell)
     shell->session = g_object_new (EPHY_TYPE_SESSION, NULL);
 
   return shell->session;
+}
+
+/**
+ * ephy_shell_get_sync_service:
+ * @shell: the #EphyShell
+ *
+ * Returns the sync service.
+ *
+ * Return value: (transfer none): the global #EphySyncService
+ **/
+EphySyncService *
+ephy_shell_get_sync_service (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  return shell->sync_service;
 }
 
 /**
