@@ -35,7 +35,7 @@
 #define MOZILLA_FXA_SERVER_URL    "https://api.accounts.firefox.com/v1/"
 #define EPHY_BOOKMARKS_COLLECTION "ephy-bookmarks"
 #define EMAIL_REGEX               "^[a-zA-Z0-9_]([a-zA-Z0-9._]+[a-zA-Z0-9_])?@[a-z0-9.-]+$"
-#define SYNC_FREQUENCY            (15 * 60)
+#define SYNC_FREQUENCY            (15 * 60) /* seconds */
 
 struct _EphySyncService {
   GObject      parent_instance;
@@ -106,8 +106,7 @@ storage_server_request_async_data_new (EphySyncService     *service,
 static void
 storage_server_request_async_data_free (StorageServerRequestAsyncData *data)
 {
-  if (G_UNLIKELY (!data))
-    return;
+  g_assert (data != NULL);
 
   g_object_unref (data->service);
   g_free (data->endpoint);
@@ -205,6 +204,7 @@ ephy_sync_service_fxa_hawk_get_sync (EphySyncService  *self,
   SoupMessage *msg;
   JsonParser *parser;
   char *url;
+  guint retval;
 
   g_return_val_if_fail (EPHY_IS_SYNC_SERVICE (self), 0);
   g_return_val_if_fail (endpoint != NULL, 0);
@@ -224,10 +224,13 @@ ephy_sync_service_fxa_hawk_get_sync (EphySyncService  *self,
     g_object_unref (parser);
   }
 
+  retval = msg->status_code;
+
   g_free (url);
+  g_object_unref (msg);
   ephy_sync_crypto_hawk_header_free (hheader);
 
-  return msg->status_code;
+  return retval;
 }
 
 static void
@@ -370,6 +373,7 @@ obtain_storage_credentials_response_cb (SoupSession *session,
     service->storage_credentials_key = g_strdup (json_object_get_string_member (json, "key"));
     service->storage_credentials_expiry_time = json_object_get_int_member (json, "duration") +
                                                ephy_sync_utils_current_time_seconds ();
+    ephy_sync_service_send_storage_request (service, data);
   } else if (msg->status_code == 401) {
     array = json_object_get_array_member (json, "errors");
     errors = json_node_get_object (json_array_get_element (array, 0));
@@ -378,19 +382,14 @@ obtain_storage_credentials_response_cb (SoupSession *session,
                json_object_get_string_member (errors, "description"));
     storage_server_request_async_data_free (data);
     service->locked = FALSE;
-    goto out;
   } else {
     g_warning ("Failed to talk to the Token Server, status code %u. "
                "See https://docs.services.mozilla.com/token/apis.html#error-responses",
                msg->status_code);
     storage_server_request_async_data_free (data);
     service->locked = FALSE;
-    goto out;
   }
 
-  ephy_sync_service_send_storage_request (service, data);
-
-out:
   g_object_unref (parser);
 }
 
@@ -573,7 +572,6 @@ ephy_sync_service_finalize (GObject *object)
   if (self->keypair != NULL)
     ephy_sync_crypto_rsa_key_pair_free (self->keypair);
 
-  ephy_sync_service_stop_periodical_sync (self);
   g_queue_free_full (self->storage_queue, (GDestroyNotify) storage_server_request_async_data_free);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
@@ -584,10 +582,11 @@ ephy_sync_service_dispose (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
-  g_clear_object (&self->session);
-  g_clear_pointer (&self->user_email, g_free);
+  ephy_sync_service_stop_periodical_sync (self);
   ephy_sync_service_clear_storage_credentials (self);
   ephy_sync_service_clear_tokens (self);
+  g_clear_pointer (&self->user_email, g_free);
+  g_clear_object (&self->session);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->dispose (object);
 }
@@ -616,7 +615,7 @@ ephy_sync_service_init (EphySyncService *self)
       ephy_sync_service_set_user_email (self, email);
       ephy_sync_secret_load_tokens (self);
     } else {
-      g_warning ("Invalid email");
+      g_warning ("Invalid email: %s", email);
     }
   }
 }
@@ -1413,5 +1412,8 @@ ephy_sync_service_stop_periodical_sync (EphySyncService *self)
   if (ephy_sync_service_is_signed_in (self) == FALSE)
     return;
 
-  g_source_remove (self->source_id);
+  if (self->source_id != 0) {
+    g_source_remove (self->source_id);
+    self->source_id = 0;
+  }
 }
