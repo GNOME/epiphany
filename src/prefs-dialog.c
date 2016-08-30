@@ -142,6 +142,7 @@ prefs_dialog_finalize (GObject *object)
     webkit_user_content_manager_unregister_script_message_handler (dialog->fxa_manager,
                                                                    "accountsCommandHandler");
     webkit_user_script_unref (dialog->fxa_script);
+    g_object_unref (dialog->fxa_manager);
   }
 
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
