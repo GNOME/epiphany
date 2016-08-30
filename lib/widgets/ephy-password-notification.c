@@ -19,7 +19,7 @@
 #include "config.h"
 #include "ephy-password-notification.h"
 
-#include "ephy-notification-manager.h"
+#include "ephy-notification-container.h"
 
 #include <glib/gi18n.h>
 
@@ -160,6 +160,6 @@ ephy_password_notification_show (EphyPasswordNotification *self)
 {
   g_return_if_fail (EPHY_IS_PASSWORD_NOTIFICATION (self));
 
-  ephy_notification_manager_add_notification (ephy_notification_manager_dup_singleton (),
-                                              GTK_WIDGET (self));
+  ephy_notification_container_add_notification (ephy_notification_container_get_default (),
+                                                GTK_WIDGET (self));
 }
