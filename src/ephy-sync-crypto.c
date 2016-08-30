@@ -57,8 +57,25 @@ ephy_sync_crypto_hawk_options_new (const char *app,
   return options;
 }
 
-static EphySyncCryptoHawkArtifacts *
+void
+ephy_sync_crypto_hawk_options_free (EphySyncCryptoHawkOptions *options)
+{
+  g_return_if_fail (options != NULL);
 
+  g_free (options->app);
+  g_free (options->dlg);
+  g_free (options->ext);
+  g_free (options->content_type);
+  g_free (options->hash);
+  g_free (options->local_time_offset);
+  g_free (options->nonce);
+  g_free (options->payload);
+  g_free (options->timestamp);
+
+  g_slice_free (EphySyncCryptoHawkOptions, options);
+}
+
+static EphySyncCryptoHawkArtifacts *
 ephy_sync_crypto_hawk_artifacts_new (const char *app,
                                      const char *dlg,
                                      const char *ext,
@@ -87,50 +104,6 @@ ephy_sync_crypto_hawk_artifacts_new (const char *app,
   return artifacts;
 }
 
-static EphySyncCryptoHawkHeader *
-ephy_sync_crypto_hawk_header_new (char                        *header,
-                                  EphySyncCryptoHawkArtifacts *artifacts)
-{
-  EphySyncCryptoHawkHeader *hheader;
-
-  hheader = g_slice_new (EphySyncCryptoHawkHeader);
-  hheader->header = header;
-  hheader->artifacts = artifacts;
-
-  return hheader;
-}
-
-static EphySyncCryptoRSAKeyPair *
-ephy_sync_crypto_rsa_key_pair_new (struct rsa_public_key  public,
-                                   struct rsa_private_key private)
-{
-  EphySyncCryptoRSAKeyPair *keypair;
-
-  keypair = g_slice_new (EphySyncCryptoRSAKeyPair);
-  keypair->public = public;
-  keypair->private = private;
-
-  return keypair;
-}
-
-void
-ephy_sync_crypto_hawk_options_free (EphySyncCryptoHawkOptions *options)
-{
-  g_return_if_fail (options != NULL);
-
-  g_free (options->app);
-  g_free (options->dlg);
-  g_free (options->ext);
-  g_free (options->content_type);
-  g_free (options->hash);
-  g_free (options->local_time_offset);
-  g_free (options->nonce);
-  g_free (options->payload);
-  g_free (options->timestamp);
-
-  g_slice_free (EphySyncCryptoHawkOptions, options);
-}
-
 static void
 ephy_sync_crypto_hawk_artifacts_free (EphySyncCryptoHawkArtifacts *artifacts)
 {
@@ -150,6 +123,19 @@ ephy_sync_crypto_hawk_artifacts_free (EphySyncCryptoHawkArtifacts *artifacts)
   g_slice_free (EphySyncCryptoHawkArtifacts, artifacts);
 }
 
+static EphySyncCryptoHawkHeader *
+ephy_sync_crypto_hawk_header_new (char                        *header,
+                                  EphySyncCryptoHawkArtifacts *artifacts)
+{
+  EphySyncCryptoHawkHeader *hheader;
+
+  hheader = g_slice_new (EphySyncCryptoHawkHeader);
+  hheader->header = header;
+  hheader->artifacts = artifacts;
+
+  return hheader;
+}
+
 void
 ephy_sync_crypto_hawk_header_free (EphySyncCryptoHawkHeader *hheader)
 {
@@ -159,6 +145,19 @@ ephy_sync_crypto_hawk_header_free (EphySyncCryptoHawkHeader *hheader)
   ephy_sync_crypto_hawk_artifacts_free (hheader->artifacts);
 
   g_slice_free (EphySyncCryptoHawkHeader, hheader);
+}
+
+static EphySyncCryptoRSAKeyPair *
+ephy_sync_crypto_rsa_key_pair_new (struct rsa_public_key  public,
+                                   struct rsa_private_key private)
+{
+  EphySyncCryptoRSAKeyPair *keypair;
+
+  keypair = g_slice_new (EphySyncCryptoRSAKeyPair);
+  keypair->public = public;
+  keypair->private = private;
+
+  return keypair;
 }
 
 void
