@@ -22,6 +22,7 @@
 #include "ephy-sync-utils.h"
 
 #include <glib/gstdio.h>
+#include <inttypes.h>
 #include <libsoup/soup.h>
 #include <nettle/aes.h>
 #include <string.h>
@@ -99,7 +100,7 @@ ephy_sync_crypto_hawk_artifacts_new (const char *app,
   artifacts->nonce = g_strdup (nonce);
   artifacts->port = g_strdup_printf ("%u", port);
   artifacts->resource = g_strdup (resource);
-  artifacts->ts = g_strdup_printf ("%ld", ts);
+  artifacts->ts = g_strdup_printf ("%" PRId64, ts);
 
   return artifacts;
 }
