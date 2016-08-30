@@ -26,6 +26,8 @@
 
 #include <string.h>
 
+#define ID_LEN 32
+
 struct _EphyBookmark {
   GObject      parent_instance;
 
@@ -195,7 +197,8 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 static void
 ephy_bookmark_init (EphyBookmark *self)
 {
-  self->id = ephy_sync_crypto_generate_random_hex (32);
+  self->id = g_malloc0 (ID_LEN + 1);
+  ephy_sync_crypto_random_hex_gen (NULL, ID_LEN, (guint8 *)self->id);
 }
 
 static JsonNode *

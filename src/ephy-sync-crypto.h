@@ -104,7 +104,9 @@ char                      *ephy_sync_crypto_create_assertion        (const char 
                                                                      const char               *audience,
                                                                      guint64                   duration,
                                                                      EphySyncCryptoRSAKeyPair *keypair);
-char                      *ephy_sync_crypto_generate_random_hex     (gsize length);
+void                       ephy_sync_crypto_random_hex_gen          (void   *ctx,
+                                                                     gsize   length,
+                                                                     guint8 *dst);
 char                      *ephy_sync_crypto_base64_urlsafe_encode   (guint8   *data,
                                                                      gsize     data_len,
                                                                      gboolean  strip);

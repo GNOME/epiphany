@@ -28,6 +28,7 @@
 #include <string.h>
 
 #define HAWK_VERSION  1
+#define NONCE_LEN     6
 
 static const char hex_digits[] = "0123456789abcdef";
 
@@ -422,15 +423,6 @@ ephy_sync_crypto_hkdf (guint8 *in,
 }
 
 static void
-ephy_sync_crypto_random_gen (void   *ctx,
-                             gsize   length,
-                             guint8 *dst)
-{
-  for (gsize i = 0; i < length; i++)
-    dst[i] = g_random_int ();
-}
-
-static void
 ephy_sync_crypto_b64_to_b64_urlsafe (char *text)
 {
   g_assert (text != NULL);
@@ -618,12 +610,18 @@ ephy_sync_crypto_compute_hawk_header (const char                *url,
   g_return_val_if_fail (key != NULL, NULL);
 
   ts = ephy_sync_utils_current_time_seconds ();
-  nonce = options && options->nonce ? options->nonce : ephy_sync_crypto_generate_random_hex (6);
   hash = options ? options->hash : NULL;
   payload = options ? options->payload : NULL;
   timestamp = options ? options->timestamp : NULL;
   uri = soup_uri_new (url);
   resource = (char *)soup_uri_get_path (uri);
+
+  if (options != NULL && options->nonce != NULL) {
+    nonce = options->nonce;
+  } else {
+    nonce = g_malloc0 (NONCE_LEN + 1);
+    ephy_sync_crypto_random_hex_gen (NULL, NONCE_LEN, (guint8 *)nonce);
+  }
 
   if (soup_uri_get_query (uri) != NULL)
     resource = g_strconcat (resource, "?", soup_uri_get_query (uri), NULL);
@@ -710,7 +708,7 @@ ephy_sync_crypto_generate_rsa_key_pair (void)
 
   /* Key sizes below 2048 are considered breakable and should not be used */
   retval = rsa_generate_keypair (&public, &private,
-                                 NULL, ephy_sync_crypto_random_gen,
+                                 NULL, ephy_sync_crypto_random_hex_gen,
                                  NULL, NULL, 2048, 0);
   if (retval == 0) {
     g_warning ("Failed to generate RSA key pair");
@@ -758,7 +756,7 @@ ephy_sync_crypto_create_assertion (const char               *certificate,
   digest = ephy_sync_crypto_decode_hex (digest_hex);
 
   if (rsa_sha256_sign_digest_tr (&keypair->public, &keypair->private,
-                                 NULL, ephy_sync_crypto_random_gen,
+                                 NULL, ephy_sync_crypto_random_hex_gen,
                                  digest, signature) == 0) {
     g_warning ("Failed to sign the message. Giving up.");
     goto out;
@@ -790,14 +788,15 @@ out:
   return assertion;
 }
 
-char *
-ephy_sync_crypto_generate_random_hex (gsize length)
+void
+ephy_sync_crypto_random_hex_gen (void   *ctx,
+                                 gsize   length,
+                                 guint8 *dst)
 {
   FILE *fp;
   gsize num_bytes;
   guint8 *bytes;
   char *hex;
-  char *out;
 
   g_assert (length > 0);
   num_bytes = (length + 1) / 2;
@@ -806,13 +805,13 @@ ephy_sync_crypto_generate_random_hex (gsize length)
   fp = fopen ("/dev/urandom", "r");
   fread (bytes, sizeof (guint8), num_bytes, fp);
   hex = ephy_sync_crypto_encode_hex (bytes, num_bytes);
-  out = g_strndup (hex, length);
+
+  for (gsize i = 0; i < length; i++)
+    dst[i] = hex[i];
 
   g_free (bytes);
   g_free (hex);
   fclose (fp);
-
-  return out;
 }
 
 char *
