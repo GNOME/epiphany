@@ -289,30 +289,6 @@ ephy_bookmark_properties_grid_set_property (GObject      *object,
   }
 }
 
-static char*
-get_address (const char *url)
-{
-  SoupURI *uri;
-  char *address;
-
-  uri = soup_uri_new (url);
-  if (!uri) {
-    url = g_strconcat (SOUP_URI_SCHEME_HTTP,
-                       "://",
-                       url,
-                       NULL);
-    uri = soup_uri_new (url);
-  }
-  address = g_strconcat (soup_uri_get_host (uri),
-                         soup_uri_get_path (uri),
-                         soup_uri_get_query (uri),
-                         soup_uri_get_fragment (uri),
-                         NULL);
-  soup_uri_free (uri);
-
-  return address;
-}
-
 static void
 ephy_bookmark_properties_grid_constructed (GObject *object)
 {
@@ -320,7 +296,7 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   GSequence *tags;
   GSequence *bookmark_tags;
   GSequenceIter *iter;
-  char *address;
+  const char *address;
 
   /* Set appearance based on type */
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
@@ -341,9 +317,8 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
 
   /* Set text for address entry */
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
-    address = get_address (ephy_bookmark_get_url (self->bookmark));
+    address = ephy_bookmark_get_url (self->bookmark);
     gtk_entry_set_text (GTK_ENTRY (self->address_entry), address);
-    g_free (address);
 
     g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
                             self->bookmark, "url",
