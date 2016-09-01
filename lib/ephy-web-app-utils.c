@@ -290,6 +290,8 @@ create_cookie_jar_for_domain (const char *address, const char *directory)
 
   /* The app domain for the current view */
   uri = soup_uri_new (address);
+  if (!uri)
+    return;
   domain = uri->host;
 
   /* The current cookies */
