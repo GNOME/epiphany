@@ -308,6 +308,9 @@ ephy_sync_service_certificate_is_valid (EphySyncService *self,
   g_return_val_if_fail (EPHY_IS_SYNC_SERVICE (self), FALSE);
   g_return_val_if_fail (certificate != NULL, FALSE);
 
+  /* Check if the certificate is something that we were expecting, i.e.
+   * if the algorithm and email fields match the expected values. */
+
   uri = soup_uri_new (MOZILLA_FXA_SERVER_URL);
   pieces = g_strsplit (certificate, ".", 0);
   header = (char *)ephy_sync_crypto_base64_urlsafe_decode (pieces[0], &len, TRUE);
@@ -420,8 +423,7 @@ ephy_sync_service_obtain_storage_credentials (EphySyncService *self,
 
   msg = soup_message_new (SOUP_METHOD_GET, MOZILLA_TOKEN_SERVER_URL);
   /* We need to add the X-Client-State header so that the Token Server will
-   * recognize accounts that were previously used to sync Firefox data too.
-   */
+   * recognize accounts that were previously used to sync Firefox data too. */
   soup_message_headers_append (msg->request_headers, "X-Client-State", client_state);
   soup_message_headers_append (msg->request_headers, "authorization", authorization);
   soup_session_queue_message (self->session, msg, obtain_storage_credentials_response_cb, user_data);
@@ -508,12 +510,14 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self,
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (self->sessionToken != NULL);
 
+  /* Generate a new RSA key pair that is going to be used to sign the new certificate. */
   if (self->keypair != NULL)
     ephy_sync_crypto_rsa_key_pair_free (self->keypair);
 
   self->keypair = ephy_sync_crypto_generate_rsa_key_pair ();
   g_return_if_fail (self->keypair != NULL);
 
+  /* Derive tokenID, reqHMACkey and requestKey from the sessionToken. */
   ephy_sync_crypto_process_session_token (self->sessionToken, &tokenID, &reqHMACkey, &requestKey);
   tokenID_hex = ephy_sync_crypto_encode_hex (tokenID, 0);
 
@@ -522,8 +526,7 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self,
   public_key_json = ephy_sync_utils_build_json_string ("algorithm", "RS", "n", n, "e", e, NULL);
   /* Duration is the lifetime of the certificate in milliseconds. The FxA server
    * limits the duration to 24 hours. For our purposes, a duration of 30 minutes
-   * will suffice.
-   */
+   * will suffice. */
   request_body = g_strdup_printf ("{\"publicKey\": %s, \"duration\": %d}",
                                   public_key_json, 30 * 60 * 1000);
   ephy_sync_service_fxa_hawk_post_async (self, "certificate/sign", tokenID_hex,
@@ -556,8 +559,7 @@ ephy_sync_service_issue_storage_request (EphySyncService               *self,
      * ephy_sync_service_obtain_signed_certificate() and
      * ephy_sync_service_obtain_storage_credentials() complete asynchronously,
      * we need to entrust them the task of sending the request to the Storage
-     * Server.
-     */
+     * Server. */
     ephy_sync_service_obtain_signed_certificate (self, data);
   } else {
     ephy_sync_service_send_storage_request (self, data);
@@ -859,6 +861,12 @@ ephy_sync_service_fetch_sync_keys (EphySyncService *self,
   g_return_val_if_fail (unwrapBKey != NULL, FALSE);
 
   unwrapKB = ephy_sync_crypto_decode_hex (unwrapBKey);
+
+  /* Derive tokenID, reqHMACkey, respHMACkey and respXORkey from the keyFetchToken.
+   * tokenID and reqHMACkey are used to make a HAWK request to the "GET /account/keys"
+   * API. The server looks up the stored table entry with tokenID, checks the request
+   * HMAC for validity, then returns the pre-encrypted response.
+   * See https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#fetching-sync-keys */
   ephy_sync_crypto_process_key_fetch_token (keyFetchToken,
                                             &tokenID, &reqHMACkey, &respHMACkey, &respXORkey);
   tokenID_hex = ephy_sync_crypto_encode_hex (tokenID, 0);
@@ -874,6 +882,8 @@ ephy_sync_service_fetch_sync_keys (EphySyncService *self,
     goto out;
   }
 
+  /* From the pre-encrypted response and respHMACkey, respXORkey, unwrapKB
+   * derive the sync keys. */
   ephy_sync_crypto_compute_sync_keys (json_object_get_string_member (json, "bundle"),
                                       respHMACkey, respXORkey, unwrapKB,
                                       &kA, &kB);
@@ -923,8 +933,7 @@ ephy_sync_service_send_storage_message (EphySyncService     *self,
                                                 callback, user_data);
 
   /* If there is currently another message being transmitted, then the new
-   * message has to wait in the queue, otherwise, it is free to go.
-   */
+   * message has to wait in the queue, otherwise, it is free to go. */
   if (self->locked == FALSE) {
     self->locked = TRUE;
     ephy_sync_service_issue_storage_request (self, data);
@@ -941,8 +950,7 @@ ephy_sync_service_release_next_storage_message (EphySyncService *self)
   g_assert (self->locked == TRUE);
 
   /* If there are other messages waiting in the queue, we release the next one
-   * and keep the service locked, else, we mark the service as not locked.
-   */
+   * and keep the service locked, else, we mark the service as not locked. */
   if (g_queue_is_empty (self->storage_queue) == FALSE)
     ephy_sync_service_issue_storage_request (self, g_queue_pop_head (self->storage_queue));
   else
@@ -1282,7 +1290,7 @@ sync_bookmarks_response_cb (SoupSession *session,
   parser = json_parser_new ();
   json_parser_load_from_data (parser, msg->response_body->data, -1, NULL);
 
-  /* Code 304 indicates that the resource has not been modifiedf. Therefore,
+  /* Code 304 indicates that the resource has not been modified. Therefore,
    * only upload the local bookmarks that were not uploaded. */
   if (msg->status_code == 304)
     goto handle_local_bookmarks;

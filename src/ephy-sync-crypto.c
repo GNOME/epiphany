@@ -178,6 +178,9 @@ ephy_sync_crypto_kw (const char *name)
 {
   g_assert (name != NULL);
 
+  /* Concatenate the given name to the Mozilla prefix.
+   * See https://raw.githubusercontent.com/wiki/mozilla/fxa-auth-server/images/onepw-create.png
+   */
   return g_strconcat ("identity.mozilla.com/picl/v1/", name, NULL);
 }
 
@@ -320,6 +323,7 @@ ephy_sync_crypto_calculate_mac (const char                  *type,
   g_assert (key != NULL);
   g_assert (artifacts != NULL);
 
+  /* Serialize the mac type and artifacts into a HAWK string. */
   normalized = ephy_sync_crypto_normalize_string (type, artifacts);
   digest_hex = g_compute_hmac_for_string (G_CHECKSUM_SHA256, key, key_len, normalized, -1);
   digest = ephy_sync_crypto_decode_hex (digest_hex);
@@ -379,7 +383,10 @@ ephy_sync_crypto_hkdf (guint8 *in,
   hash_len = g_checksum_type_get_length (G_CHECKSUM_SHA256);
   g_assert (out_len <= hash_len * 255);
 
-  /* If salt value was not provided, use an array of hash_len zeros */
+  /* Implementation of the HMAC-based Extract-and-Expand Key Derivation Function.
+   * See https://tools.ietf.org/html/rfc5869 */
+
+  /* If salt value was not provided, use an array of hash_len zeros. */
   if (salt == NULL) {
     salt = g_malloc0 (hash_len);
     salt_len = hash_len;
@@ -468,6 +475,7 @@ ephy_sync_crypto_process_key_fetch_token (const char  *keyFetchToken,
   out1 = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
   out2 = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
 
+  /* Use the keyFetchToken to derive tokenID, reqHMACkey and keyRequestKey. */
   ephy_sync_crypto_hkdf (kft, EPHY_SYNC_TOKEN_LENGTH,
                          NULL, 0,
                          (guint8 *)info_kft, strlen (info_kft),
@@ -480,6 +488,7 @@ ephy_sync_crypto_process_key_fetch_token (const char  *keyFetchToken,
   memcpy (*reqHMACkey, out1 + EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
   memcpy (keyRequestKey, out1 + 2 * EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
 
+  /* Use the keyRequestKey to derive respHMACkey and respXORkey. */
   ephy_sync_crypto_hkdf (keyRequestKey, EPHY_SYNC_TOKEN_LENGTH,
                          NULL, 0,
                          (guint8 *)info_keys, strlen (info_keys),
@@ -517,6 +526,7 @@ ephy_sync_crypto_process_session_token (const char  *sessionToken,
   info = ephy_sync_crypto_kw ("sessionToken");
   out = g_malloc (3 * EPHY_SYNC_TOKEN_LENGTH);
 
+  /* Use the sessionToken to derive tokenID, reqHMACkey and requestKey. */
   ephy_sync_crypto_hkdf (st, EPHY_SYNC_TOKEN_LENGTH,
                          NULL, 0,
                          (guint8 *)info, strlen (info),
@@ -563,6 +573,7 @@ ephy_sync_crypto_compute_sync_keys (const char  *bundle,
   wrapKB = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
   *kA = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
 
+  /* Compute the MAC and compare it to the expected value. */
   memcpy (ciphertext, bdl, 2 * EPHY_SYNC_TOKEN_LENGTH);
   memcpy (respMAC, bdl + 2 * EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
   respMAC2_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
@@ -571,9 +582,13 @@ ephy_sync_crypto_compute_sync_keys (const char  *bundle,
   respMAC2 = ephy_sync_crypto_decode_hex (respMAC2_hex);
   g_assert (ephy_sync_crypto_equals (respMAC, respMAC2, EPHY_SYNC_TOKEN_LENGTH) == TRUE);
 
+  /* XOR the extracted ciphertext with the respXORkey, then split in into the
+   * separate kA and wrap(kB) values. */
   xored = ephy_sync_crypto_xor (ciphertext, respXORkey, 2 * EPHY_SYNC_TOKEN_LENGTH);
   memcpy (*kA, xored, EPHY_SYNC_TOKEN_LENGTH);
   memcpy (wrapKB, xored + EPHY_SYNC_TOKEN_LENGTH, EPHY_SYNC_TOKEN_LENGTH);
+
+  /* Finally, XOR wrap(kB) with unwrapBKey to obtain kB. There is no MAC on wrap(kB). */
   *kB = ephy_sync_crypto_xor (unwrapBKey, wrapKB, EPHY_SYNC_TOKEN_LENGTH);
 
   g_free (bdl);
@@ -637,9 +652,12 @@ ephy_sync_crypto_compute_hawk_header (const char                *url,
 
   if (hash == NULL && payload != NULL) {
     const char *content_type = options ? options->content_type : "text/plain";
+
+    /* Calculate the hash for the given payload. */
     hash = ephy_sync_crypto_calculate_payload_hash (payload, content_type);
   }
 
+  /* Create the artifacts from the options. */
   artifacts = ephy_sync_crypto_hawk_artifacts_new (options ? options->app : NULL,
                                                    options ? options->dlg : NULL,
                                                    options ? options->ext : NULL,
@@ -651,16 +669,16 @@ ephy_sync_crypto_compute_hawk_header (const char                *url,
                                                    resource,
                                                    ts);
 
-  mac = ephy_sync_crypto_calculate_mac ("header", key, key_len, artifacts);
-
   header = g_strconcat ("Hawk id=\"", id, "\"",
                         ", ts=\"", artifacts->ts, "\"",
                         ", nonce=\"", artifacts->nonce, "\"",
                         NULL);
 
+  /* Append pre-calculated payload hash if any. */
   if (artifacts->hash != NULL && strlen (artifacts->hash) > 0)
     header = ephy_sync_crypto_append_to_header (header, "hash", artifacts->hash);
 
+  /* Append the application specific data if any. */
   if (artifacts->ext != NULL && strlen (artifacts->ext) > 0) {
     char *h_ext;
     char *tmp_ext;
@@ -673,11 +691,15 @@ ephy_sync_crypto_compute_hawk_header (const char                *url,
     g_free (tmp_ext);
   }
 
+  /* Calculate and append a message authentication code (MAC). */
+  mac = ephy_sync_crypto_calculate_mac ("header", key, key_len, artifacts);
   header = ephy_sync_crypto_append_to_header (header, "mac", mac);
 
+  /* Append the Oz application id if any. */
   if (artifacts->app != NULL) {
     header = ephy_sync_crypto_append_to_header (header, "app", artifacts->app);
 
+    /* Append the Oz delegated-by application id if any. */
     if (artifacts->dlg != NULL)
       header = ephy_sync_crypto_append_to_header (header, "dlg", artifacts->dlg);
   }
@@ -703,10 +725,10 @@ ephy_sync_crypto_generate_rsa_key_pair (void)
   rsa_public_key_init (&public);
   rsa_private_key_init (&private);
 
-  /* The public exponent, usually one of the small Fermat primes 3, 5, 17, 257, 65537 */
+  /* The public exponent, usually one of the small Fermat primes 3, 5, 17, 257, 65537. */
   mpz_set_ui (public.e, 65537);
 
-  /* Key sizes below 2048 are considered breakable and should not be used */
+  /* Key sizes below 2048 are considered breakable and should not be used. */
   retval = rsa_generate_keypair (&public, &private,
                                  NULL, ephy_sync_crypto_random_hex_gen,
                                  NULL, NULL, 2048, 0);
@@ -745,16 +767,19 @@ ephy_sync_crypto_create_assertion (const char               *certificate,
   g_return_val_if_fail (audience != NULL, NULL);
   g_return_val_if_fail (keypair != NULL, NULL);
 
+  /* Encode the header and body to base64 url safe and join them. */
   expires_at = g_get_real_time () / 1000 + duration * 1000;
   body = g_strdup_printf ("{\"exp\": %lu, \"aud\": \"%s\"}", expires_at, audience);
   body_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *)body, strlen (body), TRUE);
   header_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *)header, strlen (header), TRUE);
   to_sign = g_strdup_printf ("%s.%s", header_b64, body_b64);
 
-  mpz_init (signature);
+  /* Compute the SHA256 hash of the message to be signed. */
   digest_hex = g_compute_checksum_for_string (G_CHECKSUM_SHA256, to_sign, -1);
   digest = ephy_sync_crypto_decode_hex (digest_hex);
 
+  /* Use the provided key pair to RSA sign the message. */
+  mpz_init (signature);
   if (rsa_sha256_sign_digest_tr (&keypair->public, &keypair->private,
                                  NULL, ephy_sync_crypto_random_hex_gen,
                                  digest, signature) == 0) {
@@ -771,6 +796,7 @@ ephy_sync_crypto_create_assertion (const char               *certificate,
     goto out;
   }
 
+  /* Finally, join certificate, header, body and signed message to create the assertion. */
   sig_b64 = ephy_sync_crypto_base64_urlsafe_encode (sig, count, TRUE);
   assertion = g_strdup_printf ("%s~%s.%s.%s", certificate, header_b64, body_b64, sig_b64);
 
@@ -829,6 +855,7 @@ ephy_sync_crypto_base64_urlsafe_encode (guint8   *data,
   base64 = g_base64_encode (data, data_len);
   end = strlen (base64) - 1;
 
+  /* Strip the data of any leading or trailing '=' characters. */
   if (strip == TRUE) {
     while (start < strlen (base64) && base64[start] == '=')
       start++;
@@ -857,6 +884,7 @@ ephy_sync_crypto_base64_urlsafe_decode (const char  *text,
   g_return_val_if_fail (text != NULL, NULL);
   g_return_val_if_fail (out_len != NULL, NULL);
 
+  /* Fill the text with trailing '=' characters up to the proper length. */
   if (fill == TRUE)
     suffix = g_strnfill ((4 - strlen (text) % 4) % 4, '=');
 
@@ -885,6 +913,11 @@ ephy_sync_crypto_aes_256 (EphySyncCryptoAES256Mode  mode,
   g_return_val_if_fail (key != NULL, NULL);
   g_return_val_if_fail (data != NULL, NULL);
 
+  /* Since Nettle enforces the length of the data to be a multiple of
+   * AES_BLOCK_SIZE, the data needs to be padded accordingly. Because any
+   * data that is decrypted has to be encrypted first, crash if the length
+   * is incorrect at decryption.
+   */
   if (mode == AES_256_MODE_ENCRYPT)
     padded_len = data_len + (AES_BLOCK_SIZE - data_len % AES_BLOCK_SIZE);
   else if (mode == AES_256_MODE_DECRYPT)

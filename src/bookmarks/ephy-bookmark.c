@@ -510,6 +510,18 @@ ephy_bookmark_to_bso (EphyBookmark *self)
 
   g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
 
+  /* Convert a Bookmark object to a BSO (Basic Store Object). That is a generic
+   * JSON wrapper around all items passed into and out of the SyncStorage server.
+   * The current flow is:
+   * 1. Serialize the Bookmark to a JSON string.
+   * 2. Encrypt the JSON string using the sync key from the sync service.
+   * 3. Encode the encrypted bytes to base64 url safe.
+   * 4. Create a new JSON string that contains the id of the Bookmark and the
+        encoded bytes as payload. This is actually the BSO that is going to be
+        stored on the SyncStorage server.
+   * See https://docs.services.mozilla.com/storage/apis-1.5.html
+   */
+
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
   sync_key = ephy_sync_crypto_decode_hex (ephy_sync_service_get_token (service, TOKEN_KB));
   serialized = json_gobject_to_data (G_OBJECT (self), NULL);
@@ -539,6 +551,13 @@ ephy_bookmark_from_bso (JsonObject *bso)
   char *decrypted;
 
   g_return_val_if_fail (bso != NULL, NULL);
+
+  /* Convert a BSO to a Bookmark object. The flow is similar to the one from
+   * ephy_bookmark_to_bso(), only that the steps are reversed:
+   * 1. Decode the payload from base64 url safe to raw bytes.
+   * 2. Decrypt the bytes using the sync key to obtain the serialized Bookmark.
+   * 3. Deserialize the JSON string into a Bookmark object.
+   */
 
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
   sync_key = ephy_sync_crypto_decode_hex (ephy_sync_service_get_token (service, TOKEN_KB));
