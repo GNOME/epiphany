@@ -350,16 +350,18 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
   gtk_widget_show_all (self->tags_box);
+
+  G_OBJECT_CLASS (ephy_bookmark_properties_grid_parent_class)->constructed (object);
 }
 
 static void
-ephy_bookmark_properties_grid_destroy (GtkWidget *widget)
+ephy_bookmark_properties_grid_finalize (GObject *object)
 {
-  EphyBookmarkPropertiesGrid *self = EPHY_BOOKMARK_PROPERTIES_GRID (widget);
+  EphyBookmarkPropertiesGrid *self = EPHY_BOOKMARK_PROPERTIES_GRID (object);
 
   ephy_bookmarks_manager_save_to_file_async (self->manager, NULL, NULL, NULL);
 
-  GTK_WIDGET_CLASS (ephy_bookmark_properties_grid_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ephy_bookmark_properties_grid_parent_class)->finalize (object);
 }
 
 static void
@@ -370,8 +372,7 @@ ephy_bookmark_properties_grid_class_init (EphyBookmarkPropertiesGridClass *klass
 
   object_class->set_property = ephy_bookmark_properties_grid_set_property;
   object_class->constructed = ephy_bookmark_properties_grid_constructed;
-
-  widget_class->destroy = ephy_bookmark_properties_grid_destroy;
+  object_class->finalize = ephy_bookmark_properties_grid_finalize;
 
   obj_properties[PROP_BOOKMARK] =
     g_param_spec_object ("bookmark",
