@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2016-08-16 15:21+0000\n"
-"PO-Revision-Date: 2016-08-19 20:50+0300\n"
+"POT-Creation-Date: 2016-08-30 15:11+0000\n"
+"PO-Revision-Date: 2016-09-03 11:45+0300\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -258,7 +258,6 @@ msgid ""
 msgstr ""
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:38
-#| msgid "The visibility policy for the tabs bar."
 msgid "The position of the tabs bar."
 msgstr "Välilehtipalkin sijainti."
 
@@ -1068,24 +1067,17 @@ msgstr "Ei määritetty"
 #. Page title when a site cannot be loaded due to a page crash error.
 #: ../embed/ephy-web-view.c:1766 ../embed/ephy-web-view.c:1792
 #, c-format
-#| msgid "Problem loading “%s”"
 msgid "Problem Loading Page"
 msgstr "Ongelma sivua ladatessa"
 
 #. Message title when a site cannot be loaded due to a network error.
 #: ../embed/ephy-web-view.c:1769
-#| msgid "Oops! Unable to display this website."
 msgid "Oops! Unable to display this website"
 msgstr "Hups! Tämän sivun esittäminen epäonnistui"
 
 #. Message body when a site cannot be loaded due to a network error.
 #: ../embed/ephy-web-view.c:1772
 #, c-format
-#| msgid ""
-#| "<p>The site at “%s” seems to be unavailable. The precise error was:</"
-#| "p><p><code>%s</code></p><p>It may be temporarily unavailable or moved to "
-#| "a new address. You may wish to verify that your internet connection is "
-#| "working correctly.</p>"
 msgid ""
 "<p>The site at <strong>%s</strong> seems to be unavailable.</p><p>It may be "
 "temporarily inaccessible or moved to a new address. You may wish to verify "
@@ -1118,17 +1110,12 @@ msgstr ""
 
 #. Message title when a site cannot be loaded due to a page crash error.
 #: ../embed/ephy-web-view.c:1795
-#| msgid "Oops! There may be a problem."
 msgid "Oops! There may be a problem"
 msgstr "Hups! Mahdollinen ongelma."
 
 #. Message body when a site cannot be loaded due to a page crash error.
 #: ../embed/ephy-web-view.c:1798
 #, c-format
-#| msgid ""
-#| "<p>This site may have caused Web to close unexpectedly.</p><p>If this "
-#| "happens again, please report the problem to the <strong>%s</strong> "
-#| "developers.</p>"
 msgid ""
 "<p>The site at <strong>%s</strong> may have caused Web to close unexpectedly."
 "</p><p>If this happens again, please report the problem to the <strong>%s</"
@@ -1141,7 +1128,6 @@ msgstr ""
 #. Page title when a site cannot be loaded due to a process crash error.
 #: ../embed/ephy-web-view.c:1814
 #, c-format
-#| msgid "Problem displaying “%s”"
 msgid "Problem Displaying Page"
 msgstr "Ongelma sivua näyttäessä"
 
@@ -1152,9 +1138,6 @@ msgstr "Hups!"
 
 #. Message body when a site cannot be loaded due to a process crash error.
 #: ../embed/ephy-web-view.c:1820
-#| msgid ""
-#| "Something went wrong while displaying this page. Please reload or visit a "
-#| "different page to continue."
 msgid ""
 "<p>Something went wrong while displaying this page.</p><p>Please reload or "
 "visit a different page to continue.</p>"
@@ -1170,7 +1153,6 @@ msgstr "Tietoturvaloukkaus"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
 #: ../embed/ephy-web-view.c:1834
-#| msgid "Your connection seems to be secure."
 msgid "This Connection is Not Secure"
 msgstr "Tämä yhteys ei ole turvallinen"
 
@@ -1188,7 +1170,6 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. Do not add mnemonics here.
 #: ../embed/ephy-web-view.c:1847
-#| msgid "Back"
 msgid "Go Back"
 msgstr "Siirry takaisin"
 
@@ -1202,7 +1183,6 @@ msgstr "Mt"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #: ../embed/ephy-web-view.c:1853
-#| msgid "Accept Risk"
 msgid "Accept Risk and Proceed"
 msgstr "Hyväksy riski ja jatka"
 
@@ -1212,7 +1192,7 @@ msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr ""
 
-#: ../embed/ephy-web-view.c:2774
+#: ../embed/ephy-web-view.c:2771
 msgid "_OK"
 msgstr "_OK"
 
@@ -2400,55 +2380,46 @@ msgid "Choose a l_anguage:"
 msgstr "Valitse k_ieli:"
 
 #: ../src/resources/shortcuts-dialog.ui.h:1
-#| msgid "General"
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Yleiset"
 
 #: ../src/resources/shortcuts-dialog.ui.h:2
-#| msgid "_New Window"
 msgctxt "shortcut window"
 msgid "New window"
 msgstr "Uusi ikkuna"
 
 #: ../src/resources/shortcuts-dialog.ui.h:3
-#| msgid "New Incognito Window"
 msgctxt "shortcut window"
 msgid "New incognito window"
 msgstr "Uusi incognito-ikkuna"
 
 #: ../src/resources/shortcuts-dialog.ui.h:4
-#| msgid "Open"
 msgctxt "shortcut window"
 msgid "Open file"
 msgstr "Avaa tiedosto"
 
 #: ../src/resources/shortcuts-dialog.ui.h:5
-#| msgid "Save Image As"
 msgctxt "shortcut window"
 msgid "Save page"
 msgstr "Tallenna sivu"
 
 #: ../src/resources/shortcuts-dialog.ui.h:6
-#| msgid "Save Image As"
 msgctxt "shortcut window"
 msgid "Save page as web app"
 msgstr "Tallenna sivu web-sovelluksena"
 
 #: ../src/resources/shortcuts-dialog.ui.h:7
-#| msgid "Print"
 msgctxt "shortcut window"
 msgid "Print page"
 msgstr "Tulosta sivu"
 
 #: ../src/resources/shortcuts-dialog.ui.h:8
-#| msgid "_Quit"
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Lopeta"
 
 #: ../src/resources/shortcuts-dialog.ui.h:9
-#| msgid "_Help"
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Ohje"
@@ -2489,19 +2460,16 @@ msgid "Tabs"
 msgstr "Välilehdet"
 
 #: ../src/resources/shortcuts-dialog.ui.h:17
-#| msgid "New _Tab"
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Uusi välilehti"
 
 #: ../src/resources/shortcuts-dialog.ui.h:18
-#| msgid "Close tab"
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Sulje nykyinen välilehti"
 
 #: ../src/resources/shortcuts-dialog.ui.h:19
-#| msgid "Reopen Closed _Tab"
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Avaa uudelleen suljettu välilehti"
@@ -2512,7 +2480,6 @@ msgid "Go to the next tab"
 msgstr "Siirry seuraavaan välilehteen"
 
 #: ../src/resources/shortcuts-dialog.ui.h:21
-#| msgid "Go to most visited"
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Siirry edelliseen välilehteen"
@@ -2533,19 +2500,16 @@ msgid "Miscellaneous"
 msgstr "Muut"
 
 #: ../src/resources/shortcuts-dialog.ui.h:25
-#| msgid "History"
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Sivuhistoria"
 
 #: ../src/resources/shortcuts-dialog.ui.h:26
-#| msgid "Preferences"
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Asetukset"
 
 #: ../src/resources/shortcuts-dialog.ui.h:27
-#| msgid "Bookmarks"
 msgctxt "shortcut window"
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
@@ -2556,25 +2520,21 @@ msgid "Bookmark current page"
 msgstr "Lisää nykyinen sivu kirjanmerkkeihin"
 
 #: ../src/resources/shortcuts-dialog.ui.h:29
-#| msgid "Enable caret browsing mode?"
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Aseta kohdistinselaustila päälle/pois"
 
 #: ../src/resources/shortcuts-dialog.ui.h:30
-#| msgid "_View"
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Näkymä"
 
 #: ../src/resources/shortcuts-dialog.ui.h:31
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Lähennä"
 
 #: ../src/resources/shortcuts-dialog.ui.h:32
-#| msgid "Zoom O_ut"
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Loitonna"
@@ -2585,13 +2545,11 @@ msgid "Reset zoom"
 msgstr "Palauta mittasuhteet"
 
 #: ../src/resources/shortcuts-dialog.ui.h:34
-#| msgid "_Fullscreen"
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Koko näyttö"
 
 #: ../src/resources/shortcuts-dialog.ui.h:35
-#| msgid "_Page Source"
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Näytä sivun lähdekoodi"
@@ -2599,58 +2557,49 @@ msgstr "Näytä sivun lähdekoodi"
 #: ../src/resources/shortcuts-dialog.ui.h:36
 msgctxt "shortcut window"
 msgid "Toggle inspector"
-msgstr ""
+msgstr "Näytä/piilota tarkistin"
 
 #: ../src/resources/shortcuts-dialog.ui.h:37
-#| msgid "_Edit"
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Muokkaaminen"
 
 #: ../src/resources/shortcuts-dialog.ui.h:38
-#| msgid "Cu_t"
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Leikkaa"
 
 #: ../src/resources/shortcuts-dialog.ui.h:39
-#| msgid "_Copy"
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopioi"
 
 #: ../src/resources/shortcuts-dialog.ui.h:40
-#| msgid "_Paste"
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Liitä"
 
 #: ../src/resources/shortcuts-dialog.ui.h:41
-#| msgid "_Undo"
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Kumoa"
 
 #: ../src/resources/shortcuts-dialog.ui.h:42
-#| msgid "_Redo"
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Tee uudelleen"
 
 #: ../src/resources/shortcuts-dialog.ui.h:43
-#| msgid "Select _All"
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Valitse kaikki"
 
 #: ../src/resources/shortcuts-dialog.ui.h:44
-#| msgid "Selection Caret"
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Valitse sivun osoite"
 
 #: ../src/resources/shortcuts-dialog.ui.h:45
-#| msgid "Search"
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Haku"
@@ -2842,7 +2791,7 @@ msgstr "_Sivun lähdekoodi"
 
 #: ../src/ephy-window.c:156
 msgid "_Toggle Inspector"
-msgstr ""
+msgstr "Nä_ytä/piilota tarkistin"
 
 #. Bookmarks actions.
 #: ../src/ephy-window.c:161
