@@ -9,17 +9,17 @@
 # Gökhan Gurbetoğlu <ggurbet@gmail.com>, 2013, 2014.
 # sabri ünal <yakushabb@gmail.com>, 2014.
 # Hikmet Baş <hkmtbs@gmail.com>, 2016.
-# Muhammet Kara <muhammetk@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016.
 # Neriman Kara <nerimankaraa@gmail.com>, 2016.
+# Muhammet Kara <muhammetk@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-08 14:08+0000\n"
-"PO-Revision-Date: 2016-08-09 21:37+0300\n"
-"Last-Translator: Neriman Kara <nerimankaraa@gmail.com>\n"
+"product=epiphany&keywords=I18N+L10N&component=I18N\n"
+"POT-Creation-Date: 2016-09-04 05:52+0000\n"
+"PO-Revision-Date: 2016-09-04 20:58+0300\n"
+"Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,6 @@ msgstr "web;tarayıcı;internet;"
 
 #. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/epiphany.desktop.in:13
-#| msgid "Web Browser"
 msgid "web-browser"
 msgstr "web-browser"
 
@@ -93,10 +92,9 @@ msgstr "İmleç ile tara"
 #. default-bookmarks.rdf. See the comment there for region parameters to
 #. the URL.
 #: data/org.gnome.epiphany.gschema.xml:20
-#, fuzzy
 #| msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgid "'https://duckduckgo.com/?q=%s&t=epiphany'"
-msgstr "https://duckduckgo.com/?q=%s&t=epiphany&kl=tr-tr&kad=tr_TR"
+msgstr "'https://duckduckgo.com/?q=%s&t=epiphany&kl=tr-tr&kad=tr_TR'"
 
 #: data/org.gnome.epiphany.gschema.xml:21
 msgid "URL Search"
@@ -1220,7 +1218,7 @@ msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "D"
 
-#: embed/ephy-web-view.c:2732
+#: embed/ephy-web-view.c:2729
 msgid "_OK"
 msgstr "_Tamam"
 
@@ -1563,6 +1561,12 @@ msgstr "_Temizle"
 msgid "Paste and _Go"
 msgstr "Yapıştır ve _Git"
 
+#: lib/widgets/ephy-location-entry.c:652
+#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-window.c:901
+#: src/resources/gtk/menus.ui:45
+msgid "_Paste"
+msgstr "_Yapıştır"
+
 #. Undo, redo.
 #: lib/widgets/ephy-location-entry.c:666 src/ephy-window.c:895
 #: src/resources/gtk/menus.ui:27
@@ -1809,11 +1813,6 @@ msgstr "_Kopyala"
 #: src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Copy the selection"
 msgstr "Seçimi kopyala"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-window.c:901
-#: src/resources/gtk/menus.ui:45
-msgid "_Paste"
-msgstr "_Yapıştır"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Paste the clipboard"
@@ -2416,12 +2415,10 @@ msgid "Use the encoding specified by the document"
 msgstr "Belgenin tanımladığı kodlamayı kullan"
 
 #: src/resources/encoding-dialog.ui:65
-#| msgid "&#60;b&#62;Recent encodings&#60;/b&#62;"
 msgid "<b>Recent encodings</b>"
 msgstr "<b>En son kodlamalar</b>"
 
 #: src/resources/encoding-dialog.ui:88
-#| msgid "&#60;b&#62;Related encodings&#60;/b&#62;"
 msgid "<b>Related encodings</b>"
 msgstr "<b>İlgili kodlamalar</b>"
 
@@ -2837,155 +2834,150 @@ msgstr "Yeni sekme"
 
 #: src/resources/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
-msgid "Duplicate current tab"
-msgstr "Geçerli sekmeyi çoğalt"
-
-#: src/resources/shortcuts-dialog.ui:140
-msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Geçerli sekmeyi kapat"
 
-#: src/resources/shortcuts-dialog.ui:147
+#: src/resources/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Kapatılan sekmeyi tekrar aç"
 
-#: src/resources/shortcuts-dialog.ui:154
+#: src/resources/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Sonraki sekmeye git"
 
-#: src/resources/shortcuts-dialog.ui:161
+#: src/resources/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Önceki sekmeye git"
 
-#: src/resources/shortcuts-dialog.ui:168
+#: src/resources/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Mevcut sekmeyi sola taşı"
 
-#: src/resources/shortcuts-dialog.ui:175
+#: src/resources/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Mevcut sekmeyi sağa taşı"
 
-#: src/resources/shortcuts-dialog.ui:186
+#: src/resources/shortcuts-dialog.ui:179
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Çeşitli"
 
-#: src/resources/shortcuts-dialog.ui:190
+#: src/resources/shortcuts-dialog.ui:183
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Geçmiş"
 
-#: src/resources/shortcuts-dialog.ui:197
+#: src/resources/shortcuts-dialog.ui:190
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: src/resources/shortcuts-dialog.ui:204
+#: src/resources/shortcuts-dialog.ui:197
 msgctxt "shortcut window"
 msgid "Bookmarks"
 msgstr "Yer İmleri"
 
-#: src/resources/shortcuts-dialog.ui:211
+#: src/resources/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Geçerli sayfayı yer imlerine ekle"
 
-#: src/resources/shortcuts-dialog.ui:218
+#: src/resources/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Karet taramayı aç/kapat"
 
-#: src/resources/shortcuts-dialog.ui:229
+#: src/resources/shortcuts-dialog.ui:222
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Görünüm"
 
-#: src/resources/shortcuts-dialog.ui:233
+#: src/resources/shortcuts-dialog.ui:226
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Yakınlaştır"
 
-#: src/resources/shortcuts-dialog.ui:240
+#: src/resources/shortcuts-dialog.ui:233
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Uzaklaştır"
 
-#: src/resources/shortcuts-dialog.ui:247
+#: src/resources/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Yakınlaştırmayı sıfırla"
 
-#: src/resources/shortcuts-dialog.ui:254
+#: src/resources/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Tam Ekran"
 
-#: src/resources/shortcuts-dialog.ui:261
+#: src/resources/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Sayfa kaynağını görüntüle"
 
-#: src/resources/shortcuts-dialog.ui:268
+#: src/resources/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "İnceleyiciyi aç/kapat"
 
-#: src/resources/shortcuts-dialog.ui:279
+#: src/resources/shortcuts-dialog.ui:272
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Düzenleme"
 
-#: src/resources/shortcuts-dialog.ui:283
+#: src/resources/shortcuts-dialog.ui:276
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Kes"
 
-#: src/resources/shortcuts-dialog.ui:290
+#: src/resources/shortcuts-dialog.ui:283
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopyala"
 
-#: src/resources/shortcuts-dialog.ui:297
+#: src/resources/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Yapıştır"
 
-#: src/resources/shortcuts-dialog.ui:304
+#: src/resources/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Geri Al"
 
-#: src/resources/shortcuts-dialog.ui:311
+#: src/resources/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Yinele"
 
-#: src/resources/shortcuts-dialog.ui:318
+#: src/resources/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Tümünü seç"
 
-#: src/resources/shortcuts-dialog.ui:325
+#: src/resources/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Sayfa adresini (URL) seç"
 
-#: src/resources/shortcuts-dialog.ui:332
+#: src/resources/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Ara"
 
-#: src/resources/shortcuts-dialog.ui:339
+#: src/resources/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Sonraki arama sonucu"
 
-#: src/resources/shortcuts-dialog.ui:346
+#: src/resources/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Önceki arama sonucu"
@@ -3101,6 +3093,10 @@ msgstr ""
 #: src/window-commands.c:1754
 msgid "_Enable"
 msgstr "_Etkinleştir"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Duplicate current tab"
+#~ msgstr "Geçerli sekmeyi çoğalt"
 
 #~ msgid "The GNOME web site displayed in GNOME Web"
 #~ msgstr "GNOME web sitesinin GNOME Web'de görüntülenmesi"
