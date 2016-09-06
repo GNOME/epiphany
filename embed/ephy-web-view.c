@@ -2225,8 +2225,11 @@ ephy_web_view_new (void)
 GtkWidget *
 ephy_web_view_new_with_related_view (WebKitWebView *related_view)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+
   return g_object_new (EPHY_TYPE_WEB_VIEW,
                        "related-view", related_view,
+                       "user-content-manager", ephy_embed_shell_get_user_content_manager (shell),
                        "settings", ephy_embed_prefs_get_settings (),
                        NULL);
 }
