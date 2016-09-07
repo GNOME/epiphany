@@ -112,7 +112,8 @@ AM_LDFLAGS = \
 	$(WARN_LDFLAGS)
 
 LDADD = \
-	$(top_builddir)/src/libephymain.la \
+	$(top_builddir)/src/libephymain.la	\
+	$(top_builddir)/lib/libephymisc.la	\
 	$(GDK_LIBS)		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\

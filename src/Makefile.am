@@ -171,6 +171,7 @@ epiphany_CPPFLAGS = \
 	$(WEBKIT2GTK_CFLAGS)
 
 epiphany_LDADD = \
+	$(top_builddir)/lib/libephymisc.la	\
 	libephymain.la		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
@@ -211,6 +212,7 @@ epiphany_search_provider_CPPFLAGS = \
 	$(WEBKIT2GTK_CFLAGS)
 
 epiphany_search_provider_LDADD = \
+	$(top_builddir)/lib/libephymisc.la	\
 	libephymain.la		\
 	$(GIO_LIBS)		\
 	$(GLIB_LIBS)		\
