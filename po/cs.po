@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-08 14:08+0000\n"
-"PO-Revision-Date: 2016-08-12 10:21+0200\n"
+"product=epiphany&keywords=I18N+L10N&component=I18N\n"
+"POT-Creation-Date: 2016-09-09 18:30+0000\n"
+"PO-Revision-Date: 2016-09-09 21:12+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
-"Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
+"Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,6 +51,10 @@ msgstr ""
 #: data/epiphany.appdata.xml.in:15
 msgid "GNOME Web is often referred to by its code name, Epiphany."
 msgstr "Pro WWW GNOME je často používán kódový název, Epiphany."
+
+#: data/epiphany.appdata.xml.in:22
+msgid "The GNOME web site displayed in GNOME Web"
+msgstr "Webové stránky GNOME zobrazené ve WWW GNOME"
 
 #: data/epiphany.desktop.in:3 embed/ephy-about-handler.c:289
 #: embed/ephy-about-handler.c:320 src/ephy-main.c:77 src/ephy-main.c:324
@@ -1213,7 +1217,11 @@ msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
-#: embed/ephy-web-view.c:2732
+#: embed/ephy-web-view.c:1882
+msgid "Technical information"
+msgstr "Technické informace"
+
+#: embed/ephy-web-view.c:2733
 msgid "_OK"
 msgstr "_Budiž"
 
@@ -1567,6 +1575,12 @@ msgstr "Vy_mazat"
 msgid "Paste and _Go"
 msgstr "Vložit a pře_jít"
 
+#: lib/widgets/ephy-location-entry.c:652
+#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-window.c:901
+#: src/resources/gtk/menus.ui:45
+msgid "_Paste"
+msgstr "V_ložit"
+
 #. Undo, redo.
 #: lib/widgets/ephy-location-entry.c:666 src/ephy-window.c:895
 #: src/resources/gtk/menus.ui:27
@@ -1818,11 +1832,6 @@ msgstr "_Kopírovat"
 #: src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Copy the selection"
 msgstr "Kopírovat výběr"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-window.c:901
-#: src/resources/gtk/menus.ui:45
-msgid "_Paste"
-msgstr "V_ložit"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Paste the clipboard"
@@ -2844,155 +2853,150 @@ msgstr "Nová karta"
 
 #: src/resources/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
-msgid "Duplicate current tab"
-msgstr "Duplikovat aktuální kartu"
-
-#: src/resources/shortcuts-dialog.ui:140
-msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Zavřít aktuální kartu"
 
-#: src/resources/shortcuts-dialog.ui:147
+#: src/resources/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Znovu otevřít zavřenou kartu"
 
-#: src/resources/shortcuts-dialog.ui:154
+#: src/resources/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Přejít na následující kartu"
 
-#: src/resources/shortcuts-dialog.ui:161
+#: src/resources/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Přejít na předchozí kartu"
 
-#: src/resources/shortcuts-dialog.ui:168
+#: src/resources/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Přesunout aktuální kartu doleva"
 
-#: src/resources/shortcuts-dialog.ui:175
+#: src/resources/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Přesunout aktuální kartu doprava"
 
-#: src/resources/shortcuts-dialog.ui:186
+#: src/resources/shortcuts-dialog.ui:179
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Různé"
 
-#: src/resources/shortcuts-dialog.ui:190
+#: src/resources/shortcuts-dialog.ui:183
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Historie"
 
-#: src/resources/shortcuts-dialog.ui:197
+#: src/resources/shortcuts-dialog.ui:190
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Předvolby"
 
-#: src/resources/shortcuts-dialog.ui:204
+#: src/resources/shortcuts-dialog.ui:197
 msgctxt "shortcut window"
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: src/resources/shortcuts-dialog.ui:211
+#: src/resources/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Aktuální stránku do záložek"
 
-#: src/resources/shortcuts-dialog.ui:218
+#: src/resources/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Povolit režim prohlížení s kurzorem?"
 
-#: src/resources/shortcuts-dialog.ui:229
+#: src/resources/shortcuts-dialog.ui:222
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Zobrazení"
 
-#: src/resources/shortcuts-dialog.ui:233
+#: src/resources/shortcuts-dialog.ui:226
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Přiblížit"
 
-#: src/resources/shortcuts-dialog.ui:240
+#: src/resources/shortcuts-dialog.ui:233
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Oddálit"
 
-#: src/resources/shortcuts-dialog.ui:247
+#: src/resources/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Výchozí přiblížení"
 
-#: src/resources/shortcuts-dialog.ui:254
+#: src/resources/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
-#: src/resources/shortcuts-dialog.ui:261
+#: src/resources/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Zobrazit zdrojový kód stránky"
 
-#: src/resources/shortcuts-dialog.ui:268
+#: src/resources/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Zobrazit/skrýt inspektora"
 
-#: src/resources/shortcuts-dialog.ui:279
+#: src/resources/shortcuts-dialog.ui:272
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Úpravy"
 
-#: src/resources/shortcuts-dialog.ui:283
+#: src/resources/shortcuts-dialog.ui:276
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Vyjmout"
 
-#: src/resources/shortcuts-dialog.ui:290
+#: src/resources/shortcuts-dialog.ui:283
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: src/resources/shortcuts-dialog.ui:297
+#: src/resources/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Vložit"
 
-#: src/resources/shortcuts-dialog.ui:304
+#: src/resources/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Zpět"
 
-#: src/resources/shortcuts-dialog.ui:311
+#: src/resources/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Znovu"
 
-#: src/resources/shortcuts-dialog.ui:318
+#: src/resources/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Vybrat vše"
 
-#: src/resources/shortcuts-dialog.ui:325
+#: src/resources/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Vybrat adresu URL stránky"
 
-#: src/resources/shortcuts-dialog.ui:332
+#: src/resources/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Hledat"
 
-#: src/resources/shortcuts-dialog.ui:339
+#: src/resources/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Následující výsledek hledání"
 
-#: src/resources/shortcuts-dialog.ui:346
+#: src/resources/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Předchozí výsledek hledání"
@@ -3110,3 +3114,7 @@ msgstr ""
 #: src/window-commands.c:1754
 msgid "_Enable"
 msgstr "_Povolit"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Duplicate current tab"
+#~ msgstr "Duplikovat aktuální kartu"
