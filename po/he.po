@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany\n"
-"POT-Creation-Date: 2016-08-09 16:17+0300\n"
-"PO-Revision-Date: 2016-08-09 16:18+0300\n"
+"POT-Creation-Date: 2016-09-10 22:42+0300\n"
+"PO-Revision-Date: 2016-09-10 22:43+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -45,6 +45,10 @@ msgstr ""
 #: data/epiphany.appdata.xml.in:15
 msgid "GNOME Web is often referred to by its code name, Epiphany."
 msgstr "דפדפן GNOME מכונה לעתים קרובות בשם הקוד שלו, Epiphany."
+
+#: data/epiphany.appdata.xml.in:22
+msgid "The GNOME web site displayed in GNOME Web"
+msgstr "אתר האינטרנט של GNOME מוצג בדפדפן GNOME"
 
 #: data/epiphany.desktop.in:3 embed/ephy-about-handler.c:289
 #: embed/ephy-about-handler.c:320 src/ephy-main.c:77 src/ephy-main.c:324
@@ -1144,7 +1148,11 @@ msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
-#: embed/ephy-web-view.c:2732
+#: embed/ephy-web-view.c:1882
+msgid "Technical information"
+msgstr "מידע טכני"
+
+#: embed/ephy-web-view.c:2733
 msgid "_OK"
 msgstr "_אישור"
 
@@ -1468,6 +1476,12 @@ msgstr "_ניקוי"
 msgid "Paste and _Go"
 msgstr "להדביק ול_עבור"
 
+#: lib/widgets/ephy-location-entry.c:652
+#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-window.c:901
+#: src/resources/gtk/menus.ui:45
+msgid "_Paste"
+msgstr "ה_דבקה"
+
 #: lib/widgets/ephy-location-entry.c:666 src/ephy-window.c:895
 #: src/resources/gtk/menus.ui:27
 msgid "_Undo"
@@ -1699,11 +1713,6 @@ msgstr "_העתקה"
 #: src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Copy the selection"
 msgstr "העתקת הבחירה"
-
-#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-window.c:901
-#: src/resources/gtk/menus.ui:45
-msgid "_Paste"
-msgstr "ה_דבקה"
 
 #: src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Paste the clipboard"
@@ -2696,155 +2705,150 @@ msgstr "לשונית חדשה"
 
 #: src/resources/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
-msgid "Duplicate current tab"
-msgstr "שכפול הלשונית הנוכחית"
-
-#: src/resources/shortcuts-dialog.ui:140
-msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "סגירת הלשונית הנוכחית"
 
-#: src/resources/shortcuts-dialog.ui:147
+#: src/resources/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "פתיחה מחודשת של לשונית שנסגרה"
 
-#: src/resources/shortcuts-dialog.ui:154
+#: src/resources/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "מעבר אל הלשונית הבאה"
 
-#: src/resources/shortcuts-dialog.ui:161
+#: src/resources/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "מעבר אל הלשונית הקודמת"
 
-#: src/resources/shortcuts-dialog.ui:168
+#: src/resources/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "העברת הלשונית הנוכחית שמאלה"
 
-#: src/resources/shortcuts-dialog.ui:175
+#: src/resources/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "העברת הלשונית הנוכחית ימינה"
 
-#: src/resources/shortcuts-dialog.ui:186
+#: src/resources/shortcuts-dialog.ui:179
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "שונות"
 
-#: src/resources/shortcuts-dialog.ui:190
+#: src/resources/shortcuts-dialog.ui:183
 msgctxt "shortcut window"
 msgid "History"
 msgstr "היסטוריה"
 
-#: src/resources/shortcuts-dialog.ui:197
+#: src/resources/shortcuts-dialog.ui:190
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "העדפות"
 
-#: src/resources/shortcuts-dialog.ui:204
+#: src/resources/shortcuts-dialog.ui:197
 msgctxt "shortcut window"
 msgid "Bookmarks"
 msgstr "סימניות"
 
-#: src/resources/shortcuts-dialog.ui:211
+#: src/resources/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "הוספת סימנייה לדף הנוכחי"
 
-#: src/resources/shortcuts-dialog.ui:218
+#: src/resources/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "ניווט באמצעות הסמן"
 
-#: src/resources/shortcuts-dialog.ui:229
+#: src/resources/shortcuts-dialog.ui:222
 msgctxt "shortcut window"
 msgid "View"
 msgstr "תצוגה"
 
-#: src/resources/shortcuts-dialog.ui:233
+#: src/resources/shortcuts-dialog.ui:226
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "התקרבות"
 
-#: src/resources/shortcuts-dialog.ui:240
+#: src/resources/shortcuts-dialog.ui:233
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "התרחקות"
 
-#: src/resources/shortcuts-dialog.ui:247
+#: src/resources/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "איפוס התקריב"
 
-#: src/resources/shortcuts-dialog.ui:254
+#: src/resources/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "מסך מלא"
 
-#: src/resources/shortcuts-dialog.ui:261
+#: src/resources/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "הצגת קוד המקור של הדף"
 
-#: src/resources/shortcuts-dialog.ui:268
+#: src/resources/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "הצגת המנתח"
 
-#: src/resources/shortcuts-dialog.ui:279
+#: src/resources/shortcuts-dialog.ui:272
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "עריכה"
 
-#: src/resources/shortcuts-dialog.ui:283
+#: src/resources/shortcuts-dialog.ui:276
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "גזירה"
 
-#: src/resources/shortcuts-dialog.ui:290
+#: src/resources/shortcuts-dialog.ui:283
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "העתקה"
 
-#: src/resources/shortcuts-dialog.ui:297
+#: src/resources/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "הדבקה"
 
-#: src/resources/shortcuts-dialog.ui:304
+#: src/resources/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "ביטול פעולה"
 
-#: src/resources/shortcuts-dialog.ui:311
+#: src/resources/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "ביצוע חוזר"
 
-#: src/resources/shortcuts-dialog.ui:318
+#: src/resources/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "בחירת הכל"
 
-#: src/resources/shortcuts-dialog.ui:325
+#: src/resources/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "בחירת כתובת הדף"
 
-#: src/resources/shortcuts-dialog.ui:332
+#: src/resources/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "חיפוש"
 
-#: src/resources/shortcuts-dialog.ui:339
+#: src/resources/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "מעבר לתוצאה הבאה"
 
-#: src/resources/shortcuts-dialog.ui:346
+#: src/resources/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "מעבר לתוצאה הקודמת"
@@ -2953,8 +2957,9 @@ msgstr ""
 msgid "_Enable"
 msgstr "ה_פעלה"
 
-#~ msgid "The GNOME web site displayed in GNOME Web"
-#~ msgstr "אתר האינטרנט של GNOME מוצג בדפדפן GNOME"
+#~ msgctxt "shortcut window"
+#~ msgid "Duplicate current tab"
+#~ msgstr "שכפול הלשונית הנוכחית"
 
 #~ msgid "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
 #~ msgstr ""
