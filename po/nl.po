@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2016-09-06 21:09+0000\n"
-"PO-Revision-Date: 2016-09-07 17:49+0200\n"
+"POT-Creation-Date: 2016-09-10 00:06+0000\n"
+"PO-Revision-Date: 2016-09-10 17:02+0200\n"
 "Last-Translator: Hannie Dumoleyn <hannie@ubuntu-nl.org>\n"
 "Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
@@ -294,8 +294,8 @@ msgid ""
 "'right' (vertical tabs with bar on the right)."
 msgstr ""
 "Bepaalt waar de tabbladenbalk getoond wordt. Mogelijke waarden zijn "
-"‘bovenin’ (standaard), ‘onderin’,  ‘links’ (verticale tabbladen met de "
-"tabbladenbalk links) en ‘rechts’ (verticale tabbladen met de tabbladenbalk "
+"‘top’ (standaard), ‘bottom’,  ‘left’ (verticale tabbladen met de "
+"tabbladenbalk links) en ‘right’ (verticale tabbladen met de tabbladenbalk "
 "rechts)."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:40
@@ -1363,7 +1363,11 @@ msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "D"
 
-#: ../embed/ephy-web-view.c:2774
+#: ../embed/ephy-web-view.c:1882
+msgid "Technical information"
+msgstr "Technische informatie"
+
+#: ../embed/ephy-web-view.c:2775
 msgid "_OK"
 msgstr "_Ok"
 
@@ -1729,7 +1733,7 @@ msgstr "_Wissen"
 
 #: ../lib/widgets/ephy-location-entry.c:647
 msgid "Paste and _Go"
-msgstr "Plakken en _Doorgaan"
+msgstr "Plakken en _Gaan"
 
 # src/bookmarks_editor.c:949
 # src/bookmarks_editor.c:1169
@@ -2401,12 +2405,10 @@ msgid "Use the encoding specified by the document"
 msgstr "De door het document gespecificeerde codering gebruiken"
 
 #: ../src/resources/encoding-dialog.ui.h:3
-#| msgid "<b>Recent encodings</b>"
 msgid "&#60;b&#62;Recent encodings&#60;/b&#62;"
 msgstr "&#60;b&#62;Recente coderingen&#60;/b&#62;"
 
 #: ../src/resources/encoding-dialog.ui.h:4
-#| msgid "<b>Related encodings</b>"
 msgid "&#60;b&#62;Related encodings&#60;/b&#62;"
 msgstr "&#60;b&#62;Gerelateerde coderingen&#60;/b&#62;"
 
@@ -3166,7 +3168,6 @@ msgstr "Als _webtoepassing opslaan…"
 
 # src/toolbar.c:286
 #: ../src/ephy-window.c:100
-#| msgid "Print…"
 msgid "_Print…"
 msgstr "_Afdrukken…"
 
@@ -3212,7 +3213,6 @@ msgstr "_Inzoomen"
 
 # src/menubar.c:127
 #: ../src/ephy-window.c:148
-#| msgid "Zoom _Out"
 msgid "Zoom O_ut"
 msgstr "_Uitzoomen"
 
@@ -3233,8 +3233,6 @@ msgid "_Page Source"
 msgstr "Paginab_ron"
 
 #: ../src/ephy-window.c:156
-#| msgctxt "shortcut window"
-#| msgid "Toggle inspector"
 msgid "_Toggle Inspector"
 msgstr "Ins_pector in-/uitschakelen"
 
@@ -3281,8 +3279,6 @@ msgstr "Tabblad los_scheuren"
 # src/menubar.c:165
 #. View actions.
 #: ../src/ephy-window.c:196
-#| msgctxt "shortcut window"
-#| msgid "Fullscreen"
 msgid "_Fullscreen"
 msgstr "_Schermvullend"
 
@@ -3292,7 +3288,6 @@ msgid "Popup _Windows"
 msgstr "_Opduikvensters"
 
 #: ../src/ephy-window.c:200
-#| msgid "Select a Directory"
 msgid "Selection Caret"
 msgstr "Selectie cursornavigatie"
 
@@ -3431,7 +3426,6 @@ msgstr "Opslaan als toepassing"
 
 # src/toolbar.c:286
 #: ../src/ephy-window.c:1100
-#| msgid "Print…"
 msgid "Print"
 msgstr "Afdrukken"
 
@@ -3462,13 +3456,11 @@ msgid "Smaller"
 msgstr "Kleiner"
 
 #: ../src/ephy-window.c:1138
-#| msgid "_Back"
 msgid "Back"
 msgstr "Terug"
 
 # src/menubar.c:458
 #: ../src/ephy-window.c:1150
-#| msgid "_Forward"
 msgid "Forward"
 msgstr "Vooruit"
 
@@ -3479,13 +3471,11 @@ msgstr "Zoomen"
 
 # src/menubar.c:54
 #: ../src/ephy-window.c:1171
-#| msgid "New Tab"
 msgid "New _Tab"
 msgstr "Nieuw _tabblad"
 
 # ui/epiphany.glade.h:83
 #: ../src/ephy-window.c:1179
-#| msgid "Most Visited"
 msgid "Go to most visited"
 msgstr "Ga naar Meest bezocht"
 
