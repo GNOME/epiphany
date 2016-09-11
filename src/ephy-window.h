@@ -39,8 +39,6 @@ typedef enum
 
 EphyWindow	 *ephy_window_new		  (void);
 
-GtkUIManager	 *ephy_window_get_ui_manager	  (EphyWindow *window);
-
 GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
 
 void		  ephy_window_load_url		  (EphyWindow *window,
