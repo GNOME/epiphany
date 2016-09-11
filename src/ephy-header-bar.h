@@ -25,19 +25,19 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_TOOLBAR (ephy_toolbar_get_type())
+#define EPHY_TYPE_HEADER_BAR (ephy_header_bar_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyToolbar, ephy_toolbar, EPHY, TOOLBAR, GtkHeaderBar)
+G_DECLARE_FINAL_TYPE (EphyHeaderBar, ephy_header_bar, EPHY, HEADER_BAR, GtkHeaderBar)
 
-GtkWidget    *ephy_toolbar_new                               (EphyWindow *window);
+GtkWidget    *ephy_header_bar_new                               (EphyWindow    *window);
 
-void          ephy_toolbar_change_combined_stop_reload_state (GSimpleAction *action,
-                                                              GVariant      *state,
-                                                              gpointer       user_data);
+void          ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
+                                                                 GVariant      *state,
+                                                                 gpointer       user_data);
 
-GtkWidget    *ephy_toolbar_get_location_entry                (EphyToolbar *toolbar);
-EphyTitleBox *ephy_toolbar_get_title_box                     (EphyToolbar *toolbar);
-GtkWidget    *ephy_toolbar_get_page_menu_button              (EphyToolbar *toolbar);
-GtkWidget    *ephy_toolbar_get_new_tab_button                (EphyToolbar *toolbar);
+GtkWidget    *ephy_header_bar_get_location_entry                (EphyHeaderBar *header_bar);
+EphyTitleBox *ephy_header_bar_get_title_box                     (EphyHeaderBar *header_bar);
+GtkWidget    *ephy_header_bar_get_page_menu_button              (EphyHeaderBar *header_bar);
+GtkWidget    *ephy_header_bar_get_new_tab_button                (EphyHeaderBar *header_bar);
 
 G_END_DECLS

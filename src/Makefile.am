@@ -29,6 +29,8 @@ libephymain_la_SOURCES = \
 	ephy-encoding-dialog.h			\
 	ephy-encoding-row.c			\
 	ephy-encoding-row.h			\
+	ephy-header-bar.c			\
+	ephy-header-bar.h			\
 	ephy-history-window.c			\
 	ephy-history-window.h			\
 	ephy-link.c				\
@@ -47,8 +49,6 @@ libephymain_la_SOURCES = \
 	ephy-shell.h				\
 	ephy-title-box.c			\
 	ephy-title-box.h			\
-	ephy-toolbar.c				\
-	ephy-toolbar.h				\
 	ephy-window.c				\
 	ephy-window.h				\
 	languages.h				\

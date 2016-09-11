@@ -19,7 +19,7 @@
  */
 
 #include "config.h"
-#include "ephy-toolbar.h"
+#include "ephy-header-bar.h"
 
 #include "ephy-action-helper.h"
 #include "ephy-downloads-popover.h"
@@ -50,7 +50,7 @@ static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
 #define MAX_LABEL_LENGTH 48
 #define HISTORY_ITEM_DATA_KEY "history-item-data-key"
 
-struct _EphyToolbar {
+struct _EphyHeaderBar {
   GtkHeaderBar parent_instance;
 
   EphyWindow *window;
@@ -67,72 +67,72 @@ struct _EphyToolbar {
   guint navigation_buttons_menu_timeout;
 };
 
-G_DEFINE_TYPE (EphyToolbar, ephy_toolbar, GTK_TYPE_HEADER_BAR)
+G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, GTK_TYPE_HEADER_BAR)
 
 static gboolean
-toolbar_is_for_active_window (EphyToolbar *toolbar)
+header_bar_is_for_active_window (EphyHeaderBar *header_bar)
 {
   EphyShell *shell = ephy_shell_get_default ();
   GtkWindow *active_window;
 
   active_window = gtk_application_get_active_window (GTK_APPLICATION (shell));
 
-  return active_window == GTK_WINDOW (toolbar->window);
+  return active_window == GTK_WINDOW (header_bar->window);
 }
 
 static void
 download_added_cb (EphyDownloadsManager *manager,
                    EphyDownload         *download,
-                   EphyToolbar          *toolbar)
+                   EphyHeaderBar        *header_bar)
 {
-  if (!toolbar->downloads_popover) {
-    toolbar->downloads_popover = ephy_downloads_popover_new (toolbar->downloads_button);
-    gtk_menu_button_set_popover (GTK_MENU_BUTTON (toolbar->downloads_button),
-                                 toolbar->downloads_popover);
+  if (!header_bar->downloads_popover) {
+    header_bar->downloads_popover = ephy_downloads_popover_new (header_bar->downloads_button);
+    gtk_menu_button_set_popover (GTK_MENU_BUTTON (header_bar->downloads_button),
+                                 header_bar->downloads_popover);
   }
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->downloads_revealer), TRUE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->downloads_revealer), TRUE);
 
-  if (toolbar_is_for_active_window (toolbar))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
+  if (header_bar_is_for_active_window (header_bar))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (header_bar->downloads_button), TRUE);
 }
 
 static void
 download_completed_cb (EphyDownloadsManager *manager,
                        EphyDownload         *download,
-                       EphyToolbar          *toolbar)
+                       EphyHeaderBar        *header_bar)
 {
-  if (toolbar_is_for_active_window (toolbar))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toolbar->downloads_button), TRUE);
+  if (header_bar_is_for_active_window (header_bar))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (header_bar->downloads_button), TRUE);
 }
 
 static void
 download_removed_cb (EphyDownloadsManager *manager,
                      EphyDownload         *download,
-                     EphyToolbar          *toolbar)
+                     EphyHeaderBar        *header_bar)
 {
   if (!ephy_downloads_manager_get_downloads (manager))
-    gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->downloads_revealer), FALSE);
+    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->downloads_revealer), FALSE);
 }
 
 static void
 downloads_estimated_progress_cb (EphyDownloadsManager *manager,
-                                 EphyToolbar          *toolbar)
+                                 EphyHeaderBar        *header_bar)
 {
-  gtk_widget_queue_draw (gtk_button_get_image (GTK_BUTTON (toolbar->downloads_button)));
+  gtk_widget_queue_draw (gtk_button_get_image (GTK_BUTTON (header_bar->downloads_button)));
 }
 
 static void
-ephy_toolbar_set_property (GObject      *object,
-                           guint         property_id,
-                           const GValue *value,
-                           GParamSpec   *pspec)
+ephy_header_bar_set_property (GObject      *object,
+                              guint         property_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
 {
-  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
 
   switch (property_id) {
     case PROP_WINDOW:
-      toolbar->window = EPHY_WINDOW (g_value_get_object (value));
+      header_bar->window = EPHY_WINDOW (g_value_get_object (value));
       g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
       break;
     default:
@@ -141,16 +141,16 @@ ephy_toolbar_set_property (GObject      *object,
 }
 
 static void
-ephy_toolbar_get_property (GObject    *object,
-                           guint       property_id,
-                           GValue     *value,
-                           GParamSpec *pspec)
+ephy_header_bar_get_property (GObject    *object,
+                              guint       property_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
 {
-  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
 
   switch (property_id) {
     case PROP_WINDOW:
-      g_value_set_object (value, toolbar->window);
+      g_value_set_object (value, header_bar->window);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -158,15 +158,15 @@ ephy_toolbar_get_property (GObject    *object,
 }
 
 static void
-sync_chromes_visibility (EphyToolbar *toolbar)
+sync_chromes_visibility (EphyHeaderBar *header_bar)
 {
   EphyWindowChrome chrome;
 
-  chrome = ephy_window_get_chrome (toolbar->window);
+  chrome = ephy_window_get_chrome (header_bar->window);
 
-  gtk_widget_set_visible (toolbar->navigation_box, chrome & EPHY_WINDOW_CHROME_TOOLBAR);
-  gtk_widget_set_visible (toolbar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
-  gtk_widget_set_visible (toolbar->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
+  gtk_widget_set_visible (header_bar->navigation_box, chrome & EPHY_WINDOW_CHROME_HEADER_BAR);
+  gtk_widget_set_visible (header_bar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
+  gtk_widget_set_visible (header_bar->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
 
 typedef enum {
@@ -430,7 +430,7 @@ navigation_button_press_event_cb (GtkButton *button,
                                   GdkEvent  *event,
                                   gpointer   user_data)
 {
-  EphyToolbar *toolbar = EPHY_TOOLBAR (user_data);
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (user_data);
   EphyNavigationHistoryDirection direction;
   const gchar *action_name;
 
@@ -440,22 +440,22 @@ navigation_button_press_event_cb (GtkButton *button,
                                            : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
 
   if (((GdkEventButton *)event)->button == GDK_BUTTON_SECONDARY) {
-    popup_history_menu (GTK_WIDGET (button), toolbar->window,
+    popup_history_menu (GTK_WIDGET (button), header_bar->window,
                         direction, (GdkEventButton *)event);
   } else {
     PopupData *data;
 
     data = g_new (PopupData, 1);
     data->button = GTK_WIDGET (button);
-    data->window = toolbar->window;
+    data->window = header_bar->window;
     data->direction = direction;
     data->event = (GdkEventButton *)event;
 
-    toolbar->navigation_buttons_menu_timeout = g_timeout_add_full (G_PRIORITY_DEFAULT, 500,
-                                                                   (GSourceFunc)menu_timeout_cb,
-                                                                   data,
-                                                                   (GDestroyNotify)g_free);
-    g_source_set_name_by_id (toolbar->navigation_buttons_menu_timeout, "[epiphany] menu_timeout_cb");
+    header_bar->navigation_buttons_menu_timeout = g_timeout_add_full (G_PRIORITY_DEFAULT, 500,
+                                                                      (GSourceFunc)menu_timeout_cb,
+                                                                      data,
+                                                                      (GDestroyNotify)g_free);
+    g_source_set_name_by_id (header_bar->navigation_buttons_menu_timeout, "[epiphany] menu_timeout_cb");
   }
 
   return FALSE;
@@ -466,19 +466,19 @@ navigation_button_release_event_cb (GtkButton *button,
                                     GdkEvent  *event,
                                     gpointer   user_data)
 {
-  EphyToolbar *toolbar = EPHY_TOOLBAR (user_data);
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (user_data);
   GActionGroup *action_group;
   GAction *action;
   EphyNavigationHistoryDirection direction;
   const gchar *action_name;
 
-  if (toolbar->navigation_buttons_menu_timeout > 0) {
-    g_source_remove (toolbar->navigation_buttons_menu_timeout);
-    toolbar->navigation_buttons_menu_timeout = 0;
+  if (header_bar->navigation_buttons_menu_timeout > 0) {
+    g_source_remove (header_bar->navigation_buttons_menu_timeout);
+    header_bar->navigation_buttons_menu_timeout = 0;
   }
 
   action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
-  action_group = gtk_widget_get_action_group (GTK_WIDGET (toolbar->window), "toolbar");
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (header_bar->window), "toolbar");
 
   direction = strstr (action_name, "back") == 0 ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
                                                 : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
@@ -496,7 +496,7 @@ navigation_button_release_event_cb (GtkButton *button,
       }
       break;
     case GDK_BUTTON_SECONDARY:
-      popup_history_menu (GTK_WIDGET (button), toolbar->window,
+      popup_history_menu (GTK_WIDGET (button), header_bar->window,
                           direction, (GdkEventButton *)event);
       break;
     default:
@@ -511,23 +511,23 @@ navigation_leave_notify_event_cb (GtkButton *button,
                                   GdkEvent  *event,
                                   gpointer   user_data)
 {
-  EphyToolbar *toolbar = EPHY_TOOLBAR (user_data);
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (user_data);
 
-  if (toolbar->navigation_buttons_menu_timeout > 0) {
-    g_source_remove (toolbar->navigation_buttons_menu_timeout);
-    toolbar->navigation_buttons_menu_timeout = 0;
+  if (header_bar->navigation_buttons_menu_timeout > 0) {
+    g_source_remove (header_bar->navigation_buttons_menu_timeout);
+    header_bar->navigation_buttons_menu_timeout = 0;
   }
 
   return G_SOURCE_REMOVE;
 }
 
 void
-ephy_toolbar_change_combined_stop_reload_state (GSimpleAction *action,
-                                                GVariant      *loading,
-                                                gpointer       user_data)
+ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
+                                                   GVariant      *loading,
+                                                   gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyToolbar *toolbar;
+  EphyHeaderBar *header_bar;
   GtkWidget *image;
 
   if (g_variant_get_boolean (loading))
@@ -537,15 +537,15 @@ ephy_toolbar_change_combined_stop_reload_state (GSimpleAction *action,
     image = gtk_image_new_from_icon_name ("view-refresh-symbolic",
                                           GTK_ICON_SIZE_BUTTON);
 
-  toolbar = EPHY_TOOLBAR (ephy_window_get_toolbar (window));
-  gtk_button_set_image (GTK_BUTTON (toolbar->combined_stop_reload_button),
+  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+  gtk_button_set_image (GTK_BUTTON (header_bar->combined_stop_reload_button),
                         image);
 }
 
 static void
-ephy_toolbar_constructed (GObject *object)
+ephy_header_bar_constructed (GObject *object)
 {
-  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
   GtkWidget *box, *button;
   GtkMenu *menu;
   GMenu *page_menu;
@@ -553,14 +553,14 @@ ephy_toolbar_constructed (GObject *object)
   GtkBuilder *builder;
   EphyHistoryService *history_service;
 
-  G_OBJECT_CLASS (ephy_toolbar_parent_class)->constructed (object);
+  G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
 
-  g_signal_connect_swapped (toolbar->window, "notify::chrome",
-                            G_CALLBACK (sync_chromes_visibility), toolbar);
+  g_signal_connect_swapped (header_bar->window, "notify::chrome",
+                            G_CALLBACK (sync_chromes_visibility), header_bar);
 
   /* Back and Forward */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  toolbar->navigation_box = box;
+  header_bar->navigation_box = box;
 
   /* Back */
   button = gtk_button_new ();
@@ -571,11 +571,11 @@ ephy_toolbar_constructed (GObject *object)
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                   "toolbar.navigation-back");
   g_signal_connect (button, "button-press-event",
-                    G_CALLBACK (navigation_button_press_event_cb), toolbar);
+                    G_CALLBACK (navigation_button_press_event_cb), header_bar);
   g_signal_connect (button, "button-release-event",
-                    G_CALLBACK (navigation_button_release_event_cb), toolbar);
+                    G_CALLBACK (navigation_button_release_event_cb), header_bar);
   g_signal_connect (button, "leave-notify-event",
-                    G_CALLBACK (navigation_leave_notify_event_cb), toolbar);
+                    G_CALLBACK (navigation_leave_notify_event_cb), header_bar);
   gtk_container_add (GTK_CONTAINER (box), button);
   gtk_widget_show (GTK_WIDGET (button));
 
@@ -588,11 +588,11 @@ ephy_toolbar_constructed (GObject *object)
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                   "toolbar.navigation-forward");
   g_signal_connect (button, "button-press-event",
-                    G_CALLBACK (navigation_button_press_event_cb), toolbar);
+                    G_CALLBACK (navigation_button_press_event_cb), header_bar);
   g_signal_connect (button, "button-release-event",
-                    G_CALLBACK (navigation_button_release_event_cb), toolbar);
+                    G_CALLBACK (navigation_button_release_event_cb), header_bar);
   g_signal_connect (button, "leave-notify-event",
-                    G_CALLBACK (navigation_leave_notify_event_cb), toolbar);
+                    G_CALLBACK (navigation_leave_notify_event_cb), header_bar);
   gtk_container_add (GTK_CONTAINER (box), button);
   gtk_widget_show (GTK_WIDGET (button));
 
@@ -601,11 +601,11 @@ ephy_toolbar_constructed (GObject *object)
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                "linked");
 
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), box);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), box);
 
   /* Reload/Stop */
   button = gtk_button_new ();
-  toolbar->combined_stop_reload_button = button;
+  header_bar->combined_stop_reload_button = button;
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("view-refresh-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -614,26 +614,26 @@ ephy_toolbar_constructed (GObject *object)
   gtk_style_context_add_class (gtk_widget_get_style_context (button),
                                "image-button");
   gtk_widget_show (GTK_WIDGET (button));
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), button);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
 
   /* New Tab */
   button = gtk_button_new ();
-  toolbar->new_tab_button = button;
+  header_bar->new_tab_button = button;
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (toolbar), button);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
 
   /* Location bar + Title */
-  toolbar->title_box = ephy_title_box_new (toolbar->window);
-  toolbar->entry = ephy_title_box_get_location_entry (toolbar->title_box);
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (toolbar), GTK_WIDGET (toolbar->title_box));
-  gtk_widget_show (GTK_WIDGET (toolbar->title_box));
+  header_bar->title_box = ephy_title_box_new (header_bar->window);
+  header_bar->entry = ephy_title_box_get_location_entry (header_bar->title_box);
+  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_box));
+  gtk_widget_show (GTK_WIDGET (header_bar->title_box));
 
   /* Page Menu */
   button = gtk_menu_button_new ();
-  toolbar->page_menu_button = button;
+  header_bar->page_menu_button = button;
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
@@ -646,26 +646,26 @@ ephy_toolbar_constructed (GObject *object)
 
   menu = gtk_menu_button_get_popup (GTK_MENU_BUTTON (button));
   gtk_widget_set_halign (GTK_WIDGET (menu), GTK_ALIGN_END);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), button);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
   /* Downloads */
   downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
 
-  toolbar->downloads_revealer = gtk_revealer_new ();
-  gtk_revealer_set_transition_type (GTK_REVEALER (toolbar->downloads_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (toolbar->downloads_revealer),
+  header_bar->downloads_revealer = gtk_revealer_new ();
+  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->downloads_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->downloads_revealer),
                                  ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
 
-  toolbar->downloads_button = gtk_menu_button_new ();
-  gtk_button_set_image (GTK_BUTTON (toolbar->downloads_button), ephy_downloads_progress_icon_new ());
-  gtk_widget_set_valign (toolbar->downloads_button, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (toolbar->downloads_revealer), toolbar->downloads_button);
-  gtk_widget_show (toolbar->downloads_button);
+  header_bar->downloads_button = gtk_menu_button_new ();
+  gtk_button_set_image (GTK_BUTTON (header_bar->downloads_button), ephy_downloads_progress_icon_new ());
+  gtk_widget_set_valign (header_bar->downloads_button, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (header_bar->downloads_revealer), header_bar->downloads_button);
+  gtk_widget_show (header_bar->downloads_button);
 
   if (ephy_downloads_manager_get_downloads (downloads_manager)) {
-    toolbar->downloads_popover = ephy_downloads_popover_new (toolbar->downloads_button);
-    gtk_menu_button_set_popover (GTK_MENU_BUTTON (toolbar->downloads_button),
-                                 toolbar->downloads_popover);
+    header_bar->downloads_popover = ephy_downloads_popover_new (header_bar->downloads_button);
+    gtk_menu_button_set_popover (GTK_MENU_BUTTON (header_bar->downloads_button),
+                                 header_bar->downloads_popover);
   }
 
   g_signal_connect_object (downloads_manager, "download-added",
@@ -681,48 +681,48 @@ ephy_toolbar_constructed (GObject *object)
                            G_CALLBACK (downloads_estimated_progress_cb),
                            object, 0);
 
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (toolbar), toolbar->downloads_revealer);
-  gtk_widget_show (toolbar->downloads_revealer);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), header_bar->downloads_revealer);
+  gtk_widget_show (header_bar->downloads_revealer);
 
   history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
 
   g_signal_connect (history_service,
                     "cleared", G_CALLBACK (ephy_history_cleared_cb),
-                    toolbar->window);
+                    header_bar->window);
 }
 
 static void
-ephy_toolbar_init (EphyToolbar *toolbar)
+ephy_header_bar_init (EphyHeaderBar *header_bar)
 {
 }
 
 static void
-ephy_toolbar_dispose (GObject *object)
+ephy_header_bar_dispose (GObject *object)
 {
-  EphyToolbar *toolbar = EPHY_TOOLBAR (object);
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
 
-  if (toolbar->navigation_buttons_menu_timeout > 0) {
-    g_source_remove (toolbar->navigation_buttons_menu_timeout);
-    toolbar->navigation_buttons_menu_timeout = 0;
+  if (header_bar->navigation_buttons_menu_timeout > 0) {
+    g_source_remove (header_bar->navigation_buttons_menu_timeout);
+    header_bar->navigation_buttons_menu_timeout = 0;
   }
 
-  G_OBJECT_CLASS (ephy_toolbar_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_header_bar_parent_class)->dispose (object);
 }
 
 static void
-ephy_toolbar_class_init (EphyToolbarClass *klass)
+ephy_header_bar_class_init (EphyHeaderBarClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->dispose = ephy_toolbar_dispose;
-  gobject_class->set_property = ephy_toolbar_set_property;
-  gobject_class->get_property = ephy_toolbar_get_property;
-  gobject_class->constructed = ephy_toolbar_constructed;
+  gobject_class->dispose = ephy_header_bar_dispose;
+  gobject_class->set_property = ephy_header_bar_set_property;
+  gobject_class->get_property = ephy_header_bar_get_property;
+  gobject_class->constructed = ephy_header_bar_constructed;
 
   object_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
                          "Window",
-                         "The toolbar's EphyWindow",
+                         "The header_bar's EphyWindow",
                          EPHY_TYPE_WINDOW,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
@@ -732,36 +732,36 @@ ephy_toolbar_class_init (EphyToolbarClass *klass)
 }
 
 GtkWidget *
-ephy_toolbar_new (EphyWindow *window)
+ephy_header_bar_new (EphyWindow *window)
 {
   g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
 
-  return GTK_WIDGET (g_object_new (EPHY_TYPE_TOOLBAR,
+  return GTK_WIDGET (g_object_new (EPHY_TYPE_HEADER_BAR,
                                    "show-close-button", TRUE,
                                    "window", window,
                                    NULL));
 }
 
 GtkWidget *
-ephy_toolbar_get_location_entry (EphyToolbar *toolbar)
+ephy_header_bar_get_location_entry (EphyHeaderBar *header_bar)
 {
-  return toolbar->entry;
+  return header_bar->entry;
 }
 
 EphyTitleBox *
-ephy_toolbar_get_title_box (EphyToolbar *toolbar)
+ephy_header_bar_get_title_box (EphyHeaderBar *header_bar)
 {
-  return toolbar->title_box;
+  return header_bar->title_box;
 }
 
 GtkWidget *
-ephy_toolbar_get_page_menu_button (EphyToolbar *toolbar)
+ephy_header_bar_get_page_menu_button (EphyHeaderBar *header_bar)
 {
-  return toolbar->page_menu_button;
+  return header_bar->page_menu_button;
 }
 
 GtkWidget *
-ephy_toolbar_get_new_tab_button (EphyToolbar *toolbar)
+ephy_header_bar_get_new_tab_button (EphyHeaderBar *header_bar)
 {
-  return toolbar->new_tab_button;
+  return header_bar->new_tab_button;
 }

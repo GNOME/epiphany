@@ -33,6 +33,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-gui.h"
+#include "ephy-header-bar.h"
 #include "ephy-initial-state.h"
 #include "ephy-link.h"
 #include "ephy-link-action.h"
@@ -45,7 +46,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
-#include "ephy-toolbar.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
 #include "ephy-zoom.h"
@@ -138,7 +138,7 @@ const struct {
 struct _EphyWindow {
   GtkApplicationWindow parent_instance;
 
-  GtkWidget *toolbar;
+  GtkWidget *header_bar;
   GHashTable *action_labels;
   GtkNotebook *notebook;
   EphyEmbed *active_embed;
@@ -500,7 +500,7 @@ sync_tab_security (EphyWebView *view,
   if (window->closing) return;
 
   ephy_web_view_get_security_level (view, &security_level, NULL, NULL);
-  title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (window->toolbar));
+  title_box = ephy_header_bar_get_title_box (EPHY_HEADER_BAR (window->header_bar));
   ephy_title_box_set_security_level (title_box, security_level);
 }
 
@@ -517,7 +517,7 @@ ephy_window_fullscreen (EphyWindow *window)
   sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
   sync_chromes_visibility (window);
-  gtk_widget_hide (window->toolbar);
+  gtk_widget_hide (window->header_bar);
   ephy_embed_entering_fullscreen (embed);
 }
 
@@ -526,7 +526,7 @@ ephy_window_unfullscreen (EphyWindow *window)
 {
   window->fullscreen_mode = FALSE;
 
-  gtk_widget_show (window->toolbar);
+  gtk_widget_show (window->header_bar);
   sync_chromes_visibility (window);
   ephy_embed_leaving_fullscreen (window->active_embed);
 }
@@ -700,7 +700,7 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
     GtkWidget *entry;
     gboolean has_selection;
 
-    entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
+    entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
 
     has_selection = gtk_editable_get_selection_bounds
                       (GTK_EDITABLE (widget), NULL, NULL);
@@ -786,7 +786,7 @@ init_menu_updaters (EphyWindow *window)
 {
   GtkWidget *page_menu;
 
-  page_menu = ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (window->toolbar));
+  page_menu = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (window->header_bar));
 
   g_signal_connect (page_menu, "toggled",
                     G_CALLBACK (edit_menu_toggle_cb), window);
@@ -848,7 +848,7 @@ static const GActionEntry toolbar_entries [] = {
   { "stop", window_cmd_stop },
   { "reload", window_cmd_reload },
   { "always-stop", window_cmd_stop },
-  { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", ephy_toolbar_change_combined_stop_reload_state }
+  { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", ephy_header_bar_change_combined_stop_reload_state }
 };
 
 static const GActionEntry popup_entries [] = {
@@ -1783,12 +1783,12 @@ ephy_window_configure_for_view (EphyWindow    *window,
   properties = webkit_web_view_get_window_properties (web_view);
 
   if (webkit_window_properties_get_toolbar_visible (properties))
-    chrome |= EPHY_WINDOW_CHROME_TOOLBAR;
+    chrome |= EPHY_WINDOW_CHROME_HEADER_BAR;
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     GtkWidget *entry;
 
-    entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
+    entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
     gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
 
     if (webkit_window_properties_get_menubar_visible (properties))
@@ -2553,7 +2553,7 @@ notebook_switch_page_cb (GtkNotebook *notebook,
   /* update new tab */
   ephy_window_set_active_tab (window, embed);
 
-  ephy_title_box_set_web_view (ephy_toolbar_get_title_box (EPHY_TOOLBAR (window->toolbar)),
+  ephy_title_box_set_web_view (ephy_header_bar_get_title_box (EPHY_HEADER_BAR (window->header_bar)),
                                EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
@@ -2759,7 +2759,7 @@ open_security_popover (EphyWindow   *window,
 
   view = ephy_embed_get_web_view (window->active_embed);
   ephy_web_view_get_security_level (view, &security_level, &certificate, &tls_errors);
-  location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
+  location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
 
   security_popover = ephy_security_popover_new (relative_to,
                                                 ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (location_entry)),
@@ -2782,7 +2782,7 @@ location_controller_lock_clicked_cb (EphyLocationController *controller,
   GtkWidget *location_entry;
   GdkRectangle lock_position;
 
-  location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
+  location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
   gtk_entry_get_icon_area (GTK_ENTRY (location_entry), GTK_ENTRY_ICON_SECONDARY, &lock_position);
   open_security_popover (window, location_entry, &lock_position);
 }
@@ -2798,38 +2798,38 @@ title_box_lock_clicked_cb (EphyTitleBox *title_box,
 }
 
 static GtkWidget *
-setup_toolbar (EphyWindow *window)
+setup_header_bar (EphyWindow *window)
 {
-  GtkWidget *toolbar;
+  GtkWidget *header_bar;
   EphyEmbedShellMode app_mode;
   EphyTitleBox *title_box;
 
-  toolbar = ephy_toolbar_new (window);
-  gtk_window_set_titlebar (GTK_WINDOW (window), toolbar);
-  gtk_widget_show (toolbar);
+  header_bar = ephy_header_bar_new (window);
+  gtk_window_set_titlebar (GTK_WINDOW (window), header_bar);
+  gtk_widget_show (header_bar);
 
   app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
   if (app_mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
-    gtk_style_context_add_class (gtk_widget_get_style_context (toolbar), "incognito-mode");
+    gtk_style_context_add_class (gtk_widget_get_style_context (header_bar), "incognito-mode");
 
-  title_box = ephy_toolbar_get_title_box (EPHY_TOOLBAR (toolbar));
+  title_box = ephy_header_bar_get_title_box (EPHY_HEADER_BAR (header_bar));
   g_signal_connect (title_box, "lock-clicked",
                     G_CALLBACK (title_box_lock_clicked_cb), window);
 
-  return toolbar;
+  return header_bar;
 }
 
 static EphyLocationController *
-setup_location_controller (EphyWindow  *window,
-                           EphyToolbar *toolbar)
+setup_location_controller (EphyWindow    *window,
+                           EphyHeaderBar *header_bar)
 {
   EphyLocationController *location_controller;
 
   location_controller =
     g_object_new (EPHY_TYPE_LOCATION_CONTROLLER,
                   "window", window,
-                  "location-entry", ephy_toolbar_get_location_entry (toolbar),
-                  "title-box", ephy_toolbar_get_title_box (toolbar),
+                  "location-entry", ephy_header_bar_get_location_entry (header_bar),
+                  "title-box", ephy_header_bar_get_title_box (header_bar),
                   NULL);
   g_signal_connect (location_controller, "notify::address",
                     G_CALLBACK (sync_user_input_cb), window);
@@ -2982,8 +2982,8 @@ ephy_window_constructor (GType                  type,
   window->notebook = setup_notebook (window);
 
   /* Setup the toolbar. */
-  window->toolbar = setup_toolbar (window);
-  window->location_controller = setup_location_controller (window, EPHY_TOOLBAR (window->toolbar));
+  window->header_bar = setup_header_bar (window);
+  window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
   gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (window->notebook));
   gtk_widget_show (GTK_WIDGET (window->notebook));
 
@@ -3042,8 +3042,8 @@ ephy_window_constructor (GType                  type,
     /* We don't need to show the page menu and the new tab button in web
      * application mode.
      */
-    gtk_widget_set_visible (ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (window->toolbar)), FALSE);
-    gtk_widget_set_visible (ephy_toolbar_get_new_tab_button (EPHY_TOOLBAR (window->toolbar)), FALSE);
+    gtk_widget_set_visible (ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (window->header_bar)), FALSE);
+    gtk_widget_set_visible (ephy_header_bar_get_new_tab_button (EPHY_HEADER_BAR (window->header_bar)), FALSE);
 
     new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "context-bookmark-page");
     ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_CHROME, TRUE);
@@ -3201,7 +3201,7 @@ ephy_window_load_url (EphyWindow *window,
  * ephy_window_activate_location:
  * @window: an #EphyWindow
  *
- * Activates the location entry on @window's toolbar.
+ * Activates the location entry on @window's header bar.
  **/
 void
 ephy_window_activate_location (EphyWindow *window)
@@ -3211,10 +3211,10 @@ ephy_window_activate_location (EphyWindow *window)
   if (!(window->chrome & EPHY_WINDOW_CHROME_LOCATION))
     return;
 
-  ephy_title_box_set_mode (ephy_toolbar_get_title_box (EPHY_TOOLBAR (window->toolbar)),
+  ephy_title_box_set_mode (ephy_header_bar_get_title_box (EPHY_HEADER_BAR (window->header_bar)),
                            EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
 
-  entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (window->toolbar));
+  entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
   ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
 }
 
@@ -3340,17 +3340,17 @@ ephy_window_get_location_controller (EphyWindow *window)
 }
 
 /**
- * ephy_window_get_toolbar:
+ * ephy_window_get_header_bar:
  * @window: an #EphyWindow
  *
- * Returns the @window #EphyToolbar
+ * Returns the @window #EphyHeaderBar
  *
- * Returns: (transfer none): the @window #EphyToolbar
+ * Returns: (transfer none): the @window #EphyHeaderBar
  **/
 GtkWidget *
-ephy_window_get_toolbar (EphyWindow *window)
+ephy_window_get_header_bar (EphyWindow *window)
 {
-  return window->toolbar;
+  return window->header_bar;
 }
 
 typedef struct {

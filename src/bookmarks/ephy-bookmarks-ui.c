@@ -30,6 +30,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
+#include "ephy-header-bar.h"
 #include "ephy-link.h"
 #include "ephy-node-common.h"
 #include "ephy-open-tabs-action.h"
@@ -37,7 +38,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
-#include "ephy-toolbar.h"
 #include "ephy-topic-action-group.h"
 #include "ephy-topic-action.h"
 
@@ -67,7 +67,7 @@ find_bookmarks_menu (EphyWindow *window)
   gint n_items, i;
 
   /* Page menu */
-  page_menu_button = ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (ephy_window_get_toolbar (window)));
+  page_menu_button = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (ephy_window_get_header_bar (window)));
   page_menu = gtk_menu_button_get_menu_model (GTK_MENU_BUTTON (page_menu_button));
 
   /* Number of sections in the model */
@@ -234,7 +234,7 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
                            G_CALLBACK (tree_changed_cb),
                            G_OBJECT (window), 0);
 
-  page_menu_button = ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (ephy_window_get_toolbar (window)));
+  page_menu_button = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (ephy_window_get_header_bar (window)));
   g_signal_connect (GTK_WIDGET (page_menu_button), "button-press-event", G_CALLBACK (activate_bookmarks_menu), window);
 }
 
@@ -282,7 +282,7 @@ ephy_bookmarks_ui_detach_window (EphyWindow *window)
   g_signal_handlers_disconnect_by_func
     (G_OBJECT (eb), G_CALLBACK (tree_changed_cb), G_OBJECT (window));
 
-  page_menu_button = ephy_toolbar_get_page_menu_button (EPHY_TOOLBAR (ephy_window_get_toolbar (window)));
+  page_menu_button = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (ephy_window_get_header_bar (window)));
   g_signal_handlers_disconnect_by_func (GTK_WIDGET (page_menu_button), G_CALLBACK (activate_bookmarks_menu), window);
 }
 

@@ -29,11 +29,11 @@ G_DECLARE_FINAL_TYPE (EphyWindow, ephy_window, EPHY, WINDOW, GtkApplicationWindo
 
 typedef enum
 {
-        EPHY_WINDOW_CHROME_TOOLBAR       = 1 << 0,
+        EPHY_WINDOW_CHROME_HEADER_BAR    = 1 << 0,
         EPHY_WINDOW_CHROME_MENU          = 1 << 1,
         EPHY_WINDOW_CHROME_LOCATION      = 1 << 2,
         EPHY_WINDOW_CHROME_TABSBAR       = 1 << 3,
-        EPHY_WINDOW_CHROME_DEFAULT       = (EPHY_WINDOW_CHROME_TOOLBAR | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_TABSBAR)
+        EPHY_WINDOW_CHROME_DEFAULT       = (EPHY_WINDOW_CHROME_HEADER_BAR | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_TABSBAR)
 } EphyWindowChrome;
 
 EphyWindow	 *ephy_window_new		  (void);
@@ -49,7 +49,7 @@ void              ephy_window_set_zoom            (EphyWindow *window,
 void		  ephy_window_activate_location	  (EphyWindow *window);
 const char       *ephy_window_get_location        (EphyWindow *window);
 
-GtkWidget        *ephy_window_get_toolbar         (EphyWindow *window);
+GtkWidget        *ephy_window_get_header_bar      (EphyWindow *window);
 
 gboolean          ephy_window_close               (EphyWindow *window);
 
