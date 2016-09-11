@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 #define EPHY_DND_URI_LIST_TYPE          "text/uri-list"
 #define EPHY_DND_TEXT_TYPE              "text/plain"
 #define EPHY_DND_URL_TYPE               "_NETSCAPE_URL"
-#define EPHY_DND_TOPIC_TYPE		"ephy_topic_node"
+#define EPHY_DND_TOPIC_TYPE             "ephy_topic_node"
 
 typedef void (* EphyDragEachSelectedItemDataGet)    (const char *url,
                                                      const char *title,
@@ -37,11 +37,11 @@ typedef void (* EphyDragEachSelectedItemIterator)   (EphyDragEachSelectedItemDat
                                                      gpointer iterator_context,
                                                      gpointer data);
 
-gboolean ephy_dnd_drag_data_get			(GtkWidget *widget,
-						 GdkDragContext *context,
-						 GtkSelectionData *selection_data,
-						 guint32 time,
-						 gpointer container_context,
-						 EphyDragEachSelectedItemIterator each_selected_item_iterator);
+gboolean ephy_dnd_drag_data_get                 (GtkWidget *widget,
+                                                 GdkDragContext *context,
+                                                 GtkSelectionData *selection_data,
+                                                 guint32 time,
+                                                 gpointer container_context,
+                                                 EphyDragEachSelectedItemIterator each_selected_item_iterator);
 
 G_END_DECLS
