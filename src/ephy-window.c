@@ -3054,7 +3054,7 @@ ephy_window_constructor (GType                  type,
       ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
                                             SENS_FLAG_CHROME, TRUE);
     }
-    chrome &= ~(EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR);
+    chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR);
   }
 
   init_menu_updaters (window);
