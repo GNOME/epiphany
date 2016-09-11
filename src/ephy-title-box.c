@@ -189,6 +189,7 @@ ephy_title_box_add_title_bar (EphyTitleBox *title_box)
   gtk_label_set_line_wrap (GTK_LABEL (title_box->subtitle), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (title_box->subtitle), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (title_box->subtitle), PANGO_ELLIPSIZE_END);
+  gtk_label_set_selectable (GTK_LABEL (title_box->subtitle), TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), title_box->subtitle, FALSE, FALSE, 0);
 }
 
