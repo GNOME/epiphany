@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*  Copyright © 2002 Olivier Martin <omartin@ifrance.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,11 +27,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyTreeModelSort, ephy_tree_model_sort, EPHY, TREE_MODEL_SORT, GtkTreeModelSort)
 
-GtkTreeModel   *ephy_tree_model_sort_new		      (GtkTreeModel *child_model);
+GtkTreeModel   *ephy_tree_model_sort_new		                  (GtkTreeModel *child_model);
 
-void		ephy_tree_model_sort_set_base_drag_column_id  (EphyTreeModelSort *ms,
-							       int id);
-void		ephy_tree_model_sort_set_extra_drag_column_id (EphyTreeModelSort *ms,
-							       int id);
+void		        ephy_tree_model_sort_set_base_drag_column_id  (EphyTreeModelSort *ms,
+							                                                 int id);
+void		        ephy_tree_model_sort_set_extra_drag_column_id (EphyTreeModelSort *ms,
+							                                                 int id);
 
 G_END_DECLS

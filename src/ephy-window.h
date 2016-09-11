@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
  *
@@ -36,17 +37,17 @@ typedef enum
         EPHY_WINDOW_CHROME_DEFAULT       = (EPHY_WINDOW_CHROME_HEADER_BAR | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_TABSBAR)
 } EphyWindowChrome;
 
-EphyWindow	 *ephy_window_new		  (void);
+EphyWindow       *ephy_window_new                 (void);
 
-GtkWidget	 *ephy_window_get_notebook	  (EphyWindow *window);
+GtkWidget        *ephy_window_get_notebook        (EphyWindow *window);
 
-void		  ephy_window_load_url		  (EphyWindow *window,
-						   const char *url);
+void              ephy_window_load_url            (EphyWindow *window,
+                                                   const char *url);
 
 void              ephy_window_set_zoom            (EphyWindow *window,
                                                    double zoom);
 
-void		  ephy_window_activate_location	  (EphyWindow *window);
+void              ephy_window_activate_location   (EphyWindow *window);
 const char       *ephy_window_get_location        (EphyWindow *window);
 
 GtkWidget        *ephy_window_get_header_bar      (EphyWindow *window);

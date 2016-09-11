@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2012 Igalia S.L.
  *
@@ -30,17 +31,17 @@ G_DECLARE_FINAL_TYPE (EphyCompletionModel, ephy_completion_model, EPHY, COMPLETI
 
 typedef enum
 {
-	EPHY_COMPLETION_TEXT_COL,
-	EPHY_COMPLETION_ACTION_COL,
-	EPHY_COMPLETION_KEYWORDS_COL,
-	EPHY_COMPLETION_RELEVANCE_COL,
-	EPHY_COMPLETION_URL_COL,
-	EPHY_COMPLETION_EXTRA_COL,
-	EPHY_COMPLETION_FAVICON_COL,
-	N_COL
+  EPHY_COMPLETION_TEXT_COL,
+  EPHY_COMPLETION_ACTION_COL,
+  EPHY_COMPLETION_KEYWORDS_COL,
+  EPHY_COMPLETION_RELEVANCE_COL,
+  EPHY_COMPLETION_URL_COL,
+  EPHY_COMPLETION_EXTRA_COL,
+  EPHY_COMPLETION_FAVICON_COL,
+  N_COL
 } EphyCompletionColumn;
 
-EphyCompletionModel *ephy_completion_model_new		     (EphyHistoryService *history_service,
+EphyCompletionModel *ephy_completion_model_new               (EphyHistoryService *history_service,
                                                               EphyBookmarks *bookmarks);
 
 void                 ephy_completion_model_update_for_string (EphyCompletionModel *model,

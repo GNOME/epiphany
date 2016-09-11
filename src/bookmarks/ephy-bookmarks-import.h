@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
@@ -22,23 +23,23 @@
 
 G_BEGIN_DECLS
 
-#define MOZILLA_BOOKMARKS_DIR	".mozilla"
-#define FIREFOX_BOOKMARKS_DIR_0	".phoenix"
-#define FIREFOX_BOOKMARKS_DIR_1	".firefox"
-#define FIREFOX_BOOKMARKS_DIR_2	".mozilla/firefox"
-#define GALEON_BOOKMARKS_DIR	".galeon"
-#define KDE_BOOKMARKS_DIR	".kde/share/apps/konqueror"
+#define MOZILLA_BOOKMARKS_DIR        ".mozilla"
+#define FIREFOX_BOOKMARKS_DIR_0      ".phoenix"
+#define FIREFOX_BOOKMARKS_DIR_1      ".firefox"
+#define FIREFOX_BOOKMARKS_DIR_2      ".mozilla/firefox"
+#define GALEON_BOOKMARKS_DIR         ".galeon"
+#define KDE_BOOKMARKS_DIR            ".kde/share/apps/konqueror"
 
 gboolean ephy_bookmarks_import         (EphyBookmarks *bookmarks,
-					const char *filename);
+                                        const char *filename);
 
 gboolean ephy_bookmarks_import_mozilla (EphyBookmarks *bookmarks,
-					const char *filename);
+                                        const char *filename);
 
 gboolean ephy_bookmarks_import_xbel    (EphyBookmarks *bookmarks,
-					const char *filename);
+                                        const char *filename);
 
 gboolean ephy_bookmarks_import_rdf     (EphyBookmarks *bookmarks,
-					const char *filename);
+                                        const char *filename);
 
 G_END_DECLS

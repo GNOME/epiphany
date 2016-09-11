@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Olivier Martin <omartin@ifrance.com>
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
@@ -30,20 +31,20 @@ G_DECLARE_FINAL_TYPE (EphyNodeFilter, ephy_node_filter, EPHY, NODE_FILTER, GObje
 
 typedef enum
 {
-	EPHY_NODE_FILTER_EXPRESSION_ALWAYS_TRUE,           /* args: none */
-	EPHY_NODE_FILTER_EXPRESSION_NODE_EQUALS,           /* args: EphyNode *a, EphyNode *b */
-	EPHY_NODE_FILTER_EXPRESSION_EQUALS,                /* args: EphyNode *node */
-	EPHY_NODE_FILTER_EXPRESSION_HAS_PARENT,            /* args: EphyNode *parent */
-	EPHY_NODE_FILTER_EXPRESSION_HAS_CHILD,             /* args: EphyNode *child */
-	EPHY_NODE_FILTER_EXPRESSION_NODE_PROP_EQUALS,      /* args: int prop_id, EphyNode *node */
-	EPHY_NODE_FILTER_EXPRESSION_CHILD_PROP_EQUALS,     /* args: int prop_id, EphyNode *node */
-	EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,  /* args: int prop_id, const char *string */
-	EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_EQUALS,    /* args: int prop_id, const char *string */
-	EPHY_NODE_FILTER_EXPRESSION_KEY_PROP_CONTAINS,     /* args: int prop_id, const char *string */
-	EPHY_NODE_FILTER_EXPRESSION_KEY_PROP_EQUALS,       /* args: int prop_id, const char *string */
-	EPHY_NODE_FILTER_EXPRESSION_INT_PROP_EQUALS,       /* args: int prop_id, int int */
-	EPHY_NODE_FILTER_EXPRESSION_INT_PROP_BIGGER_THAN,  /* args: int prop_id, int int */
-	EPHY_NODE_FILTER_EXPRESSION_INT_PROP_LESS_THAN     /* args: int prop_id, int int */
+  EPHY_NODE_FILTER_EXPRESSION_ALWAYS_TRUE,           /* args: none */
+  EPHY_NODE_FILTER_EXPRESSION_NODE_EQUALS,           /* args: EphyNode *a, EphyNode *b */
+  EPHY_NODE_FILTER_EXPRESSION_EQUALS,                /* args: EphyNode *node */
+  EPHY_NODE_FILTER_EXPRESSION_HAS_PARENT,            /* args: EphyNode *parent */
+  EPHY_NODE_FILTER_EXPRESSION_HAS_CHILD,             /* args: EphyNode *child */
+  EPHY_NODE_FILTER_EXPRESSION_NODE_PROP_EQUALS,      /* args: int prop_id, EphyNode *node */
+  EPHY_NODE_FILTER_EXPRESSION_CHILD_PROP_EQUALS,     /* args: int prop_id, EphyNode *node */
+  EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_CONTAINS,  /* args: int prop_id, const char *string */
+  EPHY_NODE_FILTER_EXPRESSION_STRING_PROP_EQUALS,    /* args: int prop_id, const char *string */
+  EPHY_NODE_FILTER_EXPRESSION_KEY_PROP_CONTAINS,     /* args: int prop_id, const char *string */
+  EPHY_NODE_FILTER_EXPRESSION_KEY_PROP_EQUALS,       /* args: int prop_id, const char *string */
+  EPHY_NODE_FILTER_EXPRESSION_INT_PROP_EQUALS,       /* args: int prop_id, int int */
+  EPHY_NODE_FILTER_EXPRESSION_INT_PROP_BIGGER_THAN,  /* args: int prop_id, int int */
+  EPHY_NODE_FILTER_EXPRESSION_INT_PROP_LESS_THAN     /* args: int prop_id, int int */
 } EphyNodeFilterExpressionType;
 
 typedef struct _EphyNodeFilterExpression EphyNodeFilterExpression;
@@ -57,18 +58,18 @@ typedef struct _EphyNodeFilterExpression EphyNodeFilterExpression;
 EphyNodeFilter *ephy_node_filter_new            (void);
 
 void            ephy_node_filter_add_expression (EphyNodeFilter *filter,
-					         EphyNodeFilterExpression *expression,
-					         int level);
+                                                 EphyNodeFilterExpression *expression,
+                                                 int level);
 
 void            ephy_node_filter_empty          (EphyNodeFilter *filter);
 
 void            ephy_node_filter_done_changing  (EphyNodeFilter *filter);
 
 gboolean        ephy_node_filter_evaluate       (EphyNodeFilter *filter,
-					         EphyNode *node);
+                                                 EphyNode *node);
 
 EphyNodeFilterExpression *ephy_node_filter_expression_new  (EphyNodeFilterExpressionType,
-						            ...);
+                                                            ...);
 /* no need to free unless you didn't add the expression to a filter */
 void                      ephy_node_filter_expression_free (EphyNodeFilterExpression *expression);
 

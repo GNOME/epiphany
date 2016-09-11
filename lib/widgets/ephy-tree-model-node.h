@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
  *
@@ -31,26 +32,26 @@ typedef void (*EphyTreeModelNodeValueFunc) (EphyNode *node, GValue *value, gpoin
 
 EphyTreeModelNode *ephy_tree_model_node_new              (EphyNode *root);
 
-int		   ephy_tree_model_node_add_column_full  (EphyTreeModelNode* model,
-							  GType value_type,
-							  int prop_id,
-							  EphyTreeModelNodeValueFunc func,
-							  gpointer user_data);
+int                ephy_tree_model_node_add_column_full  (EphyTreeModelNode* model,
+                                                          GType value_type,
+                                                          int prop_id,
+                                                          EphyTreeModelNodeValueFunc func,
+                                                          gpointer user_data);
 
 int                ephy_tree_model_node_add_prop_column  (EphyTreeModelNode *model,
-						          GType value_type,
-						          int prop_id);
+                                                          GType value_type,
+                                                          int prop_id);
 
 int                ephy_tree_model_node_add_func_column  (EphyTreeModelNode *model,
-						          GType value_type,
-						          EphyTreeModelNodeValueFunc func,
-						          gpointer user_data);
+                                                          GType value_type,
+                                                          EphyTreeModelNodeValueFunc func,
+                                                          gpointer user_data);
 
 EphyNode          *ephy_tree_model_node_node_from_iter   (EphyTreeModelNode *model,
-						          GtkTreeIter *iter);
+                                                          GtkTreeIter *iter);
 
 void               ephy_tree_model_node_iter_from_node   (EphyTreeModelNode *model,
-						          EphyNode *node,
-						          GtkTreeIter *iter);
+                                                          EphyNode *node,
+                                                          GtkTreeIter *iter);
 
 G_END_DECLS

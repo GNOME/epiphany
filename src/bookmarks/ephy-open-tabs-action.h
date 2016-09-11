@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003 Peter Harvey
  *
@@ -23,6 +24,6 @@
 
 G_BEGIN_DECLS
 
-GtkActionGroup	*ephy_open_tabs_group_new	(EphyNode *node);
+GtkActionGroup        *ephy_open_tabs_group_new        (EphyNode *node);
 
 G_END_DECLS

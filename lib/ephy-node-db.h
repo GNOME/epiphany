@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
  *  Copyright © 2003 Marco Pesenti Gritti
@@ -27,39 +28,39 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyNodeDb, ephy_node_db, EPHY, NODE_DB, GObject)
 
-EphyNodeDb   *ephy_node_db_new			(const char *name);
+EphyNodeDb   *ephy_node_db_new                   (const char *name);
 
 #include "ephy-node.h"
 
-gboolean      ephy_node_db_load_from_file	(EphyNodeDb *db,
-						 const char *xml_file,
-						 const xmlChar *xml_root,
-						 const xmlChar *xml_version);
+gboolean      ephy_node_db_load_from_file        (EphyNodeDb *db,
+                                                  const char *xml_file,
+                                                  const xmlChar *xml_root,
+                                                  const xmlChar *xml_version);
 
-int           ephy_node_db_write_to_xml_safe	(EphyNodeDb *db,
-						 const xmlChar *filename,
-						 const xmlChar *root,
-						 const xmlChar *version,
-						 const xmlChar *comment,
-						 EphyNode *node, ...);
+int           ephy_node_db_write_to_xml_safe     (EphyNodeDb *db,
+                                                  const xmlChar *filename,
+                                                  const xmlChar *root,
+                                                  const xmlChar *version,
+                                                  const xmlChar *comment,
+                                                  EphyNode *node, ...);
 
-const char   *ephy_node_db_get_name		(EphyNodeDb *db);
+const char   *ephy_node_db_get_name              (EphyNodeDb *db);
 
-gboolean      ephy_node_db_is_immutable		(EphyNodeDb *db);
+gboolean      ephy_node_db_is_immutable          (EphyNodeDb *db);
 
-void	      ephy_node_db_set_immutable	(EphyNodeDb *db,
-						 gboolean immutable);
+void          ephy_node_db_set_immutable         (EphyNodeDb *db,
+                                                  gboolean immutable);
 
-EphyNode     *ephy_node_db_get_node_from_id	(EphyNodeDb *db,
-						 guint id);
+EphyNode     *ephy_node_db_get_node_from_id      (EphyNodeDb *db,
+                                                  guint id);
 
-guint	      _ephy_node_db_new_id		(EphyNodeDb *db);
+guint         _ephy_node_db_new_id               (EphyNodeDb *db);
 
-void	      _ephy_node_db_add_id		(EphyNodeDb *db,
-						 guint id,
-						 EphyNode *node);
+void          _ephy_node_db_add_id               (EphyNodeDb *db,
+                                                  guint id,
+                                                  EphyNode *node);
 
-void	      _ephy_node_db_remove_id		(EphyNodeDb *db,
-						 guint id);
+void          _ephy_node_db_remove_id            (EphyNodeDb *db,
+                                                  guint id);
 
 G_END_DECLS

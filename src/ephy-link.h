@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2004 Christian Persch
  *
@@ -30,30 +31,30 @@ G_DECLARE_INTERFACE (EphyLink, ephy_link, EPHY, LINK, GObject)
 
 typedef enum
 {
-	EPHY_LINK_NEW_WINDOW	       = 1 << 0,
-	EPHY_LINK_NEW_TAB	       = 1 << 1,
-	EPHY_LINK_JUMP_TO	       = 1 << 2,
-	EPHY_LINK_NEW_TAB_APPEND_AFTER = 1 << 3,
-	EPHY_LINK_HOME_PAGE	       = 1 << 4,
-	EPHY_LINK_TYPED		       = 1 << 5,
-	EPHY_LINK_BOOKMARK	       = 1 << 6
+  EPHY_LINK_NEW_WINDOW             = 1 << 0,
+  EPHY_LINK_NEW_TAB                = 1 << 1,
+  EPHY_LINK_JUMP_TO                = 1 << 2,
+  EPHY_LINK_NEW_TAB_APPEND_AFTER   = 1 << 3,
+  EPHY_LINK_HOME_PAGE              = 1 << 4,
+  EPHY_LINK_TYPED                  = 1 << 5,
+  EPHY_LINK_BOOKMARK               = 1 << 6
 } EphyLinkFlags;
 
 struct _EphyLinkInterface
 {
-	GTypeInterface base_iface;
+  GTypeInterface base_iface;
 
-	/* Signals */
-	EphyEmbed * (* open_link) (EphyLink *link,
-				   const char *address,
-				   EphyEmbed *embed,
-				   EphyLinkFlags flags);
+  /* Signals */
+  EphyEmbed * (* open_link) (EphyLink *link,
+                             const char *address,
+                             EphyEmbed *embed,
+                             EphyLinkFlags flags);
 };
 
-EphyEmbed *ephy_link_open		(EphyLink *link,
-					 const char *address,
-					 EphyEmbed *embed,
-					 EphyLinkFlags flags);
+EphyEmbed *ephy_link_open (EphyLink *link,
+                           const char *address,
+                           EphyEmbed *embed,
+                           EphyLinkFlags flags);
 
 EphyLinkFlags ephy_link_flags_from_current_event (void);
 

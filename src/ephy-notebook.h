@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Christophe Fergeau
  *  Copyright © 2003 Marco Pesenti Gritti
@@ -30,13 +31,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyNotebook, ephy_notebook, EPHY, NOTEBOOK, GtkNotebook)
 
-int		ephy_notebook_add_tab		(EphyNotebook *nb,
-						 EphyEmbed *embed,
-						 int position,
-						 gboolean jump_to);
-	
-void		ephy_notebook_set_tabs_allowed	(EphyNotebook *nb,
-						 gboolean tabs_allowed);
+int             ephy_notebook_add_tab           (EphyNotebook *nb,
+                                                 EphyEmbed *embed,
+                                                 int position,
+                                                 gboolean jump_to);
+
+void            ephy_notebook_set_tabs_allowed  (EphyNotebook *nb,
+                                                 gboolean tabs_allowed);
 
 void            ephy_notebook_next_page         (EphyNotebook *notebook);
 

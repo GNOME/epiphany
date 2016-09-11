@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Marco Pesenti Gritti <mpeseng@tin.it>
  *  Copyright © 2005, 2006 Peter A. Harvey
@@ -28,10 +29,10 @@ G_BEGIN_DECLS
 #define EPHY_TYPE_BOOKMARK_PROPERTIES (ephy_bookmark_properties_get_type ())
 G_DECLARE_FINAL_TYPE (EphyBookmarkProperties, ephy_bookmark_properties, EPHY, BOOKMARK_PROPERTIES, GtkDialog);
 
-GtkWidget	*ephy_bookmark_properties_new		(EphyBookmarks *bookmarks,
-							 EphyNode *bookmark,
-							 gboolean creating);
+GtkWidget        *ephy_bookmark_properties_new          (EphyBookmarks *bookmarks,
+                                                         EphyNode *bookmark,
+                                                         gboolean creating);
 
-EphyNode	*ephy_bookmark_properties_get_node	(EphyBookmarkProperties *properties);
+EphyNode        *ephy_bookmark_properties_get_node      (EphyBookmarkProperties *properties);
 
 G_END_DECLS

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2000, 2001, 2002, 2003 Marco Pesenti Gritti
  *  Copyright © 2003 Christian Persch
@@ -26,6 +27,6 @@ G_BEGIN_DECLS
 #define EPHY_TYPE_ENCODING_DIALOG (ephy_encoding_dialog_get_type ())
 G_DECLARE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, EPHY, ENCODING_DIALOG, GtkDialog);
 
-EphyEncodingDialog	*ephy_encoding_dialog_new	(EphyWindow *window);
+EphyEncodingDialog  *ephy_encoding_dialog_new  (EphyWindow *window);
 
 G_END_DECLS

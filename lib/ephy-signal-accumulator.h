@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2004 Christian Persch
  *
@@ -22,13 +23,13 @@
 G_BEGIN_DECLS
 
 gboolean ephy_signal_accumulator_object (GSignalInvocationHint *ihint,
-					 GValue *return_accu,
-					 const GValue *handler_return,
-					 gpointer accu_data);
+                                         GValue *return_accu,
+                                         const GValue *handler_return,
+                                         gpointer accu_data);
 
-gboolean ephy_signal_accumulator_string	(GSignalInvocationHint *ihint,
-					 GValue *return_accu,
-					 const GValue *handler_return,
-					 gpointer accu_data);
+gboolean ephy_signal_accumulator_string (GSignalInvocationHint *ihint,
+                                         GValue *return_accu,
+                                         const GValue *handler_return,
+                                         gpointer accu_data);
 
 G_END_DECLS

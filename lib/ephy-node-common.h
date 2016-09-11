@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003 Xan Lopez <xan@masilla.org>
  * 
@@ -20,31 +21,31 @@
 G_BEGIN_DECLS
 
 /* Databases */
-#define EPHY_NODE_DB_HISTORY "EphyHistory"
+#define EPHY_NODE_DB_HISTORY   "EphyHistory"
 #define EPHY_NODE_DB_BOOKMARKS "EphyBookmarks"
 #define EPHY_NODE_DB_SITEICONS "EphySiteIcons"
-#define EPHY_NODE_DB_STATES "EphyStates"
+#define EPHY_NODE_DB_STATES    "EphyStates"
 
 /* Root nodes */
 enum
 {
-	BOOKMARKS_NODE_ID = 0,
-	KEYWORDS_NODE_ID = 1,
-	FAVORITES_NODE_ID = 2,
-	BMKS_NOTCATEGORIZED_NODE_ID = 3,
-	STATES_NODE_ID = 4,
-	HOSTS_NODE_ID = 5,
-	PAGES_NODE_ID = 6,
-	ICONS_NODE_ID = 9,
-	SMARTBOOKMARKS_NODE_ID = 10,
-	BMKS_LOCAL_NODE_ID = 11,
+  BOOKMARKS_NODE_ID = 0,
+  KEYWORDS_NODE_ID = 1,
+  FAVORITES_NODE_ID = 2,
+  BMKS_NOTCATEGORIZED_NODE_ID = 3,
+  STATES_NODE_ID = 4,
+  HOSTS_NODE_ID = 5,
+  PAGES_NODE_ID = 6,
+  ICONS_NODE_ID = 9,
+  SMARTBOOKMARKS_NODE_ID = 10,
+  BMKS_LOCAL_NODE_ID = 11,
 };
 
 typedef enum
 {
-	EPHY_NODE_ALL_PRIORITY,
-	EPHY_NODE_SPECIAL_PRIORITY,
-	EPHY_NODE_NORMAL_PRIORITY
+  EPHY_NODE_ALL_PRIORITY,
+  EPHY_NODE_SPECIAL_PRIORITY,
+  EPHY_NODE_NORMAL_PRIORITY
 } EphyNodePriority;
 
 G_END_DECLS

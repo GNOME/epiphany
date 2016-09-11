@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003 Marco Pesenti Gritti
  *
@@ -25,9 +26,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyLocationController, ephy_location_controller, EPHY, LOCATION_CONTROLLER, GObject)
 
-const char     *ephy_location_controller_get_address	(EphyLocationController *controller);
+const char     *ephy_location_controller_get_address        (EphyLocationController *controller);
 
-void		ephy_location_controller_set_address	(EphyLocationController *controller,
-							 const char *address);
+void            ephy_location_controller_set_address        (EphyLocationController *controller,
+                                                             const char *address);
 
 G_END_DECLS

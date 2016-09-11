@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002  Ricardo Fernández Pascual
  *  Copyright © 2003, 2004  Marco Pesenti Gritti
@@ -29,50 +30,50 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkEntry)
 
-GtkWidget      *ephy_location_entry_new			(void);
+GtkWidget      *ephy_location_entry_new                 (void);
 
-void		ephy_location_entry_set_completion	(EphyLocationEntry *entry,
-							 GtkTreeModel *model,
-							 guint text_col,
-							 guint action_col,
-							 guint keywords_col,
-							 guint relevance_col,
-							 guint url_col,
-							 guint extra_col,
-							 guint favicon_col);
+void            ephy_location_entry_set_completion      (EphyLocationEntry *entry,
+                                                         GtkTreeModel *model,
+                                                         guint text_col,
+                                                         guint action_col,
+                                                         guint keywords_col,
+                                                         guint relevance_col,
+                                                         guint url_col,
+                                                         guint extra_col,
+                                                         guint favicon_col);
 
-void		ephy_location_entry_set_location	(EphyLocationEntry *entry,
-							 const char *address);
+void            ephy_location_entry_set_location        (EphyLocationEntry *entry,
+                                                         const char *address);
 
-void		ephy_location_entry_set_match_func	(EphyLocationEntry *entry, 
-							 GtkEntryCompletionMatchFunc match_func,
-							 gpointer user_data,
-							 GDestroyNotify notify);
-					
-const char     *ephy_location_entry_get_location	(EphyLocationEntry *entry);
+void            ephy_location_entry_set_match_func      (EphyLocationEntry *entry,
+                                                         GtkEntryCompletionMatchFunc match_func,
+                                                         gpointer user_data,
+                                                         GDestroyNotify notify);
 
-gboolean	ephy_location_entry_get_can_undo	(EphyLocationEntry *entry);
+const char     *ephy_location_entry_get_location        (EphyLocationEntry *entry);
 
-gboolean	ephy_location_entry_get_can_redo	(EphyLocationEntry *entry);
+gboolean        ephy_location_entry_get_can_undo        (EphyLocationEntry *entry);
 
-GSList         *ephy_location_entry_get_search_terms	(EphyLocationEntry *entry);
+gboolean        ephy_location_entry_get_can_redo        (EphyLocationEntry *entry);
 
-gboolean	ephy_location_entry_reset		(EphyLocationEntry *entry);
+GSList         *ephy_location_entry_get_search_terms    (EphyLocationEntry *entry);
 
-void		ephy_location_entry_undo_reset		(EphyLocationEntry *entry);
+gboolean        ephy_location_entry_reset               (EphyLocationEntry *entry);
 
-void		ephy_location_entry_activate		(EphyLocationEntry *entry);
+void            ephy_location_entry_undo_reset          (EphyLocationEntry *entry);
 
-void		ephy_location_entry_set_favicon		(EphyLocationEntry *entry,
-							 GdkPixbuf *pixbuf);
+void            ephy_location_entry_activate            (EphyLocationEntry *entry);
+
+void            ephy_location_entry_set_favicon         (EphyLocationEntry *entry,
+                                                         GdkPixbuf *pixbuf);
 
 void            ephy_location_entry_set_show_favicon    (EphyLocationEntry *entry,
-							 gboolean show_favicon);
+                                                         gboolean show_favicon);
 
-void		ephy_location_entry_set_security_level	(EphyLocationEntry *entry,
-							 EphySecurityLevel security_level);
+void            ephy_location_entry_set_security_level  (EphyLocationEntry *entry,
+                                                         EphySecurityLevel security_level);
 
-void		ephy_location_entry_set_lock_tooltip	(EphyLocationEntry *entry,
-							 const char *tooltip);
+void            ephy_location_entry_set_lock_tooltip    (EphyLocationEntry *entry,
+                                                         const char *tooltip);
 
 G_END_DECLS

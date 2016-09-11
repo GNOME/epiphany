@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2000, 2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004 Christian Persch
@@ -27,12 +28,12 @@ G_BEGIN_DECLS
 
 void			     ephy_langs_append_languages (GArray *array);
 
-void			     ephy_langs_sanitise	 (GArray *array);
+void			     ephy_langs_sanitise	       (GArray *array);
 
-char			   **ephy_langs_get_languages	 (void);
+char			   **ephy_langs_get_languages	   (void);
 
-GHashTable		    *ephy_langs_iso_639_table	 (void);
+GHashTable		*ephy_langs_iso_639_table	   (void);
 
-GHashTable		    *ephy_langs_iso_3166_table   (void);
+GHashTable		*ephy_langs_iso_3166_table   (void);
 
 G_END_DECLS

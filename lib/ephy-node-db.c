@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
  *  Copyright © 2003 Marco Pesenti Gritti

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003 Marco Pesenti Gritti
@@ -29,7 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySession, ephy_session, EPHY, SESSION, GObject)
 
-void 	         ephy_session_save		      (EphySession *session);
+void             ephy_session_save                    (EphySession *session);
 void             ephy_session_load                    (EphySession *session,
                                                        const char *filename,
                                                        guint32 user_time,

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen
  *  Copyright © 2003, 2004 Marco Pesenti Gritti
@@ -24,24 +25,24 @@
 #include <gtk/gtk.h>
 
 extern GQuark ephy_file_helpers_error_quark;
-#define EPHY_FILE_HELPERS_ERROR_QUARK	(ephy_file_helpers_error_quark)
+#define EPHY_FILE_HELPERS_ERROR_QUARK        (ephy_file_helpers_error_quark)
 
 G_BEGIN_DECLS
 
 typedef enum
 {
-	EPHY_MIME_PERMISSION_SAFE	= 1,
-	EPHY_MIME_PERMISSION_UNSAFE	= 2,
-	EPHY_MIME_PERMISSION_UNKNOWN	= 3
+  EPHY_MIME_PERMISSION_SAFE    = 1,
+  EPHY_MIME_PERMISSION_UNSAFE  = 2,
+  EPHY_MIME_PERMISSION_UNKNOWN = 3
 } EphyMimePermission;
 
 typedef enum
 {
-	EPHY_FILE_HELPERS_NONE		   = 0,
-	EPHY_FILE_HELPERS_KEEP_DIR	   = 1 << 1,
-	EPHY_FILE_HELPERS_PRIVATE_PROFILE  = 1 << 2,
-	EPHY_FILE_HELPERS_ENSURE_EXISTS	   = 1 << 3,
-	EPHY_FILE_HELPERS_STEAL_DATA       = 1 << 4
+  EPHY_FILE_HELPERS_NONE             = 0,
+  EPHY_FILE_HELPERS_KEEP_DIR         = 1 << 1,
+  EPHY_FILE_HELPERS_PRIVATE_PROFILE  = 1 << 2,
+  EPHY_FILE_HELPERS_ENSURE_EXISTS    = 1 << 3,
+  EPHY_FILE_HELPERS_STEAL_DATA       = 1 << 4
 } EphyFileHelpersFlags;
 
 gboolean           ephy_file_helpers_init                   (const char            *profile_dir,
@@ -52,7 +53,7 @@ const char *       ephy_dot_dir                             (void);
 gboolean           ephy_dot_dir_is_default                  (void);
 char       *       ephy_default_dot_dir                     (void);
 void               ephy_file_helpers_shutdown               (void);
-char	   *          ephy_file_get_downloads_dir              (void);
+char       *       ephy_file_get_downloads_dir              (void);
 char       *       ephy_file_desktop_dir                    (void);
 const char *       ephy_file_tmp_dir                        (void);
 char       *       ephy_file_tmp_filename                   (const char            *base,

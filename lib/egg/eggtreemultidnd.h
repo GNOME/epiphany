@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* eggtreednd.h
  * Copyright (C) 2001  Red Hat, Inc.
  *

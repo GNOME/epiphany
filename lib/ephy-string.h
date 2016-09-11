@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Marco Pesenti Gritti
  *
@@ -22,18 +23,18 @@
 
 G_BEGIN_DECLS
 
-gboolean  ephy_string_to_int	(const char *string,
-				 gulong *integer);
+gboolean  ephy_string_to_int                   (const char *string,
+                                                gulong *integer);
 
-char	 *ephy_string_blank_chr	(char *source);
+char     *ephy_string_blank_chr                (char *source);
 
-char	 *ephy_string_shorten	(char *str,
-				 gsize target_length);
+char     *ephy_string_shorten                  (char *str,
+                                                gsize target_length);
 
-char	 *ephy_string_collate_key_for_domain	(const char *host,
-						 gssize len);
+char     *ephy_string_collate_key_for_domain   (const char *host,
+                                                gssize len);
 
-char     *ephy_string_get_host_name (const char *url);
+char     *ephy_string_get_host_name            (const char *url);
 
 char    **ephy_string_commandline_args_to_uris (char **arguments, GError **error);
 

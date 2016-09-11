@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003 Marco Pesenti Gritti
  *
@@ -22,9 +23,9 @@
 G_BEGIN_DECLS
 
 void ephy_bookmarks_export_rdf (EphyBookmarks *bookmarks,
-				const char *filename);
+                                const char *filename);
 
 void ephy_bookmarks_export_mozilla (EphyBookmarks *bookmarks,
-				    const char *filename);
+                                    const char *filename);
 
 G_END_DECLS

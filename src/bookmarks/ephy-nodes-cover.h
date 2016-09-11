@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2004 Peter Harvey <pah06@uow.edu.au>
  *
@@ -32,6 +33,6 @@ gboolean ephy_nodes_covered (EphyNode *parent, const GPtrArray *children);
 GPtrArray * ephy_nodes_get_covered (EphyNode *parent, const GPtrArray *children, GPtrArray *_covered);
 
 GPtrArray * ephy_nodes_get_covering (const GPtrArray *parents, const GPtrArray *children,
-				     GPtrArray *_covering, GPtrArray *_uncovered, GArray *_sizes);
+                                     GPtrArray *_covering, GPtrArray *_uncovered, GArray *_sizes);
 
 G_END_DECLS

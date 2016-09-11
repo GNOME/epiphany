@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
  *
@@ -28,9 +29,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyBookmarksEditor, ephy_bookmarks_editor, EPHY, BOOKMARKS_EDITOR, GtkWindow)
 
-GtkWidget	    *ephy_bookmarks_editor_new        (EphyBookmarks *bookmarks);
+GtkWidget            *ephy_bookmarks_editor_new        (EphyBookmarks *bookmarks);
 
-void		     ephy_bookmarks_editor_set_parent (EphyBookmarksEditor *ebe,
-						       GtkWidget *window);
+void                  ephy_bookmarks_editor_set_parent (EphyBookmarksEditor *ebe,
+                                                        GtkWidget *window);
 
 G_END_DECLS

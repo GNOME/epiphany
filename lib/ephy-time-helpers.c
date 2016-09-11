@@ -1,5 +1,5 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
- *
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/*
  *  arch-tag: File containing code cut and pasted from elsewhere
  *
  *  Copyright © 2000 Eazel, Inc.

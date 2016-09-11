@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003, 2004 Christian Persch
  *  
@@ -29,27 +30,27 @@ G_DECLARE_FINAL_TYPE (EphyFileChooser, ephy_file_chooser, EPHY, FILE_CHOOSER, Gt
 
 typedef enum
 {
-	EPHY_FILE_FILTER_ALL_SUPPORTED,
-	EPHY_FILE_FILTER_WEBPAGES,
-	EPHY_FILE_FILTER_IMAGES,
-	EPHY_FILE_FILTER_ALL,
-	EPHY_FILE_FILTER_NONE,
-	EPHY_FILE_FILTER_LAST = EPHY_FILE_FILTER_NONE
+        EPHY_FILE_FILTER_ALL_SUPPORTED,
+        EPHY_FILE_FILTER_WEBPAGES,
+        EPHY_FILE_FILTER_IMAGES,
+        EPHY_FILE_FILTER_ALL,
+        EPHY_FILE_FILTER_NONE,
+        EPHY_FILE_FILTER_LAST = EPHY_FILE_FILTER_NONE
 } EphyFileFilterDefault;
 
-EphyFileChooser	*ephy_file_chooser_new			(const char *title,
-							 GtkWidget *parent,
-							 GtkFileChooserAction action,
-							 EphyFileFilterDefault default_filter);
+EphyFileChooser        *ephy_file_chooser_new              (const char *title,
+                                                            GtkWidget *parent,
+                                                            GtkFileChooserAction action,
+                                                            EphyFileFilterDefault default_filter);
 
-GtkFileFilter	*ephy_file_chooser_add_pattern_filter	(EphyFileChooser *dialog,
-							 const char *title,
-							 const char *first_pattern,
-							 ...);
+GtkFileFilter        *ephy_file_chooser_add_pattern_filter (EphyFileChooser *dialog,
+                                                            const char *title,
+                                                            const char *first_pattern,
+                                                            ...);
 
-GtkFileFilter	*ephy_file_chooser_add_mime_filter	(EphyFileChooser *dialog,
-							 const char *title,
-							 const char *first_mimetype,
-							 ...);
+GtkFileFilter        *ephy_file_chooser_add_mime_filter    (EphyFileChooser *dialog,
+                                                            const char *title,
+                                                            const char *first_mimetype,
+                                                            ...);
 
 G_END_DECLS

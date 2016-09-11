@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2005 Christian Persch
  *
@@ -23,11 +24,11 @@ G_BEGIN_DECLS
 
 enum
 {
-	SENS_FLAG = 1 << 0
+  SENS_FLAG = 1 << 0
 };
 
 void ephy_action_change_sensitivity_flags (GSimpleAction *action,
-                                           guint    	  flags,
+                                           guint        flags,
                                            gboolean       set);
 
 G_END_DECLS

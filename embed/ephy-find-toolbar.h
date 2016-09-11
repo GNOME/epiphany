@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2004  Tommi Komulainen
  *  Copyright © 2004, 2005  Christian Persch
@@ -28,22 +29,22 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyFindToolbar, ephy_find_toolbar, EPHY, FIND_TOOLBAR, GtkSearchBar)
 
-EphyFindToolbar *ephy_find_toolbar_new		 (WebKitWebView *web_view);
+EphyFindToolbar *ephy_find_toolbar_new           (WebKitWebView *web_view);
 
-const char	*ephy_find_toolbar_get_text	 (EphyFindToolbar *toolbar);
+const char      *ephy_find_toolbar_get_text      (EphyFindToolbar *toolbar);
 
-void		 ephy_find_toolbar_find_next	 (EphyFindToolbar *toolbar);
+void             ephy_find_toolbar_find_next     (EphyFindToolbar *toolbar);
 
-void		 ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar);
+void             ephy_find_toolbar_find_previous (EphyFindToolbar *toolbar);
 
-void		 ephy_find_toolbar_open		 (EphyFindToolbar *toolbar,
-						  gboolean links_only,
-						  gboolean clear_search);
+void             ephy_find_toolbar_open          (EphyFindToolbar *toolbar,
+                                                  gboolean links_only,
+                                                  gboolean clear_search);
 
-void		 ephy_find_toolbar_close	 (EphyFindToolbar *toolbar);
+void             ephy_find_toolbar_close         (EphyFindToolbar *toolbar);
 
-void		 ephy_find_toolbar_request_close (EphyFindToolbar *toolbar);
+void             ephy_find_toolbar_request_close (EphyFindToolbar *toolbar);
 
-void		 ephy_find_toolbar_toggle_state	 (EphyFindToolbar *toolbar);
+void             ephy_find_toolbar_toggle_state  (EphyFindToolbar *toolbar);
 
 G_END_DECLS

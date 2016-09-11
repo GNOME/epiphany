@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Marco Pesenti Gritti
  *
@@ -23,38 +24,38 @@
 
 G_BEGIN_DECLS
 
-void		ephy_gui_sanitise_popup_position	 (GtkMenu *menu,
-							  GtkWidget *parent_widget,
-							  gint *x,
-							  gint *y);
+void            ephy_gui_sanitise_popup_position         (GtkMenu *menu,
+                                                          GtkWidget *parent_widget,
+                                                          gint *x,
+                                                          gint *y);
 
-void		ephy_gui_menu_position_tree_selection    (GtkMenu   *menu,
-							  gint      *x,
-							  gint      *y,
-							  gboolean  *push_in,
-							  gpointer  user_data);
+void            ephy_gui_menu_position_tree_selection    (GtkMenu   *menu,
+                                                          gint      *x,
+                                                          gint      *y,
+                                                          gboolean  *push_in,
+                                                          gpointer  user_data);
 
-void		ephy_gui_menu_position_under_widget	 (GtkMenu   *menu,
-							  gint      *x,
-							  gint      *y,
-							  gboolean  *push_in,
-							  gpointer  user_data);
+void            ephy_gui_menu_position_under_widget      (GtkMenu   *menu,
+                                                          gint      *x,
+                                                          gint      *y,
+                                                          gboolean  *push_in,
+                                                          gpointer  user_data);
 
-GtkWindowGroup *ephy_gui_ensure_window_group		 (GtkWindow *window);
+GtkWindowGroup *ephy_gui_ensure_window_group             (GtkWindow *window);
 
-void		ephy_gui_get_current_event		 (GdkEventType *type,
-							  guint *state,
-							  guint *button);
+void            ephy_gui_get_current_event               (GdkEventType *type,
+                                                          guint *state,
+                                                          guint *button);
 
-gboolean	ephy_gui_is_middle_click		 (void);
+gboolean        ephy_gui_is_middle_click                 (void);
 
-gboolean	ephy_gui_check_location_writable         (GtkWidget *parent,
-							  const char *filename);
+gboolean        ephy_gui_check_location_writable         (GtkWidget *parent,
+                                                          const char *filename);
 
-void		ephy_gui_help				 (GtkWidget *parent,
-							  const char *page);
+void            ephy_gui_help                            (GtkWidget *parent,
+                                                          const char *page);
 
-void		ephy_gui_window_update_user_time	 (GtkWidget *window,
-							  guint32 user_time);
+void            ephy_gui_window_update_user_time         (GtkWidget *window,
+                                                          guint32 user_time);
 
 G_END_DECLS

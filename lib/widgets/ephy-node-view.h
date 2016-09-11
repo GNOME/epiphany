@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Jorn Baayen <jorn@nl.linux.org>
  *
@@ -30,86 +31,86 @@ G_DECLARE_FINAL_TYPE (EphyNodeView, ephy_node_view, EPHY, NODE_VIEW, GtkTreeView
 
 typedef enum
 {
-	EPHY_NODE_VIEW_ALL_PRIORITY,
-	EPHY_NODE_VIEW_SPECIAL_PRIORITY,
-	EPHY_NODE_VIEW_NORMAL_PRIORITY
+        EPHY_NODE_VIEW_ALL_PRIORITY,
+        EPHY_NODE_VIEW_SPECIAL_PRIORITY,
+        EPHY_NODE_VIEW_NORMAL_PRIORITY
 } EphyNodeViewPriority;
 
 typedef enum
 {
-	EPHY_NODE_VIEW_SHOW_PRIORITY = 1 << 0,
-	EPHY_NODE_VIEW_SORTABLE = 1 << 1,
-	EPHY_NODE_VIEW_EDITABLE = 1 << 2,
-	EPHY_NODE_VIEW_SEARCHABLE = 1 << 3,
-	EPHY_NODE_VIEW_ELLIPSIZED = 1 << 4
+        EPHY_NODE_VIEW_SHOW_PRIORITY = 1 << 0,
+        EPHY_NODE_VIEW_SORTABLE = 1 << 1,
+        EPHY_NODE_VIEW_EDITABLE = 1 << 2,
+        EPHY_NODE_VIEW_SEARCHABLE = 1 << 3,
+        EPHY_NODE_VIEW_ELLIPSIZED = 1 << 4
 } EphyNodeViewFlags;
 
 GtkWidget *ephy_node_view_new                 (EphyNode *root,
-					       EphyNodeFilter *filter);
+                                               EphyNodeFilter *filter);
 
-void	   ephy_node_view_add_toggle	      (EphyNodeView *view,
-					       EphyTreeModelNodeValueFunc value_func,
-					       gpointer data);
+void       ephy_node_view_add_toggle          (EphyNodeView *view,
+                                               EphyTreeModelNodeValueFunc value_func,
+                                               gpointer data);
 
-int	   ephy_node_view_add_column_full     (EphyNodeView *view,
-					       const char *title,
-					       GType value_type,
-					       guint prop_id,
-					       EphyNodeViewFlags flags,
-					       EphyTreeModelNodeValueFunc func,
-					       gpointer user_data,
-					       EphyTreeModelNodeValueFunc icon_func,
-					       GtkTreeViewColumn **ret);
+int        ephy_node_view_add_column_full     (EphyNodeView *view,
+                                               const char *title,
+                                               GType value_type,
+                                               guint prop_id,
+                                               EphyNodeViewFlags flags,
+                                               EphyTreeModelNodeValueFunc func,
+                                               gpointer user_data,
+                                               EphyTreeModelNodeValueFunc icon_func,
+                                               GtkTreeViewColumn **ret);
 
-int	   ephy_node_view_add_column	      (EphyNodeView *view,
-					       const char  *title,
-					       GType value_type,
-					       guint prop_id,
-					       EphyNodeViewFlags flags,
-					       EphyTreeModelNodeValueFunc icon_func,
-					       GtkTreeViewColumn **ret);
+int        ephy_node_view_add_column          (EphyNodeView *view,
+                                               const char  *title,
+                                               GType value_type,
+                                               guint prop_id,
+                                               EphyNodeViewFlags flags,
+                                               EphyTreeModelNodeValueFunc icon_func,
+                                               GtkTreeViewColumn **ret);
 
-int	   ephy_node_view_add_data_column     (EphyNodeView *view,
-			                       GType value_type,
-					       guint prop_id,
-			                       EphyTreeModelNodeValueFunc func,
-					       gpointer data);
+int        ephy_node_view_add_data_column     (EphyNodeView *view,
+                                               GType value_type,
+                                               guint prop_id,
+                                               EphyTreeModelNodeValueFunc func,
+                                               gpointer data);
 
-void	   ephy_node_view_set_sort            (EphyNodeView *view,
-			                       GType value_type,
-					       guint prop_id,
-					       GtkSortType sort_type);
+void       ephy_node_view_set_sort            (EphyNodeView *view,
+                                               GType value_type,
+                                               guint prop_id,
+                                               GtkSortType sort_type);
 
-void	   ephy_node_view_set_priority        (EphyNodeView *view,
-					       EphyNodeViewPriority priority_prop_id);
+void       ephy_node_view_set_priority        (EphyNodeView *view,
+                                               EphyNodeViewPriority priority_prop_id);
 
-void	   ephy_node_view_remove              (EphyNodeView *view);
+void       ephy_node_view_remove              (EphyNodeView *view);
 
 GList     *ephy_node_view_get_selection       (EphyNodeView *view);
 
-void	   ephy_node_view_select_node         (EphyNodeView *view,
-			                       EphyNode *node);
+void       ephy_node_view_select_node         (EphyNodeView *view,
+                                               EphyNode *node);
 
-void	   ephy_node_view_enable_drag_source  (EphyNodeView *view,
-					       const GtkTargetEntry *types,
-					       int n_types,
-					       int base_drag_column_id,
-					       int extra_drag_column_id);
+void       ephy_node_view_enable_drag_source  (EphyNodeView *view,
+                                               const GtkTargetEntry *types,
+                                               int n_types,
+                                               int base_drag_column_id,
+                                               int extra_drag_column_id);
 
-void	   ephy_node_view_enable_drag_dest    (EphyNodeView *view,
-					       const GtkTargetEntry *types,
-					       int n_types);
+void       ephy_node_view_enable_drag_dest    (EphyNodeView *view,
+                                               const GtkTargetEntry *types,
+                                               int n_types);
 
-void	   ephy_node_view_edit		      (EphyNodeView *view,
-					       gboolean remove_if_cancelled);
+void       ephy_node_view_edit                (EphyNodeView *view,
+                                               gboolean remove_if_cancelled);
 
-gboolean   ephy_node_view_is_target	      (EphyNodeView *view);
+gboolean   ephy_node_view_is_target           (EphyNodeView *view);
 
-void	   ephy_node_view_popup		      (EphyNodeView *view,
-					       GtkWidget *menu);
+void       ephy_node_view_popup               (EphyNodeView *view,
+                                               GtkWidget *menu);
 
 gboolean   ephy_node_view_get_iter_for_node   (EphyNodeView *view,
-					       GtkTreeIter *iter,
-					       EphyNode *node);
+                                               GtkTreeIter *iter,
+                                               EphyNode *node);
 
 G_END_DECLS

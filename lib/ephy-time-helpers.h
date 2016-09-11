@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  arch-tag: Header file for code cut and pasted from elsewhere
  *
@@ -25,9 +26,9 @@
 
 G_BEGIN_DECLS
 
-char      *eel_strdup_strftime			(const char *format,
-						 struct tm *time_pieces);
+char      *eel_strdup_strftime                        (const char *format,
+                                                       struct tm *time_pieces);
 
-char *     ephy_time_helpers_utf_friendly_time	(time_t date);
+char *     ephy_time_helpers_utf_friendly_time        (time_t date);
 
 G_END_DECLS

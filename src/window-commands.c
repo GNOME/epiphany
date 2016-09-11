@@ -1,5 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
-/* vim: set sw=8 ts=8 sts=8 noet: */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *  Copyright © 2009 Collabora Ltd.

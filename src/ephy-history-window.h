@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2003 Marco Pesenti Gritti <mpeseng@tin.it>
  *
@@ -27,6 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyHistoryWindow, ephy_history_window, EPHY, HISTORY_WINDOW, GtkDialog)
 
-GtkWidget	    *ephy_history_window_new        (EphyHistoryService *history_service);
+GtkWidget      *ephy_history_window_new        (EphyHistoryService *history_service);
 
 G_END_DECLS

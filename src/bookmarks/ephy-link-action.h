@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2004 Christian Persch
  *
@@ -23,54 +24,54 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_LINK_ACTION			(ephy_link_action_get_type ())
-#define EPHY_LINK_ACTION(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_LINK_ACTION, EphyLinkAction))
-#define EPHY_LINK_ACTION_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_LINK_ACTION, EphyLinkActionClass))
-#define EPHY_IS_LINK_ACTION(o)			(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_LINK_ACTION))
-#define EPHY_IS_LINK_ACTION_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LINK_ACTION))
-#define EPHY_LINK_ACTION_GET_CLASS(o)		(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_LINK_ACTION, EphyLinkActionClass))
+#define EPHY_TYPE_LINK_ACTION                    (ephy_link_action_get_type ())
+#define EPHY_LINK_ACTION(o)                      (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_LINK_ACTION, EphyLinkAction))
+#define EPHY_LINK_ACTION_CLASS(k)                (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_LINK_ACTION, EphyLinkActionClass))
+#define EPHY_IS_LINK_ACTION(o)                   (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_LINK_ACTION))
+#define EPHY_IS_LINK_ACTION_CLASS(k)             (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LINK_ACTION))
+#define EPHY_LINK_ACTION_GET_CLASS(o)            (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_LINK_ACTION, EphyLinkActionClass))
 
-#define EPHY_TYPE_LINK_ACTION_GROUP		(ephy_link_action_group_get_type ())
-#define EPHY_LINK_ACTION_GROUP(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_LINK_ACTION_GROUP, EphyLinkActionGroup))
-#define EPHY_LINK_ACTION_GROUP_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_LINK_ACTION_GROUP, EphyLinkActionGroupClass))
-#define EPHY_IS_LINK_ACTION_GROUP(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_LINK_ACTION_GROUP))
-#define EPHY_IS_LINK_ACTION_GROUP_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LINK_ACTION_GROUP))
-#define EPHY_LINK_ACTION_GROUP_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_LINK_ACTION_GROUP, EphyLinkActionGroupClass))
+#define EPHY_TYPE_LINK_ACTION_GROUP              (ephy_link_action_group_get_type ())
+#define EPHY_LINK_ACTION_GROUP(o)                (G_TYPE_CHECK_INSTANCE_CAST ((o), EPHY_TYPE_LINK_ACTION_GROUP, EphyLinkActionGroup))
+#define EPHY_LINK_ACTION_GROUP_CLASS(k)          (G_TYPE_CHECK_CLASS_CAST((k), EPHY_TYPE_LINK_ACTION_GROUP, EphyLinkActionGroupClass))
+#define EPHY_IS_LINK_ACTION_GROUP(o)             (G_TYPE_CHECK_INSTANCE_TYPE ((o), EPHY_TYPE_LINK_ACTION_GROUP))
+#define EPHY_IS_LINK_ACTION_GROUP_CLASS(k)       (G_TYPE_CHECK_CLASS_TYPE ((k), EPHY_TYPE_LINK_ACTION_GROUP))
+#define EPHY_LINK_ACTION_GROUP_GET_CLASS(o)      (G_TYPE_INSTANCE_GET_CLASS ((o), EPHY_TYPE_LINK_ACTION_GROUP, EphyLinkActionGroupClass))
 
-typedef struct _EphyLinkAction			EphyLinkAction;
-typedef struct _EphyLinkActionClass		EphyLinkActionClass;
-typedef struct _EphyLinkActionPrivate		EphyLinkActionPrivate;
+typedef struct _EphyLinkAction                   EphyLinkAction;
+typedef struct _EphyLinkActionClass              EphyLinkActionClass;
+typedef struct _EphyLinkActionPrivate            EphyLinkActionPrivate;
 
-typedef struct _EphyLinkActionGroup		EphyLinkActionGroup;
-typedef struct _EphyLinkActionGroupClass	EphyLinkActionGroupClass;
+typedef struct _EphyLinkActionGroup              EphyLinkActionGroup;
+typedef struct _EphyLinkActionGroupClass         EphyLinkActionGroupClass;
 
 struct _EphyLinkAction
 {
-	EphyWindowAction parent_instance;
+  EphyWindowAction parent_instance;
 
-	EphyLinkActionPrivate *priv;
+  EphyLinkActionPrivate *priv;
 };
 
 struct _EphyLinkActionClass
 {
-	EphyWindowActionClass parent_class;
+  EphyWindowActionClass parent_class;
 };
 
 struct _EphyLinkActionGroup
 {
-	GtkActionGroup parent_instance;
+  GtkActionGroup parent_instance;
 };
 
 struct _EphyLinkActionGroupClass
 {
-	GtkActionGroupClass parent_class;
+  GtkActionGroupClass parent_class;
 };
 
-GType ephy_link_action_get_type	  (void);
-guint ephy_link_action_get_button (EphyLinkAction *action);
+GType ephy_link_action_get_type       (void);
+guint ephy_link_action_get_button     (EphyLinkAction *action);
 
 GType ephy_link_action_group_get_type (void);
 
-EphyLinkActionGroup * ephy_link_action_group_new (const char *name);
+EphyLinkActionGroup *ephy_link_action_group_new (const char *name);
 
 G_END_DECLS

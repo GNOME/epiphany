@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2002 Marco Pesenti Gritti <mpeseng@tin.it>
  *
@@ -27,10 +28,10 @@ G_DECLARE_FINAL_TYPE (EphyTopicsPalette, ephy_topics_palette, EPHY, TOPICS_PALET
 
 enum
 {
-	EPHY_TOPICS_PALETTE_COLUMN_TITLE,
-	EPHY_TOPICS_PALETTE_COLUMN_NODE,
-	EPHY_TOPICS_PALETTE_COLUMN_SELECTED,
-	EPHY_TOPICS_PALETTE_COLUMNS
+  EPHY_TOPICS_PALETTE_COLUMN_TITLE,
+  EPHY_TOPICS_PALETTE_COLUMN_NODE,
+  EPHY_TOPICS_PALETTE_COLUMN_SELECTED,
+  EPHY_TOPICS_PALETTE_COLUMNS
 };
 
 EphyTopicsPalette *ephy_topics_palette_new         (EphyBookmarks     *bookmarks,
