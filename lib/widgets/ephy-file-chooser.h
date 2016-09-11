@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_FILE_CHOOSER_H
-#define EPHY_FILE_CHOOSER_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -54,5 +53,3 @@ GtkFileFilter	*ephy_file_chooser_add_mime_filter	(EphyFileChooser *dialog,
 							 ...);
 
 G_END_DECLS
-
-#endif

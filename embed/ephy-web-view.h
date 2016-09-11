@@ -18,8 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_WEB_VIEW_H
-#define EPHY_WEB_VIEW_H
+#pragma once
 
 #include <webkit2/webkit2.h>
 
@@ -117,5 +116,3 @@ char                      *ephy_web_view_get_web_app_title_finish (EphyWebView  
                                                                    GError                   **error);
 
 G_END_DECLS
-
-#endif

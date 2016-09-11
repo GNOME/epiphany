@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_URI_HELPERS_H
-#define EPHY_URI_HELPERS_H
+#pragma once
 
 #include <glib.h>
 
@@ -28,7 +27,3 @@ char *ephy_uri_decode (const char *uri);
 char *ephy_uri_normalize (const char *uri);
 
 G_END_DECLS
-
-#endif /* EPHY_URI_HELPERS_H */
-
-/* vim: set sw=2 ts=2 sts=2 et: */

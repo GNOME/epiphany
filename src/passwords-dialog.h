@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PASSWORDS_DIALOG_H
-#define PASSWORDS_DIALOG_H
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -26,5 +25,3 @@ G_DECLARE_FINAL_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, EPHY, PASSWORD
 EphyPasswordsDialog *ephy_passwords_dialog_new (void);
 
 G_END_DECLS
-
-#endif /* PASSWORDS_DIALOG_H */

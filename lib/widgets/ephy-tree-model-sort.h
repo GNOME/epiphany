@@ -14,8 +14,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_TREE_MODEL_SORT_H
-#define EPHY_TREE_MODEL_SORT_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -35,5 +34,3 @@ void		ephy_tree_model_sort_set_extra_drag_column_id (EphyTreeModelSort *ms,
 							       int id);
 
 G_END_DECLS
-
-#endif /* EPHY_TREE_MODEL_SORT_H */

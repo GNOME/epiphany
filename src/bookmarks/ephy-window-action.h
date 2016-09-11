@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_WINDOW_ACTION_H
-#define EPHY_WINDOW_ACTION_H
+#pragma once
 
 #include "ephy-window.h"
 
@@ -52,5 +51,3 @@ GType ephy_window_action_get_type (void);
 EphyWindow     *ephy_window_action_get_window       (EphyWindowAction *action);
 
 G_END_DECLS
-
-#endif

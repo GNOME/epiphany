@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_HISTORY_SERVICE_H
-#define EPHY_HISTORY_SERVICE_H
+#pragma once
 
 #include <glib-object.h>
 #include <gio/gio.h>
@@ -55,6 +54,3 @@ void                     ephy_history_service_clear                   (EphyHisto
 void                     ephy_history_service_find_hosts              (EphyHistoryService *self, gint64 from, gint64 to, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 
 G_END_DECLS
-
-#endif /* EPHY_HISTORY_SERVICE_H */
-

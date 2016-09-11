@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_LINK_H
-#define EPHY_LINK_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -59,5 +58,3 @@ EphyEmbed *ephy_link_open		(EphyLink *link,
 EphyLinkFlags ephy_link_flags_from_current_event (void);
 
 G_END_DECLS
-
-#endif /* EPHY_LINK_H */

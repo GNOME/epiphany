@@ -17,14 +17,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARKS_MENU_H
-#define EPHY_BOOKMARKS_MENU_H
+#pragma once
 
 #include "ephy-window.h"
 #include "ephy-node.h"
 
 #include <gtk/gtk.h>
 
+G_BEGIN_DECLS
+
 void ephy_bookmarks_menu_build (GMenu *menu, EphyNode *parent);
 
-#endif
+G_END_DECLS

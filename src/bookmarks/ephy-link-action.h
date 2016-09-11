@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_LINK_ACTION_H
-#define EPHY_LINK_ACTION_H
+#pragma once
 
 #include "ephy-window-action.h"
 
@@ -75,5 +74,3 @@ GType ephy_link_action_group_get_type (void);
 EphyLinkActionGroup * ephy_link_action_group_new (const char *name);
 
 G_END_DECLS
-
-#endif

@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_DND_H
-#define EPHY_DND_H
+#pragma once
 
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -45,5 +44,3 @@ gboolean ephy_dnd_drag_data_get			(GtkWidget *widget,
 						 EphyDragEachSelectedItemIterator each_selected_item_iterator);
 
 G_END_DECLS
-
-#endif

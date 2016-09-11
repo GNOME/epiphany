@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_SEARCH_PROVIDER_H
-#define _EPHY_SEARCH_PROVIDER_H
+#pragma once
 
 #include "ephy-shell-search-provider-generated.h"
 
@@ -32,5 +31,3 @@ G_DECLARE_FINAL_TYPE (EphySearchProvider, ephy_search_provider, EPHY, SEARCH_PRO
 EphySearchProvider *ephy_search_provider_new (void);
 
 G_END_DECLS
-
-#endif /* _EPHY_SEARCH_PROVIDER_H */

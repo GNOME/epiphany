@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_TOPIC_ACTION_H
-#define EPHY_TOPIC_ACTION_H
+#pragma once
 
 #include "ephy-link-action.h"
 #include "ephy-node.h"
@@ -65,5 +64,3 @@ EphyNode       *ephy_topic_action_get_topic	(EphyTopicAction *action);
 void		ephy_topic_action_updated	(EphyTopicAction *action);
 
 G_END_DECLS
-
-#endif

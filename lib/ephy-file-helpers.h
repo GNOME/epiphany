@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_FILE_HELPERS_H
-#define EPHY_FILE_HELPERS_H
+#pragma once
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -94,5 +93,3 @@ GAppInfo   *       ephy_file_launcher_get_app_info_for_file (GFile              
 void               ephy_open_incognito_window               (const char *uri);
 
 G_END_DECLS
-
-#endif /* EPHY_FILE_HELPERS_H */

@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARKS_EXPORT_H
-#define EPHY_BOOKMARKS_EXPORT_H
+#pragma once
 
 #include "ephy-bookmarks.h"
 
@@ -29,5 +28,3 @@ void ephy_bookmarks_export_mozilla (EphyBookmarks *bookmarks,
 				    const char *filename);
 
 G_END_DECLS
-
-#endif

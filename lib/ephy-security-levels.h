@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SECURITY_LEVELS_H
-#define EPHY_SECURITY_LEVELS_H
+#pragma once
 
 #include "glib.h"
 
@@ -43,5 +42,3 @@ typedef enum
 const char *ephy_security_level_to_icon_name (EphySecurityLevel level);
 
 G_END_DECLS
-
-#endif

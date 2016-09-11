@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARKS_EDITOR_H
-#define EPHY_BOOKMARKS_EDITOR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -35,5 +34,3 @@ void		     ephy_bookmarks_editor_set_parent (EphyBookmarksEditor *ebe,
 						       GtkWidget *window);
 
 G_END_DECLS
-
-#endif /* EPHY_BOOKMARKS_EDITOR_H */

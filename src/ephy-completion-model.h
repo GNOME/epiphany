@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_COMPLETION_MODEL_H
-#define EPHY_COMPLETION_MODEL_H
+#pragma once
 
 #include "ephy-bookmarks.h"
 #include "ephy-history-service.h"
@@ -49,5 +48,3 @@ void                 ephy_completion_model_update_for_string (EphyCompletionMode
                                                               EphyHistoryJobCallback callback,
                                                               gpointer data);
 G_END_DECLS
-
-#endif /* EPHY_COMPLETION_MODEL_H */

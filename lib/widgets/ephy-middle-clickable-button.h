@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EPHY_MIDDLE_CLICKABLE_BUTTON_H__
-#define __EPHY_MIDDLE_CLICKABLE_BUTTON_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -31,5 +30,3 @@ G_DECLARE_FINAL_TYPE (EphyMiddleClickableButton, ephy_middle_clickable_button, E
 GtkWidget *ephy_middle_clickable_button_new      (void);
 
 G_END_DECLS
-
-#endif

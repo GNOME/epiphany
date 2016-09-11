@@ -21,8 +21,7 @@
  *
  */
 
-#ifndef __NAUTILUS_FLOATING_BAR_H__
-#define __NAUTILUS_FLOATING_BAR_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -74,6 +73,3 @@ void        nautilus_floating_bar_add_action       (NautilusFloatingBar *self,
 						    const gchar *icon_name,
 						    gint action_id);
 void        nautilus_floating_bar_cleanup_actions  (NautilusFloatingBar *self);
-
-#endif /* __NAUTILUS_FLOATING_BAR_H__ */
-

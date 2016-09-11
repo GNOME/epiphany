@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_STRING_H
-#define EPHY_STRING_H
+#pragma once
 
 #include <glib.h>
 #include <glib-object.h>
@@ -40,5 +39,3 @@ char    **ephy_string_commandline_args_to_uris (char **arguments, GError **error
 
 
 G_END_DECLS
-
-#endif

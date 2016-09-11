@@ -16,12 +16,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include "ephy-embed-shell.h"
 #include "ephy-history-types.h"
 #include "ephy-web-view.h"
-
-#ifndef EPHY_EMBED_PRIVATE_H
-#define EPHY_EMBED_PRIVATE_H
 
 G_BEGIN_DECLS
 
@@ -52,6 +51,3 @@ char *                     ephy_web_view_create_web_application   (EphyWebView  
                                                                    const char                *title,
                                                                    GdkPixbuf                 *icon);
 G_END_DECLS
-
-#endif
-

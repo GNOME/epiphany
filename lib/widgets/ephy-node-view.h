@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EPHY_NODE_VIEW_H
-#define __EPHY_NODE_VIEW_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -114,5 +113,3 @@ gboolean   ephy_node_view_get_iter_for_node   (EphyNodeView *view,
 					       EphyNode *node);
 
 G_END_DECLS
-
-#endif /* EPHY_NODE_VIEW_H */

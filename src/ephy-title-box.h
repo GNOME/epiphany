@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EPHY_TITLE_BOX_H__
-#define __EPHY_TITLE_BOX_H__
+#pragma once
 
 #include <gtk/gtk.h>
 #include <webkit2/webkit2.h>
@@ -56,5 +55,3 @@ void                ephy_title_box_set_address          (EphyTitleBox         *t
                                                          const char           *address);
 
 G_END_DECLS
-
-#endif /* __EPHY_TITLE_BOX_H__ */

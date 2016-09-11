@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_LOCATION_ENTRY_H
-#define EPHY_LOCATION_ENTRY_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -77,5 +76,3 @@ void		ephy_location_entry_set_lock_tooltip	(EphyLocationEntry *entry,
 							 const char *tooltip);
 
 G_END_DECLS
-
-#endif

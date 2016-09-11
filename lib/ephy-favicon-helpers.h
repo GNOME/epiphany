@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_FAVICON_HELPERS_H
-#define EPHY_FAVICON_HELPERS_H
+#pragma once
 
 #include <cairo.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -26,5 +25,3 @@ G_BEGIN_DECLS
 GdkPixbuf *ephy_pixbuf_get_from_surface_scaled (cairo_surface_t *surface, int width, int height);
 
 G_END_DECLS
-
-#endif /* EPHY_FAVICON_HELPERS_H */

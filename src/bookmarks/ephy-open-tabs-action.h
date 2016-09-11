@@ -15,13 +15,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_OPEN_TABS_ACTION_H
-#define EPHY_OPEN_TABS_ACTION_H
+#pragma once
 
 #include <gtk/gtk.h>
 
 #include "ephy-node.h"
 
+G_BEGIN_DECLS
+
 GtkActionGroup	*ephy_open_tabs_group_new	(EphyNode *node);
 
-#endif
+G_END_DECLS

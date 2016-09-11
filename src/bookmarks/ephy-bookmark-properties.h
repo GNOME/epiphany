@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARK_PROPERTIES_H
-#define EPHY_BOOKMARK_PROPERTIES_H
+#pragma once
 
 #include "ephy-bookmarks.h"
 
@@ -36,5 +35,3 @@ GtkWidget	*ephy_bookmark_properties_new		(EphyBookmarks *bookmarks,
 EphyNode	*ephy_bookmark_properties_get_node	(EphyBookmarkProperties *properties);
 
 G_END_DECLS
-
-#endif /* EPHY_BOOKMARK_PROPERTIES_H */

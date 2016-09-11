@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SQLITE_H
-#define EPHY_SQLITE_H
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -31,5 +30,3 @@ typedef enum {
 #define EPHY_SQLITE_LIMIT_LIKE_PATTERN_LENGTH 50000
 
 G_END_DECLS
-
-#endif /* EPHY_SQLITE_H */

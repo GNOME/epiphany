@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARK_ACTION_GROUP_H
-#define EPHY_BOOKMARK_ACTION_GROUP_H
+#pragma once
 
 #include "ephy-link-action.h"
 #include "ephy-node.h"
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 GtkActionGroup * ephy_bookmark_group_new       (EphyNode *node);
 
 G_END_DECLS
-
-#endif

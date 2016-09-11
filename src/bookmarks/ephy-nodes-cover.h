@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_NODES_COVER_H
-#define EPHY_NODES_COVER_H
+#pragma once
 
 #include "ephy-bookmarks.h"
 
@@ -36,5 +35,3 @@ GPtrArray * ephy_nodes_get_covering (const GPtrArray *parents, const GPtrArray *
 				     GPtrArray *_covering, GPtrArray *_uncovered, GArray *_sizes);
 
 G_END_DECLS
-
-#endif /* EPHY_NODES_COVER_H */

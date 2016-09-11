@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_LANGS_H
-#define EPHY_LANGS_H
+#pragma once
 
 #include <glib.h>
 
@@ -37,5 +36,3 @@ GHashTable		    *ephy_langs_iso_639_table	 (void);
 GHashTable		    *ephy_langs_iso_3166_table   (void);
 
 G_END_DECLS
-
-#endif

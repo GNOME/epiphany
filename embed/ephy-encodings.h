@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_ENCODINGS_H
-#define EPHY_ENCODINGS_H
+#pragma once
 
 #include <glib-object.h>
 #include <glib.h>
@@ -43,5 +42,3 @@ void           ephy_encodings_add_recent    (EphyEncodings     *encodings,
 GList         *ephy_encodings_get_recent    (EphyEncodings     *encodings);
 
 G_END_DECLS
-
-#endif

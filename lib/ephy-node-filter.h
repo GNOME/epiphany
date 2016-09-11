@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_NODE_FILTER_H
-#define EPHY_NODE_FILTER_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -74,5 +73,3 @@ EphyNodeFilterExpression *ephy_node_filter_expression_new  (EphyNodeFilterExpres
 void                      ephy_node_filter_expression_free (EphyNodeFilterExpression *expression);
 
 G_END_DECLS
-
-#endif /* EPHY_NODE_FILTER_H */

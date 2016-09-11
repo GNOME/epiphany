@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EPHY_TREE_MODEL_NODE_H
-#define __EPHY_TREE_MODEL_NODE_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -55,5 +54,3 @@ void               ephy_tree_model_node_iter_from_node   (EphyTreeModelNode *mod
 						          GtkTreeIter *iter);
 
 G_END_DECLS
-
-#endif /* EPHY_TREE_MODEL_NODE_H */

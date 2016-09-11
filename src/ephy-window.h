@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_WINDOW_H
-#define EPHY_WINDOW_H
+#pragma once
 
 #include "ephy-web-view.h"
 
@@ -57,5 +56,3 @@ gboolean          ephy_window_close               (EphyWindow *window);
 EphyWindowChrome  ephy_window_get_chrome          (EphyWindow *window);
 
 G_END_DECLS
-
-#endif

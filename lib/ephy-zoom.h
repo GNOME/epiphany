@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_ZOOM_H
-#define EPHY_ZOOM_H
+#pragma once
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -60,5 +59,3 @@ float ephy_zoom_get_changed_zoom_level (float level,
 float ephy_zoom_get_nearest_zoom_level (float level);
 
 G_END_DECLS
-
-#endif

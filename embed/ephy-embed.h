@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_EMBED_H
-#define EPHY_EMBED_H
+#pragma once
 
 #include "ephy-find-toolbar.h"
 #include "ephy-web-view.h"
@@ -48,5 +47,3 @@ gboolean         ephy_embed_inspector_is_loaded      (EphyEmbed *embed);
 const char      *ephy_embed_get_title                (EphyEmbed *embed);
 
 G_END_DECLS
-
-#endif

@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_LOCATION_CONTROLLER_H
-#define EPHY_LOCATION_CONTROLLER_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -32,5 +31,3 @@ void		ephy_location_controller_set_address	(EphyLocationController *controller,
 							 const char *address);
 
 G_END_DECLS
-
-#endif

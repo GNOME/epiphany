@@ -20,8 +20,7 @@
  * along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_DOWNLOAD_WIDGET_H
-#define _EPHY_DOWNLOAD_WIDGET_H
+#pragma once
 
 #include <glib-object.h>
 #include "ephy-download.h"
@@ -37,5 +36,3 @@ GtkWidget     *ephy_download_widget_new          (EphyDownload *ephy_download);
 EphyDownload  *ephy_download_widget_get_download (EphyDownloadWidget *widget);
 
 G_END_DECLS
-
-#endif /* _EPHY_DOWNLOAD_WIDGET_H */

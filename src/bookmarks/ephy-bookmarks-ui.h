@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARKS_UI_H
-#define EPHY_BOOKMARKS_UI_H
+#pragma once
 
 #include "ephy-window.h"
 #include "ephy-node.h"
@@ -57,5 +56,3 @@ void	ephy_bookmarks_ui_show_bookmark		(GtkWindow *parent,
 											 EphyNode  *bookmark);
 
 G_END_DECLS
-
-#endif

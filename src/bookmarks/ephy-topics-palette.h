@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_TOPICS_PALETTE_H
-#define EPHY_TOPICS_PALETTE_H
+#pragma once
 
 #include "ephy-bookmarks.h"
 #include <gtk/gtk.h>
@@ -40,5 +39,3 @@ EphyTopicsPalette *ephy_topics_palette_new         (EphyBookmarks     *bookmarks
 void               ephy_topics_palette_update_list (EphyTopicsPalette *self);
 
 G_END_DECLS
-
-#endif /* EPHY_TOPICS_PALETTE_H */

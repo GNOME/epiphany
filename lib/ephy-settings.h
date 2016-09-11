@@ -17,13 +17,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SETTINGS_H
-#define EPHY_SETTINGS_H
+#pragma once
 
 #include <glib.h>
 #include <gio/gio.h>
 
 #include "ephy-prefs.h"
+
+G_BEGIN_DECLS
 
 #define EPHY_SETTINGS_MAIN      ephy_settings_get (EPHY_PREFS_SCHEMA)
 #define EPHY_SETTINGS_UI        ephy_settings_get (EPHY_PREFS_UI_SCHEMA)
@@ -35,4 +36,4 @@ GSettings *ephy_settings_get (const char *schema);
 
 void ephy_settings_shutdown (void);
 
-#endif /* EPHY_SETTINGS_H */
+G_END_DECLS

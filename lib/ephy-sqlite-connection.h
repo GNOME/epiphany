@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SQLITE_CONNECTION_H
-#define EPHY_SQLITE_CONNECTION_H
+#pragma once
 
 #include <glib-object.h>
 #include "ephy-sqlite-statement.h"
@@ -45,6 +44,3 @@ gboolean                ephy_sqlite_connection_commit_transaction      (EphySQLi
 gboolean                ephy_sqlite_connection_table_exists            (EphySQLiteConnection *self, const char *table_name);
 
 G_END_DECLS
-
-#endif /* EPHY_SQLITE_CONNECTION_H */
-

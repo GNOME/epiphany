@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WINDOW_COMMANDS_H
-#define WINDOW_COMMANDS_H
+#pragma once
 
 #include "ephy-window.h"
 
@@ -178,5 +177,3 @@ void window_cmd_tabs_close                      (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
 G_END_DECLS
-
-#endif

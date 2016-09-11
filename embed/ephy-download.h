@@ -20,8 +20,7 @@
  * along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_DOWNLOAD_H
-#define _EPHY_DOWNLOAD_H
+#pragma once
 
 #include <glib-object.h>
 #include <webkit2/webkit2.h>
@@ -65,5 +64,3 @@ gboolean      ephy_download_do_download_action    (EphyDownload *download,
                                                    EphyDownloadActionType action);
 
 G_END_DECLS
-
-#endif /* _EPHY_DOWNLOAD_H */

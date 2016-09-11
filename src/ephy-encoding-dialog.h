@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_ENCODING_DIALOG_H
-#define EPHY_ENCODING_DIALOG_H
+#pragma once
 
 #include "ephy-window.h"
 #include <gtk/gtk.h>
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (EphyEncodingDialog, ephy_encoding_dialog, EPHY, ENCODING_D
 EphyEncodingDialog	*ephy_encoding_dialog_new	(EphyWindow *window);
 
 G_END_DECLS
-
-#endif /* EPHY_ENCODING_DIALOG_H */

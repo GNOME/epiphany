@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_GUI_H
-#define EPHY_GUI_H
+#pragma once
 
 #include <gdk/gdkkeysyms.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -59,5 +58,3 @@ void		ephy_gui_window_update_user_time	 (GtkWidget *window,
 							  guint32 user_time);
 
 G_END_DECLS
-
-#endif

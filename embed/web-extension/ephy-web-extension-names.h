@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_WEB_EXTENSION_NAMES_H
-#define EPHY_WEB_EXTENSION_NAMES_H
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -25,5 +24,3 @@ G_BEGIN_DECLS
 #define EPHY_WEB_EXTENSION_INTERFACE    "org.gnome.Epiphany.WebExtension"
 
 G_END_DECLS
-
-#endif /* EPHY_WEB_EXTENSION_NAMES_H */

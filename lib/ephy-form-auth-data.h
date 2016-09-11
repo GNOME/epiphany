@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_FORM_AUTH_DATA_H
-#define EPHY_FORM_AUTH_DATA_H
+#pragma once
 
 #define SECRET_API_SUBJECT_TO_CHANGE
 
@@ -72,5 +71,3 @@ void                   ephy_form_auth_data_cache_add      (EphyFormAuthDataCache
                                                            const char            *username);
 GSList                *ephy_form_auth_data_cache_get_list (EphyFormAuthDataCache *cache,
                                                            const char            *uri);
-
-#endif

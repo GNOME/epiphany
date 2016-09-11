@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EPHY_EMBED_PREFS_H__
-#define __EPHY_EMBED_PREFS_H__
+#pragma once
 
 #include "ephy-embed.h"
 
@@ -33,5 +32,3 @@ void ephy_embed_prefs_set_cookie_accept_policy          (WebKitCookieManager *co
                                                          const char          *settings_policy);
 
 G_END_DECLS
-
-#endif /* __EPHY_EMBED_PREFS_H__ */

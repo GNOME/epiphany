@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef EPHY_DOWNLOADS_PROGRESS_ICON_H
-#define EPHY_DOWNLOADS_PROGRESS_ICON_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -33,5 +32,3 @@ G_DECLARE_FINAL_TYPE (EphyDownloadsProgressIcon, ephy_downloads_progress_icon, E
 GtkWidget *ephy_downloads_progress_icon_new      (void);
 
 G_END_DECLS
-
-#endif

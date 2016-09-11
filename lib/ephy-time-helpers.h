@@ -19,8 +19,7 @@
 
 /* Following code is copied from Rhythmbox rb-cut-and-paste-code.h */
 
-#ifndef EPHY_TIME_HELPERS_H
-#define EPHY_TIME_HELPERS_H
+#pragma once
 
 #include <time.h>
 
@@ -32,5 +31,3 @@ char      *eel_strdup_strftime			(const char *format,
 char *     ephy_time_helpers_utf_friendly_time	(time_t date);
 
 G_END_DECLS
-
-#endif /* EPHY_TIME_HELPERS_H */

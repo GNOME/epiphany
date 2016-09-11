@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_TOOLBAR_H
-#define EPHY_TOOLBAR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -42,5 +41,3 @@ GtkWidget    *ephy_toolbar_get_page_menu_button              (EphyToolbar *toolb
 GtkWidget    *ephy_toolbar_get_new_tab_button                (EphyToolbar *toolbar);
 
 G_END_DECLS
-
-#endif /* EPHY_TOOLBAR_H */

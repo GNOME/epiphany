@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLEAR_DATA_DIALOG_H
-#define CLEAR_DATA_DIALOG_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -28,5 +27,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (ClearDataDialog, clear_data_dialog, EPHY, CLEAR_DATA_DIALOG, GtkDialog)
 
 G_END_DECLS
-
-#endif

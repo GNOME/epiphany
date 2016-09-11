@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COOKIES_DIALOG_H
-#define COOKIES_DIALOG_H
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -26,5 +25,3 @@ G_DECLARE_FINAL_TYPE (EphyCookiesDialog, ephy_cookies_dialog, EPHY, COOKIES_DIAL
 EphyCookiesDialog *ephy_cookies_dialog_new (void);
 
 G_END_DECLS
-
-#endif /* COOKIES_DIALOG_H */

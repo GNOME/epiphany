@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_WEB_EXTENSION_PROXY_H
-#define EPHY_WEB_EXTENSION_PROXY_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -73,5 +72,3 @@ void                   ephy_web_extension_proxy_history_delete_host             
 void                   ephy_web_extension_proxy_history_clear                             (EphyWebExtensionProxy *web_extension);
 
 G_END_DECLS
-
-#endif /* !EPHY_WEB_EXTENSION_PROXY_H */

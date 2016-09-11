@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_NOTEBOOK_H
-#define EPHY_NOTEBOOK_H
+#pragma once
 
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -44,5 +43,3 @@ void            ephy_notebook_next_page         (EphyNotebook *notebook);
 void            ephy_notebook_prev_page         (EphyNotebook *notebook);
 
 G_END_DECLS
-
-#endif /* EPHY_NOTEBOOK_H */

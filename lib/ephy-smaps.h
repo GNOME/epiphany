@@ -17,10 +17,11 @@
  *
  */
 
-#ifndef EPHY_SMAPS_H
-#define EPHY_SMAPS_H
+#pragma once
 
 #include <glib-object.h>
+
+G_BEGIN_DECLS
 
 #define EPHY_TYPE_SMAPS (ephy_smaps_get_type ())
 
@@ -29,4 +30,4 @@ G_DECLARE_FINAL_TYPE (EphySMaps, ephy_smaps, EPHY, SMAPS, GObject)
 EphySMaps * ephy_smaps_new      (void);
 char      * ephy_smaps_to_html  (EphySMaps *smaps);
 
-#endif /* EPHY_SMAPS_H */
+G_END_DECLS

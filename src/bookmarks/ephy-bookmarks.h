@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARKS_H
-#define EPHY_BOOKMARKS_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -131,5 +130,3 @@ int            ephy_bookmarks_compare_bookmarks         (gconstpointer a, gconst
 int            ephy_bookmarks_compare_bookmark_pointers (gconstpointer a, gconstpointer b);
 
 G_END_DECLS
-
-#endif

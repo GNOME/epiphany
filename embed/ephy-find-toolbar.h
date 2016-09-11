@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_FIND_TOOLBAR_H
-#define EPHY_FIND_TOOLBAR_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -48,5 +47,3 @@ void		 ephy_find_toolbar_request_close (EphyFindToolbar *toolbar);
 void		 ephy_find_toolbar_toggle_state	 (EphyFindToolbar *toolbar);
 
 G_END_DECLS
-
-#endif /* EPHY_FIND_TOOLBAR_H */

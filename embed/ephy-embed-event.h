@@ -18,8 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_EMBED_EVENT_H
-#define EPHY_EMBED_EVENT_H
+#pragma once
 
 #include <webkit2/webkit2.h>
 
@@ -45,5 +44,3 @@ gboolean             ephy_embed_event_has_property        (EphyEmbedEvent      *
 WebKitHitTestResult *ephy_embed_event_get_hit_test_result (EphyEmbedEvent      *event);
 
 G_END_DECLS
-
-#endif

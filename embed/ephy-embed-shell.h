@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_EMBED_SHELL_H
-#define EPHY_EMBED_SHELL_H
+#pragma once
 
 #include <webkit2/webkit2.h>
 #include "ephy-downloads-manager.h"
@@ -75,5 +74,3 @@ WebKitUserContentManager *ephy_embed_shell_get_user_content_manager (EphyEmbedSh
 EphyDownloadsManager     *ephy_embed_shell_get_downloads_manager    (EphyEmbedShell *shell);
 
 G_END_DECLS
-
-#endif /* !EPHY_EMBED_SHELL_H */

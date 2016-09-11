@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_DEBUG_H
-#define EPHY_DEBUG_H
+#pragma once
 
 #include <glib.h>
 
@@ -77,5 +76,3 @@ void		ephy_profiler_stop	(const char *name);
 #endif
 
 G_END_DECLS
-
-#endif

@@ -15,10 +15,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_PROFILE_UTILS_H
-#define EPHY_PROFILE_UTILS_H
+#pragma once
 
 #include <glib.h>
+
+G_BEGIN_DECLS
 
 #define EPHY_PROFILE_MIGRATION_VERSION 10
 
@@ -32,4 +33,4 @@ gboolean ephy_profile_utils_set_migration_version (int version);
 
 gboolean ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run, gboolean debug);
 
-#endif
+G_END_DECLS

@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_NODE_DB_H
-#define EPHY_NODE_DB_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -64,5 +63,3 @@ void	      _ephy_node_db_remove_id		(EphyNodeDb *db,
 						 guint id);
 
 G_END_DECLS
-
-#endif /* __EPHY_NODE_DB_H */

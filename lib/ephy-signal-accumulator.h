@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SIGNAL_ACCUMULATORS_H
-#define EPHY_SIGNAL_ACCUMULATORS_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -33,5 +32,3 @@ gboolean ephy_signal_accumulator_string	(GSignalInvocationHint *ihint,
 					 gpointer accu_data);
 
 G_END_DECLS
-
-#endif /* EPHY_SIGNAL_ACCUMULATORS_H */

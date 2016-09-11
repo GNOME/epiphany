@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_WEB_OVERVIEW_H
-#define _EPHY_WEB_OVERVIEW_H
+#pragma once
 
 #include "ephy-web-overview-model.h"
 #include <webkit2/webkit-web-extension.h>
@@ -35,5 +34,3 @@ void             ephy_web_overview_init_js  (EphyWebOverview      *overview,
                                              JSGlobalContextRef    context);
 
 G_END_DECLS
-
-#endif /* _EPHY_WEB_OVERVIEW_H */

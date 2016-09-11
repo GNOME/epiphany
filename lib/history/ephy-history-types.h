@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_HISTORY_TYPES_H
-#define EPHY_HISTORY_TYPES_H
+#pragma once
 
 #include <glib.h>
 
@@ -123,5 +122,3 @@ void                            ephy_history_query_free (EphyHistoryQuery *query
 EphyHistoryQuery *              ephy_history_query_copy (EphyHistoryQuery *query);
 
 G_END_DECLS
-
-#endif /* EPHY_HISTORY_TYPES_H */

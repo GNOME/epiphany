@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_DBUS_UTIL_H
-#define EPHY_DBUS_UTIL_H
+#pragma once
 
 #include <gio/gio.h>
 
@@ -25,5 +24,3 @@ G_BEGIN_DECLS
 gboolean ephy_dbus_peer_is_authorized (GCredentials *peer_credentials);
 
 G_END_DECLS
-
-#endif

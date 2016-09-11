@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef EPHY_SECURITY_POPOVER_H
-#define EPHY_SECURITY_POPOVER_H
+#pragma once
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -38,5 +37,3 @@ GtkWidget *ephy_security_popover_new      (GtkWidget *relative_to,
                                            EphySecurityLevel security_level);
 
 G_END_DECLS
-
-#endif

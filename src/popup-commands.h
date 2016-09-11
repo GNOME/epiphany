@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef POPUP_COMMANDS_H
-#define POPUP_COMMANDS_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -80,5 +79,3 @@ void popup_cmd_search_selection         (GSimpleAction *action,
                                          gpointer       user_data);
 
 G_END_DECLS
-
-#endif

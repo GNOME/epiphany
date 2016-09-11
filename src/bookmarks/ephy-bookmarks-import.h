@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARKS_IMPORT_H
-#define EPHY_BOOKMARKS_IMPORT_H
+#pragma once
 
 #include "ephy-bookmarks.h"
 
@@ -43,5 +42,3 @@ gboolean ephy_bookmarks_import_rdf     (EphyBookmarks *bookmarks,
 					const char *filename);
 
 G_END_DECLS
-
-#endif

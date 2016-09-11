@@ -15,6 +15,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 static const char languages[][7] =
 {
 /* If you're missing your language/locale combination, file a bug at

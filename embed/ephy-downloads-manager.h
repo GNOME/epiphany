@@ -18,8 +18,7 @@
  *
  */
 
-#ifndef EPHY_DOWNLOADS_MANAGER_H
-#define EPHY_DOWNLOADS_MANAGER_H
+#pragma once
 
 #include "ephy-download.h"
 
@@ -38,5 +37,3 @@ GList   *ephy_downloads_manager_get_downloads          (EphyDownloadsManager *ma
 gdouble  ephy_downloads_manager_get_estimated_progress (EphyDownloadsManager *manager);
 
 G_END_DECLS
-
-#endif /* EPHY_DOWNLOADS_MANAGER_H */

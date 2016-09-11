@@ -15,8 +15,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EPHY_NODE_COMMON_H
-#define __EPHY_NODE_COMMON_H
+#pragma once
+
+G_BEGIN_DECLS
 
 /* Databases */
 #define EPHY_NODE_DB_HISTORY "EphyHistory"
@@ -46,4 +47,4 @@ typedef enum
 	EPHY_NODE_NORMAL_PRIORITY
 } EphyNodePriority;
 
-#endif /* EPHY_NODE_COMMON_H */
+G_END_DECLS

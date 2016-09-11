@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_ENCODING_H
-#define EPHY_ENCODING_H
+#pragma once
 
 #include <glib-object.h>
 #include <glib.h>
@@ -65,5 +64,3 @@ const char    * ephy_encoding_get_collation_key   (EphyEncoding *encoding);
 int             ephy_encoding_get_language_groups (EphyEncoding *encoding);
 
 G_END_DECLS
-
-#endif

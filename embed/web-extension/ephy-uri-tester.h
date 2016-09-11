@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef URI_TESTER_H
-#define URI_TESTER_H
+#pragma once
 
 #include <glib-object.h>
 #include <glib.h>
@@ -37,5 +36,3 @@ void           ephy_uri_tester_set_filters (EphyUriTester *tester,
                                             GSList *filters);
 
 G_END_DECLS
-
-#endif /* URI_TESTER_H */

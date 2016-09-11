@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_HISTORY_WINDOW_H
-#define EPHY_HISTORY_WINDOW_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -31,5 +30,3 @@ G_DECLARE_FINAL_TYPE (EphyHistoryWindow, ephy_history_window, EPHY, HISTORY_WIND
 GtkWidget	    *ephy_history_window_new        (EphyHistoryService *history_service);
 
 G_END_DECLS
-
-#endif /* EPHY_HISTORY_WINDOW_H */

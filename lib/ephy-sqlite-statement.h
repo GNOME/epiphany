@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SQLITE_STATEMENT_H
-#define EPHY_SQLITE_STATEMENT_H
+#pragma once
 
 #include <glib-object.h>
 #include "ephy-sqlite.h"
@@ -49,6 +48,3 @@ const void*              ephy_sqlite_statement_get_column_as_blob    (EphySQLite
 char*                    ephy_sqlite_create_match_pattern (const char *match_string);
 
 G_END_DECLS
-
-#endif /* EPHY_SQLITE_STATEMENT_H */
-

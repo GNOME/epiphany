@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_EMBED_CONTAINER_H
-#define EPHY_EMBED_CONTAINER_H
+#pragma once
 
 #include "ephy-embed.h"
 #include "ephy-web-view.h"
@@ -65,5 +64,3 @@ GList *           ephy_embed_container_get_children     (EphyEmbedContainer *con
 gboolean          ephy_embed_container_get_is_popup     (EphyEmbedContainer *container);
 
 G_END_DECLS
-
-#endif

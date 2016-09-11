@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_PREFS_H
-#define EPHY_PREFS_H
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -125,5 +124,3 @@ typedef enum
 #define EPHY_PREFS_LOCKDOWN_JAVASCRIPT_CHROME "disable-javascript-chrome"
 
 G_END_DECLS
-
-#endif

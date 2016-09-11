@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_TOPICS_ENTRY_H
-#define EPHY_TOPICS_ENTRY_H
+#pragma once
 
 #include "ephy-bookmarks.h"
 
@@ -30,5 +29,3 @@ G_DECLARE_FINAL_TYPE (EphyTopicsEntry, ephy_topics_entry, EPHY, TOPICS_ENTRY, Gt
 GtkWidget *ephy_topics_entry_new (EphyBookmarks *bookmarks, EphyNode *bookmark);
 
 G_END_DECLS
-
-#endif /* EPHY_TOPICS_ENTRY_H */

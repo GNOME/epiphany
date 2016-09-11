@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_EMBED_FORM_AUTH_H
-#define EPHY_EMBED_FORM_AUTH_H
+#pragma once
 
 #include <glib-object.h>
 #include <libsoup/soup.h>
@@ -41,5 +40,3 @@ const char        *ephy_embed_form_auth_get_username      (EphyEmbedFormAuth *fo
 WebKitDOMDocument *ephy_embed_form_auth_get_owner_document(EphyEmbedFormAuth *form_auth);
 
 G_END_DECLS
-
-#endif /* EPHY_EMBED_FORM_AUTH_H */

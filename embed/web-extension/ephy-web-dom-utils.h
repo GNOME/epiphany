@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_WEB_DOM_UTILS_H
-#define EPHY_WEB_DOM_UTILS_H
+#pragma once
 
 #include <webkitdom/webkitdom.h>
 #define WEBKIT_DOM_USE_UNSTABLE_API
@@ -48,5 +47,3 @@ void ephy_web_dom_utils_get_absolute_position_for_element(WebKitDOMElement *elem
 char *ephy_web_dom_utils_get_selection_as_string (WebKitDOMDOMSelection *selection);
 
 G_END_DECLS
-
-#endif

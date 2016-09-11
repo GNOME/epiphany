@@ -16,10 +16,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_HISTORY_SERVICE_PRIVATE_H
-#define EPHY_HISTORY_SERVICE_PRIVATE_H
+#pragma once
 
 #include "ephy-sqlite-connection.h"
+
+G_BEGIN_DECLS
 
 struct _EphyHistoryService {
   GObject parent_instance;
@@ -55,4 +56,4 @@ EphyHistoryHost *        ephy_history_service_get_host_row_from_url   (EphyHisto
 void                     ephy_history_service_delete_host_row         (EphyHistoryService *self, EphyHistoryHost *host);
 void                     ephy_history_service_delete_orphan_hosts     (EphyHistoryService *self);
 
-#endif /* EPHY_HISTORY_SERVICE_PRIVATE_H */
+G_END_DECLS

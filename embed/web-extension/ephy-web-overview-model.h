@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_WEB_OVERVIEW_MODEL_H
-#define _EPHY_WEB_OVERVIEW_MODEL_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -58,5 +57,3 @@ EphyWebOverviewModelItem *ephy_web_overview_model_item_new  (const char         
 void                      ephy_web_overview_model_item_free (EphyWebOverviewModelItem *item);
 
 G_END_DECLS
-
-#endif /* _EPHY_WEB_OVERVIEW_MODEL_H */

@@ -19,8 +19,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_EMBED_UTILS_H
-#define EPHY_EMBED_UTILS_H
+#pragma once
 
 #include "ephy-web-view.h"
 #include <webkit2/webkit2.h>
@@ -49,5 +48,3 @@ double   ephy_embed_utils_get_js_result_as_number               (WebKitJavascrip
 void     ephy_embed_utils_shutdown                              (void);
 
 G_END_DECLS
-
-#endif

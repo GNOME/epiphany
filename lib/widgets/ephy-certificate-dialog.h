@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_CERTIFICATE_DIALOG_H
-#define EPHY_CERTIFICATE_DIALOG_H
+#pragma once
 
 #include "ephy-security-levels.h"
 
@@ -36,5 +35,3 @@ GtkWidget *ephy_certificate_dialog_new      (GtkWindow           *parent,
                                              EphySecurityLevel    security_level);
 
 G_END_DECLS
-
-#endif

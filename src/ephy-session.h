@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SESSION_H
-#define EPHY_SESSION_H
+#pragma once
 
 #include "ephy-window.h"
 
@@ -66,5 +65,3 @@ void             ephy_session_undo_close_tab          (EphySession *session);
 gboolean         ephy_session_get_can_undo_tab_closed (EphySession *session);
 
 G_END_DECLS
-
-#endif

@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_FILE_MONITOR_H
-#define EPHY_FILE_MONITOR_H
+#pragma once
 
 #include "ephy-web-view.h"
 
@@ -33,5 +32,3 @@ void              ephy_file_monitor_update_location (EphyFileMonitor *monitor,
                                                      const char *address);
 
 G_END_DECLS
-
-#endif

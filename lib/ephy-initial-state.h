@@ -18,8 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_STATE_H
-#define EPHY_STATE_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -47,5 +46,3 @@ void ephy_initial_state_add_expander (GtkWidget            *widget,
 void ephy_initial_state_save         (void);
 
 G_END_DECLS
-
-#endif /* EPHY_STATE_H */

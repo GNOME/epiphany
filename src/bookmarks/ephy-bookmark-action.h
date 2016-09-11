@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARK_ACTION_H
-#define EPHY_BOOKMARK_ACTION_H
+#pragma once
 
 #include "ephy-link.h"
 #include "ephy-link-action.h"
@@ -69,5 +68,3 @@ void		ephy_bookmark_action_activate		(EphyBookmarkAction *action,
 							 EphyLinkFlags flags);
 
 G_END_DECLS
-
-#endif

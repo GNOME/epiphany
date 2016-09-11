@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef EPHY_ENCODING_ROW_H
-#define EPHY_ENCODING_ROW_H
+#pragma once
 
 #include "ephy-encoding.h"
 #include <gtk/gtk.h>
@@ -36,5 +35,3 @@ void             ephy_encoding_row_set_selected (EphyEncodingRow *row,
                                                  gboolean         selected);
 
 G_END_DECLS
-
-#endif /* EPHY_ENCODING_ROW_H */

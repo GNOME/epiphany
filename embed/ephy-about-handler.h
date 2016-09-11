@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_ABOUT_HANDLER_H
-#define EPHY_ABOUT_HANDLER_H
+#pragma once
 
 #include <webkit2/webkit2.h>
 
@@ -35,5 +34,3 @@ EphyAboutHandler *ephy_about_handler_new            (void);
 void              ephy_about_handler_handle_request (EphyAboutHandler       *handler,
                                                      WebKitURISchemeRequest *request);
 G_END_DECLS
-
-#endif /* EPHY_ABOUT_HANDLER_H */

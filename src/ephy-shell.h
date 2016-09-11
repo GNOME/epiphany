@@ -18,8 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SHELL_H
-#define EPHY_SHELL_H
+#pragma once
 
 #include "ephy-bookmarks.h"
 #include "ephy-embed-shell.h"
@@ -115,5 +114,3 @@ void            ephy_shell_open_uris                    (EphyShell *shell,
                                                          EphyStartupFlags startup_flags,
                                                          guint32 user_time);
 G_END_DECLS
-
-#endif

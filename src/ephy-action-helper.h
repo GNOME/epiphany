@@ -15,8 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_ACTION_HELPER_H
-#define EPHY_ACTION_HELPER_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -32,5 +31,3 @@ void ephy_action_change_sensitivity_flags (GSimpleAction *action,
                                            gboolean       set);
 
 G_END_DECLS
-
-#endif /* !EPHY_ACTION_HELPER_H */

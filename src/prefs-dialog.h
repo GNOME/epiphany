@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PREFS_DIALOG_H
-#define PREFS_DIALOG_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -29,5 +28,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (PrefsDialog, prefs_dialog, EPHY, PREFS_DIALOG, GtkDialog)
 
 G_END_DECLS
-
-#endif

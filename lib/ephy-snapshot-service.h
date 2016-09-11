@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_SNAPSHOT_SERVICE_H
-#define _EPHY_SNAPSHOT_SERVICE_H
+#pragma once
 
 #include <gtk/gtk.h>
 #include <webkit2/webkit2.h>
@@ -72,5 +71,3 @@ char                *ephy_snapshot_service_get_snapshot_path_finish         (Eph
                                                                              GError **error);
 
 G_END_DECLS
-
-#endif /* _EPHY_SNAPSHOT_SERVICE_H */

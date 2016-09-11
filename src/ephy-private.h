@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_PRIVATE_H
-#define EPHY_PRIVATE_H
+#pragma once
 
 #include "ephy-embed.h"
 #include "ephy-embed-event.h"
@@ -28,6 +27,8 @@
 #include "ephy-window.h"
 
 #include <gtk/gtk.h>
+
+G_BEGIN_DECLS
 
 /* EphyWindow */
 
@@ -59,5 +60,4 @@ void                     _ephy_shell_create_instance          (EphyEmbedShellMod
 
 void                     ephy_session_clear                   (EphySession *session);
 
-#endif
-
+G_END_DECLS

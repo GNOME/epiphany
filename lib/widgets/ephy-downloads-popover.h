@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef EPHY_DOWNLOADS_POPOVER_H
-#define EPHY_DOWNLOADS_POPOVER_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -33,5 +32,3 @@ G_DECLARE_FINAL_TYPE (EphyDownloadsPopover, ephy_downloads_popover, EPHY, DOWNLO
 GtkWidget *ephy_downloads_popover_new      (GtkWidget *relative_to);
 
 G_END_DECLS
-
-#endif

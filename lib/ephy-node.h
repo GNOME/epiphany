@@ -17,8 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_NODE_H
-#define EPHY_NODE_H
+#pragma once
 
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
@@ -152,5 +151,3 @@ void	      ephy_node_set_is_drag_dest    (EphyNode *node,
 gboolean      ephy_node_get_is_drag_dest    (EphyNode *node);
 
 G_END_DECLS
-
-#endif /* __EPHY_NODE_H */
