@@ -33,6 +33,7 @@
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
+#include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-extension-proxy.h"
 #include "ephy-web-extension-names.h"
@@ -55,6 +56,7 @@ typedef struct {
   WebKitUserContentManager *user_content;
   EphyDownloadsManager *downloads_manager;
   EphyAboutHandler *about_handler;
+  EphyViewSourceHandler *source_handler;
   guint update_overview_timeout_id;
   guint hiding_overview_item;
   GDBusServer *dbus_server;
@@ -100,6 +102,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->print_settings);
   g_clear_object (&priv->global_history_service);
   g_clear_object (&priv->about_handler);
+  g_clear_object (&priv->source_handler);
   g_clear_object (&priv->user_content);
   g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->web_context);
@@ -474,6 +477,15 @@ about_request_cb (WebKitURISchemeRequest *request,
 }
 
 static void
+source_request_cb (WebKitURISchemeRequest *request,
+                   EphyEmbedShell         *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  ephy_view_source_handler_handle_request (priv->source_handler, request);
+}
+
+static void
 ephy_resource_request_cb (WebKitURISchemeRequest *request)
 {
   const char *path;
@@ -777,6 +789,12 @@ ephy_embed_shell_startup (GApplication *application)
   /* Register about scheme as local so that it can contain file resources */
   webkit_security_manager_register_uri_scheme_as_local (webkit_web_context_get_security_manager (priv->web_context),
                                                         EPHY_ABOUT_SCHEME);
+
+  /* view source handler */
+  priv->source_handler = ephy_view_source_handler_new ();
+  webkit_web_context_register_uri_scheme (priv->web_context, EPHY_VIEW_SOURCE_SCHEME,
+                                          (WebKitURISchemeRequestCallback)source_request_cb,
+                                          shell, NULL);
 
   /* ephy-resource handler */
   webkit_web_context_register_uri_scheme (priv->web_context, "ephy-resource",

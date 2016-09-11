@@ -25,6 +25,7 @@ libephyembed_la_SOURCES = \
 	ephy-embed-container.h		\
 	ephy-embed-event.c		\
 	ephy-embed-event.h		\
+	ephy-embed-prefs.c		\
 	ephy-embed-prefs.h		\
 	ephy-embed-private.h		\
 	ephy-embed-shell.c		\
@@ -39,7 +40,8 @@ libephyembed_la_SOURCES = \
 	ephy-file-monitor.h		\
 	ephy-find-toolbar.c		\
 	ephy-find-toolbar.h		\
-	ephy-embed-prefs.c		\
+	ephy-view-source-handler.c	\
+	ephy-view-source-handler.h	\
 	ephy-web-view.c			\
 	ephy-web-view.h			\
 	ephy-web-extension-proxy.c	\
