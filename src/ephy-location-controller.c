@@ -278,16 +278,6 @@ sync_address (EphyLocationController *controller,
   g_signal_handlers_unblock_by_func (widget, G_CALLBACK (user_changed_cb), controller);
 }
 
-static void
-title_box_mode_changed_cb (EphyTitleBox *title_box,
-                           GParamSpec   *psec,
-                           gpointer      user_data)
-{
-  EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (user_data);
-
-  sync_address (controller, NULL, GTK_WIDGET (controller->location_entry));
-}
-
 static char *
 get_location_cb (EphyLocationEntry      *entry,
                  EphyLocationController *controller)
@@ -428,9 +418,6 @@ ephy_location_controller_constructed (GObject *object)
                                       NULL);
 
   add_completion_actions (controller, controller->location_entry);
-
-  g_signal_connect_object (controller->title_box, "notify::mode",
-                           G_CALLBACK (title_box_mode_changed_cb), controller, 0);
 
   sync_address (controller, NULL, widget);
   g_signal_connect_object (controller, "notify::address",

@@ -546,12 +546,13 @@ static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
-  GtkWidget *box, *button;
+  GtkWidget *box, *button, *title_widget;
   GtkMenu *menu;
   GMenu *page_menu;
   EphyDownloadsManager *downloads_manager;
   GtkBuilder *builder;
   EphyHistoryService *history_service;
+  EphyEmbedShell *embed_shell;
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
 
@@ -626,10 +627,15 @@ ephy_header_bar_constructed (GObject *object)
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
 
   /* Location bar + Title */
-  header_bar->title_box = ephy_title_box_new (header_bar->window);
-  header_bar->entry = ephy_title_box_get_location_entry (header_bar->title_box);
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_box));
-  gtk_widget_show (GTK_WIDGET (header_bar->title_box));
+  header_bar->title_box = ephy_title_box_new ();
+  header_bar->entry = ephy_location_entry_new ();
+  embed_shell = ephy_embed_shell_get_default ();
+  title_widget = ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION ? GTK_WIDGET (header_bar->title_box)
+                                                                                              : header_bar->entry;
+  gtk_widget_set_margin_start (title_widget, 54);
+  gtk_widget_set_margin_end (title_widget, 54);
+  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), title_widget);
+  gtk_widget_show (title_widget);
 
   /* Page Menu */
   button = gtk_menu_button_new ();

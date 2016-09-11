@@ -495,13 +495,19 @@ sync_tab_security (EphyWebView *view,
                    EphyWindow  *window)
 {
   EphyTitleBox *title_box;
+  GtkWidget *location_entry;
   EphySecurityLevel security_level;
 
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   ephy_web_view_get_security_level (view, &security_level, NULL, NULL);
+
   title_box = ephy_header_bar_get_title_box (EPHY_HEADER_BAR (window->header_bar));
   ephy_title_box_set_security_level (title_box, security_level);
+
+  location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
+  ephy_location_entry_set_security_level (EPHY_LOCATION_ENTRY (location_entry), security_level);
 }
 
 static void
@@ -3210,9 +3216,6 @@ ephy_window_activate_location (EphyWindow *window)
 
   if (!(window->chrome & EPHY_WINDOW_CHROME_LOCATION))
     return;
-
-  ephy_title_box_set_mode (ephy_header_bar_get_title_box (EPHY_HEADER_BAR (window->header_bar)),
-                           EPHY_TITLE_BOX_MODE_LOCATION_ENTRY);
 
   entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
   ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
