@@ -121,14 +121,16 @@ RESOURCE_FILES = \
 	resources/epiphany-bookmark-editor-ui.xml \
 	resources/epiphany.css                    \
 	resources/error.html			  \
+	resources/gtk/menus.ui			  \
 	resources/history-dialog.ui		  \
 	resources/incognito.png                   \
 	resources/missing-thumbnail.png		  \
 	resources/passwords-dialog.ui		  \
 	resources/prefs-dialog.ui		  \
 	resources/prefs-lang-dialog.ui		  \
-	resources/shortcuts-dialog.ui		  \
-	resources/gtk/menus.ui
+	resources/prism.css			  \
+	resources/prism.js			  \
+	resources/shortcuts-dialog.ui
 
 epiphany-resources.c: epiphany.gresource.xml $(RESOURCE_FILES)
 	$(AM_V_GEN) glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml

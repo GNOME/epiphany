@@ -123,9 +123,14 @@ web_resource_data_cb (WebKitWebResource     *resource,
   escaped_str = g_markup_escape_text (data_str, -1);
   g_free (data_str);
 
-  html = g_strdup_printf ("<body>"
-                            "<pre>"
-                              "<code class=\"language-html\">%s</code>"
+  html = g_strdup_printf ("<head>"
+                            "<link href=\"ephy-resource:///org/gnome/epiphany/prism.css\" rel=\"stylesheet\"/>"
+                          "</head>"
+                          "<body>"
+                            "<script src=\"ephy-resource:///org/gnome/epiphany/prism.js\"></script>"
+                            /* http://prismjs.com/plugins/line-numbers/ */
+                            "<pre class=\"line-numbers\">"
+                              "<code class=\"language-markup\">%s</code>"
                             "</pre>"
                           "</body>",
                           escaped_str);
