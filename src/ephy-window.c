@@ -3057,10 +3057,6 @@ ephy_window_constructor (GType                  type,
     chrome &= ~(EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR);
   }
 
-  /* We never want the menubar shown, we merge the app menu into
-   * our super menu manually when running outside the Shell. */
-  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), FALSE);
-
   init_menu_updaters (window);
 
   ephy_window_set_chrome (window, chrome);
