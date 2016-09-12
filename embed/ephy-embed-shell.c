@@ -499,6 +499,36 @@ ephy_resource_request_cb (WebKitURISchemeRequest *request)
 }
 
 static void
+ftp_request_cb (WebKitURISchemeRequest *request)
+{
+  GDesktopAppInfo *app_info;
+  const char *uri;
+  GList *list = NULL;
+  GError *error = NULL;
+
+  uri = webkit_uri_scheme_request_get_uri (request);
+  g_app_info_launch_default_for_uri (uri, NULL, &error);
+
+  if (!error) {
+    g_signal_emit_by_name (webkit_uri_scheme_request_get_web_view (request), "close", NULL);
+    return;
+  }
+
+  /* Default URI handler didn't work. Try nautilus before giving up. */
+  app_info = g_desktop_app_info_new ("org.gnome.Nautilus.desktop");
+  list = g_list_append (list, (gpointer)uri);
+
+  if (app_info && g_app_info_launch_uris (G_APP_INFO (app_info), list, NULL, NULL))
+    g_signal_emit_by_name (webkit_uri_scheme_request_get_web_view (request), "close", NULL);
+  else
+    webkit_uri_scheme_request_finish_error (request, error);
+
+  g_list_free (list);
+  g_error_free (error);
+  g_object_unref (app_info);
+}
+
+static void
 web_extension_destroyed (EphyEmbedShell *shell,
                          GObject        *web_extension)
 {
@@ -751,6 +781,11 @@ ephy_embed_shell_startup (GApplication *application)
   /* ephy-resource handler */
   webkit_web_context_register_uri_scheme (priv->web_context, "ephy-resource",
                                           (WebKitURISchemeRequestCallback)ephy_resource_request_cb,
+                                          NULL, NULL);
+
+  /* No support for FTP, try to open in nautilus instead of failing */
+  webkit_web_context_register_uri_scheme (priv->web_context, "ftp",
+                                          (WebKitURISchemeRequestCallback)ftp_request_cb,
                                           NULL, NULL);
 
   /* Store cookies in moz-compatible SQLite format */
