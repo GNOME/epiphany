@@ -21,7 +21,9 @@
 #include "config.h"
 #include "ephy-view-source-handler.h"
 
+#include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
+#include "ephy-web-view.h"
 
 #include <gio/gio.h>
 #include <string.h>
@@ -47,13 +49,11 @@ ephy_view_source_request_new (EphyViewSourceHandler  *handler,
                               WebKitURISchemeRequest *request)
 {
   EphyViewSourceRequest *view_source_request;
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  WebKitWebContext *context = ephy_embed_shell_get_web_context (shell);
 
   view_source_request = g_slice_new (EphyViewSourceRequest);
   view_source_request->source_handler = handler;
   view_source_request->scheme_request = g_object_ref (request);
-  view_source_request->web_view = g_object_ref_sink (webkit_web_view_new_with_context (context));
+  view_source_request->web_view = NULL; /* created only if required */
   view_source_request->cancellable = g_cancellable_new ();
   view_source_request->load_changed_id = 0;
 
@@ -67,7 +67,7 @@ ephy_view_source_request_free (EphyViewSourceRequest *request)
     g_signal_handler_disconnect (request->web_view, request->load_changed_id);
 
   g_object_unref (request->scheme_request);
-  g_object_unref (request->web_view);
+  g_clear_object (&request->web_view);
 
   g_cancellable_cancel (request->cancellable);
   g_object_unref (request->cancellable);
@@ -140,17 +140,96 @@ web_resource_data_cb (WebKitWebResource     *resource,
 }
 
 static void
+ephy_view_source_request_begin_get_source_from_web_view (EphyViewSourceRequest *request,
+                                                         WebKitWebView         *web_view)
+{
+  WebKitWebResource *resource = webkit_web_view_get_main_resource (web_view);
+  g_assert (resource);
+  webkit_web_resource_get_data (resource,
+                                request->cancellable,
+                                (GAsyncReadyCallback)(web_resource_data_cb),
+                                request);
+}
+
+static void
 load_changed_cb (WebKitWebView         *web_view,
                  WebKitLoadEvent        load_event,
                  EphyViewSourceRequest *request)
 {
-  if (load_event == WEBKIT_LOAD_FINISHED) {
-    WebKitWebResource *resource = webkit_web_view_get_main_resource (web_view);
-    webkit_web_resource_get_data (resource,
-                                  request->cancellable,
-                                  (GAsyncReadyCallback)(web_resource_data_cb),
-                                  request);
-  }
+  if (load_event == WEBKIT_LOAD_FINISHED)
+    ephy_view_source_request_begin_get_source_from_web_view (request, web_view);
+}
+
+static void
+ephy_view_source_request_begin_get_source_from_uri (EphyViewSourceRequest *request,
+                                                    const char            *uri)
+{
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  WebKitWebContext *context = ephy_embed_shell_get_web_context (shell);
+
+  request->web_view = WEBKIT_WEB_VIEW (g_object_ref_sink (webkit_web_view_new_with_context (context)));
+
+  g_assert(request->load_changed_id == 0);
+  request->load_changed_id = g_signal_connect (request->web_view, "load-changed",
+                                               G_CALLBACK (load_changed_cb),
+                                               request);
+
+  webkit_web_view_load_uri (request->web_view, uri);
+}
+
+static gint
+web_view_is_displaying_matching_uri (EphyEmbed *embed,
+                                     SoupURI   *uri)
+{
+  EphyWebView *web_view;
+  SoupURI *view_uri;
+  gint ret = -1;
+
+  if (ephy_embed_has_load_pending (embed))
+    return -1;
+
+  web_view = ephy_embed_get_web_view (embed);
+  if (ephy_web_view_is_loading (web_view))
+    return -1;
+
+  view_uri = soup_uri_new (ephy_web_view_get_address (web_view));
+  if (!view_uri)
+    return -1;
+
+  soup_uri_set_fragment (view_uri, NULL);
+  ret = soup_uri_equal (view_uri, uri) ? 0 : -1;
+
+  soup_uri_free (view_uri);
+
+  return ret;
+}
+
+static WebKitWebView *
+get_web_view_matching_uri (SoupURI *uri)
+{
+  EphyEmbedShell *shell;
+  GtkWindow *window;
+  GList *embeds = NULL;
+  GList *found;
+  EphyEmbed *embed = NULL;
+
+  shell = ephy_embed_shell_get_default ();
+  window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+
+  if (!EPHY_IS_EMBED_CONTAINER (window))
+    goto out;
+
+  embeds = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
+  found = g_list_find_custom (embeds, uri, (GCompareFunc)web_view_is_displaying_matching_uri);
+
+  if (found)
+    embed = found->data;
+
+out:
+  g_list_free (embeds);
+  if (!embed)
+    return NULL;
+  return WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed));
 }
 
 static void
@@ -160,6 +239,7 @@ ephy_view_source_request_start (EphyViewSourceRequest *request)
   char *modified_uri;
   char *decoded_fragment;
   const char *original_uri;
+  WebKitWebView *web_view;
 
   request->source_handler->outstanding_requests =
       g_list_prepend (request->source_handler->outstanding_requests, request);
@@ -179,13 +259,13 @@ ephy_view_source_request_start (EphyViewSourceRequest *request)
   soup_uri_set_scheme (soup_uri, decoded_fragment);
   soup_uri_set_fragment (soup_uri, NULL);
   modified_uri = soup_uri_to_string (soup_uri, FALSE);
+  g_assert (modified_uri);
 
-  g_assert(request->load_changed_id == 0);
-  request->load_changed_id = g_signal_connect (request->web_view, "load-changed",
-                                               G_CALLBACK (load_changed_cb),
-                                               request);
-
-  webkit_web_view_load_uri (request->web_view, modified_uri);
+  web_view = get_web_view_matching_uri (soup_uri);
+  if (web_view)
+    ephy_view_source_request_begin_get_source_from_web_view (request, WEBKIT_WEB_VIEW (web_view));
+  else
+    ephy_view_source_request_begin_get_source_from_uri (request, modified_uri);
 
   g_free (decoded_fragment);
   g_free (modified_uri);
