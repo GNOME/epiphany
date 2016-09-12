@@ -280,7 +280,7 @@ dbus_shell_search_provider_built_sources =	\
 # The upstream for the DBus interface definition is
 # at http://git.gnome.org/browse/gnome-shell/plain/data/org.gnome.ShellSearchProvider2.xml
 $(dbus_shell_search_provider_built_sources) : Makefile.am $(srcdir)/org.gnome.ShellSearchProvider2.xml
-	gdbus-codegen							\
+	$(AM_V_GEN) gdbus-codegen							\
 		--interface-prefix org.gnome.				\
 		--c-namespace Ephy					\
 		--generate-c-code ephy-shell-search-provider-generated	\
