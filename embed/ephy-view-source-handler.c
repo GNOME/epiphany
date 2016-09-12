@@ -169,7 +169,7 @@ ephy_view_source_request_begin_get_source_from_uri (EphyViewSourceRequest *reque
 
   request->web_view = WEBKIT_WEB_VIEW (g_object_ref_sink (webkit_web_view_new_with_context (context)));
 
-  g_assert(request->load_changed_id == 0);
+  g_assert (request->load_changed_id == 0);
   request->load_changed_id = g_signal_connect (request->web_view, "load-changed",
                                                G_CALLBACK (load_changed_cb),
                                                request);
