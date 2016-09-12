@@ -277,6 +277,8 @@ dbus_shell_search_provider_built_sources =	\
 	ephy-shell-search-provider-generated.c	\
 	ephy-shell-search-provider-generated.h
 
+# FIXME: Use a stamp file or something so it doesn't get run twice
+#        https://www.gnu.org/software/automake/manual/automake.html#Multiple-Outputs
 # The upstream for the DBus interface definition is
 # at http://git.gnome.org/browse/gnome-shell/plain/data/org.gnome.ShellSearchProvider2.xml
 $(dbus_shell_search_provider_built_sources) : Makefile.am $(srcdir)/org.gnome.ShellSearchProvider2.xml
