@@ -26,6 +26,7 @@
 #include "ephy-web-view.h"
 
 #include <gio/gio.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 struct _EphyViewSourceHandler {
@@ -77,21 +78,28 @@ ephy_view_source_request_free (EphyViewSourceRequest *request)
 
 static void
 finish_uri_scheme_request (EphyViewSourceRequest *request,
-                           gchar                 *data)
+                           gchar                 *data,
+                           GError                *error)
 {
   GInputStream *stream;
   gssize data_length;
 
-  data_length = MIN (strlen (data), G_MAXSSIZE);
-  stream = g_memory_input_stream_new_from_data (data, data_length, g_free);
-  webkit_uri_scheme_request_finish (request->scheme_request, stream, data_length, "text/html");
+  g_assert ((data && !error) || (!data && error));
+
+  if (error) {
+    webkit_uri_scheme_request_finish_error (request->scheme_request, error);
+  } else {
+    data_length = MIN (strlen (data), G_MAXSSIZE);
+    stream = g_memory_input_stream_new_from_data (data, data_length, g_free);
+    webkit_uri_scheme_request_finish (request->scheme_request, stream, data_length, "text/html");
+    g_object_unref (stream);
+  }
 
   request->source_handler->outstanding_requests =
       g_list_remove (request->source_handler->outstanding_requests,
                      request);
 
   ephy_view_source_request_free (request);
-  g_object_unref (stream);
 }
 
 static void
@@ -108,10 +116,8 @@ web_resource_data_cb (WebKitWebResource     *resource,
 
   data = webkit_web_resource_get_data_finish (resource, result, &length, &error);
   if (error) {
-    html = g_strdup (error->message);
-    length = strlen (html);
+    finish_uri_scheme_request (request, NULL, error);
     g_error_free (error);
-    finish_uri_scheme_request (request, html);
     return;
   }
 
@@ -136,7 +142,7 @@ web_resource_data_cb (WebKitWebResource     *resource,
                           escaped_str);
   g_free (escaped_str);
 
-  finish_uri_scheme_request (request, html);
+  finish_uri_scheme_request (request, html, NULL);
 }
 
 static void
@@ -246,14 +252,18 @@ ephy_view_source_request_start (EphyViewSourceRequest *request)
   original_uri = webkit_uri_scheme_request_get_uri (request->scheme_request);
   soup_uri = soup_uri_new (original_uri);
 
-  if (!soup_uri) {
-    g_critical ("Failed to construct SoupURI for %s", original_uri);
-    finish_uri_scheme_request (request, g_strdup (""));
+  if (!soup_uri || !soup_uri->fragment) {
+    /* Can't assert because user could theoretically input something weird */
+    GError *error = g_error_new (WEBKIT_NETWORK_ERROR,
+                                 WEBKIT_NETWORK_ERROR_FAILED,
+                                 _("%s is not a valid URI"),
+                                 original_uri);
+    finish_uri_scheme_request (request, NULL, error);
+    g_error_free (error);
     return;
   }
 
   /* Convert e.g. ephy-source://gnome.org#https to https://gnome.org */
-  g_assert (soup_uri->fragment);
   decoded_fragment = soup_uri_decode (soup_uri->fragment);
   soup_uri_set_scheme (soup_uri, decoded_fragment);
   soup_uri_set_fragment (soup_uri, NULL);
