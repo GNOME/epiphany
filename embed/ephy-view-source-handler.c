@@ -227,9 +227,8 @@ get_web_view_matching_uri (SoupURI *uri)
 
 out:
   g_list_free (embeds);
-  if (!embed)
-    return NULL;
-  return WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed));
+
+  return embed ? WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed)) : NULL;
 }
 
 static void
