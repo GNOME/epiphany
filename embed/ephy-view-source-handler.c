@@ -178,8 +178,8 @@ ephy_view_source_request_begin_get_source_from_uri (EphyViewSourceRequest *reque
 }
 
 static gint
-web_view_is_displaying_matching_uri (EphyEmbed *embed,
-                                     SoupURI   *uri)
+embed_is_displaying_matching_uri (EphyEmbed *embed,
+                                  SoupURI   *uri)
 {
   EphyWebView *web_view;
   SoupURI *view_uri;
@@ -220,7 +220,7 @@ get_web_view_matching_uri (SoupURI *uri)
     goto out;
 
   embeds = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window));
-  found = g_list_find_custom (embeds, uri, (GCompareFunc)web_view_is_displaying_matching_uri);
+  found = g_list_find_custom (embeds, uri, (GCompareFunc)embed_is_displaying_matching_uri);
 
   if (found)
     embed = found->data;
