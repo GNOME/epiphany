@@ -132,7 +132,7 @@ web_resource_data_cb (WebKitWebResource     *resource,
   html = g_strdup_printf ("<head>"
                             "<link href=\"ephy-resource:///org/gnome/epiphany/prism.css\" rel=\"stylesheet\"/>"
                           "</head>"
-                          "<body>"
+                          "<body style=\"background-color: #f5f2f0;\">"
                             "<script src=\"ephy-resource:///org/gnome/epiphany/prism.js\"></script>"
                             /* http://prismjs.com/plugins/line-numbers/ */
                             "<pre class=\"line-numbers\">"
