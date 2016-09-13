@@ -135,7 +135,7 @@ web_resource_data_cb (WebKitWebResource     *resource,
                           "<body style=\"background-color: #f5f2f0;\">"
                             "<script src=\"ephy-resource:///org/gnome/epiphany/prism.js\"></script>"
                             /* http://prismjs.com/plugins/line-numbers/ */
-                            "<pre class=\"line-numbers\">"
+                            "<pre class=\"line-numbers\" style=\"overflow: visible\">"
                               "<code class=\"language-markup\">%s</code>"
                             "</pre>"
                           "</body>",
