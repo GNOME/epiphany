@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-15 16:13+0100\n"
-"PO-Revision-Date: 2016-03-15 16:21+0100\n"
+"POT-Creation-Date: 2016-09-15 15:20+0200\n"
+"PO-Revision-Date: 2016-09-15 16:39+0100\n"
 "Last-Translator: dooteo <dooteo@zundan.com>\n"
 "Language-Team: Basque <librezale@librezale.org>\n"
 "Language: eu\n"
@@ -19,40 +19,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 2.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: ../data/default-bookmarks.rdf.in.h:1
-msgid "Search the web"
-msgstr "Bilatu webean"
-
-#. Translators: you can use the regions listed in
-#. https://duckduckgo.com/params to boost a particular region
-#. associated with your language. For instance, for translators
-#. to Finnish, it might make sense to add kl=fi-fi to the search
-#. URL in order to boost results from Finland. Additionally, the
-#. 'kad' parameter can be used to specify the locale in which
-#. duckduckgo must be translated. So, for a Finnish localized
-#. version of duckduckgo that will render results tailored for
-#. Finland, the string would be:
-#. https://duckduckgo.com/?t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#.
-#: ../data/default-bookmarks.rdf.in.h:13
-msgid "https://duckduckgo.com/?t=epiphany"
-msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=eu-es&amp;kad=eu_ES"
-
-#. Translators: you can use the regions listed in
-#. https://duckduckgo.com/params to boost a particular region
-#. associated with your language. For instance, for translators
-#. to Finnish, it might make sense to add kl=fi-fi to the search
-#. URL in order to boost results from Finland. Additionally, the
-#. 'kad' parameter can be used to specify the locale in which
-#. duckduckgo must be translated. For such case, the search url
-#. would be
-#. https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=fi-fi&amp;kad=fi_FI
-#: ../data/default-bookmarks.rdf.in.h:24 ../embed/ephy-embed-utils.c:239
-#: ../src/ephy-search-provider.c:286
-#, no-c-format
-msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=eu-es&amp;kad=eu_ES"
 
 #: ../data/epiphany.appdata.xml.in.h:1
 msgid "GNOME Web"
@@ -86,9 +52,9 @@ msgstr "GNOMEren webgunea GNOMEren webean bistaratuta"
 msgid "The GNOME Project"
 msgstr "GNOME proiektua"
 
-#: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:290
-#: ../embed/ephy-about-handler.c:321 ../src/ephy-main.c:65
-#: ../src/ephy-main.c:311 ../src/ephy-main.c:463 ../src/window-commands.c:1513
+#: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:289
+#: ../embed/ephy-about-handler.c:320 ../src/ephy-main.c:77
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1500
 msgid "Web"
 msgstr "Weba"
 
@@ -281,10 +247,37 @@ msgstr ""
 "erakutsiko da deskarga berriak hastean."
 
 #: ../data/org.gnome.epiphany.gschema.xml.h:36
+msgid "Expand tabs size to fill the available space on the tabs bar."
+msgstr "Zabaldu fitxen tamaina fitxa-barraren tarte erabilgarria betetzeko."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
+msgid ""
+"If enabled the tabs will expand to use the entire available space in the "
+"tabs bar."
+msgstr ""
+"Gaitzen bada, fitxak zabaldu egingo dira fitxa-barraren tarte "
+"erabilgarria betetzeko."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
+msgid "The position of the tabs bar."
+msgstr "Fitxa-barraren posizioa."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
+msgid ""
+"Controls where the tabs bar is shown. Possible values are 'top' (the "
+"default), 'bottom', 'left' (vertical tabs with bar on the left) and "
+"'right' (vertical tabs with bar on the right)."
+msgstr ""
+"Fitxa-barra non erakusten den kontrolatzen du. Balio erabilgarriak: "
+"'top' (goian) lehenetsia da; 'bottom' (behean); "
+"'left' (ezkerran), fitxa bertikalak barra ezkerrean agertuz; "
+"'right' (eskuinean) fitxa bertikalak barra eskuinean agertuz."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "The visibility policy for the tabs bar."
 msgstr "Fitxa-barraren ikusgaitasunaren araua."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
@@ -295,23 +288,23 @@ msgstr ""
 "gehiago), fitxa-barra soilik erakutsiko da fitxa bat edo gehiago daudenean); "
 "eta 'never' (inoiz ere ez), fitxa-barra ez da inoiz erakusten."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "Minimum font size"
 msgstr "Gutxieneko letra-tamaina"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Use GNOME fonts"
 msgstr "Erabili GNOMEko letra-tipoak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid "Use GNOME font settings."
 msgstr "Erabili GNOMEko letra-tipoen ezarpenak."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "Custom sans-serif font"
 msgstr "Sans serif letra-tipo pertsonalizatua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -319,11 +312,11 @@ msgstr ""
 "Balio bat mahaigaineko sans-serif letra-tipoa gainidazteko 'use-gnome-fonts' "
 "ezartzean."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "Custom serif font"
 msgstr "Serif letra-tipo pertsonalizatua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -331,11 +324,11 @@ msgstr ""
 "Balio bat mahaigaineko serif letra-tipoa gainidazteko 'use-gnome-fonts' "
 "ezartzean."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 msgid "Custom monospace font"
 msgstr "Tarte bakarreko letra-tipo pertsonalizatua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -343,63 +336,63 @@ msgstr ""
 "Balio bat mahaigaineko tarte bakarreko letra-tipoa gainidazteko 'use-gnome-"
 "fonts' ezartzean."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Use own colors"
 msgstr "Erabili norberaren koloreak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid "Use your own colors instead of the colors the page requests."
 msgstr "Orriak eskatzen dituen koloreen ordez, zeure koloreak erabili."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid "Use own fonts"
 msgstr "Erabili norberaren letra-tipoak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid "Use your own fonts instead of the fonts the page requests."
 msgstr "Orriak eskatzen dituen letra-tipoen ordez, zeure letra-tipoak erabili."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid "Use a custom CSS"
 msgstr "Erabili CSS pertsonalizatua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Erabili CSS pertsonalizatua webguneetako CSS propioak aldatzeko."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid "Enable spell checking"
 msgstr "Gaitu ortografia-egiaztapena"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Spell check any text typed in editable areas."
 msgstr "Area editagarrietako edozein testuren ortografia zuzendu."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Default encoding"
 msgstr "Kodeketa lehenetsia"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Kodeketa lehenetsia. Onartutako balioak WebKitGTK+-ek uler "
 "ditzakeenetarikoak dira."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 #: ../src/resources/prefs-dialog.ui.h:39
 msgid "Languages"
 msgstr "Hizkuntzak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "Preferred languages, two letter codes."
 msgstr "Hizkuntza hobetsiak, bi letrako kodeak."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid "Cookie accept"
 msgstr "Cookie-ak onartzea"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid ""
 "Where to accept cookies from. Possible values are \"always\", \"no-third-"
 "party\" and \"never\"."
@@ -407,11 +400,11 @@ msgstr ""
 "Nongo cookie-ak onartu. Balio erabilgarriak: 'always' (beti), 'no-third-"
 "party' (hirugarrengorik ez) eta 'never' (inoiz ere ez)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid "Image animation mode"
 msgstr "Animaziozko irudi modua"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid ""
 "How to present animated images. Possible values are \"normal\", \"once\" and "
 "\"disabled\"."
@@ -419,46 +412,46 @@ msgstr ""
 "Nola agertu animaziozko irudiak. Dauden balioak: \"normal\" (arrunta), \"once"
 "\" (behin) eta \"disabled\" (desgaituta)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid "Allow popups"
 msgstr "Onartu laster-leihoak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Eman baimena guneei leiho berriak JavaScript-ekin irekitzeko (JavaScript "
 "gaituta badago)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid "Enable Plugins"
 msgstr "Gaitu pluginak"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Enable JavaScript"
 msgstr "Gaitu JavaScript"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Enable WebGL"
 msgstr "Gaitu WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to enable support for WebGL contexts."
 msgstr "WebGL testuinguruaren euskarria gaitu edo ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Enable WebAudio"
 msgstr "Gaitu WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Whether to enable support for WebAudio."
 msgstr "Webaudio euskarria gaitu edo ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
 msgid "Do Not Track"
 msgstr "Jarraipenik ez egin"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -466,11 +459,11 @@ msgstr ""
 "Gure jarraipenik egiterik ez dugula nahi webguneei adierazi edo ez. Jakin "
 "ezazu webguneak ez daudela derrigortuta ezarpen honi kasu egiteko. "
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:73
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
 msgid "Enable Adblock"
 msgstr "Gaitu Adblock"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:74
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
@@ -478,11 +471,11 @@ msgstr ""
 "Web orriak erakutsi nahi dituzten kapsulatutako iragarkiak blokeatu edo ez "
 "adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:75
+#: ../data/org.gnome.epiphany.gschema.xml.h:79
 msgid "The downloads folder"
 msgstr "Deskargen karpeta"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:76
+#: ../data/org.gnome.epiphany.gschema.xml.h:80
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -491,110 +484,110 @@ msgstr ""
 "deskargen karpeta lehenetsia erabiltzeko, edo \"Desktop\" (Mahaigaina) "
 "mahaigaina karpeta erabiltzeko."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:77
+#: ../data/org.gnome.epiphany.gschema.xml.h:81
 msgid "Whether to show the title column in the bookmarks window."
 msgstr ""
 "Laster-marken leihoan tituluaren zutabea erakutsi edo ez adierazten du."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:78
+#: ../data/org.gnome.epiphany.gschema.xml.h:82
 msgid "Whether to show the address column in the bookmarks window."
 msgstr ""
 "Laster-marken leihoan helbidearen zutabea erakutsi edo ez adierazten du."
 
-#: ../embed/ephy-about-handler.c:137
+#: ../embed/ephy-about-handler.c:136
 msgid "Installed plugins"
 msgstr "Instalatutako pluginak"
 
-#: ../embed/ephy-about-handler.c:138
+#: ../embed/ephy-about-handler.c:137
 msgid "Plugins"
 msgstr "Pluginak"
 
-#: ../embed/ephy-about-handler.c:141
+#: ../embed/ephy-about-handler.c:140
 msgid "Plugins are disabled in the preferences"
 msgstr "Pluginak desgaituta daude hobespenetan"
 
-#: ../embed/ephy-about-handler.c:154
+#: ../embed/ephy-about-handler.c:153
 msgid "Enabled"
 msgstr "Gaituta"
 
 #. webkit_plugin_get_enabled (plugin) &&
-#: ../embed/ephy-about-handler.c:154
+#: ../embed/ephy-about-handler.c:153
 msgid "Yes"
 msgstr "Bai"
 
-#: ../embed/ephy-about-handler.c:154
+#: ../embed/ephy-about-handler.c:153
 msgid "No"
 msgstr "Ez"
 
-#: ../embed/ephy-about-handler.c:155
+#: ../embed/ephy-about-handler.c:154
 msgid "MIME type"
 msgstr "MIME mota"
 
-#: ../embed/ephy-about-handler.c:155
+#: ../embed/ephy-about-handler.c:154
 msgid "Description"
 msgstr "Azalpena"
 
-#: ../embed/ephy-about-handler.c:155
+#: ../embed/ephy-about-handler.c:154
 msgid "Suffixes"
 msgstr "Atzizkiak"
 
-#: ../embed/ephy-about-handler.c:218 ../embed/ephy-about-handler.c:220
+#: ../embed/ephy-about-handler.c:217 ../embed/ephy-about-handler.c:219
 msgid "Memory usage"
 msgstr "Memoria-erabilera"
 
-#: ../embed/ephy-about-handler.c:268
+#: ../embed/ephy-about-handler.c:267
 #, c-format
 msgid "Version %s"
 msgstr "%s bertsioa"
 
-#: ../embed/ephy-about-handler.c:288
+#: ../embed/ephy-about-handler.c:287
 msgid "About Web"
 msgstr "Webari buruz"
 
-#: ../embed/ephy-about-handler.c:292
+#: ../embed/ephy-about-handler.c:291
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Webaren ikuspegi xume, garbi eta dotorea."
 
-#: ../embed/ephy-about-handler.c:350 ../embed/ephy-about-handler.c:351
+#: ../embed/ephy-about-handler.c:349 ../embed/ephy-about-handler.c:350
 msgid "Applications"
 msgstr "Aplikazioak"
 
-#: ../embed/ephy-about-handler.c:352
+#: ../embed/ephy-about-handler.c:351
 msgid "List of installed web applications"
 msgstr "Instalatutako web aplikazioen zerrenda"
 
-#: ../embed/ephy-about-handler.c:366
+#: ../embed/ephy-about-handler.c:365
 msgid "Delete"
 msgstr "Ezabatu"
 
 #. Note for translators: this refers to the installation date.
-#: ../embed/ephy-about-handler.c:368
+#: ../embed/ephy-about-handler.c:367
 msgid "Installed on:"
 msgstr "Instalatuta:"
 
-#: ../embed/ephy-about-handler.c:476 ../embed/ephy-embed-utils.c:310
+#: ../embed/ephy-about-handler.c:475 ../embed/ephy-embed-utils.c:308
 msgid "Most Visited"
 msgstr "Bisitatuenak"
 
 #. Displayed when opening the browser for the first time.
-#: ../embed/ephy-about-handler.c:495
+#: ../embed/ephy-about-handler.c:494
 msgid "Welcome to Web"
 msgstr "Ongi etorri Web-era"
 
-#: ../embed/ephy-about-handler.c:495
+#: ../embed/ephy-about-handler.c:494
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Hasi arakatzen eta gehien bisitatu dituzun webguneak agertuko dira hemen."
 
-#: ../embed/ephy-about-handler.c:533
+#: ../embed/ephy-about-handler.c:532
 msgid "Remove from overview"
 msgstr "Kendu ikuspegitik"
 
-#: ../embed/ephy-about-handler.c:599 ../embed/ephy-about-handler.c:600
+#: ../embed/ephy-about-handler.c:598 ../embed/ephy-about-handler.c:599
 msgid "Private Browsing"
 msgstr "Arakatze pribatua"
 
-#: ../embed/ephy-about-handler.c:601
+#: ../embed/ephy-about-handler.c:600
 msgid ""
 "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
 "will not show up in your browsing history and all stored information will be "
@@ -605,14 +598,14 @@ msgstr ""
 "garbitu egingo da leihoa ixten duzunean. Deskargatzen dituzun fitxategiak "
 "gordeko dira."
 
-#: ../embed/ephy-about-handler.c:605
+#: ../embed/ephy-about-handler.c:604
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Isilka moduak zure jarduerak ordenagailu hau darabilten besteengandik "
 "ezkutatzen ditu."
 
-#: ../embed/ephy-about-handler.c:607
+#: ../embed/ephy-about-handler.c:606
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -628,313 +621,318 @@ msgid "Blank page"
 msgstr "Orri hutsa"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: ../embed/ephy-embed.c:534
+#: ../embed/ephy-embed.c:542
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Sakatu %s pantaila osotik irteteko"
 
-#: ../embed/ephy-embed.c:534
+#: ../embed/ephy-embed.c:542
 msgid "ESC"
 msgstr "Ihes"
 
-#: ../embed/ephy-embed.c:534
+#: ../embed/ephy-embed.c:542
 msgid "F11"
 msgstr "F11"
 
-#: ../embed/ephy-embed-utils.c:63
+#: ../embed/ephy-embed-utils.c:62
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Bidali posta '%s' helbidera"
 
-#: ../embed/ephy-encodings.c:60
+#: ../embed/ephy-embed-utils.c:238 ../src/ephy-search-provider.c:283
+#, c-format
+msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=eu-es&amp;kad=eu_ES"
+
+#: ../embed/ephy-encodings.c:57
 msgid "Arabic (_IBM-864)"
 msgstr "Arabiarra (_IBM-864)"
 
-#: ../embed/ephy-encodings.c:61
+#: ../embed/ephy-encodings.c:58
 msgid "Arabic (ISO-_8859-6)"
 msgstr "Arabiarra (ISO-_8859-6)"
 
-#: ../embed/ephy-encodings.c:62
+#: ../embed/ephy-encodings.c:59
 msgid "Arabic (_MacArabic)"
 msgstr "Arabiarra (_MacArabic)"
 
-#: ../embed/ephy-encodings.c:63
+#: ../embed/ephy-encodings.c:60
 msgid "Arabic (_Windows-1256)"
 msgstr "Arabiarra (_Windows-1256)"
 
-#: ../embed/ephy-encodings.c:64
+#: ../embed/ephy-encodings.c:61
 msgid "Baltic (_ISO-8859-13)"
 msgstr "Baltikokoa (_ISO-8859-13)"
 
-#: ../embed/ephy-encodings.c:65
+#: ../embed/ephy-encodings.c:62
 msgid "Baltic (I_SO-8859-4)"
 msgstr "Baltikokoa (I_SO-8859-4)"
 
-#: ../embed/ephy-encodings.c:66
+#: ../embed/ephy-encodings.c:63
 msgid "Baltic (_Windows-1257)"
 msgstr "Baltikokoa (_Windows-1257)"
 
-#: ../embed/ephy-encodings.c:67
+#: ../embed/ephy-encodings.c:64
 msgid "_Armenian (ARMSCII-8)"
 msgstr "_Armeniarra (ARMSCII-8)"
 
-#: ../embed/ephy-encodings.c:68
+#: ../embed/ephy-encodings.c:65
 msgid "_Georgian (GEOSTD8)"
 msgstr "_Georgiarra(GEOSTD8)"
 
-#: ../embed/ephy-encodings.c:69
+#: ../embed/ephy-encodings.c:66
 msgid "Central European (_IBM-852)"
 msgstr "Europako Erdialdekoa (_IBM-852)"
 
-#: ../embed/ephy-encodings.c:70
+#: ../embed/ephy-encodings.c:67
 msgid "Central European (I_SO-8859-2)"
 msgstr "Europako Erdialdekoa (I_SO-8859-2)"
 
-#: ../embed/ephy-encodings.c:71
+#: ../embed/ephy-encodings.c:68
 msgid "Central European (_MacCE)"
 msgstr "Europako Erdialdekoa (_MacCE)"
 
-#: ../embed/ephy-encodings.c:72
+#: ../embed/ephy-encodings.c:69
 msgid "Central European (_Windows-1250)"
 msgstr "Europako Erdialdekoa (_Windows-1250)"
 
-#: ../embed/ephy-encodings.c:73
+#: ../embed/ephy-encodings.c:70
 msgid "Chinese Simplified (_GB18030)"
 msgstr "Txinatar soildua (_GB18030)"
 
-#: ../embed/ephy-encodings.c:74
+#: ../embed/ephy-encodings.c:71
 msgid "Chinese Simplified (G_B2312)"
 msgstr "Txinatar soildua (G_B2312)"
 
-#: ../embed/ephy-encodings.c:75
+#: ../embed/ephy-encodings.c:72
 msgid "Chinese Simplified (GB_K)"
 msgstr "Txinatar soildua (GB_K)"
 
-#: ../embed/ephy-encodings.c:76
+#: ../embed/ephy-encodings.c:73
 msgid "Chinese Simplified (_HZ)"
 msgstr "Txinatar soildua (_HZ)"
 
-#: ../embed/ephy-encodings.c:77
+#: ../embed/ephy-encodings.c:74
 msgid "Chinese Simplified (_ISO-2022-CN)"
 msgstr "Txinatar soildua (_ISO-2022-CN)"
 
-#: ../embed/ephy-encodings.c:78
+#: ../embed/ephy-encodings.c:75
 msgid "Chinese Traditional (Big_5)"
 msgstr "Txinatar tradizionala (Big_5)"
 
-#: ../embed/ephy-encodings.c:79
+#: ../embed/ephy-encodings.c:76
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "Txinatar tradizionala (Big5-HK_SCS)"
 
-#: ../embed/ephy-encodings.c:80
+#: ../embed/ephy-encodings.c:77
 msgid "Chinese Traditional (_EUC-TW)"
 msgstr "Txinatar tradizionala (_EUC-TW)"
 
-#: ../embed/ephy-encodings.c:81
+#: ../embed/ephy-encodings.c:78
 msgid "Cyrillic (_IBM-855)"
 msgstr "Zirilikoa (_IBM-855)"
 
-#: ../embed/ephy-encodings.c:82
+#: ../embed/ephy-encodings.c:79
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "Zirilikoa (I_SO-8859-5)"
 
-#: ../embed/ephy-encodings.c:83
+#: ../embed/ephy-encodings.c:80
 msgid "Cyrillic (IS_O-IR-111)"
 msgstr "Zirilikoa (IS_O-IR-111)"
 
-#: ../embed/ephy-encodings.c:84
+#: ../embed/ephy-encodings.c:81
 msgid "Cyrillic (_KOI8-R)"
 msgstr "Zirilikoa (_KOI8-R)"
 
-#: ../embed/ephy-encodings.c:85
+#: ../embed/ephy-encodings.c:82
 msgid "Cyrillic (_MacCyrillic)"
 msgstr "Zirilikoa (_MacCyrillic)"
 
-#: ../embed/ephy-encodings.c:86
+#: ../embed/ephy-encodings.c:83
 msgid "Cyrillic (_Windows-1251)"
 msgstr "Zirilikoa (_Windows-1251)"
 
-#: ../embed/ephy-encodings.c:87
+#: ../embed/ephy-encodings.c:84
 msgid "Cyrillic/_Russian (IBM-866)"
 msgstr "Zirilikoa/_Errusiarra (IBM-866)"
 
-#: ../embed/ephy-encodings.c:88
+#: ../embed/ephy-encodings.c:85
 msgid "Greek (_ISO-8859-7)"
 msgstr "Grekoa (_ISO-8859-7)"
 
-#: ../embed/ephy-encodings.c:89
+#: ../embed/ephy-encodings.c:86
 msgid "Greek (_MacGreek)"
 msgstr "Grekoa (_MacGreek)"
 
-#: ../embed/ephy-encodings.c:90
+#: ../embed/ephy-encodings.c:87
 msgid "Greek (_Windows-1253)"
 msgstr "Grekoa (_Windows-1253)"
 
-#: ../embed/ephy-encodings.c:91
+#: ../embed/ephy-encodings.c:88
 msgid "Gujarati (_MacGujarati)"
 msgstr "Gujeratiarra (_MacGujarati)"
 
-#: ../embed/ephy-encodings.c:92
+#: ../embed/ephy-encodings.c:89
 msgid "Gurmukhi (Mac_Gurmukhi)"
 msgstr "Gurmukhi-koa (Mac_Gurmukhi)"
 
-#: ../embed/ephy-encodings.c:93
+#: ../embed/ephy-encodings.c:90
 msgid "Hindi (Mac_Devanagari)"
 msgstr "Hindia (Mac_Devanagari)"
 
-#: ../embed/ephy-encodings.c:94
+#: ../embed/ephy-encodings.c:91
 msgid "Hebrew (_IBM-862)"
 msgstr "Hebrearra (_IBM-862)"
 
-#: ../embed/ephy-encodings.c:95
+#: ../embed/ephy-encodings.c:92
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "Hebrearra (IS_O-8859-8-I)"
 
-#: ../embed/ephy-encodings.c:96
+#: ../embed/ephy-encodings.c:93
 msgid "Hebrew (_MacHebrew)"
 msgstr "Hebrearra (_MacHebrew)"
 
-#: ../embed/ephy-encodings.c:97
+#: ../embed/ephy-encodings.c:94
 msgid "Hebrew (_Windows-1255)"
 msgstr "Hebrearra (_Windows-1255)"
 
-#: ../embed/ephy-encodings.c:98
+#: ../embed/ephy-encodings.c:95
 msgid "_Visual Hebrew (ISO-8859-8)"
 msgstr "_Hebrear bisuala (ISO-8859-8)"
 
-#: ../embed/ephy-encodings.c:99
+#: ../embed/ephy-encodings.c:96
 msgid "Japanese (_EUC-JP)"
 msgstr "Japoniarra (_EUC-JP)"
 
-#: ../embed/ephy-encodings.c:100
+#: ../embed/ephy-encodings.c:97
 msgid "Japanese (_ISO-2022-JP)"
 msgstr "Japoniarra (_ISO-2022-JP)"
 
-#: ../embed/ephy-encodings.c:101
+#: ../embed/ephy-encodings.c:98
 msgid "Japanese (_Shift-JIS)"
 msgstr "Japoniarra (_Shift-JIS)"
 
-#: ../embed/ephy-encodings.c:102
+#: ../embed/ephy-encodings.c:99
 msgid "Korean (_EUC-KR)"
 msgstr "Korearra (_EUC-KR)"
 
-#: ../embed/ephy-encodings.c:103
+#: ../embed/ephy-encodings.c:100
 msgid "Korean (_ISO-2022-KR)"
 msgstr "Korearra (_ISO-2022-KR)"
 
-#: ../embed/ephy-encodings.c:104
+#: ../embed/ephy-encodings.c:101
 msgid "Korean (_JOHAB)"
 msgstr "Korearra (_JOHAB)"
 
-#: ../embed/ephy-encodings.c:105
+#: ../embed/ephy-encodings.c:102
 msgid "Korean (_UHC)"
 msgstr "Korearra (_UHC)"
 
-#: ../embed/ephy-encodings.c:106
+#: ../embed/ephy-encodings.c:103
 msgid "_Celtic (ISO-8859-14)"
 msgstr "_Zeltikoa (ISO-8859-14)"
 
-#: ../embed/ephy-encodings.c:107
+#: ../embed/ephy-encodings.c:104
 msgid "_Icelandic (MacIcelandic)"
 msgstr "_Islandiarra (MacIcelandic)"
 
-#: ../embed/ephy-encodings.c:108
+#: ../embed/ephy-encodings.c:105
 msgid "_Nordic (ISO-8859-10)"
 msgstr "_Nordikoa (ISO-8859-10)"
 
-#: ../embed/ephy-encodings.c:109
+#: ../embed/ephy-encodings.c:106
 msgid "_Persian (MacFarsi)"
 msgstr "_Farsia (MacFarsi)"
 
-#: ../embed/ephy-encodings.c:110
+#: ../embed/ephy-encodings.c:107
 msgid "Croatian (Mac_Croatian)"
 msgstr "Kroaziarra (Mac_Croatian)"
 
-#: ../embed/ephy-encodings.c:111
+#: ../embed/ephy-encodings.c:108
 msgid "_Romanian (MacRomanian)"
 msgstr "_Errumaniarra (MacRomanian)"
 
-#: ../embed/ephy-encodings.c:112
+#: ../embed/ephy-encodings.c:109
 msgid "R_omanian (ISO-8859-16)"
 msgstr "E_rrumaniarra (ISO-8859-16)"
 
-#: ../embed/ephy-encodings.c:113
+#: ../embed/ephy-encodings.c:110
 msgid "South _European (ISO-8859-3)"
 msgstr "Europako _Hegoaldekoa (ISO-8859-3)"
 
-#: ../embed/ephy-encodings.c:114
+#: ../embed/ephy-encodings.c:111
 msgid "Thai (TIS-_620)"
 msgstr "Thailandiarra (TIS-_620)"
 
-#: ../embed/ephy-encodings.c:115
+#: ../embed/ephy-encodings.c:112
 msgid "Thai (IS_O-8859-11)"
 msgstr "Thailandiarra (IS_O-8859-11)"
 
-#: ../embed/ephy-encodings.c:116
+#: ../embed/ephy-encodings.c:113
 msgid "_Thai (Windows-874)"
 msgstr "_Thailandiarra (Windows-874)"
 
-#: ../embed/ephy-encodings.c:117
+#: ../embed/ephy-encodings.c:114
 msgid "Turkish (_IBM-857)"
 msgstr "Turkiarra (_IBM-857)"
 
-#: ../embed/ephy-encodings.c:118
+#: ../embed/ephy-encodings.c:115
 msgid "Turkish (I_SO-8859-9)"
 msgstr "Turkiarra (I_SO-8859-9)"
 
-#: ../embed/ephy-encodings.c:119
+#: ../embed/ephy-encodings.c:116
 msgid "Turkish (_MacTurkish)"
 msgstr "Turkiarra (_MacTurkish)"
 
-#: ../embed/ephy-encodings.c:120
+#: ../embed/ephy-encodings.c:117
 msgid "Turkish (_Windows-1254)"
 msgstr "Turkiarra (_Windows-1254)"
 
-#: ../embed/ephy-encodings.c:121
+#: ../embed/ephy-encodings.c:118
 msgid "Unicode (UTF-_8)"
 msgstr "Unicode (UTF-_8)"
 
-#: ../embed/ephy-encodings.c:122
+#: ../embed/ephy-encodings.c:119
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "Zirilikoa/Ukrainarra (_KOI8-U)"
 
-#: ../embed/ephy-encodings.c:123
+#: ../embed/ephy-encodings.c:120
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "Zirilikoa/Ukrainarra (Mac_Ukrainian)"
 
-#: ../embed/ephy-encodings.c:124
+#: ../embed/ephy-encodings.c:121
 msgid "Vietnamese (_TCVN)"
 msgstr "Vietnamdarra (_TCVN)"
 
-#: ../embed/ephy-encodings.c:125
+#: ../embed/ephy-encodings.c:122
 msgid "Vietnamese (_VISCII)"
 msgstr "Vietnamdarra (_VISCII)"
 
-#: ../embed/ephy-encodings.c:126
+#: ../embed/ephy-encodings.c:123
 msgid "Vietnamese (V_PS)"
 msgstr "Vietnamdarra (V_PS)"
 
-#: ../embed/ephy-encodings.c:127
+#: ../embed/ephy-encodings.c:124
 msgid "Vietnamese (_Windows-1258)"
 msgstr "Vietnamdarra (_Windows-1258)"
 
-#: ../embed/ephy-encodings.c:128
+#: ../embed/ephy-encodings.c:125
 msgid "Western (_IBM-850)"
 msgstr "Mendebaldekoa (_IBM-850)"
 
-#: ../embed/ephy-encodings.c:129
+#: ../embed/ephy-encodings.c:126
 msgid "Western (_ISO-8859-1)"
 msgstr "Mendebaldekoa (_ISO-8859-1)"
 
-#: ../embed/ephy-encodings.c:130
+#: ../embed/ephy-encodings.c:127
 msgid "Western (IS_O-8859-15)"
 msgstr "Mendebaldekoa (IS_O-8859-15)"
 
-#: ../embed/ephy-encodings.c:131
+#: ../embed/ephy-encodings.c:128
 msgid "Western (_MacRoman)"
 msgstr "Mendebaldekoa (_MacRoman)"
 
-#: ../embed/ephy-encodings.c:132
+#: ../embed/ephy-encodings.c:129
 msgid "Western (_Windows-1252)"
 msgstr "Mendebaldekoa (_Windows-1252)"
 
@@ -942,109 +940,109 @@ msgstr "Mendebaldekoa (_Windows-1252)"
 #. * pollute the "related" part of the encodings menu with them, so we
 #. * set the language group to 0 here.
 #.
-#: ../embed/ephy-encodings.c:138
+#: ../embed/ephy-encodings.c:135
 msgid "English (_US-ASCII)"
 msgstr "Ingelesa (_US-ASCII)"
 
-#: ../embed/ephy-encodings.c:139
+#: ../embed/ephy-encodings.c:136
 msgid "Unicode (UTF-_16 BE)"
 msgstr "Unicode (UTF-_16 BE)"
 
-#: ../embed/ephy-encodings.c:140
+#: ../embed/ephy-encodings.c:137
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "Unicode (UTF-1_6 LE)"
 
-#: ../embed/ephy-encodings.c:141
+#: ../embed/ephy-encodings.c:138
 msgid "Unicode (UTF-_32 BE)"
 msgstr "Unicode (UTF-_32 BE)"
 
-#: ../embed/ephy-encodings.c:142
+#: ../embed/ephy-encodings.c:139
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Unicode (UTF-3_2 LE)"
 
 #. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: ../embed/ephy-encodings.c:221
+#: ../embed/ephy-encodings.c:218
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Ezezaguna (%s)"
 
-#: ../embed/ephy-find-toolbar.c:102
+#: ../embed/ephy-find-toolbar.c:96
 msgid "Text not found"
 msgstr "Ez da testua aurkitu"
 
-#: ../embed/ephy-find-toolbar.c:108
+#: ../embed/ephy-find-toolbar.c:102
 msgid "Search wrapped back to the top"
 msgstr "Bilatu berriro goitik"
 
-#: ../embed/ephy-find-toolbar.c:408
+#: ../embed/ephy-find-toolbar.c:388
 msgid "Type to search…"
 msgstr "Idatzi bilaketa..."
 
-#: ../embed/ephy-find-toolbar.c:414
+#: ../embed/ephy-find-toolbar.c:394
 msgid "Find previous occurrence of the search string"
 msgstr "Hitzaren aurreko agerraldia bilatzen du"
 
-#: ../embed/ephy-find-toolbar.c:422
+#: ../embed/ephy-find-toolbar.c:402
 msgid "Find next occurrence of the search string"
 msgstr "Hitzaren hurrengo agerraldia bilatzen du"
 
-#: ../embed/ephy-web-view.c:495
+#: ../embed/ephy-web-view.c:517
 msgid "_Don’t Save"
 msgstr "E_z gorde"
 
-#: ../embed/ephy-web-view.c:496 ../lib/widgets/ephy-file-chooser.c:195
+#: ../embed/ephy-web-view.c:518 ../lib/widgets/ephy-file-chooser.c:188
 msgid "_Save"
 msgstr "_Gorde"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: ../embed/ephy-web-view.c:507
+#: ../embed/ephy-web-view.c:529
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Nahi duzu '%s'(e)rako zure pasahitza gordetzea?"
 
-#: ../embed/ephy-web-view.c:1250
+#: ../embed/ephy-web-view.c:1280
 msgid "Deny"
 msgstr "Ukatu"
 
-#: ../embed/ephy-web-view.c:1251
+#: ../embed/ephy-web-view.c:1281
 msgid "Allow"
 msgstr "Baimendu"
 
 #. Translators: Geolocation policy for a specific site.
-#: ../embed/ephy-web-view.c:1263
+#: ../embed/ephy-web-view.c:1293
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "<b>%s</b>(e)ngo orriak zure kokalekua jakitea nahi du."
 
 #. Translators: Notification policy for a specific site.
-#: ../embed/ephy-web-view.c:1267
+#: ../embed/ephy-web-view.c:1297
 #, c-format
 msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgstr ""
 "<b>%s</b>(e)ngo orriak mahaigaineko jakinarazpenak bistaratzea nahi ditu."
 
 #. translators: %s here is the address of the web page
-#: ../embed/ephy-web-view.c:1353
+#: ../embed/ephy-web-view.c:1388
 #, c-format
 msgid "Loading “%s”…"
 msgstr "'%s' kargatzen..."
 
-#: ../embed/ephy-web-view.c:1355
+#: ../embed/ephy-web-view.c:1390
 msgid "Loading…"
 msgstr "Kargatzen..."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1605
+#: ../embed/ephy-web-view.c:1639
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Webgune honek aurkeztutako identifikazioa beste webgune batena da."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1610
+#: ../embed/ephy-web-view.c:1644
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1053,20 +1051,20 @@ msgstr ""
 "data zure ordenagailuaren egutegian."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1615
+#: ../embed/ephy-web-view.c:1649
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Webgune honen identifikazioa ez da erakunde fidagarri batek igorritakoa."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1620
+#: ../embed/ephy-web-view.c:1654
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 "Ezin izan da webgune honen identifikazioa prozesatu. Hondatuta egon daiteke."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1625
+#: ../embed/ephy-web-view.c:1659
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1074,7 +1072,7 @@ msgstr ""
 "Webgune honen identifikazioa igorri zuen erakunde fidagarriak errebokatu du."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1630
+#: ../embed/ephy-web-view.c:1664
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1083,7 +1081,7 @@ msgstr ""
 "darabilelako."
 
 #. Possible error message when a site presents a bad certificate.
-#: ../embed/ephy-web-view.c:1635
+#: ../embed/ephy-web-view.c:1669
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1091,156 +1089,169 @@ msgstr ""
 "Webgune honen identifikazioa etorkizuneko datentzako bakarrik da baliozkoa. "
 "Egiaztatu data ordenagailuaren egutegian."
 
-#. Message when a site's TLS certificate is invalid. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1670
-#, c-format
-msgid "This might not be the real %s."
-msgstr "Ez dirudi '%s' benetakoa denik."
-
-#. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1675
-msgid ""
-"When you try to connect securely, websites present identification to prove "
-"that your connection has not been maliciously intercepted. There is "
-"something wrong with this website’s identification:"
-msgstr ""
-"Segurtasunez konektatzen saiatzean, webguneek identifikazioak aurkezten "
-"dituzte zure konexioan beste inor maltzurki sartuta ez dagoela frogatzeko. "
-"Zerbait gaizki dago webgune honen identifikatzailearekin:"
-
-#. Message when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1681
-msgid ""
-"A third party may have hijacked your connection. You should continue only if "
-"you know there is a good reason why this website does not use trusted "
-"identification."
-msgstr ""
-"Hirugarren batek zure konexioan sartuta egon daiteke. Soilik jarraitu baldin "
-"eta webgune honek identifikazio fidagarririk ez erabiltzeko arrazoi oso onak "
-"baditu."
-
-#. Good advice from Firefox; displays when a site's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1685
-msgid ""
-"Legitimate banks, stores, and other public sites will not ask you to do this."
-msgstr ""
-"Banku, denda edo beste gune publiko legitimoek ez dizute hau egiteko "
-"eskatuko."
-
-#: ../embed/ephy-web-view.c:1753
+#: ../embed/ephy-web-view.c:1752
 msgid "None specified"
 msgstr "Ez da bat ere zehaztu"
 
-#. Page title when a site cannot be loaded. %s is the site's hostname.
-#: ../embed/ephy-web-view.c:1766 ../embed/ephy-web-view.c:1783
-#: ../embed/ephy-web-view.c:1807
+#. Page title when a site cannot be loaded due to a network error.
+#. Page title when a site cannot be loaded due to a page crash error.
+#: ../embed/ephy-web-view.c:1766 ../embed/ephy-web-view.c:1792
 #, c-format
-msgid "Problem loading “%s”"
-msgstr "Arazoa '%s' kargatzean"
+msgid "Problem Loading Page"
+msgstr "Arazoa orria kargatzean"
 
-#: ../embed/ephy-web-view.c:1768
-msgid "Oops! Unable to display this website."
-msgstr "Ezin izan da webgune hau bistaratu."
-
+#. Message title when a site cannot be loaded due to a network error.
 #: ../embed/ephy-web-view.c:1769
+msgid "Oops! Unable to display this website"
+msgstr "Ezin izan da webgune hau bistaratu"
+
+#. Message body when a site cannot be loaded due to a network error.
+#: ../embed/ephy-web-view.c:1772
 #, c-format
 msgid ""
-"<p>The site at “%s” seems to be unavailable. The precise error was:</"
-"p><p><code>%s</code></p><p>It may be temporarily unavailable or moved to a "
-"new address. You may wish to verify that your internet connection is working "
-"correctly.</p>"
+"<p>The site at <strong>%s</strong> seems to be unavailable.</p><p>It may be "
+"temporarily inaccessible or moved to a new address. You may wish to verify "
+"that your internet connection is working correctly.</p>"
 msgstr ""
-"<p>Badirudi '%s'(e)ko webgunea erabilgarri ez egotea. Errorea honakoa zen:</"
-"p><p><em>%s</em></p><p> Baliteke aldi baterako itzalita egotea edo helbide "
+"<p>Badirudi '%s'(e)ko webgunea ez dagoela erabilgarri.</p><p>"
+"Baliteke aldi baterako itzalita egotea edo helbide "
 "berri batera aldatua izatea. Ez ahaztu zure interneteko konexioa ongi "
 "funtzionatzen duela ziurtatzeaz.</p>"
 
-#: ../embed/ephy-web-view.c:1777 ../embed/ephy-web-view.c:1791
-#: ../embed/ephy-web-view.c:1800
+#. Message details when a site cannot be loaded due to a network error.
+#: ../embed/ephy-web-view.c:1781
+#, c-format
+msgid "<p>The precise error was: <i>%s</i></p>"
+msgstr "<p>Errorea honakoa zen: <i>%s</i></p>"
+
+#. The button on the network error page. Do not add mnemonics here.
+#. The button on the page crash error page. Do not add mnemonics here.
+#. The button on the process crash error page. Do not add mnemonics here.
+#: ../embed/ephy-web-view.c:1785 ../embed/ephy-web-view.c:1807
+#: ../embed/ephy-web-view.c:1824
 msgid "Reload"
 msgstr "Berritu"
 
-#. Access key for the "Reload" button on the network error page.
-#. Access key for the "Reload" button on the crash error page.
-#: ../embed/ephy-web-view.c:1780 ../embed/ephy-web-view.c:1794
-#: ../embed/ephy-web-view.c:1803
+#. Mnemonic for the Reload button on browser error pages.
+#: ../embed/ephy-web-view.c:1788 ../embed/ephy-web-view.c:1810
+#: ../embed/ephy-web-view.c:1827
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "B"
 
-#: ../embed/ephy-web-view.c:1785
-msgid "Oops! There may be a problem."
-msgstr "Arazo bat egon daiteke."
+#. Message title when a site cannot be loaded due to a page crash error.
+#: ../embed/ephy-web-view.c:1795
+msgid "Oops! There may be a problem"
+msgstr "Arazo bat egon daiteke"
 
-#: ../embed/ephy-web-view.c:1786
+#. Message body when a site cannot be loaded due to a page crash error.
+#: ../embed/ephy-web-view.c:1798
 #, c-format
 msgid ""
-"<p>This site may have caused Web to close unexpectedly.</p><p>If this "
-"happens again, please report the problem to the <strong>%s</strong> "
-"developers.</p>"
+"<p>The site at <strong>%s</strong> may have caused Web to close unexpectedly."
+"</p><p>If this happens again, please report the problem to the <strong>%s</"
+"strong>  developers.</p>"
 msgstr ""
-"<p>Webgune honek web arakatzailea ustekabean ixtea eragin dezake.</p> <p>Hau "
-"berriro gertatzen bada, eskertuko genizuke arazoaren berri <strong>%s</"
-"strong>(e)ko garatzaileei bidaliko bazenie.</p>"
+"<p><strong>%s</strong> webguneak web arakatzailea ustekabean ixtea eragin"
+" dezake.</p> <p>Hau berriro gertatzen bada, eskertuko genizuke arazoaren"
+" berri "
+"<strong>%s</strong>(e)ko garatzaileei bidaliko bazenie.</p>"
 
-#: ../embed/ephy-web-view.c:1797
+#. Page title when a site cannot be loaded due to a process crash error.
+#: ../embed/ephy-web-view.c:1814
 #, c-format
-msgid "Problem displaying “%s”"
-msgstr "Arazoa '%s' bistaratzean"
+msgid "Problem Displaying Page"
+msgstr "Arazoa orria bistaratzean"
 
-#: ../embed/ephy-web-view.c:1798
+#. Message title when a site cannot be loaded due to a process crash error.
+#: ../embed/ephy-web-view.c:1817
 msgid "Oops!"
 msgstr "Eeeepaaa!"
 
-#: ../embed/ephy-web-view.c:1799
+#. Message body when a site cannot be loaded due to a process crash error.
+#: ../embed/ephy-web-view.c:1820
 msgid ""
-"Something went wrong while displaying this page. Please reload or visit a "
-"different page to continue."
+"<p>Something went wrong while displaying this page.</p><p>Please reload or "
+"visit a different page to continue.</p>"
 msgstr ""
-"Zerbait oker joan da orri hori bistaratzean. Kargatu berriro edo bisitatu "
-"beste orri bat jarraitzeko."
+"<p>Zerbait oker joan da orri hori bistaratzean.</p><p>Kargatu berriro edo"
+" bisitatu "
+"beste orri bat jarraitzeko.</p>"
 
-#. Title of error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1809
-msgid "Look out!"
-msgstr "Kontuz!"
+#. Page title when a site is not loaded due to an invalid TLS certificate.
+#: ../embed/ephy-web-view.c:1831
+#, c-format
+msgid "Security Violation"
+msgstr "Segurtasun-bortxaketa"
 
-#. Button on error page when a website's TLS certificate is invalid.
-#: ../embed/ephy-web-view.c:1812
-msgid "Accept Risk"
-msgstr "Onartu arriskua"
+#. Message title when a site is not loaded due to an invalid TLS certificate.
+#: ../embed/ephy-web-view.c:1834
+msgid "This Connection is Not Secure"
+msgstr "Konexio hau ez da segurua"
 
-#. Access key for the "Accept Risk" button on the TLS error page.
-#: ../embed/ephy-web-view.c:1815
-msgctxt "accept-risk-access-key"
-msgid "R"
+#. Message body when a site is not loaded due to an invalid TLS certificate.
+#: ../embed/ephy-web-view.c:1837
+#, c-format
+msgid ""
+"<p>This does not look like the real <strong>%s</strong>. Attackers might be "
+"trying to steal or alter information going to or from this site (for "
+"example, private messages, credit card information, or passwords).</p>"
+msgstr ""
+"<p>Ez dirudi <strong>%s</strong> benetakoa denik. Erasotzaileek "
+"gune honetako informazioa eskuratzea edo aldatzea (mezu pribatuak, "
+"kreditu txarteleko informazioa, edo pasahitzak) saiatzen ari daitezke.</p>"
+
+#. The button on the invalid TLS certificate error page. Do not add mnemonics here.
+#: ../embed/ephy-web-view.c:1847
+msgid "Go Back"
+msgstr "Joan atzera"
+
+#. Mnemonic for the Go Back button on the invalid TLS certificate error page.
+#: ../embed/ephy-web-view.c:1850
+msgctxt "back-access-key"
+msgid "B"
 msgstr "A"
 
-#: ../embed/ephy-web-view.c:2735
+#. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
+#: ../embed/ephy-web-view.c:1853
+msgid "Accept Risk and Proceed"
+msgstr "Onartu arriskua eta jarraitu"
+
+#. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
+#: ../embed/ephy-web-view.c:1857
+msgctxt "proceed-anyway-access-key"
+msgid "P"
+msgstr "J"
+
+#: ../embed/ephy-web-view.c:1882
+msgid "Technical information"
+msgstr "Informazio teknikoa"
+
+#: ../embed/ephy-web-view.c:2775
 msgid "_OK"
 msgstr "_Ados"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:108 ../src/resources/prefs-dialog.ui.h:2
+#: ../lib/ephy-file-helpers.c:106 ../src/resources/prefs-dialog.ui.h:2
 msgid "Downloads"
 msgstr "Deskargak"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: ../lib/ephy-file-helpers.c:161
+#: ../lib/ephy-file-helpers.c:159
 msgid "Desktop"
 msgstr "Mahaigaina"
 
-#: ../lib/ephy-file-helpers.c:351
+#: ../lib/ephy-file-helpers.c:336
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Ezin izan da aldi bateko %s direktorioa sortu."
 
-#: ../lib/ephy-file-helpers.c:481
+#: ../lib/ephy-file-helpers.c:457
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "%s fitxategia badago lehendik ere. Kendu ezazu paretik."
 
-#: ../lib/ephy-file-helpers.c:505
+#: ../lib/ephy-file-helpers.c:476
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Huts egin du %s direktorioa sortzean."
@@ -1262,57 +1273,45 @@ msgstr "'%s'(r)en pasahitza '%s'(r)en inprimakian"
 msgid "Password in a form in %s"
 msgstr "Pasahitza '%s'(r)en inprimakian"
 
-#: ../lib/ephy-gui.c:204
+#: ../lib/ephy-gui.c:199
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "%s direktorioan ezin da idatzi"
 
-#: ../lib/ephy-gui.c:208
+#: ../lib/ephy-gui.c:203
 msgid "You do not have permission to create files in this directory."
 msgstr "Ez dituzu nahikoa baimen direktorioan fitxategiak sortzeko."
 
-#: ../lib/ephy-gui.c:211
+#: ../lib/ephy-gui.c:206
 msgid "Directory not Writable"
 msgstr "Direktorioa ez da idazgarria"
 
-#: ../lib/ephy-gui.c:240
+#: ../lib/ephy-gui.c:233
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "Ezin da lehendik dagoen '%s' fitxategia gainidatzi"
 
-#: ../lib/ephy-gui.c:244
+#: ../lib/ephy-gui.c:237
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
 msgstr ""
 "Izen bereko fitxategia badago lehendik ere eta ez duzu baimenik gainidazteko."
 
-#: ../lib/ephy-gui.c:247
+#: ../lib/ephy-gui.c:240
 msgid "Cannot Overwrite File"
 msgstr "Ezin da fitxategia gainidatzi"
 
-#: ../lib/ephy-gui.c:305
+#: ../lib/ephy-gui.c:296
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Ezin izan da laguntza erakutsi: %s"
 
-#: ../lib/ephy-nss-glue.c:60
-msgid "Master password needed"
-msgstr "Pasahitz maisua behar da"
-
-#: ../lib/ephy-nss-glue.c:62
-msgid ""
-"The passwords from the previous version are locked with a master password. "
-"If you want to import them, please enter your master password below."
-msgstr ""
-"Aurreko bertsioko pasahitzak blokeatuta daude pasahitz maisu batekin. "
-"Epiphany-k hauek inportatzea nahi baduzu, sartu zure pasahitz maisua azpian."
-
-#: ../lib/ephy-profile-migrator.c:99
+#: ../lib/ephy-profile-migrator.c:96
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Huts egin du cookien fitxategia Mozilla-tik kopiatzean."
 
-#: ../lib/ephy-profile-migrator.c:649
+#: ../lib/ephy-profile-migrator.c:361
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -1320,23 +1319,23 @@ msgstr ""
 "Web 3.6 bertsioak direktorio hau zaharkitu zuen, eta bere konfigurazioa  ~/."
 "config/epiphany direktoriora migratzen saiatu da."
 
-#: ../lib/ephy-profile-migrator.c:1063
+#: ../lib/ephy-profile-migrator.c:783
 msgid "Executes only the n-th migration step"
 msgstr "Migrazioaren n. urratsa soilik exekutatzen du"
 
-#: ../lib/ephy-profile-migrator.c:1065
+#: ../lib/ephy-profile-migrator.c:785
 msgid "Specifies the required version for the migrator"
 msgstr "Migratzailearen beharrezko bertsioa zehazten du"
 
-#: ../lib/ephy-profile-migrator.c:1067
+#: ../lib/ephy-profile-migrator.c:787
 msgid "Specifies the profile where the migrator should run"
 msgstr "Migratzailea zein profiletan exekutatu behar duen zehazten du"
 
-#: ../lib/ephy-profile-migrator.c:1085
+#: ../lib/ephy-profile-migrator.c:805
 msgid "Web profile migrator"
 msgstr "Web-aren profilaren migratzailea"
 
-#: ../lib/ephy-profile-migrator.c:1086
+#: ../lib/ephy-profile-migrator.c:806
 msgid "Web profile migrator options"
 msgstr "Web-aren profilaren migratzailearen aukerak"
 
@@ -1422,148 +1421,148 @@ msgstr "Bestelakoak"
 msgid "Local files"
 msgstr "Fitxategi lokalak"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:101
+#: ../lib/widgets/ephy-certificate-dialog.c:99
 msgid "The certificate does not match this website"
 msgstr "Ziurtagiria ez dator webgune honekin bat"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:104
+#: ../lib/widgets/ephy-certificate-dialog.c:102
 msgid "The certificate has expired"
 msgstr "Ziurtagiria iraungi da"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:107
+#: ../lib/widgets/ephy-certificate-dialog.c:105
 msgid "The signing certificate authority is not known"
 msgstr "Sinaduraren ziurtagiri-emailearen ez da ezaguna"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:110
+#: ../lib/widgets/ephy-certificate-dialog.c:108
 msgid "The certificate contains errors"
 msgstr "Ziurtagiriak erroreak ditu"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:113
+#: ../lib/widgets/ephy-certificate-dialog.c:111
 msgid "The certificate has been revoked"
 msgstr "Ziurtagiria errebokatu da"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:116
+#: ../lib/widgets/ephy-certificate-dialog.c:114
 msgid "The certificate is signed using a weak signature algorithm"
 msgstr "Sinatzeko algoritmo ahul batekin sinatu da ziurtagiria"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:119
+#: ../lib/widgets/ephy-certificate-dialog.c:117
 msgid "The certificate activation time is still in the future"
 msgstr "Ziurtagiria aktibatzeko denbora oraindik etorkizuneko da"
 
-#: ../lib/widgets/ephy-certificate-dialog.c:161
+#: ../lib/widgets/ephy-certificate-dialog.c:159
 msgid "The identity of this website has been verified."
 msgstr "Webgune honen identitatea egiaztatu da."
 
-#: ../lib/widgets/ephy-certificate-dialog.c:162
+#: ../lib/widgets/ephy-certificate-dialog.c:160
 msgid "The identity of this website has not been verified."
 msgstr "Webgune honen identitatea ez da egiaztatu."
 
 #. Message on certificte dialog ertificate dialog
-#: ../lib/widgets/ephy-certificate-dialog.c:174
+#: ../lib/widgets/ephy-certificate-dialog.c:172
 msgid "No problems have been detected with your connection."
 msgstr "Ez da arazorik atzeman konexioarekin."
 
-#: ../lib/widgets/ephy-certificate-dialog.c:177
+#: ../lib/widgets/ephy-certificate-dialog.c:175
 msgid ""
 "This certificate is valid. However, resources on this page were sent "
 "insecurely."
 msgstr ""
-"Ziurtagiria baliozkoa da. Hala ere, orri honen baliabidea modu "
-"ez-seguruan bidali da."
+"Ziurtagiria baliozkoa da. Hala ere, orri honen baliabidea modu ez-seguruan "
+"bidali da."
 
-#: ../lib/widgets/ephy-downloads-popover.c:223
+#: ../lib/widgets/ephy-downloads-popover.c:222
 msgid "_Clear All"
 msgstr "Garbitu _denak"
 
-#: ../lib/widgets/ephy-download-widget.c:84
+#: ../lib/widgets/ephy-download-widget.c:81
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "segundo %d falta da"
 msgstr[1] "%d segundo falta dira"
 
-#: ../lib/widgets/ephy-download-widget.c:90
+#: ../lib/widgets/ephy-download-widget.c:85
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "minutu %d falta da"
 msgstr[1] "%d minutu falta dira"
 
-#: ../lib/widgets/ephy-download-widget.c:96
+#: ../lib/widgets/ephy-download-widget.c:89
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "ordu %d falta da"
 msgstr[1] "%d ordu falta dira"
 
-#: ../lib/widgets/ephy-download-widget.c:102
+#: ../lib/widgets/ephy-download-widget.c:93
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "segundo %d falta da"
 msgstr[1] "%d segundo falta dira"
 
-#: ../lib/widgets/ephy-download-widget.c:108
+#: ../lib/widgets/ephy-download-widget.c:97
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "aste %d falta da"
 msgstr[1] "%d aste falta dira"
 
-#: ../lib/widgets/ephy-download-widget.c:114
+#: ../lib/widgets/ephy-download-widget.c:101
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
 msgstr[0] "hilabete %d falta da"
 msgstr[1] "%d hilabete falta dira"
 
-#: ../lib/widgets/ephy-download-widget.c:237
-#: ../lib/widgets/ephy-download-widget.c:420
+#: ../lib/widgets/ephy-download-widget.c:224
+#: ../lib/widgets/ephy-download-widget.c:407
 msgid "Finished"
 msgstr "Amaituta"
 
-#: ../lib/widgets/ephy-download-widget.c:254
-#: ../lib/widgets/ephy-download-widget.c:416
+#: ../lib/widgets/ephy-download-widget.c:241
+#: ../lib/widgets/ephy-download-widget.c:403
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Errorea deskargatzean: %s"
 
-#: ../lib/widgets/ephy-download-widget.c:281
+#: ../lib/widgets/ephy-download-widget.c:268
 msgid "Cancelling…"
 msgstr "Bertan behera uzten..."
 
-#: ../lib/widgets/ephy-download-widget.c:422
+#: ../lib/widgets/ephy-download-widget.c:409
 msgid "Starting…"
 msgstr "Hasieratzen..."
 
-#: ../lib/widgets/ephy-file-chooser.c:185
-#: ../lib/widgets/ephy-file-chooser.c:194
-#: ../src/bookmarks/ephy-bookmark-properties.c:391
-#: ../src/bookmarks/ephy-bookmarks-editor.c:820
+#: ../lib/widgets/ephy-file-chooser.c:180
+#: ../lib/widgets/ephy-file-chooser.c:187
+#: ../src/bookmarks/ephy-bookmark-properties.c:375
+#: ../src/bookmarks/ephy-bookmarks-editor.c:766
 #: ../src/resources/clear-data-dialog.ui.h:3
-#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:806
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:778
 msgid "_Cancel"
 msgstr "_Utzi"
 
-#: ../lib/widgets/ephy-file-chooser.c:186
+#: ../lib/widgets/ephy-file-chooser.c:181
 #: ../src/resources/history-dialog.ui.h:1
 msgid "_Open"
 msgstr "_Ireki"
 
-#: ../lib/widgets/ephy-file-chooser.c:211
+#: ../lib/widgets/ephy-file-chooser.c:203
 msgid "All supported types"
 msgstr "Onartutako mota guztiak"
 
-#: ../lib/widgets/ephy-file-chooser.c:225
+#: ../lib/widgets/ephy-file-chooser.c:218
 msgid "Web pages"
 msgstr "Web orriak"
 
-#: ../lib/widgets/ephy-file-chooser.c:236
+#: ../lib/widgets/ephy-file-chooser.c:229
 msgid "Images"
 msgstr "Irudiak"
 
-#: ../lib/widgets/ephy-file-chooser.c:244
-#: ../src/bookmarks/ephy-bookmarks-editor.c:637
+#: ../lib/widgets/ephy-file-chooser.c:238
+#: ../src/bookmarks/ephy-bookmarks-editor.c:595
 msgid "All files"
 msgstr "Fitxategi denak"
 
@@ -1571,31 +1570,40 @@ msgstr "Fitxategi denak"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: ../lib/widgets/ephy-location-entry.c:620 ../src/ephy-history-window.c:263
+#: ../lib/widgets/ephy-location-entry.c:628 ../src/ephy-history-window.c:252
 msgid "Cl_ear"
 msgstr "_Garbitu"
 
+#: ../lib/widgets/ephy-location-entry.c:647
+msgid "Paste and _Go"
+msgstr "Itsatsi eta _joan"
+
+#: ../lib/widgets/ephy-location-entry.c:652
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186 ../src/ephy-window.c:119
+msgid "_Paste"
+msgstr "_Itsatsi"
+
 #. Edit actions.
-#: ../lib/widgets/ephy-location-entry.c:639 ../src/ephy-window.c:115
+#: ../lib/widgets/ephy-location-entry.c:666 ../src/ephy-window.c:111
 msgid "_Undo"
 msgstr "_Desegin"
 
-#: ../lib/widgets/ephy-location-entry.c:646
+#: ../lib/widgets/ephy-location-entry.c:673
 msgid "_Redo"
 msgstr "_Berregin"
 
-#: ../lib/widgets/ephy-location-entry.c:927
+#: ../lib/widgets/ephy-location-entry.c:943
 msgid "Drag and drop this icon to create a link to this page"
 msgstr "Arrastatu eta jaregin ikono hau orriaren esteka sortzeko"
 
 #. Label when clicking the lock icon on a secure page. %s is the website's hostname.
-#: ../lib/widgets/ephy-security-popover.c:76
+#: ../lib/widgets/ephy-security-popover.c:74
 #, c-format
 msgid "You are connected to %s"
 msgstr "'%s'(e)ra konektatuta zaude"
 
 #. Label in certificate popover when site is untrusted. %s is a URL.
-#: ../lib/widgets/ephy-security-popover.c:110
+#: ../lib/widgets/ephy-security-popover.c:108
 #, c-format
 msgid ""
 "This web site’s digital identification is not trusted. You may have "
@@ -1605,7 +1613,7 @@ msgstr ""
 "konektatuta eduki dezakezu '%s' dela itxura eginez."
 
 #. Label in certificate popover when site uses HTTP. %s is a URL.
-#: ../lib/widgets/ephy-security-popover.c:118
+#: ../lib/widgets/ephy-security-popover.c:116
 #, c-format
 msgid ""
 "%s has no security. An attacker could see any information you send, or "
@@ -1615,288 +1623,284 @@ msgstr ""
 "ikus lezake, edo ikusten ari zaren edukia kontrola lezake."
 
 #. Label in certificate popover when site sends mixed content.
-#: ../lib/widgets/ephy-security-popover.c:127
+#: ../lib/widgets/ephy-security-popover.c:125
 msgid "This web site did not properly secure your connection."
 msgstr "Webgune honek zurekin ezarri duen konexioa ez da erabat segurua."
 
 #. Label in certificate popover on secure sites.
-#: ../lib/widgets/ephy-security-popover.c:133
+#: ../lib/widgets/ephy-security-popover.c:131
 msgid "Your connection seems to be secure."
 msgstr "Zure konexioa segurua dela dirudi."
 
-#: ../lib/widgets/ephy-security-popover.c:182
+#: ../lib/widgets/ephy-security-popover.c:180
 msgid "_View Certificate…"
 msgstr "_Ikusi ziurtagiria…"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:93
+#: ../src/bookmarks/ephy-bookmark-properties.c:91
 #, c-format
 msgid "%d bookmark is similar"
 msgid_plural "%d bookmarks are similar"
 msgstr[0] "Laster-marka %d antzekoa da"
 msgstr[1] "%d laster-marka antzekoak dira"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:237
+#: ../src/bookmarks/ephy-bookmark-properties.c:229
 msgid "Add Bookmark"
 msgstr "Gehitu laster-marka"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:239
+#: ../src/bookmarks/ephy-bookmark-properties.c:231
 #, c-format
 msgid "“%s” Properties"
 msgstr "'%s' - Propietateak"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:392
+#: ../src/bookmarks/ephy-bookmark-properties.c:376
 #: ../src/resources/prefs-dialog.ui.h:40
 #: ../src/resources/prefs-lang-dialog.ui.h:3
 msgid "_Add"
 msgstr "_Gehitu"
 
-#: ../src/bookmarks/ephy-bookmarks.c:86
+#: ../src/bookmarks/ephy-bookmarks.c:85
 msgid "Entertainment"
 msgstr "Denbora-pasa"
 
-#: ../src/bookmarks/ephy-bookmarks.c:87
+#: ../src/bookmarks/ephy-bookmarks.c:86
 msgid "News"
 msgstr "Berriak"
 
-#: ../src/bookmarks/ephy-bookmarks.c:88
+#: ../src/bookmarks/ephy-bookmarks.c:87
 msgid "Shopping"
 msgstr "Erosketak"
 
-#: ../src/bookmarks/ephy-bookmarks.c:89
+#: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Sports"
 msgstr "Kirolak"
 
-#: ../src/bookmarks/ephy-bookmarks.c:90
+#: ../src/bookmarks/ephy-bookmarks.c:89
 msgid "Travel"
 msgstr "Bidaiak"
 
-#: ../src/bookmarks/ephy-bookmarks.c:91
+#: ../src/bookmarks/ephy-bookmarks.c:90
 msgid "Work"
 msgstr "Lanekoak"
 
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:889
+#: ../src/bookmarks/ephy-bookmarks.c:840
 msgctxt "bookmarks"
 msgid "All"
 msgstr "Denak"
 
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:893
+#: ../src/bookmarks/ephy-bookmarks.c:844
 msgctxt "bookmarks"
 msgid "Not Categorized"
 msgstr "Kategoriarik gabeak"
 
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:897
+#: ../src/bookmarks/ephy-bookmarks.c:848
 msgctxt "bookmarks"
 msgid "Nearby Sites"
 msgstr "Gertuko guneak"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1109
-#: ../src/bookmarks/ephy-bookmarks-import.c:268
+#: ../src/bookmarks/ephy-bookmarks.c:1044
+#: ../src/bookmarks/ephy-bookmarks-import.c:210
 msgid "Untitled"
 msgstr "Izengabea"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:74
+#: ../src/bookmarks/ephy-bookmarks-editor.c:73
 msgid "Web (RDF)"
 msgstr "Weba (RDF)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:75
+#: ../src/bookmarks/ephy-bookmarks-editor.c:74
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:118
 msgid "Remove from this topic"
 msgstr "Ezabatu gai honetatik"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:151
+#: ../src/bookmarks/ephy-bookmarks-editor.c:148
 msgid "_File"
 msgstr "_Fitxategia"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:152
+#: ../src/bookmarks/ephy-bookmarks-editor.c:149
 msgid "_Edit"
 msgstr "_Editatu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:153
+#: ../src/bookmarks/ephy-bookmarks-editor.c:150
 msgid "_View"
 msgstr "_Ikusi"
 
 #. Help.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:154
-#: ../src/resources/epiphany-application-menu.ui.h:7 ../src/ephy-window.c:186
+#: ../src/bookmarks/ephy-bookmarks-editor.c:151
+#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:186
 msgid "_Help"
 msgstr "_Laguntza"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:158
+#: ../src/bookmarks/ephy-bookmarks-editor.c:155
 msgid "_New Topic"
 msgstr "Gai _berria"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:156
 msgid "Create a new topic"
 msgstr "Gai berria sortzen du"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1155
+#: ../src/bookmarks/ephy-bookmarks-editor.c:158
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1084
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "Ireki _leiho berrian"
 msgstr[1] "Ireki _leiho berrietan"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
+#: ../src/bookmarks/ephy-bookmarks-editor.c:159
 msgid "Open the selected bookmark in a new window"
 msgstr "Hautatutako laster-marka leiho berri batean irekitzen du"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:164
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1158
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1087
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "Ireki _fitxa berrian"
 msgstr[1] "Ireki _fitxa berrietan"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:165
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
 msgid "Open the selected bookmark in a new tab"
 msgstr "Hautatutako laster-marka fitxa berri batean irekitzen du"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:164
 msgid "_Rename…"
 msgstr "Izena _aldatu..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "Rename the selected bookmark or topic"
 msgstr "Hautatutako laster-markari edo gaiari izena aldatu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:169
+#: ../src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "_Properties"
 msgstr "_Propietateak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Hautatutako elementuen propietateak ikusi edo aldatu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
+#: ../src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "_Import Bookmarks…"
 msgstr "_Inportatu laster-markak..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 "Beste arakatzaile edo laster-marken fitxategi bateko laster-markak inportatu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "_Export Bookmarks…"
 msgstr "_Esportatu laster-markak..."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "Export bookmarks to a file"
 msgstr "Esportatu laster-markak fitxategira"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178 ../src/ephy-window.c:108
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175 ../src/ephy-window.c:104
 msgid "_Close"
 msgstr "It_xi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:179
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Close the bookmarks window"
 msgstr "Laster-marken leihoa itxi"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183 ../src/ephy-window.c:119
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180 ../src/ephy-window.c:115
 msgid "Cu_t"
 msgstr "_Ebaki"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
 msgid "Cut the selection"
 msgstr "Hautapena ebakitzen du"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1168 ../src/ephy-window.c:121
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1094 ../src/ephy-window.c:117
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "Copy the selection"
 msgstr "Hautapena kopiatzen du"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:189 ../src/ephy-window.c:123
-msgid "_Paste"
-msgstr "_Itsatsi"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:190
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Paste the clipboard"
 msgstr "Arbelaren edukia itsasten du"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
 #: ../src/resources/history-dialog.ui.h:4
 msgid "_Delete"
 msgstr "Ez_abatu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:193
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Delete the selected bookmark or topic"
 msgstr "Hautatutako laster-marka edo gaia ezabatu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195 ../src/ephy-window.c:127
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192 ../src/ephy-window.c:123
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:196
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Select all bookmarks or text"
 msgstr "Laster-marka guztiak edo testu osoa hautatu"
 
 #. Help Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "_Contents"
 msgstr "_Edukia"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
 msgid "Display bookmarks help"
 msgstr "Laster-marken laguntza erakutsi"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:188
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:188
 msgid "_About"
 msgstr "Honi _buruz"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "Display credits for the web browser creators"
 msgstr "Web arakatzailea sortu dutenen kredituak erakusten ditu"
 
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "_Title"
 msgstr "_Titulua"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Show the title column"
 msgstr "Erakutsi tituluaren zutabea"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1642
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1559
 msgid "Address"
 msgstr "Helbidea"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:213
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
 msgid "Show the address column"
 msgstr "Erakutsi helbideen zutabea"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:255
+#: ../src/bookmarks/ephy-bookmarks-editor.c:252
 msgid "Type a topic"
 msgstr "Idatzi gai bat"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:377
+#: ../src/bookmarks/ephy-bookmarks-editor.c:365
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Ezabatu '%s' gaia?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:380
+#: ../src/bookmarks/ephy-bookmarks-editor.c:368
 msgid "Delete this topic?"
 msgstr "Ezabatu gai hau?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:382
+#: ../src/bookmarks/ephy-bookmarks-editor.c:370
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -1905,44 +1909,44 @@ msgstr ""
 "dira, ez badira beste gai batzuetara eramaten bederen. Laster-markak ez dira "
 "ezabatuko."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:385
+#: ../src/bookmarks/ephy-bookmarks-editor.c:373
 msgid "_Delete Topic"
 msgstr "_Ezabatu gaia"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:495
-#: ../src/bookmarks/ephy-bookmarks-editor.c:499
+#: ../src/bookmarks/ephy-bookmarks-editor.c:471
+#: ../src/bookmarks/ephy-bookmarks-editor.c:473
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:504
-#: ../src/bookmarks/ephy-bookmarks-editor.c:508
+#: ../src/bookmarks/ephy-bookmarks-editor.c:476
+#: ../src/bookmarks/ephy-bookmarks-editor.c:478
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:513
+#: ../src/bookmarks/ephy-bookmarks-editor.c:481
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozillako '%s' profila"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:517
+#: ../src/bookmarks/ephy-bookmarks-editor.c:483
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:521
+#: ../src/bookmarks/ephy-bookmarks-editor.c:485
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:550
+#: ../src/bookmarks/ephy-bookmarks-editor.c:512
 msgid "Import failed"
 msgstr "Huts egin du inportatzeak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:552
+#: ../src/bookmarks/ephy-bookmarks-editor.c:514
 msgid "Import Failed"
 msgstr "Huts egin du inportatzeak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:555
+#: ../src/bookmarks/ephy-bookmarks-editor.c:517
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -1951,76 +1955,76 @@ msgstr ""
 "'%s'(e)ko laster-markak ezin dira inportatu fitxategia hondatuta dagoelako "
 "edo onartzen ez den motakoa delako."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:618
+#: ../src/bookmarks/ephy-bookmarks-editor.c:576
 msgid "Import Bookmarks from File"
 msgstr "Inportatu laster-markak fitxategitik"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:625
+#: ../src/bookmarks/ephy-bookmarks-editor.c:583
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox-eko/Mozilla-ko laster-markak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:629
+#: ../src/bookmarks/ephy-bookmarks-editor.c:587
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon-eko/Konqueror-eko laster-markak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:633
+#: ../src/bookmarks/ephy-bookmarks-editor.c:591
 msgid "Web bookmarks"
 msgstr "Web-aren laster-markak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:758
+#: ../src/bookmarks/ephy-bookmarks-editor.c:705
 msgid "Export Bookmarks"
 msgstr "Esportatu laster-markak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:765
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1505
-#: ../src/bookmarks/ephy-topic-action.c:218
+#: ../src/bookmarks/ephy-bookmarks-editor.c:712
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1422
+#: ../src/bookmarks/ephy-topic-action.c:207
 msgid "Bookmarks"
 msgstr "Laster-markak"
 
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:771
+#: ../src/bookmarks/ephy-bookmarks-editor.c:718
 msgid "File f_ormat:"
 msgstr "Fitxategi-_formatua:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:817
+#: ../src/bookmarks/ephy-bookmarks-editor.c:763
 msgid "Import Bookmarks"
 msgstr "Inportatu laster-markak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:822
+#: ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "I_mport"
 msgstr "_Inportatu"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:838
+#: ../src/bookmarks/ephy-bookmarks-editor.c:784
 msgid "Import bookmarks from:"
 msgstr "Inportatu laster-markak:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:858
+#: ../src/bookmarks/ephy-bookmarks-editor.c:804
 msgid "File"
 msgstr "Fitxategia"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1164
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1092
 msgid "_Copy Address"
 msgstr "_Kopiatu helbidea"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1561
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1478
 #: ../src/resources/bookmark-properties.ui.h:5
 msgid "Topics"
 msgstr "Gaiak"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1631
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1548
 msgid "Title"
 msgstr "Titulua"
 
 #. FIXME !!!!
-#: ../src/bookmarks/ephy-open-tabs-action.c:72
+#: ../src/bookmarks/ephy-open-tabs-action.c:71
 msgid "Open in New _Tabs"
 msgstr "Ireki _fitxa berrietan"
 
-#: ../src/bookmarks/ephy-open-tabs-action.c:73
+#: ../src/bookmarks/ephy-open-tabs-action.c:72
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "Ireki gai honen laster-markak fitxa berrietan"
 
-#: ../src/bookmarks/ephy-topics-entry.c:324
+#: ../src/bookmarks/ephy-topics-entry.c:305
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Sortu '%s' gaia"
@@ -2139,11 +2143,11 @@ msgid "Show all…"
 msgstr "Erakutsi denak…"
 
 #. File actions.
-#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:94
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:90
 msgid "_New Window"
 msgstr "_Leiho berria"
 
-#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:96
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:92
 msgid "New _Incognito Window"
 msgstr "Leiho berria isilka moduan"
 
@@ -2152,19 +2156,23 @@ msgid "Reopen Closed _Tab"
 msgstr "Ireki berriro itxitako _fitxa"
 
 #. Toplevel
-#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:87
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:83
 msgid "_Bookmarks"
 msgstr "Laster-_markak"
 
-#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:137
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:133
 msgid "_History"
 msgstr "_Historia"
 
-#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:139
+#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:135
 msgid "Pr_eferences"
 msgstr "_Hobespenak"
 
-#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:110
+#: ../src/resources/epiphany-application-menu.ui.h:7
+msgid "_Keyboard Shortcuts"
+msgstr "_Laster-teklak"
+
+#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:106
 msgid "_Quit"
 msgstr "_Irten"
 
@@ -2394,7 +2402,7 @@ msgstr "Ortografia-egiaztapena"
 msgid "_Enable spell checking"
 msgstr "_Gaitu ortografia-egiaztapena"
 
-#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:762
+#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:730
 msgid "Language"
 msgstr "Hizkuntza"
 
@@ -2406,27 +2414,263 @@ msgstr "Gehitu hizkuntza"
 msgid "Choose a l_anguage:"
 msgstr "Aukeratu _hizkuntza:"
 
-#: ../src/ephy-combined-stop-reload-action.c:39
+#: ../src/resources/shortcuts-dialog.ui.h:1
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Orokorra"
+
+#: ../src/resources/shortcuts-dialog.ui.h:2
+msgctxt "shortcut window"
+msgid "New window"
+msgstr "Leiho berria"
+
+#: ../src/resources/shortcuts-dialog.ui.h:3
+#, fuzzy
+msgctxt "shortcut window"
+msgid "New incognito window"
+msgstr "Leiho berria isilka moduan"
+
+#: ../src/resources/shortcuts-dialog.ui.h:4
+msgctxt "shortcut window"
+msgid "Open file"
+msgstr "Ireki fitxategia"
+
+#: ../src/resources/shortcuts-dialog.ui.h:5
+msgctxt "shortcut window"
+msgid "Save page"
+msgstr "Gorde orria"
+
+#: ../src/resources/shortcuts-dialog.ui.h:6
+msgctxt "shortcut window"
+msgid "Save page as web app"
+msgstr "Gorde orria web-aplikazio gisa"
+
+#: ../src/resources/shortcuts-dialog.ui.h:7
+msgctxt "shortcut window"
+msgid "Print page"
+msgstr "Inprimatu orria"
+
+#: ../src/resources/shortcuts-dialog.ui.h:8
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Irten"
+
+#: ../src/resources/shortcuts-dialog.ui.h:9
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "Laguntza"
+
+#: ../src/resources/shortcuts-dialog.ui.h:10
+msgctxt "shortcut window"
+msgid "Shortcuts"
+msgstr "Lasterbideak"
+
+#: ../src/resources/shortcuts-dialog.ui.h:11
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Nabigazioa"
+
+#: ../src/resources/shortcuts-dialog.ui.h:12
+msgctxt "shortcut window"
+msgid "Reload current page"
+msgstr "Birkargatu uneko orrialdea"
+
+#: ../src/resources/shortcuts-dialog.ui.h:13
+msgctxt "shortcut window"
+msgid "Stop loading current page"
+msgstr "Gelditu uneko orria kargatzea"
+
+#: ../src/resources/shortcuts-dialog.ui.h:14
+msgctxt "shortcut window"
+msgid "Go back to the previous page"
+msgstr "Joan atzera aurreko orrira"
+
+#: ../src/resources/shortcuts-dialog.ui.h:15
+msgctxt "shortcut window"
+msgid "Go forward to the next page"
+msgstr "Joan aurrera hurrengo orrialdera"
+
+#: ../src/resources/shortcuts-dialog.ui.h:16
+msgctxt "shortcut window"
+msgid "Tabs"
+msgstr "Fitxak"
+
+#: ../src/resources/shortcuts-dialog.ui.h:17
+msgctxt "shortcut window"
+msgid "New tab"
+msgstr "Fitxa berria"
+
+#: ../src/resources/shortcuts-dialog.ui.h:18
+msgctxt "shortcut window"
+msgid "Close current tab"
+msgstr "Itxi uneko fitxa"
+
+#: ../src/resources/shortcuts-dialog.ui.h:19
+msgctxt "shortcut window"
+msgid "Reopen closed tab"
+msgstr "Ireki berriro itxitako fitxa"
+
+#: ../src/resources/shortcuts-dialog.ui.h:20
+msgctxt "shortcut window"
+msgid "Go to the next tab"
+msgstr "Joan hurrengo fitxara"
+
+#: ../src/resources/shortcuts-dialog.ui.h:21
+msgctxt "shortcut window"
+msgid "Go to the previous tab"
+msgstr "Joan aurreko fitxara"
+
+#: ../src/resources/shortcuts-dialog.ui.h:22
+msgctxt "shortcut window"
+msgid "Move current tab to the left"
+msgstr "Eraman uneko fitxa ezkerrera"
+
+#: ../src/resources/shortcuts-dialog.ui.h:23
+msgctxt "shortcut window"
+msgid "Move current tab to the right"
+msgstr "Eraman uneko fitxa eskuinera"
+
+#: ../src/resources/shortcuts-dialog.ui.h:24
+msgctxt "shortcut window"
+msgid "Miscellaneous"
+msgstr "Hainbat"
+
+#: ../src/resources/shortcuts-dialog.ui.h:25
+msgctxt "shortcut window"
+msgid "History"
+msgstr "Historia"
+
+#: ../src/resources/shortcuts-dialog.ui.h:26
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Hobespenak"
+
+#: ../src/resources/shortcuts-dialog.ui.h:27
+msgctxt "shortcut window"
+msgid "Bookmarks"
+msgstr "Laster-markak"
+
+#: ../src/resources/shortcuts-dialog.ui.h:28
+msgctxt "shortcut window"
+msgid "Bookmark current page"
+msgstr "Gehitu uneko orriaren laster-marka"
+
+#: ../src/resources/shortcuts-dialog.ui.h:29
+msgctxt "shortcut window"
+msgid "Toggle caret browsing"
+msgstr "Txandakatu kurtsorearekin arakatzea"
+
+#: ../src/resources/shortcuts-dialog.ui.h:30
+msgctxt "shortcut window"
+msgid "View"
+msgstr "Ikusi"
+
+#: ../src/resources/shortcuts-dialog.ui.h:31
+msgctxt "shortcut window"
+msgid "Zoom in"
+msgstr "Handiagotu"
+
+#: ../src/resources/shortcuts-dialog.ui.h:32
+msgctxt "shortcut window"
+msgid "Zoom out"
+msgstr "Txikiagotu"
+
+#: ../src/resources/shortcuts-dialog.ui.h:33
+msgctxt "shortcut window"
+msgid "Reset zoom"
+msgstr "Berrezarri zooma"
+
+#: ../src/resources/shortcuts-dialog.ui.h:34
+msgctxt "shortcut window"
+msgid "Fullscreen"
+msgstr "Pantaila osoa"
+
+#: ../src/resources/shortcuts-dialog.ui.h:35
+msgctxt "shortcut window"
+msgid "View page source"
+msgstr "Ikusi orriaren iturburua"
+
+#: ../src/resources/shortcuts-dialog.ui.h:36
+msgctxt "shortcut window"
+msgid "Toggle inspector"
+msgstr "Txandakatu ikuskatzailea"
+
+#: ../src/resources/shortcuts-dialog.ui.h:37
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Edizioa"
+
+#: ../src/resources/shortcuts-dialog.ui.h:38
+msgctxt "shortcut window"
+msgid "Cut"
+msgstr "Ebaki"
+
+#: ../src/resources/shortcuts-dialog.ui.h:39
+msgctxt "shortcut window"
+msgid "Copy"
+msgstr "Kopiatu"
+
+#: ../src/resources/shortcuts-dialog.ui.h:40
+msgctxt "shortcut window"
+msgid "Paste"
+msgstr "Itsatsi"
+
+#: ../src/resources/shortcuts-dialog.ui.h:41
+msgctxt "shortcut window"
+msgid "Undo"
+msgstr "Desegin"
+
+#: ../src/resources/shortcuts-dialog.ui.h:42
+msgctxt "shortcut window"
+msgid "Redo"
+msgstr "Berregin"
+
+#: ../src/resources/shortcuts-dialog.ui.h:43
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Hautatu dena"
+
+#: ../src/resources/shortcuts-dialog.ui.h:44
+msgctxt "shortcut window"
+msgid "Select page URL"
+msgstr "Hautatu orriaren URLa"
+
+#: ../src/resources/shortcuts-dialog.ui.h:45
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Bilatu"
+
+#: ../src/resources/shortcuts-dialog.ui.h:46
+msgctxt "shortcut window"
+msgid "Next search result"
+msgstr "Bilaketaren hurrengo emaitza"
+
+#: ../src/resources/shortcuts-dialog.ui.h:47
+msgctxt "shortcut window"
+msgid "Previous search result"
+msgstr "Bilaketaren aurreko emaitza"
+
+#: ../src/ephy-combined-stop-reload-action.c:38
 msgid "Stop"
 msgstr "Gelditu"
 
-#: ../src/ephy-combined-stop-reload-action.c:40
+#: ../src/ephy-combined-stop-reload-action.c:39
 msgid "Stop current data transfer"
 msgstr "Uneko datu-transferentzia geldiarazi"
 
-#: ../src/ephy-combined-stop-reload-action.c:42 ../src/ephy-window.c:148
+#: ../src/ephy-combined-stop-reload-action.c:41 ../src/ephy-window.c:144
 msgid "_Reload"
 msgstr "_Berritu"
 
-#: ../src/ephy-combined-stop-reload-action.c:43
+#: ../src/ephy-combined-stop-reload-action.c:42
 msgid "Display the latest content of the current page"
 msgstr "Uneko orriaren eduki berriena bistaratzen du"
 
-#: ../src/ephy-history-window.c:253
+#: ../src/ephy-history-window.c:242
 msgid "Clear browsing history?"
 msgstr "Arakatzearen historia garbitu?"
 
-#: ../src/ephy-history-window.c:257
+#: ../src/ephy-history-window.c:246
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
@@ -2434,67 +2678,67 @@ msgstr ""
 "Arakatzearen historia garbitzen bada, historiako esteka guztiak betiko "
 "ezabatuko dira."
 
-#: ../src/ephy-main.c:74
+#: ../src/ephy-main.c:86
 msgid "Open a new tab in an existing browser window"
 msgstr "Ireki fitxa berria existitzen den arakatze-leihoan"
 
-#: ../src/ephy-main.c:76
+#: ../src/ephy-main.c:88
 msgid "Open a new browser window"
 msgstr "Ireki arakatzaile-leiho berrian"
 
-#: ../src/ephy-main.c:78
+#: ../src/ephy-main.c:90
 msgid "Import bookmarks from the given file"
 msgstr "Inportatu laster-markak emandako fitxategitik"
 
-#: ../src/ephy-main.c:78 ../src/ephy-main.c:80
+#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
 msgid "FILE"
 msgstr "FITXATEGIA"
 
-#: ../src/ephy-main.c:80
+#: ../src/ephy-main.c:92
 msgid "Load the given session file"
 msgstr "Kargatu emandako saioaren fitxategia"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:94
 msgid "Add a bookmark"
 msgstr "Gehitu laster-marka"
 
-#: ../src/ephy-main.c:82
+#: ../src/ephy-main.c:94
 msgid "URL"
 msgstr "URLa"
 
-#: ../src/ephy-main.c:84
+#: ../src/ephy-main.c:96
 msgid "Start a private instance"
 msgstr "Hasi instantzia pribatua"
 
-#: ../src/ephy-main.c:86
+#: ../src/ephy-main.c:98
 msgid "Start an instance in incognito mode"
 msgstr "Hasi instantzia bat isilka moduan"
 
-#: ../src/ephy-main.c:88
+#: ../src/ephy-main.c:100
 msgid "Start an instance in netbank mode"
 msgstr "Hasi instantzia bat netbank moduan"
 
-#: ../src/ephy-main.c:90
+#: ../src/ephy-main.c:103
 msgid "Start the browser in application mode"
 msgstr "Abiatu arakatzailea aplikazio moduan"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:105
 msgid "Profile directory to use in the private instance"
 msgstr "Profilen direktorioa instantzia pribatuan erabiltzeko"
 
-#: ../src/ephy-main.c:92
+#: ../src/ephy-main.c:105
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:107
 msgid "URL …"
 msgstr "URLa ..."
 
-#: ../src/ephy-main.c:199
+#: ../src/ephy-main.c:212
 msgid "Could not start Web"
 msgstr "Ezin izan da weba abiarazi"
 
-#: ../src/ephy-main.c:202
+#: ../src/ephy-main.c:215
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2503,110 +2747,118 @@ msgstr ""
 "Abioak huts egin du honako errorearengatik:\n"
 "%s"
 
-#: ../src/ephy-main.c:312
+#: ../src/ephy-main.c:325
 msgid "Web options"
 msgstr "Webaren aukerak"
 
-#: ../src/ephy-notebook.c:617
+#: ../src/ephy-notebook.c:660
 msgid "Close tab"
 msgstr "Itxi fitxa"
 
-#: ../src/ephy-search-provider.c:198
+#: ../src/ephy-search-provider.c:195
 #, c-format
 msgid "Search the Web for %s"
 msgstr "Bilatu '%s' webean"
 
-#: ../src/ephy-window.c:98
+#: ../src/ephy-window.c:94
 msgid "_Open…"
 msgstr "_Ireki..."
 
-#: ../src/ephy-window.c:100
+#: ../src/ephy-window.c:96
 msgid "Save _As…"
 msgstr "Gorde _honela..."
 
-#: ../src/ephy-window.c:102
+#: ../src/ephy-window.c:98
 msgid "Save As _Web Application…"
 msgstr "Gorde _web aplikazio gisa..."
 
-#: ../src/ephy-window.c:104
+#: ../src/ephy-window.c:100
 msgid "_Print…"
 msgstr "_Inprimatu..."
 
-#: ../src/ephy-window.c:106
+#: ../src/ephy-window.c:102
 msgid "S_end Link by Email…"
 msgstr "Bi_dali esteka postaz..."
 
-#: ../src/ephy-window.c:117
+#: ../src/ephy-window.c:113
 msgid "Re_do"
 msgstr "Be_rregin"
 
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:125
 msgid "_Find…"
 msgstr "_Bilatu..."
 
-#: ../src/ephy-window.c:131
+#: ../src/ephy-window.c:127
 msgid "Find Ne_xt"
 msgstr "Bilatu _hurrengoa"
 
-#: ../src/ephy-window.c:133
+#: ../src/ephy-window.c:129
 msgid "Find Pre_vious"
 msgstr "Bilatu _aurrekoa"
 
-#: ../src/ephy-window.c:135
+#: ../src/ephy-window.c:131
 msgid "Edit _Bookmarks"
 msgstr "Editatu _laster-markak"
 
 #. View actions.
-#: ../src/ephy-window.c:144 ../src/ephy-window.c:146
+#: ../src/ephy-window.c:140 ../src/ephy-window.c:142
 msgid "_Stop"
 msgstr "_Gelditu"
 
-#: ../src/ephy-window.c:150
+#: ../src/ephy-window.c:146
 msgid "Zoom _In"
 msgstr "_Handiagotu"
 
-#: ../src/ephy-window.c:152
+#: ../src/ephy-window.c:148
 msgid "Zoom O_ut"
 msgstr "_Txikiagotu"
 
-#: ../src/ephy-window.c:154
+#: ../src/ephy-window.c:150
 msgid "_Normal Size"
 msgstr "Tamaina _normala"
 
-#: ../src/ephy-window.c:156
+#: ../src/ephy-window.c:152
 msgid "Text _Encoding"
 msgstr "Testu _kodeketa"
 
-#: ../src/ephy-window.c:158
+#: ../src/ephy-window.c:154
 msgid "_Page Source"
 msgstr "_Orriaren iturburua"
 
+#: ../src/ephy-window.c:156
+msgid "_Toggle Inspector"
+msgstr "_Txandakatu ikuskatzailea"
+
 #. Bookmarks actions.
-#: ../src/ephy-window.c:163
+#: ../src/ephy-window.c:161
 msgid "_Add Bookmark…"
 msgstr "_Gehitu laster-marka..."
 
 #. Go actions.
-#: ../src/ephy-window.c:168
+#: ../src/ephy-window.c:166
 msgid "_Location…"
 msgstr "_Helbidea..."
 
 #. Tabs actions.
-#: ../src/ephy-window.c:173
+#: ../src/ephy-window.c:171
 msgid "_Previous Tab"
 msgstr "_Aurreko fitxa"
 
-#: ../src/ephy-window.c:175
+#: ../src/ephy-window.c:173
 msgid "_Next Tab"
 msgstr "_Hurrengo fitxa"
 
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:175
 msgid "Move Tab _Left"
 msgstr "Eraman fitxa e_zkerrera"
 
-#: ../src/ephy-window.c:179
+#: ../src/ephy-window.c:177
 msgid "Move Tab _Right"
 msgstr "Eraman fitxa e_skuinera"
+
+#: ../src/ephy-window.c:179
+msgid "Du_plicate"
+msgstr "_Bikoiztu"
 
 #: ../src/ephy-window.c:181
 msgid "_Detach Tab"
@@ -2730,78 +2982,78 @@ msgstr "Hemendik irtetean deskarga guztiak bertan behera utziko dira"
 msgid "Quit and cancel downloads"
 msgstr "Irten eta utzi deskargak"
 
-#: ../src/ephy-window.c:1133 ../src/window-commands.c:272
+#: ../src/ephy-window.c:1094 ../src/window-commands.c:258
 msgid "Open"
 msgstr "Ireki"
 
-#: ../src/ephy-window.c:1135
+#: ../src/ephy-window.c:1096
 msgid "Save As"
 msgstr "Gorde honela"
 
-#: ../src/ephy-window.c:1137
+#: ../src/ephy-window.c:1098
 msgid "Save As Application"
 msgstr "Gorde aplikazio gisa"
 
-#: ../src/ephy-window.c:1139
+#: ../src/ephy-window.c:1100
 msgid "Print"
 msgstr "Inprimatu"
 
-#: ../src/ephy-window.c:1141
+#: ../src/ephy-window.c:1102
 msgid "Bookmark"
 msgstr "Laster-marka"
 
-#: ../src/ephy-window.c:1143
+#: ../src/ephy-window.c:1104
 msgid "Find"
 msgstr "Bilatu"
 
-#: ../src/ephy-window.c:1149
+#: ../src/ephy-window.c:1110
 msgid "Encodings…"
 msgstr "Kodeketak..."
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1152
+#: ../src/ephy-window.c:1113
 msgid "Larger"
 msgstr "Handiagoa"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1155
+#: ../src/ephy-window.c:1116
 msgid "Smaller"
 msgstr "Txikiagoa"
 
-#: ../src/ephy-window.c:1177
+#: ../src/ephy-window.c:1138
 msgid "Back"
 msgstr "Atzera"
 
-#: ../src/ephy-window.c:1189
+#: ../src/ephy-window.c:1150
 msgid "Forward"
 msgstr "Aurrera"
 
-#: ../src/ephy-window.c:1201
+#: ../src/ephy-window.c:1162
 msgid "Zoom"
 msgstr "Zooma"
 
-#: ../src/ephy-window.c:1210
+#: ../src/ephy-window.c:1171
 msgid "New _Tab"
 msgstr "_Fitxa berria"
 
-#: ../src/ephy-window.c:1218
+#: ../src/ephy-window.c:1179
 msgid "Go to most visited"
 msgstr "Joan bisitatuenera"
 
-#: ../src/ephy-window.c:1732
+#: ../src/ephy-window.c:1669
 #, c-format
 msgid "Search the Web for '%s'"
 msgstr "Bilatu '%s' webean"
 
-#: ../src/popup-commands.c:258
+#: ../src/popup-commands.c:252
 msgid "Save Link As"
 msgstr "Gorde esteka honela"
 
-#: ../src/popup-commands.c:265
+#: ../src/popup-commands.c:259
 msgid "Save Image As"
 msgstr "Gorde irudia honela"
 
-#: ../src/popup-commands.c:272
+#: ../src/popup-commands.c:266
 msgid "Save Media As"
 msgstr "Gorde _multimedia honela"
 
@@ -2809,7 +3061,7 @@ msgstr "Gorde _multimedia honela"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:476 ../src/prefs-dialog.c:482
+#: ../src/prefs-dialog.c:454 ../src/prefs-dialog.c:458
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2818,25 +3070,25 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:491
+#: ../src/prefs-dialog.c:465
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Erabiltzaileak definitua (%s)"
 
-#: ../src/prefs-dialog.c:513
+#: ../src/prefs-dialog.c:487
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Sistemaren hizkuntza (%s)"
 msgstr[1] "Sistemaren hizkuntzak (%s)"
 
-#: ../src/prefs-dialog.c:845
+#: ../src/prefs-dialog.c:809
 msgid "Select a Directory"
 msgstr "Hautatu direktorioa"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:939
+#: ../src/prefs-dialog.c:903
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2844,52 +3096,52 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:945
+#: ../src/prefs-dialog.c:909
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany&kl=eu-es&kad=eu_ES"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:947
+#: ../src/prefs-dialog.c:911
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:950
+#: ../src/prefs-dialog.c:914
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.com/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:952
+#: ../src/prefs-dialog.c:916
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:955
+#: ../src/prefs-dialog.c:919
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
 
-#: ../src/window-commands.c:327
+#: ../src/window-commands.c:309
 msgid "Save"
 msgstr "Gorde"
 
-#: ../src/window-commands.c:707
+#: ../src/window-commands.c:680
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr ""
 "'%s' izeneko web aplikazioa badago lehendik ere. Hori ordeztea nahi duzu?"
 
-#: ../src/window-commands.c:710
+#: ../src/window-commands.c:683
 msgid "Cancel"
 msgstr "Utzi"
 
-#: ../src/window-commands.c:712
+#: ../src/window-commands.c:685
 msgid "Replace"
 msgstr "Ordeztu"
 
-#: ../src/window-commands.c:716
+#: ../src/window-commands.c:689
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -2897,42 +3149,42 @@ msgstr ""
 "Izen bereko aplikazioa badago lehendik ere. Hau ordeztean gainidatzi egingo "
 "du."
 
-#: ../src/window-commands.c:752
+#: ../src/window-commands.c:724
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "'%s' aplikazioa prest dago erabiltzeko"
 
-#: ../src/window-commands.c:755
+#: ../src/window-commands.c:727
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "'%s' aplikazioa ezin izan da sortu"
 
-#: ../src/window-commands.c:763
+#: ../src/window-commands.c:735
 msgid "Launch"
 msgstr "Abiarazi"
 
 #. Show dialog with icon, title.
-#: ../src/window-commands.c:803
+#: ../src/window-commands.c:775
 msgid "Create Web Application"
 msgstr "Sortu web aplikazioa"
 
-#: ../src/window-commands.c:808
+#: ../src/window-commands.c:780
 msgid "C_reate"
 msgstr "_Sortu"
 
-#: ../src/window-commands.c:1474 ../src/window-commands.c:1497
+#: ../src/window-commands.c:1461 ../src/window-commands.c:1484
 msgid "Contact us at:"
 msgstr "Kontaktatu gurekin:"
 
-#: ../src/window-commands.c:1477
+#: ../src/window-commands.c:1464
 msgid "Contributors:"
 msgstr "Laguntzaileak:"
 
-#: ../src/window-commands.c:1480
+#: ../src/window-commands.c:1467
 msgid "Past developers:"
 msgstr "Iraganeko garatzaileak:"
 
-#: ../src/window-commands.c:1506
+#: ../src/window-commands.c:1493
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -2949,21 +3201,21 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:1529
+#: ../src/window-commands.c:1516
 msgid "translator-credits"
 msgstr ""
 "Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>"
 
-#: ../src/window-commands.c:1532
+#: ../src/window-commands.c:1519
 msgid "Web Website"
 msgstr "Web webgunea"
 
-#: ../src/window-commands.c:1671
+#: ../src/window-commands.c:1680
 msgid "Enable caret browsing mode?"
 msgstr "Gaitu kurtsorearekin arakatzea?"
 
-#: ../src/window-commands.c:1674
+#: ../src/window-commands.c:1683
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2973,9 +3225,62 @@ msgstr ""
 "Eginbide honek kurtsore mugikor bat jartzen du web orrietan, teklatuarekin "
 "inguruan mugitzea baimenduz. Nahi duzu kurtsorearekin arakatzea aktibatzea?"
 
-#: ../src/window-commands.c:1677
+#: ../src/window-commands.c:1686
 msgid "_Enable"
 msgstr "_Gaitu"
+
+#~ msgid "Search the web"
+#~ msgstr "Bilatu webean"
+
+#~ msgid "https://duckduckgo.com/?t=epiphany"
+#~ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=eu-es&amp;kad=eu_ES"
+
+#~ msgid "This might not be the real %s."
+#~ msgstr "Ez dirudi '%s' benetakoa denik."
+
+#~ msgid ""
+#~ "When you try to connect securely, websites present identification to "
+#~ "prove that your connection has not been maliciously intercepted. There is "
+#~ "something wrong with this website’s identification:"
+#~ msgstr ""
+#~ "Segurtasunez konektatzen saiatzean, webguneek identifikazioak aurkezten "
+#~ "dituzte zure konexioan beste inor maltzurki sartuta ez dagoela "
+#~ "frogatzeko. Zerbait gaizki dago webgune honen identifikatzailearekin:"
+
+#~ msgid ""
+#~ "A third party may have hijacked your connection. You should continue only "
+#~ "if you know there is a good reason why this website does not use trusted "
+#~ "identification."
+#~ msgstr ""
+#~ "Hirugarren batek zure konexioan sartuta egon daiteke. Soilik jarraitu "
+#~ "baldin eta webgune honek identifikazio fidagarririk ez erabiltzeko "
+#~ "arrazoi oso onak baditu."
+
+#~ msgid ""
+#~ "Legitimate banks, stores, and other public sites will not ask you to do "
+#~ "this."
+#~ msgstr ""
+#~ "Banku, denda edo beste gune publiko legitimoek ez dizute hau egiteko "
+#~ "eskatuko."
+
+#~ msgid "Look out!"
+#~ msgstr "Kontuz!"
+
+#~ msgctxt "accept-risk-access-key"
+#~ msgid "R"
+#~ msgstr "A"
+
+#~ msgid "Master password needed"
+#~ msgstr "Pasahitz maisua behar da"
+
+#~ msgid ""
+#~ "The passwords from the previous version are locked with a master "
+#~ "password. If you want to import them, please enter your master password "
+#~ "below."
+#~ msgstr ""
+#~ "Aurreko bertsioko pasahitzak blokeatuta daude pasahitz maisu batekin. "
+#~ "Epiphany-k hauek inportatzea nahi baduzu, sartu zure pasahitz maisua "
+#~ "azpian."
 
 #~ msgid "Try again"
 #~ msgstr "Saiatu berriro"
@@ -3040,9 +3345,6 @@ msgstr "_Gaitu"
 
 #~ msgid "_Disk space:"
 #~ msgstr "_Diskoko lekua:"
-
-#~ msgid "MB"
-#~ msgstr "MB"
 
 #~ msgid "http://duckduckgo.com/?q=%s&amp;t=epiphany"
 #~ msgstr "http://duckduckgo.com/?q=%s&amp;t=epiphany"
@@ -3279,9 +3581,6 @@ msgstr "_Gaitu"
 #~ msgid "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 #~ msgstr "http://www.google.com/search?q=%s&amp;ie=UTF-8&amp;oe=UTF-8"
 
-#~ msgid "Web Inspector"
-#~ msgstr "Web ikuskatzailea"
-
 #~ msgid "Epiphany can't be used now. Initialization failed."
 #~ msgstr "Epiphany ezin da erabili orain. Huts egin du hasieratzean."
 
@@ -3473,9 +3772,6 @@ msgstr "_Gaitu"
 #~ msgid "MD5 Fingerprint:"
 #~ msgstr "MD5 hatz-marka:"
 
-#~ msgid "Organization:"
-#~ msgstr "Erakundea:"
-
 #~ msgid "Organizational Unit:"
 #~ msgstr "Erakundeko saila:"
 
@@ -3503,9 +3799,6 @@ msgstr "_Gaitu"
 
 #~ msgid "Home page"
 #~ msgstr "Hasierako orria"
-
-#~ msgid "Set to Current _Page"
-#~ msgstr "Ezarri _uneko orrian"
 
 #~ msgid "Set to _Blank Page"
 #~ msgstr "Ezarri orri _hutsean"
@@ -3616,9 +3909,6 @@ msgstr "_Gaitu"
 #~ msgid "Switch to this tab"
 #~ msgstr "Aldatu fitxa honetara"
 
-#~ msgid "Go to the previous visited page"
-#~ msgstr "Bisitatutako aurreko orrira joaten da"
-
 #~ msgid "Forward history"
 #~ msgstr "Aurrera joan historian"
 
@@ -3640,9 +3930,6 @@ msgstr "_Gaitu"
 
 #~ msgid "_Home"
 #~ msgstr "_Hasiera"
-
-#~ msgid "Go to the home page"
-#~ msgstr "Hasierako orrialdera joaten da"
 
 #~ msgid "Open a new tab"
 #~ msgstr "Fitxa berria irekitzen du"
@@ -3685,15 +3972,6 @@ msgstr "_Gaitu"
 #~ msgid "T_ools"
 #~ msgstr "_Tresna-barrak"
 
-#~ msgid "_Tabs"
-#~ msgstr "Fi_txak"
-
-#~ msgid "Open a file"
-#~ msgstr "Fitxategi bat irekitzen du"
-
-#~ msgid "Save the current page"
-#~ msgstr "Uneko orria gordetzen du"
-
 #~ msgid "Save the current page as a Web Application"
 #~ msgstr "Uneko orria web aplikazio gisa gordetzen du"
 
@@ -3705,9 +3983,6 @@ msgstr "_Gaitu"
 
 #~ msgid "Print Pre_view"
 #~ msgstr "Inprimatzeko _aurrebista"
-
-#~ msgid "Print preview"
-#~ msgstr "Inprimatzeko aurrebista"
 
 #~ msgid "Print the current page"
 #~ msgstr "Uneko orria inprimatzen du"
@@ -3778,14 +4053,8 @@ msgstr "_Gaitu"
 #~ msgid "View the source code of the page"
 #~ msgstr "Ikusi orriaren iturburu-kodea"
 
-#~ msgid "Page _Security Information"
-#~ msgstr "Orriaren _segurtasun-informazioa"
-
 #~ msgid "Display security information for the web page"
 #~ msgstr "Bistaratu webgunearen segurtasun-informazioa"
-
-#~ msgid "Add a bookmark for the current page"
-#~ msgstr "Gehitu uneko orriaren laster-marka"
 
 #~ msgid "Open the bookmarks window"
 #~ msgstr "Ireki laster-marken leihoa"
@@ -3801,15 +4070,6 @@ msgstr "_Gaitu"
 
 #~ msgid "Activate next tab"
 #~ msgstr "Hurrengo fitxa aktibatzen du"
-
-#~ msgid "Move current tab to left"
-#~ msgstr "Uneko fitxa ezkerrera eramaten du"
-
-#~ msgid "Move current tab to right"
-#~ msgstr "Uneko fitxa eskuinera eramaten du"
-
-#~ msgid "Detach current tab"
-#~ msgstr "Uneko fitxa desuztartzen du"
 
 #~ msgid "Display web browser help"
 #~ msgstr "Web arakatzailearen laguntza bistaratzen du"
