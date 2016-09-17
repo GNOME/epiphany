@@ -251,6 +251,11 @@ static GActionEntry app_entries[] = {
   { "quit", quit_application, NULL, NULL, NULL },
 };
 
+static GActionEntry app_mode_app_entries[] = {
+  { "about", show_about, NULL, NULL, NULL },
+  { "quit", quit_application, NULL, NULL, NULL },
+};
+
 static GActionEntry app_normal_mode_entries[] = {
   { "reopen-closed-tab", reopen_closed_tab, NULL, NULL, NULL },
 };
@@ -290,6 +295,7 @@ ephy_shell_startup (GApplication *application)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
   EphyEmbedShellMode mode;
+  GtkBuilder *builder;
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
@@ -299,11 +305,13 @@ ephy_shell_startup (GApplication *application)
                     G_CALLBACK (download_started_cb),
                     application);
 
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder,
+                                 "/org/gnome/epiphany/epiphany-application-menu.ui",
+                                 NULL);
+
   mode = ephy_embed_shell_get_mode (embed_shell);
-
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    GtkBuilder *builder;
-
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_entries, G_N_ELEMENTS (app_entries),
                                      application);
@@ -320,14 +328,18 @@ ephy_shell_startup (GApplication *application)
                               G_BINDING_SYNC_CREATE);
     }
 
-    builder = gtk_builder_new ();
-    gtk_builder_add_from_resource (builder,
-                                   "/org/gnome/epiphany/epiphany-application-menu.ui",
-                                   NULL);
+
     gtk_application_set_app_menu (GTK_APPLICATION (application),
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
-    g_object_unref (builder);
+  } else {
+    g_action_map_add_action_entries (G_ACTION_MAP (application),
+                                     app_mode_app_entries, G_N_ELEMENTS (app_mode_app_entries),
+                                     application);
+    gtk_application_set_app_menu (GTK_APPLICATION (application),
+                                  G_MENU_MODEL (gtk_builder_get_object (builder, "app-mode-app-menu")));
   }
+
+  g_object_unref (builder);
 }
 
 static void
