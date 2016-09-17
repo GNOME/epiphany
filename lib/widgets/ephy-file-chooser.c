@@ -46,24 +46,17 @@ ephy_file_chooser_init (EphyFileChooser *dialog)
 {
 }
 
-static GObject *
-ephy_file_chooser_constructor (GType                  type,
-                               guint                  n_construct_properties,
-                               GObjectConstructParam *construct_params)
+static void
+ephy_file_chooser_constructed (GObject *object)
 
 {
-  GObject *object;
   char *downloads_dir;
 
-  object = G_OBJECT_CLASS (ephy_file_chooser_parent_class)->constructor (type, n_construct_properties,
-                                                                         construct_params);
+  G_OBJECT_CLASS (ephy_file_chooser_parent_class)->constructed (object);
 
   downloads_dir = ephy_file_get_downloads_dir ();
-  gtk_file_chooser_add_shortcut_folder
-    (GTK_FILE_CHOOSER (object), downloads_dir, NULL);
+  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (object), downloads_dir, NULL);
   g_free (downloads_dir);
-
-  return object;
 }
 
 GtkFileFilter *
@@ -127,7 +120,7 @@ ephy_file_chooser_class_init (EphyFileChooserClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructor = ephy_file_chooser_constructor;
+  object_class->constructed = ephy_file_chooser_constructed;
 }
 
 static void
