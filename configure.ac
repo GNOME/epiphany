@@ -20,7 +20,7 @@ m4_define([epiphany_version_micro],[4])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 dnl Must be a valid git tag
-m4_define([epiphany_changelog_start],[3.20.0])
+m4_define([epiphany_changelog_start],[3.21.4])
 
 AX_REQUIRE_DEFINED([APPSTREAM_XML])
 AX_REQUIRE_DEFINED([AX_CHECK_ENABLE_DEBUG])
