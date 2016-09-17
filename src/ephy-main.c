@@ -120,7 +120,8 @@ get_startup_id (void)
   guint32 retval = 0;
 
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id == NULL) return 0;
+  if (startup_id == NULL)
+    return 0;
 
   /* Find the launch time from the startup_id, if it's there.  Newer spec
    * states that the startup_id is of the form <unique>_TIME<timestamp>
