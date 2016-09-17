@@ -256,68 +256,6 @@ create_desktop_file (const char *address,
   return desktop_file_path;
 }
 
-static SoupCookieJar *get_current_cookie_jar (void)
-{
-  char *filename;
-  SoupCookieJar *jar;
-  char *dot_dir;
-
-  /* FIXME: There's no API in WebKit2 to get all cookies, so we create a
-   * temp read-only jar for the current cookies to read from it.
-   * It would be better to have an API in WebKit to get the cookies instead.
-   */
-  dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
-  filename = g_build_filename (dot_dir ? dot_dir : ephy_dot_dir (), "cookies.sqlite", NULL);
-  jar = (SoupCookieJar *)soup_cookie_jar_db_new (filename, TRUE);
-  g_free (filename);
-  g_free (dot_dir);
-
-  return jar;
-}
-
-static void
-create_cookie_jar_for_domain (const char *address, const char *directory)
-{
-  GSList *cookies, *p;
-  SoupCookieJar *current_jar, *new_jar;
-  char *domain, *filename;
-  SoupURI *uri;
-
-  /* Create the new cookie jar */
-  filename = g_build_filename (directory, "cookies.sqlite", NULL);
-  new_jar = (SoupCookieJar *)soup_cookie_jar_db_new (filename, FALSE);
-  g_free (filename);
-
-  /* The app domain for the current view */
-  uri = soup_uri_new (address);
-  if (!uri)
-    return;
-  domain = uri->host;
-
-  /* The current cookies */
-  current_jar = get_current_cookie_jar ();
-  if (!current_jar) {
-    soup_uri_free (uri);
-    return;
-  }
-
-  cookies = soup_cookie_jar_all_cookies (current_jar);
-
-  for (p = cookies; p; p = p->next) {
-    SoupCookie *cookie = (SoupCookie *)p->data;
-
-    if (soup_cookie_domain_matches (cookie, domain))
-      soup_cookie_jar_add_cookie (new_jar, cookie);
-    else
-      soup_cookie_free (cookie);
-  }
-
-  soup_uri_free (uri);
-  g_slist_free (cookies);
-  g_object_unref (current_jar);
-  g_object_unref (new_jar);
-}
-
 /**
  * ephy_web_application_create:
  * @address: the address of the new web application
@@ -347,12 +285,6 @@ ephy_web_application_create (const char *address, const char *name, GdkPixbuf *i
     LOG ("Failed to create directory %s", profile_dir);
     goto out;
   }
-
-  /* Things we need in a WebApp's profile:
-     - Our own cookies file, copying the relevant cookies for the
-       app's domain.
-   */
-  create_cookie_jar_for_domain (address, profile_dir);
 
   /* Create the deskop file. */
   desktop_file_path = create_desktop_file (address, profile_dir, name, icon);
@@ -398,8 +330,6 @@ ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
     g_free (profile_dir);
     return NULL;
   }
-
-  create_cookie_jar_for_domain (address, profile_dir);
 
   return profile_dir;
 }
