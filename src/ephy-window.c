@@ -3455,7 +3455,8 @@ ephy_window_close (EphyWindow *window)
   /* We ignore the delete_event if the disable_quit lockdown has been set
    */
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_QUIT)) return FALSE;
+                              EPHY_PREFS_LOCKDOWN_QUIT))
+    return FALSE;
 
   if (window->checking_modified_forms) {
     /* stop window close */
