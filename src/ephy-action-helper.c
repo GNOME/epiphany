@@ -42,7 +42,7 @@ ephy_action_change_sensitivity_flags (GSimpleAction *action,
                                       gboolean       set)
 {
   static GQuark sensitivity_quark = 0;
-  GObject *object = (GObject *)action;
+  GObject *object = G_OBJECT (action);
   guint value;
 
   if (G_UNLIKELY (sensitivity_quark == 0)) {
