@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_TITLE_BOX (ephy_title_box_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyTitleBox, ephy_title_box, EPHY, TITLE_BOX, GtkBox)
+G_DECLARE_FINAL_TYPE (EphyTitleBox, ephy_title_box, EPHY, TITLE_BOX, GtkEventBox)
 
 EphyTitleBox       *ephy_title_box_new                  (void);
 
