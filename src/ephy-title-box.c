@@ -88,6 +88,7 @@ ephy_title_box_constructed (GObject *object)
   gtk_label_set_line_wrap (GTK_LABEL (title_box->title), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (title_box->title), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (title_box->title), PANGO_ELLIPSIZE_END);
+  gtk_label_set_text (GTK_LABEL (title_box->title), g_get_application_name ());
   gtk_box_pack_start (GTK_BOX (vbox), title_box->title, FALSE, FALSE, 0);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
@@ -114,18 +115,6 @@ ephy_title_box_constructed (GObject *object)
 }
 
 static void
-ephy_title_box_dispose (GObject *object)
-{
-  EphyTitleBox *title_box = EPHY_TITLE_BOX (object);
-
-  LOG ("EphyTitleBox dispose %p", title_box);
-
-  ephy_title_box_set_web_view (title_box, NULL);
-
-  G_OBJECT_CLASS (ephy_title_box_parent_class)->dispose (object);
-}
-
-static void
 ephy_title_box_get_preferred_width (GtkWidget *widget,
                                     gint      *minimum_width,
                                     gint      *natural_width)
@@ -143,7 +132,6 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
   GObjectClass   *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = ephy_title_box_dispose;
   object_class->constructed = ephy_title_box_constructed;
   widget_class->button_press_event = ephy_title_box_button_press_event;
   widget_class->get_preferred_width = ephy_title_box_get_preferred_width;
@@ -184,30 +172,6 @@ ephy_title_box_new (void)
   return g_object_new (EPHY_TYPE_TITLE_BOX,
                        "valign", GTK_ALIGN_CENTER,
                        NULL);
-}
-
-/**
- * ephy_title_box_set_web_view:
- * @title_box: an #EphyTitleBox
- * @web_view: a #WebKitWebView
- *
- * Sets the web view of the @title_box.
- **/
-void
-ephy_title_box_set_web_view (EphyTitleBox  *title_box,
-                             WebKitWebView *web_view)
-{
-  g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
-
-  LOG ("ephy_title_box_set_web_view title-box %p web_view %p", title_box, web_view);
-
-  g_clear_object (&title_box->title_binding);
-
-  if (web_view) {
-    title_box->title_binding = g_object_bind_property (web_view, "title",
-                                                       title_box->title, "label",
-                                                       G_BINDING_SYNC_CREATE);
-  }
 }
 
 /**

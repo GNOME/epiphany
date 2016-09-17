@@ -26,6 +26,7 @@
 #include <gio/gio.h>
 #include <glib/gstdio.h>
 #include <libsoup/soup.h>
+#include <stdlib.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
 
@@ -406,47 +407,61 @@ ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
 void
 ephy_web_application_setup_from_profile_directory (const char *profile_directory)
 {
-  char *app_name;
+  const char *app_name;
   char *app_icon;
+  char *desktop_basename;
+  char *desktop_filename;
+  GDesktopAppInfo *desktop_info;
 
   g_return_if_fail (profile_directory != NULL);
 
   app_name = g_strrstr (profile_directory, EPHY_WEB_APP_PREFIX);
-  if (!app_name)
-    return;
+  if (!app_name) {
+    g_warning ("Profile directory %s does not begin with required web app prefix %s", profile_directory, EPHY_WEB_APP_PREFIX);
+    exit (1);
+  }
 
   /* Skip the 'app-' part */
   app_name += strlen (EPHY_WEB_APP_PREFIX);
   g_set_prgname (app_name);
-  g_set_application_name (app_name);
+
+  /* Get display name from desktop file */
+  desktop_basename = g_strconcat (app_name, ".desktop", NULL);
+  desktop_filename = g_build_filename (profile_directory, desktop_basename, NULL);
+  desktop_info = g_desktop_app_info_new_from_filename (desktop_filename);
+  if (!desktop_info) {
+    g_warning ("Required desktop file not present at %s", desktop_filename);
+    exit (1);
+  }
+  g_set_application_name (g_app_info_get_name (G_APP_INFO (desktop_info)));
+
 
   app_icon = g_build_filename (profile_directory, EPHY_WEB_APP_ICON_NAME, NULL);
   gtk_window_set_default_icon_from_file (app_icon, NULL);
-  g_free (app_icon);
 
   /* We need to re-set this because we have already parsed the
    * options, which inits GTK+ and sets this as a side effect.
    */
   gdk_set_program_class (app_name);
+
+  g_free (app_icon);
+  g_free (desktop_basename);
+  g_free (desktop_filename);
+  g_object_unref (desktop_info);
 }
 
 void
 ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
 {
   GAppInfo *app_info;
-  const char *app_name;
   const char *wm_class;
   GIcon *icon;
 
   g_return_if_fail (G_IS_DESKTOP_APP_INFO (desktop_info));
 
   app_info = G_APP_INFO (desktop_info);
-  app_name = g_app_info_get_name (app_info);
-  if (!app_name)
-    return;
-
-  g_set_prgname (app_name);
-  g_set_application_name (app_name);
+  g_set_prgname (g_app_info_get_name (app_info));
+  g_set_application_name (g_app_info_get_display_name (app_info));
 
   icon = g_app_info_get_icon (app_info);
   if (G_IS_FILE_ICON (icon)) {

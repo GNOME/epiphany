@@ -31,9 +31,6 @@ G_DECLARE_FINAL_TYPE (EphyTitleBox, ephy_title_box, EPHY, TITLE_BOX, GtkEventBox
 
 EphyTitleBox       *ephy_title_box_new                  (void);
 
-void                ephy_title_box_set_web_view         (EphyTitleBox         *title_box,
-                                                         WebKitWebView        *web_view);
-
 void                ephy_title_box_set_security_level   (EphyTitleBox         *title_box,
                                                          EphySecurityLevel     security_level);
 

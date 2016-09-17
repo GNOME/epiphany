@@ -2557,9 +2557,6 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 
   /* update new tab */
   ephy_window_set_active_tab (window, embed);
-
-  ephy_title_box_set_web_view (ephy_header_bar_get_title_box (EPHY_HEADER_BAR (window->header_bar)),
-                               EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 }
 
 static GtkNotebook *
