@@ -33,7 +33,7 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 struct _EphyTitleBox {
-  GtkBox parent_instance;
+  GtkEventBox parent_instance;
 
   GtkWidget *lock_image;
   GtkWidget *title;
