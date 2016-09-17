@@ -2874,18 +2874,14 @@ browse_with_caret_get_mapping (GValue   *value,
   return TRUE;
 }
 
-static GObject *
-ephy_window_constructor (GType                  type,
-                         guint                  n_construct_properties,
-                         GObjectConstructParam *construct_params)
+static void
+ephy_window_constructed (GObject *object)
 {
-  GObject *object;
   EphyWindow *window;
   GtkSettings *settings;
   GAction *new_action;
   GActionGroup *action_group;
   GSimpleActionGroup *simple_action_group;
-
   guint settings_connection;
   GtkCssProvider *css_provider;
   guint i;
@@ -2893,8 +2889,7 @@ ephy_window_constructor (GType                  type,
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
 
-  object = G_OBJECT_CLASS (ephy_window_parent_class)->constructor
-             (type, n_construct_properties, construct_params);
+  G_OBJECT_CLASS (ephy_window_parent_class)->constructed (object);
 
   window = EPHY_WINDOW (object);
 
@@ -3063,8 +3058,6 @@ ephy_window_constructor (GType                  type,
   init_menu_updaters (window);
 
   ephy_window_set_chrome (window, chrome);
-
-  return object;
 }
 
 static void
@@ -3096,7 +3089,7 @@ ephy_window_class_init (EphyWindowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructor = ephy_window_constructor;
+  object_class->constructed = ephy_window_constructed;
   object_class->dispose = ephy_window_dispose;
   object_class->finalize = ephy_window_finalize;
   object_class->get_property = ephy_window_get_property;
