@@ -35,7 +35,6 @@ static guint signals[LAST_SIGNAL];
 struct _EphyTitleBox {
   GtkBox parent_instance;
 
-  GtkWidget *lock_image_event_box;
   GtkWidget *lock_image;
   GtkWidget *title;
   GtkWidget *subtitle;
