@@ -75,8 +75,6 @@ ephy_title_box_constructed (GObject *object)
   GtkWidget *vbox;
   GtkWidget *hbox;
 
-  LOG ("EphyTitleBox constructed");
-
   G_OBJECT_CLASS (ephy_title_box_parent_class)->constructed (object);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -156,7 +154,6 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
 static void
 ephy_title_box_init (EphyTitleBox *title_box)
 {
-  LOG ("EphyTitleBox initialising %p", title_box);
 }
 
 /**
