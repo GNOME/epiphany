@@ -466,7 +466,8 @@ sync_tab_load_status (EphyWebView    *view,
   GAction *action;
   gboolean loading;
 
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   loading = ephy_web_view_is_loading (view);
 
@@ -1013,7 +1014,8 @@ sync_tab_address (EphyWebView *view,
   const char *typed_address;
   char *location;
 
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   address = ephy_web_view_get_display_address (view);
   typed_address = ephy_web_view_get_typed_address (view);
@@ -1035,7 +1037,8 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
   gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
   double zoom;
 
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   zoom = webkit_web_view_get_zoom_level (web_view);
 
@@ -1072,7 +1075,8 @@ sync_tab_document_type (EphyWebView *view,
   EphyWebViewDocumentType type;
   gboolean can_find, disable, is_image;
 
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   /* update zoom actions */
   sync_tab_zoom (WEBKIT_WEB_VIEW (view), NULL, window);
@@ -1108,7 +1112,8 @@ sync_tab_icon (EphyWebView *view,
 {
   GdkPixbuf *icon;
 
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   icon = ephy_web_view_get_icon (view);
 
@@ -1135,7 +1140,8 @@ sync_tab_navigation (EphyWebView *view,
                      GParamSpec  *pspec,
                      EphyWindow  *window)
 {
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   _ephy_window_set_navigation_flags (window,
                                      ephy_web_view_get_navigation_flags (view));
@@ -1146,7 +1152,8 @@ sync_tab_is_blank (EphyWebView *view,
                    GParamSpec  *pspec,
                    EphyWindow  *window)
 {
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   _ephy_window_set_default_actions_sensitive (window,
                                               SENS_FLAG_IS_BLANK,
@@ -1187,7 +1194,8 @@ sync_tab_title (EphyEmbed  *embed,
                 GParamSpec *pspec,
                 EphyWindow *window)
 {
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   gtk_window_set_title (GTK_WINDOW (window),
                         ephy_embed_get_title (embed));
@@ -2203,7 +2211,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 
   old_embed = window->active_embed;
 
-  if (old_embed == new_embed) return;
+  if (old_embed == new_embed)
+    return;
 
   if (old_embed != NULL)
     ephy_window_disconnect_active_embed (window);
@@ -2436,7 +2445,8 @@ notebook_page_removed_cb (EphyNotebook *notebook,
 {
   LOG ("page-removed notebook %p embed %p position %u\n", notebook, embed, position);
 
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   g_return_if_fail (EPHY_IS_EMBED (embed));
 
@@ -2551,7 +2561,8 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 
   LOG ("switch-page notebook %p position %u\n", notebook, page_num);
 
-  if (window->closing) return;
+  if (window->closing)
+    return;
 
   /* get the new tab */
   embed = real_get_active_tab (window, page_num);
@@ -2739,7 +2750,8 @@ sync_user_input_cb (EphyLocationController *action,
 
   LOG ("sync_user_input_cb");
 
-  if (window->updating_address) return;
+  if (window->updating_address)
+    return;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (EPHY_IS_EMBED (embed));
@@ -3319,7 +3331,8 @@ void
 ephy_window_set_location (EphyWindow *window,
                           const char *address)
 {
-  if (window->updating_address) return;
+  if (window->updating_address)
+    return;
 
   window->updating_address = TRUE;
   ephy_location_controller_set_address (window->location_controller, address);
