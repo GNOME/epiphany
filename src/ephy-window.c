@@ -2420,12 +2420,6 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
   g_return_if_fail (EPHY_IS_EMBED (embed));
 
-#if 0
-  g_signal_connect_object (embed, "open-link",
-                           G_CALLBACK (ephy_link_open), window,
-                           G_CONNECT_SWAPPED);
-#endif
-
   g_signal_connect_object (ephy_embed_get_web_view (embed), "download-only-load",
                            G_CALLBACK (download_only_load_cb), window, G_CONNECT_AFTER);
 
@@ -2449,12 +2443,6 @@ notebook_page_removed_cb (EphyNotebook *notebook,
     return;
 
   g_return_if_fail (EPHY_IS_EMBED (embed));
-
-#if 0
-  g_signal_handlers_disconnect_by_func (G_OBJECT (embed),
-                                        G_CALLBACK (ephy_link_open),
-                                        window);
-#endif
 
   g_signal_handlers_disconnect_by_func
     (ephy_embed_get_web_view (embed), G_CALLBACK (download_only_load_cb), window);
