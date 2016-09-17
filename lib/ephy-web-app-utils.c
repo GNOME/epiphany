@@ -435,7 +435,6 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
   }
   g_set_application_name (g_app_info_get_name (G_APP_INFO (desktop_info)));
 
-
   app_icon = g_build_filename (profile_directory, EPHY_WEB_APP_ICON_NAME, NULL);
   gtk_window_set_default_icon_from_file (app_icon, NULL);
 
