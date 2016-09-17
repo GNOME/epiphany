@@ -147,6 +147,7 @@ bind_settings_and_actions (GSettings        *settings,
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          actions[i].action);
+    g_assert (action);
 
     /* We need a custom get_mapping for 'enabled'
      * properties, see usage of
@@ -177,6 +178,7 @@ window_added_cb (GtkApplication *application,
                  EphyLockdown   *lockdown)
 {
   GActionGroup *action_group;
+  EphyEmbedShellMode mode;
   GAction *action;
   GSettings *settings;
   EphyLocationController *location_controller;
@@ -197,10 +199,14 @@ window_added_cb (GtkApplication *application,
   arbitrary_url_cb (EPHY_SETTINGS_LOCKDOWN,
                     EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, EPHY_WINDOW (window));
 
-  action_group = G_ACTION_GROUP (G_APPLICATION (gtk_window_get_application (GTK_WINDOW (window))));
-  bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
-                             action_group, app_actions,
-                             G_N_ELEMENTS (app_actions));
+  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application));
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    /* These actions do not exist in application mode. */
+    action_group = G_ACTION_GROUP (G_APPLICATION (application));
+    bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                               action_group, app_actions,
+                               G_N_ELEMENTS (app_actions));
+  }
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                               "win");
@@ -235,7 +241,7 @@ window_added_cb (GtkApplication *application,
   g_settings_bind_writable (settings, "picture-filename",
                             action, "enabled", FALSE);
 
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     location_controller = ephy_window_get_location_controller (EPHY_WINDOW (window));
     bind_location_controller (EPHY_SETTINGS_LOCKDOWN, location_controller);
   }
