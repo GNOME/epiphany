@@ -29,12 +29,14 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
+#include "ephy-header-bar.h"
 #include "ephy-history-window.h"
 #include "ephy-lockdown.h"
 #include "ephy-prefs.h"
 #include "ephy-private.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
+#include "ephy-title-box.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
 #include "ephy-window.h"
@@ -957,9 +959,12 @@ static gboolean
 ephy_shell_open_uris_idle (OpenURIsData *data)
 {
   EphyEmbed *embed = NULL;
+  EphyEmbedShellMode mode;
   EphyNewTabFlags page_flags = 0;
   gboolean reusing_empty_tab = FALSE;
   const char *url;
+
+  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (data->shell));
 
   if (!data->window)
     data->window = ephy_window_new ();
@@ -973,7 +978,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
   }
 
   if (!reusing_empty_tab) {
-    embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
+    embed = ephy_shell_new_tab_full (data->shell,
                                      NULL, NULL,
                                      data->window,
                                      data->previous_embed,
@@ -989,11 +994,21 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
     if (reusing_empty_tab || data->flags & EPHY_NEW_TAB_JUMP)
       gtk_widget_grab_focus (GTK_WIDGET (embed));
 
-    if (data->flags & EPHY_NEW_TAB_JUMP && ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (data->shell)) != EPHY_EMBED_SHELL_MODE_TEST)
+    if (data->flags & EPHY_NEW_TAB_JUMP && mode != EPHY_EMBED_SHELL_MODE_TEST)
       gtk_window_present_with_time (GTK_WINDOW (data->window), data->user_time);
   } else {
     ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
     ephy_window_activate_location (data->window);
+  }
+
+  /* Set the subtitle from the very beginning. Looks odd if it appears later on. */
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    EphyHeaderBar *header_bar;
+    EphyTitleBox *title_box;
+
+    header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (data->window));
+    title_box = ephy_header_bar_get_title_box (header_bar);
+    ephy_title_box_set_address (title_box, url);
   }
 
   data->current_uri++;

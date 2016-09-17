@@ -208,5 +208,6 @@ ephy_title_box_set_address (EphyTitleBox *title_box,
 {
   g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
 
-  gtk_label_set_text (GTK_LABEL (title_box->subtitle), address);
+  if (address && *address)
+    gtk_label_set_text (GTK_LABEL (title_box->subtitle), address);
 }
