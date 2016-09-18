@@ -434,6 +434,8 @@ ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
 
   /* FIXME: These functions could be improved considerably. See the first two answers at:
    * http://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url
+   *
+   * Also check out: https://www.slightfuture.com/webdev/gnome-web-app-icons
    */
   found_icon = get_icon_from_html_icon (document, &image);
   if (!found_icon)
