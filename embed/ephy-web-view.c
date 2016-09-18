@@ -1768,7 +1768,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
       page_title = g_strdup_printf (_("Problem Loading Page"));
 
       /* Message title when a site cannot be loaded due to a network error. */
-      msg_title = g_strdup (_("Oops! Unable to display this website"));
+      msg_title = g_strdup (_("Unable to display this website"));
 
       /* Message body when a site cannot be loaded due to a network error. */
       msg_body = g_strdup_printf (_("<p>The site at <strong>%s</strong> seems "
@@ -1788,6 +1788,8 @@ ephy_web_view_load_error_page (EphyWebView         *view,
       button_action = g_strdup_printf ("window.location = '%s';", uri);
       /* Mnemonic for the Reload button on browser error pages. */
       button_accesskey = C_("reload-access-key", "R");
+
+      icon_name = "network-error-symbolic.png";
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
       /* Page title when a site cannot be loaded due to a page crash error. */
