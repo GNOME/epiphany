@@ -213,6 +213,7 @@ embed/Makefile
 embed/web-extension/Makefile
 src/Makefile
 src/bookmarks/Makefile
+src/search-provider/Makefile
 po/Makefile.in
 tests/Makefile
 tests/data/Makefile

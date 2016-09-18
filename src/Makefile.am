@@ -1,11 +1,10 @@
-SUBDIRS = bookmarks
+SUBDIRS = bookmarks . search-provider
 
 pkglib_LTLIBRARIES = libephymain.la
 
 bin_PROGRAMS = epiphany
 
 dist_noinst_DATA = \
-	org.gnome.ShellSearchProvider2.xml \
 	epiphany.gresource.xml \
 	$(RESOURCE_FILES)
 
@@ -42,7 +41,6 @@ libephymain_la_SOURCES = \
 	ephy-notebook.c				\
 	ephy-notebook.h				\
 	ephy-private.h				\
-	ephy-search-provider.h			\
 	ephy-session.c				\
 	ephy-session.h				\
 	ephy-shell.c				\
@@ -143,7 +141,6 @@ EPIPHANY_RESOURCES = \
 	epiphany-resources.h
 
 BUILT_SOURCES = \
-	$(dbus_shell_search_provider_built_sources) \
 	$(EPIPHANY_RESOURCES) \
 	$(TYPES_SOURCE)
 
@@ -151,7 +148,6 @@ epiphany_SOURCES = ephy-main.c \
 	$(EPIPHANY_RESOURCES)
 
 epiphany_CFLAGS = \
-	$(libephymain_la_CFLAGS)	\
 	$(WARN_CFLAGS)
 
 epiphany_CPPFLAGS = \
@@ -183,48 +179,6 @@ epiphany_LDADD = \
 	$(WEBKIT2GTK_LIBS)
 
 epiphany_LDFLAGS = \
-	-dlopen self	\
-	$(WARN_LDFLAGS)
-
-libexec_PROGRAMS = epiphany-search-provider
-
-epiphany_search_provider_SOURCES = \
-	$(dbus_shell_search_provider_built_sources) \
-	ephy-search-provider.c \
-	ephy-search-provider-main.c
-
-epiphany_search_provider_CFLAGS = \
-	$(libephymain_la_CFLAGS)	\
-	$(WARN_CFLAGS)
-
-epiphany_search_provider_CPPFLAGS = \
-	-I$(top_builddir)/lib		\
-	-I$(top_srcdir)/embed		\
-	-I$(top_srcdir)/lib   		\
-	-I$(top_srcdir)/lib/history	\
-	-I$(top_srcdir)/src/bookmarks   \
-	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DLOCALEDIR=\"$(localedir)\"	\
-	$(GIO_CFLAGS)			\
-	$(GLIB_CFLAGS)			\
-	$(GTK_CFLAGS)			\
-	$(LIBSECRET_CFLAGS)		\
-	$(LIBSOUP_CFLAGS)		\
-	$(LIBXML_CFLAGS)		\
-	$(WEBKIT2GTK_CFLAGS)
-
-epiphany_search_provider_LDADD = \
-	$(top_builddir)/lib/libephymisc.la	\
-	libephymain.la		\
-	$(GIO_LIBS)		\
-	$(GLIB_LIBS)		\
-	$(GTK_LIBS)		\
-	$(LIBSECRET_LIBS)	\
-	$(LIBSOUP_LIBS)		\
-	$(LIBXML_LIBS)		\
-	$(WEBKIT2GTK_LIBS)
-
-epiphany_search_provider_LDFLAGS = \
 	-dlopen self	\
 	$(WARN_LDFLAGS)
 
@@ -274,21 +228,6 @@ stamp-ephy-type-builtins.h: Makefile $(TYPES_H_FILES)
 	&& ( cmp -s xgen-$(@F) $(@F:stamp-%=%) || cp xgen-$(@F) $(@F:stamp-%=%) ) \
 	&& rm -f xgen-$(@F) \
 	&& echo timestamp > $(@F)
-
-dbus_shell_search_provider_built_sources =	\
-	ephy-shell-search-provider-generated.c	\
-	ephy-shell-search-provider-generated.h
-
-# FIXME: Use a stamp file or something so it doesn't get run twice
-#        https://www.gnu.org/software/automake/manual/automake.html#Multiple-Outputs
-# The upstream for the DBus interface definition is
-# at http://git.gnome.org/browse/gnome-shell/plain/data/org.gnome.ShellSearchProvider2.xml
-$(dbus_shell_search_provider_built_sources) : Makefile.am $(srcdir)/org.gnome.ShellSearchProvider2.xml
-	$(AM_V_GEN) gdbus-codegen							\
-		--interface-prefix org.gnome.				\
-		--c-namespace Ephy					\
-		--generate-c-code ephy-shell-search-provider-generated	\
-		$(srcdir)/org.gnome.ShellSearchProvider2.xml
 
 CLEANFILES = \
 	$(stamp_files) \
