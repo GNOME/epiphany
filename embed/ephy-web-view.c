@@ -1708,6 +1708,9 @@ ephy_web_view_get_error_page (EphyWebView *view)
   return view->error_page;
 }
 
+/* Note we go to some effort to avoid error-prone markup in translatable
+ * strings. Everywhere, but also here on the error pages in particular. */
+
 static void
 format_network_error_page (const char  *uri,
                            const char  *reason,
@@ -1720,32 +1723,48 @@ format_network_error_page (const char  *uri,
                            const char **button_accesskey,
                            const char **icon_name)
 {
+  char *formatted_uri;
+  char *formatted_reason;
+  char *first_paragraph;
+  const char *second_paragraph;
+
   /* Page title when a site cannot be loaded due to a network error. */
   *page_title = g_strdup_printf (_("Problem Loading Page"));
 
   /* Message title when a site cannot be loaded due to a network error. */
   *message_title = g_strdup (_("Unable to display this website"));
 
-  /* Message body when a site cannot be loaded due to a network error. */
-  *message_body = g_strdup_printf (_("<p>The site at <strong>%s</strong> seems "
-                                     "to be unavailable.</p>"
-                                     "<p>It may be temporarily inaccessible or "
-                                     "moved to a new address. You may wish to "
-                                     "verify that your internet connection is "
-                                     "working correctly.</p>"),
-                                   uri);
+  formatted_uri = g_strdup_printf ("<strong>%s</strong>", uri);
+  /* Error details when a site cannot be loaded due to a network error. */
+  first_paragraph = g_strdup_printf (_("The site at %s seems to be "
+                                       "unavailable."),
+                                     formatted_uri);
+  /* Further error details when a site cannot be loaded due to a network error. */
+  second_paragraph = _("It may be temporarily inaccessible or moved to a new "
+                       "address. You may wish to verify that your internet "
+                       "connection is working correctly.");
+  *message_body = g_strdup_printf ("<p>%s</p><p>%s</p>",
+                                   first_paragraph,
+                                   second_paragraph);
 
-  /* Message details when a site cannot be loaded due to a network error. */
-  *message_details = g_strdup_printf (_("<p>The precise error was: <i>%s</i></p>"),
-                                      reason);
+  formatted_reason = g_strdup_printf ("<i>%s</i>", reason);
+  g_free (first_paragraph);
+  /* Technical details when a site cannot be loaded due to a network error. */
+  first_paragraph = g_strdup_printf (_("The precise error was: %s"),
+                                      formatted_reason);
+  *message_details = g_strdup_printf ("<p>%s</p>", first_paragraph);
 
-  /* The button on the network error page. Do not add mnemonics here. */
+  /* The button on the network error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
   *button_action = g_strdup_printf ("window.location = '%s';", uri);
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
   *icon_name = "network-error-symbolic.png";
+
+  g_free (formatted_uri);
+  g_free (formatted_reason);
+  g_free (first_paragraph);
 }
 
 static void
@@ -1758,28 +1777,46 @@ format_crash_error_page (const char  *uri,
                          const char **button_accesskey,
                          const char **icon_name)
 {
+  char *formatted_uri;
+  char *formatted_distributor;
+  char *first_paragraph;
+  char *second_paragraph;
+
   /* Page title when a site cannot be loaded due to a page crash error. */
   *page_title = g_strdup_printf (_("Problem Loading Page"));
 
   /* Message title when a site cannot be loaded due to a page crash error. */
   *message_title = g_strdup (_("Oops! There may be a problem"));
 
-  /* Message body when a site cannot be loaded due to a page crash error. */
-  *message_body = g_strdup_printf (_("<p>The site at <strong>%s</strong> may "
-                                     "have caused Web to close unexpectedly.</p>"
-                                     "<p>If this happens again, please report "
-                                     "the problem to the <strong>%s</strong> "
-                                     " developers.</p>"),
-                                   uri,
-                                   LSB_DISTRIBUTOR);
+  formatted_uri = g_strdup_printf ("<strong>%s</strong>", uri);
+  /* Error details when a site cannot be loaded due to a page crash error. */
+  first_paragraph = g_strdup_printf (_("The site at %s may have caused Web to "
+                                       "close unexpectedly."),
+                                     formatted_uri);
 
-  /* The button on the page crash error page. Do not add mnemonics here. */
+  formatted_distributor = g_strdup_printf ("<strong>%s</strong>",
+                                           LSB_DISTRIBUTOR);
+  /* Further error details when a site cannot be loaded due to a page crash error. */
+  second_paragraph = g_strdup_printf (_("If this happens again, please report "
+                                        "the problem to the %s developers."),
+                                      formatted_distributor);
+
+  *message_body = g_strdup_printf ("<p>%s</p><p>%s</p>",
+                                   first_paragraph,
+                                   second_paragraph);
+
+  /* The button on the page crash error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
   *button_action = g_strdup_printf ("window.location = '%s';", uri);
   /* Mnemonic for the Reload button on browser error pages. */
   *button_accesskey = C_("reload-access-key", "R");
 
   *icon_name = "computer-fail-symbolic.png";
+
+  g_free (formatted_uri);
+  g_free (formatted_distributor);
+  g_free (first_paragraph);
+  g_free (second_paragraph);
 }
 
 static void
@@ -1792,17 +1829,24 @@ format_process_crash_error_page (const char  *uri,
                                  const char **button_accesskey,
                                  const char **icon_name)
 {
+  const char *first_paragraph;
+  const char *second_paragraph;
+
   /* Page title when a site cannot be loaded due to a process crash error. */
   *page_title = g_strdup_printf (_("Problem Displaying Page"));
 
   /* Message title when a site cannot be loaded due to a process crash error. */
   *message_title = g_strdup (_("Oops!"));
 
-  /* Message body when a site cannot be loaded due to a process crash error. */
-  *message_body = g_strdup (_("<p>Something went wrong while displaying this page.</p>"
-                              "<p>Please reload or visit a different page to continue.</p>"));
+  /* Error details when a site cannot be loaded due to a process crash error. */
+  first_paragraph = _("Something went wrong while displaying this page.");
+  /* Further error details when a site cannot be loaded due to a process crash error. */
+  second_paragraph = _("Please reload or visit a different page to continue.");
+  *message_body = g_strdup_printf ("<p>%s</p><p>%s</p>",
+                                   first_paragraph,
+                                   second_paragraph);
 
-  /* The button on the process crash error page. Do not add mnemonics here. */
+  /* The button on the process crash error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Reload"));
   *button_action = g_strdup_printf ("window.location = '%s';", uri);
   /* Mnemonic for the Reload button on browser error pages. */
@@ -1827,23 +1871,29 @@ format_tls_error_page (EphyWebView *view,
                        const char **hidden_button_accesskey,
                        const char **icon_name)
 {
+  char *formatted_hostname;
+  char *first_paragraph;
+
   /* Page title when a site is not loaded due to an invalid TLS certificate. */
   *page_title = g_strdup_printf (_("Security Violation"));
 
   /* Message title when a site is not loaded due to an invalid TLS certificate. */
   *message_title = g_strdup (_("This Connection is Not Secure"));
 
-  /* Message body when a site is not loaded due to an invalid TLS certificate. */
-  *message_body = g_strdup_printf (_("<p>This does not look like the real <strong>"
-                                     "%s</strong>. Attackers might be trying to "
-                                     "steal or alter information going to or from "
-                                     "this site (for example, private messages, "
-                                     "credit card information, or passwords).</p>"),
-                                   hostname);
-  /* Message details when a site is not loaded due to an invalid TLS certificate. */
+  formatted_hostname = g_strdup_printf ("<strong>%s</strong>", hostname);
+  /* Error details when a site is not loaded due to an invalid TLS certificate. */
+  first_paragraph = g_strdup_printf (_("This does not look like the real %s. "
+                                       "Attackers might be trying to steal or "
+                                       "alter information going to or from "
+                                       "this site (for example, private "
+                                       "messages, credit card information, or "
+                                       "passwords)."),
+                                     formatted_hostname);
+
+  *message_body = g_strdup_printf ("<p>%s</p>", first_paragraph);
   *message_details = detailed_message_from_tls_errors (view->tls_errors);
 
-  /* The button on the invalid TLS certificate error page. Do not add mnemonics here. */
+  /* The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Go Back"));
   *button_action = g_strdup ("window.history.back();");
   /* Mnemonic for the Go Back button on the invalid TLS certificate error page. */
@@ -1857,6 +1907,9 @@ format_tls_error_page (EphyWebView *view,
   *hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
 
   *icon_name = "channel-insecure-symbolic.png";
+
+  g_free (formatted_hostname);
+  g_free (first_paragraph);
 }
 
 /**
