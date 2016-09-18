@@ -1,4 +1,4 @@
-SUBDIRS = bookmarks . search-provider
+SUBDIRS = bookmarks . search-provider profile-migrator
 
 pkglib_LTLIBRARIES = libephymain.la
 
