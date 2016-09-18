@@ -59,3 +59,5 @@ $(BUILT_SOURCES) : Makefile.am $(srcdir)/org.gnome.ShellSearchProvider2.xml
 		$(srcdir)/org.gnome.ShellSearchProvider2.xml
 
 CLEANFILES = $(BUILT_SOURCES)
+
+-include $(top_srcdir)/git.mk
