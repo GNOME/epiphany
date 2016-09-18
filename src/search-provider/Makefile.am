@@ -1,9 +1,6 @@
 BUILT_SOURCES = \
 	ephy-shell-search-provider-generated.stamp	\
-	$(dbus_shell_search_provider_built_sources)
-
-dbus_shell_search_provider_built_sources =	\
-	ephy-shell-search-provider-generated.c	\
+	ephy-shell-search-provider-generated.c		\
 	ephy-shell-search-provider-generated.h
 
 dist_noinst_DATA = org.gnome.ShellSearchProvider2.xml
@@ -14,7 +11,8 @@ epiphany_search_provider_SOURCES = \
 	ephy-search-provider.h				\
 	ephy-search-provider.c				\
 	ephy-search-provider-main.c			\
-	$(dbus_shell_search_provider_built_sources)
+	ephy-shell-search-provider-generated.c		\
+	ephy-shell-search-provider-generated.h
 
 epiphany_search_provider_CFLAGS = \
 	$(WARN_CFLAGS)
@@ -51,6 +49,9 @@ epiphany_search_provider_LDFLAGS = \
 	-dlopen self	\
 	$(WARN_LDFLAGS)
 
+ephy-shell-search-provider-generated.c : ephy-shell-search-provider-generated.stamp
+ephy-shell-search-provider-generated.h : ephy-shell-search-provider-generated.stamp
+
 # The upstream for the DBus interface definition is
 # at http://git.gnome.org/browse/gnome-shell/plain/data/org.gnome.ShellSearchProvider2.xml
 ephy-shell-search-provider-generated.stamp : Makefile.am $(srcdir)/org.gnome.ShellSearchProvider2.xml
@@ -58,8 +59,8 @@ ephy-shell-search-provider-generated.stamp : Makefile.am $(srcdir)/org.gnome.She
 		--interface-prefix org.gnome.				\
 		--c-namespace Ephy					\
 		--generate-c-code ephy-shell-search-provider-generated	\
-		$(srcdir)/org.gnome.ShellSearchProvider2.xml
-	touch ephy-shell-search-provider-generated.stamp > /dev/null
+		$(srcdir)/org.gnome.ShellSearchProvider2.xml		\
+		&& touch ephy-shell-search-provider-generated.stamp
 
 CLEANFILES = $(BUILT_SOURCES)
 
