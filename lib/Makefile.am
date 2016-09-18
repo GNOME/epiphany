@@ -108,36 +108,6 @@ libephymisc_la_LIBADD = \
 	$(SQLITE3_LIBS)		\
 	$(WEBKIT2GTK_LIBS)
 
-pkglibexec_PROGRAMS = ephy-profile-migrator
-
-ephy_profile_migrator_SOURCES = \
-	ephy-profile-migrator.c
-
-ephy_profile_migrator_CFLAGS = \
-	$(WARN_CFLAGS)
-
-ephy_profile_migrator_CPPFLAGS = \
-	-I$(top_builddir)/lib		\
-	-I$(srcdir)/history		\
-	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
-	-DLOCALEDIR=\"$(localedir)\"	\
-	$(GLIB_CFLAGS)			\
-	$(GTK_CFLAGS)			\
-	$(LIBSECRET_CFLAGS)		\
-	$(LIBSOUP_CFLAGS)		\
-	$(WEBKIT2GTK_CFLAGS)
-
-ephy_profile_migrator_LDADD = \
-	libephymisc.la		\
-	$(GLIB_LIBS)		\
-	$(GTK_LIBS)		\
-	$(LIBSECRET_LIBS)	\
-	$(LIBSOUP_LIBS)		\
-	$(WEBKIT2GTK_LIBS)
-
-ephy_profile_migrator_LDFLAGS = \
-	$(WARN_LDFLAGS)
-
 BUILT_SOURCES = \
 	ephy-lib-type-builtins.c	\
 	ephy-lib-type-builtins.h
