@@ -29,6 +29,7 @@
 
 #include "config.h"
 
+#include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-form-auth-data.h"
@@ -43,6 +44,8 @@
 #include <glib/gstdio.h>
 #include <libsecret/secret.h>
 #include <libsoup/soup.h>
+#include <libxml/HTMLtree.h>
+#include <libxml/xmlreader.h>
 #include <locale.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -698,6 +701,172 @@ migrate_app_desktop_file_categories (void)
 }
 
 static void
+parse_rdf_lang_tag (xmlNode  *child,
+                    xmlChar **value,
+                    int      *best_match)
+{
+  const char * const *locales;
+  const char *this_language;
+  xmlChar *lang;
+  xmlChar *content;
+  int i;
+
+  if (*best_match == 0)
+    /* there's no way we can do better */
+    return;
+
+  content = xmlNodeGetContent (child);
+  if (!content)
+    return;
+
+  lang = xmlNodeGetLang (child);
+  if (lang == NULL) {
+    const char *translated;
+
+    translated = _((char *)content);
+    if ((char *)content != translated) {
+      /* if we have a translation for the content of the
+       * node, then we just use this */
+      if (*value) xmlFree (*value);
+      *value = (xmlChar *)g_strdup (translated);
+      *best_match = 0;
+
+      xmlFree (content);
+      return;
+    }
+
+    this_language = "C";
+  } else
+    this_language = (char *)lang;
+
+  locales = g_get_language_names ();
+
+  for (i = 0; locales[i] && i < *best_match; i++) {
+    if (!strcmp (locales[i], this_language)) {
+      /* if we've already encountered a less accurate
+       * translation, then free it */
+      if (*value) xmlFree (*value);
+
+      *value = content;
+      *best_match = i;
+
+      break;
+    }
+  }
+
+  if (lang) xmlFree (lang);
+  if (*value != content) xmlFree (content);
+}
+
+static void
+parse_rdf_item (EphyBookmarksManager *manager,
+                xmlNodePtr            node)
+{
+  xmlChar *title = NULL;
+  int best_match_title = INT_MAX;
+  xmlChar *link = NULL;
+  int best_match_link = INT_MAX;
+  /* we consider that it's better to use a non-localized smart link than
+   * a localized link */
+  gboolean use_smartlink = FALSE;
+  xmlChar *subject = NULL;
+  GSequence *tags;
+  xmlNode *child;
+
+  child = node->children;
+
+  link = xmlGetProp (node, (xmlChar *)"about");
+
+  tags = g_sequence_new (g_free);
+  while (child != NULL) {
+    if (xmlStrEqual (child->name, (xmlChar *)"title")) {
+      parse_rdf_lang_tag (child, &title, &best_match_title);
+    } else if (xmlStrEqual (child->name, (xmlChar *)"link") &&
+               !use_smartlink) {
+      parse_rdf_lang_tag (child, &link, &best_match_link);
+    } else if (child->ns &&
+               xmlStrEqual (child->ns->prefix, (xmlChar *)"ephy") &&
+               xmlStrEqual (child->name, (xmlChar *)"smartlink")) {
+      if (!use_smartlink) {
+        use_smartlink = TRUE;
+        best_match_link = INT_MAX;
+      }
+
+      parse_rdf_lang_tag (child, &link, &best_match_link);
+    } else if (child->ns &&
+               xmlStrEqual (child->ns->prefix, (xmlChar *)"dc") &&
+               xmlStrEqual (child->name, (xmlChar *)"subject")) {
+      subject = xmlNodeGetContent (child);
+      if (subject)
+        g_sequence_prepend (tags, subject);
+    }
+
+    child = child->next;
+  }
+
+  if (link) {
+    EphyBookmark *bookmark;
+
+    g_sequence_sort (tags, (GCompareDataFunc)ephy_bookmark_tags_compare, NULL);
+    bookmark = ephy_bookmark_new ((char *)link, (char *)title, tags);
+    ephy_bookmarks_manager_add_bookmark (manager, bookmark);
+  } else {
+    g_sequence_free (tags);
+  }
+
+  xmlFree (title);
+  xmlFree (link);
+}
+
+static void
+migrate_bookmarks (void)
+{
+  EphyBookmarksManager *manager = EPHY_BOOKMARKS_MANAGER (g_object_new (EPHY_TYPE_BOOKMARKS_MANAGER, NULL));
+
+  const char *filename;
+  xmlDocPtr doc;
+  xmlNodePtr child;
+  xmlNodePtr root;
+
+  filename = g_build_filename (ephy_dot_dir (),
+                               EPHY_BOOKMARKS_FILE_RDF,
+                               NULL);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
+                              EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
+    return;
+
+  if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
+    return;
+
+  doc = xmlParseFile (filename);
+  if (doc == NULL) {
+    /* FIXME: maybe put up a warning dialogue here, because this
+     * is a severe dataloss?
+     */
+    g_warning ("Failed to re-import the bookmarks. All bookmarks lost!\n");
+    return;
+  }
+
+  root = xmlDocGetRootElement (doc);
+
+  child = root->children;
+
+  while (child != NULL) {
+    if (xmlStrEqual (child->name, (xmlChar *)"item")) {
+      parse_rdf_item (manager, child);
+    }
+
+    child = child->next;
+  }
+
+  ephy_bookmarks_manager_save_to_file_async (manager, NULL, NULL, NULL);
+
+  xmlFreeDoc (doc);
+  g_clear_object (&manager);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. E.g. we used to have
@@ -720,6 +889,7 @@ const EphyProfileMigrator migrators[] = {
   migrate_new_urls_table,
   migrate_form_passwords_to_libsecret,
   migrate_app_desktop_file_categories,
+  migrate_bookmarks,
 };
 
 static gboolean

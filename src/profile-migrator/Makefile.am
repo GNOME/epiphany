@@ -8,8 +8,11 @@ ephy_profile_migrator_CFLAGS = \
 
 ephy_profile_migrator_CPPFLAGS = \
 	-I$(top_builddir)/lib				\
+	-I$(top_srcdir)/embed				\
 	-I$(top_srcdir)/lib   				\
 	-I$(top_srcdir)/lib/history			\
+	-I$(top_srcdir)/src/				\
+	-I$(top_srcdir)/src/bookmarks			\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" 	\
 	-DLOCALEDIR=\"$(localedir)\"			\
 	$(GLIB_CFLAGS)					\
@@ -20,6 +23,7 @@ ephy_profile_migrator_CPPFLAGS = \
 
 ephy_profile_migrator_LDADD = \
 	$(top_builddir)/lib/libephymisc.la	\
+	$(top_builddir)/src/libephymain.la	\
 	$(GLIB_LIBS)				\
 	$(GTK_LIBS)				\
 	$(LIBSECRET_LIBS)			\
