@@ -1857,7 +1857,6 @@ format_process_crash_error_page (const char  *uri,
 
 static void
 format_tls_error_page (EphyWebView *view,
-                       const char  *uri,
                        const char  *hostname,
                        char       **page_title,
                        char       **message_title,
@@ -2001,7 +2000,6 @@ ephy_web_view_load_error_page (EphyWebView         *view,
       break;
     case EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE:
       format_tls_error_page (view,
-                             uri,
                              hostname,
                              &page_title,
                              &msg_title,
