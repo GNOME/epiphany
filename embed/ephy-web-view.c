@@ -1708,6 +1708,157 @@ ephy_web_view_get_error_page (EphyWebView *view)
   return view->error_page;
 }
 
+static void
+format_network_error_page (const char  *uri,
+                           const char  *reason,
+                           char       **page_title,
+                           char       **message_title,
+                           char       **message_body,
+                           char       **message_details,
+                           char       **button_label,
+                           char       **button_action,
+                           const char **button_accesskey,
+                           const char **icon_name)
+{
+  /* Page title when a site cannot be loaded due to a network error. */
+  *page_title = g_strdup_printf (_("Problem Loading Page"));
+
+  /* Message title when a site cannot be loaded due to a network error. */
+  *message_title = g_strdup (_("Unable to display this website"));
+
+  /* Message body when a site cannot be loaded due to a network error. */
+  *message_body = g_strdup_printf (_("<p>The site at <strong>%s</strong> seems "
+                                     "to be unavailable.</p>"
+                                     "<p>It may be temporarily inaccessible or "
+                                     "moved to a new address. You may wish to "
+                                     "verify that your internet connection is "
+                                     "working correctly.</p>"),
+                                   uri);
+
+  /* Message details when a site cannot be loaded due to a network error. */
+  *message_details = g_strdup_printf (_("<p>The precise error was: <i>%s</i></p>"),
+                                      reason);
+
+  /* The button on the network error page. Do not add mnemonics here. */
+  *button_label = g_strdup (_("Reload"));
+  *button_action = g_strdup_printf ("window.location = '%s';", uri);
+  /* Mnemonic for the Reload button on browser error pages. */
+  *button_accesskey = C_("reload-access-key", "R");
+
+  *icon_name = "network-error-symbolic.png";
+}
+
+static void
+format_crash_error_page (const char  *uri,
+                         char       **page_title,
+                         char       **message_title,
+                         char       **message_body,
+                         char       **button_label,
+                         char       **button_action,
+                         const char **button_accesskey,
+                         const char **icon_name)
+{
+  /* Page title when a site cannot be loaded due to a page crash error. */
+  *page_title = g_strdup_printf (_("Problem Loading Page"));
+
+  /* Message title when a site cannot be loaded due to a page crash error. */
+  *message_title = g_strdup (_("Oops! There may be a problem"));
+
+  /* Message body when a site cannot be loaded due to a page crash error. */
+  *message_body = g_strdup_printf (_("<p>The site at <strong>%s</strong> may "
+                                     "have caused Web to close unexpectedly.</p>"
+                                     "<p>If this happens again, please report "
+                                     "the problem to the <strong>%s</strong> "
+                                     " developers.</p>"),
+                                   uri,
+                                   LSB_DISTRIBUTOR);
+
+  /* The button on the page crash error page. Do not add mnemonics here. */
+  *button_label = g_strdup (_("Reload"));
+  *button_action = g_strdup_printf ("window.location = '%s';", uri);
+  /* Mnemonic for the Reload button on browser error pages. */
+  *button_accesskey = C_("reload-access-key", "R");
+
+  *icon_name = "computer-fail-symbolic.png";
+}
+
+static void
+format_process_crash_error_page (const char  *uri,
+                                 char       **page_title,
+                                 char       **message_title,
+                                 char       **message_body,
+                                 char       **button_label,
+                                 char       **button_action,
+                                 const char **button_accesskey,
+                                 const char **icon_name)
+{
+  /* Page title when a site cannot be loaded due to a process crash error. */
+  *page_title = g_strdup_printf (_("Problem Displaying Page"));
+
+  /* Message title when a site cannot be loaded due to a process crash error. */
+  *message_title = g_strdup (_("Oops!"));
+
+  /* Message body when a site cannot be loaded due to a process crash error. */
+  *message_body = g_strdup (_("<p>Something went wrong while displaying this page.</p>"
+                              "<p>Please reload or visit a different page to continue.</p>"));
+
+  /* The button on the process crash error page. Do not add mnemonics here. */
+  *button_label = g_strdup (_("Reload"));
+  *button_action = g_strdup_printf ("window.location = '%s';", uri);
+  /* Mnemonic for the Reload button on browser error pages. */
+  *button_accesskey = C_("reload-access-key", "R");
+
+  *icon_name = "computer-fail-symbolic.png";
+}
+
+static void
+format_tls_error_page (EphyWebView *view,
+                       const char  *uri,
+                       const char  *hostname,
+                       char       **page_title,
+                       char       **message_title,
+                       char       **message_body,
+                       char       **message_details,
+                       char       **button_label,
+                       char       **button_action,
+                       const char **button_accesskey,
+                       char       **hidden_button_label,
+                       char       **hidden_button_action,
+                       const char **hidden_button_accesskey,
+                       const char **icon_name)
+{
+  /* Page title when a site is not loaded due to an invalid TLS certificate. */
+  *page_title = g_strdup_printf (_("Security Violation"));
+
+  /* Message title when a site is not loaded due to an invalid TLS certificate. */
+  *message_title = g_strdup (_("This Connection is Not Secure"));
+
+  /* Message body when a site is not loaded due to an invalid TLS certificate. */
+  *message_body = g_strdup_printf (_("<p>This does not look like the real <strong>"
+                                     "%s</strong>. Attackers might be trying to "
+                                     "steal or alter information going to or from "
+                                     "this site (for example, private messages, "
+                                     "credit card information, or passwords).</p>"),
+                                   hostname);
+  /* Message details when a site is not loaded due to an invalid TLS certificate. */
+  *message_details = detailed_message_from_tls_errors (view->tls_errors);
+
+  /* The button on the invalid TLS certificate error page. Do not add mnemonics here. */
+  *button_label = g_strdup (_("Go Back"));
+  *button_action = g_strdup ("window.history.back();");
+  /* Mnemonic for the Go Back button on the invalid TLS certificate error page. */
+  *button_accesskey = C_("back-access-key", "B");
+
+  /* The hidden button on the invalid TLS certificate error page. Do not add mnemonics here. */
+  *hidden_button_label = g_strdup (_("Accept Risk and Proceed"));
+  *hidden_button_action = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT ");",
+                                          webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
+  /* Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page. */
+  *hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
+
+  *icon_name = "channel-insecure-symbolic.png";
+}
+
 /**
  * ephy_web_view_load_error_page:
  * @view: an #EphyWebView
@@ -1764,103 +1915,52 @@ ephy_web_view_load_error_page (EphyWebView         *view,
 
   switch (page) {
     case EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR:
-      /* Page title when a site cannot be loaded due to a network error. */
-      page_title = g_strdup_printf (_("Problem Loading Page"));
-
-      /* Message title when a site cannot be loaded due to a network error. */
-      msg_title = g_strdup (_("Unable to display this website"));
-
-      /* Message body when a site cannot be loaded due to a network error. */
-      msg_body = g_strdup_printf (_("<p>The site at <strong>%s</strong> seems "
-                                    "to be unavailable.</p>"
-                                    "<p>It may be temporarily inaccessible or "
-                                    "moved to a new address. You may wish to "
-                                    "verify that your internet connection is "
-                                    "working correctly.</p>"),
-                                  uri);
-
-      /* Message details when a site cannot be loaded due to a network error. */
-      msg_details = g_strdup_printf (_("<p>The precise error was: <i>%s</i></p>"),
-                                     reason);
-
-      /* The button on the network error page. Do not add mnemonics here. */
-      button_label = g_strdup (_("Reload"));
-      button_action = g_strdup_printf ("window.location = '%s';", uri);
-      /* Mnemonic for the Reload button on browser error pages. */
-      button_accesskey = C_("reload-access-key", "R");
-
-      icon_name = "network-error-symbolic.png";
+      format_network_error_page (uri,
+                                 reason,
+                                 &page_title,
+                                 &msg_title,
+                                 &msg_body,
+                                 &msg_details,
+                                 &button_label,
+                                 &button_action,
+                                 &button_accesskey,
+                                 &icon_name);
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_CRASH:
-      /* Page title when a site cannot be loaded due to a page crash error. */
-      page_title = g_strdup_printf (_("Problem Loading Page"));
-
-      /* Message title when a site cannot be loaded due to a page crash error. */
-      msg_title = g_strdup (_("Oops! There may be a problem"));
-
-      /* Message body when a site cannot be loaded due to a page crash error. */
-      msg_body = g_strdup_printf (_("<p>The site at <strong>%s</strong> may "
-                                    "have caused Web to close unexpectedly.</p>"
-                                    "<p>If this happens again, please report "
-                                    "the problem to the <strong>%s</strong> "
-                                    " developers.</p>"),
-                                  uri,
-                                  LSB_DISTRIBUTOR);
-
-      /* The button on the page crash error page. Do not add mnemonics here. */
-      button_label = g_strdup (_("Reload"));
-      button_action = g_strdup_printf ("window.location = '%s';", uri);
-      /* Mnemonic for the Reload button on browser error pages. */
-      button_accesskey = C_("reload-access-key", "R");
+      format_crash_error_page (uri,
+                               &page_title,
+                               &msg_title,
+                               &msg_body,
+                               &button_label,
+                               &button_action,
+                               &button_accesskey,
+                               &icon_name);
       break;
     case EPHY_WEB_VIEW_ERROR_PROCESS_CRASH:
-      /* Page title when a site cannot be loaded due to a process crash error. */
-      page_title = g_strdup_printf (_("Problem Displaying Page"));
-
-      /* Message title when a site cannot be loaded due to a process crash error. */
-      msg_title = g_strdup (_("Oops!"));
-
-      /* Message body when a site cannot be loaded due to a process crash error. */
-      msg_body = g_strdup (_("<p>Something went wrong while displaying this page.</p>"
-                             "<p>Please reload or visit a different page to continue.</p>"));
-
-      /* The button on the process crash error page. Do not add mnemonics here. */
-      button_label = g_strdup (_("Reload"));
-      button_action = g_strdup_printf ("window.location = '%s';", uri);
-      /* Mnemonic for the Reload button on browser error pages. */
-      button_accesskey = C_("reload-access-key", "R");
+      format_process_crash_error_page (uri,
+                                       &page_title,
+                                       &msg_title,
+                                       &msg_body,
+                                       &button_label,
+                                       &button_action,
+                                       &button_accesskey,
+                                       &icon_name);
       break;
     case EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE:
-      /* Page title when a site is not loaded due to an invalid TLS certificate. */
-      page_title = g_strdup_printf (_("Security Violation"));
-
-      /* Message title when a site is not loaded due to an invalid TLS certificate. */
-      msg_title = g_strdup (_("This Connection is Not Secure"));
-
-      /* Message body when a site is not loaded due to an invalid TLS certificate. */
-      msg_body = g_strdup_printf (_("<p>This does not look like the real <strong>"
-                                    "%s</strong>. Attackers might be trying to "
-                                    "steal or alter information going to or from "
-                                    "this site (for example, private messages, "
-                                    "credit card information, or passwords).</p>"),
-                                  hostname);
-      /* Message details when a site is not loaded due to an invalid TLS certificate. */
-      msg_details = detailed_message_from_tls_errors (view->tls_errors);
-
-      /* The button on the invalid TLS certificate error page. Do not add mnemonics here. */
-      button_label = g_strdup (_("Go Back"));
-      button_action = g_strdup ("window.history.back();");
-      /* Mnemonic for the Go Back button on the invalid TLS certificate error page. */
-      button_accesskey = C_("back-access-key", "B");
-
-      /* The hidden button on the invalid TLS certificate error page. Do not add mnemonics here. */
-      hidden_button_label = g_strdup (_("Accept Risk and Proceed"));
-      hidden_button_action = g_strdup_printf ("window.webkit.messageHandlers.tlsErrorPage.postMessage(%"G_GUINT64_FORMAT ");",
-                                              webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)));
-      /* Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page. */
-      hidden_button_accesskey = C_("proceed-anyway-access-key", "P");
-
-      icon_name = "channel-insecure-symbolic.png";
+      format_tls_error_page (view,
+                             uri,
+                             hostname,
+                             &page_title,
+                             &msg_title,
+                             &msg_body,
+                             &msg_details,
+                             &button_label,
+                             &button_action,
+                             &button_accesskey,
+                             &hidden_button_label,
+                             &hidden_button_action,
+                             &hidden_button_accesskey,
+                             &icon_name);
       break;
     case EPHY_WEB_VIEW_ERROR_PAGE_NONE:
     default:
@@ -1879,7 +1979,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
                    page_title,
                    get_style_sheet (),
                    button_action, hidden_button_action,
-                   icon_name ? icon_name : "computer-fail-symbolic.png",
+                   icon_name,
                    page == EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE ? "danger" : "default",
                    msg_title, msg_body,
                    msg_details ? "visible" : "hidden",
