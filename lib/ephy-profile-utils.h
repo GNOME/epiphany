@@ -22,7 +22,7 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_PROFILE_MIGRATION_VERSION 10
+#define EPHY_PROFILE_MIGRATION_VERSION 11
 
 #define EPHY_HISTORY_FILE       "ephy-history.db"
 #define EPHY_BOOKMARKS_FILE     "ephy-bookmarks.xml"
