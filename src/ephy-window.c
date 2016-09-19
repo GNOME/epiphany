@@ -61,10 +61,6 @@
 
 #include <webkit2/webkit2.h>
 
-#ifdef HAVE_X11_XF86KEYSYM_H
-#include <X11/XF86keysym.h>
-#endif
-
 /**
  * SECTION:ephy-window
  * @short_description: Epiphany's main #GtkWindow widget
