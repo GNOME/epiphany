@@ -19,12 +19,13 @@ libephywebextension_la_SOURCES = \
 	ephy-web-overview-model.c
 
 libephywebextension_la_CPPFLAGS = \
-	-I$(top_srcdir)/lib	\
-	$(GIO_CFLAGS)		\
-	$(GLIB_CFLAGS)		\
-	$(GTK_CFLAGS)		\
-	$(LIBSECRET_CFLAGS)	\
-	$(LIBSOUP_CFLAGS)	\
+	-I$(top_srcdir)/lib		\
+	$(GIO_CFLAGS)			\
+	$(GLIB_CFLAGS)			\
+	$(GTK_CFLAGS)			\
+	$(HTTPSEVERYWHERE_CFLAGS)	\
+	$(LIBSECRET_CFLAGS)		\
+	$(LIBSOUP_CFLAGS)		\
 	$(WEBKIT2GTK_WEB_EXTENSION_CFLAGS)
 
 libephywebextension_la_CFLAGS = \
@@ -35,11 +36,12 @@ libephywebextension_la_LDFLAGS = \
 
 libephywebextension_la_LIBADD = \
 	$(top_builddir)/lib/libephymisc.la \
-	$(GIO_LIBS) \
-	$(GLIB_LIBS) \
-	$(GTK_LIBS) \
-	$(LIBSECRET_LIBS) \
-	$(LIBSOUP_LIBS) \
+	$(GIO_LIBS) 		\
+	$(GLIB_LIBS) 		\
+	$(GTK_LIBS) 		\
+	$(HTTPSEVERYWHERE_LIBS)	\
+	$(LIBSECRET_LIBS) 	\
+	$(LIBSOUP_LIBS) 	\
 	$(WEBKIT2GTK_WEB_EXTENSION_LIBS)
 
 -include $(top_srcdir)/git.mk
