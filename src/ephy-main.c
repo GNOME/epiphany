@@ -38,10 +38,6 @@
 #include <libxml/xmlversion.h>
 #include <string.h>
 
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
-
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;
 
@@ -142,63 +138,6 @@ get_startup_id (void)
 
   return retval;
 }
-
-#ifdef GDK_WINDOWING_X11
-/*
- * FIXME: Need a solution for windowing-systems other than X11.
- */
-
-/* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
- * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
- */
-static Time
-slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
-{
-  Window xwindow;
-  XEvent event;
-
-  {
-    XSetWindowAttributes attrs;
-    Atom atom_name;
-    Atom atom_type;
-    const char *name;
-
-    attrs.override_redirect = True;
-    attrs.event_mask = PropertyChangeMask | StructureNotifyMask;
-
-    xwindow =
-      XCreateWindow (xdisplay,
-                     RootWindow (xdisplay, 0),
-                     -100, -100, 1, 1,
-                     0,
-                     CopyFromParent,
-                     CopyFromParent,
-                     CopyFromParent,
-                     CWOverrideRedirect | CWEventMask,
-                     &attrs);
-
-    atom_name = XInternAtom (xdisplay, "WM_NAME", TRUE);
-    g_assert (atom_name != None);
-    atom_type = XInternAtom (xdisplay, "STRING", TRUE);
-    g_assert (atom_type != None);
-
-    name = "Fake Window";
-    XChangeProperty (xdisplay,
-                     xwindow, atom_name,
-                     atom_type,
-                     8, PropModeReplace, (unsigned char *)name, strlen (name));
-  }
-
-  XWindowEvent (xdisplay,
-                xwindow,
-                PropertyChangeMask,
-                &event);
-
-  XDestroyWindow (xdisplay, xwindow);
-
-  return event.xproperty.time;
-}
-#endif
 
 static void
 show_error_message (GError **error)
@@ -429,17 +368,6 @@ main (int   argc,
     g_strfreev (arguments);
     arguments = args;
   }
-
-#ifdef GDK_WINDOWING_X11
-  /* Get a timestamp manually if need be */
-  if (user_time == 0) {
-    GdkDisplay *display =
-      gdk_display_manager_get_default_display (gdk_display_manager_get ());
-    if (GDK_IS_X11_DISPLAY (display))
-      user_time =
-        slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (display));
-  }
-#endif
 
   /* Delete the requested web application, if any. Must happen after
    * ephy_file_helpers_init (). */

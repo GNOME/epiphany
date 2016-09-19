@@ -55,7 +55,4 @@ gboolean        ephy_gui_check_location_writable         (GtkWidget *parent,
 void            ephy_gui_help                            (GtkWidget *parent,
                                                           const char *page);
 
-void            ephy_gui_window_update_user_time         (GtkWidget *window,
-                                                          guint32 user_time);
-
 G_END_DECLS

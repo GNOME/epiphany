@@ -1053,7 +1053,6 @@ session_parse_window (SessionParserContext *context,
   }
 
   restore_geometry (GTK_WINDOW (context->window), &geometry);
-  ephy_gui_window_update_user_time (GTK_WIDGET (context->window), context->user_time);
 }
 
 static void

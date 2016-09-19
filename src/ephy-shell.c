@@ -691,8 +691,6 @@ ephy_shell_new_tab_full (EphyShell      *shell,
   gtk_widget_show (GTK_WIDGET (embed));
   ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
 
-  ephy_gui_window_update_user_time (GTK_WIDGET (window), user_time);
-
   if ((flags & EPHY_NEW_TAB_DONT_SHOW_WINDOW) == 0 &&
       ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_TEST) {
     gtk_widget_show (GTK_WIDGET (window));

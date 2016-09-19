@@ -165,7 +165,6 @@ epiphany_CPPFLAGS = \
 	$(GTK_CFLAGS)			\
 	$(LIBNOTIFY_CFLAGS)		\
 	$(LIBXML_CFLAGS)		\
-	$(X11_CFLAGS)			\
 	$(WEBKIT2GTK_CFLAGS)
 
 epiphany_LDADD = \
@@ -175,7 +174,6 @@ epiphany_LDADD = \
 	$(GTK_LIBS)		\
 	$(LIBNOTIFY_LIBS)	\
 	$(LIBXML_LIBS)		\
-	$(X11_LIBS)		\
 	$(WEBKIT2GTK_LIBS)
 
 epiphany_LDFLAGS = \

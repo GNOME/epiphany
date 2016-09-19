@@ -22,7 +22,6 @@
 #include "ephy-debug.h"
 
 #include <ctype.h>
-#include <gdk/gdkx.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
@@ -365,22 +364,3 @@ ephy_gui_is_middle_click (void)
 
   return is_middle_click;
 }
-
-void
-ephy_gui_window_update_user_time (GtkWidget *window,
-                                  guint32    user_time)
-{
-  LOG ("updating user time on window %p to %d", window, user_time);
-
-  if (user_time != 0) {
-    gtk_widget_realize (window);
-
-#ifdef GDK_WINDOWING_X11
-    if (GDK_IS_X11_DISPLAY (gdk_display_get_default ())) {
-      gdk_x11_window_set_user_time (gtk_widget_get_window (window),
-                                    user_time);
-    }
-#endif
-  }
-}
-

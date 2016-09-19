@@ -107,8 +107,6 @@ PKG_CHECK_MODULES([CAIRO], [cairo])
 PKG_CHECK_MODULES([GCR], [gcr-3 >= 3.5.5])
 PKG_CHECK_MODULES([GDK], [gdk-3.0 >= $GTK_REQUIRED])
 PKG_CHECK_MODULES([GDK_PIXBUF], [gdk-pixbuf-2.0])
-dnl FIXME: x11 should not be mandatory.
-PKG_CHECK_MODULES([GDK_X11], [gdk-x11-3.0 >= $GTK_REQUIRED])
 PKG_CHECK_MODULES([GIO_UNIX], [gio-unix-2.0 >= $GLIB_REQUIRED])
 PKG_CHECK_MODULES([GLIB], [glib-2.0 >= $GLIB_REQUIRED])
 PKG_CHECK_MODULES([GNOME_DESKTOP], [gnome-desktop-3.0 >= 2.91.2])
@@ -124,8 +122,6 @@ PKG_CHECK_MODULES([LIBXSLT], [libxslt >= 1.1.7])
 PKG_CHECK_MODULES([SQLITE3], [sqlite3])
 PKG_CHECK_MODULES([WEBKIT2GTK], [webkit2gtk-4.0 >= $WEBKITGTK_REQUIRED])
 PKG_CHECK_MODULES([WEBKIT2GTK_WEB_EXTENSION], [webkit2gtk-web-extension-4.0 >= $WEBKITGTK_REQUIRED])
-dnl FIXME: x11 should not be mandatory.
-PKG_CHECK_MODULES([X11], [x11])
 
 # ******************
 # Portability checks
