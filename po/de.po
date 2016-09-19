@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2016-09-09 18:03+0000\n"
-"PO-Revision-Date: 2016-09-09 20:29+0200\n"
+"POT-Creation-Date: 2016-09-19 02:42+0000\n"
+"PO-Revision-Date: 2016-09-19 10:09+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -62,8 +62,8 @@ msgid "The GNOME web site displayed in GNOME Web"
 msgstr "Die GNOME-Webseite, angezeigt im GNOME Webbrowser"
 
 #: data/epiphany.desktop.in:3 embed/ephy-about-handler.c:289
-#: embed/ephy-about-handler.c:320 src/ephy-main.c:77 src/ephy-main.c:324
-#: src/ephy-main.c:479 src/window-commands.c:251
+#: embed/ephy-about-handler.c:320 src/ephy-main.c:73 src/ephy-main.c:264
+#: src/ephy-main.c:408 src/window-commands.c:251
 msgid "Web"
 msgstr "Internet"
 
@@ -82,7 +82,6 @@ msgstr "Netz;Browser;Internet;"
 
 #. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/epiphany.desktop.in:13
-#| msgid "Web Browser"
 msgid "web-browser"
 msgstr "web-browser"
 
@@ -102,7 +101,6 @@ msgstr "Im Internet mit Caret Browsing surfen"
 #. default-bookmarks.rdf. See the comment there for region parameters to
 #. the URL.
 #: data/org.gnome.epiphany.gschema.xml:20
-#| msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgid "'https://duckduckgo.com/?q=%s&t=epiphany'"
 msgstr "'https://duckduckgo.com/?q=%s&t=epiphany'"
 
@@ -589,7 +587,7 @@ msgstr "Löschen"
 msgid "Installed on:"
 msgstr "Installiert am:"
 
-#: embed/ephy-about-handler.c:475 embed/ephy-embed-utils.c:308
+#: embed/ephy-about-handler.c:475 embed/ephy-embed-utils.c:312
 msgid "Most Visited"
 msgstr "Meistbesucht"
 
@@ -642,30 +640,30 @@ msgstr ""
 "verfolgen."
 
 #. characters
-#: embed/ephy-embed.c:47
+#: embed/ephy-embed.c:46
 msgid "Blank page"
 msgstr "Leere Seite"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:542
+#: embed/ephy-embed.c:541
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "%s drücken, um den Vollbildmodus zu verlassen"
 
-#: embed/ephy-embed.c:542
+#: embed/ephy-embed.c:541
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:542
+#: embed/ephy-embed.c:541
 msgid "F11"
 msgstr "F11"
 
-#: embed/ephy-embed-utils.c:62
+#: embed/ephy-embed-utils.c:63
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "E-Mail an »%s« senden"
 
-#: embed/ephy-embed-utils.c:238 src/ephy-search-provider.c:283
+#: embed/ephy-embed-utils.c:239 src/search-provider/ephy-search-provider.c:284
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany;kl=de-de"
@@ -1014,11 +1012,16 @@ msgstr "Vorhergehenden Treffer für diese Zeichenkette suchen"
 msgid "Find next occurrence of the search string"
 msgstr "Nächsten Treffer für diese Zeichenkette suchen"
 
+#: embed/ephy-view-source-handler.c:259
+#, c-format
+msgid "%s is not a valid URI"
+msgstr "%s ist keine gültige Adresse"
+
 #: embed/ephy-web-view.c:517
 msgid "_Don’t Save"
 msgstr "_Nicht Speichern"
 
-#: embed/ephy-web-view.c:518 lib/widgets/ephy-file-chooser.c:188
+#: embed/ephy-web-view.c:518 lib/widgets/ephy-file-chooser.c:182
 msgid "_Save"
 msgstr "_Speichern"
 
@@ -1063,7 +1066,7 @@ msgid "Loading…"
 msgstr "Laden …"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1639
+#: embed/ephy-web-view.c:1641
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1071,7 +1074,7 @@ msgstr ""
 "anderen Webseite."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1644
+#: embed/ephy-web-view.c:1646
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1080,14 +1083,14 @@ msgstr ""
 "Ihrem Rechner."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1649
+#: embed/ephy-web-view.c:1651
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Die Identifikation dieser Webseite wurde nicht durch eine vertrauenswürdige "
 "Organisation bereitgestellt."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1654
+#: embed/ephy-web-view.c:1656
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1095,7 +1098,7 @@ msgstr ""
 "könnte beschädigt sein."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1659
+#: embed/ephy-web-view.c:1661
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1104,7 +1107,7 @@ msgstr ""
 "vertrauenswürdige Organisation zurückgezogen."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1664
+#: embed/ephy-web-view.c:1666
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1113,7 +1116,7 @@ msgstr ""
 "nicht ausreichende Verschlüsselung verwendet."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1669
+#: embed/ephy-web-view.c:1671
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1121,142 +1124,150 @@ msgstr ""
 "Die Identifikation dieser Webseite ist nur für Daten in der Zukunft gültig. "
 "Überprüfen Sie das Datum auf Ihrem Rechner."
 
-#: embed/ephy-web-view.c:1752
-msgid "None specified"
-msgstr "Nichts angegeben"
-
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1766 embed/ephy-web-view.c:1792
+#: embed/ephy-web-view.c:1732 embed/ephy-web-view.c:1786
 msgid "Problem Loading Page"
 msgstr "Probleme beim Laden der Seite"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1769
-msgid "Oops! Unable to display this website"
-msgstr "Hoppla, Laden der Internetseite nicht möglich"
+#: embed/ephy-web-view.c:1735
+msgid "Unable to display this website"
+msgstr "Anzeige dieser Internetseite ist nicht möglich"
 
-#. Message body when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1772
+#. Error details when a site cannot be loaded due to a network error.
+#: embed/ephy-web-view.c:1739
 #, c-format
+msgid "The site at %s seems to be unavailable."
+msgstr "Die Seite %s scheint nicht erreichbar zu sein."
+
+#. Further error details when a site cannot be loaded due to a network error.
+#: embed/ephy-web-view.c:1743
 msgid ""
-"<p>The site at <strong>%s</strong> seems to be unavailable.</p><p>It may be "
-"temporarily inaccessible or moved to a new address. You may wish to verify "
-"that your internet connection is working correctly.</p>"
+"It may be temporarily inaccessible or moved to a new address. You may wish "
+"to verify that your internet connection is working correctly."
 msgstr ""
-"<p>Die Internetseite <strong>%s</strong> ist möglicherweise nicht "
-"erreichbar, die genaue Fehlermeldung war:</p><p>Sie könnte vorübergehend "
-"nicht erreichbar sein oder zu einer neuen Adresse umgezogen sein.</"
-"p><p>Falls das Problem weiterhin besteht, sollten Sie Ihre "
-"Internetverbindung überprüfen.</p>"
+"Sie könnte vorübergehend nicht erreichbar sein oder zu einer neuen Adresse "
+"umgezogen sein. Falls das Problem weiterhin besteht, sollten Sie Ihre "
+"Internetverbindung überprüfen."
 
-#. Message details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1781
+#. Technical details when a site cannot be loaded due to a network error.
+#: embed/ephy-web-view.c:1753
 #, c-format
-msgid "<p>The precise error was: <i>%s</i></p>"
-msgstr "<p>Detaillierte Fehlermeldung: <i>%s</i></p>"
+msgid "The precise error was: %s"
+msgstr "Die detaillierte Fehlermeldung war: %s"
 
-#. The button on the network error page. Do not add mnemonics here.
-#. The button on the page crash error page. Do not add mnemonics here.
-#. The button on the process crash error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1785 embed/ephy-web-view.c:1807
-#: embed/ephy-web-view.c:1824
+#. The button on the network error page. DO NOT ADD MNEMONICS HERE.
+#. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
+#. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
+#: embed/ephy-web-view.c:1758 embed/ephy-web-view.c:1809
+#: embed/ephy-web-view.c:1850
 msgid "Reload"
 msgstr "Neu laden"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1788 embed/ephy-web-view.c:1810
-#: embed/ephy-web-view.c:1827
+#: embed/ephy-web-view.c:1761 embed/ephy-web-view.c:1812
+#: embed/ephy-web-view.c:1853
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1795
+#: embed/ephy-web-view.c:1789
 msgid "Oops! There may be a problem"
 msgstr "Hoppla, möglicherweise gibt es ein Problem."
 
-#. Message body when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1798
+#. Error details when a site cannot be loaded due to a page crash error.
+#: embed/ephy-web-view.c:1793
 #, c-format
-msgid ""
-"<p>The site at <strong>%s</strong> may have caused Web to close unexpectedly."
-"</p><p>If this happens again, please report the problem to the <strong>%s</"
-"strong>  developers.</p>"
+msgid "The site at %s may have caused Web to close unexpectedly."
 msgstr ""
-"<p>Die Seite <strong>%s</strong> hat Gnome Web unerwartet abstürzen lassen.</"
-"p><p>Falls dies erneut passiert, melden Sie bitte das Problem den <strong>"
-"%s</strong>-Entwicklern.</p>"
+"Die Seite auf %s könnte verursacht haben, dass der Internet-Browser "
+"unerwartet beendet wurde."
+
+#. Further error details when a site cannot be loaded due to a page crash error.
+#: embed/ephy-web-view.c:1800
+#, c-format
+msgid "If this happens again, please report the problem to the %s developers."
+msgstr ""
+"Falls dies erneut auftritt, melden Sie bitte das Problem an die %s-"
+"Entwickler."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1814
+#: embed/ephy-web-view.c:1836
 msgid "Problem Displaying Page"
 msgstr "Problem beim Anzeigen der Seite"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1817
+#: embed/ephy-web-view.c:1839
 msgid "Oops!"
 msgstr "Hoppla!"
 
-#. Message body when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:1820
-msgid ""
-"<p>Something went wrong while displaying this page.</p><p>Please reload or "
-"visit a different page to continue.</p>"
+#. Error details when a site cannot be loaded due to a process crash error.
+#: embed/ephy-web-view.c:1842
+msgid "Something went wrong while displaying this page."
+msgstr "Etwas ging beim Anzeigen dieser Seite schief."
+
+#. Further error details when a site cannot be loaded due to a process crash error.
+#: embed/ephy-web-view.c:1844
+msgid "Please reload or visit a different page to continue."
 msgstr ""
-"<p>Etwas ging beim Anzeigen dieser Seite schief. Bitte laden Sie sie neu "
-"oder besuchen Sie eine andere Seite, um fortzufahren.</p>"
+"Bitte laden Sie sie neu oder besuchen Sie eine andere Seite, um fortzufahren."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1831
+#: embed/ephy-web-view.c:1877
 msgid "Security Violation"
 msgstr "Sicherheitsverstoß"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1834
+#: embed/ephy-web-view.c:1880
 msgid "This Connection is Not Secure"
 msgstr "Ihre Verbindung scheint nicht sicher zu sein."
 
-#. Message body when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:1837
+#. Error details when a site is not loaded due to an invalid TLS certificate.
+#: embed/ephy-web-view.c:1884
 #, c-format
 msgid ""
-"<p>This does not look like the real <strong>%s</strong>. Attackers might be "
-"trying to steal or alter information going to or from this site (for "
-"example, private messages, credit card information, or passwords).</p>"
+"This does not look like the real %s. Attackers might be trying to steal or "
+"alter information going to or from this site (for example, private messages, "
+"credit card information, or passwords)."
 msgstr ""
-"<p><strong>%s</strong> scheint nicht echt zu sein. Angreifer könnten "
-"versuchen, Informationen zu stehlen oder zu ändern, die mit dieser Seite "
-"ausgetauscht werden (z.B.: private Nachrichten, Kreditkarteninformationen "
-"oder Passwörter).</p>"
+"Dies scheint kein echtes %s zu sein. Angreifer könnten versuchen, "
+"Informationen zu stehlen oder zu ändern, die mit dieser Seite ausgetauscht "
+"werden (z.B.: private Nachrichten, Kreditkarteninformationen oder "
+"Passwörter)."
 
-#. The button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1847
+#. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
+#: embed/ephy-web-view.c:1896
 msgid "Go Back"
 msgstr "Zurück"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:1850
+#: embed/ephy-web-view.c:1899
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:1853
+#: embed/ephy-web-view.c:1902
 msgid "Accept Risk and Proceed"
 msgstr "Risiko akzeptieren und fortfahren"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:1857
+#: embed/ephy-web-view.c:1906
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
-#: embed/ephy-web-view.c:1882
+#: embed/ephy-web-view.c:1957
+msgid "None specified"
+msgstr "Nichts angegeben"
+
+#: embed/ephy-web-view.c:2037
 msgid "Technical information"
 msgstr "Technische Informationen"
 
-#: embed/ephy-web-view.c:2733
+#: embed/ephy-web-view.c:2888
 msgid "_OK"
 msgstr "_OK"
 
@@ -1289,7 +1300,7 @@ msgstr "Ordner »%s« konnte nicht angelegt werden."
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: lib/ephy-form-auth-data.c:138
+#: lib/ephy-form-auth-data.c:137
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Passwort für %s auf %s"
@@ -1297,7 +1308,7 @@ msgstr "Passwort für %s auf %s"
 #. Translators: The first %s is the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: lib/ephy-form-auth-data.c:144
+#: lib/ephy-form-auth-data.c:143
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Passwort in einem Eingabefeld auf %s"
@@ -1339,11 +1350,11 @@ msgstr "Datei kann nicht überschrieben werden"
 msgid "Could not display help: %s"
 msgstr "Hilfe konnte nicht angezeigt werden: %s"
 
-#: lib/ephy-profile-migrator.c:96
+#: lib/ephy-profile-migrator.c:95
 msgid "Failed to copy cookies file from Mozilla."
 msgstr "Kopieren der Cookie-Datei von Mozilla fehlgeschlagen"
 
-#: lib/ephy-profile-migrator.c:361
+#: lib/ephy-profile-migrator.c:360
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -1351,23 +1362,23 @@ msgstr ""
 "Internet 3.6 lehnt diesen Ordner ab und versuchte diese Konfiguration nach "
 "~/.config/epiphany zu migrieren."
 
-#: lib/ephy-profile-migrator.c:783
+#: lib/ephy-profile-migrator.c:782
 msgid "Executes only the n-th migration step"
 msgstr "Nur den n-ten Migrationsschritt ausführen"
 
-#: lib/ephy-profile-migrator.c:785
+#: lib/ephy-profile-migrator.c:784
 msgid "Specifies the required version for the migrator"
 msgstr "Bestimmt die benötigte Version des Migrators"
 
-#: lib/ephy-profile-migrator.c:787
+#: lib/ephy-profile-migrator.c:786
 msgid "Specifies the profile where the migrator should run"
 msgstr "Bestimmt das Profil, wo der Migrator ausgeführt werden sollte"
 
-#: lib/ephy-profile-migrator.c:805
+#: lib/ephy-profile-migrator.c:804
 msgid "Web profile migrator"
 msgstr "Internet Profilmigrator"
 
-#: lib/ephy-profile-migrator.c:806
+#: lib/ephy-profile-migrator.c:805
 msgid "Web profile migrator options"
 msgstr "Einstellungen für den Internet Profilmigrator"
 
@@ -1409,92 +1420,92 @@ msgstr "%-d. %b %Y"
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: lib/ephy-zoom.h:39
+#: lib/ephy-zoom.h:38
 msgid "50%"
 msgstr "50%"
 
-#: lib/ephy-zoom.h:40
+#: lib/ephy-zoom.h:39
 msgid "75%"
 msgstr "75%"
 
-#: lib/ephy-zoom.h:41
+#: lib/ephy-zoom.h:40
 msgid "100%"
 msgstr "100%"
 
-#: lib/ephy-zoom.h:42
+#: lib/ephy-zoom.h:41
 msgid "125%"
 msgstr "125%"
 
-#: lib/ephy-zoom.h:43
+#: lib/ephy-zoom.h:42
 msgid "150%"
 msgstr "150%"
 
-#: lib/ephy-zoom.h:44
+#: lib/ephy-zoom.h:43
 msgid "175%"
 msgstr "175%"
 
-#: lib/ephy-zoom.h:45
+#: lib/ephy-zoom.h:44
 msgid "200%"
 msgstr "200%"
 
-#: lib/ephy-zoom.h:46
+#: lib/ephy-zoom.h:45
 msgid "300%"
 msgstr "300%"
 
-#: lib/ephy-zoom.h:47
+#: lib/ephy-zoom.h:46
 msgid "400%"
 msgstr "400%"
 
-#: lib/history/ephy-history-service-hosts-table.c:356
+#: lib/history/ephy-history-service-hosts-table.c:355
 msgid "Others"
 msgstr "Sonstige"
 
-#: lib/history/ephy-history-service-hosts-table.c:360
+#: lib/history/ephy-history-service-hosts-table.c:359
 msgid "Local files"
 msgstr "Lokale Dateien"
 
-#: lib/widgets/ephy-certificate-dialog.c:99
+#: lib/widgets/ephy-certificate-dialog.c:100
 msgid "The certificate does not match this website"
 msgstr "Das Zertifikat stimmt nicht mit dieser Internetseite überein"
 
-#: lib/widgets/ephy-certificate-dialog.c:102
+#: lib/widgets/ephy-certificate-dialog.c:103
 msgid "The certificate has expired"
 msgstr "Das Zertifikat ist abgelaufen"
 
-#: lib/widgets/ephy-certificate-dialog.c:105
+#: lib/widgets/ephy-certificate-dialog.c:106
 msgid "The signing certificate authority is not known"
 msgstr "Der Zertifikatsaussteller ist nicht bekannt"
 
-#: lib/widgets/ephy-certificate-dialog.c:108
+#: lib/widgets/ephy-certificate-dialog.c:109
 msgid "The certificate contains errors"
 msgstr "Das Zertifikat beinhaltet Fehler"
 
-#: lib/widgets/ephy-certificate-dialog.c:111
+#: lib/widgets/ephy-certificate-dialog.c:112
 msgid "The certificate has been revoked"
 msgstr "Das Zertifikat wurde annulliert"
 
-#: lib/widgets/ephy-certificate-dialog.c:114
+#: lib/widgets/ephy-certificate-dialog.c:115
 msgid "The certificate is signed using a weak signature algorithm"
 msgstr "Das Zertifikat nutzt einen schwachen Signaturalgorithmus"
 
-#: lib/widgets/ephy-certificate-dialog.c:117
+#: lib/widgets/ephy-certificate-dialog.c:118
 msgid "The certificate activation time is still in the future"
 msgstr "Die Aktivierungszeit des Zertifikats liegt in der Zukunft"
 
-#: lib/widgets/ephy-certificate-dialog.c:159
+#: lib/widgets/ephy-certificate-dialog.c:160
 msgid "The identity of this website has been verified."
 msgstr "Die Identität dieser Internetseite wurde bestätigt."
 
-#: lib/widgets/ephy-certificate-dialog.c:160
+#: lib/widgets/ephy-certificate-dialog.c:161
 msgid "The identity of this website has not been verified."
 msgstr "Die Identität dieser Internetseite wurde nicht bestätigt."
 
 #. Message on certificte dialog ertificate dialog
-#: lib/widgets/ephy-certificate-dialog.c:172
+#: lib/widgets/ephy-certificate-dialog.c:173
 msgid "No problems have been detected with your connection."
 msgstr "Keine Probleme mit Ihrer Verbindung festgestellt."
 
-#: lib/widgets/ephy-certificate-dialog.c:175
+#: lib/widgets/ephy-certificate-dialog.c:176
 msgid ""
 "This certificate is valid. However, resources on this page were sent "
 "insecurely."
@@ -1506,93 +1517,93 @@ msgstr ""
 msgid "_Clear All"
 msgstr "Alle _leeren"
 
-#: lib/widgets/ephy-download-widget.c:81
+#: lib/widgets/ephy-download-widget.c:80
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "%d Sekunde verbleibend"
 msgstr[1] "%d Sekunden verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:85
+#: lib/widgets/ephy-download-widget.c:84
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "%d Minute verbleibend"
 msgstr[1] "%d Minuten verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:89
+#: lib/widgets/ephy-download-widget.c:88
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "%d Stunde verbleibend"
 msgstr[1] "%d Stunden verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:93
+#: lib/widgets/ephy-download-widget.c:92
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "%d Tag verbleibend"
 msgstr[1] "%d Tage verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:97
+#: lib/widgets/ephy-download-widget.c:96
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "%d Woche verbleibend"
 msgstr[1] "%d Wochen verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:101
+#: lib/widgets/ephy-download-widget.c:100
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
 msgstr[0] "%d Monat verbleibend"
 msgstr[1] "%d Monate verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:224
-#: lib/widgets/ephy-download-widget.c:407
+#: lib/widgets/ephy-download-widget.c:223
+#: lib/widgets/ephy-download-widget.c:406
 msgid "Finished"
 msgstr "Abgeschlossen"
 
-#: lib/widgets/ephy-download-widget.c:241
-#: lib/widgets/ephy-download-widget.c:403
+#: lib/widgets/ephy-download-widget.c:240
+#: lib/widgets/ephy-download-widget.c:402
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Fehler beim Herunterladen: %s"
 
-#: lib/widgets/ephy-download-widget.c:268
+#: lib/widgets/ephy-download-widget.c:267
 msgid "Cancelling…"
 msgstr "Wird abgebrochen …"
 
-#: lib/widgets/ephy-download-widget.c:409
+#: lib/widgets/ephy-download-widget.c:408
 msgid "Starting…"
 msgstr "Wird gestartet …"
 
-#: lib/widgets/ephy-file-chooser.c:180 lib/widgets/ephy-file-chooser.c:187
-#: src/bookmarks/ephy-bookmark-properties.c:375
-#: src/bookmarks/ephy-bookmarks-editor.c:772
+#: lib/widgets/ephy-file-chooser.c:174 lib/widgets/ephy-file-chooser.c:181
+#: src/bookmarks/ephy-bookmark-properties.c:376
+#: src/bookmarks/ephy-bookmarks-editor.c:773
 #: src/resources/clear-data-dialog.ui:33 src/resources/prefs-lang-dialog.ui:16
 #: src/window-commands.c:965
 msgid "_Cancel"
 msgstr "A_bbrechen"
 
-#: lib/widgets/ephy-file-chooser.c:181 src/resources/history-dialog.ui:17
+#: lib/widgets/ephy-file-chooser.c:175 src/resources/history-dialog.ui:17
 msgid "_Open"
 msgstr "Ö_ffnen"
 
-#: lib/widgets/ephy-file-chooser.c:203
+#: lib/widgets/ephy-file-chooser.c:197
 msgid "All supported types"
 msgstr "Alle unterstützten Typen"
 
-#: lib/widgets/ephy-file-chooser.c:218
+#: lib/widgets/ephy-file-chooser.c:212
 msgid "Web pages"
 msgstr "Internetseiten"
 
-#: lib/widgets/ephy-file-chooser.c:229
+#: lib/widgets/ephy-file-chooser.c:223
 msgid "Images"
 msgstr "Bilder"
 
-#: lib/widgets/ephy-file-chooser.c:238
-#: src/bookmarks/ephy-bookmarks-editor.c:601
+#: lib/widgets/ephy-file-chooser.c:232
+#: src/bookmarks/ephy-bookmarks-editor.c:602
 msgid "All files"
 msgstr "Alle Dateien"
 
@@ -1609,13 +1620,13 @@ msgid "Paste and _Go"
 msgstr "Einfü_gen und weiter"
 
 #: lib/widgets/ephy-location-entry.c:652
-#: src/bookmarks/ephy-bookmarks-editor.c:192 src/ephy-window.c:901
+#: src/bookmarks/ephy-bookmarks-editor.c:193 src/ephy-window.c:904
 #: src/resources/gtk/menus.ui:45
 msgid "_Paste"
 msgstr "E_infügen"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:666 src/ephy-window.c:895
+#: lib/widgets/ephy-location-entry.c:666 src/ephy-window.c:898
 #: src/resources/gtk/menus.ui:27
 msgid "_Undo"
 msgstr "_Rückgängig"
@@ -1672,23 +1683,23 @@ msgstr "Zertifikat _ansehen …"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: src/bookmarks/ephy-bookmark-properties.c:91
+#: src/bookmarks/ephy-bookmark-properties.c:92
 #, c-format
 msgid "%d bookmark is similar"
 msgid_plural "%d bookmarks are similar"
 msgstr[0] "%d Lesezeichen ist ähnlich"
 msgstr[1] "%d Lesezeichen sind ähnlich"
 
-#: src/bookmarks/ephy-bookmark-properties.c:229
+#: src/bookmarks/ephy-bookmark-properties.c:230
 msgid "Add Bookmark"
 msgstr "Lesezeichen hinzufügen"
 
-#: src/bookmarks/ephy-bookmark-properties.c:231
+#: src/bookmarks/ephy-bookmark-properties.c:232
 #, c-format
 msgid "“%s” Properties"
 msgstr "Eigenschaften von »%s«"
 
-#: src/bookmarks/ephy-bookmark-properties.c:376
+#: src/bookmarks/ephy-bookmark-properties.c:377
 #: src/resources/prefs-dialog.ui:658 src/resources/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "_Hinzufügen"
@@ -1742,200 +1753,201 @@ msgstr "Nahe gelegene Seiten"
 msgid "Untitled"
 msgstr "Namenlos"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:73
+#: src/bookmarks/ephy-bookmarks-editor.c:74
 msgid "Web (RDF)"
 msgstr "Internet (RDF)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:74
+#: src/bookmarks/ephy-bookmarks-editor.c:75
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:118
+#: src/bookmarks/ephy-bookmarks-editor.c:119
 msgid "Remove from this topic"
 msgstr "Aus diesem Thema entfernen"
 
 #. Toplevel
-#: src/bookmarks/ephy-bookmarks-editor.c:154
+#: src/bookmarks/ephy-bookmarks-editor.c:155
 msgid "_File"
 msgstr "_Datei"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:155
+#: src/bookmarks/ephy-bookmarks-editor.c:156
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:156
+#: src/bookmarks/ephy-bookmarks-editor.c:157
 msgid "_View"
 msgstr "_Ansicht"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:157
+#: src/bookmarks/ephy-bookmarks-editor.c:158
 #: src/resources/epiphany-application-menu.ui:47
 msgid "_Help"
 msgstr "_Hilfe"
 
 #. File Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:161
+#: src/bookmarks/ephy-bookmarks-editor.c:162
 msgid "_New Topic"
 msgstr "Thema _hinzufügen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:162
+#: src/bookmarks/ephy-bookmarks-editor.c:163
 msgid "Create a new topic"
 msgstr "Ein Thema hinzufügen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:164
-#: src/bookmarks/ephy-bookmarks-editor.c:1090
+#: src/bookmarks/ephy-bookmarks-editor.c:165
+#: src/bookmarks/ephy-bookmarks-editor.c:1091
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
 msgstr[0] "In neuem _Fenster öffnen"
 msgstr[1] "In neuen _Fenstern öffnen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:165
+#: src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "Open the selected bookmark in a new window"
 msgstr "Das gewählte Lesezeichen in einem neuen Fenster öffnen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:167
-#: src/bookmarks/ephy-bookmarks-editor.c:1093
+#: src/bookmarks/ephy-bookmarks-editor.c:168
+#: src/bookmarks/ephy-bookmarks-editor.c:1094
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
 msgstr[0] "In neuem _Reiter öffnen"
 msgstr[1] "In neuen _Reitern öffnen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:168
+#: src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "Open the selected bookmark in a new tab"
 msgstr "Das gewählte Lesezeichen in einem neuen Reiter öffnen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:170
+#: src/bookmarks/ephy-bookmarks-editor.c:171
 msgid "_Rename…"
 msgstr "_Umbenennen …"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:171
+#: src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "Rename the selected bookmark or topic"
 msgstr "Das gewählte Lesezeichen oder Thema umbenennen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:172
+#: src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "_Properties"
 msgstr "Ei_genschaften"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:173
+#: src/bookmarks/ephy-bookmarks-editor.c:174
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Die Eigenschaften des gewählten Lesezeichens anzeigen / bearbeiten"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:175
+#: src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "_Import Bookmarks…"
 msgstr "Lesezeichen _importieren …"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:176
+#: src/bookmarks/ephy-bookmarks-editor.c:177
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr ""
 "Lesezeichen aus einem anderen Browser oder einer Lesezeichendatei importieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:178
+#: src/bookmarks/ephy-bookmarks-editor.c:179
 msgid "_Export Bookmarks…"
 msgstr "Lesezeichen _exportieren …"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:179
+#: src/bookmarks/ephy-bookmarks-editor.c:180
 msgid "Export bookmarks to a file"
 msgstr "Lesezeichen in Datei exportieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:181 src/resources/gtk/menus.ui:95
+#: src/bookmarks/ephy-bookmarks-editor.c:182 src/resources/gtk/menus.ui:95
 #: src/resources/gtk/menus.ui:115
 msgid "_Close"
 msgstr "S_chließen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:182
+#: src/bookmarks/ephy-bookmarks-editor.c:183
 msgid "Close the bookmarks window"
 msgstr "Das Lesezeichenfenster schließen"
 
 #. Edit Menu
 #. Edit.
-#: src/bookmarks/ephy-bookmarks-editor.c:186 src/ephy-window.c:899
+#: src/bookmarks/ephy-bookmarks-editor.c:187 src/ephy-window.c:902
 #: src/resources/gtk/menus.ui:37
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:187
+#: src/bookmarks/ephy-bookmarks-editor.c:188
 msgid "Cut the selection"
 msgstr "Den markierten Text ausschneiden"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:189
-#: src/bookmarks/ephy-bookmarks-editor.c:1100 src/ephy-window.c:900
+#: src/bookmarks/ephy-bookmarks-editor.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:1101 src/ephy-window.c:903
 #: src/resources/gtk/menus.ui:41
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:190
+#: src/bookmarks/ephy-bookmarks-editor.c:191
 msgid "Copy the selection"
 msgstr "Den markierten Text kopieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:193
+#: src/bookmarks/ephy-bookmarks-editor.c:194
 msgid "Paste the clipboard"
 msgstr "Den Inhalt der Zwischenablage einfügen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:195 src/resources/history-dialog.ui:29
+#: src/bookmarks/ephy-bookmarks-editor.c:196 src/resources/history-dialog.ui:29
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:196
+#: src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "Delete the selected bookmark or topic"
 msgstr "Das gewählte Lesezeichen oder Thema löschen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:198 src/ephy-window.c:902
+#: src/bookmarks/ephy-bookmarks-editor.c:199 src/ephy-window.c:905
 msgid "Select _All"
 msgstr "_Alles markieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:199
+#: src/bookmarks/ephy-bookmarks-editor.c:200
 msgid "Select all bookmarks or text"
 msgstr "Alle Lesezeichen auswählen / den gesamten Text markieren"
 
 #. Help Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:203
+#: src/bookmarks/ephy-bookmarks-editor.c:204
 msgid "_Contents"
 msgstr "I_nhalt"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:204
+#: src/bookmarks/ephy-bookmarks-editor.c:205
 msgid "Display bookmarks help"
 msgstr "Hilfe zu den Lesezeichen anzeigen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:206
+#: src/bookmarks/ephy-bookmarks-editor.c:207
 #: src/resources/epiphany-application-menu.ui:51
+#: src/resources/epiphany-application-menu.ui:64
 msgid "_About"
 msgstr "_Info"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:207
+#: src/bookmarks/ephy-bookmarks-editor.c:208
 msgid "Display credits for the web browser creators"
 msgstr "Die am Internet-Browser Mitwirkenden anzeigen"
 
 #. View Menu
-#: src/bookmarks/ephy-bookmarks-editor.c:213
+#: src/bookmarks/ephy-bookmarks-editor.c:214
 msgid "_Title"
 msgstr "_Titel"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:214
+#: src/bookmarks/ephy-bookmarks-editor.c:215
 msgid "Show the title column"
 msgstr "Die Titelspalte anzeigen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:215
-#: src/bookmarks/ephy-bookmarks-editor.c:1565
+#: src/bookmarks/ephy-bookmarks-editor.c:216
+#: src/bookmarks/ephy-bookmarks-editor.c:1566
 msgid "Address"
 msgstr "Adresse"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:216
+#: src/bookmarks/ephy-bookmarks-editor.c:217
 msgid "Show the address column"
 msgstr "Die Adressspalte anzeigen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:258
+#: src/bookmarks/ephy-bookmarks-editor.c:259
 msgid "Type a topic"
 msgstr "Geben Sie ein Thema an"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:371
+#: src/bookmarks/ephy-bookmarks-editor.c:372
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "Soll das Thema »%s« gelöscht werden?"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:374
+#: src/bookmarks/ephy-bookmarks-editor.c:375
 msgid "Delete this topic?"
 msgstr "Soll dieses Thema gelöscht werden?"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:376
+#: src/bookmarks/ephy-bookmarks-editor.c:377
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
@@ -1944,44 +1956,44 @@ msgstr ""
 "Lesezeichen unzugeordnet sein werden, sofern sie zu keinem anderen Thema "
 "gehören. Die Lesezeichen werden nicht gelöscht."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:379
+#: src/bookmarks/ephy-bookmarks-editor.c:380
 msgid "_Delete Topic"
 msgstr "Thema _löschen"
 
 #. FIXME: proper i18n after freeze
-#: src/bookmarks/ephy-bookmarks-editor.c:477
-#: src/bookmarks/ephy-bookmarks-editor.c:479
+#: src/bookmarks/ephy-bookmarks-editor.c:478
+#: src/bookmarks/ephy-bookmarks-editor.c:480
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:482
-#: src/bookmarks/ephy-bookmarks-editor.c:484
+#: src/bookmarks/ephy-bookmarks-editor.c:483
+#: src/bookmarks/ephy-bookmarks-editor.c:485
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: src/bookmarks/ephy-bookmarks-editor.c:487
+#: src/bookmarks/ephy-bookmarks-editor.c:488
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla-Profil »%s«"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:489
+#: src/bookmarks/ephy-bookmarks-editor.c:490
 msgid "Galeon"
 msgstr "Galeon"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:491
+#: src/bookmarks/ephy-bookmarks-editor.c:492
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:518
+#: src/bookmarks/ephy-bookmarks-editor.c:519
 msgid "Import failed"
 msgstr "Importieren gescheitert"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:520
+#: src/bookmarks/ephy-bookmarks-editor.c:521
 msgid "Import Failed"
 msgstr "Importieren gescheitert"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:523
+#: src/bookmarks/ephy-bookmarks-editor.c:524
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -1990,76 +2002,76 @@ msgstr ""
 "Die Lesezeichen von »%s« konnten nicht importiert werden, da die Datei "
 "beschädigt ist oder ihr Format nicht unterstützt wird."
 
-#: src/bookmarks/ephy-bookmarks-editor.c:582
+#: src/bookmarks/ephy-bookmarks-editor.c:583
 msgid "Import Bookmarks from File"
 msgstr "Lesezeichen aus Datei importieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:589
+#: src/bookmarks/ephy-bookmarks-editor.c:590
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla-Lesezeichen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:593
+#: src/bookmarks/ephy-bookmarks-editor.c:594
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror-Lesezeichen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:597
+#: src/bookmarks/ephy-bookmarks-editor.c:598
 msgid "Web bookmarks"
 msgstr "Internet Lesezeichen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:711
+#: src/bookmarks/ephy-bookmarks-editor.c:712
 msgid "Export Bookmarks"
 msgstr "Lesezeichen exportieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:718
-#: src/bookmarks/ephy-bookmarks-editor.c:1428
-#: src/bookmarks/ephy-topic-action.c:175
+#: src/bookmarks/ephy-bookmarks-editor.c:719
+#: src/bookmarks/ephy-bookmarks-editor.c:1429
+#: src/bookmarks/ephy-topic-action.c:176
 msgid "Bookmarks"
 msgstr "Lesezeichen"
 
 #. Make a format selection combo & label
-#: src/bookmarks/ephy-bookmarks-editor.c:724
+#: src/bookmarks/ephy-bookmarks-editor.c:725
 msgid "File f_ormat:"
 msgstr "Datei_format:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:769
+#: src/bookmarks/ephy-bookmarks-editor.c:770
 msgid "Import Bookmarks"
 msgstr "Lesezeichen importieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:774
+#: src/bookmarks/ephy-bookmarks-editor.c:775
 msgid "I_mport"
 msgstr "_Importieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:790
+#: src/bookmarks/ephy-bookmarks-editor.c:791
 msgid "Import bookmarks from:"
 msgstr "Lesezeichen importieren von:"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:810
+#: src/bookmarks/ephy-bookmarks-editor.c:811
 msgid "File"
 msgstr "Datei"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1098
+#: src/bookmarks/ephy-bookmarks-editor.c:1099
 msgid "_Copy Address"
 msgstr "Adresse _kopieren"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1484
+#: src/bookmarks/ephy-bookmarks-editor.c:1485
 #: src/resources/bookmark-properties.ui:110
 msgid "Topics"
 msgstr "Themen"
 
-#: src/bookmarks/ephy-bookmarks-editor.c:1554
+#: src/bookmarks/ephy-bookmarks-editor.c:1555
 msgid "Title"
 msgstr "Titel"
 
 #. FIXME !!!!
-#: src/bookmarks/ephy-open-tabs-action.c:71
+#: src/bookmarks/ephy-open-tabs-action.c:72
 msgid "Open in New _Tabs"
 msgstr "In neuen _Reitern öffnen"
 
-#: src/bookmarks/ephy-open-tabs-action.c:72
+#: src/bookmarks/ephy-open-tabs-action.c:73
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "Lesezeichen in diesem Thema in neuen Reitern öffnen"
 
-#: src/bookmarks/ephy-topics-entry.c:305
+#: src/bookmarks/ephy-topics-entry.c:306
 #, c-format
 msgid "Create topic “%s”"
 msgstr "Thema »%s« erstellen"
@@ -2076,67 +2088,67 @@ msgstr ""
 "Das Leeren der Browser-Chronik sorgt dafür, dass alle Verweise in der "
 "Chronik dauerhaft gelöscht werden."
 
-#: src/ephy-main.c:86
+#: src/ephy-main.c:82
 msgid "Open a new tab in an existing browser window"
 msgstr "Einen neuen Reiter in einem bestehenden Fenster öffnen"
 
-#: src/ephy-main.c:88
+#: src/ephy-main.c:84
 msgid "Open a new browser window"
 msgstr "Ein neues Fenster öffnen"
 
-#: src/ephy-main.c:90
+#: src/ephy-main.c:86
 msgid "Import bookmarks from the given file"
 msgstr "Lesezeichen aus der angegebenen Datei importieren"
 
-#: src/ephy-main.c:90 src/ephy-main.c:92
+#: src/ephy-main.c:86 src/ephy-main.c:88
 msgid "FILE"
 msgstr "DATEI"
 
-#: src/ephy-main.c:92
+#: src/ephy-main.c:88
 msgid "Load the given session file"
 msgstr "Die angegebene Sitzungsdatei laden"
 
-#: src/ephy-main.c:94
+#: src/ephy-main.c:90
 msgid "Add a bookmark"
 msgstr "Lesezeichen hinzufügen"
 
-#: src/ephy-main.c:94
+#: src/ephy-main.c:90
 msgid "URL"
 msgstr "Adresse"
 
-#: src/ephy-main.c:96
+#: src/ephy-main.c:92
 msgid "Start a private instance"
 msgstr "Private Sitzung starten"
 
-#: src/ephy-main.c:98
+#: src/ephy-main.c:94
 msgid "Start an instance in incognito mode"
 msgstr "Fenster im Inkognito-Modus starten"
 
-#: src/ephy-main.c:100
+#: src/ephy-main.c:96
 msgid "Start an instance in netbank mode"
 msgstr "Eine Instanz im Internetbanking-Modus starten"
 
-#: src/ephy-main.c:103
+#: src/ephy-main.c:99
 msgid "Start the browser in application mode"
 msgstr "Browser im Anwendungsmodus starten"
 
-#: src/ephy-main.c:105
+#: src/ephy-main.c:101
 msgid "Profile directory to use in the private instance"
 msgstr "Profilordner für private Sitzungen"
 
-#: src/ephy-main.c:105
+#: src/ephy-main.c:101
 msgid "DIR"
 msgstr "ORDNER"
 
-#: src/ephy-main.c:107
+#: src/ephy-main.c:103
 msgid "URL …"
 msgstr "Adresse …"
 
-#: src/ephy-main.c:212
+#: src/ephy-main.c:152
 msgid "Could not start Web"
 msgstr "Internet konnte nicht gestartet werden"
 
-#: src/ephy-main.c:215
+#: src/ephy-main.c:155
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2145,7 +2157,7 @@ msgstr ""
 "Der Start schlug aus folgendem Grund fehl:\n"
 "%s"
 
-#: src/ephy-main.c:325
+#: src/ephy-main.c:265
 msgid "Web options"
 msgstr "Internet-Optionen"
 
@@ -2153,138 +2165,133 @@ msgstr "Internet-Optionen"
 msgid "Close tab"
 msgstr "Reiter schließen"
 
-#: src/ephy-search-provider.c:195
-#, c-format
-msgid "Search the Web for %s"
-msgstr "Nach »%s« im Internet suchen"
-
-#: src/ephy-window.c:246
+#: src/ephy-window.c:242
 msgid "There are unsubmitted changes to form elements"
 msgstr "Einige Änderungen an Formularelementen wurden nicht übertragen"
 
-#: src/ephy-window.c:247
+#: src/ephy-window.c:243
 msgid "If you close the document anyway, you will lose that information."
 msgstr ""
 "Falls Sie das Dokument dennoch schließen, gehen diese Informationen verloren."
 
-#: src/ephy-window.c:249
+#: src/ephy-window.c:245
 msgid "Close _Document"
 msgstr "_Dokument schließen"
 
-#: src/ephy-window.c:264
+#: src/ephy-window.c:260
 msgid "There are ongoing downloads"
 msgstr "Downloads sind gerade aktiv"
 
-#: src/ephy-window.c:265
+#: src/ephy-window.c:261
 msgid "If you quit, the downloads will be cancelled"
 msgstr "Falls Sie beenden, werden die Downloads abgebrochen"
 
-#: src/ephy-window.c:266
+#: src/ephy-window.c:262
 msgid "Quit and cancel downloads"
 msgstr "Beenden und Downloads abbrechen"
 
-#: src/ephy-window.c:896 src/resources/gtk/menus.ui:31
+#: src/ephy-window.c:899 src/resources/gtk/menus.ui:31
 msgid "Re_do"
 msgstr "_Wiederholen"
 
-#: src/ephy-window.c:904
+#: src/ephy-window.c:907
 msgid "S_end Link by Email…"
 msgstr "Verweis _verschicken an …"
 
-#: src/ephy-window.c:906
+#: src/ephy-window.c:909
 msgid "_Reload"
 msgstr "A_ktualisieren"
 
-#: src/ephy-window.c:907
+#: src/ephy-window.c:910
 msgid "_Back"
 msgstr "_Zurück"
 
-#: src/ephy-window.c:908
+#: src/ephy-window.c:911
 msgid "_Forward"
 msgstr "_Vor"
 
 #. Bookmarks
-#: src/ephy-window.c:911
+#: src/ephy-window.c:914
 msgid "Add Boo_kmark…"
 msgstr "Lesezeichen _hinzufügen …"
 
 #. Links.
-#: src/ephy-window.c:915
+#: src/ephy-window.c:918
 msgid "Open Link in New _Window"
 msgstr "Verweis in _neuem Fenster öffnen"
 
-#: src/ephy-window.c:916
+#: src/ephy-window.c:919
 msgid "Open Link in New _Tab"
 msgstr "Verweis in neuem _Reiter öffnen"
 
-#: src/ephy-window.c:917
+#: src/ephy-window.c:920
 msgid "Open Link in I_ncognito Window"
 msgstr "Verweis in neuem _Inkognito-Fenster öffnen"
 
-#: src/ephy-window.c:918
+#: src/ephy-window.c:921
 msgid "_Save Link As…"
 msgstr "Verweis _speichern unter …"
 
-#: src/ephy-window.c:919
+#: src/ephy-window.c:922
 msgid "_Copy Link Address"
 msgstr "Verweisadresse _kopieren"
 
-#: src/ephy-window.c:920
+#: src/ephy-window.c:923
 msgid "_Copy E-mail Address"
 msgstr "E-Mail-Adresse _kopieren"
 
 #. Images.
-#: src/ephy-window.c:924
+#: src/ephy-window.c:927
 msgid "View _Image in New Tab"
 msgstr "_Bild in neuem Reiter anzeigen"
 
-#: src/ephy-window.c:925
+#: src/ephy-window.c:928
 msgid "Copy I_mage Address"
 msgstr "Bil_dadresse kopieren"
 
-#: src/ephy-window.c:926
+#: src/ephy-window.c:929
 msgid "_Save Image As…"
 msgstr "Bi_ld speichern unter …"
 
-#: src/ephy-window.c:927
+#: src/ephy-window.c:930
 msgid "Set as _Wallpaper"
 msgstr "Als _Hintergrund festlegen"
 
 #. Video.
-#: src/ephy-window.c:931
+#: src/ephy-window.c:934
 msgid "Open Video in New _Window"
 msgstr "Video in neuem _Fenster öffnen"
 
-#: src/ephy-window.c:932
+#: src/ephy-window.c:935
 msgid "Open Video in New _Tab"
 msgstr "Video in neuem _Reiter öffnen"
 
-#: src/ephy-window.c:933
+#: src/ephy-window.c:936
 msgid "_Save Video As…"
 msgstr "Video _speichern unter …"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:937
 msgid "_Copy Video Address"
 msgstr "Video-Adresse _kopieren"
 
 #. Audio.
-#: src/ephy-window.c:938
+#: src/ephy-window.c:941
 msgid "Open Audio in New _Window"
 msgstr "Audio in neuem _Fenster öffnen"
 
-#: src/ephy-window.c:939
+#: src/ephy-window.c:942
 msgid "Open Audio in New _Tab"
 msgstr "Audio in neuem _Reiter öffnen"
 
-#: src/ephy-window.c:940
+#: src/ephy-window.c:943
 msgid "_Save Audio As…"
 msgstr "Audio _speichern unter …"
 
-#: src/ephy-window.c:941
+#: src/ephy-window.c:944
 msgid "_Copy Audio Address"
 msgstr "Audio-Adresse kopieren"
 
-#: src/ephy-window.c:1475
+#: src/ephy-window.c:1485
 #, c-format
 msgid "Search the Web for '%s'"
 msgstr "Nach »%s« im Internet suchen"
@@ -2511,6 +2518,7 @@ msgid "_Keyboard Shortcuts"
 msgstr "_Tastenkombinationen"
 
 #: src/resources/epiphany-application-menu.ui:55
+#: src/resources/epiphany-application-menu.ui:68
 msgid "_Quit"
 msgstr "_Beenden"
 
@@ -3038,6 +3046,11 @@ msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Vorheriges Suchergebnis"
 
+#: src/search-provider/ephy-search-provider.c:196
+#, c-format
+msgid "Search the Web for %s"
+msgstr "Nach »%s« im Internet suchen"
+
 #: src/window-commands.c:212 src/window-commands.c:235
 msgid "Contact us at:"
 msgstr "Sie erreichen uns unter:"
@@ -3138,11 +3151,11 @@ msgstr "E_rstellen"
 msgid "Save"
 msgstr "Speichern"
 
-#: src/window-commands.c:1748
+#: src/window-commands.c:1759
 msgid "Enable caret browsing mode?"
 msgstr "Soll der Caret-Modus aktiviert werden?"
 
-#: src/window-commands.c:1751
+#: src/window-commands.c:1762
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3153,9 +3166,18 @@ msgstr ""
 "Sie mit der Tastatur steuern können. Wollen Sie die Eingabemarke-Navigation "
 "einschalten?"
 
-#: src/window-commands.c:1754
+#: src/window-commands.c:1765
 msgid "_Enable"
 msgstr "_Aktivieren"
+
+#~ msgid ""
+#~ "<p>The site at <strong>%s</strong> may have caused Web to close "
+#~ "unexpectedly.</p><p>If this happens again, please report the problem to "
+#~ "the <strong>%s</strong>  developers.</p>"
+#~ msgstr ""
+#~ "<p>Die Seite <strong>%s</strong> hat Gnome Web unerwartet abstürzen "
+#~ "lassen.</p><p>Falls dies erneut passiert, melden Sie bitte das Problem "
+#~ "den <strong>%s</strong>-Entwicklern.</p>"
 
 #~ msgid "The GNOME Project"
 #~ msgstr "Das GNOME-Projekt"
@@ -3417,15 +3439,6 @@ msgstr "_Aktivieren"
 
 #~ msgid "Oops! Error loading %s"
 #~ msgstr "Ups! Fehler beim Laden von %s"
-
-#~ msgid ""
-#~ "Oops! This site might have caused the web browser to close unexpectedly"
-#~ msgstr ""
-#~ "Diese Seite könnte verursacht haben, dass der Webbrowser unerwartet "
-#~ "beendet wurde"
-
-#~ msgid "Oops! Something went wrong displaying %s"
-#~ msgstr "Ups! Etwas ging schief beim Anzeigen von %s"
 
 #~ msgid "%u:%02u hour left"
 #~ msgid_plural "%u:%02u hours left"
