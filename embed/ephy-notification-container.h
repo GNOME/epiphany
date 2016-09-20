@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_NOTIFICATION_CONTAINER_H
-#define EPHY_NOTIFICATION_CONTAINER_H
+#pragma once
 
 #include <libgd/gd.h>
 
@@ -48,5 +47,3 @@ void                       ephy_notification_container_add_notification (EphyNot
                                                                          GtkWidget                 *notification);
 
 G_END_DECLS
-
-#endif

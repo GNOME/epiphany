@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SYNC_SERVICE_H
-#define EPHY_SYNC_SERVICE_H
+#pragma once
 
 #include "ephy-bookmark.h"
 #include "ephy-sync-utils.h"
@@ -80,5 +79,3 @@ void             ephy_sync_service_start_periodical_sync        (EphySyncService
 void             ephy_sync_service_stop_periodical_sync         (EphySyncService *self);
 
 G_END_DECLS
-
-#endif

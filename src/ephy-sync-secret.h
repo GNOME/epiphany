@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SYNC_SECRET_H
-#define EPHY_SYNC_SECRET_H
+#pragma once
 
 #include "ephy-sync-service.h"
 
@@ -41,5 +40,3 @@ void ephy_sync_secret_store_token   (const char        *email,
                                      EphySyncTokenType  type);
 
 G_END_DECLS
-
-#endif

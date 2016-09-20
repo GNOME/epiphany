@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_PASSWORD_NOTIFICATION_H
-#define EPHY_PASSWORD_NOTIFICATION_H
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -33,5 +32,3 @@ EphyPasswordNotification *ephy_password_notification_new  (const char *user);
 void                      ephy_password_notification_show (EphyPasswordNotification *self);
 
 G_END_DECLS
-
-#endif

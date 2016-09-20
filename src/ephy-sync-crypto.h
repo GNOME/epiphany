@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SYNC_CRYPTO_H
-#define EPHY_SYNC_CRYPTO_H
+#pragma once
 
 #include <glib-object.h>
 #include <nettle/rsa.h>
@@ -123,5 +122,3 @@ char                      *ephy_sync_crypto_encode_hex              (guint8 *dat
 guint8                    *ephy_sync_crypto_decode_hex              (const char *hex);
 
 G_END_DECLS
-
-#endif

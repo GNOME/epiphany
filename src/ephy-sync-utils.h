@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_SYNC_UTILS_H
-#define EPHY_SYNC_UTILS_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -48,5 +47,3 @@ guint8     *ephy_sync_utils_concatenate_bytes    (guint8 *bytes,
 gint64      ephy_sync_utils_current_time_seconds  (void);
 
 G_END_DECLS
-
-#endif
