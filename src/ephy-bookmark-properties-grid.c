@@ -242,7 +242,8 @@ ephy_bookmarks_properties_grid_actions_remove_bookmark (GSimpleAction *action,
 
   ephy_bookmarks_manager_remove_bookmark (self->manager,  self->bookmark);
 
-  gtk_widget_destroy (self->parent);
+  if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG)
+    gtk_widget_destroy (self->parent);
 }
 
 static void

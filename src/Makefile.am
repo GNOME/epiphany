@@ -22,6 +22,8 @@ libephymain_la_SOURCES = \
 	cookies-dialog.h			\
 	ephy-action-helper.c			\
 	ephy-action-helper.h			\
+	ephy-add-bookmark-popover.c		\
+	ephy-add-bookmark-popover.h		\
 	ephy-bookmark.c				\
 	ephy-bookmark.h				\
 	ephy-bookmark-properties-grid.c		\

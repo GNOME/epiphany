@@ -31,39 +31,44 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkEntry)
 
-GtkWidget      *ephy_location_entry_new                 (void);
+GtkWidget      *ephy_location_entry_new                        (void);
 
-void            ephy_location_entry_set_completion      (EphyLocationEntry *entry,
-                                                         GtkTreeModel *model,
-                                                         guint text_col,
-                                                         guint action_col,
-                                                         guint keywords_col,
-                                                         guint relevance_col,
-                                                         guint url_col,
-                                                         guint extra_col,
-                                                         guint favicon_col);
+void            ephy_location_entry_set_completion             (EphyLocationEntry *entry,
+                                                                GtkTreeModel      *model,
+                                                                guint              text_col,
+                                                                guint              action_col,
+                                                                guint              keywords_col,
+                                                                guint              relevance_col,
+                                                                guint              url_col,
+                                                                guint              extra_col,
+                                                                guint              favicon_col);
 
-void            ephy_location_entry_set_match_func      (EphyLocationEntry *entry,
-                                                         GtkEntryCompletionMatchFunc match_func,
-                                                         gpointer user_data,
-                                                         GDestroyNotify notify);
+void            ephy_location_entry_set_match_func             (EphyLocationEntry           *entry,
+                                                                GtkEntryCompletionMatchFunc  match_func,
+                                                                gpointer                     user_data,
+                                                                GDestroyNotify               notify);
 
-gboolean        ephy_location_entry_get_can_undo        (EphyLocationEntry *entry);
+gboolean        ephy_location_entry_get_can_undo               (EphyLocationEntry *entry);
 
-gboolean        ephy_location_entry_get_can_redo        (EphyLocationEntry *entry);
+gboolean        ephy_location_entry_get_can_redo               (EphyLocationEntry *entry);
 
-GSList         *ephy_location_entry_get_search_terms    (EphyLocationEntry *entry);
+GSList         *ephy_location_entry_get_search_terms           (EphyLocationEntry *entry);
 
-gboolean        ephy_location_entry_reset               (EphyLocationEntry *entry);
+gboolean        ephy_location_entry_reset                      (EphyLocationEntry *entry);
 
-void            ephy_location_entry_undo_reset          (EphyLocationEntry *entry);
+void            ephy_location_entry_undo_reset                 (EphyLocationEntry *entry);
 
-void            ephy_location_entry_activate            (EphyLocationEntry *entry);
+void            ephy_location_entry_activate                   (EphyLocationEntry *entry);
 
-void          ephy_location_entry_set_bookmarked_status (EphyLocationEntry *entry,
-                                                         gboolean           is_bookmarked);
+void            ephy_location_entry_set_bookmarked_status      (EphyLocationEntry *entry,
+                                                                gboolean           is_bookmarked);
 
-void            ephy_location_entry_set_lock_tooltip    (EphyLocationEntry *entry,
-                                                         const char *tooltip);
+void            ephy_location_entry_set_lock_tooltip           (EphyLocationEntry *entry,
+                                                                const char        *tooltip);
+
+void            ephy_location_entry_set_add_bookmark_popover   (EphyLocationEntry *entry,
+                                                                GtkPopover        *popover);
+
+GtkPopover     *ephy_location_entry_get_add_bookmark_popover   (EphyLocationEntry *entry);
 
 G_END_DECLS

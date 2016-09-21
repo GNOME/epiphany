@@ -61,6 +61,8 @@ struct _EphyLocationEntry {
 
   GBinding *paste_binding;
 
+  GtkPopover *add_bookmark_popover;
+
   char *before_completion;
   char *saved_text;
 
@@ -278,6 +280,28 @@ ephy_location_entry_finalize (GObject *object)
 }
 
 static void
+ephy_location_entry_size_allocate (GtkWidget     *widget,
+                                   GtkAllocation *allocation)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+
+  if (gtk_widget_is_visible (widget)) {
+    GdkRectangle pointing_to;
+
+    gtk_entry_get_icon_area (GTK_ENTRY (entry),
+                             GTK_ENTRY_ICON_SECONDARY,
+                             &pointing_to);
+    /* FIXME: GTK+ sets "margin-left: 6px" for the icon. Add 3px to the
+     * rectangle so the popover is centered on the star.
+     */
+    pointing_to.x = pointing_to.x + 3;
+    gtk_popover_set_pointing_to (entry->add_bookmark_popover, &pointing_to);
+  }
+
+  GTK_WIDGET_CLASS (ephy_location_entry_parent_class)->size_allocate (widget, allocation);
+}
+
+static void
 ephy_location_entry_get_preferred_width (GtkWidget *widget,
                                          gint      *minimum_width,
                                          gint      *natural_width)
@@ -344,7 +368,10 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   object_class->get_property = ephy_location_entry_get_property;
   object_class->set_property = ephy_location_entry_set_property;
   object_class->finalize = ephy_location_entry_finalize;
+
+  widget_class->size_allocate = ephy_location_entry_size_allocate;
   widget_class->get_preferred_width = ephy_location_entry_get_preferred_width;
+
   entry_class->copy_clipboard = ephy_location_entry_copy_clipboard;
   entry_class->cut_clipboard = ephy_location_entry_cut_clipboard;
 
@@ -1177,6 +1204,22 @@ ephy_location_entry_set_lock_tooltip (EphyLocationEntry *entry,
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
                                    GTK_ENTRY_ICON_PRIMARY,
                                    tooltip);
+}
+
+void
+ephy_location_entry_set_add_bookmark_popover (EphyLocationEntry *entry,
+                                              GtkPopover        *popover)
+{
+  g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  entry->add_bookmark_popover = popover;
+}
+
+GtkPopover *
+ephy_location_entry_get_add_bookmark_popover (EphyLocationEntry *entry)
+{
+  return entry->add_bookmark_popover;
 }
 
 /**
