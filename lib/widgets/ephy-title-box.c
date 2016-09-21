@@ -33,8 +33,6 @@ struct _EphyTitleBox {
   GtkWidget *lock_image;
   GtkWidget *title;
   GtkWidget *subtitle;
-
-  GBinding *title_binding;
 };
 
 G_DEFINE_TYPE (EphyTitleBox, ephy_title_box, GTK_TYPE_EVENT_BOX)
