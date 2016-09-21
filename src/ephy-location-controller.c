@@ -246,7 +246,7 @@ user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
   GtkTreeModel *model;
   GtkEntryCompletion *completion;
 
-  address = ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (widget));
+  address = ephy_title_widget_get_address (EPHY_TITLE_WIDGET (widget));
 
   LOG ("user_changed_cb, address %s", address);
 
@@ -274,7 +274,7 @@ sync_address (EphyLocationController *controller,
   LOG ("sync_address %s", controller->address);
 
   g_signal_handlers_block_by_func (widget, G_CALLBACK (user_changed_cb), controller);
-  ephy_location_entry_set_location (lentry, controller->address);
+  ephy_title_widget_set_address (EPHY_TITLE_WIDGET (lentry), controller->address);
   ephy_title_widget_set_address (EPHY_TITLE_WIDGET (controller->title_box), controller->address);
   g_signal_handlers_unblock_by_func (widget, G_CALLBACK (user_changed_cb), controller);
 }

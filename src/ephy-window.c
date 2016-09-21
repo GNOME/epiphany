@@ -505,7 +505,7 @@ sync_tab_security (EphyWebView *view,
   ephy_title_widget_set_security_level (EPHY_TITLE_WIDGET (title_box), security_level);
 
   location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
-  ephy_location_entry_set_security_level (EPHY_LOCATION_ENTRY (location_entry), security_level);
+  ephy_title_widget_set_security_level (EPHY_TITLE_WIDGET (location_entry), security_level);
 }
 
 static void
@@ -2762,7 +2762,7 @@ open_security_popover (EphyWindow   *window,
   location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
 
   security_popover = ephy_security_popover_new (relative_to,
-                                                ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (location_entry)),
+                                                ephy_title_widget_get_address (EPHY_TITLE_WIDGET (location_entry)),
                                                 certificate,
                                                 tls_errors,
                                                 security_level);

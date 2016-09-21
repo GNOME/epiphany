@@ -23,6 +23,7 @@
 #include "config.h"
 #include "ephy-debug.h"
 #include "ephy-location-entry.h"
+#include "ephy-title-widget.h"
 #include <glib.h>
 #include <gtk/gtk.h>
 
@@ -51,11 +52,11 @@ test_entry_set_location (void)
   const char *set = "test";
   const char *get;
 
-  EphyLocationEntry *entry;
-  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyTitleWidget *widget;
+  widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
 
-  ephy_location_entry_set_location (entry, set);
-  get = ephy_location_entry_get_location (entry);
+  ephy_title_widget_set_address (widget, set);
+  get = ephy_title_widget_get_address (widget);
   g_assert_cmpstr (set, ==, get);
 }
 
@@ -65,11 +66,11 @@ test_entry_set_location_null (void)
   const char *set = "test";
   const char *get;
 
-  EphyLocationEntry *entry;
-  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyTitleWidget *widget;
+  widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
 
-  ephy_location_entry_set_location (entry, NULL);
-  get = ephy_location_entry_get_location (entry);
+  ephy_title_widget_set_address (widget, NULL);
+  get = ephy_title_widget_get_address (widget);
   g_assert_cmpstr (set, !=, get);
 }
 
@@ -79,11 +80,11 @@ test_entry_get_location (void)
   const char *set = "test";
   const char *get;
 
-  EphyLocationEntry *entry;
-  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyTitleWidget *widget;
+  widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
 
-  ephy_location_entry_set_location (entry, set);
-  get = ephy_location_entry_get_location (entry);
+  ephy_title_widget_set_address (widget, set);
+  get = ephy_title_widget_get_address (widget);
   g_assert_cmpstr (set, ==, get);
 }
 
@@ -92,10 +93,10 @@ test_entry_get_location_empty (void)
 {
   const char *get;
 
-  EphyLocationEntry *entry;
-  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyTitleWidget *widget;
+  widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
 
-  get = ephy_location_entry_get_location (entry);
+  get = ephy_title_widget_get_address (widget);
   g_assert_cmpstr ("", ==, get);
 }
 
@@ -126,7 +127,7 @@ test_entry_can_redo (void)
   g_assert_cmpint (ephy_location_entry_get_can_redo (entry), ==, FALSE);
 
   /* Can't redo, in this point we can undo */
-  ephy_location_entry_set_location (entry, test);
+  ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), test);
   g_assert_cmpint (ephy_location_entry_get_can_redo (entry), ==, FALSE);
 
   /* Reset should set redo to TRUE */

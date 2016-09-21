@@ -3,6 +3,7 @@
  *  Copyright © 2002  Ricardo Fernández Pascual
  *  Copyright © 2003, 2004  Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005  Christian Persch
+ *  Copyright © 2016  Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,15 +43,10 @@ void            ephy_location_entry_set_completion      (EphyLocationEntry *entr
                                                          guint extra_col,
                                                          guint favicon_col);
 
-void            ephy_location_entry_set_location        (EphyLocationEntry *entry,
-                                                         const char *address);
-
 void            ephy_location_entry_set_match_func      (EphyLocationEntry *entry,
                                                          GtkEntryCompletionMatchFunc match_func,
                                                          gpointer user_data,
                                                          GDestroyNotify notify);
-
-const char     *ephy_location_entry_get_location        (EphyLocationEntry *entry);
 
 gboolean        ephy_location_entry_get_can_undo        (EphyLocationEntry *entry);
 
@@ -69,9 +65,6 @@ void            ephy_location_entry_set_favicon         (EphyLocationEntry *entr
 
 void            ephy_location_entry_set_show_favicon    (EphyLocationEntry *entry,
                                                          gboolean show_favicon);
-
-void            ephy_location_entry_set_security_level  (EphyLocationEntry *entry,
-                                                         EphySecurityLevel security_level);
 
 void            ephy_location_entry_set_lock_tooltip    (EphyLocationEntry *entry,
                                                          const char *tooltip);

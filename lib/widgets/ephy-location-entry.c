@@ -4,6 +4,7 @@
  *  Copyright © 2003, 2004  Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005  Christian Persch
  *  Copyright © 2008  Xan López
+ *  Copyright © 2016  Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
+#include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
 
 #include <gdk/gdkkeysyms.h>
@@ -85,6 +87,8 @@ struct _EphyLocationEntry {
 
   GtkTargetList *drag_targets;
   GdkDragAction drag_actions;
+
+  EphySecurityLevel security_level;
 };
 
 static const GtkTargetEntry url_drag_types [] =
@@ -104,13 +108,12 @@ static void extracell_data_func (GtkCellLayout   *cell_layout,
 
 enum {
   PROP_0,
-  PROP_LOCATION,
+  PROP_ADDRESS,
   PROP_FAVICON,
   PROP_SECURITY_LEVEL,
   PROP_SHOW_FAVICON,
   LAST_PROP
 };
-static GParamSpec *obj_properties[LAST_PROP];
 
 enum signalsEnum {
   USER_CHANGED,
@@ -121,7 +124,164 @@ enum signalsEnum {
 };
 static gint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_ENTRY)
+static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_ENTRY,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
+                                                ephy_location_entry_title_widget_interface_init))
+
+static void
+update_address_state (EphyLocationEntry *entry)
+{
+  const char *text;
+
+  text = gtk_entry_get_text (GTK_ENTRY (entry));
+  entry->original_address = text != NULL &&
+                            g_str_hash (text) == entry->hash;
+}
+
+static void
+update_favicon (EphyLocationEntry *lentry)
+{
+  GtkEntry *entry = GTK_ENTRY (lentry);
+
+  /* Only show the favicon if the entry's text is the
+   * address of the current page.
+   */
+  if (lentry->show_favicon && lentry->favicon != NULL && lentry->original_address) {
+    gtk_entry_set_icon_from_pixbuf (entry,
+                                    GTK_ENTRY_ICON_PRIMARY,
+                                    lentry->favicon);
+  } else if (lentry->show_favicon) {
+    const char *icon_name;
+
+    /* Here we could consider using fallback favicon that matches
+     * the page MIME type, though text/html should be good enough
+     * most of the time. See #337140
+     */
+    if (gtk_entry_get_text_length (entry) > 0)
+      icon_name = "text-x-generic-symbolic";
+    else
+      icon_name = "edit-find-symbolic";
+
+    gtk_entry_set_icon_from_icon_name (entry,
+                                       GTK_ENTRY_ICON_PRIMARY,
+                                       icon_name);
+  } else {
+    gtk_entry_set_icon_from_icon_name (entry,
+                                       GTK_ENTRY_ICON_PRIMARY,
+                                       NULL);
+  }
+}
+
+
+static const char *
+ephy_location_entry_title_widget_get_address (EphyTitleWidget *widget)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+
+  g_return_val_if_fail (entry, NULL);
+
+  return gtk_entry_get_text (GTK_ENTRY (widget));
+}
+
+static void
+ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
+                                              const char      *address)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+  GtkClipboard *clipboard;
+  const char *text;
+  char *effective_text = NULL, *selection = NULL;
+  int start, end;
+
+  g_return_if_fail (widget);
+
+  /* Setting a new text will clear the clipboard. This makes it impossible
+   * to copy&paste from the location entry of one tab into another tab, see
+   * bug #155824. So we save the selection iff the clipboard was owned by
+   * the location entry.
+   */
+  if (gtk_widget_get_realized (GTK_WIDGET (entry))) {
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry),
+                                          GDK_SELECTION_PRIMARY);
+    g_return_if_fail (clipboard != NULL);
+
+    if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry) &&
+        gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
+                                           &start, &end)) {
+      selection = gtk_editable_get_chars (GTK_EDITABLE (entry),
+                                          start, end);
+    }
+  }
+
+  if (address != NULL) {
+    if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
+      effective_text = g_strdup_printf ("about:%s",
+                                        address + strlen (EPHY_ABOUT_SCHEME) + 1);
+    text = address;
+    gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
+                                    GTK_ENTRY_ICON_PRIMARY,
+                                    entry->drag_targets,
+                                    entry->drag_actions);
+  } else {
+    text = "";
+    gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
+                                    GTK_ENTRY_ICON_PRIMARY,
+                                    NULL,
+                                    GDK_ACTION_DEFAULT);
+  }
+
+  /* First record the new hash, then update the entry text */
+  entry->hash = g_str_hash (effective_text ? effective_text : text);
+
+  entry->block_update = TRUE;
+  gtk_entry_set_text (GTK_ENTRY (entry), effective_text ? effective_text : text);
+  entry->block_update = FALSE;
+  g_free (effective_text);
+
+  /* We need to call update_address_state() here, as the 'changed' signal
+   * may not get called if the user has typed in the exact correct url */
+  update_address_state (entry);
+  update_favicon (entry);
+
+  /* Now restore the selection.
+   * Note that it's not owned by the entry anymore!
+   */
+  if (selection != NULL) {
+    gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY),
+                            selection, strlen (selection));
+    g_free (selection);
+  }
+}
+
+static EphySecurityLevel
+ephy_location_entry_title_widget_get_security_level (EphyTitleWidget *widget)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+
+  g_return_val_if_fail (entry, EPHY_SECURITY_LEVEL_TO_BE_DETERMINED);
+
+  return entry->security_level;
+}
+
+static void
+ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
+                                                     EphySecurityLevel  security_level)
+
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
+  const char *icon_name;
+
+  g_return_if_fail (entry);
+
+  icon_name = ephy_security_level_to_icon_name (security_level);
+  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (widget),
+                                     GTK_ENTRY_ICON_SECONDARY,
+                                     icon_name);
+
+  entry->security_level = security_level;
+}
 
 static void
 ephy_location_entry_set_property (GObject      *object,
@@ -132,17 +292,17 @@ ephy_location_entry_set_property (GObject      *object,
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 
   switch (prop_id) {
-    case PROP_LOCATION:
-      ephy_location_entry_set_location (entry,
-                                        g_value_get_string (value));
+    case PROP_ADDRESS:
+      ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry),
+                                     g_value_get_string (value));
       break;
     case PROP_FAVICON:
       ephy_location_entry_set_favicon (entry,
                                        g_value_get_object (value));
       break;
     case PROP_SECURITY_LEVEL:
-      ephy_location_entry_set_security_level (entry,
-                                              g_value_get_enum (value));
+      ephy_title_widget_set_security_level (EPHY_TITLE_WIDGET (entry),
+                                            g_value_get_enum (value));
       break;
     case PROP_SHOW_FAVICON:
       ephy_location_entry_set_show_favicon (entry,
@@ -162,8 +322,11 @@ ephy_location_entry_get_property (GObject    *object,
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
 
   switch (prop_id) {
-    case PROP_LOCATION:
-      g_value_set_string (value, ephy_location_entry_get_location (entry));
+    case PROP_ADDRESS:
+      g_value_set_string (value, ephy_title_widget_get_address (EPHY_TITLE_WIDGET (entry)));
+      break;
+    case PROP_SECURITY_LEVEL:
+      g_value_set_enum (value, ephy_title_widget_get_security_level (EPHY_TITLE_WIDGET (entry)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -237,6 +400,15 @@ ephy_location_entry_cut_clipboard (GtkEntry *entry)
 }
 
 static void
+ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface)
+{
+  iface->get_address = ephy_location_entry_title_widget_get_address;
+  iface->set_address = ephy_location_entry_title_widget_set_address;
+  iface->get_security_level = ephy_location_entry_title_widget_get_security_level;
+  iface->set_security_level = ephy_location_entry_title_widget_set_security_level;
+}
+
+static void
 ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -251,50 +423,28 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   entry_class->cut_clipboard = ephy_location_entry_cut_clipboard;
 
   /**
-   * EphyLocationEntry:location:
-   *
-   * The current location.
-   */
-  obj_properties[PROP_LOCATION] =
-    g_param_spec_string ("location",
-                         "Location",
-                         "The current location",
-                         "",
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-  /**
    * EphyLocationEntry:favicon:
    *
    * The icon corresponding to the current location.
    */
-  obj_properties[PROP_FAVICON] =
-    g_param_spec_object ("favicon",
-                         "Favicon",
-                         "The icon corresponding to the current location",
-                         GDK_TYPE_PIXBUF,
-                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class,
+                                   PROP_FAVICON,
+                                   g_param_spec_object ("favicon",
+                                                        "Favicon",
+                                                        "The icon corresponding to the current location",
+                                                        GDK_TYPE_PIXBUF,
+                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  /**
-   * EphyLocationEntry:security-level:
-   *
-   * State of the security icon.
-   */
-  obj_properties[PROP_SECURITY_LEVEL] =
-    g_param_spec_enum ("security-level",
-                       "Security level",
-                       "State of the security icon",
-                       EPHY_TYPE_SECURITY_LEVEL,
-                       EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
-                       G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class,
+                                   PROP_SHOW_FAVICON,
+                                   g_param_spec_boolean ("show-favicon",
+                                                         "Show Favicon",
+                                                         "Whether to show the favicon",
+                                                         TRUE,
+                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
-  obj_properties[PROP_SHOW_FAVICON] =
-    g_param_spec_boolean ("show-favicon",
-                          "Show Favicon",
-                          "Whether to show the favicon",
-                          TRUE,
-                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+  g_object_class_override_property (object_class, PROP_ADDRESS, "address");
+  g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
 
   /**
    * EphyLocationEntry::user-changed:
@@ -364,50 +514,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
     G_TYPE_STRING,
     0,
     G_TYPE_NONE);
-}
-
-static void
-update_address_state (EphyLocationEntry *entry)
-{
-  const char *text;
-
-  text = gtk_entry_get_text (GTK_ENTRY (entry));
-  entry->original_address = text != NULL &&
-                            g_str_hash (text) == entry->hash;
-}
-
-static void
-update_favicon (EphyLocationEntry *lentry)
-{
-  GtkEntry *entry = GTK_ENTRY (lentry);
-
-  /* Only show the favicon if the entry's text is the
-   * address of the current page.
-   */
-  if (lentry->show_favicon && lentry->favicon != NULL && lentry->original_address) {
-    gtk_entry_set_icon_from_pixbuf (entry,
-                                    GTK_ENTRY_ICON_PRIMARY,
-                                    lentry->favicon);
-  } else if (lentry->show_favicon) {
-    const char *icon_name;
-
-    /* Here we could consider using fallback favicon that matches
-     * the page MIME type, though text/html should be good enough
-     * most of the time. See #337140
-     */
-    if (gtk_entry_get_text_length (entry) > 0)
-      icon_name = "text-x-generic-symbolic";
-    else
-      icon_name = "edit-find-symbolic";
-
-    gtk_entry_set_icon_from_icon_name (entry,
-                                       GTK_ENTRY_ICON_PRIMARY,
-                                       icon_name);
-  } else {
-    gtk_entry_set_icon_from_icon_name (entry,
-                                       GTK_ENTRY_ICON_PRIMARY,
-                                       NULL);
-  }
 }
 
 static void
@@ -515,7 +621,7 @@ match_selected_cb (GtkEntryCompletion *completion,
   entry->needs_reset = (state == GDK_CONTROL_MASK ||
                         state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK));
 
-  ephy_location_entry_set_location (entry, item);
+  ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), item);
   /* gtk_im_context_reset (GTK_ENTRY (entry)->im_context); */
   g_signal_emit_by_name (entry, "activate");
 
@@ -1274,81 +1380,6 @@ ephy_location_entry_set_completion (EphyLocationEntry *entry,
 }
 
 /**
- * ephy_location_entry_set_location:
- * @entry: an #EphyLocationEntry widget
- * @address: new location address
- *
- * Sets the current address of @entry to @address.
- **/
-void
-ephy_location_entry_set_location (EphyLocationEntry *entry,
-                                  const char        *address)
-{
-  GtkWidget *widget = GTK_WIDGET (entry);
-  GtkClipboard *clipboard;
-  const char *text;
-  char *effective_text = NULL, *selection = NULL;
-  int start, end;
-
-  /* Setting a new text will clear the clipboard. This makes it impossible
-   * to copy&paste from the location entry of one tab into another tab, see
-   * bug #155824. So we save the selection iff the clipboard was owned by
-   * the location entry.
-   */
-  if (gtk_widget_get_realized (widget)) {
-    clipboard = gtk_widget_get_clipboard (widget,
-                                          GDK_SELECTION_PRIMARY);
-    g_return_if_fail (clipboard != NULL);
-
-    if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (widget) &&
-        gtk_editable_get_selection_bounds (GTK_EDITABLE (widget),
-                                           &start, &end)) {
-      selection = gtk_editable_get_chars (GTK_EDITABLE (widget),
-                                          start, end);
-    }
-  }
-
-  if (address != NULL) {
-    if (g_str_has_prefix (address, EPHY_ABOUT_SCHEME))
-      effective_text = g_strdup_printf ("about:%s",
-                                        address + strlen (EPHY_ABOUT_SCHEME) + 1);
-    text = address;
-    gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
-                                    GTK_ENTRY_ICON_PRIMARY,
-                                    entry->drag_targets,
-                                    entry->drag_actions);
-  } else {
-    text = "";
-    gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
-                                    GTK_ENTRY_ICON_PRIMARY,
-                                    NULL,
-                                    GDK_ACTION_DEFAULT);
-  }
-
-  /* First record the new hash, then update the entry text */
-  entry->hash = g_str_hash (effective_text ? effective_text : text);
-
-  entry->block_update = TRUE;
-  gtk_entry_set_text (GTK_ENTRY (widget), effective_text ? effective_text : text);
-  entry->block_update = FALSE;
-  g_free (effective_text);
-
-  /* We need to call update_address_state() here, as the 'changed' signal
-   * may not get called if the user has typed in the exact correct url */
-  update_address_state (entry);
-  update_favicon (entry);
-
-  /* Now restore the selection.
-   * Note that it's not owned by the entry anymore!
-   */
-  if (selection != NULL) {
-    gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY),
-                            selection, strlen (selection));
-    g_free (selection);
-  }
-}
-
-/**
  * ephy_location_entry_get_can_undo:
  * @entry: an #EphyLocationEntry widget
  *
@@ -1380,22 +1411,6 @@ ephy_location_entry_get_can_redo (EphyLocationEntry *entry)
   return entry->can_redo;
 }
 
-/**
- * ephy_location_entry_get_location:
- * @entry: an #EphyLocationEntry widget
- *
- * Retrieves the text displayed by the internal #GtkEntry of @entry. This is
- * the currently displayed text, like in any #GtkEntry.
- *
- * Return value: the text inside the inner #GtkEntry of @entry, owned by GTK+
- *
- **/
-const char *
-ephy_location_entry_get_location (EphyLocationEntry *entry)
-{
-  return gtk_entry_get_text (GTK_ENTRY (entry));
-}
-
 static gboolean
 ephy_location_entry_reset_internal (EphyLocationEntry *entry,
                                     gboolean           notify)
@@ -1415,7 +1430,7 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
 
   retval = g_str_hash (text) != g_str_hash (old_text);
 
-  ephy_location_entry_set_location (entry, text);
+  ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), text);
   g_free (url);
 
   if (notify) {
@@ -1510,29 +1525,6 @@ ephy_location_entry_set_show_favicon (EphyLocationEntry *entry,
   entry->show_favicon = show_favicon != FALSE;
 
   update_favicon (entry);
-}
-
-/**
- * ephy_location_entry_set_security_level:
- * @entry: an #EphyLocationEntry widget
- * @state: the #EphySecurityLevel
- *
- * Set the lock icon to be displayed
- *
- **/
-void
-ephy_location_entry_set_security_level (EphyLocationEntry *entry,
-                                        EphySecurityLevel  security_level)
-
-{
-  const char *icon_name;
-
-  g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
-
-  icon_name = ephy_security_level_to_icon_name (security_level);
-  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
-                                     GTK_ENTRY_ICON_SECONDARY,
-                                     icon_name);
 }
 
 /**
