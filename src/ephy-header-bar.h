@@ -38,5 +38,6 @@ void             ephy_header_bar_change_combined_stop_reload_state (GSimpleActio
 EphyTitleWidget *ephy_header_bar_get_title_widget                  (EphyHeaderBar *header_bar);
 GtkWidget       *ephy_header_bar_get_page_menu_button              (EphyHeaderBar *header_bar);
 GtkWidget       *ephy_header_bar_get_new_tab_button                (EphyHeaderBar *header_bar);
+EphyWindow      *ephy_header_bar_get_window                        (EphyHeaderBar *header_bar);
 
 G_END_DECLS

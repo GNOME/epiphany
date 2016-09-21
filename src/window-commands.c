@@ -20,8 +20,10 @@
  */
 
 #include "config.h"
+
 #include "window-commands.h"
 
+#include "ephy-add-bookmark-popover.h"
 #include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
@@ -36,6 +38,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
 #include "ephy-gui.h"
+#include "ephy-header-bar.h"
 #include "ephy-history-window.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
@@ -1313,15 +1316,17 @@ window_cmd_bookmark_page (GSimpleAction *action,
                           GVariant      *parameter,
                           gpointer       user_data)
 {
-  EphyEmbed *embed;
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyHeaderBar *header_bar;
+  EphyTitleWidget *title_widget;
+  GtkPopover *popover;
 
-  embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (user_data));
-  g_return_if_fail (embed != NULL);
+  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+  title_widget = ephy_header_bar_get_title_widget (header_bar);
+  g_assert (EPHY_IS_LOCATION_ENTRY (title_widget));
+  popover = ephy_location_entry_get_add_bookmark_popover (EPHY_LOCATION_ENTRY (title_widget));
 
-  ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (user_data),
-                                  ephy_web_view_get_address (ephy_embed_get_web_view (embed)),
-                                  ephy_embed_get_title (embed));
+  ephy_add_bookmark_popover_show (EPHY_ADD_BOOKMARK_POPOVER (popover));
 }
 
 void
