@@ -453,13 +453,12 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
    * Emitted when the user changes the contents of the internal #GtkEntry
    *
    */
-  signals[USER_CHANGED] = g_signal_new (
-    "user_changed", G_OBJECT_CLASS_TYPE (klass),
-    G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-    0, NULL, NULL, NULL,
-    G_TYPE_NONE,
-    0,
-    G_TYPE_NONE);
+  signals[USER_CHANGED] = g_signal_new ("user_changed", G_OBJECT_CLASS_TYPE (klass),
+                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                        0, NULL, NULL, NULL,
+                                        G_TYPE_NONE,
+                                        0,
+                                        G_TYPE_NONE);
 
   /**
    * EphyLocationEntry::lock-clicked:
@@ -469,13 +468,12 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
    * #EphyLocationEntry.
    *
    */
-  signals[LOCK_CLICKED] = g_signal_new (
-    "lock-clicked",
-    EPHY_TYPE_LOCATION_ENTRY,
-    G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-    0, NULL, NULL, NULL,
-    G_TYPE_NONE,
-    0);
+  signals[LOCK_CLICKED] = g_signal_new ("lock-clicked",
+                                        EPHY_TYPE_LOCATION_ENTRY,
+                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                        0, NULL, NULL, NULL,
+                                        G_TYPE_NONE,
+                                        0);
 
   /**
    * EphyLocationEntry::get-location:
@@ -487,14 +485,13 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
    * function should return the address of the currently loaded site.
    *
    */
-  signals[GET_LOCATION] = g_signal_new (
-    "get-location", G_OBJECT_CLASS_TYPE (klass),
-    G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-    0, ephy_signal_accumulator_string,
-    NULL, NULL,
-    G_TYPE_STRING,
-    0,
-    G_TYPE_NONE);
+  signals[GET_LOCATION] = g_signal_new ("get-location", G_OBJECT_CLASS_TYPE (klass),
+                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                        0, ephy_signal_accumulator_string,
+                                        NULL, NULL,
+                                        G_TYPE_STRING,
+                                        0,
+                                        G_TYPE_NONE);
 
   /**
    * EphyLocationEntry::get-title:
@@ -506,14 +503,13 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
    * function should return the title of the currently loaded site.
    *
    */
-  signals[GET_TITLE] = g_signal_new (
-    "get-title", G_OBJECT_CLASS_TYPE (klass),
-    G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-    0, ephy_signal_accumulator_string,
-    NULL, NULL,
-    G_TYPE_STRING,
-    0,
-    G_TYPE_NONE);
+  signals[GET_TITLE] = g_signal_new ("get-title", G_OBJECT_CLASS_TYPE (klass),
+                                     G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                                     0, ephy_signal_accumulator_string,
+                                     NULL, NULL,
+                                     G_TYPE_STRING,
+                                     0,
+                                     G_TYPE_NONE);
 }
 
 static void
