@@ -21,7 +21,7 @@
 #include <gtk/gtk.h>
 #include <webkit2/webkit2.h>
 
-#include "ephy-window.h"
+#include "ephy-security-levels.h"
 
 G_BEGIN_DECLS
 

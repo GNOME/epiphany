@@ -12,8 +12,7 @@ TYPES_H_FILES = \
 	ephy-link.h				\
 	ephy-session.h				\
 	ephy-shell.h				\
-	ephy-window.h				\
-	ephy-title-box.h
+	ephy-window.h
 
 libephymain_la_SOURCES = \
 	clear-data-dialog.c			\
@@ -45,8 +44,6 @@ libephymain_la_SOURCES = \
 	ephy-session.h				\
 	ephy-shell.c				\
 	ephy-shell.h				\
-	ephy-title-box.c			\
-	ephy-title-box.h			\
 	ephy-window.c				\
 	ephy-window.h				\
 	languages.h				\

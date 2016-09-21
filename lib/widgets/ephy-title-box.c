@@ -20,11 +20,6 @@
 #include "config.h"
 #include "ephy-title-box.h"
 
-#include "ephy-certificate-dialog.h"
-#include "ephy-debug.h"
-#include "ephy-private.h"
-#include "ephy-type-builtins.h"
-
 enum {
   LOCK_CLICKED,
   LAST_SIGNAL
