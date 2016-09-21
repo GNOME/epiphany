@@ -20,6 +20,16 @@
 #include "config.h"
 #include "ephy-title-box.h"
 
+#include "ephy-lib-type-builtins.h"
+#include "ephy-title-widget.h"
+
+enum {
+  PROP_0,
+  PROP_ADDRESS,
+  PROP_SECURITY_LEVEL,
+  LAST_PROP
+};
+
 enum {
   LOCK_CLICKED,
   LAST_SIGNAL
@@ -33,9 +43,15 @@ struct _EphyTitleBox {
   GtkWidget *lock_image;
   GtkWidget *title;
   GtkWidget *subtitle;
+
+  EphySecurityLevel security_level;
 };
 
-G_DEFINE_TYPE (EphyTitleBox, ephy_title_box, GTK_TYPE_EVENT_BOX)
+static void ephy_title_box_title_widget_interface_init (EphyTitleWidgetInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (EphyTitleBox, ephy_title_box, GTK_TYPE_EVENT_BOX,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
+                                                ephy_title_box_title_widget_interface_init))
 
 static gboolean
 ephy_title_box_button_press_event (GtkWidget      *widget,
@@ -117,6 +133,107 @@ ephy_title_box_get_preferred_width (GtkWidget *widget,
     *natural_width = 860;
 }
 
+static const char *
+ephy_title_box_title_widget_get_address (EphyTitleWidget *widget)
+{
+  EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
+
+  g_return_val_if_fail (title_box, NULL);
+
+  return gtk_label_get_text (GTK_LABEL (title_box->subtitle));
+}
+
+static void
+ephy_title_box_title_widget_set_address (EphyTitleWidget *widget,
+                                         const char      *address)
+{
+  EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
+
+  g_return_if_fail (title_box);
+
+  if (address && *address)
+    gtk_label_set_text (GTK_LABEL (title_box->subtitle), address);
+}
+
+static EphySecurityLevel
+ephy_title_box_title_widget_get_security_level (EphyTitleWidget *widget)
+{
+  EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
+
+  g_return_val_if_fail (title_box, EPHY_SECURITY_LEVEL_TO_BE_DETERMINED);
+
+  return title_box->security_level;
+}
+
+static void
+ephy_title_box_title_widget_set_security_level (EphyTitleWidget  *widget,
+                                                EphySecurityLevel security_level)
+{
+  EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
+  const char *icon_name;
+
+  g_return_if_fail (title_box);
+
+  icon_name = ephy_security_level_to_icon_name (security_level);
+
+  g_object_set (title_box->lock_image,
+                "icon-name", icon_name,
+                NULL);
+
+  gtk_widget_set_visible (title_box->lock_image, icon_name != NULL);
+
+  title_box->security_level = security_level;
+}
+
+static void
+ephy_title_box_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  EphyTitleWidget *widget = EPHY_TITLE_WIDGET (object);
+
+  switch (prop_id) {
+    case PROP_ADDRESS:
+      ephy_title_widget_set_address (widget, g_value_get_string (value));
+      break;
+    case PROP_SECURITY_LEVEL:
+      ephy_title_widget_set_security_level (widget, g_value_get_enum (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_title_box_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  EphyTitleWidget *widget = EPHY_TITLE_WIDGET (object);
+
+  switch (prop_id) {
+    case PROP_ADDRESS:
+      g_value_set_string (value, ephy_title_widget_get_address (widget));
+      break;
+    case PROP_SECURITY_LEVEL:
+      g_value_set_enum (value, ephy_title_widget_get_security_level (widget));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_title_box_title_widget_interface_init (EphyTitleWidgetInterface *iface)
+{
+  iface->get_address = ephy_title_box_title_widget_get_address;
+  iface->set_address = ephy_title_box_title_widget_set_address;
+  iface->get_security_level = ephy_title_box_title_widget_get_security_level;
+  iface->set_security_level = ephy_title_box_title_widget_set_security_level;
+}
+
 static void
 ephy_title_box_class_init (EphyTitleBoxClass *klass)
 {
@@ -124,8 +241,13 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ephy_title_box_constructed;
+  object_class->get_property = ephy_title_box_get_property;
+  object_class->set_property = ephy_title_box_set_property;
   widget_class->button_press_event = ephy_title_box_button_press_event;
   widget_class->get_preferred_width = ephy_title_box_get_preferred_width;
+
+  g_object_class_override_property (object_class, PROP_ADDRESS, "address");
+  g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
 
   /**
    * EphyTitleBox::lock-clicked:
@@ -162,45 +284,4 @@ ephy_title_box_new (void)
   return g_object_new (EPHY_TYPE_TITLE_BOX,
                        "valign", GTK_ALIGN_CENTER,
                        NULL);
-}
-
-/**
- * ephy_title_box_set_security_level:
- * @title_box: an #EphyTitleBox
- * @mode: an #EphySecurityLevel
- *
- * Sets the lock icon to be displayed by the title box and location entry
- **/
-void
-ephy_title_box_set_security_level (EphyTitleBox     *title_box,
-                                   EphySecurityLevel security_level)
-{
-  const char *icon_name;
-
-  g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
-
-  icon_name = ephy_security_level_to_icon_name (security_level);
-
-  g_object_set (title_box->lock_image,
-                "icon-name", icon_name,
-                NULL);
-
-  gtk_widget_set_visible (title_box->lock_image, icon_name != NULL);
-}
-
-/**
- * ephy_title_box_set_address:
- * @title_box: an #EphyTitleBox
- * @address: (nullable): the URI to use for the subtitle of this #EphyTitleBox
- *
- * Sets the address of @title_box to @address
- */
-void
-ephy_title_box_set_address (EphyTitleBox *title_box,
-                            const char   *address)
-{
-  g_return_if_fail (EPHY_IS_TITLE_BOX (title_box));
-
-  if (address && *address)
-    gtk_label_set_text (GTK_LABEL (title_box->subtitle), address);
 }

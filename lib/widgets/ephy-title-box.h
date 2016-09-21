@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2013, 2014 Yosef Or Boczko <yoseforb@gnome.org>
+ *  Copyright © 2016 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,11 +31,5 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (EphyTitleBox, ephy_title_box, EPHY, TITLE_BOX, GtkEventBox)
 
 EphyTitleBox       *ephy_title_box_new                  (void);
-
-void                ephy_title_box_set_security_level   (EphyTitleBox         *title_box,
-                                                         EphySecurityLevel     security_level);
-
-void                ephy_title_box_set_address          (EphyTitleBox         *title_box,
-                                                         const char           *address);
 
 G_END_DECLS

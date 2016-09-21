@@ -37,6 +37,7 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-title-box.h"
+#include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
 #include "ephy-window.h"
@@ -1018,7 +1019,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
 
     header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (data->window));
     title_box = ephy_header_bar_get_title_box (header_bar);
-    ephy_title_box_set_address (title_box, url);
+    ephy_title_widget_set_address (EPHY_TITLE_WIDGET (title_box), url);
   }
 
   data->current_uri++;

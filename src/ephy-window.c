@@ -46,6 +46,7 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
+#include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
 #include "ephy-web-view.h"
 #include "ephy-zoom.h"
@@ -501,7 +502,7 @@ sync_tab_security (EphyWebView *view,
   ephy_web_view_get_security_level (view, &security_level, NULL, NULL);
 
   title_box = ephy_header_bar_get_title_box (EPHY_HEADER_BAR (window->header_bar));
-  ephy_title_box_set_security_level (title_box, security_level);
+  ephy_title_widget_set_security_level (EPHY_TITLE_WIDGET (title_box), security_level);
 
   location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
   ephy_location_entry_set_security_level (EPHY_LOCATION_ENTRY (location_entry), security_level);

@@ -30,6 +30,7 @@
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
+#include "ephy-title-widget.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -274,7 +275,7 @@ sync_address (EphyLocationController *controller,
 
   g_signal_handlers_block_by_func (widget, G_CALLBACK (user_changed_cb), controller);
   ephy_location_entry_set_location (lentry, controller->address);
-  ephy_title_box_set_address (controller->title_box, controller->address);
+  ephy_title_widget_set_address (EPHY_TITLE_WIDGET (controller->title_box), controller->address);
   g_signal_handlers_unblock_by_func (widget, G_CALLBACK (user_changed_cb), controller);
 }
 
