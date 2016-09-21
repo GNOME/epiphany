@@ -78,6 +78,8 @@ libephywidgets_la_SOURCES = \
 	ephy-security-popover.h			\
 	ephy-title-box.c			\
 	ephy-title-box.h			\
+	ephy-title-widget.c			\
+	ephy-title-widget.h			\
 	ephy-tree-model-node.c			\
 	ephy-tree-model-node.h			\
 	ephy-tree-model-sort.c			\
