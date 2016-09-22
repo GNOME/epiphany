@@ -20,7 +20,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ephy-title-box.h"
+#include "ephy-title-widget.h"
 #include "ephy-window.h"
 
 G_BEGIN_DECLS
@@ -29,15 +29,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyHeaderBar, ephy_header_bar, EPHY, HEADER_BAR, GtkHeaderBar)
 
-GtkWidget    *ephy_header_bar_new                               (EphyWindow    *window);
+GtkWidget       *ephy_header_bar_new                               (EphyWindow    *window);
 
-void          ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
-                                                                 GVariant      *state,
-                                                                 gpointer       user_data);
+void             ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
+                                                                    GVariant      *state,
+                                                                    gpointer       user_data);
 
-GtkWidget    *ephy_header_bar_get_location_entry                (EphyHeaderBar *header_bar);
-EphyTitleBox *ephy_header_bar_get_title_box                     (EphyHeaderBar *header_bar);
-GtkWidget    *ephy_header_bar_get_page_menu_button              (EphyHeaderBar *header_bar);
-GtkWidget    *ephy_header_bar_get_new_tab_button                (EphyHeaderBar *header_bar);
+EphyTitleWidget *ephy_header_bar_get_title_widget                  (EphyHeaderBar *header_bar);
+GtkWidget       *ephy_header_bar_get_page_menu_button              (EphyHeaderBar *header_bar);
+GtkWidget       *ephy_header_bar_get_new_tab_button                (EphyHeaderBar *header_bar);
 
 G_END_DECLS

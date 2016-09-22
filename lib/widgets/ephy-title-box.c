@@ -30,13 +30,6 @@ enum {
   LAST_PROP
 };
 
-enum {
-  LOCK_CLICKED,
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
-
 struct _EphyTitleBox {
   GtkEventBox parent_instance;
 
@@ -69,7 +62,7 @@ ephy_title_box_button_press_event (GtkWidget      *widget,
       event->x < lock_allocation.x + lock_allocation.width &&
       event->y >= lock_allocation.y &&
       event->y < lock_allocation.y + lock_allocation.height) {
-    g_signal_emit (title_box, signals[LOCK_CLICKED], 0, (GdkRectangle *)&lock_allocation);
+    g_signal_emit_by_name (title_box, "lock-clicked", (GdkRectangle *)&lock_allocation);
     return GDK_EVENT_STOP;
   }
 
@@ -248,22 +241,6 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
-
-  /**
-   * EphyTitleBox::lock-clicked:
-   * @title_box: the object on which the signal is emitted
-   * @lock_position: the position of the lock icon
-   *
-   * Emitted when the user clicks the security icon inside the
-   * #EphyTitleBox.
-   */
-  signals[LOCK_CLICKED] = g_signal_new ("lock-clicked",
-                                        EPHY_TYPE_TITLE_BOX,
-                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                        0, NULL, NULL, NULL,
-                                        G_TYPE_NONE,
-                                        1,
-                                        GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void

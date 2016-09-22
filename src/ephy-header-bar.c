@@ -35,6 +35,8 @@
 #include "ephy-middle-clickable-button.h"
 #include "ephy-private.h"
 #include "ephy-shell.h"
+#include "ephy-title-box.h"
+#include "ephy-title-widget.h"
 
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
@@ -54,8 +56,7 @@ struct _EphyHeaderBar {
   GtkHeaderBar parent_instance;
 
   EphyWindow *window;
-  EphyTitleBox *title_box;
-  GtkWidget *entry;
+  EphyTitleWidget *title_widget;
   GtkWidget *navigation_box;
   GtkWidget *new_tab_button;
   GtkWidget *combined_stop_reload_button;
@@ -546,7 +547,7 @@ static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
-  GtkWidget *box, *button, *title_widget;
+  GtkWidget *box, *button;
   GtkMenu *menu;
   GMenu *page_menu;
   EphyDownloadsManager *downloads_manager;
@@ -626,16 +627,16 @@ ephy_header_bar_constructed (GObject *object)
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
 
-  /* Location bar + Title */
-  header_bar->title_box = ephy_title_box_new ();
-  header_bar->entry = ephy_location_entry_new ();
+  /* Title widget (location entry or title box) */
   embed_shell = ephy_embed_shell_get_default ();
-  title_widget = ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION ? GTK_WIDGET (header_bar->title_box)
-                                                                                              : header_bar->entry;
-  gtk_widget_set_margin_start (title_widget, 54);
-  gtk_widget_set_margin_end (title_widget, 54);
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), title_widget);
-  gtk_widget_show (title_widget);
+  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+    header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_title_box_new ());
+  else
+    header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
+  gtk_widget_set_margin_start (GTK_WIDGET (header_bar->title_widget), 54);
+  gtk_widget_set_margin_end (GTK_WIDGET (header_bar->title_widget), 54);
+  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_widget));
+  gtk_widget_show (GTK_WIDGET (header_bar->title_widget));
 
   /* Page Menu */
   button = gtk_menu_button_new ();
@@ -748,16 +749,10 @@ ephy_header_bar_new (EphyWindow *window)
                                    NULL));
 }
 
-GtkWidget *
-ephy_header_bar_get_location_entry (EphyHeaderBar *header_bar)
+EphyTitleWidget *
+ephy_header_bar_get_title_widget (EphyHeaderBar *header_bar)
 {
-  return header_bar->entry;
-}
-
-EphyTitleBox *
-ephy_header_bar_get_title_box (EphyHeaderBar *header_bar)
-{
-  return header_bar->title_box;
+  return header_bar->title_widget;
 }
 
 GtkWidget *

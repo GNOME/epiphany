@@ -39,6 +39,14 @@ ephy_title_widget_default_init (EphyTitleWidgetInterface *iface)
                                                           EPHY_TYPE_SECURITY_LEVEL,
                                                           EPHY_SECURITY_LEVEL_TO_BE_DETERMINED,
                                                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_signal_new ("lock-clicked",
+                EPHY_TYPE_TITLE_WIDGET,
+                G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE,
+                1,
+                GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 const char *

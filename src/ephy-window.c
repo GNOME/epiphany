@@ -492,8 +492,7 @@ sync_tab_security (EphyWebView *view,
                    GParamSpec  *pspec,
                    EphyWindow  *window)
 {
-  EphyTitleBox *title_box;
-  GtkWidget *location_entry;
+  EphyTitleWidget *title_widget;
   EphySecurityLevel security_level;
 
   if (window->closing)
@@ -501,11 +500,8 @@ sync_tab_security (EphyWebView *view,
 
   ephy_web_view_get_security_level (view, &security_level, NULL, NULL);
 
-  title_box = ephy_header_bar_get_title_box (EPHY_HEADER_BAR (window->header_bar));
-  ephy_title_widget_set_security_level (EPHY_TITLE_WIDGET (title_box), security_level);
-
-  location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
-  ephy_title_widget_set_security_level (EPHY_TITLE_WIDGET (location_entry), security_level);
+  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  ephy_title_widget_set_security_level (title_widget, security_level);
 }
 
 static void
@@ -701,19 +697,20 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
   gboolean can_copy, can_cut, can_undo, can_redo, can_paste;
 
   if (GTK_IS_EDITABLE (widget)) {
-    GtkWidget *entry;
+    EphyTitleWidget *title_widget;
     gboolean has_selection;
 
-    entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
+    title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
-    has_selection = gtk_editable_get_selection_bounds
-                      (GTK_EDITABLE (widget), NULL, NULL);
+    has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), NULL, NULL);
 
     can_copy = has_selection;
     can_cut = has_selection;
     can_paste = TRUE;
-    can_undo = ephy_location_entry_get_can_undo (EPHY_LOCATION_ENTRY (entry));
-    can_redo = ephy_location_entry_get_can_redo (EPHY_LOCATION_ENTRY (entry));
+    can_undo = EPHY_IS_LOCATION_ENTRY (title_widget) &&
+               ephy_location_entry_get_can_undo (EPHY_LOCATION_ENTRY (title_widget));
+    can_redo = EPHY_IS_LOCATION_ENTRY (title_widget) &&
+               ephy_location_entry_get_can_redo (EPHY_LOCATION_ENTRY (title_widget));
   } else {
     EphyEmbed *embed;
     WebKitWebView *view;
@@ -1799,7 +1796,7 @@ ephy_window_configure_for_view (EphyWindow    *window,
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     GtkWidget *entry;
 
-    entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
+    entry = GTK_WIDGET (ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar)));
     gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
 
     if (webkit_window_properties_get_menubar_visible (properties))
@@ -2746,23 +2743,22 @@ sync_user_input_cb (EphyLocationController *action,
 }
 
 static void
-open_security_popover (EphyWindow   *window,
-                       GtkWidget    *relative_to,
-                       GdkRectangle *lock_position)
+title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
+                              GdkRectangle    *lock_position,
+                              gpointer         user_data)
 {
+  EphyWindow *window = EPHY_WINDOW (user_data);
   EphyWebView *view;
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
   EphySecurityLevel security_level;
-  GtkWidget *location_entry;
   GtkWidget *security_popover;
 
   view = ephy_embed_get_web_view (window->active_embed);
   ephy_web_view_get_security_level (view, &security_level, &certificate, &tls_errors);
-  location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
 
-  security_popover = ephy_security_popover_new (relative_to,
-                                                ephy_title_widget_get_address (EPHY_TITLE_WIDGET (location_entry)),
+  security_popover = ephy_security_popover_new (GTK_WIDGET (title_widget),
+                                                ephy_title_widget_get_address (title_widget),
                                                 certificate,
                                                 tls_errors,
                                                 security_level);
@@ -2774,35 +2770,12 @@ open_security_popover (EphyWindow   *window,
   gtk_widget_show (security_popover);
 }
 
-static void
-location_controller_lock_clicked_cb (EphyLocationController *controller,
-                                     gpointer                user_data)
-{
-  EphyWindow *window = EPHY_WINDOW (user_data);
-  GtkWidget *location_entry;
-  GdkRectangle lock_position;
-
-  location_entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
-  gtk_entry_get_icon_area (GTK_ENTRY (location_entry), GTK_ENTRY_ICON_SECONDARY, &lock_position);
-  open_security_popover (window, location_entry, &lock_position);
-}
-
-static void
-title_box_lock_clicked_cb (EphyTitleBox *title_box,
-                           GdkRectangle *lock_position,
-                           gpointer      user_data)
-{
-  EphyWindow *window = EPHY_WINDOW (user_data);
-
-  open_security_popover (window, GTK_WIDGET (title_box), lock_position);
-}
-
 static GtkWidget *
 setup_header_bar (EphyWindow *window)
 {
   GtkWidget *header_bar;
   EphyEmbedShellMode app_mode;
-  EphyTitleBox *title_box;
+  EphyTitleWidget *title_widget;
 
   header_bar = ephy_header_bar_new (window);
   gtk_window_set_titlebar (GTK_WINDOW (window), header_bar);
@@ -2812,9 +2785,9 @@ setup_header_bar (EphyWindow *window)
   if (app_mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     gtk_style_context_add_class (gtk_widget_get_style_context (header_bar), "incognito-mode");
 
-  title_box = ephy_header_bar_get_title_box (EPHY_HEADER_BAR (header_bar));
-  g_signal_connect (title_box, "lock-clicked",
-                    G_CALLBACK (title_box_lock_clicked_cb), window);
+  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (header_bar));
+  g_signal_connect (title_widget, "lock-clicked",
+                    G_CALLBACK (title_widget_lock_clicked_cb), window);
 
   return header_bar;
 }
@@ -2828,15 +2801,12 @@ setup_location_controller (EphyWindow    *window,
   location_controller =
     g_object_new (EPHY_TYPE_LOCATION_CONTROLLER,
                   "window", window,
-                  "location-entry", ephy_header_bar_get_location_entry (header_bar),
-                  "title-box", ephy_header_bar_get_title_box (header_bar),
+                  "title-widget", ephy_header_bar_get_title_widget (header_bar),
                   NULL);
   g_signal_connect (location_controller, "notify::address",
                     G_CALLBACK (sync_user_input_cb), window);
   g_signal_connect_swapped (location_controller, "open-link",
                             G_CALLBACK (ephy_link_open), window);
-  g_signal_connect (location_controller, "lock-clicked",
-                    G_CALLBACK (location_controller_lock_clicked_cb), window);
 
   return location_controller;
 }
@@ -3201,13 +3171,15 @@ ephy_window_load_url (EphyWindow *window,
 void
 ephy_window_activate_location (EphyWindow *window)
 {
-  GtkWidget *entry;
+  EphyTitleWidget *title_widget;
 
   if (!(window->chrome & EPHY_WINDOW_CHROME_LOCATION))
     return;
 
-  entry = ephy_header_bar_get_location_entry (EPHY_HEADER_BAR (window->header_bar));
-  ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
+  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+
+  if (EPHY_IS_LOCATION_ENTRY (title_widget))
+    ephy_location_entry_activate (EPHY_LOCATION_ENTRY (title_widget));
 }
 
 /**

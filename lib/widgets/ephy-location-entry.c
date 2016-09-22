@@ -117,7 +117,6 @@ enum {
 
 enum signalsEnum {
   USER_CHANGED,
-  LOCK_CLICKED,
   GET_LOCATION,
   GET_TITLE,
   LAST_SIGNAL
@@ -459,21 +458,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                         G_TYPE_NONE,
                                         0,
                                         G_TYPE_NONE);
-
-  /**
-   * EphyLocationEntry::lock-clicked:
-   * @entry: the object on which the signal is emitted
-   *
-   * Emitted when the user clicks the security icon inside the
-   * #EphyLocationEntry.
-   *
-   */
-  signals[LOCK_CLICKED] = g_signal_new ("lock-clicked",
-                                        EPHY_TYPE_LOCATION_ENTRY,
-                                        G_SIGNAL_RUN_FIRST | G_SIGNAL_RUN_LAST,
-                                        0, NULL, NULL, NULL,
-                                        G_TYPE_NONE,
-                                        0);
 
   /**
    * EphyLocationEntry::get-location:
@@ -1014,7 +998,9 @@ icon_button_press_event_cb (GtkWidget           *entry,
 
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
     } else {
-      g_signal_emit (lentry, signals[LOCK_CLICKED], 0);
+      GdkRectangle lock_position;
+      gtk_entry_get_icon_area (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY, &lock_position);
+      g_signal_emit_by_name (entry, "lock-clicked", &lock_position);
     }
 
     return TRUE;
