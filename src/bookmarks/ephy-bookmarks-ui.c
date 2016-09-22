@@ -23,7 +23,6 @@
 #include "ephy-bookmark-action-group.h"
 #include "ephy-bookmark-action.h"
 #include "ephy-bookmark-properties.h"
-#include "ephy-bookmarks-menu.h"
 #include "ephy-bookmarks.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
@@ -48,7 +47,6 @@
 #define BM_WINDOW_DATA_KEY "bookmarks-window-data"
 
 typedef struct {
-  GMenu *bookmarks_menu;
   guint toolbar_menu;
 } BookmarksWindowData;
 
@@ -59,114 +57,6 @@ enum {
 
 static GHashTable *properties_dialogs = 0;
 
-static GMenu *
-find_bookmarks_menu (EphyWindow *window)
-{
-  GtkWidget *page_menu_button;
-  GMenuModel *page_menu;
-  gint n_items, i;
-
-  /* Page menu */
-  page_menu_button = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (ephy_window_get_header_bar (window)));
-  page_menu = gtk_menu_button_get_menu_model (GTK_MENU_BUTTON (page_menu_button));
-
-  /* Number of sections in the model */
-  n_items = g_menu_model_get_n_items (page_menu);
-
-  for (i = 0; i < n_items; i++) {
-    GVariant *section_label;
-
-    /* Looking for the bookmarks section */
-    section_label = g_menu_model_get_item_attribute_value (page_menu, i, "id", G_VARIANT_TYPE_STRING);
-    if (section_label != NULL && g_strcmp0 (g_variant_get_string (section_label, NULL), "bookmarks-section") == 0) {
-      GMenuModel *bookmarks_section_model;
-      GMenuModel *bookmarks_menu_model;
-
-      /* Bookmarks section should contain the bookmarks menu */
-      bookmarks_section_model = g_menu_model_get_item_link (page_menu, i, G_MENU_LINK_SECTION);
-      bookmarks_menu_model = g_menu_model_get_item_link (bookmarks_section_model, 0, G_MENU_LINK_SUBMENU);
-
-      return G_MENU (bookmarks_menu_model);
-    }
-  }
-
-  return NULL;
-}
-
-static bool
-activate_bookmarks_menu (GSimpleAction *action,
-                         GdkEvent      *event,
-                         gpointer       user_data)
-{
-  GMenu *menu;
-  BookmarksWindowData *data = g_object_get_data (G_OBJECT (user_data), BM_WINDOW_DATA_KEY);
-
-  if (event->type != GDK_BUTTON_PRESS)
-    return G_SOURCE_REMOVE;
-
-  if (data && !data->bookmarks_menu) {
-    menu = g_menu_new ();
-    ephy_bookmarks_menu_build (menu, 0);
-
-    data->bookmarks_menu = G_MENU (find_bookmarks_menu (EPHY_WINDOW (user_data)));
-    if (data->bookmarks_menu == NULL)
-      return G_SOURCE_REMOVE;
-
-    g_menu_append_section (data->bookmarks_menu, NULL, G_MENU_MODEL (menu));
-  }
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-erase_bookmarks_menu (EphyWindow *window)
-{
-  BookmarksWindowData *data;
-
-  data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
-
-  if (data != NULL && data->bookmarks_menu != NULL) {
-    g_menu_remove_all (data->bookmarks_menu);
-    g_clear_object (&data->bookmarks_menu);
-  }
-}
-
-static void
-tree_changed_cb (EphyBookmarks *bookmarks,
-                 EphyWindow    *window)
-{
-  erase_bookmarks_menu (window);
-}
-
-static void
-node_added_cb (EphyNode   *parent,
-               EphyNode   *child,
-               EphyWindow *window)
-{
-  erase_bookmarks_menu (window);
-}
-
-static void
-node_changed_cb (EphyNode   *parent,
-                 EphyNode   *child,
-                 guint       property_id,
-                 EphyWindow *window)
-{
-  if (property_id == EPHY_NODE_KEYWORD_PROP_NAME ||
-      property_id == EPHY_NODE_BMK_PROP_TITLE) {
-    erase_bookmarks_menu (window);
-  }
-}
-
-static void
-node_removed_cb (EphyNode   *parent,
-                 EphyNode   *child,
-                 guint       index,
-                 EphyWindow *window)
-{
-  erase_bookmarks_menu (window);
-}
-
 void
 ephy_bookmarks_ui_attach_window (EphyWindow *window)
 {
@@ -176,7 +66,6 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
   BookmarksWindowData *data;
   GtkUIManager *manager;
   GtkActionGroup *actions;
-  GtkWidget *page_menu_button;
 
   eb = ephy_shell_get_bookmarks (ephy_shell_get_default ());
   bookmarks = ephy_bookmarks_get_bookmarks (eb);
@@ -207,83 +96,16 @@ ephy_bookmarks_ui_attach_window (EphyWindow *window)
                            G_CALLBACK (ephy_link_open), G_OBJECT (window),
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
   g_object_unref (actions);
-
-  /* Add signal handlers for the bookmark database */
-  ephy_node_signal_connect_object (bookmarks, EPHY_NODE_CHILD_ADDED,
-                                   (EphyNodeCallback)node_added_cb,
-                                   G_OBJECT (window));
-  ephy_node_signal_connect_object (topics, EPHY_NODE_CHILD_ADDED,
-                                   (EphyNodeCallback)node_added_cb,
-                                   G_OBJECT (window));
-
-  ephy_node_signal_connect_object (bookmarks, EPHY_NODE_CHILD_REMOVED,
-                                   (EphyNodeCallback)node_removed_cb,
-                                   G_OBJECT (window));
-  ephy_node_signal_connect_object (topics, EPHY_NODE_CHILD_REMOVED,
-                                   (EphyNodeCallback)node_removed_cb,
-                                   G_OBJECT (window));
-
-  ephy_node_signal_connect_object (bookmarks, EPHY_NODE_CHILD_CHANGED,
-                                   (EphyNodeCallback)node_changed_cb,
-                                   G_OBJECT (window));
-  ephy_node_signal_connect_object (topics, EPHY_NODE_CHILD_CHANGED,
-                                   (EphyNodeCallback)node_changed_cb,
-                                   G_OBJECT (window));
-
-  g_signal_connect_object (eb, "tree_changed",
-                           G_CALLBACK (tree_changed_cb),
-                           G_OBJECT (window), 0);
-
-  page_menu_button = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (ephy_window_get_header_bar (window)));
-  g_signal_connect (GTK_WIDGET (page_menu_button), "button-press-event", G_CALLBACK (activate_bookmarks_menu), window);
 }
 
 void
 ephy_bookmarks_ui_detach_window (EphyWindow *window)
 {
-  EphyBookmarks *eb = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-  EphyNode *bookmarks = ephy_bookmarks_get_bookmarks (eb);
-  EphyNode *topics = ephy_bookmarks_get_keywords (eb);
-
   BookmarksWindowData *data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
-  GtkWidget *page_menu_button;
 
   g_return_if_fail (data != 0);
 
-  if (data->bookmarks_menu) {
-    g_menu_remove_all (data->bookmarks_menu);
-    g_object_unref (data->bookmarks_menu);
-    data->bookmarks_menu = NULL;
-  }
-
   g_object_set_data (G_OBJECT (window), BM_WINDOW_DATA_KEY, 0);
-
-  ephy_node_signal_disconnect_object (bookmarks, EPHY_NODE_CHILD_ADDED,
-                                      (EphyNodeCallback)node_added_cb,
-                                      G_OBJECT (window));
-  ephy_node_signal_disconnect_object (topics, EPHY_NODE_CHILD_ADDED,
-                                      (EphyNodeCallback)node_added_cb,
-                                      G_OBJECT (window));
-
-  ephy_node_signal_disconnect_object (bookmarks, EPHY_NODE_CHILD_REMOVED,
-                                      (EphyNodeCallback)node_removed_cb,
-                                      G_OBJECT (window));
-  ephy_node_signal_disconnect_object (topics, EPHY_NODE_CHILD_REMOVED,
-                                      (EphyNodeCallback)node_removed_cb,
-                                      G_OBJECT (window));
-
-  ephy_node_signal_disconnect_object (bookmarks, EPHY_NODE_CHILD_CHANGED,
-                                      (EphyNodeCallback)node_changed_cb,
-                                      G_OBJECT (window));
-  ephy_node_signal_disconnect_object (topics, EPHY_NODE_CHILD_CHANGED,
-                                      (EphyNodeCallback)node_changed_cb,
-                                      G_OBJECT (window));
-
-  g_signal_handlers_disconnect_by_func
-    (G_OBJECT (eb), G_CALLBACK (tree_changed_cb), G_OBJECT (window));
-
-  page_menu_button = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (ephy_window_get_header_bar (window)));
-  g_signal_handlers_disconnect_by_func (GTK_WIDGET (page_menu_button), G_CALLBACK (activate_bookmarks_menu), window);
 }
 
 static void

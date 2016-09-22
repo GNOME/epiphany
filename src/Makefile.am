@@ -117,6 +117,7 @@ RESOURCE_FILES = \
 	resources/epiphany.css                    \
 	resources/error.html			  \
 	resources/gtk/menus.ui			  \
+	resources/gtk/page-menu-popover.ui	  \
 	resources/history-dialog.ui		  \
 	resources/incognito.png                   \
 	resources/missing-thumbnail.png		  \

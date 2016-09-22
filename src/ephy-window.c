@@ -772,27 +772,6 @@ enable_edit_actions_sensitivity (EphyWindow *window)
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 }
 
-static void
-edit_menu_toggle_cb (GtkWidget  *menu,
-                     EphyWindow *window)
-{
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (menu)))
-    update_edit_actions_sensitivity (window, FALSE);
-  else
-    enable_edit_actions_sensitivity (window);
-}
-
-static void
-init_menu_updaters (EphyWindow *window)
-{
-  GtkWidget *page_menu;
-
-  page_menu = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (window->header_bar));
-
-  g_signal_connect (page_menu, "toggled",
-                    G_CALLBACK (edit_menu_toggle_cb), window);
-}
-
 static const GActionEntry window_entries [] =
 {
   { "new-tab", window_cmd_new_tab },
@@ -942,7 +921,10 @@ const struct {
   { "copy-audio-location", N_("_Copy Audio Address") },
 
   /* Selection */
-  { "search-selection", NULL }
+  { "search-selection", NULL },
+
+  { "save-as", N_("Save Pa_ge As…") },
+  { "page-source", N_("_Page Source") }
 };
 
 static char *
@@ -1030,11 +1012,39 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
   GAction *action;
   gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
   double zoom;
+  GtkWidget *page_menu_button;
+  GtkPopover *page_menu_popover;
+  GtkWidget *widget;
+  GtkWidget *zoom_level_entry;
+  GList *children;
+  char *zoom_level_text;
 
   if (window->closing)
     return;
 
   zoom = webkit_web_view_get_zoom_level (web_view);
+
+  /* Update the zoom level entry in the page menu popover:
+   * - obtain the popover from the page menu button
+   * - obtain the box (the first child of the popover)
+   * - obtain the "zoom box" (the first child of the box above)
+   * - obtain the GtkEntry which is the second child of the zoom box
+   */
+  page_menu_button = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (window->header_bar));
+  page_menu_popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (page_menu_button));
+  children = gtk_container_get_children (GTK_CONTAINER (page_menu_popover));
+  widget = g_list_nth_data (children, 0);
+  g_assert (GTK_IS_BOX (widget));
+  children = gtk_container_get_children (GTK_CONTAINER (widget));
+  widget = g_list_nth_data (children, 0);
+  g_assert (GTK_IS_BOX (widget));
+  children = gtk_container_get_children (GTK_CONTAINER (widget));
+  zoom_level_entry = g_list_nth_data (children, 1);
+  g_assert (GTK_IS_ENTRY (zoom_level_entry));
+
+  zoom_level_text = g_strdup_printf ("%.0lf%%", zoom * 100);
+  gtk_entry_set_text (GTK_ENTRY (zoom_level_entry), zoom_level_text);
+  g_free (zoom_level_text);
 
   if (zoom >= ZOOM_MAXIMAL) {
     can_zoom_in = FALSE;
@@ -1671,6 +1681,13 @@ populate_context_menu (WebKitWebView       *web_view,
 
   webkit_context_menu_append (context_menu,
                               webkit_context_menu_item_new_separator ());
+  add_action_to_context_menu (context_menu, window_action_group,
+                              "save-as", window);
+
+  webkit_context_menu_append (context_menu,
+                              webkit_context_menu_item_new_separator ());
+  add_action_to_context_menu (context_menu, window_action_group,
+                              "page-source", window);
   webkit_context_menu_append (context_menu,
                               webkit_context_menu_item_new_from_stock_action (WEBKIT_CONTEXT_MENU_ACTION_INSPECT_ELEMENT));
 
@@ -3024,8 +3041,6 @@ ephy_window_constructed (GObject *object)
     chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR);
   }
 
-  init_menu_updaters (window);
-
   ephy_window_set_chrome (window, chrome);
 }
 
@@ -3207,15 +3222,13 @@ ephy_window_set_zoom (EphyWindow *window,
 
   current_zoom = webkit_web_view_get_zoom_level (web_view);
 
-  if (zoom == ZOOM_IN) {
+  if (zoom == ZOOM_IN)
     zoom = ephy_zoom_get_changed_zoom_level (current_zoom, 1);
-  } else if (zoom == ZOOM_OUT) {
+  else if (zoom == ZOOM_OUT)
     zoom = ephy_zoom_get_changed_zoom_level (current_zoom, -1);
-  }
 
-  if (zoom != current_zoom) {
+  if (zoom != current_zoom)
     webkit_web_view_set_zoom_level (web_view, zoom);
-  }
 }
 
 static void

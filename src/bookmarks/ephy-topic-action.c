@@ -25,7 +25,6 @@
 #include "ephy-nodes-cover.h"
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarks-ui.h"
-#include "ephy-bookmarks-menu.h"
 #include "ephy-shell.h"
 #include "ephy-gui.h"
 #include "ephy-debug.h"

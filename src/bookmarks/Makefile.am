@@ -16,8 +16,6 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks-import.h		\
 	ephy-bookmarks-ui.c		\
 	ephy-bookmarks-ui.h		\
-	ephy-bookmarks-menu.c		\
-	ephy-bookmarks-menu.h		\
 	ephy-bookmark-properties.c	\
 	ephy-bookmark-properties.h	\
 	ephy-link-action.c		\

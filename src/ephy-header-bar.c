@@ -548,8 +548,7 @@ ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
   GtkWidget *box, *button;
-  GtkMenu *menu;
-  GMenu *page_menu;
+  GtkWidget *page_menu_popover;
   EphyDownloadsManager *downloads_manager;
   GtkBuilder *builder;
   EphyHistoryService *history_service;
@@ -644,15 +643,12 @@ ephy_header_bar_constructed (GObject *object)
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/menus.ui");
-  page_menu = G_MENU (gtk_builder_get_object (builder, "page-menu"));
-  gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), FALSE);
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button),
-                                  G_MENU_MODEL (page_menu));
+  g_type_ensure (G_TYPE_THEMED_ICON);
+  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
+  page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
   g_object_unref (builder);
 
-  menu = gtk_menu_button_get_popup (GTK_MENU_BUTTON (button));
-  gtk_widget_set_halign (GTK_WIDGET (menu), GTK_ALIGN_END);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
   /* Downloads */

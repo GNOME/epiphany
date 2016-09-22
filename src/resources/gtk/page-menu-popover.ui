@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkPopoverMenu" id="page-menu-popover">
+    <child>
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+        <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkBox" id="zoom-box">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="homogeneous">True</property>
+            <property name="margin-bottom">6</property>
+            <style>
+                <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkModelButton">
+                <property name="text">Zoom Out</property>
+                <property name="action-name">win.zoom-out</property>
+                <property name="iconic">True</property>
+                <property name="centered">True</property>
+                <property name="icon">zoom_out</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="zoom-level">
+                <property name="xalign">0.5</property>
+                <property name="sensitive">False</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="text">Zoom In</property>
+                <property name="action-name">win.zoom-in</property>
+                <property name="iconic">True</property>
+                <property name="centered">True</property>
+                <property name="icon">zoom_in</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="homogeneous">True</property>
+            <property name="margin-bottom">6</property>
+            <child>
+              <object class="GtkModelButton">
+                <property name="text">Zoom Out</property>
+                <property name="action-name">win.print</property>
+                <property name="iconic">True</property>
+                <property name="centered">True</property>
+                <property name="icon">print</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="text">Zoom Out</property>
+                <property name="action-name">win.find</property>
+                <property name="iconic">True</property>
+                <property name="centered">True</property>
+                <property name="icon">find</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="text">Zoom In</property>
+                <property name="action-name">win.fullscreen</property>
+                <property name="iconic">True</property>
+                <property name="centered">True</property>
+                <property name="icon">fullscreen</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">_New Tab</property>
+            <property name="action-name">win.new-tab</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">New _Window</property>
+            <property name="action-name">app.new-window</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">New _Incognito Window</property>
+            <property name="action-name">app.new-incognito</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">Text _Encoding</property>
+            <property name="action-name">win.encoding</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">Install Site as Web _Application…</property>
+            <property name="action-name">win.save-as-application</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+    <object class="GThemedIcon" id="zoom_out">
+    <property name="name">zoom-out-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="zoom_in">
+    <property name="name">zoom-in-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="print">
+    <property name="name">document-print-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="find">
+    <property name="name">system-search-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="fullscreen">
+    <property name="name">view-fullscreen-symbolic</property>
+  </object>
+</interface>
