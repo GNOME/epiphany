@@ -479,7 +479,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
     GtkIconInfo *icon_info;
 
     icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                            "web-browser-symbolic",
+                                            "org.gnome.Epiphany-symbolic",
                                             128,
                                             0);
     g_string_append_printf (data_str,
