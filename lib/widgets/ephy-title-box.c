@@ -98,7 +98,8 @@ ephy_title_box_constructed (GObject *object)
   gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
-  title_box->lock_image = gtk_image_new_from_icon_name ("channel-secure-symbolic", GTK_ICON_SIZE_MENU);
+  title_box->lock_image = gtk_image_new ();
+  g_object_set (title_box->lock_image, "icon-size", GTK_ICON_SIZE_MENU, NULL);
   gtk_widget_set_valign (title_box->lock_image, GTK_ALIGN_BASELINE);
   gtk_box_pack_start (GTK_BOX (hbox), title_box->lock_image, FALSE, FALSE, 0);
 
