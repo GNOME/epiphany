@@ -407,7 +407,7 @@ main (int   argc,
     g_set_prgname ("epiphany");
     g_set_application_name (_("Web"));
 
-    gtk_window_set_default_icon_name ("web-browser");
+    gtk_window_set_default_icon_name ("org.gnome.Epiphany");
   }
 
   _ephy_shell_create_instance (mode);

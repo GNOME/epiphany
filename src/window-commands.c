@@ -265,7 +265,7 @@ window_cmd_show_about (GSimpleAction *action,
                           * line seperated by newlines (\n).
                           */
                          "translator-credits", _("translator-credits"),
-                         "logo-icon-name", "web-browser",
+                         "logo-icon-name", "org.gnome.Epiphany",
                          "website", "https://wiki.gnome.org/Apps/Web",
                          "website-label", _("Web Website"),
                          "license-type", GTK_LICENSE_GPL_2_0,

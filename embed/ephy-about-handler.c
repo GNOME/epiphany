@@ -267,8 +267,8 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
   version = g_strdup_printf (_("Version %s"), VERSION);
 
   icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                          "web-browser",
-                                          256,
+                                          "org.gnome.Epiphany",
+                                          512,
                                           GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
   data = g_strdup_printf ("<html><head><title>%s</title>"

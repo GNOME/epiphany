@@ -197,6 +197,7 @@ AC_DEFINE_UNQUOTED([LSB_DISTRIBUTOR],["$LSB_DISTRIBUTOR"],[Distributor name])
 AC_CONFIG_FILES([
 Makefile
 data/Makefile
+data/icons/Makefile
 data/pages/Makefile
 doc/Makefile
 help/Makefile

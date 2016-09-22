@@ -1,4 +1,4 @@
-SUBDIRS = pages
+SUBDIRS = icons pages
 
 desktop_in_files = epiphany.desktop.in
 desktopdir = $(datadir)/applications
