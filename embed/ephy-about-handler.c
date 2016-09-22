@@ -450,6 +450,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                           "<head>\n"
                           "  <title>%s</title>\n"
                           "  <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n"
+                          "  <meta name=\"viewport\" content=\"width=device-width\">"
                           "  <link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">\n"
                           "  <script>\n"
                           "    document.onkeypress = function listenKeypress(event) {\n"
@@ -498,9 +499,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
   }
 
   g_string_append (data_str,
-                   "<div id=\"overview\">\n"
-                   "  <div id=\"overview-grid\">\n"
-                   "    <ul id=\"overview-item-list\">\n");
+                   "<div id=\"overview\">\n");
 
   for (l = urls; l; l = g_list_next (l)) {
     EphyHistoryURL *url = (EphyHistoryURL *)l->data;
@@ -522,21 +521,17 @@ history_service_query_urls_cb (EphyHistoryService     *history,
     }
 
     g_string_append_printf (data_str,
-                            "<li>"
-                            "  <a class=\"overview-item\" title=\"%s\" href=\"%s\">"
-                            "    <div class=\"overview-close-button\" onclick=\"removeFromOverview(this.parentNode, event)\" title=\"%s\">&#10006;</div>"
-                            "    <span class=\"overview-thumbnail\"%s></span>"
-                            "    <span class=\"overview-title\">%s</span>"
-                            "  </a>"
-                            "</li>",
+                            "<a class=\"overview-item\" title=\"%s\" href=\"%s\">"
+                            "  <div class=\"overview-close-button\" onclick=\"removeFromOverview(this.parentNode, event)\" title=\"%s\">&#10006;</div>"
+                            "  <span class=\"overview-thumbnail\"%s></span>"
+                            "  <span class=\"overview-title\">%s</span>"
+                            "</a>",
                             g_markup_escape_text (url->title, -1), url->url, _("Remove from overview"),
                             thumbnail_style ? thumbnail_style : "", url->title);
     g_free (thumbnail_style);
   }
 
   data_str = g_string_append (data_str,
-                              "      </ul>\n"
-                              "    </div>\n"
                               "  </div>\n"
                               "</body></html>\n");
 
