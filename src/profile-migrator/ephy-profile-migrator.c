@@ -808,7 +808,7 @@ parse_rdf_item (EphyBookmarksManager *manager,
     EphyBookmark *bookmark;
 
     g_sequence_sort (tags, (GCompareDataFunc)ephy_bookmark_tags_compare, NULL);
-    bookmark = ephy_bookmark_new ((char *)link, (char *)title, tags);
+    bookmark = ephy_bookmark_new ((const char *)link, (const char *)title, tags);
     ephy_bookmarks_manager_add_bookmark (manager, bookmark);
   } else {
     g_sequence_free (tags);

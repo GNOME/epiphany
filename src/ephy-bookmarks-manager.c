@@ -564,7 +564,7 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
     g_variant_iter_free (iter);
 
     /* Create the new bookmark. */
-    bookmark = ephy_bookmark_new (g_strdup (list[i]), title, tags);
+    bookmark = ephy_bookmark_new (list[i], title, tags);
     ephy_bookmark_set_time_added (bookmark, time_added);
     g_sequence_prepend (bookmarks, bookmark);
   }

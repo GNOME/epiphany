@@ -178,11 +178,11 @@ ephy_bookmark_init (EphyBookmark *self)
 }
 
 EphyBookmark *
-ephy_bookmark_new (char *url, char *title, GSequence *tags)
+ephy_bookmark_new (const char *url, const char *title, GSequence *tags)
 {
   return g_object_new (EPHY_TYPE_BOOKMARK,
-                       "url", url,
-                       "title", title,
+                       "url", g_strdup (url),
+                       "title", g_strdup (title),
                        "tags", tags,
                        "time-added", g_get_real_time (),
                        NULL);
@@ -212,6 +212,7 @@ ephy_bookmark_set_url (EphyBookmark *self, const char *url)
 {
   g_return_if_fail (EPHY_IS_BOOKMARK (self));
 
+  g_free (self->url);
   self->url = g_strdup (url);
 }
 

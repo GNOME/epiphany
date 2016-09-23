@@ -26,9 +26,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyBookmark, ephy_bookmark, EPHY, BOOKMARK, GObject)
 
-EphyBookmark        *ephy_bookmark_new                 (char      *url,
-                                                        char      *title,
-                                                        GSequence *tags);
+EphyBookmark        *ephy_bookmark_new                 (const char *url,
+                                                        const char *title,
+                                                        GSequence  *tags);
 
 void                 ephy_bookmark_set_time_added      (EphyBookmark *self,
                                                         gint64        time_added);

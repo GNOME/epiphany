@@ -173,8 +173,8 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
 
   bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
   if (!bookmark) {
-    bookmark = ephy_bookmark_new (g_strdup (address),
-                                  g_strdup (ephy_embed_get_title (embed)),
+    bookmark = ephy_bookmark_new (address,
+                                  ephy_embed_get_title (embed),
                                   g_sequence_new (g_free));
 
     ephy_bookmarks_manager_add_bookmark (manager, bookmark);
