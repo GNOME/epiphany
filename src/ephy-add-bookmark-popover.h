@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_ADD_BOOKMARK_POPOVER_H
-#define _EPHY_ADD_BOOKMARK_POPOVER_H
+#pragma once
 
 #include "ephy-header-bar.h"
 
@@ -34,5 +33,3 @@ GtkWidget       *ephy_add_bookmark_popover_new      (EphyHeaderBar *header_bar);
 void             ephy_add_bookmark_popover_show     (EphyAddBookmarkPopover *self);
 
 G_END_DECLS
-
-#endif /* _EPHY_ADD_BOOKMARK_POPOVER_H */

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARKS_MANAGER_H
-#define EPHY_BOOKMARKS_MANAGER_H
+#pragma once
 
 #include "ephy-bookmark.h"
 
@@ -60,5 +59,3 @@ gboolean     ephy_bookmarks_manager_save_to_file_finish    (EphyBookmarksManager
 void         ephy_bookmarks_manager_load_from_file         (EphyBookmarksManager *self);
 
 G_END_DECLS
-
-#endif /* EPHY_BOOKMARKS_MANAGER_H */

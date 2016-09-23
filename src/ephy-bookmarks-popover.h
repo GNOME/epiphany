@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EPHY_BOOKMARKS_POPOVER_H
-#define EPHY_BOOKMARKS_POPOVER_H
+#pragma once
 
 #include "ephy-window.h"
 
@@ -33,5 +32,3 @@ EphyBookmarksPopover*       ephy_bookmarks_popover_new      (EphyWindow *window)
 
 
 G_END_DECLS
-
-#endif /* EPHY_BOOMARKS_POPOVER_H */
