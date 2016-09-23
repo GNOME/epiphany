@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _EPHY_BOOKMARK_PROPERTIES_GRID_H
-#define _EPHY_BOOKMARK_PROPERTIES_GRID_H
+#pragma once
 
 #include "ephy-bookmark.h"
 
@@ -41,5 +40,3 @@ GtkWidget *ephy_bookmark_properties_grid_new                (EphyBookmark       
 GtkWidget *ephy_bookmark_properties_grid_get_add_tag_button (EphyBookmarkPropertiesGrid *self);
 
 G_END_DECLS
-
-#endif /* _EPHY_BOOKMARK_PROPERTIES_GRID_H */

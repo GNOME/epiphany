@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_BOOKMARK_ROW_H
-#define _EPHY_BOOKMARK_ROW_H
+#pragma once
 
 #include "ephy-bookmark.h"
 
@@ -34,5 +33,3 @@ GtkWidget           *ephy_bookmark_row_new            (EphyBookmark *bookmark);
 EphyBookmark        *ephy_bookmark_row_get_bookmark   (EphyBookmarkRow *self);
 
 G_END_DECLS
-
-#endif /* _EPHY_BOOKMARK_ROW_H */

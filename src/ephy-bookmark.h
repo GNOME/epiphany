@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EPHY_BOOKMARK_H
-#define _EPHY_BOOKMARK_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -57,5 +56,3 @@ int                  ephy_bookmark_tags_compare        (const char *tag1,
                                                         const char *tag2);
 
 G_END_DECLS
-
-#endif /* _EPHY_BOOKMARK_H */
