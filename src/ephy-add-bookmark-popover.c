@@ -32,7 +32,6 @@ struct _EphyAddBookmarkPopover {
   char          *address;
 
   GtkWidget     *grid;
-
   EphyHeaderBar *header_bar;
 };
 
@@ -83,6 +82,7 @@ ephy_add_bookmark_popover_class_init (EphyAddBookmarkPopoverClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->set_property = ephy_bookmarks_popover_set_property;
+  object_class->constructed = ephy_add_bookmark_popover_constructed;
 
   obj_properties[PROP_HEADER_BAR] =
     g_param_spec_object ("header-bar",
@@ -92,8 +92,6 @@ ephy_add_bookmark_popover_class_init (EphyAddBookmarkPopoverClass *klass)
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
-
-  object_class->constructed = ephy_add_bookmark_popover_constructed;
 }
 
 static void
@@ -104,7 +102,7 @@ ephy_add_bookmark_popover_init (EphyAddBookmarkPopover *self)
 GtkWidget *
 ephy_add_bookmark_popover_new (EphyHeaderBar *header_bar)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (header_bar), NULL);
+  g_return_val_if_fail (EPHY_IS_HEADER_BAR (header_bar), NULL);
 
   return g_object_new (EPHY_TYPE_ADD_BOOKMARK_POPOVER,
                        "header-bar", header_bar,

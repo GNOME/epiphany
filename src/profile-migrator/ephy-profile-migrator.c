@@ -727,7 +727,8 @@ parse_rdf_lang_tag (xmlNode  *child,
     if ((char *)content != translated) {
       /* if we have a translation for the content of the
        * node, then we just use this */
-      if (*value) xmlFree (*value);
+      if (*value)
+        xmlFree (*value);
       *value = (xmlChar *)g_strdup (translated);
       *best_match = 0;
 
@@ -745,7 +746,8 @@ parse_rdf_lang_tag (xmlNode  *child,
     if (!strcmp (locales[i], this_language)) {
       /* if we've already encountered a less accurate
        * translation, then free it */
-      if (*value) xmlFree (*value);
+      if (*value)
+        xmlFree (*value);
 
       *value = content;
       *best_match = i;
@@ -841,9 +843,6 @@ migrate_bookmarks (void)
 
   doc = xmlParseFile (filename);
   if (doc == NULL) {
-    /* FIXME: maybe put up a warning dialogue here, because this
-     * is a severe dataloss?
-     */
     g_warning ("Failed to re-import the bookmarks. All bookmarks lost!\n");
     return;
   }

@@ -215,13 +215,13 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
 }
 
 static GType
-ephy_bookmarks_manager_get_item_type (GListModel *model)
+ephy_bookmarks_manager_list_model_get_item_type (GListModel *model)
 {
   return EPHY_TYPE_BOOKMARK;
 }
 
 static guint
-ephy_bookmarks_manager_get_n_items (GListModel *model)
+ephy_bookmarks_manager_list_model_get_n_items (GListModel *model)
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
 
@@ -229,8 +229,8 @@ ephy_bookmarks_manager_get_n_items (GListModel *model)
 }
 
 static gpointer
-ephy_bookmarks_manager_get_item (GListModel *model,
-                                 guint       position)
+ephy_bookmarks_manager_list_model_get_item (GListModel *model,
+                                            guint       position)
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
   GSequenceIter *iter;
@@ -243,9 +243,9 @@ ephy_bookmarks_manager_get_item (GListModel *model,
 static void
 list_model_iface_init (GListModelInterface *iface)
 {
-  iface->get_item_type = ephy_bookmarks_manager_get_item_type;
-  iface->get_n_items = ephy_bookmarks_manager_get_n_items;
-  iface->get_item = ephy_bookmarks_manager_get_item;
+  iface->get_item_type = ephy_bookmarks_manager_list_model_get_item_type;
+  iface->get_n_items = ephy_bookmarks_manager_list_model_get_n_items;
+  iface->get_item = ephy_bookmarks_manager_list_model_get_item;
 }
 
 void

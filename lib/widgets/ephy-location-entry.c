@@ -1174,6 +1174,7 @@ ephy_location_entry_set_bookmarked_status (EphyLocationEntry *entry,
   g_return_if_fail (EPHY_IS_LOCATION_ENTRY (entry));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+
   if (is_bookmarked) {
     gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
                                        GTK_ENTRY_ICON_SECONDARY,

@@ -135,8 +135,8 @@ ephy_bookmark_properties_grid_tag_widget_button_clicked_cb (EphyBookmarkProperti
 
 static GtkWidget *
 ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *self,
-                                                 const char *tag,
-                                                 gboolean selected)
+                                                 const char                 *tag,
+                                                 gboolean                    selected)
 {
   GtkWidget *widget;
   GtkWidget *box;
