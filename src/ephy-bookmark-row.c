@@ -152,6 +152,8 @@ ephy_bookmark_row_constructed (GObject *object)
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   WebKitFaviconDatabase *database;
 
+  G_OBJECT_CLASS (ephy_bookmark_row_parent_class)->constructed (object);
+
   g_object_bind_property (self->bookmark, "title",
                           self->title_label, "label",
                           G_BINDING_SYNC_CREATE);
@@ -162,8 +164,6 @@ ephy_bookmark_row_constructed (GObject *object)
                                        NULL,
                                        (GAsyncReadyCallback)ephy_bookmark_row_favicon_loaded_cb,
                                        self);
-
-  G_OBJECT_CLASS (ephy_bookmark_row_parent_class)->constructed (object);
 }
 
 static void

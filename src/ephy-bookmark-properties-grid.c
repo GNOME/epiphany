@@ -298,6 +298,8 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   GSequenceIter *iter;
   const char *address;
 
+  G_OBJECT_CLASS (ephy_bookmark_properties_grid_parent_class)->constructed (object);
+
   /* Set appearance based on type */
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
     gtk_container_remove (GTK_CONTAINER (self), self->popover_bookmark_label);
@@ -350,8 +352,6 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
   gtk_widget_show_all (self->tags_box);
-
-  G_OBJECT_CLASS (ephy_bookmark_properties_grid_parent_class)->constructed (object);
 }
 
 static void
