@@ -10,8 +10,6 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmark-action.h		\
 	ephy-bookmarks-ui.c		\
 	ephy-bookmarks-ui.h		\
-	ephy-bookmark-properties.c	\
-	ephy-bookmark-properties.h	\
 	ephy-link-action.c		\
 	ephy-link-action.h		\
 	ephy-topic-action.c		\

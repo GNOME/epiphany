@@ -22,7 +22,6 @@
 
 #include "ephy-bookmark-action-group.h"
 #include "ephy-bookmark-action.h"
-#include "ephy-bookmark-properties.h"
 #include "ephy-bookmarks.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
@@ -54,8 +53,6 @@ enum {
   RESPONSE_SHOW_PROPERTIES = 1,
   RESPONSE_NEW_BOOKMARK = 2
 };
-
-static GHashTable *properties_dialogs = 0;
 
 void
 ephy_bookmarks_ui_attach_window (EphyWindow *window)
@@ -108,78 +105,23 @@ ephy_bookmarks_ui_detach_window (EphyWindow *window)
   g_object_set_data (G_OBJECT (window), BM_WINDOW_DATA_KEY, 0);
 }
 
-static void
-properties_dialog_destroy_cb (EphyBookmarkProperties *dialog,
-                              EphyNode               *bookmark)
-{
-  g_hash_table_remove (properties_dialogs, bookmark);
-}
-
 void
 ephy_bookmarks_ui_add_bookmark (GtkWindow  *parent,
                                 const char *location,
                                 const char *title)
 {
-  EphyBookmarks *bookmarks;
-  EphyNode *bookmark;
-  GtkWidget *dialog;
-
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                               EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
     return;
-
-  bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-  bookmark = ephy_bookmarks_add (bookmarks, title, location);
-
-  if (properties_dialogs == 0) {
-    properties_dialogs = g_hash_table_new (g_direct_hash, g_direct_equal);
-  }
-
-  dialog = ephy_bookmark_properties_new (bookmarks, bookmark, TRUE);
-
-  g_assert (parent != NULL);
-
-  gtk_window_group_add_window (ephy_gui_ensure_window_group (parent),
-                               GTK_WINDOW (dialog));
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
-
-  g_signal_connect (dialog, "destroy",
-                    G_CALLBACK (properties_dialog_destroy_cb), bookmark);
-  g_hash_table_insert (properties_dialogs,
-                       bookmark, dialog);
-
-  gtk_window_present_with_time (GTK_WINDOW (dialog),
-                                gtk_get_current_event_time ());
 }
 
 void
 ephy_bookmarks_ui_show_bookmark (GtkWindow *parent, EphyNode *bookmark)
 {
   EphyBookmarks *bookmarks;
-  GtkWidget *dialog;
 
   bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
 
   g_return_if_fail (EPHY_IS_BOOKMARKS (bookmarks));
   g_return_if_fail (EPHY_IS_NODE (bookmark));
-
-  if (properties_dialogs == 0) {
-    properties_dialogs = g_hash_table_new (g_direct_hash, g_direct_equal);
-  }
-
-  dialog = g_hash_table_lookup (properties_dialogs, bookmark);
-
-  if (dialog == NULL) {
-    dialog = ephy_bookmark_properties_new (bookmarks, bookmark, FALSE);
-
-    g_signal_connect (dialog, "destroy",
-                      G_CALLBACK (properties_dialog_destroy_cb), bookmark);
-    g_hash_table_insert (properties_dialogs,
-                         bookmark, dialog);
-  }
-
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
-
-  gtk_window_present_with_time (GTK_WINDOW (dialog),
-                                gtk_get_current_event_time ());
 }

@@ -20,7 +20,6 @@
 #include "config.h"
 #include "ephy-bookmarks.h"
 
-#include "ephy-bookmark-properties.h"
 #include "ephy-bookmarks-type-builtins.h"
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
