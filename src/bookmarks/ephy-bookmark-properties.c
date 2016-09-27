@@ -24,7 +24,6 @@
 
 #include "ephy-bookmarks-ui.h"
 #include "ephy-topics-entry.h"
-#include "ephy-topics-palette.h"
 #include "ephy-node-common.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
@@ -61,9 +60,6 @@ struct _EphyBookmarkProperties {
   GtkTreeView       *topics_tree_view;
   GtkScrolledWindow *topics_scrolled_window;
   GtkLabel          *warning_label;
-
-  /* model */
-  EphyTopicsPalette *topics_model;
 };
 
 enum {
@@ -244,61 +240,6 @@ title_entry_changed_cb (GtkWidget              *entry,
 }
 
 static void
-on_topic_edited (GtkCellRendererText    *renderer,
-                 const char             *path_str,
-                 const char             *new_text,
-                 EphyBookmarkProperties *properties)
-{
-  if (*new_text != 0) {
-    EphyNode *node;
-    node = ephy_bookmarks_add_keyword (properties->bookmarks, new_text);
-    ephy_bookmarks_set_keyword (properties->bookmarks, node, properties->bookmark);
-  } else {
-    ephy_topics_palette_update_list (properties->topics_model);
-  }
-}
-
-static void
-on_topic_toggled (GtkCellRendererToggle  *cell_renderer,
-                  gchar                  *path,
-                  EphyBookmarkProperties *properties)
-{
-  EphyNode     *topic;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-
-  model = gtk_tree_view_get_model (properties->topics_tree_view);
-
-  g_return_if_fail (gtk_tree_model_get_iter_from_string (model, &iter, path));
-
-  gtk_tree_model_get (model, &iter, EPHY_TOPICS_PALETTE_COLUMN_NODE, &topic, -1);
-
-  /* Protect against toggling separators. */
-  if (topic == NULL)
-    return;
-
-  if (ephy_node_has_child (topic, properties->bookmark)) {
-    ephy_bookmarks_unset_keyword (properties->bookmarks,
-                                  topic,
-                                  properties->bookmark);
-  } else {
-    ephy_bookmarks_set_keyword (properties->bookmarks,
-                                topic,
-                                properties->bookmark);
-  }
-}
-
-static gboolean
-is_separator (GtkTreeModel *model,
-              GtkTreeIter  *iter,
-              gpointer      data)
-{
-  EphyNode *node;
-  gtk_tree_model_get (model, iter, EPHY_TOPICS_PALETTE_COLUMN_NODE, &node, -1);
-  return (node == NULL);
-}
-
-static void
 location_entry_changed_cb (GtkWidget              *entry,
                            EphyBookmarkProperties *properties)
 {
@@ -361,11 +302,6 @@ ephy_bookmark_properties_constructor (GType                  type,
   gtk_widget_show (entry);
   gtk_grid_attach (properties->grid, entry, 1, 2, 1, 1);
   gtk_widget_set_hexpand (entry, TRUE);
-
-  gtk_tree_view_set_row_separator_func (properties->topics_tree_view, is_separator, NULL, NULL);
-
-  properties->topics_model = ephy_topics_palette_new (properties->bookmarks, properties->bookmark);
-  gtk_tree_view_set_model (properties->topics_tree_view, GTK_TREE_MODEL (properties->topics_model));
 
   /* TODO bind; and the entry?! */
   gtk_widget_set_sensitive (GTK_WIDGET (properties->topics_scrolled_window), !lockdown);
@@ -486,8 +422,6 @@ ephy_bookmark_properties_class_init (EphyBookmarkPropertiesClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarkProperties, warning_label);
 
   gtk_widget_class_bind_template_callback (widget_class, title_entry_changed_cb);
-  gtk_widget_class_bind_template_callback (widget_class, on_topic_toggled);         /* TODO make the row activatable instead of a little togglebutton */
-  gtk_widget_class_bind_template_callback (widget_class, on_topic_edited);          /* TODO topics’ names are not editable from there, they are synced with bookmarks... but this is used for... updating the entry \o/ yay \o/ */
   gtk_widget_class_bind_template_callback (widget_class, location_entry_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, ephy_bookmark_properties_response_cb);
   gtk_widget_class_bind_template_callback (widget_class, ephy_bookmark_properties_destroy_cb);

@@ -30,8 +30,6 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmark-action-group.h	\
 	ephy-topics-entry.c  		\
 	ephy-topics-entry.h		\
-	ephy-topics-palette.c  		\
-	ephy-topics-palette.h		\
 	ephy-nodes-cover.c		\
 	ephy-nodes-cover.h		\
 	ephy-window-action.c		\
