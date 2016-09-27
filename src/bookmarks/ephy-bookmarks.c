@@ -21,8 +21,6 @@
 #include "ephy-bookmarks.h"
 
 #include "ephy-bookmark-properties.h"
-#include "ephy-bookmarks-export.h"
-#include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-type-builtins.h"
 #include "ephy-debug.h"
 #include "ephy-embed-shell.h"
@@ -111,8 +109,6 @@ ephy_bookmarks_init_defaults (EphyBookmarks *eb)
   for (i = 0; i < G_N_ELEMENTS (default_topics); i++) {
     ephy_bookmarks_add_keyword (eb, _(default_topics[i]));
   }
-
-  ephy_bookmarks_import_rdf (eb, PKGDATADIR "/default-bookmarks.rdf");
 }
 
 static void
@@ -161,9 +157,6 @@ ephy_bookmarks_save (EphyBookmarks *eb)
     eb->keywords, (EphyNodeFilterFunc)save_filter, eb,
     eb->bookmarks, (EphyNodeFilterFunc)save_filter_local, eb,
     NULL);
-
-  /* Export bookmarks in rdf */
-  ephy_bookmarks_export_rdf (eb, eb->rdf_file);
 }
 
 static gboolean
@@ -935,12 +928,6 @@ ephy_bookmarks_init (EphyBookmarks *eb)
                eb->xml_file, eb->rdf_file);
 
     backup_file (eb->xml_file, "xml");
-
-    if (ephy_bookmarks_import_rdf (eb, eb->rdf_file) == FALSE) {
-      backup_file (eb->rdf_file, "rdf");
-
-      eb->init_defaults = TRUE;
-    }
   }
 
   if (eb->init_defaults) {

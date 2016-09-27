@@ -21,7 +21,6 @@
 #include "config.h"
 #include "ephy-shell.h"
 
-#include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
 #include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
