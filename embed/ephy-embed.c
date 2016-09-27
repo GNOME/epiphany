@@ -507,19 +507,9 @@ static gboolean
 ephy_embed_attach_inspector_cb (WebKitWebInspector *inspector,
                                 EphyEmbed          *embed)
 {
-  GtkWidget *inspector_view = GTK_WIDGET (webkit_web_inspector_get_web_view (inspector));
-  int inspected_view_height;
-  guint attached_height;
-
-  inspected_view_height = gtk_widget_get_allocated_height (GTK_WIDGET (embed->web_view));
-  attached_height = webkit_web_inspector_get_attached_height (inspector);
-  gtk_paned_set_position (embed->paned, inspected_view_height - attached_height);
-
-  gtk_paned_add2 (embed->paned, inspector_view);
-  gtk_widget_show (inspector_view);
   embed->inspector_loaded = TRUE;
 
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
