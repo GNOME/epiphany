@@ -23,7 +23,6 @@
 #include "ephy-bookmark-properties.h"
 
 #include "ephy-bookmarks-ui.h"
-#include "ephy-topics-entry.h"
 #include "ephy-node-common.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
@@ -264,7 +263,6 @@ ephy_bookmark_properties_constructor (GType                  type,
   gboolean lockdown;
   const char   *tmp;
   char         *decoded_url;
-  GtkWidget    *entry;
 
   object = G_OBJECT_CLASS (ephy_bookmark_properties_parent_class)->constructor (type,
                                                                                 n_construct_properties,
@@ -295,13 +293,6 @@ ephy_bookmark_properties_constructor (GType                  type,
   decoded_url = ephy_uri_decode (tmp);
   gtk_entry_set_text (properties->adress_entry, decoded_url);
   g_free (decoded_url);
-
-  entry = ephy_topics_entry_new (properties->bookmarks, properties->bookmark);
-  gtk_editable_set_editable (GTK_EDITABLE (entry), !lockdown);
-  gtk_label_set_mnemonic_widget (properties->topics_label, entry);
-  gtk_widget_show (entry);
-  gtk_grid_attach (properties->grid, entry, 1, 2, 1, 1);
-  gtk_widget_set_hexpand (entry, TRUE);
 
   /* TODO bind; and the entry?! */
   gtk_widget_set_sensitive (GTK_WIDGET (properties->topics_scrolled_window), !lockdown);

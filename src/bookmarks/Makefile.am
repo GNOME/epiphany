@@ -28,8 +28,6 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-topic-action-group.h	\
 	ephy-bookmark-action-group.c	\
 	ephy-bookmark-action-group.h	\
-	ephy-topics-entry.c  		\
-	ephy-topics-entry.h		\
 	ephy-window-action.c		\
 	ephy-window-action.h
 
