@@ -22,7 +22,6 @@
 #include "ephy-topic-action.h"
 #include "ephy-node.h"
 #include "ephy-node-common.h"
-#include "ephy-nodes-cover.h"
 #include "ephy-bookmarks.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-shell.h"

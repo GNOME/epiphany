@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include "ephy-topics-entry.h"
-#include "ephy-nodes-cover.h"
 #include "ephy-node-common.h"
 #include "ephy-bookmarks.h"
 #include "ephy-debug.h"
