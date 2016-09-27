@@ -21,7 +21,6 @@
 #include "config.h"
 #include "ephy-shell.h"
 
-#include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
 #include "ephy-downloads-manager.h"
@@ -57,7 +56,6 @@ struct _EphyShell {
   EphyBookmarks *bookmarks;
   EphyBookmarksManager *bookmarks_manager;
   GNetworkMonitor *network_monitor;
-  GtkWidget *bme;
   GtkWidget *history_window;
   GObject *prefs_dialog;
   EphyShellStartupContext *local_startup_context;
@@ -166,14 +164,6 @@ reopen_closed_tab (GSimpleAction *action,
 }
 
 static void
-show_bookmarks (GSimpleAction *action,
-                GVariant      *parameter,
-                gpointer       user_data)
-{
-  window_cmd_show_bookmarks (NULL, NULL, NULL);
-}
-
-static void
 show_history (GSimpleAction *action,
               GVariant      *parameter,
               gpointer       user_data)
@@ -244,7 +234,6 @@ quit_application (GSimpleAction *action,
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
-  { "bookmarks", show_bookmarks, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "shortcuts", show_shortcuts, NULL, NULL, NULL },
@@ -592,7 +581,6 @@ ephy_shell_dispose (GObject *object)
 
   g_clear_object (&shell->session);
   g_clear_object (&shell->lockdown);
-  g_clear_pointer (&shell->bme, gtk_widget_destroy);
   g_clear_pointer (&shell->history_window, gtk_widget_destroy);
   g_clear_object (&shell->prefs_dialog);
   g_clear_object (&shell->bookmarks);
@@ -788,25 +776,6 @@ ephy_shell_get_net_monitor (EphyShell *shell)
     shell->network_monitor = g_network_monitor_get_default ();
 
   return shell->network_monitor;
-}
-
-/**
- * ephy_shell_get_bookmarks_editor:
- *
- * Return value: (transfer none):
- **/
-GtkWidget *
-ephy_shell_get_bookmarks_editor (EphyShell *shell)
-{
-  EphyBookmarks *bookmarks;
-
-  if (shell->bme == NULL) {
-    bookmarks = ephy_shell_get_bookmarks (ephy_shell);
-    g_assert (bookmarks != NULL);
-    shell->bme = ephy_bookmarks_editor_new (bookmarks);
-  }
-
-  return shell->bme;
 }
 
 /**

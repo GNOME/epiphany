@@ -24,7 +24,6 @@
 #include "window-commands.h"
 
 #include "ephy-add-bookmark-popover.h"
-#include "ephy-bookmarks-editor.h"
 #include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
@@ -85,17 +84,6 @@ window_cmd_new_incognito_window (GSimpleAction *action,
                                  gpointer       user_data)
 {
   ephy_open_incognito_window (NULL);
-}
-
-void
-window_cmd_show_bookmarks (GSimpleAction *action,
-                           GVariant      *parameter,
-                           gpointer       user_data)
-{
-  GtkWidget *bwindow;
-
-  bwindow = ephy_shell_get_bookmarks_editor (ephy_shell_get_default ());
-  gtk_window_present (GTK_WINDOW (bwindow));
 }
 
 void

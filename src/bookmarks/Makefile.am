@@ -8,8 +8,6 @@ libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks.h		\
 	ephy-bookmark-action.c		\
 	ephy-bookmark-action.h		\
-	ephy-bookmarks-editor.c		\
-	ephy-bookmarks-editor.h		\
 	ephy-bookmarks-export.c		\
 	ephy-bookmarks-export.h		\
 	ephy-bookmarks-import.c 	\
