@@ -546,7 +546,7 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
     GVariantIter *iter;
     GSequence *tags;
     char *tag;
-    char *title;
+    const char *title;
     gint64 time_added;
 
     /* Obtain the correspoding GVariant. */

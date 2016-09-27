@@ -229,6 +229,7 @@ ephy_bookmark_set_title (EphyBookmark *self, const char *title)
 {
   g_return_if_fail (EPHY_IS_BOOKMARK (self));
 
+  g_free (self->title);
   self->title = g_strdup (title);
   g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_TITLE]);
 }

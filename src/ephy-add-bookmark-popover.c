@@ -63,6 +63,17 @@ ephy_bookmarks_popover_set_property (GObject      *object,
 }
 
 static void
+ephy_add_bookmark_popover_finalize (GObject *object)
+{
+  EphyAddBookmarkPopover *self = EPHY_ADD_BOOKMARK_POPOVER (object);
+
+  if (self->address)
+    g_free (self->address);
+
+  G_OBJECT_CLASS (ephy_add_bookmark_popover_parent_class)->finalize (object);
+}
+
+static void
 ephy_add_bookmark_popover_constructed (GObject *object)
 {
   EphyAddBookmarkPopover *self = EPHY_ADD_BOOKMARK_POPOVER (object);
@@ -82,6 +93,7 @@ ephy_add_bookmark_popover_class_init (EphyAddBookmarkPopoverClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->set_property = ephy_bookmarks_popover_set_property;
+  object_class->finalize = ephy_add_bookmark_popover_finalize;
   object_class->constructed = ephy_add_bookmark_popover_constructed;
 
   obj_properties[PROP_HEADER_BAR] =
