@@ -401,25 +401,12 @@ ephy_bookmarks_popover_set_property (GObject      *object,
 }
 
 static void
-ephy_bookmarks_popover_get_property (GObject      *object,
-                                     guint         prop_id,
-                                     GValue       *value,
-                                     GParamSpec   *pspec)
-{
-  switch (prop_id) {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
-}
-
-static void
 ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->set_property = ephy_bookmarks_popover_set_property;
-  object_class->get_property = ephy_bookmarks_popover_get_property;
 
   obj_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
