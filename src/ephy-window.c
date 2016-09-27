@@ -23,7 +23,6 @@
 #include "ephy-window.h"
 
 #include "ephy-action-helper.h"
-#include "ephy-bookmarks-ui.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
@@ -2606,8 +2605,6 @@ ephy_window_dispose (GObject *object)
   if (window->closing == FALSE) {
     window->closing = TRUE;
 
-    ephy_bookmarks_ui_detach_window (window);
-
     _ephy_window_set_context_event (window, NULL);
 
     g_clear_object (&window->bookmarks_manager);
@@ -2973,9 +2970,6 @@ ephy_window_constructed (GObject *object)
                                              GTK_STYLE_PROVIDER (css_provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (css_provider);
-
-  /* Initialize the menus */
-  ephy_bookmarks_ui_attach_window (window);
 
   /* other notifiers */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");

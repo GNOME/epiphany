@@ -21,7 +21,6 @@
 #include "config.h"
 #include "ephy-history-window.h"
 
-#include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
 #include "ephy-gui.h"
 #include "ephy-prefs.h"
@@ -397,27 +396,6 @@ copy_url (GSimpleAction *action,
 }
 
 static void
-bookmark (GSimpleAction *action,
-          GVariant      *parameter,
-          gpointer       user_data)
-{
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
-  GList *selection;
-
-  selection = get_selection (self);
-
-  if (g_list_length (selection) == 1) {
-    EphyHistoryURL *url;
-
-    url = selection->data;
-
-    ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (self), url->url, url->title);
-  }
-
-  g_list_free_full (selection, (GDestroyNotify)ephy_history_url_free);
-}
-
-static void
 forget (GSimpleAction *action,
         GVariant      *parameter,
         gpointer       user_data)
@@ -446,16 +424,10 @@ update_popup_menu_actions (GActionGroup *action_group,
                            gboolean      only_one_selected_item)
 {
   GAction *copy_url_action;
-  GAction *bookmark_action;
-  gboolean bookmarks_locked;
 
   copy_url_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "copy-url");
-  bookmark_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "bookmark");
-  bookmarks_locked = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                                             EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING);
 
   g_simple_action_set_enabled (G_SIMPLE_ACTION (copy_url_action), only_one_selected_item);
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (bookmark_action), (only_one_selected_item && !bookmarks_locked));
 }
 
 static gboolean
@@ -773,7 +745,6 @@ create_action_group (EphyHistoryWindow *self)
   const GActionEntry entries[] = {
     { "open-selection", open_selection },
     { "copy-url", copy_url },
-    { "bookmark", bookmark },
     { "forget", forget },
     { "forget-all", forget_all }
   };

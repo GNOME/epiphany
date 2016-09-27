@@ -19,7 +19,6 @@
 #include "config.h"
 #include "popup-commands.h"
 
-#include "ephy-bookmarks-ui.h"
 #include "ephy-downloads-manager.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
@@ -98,32 +97,6 @@ popup_cmd_media_in_new_window (GSimpleAction *action,
                                gpointer       user_data)
 {
   view_in_destination (EPHY_WINDOW (user_data), "media-uri", NEW_WINDOW);
-}
-
-void
-popup_cmd_bookmark_link (GSimpleAction *action,
-                         GVariant      *parameter,
-                         gpointer       user_data)
-{
-  EphyEmbedEvent *event;
-  WebKitHitTestResult *result;
-  const char *title;
-  const char *location;
-
-  event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-
-  result = ephy_embed_event_get_hit_test_result (event);
-  if (!webkit_hit_test_result_context_is_link (result)) {
-    return;
-  }
-
-  location = webkit_hit_test_result_get_link_uri (result);
-  title = webkit_hit_test_result_get_link_title (result);
-  if (!title) {
-    title = webkit_hit_test_result_get_link_label (result);
-  }
-
-  ephy_bookmarks_ui_add_bookmark (GTK_WINDOW (user_data), location, title);
 }
 
 static void

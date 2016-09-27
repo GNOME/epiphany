@@ -24,7 +24,6 @@
 #include "window-commands.h"
 
 #include "ephy-add-bookmark-popover.h"
-#include "ephy-bookmarks-ui.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"

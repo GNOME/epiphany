@@ -5,9 +5,7 @@ TYPES_H_FILES = \
 
 libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks.c		\
-	ephy-bookmarks.h		\
-	ephy-bookmarks-ui.c		\
-	ephy-bookmarks-ui.h
+	ephy-bookmarks.h
 
 nodist_libephybookmarks_la_SOURCES = 	\
 	$(BUILT_SOURCES)

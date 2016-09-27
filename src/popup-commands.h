@@ -33,9 +33,6 @@ void popup_cmd_link_in_new_tab          (GSimpleAction *action,
 void popup_cmd_link_in_incognito_window (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
-void popup_cmd_bookmark_link            (GSimpleAction *action,
-                                         GVariant      *parameter,
-                                         gpointer       user_data);
 void popup_cmd_view_source              (GSimpleAction *action,
                                          GVariant      *parameter,
                                          gpointer       user_data);
