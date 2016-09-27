@@ -56,3 +56,16 @@ ephy_zoom_get_nearest_zoom_level (float level)
 {
   return ephy_zoom_get_changed_zoom_level (level, 0);
 }
+
+const char *
+ephy_zoom_get_zoom_level_name (float level)
+{
+  unsigned int i;
+
+  for (i = 0; i < n_zoom_levels; i++) {
+    if (zoom_levels[i].level == level)
+      return zoom_levels[i].name;
+  }
+
+  return "";
+}

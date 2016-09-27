@@ -1026,7 +1026,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
   page_menu_popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (page_menu_button));
   zoom_level_button = g_object_get_data (G_OBJECT (page_menu_popover), "zoom-level-button");
 
-  zoom_level_text = g_strdup_printf ("%.0lf%%", zoom * 100);
+  zoom_level_text = g_strdup (ephy_zoom_get_zoom_level_name (zoom));
   gtk_button_set_label (GTK_BUTTON (zoom_level_button), zoom_level_text);
   g_free (zoom_level_text);
 
