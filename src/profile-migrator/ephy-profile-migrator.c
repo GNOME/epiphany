@@ -834,10 +834,6 @@ migrate_bookmarks (void)
                                EPHY_BOOKMARKS_FILE_RDF,
                                NULL);
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_BOOKMARK_EDITING))
-    return;
-
   if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
     return;
 
