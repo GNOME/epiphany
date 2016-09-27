@@ -127,7 +127,7 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
     g_param_spec_pointer ("tags",
                           "Tags",
                           "The bookmark's tags",
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_TIME_ADDED] =
     g_param_spec_int64 ("time-added",
@@ -136,21 +136,21 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
                         0,
                         G_MAXINT64,
                         0,
-                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "The bookmark's title",
                          "Default bookmark title",
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_URL] =
     g_param_spec_string ("url",
                          "URL",
                          "The bookmark's URL",
                          "about:overview",
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
