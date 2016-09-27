@@ -1,4 +1,4 @@
-SUBDIRS = . search-provider profile-migrator
+SUBDIRS = bookmarks . search-provider profile-migrator
 
 pkglib_LTLIBRARIES = libephymain.la
 
@@ -10,7 +10,6 @@ dist_noinst_DATA = \
 
 TYPES_H_FILES = \
 	ephy-link.h				\
-	ephy-bookmark-properties-grid.h		\
 	ephy-session.h				\
 	ephy-shell.h				\
 	ephy-window.h
@@ -22,18 +21,6 @@ libephymain_la_SOURCES = \
 	cookies-dialog.h			\
 	ephy-action-helper.c			\
 	ephy-action-helper.h			\
-	ephy-add-bookmark-popover.c		\
-	ephy-add-bookmark-popover.h		\
-	ephy-bookmark.c				\
-	ephy-bookmark.h				\
-	ephy-bookmark-properties-grid.c		\
-	ephy-bookmark-properties-grid.h		\
-	ephy-bookmark-row.c			\
-	ephy-bookmark-row.h			\
-	ephy-bookmarks-manager.c		\
-	ephy-bookmarks-manager.h		\
-	ephy-bookmarks-popover.c 		\
-	ephy-bookmarks-popover.h 		\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
 	ephy-encoding-dialog.c			\
@@ -76,14 +63,13 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_builddir)/embed		\
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/widgets	\
+	-I$(top_srcdir)/src/bookmarks	\
 	-I$(top_srcdir)/embed 		\
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/gvdb		\
-	-DLOADER_DIR=\""$(pkglibdir)/$(EPIPHANY_MAJOR)/loaders"\"		\
-	-DDATADIR=\""$(pkgdatadir)"\" 	\
 	-DLOCALEDIR=\"$(localedir)\"	\
 	-DPKGDATADIR=\"$(pkgdatadir)\"	\
 	$(GDK_CFLAGS)			\
@@ -103,11 +89,10 @@ libephymain_la_LDFLAGS = \
 	$(WARN_LDFLAGS) -avoid-version -no-undefined
 
 libephymain_la_LIBADD = \
+	$(top_builddir)/src/bookmarks/libephybookmarks.la	\
 	$(top_builddir)/embed/libephyembed.la			\
-	$(top_builddir)/lib/widgets/libephywidgets.la		\
 	$(top_builddir)/lib/libephymisc.la			\
 	$(top_builddir)/lib/egg/libegg.la			\
-	$(top_builddir)/gvdb/libgvdb.la				\
 	$(GDK_LIBS)		\
 	$(GIO_LIBS)		\
 	$(GLIB_LIBS)		\
@@ -176,6 +161,7 @@ epiphany_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_builddir)/lib/widgets	\
+	-I$(top_srcdir)/src/bookmarks	\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(GLIB_CFLAGS)			\

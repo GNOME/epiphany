@@ -23,7 +23,7 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
-#include "ephy-type-builtins.h"
+#include "ephy-bookmarks-type-builtins.h"
 
 #include <libsoup/soup.h>
 #include <string.h>
