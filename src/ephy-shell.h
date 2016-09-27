@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include "ephy-bookmarks.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed.h"
@@ -97,8 +96,6 @@ EphyEmbed      *ephy_shell_new_tab_full                 (EphyShell *shell,
 EphySession     *ephy_shell_get_session                  (EphyShell *shell);
 
 GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
-
-EphyBookmarks   *ephy_shell_get_bookmarks                (EphyShell *shell);
 
 GtkWidget       *ephy_shell_get_bookmarks_editor         (EphyShell *shell);
 

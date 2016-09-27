@@ -35,8 +35,10 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <libnotify/notify.h>
+#include <libxml/xmlreader.h>
 #include <libxml/xmlversion.h>
 #include <string.h>
+#include <stdlib.h>
 
 static gboolean open_in_new_tab = FALSE;
 static gboolean open_in_new_window = FALSE;

@@ -58,6 +58,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <libsoup/soup.h>
+#include <stdlib.h>
 
 #include <webkit2/webkit2.h>
 

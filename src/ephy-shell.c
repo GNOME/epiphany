@@ -52,7 +52,6 @@ struct _EphyShell {
   EphySession *session;
   GList *windows;
   GObject *lockdown;
-  EphyBookmarks *bookmarks;
   EphyBookmarksManager *bookmarks_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *history_window;
@@ -582,7 +581,6 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->lockdown);
   g_clear_pointer (&shell->history_window, gtk_widget_destroy);
   g_clear_object (&shell->prefs_dialog);
-  g_clear_object (&shell->bookmarks);
   g_clear_object (&shell->network_monitor);
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
@@ -727,21 +725,6 @@ ephy_shell_get_session (EphyShell *shell)
     shell->session = g_object_new (EPHY_TYPE_SESSION, NULL);
 
   return shell->session;
-}
-
-/**
- * ephy_shell_get_bookmarks:
- *
- * Return value: (transfer none):
- **/
-EphyBookmarks *
-ephy_shell_get_bookmarks (EphyShell *shell)
-{
-  if (shell->bookmarks == NULL) {
-    shell->bookmarks = ephy_bookmarks_new ();
-  }
-
-  return shell->bookmarks;
 }
 
 /**

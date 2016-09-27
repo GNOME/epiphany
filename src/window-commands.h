@@ -144,9 +144,6 @@ void window_cmd_go_location                     (GSimpleAction *action,
 void window_cmd_go_home                         (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
-void window_cmd_load_location                   (GSimpleAction *action,
-                                                 GVariant      *parameter,
-                                                 gpointer       user_data);
 void window_cmd_change_browse_with_caret_state  (GSimpleAction *action,
                                                  GVariant      *state,
                                                  gpointer       user_data);

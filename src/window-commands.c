@@ -1697,30 +1697,6 @@ window_cmd_go_location (GSimpleAction *action,
 }
 
 void
-window_cmd_load_location (GSimpleAction *action,
-                          GVariant      *parameter,
-                          gpointer       user_data)
-{
-  const char *location;
-
-  location = ephy_window_get_location (EPHY_WINDOW (user_data));
-
-  if (location) {
-    EphyBookmarks *bookmarks;
-    char *address;
-
-    bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-
-    address = ephy_bookmarks_resolve_address (bookmarks, location, NULL);
-    g_return_if_fail (address != NULL);
-
-    ephy_link_open (EPHY_LINK (user_data), address,
-                    ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (user_data)),
-                    ephy_link_flags_from_current_event ());
-  }
-}
-
-void
 window_cmd_go_home (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)

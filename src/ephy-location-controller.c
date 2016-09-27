@@ -47,10 +47,7 @@ struct _EphyLocationController {
 
   EphyWindow *window;
   EphyTitleWidget *title_widget;
-  GList *actions;
   char *address;
-  EphyNode *smart_bmks;
-  EphyBookmarks *bookmarks;
   guint editable : 1;
   gboolean sync_address_is_blocked;
 };
@@ -84,38 +81,6 @@ match_func (GtkEntryCompletion *completion,
 {
   /* We want every row in the model to show up. */
   return TRUE;
-}
-
-static void
-action_activated_cb (GtkEntryCompletion     *completion,
-                     gint                    index,
-                     EphyLocationController *controller)
-{
-  GtkWidget *entry;
-  char *content;
-
-  entry = gtk_entry_completion_get_entry (completion);
-  content = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-  if (content) {
-    EphyNode *node;
-    const char *smart_url;
-    char *url;
-
-    node = (EphyNode *)g_list_nth_data (controller->actions, index);
-    smart_url = ephy_node_get_property_string
-                  (node, EPHY_NODE_BMK_PROP_LOCATION);
-    g_return_if_fail (smart_url != NULL);
-
-    url = ephy_bookmarks_resolve_address
-            (controller->bookmarks, smart_url, content);
-    g_free (content);
-    if (url == NULL) return;
-
-    ephy_link_open (EPHY_LINK (controller), url, NULL,
-                    ephy_link_flags_from_current_event () | EPHY_LINK_TYPED);
-
-    g_free (url);
-  }
 }
 
 static void
@@ -171,7 +136,6 @@ static void
 entry_activate_cb (GtkEntry               *entry,
                    EphyLocationController *controller)
 {
-  EphyBookmarks *bookmarks;
   const char *content;
   char *address;
   char *effective_address;
@@ -184,11 +148,7 @@ entry_activate_cb (GtkEntry               *entry,
   content = gtk_entry_get_text (entry);
   if (content == NULL || content[0] == '\0') return;
 
-  bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-
-  address = ephy_bookmarks_resolve_address (bookmarks, content, NULL);
-  g_return_if_fail (address != NULL);
-
+  address = g_strdup (content);
   effective_address = ephy_embed_utils_normalize_or_autosearch_address (g_strstrip (address));
   g_free (address);
 #if 0
@@ -280,47 +240,6 @@ get_title_cb (EphyLocationEntry      *entry,
   return g_strdup (ephy_embed_get_title (embed));
 }
 
-static void
-remove_completion_actions (EphyLocationController *controller,
-                           EphyLocationEntry      *lentry)
-{
-  GtkEntryCompletion *completion;
-  GList *l;
-
-  completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
-
-  for (l = controller->actions; l != NULL; l = l->next) {
-    gtk_entry_completion_delete_action (completion, 0);
-  }
-
-  g_signal_handlers_disconnect_by_func
-    (completion, G_CALLBACK (action_activated_cb), controller);
-}
-
-static void
-add_completion_actions (EphyLocationController *controller,
-                        EphyLocationEntry      *lentry)
-{
-  GtkEntryCompletion *completion;
-  GList *l;
-
-  completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
-
-  for (l = controller->actions; l != NULL; l = l->next) {
-    EphyNode *bmk = l->data;
-    const char *title;
-    int index;
-
-    index = g_list_position (controller->actions, l);
-    title = ephy_node_get_property_string
-              (bmk, EPHY_NODE_BMK_PROP_TITLE);
-    gtk_entry_completion_insert_action_text (completion, index, (char *)title);
-  }
-
-  g_signal_connect (completion, "action_activated",
-                    G_CALLBACK (action_activated_cb), controller);
-}
-
 static gboolean
 focus_in_event_cb (GtkWidget              *entry,
                    GdkEventFocus          *event,
@@ -401,8 +320,6 @@ ephy_location_controller_constructed (GObject *object)
                                       match_func,
                                       controller->title_widget,
                                       NULL);
-
-  add_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
 
   g_object_bind_property (controller, "editable",
                           controller->title_widget, "editable",
@@ -560,120 +477,12 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
-static int
-compare_actions (gconstpointer a,
-                 gconstpointer b)
-{
-  EphyNode *node_a = (EphyNode *)a;
-  EphyNode *node_b = (EphyNode *)b;
-  const char *title1, *title2;
-  int retval;
-
-  title1 = ephy_node_get_property_string (node_a, EPHY_NODE_BMK_PROP_TITLE);
-  title2 = ephy_node_get_property_string (node_b, EPHY_NODE_BMK_PROP_TITLE);
-
-  if (title1 == NULL) {
-    retval = -1;
-  } else if (title2 == NULL) {
-    retval = 1;
-  } else {
-    char *str_a, *str_b;
-
-    str_a = g_utf8_casefold (title1, -1);
-    str_b = g_utf8_casefold (title2, -1);
-    retval = g_utf8_collate (str_a, str_b);
-    g_free (str_a);
-    g_free (str_b);
-  }
-
-  return retval;
-}
-
-static void
-init_actions_list (EphyLocationController *controller)
-{
-  GPtrArray *children;
-  guint i;
-
-  children = ephy_node_get_children (controller->smart_bmks);
-  for (i = 0; i < children->len; i++) {
-    EphyNode *kid;
-
-    kid = g_ptr_array_index (children, i);
-
-    controller->actions = g_list_prepend
-                            (controller->actions, kid);
-  }
-
-  controller->actions =
-    g_list_sort (controller->actions, (GCompareFunc)compare_actions);
-}
-
-static void
-update_actions_list (EphyLocationController *controller)
-{
-  if (!EPHY_IS_LOCATION_ENTRY (controller->title_widget))
-    return;
-
-  remove_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
-
-  g_list_free (controller->actions);
-  controller->actions = NULL;
-  init_actions_list (controller);
-
-  add_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
-}
-
-static void
-actions_child_removed_cb (EphyNode               *node,
-                          EphyNode               *child,
-                          guint                   old_index,
-                          EphyLocationController *controller)
-{
-  update_actions_list (controller);
-}
-
-static void
-actions_child_added_cb (EphyNode               *node,
-                        EphyNode               *child,
-                        EphyLocationController *controller)
-{
-  update_actions_list (controller);
-}
-
-static void
-actions_child_changed_cb (EphyNode               *node,
-                          EphyNode               *child,
-                          guint                   property_id,
-                          EphyLocationController *controller)
-{
-  update_actions_list (controller);
-}
-
 static void
 ephy_location_controller_init (EphyLocationController *controller)
 {
   controller->address = g_strdup ("");
   controller->editable = TRUE;
-  controller->bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-  controller->smart_bmks = ephy_bookmarks_get_smart_bookmarks
-                             (controller->bookmarks);
   controller->sync_address_is_blocked = FALSE;
-
-  init_actions_list (controller);
-
-  ephy_node_signal_connect_object (controller->smart_bmks,
-                                   EPHY_NODE_CHILD_ADDED,
-                                   (EphyNodeCallback)actions_child_added_cb,
-                                   G_OBJECT (controller));
-  ephy_node_signal_connect_object (controller->smart_bmks,
-                                   EPHY_NODE_CHILD_REMOVED,
-                                   (EphyNodeCallback)actions_child_removed_cb,
-                                   G_OBJECT (controller));
-  ephy_node_signal_connect_object (controller->smart_bmks,
-                                   EPHY_NODE_CHILD_CHANGED,
-                                   (EphyNodeCallback)actions_child_changed_cb,
-                                   G_OBJECT (controller));
 }
 
 static void
@@ -681,7 +490,6 @@ ephy_location_controller_finalize (GObject *object)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
 
-  g_list_free (controller->actions);
   g_free (controller->address);
 
   G_OBJECT_CLASS (ephy_location_controller_parent_class)->finalize (object);

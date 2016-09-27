@@ -21,7 +21,6 @@
 #include "config.h"
 #include "prefs-dialog.h"
 
-#include "ephy-bookmarks.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -931,44 +930,6 @@ search_engine_combo_add_default_engines (GtkListStore *store)
   }
 }
 
-static void
-search_engine_combo_add_smart_bookmarks (GtkListStore *store)
-{
-  guint i;
-  EphyBookmarks *bookmarks;
-  EphyNode *smart_bookmarks_parent_node;
-  GPtrArray *smart_bookmarks;
-
-  bookmarks = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-  smart_bookmarks_parent_node = ephy_bookmarks_get_smart_bookmarks (bookmarks);
-  smart_bookmarks = ephy_node_get_children (smart_bookmarks_parent_node);
-
-  if (!smart_bookmarks)
-    return;
-
-  for (i = 0; i < smart_bookmarks->len; ++i) {
-    EphyNode *bookmark;
-    const char *bookmark_name;
-    const char *bookmark_url;
-
-    bookmark = g_ptr_array_index (smart_bookmarks, i);
-    bookmark_name = ephy_node_get_property_string (bookmark, EPHY_NODE_BMK_PROP_TITLE);
-    bookmark_url = ephy_node_get_property_string (bookmark, EPHY_NODE_BMK_PROP_LOCATION);
-
-    if (!bookmark_name || !bookmark_url)
-      continue;
-
-    if (strcmp (bookmark_name, DEFAULT_SMART_BOOKMARK_TEXT) == 0)
-      continue;
-
-    gtk_list_store_insert_with_values (store, NULL, -1,
-                                       SEARCH_ENGINE_COL_NAME, bookmark_name,
-                                       SEARCH_ENGINE_COL_STOCK_URL, bookmark_url,
-                                       SEARCH_ENGINE_COL_URL, bookmark_url,
-                                       -1);
-  }
-}
-
 /* Has the user manually set the engine to something not in the combo?
  * If so, add that URL as an extra item in the combo. */
 static void
@@ -1021,7 +982,6 @@ create_search_engine_combo (GtkComboBox *combo)
   store = GTK_LIST_STORE (gtk_combo_box_get_model (combo));
 
   search_engine_combo_add_default_engines (store);
-  search_engine_combo_add_smart_bookmarks (store);
   search_engine_combo_add_current_engine (store);
 
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), SEARCH_ENGINE_COL_NAME,
