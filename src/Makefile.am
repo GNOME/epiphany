@@ -144,8 +144,8 @@ RESOURCE_FILES = \
 	resources/prism.css								\
 	resources/prism.js								\
 	resources/shortcuts-dialog.ui							\
-	resources/icons/hicolor/scalable/actions/ephy-bookmark-tag-symbolic.svg		\
-	resources/icons/hicolor/scalable/actions/ephy-bookmarks-symbolic.svg		\
+	resources/ephy-bookmark-tag-symbolic.svg					\
+	resources/ephy-bookmarks-symbolic.svg						\
 	resources/gtk/bookmark-properties-grid.ui					\
 	resources/gtk/bookmark-row.ui							\
 	resources/gtk/bookmarks-popover.ui						\
