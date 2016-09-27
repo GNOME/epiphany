@@ -1014,9 +1014,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
   double zoom;
   GtkWidget *page_menu_button;
   GtkPopover *page_menu_popover;
-  GtkWidget *widget;
-  GtkWidget *zoom_level_entry;
-  GList *children;
+  GtkWidget *zoom_level_button;
   char *zoom_level_text;
 
   if (window->closing)
@@ -1024,26 +1022,12 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 
   zoom = webkit_web_view_get_zoom_level (web_view);
 
-  /* Update the zoom level entry in the page menu popover:
-   * - obtain the popover from the page menu button
-   * - obtain the box (the first child of the popover)
-   * - obtain the "zoom box" (the first child of the box above)
-   * - obtain the GtkEntry which is the second child of the zoom box
-   */
   page_menu_button = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (window->header_bar));
   page_menu_popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (page_menu_button));
-  children = gtk_container_get_children (GTK_CONTAINER (page_menu_popover));
-  widget = g_list_nth_data (children, 0);
-  g_assert (GTK_IS_BOX (widget));
-  children = gtk_container_get_children (GTK_CONTAINER (widget));
-  widget = g_list_nth_data (children, 0);
-  g_assert (GTK_IS_BOX (widget));
-  children = gtk_container_get_children (GTK_CONTAINER (widget));
-  zoom_level_entry = g_list_nth_data (children, 1);
-  g_assert (GTK_IS_ENTRY (zoom_level_entry));
+  zoom_level_button = g_object_get_data (G_OBJECT (page_menu_popover), "zoom-level-button");
 
   zoom_level_text = g_strdup_printf ("%.0lf%%", zoom * 100);
-  gtk_entry_set_text (GTK_ENTRY (zoom_level_entry), zoom_level_text);
+  gtk_button_set_label (GTK_BUTTON (zoom_level_button), zoom_level_text);
   g_free (zoom_level_text);
 
   if (zoom >= ZOOM_MAXIMAL) {

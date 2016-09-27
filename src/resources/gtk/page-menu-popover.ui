@@ -32,9 +32,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="zoom-level">
+              <object class="GtkModelButton" id="zoom-level">
+                <property name="text">100%</property>
+                <property name="action-name">win.zoom-normal</property>
+                <property name="iconic">True</property>
                 <property name="xalign">0.5</property>
-                <property name="sensitive">False</property>
+                <property name="centered">True</property>
                 <property name="visible">True</property>
               </object>
               <packing>
