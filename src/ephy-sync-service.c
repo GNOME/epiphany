@@ -1129,8 +1129,10 @@ ephy_sync_service_delete_bookmark (EphySyncService *self,
   char *endpoint;
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
-  g_return_if_fail (ephy_sync_service_is_signed_in (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
+
+  if (ephy_sync_service_is_signed_in (self) == FALSE)
+    return;
 
   endpoint = g_strdup_printf ("storage/%s/%s",
                               EPHY_BOOKMARKS_COLLECTION,
