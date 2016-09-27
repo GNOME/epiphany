@@ -20,8 +20,6 @@
 #include "config.h"
 #include "ephy-bookmarks-ui.h"
 
-#include "ephy-bookmark-action-group.h"
-#include "ephy-bookmark-action.h"
 #include "ephy-bookmarks.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
@@ -31,13 +29,10 @@
 #include "ephy-header-bar.h"
 #include "ephy-link.h"
 #include "ephy-node-common.h"
-#include "ephy-open-tabs-action.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
-#include "ephy-topic-action-group.h"
-#include "ephy-topic-action.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -58,41 +53,16 @@ void
 ephy_bookmarks_ui_attach_window (EphyWindow *window)
 {
   EphyBookmarks *eb;
-  EphyNode *bookmarks;
-  EphyNode *topics;
   BookmarksWindowData *data;
   GtkUIManager *manager;
   GtkActionGroup *actions;
 
   eb = ephy_shell_get_bookmarks (ephy_shell_get_default ());
-  bookmarks = ephy_bookmarks_get_bookmarks (eb);
-  topics = ephy_bookmarks_get_keywords (eb);
   data = g_object_get_data (G_OBJECT (window), BM_WINDOW_DATA_KEY);
   g_return_if_fail (data == NULL);
 
-  manager = gtk_ui_manager_new ();
-
   data = g_new0 (BookmarksWindowData, 1);
   g_object_set_data_full (G_OBJECT (window), BM_WINDOW_DATA_KEY, data, g_free);
-
-  /* Create the self-maintaining action groups for bookmarks and topics */
-  actions = ephy_bookmark_group_new (bookmarks);
-  gtk_ui_manager_insert_action_group (manager, actions, -1);
-  g_signal_connect_object (actions, "open-link",
-                           G_CALLBACK (ephy_link_open), G_OBJECT (window),
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  g_object_unref (actions);
-
-  actions = ephy_topic_action_group_new (topics, manager);
-  gtk_ui_manager_insert_action_group (manager, actions, -1);
-  g_object_unref (actions);
-
-  actions = ephy_open_tabs_group_new (topics);
-  gtk_ui_manager_insert_action_group (manager, actions, -1);
-  g_signal_connect_object (actions, "open-link",
-                           G_CALLBACK (ephy_link_open), G_OBJECT (window),
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  g_object_unref (actions);
 }
 
 void

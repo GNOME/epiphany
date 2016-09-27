@@ -37,7 +37,6 @@
 #include "ephy-header-bar.h"
 #include "ephy-initial-state.h"
 #include "ephy-link.h"
-#include "ephy-link-action.h"
 #include "ephy-location-entry.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"

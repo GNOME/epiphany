@@ -6,22 +6,8 @@ TYPES_H_FILES = \
 libephybookmarks_la_SOURCES = 		\
 	ephy-bookmarks.c		\
 	ephy-bookmarks.h		\
-	ephy-bookmark-action.c		\
-	ephy-bookmark-action.h		\
 	ephy-bookmarks-ui.c		\
-	ephy-bookmarks-ui.h		\
-	ephy-link-action.c		\
-	ephy-link-action.h		\
-	ephy-topic-action.c		\
-	ephy-topic-action.h		\
-	ephy-open-tabs-action.c		\
-	ephy-open-tabs-action.h		\
-	ephy-topic-action-group.c	\
-	ephy-topic-action-group.h	\
-	ephy-bookmark-action-group.c	\
-	ephy-bookmark-action-group.h	\
-	ephy-window-action.c		\
-	ephy-window-action.h
+	ephy-bookmarks-ui.h
 
 nodist_libephybookmarks_la_SOURCES = 	\
 	$(BUILT_SOURCES)
