@@ -855,7 +855,9 @@ migrate_bookmarks (void)
     child = child->next;
   }
 
-  ephy_bookmarks_manager_save_to_file_async (manager, NULL, NULL, NULL);
+  ephy_bookmarks_manager_save_to_file_async (manager, NULL,
+                                             ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
+                                             NULL);
 
   xmlFreeDoc (doc);
   g_clear_object (&manager);

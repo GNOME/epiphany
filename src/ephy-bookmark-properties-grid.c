@@ -359,7 +359,9 @@ ephy_bookmark_properties_grid_finalize (GObject *object)
 {
   EphyBookmarkPropertiesGrid *self = EPHY_BOOKMARK_PROPERTIES_GRID (object);
 
-  ephy_bookmarks_manager_save_to_file_async (self->manager, NULL, NULL, NULL);
+  ephy_bookmarks_manager_save_to_file_async (self->manager, NULL,
+                                             ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
+                                             NULL);
 
   G_OBJECT_CLASS (ephy_bookmark_properties_grid_parent_class)->finalize (object);
 }

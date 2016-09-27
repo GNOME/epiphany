@@ -156,7 +156,9 @@ ephy_add_bookmark_popover_update_bookmarked_status_cb (EphyAddBookmarkPopover *s
                                                FALSE);
   }
 
-  ephy_bookmarks_manager_save_to_file_async (manager, NULL, NULL, NULL);
+  ephy_bookmarks_manager_save_to_file_async (manager, NULL,
+                                             ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
+                                             NULL);
 
   gtk_widget_hide (GTK_WIDGET (self));
 

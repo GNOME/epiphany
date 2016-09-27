@@ -87,19 +87,6 @@ build_variant (EphyBookmark *bookmark)
 }
 
 static void
-data_saved_cb (GObject      *object,
-               GAsyncResult *result,
-               gpointer      user_data)
-{
-  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (object);
-  gboolean ret;
-
-  ret = ephy_bookmarks_manager_save_to_file_finish (self, result, NULL);
-  if (ret)
-    LOG ("Bookmarks data saved");
-}
-
-static void
 add_bookmark_to_table (EphyBookmark *bookmark, GHashTable *table)
 {
   gvdb_hash_table_insert_variant (table,
@@ -277,7 +264,7 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
       g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
 
       ephy_bookmarks_manager_save_to_file_async (self, NULL,
-                                                 (GAsyncReadyCallback)data_saved_cb,
+                                                 (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                                  NULL);
   }
 }
@@ -308,7 +295,7 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
                    NULL);
 
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
-                                             (GAsyncReadyCallback)data_saved_cb,
+                                             (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                              NULL);
 }
 
@@ -337,7 +324,7 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
 
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
-                                             (GAsyncReadyCallback)data_saved_cb,
+                                             (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                              NULL);
 }
 
@@ -573,4 +560,20 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
   gvdb_table_free (table);
   g_sequence_free (bookmarks);
   gvdb_table_free (root_table);
+}
+
+void
+ephy_bookmarks_manager_save_to_file_warn_on_error_cb (GObject      *object,
+                                                      GAsyncResult *result,
+                                                      gpointer      user_data)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (object);
+  gboolean ret;
+  GError *error;
+
+  ret = ephy_bookmarks_manager_save_to_file_finish (self, result, &error);
+  if (ret == FALSE) {
+    g_warning ("%s", error->message);
+    g_error_free (error);
+  }
 }
