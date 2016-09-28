@@ -1235,24 +1235,41 @@ decide_policy_cb (WebKitWebView           *web_view,
   return TRUE;
 }
 
+typedef struct {
+  EphyWebView *web_view;
+  WebKitPermissionRequest *request;
+} PermissionRequestData;
+
 static void
 decide_on_permission_request (GtkWidget               *info_bar,
                               int                      response,
-                              WebKitPermissionRequest *request)
+                              PermissionRequestData   *data)
 {
   gtk_widget_destroy (info_bar);
 
   switch (response) {
     case GTK_RESPONSE_YES:
-      webkit_permission_request_allow (request);
+      webkit_permission_request_allow (data->request);
       break;
     default:
-      webkit_permission_request_deny (request);
+      webkit_permission_request_deny (data->request);
       break;
   }
 
+  if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (data->request) && response != GTK_RESPONSE_NONE) {
+    const char *address = ephy_web_view_get_address (data->web_view);
+    if (ephy_embed_utils_address_has_web_scheme (address)) {
+      EphyHostsManager *hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
+      ephy_hosts_manager_set_notifications_permission_for_address (
+        hosts_manager,
+        address,
+        response == GTK_RESPONSE_YES ? EPHY_HOST_PERMISSION_ALLOW : EPHY_HOST_PERMISSION_DENY);
+    }
+  }
+
   gtk_widget_destroy (info_bar);
-  g_object_unref (request);
+  g_object_unref (data->request);
+  g_slice_free (PermissionRequestData, data);
 }
 
 static gboolean
@@ -1263,6 +1280,7 @@ permission_request_cb (WebKitWebView           *web_view,
   GtkWidget *action_area;
   GtkWidget *content_area;
   GtkWidget *label;
+  PermissionRequestData *data;
   char *message;
   char *host;
 
@@ -1270,11 +1288,30 @@ permission_request_cb (WebKitWebView           *web_view,
       !WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision))
     return FALSE;
 
-  /* Application mode implies being OK with notifications. */
-  if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision) &&
-      ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    webkit_permission_request_allow (decision);
-    return TRUE;
+  if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision)) {
+    /* Application mode implies being OK with notifications. */
+    if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+      webkit_permission_request_allow (decision);
+      return TRUE;
+    }
+
+    {
+      const char *address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
+      EphyHostsManager *hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
+      EphyHostPermission permission = ephy_hosts_manager_get_notifications_permission_for_address (hosts_manager, address);
+
+      switch (permission) {
+      case EPHY_HOST_PERMISSION_ALLOW:
+        webkit_permission_request_allow (decision);
+        return TRUE;
+      case EPHY_HOST_PERMISSION_DENY:
+        webkit_permission_request_deny (decision);
+        return TRUE;
+      case EPHY_HOST_PERMISSION_UNDECIDED:
+      default:
+        break;
+      }
+    }
   }
 
   info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
@@ -1312,9 +1349,13 @@ permission_request_cb (WebKitWebView           *web_view,
   gtk_widget_show_all (info_bar);
 
   /* Ref the decision, to keep it alive while we decide */
+  data = g_new (PermissionRequestData, 1);
+  data->web_view = EPHY_WEB_VIEW (web_view);
+  data->request = g_object_ref (decision);
+
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (decide_on_permission_request),
-                    g_object_ref (decision));
+                    data);
 
   if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision))
     ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
