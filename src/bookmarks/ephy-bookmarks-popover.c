@@ -92,18 +92,35 @@ bookmark_tag_removed_cb (EphyBookmark         *bookmark,
    * box */
   if (g_sequence_is_empty (ephy_bookmark_get_tags (bookmark))) {
     GtkWidget *row;
+    GList *children;
+    GList *l;
     const char *visible_stack_child;
+    gboolean exists;
 
-    row = create_bookmark_row (bookmark, popover);
-    gtk_container_add (GTK_CONTAINER (popover->tags_list_box), row);
+    exists = FALSE;
+    children = gtk_container_get_children (GTK_CONTAINER (popover->tags_list_box));
+    for (l = children; l != NULL; l = l->next) {
+      const char *url;
+
+      url = g_object_get_data (G_OBJECT(l->data), "url");
+      if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0) {
+        exists = TRUE;
+        break;
+      }
+    }
+
+    if (!exists) {
+      /* Disconnect the previous handler on the instance as create bookmark row
+       * connects another one */
+      g_signal_handlers_disconnect_by_data (bookmark, popover);
+      row = create_bookmark_row (bookmark, popover);
+      gtk_container_add (GTK_CONTAINER (popover->tags_list_box), row);
+    }
 
     /* If we are on tag detail list box, we remove the tag from it to reflect
      * the changes */
     visible_stack_child = gtk_stack_get_visible_child_name (GTK_STACK (popover->toplevel_stack));
     if (g_strcmp0 (visible_stack_child, "tag_detail") == 0) {
-      GList *children;
-      GList *l;
-
       children = gtk_container_get_children (GTK_CONTAINER (popover->tag_detail_list_box));
       for (l = children; l != NULL; l = l->next) {
         const char *url;
@@ -126,8 +143,6 @@ bookmark_tag_removed_cb (EphyBookmark         *bookmark,
       }
     }
   }
-
-  g_signal_stop_emission_by_name (bookmark, "tag-removed");
 }
 
 static GtkWidget *
