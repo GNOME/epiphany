@@ -44,8 +44,8 @@ G_DEFINE_TYPE_EXTENDED (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJ
 enum {
   BOOKMARK_ADDED,
   BOOKMARK_REMOVED,
-  TAG_ADDED,
-  TAG_REMOVED,
+  TAG_CREATED,
+  TAG_DELETED,
   LAST_SIGNAL
 };
 
@@ -160,8 +160,8 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_BOOKMARK);
 
-  signals[TAG_ADDED] =
-    g_signal_new ("tag-added",
+  signals[TAG_CREATED] =
+    g_signal_new ("tag-created",
                   EPHY_TYPE_BOOKMARKS_MANAGER,
                   G_SIGNAL_RUN_LAST,
                   0,
@@ -169,8 +169,8 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
                   G_TYPE_NONE, 1,
                   G_TYPE_STRING);
 
-  signals[TAG_REMOVED] =
-    g_signal_new ("tag-removed",
+  signals[TAG_DELETED] =
+    g_signal_new ("tag-deleted",
                   EPHY_TYPE_BOOKMARKS_MANAGER,
                   G_SIGNAL_RUN_LAST,
                   0,
@@ -350,7 +350,7 @@ ephy_bookmarks_manager_get_bookmark_by_url (EphyBookmarksManager *self,
 }
 
 void
-ephy_bookmarks_manager_add_tag (EphyBookmarksManager *self, const char *tag)
+ephy_bookmarks_manager_create_tag (EphyBookmarksManager *self, const char *tag)
 {
   GSequenceIter *tag_iter;
   GSequenceIter *prev_tag_iter;
@@ -367,12 +367,12 @@ ephy_bookmarks_manager_add_tag (EphyBookmarksManager *self, const char *tag)
   if (g_sequence_iter_is_end (prev_tag_iter)
       || g_strcmp0 (g_sequence_get (prev_tag_iter), tag) != 0) {
     g_sequence_insert_before (tag_iter, g_strdup (tag));
-    g_signal_emit (self, signals[TAG_ADDED], 0, tag);
+    g_signal_emit (self, signals[TAG_CREATED], 0, tag);
   }
 }
 
 void
-ephy_bookmarks_manager_remove_tag (EphyBookmarksManager *self, const char *tag)
+ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self, const char *tag)
 {
   GSequenceIter *iter = NULL;
   int position;
@@ -393,7 +393,7 @@ ephy_bookmarks_manager_remove_tag (EphyBookmarksManager *self, const char *tag)
   /* Also remove the tag from each bookmark if they have it */
   g_sequence_foreach (self->bookmarks, (GFunc)ephy_bookmark_remove_tag, (gpointer)tag);
 
-  g_signal_emit (self, signals[TAG_REMOVED], 0, position);
+  g_signal_emit (self, signals[TAG_DELETED], 0, position);
 }
 
 gboolean
@@ -515,7 +515,7 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
   /* Iterate over all keys (url's) in the table. */
   list = gvdb_table_get_names (table, &length);
   for (i = 0; i < length; i++)
-    ephy_bookmarks_manager_add_tag (self, list[i]);
+    ephy_bookmarks_manager_create_tag (self, list[i]);
 
   gvdb_table_free (table);
 

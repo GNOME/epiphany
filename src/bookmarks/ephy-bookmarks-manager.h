@@ -37,9 +37,9 @@ void         ephy_bookmarks_manager_remove_bookmark               (EphyBookmarks
 EphyBookmark *ephy_bookmarks_manager_get_bookmark_by_url          (EphyBookmarksManager *self,
                                                                    const char           *url);
 
-void         ephy_bookmarks_manager_add_tag                       (EphyBookmarksManager *self,
+void         ephy_bookmarks_manager_create_tag                    (EphyBookmarksManager *self,
                                                                    const char           *tag);
-void         ephy_bookmarks_manager_remove_tag                    (EphyBookmarksManager *self,
+void         ephy_bookmarks_manager_delete_tag                    (EphyBookmarksManager *self,
                                                                    const char           *tag);
 gboolean     ephy_bookmarks_manager_tag_exists                    (EphyBookmarksManager *self,
                                                                    const char           *tag);

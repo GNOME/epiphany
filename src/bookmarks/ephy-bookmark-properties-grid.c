@@ -127,7 +127,7 @@ ephy_bookmark_properties_grid_tag_widget_button_clicked_cb (EphyBookmarkProperti
   g_assert (GTK_IS_BOX (box));
   label = g_object_get_data (G_OBJECT (box), "label");
 
-  ephy_bookmarks_manager_remove_tag (self->manager, gtk_label_get_text (label));
+  ephy_bookmarks_manager_delete_tag (self->manager, gtk_label_get_text (label));
 
   flow_box_child = gtk_widget_get_parent (box);
   gtk_widget_destroy (flow_box_child);
@@ -213,8 +213,8 @@ ephy_bookmarks_properties_grid_actions_add_tag (GSimpleAction *action,
   buffer = gtk_entry_get_buffer (GTK_ENTRY (self->add_tag_entry));
   text = gtk_entry_buffer_get_text (buffer);
 
-  /* Add tag to the list of all tags. */
-  ephy_bookmarks_manager_add_tag (self->manager, text);
+  /* Create new tag with the given title */
+  ephy_bookmarks_manager_create_tag (self->manager, text);
 
   /* Add tag to the bookmark's list of tags. */
   ephy_bookmark_add_tag (self->bookmark, text);

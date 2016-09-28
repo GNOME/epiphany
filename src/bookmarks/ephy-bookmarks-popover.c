@@ -256,9 +256,9 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
 }
 
 static void
-ephy_bookmarks_popover_tag_added_cb (EphyBookmarksPopover *self,
-                                     const char           *tag,
-                                     EphyBookmarksManager *manager)
+ephy_bookmarks_popover_tag_created_cb (EphyBookmarksPopover *self,
+                                       const char           *tag,
+                                       EphyBookmarksManager *manager)
 {
   GtkWidget *tag_row;
 
@@ -271,7 +271,7 @@ ephy_bookmarks_popover_tag_added_cb (EphyBookmarksPopover *self,
 }
 
 static void
-ephy_bookmarks_popover_tag_removed_cb (EphyBookmarksPopover *self,
+ephy_bookmarks_popover_tag_deleted_cb (EphyBookmarksPopover *self,
                                        int                   position,
                                        EphyBookmarksManager *manager)
 {
@@ -505,11 +505,11 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   g_signal_connect_object (self->manager, "bookmark-removed",
                            G_CALLBACK (ephy_bookmarks_popover_bookmark_removed_cb),
                            self, G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->manager, "tag-added",
-                           G_CALLBACK (ephy_bookmarks_popover_tag_added_cb),
+  g_signal_connect_object (self->manager, "tag-created",
+                           G_CALLBACK (ephy_bookmarks_popover_tag_created_cb),
                            self, G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->manager, "tag-removed",
-                           G_CALLBACK (ephy_bookmarks_popover_tag_removed_cb),
+  g_signal_connect_object (self->manager, "tag-deleted",
+                           G_CALLBACK (ephy_bookmarks_popover_tag_deleted_cb),
                            self, G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->bookmarks_list_box, "row-activated",
