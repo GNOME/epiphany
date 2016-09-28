@@ -44,6 +44,8 @@ libephyembed_la_SOURCES = \
 	ephy-find-toolbar.c		\
 	ephy-find-toolbar.h		\
 	ephy-embed-prefs.c		\
+	ephy-hosts-manager.c	\
+	ephy-hosts-manager.h	\
 	ephy-web-view.c			\
 	ephy-web-view.h			\
 	ephy-web-extension-proxy.c	\

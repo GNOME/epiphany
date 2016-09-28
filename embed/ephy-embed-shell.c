@@ -54,6 +54,7 @@ typedef struct {
   EphyEmbedShellMode mode;
   WebKitUserContentManager *user_content;
   EphyDownloadsManager *downloads_manager;
+  EphyHostsManager *hosts_manager;
   EphyAboutHandler *about_handler;
   guint update_overview_timeout_id;
   guint hiding_overview_item;
@@ -102,6 +103,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->about_handler);
   g_clear_object (&priv->user_content);
   g_clear_object (&priv->downloads_manager);
+  g_clear_object (&priv->hosts_manager);
   g_clear_object (&priv->web_context);
   g_clear_object (&priv->dbus_server);
 
@@ -1233,4 +1235,14 @@ ephy_embed_shell_get_downloads_manager (EphyEmbedShell *shell)
   if (!priv->downloads_manager)
     priv->downloads_manager = EPHY_DOWNLOADS_MANAGER (g_object_new (EPHY_TYPE_DOWNLOADS_MANAGER, NULL));
   return priv->downloads_manager;
+}
+
+EphyHostsManager *
+ephy_embed_shell_get_hosts_manager (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  if (!priv->hosts_manager)
+    priv->hosts_manager = ephy_hosts_manager_new ();
+  return priv->hosts_manager;
 }
