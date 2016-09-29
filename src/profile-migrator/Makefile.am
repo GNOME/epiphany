@@ -19,6 +19,7 @@ ephy_profile_migrator_CPPFLAGS = \
 	$(GTK_CFLAGS)					\
 	$(LIBSECRET_CFLAGS)				\
 	$(LIBSOUP_CFLAGS)				\
+	$(LIBXML_CFLAGS)				\
 	$(WEBKIT2GTK_CFLAGS)
 
 ephy_profile_migrator_LDADD = \
@@ -28,6 +29,7 @@ ephy_profile_migrator_LDADD = \
 	$(GTK_LIBS)				\
 	$(LIBSECRET_LIBS)			\
 	$(LIBSOUP_LIBS)				\
+	$(LIBXML_LIBS)				\
 	$(WEBKIT2GTK_LIBS)
 
 ephy_profile_migrator_LDFLAGS = \
