@@ -44,7 +44,6 @@ ephy_notification_container_init (EphyNotificationContainer *self)
 
   gtk_widget_set_halign (GTK_WIDGET (self), GTK_ALIGN_CENTER);
   gtk_widget_set_valign (GTK_WIDGET (self), GTK_ALIGN_START);
-  gtk_widget_set_visible (GTK_WIDGET (self), TRUE);
 
   self->grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self->grid), GTK_ORIENTATION_VERTICAL);
