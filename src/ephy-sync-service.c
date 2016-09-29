@@ -1050,7 +1050,7 @@ download_bookmark_response_cb (SoupSession *session,
   /* We have to manually add the tags to the bookmarks manager. */
   for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (bookmark));
        !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
-    ephy_bookmarks_manager_add_tag (manager, g_sequence_get (iter));
+    ephy_bookmarks_manager_create_tag (manager, g_sequence_get (iter));
 
   g_object_unref (parser);
 
@@ -1204,7 +1204,7 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
         /* We have to manually add the tags to the bookmarks manager. */
         for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (remote));
              !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
-          ephy_bookmarks_manager_add_tag (manager, g_sequence_get (iter));
+          ephy_bookmarks_manager_create_tag (manager, g_sequence_get (iter));
 
         g_hash_table_add (marked, remote);
       }
@@ -1215,7 +1215,7 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
         for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (remote));
              !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
           ephy_bookmark_add_tag (local, g_sequence_get (iter));
-          ephy_bookmarks_manager_add_tag (manager, g_sequence_get (iter));
+          ephy_bookmarks_manager_create_tag (manager, g_sequence_get (iter));
         }
 
         ephy_bookmark_set_id (local, ephy_bookmark_get_id (remote));
@@ -1235,7 +1235,7 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
         /* We have to manually add the tags to the bookmarks manager. */
         for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (remote));
              !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
-          ephy_bookmarks_manager_add_tag (manager, g_sequence_get (iter));
+          ephy_bookmarks_manager_create_tag (manager, g_sequence_get (iter));
 
         g_hash_table_add (marked, remote);
       } else {
@@ -1320,7 +1320,7 @@ sync_bookmarks_response_cb (SoupSession *session,
       /* We have to manually add the tags to the bookmarks manager. */
       for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (remote));
            !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
-        ephy_bookmarks_manager_add_tag (manager, g_sequence_get (iter));
+        ephy_bookmarks_manager_create_tag (manager, g_sequence_get (iter));
     } else {
       if (ephy_bookmark_get_modification_time (remote) > ephy_bookmark_get_modification_time (local)) {
         ephy_bookmarks_manager_remove_bookmark (manager, local);
@@ -1329,7 +1329,7 @@ sync_bookmarks_response_cb (SoupSession *session,
         /* We have to manually add the tags to the bookmarks manager. */
         for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (remote));
              !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
-          ephy_bookmarks_manager_add_tag (manager, g_sequence_get (iter));
+          ephy_bookmarks_manager_create_tag (manager, g_sequence_get (iter));
       } else {
         if (ephy_bookmark_get_modification_time (local) > ephy_bookmark_get_modification_time (remote))
           ephy_sync_service_upload_bookmark (service, local, TRUE);
