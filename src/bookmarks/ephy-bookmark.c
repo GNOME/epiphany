@@ -127,7 +127,7 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
     g_param_spec_pointer ("tags",
                           "Tags",
                           "The bookmark's tags",
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_TIME_ADDED] =
     g_param_spec_int64 ("time-added",
