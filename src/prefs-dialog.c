@@ -361,6 +361,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
   ephy_sync_service_clear_tokens (service);
   ephy_sync_secret_forget_tokens ();
   ephy_sync_service_set_user_email (service, NULL);
+  ephy_sync_service_set_sync_time (service, 0);
 
   g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, "");
 
