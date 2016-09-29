@@ -17,6 +17,7 @@ ephy_profile_migrator_CPPFLAGS = \
 	-DLOCALEDIR=\"$(localedir)\"			\
 	$(GLIB_CFLAGS)					\
 	$(GTK_CFLAGS)					\
+	$(JSON_GLIB_CFLAGS)				\
 	$(LIBSECRET_CFLAGS)				\
 	$(LIBSOUP_CFLAGS)				\
 	$(LIBXML_CFLAGS)				\
@@ -27,6 +28,7 @@ ephy_profile_migrator_LDADD = \
 	$(top_builddir)/src/libephymain.la	\
 	$(GLIB_LIBS)				\
 	$(GTK_LIBS)				\
+	$(JSON_GLIB_LIBS)			\
 	$(LIBSECRET_LIBS)			\
 	$(LIBSOUP_LIBS)				\
 	$(LIBXML_LIBS)				\

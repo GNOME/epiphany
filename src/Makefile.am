@@ -106,7 +106,7 @@ libephymain_la_LIBADD = \
 	$(GIO_LIBS)		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
-	$(JSON_GLIB_CFLAGS)	\
+	$(JSON_GLIB_LIBS)	\
 	$(LIBNOTIFY_LIBS)	\
 	$(LIBSECRET_LIBS)	\
 	$(LIBSOUP_LIBS)		\
@@ -176,6 +176,7 @@ epiphany_CPPFLAGS = \
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(GLIB_CFLAGS)			\
 	$(GTK_CFLAGS)			\
+	$(JSON_GLIB_CFLAGS)		\
 	$(LIBNOTIFY_CFLAGS)		\
 	$(LIBXML_CFLAGS)		\
 	$(WEBKIT2GTK_CFLAGS)
@@ -185,6 +186,7 @@ epiphany_LDADD = \
 	libephymain.la		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
+	$(JSON_GLIB_LIBS)	\
 	$(LIBNOTIFY_LIBS)	\
 	$(LIBXML_LIBS)		\
 	$(WEBKIT2GTK_LIBS)

@@ -29,6 +29,7 @@ epiphany_search_provider_CPPFLAGS = \
 	$(GIO_CFLAGS)			\
 	$(GLIB_CFLAGS)			\
 	$(GTK_CFLAGS)			\
+	$(JSON_GLIB_CFLAGS)		\
 	$(LIBSECRET_CFLAGS)		\
 	$(LIBSOUP_CFLAGS)		\
 	$(LIBXML_CFLAGS)		\
@@ -40,6 +41,7 @@ epiphany_search_provider_LDADD = \
 	$(GIO_LIBS)		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
+	$(JSON_GLIB_LIBS)	\
 	$(LIBSECRET_LIBS)	\
 	$(LIBSOUP_LIBS)		\
 	$(LIBXML_LIBS)		\
