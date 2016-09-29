@@ -30,6 +30,7 @@ libephybookmarks_la_CPPFLAGS = \
 	-DLOCALEDIR=\"$(localedir)\"			\
 	$(GLIB_CFLAGS)					\
 	$(GTK_CFLAGS)					\
+	$(JSON_GLIB_CFLAGS)				\
 	$(LIBSECRET_CFLAGS)				\
 	$(LIBSOUP_CFLAGS)				\
 	$(WEBKIT2GTK_CFLAGS)
@@ -40,6 +41,7 @@ libephybookmarks_la_LIBADD = \
 	$(top_builddir)/lib/widgets/libephywidgets.la	\
 	$(GLIB_LIBS)					\
 	$(GTK_LIBS)					\
+	$(JSON_GLIB_LIBS)				\
 	$(LIBSECRET_LIBS)				\
 	$(LIBSOUP_LIBS)					\
 	$(WEBKIT2GTK_LIBS)
