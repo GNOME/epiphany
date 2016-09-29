@@ -5,13 +5,13 @@ AM_CPPFLAGS = \
 noinst_LTLIBRARIES = libgvdb.la
 
 libgvdb_la_SOURCES = \
-    gvdb-builder.c \
-    gvdb-reader.c
+    gvdb/gvdb-builder.c \
+    gvdb/gvdb-reader.c
 
 noinst_HEADERS = \
-    gvdb-builder.h \
-    gvdb-format.h \
-    gvdb-reader.h
+    gvdb/gvdb-builder.h \
+    gvdb/gvdb-format.h \
+    gvdb/gvdb-reader.h
 
 libgvdb_la_LIBADD = \
     $(BUILD_LIBS) \
