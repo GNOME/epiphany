@@ -8,6 +8,8 @@
   <schema id="org.gnome.Epiphany.host" gettext-domain="">
     <key name="notifications-permission" enum="org.gnome.Epiphany.host.permissions">
       <default>"undecided"</default>
+      <summary>Decision to apply when notification permission is requested for this host</summary>
+      <description>This option is used to save whether a given host has been given permission to show notifications. The 'undecided' default means the browser needs to ask the user for permission, while 'allow' and 'deny' tell it to automatically make the decision upon request.</description>
     </key>
   </schema>
 </schemalist>
