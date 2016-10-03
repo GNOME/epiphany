@@ -199,11 +199,11 @@ html.epiphany-html {
 /* about:overview */
 #overview {
     padding: 0 5px;
-    max-width: 1200px;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
     bottom: 0;
-    max-height: 540px;
+    max-height: 615px;
     margin: auto;
     position: absolute;
     top: 0;
@@ -213,12 +213,12 @@ html.epiphany-html {
 }
 
 .overview-item {
-    width: 180px;
-    height: 220px;
+    width: 182px;
+    height: 185px;
     display: inline-block;
     vertical-align: top;
     overflow: hidden;
-    padding: 15px;
+    margin: 20px 20px 0 20px;
     outline: 0;
     position: relative;
     transition: 0;
@@ -228,9 +228,9 @@ html.epiphany-html {
 
 .overview-title {
     width: 180px;
-    height: 50px;
+    height: 40px;
     display: inline-block;
-    padding: 5px 0;
+    margin-top: 10px;
     overflow: hidden;
     font-family: Cantarell, sans-serif;
     font-size: 11pt;
@@ -263,8 +263,8 @@ html.epiphany-html {
 .overview-close-button {
     -webkit-transition: all 250ms;
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 5px;
+    right: 5px;
     opacity: 0;
     z-index: 5;
     color: #888;
@@ -295,7 +295,7 @@ html.epiphany-html {
 .overview-removed.overview-item {
     transition: all 0.75s ease-in-out;
     width: 0;
-    margin: 15px 0;
+    margin: 0;
     opacity: 0;
     padding: 0;
 }
