@@ -463,7 +463,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                           "      }\n"
                           "    }\n"
                           "    function removeFromOverview(elem, event) {\n"
-                          "      var listItemNode = elem.parentElement;\n"
+                          "      var listItemNode = elem;\n"
                           "      event.preventDefault();\n"
                           "      listItemNode.className +=\" overview-removed \";\n"
                           "      window.webkit.messageHandlers.overview.postMessage(elem.href);\n"
