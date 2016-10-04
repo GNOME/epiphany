@@ -28,7 +28,7 @@ G_DECLARE_FINAL_TYPE (EphyAboutHandler, ephy_about_handler, EPHY, ABOUT_HANDLER,
 
 #define EPHY_ABOUT_SCHEME "ephy-about"
 #define EPHY_ABOUT_SCHEME_LEN 10
-#define EPHY_ABOUT_OVERVIEW_MAX_ITEMS 10
+#define EPHY_ABOUT_OVERVIEW_MAX_ITEMS 9
 
 EphyAboutHandler *ephy_about_handler_new            (void);
 void              ephy_about_handler_handle_request (EphyAboutHandler       *handler,
