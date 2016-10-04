@@ -924,13 +924,6 @@ ephy_migrator (void)
   for (i = latest; i < EPHY_PROFILE_MIGRATION_VERSION; i++) {
     LOG ("Running migrator: %d of %d", i + 1, EPHY_PROFILE_MIGRATION_VERSION);
 
-    /* No need to run the password migration twice in a row. It
-       appears twice in the list for the benefit of people that were
-       using the development snapshots, since an early version didn't
-       migrate all passwords correctly. */
-    if (i == 1)
-      continue;
-
     m = migrators[i];
     m ();
   }
