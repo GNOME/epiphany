@@ -59,6 +59,8 @@ ephy_bookmark_set_property (GObject      *object,
 
   switch (prop_id) {
     case PROP_TAGS:
+      if (self->tags != NULL)
+        g_sequence_free (self->tags);
       self->tags = g_value_get_pointer (value);
       break;
     case PROP_TIME_ADDED:
