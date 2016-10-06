@@ -379,20 +379,26 @@ fill_form_cb (const char *username,
               gpointer    user_data)
 {
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (user_data);
-  WebKitDOMNode *username_node;
+  WebKitDOMHTMLInputElement *username_node;
+  WebKitDOMHTMLInputElement *password_node;
 
   if (username == NULL && password == NULL) {
     LOG ("No result");
     return;
   }
 
-  username_node = ephy_embed_form_auth_get_username_node (form_auth);
+  username_node = WEBKIT_DOM_HTML_INPUT_ELEMENT (ephy_embed_form_auth_get_username_node (form_auth));
+  password_node = WEBKIT_DOM_HTML_INPUT_ELEMENT (ephy_embed_form_auth_get_password_node (form_auth));
 
   LOG ("Found: user %s pass (hidden)", username_node ? username : "(none)");
-  if (username_node)
+  if (username_node) {
     g_object_set (username_node, "value", username, NULL);
-  g_object_set (ephy_embed_form_auth_get_password_node (form_auth),
-                "value", password, NULL);
+    webkit_dom_html_input_element_set_auto_filled (username_node, TRUE);
+    webkit_dom_html_input_element_set_editing_value (username_node, username);
+  }
+  g_object_set (password_node, "value", password, NULL);
+  webkit_dom_html_input_element_set_auto_filled (password_node, TRUE);
+  webkit_dom_html_input_element_set_editing_value (password_node, password);
 }
 
 static gint
