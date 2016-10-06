@@ -22,6 +22,8 @@ libephymisc_la_SOURCES = \
 	ephy-form-auth-data.h			\
 	ephy-gui.c				\
 	ephy-gui.h				\
+	ephy-hosts-manager.c			\
+	ephy-hosts-manager.h			\
 	ephy-initial-state.c			\
 	ephy-initial-state.h			\
 	ephy-langs.c				\

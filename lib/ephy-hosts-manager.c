@@ -19,7 +19,6 @@
 #include "config.h"
 #include "ephy-hosts-manager.h"
 
-#include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-string.h"
 
@@ -149,4 +148,21 @@ ephy_hosts_manager_set_notifications_permission_for_address (EphyHostsManager *m
 {
   GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
   g_settings_set_enum (settings, "notifications-permission", permission);
+}
+
+EphyHostPermission
+ephy_hosts_manager_get_save_password_permission_for_address (EphyHostsManager *manager,
+                                                             const char *address)
+{
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  return g_settings_get_enum (settings, "save-password-permission");
+}
+
+void
+ephy_hosts_manager_set_save_password_permission_for_address (EphyHostsManager *manager,
+                                                             const char *address,
+                                                             EphyHostPermission permission)
+{
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  g_settings_set_enum (settings, "save-password-permission", permission);
 }

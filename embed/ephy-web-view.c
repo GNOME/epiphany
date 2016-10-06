@@ -514,7 +514,8 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
 
   LOG ("Going to show infobar about %s", webkit_web_view_get_uri (WEBKIT_WEB_VIEW (web_view)));
 
-  info_bar = gtk_info_bar_new_with_buttons (_("_Don’t Save"), GTK_RESPONSE_CLOSE,
+  info_bar = gtk_info_bar_new_with_buttons (_("Not No_w"), GTK_RESPONSE_CLOSE,
+                                            _("_Never Save"), GTK_RESPONSE_REJECT,
                                             _("_Save"), GTK_RESPONSE_YES,
                                             NULL);
 
@@ -684,6 +685,15 @@ form_auth_data_save_confirmation_response (GtkInfoBar          *info_bar,
     ephy_web_extension_proxy_form_auth_data_save_confirmation_response (data->web_view->web_extension,
                                                                         data->request_id,
                                                                         response_id == GTK_RESPONSE_YES);
+  }
+
+  if (response_id == GTK_RESPONSE_REJECT) {
+    EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+    EphyHostsManager *manager = ephy_embed_shell_get_hosts_manager (shell);
+
+    ephy_hosts_manager_set_save_password_permission_for_address (manager,
+                                                                 ephy_web_view_get_address (data->web_view),
+                                                                 EPHY_HOST_PERMISSION_DENY);
   }
 
   g_slice_free (FormAuthRequestData, data);

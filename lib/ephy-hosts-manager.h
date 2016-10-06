@@ -39,6 +39,12 @@ EphyHostPermission      ephy_hosts_manager_get_notifications_permission_for_addr
 void                    ephy_hosts_manager_set_notifications_permission_for_address (EphyHostsManager    *manager,
                                                                                      const char          *address,
                                                                                      EphyHostPermission   permission);
+EphyHostPermission      ephy_hosts_manager_get_save_password_permission_for_address (EphyHostsManager    *manager,
+                                                                                     const char          *address);
+void                    ephy_hosts_manager_set_save_password_permission_for_address (EphyHostsManager    *manager,
+                                                                                     const char          *address,
+                                                                                     EphyHostPermission   permission);
+
 
 G_END_DECLS
 

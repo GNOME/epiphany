@@ -24,6 +24,7 @@
 #include "ephy-embed-form-auth.h"
 #include "ephy-file-helpers.h"
 #include "ephy-form-auth-data.h"
+#include "ephy-hosts-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-web-dom-utils.h"
@@ -55,6 +56,7 @@ struct _EphyWebExtension {
   EphyFormAuthDataCache *form_auth_data_cache;
   GHashTable *form_auth_data_save_requests;
   EphyWebOverviewModel *overview_model;
+  EphyHostsManager *hosts_manager;
 };
 
 static const char introspection_xml[] =
@@ -276,6 +278,24 @@ should_store_cb (const char *username,
                  gpointer    user_data)
 {
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (user_data);
+  EphyWebExtension *web_extension;
+  EphyHostPermission permission;
+  SoupURI *uri;
+  char *uri_string;
+
+  uri = ephy_embed_form_auth_get_uri (form_auth);
+  uri_string = soup_uri_to_string (uri, FALSE);
+  if (!uri_string)
+    return;
+
+  web_extension = ephy_web_extension_get ();
+  permission = ephy_hosts_manager_get_save_password_permission_for_address (web_extension->hosts_manager,
+                                                                            uri_string);
+
+  if (permission == EPHY_HOST_PERMISSION_DENY) {
+    LOG ("User/password storage permission previously denied. Not asking about storing.");
+    goto out;
+  }
 
   if (password) {
     WebKitDOMNode *username_node;
@@ -293,6 +313,9 @@ should_store_cb (const char *username,
     if (g_strcmp0 (username, username_field_value) == 0 &&
         g_str_equal (password, password_field_value)) {
       LOG ("User/password already stored. Not asking about storing.");
+    } else if (permission == EPHY_HOST_PERMISSION_ALLOW) {
+      LOG ("User/password not yet stored. Storing.");
+      store_password (form_auth);
     } else {
       LOG ("User/password not yet stored. Asking about storing.");
       request_decision_on_storing (g_object_ref (form_auth));
@@ -300,10 +323,16 @@ should_store_cb (const char *username,
 
     g_free (username_field_value);
     g_free (password_field_value);
+  } else if (permission == EPHY_HOST_PERMISSION_ALLOW) {
+    LOG ("No result on query; storing.");
+    store_password (form_auth);
   } else {
     LOG ("No result on query; asking whether we should store.");
     request_decision_on_storing (g_object_ref (form_auth));
   }
+
+out:
+  g_free (uri_string);
 }
 
 static gboolean
@@ -1285,6 +1314,8 @@ ephy_web_extension_dispose (GObject *object)
 
   g_clear_object (&extension->uri_tester);
   g_clear_object (&extension->overview_model);
+  g_clear_object (&extension->hosts_manager);
+
   g_clear_pointer (&extension->form_auth_data_cache,
                    ephy_form_auth_data_cache_free);
 
@@ -1401,6 +1432,8 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
   extension->uri_tester = ephy_uri_tester_new (dot_dir);
   if (!is_private_profile)
     extension->form_auth_data_cache = ephy_form_auth_data_cache_new ();
+
+  extension->hosts_manager = ephy_hosts_manager_new ();
 
   g_signal_connect_swapped (extension->extension, "page-created",
                             G_CALLBACK (ephy_web_extension_page_created_cb),
