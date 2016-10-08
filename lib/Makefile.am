@@ -3,8 +3,6 @@ SUBDIRS = widgets egg history
 pkglib_LTLIBRARIES = libephymisc.la
 
 TYPES_H_FILES = \
-	ephy-initial-state.h			\
-	ephy-node.h				\
 	ephy-security-levels.h
 
 libephymisc_la_SOURCES = \
@@ -24,15 +22,8 @@ libephymisc_la_SOURCES = \
 	ephy-gui.h				\
 	ephy-hosts-manager.c			\
 	ephy-hosts-manager.h			\
-	ephy-initial-state.c			\
-	ephy-initial-state.h			\
 	ephy-langs.c				\
 	ephy-langs.h				\
-	ephy-node.c				\
-	ephy-node.h				\
-	ephy-node-common.h			\
-	ephy-node-db.c				\
-	ephy-node-db.h				\
 	ephy-prefs.h				\
 	ephy-profile-utils.c			\
 	ephy-profile-utils.h			\

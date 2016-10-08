@@ -36,7 +36,6 @@
 #include "ephy-find-toolbar.h"
 #include "ephy-gui.h"
 #include "ephy-header-bar.h"
-#include "ephy-initial-state.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
 #include "ephy-notebook.h"
@@ -150,7 +149,6 @@ struct _EphyWindow {
   EphyLocationController *location_controller;
 
   guint closing : 1;
-  guint has_size : 1;
   guint fullscreen_mode : 1;
   guint is_popup : 1;
   guint present_on_insert : 1;
@@ -3043,29 +3041,6 @@ ephy_window_constructed (GObject *object)
 }
 
 static void
-ephy_window_show (GtkWidget *widget)
-{
-  EphyWindow *window = EPHY_WINDOW (widget);
-
-  if (!window->has_size) {
-    EphyEmbed *embed;
-    int flags = 0;
-
-    embed = window->active_embed;
-    g_return_if_fail (EPHY_IS_EMBED (embed));
-
-    if (!window->is_popup)
-      flags = EPHY_INITIAL_STATE_WINDOW_SAVE_SIZE;
-
-    ephy_initial_state_add_window (widget, "main_window", 600, 500,
-                                   TRUE, flags);
-    window->has_size = TRUE;
-  }
-
-  GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
-}
-
-static void
 ephy_window_class_init (EphyWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -3077,7 +3052,6 @@ ephy_window_class_init (EphyWindowClass *klass)
   object_class->get_property = ephy_window_get_property;
   object_class->set_property = ephy_window_set_property;
 
-  widget_class->show = ephy_window_show;
   widget_class->key_press_event = ephy_window_key_press_event;
   widget_class->window_state_event = ephy_window_state_event;
   widget_class->delete_event = ephy_window_delete_event;

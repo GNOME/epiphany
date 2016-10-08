@@ -24,7 +24,6 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-initial-state.h"
 #include "ephy-private.h"
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
@@ -436,7 +435,6 @@ main (int   argc,
   if (notify_is_initted ())
     notify_uninit ();
 
-  ephy_initial_state_save ();
   ephy_settings_shutdown ();
   ephy_file_helpers_shutdown ();
   xmlCleanupParser ();

@@ -21,8 +21,6 @@
 #include "config.h"
 #include "ephy-dnd.h"
 
-#include "ephy-node.h"
-
 #include <gtk/gtk.h>
 #include <string.h>
 
