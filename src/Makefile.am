@@ -57,14 +57,6 @@ libephymain_la_SOURCES = \
 	ephy-session.h				\
 	ephy-shell.c				\
 	ephy-shell.h				\
-	ephy-sync-crypto.c			\
-	ephy-sync-crypto.h			\
-	ephy-sync-secret.c			\
-	ephy-sync-secret.h			\
-	ephy-sync-service.c			\
-	ephy-sync-service.h			\
-	ephy-sync-utils.c			\
-	ephy-sync-utils.h			\
 	ephy-window.c				\
 	ephy-window.h				\
 	languages.h				\
@@ -74,6 +66,14 @@ libephymain_la_SOURCES = \
 	popup-commands.h			\
 	prefs-dialog.c				\
 	prefs-dialog.h				\
+	sync/ephy-sync-crypto.c			\
+	sync/ephy-sync-crypto.h			\
+	sync/ephy-sync-secret.c			\
+	sync/ephy-sync-secret.h			\
+	sync/ephy-sync-service.c		\
+	sync/ephy-sync-service.h		\
+	sync/ephy-sync-utils.c			\
+	sync/ephy-sync-utils.h			\
 	window-commands.c			\
 	window-commands.h
 
@@ -91,6 +91,7 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/widgets   	\
 	-I$(top_srcdir)/src/bookmarks	\
+	-I$(top_srcdir)/src/sync	\
 	-DLOCALEDIR=\"$(localedir)\"	\
 	-DPKGDATADIR=\"$(pkgdatadir)\"	\
 	$(GDK_CFLAGS)			\
@@ -186,6 +187,7 @@ epiphany_CPPFLAGS = \
 	-I$(top_srcdir)/lib/widgets	\
 	-I$(top_builddir)/lib/widgets	\
 	-I$(top_srcdir)/src/bookmarks	\
+	-I$(top_srcdir)/src/sync	\
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(GLIB_CFLAGS)			\
