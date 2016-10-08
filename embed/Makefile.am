@@ -40,8 +40,6 @@ libephyembed_la_SOURCES = \
 	ephy-file-monitor.h		\
 	ephy-find-toolbar.c		\
 	ephy-find-toolbar.h		\
-	ephy-hosts-manager.c		\
-	ephy-hosts-manager.h		\
 	ephy-notification-container.c	\
 	ephy-notification-container.h	\
 	ephy-view-source-handler.c	\
