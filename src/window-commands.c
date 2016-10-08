@@ -938,7 +938,6 @@ window_cmd_save_as_application (GSimpleAction *action,
   GtkWidget *dialog, *box, *image, *entry, *content_area;
   GtkWidget *label;
   GtkWidget *spinner;
-  GtkWidget *alignment;
   EphyWebView *view;
   EphyApplicationDialogData *data;
   GdkPixbuf *pixbuf;
@@ -976,16 +975,10 @@ window_cmd_save_as_application (GSimpleAction *action,
   gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
   g_object_unref (pixbuf);
 
-  alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
-  gtk_widget_set_no_show_all (alignment, TRUE);
-  gtk_widget_set_size_request (alignment, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
-  gtk_container_add (GTK_CONTAINER (box), alignment);
-  gtk_widget_show (alignment);
-
   spinner = gtk_spinner_new ();
-  gtk_widget_set_size_request (spinner, 22, 22);
+  gtk_widget_set_size_request (spinner, DEFAULT_ICON_SIZE, DEFAULT_ICON_SIZE);
   gtk_spinner_start (GTK_SPINNER (spinner));
-  gtk_container_add (GTK_CONTAINER (alignment), spinner);
+  gtk_container_add (GTK_CONTAINER (box), spinner);
   gtk_widget_show (spinner);
 
   entry = gtk_entry_new ();
@@ -1005,7 +998,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   data->image = image;
   data->entry = entry;
   data->spinner = spinner;
-  data->spinner_box = alignment;
+  data->spinner_box = box;
 
   g_object_bind_property (image, "visible", data->spinner_box, "visible", G_BINDING_INVERT_BOOLEAN);
 
