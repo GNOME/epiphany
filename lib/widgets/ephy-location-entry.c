@@ -28,7 +28,6 @@
 #include "ephy-widgets-type-builtins.h"
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
-#include "ephy-dnd.h"
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
