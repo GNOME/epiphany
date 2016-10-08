@@ -24,6 +24,7 @@
 #include "ephy-bookmark.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
+#include "ephy-embed-prefs.h"
 #include "ephy-password-notification.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -608,9 +609,15 @@ static void
 ephy_sync_service_init (EphySyncService *self)
 {
   char *email;
+  const char *user_agent;
+  WebKitSettings *settings;
 
   self->session = soup_session_new ();
   self->storage_queue = g_queue_new ();
+
+  settings = ephy_embed_prefs_get_settings ();
+  user_agent = webkit_settings_get_user_agent (settings);
+  g_object_set (self->session, "user-agent", user_agent, NULL);
 
   email = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER);
 
