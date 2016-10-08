@@ -40,7 +40,6 @@
 #define TAB_WIDTH_N_CHARS 15
 
 #define AFTER_ALL_TABS -1
-#define NOT_IN_APP_WINDOWS -2
 
 #define INSANE_NUMBER_OF_URLS 20
 
@@ -158,62 +157,12 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
-
-/* FIXME remove when gtknotebook's func for this becomes public, bug #.... */
-static EphyNotebook *
-find_notebook_at_pointer (GdkDisplay *display, gint abs_x, gint abs_y)
-{
-  GdkWindow *win_at_pointer, *toplevel_win;
-  gpointer toplevel = NULL;
-  gint x, y;
-
-  win_at_pointer = gdk_device_get_window_at_position (
-    gdk_device_manager_get_client_pointer (
-      gdk_display_get_device_manager (display)),
-    &x, &y);
-  if (win_at_pointer == NULL) {
-    /* We are outside all windows containing a notebook */
-    return NULL;
-  }
-
-  toplevel_win = gdk_window_get_toplevel (win_at_pointer);
-
-  /* get the GtkWidget which owns the toplevel GdkWindow */
-  gdk_window_get_user_data (toplevel_win, &toplevel);
-
-  /* toplevel should be an EphyWindow */
-  if (toplevel != NULL && EPHY_IS_WINDOW (toplevel)) {
-    return EPHY_NOTEBOOK (ephy_window_get_notebook
-                            (EPHY_WINDOW (toplevel)));
-  }
-
-  return NULL;
-}
-
-static gboolean
-is_in_notebook_window (EphyNotebook *notebook,
-                       gint abs_x, gint abs_y)
-{
-  EphyNotebook *nb_at_pointer;
-
-  nb_at_pointer = find_notebook_at_pointer (gtk_widget_get_display (GTK_WIDGET (notebook)),
-                                            abs_x, abs_y);
-
-  return nb_at_pointer == notebook;
-}
-
 static gint
 find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
 {
   int page_num = 0;
   GtkNotebook *nb = GTK_NOTEBOOK (notebook);
   GtkWidget *page;
-
-  /* For some reason unfullscreen + quick click can
-     cause a wrong click event to be reported to the tab */
-  if (!is_in_notebook_window (notebook, abs_x, abs_y)) {
-    return NOT_IN_APP_WINDOWS;
-  }
 
   while ((page = gtk_notebook_get_nth_page (nb, page_num))) {
     GtkWidget *tab;
