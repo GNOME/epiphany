@@ -72,8 +72,6 @@ libephywidgets_la_SOURCES = \
 	ephy-location-entry.h			\
 	ephy-middle-clickable-button.c		\
 	ephy-middle-clickable-button.h		\
-	ephy-node-view.c			\
-	ephy-node-view.h			\
 	ephy-password-notification.c		\
 	ephy-password-notification.h		\
 	ephy-security-popover.c			\
@@ -82,10 +80,6 @@ libephywidgets_la_SOURCES = \
 	ephy-title-box.h			\
 	ephy-title-widget.c			\
 	ephy-title-widget.h			\
-	ephy-tree-model-node.c			\
-	ephy-tree-model-node.h			\
-	ephy-tree-model-sort.c			\
-	ephy-tree-model-sort.h			\
 	nautilus-floating-bar.c			\
 	nautilus-floating-bar.h
 

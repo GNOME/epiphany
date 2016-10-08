@@ -31,8 +31,6 @@ libephymisc_la_SOURCES = \
 	ephy-node.c				\
 	ephy-node.h				\
 	ephy-node-common.h			\
-	ephy-node-filter.c			\
-	ephy-node-filter.h			\
 	ephy-node-db.c				\
 	ephy-node-db.h				\
 	ephy-prefs.h				\
