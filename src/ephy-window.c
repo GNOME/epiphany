@@ -1277,7 +1277,7 @@ static WebKitContextMenuItem *
 webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
 {
 #pragma GCC diagnostic push
-#pragma GCC dignostic ignored "-Wdeprecated-declarations"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   GtkAction *gtk_action;
   WebKitContextMenuItem *item;
   GActionData *action_data;
