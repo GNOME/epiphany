@@ -548,11 +548,9 @@ tab_label_style_set_cb (GtkWidget *hbox,
   char_width = pango_font_metrics_get_approximate_digit_width (metrics);
   pango_font_metrics_unref (metrics);
 
-  gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (hbox),
-                                     GTK_ICON_SIZE_MENU, &w, &h);
+  gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
 
-  gtk_widget_set_size_request
-    (hbox, TAB_WIDTH_N_CHARS * PANGO_PIXELS (char_width) + 2 * w, -1);
+  gtk_widget_set_size_request (hbox, TAB_WIDTH_N_CHARS * PANGO_PIXELS (char_width) + 2 * w, -1);
 
   button = g_object_get_data (G_OBJECT (hbox), "close-button");
   gtk_widget_set_size_request (button, w + 2, h + 2);
@@ -588,7 +586,6 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
   label = gtk_label_new (NULL);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
-  gtk_misc_set_padding (GTK_MISC (label), 0, 0);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
   gtk_widget_show (label);
 
@@ -602,7 +599,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
   gtk_button_set_relief (GTK_BUTTON (close_button),
                          GTK_RELIEF_NONE);
   /* don't allow focus on the close button */
-  gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
+  gtk_widget_set_focus_on_click (close_button, FALSE);
 
   gtk_widget_set_name (close_button, "ephy-tab-close-button");
 
