@@ -548,9 +548,12 @@ get_selected_bgcolor (void)
   GdkRGBA color;
   gtk_style_context_set_state (get_entry_style_context (),
                                GTK_STATE_FLAG_SELECTED);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   gtk_style_context_get_background_color (get_entry_style_context (),
                                           GTK_STATE_FLAG_SELECTED,
                                           &color);
+#pragma GCC diagnostic pop
   return gdk_rgba_to_string (&color);
 }
 
@@ -572,9 +575,12 @@ get_bgcolor (void)
   GdkRGBA color;
   gtk_style_context_set_state (get_entry_style_context (),
                                GTK_STATE_FLAG_NORMAL);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   gtk_style_context_get_background_color (get_entry_style_context (),
                                           GTK_STATE_FLAG_NORMAL,
                                           &color);
+#pragma GCC diagnostic pop
   return gdk_rgba_to_string (&color);
 }
 
