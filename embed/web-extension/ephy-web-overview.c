@@ -352,14 +352,14 @@ ephy_web_overview_document_loaded (WebKitWebPage   *web_page,
                                    EphyWebOverview *overview)
 {
   WebKitDOMDocument *document;
-  WebKitDOMNodeList *nodes;
+  WebKitDOMHTMLCollection *nodes;
   int i, n_nodes;
 
   document = webkit_web_page_get_dom_document (web_page);
-  nodes = webkit_dom_document_get_elements_by_tag_name (document, "a");
-  n_nodes = webkit_dom_node_list_get_length (nodes);
+  nodes = webkit_dom_document_get_elements_by_tag_name_as_html_collection (document, "a");
+  n_nodes = webkit_dom_html_collection_get_length (nodes);
   for (i = 0; i < n_nodes; i++) {
-    WebKitDOMElement *element = WEBKIT_DOM_ELEMENT (webkit_dom_node_list_item (nodes, i));
+    WebKitDOMElement *element = WEBKIT_DOM_ELEMENT (webkit_dom_html_collection_item (nodes, i));
     char *class;
 
     class = webkit_dom_element_get_class_name (element);
