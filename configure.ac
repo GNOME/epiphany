@@ -44,9 +44,7 @@ AC_CONFIG_SRCDIR([configure.ac])
 
 AX_CHECK_ENABLE_DEBUG([yes])
 AX_CODE_COVERAGE
-AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS], [$ax_is_release], [],
-	dnl TODO: Remove! These warnings should be fixed, not silenced.
-	[-Wno-deprecated-declarations])
+AX_COMPILER_FLAGS
 
 AX_GENERATE_CHANGELOG
 AC_SUBST([EPIPHANY_CHANGELOG_START],[epiphany_changelog_start])
