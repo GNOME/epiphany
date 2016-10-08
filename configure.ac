@@ -212,7 +212,6 @@ lib/widgets/Makefile
 embed/Makefile
 embed/web-extension/Makefile
 src/Makefile
-src/bookmarks/Makefile
 src/profile-migrator/Makefile
 src/search-provider/Makefile
 po/Makefile.in

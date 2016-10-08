@@ -1,4 +1,4 @@
-SUBDIRS = bookmarks . search-provider profile-migrator
+SUBDIRS = . search-provider profile-migrator
 
 pkglib_LTLIBRARIES = libephymain.la
 
@@ -9,9 +9,10 @@ dist_noinst_DATA = \
 	$(RESOURCE_FILES)
 
 TYPES_H_FILES = \
-	ephy-link.h				\
-	ephy-session.h				\
-	ephy-shell.h				\
+	bookmarks/ephy-bookmark-properties-grid.h	\
+	ephy-link.h					\
+	ephy-session.h					\
+	ephy-shell.h					\
 	ephy-window.h
 
 libephymain_la_SOURCES = \
@@ -21,6 +22,18 @@ libephymain_la_SOURCES = \
 	cookies-dialog.h			\
 	ephy-action-helper.c			\
 	ephy-action-helper.h			\
+	bookmarks/ephy-add-bookmark-popover.c	\
+	bookmarks/ephy-add-bookmark-popover.h	\
+	bookmarks/ephy-bookmark.c		\
+	bookmarks/ephy-bookmark.h		\
+	bookmarks/ephy-bookmark-properties-grid.c	\
+	bookmarks/ephy-bookmark-properties-grid.h	\
+	bookmarks/ephy-bookmark-row.c		\
+	bookmarks/ephy-bookmark-row.h		\
+	bookmarks/ephy-bookmarks-manager.c	\
+	bookmarks/ephy-bookmarks-manager.h	\
+	bookmarks/ephy-bookmarks-popover.c 	\
+	bookmarks/ephy-bookmarks-popover.h	\
 	ephy-completion-model.c			\
 	ephy-completion-model.h			\
 	ephy-encoding-dialog.c			\
@@ -71,13 +84,13 @@ libephymain_la_CPPFLAGS = \
 	-I$(top_builddir)/embed		\
 	-I$(top_builddir)/lib		\
 	-I$(top_builddir)/lib/widgets	\
-	-I$(top_srcdir)/src/bookmarks	\
 	-I$(top_srcdir)/embed 		\
+	-I$(top_srcdir)/gvdb/gvdb	\
 	-I$(top_srcdir)/lib   		\
 	-I$(top_srcdir)/lib/egg		\
 	-I$(top_srcdir)/lib/history	\
 	-I$(top_srcdir)/lib/widgets   	\
-	-I$(top_srcdir)/gvdb		\
+	-I$(top_srcdir)/src/bookmarks	\
 	-DLOCALEDIR=\"$(localedir)\"	\
 	-DPKGDATADIR=\"$(pkgdatadir)\"	\
 	$(GDK_CFLAGS)			\
@@ -98,10 +111,11 @@ libephymain_la_LDFLAGS = \
 	$(WARN_LDFLAGS) -avoid-version -no-undefined
 
 libephymain_la_LIBADD = \
-	$(top_builddir)/src/bookmarks/libephybookmarks.la	\
 	$(top_builddir)/embed/libephyembed.la			\
+	$(top_builddir)/gvdb/libgvdb.la				\
 	$(top_builddir)/lib/libephymisc.la			\
 	$(top_builddir)/lib/egg/libegg.la			\
+	$(top_builddir)/lib/widgets/libephywidgets.la		\
 	$(GDK_LIBS)		\
 	$(GIO_LIBS)		\
 	$(GLIB_LIBS)		\
