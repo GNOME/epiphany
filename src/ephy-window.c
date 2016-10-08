@@ -1276,6 +1276,8 @@ action_activate_cb (GtkAction *action, gpointer user_data)
 static WebKitContextMenuItem *
 webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
 {
+#pragma GCC diagnostic push
+#pragma GCC dignostic ignored "-Wdeprecated-declarations"
   GtkAction *gtk_action;
   WebKitContextMenuItem *item;
   GActionData *action_data;
@@ -1302,6 +1304,7 @@ webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
   g_object_unref (gtk_action);
 
   return item;
+#pragma GCC diagnostic pop
 }
 
 static void
