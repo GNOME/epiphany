@@ -943,6 +943,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   GdkPixbuf *pixbuf;
   GtkStyleContext *context;
   char *markup;
+  char *escaped_address;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_return_if_fail (embed != NULL);
@@ -985,10 +986,12 @@ window_cmd_save_as_application (GSimpleAction *action,
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 0);
 
-  markup = g_strdup_printf ("<small>%s</small>", ephy_web_view_get_display_address (view));
+  escaped_address = g_markup_escape_text (ephy_web_view_get_display_address (view), -1);
+  markup = g_strdup_printf ("<small>%s</small>", escaped_address);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), markup);
   g_free (markup);
+  g_free (escaped_address);
   gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
   context = gtk_widget_get_style_context (label);
   gtk_style_context_add_class (context, "dim-label");
