@@ -230,9 +230,9 @@ item_leave_notify_event_cb (GtkWidget   *widget,
 }
 
 static void
-icon_loaded_cb (GObject          *source,
-                GAsyncResult     *result,
-                GtkImageMenuItem *item)
+icon_loaded_cb (GObject      *source,
+                GAsyncResult *result,
+                GtkWidget    *image)
 {
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   GdkPixbuf *favicon = NULL;
@@ -244,16 +244,13 @@ icon_loaded_cb (GObject          *source,
   }
 
   if (favicon) {
-    GtkWidget *image;
-
-    image = gtk_image_new_from_pixbuf (favicon);
-    gtk_image_menu_item_set_image (item, image);
-    gtk_image_menu_item_set_always_show_image (item, TRUE);
+    gtk_image_set_from_pixbuf (GTK_IMAGE (image), favicon);
+    gtk_widget_show (image);
 
     g_object_unref (favicon);
   }
 
-  g_object_unref (item);
+  g_object_unref (image);
 }
 
 static GtkWidget *
@@ -261,35 +258,45 @@ new_history_menu_item (EphyWebView *view,
                        const char  *origtext,
                        const char  *address)
 {
-  GtkWidget *item;
-  GtkLabel *label;
+  GtkWidget *menu_item;
+  GtkWidget *box;
+  GtkWidget *image;
+  GtkWidget *label;
   WebKitFaviconDatabase *database;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   g_return_val_if_fail (address != NULL && origtext != NULL, NULL);
 
-  item = gtk_image_menu_item_new_with_label (origtext);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (item)));
-  gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
-  gtk_label_set_max_width_chars (label, MAX_LABEL_LENGTH);
+  image = gtk_image_new ();
+  gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
+
+  label = gtk_label_new (origtext);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), MAX_LABEL_LENGTH);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 6);
+
+  menu_item = gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (menu_item), box);
 
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
   webkit_favicon_database_get_favicon (database, address,
                                        NULL,
                                        (GAsyncReadyCallback)icon_loaded_cb,
-                                       g_object_ref (item));
+                                       g_object_ref (image));
 
-  g_object_set_data_full (G_OBJECT (item), "link-message", g_strdup (address), (GDestroyNotify)g_free);
+  g_object_set_data_full (G_OBJECT (menu_item), "link-message", g_strdup (address), (GDestroyNotify)g_free);
 
-  g_signal_connect (item, "enter-notify-event",
+  g_signal_connect (menu_item, "enter-notify-event",
                     G_CALLBACK (item_enter_notify_event_cb), view);
-  g_signal_connect (item, "leave-notify-event",
+  g_signal_connect (menu_item, "leave-notify-event",
                     G_CALLBACK (item_leave_notify_event_cb), view);
 
-  gtk_widget_show (item);
+  gtk_widget_show_all (menu_item);
 
-  return item;
+  return menu_item;
 }
 
 static void
