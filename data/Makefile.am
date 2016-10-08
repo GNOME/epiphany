@@ -40,14 +40,14 @@ service_DATA = $(service_in_files:.service.in=.service)
  
 # Rule to make the service file with bindir expanded
 $(service_DATA): $(service_in_files) Makefile
-	sed -e "s|\@libexecdir[@]|$(libexecdir)|g" $< > $@
+	$(AM_V_GEN) sed -e "s|\@libexecdir[@]|$(libexecdir)|g" $< > $@
 
 # Default bookmarks
 default_bookmarksdir = $(pkgdatadir)
 default_bookmarks_in_files = default-bookmarks.rdf.in
 default_bookmarks_DATA = $(default_bookmarks_in_files:.rdf.in=.rdf)
 $(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile
-	sed -e "s|\@pkgdatadir[@]|$(pkgdatadir)|g" $< > $@
+	$(AM_V_GEN) sed -e "s|\@pkgdatadir[@]|$(pkgdatadir)|g" $< > $@
 
 searchproviderdir = $(datadir)/gnome-shell/search-providers
 dist_searchprovider_DATA = epiphany-search-provider.ini
