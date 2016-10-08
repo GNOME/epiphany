@@ -124,17 +124,17 @@ ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document)
 char *
 ephy_web_dom_utils_get_application_title (WebKitDOMDocument *document)
 {
-  WebKitDOMNodeList *metas;
+  WebKitDOMHTMLCollection *metas;
   char *title = NULL;
   gulong length, i;
 
-  metas = webkit_dom_document_get_elements_by_tag_name (document, "meta");
-  length = webkit_dom_node_list_get_length (metas);
+  metas = webkit_dom_document_get_elements_by_tag_name_as_html_collection (document, "meta");
+  length = webkit_dom_html_collection_get_length (metas);
 
   for (i = 0; i < length && title == NULL; i++) {
     char *name;
     char *property;
-    WebKitDOMNode *node = webkit_dom_node_list_item (metas, i);
+    WebKitDOMNode *node = webkit_dom_html_collection_item (metas, i);
 
     /* og:site_name is read from the property attribute (standard), but is
      * commonly seen on the web in the name attribute. Both are supported. */
@@ -185,17 +185,17 @@ get_icon_from_html_icon (WebKitDOMDocument *document,
                          char             **uri_out)
 {
   gboolean ret;
-  WebKitDOMNodeList *links;
+  WebKitDOMHTMLCollection *links;
   gulong length, i;
   char *image = NULL;
   int largest_icon = 0;
 
-  links = webkit_dom_document_get_elements_by_tag_name (document, "link");
-  length = webkit_dom_node_list_get_length (links);
+  links = webkit_dom_document_get_elements_by_tag_name_as_html_collection (document, "link");
+  length = webkit_dom_html_collection_get_length (links);
 
   for (i = 0; i < length; i++) {
     char *rel;
-    WebKitDOMNode *node = webkit_dom_node_list_item (links, i);
+    WebKitDOMNode *node = webkit_dom_html_collection_item (links, i);
 
     rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
     if (rel != NULL && (
@@ -257,19 +257,19 @@ get_icon_from_mstile (WebKitDOMDocument *document,
                       char             **color_out)
 {
   gboolean ret;
-  WebKitDOMNodeList *metas;
+  WebKitDOMHTMLCollection *metas;
   gulong length, i;
   char *image = NULL;
   char *color = NULL;
 
-  metas = webkit_dom_document_get_elements_by_tag_name (document, "meta");
-  length = webkit_dom_node_list_get_length (metas);
+  metas = webkit_dom_document_get_elements_by_tag_name_as_html_collection (document, "meta");
+  length = webkit_dom_html_collection_get_length (metas);
 
   /* FIXME: Ought to also search browserconfig.xml
    * See: http://stackoverflow.com/questions/24625305/msapplication-tileimage-favicon-backup
    */
   for (i = 0; i < length; i++) {
-    WebKitDOMNode *node = webkit_dom_node_list_item (metas, i);
+    WebKitDOMNode *node = webkit_dom_html_collection_item (metas, i);
     char *name;
 
     name = webkit_dom_html_meta_element_get_name (WEBKIT_DOM_HTML_META_ELEMENT (node));
@@ -301,15 +301,15 @@ get_icon_from_ogp (WebKitDOMDocument *document,
                    char             **uri_out)
 {
   gboolean ret;
-  WebKitDOMNodeList *metas;
+  WebKitDOMHTMLCollection *metas;
   gulong length, i;
   char *image = NULL;
 
-  metas = webkit_dom_document_get_elements_by_tag_name (document, "meta");
-  length = webkit_dom_node_list_get_length (metas);
+  metas = webkit_dom_document_get_elements_by_tag_name_as_html_collection (document, "meta");
+  length = webkit_dom_html_collection_get_length (metas);
 
   for (i = 0; i < length && image == NULL; i++) {
-    WebKitDOMNode *node = webkit_dom_node_list_item (metas, i);
+    WebKitDOMNode *node = webkit_dom_html_collection_item (metas, i);
     char *property;
     char *itemprop;
 
@@ -338,16 +338,16 @@ get_icon_from_touch_icon (WebKitDOMDocument *document,
                           char             **uri_out)
 {
   gboolean ret;
-  WebKitDOMNodeList *links;
+  WebKitDOMHTMLCollection *links;
   gulong length, i;
   char *image = NULL;
 
-  links = webkit_dom_document_get_elements_by_tag_name (document, "link");
-  length = webkit_dom_node_list_get_length (links);
+  links = webkit_dom_document_get_elements_by_tag_name_as_html_collection (document, "link");
+  length = webkit_dom_html_collection_get_length (links);
 
   for (i = 0; i < length && image == NULL; i++) {
     char *rel;
-    WebKitDOMNode *node = webkit_dom_node_list_item (links, i);
+    WebKitDOMNode *node = webkit_dom_html_collection_item (links, i);
 
     rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
     /* TODO: support more than one possible icon. */
@@ -379,16 +379,16 @@ static void
 get_icon_from_favicon (WebKitDOMDocument *document,
                        char             **uri_out)
 {
-  WebKitDOMNodeList *links;
+  WebKitDOMHTMLCollection *links;
   gulong length, i;
   char *image = NULL;
 
-  links = webkit_dom_document_get_elements_by_tag_name (document, "link");
-  length = webkit_dom_node_list_get_length (links);
+  links = webkit_dom_document_get_elements_by_tag_name_as_html_collection (document, "link");
+  length = webkit_dom_html_collection_get_length (links);
 
   for (i = 0; i < length; i++) {
     char *rel;
-    WebKitDOMNode *node = webkit_dom_node_list_item (links, i);
+    WebKitDOMNode *node = webkit_dom_html_collection_item (links, i);
 
     rel = webkit_dom_html_link_element_get_rel (WEBKIT_DOM_HTML_LINK_ELEMENT (node));
     if (rel != NULL && (
