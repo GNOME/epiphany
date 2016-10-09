@@ -7,9 +7,6 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 $(desktop_DATA): $(desktop_in_files)
 	$(AM_V_GEN) $(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
 
-convertdir = $(datarootdir)/GConf/gsettings
-convert_DATA = epiphany.convert
-
 gsettings_ENUM_NAMESPACE = org.gnome.Epiphany
 gsettings_ENUM_FILES = $(top_srcdir)/lib/ephy-prefs.h
 
@@ -58,7 +55,6 @@ EXTRA_DIST = \
 	$(desktop_in_files)		\
 	$(default_bookmarks_in_files)	\
 	$(gsettings_SCHEMAS)		\
-	$(convert_DATA)			\
 	epiphany-service.xml		\
 	check-mime.py
 
