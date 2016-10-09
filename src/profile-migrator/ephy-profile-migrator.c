@@ -564,7 +564,7 @@ migrate_bookmarks (void)
 {
   EphyBookmarksManager *manager = EPHY_BOOKMARKS_MANAGER (g_object_new (EPHY_TYPE_BOOKMARKS_MANAGER, NULL));
 
-  const char *filename;
+  char *filename;
   xmlDocPtr doc;
   xmlNodePtr child;
   xmlNodePtr root;
@@ -574,12 +574,12 @@ migrate_bookmarks (void)
                                NULL);
 
   if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
-    return;
+    goto out;
 
   doc = xmlParseFile (filename);
   if (doc == NULL) {
     g_warning ("Failed to re-import the bookmarks. All bookmarks lost!\n");
-    return;
+    goto out;
   }
 
   root = xmlDocGetRootElement (doc);
@@ -599,7 +599,9 @@ migrate_bookmarks (void)
                                              NULL);
 
   xmlFreeDoc (doc);
-  g_clear_object (&manager);
+out:
+  g_free (filename):
+  g_object_unref (manager);
 }
 
 static void
