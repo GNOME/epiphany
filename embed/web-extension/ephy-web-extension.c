@@ -37,7 +37,7 @@
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
-#include <httpseverywhere-0.2.h>
+#include <httpseverywhere.h>
 #include <libsoup/soup.h>
 #include <string.h>
 #include <webkit2/webkit-web-extension.h>
