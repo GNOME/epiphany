@@ -570,7 +570,15 @@ migrate_bookmarks (void)
   xmlNodePtr root;
 
   filename = g_build_filename (ephy_dot_dir (),
-                               EPHY_BOOKMARKS_FILE_RDF,
+                               "bookmarks.gvdb",
+                               NULL);
+
+  if (g_file_test (filename, G_FILE_TEST_EXISTS) == TRUE)
+    goto out;
+
+  g_free (filename);
+  filename = g_build_filename (ephy_dot_dir (),
+                               "bookmarks.rdf",
                                NULL);
 
   if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
