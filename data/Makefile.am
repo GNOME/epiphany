@@ -26,10 +26,6 @@ dist_aboutdialog_DATA = about.ini
 mimepermissiondir = $(pkgdatadir)
 dist_mimepermission_DATA = mime-types-permissions.xml
 
-xsldir = $(pkgdatadir)
-dist_xsl_DATA = \
-	epiphany-bookmarks-html.xsl
-
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services
 service_in_files = org.gnome.Epiphany.service.in
