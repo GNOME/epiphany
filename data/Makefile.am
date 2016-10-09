@@ -51,8 +51,7 @@ EXTRA_DIST = \
 	$(desktop_in_files)		\
 	$(default_bookmarks_in_files)	\
 	$(gsettings_SCHEMAS)		\
-	epiphany-service.xml		\
-	check-mime.py
+	epiphany-service.xml
 
 CLEANFILES = \
 	$(appstream_XML)		\
