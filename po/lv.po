@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany"
 "&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2016-09-06 21:09+0000\n"
-"PO-Revision-Date: 2016-09-10 09:32+0200\n"
+"POT-Creation-Date: 2016-09-19 08:02+0000\n"
+"PO-Revision-Date: 2016-10-09 19:28+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -1178,10 +1178,6 @@ msgstr "Šis savienojums nav drošs"
 #. Message body when a site is not loaded due to an invalid TLS certificate.
 #: ../embed/ephy-web-view.c:1837
 #, c-format
-#| msgid ""
-#| "<p>This does not look like the real <strong>%s</strong>. Attackers might "
-#| "be trying to steal or alter information going to or from this site (for "
-#| "example, private messages, credit card information, or passwords)."
 msgid ""
 "<p>This does not look like the real <strong>%s</strong>. Attackers might be "
 "trying to steal or alter information going to or from this site (for "
@@ -1189,8 +1185,8 @@ msgid ""
 msgstr ""
 "<p>Šī neizskatās pēc īstas <strong>%s</strong> vietnes. Iespējams, ka "
 "uzbrucēji mēģina nozagt vai mainīt informāciju, kas iet uz vai no šīs "
-"vietnes (piemēram, privātie ziņojumi, kredītkaršu informācija vai paroles).<"
-"/p>"
+"vietnes (piemēram, privātie ziņojumi, kredītkaršu informācija vai paroles).</"
+"p>"
 
 #. The button on the invalid TLS certificate error page. Do not add mnemonics here.
 #: ../embed/ephy-web-view.c:1847
@@ -1214,7 +1210,11 @@ msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "T"
 
-#: ../embed/ephy-web-view.c:2774
+#: ../embed/ephy-web-view.c:1882
+msgid "Technical information"
+msgstr "Tehniskā informācija"
+
+#: ../embed/ephy-web-view.c:2775
 msgid "_OK"
 msgstr "_Labi"
 
@@ -2407,55 +2407,46 @@ msgid "Choose a l_anguage:"
 msgstr "Izvēlieties v_alodu:"
 
 #: ../src/resources/shortcuts-dialog.ui.h:1
-#| msgid "General"
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Vispārīgi"
 
 #: ../src/resources/shortcuts-dialog.ui.h:2
-#| msgid "_New Window"
 msgctxt "shortcut window"
 msgid "New window"
 msgstr "Jauns logs"
 
 #: ../src/resources/shortcuts-dialog.ui.h:3
-#| msgid "New Incognito Window"
 msgctxt "shortcut window"
 msgid "New incognito window"
 msgstr "Jauns inkognito logs"
 
 #: ../src/resources/shortcuts-dialog.ui.h:4
-#| msgid "Open"
 msgctxt "shortcut window"
 msgid "Open file"
 msgstr "Atvērt datni"
 
 #: ../src/resources/shortcuts-dialog.ui.h:5
-#| msgid "Save Image As"
 msgctxt "shortcut window"
 msgid "Save page"
 msgstr "Saglabāt lapu"
 
 #: ../src/resources/shortcuts-dialog.ui.h:6
-#| msgid "Save Image As"
 msgctxt "shortcut window"
 msgid "Save page as web app"
 msgstr "Saglabāt lapu kā tīmekļa lietotni"
 
 #: ../src/resources/shortcuts-dialog.ui.h:7
-#| msgid "Print"
 msgctxt "shortcut window"
 msgid "Print page"
 msgstr "Drukāt lapu"
 
 #: ../src/resources/shortcuts-dialog.ui.h:8
-#| msgid "_Quit"
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Iziet"
 
 #: ../src/resources/shortcuts-dialog.ui.h:9
-#| msgid "_Help"
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Palīdzība"
@@ -2496,19 +2487,16 @@ msgid "Tabs"
 msgstr "Cilnes"
 
 #: ../src/resources/shortcuts-dialog.ui.h:17
-#| msgid "New _Tab"
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Jauna cilne"
 
 #: ../src/resources/shortcuts-dialog.ui.h:18
-#| msgid "Close tab"
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Aizvērt šo cilni"
 
 #: ../src/resources/shortcuts-dialog.ui.h:19
-#| msgid "Reopen Closed _Tab"
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Atkārtoti atvērt aizvērtu cilni"
@@ -2519,7 +2507,6 @@ msgid "Go to the next tab"
 msgstr "Doties uz nākamo cilni"
 
 #: ../src/resources/shortcuts-dialog.ui.h:21
-#| msgid "Go to most visited"
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Iet uz iepriekšējo cilni"
@@ -2540,19 +2527,16 @@ msgid "Miscellaneous"
 msgstr "Dažādi"
 
 #: ../src/resources/shortcuts-dialog.ui.h:25
-#| msgid "History"
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Vēsture"
 
 #: ../src/resources/shortcuts-dialog.ui.h:26
-#| msgid "Preferences"
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Iestatījumi"
 
 #: ../src/resources/shortcuts-dialog.ui.h:27
-#| msgid "Bookmarks"
 msgctxt "shortcut window"
 msgid "Bookmarks"
 msgstr "Grāmatzīmes"
@@ -2563,25 +2547,21 @@ msgid "Bookmark current page"
 msgstr "Pievienot lapu grāmatzīmēm"
 
 #: ../src/resources/shortcuts-dialog.ui.h:29
-#| msgid "Enable caret browsing mode?"
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Pārslēgt kursora pārlūkošanu"
 
 #: ../src/resources/shortcuts-dialog.ui.h:30
-#| msgid "_View"
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Skats"
 
 #: ../src/resources/shortcuts-dialog.ui.h:31
-#| msgid "Zoom _In"
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Tuvināt"
 
 #: ../src/resources/shortcuts-dialog.ui.h:32
-#| msgid "Zoom O_ut"
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Tālināt"
@@ -2592,13 +2572,11 @@ msgid "Reset zoom"
 msgstr "Atstatīt mērogu"
 
 #: ../src/resources/shortcuts-dialog.ui.h:34
-#| msgid "_Fullscreen"
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Pilnekrāns"
 
 #: ../src/resources/shortcuts-dialog.ui.h:35
-#| msgid "_Page Source"
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Skatīt lapas pirmkodu"
@@ -2609,55 +2587,46 @@ msgid "Toggle inspector"
 msgstr "Pārslēgt inspektoru"
 
 #: ../src/resources/shortcuts-dialog.ui.h:37
-#| msgid "_Edit"
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Rediģēšana"
 
 #: ../src/resources/shortcuts-dialog.ui.h:38
-#| msgid "Cu_t"
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Izgriezt"
 
 #: ../src/resources/shortcuts-dialog.ui.h:39
-#| msgid "_Copy"
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopēt"
 
 #: ../src/resources/shortcuts-dialog.ui.h:40
-#| msgid "_Paste"
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Ielīmēt"
 
 #: ../src/resources/shortcuts-dialog.ui.h:41
-#| msgid "_Undo"
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Atsaukt"
 
 #: ../src/resources/shortcuts-dialog.ui.h:42
-#| msgid "_Redo"
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Atatsaukt"
 
 #: ../src/resources/shortcuts-dialog.ui.h:43
-#| msgid "Select _All"
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Izvēlēties visu"
 
 #: ../src/resources/shortcuts-dialog.ui.h:44
-#| msgid "Selection Caret"
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Izvēlieties lappuses URL"
 
 #: ../src/resources/shortcuts-dialog.ui.h:45
-#| msgid "Search"
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Meklēt"
