@@ -1,6 +1,6 @@
 AM_CPPFLAGS = \
     $(BUILD_CFLAGS) \
-    $(GVDB_CFLAGS)
+    $(GLIB_CFLAGS)
 
 noinst_LTLIBRARIES = libgvdb.la
 
@@ -15,4 +15,4 @@ noinst_HEADERS = \
 
 libgvdb_la_LIBADD = \
     $(BUILD_LIBS) \
-    $(GVDB_LIBS)
+    $(GLIB_LIBS)
