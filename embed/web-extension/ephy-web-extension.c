@@ -149,7 +149,7 @@ web_page_send_request (WebKitWebPage     *web_page,
      */
     if (new_uri[strlen (new_uri) - 1] == '/')
       new_uri[strlen (new_uri) - 1] = '\0';
-    g_info ("HTTPS Everywhere: rewrote %s to %s", request_uri, new_uri);
+    LOG ("HTTPS Everywhere: rewrote %s to %s", request_uri, new_uri);
     webkit_uri_request_set_uri (request, new_uri);
     request_uri = webkit_uri_request_get_uri (request);
   }
