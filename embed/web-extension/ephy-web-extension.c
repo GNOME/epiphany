@@ -37,13 +37,18 @@
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
-#include <httpseverywhere.h>
 #include <libsoup/soup.h>
 #include <string.h>
 #include <webkit2/webkit-web-extension.h>
 #define WEBKIT_DOM_USE_UNSTABLE_API
 #include <webkitdom/WebKitDOMDOMWindowUnstable.h>
 #include <JavaScriptCore/JavaScript.h>
+
+/* https://bugzilla.gnome.org/show_bug.cgi?id=772661 */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wredundant-decls"
+#include <httpseverywhere.h>
+#pragma GCC diagnostic pop
 
 struct _EphyWebExtension {
   GObject parent_instance;
