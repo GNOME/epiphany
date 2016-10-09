@@ -594,6 +594,7 @@ migrate_bookmarks (void)
     child = child->next;
   }
 
+  /* FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=772668 */
   ephy_bookmarks_manager_save_to_file_async (manager, NULL,
                                              ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                              NULL);
