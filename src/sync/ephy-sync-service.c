@@ -845,6 +845,94 @@ ephy_sync_service_destroy_session (EphySyncService *self,
   g_free (url);
 }
 
+char *
+ephy_sync_service_start_sign_in (EphySyncService  *self,
+                                 guint8           *tokenID,
+                                 guint8           *reqHMACkey)
+{
+  JsonNode *node;
+  JsonObject *json;
+  char *tokenID_hex;
+  char *bundle = NULL;
+  guint status_code;
+
+  /* Retrieve the sync keys bundle from the /account/keys endpoint. */
+  tokenID_hex = ephy_sync_crypto_encode_hex (tokenID, 0);
+  status_code = ephy_sync_service_fxa_hawk_get_sync (self, "account/keys", tokenID_hex,
+                                                     reqHMACkey, EPHY_SYNC_TOKEN_LENGTH,
+                                                     &node);
+  json = json_node_get_object (node);
+
+  if (status_code == 200) {
+    bundle = g_strdup (json_object_get_string_member (json, "bundle"));
+  } else {
+    LOG ("Failed to retrieve sync keys bundle: code: %ld, errno: %ld, error: '%s', message: '%s'",
+         json_object_get_int_member (json, "code"),
+         json_object_get_int_member (json, "errno"),
+         json_object_get_string_member (json, "error"),
+         json_object_get_string_member (json, "message"));
+  }
+
+  g_free (tokenID_hex);
+  json_node_free (node);
+
+  return bundle;
+}
+
+void
+ephy_sync_service_finish_sign_in (EphySyncService *self,
+                                  const char      *email,
+                                  const char      *uid,
+                                  const char      *sessionToken,
+                                  const char      *keyFetchToken,
+                                  const char      *unwrapBKey,
+                                  char            *bundle,
+                                  guint8          *respHMACkey,
+                                  guint8          *respXORkey)
+{
+  guint8 *unwrapKB;
+  guint8 *kA;
+  guint8 *kB;
+
+  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
+  g_return_if_fail (email != NULL);
+  g_return_if_fail (uid != NULL);
+  g_return_if_fail (sessionToken != NULL);
+  g_return_if_fail (keyFetchToken != NULL);
+  g_return_if_fail (unwrapBKey != NULL);
+  g_return_if_fail (bundle != NULL);
+  g_return_if_fail (respHMACkey != NULL);
+  g_return_if_fail (respXORkey != NULL);
+
+
+  /* Derive the sync keys form the received key bundle. */
+  unwrapKB = ephy_sync_crypto_decode_hex (unwrapBKey);
+  ephy_sync_crypto_compute_sync_keys (bundle,
+                                      respHMACkey, respXORkey, unwrapKB,
+                                      &kA, &kB);
+
+  /* Save the tokens. */
+  g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, email);
+  ephy_sync_service_set_user_email (self, email);
+  ephy_sync_service_set_and_store_tokens (self,
+                                          g_strdup (uid), TOKEN_UID,
+                                          g_strdup (sessionToken), TOKEN_SESSIONTOKEN,
+                                          g_strdup (keyFetchToken), TOKEN_KEYFETCHTOKEN,
+                                          g_strdup (unwrapBKey), TOKEN_UNWRAPBKEY,
+                                          ephy_sync_crypto_encode_hex (kA, 0), TOKEN_KA,
+                                          ephy_sync_crypto_encode_hex (kB, 0), TOKEN_KB,
+                                          NULL);
+
+  /* Do a first time sync and set a periodical sync afterwards. */
+  ephy_sync_service_sync_bookmarks (self, TRUE);
+  ephy_sync_service_start_periodical_sync (self, FALSE);
+
+  g_free (kA);
+  g_free (kB);
+  g_free (bundle);
+  g_free (unwrapKB);
+}
+
 gboolean
 ephy_sync_service_fetch_sync_keys (EphySyncService *self,
                                    const char      *email,
