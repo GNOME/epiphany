@@ -144,11 +144,6 @@ web_page_send_request (WebKitWebPage     *web_page,
   /* Rewrite URL to use HTTPS if directed by HTTPS Everywhere */
   new_uri = https_everywhere_rewrite (request_uri);
   if (g_strcmp0 (request_uri, new_uri) != 0) {
-    /* Workaround for https://github.com/grindhold/libhttpseverywhere/issues/8
-     * FIXME: Remove this, it's crazy!
-     */
-    if (new_uri[strlen (new_uri) - 1] == '/')
-      new_uri[strlen (new_uri) - 1] = '\0';
     LOG ("HTTPS Everywhere: rewrote %s to %s", request_uri, new_uri);
     webkit_uri_request_set_uri (request, new_uri);
     request_uri = webkit_uri_request_get_uri (request);
