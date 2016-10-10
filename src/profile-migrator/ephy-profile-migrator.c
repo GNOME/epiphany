@@ -570,7 +570,7 @@ migrate_bookmarks (void)
   xmlNodePtr root;
 
   filename = g_build_filename (ephy_dot_dir (),
-                               "bookmarks.gvdb",
+                               EPHY_BOOKMARKS_FILE,
                                NULL);
 
   if (g_file_test (filename, G_FILE_TEST_EXISTS) == TRUE)
@@ -609,7 +609,7 @@ migrate_bookmarks (void)
 
   xmlFreeDoc (doc);
 out:
-  g_free (filename):
+  g_free (filename);
   g_object_unref (manager);
 }
 
