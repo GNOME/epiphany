@@ -1325,7 +1325,7 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
 
   g_return_if_fail (label != NULL);
 
-  webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, label));
+  webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label)));
 }
 
 static void
