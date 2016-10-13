@@ -989,8 +989,11 @@ window_cmd_save_as_application (GSimpleAction *action,
   markup = g_strdup_printf ("<small>%s</small>", escaped_address);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), markup);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), 40);
   g_free (markup);
   g_free (escaped_address);
+
   gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
   context = gtk_widget_get_style_context (label);
   gtk_style_context_add_class (context, "dim-label");
