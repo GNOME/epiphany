@@ -506,7 +506,6 @@ typedef struct {
   GtkWidget *image;
   GtkWidget *entry;
   GtkWidget *spinner;
-  GtkWidget *spinner_box;
   GtkWidget *box;
   char *icon_href;
   GdkRGBA icon_rgba;
@@ -1001,9 +1000,8 @@ window_cmd_save_as_application (GSimpleAction *action,
   data->image = image;
   data->entry = entry;
   data->spinner = spinner;
-  data->spinner_box = box;
 
-  g_object_bind_property (image, "visible", data->spinner_box, "visible", G_BINDING_INVERT_BOOLEAN);
+  g_object_bind_property (image, "visible", spinner, "visible", G_BINDING_INVERT_BOOLEAN);
 
   fill_default_application_image (data);
   fill_default_application_title (data);
