@@ -37,7 +37,6 @@
 #define MOZILLA_TOKEN_SERVER_URL  "https://token.services.mozilla.com/1.0/sync/1.5"
 #define MOZILLA_FXA_SERVER_URL    "https://api.accounts.firefox.com/v1/"
 #define EPHY_BOOKMARKS_COLLECTION "ephy-bookmarks"
-#define EMAIL_REGEX               "^[a-zA-Z0-9_]([a-zA-Z0-9._]+[a-zA-Z0-9_])?@[a-z0-9.-]+$"
 #define SYNC_FREQUENCY            (15 * 60) /* seconds */
 
 struct _EphySyncService {
@@ -622,12 +621,8 @@ ephy_sync_service_init (EphySyncService *self)
   email = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER);
 
   if (g_strcmp0 (email, "") != 0) {
-    if (g_regex_match_simple (EMAIL_REGEX, email, 0, 0) == TRUE) {
-      ephy_sync_service_set_user_email (self, email);
-      ephy_sync_secret_load_tokens (self);
-    } else {
-      g_warning ("Invalid email: %s", email);
-    }
+    ephy_sync_service_set_user_email (self, email);
+    ephy_sync_secret_load_tokens (self);
   }
 }
 
