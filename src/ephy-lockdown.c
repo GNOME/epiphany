@@ -82,7 +82,9 @@ typedef struct {
 
 static const BindAction app_actions[] = {
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "new-window", "enabled" },
-  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "new-incognito", "enabled" }
+  { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "new-incognito", "enabled" },
+
+  { EPHY_PREFS_LOCKDOWN_HISTORY, "history", "enabled" }
 };
 
 static const BindAction window_actions[] = {
