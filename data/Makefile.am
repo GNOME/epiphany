@@ -45,6 +45,8 @@ $(default_bookmarks_DATA): $(default_bookmarks_in_files) Makefile
 searchproviderdir = $(datadir)/gnome-shell/search-providers
 dist_searchprovider_DATA = epiphany-search-provider.ini
 
+dist_man_MANS = epiphany.1
+
 EXTRA_DIST = \
 	$(appstream_in_files)		\
 	$(service_in_files)		\

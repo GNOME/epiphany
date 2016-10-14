@@ -1,5 +1,4 @@
-SUBDIRS = help libgd gvdb lib embed src data po doc
-
+SUBDIRS = help libgd gvdb lib embed src data po
 if ENABLE_TESTS
 SUBDIRS += tests
 endif

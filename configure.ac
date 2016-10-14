@@ -191,7 +191,6 @@ Makefile
 data/Makefile
 data/icons/Makefile
 data/pages/Makefile
-doc/Makefile
 gvdb/Makefile
 help/Makefile
 libgd/Makefile
