@@ -328,7 +328,7 @@ on_passwords_treeview_button_press_event (GtkWidget           *widget,
 
     menu = gtk_menu_new_from_model (dialog->treeview_popup_menu_model);
     gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (dialog), NULL);
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, event->button, event->time);
+    gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *)event);
     return TRUE;
   }
 

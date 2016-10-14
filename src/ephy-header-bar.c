@@ -419,10 +419,11 @@ popup_history_menu (GtkWidget                     *widget,
   GtkWidget *menu;
 
   menu = build_dropdown_menu (window, direction);
-  gtk_menu_popup (GTK_MENU (menu),
-                  NULL, NULL,
-                  ephy_gui_menu_position_under_widget, widget,
-                  event->button, event->time);
+  gtk_menu_popup_at_widget (GTK_MENU (menu),
+                            widget,
+                            GDK_GRAVITY_SOUTH_WEST,
+                            GDK_GRAVITY_NORTH_WEST,
+                            (GdkEvent *)event);
 }
 
 typedef struct {
