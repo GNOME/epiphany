@@ -86,7 +86,6 @@ typedef enum
 #define EPHY_PREFS_WEB_USE_OWN_COLORS        "use-own-colors"
 #define EPHY_PREFS_WEB_ENABLE_USER_CSS       "enable-user-css"
 #define EPHY_PREFS_WEB_ENABLE_POPUPS         "enable-popups"
-#define EPHY_PREFS_WEB_ENABLE_PLUGINS        "enable-plugins"
 #define EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING "enable-spell-checking"
 #define EPHY_PREFS_WEB_ENABLE_WEBGL          "enable-webgl"
 #define EPHY_PREFS_WEB_ENABLE_WEBAUDIO       "enable-webaudio"
