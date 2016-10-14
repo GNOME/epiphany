@@ -1,3 +1,14 @@
+==========
+COMMITTING
+==========
+
+Do NOT commit to this module without permission from a maintainer.
+See epiphany.doap for who they are.
+
+==========
+CODE STYLE
+==========
+
 In order to keep the code nice and clean we have a few requirements you'll
 need to stick to in order to get your patch accepted:
 
@@ -34,8 +45,58 @@ need to stick to in order to get your patch accepted:
   Right: (int *)foo
   Wrong: (int*) foo
 
-See doc/debugging.txt for some tips and tricks for debugging.
+=========
+DEBUGGING
+=========
 
-Do NOT commit to this module without permission from a maintainer.
-See epiphany.doap for who they are.
+To enable debugging use the configure option --enable-debug.
 
+LOGGING
+=======
+
+At execution time, you must enable the log service. To enable the
+log service, set the environment variable: EPHY_LOG_MODULES
+
+EPHY_LOG_MODULES variable has the form:
+
+	<moduleName>[:<moduleName>]*
+
+moduleName is a filename.
+ex: export EPHY_LOG_MODULES=ephy-window.c:ephy-autocompletion.c
+The special log module "all" enables all log modules.
+
+Use the LOG macro to put debug messages in the code.
+
+WARNINGS
+========
+
+At execution time, you must enable the service. To enable you to debug
+warnings, set the environment variable: EPHY_DEBUG_BREAK
+
+Possible value for EPHY_DEBUG_BREAK variable:
+
+	stack		Prints a stack trace.
+
+	suspend		Use this to stop execution when a warning occurs.
+			You can then attach a debugger to the process.
+
+	trap		Use this while running epiphany in a debugger.
+			This makes execution stop and gives back control to
+			the debugger.
+
+
+PROFILING
+=========
+
+At execution time, you must enable the profiling service. To enable the
+profiling service, set the environment variable: EPHY_PROFILING_MODULES
+
+EPHY_PROFILE_MODULES variable has the form:
+
+	<moduleName>[:<moduleName>]*
+
+moduleName is a filename.
+ex: export EPHY_PROFILE_MODULES=ephy-window.c:ephy-autocompletion.c
+The special profiling module "all" enables all profiling modules.
+
+Use START_PROFILER STOP_PROFILER macros to profile pieces of code.
