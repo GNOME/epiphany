@@ -96,8 +96,6 @@ static const GOptionEntry option_entries[] =
     N_("Start a private instance"), NULL },
   { "incognito-mode", 'i', 0, G_OPTION_ARG_NONE, &incognito_mode,
     N_("Start an instance in incognito mode"), NULL },
-  { "netbank-mode", 0, 0, G_OPTION_ARG_NONE, &incognito_mode,
-    N_("Start an instance in netbank mode"), NULL },
   { "application-mode", 'a', G_OPTION_FLAG_FILENAME | G_OPTION_FLAG_OPTIONAL_ARG,
     G_OPTION_ARG_CALLBACK, application_mode_cb,
     N_("Start the browser in application mode"), NULL },
