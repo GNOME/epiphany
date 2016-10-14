@@ -129,12 +129,6 @@ PKG_CHECK_MODULES([WEBKIT2GTK_WEB_EXTENSION], [webkit2gtk-web-extension-4.0 >= $
 AC_CHECK_HEADERS([execinfo.h])
 AC_SEARCH_LIBS([backtrace], [c execinfo])
 
-# ***************
-# Multimedia keys
-# ***************
-
-AC_CHECK_HEADERS([X11/XF86keysym.h])
-
 # *******************************
 # Internationalization
 # ******************************* 
