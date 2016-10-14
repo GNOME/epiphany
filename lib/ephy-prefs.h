@@ -122,9 +122,6 @@ typedef enum
 #define EPHY_PREFS_LOCKDOWN_HISTORY           "disable-history"
 #define EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK      "disable-save-to-disk"
 #define EPHY_PREFS_LOCKDOWN_PRINTING          "disable-printing"
-#define EPHY_PREFS_LOCKDOWN_PRINT_SETUP       "disable-print-setup"
-#define EPHY_PREFS_LOCKDOWN_COMMAND_LINE      "disable-command-line"
 #define EPHY_PREFS_LOCKDOWN_QUIT              "disable-quit"
-#define EPHY_PREFS_LOCKDOWN_JAVASCRIPT_CHROME "disable-javascript-chrome"
 
 G_END_DECLS
