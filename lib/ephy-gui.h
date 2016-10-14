@@ -20,33 +20,15 @@
 
 #pragma once
 
-#include <gdk/gdkkeysyms.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
-
-void            ephy_gui_sanitise_popup_position         (GtkMenu *menu,
-                                                          GtkWidget *parent_widget,
-                                                          gint *x,
-                                                          gint *y);
-
-void            ephy_gui_menu_position_tree_selection    (GtkMenu   *menu,
-                                                          gint      *x,
-                                                          gint      *y,
-                                                          gboolean  *push_in,
-                                                          gpointer  user_data);
 
 GtkWindowGroup *ephy_gui_ensure_window_group             (GtkWindow *window);
 
 void            ephy_gui_get_current_event               (GdkEventType *type,
                                                           guint *state,
                                                           guint *button);
-
-gboolean        ephy_gui_is_middle_click                 (void);
-
-gboolean        ephy_gui_check_location_writable         (GtkWidget *parent,
-                                                          const char *filename);
 
 void            ephy_gui_help                            (GtkWidget *parent,
                                                           const char *page);
