@@ -39,7 +39,6 @@ typedef struct {
   void (*callback)(GSettings *settings, const char *key, gpointer data);
 } PrefData;
 
-#define ENABLE_SCRIPTS_SETTING "enable-javascript"
 #define DEFAULT_ENCODING_SETTING "default-charset"
 static WebKitSettings *webkit_settings = NULL;
 
@@ -552,6 +551,7 @@ ephy_embed_prefs_init (gpointer user_data)
 
   webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
                                                        "enable-fullscreen", TRUE,
+                                                       "enable-javascript", TRUE,
                                                        "enable-site-specific-quirks", TRUE,
                                                        "enable-dns-prefetching", TRUE,
                                                        "javascript-can-open-windows-automatically", TRUE,
@@ -584,10 +584,6 @@ ephy_embed_prefs_init (gpointer user_data)
                       G_CALLBACK (gtk_settings_xft_dpi_changed_cb), NULL);
   }
 
-  g_settings_bind (EPHY_SETTINGS_WEB,
-                   EPHY_PREFS_WEB_ENABLE_JAVASCRIPT,
-                   webkit_settings, ENABLE_SCRIPTS_SETTING,
-                   G_SETTINGS_BIND_GET);
   g_settings_bind (EPHY_SETTINGS_MAIN,
                    EPHY_PREFS_ENABLE_CARET_BROWSING,
                    webkit_settings, "enable-caret-browsing",
