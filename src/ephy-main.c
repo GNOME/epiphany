@@ -79,6 +79,7 @@ option_version_cb (const gchar *option_name,
   return FALSE;
 }
 
+/* If you're modifying this array then you need to update the manpage. */
 static const GOptionEntry option_entries[] =
 {
   { "new-tab", 'n', 0, G_OPTION_ARG_NONE, &open_in_new_tab,
