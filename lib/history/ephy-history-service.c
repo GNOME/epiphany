@@ -949,7 +949,7 @@ ephy_history_service_execute_set_url_thumbnail_time (EphyHistoryService *self,
                                                      EphyHistoryURL     *url,
                                                      gpointer           *result)
 {
-  int thumbnail_time;
+  gint64 thumbnail_time;
 
   if (self->read_only)
     return FALSE;
@@ -969,7 +969,7 @@ ephy_history_service_execute_set_url_thumbnail_time (EphyHistoryService *self,
 void
 ephy_history_service_set_url_thumbnail_time (EphyHistoryService    *self,
                                              const char            *orig_url,
-                                             int                    thumbnail_time,
+                                             gint64                 thumbnail_time,
                                              GCancellable          *cancellable,
                                              EphyHistoryJobCallback callback,
                                              gpointer               user_data)

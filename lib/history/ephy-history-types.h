@@ -73,8 +73,8 @@ typedef struct _EphyHistoryURL
   char* title;
   int visit_count;
   int typed_count;
-  int last_visit_time;
-  int thumbnail_time;
+  gint64 last_visit_time;
+  gint64 thumbnail_time;
   gboolean hidden;
   EphyHistoryHost *host;
 } EphyHistoryURL;
@@ -111,7 +111,7 @@ EphyHistoryHost *               ephy_history_host_new (const char *url, const ch
 EphyHistoryHost *               ephy_history_host_copy (EphyHistoryHost *original);
 void                            ephy_history_host_free (EphyHistoryHost *host);
 
-EphyHistoryURL *                ephy_history_url_new (const char *url, const char* title, int visit_count, int typed_count, int last_visit_time);
+EphyHistoryURL *                ephy_history_url_new (const char *url, const char *title, int visit_count, int typed_count, gint64 last_visit_time);
 EphyHistoryURL *                ephy_history_url_copy (EphyHistoryURL *url);
 void                            ephy_history_url_free (EphyHistoryURL *url);
 

@@ -141,6 +141,17 @@ ephy_sqlite_statement_bind_int (EphySQLiteStatement *self, int column, int value
 }
 
 gboolean
+ephy_sqlite_statement_bind_int64 (EphySQLiteStatement *self, int column, gint64 value, GError **error)
+{
+  if (sqlite3_bind_int64 (self->prepared_statement, column + 1, value) != SQLITE_OK) {
+    ephy_sqlite_connection_get_error (self->connection, error);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+gboolean
 ephy_sqlite_statement_bind_double (EphySQLiteStatement *self, int column, double value, GError **error)
 {
   if (sqlite3_bind_double (self->prepared_statement, column + 1, value) != SQLITE_OK) {
@@ -230,6 +241,12 @@ int
 ephy_sqlite_statement_get_column_as_int (EphySQLiteStatement *self, int column)
 {
   return sqlite3_column_int (self->prepared_statement, column);
+}
+
+gint64
+ephy_sqlite_statement_get_column_as_int64 (EphySQLiteStatement *self, int column)
+{
+  return sqlite3_column_int64 (self->prepared_statement, column);
 }
 
 double

@@ -32,6 +32,7 @@ G_DECLARE_FINAL_TYPE (EphySQLiteStatement, ephy_sqlite_statement, EPHY, SQLITE_S
 gboolean                 ephy_sqlite_statement_bind_null             (EphySQLiteStatement *statement, int column, GError **error);
 gboolean                 ephy_sqlite_statement_bind_boolean          (EphySQLiteStatement *statement, int column, gboolean value, GError **error);
 gboolean                 ephy_sqlite_statement_bind_int              (EphySQLiteStatement *statement, int column, int value, GError **error);
+gboolean                 ephy_sqlite_statement_bind_int64            (EphySQLiteStatement *statement, int column, gint64 value, GError **error);
 gboolean                 ephy_sqlite_statement_bind_double           (EphySQLiteStatement *statement, int column, double value, GError **error);
 gboolean                 ephy_sqlite_statement_bind_string           (EphySQLiteStatement *statement, int column, const char *value, GError **error);
 gboolean                 ephy_sqlite_statement_bind_blob             (EphySQLiteStatement *statement, int column, const void *value, int length, GError **error);
@@ -44,6 +45,7 @@ EphySQLiteColumnType     ephy_sqlite_statement_get_column_type       (EphySQLite
 int                      ephy_sqlite_statement_get_column_size       (EphySQLiteStatement *statement, int column);
 int                      ephy_sqlite_statement_get_column_as_boolean (EphySQLiteStatement *statement, int column);
 int                      ephy_sqlite_statement_get_column_as_int     (EphySQLiteStatement *statement, int column);
+gint64                   ephy_sqlite_statement_get_column_as_int64   (EphySQLiteStatement *statement, int column);
 double                   ephy_sqlite_statement_get_column_as_double  (EphySQLiteStatement *statement, int column);
 const char*              ephy_sqlite_statement_get_column_as_string  (EphySQLiteStatement *statement, int column);
 const void*              ephy_sqlite_statement_get_column_as_blob    (EphySQLiteStatement *statement, int column);

@@ -114,9 +114,9 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
 
   url->visit_count = ephy_sqlite_statement_get_column_as_int (statement, 3),
   url->typed_count = ephy_sqlite_statement_get_column_as_int (statement, 4),
-  url->last_visit_time = ephy_sqlite_statement_get_column_as_int (statement, 5);
+  url->last_visit_time = ephy_sqlite_statement_get_column_as_int64 (statement, 5);
   url->hidden = ephy_sqlite_statement_get_column_as_int (statement, 6);
-  url->thumbnail_time = ephy_sqlite_statement_get_column_as_int (statement, 7);
+  url->thumbnail_time = ephy_sqlite_statement_get_column_as_int64 (statement, 7);
 
   g_object_unref (statement);
   return url;
@@ -144,7 +144,7 @@ ephy_history_service_add_url_row (EphyHistoryService *self, EphyHistoryURL *url)
       ephy_sqlite_statement_bind_string (statement, 1, url->title, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 2, url->visit_count, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 3, url->typed_count, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 4, url->last_visit_time, &error) == FALSE ||
+      ephy_sqlite_statement_bind_int64 (statement, 4, url->last_visit_time, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 5, url->host->id, &error) == FALSE) {
     g_warning ("Could not insert URL into urls table: %s", error->message);
     g_error_free (error);
@@ -184,9 +184,9 @@ ephy_history_service_update_url_row (EphyHistoryService *self, EphyHistoryURL *u
   if (ephy_sqlite_statement_bind_string (statement, 0, url->title, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 1, url->visit_count, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 2, url->typed_count, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 3, url->last_visit_time, &error) == FALSE ||
+      ephy_sqlite_statement_bind_int64 (statement, 3, url->last_visit_time, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 4, url->hidden, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 5, url->thumbnail_time, &error) == FALSE ||
+      ephy_sqlite_statement_bind_int64 (statement, 5, url->thumbnail_time, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 6, url->id, &error) == FALSE) {
     g_warning ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
@@ -209,12 +209,12 @@ create_url_from_statement (EphySQLiteStatement *statement)
                                               ephy_sqlite_statement_get_column_as_string (statement, 2),
                                               ephy_sqlite_statement_get_column_as_int (statement, 3),
                                               ephy_sqlite_statement_get_column_as_int (statement, 4),
-                                              ephy_sqlite_statement_get_column_as_int (statement, 5));
+                                              ephy_sqlite_statement_get_column_as_int64 (statement, 5));
 
   url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
   url->host = ephy_history_host_new (NULL, NULL, 0, 1.0);
   url->hidden = ephy_sqlite_statement_get_column_as_int (statement, 6);
-  url->thumbnail_time = ephy_sqlite_statement_get_column_as_int (statement, 7);
+  url->thumbnail_time = ephy_sqlite_statement_get_column_as_int64 (statement, 7);
   url->host->id = ephy_sqlite_statement_get_column_as_int (statement, 8);
 
   return url;

@@ -121,7 +121,7 @@ ephy_history_host_free (EphyHistoryHost *host)
 }
 
 EphyHistoryURL *
-ephy_history_url_new (const char *url, const char *title, int visit_count, int typed_count, int last_visit_time)
+ephy_history_url_new (const char *url, const char *title, int visit_count, int typed_count, gint64 last_visit_time)
 {
   EphyHistoryURL *history_url = g_slice_alloc0 (sizeof (EphyHistoryURL));
   history_url->id = -1;

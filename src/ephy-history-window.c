@@ -688,7 +688,7 @@ convert_date_data_func (GtkTreeViewColumn *column,
                         gpointer           user_data)
 {
   int col_id = GPOINTER_TO_INT (user_data);
-  int value;
+  gint64 value;
   time_t time;
   char *friendly;
 
