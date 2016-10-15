@@ -146,6 +146,7 @@ web_page_send_request (WebKitWebPage     *web_page,
     g_free (new_uri);
   }
 
+#if 0
   /* Rewrite URL to use HTTPS if directed by HTTPS Everywhere */
   new_uri = https_everywhere_rewrite (request_uri);
   if (g_strcmp0 (request_uri, new_uri) != 0) {
@@ -154,6 +155,7 @@ web_page_send_request (WebKitWebPage     *web_page,
     request_uri = webkit_uri_request_get_uri (request);
   }
   g_free (new_uri);
+#endif
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
     return FALSE;
