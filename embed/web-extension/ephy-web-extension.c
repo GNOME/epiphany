@@ -1453,7 +1453,9 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
 
   extension->initialized = TRUE;
 
+#if 0
   https_everywhere_init ();
+#endif
 
   extension->extension = g_object_ref (wk_extension);
   extension->uri_tester = ephy_uri_tester_new (dot_dir);
