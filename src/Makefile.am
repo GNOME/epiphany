@@ -5,7 +5,7 @@ pkglib_LTLIBRARIES = libephymain.la
 bin_PROGRAMS = epiphany
 
 dist_noinst_DATA = \
-	epiphany.gresource.xml \
+	resources/epiphany.gresource.xml \
 	$(RESOURCE_FILES)
 
 TYPES_H_FILES = \
@@ -158,11 +158,11 @@ RESOURCE_FILES = \
 	resources/gtk/menus.ui								\
 	$(NULL)
 
-epiphany-resources.c: epiphany.gresource.xml $(RESOURCE_FILES)
-	$(AM_V_GEN) glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-source --c-name epiphany $(srcdir)/epiphany.gresource.xml
+epiphany-resources.c: resources/epiphany.gresource.xml $(RESOURCE_FILES)
+	$(AM_V_GEN) glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-source --c-name epiphany $(srcdir)/resources/epiphany.gresource.xml
 
-epiphany-resources.h: epiphany.gresource.xml $(RESOURCE_FILES)
-	$(AM_V_GEN) glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-header --c-name epiphany $(srcdir)/epiphany.gresource.xml
+epiphany-resources.h: resources/epiphany.gresource.xml $(RESOURCE_FILES)
+	$(AM_V_GEN) glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-header --c-name epiphany $(srcdir)/resources/epiphany.gresource.xml
 
 EPIPHANY_RESOURCES = \
 	epiphany-resources.c \
