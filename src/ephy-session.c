@@ -827,31 +827,38 @@ save_session_sync (GTask        *task,
 
   buffer = xmlBufferCreate ();
   writer = xmlNewTextWriterMemory (buffer, 0);
-  if (writer == NULL) goto out;
+  if (writer == NULL)
+    goto out;
 
   ret = xmlTextWriterSetIndent (writer, 1);
-  if (ret < 0) goto out;
+  if (ret < 0)
+    goto out;
 
   ret = xmlTextWriterSetIndentString (writer, (const xmlChar *)"	 ");
-  if (ret < 0) goto out;
+  if (ret < 0)
+    goto out;
 
   START_PROFILER ("Saving session")
 
   ret = xmlTextWriterStartDocument (writer, "1.0", NULL, NULL);
-  if (ret < 0) goto out;
+  if (ret < 0)
+    goto out;
 
   /* create and set the root node for the session */
   ret = xmlTextWriterStartElement (writer, (const xmlChar *)"session");
-  if (ret < 0) goto out;
+  if (ret < 0)
+    goto out;
 
   /* iterate through all the windows */
   for (w = data->windows; w != NULL && ret >= 0; w = w->next) {
     ret = write_ephy_window (writer, (SessionWindow *)w->data);
   }
-  if (ret < 0) goto out;
+  if (ret < 0)
+    goto out;
 
   ret = xmlTextWriterEndElement (writer);       /* session */
-  if (ret < 0) goto out;
+  if (ret < 0)
+    goto out;
 
   ret = xmlTextWriterEndDocument (writer);
 
