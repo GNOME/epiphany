@@ -760,15 +760,18 @@ write_window_geometry (xmlTextWriterPtr writer,
   /* set window properties */
   ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"x", "%d",
                                            geometry->x);
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"y", "%d",
                                            geometry->y);
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"width", "%d",
                                            geometry->width);
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"height", "%d",
                                            geometry->height);
@@ -783,28 +786,34 @@ write_ephy_window (xmlTextWriterPtr writer,
   int ret;
 
   ret = xmlTextWriterStartElement (writer, (xmlChar *)"window");
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   ret = write_window_geometry (writer, &window->geometry);
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   ret = xmlTextWriterWriteFormatAttribute (writer, (const xmlChar *)"active-tab", "%d",
                                            window->active_tab);
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   if (window->role != NULL) {
     ret = xmlTextWriterWriteAttribute (writer,
                                        (const xmlChar *)"role",
                                        (const xmlChar *)window->role);
-    if (ret < 0) return ret;
+    if (ret < 0)
+      return ret;
   }
 
   for (l = window->tabs; l != NULL; l = l->next) {
     SessionTab *tab = (SessionTab *)l->data;
     ret = write_tab (writer, tab);
-    if (ret < 0) break;
+    if (ret < 0)
+      break;
   }
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   ret = xmlTextWriterEndElement (writer);       /* window */
   return ret;
