@@ -20,9 +20,6 @@ appstream_XML = $(appstream_in_files:.xml.in=.xml)
 $(appstream_XML): $(appstream_in_files)
 	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
-mimepermissiondir = $(pkgdatadir)
-dist_mimepermission_DATA = mime-types-permissions.xml
-
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services
 service_in_files = org.gnome.Epiphany.service.in

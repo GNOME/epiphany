@@ -145,6 +145,7 @@ RESOURCE_FILES = \
 	resources/gtk/page-menu-popover.ui						\
 	resources/history-dialog.ui							\
 	resources/incognito.png								\
+	resources/mime-types-permissions.xml						\
 	resources/missing-thumbnail.png							\
 	resources/passwords-dialog.ui							\
 	resources/prefs-dialog.ui							\

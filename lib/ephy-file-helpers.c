@@ -55,6 +55,8 @@
 #define DELAY_MAX_TICKS 64
 #define INITIAL_TICKS   2
 
+#define EPHY_MIME_TYPE_PERMISSIONS_URI "/org/gnome/epiphany/mime-types-permissions.xml"
+
 static GHashTable *files = NULL;
 static GHashTable *mime_table = NULL;
 
@@ -202,52 +204,6 @@ ephy_file_tmp_filename (const char *base,
   }
 
   return name;
-}
-
-/**
- * ephy_file:
- * @filename: the name of the Epiphany file requested
- *
- * Looks for @filename in Epiphany's directories and relevant paths.
- *
- * Returns: the full path to the requested file
- **/
-const char *
-ephy_file (const char *filename)
-{
-  char *ret;
-  guint i;
-
-  static const char * const paths[] =
-  {
-#ifndef NDEBUG
-    TOP_SRC_DATADIR "/",
-    TOP_SRC_DATADIR "/icons/",
-    TOP_SRC_DATADIR "/pages/",
-#endif
-    PKGDATADIR "/",
-    PKGDATADIR "/icons/",
-    PKGDATADIR "/pages/"
-  };
-
-  g_assert (files != NULL);
-
-  ret = g_hash_table_lookup (files, filename);
-  if (ret != NULL)
-    return ret;
-
-  for (i = 0; i < G_N_ELEMENTS (paths); i++) {
-    ret = g_strconcat (paths[i], filename, NULL);
-    if (g_file_test (ret, G_FILE_TEST_EXISTS) == TRUE) {
-      g_hash_table_insert (files, g_strdup (filename), ret);
-      return (const char *)ret;
-    }
-    g_free (ret);
-  }
-
-  g_warning ("Failed to find %s\n", filename);
-
-  return NULL;
 }
 
 /**
@@ -551,8 +507,9 @@ static void
 load_mime_from_xml (void)
 {
   xmlTextReaderPtr reader;
-  const char *xml_file;
+  const xmlChar *xml_file;
   int ret;
+  GBytes *bytes;
   EphyMimePermission permission = EPHY_MIME_PERMISSION_UNKNOWN;
 
   g_return_if_fail (mime_table == NULL);
@@ -560,13 +517,9 @@ load_mime_from_xml (void)
   mime_table = g_hash_table_new_full (g_str_hash, g_str_equal,
                                       xmlFree, NULL);
 
-  xml_file = ephy_file ("mime-types-permissions.xml");
-  if (xml_file == NULL) {
-    g_warning ("MIME types permissions file not found!\n");
-    return;
-  }
-
-  reader = xmlNewTextReaderFilename (xml_file);
+  bytes = g_resources_lookup_data (EPHY_MIME_TYPE_PERMISSIONS_URI, 0, NULL);
+  xml_file = (xmlChar *)g_bytes_get_data (bytes, NULL);
+  reader = xmlReaderForDoc (xml_file, EPHY_MIME_TYPE_PERMISSIONS_URI, NULL, 0);
   if (reader == NULL) {
     g_warning ("Could not load MIME types permissions file!\n");
     return;
@@ -596,6 +549,7 @@ load_mime_from_xml (void)
   }
 
   xmlFreeTextReader (reader);
+  g_object_unref (bytes);
 }
 
 /**

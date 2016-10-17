@@ -50,7 +50,6 @@ typedef enum
 gboolean           ephy_file_helpers_init                   (const char            *profile_dir,
                                                              EphyFileHelpersFlags   flags,
                                                              GError               **error);
-const char *       ephy_file                                (const char            *filename);
 const char *       ephy_dot_dir                             (void);
 gboolean           ephy_dot_dir_is_default                  (void);
 char       *       ephy_default_dot_dir                     (void);
