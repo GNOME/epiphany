@@ -4,464 +4,128 @@
 # This file is distributed under the same license as the epiphany package.
 #
 # Nurali Abdurahmonov <mavnur@gmail.com>, 2007, 2008, 2009.
+# Bahodir Mansurov <bahodir@mansurov.org>, 2016.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: uz@cyrillic\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany\n"
-"POT-Creation-Date: 2009-01-07 18:56+0500\n"
-"PO-Revision-Date: 2009-01-07 21:30+0500\n"
-"Last-Translator: Nurali Abdurahmonov <mavnur@gmail.com>\n"
-"Language-Team: Uzbek\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany&keywords=I18N+L10N&component=I18N\n"
+"POT-Creation-Date: 2016-10-09 16:30+0000\n"
+"PO-Revision-Date: 2016-10-16 12:17-0400\n"
+"Last-Translator: Bahodir Mansurov <bahodir@mansurov.org>\n"
+"Language-Team: Uzbek <bahodir@mansurov.org>\n"
 "Language: uz@cyrillic\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Poedit 1.8.9\n"
 
-#: ../data/bme.desktop.in.in.h:1
-msgid "Browse and organize your bookmarks"
-msgstr "Хатчўпларни кўриш ва бошқариш"
+#: ../data/epiphany.appdata.xml.in.h:1
+#| msgid "GNOME Web Browser"
+msgid "GNOME Web"
+msgstr "GNOME Web"
 
-#: ../data/bme.desktop.in.in.h:2
-msgid "Epiphany Web Bookmarks"
-msgstr "Epiphany браузери хатчўплари"
+#: ../data/epiphany.appdata.xml.in.h:2
+#| msgid "Web Browser"
+msgid "Web browser for GNOME"
+msgstr "GNOME учун веб браузер"
 
-#: ../data/bme.desktop.in.in.h:3
-msgid "Web Bookmarks"
-msgstr "Веб хатчўплар"
+#: ../data/epiphany.appdata.xml.in.h:3
+msgid ""
+"The web browser for GNOME, featuring tight integration with the desktop and "
+"a simple and intuitive user interface that allows you to focus on your web "
+"pages. If you’re looking for a simple, clean, beautiful view of the web, "
+"this is the browser for you."
+msgstr ""
+"GNOME иш столи билан чуқур интеграциялашган ҳамда веб саҳифаларингизга "
+"диққатингизни қаратишингизга имкон берувчи фойдаланувчи интерфейсига эга "
+"бўлган веб браузер. Агарда интернет саҳифаларининг оддий, тоза, ва чиройли "
+"кўринишини излаётган бўлсангиз, ушбу браузер сиз учун."
 
-#: ../data/epiphany.desktop.in.in.h:1
-msgid "Browse the web"
+#: ../data/epiphany.appdata.xml.in.h:4
+msgid "GNOME Web is often referred to by its code name, Epiphany."
+msgstr "GNOME Web одатда Epiphany шартли номи билан аталади."
+
+#: ../data/epiphany.appdata.xml.in.h:5
+msgid "The GNOME web site displayed in GNOME Web"
+msgstr "GNOME Webда кўрсатиладиган GNOME веб сайти"
+
+#: ../data/epiphany.appdata.xml.in.h:6
+msgid "The GNOME Project"
+msgstr "GNOME проекти"
+
+#: ../data/epiphany.desktop.in.h:1 ../embed/ephy-about-handler.c:289
+#: ../embed/ephy-about-handler.c:320 ../src/ephy-main.c:77
+#: ../src/ephy-main.c:324 ../src/ephy-main.c:479 ../src/window-commands.c:1503
+msgid "Web"
 msgstr "Веб браузер"
 
-#: ../data/epiphany.desktop.in.in.h:2
-msgid "Epiphany Web Browser"
-msgstr "Epiphany веб браузери"
-
-#. sets the name to appear in the window list applet when grouping windows
-#: ../data/epiphany.desktop.in.in.h:3 ../src/ephy-main.c:676
+#: ../data/epiphany.desktop.in.h:2
 msgid "Web Browser"
 msgstr "Веб браузер"
 
-#: ../data/epiphany-lockdown.schemas.in.h:1
+#: ../data/epiphany.desktop.in.h:3
+msgid "Epiphany Web Browser"
+msgstr "Epiphany веб браузери"
+
+#: ../data/epiphany.desktop.in.h:4
+msgid "Browse the web"
+msgstr "Веб браузер"
+
+#: ../data/epiphany.desktop.in.h:5
+msgid "web;browser;internet;"
+msgstr "веб;браузер;интернет;"
+
+#: ../data/epiphany.desktop.in.h:6
+#| msgid "_New Window"
+msgid "New Incognito Window"
+msgstr "Янги инкогнито ойна"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:1
+msgid "Browse with caret"
+msgstr "Клавиш билан навигация қилиш"
+
+#. DuckDuckGo is the default search engine. Must exactly match the URL used
+#. in the preferences dialog, except this string is surrounded by single quotes
+#. and uses &amp; instead of simply &. If the match is not otherwise exact,
+#. there will be a spurious, ugly entry in the preferences combo, so please
+#. test this. Should ideally also match the default smart bookmark link in
+#. default-bookmarks.rdf. See the comment there for region parameters to
+#. the URL.
+#: ../data/org.gnome.epiphany.gschema.xml.h:10
+#, no-c-format
+msgid "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
+msgstr "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:11
+#| msgid "_Search:"
+msgid "URL Search"
+msgstr "URL қидирув"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:12
+msgid "Search string for keywords entered in the URL bar."
+msgstr "Манзил панелига киритилган калит сўзларни излаш қатори"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:13
+#| msgid "User Name"
+msgid "User agent"
+msgstr "User agent"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:14
 msgid ""
-"A list of protocols to be considered safe in addition to the default, when "
-"disable_unsafe_protocols is enabled."
+"String that will be used as user agent, to identify the browser to the web "
+"servers."
 msgstr ""
+"Веб серверларга браузерни танитиш мақсадида фойдаланувчи агенти сифатида "
+"ишлатиладиган ибора."
 
-#: ../data/epiphany-lockdown.schemas.in.h:2
-msgid "Additional safe protocols"
-msgstr "Қўшимча хавфсиз протоколлар"
-
-#: ../data/epiphany-lockdown.schemas.in.h:3
-msgid "Disable JavaScript chrome control"
-msgstr ""
-
-#: ../data/epiphany-lockdown.schemas.in.h:4
-msgid "Disable JavaScript's control over window chrome."
-msgstr ""
-
-#: ../data/epiphany-lockdown.schemas.in.h:5
-msgid ""
-"Disable all historical information by disabling back and forward navigation, "
-"not allowing the history dialog and hiding the most used bookmarks list."
-msgstr ""
-
-#: ../data/epiphany-lockdown.schemas.in.h:6
-msgid "Disable arbitrary URLs"
-msgstr ""
-
-#: ../data/epiphany-lockdown.schemas.in.h:7
-msgid "Disable bookmark editing"
-msgstr "Хатчўпларни таҳрирлашни ўчириш"
-
-#: ../data/epiphany-lockdown.schemas.in.h:8
-msgid "Disable history"
-msgstr "Тарихни ўчириш"
-
-#: ../data/epiphany-lockdown.schemas.in.h:9
-msgid "Disable the user's ability to add or edit bookmarks."
-msgstr "Фойдаланувчига хатчўп қўшиш ва уни таҳрирлашни таъқиқлаш."
-
-#: ../data/epiphany-lockdown.schemas.in.h:10
-msgid "Disable the user's ability to edit toolbars."
-msgstr "Фойдаланувчига асбоблар панелини ўзгартиришни таъқиқлаш."
-
-#: ../data/epiphany-lockdown.schemas.in.h:11
-msgid "Disable the user's ability to type in a URL to Epiphany."
-msgstr "Фойдаланувчиларга URL киритишни таъқиқлаш."
-
-#: ../data/epiphany-lockdown.schemas.in.h:12
-msgid "Disable toolbar editing"
-msgstr "Асбоблар панелини таҳрирлашни таъқиқлаш"
-
-#: ../data/epiphany-lockdown.schemas.in.h:13
-msgid "Disable unsafe protocols"
-msgstr "Хавфли протоколларни ўчириш"
-
-#: ../data/epiphany-lockdown.schemas.in.h:14
-msgid ""
-"Disables loading of content from unsafe protocols. Safe protocols are http "
-"and https."
-msgstr ""
-"Хавфли протоколлар таркибини юклашни таъқиқлаш. Хавфсиз протоколлар - http "
-"ва https."
-
-#: ../data/epiphany-lockdown.schemas.in.h:15
-msgid "Epiphany cannot quit"
-msgstr "Epiphany'дан чиқиб бўлмайди"
-
-#: ../data/epiphany-lockdown.schemas.in.h:16
-msgid "Hide menubar by default"
-msgstr "Андоза бўйича меню панелини бекитиш"
-
-#: ../data/epiphany-lockdown.schemas.in.h:17
-msgid "Hide the menubar by default."
-msgstr "Андоза бўйича меню панелини бекитиш."
-
-#: ../data/epiphany-lockdown.schemas.in.h:18
-msgid "Lock in fullscreen mode"
-msgstr "Бутун экран усулида қулфлаш"
-
-#: ../data/epiphany-lockdown.schemas.in.h:19
-msgid "Locks Epiphany in fullscreen mode."
-msgstr "Epiphany'ни бутун экран усулида қулфлаш."
-
-#: ../data/epiphany-lockdown.schemas.in.h:20
-msgid "User is not allowed to close Epiphany"
-msgstr "Фойдаланувчи Epiphany браузерини ёпа олмайди"
-
-#: ../data/epiphany.schemas.in.h:1
-msgid "Active extensions"
-msgstr "Актив кенгайтмалар"
-
-#: ../data/epiphany.schemas.in.h:2
-msgid "Address of the user's home page."
-msgstr "Фойдаланувчи уй саҳифаси манзили."
-
-#: ../data/epiphany.schemas.in.h:3
-msgid "Allow popups"
-msgstr "Попап ойнага рухсат бериш"
-
-#: ../data/epiphany.schemas.in.h:4
-msgid "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
-msgstr ""
-"Сайтларга JavaScript ёрдамида янги ойна очишга рухсат бериш (агар JavaScript "
-"ёқилган бўлса)."
-
-#: ../data/epiphany.schemas.in.h:5
-msgid "Always show the tab bar"
-msgstr "Таб панелини ҳар доим кўрсатиш"
-
-#: ../data/epiphany.schemas.in.h:6
+#: ../data/org.gnome.epiphany.gschema.xml.h:15
 msgid "Automatic downloads"
 msgstr "Автоматик ёзиб олиш"
 
-#: ../data/epiphany.schemas.in.h:7
-msgid "Automatically manage offline status with NetworkManager"
-msgstr "NetworkManager ёрдамида офлайн ҳолатини автоматик кузатиш"
-
-#: ../data/epiphany.schemas.in.h:8
-msgid "Browse with caret"
-msgstr ""
-
-#: ../data/epiphany.schemas.in.h:9
-msgid "Cookie accept"
-msgstr "Cookie'ни қабул қилиш"
-
-#: ../data/epiphany.schemas.in.h:10
-msgid "Default encoding"
-msgstr "Андоза кодлаш усули"
-
-#: ../data/epiphany.schemas.in.h:11
-msgid ""
-"Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-HKSCS"
-"\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", \"HZ-GB-"
-"2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862\", \"IBM864"
-"\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-"
-"8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", "
-"\"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-"
-"9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
-"\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
-"\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874"
-"\", \"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
-"\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
-"\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
-"\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari\", "
-"\"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", "
-"\"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-romanian\", "
-"\"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712"
-"\", \"x-viet-vps\" and \"x-windows-949\"."
-msgstr ""
-"Андоза кодлаш усули. Қабул қилинадиган қийматлар: \"armscii-8\", \"Big5\", "
-"\"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8"
-"\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
-"\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-KR"
-"\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", \"ISO-"
-"8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", "
-"\"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-"
-"8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", "
-"\"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
-"\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
-"\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
-"\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
-"\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-"
-"mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-"
-"mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-"
-"mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
-"\"x-viet-tcvn5712\", \"x-viet-vps\" ва \"x-windows-949\"."
-
-#: ../data/epiphany.schemas.in.h:12
-msgid "Default font type"
-msgstr "Андоза шрифт тури"
-
-#: ../data/epiphany.schemas.in.h:13
-msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
-msgstr "Андоза шрифт тури. \"serif\" ва \"sans-serif\"."
-
-#: ../data/epiphany.schemas.in.h:14
-msgid "Enable Java"
-msgstr "Java'ни ёқиш"
-
-#: ../data/epiphany.schemas.in.h:15
-msgid "Enable JavaScript"
-msgstr "JavaScript'ни ёқиш"
-
-#: ../data/epiphany.schemas.in.h:16 ../data/glade/prefs-dialog.glade.h:20
-msgid "Enable Web Inspector"
-msgstr ""
-
-#: ../data/epiphany.schemas.in.h:17
-msgid "Enable smooth scrolling"
-msgstr ""
-
-#: ../data/epiphany.schemas.in.h:18
-msgid ""
-"Hide or show the downloads window. When hidden, a notification will be shown "
-"when new downloads are started."
-msgstr ""
-
-#: ../data/epiphany.schemas.in.h:19
-msgid "History pages time range"
-msgstr "Тарих саҳифалари вақти оралиғи"
-
-#: ../data/epiphany.schemas.in.h:20
-msgid "Home page"
-msgstr "Уй саҳифаси"
-
-#: ../data/epiphany.schemas.in.h:21
-msgid ""
-"How to present animated images. Possible values are \"normal\", \"once\" and "
-"\"disabled\"."
-msgstr ""
-"Анимацион расмларнинг кўриниши. Қуйидагилар бўлиши мумкин: \"normal"
-"\" (андоза), \"once\" (бир марта) ва \"disabled\" (анимациясиз)."
-
-#: ../data/epiphany.schemas.in.h:22
-msgid "How to print frames"
-msgstr "Фреймларни босиб чиқариш усули"
-
-#: ../data/epiphany.schemas.in.h:23
-msgid ""
-"How to print pages containing frames. Allowed values are \"normal\", "
-"\"separately\" and \"selected\"."
-msgstr ""
-"Фрейм мавжуд бўлган саҳифаларнинг босиб чиқарилиши. Қуйидагилар бўлиши "
-"мумкин: \"normal\" 9андоза), \"separately\" (алоҳида-алоҳида) ва \"selected"
-"\" (танланганни)."
-
-#. Translators: this is the default encoding used by Epiphany for Web pages display
-#: ../data/epiphany.schemas.in.h:25
-msgid "ISO-8859-1"
-msgstr "ISO-8859-1"
-
-#: ../data/epiphany.schemas.in.h:26
-msgid "Image animation mode"
-msgstr "Расм анимацияси усули"
-
-#: ../data/epiphany.schemas.in.h:27
-msgid "Languages"
-msgstr "Тиллар"
-
-#: ../data/epiphany.schemas.in.h:28
-msgid "Lists the active extensions."
-msgstr "Актив кенгайтмалар рўйхати."
-
-#: ../data/epiphany.schemas.in.h:29
-msgid "Middle click to open the web page pointed to by the currently selected text"
-msgstr ""
-"Жорий танланган матн кўрсатган веб саҳифани очиш учун сичқонча ўрта "
-"тугмасини босинг"
-
-#: ../data/epiphany.schemas.in.h:30
-msgid ""
-"Middle clicking on the main view pane will open the web page pointed to by "
-"the currently selected text."
-msgstr ""
-"Сичқонча тугмасининг асосий панелда босилиши, жорий белгиланган матн "
-"кўрсатадиган веб саҳифани очади."
-
-#: ../data/epiphany.schemas.in.h:31
-msgid "Minimum font size"
-msgstr "Шрифтнинг минимал ўлчами"
-
-#: ../data/epiphany.schemas.in.h:32
-msgid "Preferred languages, two letter codes."
-msgstr "Афзал кўрилган тиллар, икки ҳарфли кодлар."
-
-#: ../data/epiphany.schemas.in.h:33
-msgid "Remember passwords"
-msgstr "Махфий сўзларни эслаб қолиш"
-
-#: ../data/epiphany.schemas.in.h:34
-msgid "Show bookmarks bar by default"
-msgstr "Андоза бўйича хатчўплар панелини кўрсатиш"
-
-#: ../data/epiphany.schemas.in.h:35
-msgid "Show statusbar by default"
-msgstr "Андоза бўйича ҳолат панелини кўрсатиш"
-
-#: ../data/epiphany.schemas.in.h:36
-msgid ""
-"Show the history pages visited \"ever\", \"last_two_days\", \"last_three_days"
-"\", \"today\"."
-msgstr ""
-"\"ever\" (ҳар доим), \"last_two_days\" (охирги икки кунда), \"last_three_days"
-"\" (охирги уч кунда, \"today\" (бугун) очилган тарих саҳифаларини кўрсатиш."
-
-#: ../data/epiphany.schemas.in.h:37
-msgid "Show the tab bar also when there is only one tab open."
-msgstr "Ҳатто битта таб очиқ бўлса ҳам, таб панелини кўрсатиш."
-
-#: ../data/epiphany.schemas.in.h:38
-msgid "Show toolbars by default"
-msgstr "Андоза бўйича асбоблар панелини кўрсатиш"
-
-#: ../data/epiphany.schemas.in.h:39
-msgid "Size of disk cache"
-msgstr "Диск кэш ҳажми"
-
-#: ../data/epiphany.schemas.in.h:40
-msgid "Size of disk cache, in MB."
-msgstr "Диск кэш ҳажми мегабайтда."
-
-#: ../data/epiphany.schemas.in.h:41
-msgid "The bookmark information shown in the editor view"
-msgstr "Таҳрирчи ойнасида кўрсатиладиган хатчўп маълумоти"
-
-#: ../data/epiphany.schemas.in.h:42
-msgid ""
-"The bookmark information shown in the editor view. Valid values in the list "
-"are \"address\" and \"title\"."
-msgstr ""
-"Таҳрирчи ойнасида кўрсатиладиган хатчўп маълумоти. Қуйидагилар бўлиши "
-"мумкин: \"address\" (манзил) ва \"title\" (сарлавҳа)."
-
-#: ../data/epiphany.schemas.in.h:43
-msgid "The currently selected fonts language"
-msgstr "Жорий танланган тил шрифтлари"
-
-#: ../data/epiphany.schemas.in.h:44
-msgid ""
-"The currently selected fonts language. Valid values are \"ar\" (arabic), \"x-"
-"baltic\" (baltic languages), \"x-central-euro\" (central european "
-"languages), \"x-cyrillic\" (languages written with cyrillic alphabet), \"el"
-"\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-CN"
-"\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional chinese), \"tr"
-"\" (turkish), \"x-unicode\" (other languages), \"x-western\" (languages "
-"written in latin script), \"x-tamil\" (tamil) and \"x-devanagari"
-"\" (devanagari)."
-msgstr ""
-"Жорий танланган шрифтлар тили. Мавжуд қийматлар: \"ar\" (арабча), \"x-baltic"
-"\" (болтиқбўйи тиллари), \"x-central-euro\" (марказий европа тиллари), \"x-"
-"cyrillic\" (кирилчадан фойдаланадиган тиллар), \"el\" (юнонча), \"he"
-"\" (яҳудийча), \"ja\" (японча), \"ko\" (корейсча), \"zh-CN"
-"\" (соддалаштирилган хитойча), \"th\" (тайча), \"zh-TW\" (анъанавий "
-"хитойча), \"tr\" (туркча), \"x-unicode\" (бошқа тиллар), \"x-western"
-"\" (лотинча ҳарфлардан фойдаланадиган тиллар), \"x-tamil\" (тамил) ва \"x-"
-"devanagari\" (девангари)."
-
-#: ../data/epiphany.schemas.in.h:45
-msgid "The downloads folder"
-msgstr "Ёзиб олиш жилди"
-
-#: ../data/epiphany.schemas.in.h:46
-msgid "The encoding autodetector. Empty string means autodetect is off"
-msgstr "Кодлаш усулини авто-аниқлаш. Бўш қолдирилса, авто-аниқлаш ўчирилади"
-
-#: ../data/epiphany.schemas.in.h:47
-msgid ""
-"The encoding autodetector. Valid entries are \"\" (autodetectors off), "
-"\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
-"\"ja_parallel_state_machine\" (autodetect japanese encodings), "
-"\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
-"\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
-"encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
-"\"zhcn_parallel_state_machine\" (autodetect simplified chinese encodings), "
-"\"zhtw_parallel_state_machine\" (autodetect traditional chinese encodings) "
-"and \"universal_charset_detector\" (autodetect most encodings)."
-msgstr ""
-"Кодлаш усулини авто-аниқлаш. Мавжуд кодлаш усуллари: \"\" (авто-аниқлаш "
-"ўчирилган), \"cjk_parallel_state_machine\" (шарқий осиёча кодлаш усули), "
-"\"ja_parallel_state_machine\" (японча кодлаш усули), "
-"\"ko_parallel_state_machine\" (корейсча кодлаш усули), \"ruprob\" (русча "
-"кодлаш усули), \"ukprob\" (украинча кодлаш усули), "
-"\"zh_parallel_state_machine\" (хитойча кодлаш усули), "
-"\"zhcn_parallel_state_machine\" (соддалаштирилган хитойча кодлаш усули), "
-"\"zhtw_parallel_state_machine\" (анъанавий хитойча кодлаш усули) and "
-"\"universal_charset_detector\" (кўплаб кодлаш усуллари)."
-
-#: ../data/epiphany.schemas.in.h:48
-msgid "The page information shown in the history view"
-msgstr "Тарих ойнасида кўрсатиладиган саҳифа маълумоти"
-
-#: ../data/epiphany.schemas.in.h:49
-msgid ""
-"The page information shown in the history view. Valid values in the list are "
-"\"ViewTitle\", \"ViewAddress\" and \"ViewDateTime\"."
-msgstr ""
-
-#: ../data/epiphany.schemas.in.h:50
-msgid ""
-"The path of the folder where to download files to; or \"Downloads\" to use "
-"the default downloads folder, or \"Desktop\" to use the desktop folder."
-msgstr ""
-"Файллар ёзиб олинадиган жилд; андоза жилддан фойдаланиш учун \"Downloads\" "
-"ёки иш столига ёзиб олиш учун \"Desktop\"дан фойдаланинг."
-
-#: ../data/epiphany.schemas.in.h:51
-msgid "Toolbar style"
-msgstr "Асбоблар панели услуби"
-
-#: ../data/epiphany.schemas.in.h:52
-msgid ""
-"Toolbar style. Allowed values are \"\" (use GNOME default style), \"both"
-"\" (text and icons), \"both-horiz\" (text besides icons), \"icons\", and "
-"\"text\"."
-msgstr ""
-
-#: ../data/epiphany.schemas.in.h:53
-msgid "Use own colors"
-msgstr "Фойдаланувчи рангларидан фойдаланиш"
-
-#: ../data/epiphany.schemas.in.h:54
-msgid "Use own fonts"
-msgstr "Фойдаланувчи шрифтларидан фойдаланиш"
-
-#: ../data/epiphany.schemas.in.h:55
-msgid "Use your own colors instead of the colors the page requests."
-msgstr "Саҳифа талаб қилган ранглар ўрнига фойдаланувчи рангларидан фойдаланиш."
-
-#: ../data/epiphany.schemas.in.h:56
-msgid "Use your own fonts instead of the fonts the page requests."
-msgstr "Саҳифа талаб қилган шрифтлар ўрнига фойдаланувчи шрифтларидан фойдаланиш."
-
-#: ../data/epiphany.schemas.in.h:57
-msgid "Visibility of the downloads window"
-msgstr ""
-
-#: ../data/epiphany.schemas.in.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:16
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -469,1019 +133,1111 @@ msgstr ""
 "агар файллар браузер томонидан очилмаса, улар автоматик равишда ёзиб олинади "
 "ва мос дастур билан очилади."
 
-#: ../data/epiphany.schemas.in.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:17
+msgid "Force new windows to be opened in tabs"
+msgstr "Янги ойналарни ички ойна сифатида очишга мажбурлаш"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
 msgid ""
-"Where to accept cookies from. Possible values are \"anywhere\", \"current "
-"site\" and \"nowhere\"."
+"Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
-"cookie файллари қабул қилинадиган жойлар. Мавжуд қийматлар: \"anywhere"
-"\" (ҳамма жойдан), \"current site\" (жорий сайтдаг ва \"nowhere\" (ҳеч "
-"қаердан)."
+"Янги ойнани янги ойна сифатида очиш ўрнига ички ойна сифатида очишга мажбур "
+"қилиш."
 
-#: ../data/epiphany.schemas.in.h:60
-msgid "Whether to print the background color"
-msgstr "Орқа фон рангини босиб чиқарилиши ёки чиқарилмаслиги"
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
+msgid "Remember passwords"
+msgstr "Махфий сўзларни эслаб қолиш"
 
-#: ../data/epiphany.schemas.in.h:61
-msgid "Whether to print the background images"
-msgstr "Орқа фон расмини босиб чиқарилиши ёки чиқарилмаслиги"
-
-#: ../data/epiphany.schemas.in.h:62
-msgid "Whether to print the date in the footer"
-msgstr "Пастки колонтитулда санани кўрсатилиши"
-
-#: ../data/epiphany.schemas.in.h:63
-msgid "Whether to print the page address in the header"
-msgstr "Юқори колонтитулда саҳифа манзилини кўрсатилиши"
-
-#: ../data/epiphany.schemas.in.h:64
-msgid "Whether to print the page numbers (x of total) in the footer"
-msgstr "Пастки колонтитулда саҳифа рақамини (жамидан x) кўрсатилиши"
-
-#: ../data/epiphany.schemas.in.h:65
-msgid "Whether to print the page title in the header"
-msgstr "Юқори колонтитулда саҳифа сарлавҳасини кўрсатилиши"
-
-#: ../data/epiphany.schemas.in.h:66
-msgid "Whether to store and prefill passwords in web sites."
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#, fuzzy
+#| msgid "Whether to store and prefill passwords in web sites."
+msgid "Whether to store and prefill passwords in websites."
 msgstr "Веб саҳифалар махфий сўзларини сақлаш ва махфий сўз майдонига қўйиш"
 
-#: ../data/epiphany.schemas.in.h:67
-msgid "x-western"
-msgstr "x-western"
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
+msgid "Automatically manage offline status with NetworkManager"
+msgstr "NetworkManager ёрдамида офлайн ҳолатини автоматик кузатиш"
 
-#: ../data/glade/certificate-dialogs.glade.h:1
-msgid "<b>Fingerprints</b>"
-msgstr "<b>Бармоқ излар</b>"
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
+msgid "Enable smooth scrolling"
+msgstr "Силлиқ ўтказишни ёқиш"
 
-#: ../data/glade/certificate-dialogs.glade.h:2
-msgid "<b>Issued By</b>"
-msgstr "<b>Ким томонидан берилган</b>"
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
+msgid "Don't use an external application to view page source."
+msgstr "Саҳифа манбасини кўриш учун ташқи дастурни ишлатмаслик."
 
-#: ../data/glade/certificate-dialogs.glade.h:3
-msgid "<b>Issued To</b>"
-msgstr "<b>Кимга берилган</b>"
+#: ../data/org.gnome.epiphany.gschema.xml.h:24
+msgid "Whether to automatically restore the last session"
+msgstr "Охирги сеанс автоматик тиклансин"
 
-#: ../data/glade/certificate-dialogs.glade.h:4
-msgid "<b>Validity</b>"
-msgstr "<b>Яроқлилик муддати</b>"
-
-#: ../data/glade/certificate-dialogs.glade.h:5
-msgid "Certificate _Fields"
-msgstr "Сертификат _майдонлари"
-
-#: ../data/glade/certificate-dialogs.glade.h:6
-msgid "Certificate _Hierarchy"
-msgstr "Сертификат _иерархияси"
-
-#: ../data/glade/certificate-dialogs.glade.h:7
-msgid "Common Name:"
-msgstr "умумий номи:"
-
-#: ../data/glade/certificate-dialogs.glade.h:8
-msgid "Details"
-msgstr "Тафсилотлар"
-
-#: ../data/glade/certificate-dialogs.glade.h:9
-msgid "Expires On:"
-msgstr "Тугайди:"
-
-#: ../data/glade/certificate-dialogs.glade.h:10
-msgid "Field _Value"
-msgstr "Майдон _қиймати"
-
-#: ../data/glade/certificate-dialogs.glade.h:11
-#: ../data/glade/prefs-dialog.glade.h:23
-msgid "General"
-msgstr "Умумий"
-
-#: ../data/glade/certificate-dialogs.glade.h:12
-msgid "Issued On:"
-msgstr "Берилган сана:"
-
-#: ../data/glade/certificate-dialogs.glade.h:13
-msgid "MD5 Fingerprint:"
-msgstr "MD5 форматидаги бармоқ изи:"
-
-#: ../data/glade/certificate-dialogs.glade.h:14
-msgid "Organization:"
-msgstr "Ташкилот:"
-
-#: ../data/glade/certificate-dialogs.glade.h:15
-msgid "Organizational Unit:"
-msgstr ""
-
-#: ../data/glade/certificate-dialogs.glade.h:16
-msgid "SHA1 Fingerprint:"
-msgstr "SHA1 форматидаги бармоқ изи:"
-
-#: ../data/glade/certificate-dialogs.glade.h:17
-msgid "Serial Number:"
-msgstr "Серия рақами:"
-
-#: ../data/glade/epiphany.glade.h:1
-msgid "<b>_Automatic</b>"
-msgstr "<b>_Автоматик</b>"
-
-#: ../data/glade/epiphany.glade.h:2
-msgid "<b>_Use a different encoding:</b>"
-msgstr "<b>Бошқа кодлаш усулидан _фойдаланиш:</b>"
-
-#: ../data/glade/epiphany.glade.h:3
-msgid "Clear _All..."
-msgstr "_Ҳаммасини тозалаш..."
-
-#: ../data/glade/epiphany.glade.h:4
-msgid "Cookies"
-msgstr "Cookie'лар"
-
-#. The name of the default downloads folder
-#: ../data/glade/epiphany.glade.h:5 ../lib/ephy-file-helpers.c:106
-msgid "Downloads"
-msgstr "Ёзиб олиш"
-
-#: ../data/glade/epiphany.glade.h:6
-msgid "Passwords"
-msgstr "Махфий сўзлар"
-
-#: ../data/glade/epiphany.glade.h:7
-msgid "Personal Data"
-msgstr "Шахсий маълумот"
-
-#: ../data/glade/epiphany.glade.h:8
-msgid "Text Encoding"
-msgstr "Матн кодлаш усули"
-
-#: ../data/glade/epiphany.glade.h:9 ../src/ephy-encoding-menu.c:331
-msgid "Use the encoding specified by the document"
-msgstr "Ҳужжат кодлаш усулидан фойдаланиш"
-
-#: ../data/glade/epiphany.glade.h:10
-msgid "_Show passwords"
-msgstr "Махфий сўзларни _кўрсатиш"
-
-#: ../data/glade/form-signing-dialog.glade.h:1
-msgid "Sign Text"
-msgstr "Матнни имзолаш"
-
-#: ../data/glade/form-signing-dialog.glade.h:2
+#: ../data/org.gnome.epiphany.gschema.xml.h:25
 msgid ""
-"To confirm that you want to sign the above text, choose a certificate to "
-"sign the text with and enter its password below."
+"Defines how the session will be restored during startup. Allowed values are "
+"'always' (the previous state of the application is always restored), "
+"'crashed' (the session is only restored if the application crashes) and "
+"'never' (the homepage is always shown)."
 msgstr ""
+"Иш бошлашда сеанслар қандай тикланишини белгилайди. Мумкин қийматлар: "
+"\"always\" (дастурнинг олдинги ҳолати ҳар доим тикланади), \"crashed"
+"\" (дастур ҳалокатга учрагандагина сеанс тикланади) ва \"never\" (бош саҳифа "
+"ҳар доим кўрсатилади)."
 
-#: ../data/glade/form-signing-dialog.glade.h:3
-msgid "_Certificate:"
-msgstr "_Сертификат:"
-
-#: ../data/glade/form-signing-dialog.glade.h:4
-#: ../lib/ephy-password-dialog.c:420 ../lib/ephy-password-dialog.c:434
-msgid "_Password:"
-msgstr "_Махфий сўз:"
-
-#: ../data/glade/form-signing-dialog.glade.h:5
-msgid "_View Certificate…"
-msgstr "Сертификатни _кўриш…"
-
-#: ../data/glade/prefs-dialog.glade.h:1
-msgid "<b>Cookies</b>"
-msgstr "<b>Cookie'лар</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:2
-msgid "<b>Downloads</b>"
-msgstr "<b>Ёзиб олиш</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:3
-msgid "<b>Encodings</b>"
-msgstr "<b>Кодлаш усуллари</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:4
-msgid "<b>Home page</b>"
-msgstr "<b>Уй саҳифаси</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:5
-msgid "<b>Languages</b>"
-msgstr "<b>Тиллар</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:6
-msgid "<b>Passwords</b>"
-msgstr "<b>Махфий сўзлар</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:7
-msgid "<b>Temporary Files</b>"
-msgstr "<b>Вақтинчалик файлар</b>"
-
-#: ../data/glade/prefs-dialog.glade.h:8
-msgid "<b>Web Content</b>"
-msgstr ""
-
-#: ../data/glade/prefs-dialog.glade.h:9
-msgid "<b>Web Development</b>"
-msgstr ""
-
-#. Refers to "Only from sites you visit" option under Cookies.
-#: ../data/glade/prefs-dialog.glade.h:11
-msgid "<small>For example, not from advertisers on these sites</small>"
-msgstr ""
-
-#: ../data/glade/prefs-dialog.glade.h:12
-msgid "A_utomatically download and open files"
-msgstr "Файлларни а_втоматик ёзиб олиш ва очиш"
-
-#: ../data/glade/prefs-dialog.glade.h:13
-msgid "Add Language"
-msgstr "Тил қўшиш"
-
-#: ../data/glade/prefs-dialog.glade.h:14
-msgid "Allow popup _windows"
-msgstr "Попап _ойналарга рухсат бериш"
-
-#: ../data/glade/prefs-dialog.glade.h:15
-msgid "Au_todetect:"
-msgstr "Ав_то-аниқлаш:"
-
-#: ../data/glade/prefs-dialog.glade.h:16
-msgid "Choose a l_anguage:"
-msgstr "_Тилни танлаш:"
-
-#. Translators: the mnemonic shouldn't conflict with any of the
-#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
-#. * Select All, Input Methods and Insert Unicode control character.)
-#.
-#: ../data/glade/prefs-dialog.glade.h:17
-#: ../lib/widgets/ephy-location-entry.c:551 ../src/ephy-history-window.c:248
-#: ../src/pdm-dialog.c:336
-msgid "Cl_ear"
-msgstr "То_залаш"
-
-#: ../data/glade/prefs-dialog.glade.h:18
-msgid "De_fault:"
-msgstr "Ан_доза:"
-
-#: ../data/glade/prefs-dialog.glade.h:19
-msgid "Enable Java_Script"
-msgstr "Java_Script'ни ёқиш"
-
-#: ../data/glade/prefs-dialog.glade.h:21
-msgid "Enable _Java"
-msgstr "_Java'ни ёқиш"
-
-#: ../data/glade/prefs-dialog.glade.h:22
-msgid "Fonts & Style"
-msgstr "Шрифтлар ва услуб"
-
-#: ../data/glade/prefs-dialog.glade.h:24 ../src/prefs-dialog.c:946
-msgid "Language"
-msgstr "Тил"
-
-#: ../data/glade/prefs-dialog.glade.h:25
-msgid "Let web pages specify their own _fonts"
-msgstr "Веб саҳифаларга ўз _шрифтларини ишлатишга рухсат бериш"
-
-#: ../data/glade/prefs-dialog.glade.h:26
-msgid "Let web pages specify their own c_olors"
-msgstr "Веб саҳифаларга ўз _рангларини ишлатишга рухсат бериш"
-
-#: ../data/glade/prefs-dialog.glade.h:27
-msgid "MB"
-msgstr "Мб"
-
-#: ../data/glade/prefs-dialog.glade.h:28
-msgid "Only _from sites you visit"
-msgstr "Фақат ташриф буюрган сайтлар_дан"
-
-#: ../data/glade/prefs-dialog.glade.h:29
-msgid "Preferences"
-msgstr "Параметрлар"
-
-#: ../data/glade/prefs-dialog.glade.h:30
-msgid "Privacy"
-msgstr "Махфийлик"
-
-#: ../data/glade/prefs-dialog.glade.h:31
-msgid "Set to Current _Page"
-msgstr "Жорий _саҳифага ўрнатиш"
-
-#: ../data/glade/prefs-dialog.glade.h:32
-msgid "Set to _Blank Page"
-msgstr "_Бўш саҳифага ўрнатиш"
-
-#: ../data/glade/prefs-dialog.glade.h:33
-msgid "Use custom _stylesheet"
-msgstr "Бошқа _услубдан фойдаланиш"
-
-#: ../data/glade/prefs-dialog.glade.h:34
-msgid "Use s_mooth scrolling"
-msgstr ""
-
-#: ../data/glade/prefs-dialog.glade.h:35
-msgid "_Address:"
-msgstr "_Манзил:"
-
-#: ../data/glade/prefs-dialog.glade.h:36
-msgid "_Always accept"
-msgstr "_Ҳар доим қабул қилиш"
-
-#: ../data/glade/prefs-dialog.glade.h:37
-msgid "_Disk space:"
-msgstr "_Диск бўшлиги:"
-
-#: ../data/glade/prefs-dialog.glade.h:38
-msgid "_Download folder:"
-msgstr "_Ёзиб олиш жилди:"
-
-#: ../data/glade/prefs-dialog.glade.h:39
-msgid "_Edit Stylesheet…"
-msgstr "Услубни _таҳрирлаш…"
-
-#: ../data/glade/prefs-dialog.glade.h:40
-msgid "_Minimum size:"
-msgstr "_Минимал ўлчам:"
-
-#: ../data/glade/prefs-dialog.glade.h:41
-msgid "_Never accept"
-msgstr "_Ҳеч қачон қабул қилинмасин"
-
-#: ../data/glade/prefs-dialog.glade.h:42
-msgid "_Remember passwords"
-msgstr "Махфий сўзларни _эслаб қолиш"
-
-#: ../data/glade/print.glade.h:1
-msgid "<b>Background</b>"
-msgstr "<b>Орқа фон</b>"
-
-#: ../data/glade/print.glade.h:2
-msgid "<b>Footers</b>"
-msgstr "<b>Пастки колонтитуллар</b>"
-
-#: ../data/glade/print.glade.h:3
-msgid "<b>Frames</b>"
-msgstr "<b>Фреймлар</b>"
-
-#: ../data/glade/print.glade.h:4
-msgid "<b>Headers</b>"
-msgstr "<b>Юқори колонтитуллар</b>"
-
-#: ../data/glade/print.glade.h:5
-msgid "As laid out on the _screen"
-msgstr "_Экранда жойлашгани каби"
-
-#: ../data/glade/print.glade.h:6
-msgid "O_nly the selected frame"
-msgstr "Ф_ақат танланган фрейм"
-
-#: ../data/glade/print.glade.h:7
-msgid "P_age title"
-msgstr "_Саҳифа сарлавҳаси"
-
-#: ../data/glade/print.glade.h:8
-msgid "Page _numbers"
-msgstr "Саҳифа _рақамлари"
-
-#: ../data/glade/print.glade.h:9
-msgid "Print background c_olors"
-msgstr "Орқа фон _рангларини босиб чиқариш"
-
-#: ../data/glade/print.glade.h:10
-msgid "Print background i_mages"
-msgstr "Орқа фон р_асмларини босиб чиқариш"
-
-#: ../data/glade/print.glade.h:11
-msgid "_Date"
-msgstr "_Сана"
-
-#: ../data/glade/print.glade.h:12
-msgid "_Each frame separately"
-msgstr "_Ҳар бир фрейм алоҳида-алоҳида"
-
-#: ../data/glade/print.glade.h:13
-msgid "_Page address"
-msgstr "_Саҳифа манзили"
-
-#. this opens the downloader window, or brings it to the foreground if already open
-#: ../embed/downloader-view.c:168
-msgid "_Show Downloads"
-msgstr "Ёзиб олишларни _кўрсатиш"
-
-#: ../embed/downloader-view.c:314
-#, c-format
-msgid "%u:%02u.%02u"
-msgstr "%u:%02u.%02u"
-
-#: ../embed/downloader-view.c:318
-#, c-format
-msgid "%02u.%02u"
-msgstr "%02u.%02u"
-
-#: ../embed/downloader-view.c:379
-msgid "_Pause"
-msgstr "_Вақтинча тўхтатиш"
-
-#: ../embed/downloader-view.c:379
-msgid "_Resume"
-msgstr "_Давом этиш"
-
-#: ../embed/downloader-view.c:417
-#, c-format
-msgid "The file “%s” has been downloaded."
-msgstr "“%s” файли юкланди."
-
-#: ../embed/downloader-view.c:420
-msgid "Download finished"
-msgstr "Юклаш тугатилди"
-
-#. translators: first %s is filename, "%s of %s" is current/total file size
-#: ../embed/downloader-view.c:445
-#, c-format
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid ""
-"%s\n"
-"%s of %s"
+"Whether to delay loading of tabs that are not immediately visible on session "
+"restore"
 msgstr ""
-"%s\n"
-"%s / %s"
+"Сеанс тикланганда дарҳол кўринмайдиган ички ойналарни юклашни кечиктириш"
 
-#. impossible time or broken locale settings
-#: ../embed/downloader-view.c:455 ../embed/downloader-view.c:460
-#: ../embed/ephy-download.c:99 ../lib/ephy-time-helpers.c:279
-#: ../src/ephy-window.c:1731
-msgid "Unknown"
-msgstr "Номаълум"
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
+msgid ""
+"When this option is set to true, tabs will not start loading until the user "
+"switches to them, upon session restore."
+msgstr ""
+"Ушбу параметр танланган бўлса сеанс қайта тикланганда фойдаланувчи ички "
+"ойнага ўтмагунича у юкланмайди."
 
-#: ../embed/downloader-view.c:492
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
+msgid "Process model"
+msgstr "Жараён модели"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
+msgid ""
+"This option allows to set the process model used. Use 'shared-secondary-"
+"process' to use a single web process shared by all the tabs and 'one-"
+"secondary-process-per-web-view' to use a different web process for each tab."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
+msgid ""
+"Maximum number of web processes created at the same time when using 'one-"
+"secondary-process-per-web-view' model"
+msgstr ""
+"\"one-secondary-process-per-web-view\" модели ишлатилганда бир вақтнинг "
+"ўзида яратиладиган жараёнларнинг максимум сони"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
+msgid ""
+"This option sets a limit to the number of web processes that will be used at "
+"the same time for the 'one-secondary-process-per-web-view' model. The "
+"default value is '0' and means no limit."
+msgstr ""
+"Ушбу параметр \"one-secondary-process-per-web-view\" модели учун бир "
+"вақтнинг ўзида ишлатиладиган веб жараёнларининг сонини белгилайди. Андоза "
+"қиймати \"0\" бўлиб чекланмаганлигини билдиради."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
+msgid "[Deprecated]"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
+msgid ""
+"[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' "
+"instead."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
+msgid "Visibility of the downloads window"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
+msgid ""
+"Hide or show the downloads window. When hidden, a notification will be shown "
+"when new downloads are started."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
+msgid "Expand tabs size to fill the available space on the tabs bar."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
+msgid ""
+"If enabled the tabs will expand to use the entire available space in the "
+"tabs bar."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
+msgid "The position of the tabs bar."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
+msgid ""
+"Controls where the tabs bar is shown. Possible values are 'top' (the "
+"default), 'bottom', 'left' (vertical tabs with bar on the left) and "
+"'right' (vertical tabs with bar on the right)."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
+msgid "The visibility policy for the tabs bar."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
+msgid ""
+"Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
+"bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
+"two or more tabs) and 'never' (the tabs bar is never shown)."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
+msgid "Minimum font size"
+msgstr "Шрифтнинг минимал ўлчами"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
+msgid "Use GNOME fonts"
+msgstr "GNOME шрифтларидан фойдаланиш"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
+msgid "Use GNOME font settings."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
+msgid "Custom sans-serif font"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
+msgid ""
+"A value to be used to override sans-serif desktop font when use-gnome-fonts "
+"is set."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
+msgid "Custom serif font"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
+msgid ""
+"A value to be used to override serif desktop font when use-gnome-fonts is "
+"set."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
+msgid "Custom monospace font"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
+msgid ""
+"A value to be used to override monospace desktop font when use-gnome-fonts "
+"is set."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
+msgid "Use own colors"
+msgstr "Фойдаланувчи рангларидан фойдаланиш"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
+msgid "Use your own colors instead of the colors the page requests."
+msgstr ""
+"Саҳифа талаб қилган ранглар ўрнига фойдаланувчи рангларидан фойдаланиш."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
+msgid "Use own fonts"
+msgstr "Фойдаланувчи шрифтларидан фойдаланиш"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
+msgid "Use your own fonts instead of the fonts the page requests."
+msgstr ""
+"Саҳифа талаб қилган шрифтлар ўрнига фойдаланувчи шрифтларидан фойдаланиш."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
+msgid "Use a custom CSS"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
+msgid "Use a custom CSS file to modify websites own CSS."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
+msgid "Enable spell checking"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
+msgid "Spell check any text typed in editable areas."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
+msgid "Default encoding"
+msgstr "Андоза кодлаш усули"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
+msgid ""
+"Default encoding. Accepted values are the ones WebKitGTK+ can understand."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../src/resources/prefs-dialog.ui.h:39
+msgid "Languages"
+msgstr "Тиллар"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
+msgid "Preferred languages, two letter codes."
+msgstr "Афзал кўрилган тиллар, икки ҳарфли кодлар."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
+msgid "Cookie accept"
+msgstr "Cookie'ни қабул қилиш"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
+msgid ""
+"Where to accept cookies from. Possible values are \"always\", \"no-third-"
+"party\" and \"never\"."
+msgstr ""
+"Cookie қабул қилинадиган жойлар. Мавжуд қийматлар: \"always\" (ҳар доим), "
+"\"no-third-party\" (чет сайтлардан эмас) ва \"never\" (ҳеч қачон)."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
+msgid "Image animation mode"
+msgstr "Расм анимацияси усули"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
+msgid ""
+"How to present animated images. Possible values are \"normal\", \"once\" and "
+"\"disabled\"."
+msgstr ""
+"Анимацион расмларнинг кўриниши. Қуйидагилар бўлиши мумкин: \"normal"
+"\" (андоза), \"once\" (бир марта) ва \"disabled\" (анимациясиз)."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
+msgid "Allow popups"
+msgstr "Попап ойнага рухсат бериш"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
+msgid ""
+"Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
+msgstr ""
+"Сайтларга JavaScript ёрдамида янги ойна очишга рухсат бериш (агар JavaScript "
+"ёқилган бўлса)."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
+msgid "Enable Plugins"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
+msgid "Enable JavaScript"
+msgstr "JavaScript'ни ёқиш"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
+msgid "Enable WebGL"
+msgstr "WebGLни ёқиш"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
+msgid "Whether to enable support for WebGL contexts."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
+msgid "Enable WebAudio"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
+msgid "Whether to enable support for WebAudio."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
+msgid "Do Not Track"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
+msgid ""
+"Whether to tell websites that we do not wish to be tracked. Please note that "
+"web pages are not forced to follow this setting."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
+msgid "Enable Adblock"
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
+msgid ""
+"Whether to block the embedded advertisements that web pages might want to "
+"show."
+msgstr ""
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:79
+msgid "The downloads folder"
+msgstr "Ёзиб олиш жилди"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:80
+msgid ""
+"The path of the folder where to download files to; or \"Downloads\" to use "
+"the default downloads folder, or \"Desktop\" to use the desktop folder."
+msgstr ""
+"Файллар ёзиб олинадиган жилд; андоза жилддан фойдаланиш учун \"Downloads\" "
+"ёки иш столига ёзиб олиш учун \"Desktop\"дан фойдаланинг."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:81
+msgid "Whether to show the title column in the bookmarks window."
+msgstr "Хатчўплар ойнасида сарлавҳа устунини кўрсатиш ёки кўрсатмаслик"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:82
+msgid "Whether to show the address column in the bookmarks window."
+msgstr "Хатчўплар ойнасида манзил устунини кўрсатиш ёки кўрсатмаслик"
+
+#: ../embed/ephy-about-handler.c:136
+msgid "Installed plugins"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:137
+msgid "Plugins"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:140
+msgid "Plugins are disabled in the preferences"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:153
+msgid "Enabled"
+msgstr "Ёниқ"
+
+#. webkit_plugin_get_enabled (plugin) &&
+#: ../embed/ephy-about-handler.c:153
+msgid "Yes"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:153
+msgid "No"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:154
+msgid "MIME type"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:154
+msgid "Description"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:154
+msgid "Suffixes"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:217 ../embed/ephy-about-handler.c:219
+msgid "Memory usage"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:267
 #, c-format
-msgid "%d download"
-msgid_plural "%d downloads"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../embed/downloader-view.c:599
-#, c-format
-msgid "The file “%s” has been added to the downloads queue."
+msgid "Version %s"
 msgstr ""
 
-#: ../embed/downloader-view.c:602
-msgid "Download started"
+#: ../embed/ephy-about-handler.c:287
+msgid "About Web"
+msgstr "Web ҳақида"
+
+#: ../embed/ephy-about-handler.c:291
+msgid "A simple, clean, beautiful view of the web"
 msgstr ""
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:679 ../embed/downloader-view.c:692
-msgid "download status|Unknown"
-msgstr "ёзиб олиш ҳолати|Номаълум"
+#: ../embed/ephy-about-handler.c:349 ../embed/ephy-about-handler.c:350
+msgid "Applications"
+msgstr ""
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/downloader-view.c:684
-msgid "download status|Failed"
-msgstr "ёзиб олиш ҳолати|Муваффақиятсиз"
+#: ../embed/ephy-about-handler.c:351
+msgid "List of installed web applications"
+msgstr ""
 
-#: ../embed/downloader-view.c:751 ../src/bookmarks/ephy-bookmarks-editor.c:987
-msgid "File"
-msgstr "Файл"
+#: ../embed/ephy-about-handler.c:365
+msgid "Delete"
+msgstr "Ўчириш"
 
-#: ../embed/downloader-view.c:774
-msgid "%"
-msgstr "%"
+#. Note for translators: this refers to the installation date.
+#: ../embed/ephy-about-handler.c:367
+msgid "Installed on:"
+msgstr ""
 
-#: ../embed/downloader-view.c:785
-msgid "Remaining"
-msgstr "Қолган вақт"
+#: ../embed/ephy-about-handler.c:476 ../embed/ephy-embed-utils.c:308
+msgid "Most Visited"
+msgstr "Энг кўп кўрилган"
+
+#. Displayed when opening the browser for the first time.
+#: ../embed/ephy-about-handler.c:495
+msgid "Welcome to Web"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:495
+msgid "Start browsing and your most-visited sites will appear here."
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:529
+msgid "Remove from overview"
+msgstr "Тепадан кўринишдан олиб ташлаш"
+
+#: ../embed/ephy-about-handler.c:593 ../embed/ephy-about-handler.c:594
+msgid "Private Browsing"
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:595
+msgid ""
+"You are currently browsing <em>incognito</em>. Pages viewed in this mode "
+"will not show up in your browsing history and all stored information will be "
+"cleared when you close the window. Files you download will be kept."
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:599
+msgid ""
+"Incognito mode hides your activity only from people using this computer."
+msgstr ""
+
+#: ../embed/ephy-about-handler.c:601
+msgid ""
+"It will not hide your activity from your employer if you are at work. Your "
+"internet service provider, your government, other governments, the websites "
+"that you visit, and advertisers on these websites may still be tracking you."
+msgstr ""
 
 #. characters
-#. ms
-#. RELOAD_DELAY * RELOAD_DELAY_MAX_TICKS = 10 s
-#: ../embed/ephy-base-embed.c:49 ../embed/ephy-embed-utils.c:111
+#: ../embed/ephy-embed.c:47
 msgid "Blank page"
 msgstr "Бўш саҳифа"
 
-#: ../embed/ephy-base-embed.c:1015
+#. Translators: 'ESC' and 'F11' are keyboard keys.
+#: ../embed/ephy-embed.c:532
 #, c-format
-msgid "Redirecting to “%s”…"
-msgstr "“%s” сайтига қайта йўналтирилмоқда…"
+msgid "Press %s to exit fullscreen"
+msgstr "Бутун экран кўринишидан чиқиш учун %sни босинг"
 
-#: ../embed/ephy-base-embed.c:1017
-#, c-format
-msgid "Transferring data from “%s”…"
-msgstr "“%s” сайтидан маълумотлар узатилмоқда…"
+#: ../embed/ephy-embed.c:532
+msgid "ESC"
+msgstr "ESC"
 
-#: ../embed/ephy-base-embed.c:1019
-#, c-format
-msgid "Waiting for authorization from “%s”…"
-msgstr "“%s” сайтига тасдиқланиш кутилмоқда…"
+#: ../embed/ephy-embed.c:532
+msgid "F11"
+msgstr "F11"
 
-#. translators: %s here is the address of the web page
-#: ../embed/ephy-base-embed.c:1025 ../embed/ephy-base-embed.c:1201
-#, c-format
-msgid "Loading “%s”…"
-msgstr "“%s” юкланмоқда…"
-
-#: ../embed/ephy-base-embed.c:1203
-msgid "Loading…"
-msgstr "Юкланмоқда..."
-
-#: ../embed/ephy-embed-shell.c:244
-msgid "Epiphany can't be used now. Mozilla initialization failed."
-msgstr ""
-
-#: ../embed/ephy-embed-utils.c:61
+#: ../embed/ephy-embed-utils.c:62
 #, c-format
 msgid "Send an email message to “%s”"
-msgstr ""
+msgstr "\"%s\"га электрон хат жўнатиш"
 
-#: ../embed/ephy-encodings.c:61
+#: ../embed/ephy-embed-utils.c:238 ../src/ephy-search-provider.c:283
+#, c-format
+msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+
+#: ../embed/ephy-encodings.c:57
 msgid "Arabic (_IBM-864)"
 msgstr "Арабча (_IBM-864)"
 
-#: ../embed/ephy-encodings.c:62
+#: ../embed/ephy-encodings.c:58
 msgid "Arabic (ISO-_8859-6)"
 msgstr "Арабча (ISO-_8859-6)"
 
-#: ../embed/ephy-encodings.c:63
+#: ../embed/ephy-encodings.c:59
 msgid "Arabic (_MacArabic)"
 msgstr "Арабча (_MacArabic)"
 
-#: ../embed/ephy-encodings.c:64
+#: ../embed/ephy-encodings.c:60
 msgid "Arabic (_Windows-1256)"
 msgstr "Арабча (_Windows-1256)"
 
-#: ../embed/ephy-encodings.c:65
+#: ../embed/ephy-encodings.c:61
 msgid "Baltic (_ISO-8859-13)"
 msgstr "Балтик (_ISO-8859-13)"
 
-#: ../embed/ephy-encodings.c:66
+#: ../embed/ephy-encodings.c:62
 msgid "Baltic (I_SO-8859-4)"
 msgstr "Балтик (I_SO-8859-4)"
 
-#: ../embed/ephy-encodings.c:67
+#: ../embed/ephy-encodings.c:63
 msgid "Baltic (_Windows-1257)"
 msgstr "Балтик (_Windows-1257)"
 
-#: ../embed/ephy-encodings.c:68
+#: ../embed/ephy-encodings.c:64
 msgid "_Armenian (ARMSCII-8)"
 msgstr "_Арманча (ARMSCII-8)"
 
-#: ../embed/ephy-encodings.c:69
+#: ../embed/ephy-encodings.c:65
 msgid "_Georgian (GEOSTD8)"
 msgstr "_Грузинча (GEOSTD8)"
 
-#: ../embed/ephy-encodings.c:70
+#: ../embed/ephy-encodings.c:66
 msgid "Central European (_IBM-852)"
 msgstr "Марказий европача (_IBM-852)"
 
-#: ../embed/ephy-encodings.c:71
+#: ../embed/ephy-encodings.c:67
 msgid "Central European (I_SO-8859-2)"
 msgstr "Марказий европача (I_SO-8859-2)"
 
-#: ../embed/ephy-encodings.c:72
+#: ../embed/ephy-encodings.c:68
 msgid "Central European (_MacCE)"
 msgstr "Марказий европача (_MacCE)"
 
-#: ../embed/ephy-encodings.c:73
+#: ../embed/ephy-encodings.c:69
 msgid "Central European (_Windows-1250)"
 msgstr "Марказий европача (_Windows-1250)"
 
-#: ../embed/ephy-encodings.c:74
+#: ../embed/ephy-encodings.c:70
 msgid "Chinese Simplified (_GB18030)"
 msgstr "Соддалаштирилган хитойча (_GB18030)"
 
-#: ../embed/ephy-encodings.c:75
+#: ../embed/ephy-encodings.c:71
 msgid "Chinese Simplified (G_B2312)"
 msgstr "Соддалаштирилган хитойча (G_B2312)"
 
-#: ../embed/ephy-encodings.c:76
+#: ../embed/ephy-encodings.c:72
 msgid "Chinese Simplified (GB_K)"
 msgstr "Соддалаштирилган хитойча (GB_K)"
 
-#: ../embed/ephy-encodings.c:77
+#: ../embed/ephy-encodings.c:73
 msgid "Chinese Simplified (_HZ)"
 msgstr "Соддалаштирилган хитойча (_HZ)"
 
-#: ../embed/ephy-encodings.c:78
+#: ../embed/ephy-encodings.c:74
 msgid "Chinese Simplified (_ISO-2022-CN)"
 msgstr "Соддалаштирилган хитойча (_ISO-2022-CN)"
 
-#: ../embed/ephy-encodings.c:79
+#: ../embed/ephy-encodings.c:75
 msgid "Chinese Traditional (Big_5)"
 msgstr "Анъанавий хитойча (Big_5)"
 
-#: ../embed/ephy-encodings.c:80
+#: ../embed/ephy-encodings.c:76
 msgid "Chinese Traditional (Big5-HK_SCS)"
 msgstr "Анъанавий хитойча (Big5-HK_SCS)"
 
-#: ../embed/ephy-encodings.c:81
+#: ../embed/ephy-encodings.c:77
 msgid "Chinese Traditional (_EUC-TW)"
 msgstr "Анъанавий хитойча (_EUC-TW)"
 
-#: ../embed/ephy-encodings.c:82
+#: ../embed/ephy-encodings.c:78
 msgid "Cyrillic (_IBM-855)"
 msgstr "Кирилча (_IBM-855)"
 
-#: ../embed/ephy-encodings.c:83
+#: ../embed/ephy-encodings.c:79
 msgid "Cyrillic (I_SO-8859-5)"
 msgstr "Кирилча (I_SO-8859-5)"
 
-#: ../embed/ephy-encodings.c:84
+#: ../embed/ephy-encodings.c:80
 msgid "Cyrillic (IS_O-IR-111)"
 msgstr "Кирилча (IS_O-IR-111)"
 
-#: ../embed/ephy-encodings.c:85
+#: ../embed/ephy-encodings.c:81
 msgid "Cyrillic (_KOI8-R)"
 msgstr "Кирилча (_KOI8-R)"
 
-#: ../embed/ephy-encodings.c:86
+#: ../embed/ephy-encodings.c:82
 msgid "Cyrillic (_MacCyrillic)"
 msgstr "Кирилча (_MacCyrillic)"
 
-#: ../embed/ephy-encodings.c:87
+#: ../embed/ephy-encodings.c:83
 msgid "Cyrillic (_Windows-1251)"
 msgstr "Кирилча (_Windows-1251)"
 
-#: ../embed/ephy-encodings.c:88
+#: ../embed/ephy-encodings.c:84
 msgid "Cyrillic/_Russian (IBM-866)"
 msgstr "Кирилча/_Русча (IBM-866)"
 
-#: ../embed/ephy-encodings.c:89
+#: ../embed/ephy-encodings.c:85
 msgid "Greek (_ISO-8859-7)"
 msgstr "Юнонча (_ISO-8859-7)"
 
-#: ../embed/ephy-encodings.c:90
+#: ../embed/ephy-encodings.c:86
 msgid "Greek (_MacGreek)"
 msgstr "Юнонча (_MacGreek)"
 
-#: ../embed/ephy-encodings.c:91
+#: ../embed/ephy-encodings.c:87
 msgid "Greek (_Windows-1253)"
 msgstr "Юнонча (_Windows-1253)"
 
-#: ../embed/ephy-encodings.c:92
+#: ../embed/ephy-encodings.c:88
 msgid "Gujarati (_MacGujarati)"
 msgstr "Гужорати (_MacGujarati)"
 
-#: ../embed/ephy-encodings.c:93
+#: ../embed/ephy-encodings.c:89
 msgid "Gurmukhi (Mac_Gurmukhi)"
 msgstr "Гурмухи (Mac_Gurmukhi)"
 
-#: ../embed/ephy-encodings.c:94
+#: ../embed/ephy-encodings.c:90
 msgid "Hindi (Mac_Devanagari)"
 msgstr "Хинди (Mac_Devanagari)"
 
-#: ../embed/ephy-encodings.c:95
+#: ../embed/ephy-encodings.c:91
 msgid "Hebrew (_IBM-862)"
 msgstr "Яҳудийча (_IBM-862)"
 
-#: ../embed/ephy-encodings.c:96
+#: ../embed/ephy-encodings.c:92
 msgid "Hebrew (IS_O-8859-8-I)"
 msgstr "Яҳудийча (IS_O-8859-8-I)"
 
-#: ../embed/ephy-encodings.c:97
+#: ../embed/ephy-encodings.c:93
 msgid "Hebrew (_MacHebrew)"
 msgstr "Яҳудийча (_MacHebrew)"
 
-#: ../embed/ephy-encodings.c:98
+#: ../embed/ephy-encodings.c:94
 msgid "Hebrew (_Windows-1255)"
 msgstr "Яҳудийча (_Windows-1255)"
 
-#: ../embed/ephy-encodings.c:99
+#: ../embed/ephy-encodings.c:95
 msgid "_Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "_Визуал Иврит (ISO-8859-8)"
 
-#: ../embed/ephy-encodings.c:100
+#: ../embed/ephy-encodings.c:96
 msgid "Japanese (_EUC-JP)"
 msgstr "Японча (_EUC-JP)"
 
-#: ../embed/ephy-encodings.c:101
+#: ../embed/ephy-encodings.c:97
 msgid "Japanese (_ISO-2022-JP)"
 msgstr "Японча (_ISO-2022-JP)"
 
-#: ../embed/ephy-encodings.c:102
+#: ../embed/ephy-encodings.c:98
 msgid "Japanese (_Shift-JIS)"
 msgstr "Японча (_Shift-JIS)"
 
-#: ../embed/ephy-encodings.c:103
+#: ../embed/ephy-encodings.c:99
 msgid "Korean (_EUC-KR)"
 msgstr "Корейсча (_EUC-KR)"
 
-#: ../embed/ephy-encodings.c:104
+#: ../embed/ephy-encodings.c:100
 msgid "Korean (_ISO-2022-KR)"
 msgstr "Корейсча (_ISO-2022-KR)"
 
-#: ../embed/ephy-encodings.c:105
+#: ../embed/ephy-encodings.c:101
 msgid "Korean (_JOHAB)"
 msgstr "Корейсча (_JOHAB)"
 
-#: ../embed/ephy-encodings.c:106
+#: ../embed/ephy-encodings.c:102
 msgid "Korean (_UHC)"
 msgstr "Корейсча (_UHC)"
 
-#: ../embed/ephy-encodings.c:107
+#: ../embed/ephy-encodings.c:103
 msgid "_Celtic (ISO-8859-14)"
 msgstr "_Келтча (ISO-8859-14)"
 
-#: ../embed/ephy-encodings.c:108
+#: ../embed/ephy-encodings.c:104
 msgid "_Icelandic (MacIcelandic)"
 msgstr "_Исландча (MacIcelandic)"
 
-#: ../embed/ephy-encodings.c:109
+#: ../embed/ephy-encodings.c:105
 msgid "_Nordic (ISO-8859-10)"
 msgstr "_Скандинавча (ISO-8859-10)"
 
-#: ../embed/ephy-encodings.c:110
+#: ../embed/ephy-encodings.c:106
 msgid "_Persian (MacFarsi)"
 msgstr "_Форсча (MacFarsi)"
 
-#: ../embed/ephy-encodings.c:111
+#: ../embed/ephy-encodings.c:107
 msgid "Croatian (Mac_Croatian)"
 msgstr "Хорватча (Mac_Croatian)"
 
-#: ../embed/ephy-encodings.c:112
+#: ../embed/ephy-encodings.c:108
 msgid "_Romanian (MacRomanian)"
 msgstr "_Руминча (MacRomanian)"
 
-#: ../embed/ephy-encodings.c:113
+#: ../embed/ephy-encodings.c:109
 msgid "R_omanian (ISO-8859-16)"
 msgstr "Р_уминча (ISO-8859-16)"
 
-#: ../embed/ephy-encodings.c:114
+#: ../embed/ephy-encodings.c:110
 msgid "South _European (ISO-8859-3)"
 msgstr "Жанубий _Европача (ISO-8859-3)"
 
-#: ../embed/ephy-encodings.c:115
+#: ../embed/ephy-encodings.c:111
 msgid "Thai (TIS-_620)"
 msgstr "Тай (TIS-_620)"
 
-#: ../embed/ephy-encodings.c:116
+#: ../embed/ephy-encodings.c:112
 msgid "Thai (IS_O-8859-11)"
 msgstr "Тай (IS_O-8859-11)"
 
-#: ../embed/ephy-encodings.c:117
+#: ../embed/ephy-encodings.c:113
 msgid "_Thai (Windows-874)"
 msgstr "_Тай (Windows-874)"
 
-#: ../embed/ephy-encodings.c:118
+#: ../embed/ephy-encodings.c:114
 msgid "Turkish (_IBM-857)"
 msgstr "Туркча (_IBM-857)"
 
-#: ../embed/ephy-encodings.c:119
+#: ../embed/ephy-encodings.c:115
 msgid "Turkish (I_SO-8859-9)"
 msgstr "Туркча (I_SO-8859-9)"
 
-#: ../embed/ephy-encodings.c:120
+#: ../embed/ephy-encodings.c:116
 msgid "Turkish (_MacTurkish)"
 msgstr "Туркча (_MacTurkish)"
 
-#: ../embed/ephy-encodings.c:121
+#: ../embed/ephy-encodings.c:117
 msgid "Turkish (_Windows-1254)"
 msgstr "Туркча (_Windows-1254)"
 
-#: ../embed/ephy-encodings.c:122
+#: ../embed/ephy-encodings.c:118
 msgid "Unicode (UTF-_8)"
 msgstr "Юникод (UTF-_8)"
 
-#: ../embed/ephy-encodings.c:123
+#: ../embed/ephy-encodings.c:119
 msgid "Cyrillic/Ukrainian (_KOI8-U)"
 msgstr "Кирилча/Украинча (_KOI8-U)"
 
-#: ../embed/ephy-encodings.c:124
+#: ../embed/ephy-encodings.c:120
 msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
 msgstr "Кирилча/Украинча (Mac_Ukrainian)"
 
-#: ../embed/ephy-encodings.c:125
+#: ../embed/ephy-encodings.c:121
 msgid "Vietnamese (_TCVN)"
 msgstr "Вьетнамча (_TCVN)"
 
-#: ../embed/ephy-encodings.c:126
+#: ../embed/ephy-encodings.c:122
 msgid "Vietnamese (_VISCII)"
 msgstr "Вьетнамча (_VISCII)"
 
-#: ../embed/ephy-encodings.c:127
+#: ../embed/ephy-encodings.c:123
 msgid "Vietnamese (V_PS)"
 msgstr "Вьетнамча (V_PS)"
 
-#: ../embed/ephy-encodings.c:128
+#: ../embed/ephy-encodings.c:124
 msgid "Vietnamese (_Windows-1258)"
 msgstr "Вьетнамча (_Windows-1258)"
 
-#: ../embed/ephy-encodings.c:129
+#: ../embed/ephy-encodings.c:125
 msgid "Western (_IBM-850)"
 msgstr "Ғарбий (_IBM-850)"
 
-#: ../embed/ephy-encodings.c:130
+#: ../embed/ephy-encodings.c:126
 msgid "Western (_ISO-8859-1)"
 msgstr "Ғарбий (_ISO-8859-1)"
 
-#: ../embed/ephy-encodings.c:131
+#: ../embed/ephy-encodings.c:127
 msgid "Western (IS_O-8859-15)"
 msgstr "Ғарбий (IS_O-8859-15)"
 
-#: ../embed/ephy-encodings.c:132
+#: ../embed/ephy-encodings.c:128
 msgid "Western (_MacRoman)"
 msgstr "Ғарбий (_MacRoman)"
 
-#: ../embed/ephy-encodings.c:133
+#: ../embed/ephy-encodings.c:129
 msgid "Western (_Windows-1252)"
 msgstr "Ғарбий (_Windows-1252)"
 
-#. the following encodings are so rarely used that we don't want to pollute the "related"
-#. * part of the encodings menu with them, so we set the language group to 0 here
+#. The following encodings are so rarely used that we don't want to
+#. * pollute the "related" part of the encodings menu with them, so we
+#. * set the language group to 0 here.
 #.
-#: ../embed/ephy-encodings.c:138
+#: ../embed/ephy-encodings.c:135
 msgid "English (_US-ASCII)"
 msgstr "Инглизча (_US-ASCII)"
 
-#: ../embed/ephy-encodings.c:139
+#: ../embed/ephy-encodings.c:136
 msgid "Unicode (UTF-_16 BE)"
 msgstr "Юникод (UTF-_16 BE)"
 
-#: ../embed/ephy-encodings.c:140
+#: ../embed/ephy-encodings.c:137
 msgid "Unicode (UTF-1_6 LE)"
 msgstr "Юникод (UTF-1_6 LE)"
 
-#: ../embed/ephy-encodings.c:141
+#: ../embed/ephy-encodings.c:138
 msgid "Unicode (UTF-_32 BE)"
 msgstr "Юникод (UTF-_32 BE)"
 
-#: ../embed/ephy-encodings.c:142
+#: ../embed/ephy-encodings.c:139
 msgid "Unicode (UTF-3_2 LE)"
 msgstr "Юникод (UTF-3_2 LE)"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:146
-msgid "autodetectors|Off"
-msgstr "Ўчирилган"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:149
-msgid "automatically detect ... character encodings|Chinese"
-msgstr "Хитойча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:152
-msgid "automatically detect ... character encodings|Simplified Chinese"
-msgstr "Соддалаштирилган хитойча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:155
-msgid "automatically detect ... character encodings|Traditional Chinese"
-msgstr "Анъанавий хитойча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:158
-msgid "automatically detect ... character encodings|East Asian"
-msgstr "Шарқий осиё"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:161
-msgid "automatically detect ... character encodings|Japanese"
-msgstr "Японча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:164
-msgid "automatically detect ... character encodings|Korean"
-msgstr "Корейсча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:167
-msgid "automatically detect ... character encodings|Russian"
-msgstr "Русча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:170
-msgid "automatically detect ... character encodings|Universal"
-msgstr "Универсал"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../embed/ephy-encodings.c:173
-msgid "automatically detect ... character encodings|Ukrainian"
-msgstr "Украинча"
-
-#. translators: this is the title that an unknown encoding will
+#. Translators: this is the title that an unknown encoding will
 #. * be displayed as.
 #.
-#: ../embed/ephy-encodings.c:329
+#: ../embed/ephy-encodings.c:218
 #, c-format
 msgid "Unknown (%s)"
 msgstr "Номаълум (%s)"
 
-#: ../embed/ephy-history.c:487
-msgid "All"
-msgstr "Ҳаммаси"
+#: ../embed/ephy-find-toolbar.c:96
+msgid "Text not found"
+msgstr "Матн топилмади"
 
-#: ../embed/ephy-history.c:655
-msgid "Others"
-msgstr "Бошқалар"
+#: ../embed/ephy-find-toolbar.c:102
+msgid "Search wrapped back to the top"
+msgstr "Излаш яна тепага қайтди"
 
-#: ../embed/ephy-history.c:661
-msgid "Local files"
-msgstr "Локал файллар"
+#: ../embed/ephy-find-toolbar.c:388
+msgid "Type to search…"
+msgstr "Излаш учун ёзинг..."
 
-#: ../lib/eel-gconf-extensions.c:68
+#: ../embed/ephy-find-toolbar.c:394
+msgid "Find previous occurrence of the search string"
+msgstr "Изланган матннинг аввалги учраганини топиш"
+
+#: ../embed/ephy-find-toolbar.c:402
+msgid "Find next occurrence of the search string"
+msgstr "Изланган матннинг кейинги учраганини топиш"
+
+#: ../embed/ephy-web-view.c:517
+msgid "_Don’t Save"
+msgstr "_Сақланмасин"
+
+#: ../embed/ephy-web-view.c:518 ../lib/widgets/ephy-file-chooser.c:188
+msgid "_Save"
+msgstr "_Сақлаш"
+
+#. Translators: The %s the hostname where this is happening.
+#. * Example: mail.google.com.
+#.
+#: ../embed/ephy-web-view.c:529
+#, c-format
+msgid "Do you want to save your password for “%s”?"
+msgstr "\"%s\" учун махфий сўзингизни сақлаб қолмоқчимисиз?"
+
+#: ../embed/ephy-web-view.c:1317
+msgid "Deny"
+msgstr "Рад қилмоқ"
+
+#: ../embed/ephy-web-view.c:1318
+msgid "Allow"
+msgstr "Рухсат бермоқ"
+
+#. Translators: Geolocation policy for a specific site.
+#: ../embed/ephy-web-view.c:1330
+#, c-format
+msgid "The page at <b>%s</b> wants to know your location."
+msgstr "<b>%s</b>даги саҳифа манзилингизни билмоқчи."
+
+#. Translators: Notification policy for a specific site.
+#: ../embed/ephy-web-view.c:1334
+#, c-format
+msgid "The page at <b>%s</b> wants to show desktop notifications."
+msgstr "<b>%s</b>даги саҳифа иш столи эълонларини кўрсатмоқчи."
+
+#. translators: %s here is the address of the web page
+#: ../embed/ephy-web-view.c:1429
+#, c-format
+msgid "Loading “%s”…"
+msgstr "“%s” юкланмоқда…"
+
+#: ../embed/ephy-web-view.c:1431
+msgid "Loading…"
+msgstr "Юкланмоқда..."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1680
+msgid ""
+"This website presented identification that belongs to a different website."
+msgstr ""
+"Ушбу веб саҳифа бошқа веб саҳифага тегишли шахсиятни аниқловчи ҳужжатни "
+"тақдим қилди."
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1685
+msgid ""
+"This website’s identification is too old to trust. Check the date on your "
+"computer’s calendar."
+msgstr ""
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1690
+msgid "This website’s identification was not issued by a trusted organization."
+msgstr ""
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1695
+msgid ""
+"This website’s identification could not be processed. It may be corrupted."
+msgstr ""
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1700
+msgid ""
+"This website’s identification has been revoked by the trusted organization "
+"that issued it."
+msgstr ""
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1705
+msgid ""
+"This website’s identification cannot be trusted because it uses very weak "
+"encryption."
+msgstr ""
+
+#. Possible error message when a site presents a bad certificate.
+#: ../embed/ephy-web-view.c:1710
+msgid ""
+"This website’s identification is only valid for future dates. Check the date "
+"on your computer’s calendar."
+msgstr ""
+
+#: ../embed/ephy-web-view.c:1793
+msgid "None specified"
+msgstr "Бирорта аниқ белгиланмаган"
+
+#. Page title when a site cannot be loaded due to a network error.
+#. Page title when a site cannot be loaded due to a page crash error.
+#: ../embed/ephy-web-view.c:1807 ../embed/ephy-web-view.c:1833
+#, c-format
+msgid "Problem Loading Page"
+msgstr "Саҳифани юклашда муаммо"
+
+#. Message title when a site cannot be loaded due to a network error.
+#: ../embed/ephy-web-view.c:1810
+msgid "Oops! Unable to display this website"
+msgstr "Вой! Ушбу веб сайтни кўрсатиб бўлмади"
+
+#. Message body when a site cannot be loaded due to a network error.
+#: ../embed/ephy-web-view.c:1813
 #, c-format
 msgid ""
-"GConf error:\n"
-"  %s"
+"<p>The site at <strong>%s</strong> seems to be unavailable.</p><p>It may be "
+"temporarily inaccessible or moved to a new address. You may wish to verify "
+"that your internet connection is working correctly.</p>"
 msgstr ""
-"GConf хатоси:\n"
-"  %s"
 
-#. Translaters: This string is for a toggle to display a toolbar.
-#. * The name of the toolbar is automatically computed from the widgets
-#. * on the toolbar, and is placed at the %s. Note the _ before the %s
-#. * which is used to add mnemonics. We know that this is likely to
-#. * produce duplicates, but don't worry about it. If your language
-#. * normally has a mnemonic at the start, please use the _. If not,
-#. * please remove.
-#: ../lib/egg/egg-editable-toolbar.c:923
+#. Message details when a site cannot be loaded due to a network error.
+#: ../embed/ephy-web-view.c:1822
 #, c-format
-msgid "Show “_%s”"
-msgstr "“_%s” ни кўрсатиш"
+msgid "<p>The precise error was: <i>%s</i></p>"
+msgstr "<p>Аниқ хато қуйидагича: <i>%s</i></p>"
 
-#: ../lib/egg/egg-editable-toolbar.c:1386
-msgid "_Move on Toolbar"
-msgstr "Асбоблар панелида _кўчириш"
+#. The button on the network error page. Do not add mnemonics here.
+#. The button on the page crash error page. Do not add mnemonics here.
+#. The button on the process crash error page. Do not add mnemonics here.
+#: ../embed/ephy-web-view.c:1826 ../embed/ephy-web-view.c:1848
+#: ../embed/ephy-web-view.c:1865
+msgid "Reload"
+msgstr "Қайта юклаш"
 
-#: ../lib/egg/egg-editable-toolbar.c:1387
-msgid "Move the selected item on the toolbar"
-msgstr "Асбоблар панелидан танланган элементни кўчириш"
+#. Mnemonic for the Reload button on browser error pages.
+#: ../embed/ephy-web-view.c:1829 ../embed/ephy-web-view.c:1851
+#: ../embed/ephy-web-view.c:1868
+msgctxt "reload-access-key"
+msgid "R"
+msgstr "R"
 
-#: ../lib/egg/egg-editable-toolbar.c:1388
-msgid "_Remove from Toolbar"
-msgstr "Асбоблар панелидан _олиб ташлаш"
+#. Message title when a site cannot be loaded due to a page crash error.
+#: ../embed/ephy-web-view.c:1836
+msgid "Oops! There may be a problem"
+msgstr "Вой! Муаммо борга ўхшайди"
 
-#: ../lib/egg/egg-editable-toolbar.c:1389
-msgid "Remove the selected item from the toolbar"
-msgstr "Танланган элементни асбоблар панелидан олиб ташлаш"
+#. Message body when a site cannot be loaded due to a page crash error.
+#: ../embed/ephy-web-view.c:1839
+#, c-format
+msgid ""
+"<p>The site at <strong>%s</strong> may have caused Web to close unexpectedly."
+"</p><p>If this happens again, please report the problem to the <strong>%s</"
+"strong>  developers.</p>"
+msgstr ""
 
-#: ../lib/egg/egg-editable-toolbar.c:1390
-msgid "_Delete Toolbar"
-msgstr "Асбоблар панелини _олиб ташлаш"
+#. Page title when a site cannot be loaded due to a process crash error.
+#: ../embed/ephy-web-view.c:1855
+#, c-format
+msgid "Problem Displaying Page"
+msgstr "Саҳифани кўрсатишда муаммо"
 
-#: ../lib/egg/egg-editable-toolbar.c:1391
-msgid "Remove the selected toolbar"
-msgstr "Танланган асбоблар панелини олиб ташлаш"
+#. Message title when a site cannot be loaded due to a process crash error.
+#: ../embed/ephy-web-view.c:1858
+msgid "Oops!"
+msgstr "Вой!"
 
-#: ../lib/egg/egg-toolbar-editor.c:485
-msgid "Separator"
-msgstr "Ажратувчи"
+#. Message body when a site cannot be loaded due to a process crash error.
+#: ../embed/ephy-web-view.c:1861
+msgid ""
+"<p>Something went wrong while displaying this page.</p><p>Please reload or "
+"visit a different page to continue.</p>"
+msgstr ""
 
-#: ../lib/ephy-file-chooser.c:412
-msgid "All supported types"
-msgstr "Барча қўлланиладиган турлар"
+#. Page title when a site is not loaded due to an invalid TLS certificate.
+#: ../embed/ephy-web-view.c:1872
+#, c-format
+msgid "Security Violation"
+msgstr "Хавфсизлик бузилиши"
 
-#: ../lib/ephy-file-chooser.c:423
-msgid "Web pages"
-msgstr "Веб саҳифалар"
+#. Message title when a site is not loaded due to an invalid TLS certificate.
+#: ../embed/ephy-web-view.c:1875
+msgid "This Connection is Not Secure"
+msgstr "Ушбу алоқа хавфсиз эмас"
 
-#: ../lib/ephy-file-chooser.c:431
-msgid "Images"
-msgstr "Расмлар"
+#. Message body when a site is not loaded due to an invalid TLS certificate.
+#: ../embed/ephy-web-view.c:1878
+#, c-format
+msgid ""
+"<p>This does not look like the real <strong>%s</strong>. Attackers might be "
+"trying to steal or alter information going to or from this site (for "
+"example, private messages, credit card information, or passwords).</p>"
+msgstr ""
 
-#: ../lib/ephy-file-chooser.c:439 ../src/bookmarks/ephy-bookmarks-editor.c:766
-msgid "All files"
-msgstr "Ҳамма файллар"
+#. The button on the invalid TLS certificate error page. Do not add mnemonics here.
+#: ../embed/ephy-web-view.c:1888
+#| msgid "_Back"
+msgid "Go Back"
+msgstr "Орқага бориш"
 
-#: ../lib/ephy-file-helpers.c:291
+#. Mnemonic for the Go Back button on the invalid TLS certificate error page.
+#: ../embed/ephy-web-view.c:1891
+msgctxt "back-access-key"
+msgid "B"
+msgstr "B"
+
+#. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
+#: ../embed/ephy-web-view.c:1894
+msgid "Accept Risk and Proceed"
+msgstr "Таваккал қилиб олға"
+
+#. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
+#: ../embed/ephy-web-view.c:1898
+msgctxt "proceed-anyway-access-key"
+msgid "P"
+msgstr "P"
+
+#: ../embed/ephy-web-view.c:1923
+msgid "Technical information"
+msgstr "Техник маълумот"
+
+#: ../embed/ephy-web-view.c:2816
+msgid "_OK"
+msgstr "_Хўп"
+
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:106 ../src/resources/prefs-dialog.ui.h:2
+msgid "Downloads"
+msgstr "Ёзиб олиш"
+
+#. If we don't have XDG user dirs info, return an educated guess.
+#: ../lib/ephy-file-helpers.c:159
+msgid "Desktop"
+msgstr "Иш столи"
+
+#: ../lib/ephy-file-helpers.c:336
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "“%s” ичида вақтинчалик директория яратиб бўлмади."
 
-#: ../lib/ephy-file-helpers.c:364
+#: ../lib/ephy-file-helpers.c:457
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "“%s” файли мавжуд. Илтимос уни бошқа жойга кўчиринг."
 
-#: ../lib/ephy-file-helpers.c:375
+#: ../lib/ephy-file-helpers.c:476
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "“%s” директориясини яратиб бўлмади."
 
-#: ../lib/ephy-gui.c:284
+#. Translators: The first %s is the username and the second one is the
+#. * hostname where this is happening. Example: gnome@gmail.com and
+#. * mail.google.com.
+#.
+#: ../lib/ephy-form-auth-data.c:138
+#, c-format
+msgid "Password for %s in a form in %s"
+msgstr ""
+
+#. Translators: The first %s is the hostname where this is happening.
+#. * Example: mail.google.com.
+#.
+#: ../lib/ephy-form-auth-data.c:144
+#, c-format
+msgid "Password in a form in %s"
+msgstr ""
+
+#: ../lib/ephy-gui.c:199
 #, c-format
 msgid "Directory “%s” is not writable"
 msgstr "“%s” директорияси ёзувдан ҳимояланган"
 
-#: ../lib/ephy-gui.c:288
+#: ../lib/ephy-gui.c:203
 msgid "You do not have permission to create files in this directory."
 msgstr "Сизда ушбу директорияда файллар яратиш учун етарли ҳуқуқ йўқ."
 
-#: ../lib/ephy-gui.c:291
+#: ../lib/ephy-gui.c:206
 msgid "Directory not Writable"
 msgstr "Директория ёзувдан ҳимояланган"
 
-#: ../lib/ephy-gui.c:321
+#: ../lib/ephy-gui.c:233
 #, c-format
 msgid "Cannot overwrite existing file “%s”"
 msgstr "Мавжуд “%s” файлини алмаштириб бўлмади"
 
-#: ../lib/ephy-gui.c:325
+#: ../lib/ephy-gui.c:237
 msgid ""
 "A file with this name already exists and you don't have permission to "
 "overwrite it."
@@ -1489,727 +1245,636 @@ msgstr ""
 "Шундай номли файл аллақачон мавжуд ва уни алмаштириш учун сизда етарли ҳуқуқ "
 "йўқ."
 
-#: ../lib/ephy-gui.c:328
+#: ../lib/ephy-gui.c:240
 msgid "Cannot Overwrite File"
 msgstr "Файлни алмаштириб бўлмади"
 
-#: ../lib/ephy-gui.c:414
+#: ../lib/ephy-gui.c:296
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Ёрдамни кўрсатиб бўлмади: %s"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:40
-msgid "select fonts for|Arabic"
-msgstr "Арабча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:43
-msgid "select fonts for|Baltic"
-msgstr "Болтиқча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:46
-msgid "select fonts for|Central European"
-msgstr "Марказий европача"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:49
-msgid "select fonts for|Cyrillic"
-msgstr "Кирилча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:52
-msgid "select fonts for|Devanagari"
-msgstr "Деванагари"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:55
-msgid "select fonts for|Greek"
-msgstr "Юнонча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:58
-msgid "select fonts for|Hebrew"
-msgstr "Яҳудийча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:61
-msgid "select fonts for|Japanese"
-msgstr "Японча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:64
-msgid "select fonts for|Korean"
-msgstr "Корейсча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:67
-msgid "select fonts for|Simplified Chinese"
-msgstr "Соддалаштирилган хитойча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:70
-msgid "select fonts for|Tamil"
-msgstr "Тамилча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:73
-msgid "select fonts for|Thai"
-msgstr "Тайча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:76
-msgid "select fonts for|Traditional Chinese"
-msgstr "Анъанавий хитойча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:79
-msgid "select fonts for|Traditional Chinese (Hong Kong)"
-msgstr "Анъанавий хитойча (Гонконг)"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:82
-msgid "select fonts for|Turkish"
-msgstr "Туркча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:85
-msgid "select fonts for|Armenian"
-msgstr "Арманча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:88
-msgid "select fonts for|Bengali"
-msgstr "Бенгалча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:91
-msgid "select fonts for|Unified Canadian Syllabics"
+#: ../lib/ephy-profile-migrator.c:96
+msgid "Failed to copy cookies file from Mozilla."
 msgstr ""
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:94
-msgid "select fonts for|Ethiopic"
-msgstr "Эфиопча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:97
-msgid "select fonts for|Georgian"
-msgstr "Грузинча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:100
-msgid "select fonts for|Gujarati"
-msgstr "Гужарати"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:103
-msgid "select fonts for|Gurmukhi"
-msgstr "Гурмухи"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:106
-msgid "select fonts for|Khmer"
-msgstr "Хмерча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:109
-msgid "select fonts for|Malayalam"
-msgstr "Малаяламча"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:112
-msgid "select fonts for|Western"
-msgstr "Ғарбий"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../lib/ephy-langs.c:115
-msgid "select fonts for|Other Scripts"
-msgstr "Бошқа скриптлар"
-
-#: ../lib/ephy-password-dialog.c:392
-msgid "_Username:"
-msgstr "_Фойдаланувчи номи:"
-
-#: ../lib/ephy-password-dialog.c:406
-msgid "_Domain:"
-msgstr "_Домен:"
-
-#: ../lib/ephy-password-dialog.c:433
-msgid "_New password:"
-msgstr "_Янги махфий сўз:"
-
-#: ../lib/ephy-password-dialog.c:443
-msgid "Con_firm password:"
-msgstr "Махфий сўзни _тасдиқлаш:"
-
-#: ../lib/ephy-password-dialog.c:469
-msgid "Password quality:"
-msgstr "Махфий сўз сифати:"
-
-#: ../lib/ephy-password-dialog.c:487
-msgid "Do not remember this password"
-msgstr "Ушбу махфий сўз эслаб қолинмасин"
-
-#: ../lib/ephy-password-dialog.c:491
-msgid "_Remember password for this session"
-msgstr "Ушбу сеанс учун махфий сўзни _эслаб қолиш"
-
-#: ../lib/ephy-password-dialog.c:495
-msgid "Save password in _keyring"
+#: ../lib/ephy-profile-migrator.c:361
+msgid ""
+"Web 3.6 deprecated this directory and tried migrating this configuration to "
+"~/.config/epiphany"
 msgstr ""
 
-#: ../lib/ephy-stock-icons.c:52
-msgid "Popup Windows"
+#: ../lib/ephy-profile-migrator.c:783
+msgid "Executes only the n-th migration step"
 msgstr ""
 
-#: ../lib/ephy-stock-icons.c:53 ../src/ephy-history-window.c:1240
-msgid "History"
-msgstr "Тарих"
-
-#: ../lib/ephy-stock-icons.c:54
-#: ../src/bookmarks/ephy-bookmark-factory-action.c:301
-#: ../src/ephy-window.c:1502
-msgid "Bookmark"
-msgstr "Хатчўп"
-
-#: ../lib/ephy-stock-icons.c:55 ../src/bookmarks/ephy-bookmarks-editor.c:897
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1741
-#: ../src/bookmarks/ephy-topic-action.c:443 ../src/ephy-window.c:1506
-msgid "Bookmarks"
-msgstr "Хатчўплар"
-
-#: ../lib/ephy-stock-icons.c:56 ../src/ephy-toolbar.c:273
-msgid "Address Entry"
+#: ../lib/ephy-profile-migrator.c:785
+msgid "Specifies the required version for the migrator"
 msgstr ""
 
-#: ../lib/ephy-stock-icons.c:57
-msgid "_Download"
-msgstr "_Ёзиб олиш"
+#: ../lib/ephy-profile-migrator.c:787
+msgid "Specifies the profile where the migrator should run"
+msgstr ""
+
+#: ../lib/ephy-profile-migrator.c:805
+msgid "Web profile migrator"
+msgstr ""
+
+#: ../lib/ephy-profile-migrator.c:806
+#, fuzzy
+#| msgid "GNOME Web Browser options"
+msgid "Web profile migrator options"
+msgstr "GNOME веб браузери параметрлари"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12:34 am"
-#: ../lib/ephy-time-helpers.c:223
+#: ../lib/ephy-time-helpers.c:226
 msgid "Today %I:%M %p"
-msgstr ""
+msgstr "Бугун %I:%M %p"
 
 #. Translators: "friendly time" string for the previous day,
 #. * strftime format. e.g. "Yesterday 12:34 am"
 #.
-#: ../lib/ephy-time-helpers.c:236
+#: ../lib/ephy-time-helpers.c:239
 msgid "Yesterday %I:%M %p"
-msgstr ""
+msgstr "Кеча %I:%M %p"
 
 #. Translators: "friendly time" string for a day in the current week,
 #. * strftime format. e.g. "Wed 12:34 am"
 #.
-#: ../lib/ephy-time-helpers.c:252
+#: ../lib/ephy-time-helpers.c:255
 msgid "%a %I:%M %p"
-msgstr ""
+msgstr "%a %I:%M %p"
 
 #. Translators: "friendly time" string for a day in the current year,
 #. * strftime format. e.g. "Feb 12 12:34 am"
 #.
-#: ../lib/ephy-time-helpers.c:264
+#: ../lib/ephy-time-helpers.c:267
 msgid "%b %d %I:%M %p"
-msgstr ""
+msgstr "%b %d %I:%M %p"
 
 #. Translators: "friendly time" string for a day in a different year,
 #. * strftime format. e.g. "Feb 12 1997"
 #.
-#: ../lib/ephy-time-helpers.c:269
+#: ../lib/ephy-time-helpers.c:272
 msgid "%b %d %Y"
-msgstr ""
+msgstr "%b %d %Y"
 
-#: ../lib/ephy-zoom.h:45
+#. impossible time or broken locale settings
+#: ../lib/ephy-time-helpers.c:282
+msgid "Unknown"
+msgstr "Номаълум"
+
+#: ../lib/ephy-zoom.h:39
 msgid "50%"
 msgstr "50%"
 
-#: ../lib/ephy-zoom.h:46
+#: ../lib/ephy-zoom.h:40
 msgid "75%"
 msgstr "75%"
 
-#: ../lib/ephy-zoom.h:47
+#: ../lib/ephy-zoom.h:41
 msgid "100%"
 msgstr "100%"
 
-#: ../lib/ephy-zoom.h:48
+#: ../lib/ephy-zoom.h:42
 msgid "125%"
 msgstr "125%"
 
-#: ../lib/ephy-zoom.h:49
+#: ../lib/ephy-zoom.h:43
 msgid "150%"
 msgstr "150%"
 
-#: ../lib/ephy-zoom.h:50
+#: ../lib/ephy-zoom.h:44
 msgid "175%"
 msgstr "175%"
 
-#: ../lib/ephy-zoom.h:51
+#: ../lib/ephy-zoom.h:45
 msgid "200%"
 msgstr "200%"
 
-#: ../lib/ephy-zoom.h:52
+#: ../lib/ephy-zoom.h:46
 msgid "300%"
 msgstr "300%"
 
-#: ../lib/ephy-zoom.h:53
+#: ../lib/ephy-zoom.h:47
 msgid "400%"
 msgstr "400%"
 
-#: ../lib/widgets/ephy-location-entry.c:842
+#: ../lib/history/ephy-history-service-hosts-table.c:356
+msgid "Others"
+msgstr "Бошқалар"
+
+#: ../lib/history/ephy-history-service-hosts-table.c:360
+msgid "Local files"
+msgstr "Локал файллар"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:99
+msgid "The certificate does not match this website"
+msgstr "Сертификат ушбу сайтга мос келмайди"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:102
+msgid "The certificate has expired"
+msgstr "Сертификат муддати тугаган"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:105
+msgid "The signing certificate authority is not known"
+msgstr "Сертификатни имзолаган ҳокимият номаълум"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:108
+msgid "The certificate contains errors"
+msgstr "Сертификатда хатолари бор"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:111
+msgid "The certificate has been revoked"
+msgstr "Сертификат бекор қилинган"
+
+#: ../lib/widgets/ephy-certificate-dialog.c:114
+msgid "The certificate is signed using a weak signature algorithm"
+msgstr ""
+
+#: ../lib/widgets/ephy-certificate-dialog.c:117
+msgid "The certificate activation time is still in the future"
+msgstr ""
+
+#: ../lib/widgets/ephy-certificate-dialog.c:159
+msgid "The identity of this website has been verified."
+msgstr ""
+
+#: ../lib/widgets/ephy-certificate-dialog.c:160
+msgid "The identity of this website has not been verified."
+msgstr ""
+
+#. Message on certificte dialog ertificate dialog
+#: ../lib/widgets/ephy-certificate-dialog.c:172
+msgid "No problems have been detected with your connection."
+msgstr ""
+
+#: ../lib/widgets/ephy-certificate-dialog.c:175
+msgid ""
+"This certificate is valid. However, resources on this page were sent "
+"insecurely."
+msgstr ""
+
+#: ../lib/widgets/ephy-downloads-popover.c:222
+msgid "_Clear All"
+msgstr "_Ҳаммасини тозалаш"
+
+#: ../lib/widgets/ephy-download-widget.c:81
+#, c-format
+msgid "%d second left"
+msgid_plural "%d seconds left"
+msgstr[0] "%d секунд қолди"
+
+#: ../lib/widgets/ephy-download-widget.c:85
+#, c-format
+msgid "%d minute left"
+msgid_plural "%d minutes left"
+msgstr[0] "%d минут қолди"
+
+#: ../lib/widgets/ephy-download-widget.c:89
+#, c-format
+msgid "%d hour left"
+msgid_plural "%d hours left"
+msgstr[0] "%d соат қолди"
+
+#: ../lib/widgets/ephy-download-widget.c:93
+#, c-format
+msgid "%d day left"
+msgid_plural "%d days left"
+msgstr[0] "%d кун қолди"
+
+#: ../lib/widgets/ephy-download-widget.c:97
+#, c-format
+msgid "%d week left"
+msgid_plural "%d weeks left"
+msgstr[0] "%d ҳафта қолди"
+
+#: ../lib/widgets/ephy-download-widget.c:101
+#, c-format
+msgid "%d month left"
+msgid_plural "%d months left"
+msgstr[0] "%d ой қолди"
+
+#: ../lib/widgets/ephy-download-widget.c:224
+#: ../lib/widgets/ephy-download-widget.c:407
+msgid "Finished"
+msgstr "Тугади"
+
+#: ../lib/widgets/ephy-download-widget.c:241
+#: ../lib/widgets/ephy-download-widget.c:403
+#, c-format
+msgid "Error downloading: %s"
+msgstr "Юклашда хатолик: %s"
+
+#: ../lib/widgets/ephy-download-widget.c:268
+msgid "Cancelling…"
+msgstr "Бекор қилинмоқда..."
+
+#: ../lib/widgets/ephy-download-widget.c:409
+msgid "Starting…"
+msgstr "Бошланяпти..."
+
+#: ../lib/widgets/ephy-file-chooser.c:180
+#: ../lib/widgets/ephy-file-chooser.c:187
+#: ../src/bookmarks/ephy-bookmark-properties.c:375
+#: ../src/bookmarks/ephy-bookmarks-editor.c:766
+#: ../src/resources/clear-data-dialog.ui.h:3
+#: ../src/resources/prefs-lang-dialog.ui.h:2 ../src/window-commands.c:779
+msgid "_Cancel"
+msgstr "_Бекор қилиш"
+
+#: ../lib/widgets/ephy-file-chooser.c:181
+#: ../src/resources/history-dialog.ui.h:1
+msgid "_Open"
+msgstr "_Очиш"
+
+#: ../lib/widgets/ephy-file-chooser.c:203
+msgid "All supported types"
+msgstr "Барча қўлланиладиган турлар"
+
+#: ../lib/widgets/ephy-file-chooser.c:218
+msgid "Web pages"
+msgstr "Веб саҳифалар"
+
+#: ../lib/widgets/ephy-file-chooser.c:229
+msgid "Images"
+msgstr "Расмлар"
+
+#: ../lib/widgets/ephy-file-chooser.c:238
+#: ../src/bookmarks/ephy-bookmarks-editor.c:595
+msgid "All files"
+msgstr "Ҳамма файллар"
+
+#. Translators: the mnemonic shouldn't conflict with any of the
+#. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
+#. * Select All, Input Methods and Insert Unicode control character.)
+#.
+#: ../lib/widgets/ephy-location-entry.c:628 ../src/ephy-history-window.c:252
+msgid "Cl_ear"
+msgstr "То_залаш"
+
+#: ../lib/widgets/ephy-location-entry.c:647
+msgid "Paste and _Go"
+msgstr "Жойлаштириш ва _олға"
+
+#: ../lib/widgets/ephy-location-entry.c:652
+#: ../src/bookmarks/ephy-bookmarks-editor.c:186 ../src/ephy-window.c:119
+msgid "_Paste"
+msgstr "_Қўйиш"
+
+#. Edit actions.
+#: ../lib/widgets/ephy-location-entry.c:666 ../src/ephy-window.c:111
+msgid "_Undo"
+msgstr "_Бекор қилиш"
+
+#: ../lib/widgets/ephy-location-entry.c:673
+msgid "_Redo"
+msgstr "_Қайта қилиш"
+
+#: ../lib/widgets/ephy-location-entry.c:943
 msgid "Drag and drop this icon to create a link to this page"
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmark-action.c:319
+#. Label when clicking the lock icon on a secure page. %s is the website's hostname.
+#: ../lib/widgets/ephy-security-popover.c:74
 #, c-format
-msgid "%s:"
-msgstr "%s:"
+msgid "You are connected to %s"
+msgstr "Сиз %sга улангансиз"
 
-#: ../src/bookmarks/ephy-bookmark-action.c:496
+#. Label in certificate popover when site is untrusted. %s is a URL.
+#: ../lib/widgets/ephy-security-popover.c:108
 #, c-format
-msgid "Executes the script “%s”"
-msgstr "“%s” скриптини ишга тушириш"
+msgid ""
+"This web site’s digital identification is not trusted. You may have "
+"connected to an attacker pretending to be %s."
+msgstr ""
+
+#. Label in certificate popover when site uses HTTP. %s is a URL.
+#: ../lib/widgets/ephy-security-popover.c:116
+#, c-format
+msgid ""
+"%s has no security. An attacker could see any information you send, or "
+"control the content that you see."
+msgstr ""
+
+#. Label in certificate popover when site sends mixed content.
+#: ../lib/widgets/ephy-security-popover.c:125
+msgid "This web site did not properly secure your connection."
+msgstr ""
+
+#. Label in certificate popover on secure sites.
+#: ../lib/widgets/ephy-security-popover.c:131
+msgid "Your connection seems to be secure."
+msgstr "Сизнинг алоқангиз хавфсизга ўхшайди."
+
+#: ../lib/widgets/ephy-security-popover.c:180
+msgid "_View Certificate…"
+msgstr "Сертификатни _кўриш…"
 
 #. Translators: This string is used when counting bookmarks that
 #. * are similar to each other
-#: ../src/bookmarks/ephy-bookmark-properties.c:87
-#: ../src/bookmarks/ephy-bookmark-properties.c:613
+#: ../src/bookmarks/ephy-bookmark-properties.c:91
 #, c-format
-msgid "%d _Similar"
-msgid_plural "%d _Similar"
-msgstr[0] ""
-msgstr[1] ""
+msgid "%d bookmark is similar"
+msgid_plural "%d bookmarks are similar"
+msgstr[0] "%dта хатчўп ўхшаш"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:260
-#, c-format
-msgid "_Unify With %d Identical Bookmark"
-msgid_plural "_Unify With %d Identical Bookmarks"
-msgstr[0] ""
-msgstr[1] ""
+#: ../src/bookmarks/ephy-bookmark-properties.c:229
+msgid "Add Bookmark"
+msgstr "Хатчўп қўшиш"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:280
-#: ../src/bookmarks/ephy-bookmark-properties.c:302
-#, c-format
-msgid "Show “%s”"
-msgstr "“%s” ни кўрсатиш"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:428
+#: ../src/bookmarks/ephy-bookmark-properties.c:231
 #, c-format
 msgid "“%s” Properties"
 msgstr "“%s” хоссалари"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:552
-msgid "_Title:"
-msgstr "_Сарлавҳа:"
+#: ../src/bookmarks/ephy-bookmark-properties.c:376
+#: ../src/resources/prefs-dialog.ui.h:40
+#: ../src/resources/prefs-lang-dialog.ui.h:3
+msgid "_Add"
+msgstr "_Қўшиш"
 
-#: ../src/bookmarks/ephy-bookmark-properties.c:568
-msgid "A_ddress:"
-msgstr "М_анзиллар:"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:579
-msgid "T_opics:"
-msgstr "_Мавзулар:"
-
-#: ../src/bookmarks/ephy-bookmark-properties.c:601
-msgid "Sho_w all topics"
-msgstr "Ҳамма мавзуларни _кўрсатиш"
-
-#. Translators you should change these links to respect your locale.
-#. * For instance in .nl these should be
-#. * "http://www.google.nl" and "http://www.google.nl/search?q=%s"
-#.
-#: ../src/bookmarks/ephy-bookmarks.c:110
-msgid "Search the web"
-msgstr "Интернетда қидириш"
-
-#: ../src/bookmarks/ephy-bookmarks.c:110
-#, c-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-
-#: ../src/bookmarks/ephy-bookmarks.c:115
+#: ../src/bookmarks/ephy-bookmarks.c:85
 msgid "Entertainment"
-msgstr ""
+msgstr "Кўнгил очиш"
 
-#: ../src/bookmarks/ephy-bookmarks.c:116
+#: ../src/bookmarks/ephy-bookmarks.c:86
 msgid "News"
 msgstr "Янгиликлар"
 
-#: ../src/bookmarks/ephy-bookmarks.c:117
+#: ../src/bookmarks/ephy-bookmarks.c:87
 msgid "Shopping"
 msgstr "Олди-сотди"
 
-#: ../src/bookmarks/ephy-bookmarks.c:118
+#: ../src/bookmarks/ephy-bookmarks.c:88
 msgid "Sports"
 msgstr "Спорт"
 
-#: ../src/bookmarks/ephy-bookmarks.c:119
+#: ../src/bookmarks/ephy-bookmarks.c:89
 msgid "Travel"
 msgstr "Саёҳат"
 
-#: ../src/bookmarks/ephy-bookmarks.c:120
+#: ../src/bookmarks/ephy-bookmarks.c:90
 msgid "Work"
 msgstr "Иш"
 
-#. translators: the %s is the title of the bookmark
-#: ../src/bookmarks/ephy-bookmarks.c:462
-#, c-format
-msgid "Update bookmark “%s”?"
-msgstr "“%s” хатчўп янгилансинми?"
-
-#. translators: the %s is a URL
-#: ../src/bookmarks/ephy-bookmarks.c:467
-#, c-format
-msgid "The bookmarked page has moved to “%s”."
-msgstr "Хатчўпга қўшилган саҳифа “%s” манзилига кўчирилди."
-
-#: ../src/bookmarks/ephy-bookmarks.c:471
-msgid "_Don't Update"
-msgstr "Янгилан_масин"
-
-#: ../src/bookmarks/ephy-bookmarks.c:473
-msgid "_Update"
-msgstr "_Янгилаш"
-
-#: ../src/bookmarks/ephy-bookmarks.c:476
-msgid "Update Bookmark?"
-msgstr "Хатчўп янгилансинми?"
-
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains all bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1227
-msgid "bookmarks|All"
+#: ../src/bookmarks/ephy-bookmarks.c:840
+msgctxt "bookmarks"
+msgid "All"
 msgstr "Ҳаммаси"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
-#. Translators: this topic contains the most used bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1233
-msgid "bookmarks|Most Visited"
-msgstr "Энг кўп кўрилган"
-
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this topic contains the not categorized
 #. bookmarks
-#: ../src/bookmarks/ephy-bookmarks.c:1240
-msgid "bookmarks|Not Categorized"
+#: ../src/bookmarks/ephy-bookmarks.c:844
+msgctxt "bookmarks"
+msgid "Not Categorized"
 msgstr "Туркумланмаган"
 
-#. Translators: The text before the "|" is context to help you
-#. * decide on the correct translation. You MUST OMIT it in the
-#. * translated string.
 #. Translators: this is an automatic topic containing local
 #. * websites bookmarks autodiscovered with zeroconf.
-#: ../src/bookmarks/ephy-bookmarks.c:1248
-msgid "bookmarks|Nearby Sites"
-msgstr ""
+#: ../src/bookmarks/ephy-bookmarks.c:848
+msgctxt "bookmarks"
+msgid "Nearby Sites"
+msgstr "Яқин атрофдаги сайтлар"
 
-#: ../src/bookmarks/ephy-bookmarks.c:1483
-#: ../src/bookmarks/ephy-bookmarks-import.c:271 ../src/ephy-session.c:1299
+#: ../src/bookmarks/ephy-bookmarks.c:1044
+#: ../src/bookmarks/ephy-bookmarks-import.c:210
 msgid "Untitled"
+msgstr "Номланмаган"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:73
+msgid "Web (RDF)"
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:79
-msgid "Epiphany (RDF)"
-msgstr "Epiphany (RDF)"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:80
+#: ../src/bookmarks/ephy-bookmarks-editor.c:74
 msgid "Mozilla (HTML)"
 msgstr "Mozilla (HTML)"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:132
+#: ../src/bookmarks/ephy-bookmarks-editor.c:118
 msgid "Remove from this topic"
 msgstr "Ушбу мавзудан олиб ташлаш"
 
 #. Toplevel
-#: ../src/bookmarks/ephy-bookmarks-editor.c:159
-#: ../src/ephy-history-window.c:148 ../src/ephy-window.c:112
+#: ../src/bookmarks/ephy-bookmarks-editor.c:148
 msgid "_File"
 msgstr "_Файл"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:160
-#: ../src/ephy-history-window.c:149 ../src/ephy-window.c:113
+#: ../src/bookmarks/ephy-bookmarks-editor.c:149
 msgid "_Edit"
 msgstr "_Таҳрирлаш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:161
-#: ../src/ephy-history-window.c:150 ../src/ephy-window.c:114
+#: ../src/bookmarks/ephy-bookmarks-editor.c:150
 msgid "_View"
 msgstr "_Кўриниш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:162
-#: ../src/ephy-history-window.c:151 ../src/ephy-window.c:119
+#. Help.
+#: ../src/bookmarks/ephy-bookmarks-editor.c:151
+#: ../src/resources/epiphany-application-menu.ui.h:8 ../src/ephy-window.c:186
 msgid "_Help"
 msgstr "_Ёрдам"
 
 #. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:166
+#: ../src/bookmarks/ephy-bookmarks-editor.c:155
 msgid "_New Topic"
 msgstr "_Янги мавзу"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:167
+#: ../src/bookmarks/ephy-bookmarks-editor.c:156
 msgid "Create a new topic"
 msgstr "Янги мавзу яратиш"
 
-#. FIXME ngettext
-#. File Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:169
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1350
-#: ../src/bookmarks/ephy-bookmarks-ui.c:323 ../src/ephy-history-window.c:155
-#: ../src/ephy-history-window.c:706
+#: ../src/bookmarks/ephy-bookmarks-editor.c:158
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1084
 msgid "Open in New _Window"
 msgid_plural "Open in New _Windows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Янги _ойнада очиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:170
+#: ../src/bookmarks/ephy-bookmarks-editor.c:159
 msgid "Open the selected bookmark in a new window"
 msgstr "Танланган хатчўпни янги ойнада очиш"
 
-#. FIXME ngettext
-#: ../src/bookmarks/ephy-bookmarks-editor.c:172
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1353
-#: ../src/bookmarks/ephy-bookmarks-ui.c:311 ../src/ephy-history-window.c:158
-#: ../src/ephy-history-window.c:709
+#: ../src/bookmarks/ephy-bookmarks-editor.c:161
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1087
 msgid "Open in New _Tab"
 msgid_plural "Open in New _Tabs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Янги _ич ойнада очиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:173
+#: ../src/bookmarks/ephy-bookmarks-editor.c:162
 msgid "Open the selected bookmark in a new tab"
-msgstr "Танланган хатчўпни янги табда очиш"
+msgstr "Танланган хатчўпни янги ички ойнада очиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:175
+#: ../src/bookmarks/ephy-bookmarks-editor.c:164
 msgid "_Rename…"
 msgstr "_Номини ўзгартириш…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:165
 msgid "Rename the selected bookmark or topic"
 msgstr "Танланган хатчўп ёки мавзу номини ўзгартириш"
 
-#. Add popup menu actions that are specific to the bookmark widgets
-#: ../src/bookmarks/ephy-bookmarks-editor.c:177
-#: ../src/bookmarks/ephy-bookmarks-ui.c:299
+#: ../src/bookmarks/ephy-bookmarks-editor.c:166
 msgid "_Properties"
 msgstr "_Хоссалари"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:178
+#: ../src/bookmarks/ephy-bookmarks-editor.c:167
 msgid "View or modify the properties of the selected bookmark"
 msgstr "Белгиланган хатчўп хоссасини кўриш ёки ўзгартириш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:180
+#: ../src/bookmarks/ephy-bookmarks-editor.c:169
 msgid "_Import Bookmarks…"
 msgstr "Хатчўпларни _импорт қилиш…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:181
+#: ../src/bookmarks/ephy-bookmarks-editor.c:170
 msgid "Import bookmarks from another browser or a bookmarks file"
 msgstr "Хатчўпларни бошқа браузердан ёки хатчўп файлидан импорт қилиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:183
+#: ../src/bookmarks/ephy-bookmarks-editor.c:172
 msgid "_Export Bookmarks…"
 msgstr "Хатчўпларни _экспорт қилиш…"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:184
+#: ../src/bookmarks/ephy-bookmarks-editor.c:173
 msgid "Export bookmarks to a file"
 msgstr "Хатчўпларни файлга экспорт қилиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:186
-#: ../src/ephy-history-window.c:164 ../src/ephy-window.c:144
+#: ../src/bookmarks/ephy-bookmarks-editor.c:175 ../src/ephy-window.c:104
 msgid "_Close"
 msgstr "_Ёпиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:187
+#: ../src/bookmarks/ephy-bookmarks-editor.c:176
 msgid "Close the bookmarks window"
 msgstr "Хатчўплар ойнасини ёпиш"
 
 #. Edit Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:191
-#: ../src/ephy-history-window.c:169 ../src/ephy-window.c:156
+#: ../src/bookmarks/ephy-bookmarks-editor.c:180 ../src/ephy-window.c:115
 msgid "Cu_t"
 msgstr "_Кесиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:192
-#: ../src/ephy-history-window.c:170 ../src/ephy-window.c:157
+#: ../src/bookmarks/ephy-bookmarks-editor.c:181
 msgid "Cut the selection"
 msgstr "Танланганни кесиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:194
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1363
-#: ../src/ephy-history-window.c:172 ../src/ephy-history-window.c:719
-#: ../src/ephy-window.c:159
+#: ../src/bookmarks/ephy-bookmarks-editor.c:183
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1094 ../src/ephy-window.c:117
 msgid "_Copy"
 msgstr "_Нусха олиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:195
-#: ../src/ephy-history-window.c:173 ../src/ephy-window.c:160
+#: ../src/bookmarks/ephy-bookmarks-editor.c:184
 msgid "Copy the selection"
 msgstr "Танлангандан нусха олиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:197
-#: ../src/ephy-history-window.c:175 ../src/ephy-window.c:162
-msgid "_Paste"
-msgstr "_Қўйиш"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:198
-#: ../src/ephy-history-window.c:176
+#: ../src/bookmarks/ephy-bookmarks-editor.c:187
 msgid "Paste the clipboard"
 msgstr "Клипборддан қўйиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:200
-#: ../src/ephy-history-window.c:178
+#: ../src/bookmarks/ephy-bookmarks-editor.c:189
+#: ../src/resources/history-dialog.ui.h:4
 msgid "_Delete"
 msgstr "_Олиб ташлаш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:201
+#: ../src/bookmarks/ephy-bookmarks-editor.c:190
 msgid "Delete the selected bookmark or topic"
 msgstr "Белгиланган мавзуни ёки хатчўпни олиб ташлаш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:203
-#: ../src/ephy-history-window.c:181 ../src/ephy-window.c:168
+#: ../src/bookmarks/ephy-bookmarks-editor.c:192 ../src/ephy-window.c:123
 msgid "Select _All"
 msgstr "_Ҳаммасини танлаш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:204
+#: ../src/bookmarks/ephy-bookmarks-editor.c:193
 msgid "Select all bookmarks or text"
 msgstr "Барча хатчўпларни ёки матнни кўрсатиш"
 
 #. Help Menu
-#. Help menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:208
-#: ../src/ephy-history-window.c:189 ../src/ephy-window.c:262
+#: ../src/bookmarks/ephy-bookmarks-editor.c:197
 msgid "_Contents"
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:198
 msgid "Display bookmarks help"
 msgstr "Хатчўп бўйича қўлланмани кўрсатиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:211
-#: ../src/ephy-history-window.c:192 ../src/ephy-window.c:265
+#: ../src/bookmarks/ephy-bookmarks-editor.c:200
+#: ../src/resources/epiphany-application-menu.ui.h:9 ../src/ephy-window.c:188
 msgid "_About"
 msgstr "Дастур _ҳақида"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:212
-#: ../src/ephy-history-window.c:193 ../src/ephy-window.c:266
+#: ../src/bookmarks/ephy-bookmarks-editor.c:201
 msgid "Display credits for the web browser creators"
 msgstr "Браузер яратувчилари ҳақидаги маълумотни кўрсатиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:217
-msgid "_Show on Toolbar"
-msgstr "Асбоблар панелида _кўрсатиш"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:218
-msgid "Show the selected bookmark on a toolbar"
-msgstr "Асбоблар панелида белгиланган хатчўпни кўрсатиш"
-
 #. View Menu
-#: ../src/bookmarks/ephy-bookmarks-editor.c:231
-#: ../src/ephy-history-window.c:207
+#: ../src/bookmarks/ephy-bookmarks-editor.c:207
 msgid "_Title"
 msgstr "_Сарлавҳа"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:232
-msgid "Show only the title column"
-msgstr "Фақат сарлавҳа устунини кўрсатиш"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:208
+msgid "Show the title column"
+msgstr "Сарлавҳа устунини кўрсатиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:233
-msgid "T_itle and Address"
-msgstr "_Сарлавҳа ва манзиллар"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:209
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1559
+msgid "Address"
+msgstr "Манзил"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:234
-msgid "Show both the title and address columns"
-msgstr "Сарлавҳа ва манзил устунларини кўрсатиш"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:210
+msgid "Show the address column"
+msgstr "Манзиллар устунини кўрсатиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:277
+#: ../src/bookmarks/ephy-bookmarks-editor.c:252
 msgid "Type a topic"
 msgstr "Мавзу киритинг"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:395
+#: ../src/bookmarks/ephy-bookmarks-editor.c:365
 #, c-format
 msgid "Delete topic “%s”?"
 msgstr "“%s” мавзуси олиб ташлансинми?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:398
+#: ../src/bookmarks/ephy-bookmarks-editor.c:368
 msgid "Delete this topic?"
 msgstr "Ушбу мавзу олиб ташлансинми?"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:400
+#: ../src/bookmarks/ephy-bookmarks-editor.c:370
 msgid ""
 "Deleting this topic will cause all its bookmarks to become uncategorized, "
 "unless they also belong to other topics. The bookmarks will not be deleted."
 msgstr ""
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:403
+#: ../src/bookmarks/ephy-bookmarks-editor.c:373
 msgid "_Delete Topic"
 msgstr "Мавзуни _олиб ташлаш"
 
 #. FIXME: proper i18n after freeze
-#: ../src/bookmarks/ephy-bookmarks-editor.c:624
-#: ../src/bookmarks/ephy-bookmarks-editor.c:628
+#: ../src/bookmarks/ephy-bookmarks-editor.c:471
+#: ../src/bookmarks/ephy-bookmarks-editor.c:473
 msgid "Firefox"
 msgstr "Firefox"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:633
-#: ../src/bookmarks/ephy-bookmarks-editor.c:637
+#: ../src/bookmarks/ephy-bookmarks-editor.c:476
+#: ../src/bookmarks/ephy-bookmarks-editor.c:478
 msgid "Firebird"
 msgstr "Firebird"
 
 #. Translators: The %s is the name of a Mozilla profile.
-#: ../src/bookmarks/ephy-bookmarks-editor.c:642
+#: ../src/bookmarks/ephy-bookmarks-editor.c:481
 #, c-format
 msgid "Mozilla “%s” profile"
 msgstr "Mozilla “%s” профили"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:646
+#: ../src/bookmarks/ephy-bookmarks-editor.c:483
 msgid "Galeon"
 msgstr "Galeon"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:650
+#: ../src/bookmarks/ephy-bookmarks-editor.c:485
 msgid "Konqueror"
 msgstr "Konqueror"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:679
+#: ../src/bookmarks/ephy-bookmarks-editor.c:512
 msgid "Import failed"
 msgstr "Импорт қилиб бўлмади"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:681
+#: ../src/bookmarks/ephy-bookmarks-editor.c:514
 msgid "Import Failed"
 msgstr "Импорт қилиб бўлмади"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:684
+#: ../src/bookmarks/ephy-bookmarks-editor.c:517
 #, c-format
 msgid ""
 "The bookmarks from “%s” could not be imported because the file is corrupted "
@@ -2218,320 +1883,783 @@ msgstr ""
 "“%s” файлидан хатчўпни импорт қилиб бўлмади, бунга файл бузуқлиги ёки "
 "қўлланилмайдиган форматдалиги сабаб бўлиши мумкин."
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:747
+#: ../src/bookmarks/ephy-bookmarks-editor.c:576
 msgid "Import Bookmarks from File"
 msgstr "Хатчўпларни файлдан импорт қилиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:754
+#: ../src/bookmarks/ephy-bookmarks-editor.c:583
 msgid "Firefox/Mozilla bookmarks"
 msgstr "Firefox/Mozilla хатчўплари"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:758
+#: ../src/bookmarks/ephy-bookmarks-editor.c:587
 msgid "Galeon/Konqueror bookmarks"
 msgstr "Galeon/Konqueror хатчўплари"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:762
-msgid "Epiphany bookmarks"
-msgstr "Epiphany хатчўплари"
+#: ../src/bookmarks/ephy-bookmarks-editor.c:591
+msgid "Web bookmarks"
+msgstr "Web хатчўплари"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:886
+#: ../src/bookmarks/ephy-bookmarks-editor.c:705
 msgid "Export Bookmarks"
 msgstr "Хатчўпларни экспорт қилиш"
 
+#: ../src/bookmarks/ephy-bookmarks-editor.c:712
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1422
+#: ../src/bookmarks/ephy-topic-action.c:207
+msgid "Bookmarks"
+msgstr "Хатчўплар"
+
 #. Make a format selection combo & label
-#: ../src/bookmarks/ephy-bookmarks-editor.c:903
+#: ../src/bookmarks/ephy-bookmarks-editor.c:718
 msgid "File f_ormat:"
 msgstr "Файл ф_ормати:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:947
+#: ../src/bookmarks/ephy-bookmarks-editor.c:763
 msgid "Import Bookmarks"
 msgstr "Хатчўпларни импорт қилиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:953
+#: ../src/bookmarks/ephy-bookmarks-editor.c:768
 msgid "I_mport"
 msgstr "И_мпорт"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:967
+#: ../src/bookmarks/ephy-bookmarks-editor.c:784
 msgid "Import bookmarks from:"
 msgstr "Хатчўпларни бу ердан импорт қилиш:"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1359
-#: ../src/ephy-history-window.c:715
+#: ../src/bookmarks/ephy-bookmarks-editor.c:804
+msgid "File"
+msgstr "Файл"
+
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1092
 msgid "_Copy Address"
 msgstr "Манзилдан _нусха олиш"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1607
-#: ../src/ephy-history-window.c:1040
-msgid "_Search:"
-msgstr "_Қидириш:"
-
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1805
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1478
+#: ../src/resources/bookmark-properties.ui.h:5
 msgid "Topics"
 msgstr "Мавзулар"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1875
-#: ../src/ephy-history-window.c:1363
+#: ../src/bookmarks/ephy-bookmarks-editor.c:1548
 msgid "Title"
 msgstr "Сарлавҳа"
 
-#: ../src/bookmarks/ephy-bookmarks-editor.c:1886
-#: ../src/ephy-history-window.c:1372
-msgid "Address"
-msgstr "Манзил"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:300
-msgid "Show properties for this bookmark"
-msgstr "Ушбу хатчўп хоссасини кўрсатиш"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:312
-msgid "Open this bookmark in a new tab"
-msgstr "Ушбу хатчўпни янги табда очиш"
-
-#: ../src/bookmarks/ephy-bookmarks-ui.c:324
-msgid "Open this bookmark in a new window"
-msgstr "Ушбу хатчўпни янги ойнада очиш"
-
 #. FIXME !!!!
-#: ../src/bookmarks/ephy-open-tabs-action.c:75
+#: ../src/bookmarks/ephy-open-tabs-action.c:71
 msgid "Open in New _Tabs"
 msgstr "Янги _табларда очиш"
 
-#: ../src/bookmarks/ephy-open-tabs-action.c:76
+#: ../src/bookmarks/ephy-open-tabs-action.c:72
 msgid "Open the bookmarks in this topic in new tabs"
 msgstr "Ушбу мавзудаги хатчўпни янги табда очиш"
 
-#: ../src/bookmarks/ephy-related-action.c:153
-msgid "Related"
-msgstr ""
-
-#: ../src/bookmarks/ephy-topic-factory-action.c:300
-msgid "Topic"
-msgstr "Мавзу"
-
-#: ../src/bookmarks/ephy-topics-entry.c:329
+#: ../src/bookmarks/ephy-topics-entry.c:305
 #, c-format
 msgid "Create topic “%s”"
 msgstr "“%s” мавзусини яратиш"
 
-#: ../src/ephy-encoding-dialog.c:312
-msgid "Encodings"
-msgstr "Кодлаш усуллари"
+#: ../src/resources/bookmark-properties.ui.h:1
+msgid "_Title:"
+msgstr "_Сарлавҳа:"
 
-#: ../src/ephy-encoding-menu.c:323
-msgid "_Other…"
-msgstr "_Бошқа…"
+#: ../src/resources/bookmark-properties.ui.h:2
+msgid "A_ddress:"
+msgstr "М_анзиллар:"
 
-#: ../src/ephy-encoding-menu.c:324
-msgid "Other encodings"
-msgstr "Бошқа кодлаш усуллари"
+#: ../src/resources/bookmark-properties.ui.h:3
+msgid "T_opics:"
+msgstr "_Мавзулар:"
 
-#: ../src/ephy-encoding-menu.c:330
-msgid "_Automatic"
-msgstr "_Автоматик"
+#: ../src/resources/bookmark-properties.ui.h:4
+msgid "Sho_w all topics"
+msgstr "Ҳамма мавзуларни _кўрсатиш"
 
-#: ../src/ephy-find-toolbar.c:150
-msgid "Not found"
-msgstr "Топилмади"
+#: ../src/resources/clear-data-dialog.ui.h:1
+msgid "Clear Personal Data"
+msgstr "Шахсий маълумотни ўчириш"
 
-#: ../src/ephy-find-toolbar.c:162
-msgid "Wrapped"
+#: ../src/resources/clear-data-dialog.ui.h:2
+msgid "C_lear"
+msgstr "Т_озалаш"
+
+#: ../src/resources/clear-data-dialog.ui.h:4
+msgid "Select the personal data you wish to clear"
 msgstr ""
 
-#: ../src/ephy-find-toolbar.c:182
-msgid "Find links:"
-msgstr "Боғламаларни қидириш:"
-
-#: ../src/ephy-find-toolbar.c:182
-msgid "Find:"
-msgstr "Қидириш:"
-
-#. Create a menu item, and sync it
-#. Case sensitivity
-#: ../src/ephy-find-toolbar.c:449 ../src/ephy-find-toolbar.c:571
-msgid "_Case sensitive"
-msgstr "Катта-кичик _ҳарфни фарқлаш"
-
-#: ../src/ephy-find-toolbar.c:554
-msgid "Find Previous"
-msgstr "Олдингисини қидириш"
-
-#: ../src/ephy-find-toolbar.c:557
-msgid "Find previous occurrence of the search string"
+#: ../src/resources/clear-data-dialog.ui.h:5
+msgid ""
+"You are about to clear personal data that is stored about the web pages you "
+"have visited. Check the types of information that you want to remove:"
 msgstr ""
 
-#: ../src/ephy-find-toolbar.c:563
-msgid "Find Next"
-msgstr "Кейингини қидириш"
+#: ../src/resources/clear-data-dialog.ui.h:6
+msgid "Coo_kies"
+msgstr "Coo_kieлар"
 
-#: ../src/ephy-find-toolbar.c:566
-msgid "Find next occurrence of the search string"
+#: ../src/resources/clear-data-dialog.ui.h:7
+msgid "Cache and _temporary files"
+msgstr "Кеш ва _муваққат файллар"
+
+#: ../src/resources/clear-data-dialog.ui.h:8
+msgid "Browsing _history"
+msgstr "Навигация _тарихи"
+
+#: ../src/resources/clear-data-dialog.ui.h:9
+msgid "Saved _passwords"
+msgstr "Сақланган _махфий сўзлар"
+
+#: ../src/resources/clear-data-dialog.ui.h:10
+msgid ""
+"You cannot undo this action. The data you are choosing to clear will be "
+"removed forever."
 msgstr ""
 
-#. exit button
-#: ../src/ephy-fullscreen-popup.c:264 ../src/ephy-toolbar.c:532
-msgid "Leave Fullscreen"
-msgstr "Бутун экранга усулидан чиқиш"
+#: ../src/resources/cookies-dialog.ui.h:1 ../src/resources/prefs-dialog.ui.h:23
+msgid "Cookies"
+msgstr "Cookie'лар"
 
-#: ../src/ephy-go-action.c:42 ../src/ephy-toolbar.c:303
-msgid "Go"
-msgstr "Ўтиш"
+#: ../src/resources/cookies-dialog.ui.h:2
+#: ../src/resources/history-dialog.ui.h:6
+#: ../src/resources/passwords-dialog.ui.h:2
+msgid "C_lear All"
+msgstr "Ҳ_аммасини тозалаш"
 
-#: ../src/ephy-history-window.c:156
-msgid "Open the selected history link in a new window"
-msgstr "Танланган тарих боғламасини янги ойнада очиш"
+#: ../src/resources/cookies-dialog.ui.h:3
+#: ../src/resources/passwords-dialog.ui.h:3
+#: ../src/resources/prefs-dialog.ui.h:5
+msgid "Search"
+msgstr "Қидириш"
 
-#: ../src/ephy-history-window.c:159
-msgid "Open the selected history link in a new tab"
-msgstr "Танланган тарих боғламасини янги табда очиш"
+#: ../src/resources/cookies-dialog.ui.h:4
+msgid "Filter cookies"
+msgstr ""
 
-#: ../src/ephy-history-window.c:161
-msgid "Add _Bookmark…"
-msgstr "_Хатчўп қўшиш…"
+#: ../src/resources/cookies-dialog.ui.h:5
+msgid "Search cookies"
+msgstr ""
 
-#: ../src/ephy-history-window.c:162
-msgid "Bookmark the selected history link"
-msgstr "Танланган тарих боғламасини хатчўпга қўшиш"
+#: ../src/resources/cookies-dialog.ui.h:6
+#: ../src/resources/passwords-dialog.ui.h:6
+msgid "Site"
+msgstr "Сайт"
 
-#: ../src/ephy-history-window.c:165
-msgid "Close the history window"
-msgstr "Тарих ойнасини ёпиш"
+#: ../src/resources/cookies-dialog.ui.h:7
+msgid "Delete the selected cookies"
+msgstr "Белгиланган cookieларни ўчириш"
 
-#: ../src/ephy-history-window.c:179
-msgid "Delete the selected history link"
-msgstr "Танланган тарих боғламасини олиб ташлаш"
+#: ../src/resources/encoding-dialog.ui.h:1
+msgid "Text Encoding"
+msgstr "Матн кодлаш усули"
 
-#: ../src/ephy-history-window.c:182
-msgid "Select all history links or text"
-msgstr "Барча тарих боғламаларини ёки матнни танлаш"
+#: ../src/resources/encoding-dialog.ui.h:2
+msgid "Use the encoding specified by the document"
+msgstr "Ҳужжат кодлаш усулидан фойдаланиш"
 
-#: ../src/ephy-history-window.c:184
-msgid "Clear _History"
-msgstr "_Тарихни тозалаш"
+#: ../src/resources/encoding-dialog.ui.h:3
+msgid "&#60;b&#62;Recent encodings&#60;/b&#62;"
+msgstr ""
 
-#: ../src/ephy-history-window.c:185
-msgid "Clear your browsing history"
-msgstr "Тарихни тозалаш"
+#: ../src/resources/encoding-dialog.ui.h:4
+msgid "&#60;b&#62;Related encodings&#60;/b&#62;"
+msgstr ""
 
-#: ../src/ephy-history-window.c:190
-msgid "Display history help"
-msgstr "Тарих бўйича қўлланмани кўрсатиш"
+#: ../src/resources/encoding-dialog.ui.h:5
+msgid "Show all…"
+msgstr "Барчасини кўрсатиш..."
 
-#: ../src/ephy-history-window.c:208
-msgid "Show the title column"
-msgstr "Сарлавҳа устунини кўрсатиш"
+#. File actions.
+#: ../src/resources/epiphany-application-menu.ui.h:1 ../src/ephy-window.c:90
+msgid "_New Window"
+msgstr "_Янги ойна"
 
-#: ../src/ephy-history-window.c:209
-msgid "_Address"
-msgstr "_Манзил"
+#: ../src/resources/epiphany-application-menu.ui.h:2 ../src/ephy-window.c:92
+msgid "New _Incognito Window"
+msgstr "Янги _инкогнито ойна"
 
-#: ../src/ephy-history-window.c:210
-msgid "Show the address column"
-msgstr "Манзиллар устунини кўрсатиш"
+#: ../src/resources/epiphany-application-menu.ui.h:3
+msgid "Reopen Closed _Tab"
+msgstr ""
 
-#: ../src/ephy-history-window.c:211
-msgid "_Date and Time"
-msgstr "_Сана ва вақт"
+#. Toplevel
+#: ../src/resources/epiphany-application-menu.ui.h:4 ../src/ephy-window.c:83
+msgid "_Bookmarks"
+msgstr "_Хатчўплар"
 
-#: ../src/ephy-history-window.c:212
-msgid "Show the date and time column"
-msgstr "Сана ва вақт устунини кўрсатиш"
+#: ../src/resources/epiphany-application-menu.ui.h:5 ../src/ephy-window.c:133
+msgid "_History"
+msgstr "_Тарих"
 
-#: ../src/ephy-history-window.c:238
+#: ../src/resources/epiphany-application-menu.ui.h:6 ../src/ephy-window.c:135
+msgid "Pr_eferences"
+msgstr "Па_раметрлар"
+
+#: ../src/resources/epiphany-application-menu.ui.h:7
+msgid "_Keyboard Shortcuts"
+msgstr "_Клавишлар бирикмалари"
+
+#: ../src/resources/epiphany-application-menu.ui.h:10 ../src/ephy-window.c:106
+msgid "_Quit"
+msgstr "_Чиқиш"
+
+#: ../src/resources/history-dialog.ui.h:2
+msgid "_Copy Location"
+msgstr "_Манзилни кўчириш"
+
+#: ../src/resources/history-dialog.ui.h:3
+msgid "Add _Bookmark"
+msgstr "_Хатчўп қўшиш"
+
+#: ../src/resources/history-dialog.ui.h:5
+msgid "History"
+msgstr "Тарих"
+
+#: ../src/resources/history-dialog.ui.h:7
+msgid "Search history"
+msgstr "Тарихдан излаш"
+
+#: ../src/resources/history-dialog.ui.h:8
+msgid "Date"
+msgstr "Сана"
+
+#: ../src/resources/history-dialog.ui.h:9
+msgid "Name"
+msgstr "Номи"
+
+#: ../src/resources/history-dialog.ui.h:10
+msgid "Location"
+msgstr "Манзил"
+
+#: ../src/resources/history-dialog.ui.h:11
+msgid "Remove the selected pages from history"
+msgstr "Белгиланган саҳифаларни тарихдан ўчириб ташлаш"
+
+#: ../src/resources/history-dialog.ui.h:12
+msgid "Open the selected pages in new tabs"
+msgstr "Белгиланган саҳифаларни янги ички ойналарда очиш"
+
+#: ../src/resources/passwords-dialog.ui.h:1
+#: ../src/resources/prefs-dialog.ui.h:32
+msgid "Passwords"
+msgstr "Махфий сўзлар"
+
+#: ../src/resources/passwords-dialog.ui.h:4
+msgid "Filter passwords"
+msgstr "Махфий сўзларни фильтрлаш"
+
+#: ../src/resources/passwords-dialog.ui.h:5
+msgid "Search passwords"
+msgstr "Махфий сўзларни излаш"
+
+#: ../src/resources/passwords-dialog.ui.h:7
+msgid "User Name"
+msgstr "Фойдаланувчи номи"
+
+#: ../src/resources/passwords-dialog.ui.h:8
+msgid "Password"
+msgstr "Махфий сўз"
+
+#: ../src/resources/passwords-dialog.ui.h:9
+msgid "Forget the selected passwords"
+msgstr "Белгиланган махфий сўзларни унутиш"
+
+#: ../src/resources/passwords-dialog.ui.h:10
+msgid "Reveal all the passwords"
+msgstr "Барча махфий сўзларни кўрсатиш"
+
+#: ../src/resources/passwords-dialog.ui.h:11
+msgid "_Copy Password"
+msgstr "Махфий сўзни _кўчириш"
+
+#: ../src/resources/passwords-dialog.ui.h:12
+msgid "C_opy Username"
+msgstr "Фойдаланувчи номини к_ўчириш"
+
+#: ../src/resources/prefs-dialog.ui.h:1
+msgid "Preferences"
+msgstr "Параметрлар"
+
+#: ../src/resources/prefs-dialog.ui.h:3
+msgid "_Download folder:"
+msgstr "_Ёзиб олиш жилди:"
+
+#: ../src/resources/prefs-dialog.ui.h:4
+msgid "A_utomatically open downloaded files"
+msgstr "Юклаб олинган файлларни а_втоматик очиш"
+
+#: ../src/resources/prefs-dialog.ui.h:6
+msgid "_Engine:"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:7
+msgid "Session"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:8
+msgid "_Remember previous tabs on startup"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:9
+msgid "Web Content"
+msgstr "Web таркиби"
+
+#: ../src/resources/prefs-dialog.ui.h:10
+msgid "Allow popup _windows"
+msgstr "Попап _ойналарга рухсат бериш"
+
+#: ../src/resources/prefs-dialog.ui.h:11
+msgid "Allow _advertisements"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:12
+msgid "Enable _plugins"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:13
+msgid "General"
+msgstr "Умумий"
+
+#: ../src/resources/prefs-dialog.ui.h:14
+msgid "Fonts"
+msgstr "Шрифтлар"
+
+#: ../src/resources/prefs-dialog.ui.h:15
+msgid "_Use system fonts"
+msgstr "Система шрифтларидан _фойдаланиш"
+
+#: ../src/resources/prefs-dialog.ui.h:16
+msgid "Sans serif font:"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:17
+msgid "Serif font:"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:18
+msgid "Monospace font:"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:19
+msgid "Style"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:20
+msgid "Use custom _stylesheet"
+msgstr "Бошқа _услубдан фойдаланиш"
+
+#: ../src/resources/prefs-dialog.ui.h:21
+msgid "_Edit Stylesheet…"
+msgstr "Услубни _таҳрирлаш…"
+
+#: ../src/resources/prefs-dialog.ui.h:22
+msgid "Fonts & Style"
+msgstr "Шрифтлар ва услуб"
+
+#: ../src/resources/prefs-dialog.ui.h:24
+msgid "Manage _Cookies…"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:25
+msgid "_Always accept"
+msgstr "_Ҳар доим қабул қилиш"
+
+#: ../src/resources/prefs-dialog.ui.h:26
+msgid "Only _from sites you visit"
+msgstr "Фақат ташриф буюрган сайтлар_дан"
+
+#. Refers to "Only from sites you visit" option under Cookies.
+#: ../src/resources/prefs-dialog.ui.h:28
+msgid "<small>For example, not from advertisers on these sites</small>"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:29
+msgid "_Never accept"
+msgstr "_Ҳеч қачон қабул қилинмасин"
+
+#: ../src/resources/prefs-dialog.ui.h:30
+msgid "Tracking"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:31
+msgid "_Tell websites I do not want to be tracked"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:33
+msgid "Manage _Passwords…"
+msgstr "Махфий _сўзларни бошқариш..."
+
+#: ../src/resources/prefs-dialog.ui.h:34
+msgid "_Remember passwords"
+msgstr "Махфий сўзларни _эслаб қолиш"
+
+#: ../src/resources/prefs-dialog.ui.h:35
+msgid "Stored Data"
+msgstr "Сақланган маълумотлар"
+
+#: ../src/resources/prefs-dialog.ui.h:36
+msgid "You can clear stored personal data."
+msgstr "Сақланган шахсий маълумотларни ўчиришингиз мумкин."
+
+#: ../src/resources/prefs-dialog.ui.h:37
+msgid "Cl_ear Personal Data…"
+msgstr "Шахсий маълумотларни ўч_ириш..."
+
+#: ../src/resources/prefs-dialog.ui.h:38
+msgid "Privacy"
+msgstr "Махфийлик"
+
+#: ../src/resources/prefs-dialog.ui.h:41
+msgid "_Remove"
+msgstr "_Олиб ташлаш"
+
+#: ../src/resources/prefs-dialog.ui.h:42
+msgid "_Up"
+msgstr "_Юқорига"
+
+#: ../src/resources/prefs-dialog.ui.h:43
+msgid "_Down"
+msgstr "_Пастга"
+
+#: ../src/resources/prefs-dialog.ui.h:44
+msgid "Spell checking"
+msgstr "Имлони текшириш"
+
+#: ../src/resources/prefs-dialog.ui.h:45
+msgid "_Enable spell checking"
+msgstr ""
+
+#: ../src/resources/prefs-dialog.ui.h:46 ../src/prefs-dialog.c:730
+msgid "Language"
+msgstr "Тил"
+
+#: ../src/resources/prefs-lang-dialog.ui.h:1
+msgid "Add Language"
+msgstr "Тил қўшиш"
+
+#: ../src/resources/prefs-lang-dialog.ui.h:4
+msgid "Choose a l_anguage:"
+msgstr "_Тилни танлаш:"
+
+#: ../src/resources/shortcuts-dialog.ui.h:1
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Умумий"
+
+#: ../src/resources/shortcuts-dialog.ui.h:2
+msgctxt "shortcut window"
+msgid "New window"
+msgstr "Янги ойна"
+
+#: ../src/resources/shortcuts-dialog.ui.h:3
+msgctxt "shortcut window"
+msgid "New incognito window"
+msgstr "Янги инкогнито ойна"
+
+#: ../src/resources/shortcuts-dialog.ui.h:4
+msgctxt "shortcut window"
+msgid "Open file"
+msgstr "Файлни очиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:5
+msgctxt "shortcut window"
+msgid "Save page"
+msgstr "Саҳифани сақлаш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:6
+msgctxt "shortcut window"
+msgid "Save page as web app"
+msgstr "Саҳифани веб дастур сифатида сақлаш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:7
+msgctxt "shortcut window"
+msgid "Print page"
+msgstr "Саҳифани чоп этиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:8
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Чиқиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:9
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "Ёрдам"
+
+#: ../src/resources/shortcuts-dialog.ui.h:10
+msgctxt "shortcut window"
+msgid "Shortcuts"
+msgstr "Клавишлар бирикмаси"
+
+#: ../src/resources/shortcuts-dialog.ui.h:11
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Навигация"
+
+#: ../src/resources/shortcuts-dialog.ui.h:12
+msgctxt "shortcut window"
+msgid "Reload current page"
+msgstr "Жорий саҳифани қайта юклаш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:13
+msgctxt "shortcut window"
+msgid "Stop loading current page"
+msgstr "Жорий саҳифа юкланишини тўхтатиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:14
+msgctxt "shortcut window"
+msgid "Go back to the previous page"
+msgstr "Олдинги саҳифага ўтиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:15
+msgctxt "shortcut window"
+msgid "Go forward to the next page"
+msgstr "Кейинги саҳифага ўтиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:16
+msgctxt "shortcut window"
+msgid "Tabs"
+msgstr "Ички ойналар"
+
+#: ../src/resources/shortcuts-dialog.ui.h:17
+msgctxt "shortcut window"
+msgid "New tab"
+msgstr "Янги ички ойна"
+
+#: ../src/resources/shortcuts-dialog.ui.h:18
+msgctxt "shortcut window"
+msgid "Close current tab"
+msgstr "Жорий ички ойнани ёпиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:19
+msgctxt "shortcut window"
+msgid "Reopen closed tab"
+msgstr "Ёпилган ички ойнани қайта очиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:20
+msgctxt "shortcut window"
+msgid "Go to the next tab"
+msgstr "Кейинги ички ойнага ўтиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:21
+msgctxt "shortcut window"
+msgid "Go to the previous tab"
+msgstr "Олдинги ички ойнага ўтиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:22
+msgctxt "shortcut window"
+msgid "Move current tab to the left"
+msgstr "Жорий ички ойнани чап томонга кўчириш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:23
+msgctxt "shortcut window"
+msgid "Move current tab to the right"
+msgstr "Жорий ички ойнани ўнг томонга кўчириш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:24
+msgctxt "shortcut window"
+msgid "Miscellaneous"
+msgstr "Бошқалар"
+
+#: ../src/resources/shortcuts-dialog.ui.h:25
+msgctxt "shortcut window"
+msgid "History"
+msgstr "Тарих"
+
+#: ../src/resources/shortcuts-dialog.ui.h:26
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Афзалликлар"
+
+#: ../src/resources/shortcuts-dialog.ui.h:27
+msgctxt "shortcut window"
+msgid "Bookmarks"
+msgstr "Хатчўплар"
+
+#: ../src/resources/shortcuts-dialog.ui.h:28
+msgctxt "shortcut window"
+msgid "Bookmark current page"
+msgstr "Жорий саҳифа учун хатчўп қўшиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:29
+msgctxt "shortcut window"
+msgid "Toggle caret browsing"
+msgstr "Клавишли навигацияни ўчириш ёки ёқиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:30
+msgctxt "shortcut window"
+msgid "View"
+msgstr "Кўриниш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:31
+msgctxt "shortcut window"
+msgid "Zoom in"
+msgstr "Катталаштириш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:32
+msgctxt "shortcut window"
+msgid "Zoom out"
+msgstr "Кичиклаштириш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:33
+msgctxt "shortcut window"
+msgid "Reset zoom"
+msgstr "Масштабни асл ҳолига қайтариш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:34
+msgctxt "shortcut window"
+msgid "Fullscreen"
+msgstr "Бутун экранга"
+
+#: ../src/resources/shortcuts-dialog.ui.h:35
+msgctxt "shortcut window"
+msgid "View page source"
+msgstr "Саҳифа манбасини кўриш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:36
+msgctxt "shortcut window"
+msgid "Toggle inspector"
+msgstr "Инспекторни ўчириш ёки ёқиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:37
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Таҳрирлаш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:38
+msgctxt "shortcut window"
+msgid "Cut"
+msgstr "Кесиб олиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:39
+msgctxt "shortcut window"
+msgid "Copy"
+msgstr "Нусха олиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:40
+msgctxt "shortcut window"
+msgid "Paste"
+msgstr "Қўйиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:41
+msgctxt "shortcut window"
+msgid "Undo"
+msgstr "Бекор қилиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:42
+msgctxt "shortcut window"
+msgid "Redo"
+msgstr "Қайта қилиш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:43
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Барчасини белгилаш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:44
+msgctxt "shortcut window"
+msgid "Select page URL"
+msgstr "Саҳифа манзилини (URL) танланг"
+
+#: ../src/resources/shortcuts-dialog.ui.h:45
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Қидириш"
+
+#: ../src/resources/shortcuts-dialog.ui.h:46
+msgctxt "shortcut window"
+msgid "Next search result"
+msgstr "Кейинги қидирув натижаси"
+
+#: ../src/resources/shortcuts-dialog.ui.h:47
+msgctxt "shortcut window"
+msgid "Previous search result"
+msgstr "Олдинги қидирув натижаси"
+
+#: ../src/ephy-combined-stop-reload-action.c:38
+msgid "Stop"
+msgstr "Тўхтатиш"
+
+#: ../src/ephy-combined-stop-reload-action.c:39
+msgid "Stop current data transfer"
+msgstr "Жорий маълумот узатишни тўхтатиш"
+
+#: ../src/ephy-combined-stop-reload-action.c:41 ../src/ephy-window.c:144
+msgid "_Reload"
+msgstr "_Қайтадан юклаш"
+
+#: ../src/ephy-combined-stop-reload-action.c:42
+msgid "Display the latest content of the current page"
+msgstr "Жорий саҳифанинг энг сўнгги таркибини кўрсатиш"
+
+#: ../src/ephy-history-window.c:242
 msgid "Clear browsing history?"
 msgstr "Тарих тозалансинми?"
 
-#: ../src/ephy-history-window.c:242
+#: ../src/ephy-history-window.c:246
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr "Тарих тозаланса, ундаги барча боғламалар ҳам олиб ташланади."
 
-#: ../src/ephy-history-window.c:257
-msgid "Clear History"
-msgstr "Тарихни тозалаш"
-
-#: ../src/ephy-history-window.c:1049
-msgid "Last 30 minutes"
-msgstr "Охирги 30 дақиқа"
-
-#: ../src/ephy-history-window.c:1050
-msgid "Today"
-msgstr "Бугун"
-
-#. keep this in sync with embed/ephy-history.c's HISTORY_PAGE_OBSOLETE_DAYS
-#: ../src/ephy-history-window.c:1051 ../src/ephy-history-window.c:1054
-#: ../src/ephy-history-window.c:1058
-#, c-format
-msgid "Last %d day"
-msgid_plural "Last %d days"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/ephy-history-window.c:1300
-msgid "Sites"
-msgstr "Сайтлар"
-
-#: ../src/ephy-history-window.c:1380
-msgid "Date"
-msgstr "Сана"
-
-#: ../src/ephy-main.c:77 ../src/ephy-main.c:558 ../src/window-commands.c:882
-msgid "GNOME Web Browser"
-msgstr "GNOME веб браузери"
-
 #: ../src/ephy-main.c:86
 msgid "Open a new tab in an existing browser window"
-msgstr "Мавжуд браузер ойнасида янги таб ойна очиш"
+msgstr "Мавжуд браузер ойнасида янги ички ойна очиш"
 
 #: ../src/ephy-main.c:88
 msgid "Open a new browser window"
 msgstr "Янги ойна очиш"
 
 #: ../src/ephy-main.c:90
-msgid "Launch the bookmarks editor"
-msgstr "Хатчўп таҳрирчисини ишга тушириш"
-
-#: ../src/ephy-main.c:92
 msgid "Import bookmarks from the given file"
 msgstr "Кўрсатилган файлдан хатчўпларни импорт қилиш"
 
-#: ../src/ephy-main.c:92 ../src/ephy-main.c:94
+#: ../src/ephy-main.c:90 ../src/ephy-main.c:92
 msgid "FILE"
 msgstr "ФАЙЛ"
 
-#: ../src/ephy-main.c:94
+#: ../src/ephy-main.c:92
 msgid "Load the given session file"
 msgstr "Кўрсатилган сеанс файлини юклаш"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:94
 msgid "Add a bookmark"
 msgstr "Хатчўп қўшиш"
 
-#: ../src/ephy-main.c:96
+#: ../src/ephy-main.c:94
 msgid "URL"
 msgstr "URL"
 
-#: ../src/ephy-main.c:98
+#: ../src/ephy-main.c:96
 msgid "Start a private instance"
 msgstr ""
 
-#: ../src/ephy-main.c:100
-msgid "Profile directory to use in the private instance"
+#: ../src/ephy-main.c:98
+msgid "Start an instance in incognito mode"
 msgstr ""
 
 #: ../src/ephy-main.c:100
+msgid "Start an instance in netbank mode"
+msgstr ""
+
+#: ../src/ephy-main.c:103
+msgid "Start the browser in application mode"
+msgstr ""
+
+#: ../src/ephy-main.c:105
+msgid "Profile directory to use in the private instance"
+msgstr ""
+
+#: ../src/ephy-main.c:105
 msgid "DIR"
 msgstr "DIR"
 
-#: ../src/ephy-main.c:102
+#: ../src/ephy-main.c:107
 msgid "URL …"
 msgstr "URL …"
 
-#: ../src/ephy-main.c:419
-msgid "Could not start GNOME Web Browser"
-msgstr "GNOME веб браузерини ишга тушириб бўлмади"
+#: ../src/ephy-main.c:212
+msgid "Could not start Web"
+msgstr "Webни ишга тушириб бўлмади"
 
-#: ../src/ephy-main.c:422
+#: ../src/ephy-main.c:215
 #, c-format
 msgid ""
 "Startup failed because of the following error:\n"
@@ -2540,982 +2668,447 @@ msgstr ""
 "Қуйидаги хато сабабли ишга тушириб бўлмади:\n"
 "%s"
 
-#: ../src/ephy-main.c:559
-msgid "GNOME Web Browser options"
-msgstr "GNOME веб браузери параметрлари"
+#: ../src/ephy-main.c:325
+msgid "Web options"
+msgstr "Web параметрлари"
 
-#: ../src/ephy-notebook.c:624
+#: ../src/ephy-notebook.c:660
 msgid "Close tab"
-msgstr "Табни ёпиш"
+msgstr "Ички ойнани ёпиш"
 
-#: ../src/ephy-session.c:115
+#: ../src/ephy-search-provider.c:195
 #, c-format
-msgid "Downloads will be aborted and logout proceed in %d second."
-msgid_plural "Downloads will be aborted and logout proceed in %d seconds."
-msgstr[0] ""
-msgstr[1] ""
+msgid "Search the Web for %s"
+msgstr "Интернетдан %sни қидириш"
 
-#: ../src/ephy-session.c:227
-msgid "Abort pending downloads?"
-msgstr "Тугалланмаган ёзиб олишлар бекор қилинсинми?"
-
-#: ../src/ephy-session.c:232
-msgid ""
-"There are still downloads pending. If you log out, they will be aborted and "
-"lost."
-msgstr ""
-"Тугалланмаган ёзиб олишлар мавжуд. Агар дастурдан чиқилса, улар бекор "
-"қилинади."
-
-#: ../src/ephy-session.c:236
-msgid "_Cancel Logout"
-msgstr "Чиқишни _бекор қилиш"
-
-#: ../src/ephy-session.c:238
-msgid "_Abort Downloads"
-msgstr "Ёзиб олишларни _тўхтатиш"
-
-#: ../src/ephy-session.c:564
-msgid "Recover previous browser windows and tabs?"
-msgstr "Олдинги ойна ва таблар тиклансинми?"
-
-#: ../src/ephy-session.c:568
-msgid ""
-"Epiphany appears to have exited unexpectedly the last time it was run. You "
-"can recover the opened windows and tabs."
-msgstr ""
-"Epiphany охирги марта хато билан ишини якунлаган кўринади. Сиз олдин очилган "
-"ойна ва табларни тиклашингиз мумкин."
-
-#: ../src/ephy-session.c:572
-msgid "_Don't Recover"
-msgstr "_Тикланмасин"
-
-#: ../src/ephy-session.c:574
-msgid "_Recover"
-msgstr "_Тиклаш"
-
-#: ../src/ephy-session.c:576
-msgid "Crash Recovery"
-msgstr "Хатоликдан кейинги тиклаш"
-
-#: ../src/ephy-shell.c:169
-msgid "Sidebar extension required"
-msgstr "Ён панел кенгайтмаси талаб қилинади"
-
-#: ../src/ephy-shell.c:171
-msgid "Sidebar Extension Required"
-msgstr "Ён панел кенгайтмаси талаб қилинади"
-
-#: ../src/ephy-shell.c:175
-msgid "The link you clicked needs the sidebar extension to be installed."
-msgstr "Босилган боғлама ён панел кенгайтмаси ўрнатилган бўлишини талаб қилади."
-
-#: ../src/ephy-statusbar.c:84
-msgid "Caret"
-msgstr ""
-
-#. Translators: this is the tooltip on the "Caret" icon
-#. * in the statusbar.
-#.
-#: ../src/ephy-statusbar.c:91
-msgid "In keyboard selection mode, press F7 to exit"
-msgstr ""
-
-#: ../src/ephy-tabs-menu.c:202
-msgid "Switch to this tab"
-msgstr "Ушбу табга ўтиш"
-
-#: ../src/ephy-toolbar.c:212
-msgid "_Back"
-msgstr "_Орқага"
-
-#: ../src/ephy-toolbar.c:214
-msgid "Go to the previous visited page"
-msgstr "Олдинги кўрилган саҳифага ўтиш"
-
-#. this is the tooltip on the Back button's drop-down arrow, which will show
-#. * a menu with all sites you can go 'back' to
-#.
-#: ../src/ephy-toolbar.c:218
-msgid "Back history"
-msgstr "Тарих бўйича орқага"
-
-#: ../src/ephy-toolbar.c:232
-msgid "_Forward"
-msgstr "_Олдинга"
-
-#: ../src/ephy-toolbar.c:234
-msgid "Go to the next visited page"
-msgstr "Кейинги кўрилган саҳифага ўтиш"
-
-#. this is the tooltip on the Forward button's drop-down arrow, which will show
-#. * a menu with all sites you can go 'forward' to
-#.
-#: ../src/ephy-toolbar.c:238
-msgid "Forward history"
-msgstr "Тарих бўйича олдинга"
-
-#: ../src/ephy-toolbar.c:251
-msgid "_Up"
-msgstr "_Юқорига"
-
-#: ../src/ephy-toolbar.c:253
-msgid "Go up one level"
-msgstr "Бир даража юқорига"
-
-#. this is the tooltip on the Up button's drop-down arrow, which will show
-#. * a menu with al sites you can go 'up' to
-#.
-#: ../src/ephy-toolbar.c:257
-msgid "List of upper levels"
-msgstr "Юқори даражалар рўйхати"
-
-#: ../src/ephy-toolbar.c:275
-msgid "Enter a web address to open, or a phrase to search for"
-msgstr "Қидириш учун керакли веб манзил ёки иборани киритинг"
-
-#: ../src/ephy-toolbar.c:291
-msgid "Zoom"
-msgstr ""
-
-#: ../src/ephy-toolbar.c:293
-msgid "Adjust the text size"
-msgstr ""
-
-#: ../src/ephy-toolbar.c:305
-msgid "Go to the address entered in the address entry"
-msgstr "Манзил майдонига киритилган манзилга ўтиш"
-
-#: ../src/ephy-toolbar.c:314
-msgid "_Home"
-msgstr "_Уй"
-
-#: ../src/ephy-toolbar.c:316
-msgid "Go to the home page"
-msgstr "Уй саҳифасига ўтиш"
-
-#: ../src/ephy-toolbar.c:326
-msgid "New _Tab"
-msgstr "Янги _таб"
-
-#: ../src/ephy-toolbar.c:328
-msgid "Open a new tab"
-msgstr "Янги таб очиш"
-
-#: ../src/ephy-toolbar.c:337
-msgid "_New Window"
-msgstr "_Янги ойна"
-
-#: ../src/ephy-toolbar.c:339
-msgid "Open a new window"
-msgstr "Янги ойна очиш"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/ephy-toolbar-editor.c:74
-msgid "toolbar style|Default"
-msgstr "Андоза"
-
-#. separator row
-#: ../src/ephy-toolbar-editor.c:76
-msgid "Text below icons"
-msgstr "Матн нишончалар остида"
-
-#: ../src/ephy-toolbar-editor.c:77
-msgid "Text beside icons"
-msgstr "Матн нишончалар ёнида"
-
-#: ../src/ephy-toolbar-editor.c:78
-msgid "Icons only"
-msgstr "Фақат нишончалар"
-
-#: ../src/ephy-toolbar-editor.c:79
-msgid "Text only"
-msgstr "Фақат матн"
-
-#: ../src/ephy-toolbar-editor.c:188
-msgid "Toolbar Editor"
-msgstr "Асбоблар панели таҳрирлагичи"
-
-#. translators: translate the same as in gnome-control-center
-#: ../src/ephy-toolbar-editor.c:207
-msgid "Toolbar _button labels:"
-msgstr "Асбоблар панели _тугмаси ёрлиғи:"
-
-#: ../src/ephy-toolbar-editor.c:271
-msgid "_Add a New Toolbar"
-msgstr "Янги асбоблар панели _қўшиш"
-
-#: ../src/ephy-window.c:115
-msgid "_Bookmarks"
-msgstr "_Хатчўплар"
-
-#: ../src/ephy-window.c:116
-msgid "_Go"
-msgstr "_Ўтиш"
-
-#: ../src/ephy-window.c:117
-msgid "T_ools"
-msgstr "_Воситалар"
-
-#: ../src/ephy-window.c:118
-msgid "_Tabs"
-msgstr "_Таблар"
-
-#: ../src/ephy-window.c:120
-msgid "_Toolbars"
-msgstr "_Асбоблар панели"
-
-#. File menu
-#: ../src/ephy-window.c:126
+#: ../src/ephy-window.c:94
 msgid "_Open…"
 msgstr "_Очиш…"
 
-#: ../src/ephy-window.c:127
-msgid "Open a file"
-msgstr "Файлни очиш"
-
-#: ../src/ephy-window.c:129
+#: ../src/ephy-window.c:96
 msgid "Save _As…"
 msgstr "_Бошқача сақлаш…"
 
-#: ../src/ephy-window.c:130
-msgid "Save the current page"
-msgstr "Жорий саҳифани сақлаш"
+#: ../src/ephy-window.c:98
+msgid "Save As _Web Application…"
+msgstr "_Веб дастури сифатида сақлаш..."
 
-#: ../src/ephy-window.c:132
-msgid "Page Set_up"
-msgstr "Саҳифа _параметрлари"
-
-#: ../src/ephy-window.c:133
-msgid "Setup the page settings for printing"
-msgstr "Босиб чиқариш учун саҳифа параметрларини мослаш"
-
-#: ../src/ephy-window.c:135
-msgid "Print Pre_view"
-msgstr "_Кўриб чиқиш"
-
-#: ../src/ephy-window.c:136
-msgid "Print preview"
-msgstr "Кўриб чиқиш"
-
-#: ../src/ephy-window.c:138
+#: ../src/ephy-window.c:100
 msgid "_Print…"
 msgstr "_Босиб чиқариш…"
 
-#: ../src/ephy-window.c:139
-msgid "Print the current page"
-msgstr "Жорий саҳифани босиб чиқариш"
-
-#: ../src/ephy-window.c:141
+#: ../src/ephy-window.c:102
 msgid "S_end Link by Email…"
 msgstr "Боғламани эл.почта орқали _қўнатиш…"
 
-#: ../src/ephy-window.c:142
-msgid "Send a link of the current page"
-msgstr "Жорий саҳифа боғламасини жўнатиш"
-
-#: ../src/ephy-window.c:145
-msgid "Close this tab"
-msgstr "Ушбу таб ойнани ёпиш"
-
-#. Edit menu
-#: ../src/ephy-window.c:150
-msgid "_Undo"
-msgstr "_Бекор қилиш"
-
-#: ../src/ephy-window.c:151
-msgid "Undo the last action"
-msgstr "Охирги амални бекор қилиш"
-
-#: ../src/ephy-window.c:153
+#: ../src/ephy-window.c:113
 msgid "Re_do"
 msgstr "_Қайтариш"
 
-#: ../src/ephy-window.c:154
-msgid "Redo the last undone action"
-msgstr "Охирги бекор қилинган амални қайтариш"
-
-#: ../src/ephy-window.c:163
-msgid "Paste clipboard"
-msgstr "Клипборддан қўйиш"
-
-#: ../src/ephy-window.c:166
-msgid "Delete text"
-msgstr "Матнни олиб ташлаш"
-
-#: ../src/ephy-window.c:169
-msgid "Select the entire page"
-msgstr "Бутун саҳифани танлаш"
-
-#: ../src/ephy-window.c:171
+#: ../src/ephy-window.c:125
 msgid "_Find…"
 msgstr "_Қидириш…"
 
-#: ../src/ephy-window.c:172
-msgid "Find a word or phrase in the page"
-msgstr "Жорий саҳифадаги сўз ёки иборани қидириш"
-
-#: ../src/ephy-window.c:174
+#: ../src/ephy-window.c:127
 msgid "Find Ne_xt"
 msgstr "_Кейингисини қидириш"
 
-#: ../src/ephy-window.c:175
-msgid "Find next occurrence of the word or phrase"
-msgstr ""
-
-#: ../src/ephy-window.c:177
+#: ../src/ephy-window.c:129
 msgid "Find Pre_vious"
 msgstr "Олдин_гисини қидириш"
 
-#: ../src/ephy-window.c:178
-msgid "Find previous occurrence of the word or phrase"
-msgstr ""
+#: ../src/ephy-window.c:131
+msgid "Edit _Bookmarks"
+msgstr "_Хатчўпларни таҳрирлаш"
 
-#: ../src/ephy-window.c:180
-msgid "P_ersonal Data"
-msgstr "_Шахсий маълумот"
-
-#: ../src/ephy-window.c:181
-msgid "View and remove cookies and passwords"
-msgstr "Cookie'лар ва махфий сўзларни кўриш ва олиб ташлаш"
-
-#: ../src/ephy-window.c:184
-msgid "Certificate_s"
-msgstr "Сертификат_лар"
-
-#: ../src/ephy-window.c:185
-msgid "Manage Certificates"
-msgstr "Сертификатларни бошқариш"
-
-#: ../src/ephy-window.c:188
-msgid "P_references"
-msgstr "_Параметрлар"
-
-#: ../src/ephy-window.c:189
-msgid "Configure the web browser"
-msgstr "Веб браузерни мослаш"
-
-#. View menu
-#: ../src/ephy-window.c:194
-msgid "_Customize Toolbars…"
-msgstr "Асбоблар панелини _мослаш…"
-
-#: ../src/ephy-window.c:195
-msgid "Customize toolbars"
-msgstr "Асбоблар панелини мослаш"
-
-#: ../src/ephy-window.c:197 ../src/ephy-window.c:200
+#. View actions.
+#: ../src/ephy-window.c:140 ../src/ephy-window.c:142
 msgid "_Stop"
 msgstr "_Тўхтатиш"
 
-#: ../src/ephy-window.c:198
-msgid "Stop current data transfer"
-msgstr "Жорий маълумот узатишни тўхтатиш"
+#: ../src/ephy-window.c:146
+msgid "Zoom _In"
+msgstr "К_атталаштириш"
 
-#: ../src/ephy-window.c:202
-msgid "_Reload"
-msgstr "_Қайтадан юклаш"
+#: ../src/ephy-window.c:148
+msgid "Zoom O_ut"
+msgstr "К_ичиклаштириш"
 
-#: ../src/ephy-window.c:203
-msgid "Display the latest content of the current page"
-msgstr "Жорий саҳифанинг энг сўнгги таркибини кўрсатиш"
-
-#: ../src/ephy-window.c:205
-msgid "_Larger Text"
-msgstr "Ж_уда катта матн"
-
-#: ../src/ephy-window.c:206
-msgid "Increase the text size"
-msgstr "Матн ўлчамини катталаштириш"
-
-#: ../src/ephy-window.c:208
-msgid "S_maller Text"
-msgstr "Жуда _кичик матн"
-
-#: ../src/ephy-window.c:209
-msgid "Decrease the text size"
-msgstr "Матн ўлчамини кичрайтириш"
-
-#: ../src/ephy-window.c:211
+#: ../src/ephy-window.c:150
 msgid "_Normal Size"
 msgstr "_Оддий ўлчам"
 
-#: ../src/ephy-window.c:212
-msgid "Use the normal text size"
-msgstr "Оддий матн ўлчамидан фойдаланиш"
-
-#: ../src/ephy-window.c:214
+#: ../src/ephy-window.c:152
 msgid "Text _Encoding"
 msgstr "Матн _кодлаш усули"
 
-#: ../src/ephy-window.c:215
-msgid "Change the text encoding"
-msgstr "Матн кодлаш усулини ўзгартириш"
-
-#: ../src/ephy-window.c:217
+#: ../src/ephy-window.c:154
 msgid "_Page Source"
 msgstr "_Саҳифа коди"
 
-#: ../src/ephy-window.c:218
-msgid "View the source code of the page"
-msgstr "Саҳифа асл кодини кўриш"
-
-#: ../src/ephy-window.c:220
-msgid "Page _Security Information"
+#: ../src/ephy-window.c:156
+msgid "_Toggle Inspector"
 msgstr ""
 
-#: ../src/ephy-window.c:221
-msgid "Display security information for the web page"
-msgstr "Веб саҳифа хавфсизлик маълумотини кўрсатиш"
-
-#. Bookmarks menu
-#: ../src/ephy-window.c:226
+#. Bookmarks actions.
+#: ../src/ephy-window.c:161
 msgid "_Add Bookmark…"
 msgstr "Хатчўп _қўшиш…"
 
-#: ../src/ephy-window.c:227 ../src/ephy-window.c:301
-msgid "Add a bookmark for the current page"
-msgstr "Жорий саҳифа учун хатчўп қўшиш"
-
-#: ../src/ephy-window.c:229
-msgid "_Edit Bookmarks"
-msgstr "Хатчўпларни _таҳрирлаш"
-
-#: ../src/ephy-window.c:230
-msgid "Open the bookmarks window"
-msgstr "Хатчўп ойнасини очиш"
-
-#. Go menu
-#: ../src/ephy-window.c:235
+#. Go actions.
+#: ../src/ephy-window.c:166
 msgid "_Location…"
 msgstr "_Манзил…"
 
-#: ../src/ephy-window.c:236
-msgid "Go to a specified location"
-msgstr "Кўрсатилган манзилга ўтиш"
-
-#. History
-#: ../src/ephy-window.c:238 ../src/pdm-dialog.c:380
-msgid "Hi_story"
-msgstr "_Тарих"
-
-#: ../src/ephy-window.c:239
-msgid "Open the history window"
-msgstr "Тарих ойнасини очиш"
-
-#. Tabs menu
-#: ../src/ephy-window.c:244
+#. Tabs actions.
+#: ../src/ephy-window.c:171
 msgid "_Previous Tab"
-msgstr "_Олдинги таб"
+msgstr "_Олдинги ички ойна"
 
-#: ../src/ephy-window.c:245
-msgid "Activate previous tab"
-msgstr "Олдинги табни активлаштириш"
-
-#: ../src/ephy-window.c:247
+#: ../src/ephy-window.c:173
 msgid "_Next Tab"
-msgstr "_Кейинги таб"
+msgstr "_Кейинги ички ойна"
 
-#: ../src/ephy-window.c:248
-msgid "Activate next tab"
-msgstr "Кейинги табни активлаштириш"
-
-#: ../src/ephy-window.c:250
+#: ../src/ephy-window.c:175
 msgid "Move Tab _Left"
 msgstr "Табни _чапга кўчириш"
 
-#: ../src/ephy-window.c:251
-msgid "Move current tab to left"
-msgstr "Жорий табни чап томонга кўчириш"
-
-#: ../src/ephy-window.c:253
+#: ../src/ephy-window.c:177
 msgid "Move Tab _Right"
 msgstr "Табни _ўнгга кўчириш"
 
-#: ../src/ephy-window.c:254
-msgid "Move current tab to right"
-msgstr "Жорий табни ўнг томонга кўчириш"
+#: ../src/ephy-window.c:179
+msgid "Du_plicate"
+msgstr ""
 
-#: ../src/ephy-window.c:256
+#: ../src/ephy-window.c:181
 msgid "_Detach Tab"
 msgstr "Табни _ажратиш"
 
-#: ../src/ephy-window.c:257
-msgid "Detach current tab"
-msgstr "Жорий табни ажратиш"
-
-#: ../src/ephy-window.c:263
-msgid "Display web browser help"
-msgstr "Браузер ёрдам саҳифасини кўрсатиш"
-
-#. File Menu
-#: ../src/ephy-window.c:274
-msgid "_Work Offline"
-msgstr "Офлайнда _ишлаш"
-
-#: ../src/ephy-window.c:275
-msgid "Switch to offline mode"
-msgstr "Офлайн усулига ўтиш"
-
-#. View Menu
-#: ../src/ephy-window.c:280
-msgid "_Hide Toolbars"
-msgstr "Асбоблар панелини _бекитиш"
-
-#: ../src/ephy-window.c:281
-msgid "Show or hide toolbar"
-msgstr "Асбоблар панелини кўрсатиш/бекитиш"
-
-#: ../src/ephy-window.c:283
-msgid "St_atusbar"
-msgstr "_Ҳолат панели"
-
-#: ../src/ephy-window.c:284
-msgid "Show or hide statusbar"
-msgstr "Ҳолат панелини кўрсатиш/бекитиш"
-
-#: ../src/ephy-window.c:286
+#. View actions.
+#: ../src/ephy-window.c:196
 msgid "_Fullscreen"
 msgstr "_Бутун экран"
 
-#: ../src/ephy-window.c:287
-msgid "Browse at full screen"
-msgstr "Бутун экран усулида кўриш"
-
-#: ../src/ephy-window.c:289
+#: ../src/ephy-window.c:198
 msgid "Popup _Windows"
 msgstr "Попап _ойналар"
 
-#: ../src/ephy-window.c:290
-msgid "Show or hide unrequested popup windows from this site"
-msgstr ""
-
-#: ../src/ephy-window.c:292
+#: ../src/ephy-window.c:200
 msgid "Selection Caret"
 msgstr ""
 
-#. Document
-#: ../src/ephy-window.c:300
+#. Document.
+#: ../src/ephy-window.c:207
 msgid "Add Boo_kmark…"
 msgstr "_Хатчўп қўшиш…"
 
-#. Framed document
-#: ../src/ephy-window.c:306
-msgid "Show Only _This Frame"
-msgstr "Фақат _шу фреймни кўрсатиш"
-
-#: ../src/ephy-window.c:307
-msgid "Show only this frame in this window"
-msgstr "Фақат ушбу фреймни шу ойнада кўрсатиш"
-
-#. Links
-#: ../src/ephy-window.c:312
-msgid "_Open Link"
-msgstr "Боғламани _очиш"
-
-#: ../src/ephy-window.c:313
-msgid "Open link in this window"
-msgstr "Боғламани шу ойнада очиш"
-
-#: ../src/ephy-window.c:315
+#. Links.
+#: ../src/ephy-window.c:212
 msgid "Open Link in New _Window"
 msgstr "Боғламани янги _ойнада очиш"
 
-#: ../src/ephy-window.c:316
-msgid "Open link in a new window"
-msgstr "Боғламани янги ойнада очиш"
-
-#: ../src/ephy-window.c:318
+#: ../src/ephy-window.c:214
 msgid "Open Link in New _Tab"
-msgstr "Боғламани янги _таб ойнада очиш"
+msgstr "Боғламани янги _ички ойнада очиш"
 
-#: ../src/ephy-window.c:319
-msgid "Open link in a new tab"
-msgstr "Боғламани янги таб ойнада очиш"
+#: ../src/ephy-window.c:216
+msgid "Open Link in I_ncognito Window"
+msgstr "Боғламани и_нкогнито ойнада очиш"
 
-#: ../src/ephy-window.c:321
-msgid "_Download Link"
-msgstr "Боғламани _ёзиб олиш"
-
-#: ../src/ephy-window.c:323
+#: ../src/ephy-window.c:218
 msgid "_Save Link As…"
 msgstr "Боғламани бошқача _сақлаш…"
 
-#: ../src/ephy-window.c:324
-msgid "Save link with a different name"
-msgstr "Боғламани бошқа ном билан сақлаш"
-
-#: ../src/ephy-window.c:326
-msgid "_Bookmark Link…"
-msgstr "Боғламани _хатчўпга қўшиш…"
-
-#: ../src/ephy-window.c:328
+#: ../src/ephy-window.c:220
 msgid "_Copy Link Address"
 msgstr "Боғлама манзилидан _нусха олиш"
 
-#. Email links
-#. This is on the context menu on a mailto: link and opens the mail program
-#: ../src/ephy-window.c:334
-msgid "_Send Email…"
-msgstr "Хат _жўнатиш…"
+#: ../src/ephy-window.c:222
+msgid "_Copy E-mail Address"
+msgstr "Электрон почта манзилидан _нусха олиш"
 
-#: ../src/ephy-window.c:336
-msgid "_Copy Email Address"
-msgstr "Эл.почта манзилидан _нусха олиш"
+#. Images.
+#: ../src/ephy-window.c:227
+msgid "View _Image in New Tab"
+msgstr "_Расмни янги ички ойнада кўриш"
 
-#. Images
-#: ../src/ephy-window.c:341
-msgid "Open _Image"
-msgstr "_Расмни очиш"
-
-#: ../src/ephy-window.c:343
-msgid "_Save Image As…"
-msgstr "Расмни бошқача _сақлаш…"
-
-#: ../src/ephy-window.c:345
-msgid "_Use Image As Background"
-msgstr "Расмни орқа фон сифатида _ишлатиш"
-
-#: ../src/ephy-window.c:347
+#: ../src/ephy-window.c:229
 msgid "Copy I_mage Address"
 msgstr "_Расм манзилидан нусха олиш"
 
-#: ../src/ephy-window.c:349
-msgid "St_art Animation"
-msgstr "Анимацияни _бошлаш"
+#: ../src/ephy-window.c:231
+msgid "_Save Image As…"
+msgstr "Расмни бошқача _сақлаш…"
 
-#: ../src/ephy-window.c:351
-msgid "St_op Animation"
-msgstr "Анимацияни _тўхтатиш"
+#: ../src/ephy-window.c:233
+msgid "Set as _Wallpaper"
+msgstr "_Орқа фон сифатида қўйиш"
 
-#: ../src/ephy-window.c:528
+#. Video.
+#: ../src/ephy-window.c:238
+msgid "Open Video in New _Window"
+msgstr "Видеони янги _ойнада очиш"
+
+#: ../src/ephy-window.c:240
+msgid "Open Video in New _Tab"
+msgstr "Боғламани янги _ички ойнада очиш"
+
+#: ../src/ephy-window.c:242
+msgid "_Save Video As…"
+msgstr "Видеони қуйидагича _сақлаш…"
+
+#: ../src/ephy-window.c:244
+msgid "_Copy Video Address"
+msgstr "Видео манзилидан _нусха олиш"
+
+#. Audio.
+#: ../src/ephy-window.c:249
+msgid "Open Audio in New _Window"
+msgstr "Аудиони янги _ойнада очиш"
+
+#: ../src/ephy-window.c:251
+msgid "Open Audio in New _Tab"
+msgstr "Боғламани янги _ички ойнада очиш"
+
+#: ../src/ephy-window.c:253
+msgid "_Save Audio As…"
+msgstr "Аудиони қуйидагича _сақлаш…"
+
+#: ../src/ephy-window.c:255
+msgid "_Copy Audio Address"
+msgstr "Аудио манзилидан _нусха олиш"
+
+#: ../src/ephy-window.c:470
 msgid "There are unsubmitted changes to form elements"
 msgstr "Шакл элементларида жўнатилмаган ўзгаришлар мавжуд"
 
-#: ../src/ephy-window.c:532
+#: ../src/ephy-window.c:471
 msgid "If you close the document anyway, you will lose that information."
 msgstr "Агар ҳужжат ёпилса, барча ўзгаришлар йўқотилади."
 
-#: ../src/ephy-window.c:536
+#: ../src/ephy-window.c:473
 msgid "Close _Document"
 msgstr "_Ҳужжатни сақлаш"
 
-#: ../src/ephy-window.c:1496 ../src/window-commands.c:288
+#: ../src/ephy-window.c:488
+msgid "There are ongoing downloads"
+msgstr "Файллар юклаб олиняпти"
+
+#: ../src/ephy-window.c:489
+msgid "If you quit, the downloads will be cancelled"
+msgstr "Агар чиқсангиз барча юкланаётганлар бекор қилинади"
+
+#: ../src/ephy-window.c:490
+msgid "Quit and cancel downloads"
+msgstr "Чиқиш ва юклаб олишни бекор қилиш"
+
+#: ../src/ephy-window.c:1094 ../src/window-commands.c:258
 msgid "Open"
 msgstr "Очиш"
 
-#: ../src/ephy-window.c:1498 ../src/window-commands.c:314
+#: ../src/ephy-window.c:1096
 msgid "Save As"
 msgstr "Бошқача сақлаш"
 
-#: ../src/ephy-window.c:1500
+#: ../src/ephy-window.c:1098
+msgid "Save As Application"
+msgstr "Дастур сифатида сақлаш"
+
+#: ../src/ephy-window.c:1100
 msgid "Print"
 msgstr "Босиб чиқариш"
 
-#: ../src/ephy-window.c:1504
+#: ../src/ephy-window.c:1102
+msgid "Bookmark"
+msgstr "Хатчўп"
+
+#: ../src/ephy-window.c:1104
 msgid "Find"
 msgstr "Қидириш"
 
+#: ../src/ephy-window.c:1110
+msgid "Encodings…"
+msgstr "Кодлаш усуллари..."
+
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1517
+#: ../src/ephy-window.c:1113
 msgid "Larger"
 msgstr "Жуда катта"
 
 #. Translators: This refers to text size
-#: ../src/ephy-window.c:1520
+#: ../src/ephy-window.c:1116
 msgid "Smaller"
 msgstr "Жуда кичик"
 
-#: ../src/ephy-window.c:1734
-msgid "Insecure"
-msgstr "Ҳимоясиз"
+#: ../src/ephy-window.c:1138
+msgid "Back"
+msgstr "Орқага"
 
-#: ../src/ephy-window.c:1739
-msgid "Broken"
-msgstr "Бузуқ"
+#: ../src/ephy-window.c:1150
+msgid "Forward"
+msgstr "Олдинга"
 
-#: ../src/ephy-window.c:1751
-msgid "Low"
-msgstr "Паст"
+#: ../src/ephy-window.c:1162
+msgid "Zoom"
+msgstr "Масштаб"
 
-#: ../src/ephy-window.c:1758
-msgid "High"
-msgstr "Юқори"
+#: ../src/ephy-window.c:1171
+msgid "New _Tab"
+msgstr "Янги _ички ойна"
 
-#: ../src/ephy-window.c:1768
+#: ../src/ephy-window.c:1179
+msgid "Go to most visited"
+msgstr "Энг кўп кўрилганга ўтиш"
+
+#: ../src/ephy-window.c:1669
 #, c-format
-msgid "Security level: %s"
-msgstr "Хавфсизлик даражаси: %s"
+msgid "Search the Web for '%s'"
+msgstr "Интернетда \"%s\"ни қидириш"
 
-#: ../src/ephy-window.c:1811
-#, c-format
-msgid "%d hidden popup window"
-msgid_plural "%d hidden popup windows"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../src/ephy-window.c:2074
-#, c-format
-msgid "Open image “%s”"
-msgstr "“%s” расмини очиш"
-
-#: ../src/ephy-window.c:2079
-#, c-format
-msgid "Use as desktop background “%s”"
-msgstr "“%s” расмини иш столи орқа фони сифатида ўрнатиш"
-
-#: ../src/ephy-window.c:2084
-#, c-format
-msgid "Save image “%s”"
-msgstr "“%s” расмини сақлаш"
-
-#: ../src/ephy-window.c:2089
-#, c-format
-msgid "Copy image address “%s”"
-msgstr "“%s” расм манзилидан нусха олиш"
-
-#: ../src/ephy-window.c:2102
-#, c-format
-msgid "Send email to address “%s”"
-msgstr "“%s” манзилига эл.почта жўнатиш"
-
-#: ../src/ephy-window.c:2108
-#, c-format
-msgid "Copy email address “%s”"
-msgstr "“%s” эл.почта манзилидан нусха олиш"
-
-#: ../src/ephy-window.c:2120
-#, c-format
-msgid "Save link “%s”"
-msgstr "“%s” боғламасини сақлаш"
-
-#: ../src/ephy-window.c:2126
-#, c-format
-msgid "Bookmark link “%s”"
-msgstr "“%s” боғламасини хатчўпга қўшиш"
-
-#: ../src/ephy-window.c:2132
-#, c-format
-msgid "Copy link's address “%s”"
-msgstr "“%s” боғламаси манзилидан нусха олиш"
-
-#: ../src/pdm-dialog.c:317
-msgid "<b>Select the personal data you want to clear</b>"
-msgstr ""
-
-#: ../src/pdm-dialog.c:320
-msgid ""
-"You are about to clear personal data that is stored about the web pages you "
-"have visited. Before proceeding, check the types of information that you "
-"want to remove:"
-msgstr ""
-
-#: ../src/pdm-dialog.c:325
-msgid "Clear All Personal Data"
-msgstr ""
-
-#. Cookies
-#: ../src/pdm-dialog.c:356
-msgid "C_ookies"
-msgstr "_Кукилар"
-
-#. Passwords
-#: ../src/pdm-dialog.c:368
-msgid "Saved _passwords"
-msgstr "Сақланган _махфий сўзлар"
-
-#. Cache
-#: ../src/pdm-dialog.c:392
-msgid "_Temporary files"
-msgstr "_Вақтинчалик файллар"
-
-#: ../src/pdm-dialog.c:408
-msgid ""
-"<small><i><b>Note:</b> You cannot undo this action. The data you are "
-"choosing to clear will be deleted forever.</i></small>"
-msgstr ""
-
-#: ../src/pdm-dialog.c:604
-msgid "Cookie Properties"
-msgstr "Cookie мосламаси"
-
-#: ../src/pdm-dialog.c:621
-msgid "Content:"
-msgstr "Таркиб:"
-
-#: ../src/pdm-dialog.c:637
-msgid "Path:"
-msgstr "Йўл:"
-
-#: ../src/pdm-dialog.c:653
-msgid "Send for:"
-msgstr "Жўнатиш:"
-
-#: ../src/pdm-dialog.c:662
-msgid "Encrypted connections only"
-msgstr "Фақат ҳимояланган уланиш"
-
-#: ../src/pdm-dialog.c:662
-msgid "Any type of connection"
-msgstr "Исталган уланиш тури"
-
-#: ../src/pdm-dialog.c:668
-msgid "Expires:"
-msgstr "Тугаш муддати:"
-
-#: ../src/pdm-dialog.c:679
-msgid "End of current session"
-msgstr "Жорий сеанснинг охири"
-
-#: ../src/pdm-dialog.c:812
-msgid "Domain"
-msgstr "Домен"
-
-#: ../src/pdm-dialog.c:824
-msgid "Name"
-msgstr "Номи"
-
-#: ../src/pdm-dialog.c:1223
-msgid "Host"
-msgstr "Хост"
-
-#: ../src/pdm-dialog.c:1235
-msgid "User Name"
-msgstr "Фойдаланувчи номи"
-
-#: ../src/pdm-dialog.c:1247
-msgid "User Password"
-msgstr "Фойдаланувчи махфий сўзи"
-
-#: ../src/popup-commands.c:260
-msgid "Download Link"
-msgstr "Боғламани ёзиб олиш"
-
-#: ../src/popup-commands.c:268
+#: ../src/popup-commands.c:252
 msgid "Save Link As"
 msgstr "Боғламани бошқача сақлаш"
 
-#: ../src/popup-commands.c:275
+#: ../src/popup-commands.c:259
 msgid "Save Image As"
 msgstr "Расмни бошқача сақлаш"
 
-#: ../src/ppview-toolbar.c:86
-msgid "First"
-msgstr "Биринчи"
+#: ../src/popup-commands.c:266
+msgid "Save Media As"
+msgstr "сақлаш"
 
-#: ../src/ppview-toolbar.c:87
-msgid "Go to the first page"
-msgstr "Биринчи саҳифага ўтиш"
-
-#: ../src/ppview-toolbar.c:90
-msgid "Last"
-msgstr "Охирги"
-
-#: ../src/ppview-toolbar.c:91
-msgid "Go to the last page"
-msgstr "Охирги саҳифага ўтиш"
-
-#: ../src/ppview-toolbar.c:94
-msgid "Previous"
-msgstr "Олдинги"
-
-#: ../src/ppview-toolbar.c:95
-msgid "Go to the previous page"
-msgstr "Олдинги саҳифага ўтиш"
-
-#: ../src/ppview-toolbar.c:98
-msgid "Next"
-msgstr "Кейинги"
-
-#: ../src/ppview-toolbar.c:99
-msgid "Go to next page"
-msgstr "Кейинги саҳифага ўтиш"
-
-#: ../src/ppview-toolbar.c:102
-msgid "Close"
-msgstr "Ёпиш"
-
-#: ../src/ppview-toolbar.c:103 ../src/ppview-toolbar.c:219
-msgid "Close print preview"
-msgstr "Кўриб чиқишни ёпиш"
-
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: the first %s is the language name, and the
+#. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#: ../src/prefs-dialog.c:634 ../src/prefs-dialog.c:642
+#: ../src/prefs-dialog.c:454 ../src/prefs-dialog.c:458
 #, c-format
-msgid "language|%s (%s)"
+msgctxt "language"
+msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#. Translators: The text before the "|" is context to help you decide on
-#. * the correct translation. You MUST OMIT it in the translated string.
-#. * Translators: this refers to a user-define language code
+#. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:653
+#: ../src/prefs-dialog.c:465
 #, c-format
-msgid "language|User defined (%s)"
-msgstr "Фойдаланувчи аниқлаган (%s)"
+msgctxt "language"
+msgid "User defined (%s)"
+msgstr "Фойдаланувчи белгилаган (%s)"
 
-#: ../src/prefs-dialog.c:675
+#: ../src/prefs-dialog.c:487
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
-msgstr[0] ""
-msgstr[1] "Тизим тиллари (%s)"
+msgstr[0] "Система тили (%s)"
 
-#: ../src/prefs-dialog.c:1067
+#: ../src/prefs-dialog.c:809
 msgid "Select a Directory"
 msgstr "Директорияни танланг"
 
-#: ../src/window-commands.c:777
-msgid ""
-"The GNOME Web Browser is free software; you can redistribute it and/or "
-"modify it under the terms of the GNU General Public License as published by "
-"the Free Software Foundation; either version 2 of the License, or (at your "
-"option) any later version."
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:903
+msgid "DuckDuckGo"
+msgstr "DuckDuckGo"
+
+#. For the preferences dialog. Must exactly match the URL
+#. * you chose in the gschema, but with & instead of &amp;
+#. * If the match is not exact, there will be a spurious, ugly
+#. * entry in the preferences combo, so please test this.
+#: ../src/prefs-dialog.c:909
+#, c-format
+msgid "https://duckduckgo.com/?q=%s&t=epiphany"
+msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:911
+msgid "Google"
+msgstr "Google"
+
+#. For the preferences dialog. Consider a regional variant, like google.co.uk
+#: ../src/prefs-dialog.c:914
+#, fuzzy, c-format
+#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgid "https://google.com/search?q=%s"
+msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#. Search engine option in the preferences dialog
+#: ../src/prefs-dialog.c:916
+msgid "Bing"
+msgstr "Bing"
+
+#. For the preferences dialog. Consider a regional variant, like uk.bing.com
+#: ../src/prefs-dialog.c:919
+#, fuzzy, c-format
+#| msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgid "https://www.bing.com/search?q=%s"
+msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#: ../src/window-commands.c:309
+msgid "Save"
+msgstr "Сақлаш"
+
+#: ../src/window-commands.c:680
+#, c-format
+msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr ""
+
+#: ../src/window-commands.c:683
+msgid "Cancel"
+msgstr "Бекор қилиш"
+
+#: ../src/window-commands.c:685
+msgid "Replace"
+msgstr ""
+
+#: ../src/window-commands.c:689
+msgid ""
+"An application with the same name already exists. Replacing it will "
+"overwrite it."
+msgstr ""
+"Бу номли дастур аллақачон мавжуд. Унинг ўрнига қўйсангиз устидан ёзилади."
+
+#: ../src/window-commands.c:724
+#, c-format
+msgid "The application '%s' is ready to be used"
+msgstr ""
+
+#: ../src/window-commands.c:727
+#, c-format
+msgid "The application '%s' could not be created"
+msgstr ""
+
+#: ../src/window-commands.c:735
+msgid "Launch"
+msgstr ""
+
+#. Show dialog with icon, title.
+#: ../src/window-commands.c:776
+msgid "Create Web Application"
+msgstr "Web дастур яратиш"
 
 #: ../src/window-commands.c:781
-msgid ""
-"The GNOME Web Browser is distributed in the hope that it will be useful, but "
-"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
-"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
-"more details."
+msgid "C_reate"
 msgstr ""
 
-#: ../src/window-commands.c:785
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"the GNOME Web Browser; if not, write to the Free Software Foundation, Inc., "
-"51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA"
-msgstr ""
-
-#: ../src/window-commands.c:833 ../src/window-commands.c:849
-#: ../src/window-commands.c:860
+#: ../src/window-commands.c:1464 ../src/window-commands.c:1487
 msgid "Contact us at:"
 msgstr "Биз билан боғланинг:"
 
-#: ../src/window-commands.c:836
+#: ../src/window-commands.c:1467
 msgid "Contributors:"
 msgstr ""
 
-#: ../src/window-commands.c:839
+#: ../src/window-commands.c:1470
 msgid "Past developers:"
 msgstr "Олдинги таъминловчилар:"
 
-#: ../src/window-commands.c:872
+#: ../src/window-commands.c:1496
 #, c-format
 msgid ""
-"Lets you view web pages and find information on the internet.\n"
-"Powered by %s"
+"A simple, clean, beautiful view of the web.\n"
+"Powered by WebKit %d.%d.%d"
 msgstr ""
 
 #. Translators: This is a special message that shouldn't be translated
@@ -3526,11 +3119,1116 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: ../src/window-commands.c:898
+#: ../src/window-commands.c:1519
 msgid "translator-credits"
-msgstr "Нурали Абдураҳмонов <mavnur@gmail.com>"
+msgstr ""
+"Нурали Абдураҳмонов <mavnur@gmail.com>\n"
+"Баҳодир Мансуров <bahodir@mansurov.org>"
 
-#: ../src/window-commands.c:901
-msgid "GNOME Web Browser Website"
-msgstr "GNOME веб браузери веб саҳифаси"
+#: ../src/window-commands.c:1522
+msgid "Web Website"
+msgstr "Webнинг веб саҳифаси"
 
+#: ../src/window-commands.c:1683
+msgid "Enable caret browsing mode?"
+msgstr "Клавишли навигация усули ёқилсинми?"
+
+#: ../src/window-commands.c:1686
+msgid ""
+"Pressing F7 turns caret browsing on or off. This feature places a moveable "
+"cursor in web pages, allowing you to move around with your keyboard. Do you "
+"want to enable caret browsing?"
+msgstr ""
+
+#: ../src/window-commands.c:1689
+msgid "_Enable"
+msgstr "_Ёқиш"
+
+#~ msgid "Browse and organize your bookmarks"
+#~ msgstr "Хатчўпларни кўриш ва бошқариш"
+
+#~ msgid "Epiphany Web Bookmarks"
+#~ msgstr "Epiphany браузери хатчўплари"
+
+#~ msgid "Additional safe protocols"
+#~ msgstr "Қўшимча хавфсиз протоколлар"
+
+#~ msgid "Disable bookmark editing"
+#~ msgstr "Хатчўпларни таҳрирлашни ўчириш"
+
+#~ msgid "Disable history"
+#~ msgstr "Тарихни ўчириш"
+
+#~ msgid "Disable the user's ability to add or edit bookmarks."
+#~ msgstr "Фойдаланувчига хатчўп қўшиш ва уни таҳрирлашни таъқиқлаш."
+
+#~ msgid "Disable the user's ability to edit toolbars."
+#~ msgstr "Фойдаланувчига асбоблар панелини ўзгартиришни таъқиқлаш."
+
+#~ msgid "Disable the user's ability to type in a URL to Epiphany."
+#~ msgstr "Фойдаланувчиларга URL киритишни таъқиқлаш."
+
+#~ msgid "Disable toolbar editing"
+#~ msgstr "Асбоблар панелини таҳрирлашни таъқиқлаш"
+
+#~ msgid "Disable unsafe protocols"
+#~ msgstr "Хавфли протоколларни ўчириш"
+
+#~ msgid ""
+#~ "Disables loading of content from unsafe protocols. Safe protocols are "
+#~ "http and https."
+#~ msgstr ""
+#~ "Хавфли протоколлар таркибини юклашни таъқиқлаш. Хавфсиз протоколлар - "
+#~ "http ва https."
+
+#~ msgid "Epiphany cannot quit"
+#~ msgstr "Epiphany'дан чиқиб бўлмайди"
+
+#~ msgid "Hide menubar by default"
+#~ msgstr "Андоза бўйича меню панелини бекитиш"
+
+#~ msgid "Hide the menubar by default."
+#~ msgstr "Андоза бўйича меню панелини бекитиш."
+
+#~ msgid "Lock in fullscreen mode"
+#~ msgstr "Бутун экран усулида қулфлаш"
+
+#~ msgid "Locks Epiphany in fullscreen mode."
+#~ msgstr "Epiphany'ни бутун экран усулида қулфлаш."
+
+#~ msgid "User is not allowed to close Epiphany"
+#~ msgstr "Фойдаланувчи Epiphany браузерини ёпа олмайди"
+
+#~ msgid "Active extensions"
+#~ msgstr "Актив кенгайтмалар"
+
+#~ msgid "Address of the user's home page."
+#~ msgstr "Фойдаланувчи уй саҳифаси манзили."
+
+#~ msgid "Always show the tab bar"
+#~ msgstr "Таб панелини ҳар доим кўрсатиш"
+
+#~ msgid ""
+#~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
+#~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
+#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", "
+#~ "\"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", "
+#~ "\"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", "
+#~ "\"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", "
+#~ "\"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", "
+#~ "\"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", \"ISO-8859-15\", "
+#~ "\"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", "
+#~ "\"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", \"windows-874\", "
+#~ "\"windows-1250\", \"windows-1251\", \"windows-1252\", \"windows-1253\", "
+#~ "\"windows-1254\", \"windows-1255\", \"windows-1256\", \"windows-1257\", "
+#~ "\"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", \"x-mac-arabic\", "
+#~ "\"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", \"x-mac-devanagari"
+#~ "\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati\", \"x-mac-gurmukhi"
+#~ "\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-roman\", \"x-mac-"
+#~ "romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-user-defined\", "
+#~ "\"x-viet-tcvn5712\", \"x-viet-vps\" and \"x-windows-949\"."
+#~ msgstr ""
+#~ "Андоза кодлаш усули. Қабул қилинадиган қийматлар: \"armscii-8\", "
+#~ "\"Big5\", \"Big5-HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", "
+#~ "\"GB2312\", \"geostd8\", \"HZ-GB-2312\", \"IBM850\", \"IBM852\", "
+#~ "\"IBM855\", \"IBM857\", \"IBM862\", \"IBM864\", \"IBM866\", \"ISO-2022-CN"
+#~ "\", \"ISO-2022-JP\", \"ISO-2022-KR\", \"ISO-8859-1\", \"ISO-8859-2\", "
+#~ "\"ISO-8859-3\", \"ISO-8859-4\", \"ISO-8859-5\", \"ISO-8859-6\", "
+#~ "\"ISO-8859-7\", \"ISO-8859-8\", \"ISO-8859-8-I\", \"ISO-8859-9\", "
+#~ "\"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-13\", \"ISO-8859-14\", "
+#~ "\"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", \"KOI8-R\", \"KOI8-U\", "
+#~ "\"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", \"VISCII\", "
+#~ "\"windows-874\", \"windows-1250\", \"windows-1251\", \"windows-1252\", "
+#~ "\"windows-1253\", \"windows-1254\", \"windows-1255\", \"windows-1256\", "
+#~ "\"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-gbk\", \"x-johab\", "
+#~ "\"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", \"x-mac-cyrillic\", "
+#~ "\"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek\", \"x-mac-gujarati"
+#~ "\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-icelandic\", \"x-mac-"
+#~ "roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-mac-ukrainian\", \"x-"
+#~ "user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" ва \"x-windows-949\"."
+
+#~ msgid "Default font type"
+#~ msgstr "Андоза шрифт тури"
+
+#~ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
+#~ msgstr "Андоза шрифт тури. \"serif\" ва \"sans-serif\"."
+
+#~ msgid "History pages time range"
+#~ msgstr "Тарих саҳифалари вақти оралиғи"
+
+#~ msgid "Home page"
+#~ msgstr "Уй саҳифаси"
+
+#~ msgid "How to print frames"
+#~ msgstr "Фреймларни босиб чиқариш усули"
+
+#~ msgid ""
+#~ "How to print pages containing frames. Allowed values are \"normal\", "
+#~ "\"separately\" and \"selected\"."
+#~ msgstr ""
+#~ "Фрейм мавжуд бўлган саҳифаларнинг босиб чиқарилиши. Қуйидагилар бўлиши "
+#~ "мумкин: \"normal\" 9андоза), \"separately\" (алоҳида-алоҳида) ва "
+#~ "\"selected\" (танланганни)."
+
+#~ msgid "ISO-8859-1"
+#~ msgstr "ISO-8859-1"
+
+#~ msgid "Lists the active extensions."
+#~ msgstr "Актив кенгайтмалар рўйхати."
+
+#~ msgid ""
+#~ "Middle click to open the web page pointed to by the currently selected "
+#~ "text"
+#~ msgstr ""
+#~ "Жорий танланган матн кўрсатган веб саҳифани очиш учун сичқонча ўрта "
+#~ "тугмасини босинг"
+
+#~ msgid ""
+#~ "Middle clicking on the main view pane will open the web page pointed to "
+#~ "by the currently selected text."
+#~ msgstr ""
+#~ "Сичқонча тугмасининг асосий панелда босилиши, жорий белгиланган матн "
+#~ "кўрсатадиган веб саҳифани очади."
+
+#~ msgid "Show bookmarks bar by default"
+#~ msgstr "Андоза бўйича хатчўплар панелини кўрсатиш"
+
+#~ msgid "Show statusbar by default"
+#~ msgstr "Андоза бўйича ҳолат панелини кўрсатиш"
+
+#~ msgid ""
+#~ "Show the history pages visited \"ever\", \"last_two_days\", "
+#~ "\"last_three_days\", \"today\"."
+#~ msgstr ""
+#~ "\"ever\" (ҳар доим), \"last_two_days\" (охирги икки кунда), "
+#~ "\"last_three_days\" (охирги уч кунда, \"today\" (бугун) очилган тарих "
+#~ "саҳифаларини кўрсатиш."
+
+#~ msgid "Show the tab bar also when there is only one tab open."
+#~ msgstr "Ҳатто битта таб очиқ бўлса ҳам, таб панелини кўрсатиш."
+
+#~ msgid "Show toolbars by default"
+#~ msgstr "Андоза бўйича асбоблар панелини кўрсатиш"
+
+#~ msgid "Size of disk cache"
+#~ msgstr "Диск кэш ҳажми"
+
+#~ msgid "Size of disk cache, in MB."
+#~ msgstr "Диск кэш ҳажми мегабайтда."
+
+#~ msgid "The bookmark information shown in the editor view"
+#~ msgstr "Таҳрирчи ойнасида кўрсатиладиган хатчўп маълумоти"
+
+#~ msgid ""
+#~ "The bookmark information shown in the editor view. Valid values in the "
+#~ "list are \"address\" and \"title\"."
+#~ msgstr ""
+#~ "Таҳрирчи ойнасида кўрсатиладиган хатчўп маълумоти. Қуйидагилар бўлиши "
+#~ "мумкин: \"address\" (манзил) ва \"title\" (сарлавҳа)."
+
+#~ msgid "The currently selected fonts language"
+#~ msgstr "Жорий танланган тил шрифтлари"
+
+#~ msgid ""
+#~ "The currently selected fonts language. Valid values are \"ar\" (arabic), "
+#~ "\"x-baltic\" (baltic languages), \"x-central-euro\" (central european "
+#~ "languages), \"x-cyrillic\" (languages written with cyrillic alphabet), "
+#~ "\"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-"
+#~ "CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional "
+#~ "chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western"
+#~ "\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-"
+#~ "devanagari\" (devanagari)."
+#~ msgstr ""
+#~ "Жорий танланган шрифтлар тили. Мавжуд қийматлар: \"ar\" (арабча), \"x-"
+#~ "baltic\" (болтиқбўйи тиллари), \"x-central-euro\" (марказий европа "
+#~ "тиллари), \"x-cyrillic\" (кирилчадан фойдаланадиган тиллар), \"el"
+#~ "\" (юнонча), \"he\" (яҳудийча), \"ja\" (японча), \"ko\" (корейсча), \"zh-"
+#~ "CN\" (соддалаштирилган хитойча), \"th\" (тайча), \"zh-TW\" (анъанавий "
+#~ "хитойча), \"tr\" (туркча), \"x-unicode\" (бошқа тиллар), \"x-western"
+#~ "\" (лотинча ҳарфлардан фойдаланадиган тиллар), \"x-tamil\" (тамил) ва \"x-"
+#~ "devanagari\" (девангари)."
+
+#~ msgid "The encoding autodetector. Empty string means autodetect is off"
+#~ msgstr "Кодлаш усулини авто-аниқлаш. Бўш қолдирилса, авто-аниқлаш ўчирилади"
+
+#~ msgid ""
+#~ "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
+#~ "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
+#~ "\"ja_parallel_state_machine\" (autodetect japanese encodings), "
+#~ "\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
+#~ "\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
+#~ "encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
+#~ "\"zhcn_parallel_state_machine\" (autodetect simplified chinese "
+#~ "encodings), \"zhtw_parallel_state_machine\" (autodetect traditional "
+#~ "chinese encodings) and \"universal_charset_detector\" (autodetect most "
+#~ "encodings)."
+#~ msgstr ""
+#~ "Кодлаш усулини авто-аниқлаш. Мавжуд кодлаш усуллари: \"\" (авто-аниқлаш "
+#~ "ўчирилган), \"cjk_parallel_state_machine\" (шарқий осиёча кодлаш усули), "
+#~ "\"ja_parallel_state_machine\" (японча кодлаш усули), "
+#~ "\"ko_parallel_state_machine\" (корейсча кодлаш усули), \"ruprob\" (русча "
+#~ "кодлаш усули), \"ukprob\" (украинча кодлаш усули), "
+#~ "\"zh_parallel_state_machine\" (хитойча кодлаш усули), "
+#~ "\"zhcn_parallel_state_machine\" (соддалаштирилган хитойча кодлаш усули), "
+#~ "\"zhtw_parallel_state_machine\" (анъанавий хитойча кодлаш усули) and "
+#~ "\"universal_charset_detector\" (кўплаб кодлаш усуллари)."
+
+#~ msgid "The page information shown in the history view"
+#~ msgstr "Тарих ойнасида кўрсатиладиган саҳифа маълумоти"
+
+#~ msgid "Toolbar style"
+#~ msgstr "Асбоблар панели услуби"
+
+#~ msgid "Whether to print the background color"
+#~ msgstr "Орқа фон рангини босиб чиқарилиши ёки чиқарилмаслиги"
+
+#~ msgid "Whether to print the background images"
+#~ msgstr "Орқа фон расмини босиб чиқарилиши ёки чиқарилмаслиги"
+
+#~ msgid "Whether to print the date in the footer"
+#~ msgstr "Пастки колонтитулда санани кўрсатилиши"
+
+#~ msgid "Whether to print the page numbers (x of total) in the footer"
+#~ msgstr "Пастки колонтитулда саҳифа рақамини (жамидан x) кўрсатилиши"
+
+#~ msgid "x-western"
+#~ msgstr "x-western"
+
+#~ msgid "<b>Fingerprints</b>"
+#~ msgstr "<b>Бармоқ излар</b>"
+
+#~ msgid "<b>Issued By</b>"
+#~ msgstr "<b>Ким томонидан берилган</b>"
+
+#~ msgid "<b>Issued To</b>"
+#~ msgstr "<b>Кимга берилган</b>"
+
+#~ msgid "<b>Validity</b>"
+#~ msgstr "<b>Яроқлилик муддати</b>"
+
+#~ msgid "Certificate _Hierarchy"
+#~ msgstr "Сертификат _иерархияси"
+
+#~ msgid "Common Name:"
+#~ msgstr "умумий номи:"
+
+#~ msgid "Details"
+#~ msgstr "Тафсилотлар"
+
+#~ msgid "Expires On:"
+#~ msgstr "Тугайди:"
+
+#~ msgid "Field _Value"
+#~ msgstr "Майдон _қиймати"
+
+#~ msgid "Issued On:"
+#~ msgstr "Берилган сана:"
+
+#~ msgid "MD5 Fingerprint:"
+#~ msgstr "MD5 форматидаги бармоқ изи:"
+
+#~ msgid "SHA1 Fingerprint:"
+#~ msgstr "SHA1 форматидаги бармоқ изи:"
+
+#~ msgid "Serial Number:"
+#~ msgstr "Серия рақами:"
+
+#~ msgid "<b>_Automatic</b>"
+#~ msgstr "<b>_Автоматик</b>"
+
+#~ msgid "<b>_Use a different encoding:</b>"
+#~ msgstr "<b>Бошқа кодлаш усулидан _фойдаланиш:</b>"
+
+#~ msgid "Sign Text"
+#~ msgstr "Матнни имзолаш"
+
+#~ msgid "_Certificate:"
+#~ msgstr "_Сертификат:"
+
+#~ msgid "<b>Cookies</b>"
+#~ msgstr "<b>Cookie'лар</b>"
+
+#~ msgid "<b>Downloads</b>"
+#~ msgstr "<b>Ёзиб олиш</b>"
+
+#~ msgid "<b>Encodings</b>"
+#~ msgstr "<b>Кодлаш усуллари</b>"
+
+#~ msgid "<b>Home page</b>"
+#~ msgstr "<b>Уй саҳифаси</b>"
+
+#~ msgid "<b>Languages</b>"
+#~ msgstr "<b>Тиллар</b>"
+
+#~ msgid "<b>Passwords</b>"
+#~ msgstr "<b>Махфий сўзлар</b>"
+
+#~ msgid "<b>Temporary Files</b>"
+#~ msgstr "<b>Вақтинчалик файлар</b>"
+
+#~ msgid "Au_todetect:"
+#~ msgstr "Ав_то-аниқлаш:"
+
+#~ msgid "De_fault:"
+#~ msgstr "Ан_доза:"
+
+#~ msgid "Enable Java_Script"
+#~ msgstr "Java_Script'ни ёқиш"
+
+#~ msgid "Enable _Java"
+#~ msgstr "_Java'ни ёқиш"
+
+#~ msgid "Let web pages specify their own _fonts"
+#~ msgstr "Веб саҳифаларга ўз _шрифтларини ишлатишга рухсат бериш"
+
+#~ msgid "Let web pages specify their own c_olors"
+#~ msgstr "Веб саҳифаларга ўз _рангларини ишлатишга рухсат бериш"
+
+#~ msgid "Set to _Blank Page"
+#~ msgstr "_Бўш саҳифага ўрнатиш"
+
+#~ msgid "_Address:"
+#~ msgstr "_Манзил:"
+
+#~ msgid "_Disk space:"
+#~ msgstr "_Диск бўшлиги:"
+
+#~ msgid "_Minimum size:"
+#~ msgstr "_Минимал ўлчам:"
+
+#~ msgid "<b>Background</b>"
+#~ msgstr "<b>Орқа фон</b>"
+
+#~ msgid "<b>Footers</b>"
+#~ msgstr "<b>Пастки колонтитуллар</b>"
+
+#~ msgid "<b>Frames</b>"
+#~ msgstr "<b>Фреймлар</b>"
+
+#~ msgid "<b>Headers</b>"
+#~ msgstr "<b>Юқори колонтитуллар</b>"
+
+#~ msgid "As laid out on the _screen"
+#~ msgstr "_Экранда жойлашгани каби"
+
+#~ msgid "O_nly the selected frame"
+#~ msgstr "Ф_ақат танланган фрейм"
+
+#~ msgid "P_age title"
+#~ msgstr "_Саҳифа сарлавҳаси"
+
+#~ msgid "Page _numbers"
+#~ msgstr "Саҳифа _рақамлари"
+
+#~ msgid "Print background c_olors"
+#~ msgstr "Орқа фон _рангларини босиб чиқариш"
+
+#~ msgid "Print background i_mages"
+#~ msgstr "Орқа фон р_асмларини босиб чиқариш"
+
+#~ msgid "_Date"
+#~ msgstr "_Сана"
+
+#~ msgid "_Each frame separately"
+#~ msgstr "_Ҳар бир фрейм алоҳида-алоҳида"
+
+#~ msgid "_Page address"
+#~ msgstr "_Саҳифа манзили"
+
+#~ msgid "_Show Downloads"
+#~ msgstr "Ёзиб олишларни _кўрсатиш"
+
+#~ msgid "%u:%02u.%02u"
+#~ msgstr "%u:%02u.%02u"
+
+#~ msgid "%02u.%02u"
+#~ msgstr "%02u.%02u"
+
+#~ msgid "_Pause"
+#~ msgstr "_Вақтинча тўхтатиш"
+
+#~ msgid "_Resume"
+#~ msgstr "_Давом этиш"
+
+#~ msgid "The file “%s” has been downloaded."
+#~ msgstr "“%s” файли юкланди."
+
+#~ msgid "Download finished"
+#~ msgstr "Юклаш тугатилди"
+
+#~ msgid ""
+#~ "%s\n"
+#~ "%s of %s"
+#~ msgstr ""
+#~ "%s\n"
+#~ "%s / %s"
+
+#~ msgid "download status|Unknown"
+#~ msgstr "ёзиб олиш ҳолати|Номаълум"
+
+#~ msgid "download status|Failed"
+#~ msgstr "ёзиб олиш ҳолати|Муваффақиятсиз"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Remaining"
+#~ msgstr "Қолган вақт"
+
+#~ msgid "Redirecting to “%s”…"
+#~ msgstr "“%s” сайтига қайта йўналтирилмоқда…"
+
+#~ msgid "Transferring data from “%s”…"
+#~ msgstr "“%s” сайтидан маълумотлар узатилмоқда…"
+
+#~ msgid "Waiting for authorization from “%s”…"
+#~ msgstr "“%s” сайтига тасдиқланиш кутилмоқда…"
+
+#~ msgid "autodetectors|Off"
+#~ msgstr "Ўчирилган"
+
+#~ msgid "automatically detect ... character encodings|Chinese"
+#~ msgstr "Хитойча"
+
+#~ msgid "automatically detect ... character encodings|Simplified Chinese"
+#~ msgstr "Соддалаштирилган хитойча"
+
+#~ msgid "automatically detect ... character encodings|Traditional Chinese"
+#~ msgstr "Анъанавий хитойча"
+
+#~ msgid "automatically detect ... character encodings|East Asian"
+#~ msgstr "Шарқий осиё"
+
+#~ msgid "automatically detect ... character encodings|Japanese"
+#~ msgstr "Японча"
+
+#~ msgid "automatically detect ... character encodings|Korean"
+#~ msgstr "Корейсча"
+
+#~ msgid "automatically detect ... character encodings|Russian"
+#~ msgstr "Русча"
+
+#~ msgid "automatically detect ... character encodings|Universal"
+#~ msgstr "Универсал"
+
+#~ msgid "automatically detect ... character encodings|Ukrainian"
+#~ msgstr "Украинча"
+
+#~ msgid ""
+#~ "GConf error:\n"
+#~ "  %s"
+#~ msgstr ""
+#~ "GConf хатоси:\n"
+#~ "  %s"
+
+#~ msgid "Show “_%s”"
+#~ msgstr "“_%s” ни кўрсатиш"
+
+#~ msgid "_Move on Toolbar"
+#~ msgstr "Асбоблар панелида _кўчириш"
+
+#~ msgid "Move the selected item on the toolbar"
+#~ msgstr "Асбоблар панелидан танланган элементни кўчириш"
+
+#~ msgid "_Delete Toolbar"
+#~ msgstr "Асбоблар панелини _олиб ташлаш"
+
+#~ msgid "Separator"
+#~ msgstr "Ажратувчи"
+
+#~ msgid "select fonts for|Arabic"
+#~ msgstr "Арабча"
+
+#~ msgid "select fonts for|Baltic"
+#~ msgstr "Болтиқча"
+
+#~ msgid "select fonts for|Central European"
+#~ msgstr "Марказий европача"
+
+#~ msgid "select fonts for|Cyrillic"
+#~ msgstr "Кирилча"
+
+#~ msgid "select fonts for|Devanagari"
+#~ msgstr "Деванагари"
+
+#~ msgid "select fonts for|Greek"
+#~ msgstr "Юнонча"
+
+#~ msgid "select fonts for|Hebrew"
+#~ msgstr "Яҳудийча"
+
+#~ msgid "select fonts for|Japanese"
+#~ msgstr "Японча"
+
+#~ msgid "select fonts for|Korean"
+#~ msgstr "Корейсча"
+
+#~ msgid "select fonts for|Simplified Chinese"
+#~ msgstr "Соддалаштирилган хитойча"
+
+#~ msgid "select fonts for|Tamil"
+#~ msgstr "Тамилча"
+
+#~ msgid "select fonts for|Thai"
+#~ msgstr "Тайча"
+
+#~ msgid "select fonts for|Traditional Chinese"
+#~ msgstr "Анъанавий хитойча"
+
+#~ msgid "select fonts for|Traditional Chinese (Hong Kong)"
+#~ msgstr "Анъанавий хитойча (Гонконг)"
+
+#~ msgid "select fonts for|Turkish"
+#~ msgstr "Туркча"
+
+#~ msgid "select fonts for|Armenian"
+#~ msgstr "Арманча"
+
+#~ msgid "select fonts for|Bengali"
+#~ msgstr "Бенгалча"
+
+#~ msgid "select fonts for|Ethiopic"
+#~ msgstr "Эфиопча"
+
+#~ msgid "select fonts for|Georgian"
+#~ msgstr "Грузинча"
+
+#~ msgid "select fonts for|Gujarati"
+#~ msgstr "Гужарати"
+
+#~ msgid "select fonts for|Gurmukhi"
+#~ msgstr "Гурмухи"
+
+#~ msgid "select fonts for|Khmer"
+#~ msgstr "Хмерча"
+
+#~ msgid "select fonts for|Malayalam"
+#~ msgstr "Малаяламча"
+
+#~ msgid "select fonts for|Western"
+#~ msgstr "Ғарбий"
+
+#~ msgid "select fonts for|Other Scripts"
+#~ msgstr "Бошқа скриптлар"
+
+#~ msgid "_Domain:"
+#~ msgstr "_Домен:"
+
+#~ msgid "_New password:"
+#~ msgstr "_Янги махфий сўз:"
+
+#~ msgid "Con_firm password:"
+#~ msgstr "Махфий сўзни _тасдиқлаш:"
+
+#~ msgid "Password quality:"
+#~ msgstr "Махфий сўз сифати:"
+
+#~ msgid "Do not remember this password"
+#~ msgstr "Ушбу махфий сўз эслаб қолинмасин"
+
+#~ msgid "_Remember password for this session"
+#~ msgstr "Ушбу сеанс учун махфий сўзни _эслаб қолиш"
+
+#~ msgid "%s:"
+#~ msgstr "%s:"
+
+#~ msgid "Executes the script “%s”"
+#~ msgstr "“%s” скриптини ишга тушириш"
+
+#~ msgid "Show “%s”"
+#~ msgstr "“%s” ни кўрсатиш"
+
+#~ msgid "Update bookmark “%s”?"
+#~ msgstr "“%s” хатчўп янгилансинми?"
+
+#~ msgid "The bookmarked page has moved to “%s”."
+#~ msgstr "Хатчўпга қўшилган саҳифа “%s” манзилига кўчирилди."
+
+#~ msgid "_Update"
+#~ msgstr "_Янгилаш"
+
+#~ msgid "Update Bookmark?"
+#~ msgstr "Хатчўп янгилансинми?"
+
+#~ msgid "bookmarks|All"
+#~ msgstr "Ҳаммаси"
+
+#~ msgid "Epiphany (RDF)"
+#~ msgstr "Epiphany (RDF)"
+
+#~ msgid "_Show on Toolbar"
+#~ msgstr "Асбоблар панелида _кўрсатиш"
+
+#~ msgid "Show the selected bookmark on a toolbar"
+#~ msgstr "Асбоблар панелида белгиланган хатчўпни кўрсатиш"
+
+#~ msgid "Show only the title column"
+#~ msgstr "Фақат сарлавҳа устунини кўрсатиш"
+
+#~ msgid "T_itle and Address"
+#~ msgstr "_Сарлавҳа ва манзиллар"
+
+#~ msgid "Show both the title and address columns"
+#~ msgstr "Сарлавҳа ва манзил устунларини кўрсатиш"
+
+#~ msgid "Epiphany bookmarks"
+#~ msgstr "Epiphany хатчўплари"
+
+#~ msgid "Show properties for this bookmark"
+#~ msgstr "Ушбу хатчўп хоссасини кўрсатиш"
+
+#~ msgid "Open this bookmark in a new tab"
+#~ msgstr "Ушбу хатчўпни янги табда очиш"
+
+#~ msgid "Open this bookmark in a new window"
+#~ msgstr "Ушбу хатчўпни янги ойнада очиш"
+
+#~ msgid "Topic"
+#~ msgstr "Мавзу"
+
+#~ msgid "_Other…"
+#~ msgstr "_Бошқа…"
+
+#~ msgid "Other encodings"
+#~ msgstr "Бошқа кодлаш усуллари"
+
+#~ msgid "_Automatic"
+#~ msgstr "_Автоматик"
+
+#~ msgid "Find links:"
+#~ msgstr "Боғламаларни қидириш:"
+
+#~ msgid "Find:"
+#~ msgstr "Қидириш:"
+
+#~ msgid "_Case sensitive"
+#~ msgstr "Катта-кичик _ҳарфни фарқлаш"
+
+#~ msgid "Find Previous"
+#~ msgstr "Олдингисини қидириш"
+
+#~ msgid "Find Next"
+#~ msgstr "Кейингини қидириш"
+
+#~ msgid "Leave Fullscreen"
+#~ msgstr "Бутун экранга усулидан чиқиш"
+
+#~ msgid "Go"
+#~ msgstr "Ўтиш"
+
+#~ msgid "Open the selected history link in a new window"
+#~ msgstr "Танланган тарих боғламасини янги ойнада очиш"
+
+#~ msgid "Open the selected history link in a new tab"
+#~ msgstr "Танланган тарих боғламасини янги табда очиш"
+
+#~ msgid "Bookmark the selected history link"
+#~ msgstr "Танланган тарих боғламасини хатчўпга қўшиш"
+
+#~ msgid "Close the history window"
+#~ msgstr "Тарих ойнасини ёпиш"
+
+#~ msgid "Delete the selected history link"
+#~ msgstr "Танланган тарих боғламасини олиб ташлаш"
+
+#~ msgid "Select all history links or text"
+#~ msgstr "Барча тарих боғламаларини ёки матнни танлаш"
+
+#~ msgid "Clear _History"
+#~ msgstr "_Тарихни тозалаш"
+
+#~ msgid "Clear your browsing history"
+#~ msgstr "Тарихни тозалаш"
+
+#~ msgid "Display history help"
+#~ msgstr "Тарих бўйича қўлланмани кўрсатиш"
+
+#~ msgid "_Date and Time"
+#~ msgstr "_Сана ва вақт"
+
+#~ msgid "Show the date and time column"
+#~ msgstr "Сана ва вақт устунини кўрсатиш"
+
+#~ msgid "Clear History"
+#~ msgstr "Тарихни тозалаш"
+
+#~ msgid "Last 30 minutes"
+#~ msgstr "Охирги 30 дақиқа"
+
+#~ msgid "Today"
+#~ msgstr "Бугун"
+
+#~ msgid "Launch the bookmarks editor"
+#~ msgstr "Хатчўп таҳрирчисини ишга тушириш"
+
+#~ msgid ""
+#~ "There are still downloads pending. If you log out, they will be aborted "
+#~ "and lost."
+#~ msgstr ""
+#~ "Тугалланмаган ёзиб олишлар мавжуд. Агар дастурдан чиқилса, улар бекор "
+#~ "қилинади."
+
+#~ msgid "_Abort Downloads"
+#~ msgstr "Ёзиб олишларни _тўхтатиш"
+
+#~ msgid "Recover previous browser windows and tabs?"
+#~ msgstr "Олдинги ойна ва таблар тиклансинми?"
+
+#~ msgid ""
+#~ "Epiphany appears to have exited unexpectedly the last time it was run. "
+#~ "You can recover the opened windows and tabs."
+#~ msgstr ""
+#~ "Epiphany охирги марта хато билан ишини якунлаган кўринади. Сиз олдин "
+#~ "очилган ойна ва табларни тиклашингиз мумкин."
+
+#~ msgid "_Don't Recover"
+#~ msgstr "_Тикланмасин"
+
+#~ msgid "_Recover"
+#~ msgstr "_Тиклаш"
+
+#~ msgid "Crash Recovery"
+#~ msgstr "Хатоликдан кейинги тиклаш"
+
+#~ msgid "Sidebar extension required"
+#~ msgstr "Ён панел кенгайтмаси талаб қилинади"
+
+#~ msgid "Sidebar Extension Required"
+#~ msgstr "Ён панел кенгайтмаси талаб қилинади"
+
+#~ msgid "The link you clicked needs the sidebar extension to be installed."
+#~ msgstr ""
+#~ "Босилган боғлама ён панел кенгайтмаси ўрнатилган бўлишини талаб қилади."
+
+#~ msgid "Switch to this tab"
+#~ msgstr "Ушбу табга ўтиш"
+
+#~ msgid "Go to the previous visited page"
+#~ msgstr "Олдинги кўрилган саҳифага ўтиш"
+
+#~ msgid "Forward history"
+#~ msgstr "Тарих бўйича олдинга"
+
+#~ msgid "Go up one level"
+#~ msgstr "Бир даража юқорига"
+
+#~ msgid "List of upper levels"
+#~ msgstr "Юқори даражалар рўйхати"
+
+#~ msgid "Enter a web address to open, or a phrase to search for"
+#~ msgstr "Қидириш учун керакли веб манзил ёки иборани киритинг"
+
+#~ msgid "Go to the address entered in the address entry"
+#~ msgstr "Манзил майдонига киритилган манзилга ўтиш"
+
+#~ msgid "_Home"
+#~ msgstr "_Уй"
+
+#~ msgid "Go to the home page"
+#~ msgstr "Уй саҳифасига ўтиш"
+
+#~ msgid "Open a new tab"
+#~ msgstr "Янги таб очиш"
+
+#~ msgid "Open a new window"
+#~ msgstr "Янги ойна очиш"
+
+#~ msgid "toolbar style|Default"
+#~ msgstr "Андоза"
+
+#~ msgid "Text below icons"
+#~ msgstr "Матн нишончалар остида"
+
+#~ msgid "Text beside icons"
+#~ msgstr "Матн нишончалар ёнида"
+
+#~ msgid "Icons only"
+#~ msgstr "Фақат нишончалар"
+
+#~ msgid "Text only"
+#~ msgstr "Фақат матн"
+
+#~ msgid "Toolbar Editor"
+#~ msgstr "Асбоблар панели таҳрирлагичи"
+
+#~ msgid "Toolbar _button labels:"
+#~ msgstr "Асбоблар панели _тугмаси ёрлиғи:"
+
+#~ msgid "_Add a New Toolbar"
+#~ msgstr "Янги асбоблар панели _қўшиш"
+
+#~ msgid "_Go"
+#~ msgstr "_Ўтиш"
+
+#~ msgid "T_ools"
+#~ msgstr "_Воситалар"
+
+#~ msgid "_Toolbars"
+#~ msgstr "_Асбоблар панели"
+
+#~ msgid "Page Set_up"
+#~ msgstr "Саҳифа _параметрлари"
+
+#~ msgid "Setup the page settings for printing"
+#~ msgstr "Босиб чиқариш учун саҳифа параметрларини мослаш"
+
+#~ msgid "Print Pre_view"
+#~ msgstr "_Кўриб чиқиш"
+
+#~ msgid "Print the current page"
+#~ msgstr "Жорий саҳифани босиб чиқариш"
+
+#~ msgid "Send a link of the current page"
+#~ msgstr "Жорий саҳифа боғламасини жўнатиш"
+
+#~ msgid "Close this tab"
+#~ msgstr "Ушбу таб ойнани ёпиш"
+
+#~ msgid "Undo the last action"
+#~ msgstr "Охирги амални бекор қилиш"
+
+#~ msgid "Redo the last undone action"
+#~ msgstr "Охирги бекор қилинган амални қайтариш"
+
+#~ msgid "Paste clipboard"
+#~ msgstr "Клипборддан қўйиш"
+
+#~ msgid "Delete text"
+#~ msgstr "Матнни олиб ташлаш"
+
+#~ msgid "Select the entire page"
+#~ msgstr "Бутун саҳифани танлаш"
+
+#~ msgid "Find a word or phrase in the page"
+#~ msgstr "Жорий саҳифадаги сўз ёки иборани қидириш"
+
+#~ msgid "P_ersonal Data"
+#~ msgstr "_Шахсий маълумот"
+
+#~ msgid "View and remove cookies and passwords"
+#~ msgstr "Cookie'лар ва махфий сўзларни кўриш ва олиб ташлаш"
+
+#~ msgid "Certificate_s"
+#~ msgstr "Сертификат_лар"
+
+#~ msgid "Manage Certificates"
+#~ msgstr "Сертификатларни бошқариш"
+
+#~ msgid "P_references"
+#~ msgstr "_Параметрлар"
+
+#~ msgid "Configure the web browser"
+#~ msgstr "Веб браузерни мослаш"
+
+#~ msgid "_Customize Toolbars…"
+#~ msgstr "Асбоблар панелини _мослаш…"
+
+#~ msgid "Customize toolbars"
+#~ msgstr "Асбоблар панелини мослаш"
+
+#~ msgid "_Larger Text"
+#~ msgstr "Ж_уда катта матн"
+
+#~ msgid "Increase the text size"
+#~ msgstr "Матн ўлчамини катталаштириш"
+
+#~ msgid "S_maller Text"
+#~ msgstr "Жуда _кичик матн"
+
+#~ msgid "Decrease the text size"
+#~ msgstr "Матн ўлчамини кичрайтириш"
+
+#~ msgid "Use the normal text size"
+#~ msgstr "Оддий матн ўлчамидан фойдаланиш"
+
+#~ msgid "Change the text encoding"
+#~ msgstr "Матн кодлаш усулини ўзгартириш"
+
+#~ msgid "View the source code of the page"
+#~ msgstr "Саҳифа асл кодини кўриш"
+
+#~ msgid "Display security information for the web page"
+#~ msgstr "Веб саҳифа хавфсизлик маълумотини кўрсатиш"
+
+#~ msgid "Open the bookmarks window"
+#~ msgstr "Хатчўп ойнасини очиш"
+
+#~ msgid "Go to a specified location"
+#~ msgstr "Кўрсатилган манзилга ўтиш"
+
+#~ msgid "Hi_story"
+#~ msgstr "_Тарих"
+
+#~ msgid "Open the history window"
+#~ msgstr "Тарих ойнасини очиш"
+
+#~ msgid "Activate previous tab"
+#~ msgstr "Олдинги табни активлаштириш"
+
+#~ msgid "Activate next tab"
+#~ msgstr "Кейинги табни активлаштириш"
+
+#~ msgid "Display web browser help"
+#~ msgstr "Браузер ёрдам саҳифасини кўрсатиш"
+
+#~ msgid "_Work Offline"
+#~ msgstr "Офлайнда _ишлаш"
+
+#~ msgid "Switch to offline mode"
+#~ msgstr "Офлайн усулига ўтиш"
+
+#~ msgid "_Hide Toolbars"
+#~ msgstr "Асбоблар панелини _бекитиш"
+
+#~ msgid "Show or hide toolbar"
+#~ msgstr "Асбоблар панелини кўрсатиш/бекитиш"
+
+#~ msgid "St_atusbar"
+#~ msgstr "_Ҳолат панели"
+
+#~ msgid "Show or hide statusbar"
+#~ msgstr "Ҳолат панелини кўрсатиш/бекитиш"
+
+#~ msgid "Show Only _This Frame"
+#~ msgstr "Фақат _шу фреймни кўрсатиш"
+
+#~ msgid "Show only this frame in this window"
+#~ msgstr "Фақат ушбу фреймни шу ойнада кўрсатиш"
+
+#~ msgid "_Open Link"
+#~ msgstr "Боғламани _очиш"
+
+#~ msgid "Open link in this window"
+#~ msgstr "Боғламани шу ойнада очиш"
+
+#~ msgid "Open link in a new window"
+#~ msgstr "Боғламани янги ойнада очиш"
+
+#~ msgid "Open link in a new tab"
+#~ msgstr "Боғламани янги таб ойнада очиш"
+
+#~ msgid "_Download Link"
+#~ msgstr "Боғламани _ёзиб олиш"
+
+#~ msgid "Save link with a different name"
+#~ msgstr "Боғламани бошқа ном билан сақлаш"
+
+#~ msgid "_Bookmark Link…"
+#~ msgstr "Боғламани _хатчўпга қўшиш…"
+
+#~ msgid "_Send Email…"
+#~ msgstr "Хат _жўнатиш…"
+
+#~ msgid "Open _Image"
+#~ msgstr "_Расмни очиш"
+
+#~ msgid "_Use Image As Background"
+#~ msgstr "Расмни орқа фон сифатида _ишлатиш"
+
+#~ msgid "St_art Animation"
+#~ msgstr "Анимацияни _бошлаш"
+
+#~ msgid "St_op Animation"
+#~ msgstr "Анимацияни _тўхтатиш"
+
+#~ msgid "Insecure"
+#~ msgstr "Ҳимоясиз"
+
+#~ msgid "Broken"
+#~ msgstr "Бузуқ"
+
+#~ msgid "Low"
+#~ msgstr "Паст"
+
+#~ msgid "High"
+#~ msgstr "Юқори"
+
+#~ msgid "Security level: %s"
+#~ msgstr "Хавфсизлик даражаси: %s"
+
+#~ msgid "Open image “%s”"
+#~ msgstr "“%s” расмини очиш"
+
+#~ msgid "Use as desktop background “%s”"
+#~ msgstr "“%s” расмини иш столи орқа фони сифатида ўрнатиш"
+
+#~ msgid "Save image “%s”"
+#~ msgstr "“%s” расмини сақлаш"
+
+#~ msgid "Copy image address “%s”"
+#~ msgstr "“%s” расм манзилидан нусха олиш"
+
+#~ msgid "Send email to address “%s”"
+#~ msgstr "“%s” манзилига эл.почта жўнатиш"
+
+#~ msgid "Copy email address “%s”"
+#~ msgstr "“%s” эл.почта манзилидан нусха олиш"
+
+#~ msgid "Save link “%s”"
+#~ msgstr "“%s” боғламасини сақлаш"
+
+#~ msgid "Bookmark link “%s”"
+#~ msgstr "“%s” боғламасини хатчўпга қўшиш"
+
+#~ msgid "Copy link's address “%s”"
+#~ msgstr "“%s” боғламаси манзилидан нусха олиш"
+
+#~ msgid "C_ookies"
+#~ msgstr "_Кукилар"
+
+#~ msgid "Cookie Properties"
+#~ msgstr "Cookie мосламаси"
+
+#~ msgid "Path:"
+#~ msgstr "Йўл:"
+
+#~ msgid "Send for:"
+#~ msgstr "Жўнатиш:"
+
+#~ msgid "Encrypted connections only"
+#~ msgstr "Фақат ҳимояланган уланиш"
+
+#~ msgid "Any type of connection"
+#~ msgstr "Исталган уланиш тури"
+
+#~ msgid "Expires:"
+#~ msgstr "Тугаш муддати:"
+
+#~ msgid "End of current session"
+#~ msgstr "Жорий сеанснинг охири"
+
+#~ msgid "Domain"
+#~ msgstr "Домен"
+
+#~ msgid "Host"
+#~ msgstr "Хост"
+
+#~ msgid "User Password"
+#~ msgstr "Фойдаланувчи махфий сўзи"
+
+#~ msgid "Download Link"
+#~ msgstr "Боғламани ёзиб олиш"
+
+#~ msgid "First"
+#~ msgstr "Биринчи"
+
+#~ msgid "Go to the first page"
+#~ msgstr "Биринчи саҳифага ўтиш"
+
+#~ msgid "Last"
+#~ msgstr "Охирги"
+
+#~ msgid "Go to the last page"
+#~ msgstr "Охирги саҳифага ўтиш"
+
+#~ msgid "Previous"
+#~ msgstr "Олдинги"
+
+#~ msgid "Next"
+#~ msgstr "Кейинги"
+
+#~ msgid "Close"
+#~ msgstr "Ёпиш"
+
+#~ msgid "Close print preview"
+#~ msgstr "Кўриб чиқишни ёпиш"
