@@ -190,7 +190,6 @@ AC_CONFIG_FILES([
 Makefile
 data/Makefile
 data/icons/Makefile
-data/pages/Makefile
 gvdb/Makefile
 help/Makefile
 libgd/Makefile

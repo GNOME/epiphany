@@ -65,6 +65,7 @@
 #define MAX_HIDDEN_POPUPS       5
 
 #define EPHY_PAGE_TEMPLATE_ERROR         "/org/gnome/epiphany/page-templates/error.html"
+#define EPHY_PAGE_TEMPLATE_ERROR_CSS     "/org/gnome/epiphany/page-templates/error.css"
 
 struct _EphyWebView {
   WebKitWebView parent_instance;
@@ -1670,15 +1671,12 @@ ephy_web_view_set_placeholder (EphyWebView *view,
 static char *
 get_style_sheet (void)
 {
-  const gchar *file;
-  GError *error = NULL;
-  char *sheet = NULL;
+  GBytes *bytes;
+  const char *sheet;
 
-  file = ephy_file ("error.css");
-  if (file && !g_file_get_contents (file, &sheet, NULL, &error)) {
-    g_debug ("Unable to load error style sheet: %s", error->message);
-    g_error_free (error);
-  }
+  bytes = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_ERROR_CSS, 0, NULL);
+  sheet = g_strdup (g_bytes_get_data (bytes, NULL));
+  g_bytes_unref (bytes);
 
   return sheet;
 }
@@ -1990,6 +1988,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
   char *hidden_button_label = NULL;
   char *button_action = NULL;
   char *hidden_button_action = NULL;
+  char *style_sheet = NULL;
   const char *button_accesskey = NULL;
   const char *hidden_button_accesskey = NULL;
   const char *icon_name = NULL;
@@ -2071,6 +2070,8 @@ ephy_web_view_load_error_page (EphyWebView         *view,
 
   _ephy_web_view_update_icon (view);
 
+  style_sheet = get_style_sheet ();
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
   /* The HTML file is trusted input. */
@@ -2079,7 +2080,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
                    lang, lang,
                    ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
                    page_title,
-                   get_style_sheet (),
+                   style_sheet,
                    button_action, hidden_button_action,
                    icon_name,
                    page == EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE ? "danger" : "default",
@@ -2103,6 +2104,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
   g_free (button_action);
   g_free (hidden_button_label);
   g_free (hidden_button_action);
+  g_free (style_sheet);
 
   /* Make our history backend ignore the next page load, since it will be an error page. */
   ephy_web_view_freeze_history (view);

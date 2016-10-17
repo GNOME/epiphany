@@ -1,4 +1,4 @@
-SUBDIRS = icons pages
+SUBDIRS = icons
 
 desktop_in_files = org.gnome.Epiphany.desktop.in
 desktopdir = $(datadir)/applications
