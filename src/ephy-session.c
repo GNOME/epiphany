@@ -699,28 +699,33 @@ write_tab (xmlTextWriterPtr writer,
   int ret;
 
   ret = xmlTextWriterStartElement (writer, (xmlChar *)"embed");
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   ret = xmlTextWriterWriteAttribute (writer, (xmlChar *)"url",
                                      (const xmlChar *)tab->url);
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   ret = xmlTextWriterWriteAttribute (writer, (xmlChar *)"title",
                                      (const xmlChar *)tab->title);
-  if (ret < 0) return ret;
+  if (ret < 0)
+    return ret;
 
   if (tab->loading) {
     ret = xmlTextWriterWriteAttribute (writer,
                                        (const xmlChar *)"loading",
                                        (const xmlChar *)"true");
-    if (ret < 0) return ret;
+    if (ret < 0)
+      return ret;
   }
 
   if (tab->crashed) {
     ret = xmlTextWriterWriteAttribute (writer,
                                        (const xmlChar *)"crashed",
                                        (const xmlChar *)"true");
-    if (ret < 0) return ret;
+    if (ret < 0)
+      return ret;
   }
 
   if (tab->state) {
