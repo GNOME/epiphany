@@ -163,17 +163,19 @@ window_cmd_show_about (GSimpleAction *action,
   EphyWindow *window = EPHY_WINDOW (user_data);
   char *comments = NULL;
   GKeyFile *key_file;
+  GBytes *bytes;
   GError *error = NULL;
   char **list, **authors, **contributors, **past_authors, **artists, **documenters;
   gsize n_authors, n_contributors, n_past_authors, n_artists, n_documenters, i, j;
 
   key_file = g_key_file_new ();
-  if (!g_key_file_load_from_file (key_file, PKGDATADIR G_DIR_SEPARATOR_S "about.ini",
-                                  0, &error)) {
+  bytes = g_resources_lookup_data ("/org/gnome/epiphany/about.ini", 0, NULL);
+  if (!g_key_file_load_from_data (key_file, g_bytes_get_data (bytes, NULL), -1, 0, &error)) {
     g_warning ("Couldn't load about data: %s\n", error->message);
     g_error_free (error);
     return;
   }
+  g_bytes_unref (bytes);
 
   list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors",
                                      &n_authors, NULL);

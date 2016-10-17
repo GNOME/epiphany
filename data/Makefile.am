@@ -20,9 +20,6 @@ appstream_XML = $(appstream_in_files:.xml.in=.xml)
 $(appstream_XML): $(appstream_in_files)
 	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
-aboutdialogdir = $(pkgdatadir)
-dist_aboutdialog_DATA = about.ini
-
 mimepermissiondir = $(pkgdatadir)
 dist_mimepermission_DATA = mime-types-permissions.xml
 
