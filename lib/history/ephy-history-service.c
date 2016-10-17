@@ -25,6 +25,7 @@
 #include "ephy-history-types.h"
 #include "ephy-history-type-builtins.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-uri-helpers.h"
 
 typedef gboolean (*EphyHistoryServiceMethod)      (EphyHistoryService *self, gpointer data, gpointer *result);
 
@@ -1293,13 +1294,16 @@ ephy_history_service_visit_url (EphyHistoryService      *self,
                                 EphyHistoryPageVisitType visit_type)
 {
   EphyHistoryPageVisit *visit;
+  char *sanitized_uri;
 
   g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
   g_return_if_fail (url != NULL);
 
   g_signal_emit (self, signals[VISIT_URL], 0, url, visit_type);
 
-  visit = ephy_history_page_visit_new (url,
+  sanitized_uri = ephy_uri_sanitize (url);
+
+  visit = ephy_history_page_visit_new (sanitized_uri,
                                        time (NULL),
                                        visit_type);
   ephy_history_service_add_visit (self,
@@ -1307,6 +1311,8 @@ ephy_history_service_visit_url (EphyHistoryService      *self,
   ephy_history_page_visit_free (visit);
 
   ephy_history_service_queue_urls_visited (self);
+
+  g_free (sanitized_uri);
 }
 
 void

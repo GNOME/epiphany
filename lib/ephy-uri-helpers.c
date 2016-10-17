@@ -264,11 +264,10 @@ ephy_uri_decode (const char *uri_string)
 }
 
 char *
-ephy_uri_decode_and_sanitize (const char *uri_string)
+ephy_uri_sanitize (const char *uri_string)
 {
   SoupURI *uri;
   char *sanitized_uri;
-  char *result;
 
   /* Trick: the parameter does not actually have to be a URI. We allow calling
    * this function with any address, like about:blank. Just return in that case.
@@ -279,10 +278,23 @@ ephy_uri_decode_and_sanitize (const char *uri_string)
 
   /* Use soup_uri_to_string to remove the password component of the URI. */
   sanitized_uri = soup_uri_to_string (uri, FALSE);
+  soup_uri_free (uri);
+
+  return sanitized_uri;
+}
+
+char *
+ephy_uri_decode_and_sanitize (const char *uri_string)
+{
+
+  char *sanitized_uri;
+  char *result;
+
+  sanitized_uri = ephy_uri_sanitize (uri_string);
   result = ephy_uri_decode (sanitized_uri);
 
   g_free (sanitized_uri);
-  soup_uri_free (uri);
+
   return result;
 }
 
