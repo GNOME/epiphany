@@ -27,6 +27,7 @@
 #include "ephy-shell.h"
 #include "ephy-sync-service.h"
 #include "ephy-type-builtins.h"
+#include "ephy-uri-helpers.h"
 
 #include <libsoup/soup.h>
 #include <string.h>
@@ -330,8 +331,11 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
 
   /* Set text for address entry */
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
+    char *decoded_address;
     address = ephy_bookmark_get_url (self->bookmark);
-    gtk_entry_set_text (GTK_ENTRY (self->address_entry), address);
+    decoded_address = ephy_uri_decode_and_sanitize (address);
+    gtk_entry_set_text (GTK_ENTRY (self->address_entry), decoded_address);
+    g_free (decoded_address);
     self->prev_address = g_strdup (gtk_entry_get_text (GTK_ENTRY (self->address_entry)));
 
     g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
