@@ -1949,8 +1949,6 @@ decide_policy_cb (WebKitWebView           *web_view,
   }
 
   if (decision_type == WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION) {
-    const char *frame_name = webkit_navigation_policy_decision_get_frame_name (navigation_decision);
-
     if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_POPUPS) &&
         !webkit_navigation_action_is_user_gesture (navigation_action)) {
       webkit_policy_decision_ignore (decision);
