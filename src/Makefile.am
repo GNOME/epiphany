@@ -130,6 +130,7 @@ libephymain_la_LIBADD = \
 
 RESOURCE_FILES = \
 	resources/about.css			  					\
+	resources/about.ini								\
 	resources/channel-insecure-symbolic.png						\
 	resources/computer-fail-symbolic.png						\
 	resources/clear-data-dialog.ui							\
@@ -138,6 +139,7 @@ RESOURCE_FILES = \
 	resources/encoding-row.ui							\
 	resources/epiphany-application-menu.ui						\
 	resources/epiphany.css								\
+	resources/error.css								\
 	resources/error.html								\
 	resources/gtk/menus.ui								\
 	resources/gtk/page-menu-popover.ui						\
