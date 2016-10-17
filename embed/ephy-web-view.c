@@ -1937,9 +1937,7 @@ format_tls_error_page (EphyWebView *view,
   first_paragraph = g_strdup_printf (_("This does not look like the real %s. "
                                        "Attackers might be trying to steal or "
                                        "alter information going to or from "
-                                       "this site (for example, private "
-                                       "messages, credit card information, or "
-                                       "passwords)."),
+                                       "this site."),
                                      formatted_hostname);
 
   *message_body = g_strdup_printf ("<p>%s</p>", first_paragraph);
