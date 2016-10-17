@@ -795,6 +795,33 @@ save_session_in_thread_cb (GObject *source_object,
 	g_application_release (G_APPLICATION (ephy_shell_get_default ()));
 }
 
+static gboolean
+session_seems_sane (GList *windows)
+{
+	GList *w;
+	GList *t;
+
+	for (w = windows; w != NULL; w = w->next)
+	{
+		for (t = ((SessionWindow *)w->data)->tabs; t != NULL; t = t->next)
+		{
+			const char *url = ((SessionTab *)t->data)->url;
+			SoupURI *uri = soup_uri_new (url);
+			if (uri)
+			{
+				soup_uri_free (uri);
+			}
+			else
+			{
+				g_critical ("Refusing to save session due to invalid URL %s", url);
+				return FALSE;
+			}
+		}
+	}
+
+	return TRUE;
+}
+
 static void
 save_session_sync (GTask *task,
 		   gpointer source_object,
@@ -806,6 +833,14 @@ save_session_sync (GTask *task,
 	xmlTextWriterPtr writer;
 	GList *w;
 	int ret = -1;
+
+	/* If any web view has an insane URL, then something has probably gone wrong
+	 * inside WebKit. For instance, if the web process is nonfunctional, the UI
+	 * process could have an invalid URI property. Yes, this would be a WebKit
+	 * bug, but Epiphany should be robust to such issues. Do not clobber an
+	 * existing good session file with our new bogus state. Bug #768250. */
+	if (!session_seems_sane (data->windows))
+		return;
 
 	buffer = xmlBufferCreate ();
 	writer = xmlNewTextWriterMemory (buffer, 0);
