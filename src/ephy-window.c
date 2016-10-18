@@ -124,11 +124,11 @@ const struct {
   { "tab.duplicate", { NULL } },
   { "tab.close", { "<Primary>W", NULL } }
 }, accels_navigation_ltr [] = {
-  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "KP_4", "Back", NULL } },
-  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "KP_6", "Forward", NULL } }
+  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "Back", NULL } },
+  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "Forward", NULL } }
 }, accels_navigation_rtl [] = {
-  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "KP_6", "Back", NULL } },
-  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "KP_4", "Forward", NULL } }
+  { "toolbar.navigation-back", { "<alt>Left", "<alt>KP_Left", "Back", NULL } },
+  { "toolbar.navigation-forward", { "<alt>Right", "<alt>KP_Right", "Forward", NULL } }
 }, *accels_navigation_ltr_rtl;
 
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
