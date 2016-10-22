@@ -549,7 +549,7 @@ load_mime_from_xml (void)
   }
 
   xmlFreeTextReader (reader);
-  g_object_unref (bytes);
+  g_bytes_unref (bytes);
 }
 
 /**
