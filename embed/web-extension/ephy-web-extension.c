@@ -1178,12 +1178,12 @@ handle_method_call (GDBusConnection       *connection,
   } else if (g_strcmp0 (method_name, "GetBestWebAppIcon") == 0) {
     WebKitWebPage *web_page;
     WebKitDOMDocument *document;
-    char *base_uri = NULL;
+    const char *base_uri = NULL;
     char *uri = NULL;
     char *color = NULL;
     guint64 page_id;
 
-    g_variant_get (parameters, "(ts)", &page_id, &base_uri);
+    g_variant_get (parameters, "(t&s)", &page_id, &base_uri);
     web_page = get_webkit_web_page_or_return_dbus_error (invocation, extension->extension, page_id);
     if (!web_page)
       return;
