@@ -57,7 +57,7 @@ ephy-shell-search-provider-generated.h: ephy-shell-search-provider-generated.sta
 
 # The upstream for the DBus interface definition is
 # at http://git.gnome.org/browse/gnome-shell/plain/data/org.gnome.ShellSearchProvider2.xml
-ephy-shell-search-provider-generated.stamp: Makefile.am $(srcdir)/org.gnome.ShellSearchProvider2.xml
+ephy-shell-search-provider-generated.stamp: Makefile $(srcdir)/org.gnome.ShellSearchProvider2.xml
 	$(AM_V_GEN) gdbus-codegen							\
 		--interface-prefix org.gnome.				\
 		--c-namespace Ephy					\
