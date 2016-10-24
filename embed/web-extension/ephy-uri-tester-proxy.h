@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2014 Igalia S.L.
+ *  Copyright © 2016 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -20,20 +20,18 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <webkit2/webkit-web-extension.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_WEB_EXTENSION (ephy_web_extension_get_type())
+#define EPHY_TYPE_URI_TESTER_PROXY (ephy_uri_tester_proxy_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyWebExtension, ephy_web_extension, EPHY, WEB_EXTENSION, GObject)
+G_DECLARE_FINAL_TYPE (EphyUriTesterProxy, ephy_uri_tester_proxy, EPHY, URI_TESTER_PROXY, GObject)
 
-EphyWebExtension *ephy_web_extension_get            (void);
-void              ephy_web_extension_initialize     (EphyWebExtension   *extension,
-                                                     WebKitWebExtension *wk_extension,
-                                                     const char         *server_address,
-                                                     gboolean            is_private_profile);
+EphyUriTesterProxy *ephy_uri_tester_proxy_new (GDBusConnection *connection);
 
+char               *ephy_uri_tester_proxy_maybe_rewrite_uri (EphyUriTesterProxy *uri_tester,
+                                                             const char         *request_uri,
+                                                             const char         *page_uri);
 
 G_END_DECLS

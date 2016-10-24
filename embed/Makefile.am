@@ -42,6 +42,8 @@ libephyembed_la_SOURCES = \
 	ephy-find-toolbar.h		\
 	ephy-notification-container.c	\
 	ephy-notification-container.h	\
+	ephy-uri-tester.c		\
+	ephy-uri-tester.h		\
 	ephy-view-source-handler.c	\
 	ephy-view-source-handler.h	\
 	ephy-web-view.c			\
@@ -58,7 +60,6 @@ libephyembed_la_CFLAGS = \
 libephyembed_la_CPPFLAGS = \
 	-I$(top_builddir)/lib			\
 	-I$(top_builddir)/lib/widgets		\
-	-I$(top_srcdir)/embed/web-extension	\
 	-I$(top_srcdir)/lib			\
 	-I$(top_srcdir)/lib/egg			\
 	-I$(top_srcdir)/lib/history		\

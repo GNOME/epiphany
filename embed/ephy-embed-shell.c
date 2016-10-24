@@ -35,10 +35,10 @@
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
+#include "ephy-uri-tester.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-extension-proxy.h"
-#include "ephy-web-extension-names.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -62,6 +62,7 @@ typedef struct {
   EphyViewSourceHandler *source_handler;
   guint update_overview_timeout_id;
   guint hiding_overview_item;
+  EphyUriTester *uri_tester;
   GDBusServer *dbus_server;
   GList *web_extensions;
 } EphyEmbedShellPrivate;
@@ -110,6 +111,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->hosts_manager);
   g_clear_object (&priv->web_context);
+  g_clear_object (&priv->uri_tester);
   g_clear_object (&priv->dbus_server);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
@@ -605,8 +607,11 @@ new_connection_cb (GDBusServer     *server,
                    GDBusConnection *connection,
                    EphyEmbedShell  *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   EphyWebExtensionProxy *extension = ephy_web_extension_proxy_new (connection);
   ephy_embed_shell_watch_web_extension (shell, extension);
+
+  ephy_uri_tester_register_dbus_object (priv->uri_tester, connection);
 
   g_signal_connect_object (extension, "page-created",
                            G_CALLBACK (web_extension_page_created), shell, 0);
@@ -883,18 +888,24 @@ ephy_embed_shell_constructed (GObject *object)
 {
   EphyEmbedShell *shell;
   EphyEmbedShellPrivate *priv;
+  EphyEmbedShellMode mode;
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->constructed (object);
 
   shell = EPHY_EMBED_SHELL (object);
   priv = ephy_embed_shell_get_instance_private (shell);
+  mode = ephy_embed_shell_get_mode (shell);
+
   /* These do not run the EmbedShell application instance, so make sure that
      there is a web context and a user content manager for them. */
-  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_TEST ||
-      ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
+  if (mode == EPHY_EMBED_SHELL_MODE_TEST ||
+      mode == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
     ephy_embed_shell_create_web_context (shell);
     priv->user_content = webkit_user_content_manager_new ();
   }
+
+  if (mode != EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER)
+    priv->uri_tester = ephy_uri_tester_new ();
 
   g_signal_connect_object (ephy_snapshot_service_get_default (),
                            "snapshot-saved", G_CALLBACK (snapshot_saved_cb),

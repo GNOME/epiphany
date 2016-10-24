@@ -57,7 +57,6 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
   ephy_web_extension_initialize (extension,
                                  webkit_extension,
                                  server_address,
-                                 dot_dir,
                                  private_profile);
 }
 

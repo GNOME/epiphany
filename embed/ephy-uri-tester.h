@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <glib.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -29,13 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyUriTester, ephy_uri_tester, EPHY, URI_TESTER, GObject)
 
-EphyUriTester *ephy_uri_tester_new         (const char *base_data_dir);
+EphyUriTester *ephy_uri_tester_new                  (void);
 
-gboolean       ephy_uri_tester_test_uri    (EphyUriTester *tester,
-                                            const char *req_uri,
-                                            const char *page_uri);
-
-void           ephy_uri_tester_set_filters (EphyUriTester *tester,
-                                            GSList *filters);
+void           ephy_uri_tester_register_dbus_object (EphyUriTester   *tester,
+                                                     GDBusConnection *connection);
 
 G_END_DECLS

@@ -26,4 +26,8 @@ G_BEGIN_DECLS
 #define EPHY_WEB_EXTENSION_OBJECT_PATH  "/org/gnome/Epiphany/WebExtension"
 #define EPHY_WEB_EXTENSION_INTERFACE    "org.gnome.Epiphany.WebExtension"
 
+#define EPHY_URI_TESTER_SERVICE_NAME    "org.gnome.Epiphany.UriTester"
+#define EPHY_URI_TESTER_OBJECT_PATH     "/org/gnome/Epiphany/UriTester"
+#define EPHY_URI_TESTER_INTERFACE       "org.gnome.Epiphany.UriTester"
+
 G_END_DECLS

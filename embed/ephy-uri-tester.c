@@ -27,10 +27,16 @@
 #include "config.h"
 #include "ephy-uri-tester.h"
 
+#include "ephy-dbus-names.h"
 #include "ephy-debug.h"
+#include "ephy-file-helpers.h"
+#include "ephy-settings.h"
+#include "ephy-uri-helpers.h"
+#include "ephy-uri-tester-interface.h"
 
 #include <gio/gio.h>
 #include <glib/gstdio.h>
+#include <libsoup/soup.h>
 #include <string.h>
 
 #define DEFAULT_FILTER_URL "https://easylist-downloads.adblockplus.org/easylist.txt"
@@ -223,6 +229,15 @@ ephy_uri_tester_load_patterns (EphyUriTester *tester)
 
     g_free (fileuri);
   }
+}
+
+static void
+ephy_uri_tester_set_filters (EphyUriTester *tester, GSList *filters)
+{
+  if (tester->filters)
+    g_slist_free_full (tester->filters, g_free);
+
+  tester->filters = filters;
 }
 
 static void
@@ -920,29 +935,132 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
 }
 
 EphyUriTester *
-ephy_uri_tester_new (const char *base_data_dir)
+ephy_uri_tester_new (void)
 {
-  g_return_val_if_fail (base_data_dir != NULL, NULL);
-
-  return g_object_new (EPHY_TYPE_URI_TESTER, "base-data-dir", base_data_dir, NULL);
+  return g_object_new (EPHY_TYPE_URI_TESTER, "base-data-dir", ephy_dot_dir (), NULL);
 }
 
-gboolean
+static gboolean
 ephy_uri_tester_test_uri (EphyUriTester *tester,
                           const char    *req_uri,
                           const char    *page_uri)
 {
+  /* Always load the main resource. */
+  if (g_strcmp0 (req_uri, page_uri) == 0)
+    return FALSE;
+
+  /* Always load data requests, as uri_tester won't do any good here. */
+  if (g_str_has_prefix (req_uri, SOUP_URI_SCHEME_DATA))
+    return FALSE;
+
   /* check whitelisting rules before the normal ones */
   if (ephy_uri_tester_is_matched (tester, NULL, req_uri, page_uri, TRUE))
     return FALSE;
   return ephy_uri_tester_is_matched (tester, NULL, req_uri, page_uri, FALSE);
 }
 
-void
-ephy_uri_tester_set_filters (EphyUriTester *tester, GSList *filters)
+static char *
+ephy_uri_tester_rewrite_uri (EphyUriTester *uri_tester,
+                             const char    *request_uri,
+                             const char    *page_uri)
 {
-  if (tester->filters)
-    g_slist_free_full (tester->filters, g_free);
+  char *modified_uri;
 
-  tester->filters = filters;
+  /* Should we block the URL outright? */
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK) &&
+      ephy_uri_tester_test_uri (uri_tester, request_uri, page_uri)) {
+    g_debug ("Request '%s' blocked (page: '%s')", request_uri, page_uri);
+    return g_strdup ("");
+  }
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
+    /* Remove analytics from URL. Note that this function is a bit annoying to
+     * use: it returns NULL if it doesn't remove any query parameters. */
+    modified_uri = ephy_remove_tracking_from_uri (request_uri);
+  }
+
+  if (!modified_uri)
+    modified_uri = g_strdup (request_uri);
+
+  /* FIXME: Rewrite URL to use HTTPS if directed by HTTPS Everywhere */
+
+  return modified_uri;
+}
+
+static void
+handle_method_call (GDBusConnection       *connection,
+                    const char            *sender,
+                    const char            *object_path,
+                    const char            *interface_name,
+                    const char            *method_name,
+                    GVariant              *parameters,
+                    GDBusMethodInvocation *invocation,
+                    gpointer               user_data)
+{
+  EphyUriTester *uri_tester = EPHY_URI_TESTER (user_data);
+
+  if (g_strcmp0 (interface_name, EPHY_URI_TESTER_INTERFACE) != 0)
+    return;
+
+  if (g_strcmp0 (method_name, "MaybeRewriteUri") == 0) {
+    const char *request_uri;
+    const char *page_uri;
+    char *rewritten_uri;
+
+    g_variant_get (parameters, "(&s&s)", &request_uri, &page_uri);
+
+    if (request_uri == NULL || request_uri == '\0') {
+      g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                             "Request URI cannot be NULL or empty");
+      return;
+    }
+
+    if (page_uri == NULL || page_uri == '\0') {
+      g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                             "Page URI cannot be NULL or empty");
+      return;
+    }
+
+    rewritten_uri = ephy_uri_tester_rewrite_uri (uri_tester, request_uri, page_uri);
+
+    if (!rewritten_uri)
+      rewritten_uri = g_strdup ("");
+
+    g_dbus_method_invocation_return_value (invocation,
+                                           g_variant_new ("(s)", rewritten_uri));
+
+    g_free (rewritten_uri);
+  }
+}
+
+static const GDBusInterfaceVTable interface_vtable = {
+  handle_method_call,
+  NULL,
+  NULL
+};
+
+void
+ephy_uri_tester_register_dbus_object (EphyUriTester   *tester,
+                                      GDBusConnection *connection)
+{
+  static GDBusNodeInfo *introspection_data = NULL;
+  guint registration_id;
+  GError *error = NULL;
+
+  if (!introspection_data)
+    introspection_data = g_dbus_node_info_new_for_xml (ephy_uri_tester_introspection_xml, NULL);
+
+  registration_id =
+    g_dbus_connection_register_object (connection,
+                                       EPHY_URI_TESTER_OBJECT_PATH,
+                                       introspection_data->interfaces[0],
+                                       &interface_vtable,
+                                       g_object_ref (tester),
+                                       g_object_unref,
+                                       &error);
+  if (!registration_id) {
+    g_warning ("Failed to register URI tester object: %s\n", error->message);
+    g_error_free (error);
+    return;
+  }
 }

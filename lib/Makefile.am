@@ -6,6 +6,7 @@ TYPES_H_FILES = \
 	ephy-security-levels.h
 
 libephymisc_la_SOURCES = \
+	ephy-dbus-names.h			\
 	ephy-dbus-util.c			\
 	ephy-dbus-util.h			\
 	ephy-debug.c				\
@@ -48,6 +49,7 @@ libephymisc_la_SOURCES = \
 	ephy-time-helpers.h			\
 	ephy-uri-helpers.c			\
 	ephy-uri-helpers.h			\
+	ephy-uri-tester-interface.h		\
 	ephy-web-app-utils.c			\
 	ephy-web-app-utils.h			\
 	ephy-zoom.c				\
