@@ -22,7 +22,6 @@ libephywebextension_la_CPPFLAGS = \
 	$(GIO_CFLAGS)			\
 	$(GLIB_CFLAGS)			\
 	$(GTK_CFLAGS)			\
-	$(HTTPSEVERYWHERE_CFLAGS)	\
 	$(LIBSECRET_CFLAGS)		\
 	$(LIBSOUP_CFLAGS)		\
 	$(WEBKIT2GTK_WEB_EXTENSION_CFLAGS)
@@ -38,7 +37,6 @@ libephywebextension_la_LIBADD = \
 	$(GIO_LIBS) 		\
 	$(GLIB_LIBS) 		\
 	$(GTK_LIBS) 		\
-	$(HTTPSEVERYWHERE_LIBS)	\
 	$(LIBSECRET_LIBS) 	\
 	$(LIBSOUP_LIBS) 	\
 	$(WEBKIT2GTK_WEB_EXTENSION_LIBS)

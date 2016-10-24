@@ -71,6 +71,7 @@ libephyembed_la_CPPFLAGS = \
 	$(GIO_CFLAGS)				\
 	$(GLIB_CFLAGS)				\
 	$(GTK_CFLAGS)				\
+	$(HTTPSEVERYWHERE_CFLAGS)		\
 	$(LIBSECRET_CFLAGS)			\
 	$(LIBSOUP_CFLAGS)			\
 	$(WEBKIT2GTK_CFLAGS)
@@ -83,6 +84,7 @@ libephyembed_la_LIBADD = \
 	$(GIO_LIBS)		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
+	$(HTTPSEVERYWHERE_LIBS)	\
 	$(LIBM)			\
 	$(LIBSECRET_LIBS)	\
 	$(LIBSOUP_LIBS)		\
