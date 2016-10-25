@@ -12,7 +12,6 @@ noinst_PROGRAMS = \
 	test-ephy-sqlite \
 	test-ephy-string \
 	test-ephy-uri-helpers \
-	test-ephy-web-view \
 	$(NULL)
 
 # Mostly copied from Makefile.decl in glib
@@ -187,9 +186,10 @@ test_ephy_uri_helpers_SOURCES = \
 # test_ephy_web_app_utils_SOURCES = \
 # 	ephy-web-app-utils-test.c
 
-test_ephy_web_view_SOURCES = \
-	$(top_builddir)/src/epiphany-resources.c \
-	ephy-web-view-test.c
+# https://bugzilla.gnome.org/show_bug.cgi?id=773451
+#test_ephy_web_view_SOURCES = \
+#	$(top_builddir)/src/epiphany-resources.c \
+#	ephy-web-view-test.c
 
 dist_noinst_DATA = \
 	data/test.html \
