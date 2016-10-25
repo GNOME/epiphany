@@ -216,8 +216,11 @@ get_screen_dpi (GdkScreen *screen)
   if (dpi != -1)
     return dpi;
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   dp = hypot (gdk_screen_get_width (screen), gdk_screen_get_height (screen));
   di = hypot (gdk_screen_get_width_mm (screen), gdk_screen_get_height_mm (screen)) / 25.4;
+#pragma GCC diagnostic pop
 
   return dp / di;
 }
