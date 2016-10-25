@@ -131,10 +131,16 @@ web_page_send_request (WebKitWebPage     *web_page,
   modified_uri = ephy_uri_tester_proxy_maybe_rewrite_uri (extension->uri_tester,
                                                           request_uri,
                                                           page_uri);
+
+  if (strlen (modified_uri) == 0) {
+    LOG ("Refused to load %s", request_uri);
+    g_free (modified_uri);
+    return TRUE;
+  }
+
   if (g_strcmp0 (request_uri, modified_uri) != 0) {
     LOG ("Rewrote %s to %s", request_uri, modified_uri);
-    webkit_uri_request_set_uri (request,
-                                strlen (modified_uri) > 0 ? modified_uri : NULL);
+    webkit_uri_request_set_uri (request, modified_uri);
   }
   g_free (modified_uri);
 
