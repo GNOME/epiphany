@@ -1671,7 +1671,7 @@ static char *
 get_style_sheet (void)
 {
   GBytes *bytes;
-  const char *sheet;
+  char *sheet;
 
   bytes = g_resources_lookup_data (EPHY_PAGE_TEMPLATE_ERROR_CSS, 0, NULL);
   sheet = g_strdup (g_bytes_get_data (bytes, NULL));
