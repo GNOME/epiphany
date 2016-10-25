@@ -29,6 +29,7 @@
 
 #include "ephy-dbus-names.h"
 #include "ephy-debug.h"
+#include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"
 #include "ephy-uri-helpers.h"
@@ -999,6 +1000,14 @@ static void
 ephy_uri_tester_update_https_everywhere_rulesets (EphyUriTester *tester)
 {
   HTTPSEverywhereUpdater *updater;
+  EphyEmbedShell *shell;
+  EphyEmbedShellMode mode;
+
+  shell = ephy_embed_shell_get_default ();
+  mode = ephy_embed_shell_get_mode (shell);
+
+  if (mode == EPHY_EMBED_SHELL_MODE_TEST || mode == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER)
+    return;
 
   /* We might want to be smarter about this in the future. For now,
    * trigger an update of the rulesets once each time an EphyUriTester
