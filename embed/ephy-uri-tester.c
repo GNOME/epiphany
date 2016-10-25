@@ -986,7 +986,8 @@ https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
   https_everywhere_updater_update_finish (updater, result, &error);
 
   if (error) {
-    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
+        !g_error_matches (error, HTTPS_EVERYWHERE_UPDATE_ERROR, HTTPS_EVERYWHERE_UPDATE_ERROR_NO_UPDATE_AVAILABLE))
       g_warning ("Failed to update HTTPS Everywhere rulesets: %s", error->message);
     g_error_free (error);
   }
