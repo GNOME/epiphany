@@ -41,10 +41,6 @@
 			<summary>Remember passwords</summary>
 			<description>Whether to store and prefill passwords in websites.</description>
 		</key>
-		<key type="b" name="managed-network">
-			<default>true</default>
-			<summary>Automatically manage offline status with NetworkManager</summary>
-		</key>
 		<key type="b" name="warn-on-close-unsubmitted-data">
 			<default>true</default>
 		</key>
@@ -89,16 +85,6 @@
 		</key>
 	</schema>
 	<schema path="/org/gnome/epiphany/ui/" id="org.gnome.Epiphany.ui">
-		<key type="b" name="always-show-tabs-bar">
-			<default>false</default>
-			<summary>[Deprecated]</summary>
-			<description>[Deprecated] This setting is deprecated, use 'tabs-bar-visibility-policy' instead.</description>
-		</key>
-		<key type="b" name="downloads-hidden">
-			<default>false</default>
-			<summary>Visibility of the downloads window</summary>
-			<description>Hide or show the downloads window. When hidden, a notification will be shown when new downloads are started.</description>
-		</key>
 		<key type="b" name="expand-tabs-bar">
 			<default>true</default>
 			<summary>Expand tabs size to fill the available space on the tabs bar.</summary>
@@ -140,16 +126,6 @@
 			<summary>Custom monospace font</summary>
 			<description>A value to be used to override monospace desktop font when use-gnome-fonts is set.</description>
 		</key>
-		<key type="b" name="use-own-colors">
-			<default>false</default>
-			<summary>Use own colors</summary>
-			<description>Use your own colors instead of the colors the page requests.</description>
-		</key>
-		<key type="b" name="use-own-fonts">
-			<default>false</default>
-			<summary>Use own fonts</summary>
-			<description>Use your own fonts instead of the fonts the page requests.</description>
-		</key>
 		<key type="b" name="enable-user-css">
 			<default>false</default>
 			<summary>Use a custom CSS</summary>
@@ -174,11 +150,6 @@
 			<default>'no-third-party'</default>
 			<summary>Cookie accept</summary>
 			<description>Where to accept cookies from. Possible values are "always", "no-third-party" and "never".</description>
-		</key>
-		<key type="s" name="image-animation-mode">
-			<default>'normal'</default>
-			<summary>Image animation mode</summary>
-			<description>How to present animated images. Possible values are "normal", "once" and "disabled".</description>
 		</key>
 		<key type="b" name="enable-popups">
 			<default>true</default>
@@ -207,18 +178,6 @@
 		</key>
 	</schema>
 	<schema path="/org/gnome/epiphany/state/" id="org.gnome.Epiphany.state">
-		<key type="s" name="open-dir">
-			<default>'~'</default>
-		</key>
-		<key type="s" name="save-dir">
-			<default>'~'</default>
-		</key>
-		<key type="s" name="save-image-dir">
-			<default>'~'</default>
-		</key>
-		<key type="s" name="upload-dir">
-			<default>'~'</default>
-		</key>
 		<key type="s" name="download-dir">
 			<default>'Downloads'</default>
 			<summary>The downloads folder</summary>
@@ -226,14 +185,6 @@
 		</key>
 		<key type="as" name="recent-encodings">
 			<default>['' ]</default>
-		</key>
-		<key type="b" name="bookmarks-view-title">
-			<default>true</default>
-			<summary>Whether to show the title column in the bookmarks window.</summary>
-		</key>
-		<key type="b" name="bookmarks-view-address">
-			<default>false</default>
-			<summary>Whether to show the address column in the bookmarks window.</summary>
 		</key>
 	</schema>
 	<schema path="/org/gnome/epiphany/lockdown/" id="org.gnome.Epiphany.lockdown">

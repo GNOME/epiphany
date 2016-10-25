@@ -72,20 +72,6 @@ profile_dir_exists (void)
 }
 
 static void
-migrate_tabs_visibility (void)
-{
-  gboolean always_show_tabs;
-
-  always_show_tabs = g_settings_get_boolean (EPHY_SETTINGS_UI,
-                                             EPHY_PREFS_UI_ALWAYS_SHOW_TABS_BAR);
-
-  if (always_show_tabs)
-    g_settings_set_enum (EPHY_SETTINGS_UI,
-                         EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY,
-                         EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS);
-}
-
-static void
 migrate_profile (const char *old_dir,
                  const char *new_dir)
 {
@@ -630,7 +616,7 @@ const EphyProfileMigrator migrators[] = {
   migrate_nothing,
   migrate_nothing,
   migrate_nothing,
-  migrate_tabs_visibility,
+  migrate_nothing,
   migrate_web_app_links,
   migrate_new_urls_table,
   migrate_form_passwords_to_libsecret,
