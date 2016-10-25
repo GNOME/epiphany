@@ -985,10 +985,12 @@ https_everywhere_context_init_cb (HTTPSEverywhereContext *context,
 
   https_everywhere_context_init_finish (context, res, &error);
 
-  /* Note that if this were not fatal, we would need some way to ensure that
-   * future pending requests would not get stuck forever. */
-  if (error)
-    g_error ("Failed to initialize HTTPS Everywhere context: %s", error->message);
+  /* Note that if this were not fatal, we would need some way to ensure
+   * that future pending requests would not get stuck forever. */
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_error ("Failed to initialize HTTPS Everywhere context: %s", error->message);
+  }
 
   g_list_foreach (tester->deferred_requests, (GFunc)handle_deferred_request, tester);
   g_list_free_full (tester->deferred_requests, (GDestroyNotify)deferred_request_free);
