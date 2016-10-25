@@ -977,6 +977,41 @@ handle_deferred_request (DeferredRequest *request,
 }
 
 static void
+https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
+                            GAsyncResult *result)
+{
+  GError *error = NULL;
+
+  https_everywhere_updater_update_finish (updater, result, &error);
+
+  if (error) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to update HTTPS Everywhere rulesets: %s", error->message);
+    g_error_free (error);
+  }
+
+  g_object_unref (updater);
+}
+
+static void
+ephy_uri_tester_update_https_everywhere_rulesets (EphyUriTester *tester)
+{
+  HTTPSEverywhereUpdater *updater;
+
+  /* We might want to be smarter about this in the future. For now,
+   * trigger an update of the rulesets once each time an EphyUriTester
+   * is created. The new rulesets will get used the next time a new
+   * EphyUriTester is created. Since EphyUriTester is only intended to
+   * be created once, that means the new rulesets will be used the next
+   * time Epiphany is restarted. */
+  updater = https_everywhere_updater_new (tester->https_everywhere_context);
+  https_everywhere_updater_update (updater,
+                                   tester->cancellable,
+                                   (GAsyncReadyCallback)https_everywhere_update_cb,
+                                   NULL);
+}
+
+static void
 https_everywhere_context_init_cb (HTTPSEverywhereContext *context,
                                   GAsyncResult           *res,
                                   EphyUriTester          *tester)
@@ -994,6 +1029,8 @@ https_everywhere_context_init_cb (HTTPSEverywhereContext *context,
 
   g_list_foreach (tester->deferred_requests, (GFunc)handle_deferred_request, tester);
   g_list_free_full (tester->deferred_requests, (GDestroyNotify)deferred_request_free);
+
+  ephy_uri_tester_update_https_everywhere_rulesets (tester);
 }
 
 static void
