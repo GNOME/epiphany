@@ -3,7 +3,6 @@ SUBDIRS = data
 noinst_PROGRAMS = \
 	test-ephy-completion-model \
 	test-ephy-download \
-	test-ephy-embed-shell \
 	test-ephy-embed-utils \
 	test-ephy-encodings \
 	test-ephy-file-helpers \
@@ -128,8 +127,9 @@ test_ephy_completion_model_SOURCES = \
 test_ephy_download_SOURCES = \
 	ephy-download-test.c
 
-test_ephy_embed_shell_SOURCES = \
-	ephy-embed-shell-test.c
+# https://bugzilla.gnome.org/show_bug.cgi?id=773448
+#test_ephy_embed_shell_SOURCES = \
+#	ephy-embed-shell-test.c
 
 test_ephy_embed_utils_SOURCES = \
 	ephy-embed-utils-test.c
