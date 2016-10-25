@@ -133,7 +133,8 @@ web_page_send_request (WebKitWebPage     *web_page,
                                                           page_uri);
   if (g_strcmp0 (request_uri, modified_uri) != 0) {
     LOG ("Rewrote %s to %s", request_uri, modified_uri);
-    webkit_uri_request_set_uri (request, modified_uri);
+    webkit_uri_request_set_uri (request,
+                                strlen (modified_uri) > 0 ? modified_uri : NULL);
   }
   g_free (modified_uri);
 
