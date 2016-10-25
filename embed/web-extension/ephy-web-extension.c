@@ -1284,7 +1284,9 @@ ephy_web_extension_dispose (GObject *object)
 {
   EphyWebExtension *extension = EPHY_WEB_EXTENSION (object);
 
-  g_clear_object (&extension->uri_tester);
+// Leaked in gnome-3-22 to avoid crashes when destroyed in the exit handler.
+// Fixed in master by moving the UriTester to the UI process.
+//  g_clear_object (&extension->uri_tester);
   g_clear_object (&extension->overview_model);
   g_clear_pointer (&extension->form_auth_data_cache,
                    ephy_form_auth_data_cache_free);
