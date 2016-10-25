@@ -44,7 +44,6 @@
 #include "ephy-uri-helpers.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
-#include "ephy-web-dom-utils.h"
 #include "ephy-web-extension-proxy.h"
 #include "ephy-zoom.h"
 
