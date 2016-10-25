@@ -1,3 +1,79 @@
+3.23.1 - October 24, 2016
+=========================
+
+Epiphany has been relicensed from GPLv2+ to GPLv3+.
+
+New dependency:
+ libhttpseverywhere
+
+Removed dependencies:
+ avahi-client, avahi-gobject, gdk-x11-3.0, gsettings-desktop-schemas, x11
+
+- Address bar is once again visible at all times, except in web app mode.
+- Redesigned user interface for bookmarks management.
+--- Support for zeroconf bookmarks has been removed. (Help welcome to restore.)
+--- Support for smart bookmarks has been temporarily removed. It will return.
+- HTTPS Everywhere support added and enabled unconditionally.
+- Support for bookmarks sync between Epiphany browsers via Firefox Sync.
+--- Epiphany uses the Firefox Sync service, which can store arbitrary data.
+--- Epiphany cannot sync with Firefox. (It would be possible. Help welcome!)
+--- Epiphany is not Firefox.
+--- Epiphany is not produced or endorsed by Mozilla.
+--- Privacy Policy: https://wiki.gnome.org/Apps/Web/PrivacyPolicy
+- Integrated source code view returns, utilizing Prism JavaScript library.
+- Overview now shows three rows of three previews each.
+- Remember password info bar now has a "never remember" option.
+- Web apps now have a basic app menu.
+- Web apps are once again confined to their original domain.
+- Disable history lockdown setting now actually disables access to history.
+- Removed enable-plugins option. NPAPI browser plugins are no longer supported.
+- Removed hidden enable-javascript option. (Help welcome to support NoScript.)
+- Removed several old settings that no longer had any effect.
+- Removed --netbank-mode command line option. Use --incognito-mode instead.
+- Updated translations
+
+Thanks to Iulian Radu (port to GAction, bookmarks subsystem rewrite), Gabriel
+Ivascu (sync integration), and Daniel 'grindhold' Brendle (libhttpseverywhere)
+for their major contributions to this release.
+
+===============
+Epiphany 3.22.1
+===============
+
+- Remember decision to allow or deny notifications (#748339)
+- Do not copy cookies when creating web app (#771540)
+- Fix dock to right button in web inspector
+- Improve overview layout in small windows
+- Escape URL for markup in new web app dialog
+- Updated translations
+
+===============
+Epiphany 3.22.0
+===============
+
+- Updated translations
+
+================
+Epiphany 3.21.92
+================
+
+- Add support for opening FTP URIs in an external application (#136501)
+- Fix crash in non-English locales (#765374)
+- Don't crash if loading a local web app that uses an absolute path (#767101)
+- Fix several features that were broken when multiple tabs share a web process (#769627)
+- Remove keyboard shortcut for Duplicate Tab since it clashes with GtkInspector
+- Remove assertion that was breaking error pages on certain network errors
+- Updated translations
+
+================
+Epiphany 3.21.90
+================
+
+- Fix memory leaks (#769228)
+- Limit geolocation/notification permission request info bars (#764593)
+- Fix mistake in tracking the remember password info bar
+- Updated translations
+
 ===============
 Epiphany 3.21.4
 ===============

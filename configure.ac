@@ -1,5 +1,6 @@
 # Copyright © 2000-2004 Marco Pesenti Gritti
 # Copyright © 2003, 2004, 2005, 2006, 2007 Christian Persch
+# Copyright © 2015-2016 Igalia S.L
 #
 # This file is part of Epiphany.
 #
@@ -17,8 +18,8 @@
 # along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
 
 m4_define([epiphany_version_major],[3])
-m4_define([epiphany_version_minor],[21])
-m4_define([epiphany_version_micro],[4])
+m4_define([epiphany_version_minor],[23])
+m4_define([epiphany_version_micro],[1])
 m4_define([epiphany_version],[epiphany_version_major.epiphany_version_minor.epiphany_version_micro])
 
 dnl Must be a valid git tag
