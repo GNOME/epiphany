@@ -925,7 +925,8 @@ handle_method_call (GDBusConnection       *connection,
       return;
     }
 
-    if (https_everywhere_context_get_initialized (tester->https_everywhere_context)) {
+    if (!g_str_has_prefix (request_uri, SOUP_URI_SCHEME_HTTP) ||
+        https_everywhere_context_get_initialized (tester->https_everywhere_context)) {
       ephy_uri_tester_return_response (tester, request_uri, page_uri, invocation);
     } else {
       DeferredRequest *request = deferred_request_new (request_uri, page_uri, invocation);
