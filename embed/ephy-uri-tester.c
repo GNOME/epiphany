@@ -977,7 +977,6 @@ handle_deferred_request (DeferredRequest *request,
                                    request->invocation);
 }
 
-#if 0
 static void
 https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
                             GAsyncResult *result)
@@ -995,15 +994,10 @@ https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
 
   g_object_unref (updater);
 }
-#endif
 
 static void
 ephy_uri_tester_update_https_everywhere_rulesets (EphyUriTester *tester)
 {
-#if 0
-  // Temporarily disabled because the lock file is not getting removed properly
-  // during tests, causing test failures.
-
   HTTPSEverywhereUpdater *updater;
 
   /* We might want to be smarter about this in the future. For now,
@@ -1017,7 +1011,6 @@ ephy_uri_tester_update_https_everywhere_rulesets (EphyUriTester *tester)
                                    tester->cancellable,
                                    (GAsyncReadyCallback)https_everywhere_update_cb,
                                    NULL);
-#endif
 }
 
 static void
