@@ -39,8 +39,6 @@
 #include <libsoup/soup.h>
 #include <string.h>
 #include <webkit2/webkit-web-extension.h>
-#define WEBKIT_DOM_USE_UNSTABLE_API
-#include <webkitdom/WebKitDOMDOMWindowUnstable.h>
 #include <JavaScriptCore/JavaScript.h>
 
 struct _EphyWebExtension {
