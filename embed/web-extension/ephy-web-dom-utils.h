@@ -21,6 +21,8 @@
 #pragma once
 
 #include <webkitdom/webkitdom.h>
+#define WEBKIT_DOM_USE_UNSTABLE_API
+#include <webkitdom/WebKitDOMDOMSelection.h>
 
 G_BEGIN_DECLS
 

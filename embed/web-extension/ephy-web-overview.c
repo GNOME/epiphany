@@ -22,7 +22,10 @@
 #include "ephy-web-overview.h"
 
 #include <string.h>
-#include <webkitdom/webkitdom.h>
+
+#define WEBKIT_DOM_USE_UNSTABLE_API
+#include <webkitdom/WebKitDOMElementUnstable.h>
+#include <webkitdom/WebKitDOMDOMTokenList.h>
 
 struct _EphyWebOverview {
   GObject parent_instance;
