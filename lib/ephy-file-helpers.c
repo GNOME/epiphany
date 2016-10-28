@@ -977,6 +977,19 @@ ephy_sanitize_filename (char *filename)
 }
 
 void
+ephy_open_default_instance_window (void)
+{
+  GError *error = NULL;
+
+  g_spawn_command_line_async ("epiphany", &error);
+
+  if (error) {
+    g_warning ("Couldn't open default instance: %s", error->message);
+    g_error_free (error);
+  }
+}
+
+void
 ephy_open_incognito_window (const char *uri)
 {
   char *command;

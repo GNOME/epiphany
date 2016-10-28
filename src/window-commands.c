@@ -70,11 +70,17 @@ window_cmd_new_window (GSimpleAction *action,
                        GVariant      *parameter,
                        gpointer       user_data)
 {
+  EphyWindow *new_window;
   EphyEmbed *embed;
-  EphyWindow *new_window = ephy_window_new ();
+  EphyShell *shell = ephy_shell_get_default ();
 
-  embed = ephy_shell_new_tab (ephy_shell_get_default (),
-                              new_window, NULL, 0);
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    ephy_open_default_instance_window ();
+    return;
+  }
+
+  new_window = ephy_window_new ();
+  embed = ephy_shell_new_tab (shell, new_window, NULL, 0);
   ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
   ephy_window_activate_location (new_window);
 }
