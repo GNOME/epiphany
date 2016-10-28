@@ -91,6 +91,33 @@ ephy_about_handler_finish_request (WebKitURISchemeRequest *request,
   g_object_unref (stream);
 }
 
+typedef struct {
+  EphyAboutHandler *handler;
+  WebKitURISchemeRequest *request;
+} EphyAboutRequest;
+
+static EphyAboutRequest *
+ephy_about_request_new (EphyAboutHandler       *handler,
+                        WebKitURISchemeRequest *request)
+{
+  EphyAboutRequest *about_request;
+
+  about_request = g_slice_new (EphyAboutRequest);
+  about_request->handler = g_object_ref (handler);
+  about_request->request = g_object_ref (request);
+
+  return about_request;
+}
+
+static void
+ephy_about_request_free (EphyAboutRequest *about_request)
+{
+  g_object_unref (about_request->handler);
+  g_object_unref (about_request->request);
+
+  g_slice_free (EphyAboutRequest, about_request);
+}
+
 static void
 handle_memory_finished_cb (EphyAboutHandler       *handler,
                            GAsyncResult           *result,
