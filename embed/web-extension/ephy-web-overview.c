@@ -118,110 +118,6 @@ update_thumbnail_element_style (WebKitDOMElement *thumbnail,
   g_free (style);
 }
 
-static void
-ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
-                                      EphyWebOverview      *overview)
-{
-  GList *urls;
-  GList *l;
-  GList *items;
-  OverviewItem *item;
-
-  urls = ephy_web_overview_model_get_urls (model);
-
-  items = overview->items;
-  for (l = urls; l; l = g_list_next (l)) {
-    EphyWebOverviewModelItem *url = (EphyWebOverviewModelItem *)l->data;
-    const char *thumbnail_path;
-
-    thumbnail_path = ephy_web_overview_model_get_url_thumbnail (model, url->url);
-
-    if (items) {
-      WebKitDOMDOMTokenList *class_list;
-
-      item = (OverviewItem *)items->data;
-
-      g_free (item->url);
-      item->url = g_strdup (url->url);
-
-      class_list = webkit_dom_element_get_class_list (webkit_dom_node_get_parent_element (WEBKIT_DOM_NODE (item->anchor)));
-      if (class_list && webkit_dom_dom_token_list_contains (class_list, "overview-removed"))
-        webkit_dom_dom_token_list_remove (class_list, NULL, "overview-removed", NULL);
-
-      webkit_dom_element_set_attribute (item->anchor, "href", url->url, NULL);
-      webkit_dom_element_set_attribute (item->anchor, "title", url->title, NULL);
-      webkit_dom_node_set_text_content (WEBKIT_DOM_NODE (item->title), url->title, NULL);
-
-      if (thumbnail_path) {
-        char *style;
-
-        style = g_strdup_printf ("background: url(file://%s) no-repeat;", thumbnail_path);
-        webkit_dom_element_set_attribute (item->thumbnail, "style", style, NULL);
-        g_free (style);
-      } else {
-        webkit_dom_element_remove_attribute (item->thumbnail, "style");
-      }
-      g_clear_object (&class_list);
-    } else {
-      WebKitDOMDocument *document;
-      WebKitDOMElement *div, *anchor;
-      WebKitDOMNode *new_node;
-
-      item = g_slice_new0 (OverviewItem);
-      item->url = g_strdup (url->url);
-
-      document = webkit_web_page_get_dom_document (overview->web_page);
-      div = webkit_dom_document_get_element_by_id (document, "overview");
-
-      anchor = webkit_dom_document_create_element (document, "A", NULL);
-      item->anchor = g_object_ref (anchor);
-      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (anchor), "overview-item");
-      webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (anchor), "href", url->url, NULL);
-      webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (anchor), "title", url->title, NULL);
-      webkit_dom_node_append_child (WEBKIT_DOM_NODE (div), WEBKIT_DOM_NODE (anchor), NULL);
-
-      new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "DIV", NULL));
-      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "overview-close-button");
-      webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (new_node), "onclick", "removeFromOverview(this.parentNode, event)", NULL);
-      webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (new_node), "title", url->title, NULL);
-      webkit_dom_node_set_text_content (new_node, "✖", NULL);
-      webkit_dom_node_append_child (WEBKIT_DOM_NODE (anchor), new_node, NULL);
-
-      new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "SPAN", NULL));
-      item->thumbnail = g_object_ref (new_node);
-      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "overview-thumbnail");
-      if (thumbnail_path)
-        update_thumbnail_element_style (WEBKIT_DOM_ELEMENT (new_node), thumbnail_path);
-      webkit_dom_node_append_child (WEBKIT_DOM_NODE (anchor), new_node, NULL);
-
-      new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "SPAN", NULL));
-      item->title = g_object_ref (new_node);
-      webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "overview-title");
-      webkit_dom_node_set_text_content (new_node, url->title, NULL);
-      webkit_dom_node_append_child (WEBKIT_DOM_NODE (anchor), new_node, NULL);
-
-      overview->items = g_list_append (overview->items, item);
-    }
-
-    items = g_list_next (items);
-  }
-
-  while (items) {
-    WebKitDOMNode *anchor;
-    GList *next = items->next;
-
-    item = (OverviewItem *)items->data;
-
-    anchor = WEBKIT_DOM_NODE (item->anchor);
-    webkit_dom_node_remove_child (webkit_dom_node_get_parent_node (anchor), anchor, NULL);
-
-    overview_item_free (item);
-    overview->items = g_list_delete_link (overview->items, items);
-
-    items = next;
-  }
-}
-
 static gboolean
 apply_delayed_thumbnail_change (gpointer key,
                                 gpointer value,
@@ -378,6 +274,78 @@ ephy_web_overview_document_loaded (WebKitWebPage   *web_page,
                                  apply_delayed_thumbnail_change,
                                  overview);
     g_clear_pointer (&overview->delayed_thumbnail_changes, g_hash_table_unref);
+  }
+}
+
+static void
+ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
+                                      EphyWebOverview      *overview)
+{
+  GList *urls;
+  GList *l;
+  GList *items;
+  OverviewItem *item;
+  WebKitDOMDocument *document;
+
+  urls = ephy_web_overview_model_get_urls (model);
+  document = webkit_web_page_get_dom_document (overview->web_page);
+
+  if (document && !overview->items) {
+    /* We were loaded from page cache. The items already exist in the DOM. */
+    ephy_web_overview_document_loaded (overview->web_page, overview);
+  }
+
+  items = overview->items;
+  for (l = urls; l; l = g_list_next (l)) {
+    EphyWebOverviewModelItem *url = (EphyWebOverviewModelItem *)l->data;
+    const char *thumbnail_path;
+
+    thumbnail_path = ephy_web_overview_model_get_url_thumbnail (model, url->url);
+
+    if (items) {
+      WebKitDOMDOMTokenList *class_list;
+
+      item = (OverviewItem *)items->data;
+
+      g_free (item->url);
+      item->url = g_strdup (url->url);
+
+      class_list = webkit_dom_element_get_class_list (webkit_dom_node_get_parent_element (WEBKIT_DOM_NODE (item->anchor)));
+      if (class_list && webkit_dom_dom_token_list_contains (class_list, "overview-removed"))
+        webkit_dom_dom_token_list_remove (class_list, NULL, "overview-removed", NULL);
+
+      webkit_dom_element_set_attribute (item->anchor, "href", url->url, NULL);
+      webkit_dom_element_set_attribute (item->anchor, "title", url->title, NULL);
+      webkit_dom_node_set_text_content (WEBKIT_DOM_NODE (item->title), url->title, NULL);
+
+      if (thumbnail_path) {
+        char *style;
+
+        style = g_strdup_printf ("background: url(file://%s) no-repeat;", thumbnail_path);
+        webkit_dom_element_set_attribute (item->thumbnail, "style", style, NULL);
+        g_free (style);
+      } else {
+        webkit_dom_element_remove_attribute (item->thumbnail, "style");
+      }
+      g_clear_object (&class_list);
+    }
+
+    items = g_list_next (items);
+  }
+
+  while (items) {
+    WebKitDOMNode *anchor;
+    GList *next = items->next;
+
+    item = (OverviewItem *)items->data;
+
+    anchor = WEBKIT_DOM_NODE (item->anchor);
+    webkit_dom_node_remove_child (webkit_dom_node_get_parent_node (anchor), anchor, NULL);
+
+    overview_item_free (item);
+    overview->items = g_list_delete_link (overview->items, items);
+
+    items = next;
   }
 }
 
