@@ -383,9 +383,6 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
 
   ephy_history_service_enable_foreign_keys (self);
 
-  if (self->read_only)
-    return TRUE;
-
   ephy_sqlite_connection_begin_transaction (self->history_database, &error);
   if (error) {
     g_warning ("Could not begin long running transaction in history database: %s", error->message);
