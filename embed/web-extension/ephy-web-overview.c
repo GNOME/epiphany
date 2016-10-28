@@ -166,24 +166,21 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       g_clear_object (&class_list);
     } else {
       WebKitDOMDocument *document;
-      WebKitDOMElement *item_list, *anchor;
+      WebKitDOMElement *div, *anchor;
       WebKitDOMNode *new_node;
 
       item = g_slice_new0 (OverviewItem);
       item->url = g_strdup (url->url);
 
       document = webkit_web_page_get_dom_document (overview->web_page);
-      item_list = webkit_dom_document_get_element_by_id (document, "overview-item-list");
-
-      new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "LI", NULL));
-      webkit_dom_node_append_child (WEBKIT_DOM_NODE (item_list), WEBKIT_DOM_NODE (new_node), NULL);
+      div = webkit_dom_document_get_element_by_id (document, "overview");
 
       anchor = webkit_dom_document_create_element (document, "A", NULL);
       item->anchor = g_object_ref (anchor);
       webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (anchor), "overview-item");
       webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (anchor), "href", url->url, NULL);
       webkit_dom_element_set_attribute (WEBKIT_DOM_ELEMENT (anchor), "title", url->title, NULL);
-      webkit_dom_node_append_child (WEBKIT_DOM_NODE (new_node), WEBKIT_DOM_NODE (anchor), NULL);
+      webkit_dom_node_append_child (WEBKIT_DOM_NODE (div), WEBKIT_DOM_NODE (anchor), NULL);
 
       new_node = WEBKIT_DOM_NODE (webkit_dom_document_create_element (document, "DIV", NULL));
       webkit_dom_element_set_class_name (WEBKIT_DOM_ELEMENT (new_node), "overview-close-button");
