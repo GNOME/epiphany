@@ -65,19 +65,18 @@ ephy_form_auth_data_get_secret_attributes_table (const char *uri,
                                                  const char *field_password,
                                                  const char *username)
 {
+  GHashTable *attributes;
+  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA,
+                                        URI_KEY, uri,
+                                        username ? USERNAME_KEY : NULL, username,
+                                        NULL);
+
   if (field_username)
-    return secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA,
-                                    URI_KEY, uri,
-                                    FORM_USERNAME_KEY, field_username,
-                                    FORM_PASSWORD_KEY, field_password,
-                                    username ? USERNAME_KEY : NULL, username,
-                                    NULL);
-  else
-    return secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA,
-                                    URI_KEY, uri,
-                                    FORM_PASSWORD_KEY, field_password,
-                                    username ? USERNAME_KEY : NULL, username,
-                                    NULL);
+    g_hash_table_insert (attributes, g_strdup (FORM_USERNAME_KEY), g_strdup (field_username));
+  if (field_password)
+    g_hash_table_insert (attributes, g_strdup (FORM_PASSWORD_KEY), g_strdup (field_password));
+
+  return attributes;
 }
 
 static void
@@ -113,9 +112,9 @@ ephy_form_auth_data_store (const char         *uri,
   GTask *task;
 
   g_return_if_fail (uri);
-  g_return_if_fail (form_password);
   g_return_if_fail (password);
-  g_return_if_fail ((form_username && username) || (!form_username && !username));
+  g_return_if_fail (!form_username || username);
+  g_return_if_fail (!form_password || password);
 
   fake_uri = soup_uri_new (uri);
   g_return_if_fail (fake_uri);
@@ -241,7 +240,6 @@ ephy_form_auth_data_query (const char                   *uri,
   GHashTable *attributes;
 
   g_return_if_fail (uri);
-  g_return_if_fail (form_password);
 
   key = soup_uri_new (uri);
   g_return_if_fail (key);
@@ -401,7 +399,6 @@ ephy_form_auth_data_cache_add (EphyFormAuthDataCache *cache,
 
   g_return_if_fail (cache);
   g_return_if_fail (uri);
-  g_return_if_fail (form_password);
 
   data = ephy_form_auth_data_new (form_username, form_password, username);
   l = g_hash_table_lookup (cache->form_auth_data_map, uri);

@@ -404,15 +404,17 @@ ephy_form_auth_data_compare (EphyFormAuthData  *form_data,
                              EphyEmbedFormAuth *form_auth)
 {
   WebKitDOMNode *username_node;
+  WebKitDOMNode *password_node;
   char *username_field_name = NULL;
-  char *password_field_name;
+  char *password_field_name = NULL;
   gboolean retval;
 
   username_node = ephy_embed_form_auth_get_username_node (form_auth);
   if (username_node)
     g_object_get (username_node, "name", &username_field_name, NULL);
-  g_object_get (ephy_embed_form_auth_get_password_node (form_auth),
-                "name", &password_field_name, NULL);
+  password_node = ephy_embed_form_auth_get_password_node (form_auth);
+  if (password_node)
+    g_object_get (password_node, "name", &password_field_name, NULL);
 
   retval = g_strcmp0 (username_field_name, form_data->form_username) == 0 &&
            g_strcmp0 (password_field_name, form_data->form_password) == 0;
