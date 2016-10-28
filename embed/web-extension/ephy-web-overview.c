@@ -366,8 +366,8 @@ ephy_web_overview_document_loaded (WebKitWebPage   *web_page,
     if (g_strcmp0 (class, "overview-item") == 0) {
       OverviewItem *item = overview_item_new (element);
 
-      /* URLs and titles are always sent from the UI process, but thumbnails don't,
-       * so update the model with the thumbnail of there's one.
+      /* URLs and titles are always sent from the UI process, but thumbnails
+       * aren't, so update the model with the thumbnail if there's one.
        */
       ephy_web_overview_update_thumbnail_in_model_from_element (overview, item->url, item->thumbnail);
 
