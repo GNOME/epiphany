@@ -320,7 +320,7 @@ main (int   argc,
   }
 
   if (incognito_mode && profile_directory == NULL)
-    profile_directory = g_strdup (ephy_dot_dir ());
+    profile_directory = ephy_default_dot_dir ();
 
   /* Start our services */
   flags = !application_mode ? EPHY_FILE_HELPERS_ENSURE_EXISTS : 0;
