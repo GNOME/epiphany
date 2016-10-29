@@ -1209,5 +1209,21 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
 EphyUriTester *
 ephy_uri_tester_new (void)
 {
-  return g_object_new (EPHY_TYPE_URI_TESTER, "base-data-dir", ephy_dot_dir (), NULL);
+  EphyEmbedShell *shell;
+  EphyEmbedShellMode mode;
+  EphyUriTester *tester;
+  char *data_dir;
+
+  shell = ephy_embed_shell_get_default ();
+  mode = ephy_embed_shell_get_mode (shell);
+
+  /* The filters list is large, so we don't want to store a separate copy per
+   * web app, but users should otherwise be able to configure different filters
+   * per profile directory. */
+  data_dir = mode == EPHY_EMBED_SHELL_MODE_APPLICATION ? ephy_default_dot_dir ()
+                                                       : g_strdup (ephy_dot_dir ());
+
+  tester = g_object_new (EPHY_TYPE_URI_TESTER, "base-data-dir", data_dir, NULL);
+  g_free (data_dir);
+  return tester;
 }
