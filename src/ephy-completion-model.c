@@ -57,6 +57,8 @@ ephy_completion_model_constructed (GObject *object)
                          G_TYPE_INT, G_TYPE_STRING, G_TYPE_BOOLEAN,
                          GDK_TYPE_PIXBUF };
 
+  G_OBJECT_CLASS (ephy_completion_model_parent_class)->constructed (object);
+
   gtk_list_store_set_column_types (GTK_LIST_STORE (object),
                                    N_COL,
                                    types);
