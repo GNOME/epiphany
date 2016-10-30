@@ -148,7 +148,7 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
   object_class->finalize = ephy_bookmarks_manager_finalize;
 
   signals[BOOKMARK_ADDED] =
-      g_signal_new ("bookmark-added",
+    g_signal_new ("bookmark-added",
                   EPHY_TYPE_BOOKMARKS_MANAGER,
                   G_SIGNAL_RUN_LAST,
                   0,
