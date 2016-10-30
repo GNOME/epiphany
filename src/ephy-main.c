@@ -141,27 +141,6 @@ get_startup_id (void)
   return retval;
 }
 
-static void
-show_error_message (GError **error)
-{
-  GtkWidget *dialog;
-
-  /* FIXME better texts!!! */
-  dialog = gtk_message_dialog_new (NULL,
-                                   GTK_DIALOG_MODAL,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_CLOSE,
-                                   _("Could not start Web"));
-  gtk_message_dialog_format_secondary_text
-    (GTK_MESSAGE_DIALOG (dialog),
-    _("Startup failed because of the following error:\n%s"),
-    (*error)->message);
-
-  g_clear_error (error);
-
-  gtk_dialog_run (GTK_DIALOG (dialog));
-}
-
 static EphyStartupFlags
 get_startup_flags (void)
 {
@@ -332,10 +311,8 @@ main (int   argc,
   if (profile_directory && !incognito_mode)
     flags |= EPHY_FILE_HELPERS_KEEP_DIR;
 
-  if (!ephy_file_helpers_init (profile_directory, flags,
-                               &error)) {
-    show_error_message (&error);
-    exit (1);
+  if (!ephy_file_helpers_init (profile_directory, flags, &error)) {
+    g_error ("Fatal initialization error: %s", error->message);
   }
 
   /* Run the migration in all cases, except when running a private
