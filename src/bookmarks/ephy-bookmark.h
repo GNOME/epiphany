@@ -73,4 +73,8 @@ int                  ephy_bookmark_tags_compare          (const char *tag1,
 char                *ephy_bookmark_to_bso                (EphyBookmark *self);
 EphyBookmark        *ephy_bookmark_from_bso              (JsonObject *bso);
 
+gboolean             ephy_bookmark_is_smart              (EphyBookmark *self);
+char                *ephy_bookmark_resolve_smart_url     (EphyBookmark *self,
+                                                          const char   *search_term);
+
 G_END_DECLS

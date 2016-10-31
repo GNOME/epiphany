@@ -487,6 +487,39 @@ ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
   return bookmarks;
 }
 
+static int
+compare_smart_bookmarks (EphyBookmark *a,
+                         EphyBookmark *b)
+{
+  return g_utf8_collate (ephy_bookmark_get_title (a), ephy_bookmark_get_title (b));
+}
+
+GSequence *
+ephy_bookmarks_manager_get_smart_bookmarks (EphyBookmarksManager *self)
+{
+  GSequence *bookmarks;
+  GSequenceIter *iter;
+
+  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self), NULL);
+
+  bookmarks = g_sequence_new (g_object_unref);
+
+  for (iter = g_sequence_get_begin_iter (self->bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
+
+    if (ephy_bookmark_is_smart (bookmark)) {
+      g_sequence_insert_sorted (bookmarks,
+                                bookmark,
+                                (GCompareDataFunc)compare_smart_bookmarks,
+                                NULL);
+    }
+  }
+
+  return bookmarks;
+}
+
 GSequence *
 ephy_bookmarks_manager_get_tags (EphyBookmarksManager *self)
 {

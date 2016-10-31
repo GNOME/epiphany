@@ -51,6 +51,7 @@ gboolean     ephy_bookmarks_manager_tag_exists                    (EphyBookmarks
 GSequence   *ephy_bookmarks_manager_get_bookmarks                 (EphyBookmarksManager *self);
 GSequence   *ephy_bookmarks_manager_get_bookmarks_with_tag        (EphyBookmarksManager *self,
                                                                    const char           *tag);
+GSequence   *ephy_bookmarks_manager_get_smart_bookmarks           (EphyBookmarksManager *self);
 GSequence   *ephy_bookmarks_manager_get_tags                      (EphyBookmarksManager *self);
 
 void        ephy_bookmarks_manager_save_to_file_async             (EphyBookmarksManager *self,

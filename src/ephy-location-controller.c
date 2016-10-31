@@ -22,16 +22,18 @@
 #include "config.h"
 #include "ephy-location-controller.h"
 
-#include "ephy-widgets-type-builtins.h"
+#include "ephy-bookmark.h"
+#include "ephy-bookmarks-manager.h"
 #include "ephy-completion-model.h"
 #include "ephy-debug.h"
+#include "ephy-dnd.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
-#include "ephy-dnd.h"
 #include "ephy-shell.h"
 #include "ephy-title-widget.h"
+#include "ephy-widgets-type-builtins.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -49,6 +51,8 @@ struct _EphyLocationController {
 
   EphyWindow *window;
   EphyTitleWidget *title_widget;
+  EphyBookmarksManager *bookmarks_manager;
+  GSequence *smart_bookmarks;
   char *address;
   guint editable : 1;
   gboolean sync_address_is_blocked;
@@ -83,6 +87,35 @@ match_func (GtkEntryCompletion *completion,
 {
   /* We want every row in the model to show up. */
   return TRUE;
+}
+
+static void
+action_activated_cb (GtkEntryCompletion     *completion,
+                     int                     index,
+                     EphyLocationController *controller)
+{
+  GtkWidget *entry;
+  char *content;
+  char *url;
+  GSequenceIter *iter;
+  EphyBookmark *bookmark;
+
+  entry = gtk_entry_completion_get_entry (completion);
+  content = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+
+  if (content == NULL)
+    return;
+
+  iter = g_sequence_get_iter_at_pos (controller->smart_bookmarks, index);
+  g_assert (!g_sequence_iter_is_end (iter));
+  bookmark = g_sequence_get (iter);
+  url = ephy_bookmark_resolve_smart_url (bookmark, content);
+
+  ephy_link_open (EPHY_LINK (controller), url, NULL,
+                  ephy_link_flags_from_current_event () | EPHY_LINK_TYPED);
+
+  g_free (content);
+  g_free (url);
 }
 
 static void
@@ -148,9 +181,11 @@ entry_activate_cb (GtkEntry               *entry,
   }
 
   content = gtk_entry_get_text (entry);
-  if (content == NULL || content[0] == '\0') return;
+  if (content == NULL || content[0] == '\0')
+    return;
 
   address = g_strdup (content);
+
   effective_address = ephy_embed_utils_normalize_or_autosearch_address (g_strstrip (address));
   g_free (address);
 #if 0
@@ -242,6 +277,84 @@ get_title_cb (EphyLocationEntry      *entry,
   return g_strdup (ephy_embed_get_title (embed));
 }
 
+static void
+remove_completion_actions (EphyLocationController *controller,
+                           EphyLocationEntry      *lentry)
+{
+  GtkEntryCompletion *completion;
+  gint num_actions;
+
+  completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
+  num_actions = g_sequence_get_length (controller->smart_bookmarks);
+
+  for (int i = 0; i < num_actions; i++)
+    gtk_entry_completion_delete_action (completion, 0);
+
+  g_signal_handlers_disconnect_by_func (completion,
+                                        G_CALLBACK (action_activated_cb),
+                                        controller);
+}
+
+static void
+refresh_smart_bookmarks (EphyLocationController *controller)
+{
+  if (controller->smart_bookmarks != NULL)
+    g_sequence_free (controller->smart_bookmarks);
+
+  controller->smart_bookmarks = ephy_bookmarks_manager_get_smart_bookmarks (controller->bookmarks_manager);
+}
+
+static void
+add_completion_actions (EphyLocationController *controller,
+                        EphyLocationEntry      *lentry)
+{
+  GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
+  GSequenceIter *iter;
+  int i = 0;
+
+  for (iter = g_sequence_get_begin_iter (controller->smart_bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter), i++) {
+    EphyBookmark *bookmark;
+    const char *title;
+
+    bookmark = g_sequence_get (iter);
+    title = ephy_bookmark_get_title (bookmark);
+    gtk_entry_completion_insert_action_text (completion, i, title);
+  }
+
+  g_signal_connect (completion, "action_activated",
+                    G_CALLBACK (action_activated_cb), controller);
+}
+
+static void
+update_actions_list (EphyLocationController *controller)
+{
+  g_assert (EPHY_IS_LOCATION_ENTRY (controller->title_widget));
+
+  remove_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
+  refresh_smart_bookmarks (controller);
+  add_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
+}
+
+static void
+bookmark_added_cb (EphyBookmarksManager   *manager,
+                   EphyBookmark           *bookmark,
+                   EphyLocationController *controller)
+{
+  if (ephy_bookmark_is_smart (bookmark))
+    update_actions_list (controller);
+}
+
+static void
+bookmark_removed_cb (EphyBookmarksManager   *manager,
+                     EphyBookmark           *bookmark,
+                     EphyLocationController *controller)
+{
+  if (ephy_bookmark_is_smart (bookmark))
+    update_actions_list (controller);
+}
+
 static gboolean
 focus_in_event_cb (GtkWidget              *entry,
                    GdkEventFocus          *event,
@@ -322,6 +435,16 @@ ephy_location_controller_constructed (GObject *object)
                                       match_func,
                                       controller->title_widget,
                                       NULL);
+
+  refresh_smart_bookmarks (controller);
+  add_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
+
+  /* FIXME: This is not enough. We miss when an existing bookmark is edited.
+   * Need to add a bookmark-modified signal to EphyBookmarksManager. */
+  g_signal_connect_object (controller->bookmarks_manager, "bookmark-added",
+                           G_CALLBACK (bookmark_added_cb), controller, 0);
+  g_signal_connect_object (controller->bookmarks_manager, "bookmark-removed",
+                           G_CALLBACK (bookmark_removed_cb), controller, 0);
 
   g_object_bind_property (controller, "editable",
                           controller->title_widget, "editable",
@@ -484,6 +607,7 @@ ephy_location_controller_init (EphyLocationController *controller)
 {
   controller->address = g_strdup ("");
   controller->editable = TRUE;
+  controller->bookmarks_manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   controller->sync_address_is_blocked = FALSE;
 }
 
@@ -492,6 +616,7 @@ ephy_location_controller_finalize (GObject *object)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
 
+  g_sequence_free (controller->smart_bookmarks);
   g_free (controller->address);
 
   G_OBJECT_CLASS (ephy_location_controller_parent_class)->finalize (object);
