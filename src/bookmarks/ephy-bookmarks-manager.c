@@ -216,8 +216,17 @@ static guint
 ephy_bookmarks_manager_list_model_get_n_items (GListModel *model)
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
+  int count = 0;
 
-  return g_sequence_get_length (self->bookmarks);
+  for (GSequenceIter *iter = g_sequence_get_begin_iter (self->bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark = g_sequence_get (iter);
+    if (!ephy_bookmark_is_smart (bookmark))
+      count++;
+  }
+
+  return count;
 }
 
 static gpointer
@@ -225,11 +234,18 @@ ephy_bookmarks_manager_list_model_get_item (GListModel *model,
                                             guint       position)
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
-  GSequenceIter *iter;
+  GSequenceIter *iter = g_sequence_get_begin_iter (self->bookmarks);
+  EphyBookmark *bookmark = NULL;
+  guint i = 0;
 
-  iter = g_sequence_get_iter_at_pos (self->bookmarks, position);
+  do {
+    bookmark = g_sequence_get (iter);
+    if (!ephy_bookmark_is_smart (bookmark))
+      i++;
+    iter = g_sequence_iter_next (iter);
+  } while (i <= position);
 
-  return g_object_ref (g_sequence_get (iter));
+  return bookmark ? g_object_ref (bookmark) : NULL;
 }
 
 static void
