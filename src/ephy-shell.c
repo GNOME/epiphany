@@ -905,6 +905,13 @@ ephy_shell_close_all_windows (EphyShell *shell)
   return retval;
 }
 
+void
+ephy_shell_try_quit (EphyShell *shell)
+{
+  if (ephy_shell_close_all_windows (shell))
+    g_application_quit (G_APPLICATION (shell));
+}
+
 typedef struct {
   EphyShell *shell;
   EphySession *session;
@@ -1054,4 +1061,3 @@ ephy_shell_open_uris (EphyShell       *shell,
 
   shell->open_uris_idle_ids = g_slist_prepend (shell->open_uris_idle_ids, GUINT_TO_POINTER (id));
 }
-

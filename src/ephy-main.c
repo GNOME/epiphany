@@ -34,10 +34,12 @@
 
 #include <errno.h>
 #include <glib/gi18n.h>
+#include <glib-unix.h>
 #include <gtk/gtk.h>
 #include <libnotify/notify.h>
 #include <libxml/xmlreader.h>
 #include <libxml/xmlversion.h>
+#include <signal.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -55,6 +57,31 @@ static gboolean incognito_mode = FALSE;
 static gboolean application_mode = FALSE;
 static char *desktop_file_basename = NULL;
 static char *profile_directory = NULL;
+
+static EphyShell *ephy_shell = NULL;
+static int shutdown_signum = 0;
+
+static gboolean
+handle_shutdown_signal (gpointer user_data)
+{
+  shutdown_signum = GPOINTER_TO_INT (user_data);
+
+  /* Note that this function executes on the main loop AFTER the signal handler
+   * has returned, so we don't have to worry about async signal safety.
+   */
+  g_assert (ephy_shell != NULL);
+  ephy_shell_try_quit (ephy_shell);
+
+  /* Goals:
+   *
+   * (1) Shutdown safely and cleanly if signal is received once.
+   * (2) Shutdown unsafely but immediately if signal is received twice.
+   * (3) Always re-raise the signal so the parent process knows what happened.
+   *
+   * Removing this source is required by goals (2) and (3).
+   */
+  return G_SOURCE_REMOVE;
+}
 
 static gboolean
 application_mode_cb (const gchar *option_name,
@@ -166,7 +193,6 @@ main (int   argc,
   EphyShellStartupContext *ctx;
   EphyStartupFlags startup_flags;
   EphyEmbedShellMode mode;
-  EphyShell *ephy_shell;
   int status;
   EphyFileHelpersFlags flags;
   GDesktopAppInfo *desktop_info = NULL;
@@ -400,6 +426,10 @@ main (int   argc,
   g_strfreev (arguments);
   ephy_shell = ephy_shell_get_default ();
   ephy_shell_set_startup_context (ephy_shell, ctx);
+
+  g_unix_signal_add (SIGINT, (GSourceFunc)handle_shutdown_signal, GINT_TO_POINTER (SIGINT));
+  g_unix_signal_add (SIGTERM, (GSourceFunc)handle_shutdown_signal, GINT_TO_POINTER (SIGTERM));
+
   status = g_application_run (G_APPLICATION (ephy_shell), argc, argv);
 
   /* Shutdown */
@@ -414,6 +444,9 @@ main (int   argc,
   ephy_settings_shutdown ();
   ephy_file_helpers_shutdown ();
   xmlCleanupParser ();
+
+  if (shutdown_signum != 0)
+    raise (shutdown_signum);
 
   return status;
 }

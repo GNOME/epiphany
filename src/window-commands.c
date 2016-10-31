@@ -283,8 +283,7 @@ window_cmd_quit (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
 {
-  if (ephy_shell_close_all_windows (ephy_shell_get_default ()))
-    g_application_quit (g_application_get_default ());
+  ephy_shell_try_quit (ephy_shell_get_default ());
 }
 
 void
