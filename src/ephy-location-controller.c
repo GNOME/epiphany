@@ -338,18 +338,9 @@ update_actions_list (EphyLocationController *controller)
 }
 
 static void
-bookmark_added_cb (EphyBookmarksManager   *manager,
-                   EphyBookmark           *bookmark,
-                   EphyLocationController *controller)
-{
-  if (ephy_bookmark_is_smart (bookmark))
-    update_actions_list (controller);
-}
-
-static void
-bookmark_removed_cb (EphyBookmarksManager   *manager,
-                     EphyBookmark           *bookmark,
-                     EphyLocationController *controller)
+bookmark_modified_cb (EphyBookmarksManager   *manager,
+                      EphyBookmark           *bookmark,
+                      EphyLocationController *controller)
 {
   if (ephy_bookmark_is_smart (bookmark))
     update_actions_list (controller);
@@ -439,12 +430,14 @@ ephy_location_controller_constructed (GObject *object)
   refresh_smart_bookmarks (controller);
   add_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
 
-  /* FIXME: This is not enough. We miss when an existing bookmark is edited.
-   * Need to add a bookmark-modified signal to EphyBookmarksManager. */
   g_signal_connect_object (controller->bookmarks_manager, "bookmark-added",
-                           G_CALLBACK (bookmark_added_cb), controller, 0);
+                           G_CALLBACK (bookmark_modified_cb), controller, 0);
   g_signal_connect_object (controller->bookmarks_manager, "bookmark-removed",
-                           G_CALLBACK (bookmark_removed_cb), controller, 0);
+                           G_CALLBACK (bookmark_modified_cb), controller, 0);
+  g_signal_connect_object (controller->bookmarks_manager, "bookmark-title-changed",
+                           G_CALLBACK (bookmark_modified_cb), controller, 0);
+  g_signal_connect_object (controller->bookmarks_manager, "bookmark-url-changed",
+                           G_CALLBACK (bookmark_modified_cb), controller, 0);
 
   g_object_bind_property (controller, "editable",
                           controller->title_widget, "editable",

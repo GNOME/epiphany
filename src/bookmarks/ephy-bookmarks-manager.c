@@ -46,6 +46,8 @@ G_DEFINE_TYPE_EXTENDED (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJ
 enum {
   BOOKMARK_ADDED,
   BOOKMARK_REMOVED,
+  BOOKMARK_TITLE_CHANGED,
+  BOOKMARK_URL_CHANGED,
   TAG_CREATED,
   TAG_DELETED,
   LAST_SIGNAL
@@ -165,6 +167,24 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_BOOKMARK);
 
+  signals[BOOKMARK_TITLE_CHANGED] =
+    g_signal_new ("bookmark-title-changed",
+                  EPHY_TYPE_BOOKMARKS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  EPHY_TYPE_BOOKMARK);
+
+  signals[BOOKMARK_URL_CHANGED] =
+    g_signal_new ("bookmark-url-changed",
+                  EPHY_TYPE_BOOKMARKS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  EPHY_TYPE_BOOKMARK);
+
   signals[TAG_CREATED] =
     g_signal_new ("tag-created",
                   EPHY_TYPE_BOOKMARKS_MANAGER,
@@ -256,6 +276,22 @@ list_model_iface_init (GListModelInterface *iface)
   iface->get_item = ephy_bookmarks_manager_list_model_get_item;
 }
 
+static void
+bookmark_title_changed_cb (EphyBookmark         *bookmark,
+                           GParamSpec           *pspec,
+                           EphyBookmarksManager *self)
+{
+  g_signal_emit (self, signals[BOOKMARK_TITLE_CHANGED], 0, bookmark);
+}
+
+static void
+bookmark_url_changed_cb (EphyBookmark         *bookmark,
+                         GParamSpec           *pspec,
+                         EphyBookmarksManager *self)
+{
+  g_signal_emit (self, signals[BOOKMARK_URL_CHANGED], 0, bookmark);
+}
+
 void
 ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                      EphyBookmark         *bookmark)
@@ -288,6 +324,11 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                                  (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                                  NULL);
   }
+
+  g_signal_connect_object (bookmark, "notify::title",
+                           G_CALLBACK (bookmark_title_changed_cb), self, 0);
+  g_signal_connect_object (bookmark, "notify::url",
+                           G_CALLBACK (bookmark_url_changed_cb), self, 0);
 }
 
 void
@@ -347,6 +388,9 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                              (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                              NULL);
+
+  g_signal_handlers_disconnect_by_func (bookmark, bookmark_title_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (bookmark, bookmark_url_changed_cb, self);
 }
 
 EphyBookmark *
