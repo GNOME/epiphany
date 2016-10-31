@@ -464,7 +464,7 @@ window_cmd_new_tab (GSimpleAction *action,
   ephy_link_open (EPHY_LINK (window),
                   "about:overview",
                   NULL,
-                  EPHY_LINK_HOME_PAGE | EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
+                  EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
 }
 
 static void

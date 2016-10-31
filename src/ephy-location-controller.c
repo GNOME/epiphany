@@ -351,7 +351,12 @@ focus_in_event_cb (GtkWidget              *entry,
                    GdkEventFocus          *event,
                    EphyLocationController *controller)
 {
-  if (!controller->sync_address_is_blocked) {
+  const char *address;
+
+  /* Never block sync if the location entry is empty, else homepage URL
+   * will be missing in homepage mode. */
+  address = ephy_title_widget_get_address (controller->title_widget);
+  if (!controller->sync_address_is_blocked && address && *address) {
     controller->sync_address_is_blocked = TRUE;
     g_signal_handlers_block_by_func (controller, G_CALLBACK (sync_address), entry);
   }

@@ -993,7 +993,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
     page_flags |= EPHY_NEW_TAB_APPEND_AFTER;
   else if (data->reuse_empty_tab) {
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (data->window));
-    /* Only load a new page in this embed if it was showing or loading the homepage about:overview */
+    /* Only load a new page in this embed if it was showing or loading the homepage */
     if (ephy_web_view_get_visit_type (ephy_embed_get_web_view (embed)) == EPHY_PAGE_VISIT_HOMEPAGE)
       reusing_empty_tab = TRUE;
   }

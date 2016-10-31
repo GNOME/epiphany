@@ -3087,22 +3087,34 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
  * ephy_web_view_load_homepage:
  * @view: an #EphyWebView
  *
- * Loads the homepage, which is hardcoded to be "about:overview"
- *
+ * Loads the homepage set by the user in @view.
  **/
 void
 ephy_web_view_load_homepage (EphyWebView *view)
 {
+  EphyEmbedShell *shell;
+  EphyEmbedShellMode mode;
+
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
+  shell = ephy_embed_shell_get_default ();
+  mode = ephy_embed_shell_get_mode (shell);
+
   ephy_web_view_freeze_history (view);
-  ephy_web_view_set_visit_type (view,
-                                EPHY_PAGE_VISIT_HOMEPAGE);
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ())
-      == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+  ephy_web_view_set_visit_type (view, EPHY_PAGE_VISIT_HOMEPAGE);
+  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     ephy_web_view_load_url (view, "about:incognito");
-  else
-    ephy_web_view_load_url (view, "about:overview");
+  } else {
+    char *home;
+    home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
+    if (home == NULL || home[0] == '\0') {
+      g_free (home);
+      home = g_strdup ("about:overview");
+    }
+
+    ephy_web_view_load_url (view, home);
+    g_free (home);
+  }
 }
 
 /**
