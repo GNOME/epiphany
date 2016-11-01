@@ -1140,6 +1140,7 @@ sync_tab_bookmarked_status (EphyWebView   *view,
                             EphyWindow    *window)
 {
   EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  EphyLocationEntryBookmarkIconState state;
   GtkWidget *widget;
   EphyBookmark *bookmark;
   const char *address;
@@ -1151,11 +1152,15 @@ sync_tab_bookmarked_status (EphyWebView   *view,
 
   address = ephy_web_view_get_address (view);
 
-  if (address) {
+  if (!address || ephy_embed_utils_is_no_show_address (address)) {
+    state = EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN;
+  } else {
     bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
-    ephy_location_entry_set_bookmarked_status (EPHY_LOCATION_ENTRY (widget),
-                                               bookmark != NULL);
+    state = bookmark ? EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED
+                     : EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY;
   }
+
+  ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (widget), state);
 }
 
 static void

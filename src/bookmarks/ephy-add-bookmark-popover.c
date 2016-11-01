@@ -155,8 +155,8 @@ ephy_add_bookmark_popover_update_bookmarked_status_cb (EphyAddBookmarkPopover *s
   address = ephy_web_view_get_address (view);
 
   if (g_strcmp0 (ephy_bookmark_get_url (bookmark), address) == 0) {
-    ephy_location_entry_set_bookmarked_status (EPHY_LOCATION_ENTRY (location_entry),
-                                               FALSE);
+    ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (location_entry),
+                                                 EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY);
   }
 
   ephy_bookmarks_manager_save_to_file_async (manager, NULL,
@@ -195,7 +195,8 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
                                   g_sequence_new (g_free));
 
     ephy_bookmarks_manager_add_bookmark (manager, bookmark);
-    ephy_location_entry_set_bookmarked_status (EPHY_LOCATION_ENTRY (location_entry), TRUE);
+    ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (location_entry),
+                                                 EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED);
   }
 
   g_signal_connect_object (manager, "bookmark-removed",

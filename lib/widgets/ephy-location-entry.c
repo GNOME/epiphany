@@ -1171,8 +1171,8 @@ ephy_location_entry_activate (EphyLocationEntry *entry)
 }
 
 void
-ephy_location_entry_set_bookmarked_status (EphyLocationEntry *entry,
-                                           gboolean           is_bookmarked)
+ephy_location_entry_set_bookmark_icon_state (EphyLocationEntry                  *entry,
+                                             EphyLocationEntryBookmarkIconState  state)
 {
   GtkStyleContext *context;
 
@@ -1180,18 +1180,30 @@ ephy_location_entry_set_bookmarked_status (EphyLocationEntry *entry,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
 
-  if (is_bookmarked) {
-    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
-                                       GTK_ENTRY_ICON_SECONDARY,
-                                       "starred-symbolic");
-    gtk_style_context_remove_class (context, "non-starred");
-    gtk_style_context_add_class (context, "starred");
-  } else {
-    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
-                                       GTK_ENTRY_ICON_SECONDARY,
-                                       "non-starred-symbolic");
-    gtk_style_context_remove_class (context, "starred");
-    gtk_style_context_add_class (context, "non-starred");
+  switch (state) {
+    case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN:
+      gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                         GTK_ENTRY_ICON_SECONDARY,
+                                         NULL);
+      gtk_style_context_remove_class (context, "starred");
+      gtk_style_context_remove_class (context, "non-starred");
+      break;
+    case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY:
+      gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                         GTK_ENTRY_ICON_SECONDARY,
+                                         "non-starred-symbolic");
+      gtk_style_context_remove_class (context, "starred");
+      gtk_style_context_add_class (context, "non-starred");
+      break;
+    case EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED:
+      gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                         GTK_ENTRY_ICON_SECONDARY,
+                                         "starred-symbolic");
+      gtk_style_context_remove_class (context, "non-starred");
+      gtk_style_context_add_class (context, "starred");
+      break;
+    default:
+      g_assert_not_reached ();
   }
 }
 

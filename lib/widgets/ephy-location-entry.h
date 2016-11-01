@@ -33,6 +33,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkEntry)
 
+typedef enum {
+  EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN,
+  EPHY_LOCATION_ENTRY_BOOKMARK_ICON_EMPTY,
+  EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED
+} EphyLocationEntryBookmarkIconState;
+
 GtkWidget      *ephy_location_entry_new                        (void);
 
 void            ephy_location_entry_set_completion             (EphyLocationEntry *entry,
@@ -62,8 +68,8 @@ void            ephy_location_entry_undo_reset                 (EphyLocationEntr
 
 void            ephy_location_entry_activate                   (EphyLocationEntry *entry);
 
-void            ephy_location_entry_set_bookmarked_status      (EphyLocationEntry *entry,
-                                                                gboolean           is_bookmarked);
+void            ephy_location_entry_set_bookmark_icon_state    (EphyLocationEntry                  *entry,
+                                                                EphyLocationEntryBookmarkIconState  state);
 
 void            ephy_location_entry_set_lock_tooltip           (EphyLocationEntry *entry,
                                                                 const char        *tooltip);
