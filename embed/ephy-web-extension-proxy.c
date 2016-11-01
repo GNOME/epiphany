@@ -53,7 +53,11 @@ ephy_web_extension_proxy_dispose (GObject *object)
     web_extension->page_created_signal_id = 0;
   }
 
-  g_clear_object (&web_extension->cancellable);
+  if (web_extension->cancellable) {
+    g_cancellable_cancel (web_extension->cancellable);
+    g_clear_object (&web_extension->cancellable);
+  }
+
   g_clear_object (&web_extension->proxy);
   g_clear_object (&web_extension->connection);
 
@@ -121,6 +125,7 @@ web_extension_proxy_created_cb (GDBusProxy            *proxy,
                              web_extension->cancellable,
                              NULL /* GAsyncReadyCallback */,
                              NULL);
+    g_object_unref (web_extension);
     return;
   }
 
@@ -135,6 +140,7 @@ web_extension_proxy_created_cb (GDBusProxy            *proxy,
                                         (GDBusSignalCallback)web_extension_page_created,
                                         web_extension,
                                         NULL);
+  g_object_unref (web_extension);
 }
 
 static void
@@ -174,7 +180,7 @@ ephy_web_extension_proxy_new (GDBusConnection *connection)
                     EPHY_WEB_EXTENSION_INTERFACE,
                     web_extension->cancellable,
                     (GAsyncReadyCallback)web_extension_proxy_created_cb,
-                    web_extension);
+                    g_object_ref (web_extension));
 
   return web_extension;
 }
