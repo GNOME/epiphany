@@ -27,7 +27,6 @@
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
-#include "ephy-private.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-web-view.h"

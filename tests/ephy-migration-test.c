@@ -22,9 +22,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
-#include "ephy-embed-private.h"
 #include "ephy-file-helpers.h"
-#include "ephy-private.h"
 #include "ephy-profile-utils.h"
 
 #include <gtk/gtk.h>

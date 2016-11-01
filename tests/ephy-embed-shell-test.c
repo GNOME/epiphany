@@ -26,7 +26,6 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
-#include "ephy-private.h"
 
 #include <glib.h>
 #include <gtk/gtk.h>

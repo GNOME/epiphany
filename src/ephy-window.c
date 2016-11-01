@@ -40,7 +40,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
-#include "ephy-private.h"
 #include "ephy-security-popover.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"

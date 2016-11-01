@@ -30,7 +30,6 @@
 #include "ephy-smaps.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-web-app-utils.h"
-#include "ephy-embed-private.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>

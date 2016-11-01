@@ -44,7 +44,6 @@
 #include "ephy-location-entry.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
-#include "ephy-private.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"

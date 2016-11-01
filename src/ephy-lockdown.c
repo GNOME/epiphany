@@ -28,9 +28,11 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed-utils.h"
+#include "ephy-location-controller.h"
 #include "ephy-prefs.h"
-#include "ephy-private.h"
 #include "ephy-settings.h"
+#include "ephy-shell.h"
+#include "ephy-window.h"
 
 #include <gtk/gtk.h>
 

@@ -23,7 +23,6 @@
 #include "ephy-download.h"
 #include "ephy-embed-prefs.h"
 #include "ephy-file-helpers.h"
-#include "ephy-private.h"
 #include "ephy-shell.h"
 
 #include <glib.h>

@@ -52,7 +52,6 @@ libephymain_la_SOURCES = \
 	ephy-lockdown.h				\
 	ephy-notebook.c				\
 	ephy-notebook.h				\
-	ephy-private.h				\
 	ephy-session.c				\
 	ephy-session.h				\
 	ephy-shell.c				\

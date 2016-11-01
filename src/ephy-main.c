@@ -24,7 +24,6 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-private.h"
 #include "ephy-profile-utils.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"

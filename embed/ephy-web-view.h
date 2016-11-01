@@ -23,6 +23,8 @@
 
 #include <webkit2/webkit2.h>
 
+#include "ephy-embed-shell.h"
+#include "ephy-history-types.h"
 #include "ephy-security-levels.h"
 
 G_BEGIN_DECLS
@@ -30,6 +32,19 @@ G_BEGIN_DECLS
 #define EPHY_TYPE_WEB_VIEW (ephy_web_view_get_type ())
 
 G_DECLARE_FINAL_TYPE (EphyWebView, ephy_web_view, EPHY, WEB_VIEW, WebKitWebView)
+
+#define EPHY_WEB_VIEW_NON_SEARCH_REGEX  "(" \
+                                        "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9](:[0-9]+)?.*$|" \
+                                        "^::[0-9a-f:]*$|" \
+                                        "^[0-9a-f:]+:[0-9a-f:]*$|" \
+                                        "^https?://[^/\\.[:space:]]+.*$|" \
+                                        "^about:.*$|" \
+                                        "^data:.*$|" \
+                                        "^file:.*$" \
+                                        ")"
+
+#define EPHY_WEB_VIEW_DOMAIN_REGEX "^localhost(\\.[^[:space:]]+)?(:\\d+)?(:[0-9]+)?(/.*)?$|" \
+                                   "^[^\\.[:space:]]+\\.[^\\.[:space:]]+.*$|"
 
 typedef enum
 {
@@ -115,5 +130,17 @@ void                       ephy_web_view_get_web_app_title        (EphyWebView  
 char                      *ephy_web_view_get_web_app_title_finish (EphyWebView               *view,
                                                                    GAsyncResult              *result,
                                                                    GError                   **error);
+
+void                       ephy_web_view_set_visit_type           (EphyWebView *view, 
+                                                                   EphyHistoryPageVisitType visit_type);
+EphyHistoryPageVisitType   ephy_web_view_get_visit_type           (EphyWebView *view);
+void                       ephy_web_view_popups_manager_reset     (EphyWebView               *view);
+void                       ephy_web_view_save                     (EphyWebView               *view,
+                                                                   const char                *uri);
+void                       ephy_web_view_load_homepage            (EphyWebView               *view);
+
+char *                     ephy_web_view_create_web_application   (EphyWebView               *view,
+                                                                   const char                *title,
+                                                                   GdkPixbuf                 *icon);
 
 G_END_DECLS

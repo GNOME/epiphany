@@ -25,7 +25,6 @@
 #include "ephy-embed-utils.h"
 
 #include "ephy-about-handler.h"
-#include "ephy-embed-private.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 #include "ephy-view-source-handler.h"

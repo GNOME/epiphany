@@ -33,7 +33,6 @@
 #include "ephy-gui.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
-#include "ephy-private.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"

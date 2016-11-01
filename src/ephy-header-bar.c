@@ -38,7 +38,6 @@
 #include "ephy-history-service.h"
 #include "ephy-location-entry.h"
 #include "ephy-middle-clickable-button.h"
-#include "ephy-private.h"
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"

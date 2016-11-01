@@ -21,6 +21,8 @@
 #pragma once
 
 #include "ephy-bookmarks-manager.h"
+#include "ephy-embed-event.h"
+#include "ephy-location-controller.h"
 #include "ephy-web-view.h"
 
 #include <gtk/gtk.h>
@@ -59,5 +61,14 @@ GtkWidget        *ephy_window_get_header_bar      (EphyWindow *window);
 gboolean          ephy_window_close               (EphyWindow *window);
 
 EphyWindowChrome  ephy_window_get_chrome          (EphyWindow *window);
+
+EphyLocationController  *ephy_window_get_location_controller (EphyWindow *window);
+
+EphyEmbedEvent   *ephy_window_get_context_event        (EphyWindow *window);
+
+GtkWidget        *ephy_window_get_current_find_toolbar (EphyWindow *window);
+
+void              ephy_window_set_location             (EphyWindow *window,
+                                                        const char *address);
 
 G_END_DECLS

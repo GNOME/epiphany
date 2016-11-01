@@ -27,7 +27,6 @@ libephyembed_la_SOURCES = \
 	ephy-embed-event.h		\
 	ephy-embed-prefs.c		\
 	ephy-embed-prefs.h		\
-	ephy-embed-private.h		\
 	ephy-embed-shell.c		\
 	ephy-embed-shell.h		\
 	ephy-embed-utils.c              \

@@ -118,4 +118,17 @@ void            ephy_shell_open_uris                    (EphyShell *shell,
                                                          const char **uris,
                                                          EphyStartupFlags startup_flags,
                                                          guint32 user_time);
+
+void            ephy_shell_set_startup_context          (EphyShell               *shell,
+                                                         EphyShellStartupContext *ctx);
+
+EphyShellStartupContext *ephy_shell_startup_context_new (EphyStartupFlags  startup_flags,
+                                                         char             *bookmarks_filename,
+                                                         char             *session_filename,
+                                                         char             *bookmark_url,
+                                                         char            **arguments,
+                                                         guint32           user_time);
+
+void            _ephy_shell_create_instance             (EphyEmbedShellMode mode);
+
 G_END_DECLS

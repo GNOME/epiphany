@@ -21,9 +21,8 @@
 #include "config.h"
 
 #include "ephy-search-provider.h"
-#include "ephy-embed-shell.h"
+#include "ephy-shell.h"
 #include "ephy-file-helpers.h"
-#include "ephy-private.h"
 
 #include <glib/gi18n.h>
 #include <locale.h>
