@@ -1043,6 +1043,8 @@ https_everywhere_context_init_cb (HTTPSEverywhereContext *context,
   g_list_free_full (tester->deferred_requests, (GDestroyNotify)deferred_request_free);
 
   ephy_uri_tester_update_https_everywhere_rulesets (tester);
+
+  g_object_unref (tester);
 }
 
 static void
@@ -1111,7 +1113,7 @@ ephy_uri_tester_constructed (GObject *object)
   https_everywhere_context_init (tester->https_everywhere_context,
                                  tester->cancellable,
                                  (GAsyncReadyCallback)https_everywhere_context_init_cb,
-                                 tester);
+                                 g_object_ref (tester));
 
   ephy_uri_tester_load_filters (tester);
   ephy_uri_tester_load_patterns (tester);
@@ -1145,7 +1147,10 @@ ephy_uri_tester_dispose (GObject *object)
 
   LOG ("EphyUriTester disposing %p", object);
 
-  g_clear_object (&tester->cancellable);
+  if (tester->cancellable) {
+    g_cancellable_cancel (tester->cancellable);
+    g_clear_object (&tester->cancellable);
+  }
 
   G_OBJECT_CLASS (ephy_uri_tester_parent_class)->dispose (object);
 }
