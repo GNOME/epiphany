@@ -50,7 +50,6 @@ struct _EphyWebExtension {
   gboolean initialized;
 
   GDBusConnection *dbus_connection;
-  GCancellable *cancellable;
 
   EphyFormAuthDataCache *form_auth_data_cache;
   GHashTable *form_auth_data_save_requests;
@@ -1293,9 +1292,7 @@ ephy_web_extension_dispose (GObject *object)
     extension->form_auth_data_save_requests = NULL;
   }
 
-  g_clear_object (&extension->cancellable);
   g_clear_object (&extension->dbus_connection);
-
   g_clear_object (&extension->extension);
 
   G_OBJECT_CLASS (ephy_web_extension_parent_class)->dispose (object);
@@ -1364,8 +1361,6 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
   g_signal_connect_swapped (extension->extension, "page-created",
                             G_CALLBACK (ephy_web_extension_page_created_cb),
                             extension);
-
-  extension->cancellable = g_cancellable_new ();
 
   observer = g_dbus_auth_observer_new ();
   g_signal_connect (observer, "authorize-authenticated-peer",
