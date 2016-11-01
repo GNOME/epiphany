@@ -525,7 +525,7 @@ ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
 
       if (g_sequence_is_empty (ephy_bookmark_get_tags (bookmark))) {
         g_sequence_insert_sorted (bookmarks,
-                                  bookmark,
+                                  g_object_ref (bookmark),
                                   (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
                                   NULL);
       }
@@ -538,7 +538,7 @@ ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
 
       if (ephy_bookmark_has_tag (bookmark, tag))
         g_sequence_insert_sorted (bookmarks,
-                                  bookmark,
+                                  g_object_ref (bookmark),
                                   (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
                                   NULL);
     }

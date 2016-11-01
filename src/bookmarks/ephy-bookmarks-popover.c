@@ -376,6 +376,8 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack),
                                     "tag_detail");
+
+  g_sequence_free (bookmarks);
 }
 
 static void
