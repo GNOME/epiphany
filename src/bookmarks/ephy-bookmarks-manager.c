@@ -571,7 +571,7 @@ ephy_bookmarks_manager_get_smart_bookmarks (EphyBookmarksManager *self)
 
     if (ephy_bookmark_is_smart (bookmark)) {
       g_sequence_insert_sorted (bookmarks,
-                                bookmark,
+                                g_object_ref (bookmark),
                                 (GCompareDataFunc)compare_smart_bookmarks,
                                 NULL);
     }
