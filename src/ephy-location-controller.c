@@ -23,6 +23,7 @@
 #include "ephy-location-controller.h"
 
 #include "ephy-bookmark.h"
+#include "ephy-bookmarks-list-model.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-completion-model.h"
 #include "ephy-debug.h"
@@ -52,6 +53,7 @@ struct _EphyLocationController {
   EphyWindow *window;
   EphyTitleWidget *title_widget;
   EphyBookmarksManager *bookmarks_manager;
+  EphyBookmarksListModel *list_model;
   GSequence *smart_bookmarks;
   char *address;
   guint editable : 1;

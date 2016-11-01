@@ -24,6 +24,7 @@
 
 #include "ephy-bookmark.h"
 #include "ephy-bookmark-row.h"
+#include "ephy-bookmarks-list-model.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
@@ -40,8 +41,9 @@ struct _EphyBookmarksPopover {
   GtkWidget             *tag_detail_back_button;
   GtkWidget             *tag_detail_label;
 
-  EphyBookmarksManager  *manager;
-  EphyWindow            *window;
+  EphyBookmarksManager   *manager;
+  EphyBookmarksListModel *list_model;
+  EphyWindow             *window;
 };
 
 G_DEFINE_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, GTK_TYPE_POPOVER)
@@ -413,6 +415,16 @@ ephy_bookmarks_popover_list_box_row_activated_cb (EphyBookmarksPopover   *self,
 }
 
 static void
+ephy_bookmarks_popover_dispose (GObject *object)
+{
+  EphyBookmarksPopover *self = EPHY_BOOKMARKS_POPOVER (object);
+
+  g_clear_object (&self->list_model);
+
+  G_OBJECT_CLASS (ephy_bookmarks_popover_parent_class)->dispose (object);
+}
+
+static void
 ephy_bookmarks_popover_set_property (GObject      *object,
                                      guint         prop_id,
                                      const GValue *value,
@@ -435,6 +447,7 @@ ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ephy_bookmarks_popover_dispose;
   object_class->set_property = ephy_bookmarks_popover_set_property;
 
   obj_properties[PROP_WINDOW] =
@@ -470,6 +483,7 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  self->list_model = ephy_bookmarks_list_model_new (self->manager);
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), entries,
@@ -479,7 +493,7 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
   g_object_unref (group);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->bookmarks_list_box),
-                           G_LIST_MODEL (self->manager),
+                           G_LIST_MODEL (self->list_model),
                            create_bookmark_row,
                            self, NULL);
 

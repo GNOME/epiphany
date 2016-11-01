@@ -30,6 +30,8 @@ libephymain_la_SOURCES = \
 	bookmarks/ephy-bookmark-properties-grid.h	\
 	bookmarks/ephy-bookmark-row.c		\
 	bookmarks/ephy-bookmark-row.h		\
+	bookmarks/ephy-bookmarks-list-model.c	\
+	bookmarks/ephy-bookmarks-list-model.h	\
 	bookmarks/ephy-bookmarks-manager.c	\
 	bookmarks/ephy-bookmarks-manager.h	\
 	bookmarks/ephy-bookmarks-popover.c 	\

@@ -38,10 +38,7 @@ struct _EphyBookmarksManager {
   gchar      *gvdb_filename;
 };
 
-static void list_model_iface_init     (GListModelInterface *iface);
-
-G_DEFINE_TYPE_EXTENDED (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+G_DEFINE_TYPE (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJECT)
 
 enum {
   BOOKMARK_ADDED,
@@ -245,48 +242,6 @@ count_smart_bookmarks_prior_to (EphyBookmarksManager *self,
   return count;
 }
 
-static GType
-ephy_bookmarks_manager_list_model_get_item_type (GListModel *model)
-{
-  return EPHY_TYPE_BOOKMARK;
-}
-
-static guint
-ephy_bookmarks_manager_list_model_get_n_items (GListModel *model)
-{
-  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
-  guint length = g_sequence_get_length (self->bookmarks);
-
-  return length - count_smart_bookmarks_prior_to (self, length);
-}
-
-static gpointer
-ephy_bookmarks_manager_list_model_get_item (GListModel *model,
-                                            guint       position)
-{
-  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
-  GSequenceIter *iter = g_sequence_get_begin_iter (self->bookmarks);
-  EphyBookmark *bookmark = NULL;
-  guint i = 0;
-
-  do {
-    bookmark = g_sequence_get (iter);
-    if (!ephy_bookmark_is_smart (bookmark))
-      i++;
-    iter = g_sequence_iter_next (iter);
-  } while (i < position); //FIXME: should be <= right?
-
-  return bookmark ? g_object_ref (bookmark) : NULL;
-}
-
-static void
-list_model_iface_init (GListModelInterface *iface)
-{
-  iface->get_item_type = ephy_bookmarks_manager_list_model_get_item_type;
-  iface->get_n_items = ephy_bookmarks_manager_list_model_get_n_items;
-  iface->get_item = ephy_bookmarks_manager_list_model_get_item;
-}
-
 static void
 bookmark_title_changed_cb (EphyBookmark         *bookmark,
                            GParamSpec           *pspec,
@@ -327,9 +282,6 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
 
       /* Update list */
       position = g_sequence_iter_get_position (iter);
-      g_list_model_items_changed (G_LIST_MODEL (self),
-                                  position - count_smart_bookmarks_prior_to (self, position) - 1,
-                                  0, 1);
 
       g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
 
@@ -338,7 +290,6 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                                  NULL);
   }
 
-  // FIXME: Need g_list_model_items_changed if a bookmark's smartness changes
   g_signal_connect_object (bookmark, "notify::title",
                            G_CALLBACK (bookmark_title_changed_cb), self, 0);
   g_signal_connect_object (bookmark, "notify::url",
@@ -397,9 +348,6 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
 
   position = g_sequence_iter_get_position (iter);
   g_sequence_remove (iter);
-  g_list_model_items_changed (G_LIST_MODEL (self),
-                              position - count_smart_bookmarks_prior_to (self, position),
-                              1, 0);
 
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                              (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
