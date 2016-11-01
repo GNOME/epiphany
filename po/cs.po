@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2016-10-28 11:54+0000\n"
-"PO-Revision-Date: 2016-10-28 18:54+0200\n"
+"POT-Creation-Date: 2016-11-01 01:56+0000\n"
+"PO-Revision-Date: 2016-11-01 09:45+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -57,8 +57,8 @@ msgid "The GNOME web site displayed in GNOME Web"
 msgstr "Webové stránky GNOME zobrazené ve WWW GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:291
-#: embed/ephy-about-handler.c:322 src/ephy-main.c:76 src/ephy-main.c:266
-#: src/ephy-main.c:410 src/window-commands.c:251
+#: embed/ephy-about-handler.c:322 src/ephy-main.c:103 src/ephy-main.c:271
+#: src/ephy-main.c:413 src/window-commands.c:251
 msgid "Web"
 msgstr "WWW"
 
@@ -88,6 +88,30 @@ msgstr "Nové anonymní okno"
 msgid "Browse with caret"
 msgstr "Prohlížení pomocí kurzoru"
 
+#: data/org.gnome.epiphany.gschema.xml:14
+#| msgid "Web pages"
+msgid "Home page"
+msgstr "Domovská stránka"
+
+#: data/org.gnome.epiphany.gschema.xml:15
+msgid "Address of the user's home page."
+msgstr "Adresa uživatelovy domovské stránky."
+
+#: data/org.gnome.epiphany.gschema.xml:19
+#| msgid "Open the selected pages in new tabs"
+msgid "Whether homepage loads in new tabs"
+msgstr "Zda domovskou stránku načíst v nové kartě"
+
+#: data/org.gnome.epiphany.gschema.xml:20
+msgid ""
+"This key does nothing unless the homepage-url key is set. If homepage-url is "
+"set, then this key determines whether the homepage should be displayed in "
+"newly-created tabs."
+msgstr ""
+"Tento klíč má význam, jen když je nastavený klíč homepage-url. Když home-url "
+"nastavený je, pak tento klíč určuje, jestli se má domovská stránka otevřít v "
+"nově vytvořené kartě."
+
 #. DuckDuckGo is the default search engine. Must exactly match the URL used
 #. in the preferences dialog, except this string is surrounded by single quotes
 #. and uses &amp; instead of simply &. If the match is not otherwise exact,
@@ -95,24 +119,24 @@ msgstr "Prohlížení pomocí kurzoru"
 #. test this. Should ideally also match the default smart bookmark link in
 #. default-bookmarks.rdf. See the comment there for region parameters to
 #. the URL.
-#: data/org.gnome.epiphany.gschema.xml:20
+#: data/org.gnome.epiphany.gschema.xml:30
 msgid "'https://duckduckgo.com/?q=%s&t=epiphany'"
 msgstr ""
 "'https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=cz-cs&amp;kad=cs_CZ'"
 
-#: data/org.gnome.epiphany.gschema.xml:21
+#: data/org.gnome.epiphany.gschema.xml:31
 msgid "URL Search"
 msgstr "Hledání v URL"
 
-#: data/org.gnome.epiphany.gschema.xml:22
+#: data/org.gnome.epiphany.gschema.xml:32
 msgid "Search string for keywords entered in the URL bar."
 msgstr "Slova vložená do adresního řádku budou vyhledána tímto řetězcem."
 
-#: data/org.gnome.epiphany.gschema.xml:26
+#: data/org.gnome.epiphany.gschema.xml:36
 msgid "User agent"
 msgstr "Uživatelský agent"
 
-#: data/org.gnome.epiphany.gschema.xml:27
+#: data/org.gnome.epiphany.gschema.xml:37
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -120,11 +144,11 @@ msgstr ""
 "Řetězec použitý jako uživatelský agent, říkající stránkám, o jaký prohlížeč "
 "se jedná."
 
-#: data/org.gnome.epiphany.gschema.xml:31
+#: data/org.gnome.epiphany.gschema.xml:41
 msgid "Automatic downloads"
 msgstr "Automatické stahování"
 
-#: data/org.gnome.epiphany.gschema.xml:32
+#: data/org.gnome.epiphany.gschema.xml:42
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -132,38 +156,38 @@ msgstr ""
 "Soubory, které nemohou být otevřeny v prohlížeči, budou automaticky staženy "
 "do složky pro stahování a otevřeny příslušnou aplikací."
 
-#: data/org.gnome.epiphany.gschema.xml:36
+#: data/org.gnome.epiphany.gschema.xml:46
 msgid "Force new windows to be opened in tabs"
 msgstr "Vynutit otevírání nových oken do karet"
 
-#: data/org.gnome.epiphany.gschema.xml:37
+#: data/org.gnome.epiphany.gschema.xml:47
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "Požadavky na otevření nového okna vždy otevírat v nové kartě."
 
-#: data/org.gnome.epiphany.gschema.xml:41
+#: data/org.gnome.epiphany.gschema.xml:51
 msgid "Remember passwords"
 msgstr "Pamatovat si hesla"
 
-#: data/org.gnome.epiphany.gschema.xml:42
+#: data/org.gnome.epiphany.gschema.xml:52
 msgid "Whether to store and prefill passwords in websites."
 msgstr ""
 "Zdali mají být hesla ukládána a předvyplňována do formulářů na webových "
 "stránkách."
 
-#: data/org.gnome.epiphany.gschema.xml:49
+#: data/org.gnome.epiphany.gschema.xml:59
 msgid "Enable smooth scrolling"
 msgstr "Povolit hladké posouvání"
 
-#: data/org.gnome.epiphany.gschema.xml:53
+#: data/org.gnome.epiphany.gschema.xml:63
 msgid "Don't use an external application to view page source."
 msgstr "Nepoužívat externí aplikaci k zobrazení zdrojového kódu stránky."
 
-#: data/org.gnome.epiphany.gschema.xml:57
+#: data/org.gnome.epiphany.gschema.xml:67
 msgid "Whether to automatically restore the last session"
 msgstr "Zdali má být poslední sezení automaticky obnoveno"
 
-#: data/org.gnome.epiphany.gschema.xml:58
+#: data/org.gnome.epiphany.gschema.xml:68
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "'always' (the previous state of the application is always restored), "
@@ -175,7 +199,7 @@ msgstr ""
 "obnoveno pouze po pádu aplikace) a „never“ (vždy se zobrazí domovská "
 "stránka)."
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:72
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
@@ -183,7 +207,7 @@ msgstr ""
 "Zdali odkládat načítání karet, které nejsou po obnovení sezení ihned "
 "viditelné"
 
-#: data/org.gnome.epiphany.gschema.xml:63
+#: data/org.gnome.epiphany.gschema.xml:73
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -191,11 +215,11 @@ msgstr ""
 "Pokud je tato hodnota pravdivá, karty se po obnovení sezení nezačnou "
 "načítat, dokud se na ně uživatel nepřepne."
 
-#: data/org.gnome.epiphany.gschema.xml:67
+#: data/org.gnome.epiphany.gschema.xml:77
 msgid "Process model"
 msgstr "Model zpracování"
 
-#: data/org.gnome.epiphany.gschema.xml:68
+#: data/org.gnome.epiphany.gschema.xml:78
 msgid ""
 "This option allows to set the process model used. Use 'shared-secondary-"
 "process' to use a single web process shared by all the tabs and 'one-"
@@ -206,7 +230,7 @@ msgstr ""
 "kartami nebo „one-secondary-process-per-web-view“ pro použití různých "
 "procesů pro každou kartu."
 
-#: data/org.gnome.epiphany.gschema.xml:72
+#: data/org.gnome.epiphany.gschema.xml:82
 msgid ""
 "Maximum number of web processes created at the same time when using 'one-"
 "secondary-process-per-web-view' model"
@@ -214,7 +238,7 @@ msgstr ""
 "Maximální počet webových procesů vytvořených ve stejném okamžiku při použití "
 "modelu „one-secondary-process-per-web-view“."
 
-#: data/org.gnome.epiphany.gschema.xml:73
+#: data/org.gnome.epiphany.gschema.xml:83
 msgid ""
 "This option sets a limit to the number of web processes that will be used at "
 "the same time for the 'one-secondary-process-per-web-view' model. The "
@@ -224,11 +248,11 @@ msgstr ""
 "stejný okamžik pro model „one-secondary-process-per-web-view“. Výchozí "
 "hodnota je „0“, což znamená bez omezení."
 
-#: data/org.gnome.epiphany.gschema.xml:78
+#: data/org.gnome.epiphany.gschema.xml:88
 msgid "The sync user currently logged in"
 msgstr "Synchronizovat aktuálně přihlášeného uživatele"
 
-#: data/org.gnome.epiphany.gschema.xml:79
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla's "
 "servers."
@@ -236,19 +260,19 @@ msgstr ""
 "E-mail odkazující na účet Firefox, který se použije k synchronizaci dat se "
 "servery Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:83
+#: data/org.gnome.epiphany.gschema.xml:93
 msgid "Sync timestamp"
 msgstr "Časové razítko synchronizace"
 
-#: data/org.gnome.epiphany.gschema.xml:84
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid "The timestamp at which last we had the last sync"
 msgstr "Časový údaj, kdy se naposledy provedla synchronizace"
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "Roztáhnout ouška karet tak přes dostupné místo na liště karet."
 
-#: data/org.gnome.epiphany.gschema.xml:91
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar."
@@ -256,11 +280,11 @@ msgstr ""
 "Když je zapnuto, roztáhnou se ouška karet tak, aby zabraly všechno dostupné "
 "místo na liště karet."
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:105
 msgid "The position of the tabs bar."
 msgstr "Umístění lišty karet."
 
-#: data/org.gnome.epiphany.gschema.xml:96
+#: data/org.gnome.epiphany.gschema.xml:106
 msgid ""
 "Controls where the tabs bar is shown. Possible values are 'top' (the "
 "default), 'bottom', 'left' (vertical tabs with bar on the left) and "
@@ -270,11 +294,11 @@ msgstr ""
 "„top“ (nahoře; výchozí hodnota), „botton“ (dole) a „left“ (vlevo; svislá "
 "lišta) a „right“ (vpravo; svislá lišta)."
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:110
 msgid "The visibility policy for the tabs bar."
 msgstr "Zásady viditelnosti lišty karet."
 
-#: data/org.gnome.epiphany.gschema.xml:101
+#: data/org.gnome.epiphany.gschema.xml:111
 msgid ""
 "Controls when the tabs bar is shown. Possible values are 'always' (the tabs "
 "bar is always shown), 'more-than-one' (the tabs bar is only shown if there's "
@@ -285,44 +309,44 @@ msgstr ""
 "pouze jsou-li otevřeny alespoň dvě karty) a „never“ (lišta karet není "
 "zobrazena nikdy)."
 
-#: data/org.gnome.epiphany.gschema.xml:107
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "Minimum font size"
 msgstr "Minimální velikost písma"
 
-#: data/org.gnome.epiphany.gschema.xml:111
+#: data/org.gnome.epiphany.gschema.xml:121
 msgid "Use GNOME fonts"
 msgstr "Používat písma GNOME"
 
-#: data/org.gnome.epiphany.gschema.xml:112
+#: data/org.gnome.epiphany.gschema.xml:122
 msgid "Use GNOME font settings."
 msgstr "Používat nastavení písma z GNOME"
 
-#: data/org.gnome.epiphany.gschema.xml:116
+#: data/org.gnome.epiphany.gschema.xml:126
 msgid "Custom sans-serif font"
 msgstr "Vlastní bezpatkové písmo"
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:127
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
 msgstr ""
 "Toto písmo bude použito jako bezpatkové, je-li „use-gnome-fonts“ použito."
 
-#: data/org.gnome.epiphany.gschema.xml:121
+#: data/org.gnome.epiphany.gschema.xml:131
 msgid "Custom serif font"
 msgstr "Vlastní patkové písmo"
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:132
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
 msgstr "Toto písmo bude použito jako patkové, je-li „use-gnome-fonts“ použito."
 
-#: data/org.gnome.epiphany.gschema.xml:126
+#: data/org.gnome.epiphany.gschema.xml:136
 msgid "Custom monospace font"
 msgstr "Vlastní neproporcionální písmo"
 
-#: data/org.gnome.epiphany.gschema.xml:127
+#: data/org.gnome.epiphany.gschema.xml:137
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -330,48 +354,48 @@ msgstr ""
 "Toto písmo bude použito jako neproporcionální, je-li „use-gnome-fonts“ "
 "použito."
 
-#: data/org.gnome.epiphany.gschema.xml:131
+#: data/org.gnome.epiphany.gschema.xml:141
 msgid "Use a custom CSS"
 msgstr "Používat vlastní CSS"
 
-#: data/org.gnome.epiphany.gschema.xml:132
+#: data/org.gnome.epiphany.gschema.xml:142
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Používat vlastní CSS soubor k úpravě vzhledu stránek WWW."
 
-#: data/org.gnome.epiphany.gschema.xml:136
+#: data/org.gnome.epiphany.gschema.xml:146
 msgid "Enable spell checking"
 msgstr "Povolit kontrolu pravopisu"
 
-#: data/org.gnome.epiphany.gschema.xml:137
+#: data/org.gnome.epiphany.gschema.xml:147
 msgid "Spell check any text typed in editable areas."
 msgstr "Kontrolovat pravopis veškerého textu vkládaného do textových polí."
 
-#: data/org.gnome.epiphany.gschema.xml:141
+#: data/org.gnome.epiphany.gschema.xml:151
 msgid "Default encoding"
 msgstr "Výchozí kódování textu"
 
-#: data/org.gnome.epiphany.gschema.xml:142
+#: data/org.gnome.epiphany.gschema.xml:152
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Výchozí kódování. Přijatelné hodnoty jsou všechny, kterým rozumí WebKitGTK+."
 
-#: data/org.gnome.epiphany.gschema.xml:146 src/resources/prefs-dialog.ui:619
+#: data/org.gnome.epiphany.gschema.xml:156 src/resources/prefs-dialog.ui:619
 msgid "Languages"
 msgstr "Jazyky"
 
-#: data/org.gnome.epiphany.gschema.xml:147
+#: data/org.gnome.epiphany.gschema.xml:157
 msgid ""
 "Preferred languages. Array of locale codes or 'system' to use current locale."
 msgstr ""
 "Upřednostňované jazyky. Pole s kódy národních jazyků nebo „system“ pro "
 "aktuálně nastavený národní jazyk."
 
-#: data/org.gnome.epiphany.gschema.xml:151
+#: data/org.gnome.epiphany.gschema.xml:161
 msgid "Cookie accept"
 msgstr "Přijímání cookies"
 
-#: data/org.gnome.epiphany.gschema.xml:152
+#: data/org.gnome.epiphany.gschema.xml:162
 msgid ""
 "Where to accept cookies from. Possible values are \"always\", \"no-third-"
 "party\" and \"never\"."
@@ -379,41 +403,41 @@ msgstr ""
 "Odkud mohou být cookies přijímány. Možné hodnoty jsou „always“ (vždy), „no-"
 "third-party“ (ne od třetích stran) a „never“ (nikdy)."
 
-#: data/org.gnome.epiphany.gschema.xml:156
+#: data/org.gnome.epiphany.gschema.xml:166
 msgid "Allow popups"
 msgstr "Povolit vyskakovací okna"
 
-#: data/org.gnome.epiphany.gschema.xml:157
+#: data/org.gnome.epiphany.gschema.xml:167
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Povolit stránkám otevírat nová okna pomocí JavaScriptu (je-li povolen)."
 
-#: data/org.gnome.epiphany.gschema.xml:161
+#: data/org.gnome.epiphany.gschema.xml:171
 msgid "Enable Plugins"
 msgstr "Povolit zásuvné moduly"
 
-#: data/org.gnome.epiphany.gschema.xml:165
+#: data/org.gnome.epiphany.gschema.xml:175
 msgid "Enable WebGL"
 msgstr "Povolit WebGL"
 
-#: data/org.gnome.epiphany.gschema.xml:166
+#: data/org.gnome.epiphany.gschema.xml:176
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Zdali povolit podporu obsahu typu WebGL."
 
-#: data/org.gnome.epiphany.gschema.xml:170
+#: data/org.gnome.epiphany.gschema.xml:180
 msgid "Enable WebAudio"
 msgstr "Povolit WebAudio"
 
-#: data/org.gnome.epiphany.gschema.xml:171
+#: data/org.gnome.epiphany.gschema.xml:181
 msgid "Whether to enable support for WebAudio."
 msgstr "Zdali povolit podporu obsahu typu WebAudio."
 
-#: data/org.gnome.epiphany.gschema.xml:175
+#: data/org.gnome.epiphany.gschema.xml:185
 msgid "Do Not Track"
 msgstr "Nechci být sledován"
 
-#: data/org.gnome.epiphany.gschema.xml:176
+#: data/org.gnome.epiphany.gschema.xml:186
 msgid ""
 "Whether to tell websites that we do not wish to be tracked. Please note that "
 "web pages are not forced to follow this setting."
@@ -421,22 +445,22 @@ msgstr ""
 "Zdali sdělovat stránkám, že si nepřeji být sledován. Mějte na paměti, že "
 "stránky se nemusí tímto nastavením řídit."
 
-#: data/org.gnome.epiphany.gschema.xml:180
+#: data/org.gnome.epiphany.gschema.xml:190
 msgid "Enable Adblock"
 msgstr "Povolit Adblock"
 
-#: data/org.gnome.epiphany.gschema.xml:181
+#: data/org.gnome.epiphany.gschema.xml:191
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr ""
 "Zdali blokovat vložené reklamy, které by stránky mohly chtít zobrazovat."
 
-#: data/org.gnome.epiphany.gschema.xml:187
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid "The downloads folder"
 msgstr "Složka pro stahování"
 
-#: data/org.gnome.epiphany.gschema.xml:188
+#: data/org.gnome.epiphany.gschema.xml:198
 msgid ""
 "The path of the folder where to download files to; or \"Downloads\" to use "
 "the default downloads folder, or \"Desktop\" to use the desktop folder."
@@ -1261,7 +1285,7 @@ msgstr "Nelze vytvořit složku „%s“."
 #. * hostname where this is happening. Example: gnome@gmail.com and
 #. * mail.google.com.
 #.
-#: lib/ephy-form-auth-data.c:139
+#: lib/ephy-form-auth-data.c:138
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Heslo pro uživatele %s ve formuláři na %s"
@@ -1269,7 +1293,7 @@ msgstr "Heslo pro uživatele %s ve formuláři na %s"
 #. Translators: The first %s is the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: lib/ephy-form-auth-data.c:145
+#: lib/ephy-form-auth-data.c:144
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Heslo ve formuláři na %s"
@@ -1483,7 +1507,7 @@ msgstr "Spouští se…"
 
 #: lib/widgets/ephy-file-chooser.c:176 lib/widgets/ephy-file-chooser.c:183
 #: src/resources/clear-data-dialog.ui:33 src/resources/prefs-lang-dialog.ui:16
-#: src/window-commands.c:964
+#: src/window-commands.c:969
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -1597,72 +1621,59 @@ msgid ""
 msgstr ""
 "Vymazání historie prohlížení způsobí trvalé odstranění všech odkazů historie."
 
-#: src/ephy-main.c:86
+#: src/ephy-main.c:113
 msgid "Open a new tab in an existing browser window"
 msgstr "Otevřít novou kartu v existujícím okně prohlížeče"
 
-#: src/ephy-main.c:88
+#: src/ephy-main.c:115
 msgid "Open a new browser window"
 msgstr "Otevřít nové okno prohlížeče"
 
-#: src/ephy-main.c:90
+#: src/ephy-main.c:117
 msgid "Import bookmarks from the given file"
 msgstr "Importovat záložky z daného souboru"
 
-#: src/ephy-main.c:90 src/ephy-main.c:92
+#: src/ephy-main.c:117 src/ephy-main.c:119
 msgid "FILE"
 msgstr "SOUBOR"
 
-#: src/ephy-main.c:92
+#: src/ephy-main.c:119
 msgid "Load the given session file"
 msgstr "Načíst daný soubor sezení"
 
-#: src/ephy-main.c:94
+#: src/ephy-main.c:121
 msgid "Add a bookmark"
 msgstr "Přidat záložku"
 
-#: src/ephy-main.c:94
+#: src/ephy-main.c:121
 msgid "URL"
 msgstr "URL"
 
-#: src/ephy-main.c:96
+#: src/ephy-main.c:123
 msgid "Start a private instance"
 msgstr "Spustit soukromou instanci"
 
-#: src/ephy-main.c:98
+#: src/ephy-main.c:125
 msgid "Start an instance in incognito mode"
 msgstr "Spustit instanci v režimu anonymity"
 
-#: src/ephy-main.c:101
+#: src/ephy-main.c:128
 msgid "Start the browser in application mode"
 msgstr "Spustit prohlížeč v režimu aplikací"
 
-#: src/ephy-main.c:103
+#: src/ephy-main.c:130
 msgid "Profile directory to use in the private instance"
 msgstr "Složka s profilem, který se má používat v soukromé instanci"
 
-#: src/ephy-main.c:103
+#: src/ephy-main.c:130
 msgid "DIR"
 msgstr "SLOŽKA"
 
-#: src/ephy-main.c:105
+#: src/ephy-main.c:132
 msgid "URL …"
 msgstr "URL …"
 
-#: src/ephy-main.c:154
-msgid "Could not start Web"
-msgstr "Nelze spustit WWW"
-
-#: src/ephy-main.c:157
-#, c-format
-msgid ""
-"Startup failed because of the following error:\n"
-"%s"
-msgstr ""
-"Spouštění selhalo kvůli následující chybě:\n"
-"%s"
-
-#: src/ephy-main.c:267
+#: src/ephy-main.c:272
 msgid "Web options"
 msgstr "Možnosti WWW"
 
@@ -2692,62 +2703,62 @@ msgstr ""
 msgid "Web Website"
 msgstr "Stránky prohlížeče WWW"
 
-#: src/window-commands.c:501
+#: src/window-commands.c:506
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/window-commands.c:864
+#: src/window-commands.c:869
 #, c-format
 msgid "A web application named '%s' already exists. Do you want to replace it?"
 msgstr "Webová aplikace s názvem „%s“ již existuje. Chcete ji nahradit?"
 
-#: src/window-commands.c:867
+#: src/window-commands.c:872
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/window-commands.c:869
+#: src/window-commands.c:874
 msgid "Replace"
 msgstr "Nahradit"
 
-#: src/window-commands.c:873
+#: src/window-commands.c:878
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Aplikace s tímto názvem již existuje. Nahrazením způsobíte její přepsání."
 
-#: src/window-commands.c:908
+#: src/window-commands.c:913
 #, c-format
 msgid "The application '%s' is ready to be used"
 msgstr "Aplikace „%s“ je připravena k použití"
 
-#: src/window-commands.c:911
+#: src/window-commands.c:916
 #, c-format
 msgid "The application '%s' could not be created"
 msgstr "Aplikaci „%s“ nelze vytvořit"
 
-#: src/window-commands.c:919
+#: src/window-commands.c:924
 msgid "Launch"
 msgstr "Spustit"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:961
+#: src/window-commands.c:966
 msgid "Create Web Application"
 msgstr "Vytvořit webovou aplikaci"
 
-#: src/window-commands.c:966
+#: src/window-commands.c:971
 msgid "C_reate"
 msgstr "V_ytvořit"
 
-#: src/window-commands.c:1094
+#: src/window-commands.c:1099
 msgid "Save"
 msgstr "Uložit"
 
-#: src/window-commands.c:1734
+#: src/window-commands.c:1739
 msgid "Enable caret browsing mode?"
 msgstr "Povolit režim prohlížení s kurzorem?"
 
-#: src/window-commands.c:1737
+#: src/window-commands.c:1742
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -2757,6 +2768,16 @@ msgstr ""
 "funkce vloží do stránky pohyblivý kurzor umožňující navigaci pomocí "
 "klávesnice. Přejete si zapnout prohlížení s kurzorem?"
 
-#: src/window-commands.c:1740
+#: src/window-commands.c:1745
 msgid "_Enable"
 msgstr "_Povolit"
+
+#~ msgid "Could not start Web"
+#~ msgstr "Nelze spustit WWW"
+
+#~ msgid ""
+#~ "Startup failed because of the following error:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Spouštění selhalo kvůli následující chybě:\n"
+#~ "%s"
