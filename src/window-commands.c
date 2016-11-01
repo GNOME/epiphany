@@ -460,11 +460,17 @@ window_cmd_new_tab (GSimpleAction *action,
                     gpointer       user_data)
 {
   EphyWindow *window = user_data;
+  EphyLinkFlags flags = EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO;
+  gboolean load_homepage;
+
+  load_homepage = g_settings_get_boolean (EPHY_SETTINGS_MAIN,
+                                          EPHY_PREFS_HOMEPAGE_LOADS_IN_NEW_TABS);
+  if (load_homepage)
+    flags |= EPHY_LINK_HOME_PAGE;
 
   ephy_link_open (EPHY_LINK (window),
-                  "about:overview",
-                  NULL,
-                  EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
+                  "about:overview", /* Ignored when EPHY_LINK_HOME_PAGE is passed */
+                  NULL, flags);
 }
 
 static void
