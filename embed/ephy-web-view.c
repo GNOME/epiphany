@@ -1614,6 +1614,7 @@ load_changed_cb (WebKitWebView  *web_view,
           ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
         /* FIXME: The 1s delay is a workaround to allow time to render the page and get a favicon.
          * https://bugzilla.gnome.org/show_bug.cgi?id=761065
+         * https://bugs.webkit.org/show_bug.cgi?id=164180
          */
         if (view->snapshot_timeout_id == 0) {
           view->snapshot_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_LOW, 1,
