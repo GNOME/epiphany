@@ -282,12 +282,19 @@ ephy_view_source_request_start (EphyViewSourceRequest *request)
 }
 
 static void
+cancel_outstanding_request (EphyViewSourceRequest *request)
+{
+  g_cancellable_cancel (request->cancellable);
+}
+
+static void
 ephy_view_source_handler_dispose (GObject *object)
 {
   EphyViewSourceHandler *handler = EPHY_VIEW_SOURCE_HANDLER (object);
 
   if (handler->outstanding_requests) {
-    g_list_free_full (handler->outstanding_requests, (GDestroyNotify)ephy_view_source_request_free);
+    g_list_foreach (handler->outstanding_requests, (GFunc)cancel_outstanding_request, NULL);
+    g_list_free (handler->outstanding_requests);
     handler->outstanding_requests = NULL;
   }
 
