@@ -99,6 +99,8 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
     gtk_image_set_from_pixbuf (GTK_IMAGE (self->favicon_image), favicon);
     g_object_unref (favicon);
   }
+
+  g_object_unref (self);
 }
 
 static void
@@ -165,7 +167,7 @@ ephy_bookmark_row_constructed (GObject *object)
                                        ephy_bookmark_get_url (self->bookmark),
                                        NULL,
                                        (GAsyncReadyCallback)ephy_bookmark_row_favicon_loaded_cb,
-                                       self);
+                                       g_object_ref (self));
 }
 
 static void
