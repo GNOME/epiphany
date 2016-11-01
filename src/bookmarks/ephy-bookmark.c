@@ -469,8 +469,8 @@ ephy_bookmark_bookmarks_sort_func (EphyBookmark *bookmark1,
   gint64 time1;
   gint64 time2;
 
-  g_assert (bookmark1 != NULL);
-  g_assert (bookmark2 != NULL);
+  g_assert (EPHY_IS_BOOKMARK (bookmark1));
+  g_assert (EPHY_IS_BOOKMARK (bookmark2));
 
   time1 = ephy_bookmark_get_time_added (bookmark1);
   time2 = ephy_bookmark_get_time_added (bookmark2);
