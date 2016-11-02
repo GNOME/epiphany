@@ -391,8 +391,10 @@ fill_form_cb (const char *username,
 
   LOG ("Found: user %s pass (hidden)", username_node ? username : "(none)");
   if (username_node) {
+    g_object_set_data (G_OBJECT (username_node), "ephy-is-auto-filling", TRUE);
     webkit_dom_html_input_element_set_auto_filled (username_node, TRUE);
     webkit_dom_html_input_element_set_editing_value (username_node, username);
+    g_object_set_data (G_OBJECT (username_node), "ephy-is-auto-filling", FALSE);
   }
   webkit_dom_html_input_element_set_auto_filled (password_node, TRUE);
   webkit_dom_html_input_element_set_editing_value (password_node, password);
@@ -909,6 +911,9 @@ username_node_input_cb (WebKitDOMNode  *username_node,
 {
   WebKitDOMDocument *document;
   WebKitDOMElement *main_div;
+
+  if (g_object_get_data (G_OBJECT (username_node), "ephy-is-auto-filling"))
+    return TRUE;
 
   g_object_set_data (G_OBJECT (username_node), "ephy-user-ever-edited", GINT_TO_POINTER (TRUE));
   document = webkit_web_page_get_dom_document (web_page);
