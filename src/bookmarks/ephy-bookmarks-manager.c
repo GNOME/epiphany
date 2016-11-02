@@ -263,12 +263,12 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
     ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                                (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                                NULL);
-  }
 
-  g_signal_connect_object (bookmark, "notify::title",
-                           G_CALLBACK (bookmark_title_changed_cb), self, 0);
-  g_signal_connect_object (bookmark, "notify::url",
-                           G_CALLBACK (bookmark_url_changed_cb), self, 0);
+    g_signal_connect_object (bookmark, "notify::title",
+                             G_CALLBACK (bookmark_title_changed_cb), self, 0);
+    g_signal_connect_object (bookmark, "notify::url",
+                             G_CALLBACK (bookmark_url_changed_cb), self, 0);
+  }
 }
 
 void
