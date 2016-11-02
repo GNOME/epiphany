@@ -223,25 +223,6 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
   ephy_bookmarks_manager_load_from_file (self);
 }
 
-static guint
-count_smart_bookmarks_prior_to (EphyBookmarksManager *self,
-                                guint                 position)
-{
-  GSequenceIter *iter = g_sequence_get_begin_iter (self->bookmarks);
-  guint count = 0;
-  guint i = 0;
-
-  while (i < position) {
-    EphyBookmark *bookmark = g_sequence_get (iter);
-    if (ephy_bookmark_is_smart (bookmark))
-      count++;
-    iter = g_sequence_iter_next (iter);
-    i++;
-  }
-
-  return count;
-}
-
 static void
 bookmark_title_changed_cb (EphyBookmark         *bookmark,
                            GParamSpec           *pspec,
@@ -264,7 +245,6 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
 {
   GSequenceIter *iter;
   GSequenceIter *prev_iter;
-  int position;
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
@@ -279,9 +259,6 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
       || ephy_bookmark_get_time_added (g_sequence_get (prev_iter)) != ephy_bookmark_get_time_added (bookmark)) {
 
       g_sequence_insert_before (iter, bookmark);
-
-      /* Update list */
-      position = g_sequence_iter_get_position (iter);
 
       g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
 
@@ -331,7 +308,6 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
                                         EphyBookmark         *bookmark)
 {
   GSequenceIter *iter;
-  int position;
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
@@ -345,8 +321,6 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
   }
 
   g_signal_emit (self, signals[BOOKMARK_REMOVED], 0, bookmark);
-
-  position = g_sequence_iter_get_position (iter);
   g_sequence_remove (iter);
 
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
