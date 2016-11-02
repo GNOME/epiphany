@@ -257,14 +257,12 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
   prev_iter = g_sequence_iter_prev (iter);
   if (g_sequence_iter_is_end (prev_iter)
       || ephy_bookmark_get_time_added (g_sequence_get (prev_iter)) != ephy_bookmark_get_time_added (bookmark)) {
+    g_sequence_insert_before (iter, bookmark);
+    g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
 
-      g_sequence_insert_before (iter, bookmark);
-
-      g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
-
-      ephy_bookmarks_manager_save_to_file_async (self, NULL,
-                                                 (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
-                                                 NULL);
+    ephy_bookmarks_manager_save_to_file_async (self, NULL,
+                                               (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
+                                               NULL);
   }
 
   g_signal_connect_object (bookmark, "notify::title",
