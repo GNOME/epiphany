@@ -30,7 +30,7 @@ G_DECLARE_FINAL_TYPE (EphyUriTester, ephy_uri_tester, EPHY, URI_TESTER, GObject)
 
 EphyUriTester *ephy_uri_tester_new                  (void);
 
-void           ephy_uri_tester_register_dbus_object (EphyUriTester   *tester,
-                                                     GDBusConnection *connection);
+void           ephy_uri_tester_handle_new_dbus_connection (EphyUriTester   *tester,
+                                                           GDBusConnection *connection);
 
 G_END_DECLS

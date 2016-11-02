@@ -607,10 +607,12 @@ new_connection_cb (GDBusServer     *server,
                    EphyEmbedShell  *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  EphyWebExtensionProxy *extension = ephy_web_extension_proxy_new (connection);
+  EphyWebExtensionProxy *extension;
+
+  extension = ephy_web_extension_proxy_new (connection);
   ephy_embed_shell_watch_web_extension (shell, extension);
 
-  ephy_uri_tester_register_dbus_object (priv->uri_tester, connection);
+  ephy_uri_tester_handle_new_dbus_connection (priv->uri_tester, connection);
 
   g_signal_connect_object (extension, "page-created",
                            G_CALLBACK (web_extension_page_created), shell, 0);

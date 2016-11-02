@@ -79,6 +79,8 @@ struct _EphyUriTester {
 
   HTTPSEverywhereContext *https_everywhere_context;
   GList *deferred_requests;
+
+  GList *dbus_peers;
 };
 
 enum {
@@ -880,6 +882,43 @@ ephy_uri_tester_rewrite_uri (EphyUriTester *tester,
   return result;
 }
 
+typedef struct {
+  EphyUriTester *tester;
+  GDBusConnection *connection;
+  guint registration_id;
+} DBusPeerInfo;
+
+static DBusPeerInfo *
+dbus_peer_info_new (EphyUriTester   *tester,
+                    GDBusConnection *connection,
+                    guint            registration_id)
+{
+  DBusPeerInfo *peer = g_slice_new (DBusPeerInfo);
+  peer->tester = tester;
+  peer->connection = g_object_ref (connection);
+  peer->registration_id = registration_id;
+  return peer;
+}
+
+static void
+dbus_peer_info_free (DBusPeerInfo *peer)
+{
+  g_signal_handlers_disconnect_by_data (peer->connection, peer);
+
+  g_object_unref (peer->connection);
+  g_slice_free (DBusPeerInfo, peer);
+}
+
+static void
+dbus_connection_closed_cb (GDBusConnection *connection,
+                           gboolean         remote_peer_vanished,
+                           GError          *error,
+                           DBusPeerInfo    *peer)
+{
+  peer->tester->dbus_peers = g_list_remove (peer->tester->dbus_peers, peer);
+  dbus_peer_info_free (peer);
+}
+
 static void
 ephy_uri_tester_return_response (EphyUriTester         *tester,
                                  const char            *request_uri,
@@ -943,10 +982,11 @@ static const GDBusInterfaceVTable interface_vtable = {
 };
 
 void
-ephy_uri_tester_register_dbus_object (EphyUriTester   *tester,
-                                      GDBusConnection *connection)
+ephy_uri_tester_handle_new_dbus_connection (EphyUriTester   *tester,
+                                            GDBusConnection *connection)
 {
   static GDBusNodeInfo *introspection_data = NULL;
+  DBusPeerInfo *peer;
   guint registration_id;
   GError *error = NULL;
 
@@ -966,6 +1006,12 @@ ephy_uri_tester_register_dbus_object (EphyUriTester   *tester,
     g_error_free (error);
     return;
   }
+
+  peer = dbus_peer_info_new (tester, connection, registration_id);
+  tester->dbus_peers = g_list_append (tester->dbus_peers, peer);
+
+  g_signal_connect (connection, "closed",
+                    G_CALLBACK (dbus_connection_closed_cb), peer);
 }
 
 static void
@@ -1141,6 +1187,13 @@ ephy_uri_tester_set_property (GObject      *object,
 }
 
 static void
+unregister_dbus_object (DBusPeerInfo  *peer,
+                        EphyUriTester *tester)
+{
+  g_dbus_connection_unregister_object (peer->connection, peer->registration_id);
+}
+
+static void
 ephy_uri_tester_dispose (GObject *object)
 {
   EphyUriTester *tester = EPHY_URI_TESTER (object);
@@ -1150,6 +1203,12 @@ ephy_uri_tester_dispose (GObject *object)
   if (tester->cancellable) {
     g_cancellable_cancel (tester->cancellable);
     g_clear_object (&tester->cancellable);
+  }
+
+  if (tester->dbus_peers) {
+    g_list_foreach (tester->dbus_peers, (GFunc)unregister_dbus_object, tester);
+    g_list_free_full (tester->dbus_peers, (GDestroyNotify)dbus_peer_info_free);
+    tester->dbus_peers = NULL;
   }
 
   G_OBJECT_CLASS (ephy_uri_tester_parent_class)->dispose (object);
