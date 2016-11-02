@@ -1303,7 +1303,10 @@ ephy_web_extension_dispose (GObject *object)
     extension->page_created_signals_pending = NULL;
   }
 
-  g_clear_object (&extension->cancellable);
+  if (extension->cancellable) {
+    g_cancellable_cancel (extension->cancellable);
+    g_clear_object (&extension->cancellable);
+  }
   g_clear_object (&extension->dbus_connection);
 
   g_clear_object (&extension->extension);
@@ -1355,6 +1358,7 @@ dbus_connection_created_cb (GObject          *source_object,
   if (error) {
     g_warning ("Failed to connect to UI process: %s", error->message);
     g_error_free (error);
+    g_object_unref (extension);
     return;
   }
 
@@ -1370,11 +1374,14 @@ dbus_connection_created_cb (GObject          *source_object,
     g_warning ("Failed to register web extension object: %s\n", error->message);
     g_error_free (error);
     g_object_unref (connection);
+    g_object_unref (extension);
     return;
   }
 
   extension->dbus_connection = connection;
   ephy_web_extension_emit_page_created_signals_pending (extension);
+
+  g_object_unref (extension);
 }
 
 static gboolean
@@ -1422,6 +1429,6 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
                                      observer,
                                      extension->cancellable,
                                      (GAsyncReadyCallback)dbus_connection_created_cb,
-                                     extension);
+                                     g_object_ref (extension));
   g_object_unref (observer);
 }
