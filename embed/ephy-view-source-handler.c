@@ -52,7 +52,7 @@ ephy_view_source_request_new (EphyViewSourceHandler  *handler,
   EphyViewSourceRequest *view_source_request;
 
   view_source_request = g_slice_new (EphyViewSourceRequest);
-  view_source_request->source_handler = handler;
+  view_source_request->source_handler = g_object_ref (handler);
   view_source_request->scheme_request = g_object_ref (request);
   view_source_request->web_view = NULL; /* created only if required */
   view_source_request->cancellable = g_cancellable_new ();
@@ -67,6 +67,7 @@ ephy_view_source_request_free (EphyViewSourceRequest *request)
   if (request->load_changed_id > 0)
     g_signal_handler_disconnect (request->web_view, request->load_changed_id);
 
+  g_object_unref (request->source_handler);
   g_object_unref (request->scheme_request);
   g_clear_object (&request->web_view);
 
