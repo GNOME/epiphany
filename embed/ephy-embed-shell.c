@@ -738,10 +738,9 @@ ephy_embed_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
-  /* We're not remoting, setup the Web Context if we are not running in a test.
-     Tests already do this after construction. */
-  if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST)
-    ephy_embed_shell_create_web_context (embed_shell);
+  ephy_embed_shell_create_web_context (embed_shell);
+
+  priv->uri_tester = ephy_uri_tester_new ();
 
   ephy_embed_shell_setup_web_extensions_server (shell);
 
@@ -904,9 +903,6 @@ ephy_embed_shell_constructed (GObject *object)
     ephy_embed_shell_create_web_context (shell);
     priv->user_content = webkit_user_content_manager_new ();
   }
-
-  if (mode != EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER)
-    priv->uri_tester = ephy_uri_tester_new ();
 
   g_signal_connect_object (ephy_snapshot_service_get_default (),
                            "snapshot-saved", G_CALLBACK (snapshot_saved_cb),
