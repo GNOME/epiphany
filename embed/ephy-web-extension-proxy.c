@@ -117,7 +117,8 @@ web_extension_proxy_created_cb (GDBusProxy            *proxy,
 
   web_extension->proxy = g_dbus_proxy_new_finish (result, &error);
   if (!web_extension->proxy) {
-    g_warning ("Error creating web extension proxy: %s", error->message);
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Error creating web extension proxy: %s", error->message);
     g_error_free (error);
 
     /* Attempt to trigger connection_closed_cb, which will destroy us, and ensure that
