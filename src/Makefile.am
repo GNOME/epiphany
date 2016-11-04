@@ -99,11 +99,13 @@ libephymain_la_CPPFLAGS = \
 	$(GIO_CFLAGS)			\
 	$(GLIB_CFLAGS)			\
 	$(GTK_CFLAGS)			\
+	$(HOGWEED_CFLAGS)		\
 	$(JSON_GLIB_CFLAGS)		\
 	$(LIBNOTIFY_CFLAGS)		\
 	$(LIBSECRET_CFLAGS)		\
 	$(LIBSOUP_CFLAGS)		\
 	$(LIBXML_CFLAGS)		\
+	$(NETTLE_CFLAGS)		\
 	$(WEBKIT2GTK_CFLAGS)
 
 libephymain_la_CFLAGS = \
@@ -122,11 +124,13 @@ libephymain_la_LIBADD = \
 	$(GIO_LIBS)		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
+	$(HOGWEED_LIBS)		\
 	$(JSON_GLIB_LIBS)	\
 	$(LIBNOTIFY_LIBS)	\
 	$(LIBSECRET_LIBS)	\
 	$(LIBSOUP_LIBS)		\
 	$(LIBXML_LIBS)		\
+	$(NETTLE_LIBS)		\
 	$(WEBKIT2GTK_LIBS)
 
 RESOURCE_FILES = \
@@ -196,9 +200,11 @@ epiphany_CPPFLAGS = \
 	-DLOCALEDIR=\"$(localedir)\"	\
 	$(GLIB_CFLAGS)			\
 	$(GTK_CFLAGS)			\
+	$(HOGWEED_CFLAGS)		\
 	$(JSON_GLIB_CFLAGS)		\
 	$(LIBNOTIFY_CFLAGS)		\
 	$(LIBXML_CFLAGS)		\
+	$(NETTLE_CFLAGS)		\
 	$(WEBKIT2GTK_CFLAGS)
 
 epiphany_LDADD = \
@@ -206,9 +212,11 @@ epiphany_LDADD = \
 	libephymain.la		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
+	$(HOGWEED_LIBS)		\
 	$(JSON_GLIB_LIBS)	\
 	$(LIBNOTIFY_LIBS)	\
 	$(LIBXML_LIBS)		\
+	$(NETTLE_LIBS)		\
 	$(WEBKIT2GTK_LIBS)
 
 epiphany_LDFLAGS = \

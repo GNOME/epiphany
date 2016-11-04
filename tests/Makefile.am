@@ -95,20 +95,20 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/src		\
 	-I$(top_srcdir)/src/bookmarks	\
 	-I$(top_srcdir)/src/sync	\
-	-DTEST_DIR=\"$(srcdir)\"
-
-AM_CFLAGS = \
-	$(CODE_COVERAGE_CFLAGS) \
-	$(GDK_CFLAGS)		\
-	$(GLIB_CFLAGS)		\
-	$(GTK_CFLAGS)		\
-	$(JSON_GLIB_CFLAGS)	\
-	$(LIBSOUP_CFLAGS)	\
-	$(WARN_CFLAGS)		\
+	-DTEST_DIR=\"$(srcdir)\"	\
+	$(GDK_CFLAGS)			\
+	$(GLIB_CFLAGS)			\
+	$(GTK_CFLAGS)			\
+	$(HOGWEED_CFLAGS)		\
+	$(JSON_GLIB_CFLAGS)		\
+	$(LIBSOUP_CFLAGS)		\
+	$(NETTLE_CFLAGS)		\
 	$(WEBKIT2GTK_CFLAGS)
 
+AM_CFLAGS = \
+	$(WARN_CFLAGS)
+
 AM_LDFLAGS = \
-	$(CODE_COVERAGE_LDFLAGS) \
 	$(WARN_LDFLAGS)
 
 LDADD = \
@@ -117,8 +117,10 @@ LDADD = \
 	$(GDK_LIBS)		\
 	$(GLIB_LIBS)		\
 	$(GTK_LIBS)		\
+	$(HOGWEED_LIBS)		\
 	$(JSON_GLIB_LIBS)	\
 	$(LIBSOUP_LIBS)		\
+	$(NETTLE_LIBS)		\
 	$(WEBKIT2GTK_LIBS)
 
 test_ephy_completion_model_SOURCES = \
