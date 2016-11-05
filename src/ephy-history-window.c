@@ -718,7 +718,7 @@ convert_location_data_func (GtkTreeViewColumn *column,
                       col_id,
                       &url,
                       -1);
-  decoded_url = ephy_uri_decode_and_sanitize (url);
+  decoded_url = ephy_uri_decode (url);
 
   g_object_set (renderer, "text", decoded_url, NULL);
 

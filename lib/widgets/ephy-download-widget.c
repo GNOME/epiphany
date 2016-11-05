@@ -65,7 +65,7 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
     return NULL;
 
   basename = g_filename_display_basename (dest);
-  decoded = ephy_uri_decode_and_sanitize (basename);
+  decoded = ephy_uri_decode (basename);
   g_free (basename);
 
   return decoded;

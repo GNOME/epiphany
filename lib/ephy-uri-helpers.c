@@ -249,7 +249,7 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   return ret;
 }
 
-static char *
+char *
 ephy_uri_decode (const char *uri_string)
 {
   char *decoded_uri;
@@ -261,29 +261,6 @@ ephy_uri_decode (const char *uri_string)
   /* Protect against escaped null characters and escaped slashes. */
   decoded_uri = g_uri_unescape_string (uri_string, "/");
   return decoded_uri ? decoded_uri : g_strdup (uri_string);
-}
-
-char *
-ephy_uri_decode_and_sanitize (const char *uri_string)
-{
-  SoupURI *uri;
-  char *sanitized_uri;
-  char *result;
-
-  /* Trick: the parameter does not actually have to be a URI. We allow calling
-   * this function with any address, like about:blank. Just return in that case.
-   */
-  uri = soup_uri_new (uri_string);
-  if (!uri)
-    return g_strdup (uri_string);
-
-  /* Use soup_uri_to_string to remove the password component of the URI. */
-  sanitized_uri = soup_uri_to_string (uri, FALSE);
-  result = ephy_uri_decode (sanitized_uri);
-
-  g_free (sanitized_uri);
-  soup_uri_free (uri);
-  return result;
 }
 
 char *
