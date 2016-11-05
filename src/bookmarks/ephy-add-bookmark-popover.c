@@ -27,7 +27,6 @@
 #include "ephy-embed-container.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
-#include "ephy-uri-helpers.h"
 
 struct _EphyAddBookmarkPopover {
   GtkPopover     parent_instance;
@@ -177,16 +176,14 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
   EphyWindow *window;
   EphyEmbed *embed;
   EphyBookmark *bookmark;
-  const char *unsanitized_address;
-  char *address;
+  const char *address;
 
   manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   location_entry = GTK_WIDGET (ephy_header_bar_get_title_widget (self->header_bar));
   window = ephy_header_bar_get_window (self->header_bar);
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 
-  unsanitized_address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-  address = ephy_uri_sanitize (unsanitized_address);
+  address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
   bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
   if (!bookmark) {
@@ -220,6 +217,4 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
   }
 
   gtk_widget_show (GTK_WIDGET (self));
-
-  g_free (address);
 }
