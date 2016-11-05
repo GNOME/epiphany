@@ -333,7 +333,7 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
     char *decoded_address;
     address = ephy_bookmark_get_url (self->bookmark);
-    decoded_address = ephy_uri_decode_and_sanitize (address);
+    decoded_address = ephy_uri_decode (address);
     gtk_entry_set_text (GTK_ENTRY (self->address_entry), decoded_address);
     g_free (decoded_address);
     self->prev_address = g_strdup (gtk_entry_get_text (GTK_ENTRY (self->address_entry)));
