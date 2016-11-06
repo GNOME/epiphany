@@ -26,6 +26,10 @@
 #include "ephy-history-type-builtins.h"
 #include "ephy-sqlite-connection.h"
 
+#include <errno.h>
+#include <glib.h>
+#include <glib/gstdio.h>
+
 typedef gboolean (*EphyHistoryServiceMethod)      (EphyHistoryService *self, gpointer data, gpointer *result);
 
 typedef enum {
@@ -414,20 +418,25 @@ ephy_history_service_close_database_connections (EphyHistoryService *self)
 static void
 ephy_history_service_clear_all (EphyHistoryService *self)
 {
-  GError *error = NULL;
+  char *journal_filename;
 
-  if (NULL == self->history_database)
+  if (self->history_database == NULL)
     return;
 
   if (self->read_only)
     return;
 
-  ephy_sqlite_connection_execute (self->history_database,
-                                  "DELETE FROM hosts;", &error);
-  if (error) {
-    g_warning ("Couldn't clear history database: %s", error->message);
-    g_error_free (error);
-  }
+  ephy_sqlite_connection_close (self->history_database);
+
+  if (g_unlink (self->history_filename) == -1)
+    g_warning ("Failed to delete %s: %s", self->history_filename, g_strerror (errno));
+
+  journal_filename = g_strdup_printf ("%s-journal", self->history_filename);
+  if (g_unlink (journal_filename) == -1 && errno != ENOENT)
+    g_warning ("Failed to delete %s: %s", journal_filename, g_strerror (errno));
+  g_free (journal_filename);
+
+  ephy_history_service_open_database_connections (self);
 }
 
 static gboolean
