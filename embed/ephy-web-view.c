@@ -692,9 +692,10 @@ form_auth_data_save_confirmation_response (GtkInfoBar          *info_bar,
     EphyEmbedShell *shell = ephy_embed_shell_get_default ();
     EphyHostsManager *manager = ephy_embed_shell_get_hosts_manager (shell);
 
-    ephy_hosts_manager_set_save_password_permission_for_address (manager,
-                                                                 ephy_web_view_get_address (data->web_view),
-                                                                 EPHY_HOST_PERMISSION_DENY);
+    ephy_hosts_manager_set_permission_for_address (manager,
+                                                   EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD,
+                                                   ephy_web_view_get_address (data->web_view),
+                                                   EPHY_HOST_PERMISSION_DENY);
   }
 
   g_slice_free (FormAuthRequestData, data);
@@ -1271,8 +1272,9 @@ decide_on_permission_request (GtkWidget               *info_bar,
     const char *address = ephy_web_view_get_address (data->web_view);
     if (ephy_embed_utils_address_has_web_scheme (address)) {
       EphyHostsManager *hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
-      ephy_hosts_manager_set_notifications_permission_for_address (
+      ephy_hosts_manager_set_permission_for_address (
         hosts_manager,
+        EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS,
         address,
         response == GTK_RESPONSE_YES ? EPHY_HOST_PERMISSION_ALLOW : EPHY_HOST_PERMISSION_DENY);
     }
@@ -1309,7 +1311,9 @@ permission_request_cb (WebKitWebView           *web_view,
     {
       const char *address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
       EphyHostsManager *hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
-      EphyHostPermission permission = ephy_hosts_manager_get_notifications_permission_for_address (hosts_manager, address);
+      EphyHostPermission permission = ephy_hosts_manager_get_permission_for_address (hosts_manager,
+                                                                                     EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS,
+                                                                                     address);
 
       switch (permission) {
       case EPHY_HOST_PERMISSION_ALLOW:

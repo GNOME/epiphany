@@ -35,19 +35,20 @@ typedef enum {
   EPHY_HOST_PERMISSION_ALLOW = 1,
 } EphyHostPermission;
 
+typedef enum {
+  EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS,
+  EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD
+} EphyHostPermissionType;
+
 EphyHostsManager*       ephy_hosts_manager_new                                      (void);
-EphyHostPermission      ephy_hosts_manager_get_notifications_permission_for_address (EphyHostsManager    *manager,
-                                                                                     const char          *address);
-void                    ephy_hosts_manager_set_notifications_permission_for_address (EphyHostsManager    *manager,
-                                                                                     const char          *address,
-                                                                                     EphyHostPermission   permission);
-EphyHostPermission      ephy_hosts_manager_get_save_password_permission_for_address (EphyHostsManager    *manager,
-                                                                                     const char          *address);
-void                    ephy_hosts_manager_set_save_password_permission_for_address (EphyHostsManager    *manager,
-                                                                                     const char          *address,
-                                                                                     EphyHostPermission   permission);
 
-
+EphyHostPermission      ephy_hosts_manager_get_permission_for_address (EphyHostsManager       *manager,
+                                                                       EphyHostPermissionType  type,
+                                                                       const char             *address);
+void                    ephy_hosts_manager_set_permission_for_address (EphyHostsManager       *manager,
+                                                                       EphyHostPermissionType  type,
+                                                                       const char             *address,
+                                                                       EphyHostPermission      permission);
 G_END_DECLS
 
 #endif /* EPHY_HOSTS_MANAGER_H */

@@ -135,7 +135,7 @@ ephy_hosts_manager_new (void)
   return EPHY_HOSTS_MANAGER (g_object_new (EPHY_TYPE_HOSTS_MANAGER, NULL));
 }
 
-EphyHostPermission
+static EphyHostPermission
 ephy_hosts_manager_get_notifications_permission_for_address (EphyHostsManager *manager,
                                                              const char       *address)
 {
@@ -143,7 +143,7 @@ ephy_hosts_manager_get_notifications_permission_for_address (EphyHostsManager *m
   return g_settings_get_enum (settings, "notifications-permission");
 }
 
-void
+static void
 ephy_hosts_manager_set_notifications_permission_for_address (EphyHostsManager   *manager,
                                                              const char         *address,
                                                              EphyHostPermission  permission)
@@ -152,7 +152,7 @@ ephy_hosts_manager_set_notifications_permission_for_address (EphyHostsManager   
   g_settings_set_enum (settings, "notifications-permission", permission);
 }
 
-EphyHostPermission
+static EphyHostPermission
 ephy_hosts_manager_get_save_password_permission_for_address (EphyHostsManager *manager,
                                                              const char       *address)
 {
@@ -160,11 +160,44 @@ ephy_hosts_manager_get_save_password_permission_for_address (EphyHostsManager *m
   return g_settings_get_enum (settings, "save-password-permission");
 }
 
-void
+static void
 ephy_hosts_manager_set_save_password_permission_for_address (EphyHostsManager   *manager,
                                                              const char         *address,
                                                              EphyHostPermission  permission)
 {
   GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
   g_settings_set_enum (settings, "save-password-permission", permission);
+}
+
+EphyHostPermission
+ephy_hosts_manager_get_permission_for_address (EphyHostsManager       *manager,
+                                               EphyHostPermissionType  type,
+                                               const char             *address)
+{
+  switch (type) {
+  case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
+    return ephy_hosts_manager_get_notifications_permission_for_address (manager, address);
+  case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
+    return ephy_hosts_manager_get_save_password_permission_for_address (manager, address);
+  default:
+    g_assert_not_reached ();
+  }
+}
+
+void
+ephy_hosts_manager_set_permission_for_address (EphyHostsManager       *manager,
+                                               EphyHostPermissionType  type,
+                                               const char             *address,
+                                               EphyHostPermission      permission)
+{
+  switch (type) {
+  case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
+    ephy_hosts_manager_set_notifications_permission_for_address (manager, address, permission);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
+    ephy_hosts_manager_set_save_password_permission_for_address (manager, address, permission);
+    break;
+  default:
+    g_assert_not_reached ();
+  }
 }

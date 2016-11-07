@@ -277,8 +277,9 @@ should_store_cb (const char *username,
     return;
 
   web_extension = ephy_web_extension_get ();
-  permission = ephy_hosts_manager_get_save_password_permission_for_address (web_extension->hosts_manager,
-                                                                            uri_string);
+  permission = ephy_hosts_manager_get_permission_for_address (web_extension->hosts_manager,
+                                                              EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD,
+                                                              uri_string);
 
   if (permission == EPHY_HOST_PERMISSION_DENY) {
     LOG ("User/password storage permission previously denied. Not asking about storing.");
