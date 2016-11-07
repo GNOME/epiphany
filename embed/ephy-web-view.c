@@ -1245,8 +1245,6 @@ decide_on_permission_request (GtkWidget               *info_bar,
                               int                      response,
                               PermissionRequestData   *data)
 {
-  gtk_widget_destroy (info_bar);
-
   switch (response) {
     case GTK_RESPONSE_YES:
       webkit_permission_request_allow (data->request);
