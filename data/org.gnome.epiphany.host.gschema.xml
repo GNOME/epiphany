@@ -6,6 +6,11 @@
   </enum>
 
   <schema id="org.gnome.Epiphany.host" gettext-domain="">
+    <key name="audio-device-permission" enum="org.gnome.Epiphany.host.permissions">
+      <default>"undecided"</default>
+      <summary>Decision to apply when microphone permission is requested for this host</summary>
+      <description>This option is used to save whether a given host has been given permission to access the user's microphone. The 'undecided' default means the browser needs to ask the user for permission, while 'allow' and 'deny' tell it to automatically make the decision upon request.</description>
+    </key>
     <key name="geolocation-permission" enum="org.gnome.Epiphany.host.permissions">
       <default>"undecided"</default>
       <summary>Decision to apply when geolocation permission is requested for this host</summary>
@@ -20,6 +25,11 @@
       <default>"undecided"</default>
       <summary>Decision to apply when save password permission is requested for this host</summary>
       <description>This option is used to save whether a given host has been given permission to save passwords. The 'undecided' default means the browser needs to ask the user for permission, while 'allow' and 'deny' tell it to automatically make the decision upon request.</description>
+    </key>
+    <key name="video-device-permission" enum="org.gnome.Epiphany.host.permissions">
+      <default>"undecided"</default>
+      <summary>Decision to apply when webcam permission is requested for this host</summary>
+      <description>This option is used to save whether a given host has been given permission to access the user's webcam. The 'undecided' default means the browser needs to ask the user for permission, while 'allow' and 'deny' tell it to automatically make the decision upon request.</description>
     </key>
   </schema>
 </schemalist>

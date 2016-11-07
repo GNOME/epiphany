@@ -98,6 +98,8 @@ struct _EphyWebView {
 
   GtkWidget *geolocation_info_bar;
   GtkWidget *notification_info_bar;
+  GtkWidget *microphone_info_bar;
+  GtkWidget *webcam_info_bar;
   GtkWidget *password_info_bar;
 
   EphyHistoryService *history_service;
@@ -1258,6 +1260,7 @@ decide_on_permission_request (GtkWidget               *info_bar,
                               PermissionRequestData   *data)
 {
   const char *address;
+  EphyHostPermissionType permission_type;
 
   switch (response) {
     case GTK_RESPONSE_YES:
@@ -1268,25 +1271,33 @@ decide_on_permission_request (GtkWidget               *info_bar,
       break;
   }
 
+  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (data->request)) {
+    permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION;
+  } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (data->request)) {
+    permission_type = EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
+  } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (data->request)) {
+    if (webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (data->request)))
+      permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM;
+    else
+      permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE;
+  } else {
+    g_assert_not_reached ();
+  }
+
   address = ephy_web_view_get_address (data->web_view);
 
-  if ((WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (data->request) ||
-       WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (data->request)) &&
-      response != GTK_RESPONSE_NONE &&
-      ephy_embed_utils_address_has_web_scheme (address)) {
+  if (response != GTK_RESPONSE_NONE && ephy_embed_utils_address_has_web_scheme (address)) {
     EphyEmbedShell *shell;
     EphyHostsManager *hosts_manager;
 
     shell = ephy_embed_shell_get_default ();
     hosts_manager = ephy_embed_shell_get_hosts_manager (shell);
 
-    ephy_hosts_manager_set_permission_for_address (
-      hosts_manager,
-      WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (data->request) ? EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION
-                                                               : EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS,
-      address,
-      response == GTK_RESPONSE_YES ? EPHY_HOST_PERMISSION_ALLOW
-                                   : EPHY_HOST_PERMISSION_DENY);
+    ephy_hosts_manager_set_permission_for_address (hosts_manager,
+                                                   permission_type,
+                                                   address,
+                                                   response == GTK_RESPONSE_YES ? EPHY_HOST_PERMISSION_ALLOW
+                                                                                : EPHY_HOST_PERMISSION_DENY);
   }
 
   gtk_widget_destroy (info_bar);
@@ -1296,7 +1307,8 @@ decide_on_permission_request (GtkWidget               *info_bar,
 
 static void
 show_permission_request_info_bar (WebKitWebView           *web_view,
-                                  WebKitPermissionRequest *decision)
+                                  WebKitPermissionRequest *decision,
+                                  EphyHostPermissionType   permission_type)
 {
   PermissionRequestData *data;
   GtkWidget *info_bar;
@@ -1317,14 +1329,30 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   /* Label */
   host = ephy_string_get_host_name (webkit_web_view_get_uri (web_view));
 
-  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision)) {
-    /* Translators: Geolocation policy for a specific site. */
-    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
-                                       host);
-  } else {
+  switch (permission_type) {
+  case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
     /* Translators: Notification policy for a specific site. */
     message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to show desktop notifications."),
                                        host);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
+    /* Translators: Geolocation policy for a specific site. */
+    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
+                                       host);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
+    /* Translators: Microphone policy for a specific site. */
+    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your microphone."),
+                                       host);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
+    /* Translators: Webcam policy for a specific site. */
+    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your webcam."),
+                                       host);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
+  default:
+    g_assert_not_reached ();
   }
 
   g_free (host);
@@ -1349,10 +1377,23 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
                     G_CALLBACK (decide_on_permission_request),
                     data);
 
-  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision))
-    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
-  else
+  switch (permission_type) {
+  case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
     ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->notification_info_bar);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
+    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
+    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->microphone_info_bar);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
+    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_info_bar);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
+  default:
+    g_assert_not_reached ();
+  }
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar, TRUE);
@@ -1379,6 +1420,11 @@ permission_request_cb (WebKitWebView           *web_view,
       return TRUE;
     }
     permission_type = EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
+  } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (decision)) {
+    if (webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision)))
+      permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM;
+    else
+      permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE;
   } else {
     return FALSE;
   }
@@ -1401,7 +1447,7 @@ permission_request_cb (WebKitWebView           *web_view,
     break;
   }
 
-  show_permission_request_info_bar (web_view, decision);
+  show_permission_request_info_bar (web_view, decision, permission_type);
   return TRUE;
 }
 

@@ -186,6 +186,40 @@ ephy_hosts_manager_set_geolocation_permission_for_address (EphyHostsManager   *m
   g_settings_set_enum (settings, "geolocation-permission", permission);
 }
 
+static EphyHostPermission
+ephy_hosts_manager_get_audio_device_permission_for_address (EphyHostsManager *manager,
+                                                            const char       *address)
+{
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  return g_settings_get_enum (settings, "audio-device-permission");
+}
+
+static void
+ephy_hosts_manager_set_audio_device_permission_for_address (EphyHostsManager   *manager,
+                                                            const char         *address,
+                                                            EphyHostPermission  permission)
+{
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  g_settings_set_enum (settings, "audio-device-permission", permission);
+}
+
+static EphyHostPermission
+ephy_hosts_manager_get_video_device_permission_for_address (EphyHostsManager *manager,
+                                                            const char       *address)
+{
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  return g_settings_get_enum (settings, "video-device-permission");
+}
+
+static void
+ephy_hosts_manager_set_video_device_permission_for_address (EphyHostsManager   *manager,
+                                                            const char         *address,
+                                                            EphyHostPermission  permission)
+{
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  g_settings_set_enum (settings, "video-device-permission", permission);
+}
+
 EphyHostPermission
 ephy_hosts_manager_get_permission_for_address (EphyHostsManager       *manager,
                                                EphyHostPermissionType  type,
@@ -198,6 +232,10 @@ ephy_hosts_manager_get_permission_for_address (EphyHostsManager       *manager,
     return ephy_hosts_manager_get_save_password_permission_for_address (manager, address);
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
     return ephy_hosts_manager_get_geolocation_permission_for_address (manager, address);
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
+    return ephy_hosts_manager_get_audio_device_permission_for_address (manager, address);
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
+    return ephy_hosts_manager_get_video_device_permission_for_address (manager, address);
   default:
     g_assert_not_reached ();
   }
@@ -218,6 +256,12 @@ ephy_hosts_manager_set_permission_for_address (EphyHostsManager       *manager,
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
     ephy_hosts_manager_set_geolocation_permission_for_address (manager, address, permission);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
+    ephy_hosts_manager_set_audio_device_permission_for_address (manager, address, permission);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
+    ephy_hosts_manager_set_video_device_permission_for_address (manager, address, permission);
     break;
   default:
     g_assert_not_reached ();
