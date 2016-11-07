@@ -101,6 +101,7 @@ struct _EphyWebView {
   GtkWidget *microphone_info_bar;
   GtkWidget *webcam_info_bar;
   GtkWidget *password_info_bar;
+  GtkWidget *codecs_info_bar;
 
   EphyHistoryService *history_service;
   GCancellable *history_service_cancellable;
@@ -1255,9 +1256,9 @@ typedef struct {
 } PermissionRequestData;
 
 static void
-decide_on_permission_request (GtkWidget               *info_bar,
-                              int                      response,
-                              PermissionRequestData   *data)
+decide_on_host_permission_request_cb (GtkWidget               *info_bar,
+                                      int                      response,
+                                      PermissionRequestData   *data)
 {
   const char *address;
   EphyHostPermissionType permission_type;
@@ -1306,62 +1307,55 @@ decide_on_permission_request (GtkWidget               *info_bar,
 }
 
 static void
-show_permission_request_info_bar (WebKitWebView           *web_view,
-                                  WebKitPermissionRequest *decision,
-                                  EphyHostPermissionType   permission_type)
+decide_on_missing_media_plugins_request_cb (GtkWidget               *info_bar,
+                                            int                      response,
+                                            PermissionRequestData   *data)
+{
+  switch (response) {
+    case GTK_RESPONSE_YES:
+      webkit_permission_request_allow (data->request);
+      break;
+    default:
+      webkit_permission_request_deny (data->request);
+      break;
+  }
+
+  if (response == GTK_RESPONSE_YES)
+    webkit_permission_request_allow (data->request);
+  else
+    webkit_permission_request_deny (data->request);
+
+  gtk_widget_destroy (info_bar);
+  g_object_unref (data->request);
+  g_slice_free (PermissionRequestData, data);
+}
+
+static void
+show_permission_request_info_bar (WebKitWebView            *web_view,
+                                  WebKitPermissionRequest  *decision,
+                                  const char               *message,
+                                  const char               *no_label,
+                                  const char               *yes_label,
+                                  GtkWidget               **tracked_info_bar,
+                                  GCallback                 callback)
 {
   PermissionRequestData *data;
   GtkWidget *info_bar;
   GtkWidget *action_area;
   GtkWidget *content_area;
   GtkWidget *label;
-  char *message;
-  char *host;
 
-  info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
-                                            _("Allow"), GTK_RESPONSE_YES,
+  info_bar = gtk_info_bar_new_with_buttons (no_label, GTK_RESPONSE_NO,
+                                            yes_label, GTK_RESPONSE_YES,
                                             NULL);
 
   action_area = gtk_info_bar_get_action_area (GTK_INFO_BAR (info_bar));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (action_area),
                                   GTK_ORIENTATION_HORIZONTAL);
 
-  /* Label */
-  host = ephy_string_get_host_name (webkit_web_view_get_uri (web_view));
-
-  switch (permission_type) {
-  case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-    /* Translators: Notification policy for a specific site. */
-    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to show desktop notifications."),
-                                       host);
-    break;
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
-    /* Translators: Geolocation policy for a specific site. */
-    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
-                                       host);
-    break;
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
-    /* Translators: Microphone policy for a specific site. */
-    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your microphone."),
-                                       host);
-    break;
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
-    /* Translators: Webcam policy for a specific site. */
-    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your webcam."),
-                                       host);
-    break;
-  case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
-  default:
-    g_assert_not_reached ();
-  }
-
-  g_free (host);
-
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), message);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-
-  g_free (message);
 
   content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
   gtk_container_add (GTK_CONTAINER (content_area), label);
@@ -1373,30 +1367,91 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   data->web_view = EPHY_WEB_VIEW (web_view);
   data->request = g_object_ref (decision);
 
-  g_signal_connect (info_bar, "response",
-                    G_CALLBACK (decide_on_permission_request),
-                    data);
+  g_signal_connect (info_bar, "response", G_CALLBACK (callback), data);
+
+  ephy_web_view_track_info_bar (info_bar, tracked_info_bar);
+
+  ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
+                             info_bar, TRUE);
+}
+
+static void
+show_permission_request_info_bar_for_host_permission (WebKitWebView           *web_view,
+                                                      WebKitPermissionRequest *decision,
+                                                      EphyHostPermissionType   permission_type)
+{
+  char *message;
+  char *host;
+  GtkWidget **tracked_info_bar;
+
+  host = ephy_string_get_host_name (webkit_web_view_get_uri (web_view));
 
   switch (permission_type) {
   case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->notification_info_bar);
+    /* Translators: Notification policy for a specific site. */
+    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to show desktop notifications."),
+                                       host);
+    tracked_info_bar = &EPHY_WEB_VIEW (web_view)->notification_info_bar;
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
-    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
+    /* Translators: Geolocation policy for a specific site. */
+    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
+                                       host);
+    tracked_info_bar = &EPHY_WEB_VIEW (web_view)->geolocation_info_bar;
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
-    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->microphone_info_bar);
+    /* Translators: Microphone policy for a specific site. */
+    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your microphone."),
+                                       host);
+    tracked_info_bar = &EPHY_WEB_VIEW (web_view)->microphone_info_bar;
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
-    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_info_bar);
+    /* Translators: Webcam policy for a specific site. */
+    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your webcam."),
+                                       host);
+    tracked_info_bar = &EPHY_WEB_VIEW (web_view)->webcam_info_bar;
     break;
   case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
   default:
     g_assert_not_reached ();
   }
 
-  ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                             info_bar, TRUE);
+  show_permission_request_info_bar (web_view,
+                                    decision,
+                                    message,
+                                    _("_Deny"),
+                                    _("_Allow"),
+                                    tracked_info_bar,
+                                    G_CALLBACK (decide_on_host_permission_request_cb));
+
+  g_free (host);
+  g_free (message);
+}
+
+static void
+show_missing_media_plugin_info_bar (WebKitWebView           *web_view,
+                                    WebKitPermissionRequest *decision)
+{
+  char *host;
+  char *message;
+
+  host = ephy_string_get_host_name (webkit_web_view_get_uri (web_view));
+
+  /* Translators: Missing multimedia codec info bar */
+  message = g_markup_printf_escaped (_("The page at <b>%s</b> requires a %s multimedia codec."),
+                                     host,
+                                     webkit_install_missing_media_plugins_permission_request_get_description (WEBKIT_INSTALL_MISSING_MEDIA_PLUGINS_PERMISSION_REQUEST (decision)));
+
+  show_permission_request_info_bar (web_view,
+                                    decision,
+                                    message,
+                                    _("_Ignore"),
+                                    _("_Search for Codec"),
+                                    &EPHY_WEB_VIEW (web_view)->codecs_info_bar,
+                                    G_CALLBACK (decide_on_missing_media_plugins_request_cb));
+
+  g_free (host);
+  g_free (message);
 }
 
 static gboolean
@@ -1425,6 +1480,10 @@ permission_request_cb (WebKitWebView           *web_view,
       permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM;
     else
       permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE;
+  } else if (WEBKIT_IS_INSTALL_MISSING_MEDIA_PLUGINS_PERMISSION_REQUEST (decision)) {
+g_warning ("Got missing media plugin permission request");
+      show_missing_media_plugin_info_bar (web_view, decision);
+      return TRUE;
   } else {
     return FALSE;
   }
@@ -1447,7 +1506,7 @@ permission_request_cb (WebKitWebView           *web_view,
     break;
   }
 
-  show_permission_request_info_bar (web_view, decision, permission_type);
+  show_permission_request_info_bar_for_host_permission (web_view, decision, permission_type);
   return TRUE;
 }
 
