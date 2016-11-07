@@ -1294,55 +1294,17 @@ decide_on_permission_request (GtkWidget               *info_bar,
   g_slice_free (PermissionRequestData, data);
 }
 
-static gboolean
-permission_request_cb (WebKitWebView           *web_view,
-                       WebKitPermissionRequest *decision)
+static void
+show_permission_request_info_bar (WebKitWebView           *web_view,
+                                  WebKitPermissionRequest *decision)
 {
+  PermissionRequestData *data;
   GtkWidget *info_bar;
   GtkWidget *action_area;
   GtkWidget *content_area;
   GtkWidget *label;
-  PermissionRequestData *data;
   char *message;
   char *host;
-  const char *address;
-  EphyEmbedShell *shell;
-  EphyHostsManager *hosts_manager;
-  EphyHostPermission permission;
-  EphyHostPermissionType permission_type;
-
-  shell = ephy_embed_shell_get_default ();
-
-  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision)) {
-    permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION;
-  } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision)) {
-    /* Application mode implies being OK with notifications. */
-    if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-      webkit_permission_request_allow (decision);
-      return TRUE;
-    }
-    permission_type = EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
-  } else {
-    return FALSE;
-  }
-
-  address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-  hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
-  permission = ephy_hosts_manager_get_permission_for_address (hosts_manager,
-                                                              permission_type,
-                                                              address);
-
-  switch (permission) {
-  case EPHY_HOST_PERMISSION_ALLOW:
-    webkit_permission_request_allow (decision);
-    return TRUE;
-  case EPHY_HOST_PERMISSION_DENY:
-    webkit_permission_request_deny (decision);
-    return TRUE;
-  case EPHY_HOST_PERMISSION_UNDECIDED:
-  default:
-    break;
-  }
 
   info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
                                             _("Allow"), GTK_RESPONSE_YES,
@@ -1394,7 +1356,52 @@ permission_request_cb (WebKitWebView           *web_view,
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar, TRUE);
+}
 
+static gboolean
+permission_request_cb (WebKitWebView           *web_view,
+                       WebKitPermissionRequest *decision)
+{
+  const char *address;
+  EphyEmbedShell *shell;
+  EphyHostsManager *hosts_manager;
+  EphyHostPermission permission;
+  EphyHostPermissionType permission_type;
+
+  shell = ephy_embed_shell_get_default ();
+
+  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision)) {
+    permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION;
+  } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision)) {
+    /* Application mode implies being OK with notifications. */
+    if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+      webkit_permission_request_allow (decision);
+      return TRUE;
+    }
+    permission_type = EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
+  } else {
+    return FALSE;
+  }
+
+  address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
+  hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
+  permission = ephy_hosts_manager_get_permission_for_address (hosts_manager,
+                                                              permission_type,
+                                                              address);
+
+  switch (permission) {
+  case EPHY_HOST_PERMISSION_ALLOW:
+    webkit_permission_request_allow (decision);
+    return TRUE;
+  case EPHY_HOST_PERMISSION_DENY:
+    webkit_permission_request_deny (decision);
+    return TRUE;
+  case EPHY_HOST_PERMISSION_UNDECIDED:
+  default:
+    break;
+  }
+
+  show_permission_request_info_bar (web_view, decision);
   return TRUE;
 }
 
