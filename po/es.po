@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
 "POT-Creation-Date: 2016-10-30 01:33+0000\n"
-"PO-Revision-Date: 2016-10-31 09:37+0100\n"
+"PO-Revision-Date: 2016-11-07 16:48+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -473,6 +473,8 @@ msgstr ""
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
+"Decisión que aplicar cuando se solicita permiso para guardar la contraseña "
+"para este equipo"
 
 #: data/org.gnome.epiphany.host.gschema.xml:17
 msgid ""
@@ -1115,7 +1117,6 @@ msgstr "El sitio en %s parece no estar disponible."
 
 #. Further error details when a site cannot be loaded due to a network error.
 #: embed/ephy-web-view.c:1793
-#, fuzzy
 #| msgid ""
 #| "<p>The site at <strong>%s</strong> seems to be unavailable.</p><p>It may "
 #| "be temporarily inaccessible or moved to a new address. You may wish to "
@@ -1124,17 +1125,16 @@ msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
 msgstr ""
-"<p>Parece que el sitio web <strong>%s</strong> no está disponible.</p><p> "
 "Puede que no esté disponible temporalmente o que se haya movido a otra "
 "dirección. Puede querer comprobar que su conexión a Internet está "
-"funcionando correctamente.</p>"
+"funcionando correctamente."
 
 #. Technical details when a site cannot be loaded due to a network error.
 #: embed/ephy-web-view.c:1803
-#, fuzzy, c-format
+#, c-format
 #| msgid "<p>The precise error was: <i>%s</i></p>"
 msgid "The precise error was: %s"
-msgstr "<p>El error concreto es: <i>%s</i></p>"
+msgstr "El error concreto es: %s"
 
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
@@ -1158,17 +1158,18 @@ msgstr "Es posible que haya un problema"
 
 #. Error details when a site cannot be loaded due to a page crash error.
 #: embed/ephy-web-view.c:1843
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "Oops! This site might have caused the web browser to close unexpectedly"
 msgid "The site at %s may have caused Web to close unexpectedly."
-msgstr "El sitio puede haber causado que Epiphany se cerrase inesperadamente"
+msgstr "El sitio %s puede haber causado que Web se cerrase inesperadamente."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
 #: embed/ephy-web-view.c:1850
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
+"Si esto vuelve a suceder, informe del error a los desarrolladores de %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:1886
@@ -1182,21 +1183,17 @@ msgstr "¡Ups!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:1892
-#, fuzzy
 #| msgid "Oops! Something went wrong displaying %s"
 msgid "Something went wrong while displaying this page."
-msgstr "Algo salió mal al mostrar %s"
+msgstr "Algo salió mal al mostrar esta página."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:1894
-#, fuzzy
 #| msgid ""
 #| "<p>Something went wrong while displaying this page.</p><p>Please reload "
 #| "or visit a different page to continue.</p>"
 msgid "Please reload or visit a different page to continue."
-msgstr ""
-"<p>Algo salió mal al mostrar esta página.</p><p>Recargue la página o visite "
-"una página diferente para continuar.</p>"
+msgstr "Recargue la página o visite una página diferente para continuar."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:1927
@@ -1210,7 +1207,7 @@ msgstr "Esta conexión no es segura"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:1934
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "<p>This does not look like the real <strong>%s</strong>. Attackers might "
 #| "be trying to steal or alter information going to or from this site (for "
@@ -1219,10 +1216,8 @@ msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
 "alter information going to or from this site."
 msgstr ""
-"<p>Este no parece ser el sitio <strong>%s</strong> real. Los atacantes puede "
-"estar intentando robar o alterar la información que recibe este sitio (por "
-"ejemplo, mensajes privados, información de tarjetas de crédito o "
-"contraseñas).</p>"
+"Este no parece ser el sitio %s real. Los atacantes puede estar intentando "
+"robar o alterar la información que recibe o envía este sitio."
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #: embed/ephy-web-view.c:1944
@@ -1556,13 +1551,15 @@ msgstr "_Rehacer"
 #: lib/widgets/ephy-password-notification.c:56
 #, c-format
 msgid "The password of your Firefox account %s seems to have been changed."
-msgstr ""
+msgstr "Parece que se ha cambiado la contraseña de su cuenta de Firefox %s."
 
 #: lib/widgets/ephy-password-notification.c:62
 msgid ""
 "Please visit Preferences and sign in with the new password to continue the "
 "sync process."
 msgstr ""
+"Vaya a la página de preferencias e inicie sesión con la nueva contraseña "
+"para continuar el proceso de sincronización."
 
 #. Label when clicking the lock icon on a secure page. %s is the website's hostname.
 #: lib/widgets/ephy-security-popover.c:76
@@ -1845,17 +1842,16 @@ msgstr "Abrir medio como"
 #: src/prefs-dialog.c:233 src/prefs-dialog.c:1573
 #, c-format
 msgid "Currently logged in as %s"
-msgstr ""
+msgstr "Actualmente registrado como %s"
 
 #: src/prefs-dialog.c:357
-#, fuzzy
 #| msgid "Oops! Something went wrong displaying %s"
 msgid "Something went wrong, please try again."
-msgstr "Algo salió mal al mostrar %s"
+msgstr "Algo salió mal, inténtelo de nuevo."
 
 #: src/prefs-dialog.c:376
 msgid "Please don't leave this page until you have completed the verification."
-msgstr ""
+msgstr "No abandone esta página hasta que haya completado la verificación."
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
@@ -2165,10 +2161,9 @@ msgid "Text _Encoding"
 msgstr "Codificación del te_xto"
 
 #: src/resources/gtk/page-menu-popover.ui:179
-#, fuzzy
 #| msgid "Save As _Web Application…"
 msgid "Install Site as Web _Application…"
-msgstr "Guardar como aplicación _web…"
+msgstr "Instalar página como aplicación _web…"
 
 #: src/resources/history-dialog.ui:21
 msgid "_Copy Location"
@@ -2402,16 +2397,18 @@ msgid ""
 "computers. Web is not Firefox and cannot sync with Firefox. Web is not "
 "produced or endorsed by Mozilla."
 msgstr ""
+"Inicie sesión con su cuenta de Firefox para sincronizar sus datos con Web en "
+"otros equipos. Wed no es Firefox y no se puede sincronizar con Firefox. Web "
+"no está desarrollado ni promocionado por Mozilla."
 
 #: src/resources/prefs-dialog.ui:809
 msgid "Sign out if you wish to stop syncing."
-msgstr ""
+msgstr "Cierre la sesión si quiere detener la sincronización."
 
 #: src/resources/prefs-dialog.ui:814
-#, fuzzy
 #| msgid "Sign Text"
 msgid "Sign _out"
-msgstr "Firmar texto"
+msgstr "Cerrar _sesión"
 
 #: src/resources/prefs-lang-dialog.ui:13
 msgid "Add Language"
