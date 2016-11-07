@@ -135,89 +135,23 @@ ephy_hosts_manager_new (void)
   return EPHY_HOSTS_MANAGER (g_object_new (EPHY_TYPE_HOSTS_MANAGER, NULL));
 }
 
-static EphyHostPermission
-ephy_hosts_manager_get_notifications_permission_for_address (EphyHostsManager *manager,
-                                                             const char       *address)
+static const char *
+permission_type_to_string (EphyHostPermissionType type)
 {
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  return g_settings_get_enum (settings, "notifications-permission");
-}
-
-static void
-ephy_hosts_manager_set_notifications_permission_for_address (EphyHostsManager   *manager,
-                                                             const char         *address,
-                                                             EphyHostPermission  permission)
-{
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  g_settings_set_enum (settings, "notifications-permission", permission);
-}
-
-static EphyHostPermission
-ephy_hosts_manager_get_save_password_permission_for_address (EphyHostsManager *manager,
-                                                             const char       *address)
-{
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  return g_settings_get_enum (settings, "save-password-permission");
-}
-
-static void
-ephy_hosts_manager_set_save_password_permission_for_address (EphyHostsManager   *manager,
-                                                             const char         *address,
-                                                             EphyHostPermission  permission)
-{
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  g_settings_set_enum (settings, "save-password-permission", permission);
-}
-
-static EphyHostPermission
-ephy_hosts_manager_get_geolocation_permission_for_address (EphyHostsManager *manager,
-                                                           const char       *address)
-{
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  return g_settings_get_enum (settings, "geolocation-permission");
-}
-
-static void
-ephy_hosts_manager_set_geolocation_permission_for_address (EphyHostsManager   *manager,
-                                                           const char         *address,
-                                                           EphyHostPermission  permission)
-{
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  g_settings_set_enum (settings, "geolocation-permission", permission);
-}
-
-static EphyHostPermission
-ephy_hosts_manager_get_audio_device_permission_for_address (EphyHostsManager *manager,
-                                                            const char       *address)
-{
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  return g_settings_get_enum (settings, "audio-device-permission");
-}
-
-static void
-ephy_hosts_manager_set_audio_device_permission_for_address (EphyHostsManager   *manager,
-                                                            const char         *address,
-                                                            EphyHostPermission  permission)
-{
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  g_settings_set_enum (settings, "audio-device-permission", permission);
-}
-
-static EphyHostPermission
-ephy_hosts_manager_get_video_device_permission_for_address (EphyHostsManager *manager,
-                                                            const char       *address)
-{
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  return g_settings_get_enum (settings, "video-device-permission");
-}
-
-static void
-ephy_hosts_manager_set_video_device_permission_for_address (EphyHostsManager   *manager,
-                                                            const char         *address,
-                                                            EphyHostPermission  permission)
-{
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
-  g_settings_set_enum (settings, "video-device-permission", permission);
+  switch (type) {
+  case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
+    return "notifications-permission";
+  case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
+    return "save-password-permission";
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
+    return "geolocation-permission";
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
+    return "audio-device-permission";
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
+    return "video-device-permission";
+  default:
+    g_assert_not_reached ();
+  }
 }
 
 EphyHostPermission
@@ -225,20 +159,8 @@ ephy_hosts_manager_get_permission_for_address (EphyHostsManager       *manager,
                                                EphyHostPermissionType  type,
                                                const char             *address)
 {
-  switch (type) {
-  case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-    return ephy_hosts_manager_get_notifications_permission_for_address (manager, address);
-  case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
-    return ephy_hosts_manager_get_save_password_permission_for_address (manager, address);
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
-    return ephy_hosts_manager_get_geolocation_permission_for_address (manager, address);
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
-    return ephy_hosts_manager_get_audio_device_permission_for_address (manager, address);
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
-    return ephy_hosts_manager_get_video_device_permission_for_address (manager, address);
-  default:
-    g_assert_not_reached ();
-  }
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  return g_settings_get_enum (settings, permission_type_to_string (type));
 }
 
 void
@@ -247,23 +169,6 @@ ephy_hosts_manager_set_permission_for_address (EphyHostsManager       *manager,
                                                const char             *address,
                                                EphyHostPermission      permission)
 {
-  switch (type) {
-  case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-    ephy_hosts_manager_set_notifications_permission_for_address (manager, address, permission);
-    break;
-  case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
-    ephy_hosts_manager_set_save_password_permission_for_address (manager, address, permission);
-    break;
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
-    ephy_hosts_manager_set_geolocation_permission_for_address (manager, address, permission);
-    break;
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
-    ephy_hosts_manager_set_audio_device_permission_for_address (manager, address, permission);
-    break;
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
-    ephy_hosts_manager_set_video_device_permission_for_address (manager, address, permission);
-    break;
-  default:
-    g_assert_not_reached ();
-  }
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  g_settings_set_enum (settings, permission_type_to_string (type), permission);
 }
