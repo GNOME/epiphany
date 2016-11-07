@@ -83,8 +83,8 @@ ephy_hosts_manager_class_init (EphyHostsManagerClass *klass)
 }
 
 static void
-setting_changed_cb (GSettings *settings,
-                    char *key,
+setting_changed_cb (GSettings        *settings,
+                    char             *key,
                     EphyHostsManager *manager)
 {
   const char *host = g_hash_table_lookup (manager->settings_mapping, settings);
@@ -93,7 +93,7 @@ setting_changed_cb (GSettings *settings,
 
 static GSettings *
 ephy_hosts_manager_get_settings_for_address (EphyHostsManager *manager,
-                                             const char *address)
+                                             const char       *address)
 {
   char *host = ephy_string_get_host_name (address);
   char *key_file = NULL;
@@ -137,16 +137,16 @@ ephy_hosts_manager_new (void)
 
 EphyHostPermission
 ephy_hosts_manager_get_notifications_permission_for_address (EphyHostsManager *manager,
-                                                             const char *address)
+                                                             const char       *address)
 {
   GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
   return g_settings_get_enum (settings, "notifications-permission");
 }
 
 void
-ephy_hosts_manager_set_notifications_permission_for_address (EphyHostsManager *manager,
-                                                             const char *address,
-                                                             EphyHostPermission permission)
+ephy_hosts_manager_set_notifications_permission_for_address (EphyHostsManager   *manager,
+                                                             const char         *address,
+                                                             EphyHostPermission  permission)
 {
   GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
   g_settings_set_enum (settings, "notifications-permission", permission);
@@ -154,16 +154,16 @@ ephy_hosts_manager_set_notifications_permission_for_address (EphyHostsManager *m
 
 EphyHostPermission
 ephy_hosts_manager_get_save_password_permission_for_address (EphyHostsManager *manager,
-                                                             const char *address)
+                                                             const char       *address)
 {
   GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
   return g_settings_get_enum (settings, "save-password-permission");
 }
 
 void
-ephy_hosts_manager_set_save_password_permission_for_address (EphyHostsManager *manager,
-                                                             const char *address,
-                                                             EphyHostPermission permission)
+ephy_hosts_manager_set_save_password_permission_for_address (EphyHostsManager   *manager,
+                                                             const char         *address,
+                                                             EphyHostPermission  permission)
 {
   GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
   g_settings_set_enum (settings, "save-password-permission", permission);
