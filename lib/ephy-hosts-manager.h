@@ -37,7 +37,8 @@ typedef enum {
 
 typedef enum {
   EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS,
-  EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD
+  EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD,
+  EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION
 } EphyHostPermissionType;
 
 EphyHostsManager*       ephy_hosts_manager_new                                      (void);

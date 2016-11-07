@@ -169,6 +169,23 @@ ephy_hosts_manager_set_save_password_permission_for_address (EphyHostsManager   
   g_settings_set_enum (settings, "save-password-permission", permission);
 }
 
+static EphyHostPermission
+ephy_hosts_manager_get_geolocation_permission_for_address (EphyHostsManager *manager,
+                                                           const char       *address)
+{
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  return g_settings_get_enum (settings, "geolocation-permission");
+}
+
+static void
+ephy_hosts_manager_set_geolocation_permission_for_address (EphyHostsManager   *manager,
+                                                           const char         *address,
+                                                           EphyHostPermission  permission)
+{
+  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  g_settings_set_enum (settings, "geolocation-permission", permission);
+}
+
 EphyHostPermission
 ephy_hosts_manager_get_permission_for_address (EphyHostsManager       *manager,
                                                EphyHostPermissionType  type,
@@ -179,6 +196,8 @@ ephy_hosts_manager_get_permission_for_address (EphyHostsManager       *manager,
     return ephy_hosts_manager_get_notifications_permission_for_address (manager, address);
   case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
     return ephy_hosts_manager_get_save_password_permission_for_address (manager, address);
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
+    return ephy_hosts_manager_get_geolocation_permission_for_address (manager, address);
   default:
     g_assert_not_reached ();
   }
@@ -196,6 +215,9 @@ ephy_hosts_manager_set_permission_for_address (EphyHostsManager       *manager,
     break;
   case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
     ephy_hosts_manager_set_save_password_permission_for_address (manager, address, permission);
+    break;
+  case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
+    ephy_hosts_manager_set_geolocation_permission_for_address (manager, address, permission);
     break;
   default:
     g_assert_not_reached ();

@@ -1257,6 +1257,8 @@ decide_on_permission_request (GtkWidget               *info_bar,
                               int                      response,
                               PermissionRequestData   *data)
 {
+  const char *address;
+
   switch (response) {
     case GTK_RESPONSE_YES:
       webkit_permission_request_allow (data->request);
@@ -1266,16 +1268,25 @@ decide_on_permission_request (GtkWidget               *info_bar,
       break;
   }
 
-  if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (data->request) && response != GTK_RESPONSE_NONE) {
-    const char *address = ephy_web_view_get_address (data->web_view);
-    if (ephy_embed_utils_address_has_web_scheme (address)) {
-      EphyHostsManager *hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
-      ephy_hosts_manager_set_permission_for_address (
-        hosts_manager,
-        EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS,
-        address,
-        response == GTK_RESPONSE_YES ? EPHY_HOST_PERMISSION_ALLOW : EPHY_HOST_PERMISSION_DENY);
-    }
+  address = ephy_web_view_get_address (data->web_view);
+
+  if ((WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (data->request) ||
+       WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (data->request)) &&
+      response != GTK_RESPONSE_NONE &&
+      ephy_embed_utils_address_has_web_scheme (address)) {
+    EphyEmbedShell *shell;
+    EphyHostsManager *hosts_manager;
+
+    shell = ephy_embed_shell_get_default ();
+    hosts_manager = ephy_embed_shell_get_hosts_manager (shell);
+
+    ephy_hosts_manager_set_permission_for_address (
+      hosts_manager,
+      WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (data->request) ? EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION
+                                                               : EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS,
+      address,
+      response == GTK_RESPONSE_YES ? EPHY_HOST_PERMISSION_ALLOW
+                                   : EPHY_HOST_PERMISSION_DENY);
   }
 
   gtk_widget_destroy (info_bar);
@@ -1294,37 +1305,43 @@ permission_request_cb (WebKitWebView           *web_view,
   PermissionRequestData *data;
   char *message;
   char *host;
+  const char *address;
+  EphyEmbedShell *shell;
+  EphyHostsManager *hosts_manager;
+  EphyHostPermission permission;
+  EphyHostPermissionType permission_type;
 
-  if (!WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision) &&
-      !WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision))
-    return FALSE;
+  shell = ephy_embed_shell_get_default ();
 
-  if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision)) {
+  if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision)) {
+    permission_type = EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION;
+  } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision)) {
     /* Application mode implies being OK with notifications. */
-    if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
       webkit_permission_request_allow (decision);
       return TRUE;
     }
+    permission_type = EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
+  } else {
+    return FALSE;
+  }
 
-    {
-      const char *address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-      EphyHostsManager *hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
-      EphyHostPermission permission = ephy_hosts_manager_get_permission_for_address (hosts_manager,
-                                                                                     EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS,
-                                                                                     address);
+  address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
+  hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
+  permission = ephy_hosts_manager_get_permission_for_address (hosts_manager,
+                                                              permission_type,
+                                                              address);
 
-      switch (permission) {
-      case EPHY_HOST_PERMISSION_ALLOW:
-        webkit_permission_request_allow (decision);
-        return TRUE;
-      case EPHY_HOST_PERMISSION_DENY:
-        webkit_permission_request_deny (decision);
-        return TRUE;
-      case EPHY_HOST_PERMISSION_UNDECIDED:
-      default:
-        break;
-      }
-    }
+  switch (permission) {
+  case EPHY_HOST_PERMISSION_ALLOW:
+    webkit_permission_request_allow (decision);
+    return TRUE;
+  case EPHY_HOST_PERMISSION_DENY:
+    webkit_permission_request_deny (decision);
+    return TRUE;
+  case EPHY_HOST_PERMISSION_UNDECIDED:
+  default:
+    break;
   }
 
   info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
