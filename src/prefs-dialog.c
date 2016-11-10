@@ -373,7 +373,7 @@ server_message_received_cb (WebKitUserContentManager *manager,
       FxACallbackData *cb_data;
 
       text = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>",
-                              _("Please don't leave this page until you have completed the verification."));
+                              _("Please don’t leave this page until you have completed the verification."));
       gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details), text);
       gtk_widget_set_visible (dialog->sync_sign_in_details, TRUE);
 

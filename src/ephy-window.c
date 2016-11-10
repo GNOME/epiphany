@@ -1492,7 +1492,7 @@ populate_context_menu (WebKitWebView       *web_view,
       char *label;
       GVariant *value;
 
-      label = g_strdup_printf (_("Search the Web for '%s'"), ellipsized);
+      label = g_strdup_printf (_("Search the Web for “%s”"), ellipsized);
       value = g_variant_new_string (label);
       search_selection_action_name = g_action_print_detailed_name ("search-selection",
                                                                    value);

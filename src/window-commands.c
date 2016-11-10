@@ -865,7 +865,7 @@ confirm_web_application_overwrite (GtkWindow *parent, const char *title)
                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_QUESTION,
                                    GTK_BUTTONS_NONE,
-                                   _("A web application named '%s' already exists. Do you want to replace it?"),
+                                   _("A web application named “%s” already exists. Do you want to replace it?"),
                                    title);
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("Cancel"),
@@ -909,10 +909,10 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
                                                 app_name,
                                                 gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
     if (desktop_file)
-      message = g_strdup_printf (_("The application '%s' is ready to be used"),
+      message = g_strdup_printf (_("The application “%s” is ready to be used"),
                                  app_name);
     else
-      message = g_strdup_printf (_("The application '%s' could not be created"),
+      message = g_strdup_printf (_("The application “%s” could not be created"),
                                  app_name);
 
     notification = notify_notification_new (message,

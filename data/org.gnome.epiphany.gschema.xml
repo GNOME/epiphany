@@ -12,7 +12,7 @@
 		<key type="s" name="homepage-url">
 			<default>''</default>
 			<summary>Home page</summary>
-			<description>Address of the user's home page.</description>
+			<description>Address of the user’s home page.</description>
 		</key>
 		<key type="b" name="homepage-loads-in-new-tabs">
 			<default>false</default>
@@ -60,12 +60,12 @@
 		</key>
 		<key type="b" name="internal-view-source">
 			<default>true</default>
-			<summary>Don't use an external application to view page	source.</summary>
+			<summary>Don’t use an external application to view page	source.</summary>
 		</key>
                 <key name="restore-session-policy" enum="org.gnome.Epiphany.EphyPrefsRestoreSessionPolicy">
                         <default>'always'</default>
                         <summary>Whether to automatically restore the last session</summary>
-                        <description>Defines how the session will be restored during startup. Allowed values are 'always' (the previous state of the application is always restored), 'crashed' (the session is only restored if the application crashes) and 'never' (the homepage is always shown).</description>
+                        <description>Defines how the session will be restored during startup. Allowed values are “always” (the previous state of the application is always restored), “crashed” (the session is only restored if the application crashes) and “never” (the homepage is always shown).</description>
                 </key>
                 <key type="b" name="restore-session-delaying-loads">
                         <default>true</default>
@@ -75,18 +75,18 @@
                 <key name="process-model" enum="org.gnome.Epiphany.EphyPrefsProcessModel">
                         <default>'one-secondary-process-per-web-view'</default>
                         <summary>Process model</summary>
-                        <description>This option allows to set the process model used. Use 'shared-secondary-process' to use a single web process shared by all the tabs and 'one-secondary-process-per-web-view' to use a different web process for each tab.</description>
+                        <description>This option allows to set the process model used. Use “shared-secondary-process” to use a single web process shared by all the tabs and “one-secondary-process-per-web-view” to use a different web process for each tab.</description>
                 </key>
                 <key type="u" name="max-processes">
                         <default>0</default>
-                        <summary>Maximum number of web processes created at the same time when using 'one-secondary-process-per-web-view' model</summary>
-                        <description>This option sets a limit to the number of web processes that will be used at the same time for the 'one-secondary-process-per-web-view' model. The default value is '0' and means no limit.</description>
+                        <summary>Maximum number of web processes created at the same time when using “one-secondary-process-per-web-view” model</summary>
+                        <description>This option sets a limit to the number of web processes that will be used at the same time for the “one-secondary-process-per-web-view” model. The default value is “0” and means no limit.</description>
 
                 </key>
 		<key type="s" name="sync-user">
 			<default>''</default>
 			<summary>The sync user currently logged in</summary>
-			<description>The email linked to the Firefox Account used to sync data with Mozilla's servers.</description>
+			<description>The email linked to the Firefox Account used to sync data with Mozilla’s servers.</description>
 		</key>
 		<key type="d" name="sync-time">
 			<default>0</default>
@@ -103,12 +103,12 @@
 		<key name="tabs-bar-position" enum="org.gnome.Epiphany.EphyPrefsUITabsBarPosition">
 			<default>'top'</default>
 			<summary>The position of the tabs bar.</summary>
-			<description>Controls where the tabs bar is shown. Possible values are 'top' (the default), 'bottom', 'left' (vertical tabs with bar on the left) and 'right' (vertical tabs with bar on the right).</description>
+			<description>Controls where the tabs bar is shown. Possible values are “top” (the default), “bottom”, “left” (vertical tabs with bar on the left) and “right” (vertical tabs with bar on the right).</description>
 		</key>
 		<key name="tabs-bar-visibility-policy" enum="org.gnome.Epiphany.EphyPrefsUITabsBarVisibilityPolicy">
 			<default>'more-than-one'</default>
 			<summary>The visibility policy for the tabs  bar.</summary>
-			<description>Controls when the tabs bar is shown. Possible values are 'always' (the tabs bar is always shown), 'more-than-one' (the tabs bar is only shown if there's two or more tabs) and 'never' (the tabs bar is never shown).</description>
+			<description>Controls when the tabs bar is shown. Possible values are “always” (the tabs bar is always shown), “more-than-one” (the tabs bar is only shown if there’s two or more tabs) and “never” (the tabs bar is never shown).</description>
 		</key>
 	</schema>
 	<schema path="/org/gnome/epiphany/web/" id="org.gnome.Epiphany.web">
@@ -154,12 +154,12 @@
 		<key type="as" name="language">
 			<default>['system']</default>
 			<summary>Languages</summary>
-			<description>Preferred languages. Array of locale codes or 'system' to use current locale.</description>
+			<description>Preferred languages. Array of locale codes or “system” to use current locale.</description>
 		</key>
 		<key name="cookies-policy" enum="org.gnome.Epiphany.EphyPrefsWebCookiesPolicy">
 			<default>'no-third-party'</default>
 			<summary>Cookie accept</summary>
-			<description>Where to accept cookies from. Possible values are "always", "no-third-party" and "never".</description>
+			<description>Where to accept cookies from. Possible values are “always”, “no-third-party” and “never”.</description>
 		</key>
 		<key type="b" name="enable-popups">
 			<default>true</default>
@@ -195,7 +195,7 @@
 		<key type="s" name="download-dir">
 			<default>'Downloads'</default>
 			<summary>The downloads folder</summary>
-			<description>The path of the folder where to download files to; or "Downloads" to use the default downloads folder, or "Desktop" to use the desktop folder.</description>
+			<description>The path of the folder where to download files to; or “Downloads” to use the default downloads folder, or “Desktop” to use the desktop folder.</description>
 		</key>
 		<key type="as" name="recent-encodings">
 			<default>['' ]</default>
