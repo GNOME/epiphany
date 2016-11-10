@@ -1406,6 +1406,25 @@ ellipsize_string (const char *string,
   return ellipsized;
 }
 
+static char *
+mnemonic_escape_string (const char *string)
+{
+  GString *gstring;
+  const char *ptr;
+
+  gstring = g_string_new (string);
+  ptr = gstring->str;
+
+  /* Convert each underscore to a double underscore. */
+  while ((ptr = g_utf8_strchr (ptr, -1, '_')) != NULL) {
+    ptrdiff_t pos = ptr - gstring->str;
+    g_string_insert (gstring, pos, "_");
+    ptr = gstring->str + pos + 2;
+  }
+
+  return g_string_free (gstring, FALSE);
+}
+
 static void
 parse_context_menu_user_data (WebKitContextMenu *context_menu,
                               const char       **selected_text)
@@ -1488,19 +1507,20 @@ populate_context_menu (WebKitWebView       *web_view,
   parse_context_menu_user_data (context_menu, &selected_text);
   if (selected_text) {
     char *ellipsized = ellipsize_string (selected_text, 32);
-    if (ellipsized) {
-      char *label;
-      GVariant *value;
+    char *escaped = mnemonic_escape_string (ellipsized);
+    char *label;
+    GVariant *value;
 
-      label = g_strdup_printf (_("Search the Web for “%s”"), ellipsized);
-      value = g_variant_new_string (label);
-      search_selection_action_name = g_action_print_detailed_name ("search-selection",
-                                                                   value);
-      g_variant_unref (value);
-      can_search_selection = TRUE;
+    label = g_strdup_printf (_("Search the Web for “%s”"), escaped);
+    value = g_variant_new_string (label);
+    search_selection_action_name = g_action_print_detailed_name ("search-selection",
+                                                                 value);
+    g_variant_unref (value);
+    can_search_selection = TRUE;
 
-      g_free (label);
-    }
+    g_free (ellipsized);
+    g_free (escaped);
+    g_free (label);
   }
 
   webkit_context_menu_remove_all (context_menu);
