@@ -8,7 +8,7 @@ EXTRA_DIST = \
 	LICENSE.prism
 
 AM_DISTCHECK_CONFIGURE_FLAGS = \
-	--enable-appdata-check	\
+	--enable-appstream-util	\
 	--enable-debug
 
 @CODE_COVERAGE_RULES@
