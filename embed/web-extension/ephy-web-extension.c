@@ -938,12 +938,11 @@ form_destroyed_cb (gpointer form_auth, GObject *form)
 }
 
 static void
-web_page_document_loaded (WebKitWebPage    *web_page,
-                          EphyWebExtension *extension)
+web_page_form_controls_associated (WebKitWebPage    *web_page,
+                                   GPtrArray        *elements,
+                                   EphyWebExtension *extension)
 {
-  WebKitDOMHTMLCollection *forms = NULL;
   WebKitDOMDocument *document = NULL;
-  gulong forms_n;
   guint i;
 
   if (!extension->form_auth_data_cache ||
@@ -951,21 +950,18 @@ web_page_document_loaded (WebKitWebPage    *web_page,
     return;
 
   document = webkit_web_page_get_dom_document (web_page);
-  forms = webkit_dom_document_get_forms (document);
-  forms_n = webkit_dom_html_collection_get_length (forms);
 
-  if (forms_n == 0) {
-    LOG ("No forms found.");
-    g_object_unref (forms);
-    return;
-  }
-
-  for (i = 0; i < forms_n; i++) {
+  for (i = 0; i < elements->len; ++i) {
+    WebKitDOMElement *element;
     WebKitDOMHTMLFormElement *form;
     WebKitDOMNode *username_node = NULL;
     WebKitDOMNode *password_node = NULL;
 
-    form = WEBKIT_DOM_HTML_FORM_ELEMENT (webkit_dom_html_collection_item (forms, i));
+    element = WEBKIT_DOM_ELEMENT (g_ptr_array_index (elements, i));
+    if (!WEBKIT_DOM_IS_HTML_FORM_ELEMENT(element))
+      continue;
+
+    form = WEBKIT_DOM_HTML_FORM_ELEMENT (element);
 
     /* We have a field that may be the user, and one for a password. */
     if (ephy_web_dom_utils_find_form_auth_elements (form, &username_node, &password_node)) {
@@ -1024,8 +1020,6 @@ web_page_document_loaded (WebKitWebPage    *web_page,
     } else
       LOG ("No pre-fillable/hookable form found");
   }
-
-  g_object_unref (forms);
 }
 
 static void
@@ -1107,14 +1101,14 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
   g_signal_connect (web_page, "send-request",
                     G_CALLBACK (web_page_send_request),
                     extension);
-  g_signal_connect (web_page, "document-loaded",
-                    G_CALLBACK (web_page_document_loaded),
-                    extension);
   g_signal_connect (web_page, "notify::uri",
                     G_CALLBACK (web_page_uri_changed),
                     extension);
   g_signal_connect (web_page, "context-menu",
                     G_CALLBACK (web_page_context_menu),
+                    extension);
+  g_signal_connect (web_page, "form-controls-associated",
+                    G_CALLBACK (web_page_form_controls_associated),
                     extension);
 }
 
