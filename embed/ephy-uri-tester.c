@@ -37,14 +37,9 @@
 
 #include <gio/gio.h>
 #include <glib/gstdio.h>
+#include <httpseverywhere.h>
 #include <libsoup/soup.h>
 #include <string.h>
-
-/* https://bugzilla.gnome.org/show_bug.cgi?id=772661 */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wredundant-decls"
-#include <httpseverywhere.h>
-#pragma GCC diagnostic pop
 
 #define DEFAULT_FILTER_URL "https://easylist-downloads.adblockplus.org/easylist.txt"
 #define FILTERS_LIST_FILENAME "filters.list"
