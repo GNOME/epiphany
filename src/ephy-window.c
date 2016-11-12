@@ -921,7 +921,7 @@ const struct {
   { "copy-audio-location", N_("_Copy Audio Address") },
 
   /* Selection */
-  { "search-selection", NULL },
+  { "search-selection", "search-selection-placeholder" },
 
   { "save-as", N_("Save Pa_ge As…") },
   { "page-source", N_("_Page Source") }
@@ -1272,11 +1272,16 @@ action_activate_cb (GtkAction *action, gpointer user_data)
 
   g_action_activate (action_data->action, action_data->parameter);
 
+  if (action_data->parameter != NULL)
+    g_variant_unref (action_data->parameter);
+
   g_slice_free (GActionData, action_data);
 }
 
 static WebKitContextMenuItem *
-webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
+webkit_context_menu_item_new_from_gaction_with_parameter (GAction    *action,
+                                                          const char *label,
+                                                          GVariant   *parameter)
 {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -1286,12 +1291,10 @@ webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
 
   action_data = g_slice_new (GActionData);
   action_data->action = action;
-  if (g_action_get_parameter_type (action) != NULL
-      && g_variant_type_equal (g_action_get_parameter_type (action), G_VARIANT_TYPE_STRING)) {
-    action_data->parameter = g_variant_new_string (label);
-  } else {
-    action_data->parameter = NULL;
-  }
+  action_data->parameter = parameter;
+
+  if (parameter != NULL)
+    g_variant_ref_sink (parameter);
 
   gtk_action = gtk_action_new (g_action_get_name (action), label, NULL, NULL);
   g_signal_connect (gtk_action, "activate",
@@ -1309,6 +1312,67 @@ webkit_context_menu_item_new_from_gaction (GAction *action, const gchar *label)
 #pragma GCC diagnostic pop
 }
 
+static WebKitContextMenuItem *
+webkit_context_menu_item_new_from_gaction (GAction    *action,
+                                           const char *label)
+{
+  return webkit_context_menu_item_new_from_gaction_with_parameter (action, label, NULL);
+}
+
+static char *
+ellipsize_string (const char *string,
+                  glong       max_length)
+{
+  char *ellipsized;
+  glong length = g_utf8_strlen (string, -1);
+
+  if (length == 0)
+    return NULL;
+
+  if (length < max_length) {
+    ellipsized = g_strdup (string);
+  } else {
+    char *str = g_utf8_substring (string, 0, max_length);
+    ellipsized = g_strconcat (str, "…", NULL);
+    g_free (str);
+  }
+  return ellipsized;
+}
+
+static char *
+mnemonic_escape_string (const char *string)
+{
+  GString *gstring;
+  const char *ptr;
+
+  gstring = g_string_new (string);
+  ptr = gstring->str;
+
+  /* Convert each underscore to a double underscore. */
+  while ((ptr = g_utf8_strchr (ptr, -1, '_')) != NULL) {
+    ptrdiff_t pos = ptr - gstring->str;
+    g_string_insert (gstring, pos, "_");
+    ptr = gstring->str + pos + 2;
+  }
+
+  return g_string_free (gstring, FALSE);
+}
+
+static char *
+format_search_label (const char *search_term)
+{
+  char *ellipsized = ellipsize_string (search_term, 32);
+  char *escaped = mnemonic_escape_string (ellipsized);
+  char *label;
+
+  label = g_strdup_printf (_("Search the Web for “%s”"), escaped);
+
+  g_free (ellipsized);
+  g_free (escaped);
+
+  return label;
+}
+
 static void
 add_action_to_context_menu (WebKitContextMenu *context_menu,
                             GActionGroup      *action_group,
@@ -1318,18 +1382,25 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
   GAction *action;
   const char *label;
   char *name;
+  char *search_label;
+  const char *search_term;
   GVariant *target;
 
   g_action_parse_detailed_name (action_name, &name, &target, NULL);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), name);
   label = g_hash_table_lookup (window->action_labels, name);
-  if (label == NULL)
-    label = g_variant_get_string (target, NULL);
-
-  g_return_if_fail (label != NULL);
-
-  webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label)));
+  if (strcmp (label, "search-selection-placeholder") != 0) {
+    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label)));
+  } else {
+    search_term = g_variant_get_string (target, NULL);
+    search_label = format_search_label (search_term);
+    webkit_context_menu_append (context_menu,
+                                webkit_context_menu_item_new_from_gaction_with_parameter (action,
+                                                                                          search_label,
+                                                                                          g_variant_new_string (search_term)));
+    g_free (search_label);
+  }
 }
 
 static void
@@ -1384,45 +1455,6 @@ find_spelling_guess_context_menu_items (WebKitContextMenu *context_menu)
   }
 
   return g_list_reverse (retval);
-}
-
-static char *
-ellipsize_string (const char *string,
-                  glong       max_length)
-{
-  char *ellipsized;
-  glong length = g_utf8_strlen (string, -1);
-
-  if (length == 0)
-    return NULL;
-
-  if (length < max_length) {
-    ellipsized = g_strdup (string);
-  } else {
-    char *str = g_utf8_substring (string, 0, max_length);
-    ellipsized = g_strconcat (str, "…", NULL);
-    g_free (str);
-  }
-  return ellipsized;
-}
-
-static char *
-mnemonic_escape_string (const char *string)
-{
-  GString *gstring;
-  const char *ptr;
-
-  gstring = g_string_new (string);
-  ptr = gstring->str;
-
-  /* Convert each underscore to a double underscore. */
-  while ((ptr = g_utf8_strchr (ptr, -1, '_')) != NULL) {
-    ptrdiff_t pos = ptr - gstring->str;
-    g_string_insert (gstring, pos, "_");
-    ptr = gstring->str + pos + 2;
-  }
-
-  return g_string_free (gstring, FALSE);
 }
 
 static void
@@ -1506,21 +1538,13 @@ populate_context_menu (WebKitWebView       *web_view,
 
   parse_context_menu_user_data (context_menu, &selected_text);
   if (selected_text) {
-    char *ellipsized = ellipsize_string (selected_text, 32);
-    char *escaped = mnemonic_escape_string (ellipsized);
-    char *label;
     GVariant *value;
 
-    label = g_strdup_printf (_("Search the Web for “%s”"), escaped);
-    value = g_variant_new_string (label);
+    value = g_variant_new_string (selected_text);
     search_selection_action_name = g_action_print_detailed_name ("search-selection",
                                                                  value);
     g_variant_unref (value);
     can_search_selection = TRUE;
-
-    g_free (ellipsized);
-    g_free (escaped);
-    g_free (label);
   }
 
   webkit_context_menu_remove_all (context_menu);

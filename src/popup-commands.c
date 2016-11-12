@@ -369,33 +369,19 @@ popup_cmd_link_in_incognito_window (GSimpleAction *action,
   g_value_unset (&value);
 }
 
-static gchar *
-get_search_term (const gchar *text)
-{
-  gchar *search_term;
-
-  search_term = strchr (text, '\'') + 1;
-  search_term[strlen (search_term) - 1] = '\0';
-
-  return search_term;
-}
-
 void
 popup_cmd_search_selection (GSimpleAction *action,
                             GVariant      *parameter,
                             gpointer       user_data)
 {
   EphyEmbed *embed, *new_embed;
-  const char *text;
   const char *search_term;
   char *search_url;
 
-  embed = ephy_embed_container_get_active_child
-            (EPHY_EMBED_CONTAINER (user_data));
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (user_data));
   g_assert (EPHY_IS_EMBED (embed));
 
-  text = g_variant_get_string (parameter, NULL);
-  search_term = get_search_term (text);
+  search_term = g_variant_get_string (parameter, NULL);
   search_url = ephy_embed_utils_autosearch_address (search_term);
   new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (user_data), embed, EPHY_NEW_TAB_APPEND_AFTER);
