@@ -143,10 +143,10 @@ ephy_langs_bind_iso_domains (void)
   static gboolean bound = FALSE;
 
   if (bound == FALSE) {
-    bindtextdomain (ISO_639_DOMAIN, LOCALEDIR);
+    bindtextdomain (ISO_639_DOMAIN, ISO_CODES_PREFIX "/share/locale");
     bind_textdomain_codeset (ISO_639_DOMAIN, "UTF-8");
 
-    bindtextdomain (ISO_3166_DOMAIN, LOCALEDIR);
+    bindtextdomain (ISO_3166_DOMAIN, ISO_CODES_PREFIX "/share/locale");
     bind_textdomain_codeset (ISO_3166_DOMAIN, "UTF-8");
 
     bound = TRUE;
