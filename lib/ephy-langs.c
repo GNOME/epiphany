@@ -182,7 +182,9 @@ read_iso_3166_entry (xmlTextReaderPtr reader,
   xmlChar *code, *name;
 
   code = xmlTextReaderGetAttribute (reader, (const xmlChar *)"alpha_2_code");
-  name = xmlTextReaderGetAttribute (reader, (const xmlChar *)"name");
+  name = xmlTextReaderGetAttribute (reader, (const xmlChar *)"common_name");
+  if (name == NULL)
+    name = xmlTextReaderGetAttribute (reader, (const xmlChar *)"name");
 
   if (code != NULL && code[0] != '\0' && name != NULL && name[0] != '\0') {
     char *lcode;
