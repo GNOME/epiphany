@@ -835,6 +835,30 @@ ephy_window_bound_accels (GtkWidget *widget,
 	return FALSE;
 }
 
+static gboolean
+should_web_view_receive_key_press_event (GdkEventKey *event)
+{
+	if (event->state == GDK_CONTROL_MASK)
+		return event->keyval != GDK_KEY_n &&
+		       event->keyval != GDK_KEY_q &&
+		       event->keyval != GDK_KEY_t &&
+		       event->keyval != GDK_KEY_w &&
+		       event->keyval != GDK_KEY_Page_Up &&
+		       event->keyval != GDK_KEY_KP_9 &&
+		       event->keyval != GDK_KEY_Page_Down &&
+		       event->keyval != GDK_KEY_KP_3;
+
+	if (event->state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+		return event->keyval != GDK_KEY_N &&
+		       event->keyval != GDK_KEY_T &&
+		       event->keyval != GDK_KEY_Page_Up &&
+		       event->keyval != GDK_KEY_KP_9 &&
+		       event->keyval != GDK_KEY_Page_Down &&
+		       event->keyval != GDK_KEY_KP_3;
+
+	return TRUE;
+}
+
 static gboolean 
 ephy_window_key_press_event (GtkWidget *widget,
 			     GdkEventKey *event)
@@ -856,7 +880,8 @@ ephy_window_key_press_event (GtkWidget *widget,
 	 * first propagate the event to the web view. Next, try
 	 * accelerators only if the web view did not handle the event.
 	 */
-	if (!gtk_window_propagate_key_event (GTK_WINDOW (widget), event)) {
+	if (!should_web_view_receive_key_press_event (event) ||
+	    !gtk_window_propagate_key_event (GTK_WINDOW (widget), event)) {
 		if (!gtk_window_activate_key (GTK_WINDOW (widget), event))
 			ephy_window_bound_accels (widget, event);
 	}
