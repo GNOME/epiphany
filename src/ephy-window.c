@@ -535,61 +535,23 @@ static gboolean
 ephy_window_key_press_event (GtkWidget   *widget,
                              GdkEventKey *event)
 {
-  EphyWindow *window = EPHY_WINDOW (widget);
-  GtkWidget *focus_widget;
-  gboolean shortcircuit = FALSE, force_chain = FALSE, handled = FALSE;
-  guint modifier = event->state & gtk_accelerator_get_default_mod_mask ();
+  EphyWebView *view;
 
-  /* In an attempt to get the mozembed playing nice with things like emacs keybindings
-   * we are passing important events to the focused child widget before letting the window's
-   * base handler see them. This is *completely against* stated gtk2 policy but the
-   * 'correct' behaviour is exceptionally useless. We need to keep an eye out for
-   * unexpected consequences of this decision. IME's should be a high concern, but
-   * considering that the IME folks complained about the upside-down event propagation
-   * rules, we might be doing them a favour.
-   *
-   * We achieve this by first evaluating the event to see if it's important, and if
-   * so, we get the focus widget and attempt to get the widget to handle that event.
-   * If the widget does handle it, we're done (unless force_chain is true, in which
-   * case the event is handled as normal in addition to being sent to the focus
-   * widget), otherwise the event follows the normal handling path.
+  view = ephy_embed_get_web_view (EPHY_WINDOW (widget)->active_embed);
+  if (gtk_window_get_focus (GTK_WINDOW (widget)) != GTK_WIDGET (view))
+    return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
+
+  /* GtkWindow's key press handler first calls gtk_window_activate_key,
+   * then gtk_window_propagate_key_event. We want to do the opposite,
+   * because we want to give webpages the chance to override most
+   * Epiphany shortcuts. For example, Ctrl+I in Google Docs should
+   * italicize your text and not open a new incognito window. So:
+   * first propagate the event to the web view. Next, try
+   * accelerators only if the web view did not handle the event.
    */
-
-  if ((event->state & GDK_CONTROL_MASK ||
-       event->state & GDK_MOD1_MASK ||
-       event->state & GDK_SHIFT_MASK) &&
-      event->length > 0) {
-    /* Pass (CTRL|ALT|SHIFT)+letter characters to the widget */
-    shortcircuit = TRUE;
-  } else if (event->keyval == GDK_KEY_Escape && modifier == 0) {
-    /* Always pass Escape to both the widget, and the parent */
-    shortcircuit = TRUE;
-    force_chain = TRUE;
-  } else if (window->key_theme_is_emacs &&
-             (modifier == GDK_CONTROL_MASK) &&
-             event->length > 0 &&
-             /* But don't pass Ctrl+Enter twice */
-             event->keyval != GDK_KEY_Return &&
-             event->keyval != GDK_KEY_KP_Enter &&
-             event->keyval != GDK_KEY_ISO_Enter) {
-    /* Pass CTRL+letter characters to the widget */
-    shortcircuit = TRUE;
-  }
-
-  if (shortcircuit) {
-    focus_widget = gtk_window_get_focus (GTK_WINDOW (window));
-
-    if (GTK_IS_WIDGET (focus_widget)) {
-      handled = gtk_widget_event (focus_widget,
-                                  (GdkEvent *)event);
-    }
-
-    if (handled && !force_chain) {
-      return handled;
-    }
-  }
-
-  return GTK_WIDGET_CLASS (ephy_window_parent_class)->key_press_event (widget, event);
+  if (!gtk_window_propagate_key_event (GTK_WINDOW (widget), event))
+    gtk_window_activate_key (GTK_WINDOW (widget), event);
+  return GDK_EVENT_STOP;
 }
 
 static gboolean
