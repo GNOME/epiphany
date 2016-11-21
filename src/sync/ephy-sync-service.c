@@ -624,6 +624,8 @@ ephy_sync_service_init (EphySyncService *self)
     ephy_sync_service_set_user_email (self, email);
     ephy_sync_secret_load_tokens (self);
   }
+
+  g_free (email);
 }
 
 EphySyncService *
