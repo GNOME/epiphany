@@ -548,8 +548,7 @@ parse_rdf_item (EphyBookmarksManager *manager,
 static void
 migrate_bookmarks (void)
 {
-  EphyBookmarksManager *manager = EPHY_BOOKMARKS_MANAGER (g_object_new (EPHY_TYPE_BOOKMARKS_MANAGER, NULL));
-
+  EphyBookmarksManager *manager = ephy_bookmarks_manager_new ();
   char *filename;
   xmlDocPtr doc;
   xmlNodePtr child;

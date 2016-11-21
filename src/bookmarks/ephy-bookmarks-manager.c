@@ -239,6 +239,12 @@ bookmark_url_changed_cb (EphyBookmark         *bookmark,
   g_signal_emit (self, signals[BOOKMARK_URL_CHANGED], 0, bookmark);
 }
 
+EphyBookmarksManager *
+ephy_bookmarks_manager_new (void)
+{
+  return EPHY_BOOKMARKS_MANAGER (g_object_new (EPHY_TYPE_BOOKMARKS_MANAGER, NULL));
+}
+
 void
 ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                      EphyBookmark         *bookmark)

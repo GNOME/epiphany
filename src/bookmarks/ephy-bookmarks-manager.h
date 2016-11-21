@@ -30,6 +30,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyBookmarksManager, ephy_bookmarks_manager, EPHY, BOOKMARKS_MANAGER, GObject)
 
+EphyBookmarksManager *ephy_bookmarks_manager_new                  (void);
+
 void         ephy_bookmarks_manager_add_bookmark                  (EphyBookmarksManager *self,
                                                                    EphyBookmark         *bookmark);
 void         ephy_bookmarks_manager_add_bookmarks                 (EphyBookmarksManager *self,

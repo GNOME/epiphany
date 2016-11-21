@@ -770,7 +770,7 @@ ephy_shell_get_bookmarks_manager (EphyShell *shell)
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
   if (shell->bookmarks_manager == NULL)
-    shell->bookmarks_manager = EPHY_BOOKMARKS_MANAGER (g_object_new (EPHY_TYPE_BOOKMARKS_MANAGER, NULL));
+    shell->bookmarks_manager = ephy_bookmarks_manager_new ();
 
   return shell->bookmarks_manager;
 }
