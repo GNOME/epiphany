@@ -130,9 +130,9 @@ ephy_bookmark_finalize (GObject *object)
 {
   EphyBookmark *self = EPHY_BOOKMARK (object);
 
-  g_clear_pointer (&self->url, g_free);
-  g_clear_pointer (&self->title, g_free);
-  g_clear_pointer (&self->id, g_free);
+  g_free (self->url);
+  g_free (self->title);
+  g_free (self->id);
 
   g_sequence_free (self->tags);
 
