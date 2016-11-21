@@ -136,6 +136,8 @@ ephy_bookmarks_manager_finalize (GObject *object)
   g_clear_pointer (&self->bookmarks, g_sequence_free);
   g_clear_pointer (&self->tags, g_sequence_free);
 
+  g_free (self->gvdb_filename);
+
   G_OBJECT_CLASS (ephy_bookmarks_manager_parent_class)->finalize (object);
 }
 
