@@ -89,10 +89,10 @@ ephy_bookmark_set_property (GObject      *object,
       ephy_bookmark_set_time_added (self, g_value_get_int64 (value));
       break;
     case PROP_TITLE:
-      self->title = g_value_dup_string (value);
+      ephy_bookmark_set_title (self, g_value_get_string (value));
       break;
     case PROP_URL:
-      self->url = g_value_dup_string (value);
+      ephy_bookmark_set_url (self, g_value_get_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
