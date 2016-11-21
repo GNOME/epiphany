@@ -50,7 +50,9 @@ download_box_row_activated_cb (EphyDownloadsPopover *popover,
   if (!ephy_download_succeeded (download))
     return;
 
-  ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_OPEN);
+  ephy_download_do_download_action (download,
+                                    EPHY_DOWNLOAD_ACTION_OPEN,
+                                    gtk_get_current_event_time ());
 }
 
 static void

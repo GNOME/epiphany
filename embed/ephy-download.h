@@ -58,7 +58,8 @@ guint32       ephy_download_get_start_time        (EphyDownload *download);
 EphyDownloadActionType ephy_download_get_action   (EphyDownload *download);
 void          ephy_download_set_action            (EphyDownload *download,
                                                    EphyDownloadActionType action);
-gboolean      ephy_download_do_download_action    (EphyDownload *download,
-                                                   EphyDownloadActionType action);
+gboolean      ephy_download_do_download_action    (EphyDownload          *download,
+                                                   EphyDownloadActionType action,
+                                                   guint32                user_time);
 
 G_END_DECLS
