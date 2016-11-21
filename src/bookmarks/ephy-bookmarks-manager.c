@@ -577,7 +577,7 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
   list = gvdb_table_get_names (table, &length);
   for (i = 0; i < length; i++)
     ephy_bookmarks_manager_create_tag (self, list[i]);
-
+  g_strfreev (list);
   gvdb_table_free (table);
 
   /* Get bookmarks table */
@@ -621,9 +621,12 @@ ephy_bookmarks_manager_load_from_file (EphyBookmarksManager *self)
     ephy_bookmark_set_modification_time (bookmark, modified);
     ephy_bookmark_set_is_uploaded (bookmark, uploaded);
     g_sequence_prepend (bookmarks, bookmark);
+
+    g_variant_unref (value);
   }
   ephy_bookmarks_manager_add_bookmarks (self, bookmarks);
 
+  g_strfreev (list);
   gvdb_table_free (table);
   g_sequence_free (bookmarks);
   gvdb_table_free (root_table);
