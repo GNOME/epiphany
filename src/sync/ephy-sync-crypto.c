@@ -627,21 +627,22 @@ ephy_sync_crypto_compute_hawk_header (const char                *url,
   g_return_val_if_fail (key != NULL, NULL);
 
   ts = ephy_sync_utils_current_time_seconds ();
-  hash = options ? options->hash : NULL;
+  hash = options ? g_strdup (options->hash) : NULL;
   payload = options ? options->payload : NULL;
   timestamp = options ? options->timestamp : NULL;
   uri = soup_uri_new (url);
-  resource = (char *)soup_uri_get_path (uri);
+  resource = soup_uri_get_query (uri) == NULL ? g_strdup (soup_uri_get_path (uri))
+                                              : g_strconcat (soup_uri_get_path (uri),
+                                                             "?",
+                                                             soup_uri_get_query (uri),
+                                                             NULL);
 
   if (options != NULL && options->nonce != NULL) {
-    nonce = options->nonce;
+    nonce = g_strdup (options->nonce);
   } else {
     nonce = g_malloc0 (NONCE_LEN + 1);
     ephy_sync_crypto_random_hex_gen (NULL, NONCE_LEN, (guint8 *)nonce);
   }
-
-  if (soup_uri_get_query (uri) != NULL)
-    resource = g_strconcat (resource, "?", soup_uri_get_query (uri), NULL);
 
   if (timestamp != NULL) {
     char *local_time_offset;
@@ -707,12 +708,9 @@ ephy_sync_crypto_compute_hawk_header (const char                *url,
   }
 
   soup_uri_free (uri);
-
-  if (options == NULL || options->nonce == NULL)
-    g_free (nonce);
-
-  if (soup_uri_get_query (uri) != NULL)
-    g_free (resource);
+  g_free (hash);
+  g_free (nonce);
+  g_free (resource);
 
   return ephy_sync_crypto_hawk_header_new (header, artifacts);
 }
