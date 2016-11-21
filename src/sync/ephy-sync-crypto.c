@@ -709,6 +709,7 @@ ephy_sync_crypto_compute_hawk_header (const char                *url,
 
   soup_uri_free (uri);
   g_free (hash);
+  g_free (mac);
   g_free (nonce);
   g_free (resource);
 
