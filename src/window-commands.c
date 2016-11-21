@@ -93,6 +93,22 @@ window_cmd_new_incognito_window (GSimpleAction *action,
 }
 
 void
+window_cmd_import_bookmarks (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+
+}
+
+void
+window_cmd_export_bookmarks (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+
+}
+
+void
 window_cmd_show_history (GSimpleAction *action,
                          GVariant      *parameter,
                          gpointer       user_data)

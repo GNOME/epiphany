@@ -164,6 +164,22 @@ reopen_closed_tab (GSimpleAction *action,
 }
 
 static void
+import_bookmarks (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  window_cmd_import_bookmarks (NULL, NULL, NULL);
+}
+
+static void
+export_bookmarks (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  window_cmd_export_bookmarks (NULL, NULL, NULL);
+}
+
+static void
 show_history (GSimpleAction *action,
               GVariant      *parameter,
               gpointer       user_data)
@@ -234,6 +250,8 @@ quit_application (GSimpleAction *action,
 static GActionEntry app_entries[] = {
   { "new-window", new_window, NULL, NULL, NULL },
   { "new-incognito", new_incognito_window, NULL, NULL, NULL },
+  { "import-bookmarks", import_bookmarks, NULL, NULL, NULL },
+  { "export-bookmarks", export_bookmarks, NULL, NULL, NULL },
   { "history", show_history, NULL, NULL, NULL },
   { "preferences", show_preferences, NULL, NULL, NULL },
   { "shortcuts", show_shortcuts, NULL, NULL, NULL },
