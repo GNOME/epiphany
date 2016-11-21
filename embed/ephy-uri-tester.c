@@ -851,7 +851,7 @@ ephy_uri_tester_rewrite_uri (EphyUriTester *tester,
                              const char    *request_uri,
                              const char    *page_uri)
 {
-  char *modified_uri;
+  char *modified_uri = NULL;
   char *result;
 
   /* Should we block the URL outright? */
