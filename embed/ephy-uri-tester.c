@@ -870,9 +870,13 @@ ephy_uri_tester_rewrite_uri (EphyUriTester *tester,
   if (!modified_uri)
     modified_uri = g_strdup (request_uri);
 
-  result = https_everywhere_context_rewrite (tester->https_everywhere_context,
-                                             modified_uri);
-  g_free (modified_uri);
+  if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_HTTP)) {
+    result = https_everywhere_context_rewrite (tester->https_everywhere_context,
+                                               modified_uri);
+    g_free (modified_uri);
+  } else {
+    result = modified_uri;
+  }
 
   return result;
 }
