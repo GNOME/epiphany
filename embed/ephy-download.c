@@ -411,10 +411,22 @@ ephy_download_failed (EphyDownload *download,
   return FALSE;
 }
 
-static gboolean
-ephy_download_do_download_action_internal (EphyDownload *download,
-                                           EphyDownloadActionType action,
-                                           guint32 user_time)
+/**
+ * ephy_download_do_download_action:
+ * @download: an #EphyDownload
+ * @action: one of #EphyDownloadActionType
+ * @user_time: GDK timestamp, for focus-stealing prevention
+ *
+ * Executes the given @action for @download, this can be any of
+ * #EphyDownloadActionType.
+ *
+ * Returns: %TRUE if the action was executed succesfully.
+ *
+ **/
+gboolean
+ephy_download_do_download_action (EphyDownload          *download,
+                                  EphyDownloadActionType action,
+                                  guint32                user_time)
 {
   GFile *destination;
   const char *destination_uri;
@@ -424,16 +436,16 @@ ephy_download_do_download_action_internal (EphyDownload *download,
   destination = g_file_new_for_uri (destination_uri);
 
   switch ((action ? action : download->action)) {
+    case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
+      LOG ("ephy_download_do_download_action: browse_to");
+      ret = ephy_file_browse_to (destination, user_time);
+      break;
     case EPHY_DOWNLOAD_ACTION_OPEN:
       LOG ("ephy_download_do_download_action: open");
       ret = ephy_embed_shell_launch_handler (ephy_embed_shell_get_default (),
                                              destination, NULL, user_time);
-      /* Fall through if we did not open anything. */
-      if (ret)
-        break;
-    case EPHY_DOWNLOAD_ACTION_BROWSE_TO:
-      LOG ("ephy_download_do_download_action: browse_to");
-      ret = ephy_file_browse_to (destination, user_time);
+      if (!ret)
+        ret = ephy_file_browse_to (destination, user_time);
       break;
     case EPHY_DOWNLOAD_ACTION_NONE:
       LOG ("ephy_download_do_download_action: none");
@@ -445,24 +457,6 @@ ephy_download_do_download_action_internal (EphyDownload *download,
   g_object_unref (destination);
 
   return ret;
-}
-
-/**
- * ephy_download_do_download_action:
- * @download: an #EphyDownload
- * @action: one of #EphyDownloadActionType
- *
- * Executes the given @action for @download, this can be any of
- * #EphyDownloadActionType.
- *
- * Returns: %TRUE if the action was executed succesfully.
- *
- **/
-gboolean
-ephy_download_do_download_action (EphyDownload          *download,
-                                  EphyDownloadActionType action)
-{
-  return ephy_download_do_download_action_internal (download, action, g_get_real_time ());
 }
 
 static void
@@ -699,9 +693,9 @@ download_finished_cb (WebKitDownload *wk_download,
 
   if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_AUTO_DOWNLOADS) &&
       download->action == EPHY_DOWNLOAD_ACTION_NONE)
-    ephy_download_do_download_action_internal (download, EPHY_DOWNLOAD_ACTION_OPEN, download->start_time);
+    ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_OPEN, download->start_time);
   else
-    ephy_download_do_download_action_internal (download, download->action, download->start_time);
+    ephy_download_do_download_action (download, download->action, download->start_time);
 }
 
 static void
