@@ -595,6 +595,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->prefs_dialog);
   g_clear_object (&shell->network_monitor);
   g_clear_object (&shell->sync_service);
+  g_clear_object (&shell->bookmarks_manager);
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
   shell->open_uris_idle_ids = NULL;
