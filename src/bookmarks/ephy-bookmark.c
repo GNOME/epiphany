@@ -132,6 +132,7 @@ ephy_bookmark_finalize (GObject *object)
 
   g_clear_pointer (&self->url, g_free);
   g_clear_pointer (&self->title, g_free);
+  g_clear_pointer (&self->id, g_free);
 
   g_sequence_free (self->tags);
 
