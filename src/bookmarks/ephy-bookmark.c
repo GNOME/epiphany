@@ -282,8 +282,8 @@ EphyBookmark *
 ephy_bookmark_new (const char *url, const char *title, GSequence *tags)
 {
   return g_object_new (EPHY_TYPE_BOOKMARK,
-                       "url", g_strdup (url),
-                       "title", g_strdup (title),
+                       "url", url,
+                       "title", title,
                        "tags", tags,
                        "time-added", g_get_real_time (),
                        NULL);
