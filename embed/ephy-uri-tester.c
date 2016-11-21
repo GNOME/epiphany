@@ -1078,13 +1078,12 @@ https_everywhere_context_init_cb (HTTPSEverywhereContext *context,
   if (error) {
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_error ("Failed to initialize HTTPS Everywhere context: %s", error->message);
+  } else {
+    g_list_foreach (tester->deferred_requests, (GFunc)handle_deferred_request, tester);
+    ephy_uri_tester_update_https_everywhere_rulesets (tester);
   }
 
-  g_list_foreach (tester->deferred_requests, (GFunc)handle_deferred_request, tester);
   g_list_free_full (tester->deferred_requests, (GDestroyNotify)deferred_request_free);
-
-  ephy_uri_tester_update_https_everywhere_rulesets (tester);
-
   g_object_unref (tester);
 }
 
