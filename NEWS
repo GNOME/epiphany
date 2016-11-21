@@ -1,3 +1,31 @@
+3.23.2 - November 20, 2016
+==========================
+
+- Add hidden homepage settings (#702435)
+- New Window action now opens non-incognito window in incognito mode (#723185)
+- Web apps now share adblock filters with the default profile (#755379)
+- Rework key event handling to fix events received twice (#764653)
+- Restored smart bookmarks functionality removed in 3.23.1 (#772407)
+- Form detection no longer requires named password field (#773327)
+- Improve permissions request handling and support webcam/mic requests (#773447)
+- Fix infinite loop in form detection introduced in 3.23.1 (#773830)
+- Consistently use proper Unicode characters in UI (#774217)
+- Restored all the plugin functionality that had been removed in 3.23.1
+- Fix "search the web" menu item name when search contains an underscore
+- Fix "search the web" truncating search results (broken in 3.23.1)
+- Actually delete history database from disk when clearing all history
+- Revert questionable attempt to sanitize passwords from displayed URIs
+- Hide bookmark page star on about pages
+- Fix overview thumbnails sometimes appearing twice
+- Add missing F1 keyboard shortcut to open help
+- Fix bogus libhttpseverywhere warning when update lock exists
+- Fix critical warnings when displaying overview introduced in 3.23.1
+- Fix critical warnings when starting in incognito mode
+- `epiphany --incognito-mode` now uses the default profile if unspecified
+- Cleanly handle SIGINT and SIGTERM
+- Miscellaneous code safety/correctness fixes
+- Updated translations
+
 3.23.1.2 - October 27, 2016
 ===========================
 
