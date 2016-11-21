@@ -30,7 +30,7 @@ AX_REQUIRE_DEFINED([YELP_HELP_INIT])
 dnl Must be a valid git tag
 m4_define([epiphany_changelog_start],[3.21.4])
 
-AC_INIT([GNOME Web Browser],[3.23.2],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
+AC_INIT([GNOME Web Browser],[3.23.2.1],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
 AX_IS_RELEASE([git-directory])
 
 AC_PREREQ([2.69])
