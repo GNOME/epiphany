@@ -548,7 +548,7 @@ parse_rdf_item (EphyBookmarksManager *manager,
 static void
 migrate_bookmarks (void)
 {
-  EphyBookmarksManager *manager = ephy_bookmarks_manager_new ();
+  EphyBookmarksManager *manager;
   char *filename;
   xmlDocPtr doc;
   xmlNodePtr child;
@@ -558,23 +558,29 @@ migrate_bookmarks (void)
                                EPHY_BOOKMARKS_FILE,
                                NULL);
 
-  if (g_file_test (filename, G_FILE_TEST_EXISTS) == TRUE)
-    goto out;
+  if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
+    g_free (filename);
+    return;
+  }
 
   g_free (filename);
   filename = g_build_filename (ephy_dot_dir (),
                                "bookmarks.rdf",
                                NULL);
 
-  if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE)
-    goto out;
-
-  doc = xmlParseFile (filename);
-  if (doc == NULL) {
-    g_warning ("Failed to re-import the bookmarks. All bookmarks lost!\n");
-    goto out;
+  if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
+    g_free (filename);
+    return;
   }
 
+  doc = xmlParseFile (filename);
+  g_free (filename);
+  if (doc == NULL) {
+    g_warning ("Failed to re-import the bookmarks. All bookmarks lost!\n");
+    return;
+  }
+
+  manager = ephy_bookmarks_manager_new ();
   root = xmlDocGetRootElement (doc);
 
   child = root->children;
@@ -593,8 +599,6 @@ migrate_bookmarks (void)
                                              NULL);
 
   xmlFreeDoc (doc);
-out:
-  g_free (filename);
   g_object_unref (manager);
 }
 
