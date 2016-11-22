@@ -811,6 +811,10 @@ should_web_view_receive_key_press_event (GdkEventKey *event)
            event->keyval != GDK_KEY_Page_Down &&
            event->keyval != GDK_KEY_KP_3;
 
+  if (event->state == GDK_MOD1_MASK)
+    return event->keyval != GDK_KEY_Left &&
+           event->keyval != GDK_KEY_Right;
+
   return TRUE;
 }
 
