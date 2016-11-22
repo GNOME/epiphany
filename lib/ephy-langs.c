@@ -19,16 +19,13 @@
  */
 
 #include "config.h"
-
 #include "ephy-langs.h"
 
 #include "ephy-debug.h"
 
 #include <glib/gi18n.h>
-
-#include <string.h>
-
 #include <libxml/xmlreader.h>
+#include <string.h>
 
 /* sanitise the languages list according to the rules for HTTP accept-language
  * in RFC 2616, Sect. 14.4
@@ -47,7 +44,8 @@ ephy_langs_sanitise (GArray *array)
     lang1 = (char *)g_array_index (array, char *, i);
 
     dash = strchr (lang1, '-');
-    if (dash == NULL) continue;
+    if (dash == NULL)
+      continue;
 
     for (j = i + 1; j < (int)array->len; j++) {
       lang2 = (char *)g_array_index (array, char *, j);
@@ -222,7 +220,8 @@ load_iso_entries (int      iso,
 
   filename = g_strdup_printf (ISO_CODES_PREFIX "/share/xml/iso-codes/iso_%d.xml", iso);
   reader = xmlNewTextReaderFilename (filename);
-  if (reader == NULL) goto out;
+  if (reader == NULL)
+    goto out;
 
   xmlStrPrintf (iso_entries, sizeof (iso_entries), (const xmlChar *)"iso_%d_entries", iso);
   xmlStrPrintf (iso_entry, sizeof (iso_entry), (const xmlChar *)"iso_%d_entry", iso);
