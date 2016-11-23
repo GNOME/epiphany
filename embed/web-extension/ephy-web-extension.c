@@ -958,7 +958,7 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
     WebKitDOMNode *password_node = NULL;
 
     element = WEBKIT_DOM_ELEMENT (g_ptr_array_index (elements, i));
-    if (!WEBKIT_DOM_IS_HTML_FORM_ELEMENT(element))
+    if (!WEBKIT_DOM_IS_HTML_FORM_ELEMENT (element))
       continue;
 
     form = WEBKIT_DOM_HTML_FORM_ELEMENT (element);
