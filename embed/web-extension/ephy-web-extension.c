@@ -129,7 +129,8 @@ web_page_send_request (WebKitWebPage     *web_page,
 
   modified_uri = ephy_uri_tester_proxy_maybe_rewrite_uri (extension->uri_tester,
                                                           request_uri,
-                                                          page_uri);
+                                                          page_uri,
+                                                          EPHY_URI_TEST_ALL);
 
   if (strlen (modified_uri) == 0) {
     LOG ("Refused to load %s", request_uri);

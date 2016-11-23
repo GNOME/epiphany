@@ -90,7 +90,8 @@ ephy_uri_tester_proxy_new (GDBusConnection *connection)
 char *
 ephy_uri_tester_proxy_maybe_rewrite_uri (EphyUriTesterProxy *uri_tester,
                                          const char         *request_uri,
-                                         const char         *page_uri)
+                                         const char         *page_uri,
+                                         EphyUriTestFlags    flags)
 {
   GVariant *variant;
   char *modified_uri;
@@ -100,7 +101,7 @@ ephy_uri_tester_proxy_maybe_rewrite_uri (EphyUriTesterProxy *uri_tester,
 
   variant = g_dbus_proxy_call_sync (uri_tester->proxy,
                                     "MaybeRewriteUri",
-                                    g_variant_new ("(ss)", request_uri, page_uri),
+                                    g_variant_new ("(ssi)", request_uri, page_uri, flags),
                                     G_DBUS_CALL_FLAGS_NONE,
                                     -1,
                                     NULL,

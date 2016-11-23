@@ -28,9 +28,18 @@ static const char ephy_uri_tester_introspection_xml[] =
   "  <method name='MaybeRewriteUri'>"
   "   <arg name='request_uri' type='s' direction='in'/>"
   "   <arg name='page_uri' type='s' direction='in'/>"
+  "   <arg name='flags' type='i' direction='in'/>"
   "   <arg name='modified_request_uri' type='s' direction='out'/>"
   "  </method>"
   " </interface>"
   "</node>";
+
+typedef enum
+{
+  EPHY_URI_TEST_ADBLOCK          = 1 << 1,
+  EPHY_URI_TEST_TRACKING_QUERIES = 1 << 2,
+  EPHY_URI_TEST_HTTPS_EVERYWHERE = 1 << 3,
+  EPHY_URI_TEST_ALL              = EPHY_URI_TEST_ADBLOCK | EPHY_URI_TEST_TRACKING_QUERIES | EPHY_URI_TEST_HTTPS_EVERYWHERE
+} EphyUriTestFlags;
 
 G_END_DECLS

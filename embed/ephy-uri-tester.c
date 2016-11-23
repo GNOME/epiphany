@@ -92,17 +92,20 @@ G_DEFINE_TYPE (EphyUriTester, ephy_uri_tester, G_TYPE_OBJECT)
 typedef struct {
   char *request_uri;
   char *page_uri;
+  EphyUriTestFlags flags;
   GDBusMethodInvocation *invocation;
 } DeferredRequest;
 
 static DeferredRequest *
 deferred_request_new (const char            *request_uri,
                       const char            *page_uri,
+                      EphyUriTestFlags       flags,
                       GDBusMethodInvocation *invocation)
 {
   DeferredRequest *request = g_slice_new (DeferredRequest);
   request->request_uri = g_strdup (request_uri);
   request->page_uri = g_strdup (page_uri);
+  request->flags = flags;
   /* Ownership of invocation is passed to g_dbus_method_invocation_return_value(). */
   request->invocation = invocation;
   return request;
@@ -847,21 +850,24 @@ ephy_uri_tester_test_uri (EphyUriTester *tester,
 }
 
 static char *
-ephy_uri_tester_rewrite_uri (EphyUriTester *tester,
-                             const char    *request_uri,
-                             const char    *page_uri)
+ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
+                             const char       *request_uri,
+                             const char       *page_uri,
+                             EphyUriTestFlags  flags)
 {
   char *modified_uri = NULL;
   char *result;
 
   /* Should we block the URL outright? */
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK) &&
+  if ((flags & EPHY_URI_TEST_ADBLOCK) &&
+      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK) &&
       ephy_uri_tester_test_uri (tester, request_uri, page_uri)) {
     g_debug ("Request '%s' blocked (page: '%s')", request_uri, page_uri);
     return g_strdup ("");
   }
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
+  if ((flags & EPHY_URI_TEST_TRACKING_QUERIES) &&
+      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     /* Remove analytics from URL. Note that this function is a bit annoying to
      * use: it returns NULL if it doesn't remove any query parameters. */
     modified_uri = ephy_remove_tracking_from_uri (request_uri);
@@ -870,7 +876,8 @@ ephy_uri_tester_rewrite_uri (EphyUriTester *tester,
   if (!modified_uri)
     modified_uri = g_strdup (request_uri);
 
-  if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_HTTP)) {
+  if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) &&
+      g_str_has_prefix (request_uri, SOUP_URI_SCHEME_HTTP)) {
     result = https_everywhere_context_rewrite (tester->https_everywhere_context,
                                                modified_uri);
     g_free (modified_uri);
@@ -922,10 +929,11 @@ static void
 ephy_uri_tester_return_response (EphyUriTester         *tester,
                                  const char            *request_uri,
                                  const char            *page_uri,
+                                 EphyUriTestFlags       flags,
                                  GDBusMethodInvocation *invocation)
 {
   char *rewritten_uri;
-  rewritten_uri = ephy_uri_tester_rewrite_uri (tester, request_uri, page_uri);
+  rewritten_uri = ephy_uri_tester_rewrite_uri (tester, request_uri, page_uri, flags);
   g_dbus_method_invocation_return_value (invocation,
                                          g_variant_new ("(s)", rewritten_uri));
   g_free (rewritten_uri);
@@ -942,6 +950,7 @@ handle_method_call (GDBusConnection       *connection,
                     gpointer               user_data)
 {
   EphyUriTester *tester = EPHY_URI_TESTER (user_data);
+  EphyUriTestFlags flags = 0;
 
   if (g_strcmp0 (interface_name, EPHY_URI_TESTER_INTERFACE) != 0)
     return;
@@ -950,7 +959,7 @@ handle_method_call (GDBusConnection       *connection,
     const char *request_uri;
     const char *page_uri;
 
-    g_variant_get (parameters, "(&s&s)", &request_uri, &page_uri);
+    g_variant_get (parameters, "(&s&si)", &request_uri, &page_uri, &flags);
 
     if (request_uri == NULL || request_uri == '\0') {
       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
@@ -964,11 +973,12 @@ handle_method_call (GDBusConnection       *connection,
       return;
     }
 
-    if (!g_str_has_prefix (request_uri, SOUP_URI_SCHEME_HTTP) ||
+    if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) == 0 ||
+        !g_str_has_prefix (request_uri, SOUP_URI_SCHEME_HTTP) ||
         https_everywhere_context_get_initialized (tester->https_everywhere_context)) {
-      ephy_uri_tester_return_response (tester, request_uri, page_uri, invocation);
+      ephy_uri_tester_return_response (tester, request_uri, page_uri, flags, invocation);
     } else {
-      DeferredRequest *request = deferred_request_new (request_uri, page_uri, invocation);
+      DeferredRequest *request = deferred_request_new (request_uri, page_uri, flags, invocation);
       tester->deferred_requests = g_list_append (tester->deferred_requests, request);
     }
   }
@@ -1020,6 +1030,7 @@ handle_deferred_request (DeferredRequest *request,
   ephy_uri_tester_return_response (tester,
                                    request->request_uri,
                                    request->page_uri,
+                                   request->flags,
                                    request->invocation);
 }
 

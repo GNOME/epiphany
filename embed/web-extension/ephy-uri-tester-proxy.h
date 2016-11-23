@@ -22,6 +22,8 @@
 
 #include <gio/gio.h>
 
+#include "ephy-uri-tester-interface.h"
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_URI_TESTER_PROXY (ephy_uri_tester_proxy_get_type ())
@@ -32,6 +34,7 @@ EphyUriTesterProxy *ephy_uri_tester_proxy_new (GDBusConnection *connection);
 
 char               *ephy_uri_tester_proxy_maybe_rewrite_uri (EphyUriTesterProxy *uri_tester,
                                                              const char         *request_uri,
-                                                             const char         *page_uri);
+                                                             const char         *page_uri,
+                                                             EphyUriTestFlags    flags);
 
 G_END_DECLS
