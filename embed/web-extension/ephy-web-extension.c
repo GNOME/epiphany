@@ -143,6 +143,9 @@ web_page_send_request (WebKitWebPage     *web_page,
   char *modified_uri;
   EphyUriTestFlags flags = EPHY_URI_TEST_ALL;
 
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
+    flags &= ~EPHY_URI_TEST_ADBLOCK;
+
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     SoupMessageHeaders *headers = webkit_uri_request_get_http_headers (request);
     if (headers) {
@@ -150,6 +153,8 @@ web_page_send_request (WebKitWebPage     *web_page,
        * http://tools.ietf.org/id/draft-mayer-do-not-track-00.txt */
       soup_message_headers_append (headers, "DNT", "1");
     }
+  } else {
+    flags &= ~EPHY_URI_TEST_TRACKING_QUERIES;
   }
 
   request_uri = webkit_uri_request_get_uri (request);

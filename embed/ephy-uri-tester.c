@@ -860,14 +860,12 @@ ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
 
   /* Should we block the URL outright? */
   if ((flags & EPHY_URI_TEST_ADBLOCK) &&
-      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK) &&
       ephy_uri_tester_test_uri (tester, request_uri, page_uri)) {
     g_debug ("Request '%s' blocked (page: '%s')", request_uri, page_uri);
     return g_strdup ("");
   }
 
-  if ((flags & EPHY_URI_TEST_TRACKING_QUERIES) &&
-      g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
+  if ((flags & EPHY_URI_TEST_TRACKING_QUERIES)) {
     /* Remove analytics from URL. Note that this function is a bit annoying to
      * use: it returns NULL if it doesn't remove any query parameters. */
     modified_uri = ephy_remove_tracking_from_uri (request_uri);
