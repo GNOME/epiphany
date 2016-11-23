@@ -92,12 +92,81 @@ window_cmd_new_incognito_window (GSimpleAction *action,
   ephy_open_incognito_window (NULL);
 }
 
+const gchar *import_option_names[1] = {
+  N_("GVDB File")
+};
+
+static GtkTreeModel *
+create_tree_model (void)
+{
+  enum {
+    TEXT_COL
+  };
+  GtkListStore *list_store;
+  GtkTreeIter iter;
+  int i;
+
+  list_store = gtk_list_store_new (1, G_TYPE_STRING);
+  for (i = G_N_ELEMENTS (import_option_names) - 1; i >= 0; i--) {
+    gtk_list_store_prepend (list_store, &iter);
+    gtk_list_store_set (list_store, &iter,
+                        TEXT_COL, _(import_option_names[i]),
+                        -1);
+  }
+
+  return GTK_TREE_MODEL (list_store);
+}
+
 void
 window_cmd_import_bookmarks (GSimpleAction *action,
                              GVariant      *parameter,
                              gpointer       user_data)
 {
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  GtkWidget *dialog;
+  GtkWidget *content_area;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *combo_box;
+  GtkTreeModel *tree_model;
+  GtkCellRenderer *cell_renderer;
 
+  /* Show dialog with icon, title. */
+  dialog = gtk_dialog_new_with_buttons (_("Import bookmarks"),
+                                        GTK_WINDOW (window),
+                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
+                                        _("_Cancel"),
+                                        GTK_RESPONSE_CANCEL,
+                                        _("Ch_oose File"),
+                                        GTK_RESPONSE_OK,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_start (content_area, 25);
+  gtk_widget_set_margin_end (content_area, 25);
+  gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+
+  label = gtk_label_new (_("From:"));
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  tree_model = create_tree_model ();
+  combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
+  g_object_unref (tree_model);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
+
+  cell_renderer = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell_renderer, TRUE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell_renderer,
+                                  "text", 0, NULL);
+  gtk_box_pack_start (GTK_BOX (hbox), combo_box, TRUE, TRUE, 0);
+
+  gtk_container_add (GTK_CONTAINER (content_area), hbox);
+
+  gtk_widget_show_all (dialog);
 }
 
 void
