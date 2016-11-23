@@ -409,15 +409,12 @@ out:
 static void
 setup_fxa_sign_in_view (PrefsDialog *dialog)
 {
-  EphyEmbedShell *shell;
   const char *js = "\"use strict\";"
                    "function handleAccountsCommand(evt) {"
                    "  let j = {type: evt.type, detail: evt.detail};"
                    "  window.webkit.messageHandlers.accountsCommandHandler.postMessage(JSON.stringify(j));"
                    "};"
                    "window.addEventListener(\"FirefoxAccountsCommand\", handleAccountsCommand);";
-
-  shell = ephy_embed_shell_get_default ();
 
   dialog->fxa_script = webkit_user_script_new (js,
                                                WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
@@ -433,7 +430,6 @@ setup_fxa_sign_in_view (PrefsDialog *dialog)
                                                                "accountsCommandHandler");
 
   dialog->fxa_web_view = WEBKIT_WEB_VIEW (g_object_new (WEBKIT_TYPE_WEB_VIEW,
-                                                        "web-context", ephy_embed_shell_get_web_context (shell),
                                                         "user-content-manager", dialog->fxa_manager,
                                                         "settings", ephy_embed_prefs_get_settings (),
                                                         NULL));
