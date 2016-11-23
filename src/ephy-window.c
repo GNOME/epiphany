@@ -798,7 +798,7 @@ ephy_window_bound_accels (GtkWidget   *widget,
 static gboolean
 should_web_view_receive_key_press_event (GdkEventKey *event)
 {
-  if (event->state == GDK_CONTROL_MASK)
+  if ((event->state & GDK_MODIFIER_MASK) == GDK_CONTROL_MASK)
     return event->keyval != GDK_KEY_n &&
            event->keyval != GDK_KEY_q &&
            event->keyval != GDK_KEY_t &&
@@ -808,7 +808,7 @@ should_web_view_receive_key_press_event (GdkEventKey *event)
            event->keyval != GDK_KEY_Page_Down &&
            event->keyval != GDK_KEY_KP_3;
 
-  if (event->state == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+  if ((event->state & GDK_MODIFIER_MASK) == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
     return event->keyval != GDK_KEY_N &&
            event->keyval != GDK_KEY_T &&
            event->keyval != GDK_KEY_Page_Up &&
@@ -816,7 +816,7 @@ should_web_view_receive_key_press_event (GdkEventKey *event)
            event->keyval != GDK_KEY_Page_Down &&
            event->keyval != GDK_KEY_KP_3;
 
-  if (event->state == GDK_MOD1_MASK)
+  if ((event->state & GDK_MODIFIER_MASK) == GDK_MOD1_MASK)
     return event->keyval != GDK_KEY_Left &&
            event->keyval != GDK_KEY_Right;
 
