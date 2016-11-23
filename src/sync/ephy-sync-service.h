@@ -65,10 +65,6 @@ void             ephy_sync_service_finish_sign_in               (EphySyncService
                                                                  char            *bundle,
                                                                  guint8          *respHMACkey,
                                                                  guint8          *respXORkey);
-gboolean         ephy_sync_service_fetch_sync_keys              (EphySyncService *self,
-                                                                 const char      *email,
-                                                                 const char      *keyFetchToken,
-                                                                 const char      *unwrapBKey);
 void             ephy_sync_service_send_storage_message         (EphySyncService     *self,
                                                                  char                *endpoint,
                                                                  const char          *method,

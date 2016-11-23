@@ -363,6 +363,11 @@ server_message_received_cb (WebKitUserContentManager *manager,
       goto out;
     }
 
+    /* Derive tokenID, reqHMACkey, respHMACkey and respXORkey from the keyFetchToken.
+     * tokenID and reqHMACkey are used to make a HAWK request to the "GET /account/keys"
+     * API. The server looks up the stored table entry with tokenID, checks the request
+     * HMAC for validity, then returns the pre-encrypted response.
+     * See https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#fetching-sync-keys */
     ephy_sync_crypto_process_key_fetch_token (keyFetchToken,
                                               &tokenID, &reqHMACkey,
                                               &respHMACkey, &respXORkey);
