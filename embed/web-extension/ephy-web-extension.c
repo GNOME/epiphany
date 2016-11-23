@@ -106,6 +106,33 @@ static const char introspection_xml[] =
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 static gboolean
+should_use_https_everywhere (const char *request_uri,
+                             const char *redirected_uri)
+{
+  SoupURI *request_soup_uri;
+  SoupURI *redirected_soup_uri;
+  gboolean result = TRUE;
+
+  request_soup_uri = soup_uri_new (request_uri);
+  redirected_soup_uri = soup_uri_new (redirected_uri);
+
+  if (request_soup_uri->scheme == SOUP_URI_SCHEME_HTTP &&
+      redirected_soup_uri->scheme == SOUP_URI_SCHEME_HTTPS) {
+    /* If the server redirected us from an https:// URI to an http:// URI, we'd
+     * better not try to use HTTPS Everywhere as it'll just be a redirect loop.
+     * So now we compare ignoring scheme and port.... */
+    redirected_soup_uri->scheme = SOUP_URI_SCHEME_HTTP;
+    redirected_soup_uri->port = request_soup_uri->port;
+    result = !soup_uri_equal (request_soup_uri, redirected_soup_uri);
+  }
+
+  soup_uri_free (request_soup_uri);
+  soup_uri_free (redirected_soup_uri);
+
+  return result;
+}
+
+static gboolean
 web_page_send_request (WebKitWebPage     *web_page,
                        WebKitURIRequest  *request,
                        WebKitURIResponse *redirected_response,
@@ -114,6 +141,7 @@ web_page_send_request (WebKitWebPage     *web_page,
   const char *request_uri;
   const char *page_uri;
   char *modified_uri;
+  EphyUriTestFlags flags = EPHY_URI_TEST_ALL;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     SoupMessageHeaders *headers = webkit_uri_request_get_http_headers (request);
@@ -127,10 +155,16 @@ web_page_send_request (WebKitWebPage     *web_page,
   request_uri = webkit_uri_request_get_uri (request);
   page_uri = webkit_web_page_get_uri (web_page);
 
+  if (redirected_response != NULL &&
+      !should_use_https_everywhere (request_uri,
+                                    webkit_uri_response_get_uri (redirected_response))) {
+    flags &= ~EPHY_URI_TEST_HTTPS_EVERYWHERE;
+  }
+
   modified_uri = ephy_uri_tester_proxy_maybe_rewrite_uri (extension->uri_tester,
                                                           request_uri,
                                                           page_uri,
-                                                          EPHY_URI_TEST_ALL);
+                                                          flags);
 
   if (strlen (modified_uri) == 0) {
     LOG ("Refused to load %s", request_uri);
