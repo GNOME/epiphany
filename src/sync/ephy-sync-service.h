@@ -43,12 +43,8 @@ void             ephy_sync_service_set_sync_time                (EphySyncService
 char            *ephy_sync_service_get_token                    (EphySyncService   *self,
                                                                  EphySyncTokenType  type);
 void             ephy_sync_service_set_token                    (EphySyncService   *self,
-                                                                 char              *value,
+                                                                 const char        *value,
                                                                  EphySyncTokenType  type);
-void             ephy_sync_service_set_and_store_tokens         (EphySyncService   *self,
-                                                                 char              *value,
-                                                                 EphySyncTokenType  type,
-                                                                 ...) G_GNUC_NULL_TERMINATED;
 void             ephy_sync_service_clear_storage_credentials    (EphySyncService *self);
 void             ephy_sync_service_clear_tokens                 (EphySyncService *self);
 void             ephy_sync_service_destroy_session              (EphySyncService *self,

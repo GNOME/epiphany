@@ -47,6 +47,10 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
+#ifdef ENABLE_SYNC
+#include "ephy-notification.h"
+#endif
+
 struct _EphyShell {
   EphyEmbedShell parent_instance;
 
@@ -309,6 +313,29 @@ download_started_cb (WebKitWebContext *web_context,
   g_object_unref (ephy_download);
 }
 
+#ifdef ENABLE_SYNC
+static void
+sync_tokens_load_finished_cb (EphySyncService *service,
+                              GError          *error,
+                              gpointer         user_data)
+{
+  EphyNotification *notification;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+
+  /* If the tokens were successfully loaded, start the periodical sync.
+   * Otherwise, notify the user to sign in again. */
+  if (error == NULL) {
+    ephy_sync_service_start_periodical_sync (service, TRUE);
+  } else {
+    notification = ephy_notification_new (error->message,
+                                          _("Please visit Preferences and sign in "
+                                            "again to continue the sync process."));
+    ephy_notification_show (notification);
+  }
+}
+#endif
+
 static void
 ephy_shell_startup (GApplication *application)
 {
@@ -331,10 +358,6 @@ ephy_shell_startup (GApplication *application)
 
   mode = ephy_embed_shell_get_mode (embed_shell);
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
-#ifdef ENABLE_SYNC
-    EphySyncService *service;
-#endif
-
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_entries, G_N_ELEMENTS (app_entries),
                                      application);
@@ -352,10 +375,11 @@ ephy_shell_startup (GApplication *application)
     }
 
 #ifdef ENABLE_SYNC
-    /* Start the periodical sync now. */
-    service = ephy_sync_service_new ();
-    ephy_sync_service_start_periodical_sync (service, TRUE);
-    ephy_shell->sync_service = service;
+    /* Create the sync service. */
+    ephy_shell->sync_service = ephy_sync_service_new ();
+    g_signal_connect (ephy_shell->sync_service,
+                      "sync-tokens-load-finished",
+                      G_CALLBACK (sync_tokens_load_finished_cb), NULL);
 #endif
 
     builder = gtk_builder_new ();

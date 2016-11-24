@@ -258,6 +258,41 @@ hide_fxa_iframe (PrefsDialog *dialog,
   g_free (account);
 }
 
+static void
+sync_tokens_store_finished_cb (EphySyncService *service,
+                               GError          *error,
+                               PrefsDialog     *dialog)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_PREFS_DIALOG (dialog));
+
+  if (error == NULL) {
+    /* Show the 'Signed in' panel. */
+    hide_fxa_iframe (dialog, ephy_sync_service_get_user_email (service));
+
+    /* Do a first time sync and set a periodical sync to be executed. */
+    ephy_sync_service_sync_bookmarks (service, TRUE);
+    ephy_sync_service_start_periodical_sync (service, FALSE);
+  } else {
+    char *message;
+
+    /* Destroy the current session. */
+    ephy_sync_service_destroy_session (service, NULL);
+
+    /* Unset the email and tokens. */
+    g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, "");
+    ephy_sync_service_clear_tokens (service);
+
+    /* Display the error message to the user. */
+    message = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>", error->message);
+    gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details), message);
+    gtk_widget_set_visible (dialog->sync_sign_in_details, TRUE);
+    webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
+
+    g_free (message);
+  }
+}
+
 static gboolean
 poll_fxa_server (gpointer user_data)
 {
@@ -274,7 +309,6 @@ poll_fxa_server (gpointer user_data)
                                       data->sessionToken, data->keyFetchToken,
                                       data->unwrapBKey, bundle,
                                       data->respHMACkey, data->respXORkey);
-    hide_fxa_iframe (data->dialog, data->email);
 
     g_free (bundle);
     fxa_callback_data_free (data);
@@ -410,7 +444,6 @@ server_message_received_cb (WebKitUserContentManager *manager,
       bundle = ephy_sync_service_start_sign_in (service, tokenID, reqHMACkey);
       ephy_sync_service_finish_sign_in (service, email, uid, sessionToken, keyFetchToken,
                                         unwrapBKey, bundle, respHMACkey, respXORkey);
-      hide_fxa_iframe (dialog, email);
 
       g_free (bundle);
     }
@@ -1745,6 +1778,10 @@ setup_sync_page (PrefsDialog *dialog)
     g_free (text);
     g_free (account);
   }
+
+  g_signal_connect_object (service, "sync-tokens-store-finished",
+                           G_CALLBACK (sync_tokens_store_finished_cb),
+                           dialog, 0);
 }
 #endif
 

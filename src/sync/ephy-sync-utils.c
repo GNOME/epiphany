@@ -112,6 +112,26 @@ ephy_sync_utils_token_name_from_type (EphySyncTokenType type)
   }
 }
 
+EphySyncTokenType
+ephy_sync_utils_token_type_from_name (const char *name)
+{
+  if (g_strcmp0 (name, "uid") == 0) {
+    return TOKEN_UID;
+  } else if (g_strcmp0 (name, "sessionToken") == 0) {
+    return TOKEN_SESSIONTOKEN;
+  } else if (g_strcmp0 (name, "keyFetchToken") == 0) {
+    return TOKEN_KEYFETCHTOKEN;
+  } else if (g_strcmp0 (name, "unwrapBKey") == 0) {
+    return TOKEN_UNWRAPBKEY;
+  } else if (g_strcmp0 (name, "kA") == 0) {
+    return TOKEN_KA;
+  } else if (g_strcmp0 (name, "kB") == 0) {
+    return TOKEN_KB;
+  } else {
+    g_assert_not_reached ();
+  }
+}
+
 char *
 ephy_sync_utils_find_and_replace (const char *src,
                                   const char *find,

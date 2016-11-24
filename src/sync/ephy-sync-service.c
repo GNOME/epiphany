@@ -70,6 +70,14 @@ struct _EphySyncService {
 
 G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
 
+enum {
+  STORE_FINISHED,
+  LOAD_FINISHED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 typedef struct {
   EphySyncService     *service;
   char                *endpoint;
@@ -609,6 +617,22 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
 
   object_class->finalize = ephy_sync_service_finalize;
   object_class->dispose = ephy_sync_service_dispose;
+
+  signals[STORE_FINISHED] =
+    g_signal_new ("sync-tokens-store-finished",
+                  EPHY_TYPE_SYNC_SERVICE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_ERROR);
+
+  signals[LOAD_FINISHED] =
+    g_signal_new ("sync-tokens-load-finished",
+                  EPHY_TYPE_SYNC_SERVICE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_ERROR);
 }
 
 static void
@@ -716,7 +740,7 @@ ephy_sync_service_get_token (EphySyncService   *self,
 
 void
 ephy_sync_service_set_token (EphySyncService   *self,
-                             char              *value,
+                             const char        *value,
                              EphySyncTokenType  type)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
@@ -725,56 +749,31 @@ ephy_sync_service_set_token (EphySyncService   *self,
   switch (type) {
     case TOKEN_UID:
       g_free (self->uid);
-      self->uid = value;
+      self->uid = g_strdup (value);
       break;
     case TOKEN_SESSIONTOKEN:
       g_free (self->sessionToken);
-      self->sessionToken = value;
+      self->sessionToken = g_strdup (value);
       break;
     case TOKEN_KEYFETCHTOKEN:
       g_free (self->keyFetchToken);
-      self->keyFetchToken = value;
+      self->keyFetchToken = g_strdup (value);
       break;
     case TOKEN_UNWRAPBKEY:
       g_free (self->unwrapBKey);
-      self->unwrapBKey = value;
+      self->unwrapBKey = g_strdup (value);
       break;
     case TOKEN_KA:
       g_free (self->kA);
-      self->kA = value;
+      self->kA = g_strdup (value);
       break;
     case TOKEN_KB:
       g_free (self->kB);
-      self->kB = value;
+      self->kB = g_strdup (value);
       break;
     default:
       g_assert_not_reached ();
   }
-}
-
-void
-ephy_sync_service_set_and_store_tokens (EphySyncService   *self,
-                                        char              *value,
-                                        EphySyncTokenType  type,
-                                        ...)
-{
-  EphySyncTokenType next_type;
-  char *next_value;
-  va_list args;
-
-  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
-  g_return_if_fail (value != NULL);
-
-  ephy_sync_service_set_token (self, value, type);
-  ephy_sync_secret_store_token (self->user_email, value, type);
-
-  va_start (args, type);
-  while ((next_value = va_arg (args, char *)) != NULL) {
-    next_type = va_arg (args, EphySyncTokenType);
-    ephy_sync_service_set_token (self, next_value, next_type);
-    ephy_sync_secret_store_token (self->user_email, next_value, next_type);
-  }
-  va_end (args);
 }
 
 void
@@ -897,6 +896,8 @@ ephy_sync_service_finish_sign_in (EphySyncService *self,
   guint8 *unwrapKB;
   guint8 *kA;
   guint8 *kB;
+  char *kA_hex;
+  char *kB_hex;
 
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (email != NULL);
@@ -908,31 +909,32 @@ ephy_sync_service_finish_sign_in (EphySyncService *self,
   g_return_if_fail (respHMACkey != NULL);
   g_return_if_fail (respXORkey != NULL);
 
-
   /* Derive the sync keys form the received key bundle. */
   unwrapKB = ephy_sync_crypto_decode_hex (unwrapBKey);
   ephy_sync_crypto_compute_sync_keys (bundle,
                                       respHMACkey, respXORkey, unwrapKB,
                                       &kA, &kB);
+  kA_hex = ephy_sync_crypto_encode_hex (kA, 0);
+  kB_hex = ephy_sync_crypto_encode_hex (kB, 0);
 
-  /* Save the tokens. */
+  /* Save the email and the tokens. */
   g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, email);
   ephy_sync_service_set_user_email (self, email);
-  ephy_sync_service_set_and_store_tokens (self,
-                                          g_strdup (uid), TOKEN_UID,
-                                          g_strdup (sessionToken), TOKEN_SESSIONTOKEN,
-                                          g_strdup (keyFetchToken), TOKEN_KEYFETCHTOKEN,
-                                          g_strdup (unwrapBKey), TOKEN_UNWRAPBKEY,
-                                          ephy_sync_crypto_encode_hex (kA, 0), TOKEN_KA,
-                                          ephy_sync_crypto_encode_hex (kB, 0), TOKEN_KB,
-                                          NULL);
+  ephy_sync_service_set_token (self, uid, TOKEN_UID);
+  ephy_sync_service_set_token (self, sessionToken, TOKEN_SESSIONTOKEN);
+  ephy_sync_service_set_token (self, keyFetchToken, TOKEN_KEYFETCHTOKEN);
+  ephy_sync_service_set_token (self, unwrapBKey, TOKEN_UNWRAPBKEY);
+  ephy_sync_service_set_token (self, kA_hex, TOKEN_KA);
+  ephy_sync_service_set_token (self, kB_hex, TOKEN_KB);
 
-  /* Do a first time sync and set a periodical sync afterwards. */
-  ephy_sync_service_sync_bookmarks (self, TRUE);
-  ephy_sync_service_start_periodical_sync (self, FALSE);
+  /* Store the tokens in the secret schema. */
+  ephy_sync_secret_store_tokens (self, email, uid, sessionToken,
+                                 keyFetchToken, unwrapBKey, kA_hex, kB_hex);
 
   g_free (kA);
   g_free (kB);
+  g_free (kA_hex);
+  g_free (kB_hex);
   g_free (unwrapKB);
 }
 
