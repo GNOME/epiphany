@@ -42,14 +42,12 @@
 #include <string.h>
 
 #define DEFAULT_FILTER_URL "https://easylist-downloads.adblockplus.org/easylist.txt"
-#define FILTERS_LIST_FILENAME "filters.list"
 #define SIGNATURE_SIZE 8
 #define UPDATE_FREQUENCY 24 * 60 * 60 /* In seconds */
 
 struct _EphyUriTester {
   GObject parent_instance;
 
-  GSList *filters;
   char *data_dir;
 
   GHashTable *pattern;
@@ -80,7 +78,6 @@ struct _EphyUriTester {
 
 enum {
   PROP_0,
-  PROP_FILTERS,
   PROP_BASE_DATA_DIR,
   LAST_PROP
 };
@@ -123,7 +120,7 @@ static GString *
 ephy_uri_tester_fixup_regexp (const char *prefix, char *src);
 
 static void
-ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, const char *fileuri);
+ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, GFile *file);
 
 static char *
 ephy_uri_tester_ensure_data_dir (const char *base_data_dir)
@@ -161,7 +158,7 @@ ephy_uri_tester_get_fileuri_for_url (EphyUriTester *tester,
 
 typedef struct {
   EphyUriTester *tester;
-  char *dest_uri;
+  GFile *dest_file;
 } RetrieveFilterAsyncData;
 
 static void
@@ -175,34 +172,28 @@ ephy_uri_tester_retrieve_filter_finished (GFile                   *src,
     LOG ("Error retrieving filter: %s\n", error->message);
     g_error_free (error);
   } else
-    ephy_uri_tester_parse_file_at_uri (data->tester, data->dest_uri);
+    ephy_uri_tester_parse_file_at_uri (data->tester, data->dest_file);
 
   g_object_unref (data->tester);
-  g_free (data->dest_uri);
+  g_object_unref (data->dest_file);
   g_slice_free (RetrieveFilterAsyncData, data);
 }
 
 static void
 ephy_uri_tester_retrieve_filter (EphyUriTester *tester,
                                  const char    *url,
-                                 const char    *fileuri)
+                                 GFile         *file)
 {
   GFile *src;
-  GFile *dest;
   RetrieveFilterAsyncData *data;
 
-  g_return_if_fail (EPHY_IS_URI_TESTER (tester));
-  g_return_if_fail (url != NULL);
-  g_return_if_fail (fileuri != NULL);
-
   src = g_file_new_for_uri (url);
-  dest = g_file_new_for_uri (fileuri);
 
   data = g_slice_new (RetrieveFilterAsyncData);
   data->tester = g_object_ref (tester);
-  data->dest_uri = g_file_get_uri (dest);
+  data->dest_file = g_object_ref (file);
 
-  g_file_copy_async (src, dest,
+  g_file_copy_async (src, file,
                      G_FILE_COPY_OVERWRITE,
                      G_PRIORITY_DEFAULT,
                      NULL, NULL, NULL,
@@ -210,18 +201,15 @@ ephy_uri_tester_retrieve_filter (EphyUriTester *tester,
                      data);
 
   g_object_unref (src);
-  g_object_unref (dest);
 }
 
 static gboolean
-ephy_uri_tester_filter_is_valid (const char *fileuri)
+ephy_uri_tester_filter_is_valid (GFile *file)
 {
-  GFile *file = NULL;
   GFileInfo *file_info = NULL;
   gboolean result;
 
   /* Now check if the local file is too old. */
-  file = g_file_new_for_uri (fileuri);
   file_info = g_file_query_info (file,
                                  G_FILE_ATTRIBUTE_TIME_MODIFIED,
                                  G_FILE_QUERY_INFO_NONE,
@@ -242,113 +230,26 @@ ephy_uri_tester_filter_is_valid (const char *fileuri)
     g_object_unref (file_info);
   }
 
-  g_object_unref (file);
-
   return result;
 }
 
 static void
 ephy_uri_tester_load_patterns (EphyUriTester *tester)
 {
-  GSList *filter = NULL;
-  char *url = NULL;
-  char *fileuri = NULL;
+  char *fileuri;
+  GFile *file;
 
-  /* Load patterns from the list of filters. */
-  for (filter = tester->filters; filter; filter = g_slist_next (filter)) {
-    url = (char *)filter->data;
-    fileuri = ephy_uri_tester_get_fileuri_for_url (tester, url);
+  fileuri = ephy_uri_tester_get_fileuri_for_url (tester, DEFAULT_FILTER_URL);
+  file = g_file_new_for_uri (fileuri);
+  g_free (fileuri);
 
-    if (!ephy_uri_tester_filter_is_valid (fileuri))
-      ephy_uri_tester_retrieve_filter (tester, url, fileuri);
-    else
-      ephy_uri_tester_parse_file_at_uri (tester, fileuri);
+  if (!ephy_uri_tester_filter_is_valid (file))
+    ephy_uri_tester_retrieve_filter (tester, DEFAULT_FILTER_URL, file);
+  else
+    ephy_uri_tester_parse_file_at_uri (tester, file);
 
-    g_free (fileuri);
-  }
+  g_object_unref (file);
 }
-
-static void
-ephy_uri_tester_set_filters (EphyUriTester *tester, GSList *filters)
-{
-  if (tester->filters)
-    g_slist_free_full (tester->filters, g_free);
-
-  tester->filters = filters;
-}
-
-static void
-ephy_uri_tester_load_filters (EphyUriTester *tester)
-{
-  GSList *list = NULL;
-  char *filepath = NULL;
-
-  filepath = g_build_filename (tester->data_dir, FILTERS_LIST_FILENAME, NULL);
-
-  if (g_file_test (filepath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)) {
-    GFile *file = NULL;
-    char *contents = NULL;
-    gsize length = 0;
-    GError *error = NULL;
-
-    file = g_file_new_for_path (filepath);
-    if (g_file_load_contents (file, NULL, &contents, &length, NULL, &error)) {
-      char **urls_array = NULL;
-      char *url = NULL;
-      int i = 0;
-
-      urls_array = g_strsplit (contents, ";", -1);
-      for (i = 0; urls_array [i]; i++) {
-        url = g_strstrip (g_strdup (urls_array[i]));
-        if (!g_str_equal (url, ""))
-          list = g_slist_prepend (list, url);
-      }
-      g_strfreev (urls_array);
-
-      g_free (contents);
-    }
-
-    if (error) {
-      LOG ("Error loading filters from %s: %s", filepath, error->message);
-      g_error_free (error);
-    }
-
-    g_object_unref (file);
-  } else {
-    /* No file exists yet, so use the default filter and save it. */
-    list = g_slist_prepend (list, g_strdup (DEFAULT_FILTER_URL));
-  }
-
-  g_free (filepath);
-
-  ephy_uri_tester_set_filters (tester, g_slist_reverse (list));
-}
-
-#if 0
- TODO: Use this to create a filters dialog, or something.
-
-static void
-ephy_uri_tester_save_filters (EphyUriTester *tester)
-{
-  FILE *file = NULL;
-  char *filepath = NULL;
-
-  filepath = g_build_filename (tester->data_dir, FILTERS_LIST_FILENAME, NULL);
-
-  if ((file = g_fopen (filepath, "w"))) {
-    GSList *item = NULL;
-    char *filter = NULL;
-
-    for (item = tester->filters; item; item = g_slist_next (item)) {
-      filter = g_strdup_printf ("%s;", (char *)item->data);
-      fputs (filter, file);
-      g_free (filter);
-    }
-    fclose (file);
-  }
-  g_free (filepath);
-}
-#endif
 
 static inline int
 ephy_uri_tester_check_rule (EphyUriTester *tester,
@@ -821,13 +722,9 @@ file_read_cb (GFile *file, GAsyncResult *result, EphyUriTester *tester)
 }
 
 static void
-ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, const char *fileuri)
+ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, GFile *file)
 {
-  GFile *file;
-
-  file = g_file_new_for_uri (fileuri);
   g_file_read_async (file, G_PRIORITY_DEFAULT_IDLE, NULL, (GAsyncReadyCallback)file_read_cb, tester);
-  g_object_unref (file);
 }
 
 static gboolean
@@ -1105,7 +1002,6 @@ ephy_uri_tester_init (EphyUriTester *tester)
 {
   LOG ("EphyUriTester initializing %p", tester);
 
-  tester->filters = NULL;
   tester->pattern = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify)g_free,
                                            (GDestroyNotify)g_regex_unref);
@@ -1168,7 +1064,6 @@ ephy_uri_tester_constructed (GObject *object)
                                  (GAsyncReadyCallback)https_everywhere_context_init_cb,
                                  g_object_ref (tester));
 
-  ephy_uri_tester_load_filters (tester);
   ephy_uri_tester_load_patterns (tester);
 }
 
@@ -1181,9 +1076,6 @@ ephy_uri_tester_set_property (GObject      *object,
   EphyUriTester *tester = EPHY_URI_TESTER (object);
 
   switch (prop_id) {
-    case PROP_FILTERS:
-      ephy_uri_tester_set_filters (tester, (GSList *)g_value_get_pointer (value));
-      break;
     case PROP_BASE_DATA_DIR:
       tester->data_dir = ephy_uri_tester_ensure_data_dir (g_value_get_string (value));
       break;
@@ -1228,7 +1120,6 @@ ephy_uri_tester_finalize (GObject *object)
 
   LOG ("EphyUriTester finalizing %p", object);
 
-  g_slist_free_full (tester->filters, g_free);
   g_free (tester->data_dir);
 
   g_hash_table_destroy (tester->pattern);
@@ -1261,12 +1152,6 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
   object_class->constructed = ephy_uri_tester_constructed;
   object_class->dispose = ephy_uri_tester_dispose;
   object_class->finalize = ephy_uri_tester_finalize;
-
-  obj_properties[PROP_FILTERS] =
-    g_param_spec_pointer ("filters",
-                          "filters",
-                          "filters",
-                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_BASE_DATA_DIR] =
     g_param_spec_string ("base-data-dir",
