@@ -22,19 +22,10 @@
 
 #include <gio/gio.h>
 
-#include "ephy-uri-tester-interface.h"
-
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_URI_TESTER_PROXY (ephy_uri_tester_proxy_get_type ())
+#define ADBLOCK_FILTER_URL "https://easylist-downloads.adblockplus.org/easylist.txt"
 
-G_DECLARE_FINAL_TYPE (EphyUriTesterProxy, ephy_uri_tester_proxy, EPHY, URI_TESTER_PROXY, GObject)
-
-EphyUriTesterProxy *ephy_uri_tester_proxy_new (GDBusConnection *connection);
-
-char               *ephy_uri_tester_proxy_maybe_rewrite_uri (EphyUriTesterProxy *uri_tester,
-                                                             const char         *request_uri,
-                                                             const char         *page_uri,
-                                                             EphyUriTestFlags    flags);
+GFile *ephy_uri_tester_get_adblock_filer_file (const char *adblock_data_dir);
 
 G_END_DECLS

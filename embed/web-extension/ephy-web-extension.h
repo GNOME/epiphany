@@ -33,7 +33,7 @@ EphyWebExtension *ephy_web_extension_get            (void);
 void              ephy_web_extension_initialize     (EphyWebExtension   *extension,
                                                      WebKitWebExtension *wk_extension,
                                                      const char         *server_address,
+                                                     const char         *adblock_data_dir,
                                                      gboolean            is_private_profile);
-
 
 G_END_DECLS

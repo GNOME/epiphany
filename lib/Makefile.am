@@ -49,7 +49,8 @@ libephymisc_la_SOURCES = \
 	ephy-time-helpers.h			\
 	ephy-uri-helpers.c			\
 	ephy-uri-helpers.h			\
-	ephy-uri-tester-interface.h		\
+	ephy-uri-tester-shared.c		\
+	ephy-uri-tester-shared.h		\
 	ephy-web-app-utils.c			\
 	ephy-web-app-utils.h			\
 	ephy-zoom.c				\

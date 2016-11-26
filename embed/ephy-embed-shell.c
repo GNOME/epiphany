@@ -34,18 +34,21 @@
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
-#include "ephy-uri-tester.h"
+#include "ephy-uri-tester-shared.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-extension-proxy.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <httpseverywhere.h>
 #include <stdlib.h>
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
 #define OVERVIEW_RELOAD_DELAY 500
+
+#define ADBLOCK_FILTER_UPDATE_FREQUENCY 24 * 60 * 60 /* In seconds */
 
 typedef struct {
   WebKitWebContext *web_context;
@@ -61,9 +64,11 @@ typedef struct {
   EphyViewSourceHandler *source_handler;
   guint update_overview_timeout_id;
   guint hiding_overview_item;
-  EphyUriTester *uri_tester;
   GDBusServer *dbus_server;
   GList *web_extensions;
+
+  char *adblock_data_dir;
+  GCancellable *uri_tester_update_cancellable;
 } EphyEmbedShellPrivate;
 
 enum {
@@ -96,6 +101,11 @@ ephy_embed_shell_dispose (GObject *object)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (object));
 
+  if (priv->uri_tester_update_cancellable) {
+    g_cancellable_cancel (priv->uri_tester_update_cancellable);
+    g_clear_object (&priv->uri_tester_update_cancellable);
+  }
+
   if (priv->update_overview_timeout_id > 0) {
     g_source_remove (priv->update_overview_timeout_id);
     priv->update_overview_timeout_id = 0;
@@ -111,10 +121,19 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->hosts_manager);
   g_clear_object (&priv->web_context);
-  g_clear_object (&priv->uri_tester);
   g_clear_object (&priv->dbus_server);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
+}
+
+static void
+ephy_embed_shell_finalize (GObject *object)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (object));
+
+  g_free (priv->adblock_data_dir);
+
+  G_OBJECT_CLASS (ephy_embed_shell_parent_class)->finalize (object);
 }
 
 static void
@@ -567,6 +586,204 @@ ftp_request_cb (WebKitURISchemeRequest *request)
 }
 
 static void
+https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
+                            GAsyncResult           *result)
+{
+  GError *error = NULL;
+
+  https_everywhere_updater_update_finish (updater, result, &error);
+
+  if (!error)
+    return;
+
+  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
+      !g_error_matches (error, HTTPS_EVERYWHERE_UPDATE_ERROR, HTTPS_EVERYWHERE_UPDATE_ERROR_IN_PROGRESS) &&
+      !g_error_matches (error, HTTPS_EVERYWHERE_UPDATE_ERROR, HTTPS_EVERYWHERE_UPDATE_ERROR_NO_UPDATE_AVAILABLE))
+    g_warning ("Failed to update HTTPS Everywhere rulesets: %s", error->message);
+  g_error_free (error);
+}
+
+static const char *
+ephy_embed_shell_ensure_adblock_data_dir (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  if (priv->adblock_data_dir)
+    return priv->adblock_data_dir;
+
+  /* The filters list is large, so we don't want to store a separate copy per
+   * web app, but users should otherwise be able to configure different filters
+   * per profile directory. */
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    char *default_dot_dir = ephy_default_dot_dir ();
+
+    priv->adblock_data_dir = g_build_filename (default_dot_dir, "adblock", NULL);
+    g_free (default_dot_dir);
+  } else
+    priv->adblock_data_dir = g_build_filename (ephy_dot_dir (), "adblock", NULL);
+  g_mkdir_with_parents (priv->adblock_data_dir, 0700);
+
+  return priv->adblock_data_dir;
+}
+
+static gboolean
+adblock_filter_file_is_valid (GFile *file)
+{
+  GFileInfo *file_info;
+  gboolean result = FALSE;
+
+  /* Now check if the local file is too old. */
+  file_info = g_file_query_info (file,
+                                 G_FILE_ATTRIBUTE_TIME_MODIFIED","G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                                 G_FILE_QUERY_INFO_NONE,
+                                 NULL,
+                                 NULL);
+  if (file_info) {
+    if (g_file_info_get_size (file_info) > 0) {
+      GTimeVal current_time;
+      GTimeVal mod_time;
+
+      g_get_current_time (&current_time);
+      g_file_info_get_modification_time (file_info, &mod_time);
+
+      if (current_time.tv_sec > mod_time.tv_sec) {
+        gint64 expire_time = mod_time.tv_sec + ADBLOCK_FILTER_UPDATE_FREQUENCY;
+
+        result = current_time.tv_sec < expire_time;
+      }
+    }
+    g_object_unref (file_info);
+  }
+
+  return result;
+}
+
+typedef struct {
+  EphyEmbedShell *shell;
+
+  GFile *filter_file;
+  GFile *tmp_file;
+} AdblockFilterRetrieveData;
+
+static AdblockFilterRetrieveData *
+adblock_filter_retrieve_data_new (EphyEmbedShell *shell,
+                                  GFile          *filter_file)
+{
+  AdblockFilterRetrieveData* data;
+  char *path, *tmp_path;
+
+  data = g_slice_new (AdblockFilterRetrieveData);
+  data->shell = g_object_ref (shell);
+  data->filter_file = g_object_ref (filter_file);
+
+  path = g_file_get_path (filter_file);
+  tmp_path = g_strdup_printf ("%s.tmp", path);
+  g_free (path);
+  data->tmp_file = g_file_new_for_path (tmp_path);
+  g_free (tmp_path);
+
+  return data;
+}
+
+static void
+adblock_filter_retrieve_data_free (AdblockFilterRetrieveData *data)
+{
+  g_object_unref (data->shell);
+  g_object_unref (data->filter_file);
+  g_object_unref (data->tmp_file);
+
+  g_slice_free (AdblockFilterRetrieveData, data);
+}
+
+static void
+ephy_embed_shell_retrieve_filter_file_finished (GFile                     *src,
+                                                GAsyncResult              *result,
+                                                AdblockFilterRetrieveData *data)
+{
+  GError *error = NULL;
+
+  if (!g_file_copy_finish (src, result, &error) ||
+      !g_file_move (data->tmp_file, data->filter_file, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error)) {
+    GFileOutputStream *stream;
+
+    /* If failed to retrieve, create an empty file if it doesn't exist to unblock extensions */
+    stream = g_file_create (data->filter_file, G_FILE_CREATE_NONE, NULL, NULL);
+    g_object_unref (stream);
+
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Error retrieving filter: %s\n", error->message);
+    g_error_free (error);
+  }
+
+  adblock_filter_retrieve_data_free (data);
+}
+
+static void
+ephy_embed_shell_retrieve_filter_file (EphyEmbedShell *shell,
+                                       GFile          *file)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  GFile *src = g_file_new_for_uri (ADBLOCK_FILTER_URL);
+  AdblockFilterRetrieveData *data;
+
+  if (!priv->uri_tester_update_cancellable)
+    priv->uri_tester_update_cancellable = g_cancellable_new ();
+
+  data = adblock_filter_retrieve_data_new (shell, file);
+
+  g_file_copy_async (src, data->tmp_file,
+                     G_FILE_COPY_OVERWRITE,
+                     G_PRIORITY_DEFAULT,
+                     priv->uri_tester_update_cancellable,
+                     NULL, NULL,
+                     (GAsyncReadyCallback)ephy_embed_shell_retrieve_filter_file_finished,
+                     data);
+
+  g_object_unref (src);
+}
+
+static void
+ephy_embed_shell_update_adblock_filter_file (EphyEmbedShell *shell)
+{
+  GFile *filter_file;
+
+  filter_file = ephy_uri_tester_get_adblock_filer_file (ephy_embed_shell_ensure_adblock_data_dir (shell));
+
+  if (!adblock_filter_file_is_valid (filter_file))
+    ephy_embed_shell_retrieve_filter_file (shell, filter_file);
+
+  g_object_unref (filter_file);
+}
+
+static void
+ephy_embed_shell_update_uri_tester (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  ephy_embed_shell_update_adblock_filter_file (shell);
+
+  if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST &&
+      priv->mode != EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
+    HTTPSEverywhereContext *context;
+    HTTPSEverywhereUpdater *updater;
+
+    if (!priv->uri_tester_update_cancellable)
+      priv->uri_tester_update_cancellable = g_cancellable_new ();
+
+    /* We might want to be smarter about this in the future. For now,
+     * trigger an update of the rulesets once each time Epiphany is started. */
+    context = https_everywhere_context_new ();
+    updater = https_everywhere_updater_new (context);
+    https_everywhere_updater_update (updater,
+                                     priv->uri_tester_update_cancellable,
+                                     (GAsyncReadyCallback)https_everywhere_update_cb,
+                                     NULL);
+    g_object_unref (context);
+    g_object_unref (updater);
+  }
+}
+
+static void
 web_extension_destroyed (EphyEmbedShell *shell,
                          GObject        *web_extension)
 {
@@ -606,9 +823,10 @@ initialize_web_extensions (WebKitWebContext *web_context,
   address = priv->dbus_server ? g_dbus_server_get_client_address (priv->dbus_server) : NULL;
 
   private_profile = EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode);
-  user_data = g_variant_new ("(mssb)",
+  user_data = g_variant_new ("(msssb)",
                              address,
                              ephy_dot_dir (),
+                             ephy_embed_shell_ensure_adblock_data_dir (shell),
                              private_profile);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, user_data);
 }
@@ -627,13 +845,10 @@ new_connection_cb (GDBusServer     *server,
                    GDBusConnection *connection,
                    EphyEmbedShell  *shell)
 {
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   EphyWebExtensionProxy *extension;
 
   extension = ephy_web_extension_proxy_new (connection);
   ephy_embed_shell_watch_web_extension (shell, extension);
-
-  ephy_uri_tester_handle_new_dbus_connection (priv->uri_tester, connection);
 
   g_signal_connect_object (extension, "page-created",
                            G_CALLBACK (web_extension_page_created), shell, 0);
@@ -759,9 +974,9 @@ ephy_embed_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
-  ephy_embed_shell_create_web_context (embed_shell);
+  ephy_embed_shell_update_uri_tester (embed_shell);
 
-  priv->uri_tester = ephy_uri_tester_new ();
+  ephy_embed_shell_create_web_context (embed_shell);
 
   ephy_embed_shell_setup_web_extensions_server (shell);
 
@@ -951,6 +1166,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
 
   object_class->dispose = ephy_embed_shell_dispose;
+  object_class->finalize = ephy_embed_shell_finalize;
   object_class->set_property = ephy_embed_shell_set_property;
   object_class->get_property = ephy_embed_shell_get_property;
   object_class->constructed = ephy_embed_shell_constructed;

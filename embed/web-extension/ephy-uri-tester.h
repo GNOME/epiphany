@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2016 Igalia S.L.
+ *  Copyright © 2011 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -20,26 +20,28 @@
 
 #pragma once
 
+#include <gio/gio.h>
+
 G_BEGIN_DECLS
 
-static const char ephy_uri_tester_introspection_xml[] =
-  "<node>"
-  " <interface name='org.gnome.Epiphany.UriTester'>"
-  "  <method name='MaybeRewriteUri'>"
-  "   <arg name='request_uri' type='s' direction='in'/>"
-  "   <arg name='page_uri' type='s' direction='in'/>"
-  "   <arg name='flags' type='i' direction='in'/>"
-  "   <arg name='modified_request_uri' type='s' direction='out'/>"
-  "  </method>"
-  " </interface>"
-  "</node>";
+#define EPHY_TYPE_URI_TESTER (ephy_uri_tester_get_type ())
+
+G_DECLARE_FINAL_TYPE (EphyUriTester, ephy_uri_tester, EPHY, URI_TESTER, GObject)
 
 typedef enum
 {
   EPHY_URI_TEST_ADBLOCK          = 1 << 1,
-  EPHY_URI_TEST_TRACKING_QUERIES = 1 << 2,
-  EPHY_URI_TEST_HTTPS_EVERYWHERE = 1 << 3,
-  EPHY_URI_TEST_ALL              = EPHY_URI_TEST_ADBLOCK | EPHY_URI_TEST_TRACKING_QUERIES | EPHY_URI_TEST_HTTPS_EVERYWHERE
+  EPHY_URI_TEST_HTTPS_EVERYWHERE = 1 << 2,
+  EPHY_URI_TEST_ALL              = EPHY_URI_TEST_ADBLOCK | EPHY_URI_TEST_HTTPS_EVERYWHERE
 } EphyUriTestFlags;
+
+
+EphyUriTester *ephy_uri_tester_new         (const char       *adblock_data_dir);
+void           ephy_uri_tester_load        (EphyUriTester    *tester);
+char          *ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
+                                            const char       *request_uri,
+                                            const char       *page_uri,
+                                            EphyUriTestFlags  flags);
+
 
 G_END_DECLS

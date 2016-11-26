@@ -41,8 +41,6 @@ libephyembed_la_SOURCES = \
 	ephy-find-toolbar.h		\
 	ephy-notification-container.c	\
 	ephy-notification-container.h	\
-	ephy-uri-tester.c		\
-	ephy-uri-tester.h		\
 	ephy-view-source-handler.c	\
 	ephy-view-source-handler.h	\
 	ephy-web-view.c			\

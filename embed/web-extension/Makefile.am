@@ -5,8 +5,8 @@ webextensiondir = $(pkglibdir)/web-extensions
 libephywebextension_la_SOURCES = \
 	ephy-embed-form-auth.c		\
 	ephy-embed-form-auth.h		\
-	ephy-uri-tester-proxy.c		\
-	ephy-uri-tester-proxy.h		\
+	ephy-uri-tester.c		\
+	ephy-uri-tester.h		\
 	ephy-web-dom-utils.c		\
 	ephy-web-dom-utils.h		\
 	ephy-web-extension.c		\
@@ -24,6 +24,7 @@ libephywebextension_la_CPPFLAGS = \
 	$(GTK_CFLAGS)			\
 	$(LIBSECRET_CFLAGS)		\
 	$(LIBSOUP_CFLAGS)		\
+	$(HTTPSEVERYWHERE_CFLAGS)	\
 	$(WEBKIT2GTK_WEB_EXTENSION_CFLAGS)
 
 libephywebextension_la_CFLAGS = \
@@ -39,6 +40,7 @@ libephywebextension_la_LIBADD = \
 	$(GTK_LIBS) 		\
 	$(LIBSECRET_LIBS) 	\
 	$(LIBSOUP_LIBS) 	\
+	$(HTTPSEVERYWHERE_LIBS)	\
 	$(WEBKIT2GTK_WEB_EXTENSION_LIBS)
 
 -include $(top_srcdir)/git.mk

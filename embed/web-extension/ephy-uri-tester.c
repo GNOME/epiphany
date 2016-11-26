@@ -27,13 +27,8 @@
 #include "config.h"
 #include "ephy-uri-tester.h"
 
-#include "ephy-dbus-names.h"
 #include "ephy-debug.h"
-#include "ephy-embed-shell.h"
-#include "ephy-file-helpers.h"
-#include "ephy-settings.h"
-#include "ephy-uri-helpers.h"
-#include "ephy-uri-tester-interface.h"
+#include "ephy-uri-tester-shared.h"
 
 #include <gio/gio.h>
 #include <glib/gstdio.h>
@@ -41,14 +36,12 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#define DEFAULT_FILTER_URL "https://easylist-downloads.adblockplus.org/easylist.txt"
 #define SIGNATURE_SIZE 8
-#define UPDATE_FREQUENCY 24 * 60 * 60 /* In seconds */
 
 struct _EphyUriTester {
   GObject parent_instance;
 
-  char *data_dir;
+  char *adblock_data_dir;
 
   GHashTable *pattern;
   GHashTable *keys;
@@ -68,17 +61,16 @@ struct _EphyUriTester {
   GRegex *regex_subdocument;
   GRegex *regex_frame_add;
 
-  GCancellable *cancellable;
+  GMainLoop *load_loop;
+  gboolean adblock_loaded;
+  gboolean https_everywhere_loaded;
 
   HTTPSEverywhereContext *https_everywhere_context;
-  GList *deferred_requests;
-
-  GList *dbus_peers;
 };
 
 enum {
   PROP_0,
-  PROP_BASE_DATA_DIR,
+  PROP_ADBLOCK_DATA_DIR,
   LAST_PROP
 };
 
@@ -86,170 +78,8 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 G_DEFINE_TYPE (EphyUriTester, ephy_uri_tester, G_TYPE_OBJECT)
 
-typedef struct {
-  char *request_uri;
-  char *page_uri;
-  EphyUriTestFlags flags;
-  GDBusMethodInvocation *invocation;
-} DeferredRequest;
-
-static DeferredRequest *
-deferred_request_new (const char            *request_uri,
-                      const char            *page_uri,
-                      EphyUriTestFlags       flags,
-                      GDBusMethodInvocation *invocation)
-{
-  DeferredRequest *request = g_slice_new (DeferredRequest);
-  request->request_uri = g_strdup (request_uri);
-  request->page_uri = g_strdup (page_uri);
-  request->flags = flags;
-  /* Ownership of invocation is passed to g_dbus_method_invocation_return_value(). */
-  request->invocation = invocation;
-  return request;
-}
-
-static void
-deferred_request_free (DeferredRequest *request)
-{
-  g_free (request->request_uri);
-  g_free (request->page_uri);
-  g_slice_free (DeferredRequest, request);
-}
-
 static GString *
 ephy_uri_tester_fixup_regexp (const char *prefix, char *src);
-
-static void
-ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, GFile *file);
-
-static char *
-ephy_uri_tester_ensure_data_dir (const char *base_data_dir)
-{
-  char *folder;
-
-  /* Ensure adblock's dir is there. */
-  folder = g_build_filename (base_data_dir, "adblock", NULL);
-  g_mkdir_with_parents (folder, 0700);
-
-  return folder;
-}
-
-static char *
-ephy_uri_tester_get_fileuri_for_url (EphyUriTester *tester,
-                                     const char    *url)
-{
-  char *filename = NULL;
-  char *path = NULL;
-  char *uri = NULL;
-
-  if (!strncmp (url, "file", 4))
-    return g_strndup (url + 7, strlen (url) - 7);
-
-  filename = g_compute_checksum_for_string (G_CHECKSUM_MD5, url, -1);
-
-  path = g_build_filename (tester->data_dir, filename, NULL);
-  uri = g_filename_to_uri (path, NULL, NULL);
-
-  g_free (filename);
-  g_free (path);
-
-  return uri;
-}
-
-typedef struct {
-  EphyUriTester *tester;
-  GFile *dest_file;
-} RetrieveFilterAsyncData;
-
-static void
-ephy_uri_tester_retrieve_filter_finished (GFile                   *src,
-                                          GAsyncResult            *result,
-                                          RetrieveFilterAsyncData *data)
-{
-  GError *error = NULL;
-
-  if (!g_file_copy_finish (src, result, &error)) {
-    LOG ("Error retrieving filter: %s\n", error->message);
-    g_error_free (error);
-  } else
-    ephy_uri_tester_parse_file_at_uri (data->tester, data->dest_file);
-
-  g_object_unref (data->tester);
-  g_object_unref (data->dest_file);
-  g_slice_free (RetrieveFilterAsyncData, data);
-}
-
-static void
-ephy_uri_tester_retrieve_filter (EphyUriTester *tester,
-                                 const char    *url,
-                                 GFile         *file)
-{
-  GFile *src;
-  RetrieveFilterAsyncData *data;
-
-  src = g_file_new_for_uri (url);
-
-  data = g_slice_new (RetrieveFilterAsyncData);
-  data->tester = g_object_ref (tester);
-  data->dest_file = g_object_ref (file);
-
-  g_file_copy_async (src, file,
-                     G_FILE_COPY_OVERWRITE,
-                     G_PRIORITY_DEFAULT,
-                     NULL, NULL, NULL,
-                     (GAsyncReadyCallback)ephy_uri_tester_retrieve_filter_finished,
-                     data);
-
-  g_object_unref (src);
-}
-
-static gboolean
-ephy_uri_tester_filter_is_valid (GFile *file)
-{
-  GFileInfo *file_info = NULL;
-  gboolean result;
-
-  /* Now check if the local file is too old. */
-  file_info = g_file_query_info (file,
-                                 G_FILE_ATTRIBUTE_TIME_MODIFIED,
-                                 G_FILE_QUERY_INFO_NONE,
-                                 NULL,
-                                 NULL);
-  result = FALSE;
-  if (file_info) {
-    GTimeVal current_time;
-    GTimeVal mod_time;
-
-    g_get_current_time (&current_time);
-    g_file_info_get_modification_time (file_info, &mod_time);
-
-    if (current_time.tv_sec > mod_time.tv_sec) {
-      gint64 expire_time = mod_time.tv_sec + UPDATE_FREQUENCY;
-      result = current_time.tv_sec < expire_time;
-    }
-    g_object_unref (file_info);
-  }
-
-  return result;
-}
-
-static void
-ephy_uri_tester_load_patterns (EphyUriTester *tester)
-{
-  char *fileuri;
-  GFile *file;
-
-  fileuri = ephy_uri_tester_get_fileuri_for_url (tester, DEFAULT_FILTER_URL);
-  file = g_file_new_for_uri (fileuri);
-  g_free (fileuri);
-
-  if (!ephy_uri_tester_filter_is_valid (file))
-    ephy_uri_tester_retrieve_filter (tester, DEFAULT_FILTER_URL, file);
-  else
-    ephy_uri_tester_parse_file_at_uri (tester, file);
-
-  g_object_unref (file);
-}
 
 static inline int
 ephy_uri_tester_check_rule (EphyUriTester *tester,
@@ -672,6 +502,22 @@ ephy_uri_tester_parse_line (EphyUriTester *tester,
 }
 
 static void
+ephy_uri_tester_adblock_loaded (EphyUriTester *tester)
+{
+  tester->adblock_loaded = TRUE;
+  if (tester->https_everywhere_loaded)
+    g_main_loop_quit (tester->load_loop);
+}
+
+static void
+ephy_uri_tester_https_everywhere_loaded (EphyUriTester *tester)
+{
+  tester->https_everywhere_loaded = TRUE;
+  if (tester->adblock_loaded)
+    g_main_loop_quit (tester->load_loop);
+}
+
+static void
 file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *tester)
 {
   char *line;
@@ -684,6 +530,7 @@ file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *te
       g_error_free (error);
     }
 
+    ephy_uri_tester_adblock_loaded (tester);
     return;
   }
 
@@ -710,6 +557,7 @@ file_read_cb (GFile *file, GAsyncResult *result, EphyUriTester *tester)
     g_free (path);
     g_error_free (error);
 
+    ephy_uri_tester_adblock_loaded (tester);
     return;
   }
 
@@ -721,257 +569,35 @@ file_read_cb (GFile *file, GAsyncResult *result, EphyUriTester *tester)
   g_object_unref (data_stream);
 }
 
-static void
-ephy_uri_tester_parse_file_at_uri (EphyUriTester *tester, GFile *file)
-{
-  g_file_read_async (file, G_PRIORITY_DEFAULT_IDLE, NULL, (GAsyncReadyCallback)file_read_cb, tester);
-}
-
 static gboolean
-ephy_uri_tester_test_uri (EphyUriTester *tester,
+ephy_uri_tester_block_uri (EphyUriTester *tester,
                           const char    *req_uri,
                           const char    *page_uri)
 {
-  /* Always load the main resource. */
-  if (g_strcmp0 (req_uri, page_uri) == 0)
-    return FALSE;
-
-  /* Always load data requests, as uri_tester won't do any good here. */
-  if (g_str_has_prefix (req_uri, SOUP_URI_SCHEME_DATA))
-    return FALSE;
-
   /* check whitelisting rules before the normal ones */
   if (ephy_uri_tester_is_matched (tester, NULL, req_uri, page_uri, TRUE))
     return FALSE;
   return ephy_uri_tester_is_matched (tester, NULL, req_uri, page_uri, FALSE);
 }
 
-static char *
+char *
 ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
                              const char       *request_uri,
                              const char       *page_uri,
                              EphyUriTestFlags  flags)
 {
-  char *modified_uri = NULL;
-  char *result;
-
   /* Should we block the URL outright? */
   if ((flags & EPHY_URI_TEST_ADBLOCK) &&
-      ephy_uri_tester_test_uri (tester, request_uri, page_uri)) {
+      ephy_uri_tester_block_uri (tester, request_uri, page_uri)) {
     g_debug ("Request '%s' blocked (page: '%s')", request_uri, page_uri);
-    return g_strdup ("");
+
+    return NULL;
   }
 
-  if ((flags & EPHY_URI_TEST_TRACKING_QUERIES)) {
-    /* Remove analytics from URL. Note that this function is a bit annoying to
-     * use: it returns NULL if it doesn't remove any query parameters. */
-    modified_uri = ephy_remove_tracking_from_uri (request_uri);
-  }
+  if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) && https_everywhere_context_get_initialized (tester->https_everywhere_context))
+    return https_everywhere_context_rewrite (tester->https_everywhere_context, request_uri);
 
-  if (!modified_uri)
-    modified_uri = g_strdup (request_uri);
-
-  if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) &&
-      g_str_has_prefix (request_uri, "http://")) {
-    result = https_everywhere_context_rewrite (tester->https_everywhere_context,
-                                               modified_uri);
-    g_free (modified_uri);
-  } else {
-    result = modified_uri;
-  }
-
-  return result;
-}
-
-typedef struct {
-  EphyUriTester *tester;
-  GDBusConnection *connection;
-  guint registration_id;
-} DBusPeerInfo;
-
-static DBusPeerInfo *
-dbus_peer_info_new (EphyUriTester   *tester,
-                    GDBusConnection *connection,
-                    guint            registration_id)
-{
-  DBusPeerInfo *peer = g_slice_new (DBusPeerInfo);
-  peer->tester = tester;
-  peer->connection = g_object_ref (connection);
-  peer->registration_id = registration_id;
-  return peer;
-}
-
-static void
-dbus_peer_info_free (DBusPeerInfo *peer)
-{
-  g_signal_handlers_disconnect_by_data (peer->connection, peer);
-
-  g_object_unref (peer->connection);
-  g_slice_free (DBusPeerInfo, peer);
-}
-
-static void
-dbus_connection_closed_cb (GDBusConnection *connection,
-                           gboolean         remote_peer_vanished,
-                           GError          *error,
-                           DBusPeerInfo    *peer)
-{
-  peer->tester->dbus_peers = g_list_remove (peer->tester->dbus_peers, peer);
-  dbus_peer_info_free (peer);
-}
-
-static void
-ephy_uri_tester_return_response (EphyUriTester         *tester,
-                                 const char            *request_uri,
-                                 const char            *page_uri,
-                                 EphyUriTestFlags       flags,
-                                 GDBusMethodInvocation *invocation)
-{
-  char *rewritten_uri;
-  rewritten_uri = ephy_uri_tester_rewrite_uri (tester, request_uri, page_uri, flags);
-  g_dbus_method_invocation_return_value (invocation,
-                                         g_variant_new ("(s)", rewritten_uri));
-  g_free (rewritten_uri);
-}
-
-static void
-handle_method_call (GDBusConnection       *connection,
-                    const char            *sender,
-                    const char            *object_path,
-                    const char            *interface_name,
-                    const char            *method_name,
-                    GVariant              *parameters,
-                    GDBusMethodInvocation *invocation,
-                    gpointer               user_data)
-{
-  EphyUriTester *tester = EPHY_URI_TESTER (user_data);
-  EphyUriTestFlags flags = 0;
-
-  if (g_strcmp0 (interface_name, EPHY_URI_TESTER_INTERFACE) != 0)
-    return;
-
-  if (g_strcmp0 (method_name, "MaybeRewriteUri") == 0) {
-    const char *request_uri;
-    const char *page_uri;
-
-    g_variant_get (parameters, "(&s&si)", &request_uri, &page_uri, &flags);
-
-    if (request_uri == NULL || request_uri == '\0') {
-      g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                             "Request URI cannot be NULL or empty");
-      return;
-    }
-
-    if (page_uri == NULL || page_uri == '\0') {
-      g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                             "Page URI cannot be NULL or empty");
-      return;
-    }
-
-    if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) == 0 ||
-        !g_str_has_prefix (request_uri, "http://") ||
-        https_everywhere_context_get_initialized (tester->https_everywhere_context)) {
-      ephy_uri_tester_return_response (tester, request_uri, page_uri, flags, invocation);
-    } else {
-      DeferredRequest *request = deferred_request_new (request_uri, page_uri, flags, invocation);
-      tester->deferred_requests = g_list_append (tester->deferred_requests, request);
-    }
-  }
-}
-
-static const GDBusInterfaceVTable interface_vtable = {
-  handle_method_call,
-  NULL,
-  NULL
-};
-
-void
-ephy_uri_tester_handle_new_dbus_connection (EphyUriTester   *tester,
-                                            GDBusConnection *connection)
-{
-  static GDBusNodeInfo *introspection_data = NULL;
-  DBusPeerInfo *peer;
-  guint registration_id;
-  GError *error = NULL;
-
-  if (!introspection_data)
-    introspection_data = g_dbus_node_info_new_for_xml (ephy_uri_tester_introspection_xml, NULL);
-
-  registration_id =
-    g_dbus_connection_register_object (connection,
-                                       EPHY_URI_TESTER_OBJECT_PATH,
-                                       introspection_data->interfaces[0],
-                                       &interface_vtable,
-                                       g_object_ref (tester),
-                                       g_object_unref,
-                                       &error);
-  if (!registration_id) {
-    g_warning ("Failed to register URI tester object: %s\n", error->message);
-    g_error_free (error);
-    return;
-  }
-
-  peer = dbus_peer_info_new (tester, connection, registration_id);
-  tester->dbus_peers = g_list_append (tester->dbus_peers, peer);
-
-  g_signal_connect (connection, "closed",
-                    G_CALLBACK (dbus_connection_closed_cb), peer);
-}
-
-static void
-handle_deferred_request (DeferredRequest *request,
-                         EphyUriTester   *tester)
-{
-  ephy_uri_tester_return_response (tester,
-                                   request->request_uri,
-                                   request->page_uri,
-                                   request->flags,
-                                   request->invocation);
-}
-
-static void
-https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
-                            GAsyncResult *result)
-{
-  GError *error = NULL;
-
-  https_everywhere_updater_update_finish (updater, result, &error);
-
-  if (error) {
-    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
-        !g_error_matches (error, HTTPS_EVERYWHERE_UPDATE_ERROR, HTTPS_EVERYWHERE_UPDATE_ERROR_IN_PROGRESS) &&
-        !g_error_matches (error, HTTPS_EVERYWHERE_UPDATE_ERROR, HTTPS_EVERYWHERE_UPDATE_ERROR_NO_UPDATE_AVAILABLE))
-      g_warning ("Failed to update HTTPS Everywhere rulesets: %s", error->message);
-    g_error_free (error);
-  }
-
-  g_object_unref (updater);
-}
-
-static void
-ephy_uri_tester_update_https_everywhere_rulesets (EphyUriTester *tester)
-{
-  HTTPSEverywhereUpdater *updater;
-  EphyEmbedShell *shell;
-  EphyEmbedShellMode mode;
-
-  shell = ephy_embed_shell_get_default ();
-  mode = ephy_embed_shell_get_mode (shell);
-
-  if (mode == EPHY_EMBED_SHELL_MODE_TEST || mode == EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER)
-    return;
-
-  /* We might want to be smarter about this in the future. For now,
-   * trigger an update of the rulesets once each time an EphyUriTester
-   * is created. The new rulesets will get used the next time a new
-   * EphyUriTester is created. Since EphyUriTester is only intended to
-   * be created once, that means the new rulesets will be used the next
-   * time Epiphany is restarted. */
-  updater = https_everywhere_updater_new (tester->https_everywhere_context);
-  https_everywhere_updater_update (updater,
-                                   tester->cancellable,
-                                   (GAsyncReadyCallback)https_everywhere_update_cb,
-                                   NULL);
+  return g_strdup (request_uri);
 }
 
 static void
@@ -983,18 +609,74 @@ https_everywhere_context_init_cb (HTTPSEverywhereContext *context,
 
   https_everywhere_context_init_finish (context, res, &error);
 
-  /* Note that if this were not fatal, we would need some way to ensure
-   * that future pending requests would not get stuck forever. */
   if (error) {
-    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_error ("Failed to initialize HTTPS Everywhere context: %s", error->message);
-  } else {
-    g_list_foreach (tester->deferred_requests, (GFunc)handle_deferred_request, tester);
-    ephy_uri_tester_update_https_everywhere_rulesets (tester);
+    g_warning ("Failed to initialize HTTPS Everywhere context: %s", error->message);
+    g_error_free (error);
   }
 
-  g_list_free_full (tester->deferred_requests, (GDestroyNotify)deferred_request_free);
-  g_object_unref (tester);
+  ephy_uri_tester_https_everywhere_loaded (tester);
+}
+
+static void
+adblock_file_monitor_changed (GFileMonitor     *monitor,
+                              GFile            *file,
+                              GFile            *other_file,
+                              GFileMonitorEvent event_type,
+                              EphyUriTester    *tester)
+{
+  if (event_type != G_FILE_MONITOR_EVENT_RENAMED)
+    return;
+
+  g_signal_handlers_disconnect_by_func (monitor, adblock_file_monitor_changed, tester);
+  g_file_read_async (other_file, G_PRIORITY_DEFAULT_IDLE, NULL,
+                     (GAsyncReadyCallback)file_read_cb,
+                     tester);
+}
+
+static void
+ephy_uri_tester_load_sync (GTask         *task,
+                           EphyUriTester *tester)
+{
+  GMainContext *context;
+  GFile *filter_file;
+  GFileMonitor *monitor = NULL;
+
+  context = g_main_context_new ();
+  tester->load_loop = g_main_loop_new (context, FALSE);
+  g_main_context_push_thread_default (context);
+
+  tester->https_everywhere_context = https_everywhere_context_new ();
+  https_everywhere_context_init (tester->https_everywhere_context, NULL,
+                                 (GAsyncReadyCallback)https_everywhere_context_init_cb,
+                                 tester);
+
+  filter_file = ephy_uri_tester_get_adblock_filer_file (tester->adblock_data_dir);
+  if (!g_file_query_exists (filter_file, NULL)) {
+    GError *error = NULL;
+
+    monitor = g_file_monitor_file (filter_file, G_FILE_MONITOR_WATCH_MOVES, NULL, &error);
+    if (monitor) {
+       g_signal_connect (monitor, "changed", G_CALLBACK (adblock_file_monitor_changed), tester);
+    } else {
+      g_warning ("Failed to monitor adblock file: %s\n", error->message);
+      g_error_free (error);
+      ephy_uri_tester_adblock_loaded (tester);
+    }
+  } else {
+    g_file_read_async (filter_file, G_PRIORITY_DEFAULT_IDLE, NULL,
+                       (GAsyncReadyCallback)file_read_cb,
+                       tester);
+  }
+  g_object_unref (filter_file);
+
+  g_main_loop_run (tester->load_loop);
+
+  if (monitor)
+    g_object_unref (monitor);
+  g_main_context_pop_thread_default (context);
+  g_main_context_unref (context);
+
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -1050,24 +732,6 @@ ephy_uri_tester_init (EphyUriTester *tester)
 }
 
 static void
-ephy_uri_tester_constructed (GObject *object)
-{
-  EphyUriTester *tester = EPHY_URI_TESTER (object);
-
-  G_OBJECT_CLASS (ephy_uri_tester_parent_class)->constructed (object);
-
-  tester->cancellable = g_cancellable_new ();
-
-  tester->https_everywhere_context = https_everywhere_context_new ();
-  https_everywhere_context_init (tester->https_everywhere_context,
-                                 tester->cancellable,
-                                 (GAsyncReadyCallback)https_everywhere_context_init_cb,
-                                 g_object_ref (tester));
-
-  ephy_uri_tester_load_patterns (tester);
-}
-
-static void
 ephy_uri_tester_set_property (GObject      *object,
                               guint         prop_id,
                               const GValue *value,
@@ -1076,41 +740,13 @@ ephy_uri_tester_set_property (GObject      *object,
   EphyUriTester *tester = EPHY_URI_TESTER (object);
 
   switch (prop_id) {
-    case PROP_BASE_DATA_DIR:
-      tester->data_dir = ephy_uri_tester_ensure_data_dir (g_value_get_string (value));
+    case PROP_ADBLOCK_DATA_DIR:
+      tester->adblock_data_dir = g_value_dup_string (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
-}
-
-static void
-unregister_dbus_object (DBusPeerInfo  *peer,
-                        EphyUriTester *tester)
-{
-  g_dbus_connection_unregister_object (peer->connection, peer->registration_id);
-}
-
-static void
-ephy_uri_tester_dispose (GObject *object)
-{
-  EphyUriTester *tester = EPHY_URI_TESTER (object);
-
-  LOG ("EphyUriTester disposing %p", object);
-
-  if (tester->cancellable) {
-    g_cancellable_cancel (tester->cancellable);
-    g_clear_object (&tester->cancellable);
-  }
-
-  if (tester->dbus_peers) {
-    g_list_foreach (tester->dbus_peers, (GFunc)unregister_dbus_object, tester);
-    g_list_free_full (tester->dbus_peers, (GDestroyNotify)dbus_peer_info_free);
-    tester->dbus_peers = NULL;
-  }
-
-  G_OBJECT_CLASS (ephy_uri_tester_parent_class)->dispose (object);
 }
 
 static void
@@ -1120,7 +756,7 @@ ephy_uri_tester_finalize (GObject *object)
 
   LOG ("EphyUriTester finalizing %p", object);
 
-  g_free (tester->data_dir);
+  g_free (tester->adblock_data_dir);
 
   g_hash_table_destroy (tester->pattern);
   g_hash_table_destroy (tester->keys);
@@ -1140,6 +776,8 @@ ephy_uri_tester_finalize (GObject *object)
   g_regex_unref (tester->regex_subdocument);
   g_regex_unref (tester->regex_frame_add);
 
+  g_clear_object (&tester->https_everywhere_context);
+
   G_OBJECT_CLASS (ephy_uri_tester_parent_class)->finalize (object);
 }
 
@@ -1149,14 +787,12 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->set_property = ephy_uri_tester_set_property;
-  object_class->constructed = ephy_uri_tester_constructed;
-  object_class->dispose = ephy_uri_tester_dispose;
   object_class->finalize = ephy_uri_tester_finalize;
 
-  obj_properties[PROP_BASE_DATA_DIR] =
-    g_param_spec_string ("base-data-dir",
-                         "Base data dir",
-                         "The base dir where to create the adblock data dir",
+  obj_properties[PROP_ADBLOCK_DATA_DIR] =
+    g_param_spec_string ("adblock-data-dir",
+                         "Adblock data dir",
+                         "The adblock data dir",
                          NULL,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
@@ -1164,23 +800,22 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
 }
 
 EphyUriTester *
-ephy_uri_tester_new (void)
+ephy_uri_tester_new (const char *adblock_data_dir)
 {
-  EphyEmbedShell *shell;
-  EphyEmbedShellMode mode;
-  EphyUriTester *tester;
-  char *data_dir;
+  return EPHY_URI_TESTER (g_object_new (EPHY_TYPE_URI_TESTER, "adblock-data-dir", adblock_data_dir, NULL));
+}
 
-  shell = ephy_embed_shell_get_default ();
-  mode = ephy_embed_shell_get_mode (shell);
+void
+ephy_uri_tester_load (EphyUriTester *tester)
+{
+  GTask *task;
 
-  /* The filters list is large, so we don't want to store a separate copy per
-   * web app, but users should otherwise be able to configure different filters
-   * per profile directory. */
-  data_dir = mode == EPHY_EMBED_SHELL_MODE_APPLICATION ? ephy_default_dot_dir ()
-                                                       : g_strdup (ephy_dot_dir ());
+  g_return_if_fail (EPHY_IS_URI_TESTER (tester));
 
-  tester = g_object_new (EPHY_TYPE_URI_TESTER, "base-data-dir", data_dir, NULL);
-  g_free (data_dir);
-  return tester;
+  if (tester->adblock_loaded && tester->https_everywhere_loaded)
+    return;
+
+  task = g_task_new (tester, NULL, NULL, NULL);
+  g_task_run_in_thread_sync (task, (GTaskThreadFunc)ephy_uri_tester_load_sync);
+  g_object_unref (task);
 }

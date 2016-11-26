@@ -30,7 +30,8 @@
 #include "ephy-hosts-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "ephy-uri-tester-proxy.h"
+#include "ephy-uri-helpers.h"
+#include "ephy-uri-tester.h"
 #include "ephy-web-dom-utils.h"
 #include "ephy-web-overview.h"
 
@@ -50,12 +51,13 @@ struct _EphyWebExtension {
   gboolean initialized;
 
   GDBusConnection *dbus_connection;
+  GArray *page_created_signals_pending;
 
   EphyFormAuthDataCache *form_auth_data_cache;
   GHashTable *form_auth_data_save_requests;
   EphyWebOverviewModel *overview_model;
   EphyHostsManager *hosts_manager;
-  EphyUriTesterProxy *uri_tester;
+  EphyUriTester *uri_tester;
 };
 
 static const char introspection_xml[] =
@@ -114,6 +116,16 @@ should_use_https_everywhere (const char *request_uri,
   gboolean result = TRUE;
 
   request_soup_uri = soup_uri_new (request_uri);
+  if (request_soup_uri->scheme != SOUP_URI_SCHEME_HTTP) {
+    soup_uri_free (request_soup_uri);
+    return FALSE;
+  }
+
+  if (!redirected_uri) {
+    soup_uri_free (request_soup_uri);
+    return TRUE;
+  }
+
   redirected_soup_uri = soup_uri_new (redirected_uri);
 
   if (request_soup_uri->scheme == SOUP_URI_SCHEME_HTTP &&
@@ -133,17 +145,51 @@ should_use_https_everywhere (const char *request_uri,
 }
 
 static gboolean
+should_use_adblocker (const char *request_uri,
+                      const char *page_uri)
+{
+  /* Always load the main resource. */
+  if (g_strcmp0 (request_uri, page_uri) == 0)
+    return FALSE;
+
+  /* Always load data requests, as uri_tester won't do any good here. */
+  if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_DATA))
+    return FALSE;
+
+  /* Always load about pages */
+  if (g_str_has_prefix (request_uri, "about") ||
+      g_str_has_prefix (request_uri, "ephy-about"))
+    return FALSE;
+
+  /* Always load resources */
+  if (g_str_has_prefix (request_uri, "resource://") ||
+      g_str_has_prefix (request_uri, "ephy-resource://"))
+    return FALSE;
+
+  /* Always load local files */
+  if (g_str_has_prefix (request_uri, "file://"))
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
 web_page_send_request (WebKitWebPage     *web_page,
                        WebKitURIRequest  *request,
                        WebKitURIResponse *redirected_response,
                        EphyWebExtension  *extension)
 {
   const char *request_uri;
+  const char *redirected_response_uri;
   const char *page_uri;
-  char *modified_uri;
+  char *modified_uri = NULL;
   EphyUriTestFlags flags = EPHY_URI_TEST_ALL;
 
-  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
+  request_uri = webkit_uri_request_get_uri (request);
+  page_uri = webkit_web_page_get_uri (web_page);
+
+  if (!should_use_adblocker (request_uri, page_uri) ||
+      !g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
     flags &= ~EPHY_URI_TEST_ADBLOCK;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
@@ -153,28 +199,30 @@ web_page_send_request (WebKitWebPage     *web_page,
        * http://tools.ietf.org/id/draft-mayer-do-not-track-00.txt */
       soup_message_headers_append (headers, "DNT", "1");
     }
-  } else {
-    flags &= ~EPHY_URI_TEST_TRACKING_QUERIES;
+    modified_uri = ephy_remove_tracking_from_uri (request_uri);
   }
 
-  request_uri = webkit_uri_request_get_uri (request);
-  page_uri = webkit_web_page_get_uri (web_page);
-
-  if (redirected_response != NULL &&
-      !should_use_https_everywhere (request_uri,
-                                    webkit_uri_response_get_uri (redirected_response))) {
+  redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
+  if (!should_use_https_everywhere (request_uri, redirected_response_uri))
     flags &= ~EPHY_URI_TEST_HTTPS_EVERYWHERE;
-  }
 
-  modified_uri = ephy_uri_tester_proxy_maybe_rewrite_uri (extension->uri_tester,
-                                                          request_uri,
-                                                          page_uri,
-                                                          flags);
+  if ((flags & EPHY_URI_TEST_ADBLOCK) || (flags & EPHY_URI_TEST_HTTPS_EVERYWHERE)) {
+    char *result;
 
-  if (strlen (modified_uri) == 0) {
-    LOG ("Refused to load %s", request_uri);
+    ephy_uri_tester_load (extension->uri_tester);
+    result = ephy_uri_tester_rewrite_uri (extension->uri_tester,
+                                          modified_uri ? modified_uri : request_uri,
+                                          page_uri, flags);
     g_free (modified_uri);
-    return TRUE;
+
+    if (!result) {
+      LOG ("Refused to load %s", request_uri);
+      return TRUE;
+    }
+
+    modified_uri = result;
+  } else if (!modified_uri) {
+    return FALSE;
   }
 
   if (g_strcmp0 (request_uri, modified_uri) != 0) {
@@ -1176,13 +1224,44 @@ ephy_web_extension_emit_page_created (EphyWebExtension *extension,
 }
 
 static void
+ephy_web_extension_emit_page_created_signals_pending (EphyWebExtension *extension)
+{
+  guint i;
+
+  if (!extension->page_created_signals_pending)
+    return;
+
+  for (i = 0; i < extension->page_created_signals_pending->len; i++) {
+    guint64 page_id;
+
+    page_id = g_array_index (extension->page_created_signals_pending, guint64, i);
+    ephy_web_extension_emit_page_created (extension, page_id);
+  }
+
+  g_array_free (extension->page_created_signals_pending, TRUE);
+  extension->page_created_signals_pending = NULL;
+}
+
+static void
+ephy_web_extension_queue_page_created_signal_emission (EphyWebExtension *extension,
+                                                       guint64           page_id)
+{
+  if (!extension->page_created_signals_pending)
+    extension->page_created_signals_pending = g_array_new (FALSE, FALSE, sizeof (guint64));
+  extension->page_created_signals_pending = g_array_append_val (extension->page_created_signals_pending, page_id);
+}
+
+static void
 ephy_web_extension_page_created_cb (EphyWebExtension *extension,
                                     WebKitWebPage    *web_page)
 {
   guint64 page_id;
 
   page_id = webkit_web_page_get_id (web_page);
-  ephy_web_extension_emit_page_created (extension, page_id);
+  if (extension->dbus_connection)
+    ephy_web_extension_emit_page_created (extension, page_id);
+  else
+    ephy_web_extension_queue_page_created_signal_emission (extension, page_id);
 
   g_signal_connect (web_page, "send-request",
                     G_CALLBACK (web_page_send_request),
@@ -1367,6 +1446,7 @@ ephy_web_extension_dispose (GObject *object)
 {
   EphyWebExtension *extension = EPHY_WEB_EXTENSION (object);
 
+  g_clear_object (&extension->uri_tester);
   g_clear_object (&extension->overview_model);
   g_clear_object (&extension->hosts_manager);
 
@@ -1376,6 +1456,11 @@ ephy_web_extension_dispose (GObject *object)
   if (extension->form_auth_data_save_requests) {
     g_hash_table_destroy (extension->form_auth_data_save_requests);
     extension->form_auth_data_save_requests = NULL;
+  }
+
+  if (extension->page_created_signals_pending) {
+    g_array_free (extension->page_created_signals_pending, TRUE);
+    extension->page_created_signals_pending = NULL;
   }
 
   g_clear_object (&extension->dbus_connection);
@@ -1411,6 +1496,45 @@ ephy_web_extension_get (void)
   return EPHY_WEB_EXTENSION (g_once (&once_init, ephy_web_extension_create_instance, NULL));
 }
 
+static void
+dbus_connection_created_cb (GObject          *source_object,
+                            GAsyncResult     *result,
+                            EphyWebExtension *extension)
+{
+  static GDBusNodeInfo *introspection_data = NULL;
+  GDBusConnection *connection;
+  guint registration_id;
+  GError *error = NULL;
+
+  if (!introspection_data)
+    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
+
+  connection = g_dbus_connection_new_for_address_finish (result, &error);
+  if (error) {
+    g_warning ("Failed to connect to UI process: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  registration_id =
+    g_dbus_connection_register_object (connection,
+                                       EPHY_WEB_EXTENSION_OBJECT_PATH,
+                                       introspection_data->interfaces[0],
+                                       &interface_vtable,
+                                       extension,
+                                       NULL,
+                                       &error);
+  if (!registration_id) {
+    g_warning ("Failed to register web extension object: %s\n", error->message);
+    g_error_free (error);
+    g_object_unref (connection);
+    return;
+  }
+
+  extension->dbus_connection = connection;
+  ephy_web_extension_emit_page_created_signals_pending (extension);
+}
+
 static gboolean
 authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
                                  GIOStream         *stream,
@@ -1424,12 +1548,10 @@ void
 ephy_web_extension_initialize (EphyWebExtension   *extension,
                                WebKitWebExtension *wk_extension,
                                const char         *server_address,
+                               const char         *adblock_data_dir,
                                gboolean            is_private_profile)
 {
-  static GDBusNodeInfo *introspection_data = NULL;
   GDBusAuthObserver *observer;
-  guint registration_id;
-  GError *error = NULL;
 
   g_return_if_fail (EPHY_IS_WEB_EXTENSION (extension));
 
@@ -1452,35 +1574,13 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
   g_signal_connect (observer, "authorize-authenticated-peer",
                     G_CALLBACK (authorize_authenticated_peer_cb), extension);
 
-  /* Sync because this has to be ready before the first URI request, since
-   * WebKit does not provide any async way to rewrite URI requests. */
-  extension->dbus_connection =
-      g_dbus_connection_new_for_address_sync (server_address,
-                                              G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
-                                              observer,
-                                              NULL,
-                                              &error);
+  g_dbus_connection_new_for_address (server_address,
+                                     G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
+                                     observer,
+                                     NULL,
+                                     (GAsyncReadyCallback)dbus_connection_created_cb,
+                                     extension);
   g_object_unref (observer);
 
-  /* Fatal. */
-  if (error)
-    g_error ("Failed to connect to UI process: %s", error->message);
-
-  if (!introspection_data)
-    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
-
-  registration_id =
-    g_dbus_connection_register_object (extension->dbus_connection,
-                                       EPHY_WEB_EXTENSION_OBJECT_PATH,
-                                       introspection_data->interfaces[0],
-                                       &interface_vtable,
-                                       extension,
-                                       NULL,
-                                       &error);
-
-  /* Fatal. */
-  if (!registration_id)
-    g_error ("Failed to register web extension object: %s\n", error->message);
-
-  extension->uri_tester = ephy_uri_tester_proxy_new (extension->dbus_connection);
+  extension->uri_tester = ephy_uri_tester_new (adblock_data_dir);
 }

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2011 Igalia S.L.
+ *  Copyright © 2016 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -18,19 +18,20 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "config.h"
+#include "ephy-uri-tester-shared.h"
 
-#include <gio/gio.h>
+GFile *
+ephy_uri_tester_get_adblock_filer_file (const char *adblock_data_dir)
+{
+  char *filter_filename, *filter_path;
+  GFile *filter_file;
 
-G_BEGIN_DECLS
+  filter_filename = g_compute_checksum_for_string (G_CHECKSUM_MD5, ADBLOCK_FILTER_URL, -1);
+  filter_path = g_build_filename (adblock_data_dir, filter_filename, NULL);
+  g_free (filter_filename);
+  filter_file = g_file_new_for_path (filter_path);
+  g_free (filter_path);
 
-#define EPHY_TYPE_URI_TESTER (ephy_uri_tester_get_type ())
-
-G_DECLARE_FINAL_TYPE (EphyUriTester, ephy_uri_tester, EPHY, URI_TESTER, GObject)
-
-EphyUriTester *ephy_uri_tester_new                  (void);
-
-void           ephy_uri_tester_handle_new_dbus_connection (EphyUriTester   *tester,
-                                                           GDBusConnection *connection);
-
-G_END_DECLS
+  return filter_file;
+}
