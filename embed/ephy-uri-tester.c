@@ -772,7 +772,7 @@ ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
     modified_uri = g_strdup (request_uri);
 
   if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) &&
-      g_str_has_prefix (request_uri, SOUP_URI_SCHEME_HTTP)) {
+      g_str_has_prefix (request_uri, "http://")) {
     result = https_everywhere_context_rewrite (tester->https_everywhere_context,
                                                modified_uri);
     g_free (modified_uri);
@@ -869,7 +869,7 @@ handle_method_call (GDBusConnection       *connection,
     }
 
     if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) == 0 ||
-        !g_str_has_prefix (request_uri, SOUP_URI_SCHEME_HTTP) ||
+        !g_str_has_prefix (request_uri, "http://") ||
         https_everywhere_context_get_initialized (tester->https_everywhere_context)) {
       ephy_uri_tester_return_response (tester, request_uri, page_uri, flags, invocation);
     } else {
