@@ -486,19 +486,26 @@ ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 }
 
 static void
-ephy_web_view_track_info_bar (GtkWidget  *new_info_bar,
-                              GtkWidget **tracked_info_bar)
+untrack_info_bar (GtkWidget **tracked_info_bar)
+{
+  g_assert (tracked_info_bar);
+  g_assert (!*tracked_info_bar || GTK_IS_INFO_BAR (*tracked_info_bar));
+
+  if (*tracked_info_bar) {
+    g_object_remove_weak_pointer (G_OBJECT (*tracked_info_bar), (gpointer *)tracked_info_bar);
+    *tracked_info_bar = NULL;
+  }
+}
+
+static void
+track_info_bar (GtkWidget  *new_info_bar,
+                GtkWidget **tracked_info_bar)
 {
   g_assert (GTK_IS_INFO_BAR (new_info_bar));
   g_assert (tracked_info_bar);
   g_assert (!*tracked_info_bar || GTK_IS_INFO_BAR (*tracked_info_bar));
 
-  /* We track info bars so we only ever show one of a kind. */
-  if (*tracked_info_bar) {
-    g_object_remove_weak_pointer (G_OBJECT (*tracked_info_bar),
-                                  (gpointer *)tracked_info_bar);
-    gtk_widget_destroy (*tracked_info_bar);
-  }
+  untrack_info_bar (tracked_info_bar);
 
   *tracked_info_bar = new_info_bar;
   g_object_add_weak_pointer (G_OBJECT (new_info_bar),
@@ -541,7 +548,7 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
   gtk_container_add (GTK_CONTAINER (content_area), label);
   gtk_widget_show (label);
 
-  ephy_web_view_track_info_bar (info_bar, &web_view->password_info_bar);
+  track_info_bar (info_bar, &web_view->password_info_bar);
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar, FALSE);
@@ -762,7 +769,7 @@ sensitive_form_focused_cb (EphyEmbedShell *shell,
   gtk_container_add (GTK_CONTAINER (content_area), label);
   gtk_widget_show (label);
 
-  ephy_web_view_track_info_bar (info_bar, &web_view->sensitive_form_info_bar);
+  track_info_bar (info_bar, &web_view->sensitive_form_info_bar);
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar, FALSE);
@@ -825,35 +832,12 @@ ephy_web_view_dispose (GObject *object)
     view->web_extension = NULL;
   }
 
-  if (view->geolocation_info_bar) {
-    g_object_remove_weak_pointer (G_OBJECT (view->geolocation_info_bar), (gpointer *)&view->geolocation_info_bar);
-    view->geolocation_info_bar = NULL;
-  }
-
-  if (view->notification_info_bar) {
-    g_object_remove_weak_pointer (G_OBJECT (view->notification_info_bar), (gpointer *)&view->notification_info_bar);
-    view->notification_info_bar = NULL;
-  }
-
-  if (view->microphone_info_bar) {
-    g_object_remove_weak_pointer (G_OBJECT (view->microphone_info_bar), (gpointer *)&view->microphone_info_bar);
-    view->microphone_info_bar = NULL;
-  }
-
-  if (view->webcam_info_bar) {
-    g_object_remove_weak_pointer (G_OBJECT (view->webcam_info_bar), (gpointer *)&view->webcam_info_bar);
-    view->webcam_info_bar = NULL;
-  }
-
-  if (view->password_info_bar) {
-    g_object_remove_weak_pointer (G_OBJECT (view->password_info_bar), (gpointer *)&view->password_info_bar);
-    view->password_info_bar = NULL;
-  }
-
-  if (view->sensitive_form_info_bar) {
-    g_object_remove_weak_pointer (G_OBJECT (view->sensitive_form_info_bar), (gpointer *)&view->sensitive_form_info_bar);
-    view->sensitive_form_info_bar = NULL;
-  }
+  untrack_info_bar (&view->geolocation_info_bar);
+  untrack_info_bar (&view->notification_info_bar);
+  untrack_info_bar (&view->microphone_info_bar);
+  untrack_info_bar (&view->webcam_info_bar);
+  untrack_info_bar (&view->password_info_bar);
+  untrack_info_bar (&view->sensitive_form_info_bar);
 
   g_signal_handlers_disconnect_by_func (view->history_service,
                                         ephy_web_view_history_cleared_cb,
@@ -1432,16 +1416,16 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
 
   switch (permission_type) {
   case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
-    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->notification_info_bar);
+    track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->notification_info_bar);
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
-    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
+    track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
-    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->microphone_info_bar);
+    track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->microphone_info_bar);
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
-    ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_info_bar);
+    track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->webcam_info_bar);
     break;
   case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
   default:
@@ -1688,9 +1672,8 @@ load_changed_cb (WebKitWebView  *web_view,
       restore_zoom_level (view, loading_uri);
 
       if (view->sensitive_form_info_bar) {
-        g_object_remove_weak_pointer (G_OBJECT (view->sensitive_form_info_bar), (gpointer *)&view->sensitive_form_info_bar);
         gtk_widget_destroy (view->sensitive_form_info_bar);
-        view->sensitive_form_info_bar = NULL;
+        untrack_info_bar (&view->sensitive_form_info_bar);
       }
 
       break;
