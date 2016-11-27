@@ -763,12 +763,15 @@ sensitive_form_focused_cb (EphyEmbedShell *shell,
   /* Translators: Message appears when insecure password form is focused. */
   label = gtk_label_new (_("Heads-up: this form is not secure. If you type your password, it will be visible to cybercriminals!"));
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_widget_show (label);
 
   info_bar = gtk_info_bar_new ();
   gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
+  gtk_info_bar_set_show_close_button (GTK_INFO_BAR (info_bar), TRUE);
   content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
   gtk_container_add (GTK_CONTAINER (content_area), label);
-  gtk_widget_show (label);
+
+  g_signal_connect (info_bar, "response", G_CALLBACK (gtk_widget_hide), NULL);
 
   track_info_bar (info_bar, &web_view->sensitive_form_info_bar);
 
