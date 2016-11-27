@@ -971,6 +971,46 @@ username_node_input_cb (WebKitDOMNode  *username_node,
   return TRUE;
 }
 
+static gboolean
+sensitive_form_focused_cb (WebKitDOMHTMLFormElement *form,
+                           WebKitDOMEvent           *dom_event,
+                           WebKitWebPage            *web_page)
+{
+  WebKitDOMDOMWindow *dom_window;
+  GVariant *variant;
+  char *message;
+  char *action;
+  gboolean insecure_action;
+
+  dom_window = webkit_dom_document_get_default_view (webkit_web_page_get_dom_document (web_page));
+  if (dom_window == NULL)
+    return FALSE;
+
+  action = webkit_dom_html_form_element_get_action (form);
+  /* The goal here is to detect insecure forms on secure pages. The action need
+   * not necessarily contain any protocol, so just assume the form is secure
+   * unless it's clearly not. Insecure forms on insecure pages will be detected
+   * in the UI process. Note that basically no websites should actually be dumb
+   * enough to trip this, but no doubt they exist somewhere.... */
+  insecure_action = action == NULL && g_str_has_prefix (action, "http://");
+
+  variant = g_variant_new ("(tb)",
+                           webkit_web_page_get_id (web_page),
+                           insecure_action);
+  message = g_variant_print (variant, FALSE);
+
+  if (!webkit_dom_dom_window_webkit_message_handlers_post_message (dom_window, "sensitiveFormFocused", message))
+    g_warning ("Error sending sensitiveFormFocused message");
+
+  g_free (action);
+  g_free (message);
+  g_object_unref (dom_window);
+  g_variant_unref (variant);
+
+  /* Hoping FALSE means "propagate" because there is absolutely no documentation for this. */
+  return FALSE;
+}
+
 static void
 form_destroyed_cb (gpointer form_auth, GObject *form)
 {
@@ -1059,6 +1099,12 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
       g_object_weak_ref (G_OBJECT (form), form_destroyed_cb, form_auth);
     } else
       LOG ("No pre-fillable/hookable form found");
+
+    if (ephy_web_dom_utils_form_contains_sensitive_element (form)) {
+      webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form), "focus",
+                                                  G_CALLBACK (sensitive_form_focused_cb), TRUE,
+                                                  web_page);
+    }
   }
 }
 

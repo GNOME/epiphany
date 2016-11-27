@@ -72,6 +72,7 @@ enum {
   PAGE_CREATED,
   ALLOW_TLS_CERTIFICATE,
   FORM_AUTH_DATA_SAVE_REQUESTED,
+  SENSITIVE_FORM_FOCUSED,
 
   LAST_SIGNAL
 };
@@ -135,6 +136,26 @@ web_extension_form_auth_data_message_received_cb (WebKitUserContentManager *mana
   g_variant_get (variant, "(ut&s&s)", &request_id, &page_id, &hostname, &username);
   g_signal_emit (shell, signals[FORM_AUTH_DATA_SAVE_REQUESTED], 0,
                  request_id, page_id, hostname, username);
+  g_variant_unref (variant);
+}
+
+static void
+web_extension_sensitive_form_focused_message_received_cb (WebKitUserContentManager *manager,
+                                                          WebKitJavascriptResult   *message,
+                                                          EphyEmbedShell           *shell)
+{
+  guint64 page_id;
+  gboolean insecure_action;
+  GVariant *variant;
+  char *message_str;
+
+  message_str = ephy_embed_utils_get_js_result_as_string (message);
+  variant = g_variant_parse (G_VARIANT_TYPE ("(tb)"), message_str, NULL, NULL, NULL);
+  g_free (message_str);
+
+  g_variant_get (variant, "(tb)", &page_id, &insecure_action);
+  g_signal_emit (shell, signals[SENSITIVE_FORM_FOCUSED], 0,
+                 page_id, insecure_action);
   g_variant_unref (variant);
 }
 
@@ -767,6 +788,12 @@ ephy_embed_shell_startup (GApplication *application)
                     shell);
 
   webkit_user_content_manager_register_script_message_handler (priv->user_content,
+                                                               "sensitiveFormFocused");
+  g_signal_connect (priv->user_content, "script-message-received::sensitiveFormFocused",
+                    G_CALLBACK (web_extension_sensitive_form_focused_message_received_cb),
+                    shell);
+
+  webkit_user_content_manager_register_script_message_handler (priv->user_content,
                                                                "aboutApps");
   g_signal_connect (priv->user_content, "script-message-received::aboutApps",
                     G_CALLBACK (web_extension_about_apps_message_received_cb),
@@ -1031,6 +1058,23 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   G_TYPE_UINT64,
                   G_TYPE_STRING,
                   G_TYPE_STRING);
+
+  /**
+   * EphyEmbedShell::sensitive-form-focused
+   * @shell: the #EphyEmbedShell
+   * @page_id: the identifier of the web page
+   * @insecure_action: whether the target of the form is http://
+   *
+   * Emitted when a form in a web page gains focus.
+   */
+  signals[SENSITIVE_FORM_FOCUSED] =
+    g_signal_new ("sensitive-form-focused",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 2,
+                  G_TYPE_UINT64,
+                  G_TYPE_BOOLEAN);
 }
 
 /**

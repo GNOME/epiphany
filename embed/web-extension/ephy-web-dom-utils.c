@@ -541,6 +541,47 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
   return FALSE;
 }
 
+/* ephy_web_dom_utils_find_form_auth_elements() is great, but it only returns
+ * something useful if it can pair a username node with a password node. This
+ * function says whether the form has a password node or not, even if Epiphany
+ * isn't smart enough to match it to a username node.
+ *
+ * Ideally we'd also detect credit card data or other sensitive stuff, but
+ * there's no standard way to do so, so don't try.
+ */
+gboolean
+ephy_web_dom_utils_form_contains_sensitive_element (WebKitDOMHTMLFormElement *form)
+{
+  WebKitDOMHTMLCollection *elements;
+  guint i, n_elements;
+  gboolean found_auth_element = FALSE;
+
+  elements = webkit_dom_html_form_element_get_elements (form);
+  n_elements = webkit_dom_html_collection_get_length (elements);
+
+  for (i = 0; i < n_elements && !found_auth_element; i++) {
+    WebKitDOMNode *element;
+    char *element_type;
+
+    element = webkit_dom_html_collection_item (elements, i);
+    if (!WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
+      continue;
+
+    g_object_get (element, "type", &element_type, NULL);
+
+    if (g_strcmp0 (element_type, "password") == 0 ||
+        g_strcmp0 (element_type, "adminpw") == 0) {
+      found_auth_element = TRUE;
+    }
+
+    g_free (element_type);
+  }
+
+  g_object_unref (elements);
+
+  return found_auth_element;
+}
+
 /**
  * ephy_web_dom_utils_get_absolute_position_for_element:
  * @element: the #WebKitDOMElement.

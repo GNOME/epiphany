@@ -41,4 +41,6 @@ typedef enum
 
 const char *ephy_security_level_to_icon_name (EphySecurityLevel level);
 
+gboolean ephy_security_level_is_secure (EphySecurityLevel level);
+
 G_END_DECLS

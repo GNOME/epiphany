@@ -101,6 +101,7 @@ struct _EphyWebView {
   GtkWidget *microphone_info_bar;
   GtkWidget *webcam_info_bar;
   GtkWidget *password_info_bar;
+  GtkWidget *sensitive_form_info_bar;
 
   EphyHistoryService *history_service;
   GCancellable *history_service_cancellable;
@@ -736,6 +737,39 @@ form_auth_data_save_requested (EphyEmbedShell *shell,
 }
 
 static void
+sensitive_form_focused_cb (EphyEmbedShell *shell,
+                           guint64         page_id,
+                           gboolean        insecure_action,
+                           EphyWebView    *web_view)
+{
+  GtkWidget *info_bar;
+  GtkWidget *label;
+  GtkWidget *content_area;
+
+  if (web_view->sensitive_form_info_bar)
+    return;
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
+    return;
+  if (insecure_action || ephy_security_level_is_secure (web_view->security_level))
+    return;
+
+  /* Translators: Message appears when insecure password form is focused. */
+  label = gtk_label_new (_("Heads-up: this form is not secure. If you type your password, it will be visible to cybercriminals!"));
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+
+  info_bar = gtk_info_bar_new ();
+  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
+  gtk_container_add (GTK_CONTAINER (content_area), label);
+  gtk_widget_show (label);
+
+  ephy_web_view_track_info_bar (info_bar, &web_view->sensitive_form_info_bar);
+
+  ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
+                             info_bar, FALSE);
+  gtk_widget_show (info_bar);
+}
+
+static void
 allow_tls_certificate_cb (EphyEmbedShell *shell,
                           guint64         page_id,
                           EphyWebView    *view)
@@ -772,6 +806,10 @@ page_created_cb (EphyEmbedShell        *shell,
                            G_CALLBACK (form_auth_data_save_requested),
                            view, 0);
 
+  g_signal_connect_object (shell, "sensitive-form-focused",
+                           G_CALLBACK (sensitive_form_focused_cb),
+                           view, 0);
+
   g_signal_connect_object (shell, "allow-tls-certificate",
                            G_CALLBACK (allow_tls_certificate_cb),
                            view, 0);
@@ -800,6 +838,11 @@ ephy_web_view_dispose (GObject *object)
   if (view->password_info_bar) {
     g_object_remove_weak_pointer (G_OBJECT (view->password_info_bar), (gpointer *)&view->password_info_bar);
     view->password_info_bar = NULL;
+  }
+
+  if (view->sensitive_form_info_bar) {
+    g_object_remove_weak_pointer (G_OBJECT (view->sensitive_form_info_bar), (gpointer *)&view->sensitive_form_info_bar);
+    view->sensitive_form_info_bar = NULL;
   }
 
   g_signal_handlers_disconnect_by_func (view->history_service,
@@ -1633,6 +1676,12 @@ load_changed_cb (WebKitWebView  *web_view,
 
       /* Zoom level. */
       restore_zoom_level (view, loading_uri);
+
+      if (view->sensitive_form_info_bar) {
+        g_object_remove_weak_pointer (G_OBJECT (view->sensitive_form_info_bar), (gpointer *)&view->sensitive_form_info_bar);
+        gtk_widget_destroy (view->sensitive_form_info_bar);
+        view->sensitive_form_info_bar = NULL;
+      }
 
       break;
     }

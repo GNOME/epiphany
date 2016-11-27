@@ -52,3 +52,9 @@ ephy_security_level_to_icon_name (EphySecurityLevel level)
 
   return result;
 }
+
+gboolean
+ephy_security_level_is_secure (EphySecurityLevel level)
+{
+  return level >= EPHY_SECURITY_LEVEL_STRONG_SECURITY;
+}

@@ -39,6 +39,8 @@ gboolean ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *f
                                                      WebKitDOMNode           **username,
                                                      WebKitDOMNode           **password);
 
+gboolean ephy_web_dom_utils_form_contains_sensitive_element (WebKitDOMHTMLFormElement *form);
+
 void ephy_web_dom_utils_get_absolute_bottom_for_element (WebKitDOMElement *element,
                                                          double           *x,
                                                          double           *y);
