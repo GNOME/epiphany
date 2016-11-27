@@ -835,6 +835,16 @@ ephy_web_view_dispose (GObject *object)
     view->notification_info_bar = NULL;
   }
 
+  if (view->microphone_info_bar) {
+    g_object_remove_weak_pointer (G_OBJECT (view->microphone_info_bar), (gpointer *)&view->microphone_info_bar);
+    view->microphone_info_bar = NULL;
+  }
+
+  if (view->webcam_info_bar) {
+    g_object_remove_weak_pointer (G_OBJECT (view->webcam_info_bar), (gpointer *)&view->webcam_info_bar);
+    view->webcam_info_bar = NULL;
+  }
+
   if (view->password_info_bar) {
     g_object_remove_weak_pointer (G_OBJECT (view->password_info_bar), (gpointer *)&view->password_info_bar);
     view->password_info_bar = NULL;
