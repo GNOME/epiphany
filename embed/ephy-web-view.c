@@ -765,6 +765,7 @@ sensitive_form_focused_cb (EphyEmbedShell *shell,
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
 
   info_bar = gtk_info_bar_new ();
+  gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
   content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
   gtk_container_add (GTK_CONTAINER (content_area), label);
   gtk_widget_show (label);
