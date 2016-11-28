@@ -22,11 +22,10 @@
 
 #include "ephy-bookmarks-manager.h"
 
+#include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "gvdb-builder.h"
-#include "gvdb-reader.h"
 
 #define EPHY_BOOKMARKS_FILE "bookmarks.gvdb"
 
@@ -54,76 +53,11 @@ enum {
 static guint       signals[LAST_SIGNAL];
 
 static void
-gvdb_hash_table_insert_variant (GHashTable *table,
-                                const char *key,
-                                GVariant   *value)
-{
-  GvdbItem *item;
-
-  item = gvdb_hash_table_insert (table, key);
-  gvdb_item_set_value (item, value);
-}
-
-static GVariant *
-build_variant (EphyBookmark *bookmark)
-{
-  GVariantBuilder builder;
-  GSequence *tags;
-  GSequenceIter *iter;
-
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(xssdbas)"));
-
-  g_variant_builder_add (&builder, "x", ephy_bookmark_get_time_added (bookmark));
-  g_variant_builder_add (&builder, "s", ephy_bookmark_get_title (bookmark));
-  g_variant_builder_add (&builder, "s", ephy_bookmark_get_id (bookmark));
-  g_variant_builder_add (&builder, "d", ephy_bookmark_get_modification_time (bookmark));
-  g_variant_builder_add (&builder, "b", ephy_bookmark_is_uploaded (bookmark));
-
-  g_variant_builder_open (&builder, G_VARIANT_TYPE ("as"));
-  tags = ephy_bookmark_get_tags (bookmark);
-  for (iter = g_sequence_get_begin_iter (tags);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter)) {
-    g_variant_builder_add (&builder, "s", g_sequence_get (iter));
-  }
-  g_variant_builder_close (&builder);
-
-  return g_variant_builder_end (&builder);
-}
-
-static void
-add_bookmark_to_table (EphyBookmark *bookmark, GHashTable *table)
-{
-  gvdb_hash_table_insert_variant (table,
-                                  ephy_bookmark_get_url (bookmark),
-                                  build_variant (bookmark));
-}
-
-static void
-add_tag_to_table (const char *tag, GHashTable *table)
-{
-  gvdb_hash_table_insert (table, tag);
-}
-
-static void
 ephy_bookmarks_manager_save_to_file (EphyBookmarksManager *self, GTask *task)
 {
-  GHashTable *root_table;
-  GHashTable *table;
   gboolean result;
 
-  root_table = gvdb_hash_table_new (NULL, NULL);
-
-  table = gvdb_hash_table_new (root_table, "tags");
-  g_sequence_foreach (self->tags, (GFunc)add_tag_to_table, table);
-  g_hash_table_unref (table);
-
-  table = gvdb_hash_table_new (root_table, "bookmarks");
-  g_sequence_foreach (self->bookmarks, (GFunc)add_bookmark_to_table, table);
-  g_hash_table_unref (table);
-
-  result = gvdb_table_write_contents (root_table, self->gvdb_filename, FALSE, NULL);
-  g_hash_table_unref (root_table);
+  result = ephy_bookmarks_export (self, self->gvdb_filename, NULL);
 
   if (task)
     g_task_return_boolean (task, result);

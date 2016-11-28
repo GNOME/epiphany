@@ -180,7 +180,11 @@ export_bookmarks (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  window_cmd_export_bookmarks (NULL, NULL, NULL);
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+
+  window_cmd_export_bookmarks (NULL, NULL, EPHY_WINDOW (window));
 }
 
 static void

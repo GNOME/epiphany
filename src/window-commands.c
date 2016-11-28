@@ -26,6 +26,7 @@
 #include "window-commands.h"
 
 #include "ephy-add-bookmark-popover.h"
+#include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
@@ -247,7 +248,57 @@ window_cmd_export_bookmarks (GSimpleAction *action,
                              GVariant      *parameter,
                              gpointer       user_data)
 {
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkWidget *dialog;
+  GtkWidget *export_info_dialog;
+  int chooser_response;
+  gboolean exported;
+  GtkFileFilter *filter;
 
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*.gvdb");
+
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_SAVE,
+                         "filter", filter,
+                         "modal", TRUE,
+                         "show-hidden", TRUE,
+                         "transient-for", user_data,
+                         "title", _("Choose File"),
+                         NULL);
+
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                          _("_Save"), GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  /* Translators: Only translate the part before ".gvdb" (e.g. "bookmarks") */
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), _("bookmarks.gvdb"));
+
+  chooser_response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (chooser_response == GTK_RESPONSE_OK) {
+    GError *error = NULL;
+    char *filename;
+
+    gtk_widget_hide (dialog);
+
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+    exported = ephy_bookmarks_export (manager, filename, &error);
+    g_free (filename);
+
+    export_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                                                 GTK_DIALOG_MODAL,
+                                                 exported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                                 GTK_BUTTONS_OK,
+                                                 "%s",
+                                                 exported ? _("Bookmarks successfully exported!") :
+                                                            error->message);
+    gtk_dialog_run (GTK_DIALOG (export_info_dialog));
+    gtk_widget_destroy (export_info_dialog);
+  }
+
+  gtk_widget_destroy (dialog);
 }
 
 void
