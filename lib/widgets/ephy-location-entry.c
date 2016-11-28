@@ -606,6 +606,13 @@ entry_undo_activate_cb (GtkMenuItem       *item,
   ephy_location_entry_reset_internal (entry, FALSE);
 }
 
+/* The build should fail here each time when upgrading to a new major version
+ * of GTK+, so that we don't forget to update this domain.
+ */
+#if GTK_MAJOR_VERSION == 3
+#define GTK_GETTEXT_DOMAIN "gtk30"
+#endif
+
 static void
 entry_populate_popup_cb (GtkEntry          *entry,
                          GtkMenu           *menu,
@@ -650,14 +657,12 @@ entry_populate_popup_cb (GtkEntry          *entry,
   children = gtk_container_get_children (GTK_CONTAINER (menu));
   for (item = children, pos = 0; item != NULL; item = item->next, pos++) {
     /* Translators: Location entry context menu item, must EXACTLY match GtkEntry's translation. */
-    if (g_strcmp0 (gtk_menu_item_get_label (item->data), _("_Paste")) == 0) {
+    if (g_strcmp0 (gtk_menu_item_get_label (item->data), g_dgettext (GTK_GETTEXT_DOMAIN, "_Paste")) == 0) {
       paste_menuitem = item->data;
       break;
     }
   }
-
-  if (!paste_menuitem)
-    g_error ("Broken translation, see bug #772994");
+  g_assert (paste_menuitem != NULL);
 
   g_signal_connect (paste_and_go_menuitem, "activate",
                     G_CALLBACK (entry_paste_and_go_activate_cb), lentry);
