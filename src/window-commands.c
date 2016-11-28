@@ -26,6 +26,8 @@
 #include "window-commands.h"
 
 #include "ephy-add-bookmark-popover.h"
+#include "ephy-bookmarks-import.h"
+#include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -117,6 +119,73 @@ create_tree_model (void)
   return GTK_TREE_MODEL (list_store);
 }
 
+static void
+dialog_bookmarks_import_cb (GtkDialog   *dialog,
+                            int          response,
+                            GtkComboBox *combo_box)
+{
+  EphyBookmarksManager *manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  GtkWidget *file_chooser_dialog;
+  GtkWidget *import_info_dialog;
+  int active;
+  int chooser_response;
+  gboolean imported;
+
+  if (response == GTK_RESPONSE_OK) {
+    active = gtk_combo_box_get_active (combo_box);
+    if (active == 0) {
+      GtkFileFilter *filter;
+
+      filter = gtk_file_filter_new ();
+      gtk_file_filter_add_pattern (filter, "*.gvdb");
+
+      file_chooser_dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                                          "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+                                          "filter", filter,
+                                          "modal", TRUE,
+                                          "show-hidden", TRUE,
+                                          "transient-for", dialog,
+                                          "title", _("Choose File"),
+                                          NULL);
+
+      gtk_dialog_add_buttons (GTK_DIALOG (file_chooser_dialog),
+                              _("_Cancel"), GTK_RESPONSE_CANCEL,
+                              _("I_mport"), GTK_RESPONSE_OK,
+                              NULL);
+      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+      chooser_response = gtk_dialog_run (GTK_DIALOG (file_chooser_dialog));
+      if (chooser_response == GTK_RESPONSE_OK) {
+        GError *error = NULL;
+        char *filename;
+
+        gtk_widget_hide (file_chooser_dialog);
+
+        filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_chooser_dialog));
+        imported = ephy_bookmarks_import (manager, filename, &error);
+        g_free (filename);
+
+        import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                                                     GTK_DIALOG_MODAL,
+                                                     imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                                     GTK_BUTTONS_OK,
+                                                     "%s",
+                                                     imported ? _("Bookmarks successfully imported!") :
+                                                                error->message);
+        gtk_dialog_run (GTK_DIALOG (import_info_dialog));
+
+        gtk_widget_destroy (import_info_dialog);
+      }
+      gtk_widget_destroy (file_chooser_dialog);
+
+      if (imported)
+        gtk_widget_destroy (GTK_WIDGET (dialog));
+    }
+  } else if (response == GTK_RESPONSE_CANCEL) {
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+  }
+}
+
 void
 window_cmd_import_bookmarks (GSimpleAction *action,
                              GVariant      *parameter,
@@ -131,7 +200,6 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
 
-  /* Show dialog with icon, title. */
   dialog = gtk_dialog_new_with_buttons (_("Import bookmarks"),
                                         GTK_WINDOW (window),
                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
@@ -165,6 +233,11 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   gtk_box_pack_start (GTK_BOX (hbox), combo_box, TRUE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (content_area), hbox);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (dialog_bookmarks_import_cb),
+                    GTK_COMBO_BOX (combo_box));
 
   gtk_widget_show_all (dialog);
 }
