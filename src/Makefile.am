@@ -152,6 +152,7 @@ RESOURCE_FILES = \
 	resources/incognito.png								\
 	resources/mime-types-permissions.xml						\
 	resources/missing-thumbnail.png							\
+	resources/network-error-symbolic.png						\
 	resources/passwords-dialog.ui							\
 	resources/prefs-dialog.ui							\
 	resources/prefs-lang-dialog.ui							\
