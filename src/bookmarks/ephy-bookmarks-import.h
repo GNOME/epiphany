@@ -24,8 +24,16 @@
 
 G_BEGIN_DECLS
 
-gboolean        ephy_bookmarks_import       (EphyBookmarksManager  *manager,
-                                             const char            *filename,
-                                             GError               **error);
+#define FIREFOX_PROFILES_DIR        ".mozilla/firefox"
+#define FIREFOX_PROFILES_FILE       "profiles.ini"
+#define FIREFOX_BOOKMARKS_FILE      "places.sqlite"
+
+gboolean    ephy_bookmarks_import               (EphyBookmarksManager  *manager,
+                                                 const char            *filename,
+                                                 GError               **error);
+
+gboolean    ephy_bookmarks_import_from_firefox  (EphyBookmarksManager  *manager,
+                                                 const gchar           *profile,
+                                                 GError               **error);
 
 G_END_DECLS

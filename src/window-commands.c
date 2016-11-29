@@ -95,9 +95,89 @@ window_cmd_new_incognito_window (GSimpleAction *action,
   ephy_open_incognito_window (NULL);
 }
 
-const gchar *import_option_names[1] = {
-  N_("GVDB File")
+const gchar *import_option_names[2] = {
+  N_("GVDB File"),
+  N_("Firefox")
 };
+
+static void
+combo_box_changed_cb (GtkComboBox *combo_box,
+                      GtkButton   *button)
+{
+  int active;
+
+  g_assert (GTK_IS_COMBO_BOX (combo_box));
+  g_assert (GTK_IS_BUTTON (button));
+
+  active = gtk_combo_box_get_active (combo_box);
+  if (active == 0)
+    gtk_button_set_label (button, _("Ch_oose File"));
+  else if (active == 1)
+    gtk_button_set_label (button, _("I_mport"));
+}
+
+static gchar *
+get_path (GIOChannel *channel)
+{
+  gchar *line;
+  gchar *path;
+  gsize length;
+
+  do {
+    g_io_channel_read_line (channel, &line, &length, NULL, NULL);
+
+    if (g_str_has_prefix (line, "Path")) {
+      path = g_strdup (line);
+
+      /* Extract value (e.g. Path=Value\n -> Value) */
+      path = strchr (path, '=');
+      path++;
+      path[strcspn (path, "\n")] = 0;
+
+      g_free (line);
+      return path;
+    }
+
+    g_free (line);
+    /* Until '\n' */
+  } while (length != 1);
+
+  return NULL;
+}
+
+static GSList *
+get_firefox_profiles (void)
+{
+  GIOChannel *channel;
+  GSList *profiles = NULL;
+  gchar *filename;
+  gchar *line;
+  gchar *profile;
+  int count = 0;
+  gsize length;
+
+  filename = g_build_filename (g_get_home_dir (),
+                               FIREFOX_PROFILES_DIR,
+                               FIREFOX_PROFILES_FILE,
+                               NULL);
+  channel = g_io_channel_new_file (filename, "r", NULL);
+  g_free (filename);
+
+  do {
+    g_io_channel_read_line (channel, &line, &length, NULL, NULL);
+
+    profile = g_strdup_printf ("[Profile%d]\n", count);
+    if (g_strcmp0 (line, profile) == 0) {
+      profiles = g_slist_append (profiles, get_path (channel));
+
+      count++;
+    }
+    g_free (profile);
+    g_free (line);
+  } while (length != 0);
+
+  return profiles;
+}
 
 static GtkTreeModel *
 create_tree_model (void)
@@ -107,10 +187,24 @@ create_tree_model (void)
   };
   GtkListStore *list_store;
   GtkTreeIter iter;
+  GSList *firefox_profiles;
+  gboolean has_firefox_profile;
   int i;
+
+
+  /* Check if user has a firefox profile*/
+  firefox_profiles = get_firefox_profiles ();
+  has_firefox_profile = g_slist_length (firefox_profiles) > 0;
+  g_slist_free (firefox_profiles);
 
   list_store = gtk_list_store_new (1, G_TYPE_STRING);
   for (i = G_N_ELEMENTS (import_option_names) - 1; i >= 0; i--) {
+    /* Skip Firefox option if user doesn't have a Firefox profile */
+    if (g_strcmp0 (import_option_names[i], _("Firefox")) == 0) {
+      if (!has_firefox_profile)
+        continue;
+    }
+
     gtk_list_store_prepend (list_store, &iter);
     gtk_list_store_set (list_store, &iter,
                         TEXT_COL, _(import_option_names[i]),
@@ -118,6 +212,64 @@ create_tree_model (void)
   }
 
   return GTK_TREE_MODEL (list_store);
+}
+
+static gchar *
+show_profile_selector (GtkWidget *parent, GSList *profiles)
+{
+  GtkWidget *selector;
+  GtkWidget *list_box;
+  GtkWidget *suggested;
+  GtkWidget *content_area;
+  GSList *l;
+  int response;
+  gchar *selected_profile = NULL;
+
+  selector = gtk_dialog_new_with_buttons (_("Select Profile"),
+                                          GTK_WINDOW (parent),
+                                          GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
+                                          _("_Cancel"),
+                                          GTK_RESPONSE_CANCEL,
+                                          _("_Select"),
+                                          GTK_RESPONSE_OK,
+                                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (selector), GTK_RESPONSE_OK);
+
+  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (selector), GTK_RESPONSE_OK);
+  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
+                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
+
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (selector));
+  gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
+  gtk_widget_set_valign (content_area, GTK_ALIGN_CENTER);
+
+  list_box = gtk_list_box_new ();
+  for (l = profiles; l != NULL; l = l->next) {
+    const gchar *profile = l->data;
+    GtkWidget *label;
+
+    label = gtk_label_new (strchr (profile, '.') + 1);
+    g_object_set_data (G_OBJECT (label), "profile_path", g_strdup (profile));
+    gtk_widget_set_margin_top (label, 6);
+    gtk_widget_set_margin_bottom (label, 6);
+    gtk_list_box_insert (GTK_LIST_BOX (list_box), label, -1);
+  }
+  gtk_container_add (GTK_CONTAINER (content_area), list_box);
+
+  gtk_widget_show_all (content_area);
+
+  response = gtk_dialog_run (GTK_DIALOG (selector));
+  if (response == GTK_RESPONSE_OK) {
+    GtkListBoxRow *row;
+    GtkWidget *row_widget;
+
+    row = gtk_list_box_get_selected_row (GTK_LIST_BOX (list_box));
+    row_widget = gtk_bin_get_child (GTK_BIN (row));
+    selected_profile = g_object_get_data (G_OBJECT (row_widget), "profile_path");
+  }
+  gtk_widget_destroy (selector);
+
+  return selected_profile;
 }
 
 static void
@@ -130,7 +282,7 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
   GtkWidget *import_info_dialog;
   int active;
   int chooser_response;
-  gboolean imported;
+  gboolean imported = FALSE;
 
   if (response == GTK_RESPONSE_OK) {
     active = gtk_combo_box_get_active (combo_box);
@@ -178,10 +330,51 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
         gtk_widget_destroy (import_info_dialog);
       }
       gtk_widget_destroy (file_chooser_dialog);
+    } else if (active == 1) {
+      GError *error = NULL;
+      GSList *profiles;
+      gchar *profile;
+      int num_profiles;
 
-      if (imported)
-        gtk_widget_destroy (GTK_WIDGET (dialog));
+      profiles = get_firefox_profiles ();
+
+      /* Import default profile */
+      num_profiles = g_slist_length (profiles);
+      if (num_profiles == 1) {
+        imported = ephy_bookmarks_import_from_firefox (manager, profiles->data, &error);
+      } else if (num_profiles > 1) {
+        profile = show_profile_selector (GTK_WIDGET (dialog), profiles);
+        if (profile) {
+          imported = ephy_bookmarks_import_from_firefox (manager, profile, &error);
+          g_free (profile);
+        }
+      } else {
+        g_assert_not_reached ();
+      }
+
+      g_slist_free (profiles);
+
+      /* If there are multiple profiles, but the user didn't select one in
+       * the profile (he pressed Cancel), don't display the import info dialog
+       * as no import took place
+       */
+      if (profile) {
+        import_info_dialog = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                                                     GTK_DIALOG_MODAL,
+                                                     imported ? GTK_MESSAGE_INFO : GTK_MESSAGE_WARNING,
+                                                     GTK_BUTTONS_OK,
+                                                     "%s",
+                                                     imported ? _("Bookmarks successfully imported!") :
+                                                                error->message);
+        gtk_dialog_run (GTK_DIALOG (import_info_dialog));
+        gtk_widget_destroy (import_info_dialog);
+      }
+      if (error)
+        g_error_free (error);
     }
+
+    if (imported)
+      gtk_widget_destroy (GTK_WIDGET (dialog));
   } else if (response == GTK_RESPONSE_CANCEL) {
     gtk_widget_destroy (GTK_WIDGET (dialog));
   }
@@ -226,6 +419,10 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (tree_model));
   g_object_unref (tree_model);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
+
+  g_signal_connect (GTK_COMBO_BOX (combo_box), "changed",
+                    G_CALLBACK (combo_box_changed_cb),
+                    gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK));
 
   cell_renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell_renderer, TRUE);
