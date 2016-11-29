@@ -261,6 +261,7 @@ poll_fxa_server (gpointer user_data)
                                       data->respHMACkey, data->respXORkey);
     hide_fxa_iframe (data->dialog, data->email);
 
+    g_free (bundle);
     fxa_callback_data_free (data);
     data->dialog->source_id = 0;
 

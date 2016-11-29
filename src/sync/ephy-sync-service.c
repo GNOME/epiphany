@@ -926,7 +926,6 @@ ephy_sync_service_finish_sign_in (EphySyncService *self,
 
   g_free (kA);
   g_free (kB);
-  g_free (bundle);
   g_free (unwrapKB);
 }
 
