@@ -352,4 +352,3 @@ ephy_certificate_dialog_new (GtkWindow           *parent,
 
   return dialog;
 }
-

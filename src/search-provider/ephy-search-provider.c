@@ -455,4 +455,3 @@ ephy_search_provider_new (void)
                        "application-id", "org.gnome.EpiphanySearchProvider",
                        NULL);
 }
-

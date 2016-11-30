@@ -397,4 +397,3 @@ egg_tree_multi_drag_add_drag_support (GtkTreeView *tree_view)
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_signal_connect (G_OBJECT (tree_view), "button_press_event", G_CALLBACK (egg_tree_multi_drag_button_press_event), NULL);
 }
-

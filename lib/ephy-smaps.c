@@ -488,5 +488,3 @@ EphySMaps *ephy_smaps_new (void)
 {
   return EPHY_SMAPS (g_object_new (EPHY_TYPE_SMAPS, NULL));
 }
-
-

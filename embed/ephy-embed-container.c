@@ -165,5 +165,3 @@ ephy_embed_container_get_is_popup (EphyEmbedContainer *container)
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
   return iface->get_is_popup (container);
 }
-
-

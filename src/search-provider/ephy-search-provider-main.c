@@ -56,4 +56,3 @@ gint main (gint argc, gchar **argv)
 
   return status;
 }
-
