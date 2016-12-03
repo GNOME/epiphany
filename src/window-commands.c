@@ -394,7 +394,7 @@ window_cmd_import_bookmarks (GSimpleAction *action,
   GtkTreeModel *tree_model;
   GtkCellRenderer *cell_renderer;
 
-  dialog = gtk_dialog_new_with_buttons (_("Import bookmarks"),
+  dialog = gtk_dialog_new_with_buttons (_("Import Bookmarks"),
                                         GTK_WINDOW (window),
                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
                                         _("_Cancel"),
