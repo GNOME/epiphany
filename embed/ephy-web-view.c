@@ -925,7 +925,6 @@ ephy_web_view_set_address (EphyWebView *view,
                            const char  *address)
 {
   GObject *object = G_OBJECT (view);
-  gboolean is_blank;
   gboolean was_empty;
 
   if (g_strcmp0 (view->address, address) == 0)
@@ -938,9 +937,7 @@ ephy_web_view_set_address (EphyWebView *view,
   g_free (view->display_address);
   view->display_address = ephy_uri_decode (view->address);
 
-  is_blank = address == NULL ||
-             strcmp (address, "about:blank") == 0;
-  _ephy_web_view_set_is_blank (view, is_blank);
+  _ephy_web_view_set_is_blank (view, ephy_embed_utils_url_is_empty (address));
 
   /* If the view was empty there is no need to clean the typed address. */
   if (!was_empty && ephy_web_view_is_loading (view) && view->typed_address != NULL)

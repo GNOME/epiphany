@@ -992,7 +992,7 @@ sync_tab_address (EphyWebView *view,
 
   _ephy_window_set_default_actions_sensitive (window,
                                               SENS_FLAG_IS_BLANK,
-                                              ephy_web_view_is_overview (view));
+                                              ephy_web_view_get_is_blank (view));
 
   location = calculate_location (typed_address, address);
   ephy_window_set_location (window, location);
