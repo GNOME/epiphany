@@ -62,7 +62,7 @@ get_bookmarks_from_table (GvdbTable *table)
     double modified;
     gboolean uploaded;
 
-    /* Obtain the correspoding GVariant. */
+    /* Obtain the corresponding GVariant. */
     value = gvdb_table_get_value (table, list[i]);
 
     g_variant_get (value, "(x&s&sdbas)", &time_added, &title, &id, &modified, &uploaded, &iter);
