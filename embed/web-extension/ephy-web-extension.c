@@ -111,6 +111,7 @@ static gboolean
 should_use_https_everywhere (const char *request_uri,
                              const char *redirected_uri)
 {
+#ifdef HAVE_LIBHTTPSEVERYWHERE
   SoupURI *request_soup_uri;
   SoupURI *redirected_soup_uri;
   gboolean result = TRUE;
@@ -142,6 +143,9 @@ should_use_https_everywhere (const char *request_uri,
   soup_uri_free (redirected_soup_uri);
 
   return result;
+#else
+  return FALSE;
+#endif
 }
 
 static gboolean

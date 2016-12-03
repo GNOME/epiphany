@@ -41,8 +41,11 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <httpseverywhere.h>
 #include <stdlib.h>
+
+#ifdef HAVE_LIBHTTPSEVERYWHERE
+#include <httpseverywhere.h>
+#endif
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
@@ -585,6 +588,7 @@ ftp_request_cb (WebKitURISchemeRequest *request)
   g_object_unref (app_info);
 }
 
+#ifdef HAVE_LIBHTTPSEVERYWHERE
 static void
 https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
                             GAsyncResult           *result)
@@ -602,6 +606,7 @@ https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
     g_warning ("Failed to update HTTPS Everywhere rulesets: %s", error->message);
   g_error_free (error);
 }
+#endif
 
 static const char *
 ephy_embed_shell_ensure_adblock_data_dir (EphyEmbedShell *shell)
@@ -764,12 +769,15 @@ ephy_embed_shell_update_uri_tester (EphyEmbedShell *shell)
 
   if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST &&
       priv->mode != EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
+#ifdef HAVE_LIBHTTPSEVERYWHERE
     HTTPSEverywhereContext *context;
     HTTPSEverywhereUpdater *updater;
+#endif
 
     if (!priv->uri_tester_update_cancellable)
       priv->uri_tester_update_cancellable = g_cancellable_new ();
 
+#ifdef HAVE_LIBHTTPSEVERYWHERE
     /* We might want to be smarter about this in the future. For now,
      * trigger an update of the rulesets once each time Epiphany is started. */
     context = https_everywhere_context_new ();
@@ -780,6 +788,7 @@ ephy_embed_shell_update_uri_tester (EphyEmbedShell *shell)
                                      NULL);
     g_object_unref (context);
     g_object_unref (updater);
+#endif
   }
 }
 

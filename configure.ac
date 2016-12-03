@@ -108,7 +108,6 @@ PKG_CHECK_MODULES([GNOME_DESKTOP], [gnome-desktop-3.0 >= 2.91.2])
 PKG_CHECK_MODULES([GTK], [gtk+-3.0 >= $GTK_REQUIRED])
 PKG_CHECK_MODULES([GTK_UNIX_PRINT], [gtk+-unix-print-3.0 >= $GTK_REQUIRED])
 PKG_CHECK_MODULES([HOGWEED], [hogweed >= 3.2])
-PKG_CHECK_MODULES([HTTPSEVERYWHERE], [httpseverywhere-0.2 >= 0.2.2])
 PKG_CHECK_MODULES([JSON_GLIB], [json-glib-1.0 >= 1.2.0])
 PKG_CHECK_MODULES([LIBNOTIFY], [libnotify >= 0.5.1])
 PKG_CHECK_MODULES([LIBSECRET], [libsecret-1 >= 0.14])
@@ -119,6 +118,17 @@ PKG_CHECK_MODULES([NETTLE], [nettle >= 3.2])
 PKG_CHECK_MODULES([SQLITE3], [sqlite3 >= 3.0])
 PKG_CHECK_MODULES([WEBKIT2GTK], [webkit2gtk-4.0 >= $WEBKITGTK_REQUIRED])
 PKG_CHECK_MODULES([WEBKIT2GTK_WEB_EXTENSION], [webkit2gtk-web-extension-4.0 >= $WEBKITGTK_REQUIRED])
+
+# libhttpseverywhere is disabled by default for now. See tracker bug #775575.
+AC_ARG_WITH([libhttpseverywhere],
+	[AS_HELP_STRING([--with-libhttpseverywhere], [Enable experimental HTTPS Everywhere support])],
+	[with_libhttpseverywhere=yes],
+	[with_libhttpseverywhere=no]
+)
+AS_IF([test "x$with_libhttpseverywhere" = "xyes"],
+	[PKG_CHECK_MODULES([HTTPSEVERYWHERE], [httpseverywhere-0.2 >= 0.2.2])
+		AC_DEFINE([HAVE_LIBHTTPSEVERYWHERE], [1], [Define if libhttpseverywhere is available])]
+)
 
 # ******************
 # Portability checks
@@ -220,4 +230,5 @@ Epiphany was configured with the following options:
 	Extra debugging support	   : $enable_debug
 	Build tests		   : $enable_tests
 	Code coverage		   : $enable_code_coverage
+	HTTPS Everywhere (unstable): $with_libhttpseverywhere
 "
