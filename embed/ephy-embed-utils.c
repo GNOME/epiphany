@@ -265,14 +265,11 @@ ephy_embed_utils_normalize_or_autosearch_address (const char *address)
 gboolean
 ephy_embed_utils_url_is_empty (const char *location)
 {
-  gboolean is_empty = FALSE;
-
-  if (location == NULL ||
-      location[0] == '\0' ||
-      strcmp (location, "about:blank") == 0)
-    is_empty = TRUE;
-
-  return is_empty;
+  return (location == NULL ||
+          location[0] == '\0' ||
+          strcmp (location, "about:blank") == 0 ||
+          strcmp (location, "ephy-about:overview") == 0 ||
+          strcmp (location, "ephy-about:incognito") == 0);
 }
 
 /* This is the list of addresses that should never be shown in the

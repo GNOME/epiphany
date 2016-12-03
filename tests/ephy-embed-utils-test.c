@@ -89,7 +89,9 @@ static const IsEmptyTest tests_is_empty[] = {
   { "about:blank", "about:blank", TRUE },
   { "about:blanco", "about:blanco", FALSE },
   { "non-blank-URI", "http://www.gnome.org", FALSE },
-  { "random", "what is this, I don't even", FALSE }
+  { "random", "what is this, I don't even", FALSE },
+  { "overview", "ephy-about:overview", TRUE },
+  { "incognito", "ephy-about:incognito", TRUE }
 };
 
 static void
