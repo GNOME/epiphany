@@ -954,26 +954,8 @@ uri_changed_cb (WebKitWebView *web_view,
                 GParamSpec    *spec,
                 gpointer       data)
 {
-  char *uri;
-  const char *current_address;
-
-  /* We already update the URI manually while loading, so only
-   * update the URI when it changes after the page has been loaded
-   * which is usually the result of navigation within the same page action.
-   */
-  if (webkit_web_view_is_loading (web_view))
-    return;
-
-  /* We need to check if we get URI notifications without going
-     through the usual load process, as this can happen when changing
-     location within a page */
-  current_address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
-  g_object_get (web_view, "uri", &uri, NULL);
-
-  if (g_str_equal (uri, current_address) == FALSE)
-    ephy_web_view_set_address (EPHY_WEB_VIEW (web_view), uri);
-
-  g_free (uri);
+  ephy_web_view_set_address (EPHY_WEB_VIEW (web_view),
+                             webkit_web_view_get_uri (web_view));
 }
 
 static void
@@ -1563,8 +1545,8 @@ ephy_web_view_set_loading_message (EphyWebView *view,
 }
 
 static void
-ephy_web_view_location_changed (EphyWebView *view,
-                                const char  *location)
+ephy_web_view_set_committed_location (EphyWebView *view,
+                                      const char  *location)
 {
   GObject *object = G_OBJECT (view);
 
@@ -1683,7 +1665,6 @@ load_changed_cb (WebKitWebView  *web_view,
       break;
     }
     case WEBKIT_LOAD_REDIRECTED:
-      /* TODO: Update the loading uri */
       break;
     case WEBKIT_LOAD_COMMITTED: {
       const char *uri;
@@ -1691,7 +1672,7 @@ load_changed_cb (WebKitWebView  *web_view,
 
       /* Title and location. */
       uri = webkit_web_view_get_uri (web_view);
-      ephy_web_view_location_changed (view, uri);
+      ephy_web_view_set_committed_location (view, uri);
       update_security_status_for_committed_load (view, uri);
 
       /* History. */
