@@ -87,7 +87,6 @@ typedef enum
 
 #define EPHY_PREFS_SCHEMA                         "org.gnome.Epiphany"
 #define EPHY_PREFS_HOMEPAGE_URL                   "homepage-url"
-#define EPHY_PREFS_HOMEPAGE_LOADS_IN_NEW_TABS     "homepage-loads-in-new-tabs"
 #define EPHY_PREFS_USER_AGENT                     "user-agent"
 #define EPHY_PREFS_NEW_WINDOWS_IN_TABS            "new-windows-in-tabs"
 #define EPHY_PREFS_AUTO_DOWNLOADS                 "automatic-downloads"

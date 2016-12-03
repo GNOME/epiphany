@@ -3202,13 +3202,12 @@ ephy_web_view_load_homepage (EphyWebView *view)
     ephy_web_view_load_url (view, "about:incognito");
   } else {
     char *home;
-    home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
-    if (home == NULL || home[0] == '\0') {
-      g_free (home);
-      home = g_strdup ("about:overview");
-    }
 
-    ephy_web_view_load_url (view, home);
+    home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
+    if (home == NULL || home[0] == '\0')
+      ephy_web_view_load_url (view, "about:overview");
+    else
+      ephy_web_view_load_url (view, home);
     g_free (home);
   }
 }
