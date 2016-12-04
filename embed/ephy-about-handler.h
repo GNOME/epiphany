@@ -19,6 +19,8 @@
 #ifndef EPHY_ABOUT_HANDLER_H
 #define EPHY_ABOUT_HANDLER_H
 
+#include "ephy-history-service.h"
+
 #include <webkit2/webkit2.h>
 
 G_BEGIN_DECLS
@@ -29,11 +31,13 @@ G_DECLARE_FINAL_TYPE (EphyAboutHandler, ephy_about_handler, EPHY, ABOUT_HANDLER,
 
 #define EPHY_ABOUT_SCHEME "ephy-about"
 #define EPHY_ABOUT_SCHEME_LEN 10
-#define EPHY_ABOUT_OVERVIEW_MAX_ITEMS 10
 
 EphyAboutHandler *ephy_about_handler_new            (void);
 void              ephy_about_handler_handle_request (EphyAboutHandler       *handler,
                                                      WebKitURISchemeRequest *request);
+
+EphyHistoryQuery *ephy_history_query_new_for_overview (void);
+
 G_END_DECLS
 
 #endif /* EPHY_ABOUT_HANDLER_H */

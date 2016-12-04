@@ -40,9 +40,12 @@ struct _EphyAboutHandler {
   EphySMaps *smaps;
 };
 
-#define EPHY_PAGE_TEMPLATE_ABOUT_CSS        "ephy-resource:///org/gnome/epiphany/page-templates/about.css"
-
 G_DEFINE_TYPE (EphyAboutHandler, ephy_about_handler, G_TYPE_OBJECT)
+
+
+#define EPHY_ABOUT_OVERVIEW_MAX_ITEMS 9
+
+#define EPHY_PAGE_TEMPLATE_ABOUT_CSS        "ephy-resource:///org/gnome/epiphany/page-templates/about.css"
 
 static void
 ephy_about_handler_finalize (GObject *object)
@@ -541,6 +544,20 @@ history_service_query_urls_cb (EphyHistoryService     *history,
   g_object_unref (request);
 }
 
+EphyHistoryQuery *
+ephy_history_query_new_for_overview (void)
+{
+  EphyHistoryQuery *query;
+
+  query = ephy_history_query_new ();
+  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
+  query->limit = EPHY_ABOUT_OVERVIEW_MAX_ITEMS;
+  query->ignore_hidden = TRUE;
+  query->ignore_local = TRUE;
+
+  return query;
+}
+
 static gboolean
 ephy_about_handler_handle_html_overview (EphyAboutHandler       *handler,
                                          WebKitURISchemeRequest *request)
@@ -549,11 +566,7 @@ ephy_about_handler_handle_html_overview (EphyAboutHandler       *handler,
   EphyHistoryQuery *query;
 
   history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
-  query = ephy_history_query_new ();
-  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
-  query->limit = EPHY_ABOUT_OVERVIEW_MAX_ITEMS;
-  query->ignore_hidden = TRUE;
-  query->ignore_local = TRUE;
+  query = ephy_history_query_new_for_overview ();
   ephy_history_service_query_urls (history, query, NULL,
                                    (EphyHistoryJobCallback)history_service_query_urls_cb,
                                    g_object_ref (request));

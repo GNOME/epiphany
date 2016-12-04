@@ -157,12 +157,7 @@ ephy_embed_shell_update_overview_urls (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   EphyHistoryQuery *query;
 
-  query = ephy_history_query_new ();
-  query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
-  query->limit = EPHY_ABOUT_OVERVIEW_MAX_ITEMS;
-  query->ignore_hidden = TRUE;
-  query->ignore_local = TRUE;
-
+  query = ephy_history_query_new_for_overview ();
   ephy_history_service_query_urls (priv->global_history_service, query, NULL,
                                    (EphyHistoryJobCallback)history_service_query_urls_cb,
                                    shell);
