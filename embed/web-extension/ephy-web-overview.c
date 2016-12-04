@@ -310,7 +310,7 @@ ephy_web_overview_model_urls_changed (EphyWebOverviewModel *model,
       g_free (item->url);
       item->url = g_strdup (url->url);
 
-      class_list = webkit_dom_element_get_class_list (webkit_dom_node_get_parent_element (WEBKIT_DOM_NODE (item->anchor)));
+      class_list = webkit_dom_element_get_class_list (item->anchor);
       if (class_list && webkit_dom_dom_token_list_contains (class_list, "overview-removed"))
         webkit_dom_dom_token_list_remove (class_list, NULL, "overview-removed", NULL);
 
