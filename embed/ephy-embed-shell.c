@@ -384,6 +384,56 @@ ephy_embed_shell_set_thumbnail_path (EphyEmbedShell *shell,
   }
 }
 
+typedef struct {
+  char *url;
+  time_t mtime;
+} GetSnapshotPathAsyncData;
+
+static void
+got_snapshot_path_for_url_cb (EphySnapshotService      *service,
+                              GAsyncResult             *result,
+                              GetSnapshotPathAsyncData *data)
+{
+  char *snapshot;
+  GError *error = NULL;
+
+  snapshot = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, &error);
+  if (snapshot) {
+    ephy_embed_shell_set_thumbnail_path (ephy_embed_shell_get_default (), data->url, data->mtime, snapshot);
+    g_free (snapshot);
+  } else {
+    /* Bad luck, not something to warn about. */
+    g_info ("Failed to get snapshot for URL %s: %s", data->url, error->message);
+    g_error_free (error);
+  }
+  g_free (data->url);
+  g_free (data);
+}
+
+void
+ephy_embed_shell_schedule_thumbnail_update (EphyEmbedShell *shell,
+                                            EphyHistoryURL *url)
+{
+  EphySnapshotService *service;
+  const char *snapshot;
+
+  service = ephy_snapshot_service_get_default ();
+  snapshot = ephy_snapshot_service_lookup_cached_snapshot_path (service, url->url);
+
+  if (snapshot) {
+    ephy_embed_shell_set_thumbnail_path (shell, url->url, url->thumbnail_time, snapshot);
+  } else {
+    GetSnapshotPathAsyncData *data = g_new (GetSnapshotPathAsyncData, 1);
+
+    data->url = g_strdup (url->url);
+    data->mtime = url->thumbnail_time;
+    ephy_snapshot_service_get_snapshot_path_for_url_async (service,
+                                                           url->url, url->thumbnail_time, NULL,
+                                                           (GAsyncReadyCallback)got_snapshot_path_for_url_cb,
+                                                           data);
+  }
+}
+
 /**
  * ephy_embed_shell_get_global_history_service:
  * @shell: the #EphyEmbedShell

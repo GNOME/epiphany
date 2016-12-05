@@ -405,43 +405,21 @@ ephy_about_handler_handle_applications (EphyAboutHandler       *handler,
   return TRUE;
 }
 
-typedef struct {
-  char *url;
-  time_t mtime;
-} GetSnapshotPathAsyncData;
-
-static void
-got_snapshot_path_for_url_cb (EphySnapshotService      *service,
-                              GAsyncResult             *result,
-                              GetSnapshotPathAsyncData *data)
-{
-  char *snapshot;
-  GError *error = NULL;
-
-  snapshot = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, &error);
-  if (snapshot) {
-    ephy_embed_shell_set_thumbnail_path (ephy_embed_shell_get_default (), data->url, data->mtime, snapshot);
-    g_free (snapshot);
-  } else {
-    /* Bad luck, not something to warn about. */
-    g_info ("Failed to get snapshot for URL %s: %s", data->url, error->message);
-    g_error_free (error);
-  }
-  g_free (data->url);
-  g_free (data);
-}
-
 static void
 history_service_query_urls_cb (EphyHistoryService     *history,
                                gboolean                success,
                                GList                  *urls,
                                WebKitURISchemeRequest *request)
 {
-  EphySnapshotService *snapshot_service = ephy_snapshot_service_get_default ();
+  EphySnapshotService *snapshot_service;
+  EphyEmbedShell *shell;
   GString *data_str;
   gsize data_length;
   char *lang;
   GList *l;
+
+  snapshot_service = ephy_snapshot_service_get_default ();
+  shell = ephy_embed_shell_get_default ();
 
   data_str = g_string_new (NULL);
 
@@ -510,18 +488,10 @@ history_service_query_urls_cb (EphyHistoryService     *history,
     char *thumbnail_style = NULL;
 
     snapshot = ephy_snapshot_service_lookup_cached_snapshot_path (snapshot_service, url->url);
-    if (!snapshot) {
-      GetSnapshotPathAsyncData *data = g_new (GetSnapshotPathAsyncData, 1);
-
-      data->url = g_strdup (url->url);
-      data->mtime = url->thumbnail_time;
-      ephy_snapshot_service_get_snapshot_path_for_url_async (ephy_snapshot_service_get_default (),
-                                                             url->url, url->thumbnail_time, NULL,
-                                                             (GAsyncReadyCallback)got_snapshot_path_for_url_cb,
-                                                             data);
-    } else {
+    if (snapshot)
       thumbnail_style = g_strdup_printf (" style=\"background: url(file://%s) no-repeat;\"", snapshot);
-    }
+    else
+      ephy_embed_shell_schedule_thumbnail_update (shell, url);
 
     g_string_append_printf (data_str,
                             "<a class=\"overview-item\" title=\"%s\" href=\"%s\">"
