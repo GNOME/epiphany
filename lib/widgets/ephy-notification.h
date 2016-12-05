@@ -25,12 +25,12 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_PASSWORD_NOTIFICATION (ephy_password_notification_get_type ())
+#define EPHY_TYPE_NOTIFICATION (ephy_notification_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyPasswordNotification, ephy_password_notification, EPHY, PASSWORD_NOTIFICATION, GtkGrid)
+G_DECLARE_FINAL_TYPE (EphyNotification, ephy_notification, EPHY, NOTIFICATION, GtkGrid)
 
-EphyPasswordNotification *ephy_password_notification_new  (const char *user);
-
-void                      ephy_password_notification_show (EphyPasswordNotification *self);
+EphyNotification *ephy_notification_new  (const char *head,
+                                          const char *body);
+void              ephy_notification_show (EphyNotification *self);
 
 G_END_DECLS

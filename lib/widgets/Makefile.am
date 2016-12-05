@@ -72,8 +72,8 @@ libephywidgets_la_SOURCES = \
 	ephy-location-entry.h			\
 	ephy-middle-clickable-button.c		\
 	ephy-middle-clickable-button.h		\
-	ephy-password-notification.c		\
-	ephy-password-notification.h		\
+	ephy-notification.c			\
+	ephy-notification.h			\
 	ephy-security-popover.c			\
 	ephy-security-popover.h			\
 	ephy-title-box.c			\

@@ -25,12 +25,13 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-embed-prefs.h"
-#include "ephy-password-notification.h"
+#include "ephy-notification.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-secret.h"
 
+#include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 #include <string.h>
 
@@ -445,7 +446,6 @@ obtain_signed_certificate_response_cb (SoupSession *session,
 {
   StorageServerRequestAsyncData *data;
   EphySyncService *service;
-  EphyPasswordNotification *notification;
   JsonParser *parser;
   JsonObject *json;
   const char *certificate;
@@ -462,9 +462,16 @@ obtain_signed_certificate_response_cb (SoupSession *session,
    * if the user has changed his password since the last time he signed in.
    * When this happens, notify the user to sign in with the new password. */
   if (msg->status_code == 401 && json_object_get_int_member (json, "errno") == 110) {
-    notification = ephy_password_notification_new (ephy_sync_service_get_user_email (service));
-    ephy_password_notification_show (notification);
+    char *error = g_strdup_printf (_("The password of your Firefox account %s "
+                                     "seems to have been changed."),
+                                   ephy_sync_service_get_user_email (service));
+    const char *suggestion = _("Please visit Preferences and sign in with "
+                               "the new password to continue the sync process.");
+
+    ephy_notification_show (ephy_notification_new (error, suggestion));
+
     storage_server_request_async_data_free (data);
+    g_free (error);
     service->locked = FALSE;
     goto out;
   }
