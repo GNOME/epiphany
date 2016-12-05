@@ -38,6 +38,8 @@
 #include "ephy-history-service.h"
 #include "ephy-location-entry.h"
 #include "ephy-middle-clickable-button.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
@@ -175,6 +177,17 @@ sync_chromes_visibility (EphyHeaderBar *header_bar)
   gtk_widget_set_visible (header_bar->bookmarks_button, chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
   gtk_widget_set_visible (header_bar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
   gtk_widget_set_visible (header_bar->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
+}
+
+static void
+homepage_url_changed (GSettings  *settings,
+                      const char *key,
+                      GtkWidget  *button)
+{
+  const char *setting;
+
+  setting = g_settings_get_string (settings, key);
+  gtk_widget_set_visible (button, setting && setting[0]);
 }
 
 typedef enum {
@@ -646,6 +659,23 @@ ephy_header_bar_constructed (GObject *object)
   gtk_widget_show (GTK_WIDGET (button));
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
 
+  /* Homepage */
+  button = gtk_button_new ();
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_icon_name ("go-home-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.home");
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
+
+  embed_shell = ephy_embed_shell_get_default ();
+  if (ephy_embed_shell_get_mode (embed_shell) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    homepage_url_changed (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL, button);
+    g_signal_connect (EPHY_SETTINGS_MAIN,
+                      "changed::" EPHY_PREFS_HOMEPAGE_URL,
+                      G_CALLBACK (homepage_url_changed),
+                      button);
+  }
+
   /* New Tab */
   button = gtk_button_new ();
   header_bar->new_tab_button = button;
@@ -656,7 +686,6 @@ ephy_header_bar_constructed (GObject *object)
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
 
   /* Title widget (location entry or title box) */
-  embed_shell = ephy_embed_shell_get_default ();
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_title_box_new ());
   else
