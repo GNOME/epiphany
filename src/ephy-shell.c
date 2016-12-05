@@ -1044,8 +1044,9 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
     if (data->flags & EPHY_NEW_TAB_JUMP && mode != EPHY_EMBED_SHELL_MODE_TEST)
       gtk_window_present_with_time (GTK_WINDOW (data->window), data->user_time);
   } else {
-    ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
-    ephy_window_activate_location (data->window);
+    ephy_web_view_load_new_tab_page (ephy_embed_get_web_view (embed));
+    if (data->flags & EPHY_NEW_TAB_JUMP)
+      ephy_window_activate_location (data->window);
   }
 
   /* Set address from the very beginning. Looks odd in app mode if it appears later on. */

@@ -319,8 +319,9 @@ ephy_window_open_link (EphyLink     *link,
 {
   EphyWindow *window = EPHY_WINDOW (link);
   EphyEmbed *new_embed;
+  EphyWebView *web_view;
 
-  g_return_val_if_fail (address != NULL, NULL);
+  g_assert (address != NULL || (flags & (EPHY_LINK_NEW_WINDOW | EPHY_LINK_NEW_TAB | EPHY_LINK_HOME_PAGE)));
 
   if (embed == NULL) {
     embed = window->active_embed;
@@ -351,30 +352,28 @@ ephy_window_open_link (EphyLink     *link,
     if (flags & EPHY_LINK_NEW_TAB_APPEND_AFTER)
       ntflags |= EPHY_NEW_TAB_APPEND_AFTER;
 
-    new_embed = ephy_shell_new_tab
-                  (ephy_shell_get_default (),
-                  target_window,
-                  embed, ntflags);
-    if (flags & EPHY_LINK_HOME_PAGE) {
-      ephy_web_view_load_homepage (ephy_embed_get_web_view (new_embed));
-      ephy_window_activate_location (window);
-    } else {
-      ephy_web_view_load_url (ephy_embed_get_web_view (new_embed), address);
-      if (flags & EPHY_LINK_JUMP_TO) {
-        gtk_widget_grab_focus (GTK_WIDGET (new_embed));
-      }
-    }
+    new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
+                                    target_window,
+                                    embed, ntflags);
+  } else if (!embed) {
+    new_embed = ephy_shell_new_tab (ephy_shell_get_default (), window, NULL, 0);
   } else {
-    ephy_web_view_load_url (ephy_embed_get_web_view (embed), address);
-
-    if (address == NULL || address[0] == '\0' || g_str_equal (address, "about:blank")) {
-      ephy_window_activate_location (window);
-    } else {
-      gtk_widget_grab_focus (GTK_WIDGET (embed));
-    }
-
     new_embed = embed;
   }
+
+  web_view = ephy_embed_get_web_view (new_embed);
+
+  if (address)
+    ephy_web_view_load_url (web_view, address);
+  else if (flags & EPHY_LINK_NEW_TAB)
+    ephy_web_view_load_new_tab_page (web_view);
+  else if (flags & (EPHY_LINK_NEW_WINDOW | EPHY_LINK_HOME_PAGE))
+    ephy_web_view_load_homepage (web_view);
+
+  if (ephy_web_view_get_is_blank (web_view))
+    ephy_window_activate_location (window);
+  else
+    gtk_widget_grab_focus (GTK_WIDGET (new_embed));
 
   return new_embed;
 }

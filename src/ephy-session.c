@@ -31,6 +31,7 @@
 #include "ephy-embed.h"
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
+#include "ephy-link.h"
 #include "ephy-notebook.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
@@ -373,16 +374,8 @@ session_maybe_open_window (EphySession *session,
   /* FIXME: maybe just check for normal windows? */
   if (ephy_shell_get_n_windows (shell) == 0) {
     EphyWindow *window = ephy_window_new ();
-    EphyEmbed *embed;
 
-    embed = ephy_shell_new_tab_full (shell,
-                                     NULL /* title */,
-                                     NULL /* related view */,
-                                     window, NULL /* tab */,
-                                     0,
-                                     user_time);
-    ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
-    ephy_window_activate_location (window);
+    ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_HOME_PAGE);
   }
 }
 

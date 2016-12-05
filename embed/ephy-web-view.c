@@ -3190,6 +3190,34 @@ ephy_web_view_load_homepage (EphyWebView *view)
 {
   EphyEmbedShell *shell;
   EphyEmbedShellMode mode;
+  char *home;
+
+  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+
+  shell = ephy_embed_shell_get_default ();
+  mode = ephy_embed_shell_get_mode (shell);
+
+  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    ephy_web_view_load_new_tab_page (view);
+    return;
+  }
+
+  home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
+  if (home == NULL || home[0] == '\0') {
+    ephy_web_view_load_new_tab_page(view);
+  } else {
+    ephy_web_view_freeze_history (view);
+    ephy_web_view_set_visit_type (view, EPHY_PAGE_VISIT_HOMEPAGE);
+    ephy_web_view_load_url (view, home);
+  }
+  g_free (home);
+}
+
+void
+ephy_web_view_load_new_tab_page (EphyWebView *view)
+{
+  EphyEmbedShell *shell;
+  EphyEmbedShellMode mode;
 
   g_return_if_fail (EPHY_IS_WEB_VIEW (view));
 
@@ -3198,18 +3226,10 @@ ephy_web_view_load_homepage (EphyWebView *view)
 
   ephy_web_view_freeze_history (view);
   ephy_web_view_set_visit_type (view, EPHY_PAGE_VISIT_HOMEPAGE);
-  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+  if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     ephy_web_view_load_url (view, "about:incognito");
-  } else {
-    char *home;
-
-    home = g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL);
-    if (home == NULL || home[0] == '\0')
-      ephy_web_view_load_url (view, "about:overview");
-    else
-      ephy_web_view_load_url (view, home);
-    g_free (home);
-  }
+  else
+    ephy_web_view_load_url (view, "about:overview");
 }
 
 /**

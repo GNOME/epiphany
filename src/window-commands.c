@@ -82,9 +82,7 @@ window_cmd_new_window (GSimpleAction *action,
   }
 
   new_window = ephy_window_new ();
-  embed = ephy_shell_new_tab (shell, new_window, NULL, 0);
-  ephy_web_view_load_homepage (ephy_embed_get_web_view (embed));
-  ephy_window_activate_location (new_window);
+  ephy_link_open (EPHY_LINK (new_window), NULL, NULL, EPHY_LINK_HOME_PAGE);
 }
 
 void
@@ -867,8 +865,8 @@ window_cmd_new_tab (GSimpleAction *action,
   EphyWindow *window = user_data;
 
   ephy_link_open (EPHY_LINK (window),
-                  "about:overview",
-                  NULL, EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
+                  NULL, NULL,
+                  EPHY_LINK_NEW_TAB | EPHY_LINK_JUMP_TO);
 }
 
 static void
@@ -2112,8 +2110,7 @@ window_cmd_go_home (GSimpleAction *action,
                     gpointer       user_data)
 {
   ephy_link_open (EPHY_LINK (user_data),
-                  "about:overview",
-                  NULL,
+                  NULL, NULL,
                   EPHY_LINK_HOME_PAGE);
 }
 
