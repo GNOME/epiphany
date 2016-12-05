@@ -73,7 +73,6 @@ window_cmd_new_window (GSimpleAction *action,
                        gpointer       user_data)
 {
   EphyWindow *new_window;
-  EphyEmbed *embed;
   EphyShell *shell = ephy_shell_get_default ();
 
   if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
