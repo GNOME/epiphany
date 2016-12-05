@@ -23,6 +23,7 @@
 
 #include <webkit2/webkit2.h>
 #include "ephy-downloads-manager.h"
+#include "ephy-history-service.h"
 #include "ephy-hosts-manager.h"
 
 G_BEGIN_DECLS
@@ -73,6 +74,8 @@ void               ephy_embed_shell_set_thumbnail_path         (EphyEmbedShell  
                                                                 const char       *url,
                                                                 time_t            mtime,
                                                                 const char       *path);
+void               ephy_embed_shell_schedule_thumbnail_update  (EphyEmbedShell   *shell,
+                                                                EphyHistoryURL   *url);
 WebKitUserContentManager *ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell);
 EphyDownloadsManager     *ephy_embed_shell_get_downloads_manager    (EphyEmbedShell *shell);
 EphyHostsManager         *ephy_embed_shell_get_hosts_manager        (EphyEmbedShell *shell);
