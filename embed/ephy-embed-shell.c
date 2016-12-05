@@ -198,6 +198,9 @@ history_service_query_urls_cb (EphyHistoryService *service,
 
     ephy_web_extension_proxy_history_set_urls (web_extension, urls);
   }
+
+  for (l = urls; l; l = g_list_next (l))
+    ephy_embed_shell_schedule_thumbnail_update (shell, (EphyHistoryURL *)l->data);
 }
 
 static void
