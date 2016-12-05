@@ -54,6 +54,74 @@
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="halign">start</property>
+                            <property name="label" translatable="yes">Homepage</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <property name="margin-start">12</property>
+                            <child>
+                              <object class="GtkRadioButton" id="new_tab_homepage_radiobutton">
+                                <property name="label" translatable="yes">Default new _tab page</property>
+                                <property name="visible">True</property>
+                                <property name="use-underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="blank_homepage_radiobutton">
+                                <property name="label" translatable="yes">_Blank page</property>
+                                <property name="visible">True</property>
+                                <property name="use-underline">True</property>
+                                <property name="group">new_tab_homepage_radiobutton</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="spacing">12</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="custom_homepage_radiobutton">
+                                    <property name="label" translatable="yes">_Custom:</property>
+                                    <property name="visible">True</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="group">new_tab_homepage_radiobutton</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEntry" id="custom_homepage_entry">
+                                    <property name="visible">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="secondary-icon-name">edit-clear-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">Downloads</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>

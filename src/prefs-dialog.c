@@ -62,6 +62,10 @@ struct _PrefsDialog {
   GtkDialog parent_instance;
 
   /* general */
+  GtkWidget *new_tab_homepage_radiobutton;
+  GtkWidget *blank_homepage_radiobutton;
+  GtkWidget *custom_homepage_radiobutton;
+  GtkWidget *custom_homepage_entry;
   GtkWidget *download_button_hbox;
   GtkWidget *download_button_label;
   GtkWidget *automatic_downloads_checkbutton;
@@ -531,6 +535,10 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/prefs-dialog.ui");
   /* general */
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, new_tab_homepage_radiobutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, blank_homepage_radiobutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_radiobutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_entry);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, automatic_downloads_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_engine_combo);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, restore_session_checkbutton);
@@ -1387,6 +1395,106 @@ create_search_engine_combo (GtkComboBox *combo)
 }
 
 static gboolean
+new_tab_homepage_get_mapping (GValue   *value,
+                              GVariant *variant,
+                              gpointer  user_data)
+{
+  const char *setting;
+
+  setting = g_variant_get_string (variant, NULL);
+  if (!setting || setting[0] == '\0')
+    g_value_set_boolean (value, TRUE);
+
+  return TRUE;
+}
+
+static GVariant *
+new_tab_homepage_set_mapping (const GValue       *value,
+                              const GVariantType *expected_type,
+                              gpointer            user_data)
+{
+  if (!g_value_get_boolean (value))
+    return NULL;
+  return g_variant_new_string ("");
+}
+
+static gboolean
+blank_homepage_get_mapping (GValue   *value,
+                            GVariant *variant,
+                            gpointer  user_data)
+{
+  const char *setting;
+
+  setting = g_variant_get_string (variant, NULL);
+  if (g_strcmp0 (setting, "about:blank") == 0)
+      g_value_set_boolean (value, TRUE);
+
+  return TRUE;
+}
+
+static GVariant *
+blank_homepage_set_mapping (const GValue       *value,
+                            const GVariantType *expected_type,
+                            gpointer            user_data)
+{
+  if (!g_value_get_boolean (value))
+    return NULL;
+  return g_variant_new_string ("about:blank");
+}
+
+static gboolean
+custom_homepage_get_mapping (GValue   *value,
+                             GVariant *variant,
+                             gpointer  user_data)
+{
+  const char *setting;
+
+  setting = g_variant_get_string (variant, NULL);
+  if (setting && setting[0] != '\0' && g_strcmp0 (setting, "about:blank") != 0)
+    g_value_set_boolean (value, TRUE);
+  return TRUE;
+}
+
+static GVariant *
+custom_homepage_set_mapping (const GValue       *value,
+                             const GVariantType *expected_type,
+                             gpointer            user_data)
+{
+  PrefsDialog *dialog = user_data;
+  const char *setting;
+
+  if (!g_value_get_boolean (value)) {
+    gtk_widget_set_sensitive (dialog->custom_homepage_entry, FALSE);
+    return NULL;
+  }
+
+  gtk_widget_set_sensitive (dialog->custom_homepage_entry, TRUE);
+  gtk_widget_grab_focus (dialog->custom_homepage_entry);
+  setting = gtk_entry_get_text (GTK_ENTRY (dialog->custom_homepage_entry));
+  if (!setting || setting[0] == '\0')
+    return NULL;
+
+  gtk_entry_set_text (GTK_ENTRY (dialog->custom_homepage_entry), setting);
+  return g_variant_new_string (setting);
+}
+
+static void
+custom_homepage_entry_changed (GtkEntry    *entry,
+                               PrefsDialog *dialog)
+{
+  g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL,
+                         gtk_entry_get_text (entry));
+}
+
+static void
+custom_homepage_entry_icon_released (GtkEntry            *entry,
+                                     GtkEntryIconPosition icon_pos)
+{
+  if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
+    gtk_entry_set_text (entry, "");
+}
+
+static gboolean
 restore_session_get_mapping (GValue   *value,
                              GVariant *variant,
                              gpointer  user_data)
@@ -1416,6 +1524,49 @@ setup_general_page (PrefsDialog *dialog)
 
   settings = ephy_settings_get (EPHY_PREFS_SCHEMA);
   web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+
+  g_settings_bind_with_mapping (settings,
+                                EPHY_PREFS_HOMEPAGE_URL,
+                                dialog->new_tab_homepage_radiobutton,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                new_tab_homepage_get_mapping,
+                                new_tab_homepage_set_mapping,
+                                NULL,
+                                NULL);
+  g_settings_bind_with_mapping (settings,
+                                EPHY_PREFS_HOMEPAGE_URL,
+                                dialog->blank_homepage_radiobutton,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                blank_homepage_get_mapping,
+                                blank_homepage_set_mapping,
+                                NULL,
+                                NULL);
+  g_settings_bind_with_mapping (settings,
+                                EPHY_PREFS_HOMEPAGE_URL,
+                                dialog->custom_homepage_radiobutton,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                custom_homepage_get_mapping,
+                                custom_homepage_set_mapping,
+                                dialog,
+                                NULL);
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->custom_homepage_radiobutton))) {
+    gtk_widget_set_sensitive (dialog->custom_homepage_entry, TRUE);
+    gtk_entry_set_text (GTK_ENTRY (dialog->custom_homepage_entry),
+                        g_settings_get_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL));
+  } else {
+    gtk_widget_set_sensitive (dialog->custom_homepage_entry, FALSE);
+    gtk_entry_set_text (GTK_ENTRY (dialog->custom_homepage_entry), "");
+  }
+
+  g_signal_connect (dialog->custom_homepage_entry, "changed",
+                    G_CALLBACK (custom_homepage_entry_changed),
+                    dialog);
+  g_signal_connect (dialog->custom_homepage_entry, "icon-release",
+                    G_CALLBACK (custom_homepage_entry_icon_released),
+                    NULL);
 
   g_settings_bind (settings,
                    EPHY_PREFS_AUTO_DOWNLOADS,
