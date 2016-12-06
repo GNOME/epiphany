@@ -64,7 +64,6 @@ struct _EphyEmbed {
   GSList *destroy_on_transition_list;
   GtkWidget *overlay;
   GtkWidget *floating_bar;
-  GtkWidget *progress;
   GtkWidget *fullscreen_message_label;
 
   char *title;
@@ -83,10 +82,7 @@ struct _EphyEmbed {
 
   guint fullscreen_message_id;
 
-  guint clear_progress_source_id;
-
   gulong status_handler_id;
-  gulong progress_update_handler_id;
   gboolean inspector_loaded;
 };
 
@@ -355,11 +351,6 @@ ephy_embed_dispose (GObject *object)
     embed->pop_statusbar_later_source_id = 0;
   }
 
-  if (embed->clear_progress_source_id) {
-    g_source_remove (embed->clear_progress_source_id);
-    embed->clear_progress_source_id = 0;
-  }
-
   if (embed->delayed_request_source_id) {
     g_source_remove (embed->delayed_request_source_id);
     embed->delayed_request_source_id = 0;
@@ -370,11 +361,6 @@ ephy_embed_dispose (GObject *object)
   if (embed->status_handler_id) {
     g_signal_handler_disconnect (embed->web_view, embed->status_handler_id);
     embed->status_handler_id = 0;
-  }
-
-  if (embed->progress_update_handler_id) {
-    g_signal_handler_disconnect (embed->web_view, embed->progress_update_handler_id);
-    embed->progress_update_handler_id = 0;
   }
 
   if (embed->fullscreen_message_id) {
@@ -590,49 +576,6 @@ status_message_notify_cb (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed
 }
 
 static gboolean
-clear_progress_cb (EphyEmbed *embed)
-{
-  gtk_widget_hide (embed->progress);
-  embed->clear_progress_source_id = 0;
-
-  return FALSE;
-}
-
-static void
-progress_update (EphyWebView *view, GParamSpec *pspec, EphyEmbed *embed)
-{
-  gdouble progress;
-  gboolean loading;
-  const char *uri;
-
-  if (embed->clear_progress_source_id) {
-    g_source_remove (embed->clear_progress_source_id);
-    embed->clear_progress_source_id = 0;
-  }
-
-  uri = webkit_web_view_get_uri (embed->web_view);
-  if (!uri || g_str_has_prefix (uri, "ephy-about:") ||
-      g_str_has_prefix (uri, "about:")) {
-    gtk_widget_hide (embed->progress);
-    return;
-  }
-
-  progress = webkit_web_view_get_estimated_load_progress (embed->web_view);
-  loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (embed->web_view));
-
-  if (progress == 1.0 || !loading) {
-    embed->clear_progress_source_id = g_timeout_add (500,
-                                                     (GSourceFunc)clear_progress_cb,
-                                                     embed);
-    g_source_set_name_by_id (embed->clear_progress_source_id, "[epiphany] clear_progress_cb");
-  } else
-    gtk_widget_show (embed->progress);
-
-  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (embed->progress),
-                                 (loading || progress == 1.0) ? progress : 0.0);
-}
-
-static gboolean
 load_delayed_request_if_mapped (gpointer user_data)
 {
   EphyEmbed *embed = EPHY_EMBED (user_data);
@@ -733,13 +676,6 @@ ephy_embed_constructed (GObject *object)
 
   gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->floating_bar);
 
-  embed->progress = gtk_progress_bar_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (embed->progress),
-                               GTK_STYLE_CLASS_OSD);
-  gtk_widget_set_halign (embed->progress, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (embed->progress, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->progress);
-
   embed->find_toolbar = ephy_find_toolbar_new (embed->web_view);
   g_signal_connect (embed->find_toolbar, "close",
                     G_CALLBACK (ephy_embed_find_toolbar_close_cb),
@@ -751,8 +687,6 @@ ephy_embed_constructed (GObject *object)
 
   paned = GTK_WIDGET (embed->paned);
 
-  embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
-                                                        G_CALLBACK (progress_update), object);
   gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (embed->overlay),
                    TRUE, FALSE);
 
