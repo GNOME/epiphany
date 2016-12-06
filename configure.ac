@@ -122,7 +122,7 @@ PKG_CHECK_MODULES([WEBKIT2GTK_WEB_EXTENSION], [webkit2gtk-web-extension-4.0 >= $
 # libhttpseverywhere is disabled by default for now. See tracker bug #775575.
 AC_ARG_WITH([libhttpseverywhere],
 	[AS_HELP_STRING([--with-libhttpseverywhere], [Enable experimental HTTPS Everywhere support])],
-	[with_libhttpseverywhere=yes],
+	[],
 	[with_libhttpseverywhere=no]
 )
 AS_IF([test "x$with_libhttpseverywhere" = "xyes"],
