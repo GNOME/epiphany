@@ -114,7 +114,7 @@ struct _PrefsDialog {
   WebKitWebView *fxa_web_view;
   WebKitUserContentManager *fxa_manager;
   WebKitUserScript *fxa_script;
-  guint source_id;
+  guint fxa_id;
 };
 
 typedef struct {
@@ -213,9 +213,9 @@ prefs_dialog_finalize (GObject *object)
     g_object_unref (dialog->fxa_manager);
   }
 
-  if (dialog->source_id != 0) {
-    g_source_remove (dialog->source_id);
-    dialog->source_id = 0;
+  if (dialog->fxa_id != 0) {
+    g_source_remove (dialog->fxa_id);
+    dialog->fxa_id = 0;
   }
 
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
@@ -263,7 +263,7 @@ poll_fxa_server (gpointer user_data)
 
     g_free (bundle);
     fxa_callback_data_free (data);
-    data->dialog->source_id = 0;
+    data->dialog->fxa_id = 0;
 
     return G_SOURCE_REMOVE;
   }
@@ -386,7 +386,7 @@ server_message_received_cb (WebKitUserContentManager *manager,
       cb_data = fxa_callback_data_new (dialog, email, uid, sessionToken,
                                        keyFetchToken, unwrapBKey, tokenID,
                                        reqHMACkey, respHMACkey, respXORkey);
-      dialog->source_id = g_timeout_add_seconds (2, (GSourceFunc)poll_fxa_server, cb_data);
+      dialog->fxa_id = g_timeout_add_seconds (2, (GSourceFunc)poll_fxa_server, cb_data);
 
       g_free (text);
     } else {
