@@ -51,7 +51,9 @@ struct _EphyShell {
   EphyEmbedShell parent_instance;
 
   EphySession *session;
+#ifdef ENABLE_SYNC
   EphySyncService *sync_service;
+#endif
   GList *windows;
   GObject *lockdown;
   EphyBookmarksManager *bookmarks_manager;
@@ -329,7 +331,9 @@ ephy_shell_startup (GApplication *application)
 
   mode = ephy_embed_shell_get_mode (embed_shell);
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+#ifdef ENABLE_SYNC
     EphySyncService *service;
+#endif
 
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_entries, G_N_ELEMENTS (app_entries),
@@ -347,10 +351,12 @@ ephy_shell_startup (GApplication *application)
                               G_BINDING_SYNC_CREATE);
     }
 
+#ifdef ENABLE_SYNC
     /* Start the periodical sync now. */
     service = ephy_sync_service_new ();
     ephy_sync_service_start_periodical_sync (service, TRUE);
     ephy_shell->sync_service = service;
+#endif
 
     builder = gtk_builder_new ();
     gtk_builder_add_from_resource (builder,
@@ -620,7 +626,9 @@ ephy_shell_dispose (GObject *object)
   g_clear_pointer (&shell->history_window, gtk_widget_destroy);
   g_clear_object (&shell->prefs_dialog);
   g_clear_object (&shell->network_monitor);
+#ifdef ENABLE_SYNC
   g_clear_object (&shell->sync_service);
+#endif
   g_clear_object (&shell->bookmarks_manager);
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
@@ -767,6 +775,7 @@ ephy_shell_get_session (EphyShell *shell)
   return shell->session;
 }
 
+#ifdef ENABLE_SYNC
 /**
  * ephy_shell_get_sync_service:
  * @shell: the #EphyShell
@@ -782,6 +791,7 @@ ephy_shell_get_sync_service (EphyShell *shell)
 
   return shell->sync_service;
 }
+#endif
 
 /**
  * ephy_shell_get_bookmarks_manager:

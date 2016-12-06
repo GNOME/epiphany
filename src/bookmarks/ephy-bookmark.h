@@ -70,8 +70,10 @@ int                  ephy_bookmark_bookmarks_sort_func   (EphyBookmark *bookmark
 int                  ephy_bookmark_tags_compare          (const char *tag1,
                                                           const char *tag2);
 
+#ifdef ENABLE_SYNC
 char                *ephy_bookmark_to_bso                (EphyBookmark *self);
 EphyBookmark        *ephy_bookmark_from_bso              (JsonObject *bso);
+#endif
 
 gboolean             ephy_bookmark_is_smart              (EphyBookmark *self);
 char                *ephy_bookmark_resolve_smart_url     (EphyBookmark *self,

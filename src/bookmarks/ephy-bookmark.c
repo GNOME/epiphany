@@ -23,10 +23,13 @@
 #include "ephy-bookmark.h"
 
 #include "ephy-shell.h"
-#include "ephy-sync-crypto.h"
-#include "ephy-sync-utils.h"
 
 #include <string.h>
+
+#ifdef ENABLE_SYNC
+#include "ephy-sync-crypto.h"
+#include "ephy-sync-utils.h"
+#endif
 
 #define ID_LEN 32
 
@@ -200,8 +203,30 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 static void
 ephy_bookmark_init (EphyBookmark *self)
 {
+#ifdef ENABLE_SYNC
   self->id = g_malloc0 (ID_LEN + 1);
   ephy_sync_crypto_random_hex_gen (NULL, ID_LEN, (guint8 *)self->id);
+#else
+  static const char hex_digits[] = "0123456789abcdef";
+  FILE *fp;
+  gsize num_bytes;
+  guint8 *bytes;
+
+  num_bytes = (ID_LEN + 1) / 2;
+  bytes = g_malloc (num_bytes);
+
+  fp = fopen ("/dev/urandom", "r");
+  fread (bytes, sizeof (guint8), num_bytes, fp);
+
+  self->id = g_malloc0 (ID_LEN + 1);
+  for (gsize i = 0; i < num_bytes; i++) {
+    self->id[2 * i] = hex_digits[bytes[i] >> 4];
+    self->id[2 * i + 1] = hex_digits[bytes[i] & 0xf];
+  }
+
+  g_free (bytes);
+  fclose (fp);
+#endif
 }
 
 static JsonNode *
@@ -500,6 +525,7 @@ ephy_bookmark_tags_compare (const char *tag1, const char *tag2)
   return result;
 }
 
+#ifdef ENABLE_SYNC
 char *
 ephy_bookmark_to_bso (EphyBookmark *self)
 {
@@ -587,6 +613,7 @@ out:
 
   return bookmark;
 }
+#endif
 
 gboolean
 ephy_bookmark_is_smart (EphyBookmark *bookmark)

@@ -26,12 +26,15 @@
 #include "ephy-embed-shell.h"
 #include "ephy-embed.h"
 #include "ephy-session.h"
-#include "ephy-sync-service.h"
 #include "ephy-window.h"
 
 #include <webkit2/webkit2.h>
 #include <glib-object.h>
 #include <glib.h>
+
+#ifdef ENABLE_SYNC
+#include "ephy-sync-service.h"
+#endif
 
 G_BEGIN_DECLS
 
@@ -102,7 +105,9 @@ GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
 
 EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
 
+#ifdef ENABLE_SYNC
 EphySyncService *ephy_shell_get_sync_service             (EphyShell *shell);
+#endif
 
 GtkWidget       *ephy_shell_get_history_window           (EphyShell *shell);
 
