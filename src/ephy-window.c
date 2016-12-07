@@ -1006,8 +1006,6 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
   GAction *action;
   gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
   double zoom;
-  GtkWidget *page_menu_button;
-  GtkPopover *page_menu_popover;
   GtkWidget *zoom_level_button;
 
   if (window->closing)
@@ -1015,9 +1013,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 
   zoom = webkit_web_view_get_zoom_level (web_view);
 
-  page_menu_button = ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (window->header_bar));
-  page_menu_popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (page_menu_button));
-  zoom_level_button = g_object_get_data (G_OBJECT (page_menu_popover), "zoom-level-button");
+  zoom_level_button = ephy_header_bar_get_zoom_level_button (EPHY_HEADER_BAR (window->header_bar));
 
   gtk_button_set_label (GTK_BUTTON (zoom_level_button), ephy_zoom_get_zoom_level_name (zoom));
 

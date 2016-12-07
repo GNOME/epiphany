@@ -72,6 +72,7 @@ struct _EphyHeaderBar {
   GtkWidget *downloads_revealer;
   GtkWidget *downloads_button;
   GtkWidget *downloads_popover;
+  GtkWidget *zoom_level_button;
 
   guint navigation_buttons_menu_timeout;
 };
@@ -715,7 +716,7 @@ ephy_header_bar_constructed (GObject *object)
   g_type_ensure (G_TYPE_THEMED_ICON);
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
   page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));
-  g_object_set_data (G_OBJECT (page_menu_popover), "zoom-level-button", gtk_builder_get_object (builder, "zoom-level"));
+  header_bar->zoom_level_button = GTK_WIDGET (gtk_builder_get_object (builder, "zoom-level"));
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
   g_object_unref (builder);
 
@@ -832,9 +833,9 @@ ephy_header_bar_get_title_widget (EphyHeaderBar *header_bar)
 }
 
 GtkWidget *
-ephy_header_bar_get_page_menu_button (EphyHeaderBar *header_bar)
+ephy_header_bar_get_zoom_level_button (EphyHeaderBar *header_bar)
 {
-  return header_bar->page_menu_button;
+  return header_bar->zoom_level_button;
 }
 
 EphyWindow *
