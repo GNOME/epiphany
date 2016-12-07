@@ -3059,12 +3059,6 @@ ephy_window_constructed (GObject *object)
   if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     g_object_set (window->location_controller, "editable", FALSE, NULL);
 
-    /* We don't need to show the page menu and the new tab button in web
-     * application mode.
-     */
-    gtk_widget_set_visible (ephy_header_bar_get_page_menu_button (EPHY_HEADER_BAR (window->header_bar)), FALSE);
-    gtk_widget_set_visible (ephy_header_bar_get_new_tab_button (EPHY_HEADER_BAR (window->header_bar)), FALSE);
-
     action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "popup");
     new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "context-bookmark-page");
     ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_CHROME, TRUE);
