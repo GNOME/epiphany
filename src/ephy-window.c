@@ -1009,7 +1009,6 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
   GtkWidget *page_menu_button;
   GtkPopover *page_menu_popover;
   GtkWidget *zoom_level_button;
-  char *zoom_level_text;
 
   if (window->closing)
     return;
@@ -1020,9 +1019,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
   page_menu_popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (page_menu_button));
   zoom_level_button = g_object_get_data (G_OBJECT (page_menu_popover), "zoom-level-button");
 
-  zoom_level_text = g_strdup (ephy_zoom_get_zoom_level_name (zoom));
-  gtk_button_set_label (GTK_BUTTON (zoom_level_button), zoom_level_text);
-  g_free (zoom_level_text);
+  gtk_button_set_label (GTK_BUTTON (zoom_level_button), ephy_zoom_get_zoom_level_name (zoom));
 
   if (zoom >= ZOOM_MAXIMAL) {
     can_zoom_in = FALSE;
