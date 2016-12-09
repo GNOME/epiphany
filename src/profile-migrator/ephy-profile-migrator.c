@@ -524,8 +524,10 @@ parse_rdf_item (EphyBookmarksManager *manager,
                xmlStrEqual (child->ns->prefix, (xmlChar *)"dc") &&
                xmlStrEqual (child->name, (xmlChar *)"subject")) {
       subject = xmlNodeGetContent (child);
-      if (subject)
+      if (subject) {
         g_sequence_prepend (tags, subject);
+        ephy_bookmarks_manager_create_tag (manager, (const char *)subject);
+      }
     }
 
     child = child->next;
