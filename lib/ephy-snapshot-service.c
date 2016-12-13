@@ -135,9 +135,10 @@ ephy_snapshot_service_prepare_snapshot (cairo_surface_t *surface,
     }
 
     snapshot = gdk_pixbuf_get_from_surface (surface, x_offset, 0, new_width, new_height);
-    scaled = gnome_desktop_thumbnail_scale_down_pixbuf (snapshot,
-                                                        EPHY_THUMBNAIL_WIDTH,
-                                                        EPHY_THUMBNAIL_HEIGHT);
+    scaled = gdk_pixbuf_scale_simple (snapshot,
+                                      EPHY_THUMBNAIL_WIDTH,
+                                      EPHY_THUMBNAIL_HEIGHT,
+                                      GDK_INTERP_BILINEAR);
   }
 
   g_object_unref (snapshot);
