@@ -274,7 +274,7 @@ ephy_uri_decode (const char *uri_string)
 
   /* Process any punycode in the host portion of the URI. */
   uri = soup_uri_new (uri_string);
-  if (uri->host != NULL) {
+  if (uri != NULL && uri->host != NULL) {
     /* Ideally this context object would be cached and reused across function
      * calls. The object is itself threadsafe, but a mutex would still be needed
      * to create it and assign it to a local variable, unless we use thread-
@@ -298,7 +298,7 @@ ephy_uri_decode (const char *uri_string)
   }
 
   /* Note: this also strips passwords from the display URI. */
-  percent_encoded_uri = soup_uri_to_string (uri, FALSE);
+  percent_encoded_uri = uri != NULL ? soup_uri_to_string (uri, FALSE) : g_strdup (uri_string);
   soup_uri_free (uri);
 
   /* Now, decode any percent-encoded characters in the URI. If there are null
