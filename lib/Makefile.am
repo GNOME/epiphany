@@ -74,6 +74,7 @@ libephymisc_la_CPPFLAGS = \
 	$(GLIB_CFLAGS)					\
 	$(GNOME_DESKTOP_CFLAGS)				\
 	$(GTK_CFLAGS)					\
+	$(ICU_UC_CFLAGS)				\
 	$(LIBSECRET_CFLAGS)				\
 	$(LIBSOUP_CFLAGS)				\
 	$(LIBXML_CFLAGS)				\
@@ -95,6 +96,7 @@ libephymisc_la_LIBADD = \
 	$(GLIB_LIBS)		\
 	$(GNOME_DESKTOP_LIBS)	\
 	$(GTK_LIBS)		\
+	$(ICU_UC_LIBS)		\
 	$(LIBSECRET_LIBS)	\
 	$(LIBSOUP_LIBS)		\
 	$(LIBXML_LIBS)		\

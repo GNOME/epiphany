@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <libsoup/soup.h>
 #include <string.h>
+#include <unicode/uidna.h>
 
 /**
  * SECTION:ephy-uri-helpers
@@ -249,18 +250,65 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   return ret;
 }
 
+/* Use this function to format a URI for display. The URIs used
+ * internally by WebKit may contain percent-encoded characters or
+ * punycode, which we do not want the user to see.
+ *
+ * Note this should probably be handled by WebKit instead.
+ */
 char *
 ephy_uri_decode (const char *uri_string)
 {
-  char *decoded_uri;
+  static const guint MAX_DOMAIN_LENGTH = 255;
+  SoupURI *uri;
+  char *percent_encoded_uri;
+  char *idna_decoded_name;
+  char *fully_decoded_uri;
+  UIDNA *idna;
+  UIDNAInfo info = UIDNA_INFO_INITIALIZER;
+  UErrorCode error = U_ZERO_ERROR;
 
   /* This function is not null-safe since it is mostly used in scenarios where
    * passing or returning null would typically lead to a security issue. */
   g_assert (uri_string);
 
-  /* Protect against escaped null characters and escaped slashes. */
-  decoded_uri = g_uri_unescape_string (uri_string, "/");
-  return decoded_uri ? decoded_uri : g_strdup (uri_string);
+  /* Process any punycode in the host portion of the URI. */
+  uri = soup_uri_new (uri_string);
+  if (uri->host != NULL) {
+    /* Ideally this context object would be cached and reused across function
+     * calls. The object is itself threadsafe, but a mutex would still be needed
+     * to create it and assign it to a local variable, unless we use thread-
+     * local storage, which seems overkill for a threadsafe object. So just
+     * create a new one on each call for now. */
+    idna = uidna_openUTS46 (UIDNA_DEFAULT, &error);
+    if (U_FAILURE (error))
+      g_error ("ICU error opening UTS #46 context: %d", error);
+
+    idna_decoded_name = g_malloc (MAX_DOMAIN_LENGTH);
+    uidna_nameToUnicodeUTF8 (idna, uri->host, -1, idna_decoded_name, MAX_DOMAIN_LENGTH, &info, &error);
+    uidna_close (idna);
+
+    if (U_FAILURE (error)) {
+      g_warning ("ICU error converting domain %s for display: %d", uri->host, error);
+      return g_strdup (uri_string);
+    }
+
+    g_free (uri->host);
+    uri->host = idna_decoded_name;
+  }
+
+  /* Note: this also strips passwords from the display URI. */
+  percent_encoded_uri = soup_uri_to_string (uri, FALSE);
+  soup_uri_free (uri);
+
+  /* Now, decode any percent-encoded characters in the URI. If there are null
+   * characters or escaped slashes, this returns NULL, so just display the
+   * encoded URI in that case. */
+  fully_decoded_uri = g_uri_unescape_string (percent_encoded_uri, "/");
+  if (fully_decoded_uri == NULL)
+    return percent_encoded_uri;
+  g_free (percent_encoded_uri);
+  return fully_decoded_uri;
 }
 
 char *
