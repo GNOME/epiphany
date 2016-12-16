@@ -260,11 +260,12 @@ char *
 ephy_uri_decode (const char *uri_string)
 {
   static const guint MAX_DOMAIN_LENGTH = 255;
+  static UIDNA *idna = NULL;
+  static GMutex idna_creation_mutex;
   SoupURI *uri;
   char *percent_encoded_uri;
   char *idna_decoded_name;
   char *fully_decoded_uri;
-  UIDNA *idna;
   UIDNAInfo info = UIDNA_INFO_INITIALIZER;
   UErrorCode error = U_ZERO_ERROR;
 
@@ -272,21 +273,20 @@ ephy_uri_decode (const char *uri_string)
    * passing or returning null would typically lead to a security issue. */
   g_assert (uri_string);
 
-  /* Process any punycode in the host portion of the URI. */
-  uri = soup_uri_new (uri_string);
-  if (uri != NULL && uri->host != NULL) {
-    /* Ideally this context object would be cached and reused across function
-     * calls. The object is itself threadsafe, but a mutex would still be needed
-     * to create it and assign it to a local variable, unless we use thread-
-     * local storage, which seems overkill for a threadsafe object. So just
-     * create a new one on each call for now. */
+  /* This object is threadsafe to *use*, but need to create it exactly once. */
+  g_mutex_lock (&idna_creation_mutex);
+  if (idna == NULL) {
     idna = uidna_openUTS46 (UIDNA_DEFAULT, &error);
     if (U_FAILURE (error))
       g_error ("ICU error opening UTS #46 context: %d", error);
+  }
+  g_mutex_unlock (&idna_creation_mutex);
 
+  /* Process any punycode in the host portion of the URI. */
+  uri = soup_uri_new (uri_string);
+  if (uri != NULL && uri->host != NULL) {
     idna_decoded_name = g_malloc (MAX_DOMAIN_LENGTH);
     uidna_nameToUnicodeUTF8 (idna, uri->host, -1, idna_decoded_name, MAX_DOMAIN_LENGTH, &info, &error);
-    uidna_close (idna);
 
     if (U_FAILURE (error)) {
       g_warning ("ICU error converting domain %s for display: %d", uri->host, error);
