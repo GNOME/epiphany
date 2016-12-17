@@ -269,32 +269,6 @@ ephy_uri_tester_load_filters (EphyUriTester *tester)
   ephy_uri_tester_set_filters (tester, g_slist_reverse (list));
 }
 
-#if 0
- TODO: Use this to create a filters dialog, or something.
-
-static void
-ephy_uri_tester_save_filters (EphyUriTester *tester)
-{
-  FILE *file = NULL;
-  char *filepath = NULL;
-
-  filepath = g_build_filename (tester->data_dir, FILTERS_LIST_FILENAME, NULL);
-
-  if ((file = g_fopen (filepath, "w"))) {
-    GSList *item = NULL;
-    char *filter = NULL;
-
-    for (item = tester->filters; item; item = g_slist_next (item)) {
-      filter = g_strdup_printf ("%s;", (char *)item->data);
-      fputs (filter, file);
-      g_free (filter);
-    }
-    fclose (file);
-  }
-  g_free (filepath);
-}
-#endif
-
 static inline int
 ephy_uri_tester_check_rule (EphyUriTester *tester,
                             GRegex        *regex,
