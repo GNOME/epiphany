@@ -259,7 +259,7 @@ ephy_remove_tracking_from_uri (const char *uri_string)
 char *
 ephy_uri_decode (const char *uri_string)
 {
-  static const guint MAX_DOMAIN_LENGTH = 255;
+  static const guint MAX_DOMAIN_LENGTH = 255; /* RFC 1034, section 3.1 */
   static UIDNA *idna = NULL;
   static GMutex idna_creation_mutex;
   SoupURI *uri;
