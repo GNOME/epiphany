@@ -285,8 +285,15 @@ ephy_uri_decode (const char *uri_string)
   /* Process any punycode in the host portion of the URI. */
   uri = soup_uri_new (uri_string);
   if (uri != NULL && uri->host != NULL) {
-    idna_decoded_name = g_malloc (MAX_DOMAIN_LENGTH);
-    uidna_nameToUnicodeUTF8 (idna, uri->host, -1, idna_decoded_name, MAX_DOMAIN_LENGTH, &info, &error);
+    /* +1 so there is space for the trailing NUL with the longest-possible
+     * domain name. +2 because ICU has this rather terrible behavior of
+     * sometimes returning a result that's not NUL-terminated if the buffer
+     * capacity exactly matches the output length, indicating that with a
+     * warning code that's not caught by U_FAILURE. Our buffer is large enough
+     * for any valid domain, but this function may receive invalid domains as
+     * input. */
+    idna_decoded_name = g_malloc0 (MAX_DOMAIN_LENGTH + 2);
+    uidna_nameToUnicodeUTF8 (idna, uri->host, -1, idna_decoded_name, MAX_DOMAIN_LENGTH + 1, &info, &error);
 
     if (U_FAILURE (error)) {
       g_warning ("ICU error converting domain %s for display: %d", uri->host, error);
