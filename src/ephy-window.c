@@ -151,7 +151,6 @@ struct _EphyWindow {
   guint fullscreen_mode : 1;
   guint is_popup : 1;
   guint present_on_insert : 1;
-  guint key_theme_is_emacs : 1;
   guint updating_address : 1;
   guint force_close : 1;
   guint checking_modified_forms : 1;
@@ -389,40 +388,6 @@ G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, GTK_TYPE_APPLICATION_WINDOW,
                                                 ephy_window_link_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
                                                 ephy_window_embed_container_iface_init))
-
-static void
-settings_change_notify (GtkSettings *settings,
-                        EphyWindow  *window)
-{
-  char *key_theme_name;
-
-  g_object_get (settings,
-                "gtk-key-theme-name", &key_theme_name,
-                NULL);
-
-  window->key_theme_is_emacs =
-    key_theme_name &&
-    g_ascii_strcasecmp (key_theme_name, "Emacs") == 0;
-
-  g_free (key_theme_name);
-}
-
-static void
-settings_changed_cb (GtkSettings *settings)
-{
-  GList *list, *l;
-
-  /* FIXME: multi-head */
-  list = gtk_window_list_toplevels ();
-
-  for (l = list; l != NULL; l = l->next) {
-    if (EPHY_IS_WINDOW (l->data)) {
-      settings_change_notify (settings, l->data);
-    }
-  }
-
-  g_list_free (list);
-}
 
 static void
 sync_chromes_visibility (EphyWindow *window)
@@ -2896,11 +2861,9 @@ static void
 ephy_window_constructed (GObject *object)
 {
   EphyWindow *window;
-  GtkSettings *settings;
   GAction *new_action;
   GActionGroup *action_group;
   GSimpleActionGroup *simple_action_group;
-  guint settings_connection;
   GtkCssProvider *css_provider;
   guint i;
   EphyEmbedShellMode mode;
@@ -2975,22 +2938,6 @@ ephy_window_constructed (GObject *object)
   }
 
   ephy_gui_ensure_window_group (GTK_WINDOW (window));
-
-  /* initialize the listener for the key theme
-   * FIXME: Need to handle multi-head and migration.
-   */
-  settings = gtk_settings_get_default ();
-  settings_connection = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (settings),
-                                                             SETTINGS_CONNECTION_DATA_KEY));
-  if (settings_connection == 0) {
-    settings_connection =
-      g_signal_connect (settings, "notify::gtk-key-theme-name",
-                        G_CALLBACK (settings_changed_cb), NULL);
-    g_object_set_data (G_OBJECT (settings), SETTINGS_CONNECTION_DATA_KEY,
-                       GUINT_TO_POINTER (settings_connection));
-  }
-
-  settings_change_notify (settings, window);
 
   /* Setup tab accels */
   setup_tab_accels (window);
