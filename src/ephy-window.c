@@ -509,8 +509,7 @@ should_web_view_receive_key_press_event (GdkEventKey *event)
            event->keyval != GDK_KEY_KP_3;
 
   if ((event->state & GDK_MODIFIER_MASK) == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
-    return event->keyval != GDK_KEY_N &&
-           event->keyval != GDK_KEY_T &&
+    return event->keyval != GDK_KEY_T &&
            event->keyval != GDK_KEY_Page_Up &&
            event->keyval != GDK_KEY_KP_9 &&
            event->keyval != GDK_KEY_Page_Down &&
