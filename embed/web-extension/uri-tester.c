@@ -113,35 +113,12 @@ uri_tester_get_fileuri_for_url (UriTester *tester,
   return uri;
 }
 
-typedef struct {
-  UriTester *tester;
-  char *dest_uri;
-} RetrieveFilterAsyncData;
-
-static void
-uri_tester_retrieve_filter_finished (GFile *src,
-                                     GAsyncResult *result,
-                                     RetrieveFilterAsyncData *data)
-{
-  GError *error = NULL;
-
-  if (!g_file_copy_finish (src, result, &error)) {
-    LOG ("Error retrieving filter: %s\n", error->message);
-    g_error_free (error);
-  } else
-    uri_tester_parse_file_at_uri (data->tester, data->dest_uri);
-
-  g_object_unref (data->tester);
-  g_free (data->dest_uri);
-  g_slice_free (RetrieveFilterAsyncData, data);
-}
-
 static void
 uri_tester_retrieve_filter (UriTester *tester, const char *url, const char *fileuri)
 {
   GFile *src;
   GFile *dest;
-  RetrieveFilterAsyncData *data;
+  GError *error = NULL;
 
   g_return_if_fail (IS_URI_TESTER (tester));
   g_return_if_fail (url != NULL);
@@ -150,16 +127,17 @@ uri_tester_retrieve_filter (UriTester *tester, const char *url, const char *file
   src = g_file_new_for_uri (url);
   dest = g_file_new_for_uri (fileuri);
 
-  data = g_slice_new (RetrieveFilterAsyncData);
-  data->tester = g_object_ref (tester);
-  data->dest_uri = g_file_get_uri (dest);
+  g_file_copy (src, dest,
+               G_FILE_COPY_OVERWRITE,
+               NULL, NULL, NULL,
+               &error);
 
-  g_file_copy_async (src, dest,
-                     G_FILE_COPY_OVERWRITE,
-                     G_PRIORITY_DEFAULT,
-                     NULL, NULL, NULL,
-                     (GAsyncReadyCallback)uri_tester_retrieve_filter_finished,
-                     data);
+  if (error != NULL) {
+    g_warning ("Error retrieving adblock filter: %s\n", error->message);
+    g_error_free (error);
+  } else {
+    uri_tester_parse_file_at_uri (tester, fileuri);
+  }
 
   g_object_unref (src);
   g_object_unref (dest);
@@ -259,7 +237,7 @@ uri_tester_load_filters (UriTester *tester)
 
       if (error)
         {
-          LOG ("Error loading filters from %s: %s", filepath, error->message);
+          g_warning ("Error loading filters from %s: %s", filepath, error->message);
           g_error_free (error);
         }
 
@@ -767,64 +745,43 @@ uri_tester_parse_line (UriTester *tester, char *line, gboolean whitelist)
 }
 
 static void
-file_parse_cb (GDataInputStream *stream, GAsyncResult *result, UriTester *tester)
+uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri)
 {
+  GFile *file;
+  GFileInputStream *stream;
+  GDataInputStream *data_stream = NULL;
   char *line;
   GError *error = NULL;
 
-  line = g_data_input_stream_read_line_finish (stream, result, NULL, &error);
-  if (!line) {
-    if (error) {
-      LOG ("Error parsing file: %s\n", error->message);
-      g_error_free (error);
-    }
+  file = g_file_new_for_uri (fileuri);
+  stream = g_file_read (file, NULL, &error);
+  g_object_unref (file);
 
-    return;
-  }
-
-  uri_tester_parse_line (tester, line, FALSE);
-  g_free (line);
-
-  g_data_input_stream_read_line_async (stream, G_PRIORITY_DEFAULT_IDLE, NULL,
-                                       (GAsyncReadyCallback)file_parse_cb, tester);
-}
-
-static void
-file_read_cb (GFile *file, GAsyncResult *result, UriTester *tester)
-{
-  GFileInputStream *stream;
-  GDataInputStream *data_stream;
-  GError *error = NULL;
-
-  stream = g_file_read_finish (file, result, &error);
   if (!stream) {
-    char *path;
-
-    path = g_file_get_path (file);
-    LOG ("Error opening file %s for parsing: %s\n", path, error->message);
-    g_free (path);
+    g_warning ("Error opening %s for parsing: %s\n", fileuri, error->message);
     g_error_free (error);
-
     return;
   }
 
   data_stream = g_data_input_stream_new (G_INPUT_STREAM (stream));
   g_object_unref (stream);
 
-  g_data_input_stream_read_line_async (data_stream, G_PRIORITY_DEFAULT_IDLE, NULL,
-                                       (GAsyncReadyCallback)file_parse_cb, tester);
+  for (;;) {
+    line = g_data_input_stream_read_line (data_stream, NULL, NULL, &error);
+    if (!line) {
+      if (error) {
+        g_warning ("Error parsing file: %s\n", error->message);
+        g_error_free (error);
+      }
+
+      break;
+    }
+
+    uri_tester_parse_line (tester, line, FALSE);
+    g_free (line);
+  }
+
   g_object_unref (data_stream);
-}
-
-static void
-uri_tester_parse_file_at_uri (UriTester *tester, const char *fileuri)
-{
-  GFile *file;
-  GFileInputStream *stream;
-
-  file = g_file_new_for_uri (fileuri);
-  g_file_read_async (file, G_PRIORITY_DEFAULT_IDLE, NULL, (GAsyncReadyCallback)file_read_cb, tester);
-  g_object_unref (file);
 }
 
 static void
