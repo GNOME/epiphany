@@ -791,29 +791,50 @@ ephy_window_bound_accels (GtkWidget   *widget,
 }
 
 static gboolean
-should_web_view_receive_key_press_event (GdkEventKey *event)
+ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
+                                                 GdkEventKey *event)
 {
-  if ((event->state & GDK_MODIFIER_MASK) == GDK_CONTROL_MASK)
-    return event->keyval != GDK_KEY_n &&
-           event->keyval != GDK_KEY_q &&
-           event->keyval != GDK_KEY_t &&
-           event->keyval != GDK_KEY_w &&
-           event->keyval != GDK_KEY_Page_Up &&
-           event->keyval != GDK_KEY_KP_9 &&
-           event->keyval != GDK_KEY_Page_Down &&
-           event->keyval != GDK_KEY_KP_3;
+  GdkDisplay *display;
+  GdkKeymap *keymap;
+  guint keyval;
+  GdkModifierType consumed;
+  GdkModifierType state_mask = GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK;
 
-  if ((event->state & GDK_MODIFIER_MASK) == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
-    return event->keyval != GDK_KEY_N &&
-           event->keyval != GDK_KEY_T &&
-           event->keyval != GDK_KEY_Page_Up &&
-           event->keyval != GDK_KEY_KP_9 &&
-           event->keyval != GDK_KEY_Page_Down &&
-           event->keyval != GDK_KEY_KP_3;
+  display = gtk_widget_get_display (GTK_WIDGET (window));
+  keymap = gdk_keymap_get_for_display (display);
 
-  if ((event->state & GDK_MODIFIER_MASK) == GDK_MOD1_MASK)
-    return event->keyval != GDK_KEY_Left &&
-           event->keyval != GDK_KEY_Right;
+  gdk_keymap_translate_keyboard_state (keymap,
+                                       event->hardware_keycode,
+                                       event->state,
+                                       event->group,
+                                       &keyval,
+                                       NULL,
+                                       NULL,
+                                       &consumed);
+  state_mask &= ~consumed;
+
+  /* Websites are allowed to override most Epiphany accelerators, but not
+   * window or tab management accelerators. */
+  if ((event->state & state_mask) == GDK_CONTROL_MASK)
+    return keyval != GDK_KEY_n &&         /* New Window */
+           keyval != GDK_KEY_q &&         /* Quit */
+           keyval != GDK_KEY_T &&         /* Reopen Closed Tab */
+           keyval != GDK_KEY_t &&         /* New Tab */
+           keyval != GDK_KEY_w &&         /* Close Tab */
+           keyval != GDK_KEY_Page_Up &&   /* Previous Tab */
+           keyval != GDK_KEY_KP_9 &&      /* Previous Tab */
+           keyval != GDK_KEY_Page_Down && /* Next Tab */
+           keyval != GDK_KEY_KP_3;        /* Next Tab */
+
+  if ((event->state & state_mask) == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
+    return keyval != GDK_KEY_Page_Up &&   /* Move Tab Left */
+           keyval != GDK_KEY_KP_9 &&      /* Move Tab Left */
+           keyval != GDK_KEY_Page_Down && /* Move Tab Right */
+           keyval != GDK_KEY_KP_3;        /* Move Tab Right */
+
+  if ((event->state & state_mask) == GDK_MOD1_MASK)
+    return keyval != GDK_KEY_Left &&      /* Back */
+           keyval != GDK_KEY_Right;       /* Forward */
 
   return TRUE;
 }
@@ -841,7 +862,7 @@ ephy_window_key_press_event (GtkWidget   *widget,
    * short-circuit the event propagation if it's a special keybinding
    * that is reserved for Epiphany not allowed to be seen by webpages.
    */
-  if (!should_web_view_receive_key_press_event (event) ||
+  if (!ephy_window_should_view_receive_key_press_event (EPHY_WINDOW (widget), event) ||
       !gtk_window_propagate_key_event (GTK_WINDOW (widget), event)) {
     if (!ephy_window_bound_accels (widget, event))
       gtk_window_activate_key (GTK_WINDOW (widget), event);
