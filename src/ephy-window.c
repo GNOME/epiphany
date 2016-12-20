@@ -102,7 +102,7 @@ const struct {
   { "win.select-all", { "<Primary>A", NULL } },
 
   { "win.send-to", { "Send", NULL } },
-  { "win.location", { "<Primary>L", "F6", "Go", "OpenURL", NULL } },
+  { "win.location", { "<Primary>L", "<alt>D", "F6", "Go", "OpenURL", NULL } },
   { "win.home", { "<alt>Home", NULL } },
 
   /* Toggle actions */
