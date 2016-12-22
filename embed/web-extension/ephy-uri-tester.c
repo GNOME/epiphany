@@ -606,7 +606,7 @@ ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
   }
 
 #ifdef HAVE_LIBHTTPSEVERYWHERE
-  if (flags & EPHY_URI_TEST_HTTPS_EVERYWHERE)
+  if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) && tester->https_everywhere_context != NULL)
     return https_everywhere_context_rewrite (tester->https_everywhere_context, request_uri);
 #endif
 
@@ -767,6 +767,20 @@ ephy_uri_tester_set_property (GObject      *object,
 }
 
 static void
+ephy_uri_tester_dispose (GObject *object)
+{
+  EphyUriTester *tester = EPHY_URI_TESTER (object);
+
+  LOG ("EphyUriTester disposing %p", object);
+
+#ifdef HAVE_LIBHTTPSEVERYWHERE
+  g_clear_object (&tester->https_everywhere_context);
+#endif
+
+  G_OBJECT_CLASS (ephy_uri_tester_parent_class)->dispose (object);
+}
+
+static void
 ephy_uri_tester_finalize (GObject *object)
 {
   EphyUriTester *tester = EPHY_URI_TESTER (object);
@@ -793,10 +807,6 @@ ephy_uri_tester_finalize (GObject *object)
   g_regex_unref (tester->regex_subdocument);
   g_regex_unref (tester->regex_frame_add);
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
-  g_clear_object (&tester->https_everywhere_context);
-#endif
-
   G_OBJECT_CLASS (ephy_uri_tester_parent_class)->finalize (object);
 }
 
@@ -806,6 +816,7 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->set_property = ephy_uri_tester_set_property;
+  object_class->dispose = ephy_uri_tester_dispose;
   object_class->finalize = ephy_uri_tester_finalize;
 
   obj_properties[PROP_ADBLOCK_DATA_DIR] =
