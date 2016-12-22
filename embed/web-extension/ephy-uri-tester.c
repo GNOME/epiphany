@@ -606,7 +606,7 @@ ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
   }
 
 #ifdef HAVE_LIBHTTPSEVERYWHERE
-  if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) && https_everywhere_context_get_initialized (tester->https_everywhere_context))
+  if (flags & EPHY_URI_TEST_HTTPS_EVERYWHERE)
     return https_everywhere_context_rewrite (tester->https_everywhere_context, request_uri);
 #endif
 
