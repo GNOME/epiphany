@@ -800,7 +800,7 @@ ephy_embed_shell_update_adblock_filter_file (EphyEmbedShell *shell)
 {
   GFile *filter_file;
 
-  filter_file = ephy_uri_tester_get_adblock_filer_file (ephy_embed_shell_ensure_adblock_data_dir (shell));
+  filter_file = ephy_uri_tester_get_adblock_filter_file (ephy_embed_shell_ensure_adblock_data_dir (shell));
 
   if (!adblock_filter_file_is_valid (filter_file))
     ephy_embed_shell_retrieve_filter_file (shell, filter_file);

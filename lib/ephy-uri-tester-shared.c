@@ -22,7 +22,7 @@
 #include "ephy-uri-tester-shared.h"
 
 GFile *
-ephy_uri_tester_get_adblock_filer_file (const char *adblock_data_dir)
+ephy_uri_tester_get_adblock_filter_file (const char *adblock_data_dir)
 {
   char *filter_filename, *filter_path;
   GFile *filter_file;

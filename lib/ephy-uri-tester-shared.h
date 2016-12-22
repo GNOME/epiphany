@@ -26,6 +26,6 @@ G_BEGIN_DECLS
 
 #define ADBLOCK_FILTER_URL "https://easylist-downloads.adblockplus.org/easylist.txt"
 
-GFile *ephy_uri_tester_get_adblock_filer_file (const char *adblock_data_dir);
+GFile *ephy_uri_tester_get_adblock_filter_file (const char *adblock_data_dir);
 
 G_END_DECLS

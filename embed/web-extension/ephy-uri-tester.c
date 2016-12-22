@@ -667,7 +667,7 @@ ephy_uri_tester_load_sync (GTask         *task,
                                  tester);
 #endif
 
-  filter_file = ephy_uri_tester_get_adblock_filer_file (tester->adblock_data_dir);
+  filter_file = ephy_uri_tester_get_adblock_filter_file (tester->adblock_data_dir);
   if (!g_file_query_exists (filter_file, NULL)) {
     GError *error = NULL;
 
