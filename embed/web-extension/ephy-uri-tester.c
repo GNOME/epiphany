@@ -537,7 +537,7 @@ file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *te
   line = g_data_input_stream_read_line_finish (stream, result, NULL, &error);
   if (!line) {
     if (error) {
-      LOG ("Error parsing file: %s\n", error->message);
+      g_warning ("Error parsing file: %s\n", error->message);
       g_error_free (error);
     }
 
@@ -564,7 +564,7 @@ file_read_cb (GFile *file, GAsyncResult *result, EphyUriTester *tester)
     char *path;
 
     path = g_file_get_path (file);
-    LOG ("Error opening file %s for parsing: %s\n", path, error->message);
+    g_warning ("Error opening file %s for parsing: %s\n", path, error->message);
     g_free (path);
     g_error_free (error);
 
