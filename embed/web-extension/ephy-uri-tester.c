@@ -807,6 +807,8 @@ ephy_uri_tester_finalize (GObject *object)
   g_regex_unref (tester->regex_subdocument);
   g_regex_unref (tester->regex_frame_add);
 
+  g_main_loop_unref (tester->load_loop);
+
   G_OBJECT_CLASS (ephy_uri_tester_parent_class)->finalize (object);
 }
 
