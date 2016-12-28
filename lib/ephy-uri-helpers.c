@@ -282,9 +282,12 @@ ephy_uri_decode (const char *uri_string)
   }
   g_mutex_unlock (&idna_creation_mutex);
 
-  /* Process any punycode in the host portion of the URI. */
   uri = soup_uri_new (uri_string);
-  if (uri != NULL && uri->host != NULL) {
+  if (uri == NULL)
+    return g_strdup (uri_string);
+
+  /* Process any punycode in the host portion of the URI. */
+  if (uri->host != NULL) {
     /* +1 so there is space for the trailing NUL with the longest-possible
      * domain name. +2 because ICU has this rather terrible behavior of
      * sometimes returning a result that's not NUL-terminated if the buffer
@@ -305,7 +308,7 @@ ephy_uri_decode (const char *uri_string)
   }
 
   /* Note: this also strips passwords from the display URI. */
-  percent_encoded_uri = uri != NULL ? soup_uri_to_string (uri, FALSE) : g_strdup (uri_string);
+  percent_encoded_uri = soup_uri_to_string (uri, FALSE);
   soup_uri_free (uri);
 
   /* Now, decode any percent-encoded characters in the URI. If there are null
