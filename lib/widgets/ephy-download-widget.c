@@ -64,11 +64,11 @@ get_destination_basename_from_download (EphyDownload *ephy_download)
   if (!dest)
     return NULL;
 
-  basename = g_filename_display_basename (dest);
-  decoded = ephy_uri_decode (basename);
-  g_free (basename);
+  decoded = ephy_uri_decode (dest);
+  basename = g_filename_display_basename (decoded);
+  g_free (decoded);
 
-  return decoded;
+  return basename;
 }
 
 /* modified from telepathy-account-widgets/tpaw-time.c */
