@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2013 Bastien Nocera <hadess@hadess.net>
+ *  Copyright © 2016 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +33,7 @@ G_BEGIN_DECLS
 char *ephy_remove_tracking_from_uri (const char *uri);
 char *ephy_uri_safe_unescape (const char *uri);
 char *ephy_uri_normalize (const char *uri);
+char *ephy_uri_to_security_origin (const char *uri);
 
 G_END_DECLS
 
