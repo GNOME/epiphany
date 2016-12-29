@@ -62,34 +62,6 @@ ephy_permissions_manager_class_init (EphyPermissionsManagerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ephy_permissions_manager_dispose;
-
-  /**
-   * EphyPermissionsManager::setting-changed:
-   * @permissions_manager: the #EphyPermissionsManager that received the signal
-   * @host: the hostname for which the setting changed
-   * @key: the name of the key that changed
-   *
-   * The ::setting-changed signal is emitted when the a setting changes for
-   * one of the hosts managed by the manager. It can be used to represent the
-   * change on the UI for instance.
-   **/
-  g_signal_new ("setting-changed",
-                EPHY_TYPE_PERMISSIONS_MANAGER,
-                G_SIGNAL_RUN_FIRST,
-                0, NULL, NULL, NULL,
-                G_TYPE_NONE,
-                2,
-                G_TYPE_STRING,
-                G_TYPE_STRING);
-}
-
-static void
-setting_changed_cb (GSettings              *settings,
-                    char                   *key,
-                    EphyPermissionsManager *manager)
-{
-  const char *host = g_hash_table_lookup (manager->settings_mapping, settings);
-  g_signal_emit_by_name (manager, "setting-changed", host, key);
 }
 
 static GSettings *
@@ -123,9 +95,6 @@ ephy_permissions_manager_get_settings_for_address (EphyPermissionsManager *manag
 
   g_hash_table_insert (manager->hosts_mapping, host, settings);
   g_hash_table_insert (manager->settings_mapping, settings, host);
-
-  g_signal_connect (settings, "changed",
-                    G_CALLBACK (setting_changed_cb), manager);
 
   return settings;
 }
