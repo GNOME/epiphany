@@ -1913,6 +1913,7 @@ ephy_web_view_get_error_page (EphyWebView *view)
 
 static void
 format_network_error_page (const char  *uri,
+                           const char  *origin,
                            const char  *reason,
                            char       **page_title,
                            char       **message_title,
@@ -1923,7 +1924,7 @@ format_network_error_page (const char  *uri,
                            const char **button_accesskey,
                            const char **icon_name)
 {
-  char *formatted_uri;
+  char *formatted_origin;
   char *formatted_reason;
   char *first_paragraph;
   const char *second_paragraph;
@@ -1934,11 +1935,11 @@ format_network_error_page (const char  *uri,
   /* Message title when a site cannot be loaded due to a network error. */
   *message_title = g_strdup (_("Unable to display this website"));
 
-  formatted_uri = g_strdup_printf ("<strong>%s</strong>", uri);
+  formatted_origin = g_strdup_printf ("<strong>%s</strong>", origin);
   /* Error details when a site cannot be loaded due to a network error. */
   first_paragraph = g_strdup_printf (_("The site at %s seems to be "
                                        "unavailable."),
-                                     formatted_uri);
+                                     formatted_origin);
   /* Further error details when a site cannot be loaded due to a network error. */
   second_paragraph = _("It may be temporarily inaccessible or moved to a new "
                        "address. You may wish to verify that your internet "
@@ -1962,7 +1963,7 @@ format_network_error_page (const char  *uri,
 
   *icon_name = "network-error-symbolic.png";
 
-  g_free (formatted_uri);
+  g_free (formatted_origin);
   g_free (formatted_reason);
   g_free (first_paragraph);
 }
@@ -1990,7 +1991,7 @@ format_crash_error_page (const char  *uri,
 
   formatted_uri = g_strdup_printf ("<strong>%s</strong>", uri);
   /* Error details when a site cannot be loaded due to a page crash error. */
-  first_paragraph = g_strdup_printf (_("The site at %s may have caused Web to "
+  first_paragraph = g_strdup_printf (_("The page %s may have caused Web to "
                                        "close unexpectedly."),
                                      formatted_uri);
 
@@ -2057,7 +2058,7 @@ format_process_crash_error_page (const char  *uri,
 
 static void
 format_tls_error_page (EphyWebView *view,
-                       const char  *hostname,
+                       const char  *origin,
                        char       **page_title,
                        char       **message_title,
                        char       **message_body,
@@ -2070,7 +2071,7 @@ format_tls_error_page (EphyWebView *view,
                        const char **hidden_button_accesskey,
                        const char **icon_name)
 {
-  char *formatted_hostname;
+  char *formatted_origin;
   char *first_paragraph;
 
   /* Page title when a site is not loaded due to an invalid TLS certificate. */
@@ -2079,13 +2080,13 @@ format_tls_error_page (EphyWebView *view,
   /* Message title when a site is not loaded due to an invalid TLS certificate. */
   *message_title = g_strdup (_("This Connection is Not Secure"));
 
-  formatted_hostname = g_strdup_printf ("<strong>%s</strong>", hostname);
+  formatted_origin = g_strdup_printf ("<strong>%s</strong>", origin);
   /* Error details when a site is not loaded due to an invalid TLS certificate. */
   first_paragraph = g_strdup_printf (_("This does not look like the real %s. "
                                        "Attackers might be trying to steal or "
                                        "alter information going to or from "
                                        "this site."),
-                                     formatted_hostname);
+                                     formatted_origin);
 
   *message_body = g_strdup_printf ("<p>%s</p>", first_paragraph);
   *message_details = detailed_message_from_tls_errors (view->tls_errors);
@@ -2105,7 +2106,7 @@ format_tls_error_page (EphyWebView *view,
 
   *icon_name = "channel-insecure-symbolic.png";
 
-  g_free (formatted_hostname);
+  g_free (formatted_origin);
   g_free (first_paragraph);
 }
 
@@ -2127,7 +2128,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
 {
   GBytes *html_file;
   GString *html = g_string_new ("");
-  char *hostname = NULL;
+  char *origin = NULL;
   char *lang = NULL;
   char *page_title = NULL;
   char *msg_title = NULL;
@@ -2155,9 +2156,9 @@ ephy_web_view_load_error_page (EphyWebView         *view,
 
   reason = error ? error->message : _("None specified");
 
-  hostname = ephy_string_get_host_name (uri);
-  if (hostname == NULL)
-    hostname = g_strdup (uri);
+  origin = ephy_uri_to_security_origin (uri);
+  if (origin == NULL)
+    origin = g_strdup (uri);
 
   lang = g_strdup (pango_language_to_string (gtk_get_default_language ()));
   g_strdelimit (lang, "_-@", '\0');
@@ -2167,6 +2168,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
   switch (page) {
     case EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR:
       format_network_error_page (uri,
+                                 origin,
                                  reason,
                                  &page_title,
                                  &msg_title,
@@ -2199,7 +2201,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
       break;
     case EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE:
       format_tls_error_page (view,
-                             hostname,
+                             origin,
                              &page_title,
                              &msg_title,
                              &msg_body,
@@ -2243,7 +2245,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
 #pragma GCC diagnostic pop
 
   g_bytes_unref (html_file);
-  g_free (hostname);
+  g_free (origin);
   g_free (lang);
   g_free (page_title);
   g_free (msg_title);
