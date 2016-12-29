@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2013 Bastien Nocera <hadess@hadess.net>
+ *  Copyright © 2016 Igalia S.L.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -280,4 +281,26 @@ ephy_uri_normalize (const char *uri_string)
   return encoded_uri;
 }
 
-/* vim: set sw=2 ts=2 sts=2 et: */
+char *
+ephy_uri_to_security_origin (const char *uri_string)
+{
+  SoupURI *uri;
+  char *result;
+
+  /* Convert to URI containing only protocol, host, and port. */
+  uri = soup_uri_new (uri_string);
+  if (uri == NULL)
+    return NULL;
+
+  if (uri->scheme == SOUP_URI_SCHEME_FILE ||
+      uri->scheme == SOUP_URI_SCHEME_DATA)
+    return NULL;
+
+  if (soup_uri_uses_default_port (uri))
+    result = g_strdup_printf ("%s://%s", uri->scheme, uri->host);
+  else
+    result = g_strdup_printf ("%s://%s:%u", uri->scheme, uri->host, uri->port);
+  soup_uri_free (uri);
+
+  return result;
+}
