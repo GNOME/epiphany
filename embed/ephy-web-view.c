@@ -733,10 +733,10 @@ form_auth_data_save_confirmation_response (GtkInfoBar          *info_bar,
     EphyEmbedShell *shell = ephy_embed_shell_get_default ();
     EphyPermissionsManager *manager = ephy_embed_shell_get_permissions_manager (shell);
 
-    ephy_permissions_manager_set_permission_for_address (manager,
-                                                         EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
-                                                         data->origin,
-                                                         EPHY_PERMISSION_DENY);
+    ephy_permissions_manager_set_permission (manager,
+                                             EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
+                                             data->origin,
+                                             EPHY_PERMISSION_DENY);
   }
 
   g_object_weak_unref (G_OBJECT (info_bar), (GWeakNotify)form_auth_save_confirmation_info_bar_destroyed_cb, data);
@@ -1370,11 +1370,11 @@ decide_on_permission_request (GtkWidget               *info_bar,
     shell = ephy_embed_shell_get_default ();
     permissions_manager = ephy_embed_shell_get_permissions_manager (shell);
 
-    ephy_permissions_manager_set_permission_for_address (permissions_manager,
-                                                         permission_type,
-                                                         data->origin,
-                                                         response == GTK_RESPONSE_YES ? EPHY_PERMISSION_ALLOW
-                                                                                      : EPHY_PERMISSION_DENY);
+    ephy_permissions_manager_set_permission (permissions_manager,
+                                             permission_type,
+                                             data->origin,
+                                             response == GTK_RESPONSE_YES ? EPHY_PERMISSION_ALLOW
+                                                                          : EPHY_PERMISSION_DENY);
   }
 
   g_object_weak_unref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
@@ -1480,6 +1480,7 @@ permission_request_cb (WebKitWebView           *web_view,
                        WebKitPermissionRequest *decision)
 {
   const char *address;
+  char *origin;
   EphyEmbedShell *shell;
   EphyPermissionsManager *permissions_manager;
   EphyPermission permission;
@@ -1506,10 +1507,15 @@ permission_request_cb (WebKitWebView           *web_view,
   }
 
   address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
+  origin = ephy_uri_to_security_origin (address);
+  if (origin == NULL)
+    return FALSE;
+
   permissions_manager = ephy_embed_shell_get_permissions_manager (ephy_embed_shell_get_default ());
-  permission = ephy_permissions_manager_get_permission_for_address (permissions_manager,
-                                                                    permission_type,
-                                                                    address);
+  permission = ephy_permissions_manager_get_permission (permissions_manager,
+                                                        permission_type,
+                                                        origin);
+  g_free (origin);
 
   switch (permission) {
   case EPHY_PERMISSION_ALLOW:

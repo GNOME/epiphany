@@ -710,6 +710,20 @@ migrate_initial_state (void)
 }
 
 static void
+migrate_permissions (void)
+{
+  char *filename;
+  GFile *file;
+
+  filename = g_build_filename (ephy_dot_dir (), "hosts.ini", NULL);
+  file = g_file_new_for_path (filename);
+  g_free (filename);
+
+  g_file_delete (file, NULL, NULL);
+  g_object_unref (file);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -736,6 +750,7 @@ const EphyProfileMigrator migrators[] = {
   migrate_bookmarks,
   migrate_adblock_filters,
   migrate_initial_state,
+  migrate_permissions
 };
 
 static gboolean

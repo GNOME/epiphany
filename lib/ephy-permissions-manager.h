@@ -43,13 +43,13 @@ typedef enum {
   EPHY_PERMISSION_TYPE_ACCESS_WEBCAM
 } EphyPermissionType;
 
-EphyPermissionsManager *ephy_permissions_manager_new                        (void);
+EphyPermissionsManager *ephy_permissions_manager_new            (void);
 
-EphyPermission          ephy_permissions_manager_get_permission_for_address (EphyPermissionsManager *manager,
-                                                                             EphyPermissionType      type,
-                                                                             const char             *address);
-void                    ephy_permissions_manager_set_permission_for_address (EphyPermissionsManager *manager,
-                                                                             EphyPermissionType      type,
-                                                                             const char             *address,
-                                                                             EphyPermission          permission);
+EphyPermission          ephy_permissions_manager_get_permission (EphyPermissionsManager *manager,
+                                                                 EphyPermissionType      type,
+                                                                 const char             *origin);
+void                    ephy_permissions_manager_set_permission (EphyPermissionsManager *manager,
+                                                                 EphyPermissionType      type,
+                                                                 const char             *origin,
+                                                                 EphyPermission          permission);
 G_END_DECLS

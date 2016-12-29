@@ -378,16 +378,20 @@ should_store_cb (const char *username,
   SoupURI *uri;
   char *uri_string;
   char *password_field_value = NULL;
+  char *origin = NULL;
 
   uri = ephy_embed_form_auth_get_uri (form_auth);
   uri_string = soup_uri_to_string (uri, FALSE);
-  if (!uri_string)
+  if (uri_string == NULL)
     return;
+  origin = ephy_uri_to_security_origin (uri_string);
+  if (origin == NULL)
+    goto out;
 
   web_extension = ephy_web_extension_get ();
-  permission = ephy_permissions_manager_get_permission_for_address (web_extension->permissions_manager,
-                                                                    EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
-                                                                    uri_string);
+  permission = ephy_permissions_manager_get_permission (web_extension->permissions_manager,
+                                                        EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
+                                                        origin);
 
   if (permission == EPHY_PERMISSION_DENY) {
     LOG ("User/password storage permission previously denied. Not asking about storing.");
@@ -429,6 +433,8 @@ should_store_cb (const char *username,
 out:
   if (password_field_value)
     g_free (password_field_value);
+  if (origin != NULL)
+    g_free (origin);
   g_free (uri_string);
 }
 

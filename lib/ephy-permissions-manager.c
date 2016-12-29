@@ -27,12 +27,14 @@
 
 #define G_SETTINGS_ENABLE_BACKEND 1
 #include <gio/gsettingsbackend.h>
+#include <string.h>
+#include <webkit2/webkit2.h>
 
 struct _EphyPermissionsManager
 {
   GObject parent_instance;
 
-  GHashTable *hosts_mapping;
+  GHashTable *origins_mapping;
   GHashTable *settings_mapping;
 };
 
@@ -41,7 +43,7 @@ G_DEFINE_TYPE (EphyPermissionsManager, ephy_permissions_manager, G_TYPE_OBJECT)
 static void
 ephy_permissions_manager_init (EphyPermissionsManager *manager)
 {
-  manager->hosts_mapping = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
+  manager->origins_mapping = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
   manager->settings_mapping = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
 }
 
@@ -50,7 +52,7 @@ ephy_permissions_manager_dispose (GObject *object)
 {
   EphyPermissionsManager *manager = EPHY_PERMISSIONS_MANAGER (object);
 
-  g_clear_pointer (&manager->hosts_mapping, g_hash_table_destroy);
+  g_clear_pointer (&manager->origins_mapping, g_hash_table_destroy);
   g_clear_pointer (&manager->settings_mapping, g_hash_table_destroy);
 
   G_OBJECT_CLASS (ephy_permissions_manager_parent_class)->dispose (object);
@@ -65,36 +67,48 @@ ephy_permissions_manager_class_init (EphyPermissionsManagerClass *klass)
 }
 
 static GSettings *
-ephy_permissions_manager_get_settings_for_address (EphyPermissionsManager *manager,
-                                                   const char             *address)
+ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manager,
+                                                  const char             *origin)
 {
-  char *host = ephy_string_get_host_name (address);
-  char *key_file = NULL;
-  char *host_path = NULL;
-  GSettingsBackend* backend = NULL;
+  char *key_file;
+  char *origin_path;
+  char *trimmed_protocol;
+  GSettingsBackend* backend;
   GSettings *settings;
+  WebKitSecurityOrigin *security_origin;
+  char *pos;
 
-  g_assert (host != NULL);
+  g_assert (origin != NULL);
 
-  settings = g_hash_table_lookup (manager->hosts_mapping, host);
-  if (settings) {
-    g_free (host);
+  settings = g_hash_table_lookup (manager->origins_mapping, origin);
+  if (settings)
     return settings;
-  }
 
-  key_file = g_strdup_printf ("%s" G_DIR_SEPARATOR_S "hosts.ini", ephy_dot_dir ());
-  backend = g_keyfile_settings_backend_new (key_file, "/", "Hosts");
+  key_file = g_build_filename (ephy_dot_dir (), "permissions.ini", NULL);
+  backend = g_keyfile_settings_backend_new (key_file, "/", NULL);
   g_free (key_file);
 
-  host_path = g_strdup_printf ("/org/gnome/epiphany/hosts/%s/", host);
+  /* Cannot contain consecutive slashes in GSettings path... */
+  security_origin = webkit_security_origin_new_for_uri (origin);
+  trimmed_protocol = g_strdup (webkit_security_origin_get_protocol (security_origin));
+  pos = strchr (trimmed_protocol, '/');
+  if (pos != NULL)
+    *pos = '\0';
 
-  settings = g_settings_new_with_backend_and_path ("org.gnome.Epiphany.host", backend, host_path);
+  origin_path = g_strdup_printf ("/org/gnome/epiphany/permissions/%s/%s/%u/",
+                                 trimmed_protocol,
+                                 webkit_security_origin_get_host (security_origin),
+                                 webkit_security_origin_get_port (security_origin));
 
-  g_free (host_path);
+  settings = g_settings_new_with_backend_and_path ("org.gnome.Epiphany.Permissions", backend, origin_path);
+  g_free (trimmed_protocol);
+  g_free (origin_path);
   g_object_unref (backend);
+  webkit_security_origin_unref (security_origin);
 
-  g_hash_table_insert (manager->hosts_mapping, host, settings);
-  g_hash_table_insert (manager->settings_mapping, settings, host);
+  /* Note that settings is owned only by the first hash table! */
+  g_hash_table_insert (manager->origins_mapping, g_strdup (origin), settings);
+  g_hash_table_insert (manager->settings_mapping, settings, g_strdup (origin));
 
   return settings;
 }
@@ -125,20 +139,20 @@ permission_type_to_string (EphyPermissionType type)
 }
 
 EphyPermission
-ephy_permissions_manager_get_permission_for_address (EphyPermissionsManager *manager,
-                                                     EphyPermissionType      type,
-                                                     const char             *address)
+ephy_permissions_manager_get_permission (EphyPermissionsManager *manager,
+                                         EphyPermissionType      type,
+                                         const char             *origin)
 {
-  GSettings *settings = ephy_permissions_manager_get_settings_for_address (manager, address);
+  GSettings *settings = ephy_permissions_manager_get_settings_for_origin (manager, origin);
   return g_settings_get_enum (settings, permission_type_to_string (type));
 }
 
 void
-ephy_permissions_manager_set_permission_for_address (EphyPermissionsManager *manager,
-                                                     EphyPermissionType      type,
-                                                     const char             *address,
-                                                     EphyPermission          permission)
+ephy_permissions_manager_set_permission (EphyPermissionsManager *manager,
+                                         EphyPermissionType      type,
+                                         const char             *origin,
+                                         EphyPermission          permission)
 {
-  GSettings *settings = ephy_permissions_manager_get_settings_for_address (manager, address);
+  GSettings *settings = ephy_permissions_manager_get_settings_for_origin (manager, origin);
   g_settings_set_enum (settings, permission_type_to_string (type), permission);
 }

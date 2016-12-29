@@ -10,7 +10,7 @@ $(desktop_DATA): $(desktop_in_files)
 gsettings_ENUM_NAMESPACE = org.gnome.Epiphany
 gsettings_ENUM_FILES = $(top_srcdir)/lib/ephy-prefs.h
 
-gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml org.gnome.epiphany.host.gschema.xml
+gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml org.gnome.epiphany.permissions.gschema.xml
 @GSETTINGS_RULES@
 
 appstream_in_files = org.gnome.Epiphany.appdata.xml.in
