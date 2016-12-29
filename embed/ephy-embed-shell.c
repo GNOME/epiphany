@@ -135,7 +135,7 @@ web_extension_form_auth_data_message_received_cb (WebKitUserContentManager *mana
 {
   guint request_id;
   guint64 page_id;
-  const char *hostname;
+  const char *origin;
   const char *username;
   GVariant *variant;
   gchar *message_str;
@@ -144,9 +144,9 @@ web_extension_form_auth_data_message_received_cb (WebKitUserContentManager *mana
   variant = g_variant_parse (G_VARIANT_TYPE ("(utss)"), message_str, NULL, NULL, NULL);
   g_free (message_str);
 
-  g_variant_get (variant, "(ut&s&s)", &request_id, &page_id, &hostname, &username);
+  g_variant_get (variant, "(ut&s&s)", &request_id, &page_id, &origin, &username);
   g_signal_emit (shell, signals[FORM_AUTH_DATA_SAVE_REQUESTED], 0,
-                 request_id, page_id, hostname, username);
+                 request_id, page_id, origin, username);
   g_variant_unref (variant);
 }
 

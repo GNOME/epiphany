@@ -311,18 +311,27 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
   guint request_id;
   SoupURI *uri;
   WebKitDOMNode *username_node;
-  WebKitDOMDOMWindow *dom_window;
+  WebKitDOMDOMWindow *dom_window = NULL;
   GVariant *variant;
-  gchar *message;
+  char *message = NULL;
+  char *uri_string = NULL;
+  char *origin = NULL;
 
   dom_window = webkit_dom_document_get_default_view (ephy_embed_form_auth_get_owner_document (form_auth));
-  if (!dom_window) {
-    g_object_unref (form_auth);
-    return;
-  }
+  if (dom_window == NULL)
+    goto out;
+
+  uri = ephy_embed_form_auth_get_uri (form_auth);
+  if (uri == NULL)
+    goto out;
+
+  uri_string = soup_uri_to_string (uri, FALSE);
+  origin = ephy_uri_to_security_origin (uri_string);
+  if (origin == NULL)
+    goto out;
 
   request_id = form_auth_data_save_request_new_id ();
-  uri = ephy_embed_form_auth_get_uri (form_auth);
+
   username_node = ephy_embed_form_auth_get_username_node (form_auth);
   if (username_node)
     g_object_get (username_node, "value", &username_field_value, NULL);
@@ -330,7 +339,7 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
   variant = g_variant_new ("(utss)",
                            request_id,
                            ephy_embed_form_auth_get_page_id (form_auth),
-                           uri ? uri->host : "",
+                           origin,
                            username_field_value ? username_field_value : "");
   g_free (username_field_value);
 
@@ -345,9 +354,17 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
     g_warning ("Error sending formAuthData message");
   }
 
-  g_object_unref (dom_window);
-  g_free (message);
-  g_object_unref (form_auth);
+out:
+  if (dom_window != NULL)
+    g_object_unref (dom_window);
+  if (form_auth != NULL)
+    g_object_unref (form_auth);
+  if (message != NULL)
+    g_free (message);
+  if (uri_string != NULL)
+    g_free (uri_string);
+  if (origin != NULL)
+    g_free (origin);
 }
 
 static void

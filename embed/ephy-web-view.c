@@ -514,7 +514,7 @@ track_info_bar (GtkWidget  *new_info_bar,
 
 static GtkWidget *
 ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view,
-                                                           const char  *hostname,
+                                                           const char  *origin,
                                                            const char  *username)
 {
   GtkWidget *info_bar;
@@ -538,8 +538,7 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
   /* Translators: The %s the hostname where this is happening.
    * Example: mail.google.com.
    */
-  message = g_markup_printf_escaped (_("Do you want to save your password for “%s”?"),
-                                     hostname);
+  message = g_markup_printf_escaped (_("Do you want to save your password for “%s”?"), origin);
   gtk_label_set_markup (GTK_LABEL (label), message);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   g_free (message);
@@ -683,26 +682,26 @@ icon_changed_cb (EphyWebView *view,
 typedef struct {
   EphyWebView *web_view;
   guint request_id;
-  char *host;
+  char *origin;
 } FormAuthRequestData;
 
 static FormAuthRequestData *
 form_auth_request_data_new (EphyWebView *web_view,
                             guint        request_id,
-                            const char  *host)
+                            const char  *origin)
 {
   FormAuthRequestData *data;
   data = g_slice_new (FormAuthRequestData);
   data->web_view = web_view;
   data->request_id = request_id;
-  data->host = g_strdup (host);
+  data->origin = g_strdup (origin);
   return data;
 }
 
 static void
 form_auth_request_data_free (FormAuthRequestData *data)
 {
-  g_free (data->host);
+  g_free (data->origin);
   g_slice_free (FormAuthRequestData, data);
 }
 
@@ -735,7 +734,7 @@ form_auth_data_save_confirmation_response (GtkInfoBar          *info_bar,
 
     ephy_hosts_manager_set_permission_for_address (manager,
                                                    EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD,
-                                                   data->host,
+                                                   data->origin,
                                                    EPHY_HOST_PERMISSION_DENY);
   }
 
@@ -748,7 +747,7 @@ static void
 form_auth_data_save_requested (EphyEmbedShell *shell,
                                guint           request_id,
                                guint64         page_id,
-                               const char     *hostname,
+                               const char     *origin,
                                const char     *username,
                                EphyWebView    *web_view)
 {
@@ -765,8 +764,8 @@ form_auth_data_save_requested (EphyEmbedShell *shell,
     return;
   }
 
-  info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, hostname, username);
-  data = form_auth_request_data_new (web_view, request_id, hostname);
+  info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, origin, username);
+  data = form_auth_request_data_new (web_view, request_id, origin);
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (form_auth_data_save_confirmation_response),
                     data);
@@ -1298,20 +1297,20 @@ decide_policy_cb (WebKitWebView           *web_view,
 typedef struct {
   EphyWebView *web_view;
   WebKitPermissionRequest *request;
-  char *host;
+  char *origin;
 } PermissionRequestData;
 
 static PermissionRequestData *
 permission_request_data_new (EphyWebView             *web_view,
                              WebKitPermissionRequest *request,
-                             const char              *host)
+                             const char              *origin)
 {
   PermissionRequestData *data;
   data = g_new (PermissionRequestData, 1);
   data->web_view = web_view;
   /* Ref the decision to keep it alive while we decide */
   data->request = g_object_ref (request);
-  data->host = g_strdup (host);
+  data->origin = g_strdup (origin);
   return data;
 }
 
@@ -1319,7 +1318,7 @@ static void
 permission_request_data_free (PermissionRequestData *data)
 {
   g_object_unref (data->request);
-  g_free (data->host);
+  g_free (data->origin);
   g_slice_free (PermissionRequestData, data);
 }
 
@@ -1372,7 +1371,7 @@ decide_on_permission_request (GtkWidget               *info_bar,
 
     ephy_hosts_manager_set_permission_for_address (hosts_manager,
                                                    permission_type,
-                                                   data->host,
+                                                   data->origin,
                                                    response == GTK_RESPONSE_YES ? EPHY_HOST_PERMISSION_ALLOW
                                                                                 : EPHY_HOST_PERMISSION_DENY);
   }
@@ -1393,7 +1392,7 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   GtkWidget *content_area;
   GtkWidget *label;
   char *message;
-  char *host;
+  char *origin;
 
   info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
                                             _("Allow"), GTK_RESPONSE_YES,
@@ -1404,28 +1403,30 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
                                   GTK_ORIENTATION_HORIZONTAL);
 
   /* Label */
-  host = ephy_string_get_host_name (webkit_web_view_get_uri (web_view));
+  origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
+  if (origin == NULL)
+    return;
 
   switch (permission_type) {
   case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
     /* Translators: Notification policy for a specific site. */
     message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to show desktop notifications."),
-                                       host);
+                                       origin);
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
     /* Translators: Geolocation policy for a specific site. */
     message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
-                                       host);
+                                       origin);
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
     /* Translators: Microphone policy for a specific site. */
     message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your microphone."),
-                                       host);
+                                       origin);
     break;
   case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
     /* Translators: Webcam policy for a specific site. */
     message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your webcam."),
-                                       host);
+                                       origin);
     break;
   case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
   default:
@@ -1443,12 +1444,13 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
 
   gtk_widget_show_all (info_bar);
 
-  data = permission_request_data_new (EPHY_WEB_VIEW (web_view), decision, host);
+  data = permission_request_data_new (EPHY_WEB_VIEW (web_view), decision, origin);
+
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (decide_on_permission_request),
                     data);
   g_object_weak_ref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
-  g_free (host);
+  g_free (origin);
 
   switch (permission_type) {
   case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
