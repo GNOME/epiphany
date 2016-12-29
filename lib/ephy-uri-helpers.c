@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2013 Bastien Nocera <hadess@hadess.net>
+ *  Copyright © 2016 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -25,6 +26,7 @@
 #include <libsoup/soup.h>
 #include <string.h>
 #include <unicode/uidna.h>
+#include <webkit2/webkit2.h>
 
 /**
  * SECTION:ephy-uri-helpers
@@ -340,4 +342,16 @@ ephy_uri_normalize (const char *uri_string)
   return encoded_uri;
 }
 
-/* vim: set sw=2 ts=2 sts=2 et: */
+char *
+ephy_uri_to_security_origin (const char *uri_string)
+{
+  WebKitSecurityOrigin *origin;
+  const char *result;
+
+  /* Convert to URI containing only protocol, host, and port. */
+  origin = webkit_security_origin_new_for_uri (uri_string);
+  result = webkit_security_origin_to_string (origin);
+  webkit_security_origin_unref (origin);
+
+  return result != NULL ? g_strdup (result) : NULL;
+}
