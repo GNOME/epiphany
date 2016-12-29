@@ -23,10 +23,10 @@ libephymisc_la_SOURCES = \
 	ephy-form-auth-data.h			\
 	ephy-gui.c				\
 	ephy-gui.h				\
-	ephy-hosts-manager.c			\
-	ephy-hosts-manager.h			\
 	ephy-langs.c				\
 	ephy-langs.h				\
+	ephy-permissions-manager.c		\
+	ephy-permissions-manager.h		\
 	ephy-prefs.h				\
 	ephy-profile-utils.c			\
 	ephy-profile-utils.h			\

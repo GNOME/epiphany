@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2015 Gustavo Noronha Silva <gns@gnome.org>
+ *  Copyright © 2016 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -19,7 +20,7 @@
  */
 
 #include "config.h"
-#include "ephy-hosts-manager.h"
+#include "ephy-permissions-manager.h"
 
 #include "ephy-file-helpers.h"
 #include "ephy-string.h"
@@ -27,7 +28,7 @@
 #define G_SETTINGS_ENABLE_BACKEND 1
 #include <gio/gsettingsbackend.h>
 
-struct _EphyHostsManager
+struct _EphyPermissionsManager
 {
   GObject parent_instance;
 
@@ -35,36 +36,36 @@ struct _EphyHostsManager
   GHashTable *settings_mapping;
 };
 
-G_DEFINE_TYPE (EphyHostsManager, ephy_hosts_manager, G_TYPE_OBJECT)
+G_DEFINE_TYPE (EphyPermissionsManager, ephy_permissions_manager, G_TYPE_OBJECT)
 
 static void
-ephy_hosts_manager_init (EphyHostsManager *manager)
+ephy_permissions_manager_init (EphyPermissionsManager *manager)
 {
   manager->hosts_mapping = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
   manager->settings_mapping = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
 }
 
 static void
-ephy_hosts_manager_dispose (GObject *object)
+ephy_permissions_manager_dispose (GObject *object)
 {
-  EphyHostsManager *manager = EPHY_HOSTS_MANAGER (object);
+  EphyPermissionsManager *manager = EPHY_PERMISSIONS_MANAGER (object);
 
   g_clear_pointer (&manager->hosts_mapping, g_hash_table_destroy);
   g_clear_pointer (&manager->settings_mapping, g_hash_table_destroy);
 
-  G_OBJECT_CLASS (ephy_hosts_manager_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_permissions_manager_parent_class)->dispose (object);
 }
 
 static void
-ephy_hosts_manager_class_init (EphyHostsManagerClass *klass)
+ephy_permissions_manager_class_init (EphyPermissionsManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = ephy_hosts_manager_dispose;
+  object_class->dispose = ephy_permissions_manager_dispose;
 
   /**
-   * EphyHostsManager::setting-changed:
-   * @host_manager: the #EphyHostsManager that received the signal
+   * EphyPermissionsManager::setting-changed:
+   * @permissions_manager: the #EphyPermissionsManager that received the signal
    * @host: the hostname for which the setting changed
    * @key: the name of the key that changed
    *
@@ -73,7 +74,7 @@ ephy_hosts_manager_class_init (EphyHostsManagerClass *klass)
    * change on the UI for instance.
    **/
   g_signal_new ("setting-changed",
-                EPHY_TYPE_HOSTS_MANAGER,
+                EPHY_TYPE_PERMISSIONS_MANAGER,
                 G_SIGNAL_RUN_FIRST,
                 0, NULL, NULL, NULL,
                 G_TYPE_NONE,
@@ -83,17 +84,17 @@ ephy_hosts_manager_class_init (EphyHostsManagerClass *klass)
 }
 
 static void
-setting_changed_cb (GSettings        *settings,
-                    char             *key,
-                    EphyHostsManager *manager)
+setting_changed_cb (GSettings              *settings,
+                    char                   *key,
+                    EphyPermissionsManager *manager)
 {
   const char *host = g_hash_table_lookup (manager->settings_mapping, settings);
   g_signal_emit_by_name (manager, "setting-changed", host, key);
 }
 
 static GSettings *
-ephy_hosts_manager_get_settings_for_address (EphyHostsManager *manager,
-                                             const char       *address)
+ephy_permissions_manager_get_settings_for_address (EphyPermissionsManager *manager,
+                                                   const char             *address)
 {
   char *host = ephy_string_get_host_name (address);
   char *key_file = NULL;
@@ -129,46 +130,46 @@ ephy_hosts_manager_get_settings_for_address (EphyHostsManager *manager,
   return settings;
 }
 
-EphyHostsManager *
-ephy_hosts_manager_new (void)
+EphyPermissionsManager *
+ephy_permissions_manager_new (void)
 {
-  return EPHY_HOSTS_MANAGER (g_object_new (EPHY_TYPE_HOSTS_MANAGER, NULL));
+  return EPHY_PERMISSIONS_MANAGER (g_object_new (EPHY_TYPE_PERMISSIONS_MANAGER, NULL));
 }
 
 static const char *
-permission_type_to_string (EphyHostPermissionType type)
+permission_type_to_string (EphyPermissionType type)
 {
   switch (type) {
-  case EPHY_HOST_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
+  case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
     return "notifications-permission";
-  case EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD:
+  case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
     return "save-password-permission";
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_LOCATION:
+  case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
     return "geolocation-permission";
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_MICROPHONE:
+  case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
     return "audio-device-permission";
-  case EPHY_HOST_PERMISSION_TYPE_ACCESS_WEBCAM:
+  case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
     return "video-device-permission";
   default:
     g_assert_not_reached ();
   }
 }
 
-EphyHostPermission
-ephy_hosts_manager_get_permission_for_address (EphyHostsManager       *manager,
-                                               EphyHostPermissionType  type,
-                                               const char             *address)
+EphyPermission
+ephy_permissions_manager_get_permission_for_address (EphyPermissionsManager *manager,
+                                                     EphyPermissionType      type,
+                                                     const char             *address)
 {
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  GSettings *settings = ephy_permissions_manager_get_settings_for_address (manager, address);
   return g_settings_get_enum (settings, permission_type_to_string (type));
 }
 
 void
-ephy_hosts_manager_set_permission_for_address (EphyHostsManager       *manager,
-                                               EphyHostPermissionType  type,
-                                               const char             *address,
-                                               EphyHostPermission      permission)
+ephy_permissions_manager_set_permission_for_address (EphyPermissionsManager *manager,
+                                                     EphyPermissionType      type,
+                                                     const char             *address,
+                                                     EphyPermission          permission)
 {
-  GSettings *settings = ephy_hosts_manager_get_settings_for_address (manager, address);
+  GSettings *settings = ephy_permissions_manager_get_settings_for_address (manager, address);
   g_settings_set_enum (settings, permission_type_to_string (type), permission);
 }

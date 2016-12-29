@@ -27,7 +27,7 @@
 #include "ephy-embed-form-auth.h"
 #include "ephy-file-helpers.h"
 #include "ephy-form-auth-data.h"
-#include "ephy-hosts-manager.h"
+#include "ephy-permissions-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-uri-helpers.h"
@@ -54,7 +54,7 @@ struct _EphyWebExtension {
   EphyFormAuthDataCache *form_auth_data_cache;
   GHashTable *form_auth_data_save_requests;
   EphyWebOverviewModel *overview_model;
-  EphyHostsManager *hosts_manager;
+  EphyPermissionsManager *permissions_manager;
   EphyUriTester *uri_tester;
 };
 
@@ -374,7 +374,7 @@ should_store_cb (const char *username,
 {
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (user_data);
   EphyWebExtension *web_extension;
-  EphyHostPermission permission;
+  EphyPermission permission;
   SoupURI *uri;
   char *uri_string;
   char *password_field_value = NULL;
@@ -385,11 +385,11 @@ should_store_cb (const char *username,
     return;
 
   web_extension = ephy_web_extension_get ();
-  permission = ephy_hosts_manager_get_permission_for_address (web_extension->hosts_manager,
-                                                              EPHY_HOST_PERMISSION_TYPE_SAVE_PASSWORD,
-                                                              uri_string);
+  permission = ephy_permissions_manager_get_permission_for_address (web_extension->permissions_manager,
+                                                                    EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
+                                                                    uri_string);
 
-  if (permission == EPHY_HOST_PERMISSION_DENY) {
+  if (permission == EPHY_PERMISSION_DENY) {
     LOG ("User/password storage permission previously denied. Not asking about storing.");
     goto out;
   }
@@ -412,7 +412,7 @@ should_store_cb (const char *username,
     if (g_strcmp0 (username, username_field_value) == 0 &&
         g_strcmp0 (password, password_field_value) == 0) {
       LOG ("User/password already stored. Not asking about storing.");
-    } else if (permission == EPHY_HOST_PERMISSION_ALLOW) {
+    } else if (permission == EPHY_PERMISSION_ALLOW) {
       LOG ("User/password not yet stored. Storing.");
       store_password (form_auth);
     } else {
@@ -421,7 +421,6 @@ should_store_cb (const char *username,
     }
 
     g_free (username_field_value);
-
   } else {
     LOG ("No result on query; asking whether we should store.");
     request_decision_on_storing (g_object_ref (form_auth));
@@ -1469,7 +1468,7 @@ ephy_web_extension_dispose (GObject *object)
 
   g_clear_object (&extension->uri_tester);
   g_clear_object (&extension->overview_model);
-  g_clear_object (&extension->hosts_manager);
+  g_clear_object (&extension->permissions_manager);
 
   g_clear_pointer (&extension->form_auth_data_cache,
                    ephy_form_auth_data_cache_free);
@@ -1585,7 +1584,7 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
   if (!is_private_profile)
     extension->form_auth_data_cache = ephy_form_auth_data_cache_new ();
 
-  extension->hosts_manager = ephy_hosts_manager_new ();
+  extension->permissions_manager = ephy_permissions_manager_new ();
 
   g_signal_connect_swapped (extension->extension, "page-created",
                             G_CALLBACK (ephy_web_extension_page_created_cb),
