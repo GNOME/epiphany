@@ -769,7 +769,9 @@ ephy_uri_tester_set_property (GObject      *object,
 static void
 ephy_uri_tester_dispose (GObject *object)
 {
+#ifdef HAVE_LIBHTTPSEVERYWHERE
   EphyUriTester *tester = EPHY_URI_TESTER (object);
+#endif
 
   LOG ("EphyUriTester disposing %p", object);
 
