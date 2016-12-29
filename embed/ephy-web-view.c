@@ -1238,6 +1238,7 @@ decide_policy_cb (WebKitWebView           *web_view,
 typedef struct {
   EphyWebView *web_view;
   WebKitPermissionRequest *request;
+  char *host;
 } PermissionRequestData;
 
 static void
@@ -1260,13 +1261,14 @@ decide_on_permission_request (GtkWidget               *info_bar,
       EphyHostsManager *hosts_manager = ephy_embed_shell_get_hosts_manager (ephy_embed_shell_get_default ());
       ephy_hosts_manager_set_notifications_permission_for_address (
         hosts_manager,
-        address,
+        data->host,
         response == GTK_RESPONSE_YES ? EPHY_HOST_PERMISSION_ALLOW : EPHY_HOST_PERMISSION_DENY);
     }
   }
 
   gtk_widget_destroy (info_bar);
   g_object_unref (data->request);
+  g_free (data->host);
   g_slice_free (PermissionRequestData, data);
 }
 
@@ -1333,8 +1335,6 @@ permission_request_cb (WebKitWebView           *web_view,
                                        host);
   }
 
-  g_free (host);
-
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), message);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
@@ -1350,6 +1350,7 @@ permission_request_cb (WebKitWebView           *web_view,
   data = g_new (PermissionRequestData, 1);
   data->web_view = EPHY_WEB_VIEW (web_view);
   data->request = g_object_ref (decision);
+  data->host = host;
 
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (decide_on_permission_request),
