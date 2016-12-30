@@ -22,7 +22,7 @@
 #include "config.h"
 #include "ephy-form-auth-data.h"
 
-#include "ephy-string.h"
+#include "ephy-uri-helpers.h"
 
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
@@ -48,12 +48,6 @@ normalize_and_prepare_uri (SoupURI  *uri,
                            gboolean  remove_path)
 {
   g_assert (uri != NULL);
-
-  /* We normalize https? schemes here so that we use passwords
-   * we stored in https sites in their http counterparts, and
-   * vice-versa. */
-  if (uri->scheme == SOUP_URI_SCHEME_HTTPS)
-    soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
 
   soup_uri_set_query (uri, NULL);
   if (remove_path)
@@ -134,14 +128,14 @@ ephy_form_auth_data_store (const char *uri,
                                                                 form_password, username);
   if (username != NULL) {
     /* Translators: The first %s is the username and the second one is the
-     * hostname where this is happening. Example: gnome@gmail.com and
-     * mail.google.com.
+     * security origin where this is happening. Example: gnome@gmail.com and
+     * https://mail.google.com.
      */
     label = g_strdup_printf (_("Password for %s in a form in %s"),
                              username, fake_uri_str);
   } else {
-    /* Translators: The first %s is the hostname where this is happening.
-     * Example: mail.google.com.
+    /* Translators: The first %s is the security origin where this is happening.
+     * Example: https://mail.google.com.
      */
     label = g_strdup_printf (_("Password in a form in %s"), fake_uri_str);
   }
@@ -320,16 +314,18 @@ screcet_service_search_finished (SecretService *service,
   for (p = results; p; p = p->next) {
     SecretItem *item = (SecretItem *)p->data;
     GHashTable *attributes;
-    char *host;
+    char *origin;
 
     attributes = secret_item_get_attributes (item);
-    host = ephy_string_get_host_name (g_hash_table_lookup (attributes, URI_KEY));
-    ephy_form_auth_data_cache_add (cache, host,
-                                   g_hash_table_lookup (attributes, FORM_USERNAME_KEY),
-                                   g_hash_table_lookup (attributes, FORM_PASSWORD_KEY),
-                                   g_hash_table_lookup (attributes, USERNAME_KEY));
+    origin = ephy_uri_to_security_origin (g_hash_table_lookup (attributes, URI_KEY));
+    if (origin != NULL) {
+      ephy_form_auth_data_cache_add (cache, origin,
+                                     g_hash_table_lookup (attributes, FORM_USERNAME_KEY),
+                                     g_hash_table_lookup (attributes, FORM_PASSWORD_KEY),
+                                     g_hash_table_lookup (attributes, USERNAME_KEY));
 
-    g_free (host);
+      g_free (origin);
+    }
     g_hash_table_unref (attributes);
   }
 

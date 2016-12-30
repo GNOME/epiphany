@@ -28,12 +28,12 @@
 #include <libsecret/secret.h>
 
 #include "ephy-form-auth-data.h"
-#include "ephy-string.h"
+#include "ephy-uri-helpers.h"
 #include "passwords-dialog.h"
 
 typedef enum
 {
-	COL_PASSWORDS_HOST,
+	COL_PASSWORDS_ORIGIN,
 	COL_PASSWORDS_USER,
 	COL_PASSWORDS_PASSWORD,
 	COL_PASSWORDS_INVISIBLE,
@@ -435,26 +435,30 @@ secrets_search_ready_cb (GObject *source_object,
 		GHashTable *attributes = NULL;
 		const char *username = NULL;
 		const char *password = NULL;
-		char *host = NULL;
+		char *origin = NULL;
 		GtkTreeIter iter;
 
 		attributes = secret_item_get_attributes (item);
 		username = g_hash_table_lookup (attributes, USERNAME_KEY);
-		host = ephy_string_get_host_name (g_hash_table_lookup (attributes, URI_KEY));
 		value = secret_item_get_secret (item);
 		password = secret_value_get (value, NULL);
+		origin = ephy_uri_to_security_origin (g_hash_table_lookup (attributes, URI_KEY));
+		if (origin == NULL) {
+			g_hash_table_unref (attributes);
+			continue;
+		}
 
 		gtk_list_store_insert_with_values (GTK_LIST_STORE (dialog->priv->liststore),
 						   &iter,
 						   -1,
-						   COL_PASSWORDS_HOST, host,
+						   COL_PASSWORDS_ORIGIN, origin,
 						   COL_PASSWORDS_USER, username,
 						   COL_PASSWORDS_PASSWORD, password,
 						   COL_PASSWORDS_INVISIBLE, "●●●●●●●●",
 						   COL_PASSWORDS_DATA, item,
 						   -1);
 
-		g_free (host);
+		g_free (origin);
 		g_hash_table_unref (attributes);
 	}
 
@@ -496,23 +500,23 @@ row_visible_func (GtkTreeModel *model,
 		  PasswordsDialog *dialog)
 {
 	char *username;
-	char *host;
+	char *origin;
 	gboolean visible = FALSE;
 
 	if (dialog->priv->search_text == NULL)
 		return TRUE;
 
 	gtk_tree_model_get (model, iter,
-			    COL_PASSWORDS_HOST, &host,
+			    COL_PASSWORDS_ORIGIN, &origin,
 			    COL_PASSWORDS_USER, &username,
 			    -1);
 
-	if (host != NULL && g_strrstr (host, dialog->priv->search_text) != NULL)
+	if (origin != NULL && g_strrstr (origin, dialog->priv->search_text) != NULL)
 		visible = TRUE;
 	else if (username != NULL && g_strrstr (username, dialog->priv->search_text) != NULL)
 		visible = TRUE;
 
-	g_free (host);
+	g_free (origin);
 	g_free (username);
 
 	return visible;
