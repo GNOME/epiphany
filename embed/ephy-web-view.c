@@ -1373,7 +1373,7 @@ decide_on_permission_request (GtkWidget               *info_bar,
     ephy_permissions_manager_set_permission (permissions_manager,
                                              permission_type,
                                              data->origin,
-                                             response == GTK_RESPONSE_YES ? EPHY_PERMISSION_ALLOW
+                                             response == GTK_RESPONSE_YES ? EPHY_PERMISSION_PERMIT
                                                                           : EPHY_PERMISSION_DENY);
   }
 
@@ -1518,7 +1518,7 @@ permission_request_cb (WebKitWebView           *web_view,
   g_free (origin);
 
   switch (permission) {
-  case EPHY_PERMISSION_ALLOW:
+  case EPHY_PERMISSION_PERMIT:
     webkit_permission_request_allow (decision);
     return TRUE;
   case EPHY_PERMISSION_DENY:

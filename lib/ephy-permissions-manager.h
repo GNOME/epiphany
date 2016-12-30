@@ -32,7 +32,7 @@ G_DECLARE_FINAL_TYPE (EphyPermissionsManager, ephy_permissions_manager, EPHY, PE
 typedef enum {
   EPHY_PERMISSION_UNDECIDED = -1,
   EPHY_PERMISSION_DENY = 0,
-  EPHY_PERMISSION_ALLOW = 1,
+  EPHY_PERMISSION_PERMIT = 1
 } EphyPermission;
 
 typedef enum {

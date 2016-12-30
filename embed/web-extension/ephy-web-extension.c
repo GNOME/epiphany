@@ -416,7 +416,7 @@ should_store_cb (const char *username,
     if (g_strcmp0 (username, username_field_value) == 0 &&
         g_strcmp0 (password, password_field_value) == 0) {
       LOG ("User/password already stored. Not asking about storing.");
-    } else if (permission == EPHY_PERMISSION_ALLOW) {
+    } else if (permission == EPHY_PERMISSION_PERMIT) {
       LOG ("User/password not yet stored. Storing.");
       store_password (form_auth);
     } else {
