@@ -27,6 +27,7 @@
 
 #define G_SETTINGS_ENABLE_BACKEND 1
 #include <gio/gsettingsbackend.h>
+#include <stdlib.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
 
@@ -39,6 +40,8 @@ struct _EphyPermissionsManager
 };
 
 G_DEFINE_TYPE (EphyPermissionsManager, ephy_permissions_manager, G_TYPE_OBJECT)
+
+#define PERMISSIONS_FILENAME "permissions.ini"
 
 static void
 ephy_permissions_manager_init (EphyPermissionsManager *manager)
@@ -70,9 +73,9 @@ static GSettings *
 ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manager,
                                                   const char             *origin)
 {
-  char *key_file;
   char *origin_path;
   char *trimmed_protocol;
+  char *filename;
   GSettingsBackend* backend;
   GSettings *settings;
   WebKitSecurityOrigin *security_origin;
@@ -84,9 +87,9 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
   if (settings)
     return settings;
 
-  key_file = g_build_filename (ephy_dot_dir (), "permissions.ini", NULL);
-  backend = g_keyfile_settings_backend_new (key_file, "/", NULL);
-  g_free (key_file);
+  filename = g_build_filename (ephy_dot_dir (), PERMISSIONS_FILENAME, NULL);
+  backend = g_keyfile_settings_backend_new (filename, "/", NULL);
+  g_free (filename);
 
   /* Cannot contain consecutive slashes in GSettings path... */
   security_origin = webkit_security_origin_new_for_uri (origin);
@@ -155,4 +158,135 @@ ephy_permissions_manager_set_permission (EphyPermissionsManager *manager,
 {
   GSettings *settings = ephy_permissions_manager_get_settings_for_origin (manager, origin);
   g_settings_set_enum (settings, permission_type_to_string (type), permission);
+}
+
+static WebKitSecurityOrigin *
+group_name_to_security_origin (const char *group)
+{
+  char **tokens;
+  WebKitSecurityOrigin *origin = NULL;
+
+  /* Should be of form org/gnome/epiphany/permissions/http/example.com/0 */
+  tokens = g_strsplit (group, "/", -1);
+  if (g_strv_length (tokens) == 7 && tokens[4] != NULL && tokens[5] != NULL && tokens[6] != NULL)
+    origin = webkit_security_origin_new (tokens[4], tokens[5], atoi (tokens[6]));
+
+  g_strfreev (tokens);
+
+  return origin;
+}
+
+static WebKitSecurityOrigin *
+origin_for_keyfile_key (GKeyFile           *file,
+                        const char         *filename,
+                        const char         *group,
+                        const char         *key,
+                        EphyPermissionType  type,
+                        gboolean            permit)
+{
+  WebKitSecurityOrigin *origin = NULL;
+  char *value;
+  GError *error = NULL;
+
+  if (strcmp (permission_type_to_string (type), key) == 0) {
+    value = g_key_file_get_string (file, group, key, &error);
+    if (error != NULL) {
+      g_warning ("Error processing %s group %s key %s: %s",
+                 filename, group, key, error->message);
+      g_error_free (error);
+      return NULL;
+    }
+
+    if ((permit && strcmp (value, "'allow'") == 0) ||
+        (!permit && strcmp (value, "'deny'") == 0))
+      origin = group_name_to_security_origin (group);
+
+    g_free (value);
+  }
+
+  return origin;
+}
+
+static GList *
+origins_for_keyfile_group (GKeyFile           *file,
+                           const char         *filename,
+                           const char         *group,
+                           EphyPermissionType  type,
+                           gboolean            permit)
+{
+  char **keys;
+  gsize keys_length;
+  GList *origins = NULL;
+  WebKitSecurityOrigin *origin;
+  GError *error = NULL;
+
+  keys = g_key_file_get_keys (file, group, &keys_length, &error);
+  if (error != NULL) {
+    g_warning ("Error processing %s group %s: %s", filename, group, error->message);
+    g_error_free (error);
+    return NULL;
+  }
+
+  for (guint i = 0; i < keys_length; i++) {
+    origin = origin_for_keyfile_key (file, filename, group, keys[i], type, permit);
+    if (origin)
+      origins = g_list_prepend (origins, origin);
+  }
+
+  g_strfreev (keys);
+
+  return origins;
+}
+
+/* TODO: Consider caching this in memory. This gets called twice when
+ * starting each web process. It could be dozens or hundreds of file
+ * reads when starting the browser. It's silly to cache individual
+ * settings but not this. */
+static GList *
+ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
+                                               EphyPermissionType      type,
+                                               gboolean                permit)
+{
+  GKeyFile *file;
+  char *filename;
+  char **groups;
+  gsize groups_length;
+  GList *origins = NULL;
+  GError *error = NULL;
+
+  file = g_key_file_new ();
+  filename = g_build_filename (ephy_dot_dir (), PERMISSIONS_FILENAME, NULL);
+
+  g_key_file_load_from_file (file, filename, G_KEY_FILE_NONE, &error);
+  if (error != NULL) {
+    if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+      g_warning ("Error processing %s: %s", filename, error->message);
+    g_error_free (error);
+    return NULL;
+  }
+
+  groups = g_key_file_get_groups (file, &groups_length);
+  for (guint i = 0; i < groups_length; i++)
+    origins = g_list_concat (origins,
+                             origins_for_keyfile_group (file, filename, groups[i], type, permit));
+
+  g_key_file_unref (file);
+  g_strfreev (groups);
+  g_free (filename);
+
+  return origins;
+}
+
+GList *
+ephy_permissions_manager_get_permitted_origins (EphyPermissionsManager *manager,
+                                                EphyPermissionType      type)
+{
+  return ephy_permissions_manager_get_matching_origins (manager, type, TRUE);
+}
+
+GList *
+ephy_permissions_manager_get_denied_origins (EphyPermissionsManager *manager,
+                                             EphyPermissionType      type)
+{
+  return ephy_permissions_manager_get_matching_origins (manager, type, FALSE);
 }

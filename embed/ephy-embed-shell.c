@@ -674,6 +674,24 @@ initialize_web_extensions (WebKitWebContext *web_context,
 }
 
 static void
+initialize_notification_permissions (WebKitWebContext *web_context,
+                                     EphyEmbedShell   *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  GList *permitted_origins;
+  GList *denied_origins;
+
+  permitted_origins = ephy_permissions_manager_get_permitted_origins (priv->permissions_manager,
+                                                                      EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS);
+  denied_origins = ephy_permissions_manager_get_denied_origins (priv->permissions_manager,
+                                                                EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS);
+  webkit_web_context_initialize_notification_permissions (web_context, permitted_origins, denied_origins);
+
+  g_list_free_full (permitted_origins, (GDestroyNotify)webkit_security_origin_unref);
+  g_list_free_full (denied_origins, (GDestroyNotify)webkit_security_origin_unref);
+}
+
+static void
 web_extension_page_created (EphyWebExtensionProxy *extension,
                             guint64                page_id,
                             EphyEmbedShell        *shell)
@@ -903,6 +921,11 @@ ephy_embed_shell_startup (GApplication *application)
   ephy_embed_shell_setup_process_model (shell);
   g_signal_connect (priv->web_context, "initialize-web-extensions",
                     G_CALLBACK (initialize_web_extensions),
+                    shell);
+
+  priv->permissions_manager = ephy_permissions_manager_new ();
+  g_signal_connect (priv->web_context, "initialize-notification-permissions",
+                    G_CALLBACK (initialize_notification_permissions),
                     shell);
 
   /* Favicon Database */
@@ -1433,7 +1456,5 @@ ephy_embed_shell_get_permissions_manager (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  if (!priv->permissions_manager)
-    priv->permissions_manager = ephy_permissions_manager_new ();
   return priv->permissions_manager;
 }

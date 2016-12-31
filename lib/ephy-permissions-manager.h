@@ -52,4 +52,10 @@ void                    ephy_permissions_manager_set_permission (EphyPermissions
                                                                  EphyPermissionType      type,
                                                                  const char             *origin,
                                                                  EphyPermission          permission);
+
+GList                  *ephy_permissions_manager_get_permitted_origins (EphyPermissionsManager *manager,
+                                                                        EphyPermissionType      type);
+GList                  *ephy_permissions_manager_get_denied_origins    (EphyPermissionsManager *manager,
+                                                                        EphyPermissionType      type);
+
 G_END_DECLS
