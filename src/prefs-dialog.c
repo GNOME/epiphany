@@ -36,9 +36,6 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
-#include "ephy-sync-crypto.h"
-#include "ephy-sync-secret.h"
-#include "ephy-sync-service.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
 #include "languages.h"
@@ -49,6 +46,12 @@
 #include <JavaScriptCore/JavaScript.h>
 #include <json-glib/json-glib.h>
 #include <string.h>
+
+#ifdef ENABLE_SYNC
+#include "ephy-sync-crypto.h"
+#include "ephy-sync-secret.h"
+#include "ephy-sync-service.h"
+#endif
 
 #define DOWNLOAD_BUTTON_WIDTH   8
 #define FXA_IFRAME_URL "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1"
