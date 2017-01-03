@@ -28,6 +28,7 @@
 #include "ephy-type-builtins.h"
 #include "ephy-uri-helpers.h"
 
+#include <glib/gi18n.h>
 #include <libsoup/soup.h>
 #include <string.h>
 
@@ -154,6 +155,7 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
   GtkWidget *label;
   GtkStyleContext *context;
   gboolean default_tag;
+  const char *label_text;
 
   default_tag = (g_strcmp0 (tag, "Favorites") == 0);
 
@@ -172,7 +174,8 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
     gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
   }
 
-  label = gtk_label_new (tag);
+  label_text = default_tag ? _("Favorites") : tag;
+  label = gtk_label_new (label_text);
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
 
   if (!default_tag) {

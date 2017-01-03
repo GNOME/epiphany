@@ -200,13 +200,18 @@ create_tag_row (const char *tag)
   gtk_widget_set_halign (box, GTK_ALIGN_START);
 
   if (g_strcmp0 (tag, "Favorites") == 0)
+  {
     image = gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_MENU);
+    label = gtk_label_new (_("Favorites"));
+  }
   else
+  {
     image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic", GTK_ICON_SIZE_MENU);
-  gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
+    label = gtk_label_new (tag);
+  }
 
-  label = gtk_label_new (tag);
-  gtk_box_pack_start (GTK_BOX (box),label, TRUE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, FALSE, 0);
 
   gtk_container_add (GTK_CONTAINER (row), box);
   gtk_widget_show_all (row);
