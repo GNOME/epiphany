@@ -637,7 +637,7 @@ entry_populate_popup_cb (GtkEntry          *entry,
   GtkWidget *redo_menuitem;
   GtkWidget *paste_and_go_menuitem;
   GtkWidget *separator;
-  GtkWidget *paste_menuitem;
+  GtkWidget *paste_menuitem = NULL;
   GList *children, *item;
   int pos = 0, sep = 0;
   gboolean is_editable;

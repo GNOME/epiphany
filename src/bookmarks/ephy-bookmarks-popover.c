@@ -239,7 +239,7 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
                                             EphyBookmark         *bookmark,
                                             EphyBookmarksManager *manager)
 {
-  GtkWidget *row;
+  GtkWidget *row = NULL;
   GList *children;
   GList *l;
 

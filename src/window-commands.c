@@ -330,7 +330,7 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
     } else if (active == 1) {
       GError *error = NULL;
       GSList *profiles;
-      gchar *profile;
+      gchar *profile = NULL;
       int num_profiles;
 
       profiles = get_firefox_profiles ();
