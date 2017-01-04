@@ -43,7 +43,7 @@ struct _EphyAboutHandler {
 G_DEFINE_TYPE (EphyAboutHandler, ephy_about_handler, G_TYPE_OBJECT)
 
 
-#define EPHY_ABOUT_OVERVIEW_MAX_ITEMS 9
+#define EPHY_ABOUT_OVERVIEW_MAX_ITEMS 10
 
 #define EPHY_PAGE_TEMPLATE_ABOUT_CSS        "ephy-resource:///org/gnome/epiphany/page-templates/about.css"
 
