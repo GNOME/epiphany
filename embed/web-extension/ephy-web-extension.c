@@ -360,6 +360,7 @@ should_store_cb (const char *username,
   EphyHostPermission permission;
   SoupURI *uri;
   char *uri_string;
+  char *password_field_value = NULL;
 
   uri = ephy_embed_form_auth_get_uri (form_auth);
   uri_string = soup_uri_to_string (uri, FALSE);
@@ -376,16 +377,18 @@ should_store_cb (const char *username,
     goto out;
   }
 
+  g_object_get (ephy_embed_form_auth_get_password_node (form_auth),
+                "value", &password_field_value, NULL);
+  if (password_field_value == NULL || strlen (password_field_value) == 0)
+    goto out;
+
   if (password) {
     WebKitDOMNode *username_node;
     char *username_field_value = NULL;
-    char *password_field_value = NULL;
 
     username_node = ephy_embed_form_auth_get_username_node (form_auth);
     if (username_node)
       g_object_get (username_node, "value", &username_field_value, NULL);
-    g_object_get (ephy_embed_form_auth_get_password_node (form_auth),
-                  "value", &password_field_value, NULL);
 
     /* FIXME: We use only the first result, for now; We need to do
      * something smarter here */
@@ -401,7 +404,7 @@ should_store_cb (const char *username,
     }
 
     g_free (username_field_value);
-    g_free (password_field_value);
+
   } else if (permission == EPHY_HOST_PERMISSION_ALLOW) {
     LOG ("No result on query; storing.");
     store_password (form_auth);
@@ -411,6 +414,8 @@ should_store_cb (const char *username,
   }
 
 out:
+  if (password_field_value)
+    g_free (password_field_value);
   g_free (uri_string);
 }
 
