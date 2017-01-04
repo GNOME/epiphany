@@ -393,7 +393,7 @@ should_store_cb (const char *username,
     /* FIXME: We use only the first result, for now; We need to do
      * something smarter here */
     if (g_strcmp0 (username, username_field_value) == 0 &&
-        g_str_equal (password, password_field_value)) {
+        g_strcmp0 (password, password_field_value) == 0) {
       LOG ("User/password already stored. Not asking about storing.");
     } else if (permission == EPHY_HOST_PERMISSION_ALLOW) {
       LOG ("User/password not yet stored. Storing.");
