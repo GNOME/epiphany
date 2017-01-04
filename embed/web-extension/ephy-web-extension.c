@@ -405,9 +405,6 @@ should_store_cb (const char *username,
 
     g_free (username_field_value);
 
-  } else if (permission == EPHY_HOST_PERMISSION_ALLOW) {
-    LOG ("No result on query; storing.");
-    store_password (form_auth);
   } else {
     LOG ("No result on query; asking whether we should store.");
     request_decision_on_storing (g_object_ref (form_auth));
