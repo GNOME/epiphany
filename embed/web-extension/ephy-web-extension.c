@@ -280,17 +280,20 @@ should_store_cb (const char *username,
                  gpointer    user_data)
 {
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (user_data);
+  char *password_field_value = NULL;
+
+  g_object_get (ephy_embed_form_auth_get_password_node (form_auth),
+                "value", &password_field_value, NULL);
+  if (password_field_value == NULL || strlen (password_field_value) == 0)
+    goto out;
 
   if (password) {
     WebKitDOMNode *username_node;
     char *username_field_value = NULL;
-    char *password_field_value = NULL;
 
     username_node = ephy_embed_form_auth_get_username_node (form_auth);
     if (username_node)
       g_object_get (username_node, "value", &username_field_value, NULL);
-    g_object_get (ephy_embed_form_auth_get_password_node (form_auth),
-                  "value", &password_field_value, NULL);
 
     /* FIXME: We use only the first result, for now; We need to do
      * something smarter here */
@@ -303,11 +306,14 @@ should_store_cb (const char *username,
     }
 
     g_free (username_field_value);
-    g_free (password_field_value);
   } else {
     LOG ("No result on query; asking whether we should store.");
     request_decision_on_storing (g_object_ref (form_auth));
   }
+
+out:
+  if (password_field_value != NULL)
+    g_free (password_field_value);
 }
 
 static gboolean
