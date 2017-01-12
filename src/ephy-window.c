@@ -1448,6 +1448,7 @@ populate_context_menu (WebKitWebView       *web_view,
 {
   WebKitContextMenuItem *input_methods_item = NULL;
   WebKitContextMenuItem *unicode_item = NULL;
+  WebKitContextMenuItem *copy_image_item = NULL;
   WebKitContextMenuItem *play_pause_item = NULL;
   WebKitContextMenuItem *mute_item = NULL;
   WebKitContextMenuItem *toggle_controls_item = NULL;
@@ -1460,7 +1461,7 @@ populate_context_menu (WebKitWebView       *web_view,
   EphyEmbedEvent *embed_event;
   gboolean app_mode, incognito_mode;
   gboolean is_document = FALSE;
-  gboolean is_image;
+  gboolean is_image = FALSE;
   gboolean is_media = FALSE;
   gboolean is_video = FALSE;
   gboolean is_audio = FALSE;
@@ -1475,7 +1476,10 @@ populate_context_menu (WebKitWebView       *web_view,
   popup_action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                                     "popup");
 
-  is_image = webkit_hit_test_result_context_is_image (hit_test_result);
+  if (webkit_hit_test_result_context_is_image (hit_test_result)) {
+    is_image = TRUE;
+    copy_image_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_COPY_IMAGE_TO_CLIPBOARD);
+  }
 
   if (webkit_hit_test_result_context_is_editable (hit_test_result)) {
     input_methods_item = find_item_in_context_menu (context_menu, WEBKIT_CONTEXT_MENU_ACTION_INPUT_METHODS);
@@ -1644,6 +1648,7 @@ populate_context_menu (WebKitWebView       *web_view,
                                 webkit_context_menu_item_new_separator ());
     add_action_to_context_menu (context_menu, popup_action_group,
                                 "save-image-as", window);
+    add_item_to_context_menu (context_menu, copy_image_item);
     add_action_to_context_menu (context_menu, popup_action_group,
                                 "copy-image-location", window);
     add_action_to_context_menu (context_menu, popup_action_group,
