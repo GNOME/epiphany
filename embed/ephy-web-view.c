@@ -988,11 +988,6 @@ ephy_web_view_constructed (GObject *object)
   if (G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed)
     G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
 
-  /* Use full content zooming by default */
-  /* FIXME: we could make this configurable through GSettings, or have
-   * different keys for text and full content zooming. AFAIK you can
-   * have both enabled at the same time in WebKit now (although our
-   * API does not reflect this atm). See r67274 in WebKit. */
   g_signal_emit_by_name (ephy_embed_shell_get_default (), "web-view-created", object);
 
   g_signal_connect (object, "web-process-crashed",
