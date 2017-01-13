@@ -985,8 +985,7 @@ process_crashed_cb (EphyWebView *web_view, gpointer user_data)
 static void
 ephy_web_view_constructed (GObject *object)
 {
-  if (G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed)
-    G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
+  G_OBJECT_CLASS (ephy_web_view_parent_class)->constructed (object);
 
   g_signal_emit_by_name (ephy_embed_shell_get_default (), "web-view-created", object);
 
