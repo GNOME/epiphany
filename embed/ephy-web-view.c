@@ -673,6 +673,23 @@ typedef struct {
   guint request_id;
 } FormAuthRequestData;
 
+static FormAuthRequestData *
+form_auth_request_data_new (EphyWebView *web_view,
+                            guint        request_id)
+{
+  FormAuthRequestData *data;
+  data = g_slice_new (FormAuthRequestData);
+  data->web_view = web_view;
+  data->request_id = request_id;
+  return data;
+}
+
+static void
+form_auth_request_data_free (FormAuthRequestData *data)
+{
+  g_slice_free (FormAuthRequestData, data);
+}
+
 static void
 form_auth_data_save_confirmation_response (GtkInfoBar          *info_bar,
                                            gint                 response_id,
@@ -686,7 +703,7 @@ form_auth_data_save_confirmation_response (GtkInfoBar          *info_bar,
                                                                         response_id == GTK_RESPONSE_YES);
   }
 
-  g_slice_free (FormAuthRequestData, data);
+  form_auth_request_data_free (data);
 }
 
 static void
@@ -711,9 +728,7 @@ form_auth_data_save_requested (EphyEmbedShell *shell,
   }
 
   info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, hostname, username);
-  data = g_slice_new (FormAuthRequestData);
-  data->web_view = web_view;
-  data->request_id = request_id;
+  data = form_auth_request_data_new (web_view, request_id);
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (form_auth_data_save_confirmation_response),
                     data);
@@ -1241,6 +1256,28 @@ typedef struct {
   char *host;
 } PermissionRequestData;
 
+static PermissionRequestData *
+permission_request_data_new (EphyWebView             *web_view,
+                             WebKitPermissionRequest *request,
+                             const char              *host)
+{
+  PermissionRequestData *data;
+  data = g_new (PermissionRequestData, 1);
+  data->web_view = web_view;
+  /* Ref the decision to keep it alive while we decide */
+  data->request = g_object_ref (request);
+  data->host = g_strdup (host);
+  return data;
+}
+
+static void
+permission_request_data_free (PermissionRequestData *data)
+{
+  g_object_unref (data->request);
+  g_free (data->host);
+  g_slice_free (PermissionRequestData, data);
+}
+
 static void
 decide_on_permission_request (GtkWidget               *info_bar,
                               int                      response,
@@ -1267,9 +1304,7 @@ decide_on_permission_request (GtkWidget               *info_bar,
   }
 
   gtk_widget_destroy (info_bar);
-  g_object_unref (data->request);
-  g_free (data->host);
-  g_slice_free (PermissionRequestData, data);
+  permission_request_data_free (data);
 }
 
 static gboolean
@@ -1346,15 +1381,11 @@ permission_request_cb (WebKitWebView           *web_view,
 
   gtk_widget_show_all (info_bar);
 
-  /* Ref the decision, to keep it alive while we decide */
-  data = g_new (PermissionRequestData, 1);
-  data->web_view = EPHY_WEB_VIEW (web_view);
-  data->request = g_object_ref (decision);
-  data->host = host;
-
+  data = permission_request_data_new (EPHY_WEB_VIEW (web_view), decision, host);
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (decide_on_permission_request),
                     data);
+  g_free (host);
 
   if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision))
     ephy_web_view_track_info_bar (info_bar, &EPHY_WEB_VIEW (web_view)->geolocation_info_bar);
