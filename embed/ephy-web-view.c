@@ -707,12 +707,22 @@ form_auth_request_data_free (FormAuthRequestData *data)
 }
 
 static void
+form_auth_save_confirmation_info_bar_destroyed_cb (FormAuthRequestData *data,
+                                                   GObject             *where_the_info_bar_was)
+{
+  /* Ensure the hash table entry in the web process is removed. */
+  if (data->web_view->web_extension)
+    ephy_web_extension_proxy_form_auth_data_save_confirmation_response (data->web_view->web_extension,
+                                                                        data->request_id,
+                                                                        FALSE);
+  form_auth_request_data_free (data);
+}
+
+static void
 form_auth_data_save_confirmation_response (GtkInfoBar          *info_bar,
                                            gint                 response_id,
                                            FormAuthRequestData *data)
 {
-  gtk_widget_destroy (GTK_WIDGET (info_bar));
-
   if (data->web_view->web_extension) {
     ephy_web_extension_proxy_form_auth_data_save_confirmation_response (data->web_view->web_extension,
                                                                         data->request_id,
@@ -729,6 +739,8 @@ form_auth_data_save_confirmation_response (GtkInfoBar          *info_bar,
                                                    EPHY_HOST_PERMISSION_DENY);
   }
 
+  g_object_weak_unref (G_OBJECT (info_bar), (GWeakNotify)form_auth_save_confirmation_info_bar_destroyed_cb, data);
+  gtk_widget_destroy (GTK_WIDGET (info_bar));
   form_auth_request_data_free (data);
 }
 
@@ -758,6 +770,7 @@ form_auth_data_save_requested (EphyEmbedShell *shell,
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (form_auth_data_save_confirmation_response),
                     data);
+  g_object_weak_ref (G_OBJECT (info_bar), (GWeakNotify)form_auth_save_confirmation_info_bar_destroyed_cb, data);
 
   gtk_widget_show (info_bar);
 }
@@ -1311,6 +1324,14 @@ permission_request_data_free (PermissionRequestData *data)
 }
 
 static void
+permission_request_info_bar_destroyed_cb (PermissionRequestData *data,
+                                          GObject               *where_the_info_bar_was)
+{
+  webkit_permission_request_deny (data->request);
+  permission_request_data_free (data);
+}
+
+static void
 decide_on_permission_request (GtkWidget               *info_bar,
                               int                      response,
                               PermissionRequestData   *data)
@@ -1356,6 +1377,7 @@ decide_on_permission_request (GtkWidget               *info_bar,
                                                                                 : EPHY_HOST_PERMISSION_DENY);
   }
 
+  g_object_weak_unref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
   gtk_widget_destroy (info_bar);
   permission_request_data_free (data);
 }
@@ -1425,6 +1447,7 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (decide_on_permission_request),
                     data);
+  g_object_weak_ref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
   g_free (host);
 
   switch (permission_type) {
