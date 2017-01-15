@@ -5,6 +5,7 @@ COMMITTING
 Do NOT commit to this module without permission from a maintainer.
 See epiphany.doap for who they are.
 
+
 ==========
 CODE STYLE
 ==========
@@ -44,6 +45,139 @@ need to stick to in order to get your patch accepted:
 
   Right: (int *)foo
   Wrong: (int*) foo
+
+
+===================
+CODE STRUCTURE TIPS
+===================
+
+LAYERING
+========
+
+The code is currently structured into layers, where higher-level layers have
+full access to lower-level layers, but lower-level layers have no access to the
+higher layers except via delegate objects. (See EphyEmbedContainer for an
+example of a delegate interface that allows embed/ limited access to EphyWindow,
+even though EphyWindow is in src/.) The levels are:
+
+ * src/ <-- highest layer, mostly GUI stuff.
+ * lib/widgets/ <-- FIXME: very confusing, this layering should be fixed
+ * embed/ <-- stuff relating to the web view
+ * lib/ <-- lowest-layer, helper classes that don't need higher-level stuff
+
+The build system enforces that higher-level layers are not in the include path
+of lower-level layers, so you should not be able to break the layering unless
+you go out of your way to do so.
+
+GTK APPLICATION AND EPHY SHELL
+==============================
+
+Epiphany has one singleton EphyShell object. Its inheritance heirarchy is:
+
+ - GApplication
+ --- GtkApplication
+ ----- EphyEmbedShell
+ ------- EphyShell
+
+There is exactly one instance of EphyShell, and it is also the EphyEmbedShell
+and the GtkApplication. Use normal GObject casts to get a pointer to the type
+you need.
+
+EphyShell is a singleton object where we put all our global state, so it's kind
+of like having a global variable, but more organized. You can access it from
+anywhere in src/ using ephy_shell_get_default().
+
+EphyEmbedShell is a separate class from EphyShell to for layering purposes. It
+is accessible anywhere from embed/ or src/. So if you have global stuff that you
+need to access from embed/, you need to put it in EphyEmbedShell, not EphyShell.
+
+IMPORTANT EPIPHANY OBJECTS
+==========================
+
+EphyWindow is a subclass of GtkApplicationWindow, which is a subclass of
+GtkWindow. It's the window. You can have any number of windows open at a time.
+EphyWindow contains (a) an EphyHeaderBar (subclass of GtkHeaderBar), and (b) an
+EphyNotebook (subclass of GtkNotebook). EphyNotebook contains one or more tabs,
+and each tab is an EphyEmbed. That's worth repeating: an EphyEmbed corresponds
+to one browser tab. Each EphyEmbed contains an EphyWebView (subclass of
+WebKitWebView). This is the object that actually displays the web page, where
+all the web browser magic happens.
+
+IMPORTANT WEBKITGTK+ OBJECTS
+============================
+
+WebKitGTK+ is a WebKit port that provides a GTK+ API wrapper around WebKit.
+
+WebKit is really nice. It encapsulates 95% of the complexity of building a web
+browser, like the JavaScript engine, HTML layout engine, and actually rendering
+the webpage. Epiphany only has to deal with the remaining 5%. The most important
+WebKitGTK+ objects are:
+
+ * WebKitWebView (superclass of EphyWebView). Displays the web.
+ * WebKitWebContext, a global object that manages shared state among web views.
+
+Epiphany has one EphyWebView per browser tab. It has exactly one
+WebKitWebContext, stored by EphyEmbedShell. WARNING: you need to be careful to
+use the web context from EphyEmbedShell when using a WebKit API that expects a
+WebKitWebContext. Think very carefully before using WebKit's default
+WebKitWebContext, which does not have all the right Epiphany settings and is
+probably not what you want. That is, do not pass NULL to a WebKitWebContext*
+parameter, and do not use webkit_web_context_get_default(). An exception is for
+the Firefox Sync web view in the preferences dialog.
+
+WebKit API documentation can be found at:
+
+ https://webkitgtk.org/reference/webkit2gtk/unstable/index.html
+
+There is separate documentation for the DOM API:
+
+  https://webkitgtk.org/reference/webkitdomgtk/unstable/index.html
+
+WEBKIT2 PROCESS ARCHITECTURE
+============================
+
+WebKit2 has a multiprocess architecture to improve the robustness of the
+browser. The UI process (the main epiphany process) runs several subprocesses:
+
+ * Any number of WebKitWebProcesses, which handle rendering web content
+ * One WebKitNetworkProcess, which handles most network requests
+ * One or zero WebKitDatabaseProcesses, which handles IndexedDB
+
+In WebKitGTK+, by default each WebKitWebView shares the same WebKitWebProcess.
+This can reduce overall resource usage, but it results in a less-stable browser
+as a crash in one tab will crash all other tabs, and the effects of memory leaks
+are greatly amplified. So Epiphany runs a separate WebKitWebProcess for each
+browser tab. (This is almost true. Sometimes a tab will create another tab using
+JavaScript. In such cases, the web views are "related" and share the same
+WebKitWebProcess.) There is a GSettings option to switch back to single-process
+mode if required, but we do not claim to support this!
+
+Epiphany uses GtkApplication to ensure uniqueness, so you can usually only have
+one UI process running at a time. An exception is if you use incognito mode, or
+private profile mode (which is only available from the command line). In such
+cases, there is no shared state with the main Epiphany browser process.
+
+EPIPHANY WEB EXTENSION
+======================
+
+For some Epiphany features, we need to run code in the web process. This code is
+called the "web extension" and lives in embed/web-extension/. It is compiled
+a shared library libephywebextension.so and installed in $(pkglibdir) (e.g.
+/usr/lib64/epiphany). EphyEmbedShell tells WebKit to look for web extensions
+in that location using webkit_web_context_set_web_extensions_directory(), starts
+a private D-Bus server (a D-Bus server that is completely separate from the
+shared system and session busses), and advertises the address of its D-Bus
+server to the web extension by passing it in a GVariant parameter to
+webkit_web_context_set_web_extensions_initialization_user_data(). Now the
+Epiphany UI process and web extension can communicate back and forth via D-Bus.
+EphyWebExtensionProxy encapsulates this IPC in the UI process; EphyEmbedShell
+uses it to communicate with the web process.
+
+Epiphany uses script message handlers as an additional form of IPC besides
+D-Bus. This allows the web extension to send a WebKitJavascriptResult directly
+to the UI process, which is received in EphyEmbedShell. This should generally
+be used rather than D-Bus when you need to send a message from the web process
+to the UI process.
 
 =========
 DEBUGGING
