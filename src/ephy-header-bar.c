@@ -65,6 +65,7 @@ struct _EphyHeaderBar {
   EphyWindow *window;
   EphyTitleWidget *title_widget;
   GtkWidget *navigation_box;
+  GtkWidget *new_tab_revealer;
   GtkWidget *new_tab_button;
   GtkWidget *combined_stop_reload_button;
   GtkWidget *bookmarks_button;
@@ -587,10 +588,19 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
 }
 
 static void
+notebook_show_tabs_changed_cb (GtkNotebook   *notebook,
+                               GParamSpec    *pspec,
+                               EphyHeaderBar *header_bar)
+{
+  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer),
+                                 !gtk_notebook_get_show_tabs (notebook));
+}
+
+static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
-  GtkWidget *box, *button;
+  GtkWidget *box, *button, *notebook;
   GtkWidget *page_menu_popover;
   EphyDownloadsManager *downloads_manager;
   GtkBuilder *builder;
@@ -678,13 +688,24 @@ ephy_header_bar_constructed (GObject *object)
   }
 
   /* New Tab */
+  header_bar->new_tab_revealer = gtk_revealer_new ();
+  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->new_tab_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), header_bar->new_tab_revealer);
+  gtk_widget_show (header_bar->new_tab_revealer);
+
   button = gtk_button_new ();
   header_bar->new_tab_button = button;
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
+  gtk_container_add (GTK_CONTAINER (header_bar->new_tab_revealer), button);
+  gtk_widget_show (button);
+
+  notebook = ephy_window_get_notebook (header_bar->window);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer),
+                                 !gtk_notebook_get_show_tabs (GTK_NOTEBOOK (notebook)));
+  g_signal_connect_object (notebook, "notify::show-tabs", G_CALLBACK (notebook_show_tabs_changed_cb), header_bar, 0);
 
   /* Title widget (location entry or title box) */
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
