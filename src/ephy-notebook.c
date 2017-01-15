@@ -54,6 +54,7 @@ struct _EphyNotebook {
   guint tabs_allowed : 1;
 };
 
+static void ephy_notebook_constructed (GObject *object);
 static void ephy_notebook_finalize (GObject *object);
 static int  ephy_notebook_insert_page (GtkNotebook *notebook,
                                        GtkWidget   *child,
@@ -130,6 +131,7 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkNotebookClass *notebook_class = GTK_NOTEBOOK_CLASS (klass);
 
+  object_class->constructed = ephy_notebook_constructed;
   object_class->finalize = ephy_notebook_finalize;
   object_class->get_property = ephy_notebook_get_property;
   object_class->set_property = ephy_notebook_set_property;
@@ -441,6 +443,26 @@ ephy_notebook_init (EphyNotebook *notebook)
   g_signal_connect (EPHY_SETTINGS_UI,
                     "changed::" EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY,
                     G_CALLBACK (show_tabs_changed_cb), notebook);
+}
+
+static void
+ephy_notebook_constructed (GObject *object)
+{
+  EphyNotebook *notebook = EPHY_NOTEBOOK (object);
+  GtkWidget *hbox;
+  GtkWidget *widget;
+
+  G_OBJECT_CLASS (ephy_notebook_parent_class)->constructed (object);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), hbox, GTK_PACK_END);
+  gtk_widget_show (hbox);
+
+  widget = gtk_button_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_relief (GTK_BUTTON (widget), GTK_RELIEF_NONE);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (widget), "win.new-tab");
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 6);
+  gtk_widget_show (widget);
 }
 
 static void
