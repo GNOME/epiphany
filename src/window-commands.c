@@ -2236,23 +2236,31 @@ window_cmd_tabs_duplicate (GSimpleAction *action,
                            gpointer       user_data)
 {
   EphyEmbed *embed, *new_embed;
-  EphyWebView *view, *new_view;
+  WebKitWebView *view, *new_view;
   WebKitWebViewSessionState *session_state;
+  WebKitBackForwardList *bf_list;
+  WebKitBackForwardListItem *item;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (user_data));
-  view = ephy_embed_get_web_view (embed);
-  session_state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (view));
+  view = WEBKIT_WEB_VIEW (ephy_embed_get_web_view (embed));
+  session_state = webkit_web_view_get_session_state (view);
 
   new_embed = ephy_shell_new_tab (ephy_shell_get_default (),
                                   EPHY_WINDOW (user_data),
                                   embed,
                                   EPHY_NEW_TAB_APPEND_AFTER | EPHY_NEW_TAB_JUMP);
 
-  new_view = ephy_embed_get_web_view (new_embed);
+  new_view = WEBKIT_WEB_VIEW (ephy_embed_get_web_view (new_embed));
 
-  webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (new_view), session_state);
+  webkit_web_view_restore_session_state (new_view, session_state);
   webkit_web_view_session_state_unref (session_state);
-  ephy_web_view_load_url (new_view, webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
+
+  bf_list = webkit_web_view_get_back_forward_list (new_view);
+  item = webkit_back_forward_list_get_current_item (bf_list);
+  if (item)
+    webkit_web_view_go_to_back_forward_list_item (new_view, item);
+  else
+    ephy_web_view_load_url (EPHY_WEB_VIEW (new_view), webkit_web_view_get_uri (view));
 }
 
 void
