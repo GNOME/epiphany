@@ -63,7 +63,7 @@ even though EphyWindow is in src/.) The levels are:
  * src/ <-- highest layer, mostly GUI stuff.
  * lib/widgets/ <-- FIXME: very confusing, this layering should be fixed
  * embed/ <-- stuff relating to the web view
- * lib/ <-- lowest-layer, helper classes that don't need higher-level stuff
+ * lib/ <-- lowest layer, helper classes that don't need higher-level stuff
 
 The build system enforces that higher-level layers are not in the include path
 of lower-level layers, so you should not be able to break the layering unless
@@ -87,8 +87,8 @@ EphyShell is a singleton object where we put all our global state, so it's kind
 of like having a global variable, but more organized. You can access it from
 anywhere in src/ using ephy_shell_get_default().
 
-EphyEmbedShell is a separate class from EphyShell to for layering purposes. It
-is accessible anywhere from embed/ or src/. So if you have global stuff that you
+EphyEmbedShell is a separate class from EphyShell for layering purposes. It is
+accessible anywhere from embed/ or src/. So if you have global stuff that you
 need to access from embed/, you need to put it in EphyEmbedShell, not EphyShell.
 
 IMPORTANT EPIPHANY OBJECTS
@@ -125,7 +125,7 @@ probably not what you want. That is, do not pass NULL to a WebKitWebContext*
 parameter, and do not use webkit_web_context_get_default(). An exception is for
 the Firefox Sync web view in the preferences dialog.
 
-WebKit API documentation can be found at:
+WebKitGTK+ API documentation can be found at:
 
  https://webkitgtk.org/reference/webkit2gtk/unstable/index.html
 
@@ -152,8 +152,8 @@ JavaScript. In such cases, the web views are "related" and share the same
 WebKitWebProcess.) There is a GSettings option to switch back to single-process
 mode if required, but we do not claim to support this!
 
-Epiphany uses GtkApplication to ensure uniqueness, so you can usually only have
-one UI process running at a time. An exception is if you use incognito mode, or
+Epiphany uses GtkApplication to ensure uniqueness, so you usually only have one
+UI process running at a time. An exception is if you use incognito mode, or
 private profile mode (which is only available from the command line). In such
 cases, there is no shared state with the main Epiphany browser process.
 
@@ -162,7 +162,7 @@ EPIPHANY WEB EXTENSION
 
 For some Epiphany features, we need to run code in the web process. This code is
 called the "web extension" and lives in embed/web-extension/. It is compiled
-a shared library libephywebextension.so and installed in $(pkglibdir) (e.g.
+into a shared library libephywebextension.so and installed in $(pkglibdir) (e.g.
 /usr/lib64/epiphany). EphyEmbedShell tells WebKit to look for web extensions
 in that location using webkit_web_context_set_web_extensions_directory(), starts
 a private D-Bus server (a D-Bus server that is completely separate from the
