@@ -702,12 +702,14 @@ ephy_header_bar_constructed (GObject *object)
   }
 
   /* Title widget (location entry or title box) */
-  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_title_box_new ());
-  else
+  } else {
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
-  gtk_widget_set_margin_start (GTK_WIDGET (header_bar->title_widget), 54);
-  gtk_widget_set_margin_end (GTK_WIDGET (header_bar->title_widget), 54);
+    gtk_widget_set_margin_start (GTK_WIDGET (header_bar->title_widget), 30);
+    gtk_widget_set_margin_end (GTK_WIDGET (header_bar->title_widget), 30);
+  }
+
   gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_widget));
   gtk_widget_show (GTK_WIDGET (header_bar->title_widget));
 
