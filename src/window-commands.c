@@ -653,7 +653,7 @@ window_cmd_show_about (GSimpleAction *action,
                          "program-name", _("Web"),
                          "version", VERSION,
                          "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-                         "Copyright © 2003–2016 The Web Developers",
+                         "Copyright © 2003–2017 The Web Developers",
                          "artists", artists,
                          "authors", authors,
                          "comments", comments,
