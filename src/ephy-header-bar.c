@@ -592,8 +592,22 @@ notebook_show_tabs_changed_cb (GtkNotebook   *notebook,
                                GParamSpec    *pspec,
                                EphyHeaderBar *header_bar)
 {
-  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer),
-                                 !gtk_notebook_get_show_tabs (notebook));
+  gboolean visible = !gtk_notebook_get_show_tabs (notebook);
+
+  if (visible) {
+    gtk_widget_show (header_bar->new_tab_revealer);
+    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer), TRUE);
+  } else {
+    /* Note the animation here doesn't actually work, since we hide the revealer
+     * right away. That's not ideal, but not much we can do about it, since
+     * hiding the revealer results in the location entry expanding, and that
+     * needs to happen immediately or it looks pretty bad, so we can't wait
+     * until the animation completes. Using the revealer is still worthwhile
+     * because the new tab button reveal animation is more important.
+     */
+    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer), FALSE);
+    gtk_widget_hide (header_bar->new_tab_revealer);
+  }
 }
 
 static void
@@ -687,26 +701,6 @@ ephy_header_bar_constructed (GObject *object)
                       button);
   }
 
-  /* New Tab */
-  header_bar->new_tab_revealer = gtk_revealer_new ();
-  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->new_tab_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), header_bar->new_tab_revealer);
-  gtk_widget_show (header_bar->new_tab_revealer);
-
-  button = gtk_button_new ();
-  header_bar->new_tab_button = button;
-  gtk_button_set_image (GTK_BUTTON (button),
-                        gtk_image_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON));
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
-  gtk_container_add (GTK_CONTAINER (header_bar->new_tab_revealer), button);
-  gtk_widget_show (button);
-
-  notebook = ephy_window_get_notebook (header_bar->window);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer),
-                                 !gtk_notebook_get_show_tabs (GTK_NOTEBOOK (notebook)));
-  g_signal_connect_object (notebook, "notify::show-tabs", G_CALLBACK (notebook_show_tabs_changed_cb), header_bar, 0);
-
   /* Title widget (location entry or title box) */
   if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_title_box_new ());
@@ -772,6 +766,28 @@ ephy_header_bar_constructed (GObject *object)
     gtk_menu_button_set_popover (GTK_MENU_BUTTON (header_bar->downloads_button),
                                  header_bar->downloads_popover);
   }
+
+  /* New Tab */
+  header_bar->new_tab_revealer = gtk_revealer_new ();
+  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->new_tab_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), header_bar->new_tab_revealer);
+
+  button = gtk_button_new ();
+  header_bar->new_tab_button = button;
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
+  gtk_container_add (GTK_CONTAINER (header_bar->new_tab_revealer), button);
+  gtk_widget_show (button);
+
+  notebook = ephy_window_get_notebook (header_bar->window);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer),
+                                 !gtk_notebook_get_show_tabs (GTK_NOTEBOOK (notebook)));
+  gtk_widget_set_visible (header_bar->new_tab_revealer,
+                          !gtk_notebook_get_show_tabs (GTK_NOTEBOOK (notebook)));
+  g_signal_connect_object (notebook, "notify::show-tabs",
+                           G_CALLBACK (notebook_show_tabs_changed_cb), header_bar, 0);
 
   g_signal_connect_object (downloads_manager, "download-added",
                            G_CALLBACK (download_added_cb),
