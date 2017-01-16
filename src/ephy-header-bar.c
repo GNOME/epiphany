@@ -80,6 +80,9 @@ struct _EphyHeaderBar {
 
 G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, GTK_TYPE_HEADER_BAR)
 
+/* Translators: tooltip for the refresh button */
+static const char *REFRESH_BUTTON_TOOLTIP = N_("Reload the current page");
+
 static gboolean
 header_bar_is_for_active_window (EphyHeaderBar *header_bar)
 {
@@ -561,14 +564,19 @@ ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
   EphyHeaderBar *header_bar;
   GtkWidget *image;
 
-  if (g_variant_get_boolean (loading))
+  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+
+  if (g_variant_get_boolean (loading)) {
     image = gtk_image_new_from_icon_name ("process-stop-symbolic",
                                           GTK_ICON_SIZE_BUTTON);
-  else
+    /* Translators: tooltip for the stop button */
+    gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button, _("Stop loading the current page"));
+  } else {
     image = gtk_image_new_from_icon_name ("view-refresh-symbolic",
                                           GTK_ICON_SIZE_BUTTON);
+    gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button, _(REFRESH_BUTTON_TOOLTIP));
+  }
 
-  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
   gtk_button_set_image (GTK_BUTTON (header_bar->combined_stop_reload_button),
                         image);
 }
@@ -636,6 +644,8 @@ ephy_header_bar_constructed (GObject *object)
                         gtk_image_new_from_icon_name ("go-previous-symbolic",
                         GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  /* Translators: tooltip for the back button */
+  gtk_widget_set_tooltip_text (button, _("Go back to the previous page"));
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                   "toolbar.navigation-back");
   g_signal_connect (button, "button-press-event",
@@ -653,6 +663,8 @@ ephy_header_bar_constructed (GObject *object)
                         gtk_image_new_from_icon_name ("go-next-symbolic",
                         GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  /* Translators: tooltip for the forward button */
+  gtk_widget_set_tooltip_text (button, _("Go forward to the next page"));
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                   "toolbar.navigation-forward");
   g_signal_connect (button, "button-press-event",
@@ -677,6 +689,7 @@ ephy_header_bar_constructed (GObject *object)
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("view-refresh-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_tooltip_text (button, _(REFRESH_BUTTON_TOOLTIP));
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
                                   "toolbar.combined-stop-reload");
   gtk_style_context_add_class (gtk_widget_get_style_context (button),
@@ -689,6 +702,8 @@ ephy_header_bar_constructed (GObject *object)
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("go-home-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  /* Translators: tooltip for the secret homepage button */
+  gtk_widget_set_tooltip_text (button, _("Go to your homepage"));
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.home");
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar), button);
 
@@ -745,8 +760,9 @@ ephy_header_bar_constructed (GObject *object)
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("ephy-bookmarks-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  /* Translators: tooltip for the bookmarks popover button */
+  gtk_widget_set_tooltip_text (button, _("View and manage your bookmarks"));
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (ephy_bookmarks_popover_new (header_bar->window)));
-
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
   /* Downloads */
@@ -757,16 +773,18 @@ ephy_header_bar_constructed (GObject *object)
   gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->downloads_revealer),
                                  ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
 
-  header_bar->downloads_button = gtk_menu_button_new ();
-  gtk_button_set_image (GTK_BUTTON (header_bar->downloads_button), ephy_downloads_progress_icon_new ());
-  gtk_widget_set_valign (header_bar->downloads_button, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (header_bar->downloads_revealer), header_bar->downloads_button);
-  gtk_widget_show (header_bar->downloads_button);
+  button = gtk_menu_button_new ();
+  header_bar->downloads_button = button;
+  gtk_button_set_image (GTK_BUTTON (button), ephy_downloads_progress_icon_new ());
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  /* Translators: tooltip for the downloads button */
+  gtk_widget_set_tooltip_text (button, _("View downloads"));
+  gtk_container_add (GTK_CONTAINER (header_bar->downloads_revealer), button);
+  gtk_widget_show (button);
 
   if (ephy_downloads_manager_get_downloads (downloads_manager)) {
-    header_bar->downloads_popover = ephy_downloads_popover_new (header_bar->downloads_button);
-    gtk_menu_button_set_popover (GTK_MENU_BUTTON (header_bar->downloads_button),
-                                 header_bar->downloads_popover);
+    header_bar->downloads_popover = ephy_downloads_popover_new (button);
+    gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), header_bar->downloads_popover);
   }
 
   /* New Tab */
@@ -778,6 +796,8 @@ ephy_header_bar_constructed (GObject *object)
   header_bar->new_tab_button = button;
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON));
+  /* Translators: tooltip for the new tab button */
+  gtk_widget_set_tooltip_text (button, _("Open a new tab"));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
   gtk_container_add (GTK_CONTAINER (header_bar->new_tab_revealer), button);
