@@ -51,6 +51,8 @@ struct _EphyNotebook {
   GList *focused_pages;
   guint tabs_vis_notifier_id;
 
+  GMenu *tab_menu;
+
   guint tabs_allowed : 1;
 };
 
@@ -63,6 +65,15 @@ static int  ephy_notebook_insert_page (GtkNotebook *notebook,
                                        int          position);
 static void ephy_notebook_remove (GtkContainer *container,
                                   GtkWidget    *tab_widget);
+static void ephy_notebook_page_added (GtkNotebook *notebook,
+                                      GtkWidget   *child,
+                                      guint        page_num);
+static void ephy_notebook_page_removed (GtkNotebook *notebook,
+                                        GtkWidget   *child,
+                                        guint        page_num);
+static void ephy_notebook_page_reordered (GtkNotebook *notebook,
+                                          GtkWidget   *child,
+                                          guint        page_num);
 
 static const GtkTargetEntry url_drag_types [] =
 {
@@ -139,6 +150,9 @@ ephy_notebook_class_init (EphyNotebookClass *klass)
   container_class->remove = ephy_notebook_remove;
 
   notebook_class->insert_page = ephy_notebook_insert_page;
+  notebook_class->page_added = ephy_notebook_page_added;
+  notebook_class->page_removed = ephy_notebook_page_removed;
+  notebook_class->page_reordered = ephy_notebook_page_reordered;
 
   signals[TAB_CLOSE_REQUEST] =
     g_signal_new ("tab-close-request",
@@ -450,7 +464,8 @@ ephy_notebook_constructed (GObject *object)
 {
   EphyNotebook *notebook = EPHY_NOTEBOOK (object);
   GtkWidget *hbox;
-  GtkWidget *widget;
+  GtkWidget *button;
+  GtkWidget *popover;
 
   G_OBJECT_CLASS (ephy_notebook_parent_class)->constructed (object);
 
@@ -458,11 +473,21 @@ ephy_notebook_constructed (GObject *object)
   gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), hbox, GTK_PACK_END);
   gtk_widget_show (hbox);
 
-  widget = gtk_button_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_relief (GTK_BUTTON (widget), GTK_RELIEF_NONE);
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (widget), "win.new-tab");
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 6);
-  gtk_widget_show (widget);
+  button = gtk_button_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 6);
+  gtk_widget_show (button);
+
+  button = gtk_menu_button_new ();
+  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 6);
+  gtk_widget_show (button);
+
+  notebook->tab_menu = g_menu_new ();
+  popover = gtk_popover_new (button);
+  gtk_popover_bind_model (GTK_POPOVER (popover), G_MENU_MODEL (notebook->tab_menu), "win");
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
 }
 
 static void
@@ -483,6 +508,69 @@ ephy_notebook_finalize (GObject *object)
   g_list_free (notebook->focused_pages);
 
   G_OBJECT_CLASS (ephy_notebook_parent_class)->finalize (object);
+}
+
+static const char *
+get_nth_tab_label_text (GtkNotebook *notebook,
+                        int          n)
+{
+  GtkWidget *page;
+  GtkWidget *tab_label;
+  GtkWidget *label;
+
+  g_assert (n >= 0);
+
+  page = gtk_notebook_get_nth_page (notebook, n);
+  g_assert (page != NULL);
+
+  tab_label = gtk_notebook_get_tab_label (notebook, page);
+  g_assert (GTK_IS_BOX (tab_label));
+
+  label = g_object_get_data (G_OBJECT (tab_label), "label");
+  g_assert (GTK_IS_LABEL (label));
+
+  return gtk_label_get_text (GTK_LABEL (label));
+}
+
+static char *
+ellipsize_tab_label (const char *label)
+{
+  static const int MAX_LENGTH = 50;
+  char *substring;
+  char *result;
+
+  if (g_utf8_strlen (label, -1) < MAX_LENGTH)
+    return g_strdup (label);
+
+  substring = g_utf8_substring (label, 0, MAX_LENGTH);
+  result = g_strconcat (substring, "…", NULL);
+  g_free (substring);
+
+  return result;
+}
+
+static void
+ephy_notebook_rebuild_tab_menu (EphyNotebook *notebook)
+{
+  GMenuItem *item;
+  const char *text;
+  char *ellipsized_text;
+  int num_pages;
+
+  g_menu_remove_all (notebook->tab_menu);
+
+  num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+
+  /* TODO: Add favicon as well. Will have to ditch GMenu. :( */
+  for (int i = 0; i < num_pages; i++) {
+    text = get_nth_tab_label_text (GTK_NOTEBOOK (notebook), i);
+    ellipsized_text = ellipsize_tab_label (text);
+    item = g_menu_item_new (ellipsized_text, NULL);
+    g_menu_item_set_action_and_target (item, "show-tab", "u", (guint)i, NULL);
+    g_menu_append_item (notebook->tab_menu, item);
+    g_free (ellipsized_text);
+    g_object_unref (item);
+  }
 }
 
 static void
@@ -529,6 +617,14 @@ sync_label (EphyEmbed *embed, GParamSpec *pspec, GtkWidget *label)
   title = ephy_embed_get_title (embed);
   gtk_label_set_text (GTK_LABEL (label), title);
   gtk_widget_set_tooltip_text (label, title);
+}
+
+static void
+rebuild_tab_menu_cb (EphyEmbed    *embed,
+                     GParamSpec   *pspec,
+                     EphyNotebook *notebook)
+{
+  ephy_notebook_rebuild_tab_menu (notebook);
 }
 
 static void
@@ -667,6 +763,8 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
                            G_CALLBACK (sync_icon), icon, 0);
   g_signal_connect_object (embed, "notify::title",
                            G_CALLBACK (sync_label), label, 0);
+  g_signal_connect_object (embed, "notify::title",
+                           G_CALLBACK (rebuild_tab_menu_cb), nb, 0);
   g_signal_connect_object (view, "load-changed",
                            G_CALLBACK (load_changed_cb), box, 0);
   g_signal_connect_object (view, "notify::is-playing-audio",
@@ -815,6 +913,8 @@ ephy_notebook_remove (GtkContainer *container,
   g_signal_handlers_disconnect_by_func
     (tab_widget, G_CALLBACK (sync_label), tab_label_label);
   g_signal_handlers_disconnect_by_func
+    (tab_widget, G_CALLBACK (sync_label), notebook);
+  g_signal_handlers_disconnect_by_func
     (view, G_CALLBACK (sync_load_status), tab_label);
   g_signal_handlers_disconnect_by_func
     (view, G_CALLBACK (sync_is_playing_audio), tab_label_speaker_icon);
@@ -822,6 +922,38 @@ ephy_notebook_remove (GtkContainer *container,
   GTK_CONTAINER_CLASS (ephy_notebook_parent_class)->remove (container, tab_widget);
 
   update_tabs_visibility (notebook, FALSE);
+}
+
+static void
+ephy_notebook_page_added (GtkNotebook *notebook,
+                          GtkWidget   *child,
+                          guint        page_num)
+{
+  if (GTK_NOTEBOOK_CLASS (ephy_notebook_parent_class)->page_added != NULL)
+    GTK_NOTEBOOK_CLASS (ephy_notebook_parent_class)->page_added (notebook, child, page_num);
+
+  ephy_notebook_rebuild_tab_menu (EPHY_NOTEBOOK (notebook));
+}
+
+static void
+ephy_notebook_page_removed (GtkNotebook *notebook,
+                            GtkWidget   *child,
+                            guint        page_num)
+{
+  if (GTK_NOTEBOOK_CLASS (ephy_notebook_parent_class)->page_removed != NULL)
+    GTK_NOTEBOOK_CLASS (ephy_notebook_parent_class)->page_removed (notebook, child, page_num);
+
+  ephy_notebook_rebuild_tab_menu (EPHY_NOTEBOOK (notebook));
+}
+
+static void ephy_notebook_page_reordered (GtkNotebook *notebook,
+                                          GtkWidget   *child,
+                                          guint        page_num)
+{
+  if (GTK_NOTEBOOK_CLASS (ephy_notebook_parent_class)->page_reordered != NULL)
+    GTK_NOTEBOOK_CLASS (ephy_notebook_parent_class)->page_reordered (notebook, child, page_num);
+
+  ephy_notebook_rebuild_tab_menu (EPHY_NOTEBOOK (notebook));
 }
 
 /**

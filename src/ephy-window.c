@@ -782,6 +782,8 @@ static const GActionEntry window_entries [] =
   { "location", window_cmd_go_location },
   { "home", window_cmd_go_home },
 
+  { "show-tab", window_cmd_show_tab, "u" },
+
   /* Toggle actions */
   { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret_state },
   { "fullscreen", NULL, NULL, "false", window_cmd_change_fullscreen_state },

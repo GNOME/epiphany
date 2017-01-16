@@ -2312,3 +2312,19 @@ window_cmd_tabs_close (GSimpleAction *action,
 
   g_signal_emit_by_name (notebook, "tab-close-request", embed);
 }
+
+void
+window_cmd_show_tab (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  GtkWidget *notebook;
+  guint32 tab_num;
+
+  g_assert (g_variant_is_of_type (parameter, G_VARIANT_TYPE_UINT32));
+  tab_num = g_variant_get_uint32 (parameter);
+
+  notebook = ephy_window_get_notebook (window);
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), tab_num);
+}
