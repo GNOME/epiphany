@@ -182,5 +182,8 @@ void window_cmd_tabs_close                      (GSimpleAction *action,
 void window_cmd_show_tab                        (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_change_show_tab_state           (GSimpleAction *action,
+                                                 GVariant      *state,
+                                                 gpointer       user_data);
 
 G_END_DECLS

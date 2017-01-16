@@ -2327,4 +2327,13 @@ window_cmd_show_tab (GSimpleAction *action,
 
   notebook = ephy_window_get_notebook (window);
   gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), tab_num);
+  g_simple_action_set_state (action, parameter);
+}
+
+void
+window_cmd_change_show_tab_state (GSimpleAction *action,
+                                  GVariant      *parameter,
+                                  gpointer       user_data)
+{
+  /* This page intentionally left blank. */
 }

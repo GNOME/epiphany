@@ -782,7 +782,7 @@ static const GActionEntry window_entries [] =
   { "location", window_cmd_go_location },
   { "home", window_cmd_go_home },
 
-  { "show-tab", window_cmd_show_tab, "u" },
+  { "show-tab", window_cmd_show_tab, "u", "uint32 0", window_cmd_change_show_tab_state },
 
   /* Toggle actions */
   { "browse-with-caret", NULL, NULL, "false", window_cmd_change_browse_with_caret_state },
@@ -2585,6 +2585,8 @@ notebook_switch_page_cb (GtkNotebook *notebook,
                          EphyWindow  *window)
 {
   EphyEmbed *embed;
+  GActionGroup *group;
+  GAction *action;
 
   LOG ("switch-page notebook %p position %u\n", notebook, page_num);
 
@@ -2596,6 +2598,11 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 
   /* update new tab */
   ephy_window_set_active_tab (window, embed);
+
+  /* update notebook menu */
+  group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), "show-tab");
+  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_uint32 (page_num));
 }
 
 static GtkNotebook *
