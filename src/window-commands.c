@@ -2207,7 +2207,8 @@ window_cmd_tabs_move_left (GSimpleAction *action,
 
   notebook = GTK_NOTEBOOK (ephy_window_get_notebook (EPHY_WINDOW (user_data)));
   page = gtk_notebook_get_current_page (notebook);
-  if (page < 1) return;
+  if (page < 1)
+    return;
 
   child = gtk_notebook_get_nth_page (notebook, page);
   gtk_notebook_reorder_child (notebook, child, page - 1);
@@ -2224,7 +2225,8 @@ void window_cmd_tabs_move_right (GSimpleAction *action,
   notebook = GTK_NOTEBOOK (ephy_window_get_notebook (EPHY_WINDOW (user_data)));
   page = gtk_notebook_get_current_page (notebook);
   n_pages = gtk_notebook_get_n_pages (notebook) - 1;
-  if (page > n_pages - 1) return;
+  if (page > n_pages - 1)
+    return;
 
   child = gtk_notebook_get_nth_page (notebook, page);
   gtk_notebook_reorder_child (notebook, child, page + 1);
@@ -2290,8 +2292,8 @@ window_cmd_tabs_detach (GSimpleAction *action,
 
 void
 window_cmd_tabs_close (GSimpleAction *action,
-                              GVariant      *parameter,
-                              gpointer       user_data)
+                       GVariant      *parameter,
+                       gpointer       user_data)
 {
   EphyWindow *window = user_data;
   GtkWidget *notebook;
