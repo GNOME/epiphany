@@ -2896,7 +2896,7 @@ static void
 ephy_window_constructed (GObject *object)
 {
   EphyWindow *window;
-  GAction *new_action;
+  GAction *action;
   GActionGroup *action_group;
   GSimpleActionGroup *simple_action_group;
   GtkCssProvider *css_provider;
@@ -2998,16 +2998,16 @@ ephy_window_constructed (GObject *object)
 
   /* other notifiers */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                            "browse-with-caret");
 
   g_settings_bind_with_mapping (EPHY_SETTINGS_MAIN,
                                 EPHY_PREFS_ENABLE_CARET_BROWSING,
-                                G_SIMPLE_ACTION (new_action), "state",
+                                G_SIMPLE_ACTION (action), "state",
                                 G_SETTINGS_BIND_GET|G_SETTINGS_BIND_GET_NO_CHANGES,
                                 browse_with_caret_get_mapping,
                                 NULL,
-                                new_action, NULL);
+                                action, NULL);
 
   g_signal_connect (EPHY_SETTINGS_WEB,
                     "changed::" EPHY_PREFS_WEB_ENABLE_POPUPS,
@@ -3017,15 +3017,15 @@ ephy_window_constructed (GObject *object)
                                               "win");
 
   /* Disable actions not needed for popup mode. */
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "new-tab");
-  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "new-tab");
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                         SENS_FLAG_CHROME,
                                         window->is_popup);
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "popup");
-  new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "open-link-in-new-tab");
-  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                         SENS_FLAG_CHROME,
                                         window->is_popup);
 
@@ -3035,14 +3035,14 @@ ephy_window_constructed (GObject *object)
     g_object_set (window->location_controller, "editable", FALSE, NULL);
 
     action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "popup");
-    new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "context-bookmark-page");
-    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action), SENS_FLAG_CHROME, TRUE);
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "context-bookmark-page");
+    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG_CHROME, TRUE);
 
     action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
     for (i = 0; i < G_N_ELEMENTS (disabled_actions_for_app_mode); i++) {
-      new_action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                               disabled_actions_for_app_mode[i]);
-      ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (new_action),
+      action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                           disabled_actions_for_app_mode[i]);
+      ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                             SENS_FLAG_CHROME, TRUE);
     }
     chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR | EPHY_WINDOW_CHROME_BOOKMARKS);
