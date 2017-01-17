@@ -134,7 +134,7 @@ clear_data_dialog_class_init (ClearDataDialogClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/clear-data-dialog.ui");
+                                               "/org/gnome/epiphany/gtk/clear-data-dialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, cookies_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, ClearDataDialog, cache_checkbutton);

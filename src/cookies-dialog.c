@@ -237,7 +237,7 @@ ephy_cookies_dialog_class_init (EphyCookiesDialogClass *klass)
   object_class->finalize = ephy_cookies_dialog_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/cookies-dialog.ui");
+                                               "/org/gnome/epiphany/gtk/cookies-dialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, liststore);
   gtk_widget_class_bind_template_child (widget_class, EphyCookiesDialog, treemodelfilter);

@@ -569,7 +569,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   object_class->finalize = prefs_dialog_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/prefs-dialog.ui");
+                                               "/org/gnome/epiphany/gtk/prefs-dialog.ui");
   /* general */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, new_tab_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, blank_homepage_radiobutton);
@@ -938,7 +938,7 @@ setup_add_language_dialog (PrefsDialog *dialog)
   guint i;
   GtkBuilder *builder;
 
-  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/prefs-lang-dialog.ui");
+  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/prefs-lang-dialog.ui");
   ad = GTK_WIDGET (gtk_builder_get_object (builder, "add_language_dialog"));
   add_button = GTK_WIDGET (gtk_builder_get_object (builder, "add_button"));
   treeview = GTK_TREE_VIEW (gtk_builder_get_object (builder, "languages_treeview"));

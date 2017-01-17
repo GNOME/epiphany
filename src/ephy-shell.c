@@ -353,7 +353,7 @@ ephy_shell_startup (GApplication *application)
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder,
-                                 "/org/gnome/epiphany/epiphany-application-menu.ui",
+                                 "/org/gnome/epiphany/gtk/application-menu.ui",
                                  NULL);
 
   mode = ephy_embed_shell_get_mode (embed_shell);
@@ -382,10 +382,6 @@ ephy_shell_startup (GApplication *application)
                       G_CALLBACK (sync_tokens_load_finished_cb), NULL);
 #endif
 
-    builder = gtk_builder_new ();
-    gtk_builder_add_from_resource (builder,
-                                   "/org/gnome/epiphany/epiphany-application-menu.ui",
-                                   NULL);
     gtk_application_set_app_menu (GTK_APPLICATION (application),
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   } else {

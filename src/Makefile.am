@@ -142,38 +142,37 @@ libephymain_la_LIBADD = \
 	$(WEBKIT2GTK_LIBS)
 
 RESOURCE_FILES = \
-	resources/about.css			  					\
-	resources/about.ini								\
-	resources/channel-insecure-symbolic.png						\
-	resources/computer-fail-symbolic.png						\
-	resources/clear-data-dialog.ui							\
-	resources/cookies-dialog.ui							\
-	resources/encoding-dialog.ui							\
-	resources/encoding-row.ui							\
-	resources/epiphany-application-menu.ui						\
-	resources/epiphany.css								\
-	resources/error.css								\
-	resources/error.html								\
-	resources/gtk/menus.ui								\
-	resources/gtk/page-menu-popover.ui						\
-	resources/history-dialog.ui							\
-	resources/incognito.png								\
-	resources/mime-types-permissions.xml						\
-	resources/missing-thumbnail.png							\
-	resources/network-error-symbolic.png						\
-	resources/passwords-dialog.ui							\
-	resources/prefs-dialog.ui							\
-	resources/prefs-lang-dialog.ui							\
-	resources/prism.css								\
-	resources/prism.js								\
-	resources/shortcuts-dialog.ui							\
-	resources/ephy-bookmark-tag-symbolic.svg					\
-	resources/ephy-bookmarks-symbolic.svg						\
-	resources/gtk/bookmark-properties-grid.ui					\
-	resources/gtk/bookmark-row.ui							\
-	resources/gtk/bookmarks-popover.ui						\
-	resources/gtk/menus.ui								\
-	$(NULL)
+	resources/about.css			  	\
+	resources/about.ini				\
+	resources/channel-insecure-symbolic.png		\
+	resources/computer-fail-symbolic.png		\
+	resources/ephy-bookmark-tag-symbolic.svg	\
+	resources/ephy-bookmarks-symbolic.svg		\
+	resources/epiphany.css				\
+	resources/error.css				\
+	resources/error.html				\
+	resources/gtk/application-menu.ui		\
+	resources/gtk/bookmark-properties-grid.ui	\
+	resources/gtk/bookmark-row.ui			\
+	resources/gtk/bookmarks-popover.ui		\
+	resources/gtk/clear-data-dialog.ui		\
+	resources/gtk/cookies-dialog.ui			\
+	resources/gtk/encoding-dialog.ui		\
+	resources/gtk/encoding-row.ui			\
+	resources/gtk/history-dialog.ui			\
+	resources/gtk/menus.ui				\
+	resources/gtk/page-menu-popover.ui		\
+	resources/gtk/passwords-dialog.ui		\
+	resources/gtk/prefs-dialog.ui			\
+	resources/gtk/prefs-lang-dialog.ui		\
+	resources/gtk/shortcuts-dialog.ui		\
+	resources/incognito.png				\
+	resources/mime-types-permissions.xml		\
+	resources/missing-thumbnail.png			\
+	resources/network-error-symbolic.png		\
+	resources/prism.css				\
+	resources/prism.js
+
 
 epiphany-resources.c: resources/epiphany.gresource.xml $(RESOURCE_FILES)
 	$(AM_V_GEN) glib-compile-resources --target=$@ --sourcedir=$(srcdir)/resources --generate-source --c-name epiphany $(srcdir)/resources/epiphany.gresource.xml
