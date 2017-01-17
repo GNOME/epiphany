@@ -206,8 +206,6 @@ main (int   argc,
    */
   LIBXML_TEST_VERSION;
 
-  notify_init (PACKAGE);
-
   /* If we're given -remote arguments, translate them */
   if (argc >= 2 && strcmp (argv[1], "-remote") == 0) {
     const char *opening, *closing;
