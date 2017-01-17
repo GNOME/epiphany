@@ -237,6 +237,9 @@ ephy_bookmarks_popover_bookmark_added_cb (EphyBookmarksPopover *self,
     row = create_bookmark_row (bookmark, self);
     gtk_container_add (GTK_CONTAINER (self->tags_list_box), row);
   }
+
+  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "empty-state") == 0)
+    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "default");
 }
 
 static void
@@ -270,6 +273,9 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
   }
 
   gtk_container_remove (GTK_CONTAINER (self->tags_list_box), row);
+
+  if (g_list_model_get_n_items (G_LIST_MODEL (self->list_model)) == 0)
+    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
 }
 
 static void
@@ -501,6 +507,9 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
                            G_LIST_MODEL (self->list_model),
                            create_bookmark_row,
                            self, NULL);
+
+  if (g_list_model_get_n_items (G_LIST_MODEL (self->list_model)) == 0)
+    gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
 
   gtk_list_box_set_sort_func (GTK_LIST_BOX (self->tags_list_box),
                               (GtkListBoxSortFunc)tags_list_box_sort_func,
