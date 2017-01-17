@@ -261,8 +261,14 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
       break;
   }
 
-  g_signal_emit (self, signals[BOOKMARK_REMOVED], 0, bookmark);
+  /* Ensure the bookmark is removed from our list before the signal is emitted,
+   * because this is the bookmark REMOVED signal after all, so callers expect
+   * it to be already gone.
+   */
+  g_object_ref (bookmark);
   g_sequence_remove (iter);
+  g_signal_emit (self, signals[BOOKMARK_REMOVED], 0, bookmark);
+  g_object_unref (bookmark);
 
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                              (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
