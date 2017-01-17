@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.10 -->
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkTreeStore" id="treestore">
+    <columns>
+      <!-- column-name TYPE -->
+      <column type="guint"/>
+      <!-- column-name ACTIVE -->
+      <column type="gboolean"/>
+      <!-- column-name NAME -->
+      <column type="gchararray"/>
+      <!-- column-name DATA -->
+      <column type="WebKitWebsiteData"/>
+      <!-- column-name SENSITIVE -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <object class="GtkTreeModelFilter" id="treemodelfilter">
+    <property name="child_model">treestore</property>
+  </object>
   <template class="ClearDataDialog" parent="GtkDialog">
-    <property name="border_width">15</property>
+    <property name="height_request">500</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <property name="resizable">False</property>
     <signal name="response" handler="clear_data_dialog_response_cb"/>
+    <signal name="key-press-event" handler="gtk_search_bar_handle_event" object="search_bar" swapped="true"/>
     <child internal-child="headerbar">
       <object class="GtkHeaderBar">
         <property name="title" translatable="yes">Clear Personal Data</property>
-        <property name="show-close-button">False</property>
+        <property name="show-close-button">True</property>
         <child>
           <object class="GtkButton" id="clear_button">
             <property name="label" translatable="yes">C_lear</property>
@@ -24,46 +41,66 @@
               <class name="text-button"/>
             </style>
           </object>
-          <packing>
-            <property name="pack_type">end</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkButton" id="cancel_button">
-            <property name="label" translatable="yes">_Cancel</property>
+          <object class="GtkToggleButton" id="search_button">
             <property name="visible">True</property>
-            <property name="use_underline">True</property>
             <property name="valign">center</property>
+            <accelerator key="F" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
             <style>
-              <class name="text-button"/>
+              <class name="image-button"/>
             </style>
+            <child internal-child="accessible">
+              <object class="AtkObject">
+                <property name="AtkObject::accessible-name" translatable="yes">Search</property>
+                <property name="AtkObject::accessible-description" translatable="yes">Filter domains</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">edit-find-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
           </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
         </child>
       </object>
     </child>
     <child internal-child="vbox">
       <object class="GtkBox">
-        <property name="spacing">12</property>
+        <property name="border_width">0</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkSearchBar" id="search_bar">
             <property name="visible">True</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes">Select the personal data you wish to clear</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <property name="search-mode-enabled" bind-source="search_button" bind-property="active" bind-flags="bidirectional|sync-create"/>
+            <child>
+              <object class="GtkSearchEntry" id="search_entry">
+                <property name="visible">True</property>
+                <property name="width-request">300</property> <!-- looks cool and same as passwords-dialog -->
+                <property name="primary_icon_name">edit-find-symbolic</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">False</property>
+                <property name="placeholder_text" translatable="yes">Search domains</property>
+                <signal name="search-changed" handler="search_entry_changed_cb"/>
+              </object>
+            </child>
           </object>
         </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="border_width">15</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">You are about to clear personal data that is stored about the web pages you have visited. Check the types of information that you want to remove:</property>
+                <property name="label" translatable="yes">You can select a period of time to clear data for all websites modified in that period. If you choose from the beginning of time, then you can also clear data only for particular websites.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">50</property>
               </object>
@@ -71,62 +108,138 @@
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="margin">10</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">2</property>
+                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkCheckButton" id="cookies_checkbutton">
-                    <property name="label" translatable="yes">Coo_kies</property>
+                  <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="halign">start</property>
-                    <signal name="toggled" handler="checkbutton_toggled_cb"/>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Clear selected personal data _from:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">timespan_combo</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="timespan_combo">
+                        <property name="visible">True</property>
+                        <signal name="changed" handler="timespan_combo_changed_cb"/>
+                        <items>
+                          <item translatable="yes">the past hour</item>
+                          <item translatable="yes">the past day</item>
+                          <item translatable="yes">the past week</item>
+                          <item translatable="yes">the past four weeks</item>
+                          <item translatable="yes">the beginning of time</item>
+                        </items>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="cache_checkbutton">
-                    <property name="label" translatable="yes">Cache and _temporary files</property>
+                  <object class="GtkStack" id="stack">
                     <property name="visible">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="halign">start</property>
-                    <signal name="toggled" handler="checkbutton_toggled_cb"/>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="history_checkbutton">
-                    <property name="label" translatable="yes">Browsing _history</property>
-                    <property name="visible">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="halign">start</property>
-                    <signal name="toggled" handler="checkbutton_toggled_cb"/>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="passwords_checkbutton">
-                    <property name="label" translatable="yes">Saved _passwords</property>
-                    <property name="visible">True</property>
-                    <property name="use_underline">True</property>
-                    <property name="halign">start</property>
-                    <signal name="toggled" handler="checkbutton_toggled_cb"/>
+                    <child>
+                      <object class="GtkSpinner" id="spinner">
+                        <property name="visible">True</property>
+                        <property name="width_request">32</property>
+                        <property name="height_request">32</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                      <packing>
+                        <property name="name">spinner</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <child>
+                          <object class="GtkTreeView" id="treeview">
+                            <property name="visible">True</property>
+                            <property name="model">treemodelfilter</property>
+                            <property name="headers-visible">False</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection">
+                                <property name="mode">none</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="active_column">
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="check_renderer">
+                                    <signal name="toggled" handler="item_toggled_cb"/>
+                                  </object>
+                                  <attributes>
+                                    <attribute name="active">1</attribute>
+                                    <attribute name="sensitive">4</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="name_column">
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">2</attribute>
+                                    <attribute name="sensitive">4</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="name">view</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="label" translatable="yes">No data found</property>
+                        <attributes>
+                          <attribute name="scale" value="1.4"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="name">nodata</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes">You cannot undo this action. The data you are choosing to clear will be removed forever.</property>
-            <property name="wrap">True</property>
-            <property name="max_width_chars">50</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">You cannot undo this action. The data you are choosing to clear will be removed forever.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">50</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
           </object>
         </child>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-6">cancel_button</action-widget>
       <action-widget response="-5">clear_button</action-widget>
     </action-widgets>
   </template>
