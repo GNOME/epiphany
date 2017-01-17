@@ -30,7 +30,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-gui.h"
 #include "ephy-header-bar.h"
-#include "ephy-history-window.h"
+#include "ephy-history-dialog.h"
 #include "ephy-lockdown.h"
 #include "ephy-prefs.h"
 #include "ephy-session.h"
@@ -62,7 +62,7 @@ struct _EphyShell {
   GObject *lockdown;
   EphyBookmarksManager *bookmarks_manager;
   GNetworkMonitor *network_monitor;
-  GtkWidget *history_window;
+  GtkWidget *history_dialog;
   GObject *prefs_dialog;
   EphyShellStartupContext *local_startup_context;
   EphyShellStartupContext *remote_startup_context;
@@ -643,7 +643,7 @@ ephy_shell_dispose (GObject *object)
 
   g_clear_object (&shell->session);
   g_clear_object (&shell->lockdown);
-  g_clear_pointer (&shell->history_window, gtk_widget_destroy);
+  g_clear_pointer (&shell->history_dialog, gtk_widget_destroy);
   g_clear_object (&shell->prefs_dialog);
   g_clear_object (&shell->network_monitor);
 #ifdef ENABLE_SYNC
@@ -847,29 +847,29 @@ ephy_shell_get_net_monitor (EphyShell *shell)
 }
 
 /**
- * ephy_shell_get_history_window:
+ * ephy_shell_get_history_dialog:
  *
  * Return value: (transfer none):
  **/
 GtkWidget *
-ephy_shell_get_history_window (EphyShell *shell)
+ephy_shell_get_history_dialog (EphyShell *shell)
 {
   EphyEmbedShell *embed_shell;
   EphyHistoryService *service;
 
   embed_shell = ephy_embed_shell_get_default ();
 
-  if (shell->history_window == NULL) {
+  if (shell->history_dialog == NULL) {
     service = EPHY_HISTORY_SERVICE
                 (ephy_embed_shell_get_global_history_service (embed_shell));
-    shell->history_window = ephy_history_window_new (service);
-    g_signal_connect (shell->history_window,
+    shell->history_dialog = ephy_history_dialog_new (service);
+    g_signal_connect (shell->history_dialog,
                       "destroy",
                       G_CALLBACK (gtk_widget_destroyed),
-                      &shell->history_window);
+                      &shell->history_dialog);
   }
 
-  return shell->history_window;
+  return shell->history_dialog;
 }
 
 /**

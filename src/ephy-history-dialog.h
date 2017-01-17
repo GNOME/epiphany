@@ -26,10 +26,10 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_HISTORY_WINDOW (ephy_history_window_get_type ())
+#define EPHY_TYPE_HISTORY_DIALOG (ephy_history_dialog_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyHistoryWindow, ephy_history_window, EPHY, HISTORY_WINDOW, GtkDialog)
+G_DECLARE_FINAL_TYPE (EphyHistoryDialog, ephy_history_dialog, EPHY, HISTORY_DIALOG, GtkDialog)
 
-GtkWidget      *ephy_history_window_new        (EphyHistoryService *history_service);
+GtkWidget      *ephy_history_dialog_new        (EphyHistoryService *history_service);
 
 G_END_DECLS

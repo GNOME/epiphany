@@ -109,7 +109,7 @@ EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
 EphySyncService *ephy_shell_get_sync_service             (EphyShell *shell);
 #endif
 
-GtkWidget       *ephy_shell_get_history_window           (EphyShell *shell);
+GtkWidget       *ephy_shell_get_history_dialog           (EphyShell *shell);
 
 GObject         *ephy_shell_get_prefs_dialog             (EphyShell *shell);
 

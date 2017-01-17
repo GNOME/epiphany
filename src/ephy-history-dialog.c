@@ -21,7 +21,7 @@
  */
 
 #include "config.h"
-#include "ephy-history-window.h"
+#include "ephy-history-dialog.h"
 
 #include "ephy-debug.h"
 #include "ephy-gui.h"
@@ -41,7 +41,7 @@
 /* 3/5 of gdkframeclockidle.c's FRAME_INTERVAL (16667 microsecs) */
 #define GTK_TREE_VIEW_TIME_MS_PER_IDLE 10
 
-struct _EphyHistoryWindow {
+struct _EphyHistoryDialog {
   GtkDialog parent_instance;
 
   EphyHistoryService *history_service;
@@ -70,7 +70,7 @@ struct _EphyHistoryWindow {
   GtkWidget *confirmation_dialog;
 };
 
-G_DEFINE_TYPE (EphyHistoryWindow, ephy_history_window, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (EphyHistoryDialog, ephy_history_dialog, GTK_TYPE_DIALOG)
 
 enum {
   PROP_0,
@@ -84,10 +84,10 @@ typedef enum {
   COLUMN_DATE,
   COLUMN_NAME,
   COLUMN_LOCATION
-} EphyHistoryWindowColumns;
+} EphyHistoryDialogColumns;
 
 static gboolean
-add_urls_source (EphyHistoryWindow *self)
+add_urls_source (EphyHistoryDialog *self)
 {
   EphyHistoryURL *url;
   GTimer *timer;
@@ -127,7 +127,7 @@ on_find_urls_cb (gpointer service,
                  gpointer result_data,
                  gpointer user_data)
 {
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
   GtkTreeViewColumn *column;
 
   if (success != TRUE)
@@ -147,7 +147,7 @@ on_find_urls_cb (gpointer service,
 }
 
 static GList *
-substrings_filter (EphyHistoryWindow *self)
+substrings_filter (EphyHistoryDialog *self)
 {
   char **tokens, **p;
   GList *substrings = NULL;
@@ -167,7 +167,7 @@ substrings_filter (EphyHistoryWindow *self)
 }
 
 static void
-remove_pending_sorter_source (EphyHistoryWindow *self)
+remove_pending_sorter_source (EphyHistoryDialog *self)
 {
   if (self->sorter_source != 0) {
     g_source_remove (self->sorter_source);
@@ -181,7 +181,7 @@ remove_pending_sorter_source (EphyHistoryWindow *self)
 }
 
 static void
-filter_now (EphyHistoryWindow *self)
+filter_now (EphyHistoryDialog *self)
 {
   gint64 from, to;
   GList *substrings;
@@ -219,7 +219,7 @@ filter_now (EphyHistoryWindow *self)
 static void
 confirmation_dialog_response_cb (GtkWidget         *dialog,
                                  int                response,
-                                 EphyHistoryWindow *self)
+                                 EphyHistoryDialog *self)
 {
   gtk_widget_destroy (dialog);
 
@@ -231,7 +231,7 @@ confirmation_dialog_response_cb (GtkWidget         *dialog,
 }
 
 static GtkWidget *
-confirmation_dialog_construct (EphyHistoryWindow *self)
+confirmation_dialog_construct (EphyHistoryDialog *self)
 {
   GtkWidget *dialog, *button;
 
@@ -268,7 +268,7 @@ forget_all (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
 
   if (self->confirmation_dialog == NULL) {
     GtkWidget **confirmation_dialog;
@@ -283,7 +283,7 @@ forget_all (GSimpleAction *action,
 }
 
 static GtkWidget *
-get_target_window (EphyHistoryWindow *self)
+get_target_window (EphyHistoryDialog *self)
 {
     return GTK_WIDGET (gtk_application_get_active_window (GTK_APPLICATION (ephy_shell_get_default ())));
 }
@@ -294,7 +294,7 @@ on_browse_history_deleted_cb (gpointer service,
                               gpointer result_data,
                               gpointer user_data)
 {
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
 
   if (success != TRUE)
     return;
@@ -332,7 +332,7 @@ get_selection_foreach (GtkTreeModel *model,
 }
 
 static GList *
-get_selection (EphyHistoryWindow *self)
+get_selection (EphyHistoryDialog *self)
 {
   GList *list = NULL;
 
@@ -344,7 +344,7 @@ get_selection (EphyHistoryWindow *self)
 }
 
 static void
-delete_selected (EphyHistoryWindow *self)
+delete_selected (EphyHistoryDialog *self)
 {
   GList *selected;
 
@@ -358,7 +358,7 @@ open_selection (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       user_data)
 {
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
   EphyWindow *window;
   GList *selection;
   GList *l;
@@ -383,7 +383,7 @@ copy_url (GSimpleAction *action,
           GVariant      *parameter,
           gpointer       user_data)
 {
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
   GList *selection;
 
   selection = get_selection (self);
@@ -402,7 +402,7 @@ forget (GSimpleAction *action,
         GVariant      *parameter,
         gpointer       user_data)
 {
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (user_data);
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (user_data);
 
   delete_selected (self);
 }
@@ -410,7 +410,7 @@ forget (GSimpleAction *action,
 static gboolean
 on_treeview_key_press_event (GtkWidget         *widget,
                              GdkEventKey       *event,
-                             EphyHistoryWindow *self)
+                             EphyHistoryDialog *self)
 {
   if (event->keyval == GDK_KEY_Delete || event->keyval == GDK_KEY_KP_Delete) {
     delete_selected (self);
@@ -435,7 +435,7 @@ update_popup_menu_actions (GActionGroup *action_group,
 static gboolean
 on_treeview_button_press_event (GtkWidget         *widget,
                                 GdkEventButton    *event,
-                                EphyHistoryWindow *self)
+                                EphyHistoryDialog *self)
 {
   if (event->button == 3) {
     int n;
@@ -460,7 +460,7 @@ static void
 on_treeview_row_activated (GtkTreeView       *view,
                            GtkTreePath       *path,
                            GtkTreeViewColumn *col,
-                           EphyHistoryWindow *self)
+                           EphyHistoryDialog *self)
 {
   EphyWindow *window;
   EphyHistoryURL *url;
@@ -479,7 +479,7 @@ on_treeview_row_activated (GtkTreeView       *view,
 
 static void
 on_search_entry_changed (GtkSearchEntry    *entry,
-                         EphyHistoryWindow *self)
+                         EphyHistoryDialog *self)
 {
   const char *text;
 
@@ -493,7 +493,7 @@ on_search_entry_changed (GtkSearchEntry    *entry,
 static gboolean
 on_search_key_press_event (GtkWidget        *widget,
                           GdkEventKey       *event,
-                          EphyHistoryWindow *self)
+                          EphyHistoryDialog *self)
 {
   if (event->keyval == GDK_KEY_Escape) {
     g_signal_emit_by_name (self, "close", NULL);
@@ -519,7 +519,7 @@ update_selection_actions (GActionGroup *action_group,
 
 static void
 on_treeview_selection_changed (GtkTreeSelection  *selection,
-                               EphyHistoryWindow *self)
+                               EphyHistoryDialog *self)
 {
   update_selection_actions (self->action_group,
                             gtk_tree_selection_count_selected_rows (selection) > 0);
@@ -527,7 +527,7 @@ on_treeview_selection_changed (GtkTreeSelection  *selection,
 
 static void
 on_treeview_column_clicked_event (GtkTreeViewColumn *column,
-                                  EphyHistoryWindow *self)
+                                  EphyHistoryDialog *self)
 {
   GtkTreeViewColumn *previous_sortby;
   gint new_sort_column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (column), "column"));
@@ -549,7 +549,7 @@ on_treeview_column_clicked_event (GtkTreeViewColumn *column,
 
 static gboolean
 on_urls_visited_cb (EphyHistoryService *service,
-                    EphyHistoryWindow  *self)
+                    EphyHistoryDialog  *self)
 {
   filter_now (self);
 
@@ -557,7 +557,7 @@ on_urls_visited_cb (EphyHistoryService *service,
 }
 
 static void
-set_history_service (EphyHistoryWindow  *self,
+set_history_service (EphyHistoryDialog  *self,
                      EphyHistoryService *history_service)
 {
   if (history_service == self->history_service)
@@ -581,12 +581,12 @@ set_history_service (EphyHistoryWindow  *self,
 }
 
 static void
-ephy_history_window_set_property (GObject      *object,
+ephy_history_dialog_set_property (GObject      *object,
                                   guint         prop_id,
                                   const GValue *value,
                                   GParamSpec   *pspec)
 {
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (object);
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (object);
 
   switch (prop_id) {
     case PROP_HISTORY_SERVICE:
@@ -599,12 +599,12 @@ ephy_history_window_set_property (GObject      *object,
 }
 
 static void
-ephy_history_window_get_property (GObject    *object,
+ephy_history_dialog_get_property (GObject    *object,
                                   guint       prop_id,
                                   GValue     *value,
                                   GParamSpec *pspec)
 {
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (object);
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (object);
 
   switch (prop_id) {
     case PROP_HISTORY_SERVICE:
@@ -617,9 +617,9 @@ ephy_history_window_get_property (GObject    *object,
 }
 
 static void
-ephy_history_window_dispose (GObject *object)
+ephy_history_dialog_dispose (GObject *object)
 {
-  EphyHistoryWindow *self = EPHY_HISTORY_WINDOW (object);
+  EphyHistoryDialog *self = EPHY_HISTORY_DIALOG (object);
 
   g_free (self->search_text);
   self->search_text = NULL;
@@ -637,18 +637,18 @@ ephy_history_window_dispose (GObject *object)
 
   remove_pending_sorter_source (self);
 
-  G_OBJECT_CLASS (ephy_history_window_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_history_dialog_parent_class)->dispose (object);
 }
 
 static void
-ephy_history_window_class_init (EphyHistoryWindowClass *klass)
+ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->set_property = ephy_history_window_set_property;
-  object_class->get_property = ephy_history_window_get_property;
-  object_class->dispose = ephy_history_window_dispose;
+  object_class->set_property = ephy_history_dialog_set_property;
+  object_class->get_property = ephy_history_dialog_get_property;
+  object_class->dispose = ephy_history_dialog_dispose;
 
   obj_properties[PROP_HISTORY_SERVICE] =
     g_param_spec_object ("history-service",
@@ -661,15 +661,15 @@ ephy_history_window_class_init (EphyHistoryWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/history-dialog.ui");
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, liststore);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, treeview);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, tree_selection);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, date_column);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, name_column);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, location_column);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, date_renderer);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, location_renderer);
-  gtk_widget_class_bind_template_child (widget_class, EphyHistoryWindow, treeview_popup_menu_model);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, liststore);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, treeview);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, tree_selection);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, date_column);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, name_column);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, location_column);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, date_renderer);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, location_renderer);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, treeview_popup_menu_model);
 
   gtk_widget_class_bind_template_callback (widget_class, on_treeview_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_treeview_key_press_event);
@@ -727,13 +727,13 @@ convert_location_data_func (GtkTreeViewColumn *column,
 }
 
 GtkWidget *
-ephy_history_window_new (EphyHistoryService *history_service)
+ephy_history_dialog_new (EphyHistoryService *history_service)
 {
-  EphyHistoryWindow *self;
+  EphyHistoryDialog *self;
 
   g_return_val_if_fail (history_service != NULL, NULL);
 
-  self = g_object_new (EPHY_TYPE_HISTORY_WINDOW,
+  self = g_object_new (EPHY_TYPE_HISTORY_DIALOG,
                        "use-header-bar", TRUE,
                        "history-service", history_service,
                        NULL);
@@ -742,7 +742,7 @@ ephy_history_window_new (EphyHistoryService *history_service)
 }
 
 static GActionGroup *
-create_action_group (EphyHistoryWindow *self)
+create_action_group (EphyHistoryDialog *self)
 {
   const GActionEntry entries[] = {
     { "open-selection", open_selection },
@@ -759,7 +759,7 @@ create_action_group (EphyHistoryWindow *self)
 }
 
 static void
-ephy_history_window_init (EphyHistoryWindow *self)
+ephy_history_dialog_init (EphyHistoryDialog *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 

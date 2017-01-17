@@ -48,8 +48,8 @@ libephymain_la_SOURCES = \
 	ephy-encoding-row.h			\
 	ephy-header-bar.c			\
 	ephy-header-bar.h			\
-	ephy-history-window.c			\
-	ephy-history-window.h			\
+	ephy-history-dialog.c			\
+	ephy-history-dialog.h			\
 	ephy-link.c				\
 	ephy-link.h				\
 	ephy-location-controller.c		\
