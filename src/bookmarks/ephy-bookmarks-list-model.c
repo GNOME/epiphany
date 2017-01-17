@@ -41,13 +41,16 @@ enum {
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
-
+#include <glib/gstdio.h>
 static void
 maybe_add_bookmark (EphyBookmark           *bookmark,
                     EphyBookmarksListModel *self)
 {
   if (!ephy_bookmark_is_smart (bookmark))
+{
     self->dumb_bookmarks = g_list_append (self->dumb_bookmarks, g_object_ref (bookmark));
+g_printf ("Appending bookmark %s (%p) to model\n", ephy_bookmark_get_title (bookmark), bookmark);
+}
 }
 
 static void
@@ -55,6 +58,8 @@ refresh_bookmarks_list (EphyBookmarksListModel *self)
 {
   GSequence *bookmarks;
   guint previous_length = 0;
+
+g_printf ("Refreshing bookmark model\n");
 
   if (self->dumb_bookmarks != NULL) {
     previous_length = g_list_length (self->dumb_bookmarks);
@@ -64,7 +69,7 @@ refresh_bookmarks_list (EphyBookmarksListModel *self)
 
   bookmarks = ephy_bookmarks_manager_get_bookmarks (self->bookmarks_manager);
   g_sequence_foreach (bookmarks, (GFunc)maybe_add_bookmark, self);
-
+g_printf ("Reporting %u items removed and %u items added to model\n", previous_length, g_list_length (self->dumb_bookmarks));
   g_list_model_items_changed (G_LIST_MODEL (self),
                               0,
                               previous_length,
