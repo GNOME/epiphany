@@ -770,10 +770,11 @@ ephy_embed_shell_retrieve_filter_file_finished (GFile                     *src,
 
 static void
 ephy_embed_shell_retrieve_filter_file (EphyEmbedShell *shell,
+                                       const char     *filter_url,
                                        GFile          *file)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  GFile *src = g_file_new_for_uri (ADBLOCK_DEFAULT_FILTER_URL);
+  GFile *src = g_file_new_for_uri (filter_url);
   AdblockFilterRetrieveData *data;
 
   if (!priv->uri_tester_update_cancellable)
@@ -793,16 +794,21 @@ ephy_embed_shell_retrieve_filter_file (EphyEmbedShell *shell,
 }
 
 static void
-ephy_embed_shell_update_adblock_filter_file (EphyEmbedShell *shell)
+ephy_embed_shell_update_adblock_filter_files (EphyEmbedShell *shell)
 {
-  GFile *filter_file;
+  char **filters;
 
-  filter_file = ephy_uri_tester_get_adblock_filter_file (ephy_embed_shell_ensure_adblock_data_dir (shell));
+  filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
+  for (guint i = 0; filters[i]; i++) {
+    GFile *filter_file;
 
-  if (!adblock_filter_file_is_valid (filter_file))
-    ephy_embed_shell_retrieve_filter_file (shell, filter_file);
+    filter_file = ephy_uri_tester_get_adblock_filter_file (ephy_embed_shell_ensure_adblock_data_dir (shell), filters[i]);
+    if (!adblock_filter_file_is_valid (filter_file))
+      ephy_embed_shell_retrieve_filter_file (shell, filters[i], filter_file);
+    g_object_unref (filter_file);
+  }
 
-  g_object_unref (filter_file);
+  g_strfreev (filters);
 }
 
 static void
@@ -810,7 +816,7 @@ ephy_embed_shell_update_uri_tester (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  ephy_embed_shell_update_adblock_filter_file (shell);
+  ephy_embed_shell_update_adblock_filter_files (shell);
 
   if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST &&
       priv->mode != EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {

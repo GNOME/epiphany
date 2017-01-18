@@ -28,6 +28,8 @@
 #include "ephy-uri-tester.h"
 
 #include "ephy-debug.h"
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
 #include "ephy-uri-tester-shared.h"
 
 #include <gio/gio.h>
@@ -65,6 +67,7 @@ struct _EphyUriTester {
   GRegex *regex_frame_add;
 
   GMainLoop *load_loop;
+  int adblock_filters_to_load;
   gboolean adblock_loaded;
 #ifdef HAVE_LIBHTTPSEVERYWHERE
   gboolean https_everywhere_loaded;
@@ -509,13 +512,15 @@ ephy_uri_tester_parse_line (EphyUriTester *tester,
 static void
 ephy_uri_tester_adblock_loaded (EphyUriTester *tester)
 {
-  tester->adblock_loaded = TRUE;
+  if (g_atomic_int_dec_and_test (&tester->adblock_filters_to_load)) {
+    tester->adblock_loaded = TRUE;
 #ifdef HAVE_LIBHTTPSEVERYWHERE
-  if (tester->https_everywhere_loaded)
-    g_main_loop_quit (tester->load_loop);
+    if (tester->https_everywhere_loaded)
+      g_main_loop_quit (tester->load_loop);
 #else
-  g_main_loop_quit (tester->load_loop);
+    g_main_loop_quit (tester->load_loop);
 #endif
+  }
 }
 
 #ifdef HAVE_LIBHTTPSEVERYWHERE
@@ -653,8 +658,8 @@ ephy_uri_tester_load_sync (GTask         *task,
                            EphyUriTester *tester)
 {
   GMainContext *context;
-  GFile *filter_file;
-  GFileMonitor *monitor = NULL;
+  char **filters;
+  GList *monitors = NULL;
 
   context = g_main_context_new ();
   tester->load_loop = g_main_loop_new (context, FALSE);
@@ -667,29 +672,37 @@ ephy_uri_tester_load_sync (GTask         *task,
                                  tester);
 #endif
 
-  filter_file = ephy_uri_tester_get_adblock_filter_file (tester->adblock_data_dir);
-  if (!g_file_query_exists (filter_file, NULL)) {
-    GError *error = NULL;
+  filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
+  tester->adblock_filters_to_load = g_strv_length (filters);
+  for (guint i = 0; filters[i]; i++) {
+    GFile *filter_file;
 
-    monitor = g_file_monitor_file (filter_file, G_FILE_MONITOR_WATCH_MOVES, NULL, &error);
-    if (monitor) {
-       g_signal_connect (monitor, "changed", G_CALLBACK (adblock_file_monitor_changed), tester);
+    filter_file = ephy_uri_tester_get_adblock_filter_file (tester->adblock_data_dir, filters[i]);
+    if (!g_file_query_exists (filter_file, NULL)) {
+      GFileMonitor *monitor;
+      GError *error = NULL;
+
+      monitor = g_file_monitor_file (filter_file, G_FILE_MONITOR_WATCH_MOVES, NULL, &error);
+      if (monitor) {
+        monitors = g_list_prepend (monitors, monitor);
+        g_signal_connect (monitor, "changed", G_CALLBACK (adblock_file_monitor_changed), tester);
+      } else {
+        g_warning ("Failed to monitor adblock file: %s\n", error->message);
+        g_error_free (error);
+        ephy_uri_tester_adblock_loaded (tester);
+      }
     } else {
-      g_warning ("Failed to monitor adblock file: %s\n", error->message);
-      g_error_free (error);
-      ephy_uri_tester_adblock_loaded (tester);
+      g_file_read_async (filter_file, G_PRIORITY_DEFAULT_IDLE, NULL,
+                         (GAsyncReadyCallback)file_read_cb,
+                         tester);
     }
-  } else {
-    g_file_read_async (filter_file, G_PRIORITY_DEFAULT_IDLE, NULL,
-                       (GAsyncReadyCallback)file_read_cb,
-                       tester);
+    g_object_unref (filter_file);
   }
-  g_object_unref (filter_file);
+  g_strfreev (filters);
 
   g_main_loop_run (tester->load_loop);
 
-  if (monitor)
-    g_object_unref (monitor);
+  g_list_free_full (monitors, g_object_unref);
   g_main_context_pop_thread_default (context);
   g_main_context_unref (context);
 
