@@ -664,9 +664,6 @@ ephy_embed_shell_ensure_adblock_data_dir (EphyEmbedShell *shell)
   if (priv->adblock_data_dir)
     return priv->adblock_data_dir;
 
-  /* The filters list is large, so we don't want to store a separate copy per
-   * web app, but users should otherwise be able to configure different filters
-   * per profile directory. */
   if (priv->mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
     char *default_dot_dir = ephy_default_dot_dir ();
 
@@ -776,7 +773,7 @@ ephy_embed_shell_retrieve_filter_file (EphyEmbedShell *shell,
                                        GFile          *file)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  GFile *src = g_file_new_for_uri (ADBLOCK_FILTER_URL);
+  GFile *src = g_file_new_for_uri (ADBLOCK_DEFAULT_FILTER_URL);
   AdblockFilterRetrieveData *data;
 
   if (!priv->uri_tester_update_cancellable)

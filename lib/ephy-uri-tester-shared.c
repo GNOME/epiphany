@@ -21,13 +21,21 @@
 #include "config.h"
 #include "ephy-uri-tester-shared.h"
 
+#include "ephy-prefs.h"
+#include "ephy-settings.h"
+
 GFile *
 ephy_uri_tester_get_adblock_filter_file (const char *adblock_data_dir)
 {
+  char **filters;
   char *filter_filename, *filter_path;
   GFile *filter_file;
 
-  filter_filename = g_compute_checksum_for_string (G_CHECKSUM_MD5, ADBLOCK_FILTER_URL, -1);
+  filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
+
+  /* FIXME: really support multiple filters */
+  filter_filename = g_compute_checksum_for_string (G_CHECKSUM_MD5, filters[0] ? filters[0] : ADBLOCK_DEFAULT_FILTER_URL, -1);
+  g_strfreev (filters);
   filter_path = g_build_filename (adblock_data_dir, filter_filename, NULL);
   g_free (filter_filename);
   filter_file = g_file_new_for_path (filter_path);

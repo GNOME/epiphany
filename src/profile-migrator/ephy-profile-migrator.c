@@ -39,6 +39,7 @@
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-uri-tester-shared.h"
 #include "ephy-web-app-utils.h"
 
 #include <fcntl.h>
@@ -605,6 +606,87 @@ migrate_bookmarks (void)
 }
 
 static void
+migrate_adblock_filters (void)
+{
+  char *adblock_dir;
+  char *filters_filename;
+  char *contents;
+  gsize content_size;
+  GPtrArray *filters_array = NULL;
+  GError *error = NULL;
+
+  adblock_dir = g_build_filename (ephy_dot_dir (), "adblock", NULL);
+  if (!g_file_test (adblock_dir, G_FILE_TEST_IS_DIR)) {
+    g_free (adblock_dir);
+    return;
+  }
+
+  if (!ephy_dot_dir_is_default ()) {
+    char *default_dot_dir;
+
+    /* Adblock filters rules are now shared to save space */
+    ephy_file_delete_dir_recursively (adblock_dir, NULL);
+    g_free (adblock_dir);
+
+    default_dot_dir = ephy_default_dot_dir ();
+    adblock_dir = g_build_filename (default_dot_dir, "adblock", NULL);
+    g_free (default_dot_dir);
+  }
+
+  filters_filename = g_build_filename (adblock_dir, "filters.list", NULL);
+  g_free (adblock_dir);
+
+  if (!g_file_get_contents (filters_filename, &contents, &content_size, &error)) {
+    if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+      g_warning ("Failed to read filters file: %s: %s", filters_filename, error->message);
+    g_free (filters_filename);
+    g_error_free (error);
+    return;
+  }
+
+  if (content_size > 0) {
+    char **filter_list;
+    guint  filter_list_length;
+    guint  i;
+
+    filter_list = g_strsplit (contents, ";", -1);
+    filter_list_length = g_strv_length (filter_list);
+    if (filter_list_length > 0) {
+      filters_array = g_ptr_array_sized_new (MAX (2, filter_list_length) + 1);
+      g_ptr_array_set_free_func (filters_array, g_free);
+      g_ptr_array_add (filters_array, g_strdup (ADBLOCK_DEFAULT_FILTER_URL));
+
+      for (i = 0; filter_list[i]; i++) {
+        char *url;
+
+        url = g_strstrip (filter_list[i]);
+        if (url[0] != '\0' && !g_str_equal (url, ADBLOCK_DEFAULT_FILTER_URL))
+          g_ptr_array_add (filters_array, g_strdup (url));
+      }
+
+      if (filters_array->len == 1) {
+        /* No additional filters, so do nothing. */
+        g_ptr_array_free (filters_array, TRUE);
+        filters_array = NULL;
+      } else {
+        g_ptr_array_add (filters_array, NULL);
+      }
+    }
+    g_strfreev (filter_list);
+  }
+
+  if (filters_array) {
+    g_settings_set_strv (EPHY_SETTINGS_WEB,
+                         EPHY_PREFS_WEB_ADBLOCK_FILTERS,
+                         (const gchar * const *)filters_array->pdata);
+    g_settings_sync ();
+    g_ptr_array_free (filters_array, TRUE);
+  }
+
+  g_unlink (filters_filename);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -627,6 +709,7 @@ const EphyProfileMigrator migrators[] = {
   migrate_form_passwords_to_libsecret,
   migrate_app_desktop_file_categories,
   migrate_bookmarks,
+  migrate_adblock_filters,
 };
 
 static gboolean
