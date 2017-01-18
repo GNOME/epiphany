@@ -308,10 +308,10 @@ ephy_location_entry_get_preferred_width (GtkWidget *widget,
                                          gint      *natural_width)
 {
   if (minimum_width)
-    *minimum_width = 240;
+    *minimum_width = -1;
 
   if (natural_width)
-    *natural_width = 480;
+    *natural_width = 848;
 }
 
 static void
