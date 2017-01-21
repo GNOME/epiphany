@@ -239,10 +239,9 @@ confirm_close_with_modified_forms (EphyWindow *window)
   int response;
 
   dialog = construct_confirm_close_dialog (window,
-                                           _("There are unsubmitted changes to form elements"),
-                                           _("If you close the document anyway, "
-                                             "you will lose that information."),
-                                           _("Close _Document"));
+                                           _("Do you want to leave this website?"),
+                                           _("A form you modified has not been submitted."),
+                                           _("_Discard form"));
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
   gtk_widget_destroy (dialog);
