@@ -344,7 +344,7 @@ ephy_passwords_dialog_class_init (EphyPasswordsDialogClass *klass)
   object_class->dispose = ephy_passwords_dialog_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/epiphany/passwords-dialog.ui");
+                                               "/org/gnome/epiphany/gtk/passwords-dialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, liststore);
   gtk_widget_class_bind_template_child (widget_class, EphyPasswordsDialog, treemodelfilter);
