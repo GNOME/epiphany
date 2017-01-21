@@ -70,6 +70,7 @@ typedef struct {
   GList *web_extensions;
   EphyFiltersManager *filters_manager;
   GCancellable *cancellable;
+  EphySearchEngineManager *search_engine_manager;
 } EphyEmbedShellPrivate;
 
 enum {
@@ -124,6 +125,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->web_context);
   g_clear_object (&priv->dbus_server);
   g_clear_object (&priv->filters_manager);
+  g_clear_object (&priv->search_engine_manager);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -955,6 +957,8 @@ ephy_embed_shell_startup (GApplication *application)
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
   g_free (cookie_policy);
 
+  priv->search_engine_manager = ephy_search_engine_manager_new ();
+
 #ifdef HAVE_LIBHTTPSEVERYWHERE
     /* We might want to be smarter about this in the future. For now,
      * trigger an update of the rulesets once each time Epiphany is started.
@@ -1436,4 +1440,14 @@ ephy_embed_shell_get_hosts_manager (EphyEmbedShell *shell)
   if (!priv->hosts_manager)
     priv->hosts_manager = ephy_hosts_manager_new ();
   return priv->hosts_manager;
+}
+
+EphySearchEngineManager *
+ephy_embed_shell_get_search_engine_manager (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  if (!priv->search_engine_manager)
+    priv->search_engine_manager = ephy_search_engine_manager_new ();
+  return priv->search_engine_manager;
 }

@@ -1,0 +1,24 @@
+<schemalist>
+    <schema id="org.gnome.Epiphany.search-engines" gettext-domain="">
+        <key type="s" name="default-search-engine">
+            <default>'DuckDuckGo'</default>
+	    <summary>Default search engine.</summary>
+	    <description>Name of the search engine selected by default.</description>
+        </key>
+	<key type="as" name="search-engines-names">
+	    <default>['DuckDuckGo', 'Google', 'Bing' ]</default>
+	    <summary>Default search engines.</summary>
+	    <description>List of the names of the default search engines.</description>
+        </key>
+	<key type="as" name="search-engines-urls">
+	    <!-- Array of default search engines. Must exactly match the URLs used
+            in the preferences dialog, except this stringes are surrounded by single quotes
+            and use &amp; instead of simply &. If the match is not otherwise exact,
+            there will be a spurious, ugly entry in the preferences combo, so please
+            test this. -->
+	    <default l10n="messages">['https://duckduckgo.com/?q=%s&amp;t=epiphany', 'https://google.com/search?q=%s', 'https://www.bing.com/search?q=%s' ]</default>
+	    <summary>Default search engines urls.</summary>
+	    <description>List of all the urls of the default search engines.</description>
+         </key>
+      </schema>
+</schemalist>

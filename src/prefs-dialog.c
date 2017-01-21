@@ -147,7 +147,6 @@ typedef struct {
 
 enum {
   SEARCH_ENGINE_COL_NAME,
-  SEARCH_ENGINE_COL_STOCK_URL,
   SEARCH_ENGINE_COL_URL,
   SEARCH_ENGINE_NUM_COLS
 };
@@ -660,7 +659,7 @@ combo_get_mapping (GValue   *value,
 
   while (valid) {
     char *item_name;
-    gtk_tree_model_get (model, &iter, 1, &item_name, -1);
+    gtk_tree_model_get (model, &iter, 0, &item_name, -1);
 
     if (g_strcmp0 (item_name, settings_name) == 0) {
       g_value_set_int (value, i);
@@ -693,7 +692,7 @@ combo_set_mapping (const GValue       *value,
 
   if (valid) {
     char *item_name;
-    gtk_tree_model_get (model, &iter, 1, &item_name, -1);
+    gtk_tree_model_get (model, &iter, 0, &item_name, -1);
 
     variant = g_variant_new_string (item_name);
 
@@ -1341,82 +1340,23 @@ cookies_set_mapping (const GValue       *value,
 }
 
 static void
-search_engine_combo_add_default_engines (GtkListStore *store)
+search_engine_combo_add_search_engines (GtkListStore            *store,
+                                        EphySearchEngineManager *manager)
 {
-  guint i;
-  const char *default_engines[][3] = {       /* Search engine option in the preferences dialog */
-    { N_("DuckDuckGo"),
-      "https://duckduckgo.com/?q=%s&t=epiphany",
-      /* For the preferences dialog. Must exactly match the URL
-      * you chose in the gschema, but with & instead of &amp;
-      * If the match is not exact, there will be a spurious, ugly
-      * entry in the preferences combo, so please test this. */
-      N_("https://duckduckgo.com/?q=%s&t=epiphany") },
-    /* Search engine option in the preferences dialog */
-    { N_("Google"),
-      "https://google.com/search?q=%s",
-      /* For the preferences dialog. Consider a regional variant, like google.co.uk */
-      N_("https://google.com/search?q=%s") },
-    /* Search engine option in the preferences dialog */
-    { N_("Bing"),
-      "https://www.bing.com/search?q=%s",
-      /* For the preferences dialog. Consider a regional variant, like uk.bing.com */
-      N_("https://www.bing.com/search?q=%s") }
-  };
+  guint i, n_engines;
+  gchar **engines_names ;
+  engines_names = ephy_search_engine_manager_get_names (manager);
+  n_engines = g_strv_length (engines_names);
 
-  for (i = 0; i < G_N_ELEMENTS (default_engines); ++i) {
+  for (i = 0; i < n_engines; i++) {
+    const char *name = engines_names[i];
+    const char *url = ephy_search_engine_manager_get_url (manager, name);
     gtk_list_store_insert_with_values (store, NULL, -1,
-                                       SEARCH_ENGINE_COL_NAME,
-                                       _(default_engines[i][0]),
-                                       SEARCH_ENGINE_COL_STOCK_URL,
-                                       default_engines[i][1],
-                                       SEARCH_ENGINE_COL_URL,
-                                       _(default_engines[i][2]),
+                                       SEARCH_ENGINE_COL_NAME, name,
+                                       SEARCH_ENGINE_COL_URL, url,
                                        -1);
   }
-}
-
-/* Has the user manually set the engine to something not in the combo?
- * If so, add that URL as an extra item in the combo. */
-static void
-search_engine_combo_add_current_engine (GtkListStore *store)
-{
-  GtkTreeIter iter;
-  char *original_url;
-  gboolean in_combo = FALSE;
-  gboolean has_next = FALSE;
-
-  original_url = g_settings_get_string (EPHY_SETTINGS_MAIN,
-                                        EPHY_PREFS_KEYWORD_SEARCH_URL);
-  if (!original_url)
-    return;
-
-  has_next = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
-
-  while (!in_combo && has_next) {
-    char *stock_url, *url;
-
-    gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
-                        SEARCH_ENGINE_COL_STOCK_URL, &stock_url,
-                        SEARCH_ENGINE_COL_URL, &url, -1);
-
-    if (strcmp (original_url, stock_url) == 0 ||
-        strcmp (original_url, url) == 0)
-      in_combo = TRUE;
-
-    g_free (stock_url);
-    g_free (url);
-    has_next = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
-  }
-
-  if (!in_combo)
-    gtk_list_store_insert_with_values (store, NULL, -1,
-                                       SEARCH_ENGINE_COL_NAME, original_url,
-                                       SEARCH_ENGINE_COL_STOCK_URL, original_url,
-                                       SEARCH_ENGINE_COL_URL, original_url,
-                                       -1);
-
-  g_free (original_url);
+  g_strfreev (engines_names);
 }
 
 static void
@@ -1424,15 +1364,27 @@ create_search_engine_combo (GtkComboBox *combo)
 {
   GtkCellRenderer *renderer;
   GtkListStore *store;
+  char *default_search_engine;
+  GSettings *search_engine_settings;
+  EphyEmbedShell *shell;
+  EphySearchEngineManager *search_engine_manager;
+
+  shell = ephy_embed_shell_get_default ();
+  search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
 
   store = GTK_LIST_STORE (gtk_combo_box_get_model (combo));
+  search_engine_combo_add_search_engines (store, search_engine_manager);
 
-  search_engine_combo_add_default_engines (store);
-  search_engine_combo_add_current_engine (store);
 
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), SEARCH_ENGINE_COL_NAME,
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+                                        SEARCH_ENGINE_COL_NAME,
                                         GTK_SORT_ASCENDING);
   gtk_combo_box_set_model (combo, GTK_TREE_MODEL (store));
+
+  default_search_engine = ephy_search_engine_manager_get_default_engine (search_engine_manager);
+
+  gtk_combo_box_set_id_column (combo, SEARCH_ENGINE_COL_NAME);
+  gtk_combo_box_set_active_id (combo, default_search_engine);
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
@@ -1440,14 +1392,17 @@ create_search_engine_combo (GtkComboBox *combo)
                                   "text", SEARCH_ENGINE_COL_NAME,
                                   NULL);
 
-  g_settings_bind_with_mapping (EPHY_SETTINGS_MAIN,
-                                EPHY_PREFS_KEYWORD_SEARCH_URL,
+  search_engine_settings = ephy_search_engine_manager_get_settings (search_engine_manager);
+
+  g_settings_bind_with_mapping (search_engine_settings,
+                                "default-search-engine",
                                 combo, "active",
                                 G_SETTINGS_BIND_DEFAULT,
                                 combo_get_mapping,
                                 combo_set_mapping,
                                 combo,
                                 NULL);
+  g_free (default_search_engine);
 }
 
 static gboolean
