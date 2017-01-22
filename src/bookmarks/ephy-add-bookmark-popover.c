@@ -201,20 +201,17 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
                          self,
                          G_CONNECT_SWAPPED);
 
-  if (!self->address || g_strcmp0 (address, self->address) != 0) {
-    if (self->grid)
-      gtk_widget_destroy (self->grid);
+  if (self->grid)
+    gtk_widget_destroy (self->grid);
+  self->grid = ephy_bookmark_properties_grid_new (bookmark,
+                                                  EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER,
+                                                  GTK_WIDGET (self));
+  gtk_container_add (GTK_CONTAINER (self), self->grid);
+  gtk_popover_set_default_widget (GTK_POPOVER (self),
+                                  ephy_bookmark_properties_grid_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES_GRID (self->grid)));
 
-    self->grid = ephy_bookmark_properties_grid_new (bookmark,
-                                                    EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER,
-                                                    GTK_WIDGET (self));
-    gtk_container_add (GTK_CONTAINER (self), self->grid);
-    gtk_popover_set_default_widget (GTK_POPOVER (self),
-                                    ephy_bookmark_properties_grid_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES_GRID (self->grid)));
-
-    g_free (self->address);
-    self->address = g_strdup (address);
-  }
+  g_free (self->address);
+  self->address = g_strdup (address);
 
   gtk_popover_popup (GTK_POPOVER (self));
 }
