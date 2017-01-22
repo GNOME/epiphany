@@ -577,8 +577,9 @@ ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
     gtk_widget_set_tooltip_text (header_bar->combined_stop_reload_button, _(REFRESH_BUTTON_TOOLTIP));
   }
 
-  gtk_button_set_image (GTK_BUTTON (header_bar->combined_stop_reload_button),
-                        image);
+  gtk_button_set_image (GTK_BUTTON (header_bar->combined_stop_reload_button), image);
+
+  g_simple_action_set_state (action, loading);
 }
 
 static void
