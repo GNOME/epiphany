@@ -200,12 +200,8 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_add_class (context, "bookmark-tag-widget");
-  if (selected) {
-    /* Toggle initial state on child */
-    ephy_bookmark_properties_grid_tags_box_child_activated_cb (EPHY_BOOKMARK_PROPERTIES_GRID (self),
-                                                               GTK_FLOW_BOX_CHILD (GTK_FLOW_BOX_CHILD (widget)),
-                                                               GTK_FLOW_BOX (self->tags_box));
-  }
+  if (selected)
+    gtk_style_context_add_class (context, "bookmark-tag-widget-selected");
 
   gtk_widget_show_all (widget);
 
