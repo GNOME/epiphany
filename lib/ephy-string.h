@@ -40,5 +40,10 @@ char     *ephy_string_get_host_name            (const char *url);
 
 char    **ephy_string_commandline_args_to_uris (char **arguments, GError **error);
 
+char    **ephy_strv_append                     (const char * const *strv,
+                                                const char *str);
+char    **ephy_strv_remove                     (const char * const *strv,
+                                                const char *str);
+
 
 G_END_DECLS
