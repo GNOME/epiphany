@@ -711,12 +711,14 @@ adblock_filter_file_is_valid (GFile *file)
 typedef struct {
   EphyEmbedShell *shell;
 
+  GFile *src_file;
   GFile *filter_file;
   GFile *tmp_file;
 } AdblockFilterRetrieveData;
 
 static AdblockFilterRetrieveData *
 adblock_filter_retrieve_data_new (EphyEmbedShell *shell,
+                                  GFile          *src_file,
                                   GFile          *filter_file)
 {
   AdblockFilterRetrieveData* data;
@@ -724,6 +726,7 @@ adblock_filter_retrieve_data_new (EphyEmbedShell *shell,
 
   data = g_slice_new (AdblockFilterRetrieveData);
   data->shell = g_object_ref (shell);
+  data->src_file = g_object_ref (src_file);
   data->filter_file = g_object_ref (filter_file);
 
   path = g_file_get_path (filter_file);
@@ -739,6 +742,7 @@ static void
 adblock_filter_retrieve_data_free (AdblockFilterRetrieveData *data)
 {
   g_object_unref (data->shell);
+  g_object_unref (data->src_file);
   g_object_unref (data->filter_file);
   g_object_unref (data->tmp_file);
 
@@ -761,7 +765,7 @@ ephy_embed_shell_retrieve_filter_file_finished (GFile                     *src,
     g_object_unref (stream);
 
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Error retrieving filter: %s\n", error->message);
+      g_warning ("Error retrieving filter %s: %s\n", g_file_get_uri (data->src_file), error->message);
     g_error_free (error);
   }
 
@@ -780,7 +784,7 @@ ephy_embed_shell_retrieve_filter_file (EphyEmbedShell *shell,
   if (!priv->uri_tester_update_cancellable)
     priv->uri_tester_update_cancellable = g_cancellable_new ();
 
-  data = adblock_filter_retrieve_data_new (shell, file);
+  data = adblock_filter_retrieve_data_new (shell, src, file);
 
   g_file_copy_async (src, data->tmp_file,
                      G_FILE_COPY_OVERWRITE,
