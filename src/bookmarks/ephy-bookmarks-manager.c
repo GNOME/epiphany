@@ -45,6 +45,8 @@ enum {
   BOOKMARK_REMOVED,
   BOOKMARK_TITLE_CHANGED,
   BOOKMARK_URL_CHANGED,
+  BOOKMARK_TAG_ADDED,
+  BOOKMARK_TAG_REMOVED,
   TAG_CREATED,
   TAG_DELETED,
   LAST_SIGNAL
@@ -119,6 +121,26 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
                   G_TYPE_NONE, 1,
                   EPHY_TYPE_BOOKMARK);
 
+  signals[BOOKMARK_TAG_ADDED] =
+    g_signal_new ("bookmark-tag-added",
+                  EPHY_TYPE_BOOKMARKS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 2,
+                  EPHY_TYPE_BOOKMARK,
+                  G_TYPE_STRING);
+
+  signals[BOOKMARK_TAG_REMOVED] =
+    g_signal_new ("bookmark-tag-removed",
+                  EPHY_TYPE_BOOKMARKS_MANAGER,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE, 2,
+                  EPHY_TYPE_BOOKMARK,
+                  G_TYPE_STRING);
+
   signals[TAG_CREATED] =
     g_signal_new ("tag-created",
                   EPHY_TYPE_BOOKMARKS_MANAGER,
@@ -176,6 +198,23 @@ bookmark_url_changed_cb (EphyBookmark         *bookmark,
   g_signal_emit (self, signals[BOOKMARK_URL_CHANGED], 0, bookmark);
 }
 
+static void
+bookmark_tag_added_cb (EphyBookmark         *bookmark,
+                       const char           *tag,
+                       EphyBookmarksManager *self)
+{
+  g_signal_emit (self, signals[BOOKMARK_TAG_ADDED], 0, bookmark, tag);
+}
+
+static void
+bookmark_tag_removed_cb (EphyBookmark         *bookmark,
+                         const char           *tag,
+                         EphyBookmarksManager *self)
+{
+  g_signal_emit (self, signals[BOOKMARK_TAG_REMOVED], 0, bookmark, tag);
+}
+
+
 EphyBookmarksManager *
 ephy_bookmarks_manager_new (void)
 {
@@ -211,6 +250,10 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                              G_CALLBACK (bookmark_title_changed_cb), self, 0);
     g_signal_connect_object (bookmark, "notify::url",
                              G_CALLBACK (bookmark_url_changed_cb), self, 0);
+    g_signal_connect_object (bookmark, "tag-added",
+                             G_CALLBACK (bookmark_tag_added_cb), self, 0);
+    g_signal_connect_object (bookmark, "tag-removed",
+                             G_CALLBACK (bookmark_tag_removed_cb), self, 0);
   }
 }
 
@@ -276,6 +319,8 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
 
   g_signal_handlers_disconnect_by_func (bookmark, bookmark_title_changed_cb, self);
   g_signal_handlers_disconnect_by_func (bookmark, bookmark_url_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (bookmark, bookmark_tag_added_cb, self);
+  g_signal_handlers_disconnect_by_func (bookmark, bookmark_tag_removed_cb, self);
 }
 
 EphyBookmark *
