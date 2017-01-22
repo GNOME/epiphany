@@ -36,6 +36,8 @@
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-string.h"
+#include "ephy-uri-tester-shared.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
 #include "languages.h"
@@ -1265,6 +1267,24 @@ prefs_dialog_response_cb (GtkDialog *widget,
 }
 
 static void
+do_not_track_button_clicked_cb (GtkWidget   *button,
+                                PrefsDialog *dialog)
+{
+  char **filters;
+  char **new_filters;
+
+  filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+    new_filters = ephy_strv_append ((const char * const *)filters, ADBLOCK_PRIVACY_FILTER_URL);
+  else
+    new_filters = ephy_strv_remove ((const char * const *)filters, ADBLOCK_PRIVACY_FILTER_URL);
+  g_settings_set_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS, (const char * const *)new_filters);
+
+  g_strfreev (filters);
+  g_strfreev (new_filters);
+}
+
+static void
 clear_personal_data_button_clicked_cb (GtkWidget   *button,
                                        PrefsDialog *dialog)
 {
@@ -1732,6 +1752,10 @@ setup_privacy_page (PrefsDialog *dialog)
                    dialog->do_not_track_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
+  g_signal_connect (dialog->do_not_track_checkbutton,
+                    "clicked",
+                    G_CALLBACK (do_not_track_button_clicked_cb),
+                    dialog);
 
   g_signal_connect (dialog->clear_personal_data_button,
                     "clicked",
