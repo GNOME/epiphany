@@ -63,6 +63,7 @@ static GtkWidget *create_bookmark_row (gpointer item, gpointer user_data);
 
 static void
 bookmark_tag_added_cb (EphyBookmark         *bookmark,
+                       const char           *tag,
                        EphyBookmarksPopover *popover)
 {
   g_assert (EPHY_IS_BOOKMARK (bookmark));

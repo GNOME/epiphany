@@ -188,7 +188,8 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
 
   signals[TAG_REMOVED] =
     g_signal_new ("tag-removed",
@@ -441,7 +442,7 @@ ephy_bookmark_add_tag (EphyBookmark *self,
       || g_strcmp0 (g_sequence_get (prev_tag_iter), tag) != 0)
     g_sequence_insert_before (tag_iter, g_strdup (tag));
 
-  g_signal_emit (self, signals[TAG_ADDED], 0);
+  g_signal_emit (self, signals[TAG_ADDED], 0, tag);
 }
 
 void
