@@ -798,9 +798,69 @@ ephy_embed_shell_retrieve_filter_file (EphyEmbedShell *shell,
 }
 
 static void
+ephy_embed_shell_remove_old_adblock_filters (EphyEmbedShell *shell,
+                                             GList          *current_files)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  GFile *file;
+  GFile *filters_dir;
+  GFileEnumerator *enumerator;
+  gboolean current_filter;
+  GError *error = NULL;
+
+  filters_dir = g_file_new_for_path (ephy_embed_shell_ensure_adblock_data_dir (shell));
+  enumerator = g_file_enumerate_children (filters_dir,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                          G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                          NULL,
+                                          &error);
+  if (error != NULL) {
+    g_warning ("Failed to enumerate children of %s: %s", priv->adblock_data_dir, error->message);
+    g_error_free (error);
+    g_object_unref (filters_dir);
+    return;
+  }
+
+  /* For each file in the adblock directory, check if it is a currently-enabled
+   * and remove it if not, since filter files can be quite large. */
+  for (;;) {
+    g_file_enumerator_iterate (enumerator, NULL, &file, NULL, &error);
+    if (error != NULL) {
+      g_warning ("Failed to iterate file enumerator for %s: %s", priv->adblock_data_dir, error->message);
+      g_clear_error (&error);
+      continue;
+    }
+
+    /* Success: no more files left to iterate. */
+    if (file == NULL)
+      break;
+
+    current_filter = FALSE;
+    for (GList *l = current_files; l != NULL; l = l->next) {
+      if (g_file_equal (l->data, file)) {
+        current_filter = TRUE;
+        break;
+      }
+    }
+
+    if (!current_filter) {
+      g_file_delete (file, NULL, &error);
+      if (error != NULL) {
+        g_warning ("Failed to remove %s: %s", g_file_get_path (file), error->message);
+        g_clear_error (&error);
+      }
+    }
+  }
+
+  g_object_unref (filters_dir);
+  g_object_unref (enumerator);
+}
+
+static void
 ephy_embed_shell_update_adblock_filter_files (EphyEmbedShell *shell)
 {
   char **filters;
+  GList *files = NULL;
 
   filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
   for (guint i = 0; filters[i]; i++) {
@@ -809,10 +869,13 @@ ephy_embed_shell_update_adblock_filter_files (EphyEmbedShell *shell)
     filter_file = ephy_uri_tester_get_adblock_filter_file (ephy_embed_shell_ensure_adblock_data_dir (shell), filters[i]);
     if (!adblock_filter_file_is_valid (filter_file))
       ephy_embed_shell_retrieve_filter_file (shell, filters[i], filter_file);
-    g_object_unref (filter_file);
+    files = g_list_prepend (files, filter_file);
   }
 
+  ephy_embed_shell_remove_old_adblock_filters (shell, files);
+
   g_strfreev (filters);
+  g_list_free_full (files, g_object_unref);
 }
 
 static void
