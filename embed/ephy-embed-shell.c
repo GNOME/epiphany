@@ -762,7 +762,8 @@ ephy_embed_shell_retrieve_filter_file_finished (GFile                     *src,
 
     /* If failed to retrieve, create an empty file if it doesn't exist to unblock extensions */
     stream = g_file_create (data->filter_file, G_FILE_CREATE_NONE, NULL, NULL);
-    g_object_unref (stream);
+    if (stream)
+      g_object_unref (stream);
 
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
       g_warning ("Error retrieving filter %s: %s\n", g_file_get_uri (data->src_file), error->message);
@@ -859,8 +860,13 @@ ephy_embed_shell_remove_old_adblock_filters (EphyEmbedShell *shell,
 static void
 ephy_embed_shell_update_adblock_filter_files (EphyEmbedShell *shell)
 {
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   char **filters;
   GList *files = NULL;
+
+  /* One at a time please! */
+  if (priv->uri_tester_update_cancellable)
+    g_cancellable_cancel (priv->uri_tester_update_cancellable);
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) {
     ephy_embed_shell_remove_old_adblock_filters (shell, files);
