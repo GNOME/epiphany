@@ -67,6 +67,9 @@ ephy_web_extension_shutdown (void)
 {
   if (extension)
     g_object_unref (extension);
+
+  ephy_settings_shutdown ();
+  ephy_file_helpers_shutdown ();
 }
 
 #pragma GCC diagnostic pop
