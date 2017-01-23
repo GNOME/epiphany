@@ -228,16 +228,11 @@ update_adblock_filter_files (EphyFiltersManager *manager)
   char **filters;
   GList *files = NULL;
 
-  /* One at a time please! */
-  if (manager->cancellable)
-    g_cancellable_cancel (manager->cancellable);
-  else
-    manager->cancellable = g_cancellable_new ();
-
-  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) {
-    remove_old_adblock_filters (manager, files);
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
     return;
-  }
+
+  /* One at a time please! */
+  g_cancellable_cancel (manager->cancellable);
 
   filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
   for (guint i = 0; filters[i]; i++) {
@@ -371,6 +366,7 @@ ephy_filters_manager_class_init (EphyFiltersManagerClass *klass)
 static void
 ephy_filters_manager_init (EphyFiltersManager *manager)
 {
+  manager->cancellable = g_cancellable_new ();
 }
 
 EphyFiltersManager *
