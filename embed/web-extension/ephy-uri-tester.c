@@ -654,23 +654,10 @@ adblock_file_monitor_changed (GFileMonitor     *monitor,
 }
 
 static void
-ephy_uri_tester_load_sync (GTask         *task,
-                           EphyUriTester *tester)
+ephy_uri_tester_begin_loading_adblock_filters (EphyUriTester  *tester,
+                                               GList         **monitors)
 {
-  GMainContext *context;
   char **filters;
-  GList *monitors = NULL;
-
-  context = g_main_context_new ();
-  tester->load_loop = g_main_loop_new (context, FALSE);
-  g_main_context_push_thread_default (context);
-
-#ifdef HAVE_LIBHTTPSEVERYWHERE
-  tester->https_everywhere_context = https_everywhere_context_new ();
-  https_everywhere_context_init (tester->https_everywhere_context, NULL,
-                                 (GAsyncReadyCallback)https_everywhere_context_init_cb,
-                                 tester);
-#endif
 
   filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
   tester->adblock_filters_to_load = g_strv_length (filters);
@@ -684,7 +671,7 @@ ephy_uri_tester_load_sync (GTask         *task,
 
       monitor = g_file_monitor_file (filter_file, G_FILE_MONITOR_WATCH_MOVES, NULL, &error);
       if (monitor) {
-        monitors = g_list_prepend (monitors, monitor);
+        *monitors = g_list_prepend (*monitors, monitor);
         g_signal_connect (monitor, "changed", G_CALLBACK (adblock_file_monitor_changed), tester);
       } else {
         g_warning ("Failed to monitor adblock file: %s\n", error->message);
@@ -699,12 +686,38 @@ ephy_uri_tester_load_sync (GTask         *task,
     g_object_unref (filter_file);
   }
   g_strfreev (filters);
+}
+
+static void
+ephy_uri_tester_load_sync (GTask         *task,
+                           EphyUriTester *tester)
+{
+  GMainContext *context;
+  GList *monitors = NULL;
+
+  context = g_main_context_new ();
+  g_main_context_push_thread_default (context);
+  tester->load_loop = g_main_loop_new (context, FALSE);
+
+#ifdef HAVE_LIBHTTPSEVERYWHERE
+  if (!tester->https_everywhere_loaded) {
+    g_assert (tester->https_everywhere_context == NULL);
+    tester->https_everywhere_context = https_everywhere_context_new ();
+    https_everywhere_context_init (tester->https_everywhere_context, NULL,
+                                   (GAsyncReadyCallback)https_everywhere_context_init_cb,
+                                   tester);
+  }
+#endif
+
+  if (!tester->adblock_loaded)
+    ephy_uri_tester_begin_loading_adblock_filters (tester, &monitors);
 
   g_main_loop_run (tester->load_loop);
 
   g_list_free_full (monitors, g_object_unref);
   g_main_context_pop_thread_default (context);
   g_main_context_unref (context);
+  g_main_loop_unref (tester->load_loop);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -822,9 +835,6 @@ ephy_uri_tester_finalize (GObject *object)
   g_regex_unref (tester->regex_subdocument);
   g_regex_unref (tester->regex_frame_add);
 
-  if (tester->load_loop)
-    g_main_loop_unref (tester->load_loop);
-
   G_OBJECT_CLASS (ephy_uri_tester_parent_class)->finalize (object);
 }
 
@@ -853,10 +863,30 @@ ephy_uri_tester_new (const char *adblock_data_dir)
   return EPHY_URI_TESTER (g_object_new (EPHY_TYPE_URI_TESTER, "adblock-data-dir", adblock_data_dir, NULL));
 }
 
+static void
+ephy_uri_tester_adblock_filters_changed_cb (GSettings     *settings,
+                                            char          *key,
+                                            EphyUriTester *tester)
+{
+  g_hash_table_remove_all (tester->pattern);
+  g_hash_table_remove_all (tester->keys);
+  g_hash_table_remove_all (tester->optslist);
+  g_hash_table_remove_all (tester->urlcache);
+
+  g_hash_table_remove_all (tester->whitelisted_pattern);
+  g_hash_table_remove_all (tester->whitelisted_keys);
+  g_hash_table_remove_all (tester->whitelisted_optslist);
+  g_hash_table_remove_all (tester->whitelisted_urlcache);
+
+  tester->adblock_loaded = FALSE;
+  ephy_uri_tester_load (tester);
+}
+
 void
 ephy_uri_tester_load (EphyUriTester *tester)
 {
   GTask *task;
+  char **trash;
 
   g_return_if_fail (EPHY_IS_URI_TESTER (tester));
 
@@ -867,7 +897,16 @@ ephy_uri_tester_load (EphyUriTester *tester)
      )
     return;
 
+  g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_WEB, ephy_uri_tester_adblock_filters_changed_cb, tester);
+
   task = g_task_new (tester, NULL, NULL, NULL);
   g_task_run_in_thread_sync (task, (GTaskThreadFunc)ephy_uri_tester_load_sync);
   g_object_unref (task);
+
+  g_signal_connect (EPHY_SETTINGS_WEB, "changed::adblock-filters",
+                    G_CALLBACK (ephy_uri_tester_adblock_filters_changed_cb), tester);
+  /* GSettings never emits the changed signal until after we read the setting
+   * the first time after connecting the handler... work around this.*/
+  trash = g_settings_get_strv (EPHY_SETTINGS_WEB, "adblock-filters");
+  g_strfreev (trash);
 }

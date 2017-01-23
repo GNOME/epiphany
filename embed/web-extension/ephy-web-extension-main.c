@@ -23,6 +23,7 @@
 #include "ephy-web-extension.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-settings.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-prototypes"

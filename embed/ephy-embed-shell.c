@@ -879,6 +879,14 @@ ephy_embed_shell_update_adblock_filter_files (EphyEmbedShell *shell)
 }
 
 static void
+ephy_uri_tester_adblock_filters_changed_cb (GSettings      *settings,
+                                            char           *key,
+                                            EphyEmbedShell *shell)
+{
+  ephy_embed_shell_update_adblock_filter_files (shell);
+}
+
+static void
 ephy_embed_shell_update_uri_tester (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
@@ -1101,9 +1109,13 @@ ephy_embed_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
-  ephy_embed_shell_update_uri_tester (embed_shell);
+  /* Note: it's up here because we must connect *before* reading the setting. */
+  g_signal_connect (EPHY_SETTINGS_WEB, "changed::adblock-filters",
+                    G_CALLBACK (ephy_uri_tester_adblock_filters_changed_cb), shell);
 
-  ephy_embed_shell_create_web_context (embed_shell);
+  ephy_embed_shell_update_uri_tester (shell);
+
+  ephy_embed_shell_create_web_context (shell);
 
   ephy_embed_shell_setup_web_extensions_server (shell);
 
