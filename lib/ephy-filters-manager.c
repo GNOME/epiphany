@@ -81,7 +81,7 @@ adblock_filter_file_is_valid (GFile *file)
 typedef struct {
   EphyFiltersManager *manager;
 
-  GFile *src_file;
+  char *src_uri;
   GFile *filter_file;
   GFile *tmp_file;
 } AdblockFilterRetrieveData;
@@ -96,7 +96,7 @@ adblock_filter_retrieve_data_new (EphyFiltersManager *manager,
 
   data = g_slice_new (AdblockFilterRetrieveData);
   data->manager = g_object_ref (manager);
-  data->src_file = g_object_ref (src_file);
+  data->src_uri = g_file_get_uri (src_file);
   data->filter_file = g_object_ref (filter_file);
 
   path = g_file_get_path (filter_file);
@@ -112,9 +112,10 @@ static void
 adblock_filter_retrieve_data_free (AdblockFilterRetrieveData *data)
 {
   g_object_unref (data->manager);
-  g_object_unref (data->src_file);
   g_object_unref (data->filter_file);
   g_object_unref (data->tmp_file);
+
+  g_free (data->src_uri);
 
   g_slice_free (AdblockFilterRetrieveData, data);
 }
@@ -136,7 +137,7 @@ retrieve_filter_file_finished (GFile                     *src,
       g_object_unref (stream);
 
     if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Error retrieving filter %s: %s\n", g_file_get_uri (data->src_file), error->message);
+      g_warning ("Error retrieving filter %s: %s\n", data->src_uri, error->message);
     g_error_free (error);
   }
 
@@ -172,6 +173,7 @@ remove_old_adblock_filters (EphyFiltersManager *manager,
   GFile *filters_dir;
   GFileEnumerator *enumerator;
   gboolean current_filter;
+  char *path;
   GError *error = NULL;
 
   filters_dir = g_file_new_for_path (manager->filters_dir);
@@ -212,7 +214,9 @@ remove_old_adblock_filters (EphyFiltersManager *manager,
     if (!current_filter) {
       g_file_delete (file, NULL, &error);
       if (error != NULL) {
-        g_warning ("Failed to remove %s: %s", g_file_get_path (file), error->message);
+        path = g_file_get_path (file);
+        g_warning ("Failed to remove %s: %s", path, error->message);
+        g_free (path);
         g_clear_error (&error);
       }
     }
