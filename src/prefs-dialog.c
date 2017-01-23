@@ -89,7 +89,7 @@ struct _PrefsDialog {
   GtkWidget *css_checkbox;
   GtkWidget *css_edit_button;
 
-  /* privacy */
+  /* stored data */
   GtkWidget *always;
   GtkWidget *no_third_party;
   GtkWidget *never;
@@ -595,7 +595,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_checkbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_edit_button);
 
-  /* privacy */
+  /* stored data */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, always);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, no_third_party);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, never);
@@ -1707,7 +1707,7 @@ setup_fonts_page (PrefsDialog *dialog)
 }
 
 static void
-setup_privacy_page (PrefsDialog *dialog)
+setup_stored_data_page (PrefsDialog *dialog)
 {
   GSettings *settings;
   GSettings *web_settings;
@@ -1819,7 +1819,7 @@ prefs_dialog_init (PrefsDialog *dialog)
 
   setup_general_page (dialog);
   setup_fonts_page (dialog);
-  setup_privacy_page (dialog);
+  setup_stored_data_page (dialog);
   setup_language_page (dialog);
 #ifdef ENABLE_SYNC
   setup_sync_page (dialog);
