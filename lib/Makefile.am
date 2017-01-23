@@ -17,6 +17,8 @@ libephymisc_la_SOURCES = \
 	ephy-favicon-helpers.h			\
 	ephy-file-helpers.c			\
 	ephy-file-helpers.h			\
+	ephy-filters-manager.c			\
+	ephy-filters-manager.h			\
 	ephy-form-auth-data.c			\
 	ephy-form-auth-data.h			\
 	ephy-gui.c				\
