@@ -864,9 +864,7 @@ ephy_uri_tester_new (const char *adblock_data_dir)
 }
 
 static void
-ephy_uri_tester_adblock_filters_changed_cb (GSettings     *settings,
-                                            char          *key,
-                                            EphyUriTester *tester)
+ephy_uri_tester_reload_adblock_filters (EphyUriTester *tester)
 {
   g_hash_table_remove_all (tester->pattern);
   g_hash_table_remove_all (tester->keys);
@@ -882,6 +880,22 @@ ephy_uri_tester_adblock_filters_changed_cb (GSettings     *settings,
   ephy_uri_tester_load (tester);
 }
 
+static void
+ephy_uri_tester_adblock_filters_changed_cb (GSettings     *settings,
+                                            char          *key,
+                                            EphyUriTester *tester)
+{
+  ephy_uri_tester_reload_adblock_filters (tester);
+}
+
+static void
+ephy_uri_tester_enable_adblock_changed_cb (GSettings     *settings,
+                                           char          *key,
+                                           EphyUriTester *tester)
+{
+  ephy_uri_tester_reload_adblock_filters (tester);
+}
+
 void
 ephy_uri_tester_load (EphyUriTester *tester)
 {
@@ -889,6 +903,9 @@ ephy_uri_tester_load (EphyUriTester *tester)
   char **trash;
 
   g_return_if_fail (EPHY_IS_URI_TESTER (tester));
+
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
+    tester->adblock_loaded = TRUE;
 
   if (tester->adblock_loaded
 #ifdef HAVE_LIBHTTPSEVERYWHERE
@@ -898,13 +915,16 @@ ephy_uri_tester_load (EphyUriTester *tester)
     return;
 
   g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_WEB, ephy_uri_tester_adblock_filters_changed_cb, tester);
+  g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_WEB, ephy_uri_tester_enable_adblock_changed_cb, tester);
 
   task = g_task_new (tester, NULL, NULL, NULL);
   g_task_run_in_thread_sync (task, (GTaskThreadFunc)ephy_uri_tester_load_sync);
   g_object_unref (task);
 
-  g_signal_connect (EPHY_SETTINGS_WEB, "changed::adblock-filters",
+  g_signal_connect (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ADBLOCK_FILTERS,
                     G_CALLBACK (ephy_uri_tester_adblock_filters_changed_cb), tester);
+  g_signal_connect (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
+                    G_CALLBACK (ephy_uri_tester_enable_adblock_changed_cb), tester);
   /* GSettings never emits the changed signal until after we read the setting
    * the first time after connecting the handler... work around this.*/
   trash = g_settings_get_strv (EPHY_SETTINGS_WEB, "adblock-filters");

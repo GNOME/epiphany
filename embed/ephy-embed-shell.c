@@ -862,6 +862,11 @@ ephy_embed_shell_update_adblock_filter_files (EphyEmbedShell *shell)
   char **filters;
   GList *files = NULL;
 
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK)) {
+    ephy_embed_shell_remove_old_adblock_filters (shell, files);
+    return;
+  }
+
   filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
   for (guint i = 0; filters[i]; i++) {
     GFile *filter_file;
@@ -882,6 +887,14 @@ static void
 ephy_uri_tester_adblock_filters_changed_cb (GSettings      *settings,
                                             char           *key,
                                             EphyEmbedShell *shell)
+{
+  ephy_embed_shell_update_adblock_filter_files (shell);
+}
+
+static void
+ephy_uri_tester_enable_adblock_changed_cb (GSettings      *settings,
+                                           char           *key,
+                                           EphyEmbedShell *shell)
 {
   ephy_embed_shell_update_adblock_filter_files (shell);
 }
@@ -1109,9 +1122,11 @@ ephy_embed_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
-  /* Note: it's up here because we must connect *before* reading the setting. */
-  g_signal_connect (EPHY_SETTINGS_WEB, "changed::adblock-filters",
+  /* Note: up here because we must connect *before* reading the settings. */
+  g_signal_connect (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ADBLOCK_FILTERS,
                     G_CALLBACK (ephy_uri_tester_adblock_filters_changed_cb), shell);
+  g_signal_connect (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
+                    G_CALLBACK (ephy_uri_tester_enable_adblock_changed_cb), shell);
 
   ephy_embed_shell_update_uri_tester (shell);
 
