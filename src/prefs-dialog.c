@@ -1641,17 +1641,34 @@ setup_general_page (PrefsDialog *dialog)
                    EPHY_PREFS_WEB_ENABLE_POPUPS,
                    dialog->popups_allow_checkbutton,
                    "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-                   dialog->adblock_allow_checkbutton,
-                   "active",
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_PLUGINS,
                    dialog->enable_plugins_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
+
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
+                   dialog->adblock_allow_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
+                   dialog->do_not_track_checkbutton,
+                   "sensitive",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_DO_NOT_TRACK,
+                   dialog->do_not_track_checkbutton,
+                   "active",
+                   /* Teensy hack: don't override the previous binding. */
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
+  g_signal_connect (dialog->do_not_track_checkbutton,
+                    "clicked",
+                    G_CALLBACK (do_not_track_button_clicked_cb),
+                    dialog);
 
   create_download_path_button (dialog);
   create_search_engine_combo (GTK_COMBO_BOX (dialog->search_engine_combo));
@@ -1747,15 +1764,6 @@ setup_stored_data_page (PrefsDialog *dialog)
                    dialog->remember_passwords_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_DO_NOT_TRACK,
-                   dialog->do_not_track_checkbutton,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_signal_connect (dialog->do_not_track_checkbutton,
-                    "clicked",
-                    G_CALLBACK (do_not_track_button_clicked_cb),
-                    dialog);
 
   g_signal_connect (dialog->clear_personal_data_button,
                     "clicked",

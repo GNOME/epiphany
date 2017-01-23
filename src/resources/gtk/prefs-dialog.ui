@@ -266,15 +266,23 @@
                         <property name="spacing">6</property>
                         <property name="margin-start">12</property>
                         <child>
-                          <object class="GtkCheckButton" id="popups_allow_checkbutton">
-                            <property name="label" translatable="yes">Allow popup _windows</property>
+                          <object class="GtkCheckButton" id="adblock_allow_checkbutton">
+                            <property name="label" translatable="yes">Try to block _advertisements</property>
                             <property name="visible">True</property>
                             <property name="use-underline">True</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="adblock_allow_checkbutton">
-                            <property name="label" translatable="yes">Allow _advertisements</property>
+                          <object class="GtkCheckButton" id="do_not_track_checkbutton">
+                            <property name="label" translatable="yes">Try to block web _trackers</property>
+                            <property name="visible">True</property>
+                            <property name="use-underline">True</property>
+                            <property name="margin-start">12</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="popups_allow_checkbutton">
+                            <property name="label" translatable="yes">Block popup _windows</property>
                             <property name="visible">True</property>
                             <property name="use-underline">True</property>
                           </object>
@@ -540,32 +548,6 @@
                             <property name="group">always</property>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Tracking</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="do_not_track_checkbutton">
-                        <property name="label" translatable="yes">Block selected web _trackers</property>
-                        <property name="visible">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="halign">start</property>
-                        <property name="margin-start">12</property>
                       </object>
                     </child>
                   </object>
