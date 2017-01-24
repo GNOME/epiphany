@@ -687,6 +687,29 @@ migrate_adblock_filters (void)
 }
 
 static void
+migrate_initial_state (void)
+{
+  char *filename;
+  GFile *file;
+  GError *error = NULL;
+
+  /* EphyInitialState no longer exists. It's just window sizes, so "migrate" it
+   * by simply removing the file to avoid cluttering the profile dir. */
+  filename = g_build_filename (ephy_dot_dir (), "states.xml", NULL);
+  file = g_file_new_for_path (filename);
+
+  g_file_delete (file, NULL, &error);
+  if (error != NULL) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+      g_warning ("Failed to delete %s: %s", filename, error->message);
+    g_error_free (error);
+  }
+
+  g_free (filename);
+  g_object_unref (file);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -697,6 +720,8 @@ migrate_nothing (void)
    */
 }
 
+/* If adding anything here, you need to edit EPHY_PROFILE_MIGRATION_VERSION
+ * in ephy-profile-utils.h. */
 const EphyProfileMigrator migrators[] = {
   migrate_nothing,
   migrate_nothing,
@@ -710,6 +735,7 @@ const EphyProfileMigrator migrators[] = {
   migrate_app_desktop_file_categories,
   migrate_bookmarks,
   migrate_adblock_filters,
+  migrate_initial_state,
 };
 
 static gboolean
