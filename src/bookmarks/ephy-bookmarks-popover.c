@@ -74,6 +74,7 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *popover,
   if (g_sequence_get_length (ephy_bookmark_get_tags (bookmark)) == 1) {
     GList *children;
     GList *l;
+    const char *visible_stack_child;
 
     children = gtk_container_get_children (GTK_CONTAINER (popover->tags_list_box));
     for (l = children; l != NULL; l = l->next) {
@@ -87,6 +88,7 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *popover,
     /* If we are on the tag detail list box, then the user has toggled the state
      * of the tag widget multiple times. The first time the bookmark was removed
      * from the list box. Now we have to add it back. */
+    visible_stack_child = gtk_stack_get_visible_child_name (GTK_STACK (popover->toplevel_stack));
     if (g_strcmp0 (visible_stack_child, "tag_detail") == 0) {
       GtkWidget *row;
       row = create_bookmark_row (bookmark, popover);
