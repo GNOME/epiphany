@@ -221,6 +221,20 @@ ephy_bookmarks_manager_new (void)
   return EPHY_BOOKMARKS_MANAGER (g_object_new (EPHY_TYPE_BOOKMARKS_MANAGER, NULL));
 }
 
+static void
+ephy_bookmarks_manager_watch_bookmark (EphyBookmarksManager *self,
+                                       EphyBookmark         *bookmark)
+{
+  g_signal_connect_object (bookmark, "notify::title",
+                           G_CALLBACK (bookmark_title_changed_cb), self, 0);
+  g_signal_connect_object (bookmark, "notify::url",
+                           G_CALLBACK (bookmark_url_changed_cb), self, 0);
+  g_signal_connect_object (bookmark, "tag-added",
+                           G_CALLBACK (bookmark_tag_added_cb), self, 0);
+  g_signal_connect_object (bookmark, "tag-removed",
+                           G_CALLBACK (bookmark_tag_removed_cb), self, 0);
+}
+
 void
 ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                      EphyBookmark         *bookmark)
@@ -245,15 +259,7 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
     ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                                (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                                NULL);
-
-    g_signal_connect_object (bookmark, "notify::title",
-                             G_CALLBACK (bookmark_title_changed_cb), self, 0);
-    g_signal_connect_object (bookmark, "notify::url",
-                             G_CALLBACK (bookmark_url_changed_cb), self, 0);
-    g_signal_connect_object (bookmark, "tag-added",
-                             G_CALLBACK (bookmark_tag_added_cb), self, 0);
-    g_signal_connect_object (bookmark, "tag-removed",
-                             G_CALLBACK (bookmark_tag_removed_cb), self, 0);
+    ephy_bookmarks_manager_watch_bookmark (self, bookmark);
   }
 }
 
@@ -274,8 +280,11 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
     if (!g_sequence_lookup (self->bookmarks,
                             bookmark,
                             (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
-                            NULL))
+                            NULL)) {
       g_sequence_prepend (self->bookmarks, g_object_ref (bookmark));
+      g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
+      ephy_bookmarks_manager_watch_bookmark (self, bookmark);
+    }
   }
 
   g_sequence_sort (self->bookmarks,
