@@ -72,7 +72,6 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *popover,
 
   /* If the bookmark no longer has 0 tags, we remove it from the tags list box */
   if (g_sequence_get_length (ephy_bookmark_get_tags (bookmark)) == 1) {
-    GtkWidget *row;
     GList *children;
     GList *l;
 
@@ -88,8 +87,11 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *popover,
     /* If we are on the tag detail list box, then the user has toggled the state
      * of the tag widget multiple times. The first time the bookmark was removed
      * from the list box. Now we have to add it back. */
-    row = create_bookmark_row (bookmark, popover);
-    gtk_container_add (GTK_CONTAINER (popover->tag_detail_list_box), row);
+    if (g_strcmp0 (visible_stack_child, "tag_detail") == 0) {
+      GtkWidget *row;
+      row = create_bookmark_row (bookmark, popover);
+      gtk_container_add (GTK_CONTAINER (popover->tag_detail_list_box), row);
+    }
   }
 }
 
