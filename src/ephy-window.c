@@ -1723,23 +1723,20 @@ populate_context_menu (WebKitWebView       *web_view,
 }
 
 static gboolean
-save_target_uri (EphyWindow          *window,
-                 WebKitWebView       *view,
-                 GdkEventButton      *event,
-                 WebKitHitTestResult *hit_test_result)
+save_target_uri (EphyWindow    *window,
+                 WebKitWebView *view)
 {
   guint context;
   char *location = NULL;
   gboolean retval = FALSE;
 
-  g_object_get (hit_test_result, "context", &context, NULL);
+  g_object_get (window->hit_test_result, "context", &context, NULL);
 
-  LOG ("ephy_window_dom_mouse_click_cb: button %d, context %d, modifier %d (%d:%d)",
-       event->button, context, event->state, (int)event->x, (int)event->y);
+  LOG ("save_target_uri: context %d", context);
 
   /* shift+click saves the link target */
   if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK) {
-    g_object_get (G_OBJECT (hit_test_result), "link-uri", &location, NULL);
+    g_object_get (G_OBJECT (window->hit_test_result), "link-uri", &location, NULL);
   }
   /* Note: pressing enter to submit a form synthesizes a mouse
    * click event
@@ -1747,7 +1744,7 @@ save_target_uri (EphyWindow          *window,
   /* shift+click saves the non-link image */
   else if (context & WEBKIT_HIT_TEST_RESULT_CONTEXT_IMAGE &&
            !(context & WEBKIT_HIT_TEST_RESULT_CONTEXT_EDITABLE)) {
-    g_object_get (G_OBJECT (hit_test_result), "image-uri", &location, NULL);
+    g_object_get (G_OBJECT (window->hit_test_result), "image-uri", &location, NULL);
   }
 
   if (location) {
@@ -1768,27 +1765,6 @@ save_target_uri (EphyWindow          *window,
   }
 
   return retval;
-}
-
-static gboolean
-ephy_window_dom_mouse_click_cb (WebKitWebView  *view,
-                                GdkEventButton *event,
-                                EphyWindow     *window)
-{
-  WebKitHitTestResult *hit_test_result;
-  gboolean handled = FALSE;
-
-  /* Since we're only dealing with shift+click, we can do these
-     checks early. */
-  if (!(event->state & GDK_SHIFT_MASK) || event->button != GDK_BUTTON_PRIMARY) {
-    return FALSE;
-  }
-
-  hit_test_result = g_object_ref (window->hit_test_result);
-  handled = save_target_uri (window, view, event, hit_test_result);
-  g_object_unref (hit_test_result);
-
-  return handled;
 }
 
 static void
@@ -2056,15 +2032,12 @@ decide_policy_cb (WebKitWebView           *web_view,
       flags |= EPHY_NEW_TAB_APPEND_AFTER;
       inherit_session = TRUE;
     }
-    /* Because we connect to button-press-event *after*
-     * (G_CONNECT_AFTER) we need to prevent WebKit from browsing to
-     * a link when you shift+click it. Otherwise when you
-     * shift+click a link to download it you would also be taken to
-     * the link destination. */
+    /* Shift+click means download URI */
     else if (button == 1 && state == GDK_SHIFT_MASK) {
-      webkit_policy_decision_ignore (decision);
-
-      return TRUE;
+      if (save_target_uri (window, web_view)) {
+        webkit_policy_decision_ignore (decision);
+        return TRUE;
+      }
     }
     /* Those were our special cases, we won't handle this */
     else {
@@ -2168,9 +2141,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
   g_signal_connect_object (view, "notify::is-blank",
                            G_CALLBACK (sync_tab_is_blank),
                            window, 0);
-  g_signal_connect_object (view, "button-press-event",
-                           G_CALLBACK (ephy_window_dom_mouse_click_cb),
-                           window, 0);
   g_signal_connect_object (view, "context-menu",
                            G_CALLBACK (populate_context_menu),
                            window, 0);
@@ -2233,8 +2203,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
                                         G_CALLBACK (sync_tab_address),
                                         window);
 
-  g_signal_handlers_disconnect_by_func
-    (view, G_CALLBACK (ephy_window_dom_mouse_click_cb), window);
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (populate_context_menu),
                                         window);
