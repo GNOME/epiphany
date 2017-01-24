@@ -117,9 +117,6 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *popover,
     }
 
     if (!exists) {
-      /* Disconnect the previous handler on the instance as create bookmark row
-       * connects another one */
-      g_signal_handlers_disconnect_by_data (bookmark, popover);
       row = create_bookmark_row (bookmark, popover);
       gtk_container_add (GTK_CONTAINER (popover->tags_list_box), row);
     }
