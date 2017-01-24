@@ -71,4 +71,8 @@ GtkWidget        *ephy_window_get_current_find_toolbar (EphyWindow *window);
 void              ephy_window_set_location             (EphyWindow *window,
                                                         const char *address);
 
+void              ephy_window_set_default_size         (EphyWindow *window,
+                                                        gint        width,
+                                                        gint        height);
+
 G_END_DECLS

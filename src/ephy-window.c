@@ -144,11 +144,15 @@ struct _EphyWindow {
   EphyEmbedEvent *context_event;
   WebKitHitTestResult *hit_test_result;
   guint idle_worker;
-
   EphyLocationController *location_controller;
 
+  gint current_width;
+  gint current_height;
+
+  guint has_size : 1;
+  guint is_maximized : 1;
+  guint is_fullscreen : 1;
   guint closing : 1;
-  guint fullscreen_mode : 1;
   guint is_popup : 1;
   guint present_on_insert : 1;
   guint updating_address : 1;
@@ -399,7 +403,7 @@ sync_chromes_visibility (EphyWindow *window)
   show_tabsbar = (window->chrome & EPHY_WINDOW_CHROME_TABSBAR);
 
   ephy_notebook_set_tabs_allowed (EPHY_NOTEBOOK (window->notebook),
-                                  show_tabsbar && !(window->is_popup || window->fullscreen_mode));
+                                  show_tabsbar && !(window->is_popup || window->is_fullscreen));
 }
 
 static void
@@ -472,7 +476,7 @@ ephy_window_fullscreen (EphyWindow *window)
 {
   EphyEmbed *embed;
 
-  window->fullscreen_mode = TRUE;
+  window->is_fullscreen = TRUE;
 
   /* sync status */
   embed = window->active_embed;
@@ -487,7 +491,7 @@ ephy_window_fullscreen (EphyWindow *window)
 static void
 ephy_window_unfullscreen (EphyWindow *window)
 {
-  window->fullscreen_mode = FALSE;
+  window->is_fullscreen = FALSE;
 
   gtk_widget_show (window->header_bar);
   sync_chromes_visibility (window);
@@ -1817,6 +1821,7 @@ window_properties_geometry_changed (WebKitWindowProperties *properties,
   webkit_window_properties_get_geometry (properties, &geometry);
   if (geometry.x >= 0 && geometry.y >= 0)
     gtk_window_move (GTK_WINDOW (window), geometry.x, geometry.y);
+
   if (geometry.width > 0 && geometry.height > 0)
     gtk_window_resize (GTK_WINDOW (window), geometry.width, geometry.height);
 }
@@ -2707,14 +2712,30 @@ ephy_window_get_property (GObject    *object,
   }
 }
 
+static void
+ephy_window_size_allocate (GtkWidget     *widget,
+                           GtkAllocation *allocation)
+{
+  EphyWindow *window = EPHY_WINDOW (widget);
+
+  GTK_WIDGET_CLASS (ephy_window_parent_class)->size_allocate (widget, allocation);
+
+  if (!window->is_maximized && !window->is_fullscreen) {
+    gtk_window_get_size (GTK_WINDOW (widget),
+                         &window->current_width,
+                         &window->current_height);
+  }
+}
+
 static gboolean
 ephy_window_state_event (GtkWidget           *widget,
                          GdkEventWindowState *event)
 {
   EphyWindow *window = EPHY_WINDOW (widget);
+  gboolean result = GDK_EVENT_PROPAGATE;
 
   if (GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event) {
-    GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event (widget, event);
+    result = GTK_WIDGET_CLASS (ephy_window_parent_class)->window_state_event (widget, event);
   }
 
   if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN) {
@@ -2735,9 +2756,57 @@ ephy_window_state_event (GtkWidget           *widget,
 
     g_simple_action_set_state (G_SIMPLE_ACTION (action),
                                g_variant_new_boolean (fullscreen));
+  } else if (event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED) {
+    window->is_maximized = event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED;
   }
 
-  return FALSE;
+  return result;
+}
+
+void
+ephy_window_set_default_size (EphyWindow *window,
+                              gint        width,
+                              gint        height)
+{
+  gtk_window_set_default_size (GTK_WINDOW (window), width, height);
+  window->has_size = TRUE;
+}
+
+static void
+ephy_window_show (GtkWidget *widget)
+{
+  EphyWindow *window = EPHY_WINDOW (widget);
+
+  if (!window->has_size && !window->is_popup) {
+    window->current_width = g_settings_get_int (EPHY_SETTINGS_UI, "width");
+    window->current_height = g_settings_get_int (EPHY_SETTINGS_UI, "height");
+    window->is_maximized = g_settings_get_boolean (EPHY_SETTINGS_UI, "is-maximized");
+
+    gtk_window_resize (GTK_WINDOW (window),
+                       window->current_width,
+                       window->current_height);
+
+    if (window->is_maximized)
+      gtk_window_maximize (GTK_WINDOW (window));
+
+    window->has_size = TRUE;
+  }
+
+  GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
+}
+
+static void
+ephy_window_destroy (GtkWidget *widget)
+{
+  EphyWindow *window = EPHY_WINDOW (widget);
+
+  if (!window->is_popup) {
+    g_settings_set_int (EPHY_SETTINGS_UI, "width", window->current_width);
+    g_settings_set_int (EPHY_SETTINGS_UI, "height", window->current_height);
+    g_settings_set_boolean (EPHY_SETTINGS_UI, "is-maximized", window->is_maximized);
+  }
+
+  GTK_WIDGET_CLASS (ephy_window_parent_class)->destroy (widget);
 }
 
 static void
@@ -3063,7 +3132,10 @@ ephy_window_class_init (EphyWindowClass *klass)
   object_class->set_property = ephy_window_set_property;
 
   widget_class->key_press_event = ephy_window_key_press_event;
+  widget_class->size_allocate = ephy_window_size_allocate;
   widget_class->window_state_event = ephy_window_state_event;
+  widget_class->show = ephy_window_show;
+  widget_class->destroy = ephy_window_destroy;
   widget_class->delete_event = ephy_window_delete_event;
 
   g_object_class_override_property (object_class,

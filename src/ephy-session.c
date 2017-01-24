@@ -1027,7 +1027,7 @@ restore_geometry (GtkWindow    *window,
   }
 
   if (geometry->width > 0 && geometry->height > 0) {
-    gtk_window_set_default_size (window, geometry->width, geometry->height);
+    ephy_window_set_default_size (EPHY_WINDOW (window), geometry->width, geometry->height);
   }
 }
 
