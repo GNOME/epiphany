@@ -235,8 +235,10 @@ update_adblock_filter_files (EphyFiltersManager *manager)
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
     return;
 
-  /* One at a time please! */
+  /* Only once at a time please! Newest set of filters wins. */
   g_cancellable_cancel (manager->cancellable);
+  g_object_unref (manager->cancellable);
+  manager->cancellable = g_cancellable_new ();
 
   filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
   for (guint i = 0; filters[i]; i++) {
