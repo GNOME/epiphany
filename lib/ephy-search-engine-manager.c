@@ -139,7 +139,8 @@ static void
 ephy_search_engine_manager_apply_settings (EphySearchEngineManager *manager)
 {
   GHashTableIter iter;
-  gpointer key, value;
+  gpointer key;
+  gpointer value;
   int size;
   int i = 0;
   char **search_engine_names;
@@ -154,12 +155,14 @@ ephy_search_engine_manager_apply_settings (EphySearchEngineManager *manager)
   search_engine_urls = g_malloc(size + 1);
 
   g_hash_table_iter_init (&iter, manager->search_engines);
+
   while (g_hash_table_iter_next (&iter, &key, &value))
   {
     search_engine_names[i] = key;
     search_engine_urls[i] = value;
     i++;
   }
+
   search_engine_names[size] = NULL;
   search_engine_urls[size] = NULL;
 
@@ -173,8 +176,8 @@ ephy_search_engine_manager_apply_settings (EphySearchEngineManager *manager)
                        "search-engines-urls",
                        (const char * const*) search_engine_urls);
 
-  g_strfreev (search_engine_names);
-  g_strfreev (search_engine_urls);
+  g_free (search_engine_names);
+  g_free (search_engine_urls);
 }
 
 void

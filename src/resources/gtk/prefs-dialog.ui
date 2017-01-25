@@ -5,10 +5,14 @@
     <columns>
       <!-- column-name name -->
       <column type="gchararray"/>
+
       <!-- column-name stock url -->
       <column type="gchararray"/>
+
       <!-- column-name url -->
-      <column type="gchararray"/>
+      -<column type="gchararray"/>
+
+
     </columns>
   </object>
   <template class="PrefsDialog" parent="GtkDialog">
@@ -169,13 +173,27 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Search</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="hexpand">True</property>
+                            <property name="label" translatable="yes">Search Engines</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+			<child>
+                          <object class="GtkButton" id="search_engine_dialog_button">
+                            <property name="label" translatable="yes">_Manage Search Engines</property>
+                            <property name="visible">True</property>
+                            <property name="use-underline">True</property>
+                            <signal name="clicked" handler="on_search_engine_dialog_button_clicked"/>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -191,7 +209,7 @@
                             <child>
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Engine:</property>
+                                <property name="label" translatable="yes">_Default Search Engine :</property>
                                 <property name="use-underline">True</property>
                                 <property name="mnemonic-widget">search_engine_combo</property>
                               </object>
@@ -206,6 +224,19 @@
                                 <property name="position">1</property>
                               </packing>
                             </child>
+			<child>
+			<!--
+                          <object class="GtkButton" id="search_engine_dialog_button">
+                            <property name="label" translatable="yes">_Manage Search Engines</property>
+                            <property name="visible">True</property>
+                            <property name="use-underline">True</property>
+                            <signal name="clicked" handler="on_search_engine_dialog_button_clicked"/>
+                          </object>
+                          <packing>
+                                <property name="expand">False</property>
+                          </packing>
+			  -->
+                        </child>
                           </object>
                         </child>
                       </object>
