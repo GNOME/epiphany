@@ -43,9 +43,6 @@ typedef enum
   EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER
 } EphyEmbedShellMode;
 
-#define EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE(mode) \
-  (mode == EPHY_EMBED_SHELL_MODE_PRIVATE || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
-
 struct _EphyEmbedShellClass
 {
   GtkApplicationClass parent_class;

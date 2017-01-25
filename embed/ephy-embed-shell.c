@@ -664,7 +664,7 @@ initialize_web_extensions (WebKitWebContext *web_context,
 
   address = priv->dbus_server ? g_dbus_server_get_client_address (priv->dbus_server) : NULL;
 
-  private_profile = EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode);
+  private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO;
   user_data = g_variant_new ("(msssb)",
                              address,
                              ephy_dot_dir (),
@@ -802,10 +802,15 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
   char *data_dir;
   char *cache_dir;
 
-  data_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    priv->web_context = webkit_web_context_new_ephemeral ();
+    return;
+  }
+
+  data_dir = g_build_filename (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE ?
                                ephy_dot_dir () : g_get_user_data_dir (),
                                g_get_prgname (), NULL);
-  cache_dir = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
+  cache_dir = g_build_filename (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE ?
                                 ephy_dot_dir () : g_get_user_cache_dir (),
                                 g_get_prgname (), NULL);
 
@@ -926,7 +931,7 @@ ephy_embed_shell_startup (GApplication *application)
                     shell);
 
   /* Favicon Database */
-  favicon_db_path = g_build_filename (EPHY_EMBED_SHELL_MODE_HAS_PRIVATE_PROFILE (priv->mode) ?
+  favicon_db_path = g_build_filename (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE ?
                                       ephy_dot_dir () : g_get_user_cache_dir (),
                                       "icondatabase", NULL);
   webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
@@ -965,10 +970,12 @@ ephy_embed_shell_startup (GApplication *application)
 
   /* Store cookies in moz-compatible SQLite format */
   cookie_manager = webkit_web_context_get_cookie_manager (priv->web_context);
-  filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
-  webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
-                                                WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
-  g_free (filename);
+  if (priv->mode != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    filename = g_build_filename (ephy_dot_dir (), "cookies.sqlite", NULL);
+    webkit_cookie_manager_set_persistent_storage (cookie_manager, filename,
+                                                  WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
+    g_free (filename);
+  }
 
   cookie_policy = g_settings_get_string (EPHY_SETTINGS_WEB,
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
