@@ -33,7 +33,6 @@
 #include "ephy-gui.h"
 #include "ephy-langs.h"
 #include "ephy-prefs.h"
-#include "ephy-search-engine-dialog.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -563,19 +562,6 @@ on_manage_passwords_button_clicked (GtkWidget   *button,
 }
 
 static void
-on_search_engine_dialog_button_clicked (GtkWidget   *button,
-                                        PrefsDialog *dialog)
-{
-  GtkWindow *search_engine_dialog;
-
-  search_engine_dialog = GTK_WINDOW (ephy_search_engine_dialog_new ());
-
-  gtk_window_set_transient_for (search_engine_dialog, GTK_WINDOW (dialog));
-  gtk_window_set_modal (search_engine_dialog, TRUE);
-  gtk_window_present (search_engine_dialog);
-}
-
-static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -638,7 +624,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
-  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
 }
 
 static void

@@ -58,8 +58,6 @@ libephymain_la_SOURCES = \
 	ephy-lockdown.h				\
 	ephy-notebook.c				\
 	ephy-notebook.h				\
-	ephy-search-engine-dialog.c		\
-	ephy-search-engine-dialog.h		\
 	ephy-session.c				\
 	ephy-session.h				\
 	ephy-shell.c				\
