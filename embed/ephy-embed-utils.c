@@ -29,10 +29,10 @@
 #include "ephy-string.h"
 #include "ephy-view-source-handler.h"
 
-#include <JavaScriptCore/JavaScript.h>
+#include <string.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
-#include <string.h>
+#include <JavaScriptCore/JavaScript.h>
 
 static GRegex *non_search_regex;
 static GRegex *domain_regex;
@@ -230,20 +230,15 @@ ephy_embed_utils_normalize_address (const char *address)
 char *
 ephy_embed_utils_autosearch_address (const char *search_key)
 {
-  char *query_param;
-  const char *url_search;
-  char *default_name;
+  char *query_param, *url_search;
   char *effective_address;
-  EphyEmbedShell *shell;
-  EphySearchEngineManager *search_engine_manager;
 
-  shell = ephy_embed_shell_get_default ();
-  search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
-  default_name = ephy_search_engine_manager_get_default_engine (search_engine_manager);
-  url_search = ephy_search_engine_manager_get_url (search_engine_manager, default_name);
-
-  if (url_search == NULL || url_search[0] == '\0')
-    url_search = _("https://duckduckgo.com/?q=%s&amp;t=epiphany");
+  url_search = g_settings_get_string (EPHY_SETTINGS_MAIN,
+                                      EPHY_PREFS_KEYWORD_SEARCH_URL);
+  if (url_search == NULL || url_search[0] == '\0') {
+    g_free (url_search);
+    url_search = g_strdup (_("https://duckduckgo.com/?q=%s&amp;t=epiphany"));
+  }
 
   query_param = soup_form_encode ("q", search_key, NULL);
 #pragma GCC diagnostic push
@@ -253,7 +248,7 @@ ephy_embed_utils_autosearch_address (const char *search_key)
   effective_address = g_strdup_printf (url_search, query_param + 2);
 #pragma GCC diagnostic pop
   g_free (query_param);
-  g_free (default_name);
+  g_free (url_search);
 
   return effective_address;
 }

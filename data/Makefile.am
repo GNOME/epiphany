@@ -10,9 +10,7 @@ $(desktop_DATA): $(desktop_in_files)
 gsettings_ENUM_NAMESPACE = org.gnome.Epiphany
 gsettings_ENUM_FILES = $(top_srcdir)/lib/ephy-prefs.h
 
-gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml                \
-                    org.gnome.epiphany.host.gschema.xml           \
-                    org.gnome.epiphany.search.engines.gschema.xml
+gsettings_SCHEMAS = org.gnome.epiphany.gschema.xml org.gnome.epiphany.host.gschema.xml
 @GSETTINGS_RULES@
 
 appstream_in_files = org.gnome.Epiphany.appdata.xml.in
@@ -26,7 +24,7 @@ $(appstream_XML): $(appstream_in_files)
 servicedir = $(datadir)/dbus-1/services
 service_in_files = org.gnome.EpiphanySearchProvider.service.in
 service_DATA = $(service_in_files:.service.in=.service)
-
+ 
 # Rule to make the service file with bindir expanded
 $(service_DATA): $(service_in_files) Makefile
 	$(AM_V_GEN) sed -e "s|\@libexecdir[@]|$(libexecdir)|g" $< > $@

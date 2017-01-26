@@ -29,11 +29,11 @@
 #include "ephy-profile-utils.h"
 #include "ephy-shell.h"
 
+#include <string.h>
+#include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
-#include <glib/gi18n.h>
 #include <libsoup/soup.h>
-#include <string.h>
 
 struct _EphySearchProvider {
   GApplication parent_instance;
@@ -278,21 +278,15 @@ launch_search (EphySearchProvider *self,
                char              **terms,
                guint               timestamp)
 {
-  char *search_string;
-  const char *url_search;
-  char *query_param;
-  char *effective_url;
-  char *default_name;
-  EphyEmbedShell *shell;
-  EphySearchEngineManager *search_engine_manager;
+  char *search_string, *url_search, *query_param, *effective_url;
 
-  shell = ephy_embed_shell_get_default ();
-  search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
-  default_name = ephy_search_engine_manager_get_default_engine (search_engine_manager);
-  url_search = ephy_search_engine_manager_get_url (search_engine_manager, default_name);
+  url_search = g_settings_get_string (self->settings, EPHY_PREFS_KEYWORD_SEARCH_URL);
 
-  if (url_search == NULL || url_search[0] == '\0')
-    url_search = _("https://duckduckgo.com/?q=%s&amp;t=epiphany");
+  if (url_search == NULL || url_search[0] == '\0') {
+    g_free (url_search);
+
+    url_search = g_strdup (_("https://duckduckgo.com/?q=%s&amp;t=epiphany"));
+  }
 
   search_string = g_strjoinv (" ", terms);
   query_param = soup_form_encode ("q", search_string, NULL);
@@ -307,9 +301,9 @@ launch_search (EphySearchProvider *self,
   launch_uri (effective_url, timestamp);
 
   g_free (query_param);
+  g_free (url_search);
   g_free (effective_url);
   g_free (search_string);
-  g_free (default_name);
 }
 
 static gboolean
