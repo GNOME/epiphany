@@ -521,6 +521,10 @@ ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
                                        &consumed);
   state_mask &= ~consumed;
 
+  /* Focus location entry */
+  if (keyval == GDK_KEY_F6)
+    return FALSE;
+
   /* Websites are allowed to override most Epiphany accelerators, but not
    * window or tab management accelerators. */
   if ((event->state & state_mask) == GDK_CONTROL_MASK)
