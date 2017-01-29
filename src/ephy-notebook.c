@@ -277,7 +277,7 @@ notebook_drag_data_received_cb (GtkWidget        *widget,
   if (target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
     return;
 
-  g_signal_stop_emission_by_name (widget, "drag_data_received");
+  g_signal_stop_emission_by_name (widget, "drag-data-received");
 
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                               EPHY_PREFS_LOCKDOWN_ARBITRARY_URL)) return;
