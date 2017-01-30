@@ -189,10 +189,11 @@ homepage_url_changed (GSettings  *settings,
                       const char *key,
                       GtkWidget  *button)
 {
-  const char *setting;
+  char *setting;
 
   setting = g_settings_get_string (settings, key);
   gtk_widget_set_visible (button, setting && setting[0]);
+  g_free (setting);
 }
 
 typedef enum {
