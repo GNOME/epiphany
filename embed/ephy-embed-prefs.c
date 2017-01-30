@@ -344,7 +344,7 @@ webkit_pref_callback_accept_languages (GSettings  *settings,
 {
   GArray *array;
   char **languages;
-  int i;
+  guint i;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   WebKitWebContext *web_context = ephy_embed_shell_get_web_context (shell);
 
@@ -372,6 +372,8 @@ webkit_pref_callback_accept_languages (GSettings  *settings,
   }
 
   g_strfreev (languages);
+  for (i = 0; i < array->len; i++)
+    g_free (g_array_index (array, char *, i));
   g_array_free (array, TRUE);
 }
 
