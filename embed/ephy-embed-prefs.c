@@ -364,6 +364,7 @@ webkit_pref_callback_accept_languages (GSettings  *settings,
       g_array_append_val (array, str);
     }
   }
+  g_strfreev (languages);
 
   ephy_langs_sanitise (array);
 
@@ -379,7 +380,6 @@ webkit_pref_callback_accept_languages (GSettings  *settings,
     g_strfreev (normalized);
   }
 
-  g_strfreev (languages);
   for (i = 0; i < array->len; i++)
     g_free (g_array_index (array, char *, i));
   g_array_free (array, TRUE);
