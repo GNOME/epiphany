@@ -468,6 +468,9 @@ out:
 static void
 setup_fxa_sign_in_view (PrefsDialog *dialog)
 {
+  EphyEmbedShell *shell;
+  WebKitWebContext *embed_context;
+  WebKitWebContext *sync_context;
   const char *js = "\"use strict\";"
                    "function handleAccountsCommand(evt) {"
                    "  let j = {type: evt.type, detail: evt.detail};"
@@ -488,10 +491,18 @@ setup_fxa_sign_in_view (PrefsDialog *dialog)
   webkit_user_content_manager_register_script_message_handler (dialog->fxa_manager,
                                                                "accountsCommandHandler");
 
+  shell = ephy_embed_shell_get_default ();
+  embed_context = ephy_embed_shell_get_web_context (shell);
+
+  sync_context = webkit_web_context_new ();
+  webkit_web_context_set_preferred_languages (sync_context,
+                                              g_object_get_data (G_OBJECT (embed_context), "preferred-languages"));
   dialog->fxa_web_view = WEBKIT_WEB_VIEW (g_object_new (WEBKIT_TYPE_WEB_VIEW,
                                                         "user-content-manager", dialog->fxa_manager,
                                                         "settings", ephy_embed_prefs_get_settings (),
+                                                        "web-context", sync_context,
                                                         NULL));
+  g_object_unref (sync_context);
 
   gtk_widget_set_visible (GTK_WIDGET (dialog->fxa_web_view), TRUE);
   gtk_widget_set_size_request (GTK_WIDGET (dialog->fxa_web_view), 450, 450);

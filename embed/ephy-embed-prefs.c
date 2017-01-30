@@ -369,10 +369,10 @@ webkit_pref_callback_accept_languages (GSettings  *settings,
   ephy_langs_sanitise (array);
 
   webkit_web_context_set_preferred_languages (web_context, (const char * const *)(void *)array->data);
-
-  /* Set preferred languages also for the default web context, used by the sync
-   * tab in the preferences dialog. It doesn't need spellchecking. */
-  webkit_web_context_set_preferred_languages (webkit_web_context_get_default (), (const char * const *)(void *)array->data);
+  /* Used by the Firefox Sync web view in prefs-dialog.c. */
+  g_object_set_data_full (G_OBJECT (web_context), "preferred-languages",
+                          g_strdupv ((char **)(void *)array->data),
+                          (GDestroyNotify)g_strfreev);
 
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING)) {
     char **normalized = normalize_languages ((char **)(void *)array->data);
