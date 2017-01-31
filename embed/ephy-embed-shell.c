@@ -686,9 +686,6 @@ initialize_notification_permissions (WebKitWebContext *web_context,
   denied_origins = ephy_permissions_manager_get_denied_origins (priv->permissions_manager,
                                                                 EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS);
   webkit_web_context_initialize_notification_permissions (web_context, permitted_origins, denied_origins);
-
-  g_list_free_full (permitted_origins, (GDestroyNotify)webkit_security_origin_unref);
-  g_list_free_full (denied_origins, (GDestroyNotify)webkit_security_origin_unref);
 }
 
 static void

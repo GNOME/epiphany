@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2015 Gustavo Noronha Silva <gns@gnome.org>
- *  Copyright © 2016 Igalia S.L.
+ *  Copyright © 2016-2017 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -37,6 +37,9 @@ struct _EphyPermissionsManager
 
   GHashTable *origins_mapping;
   GHashTable *settings_mapping;
+
+  GHashTable *permission_type_permitted_origins;
+  GHashTable *permission_type_denied_origins;
 };
 
 G_DEFINE_TYPE (EphyPermissionsManager, ephy_permissions_manager, G_TYPE_OBJECT)
@@ -48,6 +51,19 @@ ephy_permissions_manager_init (EphyPermissionsManager *manager)
 {
   manager->origins_mapping = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
   manager->settings_mapping = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
+
+  /* We cannot use a key_destroy_func here because we need to be able to update
+   * the GList keys without destroying the contents of the lists. */
+  manager->permission_type_permitted_origins = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+  manager->permission_type_denied_origins = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+}
+
+static void
+free_cached_origin_list (gpointer key,
+                         gpointer value,
+                         gpointer user_data)
+{
+  g_list_free_full ((GList *)value, (GDestroyNotify)webkit_security_origin_unref);
 }
 
 static void
@@ -57,6 +73,18 @@ ephy_permissions_manager_dispose (GObject *object)
 
   g_clear_pointer (&manager->origins_mapping, g_hash_table_destroy);
   g_clear_pointer (&manager->settings_mapping, g_hash_table_destroy);
+
+  if (manager->permission_type_permitted_origins != NULL) {
+    g_hash_table_foreach (manager->permission_type_permitted_origins, free_cached_origin_list, NULL);
+    g_hash_table_destroy (manager->permission_type_permitted_origins);
+    manager->permission_type_permitted_origins = NULL;
+  }
+
+  if (manager->permission_type_denied_origins != NULL) {
+    g_hash_table_foreach (manager->permission_type_denied_origins, free_cached_origin_list, NULL);
+    g_hash_table_destroy (manager->permission_type_denied_origins);
+    manager->permission_type_denied_origins = NULL;
+  }
 
   G_OBJECT_CLASS (ephy_permissions_manager_parent_class)->dispose (object);
 }
@@ -150,14 +178,95 @@ ephy_permissions_manager_get_permission (EphyPermissionsManager *manager,
   return g_settings_get_enum (settings, permission_type_to_string (type));
 }
 
+static gint
+webkit_security_origin_compare (WebKitSecurityOrigin *a,
+                                WebKitSecurityOrigin *b)
+{
+  if (webkit_security_origin_is_opaque (a))
+    return -1;
+  if (webkit_security_origin_is_opaque (b))
+    return 1;
+
+  return g_strcmp0 (webkit_security_origin_get_protocol (a), webkit_security_origin_get_protocol (b)) * 100 ||
+         g_strcmp0 (webkit_security_origin_get_host (a), webkit_security_origin_get_host (b)) * 10 ||
+         webkit_security_origin_get_port (b) - webkit_security_origin_get_port (a);
+}
+
+static void
+maybe_add_origin_to_permission_type_cache (GHashTable           *permissions,
+                                           EphyPermissionType    type,
+                                           WebKitSecurityOrigin *origin)
+{
+  GList *origins;
+  GList *l;
+
+  /* Add origin to the appropriate permissions cache if (a) the cache already
+   * exists, and (b) it does not already contain origin. */
+  origins = g_hash_table_lookup (permissions, GINT_TO_POINTER (type));
+  if (origins != NULL) {
+    l = g_list_find_custom (origins, origin, (GCompareFunc)webkit_security_origin_compare);
+    if (l == NULL) {
+      origins = g_list_prepend (origins, webkit_security_origin_ref (origin));
+      g_hash_table_replace (permissions, GINT_TO_POINTER (type), origins);
+    }
+  }
+}
+
+static void
+maybe_remove_origin_from_permission_type_cache (GHashTable           *permissions,
+                                                EphyPermissionType    type,
+                                                WebKitSecurityOrigin *origin)
+{
+  GList *origins;
+  GList *l;
+
+  /* Remove origin from the appropriate permissions cache if (a) the cache
+   * exists, and (b) it contains origin. */
+  origins = g_hash_table_lookup (permissions, GINT_TO_POINTER (type));
+  if (origins != NULL) {
+    l = g_list_find_custom (origins, origin, (GCompareFunc)webkit_security_origin_compare);
+    if (l != NULL) {
+      webkit_security_origin_unref (l->data);
+      origins = g_list_remove_link (origins, l);
+      g_hash_table_replace (permissions, GINT_TO_POINTER (type), origins);
+    }
+  }
+}
+
 void
 ephy_permissions_manager_set_permission (EphyPermissionsManager *manager,
                                          EphyPermissionType      type,
                                          const char             *origin,
                                          EphyPermission          permission)
 {
-  GSettings *settings = ephy_permissions_manager_get_settings_for_origin (manager, origin);
+  WebKitSecurityOrigin *webkit_origin;
+  GSettings *settings;
+
+  webkit_origin = webkit_security_origin_new_for_uri (origin);
+  if (webkit_origin == NULL)
+    return;
+
+  settings = ephy_permissions_manager_get_settings_for_origin (manager, origin);
   g_settings_set_enum (settings, permission_type_to_string (type), permission);
+
+  switch (permission) {
+    case EPHY_PERMISSION_UNDECIDED:
+      maybe_remove_origin_from_permission_type_cache (manager->permission_type_permitted_origins, type, webkit_origin);
+      maybe_remove_origin_from_permission_type_cache (manager->permission_type_denied_origins, type, webkit_origin);
+      break;
+    case EPHY_PERMISSION_DENY:
+      maybe_remove_origin_from_permission_type_cache (manager->permission_type_permitted_origins, type, webkit_origin);
+      maybe_add_origin_to_permission_type_cache (manager->permission_type_denied_origins, type, webkit_origin);
+      break;
+    case EPHY_PERMISSION_PERMIT:
+      maybe_add_origin_to_permission_type_cache (manager->permission_type_permitted_origins, type, webkit_origin);
+      maybe_remove_origin_from_permission_type_cache (manager->permission_type_denied_origins, type, webkit_origin);
+      break;
+    default:
+      g_assert_not_reached ();
+  }
+
+  webkit_security_origin_unref (webkit_origin);
 }
 
 static WebKitSecurityOrigin *
@@ -238,10 +347,6 @@ origins_for_keyfile_group (GKeyFile           *file,
   return origins;
 }
 
-/* TODO: Consider caching this in memory. This gets called twice when
- * starting each web process. It could be dozens or hundreds of file
- * reads when starting the browser. It's silly to cache individual
- * settings but not this. */
 static GList *
 ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
                                                EphyPermissionType      type,
@@ -254,6 +359,19 @@ ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
   GList *origins = NULL;
   GError *error = NULL;
 
+  /* Return results from cache, if they exist. */
+  if (permit) {
+    origins = g_hash_table_lookup (manager->permission_type_permitted_origins, GINT_TO_POINTER (type));
+    if (origins != NULL)
+      return origins;
+  } else {
+    origins = g_hash_table_lookup (manager->permission_type_denied_origins, GINT_TO_POINTER (type));
+    if (origins != NULL)
+      return origins;
+  }
+
+  /* Not cached. Load results from GSettings keyfile. Do it manually because the
+   * GSettings API is not designed to be used for enumerating settings. */
   file = g_key_file_new ();
   filename = g_build_filename (ephy_dot_dir (), PERMISSIONS_FILENAME, NULL);
 
@@ -273,6 +391,14 @@ ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
   g_key_file_unref (file);
   g_strfreev (groups);
   g_free (filename);
+
+  /* Cache the results. */
+  if (origins != NULL) {
+    g_hash_table_insert (permit ? manager->permission_type_permitted_origins
+                                : manager->permission_type_denied_origins,
+                         GINT_TO_POINTER (type),
+                         origins);
+  }
 
   return origins;
 }
