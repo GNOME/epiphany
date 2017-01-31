@@ -693,7 +693,10 @@ window_cmd_reopen_closed_tab (GSimpleAction *action,
                               GVariant      *parameter,
                               gpointer       user_data)
 {
-  ephy_session_undo_close_tab (ephy_shell_get_session (ephy_shell_get_default ()));
+  EphySession *session = ephy_shell_get_session (ephy_shell_get_default ());
+
+  g_assert (session != NULL);
+  ephy_session_undo_close_tab (session);
 }
 
 void

@@ -129,15 +129,13 @@ ephy_shell_startup_context_free (EphyShellStartupContext *ctx)
 static void
 ephy_shell_startup_continue (EphyShell *shell, EphyShellStartupContext *ctx)
 {
-  EphySession *session;
+  if (ctx->session_filename != NULL) {
+    EphySession *session = ephy_shell_get_session (shell);
 
-  session = ephy_shell_get_session (shell);
-  g_assert (session != NULL);
-
-  if (ctx->session_filename != NULL)
+    g_assert (session != NULL);
     ephy_session_load (session, (const char *)ctx->session_filename,
                        ctx->user_time, NULL, NULL, NULL);
-  else if (ctx->arguments != NULL) {
+  } else if (ctx->arguments != NULL) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
     ephy_shell_open_uris (shell, (const char **)ctx->arguments,
@@ -419,8 +417,10 @@ ephy_shell_activate (GApplication *application)
    * can be invalidated by another remote instance.
    */
   if (shell->remote_startup_context == NULL) {
-    if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) != EPHY_EMBED_SHELL_MODE_APPLICATION) {
-      ephy_session_resume (ephy_shell_get_session (shell),
+    EphySession *session = ephy_shell_get_session (shell);
+
+    if (session) {
+      ephy_session_resume (session,
                            shell->local_startup_context->user_time,
                            NULL, session_load_cb, shell->local_startup_context);
     } else
@@ -789,6 +789,9 @@ ephy_shell_get_session (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) ==  EPHY_EMBED_SHELL_MODE_APPLICATION)
+    return NULL;
+
   if (shell->session == NULL)
     shell->session = g_object_new (EPHY_TYPE_SESSION, NULL);
 
@@ -941,10 +944,12 @@ ephy_shell_close_all_windows (EphyShell *shell)
 {
   GList *windows;
   gboolean retval = TRUE;
+  EphySession *session = ephy_shell_get_session (shell);
 
   g_return_val_if_fail (EPHY_IS_SHELL (shell), FALSE);
 
-  ephy_session_close (ephy_shell_get_session (shell));
+  if (session)
+    ephy_session_close (session);
 
   windows = gtk_application_get_windows (GTK_APPLICATION (shell));
   while (windows) {
@@ -991,10 +996,11 @@ open_uris_data_new (EphyShell       *shell,
   gboolean new_windows_in_tabs;
   gboolean fullscreen_lockdown;
   gboolean have_uris;
+  EphySession *session = ephy_shell_get_session (shell);
 
   data = g_slice_new0 (OpenURIsData);
   data->shell = shell;
-  data->session = g_object_ref (ephy_shell_get_session (shell));
+  data->session = session ? g_object_ref (session) : NULL;
   data->uris = g_strdupv ((char **)uris);
   data->user_time = user_time;
 
@@ -1024,7 +1030,7 @@ static void
 open_uris_data_free (OpenURIsData *data)
 {
   g_application_release (G_APPLICATION (data->shell));
-  g_object_unref (data->session);
+  g_clear_object (&data->session);
   g_strfreev (data->uris);
 
   g_slice_free (OpenURIsData, data);

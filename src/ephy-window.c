@@ -3486,6 +3486,7 @@ ephy_window_close (EphyWindow *window)
   /* If this is the last window, check ongoing downloads and save its state in the session. */
   if (ephy_shell_get_n_windows (ephy_shell_get_default ()) == 1) {
     EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
+    EphySession *session;
 
     if (ephy_downloads_manager_has_active_downloads (manager) &&
         !confirm_close_with_downloads (window)) {
@@ -3493,7 +3494,9 @@ ephy_window_close (EphyWindow *window)
       return FALSE;
     }
 
-    ephy_session_close (ephy_shell_get_session (ephy_shell_get_default ()));
+    session = ephy_shell_get_session (ephy_shell_get_default ());
+    if (session)
+      ephy_session_close (session);
   }
 
   /* See bug #114689 */
