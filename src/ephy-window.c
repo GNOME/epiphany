@@ -2750,13 +2750,17 @@ ephy_window_show (GtkWidget *widget)
   EphyWindow *window = EPHY_WINDOW (widget);
 
   if (!window->has_size && !window->is_popup) {
-    window->current_width = g_settings_get_int (EPHY_SETTINGS_UI, "width");
-    window->current_height = g_settings_get_int (EPHY_SETTINGS_UI, "height");
-    window->is_maximized = g_settings_get_boolean (EPHY_SETTINGS_UI, "is-maximized");
+    g_settings_get (EPHY_SETTINGS_STATE,
+                    "window-size", "(ii)",
+                    &window->current_width,
+                    &window->current_height);
+    window->is_maximized = g_settings_get_boolean (EPHY_SETTINGS_STATE, "is-maximized");
 
-    gtk_window_resize (GTK_WINDOW (window),
-                       window->current_width,
-                       window->current_height);
+    if (window->current_width > 0 && window->current_height > 0) {
+      gtk_window_resize (GTK_WINDOW (window),
+                         window->current_width,
+                         window->current_height);
+    }
 
     if (window->is_maximized)
       gtk_window_maximize (GTK_WINDOW (window));
@@ -2773,9 +2777,11 @@ ephy_window_destroy (GtkWidget *widget)
   EphyWindow *window = EPHY_WINDOW (widget);
 
   if (!window->is_popup) {
-    g_settings_set_int (EPHY_SETTINGS_UI, "width", window->current_width);
-    g_settings_set_int (EPHY_SETTINGS_UI, "height", window->current_height);
-    g_settings_set_boolean (EPHY_SETTINGS_UI, "is-maximized", window->is_maximized);
+    g_settings_set (EPHY_SETTINGS_STATE,
+                    "window-size", "(ii)",
+                    window->current_width,
+                    window->current_height);
+    g_settings_set_boolean (EPHY_SETTINGS_STATE, "is-maximized", window->is_maximized);
   }
 
   GTK_WIDGET_CLASS (ephy_window_parent_class)->destroy (widget);
