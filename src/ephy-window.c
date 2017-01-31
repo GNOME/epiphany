@@ -149,7 +149,7 @@ struct _EphyWindow {
   gint current_width;
   gint current_height;
 
-  guint has_size : 1;
+  guint has_default_size : 1;
   guint is_maximized : 1;
   guint is_fullscreen : 1;
   guint closing : 1;
@@ -2741,7 +2741,7 @@ ephy_window_set_default_size (EphyWindow *window,
                               gint        height)
 {
   gtk_window_set_default_size (GTK_WINDOW (window), width, height);
-  window->has_size = TRUE;
+  window->has_default_size = TRUE;
 }
 
 static void
@@ -2749,7 +2749,7 @@ ephy_window_show (GtkWidget *widget)
 {
   EphyWindow *window = EPHY_WINDOW (widget);
 
-  if (!window->has_size && !window->is_popup) {
+  if (!window->has_default_size && !window->is_popup) {
     g_settings_get (EPHY_SETTINGS_STATE,
                     "window-size", "(ii)",
                     &window->current_width,
@@ -2765,7 +2765,7 @@ ephy_window_show (GtkWidget *widget)
     if (window->is_maximized)
       gtk_window_maximize (GTK_WINDOW (window));
 
-    window->has_size = TRUE;
+    window->has_default_size = TRUE;
   }
 
   GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
