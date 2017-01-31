@@ -2809,12 +2809,24 @@ ephy_window_show (GtkWidget *widget)
   GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
 }
 
+static gboolean
+ephy_window_should_save_state (EphyWindow *window)
+{
+  if (window->is_popup)
+    return FALSE;
+
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION)
+    return TRUE;
+
+  return ephy_dot_dir_is_default ();
+}
+
 static void
 ephy_window_destroy (GtkWidget *widget)
 {
   EphyWindow *window = EPHY_WINDOW (widget);
 
-  if (!window->is_popup) {
+  if (ephy_window_should_save_state (window)) {
     g_settings_set (EPHY_SETTINGS_STATE,
                     "window-size", "(ii)",
                     window->current_width,
