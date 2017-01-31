@@ -1066,7 +1066,7 @@ sensitive_form_focused_cb (WebKitDOMHTMLFormElement *form,
    * unless it's clearly not. Insecure forms on insecure pages will be detected
    * in the UI process. Note that basically no websites should actually be dumb
    * enough to trip this, but no doubt they exist somewhere.... */
-  insecure_action = action == NULL && g_str_has_prefix (action, "http://");
+  insecure_action = action != NULL && g_str_has_prefix (action, "http://");
 
   variant = g_variant_new ("(tb)",
                            webkit_web_page_get_id (web_page),
