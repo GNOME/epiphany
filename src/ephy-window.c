@@ -148,8 +148,11 @@ struct _EphyWindow {
 
   gint current_width;
   gint current_height;
+  gint current_x;
+  gint current_y;
 
   guint has_default_size : 1;
+  guint has_default_position : 1;
   guint is_maximized : 1;
   guint is_fullscreen : 1;
   guint closing : 1;
@@ -2684,19 +2687,25 @@ ephy_window_get_property (GObject    *object,
   }
 }
 
-static void
-ephy_window_size_allocate (GtkWidget     *widget,
-                           GtkAllocation *allocation)
+static gboolean
+ephy_window_configure_event (GtkWidget *widget,
+                             GdkEventConfigure *event)
 {
   EphyWindow *window = EPHY_WINDOW (widget);
+  gboolean result;
 
-  GTK_WIDGET_CLASS (ephy_window_parent_class)->size_allocate (widget, allocation);
+  result = GTK_WIDGET_CLASS (ephy_window_parent_class)->configure_event (widget, event);
 
   if (!window->is_maximized && !window->is_fullscreen) {
+    gtk_window_get_position (GTK_WINDOW (widget),
+                             &window->current_x,
+                             &window->current_y);
     gtk_window_get_size (GTK_WINDOW (widget),
                          &window->current_width,
                          &window->current_height);
   }
+
+  return result;
 }
 
 static gboolean
@@ -2744,28 +2753,57 @@ ephy_window_set_default_size (EphyWindow *window,
   window->has_default_size = TRUE;
 }
 
+void
+ephy_window_set_default_position (EphyWindow *window,
+                                  gint        x,
+                                  gint        y)
+{
+  gtk_window_move (GTK_WINDOW (window), x, y);
+  window->has_default_position = TRUE;
+}
+
 static void
 ephy_window_show (GtkWidget *widget)
 {
   EphyWindow *window = EPHY_WINDOW (widget);
 
-  if (!window->has_default_size && !window->is_popup) {
-    g_settings_get (EPHY_SETTINGS_STATE,
-                    "window-size", "(ii)",
-                    &window->current_width,
-                    &window->current_height);
-    window->is_maximized = g_settings_get_boolean (EPHY_SETTINGS_STATE, "is-maximized");
+  if (window->is_popup) {
+    GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
+    return;
+  }
 
-    if (window->current_width > 0 && window->current_height > 0) {
-      gtk_window_resize (GTK_WINDOW (window),
-                         window->current_width,
-                         window->current_height);
+  window->is_maximized = g_settings_get_boolean (EPHY_SETTINGS_STATE, "is-maximized");
+  if (window->is_maximized)
+    gtk_window_maximize (GTK_WINDOW (window));
+  else {
+    if (!window->has_default_position) {
+      g_settings_get (EPHY_SETTINGS_STATE,
+                      "window-position", "(ii)",
+                      &window->current_x,
+                      &window->current_y);
+      if (window->current_x >= 0 && window->current_y >= 0) {
+        gtk_window_move (GTK_WINDOW (window),
+                         window->current_x,
+                         window->current_y);
+      }
+
+      window->has_default_position = TRUE;
     }
 
-    if (window->is_maximized)
-      gtk_window_maximize (GTK_WINDOW (window));
+    if (!window->has_default_size) {
+      g_settings_get (EPHY_SETTINGS_STATE,
+                      "window-size", "(ii)",
+                      &window->current_width,
+                      &window->current_height);
 
-    window->has_default_size = TRUE;
+      if (window->current_width > 0 && window->current_height > 0) {
+        gtk_window_resize (GTK_WINDOW (window),
+                           window->current_width,
+                           window->current_height);
+      }
+
+      window->has_default_size = TRUE;
+    }
   }
 
   GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
@@ -2781,6 +2819,10 @@ ephy_window_destroy (GtkWidget *widget)
                     "window-size", "(ii)",
                     window->current_width,
                     window->current_height);
+    g_settings_set (EPHY_SETTINGS_STATE,
+                    "window-position", "(ii)",
+                    window->current_x,
+                    window->current_y);
     g_settings_set_boolean (EPHY_SETTINGS_STATE, "is-maximized", window->is_maximized);
   }
 
@@ -3110,7 +3152,7 @@ ephy_window_class_init (EphyWindowClass *klass)
   object_class->set_property = ephy_window_set_property;
 
   widget_class->key_press_event = ephy_window_key_press_event;
-  widget_class->size_allocate = ephy_window_size_allocate;
+  widget_class->configure_event = ephy_window_configure_event;
   widget_class->window_state_event = ephy_window_state_event;
   widget_class->show = ephy_window_show;
   widget_class->destroy = ephy_window_destroy;

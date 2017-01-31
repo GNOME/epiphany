@@ -74,5 +74,8 @@ void              ephy_window_set_location             (EphyWindow *window,
 void              ephy_window_set_default_size         (EphyWindow *window,
                                                         gint        width,
                                                         gint        height);
+void              ephy_window_set_default_position     (EphyWindow *window,
+                                                        gint        x,
+                                                        gint        y);
 
 G_END_DECLS

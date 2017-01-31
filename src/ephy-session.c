@@ -1025,13 +1025,11 @@ static void
 restore_geometry (GtkWindow    *window,
                   GdkRectangle *geometry)
 {
-  if (geometry->x >= 0 && geometry->y >= 0) {
-    gtk_window_move (window, geometry->x, geometry->y);
-  }
+  if (geometry->x >= 0 && geometry->y >= 0)
+    ephy_window_set_default_position (EPHY_WINDOW (window), geometry->x, geometry->y);
 
-  if (geometry->width > 0 && geometry->height > 0) {
+  if (geometry->width > 0 && geometry->height > 0)
     ephy_window_set_default_size (EPHY_WINDOW (window), geometry->width, geometry->height);
-  }
 }
 
 typedef struct {
