@@ -29,6 +29,17 @@
 
 static GHashTable *settings = NULL;
 
+static void
+ensure_settings (void)
+{
+  if (settings)
+    return;
+
+  settings = g_hash_table_new_full (g_str_hash,
+                                    g_str_equal, g_free,
+                                    g_object_unref);
+}
+
 void
 ephy_settings_shutdown (void)
 {
@@ -43,22 +54,35 @@ ephy_settings_get (const char *schema)
 {
   GSettings *gsettings = NULL;
 
-  if (settings == NULL) {
-    settings = g_hash_table_new_full (g_str_hash,
-                                      g_str_equal, g_free,
-                                      g_object_unref);
-  }
+  ensure_settings ();
 
   gsettings = g_hash_table_lookup (settings, schema);
 
   if (gsettings == NULL) {
     gsettings = g_settings_new (schema);
-
     if (gsettings == NULL)
-      g_warning ("Invalid schema requested");
+      g_warning ("Invalid schema %s requested", schema);
     else
       g_hash_table_insert (settings, g_strdup (schema), gsettings);
   }
 
   return gsettings;
+}
+
+void
+ephy_settings_ensure_schema_for_path (const char *schema,
+                                      const char *path)
+{
+  GSettings *gsettings;
+
+  ensure_settings ();
+
+  if (g_hash_table_lookup (settings, schema))
+    return;
+
+  gsettings = g_settings_new_with_path (schema, path);
+  if (gsettings == NULL)
+    g_warning ("Invalid schema %s requested for path %s", schema, path);
+  else
+    g_hash_table_insert (settings, g_strdup (schema), gsettings);
 }
