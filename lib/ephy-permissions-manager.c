@@ -187,8 +187,8 @@ webkit_security_origin_compare (WebKitSecurityOrigin *a,
   if (webkit_security_origin_is_opaque (b))
     return 1;
 
-  return g_strcmp0 (webkit_security_origin_get_protocol (a), webkit_security_origin_get_protocol (b)) * 100 ||
-         g_strcmp0 (webkit_security_origin_get_host (a), webkit_security_origin_get_host (b)) * 10 ||
+  return g_strcmp0 (webkit_security_origin_get_protocol (a), webkit_security_origin_get_protocol (b)) ||
+         g_strcmp0 (webkit_security_origin_get_host (a), webkit_security_origin_get_host (b)) ||
          webkit_security_origin_get_port (b) - webkit_security_origin_get_port (a);
 }
 
