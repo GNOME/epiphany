@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define EPHY_PROFILE_MIGRATION_VERSION 14
+#define EPHY_PROFILE_MIGRATION_VERSION 15
 
 #define EPHY_BOOKMARKS_FILE     "bookmarks.gvdb"
 #define EPHY_HISTORY_FILE       "ephy-history.db"
