@@ -129,13 +129,13 @@ ephy_shell_startup_context_free (EphyShellStartupContext *ctx)
 static void
 ephy_shell_startup_continue (EphyShell *shell, EphyShellStartupContext *ctx)
 {
-  if (ctx->session_filename != NULL) {
-    EphySession *session = ephy_shell_get_session (shell);
+  EphySession *session = ephy_shell_get_session (shell);
 
+  if (ctx->session_filename != NULL) {
     g_assert (session != NULL);
     ephy_session_load (session, (const char *)ctx->session_filename,
                        ctx->user_time, NULL, NULL, NULL);
-  } else if (ctx->arguments != NULL) {
+  } else if (ctx->arguments || !session) {
     /* Don't queue any window openings if no extra arguments given, */
     /* since session autoresume will open one for us. */
     ephy_shell_open_uris (shell, (const char **)ctx->arguments,
@@ -787,9 +787,12 @@ ephy_shell_new_tab (EphyShell      *shell,
 EphySession *
 ephy_shell_get_session (EphyShell *shell)
 {
+  EphyEmbedShellMode mode;
+
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
-  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell)) ==  EPHY_EMBED_SHELL_MODE_APPLICATION)
+  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
+  if (mode ==  EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     return NULL;
 
   if (shell->session == NULL)
@@ -1009,7 +1012,7 @@ open_uris_data_new (EphyShell       *shell,
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                                 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
 
-  have_uris = !(g_strv_length ((char **)uris) == 1 && g_str_equal (uris[0], ""));
+  have_uris = uris && !(g_strv_length ((char **)uris) == 1 && g_str_equal (uris[0], ""));
 
   if (startup_flags & EPHY_STARTUP_NEW_WINDOW && !fullscreen_lockdown) {
     data->window = ephy_window_new ();
@@ -1069,8 +1072,8 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
                                      data->user_time);
   }
 
-  url = data->uris[data->current_uri];
-  if (url[0] != '\0') {
+  url = data->uris ? data->uris[data->current_uri] : NULL;
+  if (url && url[0] != '\0') {
     ephy_web_view_load_url (ephy_embed_get_web_view (embed), url);
 
     /* When reusing an empty tab, the focus is in the location entry */
@@ -1093,7 +1096,7 @@ ephy_shell_open_uris_idle (OpenURIsData *data)
   data->current_uri++;
   data->previous_embed = embed;
 
-  return data->uris[data->current_uri] != NULL;
+  return data->uris && data->uris[data->current_uri] != NULL;
 }
 
 static void
