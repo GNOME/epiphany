@@ -426,6 +426,85 @@ migrate_app_desktop_file_categories (void)
   ephy_web_application_free_application_list (web_apps);
 }
 
+/* https://bugzilla.gnome.org/show_bug.cgi?id=752738 */
+static void
+migrate_insecure_password (SecretItem *item)
+{
+  GHashTable *attributes;
+  WebKitSecurityOrigin *original_origin;
+  const char *original_uri;
+
+  attributes = secret_item_get_attributes (item);
+  original_uri = g_hash_table_lookup (attributes, URI_KEY);
+  original_origin = webkit_security_origin_new_for_uri (original_uri);
+  if (original_origin == NULL) {
+    g_warning ("Failed to convert URI %s to a security origin, insecure password will not be migrated", original_uri);
+    g_hash_table_unref (attributes);
+    return;
+  }
+
+  if (g_strcmp0 (webkit_security_origin_get_protocol (original_origin), "http") == 0) {
+    WebKitSecurityOrigin *new_origin;
+    char *new_uri;
+    GError *error = NULL;
+
+    new_origin = webkit_security_origin_new ("https",
+                                             webkit_security_origin_get_host (original_origin),
+                                             webkit_security_origin_get_port (original_origin));
+    new_uri = webkit_security_origin_to_string (new_origin);
+    webkit_security_origin_unref (new_origin);
+
+    g_hash_table_replace (attributes, g_strdup (URI_KEY), new_uri);
+    secret_item_set_attributes_sync (item, EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL, &error);
+    if (error != NULL) {
+      g_warning ("Failed to convert URI %s to https://, insecure password will not be migrated: %s", original_uri, error->message);
+      g_error_free (error);
+    }
+  }
+
+  g_hash_table_unref (attributes);
+  webkit_security_origin_unref (original_origin);
+}
+
+static void
+migrate_insecure_passwords (void)
+{
+  SecretService *service;
+  GHashTable *attributes;
+  GList *items;
+  GError *error = NULL;
+
+  service = secret_service_get_sync (SECRET_SERVICE_LOAD_COLLECTIONS, NULL, &error);
+  if (error != NULL) {
+    g_warning ("Failed to get secret service proxy, insecure passwords will not be migrated: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
+
+  items = secret_service_search_sync (service,
+                                      EPHY_FORM_PASSWORD_SCHEMA,
+                                      attributes,
+                                      SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                                      NULL,
+                                      &error);
+  if (error != NULL) {
+    g_warning ("Failed to search secret service, insecure passwords will not be migrated: %s", error->message);
+    g_error_free (error);
+    goto out;
+  }
+
+  for (GList *l = items; l != NULL; l = l->next)
+    migrate_insecure_password ((SecretItem *)l->data);
+
+  g_list_free_full (items, g_object_unref);
+
+out:
+  g_object_unref (service);
+  g_hash_table_unref (attributes);
+}
+
 static void
 parse_rdf_lang_tag (xmlNode  *child,
                     xmlChar **value,
@@ -723,85 +802,6 @@ migrate_permissions (void)
   g_object_unref (file);
 }
 
-/* https://bugzilla.gnome.org/show_bug.cgi?id=752738 */
-static void
-migrate_insecure_password (SecretItem *item)
-{
-  GHashTable *attributes;
-  WebKitSecurityOrigin *original_origin;
-  const char *original_uri;
-
-  attributes = secret_item_get_attributes (item);
-  original_uri = g_hash_table_lookup (attributes, URI_KEY);
-  original_origin = webkit_security_origin_new_for_uri (original_uri);
-  if (original_origin == NULL) {
-    g_warning ("Failed to convert URI %s to a security origin, insecure password will not be migrated", original_uri);
-    g_hash_table_unref (attributes);
-    return;
-  }
-
-  if (g_strcmp0 (webkit_security_origin_get_protocol (original_origin), "http") == 0) {
-    WebKitSecurityOrigin *new_origin;
-    char *new_uri;
-    GError *error = NULL;
-
-    new_origin = webkit_security_origin_new ("https",
-                                             webkit_security_origin_get_host (original_origin),
-                                             webkit_security_origin_get_port (original_origin));
-    new_uri = webkit_security_origin_to_string (new_origin);
-    webkit_security_origin_unref (new_origin);
-
-    g_hash_table_replace (attributes, g_strdup (URI_KEY), new_uri);
-    secret_item_set_attributes_sync (item, EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL, &error);
-    if (error != NULL) {
-      g_warning ("Failed to convert URI %s to https://, insecure password will not be migrated: %s", original_uri, error->message);
-      g_error_free (error);
-    }
-  }
-
-  g_hash_table_unref (attributes);
-  webkit_security_origin_unref (original_origin);
-}
-
-static void
-migrate_insecure_passwords (void)
-{
-  SecretService *service;
-  GHashTable *attributes;
-  GList *items;
-  GError *error = NULL;
-
-  service = secret_service_get_sync (SECRET_SERVICE_LOAD_COLLECTIONS, NULL, &error);
-  if (error != NULL) {
-    g_warning ("Failed to get secret service proxy, insecure passwords will not be migrated: %s", error->message);
-    g_error_free (error);
-    return;
-  }
-
-  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
-
-  items = secret_service_search_sync (service,
-                                      EPHY_FORM_PASSWORD_SCHEMA,
-                                      attributes,
-                                      SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
-                                      NULL,
-                                      &error);
-  if (error != NULL) {
-    g_warning ("Failed to search secret service, insecure passwords will not be migrated: %s", error->message);
-    g_error_free (error);
-    goto out;
-  }
-
-  for (GList *l = items; l != NULL; l = l->next)
-    migrate_insecure_password ((SecretItem *)l->data);
-
-  g_list_free_full (items, g_object_unref);
-
-out:
-  g_object_unref (service);
-  g_hash_table_unref (attributes);
-}
-
 static void
 migrate_nothing (void)
 {
@@ -826,11 +826,11 @@ const EphyProfileMigrator migrators[] = {
   migrate_new_urls_table,
   migrate_form_passwords_to_libsecret,
   migrate_app_desktop_file_categories,
+  migrate_insecure_passwords,
   migrate_bookmarks,
   migrate_adblock_filters,
   migrate_initial_state,
   migrate_permissions,
-  migrate_insecure_passwords,
 };
 
 static gboolean
