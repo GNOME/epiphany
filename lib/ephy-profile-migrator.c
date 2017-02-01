@@ -37,6 +37,7 @@
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-web-app-utils.h"
 #ifdef ENABLE_NSS
 #include "ephy-nss-glue.h"
@@ -986,6 +987,80 @@ migrate_app_desktop_file_categories (void)
   ephy_web_application_free_application_list (web_apps);
 }
 
+/* https://bugzilla.gnome.org/show_bug.cgi?id=752738 */
+static void
+migrate_insecure_password (SecretItem *item)
+{
+  GHashTable *attributes;
+  SoupURI *soup_uri;
+  const char *original_uri;
+
+  attributes = secret_item_get_attributes (item);
+  original_uri = g_hash_table_lookup (attributes, URI_KEY);
+  soup_uri = soup_uri_new (original_uri);
+  if (soup_uri == NULL) {
+    g_warning ("Failed to convert URI %s to a SoupURI, insecure password will not be migrated", original_uri);
+    g_hash_table_unref (attributes);
+    return;
+  }
+
+  if (soup_uri->scheme == SOUP_URI_SCHEME_HTTP) {
+    char *new_uri;
+    GError *error = NULL;
+
+    new_uri = ephy_uri_to_https_security_origin (original_uri);
+
+    g_hash_table_replace (attributes, g_strdup (URI_KEY), new_uri);
+    secret_item_set_attributes_sync (item, EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL, &error);
+    if (error != NULL) {
+      g_warning ("Failed to convert URI %s to https://, insecure password will not be migrated: %s", original_uri, error->message);
+      g_error_free (error);
+    }
+  }
+
+  g_hash_table_unref (attributes);
+  soup_uri_free (soup_uri);
+}
+
+static void
+migrate_insecure_passwords (void)
+{
+  SecretService *service;
+  GHashTable *attributes;
+  GList *items;
+  GError *error = NULL;
+
+  service = secret_service_get_sync (SECRET_SERVICE_LOAD_COLLECTIONS, NULL, &error);
+  if (error != NULL) {
+    g_warning ("Failed to get secret service proxy, insecure passwords will not be migrated: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
+
+  items = secret_service_search_sync (service,
+                                      EPHY_FORM_PASSWORD_SCHEMA,
+                                      attributes,
+                                      SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                                      NULL,
+                                      &error);
+  if (error != NULL) {
+    g_warning ("Failed to search secret service, insecure passwords will not be migrated: %s", error->message);
+    g_error_free (error);
+    goto out;
+  }
+
+  for (GList *l = items; l != NULL; l = l->next)
+    migrate_insecure_password ((SecretItem *)l->data);
+
+  g_list_free_full (items, g_object_unref);
+
+out:
+  g_object_unref (service);
+  g_hash_table_unref (attributes);
+}
+
 const EphyProfileMigrator migrators[] = {
   migrate_cookies,
   migrate_passwords,
@@ -1001,6 +1076,7 @@ const EphyProfileMigrator migrators[] = {
   migrate_new_urls_table,
   migrate_form_passwords_to_libsecret,
   migrate_app_desktop_file_categories,
+  migrate_insecure_passwords,
 };
 
 static gboolean
