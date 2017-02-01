@@ -854,7 +854,7 @@ ephy_migrator (void)
       return FALSE;
 
     LOG ("Running only migrator: %d", do_step_n);
-    m = migrators[do_step_n];
+    m = migrators[do_step_n + 1];
     m ();
 
     return TRUE;
