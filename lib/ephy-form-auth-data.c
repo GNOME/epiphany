@@ -293,9 +293,9 @@ ephy_form_auth_data_free (EphyFormAuthData *data)
 }
 
 static void
-screcet_service_search_finished (SecretService         *service,
-                                 GAsyncResult          *result,
-                                 EphyFormAuthDataCache *cache)
+secret_service_search_finished (SecretService         *service,
+                                GAsyncResult          *result,
+                                EphyFormAuthDataCache *cache)
 {
   GList *results, *p;
   GError *error = NULL;
@@ -339,7 +339,7 @@ ephy_form_auth_data_cache_init (EphyFormAuthDataCache *cache)
                          attributes,
                          SECRET_SEARCH_UNLOCK | SECRET_SEARCH_ALL,
                          NULL,
-                         (GAsyncReadyCallback)screcet_service_search_finished,
+                         (GAsyncReadyCallback)secret_service_search_finished,
                          cache);
   g_hash_table_unref (attributes);
 }
