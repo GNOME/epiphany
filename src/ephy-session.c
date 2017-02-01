@@ -823,10 +823,7 @@ session_seems_sane (GList *windows)
        SoupURI *uri = soup_uri_new (url);
        if (uri) {
          soup_uri_free (uri);
-       }
-       /* Blank URLs can occur in some situations. Don't save them, but also
-        * do not torpedo the entire session as it's not a bug. */
-       else if (strcmp (url, "") != 0) {
+       } else {
          g_critical ("Refusing to save session due to invalid URL %s", url);
          return FALSE;
        }
