@@ -839,6 +839,8 @@ ephy_migrator (void)
   int latest, i;
   EphyProfileMigrator m;
 
+  g_assert (EPHY_PROFILE_MIGRATION_VERSION == G_N_ELEMENTS (migrators));
+
   /* Always try to migrate the data from the old profile dir at the
    * very beginning. */
   migrate_profile_gnome2_to_xdg ();
@@ -852,6 +854,11 @@ ephy_migrator (void)
   if (do_step_n != -1) {
     if (do_step_n >= EPHY_PROFILE_MIGRATION_VERSION)
       return FALSE;
+
+    if (do_step_n < 1) {
+      g_printf ("Invalid migration step %d\n", do_step_n);
+      return FALSE;
+    }
 
     LOG ("Running only migrator: %d", do_step_n);
     m = migrators[do_step_n - 1];
