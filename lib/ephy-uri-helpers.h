@@ -34,6 +34,7 @@ char *ephy_remove_tracking_from_uri (const char *uri);
 char *ephy_uri_safe_unescape (const char *uri);
 char *ephy_uri_normalize (const char *uri);
 char *ephy_uri_to_security_origin (const char *uri);
+char *ephy_uri_to_https_security_origin (const char *uri);
 
 G_END_DECLS
 
