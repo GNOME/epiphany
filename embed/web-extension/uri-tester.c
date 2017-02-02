@@ -421,7 +421,6 @@ static GString *
 uri_tester_fixup_regexp (const char *prefix, char *src)
 {
   GString *str;
-  int len = 0;
 
   if (!src)
     return NULL;
@@ -441,20 +440,26 @@ uri_tester_fixup_regexp (const char *prefix, char *src)
         case '*':
           g_string_append (str, ".*");
           break;
-          /*case '.':
-            g_string_append (str, "\\.");
-            break;*/
+        case '^':
+          g_string_append (str, "([^a-zA-Z\\d]|[_\\-\\.%])");
+          break;
+        case '|':
+          if (src[1] == '\0')
+            g_string_append (str, "$");
+          else
+            g_string_append (str, "\\|");
+          break;
+        case '.':
+        case '+':
         case '?':
         case '[':
         case ']':
+        case '{':
+        case '}':
+        case '(':
+        case ')':
+        case '\\':
           g_string_append_printf (str, "\\%c", *src);
-          break;
-        case '|':
-          /* FIXME: We actually need to match :[0-9]+ or '/'. Sign means
-             "here could be port number or nothing". So bla.com^ will match
-             bla.com/ or bla.com:8080/ but not bla.com.au/ */
-        case '^':
-        case '+':
           break;
         default:
           g_string_append_printf (str,"%c", *src);
@@ -463,11 +468,6 @@ uri_tester_fixup_regexp (const char *prefix, char *src)
       src++;
     }
   while (*src);
-
-  len = str->len;
-  /* We dont need .* in the end of url. Thats stupid */
-  if (str->str && str->str[len-1] == '*' && str->str[len-2] == '.')
-    g_string_erase (str, len-2, 2);
 
   return str;
 }
