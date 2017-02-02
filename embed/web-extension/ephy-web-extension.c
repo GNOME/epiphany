@@ -212,15 +212,15 @@ store_password (EphyEmbedFormAuth *form_auth)
                              username_field_value,
                              password_field_value,
                              NULL, NULL);
-  g_free (uri_str);
 
   /* Update internal caching */
   ephy_form_auth_data_cache_add (extension->priv->form_auth_data_cache,
-                                 uri->host,
+                                 uri_str,
                                  username_field_name,
                                  password_field_name,
                                  username_field_value);
 
+  g_free (uri_str);
   g_free (username_field_name);
   g_free (username_field_value);
   g_free (password_field_name);
@@ -420,14 +420,15 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
     return;
 
   extension = ephy_web_extension_get ();
-  form_auth_data_list = ephy_form_auth_data_cache_get_list (extension->priv->form_auth_data_cache, uri->host);
+  uri_str = soup_uri_to_string (uri, FALSE);
+  form_auth_data_list = ephy_form_auth_data_cache_get_list (extension->priv->form_auth_data_cache, uri_str);
   l = g_slist_find_custom (form_auth_data_list, form_auth, (GCompareFunc)ephy_form_auth_data_compare);
-  if (!l)
+  if (!l) {
+    g_free (uri_str);
     return;
+  }
 
   form_data = (EphyFormAuthData *)l->data;
-  uri_str = soup_uri_to_string (uri, FALSE);
-
   username_node = ephy_embed_form_auth_get_username_node (form_auth);
   if (username_node)
     g_object_get (username_node, "value", &username, NULL);
@@ -938,8 +939,7 @@ web_page_document_loaded (WebKitWebPage *web_page,
     if (ephy_web_dom_utils_find_form_auth_elements (form, &username_node, &password_node)) {
       EphyEmbedFormAuth *form_auth;
       GSList *auth_data_list;
-      const char *uri_string;
-      SoupURI *uri;
+      const char *uri;
 
       LOG ("Hooking and pre-filling a form");
 
@@ -955,12 +955,8 @@ web_page_document_loaded (WebKitWebPage *web_page,
       }
 
       /* Plug in the user autocomplete */
-      uri_string = webkit_web_page_get_uri (web_page);
-      uri = soup_uri_new (uri_string);
-
-      auth_data_list = ephy_form_auth_data_cache_get_list (extension->priv->form_auth_data_cache, uri->host);
-
-      soup_uri_free (uri);
+      uri = webkit_web_page_get_uri (web_page);
+      auth_data_list = ephy_form_auth_data_cache_get_list (extension->priv->form_auth_data_cache, uri);
 
       if (auth_data_list && auth_data_list->next && username_node) {
         LOG ("More than 1 password saved, hooking menu for choosing which on focus");
