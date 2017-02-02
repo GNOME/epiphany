@@ -310,18 +310,13 @@ secret_service_search_finished (SecretService         *service,
   for (p = results; p; p = p->next) {
     SecretItem *item = (SecretItem *)p->data;
     GHashTable *attributes;
-    char *origin;
 
     attributes = secret_item_get_attributes (item);
-    origin = ephy_uri_to_security_origin (g_hash_table_lookup (attributes, URI_KEY));
-    if (origin != NULL) {
-      ephy_form_auth_data_cache_add (cache, origin,
-                                     g_hash_table_lookup (attributes, FORM_USERNAME_KEY),
-                                     g_hash_table_lookup (attributes, FORM_PASSWORD_KEY),
-                                     g_hash_table_lookup (attributes, USERNAME_KEY));
-
-      g_free (origin);
-    }
+    ephy_form_auth_data_cache_add (cache,
+                                   g_hash_table_lookup (attributes, URI_KEY),
+                                   g_hash_table_lookup (attributes, FORM_USERNAME_KEY),
+                                   g_hash_table_lookup (attributes, FORM_PASSWORD_KEY),
+                                   g_hash_table_lookup (attributes, USERNAME_KEY));
     g_hash_table_unref (attributes);
   }
 
@@ -392,23 +387,31 @@ ephy_form_auth_data_cache_add (EphyFormAuthDataCache *cache,
 {
   EphyFormAuthData *data;
   GSList *l;
+  char *origin;
 
   g_return_if_fail (cache);
   g_return_if_fail (uri);
 
   data = ephy_form_auth_data_new (form_username, form_password, username);
-  l = g_hash_table_lookup (cache->form_auth_data_map, uri);
+  origin = ephy_uri_to_security_origin (uri);
+  l = g_hash_table_lookup (cache->form_auth_data_map, origin);
   l = g_slist_append (l, data);
-  g_hash_table_replace (cache->form_auth_data_map,
-                        g_strdup (uri), l);
+  g_hash_table_replace (cache->form_auth_data_map, origin, l);
 }
 
 GSList *
 ephy_form_auth_data_cache_get_list (EphyFormAuthDataCache *cache,
                                     const char            *uri)
 {
+  char *origin;
+  GSList *list;
+
   g_return_val_if_fail (cache, NULL);
   g_return_val_if_fail (uri, NULL);
 
-  return g_hash_table_lookup (cache->form_auth_data_map, uri);
+  origin = ephy_uri_to_security_origin (uri);
+  list = g_hash_table_lookup (cache->form_auth_data_map, origin);
+  g_free (origin);
+
+  return list;
 }
