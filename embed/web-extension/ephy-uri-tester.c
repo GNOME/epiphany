@@ -216,7 +216,6 @@ static GString *
 ephy_uri_tester_fixup_regexp (const char *prefix, char *src)
 {
   GString *str;
-  int len = 0;
 
   if (!src)
     return NULL;
@@ -228,25 +227,55 @@ ephy_uri_tester_fixup_regexp (const char *prefix, char *src)
     (void)*src++;
   }
 
+  /* NOTE: The '$' is used as separator for the rule options, so rule patterns
+     cannot ever contain them. If a rule needs to match it, it uses "%24".
+     Splitting the option is done in ephy_uri_tester_add_url_pattern().
+
+     The loop below always escapes square brackets. This way there is no chance
+     that they get interpreted as a character class, and it is NOT needed to
+     escape '-' because it's only special inside a character class. */
   do {
     switch (*src) {
       case '*':
         g_string_append (str, ".*");
         break;
-      /*case '.':
-         g_string_append (str, "\\.");
-         break;*/
+      case '^':
+      /* Matches a separator character, defined as:
+       * "anything but a letter, a digit, or one of the following: _ - . %" */
+        g_string_append (str, "([^a-zA-Z\\d]|[_\\-\\.%])");
+        break;
+      case '|':
+      /* If at the end of the pattern, the match is anchored at the end. In
+       * the middle of a pattern it matches a literal vertical bar and the
+       * character must be escaped. */
+        if (src[1] == '\0')
+          g_string_append (str, "$");
+        else
+          g_string_append (str, "\\|");
+        break;
+      /* The following characters are escaped as they have a meaning in
+       * regular expressions:
+       *   - '.' matches any character.
+       *   - '+' matches the preceding pattern one or more times.
+       *   - '?' matches the preceding pattern zero or one times.
+       *   - '[' ']' are used to define a character class.
+       *   - '{' '}' are used to define a min/max quantifier.
+       *   - '(' ')' are used to defin a submatch expression.
+       *   - '\' has several uses in regexps (shortcut character classes.
+       *     matching non-printing characters, using octal/hex, octal
+       *     constants, backreferences... they must to be escaped to
+       *     match a literal backslash and prevent wrecking havoc!). */
+      case '.':
+      case '+':
       case '?':
       case '[':
       case ']':
+      case '{':
+      case '}':
+      case '(':
+      case ')':
+      case '\\':
         g_string_append_printf (str, "\\%c", *src);
-        break;
-      case '|':
-      /* FIXME: We actually need to match :[0-9]+ or '/'. Sign means
-         "here could be port number or nothing". So bla.com^ will match
-         bla.com/ or bla.com:8080/ but not bla.com.au/ */
-      case '^':
-      case '+':
         break;
       default:
         g_string_append_printf (str, "%c", *src);
@@ -254,11 +283,6 @@ ephy_uri_tester_fixup_regexp (const char *prefix, char *src)
     }
     src++;
   } while (*src);
-
-  len = str->len;
-  /* We dont need .* in the end of url. Thats stupid */
-  if (str->str && str->str[len - 1] == '*' && str->str[len - 2] == '.')
-    g_string_erase (str, len - 2, 2);
 
   return str;
 }
