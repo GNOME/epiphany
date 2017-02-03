@@ -21,6 +21,7 @@
 #include "config.h"
 #include "ephy-form-auth-data.h"
 
+#include "ephy-debug.h"
 #include "ephy-uri-helpers.h"
 
 #include <glib/gi18n.h>
@@ -110,6 +111,9 @@ ephy_form_auth_data_store (const char         *uri,
   g_return_if_fail (!form_username || username);
   g_return_if_fail (!form_password || password);
 
+  LOG ("Storing password in secret service for uri=%s form_username=%s form_password=%s username=%s",
+       uri, form_username, form_password, username);
+
   fake_uri = soup_uri_new (uri);
   g_return_if_fail (fake_uri);
 
@@ -196,16 +200,19 @@ search_form_data_cb (SecretService                *service,
     goto out;
   }
 
-  if (!results)
+  if (!results) {
+    LOG ("...secret service query returned no result.");
     goto out;
+  }
 
   item = (SecretItem *)results->data;
   attributes = secret_item_get_attributes (item);
   username = g_hash_table_lookup (attributes, USERNAME_KEY);
   value = secret_item_get_secret (item);
   password = secret_value_get (value, NULL);
-
   g_list_free_full (results, (GDestroyNotify)g_object_unref);
+
+  LOG ("...secret service query returned a password for username=%s.", username);
 
  out:
   if (closure->callback)
@@ -237,6 +244,9 @@ ephy_form_auth_data_query (const char                   *uri,
 
   key = soup_uri_new (uri);
   g_return_if_fail (key);
+
+  LOG ("Querying secret service for uri=%s form_username=%s form_password=%s username=%s...",
+       uri, form_username, form_password, username);
 
   if (!form_username && g_strcmp0 (form_password, "adminpw") == 0)
     normalize_and_prepare_uri (key, FALSE);
@@ -320,6 +330,8 @@ secret_service_search_finished (SecretService         *service,
     g_hash_table_unref (attributes);
   }
 
+  LOG ("...successfully initialized form auth data cache.");
+
   g_list_free_full (results, g_object_unref);
 }
 
@@ -327,6 +339,8 @@ static void
 ephy_form_auth_data_cache_init (EphyFormAuthDataCache *cache)
 {
   GHashTable *attributes;
+
+  LOG ("Initializing form auth data cache %p...", cache);
 
   attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
   secret_service_search (NULL,
@@ -391,6 +405,9 @@ ephy_form_auth_data_cache_add (EphyFormAuthDataCache *cache,
 
   g_return_if_fail (cache);
   g_return_if_fail (uri);
+
+  LOG ("Adding uri=%s form_username=%s form_password=%s username=%s to form auth data cache %p",
+       uri, form_username, form_password, username, cache);
 
   data = ephy_form_auth_data_new (form_username, form_password, username);
   origin = ephy_uri_to_security_origin (uri);
