@@ -740,7 +740,29 @@ migrate_insecure_passwords (void)
   SecretService *service;
   GHashTable *attributes;
   GList *items;
+  int default_profile_migration_version;
   GError *error = NULL;
+
+  /* This is ephy *profile* migrator. It runs on a per-profile basis. i.e.
+   * each web app runs migrators separately. So this migration step could run
+   * once for a profile dir, then again far in the future when an old web app
+   * is opened. But passwords are global state, not stored in the profile dir,
+   * and we want to run this migration only once. This is tricky to fix, but
+   * it's easier if we relax the constraint to "never run this migrator if it
+   * has been run already for the default profile dir." That's because we don't
+   * really care if a couple web app passwords get converted from insecure to
+   * secure, which is not a big problem and indicates the user probably never
+   * uses Epiphany except for web apps anyway. We just don't want all the user's
+   * passwords to get converted mysteriously because he happens to open a web
+   * app. So check the migration version for the default profile dir and abort
+   * if this migrator has already run there. This way we avoid adding a new flag
+   * file to clutter the profile dir just to check if this migrator has run.
+   */
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  if (default_profile_migration_version >= EPHY_INSECURE_PASSWORDS_MIGRATION_VERSION) {
+    LOG ("Skipping insecure password migration because default profile has already migrated");
+    return;
+  }
 
   service = secret_service_get_sync (SECRET_SERVICE_LOAD_COLLECTIONS, NULL, &error);
   if (error != NULL) {

@@ -21,12 +21,14 @@
 #include <glib.h>
 
 #define EPHY_PROFILE_MIGRATION_VERSION 11
+#define EPHY_INSECURE_PASSWORDS_MIGRATION_VERSION 11
 
 #define EPHY_HISTORY_FILE       "ephy-history.db"
 #define EPHY_BOOKMARKS_FILE     "ephy-bookmarks.xml"
 #define EPHY_BOOKMARKS_FILE_RDF "bookmarks.rdf"
 
 int ephy_profile_utils_get_migration_version (void);
+int ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_directory);
 
 gboolean ephy_profile_utils_set_migration_version (int version);
 
