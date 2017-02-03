@@ -2,7 +2,6 @@ SUBDIRS = data
 
 noinst_PROGRAMS = \
 	test-ephy-completion-model \
-	test-ephy-download \
 	test-ephy-embed-utils \
 	test-ephy-encodings \
 	test-ephy-file-helpers \
@@ -126,8 +125,9 @@ LDADD = \
 test_ephy_completion_model_SOURCES = \
 	ephy-completion-model-test.c
 
-test_ephy_download_SOURCES = \
-	ephy-download-test.c
+# https://bugzilla.gnome.org/show_bug.cgi?id=778153
+#test_ephy_download_SOURCES = \
+#	ephy-download-test.c
 
 # https://bugzilla.gnome.org/show_bug.cgi?id=773448
 #test_ephy_embed_shell_SOURCES = \
