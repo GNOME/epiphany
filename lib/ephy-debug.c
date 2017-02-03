@@ -151,7 +151,7 @@ trap_handler (const char    *log_domain,
 /**
  * ephy_debug_init:
  *
- * Starts the debugging facility, see doc/debugging.txt in Epiphany's source for
+ * Starts the debugging facility. See Epiphany's HACKING file for
  * more information. It also starts module logging and profiling if the
  * appropiate variables are set: EPHY_LOG_MODULES and EPHY_PROFILE_MODULES.
  **/
