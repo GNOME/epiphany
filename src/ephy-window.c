@@ -880,6 +880,8 @@ ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
 	if ((event->state & state_mask) == GDK_MOD1_MASK)
 		return keyval != GDK_KEY_Left &&      /* Back */
 		       keyval != GDK_KEY_Right;       /* Forward */
+
+	return TRUE;
 }
 
 static gboolean
