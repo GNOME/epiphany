@@ -24,17 +24,19 @@
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 
+#include <string.h>
+
 #define PROFILE_MIGRATION_FILE ".migrated"
 
 int
-ephy_profile_utils_get_migration_version (void)
+ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_directory)
 {
   char *migrated_file, *contents = NULL;
   gsize size;
   int result = 0;
   int latest = 0;
 
-  migrated_file = g_build_filename (ephy_dot_dir (),
+  migrated_file = g_build_filename (profile_directory,
                                     PROFILE_MIGRATION_FILE,
                                     NULL);
 
@@ -48,7 +50,8 @@ ephy_profile_utils_get_migration_version (void)
 
     if (result != 1)
       latest = 0;
-  } else if (ephy_dot_dir_is_default () == FALSE) {
+  } else if (strcmp (ephy_dot_dir (), profile_directory) == 0 &&
+             ephy_dot_dir_is_default () == FALSE) {
     /* Since version 8, we need to migrate also profile directories
        other than the default one. Profiles in such directories work
        perfectly fine without going through the first 7 migration
@@ -61,6 +64,12 @@ ephy_profile_utils_get_migration_version (void)
   g_free (migrated_file);
 
   return latest;
+}
+
+int
+ephy_profile_utils_get_migration_version (void)
+{
+  return ephy_profile_utils_get_migration_version_for_profile_dir (ephy_dot_dir ());
 }
 
 gboolean

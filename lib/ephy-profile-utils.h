@@ -25,11 +25,13 @@
 G_BEGIN_DECLS
 
 #define EPHY_PROFILE_MIGRATION_VERSION 15
+#define EPHY_INSECURE_PASSWORDS_MIGRATION_VERSION 11
 
 #define EPHY_BOOKMARKS_FILE     "bookmarks.gvdb"
 #define EPHY_HISTORY_FILE       "ephy-history.db"
 
 int ephy_profile_utils_get_migration_version (void);
+int ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_directory);
 
 gboolean ephy_profile_utils_set_migration_version (int version);
 
