@@ -24,6 +24,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
+#include "ephy-settings.h"
 #include "ephy-shell.h"
 
 #include <gtk/gtk.h>
@@ -95,6 +96,8 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/src/ephy-encodings/get",
                    test_ephy_encodings_get);
+
+  ephy_settings_ensure_schema_for_path (EPHY_PREFS_STATE_SCHEMA, "/org/gnome/epiphany/state/");
 
   ret = g_test_run ();
 

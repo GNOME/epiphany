@@ -329,6 +329,8 @@ main (int argc, char *argv[])
 
   ephy_debug_init ();
 
+  ephy_settings_ensure_schema_for_path (EPHY_PREFS_STATE_SCHEMA, "/org/gnome/epiphany/state/");
+
   g_test_add_func ("/lib/ephy-file-helpers/init",
                    test_ephy_file_helpers_init);
 
