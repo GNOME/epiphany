@@ -1,3 +1,34 @@
+3.23.5 - February 03, 2017
+==========================
+
+- Add option to subscribe to EasyPrivacy filters and enable by default (#739631)
+- Introduce new, more powerful clear personal data dialog (#741447)
+- Fix serious password extraction sweep attack on password manager (#752738)
+- Adblock filters are now configured in GSettings (#755193)
+- Restore support for having multiple adblock filters at once (#755193)
+- Fix many bugs affecting the bookmarks popover (#772131, #777615)
+- Remember fallback window size in GSettings (#777055)
+- Prefer common_name to name when reading ISO 3166 data (#774466)
+- Fix the Stop button (#777585)
+- Fix adblocker blocking too much stuff, breaking Twitter (#777714)
+- Avoid writing anything to disk in incognito mode (#777736)
+- Change keyboard shortcut for export bookmarks to Ctrl+Shift+X (#777872)
+- Fix F6 keyboard shortcut for focusing address bar (#777873)
+- Properly set initial notification permissions (#777835)
+- Add empty state to bookmarks popover, so it looks better with no bookmarks
+- Automatically delete unused adblock filters when the adblocker is enabled
+- Renamed Privacy preferences tab to Stored Data
+- Moved do not track preference to General preferences tab
+- Improve warning text when closing tab with modified form
+- Allow saving session even if a tab has a blank URL
+- Display full security origins rather than just hostnames when appropriate
+- Fix recently-introduced critical warnings when focusing password forms
+- Do not ever use session in web app or incognito mode
+- Fix off-by-one in profile migrator -d option
+- Avoid crash if profile migrator is passed invalid -d
+- Restore preference to set default encoding
+- Updated translations
+
 3.23.4 - January 16, 2017
 =========================
 
