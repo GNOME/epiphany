@@ -66,43 +66,79 @@ typedef enum
 #define EPHY_PREFS_STATE_SCHEMA                 "org.gnome.Epiphany.state"
 #define EPHY_PREFS_STATE_DOWNLOAD_DIR           "download-dir"
 #define EPHY_PREFS_STATE_RECENT_ENCODINGS       "recent-encodings"
+#define EPHY_PREFS_STATE_WINDOW_POSITION        "window-position"
+#define EPHY_PREFS_STATE_WINDOW_SIZE            "window-size"
+#define EPHY_PREFS_STATE_IS_MAXIMIZED           "is-maximized"
 
-#define EPHY_PREFS_WEB_SCHEMA                "org.gnome.Epiphany.web"
-#define EPHY_PREFS_WEB_FONT_MIN_SIZE         "min-font-size"
-#define EPHY_PREFS_WEB_LANGUAGE              "language"
-#define EPHY_PREFS_WEB_USE_GNOME_FONTS       "use-gnome-fonts"
-#define EPHY_PREFS_WEB_SANS_SERIF_FONT       "sans-serif-font"
-#define EPHY_PREFS_WEB_SERIF_FONT            "serif-font"
-#define EPHY_PREFS_WEB_MONOSPACE_FONT        "monospace-font"
-#define EPHY_PREFS_WEB_ENABLE_USER_CSS       "enable-user-css"
-#define EPHY_PREFS_WEB_ENABLE_POPUPS         "enable-popups"
-#define EPHY_PREFS_WEB_ENABLE_PLUGINS        "enable-plugins"
-#define EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING "enable-spell-checking"
-#define EPHY_PREFS_WEB_ENABLE_WEBGL          "enable-webgl"
-#define EPHY_PREFS_WEB_ENABLE_WEBAUDIO       "enable-webaudio"
-#define EPHY_PREFS_WEB_COOKIES_POLICY        "cookies-policy"
-#define EPHY_PREFS_WEB_DEFAULT_ENCODING      "default-encoding"
-#define EPHY_PREFS_WEB_DO_NOT_TRACK          "do-not-track"
-#define EPHY_PREFS_WEB_ENABLE_ADBLOCK        "enable-adblock"
-#define EPHY_PREFS_WEB_ADBLOCK_FILTERS       "adblock-filters"
+static const char * const ephy_prefs_state_schema[] = {
+  EPHY_PREFS_STATE_DOWNLOAD_DIR,
+  EPHY_PREFS_STATE_RECENT_ENCODINGS,
+  EPHY_PREFS_STATE_WINDOW_POSITION,
+  EPHY_PREFS_STATE_WINDOW_SIZE,
+  EPHY_PREFS_STATE_IS_MAXIMIZED
+};
 
-#define EPHY_PREFS_SCHEMA                         "org.gnome.Epiphany"
-#define EPHY_PREFS_HOMEPAGE_URL                   "homepage-url"
-#define EPHY_PREFS_USER_AGENT                     "user-agent"
-#define EPHY_PREFS_NEW_WINDOWS_IN_TABS            "new-windows-in-tabs"
-#define EPHY_PREFS_AUTO_DOWNLOADS                 "automatic-downloads"
-#define EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA "warn-on-close-unsubmitted-data"
-#define EPHY_PREFS_REMEMBER_PASSWORDS             "remember-passwords"
-#define EPHY_PREFS_KEYWORD_SEARCH_URL             "keyword-search-url"
-#define EPHY_PREFS_ENABLE_SMOOTH_SCROLLING        "enable-smooth-scrolling"
-#define EPHY_PREFS_ENABLE_CARET_BROWSING          "enable-caret-browsing"
-#define EPHY_PREFS_INTERNAL_VIEW_SOURCE           "internal-view-source"
-#define EPHY_PREFS_RESTORE_SESSION_POLICY         "restore-session-policy"
-#define EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS "restore-session-delaying-loads"
-#define EPHY_PREFS_PROCESS_MODEL                  "process-model"
-#define EPHY_PREFS_MAX_PROCESSES                  "max-processes"
-#define EPHY_PREFS_SYNC_USER                      "sync-user"
-#define EPHY_PREFS_SYNC_TIME                      "sync-time"
+#define EPHY_PREFS_WEB_SCHEMA                  "org.gnome.Epiphany.web"
+#define EPHY_PREFS_WEB_FONT_MIN_SIZE           "min-font-size"
+#define EPHY_PREFS_WEB_LANGUAGE                "language"
+#define EPHY_PREFS_WEB_USE_GNOME_FONTS         "use-gnome-fonts"
+#define EPHY_PREFS_WEB_SANS_SERIF_FONT         "sans-serif-font"
+#define EPHY_PREFS_WEB_SERIF_FONT              "serif-font"
+#define EPHY_PREFS_WEB_MONOSPACE_FONT          "monospace-font"
+#define EPHY_PREFS_WEB_ENABLE_USER_CSS         "enable-user-css"
+#define EPHY_PREFS_WEB_ENABLE_POPUPS           "enable-popups"
+#define EPHY_PREFS_WEB_ENABLE_PLUGINS          "enable-plugins"
+#define EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING   "enable-spell-checking"
+#define EPHY_PREFS_WEB_ENABLE_WEBGL            "enable-webgl"
+#define EPHY_PREFS_WEB_ENABLE_WEBAUDIO         "enable-webaudio"
+#define EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING "enable-smooth-scrolling"
+#define EPHY_PREFS_WEB_USER_AGENT              "user-agent"
+#define EPHY_PREFS_WEB_COOKIES_POLICY          "cookies-policy"
+#define EPHY_PREFS_WEB_DEFAULT_ENCODING        "default-encoding"
+#define EPHY_PREFS_WEB_DO_NOT_TRACK            "do-not-track"
+#define EPHY_PREFS_WEB_ENABLE_ADBLOCK          "enable-adblock"
+#define EPHY_PREFS_WEB_REMEMBER_PASSWORDS      "remember-passwords"
+
+static const char * const ephy_prefs_web_schema[] = {
+  EPHY_PREFS_WEB_FONT_MIN_SIZE,
+  EPHY_PREFS_WEB_LANGUAGE,
+  EPHY_PREFS_WEB_USE_GNOME_FONTS,
+  EPHY_PREFS_WEB_SANS_SERIF_FONT,
+  EPHY_PREFS_WEB_SERIF_FONT,
+  EPHY_PREFS_WEB_MONOSPACE_FONT,
+  EPHY_PREFS_WEB_ENABLE_USER_CSS,
+  EPHY_PREFS_WEB_ENABLE_POPUPS,
+  EPHY_PREFS_WEB_ENABLE_PLUGINS,
+  EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
+  EPHY_PREFS_WEB_ENABLE_WEBGL,
+  EPHY_PREFS_WEB_ENABLE_WEBAUDIO,
+  EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
+  EPHY_PREFS_WEB_USER_AGENT,
+  EPHY_PREFS_WEB_COOKIES_POLICY,
+  EPHY_PREFS_WEB_DEFAULT_ENCODING,
+  EPHY_PREFS_WEB_DO_NOT_TRACK,
+  EPHY_PREFS_WEB_ENABLE_ADBLOCK,
+  EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
+};
+
+#define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"
+#define EPHY_PREFS_HOMEPAGE_URL                       "homepage-url"
+#define EPHY_PREFS_DEPRECATED_USER_AGENT              "user-agent"
+#define EPHY_PREFS_NEW_WINDOWS_IN_TABS                "new-windows-in-tabs"
+#define EPHY_PREFS_AUTO_DOWNLOADS                     "automatic-downloads"
+#define EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA     "warn-on-close-unsubmitted-data"
+#define EPHY_PREFS_DEPRECATED_REMEMBER_PASSWORDS      "remember-passwords"
+#define EPHY_PREFS_KEYWORD_SEARCH_URL                 "keyword-search-url"
+#define EPHY_PREFS_DEPRECATED_ENABLE_SMOOTH_SCROLLING "enable-smooth-scrolling"
+#define EPHY_PREFS_ENABLE_CARET_BROWSING              "enable-caret-browsing"
+#define EPHY_PREFS_INTERNAL_VIEW_SOURCE               "internal-view-source"
+#define EPHY_PREFS_RESTORE_SESSION_POLICY             "restore-session-policy"
+#define EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS     "restore-session-delaying-loads"
+#define EPHY_PREFS_PROCESS_MODEL                      "process-model"
+#define EPHY_PREFS_MAX_PROCESSES                      "max-processes"
+#define EPHY_PREFS_SYNC_USER                          "sync-user"
+#define EPHY_PREFS_SYNC_TIME                          "sync-time"
+#define EPHY_PREFS_ADBLOCK_FILTERS                    "adblock-filters"
 
 #define EPHY_PREFS_LOCKDOWN_SCHEMA            "org.gnome.Epiphany.lockdown"
 #define EPHY_PREFS_LOCKDOWN_FULLSCREEN        "disable-fullscreen"
@@ -112,5 +148,13 @@ typedef enum
 #define EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK      "disable-save-to-disk"
 #define EPHY_PREFS_LOCKDOWN_PRINTING          "disable-printing"
 #define EPHY_PREFS_LOCKDOWN_QUIT              "disable-quit"
+
+static struct {
+  const char *schema;
+  const char *path;
+} const ephy_prefs_relocatable_schemas[] = {
+  { EPHY_PREFS_STATE_SCHEMA, "state/" },
+  { EPHY_PREFS_WEB_SCHEMA, "web/" },
+};
 
 G_END_DECLS

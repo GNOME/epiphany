@@ -35,9 +35,6 @@ G_BEGIN_DECLS
 
 GSettings *ephy_settings_get (const char *schema);
 
-void ephy_settings_ensure_schema_for_path (const char *schema,
-                                           const char *path);
-
 void ephy_settings_shutdown (void);
 
 G_END_DECLS

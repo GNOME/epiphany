@@ -30,7 +30,11 @@
 		<key type="s" name="user-agent">
 			<default>''</default>
 			<summary>User agent</summary>
-			<description>String that will be used as user agent, to identify the browser to the web servers.</description>
+			<description>
+                          String that will be used as user agent, to identify the browser to the web servers.
+
+                          DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/web/user-agent instead.
+                        </description>
 		</key>
 		<key type="b" name="automatic-downloads">
 			<default>false</default>
@@ -45,7 +49,11 @@
 		<key type="b" name="remember-passwords">
 			<default>true</default>
 			<summary>Remember passwords</summary>
-			<description>Whether to store and prefill passwords in websites.</description>
+			<description>
+                          Whether to store and prefill passwords in websites.
+
+                          DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/web/remember-passwords instead.
+                        </description>
 		</key>
 		<key type="b" name="warn-on-close-unsubmitted-data">
 			<default>true</default>
@@ -53,6 +61,9 @@
 		<key type="b" name="enable-smooth-scrolling">
 			<default>false</default>
 			<summary>Enable smooth scrolling</summary>
+                        <description>
+                          DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/web/enable-smooth-scrolling instead.
+                        </description>
 		</key>
 		<key type="b" name="internal-view-source">
 			<default>true</default>
@@ -89,6 +100,11 @@
 			<summary>Sync timestamp</summary>
 			<description>The timestamp at which last we had the last sync</description>
 		</key>
+                <key type="as" name="adblock-filters">
+                        <default>['https://easylist.to/easylist/easylist.txt', 'https://easylist.to/easylist/easyprivacy.txt']</default>
+                        <summary>List of adblock filters</summary>
+                        <description>List of URLs with filter rules to be used by the adblock.</description>
+                </key>
 	</schema>
 	<schema path="/org/gnome/epiphany/ui/" id="org.gnome.Epiphany.ui">
 		<key type="b" name="expand-tabs-bar">
@@ -107,7 +123,7 @@
 			<description>Controls when the tabs bar is shown. Possible values are “always” (the tabs bar is always shown), “more-than-one” (the tabs bar is only shown if there’s two or more tabs) and “never” (the tabs bar is never shown).</description>
 		</key>
 	</schema>
-	<schema path="/org/gnome/epiphany/web/" id="org.gnome.Epiphany.web">
+	<schema id="org.gnome.Epiphany.web">
 		<key type="i" name="min-font-size">
 			<default>0</default>
 			<summary>Minimum font size</summary>
@@ -176,6 +192,16 @@
 			<summary>Enable WebAudio</summary>
 			<description>Whether to enable support for WebAudio.</description>
 		</key>
+		<key type="b" name="enable-smooth-scrolling">
+			<default>false</default>
+			<summary>Enable smooth scrolling</summary>
+                        <description>Whether to enable smooth scrolling.</description>
+		</key>
+		<key type="s" name="user-agent">
+			<default>''</default>
+			<summary>User agent</summary>
+			<description>String that will be used as user agent, to identify the browser to the web servers.</description>
+		</key>
 		<key type="b" name="do-not-track">
 			<default>true</default>
 			<summary>Do Not Track</summary>
@@ -186,11 +212,11 @@
 			<summary>Enable adblock</summary>
 			<description>Whether to block the embedded advertisements that web pages might want to show.</description>
 		</key>
-                <key type="as" name="adblock-filters">
-                        <default>['https://easylist.to/easylist/easylist.txt', 'https://easylist.to/easylist/easyprivacy.txt']</default>
-                        <summary>List of adblock filters</summary>
-                        <description>List of URLs with filter rules to be used by the adblock.</description>
-                </key>
+		<key type="b" name="remember-passwords">
+			<default>true</default>
+			<summary>Remember passwords</summary>
+			<description>Whether to store and prefill passwords in websites.</description>
+		</key>
 	</schema>
 	<schema id="org.gnome.Epiphany.state">
 		<key type="s" name="download-dir">

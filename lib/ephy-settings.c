@@ -19,10 +19,11 @@
  */
 
 #include "config.h"
-
 #include "ephy-settings.h"
 
 #include "ephy-debug.h"
+#include "ephy-file-helpers.h"
+#include "ephy-web-app-utils.h"
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -30,14 +31,39 @@
 static GHashTable *settings = NULL;
 
 static void
-ensure_settings (void)
+ephy_settings_init (void)
 {
-  if (settings)
+  const char *profile_directory;
+  const char *web_app_name;
+  char *base_path;
+
+  if (settings != NULL)
     return;
+
+  profile_directory = ephy_dot_dir ();
+  if (!profile_directory)
+    g_error ("ephy-settings used before ephy_file_helpers_init");
 
   settings = g_hash_table_new_full (g_str_hash,
                                     g_str_equal, g_free,
                                     g_object_unref);
+
+  web_app_name = g_strrstr (profile_directory, EPHY_WEB_APP_PREFIX);
+  if (web_app_name)
+    base_path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", web_app_name, NULL);
+  else
+    base_path = g_strdup ("/org/gnome/epiphany/");
+
+  for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_relocatable_schemas); i++) {
+    char *path;
+
+    path = g_build_path ("/", base_path, ephy_prefs_relocatable_schemas[i].path, NULL);
+    g_hash_table_insert (settings, g_strdup (ephy_prefs_relocatable_schemas[i].schema),
+                         g_settings_new_with_path (ephy_prefs_relocatable_schemas[i].schema, path));
+    g_free (path);
+  }
+
+  g_free (base_path);
 }
 
 void
@@ -54,7 +80,7 @@ ephy_settings_get (const char *schema)
 {
   GSettings *gsettings = NULL;
 
-  ensure_settings ();
+  ephy_settings_init ();
 
   gsettings = g_hash_table_lookup (settings, schema);
 
@@ -69,20 +95,4 @@ ephy_settings_get (const char *schema)
   return gsettings;
 }
 
-void
-ephy_settings_ensure_schema_for_path (const char *schema,
-                                      const char *path)
-{
-  GSettings *gsettings;
 
-  ensure_settings ();
-
-  if (g_hash_table_lookup (settings, schema))
-    return;
-
-  gsettings = g_settings_new_with_path (schema, path);
-  if (gsettings == NULL)
-    g_warning ("Invalid schema %s requested for path %s", schema, path);
-  else
-    g_hash_table_insert (settings, g_strdup (schema), gsettings);
-}

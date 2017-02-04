@@ -1101,7 +1101,7 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
   guint i;
 
   if (!extension->form_auth_data_cache ||
-      !g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_REMEMBER_PASSWORDS))
+      !g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS))
     return;
 
   document = webkit_web_page_get_dom_document (web_page);

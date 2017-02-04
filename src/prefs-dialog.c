@@ -68,6 +68,7 @@ struct _PrefsDialog {
   GtkDialog parent_instance;
 
   /* general */
+  GtkWidget *homepage_box;
   GtkWidget *new_tab_homepage_radiobutton;
   GtkWidget *blank_homepage_radiobutton;
   GtkWidget *custom_homepage_radiobutton;
@@ -75,7 +76,9 @@ struct _PrefsDialog {
   GtkWidget *download_button_hbox;
   GtkWidget *download_button_label;
   GtkWidget *automatic_downloads_checkbutton;
+  GtkWidget *search_box;
   GtkWidget *search_engine_combo;
+  GtkWidget *session_box;
   GtkWidget *restore_session_checkbutton;
   GtkWidget *popups_allow_checkbutton;
   GtkWidget *adblock_allow_checkbutton;
@@ -592,12 +595,15 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-dialog.ui");
   /* general */
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, homepage_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, new_tab_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, blank_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_entry);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, automatic_downloads_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_engine_combo);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, session_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, restore_session_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, popups_allow_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, adblock_allow_checkbutton);
@@ -1354,12 +1360,12 @@ do_not_track_button_clicked_cb (GtkWidget   *button,
   char **filters;
   char **new_filters;
 
-  filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
+  filters = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     new_filters = ephy_strv_append ((const char * const *)filters, ADBLOCK_PRIVACY_FILTER_URL);
   else
     new_filters = ephy_strv_remove ((const char * const *)filters, ADBLOCK_PRIVACY_FILTER_URL);
-  g_settings_set_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS, (const char * const *)new_filters);
+  g_settings_set_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS, (const char * const *)new_filters);
 
   g_strfreev (filters);
   g_strfreev (new_filters);
@@ -1807,10 +1813,8 @@ setup_fonts_page (PrefsDialog *dialog)
 static void
 setup_stored_data_page (PrefsDialog *dialog)
 {
-  GSettings *settings;
   GSettings *web_settings;
 
-  settings = ephy_settings_get (EPHY_PREFS_SCHEMA);
   web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
 
   g_settings_bind_with_mapping (web_settings,
@@ -1840,8 +1844,8 @@ setup_stored_data_page (PrefsDialog *dialog)
                                 cookies_set_mapping,
                                 dialog->never,
                                 NULL);
-  g_settings_bind (settings,
-                   EPHY_PREFS_REMEMBER_PASSWORDS,
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
                    dialog->remember_passwords_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
@@ -1909,18 +1913,35 @@ setup_sync_page (PrefsDialog *dialog)
 static void
 prefs_dialog_init (PrefsDialog *dialog)
 {
+  EphyEmbedShellMode mode;
+
   gtk_widget_init_template (GTK_WIDGET (dialog));
+
+  mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+  gtk_widget_set_visible (dialog->homepage_box,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (dialog->search_box,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (dialog->automatic_downloads_checkbutton,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (dialog->session_box,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (dialog->do_not_track_checkbutton,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
 
   setup_general_page (dialog);
   setup_fonts_page (dialog);
   setup_stored_data_page (dialog);
   setup_language_page (dialog);
 #ifdef ENABLE_SYNC
-  setup_sync_page (dialog);
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    setup_sync_page (dialog);
 
-  /* TODO: Switch back to using a template callback in class_init once sync is unconditionally enabled. */
-  g_signal_connect (dialog->sync_sign_out_button, "clicked",
-                    G_CALLBACK (on_sync_sign_out_button_clicked), dialog);
+    /* TODO: Switch back to using a template callback in class_init once sync is unconditionally enabled. */
+    g_signal_connect (dialog->sync_sign_out_button, "clicked",
+                      G_CALLBACK (on_sync_sign_out_button_clicked), dialog);
+  } else
+    gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
 #else
   gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
 #endif

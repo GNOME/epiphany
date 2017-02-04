@@ -36,6 +36,7 @@
 #include "ephy-file-helpers.h"
 #include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
+#include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
@@ -777,8 +778,8 @@ migrate_adblock_filters (void)
   }
 
   if (filters_array) {
-    g_settings_set_strv (EPHY_SETTINGS_WEB,
-                         EPHY_PREFS_WEB_ADBLOCK_FILTERS,
+    g_settings_set_strv (EPHY_SETTINGS_MAIN,
+                         EPHY_PREFS_ADBLOCK_FILTERS,
                          (const gchar * const *)filters_array->pdata);
     g_settings_sync ();
     g_ptr_array_free (filters_array, TRUE);
@@ -824,6 +825,85 @@ migrate_permissions (void)
   g_object_unref (file);
 }
 
+static const char * const deprecated_settings[] = {
+  EPHY_PREFS_DEPRECATED_USER_AGENT,
+  EPHY_PREFS_DEPRECATED_REMEMBER_PASSWORDS,
+  EPHY_PREFS_DEPRECATED_ENABLE_SMOOTH_SCROLLING,
+};
+
+static void
+migrate_deprecated_settings (void)
+{
+  for (guint i = 0; i < G_N_ELEMENTS (deprecated_settings); i++) {
+    GVariant *value;
+
+    value = g_settings_get_value (EPHY_SETTINGS_MAIN, deprecated_settings[i]);
+    g_settings_set_value (EPHY_SETTINGS_WEB, deprecated_settings[i], value);
+    g_variant_unref (value);
+  }
+
+  g_settings_sync ();
+}
+
+static gboolean
+is_deprecated_setting (const char *setting)
+{
+  for (guint i = 0; i < G_N_ELEMENTS (deprecated_settings); i++) {
+    if (g_str_equal (setting, deprecated_settings[i]))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+static void
+migrate_settings (void)
+{
+  int default_profile_migration_version;
+
+  /* The migrator is only run for the main profile and web apps,
+   * so if the profile dir is not the default one, it's a web app.
+   * If not a web app, migrate deprecated settings.
+   */
+  if (ephy_dot_dir_is_default ()) {
+    migrate_deprecated_settings ();
+    return;
+  }
+
+  /* If it's a web app, inherit settings from the default profile. */
+  /* If the default profile hasn't been migrated yet, use the deprecated settings. */
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  if (default_profile_migration_version < EPHY_SETTINGS_MIGRATION_VERSION) {
+    GSettings *settings;
+
+    settings = g_settings_new_with_path (EPHY_PREFS_WEB_SCHEMA, "/org/gnome/epiphany/web/");
+
+    for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_web_schema); i++) {
+      GVariant *value;
+
+      if (is_deprecated_setting (ephy_prefs_web_schema[i]))
+        continue;
+
+      value = g_settings_get_value (settings, ephy_prefs_web_schema[i]);
+      g_settings_set_value (EPHY_SETTINGS_WEB, ephy_prefs_web_schema[i], value);
+      g_variant_unref (value);
+    }
+
+    g_object_unref (settings);
+
+    for (guint i = 0; i < G_N_ELEMENTS (deprecated_settings); i++) {
+      GVariant *value;
+
+      value = g_settings_get_value (EPHY_SETTINGS_MAIN, deprecated_settings[i]);
+      g_settings_set_value (EPHY_SETTINGS_WEB, deprecated_settings[i], value);
+      g_variant_unref (value);
+    }
+  } else
+    ephy_web_application_initialize_settings (ephy_dot_dir ());
+
+  g_settings_sync ();
+}
+
 static void
 migrate_nothing (void)
 {
@@ -853,6 +933,7 @@ const EphyProfileMigrator migrators[] = {
   /* 13 */ migrate_adblock_filters,
   /* 14 */ migrate_initial_state,
   /* 15 */ migrate_permissions,
+  /* 16 */ migrate_settings,
 };
 
 static gboolean

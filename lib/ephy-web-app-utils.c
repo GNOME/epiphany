@@ -23,6 +23,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-prefs.h"
 
 #include <errno.h>
 #include <gio/gio.h>
@@ -290,6 +291,8 @@ ephy_web_application_create (const char *address, const char *name, GdkPixbuf *i
 
   /* Create the deskop file. */
   desktop_file_path = create_desktop_file (address, profile_dir, name, icon);
+  if (desktop_file_path)
+    ephy_web_application_initialize_settings (profile_dir);
 
  out:
   if (profile_dir)
@@ -566,4 +569,49 @@ ephy_web_application_exists (const char *name)
   g_free (profile_dir);
 
   return profile_exists;
+}
+
+void
+ephy_web_application_initialize_settings (const char *profile_directory)
+{
+  GSettings *settings;
+  GSettings *web_app_settings;
+  char *name;
+  char *path;
+
+  name = g_path_get_basename (profile_directory);
+  settings = g_settings_new_with_path (EPHY_PREFS_WEB_SCHEMA, "/org/gnome/epiphany/web/");
+
+  path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "web/", NULL);
+  web_app_settings = g_settings_new_with_path (EPHY_PREFS_WEB_SCHEMA, path);
+  g_free (path);
+
+  for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_web_schema); i++) {
+    GVariant *value;
+
+    value = g_settings_get_value (settings, ephy_prefs_web_schema[i]);
+    g_settings_set_value (web_app_settings, ephy_prefs_web_schema[i], value);
+    g_variant_unref (value);
+  }
+
+  g_object_unref (settings);
+  g_object_unref (web_app_settings);
+
+  settings = g_settings_new_with_path (EPHY_PREFS_STATE_SCHEMA, "/org/gnome/epiphany/state/");
+
+  path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", name, "state/", NULL);
+  web_app_settings = g_settings_new_with_path (EPHY_PREFS_STATE_SCHEMA, path);
+  g_free (path);
+
+  for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_state_schema); i++) {
+    GVariant *value;
+
+    value = g_settings_get_value (settings, ephy_prefs_state_schema[i]);
+    g_settings_set_value (web_app_settings, ephy_prefs_state_schema[i], value);
+    g_variant_unref (value);
+  }
+
+  g_object_unref (settings);
+  g_object_unref (web_app_settings);
+  g_free (name);
 }

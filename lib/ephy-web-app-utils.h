@@ -56,4 +56,6 @@ void     ephy_web_application_free_application_list (GList *list);
 
 gboolean ephy_web_application_exists (const char *name);
 
+void     ephy_web_application_initialize_settings (const char *profile_directory);
+
 G_END_DECLS

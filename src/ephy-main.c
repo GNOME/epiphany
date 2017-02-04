@@ -380,19 +380,6 @@ main (int   argc,
     exit (0);
   }
 
-  /* Setup relocatable schemas */
-  if (application_mode) {
-    char *web_app_name;
-    char *path;
-
-    web_app_name = g_path_get_basename (profile_directory);
-    path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", web_app_name, "state/", NULL);
-    ephy_settings_ensure_schema_for_path (EPHY_PREFS_STATE_SCHEMA, path);
-    g_free (web_app_name);
-    g_free (path);
-  } else
-    ephy_settings_ensure_schema_for_path (EPHY_PREFS_STATE_SCHEMA, "/org/gnome/epiphany/state/");
-
   startup_flags = get_startup_flags ();
 
   /* Now create the shell */

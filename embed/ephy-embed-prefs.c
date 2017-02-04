@@ -542,8 +542,8 @@ static const PrefData webkit_pref_entries[] =
     EPHY_PREFS_WEB_LANGUAGE,
     "accept-language",
     webkit_pref_callback_accept_languages },
-  { EPHY_PREFS_SCHEMA,
-    EPHY_PREFS_USER_AGENT,
+  { EPHY_PREFS_WEB_SCHEMA,
+    EPHY_PREFS_WEB_USER_AGENT,
     "user-agent",
     webkit_pref_callback_user_agent },
   { EPHY_PREFS_WEB_SCHEMA,
@@ -617,8 +617,8 @@ ephy_embed_prefs_init (gpointer user_data)
                    EPHY_PREFS_WEB_ENABLE_WEBAUDIO,
                    webkit_settings, "enable-webaudio",
                    G_SETTINGS_BIND_GET);
-  g_settings_bind (EPHY_SETTINGS_MAIN,
-                   EPHY_PREFS_ENABLE_SMOOTH_SCROLLING,
+  g_settings_bind (EPHY_SETTINGS_WEB,
+                   EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
                    webkit_settings, "enable-smooth-scrolling",
                    G_SETTINGS_BIND_GET);
   return webkit_settings;

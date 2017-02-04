@@ -97,8 +97,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/src/ephy-encodings/get",
                    test_ephy_encodings_get);
 
-  ephy_settings_ensure_schema_for_path (EPHY_PREFS_STATE_SCHEMA, "/org/gnome/epiphany/state/");
-
   ret = g_test_run ();
 
   g_object_unref (ephy_shell_get_default ());

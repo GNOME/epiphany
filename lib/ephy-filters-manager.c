@@ -240,7 +240,7 @@ update_adblock_filter_files (EphyFiltersManager *manager)
   g_object_unref (manager->cancellable);
   manager->cancellable = g_cancellable_new ();
 
-  filters = g_settings_get_strv (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ADBLOCK_FILTERS);
+  filters = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
   for (guint i = 0; filters[i]; i++) {
     GFile *filter_file;
 
@@ -303,7 +303,7 @@ ephy_filters_manager_constructed (GObject *object)
   G_OBJECT_CLASS (ephy_filters_manager_parent_class)->constructed (object);
 
   /* Note: up here because we must connect *before* reading the settings. */
-  g_signal_connect (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ADBLOCK_FILTERS,
+  g_signal_connect (EPHY_SETTINGS_MAIN, "changed::" EPHY_PREFS_ADBLOCK_FILTERS,
                     G_CALLBACK (adblock_filters_changed_cb), manager);
   g_signal_connect (EPHY_SETTINGS_WEB, "changed::" EPHY_PREFS_WEB_ENABLE_ADBLOCK,
                     G_CALLBACK (enable_adblock_changed_cb), manager);
