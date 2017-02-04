@@ -131,7 +131,7 @@ ephy_permissions_manager_get_settings_for_origin (EphyPermissionsManager *manage
                                  webkit_security_origin_get_host (security_origin),
                                  webkit_security_origin_get_port (security_origin));
 
-  settings = g_settings_new_with_backend_and_path ("org.gnome.Epiphany.Permissions", backend, origin_path);
+  settings = g_settings_new_with_backend_and_path ("org.gnome.Epiphany.permissions", backend, origin_path);
   g_free (trimmed_protocol);
   g_free (origin_path);
   g_object_unref (backend);
