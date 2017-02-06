@@ -130,9 +130,8 @@ struct _PrefsDialog {
   WebKitUserContentManager *fxa_manager;
   WebKitUserScript *fxa_script;
   guint fxa_id;
-#else
-  GtkWidget *notebook;
 #endif
+  GtkWidget *notebook;
 };
 
 #ifdef ENABLE_SYNC
@@ -645,9 +644,8 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_details);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_button);
-#else
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
 #endif
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
 
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
