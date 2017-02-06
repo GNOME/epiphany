@@ -53,6 +53,7 @@
 #include <locale.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <webkit2/webkit2.h>
 
 static int do_step_n = -1;
 static int migration_version = -1;

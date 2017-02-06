@@ -29,6 +29,7 @@
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
+#include "ephy-web-app-utils.h"
 
 #include <errno.h>
 #include <gdk/gdk.h>
@@ -57,14 +58,20 @@
 
 #define EPHY_MIME_TYPE_PERMISSIONS_URI "/org/gnome/epiphany/mime-types-permissions.xml"
 
-static GHashTable *files = NULL;
-static GHashTable *mime_table = NULL;
+typedef enum {
+  EPHY_PROFILE_DIR_UNKNOWN,
+  EPHY_PROFILE_DIR_DEFAULT,
+  EPHY_PROFILE_DIR_WEB_APP
+} EphyProfileDirType;
 
-static gboolean keep_directory = FALSE;
-static char *dot_dir = NULL;
-static char *tmp_dir = NULL;
-static GList *del_on_exit = NULL;
-static gboolean is_default_dot_dir = FALSE;
+static GHashTable *files;
+static GHashTable *mime_table;
+
+static gboolean keep_directory;
+static char *dot_dir;
+static char *tmp_dir;
+static GList *del_on_exit;
+static EphyProfileDirType dot_dir_type;
 
 GQuark ephy_file_helpers_error_quark;
 
@@ -231,7 +238,20 @@ ephy_dot_dir (void)
 gboolean
 ephy_dot_dir_is_default (void)
 {
-  return is_default_dot_dir;
+  return dot_dir_type == EPHY_PROFILE_DIR_DEFAULT;
+}
+
+/**
+ * ephy_dot_dir_is_web_application:
+ *
+ * Returns whether the dot directory in use is a web appplication one.
+ *
+ * Returns: %TRUE if it is a web application dot dir, %FALSE for others
+ */
+gboolean
+ephy_dot_dir_is_web_application (void)
+{
+  return dot_dir_type == EPHY_PROFILE_DIR_WEB_APP;
 }
 
 /**
@@ -279,6 +299,8 @@ ephy_file_helpers_init (const char          *profile_dir,
   steal_data_from_profile = flags & EPHY_FILE_HELPERS_STEAL_DATA;
 
   if (profile_dir != NULL && !steal_data_from_profile) {
+    char *basename;
+
     if (g_path_is_absolute (profile_dir)) {
       dot_dir = g_strdup (profile_dir);
     } else {
@@ -286,6 +308,11 @@ ephy_file_helpers_init (const char          *profile_dir,
       dot_dir = g_file_get_path (file);
       g_object_unref (file);
     }
+
+    basename = g_path_get_basename (dot_dir);
+    if (g_str_has_prefix (basename, EPHY_WEB_APP_PREFIX))
+      dot_dir_type = EPHY_PROFILE_DIR_WEB_APP;
+    g_free (basename);
   } else if (private_profile) {
     if (ephy_file_tmp_dir () == NULL) {
       g_set_error (error,
@@ -303,7 +330,7 @@ ephy_file_helpers_init (const char          *profile_dir,
 
   if (dot_dir == NULL) {
     dot_dir = ephy_default_dot_dir ();
-    is_default_dot_dir = TRUE;
+    dot_dir_type = EPHY_PROFILE_DIR_DEFAULT;
   }
 
   if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS)

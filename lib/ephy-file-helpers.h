@@ -52,6 +52,7 @@ gboolean           ephy_file_helpers_init                   (const char         
                                                              GError               **error);
 const char *       ephy_dot_dir                             (void);
 gboolean           ephy_dot_dir_is_default                  (void);
+gboolean           ephy_dot_dir_is_web_application          (void);
 char       *       ephy_default_dot_dir                     (void);
 void               ephy_file_helpers_shutdown               (void);
 char       *       ephy_file_get_downloads_dir              (void);
