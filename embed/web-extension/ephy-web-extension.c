@@ -398,6 +398,10 @@ should_store_cb (const char *username,
     goto out;
   }
 
+  /* We never ask the user in web applications. */
+  if (permission == EPHY_PERMISSION_UNDECIDED && ephy_dot_dir_is_web_application ())
+    permission = EPHY_PERMISSION_PERMIT;
+
   g_object_get (ephy_embed_form_auth_get_password_node (form_auth),
                 "value", &password_field_value, NULL);
   if (password_field_value == NULL || strlen (password_field_value) == 0)
