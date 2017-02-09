@@ -1104,10 +1104,6 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
   WebKitDOMDocument *document = NULL;
   guint i;
 
-  if (!extension->form_auth_data_cache ||
-      !g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS))
-    return;
-
   document = webkit_web_page_get_dom_document (web_page);
 
   for (i = 0; i < elements->len; ++i) {
@@ -1121,6 +1117,17 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
       continue;
 
     form = WEBKIT_DOM_HTML_FORM_ELEMENT (element);
+
+    if (ephy_web_dom_utils_form_contains_sensitive_element (form)) {
+      LOG ("Sensitive form element detected, hooking sensitive form focused callback");
+      webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form), "focus",
+                                                  G_CALLBACK (sensitive_form_focused_cb), TRUE,
+                                                  web_page);
+    }
+
+    if (!extension->form_auth_data_cache ||
+        !g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS))
+      continue;
 
     /* We have a field that may be the user, and one for a password. */
     if (ephy_web_dom_utils_find_form_auth_elements (form, &username_node, &password_node)) {
@@ -1173,12 +1180,6 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
       g_object_weak_ref (G_OBJECT (form), form_destroyed_cb, form_auth);
     } else
       LOG ("No pre-fillable/hookable form found");
-
-    if (ephy_web_dom_utils_form_contains_sensitive_element (form)) {
-      webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form), "focus",
-                                                  G_CALLBACK (sensitive_form_focused_cb), TRUE,
-                                                  web_page);
-    }
   }
 }
 
