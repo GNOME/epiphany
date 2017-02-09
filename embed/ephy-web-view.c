@@ -782,7 +782,7 @@ sensitive_form_focused_cb (EphyEmbedShell *shell,
     return;
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
     return;
-  if (insecure_action || ephy_security_level_is_secure (web_view->security_level))
+  if (!insecure_action && ephy_security_level_is_secure (web_view->security_level))
     return;
 
   /* Translators: Message appears when insecure password form is focused. */
