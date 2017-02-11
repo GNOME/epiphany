@@ -580,7 +580,7 @@ ephy_notebook_rebuild_tab_menu (EphyNotebook *notebook)
     g_object_unref (item);
   }
 
-  current_page = gtk_notebook_get_current_page (notebook);
+  current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
   if (current_page < 0)
     return;
 
