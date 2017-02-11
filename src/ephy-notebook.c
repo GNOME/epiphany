@@ -586,6 +586,10 @@ ephy_notebook_rebuild_tab_menu (EphyNotebook *notebook)
 
   window = gtk_widget_get_toplevel (GTK_WIDGET (notebook));
   group = gtk_widget_get_action_group (window, "win");
+  /* Is window being destroyed? */
+  if (group == NULL)
+    return;
+
   action = g_action_map_lookup_action (G_ACTION_MAP (group), "show-tab");
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_uint32 ((guint32)current_page));
 }
