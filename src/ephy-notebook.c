@@ -560,6 +560,10 @@ ephy_notebook_rebuild_tab_menu (EphyNotebook *notebook)
   const char *text;
   char *ellipsized_text;
   int num_pages;
+  GtkWidget *window;
+  GActionGroup *group;
+  GAction *action;
+  gint current_page;
 
   g_menu_remove_all (notebook->tab_menu);
 
@@ -575,6 +579,15 @@ ephy_notebook_rebuild_tab_menu (EphyNotebook *notebook)
     g_free (ellipsized_text);
     g_object_unref (item);
   }
+
+  current_page = gtk_notebook_get_current_page (notebook);
+  if (current_page < 0)
+    return;
+
+  window = gtk_widget_get_toplevel (GTK_WIDGET (notebook));
+  group = gtk_widget_get_action_group (window, "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), "show-tab");
+  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_uint32 ((guint32)current_page));
 }
 
 static void
