@@ -42,7 +42,6 @@
 #include "ephy-snapshot-service.h"
 #include "ephy-string.h"
 #include "ephy-uri-helpers.h"
-#include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-extension-proxy.h"
 #include "ephy-zoom.h"
@@ -1658,7 +1657,6 @@ update_security_status_for_committed_load (EphyWebView *view,
   g_clear_pointer (&view->tls_error_failing_uri, g_free);
 
   if (!soup_uri ||
-      strcmp (soup_uri_get_scheme (soup_uri), EPHY_VIEW_SOURCE_SCHEME) == 0 ||
       webkit_security_manager_uri_scheme_is_local (security_manager, soup_uri->scheme) ||
       webkit_security_manager_uri_scheme_is_empty_document (security_manager, soup_uri->scheme)) {
     security_level = EPHY_SECURITY_LEVEL_LOCAL_PAGE;

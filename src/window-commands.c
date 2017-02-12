@@ -51,7 +51,6 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
-#include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
 
@@ -1772,23 +1771,6 @@ static void
 view_source_embedded (const char *uri, EphyEmbed *embed)
 {
   EphyEmbed *new_embed;
-  SoupURI *soup_uri;
-  char *source_uri;
-
-  /* Abort if we're already in view source mode */
-  if (strstr (uri, EPHY_VIEW_SOURCE_SCHEME) == uri)
-    return;
-
-  soup_uri = soup_uri_new (uri);
-  if (!soup_uri) {
-    g_critical ("Failed to construct SoupURI for %s", uri);
-    return;
-  }
-
-  /* Convert e.g. https://gnome.org to ephy-source://gnome.org#https */
-  soup_uri_set_fragment (soup_uri, soup_uri->scheme);
-  soup_uri_set_scheme (soup_uri, EPHY_VIEW_SOURCE_SCHEME);
-  source_uri = soup_uri_to_string (soup_uri, FALSE);
 
   new_embed = ephy_shell_new_tab
                 (ephy_shell_get_default (),
@@ -1796,11 +1778,13 @@ view_source_embedded (const char *uri, EphyEmbed *embed)
                 embed,
                 EPHY_NEW_TAB_JUMP | EPHY_NEW_TAB_APPEND_AFTER);
 
-  webkit_web_view_load_uri (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), source_uri);
+  /* FIXME: Implement embedded view source mode using a custom URI handler and a
+   * javascript library for the syntax highlighting.
+   * https://bugzilla.gnome.org/show_bug.cgi?id=731558
+   */
+  webkit_web_view_load_uri
+    (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (new_embed), uri);
   gtk_widget_grab_focus (GTK_WIDGET (new_embed));
-
-  g_free (source_uri);
-  soup_uri_free (soup_uri);
 }
 
 static void
@@ -1987,11 +1971,15 @@ window_cmd_page_source (GSimpleAction *action,
 
   address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
+#if 0
+ FIXME: Disabled due to bug #738475
+
   if (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                               EPHY_PREFS_INTERNAL_VIEW_SOURCE)) {
     view_source_embedded (address, embed);
     return;
   }
+#endif
 
   user_time = gtk_get_current_event_time ();
 
