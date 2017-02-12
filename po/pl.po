@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-02-05 12:28+0000\n"
-"PO-Revision-Date: 2017-02-05 15:33+0100\n"
+"POT-Creation-Date: 2017-02-12 01:06+0000\n"
+"PO-Revision-Date: 2017-02-12 15:18+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -61,7 +61,7 @@ msgstr "Projekt GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:293
 #: embed/ephy-about-handler.c:324 src/ephy-main.c:102 src/ephy-main.c:270
-#: src/ephy-main.c:412 src/window-commands.c:653
+#: src/ephy-main.c:412 src/window-commands.c:652
 msgid "Web"
 msgstr "WWW"
 
@@ -528,8 +528,8 @@ msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
-"Rozmiar używany dla nowego okna, które nie zostało przywrócone "
-"z poprzedniej sesji."
+"Rozmiar używany dla nowego okna, które nie zostało przywrócone z poprzedniej "
+"sesji."
 
 #: data/org.gnome.epiphany.gschema.xml:242
 msgid "Is maximized"
@@ -712,7 +712,7 @@ msgstr "Usuń"
 msgid "Installed on:"
 msgstr "Zainstalowano:"
 
-#: embed/ephy-about-handler.c:457 embed/ephy-embed-utils.c:310
+#: embed/ephy-about-handler.c:457 embed/ephy-embed-utils.c:306
 msgid "Most Visited"
 msgstr "Najczęściej odwiedzane"
 
@@ -781,12 +781,12 @@ msgstr "Esc"
 msgid "F11"
 msgstr "F11"
 
-#: embed/ephy-embed-utils.c:64
+#: embed/ephy-embed-utils.c:63
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Wyślij wiadomość e-mail na adres „%s”"
 
-#: embed/ephy-embed-utils.c:240 src/search-provider/ephy-search-provider.c:288
+#: embed/ephy-embed-utils.c:239 src/search-provider/ephy-search-provider.c:288
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=pl-pl&amp;kad=pl_PL"
@@ -1135,34 +1135,29 @@ msgstr "Wyszukuje poprzednie wystąpienie słowa lub frazy"
 msgid "Find next occurrence of the search string"
 msgstr "Wyszukuje następne wystąpienie ciągu"
 
-#: embed/ephy-view-source-handler.c:260
-#, c-format
-msgid "%s is not a valid URI"
-msgstr "„%s” nie jest prawidłowym adresem"
-
-#: embed/ephy-web-view.c:529
+#: embed/ephy-web-view.c:528
 msgid "Not No_w"
 msgstr "Ni_e teraz"
 
-#: embed/ephy-web-view.c:530
+#: embed/ephy-web-view.c:529
 msgid "_Never Save"
 msgstr "_Nigdy nie zapisuj"
 
-#: embed/ephy-web-view.c:531 lib/widgets/ephy-file-chooser.c:184
-#: src/window-commands.c:466
+#: embed/ephy-web-view.c:530 lib/widgets/ephy-file-chooser.c:184
+#: src/window-commands.c:465
 msgid "_Save"
 msgstr "_Zapisz"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:542
+#: embed/ephy-web-view.c:541
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Zapisać hasło dla strony „%s”?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:796
+#: embed/ephy-web-view.c:788
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will be "
 "visible to cybercriminals!"
@@ -1170,56 +1165,56 @@ msgstr ""
 "Uwaga: ten formularz nie jest bezpieczny. Wpisane w nim hasło może być "
 "widoczne dla cyberprzestępców."
 
-#: embed/ephy-web-view.c:1398
+#: embed/ephy-web-view.c:1390
 msgid "Deny"
 msgstr "Odmów"
 
-#: embed/ephy-web-view.c:1399
+#: embed/ephy-web-view.c:1391
 msgid "Allow"
 msgstr "Zezwól"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1414
+#: embed/ephy-web-view.c:1406
 #, c-format
 msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgstr "Strona <b>%s</b> chce wyświetlać powiadomienia pulpitu."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1419
+#: embed/ephy-web-view.c:1411
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "Strona <b>%s</b> chce poznać położenie użytkownika."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1424
+#: embed/ephy-web-view.c:1416
 #, c-format
 msgid "The page at <b>%s</b> wants to use your microphone."
 msgstr "Strona <b>%s</b> chce używać mikrofonu."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1429
+#: embed/ephy-web-view.c:1421
 #, c-format
 msgid "The page at <b>%s</b> wants to use your webcam."
 msgstr "Strona <b>%s</b> chce używać kamerki."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1594
+#: embed/ephy-web-view.c:1586
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Wczytywanie strony „%s”…"
 
-#: embed/ephy-web-view.c:1596
+#: embed/ephy-web-view.c:1588
 msgid "Loading…"
 msgstr "Wczytywanie…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1850
+#: embed/ephy-web-view.c:1841
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Ta strona przedstawiła certyfikat należący do innej strony."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1855
+#: embed/ephy-web-view.c:1846
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1228,18 +1223,18 @@ msgstr ""
 "sprawdzić, czy data w komputerze jest prawidłowa."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1860
+#: embed/ephy-web-view.c:1851
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Certyfikat tej strony nie został wydany przez zaufaną organizację."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1865
+#: embed/ephy-web-view.c:1856
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "Nie można przetworzyć certyfikatu tej strony. Może on być uszkodzony."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1870
+#: embed/ephy-web-view.c:1861
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1248,7 +1243,7 @@ msgstr ""
 "go wydała."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1875
+#: embed/ephy-web-view.c:1866
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1257,7 +1252,7 @@ msgstr ""
 "szyfrowania."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1880
+#: embed/ephy-web-view.c:1871
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1267,23 +1262,23 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1942 embed/ephy-web-view.c:1996
+#: embed/ephy-web-view.c:1933 embed/ephy-web-view.c:1987
 msgid "Problem Loading Page"
 msgstr "Problem podczas wczytywania strony"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1945
+#: embed/ephy-web-view.c:1936
 msgid "Unable to display this website"
 msgstr "Nie można wyświetlić tej strony"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1949
+#: embed/ephy-web-view.c:1940
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Strona „%s” jest niedostępna."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1953
+#: embed/ephy-web-view.c:1944
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1292,7 +1287,7 @@ msgstr ""
 "Proszę także sprawdzić, czy połączenie internetowe działa poprawnie."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1963
+#: embed/ephy-web-view.c:1954
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Dokładna treść błędu: %s"
@@ -1300,68 +1295,68 @@ msgstr "Dokładna treść błędu: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1968 embed/ephy-web-view.c:2019
-#: embed/ephy-web-view.c:2060
+#: embed/ephy-web-view.c:1959 embed/ephy-web-view.c:2010
+#: embed/ephy-web-view.c:2051
 msgid "Reload"
 msgstr "Wczytaj ponownie"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1971 embed/ephy-web-view.c:2022
-#: embed/ephy-web-view.c:2063
+#: embed/ephy-web-view.c:1962 embed/ephy-web-view.c:2013
+#: embed/ephy-web-view.c:2054
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "W"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1999
+#: embed/ephy-web-view.c:1990
 msgid "Oops! There may be a problem"
 msgstr "Wystąpił problem."
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2003
+#: embed/ephy-web-view.c:1994
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Strona „%s” mogła spowodować nieoczekiwanie zamknięcie przeglądarki."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2010
+#: embed/ephy-web-view.c:2001
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Jeśli się to powtórzy, prosimy zgłosić problem programistom projektu %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2046
+#: embed/ephy-web-view.c:2037
 msgid "Problem Displaying Page"
 msgstr "Problem podczas wyświetlania strony"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2049
+#: embed/ephy-web-view.c:2040
 msgid "Oops!"
 msgstr "Błąd"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2052
+#: embed/ephy-web-view.c:2043
 msgid "Something went wrong while displaying this page."
 msgstr "Wystąpił błąd podczas wyświetlania tej strony."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2054
+#: embed/ephy-web-view.c:2045
 msgid "Please reload or visit a different page to continue."
 msgstr "Proszę ją wczytać ponownie lub odwiedzić inną, aby kontynuować."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2087
+#: embed/ephy-web-view.c:2078
 msgid "Security Violation"
 msgstr "Naruszenie bezpieczeństwa"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2090
+#: embed/ephy-web-view.c:2081
 msgid "This Connection is Not Secure"
 msgstr "To połączenie nie jest bezpieczne"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2094
+#: embed/ephy-web-view.c:2085
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1372,60 +1367,60 @@ msgstr ""
 "strony."
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2104
+#: embed/ephy-web-view.c:2095
 msgid "Go Back"
 msgstr "Wstecz"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:2107
+#: embed/ephy-web-view.c:2098
 msgctxt "back-access-key"
 msgid "B"
 msgstr "W"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2110
+#: embed/ephy-web-view.c:2101
 msgid "Accept Risk and Proceed"
 msgstr "Akceptuję ryzyko, kontynuuj"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:2114
+#: embed/ephy-web-view.c:2105
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "A"
 
-#: embed/ephy-web-view.c:2166
+#: embed/ephy-web-view.c:2157
 msgid "None specified"
 msgstr "Nie podano nikogo"
 
-#: embed/ephy-web-view.c:2249
+#: embed/ephy-web-view.c:2240
 msgid "Technical information"
 msgstr "Informacje techniczne"
 
-#: embed/ephy-web-view.c:3101
+#: embed/ephy-web-view.c:3092
 msgid "_OK"
 msgstr "_OK"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:110 src/resources/gtk/prefs-dialog.ui:125
+#: lib/ephy-file-helpers.c:117 src/resources/gtk/prefs-dialog.ui:125
 msgid "Downloads"
 msgstr "Pobrane"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:163
+#: lib/ephy-file-helpers.c:170
 msgid "Desktop"
 msgstr "Pulpit"
 
-#: lib/ephy-file-helpers.c:294
+#: lib/ephy-file-helpers.c:321
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Nie można utworzyć katalogu tymczasowego w „%s”."
 
-#: lib/ephy-file-helpers.c:415
+#: lib/ephy-file-helpers.c:442
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Plik „%s” istnieje. Proszę przenieść go w inne miejsce."
 
-#: lib/ephy-file-helpers.c:434
+#: lib/ephy-file-helpers.c:461
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Utworzenie katalogu „%s” się nie powiodło."
@@ -1655,9 +1650,9 @@ msgid "Starting…"
 msgstr "Uruchamianie…"
 
 #: lib/widgets/ephy-file-chooser.c:176 lib/widgets/ephy-file-chooser.c:183
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:228
-#: src/window-commands.c:302 src/window-commands.c:397
-#: src/window-commands.c:465 src/window-commands.c:1367
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:227
+#: src/window-commands.c:301 src/window-commands.c:396
+#: src/window-commands.c:464 src/window-commands.c:1366
 msgid "_Cancel"
 msgstr "_Anuluj"
 
@@ -1904,7 +1899,7 @@ msgstr "Opcje przeglądarki WWW"
 msgid "View open tabs"
 msgstr "Wyświetla otwarte karty"
 
-#: src/ephy-notebook.c:731
+#: src/ephy-notebook.c:748
 msgid "Close tab"
 msgstr "Zamyka kartę"
 
@@ -2083,16 +2078,16 @@ msgid "Save Media As"
 msgstr "Zapis multimediów jako"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:264 src/prefs-dialog.c:1900
+#: src/prefs-dialog.c:263 src/prefs-dialog.c:1898
 #, c-format
 msgid "Currently logged in as %s"
 msgstr "Obecnie zalogowano jako %s"
 
-#: src/prefs-dialog.c:423
+#: src/prefs-dialog.c:422
 msgid "Something went wrong, please try again."
 msgstr "Coś się nie powiodło. Proszę spróbować ponownie."
 
-#: src/prefs-dialog.c:447
+#: src/prefs-dialog.c:446
 msgid "Please don’t leave this page until you have completed the verification."
 msgstr "Nie należy opuszczać tej strony przed ukończeniem weryfikacji."
 
@@ -2100,7 +2095,7 @@ msgstr "Nie należy opuszczać tej strony przed ukończeniem weryfikacji."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:968 src/prefs-dialog.c:972
+#: src/prefs-dialog.c:966 src/prefs-dialog.c:970
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2109,13 +2104,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:979
+#: src/prefs-dialog.c:977
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Określony przez użytkownika (%s)"
 
-#: src/prefs-dialog.c:1001
+#: src/prefs-dialog.c:999
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2123,16 +2118,16 @@ msgstr[0] "Język systemu (%s)"
 msgstr[1] "Języki systemu (%s)"
 msgstr[2] "Języków systemu (%s)"
 
-#: src/prefs-dialog.c:1244 src/resources/gtk/prefs-dialog.ui:817
+#: src/prefs-dialog.c:1242 src/resources/gtk/prefs-dialog.ui:817
 msgid "Language"
 msgstr "Język"
 
-#: src/prefs-dialog.c:1323
+#: src/prefs-dialog.c:1321
 msgid "Select a Directory"
 msgstr "Wybór katalogu"
 
 #. Search engine option in the preferences dialog
-#: src/prefs-dialog.c:1435
+#: src/prefs-dialog.c:1433
 msgid "DuckDuckGo"
 msgstr "DuckDuckGo"
 
@@ -2140,34 +2135,34 @@ msgstr "DuckDuckGo"
 #. * you chose in the gschema, but with & instead of &amp;
 #. * If the match is not exact, there will be a spurious, ugly
 #. * entry in the preferences combo, so please test this.
-#: src/prefs-dialog.c:1441
+#: src/prefs-dialog.c:1439
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&t=epiphany&kl=pl-pl&kad=pl_PL"
 
 #. Search engine option in the preferences dialog
-#: src/prefs-dialog.c:1443
+#: src/prefs-dialog.c:1441
 msgid "Google"
 msgstr "Google"
 
 #. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: src/prefs-dialog.c:1446
+#: src/prefs-dialog.c:1444
 #, c-format
 msgid "https://google.com/search?q=%s"
 msgstr "https://google.pl/search?q=%s"
 
 #. Search engine option in the preferences dialog
-#: src/prefs-dialog.c:1448
+#: src/prefs-dialog.c:1446
 msgid "Bing"
 msgstr "Bing"
 
 #. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: src/prefs-dialog.c:1451
+#: src/prefs-dialog.c:1449
 #, c-format
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
 
-#: src/profile-migrator/ephy-profile-migrator.c:90
+#: src/profile-migrator/ephy-profile-migrator.c:91
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -2176,23 +2171,23 @@ msgstr ""
 "przestarzały, a jego zawartość została przeniesiona do katalogu ~/.config/"
 "epiphany"
 
-#: src/profile-migrator/ephy-profile-migrator.c:996
+#: src/profile-migrator/ephy-profile-migrator.c:997
 msgid "Executes only the n-th migration step"
 msgstr "Wykonuje tylko podany krok migracji"
 
-#: src/profile-migrator/ephy-profile-migrator.c:998
+#: src/profile-migrator/ephy-profile-migrator.c:999
 msgid "Specifies the required version for the migrator"
 msgstr "Podaje wymaganą wersję dla migracji"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1000
+#: src/profile-migrator/ephy-profile-migrator.c:1001
 msgid "Specifies the profile where the migrator should run"
 msgstr "Podaje profil dla migracji"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1018
+#: src/profile-migrator/ephy-profile-migrator.c:1019
 msgid "Web profile migrator"
 msgstr "Migracja profilu przeglądarki WWW"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1019
+#: src/profile-migrator/ephy-profile-migrator.c:1020
 msgid "Web profile migrator options"
 msgstr "Opcje migracji profilu przeglądarki WWW"
 
@@ -2210,41 +2205,37 @@ msgid "Reopen Closed _Tab"
 msgstr "_Przywróć zamkniętą kartę"
 
 #: src/resources/gtk/application-menu.ui:23
-msgid "_Bookmarks"
-msgstr "_Zakładki"
-
-#: src/resources/gtk/application-menu.ui:26
-msgid "I_mport bookmarks"
+msgid "I_mport Bookmarks"
 msgstr "Zai_mportuj zakładki"
 
-#: src/resources/gtk/application-menu.ui:31
-msgid "E_xport bookmarks"
+#: src/resources/gtk/application-menu.ui:28
+msgid "E_xport Bookmarks"
 msgstr "Wye_ksportuj zakładki"
 
-#: src/resources/gtk/application-menu.ui:38
+#: src/resources/gtk/application-menu.ui:35
 msgid "_History"
 msgstr "_Historia"
 
-#: src/resources/gtk/application-menu.ui:45
-#: src/resources/gtk/application-menu.ui:75
+#: src/resources/gtk/application-menu.ui:42
+#: src/resources/gtk/application-menu.ui:72
 msgid "Pr_eferences"
 msgstr "Pr_eferencje"
 
-#: src/resources/gtk/application-menu.ui:52
+#: src/resources/gtk/application-menu.ui:49
 msgid "_Keyboard Shortcuts"
 msgstr "_Skróty klawiszowe"
 
-#: src/resources/gtk/application-menu.ui:57
+#: src/resources/gtk/application-menu.ui:54
 msgid "_Help"
 msgstr "Pomo_c"
 
-#: src/resources/gtk/application-menu.ui:62
-#: src/resources/gtk/application-menu.ui:82
+#: src/resources/gtk/application-menu.ui:59
+#: src/resources/gtk/application-menu.ui:79
 msgid "_About"
 msgstr "_O programie"
 
-#: src/resources/gtk/application-menu.ui:66
-#: src/resources/gtk/application-menu.ui:86
+#: src/resources/gtk/application-menu.ui:63
+#: src/resources/gtk/application-menu.ui:83
 msgid "_Quit"
 msgstr "Za_kończ"
 
@@ -2391,7 +2382,7 @@ msgstr "Kodowanie tekstu"
 
 #: src/resources/gtk/encoding-dialog.ui:29
 msgid "Use the encoding specified by the document"
-msgstr "Używanie kodowania określonego przez dokument"
+msgstr "Używanie kodowania podanego przez dokument"
 
 #: src/resources/gtk/encoding-dialog.ui:64
 msgid "Recent encodings"
@@ -2419,7 +2410,7 @@ msgstr "Historia"
 
 #: src/resources/gtk/history-dialog.ui:67
 msgid "Search history"
-msgstr "Przeszukiwanie historii"
+msgstr "Wyszukiwanie w historii"
 
 #: src/resources/gtk/history-dialog.ui:105
 msgid "Date"
@@ -2527,7 +2518,7 @@ msgstr "Strona domowa"
 
 #: src/resources/gtk/prefs-dialog.ui:71
 msgid "New _tab page"
-msgstr "_Strona w nowych kartach"
+msgstr "_Strona nowej karty"
 
 #: src/resources/gtk/prefs-dialog.ui:78
 msgid "_Blank page"
@@ -2623,7 +2614,7 @@ msgstr "Zarządzaj _ciasteczkami…"
 
 #: src/resources/gtk/prefs-dialog.ui:521
 msgid "_Always accept"
-msgstr "St_ałe akceptowanie"
+msgstr "_Akceptowanie wszystkich"
 
 #: src/resources/gtk/prefs-dialog.ui:528
 msgid "Only _from sites you visit"
@@ -2683,12 +2674,12 @@ msgid "_Down"
 msgstr "W _dół"
 
 #: src/resources/gtk/prefs-dialog.ui:791
-msgid "Spell checking"
+msgid "Spell Checking"
 msgstr "Sprawdzanie pisowni"
 
 #: src/resources/gtk/prefs-dialog.ui:800
 msgid "_Enable spell checking"
-msgstr "_Sprawdzanie pisowni"
+msgstr "_Włączone"
 
 #: src/resources/gtk/prefs-dialog.ui:839 src/resources/gtk/prefs-dialog.ui:925
 msgid "Sync"
@@ -2719,7 +2710,7 @@ msgstr "Dodanie języka"
 
 #: src/resources/gtk/prefs-lang-dialog.ui:67
 msgid "Choose a l_anguage:"
-msgstr "_Wybór języka:"
+msgstr "_Proszę wybrać język:"
 
 #: src/resources/gtk/shortcuts-dialog.ui:15
 msgctxt "shortcut window"
@@ -2997,69 +2988,69 @@ msgstr ""
 "Proszę przejść do preferencji i zalogować się za pomocą nowego hasła, aby "
 "kontynuować synchronizację."
 
-#: src/window-commands.c:96
+#: src/window-commands.c:95
 msgid "GVDB File"
 msgstr "Plik GVDB"
 
 #. Skip Firefox option if user doesn't have a Firefox profile
-#: src/window-commands.c:97 src/window-commands.c:200
+#: src/window-commands.c:96 src/window-commands.c:199
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:111 src/window-commands.c:399
+#: src/window-commands.c:110 src/window-commands.c:398
 msgid "Ch_oose File"
 msgstr "_Wybierz plik"
 
-#: src/window-commands.c:113 src/window-commands.c:303
+#: src/window-commands.c:112 src/window-commands.c:302
 msgid "I_mport"
 msgstr "Zai_mportuj"
 
-#: src/window-commands.c:225
+#: src/window-commands.c:224
 msgid "Select Profile"
 msgstr "Wybór profilu"
 
-#: src/window-commands.c:230
+#: src/window-commands.c:229
 msgid "_Select"
 msgstr "_Wybierz"
 
-#: src/window-commands.c:298 src/window-commands.c:461
+#: src/window-commands.c:297 src/window-commands.c:460
 msgid "Choose File"
 msgstr "Wybór pliku"
 
-#: src/window-commands.c:323 src/window-commands.c:364
+#: src/window-commands.c:322 src/window-commands.c:363
 msgid "Bookmarks successfully imported!"
 msgstr "Pomyślnie zaimportowano zakładki."
 
-#: src/window-commands.c:394
+#: src/window-commands.c:393
 msgid "Import Bookmarks"
 msgstr "Importowanie zakładek"
 
-#: src/window-commands.c:412
+#: src/window-commands.c:411
 msgid "From:"
 msgstr "Z:"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:471
+#: src/window-commands.c:470
 msgid "bookmarks.gvdb"
 msgstr "zakładki.gvdb"
 
-#: src/window-commands.c:489
+#: src/window-commands.c:488
 msgid "Bookmarks successfully exported!"
 msgstr "Pomyślnie wyeksportowano zakładki."
 
-#: src/window-commands.c:614 src/window-commands.c:637
+#: src/window-commands.c:613 src/window-commands.c:636
 msgid "Contact us at:"
 msgstr "Kontakt:"
 
-#: src/window-commands.c:617
+#: src/window-commands.c:616
 msgid "Contributors:"
 msgstr "Współtwórcy:"
 
-#: src/window-commands.c:620
+#: src/window-commands.c:619
 msgid "Past developers:"
 msgstr "Poprzedni programiści:"
 
-#: src/window-commands.c:646
+#: src/window-commands.c:645
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3076,7 +3067,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:669
+#: src/window-commands.c:668
 msgid "translator-credits"
 msgstr ""
 "Cezary Jackiewicz <cjackiewicz@poczta.onet.pl>, 2000-2001\n"
@@ -3088,28 +3079,28 @@ msgstr ""
 "Paweł Żołnowski <pawel@zolnowski.name>, 2014-2015\n"
 "Aviary.pl <community-poland@mozilla.org>, 2007-2017"
 
-#: src/window-commands.c:672
+#: src/window-commands.c:671
 msgid "Web Website"
 msgstr "Witryna przeglądarki WWW"
 
-#: src/window-commands.c:904
+#: src/window-commands.c:903
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/window-commands.c:1267
+#: src/window-commands.c:1266
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Program WWW o nazwie „%s” już istnieje. Zastąpić go?"
 
-#: src/window-commands.c:1270
+#: src/window-commands.c:1269
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: src/window-commands.c:1272
+#: src/window-commands.c:1271
 msgid "Replace"
 msgstr "Zastąp"
 
-#: src/window-commands.c:1276
+#: src/window-commands.c:1275
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -3117,38 +3108,38 @@ msgstr ""
 "Program o tej samej nazwie już istnieje. Zastąpienie go spowoduje jego "
 "nadpisanie."
 
-#: src/window-commands.c:1311
+#: src/window-commands.c:1310
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Program „%s” jest gotowy do użycia"
 
-#: src/window-commands.c:1314
+#: src/window-commands.c:1313
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Nie można utworzyć programu „%s”"
 
-#: src/window-commands.c:1322
+#: src/window-commands.c:1321
 msgid "Launch"
 msgstr "Uruchom"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1364
+#: src/window-commands.c:1363
 msgid "Create Web Application"
 msgstr "Utworzenie programu WWW"
 
-#: src/window-commands.c:1369
+#: src/window-commands.c:1368
 msgid "C_reate"
 msgstr "U_twórz"
 
-#: src/window-commands.c:1497
+#: src/window-commands.c:1496
 msgid "Save"
 msgstr "Zapisz"
 
-#: src/window-commands.c:2136
+#: src/window-commands.c:2124
 msgid "Enable caret browsing mode?"
 msgstr "Włączyć tryb przeglądania za pomocą karetki?"
 
-#: src/window-commands.c:2139
+#: src/window-commands.c:2127
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3158,6 +3149,6 @@ msgstr ""
 "umieszcza ruchomy kursor na stronach, umożliwiając poruszanie się za pomocą "
 "klawiatury. Włączyć tę funkcję?"
 
-#: src/window-commands.c:2142
+#: src/window-commands.c:2130
 msgid "_Enable"
 msgstr "_Włącz"
