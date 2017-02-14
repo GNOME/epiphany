@@ -542,7 +542,8 @@ ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
            keyval != GDK_KEY_KP_3;        /* Next Tab */
 
   if ((event->state & state_mask) == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
-    return keyval != GDK_KEY_Page_Up &&   /* Move Tab Left */
+    return keyval != GDK_KEY_n &&         /* New Incognito Window */
+           keyval != GDK_KEY_Page_Up &&   /* Move Tab Left */
            keyval != GDK_KEY_KP_9 &&      /* Move Tab Left */
            keyval != GDK_KEY_Page_Down && /* Move Tab Right */
            keyval != GDK_KEY_KP_3;        /* Move Tab Right */
