@@ -378,7 +378,8 @@ delayed_thumbnail_update_data_new (EphyWebExtensionProxy *extension,
 static void
 delayed_thumbnail_update_data_free (DelayedThumbnailUpdateData *data)
 {
-  g_object_remove_weak_pointer (G_OBJECT (data->extension), (gpointer *)&data->extension);
+  if (data->extension)
+    g_object_remove_weak_pointer (G_OBJECT (data->extension), (gpointer *)&data->extension);
   g_free (data->url);
   g_free (data->path);
   g_free (data);
