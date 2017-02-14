@@ -568,6 +568,23 @@ ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *serv
   g_object_unref (task);
 }
 
+static void
+take_fresh_snapshot_in_background_if_stale (EphySnapshotService *service,
+                                            SnapshotAsyncData   *data)
+{
+  GTask *task;
+
+  /* We schedule a new snapshot now, which will complete eventually. It won't be
+   * used now. This is just to ensure we get a newer snapshot in the future. */
+  if (ephy_snapshot_service_lookup_snapshot_freshness (service, data->url) == SNAPSHOT_STALE) {
+    task = g_task_new (service, NULL, NULL, NULL);
+    g_task_set_task_data (task,
+                          data,
+                          (GDestroyNotify)snapshot_async_data_free);
+    ephy_snapshot_service_take_from_webview (task);
+  }
+}
+
 char *
 ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService *service,
                                                         GAsyncResult        *result,
@@ -588,20 +605,12 @@ got_snapshot_path_for_url (EphySnapshotService *service,
 
   path = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, NULL);
   if (path) {
+    take_fresh_snapshot_in_background_if_stale (service, snapshot_async_data_copy (data));
     g_task_return_pointer (task, path, g_free);
     g_object_unref (task);
-
-    if (ephy_snapshot_service_lookup_snapshot_freshness (service, data->url) == SNAPSHOT_FRESH)
-      return;
-
-    /* Take a fresh snapshot in the background. */
-    task = g_task_new (service, NULL, NULL, NULL);
-    g_task_set_task_data (task,
-                          snapshot_async_data_copy (data),
-                          (GDestroyNotify)snapshot_async_data_free);
+  } else {
+    ephy_snapshot_service_take_from_webview (task);
   }
-
-  ephy_snapshot_service_take_from_webview (task);
 }
 
 void
@@ -626,6 +635,8 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
   path = ephy_snapshot_service_lookup_cached_snapshot_path (service, uri);
 
   if (path) {
+    take_fresh_snapshot_in_background_if_stale (service,
+                                                snapshot_async_data_new (service, NULL, web_view, mtime, uri));
     g_task_return_pointer (task, g_strdup (path), g_free);
     g_object_unref (task);
   } else {
