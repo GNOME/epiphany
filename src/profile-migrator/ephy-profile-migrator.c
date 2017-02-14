@@ -43,6 +43,7 @@
 #include "ephy-uri-tester-shared.h"
 #include "ephy-web-app-utils.h"
 
+#include <errno.h>
 #include <fcntl.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -663,32 +664,24 @@ migrate_bookmarks (void)
   filename = g_build_filename (ephy_dot_dir (),
                                EPHY_BOOKMARKS_FILE,
                                NULL);
-
-  if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
-    g_free (filename);
-    return;
-  }
-
+  if (g_file_test (filename, G_FILE_TEST_EXISTS))
+    goto out;
   g_free (filename);
+
   filename = g_build_filename (ephy_dot_dir (),
                                "bookmarks.rdf",
                                NULL);
-
-  if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
-    g_free (filename);
-    return;
-  }
+  if (!g_file_test (filename, G_FILE_TEST_EXISTS))
+    goto out;
 
   doc = xmlParseFile (filename);
-  g_free (filename);
   if (doc == NULL) {
     g_warning ("Failed to re-import the bookmarks. All bookmarks lost!\n");
-    return;
+    goto out;
   }
 
   manager = ephy_bookmarks_manager_new ();
   root = xmlDocGetRootElement (doc);
-
   child = root->children;
 
   while (child != NULL) {
@@ -706,6 +699,19 @@ migrate_bookmarks (void)
 
   xmlFreeDoc (doc);
   g_object_unref (manager);
+
+  /* Remove old bookmarks files */
+  if (g_unlink (filename) != 0)
+    g_warning ("Failed to delete %s: %s", filename, g_strerror (errno));
+  g_free (filename);
+
+  filename = g_build_filename (ephy_dot_dir (),
+                               "ephy-bookmarks.xml",
+                               NULL);
+  if (g_unlink (filename) != 0)
+    g_warning ("Failed to delete %s: %s", filename, g_strerror (errno));
+out:
+  g_free (filename);
 }
 
 static void
