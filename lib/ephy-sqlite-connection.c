@@ -106,7 +106,11 @@ ephy_sqlite_connection_execute (EphySQLiteConnection *self, const char *sql, GEr
     return FALSE;
   }
 
-  return sqlite3_exec (self->database, sql, NULL, NULL, NULL) == SQLITE_OK;
+  if (sqlite3_exec (self->database, sql, NULL, NULL, NULL) != SQLITE_OK) {
+    ephy_sqlite_connection_get_error (self, error);
+    return FALSE;
+  }
+  return TRUE;
 }
 
 EphySQLiteStatement *
