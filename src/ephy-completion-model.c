@@ -429,10 +429,9 @@ query_completed_cb (EphyHistoryService *service,
     url = ephy_bookmark_get_url (bookmark);
     title = ephy_bookmark_get_title (bookmark);
 
-    if (!ephy_bookmark_is_smart (bookmark) &&
-        should_add_bookmark_to_model (model, user_data->search_string, title, url)) {
+    if (should_add_bookmark_to_model (model, user_data->search_string,
+                                      title, url))
       list = add_to_potential_rows (list, title, url, NULL, 0, TRUE, FALSE);
-    }
   }
 
   /* History */

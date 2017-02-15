@@ -27,6 +27,13 @@
 #include "ephy-settings.h"
 #include "ephy-prefs.h"
 
+enum {
+  SEARCH_ENGINES_CHANGED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 struct _EphySearchEngineManager
 {
   GObject parent_instance;
@@ -61,6 +68,16 @@ ephy_search_engine_info_new (const char *address,
 }
 
 static void
+search_engines_changed_cb (GSettings *settings,
+                           char      *key,
+                           gpointer   user_data)
+{
+
+  g_signal_emit (EPHY_SEARCH_ENGINE_MANAGER (user_data),
+                 signals[SEARCH_ENGINES_CHANGED], 0);
+}
+
+static void
 ephy_search_engine_manager_init (EphySearchEngineManager *manager)
 {
   const char *address;
@@ -81,6 +98,10 @@ ephy_search_engine_manager_init (EphySearchEngineManager *manager)
                          ephy_search_engine_info_new (address,
                                                       bang));
   }
+
+  g_signal_connect (EPHY_SETTINGS_MAIN,
+                    "changed::search-engines",
+                    G_CALLBACK (search_engines_changed_cb), manager);
 }
 
 static void
@@ -99,6 +120,13 @@ ephy_search_engine_manager_class_init (EphySearchEngineManagerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ephy_search_engine_manager_dispose;
+
+  signals[SEARCH_ENGINES_CHANGED] = g_signal_new ("changed",
+                                                  EPHY_TYPE_SEARCH_ENGINE_MANAGER,
+                                                  G_SIGNAL_RUN_LAST,
+                                                  0,
+                                                  NULL, NULL, NULL,
+                                                  G_TYPE_NONE, 0);
 }
 
 EphySearchEngineManager *

@@ -22,19 +22,16 @@
 #include "config.h"
 #include "ephy-location-controller.h"
 
-#include "ephy-bookmark.h"
-#include "ephy-bookmarks-list-model.h"
-#include "ephy-bookmarks-manager.h"
+#include "ephy-widgets-type-builtins.h"
 #include "ephy-completion-model.h"
 #include "ephy-debug.h"
-#include "ephy-dnd.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
+#include "ephy-dnd.h"
 #include "ephy-shell.h"
 #include "ephy-title-widget.h"
-#include "ephy-widgets-type-builtins.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -52,12 +49,11 @@ struct _EphyLocationController {
 
   EphyWindow *window;
   EphyTitleWidget *title_widget;
-  EphyBookmarksManager *bookmarks_manager;
-  EphyBookmarksListModel *list_model;
-  GSequence *smart_bookmarks;
   char *address;
   guint editable : 1;
   gboolean sync_address_is_blocked;
+  EphySearchEngineManager *search_engine_manager;
+  guint num_search_engines_actions;
 };
 
 static void ephy_location_controller_finalize (GObject *object);
@@ -89,35 +85,6 @@ match_func (GtkEntryCompletion *completion,
 {
   /* We want every row in the model to show up. */
   return TRUE;
-}
-
-static void
-action_activated_cb (GtkEntryCompletion     *completion,
-                     int                     index,
-                     EphyLocationController *controller)
-{
-  GtkWidget *entry;
-  char *content;
-  char *url;
-  GSequenceIter *iter;
-  EphyBookmark *bookmark;
-
-  entry = gtk_entry_completion_get_entry (completion);
-  content = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-
-  if (content == NULL)
-    return;
-
-  iter = g_sequence_get_iter_at_pos (controller->smart_bookmarks, index);
-  g_assert (!g_sequence_iter_is_end (iter));
-  bookmark = g_sequence_get (iter);
-  url = ephy_bookmark_resolve_smart_url (bookmark, content);
-
-  ephy_link_open (EPHY_LINK (controller), url, NULL,
-                  ephy_link_flags_from_current_event () | EPHY_LINK_TYPED);
-
-  g_free (content);
-  g_free (url);
 }
 
 static void
@@ -183,11 +150,9 @@ entry_activate_cb (GtkEntry               *entry,
   }
 
   content = gtk_entry_get_text (entry);
-  if (content == NULL || content[0] == '\0')
-    return;
+  if (content == NULL || content[0] == '\0') return;
 
   address = g_strdup (content);
-
   effective_address = ephy_embed_utils_normalize_or_autosearch_address (g_strstrip (address));
   g_free (address);
 #if 0
@@ -279,75 +244,6 @@ get_title_cb (EphyLocationEntry      *entry,
   return g_strdup (ephy_embed_get_title (embed));
 }
 
-static void
-remove_completion_actions (EphyLocationController *controller,
-                           EphyLocationEntry      *lentry)
-{
-  GtkEntryCompletion *completion;
-  gint num_actions;
-
-  completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
-  num_actions = g_sequence_get_length (controller->smart_bookmarks);
-
-  for (int i = 0; i < num_actions; i++)
-    gtk_entry_completion_delete_action (completion, 0);
-
-  g_signal_handlers_disconnect_by_func (completion,
-                                        G_CALLBACK (action_activated_cb),
-                                        controller);
-}
-
-static void
-refresh_smart_bookmarks (EphyLocationController *controller)
-{
-  if (controller->smart_bookmarks != NULL)
-    g_sequence_free (controller->smart_bookmarks);
-
-  controller->smart_bookmarks = ephy_bookmarks_manager_get_smart_bookmarks (controller->bookmarks_manager);
-}
-
-static void
-add_completion_actions (EphyLocationController *controller,
-                        EphyLocationEntry      *lentry)
-{
-  GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
-  GSequenceIter *iter;
-  int i = 0;
-
-  for (iter = g_sequence_get_begin_iter (controller->smart_bookmarks);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter), i++) {
-    EphyBookmark *bookmark;
-    const char *title;
-
-    bookmark = g_sequence_get (iter);
-    title = ephy_bookmark_get_title (bookmark);
-    gtk_entry_completion_insert_action_text (completion, i, title);
-  }
-
-  g_signal_connect (completion, "action_activated",
-                    G_CALLBACK (action_activated_cb), controller);
-}
-
-static void
-update_actions_list (EphyLocationController *controller)
-{
-  g_assert (EPHY_IS_LOCATION_ENTRY (controller->title_widget));
-
-  remove_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
-  refresh_smart_bookmarks (controller);
-  add_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
-}
-
-static void
-bookmark_modified_cb (EphyBookmarksManager   *manager,
-                      EphyBookmark           *bookmark,
-                      EphyLocationController *controller)
-{
-  if (ephy_bookmark_is_smart (bookmark))
-    update_actions_list (controller);
-}
-
 static gboolean
 focus_in_event_cb (GtkWidget              *entry,
                    GdkEventFocus          *event,
@@ -389,6 +285,80 @@ switch_page_cb (GtkNotebook            *notebook,
     controller->sync_address_is_blocked = FALSE;
     g_signal_handlers_unblock_by_func (controller, G_CALLBACK (sync_address), controller->title_widget);
   }
+}
+
+static void
+action_activated_cb (GtkEntryCompletion     *completion,
+                     int                     index,
+                     EphyLocationController *controller)
+{
+  GtkWidget *entry;
+  char *content;
+  char *url;
+  char **engine_names;
+
+  entry = gtk_entry_completion_get_entry (completion);
+  content = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+  if (content == NULL)
+    return;
+
+  engine_names = ephy_search_engine_manager_get_names (controller->search_engine_manager);
+  url = ephy_search_engine_manager_build_search_address (controller->search_engine_manager,
+                                                         engine_names[index],
+                                                         content);
+
+  g_strfreev (engine_names);
+
+  ephy_link_open (EPHY_LINK (controller), url, NULL,
+                  ephy_link_flags_from_current_event ());
+  g_free (content);
+  g_free (url);
+}
+
+static void
+fill_entry_completion_with_actions (GtkEntryCompletion     *completion,
+                                    EphyLocationController *controller)
+{
+  char **engine_names;
+
+  engine_names = ephy_search_engine_manager_get_names (controller->search_engine_manager);
+
+  controller->num_search_engines_actions = 0;
+
+  for (guint i = 0; engine_names[i] != NULL; i++) {
+    gtk_entry_completion_insert_action_text (completion, i, engine_names[i]);
+    controller->num_search_engines_actions++;
+  }
+
+  g_strfreev (engine_names);
+}
+
+static void
+add_completion_actions (EphyLocationController *controller,
+                        EphyLocationEntry      *lentry)
+{
+  GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
+
+  fill_entry_completion_with_actions (completion, controller);
+  g_signal_connect (completion, "action_activated",
+                    G_CALLBACK (action_activated_cb), controller);
+}
+
+static void
+search_engines_changed_cb (EphySearchEngineManager *manager,
+                           gpointer  data)
+{
+  EphyLocationController *controller;
+  GtkEntryCompletion *completion;
+
+  controller = EPHY_LOCATION_CONTROLLER (data);
+  completion = gtk_entry_get_completion (GTK_ENTRY (controller->title_widget));
+
+  for (guint i = 0; i < controller->num_search_engines_actions; i++) {
+    gtk_entry_completion_delete_action (completion, 0);
+  }
+
+  fill_entry_completion_with_actions (completion, controller);
 }
 
 static void
@@ -434,17 +404,10 @@ ephy_location_controller_constructed (GObject *object)
                                       controller->title_widget,
                                       NULL);
 
-  refresh_smart_bookmarks (controller);
   add_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
 
-  g_signal_connect_object (controller->bookmarks_manager, "bookmark-added",
-                           G_CALLBACK (bookmark_modified_cb), controller, 0);
-  g_signal_connect_object (controller->bookmarks_manager, "bookmark-removed",
-                           G_CALLBACK (bookmark_modified_cb), controller, 0);
-  g_signal_connect_object (controller->bookmarks_manager, "bookmark-title-changed",
-                           G_CALLBACK (bookmark_modified_cb), controller, 0);
-  g_signal_connect_object (controller->bookmarks_manager, "bookmark-url-changed",
-                           G_CALLBACK (bookmark_modified_cb), controller, 0);
+  g_signal_connect (controller->search_engine_manager, "changed",
+                    G_CALLBACK (search_engines_changed_cb), controller);
 
   g_object_bind_property (controller, "editable",
                           controller->title_widget, "editable",
@@ -605,10 +568,13 @@ ephy_location_controller_class_init (EphyLocationControllerClass *class)
 static void
 ephy_location_controller_init (EphyLocationController *controller)
 {
+  EphyEmbedShell *shell;
+
   controller->address = g_strdup ("");
   controller->editable = TRUE;
-  controller->bookmarks_manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   controller->sync_address_is_blocked = FALSE;
+  shell = ephy_embed_shell_get_default ();
+  controller->search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
 }
 
 static void
@@ -616,7 +582,6 @@ ephy_location_controller_finalize (GObject *object)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
 
-  g_sequence_free (controller->smart_bookmarks);
   g_free (controller->address);
 
   G_OBJECT_CLASS (ephy_location_controller_parent_class)->finalize (object);

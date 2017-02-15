@@ -615,38 +615,3 @@ out:
   return bookmark;
 }
 #endif
-
-gboolean
-ephy_bookmark_is_smart (EphyBookmark *bookmark)
-{
-  g_return_val_if_fail (EPHY_IS_BOOKMARK (bookmark), FALSE);
-
-  return !!strstr (bookmark->url, "%s");
-}
-
-char *
-ephy_bookmark_resolve_smart_url (EphyBookmark *bookmark,
-                                 const char   *search_term)
-{
-  GString *url;
-  const char *original_url;
-  char *result;
-  gssize pos;
-
-  g_return_val_if_fail (EPHY_IS_BOOKMARK (bookmark), FALSE);
-  g_return_val_if_fail (ephy_bookmark_is_smart (bookmark), FALSE);
-  g_return_val_if_fail (search_term != NULL, FALSE);
-  g_return_val_if_fail (search_term[0] != '\0', FALSE);
-
-  original_url = ephy_bookmark_get_url (bookmark);
-  url = g_string_new (original_url);
-  pos = (gssize)(strstr (original_url, "%s") - original_url);
-  g_assert (pos > 0);
-
-  g_string_erase (url, pos, 2);
-  g_string_insert (url, pos, search_term);
-
-  result = url->str;
-  g_string_free (url, FALSE);
-  return result;
-}

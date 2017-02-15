@@ -40,7 +40,10 @@ struct _EphyBookmarksManager {
   gchar      *gvdb_filename;
 };
 
-G_DEFINE_TYPE (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJECT)
+static void list_model_iface_init     (GListModelInterface *iface);
+
+G_DEFINE_TYPE_EXTENDED (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
   BOOKMARK_ADDED,
@@ -185,6 +188,40 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
   ephy_bookmarks_manager_load_from_file (self);
 }
 
+static GType
+ephy_bookmarks_manager_list_model_get_item_type (GListModel *model)
+{
+  return EPHY_TYPE_BOOKMARK;
+}
+
+static guint
+ephy_bookmarks_manager_list_model_get_n_items (GListModel *model)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
+
+  return g_sequence_get_length (self->bookmarks);
+}
+
+static gpointer
+ephy_bookmarks_manager_list_model_get_item (GListModel *model,
+                                            guint       position)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
+  GSequenceIter *iter;
+
+  iter = g_sequence_get_iter_at_pos (self->bookmarks, position);
+
+  return g_object_ref (g_sequence_get (iter));
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item_type = ephy_bookmarks_manager_list_model_get_item_type;
+  iface->get_n_items = ephy_bookmarks_manager_list_model_get_n_items;
+  iface->get_item = ephy_bookmarks_manager_list_model_get_item;
+}
+
 static void
 bookmark_title_changed_cb (EphyBookmark         *bookmark,
                            GParamSpec           *pspec,
@@ -238,12 +275,23 @@ ephy_bookmarks_manager_watch_bookmark (EphyBookmarksManager *self,
                            G_CALLBACK (bookmark_tag_removed_cb), self, 0);
 }
 
+static void
+ephy_bookmarks_manager_unwatch_bookmark (EphyBookmarksManager *self,
+                                         EphyBookmark         *bookmark)
+{
+  g_signal_handlers_disconnect_by_func (bookmark, bookmark_title_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (bookmark, bookmark_url_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (bookmark, bookmark_tag_added_cb, self);
+  g_signal_handlers_disconnect_by_func (bookmark, bookmark_tag_removed_cb, self);
+}
+
 void
 ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                      EphyBookmark         *bookmark)
 {
   GSequenceIter *iter;
   GSequenceIter *prev_iter;
+  gint position;
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
@@ -257,6 +305,11 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
   if (g_sequence_iter_is_end (prev_iter)
       || ephy_bookmark_get_time_added (g_sequence_get (prev_iter)) != ephy_bookmark_get_time_added (bookmark)) {
     g_sequence_insert_before (iter, bookmark);
+
+    /* Update list */
+    position = g_sequence_iter_get_position (iter);
+    g_list_model_items_changed (G_LIST_MODEL (self), position - 1, 0, 1);
+
     g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
 
     ephy_bookmarks_manager_save_to_file_async (self, NULL,
@@ -304,6 +357,7 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
                                         EphyBookmark         *bookmark)
 {
   GSequenceIter *iter;
+  gint position;
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
@@ -315,13 +369,16 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
                    ephy_bookmark_get_url (bookmark)) == 0)
       break;
   }
+  g_assert (!g_sequence_iter_is_end (iter));
 
   /* Ensure the bookmark is removed from our list before the signal is emitted,
    * because this is the bookmark REMOVED signal after all, so callers expect
    * it to be already gone.
    */
   g_object_ref (bookmark);
+  position = g_sequence_iter_get_position (iter);
   g_sequence_remove (iter);
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
   g_signal_emit (self, signals[BOOKMARK_REMOVED], 0, bookmark);
   g_object_unref (bookmark);
 
@@ -329,10 +386,7 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
                                              (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                              NULL);
 
-  g_signal_handlers_disconnect_by_func (bookmark, bookmark_title_changed_cb, self);
-  g_signal_handlers_disconnect_by_func (bookmark, bookmark_url_changed_cb, self);
-  g_signal_handlers_disconnect_by_func (bookmark, bookmark_tag_added_cb, self);
-  g_signal_handlers_disconnect_by_func (bookmark, bookmark_tag_removed_cb, self);
+  ephy_bookmarks_manager_unwatch_bookmark (self, bookmark);
 }
 
 EphyBookmark *
@@ -486,39 +540,6 @@ ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
                                   g_object_ref (bookmark),
                                   (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
                                   NULL);
-    }
-  }
-
-  return bookmarks;
-}
-
-static int
-compare_smart_bookmarks (EphyBookmark *a,
-                         EphyBookmark *b)
-{
-  return g_utf8_collate (ephy_bookmark_get_title (a), ephy_bookmark_get_title (b));
-}
-
-GSequence *
-ephy_bookmarks_manager_get_smart_bookmarks (EphyBookmarksManager *self)
-{
-  GSequence *bookmarks;
-  GSequenceIter *iter;
-
-  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self), NULL);
-
-  bookmarks = g_sequence_new (g_object_unref);
-
-  for (iter = g_sequence_get_begin_iter (self->bookmarks);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter)) {
-    EphyBookmark *bookmark = g_sequence_get (iter);
-
-    if (ephy_bookmark_is_smart (bookmark)) {
-      g_sequence_insert_sorted (bookmarks,
-                                g_object_ref (bookmark),
-                                (GCompareDataFunc)compare_smart_bookmarks,
-                                NULL);
     }
   }
 

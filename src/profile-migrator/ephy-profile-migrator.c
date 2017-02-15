@@ -38,6 +38,7 @@
 #include "ephy-history-service.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
+#include "ephy-search-engine-manager.h"
 #include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
 #include "ephy-uri-tester-shared.h"
@@ -912,6 +913,62 @@ migrate_settings (void)
 }
 
 static void
+migrate_search_engines (void)
+{
+  EphyBookmarksManager *bookmarks_manager;
+  EphySearchEngineManager *search_engine_manager;
+  GSequence *bookmarks;
+  GSequenceIter *iter;
+  GList *smart_bookmarks = NULL;
+  const char *address;
+  const char *title;
+  char *default_search_engine_address;
+  const char *default_search_engine_name = _("Search the Web");
+
+  bookmarks_manager = ephy_bookmarks_manager_new ();
+  search_engine_manager = ephy_search_engine_manager_new ();
+
+  default_search_engine_address = g_settings_get_string (EPHY_SETTINGS_MAIN,
+                                                         EPHY_PREFS_KEYWORD_SEARCH_URL);
+  if (default_search_engine_address != NULL) {
+      ephy_search_engine_manager_add_engine (search_engine_manager,
+                                             default_search_engine_name,
+                                             default_search_engine_address,
+                                             "");
+      ephy_search_engine_manager_set_default_engine (search_engine_manager,
+                                                     default_search_engine_name);
+      g_free (default_search_engine_address);
+  }
+
+  bookmarks = ephy_bookmarks_manager_get_bookmarks (bookmarks_manager);
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter)) {
+    EphyBookmark *bookmark;
+
+    bookmark = g_sequence_get (iter);
+    address = ephy_bookmark_get_url (bookmark);
+
+    if (strstr (address, "%s") != NULL) {
+      title = ephy_bookmark_get_title (bookmark);
+      ephy_search_engine_manager_add_engine (search_engine_manager,
+                                             title,
+                                             address,
+                                             "");
+      smart_bookmarks = g_list_append (smart_bookmarks, bookmark);
+   }
+  }
+
+  for (GList *l = smart_bookmarks; l != NULL; l = l->next)
+    ephy_bookmarks_manager_remove_bookmark (bookmarks_manager,
+                                            (EphyBookmark *)(l->data));
+
+  g_list_free (smart_bookmarks);
+  g_object_unref (bookmarks_manager);
+  g_object_unref (search_engine_manager);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -941,6 +998,7 @@ const EphyProfileMigrator migrators[] = {
   /* 14 */ migrate_initial_state,
   /* 15 */ migrate_permissions,
   /* 16 */ migrate_settings,
+  /* 17 */ migrate_search_engines,
 };
 
 static gboolean
