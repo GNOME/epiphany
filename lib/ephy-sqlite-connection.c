@@ -114,8 +114,12 @@ ephy_sqlite_connection_execute (EphySQLiteConnection *self, const char *sql, GEr
     set_error_from_string ("Connection not open.", error);
     return FALSE;
   }
-  
-  return sqlite3_exec (priv->database, sql, NULL, NULL, NULL) == SQLITE_OK;
+
+  if (sqlite3_exec (priv->database, sql, NULL, NULL, NULL) != SQLITE_OK) {
+    ephy_sqlite_connection_get_error (self, error);
+    return FALSE;
+  }
+  return TRUE;
 }
 
 EphySQLiteStatement *
