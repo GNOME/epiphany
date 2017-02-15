@@ -75,12 +75,12 @@ download_added_cb (EphyDownloadsPopover *popover,
   GtkWidget *widget;
 
   widget = ephy_download_widget_new (download);
-  g_signal_connect_swapped (download, "completed",
-                            G_CALLBACK (download_completed_cb),
-                            popover);
-  g_signal_connect_swapped (download, "error",
-                            G_CALLBACK (download_failed_cb),
-                            popover);
+  g_signal_connect_object (download, "completed",
+                           G_CALLBACK (download_completed_cb),
+                           popover, G_CONNECT_SWAPPED);
+  g_signal_connect_object (download, "error",
+                           G_CALLBACK (download_failed_cb),
+                           popover, G_CONNECT_SWAPPED);
   gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), widget);
   gtk_widget_show (widget);
 }
@@ -192,12 +192,12 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
     EphyDownload *download = (EphyDownload *)l->data;
     GtkWidget *widget;
 
-    g_signal_connect_swapped (download, "completed",
-                              G_CALLBACK (download_completed_cb),
-                              popover);
-    g_signal_connect_swapped (download, "error",
-                              G_CALLBACK (download_failed_cb),
-                              popover);
+    g_signal_connect_object (download, "completed",
+                             G_CALLBACK (download_completed_cb),
+                             popover, G_CONNECT_SWAPPED);
+    g_signal_connect_object (download, "error",
+                             G_CALLBACK (download_failed_cb),
+                             popover, G_CONNECT_SWAPPED);
 
     widget = ephy_download_widget_new (download);
     gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), widget);
