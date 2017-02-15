@@ -49,7 +49,8 @@ G_DEFINE_TYPE (EphyDownloadsManager, ephy_downloads_manager, G_TYPE_OBJECT)
 static void
 ephy_downloads_manager_acquire_session_inhibitor (EphyDownloadsManager *manager)
 {
-  if (++manager->inhibitors > 1)
+  manager->inhibitors++;
+  if (manager->inhibitors > 1)
     return;
 
   g_assert (manager->inhibitor_cookie == 0);
@@ -65,7 +66,10 @@ ephy_downloads_manager_acquire_session_inhibitor (EphyDownloadsManager *manager)
 static void
 ephy_downloads_manager_release_session_inhibitor (EphyDownloadsManager *manager)
 {
-  if (--manager->inhibitors > 0)
+  g_assert (manager->inhibitors > 0);
+  manager->inhibitors--;
+
+  if (manager->inhibitors > 0)
     return;
 
   if (manager->inhibitor_cookie > 0) {
