@@ -33,6 +33,7 @@
 #include "ephy-gui.h"
 #include "ephy-langs.h"
 #include "ephy-prefs.h"
+#include "ephy-search-engine-dialog.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
@@ -76,7 +77,6 @@ struct _PrefsDialog {
   GtkWidget *download_button_label;
   GtkWidget *automatic_downloads_checkbutton;
   GtkWidget *search_box;
-  GtkWidget *search_engine_combo;
   GtkWidget *session_box;
   GtkWidget *restore_session_checkbutton;
   GtkWidget *popups_allow_checkbutton;
@@ -148,10 +148,9 @@ typedef struct {
 #endif
 
 enum {
-  SEARCH_ENGINE_COL_NAME,
-  SEARCH_ENGINE_COL_STOCK_URL,
-  SEARCH_ENGINE_COL_URL,
-  SEARCH_ENGINE_NUM_COLS
+  COL_TITLE_ELIDED,
+  COL_ENCODING,
+  NUM_COLS
 };
 
 G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
@@ -576,6 +575,19 @@ on_manage_passwords_button_clicked (GtkWidget   *button,
 }
 
 static void
+on_search_engine_dialog_button_clicked (GtkWidget   *button,
+                                        PrefsDialog *dialog)
+{
+  GtkWindow *search_engine_dialog;
+
+  search_engine_dialog = GTK_WINDOW (ephy_search_engine_dialog_new ());
+
+  gtk_window_set_transient_for (search_engine_dialog, GTK_WINDOW (dialog));
+  gtk_window_set_modal (search_engine_dialog, TRUE);
+  gtk_window_present (search_engine_dialog);
+}
+
+static void
 prefs_dialog_class_init (PrefsDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -593,7 +605,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_entry);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, automatic_downloads_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_engine_combo);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, session_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, restore_session_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, popups_allow_checkbutton);
@@ -640,6 +651,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
 }
 
 static void
@@ -1355,116 +1367,6 @@ cookies_set_mapping (const GValue       *value,
   return variant;
 }
 
-static void
-search_engine_combo_add_default_engines (GtkListStore *store)
-{
-  guint i;
-  const char *default_engines[][3] = {       /* Search engine option in the preferences dialog */
-    { N_("DuckDuckGo"),
-      "https://duckduckgo.com/?q=%s&t=epiphany",
-      /* For the preferences dialog. Must exactly match the URL
-      * you chose in the gschema, but with & instead of &amp;
-      * If the match is not exact, there will be a spurious, ugly
-      * entry in the preferences combo, so please test this. */
-      N_("https://duckduckgo.com/?q=%s&t=epiphany") },
-    /* Search engine option in the preferences dialog */
-    { N_("Google"),
-      "https://google.com/search?q=%s",
-      /* For the preferences dialog. Consider a regional variant, like google.co.uk */
-      N_("https://google.com/search?q=%s") },
-    /* Search engine option in the preferences dialog */
-    { N_("Bing"),
-      "https://www.bing.com/search?q=%s",
-      /* For the preferences dialog. Consider a regional variant, like uk.bing.com */
-      N_("https://www.bing.com/search?q=%s") }
-  };
-
-  for (i = 0; i < G_N_ELEMENTS (default_engines); ++i) {
-    gtk_list_store_insert_with_values (store, NULL, -1,
-                                       SEARCH_ENGINE_COL_NAME,
-                                       _(default_engines[i][0]),
-                                       SEARCH_ENGINE_COL_STOCK_URL,
-                                       default_engines[i][1],
-                                       SEARCH_ENGINE_COL_URL,
-                                       _(default_engines[i][2]),
-                                       -1);
-  }
-}
-
-/* Has the user manually set the engine to something not in the combo?
- * If so, add that URL as an extra item in the combo. */
-static void
-search_engine_combo_add_current_engine (GtkListStore *store)
-{
-  GtkTreeIter iter;
-  char *original_url;
-  gboolean in_combo = FALSE;
-  gboolean has_next = FALSE;
-
-  original_url = g_settings_get_string (EPHY_SETTINGS_MAIN,
-                                        EPHY_PREFS_KEYWORD_SEARCH_URL);
-  if (!original_url)
-    return;
-
-  has_next = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
-
-  while (!in_combo && has_next) {
-    char *stock_url, *url;
-
-    gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
-                        SEARCH_ENGINE_COL_STOCK_URL, &stock_url,
-                        SEARCH_ENGINE_COL_URL, &url, -1);
-
-    if (strcmp (original_url, stock_url) == 0 ||
-        strcmp (original_url, url) == 0)
-      in_combo = TRUE;
-
-    g_free (stock_url);
-    g_free (url);
-    has_next = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
-  }
-
-  if (!in_combo)
-    gtk_list_store_insert_with_values (store, NULL, -1,
-                                       SEARCH_ENGINE_COL_NAME, original_url,
-                                       SEARCH_ENGINE_COL_STOCK_URL, original_url,
-                                       SEARCH_ENGINE_COL_URL, original_url,
-                                       -1);
-
-  g_free (original_url);
-}
-
-static void
-create_search_engine_combo (GtkComboBox *combo)
-{
-  GtkCellRenderer *renderer;
-  GtkListStore *store;
-
-  store = GTK_LIST_STORE (gtk_combo_box_get_model (combo));
-
-  search_engine_combo_add_default_engines (store);
-  search_engine_combo_add_current_engine (store);
-
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store), SEARCH_ENGINE_COL_NAME,
-                                        GTK_SORT_ASCENDING);
-  gtk_combo_box_set_model (combo, GTK_TREE_MODEL (store));
-
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-                                  "text", SEARCH_ENGINE_COL_NAME,
-                                  NULL);
-
-  g_settings_bind_with_mapping (EPHY_SETTINGS_MAIN,
-                                EPHY_PREFS_KEYWORD_SEARCH_URL,
-                                combo, "active",
-                                G_SETTINGS_BIND_DEFAULT,
-                                combo_get_mapping,
-                                combo_set_mapping,
-                                combo,
-                                NULL);
-}
-
 static gboolean
 new_tab_homepage_get_mapping (GValue   *value,
                               GVariant *variant,
@@ -1686,7 +1588,6 @@ setup_general_page (PrefsDialog *dialog)
                     dialog);
 
   create_download_path_button (dialog);
-  create_search_engine_combo (GTK_COMBO_BOX (dialog->search_engine_combo));
 }
 
 static void
