@@ -22,6 +22,7 @@
 #include "ephy-search-provider.h"
 
 #include "ephy-completion-model.h"
+#include "ephy-embed-shell.h"
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
@@ -40,7 +41,6 @@ struct _EphySearchProvider
   GCancellable             *cancellable;
 
   GSettings                *settings;
-  EphyHistoryService       *history_service;
   EphyBookmarks            *bookmarks;
   EphyCompletionModel      *model;
 };
@@ -346,6 +346,7 @@ static void
 ephy_search_provider_init (EphySearchProvider *self)
 {
   char *filename;
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
   g_application_set_flags (G_APPLICATION (self), G_APPLICATION_IS_SERVICE);
 
@@ -365,9 +366,10 @@ ephy_search_provider_init (EphySearchProvider *self)
   self->settings = g_settings_new (EPHY_PREFS_SCHEMA);
 
   filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
-  self->history_service = ephy_history_service_new (filename, TRUE);
   self->bookmarks = ephy_bookmarks_new ();
-  self->model = ephy_completion_model_new (self->history_service, self->bookmarks, FALSE);
+  self->model = ephy_completion_model_new (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (shell)),
+                                           self->bookmarks,
+                                           FALSE);
   g_free (filename);
 
   self->cancellable = g_cancellable_new ();
@@ -426,7 +428,6 @@ ephy_search_provider_dispose (GObject *object)
   g_clear_object (&self->settings);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->model);
-  g_clear_object (&self->history_service);
   g_clear_object (&self->bookmarks);
 
   G_OBJECT_CLASS (ephy_search_provider_parent_class)->dispose (object);

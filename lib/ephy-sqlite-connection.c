@@ -19,15 +19,26 @@
 #include "config.h"
 #include "ephy-sqlite-connection.h"
 
+#include "ephy-lib-type-builtins.h"
+
 #include <sqlite3.h>
 
 struct _EphySQLiteConnectionPrivate {
   sqlite3 *database;
+  EphySQLiteConnectionMode mode;
 };
 
 #define EPHY_SQLITE_CONNECTION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), EPHY_TYPE_SQLITE_CONNECTION, EphySQLiteConnectionPrivate))
 
 G_DEFINE_TYPE (EphySQLiteConnection, ephy_sqlite_connection, G_TYPE_OBJECT);
+
+enum {
+  PROP_0,
+  PROP_MODE,
+  LAST_PROP
+};
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 static void
 ephy_sqlite_connection_finalize (GObject *self)
@@ -37,11 +48,42 @@ ephy_sqlite_connection_finalize (GObject *self)
 }
 
 static void
+ephy_sqlite_connection_set_property (GObject      *object,
+                                     guint         property_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  EphySQLiteConnection *self = EPHY_SQLITE_CONNECTION (object);
+
+  switch (property_id) {
+    case PROP_MODE:
+      self->priv->mode = g_value_get_enum (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
+      break;
+  }
+}
+
+static void
 ephy_sqlite_connection_class_init (EphySQLiteConnectionClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  object_class->finalize = ephy_sqlite_connection_finalize;
-  g_type_class_add_private (object_class, sizeof (EphySQLiteConnectionPrivate));
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = ephy_sqlite_connection_finalize;
+  gobject_class->set_property = ephy_sqlite_connection_set_property;
+
+  obj_properties[PROP_MODE] =
+    g_param_spec_enum ("mode",
+                       "SQLite connection mode",
+                       "Whether the SQLite connection is read-only or writable",
+                       EPHY_TYPE_SQ_LITE_CONNECTION_MODE,
+                       EPHY_SQLITE_CONNECTION_MODE_READWRITE,
+                       G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
+
+  g_type_class_add_private (gobject_class, sizeof (EphySQLiteConnectionPrivate));
 }
 
 static void
@@ -51,7 +93,7 @@ ephy_sqlite_connection_init (EphySQLiteConnection *self)
   self->priv->database = NULL;
 }
 
-static GQuark get_ephy_sqlite_quark (void)
+GQuark ephy_sqlite_error_quark (void)
 {
   return g_quark_from_static_string ("ephy-sqlite");
 }
@@ -60,13 +102,15 @@ static void
 set_error_from_string (const char* string, GError **error)
 {
   if (error)
-    *error = g_error_new (get_ephy_sqlite_quark (), 0, string, 0);
+    *error = g_error_new_literal (ephy_sqlite_error_quark (), 0, string);
 }
 
 EphySQLiteConnection *
-ephy_sqlite_connection_new ()
+ephy_sqlite_connection_new (EphySQLiteConnectionMode mode)
 {
-  return EPHY_SQLITE_CONNECTION (g_object_new (EPHY_TYPE_SQLITE_CONNECTION, NULL));
+  return EPHY_SQLITE_CONNECTION (g_object_new (EPHY_TYPE_SQLITE_CONNECTION,
+                                               "mode", mode,
+                                               NULL));
 }
 
 gboolean
@@ -78,8 +122,12 @@ ephy_sqlite_connection_open (EphySQLiteConnection *self, const gchar *filename, 
     set_error_from_string ("Connection already open.", error);
     return FALSE;
   }
-  
-  if (sqlite3_open (filename, &priv->database) != SQLITE_OK) {
+
+  if (sqlite3_open_v2 (filename,
+                       &priv->database,
+                       priv->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY ? SQLITE_OPEN_READONLY
+                                                                           : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
+                       NULL) != SQLITE_OK) {
     ephy_sqlite_connection_get_error (self, error);
     priv->database = NULL;
     return FALSE;
@@ -102,7 +150,7 @@ void
 ephy_sqlite_connection_get_error (EphySQLiteConnection *self, GError **error)
 {
   if (error)
-    *error = g_error_new (get_ephy_sqlite_quark (), 0, sqlite3_errmsg (self->priv->database), 0);
+    *error = g_error_new_literal (ephy_sqlite_error_quark (), sqlite3_errcode (self->priv->database), sqlite3_errmsg (self->priv->database));
 }
 
 gboolean
@@ -153,18 +201,24 @@ ephy_sqlite_connection_get_last_insert_id (EphySQLiteConnection *self)
 gboolean
 ephy_sqlite_connection_begin_transaction (EphySQLiteConnection *self, GError **error)
 {
+  if (self->priv->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
+    return TRUE;
   return ephy_sqlite_connection_execute (self, "BEGIN TRANSACTION", error);
 }
 
 gboolean
 ephy_sqlite_connection_rollback_transaction (EphySQLiteConnection *self, GError **error)
 {
+  if (self->priv->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
+    return TRUE;
   return ephy_sqlite_connection_execute (self, "ROLLBACK", error);
 }
 
 gboolean
 ephy_sqlite_connection_commit_transaction (EphySQLiteConnection *self, GError **error)
 {
+  if (self->priv->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
+    return TRUE;
   return ephy_sqlite_connection_execute (self, "COMMIT", error);
 }
 

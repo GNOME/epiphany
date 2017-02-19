@@ -23,7 +23,9 @@
 
 #include <glib-object.h>
 #include <gio/gio.h>
+
 #include "ephy-history-types.h"
+#include "ephy-sqlite-connection.h"
 
 G_BEGIN_DECLS
 
@@ -58,7 +60,7 @@ struct _EphyHistoryServiceClass {
 };
 
 GType                    ephy_history_service_get_type                (void);
-EphyHistoryService *     ephy_history_service_new                     (const char *history_filename, gboolean read_only);
+EphyHistoryService *     ephy_history_service_new                     (const char *history_filename, EphySQLiteConnectionMode mode);
 
 void                     ephy_history_service_add_visit               (EphyHistoryService *self, EphyHistoryPageVisit *visit, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_add_visits              (EphyHistoryService *self, GList *visits, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
