@@ -70,6 +70,9 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *self,
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
 
+  if (ephy_bookmark_is_smart (bookmark))
+    return;
+
   /* If the bookmark no longer has 0 tags, we remove it from the tags list box */
   if (g_sequence_get_length (ephy_bookmark_get_tags (bookmark)) == 1) {
     GList *children;
@@ -105,6 +108,9 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
 {
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
+
+  if (ephy_bookmark_is_smart (bookmark))
+    return;
 
   /* If the bookmark has 0 tags after removing one, we add it to the tags list
    * box */
