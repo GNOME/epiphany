@@ -21,13 +21,20 @@
 #include <glib-object.h>
 #include "ephy-sqlite-statement.h"
 
+#include <sqlite3.h>
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_SQLITE_CONNECTION (ephy_sqlite_connection_get_type ())
 
 G_DECLARE_FINAL_TYPE (EphySQLiteConnection, ephy_sqlite_connection, EPHY, SQLITE_CONNECTION, GObject)
 
-EphySQLiteConnection *  ephy_sqlite_connection_new                     (void);
+typedef enum {
+  EPHY_SQLITE_CONNECTION_MODE_READ_ONLY,
+  EPHY_SQLITE_CONNECTION_MODE_READWRITE
+} EphySQLiteConnectionMode;
+
+EphySQLiteConnection *  ephy_sqlite_connection_new                     (EphySQLiteConnectionMode mode);
 
 gboolean                ephy_sqlite_connection_open                    (EphySQLiteConnection *self, const gchar *filename, GError **error);
 void                    ephy_sqlite_connection_close                   (EphySQLiteConnection *self);
@@ -43,6 +50,10 @@ gboolean                ephy_sqlite_connection_rollback_transaction    (EphySQLi
 gboolean                ephy_sqlite_connection_commit_transaction      (EphySQLiteConnection *self, GError **error);
 
 gboolean                ephy_sqlite_connection_table_exists            (EphySQLiteConnection *self, const char *table_name);
+
+GQuark                  ephy_sqlite_error_quark                        (void);
+
+#define EPHY_SQLITE_ERROR ephy_sqlite_error_quark ()
 
 G_END_DECLS
 

@@ -27,29 +27,19 @@
 #include <gtk/gtk.h>
 
 static EphyHistoryService *
-ensure_empty_history (const char *filename, gboolean readonly)
+ensure_empty_history (const char *filename)
 {
   if (g_file_test (filename, G_FILE_TEST_IS_REGULAR))
     g_unlink (filename);
 
-  return ephy_history_service_new (filename, readonly);
+  return ephy_history_service_new (filename, EPHY_SQLITE_CONNECTION_MODE_READWRITE);
 }
 
 static void
 test_create_history_service (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
-
-  g_free (temporary_file);
-  g_object_unref (service);
-}
-
-static void
-test_create_readonly_history_service (void)
-{
-  gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, TRUE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
 
   g_free (temporary_file);
   g_object_unref (service);
@@ -69,7 +59,7 @@ static void
 test_create_history_service_and_destroy_later (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   g_free (temporary_file);
   g_timeout_add (100, (GSourceFunc)destroy_history_service_and_end_main_loop, service);
 
@@ -79,9 +69,12 @@ test_create_history_service_and_destroy_later (void)
 static void
 page_vist_created (EphyHistoryService *service, gboolean success, gpointer result_data, gpointer user_data)
 {
+  if (user_data != NULL) {
+    g_assert (EPHY_IS_HISTORY_SERVICE (user_data));
+    g_object_unref (user_data);
+  }
   g_object_unref (service);
   g_assert (result_data == NULL);
-  g_assert (user_data == NULL);
   g_assert (success);
   gtk_main_quit ();
 }
@@ -90,7 +83,7 @@ static void
 test_create_history_entry (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
 
   EphyHistoryPageVisit *visit = ephy_history_page_visit_new ("http://www.gnome.org", 0, EPHY_PAGE_VISIT_TYPED);
   ephy_history_service_add_visit (service, visit, NULL, page_vist_created, NULL);
@@ -99,6 +92,29 @@ test_create_history_entry (void)
 
   gtk_main ();
 }
+
+static void
+test_readonly_mode (void)
+{
+  gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
+  /* FIXME: This is racy, since we need to be sure the history thread of the
+   * first EphyHistoryService object has created the database before starting
+   * the history thread of the second EphyHistoryService object. This is a test
+   * bug, not an application bug.
+   */
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
+  EphyHistoryService *readonly_service = ephy_history_service_new (temporary_file, EPHY_SQLITE_CONNECTION_MODE_READ_ONLY);
+
+  /* Having the database open read-only should not break normal connections.
+   * https://bugzilla.gnome.org/show_bug.cgi?id=778649 */
+  EphyHistoryPageVisit *visit = ephy_history_page_visit_new ("http://www.gnome.org", 0, EPHY_PAGE_VISIT_TYPED);
+  ephy_history_service_add_visit (service, visit, NULL, page_vist_created, readonly_service);
+  ephy_history_page_visit_free (visit);
+  g_free (temporary_file);
+
+  gtk_main ();
+}
+
 
 static GList *
 create_test_page_visit_list (void)
@@ -163,7 +179,7 @@ static void
 test_create_history_entries (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
 
   GList *visits = create_test_page_visit_list ();
 
@@ -212,7 +228,7 @@ static void
 test_set_url_title_helper (gboolean test_results)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
 
   EphyHistoryPageVisit *visit = ephy_history_page_visit_new ("http://www.gnome.org", 0, EPHY_PAGE_VISIT_TYPED);
   ephy_history_service_add_visit (service, visit, NULL, set_url_title_visit_created, GINT_TO_POINTER (test_results));
@@ -246,7 +262,7 @@ static void
 test_set_url_title_url_not_existent (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   g_free (temporary_file);
 
   ephy_history_service_set_url_title (service, "http://www.gnome.org", "GNOME", NULL, set_url_title_url_not_existent, NULL);
@@ -288,7 +304,7 @@ static void
 test_get_url_helper (gboolean add_entry)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   g_free (temporary_file);
 
   if (add_entry == TRUE) {
@@ -385,7 +401,7 @@ static void
 test_complex_url_query (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   GList *visits;
 
   visits = create_visits_for_complex_tests ();
@@ -425,7 +441,7 @@ static void
 test_complex_url_query_with_time_range (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   GList *visits;
 
   visits = create_visits_for_complex_tests ();
@@ -474,7 +490,7 @@ static void
 test_clear (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  EphyHistoryService *service = ensure_empty_history (temporary_file, FALSE);
+  EphyHistoryService *service = ensure_empty_history (temporary_file);
   GList *visits = create_test_page_visit_list ();
 
   ephy_history_service_add_visits (service, visits, NULL, NULL, NULL);
@@ -489,9 +505,9 @@ main (int argc, char *argv[])
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/embed/history/test_create_history_service", test_create_history_service);
-  g_test_add_func ("/embed/history/test_create_readonly_history_service", test_create_readonly_history_service);
   g_test_add_func ("/embed/history/test_create_history_service_and_destroy_later", test_create_history_service_and_destroy_later);
   g_test_add_func ("/embed/history/test_create_history_entry", test_create_history_entry);
+  g_test_add_func ("/embed/history/test_readonly_mode", test_readonly_mode);
   g_test_add_func ("/embed/history/test_create_history_entries", test_create_history_entries);
   g_test_add_func ("/embed/history/test_set_url_title", test_set_url_title);
   g_test_add_func ("/embed/history/test_set_url_title_is_correct", test_set_url_title_is_correct);

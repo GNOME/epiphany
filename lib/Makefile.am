@@ -8,7 +8,8 @@ noinst_LTLIBRARIES = libephymisc.la
 TYPES_H_FILES = \
 	ephy-initial-state.h			\
 	ephy-node.h				\
-	ephy-security-levels.h
+	ephy-security-levels.h			\
+	ephy-sqlite-connection.h
 
 libephymisc_la_SOURCES = \
 	ephy-dbus-util.c			\
