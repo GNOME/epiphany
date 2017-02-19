@@ -340,19 +340,19 @@ ephy_history_service_commit (EphyHistoryService *self)
   GError *error = NULL;
   g_assert (self->history_thread == g_thread_self ());
 
-  if (NULL == self->history_database)
+  if (self->history_database == NULL)
     return;
 
   if (self->read_only)
     return;
 
   ephy_sqlite_connection_commit_transaction (self->history_database, &error);
-  if (NULL != error) {
+  if (error != NULL) {
     g_warning ("Could not commit idle history database transaction: %s", error->message);
     g_error_free (error);
   }
   ephy_sqlite_connection_begin_transaction (self->history_database, &error);
-  if (NULL != error) {
+  if (error != NULL) {
     g_warning ("Could not start long-running history database transaction: %s", error->message);
     g_error_free (error);
   }
@@ -365,7 +365,7 @@ ephy_history_service_enable_foreign_keys (EphyHistoryService *self)
 {
   GError *error = NULL;
 
-  if (NULL == self->history_database)
+  if (self->history_database == NULL)
     return;
 
   ephy_sqlite_connection_execute (self->history_database,
@@ -601,7 +601,7 @@ ephy_history_service_execute_add_visit_helper (EphyHistoryService *self, EphyHis
   ephy_history_service_update_host_row (self, visit->url->host);
 
   /* A NULL return here means that the URL does not yet exist in the database */
-  if (NULL == ephy_history_service_get_url_row (self, visit->url->url, visit->url)) {
+  if (ephy_history_service_get_url_row (self, visit->url->url, visit->url) == NULL) {
     visit->url->last_visit_time = visit->visit_time;
     visit->url->visit_count = 1;
 
@@ -665,7 +665,7 @@ ephy_history_service_execute_find_visits (EphyHistoryService *self, EphyHistoryQ
   /* FIXME: We don't have a good way to tell the difference between failures and empty returns */
   while (current) {
     EphyHistoryPageVisit *visit = (EphyHistoryPageVisit *)current->data;
-    if (NULL == ephy_history_service_get_url_row (self, NULL, visit->url)) {
+    if (ephy_history_service_get_url_row (self, NULL, visit->url) == NULL) {
       ephy_history_page_visit_list_free (visits);
       g_warning ("Tried to process an orphaned page visit");
       return FALSE;
@@ -838,7 +838,7 @@ ephy_history_service_execute_set_url_title (EphyHistoryService *self,
   if (self->read_only)
     return FALSE;
 
-  if (NULL == ephy_history_service_get_url_row (self, NULL, url)) {
+  if (ephy_history_service_get_url_row (self, NULL, url) == NULL) {
     /* The URL is not yet in the database, so we can't update it.. */
     g_free (title);
     return FALSE;
@@ -943,7 +943,7 @@ ephy_history_service_execute_set_url_hidden (EphyHistoryService *self,
 
   hidden = url->hidden;
 
-  if (NULL == ephy_history_service_get_url_row (self, NULL, url)) {
+  if (ephy_history_service_get_url_row (self, NULL, url) == NULL) {
     /* The URL is not yet in the database, so we can't update it.. */
     return FALSE;
   } else {
@@ -989,7 +989,7 @@ ephy_history_service_execute_set_url_thumbnail_time (EphyHistoryService *self,
 
   thumbnail_time = url->thumbnail_time;
 
-  if (NULL == ephy_history_service_get_url_row (self, NULL, url))
+  if (ephy_history_service_get_url_row (self, NULL, url) == NULL)
     return FALSE;
   else {
     url->thumbnail_time = thumbnail_time;
