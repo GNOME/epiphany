@@ -99,11 +99,6 @@ static void
 test_readonly_mode (void)
 {
   gchar *temporary_file = g_build_filename (g_get_tmp_dir (), "epiphany-history-test.db", NULL);
-  /* FIXME: This is racy, since we need to be sure the history thread of the
-   * first EphyHistoryService object has created the database before starting
-   * the history thread of the second EphyHistoryService object. This is a test
-   * bug, not an application bug.
-   */
   EphyHistoryService *service = ensure_empty_history (temporary_file);
   EphyHistoryService *readonly_service = ephy_history_service_new (temporary_file, EPHY_SQLITE_CONNECTION_MODE_READ_ONLY);
 
