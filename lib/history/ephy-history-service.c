@@ -1166,7 +1166,6 @@ ephy_history_service_execute_clear (EphyHistoryService *self,
     return FALSE;
 
   ephy_history_service_clear_all (self);
-  ephy_history_service_schedule_commit (self);
 
   return TRUE;
 }
