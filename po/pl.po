@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-02-12 01:06+0000\n"
-"PO-Revision-Date: 2017-02-12 15:18+0100\n"
+"POT-Creation-Date: 2017-02-19 18:53+0000\n"
+"PO-Revision-Date: 2017-02-19 20:58+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -786,7 +786,7 @@ msgstr "F11"
 msgid "Send an email message to “%s”"
 msgstr "Wyślij wiadomość e-mail na adres „%s”"
 
-#: embed/ephy-embed-utils.c:239 src/search-provider/ephy-search-provider.c:288
+#: embed/ephy-embed-utils.c:239 src/search-provider/ephy-search-provider.c:287
 #, c-format
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=pl-pl&amp;kad=pl_PL"
@@ -1442,7 +1442,7 @@ msgstr "Hasło dla użytkownika %s w formularzu na „%s”"
 msgid "Password in a form in %s"
 msgstr "Hasło w formularzu na „%s”"
 
-#: lib/ephy-gui.c:79
+#: lib/ephy-gui.c:73
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nie można wyświetlić pomocy: %s"
@@ -1680,7 +1680,7 @@ msgstr "Wszystkie pliki"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:649 src/ephy-history-dialog.c:253
+#: lib/widgets/ephy-location-entry.c:649 src/ephy-history-dialog.c:256
 msgid "Cl_ear"
 msgstr "_Wyczyść"
 
@@ -1689,7 +1689,7 @@ msgid "Paste and _Go"
 msgstr "W_klej i przejdź"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:688 src/ephy-window.c:866
+#: lib/widgets/ephy-location-entry.c:688 src/ephy-window.c:867
 msgid "_Undo"
 msgstr "Cof_nij"
 
@@ -1826,17 +1826,21 @@ msgstr "Wyświetla pobrane pliki"
 msgid "Open a new tab"
 msgstr "Otwiera nową kartę"
 
-#: src/ephy-history-dialog.c:243
+#: src/ephy-history-dialog.c:246
 msgid "Clear browsing history?"
 msgstr "Wyczyścić historię przeglądania?"
 
-#: src/ephy-history-dialog.c:247
+#: src/ephy-history-dialog.c:250
 msgid ""
 "Clearing the browsing history will cause all history links to be permanently "
 "deleted."
 msgstr ""
 "Wyczyszczenie historii przeglądania spowoduje, że wszystkie odnośniki "
 "historii zostaną usunięte."
+
+#: src/ephy-history-dialog.c:810
+msgid "It is not possible to modify history when in incognito mode."
+msgstr "W trybie incognito nie można modyfikować historii."
 
 #: src/ephy-main.c:112
 msgid "Open a new tab in an existing browser window"
@@ -1934,133 +1938,133 @@ msgstr "Jeśli program zostanie zakończony, pobierania zostaną anulowane"
 msgid "Quit and cancel downloads"
 msgstr "Zakończ program i anuluj pobierania"
 
-#: src/ephy-window.c:867
+#: src/ephy-window.c:868
 msgid "Re_do"
 msgstr "_Ponów"
 
 #. Edit.
-#: src/ephy-window.c:870
+#: src/ephy-window.c:871
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: src/ephy-window.c:871
+#: src/ephy-window.c:872
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: src/ephy-window.c:872
+#: src/ephy-window.c:873
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: src/ephy-window.c:873
+#: src/ephy-window.c:874
 msgid "Select _All"
 msgstr "_Zaznacz wszystko"
 
-#: src/ephy-window.c:875
+#: src/ephy-window.c:876
 msgid "S_end Link by Email…"
 msgstr "Wyślij _odnośnik przez e-mail…"
 
-#: src/ephy-window.c:877
+#: src/ephy-window.c:878
 msgid "_Reload"
 msgstr "W_czytaj ponownie"
 
-#: src/ephy-window.c:878
+#: src/ephy-window.c:879
 msgid "_Back"
 msgstr "_Wstecz"
 
-#: src/ephy-window.c:879
+#: src/ephy-window.c:880
 msgid "_Forward"
 msgstr "_Dalej"
 
 #. Bookmarks
-#: src/ephy-window.c:882
+#: src/ephy-window.c:883
 msgid "Add Boo_kmark…"
 msgstr "_Dodaj zakładkę…"
 
 #. Links.
-#: src/ephy-window.c:886
+#: src/ephy-window.c:887
 msgid "Open Link in New _Window"
 msgstr "Otwórz odnośnik w _nowym oknie"
 
-#: src/ephy-window.c:887
+#: src/ephy-window.c:888
 msgid "Open Link in New _Tab"
 msgstr "Otwórz odnośnik w nowej _karcie"
 
-#: src/ephy-window.c:888
+#: src/ephy-window.c:889
 msgid "Open Link in I_ncognito Window"
 msgstr "Otwórz odnośnik w oknie in_cognito"
 
-#: src/ephy-window.c:889
+#: src/ephy-window.c:890
 msgid "_Save Link As…"
 msgstr "_Zapisz odnośnik jako…"
 
-#: src/ephy-window.c:890
+#: src/ephy-window.c:891
 msgid "_Copy Link Address"
 msgstr "Skopiuj _adres odnośnika"
 
-#: src/ephy-window.c:891
+#: src/ephy-window.c:892
 msgid "_Copy E-mail Address"
 msgstr "Skopiuj adres _e-mail"
 
 #. Images.
-#: src/ephy-window.c:895
+#: src/ephy-window.c:896
 msgid "View _Image in New Tab"
 msgstr "Wyświetl o_braz w nowej karcie"
 
-#: src/ephy-window.c:896
+#: src/ephy-window.c:897
 msgid "Copy I_mage Address"
 msgstr "Skopiuj adres ob_razu"
 
-#: src/ephy-window.c:897
+#: src/ephy-window.c:898
 msgid "_Save Image As…"
 msgstr "Zapisz _obraz jako…"
 
-#: src/ephy-window.c:898
+#: src/ephy-window.c:899
 msgid "Set as _Wallpaper"
 msgstr "Ustaw jako _tapetę"
 
 #. Video.
-#: src/ephy-window.c:902
+#: src/ephy-window.c:903
 msgid "Open Video in New _Window"
 msgstr "Otwórz plik wi_deo w nowym oknie"
 
-#: src/ephy-window.c:903
+#: src/ephy-window.c:904
 msgid "Open Video in New _Tab"
 msgstr "Otwórz plik wid_eo w nowej karcie"
 
-#: src/ephy-window.c:904
+#: src/ephy-window.c:905
 msgid "_Save Video As…"
 msgstr "Zapisz plik _wideo jako…"
 
-#: src/ephy-window.c:905
+#: src/ephy-window.c:906
 msgid "_Copy Video Address"
 msgstr "Skopiuj adres pliku wide_o"
 
 #. Audio.
-#: src/ephy-window.c:909
+#: src/ephy-window.c:910
 msgid "Open Audio in New _Window"
 msgstr "Otwórz plik dźwiękowy w _nowym oknie"
 
-#: src/ephy-window.c:910
+#: src/ephy-window.c:911
 msgid "Open Audio in New _Tab"
 msgstr "Otwórz plik dźwiękowy w nowej k_arcie"
 
-#: src/ephy-window.c:911
+#: src/ephy-window.c:912
 msgid "_Save Audio As…"
 msgstr "Zapisz plik dźwiękowy ja_ko…"
 
-#: src/ephy-window.c:912
+#: src/ephy-window.c:913
 msgid "_Copy Audio Address"
 msgstr "Skopiuj ad_res pliku dźwiękowego"
 
-#: src/ephy-window.c:917
+#: src/ephy-window.c:918
 msgid "Save Pa_ge As…"
 msgstr "Zapisz _stronę jako…"
 
-#: src/ephy-window.c:918
+#: src/ephy-window.c:919
 msgid "_Page Source"
 msgstr "Ź_ródło strony"
 
-#: src/ephy-window.c:1352
+#: src/ephy-window.c:1353
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Wyszukaj „%s” w Internecie"
@@ -2162,7 +2166,7 @@ msgstr "Bing"
 msgid "https://www.bing.com/search?q=%s"
 msgstr "https://www.bing.com/search?q=%s"
 
-#: src/profile-migrator/ephy-profile-migrator.c:91
+#: src/profile-migrator/ephy-profile-migrator.c:92
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -2171,23 +2175,23 @@ msgstr ""
 "przestarzały, a jego zawartość została przeniesiona do katalogu ~/.config/"
 "epiphany"
 
-#: src/profile-migrator/ephy-profile-migrator.c:997
+#: src/profile-migrator/ephy-profile-migrator.c:1003
 msgid "Executes only the n-th migration step"
 msgstr "Wykonuje tylko podany krok migracji"
 
-#: src/profile-migrator/ephy-profile-migrator.c:999
+#: src/profile-migrator/ephy-profile-migrator.c:1005
 msgid "Specifies the required version for the migrator"
 msgstr "Podaje wymaganą wersję dla migracji"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1001
+#: src/profile-migrator/ephy-profile-migrator.c:1007
 msgid "Specifies the profile where the migrator should run"
 msgstr "Podaje profil dla migracji"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1019
+#: src/profile-migrator/ephy-profile-migrator.c:1025
 msgid "Web profile migrator"
 msgstr "Migracja profilu przeglądarki WWW"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1020
+#: src/profile-migrator/ephy-profile-migrator.c:1026
 msgid "Web profile migrator options"
 msgstr "Opcje migracji profilu przeglądarki WWW"
 
@@ -2942,7 +2946,7 @@ msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Poprzedni wynik wyszukiwana"
 
-#: src/search-provider/ephy-search-provider.c:200
+#: src/search-provider/ephy-search-provider.c:199
 #, c-format
 msgid "Search the Web for %s"
 msgstr "Wyszukaj „%s” w Internecie"
@@ -3135,11 +3139,11 @@ msgstr "U_twórz"
 msgid "Save"
 msgstr "Zapisz"
 
-#: src/window-commands.c:2124
+#: src/window-commands.c:2117
 msgid "Enable caret browsing mode?"
 msgstr "Włączyć tryb przeglądania za pomocą karetki?"
 
-#: src/window-commands.c:2127
+#: src/window-commands.c:2120
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3149,6 +3153,6 @@ msgstr ""
 "umieszcza ruchomy kursor na stronach, umożliwiając poruszanie się za pomocą "
 "klawiatury. Włączyć tę funkcję?"
 
-#: src/window-commands.c:2130
+#: src/window-commands.c:2123
 msgid "_Enable"
 msgstr "_Włącz"
