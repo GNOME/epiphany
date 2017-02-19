@@ -54,7 +54,6 @@ ephy_gui_help (GtkWidget  *parent,
                const char *page)
 {
   GError *error = NULL;
-  GdkScreen *screen;
   char *url;
 
   if (page)
@@ -62,12 +61,7 @@ ephy_gui_help (GtkWidget  *parent,
   else
     url = g_strdup ("help:epiphany");
 
-  if (parent)
-    screen = gtk_widget_get_screen (parent);
-  else
-    screen = gdk_screen_get_default ();
-
-  gtk_show_uri (screen, url, gtk_get_current_event_time (), &error);
+  gtk_show_uri_on_window (GTK_WINDOW (parent), url, gtk_get_current_event_time (), &error);
 
   if (error != NULL) {
     GtkWidget *dialog;

@@ -1946,10 +1946,8 @@ decide_policy_cb (WebKitWebView           *web_view,
 
   if (!ephy_embed_utils_address_has_web_scheme (uri)) {
     GError *error = NULL;
-    GdkScreen *screen;
 
-    screen = gtk_widget_get_screen (GTK_WIDGET (web_view));
-    gtk_show_uri (screen, uri, GDK_CURRENT_TIME, &error);
+    gtk_show_uri_on_window (GTK_WINDOW (window), uri, GDK_CURRENT_TIME, &error);
 
     if (error) {
       LOG ("failed to handle non web scheme: %s", error->message);
