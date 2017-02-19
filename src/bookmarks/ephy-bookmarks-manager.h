@@ -22,6 +22,7 @@
 
 #include "ephy-bookmark.h"
 
+#include <glib/gi18n.h>
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
@@ -29,6 +30,8 @@ G_BEGIN_DECLS
 #define EPHY_TYPE_BOOKMARKS_MANAGER (ephy_bookmarks_manager_get_type ())
 
 G_DECLARE_FINAL_TYPE (EphyBookmarksManager, ephy_bookmarks_manager, EPHY, BOOKMARKS_MANAGER, GObject)
+
+#define EPHY_BOOKMARKS_FAVORITES_TAG N_("Favorites")
 
 EphyBookmarksManager *ephy_bookmarks_manager_new                  (void);
 

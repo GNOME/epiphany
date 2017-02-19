@@ -157,7 +157,7 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
   gboolean default_tag;
   const char *label_text;
 
-  default_tag = (g_strcmp0 (tag, "Favorites") == 0);
+  default_tag = (g_strcmp0 (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0);
 
   widget = gtk_flow_box_child_new ();
   gtk_widget_set_can_focus (widget, FALSE);
@@ -174,7 +174,7 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
     gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
   }
 
-  label_text = default_tag ? _("Favorites") : tag;
+  label_text = default_tag ? _(EPHY_BOOKMARKS_FAVORITES_TAG) : tag;
   label = gtk_label_new (label_text);
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
 

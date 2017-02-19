@@ -518,9 +518,9 @@ ephy_bookmark_tags_compare (const char *tag1, const char *tag2)
   if (result == 0)
     return 0;
 
-  if (g_strcmp0 (tag1, "Favorites") == 0)
+  if (g_strcmp0 (tag1, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
     return -1;
-  if (g_strcmp0 (tag2, "Favorites") == 0)
+  if (g_strcmp0 (tag2, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
     return 1;
 
   return result;

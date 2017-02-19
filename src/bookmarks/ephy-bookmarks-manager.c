@@ -174,7 +174,7 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
   self->tags = g_sequence_new (g_free);
 
   g_sequence_insert_sorted (self->tags,
-                            g_strdup ("Favorites"),
+                            g_strdup (EPHY_BOOKMARKS_FAVORITES_TAG),
                             (GCompareDataFunc)ephy_bookmark_tags_compare,
                             NULL);
 
@@ -408,7 +408,7 @@ ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self, const char *tag)
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (tag != NULL);
 
-  if (strcmp (tag, "Favorites"))
+  if (strcmp (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
     return;
 
   iter = g_sequence_lookup (self->tags,
