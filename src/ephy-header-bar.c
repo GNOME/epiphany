@@ -827,7 +827,7 @@ ephy_header_bar_constructed (GObject *object)
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), header_bar->downloads_revealer);
   gtk_widget_show (header_bar->downloads_revealer);
 
-  history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+  history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
 
   g_signal_connect (history_service,
                     "cleared", G_CALLBACK (ephy_history_cleared_cb),

@@ -56,7 +56,7 @@ test_ephy_encodings_get (void)
   EphyEncodings *encodings;
   GList *all, *p;
 
-  encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings (embed_shell));
+  encodings = ephy_embed_shell_get_encodings (embed_shell);
   g_assert (encodings);
 
   all = ephy_encodings_get_all (encodings);

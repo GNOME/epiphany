@@ -479,7 +479,7 @@ ephy_embed_shell_schedule_thumbnail_update (EphyEmbedShell *shell,
  *
  * Return value: (transfer none): the global #EphyHistoryService
  **/
-GObject *
+EphyHistoryService *
 ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
@@ -517,7 +517,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
                       shell);
   }
 
-  return G_OBJECT (priv->global_history_service);
+  return priv->global_history_service;
 }
 
 static void
@@ -526,7 +526,7 @@ snapshot_saved_cb (EphySnapshotService *service,
                    gint64               mtime,
                    EphyEmbedShell      *shell)
 {
-  ephy_history_service_set_url_thumbnail_time (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (shell)),
+  ephy_history_service_set_url_thumbnail_time (ephy_embed_shell_get_global_history_service (shell),
                                                url, mtime,
                                                NULL, NULL, NULL);
 }
@@ -537,7 +537,7 @@ snapshot_saved_cb (EphySnapshotService *service,
  *
  * Return value: (transfer none):
  **/
-GObject *
+EphyEncodings *
 ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
@@ -547,7 +547,7 @@ ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
   if (priv->encodings == NULL)
     priv->encodings = ephy_encodings_new ();
 
-  return G_OBJECT (priv->encodings);
+  return priv->encodings;
 }
 
 void

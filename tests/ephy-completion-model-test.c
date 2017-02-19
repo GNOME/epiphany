@@ -30,7 +30,7 @@ static void
 test_ephy_completion_model_create (void)
 {
   EphyCompletionModel *model;
-  model = ephy_completion_model_new (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ())),
+  model = ephy_completion_model_new (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()),
                                      ephy_shell_get_bookmarks_manager (ephy_shell_get_default ()));
   g_assert (model);
   g_object_unref (model);
@@ -56,7 +56,7 @@ test_ephy_completion_model_update_empty (void)
   EphyCompletionModel *model;
   GMainLoop *loop = NULL;
 
-  model = ephy_completion_model_new (EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ())),
+  model = ephy_completion_model_new (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()),
                                      ephy_shell_get_bookmarks_manager (ephy_shell_get_default ()));
   g_assert (model);
 

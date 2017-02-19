@@ -352,9 +352,7 @@ ephy_encoding_dialog_init (EphyEncodingDialog *dialog)
   dialog->update_embed_tag = FALSE;
   dialog->update_view_tag = FALSE;
 
-  dialog->encodings =
-    EPHY_ENCODINGS (ephy_embed_shell_get_encodings
-                      (EPHY_EMBED_SHELL (ephy_shell_get_default ())));
+  dialog->encodings = ephy_embed_shell_get_encodings (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
 
   encodings = ephy_encodings_get_all (dialog->encodings);
 

@@ -535,7 +535,7 @@ ephy_about_handler_handle_html_overview (EphyAboutHandler       *handler,
   EphyHistoryService *history;
   EphyHistoryQuery *query;
 
-  history = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+  history = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   query = ephy_history_query_new_for_overview ();
   ephy_history_service_query_urls (history, query, NULL,
                                    (EphyHistoryJobCallback)history_service_query_urls_cb,

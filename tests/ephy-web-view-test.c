@@ -421,7 +421,7 @@ test_ephy_web_view_error_pages_not_stored_in_history (void)
   loop = g_main_loop_new (NULL, FALSE);
   bad_url = "http://localhost:2984375932/";
 
-  history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (embed_shell));
+  history_service = ephy_embed_shell_get_global_history_service (embed_shell);
   g_assert (history_service);
   g_signal_connect (history_service, "visit-url",
                     G_CALLBACK (visit_url_cb), NULL);

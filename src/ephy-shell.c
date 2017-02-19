@@ -867,8 +867,7 @@ ephy_shell_get_history_dialog (EphyShell *shell)
   embed_shell = ephy_embed_shell_get_default ();
 
   if (shell->history_dialog == NULL) {
-    service = EPHY_HISTORY_SERVICE
-                (ephy_embed_shell_get_global_history_service (embed_shell));
+    service = ephy_embed_shell_get_global_history_service (embed_shell);
     shell->history_dialog = ephy_history_dialog_new (service);
     g_signal_connect (shell->history_dialog,
                       "destroy",

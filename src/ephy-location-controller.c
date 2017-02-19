@@ -415,7 +415,7 @@ ephy_location_controller_constructed (GObject *object)
   if (!EPHY_IS_LOCATION_ENTRY (controller->title_widget))
     return;
 
-  history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+  history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   bookmarks_manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   model = ephy_completion_model_new (history_service, bookmarks_manager);
   ephy_location_entry_set_completion (EPHY_LOCATION_ENTRY (controller->title_widget),

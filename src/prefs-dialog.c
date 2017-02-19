@@ -1868,7 +1868,7 @@ setup_language_page (PrefsDialog *dialog)
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
-  encodings = EPHY_ENCODINGS (ephy_embed_shell_get_encodings (EPHY_EMBED_SHELL (ephy_shell_get_default ())));
+  encodings = ephy_embed_shell_get_encodings (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
 
   create_node_combo (dialog, encodings, "ISO-8859-1");
 

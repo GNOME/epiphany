@@ -2419,7 +2419,7 @@ ephy_web_view_init (EphyWebView *web_view)
 
   web_view->file_monitor = ephy_file_monitor_new (web_view);
 
-  web_view->history_service = EPHY_HISTORY_SERVICE (ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ()));
+  web_view->history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   web_view->history_service_cancellable = g_cancellable_new ();
 
   g_signal_connect_object (web_view->history_service,
