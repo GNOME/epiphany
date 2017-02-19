@@ -156,7 +156,8 @@ ephy_bookmarks_manager_class_init (EphyBookmarksManagerClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
+                  G_TYPE_NONE, 2,
+                  G_TYPE_STRING,
                   G_TYPE_INT);
 }
 
@@ -418,7 +419,7 @@ ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self, const char *tag)
   /* Also remove the tag from each bookmark if they have it */
   g_sequence_foreach (self->bookmarks, (GFunc)ephy_bookmark_remove_tag, (gpointer)tag);
 
-  g_signal_emit (self, signals[TAG_DELETED], 0, position);
+  g_signal_emit (self, signals[TAG_DELETED], 0, tag, position);
 }
 
 gboolean

@@ -40,6 +40,7 @@ struct _EphyBookmarksPopover {
   GtkWidget             *tag_detail_list_box;
   GtkWidget             *tag_detail_back_button;
   GtkWidget             *tag_detail_label;
+  char                  *tag_detail_tag;
 
   EphyBookmarksManager   *manager;
   EphyBookmarksListModel *list_model;
@@ -151,9 +152,10 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
           gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), GTK_WIDGET (l->data));
       }
 
-      /* If we removed a tag's last bookmark while on the tags detail box,
+      /* If we removed a tag's last bookmark while on that tag's tag detail box,
        * we switch back to the tags list stack */
-      if (g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
+      if (g_strcmp0 (self->tag_detail_tag, tag) == 0 &&
+          g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
         GActionGroup *group;
         GAction *action;
 
@@ -301,6 +303,7 @@ ephy_bookmarks_popover_tag_created_cb (EphyBookmarksPopover *self,
 
 static void
 ephy_bookmarks_popover_tag_deleted_cb (EphyBookmarksPopover *self,
+                                       const char           *tag,
                                        int                   position,
                                        EphyBookmarksManager *manager)
 {
@@ -313,7 +316,8 @@ ephy_bookmarks_popover_tag_deleted_cb (EphyBookmarksPopover *self,
   gtk_container_remove (GTK_CONTAINER (self->tags_list_box),
                         GTK_WIDGET (row));
 
-  if (g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "tag_detail") == 0) {
+  if (g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "tag_detail") == 0 &&
+      g_strcmp0 (self->tag_detail_tag, tag) == 0) {
     GActionGroup *group;
     GAction *action;
 
@@ -393,8 +397,11 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
 
   gtk_label_set_label (GTK_LABEL (self->tag_detail_label), tag);
 
-  gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack),
-                                    "tag_detail");
+  gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "tag_detail");
+
+  if (self->tag_detail_tag != NULL)
+    g_free (self->tag_detail_tag);
+  self->tag_detail_tag = g_strdup (tag);
 
   g_sequence_free (bookmarks);
 }
@@ -442,6 +449,16 @@ ephy_bookmarks_popover_dispose (GObject *object)
 }
 
 static void
+ephy_bookmarks_popover_finalize (GObject *object)
+{
+  EphyBookmarksPopover *self = EPHY_BOOKMARKS_POPOVER (object);
+
+  g_free (self->tag_detail_tag);
+
+  G_OBJECT_CLASS (ephy_bookmarks_popover_parent_class)->finalize (object);
+}
+
+static void
 ephy_bookmarks_popover_set_property (GObject      *object,
                                      guint         prop_id,
                                      const GValue *value,
@@ -465,6 +482,7 @@ ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = ephy_bookmarks_popover_dispose;
+  object_class->finalize = ephy_bookmarks_popover_finalize;
   object_class->set_property = ephy_bookmarks_popover_set_property;
 
   obj_properties[PROP_WINDOW] =
