@@ -29,7 +29,7 @@
 static EphySQLiteConnection *
 ensure_empty_database (const char *filename)
 {
-  EphySQLiteConnection *connection = ephy_sqlite_connection_new ();
+  EphySQLiteConnection *connection = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE);
   GError *error = NULL;
 
   if (g_file_test (filename, G_FILE_TEST_IS_REGULAR))

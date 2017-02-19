@@ -3,7 +3,8 @@ SUBDIRS = widgets egg history
 pkglib_LTLIBRARIES = libephymisc.la
 
 TYPES_H_FILES = \
-	ephy-security-levels.h
+	ephy-security-levels.h	\
+	ephy-sqlite-connection.h
 
 libephymisc_la_SOURCES = \
 	ephy-dbus-names.h			\
