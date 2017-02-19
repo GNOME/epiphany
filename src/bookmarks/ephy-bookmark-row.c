@@ -96,7 +96,8 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
   }
 
   if (favicon) {
-    gtk_image_set_from_pixbuf (GTK_IMAGE (self->favicon_image), favicon);
+    if (self->favicon_image != NULL)
+      gtk_image_set_from_pixbuf (GTK_IMAGE (self->favicon_image), favicon);
     g_object_unref (favicon);
   }
 
@@ -150,6 +151,13 @@ ephy_bookmark_row_dispose (GObject *object)
 }
 
 static void
+favicon_image_destroyed (EphyBookmarkRow *self,
+                         GtkWidget       *favicon_image)
+{
+  self->favicon_image = NULL;
+}
+
+static void
 ephy_bookmark_row_constructed (GObject *object)
 {
   EphyBookmarkRow *self = EPHY_BOOKMARK_ROW (object);
@@ -168,6 +176,13 @@ ephy_bookmark_row_constructed (GObject *object)
                                        NULL,
                                        (GAsyncReadyCallback)ephy_bookmark_row_favicon_loaded_cb,
                                        g_object_ref (self));
+
+  /* Although we keep a ref to ourself during the favicon load, so we are
+   * guaranteed to remain a valid GObject, the widget hierarchy could still
+   * be destroyed before ephy_bookmark_favicon_loaded_cb() is called. Hence we
+   * need to keep track of whether self->favicon_image is still valid. */
+  g_signal_connect_object (self->favicon_image, "destroy",
+                           G_CALLBACK (favicon_image_destroyed), self, G_CONNECT_SWAPPED);
 }
 
 static void
