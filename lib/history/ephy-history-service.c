@@ -411,6 +411,9 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
 
   g_assert (priv->history_thread == g_thread_self ());
 
+  if (priv->history_database != NULL)
+    g_object_unref (priv->history_database);
+
   priv->history_database = ephy_sqlite_connection_new (priv->read_only ? EPHY_SQLITE_CONNECTION_MODE_READ_ONLY
                                                                        : EPHY_SQLITE_CONNECTION_MODE_READWRITE);
   ephy_sqlite_connection_open (priv->history_database, priv->history_filename, &error);
