@@ -257,7 +257,7 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
   GtkWidget *row = NULL;
   GList *children;
   GList *l;
-  const char *visible_stack_child;
+  gboolean found = FALSE;
 
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
   g_assert (EPHY_IS_BOOKMARK (bookmark));
@@ -276,10 +276,14 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
     url = g_object_get_data (G_OBJECT (row), "url");
     if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0
         && g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0) {
+      found = TRUE;
       break;
     }
   }
-  gtk_container_remove (GTK_CONTAINER (self->tags_list_box), row);
+  if (found) {
+    gtk_container_remove (GTK_CONTAINER (self->tags_list_box), row);
+    found = FALSE;
+  }
 
   children = gtk_container_get_children (GTK_CONTAINER (self->tag_detail_list_box));
   for (l = children; l != NULL; l = l->next) {
@@ -291,16 +295,16 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
     url = g_object_get_data (G_OBJECT (row), "url");
     if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0
         && g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0) {
+      found = TRUE;
       break;
     }
   }
-  gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), row);
-
-  visible_stack_child = gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack));
+  if (found)
+    gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), row);
 
   if (g_list_model_get_n_items (G_LIST_MODEL (self->list_model)) == 0) {
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
-  } else if (g_strcmp0 (visible_stack_child, "tag_detail") == 0 &&
+  } else if (g_strcmp0 (gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack)), "tag_detail") == 0 &&
              g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, self->tag_detail_tag))) {
     /* If we removed the tag's last bookmark, switch back to the tags list. */
     GActionGroup *group;
