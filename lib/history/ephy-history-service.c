@@ -266,12 +266,12 @@ ephy_history_service_init (EphyHistoryService *self)
 }
 
 EphyHistoryService *
-ephy_history_service_new (const char *history_filename,
-                          gboolean    read_only)
+ephy_history_service_new (const char               *history_filename,
+                          EphySQLiteConnectionMode  mode)
 {
   return EPHY_HISTORY_SERVICE (g_object_new (EPHY_TYPE_HISTORY_SERVICE,
                                              "history-filename", history_filename,
-                                             "read-only", read_only,
+                                             "read-only", mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY,
                                              NULL));
 }
 
@@ -371,12 +371,20 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
 
   g_assert (self->history_thread == g_thread_self ());
 
-  self->history_database = ephy_sqlite_connection_new ();
+  self->history_database = ephy_sqlite_connection_new (self->read_only ? EPHY_SQLITE_CONNECTION_MODE_READ_ONLY
+                                                                       : EPHY_SQLITE_CONNECTION_MODE_READWRITE);
   ephy_sqlite_connection_open (self->history_database, self->history_filename, &error);
   if (error) {
     g_object_unref (self->history_database);
     self->history_database = NULL;
-    g_warning ("Could not open history database at %s: %s", self->history_filename, error->message);
+
+    /* Opening the database is expected to fail if it's being opened in read-
+     * only mode and does not already exist. Otherwise, this is bad. */
+    if (!self->read_only ||
+        !g_error_matches (error, EPHY_SQLITE_ERROR, SQLITE_CANTOPEN) ||
+        g_file_test (self->history_filename, G_FILE_TEST_EXISTS)) {
+      g_warning ("Could not open history database at %s: %s", self->history_filename, error->message);
+    }
     g_error_free (error);
     return FALSE;
   }
