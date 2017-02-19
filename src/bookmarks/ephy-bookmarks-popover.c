@@ -147,20 +147,19 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
         const char *url;
 
         url = g_object_get_data (G_OBJECT (l->data), "url");
-        if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0) {
+        if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0)
           gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), GTK_WIDGET (l->data));
+      }
 
-          /* If we removed a tag's last bookmark while on the tags detail box,
-           * we switch back to the tags list stack */
-          if (g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
-            GActionGroup *group;
-            GAction *action;
+      /* If we removed a tag's last bookmark while on the tags detail box,
+       * we switch back to the tags list stack */
+      if (g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
+        GActionGroup *group;
+        GAction *action;
 
-            group = gtk_widget_get_action_group (GTK_WIDGET (self), "popover");
-            action = g_action_map_lookup_action (G_ACTION_MAP (group), "tag-detail-back");
-            g_action_activate (action, NULL);
-          }
-        }
+        group = gtk_widget_get_action_group (GTK_WIDGET (self), "popover");
+        action = g_action_map_lookup_action (G_ACTION_MAP (group), "tag-detail-back");
+        g_action_activate (action, NULL);
       }
     }
   }
