@@ -27,6 +27,8 @@
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 
+#include <string.h>
+
 #define EPHY_BOOKMARKS_FILE "bookmarks.gvdb"
 
 struct _EphyBookmarksManager {
@@ -405,6 +407,9 @@ ephy_bookmarks_manager_delete_tag (EphyBookmarksManager *self, const char *tag)
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (tag != NULL);
+
+  if (strcmp (tag, "Favorites"))
+    return;
 
   iter = g_sequence_lookup (self->tags,
                             (gpointer)tag,
