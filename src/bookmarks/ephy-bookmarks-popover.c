@@ -107,6 +107,12 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
                                                 const char           *tag,
                                                 EphyBookmarksManager *manager)
 {
+  GtkWidget *row;
+  GList *children;
+  GList *l;
+  const char *visible_stack_child;
+  gboolean exists;
+
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
 
@@ -116,12 +122,6 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
   /* If the bookmark has 0 tags after removing one, we add it to the tags list
    * box */
   if (g_sequence_is_empty (ephy_bookmark_get_tags (bookmark))) {
-    GtkWidget *row;
-    GList *children;
-    GList *l;
-    const char *visible_stack_child;
-    gboolean exists;
-
     exists = FALSE;
     children = gtk_container_get_children (GTK_CONTAINER (self->tags_list_box));
     for (l = children; l != NULL; l = l->next) {
@@ -138,31 +138,30 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
       row = create_bookmark_row (bookmark, self);
       gtk_container_add (GTK_CONTAINER (self->tags_list_box), row);
     }
+  }
 
-    /* If we are on tag detail list box, we remove the bookmark from it to
-     * reflect the changes */
-    visible_stack_child = gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack));
-    if (g_strcmp0 (visible_stack_child, "tag_detail") == 0) {
-      children = gtk_container_get_children (GTK_CONTAINER (self->tag_detail_list_box));
-      for (l = children; l != NULL; l = l->next) {
-        const char *url;
+  /* If we are on the tag detail list box of the tag that was removed, we
+   * remove the bookmark from it to reflect the changes. */
+  visible_stack_child = gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack));
+  if (g_strcmp0 (visible_stack_child, "tag_detail") == 0 &&
+      g_strcmp0 (self->tag_detail_tag, tag) == 0) {
+    children = gtk_container_get_children (GTK_CONTAINER (self->tag_detail_list_box));
+    for (l = children; l != NULL; l = l->next) {
+      const char *url;
 
-        url = g_object_get_data (G_OBJECT (l->data), "url");
-        if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0)
-          gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), GTK_WIDGET (l->data));
-      }
+      url = g_object_get_data (G_OBJECT (l->data), "url");
+      if (g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0)
+        gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), GTK_WIDGET (l->data));
+    }
 
-      /* If we removed a tag's last bookmark while on that tag's tag detail box,
-       * we switch back to the tags list stack */
-      if (g_strcmp0 (self->tag_detail_tag, tag) == 0 &&
-          g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
-        GActionGroup *group;
-        GAction *action;
+    /* If we removed the tag's last bookmark, switch back to the tags list. */
+    if (g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
+      GActionGroup *group;
+      GAction *action;
 
-        group = gtk_widget_get_action_group (GTK_WIDGET (self), "popover");
-        action = g_action_map_lookup_action (G_ACTION_MAP (group), "tag-detail-back");
-        g_action_activate (action, NULL);
-      }
+      group = gtk_widget_get_action_group (GTK_WIDGET (self), "popover");
+      action = g_action_map_lookup_action (G_ACTION_MAP (group), "tag-detail-back");
+      g_action_activate (action, NULL);
     }
   }
 }
