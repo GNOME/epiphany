@@ -513,7 +513,6 @@ run_history_service_thread (EphyHistoryService *self)
   do {
     message = g_async_queue_try_pop (self->queue);
     if (!message) {
-      /* Schedule commit if needed. */
       if (ephy_history_service_is_scheduled_to_commit (self))
         ephy_history_service_commit (self);
 
