@@ -204,7 +204,7 @@ create_tag_row (const char *tag)
   gtk_widget_set_halign (box, GTK_ALIGN_START);
 
   if (g_strcmp0 (tag, "Favorites") == 0) {
-    image = gtk_image_new_from_icon_name ("user-bookmarks-symbolic", GTK_ICON_SIZE_MENU);
+    image = gtk_image_new_from_icon_name ("emblem-favorite-symbolic", GTK_ICON_SIZE_MENU);
     label = gtk_label_new (_("Favorites"));
   } else {
     image = gtk_image_new_from_icon_name ("ephy-bookmark-tag-symbolic", GTK_ICON_SIZE_MENU);

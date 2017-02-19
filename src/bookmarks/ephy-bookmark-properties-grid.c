@@ -167,7 +167,7 @@ ephy_bookmark_properties_grid_create_tag_widget (EphyBookmarkPropertiesGrid *sel
   if (default_tag) {
     GtkWidget *image;
 
-    image = gtk_image_new_from_icon_name ("user-bookmarks-symbolic",
+    image = gtk_image_new_from_icon_name ("emblem-favorite-symbolic",
                                           GTK_ICON_SIZE_BUTTON);
     gtk_widget_set_margin_bottom (image, 8);
     gtk_widget_set_margin_top (image, 8);
