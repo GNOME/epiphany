@@ -155,6 +155,36 @@ ephy_history_service_dispose (GObject *object)
   G_OBJECT_CLASS (ephy_history_service_parent_class)->dispose (object);
 }
 
+static void
+ephy_history_service_constructed (GObject *object)
+{
+  EphyHistoryService *self = EPHY_HISTORY_SERVICE (object);
+
+  G_OBJECT_CLASS (ephy_history_service_parent_class)->constructed (object);
+
+  self->queue = g_async_queue_new ();
+
+  /* This value is checked in several functions to verify that they are only
+   * ever run on the history thread. Accordingly, we'd better be sure it's set
+   * before it is checked for the first time. That requires a lock here. */
+  g_mutex_lock (&self->history_thread_mutex);
+  self->history_thread = g_thread_new ("EphyHistoryService", (GThreadFunc)run_history_service_thread, self);
+
+  /* Additionally, make sure the SQLite connection has really been opened before
+   * returning. We need this so that we can test that using a read-only service
+   * at the same time as a read/write service does not cause the read/write
+   * service to break. This delay is required because we need to be sure the
+   * read/write service has completed initialization before attempting to open
+   * the read-only service, or initializing the read-only service will fail.
+   * This isn't needed except in test mode, because only tests might run
+   * multiple history services, but it's harmless and cleaner to do always.
+   */
+  while (!self->history_thread_initialized)
+    g_cond_wait (&self->history_thread_initialized_condition, &self->history_thread_mutex);
+
+  g_mutex_unlock (&self->history_thread_mutex);
+}
+
 static gboolean
 emit_urls_visited (EphyHistoryService *self)
 {
@@ -181,6 +211,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
 
   gobject_class->finalize = ephy_history_service_finalize;
   gobject_class->dispose = ephy_history_service_dispose;
+  gobject_class->constructed = ephy_history_service_constructed;
   gobject_class->get_property = ephy_history_service_get_property;
   gobject_class->set_property = ephy_history_service_set_property;
 
@@ -268,14 +299,6 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
 static void
 ephy_history_service_init (EphyHistoryService *self)
 {
-  self->queue = g_async_queue_new ();
-
-  /* This value is checked in several functions to verify that they are only
-   * ever run on the history thread. Accordingly, we'd better be sure it's set
-   * before it is checked for the first time. That requires a lock here. */
-  g_mutex_lock (&self->history_thread_mutex);
-  self->history_thread = g_thread_new ("EphyHistoryService", (GThreadFunc)run_history_service_thread, self);
-  g_mutex_unlock (&self->history_thread_mutex);
 }
 
 EphyHistoryService *
@@ -497,6 +520,7 @@ static gpointer
 run_history_service_thread (EphyHistoryService *self)
 {
   EphyHistoryServiceMessage *message;
+  gboolean success;
 
   /* Note that self->history_thread is only written once, and that's guaranteed
    * to have occurred before we enter this critical section due to this mutex.
@@ -505,9 +529,14 @@ run_history_service_thread (EphyHistoryService *self)
    */
   g_mutex_lock (&self->history_thread_mutex);
   g_assert (self->history_thread == g_thread_self ());
+
+  success = ephy_history_service_open_database_connections (self);
+
+  self->history_thread_initialized = TRUE;
+  g_cond_signal (&self->history_thread_initialized_condition);
   g_mutex_unlock (&self->history_thread_mutex);
 
-  if (ephy_history_service_open_database_connections (self) == FALSE)
+  if (!success)
     return NULL;
 
   do {
