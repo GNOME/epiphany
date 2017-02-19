@@ -416,7 +416,8 @@ ephy_history_service_get_host_row_from_url (EphyHistoryService *self,
 
   if (host == NULL) {
     host = ephy_history_host_new (host_locations->data, hostname, 0, 1.0);
-    ephy_history_service_add_host_row (self, host);
+    if (!self->priv->read_only)
+      ephy_history_service_add_host_row (self, host);
   }
 
   g_free (hostname);
