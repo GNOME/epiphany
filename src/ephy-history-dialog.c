@@ -57,6 +57,9 @@ struct _EphyHistoryDialog {
   GtkWidget *location_renderer;
   GMenuModel *treeview_popup_menu_model;
 
+  GtkWidget *forget_all_button;
+  GtkWidget *forget_button;
+
   GActionGroup *action_group;
 
   GList *urls;
@@ -507,13 +510,16 @@ static void
 update_selection_actions (GActionGroup *action_group,
                           gboolean      has_selection)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   GAction *forget_action;
   GAction *open_selection_action;
 
-  forget_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "forget");
-  open_selection_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-selection");
+  if (ephy_embed_shell_get_mode (shell) != EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    forget_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "forget");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (forget_action), has_selection);
+  }
 
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (forget_action), has_selection);
+  open_selection_action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-selection");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (open_selection_action), has_selection);
 }
 
@@ -670,6 +676,8 @@ ephy_history_dialog_class_init (EphyHistoryDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, date_renderer);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, location_renderer);
   gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, treeview_popup_menu_model);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, forget_all_button);
+  gtk_widget_class_bind_template_child (widget_class, EphyHistoryDialog, forget_button);
 
   gtk_widget_class_bind_template_callback (widget_class, on_treeview_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_treeview_key_press_event);
@@ -761,6 +769,10 @@ create_action_group (EphyHistoryDialog *self)
 static void
 ephy_history_dialog_init (EphyHistoryDialog *self)
 {
+  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
+  const char *tooltip;
+  GAction *action;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->cancellable = g_cancellable_new ();
@@ -793,6 +805,18 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
 
   self->action_group = create_action_group (self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "history", self->action_group);
+
+  if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
+    tooltip = _("It is not possible to modify history when in incognito mode.");
+    gtk_widget_set_tooltip_text (self->forget_all_button, tooltip);
+    gtk_widget_set_tooltip_text (self->forget_button, tooltip);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP (self->action_group), "forget");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP (self->action_group), "forget-all");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  }
 
   update_selection_actions (self->action_group, FALSE);
 }

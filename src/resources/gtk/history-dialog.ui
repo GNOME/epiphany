@@ -40,7 +40,7 @@
         <property name="title" translatable="yes">History</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="forget_all_button">
             <property name="label" translatable="yes">C_lear All</property>
             <property name="visible">True</property>
             <property name="use_underline">True</property>
@@ -163,7 +163,7 @@
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="forget_button">
                             <property name="visible">True</property>
                             <property name="tooltip_text" translatable="yes">Remove the selected pages from history</property>
                             <property name="action-name">history.forget</property>
