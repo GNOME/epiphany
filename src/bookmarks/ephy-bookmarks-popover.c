@@ -279,8 +279,22 @@ ephy_bookmarks_popover_bookmark_removed_cb (EphyBookmarksPopover *self,
       break;
     }
   }
-
   gtk_container_remove (GTK_CONTAINER (self->tags_list_box), row);
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->tag_detail_list_box));
+  for (l = children; l != NULL; l = l->next) {
+    const char *type;
+    const char *url;
+
+    row = GTK_WIDGET (l->data);
+    type = g_object_get_data (G_OBJECT (row), "type");
+    url = g_object_get_data (G_OBJECT (row), "url");
+    if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0
+        && g_strcmp0 (ephy_bookmark_get_url (bookmark), url) == 0) {
+      break;
+    }
+  }
+  gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), row);
 
   if (g_list_model_get_n_items (G_LIST_MODEL (self->list_model)) == 0)
     gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "empty-state");
