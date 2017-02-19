@@ -25,6 +25,7 @@ struct _EphyHistoryService {
   GObject parent_instance;
   char *history_filename;
   EphySQLiteConnection *history_database;
+  GMutex history_thread_mutex;
   GThread *history_thread;
   GAsyncQueue *queue;
   gboolean scheduled_to_quit;

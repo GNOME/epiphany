@@ -265,8 +265,14 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
 static void
 ephy_history_service_init (EphyHistoryService *self)
 {
-  self->history_thread = g_thread_new ("EphyHistoryService", (GThreadFunc)run_history_service_thread, self);
   self->queue = g_async_queue_new ();
+
+  /* This value is checked in several functions to verify that they are only
+   * ever run on the history thread. Accordingly, we'd better be sure it's set
+   * before it is checked for the first time. That requires a lock here. */
+  g_mutex_lock (&self->history_thread_mutex);
+  self->history_thread = g_thread_new ("EphyHistoryService", (GThreadFunc)run_history_service_thread, self);
+  g_mutex_unlock (&self->history_thread_mutex);
 }
 
 EphyHistoryService *
@@ -486,7 +492,14 @@ run_history_service_thread (EphyHistoryService *self)
 {
   EphyHistoryServiceMessage *message;
 
+  /* Note that self->history_thread is only written once, and that's guaranteed
+   * to have occurred before we enter this critical section due to this mutex.
+   * Accordingly, we do not need to use the mutex when performing these
+   * assertions in other functions.
+   */
+  g_mutex_lock (&self->history_thread_mutex);
   g_assert (self->history_thread == g_thread_self ());
+  g_mutex_unlock (&self->history_thread_mutex);
 
   if (ephy_history_service_open_database_connections (self) == FALSE)
     return NULL;
