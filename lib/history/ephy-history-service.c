@@ -284,7 +284,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                          "History filename",
                          "The filename of the SQLite file holding containing history",
                          NULL,
-                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   obj_properties[PROP_READ_ONLY] =
     g_param_spec_boolean ("read-only",
