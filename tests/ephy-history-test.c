@@ -108,7 +108,6 @@ test_readonly_mode (void)
   gtk_main ();
 }
 
-
 static GList *
 create_test_page_visit_list (void)
 {
