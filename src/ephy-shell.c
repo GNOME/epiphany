@@ -902,10 +902,15 @@ ephy_shell_get_prefs_dialog (EphyShell *shell)
 void
 _ephy_shell_create_instance (EphyEmbedShellMode mode)
 {
+  const char *id;
+
   g_assert (ephy_shell == NULL);
 
+  id = (mode == EPHY_EMBED_SHELL_MODE_APPLICATION ? "org.gnome.Epiphany.WebApp"
+                                                  : "org.gnome.Epiphany");
+
   ephy_shell = EPHY_SHELL (g_object_new (EPHY_TYPE_SHELL,
-                                         "application-id", "org.gnome.Epiphany",
+                                         "application-id", id,
                                          "mode", mode,
                                          NULL));
   /* FIXME weak ref */
