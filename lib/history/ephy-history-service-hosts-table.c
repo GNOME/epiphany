@@ -45,7 +45,6 @@ ephy_history_service_initialize_hosts_table (EphyHistoryService *self)
     g_error_free (error);
     return FALSE;
   }
-  ephy_history_service_schedule_commit (self);
   return TRUE;
 }
 
