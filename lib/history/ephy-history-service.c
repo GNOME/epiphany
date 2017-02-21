@@ -358,29 +358,37 @@ ephy_history_service_send_message (EphyHistoryService *self, EphyHistoryServiceM
 }
 
 static void
-ephy_history_service_commit (EphyHistoryService *self)
+ephy_history_service_open_transaction (EphyHistoryService *self)
 {
   GError *error = NULL;
   g_assert (self->history_thread == g_thread_self ());
 
-  if (self->history_database == NULL)
+  if (self->history_database == NULL ||
+      self->read_only)
     return;
 
-  if (self->read_only)
+  ephy_sqlite_connection_begin_transaction (self->history_database, &error);
+  if (error != NULL) {
+    g_error ("Could not open history database transaction: %s", error->message);
+    g_error_free (error);
+  }
+}
+
+static void
+ephy_history_service_commit_transaction (EphyHistoryService *self)
+{
+  GError *error = NULL;
+  g_assert (self->history_thread == g_thread_self ());
+
+  if (self->history_database == NULL ||
+      self->read_only)
     return;
 
   ephy_sqlite_connection_commit_transaction (self->history_database, &error);
   if (error != NULL) {
-    g_warning ("Could not commit idle history database transaction: %s", error->message);
+    g_warning ("Could not commit history database transaction: %s", error->message);
     g_error_free (error);
   }
-  ephy_sqlite_connection_begin_transaction (self->history_database, &error);
-  if (error != NULL) {
-    g_warning ("Could not start long-running history database transaction: %s", error->message);
-    g_error_free (error);
-  }
-
-  self->scheduled_to_commit = FALSE;
 }
 
 static void
@@ -430,22 +438,10 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
 
   ephy_history_service_enable_foreign_keys (self);
 
-  if (self->read_only)
-    return TRUE;
-
-  ephy_sqlite_connection_begin_transaction (self->history_database, &error);
-  if (error) {
-    g_warning ("Could not begin long running transaction in history database: %s", error->message);
-    g_error_free (error);
-    return FALSE;
-  }
-
-  if (ephy_history_service_initialize_hosts_table (self) == FALSE ||
-      ephy_history_service_initialize_urls_table (self) == FALSE ||
-      ephy_history_service_initialize_visits_table (self) == FALSE)
-    return FALSE;
-
-  return TRUE;
+  return self->read_only ||
+          (ephy_history_service_initialize_hosts_table (self) &&
+           ephy_history_service_initialize_urls_table (self) &&
+           ephy_history_service_initialize_visits_table (self));
 }
 
 static void
@@ -458,56 +454,10 @@ ephy_history_service_close_database_connections (EphyHistoryService *self)
   self->history_database = NULL;
 }
 
-static void
-ephy_history_service_clear_all (EphyHistoryService *self)
-{
-  char *journal_filename;
-
-  if (self->history_database == NULL)
-    return;
-
-  if (self->read_only)
-    return;
-
-  ephy_sqlite_connection_close (self->history_database);
-
-  if (g_unlink (self->history_filename) == -1)
-    g_warning ("Failed to delete %s: %s", self->history_filename, g_strerror (errno));
-
-  journal_filename = g_strdup_printf ("%s-journal", self->history_filename);
-  if (g_unlink (journal_filename) == -1 && errno != ENOENT)
-    g_warning ("Failed to delete %s: %s", journal_filename, g_strerror (errno));
-  g_free (journal_filename);
-
-  ephy_history_service_open_database_connections (self);
-}
-
-static gboolean
-ephy_history_service_is_scheduled_to_quit (EphyHistoryService *self)
-{
-  return self->scheduled_to_quit;
-}
-
-static gboolean
-ephy_history_service_is_scheduled_to_commit (EphyHistoryService *self)
-{
-  return self->scheduled_to_commit;
-}
-
-void
-ephy_history_service_schedule_commit (EphyHistoryService *self)
-{
-  if (!self->read_only)
-    self->scheduled_to_commit = TRUE;
-}
-
 static gboolean
 ephy_history_service_execute_quit (EphyHistoryService *self, gpointer data, gpointer *result)
 {
   g_assert (self->history_thread == g_thread_self ());
-
-  if (ephy_history_service_is_scheduled_to_commit (self))
-    ephy_history_service_commit (self);
 
   g_async_queue_unref (self->queue);
 
@@ -542,16 +492,13 @@ run_history_service_thread (EphyHistoryService *self)
   do {
     message = g_async_queue_try_pop (self->queue);
     if (!message) {
-      if (ephy_history_service_is_scheduled_to_commit (self))
-        ephy_history_service_commit (self);
-
       /* Block the thread until there's data in the queue. */
       message = g_async_queue_pop (self->queue);
     }
 
     /* Process item. */
     ephy_history_service_process_message (self, message);
-  } while (!ephy_history_service_is_scheduled_to_quit (self));
+  } while (!self->scheduled_to_quit);
 
   ephy_history_service_close_database_connections (self);
 
@@ -678,8 +625,6 @@ ephy_history_service_execute_add_visits (EphyHistoryService *self, GList *visits
     success = success && ephy_history_service_execute_add_visit_helper (self, (EphyHistoryPageVisit *)visits->data);
     visits = visits->next;
   }
-
-  ephy_history_service_schedule_commit (self);
 
   return success;
 }
@@ -876,7 +821,6 @@ ephy_history_service_execute_set_url_title (EphyHistoryService *self,
     g_free (url->title);
     url->title = title;
     ephy_history_service_update_url_row (self, url);
-    ephy_history_service_schedule_commit (self);
 
     ctx = signal_emission_context_new (self,
                                        ephy_history_url_copy (url),
@@ -932,7 +876,6 @@ ephy_history_service_execute_set_url_zoom_level (EphyHistoryService *self,
 
   host->zoom_level = zoom_level;
   ephy_history_service_update_host_row (self, host);
-  ephy_history_service_schedule_commit (self);
 
   return TRUE;
 }
@@ -977,7 +920,6 @@ ephy_history_service_execute_set_url_hidden (EphyHistoryService *self,
   } else {
     url->hidden = hidden;
     ephy_history_service_update_url_row (self, url);
-    ephy_history_service_schedule_commit (self);
     return TRUE;
   }
 }
@@ -1022,7 +964,6 @@ ephy_history_service_execute_set_url_thumbnail_time (EphyHistoryService *self,
   else {
     url->thumbnail_time = thumbnail_time;
     ephy_history_service_update_url_row (self, url);
-    ephy_history_service_schedule_commit (self);
     return TRUE;
   }
 }
@@ -1149,7 +1090,6 @@ ephy_history_service_execute_delete_urls (EphyHistoryService *self,
   }
 
   ephy_history_service_delete_orphan_hosts (self);
-  ephy_history_service_schedule_commit (self);
 
   return TRUE;
 }
@@ -1176,7 +1116,6 @@ ephy_history_service_execute_delete_host (EphyHistoryService    *self,
     return FALSE;
 
   ephy_history_service_delete_host_row (self, host);
-  ephy_history_service_schedule_commit (self);
 
   ctx = signal_emission_context_new (self, g_strdup (host->url),
                                      (GDestroyNotify)g_free);
@@ -1193,10 +1132,25 @@ ephy_history_service_execute_clear (EphyHistoryService *self,
                                     gpointer            pointer,
                                     gpointer           *result)
 {
-  if (self->read_only)
+  char *journal_filename;
+
+  if (self->history_database == NULL ||
+      self->read_only)
     return FALSE;
 
-  ephy_history_service_clear_all (self);
+  ephy_history_service_commit_transaction (self);
+  ephy_sqlite_connection_close (self->history_database);
+
+  if (g_unlink (self->history_filename) == -1)
+    g_warning ("Failed to delete %s: %s", self->history_filename, g_strerror (errno));
+
+  journal_filename = g_strdup_printf ("%s-journal", self->history_filename);
+  if (g_unlink (journal_filename) == -1 && errno != ENOENT)
+    g_warning ("Failed to delete %s: %s", journal_filename, g_strerror (errno));
+  g_free (journal_filename);
+
+  ephy_history_service_open_database_connections (self);
+  ephy_history_service_open_transaction (self);
 
   return TRUE;
 }
@@ -1302,10 +1256,13 @@ ephy_history_service_process_message (EphyHistoryService        *self,
 
   method = methods[message->type];
   message->result = NULL;
-  if (message->service->history_database)
+  if (message->service->history_database) {
+    ephy_history_service_open_transaction (self);
     message->success = method (message->service, message->method_argument, &message->result);
-  else
+    ephy_history_service_commit_transaction (self);
+  } else {
     message->success = FALSE;
+  }
 
   if (message->callback || message->type == CLEAR)
     g_idle_add ((GSourceFunc)ephy_history_service_execute_job_callback, message);

@@ -34,12 +34,10 @@ struct _EphyHistoryService {
   GThread *history_thread;
   GAsyncQueue *queue;
   gboolean scheduled_to_quit;
-  gboolean scheduled_to_commit;
   gboolean read_only;
   int queue_urls_visited_id;
 };
 
-void                     ephy_history_service_schedule_commit         (EphyHistoryService *self); 
 gboolean                 ephy_history_service_initialize_urls_table   (EphyHistoryService *self);
 EphyHistoryURL *         ephy_history_service_get_url_row             (EphyHistoryService *self, const char *url_string, EphyHistoryURL *url);
 void                     ephy_history_service_add_url_row             (EphyHistoryService *self, EphyHistoryURL *url);
