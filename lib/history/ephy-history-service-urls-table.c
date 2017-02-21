@@ -389,7 +389,7 @@ void
 ephy_history_service_delete_url (EphyHistoryService *self, EphyHistoryURL *url)
 {
   EphySQLiteStatement *statement = NULL;
-  gchar *sql_statement;
+  const char *sql_statement;
   GError *error = NULL;
 
   g_assert (self->history_thread == g_thread_self ());
@@ -398,13 +398,12 @@ ephy_history_service_delete_url (EphyHistoryService *self, EphyHistoryURL *url)
   g_return_if_fail (url->id != -1 || url->url);
 
   if (url->id != -1)
-    sql_statement = g_strdup ("DELETE FROM urls WHERE id=?");
+    sql_statement = "DELETE FROM urls WHERE id=?";
   else
-    sql_statement = g_strdup ("DELETE FROM urls WHERE url=?");
+    sql_statement = "DELETE FROM urls WHERE url=?";
 
   statement = ephy_sqlite_connection_create_statement (self->history_database,
                                                        sql_statement, &error);
-  g_free (sql_statement);
 
   if (error) {
     g_warning ("Could not build urls table query statement: %s", error->message);
