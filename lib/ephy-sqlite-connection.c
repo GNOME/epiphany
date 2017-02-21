@@ -200,14 +200,6 @@ ephy_sqlite_connection_begin_transaction (EphySQLiteConnection *self, GError **e
 }
 
 gboolean
-ephy_sqlite_connection_rollback_transaction (EphySQLiteConnection *self, GError **error)
-{
-  if (self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)
-    return TRUE;
-  return ephy_sqlite_connection_execute (self, "ROLLBACK", error);
-}
-
-gboolean
 ephy_sqlite_connection_commit_transaction (EphySQLiteConnection *self, GError **error)
 {
   if (self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY)

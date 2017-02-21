@@ -48,7 +48,6 @@ EphySQLiteStatement *   ephy_sqlite_connection_create_statement        (EphySQLi
 gint64                  ephy_sqlite_connection_get_last_insert_id      (EphySQLiteConnection *self);
 
 gboolean                ephy_sqlite_connection_begin_transaction       (EphySQLiteConnection *self, GError **error);
-gboolean                ephy_sqlite_connection_rollback_transaction    (EphySQLiteConnection *self, GError **error);
 gboolean                ephy_sqlite_connection_commit_transaction      (EphySQLiteConnection *self, GError **error);
 
 gboolean                ephy_sqlite_connection_table_exists            (EphySQLiteConnection *self, const char *table_name);
