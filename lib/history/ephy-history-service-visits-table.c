@@ -81,8 +81,12 @@ ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVis
     visit->id = ephy_sqlite_connection_get_last_insert_id (self->history_database);
   }
 
-  ephy_history_service_schedule_commit (self);
+  /* Remember kids: prepared statements lock the database! They must be unreffed
+   * before scheduling commit.
+   */
   g_object_unref (statement);
+
+  ephy_history_service_schedule_commit (self);
 }
 
 static EphyHistoryPageVisit *
