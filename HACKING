@@ -119,11 +119,9 @@ WebKitGTK+ objects are:
 Epiphany has one EphyWebView per browser tab. It has exactly one
 WebKitWebContext, stored by EphyEmbedShell. WARNING: you need to be careful to
 use the web context from EphyEmbedShell when using a WebKit API that expects a
-WebKitWebContext. Think very carefully before using WebKit's default
-WebKitWebContext, which does not have all the right Epiphany settings and is
-probably not what you want. That is, do not pass NULL to a WebKitWebContext*
-parameter, and do not use webkit_web_context_get_default(). An exception is for
-the Firefox Sync web view in the preferences dialog.
+WebKitWebContext. Do not use WebKit's default WebKitWebContext; that is, do not
+pass NULL to any WebKitWebContext* parameter, and do not use
+webkit_web_context_get_default().
 
 WebKitGTK+ API documentation can be found at:
 
