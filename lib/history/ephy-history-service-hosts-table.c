@@ -424,7 +424,7 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
                                       EphyHistoryHost    *host)
 {
   EphySQLiteStatement *statement = NULL;
-  gchar *sql_statement;
+  const char *sql_statement;
   GError *error = NULL;
 
   g_assert (self->history_thread == g_thread_self ());
@@ -433,13 +433,12 @@ ephy_history_service_delete_host_row (EphyHistoryService *self,
   g_assert (host->id != -1 || host->url);
 
   if (host->id != -1)
-    sql_statement = g_strdup ("DELETE FROM hosts WHERE id=?");
+    sql_statement = "DELETE FROM hosts WHERE id=?";
   else
-    sql_statement = g_strdup ("DELETE FROM hosts WHERE url=?");
+    sql_statement = "DELETE FROM hosts WHERE url=?";
 
   statement = ephy_sqlite_connection_create_statement (self->history_database,
                                                        sql_statement, &error);
-  g_free (sql_statement);
 
   if (error) {
     g_warning ("Could not build urls table query statement: %s", error->message);
