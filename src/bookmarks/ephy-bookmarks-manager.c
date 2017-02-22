@@ -380,13 +380,13 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
   g_sequence_remove (iter);
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
   g_signal_emit (self, signals[BOOKMARK_REMOVED], 0, bookmark);
-  g_object_unref (bookmark);
 
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                              (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                              NULL);
 
   ephy_bookmarks_manager_unwatch_bookmark (self, bookmark);
+  g_object_unref (bookmark);
 }
 
 EphyBookmark *
