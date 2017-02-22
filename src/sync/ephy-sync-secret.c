@@ -122,7 +122,7 @@ load_tokens_cb (SecretService *service,
     g_set_error (&ret_error,
                  SYNC_SECRET_ERROR,
                  SYNC_SECRET_ERROR_LOAD,
-                 _("Could not found the sync tokens for the currently logged in user."));
+                 _("Could not find the sync tokens for the currently logged-in user."));
     g_warning ("sync-secret: Emails differ: %s vs %s", email, user_email);
     goto out;
   }
