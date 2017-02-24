@@ -185,6 +185,7 @@ is_bang_search (const char *address)
 
     if (strstr (address, buffer->str) == address) {
       g_string_free (buffer, TRUE);
+      g_free (bangs);
       return TRUE;
     }
     g_string_free (buffer, TRUE);
