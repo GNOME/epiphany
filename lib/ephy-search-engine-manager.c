@@ -193,7 +193,7 @@ ephy_search_engine_manager_get_names (EphySearchEngineManager *manager)
   g_hash_table_iter_init (&iter, manager->search_engines);
 
   while (g_hash_table_iter_next (&iter, &key, NULL))
-    search_engine_names[i++] = g_strdup ((char *) key);
+    search_engine_names[i++] = g_strdup ((char *)key);
 
   return search_engine_names;
 }
