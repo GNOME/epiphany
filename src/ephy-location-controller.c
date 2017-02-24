@@ -22,16 +22,17 @@
 #include "config.h"
 #include "ephy-location-controller.h"
 
-#include "ephy-widgets-type-builtins.h"
+
 #include "ephy-completion-model.h"
 #include "ephy-debug.h"
+#include "ephy-dnd.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-utils.h"
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
-#include "ephy-dnd.h"
 #include "ephy-shell.h"
 #include "ephy-title-widget.h"
+#include "ephy-widgets-type-builtins.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -150,7 +151,8 @@ entry_activate_cb (GtkEntry               *entry,
   }
 
   content = gtk_entry_get_text (entry);
-  if (content == NULL || content[0] == '\0') return;
+  if (content == NULL || content[0] == '\0')
+    return;
 
   address = g_strdup (content);
   effective_address = ephy_embed_utils_normalize_or_autosearch_address (g_strstrip (address));
@@ -306,7 +308,6 @@ action_activated_cb (GtkEntryCompletion     *completion,
   url = ephy_search_engine_manager_build_search_address (controller->search_engine_manager,
                                                          engine_names[index],
                                                          content);
-
   g_strfreev (engine_names);
 
   ephy_link_open (EPHY_LINK (controller), url, NULL,
@@ -354,9 +355,8 @@ search_engines_changed_cb (EphySearchEngineManager *manager,
   controller = EPHY_LOCATION_CONTROLLER (data);
   completion = gtk_entry_get_completion (GTK_ENTRY (controller->title_widget));
 
-  for (guint i = 0; i < controller->num_search_engines_actions; i++) {
+  for (guint i = 0; i < controller->num_search_engines_actions; i++)
     gtk_entry_completion_delete_action (completion, 0);
-  }
 
   fill_entry_completion_with_actions (completion, controller);
 }

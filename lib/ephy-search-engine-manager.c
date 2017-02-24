@@ -72,7 +72,6 @@ search_engines_changed_cb (GSettings *settings,
                            char      *key,
                            gpointer   user_data)
 {
-
   g_signal_emit (EPHY_SEARCH_ENGINE_MANAGER (user_data),
                  signals[SEARCH_ENGINES_CHANGED], 0);
 }
@@ -141,7 +140,7 @@ ephy_search_engine_manager_get_address (EphySearchEngineManager *manager,
 {
   EphySearchEngineInfo *info;
 
-  info = (EphySearchEngineInfo *) g_hash_table_lookup (manager->search_engines, name);
+  info = (EphySearchEngineInfo *)g_hash_table_lookup (manager->search_engines, name);
 
   if (info)
     return info->address;
@@ -155,7 +154,7 @@ ephy_search_engine_manager_get_bang (EphySearchEngineManager *manager,
 {
   EphySearchEngineInfo *info;
 
-  info = (EphySearchEngineInfo *) g_hash_table_lookup (manager->search_engines, name);
+  info = (EphySearchEngineInfo *)g_hash_table_lookup (manager->search_engines, name);
 
   if (info)
     return info->bang;
@@ -194,7 +193,7 @@ ephy_search_engine_manager_get_names (EphySearchEngineManager *manager)
   g_hash_table_iter_init (&iter, manager->search_engines);
 
   while (g_hash_table_iter_next (&iter, &key, NULL))
-    search_engine_names[i++] = g_strdup((char *) key);
+    search_engine_names[i++] = g_strdup ((char *) key);
 
   return search_engine_names;
 }
@@ -233,7 +232,7 @@ ephy_search_engine_manager_apply_settings (EphySearchEngineManager *manager)
   g_hash_table_iter_init (&iter, manager->search_engines);
 
   while (g_hash_table_iter_next (&iter, &key, &value)) {
-    info = (EphySearchEngineInfo *) value;
+    info = (EphySearchEngineInfo *)value;
     g_variant_builder_add (&builder, "(sss)", key, info->address, info->bang);
   }
   variant = g_variant_builder_end (&builder);
@@ -288,7 +287,7 @@ ephy_search_engine_manager_engine_from_bang (EphySearchEngineManager *manager,
   g_hash_table_iter_init (&iter, manager->search_engines);
 
   while (g_hash_table_iter_next (&iter, &key, &value)) {
-    info = (EphySearchEngineInfo *) value;
+    info = (EphySearchEngineInfo *)value;
     if (g_strcmp0(bang, info->bang) == 0)
       return (const char *)key;
   }
@@ -327,7 +326,7 @@ ephy_search_engine_manager_build_search_address (EphySearchEngineManager *manage
 {
   EphySearchEngineInfo *info;
 
-  info = (EphySearchEngineInfo *) g_hash_table_lookup (manager->search_engines, name);
+  info = (EphySearchEngineInfo *)g_hash_table_lookup (manager->search_engines, name);
 
   if (info == NULL)
     return NULL;
@@ -348,7 +347,7 @@ ephy_search_engine_manager_parse_bang_search (EphySearchEngineManager *manager,
   g_hash_table_iter_init (&iter, manager->search_engines);
 
   while (g_hash_table_iter_next (&iter, NULL, &value)) {
-    info = (EphySearchEngineInfo *) value;
+    info = (EphySearchEngineInfo *)value;
     buffer = g_string_new (info->bang);
     g_string_append (buffer, " ");
     if (strstr (search, buffer->str) == search) {

@@ -198,12 +198,13 @@ dialog_check_bang_entry (const char             *bang,
     dialog_set_entry_error_state (dialog->search_engine_bang_entry);
     return FALSE;
   }
-  else if (g_strcmp0 (bang, NEW_SEARCH_ENGINE_BANG) == 0) {
+
+  if (g_strcmp0 (bang, NEW_SEARCH_ENGINE_BANG) == 0) {
     dialog_set_entry_error_state (dialog->search_engine_bang_entry);
     return FALSE;
   }
-  else
-    dialog_set_entry_normal_state (dialog->search_engine_bang_entry);
+
+  dialog_set_entry_normal_state (dialog->search_engine_bang_entry);
 
   return TRUE;
 }
@@ -244,14 +245,13 @@ list_box_row_selected_cb (GtkListBox    *list_box,
     gtk_entry_set_placeholder_text (GTK_ENTRY (dialog->search_engine_name_entry),
                                     search_engine_name);
     search_engine_name = "";
-  }
-  else
-  {
+  } else {
     gtk_entry_set_text (GTK_ENTRY (dialog->search_engine_name_entry), search_engine_name);
     gtk_entry_set_text (GTK_ENTRY (dialog->search_engine_address_entry), search_engine_address);
     gtk_entry_set_text (GTK_ENTRY (dialog->search_engine_bang_entry), search_engine_bang);
 
     search_engine_default = ephy_search_engine_manager_get_default_engine (manager);
+
     if (g_strcmp0 (search_engine_name, search_engine_default) == 0)
       is_default = TRUE;
   }
@@ -271,7 +271,6 @@ list_box_row_selected_cb (GtkListBox    *list_box,
 static void
 ephy_search_engine_dialog_fill_list_box (EphySearchEngineDialog *dialog)
 {
-
   GtkListBox *listbox;
   GtkWidget *list_box_row;
   EphySearchEngineManager *manager;
@@ -302,8 +301,7 @@ generate_new_unique_default_engine_name (EphySearchEngineDialog *dialog)
   guint i = 1;
   char *default_name = g_strdup_printf ("%s %d", NEW_SEARCH_ENGINE_NAME, i);
 
-  while (dialog_list_box_child_n_occurence (default_name, dialog) != 0)
-  {
+  while (dialog_list_box_child_n_occurence (default_name, dialog) != 0) {
     if (i == UINT_MAX)
       break;
 
@@ -518,8 +516,7 @@ dialog_entry_change_on_event (GtkWidget *entry,
                                            search_engine_name,
                                            search_engine_address,
                                            search_engine_bang);
-  }
-  else {
+  } else {
     ephy_search_engine_manager_modify_engine (manager,
                                               search_engine_name,
                                               search_engine_address,
