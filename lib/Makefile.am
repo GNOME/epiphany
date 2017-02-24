@@ -31,6 +31,8 @@ libephymisc_la_SOURCES = \
 	ephy-prefs.h				\
 	ephy-profile-utils.c			\
 	ephy-profile-utils.h			\
+	ephy-search-engine-manager.c		\
+	ephy-search-engine-manager.h		\
 	ephy-security-levels.c			\
 	ephy-security-levels.h			\
 	ephy-settings.c				\

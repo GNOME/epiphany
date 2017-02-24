@@ -16,16 +16,25 @@
 			<description>Address of the user’s home page.</description>
 		</key>
 		<key type="s" name="keyword-search-url">
-			<!-- DuckDuckGo is the default search engine. Must exactly match the URL used
-			     in the preferences dialog, except this string is surrounded by single quotes
-			     and uses &amp; instead of simply &. If the match is not otherwise exact,
-			     there will be a spurious, ugly entry in the preferences combo, so please
-			     test this. Should ideally also match the default smart bookmark link in
-			     default-bookmarks.rdf. See the comment there for region parameters to
-			     the URL. -->
-			<default l10n="messages">'https://duckduckgo.com/?q=%s&amp;t=epiphany'</default>
+			<default>'https://duckduckgo.com/?q=%s&amp;t=epiphany'</default>
 			<summary>URL Search</summary>
-			<description>Search string for keywords entered in the URL bar.</description>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/search-engines instead.</description>
+		</key>
+		<key type="s" name="default-search-engine">
+			<default>'DuckDuckGo'</default>
+			<summary>Default search engine.</summary>
+			<description>Name of the search engine selected by default.</description>
+		</key>
+		<key type="a(sss)" name="search-engines">
+			<default l10n="messages">
+                                 <!-- TRANSLATORS: These are the prepopulated search engines. You should
+                                      add country-specific URL query parameters if appropriate. -->
+                                 [('DuckDuckGo', 'https://duckduckgo.com/?q=%s&amp;t=epiphany', '!ddg'),
+				  ('Google', 'https://www.google.com/search?q=%s', '!g'),
+				  ('Bing', 'https://www.bing.com/search?q=%s', '!b')]
+			</default>
+			<summary>Default search engines.</summary>
+			<description>List of the default search engines. It is an array in which each search engine is described by a name, an address, and a bang (shortcut).</description>
 		</key>
 		<key type="s" name="user-agent">
 			<default>''</default>

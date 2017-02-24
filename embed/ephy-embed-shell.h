@@ -27,6 +27,7 @@
 #include "ephy-encodings.h"
 #include "ephy-history-service.h"
 #include "ephy-permissions-manager.h"
+#include "ephy-search-engine-manager.h"
 
 G_BEGIN_DECLS
 
@@ -79,5 +80,6 @@ void               ephy_embed_shell_schedule_thumbnail_update  (EphyEmbedShell  
 WebKitUserContentManager *ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell);
 EphyDownloadsManager     *ephy_embed_shell_get_downloads_manager    (EphyEmbedShell *shell);
 EphyPermissionsManager   *ephy_embed_shell_get_permissions_manager  (EphyEmbedShell *shell);
+EphySearchEngineManager  *ephy_embed_shell_get_search_engine_manager (EphyEmbedShell *shell);
 
 G_END_DECLS

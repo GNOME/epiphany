@@ -67,6 +67,7 @@ typedef struct {
   GDBusServer *dbus_server;
   GList *web_extensions;
   EphyFiltersManager *filters_manager;
+  EphySearchEngineManager *search_engine_manager;
   GCancellable *cancellable;
 } EphyEmbedShellPrivate;
 
@@ -121,6 +122,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->web_context);
   g_clear_object (&priv->dbus_server);
   g_clear_object (&priv->filters_manager);
+  g_clear_object (&priv->search_engine_manager);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -1450,4 +1452,14 @@ ephy_embed_shell_get_permissions_manager (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   return priv->permissions_manager;
+}
+
+EphySearchEngineManager *
+ephy_embed_shell_get_search_engine_manager (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  if (!priv->search_engine_manager)
+    priv->search_engine_manager = ephy_search_engine_manager_new ();
+  return priv->search_engine_manager;
 }

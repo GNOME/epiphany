@@ -28,10 +28,10 @@
 #include "ephy-settings.h"
 #include "ephy-string.h"
 
-#include <string.h>
+#include <JavaScriptCore/JavaScript.h>
 #include <glib/gi18n.h>
 #include <libsoup/soup.h>
-#include <JavaScriptCore/JavaScript.h>
+#include <string.h>
 
 static GRegex *non_search_regex;
 static GRegex *domain_regex;
@@ -167,6 +167,33 @@ is_public_domain (const char *address)
   return retval;
 }
 
+static gboolean
+is_bang_search (const char *address)
+{
+  EphyEmbedShell *shell;
+  EphySearchEngineManager *search_engine_manager;
+  char **bangs;
+  GString *buffer;
+
+  shell = ephy_embed_shell_get_default ();
+  search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
+  bangs = ephy_search_engine_manager_get_bangs (search_engine_manager);
+
+  for (uint i = 0; bangs[i] != NULL; i++) {
+    buffer = g_string_new (bangs[i]);
+    g_string_append (buffer, " ");
+
+    if (strstr (address, buffer->str) == address) {
+      g_string_free (buffer, TRUE);
+      return TRUE;
+    }
+    g_string_free (buffer, TRUE);
+  }
+  g_free (bangs);
+
+  return FALSE;
+}
+
 gboolean
 ephy_embed_utils_address_is_valid (const char *address)
 {
@@ -181,7 +208,8 @@ ephy_embed_utils_address_is_valid (const char *address)
   retval = scheme ||
            ephy_embed_utils_address_is_existing_absolute_filename (address) ||
            g_regex_match (get_non_search_regex (), address, 0, NULL) ||
-           is_public_domain (address);
+           is_public_domain (address) ||
+           is_bang_search (address);
 
   g_free (scheme);
 
@@ -194,6 +222,16 @@ ephy_embed_utils_normalize_address (const char *address)
   char *effective_address = NULL;
 
   g_return_val_if_fail (address, NULL);
+
+  if (is_bang_search (address)) {
+    EphyEmbedShell *shell;
+    EphySearchEngineManager *search_engine_manager;
+
+    shell = ephy_embed_shell_get_default ();
+    search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
+    return ephy_search_engine_manager_parse_bang_search (search_engine_manager,
+                                                         address);
+  }
 
   if (ephy_embed_utils_address_is_existing_absolute_filename (address))
     return g_strconcat ("file://", address, NULL);
@@ -229,25 +267,27 @@ ephy_embed_utils_normalize_address (const char *address)
 char *
 ephy_embed_utils_autosearch_address (const char *search_key)
 {
-  char *query_param, *url_search;
+  char *query_param;
+  const char *address_search;
+  char *default_name;
   char *effective_address;
+  EphyEmbedShell *shell;
+  EphySearchEngineManager *search_engine_manager;
 
-  url_search = g_settings_get_string (EPHY_SETTINGS_MAIN,
-                                      EPHY_PREFS_KEYWORD_SEARCH_URL);
-  if (url_search == NULL || url_search[0] == '\0') {
-    g_free (url_search);
-    url_search = g_strdup (_("https://duckduckgo.com/?q=%s&amp;t=epiphany"));
-  }
+  shell = ephy_embed_shell_get_default ();
+  search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
+  default_name = ephy_search_engine_manager_get_default_engine (search_engine_manager);
+  address_search = ephy_search_engine_manager_get_address (search_engine_manager, default_name);
 
   query_param = soup_form_encode ("q", search_key, NULL);
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
   /* Format string under control of user input... but gsettings is trusted input. */
   /* + 2 here is getting rid of 'q=' */
-  effective_address = g_strdup_printf (url_search, query_param + 2);
+  effective_address = g_strdup_printf (address_search, query_param + 2);
 #pragma GCC diagnostic pop
   g_free (query_param);
-  g_free (url_search);
+  g_free (default_name);
 
   return effective_address;
 }

@@ -24,6 +24,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
+#include "ephy-search-engine-manager.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-web-view.h"
@@ -289,30 +290,35 @@ verify_normalize_or_autosearch_urls (EphyWebView               *view,
 static void
 test_ephy_web_view_normalize_or_autosearch (void)
 {
-  char *default_engine_url;
+  char *default_engine;
   EphyWebView *view;
+  EphySearchEngineManager *manager;
+  EphyEmbedShell *shell;
+
 
   view = EPHY_WEB_VIEW (ephy_web_view_new ());
-  default_engine_url = g_settings_get_string (EPHY_SETTINGS_MAIN,
-                                              EPHY_PREFS_KEYWORD_SEARCH_URL);
 
-  g_settings_set_string (EPHY_SETTINGS_MAIN,
-                         EPHY_PREFS_KEYWORD_SEARCH_URL,
-                         "http://duckduckgo.com/?q=%s&t=epiphany");
+  shell = ephy_embed_shell_get_default ();
+  manager = ephy_embed_shell_get_search_engine_manager (shell);
 
+
+  default_engine = ephy_search_engine_manager_get_default_engine (manager);
+  ephy_search_engine_manager_add_engine (manager,
+                                         "org.gnome.Epiphany.EphyWebViewTest",
+                                         "http://duckduckgo.com/?q=%s&t=epiphany",
+                                         "");
+  g_assert (ephy_search_engine_manager_set_default_engine (manager, "org.gnome.Epiphany.EphyWebViewTest"));
   verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_ddg, G_N_ELEMENTS (normalize_or_autosearch_test_ddg));
 
-  g_settings_set_string (EPHY_SETTINGS_MAIN,
-                         EPHY_PREFS_KEYWORD_SEARCH_URL,
-                         "http://www.google.com/?q=%s");
+  ephy_search_engine_manager_modify_engine (manager,
+                                            "org.gnome.Epiphany.EphyWebViewTest",
+                                            "http://www.google.com/?q=%s",
+                                            "");
 
+  g_assert (ephy_search_engine_manager_set_default_engine (manager, default_engine));
   verify_normalize_or_autosearch_urls (view, normalize_or_autosearch_test_google, G_N_ELEMENTS (normalize_or_autosearch_test_google));
 
-  g_settings_set_string (EPHY_SETTINGS_MAIN,
-                         EPHY_PREFS_KEYWORD_SEARCH_URL,
-                         default_engine_url);
-
-  g_free (default_engine_url);
+  g_free (default_engine);
   g_object_unref (g_object_ref_sink (view));
 }
 
