@@ -669,67 +669,6 @@ css_edit_button_clicked_cb (GtkWidget   *button,
   g_object_unref (css_file);
 }
 
-static gboolean
-combo_get_mapping (GValue   *value,
-                   GVariant *variant,
-                   gpointer  user_data)
-{
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  gboolean valid = FALSE;
-  const char *settings_name;
-  int i;
-
-  model = gtk_combo_box_get_model (GTK_COMBO_BOX (user_data));
-  valid = gtk_tree_model_get_iter_first (model, &iter);
-  settings_name = g_variant_get_string (variant, NULL);
-  i = 0;
-
-  while (valid) {
-    char *item_name;
-    gtk_tree_model_get (model, &iter, 1, &item_name, -1);
-
-    if (g_strcmp0 (item_name, settings_name) == 0) {
-      g_value_set_int (value, i);
-      g_free (item_name);
-      break;
-    }
-
-    i++;
-    valid = gtk_tree_model_iter_next (model, &iter);
-    g_free (item_name);
-  }
-
-  return TRUE;
-}
-
-static GVariant *
-combo_set_mapping (const GValue       *value,
-                   const GVariantType *expected_type,
-                   gpointer            user_data)
-{
-  GVariant *variant = NULL;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  gboolean valid = FALSE;
-  int n;
-
-  n = g_value_get_int (value);
-  model = gtk_combo_box_get_model (GTK_COMBO_BOX (user_data));
-  valid = gtk_tree_model_iter_nth_child (model, &iter, NULL, n);
-
-  if (valid) {
-    char *item_name;
-    gtk_tree_model_get (model, &iter, 1, &item_name, -1);
-
-    variant = g_variant_new_string (item_name);
-
-    g_free (item_name);
-  }
-
-  return variant;
-}
-
 static void
 language_editor_add (PrefsDialog *pd,
                      const char  *code,
