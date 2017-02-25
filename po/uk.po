@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-24 09:41+0200\n"
-"PO-Revision-Date: 2017-02-24 14:15+0300\n"
+"POT-Creation-Date: 2017-02-25 16:11+0200\n"
+"PO-Revision-Date: 2017-02-25 16:16+0300\n"
 "Last-Translator: Daniel Korostil <ted.korostiled@gmail.com>\n"
 "Language-Team: linux.org.ua\n"
 "Language: uk\n"
@@ -33,31 +33,54 @@ msgstr "Домашня сторінка"
 msgid "Address of the user’s home page."
 msgstr "Адреса домашньої сторінки."
 
-#. DuckDuckGo is the default search engine. Must exactly match the URL used
-#. in the preferences dialog, except this string is surrounded by single quotes
-#. and uses &amp; instead of simply &. If the match is not otherwise exact,
-#. there will be a spurious, ugly entry in the preferences combo, so please
-#. test this. Should ideally also match the default smart bookmark link in
-#. default-bookmarks.rdf. See the comment there for region parameters to
-#. the URL.
-#: ../data/org.gnome.epiphany.gschema.xml.h:12
-#, no-c-format
-msgid "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
-msgstr "'https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=ua-uk&kad=uk_UA'"
-
-#: ../data/org.gnome.epiphany.gschema.xml.h:13
+#: ../data/org.gnome.epiphany.gschema.xml.h:4
 msgid "URL Search"
 msgstr "URL пошуку"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:14
-msgid "Search string for keywords entered in the URL bar."
-msgstr "Рядок пошуку для ключових слів у полі вводу URL."
+#: ../data/org.gnome.epiphany.gschema.xml.h:5
+msgid ""
+"DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
+"search-engines instead."
+msgstr ""
+"ЗАСТАРІЛО: Цей ключ застарілий і не вживається. Використовуйте "
+"/org/gnome/epiphany/search-engines натомість."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:15
+#: ../data/org.gnome.epiphany.gschema.xml.h:6
+msgid "Default search engine."
+msgstr "Типовий пошуковий рушій."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:7
+msgid "Name of the search engine selected by default."
+msgstr "Назва пошукового рушія, якого вибрано як типовий."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:9
+#, no-c-format
+msgid ""
+"[('DuckDuckGo', 'https://duckduckgo.com/?q=%s&amp;t=epiphany', '!ddg'),\n"
+"\t\t\t\t  ('Google', 'https://www.google.com/search?q=%s', '!g'),\n"
+"\t\t\t\t  ('Bing', 'https://www.bing.com/search?q=%s', '!b')]"
+msgstr ""
+"[('DuckDuckGo', 'https://duckduckgo.com/?q=%s&amp;t=epiphany', '!ddg'),\n"
+"\t\t\t\t  ('Google', 'https://www.google.com/search?q=%s', '!g'),\n"
+"\t\t\t\t  ('Bing', 'https://www.bing.com/search?q=%s', '!b')]"
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:12
+msgid "Default search engines."
+msgstr "Типові пошукові рушії."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:13
+msgid ""
+"List of the default search engines. It is an array in which each search "
+"engine is described by a name, an address, and a bang (shortcut)."
+msgstr ""
+"Перелік типових пошукових рушіїв. Це масив, у якому кожеш рушій описаний "
+"назвою, адресою та скороченням."
+
+#: ../data/org.gnome.epiphany.gschema.xml.h:14
 msgid "User agent"
 msgstr "Агент користувача"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:16
+#: ../data/org.gnome.epiphany.gschema.xml.h:15
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers.\n"
@@ -67,14 +90,14 @@ msgid ""
 msgstr ""
 "Рядок, що використовується як ідентифікатор браузера для веб-сервера.\n"
 "\n"
-"ЗАСТАРІЛО: Цей ключ застарілий і не вживається. Використовуйте "
-"/org/gnome/epiphany/web/user-agent натомість."
+"ЗАСТАРІЛО: Цей ключ застарілий і не вживається. Використовуйте /org/gnome/"
+"epiphany/web/user-agent натомість."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:19
+#: ../data/org.gnome.epiphany.gschema.xml.h:18
 msgid "Automatic downloads"
 msgstr "Автоматичне завантаження"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:20
+#: ../data/org.gnome.epiphany.gschema.xml.h:19
 msgid ""
 "When files cannot be opened by the browser they are automatically downloaded "
 "to the download folder and opened with the appropriate application."
@@ -82,20 +105,20 @@ msgstr ""
 "Коли файли не можуть відкриті переглядачем, вони автоматично завантажуються "
 "у теку завантаження та відкриваються використовуючи відповідну програму."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:21
+#: ../data/org.gnome.epiphany.gschema.xml.h:20
 msgid "Force new windows to be opened in tabs"
 msgstr "Примусово відкривати нові запити у вкладках."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:22
+#: ../data/org.gnome.epiphany.gschema.xml.h:21
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "Примусово відкривати нові запити у вкладках, а не у нових вікнах."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:23
+#: ../data/org.gnome.epiphany.gschema.xml.h:22
 msgid "Remember passwords"
 msgstr "Запам'ятовувати паролі"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:24
+#: ../data/org.gnome.epiphany.gschema.xml.h:23
 msgid ""
 "Whether to store and prefill passwords in websites.\n"
 "\n"
@@ -104,30 +127,30 @@ msgid ""
 msgstr ""
 "Чи зберігати і заповняти паролі на сайтах.\n"
 "\n"
-"ЗАСТАРІЛО: Це ключ застарілий і не вживається. Використовуйте "
-"/org/gnome/epiphany/web/remember-passwords натомість."
+"ЗАСТАРІЛО: Це ключ застарілий і не вживається. Використовуйте /org/gnome/"
+"epiphany/web/remember-passwords натомість."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:27
+#: ../data/org.gnome.epiphany.gschema.xml.h:26
 msgid "Enable smooth scrolling"
 msgstr "Увімкнути плавне прокручування"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:28
+#: ../data/org.gnome.epiphany.gschema.xml.h:27
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/web/"
 "enable-smooth-scrolling instead."
 msgstr ""
-"ЗАСТАРІЛО: Цей ключ застарілий і не вживається. Використовуйте "
-"/org/gnome/epiphany/web/enable-smooth-scrolling натомість."
+"ЗАСТАРІЛО: Цей ключ застарілий і не вживається. Використовуйте /org/gnome/"
+"epiphany/web/enable-smooth-scrolling натомість."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:29
+#: ../data/org.gnome.epiphany.gschema.xml.h:28
 msgid "Don’t use an external application to view page source."
 msgstr "Не використовувати зовнішні програми для переглядання коду сторінки."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:30
+#: ../data/org.gnome.epiphany.gschema.xml.h:29
 msgid "Whether to automatically restore the last session"
 msgstr "Чи автоматично відновлювати останній сеанс"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:31
+#: ../data/org.gnome.epiphany.gschema.xml.h:30
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored), "
@@ -139,7 +162,7 @@ msgstr ""
 "відновлюється тільки, коли  програма зазнає краху) і «never» (показується "
 "завжди домівка)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:32
+#: ../data/org.gnome.epiphany.gschema.xml.h:31
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
@@ -147,7 +170,7 @@ msgstr ""
 "Чи затримуваним завантаження вкладок, які видно не відразу на відновленні "
 "сеансу"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:33
+#: ../data/org.gnome.epiphany.gschema.xml.h:32
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -155,21 +178,21 @@ msgstr ""
 "Коли цей параметр вказано, вкладки не починатимуть завантаження, поки "
 "користувач не перейде до них, на відновленні сеансу."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:34
+#: ../data/org.gnome.epiphany.gschema.xml.h:33
 msgid "Process model"
 msgstr "Модель оброблення"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:35
+#: ../data/org.gnome.epiphany.gschema.xml.h:34
 msgid ""
 "This option allows to set the process model used. Use “shared-secondary-"
 "process” to use a single web process shared by all the tabs and “one-"
 "secondary-process-per-web-view” to use a different web process for each tab."
 msgstr ""
-"Цей параметр дозволяє вказати модель оброблення. «shared-secondary-process» —"
-" використовувати один процес для всіх вкладок, «one-secondary-process-per-"
+"Цей параметр дозволяє вказати модель оброблення. «shared-secondary-process» "
+"— використовувати один процес для всіх вкладок, «one-secondary-process-per-"
 "web-view» — використовувати для кожної вкладки окремий процес."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:36
+#: ../data/org.gnome.epiphany.gschema.xml.h:35
 msgid ""
 "Maximum number of web processes created at the same time when using “one-"
 "secondary-process-per-web-view” model"
@@ -177,7 +200,7 @@ msgstr ""
 "Максимальна кількість процесів, які створено в той же час, що модель «one-"
 "secondary-process-per-web-view»"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:37
+#: ../data/org.gnome.epiphany.gschema.xml.h:36
 msgid ""
 "This option sets a limit to the number of web processes that will be used at "
 "the same time for the “one-secondary-process-per-web-view” model. The "
@@ -187,11 +210,11 @@ msgstr ""
 "одночасно з моделлю «one-secondary-process-per-web-view». Типове значення — "
 "«0» і означає, що обмежень немає."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:38
+#: ../data/org.gnome.epiphany.gschema.xml.h:37
 msgid "The sync user currently logged in"
 msgstr "Синхронізування поточного користувача"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:39
+#: ../data/org.gnome.epiphany.gschema.xml.h:38
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -199,30 +222,30 @@ msgstr ""
 "Пошта зв'язана з обліковим записом Firefox для синхронізування даних з "
 "серверами Mozilla."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:40
+#: ../data/org.gnome.epiphany.gschema.xml.h:39
 msgid "Sync timestamp"
 msgstr "Часова мітка синхронізування"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:41
+#: ../data/org.gnome.epiphany.gschema.xml.h:40
 msgid "The timestamp at which last we had the last sync"
 msgstr "Часова мітка, що позначає останнє синхронізування"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:42
+#: ../data/org.gnome.epiphany.gschema.xml.h:41
 msgid "List of adblock filters"
 msgstr "Перелік фільтрів блокування реклами"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:43
+#: ../data/org.gnome.epiphany.gschema.xml.h:42
 msgid "List of URLs with filter rules to be used by the adblock."
 msgstr ""
 "Перелік посилань з правилами фільтрів, які використовується для блокування "
 "реклами."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:44
+#: ../data/org.gnome.epiphany.gschema.xml.h:43
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "Збільшувати розмір вкладок, щоб заповнювати доступний простір на панелі."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:45
+#: ../data/org.gnome.epiphany.gschema.xml.h:44
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar."
@@ -230,52 +253,52 @@ msgstr ""
 "Якщо увімкнено, вкладки збільшуватимуться для використання всього простору "
 "на панелі."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:46
+#: ../data/org.gnome.epiphany.gschema.xml.h:45
 msgid "The position of the tabs bar."
 msgstr "Розміщення панелі вкладок."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:47
+#: ../data/org.gnome.epiphany.gschema.xml.h:46
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
 "“right” (vertical tabs with bar on the right)."
 msgstr ""
 "Вказує, де панель вкладок показується. Доступні значення: «top» (типове), "
-"«bottom», «left» (вертикальні вкладки з панеллю зліва) і «right» ("
-"вертикальні вкладки з панеллю справа)."
+"«bottom», «left» (вертикальні вкладки з панеллю зліва) і "
+"«right» (вертикальні вкладки з панеллю справа)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:48
+#: ../data/org.gnome.epiphany.gschema.xml.h:47
 msgid "The visibility policy for the tabs bar."
 msgstr "Умови видимості для панелі вкладок."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:49
+#: ../data/org.gnome.epiphany.gschema.xml.h:48
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
 "two or more tabs) and “never” (the tabs bar is never shown)."
 msgstr ""
-"Вказує, коли панель вкладок показується. Допустимі значення — «always» ("
-"завжди показувати панель вкладок), «more-than-one» (вкладки показуються "
-"тільки тоді, коли їх є дві або більше) і «never» (панель вкладок ніколи не "
-"показується)."
+"Вказує, коли панель вкладок показується. Допустимі значення — "
+"«always» (завжди показувати панель вкладок), «more-than-one» (вкладки "
+"показуються тільки тоді, коли їх є дві або більше) і «never» (панель вкладок "
+"ніколи не показується)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:50
+#: ../data/org.gnome.epiphany.gschema.xml.h:49
 msgid "Minimum font size"
 msgstr "Мінімальний розмір шрифту"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:51
+#: ../data/org.gnome.epiphany.gschema.xml.h:50
 msgid "Use GNOME fonts"
 msgstr "Використовувати шрифти GNOME"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:52
+#: ../data/org.gnome.epiphany.gschema.xml.h:51
 msgid "Use GNOME font settings."
 msgstr "Використовувати параметри шрифтів GNOME."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:53
+#: ../data/org.gnome.epiphany.gschema.xml.h:52
 msgid "Custom sans-serif font"
 msgstr "Інший шрифт без засічок"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:54
+#: ../data/org.gnome.epiphany.gschema.xml.h:53
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -283,11 +306,11 @@ msgstr ""
 "Значення для перезаписування стільничних шрифтів без засічок, коли вказано "
 "use-gnome-fonts."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:55
+#: ../data/org.gnome.epiphany.gschema.xml.h:54
 msgid "Custom serif font"
 msgstr "Інший шрифт із засічками"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:56
+#: ../data/org.gnome.epiphany.gschema.xml.h:55
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -295,11 +318,11 @@ msgstr ""
 "Значення для перезаписування стільничних шрифтів із засічками, коли вказано "
 "use-gnome-fonts."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:57
+#: ../data/org.gnome.epiphany.gschema.xml.h:56
 msgid "Custom monospace font"
 msgstr "Інший моноширинний шрифт"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:58
+#: ../data/org.gnome.epiphany.gschema.xml.h:57
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -307,47 +330,47 @@ msgstr ""
 "Значення для перезаписування стільничних моноширинних шрифтів, коли вказано "
 "use-gnome-fonts."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:59
+#: ../data/org.gnome.epiphany.gschema.xml.h:58
 msgid "Use a custom CSS"
 msgstr "Використовувати нетиповий CSS"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:60
+#: ../data/org.gnome.epiphany.gschema.xml.h:59
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Використовувати інший файл CSS, щоб змінювати сайти, які мають CSS."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:61
+#: ../data/org.gnome.epiphany.gschema.xml.h:60
 msgid "Enable spell checking"
 msgstr "Увімкнути перевіряння орфографії"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:62
+#: ../data/org.gnome.epiphany.gschema.xml.h:61
 msgid "Spell check any text typed in editable areas."
 msgstr ""
 "Перевіряти орфографію будь-якого тексту, який вводиться у можливих ділянках."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:63
+#: ../data/org.gnome.epiphany.gschema.xml.h:62
 msgid "Default encoding"
 msgstr "Типова кодова сторінка"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:64
+#: ../data/org.gnome.epiphany.gschema.xml.h:63
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Типове кодування. Допустимі значення — ті, які може розібрати WebKitGTK."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:65
+#: ../data/org.gnome.epiphany.gschema.xml.h:64
 msgid "Languages"
 msgstr "Мови"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:66
+#: ../data/org.gnome.epiphany.gschema.xml.h:65
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr "Бажані мови. Масив кодів локалей або «системна» для  поточної локалі."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:67
+#: ../data/org.gnome.epiphany.gschema.xml.h:66
 msgid "Cookie accept"
 msgstr "Дозволити cookie"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:68
+#: ../data/org.gnome.epiphany.gschema.xml.h:67
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -355,52 +378,52 @@ msgstr ""
 "Звідки приймати куки. Доступні значення: «always», «no-third-party» та "
 "«never»."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:69
+#: ../data/org.gnome.epiphany.gschema.xml.h:68
 msgid "Allow popups"
 msgstr "Дозволити контекстні вікна"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:70
+#: ../data/org.gnome.epiphany.gschema.xml.h:69
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Дозволити відкривання нових вікон використовуючи JavaScript (якщо JavaScript "
 "увімкнено)."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:71
+#: ../data/org.gnome.epiphany.gschema.xml.h:70
 msgid "Enable Plugins"
 msgstr "Увімкнути додатки"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:72
+#: ../data/org.gnome.epiphany.gschema.xml.h:71
 msgid "Enable WebGL"
 msgstr "Увімкнути WebGL"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:73
+#: ../data/org.gnome.epiphany.gschema.xml.h:72
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Чи увімкнення підтримування для вмісту WebGL."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:74
+#: ../data/org.gnome.epiphany.gschema.xml.h:73
 msgid "Enable WebAudio"
 msgstr "Увімкнути WebAudio"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:75
+#: ../data/org.gnome.epiphany.gschema.xml.h:74
 msgid "Whether to enable support for WebAudio."
 msgstr "Чи ввімкнено підтримування для WebAudio."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:76
+#: ../data/org.gnome.epiphany.gschema.xml.h:75
 msgid "Whether to enable smooth scrolling."
 msgstr "Чи ввімкнути плавне прокручування."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:77
+#: ../data/org.gnome.epiphany.gschema.xml.h:76
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
 msgstr "Рядок, що використовується як ідентифікатор браузера для веб-сервера."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:78
+#: ../data/org.gnome.epiphany.gschema.xml.h:77
 msgid "Do Not Track"
 msgstr "Без слідкування"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:79
+#: ../data/org.gnome.epiphany.gschema.xml.h:78
 msgid ""
 "Enables DNT headers and tracking query parameter removal. Note that when "
 "changing this setting from the preferences dialog, the adblock-filters "
@@ -410,25 +433,25 @@ msgstr ""
 "увазі, коли змінюєте цей параметр з вікна параметрів, налаштування фільтрів "
 "блокування реклами буде додатково доповнено фільтрами EasyPrivacy."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:80
+#: ../data/org.gnome.epiphany.gschema.xml.h:79
 msgid "Enable adblock"
 msgstr "Увімкнути блокування реклами"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:81
+#: ../data/org.gnome.epiphany.gschema.xml.h:80
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Чи блокувати вбудовану рекламу, яку сайти вам бажають показати."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:82
+#: ../data/org.gnome.epiphany.gschema.xml.h:81
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Чи зберігати паролі та заповнювати поля з паролями на сайтах."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:83
+#: ../data/org.gnome.epiphany.gschema.xml.h:82
 msgid "The downloads folder"
 msgstr "Тека для завантажень"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:84
+#: ../data/org.gnome.epiphany.gschema.xml.h:83
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -437,33 +460,33 @@ msgstr ""
 "використовувати типову теку звантаження, або «Стільниця» щоб звантажувати "
 "файли на стільницю."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:85
+#: ../data/org.gnome.epiphany.gschema.xml.h:84
 msgid "Window position"
 msgstr "Положення вікна"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:86
+#: ../data/org.gnome.epiphany.gschema.xml.h:85
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 "Положення потрібне для нових вікон, які не відновлені з попередніх сеансів."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:87
+#: ../data/org.gnome.epiphany.gschema.xml.h:86
 msgid "Window size"
 msgstr "Розмір вікна"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:88
+#: ../data/org.gnome.epiphany.gschema.xml.h:87
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 "Розмір потрібен для нових вікон, які не відновлені з попередніх сеансів."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:89
+#: ../data/org.gnome.epiphany.gschema.xml.h:88
 msgid "Is maximized"
 msgstr "Чи розгорнуто"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:90
+#: ../data/org.gnome.epiphany.gschema.xml.h:89
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -471,11 +494,11 @@ msgstr ""
 "Чи новому вікну, яке не відновлено з попереднього сеансу, слід бути "
 "розгорнутим."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:91
+#: ../data/org.gnome.epiphany.gschema.xml.h:90
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на мікрофон для цього вузла"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:92
+#: ../data/org.gnome.epiphany.gschema.xml.h:91
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -487,12 +510,12 @@ msgstr ""
 "користувача про дозвіл, в той час, коли «allow» і «deny» будуть автоматично "
 "робити вибір за користувача."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:93
+#: ../data/org.gnome.epiphany.gschema.xml.h:92
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на розміщення для цього вузла"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:94
+#: ../data/org.gnome.epiphany.gschema.xml.h:93
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -504,12 +527,12 @@ msgstr ""
 "питати користувача про дозвіл, в той час, коли «allow» і «deny» будуть "
 "автоматично робити вибір за користувача."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:95
+#: ../data/org.gnome.epiphany.gschema.xml.h:94
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на сповіщення для цього вузла"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:96
+#: ../data/org.gnome.epiphany.gschema.xml.h:95
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -521,12 +544,12 @@ msgstr ""
 "питати користувача про дозвіл, в той час, коли «allow» і «deny» будуть "
 "автоматично робити вибір за користувача."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:97
+#: ../data/org.gnome.epiphany.gschema.xml.h:96
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на збереження паролю для цього вузла"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:98
+#: ../data/org.gnome.epiphany.gschema.xml.h:97
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -538,11 +561,11 @@ msgstr ""
 "буде питати користувача про дозвіл, в той час, коли «allow» і «deny» будуть "
 "автоматично робити вибір за користувача."
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:99
+#: ../data/org.gnome.epiphany.gschema.xml.h:98
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr "Що робити, коли вимагаються права на камеру для цього вузла"
 
-#: ../data/org.gnome.epiphany.gschema.xml.h:100
+#: ../data/org.gnome.epiphany.gschema.xml.h:99
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -631,7 +654,7 @@ msgstr "Вилучити"
 msgid "Installed on:"
 msgstr "Встановлено на:"
 
-#: ../embed/ephy-about-handler.c:457 ../embed/ephy-embed-utils.c:306
+#: ../embed/ephy-about-handler.c:457 ../embed/ephy-embed-utils.c:347
 msgid "Most Visited"
 msgstr "Найвідвідуваніші"
 
@@ -703,12 +726,6 @@ msgstr "F11"
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Надіслати лист за адресою «%s»"
-
-#: ../embed/ephy-embed-utils.c:239
-#: ../src/search-provider/ephy-search-provider.c:287
-#, c-format
-msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=ua-uk&kad=uk_UA"
 
 #: ../embed/ephy-encodings.c:59
 msgid "Arabic (_IBM-864)"
@@ -1828,6 +1845,18 @@ msgstr "Переглянути відкриті вкладки"
 msgid "Close tab"
 msgstr "Закрити вкладку"
 
+#: ../src/ephy-search-engine-dialog.c:30
+msgid "New search engine"
+msgstr "Додати пошуковий рушій"
+
+#: ../src/ephy-search-engine-dialog.c:31
+msgid "New address"
+msgstr "Додати адресу"
+
+#: ../src/ephy-search-engine-dialog.c:32
+msgid "Bang"
+msgstr "Скорочення"
+
 #: ../src/ephy-shell.c:331
 msgid ""
 "Please visit Preferences and sign in again to continue the sync process."
@@ -2003,16 +2032,16 @@ msgid "Save Media As"
 msgstr "Зберегти матеріал як"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: ../src/prefs-dialog.c:255 ../src/prefs-dialog.c:1823
+#: ../src/prefs-dialog.c:254 ../src/prefs-dialog.c:1724
 #, c-format
 msgid "Currently logged in as %s"
 msgstr "Увійшли як %s"
 
-#: ../src/prefs-dialog.c:414
+#: ../src/prefs-dialog.c:413
 msgid "Something went wrong, please try again."
 msgstr "Щось пішло не так, спробу ще раз."
 
-#: ../src/prefs-dialog.c:438
+#: ../src/prefs-dialog.c:437
 msgid "Please don’t leave this page until you have completed the verification."
 msgstr "Не покидайте цієї сторінки, поки не закінчиться перевірка."
 
@@ -2020,7 +2049,7 @@ msgstr "Не покидайте цієї сторінки, поки не зак�
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: ../src/prefs-dialog.c:896 ../src/prefs-dialog.c:900
+#: ../src/prefs-dialog.c:908 ../src/prefs-dialog.c:912
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2029,13 +2058,13 @@ msgstr "|%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: ../src/prefs-dialog.c:907
+#: ../src/prefs-dialog.c:919
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Визначено користувачем (%s)"
 
-#: ../src/prefs-dialog.c:929
+#: ../src/prefs-dialog.c:941
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2043,51 +2072,15 @@ msgstr[0] "Системна мова (%s)"
 msgstr[1] "Системні мови (%s)"
 msgstr[2] "Системних мов (%s)"
 
-#: ../src/prefs-dialog.c:1172
+#: ../src/prefs-dialog.c:1184
 msgid "Language"
 msgstr "Мова"
 
-#: ../src/prefs-dialog.c:1251
+#: ../src/prefs-dialog.c:1263
 msgid "Select a Directory"
 msgstr "Виберіть каталог"
 
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1363
-msgid "DuckDuckGo"
-msgstr "DuckDuckGo"
-
-#. For the preferences dialog. Must exactly match the URL
-#. * you chose in the gschema, but with & instead of &amp;
-#. * If the match is not exact, there will be a spurious, ugly
-#. * entry in the preferences combo, so please test this.
-#: ../src/prefs-dialog.c:1369
-#, c-format
-msgid "https://duckduckgo.com/?q=%s&t=epiphany"
-msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=ua-uk&kad=uk_UA"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1371
-msgid "Google"
-msgstr "Google"
-
-#. For the preferences dialog. Consider a regional variant, like google.co.uk
-#: ../src/prefs-dialog.c:1374
-#, c-format
-msgid "https://google.com/search?q=%s"
-msgstr "http://www.google.com.ua/search?q=%s&ie=UTF-8&oe=UTF-8"
-
-#. Search engine option in the preferences dialog
-#: ../src/prefs-dialog.c:1376
-msgid "Bing"
-msgstr "Bing"
-
-#. For the preferences dialog. Consider a regional variant, like uk.bing.com
-#: ../src/prefs-dialog.c:1379
-#, c-format
-msgid "https://www.bing.com/search?q=%s"
-msgstr "https://www.bing.com/search?q=%s"
-
-#: ../src/profile-migrator/ephy-profile-migrator.c:92
+#: ../src/profile-migrator/ephy-profile-migrator.c:93
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -2095,23 +2088,27 @@ msgstr ""
 "Тенет 3.6 вважає цей каталог застарілим і спробував перемістити налаштування "
 "в ~/.config/epiphany"
 
-#: ../src/profile-migrator/ephy-profile-migrator.c:1003
+#: ../src/profile-migrator/ephy-profile-migrator.c:926
+msgid "Search the Web"
+msgstr "Пошукати у мережі"
+
+#: ../src/profile-migrator/ephy-profile-migrator.c:1061
 msgid "Executes only the n-th migration step"
 msgstr "Виконує тільки n-ий міграційний крок"
 
-#: ../src/profile-migrator/ephy-profile-migrator.c:1005
+#: ../src/profile-migrator/ephy-profile-migrator.c:1063
 msgid "Specifies the required version for the migrator"
 msgstr "Вказує потрібну версію для мігрування"
 
-#: ../src/profile-migrator/ephy-profile-migrator.c:1007
+#: ../src/profile-migrator/ephy-profile-migrator.c:1065
 msgid "Specifies the profile where the migrator should run"
 msgstr "Вказує профіль, де слід зробити мігрування"
 
-#: ../src/profile-migrator/ephy-profile-migrator.c:1025
+#: ../src/profile-migrator/ephy-profile-migrator.c:1083
 msgid "Web profile migrator"
 msgstr "Мігрування профілів Тенет"
 
-#: ../src/profile-migrator/ephy-profile-migrator.c:1026
+#: ../src/profile-migrator/ephy-profile-migrator.c:1084
 msgid "Web profile migrator options"
 msgstr "Параметри мігрування профілів для Тенет"
 
@@ -2322,6 +2319,34 @@ msgstr ""
 #: ../src/window-commands.c:2123
 msgid "_Enable"
 msgstr "_Увімкнути"
+
+#~ msgid "'https://duckduckgo.com/?q=%s&amp;t=epiphany'"
+#~ msgstr ""
+#~ "'https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=ua-uk&kad=uk_UA'"
+
+#~ msgid "Search string for keywords entered in the URL bar."
+#~ msgstr "Рядок пошуку для ключових слів у полі вводу URL."
+
+#~ msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
+#~ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=ua-uk&kad=uk_UA"
+
+#~ msgid "DuckDuckGo"
+#~ msgstr "DuckDuckGo"
+
+#~ msgid "https://duckduckgo.com/?q=%s&t=epiphany"
+#~ msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany&amp;kl=ua-uk&kad=uk_UA"
+
+#~ msgid "Google"
+#~ msgstr "Google"
+
+#~ msgid "https://google.com/search?q=%s"
+#~ msgstr "http://www.google.com.ua/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#~ msgid "Bing"
+#~ msgstr "Bing"
+
+#~ msgid "https://www.bing.com/search?q=%s"
+#~ msgstr "https://www.bing.com/search?q=%s"
 
 #~ msgid "GNOME Web"
 #~ msgstr "Тенет GNOME"
@@ -3200,10 +3225,6 @@ msgstr "_Увімкнути"
 #~ msgstr "Пошук"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Next search result"
-#~ msgstr "Наступний результат пошуку"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Previous search result"
 #~ msgstr "Попередній результат пошуку"
 
@@ -3349,9 +3370,6 @@ msgstr "_Увімкнути"
 
 #~ msgid "Search the Web for '%s'"
 #~ msgstr "Знайти у Тенетах «%s»"
-
-#~ msgid "Search the web"
-#~ msgstr "Знайти у мережі"
 
 #~ msgid "https://duckduckgo.com/?t=epiphany"
 #~ msgstr "https://duckduckgo.com/?t=epiphany&amp;kl=ua-uk&kad=uk_UA"
@@ -3954,9 +3972,6 @@ msgstr "_Увімкнути"
 
 #~ msgid "_Each frame separately"
 #~ msgstr "_Кожну рамку окремо"
-
-#~ msgid "_Page address"
-#~ msgstr "_Адреса сторінки"
 
 #~ msgid ""
 #~ "CA Certificates file we should use was not found, all SSL sites will be "
