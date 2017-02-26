@@ -49,7 +49,7 @@ struct _EphyCookiesDialog {
 
   GActionGroup *action_group;
 
-  WebKitCookieManager *cookie_manager;
+  WebKitWebsiteDataManager *data_manager;
   gboolean filled;
 
   char *search_text;
@@ -64,7 +64,7 @@ static void cookie_changed_cb (WebKitCookieManager *cookie_manager,
 static void
 reload_model (EphyCookiesDialog *dialog)
 {
-  g_signal_handlers_disconnect_by_func (dialog->cookie_manager, cookie_changed_cb, dialog);
+  g_signal_handlers_disconnect_by_func (webkit_website_data_manager_get_cookie_manager (dialog->data_manager), cookie_changed_cb, dialog);
   gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
   dialog->filled = FALSE;
   populate_model (dialog);
@@ -80,7 +80,7 @@ cookie_changed_cb (WebKitCookieManager *cookie_manager,
 static void
 ephy_cookies_dialog_dispose (GObject *object)
 {
-  g_signal_handlers_disconnect_by_func (EPHY_COOKIES_DIALOG (object)->cookie_manager, cookie_changed_cb, object);
+  g_signal_handlers_disconnect_by_func (webkit_website_data_manager_get_cookie_manager (EPHY_COOKIES_DIALOG (object)->data_manager), cookie_changed_cb, object);
   G_OBJECT_CLASS (ephy_cookies_dialog_parent_class)->dispose (object);
 }
 
@@ -92,21 +92,13 @@ ephy_cookies_dialog_finalize (GObject *object)
 }
 
 static void
-cookie_remove (EphyCookiesDialog *dialog,
-               gpointer           data)
-{
-  const char *domain = (const char *)data;
-
-  webkit_cookie_manager_delete_cookies_for_domain (dialog->cookie_manager, domain);
-}
-
-static void
 forget (GSimpleAction *action,
         GVariant      *parameter,
         gpointer       user_data)
 {
   EphyCookiesDialog *dialog = EPHY_COOKIES_DIALOG (user_data);
   GList *llist, *rlist = NULL, *l, *r;
+  GList *data_to_remove = NULL;
   GtkTreeModel *model;
   GtkTreePath *path;
   GtkTreeIter iter, iter2;
@@ -151,8 +143,8 @@ forget (GSimpleAction *action,
 
     path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)r->data);
     gtk_tree_model_get_iter (model, &iter, path);
-    gtk_tree_model_get_value (model, &iter, COL_COOKIES_HOST, &val);
-    cookie_remove (dialog, (gpointer)g_value_get_string (&val));
+    gtk_tree_model_get_value (model, &iter, COL_COOKIES_DATA, &val);
+    data_to_remove = g_list_prepend (data_to_remove, g_value_dup_boxed (&val));
     g_value_unset (&val);
 
     gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (dialog->treemodelsort),
@@ -172,6 +164,11 @@ forget (GSimpleAction *action,
   g_list_foreach (llist, (GFunc)gtk_tree_path_free, NULL);
   g_list_free (llist);
   g_list_free (rlist);
+
+  if (data_to_remove) {
+    webkit_website_data_manager_remove (dialog->data_manager, WEBKIT_WEBSITE_DATA_COOKIES, data_to_remove, NULL, NULL, NULL);
+    g_list_free_full (data_to_remove, (GDestroyNotify)webkit_website_data_unref);
+  }
 
   /* Selection */
   if (row_ref != NULL) {
@@ -223,7 +220,7 @@ forget_all (GSimpleAction *action,
 {
   EphyCookiesDialog *dialog = EPHY_COOKIES_DIALOG (user_data);
 
-  webkit_cookie_manager_delete_all_cookies (dialog->cookie_manager);
+  webkit_website_data_manager_clear (dialog->data_manager, WEBKIT_WEBSITE_DATA_COOKIES, 0, NULL, NULL, NULL);
   reload_model (dialog);
 }
 
@@ -235,6 +232,8 @@ ephy_cookies_dialog_class_init (EphyCookiesDialogClass *klass)
 
   object_class->dispose = ephy_cookies_dialog_dispose;
   object_class->finalize = ephy_cookies_dialog_finalize;
+
+  g_type_ensure (WEBKIT_TYPE_WEBSITE_DATA);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/cookies-dialog.ui");
@@ -270,9 +269,9 @@ cookie_search_equal (GtkTreeModel *model,
 
 static void
 cookie_add (EphyCookiesDialog *dialog,
-            gpointer           data)
+            WebKitWebsiteData *data)
 {
-  char *domain = (char *)data;
+  const char *domain;
   GtkListStore *store;
   GtkTreeIter iter;
   int column[3] = { COL_COOKIES_HOST, COL_COOKIES_HOST_KEY, COL_COOKIES_DATA };
@@ -288,10 +287,12 @@ cookie_add (EphyCookiesDialog *dialog,
 
   g_value_init (&value[0], G_TYPE_STRING);
   g_value_init (&value[1], G_TYPE_STRING);
-  g_value_init (&value[2], SOUP_TYPE_COOKIE);
+  g_value_init (&value[2], WEBKIT_TYPE_WEBSITE_DATA);
 
-  g_value_set_static_string (&value[0], domain);
+  domain = webkit_website_data_get_name (data);
+  g_value_set_string (&value[0], domain);
   g_value_take_string (&value[1], ephy_string_collate_key_for_domain (domain, -1));
+  g_value_take_boxed (&value[2], data);
 
   gtk_list_store_insert_with_valuesv (store, &iter, -1,
                                       column, value,
@@ -325,22 +326,21 @@ compare_cookie_host_keys (GtkTreeModel *model,
 }
 
 static void
-get_domains_with_cookies_cb (WebKitCookieManager *cookie_manager,
-                             GAsyncResult        *result,
-                             EphyCookiesDialog   *dialog)
+get_domains_with_cookies_cb (WebKitWebsiteDataManager *data_manager,
+                             GAsyncResult             *result,
+                             EphyCookiesDialog        *dialog)
 {
-  gchar **domains;
-  guint i;
+  GList *data_list;
 
-  domains = webkit_cookie_manager_get_domains_with_cookies_finish (cookie_manager, result, NULL);
-  if (!domains)
+  data_list = webkit_website_data_manager_fetch_finish (data_manager, result, NULL);
+  if (!data_list)
     return;
 
-  for (i = 0; domains[i]; i++)
-    cookie_add (dialog, domains[i]);
+  for (GList *l = data_list; l && l->data; l = g_list_next (l))
+    cookie_add (dialog, (WebKitWebsiteData *)l->data);
 
-  /* The array items have been consumed, so we need only to free the array. */
-  g_free (domains);
+  /* The list items have been consumed, so we need only to free the list. */
+  g_list_free (data_list);
 
   /* Now turn on sorting */
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (dialog->liststore),
@@ -351,7 +351,7 @@ get_domains_with_cookies_cb (WebKitCookieManager *cookie_manager,
                                         COL_COOKIES_HOST_KEY,
                                         GTK_SORT_ASCENDING);
 
-  g_signal_connect (cookie_manager,
+  g_signal_connect (webkit_website_data_manager_get_cookie_manager (data_manager),
                     "changed",
                     G_CALLBACK (cookie_changed_cb),
                     dialog);
@@ -387,10 +387,11 @@ populate_model (EphyCookiesDialog *dialog)
 {
   g_assert (dialog->filled == FALSE);
 
-  webkit_cookie_manager_get_domains_with_cookies (dialog->cookie_manager,
-                                                  NULL,
-                                                  (GAsyncReadyCallback)get_domains_with_cookies_cb,
-                                                  dialog);
+  webkit_website_data_manager_fetch (dialog->data_manager,
+                                     WEBKIT_WEBSITE_DATA_COOKIES,
+                                     NULL,
+                                     (GAsyncReadyCallback)get_domains_with_cookies_cb,
+                                     dialog);
 }
 
 static void
@@ -432,7 +433,7 @@ ephy_cookies_dialog_init (EphyCookiesDialog *dialog)
                                           NULL);
 
   web_context = ephy_embed_shell_get_web_context (shell);
-  dialog->cookie_manager = webkit_web_context_get_cookie_manager (web_context);
+  dialog->data_manager = webkit_web_context_get_website_data_manager (web_context);
 
   setup_page (dialog);
 
