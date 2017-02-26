@@ -180,6 +180,17 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
   g_list_free_full (data_list, (GDestroyNotify)webkit_website_data_unref);
 }
 
+static gboolean
+all_children_visible (GtkTreeModel       *model,
+                      GtkTreeIter        *child_iter,
+                      GtkTreeModelFilter *filter)
+{
+  GtkTreeIter filter_iter;
+
+  gtk_tree_model_filter_convert_child_iter_to_iter (filter, &filter_iter, child_iter);
+  return gtk_tree_model_iter_n_children (model, child_iter) == gtk_tree_model_iter_n_children (GTK_TREE_MODEL (filter), &filter_iter);
+}
+
 static void
 clear_data_dialog_response_cb (GtkDialog       *widget,
                                int              response,
@@ -212,24 +223,27 @@ clear_data_dialog_response_cb (GtkDialog       *widget,
                         TYPE_COLUMN, &type,
                         ACTIVE_COLUMN, &active,
                         -1);
-    if (active) {
+    if (active && (timespan || all_children_visible (dialog->treestore, &top_iter, dialog->treemodelfilter))) {
       types_to_clear |= type;
     } else if (!timespan && gtk_tree_model_iter_children (dialog->treestore, &child_iter, &top_iter)) {
       gboolean empty = TRUE;
 
       do {
         WebKitWebsiteData *data;
+        GtkTreeIter filter_iter;
 
-        gtk_tree_model_get (dialog->treestore, &child_iter,
-                            ACTIVE_COLUMN, &active,
-                            DATA_COLUMN, &data,
-                            -1);
+        if (gtk_tree_model_filter_convert_child_iter_to_iter (dialog->treemodelfilter, &filter_iter, &child_iter)) {
+          gtk_tree_model_get (dialog->treestore, &child_iter,
+                              ACTIVE_COLUMN, &active,
+                              DATA_COLUMN, &data,
+                              -1);
 
-        if (active) {
-          data_to_remove = g_list_prepend (data_to_remove, data);
-          empty = FALSE;
-        } else
-          webkit_website_data_unref (data);
+          if (active) {
+            data_to_remove = g_list_prepend (data_to_remove, data);
+            empty = FALSE;
+          } else
+            webkit_website_data_unref (data);
+        }
       } while (gtk_tree_model_iter_next (dialog->treestore, &child_iter));
 
       if (!empty)
