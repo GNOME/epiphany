@@ -259,10 +259,13 @@ item_toggled_cb (GtkCellRendererToggle *renderer,
                  ClearDataDialog       *dialog)
 {
   GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
-  GtkTreeIter iter;
+  GtkTreeIter filter_iter, iter;
   gboolean active;
 
-  gtk_tree_model_get_iter (dialog->treestore, &iter, path);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (dialog->treemodelfilter),
+                           &filter_iter, path);
+  gtk_tree_model_filter_convert_iter_to_child_iter (dialog->treemodelfilter,
+                                                    &iter, &filter_iter);
   gtk_tree_model_get (dialog->treestore, &iter,
                       ACTIVE_COLUMN, &active,
                       -1);
