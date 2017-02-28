@@ -12,7 +12,11 @@ Type=Application
 Icon=org.gnome.Epiphany
 Categories=Network;GNOME;GTK;WebBrowser;
 MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;multipart/related;application/x-mimearchive;message/rfc822;
-Actions=Incognito;
+Actions=new-window;Incognito;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=epiphany --new-window
 
 [Desktop Action Incognito]
 Name=New Incognito Window
