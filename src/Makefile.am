@@ -165,6 +165,7 @@ RESOURCE_FILES = \
 	resources/gtk/passwords-dialog.ui		\
 	resources/gtk/prefs-dialog.ui			\
 	resources/gtk/prefs-lang-dialog.ui		\
+	resources/gtk/search-engine-dialog.ui		\
 	resources/gtk/shortcuts-dialog.ui		\
 	resources/incognito.png				\
 	resources/mime-types-permissions.xml		\
