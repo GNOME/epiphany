@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=epipha"
 "ny&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-02-24 22:10+0000\n"
-"PO-Revision-Date: 2017-02-25 09:25-0200\n"
+"POT-Creation-Date: 2017-02-28 18:20+0000\n"
+"PO-Revision-Date: 2017-02-28 18:07-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -68,6 +68,10 @@ msgstr "O GNOME Web é geralmente mencionado por seu codinome, Epiphany."
 msgid "The GNOME web site displayed in GNOME Web"
 msgstr "O site do GNOME exibido no GNOME Web"
 
+#: data/org.gnome.Epiphany.appdata.xml.in:37
+msgid "The GNOME Project"
+msgstr "O projeto GNOME"
+
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:293
 #: embed/ephy-about-handler.c:324 src/ephy-main.c:102 src/ephy-main.c:270
 #: src/ephy-main.c:412 src/window-commands.c:652
@@ -92,8 +96,13 @@ msgstr "web;navegador;internet;"
 msgid "org.gnome.Epiphany"
 msgstr "org.gnome.Epiphany"
 
-# Seguindo ideia do Chromium: icognito -> anônimo.
 #: data/org.gnome.Epiphany.desktop.in:19
+#| msgid "_New Window"
+msgid "New Window"
+msgstr "Nova janela"
+
+# Seguindo ideia do Chromium: icognito -> anônimo.
+#: data/org.gnome.Epiphany.desktop.in:23
 msgid "New Incognito Window"
 msgstr "Nova janela anônima"
 
@@ -114,18 +123,14 @@ msgid "URL Search"
 msgstr "Pesquisar URL"
 
 #: data/org.gnome.epiphany.gschema.xml:21
-#| msgid ""
-#| "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#| "web/enable-smooth-scrolling instead."
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "search-engines instead."
 msgstr ""
-"OBSOLETA: Essa chave está obsoleta e é ignorada. Em vez disso, use "
-"/org/gnome/epiphany/search-engines."
+"OBSOLETA: Essa chave está obsoleta e é ignorada. Em vez disso, use /org/"
+"gnome/epiphany/search-engines."
 
 #: data/org.gnome.epiphany.gschema.xml:25
-#| msgid "Default encoding"
 msgid "Default search engine."
 msgstr "Mecanismo de pesquisa padrão."
 
@@ -144,7 +149,6 @@ msgstr ""
 "\t\t\t\t  ('Bing', 'https://www.bing.com/search?q=%s', '!b')]"
 
 #: data/org.gnome.epiphany.gschema.xml:36
-#| msgid "Default encoding"
 msgid "Default search engines."
 msgstr "Mecanismos de pesquisa padrão."
 
@@ -424,8 +428,7 @@ msgstr "Habilitar verificação ortográfica"
 
 #: data/org.gnome.epiphany.gschema.xml:168
 msgid "Spell check any text typed in editable areas."
-msgstr ""
-"Veririca a ortografia em qualquer texto digitado em áreas editáveis."
+msgstr "Veririca a ortografia em qualquer texto digitado em áreas editáveis."
 
 #: data/org.gnome.epiphany.gschema.xml:172
 msgid "Default encoding"
@@ -746,7 +749,7 @@ msgstr "Excluir"
 msgid "Installed on:"
 msgstr "Instalados em:"
 
-#: embed/ephy-about-handler.c:457 embed/ephy-embed-utils.c:346
+#: embed/ephy-about-handler.c:457 embed/ephy-embed-utils.c:347
 msgid "Most Visited"
 msgstr "Mais visitados"
 
@@ -1937,13 +1940,10 @@ msgid "Close tab"
 msgstr "Fechar aba"
 
 #: src/ephy-search-engine-dialog.c:30
-#| msgctxt "shortcut window"
-#| msgid "Next search result"
 msgid "New search engine"
 msgstr "Novo mecanismo de pesquisa"
 
 #: src/ephy-search-engine-dialog.c:31
-#| msgid "Address"
 msgid "New address"
 msgstr "Novo endereço"
 
@@ -2127,7 +2127,7 @@ msgid "Save Media As"
 msgstr "Salvar mídia como"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:254 src/prefs-dialog.c:1724
+#: src/prefs-dialog.c:254 src/prefs-dialog.c:1663
 #, c-format
 msgid "Currently logged in as %s"
 msgstr "Atualmente autenticado como %s"
@@ -2144,7 +2144,7 @@ msgstr "Por favor, não saia dessa página até ter completado a verificação."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:908 src/prefs-dialog.c:912
+#: src/prefs-dialog.c:847 src/prefs-dialog.c:851
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2153,24 +2153,24 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:919
+#: src/prefs-dialog.c:858
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definido pelo usuário (%s)"
 
-#: src/prefs-dialog.c:941
+#: src/prefs-dialog.c:880
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma do sistema (%s)"
 msgstr[1] "Idiomas do sistema (%s)"
 
-#: src/prefs-dialog.c:1184 src/resources/gtk/prefs-dialog.ui:765
+#: src/prefs-dialog.c:1123 src/resources/gtk/prefs-dialog.ui:765
 msgid "Language"
 msgstr "Idioma"
 
-#: src/prefs-dialog.c:1263
+#: src/prefs-dialog.c:1202
 msgid "Select a Directory"
 msgstr "Selecione um diretório"
 
@@ -2183,7 +2183,6 @@ msgstr ""
 "esta configuração para ~/.config/epiphany"
 
 #: src/profile-migrator/ephy-profile-migrator.c:926
-#| msgid "Search the web"
 msgid "Search the Web"
 msgstr "Pesquisar na web"
 
@@ -2555,12 +2554,10 @@ msgid "A_utomatically open downloaded files"
 msgstr "Abrir arquivos baixados a_utomaticamente"
 
 #: src/resources/gtk/prefs-dialog.ui:169
-#| msgid "Search domains"
 msgid "Search Engines"
 msgstr "Mecanismos de pesquisa"
 
 #: src/resources/gtk/prefs-dialog.ui:177
-#| msgid "Manage _Cookies…"
 msgid "_Manage Search Engines…"
 msgstr "_Gerenciar mecanismos de pesquisa…"
 
@@ -2737,7 +2734,6 @@ msgid "Manage Search Engines"
 msgstr "Gerenciar mecanismos de pesquisa"
 
 #: src/resources/gtk/search-engine-dialog.ui:212
-#| msgid "De_fault:"
 msgid "Default"
 msgstr "Padrão"
 
@@ -2998,7 +2994,6 @@ msgid "Found more than one set of sync tokens."
 msgstr "Localizados mais de um conjunto de tokens de sincronização."
 
 #: src/sync/ephy-sync-secret.c:125
-#| msgid "Could not found the sync tokens for the currently logged in user."
 msgid "Could not find the sync tokens for the currently logged-in user."
 msgstr ""
 "Não foi possível localizar os tokens de sincronização para o usuário "
@@ -3209,9 +3204,6 @@ msgstr ""
 #: src/window-commands.c:2123
 msgid "_Enable"
 msgstr "_Ativar"
-
-#~ msgid "The GNOME Project"
-#~ msgstr "O projeto GNOME"
 
 # Parâmetro é "br-pt", conforme link informado
 #~ msgid "'https://duckduckgo.com/?q=%s&t=epiphany'"
