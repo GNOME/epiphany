@@ -369,7 +369,7 @@ ephy_history_service_open_transaction (EphyHistoryService *self)
 
   ephy_sqlite_connection_begin_transaction (self->history_database, &error);
   if (error != NULL) {
-    g_error ("Could not open history database transaction: %s", error->message);
+    g_warning ("Could not open history database transaction: %s", error->message);
     g_error_free (error);
   }
 }
