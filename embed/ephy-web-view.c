@@ -1299,7 +1299,7 @@ permission_request_data_new (EphyWebView             *web_view,
                              const char              *origin)
 {
   PermissionRequestData *data;
-  data = g_new (PermissionRequestData, 1);
+  data = g_slice_new (PermissionRequestData);
   data->web_view = web_view;
   /* Ref the decision to keep it alive while we decide */
   data->request = g_object_ref (request);
