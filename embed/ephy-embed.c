@@ -229,15 +229,6 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
 }
 
 static void
-ephy_embed_destroy_top_widgets (EphyEmbed *embed)
-{
-  GSList *iter;
-
-  for (iter = embed->priv->destroy_on_transition_list; iter; iter = iter->next)
-    gtk_widget_destroy (GTK_WIDGET (iter->data));
-}
-
-static void
 remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
 {
   GSList *list;
@@ -248,7 +239,20 @@ remove_from_destroy_list_cb (GtkWidget *widget, EphyEmbed *embed)
 }
 
 static void
-ephy_embed_set_title (EphyEmbed *embed,
+ephy_embed_destroy_top_widgets (EphyEmbed *embed)
+{
+  GSList *iter;
+
+  for (iter = embed->priv->destroy_on_transition_list; iter; iter = iter->next) {
+    g_signal_handlers_disconnect_by_func (iter->data, remove_from_destroy_list_cb, embed);
+    gtk_widget_destroy (GTK_WIDGET (iter->data));
+  }
+
+  embed->priv->destroy_on_transition_list = NULL;
+}
+
+static void
+ephy_embed_set_title (EphyEmbed  *embed,
                       const char *title)
 {
   EphyEmbedPrivate *priv = embed->priv;
