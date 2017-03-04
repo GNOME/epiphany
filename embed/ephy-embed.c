@@ -842,17 +842,19 @@ ephy_embed_get_find_toolbar (EphyEmbed *embed)
  * ephy_embed_add_top_widget:
  * @embed: an #EphyEmbed
  * @widget: a #GtkWidget
- * @destroy_on_transition: whether the widget be automatically
+ * @policy: whether the widget be automatically
  * destroyed on page transitions
  *
  * Adds a #GtkWidget to the top of the embed.
  */
 void
-ephy_embed_add_top_widget (EphyEmbed *embed, GtkWidget *widget, gboolean destroy_on_transition)
+ephy_embed_add_top_widget (EphyEmbed                *embed,
+                           GtkWidget                *widget,
+                           EphyEmbedTopWidgetPolicy  policy)
 {
   GSList *list;
 
-  if (destroy_on_transition) {
+  if (policy == EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION) {
     list = embed->destroy_on_transition_list;
     list = g_slist_prepend (list, widget);
     embed->destroy_on_transition_list = list;

@@ -550,7 +550,8 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
   track_info_bar (info_bar, &web_view->password_info_bar);
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                             info_bar, FALSE);
+                             info_bar,
+                             EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
 
   return info_bar;
 }
@@ -800,7 +801,8 @@ sensitive_form_focused_cb (EphyEmbedShell *shell,
   track_info_bar (info_bar, &web_view->sensitive_form_info_bar);
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                             info_bar, TRUE);
+                             info_bar,
+                             EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
   gtk_widget_show (info_bar);
 }
 
@@ -1464,7 +1466,8 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   }
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                             info_bar, TRUE);
+                             info_bar,
+                             EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
 }
 
 static gboolean
@@ -3092,7 +3095,7 @@ ephy_web_view_print_failed (EphyWebView *view, GError *error)
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (gtk_widget_destroy), NULL);
 
-  ephy_embed_add_top_widget (embed, info_bar, FALSE);
+  ephy_embed_add_top_widget (embed, info_bar, EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION);
   gtk_widget_show_all (info_bar);
 }
 

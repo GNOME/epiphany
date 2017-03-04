@@ -32,11 +32,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyEmbed, ephy_embed, EPHY, EMBED, GtkBox)
 
+typedef enum {
+  EPHY_EMBED_TOP_WIDGET_POLICY_RETAIN_ON_TRANSITION,
+  EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION
+} EphyEmbedTopWidgetPolicy;
+
 EphyWebView*     ephy_embed_get_web_view                  (EphyEmbed  *embed);
 EphyFindToolbar* ephy_embed_get_find_toolbar              (EphyEmbed  *embed);
-void             ephy_embed_add_top_widget                (EphyEmbed  *embed,
-                                                           GtkWidget  *widget,
-                                                           gboolean    destroy_on_transition);
+void             ephy_embed_add_top_widget                (EphyEmbed                *embed,
+                                                           GtkWidget                *widget,
+                                                           EphyEmbedTopWidgetPolicy  policy);
 void             ephy_embed_remove_top_widget             (EphyEmbed  *embed,
                                                            GtkWidget  *widget);
 void             ephy_embed_entering_fullscreen           (EphyEmbed *embed);
