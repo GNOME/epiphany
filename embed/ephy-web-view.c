@@ -800,7 +800,7 @@ sensitive_form_focused_cb (EphyEmbedShell *shell,
   track_info_bar (info_bar, &web_view->sensitive_form_info_bar);
 
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
-                             info_bar, FALSE);
+                             info_bar, TRUE);
   gtk_widget_show (info_bar);
 }
 
@@ -1707,12 +1707,6 @@ load_changed_cb (WebKitWebView  *web_view,
 
       /* Zoom level. */
       restore_zoom_level (view, loading_uri);
-
-      if (view->sensitive_form_info_bar) {
-        gtk_widget_destroy (view->sensitive_form_info_bar);
-        untrack_info_bar (&view->sensitive_form_info_bar);
-      }
-
       break;
     }
     case WEBKIT_LOAD_REDIRECTED:
