@@ -6,12 +6,6 @@ HELP_FILES = \
 	index.page \
 	introduction.page \
 	legal.xml \
-	bookmark.page \
-	bookmark-add.page \
-	bookmark-delete.page \
-	bookmark-edit.page \
-	bookmark-smart.page \
-	bookmark-topic.page \
 	browse-local.page \
 	browse-private.page \
 	browse-tab.page \
