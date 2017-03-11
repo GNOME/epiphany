@@ -493,6 +493,7 @@ untrack_info_bar (GtkWidget **tracked_info_bar)
 
   if (*tracked_info_bar) {
     g_object_remove_weak_pointer (G_OBJECT (*tracked_info_bar), (gpointer *)tracked_info_bar);
+    gtk_widget_destroy (*tracked_info_bar);
     *tracked_info_bar = NULL;
   }
 }
