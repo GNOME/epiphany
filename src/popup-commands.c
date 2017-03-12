@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
  *  Copyright © 2000-2003 Marco Pesenti Gritti
+ *  Copyright © 2017 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -154,25 +155,24 @@ filename_suggested_cb (EphyDownload        *download,
                        const char          *suggested_filename,
                        SavePropertyURLData *data)
 {
-  EphyFileChooser *dialog;
+  GtkFileChooser *dialog;
   char *sanitized_filename;
 
-  dialog = ephy_file_chooser_new (data->title,
-                                  GTK_WIDGET (data->window),
-                                  GTK_FILE_CHOOSER_ACTION_SAVE,
-                                  EPHY_FILE_FILTER_NONE);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+  dialog = ephy_create_file_chooser (data->title,
+                                     GTK_WIDGET (data->window),
+                                     GTK_FILE_CHOOSER_ACTION_SAVE,
+                                     EPHY_FILE_FILTER_NONE);
+  gtk_file_chooser_set_do_overwrite_confirmation (dialog, TRUE);
 
   sanitized_filename = ephy_sanitize_filename (g_strdup (suggested_filename));
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), sanitized_filename);
+  gtk_file_chooser_set_current_name (dialog, sanitized_filename);
   g_free (sanitized_filename);
 
-  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+  if (gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
     char *uri;
     WebKitDownload *webkit_download;
 
-    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+    uri = gtk_file_chooser_get_uri (dialog);
     ephy_download_set_destination_uri (download, uri);
     g_free (uri);
 
@@ -188,7 +188,7 @@ filename_suggested_cb (EphyDownload        *download,
                      g_object_unref);
   }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  g_object_unref (dialog);
   g_free (data->title);
   g_object_unref (data->window);
   g_free (data);

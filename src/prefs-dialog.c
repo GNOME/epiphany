@@ -2,7 +2,7 @@
 /*
  *  Copyright © 200-2003 Marco Pesenti Gritti
  *  Copyright © 2003, 2004, 2005 Christian Persch
- *  Copyright © 2010 Igalia S.L.
+ *  Copyright © 2010, 2017 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -1194,21 +1194,13 @@ static void
 create_download_path_button (PrefsDialog *dialog)
 {
   GtkWidget *button;
-  EphyFileChooser *fc;
   char *dir;
 
   dir = ephy_file_get_downloads_dir ();
 
-  fc = ephy_file_chooser_new (_("Select a Directory"),
-                              GTK_WIDGET (dialog),
-                              GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                              EPHY_FILE_FILTER_NONE);
+  button = gtk_file_chooser_button_new (_("Select a Directory"),
+                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
-  /* Unset the destroy-with-parent, since gtkfilechooserbutton doesn't
-   * expect this */
-  gtk_window_set_destroy_with_parent (GTK_WINDOW (fc), FALSE);
-
-  button = gtk_file_chooser_button_new_with_dialog (GTK_WIDGET (fc));
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button), dir);
   gtk_file_chooser_button_set_width_chars (GTK_FILE_CHOOSER_BUTTON (button),
                                            DOWNLOAD_BUTTON_WIDTH);

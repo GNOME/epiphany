@@ -2,8 +2,8 @@
 /*
  *  Copyright © 2000-2004 Marco Pesenti Gritti
  *  Copyright © 2009 Collabora Ltd.
- *  Copyright © 2011 Igalia S.L.
  *  Copyright © 2016 Iulian-Gabriel Radu
+ *  Copyright © 2011, 2017 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -871,7 +871,7 @@ window_cmd_new_tab (GSimpleAction *action,
 }
 
 static void
-open_response_cb (GtkDialog *dialog, int response, EphyWindow *window)
+open_response_cb (GtkNativeDialog *dialog, int response, EphyWindow *window)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
     char *uri, *converted;
@@ -889,7 +889,7 @@ open_response_cb (GtkDialog *dialog, int response, EphyWindow *window)
     }
   }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  g_object_unref (dialog);
 }
 
 void
@@ -898,17 +898,17 @@ window_cmd_open (GSimpleAction *action,
                  gpointer       user_data)
 {
   EphyWindow *window = user_data;
-  EphyFileChooser *dialog;
+  GtkFileChooser *dialog;
 
-  dialog = ephy_file_chooser_new (_("Open"),
-                                  GTK_WIDGET (window),
-                                  GTK_FILE_CHOOSER_ACTION_OPEN,
-                                  EPHY_FILE_FILTER_ALL_SUPPORTED);
+  dialog = ephy_create_file_chooser (_("Open"),
+                                     GTK_WIDGET (window),
+                                     GTK_FILE_CHOOSER_ACTION_OPEN,
+                                     EPHY_FILE_FILTER_ALL_SUPPORTED);
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (open_response_cb), window);
 
-  gtk_widget_show (GTK_WIDGET (dialog));
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
 }
 
 typedef struct {
@@ -1458,7 +1458,7 @@ get_suggested_filename (EphyEmbed *embed)
 }
 
 static void
-save_response_cb (GtkDialog *dialog, int response, EphyEmbed *embed)
+save_response_cb (GtkNativeDialog *dialog, int response, EphyEmbed *embed)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
     char *uri, *converted;
@@ -1477,7 +1477,7 @@ save_response_cb (GtkDialog *dialog, int response, EphyEmbed *embed)
     }
   }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  g_object_unref (dialog);
 }
 
 void
@@ -1487,16 +1487,16 @@ window_cmd_save_as (GSimpleAction *action,
 {
   EphyWindow *window = user_data;
   EphyEmbed *embed;
-  EphyFileChooser *dialog;
+  GtkFileChooser *dialog;
   char *suggested_filename;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_return_if_fail (embed != NULL);
 
-  dialog = ephy_file_chooser_new (_("Save"),
-                                  GTK_WIDGET (window),
-                                  GTK_FILE_CHOOSER_ACTION_SAVE,
-                                  EPHY_FILE_FILTER_NONE);
+  dialog = ephy_create_file_chooser (_("Save"),
+                                     GTK_WIDGET (window),
+                                     GTK_FILE_CHOOSER_ACTION_SAVE,
+                                     EPHY_FILE_FILTER_NONE);
 
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
@@ -1508,7 +1508,7 @@ window_cmd_save_as (GSimpleAction *action,
   g_signal_connect (dialog, "response",
                     G_CALLBACK (save_response_cb), embed);
 
-  gtk_widget_show (GTK_WIDGET (dialog));
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
 }
 
 void
