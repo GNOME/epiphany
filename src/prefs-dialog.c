@@ -1198,7 +1198,7 @@ create_download_path_button (PrefsDialog *dialog)
 
   dir = ephy_file_get_downloads_dir ();
 
-  button = gtk_file_chooser_button_new (_("Select a Directory"),
+  button = gtk_file_chooser_button_new (_("Select a directory"),
                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button), dir);
