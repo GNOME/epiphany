@@ -1435,7 +1435,8 @@ get_suggested_filename (EphyEmbed *embed)
     suggested_filename = g_strdup (webkit_uri_response_get_suggested_filename (response));
     if (!suggested_filename) {
       SoupURI *soup_uri = soup_uri_new (webkit_web_resource_get_uri (web_resource));
-      suggested_filename = g_path_get_basename (soup_uri->path);
+      char *last_slash = strrchr (soup_uri->path, '/');
+      suggested_filename = soup_uri_decode (last_slash ? (last_slash + 1) : soup_uri->path);
       soup_uri_free (soup_uri);
     }
   }
