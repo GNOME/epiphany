@@ -407,7 +407,10 @@ ephy_bookmarks_popover_show_tag_detail (EphyBookmarksPopover *self,
     gtk_container_add (GTK_CONTAINER (self->tag_detail_list_box), row);
   }
 
-  gtk_label_set_label (GTK_LABEL (self->tag_detail_label), tag);
+  if (strcmp (tag, EPHY_BOOKMARKS_FAVORITES_TAG) == 0)
+    gtk_label_set_label (GTK_LABEL (self->tag_detail_label), _(EPHY_BOOKMARKS_FAVORITES_TAG));
+  else
+    gtk_label_set_label (GTK_LABEL (self->tag_detail_label), tag);
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack), "tag_detail");
 
