@@ -58,7 +58,7 @@ ephy_bookmark_row_button_clicked_cb (EphyBookmarkRow *row,
   g_assert (GTK_IS_BUTTON (button));
 
   dialog = g_object_new (GTK_TYPE_DIALOG,
-                         "title", "Bookmark Properties",
+                         "title", _("Bookmark Properties"),
                          "transient-for", GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (row))),
                          "use-header-bar", TRUE,
                          "modal", TRUE,
