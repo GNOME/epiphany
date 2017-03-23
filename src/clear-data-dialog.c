@@ -153,7 +153,7 @@ website_data_fetched_cb (WebKitWebsiteDataManager *manager,
     gtk_tree_store_insert_with_values (treestore, &parent_iter, NULL, -1,
                                        TYPE_COLUMN, data_entries[i].type,
                                        ACTIVE_COLUMN, data_entries[i].initial_state,
-                                       NAME_COLUMN, data_entries[i].name,
+                                       NAME_COLUMN, _(data_entries[i].name),
                                        DATA_COLUMN, NULL,
                                        SENSITIVE_COLUMN, TRUE,
                                        -1);
