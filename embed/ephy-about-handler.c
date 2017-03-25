@@ -283,7 +283,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "<img src=\"file://%s\"/>"
                           "<h1 id=\"about-title\">%s</h1>"
                           "<h2 id=\"about-subtitle\">%s</h2>"
-                          "<p id=\"about-tagline\">“%s”</p>"
+                          "<p id=\"about-tagline\">%s</p>"
                           "<table class=\"properties\">"
                           "<tr><td class=\"prop-label\">%s</td><td class=\"prop-value\">%d.%d.%d</td></tr>"
                           "</table>"
