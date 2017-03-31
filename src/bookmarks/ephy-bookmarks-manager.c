@@ -336,6 +336,7 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
 {
   GSequenceIter *iter;
   GSequenceIter *new_iter;
+  int position;
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (bookmarks != NULL);
@@ -348,6 +349,9 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
     new_iter = ephy_bookmarks_search_and_insert_bookmark (self->bookmarks,
                                                           g_object_ref (bookmark));
     if (new_iter) {
+      position = g_sequence_iter_get_position (new_iter);
+      g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+
       g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
       ephy_bookmarks_manager_watch_bookmark (self, bookmark);
     }
