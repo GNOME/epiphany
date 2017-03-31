@@ -490,19 +490,35 @@ ephy_bookmark_get_tags (EphyBookmark *self)
 }
 
 int
-ephy_bookmark_bookmarks_sort_func (EphyBookmark *bookmark1,
-                                   EphyBookmark *bookmark2)
+ephy_bookmark_bookmarks_compare_func (EphyBookmark *bookmark1,
+                                      EphyBookmark *bookmark2)
 {
   gint64 time1;
   gint64 time2;
+  const char *title1;
+  const char *title2;
+  int title_result;
+  const char *id1;
+  const char *id2;
 
   g_assert (EPHY_IS_BOOKMARK (bookmark1));
   g_assert (EPHY_IS_BOOKMARK (bookmark2));
 
   time1 = ephy_bookmark_get_time_added (bookmark1);
   time2 = ephy_bookmark_get_time_added (bookmark2);
+  if (time2 - time1 != 0)
+    return time2 - time1;
 
-  return time2 - time1;
+  title1 = ephy_bookmark_get_title (bookmark1);
+  title2 = ephy_bookmark_get_title (bookmark2);
+  title_result = g_strcmp0 (title1, title2);
+  if (title_result != 0)
+    return title_result;
+
+  id1 = ephy_bookmark_get_id (bookmark1);
+  id2 = ephy_bookmark_get_id (bookmark2);
+
+  return g_strcmp0 (id1, id2);
 }
 
 int

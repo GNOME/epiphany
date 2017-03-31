@@ -65,8 +65,8 @@ gboolean             ephy_bookmark_has_tag               (EphyBookmark *self,
                                                           const char   *tag);
 GSequence           *ephy_bookmark_get_tags              (EphyBookmark *self);
 
-int                  ephy_bookmark_bookmarks_sort_func   (EphyBookmark *bookmark1,
-                                                          EphyBookmark *bookmark2);
+int                  ephy_bookmark_bookmarks_compare_func   (EphyBookmark *bookmark1,
+                                                             EphyBookmark *bookmark2);
 int                  ephy_bookmark_tags_compare          (const char *tag1,
                                                           const char *tag2);
 

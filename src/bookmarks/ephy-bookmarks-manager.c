@@ -285,30 +285,41 @@ ephy_bookmarks_manager_unwatch_bookmark (EphyBookmarksManager *self,
   g_signal_handlers_disconnect_by_func (bookmark, bookmark_tag_removed_cb, self);
 }
 
+static GSequenceIter *
+ephy_bookmarks_search_and_insert_bookmark (GSequence     *bookmarks,
+                                           EphyBookmark  *bookmark)
+{
+  GSequenceIter *iter;
+  GSequenceIter *prev_iter;
+
+  iter = g_sequence_search (bookmarks, bookmark,
+                            (GCompareDataFunc)ephy_bookmark_bookmarks_compare_func,
+                            NULL);
+
+  prev_iter = g_sequence_iter_prev (iter);
+  if (g_sequence_iter_is_end (prev_iter)
+      || ephy_bookmark_bookmarks_compare_func (g_sequence_get (prev_iter), bookmark) != 0) {
+    return g_sequence_insert_before (iter, bookmark);
+  }
+
+  return NULL;
+}
+
 void
 ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
                                      EphyBookmark         *bookmark)
 {
   GSequenceIter *iter;
-  GSequenceIter *prev_iter;
   gint position;
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
 
-  iter = g_sequence_search (self->bookmarks,
-                            bookmark,
-                            (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
-                            NULL);
-
-  prev_iter = g_sequence_iter_prev (iter);
-  if (g_sequence_iter_is_end (prev_iter)
-      || ephy_bookmark_get_time_added (g_sequence_get (prev_iter)) != ephy_bookmark_get_time_added (bookmark)) {
-    g_sequence_insert_before (iter, bookmark);
-
+  iter = ephy_bookmarks_search_and_insert_bookmark (self->bookmarks, bookmark);
+  if (iter) {
     /* Update list */
     position = g_sequence_iter_get_position (iter);
-    g_list_model_items_changed (G_LIST_MODEL (self), position - 1, 0, 1);
+    g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 
     g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
 
@@ -324,6 +335,7 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
                                       GSequence            *bookmarks)
 {
   GSequenceIter *iter;
+  GSequenceIter *new_iter;
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (bookmarks != NULL);
@@ -333,19 +345,13 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
        iter = g_sequence_iter_next (iter)) {
     EphyBookmark *bookmark = g_sequence_get (iter);
 
-    if (!g_sequence_lookup (self->bookmarks,
-                            bookmark,
-                            (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
-                            NULL)) {
-      g_sequence_prepend (self->bookmarks, g_object_ref (bookmark));
+    new_iter = ephy_bookmarks_search_and_insert_bookmark (self->bookmarks,
+                                                          g_object_ref (bookmark));
+    if (new_iter) {
       g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
       ephy_bookmarks_manager_watch_bookmark (self, bookmark);
     }
   }
-
-  g_sequence_sort (self->bookmarks,
-                   (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
-                   NULL);
 
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                              (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
@@ -525,7 +531,7 @@ ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
       if (g_sequence_is_empty (ephy_bookmark_get_tags (bookmark))) {
         g_sequence_insert_sorted (bookmarks,
                                   g_object_ref (bookmark),
-                                  (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
+                                  (GCompareDataFunc)ephy_bookmark_bookmarks_compare_func,
                                   NULL);
       }
     }
@@ -538,7 +544,7 @@ ephy_bookmarks_manager_get_bookmarks_with_tag (EphyBookmarksManager *self,
       if (ephy_bookmark_has_tag (bookmark, tag))
         g_sequence_insert_sorted (bookmarks,
                                   g_object_ref (bookmark),
-                                  (GCompareDataFunc)ephy_bookmark_bookmarks_sort_func,
+                                  (GCompareDataFunc)ephy_bookmark_bookmarks_compare_func,
                                   NULL);
     }
   }
