@@ -73,6 +73,7 @@ ephy_add_bookmark_popover_finalize (GObject *object)
 
   if (self->address)
     g_free (self->address);
+  g_object_unref (self->bookmark);
 
   G_OBJECT_CLASS (ephy_add_bookmark_popover_parent_class)->finalize (object);
 }

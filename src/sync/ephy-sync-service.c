@@ -1078,6 +1078,7 @@ download_bookmark_response_cb (SoupSession *session,
        !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
     ephy_bookmarks_manager_create_tag (manager, g_sequence_get (iter));
 
+  g_object_unref (bookmark);
   g_object_unref (parser);
 
 out:
@@ -1198,7 +1199,7 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
   manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
   bookmarks = ephy_bookmarks_manager_get_bookmarks (manager);
-  marked = g_hash_table_new (g_direct_hash, g_direct_equal);
+  marked = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, NULL);
   parser = json_parser_new ();
   json_parser_load_from_data (parser, msg->response_body->data, -1, NULL);
 
@@ -1232,7 +1233,7 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
              !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
           ephy_bookmarks_manager_create_tag (manager, g_sequence_get (iter));
 
-        g_hash_table_add (marked, remote);
+        g_hash_table_add (marked, g_object_ref (remote));
       }
       /* If there is a local bookmark with the same url as the remote one, then
        * merge tags into the local one, keep the remote id and upload it to the
@@ -1246,8 +1247,7 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
 
         ephy_bookmark_set_id (local, ephy_bookmark_get_id (remote));
         ephy_sync_service_upload_bookmark (service, local, TRUE);
-        g_object_unref (remote);
-        g_hash_table_add (marked, local);
+        g_hash_table_add (marked, g_object_ref (local));
       }
     }
     /* Having a local bookmark with the same id as the remote one means that the
@@ -1263,15 +1263,16 @@ sync_bookmarks_first_time_response_cb (SoupSession *session,
              !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
           ephy_bookmarks_manager_create_tag (manager, g_sequence_get (iter));
 
-        g_hash_table_add (marked, remote);
+        g_hash_table_add (marked, g_object_ref (remote));
       } else {
         if (ephy_bookmark_get_modification_time (local) > ephy_bookmark_get_modification_time (remote))
           ephy_sync_service_upload_bookmark (service, local, TRUE);
 
-        g_hash_table_add (marked, local);
-        g_object_unref (remote);
+        g_hash_table_add (marked, g_object_ref (local));
       }
     }
+
+    g_object_unref (remote);
   }
 
   /* Upload the remaining local bookmarks to the server. */

@@ -315,7 +315,8 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
 
-  iter = ephy_bookmarks_search_and_insert_bookmark (self->bookmarks, bookmark);
+  iter = ephy_bookmarks_search_and_insert_bookmark (self->bookmarks,
+                                                    g_object_ref (bookmark));
   if (iter) {
     /* Update list */
     position = g_sequence_iter_get_position (iter);
