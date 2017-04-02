@@ -32,7 +32,6 @@ struct _EphyAddBookmarkPopover {
   GtkPopover     parent_instance;
 
   char          *address;
-  EphyBookmark  *bookmark;
   gboolean       is_new_bookmark;
 
   GtkWidget     *grid;
@@ -73,7 +72,6 @@ ephy_add_bookmark_popover_finalize (GObject *object)
 
   if (self->address)
     g_free (self->address);
-  g_object_unref (self->bookmark);
 
   G_OBJECT_CLASS (ephy_add_bookmark_popover_parent_class)->finalize (object);
 }
@@ -115,26 +113,15 @@ static void
 ephy_add_bookmark_popover_closed_cb (GtkPopover *popover,
                                      gpointer    user_data)
 {
-  EphyAddBookmarkPopover *self;
   EphyBookmarksManager *manager;
-  GtkWidget *location_entry;
 
   g_assert (EPHY_IS_ADD_BOOKMARK_POPOVER (popover));
 
-  self = EPHY_ADD_BOOKMARK_POPOVER (popover);
   manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
 
-  if (self->is_new_bookmark) {
-    location_entry = GTK_WIDGET (ephy_header_bar_get_title_widget (self->header_bar));
-    ephy_bookmarks_manager_add_bookmark (manager, self->bookmark);
-    ephy_location_entry_set_bookmark_icon_state (EPHY_LOCATION_ENTRY (location_entry),
-                                                 EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED);
-    self->is_new_bookmark = FALSE;
-  } else {
-    ephy_bookmarks_manager_save_to_file_async (manager, NULL,
-                                               ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
-                                               NULL);
-  }
+  ephy_bookmarks_manager_save_to_file_async (manager, NULL,
+                                             ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
+                                             NULL);
 }
 
 static void
@@ -204,34 +191,42 @@ void
 ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
 {
   EphyBookmarksManager *manager;
+  EphyBookmark *bookmark;
   EphyWindow *window;
+  EphyLocationEntry *location_entry;
   EphyEmbed *embed;
   const char *address;
 
   manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  location_entry = EPHY_LOCATION_ENTRY (ephy_header_bar_get_title_widget (self->header_bar));
   window = ephy_header_bar_get_window (self->header_bar);
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 
   address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
-  self->bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
-  if (!self->bookmark) {
-    self->bookmark = ephy_bookmark_new (address,
-                                        ephy_embed_get_title (embed),
-                                        g_sequence_new (g_free));
-    self->is_new_bookmark = TRUE;
+  bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
+  if (!bookmark) {
+    bookmark = ephy_bookmark_new (address,
+                                  ephy_embed_get_title (embed),
+                                  g_sequence_new (g_free));
+
+    ephy_bookmarks_manager_add_bookmark (manager, bookmark);
+    ephy_location_entry_set_bookmark_icon_state (location_entry,
+                                                 EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED);
+    g_object_unref (bookmark);
   }
 
   g_signal_connect_object (manager, "bookmark-removed",
-                         G_CALLBACK (ephy_add_bookmark_popover_update_bookmarked_status_cb),
-                         self,
-                         G_CONNECT_SWAPPED);
+                           G_CALLBACK (ephy_add_bookmark_popover_update_bookmarked_status_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   if (self->grid)
     gtk_widget_destroy (self->grid);
-  self->grid = ephy_bookmark_properties_grid_new (self->bookmark,
+  self->grid = ephy_bookmark_properties_grid_new (bookmark,
                                                   EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_POPOVER,
                                                   GTK_WIDGET (self));
+
   gtk_container_add (GTK_CONTAINER (self), self->grid);
   gtk_popover_set_default_widget (GTK_POPOVER (self),
                                   ephy_bookmark_properties_grid_get_add_tag_button (EPHY_BOOKMARK_PROPERTIES_GRID (self->grid)));
