@@ -1375,7 +1375,7 @@ handle_method_call (GDBusConnection       *connection,
     if (!web_page)
       return;
 
-    if (base_uri == NULL || base_uri == '\0') {
+    if (base_uri == NULL || *base_uri == '\0') {
       g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
                                              "Base URI cannot be NULL or empty");
       return;
