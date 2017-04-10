@@ -107,7 +107,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 
   active = gtk_combo_box_get_active (combo_box);
   if (active == 0)
-    gtk_button_set_label (button, _("Ch_oose File"));
+    gtk_button_set_label (button, _("Ch_oose File…"));
   else if (active == 1)
     gtk_button_set_label (button, _("I_mport"));
 }
