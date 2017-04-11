@@ -78,6 +78,7 @@ const struct {
   const char *accelerators[9];
 } accels [] = {
   /* Page Menu accels */
+  { "win.page-menu", { "F10", NULL } },
   { "win.new-tab", { "<Primary>T", NULL } },
   { "win.open", { "<Primary>O", NULL } },
   { "win.save-as", { "<shift><Primary>S", "<Primary>S", NULL } },
@@ -765,6 +766,7 @@ enable_edit_actions_sensitivity (EphyWindow *window)
 
 static const GActionEntry window_entries [] =
 {
+  { "page-menu", window_cmd_page_menu },
   { "new-tab", window_cmd_new_tab },
   { "open", window_cmd_open },
   { "save-as", window_cmd_save_as },

@@ -845,6 +845,23 @@ void window_cmd_combined_stop_reload (GSimpleAction *action,
 }
 
 void
+window_cmd_page_menu (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyHeaderBar *header_bar;
+  GtkMenuButton *button;
+  GtkPopover *popover;
+
+  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+  button = GTK_MENU_BUTTON (ephy_header_bar_get_page_menu_button (header_bar));
+  popover = gtk_menu_button_get_popover (button);
+  gtk_popover_popup (popover);
+}
+
+void
 window_cmd_new_tab (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)

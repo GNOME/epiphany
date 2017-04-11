@@ -74,6 +74,9 @@ void window_cmd_reload                          (GSimpleAction *action,
 void window_cmd_combined_stop_reload            (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_page_menu                       (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_new_tab                         (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

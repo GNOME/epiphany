@@ -897,6 +897,12 @@ ephy_header_bar_get_zoom_level_button (EphyHeaderBar *header_bar)
   return header_bar->zoom_level_button;
 }
 
+GtkWidget *
+ephy_header_bar_get_page_menu_button (EphyHeaderBar *header_bar)
+{
+  return header_bar->page_menu_button;
+}
+
 EphyWindow *
 ephy_header_bar_get_window (EphyHeaderBar *header_bar)
 {
