@@ -2971,7 +2971,8 @@ static const char *disabled_actions_for_app_mode[] = { "open",
                                                        "encoding",
                                                        "bookmark-page",
                                                        "page-source",
-                                                       "toggle-inspector" };
+                                                       "toggle-inspector",
+                                                       "new-tab" };
 
 static void
 parse_css_error (GtkCssProvider *provider,
