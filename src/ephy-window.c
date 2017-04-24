@@ -117,8 +117,8 @@ const struct {
   { "toolbar.combined-stop-reload", { NULL } },
 
   /* Tabs */
-  { "tab.previous", { "<Primary>Page_Up", "<Primary>KP_9", NULL } },
-  { "tab.next", { "<Primary>Page_Down", "<Primary>KP_3", NULL } },
+  { "tab.previous", { "<Primary>Page_Up", "<Primary>KP_9", "<shift><Primary>Tab", NULL } },
+  { "tab.next", { "<Primary>Page_Down", "<Primary>KP_3", "<Primary>Tab", NULL } },
   { "tab.move-left", { "<shift><Primary>Page_Up", "<shift><Primary>Page_Up", NULL } },
   { "tab.move-right", { "<shift><Primary>Page_Down", "<shift><Primary>Page_Down", NULL } },
   { "tab.duplicate", { NULL } },
@@ -540,7 +540,9 @@ ephy_window_should_view_receive_key_press_event (EphyWindow  *window,
            keyval != GDK_KEY_Page_Up &&   /* Previous Tab */
            keyval != GDK_KEY_KP_9 &&      /* Previous Tab */
            keyval != GDK_KEY_Page_Down && /* Next Tab */
-           keyval != GDK_KEY_KP_3;        /* Next Tab */
+           keyval != GDK_KEY_KP_3 &&      /* Next Tab */
+           keyval != GDK_KEY_Tab &&       /* Next Tab */
+           keyval != GDK_KEY_ISO_Left_Tab;/* Previous Tab (Shift+Tab -> ISO Left Tab) */
 
   if ((event->state & state_mask) == (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
     return keyval != GDK_KEY_n &&         /* New Incognito Window */
