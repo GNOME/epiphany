@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-03-23 17:09+0000\n"
-"PO-Revision-Date: 2017-03-25 13:33+0200\n"
+"POT-Creation-Date: 2017-04-21 19:42+0000\n"
+"PO-Revision-Date: 2017-04-24 23:02+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -57,7 +57,7 @@ msgstr "GNOME projektas"
 
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:293
 #: embed/ephy-about-handler.c:324 src/ephy-main.c:102 src/ephy-main.c:270
-#: src/ephy-main.c:412 src/window-commands.c:652
+#: src/ephy-main.c:412 src/window-commands.c:638
 msgid "Web"
 msgstr "Žiniatinklis"
 
@@ -80,6 +80,11 @@ msgid "org.gnome.Epiphany"
 msgstr "org.gnome.Epiphany"
 
 #: data/org.gnome.Epiphany.desktop.in:19
+#| msgid "_New Window"
+msgid "New Window"
+msgstr "Naujas langas"
+
+#: data/org.gnome.Epiphany.desktop.in:23
 msgid "New Incognito Window"
 msgstr "Naujas incognito langas"
 
@@ -1136,7 +1141,7 @@ msgid "_Never Save"
 msgstr "_Niekada neįrašyti"
 
 #: embed/ephy-web-view.c:531 lib/widgets/ephy-file-chooser.c:121
-#: src/window-commands.c:465
+#: src/window-commands.c:447
 msgid "_Save"
 msgstr "Į_rašyti"
 
@@ -1642,8 +1647,8 @@ msgstr "Pradedama..."
 
 #: lib/widgets/ephy-file-chooser.c:109
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:227
-#: src/window-commands.c:301 src/window-commands.c:396
-#: src/window-commands.c:464 src/window-commands.c:1366
+#: src/window-commands.c:292 src/window-commands.c:389
+#: src/window-commands.c:448 src/window-commands.c:1352
 msgid "_Cancel"
 msgstr "A_tsisakyti"
 
@@ -1729,7 +1734,6 @@ msgid "_View Certificate…"
 msgstr "_Rodyti liudijimą…"
 
 #: src/bookmarks/ephy-bookmark-row.c:61
-#| msgid "_Properties"
 msgid "Bookmark Properties"
 msgstr "Gairių savybės"
 
@@ -2135,7 +2139,8 @@ msgid "Language"
 msgstr "Kalba"
 
 #: src/prefs-dialog.c:1201
-msgid "Select a Directory"
+#| msgid "Select a Directory"
+msgid "Select a directory"
 msgstr "Pasirinkite aplanką"
 
 #: src/profile-migrator/ephy-profile-migrator.c:93
@@ -2146,27 +2151,27 @@ msgstr ""
 "Žiniatinklis 3.6 apleido šį katalogą ir bando migruoti konfigūraciją į ~/."
 "config/epiphany"
 
-#: src/profile-migrator/ephy-profile-migrator.c:926
+#: src/profile-migrator/ephy-profile-migrator.c:927
 msgid "Search the Web"
 msgstr "Ieškoti internete"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1061
+#: src/profile-migrator/ephy-profile-migrator.c:1062
 msgid "Executes only the n-th migration step"
 msgstr "vykdo tik n-ąjį migracijos žingsnį"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1063
+#: src/profile-migrator/ephy-profile-migrator.c:1064
 msgid "Specifies the required version for the migrator"
 msgstr "Nurodo migracijai reikalingą versiją"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1065
+#: src/profile-migrator/ephy-profile-migrator.c:1066
 msgid "Specifies the profile where the migrator should run"
 msgstr "Nurodo profilį, kur turi vykti migracija"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1083
+#: src/profile-migrator/ephy-profile-migrator.c:1084
 msgid "Web profile migrator"
 msgstr "Žiniatinklio profilio migruotojas"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1084
+#: src/profile-migrator/ephy-profile-migrator.c:1085
 msgid "Web profile migrator options"
 msgstr "Žiniatinklio profilio migruotojo parametrai"
 
@@ -2240,12 +2245,10 @@ msgid "Tags"
 msgstr "Žymos"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:140
-#| msgid "Add Boo_kmark…"
 msgid "Add Tag…"
 msgstr "Pridėti žymą…"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:148
-#: src/resources/gtk/prefs-dialog.ui:695
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "_Pridėti"
@@ -2526,8 +2529,9 @@ msgid "Search Engines"
 msgstr "Paieškos varikliai"
 
 #: src/resources/gtk/prefs-dialog.ui:177
-msgid "_Manage Search Engines…"
-msgstr "_Tvarkyti paieškos variklius…"
+#| msgid "Manage Search Engines"
+msgid "_Manage Search Engines"
+msgstr "_Tvarkyti paieškos variklius"
 
 #: src/resources/gtk/prefs-dialog.ui:190
 msgid "You can select different search engines to use."
@@ -2594,16 +2598,18 @@ msgid "Use custom _stylesheet"
 msgstr "Naudoti kitą _stiliaus aprašą"
 
 #: src/resources/gtk/prefs-dialog.ui:441
-msgid "_Edit Stylesheet…"
-msgstr "_Taisyti stiliaus aprašą..."
+#| msgid "_Edit Stylesheet…"
+msgid "_Edit Stylesheet"
+msgstr "_Taisyti stiliaus aprašą"
 
 #: src/resources/gtk/prefs-dialog.ui:458
 msgid "Fonts & Style"
 msgstr "Šriftai ir stilius"
 
 #: src/resources/gtk/prefs-dialog.ui:492
-msgid "Manage _Cookies…"
-msgstr "Tvarkyti sl_apukus…"
+#| msgid "Manage _Cookies…"
+msgid "Manage _Cookies"
+msgstr "Tvarkyti sl_apukus"
 
 #: src/resources/gtk/prefs-dialog.ui:508
 msgid "_Always accept"
@@ -2623,8 +2629,9 @@ msgid "_Never accept"
 msgstr "_Niekada nepriimti"
 
 #: src/resources/gtk/prefs-dialog.ui:563
-msgid "Manage _Passwords…"
-msgstr "Tvarkyti sla_ptažodžius…"
+#| msgid "Manage _Passwords…"
+msgid "Manage _Passwords"
+msgstr "Tvarkyti sla_ptažodžius"
 
 #: src/resources/gtk/prefs-dialog.ui:573
 msgid "_Remember passwords"
@@ -2639,12 +2646,18 @@ msgid "You can clear stored personal data."
 msgstr "Galite išvalyti savo įrašytus asmeninius duomenis."
 
 #: src/resources/gtk/prefs-dialog.ui:616
-msgid "Manage Personal _Data…"
-msgstr "Tvarkyti asmeninius _duomenis…"
+#| msgid "Manage Personal _Data…"
+msgid "Manage Personal _Data"
+msgstr "Tvarkyti asmeninius _duomenis"
 
 #: src/resources/gtk/prefs-dialog.ui:634
 msgid "Stored Data"
 msgstr "Įrašyti duomenys"
+
+#: src/resources/gtk/prefs-dialog.ui:695
+#| msgid "_Add"
+msgid "_Add…"
+msgstr "_Pridėti…"
 
 #: src/resources/gtk/prefs-dialog.ui:702
 msgid "_Remove"
@@ -2771,176 +2784,182 @@ msgid "Navigation"
 msgstr "Judėjimas"
 
 #: src/resources/gtk/shortcuts-dialog.ui:90
+#| msgid "Go to your homepage"
+msgctxt "shortcut window"
+msgid "Go to homepage"
+msgstr "Eiti į namų tinklalapį"
+
+#: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Įkelti iš naujo dabartinį puslapį"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Stabdyti dabartinio puslapio įkėlimą"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Grįžti atgal į ankstesnį puslapį"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:118
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Grįžti pirmyn į kitą puslapį"
 
-#: src/resources/gtk/shortcuts-dialog.ui:122
+#: src/resources/gtk/shortcuts-dialog.ui:129
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Kortelės"
 
-#: src/resources/gtk/shortcuts-dialog.ui:126
+#: src/resources/gtk/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Nauja kortelė"
 
-#: src/resources/gtk/shortcuts-dialog.ui:133
+#: src/resources/gtk/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Užverti dabartinę kortelę"
 
-#: src/resources/gtk/shortcuts-dialog.ui:140
+#: src/resources/gtk/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Vėl atverti užvertą kortelę"
 
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Eiti į kitą kortelę"
 
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Eiti į ankstesnę kortelę"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Perkelti dabartinę kortelę į kairę"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:175
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Perkelti dabartinę kortelę į dešinę"
 
-#: src/resources/gtk/shortcuts-dialog.ui:179
+#: src/resources/gtk/shortcuts-dialog.ui:186
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Įvairūs"
 
-#: src/resources/gtk/shortcuts-dialog.ui:183
+#: src/resources/gtk/shortcuts-dialog.ui:190
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Retrospektyva"
 
-#: src/resources/gtk/shortcuts-dialog.ui:190
+#: src/resources/gtk/shortcuts-dialog.ui:197
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Nuostatos"
 
-#: src/resources/gtk/shortcuts-dialog.ui:197
+#: src/resources/gtk/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Įtraukti į gaires dabartinį puslapį"
 
-#: src/resources/gtk/shortcuts-dialog.ui:204
+#: src/resources/gtk/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Perjungti naršymą naudojant rodyklių klavišus"
 
-#: src/resources/gtk/shortcuts-dialog.ui:215
+#: src/resources/gtk/shortcuts-dialog.ui:222
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Rodymas"
 
-#: src/resources/gtk/shortcuts-dialog.ui:219
+#: src/resources/gtk/shortcuts-dialog.ui:226
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Didinti"
 
-#: src/resources/gtk/shortcuts-dialog.ui:226
+#: src/resources/gtk/shortcuts-dialog.ui:233
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Mažinti"
 
-#: src/resources/gtk/shortcuts-dialog.ui:233
+#: src/resources/gtk/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Atstatyti dydį"
 
-#: src/resources/gtk/shortcuts-dialog.ui:240
+#: src/resources/gtk/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Visame ekrane"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
+#: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Rodyti puslapio išeities tekstą"
 
-#: src/resources/gtk/shortcuts-dialog.ui:254
+#: src/resources/gtk/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Perjungti inspektorių"
 
-#: src/resources/gtk/shortcuts-dialog.ui:265
+#: src/resources/gtk/shortcuts-dialog.ui:272
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Redagavimas"
 
-#: src/resources/gtk/shortcuts-dialog.ui:269
+#: src/resources/gtk/shortcuts-dialog.ui:276
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Iškirpti"
 
-#: src/resources/gtk/shortcuts-dialog.ui:276
+#: src/resources/gtk/shortcuts-dialog.ui:283
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopijuoti"
 
-#: src/resources/gtk/shortcuts-dialog.ui:283
+#: src/resources/gtk/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Įdėti"
 
-#: src/resources/gtk/shortcuts-dialog.ui:290
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Atšaukti"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Pakartoti"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Pažymėti viską"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Pažymėti puslapio URL"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Ieškoti"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Kitas paieškos rezultatas"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Ankstesnis paieškos rezultatas"
@@ -2999,11 +3018,12 @@ msgstr "GVDB failas"
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:110 src/window-commands.c:398
-msgid "Ch_oose File"
-msgstr "_Pasirinkite failą"
+#: src/window-commands.c:110
+#| msgid "Ch_oose File"
+msgid "Ch_oose File…"
+msgstr "_Pasirinkite failą…"
 
-#: src/window-commands.c:112 src/window-commands.c:302
+#: src/window-commands.c:112 src/window-commands.c:291
 msgid "I_mport"
 msgstr "I_mportuoti"
 
@@ -3015,44 +3035,48 @@ msgstr "Pasirinkite profilį"
 msgid "_Select"
 msgstr "_Pasirinkite"
 
-#: src/window-commands.c:297 src/window-commands.c:460
+#: src/window-commands.c:288 src/window-commands.c:444
 msgid "Choose File"
 msgstr "Pasirinkite failą"
 
-#: src/window-commands.c:322 src/window-commands.c:363
+#: src/window-commands.c:315 src/window-commands.c:356
 msgid "Bookmarks successfully imported!"
 msgstr "Gairės sėkmingai importuotos!"
 
-#: src/window-commands.c:393
+#: src/window-commands.c:386
 msgid "Import Bookmarks"
 msgstr "Importuoti gaires"
 
-#: src/window-commands.c:411
+#: src/window-commands.c:391
+msgid "Ch_oose File"
+msgstr "_Pasirinkite failą"
+
+#: src/window-commands.c:404
 msgid "From:"
 msgstr "Nuo:"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:470
+#: src/window-commands.c:452
 msgid "bookmarks.gvdb"
 msgstr "gairės.gvdb"
 
-#: src/window-commands.c:488
+#: src/window-commands.c:474
 msgid "Bookmarks successfully exported!"
 msgstr "Gairės sėkmingai eksportuotos!"
 
-#: src/window-commands.c:613 src/window-commands.c:636
+#: src/window-commands.c:599 src/window-commands.c:622
 msgid "Contact us at:"
 msgstr "Susisiekite su mumis:"
 
-#: src/window-commands.c:616
+#: src/window-commands.c:602
 msgid "Contributors:"
 msgstr "Prisidėjo:"
 
-#: src/window-commands.c:619
+#: src/window-commands.c:605
 msgid "Past developers:"
 msgstr "Ankstesnieji kūrėjai:"
 
-#: src/window-commands.c:645
+#: src/window-commands.c:631
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3069,7 +3093,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:668
+#: src/window-commands.c:654
 msgid "translator-credits"
 msgstr ""
 "išvertė:\n"
@@ -3077,65 +3101,65 @@ msgstr ""
 "Žygimantas Beručka <zygis@gnome.org>,\n"
 "Justina Klingaitė <justina.klingaite@gmail.com>"
 
-#: src/window-commands.c:671
+#: src/window-commands.c:657
 msgid "Web Website"
 msgstr "Žiniatinklio naršyklės svetainė"
 
-#: src/window-commands.c:903
+#: src/window-commands.c:889
 msgid "Open"
 msgstr "Atverti"
 
-#: src/window-commands.c:1266
+#: src/window-commands.c:1252
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Internetinė programa „%s“ jau yra. Ar norite ją pakeisti?"
 
-#: src/window-commands.c:1269
+#: src/window-commands.c:1255
 msgid "Cancel"
 msgstr "Atmesti"
 
-#: src/window-commands.c:1271
+#: src/window-commands.c:1257
 msgid "Replace"
 msgstr "Pakeisti"
 
-#: src/window-commands.c:1275
+#: src/window-commands.c:1261
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "Failas tokiu pavadinimu jau yra. Pakeitimas ją perrašys."
 
-#: src/window-commands.c:1310
+#: src/window-commands.c:1296
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Programa „%s“ pasiruošusi naudojimui"
 
-#: src/window-commands.c:1313
+#: src/window-commands.c:1299
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Nepavyko sukurti programos „%s“"
 
-#: src/window-commands.c:1321
+#: src/window-commands.c:1307
 msgid "Launch"
 msgstr "Paleisti"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1363
+#: src/window-commands.c:1349
 msgid "Create Web Application"
 msgstr "Sukurti internetinę programą"
 
-#: src/window-commands.c:1368
+#: src/window-commands.c:1354
 msgid "C_reate"
 msgstr "Suku_rti"
 
-#: src/window-commands.c:1496
+#: src/window-commands.c:1483
 msgid "Save"
 msgstr "Įrašyti"
 
-#: src/window-commands.c:2117
+#: src/window-commands.c:2104
 msgid "Enable caret browsing mode?"
 msgstr "Įjungti naršymą naudojant rodyklių klavišus?"
 
-#: src/window-commands.c:2120
+#: src/window-commands.c:2107
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3145,9 +3169,12 @@ msgstr ""
 "puslapiuose stumdomą žymiklį, leidžiantį jums judėti naudojant klaviatūrą. "
 "Ar norite dabar įjungti naršymą naudojant rodyklių klavišus?"
 
-#: src/window-commands.c:2123
+#: src/window-commands.c:2110
 msgid "_Enable"
 msgstr "_Įjungti"
+
+#~ msgid "_Manage Search Engines…"
+#~ msgstr "_Tvarkyti paieškos variklius…"
 
 #~ msgid "'https://duckduckgo.com/?q=%s&t=epiphany'"
 #~ msgstr "'https://duckduckgo.com/?q=%s&t=epiphany'"
