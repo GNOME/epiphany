@@ -37,7 +37,7 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
 #include <httpseverywhere.h>
 #endif
 
@@ -69,7 +69,7 @@ struct _EphyUriTester {
   GMainLoop *load_loop;
   int adblock_filters_to_load;
   gboolean adblock_loaded;
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
   gboolean https_everywhere_loaded;
 
   HTTPSEverywhereContext *https_everywhere_context;
@@ -538,7 +538,7 @@ ephy_uri_tester_adblock_loaded (EphyUriTester *tester)
 {
   if (g_atomic_int_dec_and_test (&tester->adblock_filters_to_load)) {
     tester->adblock_loaded = TRUE;
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
     if (tester->https_everywhere_loaded)
       g_main_loop_quit (tester->load_loop);
 #else
@@ -547,7 +547,7 @@ ephy_uri_tester_adblock_loaded (EphyUriTester *tester)
   }
 }
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
 static void
 ephy_uri_tester_https_everywhere_loaded (EphyUriTester *tester)
 {
@@ -634,7 +634,7 @@ ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
     return NULL;
   }
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
   if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) && tester->https_everywhere_context != NULL)
     return https_everywhere_context_rewrite (tester->https_everywhere_context, request_uri);
 #endif
@@ -642,7 +642,7 @@ ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
   return g_strdup (request_uri);
 }
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
 static void
 https_everywhere_context_init_cb (HTTPSEverywhereContext *context,
                                   GAsyncResult           *res,
@@ -723,7 +723,7 @@ ephy_uri_tester_load_sync (GTask         *task,
   g_main_context_push_thread_default (context);
   tester->load_loop = g_main_loop_new (context, FALSE);
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
   if (!tester->https_everywhere_loaded) {
     g_assert (tester->https_everywhere_context == NULL);
     tester->https_everywhere_context = https_everywhere_context_new ();
@@ -819,13 +819,13 @@ ephy_uri_tester_set_property (GObject      *object,
 static void
 ephy_uri_tester_dispose (GObject *object)
 {
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
   EphyUriTester *tester = EPHY_URI_TESTER (object);
 #endif
 
   LOG ("EphyUriTester disposing %p", object);
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
   g_clear_object (&tester->https_everywhere_context);
 #endif
 
@@ -932,7 +932,7 @@ ephy_uri_tester_load (EphyUriTester *tester)
     tester->adblock_loaded = TRUE;
 
   if (tester->adblock_loaded
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
       && tester->https_everywhere_loaded
 #endif
      )

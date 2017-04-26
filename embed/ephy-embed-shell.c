@@ -43,7 +43,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
 #include <httpseverywhere.h>
 #endif
 
@@ -821,7 +821,7 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
   g_object_unref (manager);
 }
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
 static void
 https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
                             GAsyncResult           *result)
@@ -868,7 +868,7 @@ ephy_embed_shell_startup (GApplication *application)
   char *filename;
   char *cookie_policy;
   char *filters_dir;
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
   HTTPSEverywhereContext *context;
   HTTPSEverywhereUpdater *updater;
 #endif
@@ -973,7 +973,7 @@ ephy_embed_shell_startup (GApplication *application)
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
   g_free (cookie_policy);
 
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
     /* We might want to be smarter about this in the future. For now,
      * trigger an update of the rulesets once each time Epiphany is started.
      * Note that the updated rules will not be used until the next time Epiphany

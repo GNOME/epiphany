@@ -109,7 +109,7 @@ static gboolean
 should_use_https_everywhere (const char *request_uri,
                              const char *redirected_uri)
 {
-#ifdef HAVE_LIBHTTPSEVERYWHERE
+#if ENABLE_HTTPS_EVERYWHERE
   SoupURI *request_soup_uri;
   SoupURI *redirected_soup_uri;
   gboolean result = TRUE;

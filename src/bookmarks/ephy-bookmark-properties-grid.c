@@ -32,7 +32,7 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 #include "ephy-sync-service.h"
 #endif
 
@@ -245,14 +245,14 @@ ephy_bookmarks_properties_grid_actions_remove_bookmark (GSimpleAction *action,
                                                         GVariant      *value,
                                                         gpointer       user_data)
 {
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
   EphySyncService *service;
 #endif
   EphyBookmarkPropertiesGrid *self = user_data;
 
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES_GRID (self));
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
   ephy_sync_service_delete_bookmark (service, self->bookmark, FALSE);
 #endif

@@ -70,7 +70,7 @@ int                  ephy_bookmark_bookmarks_compare_func   (EphyBookmark *bookm
 int                  ephy_bookmark_tags_compare          (const char *tag1,
                                                           const char *tag2);
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 char                *ephy_bookmark_to_bso                (EphyBookmark *self);
 EphyBookmark        *ephy_bookmark_from_bso              (JsonObject *bso);
 #endif

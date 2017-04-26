@@ -23,7 +23,7 @@
 
 #include "ephy-history-service-private.h"
 #include "ephy-history-types.h"
-#include "ephy-history-type-builtins.h"
+#include "ephy-lib-type-builtins.h"
 #include "ephy-sqlite-connection.h"
 
 #include <errno.h>

@@ -853,7 +853,7 @@ ephy_sync_service_start_sign_in (EphySyncService  *self,
                                  guint8           *tokenID,
                                  guint8           *reqHMACkey)
 {
-  JsonNode *node;
+  JsonNode *node = NULL;
   JsonObject *json;
   char *tokenID_hex;
   char *bundle = NULL;

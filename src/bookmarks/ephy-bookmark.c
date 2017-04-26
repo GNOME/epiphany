@@ -26,7 +26,7 @@
 
 #include <string.h>
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-utils.h"
 #endif
@@ -204,7 +204,7 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 static void
 ephy_bookmark_init (EphyBookmark *self)
 {
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
   self->id = g_malloc0 (ID_LEN + 1);
   ephy_sync_crypto_random_hex_gen (NULL, ID_LEN, (guint8 *)self->id);
 #else
@@ -542,7 +542,7 @@ ephy_bookmark_tags_compare (const char *tag1, const char *tag2)
   return result;
 }
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 char *
 ephy_bookmark_to_bso (EphyBookmark *self)
 {

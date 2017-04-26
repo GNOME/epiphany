@@ -1994,7 +1994,7 @@ format_crash_error_page (const char  *uri,
                                      formatted_uri);
 
   formatted_distributor = g_strdup_printf ("<strong>%s</strong>",
-                                           LSB_DISTRIBUTOR);
+                                           DISTRIBUTOR_NAME);
   /* Further error details when a site cannot be loaded due to a page crash error. */
   second_paragraph = g_strdup_printf (_("If this happens again, please report "
                                         "the problem to the %s developers."),

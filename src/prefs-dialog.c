@@ -50,7 +50,7 @@
 #include <json-glib/json-glib.h>
 #include <string.h>
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-secret.h"
 #include "ephy-sync-service.h"
@@ -115,7 +115,7 @@ struct _PrefsDialog {
   GHashTable *iso_639_table;
   GHashTable *iso_3166_table;
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
   /* sync */
   GtkWidget *sync_authenticate_box;
   GtkWidget *sync_sign_in_box;
@@ -132,7 +132,7 @@ struct _PrefsDialog {
   GtkWidget *notebook;
 };
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 typedef struct {
   PrefsDialog *dialog;
   char        *email;
@@ -155,7 +155,7 @@ enum {
 
 G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 static FxACallbackData *
 fxa_callback_data_new (PrefsDialog *dialog,
                        const char  *email,
@@ -224,7 +224,7 @@ prefs_dialog_finalize (GObject *object)
   g_hash_table_destroy (dialog->iso_639_table);
   g_hash_table_destroy (dialog->iso_3166_table);
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
   if (dialog->fxa_web_view != NULL) {
     webkit_user_content_manager_unregister_script_message_handler (dialog->fxa_manager,
                                                                    "accountsCommandHandler");
@@ -241,7 +241,7 @@ prefs_dialog_finalize (GObject *object)
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
 }
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 static void
 hide_fxa_iframe (PrefsDialog *dialog,
                  const char  *email)
@@ -638,7 +638,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_down_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_spell_checking_checkbutton);
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
   /* sync */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_authenticate_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_in_box);
@@ -1632,7 +1632,7 @@ setup_language_page (PrefsDialog *dialog)
   create_language_section (dialog);
 }
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 static void
 setup_sync_page (PrefsDialog *dialog)
 {
@@ -1688,7 +1688,7 @@ prefs_dialog_init (PrefsDialog *dialog)
   setup_fonts_page (dialog);
   setup_stored_data_page (dialog);
   setup_language_page (dialog);
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     setup_sync_page (dialog);
 

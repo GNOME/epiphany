@@ -32,7 +32,7 @@
 #include <glib-object.h>
 #include <glib.h>
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 #include "ephy-sync-service.h"
 #endif
 
@@ -105,7 +105,7 @@ GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
 
 EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 EphySyncService *ephy_shell_get_sync_service             (EphyShell *shell);
 #endif
 

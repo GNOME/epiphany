@@ -136,7 +136,7 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
   argv[i++] = NULL;
 
   if (debug)
-    argv[0] = ABS_TOP_BUILD_DIR "/lib/"EPHY_PROFILE_MIGRATOR;
+    argv[0] = BUILD_ROOT "/src/" EPHY_PROFILE_MIGRATOR;
 
   ret = g_spawn_sync (NULL, (char **)argv, envp, G_SPAWN_SEARCH_PATH,
                       NULL, NULL, NULL, NULL,
@@ -146,7 +146,7 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
   g_strfreev (envp);
 
   if (error) {
-    LOG ("Failed to run migrator: %s", error->message);
+    g_warning ("Failed to run migrator: %s", error->message);
     g_error_free (error);
   }
 

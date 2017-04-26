@@ -206,7 +206,7 @@ main (int   argc,
    */
   LIBXML_TEST_VERSION;
 
-  notify_init (PACKAGE);
+  notify_init ("epiphany");
 
   /* If we're given -remote arguments, translate them */
   if (argc >= 2 && strcmp (argv[1], "-remote") == 0) {
@@ -346,7 +346,7 @@ main (int   argc,
   if (!(private_instance && profile_directory == NULL) && incognito_mode == FALSE) {
     /* If the migration fails we don't really want to continue. */
     if (!ephy_profile_utils_do_migration ((const char *)profile_directory, -1, FALSE)) {
-      g_print ("Failed to run the migrator process, Web will now abort.");
+      g_print ("Failed to run the migrator process, Web will now abort.\n");
       exit (1);
     }
   }

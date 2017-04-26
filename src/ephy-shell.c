@@ -47,7 +47,7 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 #include "ephy-notification.h"
 #endif
 
@@ -55,7 +55,7 @@ struct _EphyShell {
   EphyEmbedShell parent_instance;
 
   EphySession *session;
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
   EphySyncService *sync_service;
 #endif
   GList *windows;
@@ -312,7 +312,7 @@ download_started_cb (WebKitWebContext *web_context,
   g_object_unref (ephy_download);
 }
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 static void
 sync_tokens_load_finished_cb (EphySyncService *service,
                               GError          *error,
@@ -373,7 +373,7 @@ ephy_shell_startup (GApplication *application)
                               G_BINDING_SYNC_CREATE);
     }
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
     /* Create the sync service. */
     ephy_shell->sync_service = ephy_sync_service_new ();
     g_signal_connect (ephy_shell->sync_service,
@@ -647,7 +647,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_pointer (&shell->history_dialog, gtk_widget_destroy);
   g_clear_object (&shell->prefs_dialog);
   g_clear_object (&shell->network_monitor);
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
   g_clear_object (&shell->sync_service);
 #endif
   g_clear_object (&shell->bookmarks_manager);
@@ -802,7 +802,7 @@ ephy_shell_get_session (EphyShell *shell)
   return shell->session;
 }
 
-#ifdef ENABLE_SYNC
+#if ENABLE_FIREFOX_SYNC
 /**
  * ephy_shell_get_sync_service:
  * @shell: the #EphyShell

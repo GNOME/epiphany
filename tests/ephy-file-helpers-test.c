@@ -323,7 +323,7 @@ main (int argc, char *argv[])
   /* Set our custom user-dirs.dirs, to control the output of
    * g_get_user_special_dir. The values there are the ones we should
    * check for in the test. */
-  g_setenv ("XDG_CONFIG_HOME", TOP_SRC_DIR "/tests/data/", TRUE);
+  g_setenv ("XDG_CONFIG_HOME", SOURCE_ROOT "/tests/data/", TRUE);
 
   gtk_test_init (&argc, &argv);
 
