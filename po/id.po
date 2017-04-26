@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-03-23 17:09+0000\n"
-"PO-Revision-Date: 2017-03-29 18:00+0700\n"
+"POT-Creation-Date: 2017-04-21 19:42+0000\n"
+"PO-Revision-Date: 2017-04-24 10:14+0700\n"
 "Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -57,7 +57,7 @@ msgstr "Projek GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:293
 #: embed/ephy-about-handler.c:324 src/ephy-main.c:102 src/ephy-main.c:270
-#: src/ephy-main.c:412 src/window-commands.c:652
+#: src/ephy-main.c:412 src/window-commands.c:638
 msgid "Web"
 msgstr "Web"
 
@@ -80,6 +80,10 @@ msgid "org.gnome.Epiphany"
 msgstr "org.gnome.Epiphany"
 
 #: data/org.gnome.Epiphany.desktop.in:19
+msgid "New Window"
+msgstr "Jendela Baru"
+
+#: data/org.gnome.Epiphany.desktop.in:23
 msgid "New Incognito Window"
 msgstr "Jendela Penyamaran Baru"
 
@@ -1157,7 +1161,7 @@ msgid "_Never Save"
 msgstr "_Tidak Pernah Simpan"
 
 #: embed/ephy-web-view.c:531 lib/widgets/ephy-file-chooser.c:121
-#: src/window-commands.c:465
+#: src/window-commands.c:447
 msgid "_Save"
 msgstr "_Simpan"
 
@@ -1653,8 +1657,8 @@ msgstr "Memulai…"
 
 #: lib/widgets/ephy-file-chooser.c:109
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:227
-#: src/window-commands.c:301 src/window-commands.c:396
-#: src/window-commands.c:464 src/window-commands.c:1366
+#: src/window-commands.c:292 src/window-commands.c:389
+#: src/window-commands.c:448 src/window-commands.c:1352
 msgid "_Cancel"
 msgstr "_Batal"
 
@@ -2149,7 +2153,7 @@ msgid "Language"
 msgstr "Bahasa"
 
 #: src/prefs-dialog.c:1201
-msgid "Select a Directory"
+msgid "Select a directory"
 msgstr "Pilih direktori"
 
 #: src/profile-migrator/ephy-profile-migrator.c:93
@@ -2160,27 +2164,27 @@ msgstr ""
 "Web 3.6 membuat usang direktori ini dan mencoba memigrasi konfigurasi ini ke "
 "~/.config/epiphany"
 
-#: src/profile-migrator/ephy-profile-migrator.c:926
+#: src/profile-migrator/ephy-profile-migrator.c:927
 msgid "Search the Web"
 msgstr "Cari di Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1061
+#: src/profile-migrator/ephy-profile-migrator.c:1062
 msgid "Executes only the n-th migration step"
 msgstr "Laksanakan hanya langkah migrasi ke-n"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1063
+#: src/profile-migrator/ephy-profile-migrator.c:1064
 msgid "Specifies the required version for the migrator"
 msgstr "Menentukan versi migrator yang diperlukan"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1065
+#: src/profile-migrator/ephy-profile-migrator.c:1066
 msgid "Specifies the profile where the migrator should run"
 msgstr "Menentukan profil yang seharusnya dijalankan oleh migrator"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1083
+#: src/profile-migrator/ephy-profile-migrator.c:1084
 msgid "Web profile migrator"
 msgstr "Pemigrasi profil Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1084
+#: src/profile-migrator/ephy-profile-migrator.c:1085
 msgid "Web profile migrator options"
 msgstr "Opsi pemigrasi profil Web"
 
@@ -2258,7 +2262,6 @@ msgid "Add Tag…"
 msgstr "Tambahkan Tag…"
 
 #: src/resources/gtk/bookmark-properties-grid.ui:148
-#: src/resources/gtk/prefs-dialog.ui:695
 #: src/resources/gtk/prefs-lang-dialog.ui:27
 msgid "_Add"
 msgstr "T_ambah"
@@ -2539,8 +2542,8 @@ msgid "Search Engines"
 msgstr "Mesin Pencari"
 
 #: src/resources/gtk/prefs-dialog.ui:177
-msgid "_Manage Search Engines…"
-msgstr "Kelola _Mesin Pencari…"
+msgid "_Manage Search Engines"
+msgstr "Kelola _Mesin Pencari"
 
 #: src/resources/gtk/prefs-dialog.ui:190
 msgid "You can select different search engines to use."
@@ -2607,16 +2610,16 @@ msgid "Use custom _stylesheet"
 msgstr "Gunakan _stylesheet gubahan"
 
 #: src/resources/gtk/prefs-dialog.ui:441
-msgid "_Edit Stylesheet…"
-msgstr "Ubah Styl_esheet…"
+msgid "_Edit Stylesheet"
+msgstr "Ubah Styl_esheet"
 
 #: src/resources/gtk/prefs-dialog.ui:458
 msgid "Fonts & Style"
 msgstr "Fonta & Gaya"
 
 #: src/resources/gtk/prefs-dialog.ui:492
-msgid "Manage _Cookies…"
-msgstr "Kelola _Cookie…"
+msgid "Manage _Cookies"
+msgstr "Kelola _Cookie"
 
 #: src/resources/gtk/prefs-dialog.ui:508
 msgid "_Always accept"
@@ -2637,8 +2640,8 @@ msgid "_Never accept"
 msgstr "_Tolak selalu"
 
 #: src/resources/gtk/prefs-dialog.ui:563
-msgid "Manage _Passwords…"
-msgstr "Kelola _Sandi…"
+msgid "Manage _Passwords"
+msgstr "Kelola _Sandi"
 
 #: src/resources/gtk/prefs-dialog.ui:573
 msgid "_Remember passwords"
@@ -2653,12 +2656,16 @@ msgid "You can clear stored personal data."
 msgstr "Anda dapat membersihkan data pribadi yang tersimpan."
 
 #: src/resources/gtk/prefs-dialog.ui:616
-msgid "Manage Personal _Data…"
-msgstr "Atur _Data Pribadi…"
+msgid "Manage Personal _Data"
+msgstr "Kelola _Data Pribadi"
 
 #: src/resources/gtk/prefs-dialog.ui:634
 msgid "Stored Data"
 msgstr "Data Tersimpan"
+
+#: src/resources/gtk/prefs-dialog.ui:695
+msgid "_Add…"
+msgstr "T_ambah…"
 
 #: src/resources/gtk/prefs-dialog.ui:702
 msgid "_Remove"
@@ -2786,175 +2793,180 @@ msgstr "Navigasi"
 
 #: src/resources/gtk/shortcuts-dialog.ui:90
 msgctxt "shortcut window"
+msgid "Go to homepage"
+msgstr "Pergi ke halaman pembuka"
+
+#: src/resources/gtk/shortcuts-dialog.ui:97
+msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Muat ulang halaman ini"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Berhenti memuat halaman ini"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Kembali ke halaman sebelumnya"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:118
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Maju ke halaman selanjutnya"
 
-#: src/resources/gtk/shortcuts-dialog.ui:122
+#: src/resources/gtk/shortcuts-dialog.ui:129
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Tab"
 
-#: src/resources/gtk/shortcuts-dialog.ui:126
+#: src/resources/gtk/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Tab baru"
 
-#: src/resources/gtk/shortcuts-dialog.ui:133
+#: src/resources/gtk/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Tutup tab ini"
 
-#: src/resources/gtk/shortcuts-dialog.ui:140
+#: src/resources/gtk/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Buka lagi tab yang ditutup"
 
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Pergi ke tab selanjutnya"
 
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Pergi ke tab sebelumnya"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Pindahkan tab ini ke kiri"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:175
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Pindahkan tab ini ke kanan"
 
-#: src/resources/gtk/shortcuts-dialog.ui:179
+#: src/resources/gtk/shortcuts-dialog.ui:186
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Rupa-rupa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:183
+#: src/resources/gtk/shortcuts-dialog.ui:190
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Riwayat"
 
-#: src/resources/gtk/shortcuts-dialog.ui:190
+#: src/resources/gtk/shortcuts-dialog.ui:197
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferensi"
 
-#: src/resources/gtk/shortcuts-dialog.ui:197
+#: src/resources/gtk/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Penanda Taut Halaman Kini"
 
-#: src/resources/gtk/shortcuts-dialog.ui:204
+#: src/resources/gtk/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Jungkitkan meramban dengan tanda sisip"
 
-#: src/resources/gtk/shortcuts-dialog.ui:215
+#: src/resources/gtk/shortcuts-dialog.ui:222
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Tilik"
 
-#: src/resources/gtk/shortcuts-dialog.ui:219
+#: src/resources/gtk/shortcuts-dialog.ui:226
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Perbesar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:226
+#: src/resources/gtk/shortcuts-dialog.ui:233
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Perkecil"
 
-#: src/resources/gtk/shortcuts-dialog.ui:233
+#: src/resources/gtk/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Reset zum"
 
-#: src/resources/gtk/shortcuts-dialog.ui:240
+#: src/resources/gtk/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Layar penuh"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
+#: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Tilik sumber halaman"
 
-#: src/resources/gtk/shortcuts-dialog.ui:254
+#: src/resources/gtk/shortcuts-dialog.ui:261
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Jungkitkan pemeriksa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:265
+#: src/resources/gtk/shortcuts-dialog.ui:272
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Menyunting"
 
-#: src/resources/gtk/shortcuts-dialog.ui:269
+#: src/resources/gtk/shortcuts-dialog.ui:276
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Potong"
 
-#: src/resources/gtk/shortcuts-dialog.ui:276
+#: src/resources/gtk/shortcuts-dialog.ui:283
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Salin"
 
-#: src/resources/gtk/shortcuts-dialog.ui:283
+#: src/resources/gtk/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Tempel"
 
-#: src/resources/gtk/shortcuts-dialog.ui:290
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Tak Jadi"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Jadi Lagi"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Pilih semua"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Pilihan URL halaman"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Cari"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Hasil cari selanjutnya"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:339
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Hasil cari sebelumnya"
@@ -3014,11 +3026,11 @@ msgstr "Berkas GVDB"
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:110 src/window-commands.c:398
-msgid "Ch_oose File"
+#: src/window-commands.c:110
+msgid "Ch_oose File…"
 msgstr "P_ilih Berkas"
 
-#: src/window-commands.c:112 src/window-commands.c:302
+#: src/window-commands.c:112 src/window-commands.c:291
 msgid "I_mport"
 msgstr "I_mpor"
 
@@ -3030,44 +3042,48 @@ msgstr "Pilih Profil"
 msgid "_Select"
 msgstr "_Pilih"
 
-#: src/window-commands.c:297 src/window-commands.c:460
+#: src/window-commands.c:288 src/window-commands.c:444
 msgid "Choose File"
 msgstr "Pilih Berkas"
 
-#: src/window-commands.c:322 src/window-commands.c:363
+#: src/window-commands.c:315 src/window-commands.c:356
 msgid "Bookmarks successfully imported!"
 msgstr "Penanda taut sukses diimpor!"
 
-#: src/window-commands.c:393
+#: src/window-commands.c:386
 msgid "Import Bookmarks"
 msgstr "Impor Penanda Taut"
 
-#: src/window-commands.c:411
+#: src/window-commands.c:391
+msgid "Ch_oose File"
+msgstr "P_ilih Berkas"
+
+#: src/window-commands.c:404
 msgid "From:"
 msgstr "Dari:"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:470
+#: src/window-commands.c:452
 msgid "bookmarks.gvdb"
 msgstr "penanda taut.gvdb"
 
-#: src/window-commands.c:488
+#: src/window-commands.c:474
 msgid "Bookmarks successfully exported!"
 msgstr "Penanda taut sukses diekspor!"
 
-#: src/window-commands.c:613 src/window-commands.c:636
+#: src/window-commands.c:599 src/window-commands.c:622
 msgid "Contact us at:"
 msgstr "Hubungi kami:"
 
-#: src/window-commands.c:616
+#: src/window-commands.c:602
 msgid "Contributors:"
 msgstr "Kontributor:"
 
-#: src/window-commands.c:619
+#: src/window-commands.c:605
 msgid "Past developers:"
 msgstr "Pengembang yang lalu:"
 
-#: src/window-commands.c:645
+#: src/window-commands.c:631
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3084,7 +3100,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:668
+#: src/window-commands.c:654
 msgid "translator-credits"
 msgstr ""
 "Tunggul Arif Siswoyo <tunggul@matralintas.net>, 2003\n"
@@ -3094,65 +3110,65 @@ msgstr ""
 "Andika Triwidada <andika@gmail.com>, 2011-2015.\n"
 "Kukuh Syafaat <syafaatkukuh@gmail.com>, 2017."
 
-#: src/window-commands.c:671
+#: src/window-commands.c:657
 msgid "Web Website"
 msgstr "Situs Web"
 
-#: src/window-commands.c:903
+#: src/window-commands.c:889
 msgid "Open"
 msgstr "Buka"
 
-#: src/window-commands.c:1266
+#: src/window-commands.c:1252
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Aplikasi web bernama '%s' telah ada. Apakah Anda ingin menimpanya?"
 
-#: src/window-commands.c:1269
+#: src/window-commands.c:1255
 msgid "Cancel"
 msgstr "Batal"
 
-#: src/window-commands.c:1271
+#: src/window-commands.c:1257
 msgid "Replace"
 msgstr "Timpa"
 
-#: src/window-commands.c:1275
+#: src/window-commands.c:1261
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "Aplikasi dengan nama sama telah ada. Menggantinya akan menimpanya."
 
-#: src/window-commands.c:1310
+#: src/window-commands.c:1296
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Aplikasi '%s' siap untuk digunakan"
 
-#: src/window-commands.c:1313
+#: src/window-commands.c:1299
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Aplikasi '%s' tidak dapat dibuat"
 
-#: src/window-commands.c:1321
+#: src/window-commands.c:1307
 msgid "Launch"
 msgstr "Luncurkan"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1363
+#: src/window-commands.c:1349
 msgid "Create Web Application"
 msgstr "Buat Aplikasi Web"
 
-#: src/window-commands.c:1368
+#: src/window-commands.c:1354
 msgid "C_reate"
 msgstr "_Buat"
 
-#: src/window-commands.c:1496
+#: src/window-commands.c:1483
 msgid "Save"
 msgstr "Simpan"
 
-#: src/window-commands.c:2117
+#: src/window-commands.c:2104
 msgid "Enable caret browsing mode?"
 msgstr "Aktifkan mode tanda sisip?"
 
-#: src/window-commands.c:2120
+#: src/window-commands.c:2107
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3163,9 +3179,12 @@ msgstr ""
 "memungkinkan Anda berpindah-pindah dengan papan tik Anda. Apakah Anda ingin "
 "mengaktifkan meramban dengan tanda sisip?"
 
-#: src/window-commands.c:2123
+#: src/window-commands.c:2110
 msgid "_Enable"
 msgstr "_Aktifkan"
+
+#~ msgid "_Manage Search Engines…"
+#~ msgstr "Kelola _Mesin Pencari…"
 
 #~ msgid "'https://duckduckgo.com/?q=%s&t=epiphany'"
 #~ msgstr "https://duckduckgo.com/?q=%s&t=epiphany"
