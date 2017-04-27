@@ -86,7 +86,8 @@ libephymain = shared_library('ephymain',
 ephymain_dep = declare_dependency(
   link_with: libephymain,
   include_directories: libephymain_includes,
-  dependencies: libephymain_deps
+  dependencies: libephymain_deps,
+  sources: enums
 )
 
 

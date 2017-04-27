@@ -54,5 +54,6 @@ libephywidgets = static_library('ephywidgets',
 ephywidgets_dep = declare_dependency(
   link_with: libephywidgets,
   include_directories: libephywidgets_includes,
-  dependencies: libephywidgets_deps
+  dependencies: libephywidgets_deps,
+  sources: enums
 )

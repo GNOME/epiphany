@@ -67,5 +67,6 @@ libephyembed = static_library('ephyembed',
 ephyembed_dep = declare_dependency(
   link_with: libephyembed,
   include_directories: libephyembed_includes,
-  dependencies: libephyembed_deps
+  dependencies: libephyembed_deps,
+  sources: enums
 )

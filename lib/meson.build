@@ -80,7 +80,8 @@ libephymisc = shared_library('ephymisc',
 ephymisc_dep = declare_dependency(
   link_with: libephymisc,
   include_directories: libephymisc_includes,
-  dependencies: libephymisc_deps
+  dependencies: libephymisc_deps,
+  sources: enums
 )
 
 subdir('widgets')
