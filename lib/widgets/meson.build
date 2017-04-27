@@ -9,6 +9,8 @@ enums = gnome.mkenums('ephy-widgets',
 )
 
 libephywidgets_sources = [
+  'contrib/gd-two-lines-renderer.c',
+  'contrib/nautilus-floating-bar.c',
   'ephy-certificate-dialog.c',
   'ephy-downloads-popover.c',
   'ephy-downloads-progress-icon.c',
@@ -20,7 +22,6 @@ libephywidgets_sources = [
   'ephy-security-popover.c',
   'ephy-title-box.c',
   'ephy-title-widget.c',
-  'nautilus-floating-bar.c',
   enums
 ]
 
@@ -31,7 +32,6 @@ libephywidgets_deps = [
   gio_dep,
   glib_dep,
   gtk_dep,
-  libgd_dep,
   libsoup_dep,
   webkit2gtk_dep
 ]
@@ -42,7 +42,8 @@ libephywidgets_includes = include_directories(
   '../egg',
   '../history',
   '../..',
-  '../../embed'
+  '../../embed',
+  'contrib'
 )
 
 libephywidgets = static_library('ephywidgets',

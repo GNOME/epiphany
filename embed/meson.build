@@ -37,7 +37,6 @@ libephyembed_deps = [
   glib_dep,
   gtk_dep,
   icu_uc_dep,
-  libgd_dep,
   libsecret_dep,
   libsoup_dep,
   m_dep,
@@ -55,7 +54,7 @@ libephyembed_includes = include_directories(
   '../lib/egg',
   '../lib/history',
   '../lib/widgets',
-  '../subprojects/libgd'
+  '../lib/widgets/contrib'
 )
 
 libephyembed = static_library('ephyembed',

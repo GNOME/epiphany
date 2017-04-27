@@ -45,13 +45,6 @@ configure_file(
 gvdb = subproject('gvdb')
 gvdb_dep = gvdb.get_variable('gvdb_dep')
 
-libgd = subproject('libgd',
-  default_options: [
-    'with-main-view=true'
-  ]
-)
-libgd_dep = libgd.get_variable('libgd_dep')
-
 glib_requirement = '>= 2.46.0'
 gtk_requirement = '>= 3.22.0'
 webkitgtk_requirement = '>= 2.16.0'

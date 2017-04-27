@@ -33,11 +33,11 @@
 #include "ephy-signal-accumulator.h"
 #include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
+#include "gd-two-lines-renderer.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libgd/gd.h>
 #include <string.h>
 #if 0
 /* FIXME: Refactor the DNS prefetch, this is a layering violation */
