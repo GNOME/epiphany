@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_NOTIFICATION (ephy_notification_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyNotification, ephy_notification, EPHY, NOTIFICATION, GtkGrid)
+G_DECLARE_FINAL_TYPE (EphyNotification, ephy_notification, EPHY, NOTIFICATION, GtkFrame)
 
 EphyNotification *ephy_notification_new  (const char *head,
                                           const char *body);

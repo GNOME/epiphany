@@ -22,16 +22,16 @@
 #include "ephy-notification-container.h"
 
 struct _EphyNotificationContainer {
-  GdNotification  parent_instance;
+  GtkRevealer  parent_instance;
 
-  GtkWidget      *grid;
+  GtkWidget   *grid;
 };
 
 struct _EphyNotificationContainerClass {
-  GdNotificationClass parent_class;
+  GtkRevealerClass parent_class;
 };
 
-G_DEFINE_TYPE (EphyNotificationContainer, ephy_notification_container, GD_TYPE_NOTIFICATION);
+G_DEFINE_TYPE (EphyNotificationContainer, ephy_notification_container, GTK_TYPE_REVEALER);
 
 static EphyNotificationContainer *notification_container = NULL;
 
@@ -65,8 +65,6 @@ ephy_notification_container_get_default (void)
     return notification_container;
 
   return g_object_new (EPHY_TYPE_NOTIFICATION_CONTAINER,
-                       "show-close-button", TRUE,
-                       "timeout", -1,
                        NULL);
 }
 
@@ -79,4 +77,5 @@ ephy_notification_container_add_notification (EphyNotificationContainer *self,
 
   gtk_container_add (GTK_CONTAINER (self->grid), notification);
   gtk_widget_show_all (GTK_WIDGET (self));
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
 }

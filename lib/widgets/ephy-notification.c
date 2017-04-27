@@ -24,17 +24,20 @@
 #include "ephy-notification-container.h"
 
 struct _EphyNotification {
-  GtkGrid    parent_instance;
+  GtkFrame   parent_instance;
+
+  GtkWidget *grid;
 
   GtkWidget *head;
   GtkWidget *body;
+  GtkWidget *close_button;
 
   char      *head_msg;
   char      *body_msg;
 };
 
 struct _EphyNotificationClass {
-  GtkGridClass parent_class;
+  GtkFrameClass parent_class;
 };
 
 enum {
@@ -110,17 +113,51 @@ ephy_notification_get_property (GObject    *object,
 }
 
 static void
+close_button_clicked_cb (GtkButton        *button,
+                         EphyNotification *self)
+{
+  EphyNotificationContainer *container = ephy_notification_container_get_default ();
+
+  gtk_widget_hide (GTK_WIDGET (container));
+  gtk_revealer_set_reveal_child (GTK_REVEALER (container), FALSE);
+}
+
+static void
 ephy_notification_init (EphyNotification *self)
 {
+  GtkWidget *image;
+  GtkStyleContext *context;
+
+  self->grid = gtk_grid_new ();
+  context = gtk_widget_get_style_context (self->grid);
+  gtk_style_context_add_class (context, "app-notification");
+  gtk_container_add (GTK_CONTAINER (self), self->grid);
+
   self->head = gtk_label_new (NULL);
   gtk_widget_set_halign (self->head, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (self->head, TRUE);
-  gtk_grid_attach (GTK_GRID (self), self->head, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (self->grid), self->head, 0, 0, 1, 1);
 
   self->body = gtk_label_new (NULL);
   gtk_widget_set_halign (self->body, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (self->body, TRUE);
-  gtk_grid_attach (GTK_GRID (self), self->body, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (self->grid), self->body, 0, 1, 1, 1);
+
+  self->close_button = gtk_button_new ();
+  g_object_set (self->close_button,
+                "relief", GTK_RELIEF_NONE,
+                "focus-on-click", FALSE,
+                "margin", 6,
+                NULL);
+  gtk_grid_attach (GTK_GRID (self->grid), self->close_button, 1, 0, 1, 2);
+
+  image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (self->close_button), image);
+
+  g_signal_connect (self->close_button,
+                    "clicked",
+                    G_CALLBACK (close_button_clicked_cb),
+                    self);
 }
 
 static void

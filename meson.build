@@ -47,8 +47,7 @@ gvdb_dep = gvdb.get_variable('gvdb_dep')
 
 libgd = subproject('libgd',
   default_options: [
-    'with-main-view=true',
-    'with-notification=true'
+    'with-main-view=true'
   ]
 )
 libgd_dep = libgd.get_variable('libgd_dep')
