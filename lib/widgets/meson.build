@@ -39,7 +39,7 @@ libephywidgets_deps = [
 libephywidgets_includes = include_directories(
   '.',
   '..',
-  '../egg',
+  '../contrib',
   '../history',
   '../..',
   '../../embed',

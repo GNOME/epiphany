@@ -48,7 +48,6 @@ libephymain_deps = [
   ephyembed_dep,
   ephymisc_dep,
   ephywidgets_dep,
-  gvdb_dep,
   json_glib_dep,
   libnotify_dep
 ]
