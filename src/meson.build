@@ -41,9 +41,9 @@ libephymain_sources = [
   'popup-commands.c',
   'prefs-dialog.c',
   'sync/ephy-sync-crypto.c',
-  'sync/ephy-sync-secret.c',
   'sync/ephy-sync-service.c',
-  'sync/ephy-sync-utils.c',
+  'sync/ephy-synchronizable.c',
+  'sync/ephy-synchronizable-manager.c',
   'window-commands.c',
   enums
 ]

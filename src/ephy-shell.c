@@ -48,7 +48,6 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
-
 struct _EphyShell {
   EphyEmbedShell parent_instance;
 
@@ -309,27 +308,6 @@ download_started_cb (WebKitWebContext *web_context,
 }
 
 static void
-sync_tokens_load_finished_cb (EphySyncService *service,
-                              GError          *error,
-                              gpointer         user_data)
-{
-  EphyNotification *notification;
-
-  g_assert (EPHY_IS_SYNC_SERVICE (service));
-
-  /* If the tokens were successfully loaded, start the periodical sync.
-   * Otherwise, notify the user to sign in again. */
-  if (error == NULL) {
-    ephy_sync_service_start_periodical_sync (service, TRUE);
-  } else {
-    notification = ephy_notification_new (error->message,
-                                          _("Please visit Preferences and sign in "
-                                            "again to continue the sync process."));
-    ephy_notification_show (notification);
-  }
-}
-
-static void
 ephy_shell_startup (GApplication *application)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
@@ -367,12 +345,11 @@ ephy_shell_startup (GApplication *application)
                               G_BINDING_SYNC_CREATE);
     }
 
-    /* Create the sync service. */
+    /* Create the sync service and register synchronizable managers. */
     ephy_shell->sync_service = ephy_sync_service_new ();
-    g_signal_connect (ephy_shell->sync_service,
-                      "sync-tokens-load-finished",
-                      G_CALLBACK (sync_tokens_load_finished_cb), NULL);
-
+    if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_ENABLED))
+      ephy_sync_service_register_manager (ephy_shell->sync_service,
+                                          EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (ephy_shell)));
     gtk_application_set_app_menu (GTK_APPLICATION (application),
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   } else {

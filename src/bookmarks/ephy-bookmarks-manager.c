@@ -19,13 +19,14 @@
  */
 
 #include "config.h"
-
 #include "ephy-bookmarks-manager.h"
 
 #include "ephy-bookmarks-export.h"
 #include "ephy-bookmarks-import.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-settings.h"
+#include "ephy-synchronizable-manager.h"
 
 #include <string.h>
 
@@ -41,9 +42,13 @@ struct _EphyBookmarksManager {
 };
 
 static void list_model_iface_init     (GListModelInterface *iface);
+static void ephy_synchronizable_manager_iface_init (EphySynchronizableManagerInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+G_DEFINE_TYPE_WITH_CODE (EphyBookmarksManager, ephy_bookmarks_manager, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                list_model_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE_MANAGER,
+                                                ephy_synchronizable_manager_iface_init))
 
 enum {
   BOOKMARK_ADDED,
@@ -68,6 +73,36 @@ ephy_bookmarks_manager_save_to_file (EphyBookmarksManager *self, GTask *task)
 
   if (task)
     g_task_return_boolean (task, result);
+}
+
+static void
+ephy_bookmarks_manager_copy_tags_from_bookmark (EphyBookmarksManager *self,
+                                                EphyBookmark         *dest,
+                                                EphyBookmark         *source)
+{
+  GSequenceIter *iter;
+
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+  g_assert (EPHY_IS_BOOKMARK (dest));
+  g_assert (EPHY_IS_BOOKMARK (source));
+
+  for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (source));
+       !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
+    ephy_bookmark_add_tag (dest, g_sequence_get (iter));
+}
+
+static void
+ephy_bookmarks_manager_create_tags_from_bookmark (EphyBookmarksManager *self,
+                                                  EphyBookmark         *bookmark)
+{
+  GSequenceIter *iter;
+
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+  g_assert (EPHY_IS_BOOKMARK (bookmark));
+
+  for (iter = g_sequence_get_begin_iter (ephy_bookmark_get_tags (bookmark));
+       !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter))
+    ephy_bookmarks_manager_create_tag (self, g_sequence_get (iter));
 }
 
 static void
@@ -188,40 +223,6 @@ ephy_bookmarks_manager_init (EphyBookmarksManager *self)
   ephy_bookmarks_manager_load_from_file (self);
 }
 
-static GType
-ephy_bookmarks_manager_list_model_get_item_type (GListModel *model)
-{
-  return EPHY_TYPE_BOOKMARK;
-}
-
-static guint
-ephy_bookmarks_manager_list_model_get_n_items (GListModel *model)
-{
-  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
-
-  return g_sequence_get_length (self->bookmarks);
-}
-
-static gpointer
-ephy_bookmarks_manager_list_model_get_item (GListModel *model,
-                                            guint       position)
-{
-  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
-  GSequenceIter *iter;
-
-  iter = g_sequence_get_iter_at_pos (self->bookmarks, position);
-
-  return g_object_ref (g_sequence_get (iter));
-}
-
-static void
-list_model_iface_init (GListModelInterface *iface)
-{
-  iface->get_item_type = ephy_bookmarks_manager_list_model_get_item_type;
-  iface->get_n_items = ephy_bookmarks_manager_list_model_get_n_items;
-  iface->get_item = ephy_bookmarks_manager_list_model_get_item;
-}
-
 static void
 bookmark_title_changed_cb (EphyBookmark         *bookmark,
                            GParamSpec           *pspec,
@@ -254,7 +255,6 @@ bookmark_tag_removed_cb (EphyBookmark         *bookmark,
   g_signal_emit (self, signals[BOOKMARK_TAG_REMOVED], 0, bookmark, tag);
 }
 
-
 EphyBookmarksManager *
 ephy_bookmarks_manager_new (void)
 {
@@ -267,7 +267,7 @@ ephy_bookmarks_manager_watch_bookmark (EphyBookmarksManager *self,
 {
   g_signal_connect_object (bookmark, "notify::title",
                            G_CALLBACK (bookmark_title_changed_cb), self, 0);
-  g_signal_connect_object (bookmark, "notify::url",
+  g_signal_connect_object (bookmark, "notify::bmkUri",
                            G_CALLBACK (bookmark_url_changed_cb), self, 0);
   g_signal_connect_object (bookmark, "tag-added",
                            G_CALLBACK (bookmark_tag_added_cb), self, 0);
@@ -305,15 +305,16 @@ ephy_bookmarks_search_and_insert_bookmark (GSequence     *bookmarks,
   return NULL;
 }
 
-void
-ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
-                                     EphyBookmark         *bookmark)
+static void
+ephy_bookmarks_manager_add_bookmark_internal (EphyBookmarksManager *self,
+                                              EphyBookmark         *bookmark,
+                                              gboolean              should_save)
 {
   GSequenceIter *iter;
-  gint position;
+  int position;
 
-  g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
-  g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+  g_assert (EPHY_IS_BOOKMARK (bookmark));
 
   iter = ephy_bookmarks_search_and_insert_bookmark (self->bookmarks,
                                                     g_object_ref (bookmark));
@@ -323,12 +324,24 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
     g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 
     g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
+    ephy_bookmarks_manager_watch_bookmark (self, bookmark);
+  }
 
+  if (should_save)
     ephy_bookmarks_manager_save_to_file_async (self, NULL,
                                                (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                                NULL);
-    ephy_bookmarks_manager_watch_bookmark (self, bookmark);
-  }
+}
+
+void
+ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
+                                     EphyBookmark         *bookmark)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
+  g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
+
+  ephy_bookmarks_manager_add_bookmark_internal (self, bookmark, TRUE);
+  g_signal_emit_by_name (self, "synchronizable-modified", bookmark);
 }
 
 void
@@ -336,26 +349,16 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
                                       GSequence            *bookmarks)
 {
   GSequenceIter *iter;
-  GSequenceIter *new_iter;
-  int position;
 
   g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
   g_return_if_fail (bookmarks != NULL);
 
   for (iter = g_sequence_get_begin_iter (bookmarks);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter)) {
+       !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
     EphyBookmark *bookmark = g_sequence_get (iter);
 
-    new_iter = ephy_bookmarks_search_and_insert_bookmark (self->bookmarks,
-                                                          g_object_ref (bookmark));
-    if (new_iter) {
-      position = g_sequence_iter_get_position (new_iter);
-      g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
-
-      g_signal_emit (self, signals[BOOKMARK_ADDED], 0, bookmark);
-      ephy_bookmarks_manager_watch_bookmark (self, bookmark);
-    }
+    ephy_bookmarks_manager_add_bookmark_internal (self, bookmark, FALSE);
+    g_signal_emit_by_name (self, "synchronizable-modified", bookmark);
   }
 
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
@@ -363,21 +366,21 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
                                              NULL);
 }
 
-void
-ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
-                                        EphyBookmark         *bookmark)
+static void
+ephy_bookmarks_manager_remove_bookmark_internal (EphyBookmarksManager *self,
+                                                 EphyBookmark         *bookmark)
 {
   GSequenceIter *iter;
   gint position;
 
-  g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
-  g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+  g_assert (EPHY_IS_BOOKMARK (bookmark));
 
   for (iter = g_sequence_get_begin_iter (self->bookmarks);
          !g_sequence_iter_is_end (iter);
          iter = g_sequence_iter_next (iter)) {
-    if (g_strcmp0 (ephy_bookmark_get_url (g_sequence_get (iter)),
-                   ephy_bookmark_get_url (bookmark)) == 0)
+    if (g_strcmp0 (ephy_bookmark_get_id (g_sequence_get (iter)),
+                   ephy_bookmark_get_id (bookmark)) == 0)
       break;
   }
   g_assert (!g_sequence_iter_is_end (iter));
@@ -398,6 +401,16 @@ ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
 
   ephy_bookmarks_manager_unwatch_bookmark (self, bookmark);
   g_object_unref (bookmark);
+}
+
+void ephy_bookmarks_manager_remove_bookmark (EphyBookmarksManager *self,
+                                             EphyBookmark         *bookmark)
+{
+  g_return_if_fail (EPHY_IS_BOOKMARKS_MANAGER (self));
+  g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
+
+  g_signal_emit_by_name (self, "synchronizable-deleted", bookmark);
+  ephy_bookmarks_manager_remove_bookmark_internal (self, bookmark);
 }
 
 EphyBookmark *
@@ -610,4 +623,295 @@ ephy_bookmarks_manager_save_to_file_warn_on_error_cb (GObject      *object,
     g_warning ("%s", error->message);
     g_error_free (error);
   }
+}
+
+static GType
+ephy_bookmarks_manager_list_model_get_item_type (GListModel *model)
+{
+  return EPHY_TYPE_BOOKMARK;
+}
+
+static guint
+ephy_bookmarks_manager_list_model_get_n_items (GListModel *model)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
+
+  return g_sequence_get_length (self->bookmarks);
+}
+
+static gpointer
+ephy_bookmarks_manager_list_model_get_item (GListModel *model,
+                                            guint       position)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (model);
+  GSequenceIter *iter;
+
+  iter = g_sequence_get_iter_at_pos (self->bookmarks, position);
+
+  return g_object_ref (g_sequence_get (iter));
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item_type = ephy_bookmarks_manager_list_model_get_item_type;
+  iface->get_n_items = ephy_bookmarks_manager_list_model_get_n_items;
+  iface->get_item = ephy_bookmarks_manager_list_model_get_item;
+}
+
+static const char *
+synchronizable_manager_get_collection_name (EphySynchronizableManager *manager)
+{
+  gboolean sync_with_firefox = g_settings_get_boolean (EPHY_SETTINGS_SYNC,
+                                                       EPHY_PREFS_SYNC_WITH_FIREFOX);
+
+  return sync_with_firefox ? "bookmarks" : "ephy-bookmarks";
+}
+
+static GType
+synchronizable_manager_get_synchronizable_type (EphySynchronizableManager *manager)
+{
+  return EPHY_TYPE_BOOKMARK;
+}
+
+static gboolean
+synchronizable_manager_is_initial_sync (EphySynchronizableManager *manager)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC,
+                                 EPHY_PREFS_SYNC_BOOKMARKS_INITIAL);
+}
+
+static void
+synchronizable_manager_set_is_initial_sync (EphySynchronizableManager *manager,
+                                            gboolean                   is_initial)
+{
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC,
+                          EPHY_PREFS_SYNC_BOOKMARKS_INITIAL,
+                          is_initial);
+}
+
+static double
+synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
+{
+  return g_settings_get_double (EPHY_SETTINGS_SYNC,
+                                EPHY_PREFS_SYNC_BOOKMARKS_TIME);
+}
+
+static void
+synchronizable_manager_set_sync_time (EphySynchronizableManager *manager,
+                                      double                     sync_time)
+{
+  g_settings_set_double (EPHY_SETTINGS_SYNC,
+                         EPHY_PREFS_SYNC_BOOKMARKS_TIME,
+                         sync_time);
+}
+
+static void
+synchronizable_manager_add (EphySynchronizableManager *manager,
+                            EphySynchronizable        *synchronizable)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
+  EphyBookmark *bookmark = EPHY_BOOKMARK (synchronizable);
+
+  ephy_bookmarks_manager_add_bookmark_internal (self, bookmark, TRUE);
+  ephy_bookmarks_manager_create_tags_from_bookmark (self, bookmark);
+}
+
+static void
+synchronizable_manager_remove (EphySynchronizableManager *manager,
+                               EphySynchronizable        *synchronizable)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
+  EphyBookmark *bookmark = EPHY_BOOKMARK (synchronizable);
+
+  ephy_bookmarks_manager_remove_bookmark_internal (self, bookmark);
+}
+
+static GSList *
+ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
+                                             GSList               *remote_bookmarks)
+{
+  GSList *to_upload = NULL;
+  EphyBookmark *bookmark;
+  GSequence *bookmarks;
+  GSequenceIter *iter;
+  GHashTable *dont_upload;
+  double timestamp;
+
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  dont_upload = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  for (GSList *l = remote_bookmarks; l && l->data; l = l->next) {
+    const char *id;
+    const char *url;
+    char *type;
+    char *parent_id;
+
+    g_object_get (l->data, "type", &type, "parentid", &parent_id, NULL);
+    /* Ignore mobile/unfiled bookmarks and everything that is not of type bookmark. */
+    if (g_strcmp0 (type, "bookmark") ||
+        (!g_strcmp0 (parent_id, "mobile") || !g_strcmp0 (parent_id, "unfiled")))
+      goto next;
+
+    /* Bookmarks from server may miss the time added timestamp. */
+    if (!ephy_bookmark_get_time_added (l->data))
+      ephy_bookmark_set_time_added (l->data, g_get_real_time ());
+
+    id = ephy_bookmark_get_id (l->data);
+    url = ephy_bookmark_get_url (l->data);
+    bookmark = ephy_bookmarks_manager_get_bookmark_by_id (self, id);
+
+    if (bookmark) {
+      if (!g_strcmp0 (ephy_bookmark_get_url (bookmark), url)) {
+        /* Same id, same url. Merge tags and reupload. */
+        ephy_bookmarks_manager_copy_tags_from_bookmark (self, bookmark, l->data);
+        timestamp = ephy_synchronizable_get_server_time_modified (l->data);
+        ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), timestamp);
+      } else {
+        /* Same id, different url. Keep both and upload local one with new id. */
+        char *new_id = ephy_sync_crypto_get_random_sync_id ();
+        ephy_bookmark_set_id (bookmark, new_id);
+        ephy_bookmarks_manager_add_bookmark_internal (self, l->data, FALSE);
+        g_hash_table_add (dont_upload, g_strdup (id));
+        g_free (new_id);
+      }
+    } else {
+      bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self, url);
+      if (bookmark) {
+        /* Different id, same url. Keep remote id, merge tags and reupload. */
+        ephy_bookmark_set_id (bookmark, id);
+        ephy_bookmarks_manager_copy_tags_from_bookmark (self, bookmark, l->data);
+        timestamp = ephy_synchronizable_get_server_time_modified (l->data);
+        ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), timestamp);
+      } else {
+        /* Different id, different url. Add remote bookmark. */
+        ephy_bookmarks_manager_add_bookmark_internal (self, l->data, FALSE);
+        g_hash_table_add (dont_upload, g_strdup (id));
+      }
+    }
+
+    /* In any case, create new tags from the remote bookmark if any. */
+    ephy_bookmarks_manager_create_tags_from_bookmark (self, l->data);
+
+next:
+    g_free (type);
+    g_free (parent_id);
+  }
+
+  bookmarks = ephy_bookmarks_manager_get_bookmarks (self);
+  for (iter = g_sequence_get_begin_iter (bookmarks);
+       !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
+    bookmark = g_sequence_get (iter);
+    if (!g_hash_table_contains (dont_upload, ephy_bookmark_get_id (bookmark)))
+      to_upload = g_slist_prepend (to_upload, g_object_ref (bookmark));
+  }
+
+  /* Commit changes to file. */
+  ephy_bookmarks_manager_save_to_file_async (self, NULL,
+                                             (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
+                                             NULL);
+  g_hash_table_unref (dont_upload);
+
+  return to_upload;
+}
+
+static GSList *
+ephy_bookmarks_manager_handle_regular_merge (EphyBookmarksManager *self,
+                                             GSList               *updated_bookmarks,
+                                             GSList               *deleted_bookmarks)
+{
+  GSList *to_upload = NULL;
+  EphyBookmark *bookmark;
+  double timestamp;
+
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  for (GSList *l = deleted_bookmarks; l && l->data; l = l->next) {
+    bookmark = ephy_bookmarks_manager_get_bookmark_by_id (self, ephy_bookmark_get_id (l->data));
+    if (bookmark)
+      ephy_bookmarks_manager_remove_bookmark_internal (self, bookmark);
+  }
+
+  for (GSList *l = updated_bookmarks; l && l->data; l = l->next) {
+    const char *id;
+    const char *url;
+    char *type;
+    char *parent_id;
+
+    g_object_get (l->data, "type", &type, "parentid", &parent_id, NULL);
+    /* Ignore mobile/unfiled bookmarks and everything that is not of type bookmark. */
+    if (g_strcmp0 (type, "bookmark") ||
+        (!g_strcmp0 (parent_id, "mobile") || !g_strcmp0 (parent_id, "unfiled")))
+      goto next;
+
+    /* Bookmarks from server may miss the time added timestamp. */
+    if (!ephy_bookmark_get_time_added (l->data))
+      ephy_bookmark_set_time_added (l->data, g_get_real_time ());
+
+    id = ephy_bookmark_get_id (l->data);
+    url = ephy_bookmark_get_url (l->data);
+    bookmark = ephy_bookmarks_manager_get_bookmark_by_id (self, id);
+
+    if (bookmark) {
+      /* Same id. Overwrite local bookmark. */
+      ephy_bookmarks_manager_remove_bookmark_internal (self, bookmark);
+      ephy_bookmarks_manager_add_bookmark_internal (self, l->data, FALSE);
+    } else {
+      bookmark = ephy_bookmarks_manager_get_bookmark_by_url (self, url);
+      if (bookmark) {
+        /* Different id, same url. Keep remote id, merge tags and reupload. */
+        ephy_bookmark_set_id (bookmark, id);
+        ephy_bookmarks_manager_copy_tags_from_bookmark (self, bookmark, l->data);
+        timestamp = ephy_synchronizable_get_server_time_modified (l->data);
+        ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), timestamp);
+        to_upload = g_slist_prepend (to_upload, g_object_ref (bookmark));
+      } else {
+        /* Different id, different url. Add remote bookmark. */
+        ephy_bookmarks_manager_add_bookmark_internal (self, l->data, FALSE);
+      }
+    }
+
+    /* In any case, create new tags from the remote bookmark if any. */
+    ephy_bookmarks_manager_create_tags_from_bookmark (self, l->data);
+
+next:
+    g_free (type);
+    g_free (parent_id);
+  }
+
+  /* Commit changes to file. */
+  ephy_bookmarks_manager_save_to_file_async (self, NULL,
+                                             (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
+                                             NULL);
+
+  return to_upload;
+}
+
+static GSList *
+synchronizable_manager_merge (EphySynchronizableManager *manager,
+                              gboolean                   is_initial,
+                              GSList                    *remotes_deleted,
+                              GSList                    *remotes_updated)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
+
+  if (is_initial)
+    return ephy_bookmarks_manager_handle_initial_merge (self, remotes_updated);
+
+  return ephy_bookmarks_manager_handle_regular_merge (self, remotes_updated, remotes_deleted);
+}
+
+static void
+ephy_synchronizable_manager_iface_init (EphySynchronizableManagerInterface *iface)
+{
+  iface->get_collection_name = synchronizable_manager_get_collection_name;
+  iface->get_synchronizable_type = synchronizable_manager_get_synchronizable_type;
+  iface->is_initial_sync = synchronizable_manager_is_initial_sync;
+  iface->set_is_initial_sync = synchronizable_manager_set_is_initial_sync;
+  iface->get_sync_time = synchronizable_manager_get_sync_time;
+  iface->set_sync_time = synchronizable_manager_set_sync_time;
+  iface->add = synchronizable_manager_add;
+  iface->remove = synchronizable_manager_remove;
+  iface->merge = synchronizable_manager_merge;
 }

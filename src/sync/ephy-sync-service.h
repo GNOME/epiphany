@@ -20,11 +20,9 @@
 
 #pragma once
 
-#include "ephy-bookmark.h"
-#include "ephy-sync-utils.h"
+#include "ephy-synchronizable-manager.h"
 
 #include <glib-object.h>
-#include <libsoup/soup.h>
 
 G_BEGIN_DECLS
 
@@ -32,56 +30,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySyncService, ephy_sync_service, EPHY, SYNC_SERVICE, GObject)
 
-EphySyncService *ephy_sync_service_new                          (void);
-gboolean         ephy_sync_service_is_signed_in                 (EphySyncService *self);
-char            *ephy_sync_service_get_user_email               (EphySyncService *self);
-void             ephy_sync_service_set_user_email               (EphySyncService *self,
-                                                                 const char      *email);
-double           ephy_sync_service_get_sync_time                (EphySyncService *self);
-void             ephy_sync_service_set_sync_time                (EphySyncService *self,
-                                                                 double           time);
-char            *ephy_sync_service_get_token                    (EphySyncService   *self,
-                                                                 EphySyncTokenType  type);
-void             ephy_sync_service_set_token                    (EphySyncService   *self,
-                                                                 const char        *value,
-                                                                 EphySyncTokenType  type);
-void             ephy_sync_service_clear_storage_credentials    (EphySyncService *self);
-void             ephy_sync_service_clear_tokens                 (EphySyncService *self);
-void             ephy_sync_service_destroy_session              (EphySyncService *self,
-                                                                 const char      *sessionToken);
-char            *ephy_sync_service_start_sign_in                (EphySyncService  *self,
-                                                                 guint8           *tokenID,
-                                                                 guint8           *reqHMACkey);
-void             ephy_sync_service_finish_sign_in               (EphySyncService *self,
-                                                                 const char      *email,
-                                                                 const char      *uid,
-                                                                 const char      *sessionToken,
-                                                                 const char      *keyFetchToken,
-                                                                 const char      *unwrapBKey,
-                                                                 char            *bundle,
-                                                                 guint8          *respHMACkey,
-                                                                 guint8          *respXORkey);
-void             ephy_sync_service_send_storage_message         (EphySyncService     *self,
-                                                                 char                *endpoint,
-                                                                 const char          *method,
-                                                                 char                *request_body,
-                                                                 double               modified_since,
-                                                                 double               unmodified_since,
-                                                                 SoupSessionCallback  callback,
-                                                                 gpointer             user_data);
-void             ephy_sync_service_release_next_storage_message (EphySyncService *self);
-void             ephy_sync_service_upload_bookmark              (EphySyncService *self,
-                                                                 EphyBookmark    *bookmark,
-                                                                 gboolean         force);
-void             ephy_sync_service_download_bookmark            (EphySyncService *self,
-                                                                 EphyBookmark    *bookmark);
-void             ephy_sync_service_delete_bookmark              (EphySyncService *self,
-                                                                 EphyBookmark    *bookmark,
-                                                                 gboolean         conditional);
-void             ephy_sync_service_sync_bookmarks               (EphySyncService *self,
-                                                                 gboolean         first);
-void             ephy_sync_service_start_periodical_sync        (EphySyncService *self,
-                                                                 gboolean         now);
-void             ephy_sync_service_stop_periodical_sync         (EphySyncService *self);
+EphySyncService   *ephy_sync_service_new                    (void);
+gboolean           ephy_sync_service_is_signed_in           (EphySyncService *self);
+const char        *ephy_sync_service_get_sync_user          (EphySyncService *self);
+void               ephy_sync_service_do_sign_in             (EphySyncService *self,
+                                                             const char      *email,
+                                                             const char      *uid,
+                                                             const char      *session_token,
+                                                             const char      *key_fetch_token,
+                                                             const char      *unwrap_b_key);
+void               ephy_sync_service_do_sign_out            (EphySyncService *self);
+void               ephy_sync_service_do_sync                (EphySyncService *self);
+void               ephy_sync_service_start_periodical_sync  (EphySyncService *self);
+void               ephy_sync_service_register_manager       (EphySyncService           *self,
+                                                             EphySynchronizableManager *manager);
+void               ephy_sync_service_unregister_manager     (EphySyncService           *self,
+                                                             EphySynchronizableManager *manager);
 
 G_END_DECLS

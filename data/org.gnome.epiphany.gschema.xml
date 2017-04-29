@@ -6,6 +6,7 @@
 		<child schema="org.gnome.Epiphany.state" name="state"/>
 		<child schema="org.gnome.Epiphany.lockdown" name="lockdown"/>
 		<child schema="org.gnome.Epiphany.permissions" name="permissions"/>
+		<child schema="org.gnome.Epiphany.sync" name="sync"/>
 		<key type="b" name="enable-caret-browsing">
 			<default>false</default>
 			<summary>Browse with caret</summary>
@@ -99,16 +100,6 @@
                         <description>This option sets a limit to the number of web processes that will be used at the same time for the “one-secondary-process-per-web-view” model. The default value is “0” and means no limit.</description>
 
                 </key>
-		<key type="s" name="sync-user">
-			<default>''</default>
-			<summary>The sync user currently logged in</summary>
-			<description>The email linked to the Firefox Account used to sync data with Mozilla’s servers.</description>
-		</key>
-		<key type="d" name="sync-time">
-			<default>0</default>
-			<summary>Sync timestamp</summary>
-			<description>The timestamp at which last we had the last sync</description>
-		</key>
                 <key type="as" name="adblock-filters">
                         <default>['https://easylist.to/easylist/easylist.txt', 'https://easylist.to/easylist/easyprivacy.txt']</default>
                         <summary>List of adblock filters</summary>
@@ -278,6 +269,43 @@
 		</key>
 		<key type="b" name="disable-quit">
 			<default>false</default>
+		</key>
+	</schema>
+	<schema path="/org/gnome/Epiphany/sync/" id="org.gnome.Epiphany.sync">
+		<key type="s" name="sync-user">
+			<default>''</default>
+			<summary>Currently signed in sync user</summary>
+			<description>The email linked to the Firefox Account used to sync data with Mozilla’s servers.</description>
+		</key>
+		<key type="s" name="sync-client-id">
+			<default>''</default>
+			<summary>Sync client ID</summary>
+			<description>The sync client ID of the current device.</description>
+		</key>
+		<key type="u" name="sync-frequency">
+			<default>30</default>
+			<summary>The sync frequency in minutes</summary>
+			<description>The number of minutes between two consecutive syncs.</description>
+		</key>
+		<key type="b" name="sync-with-firefox">
+			<default>false</default>
+			<summary>Sync data with Firefox</summary>
+			<description>TRUE if Ephy collections should be synced with Firefox collections, FALSE otherwise.</description>
+		</key>
+		<key type="b" name="sync-bookmarks-enabled">
+			<default>false</default>
+			<summary>Enable bookmarks sync</summary>
+			<description>TRUE if bookmarks collection should be synced, FALSE otherwise.</description>
+		</key>
+		<key type="d" name="sync-bookmarks-time">
+			<default>0</default>
+			<summary>Bookmarks sync timestamp</summary>
+			<description>The timestamp at which last bookmarks sync was made.</description>
+		</key>
+		<key type="b" name="sync-bookmarks-initial">
+			<default>true</default>
+			<summary>Initial sync or normal sync</summary>
+			<description>TRUE if bookmarks collection needs to be synced for the first time, FALSE otherwise.</description>
 		</key>
 	</schema>
 	<enum id="org.gnome.Epiphany.Permission">
