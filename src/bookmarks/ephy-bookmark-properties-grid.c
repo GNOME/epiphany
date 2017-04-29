@@ -25,6 +25,7 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
+#include "ephy-sync-service.h"
 #include "ephy-type-builtins.h"
 #include "ephy-uri-helpers.h"
 
@@ -32,9 +33,6 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#if ENABLE_FIREFOX_SYNC
-#include "ephy-sync-service.h"
-#endif
 
 struct _EphyBookmarkPropertiesGrid {
   GtkGrid                         parent_instance;
@@ -245,17 +243,13 @@ ephy_bookmarks_properties_grid_actions_remove_bookmark (GSimpleAction *action,
                                                         GVariant      *value,
                                                         gpointer       user_data)
 {
-#if ENABLE_FIREFOX_SYNC
   EphySyncService *service;
-#endif
   EphyBookmarkPropertiesGrid *self = user_data;
 
   g_assert (EPHY_IS_BOOKMARK_PROPERTIES_GRID (self));
 
-#if ENABLE_FIREFOX_SYNC
   service = ephy_shell_get_sync_service (ephy_shell_get_default ());
   ephy_sync_service_delete_bookmark (service, self->bookmark, FALSE);
-#endif
   ephy_bookmarks_manager_remove_bookmark (self->manager,  self->bookmark);
 
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG)

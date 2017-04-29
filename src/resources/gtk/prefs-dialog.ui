@@ -21,7 +21,7 @@
         <property name="spacing">2</property>
         <property name="border_width">0</property>
         <child>
-          <object class="GtkNotebook" id="notebook">
+          <object class="GtkNotebook">
             <property name="visible">True</property>
             <property name="show_border">False</property>
             <child>
@@ -853,6 +853,7 @@
                                 <property name="use-underline">True</property>
                                 <property name="halign">start</property>
                                 <property name="width-request">100</property>
+                                <signal name="clicked" handler="on_sync_sign_out_button_clicked"/>
                                 <style>
                                   <class name="destructive-action"/>
                                   <class name="text-button"/>
