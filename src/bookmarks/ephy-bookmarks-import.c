@@ -18,9 +18,8 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ephy-bookmarks-import.h"
-
 #include "config.h"
+#include "ephy-bookmarks-import.h"
 
 #include "ephy-shell.h"
 #include "ephy-sqlite-connection.h"
@@ -59,13 +58,15 @@ get_bookmarks_from_table (GvdbTable *table)
     const char *title;
     gint64 time_added;
     char *id;
-    double modified;
-    gboolean uploaded;
+    double server_time_modified;
+    gboolean is_uploaded;
 
     /* Obtain the corresponding GVariant. */
     value = gvdb_table_get_value (table, list[i]);
 
-    g_variant_get (value, "(x&s&sdbas)", &time_added, &title, &id, &modified, &uploaded, &iter);
+    g_variant_get (value, "(x&s&sdbas)",
+                   &time_added, &title, &id,
+                   &server_time_modified, &is_uploaded, &iter);
 
     /* Add all stored tags in a GSequence. */
     tags = g_sequence_new (g_free);
@@ -77,11 +78,10 @@ get_bookmarks_from_table (GvdbTable *table)
     g_variant_iter_free (iter);
 
     /* Create the new bookmark. */
-    bookmark = ephy_bookmark_new (list[i], title, tags);
+    bookmark = ephy_bookmark_new (list[i], title, tags, id);
     ephy_bookmark_set_time_added (bookmark, time_added);
-    ephy_bookmark_set_id (bookmark, id);
-    ephy_bookmark_set_modification_time (bookmark, modified);
-    ephy_bookmark_set_is_uploaded (bookmark, uploaded);
+    ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), server_time_modified);
+    ephy_bookmark_set_is_uploaded (bookmark, is_uploaded);
     g_sequence_prepend (bookmarks, bookmark);
 
     g_variant_unref (value);
@@ -214,7 +214,7 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
   GSequence *bookmarks = NULL;
   gboolean ret = TRUE;
   gchar *filename;
-  const char *statement_str = "SELECT b.id, p.url, b.title, b.dateAdded "
+  const char *statement_str = "SELECT b.id, p.url, b.title, b.dateAdded, b.guid "
                               "FROM moz_bookmarks b "
                               "JOIN moz_places p ON b.fk=p.id "
                               "WHERE b.type=1 AND p.url NOT LIKE 'about%' "
@@ -260,11 +260,12 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
     const char *url = ephy_sqlite_statement_get_column_as_string (statement, 1);
     const char *title = ephy_sqlite_statement_get_column_as_string (statement, 2);
     gint64 time_added = ephy_sqlite_statement_get_column_as_int64 (statement, 3);
+    const char *guid = ephy_sqlite_statement_get_column_as_string (statement, 4);
     EphyBookmark *bookmark;
     GSequence *tags;
 
     tags = g_sequence_new (g_free);
-    bookmark = ephy_bookmark_new (url, title, tags);
+    bookmark = ephy_bookmark_new (url, title, tags, guid);
     ephy_bookmark_set_time_added (bookmark, time_added);
     load_tags_for_bookmark (connection, bookmark, bookmark_id);
 

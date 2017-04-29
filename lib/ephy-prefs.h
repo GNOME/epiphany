@@ -138,8 +138,6 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_RESTORE_SESSION_DELAYING_LOADS     "restore-session-delaying-loads"
 #define EPHY_PREFS_PROCESS_MODEL                      "process-model"
 #define EPHY_PREFS_MAX_PROCESSES                      "max-processes"
-#define EPHY_PREFS_SYNC_USER                          "sync-user"
-#define EPHY_PREFS_SYNC_TIME                          "sync-time"
 #define EPHY_PREFS_ADBLOCK_FILTERS                    "adblock-filters"
 #define EPHY_PREFS_SEARCH_ENGINES                     "search-engines"
 #define EPHY_PREFS_DEFAULT_SEARCH_ENGINE              "default-search-engine"
@@ -152,6 +150,15 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_LOCKDOWN_SAVE_TO_DISK      "disable-save-to-disk"
 #define EPHY_PREFS_LOCKDOWN_PRINTING          "disable-printing"
 #define EPHY_PREFS_LOCKDOWN_QUIT              "disable-quit"
+
+#define EPHY_PREFS_SYNC_SCHEMA            "org.gnome.Epiphany.sync"
+#define EPHY_PREFS_SYNC_USER              "sync-user"
+#define EPHY_PREFS_SYNC_CLIENT_ID         "sync-client-id"
+#define EPHY_PREFS_SYNC_FREQUENCY         "sync-frequency"
+#define EPHY_PREFS_SYNC_WITH_FIREFOX      "sync-with-firefox"
+#define EPHY_PREFS_SYNC_BOOKMARKS_ENABLED "sync-bookmarks-enabled"
+#define EPHY_PREFS_SYNC_BOOKMARKS_TIME    "sync-bookmarks-time"
+#define EPHY_PREFS_SYNC_BOOKMARKS_INITIAL "sync-bookmarks-initial"
 
 static struct {
   const char *schema;

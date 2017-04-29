@@ -41,6 +41,7 @@
 #include "ephy-search-engine-manager.h"
 #include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-sync-crypto.h"
 #include "ephy-uri-tester-shared.h"
 #include "ephy-web-app-utils.h"
 
@@ -646,11 +647,15 @@ parse_rdf_item (EphyBookmarksManager *manager,
 
   if (link) {
     EphyBookmark *bookmark;
+    char *id;
 
     g_sequence_sort (tags, (GCompareDataFunc)ephy_bookmark_tags_compare, NULL);
-    bookmark = ephy_bookmark_new ((const char *)link, (const char *)title, tags);
+    id = ephy_sync_crypto_get_random_sync_id ();
+    bookmark = ephy_bookmark_new ((const char *)link, (const char *)title, tags, id);
     ephy_bookmarks_manager_add_bookmark (manager, bookmark);
+
     g_object_unref (bookmark);
+    g_free (id);
   } else {
     g_sequence_free (tags);
   }
