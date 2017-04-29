@@ -40,10 +40,6 @@ libephymain_sources = [
   'passwords-dialog.c',
   'popup-commands.c',
   'prefs-dialog.c',
-  'sync/ephy-sync-crypto.c',
-  'sync/ephy-sync-service.c',
-  'sync/ephy-synchronizable.c',
-  'sync/ephy-synchronizable-manager.c',
   'window-commands.c',
   enums
 ]
@@ -51,18 +47,14 @@ libephymain_sources = [
 libephymain_deps = [
   ephyembed_dep,
   ephymisc_dep,
+  ephysync_dep,
   ephywidgets_dep,
-  gmp_dep,
-  hogweed_dep,
-  json_glib_dep,
-  libnotify_dep,
-  nettle_dep
+  libnotify_dep
 ]
 
 libephymain_includes = include_directories(
   '.',
   'bookmarks',
-  'sync'
 )
 
 libephymain = shared_library('ephymain',
