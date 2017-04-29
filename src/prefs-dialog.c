@@ -533,8 +533,10 @@ on_manage_passwords_button_clicked (GtkWidget   *button,
                                     PrefsDialog *dialog)
 {
   EphyPasswordsDialog *passwords_dialog;
+  EphyPasswordManager *password_manager;
 
-  passwords_dialog = ephy_passwords_dialog_new ();
+  password_manager = ephy_shell_get_password_manager (ephy_shell_get_default ());
+  passwords_dialog = ephy_passwords_dialog_new (password_manager);
 
   gtk_window_set_transient_for (GTK_WINDOW (passwords_dialog), GTK_WINDOW (dialog));
   gtk_window_set_modal (GTK_WINDOW (passwords_dialog), TRUE);

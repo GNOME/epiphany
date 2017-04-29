@@ -20,11 +20,13 @@
 
 #pragma once
 
+#include "ephy-password-manager.h"
+
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_PASSWORDS_DIALOG (ephy_passwords_dialog_get_type ())
 G_DECLARE_FINAL_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, EPHY, PASSWORDS_DIALOG, GtkDialog);
 
-EphyPasswordsDialog *ephy_passwords_dialog_new (void);
+EphyPasswordsDialog *ephy_passwords_dialog_new (EphyPasswordManager *manager);
 
 G_END_DECLS

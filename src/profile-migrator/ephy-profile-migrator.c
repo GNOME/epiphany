@@ -34,8 +34,8 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
+#include "ephy-password-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
 #include "ephy-search-engine-manager.h"
@@ -285,7 +285,7 @@ store_form_auth_data_cb (GObject      *object,
 {
   GError *error = NULL;
 
-  if (ephy_form_auth_data_store_finish (res, &error) == FALSE) {
+  if (ephy_password_manager_store_finish (res, &error) == FALSE) {
     g_warning ("Couldn't store a form password: %s", error->message);
     g_error_free (error);
     goto out;
@@ -348,13 +348,13 @@ load_collection_items_cb (SecretCollection *collection,
       secret_item_load_secret_sync (item, NULL, NULL);
       secret = secret_item_get_secret (item);
       password = secret_value_get (secret, NULL);
-      ephy_form_auth_data_store (actual_server,
-                                 form_username,
-                                 form_password,
-                                 username,
-                                 password,
-                                 (GAsyncReadyCallback)store_form_auth_data_cb,
-                                 g_hash_table_ref (attributes));
+      ephy_password_manager_store (actual_server,
+                                   form_username,
+                                   form_password,
+                                   username,
+                                   password,
+                                   (GAsyncReadyCallback)store_form_auth_data_cb,
+                                   g_hash_table_ref (attributes));
       g_free (actual_server);
       secret_value_unref (secret);
       g_hash_table_unref (t);

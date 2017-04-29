@@ -56,6 +56,7 @@ struct _EphyShell {
   GList *windows;
   GObject *lockdown;
   EphyBookmarksManager *bookmarks_manager;
+  EphyPasswordManager *password_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *history_dialog;
   GObject *prefs_dialog;
@@ -345,6 +346,8 @@ ephy_shell_startup (GApplication *application)
                               G_BINDING_SYNC_CREATE);
     }
 
+    ephy_shell->password_manager = ephy_password_manager_new ();
+
     /* Create the sync service and register synchronizable managers. */
     ephy_shell->sync_service = ephy_sync_service_new ();
     if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_ENABLED))
@@ -618,6 +621,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->network_monitor);
   g_clear_object (&shell->sync_service);
   g_clear_object (&shell->bookmarks_manager);
+  g_clear_object (&shell->password_manager);
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
   shell->open_uris_idle_ids = NULL;
@@ -802,6 +806,22 @@ ephy_shell_get_bookmarks_manager (EphyShell *shell)
     shell->bookmarks_manager = ephy_bookmarks_manager_new ();
 
   return shell->bookmarks_manager;
+}
+
+/**
+ * ephy_shell_get_password_manager:
+ * @shell: the #EphyShell
+ *
+ * Returns the passwords manager.
+ *
+ * Return value: (transfer none): An #EphyPasswordManager.
+ */
+EphyPasswordManager *
+ephy_shell_get_password_manager (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  return shell->password_manager;
 }
 
 /**
