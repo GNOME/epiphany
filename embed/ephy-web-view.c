@@ -33,7 +33,6 @@
 #include "ephy-favicon-helpers.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-monitor.h"
-#include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-permissions-manager.h"
