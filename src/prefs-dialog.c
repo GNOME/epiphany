@@ -38,6 +38,9 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
+#include "ephy-sync-crypto.h"
+#include "ephy-sync-secret.h"
+#include "ephy-sync-service.h"
 #include "ephy-uri-tester-shared.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
@@ -49,12 +52,6 @@
 #include <JavaScriptCore/JavaScript.h>
 #include <json-glib/json-glib.h>
 #include <string.h>
-
-#if ENABLE_FIREFOX_SYNC
-#include "ephy-sync-crypto.h"
-#include "ephy-sync-secret.h"
-#include "ephy-sync-service.h"
-#endif
 
 #define DOWNLOAD_BUTTON_WIDTH   8
 #define FXA_IFRAME_URL "https://accounts.firefox.com/signin?service=sync&context=fx_desktop_v3"
@@ -115,7 +112,6 @@ struct _PrefsDialog {
   GHashTable *iso_639_table;
   GHashTable *iso_3166_table;
 
-#if ENABLE_FIREFOX_SYNC
   /* sync */
   GtkWidget *sync_authenticate_box;
   GtkWidget *sync_sign_in_box;
@@ -128,11 +124,8 @@ struct _PrefsDialog {
   WebKitUserContentManager *fxa_manager;
   WebKitUserScript *fxa_script;
   guint fxa_id;
-#endif
-  GtkWidget *notebook;
 };
 
-#if ENABLE_FIREFOX_SYNC
 typedef struct {
   PrefsDialog *dialog;
   char        *email;
@@ -145,7 +138,6 @@ typedef struct {
   guint8      *respHMACkey;
   guint8      *respXORkey;
 } FxACallbackData;
-#endif
 
 enum {
   COL_TITLE_ELIDED,
@@ -155,7 +147,6 @@ enum {
 
 G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
 
-#if ENABLE_FIREFOX_SYNC
 static FxACallbackData *
 fxa_callback_data_new (PrefsDialog *dialog,
                        const char  *email,
@@ -206,7 +197,6 @@ fxa_callback_data_free (FxACallbackData *data)
 
   g_slice_free (FxACallbackData, data);
 }
-#endif
 
 static void
 prefs_dialog_finalize (GObject *object)
@@ -224,7 +214,6 @@ prefs_dialog_finalize (GObject *object)
   g_hash_table_destroy (dialog->iso_639_table);
   g_hash_table_destroy (dialog->iso_3166_table);
 
-#if ENABLE_FIREFOX_SYNC
   if (dialog->fxa_web_view != NULL) {
     webkit_user_content_manager_unregister_script_message_handler (dialog->fxa_manager,
                                                                    "toChromeMessageHandler");
@@ -236,12 +225,10 @@ prefs_dialog_finalize (GObject *object)
     g_source_remove (dialog->fxa_id);
     dialog->fxa_id = 0;
   }
-#endif
 
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
 }
 
-#if ENABLE_FIREFOX_SYNC
 static void
 hide_fxa_iframe (PrefsDialog *dialog,
                  const char  *email)
@@ -561,7 +548,6 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
                       TRUE, TRUE, 0);
   gtk_widget_set_visible (dialog->sync_sign_in_details, FALSE);
 }
-#endif
 
 static void
 on_manage_cookies_button_clicked (GtkWidget   *button,
@@ -653,7 +639,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_down_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_spell_checking_checkbutton);
 
-#if ENABLE_FIREFOX_SYNC
   /* sync */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_authenticate_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_in_box);
@@ -661,12 +646,11 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_details);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_button);
-#endif
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
 
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_sign_out_button_clicked);
 }
 
 static void
@@ -1647,7 +1631,6 @@ setup_language_page (PrefsDialog *dialog)
   create_language_section (dialog);
 }
 
-#if ENABLE_FIREFOX_SYNC
 static void
 setup_sync_page (PrefsDialog *dialog)
 {
@@ -1678,7 +1661,6 @@ setup_sync_page (PrefsDialog *dialog)
                            G_CALLBACK (sync_tokens_store_finished_cb),
                            dialog, 0);
 }
-#endif
 
 static void
 prefs_dialog_init (PrefsDialog *dialog)
@@ -1703,18 +1685,8 @@ prefs_dialog_init (PrefsDialog *dialog)
   setup_fonts_page (dialog);
   setup_stored_data_page (dialog);
   setup_language_page (dialog);
-#if ENABLE_FIREFOX_SYNC
-  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
     setup_sync_page (dialog);
-
-    /* TODO: Switch back to using a template callback in class_init once sync is unconditionally enabled. */
-    g_signal_connect (dialog->sync_sign_out_button, "clicked",
-                      G_CALLBACK (on_sync_sign_out_button_clicked), dialog);
-  } else
-    gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
-#else
-  gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
-#endif
 
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
   g_signal_connect (dialog, "response",

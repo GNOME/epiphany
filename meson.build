@@ -34,7 +34,6 @@ conf.set_quoted('SOURCE_ROOT', meson.source_root())
 conf.set_quoted('VERSION', meson.project_version())
 
 conf.set10('ENABLE_NLS', true)
-conf.set10('ENABLE_FIREFOX_SYNC', get_option('enable_firefox_sync'))
 conf.set10('ENABLE_HTTPS_EVERYWHERE', get_option('enable_https_everywhere'))
 
 configure_file(
@@ -44,6 +43,7 @@ configure_file(
 
 glib_requirement = '>= 2.46.0'
 gtk_requirement = '>= 3.22.13'
+nettle_requirement = '>= 3.2'
 webkitgtk_requirement = '>= 2.17.3'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
@@ -56,6 +56,7 @@ glib_dep = dependency('glib-2.0', version: glib_requirement)
 gnome_desktop_dep = dependency('gnome-desktop-3.0', version: '>= 2.91.2')
 gtk_dep = dependency('gtk+-3.0', version: gtk_requirement)
 gtk_unix_print_dep = dependency('gtk+-unix-print-3.0', version: gtk_requirement)
+hogweed_dep = dependency('hogweed', version: nettle_requirement)
 icu_uc_dep = dependency('icu-uc', version: '>= 4.6')
 iso_codes_dep = dependency('iso-codes', version: '>= 0.35')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
@@ -64,19 +65,14 @@ libsecret_dep = dependency('libsecret-1', version: '>= 0.14')
 libsoup_dep = dependency('libsoup-2.4', version: '>= 2.48.0')
 libxml_dep = dependency('libxml-2.0', version: '>= 2.6.12')
 libxslt_dep = dependency('libxslt', version: '>= 1.1.7')
+nettle_dep = dependency('nettle', version: nettle_requirement)
 sqlite3_dep = dependency('sqlite3', version: '>= 3.0')
 webkit2gtk_dep = dependency('webkit2gtk-4.0', version: webkitgtk_requirement)
 webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', version: webkitgtk_requirement)
 
 cc = meson.get_compiler('c')
+gmp_dep = cc.find_library('gmp')
 m_dep = cc.find_library('m', required: false)
-
-if get_option('enable_firefox_sync')
-  nettle_requirement = '>= 3.2'
-  hogweed_dep = dependency('hogweed', version: nettle_requirement)
-  nettle_dep = dependency('nettle', version: nettle_requirement)
-  gmp_dep = cc.find_library('gmp')
-endif
 
 if get_option('enable_https_everywhere')
   httpseverywhere_dep = dependency('httpseverywhere-0.4', version: '>= 0.2.2')

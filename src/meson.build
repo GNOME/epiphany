@@ -40,6 +40,10 @@ libephymain_sources = [
   'passwords-dialog.c',
   'popup-commands.c',
   'prefs-dialog.c',
+  'sync/ephy-sync-crypto.c',
+  'sync/ephy-sync-secret.c',
+  'sync/ephy-sync-service.c',
+  'sync/ephy-sync-utils.c',
   'window-commands.c',
   enums
 ]
@@ -48,8 +52,11 @@ libephymain_deps = [
   ephyembed_dep,
   ephymisc_dep,
   ephywidgets_dep,
+  gmp_dep,
+  hogweed_dep,
   json_glib_dep,
-  libnotify_dep
+  libnotify_dep,
+  nettle_dep
 ]
 
 libephymain_includes = include_directories(
@@ -57,21 +64,6 @@ libephymain_includes = include_directories(
   'bookmarks',
   'sync'
 )
-
-if get_option('enable_firefox_sync')
-  libephymain_sources += [
-    'sync/ephy-sync-crypto.c',
-    'sync/ephy-sync-secret.c',
-    'sync/ephy-sync-service.c',
-    'sync/ephy-sync-utils.c'
-  ]
-
-  libephymain_deps += [
-    gmp_dep,
-    hogweed_dep,
-    nettle_dep
-  ]
-endif
 
 libephymain = shared_library('ephymain',
   libephymain_sources,
