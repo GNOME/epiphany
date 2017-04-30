@@ -22,8 +22,6 @@ libephymisc_sources = [
   'ephy-filters-manager.c',
   'ephy-gui.c',
   'ephy-langs.c',
-  'ephy-password-manager.c',
-  'ephy-password-record.c',
   'ephy-permissions-manager.c',
   'ephy-profile-utils.c',
   'ephy-search-engine-manager.c',

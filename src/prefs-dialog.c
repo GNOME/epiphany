@@ -121,6 +121,7 @@ struct _PrefsDialog {
   GtkWidget *sync_options_box;
   GtkWidget *sync_with_firefox_checkbutton;
   GtkWidget *sync_bookmarks_checkbutton;
+  GtkWidget *sync_passwords_checkbutton;
   GtkWidget *sync_frequency_5_min_radiobutton;
   GtkWidget *sync_frequency_15_min_radiobutton;
   GtkWidget *sync_frequency_30_min_radiobutton;
@@ -175,19 +176,20 @@ prefs_dialog_finalize (GObject *object)
 }
 
 static void
-sync_bookmarks_toggled_cb (GtkToggleButton *button,
-                           PrefsDialog     *dialog)
+sync_collection_toggled_cb (GtkToggleButton *button,
+                            PrefsDialog     *dialog)
 {
-  EphyBookmarksManager *manager;
+  EphySynchronizableManager *manager = NULL;
 
-  manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
+  if (GTK_WIDGET (button) == dialog->sync_bookmarks_checkbutton)
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (ephy_shell_get_default ()));
+  else if (GTK_WIDGET (button) == dialog->sync_passwords_checkbutton)
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (ephy_shell_get_default ()));
 
   if (gtk_toggle_button_get_active (button))
-    ephy_sync_service_register_manager (dialog->sync_service,
-                                        EPHY_SYNCHRONIZABLE_MANAGER (manager));
+    ephy_sync_service_register_manager (dialog->sync_service, manager);
   else
-    ephy_sync_service_unregister_manager (dialog->sync_service,
-                                          EPHY_SYNCHRONIZABLE_MANAGER (manager));
+    ephy_sync_service_unregister_manager (dialog->sync_service, manager);
 }
 
 static void
@@ -234,6 +236,7 @@ sync_secrets_store_finished_cb (EphySyncService *service,
                                 PrefsDialog     *dialog)
 {
   EphyBookmarksManager *bookmarks_manager;
+  EphyPasswordManager *password_manager;
 
   g_assert (EPHY_IS_SYNC_SERVICE (service));
   g_assert (EPHY_IS_PREFS_DIALOG (dialog));
@@ -263,6 +266,10 @@ sync_secrets_store_finished_cb (EphySyncService *service,
     if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_ENABLED)) {
       bookmarks_manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
       ephy_sync_service_register_manager (service, EPHY_SYNCHRONIZABLE_MANAGER (bookmarks_manager));
+    }
+    if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED)) {
+      password_manager = ephy_shell_get_password_manager (ephy_shell_get_default ());
+      ephy_sync_service_register_manager (service, EPHY_SYNCHRONIZABLE_MANAGER (password_manager));
     }
 
     g_free (text);
@@ -617,6 +624,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_options_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_with_firefox_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_bookmarks_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_passwords_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_5_min_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_15_min_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_30_min_radiobutton);
@@ -1692,7 +1700,10 @@ setup_sync_page (PrefsDialog *dialog)
                            G_CALLBACK (sync_finished_cb),
                            dialog, 0);
   g_signal_connect_object (dialog->sync_bookmarks_checkbutton, "toggled",
-                           G_CALLBACK (sync_bookmarks_toggled_cb),
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_passwords_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
                            dialog, 0);
 
   g_settings_bind (sync_settings,
@@ -1703,6 +1714,11 @@ setup_sync_page (PrefsDialog *dialog)
   g_settings_bind (sync_settings,
                    EPHY_PREFS_SYNC_BOOKMARKS_ENABLED,
                    dialog->sync_bookmarks_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
+                   dialog->sync_passwords_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind_with_mapping (sync_settings,

@@ -159,6 +159,9 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_SYNC_BOOKMARKS_ENABLED "sync-bookmarks-enabled"
 #define EPHY_PREFS_SYNC_BOOKMARKS_TIME    "sync-bookmarks-time"
 #define EPHY_PREFS_SYNC_BOOKMARKS_INITIAL "sync-bookmarks-initial"
+#define EPHY_PREFS_SYNC_PASSWORDS_ENABLED "sync-passwords-enabled"
+#define EPHY_PREFS_SYNC_PASSWORDS_TIME    "sync-passwords-time"
+#define EPHY_PREFS_SYNC_PASSWORDS_INITIAL "sync-passwords-initial"
 
 static struct {
   const char *schema;

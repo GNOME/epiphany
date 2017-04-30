@@ -312,7 +312,7 @@ load_collection_items_cb (SecretCollection *collection,
   SecretValue *secret;
   GList *l;
   GHashTable *attributes, *t;
-  const char *server, *username, *form_username, *form_password, *password;
+  const char *server, *username, *username_field, *password_field, *password;
   char *actual_server;
   SoupURI *uri;
   GError *error = NULL;
@@ -341,20 +341,20 @@ load_collection_items_cb (SecretCollection *collection,
       username = g_hash_table_lookup (attributes, "user");
       uri = soup_uri_new (server);
       t = soup_form_decode (uri->query);
-      form_username = g_hash_table_lookup (t, FORM_USERNAME_KEY);
-      form_password = g_hash_table_lookup (t, FORM_PASSWORD_KEY);
+      username_field = g_hash_table_lookup (t, USERNAME_FIELD_KEY);
+      password_field = g_hash_table_lookup (t, PASSWORD_FIELD_KEY);
       soup_uri_set_query (uri, NULL);
       actual_server = soup_uri_to_string (uri, FALSE);
       secret_item_load_secret_sync (item, NULL, NULL);
       secret = secret_item_get_secret (item);
       password = secret_value_get (secret, NULL);
-      ephy_password_manager_store (actual_server,
-                                   form_username,
-                                   form_password,
-                                   username,
-                                   password,
-                                   (GAsyncReadyCallback)store_form_auth_data_cb,
-                                   g_hash_table_ref (attributes));
+      ephy_password_manager_store_raw (actual_server,
+                                       username,
+                                       password,
+                                       username_field,
+                                       password_field,
+                                       (GAsyncReadyCallback)store_form_auth_data_cb,
+                                       g_hash_table_ref (attributes));
       g_free (actual_server);
       secret_value_unref (secret);
       g_hash_table_unref (t);
@@ -443,7 +443,7 @@ migrate_insecure_password (SecretItem *item)
   const char *original_uri;
 
   attributes = secret_item_get_attributes (item);
-  original_uri = g_hash_table_lookup (attributes, URI_KEY);
+  original_uri = g_hash_table_lookup (attributes, HOSTNAME_KEY);
   original_origin = webkit_security_origin_new_for_uri (original_uri);
   if (original_origin == NULL) {
     g_warning ("Failed to convert URI %s to a security origin, insecure password will not be migrated", original_uri);
@@ -462,7 +462,7 @@ migrate_insecure_password (SecretItem *item)
     new_uri = webkit_security_origin_to_string (new_origin);
     webkit_security_origin_unref (new_origin);
 
-    g_hash_table_replace (attributes, g_strdup (URI_KEY), new_uri);
+    g_hash_table_replace (attributes, g_strdup (HOSTNAME_KEY), new_uri);
     secret_item_set_attributes_sync (item, EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL, &error);
     if (error != NULL) {
       g_warning ("Failed to convert URI %s to https://, insecure password will not be migrated: %s", original_uri, error->message);

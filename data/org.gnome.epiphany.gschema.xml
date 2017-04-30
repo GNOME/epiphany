@@ -307,6 +307,21 @@
 			<summary>Initial sync or normal sync</summary>
 			<description>TRUE if bookmarks collection needs to be synced for the first time, FALSE otherwise.</description>
 		</key>
+		<key type="b" name="sync-passwords-enabled">
+			<default>false</default>
+			<summary>Enable passwords sync</summary>
+			<description>TRUE if passwords collection should be synced, FALSE otherwise.</description>
+		</key>
+		<key type="d" name="sync-passwords-time">
+			<default>0</default>
+			<summary>Passwords sync timestamp</summary>
+			<description>The timestamp at which last passwords sync was made.</description>
+		</key>
+		<key type="b" name="sync-passwords-initial">
+			<default>true</default>
+			<summary>Initial sync or normal sync</summary>
+			<description>TRUE if passwords collection needs to be synced for the first time, FALSE otherwise.</description>
+		</key>
 	</schema>
 	<enum id="org.gnome.Epiphany.Permission">
 		<value nick="undecided" value="-1"/>

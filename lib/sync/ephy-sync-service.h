@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySyncService, ephy_sync_service, EPHY, SYNC_SERVICE, GObject)
 
-EphySyncService   *ephy_sync_service_new                    (void);
+EphySyncService   *ephy_sync_service_new                    (gboolean sync_periodically);
 gboolean           ephy_sync_service_is_signed_in           (EphySyncService *self);
 const char        *ephy_sync_service_get_sync_user          (EphySyncService *self);
 void               ephy_sync_service_do_sign_in             (EphySyncService *self,

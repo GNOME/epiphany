@@ -42,6 +42,7 @@ ephy_synchronizable_manager_default_init (EphySynchronizableManagerInterface *if
   iface->set_sync_time = ephy_synchronizable_manager_set_sync_time;
   iface->add = ephy_synchronizable_manager_add;
   iface->remove = ephy_synchronizable_manager_remove;
+  iface->save = ephy_synchronizable_manager_save;
   iface->merge = ephy_synchronizable_manager_merge;
 
   signals[SYNCHRONIZABLE_DELETED] =
@@ -219,6 +220,32 @@ ephy_synchronizable_manager_remove (EphySynchronizableManager *manager,
 }
 
 /**
+ * ephy_synchronizable_manager_save:
+ * @manager: an #EphySynchronizableManager
+ * @synchronizable: (transfer none): an #EphySynchronizable
+ *
+ * Saves @synchronizable in the local storage (e.g. file, database, secret schema).
+ * This should only be called on a synchronizable object that already exists in
+ * in @manager's collection (i.e. previously added with ephy_synchronizable_manager_add)
+ * as the @manager expects it to be present. Normally ephy_synchronizable_manager_add
+ * saves the object in the local storage, so the only use case of this function
+ * is to save an existing object which was modified outside the manager (i.e. modified
+ * by the sync service).
+ **/
+void
+ephy_synchronizable_manager_save (EphySynchronizableManager *manager,
+                                  EphySynchronizable        *synchronizable)
+{
+  EphySynchronizableManagerInterface *iface;
+
+  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
+  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE (synchronizable));
+
+  iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
+  iface->save (manager, synchronizable);
+}
+
+/**
  * ephy_synchronizable_manager_merge:
  * @manager: an #EphySynchronizableManager
  * @is_initial: a boolean saying whether the collection managed by @manager
@@ -227,23 +254,28 @@ ephy_synchronizable_manager_remove (EphySynchronizableManager *manager,
  *                   objects that were removed remotely from the server.
  * @remotes_updated: (transfer none): a #GSList holding the #EphySynchronizable
  *                   objects that were updated remotely on the server.
+ * @callback: an #EphySynchronizableManagerMergeCallback that will be called
+ *            when the merge is complete.
+ * @user_data: user data to pass to the @callback.
  *
  * Merges a list of remote-deleted objects and a list of remote-updated objects
- * with the local objects in @manager's collection.
- *
- * Return value: (transfer full): a #GSList holding the #EphySynchronizable
- *               objects that need to be re-uploaded to server.
+ * with the local objects in @manager's collection. When the merge is completed,
+ * @callback will be invoked with a list of objects that need to be (re)uploaded
+ * to server. Transfer full for the list of objects to be (re)uploaded.
  **/
-GSList *
-ephy_synchronizable_manager_merge (EphySynchronizableManager *manager,
-                                   gboolean                   is_initial,
-                                   GSList                    *remotes_deleted,
-                                   GSList                    *remotes_updated)
+void
+ephy_synchronizable_manager_merge (EphySynchronizableManager              *manager,
+                                   gboolean                                is_initial,
+                                   GSList                                 *remotes_deleted,
+                                   GSList                                 *remotes_updated,
+                                   EphySynchronizableManagerMergeCallback  callback,
+                                   gpointer                                user_data)
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager), NULL);
+  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
+  g_return_if_fail (callback);
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
-  return iface->merge (manager, is_initial, remotes_deleted, remotes_updated);
+  iface->merge (manager, is_initial, remotes_deleted, remotes_updated, callback, user_data);
 }
