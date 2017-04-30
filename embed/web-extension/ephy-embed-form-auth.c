@@ -29,6 +29,7 @@ struct _EphyEmbedFormAuth {
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
   char *username;
+  gboolean password_updated;
 };
 
 G_DEFINE_TYPE (EphyEmbedFormAuth, ephy_embed_form_auth, G_TYPE_OBJECT)
@@ -108,6 +109,19 @@ const char *
 ephy_embed_form_auth_get_username (EphyEmbedFormAuth *form_auth)
 {
   return form_auth->username;
+}
+
+gboolean
+ephy_embed_form_auth_get_password_updated (EphyEmbedFormAuth *form_auth)
+{
+  return form_auth->password_updated;
+}
+
+void
+ephy_embed_form_auth_set_password_updated (EphyEmbedFormAuth *form_auth,
+                                           gboolean           password_updated)
+{
+  form_auth->password_updated = password_updated;
 }
 
 WebKitDOMDocument *

@@ -62,16 +62,6 @@ struct _EphyPasswordsDialog {
 
 G_DEFINE_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, GTK_TYPE_DIALOG)
 
-static void populate_model (EphyPasswordsDialog *dialog);
-
-static void
-reload_model (EphyPasswordsDialog *dialog)
-{
-  gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
-  dialog->filled = FALSE;
-  populate_model (dialog);
-}
-
 static void
 ephy_passwords_dialog_dispose (GObject *object)
 {
@@ -140,10 +130,10 @@ forget (GSimpleAction *action,
     gtk_tree_model_get_value (model, &iter, COL_PASSWORDS_DATA, &val);
     record = g_value_get_object (&val);
     ephy_password_manager_forget (dialog->manager,
-                                  ephy_password_record_get_origin (record),
-                                  ephy_password_record_get_form_username (record),
-                                  ephy_password_record_get_form_password (record),
-                                  ephy_password_record_get_username (record));
+                                  ephy_password_record_get_hostname (record),
+                                  ephy_password_record_get_username (record),
+                                  ephy_password_record_get_username_field (record),
+                                  ephy_password_record_get_password_field (record));
     dialog->records = g_slist_remove (dialog->records, record);
     g_object_unref (record);
     g_value_unset (&val);
@@ -351,10 +341,12 @@ forget_all (GSimpleAction *action,
   EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
 
   ephy_password_manager_forget_all (dialog->manager);
+
+  gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
+  dialog->filled = FALSE;
+
   g_slist_free_full (dialog->records, g_object_unref);
   dialog->records = NULL;
-
-  reload_model (dialog);
 }
 
 static void
@@ -370,7 +362,7 @@ populate_model_cb (GSList   *records,
     gtk_list_store_insert_with_values (GTK_LIST_STORE (dialog->liststore),
                                        &iter,
                                        -1,
-                                       COL_PASSWORDS_ORIGIN, ephy_password_record_get_origin (record),
+                                       COL_PASSWORDS_ORIGIN, ephy_password_record_get_hostname (record),
                                        COL_PASSWORDS_USER, ephy_password_record_get_username (record),
                                        COL_PASSWORDS_PASSWORD, ephy_password_record_get_password (record),
                                        COL_PASSWORDS_INVISIBLE, "●●●●●●●●",

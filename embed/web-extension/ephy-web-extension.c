@@ -30,6 +30,7 @@
 #include "ephy-permissions-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-sync-service.h"
 #include "ephy-uri-helpers.h"
 #include "ephy-uri-tester.h"
 #include "ephy-web-dom-utils.h"
@@ -51,6 +52,7 @@ struct _EphyWebExtension {
   GDBusConnection *dbus_connection;
   GArray *page_created_signals_pending;
 
+  EphySyncService *sync_service;
   EphyPasswordManager *password_manager;
   GHashTable *form_auth_data_save_requests;
   EphyWebOverviewModel *overview_model;
@@ -267,6 +269,7 @@ store_password (EphyEmbedFormAuth *form_auth)
   char *username_field_value = NULL;
   char *password_field_name = NULL;
   char *password_field_value = NULL;
+  gboolean password_updated;
   WebKitDOMNode *username_node;
   EphyWebExtension *extension = ephy_web_extension_get ();
 
@@ -283,12 +286,14 @@ store_password (EphyEmbedFormAuth *form_auth)
 
   uri = ephy_embed_form_auth_get_uri (form_auth);
   uri_str = soup_uri_to_string (uri, FALSE);
+  password_updated = ephy_embed_form_auth_get_password_updated (form_auth);
   ephy_password_manager_save (extension->password_manager,
                               uri_str,
+                              username_field_value,
+                              password_field_value,
                               username_field_name,
                               password_field_name,
-                              username_field_value,
-                              password_field_value);
+                              !password_updated);
 
   g_free (uri_str);
   g_free (username_field_name);
@@ -417,15 +422,18 @@ should_store_cb (GSList   *records,
       LOG ("User/password already stored. Not asking about storing.");
     } else if (permission == EPHY_PERMISSION_PERMIT) {
       LOG ("User/password not yet stored. Storing.");
+      ephy_embed_form_auth_set_password_updated (form_auth, TRUE);
       store_password (form_auth);
     } else {
       LOG ("User/password not yet stored. Asking about storing.");
+      ephy_embed_form_auth_set_password_updated (form_auth, TRUE);
       request_decision_on_storing (g_object_ref (form_auth));
     }
 
     g_free (username_field_value);
   } else {
     LOG ("No result on query; asking whether we should store.");
+    ephy_embed_form_auth_set_password_updated (form_auth, FALSE);
     request_decision_on_storing (g_object_ref (form_auth));
   }
 
@@ -475,9 +483,9 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
 
   ephy_password_manager_query (extension->password_manager,
                                uri_str,
+                               username_field_value,
                                username_field_name,
                                password_field_name,
-                               username_field_value,
                                should_store_cb,
                                form_auth);
 
@@ -555,9 +563,9 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
 
   ephy_password_manager_query (extension->password_manager,
                                uri_str,
+                               username,
                                username_field_name,
                                password_field_name,
-                               username,
                                fill_form_cb,
                                form_auth);
 
@@ -730,8 +738,7 @@ show_user_choices (WebKitDOMDocument *document,
   WebKitDOMNode *body;
   WebKitDOMElement *main_div;
   WebKitDOMElement *ul;
-  GSList *iter;
-  GSList *password_records_list;
+  GSList *cached_users;
   gboolean username_node_ever_edited;
   double x, y;
   double input_width;
@@ -777,32 +784,27 @@ show_user_choices (WebKitDOMDocument *document,
                                     "padding: 0;",
                                     NULL);
 
-  password_records_list = (GSList *)g_object_get_data (G_OBJECT (username_node),
-                                                       "ephy-password-records-list");
+  cached_users = (GSList *)g_object_get_data (G_OBJECT (username_node), "ephy-cached-users");
 
   username_node_ever_edited =
     GPOINTER_TO_INT (g_object_get_data (G_OBJECT (username_node),
                                         "ephy-user-ever-edited"));
 
-  for (iter = password_records_list; iter; iter = iter->next) {
-    EphyPasswordRecord *record;
+  for (GSList *l = cached_users; l && l->data; l = l->next) {
+    const char *user = l->data;
     WebKitDOMElement *li;
     WebKitDOMElement *anchor;
     char *child_style;
-    const char *record_username;
     gboolean is_selected;
-
-    record = EPHY_PASSWORD_RECORD (iter->data);
-    record_username = ephy_password_record_get_username (record);
 
     /* Filter out the available names that do not match, but show all options in
      * case we have been triggered by something other than the user editing the
      * input.
      */
-    if (username_node_ever_edited && !g_str_has_prefix (record_username, username))
+    if (username_node_ever_edited && !g_str_has_prefix (user, username))
       continue;
 
-    is_selected = !g_strcmp0 (username, record_username);
+    is_selected = !g_strcmp0 (username, user);
 
     li = webkit_dom_document_create_element (document, "li", NULL);
     webkit_dom_element_set_attribute (li, "tabindex", "-1", NULL);
@@ -834,7 +836,7 @@ show_user_choices (WebKitDOMDocument *document,
                                                 username_node);
 
     webkit_dom_node_set_text_content (WEBKIT_DOM_NODE (anchor),
-                                      record_username,
+                                      user,
                                       NULL);
   }
 
@@ -1108,7 +1110,7 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
     /* We have a field that may be the user, and one for a password. */
     if (ephy_web_dom_utils_find_form_auth_elements (form, &username_node, &password_node)) {
       EphyEmbedFormAuth *form_auth;
-      GSList *password_records_list;
+      GSList *cached_users;
       const char *uri;
 
       LOG ("Hooking and pre-filling a form");
@@ -1126,11 +1128,11 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
 
       /* Plug in the user autocomplete */
       uri = webkit_web_page_get_uri (web_page);
-      password_records_list = ephy_password_manager_get_cached_by_uri (extension->password_manager, uri);
+      cached_users = ephy_password_manager_get_cached_users_for_uri (extension->password_manager, uri);
 
-      if (password_records_list && password_records_list->next && username_node) {
+      if (cached_users && cached_users->next && username_node) {
         LOG ("More than 1 password saved, hooking menu for choosing which on focus");
-        g_object_set_data (G_OBJECT (username_node), "ephy-password-records-list", password_records_list);
+        g_object_set_data (G_OBJECT (username_node), "ephy-cached-users", cached_users);
         g_object_set_data (G_OBJECT (username_node), "ephy-form-auth", form_auth);
         g_object_set_data (G_OBJECT (username_node), "ephy-document", document);
         webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "input",
@@ -1149,7 +1151,7 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
                                                     G_CALLBACK (username_node_changed_cb), FALSE,
                                                     web_page);
       } else
-        LOG ("No items or a single item in password_records_list, not hooking menu for choosing.");
+        LOG ("No items or a single item in cached_users, not hooking menu for choosing.");
 
       pre_fill_form (form_auth);
 
@@ -1445,6 +1447,87 @@ static const GDBusInterfaceVTable interface_vtable = {
 };
 
 static void
+ephy_prefs_sync_passwords_enabled_cb (GSettings *settings,
+                                      char      *key,
+                                      gpointer   user_data)
+{
+  EphyWebExtension *extension;
+  EphySynchronizableManager *manager;
+
+  extension = EPHY_WEB_EXTENSION (user_data);
+  manager = EPHY_SYNCHRONIZABLE_MANAGER (extension->password_manager);
+
+  if (g_settings_get_boolean (settings, key))
+    ephy_sync_service_register_manager (extension->sync_service, manager);
+  else
+    ephy_sync_service_unregister_manager (extension->sync_service, manager);
+}
+
+static void
+ephy_web_extension_create_sync_service (EphyWebExtension *extension)
+{
+  EphySynchronizableManager *manager;
+
+  g_assert (EPHY_IS_WEB_EXTENSION (extension));
+  g_assert (EPHY_IS_PASSWORD_MANAGER (extension->password_manager));
+  g_assert (!extension->sync_service);
+
+  extension->sync_service = ephy_sync_service_new (FALSE);
+  manager = EPHY_SYNCHRONIZABLE_MANAGER (extension->password_manager);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED))
+    ephy_sync_service_register_manager (extension->sync_service, manager);
+
+  g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
+                    G_CALLBACK (ephy_prefs_sync_passwords_enabled_cb), extension);
+}
+
+static void
+ephy_web_extension_destroy_sync_service (EphyWebExtension *extension)
+{
+  EphySynchronizableManager *manager;
+
+  g_assert (EPHY_IS_WEB_EXTENSION (extension));
+  g_assert (EPHY_IS_PASSWORD_MANAGER (extension->password_manager));
+  g_assert (EPHY_IS_SYNC_SERVICE (extension->sync_service));
+
+  manager = EPHY_SYNCHRONIZABLE_MANAGER (extension->password_manager);
+  ephy_sync_service_unregister_manager (extension->sync_service, manager);
+  g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_SYNC,
+                                        ephy_prefs_sync_passwords_enabled_cb,
+                                        extension);
+
+  g_clear_object (&extension->sync_service);
+}
+
+static void
+ephy_prefs_sync_user_cb (GSettings *settings,
+                         char      *key,
+                         gpointer   user_data)
+{
+  EphyWebExtension *extension;
+  char *sync_user;
+
+  /* If the sync user has changed we need to destroy the previous sync service
+   * (which is no longer valid because the user specific data has been cleared)
+   * and create a new one which will load the new user specific data. This way
+   * we will correctly upload new saved passwords in the future.
+   */
+  extension = EPHY_WEB_EXTENSION (user_data);
+  sync_user = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER);
+
+  if (!g_strcmp0 (sync_user, "")) {
+    /* Signed out. */
+    ephy_web_extension_destroy_sync_service (extension);
+  } else {
+    /* Signed in. */
+    ephy_web_extension_create_sync_service (extension);
+  }
+
+  g_free (sync_user);
+}
+
+static void
 ephy_web_extension_dispose (GObject *object)
 {
   EphyWebExtension *extension = EPHY_WEB_EXTENSION (object);
@@ -1452,7 +1535,12 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_object (&extension->uri_tester);
   g_clear_object (&extension->overview_model);
   g_clear_object (&extension->permissions_manager);
-  g_clear_object (&extension->password_manager);
+
+  if (extension->password_manager) {
+    if (extension->sync_service)
+      ephy_web_extension_destroy_sync_service (extension);
+    g_clear_object (&extension->password_manager);
+  }
 
   if (extension->form_auth_data_save_requests) {
     g_hash_table_destroy (extension->form_auth_data_save_requests);
@@ -1562,8 +1650,19 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
   extension->initialized = TRUE;
 
   extension->extension = g_object_ref (wk_extension);
-  if (!is_private_profile)
+  if (!is_private_profile) {
+    char *sync_user = g_settings_get_string (EPHY_SETTINGS_SYNC,
+                                             EPHY_PREFS_SYNC_USER);
     extension->password_manager = ephy_password_manager_new ();
+
+    if (g_strcmp0 (sync_user, ""))
+      ephy_web_extension_create_sync_service (extension);
+
+    g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_USER,
+                      G_CALLBACK (ephy_prefs_sync_user_cb), extension);
+
+    g_free (sync_user);
+  }
 
   extension->permissions_manager = ephy_permissions_manager_new ();
 

@@ -346,13 +346,15 @@ ephy_shell_startup (GApplication *application)
                               G_BINDING_SYNC_CREATE);
     }
 
-    ephy_shell->password_manager = ephy_password_manager_new ();
-
     /* Create the sync service and register synchronizable managers. */
-    ephy_shell->sync_service = ephy_sync_service_new ();
+    ephy_shell->sync_service = ephy_sync_service_new (TRUE);
     if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_ENABLED))
       ephy_sync_service_register_manager (ephy_shell->sync_service,
                                           EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (ephy_shell)));
+    if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED))
+      ephy_sync_service_register_manager (ephy_shell->sync_service,
+                                          EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (ephy_shell)));
+
     gtk_application_set_app_menu (GTK_APPLICATION (application),
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   } else {
@@ -820,6 +822,9 @@ EphyPasswordManager *
 ephy_shell_get_password_manager (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->password_manager == NULL)
+    shell->password_manager = ephy_password_manager_new ();
 
   return shell->password_manager;
 }

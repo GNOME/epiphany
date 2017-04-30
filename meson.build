@@ -41,7 +41,7 @@ configure_file(
   configuration: conf
 )
 
-glib_requirement = '>= 2.46.0'
+glib_requirement = '>= 2.52.0'
 gtk_requirement = '>= 3.22.13'
 nettle_requirement = '>= 3.2'
 webkitgtk_requirement = '>= 2.17.3'

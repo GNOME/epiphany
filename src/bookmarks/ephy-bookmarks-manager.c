@@ -727,6 +727,17 @@ synchronizable_manager_remove (EphySynchronizableManager *manager,
   ephy_bookmarks_manager_remove_bookmark_internal (self, bookmark);
 }
 
+static void
+synchronizable_manager_save (EphySynchronizableManager *manager,
+                             EphySynchronizable        *synchronizable)
+{
+  EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
+
+  ephy_bookmarks_manager_save_to_file_async (self, NULL,
+                                             (GAsyncReadyCallback)ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
+                                             NULL);
+}
+
 static GSList *
 ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
                                              GSList               *remote_bookmarks)
@@ -888,18 +899,26 @@ next:
   return to_upload;
 }
 
-static GSList *
-synchronizable_manager_merge (EphySynchronizableManager *manager,
-                              gboolean                   is_initial,
-                              GSList                    *remotes_deleted,
-                              GSList                    *remotes_updated)
+static void
+synchronizable_manager_merge (EphySynchronizableManager              *manager,
+                              gboolean                                is_initial,
+                              GSList                                 *remotes_deleted,
+                              GSList                                 *remotes_updated,
+                              EphySynchronizableManagerMergeCallback  callback,
+                              gpointer                                user_data)
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
+  GSList *to_upload = NULL;
 
   if (is_initial)
-    return ephy_bookmarks_manager_handle_initial_merge (self, remotes_updated);
+    to_upload = ephy_bookmarks_manager_handle_initial_merge (self,
+                                                             remotes_updated);
+  else
+    to_upload = ephy_bookmarks_manager_handle_regular_merge (self,
+                                                             remotes_updated,
+                                                             remotes_deleted);
 
-  return ephy_bookmarks_manager_handle_regular_merge (self, remotes_updated, remotes_deleted);
+  callback (to_upload, user_data);
 }
 
 static void
@@ -913,5 +932,6 @@ ephy_synchronizable_manager_iface_init (EphySynchronizableManagerInterface *ifac
   iface->set_sync_time = synchronizable_manager_set_sync_time;
   iface->add = synchronizable_manager_add;
   iface->remove = synchronizable_manager_remove;
+  iface->save = synchronizable_manager_save;
   iface->merge = synchronizable_manager_merge;
 }

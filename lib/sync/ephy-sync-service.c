@@ -75,6 +75,8 @@ struct _EphySyncService {
 
   char                 *certificate;
   SyncCryptoRSAKeyPair *rsa_key_pair;
+
+  gboolean sync_periodically;
 };
 
 G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
@@ -93,6 +95,14 @@ static const char * const secrets[LAST_SECRET] = {
   "master_key",
   "crypto_keys"
 };
+
+enum {
+  PROP_0,
+  PROP_SYNC_PERIODICALLY,
+  LAST_PROP
+};
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 enum {
   STORE_FINISHED,
@@ -131,6 +141,8 @@ typedef struct {
   EphySynchronizableManager *manager;
   gboolean                   is_initial;
   gboolean                   is_last;
+  GSList                    *remotes_deleted;
+  GSList                    *remotes_updated;
 } SyncCollectionAsyncData;
 
 typedef struct {
@@ -233,6 +245,8 @@ sync_collection_async_data_new (EphySyncService           *service,
   data->manager = g_object_ref (manager);
   data->is_initial = is_initial;
   data->is_last = is_last;
+  data->remotes_deleted = NULL;
+  data->remotes_updated = NULL;
 
   return data;
 }
@@ -244,6 +258,8 @@ sync_collection_async_data_free (SyncCollectionAsyncData *data)
 
   g_object_unref (data->service);
   g_object_unref (data->manager);
+  g_slist_free_full (data->remotes_deleted, g_object_unref);
+  g_slist_free_full (data->remotes_updated, g_object_unref);
   g_slice_free (SyncCollectionAsyncData, data);
 }
 
@@ -271,6 +287,40 @@ sync_async_data_free (SyncAsyncData *data)
   g_object_unref (data->manager);
   g_object_unref (data->synchronizable);
   g_slice_free (SyncAsyncData, data);
+}
+
+static void
+ephy_sync_service_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (object);
+
+  switch (prop_id) {
+    case PROP_SYNC_PERIODICALLY:
+      self->sync_periodically = g_value_get_boolean (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_sync_service_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (object);
+
+  switch (prop_id) {
+    case PROP_SYNC_PERIODICALLY:
+      g_value_set_boolean (value, self->sync_periodically);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
 }
 
 static const char *
@@ -950,6 +1000,7 @@ ephy_sync_service_delete_synchronizable (EphySyncService           *self,
   char *record;
   char *payload;
   char *body;
+  char *id_safe;
   const char *collection;
   const char *id;
 
@@ -958,9 +1009,12 @@ ephy_sync_service_delete_synchronizable (EphySyncService           *self,
   g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
   g_assert (ephy_sync_service_is_signed_in (self));
 
-  id = ephy_synchronizable_get_id (synchronizable);
   collection = ephy_synchronizable_manager_get_collection_name (manager);
-  endpoint = g_strdup_printf ("storage/%s/%s", collection, id);
+  id = ephy_synchronizable_get_id (synchronizable);
+  /* Firefox uses UUIDs with curly braces as IDs for saved passwords records.
+   * Curly braces are unsafe characters in URLs so they must be encoded. */
+  id_safe = soup_uri_encode (id, NULL);
+  endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
 
   node = json_node_new (JSON_NODE_OBJECT);
   object = json_object_new ();
@@ -980,6 +1034,7 @@ ephy_sync_service_delete_synchronizable (EphySyncService           *self,
                                            SOUP_METHOD_PUT, body, -1, -1,
                                            delete_synchronizable_cb, NULL);
 
+  g_free (id_safe);
   g_free (endpoint);
   g_free (record);
   g_free (payload);
@@ -1049,6 +1104,7 @@ ephy_sync_service_download_synchronizable (EphySyncService           *self,
 {
   SyncAsyncData *data;
   char *endpoint;
+  char *id_safe;
   const char *collection;
   const char *id;
 
@@ -1059,7 +1115,10 @@ ephy_sync_service_download_synchronizable (EphySyncService           *self,
 
   id = ephy_synchronizable_get_id (synchronizable);
   collection = ephy_synchronizable_manager_get_collection_name (manager);
-  endpoint = g_strdup_printf ("storage/%s/%s", collection, id);
+  /* Firefox uses UUIDs with curly braces as IDs for saved passwords records.
+   * Curly braces are unsafe characters in URLs so they must be encoded. */
+  id_safe = soup_uri_encode (id, NULL);
+  endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
   data = sync_async_data_new (self, manager, synchronizable);
 
   LOG ("Downloading object with id %s...", id);
@@ -1068,6 +1127,7 @@ ephy_sync_service_download_synchronizable (EphySyncService           *self,
                                            download_synchronizable_cb, data);
 
   g_free (endpoint);
+  g_free (id_safe);
 }
 
 static void
@@ -1086,8 +1146,8 @@ upload_synchronizable_cb (SoupSession *session,
   } else if (msg->status_code == 200) {
     LOG ("Successfully uploaded to server");
     time_modified = g_ascii_strtod (msg->response_body->data, NULL);
-    /* FIXME: Make sure the synchronizable manager commits this change to file/database. */
     ephy_synchronizable_set_server_time_modified (data->synchronizable, time_modified);
+    ephy_synchronizable_manager_save (data->manager, data->synchronizable);
   } else {
     g_warning ("Failed to upload object. Status code: %u, response: %s",
                msg->status_code, msg->response_body->data);
@@ -1106,6 +1166,7 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
   JsonNode *bso;
   char *endpoint;
   char *body;
+  char *id_safe;
   const char *collection;
   const char *id;
 
@@ -1118,7 +1179,10 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
   bundle = ephy_sync_service_get_key_bundle (self, collection);
   bso = ephy_synchronizable_to_bso (synchronizable, bundle);
   id = ephy_synchronizable_get_id (synchronizable);
-  endpoint = g_strdup_printf ("storage/%s/%s", collection, id);
+  /* Firefox uses UUIDs with curly braces as IDs for saved passwords records.
+   * Curly braces are unsafe characters in URLs so they must be encoded. */
+  id_safe = soup_uri_encode (id, NULL);
+  endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
   data = sync_async_data_new (self, manager, synchronizable);
   body = json_to_string (bso, FALSE);
 
@@ -1127,10 +1191,28 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
                                            ephy_synchronizable_get_server_time_modified (synchronizable),
                                            upload_synchronizable_cb, data);
 
+  g_free (id_safe);
   g_free (body);
   g_free (endpoint);
   json_node_unref (bso);
   ephy_sync_crypto_key_bundle_free (bundle);
+}
+
+static void
+merge_finished_cb (GSList   *to_upload,
+                   gpointer  user_data)
+{
+  SyncCollectionAsyncData *data = (SyncCollectionAsyncData *)user_data;
+
+  for (GSList *l = to_upload; l && l->data; l = l->next)
+    ephy_sync_service_upload_synchronizable (data->service, data->manager, l->data);
+
+  if (data->is_last)
+    g_signal_emit (data->service, signals[SYNC_FINISHED], 0);
+
+  if (to_upload)
+    g_slist_free_full (to_upload, g_object_unref);
+  sync_collection_async_data_free (data);
 }
 
 static void
@@ -1144,9 +1226,6 @@ sync_collection_cb (SoupSession *session,
   JsonNode *node = NULL;
   JsonArray *array = NULL;
   GError *error = NULL;
-  GSList *remotes_updated = NULL;
-  GSList *remotes_deleted = NULL;
-  GSList *to_upload = NULL;
   GType type;
   const char *collection;
   const char *last_modified;
@@ -1157,20 +1236,18 @@ sync_collection_cb (SoupSession *session,
   if (msg->status_code != 200) {
     g_warning ("Failed to get records in collection %s. Status code: %u, response: %s",
                collection, msg->status_code, msg->response_body->data);
-    goto out;
+    goto out_error;
   }
   node = json_from_string (msg->response_body->data, &error);
   if (error) {
     g_warning ("Response is not a valid JSON: %s", error->message);
-    goto out;
+    goto out_error;
   }
   array = json_node_get_array (node);
   if (!array) {
     g_warning ("JSON node does not hold an array");
-    goto out;
+    goto out_error;
   }
-
-  LOG ("Found %u new remote objects...", json_array_get_length (array));
 
   type = ephy_synchronizable_manager_get_synchronizable_type (data->manager);
   bundle = ephy_sync_service_get_key_bundle (data->service, collection);
@@ -1182,36 +1259,35 @@ sync_collection_cb (SoupSession *session,
       continue;
     }
     if (is_deleted)
-      remotes_deleted = g_slist_prepend (remotes_deleted, remote);
+      data->remotes_deleted = g_slist_prepend (data->remotes_deleted, remote);
     else
-      remotes_updated = g_slist_prepend (remotes_updated, remote);
+      data->remotes_updated = g_slist_prepend (data->remotes_updated, remote);
   }
 
-  to_upload = ephy_synchronizable_manager_merge (data->manager, data->is_initial,
-                                                 remotes_deleted, remotes_updated);
-  for (GSList *l = to_upload; l && l->data; l = l->next)
-    ephy_sync_service_upload_synchronizable (data->service, data->manager, l->data);
+  LOG ("Found %u deleted objects and %u new/updated objects in %s collection",
+       g_slist_length (data->remotes_deleted),
+       g_slist_length (data->remotes_updated),
+       collection);
 
   /* Update sync time. */
   last_modified = soup_message_headers_get_one (msg->response_headers, "X-Last-Modified");
   ephy_synchronizable_manager_set_sync_time (data->manager, g_ascii_strtod (last_modified, NULL));
   ephy_synchronizable_manager_set_is_initial_sync (data->manager, FALSE);
 
-out:
+  ephy_synchronizable_manager_merge (data->manager, data->is_initial,
+                                     data->remotes_deleted, data->remotes_updated,
+                                     merge_finished_cb, data);
+  goto out_no_error;
+
+out_error:
   if (data->is_last)
     g_signal_emit (data->service, signals[SYNC_FINISHED], 0);
-
-  if (to_upload)
-    g_slist_free_full (to_upload, g_object_unref);
-  if (remotes_updated)
-    g_slist_free_full (remotes_updated, g_object_unref);
-  if (remotes_deleted)
-    g_slist_free_full (remotes_deleted, g_object_unref);
+  sync_collection_async_data_free (data);
+out_no_error:
   if (node)
     json_node_unref (node);
   if (error)
     g_error_free (error);
-  sync_collection_async_data_free (data);
 }
 
 static void
@@ -1454,7 +1530,8 @@ load_secrets_cb (SecretService   *service,
     ephy_sync_service_set_secret (self, l->data,
                                   json_object_get_string_member (object, l->data));
 
-  ephy_sync_service_start_periodical_sync (self);
+  if (self->sync_periodically)
+    ephy_sync_service_start_periodical_sync (self);
   goto out_no_error;
 
 out_error:
@@ -1575,11 +1652,60 @@ ephy_sync_service_dispose (GObject *object)
 }
 
 static void
+ephy_sync_service_constructed (GObject *object)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (object);
+  WebKitSettings *settings;
+  const char *user_agent;
+
+  G_OBJECT_CLASS (ephy_sync_service_parent_class)->constructed (object);
+
+  if (self->sync_periodically) {
+    settings = ephy_embed_prefs_get_settings ();
+    user_agent = webkit_settings_get_user_agent (settings);
+    g_object_set (self->session, "user-agent", user_agent, NULL);
+
+    g_signal_connect (self, "sync-frequency-changed",
+                      G_CALLBACK (sync_frequency_changed_cb), NULL);
+  }
+}
+
+static void
+ephy_sync_service_init (EphySyncService *self)
+{
+  char *account;
+
+  self->session = soup_session_new ();
+  self->storage_queue = g_queue_new ();
+  self->secrets = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+  account = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER);
+  if (g_strcmp0 (account, "")) {
+    self->account = g_strdup (account);
+    ephy_sync_service_load_secrets (self);
+  }
+
+  g_free (account);
+}
+
+static void
 ephy_sync_service_class_init (EphySyncServiceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->set_property = ephy_sync_service_set_property;
+  object_class->get_property = ephy_sync_service_get_property;
+  object_class->constructed = ephy_sync_service_constructed;
   object_class->dispose = ephy_sync_service_dispose;
+
+  obj_properties[PROP_SYNC_PERIODICALLY] =
+    g_param_spec_boolean ("sync-periodically",
+                          "Sync periodically",
+                          "Whether should periodically sync data",
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   signals[STORE_FINISHED] =
     g_signal_new ("sync-secrets-store-finished",
@@ -1612,38 +1738,12 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
                   G_TYPE_NONE, 0);
 }
 
-static void
-ephy_sync_service_init (EphySyncService *self)
-{
-  char *account;
-  const char *user_agent;
-  WebKitSettings *settings;
-
-  self->session = soup_session_new ();
-  self->storage_queue = g_queue_new ();
-  self->secrets = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-
-  settings = ephy_embed_prefs_get_settings ();
-  user_agent = webkit_settings_get_user_agent (settings);
-  g_object_set (self->session, "user-agent", user_agent, NULL);
-
-  account = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER);
-  if (g_strcmp0 (account, "")) {
-    self->account = g_strdup (account);
-    ephy_sync_service_load_secrets (self);
-  }
-
-  g_signal_connect (self, "sync-frequency-changed",
-                    G_CALLBACK (sync_frequency_changed_cb),
-                    NULL);
-
-  g_free (account);
-}
-
 EphySyncService *
-ephy_sync_service_new (void)
+ephy_sync_service_new (gboolean sync_periodically)
 {
-  return EPHY_SYNC_SERVICE (g_object_new (EPHY_TYPE_SYNC_SERVICE, NULL));
+  return EPHY_SYNC_SERVICE (g_object_new (EPHY_TYPE_SYNC_SERVICE,
+                                          "sync-periodically", sync_periodically,
+                                          NULL));
 }
 
 gboolean
@@ -2189,6 +2289,7 @@ ephy_sync_service_do_sign_out (EphySyncService *self)
 
   g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER, "");
   g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_INITIAL, TRUE);
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_INITIAL, TRUE);
 }
 
 void
@@ -2205,6 +2306,7 @@ ephy_sync_service_start_periodical_sync (EphySyncService *self)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
   g_return_if_fail (ephy_sync_service_is_signed_in (self));
+  g_return_if_fail (self->sync_periodically);
 
   ephy_sync_service_sync (self);
   ephy_sync_service_schedule_periodical_sync (self);

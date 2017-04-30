@@ -10,6 +10,7 @@ web_extension_sources = [
 
 web_extension_deps = [
   ephymisc_dep,
+  ephysync_dep,
   webkit2gtk_web_extension_dep
 ]
 
