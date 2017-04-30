@@ -465,7 +465,6 @@ ephy_notebook_constructed (GObject *object)
   EphyNotebook *notebook = EPHY_NOTEBOOK (object);
   GtkWidget *hbox;
   GtkWidget *button;
-  GtkWidget *popover;
 
   G_OBJECT_CLASS (ephy_notebook_parent_class)->constructed (object);
 
@@ -489,9 +488,9 @@ ephy_notebook_constructed (GObject *object)
   gtk_widget_show (button);
 
   notebook->tab_menu = g_menu_new ();
-  popover = gtk_popover_new (button);
-  gtk_popover_bind_model (GTK_POPOVER (popover), G_MENU_MODEL (notebook->tab_menu), "win");
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
+  /* Remove this when popover menus become scrollable. */
+  gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), FALSE);
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), G_MENU_MODEL (notebook->tab_menu));
 }
 
 static void
@@ -574,7 +573,7 @@ ephy_notebook_rebuild_tab_menu (EphyNotebook *notebook)
     text = get_nth_tab_label_text (GTK_NOTEBOOK (notebook), i);
     ellipsized_text = ellipsize_tab_label (text);
     item = g_menu_item_new (ellipsized_text, NULL);
-    g_menu_item_set_action_and_target (item, "show-tab", "u", (guint)i, NULL);
+    g_menu_item_set_action_and_target (item, "win.show-tab", "u", (guint)i, NULL);
     g_menu_append_item (notebook->tab_menu, item);
     g_free (ellipsized_text);
     g_object_unref (item);
