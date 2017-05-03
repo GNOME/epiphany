@@ -980,6 +980,78 @@ migrate_search_engines (void)
 }
 
 static void
+migrate_passwords_to_firefox_sync_passwords (void)
+{
+  GHashTable *attributes;
+  GList *passwords = NULL;
+  GError *error = NULL;
+  int default_profile_migration_version;
+
+  /* Similar to the insecure passowrds migration, we want to migrate passwords
+   * to Firefox Sync passwords only once since saved passwords are stored
+   * globally and not per profile. This won't affect password lookup for web
+   * apps because this migration only adds a couple of new fields to the
+   * password schema, fields that are not taken into consideration when
+   * querying passwords.
+   */
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  if (default_profile_migration_version >= EPHY_FIREFOX_SYNC_PASSWORDS_MIGRATION_VERSION)
+    return;
+
+  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
+  passwords = secret_service_search_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA, attributes,
+                                          SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                                          NULL, &error);
+  if (error) {
+    g_warning ("Failed to search the password schema: %s", error->message);
+    goto out;
+  }
+
+  secret_service_clear_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
+                             attributes, NULL, &error);
+  if (error) {
+    g_warning ("Failed to clear the password schema: %s", error->message);
+    goto out;
+  }
+
+  for (GList *l = passwords; l && l->data; l = l->next) {
+    SecretItem *item = (SecretItem *)l->data;
+    SecretValue *value = secret_item_get_secret (item);
+    GHashTable *attrs = secret_item_get_attributes (item);
+    const char *hostname = g_hash_table_lookup (attrs, HOSTNAME_KEY);
+    const char *username = g_hash_table_lookup (attrs, USERNAME_KEY);
+    char *uuid = g_uuid_string_random ();
+    char *label;
+
+    g_hash_table_insert (attrs, g_strdup (ID_KEY), g_strdup_printf ("{%s}", uuid));
+    g_hash_table_insert (attrs, g_strdup (SERVER_TIME_MODIFIED_KEY), g_strdup ("0"));
+
+    if (username)
+      label = g_strdup_printf ("Password for %s in a form in %s", username, hostname);
+    else
+      label = g_strdup_printf ("Password in a form in %s", hostname);
+    secret_service_store_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
+                               attrs, NULL, label,
+                               value, NULL, &error);
+    if (error) {
+      g_warning ("Failed to store password: %s", error->message);
+      g_clear_pointer (&error, g_error_free);
+    }
+
+    g_free (label);
+    g_free (uuid);
+    secret_value_unref (value);
+    g_hash_table_unref (attrs);
+  }
+
+out:
+  if (error)
+    g_error_free (error);
+  g_hash_table_unref (attributes);
+  g_list_free_full (passwords, g_object_unref);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1010,6 +1082,7 @@ const EphyProfileMigrator migrators[] = {
   /* 15 */ migrate_permissions,
   /* 16 */ migrate_settings,
   /* 17 */ migrate_search_engines,
+  /* 18 */ migrate_passwords_to_firefox_sync_passwords,
 };
 
 static gboolean
