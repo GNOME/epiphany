@@ -406,8 +406,8 @@ ephy_location_controller_constructed (GObject *object)
 
   add_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
 
-  g_signal_connect (controller->search_engine_manager, "changed",
-                    G_CALLBACK (search_engines_changed_cb), controller);
+  g_signal_connect_object (controller->search_engine_manager, "changed",
+                           G_CALLBACK (search_engines_changed_cb), controller, 0);
 
   g_object_bind_property (controller, "editable",
                           controller->title_widget, "editable",
