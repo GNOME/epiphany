@@ -561,7 +561,6 @@ ephy_embed_prefs_init (gpointer user_data)
   webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
                                                        "enable-fullscreen", TRUE,
                                                        "enable-javascript", TRUE,
-                                                       "enable-site-specific-quirks", TRUE,
                                                        "enable-dns-prefetching", TRUE,
                                                        "javascript-can-open-windows-automatically", TRUE,
                                                        NULL);
@@ -620,6 +619,10 @@ ephy_embed_prefs_init (gpointer user_data)
   g_settings_bind (EPHY_SETTINGS_WEB,
                    EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
                    webkit_settings, "enable-smooth-scrolling",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (EPHY_SETTINGS_WEB,
+                   EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS,
+                   webkit_settings, "enable-site-specific-quirks",
                    G_SETTINGS_BIND_GET);
   return webkit_settings;
 }

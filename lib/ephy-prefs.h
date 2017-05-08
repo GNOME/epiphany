@@ -78,26 +78,27 @@ static const char * const ephy_prefs_state_schema[] = {
   EPHY_PREFS_STATE_IS_MAXIMIZED
 };
 
-#define EPHY_PREFS_WEB_SCHEMA                  "org.gnome.Epiphany.web"
-#define EPHY_PREFS_WEB_FONT_MIN_SIZE           "min-font-size"
-#define EPHY_PREFS_WEB_LANGUAGE                "language"
-#define EPHY_PREFS_WEB_USE_GNOME_FONTS         "use-gnome-fonts"
-#define EPHY_PREFS_WEB_SANS_SERIF_FONT         "sans-serif-font"
-#define EPHY_PREFS_WEB_SERIF_FONT              "serif-font"
-#define EPHY_PREFS_WEB_MONOSPACE_FONT          "monospace-font"
-#define EPHY_PREFS_WEB_ENABLE_USER_CSS         "enable-user-css"
-#define EPHY_PREFS_WEB_ENABLE_POPUPS           "enable-popups"
-#define EPHY_PREFS_WEB_ENABLE_PLUGINS          "enable-plugins"
-#define EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING   "enable-spell-checking"
-#define EPHY_PREFS_WEB_ENABLE_WEBGL            "enable-webgl"
-#define EPHY_PREFS_WEB_ENABLE_WEBAUDIO         "enable-webaudio"
-#define EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING "enable-smooth-scrolling"
-#define EPHY_PREFS_WEB_USER_AGENT              "user-agent"
-#define EPHY_PREFS_WEB_COOKIES_POLICY          "cookies-policy"
-#define EPHY_PREFS_WEB_DEFAULT_ENCODING        "default-encoding"
-#define EPHY_PREFS_WEB_DO_NOT_TRACK            "do-not-track"
-#define EPHY_PREFS_WEB_ENABLE_ADBLOCK          "enable-adblock"
-#define EPHY_PREFS_WEB_REMEMBER_PASSWORDS      "remember-passwords"
+#define EPHY_PREFS_WEB_SCHEMA                      "org.gnome.Epiphany.web"
+#define EPHY_PREFS_WEB_FONT_MIN_SIZE               "min-font-size"
+#define EPHY_PREFS_WEB_LANGUAGE                    "language"
+#define EPHY_PREFS_WEB_USE_GNOME_FONTS             "use-gnome-fonts"
+#define EPHY_PREFS_WEB_SANS_SERIF_FONT             "sans-serif-font"
+#define EPHY_PREFS_WEB_SERIF_FONT                  "serif-font"
+#define EPHY_PREFS_WEB_MONOSPACE_FONT              "monospace-font"
+#define EPHY_PREFS_WEB_ENABLE_USER_CSS             "enable-user-css"
+#define EPHY_PREFS_WEB_ENABLE_POPUPS               "enable-popups"
+#define EPHY_PREFS_WEB_ENABLE_PLUGINS              "enable-plugins"
+#define EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING       "enable-spell-checking"
+#define EPHY_PREFS_WEB_ENABLE_WEBGL                "enable-webgl"
+#define EPHY_PREFS_WEB_ENABLE_WEBAUDIO             "enable-webaudio"
+#define EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING     "enable-smooth-scrolling"
+#define EPHY_PREFS_WEB_USER_AGENT                  "user-agent"
+#define EPHY_PREFS_WEB_COOKIES_POLICY              "cookies-policy"
+#define EPHY_PREFS_WEB_DEFAULT_ENCODING            "default-encoding"
+#define EPHY_PREFS_WEB_DO_NOT_TRACK                "do-not-track"
+#define EPHY_PREFS_WEB_ENABLE_ADBLOCK              "enable-adblock"
+#define EPHY_PREFS_WEB_REMEMBER_PASSWORDS          "remember-passwords"
+#define EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS "enable-site-specific-quirks"
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,
@@ -119,6 +120,7 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_DO_NOT_TRACK,
   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
   EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
+  EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS
 };
 
 #define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"
