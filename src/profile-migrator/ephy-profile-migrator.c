@@ -223,6 +223,9 @@ migrate_new_urls_table (void)
   GError *error = NULL;
 
   filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
+  if (!g_file_test (filename, G_FILE_TEST_EXISTS))
+    return;
+
   history_database = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE);
   ephy_sqlite_connection_open (history_database, filename, &error);
 
