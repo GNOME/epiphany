@@ -1487,11 +1487,6 @@ permission_request_cb (WebKitWebView           *web_view,
   if (WEBKIT_IS_GEOLOCATION_PERMISSION_REQUEST (decision)) {
     permission_type = EPHY_PERMISSION_TYPE_ACCESS_LOCATION;
   } else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST (decision)) {
-    /* Application mode implies being OK with notifications. */
-    if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-      webkit_permission_request_allow (decision);
-      return TRUE;
-    }
     permission_type = EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS;
   } else if (WEBKIT_IS_USER_MEDIA_PERMISSION_REQUEST (decision)) {
     if (webkit_user_media_permission_is_for_video_device (WEBKIT_USER_MEDIA_PERMISSION_REQUEST (decision)))
@@ -1511,21 +1506,31 @@ permission_request_cb (WebKitWebView           *web_view,
   permission = ephy_permissions_manager_get_permission (permissions_manager,
                                                         permission_type,
                                                         origin);
-  g_free (origin);
 
   switch (permission) {
   case EPHY_PERMISSION_PERMIT:
     webkit_permission_request_allow (decision);
-    return TRUE;
+    goto out;
   case EPHY_PERMISSION_DENY:
     webkit_permission_request_deny (decision);
-    return TRUE;
+    goto out;
   case EPHY_PERMISSION_UNDECIDED:
-  default:
-    break;
+    /* Application mode implies being OK with notifications. */
+    if (permission_type == EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS &&
+        ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+      ephy_permissions_manager_set_permission (permissions_manager,
+                                               permission_type,
+                                               origin,
+                                               EPHY_PERMISSION_PERMIT);
+      webkit_permission_request_allow (decision);
+    } else {
+      show_permission_request_info_bar (web_view, decision, permission_type);
+    }
   }
 
-  show_permission_request_info_bar (web_view, decision, permission_type);
+out:
+  g_free (origin);
+
   return TRUE;
 }
 
