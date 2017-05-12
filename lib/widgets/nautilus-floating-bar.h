@@ -1,26 +1,27 @@
-/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
-/*
- *  Copyright (C) 2011 Red Hat Inc.
+
+/* Nautilus - Floating status bar.
  *
- *  This file is part of Epiphany.
+ * Copyright (C) 2011 Red Hat Inc.
  *
- *  Epiphany is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
- *  Epiphany is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  *
- *  Authors: Cosimo Cecchi <cosimoc@redhat.com>
+ * Authors: Cosimo Cecchi <cosimoc@redhat.com>
+ *
  */
 
-#pragma once
+#ifndef __NAUTILUS_FLOATING_BAR_H__
+#define __NAUTILUS_FLOATING_BAR_H__
 
 #include <gtk/gtk.h>
 
@@ -72,3 +73,7 @@ void        nautilus_floating_bar_add_action       (NautilusFloatingBar *self,
 						    const gchar *icon_name,
 						    gint action_id);
 void        nautilus_floating_bar_cleanup_actions  (NautilusFloatingBar *self);
+
+void        nautilus_floating_bar_remove_hover_timeout (NautilusFloatingBar *self);
+
+#endif /* __NAUTILUS_FLOATING_BAR_H__ */
