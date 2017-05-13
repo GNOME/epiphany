@@ -291,10 +291,30 @@ replace_rows_in_model (EphyCompletionModel *model, GSList *new_rows)
 static gboolean
 should_add_bookmark_to_model (EphyCompletionModel *model,
                               const char          *search_string,
-                              const char          *title,
-                              const char          *location)
+                              EphyBookmark        *bookmark)
 {
   gboolean ret = TRUE;
+  GSequence *tags;
+  GSequenceIter *tag_iter;
+  const char *url;
+  const char *title;
+  char *tag_string = NULL;
+  char **tag_array;
+  int i;
+
+  title = ephy_bookmark_get_title (bookmark);
+  url = ephy_bookmark_get_url (bookmark);
+  tags = ephy_bookmark_get_tags (bookmark);
+
+  tag_array = g_malloc0 ((g_sequence_get_length (tags) + 1) * sizeof (char *));
+
+  for (i = 0, tag_iter = g_sequence_get_begin_iter (tags);
+       !g_sequence_iter_is_end (tag_iter);
+       i++, tag_iter = g_sequence_iter_next (tag_iter)) {
+    tag_array[i] = g_sequence_get (tag_iter);
+  }
+
+  tag_string = g_strjoinv (" ", tag_array);
 
   if (model->search_terms) {
     GSList *iter;
@@ -302,13 +322,18 @@ should_add_bookmark_to_model (EphyCompletionModel *model,
 
     for (iter = model->search_terms; iter != NULL; iter = iter->next) {
       current = (GRegex *)iter->data;
+
       if ((!g_regex_match (current, title ? title : "", G_REGEX_MATCH_NOTEMPTY, NULL)) &&
-          (!g_regex_match (current, location ? location : "", G_REGEX_MATCH_NOTEMPTY, NULL))) {
+          (!g_regex_match (current, url ? url : "", G_REGEX_MATCH_NOTEMPTY, NULL)) &&
+          (!g_regex_match (current, tag_string ? tag_string : "", G_REGEX_MATCH_NOTEMPTY, NULL))) {
         ret = FALSE;
         break;
       }
     }
   }
+
+  g_free (tag_array);
+  g_free (tag_string);
 
   return ret;
 }
@@ -426,12 +451,11 @@ query_completed_cb (EphyHistoryService *service,
 
     bookmark = g_sequence_get (iter);
 
-    url = ephy_bookmark_get_url (bookmark);
-    title = ephy_bookmark_get_title (bookmark);
-
-    if (should_add_bookmark_to_model (model, user_data->search_string,
-                                      title, url))
+    if (should_add_bookmark_to_model (model, user_data->search_string, bookmark)) {
+      url = ephy_bookmark_get_url (bookmark);
+      title = ephy_bookmark_get_title (bookmark);
       list = add_to_potential_rows (list, title, url, NULL, 0, TRUE, FALSE);
+    }
   }
 
   /* History */
