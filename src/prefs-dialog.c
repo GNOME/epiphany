@@ -127,7 +127,6 @@ struct _PrefsDialog {
   GtkWidget *sync_frequency_30_min_radiobutton;
   GtkWidget *sync_frequency_60_min_radiobutton;
   GtkWidget *sync_now_button;
-  guint32 sync_frequency;
   gboolean sync_was_signed_in;
 
   WebKitWebView *fxa_web_view;
@@ -166,11 +165,8 @@ prefs_dialog_finalize (GObject *object)
     g_object_unref (dialog->fxa_manager);
   }
 
-  if (ephy_sync_service_is_signed_in (dialog->sync_service) && !dialog->sync_was_signed_in) {
+  if (ephy_sync_service_is_signed_in (dialog->sync_service) && !dialog->sync_was_signed_in)
     ephy_sync_service_start_periodical_sync (dialog->sync_service);
-  } else if (dialog->sync_frequency != g_settings_get_uint (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_FREQUENCY)) {
-      g_signal_emit_by_name (dialog->sync_service, "sync-frequency-changed");
-  }
 
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
 }
@@ -1757,9 +1753,6 @@ setup_sync_page (PrefsDialog *dialog)
                                 sync_frequency_set_mapping,
                                 GINT_TO_POINTER (60),
                                 NULL);
-
-  dialog->sync_frequency = g_settings_get_uint (EPHY_SETTINGS_SYNC,
-                                                EPHY_PREFS_SYNC_FREQUENCY);
 }
 
 static void
