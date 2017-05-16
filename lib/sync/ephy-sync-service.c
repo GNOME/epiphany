@@ -107,7 +107,6 @@ static GParamSpec *obj_properties[LAST_PROP];
 enum {
   STORE_FINISHED,
   SIGN_IN_ERROR,
-  SYNC_FREQUENCY_CHANGED,
   SYNC_FINISHED,
   LAST_SIGNAL
 };
@@ -1438,18 +1437,20 @@ ephy_sync_service_stop_periodical_sync (EphySyncService *self)
 static void
 ephy_sync_service_schedule_periodical_sync (EphySyncService *self)
 {
+  guint seconds;
+
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  self->source_id = g_timeout_add_seconds (g_settings_get_uint (EPHY_SETTINGS_SYNC,
-                                                                EPHY_PREFS_SYNC_FREQUENCY) * 60,
-                                           ephy_sync_service_sync,
-                                           self);
-  LOG ("Scheduled new sync with frequency %u mins",
-       g_settings_get_uint (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_FREQUENCY));
+  seconds = g_settings_get_uint (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_FREQUENCY) * 60;
+  self->source_id = g_timeout_add_seconds (seconds, ephy_sync_service_sync, self);
+
+  LOG ("Scheduled new sync with frequency %u minutes", seconds / 60);
 }
 
 static void
-sync_frequency_changed_cb (EphySyncService *self)
+sync_frequency_changed_cb (GSettings       *settings,
+                           char            *key,
+                           EphySyncService *self)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
@@ -1665,8 +1666,8 @@ ephy_sync_service_constructed (GObject *object)
     user_agent = webkit_settings_get_user_agent (settings);
     g_object_set (self->session, "user-agent", user_agent, NULL);
 
-    g_signal_connect (self, "sync-frequency-changed",
-                      G_CALLBACK (sync_frequency_changed_cb), NULL);
+    g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_FREQUENCY,
+                      G_CALLBACK (sync_frequency_changed_cb), self);
   }
 }
 
@@ -1722,13 +1723,6 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_STRING);
-
-  signals[SYNC_FREQUENCY_CHANGED] =
-    g_signal_new ("sync-frequency-changed",
-                  EPHY_TYPE_SYNC_SERVICE,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
 
   signals[SYNC_FINISHED] =
     g_signal_new ("sync-finished",
