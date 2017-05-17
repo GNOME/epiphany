@@ -463,12 +463,8 @@ ephy_web_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 static gboolean
 ephy_web_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
-  /* This are the special cases WebkitWebView doesn't handle but we have an
+  /* These are the special cases WebkitWebView doesn't handle but we have an
    * interest in handling. */
-
-  /* We always show the browser context menu on control-rightclick. */
-  if (event->button == 3 && event->state == GDK_CONTROL_MASK)
-    return FALSE;
 
   /* Handle typical back/forward mouse buttons. */
   if (event->button == 8) {
