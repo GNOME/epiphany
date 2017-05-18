@@ -43,7 +43,7 @@ configure_file(
 )
 
 glib_requirement = '>= 2.46.0'
-gtk_requirement = '>= 3.22.0'
+gtk_requirement = '>= 3.22.13'
 webkitgtk_requirement = '>= 2.16.0'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
