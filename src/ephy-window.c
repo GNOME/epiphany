@@ -1253,65 +1253,6 @@ context_menu_dismissed_cb (WebKitWebView *webView,
   _ephy_window_unset_context_event (window);
 }
 
-typedef struct {
-  GAction *action;
-  GVariant *parameter;
-} GActionData;
-
-static void
-action_activate_cb (GtkAction *action, gpointer user_data)
-{
-  GActionData *action_data = (GActionData *)user_data;
-
-  g_action_activate (action_data->action, action_data->parameter);
-
-  if (action_data->parameter != NULL)
-    g_variant_unref (action_data->parameter);
-
-  g_slice_free (GActionData, action_data);
-}
-
-static WebKitContextMenuItem *
-webkit_context_menu_item_new_from_gaction_with_parameter (GAction    *action,
-                                                          const char *label,
-                                                          GVariant   *parameter)
-{
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  GtkAction *gtk_action;
-  WebKitContextMenuItem *item;
-  GActionData *action_data;
-
-  action_data = g_slice_new (GActionData);
-  action_data->action = action;
-  action_data->parameter = parameter;
-
-  if (parameter != NULL)
-    g_variant_ref_sink (parameter);
-
-  gtk_action = gtk_action_new (g_action_get_name (action), label, NULL, NULL);
-  g_signal_connect (gtk_action, "activate",
-                    G_CALLBACK (action_activate_cb), action_data);
-
-  g_object_bind_property (action, "enabled",
-                          gtk_action, "sensitive",
-                          G_BINDING_SYNC_CREATE);
-
-  item = webkit_context_menu_item_new (gtk_action);
-
-  g_object_unref (gtk_action);
-
-  return item;
-#pragma GCC diagnostic pop
-}
-
-static WebKitContextMenuItem *
-webkit_context_menu_item_new_from_gaction (GAction    *action,
-                                           const char *label)
-{
-  return webkit_context_menu_item_new_from_gaction_with_parameter (action, label, NULL);
-}
-
 static char *
 ellipsize_string (const char *string,
                   glong       max_length)
@@ -1384,14 +1325,11 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), name);
   label = g_hash_table_lookup (window->action_labels, name);
   if (strcmp (label, "search-selection-placeholder") != 0) {
-    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label)));
+    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label), NULL));
   } else {
     search_term = g_variant_get_string (target, NULL);
     search_label = format_search_label (search_term);
-    webkit_context_menu_append (context_menu,
-                                webkit_context_menu_item_new_from_gaction_with_parameter (action,
-                                                                                          search_label,
-                                                                                          g_variant_new_string (search_term)));
+    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, search_label, target));
     g_free (search_label);
   }
 }
