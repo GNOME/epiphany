@@ -77,6 +77,7 @@ struct _EphySyncService {
   SyncCryptoRSAKeyPair *rsa_key_pair;
 
   gboolean sync_periodically;
+  gboolean is_signing_in;
 };
 
 G_DEFINE_TYPE (EphySyncService, ephy_sync_service, G_TYPE_OBJECT);
@@ -690,6 +691,26 @@ ephy_sync_service_destroy_session (EphySyncService *self,
 }
 
 static void
+ephy_sync_service_report_sign_in_error (EphySyncService *self,
+                                        const char      *message,
+                                        const char      *session_token,
+                                        gboolean         clear_secrets)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+  g_assert (message);
+
+  g_signal_emit (self, signals[SIGN_IN_ERROR], 0, message);
+  ephy_sync_service_destroy_session (self, session_token);
+
+  if (clear_secrets) {
+    g_clear_pointer (&self->account, g_free);
+    g_hash_table_remove_all (self->secrets);
+  }
+
+  self->is_signing_in = FALSE;
+}
+
+static void
 obtain_storage_credentials_cb (SoupSession *session,
                                SoupMessage *msg,
                                gpointer     user_data)
@@ -739,8 +760,11 @@ obtain_storage_credentials_cb (SoupSession *session,
   goto out;
 
 out_error:
-  message = _("Failed to obtain the storage credentials.");
+  message = _("Failed to obtain storage credentials.");
   suggestion = _("Please visit Preferences and sign in again to continue syncing.");
+  if (self->is_signing_in)
+    ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
+  else
   ephy_notification_show (ephy_notification_new (message, suggestion));
 out:
   self->locked = FALSE;
@@ -870,9 +894,12 @@ obtain_signed_certificate_cb (SoupSession *session,
              msg->status_code, msg->response_body->data);
 
 out_error:
-  message = message ? message : _("Failed to obtain a signed certificate.");
+  message = message ? message : _("Failed to obtain signed certificate.");
   suggestion = suggestion ? suggestion : _("Please visit Preferences and sign in again to continue syncing.");
-  ephy_notification_show (ephy_notification_new (message, suggestion));
+  if (self->is_signing_in)
+    ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
+  else
+    ephy_notification_show (ephy_notification_new (message, suggestion));
   self->locked = FALSE;
 out_no_error:
   if (node)
@@ -1583,6 +1610,7 @@ store_secrets_cb (SecretService   *service,
   }
 
   g_signal_emit (self, signals[STORE_FINISHED], 0, error);
+  self->is_signing_in = FALSE;
 
   if (error)
     g_error_free (error);
@@ -1754,24 +1782,6 @@ ephy_sync_service_get_sync_user (EphySyncService *self)
   g_return_val_if_fail (EPHY_IS_SYNC_SERVICE (self), NULL);
 
   return self->account;
-}
-
-static void
-ephy_sync_service_report_sign_in_error (EphySyncService *self,
-                                        const char      *message,
-                                        const char      *session_token,
-                                        gboolean         clear_secrets)
-{
-  g_assert (EPHY_IS_SYNC_SERVICE (self));
-  g_assert (message);
-
-  g_signal_emit (self, signals[SIGN_IN_ERROR], 0, message);
-  ephy_sync_service_destroy_session (self, session_token);
-
-  if (clear_secrets) {
-    g_clear_pointer (&self->account, g_free);
-    g_hash_table_remove_all (self->secrets);
-  }
 }
 
 static char *
@@ -2170,6 +2180,8 @@ ephy_sync_service_do_sign_in (EphySyncService *self,
   g_return_if_fail (session_token);
   g_return_if_fail (key_fetch_token);
   g_return_if_fail (unwrap_b_key);
+
+  self->is_signing_in = TRUE;
 
   /* Derive tokenID, reqHMACkey, respHMACkey and respXORkey from keyFetchToken.
    * tokenID and reqHMACkey are used to sign a HAWK GET requests to the /account/keys
