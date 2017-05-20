@@ -59,6 +59,7 @@ enum {
 static GParamSpec *obj_properties[LAST_PROP];
 
 static GtkWidget *create_bookmark_row (gpointer item, gpointer user_data);
+static GtkWidget *create_tag_row (const char *tag);
 
 static void
 ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *self,
@@ -66,6 +67,8 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *self,
                                               const char           *tag,
                                               EphyBookmarksManager *manager)
 {
+  GtkWidget *tag_row;
+
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
 
@@ -94,6 +97,13 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *self,
       gtk_container_add (GTK_CONTAINER (self->tag_detail_list_box), row);
     }
   }
+
+  /* The first time a tag is asigned to a bookmark, a tag row is created and
+   * added to the tags list */
+  if (g_sequence_get_length (ephy_bookmarks_manager_get_bookmarks_with_tag (manager, tag)) == 1) {
+    tag_row = create_tag_row (tag);
+    gtk_container_add (GTK_CONTAINER (self->tags_list_box), tag_row);
+  }
 }
 
 static void
@@ -107,6 +117,7 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
   GList *l;
   const char *visible_stack_child;
   gboolean exists;
+  gpointer title;
 
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
@@ -155,6 +166,16 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
       action = g_action_map_lookup_action (G_ACTION_MAP (group), "tag-detail-back");
       g_action_activate (action, NULL);
     }
+  }
+
+  /* If the tag no longer contains bookmarks, remove it from the tags list */
+  if (g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
+      children = gtk_container_get_children (GTK_CONTAINER (self->tags_list_box));
+      for (l = children; l != NULL; l = l->next) {
+        title = g_object_get_data (G_OBJECT (l->data), "title");
+        if (g_strcmp0 (title, tag) == 0)
+          gtk_container_remove (GTK_CONTAINER (self->tags_list_box), GTK_WIDGET (l->data));
+      }
   }
 }
 
@@ -552,8 +573,10 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
     const char *tag = g_sequence_get (iter);
     GtkWidget *tag_row;
 
-    tag_row = create_tag_row (tag);
-    gtk_container_add (GTK_CONTAINER (self->tags_list_box), tag_row);
+    if (!g_sequence_is_empty (ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, tag))) {
+      tag_row = create_tag_row (tag);
+      gtk_container_add (GTK_CONTAINER (self->tags_list_box), tag_row);
+    }
   }
 
   bookmarks = ephy_bookmarks_manager_get_bookmarks_with_tag (self->manager, NULL);
