@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_INTERFACE (EphySynchronizableManager, ephy_synchronizable_manager, EPHY, SYNCHRONIZABLE_MANAGER, GObject)
 
-typedef void (*EphySynchronizableManagerMergeCallback) (GSList *to_upload, gpointer user_data);
+typedef void (*EphySynchronizableManagerMergeCallback) (GSList *to_upload, gboolean should_force, gpointer user_data);
 
 struct _EphySynchronizableManagerInterface {
   GTypeInterface parent_iface;

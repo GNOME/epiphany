@@ -1,4 +1,6 @@
 libephysync_sources = [
+  'ephy-history-manager.c',
+  'ephy-history-record.c',
   'ephy-password-manager.c',
   'ephy-password-record.c',
   'ephy-sync-crypto.c',

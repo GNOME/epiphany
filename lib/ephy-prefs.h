@@ -162,6 +162,9 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_SYNC_PASSWORDS_ENABLED "sync-passwords-enabled"
 #define EPHY_PREFS_SYNC_PASSWORDS_TIME    "sync-passwords-time"
 #define EPHY_PREFS_SYNC_PASSWORDS_INITIAL "sync-passwords-initial"
+#define EPHY_PREFS_SYNC_HISTORY_ENABLED   "sync-history-enabled"
+#define EPHY_PREFS_SYNC_HISTORY_TIME      "sync-history-time"
+#define EPHY_PREFS_SYNC_HISTORY_INITIAL   "sync-history-initial"
 
 static struct {
   const char *schema;

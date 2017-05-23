@@ -26,6 +26,7 @@
 #include "ephy-notification.h"
 #include "ephy-settings.h"
 #include "ephy-sync-crypto.h"
+#include "ephy-sync-utils.h"
 
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
@@ -564,8 +565,8 @@ ephy_sync_service_certificate_is_valid (EphySyncService *self,
   g_assert (certificate);
 
   pieces = g_strsplit (certificate, ".", 0);
-  header = (char *)ephy_sync_crypto_base64_urlsafe_decode (pieces[0], &len, TRUE);
-  payload = (char *)ephy_sync_crypto_base64_urlsafe_decode (pieces[1], &len, TRUE);
+  header = (char *)ephy_sync_utils_base64_urlsafe_decode (pieces[0], &len, TRUE);
+  payload = (char *)ephy_sync_utils_base64_urlsafe_decode (pieces[1], &len, TRUE);
   parser = json_parser_new ();
 
   json_parser_load_from_data (parser, header, -1, &error);
@@ -662,7 +663,7 @@ ephy_sync_service_destroy_session (EphySyncService *self,
   url = g_strdup_printf ("%ssession/destroy", FIREFOX_ACCOUNTS_SERVER_URL);
   ephy_sync_crypto_process_session_token (session_token, &token_id,
                                           &req_hmac_key, &request_key, 32);
-  token_id_hex = ephy_sync_crypto_encode_hex (token_id, 32);
+  token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
 
   msg = soup_message_new (SOUP_METHOD_POST, url);
   soup_message_set_request (msg, content_type, SOUP_MEMORY_STATIC,
@@ -820,7 +821,7 @@ ephy_sync_service_obtain_storage_credentials (EphySyncService *self)
   audience = get_audience (TOKEN_SERVER_URL);
   assertion = ephy_sync_crypto_create_assertion (self->certificate, audience,
                                                  300, self->rsa_key_pair);
-  key_b = ephy_sync_crypto_decode_hex (ephy_sync_service_get_secret (self, secrets[MASTER_KEY]));
+  key_b = ephy_sync_utils_decode_hex (ephy_sync_service_get_secret (self, secrets[MASTER_KEY]));
   hashed_key_b = g_compute_checksum_for_data (G_CHECKSUM_SHA256, key_b, 32);
   client_state = g_strndup (hashed_key_b, 32);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
@@ -934,7 +935,7 @@ ephy_sync_service_obtain_signed_certificate (EphySyncService *self)
   session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
   ephy_sync_crypto_process_session_token (session_token, &token_id,
                                           &req_hmac_key, &request_key, 32);
-  token_id_hex = ephy_sync_crypto_encode_hex (token_id, 32);
+  token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
 
   n = mpz_get_str (NULL, 10, self->rsa_key_pair->public.n);
   e = mpz_get_str (NULL, 10, self->rsa_key_pair->public.e);
@@ -1050,7 +1051,6 @@ ephy_sync_service_delete_synchronizable (EphySyncService           *self,
   record = json_to_string (node, FALSE);
   bundle = ephy_sync_service_get_key_bundle (self, collection);
   payload = ephy_sync_crypto_encrypt_record (record,  bundle);
-  json_object_remove_member (object, "type");
   json_object_remove_member (object, "deleted");
   json_object_set_string_member (object, "payload", payload);
   body = json_to_string (node, FALSE);
@@ -1185,7 +1185,8 @@ upload_synchronizable_cb (SoupSession *session,
 static void
 ephy_sync_service_upload_synchronizable (EphySyncService           *self,
                                          EphySynchronizableManager *manager,
-                                         EphySynchronizable        *synchronizable)
+                                         EphySynchronizable        *synchronizable,
+                                         gboolean                   should_force)
 {
   SyncCryptoKeyBundle *bundle;
   SyncAsyncData *data;
@@ -1195,6 +1196,7 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
   char *id_safe;
   const char *collection;
   const char *id;
+  double time_modified;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
@@ -1213,8 +1215,9 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
   body = json_to_string (bso, FALSE);
 
   LOG ("Uploading object with id %s...", id);
-  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_PUT, body, -1,
-                                           ephy_synchronizable_get_server_time_modified (synchronizable),
+  time_modified = ephy_synchronizable_get_server_time_modified (synchronizable);
+  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_PUT, body,
+                                           -1, should_force ? -1 : time_modified,
                                            upload_synchronizable_cb, data);
 
   g_free (id_safe);
@@ -1225,13 +1228,15 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
 }
 
 static void
-merge_finished_cb (GSList   *to_upload,
-                   gpointer  user_data)
+merge_collection_finished_cb (GSList   *to_upload,
+                              gboolean  should_force,
+                              gpointer  user_data)
 {
   SyncCollectionAsyncData *data = (SyncCollectionAsyncData *)user_data;
 
   for (GSList *l = to_upload; l && l->data; l = l->next)
-    ephy_sync_service_upload_synchronizable (data->service, data->manager, l->data);
+    ephy_sync_service_upload_synchronizable (data->service, data->manager,
+                                             l->data, should_force);
 
   if (data->is_last)
     g_signal_emit (data->service, signals[SYNC_FINISHED], 0);
@@ -1302,7 +1307,7 @@ sync_collection_cb (SoupSession *session,
 
   ephy_synchronizable_manager_merge (data->manager, data->is_initial,
                                      data->remotes_deleted, data->remotes_updated,
-                                     merge_finished_cb, data);
+                                     merge_collection_finished_cb, data);
   goto out_no_error;
 
 out_error:
@@ -1414,7 +1419,7 @@ ephy_sync_service_register_client_id (EphySyncService *self)
   protocol = g_strdup_printf ("1.%d", STORAGE_VERSION);
   json_array_add_string_element (array, protocol);
   json_object_set_array_member (payload, "protocols", array);
-  client_id = ephy_sync_crypto_get_random_sync_id ();
+  client_id = ephy_sync_utils_get_random_sync_id ();
   json_object_set_string_member (payload, "id", client_id);
   name = g_strdup_printf ("%s on Epiphany", client_id);
   json_object_set_string_member (payload, "name", name);
@@ -1803,7 +1808,7 @@ ephy_sync_service_upload_crypto_keys_record (EphySyncService *self)
   node = json_node_new (JSON_NODE_OBJECT);
   record = json_object_new ();
   payload_clear = ephy_sync_crypto_generate_crypto_keys (32);
-  master_key = ephy_sync_crypto_decode_hex (master_key_hex);
+  master_key = ephy_sync_utils_decode_hex (master_key_hex);
   bundle = ephy_sync_crypto_derive_key_bundle (master_key, 32);
   payload_cipher = ephy_sync_crypto_encrypt_record (payload_clear, bundle);
   json_object_set_string_member (record, "payload", payload_cipher);
@@ -1868,7 +1873,7 @@ obtain_crypto_keys_cb (SoupSession *session,
   /* Derive the Sync Key bundle from kB. The bundle consists of two 32 bytes keys:
    * the first one used as a symmetric encryption key (AES) and the second one
    * used as a HMAC key. */
-  key_b = ephy_sync_crypto_decode_hex (ephy_sync_service_get_secret (self, secrets[MASTER_KEY]));
+  key_b = ephy_sync_utils_decode_hex (ephy_sync_service_get_secret (self, secrets[MASTER_KEY]));
   bundle = ephy_sync_crypto_derive_key_bundle (key_b, 32);
   crypto_keys = ephy_sync_crypto_decrypt_record (payload, bundle);
   if (!crypto_keys) {
@@ -1911,7 +1916,7 @@ make_engine_object (int version)
   char *sync_id;
 
   object = json_object_new ();
-  sync_id = ephy_sync_crypto_get_random_sync_id ();
+  sync_id = ephy_sync_utils_get_random_sync_id ();
   json_object_set_int_member (object, "version", version);
   json_object_set_string_member (object, "syncID", sync_id);
 
@@ -1950,7 +1955,7 @@ ephy_sync_service_upload_meta_global_record (EphySyncService *self)
   json_object_set_object_member (engines, "forms", make_engine_object (1));
   json_object_set_object_member (payload, "engines", engines);
   json_object_set_int_member (payload, "storageVersion", STORAGE_VERSION);
-  sync_id = ephy_sync_crypto_get_random_sync_id ();
+  sync_id = ephy_sync_utils_get_random_sync_id ();
   json_object_set_string_member (payload, "syncID", sync_id);
   json_node_set_object (node, payload);
   payload_str = json_to_string (node, FALSE);
@@ -2075,7 +2080,7 @@ ephy_sync_service_conclude_sign_in (EphySyncService *self,
   g_assert (bundle);
 
   /* Derive the master sync keys form the key bundle. */
-  unwrap_key_b = ephy_sync_crypto_decode_hex (data->unwrap_b_key);
+  unwrap_key_b = ephy_sync_utils_decode_hex (data->unwrap_b_key);
   if (!ephy_sync_crypto_compute_sync_keys (bundle, data->resp_hmac_key,
                                            data->resp_xor_key, unwrap_key_b,
                                            &key_a, &key_b, 32)) {
@@ -2088,7 +2093,7 @@ ephy_sync_service_conclude_sign_in (EphySyncService *self,
   self->account = g_strdup (data->email);
   ephy_sync_service_set_secret (self, secrets[UID], data->uid);
   ephy_sync_service_set_secret (self, secrets[SESSION_TOKEN], data->session_token);
-  key_b_hex = ephy_sync_crypto_encode_hex (key_b, 32);
+  key_b_hex = ephy_sync_utils_encode_hex (key_b, 32);
   ephy_sync_service_set_secret (self, secrets[MASTER_KEY], key_b_hex);
 
   ephy_sync_service_check_storage_version (self);
@@ -2190,7 +2195,7 @@ ephy_sync_service_do_sign_in (EphySyncService *self,
    * See https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#fetching-sync-keys */
   ephy_sync_crypto_process_key_fetch_token (key_fetch_token, &token_id, &req_hmac_key,
                                             &resp_hmac_key, &resp_xor_key, 32);
-  token_id_hex = ephy_sync_crypto_encode_hex (token_id, 32);
+  token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
 
   /* Get the master sync key bundle from the /account/keys endpoint. */
   data = sign_in_async_data_new (self, email, uid,
@@ -2226,6 +2231,7 @@ synchronizable_deleted_cb (EphySynchronizableManager *manager,
 static void
 synchronizable_modified_cb (EphySynchronizableManager *manager,
                             EphySynchronizable        *synchronizable,
+                            gboolean                   should_force,
                             EphySyncService           *self)
 {
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
@@ -2235,7 +2241,7 @@ synchronizable_modified_cb (EphySynchronizableManager *manager,
   if (!ephy_sync_service_is_signed_in (self))
     return;
 
-  ephy_sync_service_upload_synchronizable (self, manager, synchronizable);
+  ephy_sync_service_upload_synchronizable (self, manager, synchronizable, should_force);
 }
 
 void
@@ -2290,12 +2296,12 @@ ephy_sync_service_do_sign_out (EphySyncService *self)
     g_signal_handlers_disconnect_by_func (l->data, synchronizable_deleted_cb, self);
     g_signal_handlers_disconnect_by_func (l->data, synchronizable_modified_cb, self);
   }
-  g_slist_free (self->managers);
-  self->managers = NULL;
+  g_clear_pointer (&self->managers, g_slist_free);
 
   g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER, "");
   g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_INITIAL, TRUE);
   g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_INITIAL, TRUE);
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_INITIAL, TRUE);
 }
 
 void

@@ -446,7 +446,7 @@ update_password_cb (GSList   *records,
   record = EPHY_PASSWORD_RECORD (records->data);
   ephy_password_record_set_password (record, data->password);
   ephy_password_manger_store_record (data->manager, record);
-  g_signal_emit_by_name (data->manager, "synchronizable-modified", record);
+  g_signal_emit_by_name (data->manager, "synchronizable-modified", record, FALSE);
 
   g_slist_free_full (records, g_object_unref);
   update_password_async_data_free (data);
@@ -492,7 +492,7 @@ ephy_password_manager_save (EphyPasswordManager *self,
                                      username_field, password_field,
                                      timestamp, timestamp);
   ephy_password_manger_store_record (self, record);
-  g_signal_emit_by_name (self, "synchronizable-modified", record);
+  g_signal_emit_by_name (self, "synchronizable-modified", record, FALSE);
 
   g_free (hostname);
   g_free (uuid);
@@ -1063,7 +1063,7 @@ merge_cb (GSList   *records,
                                                             data->remotes_deleted,
                                                             data->remotes_updated);
 
-  data->callback (to_upload, data->user_data);
+  data->callback (to_upload, FALSE, data->user_data);
 
   g_slist_free_full (records, g_object_unref);
   merge_passwords_async_data_free (data);

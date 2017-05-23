@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-sync-crypto.h"
 
+#include "ephy-sync-utils.h"
+
 #include <glib/gstdio.h>
 #include <inttypes.h>
 #include <libsoup/soup.h>
@@ -31,9 +33,6 @@
 #define HAWK_VERSION  1
 #define NONCE_LEN     6
 #define IV_LEN        16
-#define SYNC_ID_LEN   12
-
-static const char hex_digits[] = "0123456789abcdef";
 
 SyncCryptoHawkOptions *
 ephy_sync_crypto_hawk_options_new (const char *app,
@@ -204,8 +203,8 @@ ephy_sync_crypto_key_bundle_from_array (JsonArray *array)
 
   aes_key = g_base64_decode (json_array_get_string_element (array, 0), &len);
   hmac_key = g_base64_decode (json_array_get_string_element (array, 1), &len);
-  aes_key_hex = ephy_sync_crypto_encode_hex (aes_key, 32);
-  hmac_key_hex = ephy_sync_crypto_encode_hex (hmac_key, 32);
+  aes_key_hex = ephy_sync_utils_encode_hex (aes_key, 32);
+  hmac_key_hex = ephy_sync_utils_encode_hex (hmac_key, 32);
   bundle = ephy_sync_crypto_key_bundle_new (aes_key_hex, hmac_key_hex);
 
   g_free (aes_key);
@@ -388,7 +387,7 @@ ephy_sync_crypto_calculate_payload_hash (const char *payload,
                             HAWK_VERSION, content, payload);
 
   digest_hex = g_compute_checksum_for_string (G_CHECKSUM_SHA256, update, -1);
-  digest = ephy_sync_crypto_decode_hex (digest_hex);
+  digest = ephy_sync_utils_decode_hex (digest_hex);
   hash = g_base64_encode (digest, g_checksum_type_get_length (G_CHECKSUM_SHA256));
 
   g_free (content);
@@ -419,7 +418,7 @@ ephy_sync_crypto_calculate_mac (const char              *type,
   digest_hex = g_compute_hmac_for_string (G_CHECKSUM_SHA256,
                                           key, key_len,
                                           normalized, -1);
-  digest = ephy_sync_crypto_decode_hex (digest_hex);
+  digest = ephy_sync_utils_decode_hex (digest_hex);
   mac = g_base64_encode (digest, g_checksum_type_get_length (G_CHECKSUM_SHA256));
 
   g_free (normalized);
@@ -517,7 +516,7 @@ ephy_sync_crypto_hkdf (const guint8 *in,
   prk_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
                                      salt, salt_len,
                                      in, in_len);
-  prk = ephy_sync_crypto_decode_hex (prk_hex);
+  prk = ephy_sync_utils_decode_hex (prk_hex);
 
   /* Step 2: Expand */
   counter = 1;
@@ -539,7 +538,7 @@ ephy_sync_crypto_hkdf (const guint8 *in,
     tmp_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
                                        prk, hash_len,
                                        data, data_len);
-    tmp = ephy_sync_crypto_decode_hex (tmp_hex);
+    tmp = ephy_sync_utils_decode_hex (tmp_hex);
     memcpy (out_full + i * hash_len, tmp, hash_len);
 
     g_free (data);
@@ -553,26 +552,6 @@ ephy_sync_crypto_hkdf (const guint8 *in,
   g_free (salt);
   g_free (prk);
   g_free (out_full);
-}
-
-static void
-ephy_sync_crypto_b64_to_b64_urlsafe (char *text)
-{
-  g_assert (text);
-
-  /* Replace '+' with '-' and '/' with '_' */
-  g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=/", '-');
-  g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=-", '_');
-}
-
-static void
-ephy_sync_crypto_b64_urlsafe_to_b64 (char *text)
-{
-  g_assert (text);
-
-  /* Replace '-' with '+' and '_' with '/' */
-  g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=_", '+');
-  g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=+", '/');
 }
 
 static guint8 *
@@ -698,27 +677,6 @@ ephy_sync_crypto_hmac_is_valid (const char   *text,
   return retval;
 }
 
-/*
- * This function is required by Nettle's RSA support.
- * From Nettle's documentation: random_ctx and random is a randomness generator.
- * random(random_ctx, length, dst) should generate length random octets and store them at dst.
- * We don't really use random_ctx, since we have /dev/urandom available.
- */
-static void
-ephy_sync_crypto_random_bytes_gen (void   *random_ctx,
-                                   gsize   length,
-                                   guint8 *dst)
-{
-  FILE *fp;
-
-  g_assert (length > 0);
-  g_assert (dst);
-
-  fp = fopen ("/dev/urandom", "r");
-  fread (dst, sizeof (guint8), length, fp);
-  fclose (fp);
-}
-
 void
 ephy_sync_crypto_process_key_fetch_token (const char  *key_fetch_token,
                                           guint8     **token_id,
@@ -740,7 +698,7 @@ ephy_sync_crypto_process_key_fetch_token (const char  *key_fetch_token,
   g_return_if_fail (resp_hmac_key);
   g_return_if_fail (resp_xor_key);
 
-  kft = ephy_sync_crypto_decode_hex (key_fetch_token);
+  kft = ephy_sync_utils_decode_hex (key_fetch_token);
   info_kft = ephy_sync_crypto_kw ("keyFetchToken");
   info_keys = ephy_sync_crypto_kw ("account/keys");
   out1 = g_malloc (3 * token_len);
@@ -794,7 +752,7 @@ ephy_sync_crypto_process_session_token (const char  *session_token,
   g_return_if_fail (req_hmac_key);
   g_return_if_fail (request_key);
 
-  st = ephy_sync_crypto_decode_hex (session_token);
+  st = ephy_sync_utils_decode_hex (session_token);
   info = ephy_sync_crypto_kw ("sessionToken");
   out = g_malloc (3 * token_len);
 
@@ -841,7 +799,7 @@ ephy_sync_crypto_compute_sync_keys (const char    *bundle_hex,
   g_return_val_if_fail (kA, FALSE);
   g_return_val_if_fail (kB, FALSE);
 
-  bundle = ephy_sync_crypto_decode_hex (bundle_hex);
+  bundle = ephy_sync_utils_decode_hex (bundle_hex);
   ciphertext = g_malloc (2 * key_len);
   resp_hmac = g_malloc (key_len);
 
@@ -851,7 +809,7 @@ ephy_sync_crypto_compute_sync_keys (const char    *bundle_hex,
   resp_hmac_2_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
                                              resp_hmac_key, key_len,
                                              ciphertext, 2 * key_len);
-  resp_hmac_2 = ephy_sync_crypto_decode_hex (resp_hmac_2_hex);
+  resp_hmac_2 = ephy_sync_utils_decode_hex (resp_hmac_2_hex);
   if (!ephy_sync_crypto_equals (resp_hmac, resp_hmac_2, key_len)) {
     g_warning ("HMAC values differs from the one expected");
     retval = FALSE;
@@ -904,14 +862,14 @@ ephy_sync_crypto_derive_key_bundle (const guint8 *key,
   prk_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
                                      salt, key_len,
                                      key, key_len);
-  prk = ephy_sync_crypto_decode_hex (prk_hex);
+  prk = ephy_sync_utils_decode_hex (prk_hex);
   tmp = ephy_sync_crypto_concat_bytes ((guint8 *)info, strlen (info),
                                        "\x01", 1,
                                        NULL);
   aes_key_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
                                          prk, key_len,
                                          tmp, strlen (info) + 1);
-  aes_key = ephy_sync_crypto_decode_hex (aes_key_hex);
+  aes_key = ephy_sync_utils_decode_hex (aes_key_hex);
   g_free (tmp);
   tmp = ephy_sync_crypto_concat_bytes (aes_key, key_len,
                                        (guint8 *)info, strlen (info),
@@ -945,10 +903,10 @@ ephy_sync_crypto_generate_crypto_keys (gsize key_len)
   char *payload;
 
   aes_key = g_malloc (key_len);
-  ephy_sync_crypto_random_bytes_gen (NULL, key_len, aes_key);
+  ephy_sync_utils_generate_random_bytes (NULL, key_len, aes_key);
   aes_key_b64 = g_base64_encode (aes_key, key_len);
   hmac_key = g_malloc (key_len);
-  ephy_sync_crypto_random_bytes_gen (NULL, key_len, hmac_key);
+  ephy_sync_utils_generate_random_bytes (NULL, key_len, hmac_key);
   hmac_key_b64 = g_base64_encode (hmac_key, key_len);
 
   node = json_node_new (JSON_NODE_OBJECT);
@@ -1014,8 +972,8 @@ ephy_sync_crypto_decrypt_record (const char          *payload,
   }
 
   /* Get the encryption key and the HMAC key. */
-  aes_key = ephy_sync_crypto_decode_hex (bundle->aes_key_hex);
-  hmac_key = ephy_sync_crypto_decode_hex (bundle->hmac_key_hex);
+  aes_key = ephy_sync_utils_decode_hex (bundle->aes_key_hex);
+  hmac_key = ephy_sync_utils_decode_hex (bundle->hmac_key_hex);
 
   /* Under no circumstances should a client try to decrypt a record
    * if the HMAC verification fails. */
@@ -1063,12 +1021,12 @@ ephy_sync_crypto_encrypt_record (const char          *cleartext,
   g_return_val_if_fail (bundle, NULL);
 
   /* Get the encryption key and the HMAC key. */
-  aes_key = ephy_sync_crypto_decode_hex (bundle->aes_key_hex);
-  hmac_key = ephy_sync_crypto_decode_hex (bundle->hmac_key_hex);
+  aes_key = ephy_sync_utils_decode_hex (bundle->aes_key_hex);
+  hmac_key = ephy_sync_utils_decode_hex (bundle->hmac_key_hex);
 
   /* Generate a random 16 bytes initialization vector. */
   iv = g_malloc (IV_LEN);
-  ephy_sync_crypto_random_bytes_gen (NULL, IV_LEN, iv);
+  ephy_sync_utils_generate_random_bytes (NULL, IV_LEN, iv);
 
   /* Encrypt the record using the AES key. */
   ciphertext = ephy_sync_crypto_aes_256_encrypt (cleartext, aes_key,
@@ -1142,8 +1100,8 @@ ephy_sync_crypto_compute_hawk_header (const char            *url,
     nonce = g_strdup (options->nonce);
   } else {
     bytes = g_malloc (NONCE_LEN / 2);
-    ephy_sync_crypto_random_bytes_gen (NULL, NONCE_LEN / 2, bytes);
-    nonce = ephy_sync_crypto_encode_hex (bytes, NONCE_LEN / 2);
+    ephy_sync_utils_generate_random_bytes (NULL, NONCE_LEN / 2, bytes);
+    nonce = ephy_sync_utils_encode_hex (bytes, NONCE_LEN / 2);
     g_free (bytes);
   }
 
@@ -1237,7 +1195,7 @@ ephy_sync_crypto_generate_rsa_key_pair (void)
 
   /* Key sizes below 2048 are considered breakable and should not be used. */
   success = rsa_generate_keypair (&public, &private,
-                                  NULL, ephy_sync_crypto_random_bytes_gen,
+                                  NULL, ephy_sync_utils_generate_random_bytes,
                                   NULL, NULL, 2048, 0);
   /* Given correct parameters, this never fails. */
   g_assert (success);
@@ -1274,18 +1232,18 @@ ephy_sync_crypto_create_assertion (const char           *certificate,
   /* Encode the header and body to base64 url safe and join them. */
   expires_at = g_get_real_time () / 1000 + seconds * 1000;
   body = g_strdup_printf ("{\"exp\": %lu, \"aud\": \"%s\"}", expires_at, audience);
-  body_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *)body, strlen (body), TRUE);
-  header_b64 = ephy_sync_crypto_base64_urlsafe_encode ((guint8 *)header, strlen (header), TRUE);
+  body_b64 = ephy_sync_utils_base64_urlsafe_encode ((guint8 *)body, strlen (body), TRUE);
+  header_b64 = ephy_sync_utils_base64_urlsafe_encode ((guint8 *)header, strlen (header), TRUE);
   to_sign = g_strdup_printf ("%s.%s", header_b64, body_b64);
 
   /* Compute the SHA256 hash of the message to be signed. */
   digest_hex = g_compute_checksum_for_string (G_CHECKSUM_SHA256, to_sign, -1);
-  digest = ephy_sync_crypto_decode_hex (digest_hex);
+  digest = ephy_sync_utils_decode_hex (digest_hex);
 
   /* Use the provided key pair to RSA sign the message. */
   mpz_init (signature);
   success = rsa_sha256_sign_digest_tr (&rsa_key_pair->public, &rsa_key_pair->private,
-                                       NULL, ephy_sync_crypto_random_bytes_gen,
+                                       NULL, ephy_sync_utils_generate_random_bytes,
                                        digest, signature);
   /* Given correct parameters, this never fails. */
   g_assert (success);
@@ -1297,7 +1255,7 @@ ephy_sync_crypto_create_assertion (const char           *certificate,
   g_assert (count == expected_size);
 
   /* Join certificate, header, body and signed message to create the assertion. */
-  sig_b64 = ephy_sync_crypto_base64_urlsafe_encode (sig, count, TRUE);
+  sig_b64 = ephy_sync_utils_base64_urlsafe_encode (sig, count, TRUE);
   assertion = g_strdup_printf ("%s~%s.%s.%s", certificate, header_b64, body_b64, sig_b64);
 
   g_free (body);
@@ -1311,119 +1269,4 @@ ephy_sync_crypto_create_assertion (const char           *certificate,
   mpz_clear (signature);
 
   return assertion;
-}
-
-char *
-ephy_sync_crypto_base64_urlsafe_encode (const guint8 *data,
-                                        gsize         data_len,
-                                        gboolean      strip)
-{
-  char *base64;
-  char *out;
-  gsize start = 0;
-  gssize end;
-
-  g_return_val_if_fail (data, NULL);
-
-  base64 = g_base64_encode (data, data_len);
-  end = strlen (base64) - 1;
-
-  /* Strip the data of any leading or trailing '=' characters. */
-  if (strip) {
-    while (start < strlen (base64) && base64[start] == '=')
-      start++;
-
-    while (end >= 0 && base64[end] == '=')
-      end--;
-  }
-
-  out = g_strndup (base64 + start, end - start + 1);
-  ephy_sync_crypto_b64_to_b64_urlsafe (out);
-
-  g_free (base64);
-
-  return out;
-}
-
-guint8 *
-ephy_sync_crypto_base64_urlsafe_decode (const char  *text,
-                                        gsize       *out_len,
-                                        gboolean     fill)
-{
-  guint8 *out;
-  char *to_decode;
-  char *suffix = NULL;
-
-  g_return_val_if_fail (text, NULL);
-  g_return_val_if_fail (out_len, NULL);
-
-  /* Fill the text with trailing '=' characters up to the proper length. */
-  if (fill)
-    suffix = g_strnfill ((4 - strlen (text) % 4) % 4, '=');
-
-  to_decode = g_strconcat (text, suffix, NULL);
-  ephy_sync_crypto_b64_urlsafe_to_b64 (to_decode);
-  out = g_base64_decode (to_decode, out_len);
-
-  g_free (suffix);
-  g_free (to_decode);
-
-  return out;
-}
-
-char *
-ephy_sync_crypto_encode_hex (const guint8 *data,
-                             gsize         data_len)
-{
-  char *retval;
-
-  g_return_val_if_fail (data, NULL);
-
-  retval = g_malloc (data_len * 2 + 1);
-  for (gsize i = 0; i < data_len; i++) {
-    guint8 byte = data[i];
-
-    retval[2 * i] = hex_digits[byte >> 4];
-    retval[2 * i + 1] = hex_digits[byte & 0xf];
-  }
-  retval[data_len * 2] = 0;
-
-  return retval;
-}
-
-guint8 *
-ephy_sync_crypto_decode_hex (const char *hex)
-{
-  guint8 *retval;
-
-  g_return_val_if_fail (hex, NULL);
-
-  retval = g_malloc (strlen (hex) / 2);
-  for (gsize i = 0, j = 0; i < strlen (hex); i += 2, j++)
-    sscanf (hex + i, "%2hhx", retval + j);
-
-  return retval;
-}
-
-char *
-ephy_sync_crypto_get_random_sync_id (void)
-{
-  char *id;
-  char *base64;
-  guint8 *bytes;
-  gsize bytes_len;
-
-  /* The sync id is a base64-urlsafe string. Base64 uses 4 chars to represent 3 bytes,
-   * therefore we need ceil(len * 3 / 4) bytes to cover the requested length. */
-  bytes_len = (SYNC_ID_LEN + 3) / 4 * 3;
-  bytes = g_malloc (bytes_len);
-
-  ephy_sync_crypto_random_bytes_gen (NULL, bytes_len, bytes);
-  base64 = ephy_sync_crypto_base64_urlsafe_encode (bytes, bytes_len, FALSE);
-  id = g_strndup (base64, SYNC_ID_LEN);
-
-  g_free (base64);
-  g_free (bytes);
-
-  return id;
 }

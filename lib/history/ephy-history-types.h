@@ -71,12 +71,15 @@ typedef struct _EphyHistoryURL
   int id;
   char* url;
   char* title;
+  char *sync_id;
   int visit_count;
   int typed_count;
   gint64 last_visit_time; /* Microseconds */
   gint64 thumbnail_time;  /* Seconds */
   gboolean hidden;
   EphyHistoryHost *host;
+  gboolean notify_visit;
+  gboolean notify_delete;
 } EphyHistoryURL;
 
 typedef struct _EphyHistoryPageVisit

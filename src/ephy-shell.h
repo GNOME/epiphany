@@ -25,6 +25,7 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed.h"
+#include "ephy-history-manager.h"
 #include "ephy-password-manager.h"
 #include "ephy-session.h"
 #include "ephy-sync-service.h"
@@ -104,6 +105,8 @@ GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
 EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
 
 EphyPasswordManager *ephy_shell_get_password_manager     (EphyShell *shell);
+
+EphyHistoryManager *ephy_shell_get_history_manager       (EphyShell *shell);
 
 EphySyncService *ephy_shell_get_sync_service             (EphyShell *shell);
 

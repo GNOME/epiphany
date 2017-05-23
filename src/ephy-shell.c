@@ -57,6 +57,7 @@ struct _EphyShell {
   GObject *lockdown;
   EphyBookmarksManager *bookmarks_manager;
   EphyPasswordManager *password_manager;
+  EphyHistoryManager *history_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *history_dialog;
   GObject *prefs_dialog;
@@ -354,6 +355,9 @@ ephy_shell_startup (GApplication *application)
     if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED))
       ephy_sync_service_register_manager (ephy_shell->sync_service,
                                           EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (ephy_shell)));
+    if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_ENABLED))
+      ephy_sync_service_register_manager (ephy_shell->sync_service,
+                                          EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (ephy_shell)));
 
     gtk_application_set_app_menu (GTK_APPLICATION (application),
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
@@ -624,6 +628,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->sync_service);
   g_clear_object (&shell->bookmarks_manager);
   g_clear_object (&shell->password_manager);
+  g_clear_object (&shell->history_manager);
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
   shell->open_uris_idle_ids = NULL;
@@ -827,6 +832,31 @@ ephy_shell_get_password_manager (EphyShell *shell)
     shell->password_manager = ephy_password_manager_new ();
 
   return shell->password_manager;
+}
+
+/**
+ * ephy_shell_get_history_manager:
+ * @shell: the #EphyShell
+ *
+ * Returns the history manager.
+ *
+ * Return value: (transfer none): An #EphyHistoryManager.
+ */
+EphyHistoryManager *
+ephy_shell_get_history_manager (EphyShell *shell)
+{
+  EphyEmbedShell *embed_shell;
+  EphyHistoryService *service;
+
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->history_manager == NULL) {
+    embed_shell = ephy_embed_shell_get_default ();
+    service = ephy_embed_shell_get_global_history_service (embed_shell);
+    shell->history_manager = ephy_history_manager_new (service);
+  }
+
+  return shell->history_manager;
 }
 
 /**
