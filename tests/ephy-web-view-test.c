@@ -406,10 +406,9 @@ test_ephy_web_view_provisional_load_failure_updates_back_forward_list (void)
 }
 
 static void
-visit_url_cb (EphyHistoryService  *service,
-              const char          *url,
-              EphyHistoryPageVisit visit_type,
-              gpointer             user_data)
+visit_url_cb (EphyHistoryService *service,
+              EphyHistoryURL     *url,
+              gpointer            user_data)
 {
   /* We are only loading an error page, this code should never be
    * reached. */

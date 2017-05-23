@@ -58,8 +58,9 @@ ephy_synchronizable_manager_default_init (EphySynchronizableManagerInterface *if
                   EPHY_TYPE_SYNCHRONIZABLE_MANAGER,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1,
-                  EPHY_TYPE_SYNCHRONIZABLE);
+                  G_TYPE_NONE, 2,
+                  EPHY_TYPE_SYNCHRONIZABLE,
+                  G_TYPE_BOOLEAN);
 }
 
 /**

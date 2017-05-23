@@ -27,6 +27,7 @@
 #include "ephy-embed-container.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
+#include "ephy-sync-utils.h"
 
 struct _EphyAddBookmarkPopover {
   GtkPopover     parent_instance;
@@ -207,7 +208,7 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
 
   bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
   if (!bookmark) {
-    char *id = ephy_sync_crypto_get_random_sync_id ();
+    char *id = ephy_sync_utils_get_random_sync_id ();
     bookmark = ephy_bookmark_new (address,
                                   ephy_embed_get_title (embed),
                                   g_sequence_new (g_free),

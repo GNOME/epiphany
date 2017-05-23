@@ -1765,7 +1765,10 @@ load_changed_cb (WebKitWebView  *web_view,
 
         ephy_history_service_visit_url (view->history_service,
                                         history_uri,
-                                        view->visit_type);
+                                        NULL,
+                                        g_get_real_time (),
+                                        view->visit_type,
+                                        TRUE);
 
         g_free (history_uri);
       }

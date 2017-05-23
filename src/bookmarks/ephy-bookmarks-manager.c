@@ -26,6 +26,7 @@
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
 #include "ephy-settings.h"
+#include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
 
 #include <string.h>
@@ -341,7 +342,7 @@ ephy_bookmarks_manager_add_bookmark (EphyBookmarksManager *self,
   g_return_if_fail (EPHY_IS_BOOKMARK (bookmark));
 
   ephy_bookmarks_manager_add_bookmark_internal (self, bookmark, TRUE);
-  g_signal_emit_by_name (self, "synchronizable-modified", bookmark);
+  g_signal_emit_by_name (self, "synchronizable-modified", bookmark, FALSE);
 }
 
 void
@@ -358,7 +359,7 @@ ephy_bookmarks_manager_add_bookmarks (EphyBookmarksManager *self,
     EphyBookmark *bookmark = g_sequence_get (iter);
 
     ephy_bookmarks_manager_add_bookmark_internal (self, bookmark, FALSE);
-    g_signal_emit_by_name (self, "synchronizable-modified", bookmark);
+    g_signal_emit_by_name (self, "synchronizable-modified", bookmark, FALSE);
   }
 
   ephy_bookmarks_manager_save_to_file_async (self, NULL,
@@ -781,7 +782,7 @@ ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
         ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), timestamp);
       } else {
         /* Same id, different url. Keep both and upload local one with new id. */
-        char *new_id = ephy_sync_crypto_get_random_sync_id ();
+        char *new_id = ephy_sync_utils_get_random_sync_id ();
         ephy_bookmark_set_id (bookmark, new_id);
         ephy_bookmarks_manager_add_bookmark_internal (self, l->data, FALSE);
         g_hash_table_add (dont_upload, g_strdup (id));
@@ -918,7 +919,7 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
                                                              remotes_updated,
                                                              remotes_deleted);
 
-  callback (to_upload, user_data);
+  callback (to_upload, FALSE, user_data);
 }
 
 static void

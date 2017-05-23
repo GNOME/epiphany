@@ -127,10 +127,13 @@ ephy_history_url_new (const char *url, const char *title, int visit_count, int t
   history_url->id = -1;
   history_url->url = g_strdup (url);
   history_url->title = g_strdup (title);
+  history_url->sync_id = NULL;
   history_url->visit_count = visit_count;
   history_url->typed_count = typed_count;
   history_url->last_visit_time = last_visit_time;
   history_url->host = NULL;
+  history_url->notify_visit = TRUE;
+  history_url->notify_delete = TRUE;
   return history_url;
 }
 
@@ -147,9 +150,12 @@ ephy_history_url_copy (EphyHistoryURL *url)
                                url->typed_count,
                                url->last_visit_time);
   copy->id = url->id;
+  copy->sync_id = g_strdup (url->sync_id);
   copy->hidden = url->hidden;
   copy->host = ephy_history_host_copy (url->host);
   copy->thumbnail_time = url->thumbnail_time;
+  copy->notify_visit = url->notify_visit;
+  copy->notify_delete = url->notify_delete;
 
   return copy;
 }
@@ -162,6 +168,7 @@ ephy_history_url_free (EphyHistoryURL *url)
 
   g_free (url->url);
   g_free (url->title);
+  g_free (url->sync_id);
   ephy_history_host_free (url->host);
   g_slice_free1 (sizeof (EphyHistoryURL), url);
 }

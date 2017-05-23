@@ -419,7 +419,7 @@ ephy_bookmark_properties_grid_finalize (GObject *object)
   EphyBookmarkPropertiesGrid *self = EPHY_BOOKMARK_PROPERTIES_GRID (object);
 
   if (self->bookmark_is_modified && !self->bookmark_is_removed)
-    g_signal_emit_by_name (self->manager, "synchronizable-modified", self->bookmark);
+    g_signal_emit_by_name (self->manager, "synchronizable-modified", self->bookmark, FALSE);
 
   ephy_bookmarks_manager_save_to_file_async (self->manager, NULL,
                                              ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
