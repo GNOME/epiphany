@@ -62,10 +62,56 @@ struct _EphyPasswordsDialog {
 
 G_DEFINE_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, GTK_TYPE_DIALOG)
 
+enum {
+  PROP_0,
+  PROP_PASSWORD_MANAGER,
+  LAST_PROP
+};
+
+static GParamSpec *obj_properties[LAST_PROP];
+
+static void
+ephy_passwords_dialog_set_property (GObject      *object,
+                                    guint         prop_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
+{
+  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
+
+  switch (prop_id) {
+    case PROP_PASSWORD_MANAGER:
+      g_clear_object (&dialog->manager);
+      dialog->manager = g_object_ref (g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
+}
+
+static void
+ephy_passwords_dialog_get_property (GObject    *object,
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
+{
+  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
+
+  switch (prop_id) {
+    case PROP_PASSWORD_MANAGER:
+      g_value_set_object (value, dialog->manager);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
 static void
 ephy_passwords_dialog_dispose (GObject *object)
 {
   EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
+
+  g_clear_object (&dialog->manager);
 
   g_free (dialog->search_text);
   dialog->search_text = NULL;
@@ -313,7 +359,18 @@ ephy_passwords_dialog_class_init (EphyPasswordsDialogClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->set_property = ephy_passwords_dialog_set_property;
+  object_class->get_property = ephy_passwords_dialog_get_property;
   object_class->dispose = ephy_passwords_dialog_dispose;
+
+  obj_properties[PROP_PASSWORD_MANAGER] =
+    g_param_spec_object ("password-manager",
+                         "Password manager",
+                         "Password Manager",
+                         EPHY_TYPE_PASSWORD_MANAGER,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/passwords-dialog.ui");
@@ -462,12 +519,8 @@ ephy_passwords_dialog_init (EphyPasswordsDialog *dialog)
 EphyPasswordsDialog *
 ephy_passwords_dialog_new (EphyPasswordManager *manager)
 {
-  EphyPasswordsDialog *dialog;
-
-  dialog = EPHY_PASSWORDS_DIALOG (g_object_new (EPHY_TYPE_PASSWORDS_DIALOG,
-                                                "use-header-bar", TRUE,
-                                                NULL));
-  dialog->manager = manager;
-
-  return dialog;
+  return EPHY_PASSWORDS_DIALOG (g_object_new (EPHY_TYPE_PASSWORDS_DIALOG,
+                                              "password-manager", manager,
+                                              "use-header-bar", TRUE,
+                                              NULL));
 }
