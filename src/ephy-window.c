@@ -1270,9 +1270,9 @@ action_activate_cb (GtkAction *action, gpointer user_data)
 }
 
 static WebKitContextMenuItem *
-webkit_context_menu_item_new_from_gaction_with_parameter (GAction    *action,
-                                                          const char *label,
-                                                          GVariant   *parameter)
+ephy_webkit_context_menu_item_new_from_gaction_with_parameter (GAction    *action,
+                                                               const char *label,
+                                                               GVariant   *parameter)
 {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -1304,10 +1304,10 @@ webkit_context_menu_item_new_from_gaction_with_parameter (GAction    *action,
 }
 
 static WebKitContextMenuItem *
-webkit_context_menu_item_new_from_gaction (GAction    *action,
-                                           const char *label)
+ephy_webkit_context_menu_item_new_from_gaction (GAction    *action,
+                                                const char *label)
 {
-  return webkit_context_menu_item_new_from_gaction_with_parameter (action, label, NULL);
+  return ephy_webkit_context_menu_item_new_from_gaction_with_parameter (action, label, NULL);
 }
 
 static char *
@@ -1382,14 +1382,14 @@ add_action_to_context_menu (WebKitContextMenu *context_menu,
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group), name);
   label = g_hash_table_lookup (window->action_labels, name);
   if (strcmp (label, "search-selection-placeholder") != 0) {
-    webkit_context_menu_append (context_menu, webkit_context_menu_item_new_from_gaction (action, _(label)));
+    webkit_context_menu_append (context_menu, ephy_webkit_context_menu_item_new_from_gaction (action, _(label)));
   } else {
     search_term = g_variant_get_string (target, NULL);
     search_label = format_search_label (search_term);
     webkit_context_menu_append (context_menu,
-                                webkit_context_menu_item_new_from_gaction_with_parameter (action,
-                                                                                          search_label,
-                                                                                          g_variant_new_string (search_term)));
+                                ephy_webkit_context_menu_item_new_from_gaction_with_parameter (action,
+                                                                                               search_label,
+                                                                                               g_variant_new_string (search_term)));
     g_free (search_label);
   }
 }
