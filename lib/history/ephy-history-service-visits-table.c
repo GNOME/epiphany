@@ -68,7 +68,7 @@ ephy_history_service_add_visit_row (EphyHistoryService *self, EphyHistoryPageVis
   }
 
   if (ephy_sqlite_statement_bind_int (statement, 0, visit->url->id, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 1, visit->visit_time, &error) == FALSE ||
+      ephy_sqlite_statement_bind_int64 (statement, 1, visit->visit_time, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 2, visit->visit_type, &error) == FALSE) {
     g_warning ("Could not build visits table addition statement: %s", error->message);
     g_error_free (error);
@@ -92,7 +92,7 @@ create_page_visit_from_statement (EphySQLiteStatement *statement)
 {
   EphyHistoryPageVisit *visit =
     ephy_history_page_visit_new (NULL,
-                                 ephy_sqlite_statement_get_column_as_int (statement, 1),
+                                 ephy_sqlite_statement_get_column_as_int64 (statement, 1),
                                  ephy_sqlite_statement_get_column_as_int (statement, 2));
   visit->url->id = ephy_sqlite_statement_get_column_as_int (statement, 0);
   return visit;
@@ -157,7 +157,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
   }
 
   if (query->from >= 0) {
-    if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->from, &error) == FALSE) {
+    if (ephy_sqlite_statement_bind_int64 (statement, i++, query->from, &error) == FALSE) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
@@ -165,7 +165,7 @@ ephy_history_service_find_visit_rows (EphyHistoryService *self, EphyHistoryQuery
     }
   }
   if (query->to >= 0) {
-    if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->to, &error) == FALSE) {
+    if (ephy_sqlite_statement_bind_int64 (statement, i++, query->to, &error) == FALSE) {
       g_warning ("Could not build urls table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);

@@ -697,16 +697,15 @@ convert_date_data_func (GtkTreeViewColumn *column,
 {
   int col_id = GPOINTER_TO_INT (user_data);
   gint64 value;
-  time_t time;
   char *friendly;
 
   gtk_tree_model_get (model, iter,
                       col_id,
                       &value,
                       -1);
-  time = (time_t)value;
 
-  friendly = ephy_time_helpers_utf_friendly_time (time);
+  /* Convert back to seconds. */
+  friendly = ephy_time_helpers_utf_friendly_time (value / 1000000);
   g_object_set (renderer, "text", friendly, NULL);
   g_free (friendly);
 }

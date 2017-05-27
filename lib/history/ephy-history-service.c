@@ -1317,7 +1317,7 @@ ephy_history_service_visit_url (EphyHistoryService      *self,
   g_signal_emit (self, signals[VISIT_URL], 0, url, visit_type);
 
   visit = ephy_history_page_visit_new (url,
-                                       time (NULL),
+                                       g_get_real_time (),
                                        visit_type);
   ephy_history_service_add_visit (self,
                                   visit, NULL, NULL, NULL);

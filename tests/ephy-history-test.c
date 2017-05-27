@@ -419,7 +419,7 @@ perform_complex_url_query_with_time_range (EphyHistoryService *service,
   query->substring_list = g_list_prepend (query->substring_list, (gpointer)"k");
   query->limit = 1;
   query->sort_type = EPHY_HISTORY_SORT_MOST_VISITED;
-  query->from = 500;
+  query->from = 500 * 1000000;  /* Microseconds */
 
   /* The expected result. */
   url = ephy_history_url_new ("http://www.webkitgtk.org",
