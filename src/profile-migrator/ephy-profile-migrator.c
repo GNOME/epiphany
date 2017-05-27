@@ -1070,6 +1070,99 @@ out:
 }
 
 static void
+migrate_history_to_firefox_sync_history (void)
+{
+  EphySQLiteConnection *history_db = NULL;
+  EphySQLiteStatement *statement = NULL;
+  GSList *ids = NULL;
+  GError *error = NULL;
+  char *history_filename;
+  const char *sql_query;
+  int id;
+
+  history_filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
+  if (!g_file_test (history_filename, G_FILE_TEST_EXISTS)) {
+    LOG ("There is no history to migrate...");
+    goto out;
+  }
+
+  history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE);
+  ephy_sqlite_connection_open (history_db, history_filename, &error);
+  if (error) {
+    g_warning ("Failed to open history database: %s\n", error->message);
+    goto out;
+  }
+
+  /* Get the ID of each row in table. */
+  sql_query = "SELECT DISTINCT urls.id FROM urls ORDER BY urls.id";
+  statement = ephy_sqlite_connection_create_statement (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to create SQLite statement: %s", error->message);
+    goto out;
+  }
+
+  while (ephy_sqlite_statement_step (statement, &error)) {
+    if (error) {
+      g_warning ("Error in ephy_sqlite_statement_step: %s", error->message);
+      g_error_free (error);
+      error = NULL;
+    } else {
+      id = ephy_sqlite_statement_get_column_as_int (statement, 0);
+      ids = g_slist_prepend (ids, GINT_TO_POINTER (id));
+    }
+  }
+
+  /* Add new sync_id column. */
+  sql_query = "ALTER TABLE urls ADD COLUMN sync_id LONGVARCAR";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to add new column to urls table: %s", error->message);
+    goto out;
+  }
+
+  /* Set sync_id for each row. */
+  for (GSList *l = ids; l && l->data; l = l->next) {
+    char *sync_id = ephy_sync_crypto_get_random_sync_id ();
+    char *sql = g_strdup_printf ("UPDATE urls SET sync_id = \"%s\" WHERE id=%d",
+                                 sync_id, GPOINTER_TO_INT (l->data));
+
+    ephy_sqlite_connection_execute (history_db, sql, &error);
+    if (error) {
+      g_warning ("Failed to set sync ID: %s", error->message);
+      g_error_free (error);
+      error = NULL;
+    }
+
+    g_free (sync_id);
+    g_free (sql);
+  }
+
+  /* Update visit timestamps to microseconds. */
+  sql_query = "UPDATE urls SET last_visit_time = last_visit_time * 1000000";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to update last visit time to microseconds: %s", error->message);
+    goto out;
+  }
+
+  sql_query = "UPDATE visits SET visit_time = visit_time * 1000000";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error)
+    g_warning ("Failed to update visit time to microseconds: %s", error->message);
+
+out:
+  g_free (history_filename);
+  if (history_db)
+    g_object_unref (history_db);
+  if (statement)
+    g_object_unref (statement);
+  if (ids)
+    g_slist_free (ids);
+  if (error)
+    g_error_free (error);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1102,6 +1195,7 @@ const EphyProfileMigrator migrators[] = {
   /* 17 */ migrate_search_engines,
   /* 18 */ migrate_icon_database,
   /* 19 */ migrate_passwords_to_firefox_sync_passwords,
+  /* 20 */ migrate_history_to_firefox_sync_history,
 };
 
 static gboolean

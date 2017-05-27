@@ -296,7 +296,7 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
     return NULL;
   }
   if (query->from > 0) {
-    if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->from, &error) == FALSE) {
+    if (ephy_sqlite_statement_bind_int64 (statement, i++, query->from, &error) == FALSE) {
       g_warning ("Could not build hosts table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
@@ -304,7 +304,7 @@ ephy_history_service_find_host_rows (EphyHistoryService *self, EphyHistoryQuery 
     }
   }
   if (query->to > 0) {
-    if (ephy_sqlite_statement_bind_int (statement, i++, (int)query->to, &error) == FALSE) {
+    if (ephy_sqlite_statement_bind_int64 (statement, i++, query->to, &error) == FALSE) {
       g_warning ("Could not build hosts table query statement: %s", error->message);
       g_error_free (error);
       g_object_unref (statement);
