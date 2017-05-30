@@ -57,7 +57,7 @@
 #endif
 
 #define DOWNLOAD_BUTTON_WIDTH   8
-#define FXA_IFRAME_URL "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1"
+#define FXA_IFRAME_URL "https://accounts.firefox.com/signin?service=sync&context=fx_desktop_v2"
 
 enum {
   COL_LANG_NAME,
@@ -327,30 +327,42 @@ poll_fxa_server (gpointer user_data)
 }
 
 static void
-inject_data_to_server (PrefsDialog *dialog,
-                       const char  *type,
-                       const char  *status,
-                       const char  *data)
+sync_send_message_to_content (PrefsDialog *dialog,
+                              const char  *channel_id,
+                              const char  *command,
+                              gint64       message_id,
+                              JsonObject  *data)
 {
-  char *json;
+  JsonNode *node;
+  JsonObject *detail;
+  JsonObject *message;
+  char *detail_str;
   char *script;
+  const char *type;
 
-  if (data == NULL)
-    json = g_strdup_printf ("{'type': '%s', 'content': {'status': '%s'}}",
-                            type, status);
-  else
-    json = g_strdup_printf ("{'type': '%s', 'content': {'status': '%s', 'data': %s}}",
-                            type, status, data);
+  message = json_object_new ();
+  json_object_set_string_member (message, "command", command);
+  json_object_set_int_member (message, "messageId", message_id);
+  json_object_set_object_member (message, "data", json_object_ref (data));
+  detail = json_object_new ();
+  json_object_set_string_member (detail, "id", channel_id);
+  json_object_set_object_member (detail, "message", message);
+  node = json_node_new (JSON_NODE_OBJECT);
+  json_node_set_object (node, detail);
 
-  script = g_strdup_printf ("window.postMessage(%s, '%s');", json, FXA_IFRAME_URL);
+  type = "WebChannelMessageToContent";
+  detail_str = json_to_string (node, FALSE);
+  script = g_strdup_printf ("let e = new window.CustomEvent(\"%s\", {detail: %s});"
+                            "window.dispatchEvent(e);",
+                            type, detail_str);
 
-  /* No callback, we don't expect any response from the server. */
-  webkit_web_view_run_javascript (dialog->fxa_web_view,
-                                  script,
-                                  NULL, NULL, NULL);
+  /* We don't expect any response from the server. */
+  webkit_web_view_run_javascript (dialog->fxa_web_view, script, NULL, NULL, NULL);
 
-  g_free (json);
   g_free (script);
+  g_free (detail_str);
+  json_object_unref (detail);
+  json_node_unref (node);
 }
 
 static void
@@ -362,6 +374,7 @@ server_message_received_cb (WebKitUserContentManager *manager,
   JsonParser *parser;
   JsonObject *object;
   JsonObject *detail;
+  JsonObject *message;
   char *json_string;
   const char *type;
   const char *command;
@@ -373,23 +386,31 @@ server_message_received_cb (WebKitUserContentManager *manager,
   object = json_node_get_object (json_parser_get_root (parser));
   type = json_object_get_string_member (object, "type");
 
-  /* The only message type we can receive is FirefoxAccountsCommand. */
-  if (g_strcmp0 (type, "FirefoxAccountsCommand") != 0) {
+  /* The only message type we can receive is WebChannelMessageToChrome. */
+  if (g_strcmp0 (type, "WebChannelMessageToChrome") != 0) {
     g_warning ("Unknown command type: %s", type);
     goto out;
   }
 
   detail = json_object_get_object_member (object, "detail");
-  command = json_object_get_string_member (detail, "command");
+  message = json_object_get_object_member (detail, "message");
+  command = json_object_get_string_member (message, "command");
 
-  if (g_strcmp0 (command, "loaded") == 0) {
+  if (g_strcmp0 (command, "fxaccounts:loaded") == 0) {
     LOG ("Loaded Firefox Sign In iframe");
     gtk_widget_set_visible (dialog->sync_sign_in_details, FALSE);
-  } else if (g_strcmp0 (command, "can_link_account") == 0) {
+  } else if (g_strcmp0 (command, "fxaccounts:can_link_account") == 0) {
     /* We need to confirm a relink. */
-    inject_data_to_server (dialog, "message", "can_link_account", "{'ok': true}");
-  } else if (g_strcmp0 (command, "login") == 0) {
-    JsonObject *data = json_object_get_object_member (detail, "data");
+    JsonObject *data = json_object_new ();
+    json_object_set_boolean_member (data, "ok", TRUE);
+    sync_send_message_to_content (dialog,
+                                  json_object_get_string_member (detail, "id"),
+                                  "fxaccounts:can_link_account",
+                                  json_object_get_int_member (message, "messageId"),
+                                  data);
+    json_object_unref (data);
+  } else if (g_strcmp0 (command, "fxaccounts:login") == 0) {
+    JsonObject *data = json_object_get_object_member (message, "data");
     const char *email = json_object_get_string_member (data, "email");
     const char *uid = json_object_get_string_member (data, "uid");
     const char *sessionToken = json_object_get_string_member (data, "sessionToken");
@@ -400,8 +421,6 @@ server_message_received_cb (WebKitUserContentManager *manager,
     guint8 *respHMACkey;
     guint8 *respXORkey;
     char *text;
-
-    inject_data_to_server (dialog, "message", "login", NULL);
 
     /* Cannot retrieve the sync keys without keyFetchToken or unwrapBKey. */
     if (keyFetchToken == NULL || unwrapBKey == NULL) {
@@ -453,12 +472,8 @@ server_message_received_cb (WebKitUserContentManager *manager,
 
       g_free (bundle);
     }
-  } else if (g_strcmp0 (command, "session_status") == 0) {
-    /* We are not signed in at this time, which we signal by returning an error. */
-    inject_data_to_server (dialog, "message", "error", NULL);
-  } else if (g_strcmp0 (command, "sign_out") == 0) {
-    /* We are not signed in at this time. We should never get a sign out message! */
-    inject_data_to_server (dialog, "message", "error", NULL);
+  } else {
+    g_warning ("Unexepected command: %s", command);
   }
 
 out:
@@ -472,25 +487,25 @@ setup_fxa_sign_in_view (PrefsDialog *dialog)
   EphyEmbedShell *shell;
   WebKitWebContext *embed_context;
   WebKitWebContext *sync_context;
-  const char *js = "\"use strict\";"
-                   "function handleAccountsCommand(evt) {"
-                   "  let j = {type: evt.type, detail: evt.detail};"
-                   "  window.webkit.messageHandlers.accountsCommandHandler.postMessage(JSON.stringify(j));"
-                   "};"
-                   "window.addEventListener(\"FirefoxAccountsCommand\", handleAccountsCommand);";
+  const char *script;
 
-  dialog->fxa_script = webkit_user_script_new (js,
+  script = "function handleToChromeMessage(evt) {"
+           "  let e = JSON.stringify({type: evt.type, detail: evt.detail});"
+           "  window.webkit.messageHandlers.toChromeMessageHandler.postMessage(e);"
+           "};"
+           "window.addEventListener(\"WebChannelMessageToChrome\", handleToChromeMessage);";
+  dialog->fxa_script = webkit_user_script_new (script,
                                                WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
                                                WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
                                                NULL, NULL);
   dialog->fxa_manager = webkit_user_content_manager_new ();
   webkit_user_content_manager_add_script (dialog->fxa_manager, dialog->fxa_script);
   g_signal_connect (dialog->fxa_manager,
-                    "script-message-received::accountsCommandHandler",
+                    "script-message-received::toChromeMessageHandler",
                     G_CALLBACK (server_message_received_cb),
                     dialog);
   webkit_user_content_manager_register_script_message_handler (dialog->fxa_manager,
-                                                               "accountsCommandHandler");
+                                                               "toChromeMessageHandler");
 
   shell = ephy_embed_shell_get_default ();
   embed_context = ephy_embed_shell_get_web_context (shell);
