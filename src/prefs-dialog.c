@@ -1678,25 +1678,6 @@ setup_sync_page (PrefsDialog *dialog)
     g_free (user);
   }
 
-  g_signal_connect_object (dialog->sync_service, "sync-secrets-store-finished",
-                           G_CALLBACK (sync_secrets_store_finished_cb),
-                           dialog, 0);
-  g_signal_connect_object (dialog->sync_service, "sync-sign-in-error",
-                           G_CALLBACK (sync_sign_in_error_cb),
-                           dialog, 0);
-  g_signal_connect_object (dialog->sync_service, "sync-finished",
-                           G_CALLBACK (sync_finished_cb),
-                           dialog, 0);
-  g_signal_connect_object (dialog->sync_bookmarks_checkbutton, "toggled",
-                           G_CALLBACK (sync_collection_toggled_cb),
-                           dialog, 0);
-  g_signal_connect_object (dialog->sync_passwords_checkbutton, "toggled",
-                           G_CALLBACK (sync_collection_toggled_cb),
-                           dialog, 0);
-  g_signal_connect_object (dialog->sync_history_checkbutton, "toggled",
-                           G_CALLBACK (sync_collection_toggled_cb),
-                           dialog, 0);
-
   g_settings_bind (sync_settings,
                    EPHY_PREFS_SYNC_WITH_FIREFOX,
                    dialog->sync_with_firefox_checkbutton,
@@ -1753,6 +1734,25 @@ setup_sync_page (PrefsDialog *dialog)
                                 sync_frequency_set_mapping,
                                 GINT_TO_POINTER (60),
                                 NULL);
+
+  g_signal_connect_object (dialog->sync_service, "sync-secrets-store-finished",
+                           G_CALLBACK (sync_secrets_store_finished_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_service, "sync-sign-in-error",
+                           G_CALLBACK (sync_sign_in_error_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_service, "sync-finished",
+                           G_CALLBACK (sync_finished_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_bookmarks_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_passwords_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_history_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           dialog, 0);
 }
 
 static void
