@@ -184,11 +184,15 @@ sync_collection_toggled_cb (GtkToggleButton *button,
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (ephy_shell_get_default ()));
   else if (GTK_WIDGET (button) == dialog->sync_history_checkbutton)
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (ephy_shell_get_default ()));
-
-  if (gtk_toggle_button_get_active (button))
-    ephy_sync_service_register_manager (dialog->sync_service, manager);
   else
+    g_assert_not_reached ();
+
+  if (gtk_toggle_button_get_active (button)) {
+    ephy_sync_service_register_manager (dialog->sync_service, manager);
+  } else {
     ephy_sync_service_unregister_manager (dialog->sync_service, manager);
+    ephy_synchronizable_manager_set_is_initial_sync (manager, TRUE);
+  }
 }
 
 static void
