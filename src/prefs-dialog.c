@@ -196,6 +196,22 @@ sync_collection_toggled_cb (GtkToggleButton *button,
 }
 
 static void
+sync_with_firefox_toggled_cb (GtkToggleButton *button,
+                              PrefsDialog     *dialog)
+{
+  gboolean button_is_active = gtk_toggle_button_get_active (button);
+  gboolean sync_with_firefox = g_settings_get_boolean (EPHY_SETTINGS_SYNC,
+                                                       EPHY_PREFS_SYNC_WITH_FIREFOX);
+
+  /* Make sure this is called only when the button was toggled by the user. */
+  g_assert (button_is_active != sync_with_firefox);
+
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_INITIAL, TRUE);
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_INITIAL, TRUE);
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_INITIAL, TRUE);
+}
+
+static void
 sync_finished_cb (EphySyncService *service,
                   PrefsDialog     *dialog)
 {
@@ -1764,6 +1780,9 @@ setup_sync_page (PrefsDialog *dialog)
                            dialog, 0);
   g_signal_connect_object (dialog->sync_service, "sync-finished",
                            G_CALLBACK (sync_finished_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_with_firefox_checkbutton, "toggled",
+                           G_CALLBACK (sync_with_firefox_toggled_cb),
                            dialog, 0);
   g_signal_connect_object (dialog->sync_bookmarks_checkbutton, "toggled",
                            G_CALLBACK (sync_collection_toggled_cb),
