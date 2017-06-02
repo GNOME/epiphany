@@ -313,6 +313,8 @@ static void
 ephy_shell_startup (GApplication *application)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
+  EphyShell *shell = EPHY_SHELL (application);
+  EphySynchronizableManager *manager;
   EphyEmbedShellMode mode;
   GtkBuilder *builder;
 
@@ -339,25 +341,29 @@ ephy_shell_startup (GApplication *application)
       g_action_map_add_action_entries (G_ACTION_MAP (application),
                                        app_normal_mode_entries, G_N_ELEMENTS (app_normal_mode_entries),
                                        application);
-      g_object_bind_property (G_OBJECT (ephy_shell_get_session (EPHY_SHELL (application))),
+      g_object_bind_property (G_OBJECT (ephy_shell_get_session (shell)),
                               "can-undo-tab-closed",
                               g_action_map_lookup_action (G_ACTION_MAP (application),
                                                           "reopen-closed-tab"),
                               "enabled",
                               G_BINDING_SYNC_CREATE);
-    }
 
-    /* Create the sync service and register synchronizable managers. */
-    ephy_shell->sync_service = ephy_sync_service_new (TRUE);
-    if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_ENABLED))
-      ephy_sync_service_register_manager (ephy_shell->sync_service,
-                                          EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (ephy_shell)));
-    if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED))
-      ephy_sync_service_register_manager (ephy_shell->sync_service,
-                                          EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (ephy_shell)));
-    if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_ENABLED))
-      ephy_sync_service_register_manager (ephy_shell->sync_service,
-                                          EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (ephy_shell)));
+      /* Register the synchronizable managers. */
+      if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_ENABLED)) {
+        manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
+        ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
+      }
+
+      if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED)) {
+        manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
+        ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
+      }
+
+      if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_ENABLED)) {
+        manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
+        ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
+      }
+    }
 
     gtk_application_set_app_menu (GTK_APPLICATION (application),
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
@@ -792,6 +798,9 @@ EphySyncService *
 ephy_shell_get_sync_service (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->sync_service == NULL)
+    shell->sync_service = ephy_sync_service_new (TRUE);
 
   return shell->sync_service;
 }

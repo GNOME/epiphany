@@ -62,6 +62,8 @@ enum {
 struct _PrefsDialog {
   GtkDialog parent_instance;
 
+  GtkWidget *notebook;
+
   /* general */
   GtkWidget *homepage_box;
   GtkWidget *new_tab_homepage_radiobutton;
@@ -166,8 +168,10 @@ prefs_dialog_finalize (GObject *object)
     g_object_unref (dialog->fxa_manager);
   }
 
-  if (ephy_sync_service_is_signed_in (dialog->sync_service) && !dialog->sync_was_signed_in)
-    ephy_sync_service_start_periodical_sync (dialog->sync_service);
+  if (dialog->sync_service != NULL) {
+    if (ephy_sync_service_is_signed_in (dialog->sync_service) && !dialog->sync_was_signed_in)
+      ephy_sync_service_start_periodical_sync (dialog->sync_service);
+  }
 
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
 }
@@ -597,6 +601,9 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-dialog.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
+
   /* general */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, homepage_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, new_tab_homepage_radiobutton);
@@ -1797,7 +1804,10 @@ prefs_dialog_init (PrefsDialog *dialog)
   setup_fonts_page (dialog);
   setup_stored_data_page (dialog);
   setup_language_page (dialog);
-  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION)
+
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
+  else
     setup_sync_page (dialog);
 
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
