@@ -30,32 +30,9 @@
 
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
-#include <libsecret/secret.h>
-#include <libsoup/soup.h>
 #include <string.h>
 
-#define TOKEN_SERVER_URL "https://token.services.mozilla.com/1.0/sync/1.5"
-#define FIREFOX_ACCOUNTS_SERVER_URL "https://api.accounts.firefox.com/v1/"
-
 #define STORAGE_VERSION 5
-
-#define ACCOUNT_KEY "firefox_account"
-
-static const SecretSchema *
-ephy_sync_service_get_secret_schema (void)
-{
-  static const SecretSchema schema = {
-    "org.epiphany.SyncSecrets", SECRET_SCHEMA_NONE,
-    {
-      { ACCOUNT_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
-      { "NULL", 0 },
-    }
-  };
-
-  return &schema;
-}
-
-#define EPHY_SYNC_SECRET_SCHEMA (ephy_sync_service_get_secret_schema ())
 
 struct _EphySyncService {
   GObject      parent_instance;
@@ -425,7 +402,7 @@ ephy_sync_service_fxa_hawk_post_async (EphySyncService     *self,
   g_assert (key);
   g_assert (request_body);
 
-  url = g_strdup_printf ("%s%s", FIREFOX_ACCOUNTS_SERVER_URL, endpoint);
+  url = g_strdup_printf ("%s/%s", FIREFOX_ACCOUNTS_SERVER_URL, endpoint);
   msg = soup_message_new (SOUP_METHOD_POST, url);
   soup_message_set_request (msg, content_type, SOUP_MEMORY_COPY,
                             request_body, strlen (request_body));
@@ -467,7 +444,7 @@ ephy_sync_service_fxa_hawk_get_async (EphySyncService     *self,
   g_assert (id);
   g_assert (key);
 
-  url = g_strdup_printf ("%s%s", FIREFOX_ACCOUNTS_SERVER_URL, endpoint);
+  url = g_strdup_printf ("%s/%s", FIREFOX_ACCOUNTS_SERVER_URL, endpoint);
   msg = soup_message_new (SOUP_METHOD_GET, url);
   hawk_header = ephy_sync_crypto_compute_hawk_header (url, "GET", id,
                                                       key, key_len,
@@ -660,7 +637,7 @@ ephy_sync_service_destroy_session (EphySyncService *self,
     session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
   g_assert (session_token);
 
-  url = g_strdup_printf ("%ssession/destroy", FIREFOX_ACCOUNTS_SERVER_URL);
+  url = g_strdup_printf ("%s/session/destroy", FIREFOX_ACCOUNTS_SERVER_URL);
   ephy_sync_crypto_process_session_token (session_token, &token_id,
                                           &req_hmac_key, &request_key, 32);
   token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
@@ -775,34 +752,6 @@ out:
     g_error_free (error);
 }
 
-static char *
-get_audience (const char *url)
-{
-  SoupURI *uri;
-  const char *scheme;
-  const char *host;
-  char *audience;
-  char *port;
-
-  g_assert (url);
-
-  uri = soup_uri_new (url);
-  scheme = soup_uri_get_scheme (uri);
-  host = soup_uri_get_host (uri);
-  /* soup_uri_get_port returns the default port if URI does not have any port. */
-  port = g_strdup_printf (":%u", soup_uri_get_port (uri));
-
-  if (g_strstr_len (url, -1, port))
-    audience = g_strdup_printf ("%s://%s%s", scheme, host, port);
-  else
-    audience = g_strdup_printf ("%s://%s", scheme, host);
-
-  g_free (port);
-  soup_uri_free (uri);
-
-  return audience;
-}
-
 static void
 ephy_sync_service_obtain_storage_credentials (EphySyncService *self)
 {
@@ -818,7 +767,7 @@ ephy_sync_service_obtain_storage_credentials (EphySyncService *self)
   g_assert (self->certificate);
   g_assert (self->rsa_key_pair);
 
-  audience = get_audience (TOKEN_SERVER_URL);
+  audience = ephy_sync_utils_get_audience (TOKEN_SERVER_URL);
   assertion = ephy_sync_crypto_create_assertion (self->certificate, audience,
                                                  300, self->rsa_key_pair);
   key_b = ephy_sync_utils_decode_hex (ephy_sync_service_get_secret (self, secrets[MASTER_KEY]));
@@ -1644,7 +1593,7 @@ ephy_sync_service_store_secrets (EphySyncService *self)
   while (g_hash_table_iter_next (&iter, &key, &value))
     json_object_set_string_member (object, key, value);
   json_node_set_object (node, object);
-  json_string = json_to_string (node, FALSE);
+  json_string = json_to_string (node, TRUE);
 
   secret = secret_value_new (json_string, -1, "text/plain");
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
