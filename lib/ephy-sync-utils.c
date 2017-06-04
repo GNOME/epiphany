@@ -21,12 +21,27 @@
 #include "config.h"
 #include "ephy-sync-utils.h"
 
+#include <libsoup/soup.h>
 #include <stdio.h>
 #include <string.h>
 
 #define SYNC_ID_LEN 12
 
 static const char hex_digits[] = "0123456789abcdef";
+
+const SecretSchema *
+ephy_sync_utils_get_secret_schema (void)
+{
+  static const SecretSchema schema = {
+    "org.epiphany.SyncSecrets", SECRET_SCHEMA_NONE,
+    {
+      { ACCOUNT_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
+      { "NULL", 0 },
+    }
+  };
+
+  return &schema;
+}
 
 char *
 ephy_sync_utils_encode_hex (const guint8 *data,
@@ -159,6 +174,34 @@ ephy_sync_utils_generate_random_bytes (void   *random_ctx,
   fp = fopen ("/dev/urandom", "r");
   fread (out, sizeof (guint8), num_bytes, fp);
   fclose (fp);
+}
+
+char *
+ephy_sync_utils_get_audience (const char *url)
+{
+  SoupURI *uri;
+  const char *scheme;
+  const char *host;
+  char *audience;
+  char *port;
+
+  g_return_val_if_fail (url, NULL);
+
+  uri = soup_uri_new (url);
+  scheme = soup_uri_get_scheme (uri);
+  host = soup_uri_get_host (uri);
+  /* soup_uri_get_port returns the default port if URI does not have any port. */
+  port = g_strdup_printf (":%u", soup_uri_get_port (uri));
+
+  if (g_strstr_len (url, -1, port))
+    audience = g_strdup_printf ("%s://%s%s", scheme, host, port);
+  else
+    audience = g_strdup_printf ("%s://%s", scheme, host);
+
+  g_free (port);
+  soup_uri_free (uri);
+
+  return audience;
 }
 
 char *

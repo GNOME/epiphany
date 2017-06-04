@@ -1,4 +1,5 @@
 libephysync_sources = [
+  'debug/ephy-sync-debug.c',
   'ephy-history-manager.c',
   'ephy-history-record.c',
   'ephy-password-manager.c',
@@ -26,7 +27,8 @@ libephysync_includes = include_directories(
   '../history',
   '../widgets',
   '../..',
-  '../../embed'
+  '../../embed',
+  'debug'
 )
 
 libephysync = static_library('ephysync',
