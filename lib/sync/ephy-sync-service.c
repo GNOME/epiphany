@@ -1377,6 +1377,8 @@ ephy_sync_service_register_client_id (EphySyncService *self)
   json_object_set_string_member (payload, "application", "Epiphany");
   json_object_set_string_member (payload, "fxaDeviceId",
                                  ephy_sync_service_get_secret (self, secrets[UID]));
+  json_object_set_string_member (payload, "version", VERSION);
+  json_object_set_null_member (payload, "appPackage");
   json_node_set_object (node, payload);
   payload_clear = json_to_string (node, FALSE);
   bundle = ephy_sync_service_get_key_bundle (self, "clients");
