@@ -44,6 +44,7 @@
 #include "cookies-dialog.h"
 #include "languages.h"
 #include "passwords-dialog.h"
+#include "synced-tabs-dialog.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -125,11 +126,13 @@ struct _PrefsDialog {
   GtkWidget *sync_bookmarks_checkbutton;
   GtkWidget *sync_passwords_checkbutton;
   GtkWidget *sync_history_checkbutton;
+  GtkWidget *sync_open_tabs_checkbutton;
   GtkWidget *sync_frequency_5_min_radiobutton;
   GtkWidget *sync_frequency_15_min_radiobutton;
   GtkWidget *sync_frequency_30_min_radiobutton;
   GtkWidget *sync_frequency_60_min_radiobutton;
   GtkWidget *sync_now_button;
+  GtkWidget *synced_tabs_button;
   gboolean sync_was_signed_in;
 
   WebKitWebView *fxa_web_view;
@@ -181,15 +184,20 @@ sync_collection_toggled_cb (GtkToggleButton *button,
                             PrefsDialog     *dialog)
 {
   EphySynchronizableManager *manager = NULL;
+  EphyShell *shell = ephy_shell_get_default ();
 
-  if (GTK_WIDGET (button) == dialog->sync_bookmarks_checkbutton)
-    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (ephy_shell_get_default ()));
-  else if (GTK_WIDGET (button) == dialog->sync_passwords_checkbutton)
-    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (ephy_shell_get_default ()));
-  else if (GTK_WIDGET (button) == dialog->sync_history_checkbutton)
-    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (ephy_shell_get_default ()));
-  else
+  if (GTK_WIDGET (button) == dialog->sync_bookmarks_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
+  } else if (GTK_WIDGET (button) == dialog->sync_passwords_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
+  } else if (GTK_WIDGET (button) == dialog->sync_history_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
+  } else if (GTK_WIDGET (button) == dialog->sync_open_tabs_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
+    ephy_open_tabs_manager_clear_cache (EPHY_OPEN_TABS_MANAGER (manager));
+  } else {
     g_assert_not_reached ();
+  }
 
   if (gtk_toggle_button_get_active (button)) {
     ephy_sync_service_register_manager (dialog->sync_service, manager);
@@ -258,9 +266,8 @@ sync_secrets_store_finished_cb (EphySyncService *service,
                                 GError          *error,
                                 PrefsDialog     *dialog)
 {
-  EphyBookmarksManager *bookmarks_manager;
-  EphyPasswordManager *password_manager;
-  EphyHistoryManager *history_manager;
+  EphySynchronizableManager *manager;
+  EphyShell *shell = ephy_shell_get_default ();
 
   g_assert (EPHY_IS_SYNC_SERVICE (service));
   g_assert (EPHY_IS_PREFS_DIALOG (dialog));
@@ -288,16 +295,20 @@ sync_secrets_store_finished_cb (EphySyncService *service,
                            ephy_sync_service_get_sync_user (service));
 
     if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_ENABLED)) {
-      bookmarks_manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-      ephy_sync_service_register_manager (service, EPHY_SYNCHRONIZABLE_MANAGER (bookmarks_manager));
+      manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
+      ephy_sync_service_register_manager (service, manager);
     }
     if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED)) {
-      password_manager = ephy_shell_get_password_manager (ephy_shell_get_default ());
-      ephy_sync_service_register_manager (service, EPHY_SYNCHRONIZABLE_MANAGER (password_manager));
+      manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
+      ephy_sync_service_register_manager (service, manager);
     }
     if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_ENABLED)) {
-      history_manager = ephy_shell_get_history_manager (ephy_shell_get_default ());
-      ephy_sync_service_register_manager (service, EPHY_SYNCHRONIZABLE_MANAGER (history_manager));
+      manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
+      ephy_sync_service_register_manager (service, manager);
+    }
+    if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_ENABLED)) {
+      manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
+      ephy_sync_service_register_manager (service, manager);
     }
 
     g_free (text);
@@ -551,6 +562,20 @@ on_sync_sync_now_button_clicked (GtkWidget   *button,
 }
 
 static void
+on_sync_synced_tabs_button_clicked (GtkWidget   *button,
+                                    PrefsDialog *dialog)
+{
+  EphyOpenTabsManager *manager;
+  SyncedTabsDialog *synced_tabs_dialog;
+
+  manager = ephy_shell_get_open_tabs_manager (ephy_shell_get_default ());
+  synced_tabs_dialog = synced_tabs_dialog_new (manager);
+  gtk_window_set_transient_for (GTK_WINDOW (synced_tabs_dialog), GTK_WINDOW (dialog));
+  gtk_window_set_modal (GTK_WINDOW (synced_tabs_dialog), TRUE);
+  gtk_window_present (GTK_WINDOW (synced_tabs_dialog));
+}
+
+static void
 on_manage_cookies_button_clicked (GtkWidget   *button,
                                   PrefsDialog *dialog)
 {
@@ -657,17 +682,20 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_bookmarks_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_passwords_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_history_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_open_tabs_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_5_min_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_15_min_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_30_min_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_60_min_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_now_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, synced_tabs_button);
 
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sign_out_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sync_now_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_synced_tabs_button_clicked);
 }
 
 static void
@@ -1742,6 +1770,11 @@ setup_sync_page (PrefsDialog *dialog)
                    dialog->sync_history_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_OPEN_TABS_ENABLED,
+                   dialog->sync_open_tabs_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
   g_settings_bind_with_mapping (sync_settings,
                                 EPHY_PREFS_SYNC_FREQUENCY,
                                 dialog->sync_frequency_5_min_radiobutton,
@@ -1779,6 +1812,10 @@ setup_sync_page (PrefsDialog *dialog)
                                 GINT_TO_POINTER (60),
                                 NULL);
 
+  g_object_bind_property (dialog->sync_open_tabs_checkbutton, "active",
+                          dialog->synced_tabs_button, "sensitive",
+                          G_BINDING_SYNC_CREATE);
+
   g_signal_connect_object (dialog->sync_service, "sync-secrets-store-finished",
                            G_CALLBACK (sync_secrets_store_finished_cb),
                            dialog, 0);
@@ -1798,6 +1835,9 @@ setup_sync_page (PrefsDialog *dialog)
                            G_CALLBACK (sync_collection_toggled_cb),
                            dialog, 0);
   g_signal_connect_object (dialog->sync_history_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_open_tabs_checkbutton, "toggled",
                            G_CALLBACK (sync_collection_toggled_cb),
                            dialog, 0);
 }

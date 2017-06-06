@@ -337,6 +337,16 @@
 			<summary>Initial sync or normal sync</summary>
 			<description>TRUE if history collection needs to be synced for the first time, FALSE otherwise.</description>
 		</key>
+		<key type="b" name="sync-open-tabs-enabled">
+			<default>false</default>
+			<summary>Enable open tabs sync</summary>
+			<description>TRUE if open tabs collection should be synced, FALSE otherwise.</description>
+		</key>
+		<key type="d" name="sync-open-tabs-time">
+			<default>0</default>
+			<summary>Open tabs sync timestamp</summary>
+			<description>The timestamp at which last open tabs sync was made.</description>
+		</key>
 	</schema>
 	<enum id="org.gnome.Epiphany.Permission">
 		<value nick="undecided" value="-1"/>

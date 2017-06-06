@@ -905,7 +905,7 @@
                         <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
+                            <property name="orientation">horizontal</property>
                             <property name="spacing">6</property>
                             <property name="margin-start">12</property>
                             <child>
@@ -925,6 +925,13 @@
                             <child>
                               <object class="GtkCheckButton" id="sync_history_checkbutton">
                                 <property name="label" translatable="yes">_History</property>
+                                <property name="visible">True</property>
+                                <property name="use-underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="sync_open_tabs_checkbutton">
+                                <property name="label" translatable="yes">Open _Tabs</property>
                                 <property name="visible">True</property>
                                 <property name="use-underline">True</property>
                               </object>
@@ -990,6 +997,33 @@
                                 <property name="use-underline">True</property>
                                 <property name="halign">start</property>
                                 <signal name="clicked" handler="on_sync_sync_now_button_clicked"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Misc</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <property name="margin-start">12</property>
+                            <child>
+                              <object class="GtkButton" id="synced_tabs_button">
+                                <property name="label" translatable="yes">_View synced tabs</property>
+                                <property name="visible">True</property>
+                                <property name="use-underline">True</property>
+                                <property name="halign">start</property>
+                                <signal name="clicked" handler="on_sync_synced_tabs_button_clicked"/>
                               </object>
                             </child>
                           </object>

@@ -2,6 +2,8 @@ libephysync_sources = [
   'debug/ephy-sync-debug.c',
   'ephy-history-manager.c',
   'ephy-history-record.c',
+  'ephy-open-tabs-manager.c',
+  'ephy-open-tabs-record.c',
   'ephy-password-manager.c',
   'ephy-password-record.c',
   'ephy-sync-crypto.c',
