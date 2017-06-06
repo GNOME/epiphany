@@ -165,6 +165,8 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_SYNC_HISTORY_ENABLED   "sync-history-enabled"
 #define EPHY_PREFS_SYNC_HISTORY_TIME      "sync-history-time"
 #define EPHY_PREFS_SYNC_HISTORY_INITIAL   "sync-history-initial"
+#define EPHY_PREFS_SYNC_OPEN_TABS_ENABLED "sync-open-tabs-enabled"
+#define EPHY_PREFS_SYNC_OPEN_TABS_TIME    "sync-open-tabs-time"
 
 static struct {
   const char *schema;

@@ -40,6 +40,7 @@ libephymain_sources = [
   'passwords-dialog.c',
   'popup-commands.c',
   'prefs-dialog.c',
+  'synced-tabs-dialog.c',
   'window-commands.c',
   enums
 ]

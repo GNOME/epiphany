@@ -58,6 +58,7 @@ struct _EphyShell {
   EphyBookmarksManager *bookmarks_manager;
   EphyPasswordManager *password_manager;
   EphyHistoryManager *history_manager;
+  EphyOpenTabsManager *open_tabs_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *history_dialog;
   GObject *prefs_dialog;
@@ -363,6 +364,11 @@ ephy_shell_startup (GApplication *application)
         manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
         ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
       }
+
+      if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_ENABLED)) {
+        manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
+        ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
+      }
     }
 
     gtk_application_set_app_menu (GTK_APPLICATION (application),
@@ -635,6 +641,7 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->bookmarks_manager);
   g_clear_object (&shell->password_manager);
   g_clear_object (&shell->history_manager);
+  g_clear_object (&shell->open_tabs_manager);
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
   shell->open_uris_idle_ids = NULL;
@@ -866,6 +873,17 @@ ephy_shell_get_history_manager (EphyShell *shell)
   }
 
   return shell->history_manager;
+}
+
+EphyOpenTabsManager *
+ephy_shell_get_open_tabs_manager (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->open_tabs_manager == NULL)
+    shell->open_tabs_manager = ephy_open_tabs_manager_new ();
+
+  return shell->open_tabs_manager;
 }
 
 /**

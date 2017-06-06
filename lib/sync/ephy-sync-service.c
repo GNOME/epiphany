@@ -999,7 +999,7 @@ ephy_sync_service_delete_synchronizable (EphySyncService           *self,
   json_object_set_boolean_member (object, "deleted", TRUE);
   record = json_to_string (node, FALSE);
   bundle = ephy_sync_service_get_key_bundle (self, collection);
-  payload = ephy_sync_crypto_encrypt_record (record,  bundle);
+  payload = ephy_sync_crypto_encrypt_record (record, bundle);
   json_object_remove_member (object, "deleted");
   json_object_set_string_member (object, "payload", payload);
   body = json_to_string (node, FALSE);
@@ -1335,6 +1335,10 @@ ephy_sync_service_unregister_client_id (EphySyncService *self)
   client_id = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_CLIENT_ID);
   endpoint = g_strdup_printf ("storage/clients/%s", client_id);
 
+  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
+                                           NULL, -1, -1, NULL, NULL);
+  g_free (endpoint);
+  endpoint = g_strdup_printf ("storage/tabs/%s", client_id);
   ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
                                            NULL, -1, -1, NULL, NULL);
   g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_CLIENT_ID, "");
@@ -1897,7 +1901,6 @@ ephy_sync_service_upload_meta_global_record (EphySyncService *self)
   declined = json_array_new ();
   json_array_add_string_element (declined, "addons");
   json_array_add_string_element (declined, "prefs");
-  json_array_add_string_element (declined, "tabs");
   json_object_set_array_member (payload, "declined", declined);
   json_object_set_object_member (engines, "clients", make_engine_object (1));
   json_object_set_object_member (engines, "bookmarks", make_engine_object (2));
