@@ -139,10 +139,7 @@ ephy_open_tabs_manager_clear_cache (EphyOpenTabsManager *self)
 const char *
 synchronizable_manager_get_collection_name (EphySynchronizableManager *manager)
 {
-  gboolean sync_with_firefox = g_settings_get_boolean (EPHY_SETTINGS_SYNC,
-                                                       EPHY_PREFS_SYNC_WITH_FIREFOX);
-
-  return sync_with_firefox ? "tabs" : "ephy-tabs";
+  return ephy_sync_utils_sync_with_firefox () ? "tabs" : "ephy-tabs";
 }
 
 static GType
@@ -170,17 +167,14 @@ synchronizable_manager_set_is_initial_sync (EphySynchronizableManager *manager,
 static double
 synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
 {
-  return g_settings_get_double (EPHY_SETTINGS_SYNC,
-                                EPHY_PREFS_SYNC_OPEN_TABS_TIME);
+  return ephy_sync_utils_get_open_tabs_sync_time ();
 }
 
 static void
 synchronizable_manager_set_sync_time (EphySynchronizableManager *manager,
                                       double                     sync_time)
 {
-  g_settings_set_double (EPHY_SETTINGS_SYNC,
-                         EPHY_PREFS_SYNC_OPEN_TABS_TIME,
-                         sync_time);
+  ephy_sync_utils_set_open_tabs_sync_time (sync_time);
 }
 
 static void

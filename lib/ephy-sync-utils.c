@@ -232,8 +232,7 @@ ephy_sync_utils_get_random_sync_id (void)
 void
 ephy_sync_utils_set_device_id (const char *id)
 {
-  g_return_if_fail (id);
-
+  id = id ? id : "";
   g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_ID, id);
 }
 
@@ -254,8 +253,7 @@ ephy_sync_utils_get_device_id (void)
 void
 ephy_sync_utils_set_device_name (const char *name)
 {
-  g_return_if_fail (name);
-
+  name = name ? name : "";
   g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_NAME, name);
 }
 
@@ -272,4 +270,158 @@ ephy_sync_utils_get_device_name (void)
   }
 
   return name;
+}
+
+void
+ephy_sync_utils_set_sync_user (const char *user)
+{
+  user = user ? user : "";
+  g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER, user);
+}
+
+char *
+ephy_sync_utils_get_sync_user (void)
+{
+  char *user = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER);
+
+  if (!g_strcmp0 (user, "")) {
+    g_free (user);
+    return NULL;
+  }
+
+  return user;
+}
+
+gboolean
+ephy_sync_utils_user_is_signed_in (void)
+{
+  char *user = ephy_sync_utils_get_sync_user ();
+
+  if (user) {
+    g_free (user);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+guint
+ephy_sync_utils_get_sync_frequency (void)
+{
+  /* Minutes. */
+  return g_settings_get_uint (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_FREQUENCY);
+}
+
+gboolean
+ephy_sync_utils_sync_with_firefox (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_WITH_FIREFOX);
+}
+
+gboolean
+ephy_sync_utils_bookmarks_sync_is_enabled (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_ENABLED);
+}
+
+void
+ephy_sync_utils_set_bookmarks_sync_time (double time)
+{
+  g_settings_set_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_TIME, time);
+}
+
+double
+ephy_sync_utils_get_bookmarks_sync_time (void)
+{
+  return g_settings_get_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_TIME);
+}
+
+void
+ephy_sync_utils_set_bookmarks_sync_is_initial (double is_initial)
+{
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_INITIAL, is_initial);
+}
+
+gboolean
+ephy_sync_utils_get_bookmarks_sync_is_initial (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_INITIAL);
+}
+
+gboolean
+ephy_sync_utils_passwords_sync_is_enabled (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED);
+}
+
+void
+ephy_sync_utils_set_passwords_sync_time (double time)
+{
+  g_settings_set_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_TIME, time);
+}
+
+double
+ephy_sync_utils_get_passwords_sync_time (void)
+{
+  return g_settings_get_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_TIME);
+}
+
+void
+ephy_sync_utils_set_passwords_sync_is_initial (double is_initial)
+{
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_INITIAL, is_initial);
+}
+
+gboolean
+ephy_sync_utils_get_passwords_sync_is_initial (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_INITIAL);
+}
+
+gboolean
+ephy_sync_utils_history_sync_is_enabled (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_ENABLED);
+}
+
+void
+ephy_sync_utils_set_history_sync_time (double time)
+{
+  g_settings_set_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_TIME, time);
+}
+
+double
+ephy_sync_utils_get_history_sync_time (void)
+{
+  return g_settings_get_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_TIME);
+}
+
+void
+ephy_sync_utils_set_history_sync_is_initial (double is_initial)
+{
+  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_INITIAL, is_initial);
+}
+
+gboolean
+ephy_sync_utils_get_history_sync_is_initial (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_INITIAL);
+}
+
+gboolean
+ephy_sync_utils_open_tabs_sync_is_enabled (void)
+{
+  return g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_ENABLED);
+}
+
+void
+ephy_sync_utils_set_open_tabs_sync_time (double time)
+{
+  g_settings_set_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_TIME, time);
+}
+
+double
+ephy_sync_utils_get_open_tabs_sync_time (void)
+{
+  return g_settings_get_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_TIME);
 }

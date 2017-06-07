@@ -31,6 +31,7 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-sync-service.h"
+#include "ephy-sync-utils.h"
 #include "ephy-uri-helpers.h"
 #include "ephy-uri-tester.h"
 #include "ephy-web-dom-utils.h"
@@ -1447,7 +1448,7 @@ static const GDBusInterfaceVTable interface_vtable = {
 };
 
 static void
-ephy_prefs_sync_passwords_enabled_cb (GSettings *settings,
+ephy_prefs_passwords_sync_enabled_cb (GSettings *settings,
                                       char      *key,
                                       gpointer   user_data)
 {
@@ -1475,11 +1476,11 @@ ephy_web_extension_create_sync_service (EphyWebExtension *extension)
   extension->sync_service = ephy_sync_service_new (FALSE);
   manager = EPHY_SYNCHRONIZABLE_MANAGER (extension->password_manager);
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED))
+  if (ephy_sync_utils_passwords_sync_is_enabled ())
     ephy_sync_service_register_manager (extension->sync_service, manager);
 
   g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
-                    G_CALLBACK (ephy_prefs_sync_passwords_enabled_cb), extension);
+                    G_CALLBACK (ephy_prefs_passwords_sync_enabled_cb), extension);
 }
 
 static void
@@ -1494,7 +1495,7 @@ ephy_web_extension_destroy_sync_service (EphyWebExtension *extension)
   manager = EPHY_SYNCHRONIZABLE_MANAGER (extension->password_manager);
   ephy_sync_service_unregister_manager (extension->sync_service, manager);
   g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_SYNC,
-                                        ephy_prefs_sync_passwords_enabled_cb,
+                                        ephy_prefs_passwords_sync_enabled_cb,
                                         extension);
 
   g_clear_object (&extension->sync_service);
@@ -1505,26 +1506,17 @@ ephy_prefs_sync_user_cb (GSettings *settings,
                          char      *key,
                          gpointer   user_data)
 {
-  EphyWebExtension *extension;
-  char *sync_user;
+  EphyWebExtension *extension = EPHY_WEB_EXTENSION (user_data);
 
   /* If the sync user has changed we need to destroy the previous sync service
    * (which is no longer valid because the user specific data has been cleared)
    * and create a new one which will load the new user specific data. This way
    * we will correctly upload new saved passwords in the future.
    */
-  extension = EPHY_WEB_EXTENSION (user_data);
-  sync_user = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER);
-
-  if (!g_strcmp0 (sync_user, "")) {
-    /* Signed out. */
-    ephy_web_extension_destroy_sync_service (extension);
-  } else {
-    /* Signed in. */
+  if (ephy_sync_utils_user_is_signed_in ())
     ephy_web_extension_create_sync_service (extension);
-  }
-
-  g_free (sync_user);
+  else
+    ephy_web_extension_destroy_sync_service (extension);
 }
 
 static void
@@ -1651,17 +1643,13 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
 
   extension->extension = g_object_ref (wk_extension);
   if (!is_private_profile) {
-    char *sync_user = g_settings_get_string (EPHY_SETTINGS_SYNC,
-                                             EPHY_PREFS_SYNC_USER);
     extension->password_manager = ephy_password_manager_new ();
 
-    if (g_strcmp0 (sync_user, ""))
+    if (ephy_sync_utils_user_is_signed_in ())
       ephy_web_extension_create_sync_service (extension);
 
     g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_USER,
                       G_CALLBACK (ephy_prefs_sync_user_cb), extension);
-
-    g_free (sync_user);
   }
 
   extension->permissions_manager = ephy_permissions_manager_new ();

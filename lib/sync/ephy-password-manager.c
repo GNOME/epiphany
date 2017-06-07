@@ -23,6 +23,7 @@
 
 #include "ephy-debug.h"
 #include "ephy-settings.h"
+#include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
 #include "ephy-uri-helpers.h"
 
@@ -745,10 +746,7 @@ ephy_password_manager_forget_all (EphyPasswordManager *self)
 static const char *
 synchronizable_manager_get_collection_name (EphySynchronizableManager *manager)
 {
-  gboolean sync_with_firefox = g_settings_get_boolean (EPHY_SETTINGS_SYNC,
-                                                       EPHY_PREFS_SYNC_WITH_FIREFOX);
-
-  return sync_with_firefox ? "passwords" : "ephy-passwords";
+  return ephy_sync_utils_sync_with_firefox () ? "passwords" : "ephy-passwords";
 }
 
 static GType
@@ -760,33 +758,27 @@ synchronizable_manager_get_synchronizable_type (EphySynchronizableManager *manag
 static gboolean
 synchronizable_manager_is_initial_sync (EphySynchronizableManager *manager)
 {
-  return g_settings_get_boolean (EPHY_SETTINGS_SYNC,
-                                 EPHY_PREFS_SYNC_PASSWORDS_INITIAL);
+  return ephy_sync_utils_get_passwords_sync_is_initial ();
 }
 
 static void
 synchronizable_manager_set_is_initial_sync (EphySynchronizableManager *manager,
                                             gboolean                   is_initial)
 {
-  g_settings_set_boolean (EPHY_SETTINGS_SYNC,
-                          EPHY_PREFS_SYNC_PASSWORDS_INITIAL,
-                          is_initial);
+  ephy_sync_utils_set_passwords_sync_is_initial (is_initial);
 }
 
 static double
 synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
 {
-  return g_settings_get_double (EPHY_SETTINGS_SYNC,
-                                EPHY_PREFS_SYNC_PASSWORDS_TIME);
+  return ephy_sync_utils_get_passwords_sync_time ();
 }
 
 static void
 synchronizable_manager_set_sync_time (EphySynchronizableManager *manager,
                                       double                     sync_time)
 {
-  g_settings_set_double (EPHY_SETTINGS_SYNC,
-                         EPHY_PREFS_SYNC_PASSWORDS_TIME,
-                         sync_time);
+  ephy_sync_utils_set_passwords_sync_time (sync_time);
 }
 
 static void
