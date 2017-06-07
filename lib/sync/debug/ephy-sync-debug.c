@@ -41,10 +41,10 @@ ephy_sync_debug_load_secrets (void)
   GList *result;
   char *user;
 
-  user = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER);
-  if (!g_strcmp0 (user, "")) {
+  user = ephy_sync_utils_get_sync_user ();
+  if (!user) {
     LOG ("There is no sync user signed in.");
-    goto free_user;
+    return NULL;
   }
 
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
@@ -59,7 +59,7 @@ ephy_sync_debug_load_secrets (void)
   if (error) {
     LOG ("Error searching sync secrets: %s", error->message);
     g_error_free (error);
-    goto free_result;
+    goto free_attributes;
   }
 
   value = secret_item_get_secret (result->data);
@@ -75,10 +75,9 @@ ephy_sync_debug_load_secrets (void)
   json_node_unref (node);
 free_value:
   secret_value_unref (value);
-free_result:
   g_list_free_full (result, g_object_unref);
+free_attributes:
   g_hash_table_unref (attributes);
-free_user:
   g_free (user);
 
   return secrets;

@@ -40,7 +40,7 @@ struct _EphySyncService {
   SoupSession *session;
   guint        source_id;
 
-  char        *account;
+  char        *user;
   GHashTable  *secrets;
   GSList      *managers;
 
@@ -681,7 +681,7 @@ ephy_sync_service_report_sign_in_error (EphySyncService *self,
   ephy_sync_service_destroy_session (self, session_token);
 
   if (clear_secrets) {
-    g_clear_pointer (&self->account, g_free);
+    g_clear_pointer (&self->user, g_free);
     g_hash_table_remove_all (self->secrets);
   }
 
@@ -743,7 +743,7 @@ out_error:
   if (self->is_signing_in)
     ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
   else
-  ephy_notification_show (ephy_notification_new (message, suggestion));
+    ephy_notification_show (ephy_notification_new (message, suggestion));
 out:
   self->locked = FALSE;
   if (node)
@@ -983,7 +983,7 @@ ephy_sync_service_delete_synchronizable (EphySyncService           *self,
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
   g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
-  g_assert (ephy_sync_service_is_signed_in (self));
+  g_assert (ephy_sync_utils_user_is_signed_in ());
 
   collection = ephy_synchronizable_manager_get_collection_name (manager);
   id = ephy_synchronizable_get_id (synchronizable);
@@ -1086,7 +1086,7 @@ ephy_sync_service_download_synchronizable (EphySyncService           *self,
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
   g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
-  g_assert (ephy_sync_service_is_signed_in (self));
+  g_assert (ephy_sync_utils_user_is_signed_in ());
 
   id = ephy_synchronizable_get_id (synchronizable);
   collection = ephy_synchronizable_manager_get_collection_name (manager);
@@ -1150,7 +1150,7 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
   g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
-  g_assert (ephy_sync_service_is_signed_in (self));
+  g_assert (ephy_sync_utils_user_is_signed_in ());
 
   collection = ephy_synchronizable_manager_get_collection_name (manager);
   bundle = ephy_sync_service_get_key_bundle (self, collection);
@@ -1282,7 +1282,7 @@ ephy_sync_service_sync_collection (EphySyncService           *self,
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
-  g_assert (ephy_sync_service_is_signed_in (self));
+  g_assert (ephy_sync_utils_user_is_signed_in ());
 
   collection = ephy_synchronizable_manager_get_collection_name (manager);
   is_initial = ephy_synchronizable_manager_is_initial_sync (manager);
@@ -1310,7 +1310,7 @@ ephy_sync_service_sync (gpointer user_data)
   guint index = 0;
   guint num_managers;
 
-  g_assert (ephy_sync_service_is_signed_in (self));
+  g_assert (ephy_sync_utils_user_is_signed_in ());
 
   if (!self->managers) {
     g_signal_emit (self, signals[SYNC_FINISHED], 0);
@@ -1342,7 +1342,7 @@ ephy_sync_service_schedule_periodical_sync (EphySyncService *self)
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  seconds = g_settings_get_uint (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_FREQUENCY) * 60;
+  seconds = ephy_sync_utils_get_sync_frequency () * 60;
   self->source_id = g_timeout_add_seconds (seconds, ephy_sync_service_sync, self);
 
   LOG ("Scheduled new sync with frequency %u minutes", seconds / 60);
@@ -1377,18 +1377,21 @@ static void
 ephy_sync_service_forget_secrets (EphySyncService *self)
 {
   GHashTable *attributes;
+  char *user;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (self->secrets);
 
+  user = ephy_sync_utils_get_sync_user ();
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
-                                        ACCOUNT_KEY, self->account,
+                                        ACCOUNT_KEY, user,
                                         NULL);
   secret_service_clear (NULL, EPHY_SYNC_SECRET_SCHEMA, attributes, NULL,
                         (GAsyncReadyCallback)forget_secrets_cb, NULL);
   g_hash_table_remove_all (self->secrets);
 
   g_hash_table_unref (attributes);
+  g_free (user);
 }
 
 static void
@@ -1452,18 +1455,21 @@ static void
 ephy_sync_service_load_secrets (EphySyncService *self)
 {
   GHashTable *attributes;
+  char *user;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (self->secrets);
 
+  user = ephy_sync_utils_get_sync_user ();
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
-                                        ACCOUNT_KEY, self->account,
+                                        ACCOUNT_KEY, user,
                                         NULL);
   secret_service_search (NULL, EPHY_SYNC_SECRET_SCHEMA, attributes,
                          SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
                          NULL, (GAsyncReadyCallback)load_secrets_cb, self);
 
   g_hash_table_unref (attributes);
+  g_free (user);
 }
 
 static void
@@ -1477,15 +1483,16 @@ store_secrets_cb (SecretService   *service,
   if (error) {
     g_warning ("Failed to store sync secrets: %s", error->message);
     ephy_sync_service_destroy_session (self, NULL);
-    g_clear_pointer (&self->account, g_free);
     g_hash_table_remove_all (self->secrets);
   } else {
+    ephy_sync_utils_set_sync_user (self->user);
     ephy_sync_service_register_device (self, NULL);
   }
 
   g_signal_emit (self, signals[STORE_FINISHED], 0, error);
   self->is_signing_in = FALSE;
 
+  g_clear_pointer (&self->user, g_free);
   if (error)
     g_error_free (error);
 }
@@ -1505,7 +1512,7 @@ ephy_sync_service_store_secrets (EphySyncService *self)
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (self->secrets);
-  g_assert (self->account);
+  g_assert (self->user);
 
   node = json_node_new (JSON_NODE_OBJECT);
   object = json_object_new ();
@@ -1517,10 +1524,10 @@ ephy_sync_service_store_secrets (EphySyncService *self)
 
   secret = secret_value_new (json_string, -1, "text/plain");
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
-                                        ACCOUNT_KEY, self->account,
+                                        ACCOUNT_KEY, self->user,
                                         NULL);
   /* Translators: %s is the email of the user. */
-  label = g_strdup_printf (_("The sync secrets of %s"), self->account);
+  label = g_strdup_printf (_("The sync secrets of %s"), self->user);
 
   secret_service_store (NULL, EPHY_SYNC_SECRET_SCHEMA,
                         attributes, NULL, label, secret, NULL,
@@ -1539,12 +1546,11 @@ ephy_sync_service_dispose (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
-  if (ephy_sync_service_is_signed_in (self))
+  if (ephy_sync_utils_user_is_signed_in ())
     ephy_sync_service_stop_periodical_sync (self);
 
   ephy_sync_service_clear_storage_credentials (self);
   g_clear_object (&self->session);
-  g_clear_pointer (&self->account, g_free);
   g_clear_pointer (&self->rsa_key_pair, ephy_sync_crypto_rsa_key_pair_free);
   g_clear_pointer (&self->secrets, g_hash_table_destroy);
   g_clear_pointer (&self->managers, g_slist_free);
@@ -1576,19 +1582,12 @@ ephy_sync_service_constructed (GObject *object)
 static void
 ephy_sync_service_init (EphySyncService *self)
 {
-  char *account;
-
   self->session = soup_session_new ();
   self->storage_queue = g_queue_new ();
   self->secrets = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-  account = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER);
-  if (g_strcmp0 (account, "")) {
-    self->account = g_strdup (account);
+  if (ephy_sync_utils_user_is_signed_in ())
     ephy_sync_service_load_secrets (self);
-  }
-
-  g_free (account);
 }
 
 static void
@@ -1640,22 +1639,6 @@ ephy_sync_service_new (gboolean sync_periodically)
   return EPHY_SYNC_SERVICE (g_object_new (EPHY_TYPE_SYNC_SERVICE,
                                           "sync-periodically", sync_periodically,
                                           NULL));
-}
-
-gboolean
-ephy_sync_service_is_signed_in (EphySyncService *self)
-{
-  g_return_val_if_fail (EPHY_IS_SYNC_SERVICE (self), FALSE);
-
-  return self->account != NULL;
-}
-
-const char *
-ephy_sync_service_get_sync_user (EphySyncService *self)
-{
-  g_return_val_if_fail (EPHY_IS_SYNC_SERVICE (self), NULL);
-
-  return self->account;
 }
 
 static char *
@@ -1957,8 +1940,15 @@ ephy_sync_service_conclude_sign_in (EphySyncService *self,
     goto out;
   }
 
-  /* Save email and tokens. */
-  self->account = g_strdup (data->email);
+  /* Cache the user email until the secrets are stored. We cannot use
+   * ephy_sync_utils_set_sync_user() here because that will trigger the
+   * 'changed' signal of EPHY_PREFS_SYNC_USER which in turn will cause
+   * the web extension to destroy its own sync service and create a new
+   * one. That new sync service will fail to load the sync secrets from
+   * disk because the secrets are not yet stored at this point, thus it
+   * will be unable to operate.
+   */
+  self->user = g_strdup (data->email);
   ephy_sync_service_set_secret (self, secrets[UID], data->uid);
   ephy_sync_service_set_secret (self, secrets[SESSION_TOKEN], data->session_token);
   key_b_hex = ephy_sync_utils_encode_hex (key_b, 32);
@@ -2090,7 +2080,7 @@ synchronizable_deleted_cb (EphySynchronizableManager *manager,
   g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  if (!ephy_sync_service_is_signed_in (self))
+  if (!ephy_sync_utils_user_is_signed_in ())
     return;
 
   ephy_sync_service_delete_synchronizable (self, manager, synchronizable);
@@ -2106,7 +2096,7 @@ synchronizable_modified_cb (EphySynchronizableManager *manager,
   g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  if (!ephy_sync_service_is_signed_in (self))
+  if (!ephy_sync_utils_user_is_signed_in ())
     return;
 
   ephy_sync_service_upload_synchronizable (self, manager, synchronizable, should_force);
@@ -2239,7 +2229,7 @@ ephy_sync_service_unregister_device (EphySyncService *self)
   ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
                                            NULL, -1, -1, NULL, NULL);
 
-  ephy_sync_utils_set_device_id ("");
+  ephy_sync_utils_set_device_id (NULL);
 
   g_free (endpoint);
   g_free (id);
@@ -2255,7 +2245,6 @@ ephy_sync_service_do_sign_out (EphySyncService *self)
   ephy_sync_service_destroy_session (self, NULL);
   ephy_sync_service_clear_storage_credentials (self);
   ephy_sync_service_forget_secrets (self);
-  g_clear_pointer (&self->account, g_free);
 
   /* Clear storage messages queue. */
   while (!g_queue_is_empty (self->storage_queue))
@@ -2268,17 +2257,17 @@ ephy_sync_service_do_sign_out (EphySyncService *self)
   }
   g_clear_pointer (&self->managers, g_slist_free);
 
-  g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_USER, "");
-  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_INITIAL, TRUE);
-  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_INITIAL, TRUE);
-  g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_INITIAL, TRUE);
+  ephy_sync_utils_set_sync_user (NULL);
+  ephy_sync_utils_set_bookmarks_sync_is_initial (TRUE);
+  ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
+  ephy_sync_utils_set_history_sync_is_initial (TRUE);
 }
 
 void
 ephy_sync_service_do_sync (EphySyncService *self)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
-  g_return_if_fail (ephy_sync_service_is_signed_in (self));
+  g_return_if_fail (ephy_sync_utils_user_is_signed_in ());
 
   ephy_sync_service_sync (self);
 }
@@ -2287,7 +2276,7 @@ void
 ephy_sync_service_start_periodical_sync (EphySyncService *self)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
-  g_return_if_fail (ephy_sync_service_is_signed_in (self));
+  g_return_if_fail (ephy_sync_utils_user_is_signed_in ());
   g_return_if_fail (self->sync_periodically);
 
   ephy_sync_service_sync (self);

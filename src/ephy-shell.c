@@ -36,6 +36,7 @@
 #include "ephy-prefs.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
+#include "ephy-sync-utils.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
@@ -350,22 +351,22 @@ ephy_shell_startup (GApplication *application)
                               G_BINDING_SYNC_CREATE);
 
       /* Register the synchronizable managers. */
-      if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_ENABLED)) {
+      if (ephy_sync_utils_bookmarks_sync_is_enabled ()) {
         manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
         ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
       }
 
-      if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_ENABLED)) {
+      if (ephy_sync_utils_passwords_sync_is_enabled ()) {
         manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
         ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
       }
 
-      if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_ENABLED)) {
+      if (ephy_sync_utils_history_sync_is_enabled ()) {
         manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
         ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
       }
 
-      if (g_settings_get_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_ENABLED)) {
+      if (ephy_sync_utils_open_tabs_sync_is_enabled ()) {
         manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
         ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
       }
