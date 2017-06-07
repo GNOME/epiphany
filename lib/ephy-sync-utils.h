@@ -47,5 +47,9 @@ void    ephy_sync_utils_generate_random_bytes       (void         *random_ctx,
                                                      guint8       *out);
 char   *ephy_sync_utils_get_audience                (const char   *url);
 char   *ephy_sync_utils_get_random_sync_id          (void);
+void    ephy_sync_utils_set_device_id               (const char   *id);
+char   *ephy_sync_utils_get_device_id               (void);
+void    ephy_sync_utils_set_device_name             (const char   *name);
+char   *ephy_sync_utils_get_device_name             (void);
 
 G_END_DECLS

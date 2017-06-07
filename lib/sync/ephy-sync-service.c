@@ -1325,92 +1325,6 @@ ephy_sync_service_sync (gpointer user_data)
 }
 
 static void
-ephy_sync_service_unregister_client_id (EphySyncService *self)
-{
-  char *client_id;
-  char *endpoint;
-
-  g_assert (EPHY_IS_SYNC_SERVICE (self));
-
-  client_id = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_CLIENT_ID);
-  endpoint = g_strdup_printf ("storage/clients/%s", client_id);
-
-  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
-                                           NULL, -1, -1, NULL, NULL);
-  g_free (endpoint);
-  endpoint = g_strdup_printf ("storage/tabs/%s", client_id);
-  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
-                                           NULL, -1, -1, NULL, NULL);
-  g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_CLIENT_ID, "");
-
-  g_free (endpoint);
-  g_free (client_id);
-}
-
-static void
-ephy_sync_service_register_client_id (EphySyncService *self)
-{
-  SyncCryptoKeyBundle *bundle;
-  JsonNode *node;
-  JsonObject *record;
-  JsonObject *payload;
-  JsonArray *array;
-  char *client_id;
-  char *name;
-  char *protocol;
-  char *payload_clear;
-  char *payload_cipher;
-  char *body;
-  char *endpoint;
-
-  g_assert (EPHY_IS_SYNC_SERVICE (self));
-
-  node = json_node_new (JSON_NODE_OBJECT);
-  record = json_object_new ();
-  payload = json_object_new ();
-  array = json_array_new ();
-  protocol = g_strdup_printf ("1.%d", STORAGE_VERSION);
-  json_array_add_string_element (array, protocol);
-  json_object_set_array_member (payload, "protocols", array);
-  client_id = ephy_sync_utils_get_random_sync_id ();
-  json_object_set_string_member (payload, "id", client_id);
-  name = g_strdup_printf ("%s on Epiphany", client_id);
-  json_object_set_string_member (payload, "name", name);
-  json_object_set_string_member (payload, "type", "desktop");
-  json_object_set_string_member (payload, "os", "Linux");
-  json_object_set_string_member (payload, "application", "Epiphany");
-  json_object_set_string_member (payload, "fxaDeviceId",
-                                 ephy_sync_service_get_secret (self, secrets[UID]));
-  json_object_set_string_member (payload, "version", VERSION);
-  json_object_set_null_member (payload, "appPackage");
-  json_node_set_object (node, payload);
-  payload_clear = json_to_string (node, FALSE);
-  bundle = ephy_sync_service_get_key_bundle (self, "clients");
-  payload_cipher = ephy_sync_crypto_encrypt_record (payload_clear, bundle);
-  json_object_set_string_member (record, "id", client_id);
-  json_object_set_string_member (record, "payload", payload_cipher);
-  json_node_set_object (node, record);
-  body = json_to_string (node, FALSE);
-  endpoint = g_strdup_printf ("storage/clients/%s", client_id);
-
-  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_PUT,
-                                           body, -1, -1, NULL, NULL);
-  g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_CLIENT_ID, client_id);
-
-  g_free (endpoint);
-  g_free (body);
-  g_free (payload_cipher);
-  ephy_sync_crypto_key_bundle_free (bundle);
-  g_free (payload_clear);
-  g_free (name);
-  g_free (client_id);
-  g_free (protocol);
-  json_object_unref(payload);
-  json_object_unref(record);
-  json_node_unref (node);
-}
-
-static void
 ephy_sync_service_stop_periodical_sync (EphySyncService *self)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
@@ -1566,7 +1480,7 @@ store_secrets_cb (SecretService   *service,
     g_clear_pointer (&self->account, g_free);
     g_hash_table_remove_all (self->secrets);
   } else {
-    ephy_sync_service_register_client_id (self);
+    ephy_sync_service_register_device (self, NULL);
   }
 
   g_signal_emit (self, signals[STORE_FINISHED], 0, error);
@@ -2228,13 +2142,115 @@ ephy_sync_service_unregister_manager (EphySyncService           *self,
   g_signal_handlers_disconnect_by_func (manager, synchronizable_modified_cb, self);
 }
 
+void
+ephy_sync_service_register_device (EphySyncService *self,
+                                   const char      *device_name)
+{
+  SyncCryptoKeyBundle *bundle;
+  JsonNode *node;
+  JsonObject *bso;
+  JsonObject *record;
+  JsonArray *array;
+  char *id;
+  char *name;
+  char *protocol;
+  char *cleartext;
+  char *encrypted;
+  char *body;
+  char *endpoint;
+
+  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
+
+  /* Make protocol. */
+  protocol = g_strdup_printf ("1.%d", STORAGE_VERSION);
+  array = json_array_new ();
+  json_array_add_string_element (array, protocol);
+
+  /* Make device ID and name. */
+  id = ephy_sync_utils_get_device_id ();
+  if (device_name)
+    name = g_strdup (device_name);
+  else
+    name = ephy_sync_utils_get_device_name ();
+
+  /* Set record members. */
+  record = json_object_new ();
+  json_object_set_string_member (record, "id", id);
+  json_object_set_string_member (record, "fxaDeviceId",
+                                 ephy_sync_service_get_secret (self, secrets[UID]));
+  json_object_set_string_member (record, "name", name);
+  json_object_set_string_member (record, "type", "desktop");
+  json_object_set_string_member (record, "version", VERSION);
+  json_object_set_array_member (record, "protocols", array);
+  json_object_set_string_member (record, "os", "Linux");
+  json_object_set_null_member (record, "appPackage");
+  json_object_set_string_member (record, "application", "Epiphany");
+
+  /* Get record's string representation. */
+  node = json_node_new (JSON_NODE_OBJECT);
+  json_node_set_object (node, record);
+  cleartext = json_to_string (node, FALSE);
+
+  /* Make BSO as string. */
+  bundle = ephy_sync_service_get_key_bundle (self, "clients");
+  encrypted = ephy_sync_crypto_encrypt_record (cleartext, bundle);
+  bso = json_object_new ();
+  json_object_set_string_member (bso, "id", id);
+  json_object_set_string_member (bso, "payload", encrypted);
+  json_node_set_object (node, bso);
+  body = json_to_string (node, FALSE);
+
+  /* Upload BSO and store the new device ID and name. */
+  endpoint = g_strdup_printf ("storage/clients/%s", id);
+  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_PUT,
+                                           body, -1, -1, NULL, NULL);
+
+  ephy_sync_utils_set_device_id (id);
+  ephy_sync_utils_set_device_name (name);
+
+  g_free (endpoint);
+  g_free (body);
+  g_free (encrypted);
+  ephy_sync_crypto_key_bundle_free (bundle);
+  g_free (cleartext);
+  g_free (name);
+  g_free (id);
+  g_free (protocol);
+  json_object_unref (record);
+  json_object_unref (bso);
+  json_node_unref (node);
+}
+
+static void
+ephy_sync_service_unregister_device (EphySyncService *self)
+{
+  char *id;
+  char *endpoint;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  id = ephy_sync_utils_get_device_id ();
+  endpoint = g_strdup_printf ("storage/clients/%s", id);
+  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
+                                           NULL, -1, -1, NULL, NULL);
+
+  g_free (endpoint);
+  endpoint = g_strdup_printf ("storage/tabs/%s", id);
+  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
+                                           NULL, -1, -1, NULL, NULL);
+
+  ephy_sync_utils_set_device_id ("");
+
+  g_free (endpoint);
+  g_free (id);
+}
 
 void
 ephy_sync_service_do_sign_out (EphySyncService *self)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
 
-  ephy_sync_service_unregister_client_id (self);
+  ephy_sync_service_unregister_device (self);
   ephy_sync_service_stop_periodical_sync (self);
   ephy_sync_service_destroy_session (self, NULL);
   ephy_sync_service_clear_storage_credentials (self);

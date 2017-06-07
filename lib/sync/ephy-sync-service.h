@@ -42,6 +42,8 @@ void               ephy_sync_service_do_sign_in             (EphySyncService *se
 void               ephy_sync_service_do_sign_out            (EphySyncService *self);
 void               ephy_sync_service_do_sync                (EphySyncService *self);
 void               ephy_sync_service_start_periodical_sync  (EphySyncService *self);
+void               ephy_sync_service_register_device        (EphySyncService *self,
+                                                             const char      *device_name);
 void               ephy_sync_service_register_manager       (EphySyncService           *self,
                                                              EphySynchronizableManager *manager);
 void               ephy_sync_service_unregister_manager     (EphySyncService           *self,

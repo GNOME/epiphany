@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-sync-utils.h"
 
+#include "ephy-settings.h"
+
 #include <libsoup/soup.h>
 #include <stdio.h>
 #include <string.h>
@@ -225,4 +227,49 @@ ephy_sync_utils_get_random_sync_id (void)
   g_free (bytes);
 
   return id;
+}
+
+void
+ephy_sync_utils_set_device_id (const char *id)
+{
+  g_return_if_fail (id);
+
+  g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_ID, id);
+}
+
+char *
+ephy_sync_utils_get_device_id (void)
+{
+  char *id;
+
+  id = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_ID);
+  if (!g_strcmp0 (id, "")) {
+    g_free (id);
+    id = ephy_sync_utils_get_random_sync_id ();
+  }
+
+  return id;
+}
+
+void
+ephy_sync_utils_set_device_name (const char *name)
+{
+  g_return_if_fail (name);
+
+  g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_NAME, name);
+}
+
+char *
+ephy_sync_utils_get_device_name (void)
+{
+  char *name;
+
+  name = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_NAME);
+  if (!g_strcmp0 (name, "")) {
+    g_free (name);
+    name = g_strdup_printf ("%s's Epiphany on %s",
+                            g_get_user_name (), g_get_host_name ());
+  }
+
+  return name;
 }

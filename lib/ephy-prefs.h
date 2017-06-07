@@ -153,7 +153,8 @@ static const char * const ephy_prefs_web_schema[] = {
 
 #define EPHY_PREFS_SYNC_SCHEMA            "org.gnome.Epiphany.sync"
 #define EPHY_PREFS_SYNC_USER              "sync-user"
-#define EPHY_PREFS_SYNC_CLIENT_ID         "sync-client-id"
+#define EPHY_PREFS_SYNC_DEVICE_ID         "sync-device-id"
+#define EPHY_PREFS_SYNC_DEVICE_NAME       "sync-device-name"
 #define EPHY_PREFS_SYNC_FREQUENCY         "sync-frequency"
 #define EPHY_PREFS_SYNC_WITH_FIREFOX      "sync-with-firefox"
 #define EPHY_PREFS_SYNC_BOOKMARKS_ENABLED "sync-bookmarks-enabled"

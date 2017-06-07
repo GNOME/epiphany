@@ -1028,6 +1028,60 @@
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Device name</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="spacing">6</property>
+                            <property name="margin-start">12</property>
+                            <child>
+                              <object class="GtkEntry" id="sync_device_name_entry">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="halign">start</property>
+                                <property name="width-request">250</property>
+                                <property name="sensitive">False</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="sync_device_name_change_button">
+                                <property name="label" translatable="yes">_Change</property>
+                                <property name="visible">True</property>
+                                <property name="use-underline">True</property>
+                                <property name="halign">start</property>
+                                <signal name="clicked" handler="on_sync_device_name_change_button_clicked"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="sync_device_name_save_button">
+                                <property name="label" translatable="yes">_Save</property>
+                                <property name="visible">False</property>
+                                <property name="use-underline">True</property>
+                                <property name="halign">start</property>
+                                <signal name="clicked" handler="on_sync_device_name_save_button_clicked"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="sync_device_name_cancel_button">
+                                <property name="label" translatable="yes">_Cancel</property>
+                                <property name="visible">False</property>
+                                <property name="use-underline">True</property>
+                                <property name="halign">start</property>
+                                <signal name="clicked" handler="on_sync_device_name_cancel_button_clicked"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
