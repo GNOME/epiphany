@@ -24,6 +24,7 @@
 #include "ephy-embed-container.h"
 #include "ephy-embed-shell.h"
 #include "ephy-settings.h"
+#include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
 
 struct _EphyOpenTabsManager {
@@ -79,8 +80,8 @@ ephy_open_tabs_manager_get_local_tabs (EphyOpenTabsManager *self)
   GList *windows;
   GList *tabs;
   char *favicon;
-  char *client_id;
-  char *client_name;
+  char *id;
+  char *name;
   const char *title;
   const char *url;
 
@@ -89,9 +90,9 @@ ephy_open_tabs_manager_get_local_tabs (EphyOpenTabsManager *self)
   embed_shell = ephy_embed_shell_get_default ();
   windows = gtk_application_get_windows (GTK_APPLICATION (embed_shell));
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (embed_shell));
-  client_id = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_CLIENT_ID);
-  client_name = g_strdup_printf ("%s on Epiphany", client_id);
-  local_tabs = ephy_open_tabs_record_new (client_id, client_name);
+  id = ephy_sync_utils_get_device_id ();
+  name = ephy_sync_utils_get_device_name ();
+  local_tabs = ephy_open_tabs_record_new (id, name);
 
   for (GList *l = windows; l && l->data; l = l->next) {
     tabs = ephy_embed_container_get_children (l->data);
@@ -112,8 +113,8 @@ ephy_open_tabs_manager_get_local_tabs (EphyOpenTabsManager *self)
     g_list_free (tabs);
   }
 
-  g_free (client_id);
-  g_free (client_name);
+  g_free (id);
+  g_free (name);
 
   return local_tabs;
 }
@@ -216,15 +217,15 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
   EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (manager);
   EphyOpenTabsRecord *local_tabs;
   GSList *to_upload = NULL;
-  char *client_id;
+  char *id;
 
-  client_id = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_CLIENT_ID);
+  id = ephy_sync_utils_get_device_id ();
   g_slist_free_full (self->remote_records, g_object_unref);
   self->remote_records = NULL;
 
   for (GSList *l = remotes_updated; l && l->data; l = l->next) {
     /* Exclude the record which describes the local open tabs. */
-    if (!g_strcmp0 (client_id, ephy_open_tabs_record_get_id (l->data)))
+    if (!g_strcmp0 (id, ephy_open_tabs_record_get_id (l->data)))
       continue;
 
     self->remote_records = g_slist_prepend (self->remote_records, g_object_ref (l->data));
@@ -236,7 +237,7 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
   local_tabs = ephy_open_tabs_manager_get_local_tabs (self);
   to_upload = g_slist_prepend (to_upload, local_tabs);
 
-  g_free (client_id);
+  g_free (id);
 
   callback (to_upload, TRUE, user_data);
 }

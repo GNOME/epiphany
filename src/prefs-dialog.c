@@ -39,6 +39,7 @@
 #include "ephy-shell.h"
 #include "ephy-string.h"
 #include "ephy-sync-service.h"
+#include "ephy-sync-utils.h"
 #include "ephy-uri-tester-shared.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
@@ -133,6 +134,10 @@ struct _PrefsDialog {
   GtkWidget *sync_frequency_60_min_radiobutton;
   GtkWidget *sync_now_button;
   GtkWidget *synced_tabs_button;
+  GtkWidget *sync_device_name_entry;
+  GtkWidget *sync_device_name_change_button;
+  GtkWidget *sync_device_name_save_button;
+  GtkWidget *sync_device_name_cancel_button;
   gboolean sync_was_signed_in;
 
   WebKitWebView *fxa_web_view;
@@ -576,6 +581,48 @@ on_sync_synced_tabs_button_clicked (GtkWidget   *button,
 }
 
 static void
+on_sync_device_name_change_button_clicked (GtkWidget   *button,
+                                           PrefsDialog *dialog)
+{
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog->sync_device_name_entry), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_change_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_save_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_cancel_button), TRUE);
+}
+
+static void
+on_sync_device_name_save_button_clicked (GtkWidget   *button,
+                                         PrefsDialog *dialog)
+{
+  const char *name;
+
+  name = gtk_entry_get_text (GTK_ENTRY (dialog->sync_device_name_entry));
+  ephy_sync_service_register_device (dialog->sync_service, name);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog->sync_device_name_entry), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_change_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_save_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_cancel_button), FALSE);
+}
+
+static void
+on_sync_device_name_cancel_button_clicked (GtkWidget   *button,
+                                           PrefsDialog *dialog)
+{
+  char *name;
+
+  name = ephy_sync_utils_get_device_name ();
+  gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog->sync_device_name_entry), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_change_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_save_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_cancel_button), FALSE);
+
+  g_free (name);
+}
+
+static void
 on_manage_cookies_button_clicked (GtkWidget   *button,
                                   PrefsDialog *dialog)
 {
@@ -689,6 +736,10 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_60_min_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_now_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, synced_tabs_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_entry);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_change_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_save_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_cancel_button);
 
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
@@ -696,6 +747,9 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sign_out_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_sync_now_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_sync_synced_tabs_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_change_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_save_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_cancel_button_clicked);
 }
 
 static void
@@ -1725,10 +1779,15 @@ setup_sync_page (PrefsDialog *dialog)
   GSettings *sync_settings;
   char *user;
   char *text;
+  char *name;
 
   sync_settings = ephy_settings_get (EPHY_PREFS_SYNC_SCHEMA);
   dialog->sync_service = ephy_shell_get_sync_service (ephy_shell_get_default ());
   dialog->sync_was_signed_in = ephy_sync_service_is_signed_in (dialog->sync_service);
+
+  name = ephy_sync_utils_get_device_name ();
+  gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
+  g_free (name);
 
   if (!dialog->sync_was_signed_in) {
     sync_setup_firefox_iframe (dialog);
