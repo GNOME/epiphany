@@ -1368,6 +1368,8 @@ ephy_sync_service_sync (gpointer user_data)
   for (GSList *l = self->managers; l && l->data; l = l->next)
     ephy_sync_service_sync_collection (self, l->data, ++index == num_managers);
 
+  ephy_sync_utils_set_sync_time (g_get_real_time () / 1000000);
+
   return G_SOURCE_CONTINUE;
 }
 
@@ -2309,6 +2311,7 @@ ephy_sync_service_do_sign_out (EphySyncService *self)
   ephy_sync_utils_set_bookmarks_sync_is_initial (TRUE);
   ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
   ephy_sync_utils_set_history_sync_is_initial (TRUE);
+  ephy_sync_utils_set_sync_time (0);
 }
 
 void

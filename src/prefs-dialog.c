@@ -40,6 +40,7 @@
 #include "ephy-string.h"
 #include "ephy-sync-service.h"
 #include "ephy-sync-utils.h"
+#include "ephy-time-helpers.h"
 #include "ephy-uri-tester-shared.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
@@ -138,6 +139,8 @@ struct _PrefsDialog {
   GtkWidget *sync_device_name_change_button;
   GtkWidget *sync_device_name_save_button;
   GtkWidget *sync_device_name_cancel_button;
+  GtkWidget *sync_last_sync_time_box;
+  GtkWidget *sync_last_sync_time_label;
   gboolean sync_was_signed_in;
 
   WebKitWebView *fxa_web_view;
@@ -227,6 +230,26 @@ sync_with_firefox_toggled_cb (GtkToggleButton *button,
 }
 
 static void
+sync_set_last_sync_time (PrefsDialog *dialog)
+{
+  gint64 sync_time = ephy_sync_utils_get_sync_time ();
+
+  if (sync_time) {
+    char *time = ephy_time_helpers_utf_friendly_time (sync_time);
+    /* Translators: the %s refers to the time at which the last sync was made.
+     * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
+     */
+    char *text = g_strdup_printf (_("Last synchronized: %s"), time);
+
+    gtk_label_set_text (GTK_LABEL (dialog->sync_last_sync_time_label), text);
+    gtk_widget_set_visible (dialog->sync_last_sync_time_box, TRUE);
+
+    g_free (text);
+    g_free (time);
+  }
+}
+
+static void
 sync_finished_cb (EphySyncService *service,
                   PrefsDialog     *dialog)
 {
@@ -234,6 +257,7 @@ sync_finished_cb (EphySyncService *service,
   g_assert (EPHY_IS_PREFS_DIALOG (dialog));
 
   gtk_widget_set_sensitive (dialog->sync_now_button, TRUE);
+  sync_set_last_sync_time (dialog);
 }
 
 static void
@@ -548,6 +572,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
   gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
                       dialog->sync_firefox_iframe_box,
                       FALSE, FALSE, 0);
+  gtk_widget_set_visible (dialog->sync_last_sync_time_box, FALSE);
 
   dialog->sync_was_signed_in = FALSE;
 }
@@ -734,6 +759,8 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_change_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_save_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_cancel_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_last_sync_time_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_last_sync_time_label);
 
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
@@ -1786,6 +1813,7 @@ setup_sync_page (PrefsDialog *dialog)
     /* Translators: the %s refers to the email of the currently logged in user. */
     char *text = g_strdup_printf (_("Logged in as %s"), email);
 
+    sync_set_last_sync_time (dialog);
     gtk_label_set_markup (GTK_LABEL (dialog->sync_firefox_account_label), text);
     gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
                           dialog->sync_firefox_iframe_box);

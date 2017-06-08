@@ -60,6 +60,9 @@ void      ephy_sync_utils_set_sync_user                 (const char *user);
 char     *ephy_sync_utils_get_sync_user                 (void);
 gboolean  ephy_sync_utils_user_is_signed_in             (void);
 
+void      ephy_sync_utils_set_sync_time                 (gint64 time);
+gint64    ephy_sync_utils_get_sync_time                 (void);
+
 guint     ephy_sync_utils_get_sync_frequency            (void);
 gboolean  ephy_sync_utils_sync_with_firefox             (void);
 
