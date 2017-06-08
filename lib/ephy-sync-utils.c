@@ -305,6 +305,19 @@ ephy_sync_utils_user_is_signed_in (void)
   return FALSE;
 }
 
+void
+ephy_sync_utils_set_sync_time (gint64 time)
+{
+  time = time > 0 ? time : 0;
+  g_settings_set_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_TIME, time);
+}
+
+gint64
+ephy_sync_utils_get_sync_time (void)
+{
+  return g_settings_get_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_TIME);
+}
+
 guint
 ephy_sync_utils_get_sync_frequency (void)
 {
