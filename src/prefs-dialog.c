@@ -282,7 +282,7 @@ sync_secrets_store_finished_cb (EphySyncService *service,
     /* Show sync options panel. */
     user = g_strdup_printf ("<b>%s</b>", ephy_sync_utils_get_sync_user ());
     /* Translators: the %s refers to the email of the currently logged in user. */
-    text = g_strdup_printf (_("Currently logged in as %s"), user);
+    text = g_strdup_printf (_("Logged in as %s"), user);
     gtk_label_set_markup (GTK_LABEL (dialog->sync_firefox_account_label), text);
     gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
                           dialog->sync_firefox_iframe_box);
@@ -1784,7 +1784,7 @@ setup_sync_page (PrefsDialog *dialog)
   } else {
     char *email = g_strdup_printf ("<b>%s</b>", user);
     /* Translators: the %s refers to the email of the currently logged in user. */
-    char *text = g_strdup_printf (_("Currently logged in as %s"), email);
+    char *text = g_strdup_printf (_("Logged in as %s"), email);
 
     gtk_label_set_markup (GTK_LABEL (dialog->sync_firefox_account_label), text);
     gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
