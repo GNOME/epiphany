@@ -606,15 +606,62 @@ out:
 }
 
 static void
+forget_secrets_cb (SecretService *service,
+                   GAsyncResult  *result,
+                   gpointer       user_data)
+{
+  GError *error = NULL;
+
+  secret_service_clear_finish (service, result, &error);
+  if (error) {
+    g_warning ("Failed to clear sync secrets: %s", error->message);
+    g_error_free (error);
+  } else {
+    LOG ("Successfully cleared sync secrets");
+  }
+}
+
+static void
+ephy_sync_service_forget_secrets (EphySyncService *self)
+{
+  GHashTable *attributes;
+  char *user;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+  g_assert (self->secrets);
+
+  user = ephy_sync_utils_get_sync_user ();
+  g_assert (user);
+  attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
+                                        ACCOUNT_KEY, user,
+                                        NULL);
+  secret_service_clear (NULL, EPHY_SYNC_SECRET_SCHEMA, attributes, NULL,
+                        (GAsyncReadyCallback)forget_secrets_cb, NULL);
+  g_hash_table_remove_all (self->secrets);
+
+  g_hash_table_unref (attributes);
+  g_free (user);
+}
+
+static void
 destroy_session_cb (SoupSession *session,
                     SoupMessage *msg,
                     gpointer     user_data)
 {
-  if (msg->status_code != 200)
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+
+  if (msg->status_code != 200) {
     g_warning ("Failed to destroy session. Status code: %u, response: %s",
                msg->status_code, msg->response_body->data);
-  else
+  } else {
     LOG ("Successfully destroyed session");
+  }
+
+  /* This is the last step of signing out. Sync secrets can be deleted now. */
+  ephy_sync_service_forget_secrets (self);
+  ephy_sync_service_clear_storage_credentials (self);
+  ephy_sync_utils_set_device_id (NULL);
+  ephy_sync_utils_set_sync_user (NULL);
 }
 
 static void
@@ -657,7 +704,7 @@ ephy_sync_service_destroy_session (EphySyncService *self,
                                "authorization", hawk_header->header);
   soup_message_headers_append (msg->request_headers,
                                "content-type", content_type);
-  soup_session_queue_message (self->session, msg, destroy_session_cb, NULL);
+  soup_session_queue_message (self->session, msg, destroy_session_cb, self);
 
   g_free (token_id_hex);
   g_free (token_id);
@@ -1357,41 +1404,6 @@ sync_frequency_changed_cb (GSettings       *settings,
 
   ephy_sync_service_stop_periodical_sync (self);
   ephy_sync_service_schedule_periodical_sync (self);
-}
-
-static void
-forget_secrets_cb (SecretService *service,
-                   GAsyncResult  *result,
-                   gpointer       user_data)
-{
-  GError *error = NULL;
-
-  secret_service_clear_finish (service, result, &error);
-  if (error) {
-    g_warning ("Failed to clear sync secrets: %s", error->message);
-    g_error_free (error);
-  }
-}
-
-static void
-ephy_sync_service_forget_secrets (EphySyncService *self)
-{
-  GHashTable *attributes;
-  char *user;
-
-  g_assert (EPHY_IS_SYNC_SERVICE (self));
-  g_assert (self->secrets);
-
-  user = ephy_sync_utils_get_sync_user ();
-  attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
-                                        ACCOUNT_KEY, user,
-                                        NULL);
-  secret_service_clear (NULL, EPHY_SYNC_SECRET_SCHEMA, attributes, NULL,
-                        (GAsyncReadyCallback)forget_secrets_cb, NULL);
-  g_hash_table_remove_all (self->secrets);
-
-  g_hash_table_unref (attributes);
-  g_free (user);
 }
 
 static void
@@ -2212,24 +2224,68 @@ ephy_sync_service_register_device (EphySyncService *self,
 }
 
 static void
+delete_open_tabs_record_cb (SoupSession *session,
+                            SoupMessage *msg,
+                            gpointer     user_data)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+
+  if (msg->status_code != 200) {
+    g_warning ("Failed to delete open tabs record. Status code: %u, response: %s",
+               msg->status_code, msg->response_body->data);
+  } else {
+    LOG ("Successfully deleted open tabs record");
+  }
+
+  ephy_sync_service_destroy_session (self, NULL);
+
+  /* This is the last storage message of this session, clear queue. */
+  while (!g_queue_is_empty (self->storage_queue))
+    storage_request_async_data_free (g_queue_pop_head (self->storage_queue));
+
+}
+
+static void
+unregister_device_cb (SoupSession *session,
+                      SoupMessage *msg,
+                      gpointer     user_data)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+  char *endpoint;
+  char *id;
+
+  if (msg->status_code != 200) {
+    g_warning ("Failed to unregister device. Status code: %u, response: %s",
+               msg->status_code, msg->response_body->data);
+  } else {
+    LOG ("Successfully unregistered device");
+  }
+
+  /* Delete the open tabs record corresponding to this device. */
+  id = ephy_sync_utils_get_device_id ();
+  endpoint = g_strdup_printf ("storage/tabs/%s", id);
+  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
+                                           NULL, -1, -1,
+                                           delete_open_tabs_record_cb, self);
+
+  g_free (endpoint);
+  g_free (id);
+}
+
+static void
 ephy_sync_service_unregister_device (EphySyncService *self)
 {
-  char *id;
   char *endpoint;
+  char *id;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
   id = ephy_sync_utils_get_device_id ();
   endpoint = g_strdup_printf ("storage/clients/%s", id);
-  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
-                                           NULL, -1, -1, NULL, NULL);
-
-  g_free (endpoint);
-  endpoint = g_strdup_printf ("storage/tabs/%s", id);
-  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_DELETE,
-                                           NULL, -1, -1, NULL, NULL);
-
-  ephy_sync_utils_set_device_id (NULL);
+  ephy_sync_service_queue_storage_request (self, endpoint,
+                                           SOUP_METHOD_DELETE,
+                                           NULL, -1, -1,
+                                           unregister_device_cb, self);
 
   g_free (endpoint);
   g_free (id);
@@ -2240,15 +2296,8 @@ ephy_sync_service_do_sign_out (EphySyncService *self)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
 
-  ephy_sync_service_unregister_device (self);
   ephy_sync_service_stop_periodical_sync (self);
-  ephy_sync_service_destroy_session (self, NULL);
-  ephy_sync_service_clear_storage_credentials (self);
-  ephy_sync_service_forget_secrets (self);
-
-  /* Clear storage messages queue. */
-  while (!g_queue_is_empty (self->storage_queue))
-    storage_request_async_data_free (g_queue_pop_head (self->storage_queue));
+  ephy_sync_service_unregister_device (self);
 
   /* Clear managers. */
   for (GSList *l = self->managers; l && l->data; l = l->next) {
@@ -2257,7 +2306,6 @@ ephy_sync_service_do_sign_out (EphySyncService *self)
   }
   g_clear_pointer (&self->managers, g_slist_free);
 
-  ephy_sync_utils_set_sync_user (NULL);
   ephy_sync_utils_set_bookmarks_sync_is_initial (TRUE);
   ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
   ephy_sync_utils_set_history_sync_is_initial (TRUE);
