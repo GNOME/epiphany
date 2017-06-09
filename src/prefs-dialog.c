@@ -57,7 +57,7 @@
 #endif
 
 #define DOWNLOAD_BUTTON_WIDTH   8
-#define FXA_IFRAME_URL "https://accounts.firefox.com/signin?service=sync&context=fx_desktop_v2"
+#define FXA_IFRAME_URL "https://accounts.firefox.com/signin?service=sync&context=fx_desktop_v3"
 
 enum {
   COL_LANG_NAME,
@@ -330,7 +330,7 @@ static void
 sync_send_message_to_content (PrefsDialog *dialog,
                               const char  *channel_id,
                               const char  *command,
-                              gint64       message_id,
+                              const char  *message_id,
                               JsonObject  *data)
 {
   JsonNode *node;
@@ -342,7 +342,7 @@ sync_send_message_to_content (PrefsDialog *dialog,
 
   message = json_object_new ();
   json_object_set_string_member (message, "command", command);
-  json_object_set_int_member (message, "messageId", message_id);
+  json_object_set_string_member (message, "messageId", message_id);
   json_object_set_object_member (message, "data", json_object_ref (data));
   detail = json_object_new ();
   json_object_set_string_member (detail, "id", channel_id);
@@ -406,7 +406,7 @@ server_message_received_cb (WebKitUserContentManager *manager,
     sync_send_message_to_content (dialog,
                                   json_object_get_string_member (detail, "id"),
                                   "fxaccounts:can_link_account",
-                                  json_object_get_int_member (message, "messageId"),
+                                  json_object_get_string_member (message, "messageId"),
                                   data);
     json_object_unref (data);
   } else if (g_strcmp0 (command, "fxaccounts:login") == 0) {
