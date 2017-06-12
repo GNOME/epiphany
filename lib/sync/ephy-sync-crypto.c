@@ -21,6 +21,7 @@
 #include "config.h"
 #include "ephy-sync-crypto.h"
 
+#include "ephy-string.h"
 #include "ephy-sync-utils.h"
 
 #include <glib/gstdio.h>
@@ -128,43 +129,6 @@ ephy_sync_crypto_hawk_artifacts_free (SyncCryptoHawkArtifacts *artifacts)
 }
 
 static char *
-ephy_sync_crypto_find_and_replace (const char *where,
-                                   const char *to_find,
-                                   const char *to_repl)
-{
-  const char *haystack = where;
-  const char *needle = NULL;
-  char *out;
-  gsize haystack_len;
-  gsize to_find_len;
-  gsize to_repl_len;
-  gsize new_len = 0;
-  gsize skip_len = 0;
-
-  g_assert (where);
-  g_assert (to_find);
-  g_assert (to_repl);
-
-  haystack_len = strlen (where);
-  to_find_len = strlen (to_find);
-  to_repl_len = strlen (to_repl);
-  out = g_malloc (haystack_len + 1);
-
-  while ((needle = g_strstr_len (haystack, -1, to_find)) != NULL) {
-    haystack_len += to_find_len - to_repl_len;
-    out = g_realloc (out, haystack_len + 1);
-    skip_len = needle - haystack;
-    memcpy (out + new_len, haystack, skip_len);
-    memcpy (out + new_len + skip_len, to_repl, to_repl_len);
-    new_len += skip_len + to_repl_len;
-    haystack = needle + to_find_len;
-  }
-  strcpy (out + new_len, haystack);
-
-  return out;
-}
-
-static char *
 hawk_parse_content_type (const char *content_type)
 {
   char **tokens;
@@ -252,8 +216,8 @@ hawk_normalize_string (const char              *type,
                           NULL);
 
   if (artifacts->ext && strlen (artifacts->ext) > 0) {
-    tmp = ephy_sync_crypto_find_and_replace (artifacts->ext, "\\", "\\\\");
-    n_ext = ephy_sync_crypto_find_and_replace (tmp, "\n", "\\n");
+    tmp = ephy_string_find_and_replace (artifacts->ext, "\\", "\\\\");
+    n_ext = ephy_string_find_and_replace (tmp, "\n", "\\n");
     g_free (tmp);
   }
 
@@ -393,8 +357,8 @@ ephy_sync_crypto_hawk_header_new (const char            *url,
     char *h_ext;
     char *tmp_ext;
 
-    tmp_ext = ephy_sync_crypto_find_and_replace (artifacts->ext, "\\", "\\\\");
-    h_ext = ephy_sync_crypto_find_and_replace (tmp_ext, "\n", "\\n");
+    tmp_ext = ephy_string_find_and_replace (artifacts->ext, "\\", "\\\\");
+    h_ext = ephy_string_find_and_replace (tmp_ext, "\n", "\\n");
     header = hawk_append_to_header (header, "ext", h_ext);
 
     g_free (h_ext);

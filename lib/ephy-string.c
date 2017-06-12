@@ -243,6 +243,43 @@ ephy_string_commandline_args_to_uris (char **arguments, GError **error)
   return args;
 }
 
+char *
+ephy_string_find_and_replace (const char *string,
+                              const char *to_find,
+                              const char *to_repl)
+{
+  const char *haystack = string;
+  const char *needle = NULL;
+  char *out;
+  gsize haystack_len;
+  gsize to_find_len;
+  gsize to_repl_len;
+  gsize new_len = 0;
+  gsize skip_len = 0;
+
+  g_return_val_if_fail (string, NULL);
+  g_return_val_if_fail (to_find, NULL);
+  g_return_val_if_fail (to_repl, NULL);
+
+  haystack_len = strlen (string);
+  to_find_len = strlen (to_find);
+  to_repl_len = strlen (to_repl);
+  out = g_malloc (haystack_len + 1);
+
+  while ((needle = g_strstr_len (haystack, -1, to_find)) != NULL) {
+    haystack_len += to_find_len - to_repl_len;
+    out = g_realloc (out, haystack_len + 1);
+    skip_len = needle - haystack;
+    memcpy (out + new_len, haystack, skip_len);
+    memcpy (out + new_len + skip_len, to_repl, to_repl_len);
+    new_len += skip_len + to_repl_len;
+    haystack = needle + to_find_len;
+  }
+  strcpy (out + new_len, haystack);
+
+  return out;
+}
+
 char **
 ephy_strv_append (const char * const *strv,
                   const char         *str)
