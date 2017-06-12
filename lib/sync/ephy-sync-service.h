@@ -30,21 +30,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySyncService, ephy_sync_service, EPHY, SYNC_SERVICE, GObject)
 
-EphySyncService *ephy_sync_service_new                    (gboolean sync_periodically);
-void             ephy_sync_service_do_sign_in             (EphySyncService *self,
-                                                           const char      *email,
-                                                           const char      *uid,
-                                                           const char      *session_token,
-                                                           const char      *key_fetch_token,
-                                                           const char      *unwrap_b_key);
-void             ephy_sync_service_do_sign_out            (EphySyncService *self);
-void             ephy_sync_service_do_sync                (EphySyncService *self);
-void             ephy_sync_service_start_periodical_sync  (EphySyncService *self);
-void             ephy_sync_service_register_device        (EphySyncService *self,
-                                                           const char      *device_name);
-void             ephy_sync_service_register_manager       (EphySyncService           *self,
-                                                           EphySynchronizableManager *manager);
-void             ephy_sync_service_unregister_manager     (EphySyncService           *self,
-                                                           EphySynchronizableManager *manager);
+EphySyncService *ephy_sync_service_new                (gboolean sync_periodically);
+void             ephy_sync_service_sign_in            (EphySyncService *self,
+                                                       const char      *email,
+                                                       const char      *uid,
+                                                       const char      *session_token,
+                                                       const char      *key_fetch_token,
+                                                       const char      *unwrap_kb);
+void             ephy_sync_service_sign_out           (EphySyncService *self);
+void             ephy_sync_service_sync               (EphySyncService *self);
+void             ephy_sync_service_start_sync         (EphySyncService *self);
+void             ephy_sync_service_register_device    (EphySyncService *self,
+                                                       const char      *device_name);
+void             ephy_sync_service_register_manager   (EphySyncService           *self,
+                                                       EphySynchronizableManager *manager);
+void             ephy_sync_service_unregister_manager (EphySyncService           *self,
+                                                       EphySynchronizableManager *manager);
 
 G_END_DECLS

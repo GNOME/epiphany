@@ -114,7 +114,7 @@ ephy_sync_debug_get_bundle_for_collection (const char *collection)
   array = json_object_has_member (collections, collection) ?
           json_object_get_array_member (collections, collection) :
           json_object_get_array_member (json, "default");
-  bundle = ephy_sync_crypto_key_bundle_from_array (array);
+  bundle = ephy_sync_crypto_key_bundle_new (array);
 
   json_node_unref (node);
 free_secrets:
@@ -216,9 +216,8 @@ ephy_sync_debug_prepare_soup_message (const char   *url,
   if (!g_strcmp0 (method, "PUT") || !g_strcmp0(method, "POST"))
     soup_message_headers_append (msg->request_headers, "content-type", content_type);
 
-  header = ephy_sync_crypto_compute_hawk_header (url, method, hawk_id,
-                                                 hawk_key, hawk_key_len,
-                                                 options);
+  header = ephy_sync_crypto_hawk_header_new (url, method, hawk_id,
+                                             hawk_key, hawk_key_len, options);
   soup_message_headers_append (msg->request_headers, "authorization", header->header);
 
   ephy_sync_crypto_hawk_header_free (header);
@@ -254,7 +253,7 @@ ephy_sync_debug_get_signed_certificate (const char           *session_token,
   g_assert (session_token);
   g_assert (keypair);
 
-  ephy_sync_crypto_process_session_token (session_token, &id, &key, &tmp, 32);
+  ephy_sync_crypto_derive_session_token (session_token, &id, &key, &tmp);
   id_hex = ephy_sync_utils_encode_hex (id, 32);
   n = mpz_get_str (NULL, 10, keypair->public.n);
   e = mpz_get_str (NULL, 10, keypair->public.e);
@@ -324,10 +323,10 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
   char *certificate;
   char *audience;
   char *assertion;
-  char *hashed_key_b;
+  char *hashed_kb;
   char *client_state;
   char *authorization;
-  guint8 *key_b;
+  guint8 *kb;
   const char *session_token;
   guint status_code;
   gboolean success = FALSE;
@@ -336,7 +335,7 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
   if (!secrets)
     return FALSE;
 
-  keypair = ephy_sync_crypto_generate_rsa_key_pair ();
+  keypair = ephy_sync_crypto_rsa_key_pair_new ();
   session_token = json_object_get_string_member (secrets, "session_token");
   certificate = ephy_sync_debug_get_signed_certificate (session_token, keypair);
   if (!certificate)
@@ -344,9 +343,9 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
 
   audience = ephy_sync_utils_get_audience (TOKEN_SERVER_URL);
   assertion = ephy_sync_crypto_create_assertion (certificate, audience, 300, keypair);
-  key_b = ephy_sync_utils_decode_hex (json_object_get_string_member (secrets, "master_key"));
-  hashed_key_b = g_compute_checksum_for_data (G_CHECKSUM_SHA256, key_b, 32);
-  client_state = g_strndup (hashed_key_b, 32);
+  kb = ephy_sync_utils_decode_hex (json_object_get_string_member (secrets, "master_key"));
+  hashed_kb = g_compute_checksum_for_data (G_CHECKSUM_SHA256, kb, 32);
+  client_state = g_strndup (hashed_kb, 32);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
   msg = soup_message_new ("GET", TOKEN_SERVER_URL);
   soup_message_headers_append (msg->request_headers, "X-Client-State", client_state);
@@ -378,8 +377,8 @@ free_session:
   g_object_unref (msg);
   g_free (authorization);
   g_free (client_state);
-  g_free (hashed_key_b);
-  g_free (key_b);
+  g_free (hashed_kb);
+  g_free (kb);
   g_free (assertion);
   g_free (audience);
   g_free (certificate);
@@ -895,7 +894,7 @@ ephy_sync_debug_view_crypto_keys_record (void)
   char *crypto_keys;
   const char *payload;
   const char *key_b_hex;
-  guint8 *key_b;
+  guint8 *kb;
 
   secrets = ephy_sync_debug_load_secrets ();
   if (!secrets)
@@ -915,8 +914,8 @@ ephy_sync_debug_view_crypto_keys_record (void)
   json = json_node_get_object (node);
   payload = json_object_get_string_member (json, "payload");
   key_b_hex = json_object_get_string_member (secrets, "master_key");
-  key_b = ephy_sync_utils_decode_hex (key_b_hex);
-  bundle = ephy_sync_crypto_derive_key_bundle (key_b, 32);
+  kb = ephy_sync_utils_decode_hex (key_b_hex);
+  bundle = ephy_sync_crypto_derive_master_bundle (kb);
   crypto_keys = ephy_sync_crypto_decrypt_record (payload, bundle);
 
   if (!crypto_keys)
@@ -927,7 +926,7 @@ ephy_sync_debug_view_crypto_keys_record (void)
   g_free (crypto_keys);
 free_bundle:
   ephy_sync_crypto_key_bundle_free (bundle);
-  g_free (key_b);
+  g_free (kb);
   json_node_unref (node);
 free_response:
   g_free (response);
