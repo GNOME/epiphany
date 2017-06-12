@@ -181,7 +181,7 @@ prefs_dialog_finalize (GObject *object)
 
   if (dialog->sync_service != NULL) {
     if (ephy_sync_utils_user_is_signed_in () && !dialog->sync_was_signed_in)
-      ephy_sync_service_start_periodical_sync (dialog->sync_service);
+      ephy_sync_service_start_sync (dialog->sync_service);
   }
 
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
@@ -400,7 +400,7 @@ sync_fxa_server_message_cb (WebKitUserContentManager *manager,
   const char *uid;
   const char *session_token;
   const char *key_fetch_token;
-  const char *unwrap_b_key;
+  const char *unwrap_kb;
 
   json_string = ephy_embed_utils_get_js_result_as_string (result);
   if (!json_string) {
@@ -476,8 +476,8 @@ sync_fxa_server_message_cb (WebKitUserContentManager *manager,
   uid = json_object_get_string_member (data, "uid");
   session_token = json_object_get_string_member (data, "sessionToken");
   key_fetch_token = json_object_get_string_member (data, "keyFetchToken");
-  unwrap_b_key = json_object_get_string_member (data, "unwrapBKey");
-  if (!email || !uid || !session_token || !key_fetch_token || !unwrap_b_key) {
+  unwrap_kb = json_object_get_string_member (data, "unwrapBKey");
+  if (!email || !uid || !session_token || !key_fetch_token || !unwrap_kb) {
     g_warning ("JSON object has missing or invalid members");
     goto out_error;
   }
@@ -490,8 +490,8 @@ sync_fxa_server_message_cb (WebKitUserContentManager *manager,
   if (!json_object_get_boolean_member (data, "verified"))
     sync_sign_in_details_show (dialog, _("Please don’t leave this page until "
                                          "you have completed the verification."));
-  ephy_sync_service_do_sign_in (dialog->sync_service, email, uid,
-                                session_token, key_fetch_token, unwrap_b_key);
+  ephy_sync_service_sign_in (dialog->sync_service, email, uid,
+                             session_token, key_fetch_token, unwrap_kb);
   goto out_no_error;
 
 out_error:
@@ -561,7 +561,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
                                  PrefsDialog *dialog)
 {
 
-  ephy_sync_service_do_sign_out (dialog->sync_service);
+  ephy_sync_service_sign_out (dialog->sync_service);
 
   /* Show Firefox Accounts iframe. */
   sync_setup_firefox_iframe (dialog);
@@ -582,7 +582,7 @@ on_sync_sync_now_button_clicked (GtkWidget   *button,
                                  PrefsDialog *dialog)
 {
   gtk_widget_set_sensitive (button, FALSE);
-  ephy_sync_service_do_sync (dialog->sync_service);
+  ephy_sync_service_sync (dialog->sync_service);
 }
 
 static void

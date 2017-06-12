@@ -393,16 +393,17 @@
   EphySyncCrypto is a helper module that handles all the cryptographic stuff.
   Its API include:
 
-    * _process_session_token(). Derives the Hawk id and key from a sessionToken.
+    * _derive_session_token(). Derives the Hawk id and key from a sessionToken.
 
-    * _process_key_fetch_token(). Derives the Hawk id and key, the response HMAC
+    * _derive_key_fetch_token(). Derives the Hawk id and key, the response HMAC
       key and the response XOR key from a keyFetchToken.
 
-    * _compute_sync_keys(). Derives the Master Sync Key from the unwrapBKey
+    * _derive_master_keys(). Derives the Master Sync Key from the unwrapBKey
       token, the bundle returned by the /accounts/keys endpoint of the Firefox
-      Accounts Server, the response HMAC key and the response XOR key.
+      Accounts Server, the response HMAC key and the response XOR key. kB is
+      the Master Sync Key and kA is left unused.
 
-    * _derive_key_bundle(). Derives the key bundle from the Master Sync Key.
+    * _derive_master_bundle(). Derives the key bundle from the Master Sync Key.
 
     * _generate_crypto_keys(). Generates a new crypto/keys record.
 
@@ -410,13 +411,13 @@
 
     * _decrypt_record(). Decrypts a BSO payload into a clear text.
 
-    * _generate_rsa_key_pair(). Generates a RSA key pair. This is needed when
+    * _rsa_key_pair_new(). Generates a RSA key pair. This is needed when
       obtaining an identify certificate and creating the BrowserID assertion.
 
     * _create_assertion(). Creates a BrowserID assertion from a certificate, an
       audience and a RSA key pair.
 
-    * _compute_hawk_header(). Creates a Hawk header that is used to authorize
+    * _hawk_header_new(). Creates a Hawk header that is used to authorize
       Hawk requests. Unfortunately, there isn't any C library for creating Hawk
       headers so the code has been reproduced from a Python library [19].
 
