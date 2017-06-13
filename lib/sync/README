@@ -262,6 +262,38 @@
      keyFetchToken and unwrapBKey tokens amongst other. Now the client has
      everything it needs and the sync can begin.
 
+  After the sync tokens have been received via fxaccounts:login command in the
+  preferences dialog, they are passed to EphySyncService via the _sign_in()
+  function. After that, EphySyncService takes care of the rest:
+
+    * It retrieves the Master Sync Key.
+
+    * It verifies the version of the Sync Storage Server. EphySyncService only
+      supports version 1.5 so the sign in will fail in case it detects a lower
+      version. The version is kept on the Sync Storage Server in the meta/global
+      record [18]. This is a special record that is not encrypted and contains
+      general information about the state of the Sync Storage Server. In case
+      the meta/global record is missing (this happens when the Firefox account
+      is newly created), EphySyncService will generate and upload new one.
+
+    * It retrieves account's crypto keys from the Sync Storage Server. In case
+      the crypto/keys record does not exist (this happens when the Firefox
+      account is newly created), EphySyncService will generate and upload a new
+      crypto/keys record that contains a randomly generated default key bundle.
+
+    * It registers the current device in the clients collection on the Sync
+      Storage Server.
+
+    * It stores the sync secrets (sessionToken, uid, Master Sync Key, crypto
+      keys) in the sync SecretSchema. They are kept there until sign out, when
+      the SecretSchema is cleared. At this point the sign in is considered
+      complete and the Firefox iframe is replaced with the panel that displays
+      the sync configuration options.
+
+  Note that the above steps are chronological. If any failure happens at any
+  point, EphySyncService will abort and report a sign in error in next to the
+  Firefox iframe.
+
   Sync Modules in Epiphany
   ------------------------
 
@@ -276,24 +308,6 @@
   (gets the storage credentials) and Firefox Accounts Server (gets account keys,
   gets certificates, destroys the session). It also schedules and makes
   periodical synchronizations via every collection's manager.
-
-  After the user clicks Sign In and the fxaccounts:login WebChannel message is
-  received, the sessionToken, keyFetchToken and unwrapBKey are passed from the
-  preferences dialog to EphySyncService via the _sign_in(). The sync service
-  will then go through all the flow previously described to read the crypto/keys
-  record from the Sync Storage Server. In case the crypto/keys record does not
-  exist (this happens when the Firefox account is newly created), the sync
-  service will generate and upload a new crypto/keys record which contains a
-  randomly generated default key bundle. Note that EphySyncService currently
-  supports only v1.5 of the Sync Storage Server and the sign in will fail if it
-  detects a lower version. The version is kept on the Sync Storage Server in
-  the meta/global record [18]. This is a special record that is not encrypted
-  and contains general information about the state of the Sync Storage Server.
-
-  The sessionToken, the Master Sync Key and the crypto key bundles are then
-  stored in the sync SecretSchema. They are loaded in memory at every startup
-  and used whenever needed until the user signs out. At that point they are
-  freed and the SecretSchema is cleared.
 
   The requests to the Sync Storage Server are sent internally via
   ephy_sync_service_queue_storage_request(). This checks whether the storage
