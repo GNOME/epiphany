@@ -345,7 +345,7 @@ sync_secrets_store_finished_cb (EphySyncService *service,
 
 static void
 sync_message_to_fxa_content (PrefsDialog *dialog,
-                             const char  *channel_id,
+                             const char  *web_channel_id,
                              const char  *command,
                              const char  *message_id,
                              JsonObject  *data)
@@ -357,12 +357,18 @@ sync_message_to_fxa_content (PrefsDialog *dialog,
   char *script;
   const char *type;
 
+  g_assert (EPHY_IS_PREFS_DIALOG (dialog));
+  g_assert (web_channel_id);
+  g_assert (command);
+  g_assert (message_id);
+  g_assert (data);
+
   message = json_object_new ();
   json_object_set_string_member (message, "command", command);
   json_object_set_string_member (message, "messageId", message_id);
   json_object_set_object_member (message, "data", json_object_ref (data));
   detail = json_object_new ();
-  json_object_set_string_member (detail, "id", channel_id);
+  json_object_set_string_member (detail, "id", web_channel_id);
   json_object_set_object_member (detail, "message", message);
   node = json_node_new (JSON_NODE_OBJECT);
   json_node_set_object (node, detail);
@@ -382,127 +388,187 @@ sync_message_to_fxa_content (PrefsDialog *dialog,
   json_node_unref (node);
 }
 
+static gboolean
+sync_parse_message_from_fxa_content (const char  *message,
+                                     char       **web_channel_id,
+                                     char       **message_id,
+                                     char       **command,
+                                     JsonObject **data,
+                                     char       **error_msg)
+{
+  JsonNode *node;
+  JsonObject *object;
+  JsonObject *detail;
+  JsonObject *msg;
+  JsonObject *msg_data = NULL;
+  const char *type;
+  const char *channel_id;
+  const char *cmd;
+  const char *error = NULL;
+  gboolean success = FALSE;
+
+  g_assert (message);
+  g_assert (web_channel_id);
+  g_assert (message_id);
+  g_assert (command);
+  g_assert (data);
+  g_assert (error_msg);
+
+  /* Expected message format is:
+   * {
+   *   type: "WebChannelMessageToChrome",
+   *   detail: {
+   *     id: <id> (string, the id of the WebChannel),
+   *     message: {
+   *       messageId: <messageId> (optional string, the message id),
+   *       command: <command> (string, the message command),
+   *       data: <data> (optional JSON object, the message data)
+   *     }
+   *   }
+   * }
+   */
+
+  node = json_from_string (message, NULL);
+  if (!node) {
+    error = "Message is not a valid JSON";
+    goto out_error;
+  }
+  object = json_node_get_object (node);
+  if (!object) {
+    error = "Message is not a JSON object";
+    goto out_error;
+  }
+  type = json_object_get_string_member (object, "type");
+  if (!type) {
+    error = "Message has missing or invalid 'type' member";
+    goto out_error;
+  } else if (strcmp (type, "WebChannelMessageToChrome")) {
+    error = "Message type is not WebChannelMessageToChrome";
+    goto out_error;
+  }
+  detail = json_object_get_object_member (object, "detail");
+  if (!detail) {
+    error = "Message has missing or invalid 'detail' member";
+    goto out_error;
+  }
+  channel_id = json_object_get_string_member (detail, "id");
+  if (!channel_id) {
+    error = "'Detail' object has missing or invalid 'id' member";
+    goto out_error;
+  }
+  msg = json_object_get_object_member (detail, "message");
+  if (!msg) {
+    error = "'Detail' object has missing or invalid 'message' member";
+    goto out_error;
+  }
+  cmd = json_object_get_string_member (msg, "command");
+  if (!cmd) {
+    error = "'Message' object has missing or invalid 'command' member";
+    goto out_error;
+  }
+
+  *web_channel_id = g_strdup (channel_id);
+  *command = g_strdup (cmd);
+  *message_id = json_object_has_member (msg, "messageId") ?
+                g_strdup (json_object_get_string_member (msg, "messageId")) :
+                NULL;
+  if (json_object_has_member (msg, "data"))
+    msg_data = json_object_get_object_member (msg, "data");
+  *data = msg_data ? json_object_ref (msg_data) : NULL;
+
+  success = TRUE;
+  *error_msg = NULL;
+  goto out_no_error;
+
+out_error:
+  *web_channel_id = NULL;
+  *command = NULL;
+  *message_id = NULL;
+  *error_msg = g_strdup (error);
+
+out_no_error:
+  json_node_unref (node);
+
+  return success;
+}
+
 static void
 sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
                                   WebKitJavascriptResult   *result,
                                   PrefsDialog              *dialog)
 {
-  JsonNode *node = NULL;
-  JsonObject *json = NULL;
-  JsonObject *detail = NULL;
-  JsonObject *message = NULL;
   JsonObject *data = NULL;
-  GError *error = NULL;
-  char *json_string = NULL;
-  const char *type;
-  const char *command;
-  const char *email;
-  const char *uid;
-  const char *session_token;
-  const char *key_fetch_token;
-  const char *unwrap_kb;
+  char *message = NULL;
+  char *web_channel_id = NULL;
+  char *message_id = NULL;
+  char *command = NULL;
+  char *error_msg = NULL;
+  gboolean is_error = FALSE;
 
-  json_string = ephy_embed_utils_get_js_result_as_string (result);
-  if (!json_string) {
-    g_warning ("Failed to get JavaScript result as string");
-    goto out_error;
-  }
-  node = json_from_string (json_string, &error);
-  if (error) {
-    g_warning ("Response is not a valid JSON: %s", error->message);
-    goto out_error;
-  }
-  json = json_node_get_object (node);
-  if (!json) {
-    g_warning ("JSON node does not hold a JSON object");
-    goto out_error;
-  }
-  type = json_object_get_string_member (json, "type");
-  if (!type) {
-    g_warning ("JSON object has missing or invalid 'type' member");
-    goto out_error;
-  }
-  /* The only message type expected is WebChannelMessageToChrome. */
-  if (g_strcmp0 (type, "WebChannelMessageToChrome")) {
-    g_warning ("Unknown command type: %s", type);
-    goto out_error;
-  }
-  detail = json_object_get_object_member (json, "detail");
-  if (!detail) {
-    g_warning ("JSON object has missing or invalid 'detail' member");
-    goto out_error;
-  }
-  message = json_object_get_object_member (detail, "message");
+  message = ephy_embed_utils_get_js_result_as_string (result);
   if (!message) {
-    g_warning ("JSON object has missing or invalid 'message' member");
-    goto out_error;
-  }
-  command = json_object_get_string_member (message, "command");
-  if (!command) {
-    g_warning ("JSON object has missing or invalid 'command' member");
-    goto out_error;
+    g_warning ("Failed to get JavaScript result as string");
+    is_error = TRUE;
+    goto out;
   }
 
-  if (!g_strcmp0 (command, "fxaccounts:loaded")) {
-    LOG ("Firefox Accounts iframe loaded");
-    goto out_no_error;
+  if (!sync_parse_message_from_fxa_content (message, &web_channel_id,
+                                            &message_id, &command,
+                                            &data, &error_msg)) {
+    g_warning ("Failed to parse message from FxA Content Server: %s", error_msg);
+    is_error = TRUE;
+    goto out;
   }
+
+  LOG ("WebChannelMessageToChrome: received %s command", command);
+
   if (!g_strcmp0 (command, "fxaccounts:can_link_account")) {
-    /* We need to confirm a relink. */
-    data = json_object_new ();
-    json_object_set_boolean_member (data, "ok", TRUE);
-    sync_message_to_fxa_content (dialog,
-                                 json_object_get_string_member (detail, "id"),
-                                 "fxaccounts:can_link_account",
-                                 json_object_get_string_member (message, "messageId"),
-                                 data);
+    /* Confirm a relink. Respond with {ok: true}. */
+    JsonObject *response = json_object_new ();
+    json_object_set_boolean_member (response, "ok", TRUE);
+    sync_message_to_fxa_content (dialog, web_channel_id, command, message_id, response);
+    json_object_unref (response);
+  } else if (!g_strcmp0 (command, "fxaccounts:login")) {
+    /* Extract sync tokens and pass them to the sync service. */
+    const char *email = json_object_get_string_member (data, "email");
+    const char *uid = json_object_get_string_member (data, "uid");
+    const char *session_token = json_object_get_string_member (data, "sessionToken");
+    const char *key_fetch_token = json_object_get_string_member (data, "keyFetchToken");
+    const char *unwrap_kb = json_object_get_string_member (data, "unwrapBKey");
+
+    if (!email || !uid || !session_token || !key_fetch_token || !unwrap_kb) {
+      g_warning ("Message data has missing or invalid members");
+      is_error = TRUE;
+      goto out;
+    }
+    if (!json_object_has_member (data, "verified") ||
+        !JSON_NODE_HOLDS_VALUE (json_object_get_member (data, "verified"))) {
+      g_warning ("Message data has missing or invalid 'verified' member");
+      is_error = TRUE;
+      goto out;
+    }
+
+    if (!json_object_get_boolean_member (data, "verified"))
+      sync_sign_in_details_show (dialog, _("Please don’t leave this page until "
+                                           "you have completed the verification."));
+
+    ephy_sync_service_sign_in (dialog->sync_service, email, uid,
+                               session_token, key_fetch_token, unwrap_kb);
+  }
+
+out:
+  if (data)
     json_object_unref (data);
-    goto out_no_error;
-  }
-  if (g_strcmp0 (command, "fxaccounts:login")) {
-    g_warning ("Unexepected command: %s", command);
-    goto out_error;
-  }
+  g_free (message);
+  g_free (web_channel_id);
+  g_free (message_id);
+  g_free (command);
+  g_free (error_msg);
 
-  /* Login command. */
-  gtk_widget_set_visible (dialog->sync_firefox_iframe_label, FALSE);
-
-  data = json_object_get_object_member (message, "data");
-  if (!data) {
-    g_warning ("JSON object has invalid 'data' member");
-    goto out_error;
+  if (is_error) {
+    sync_sign_in_details_show (dialog, _("Something went wrong, please try again later."));
+    webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
   }
-  email = json_object_get_string_member (data, "email");
-  uid = json_object_get_string_member (data, "uid");
-  session_token = json_object_get_string_member (data, "sessionToken");
-  key_fetch_token = json_object_get_string_member (data, "keyFetchToken");
-  unwrap_kb = json_object_get_string_member (data, "unwrapBKey");
-  if (!email || !uid || !session_token || !key_fetch_token || !unwrap_kb) {
-    g_warning ("JSON object has missing or invalid members");
-    goto out_error;
-  }
-  if (!json_object_has_member (data, "verified") ||
-      !JSON_NODE_HOLDS_VALUE (json_object_get_member (data, "verified"))) {
-    g_warning ("JSON object has missing or invalid 'verified' member");
-    goto out_error;
-  }
-
-  if (!json_object_get_boolean_member (data, "verified"))
-    sync_sign_in_details_show (dialog, _("Please don’t leave this page until "
-                                         "you have completed the verification."));
-  ephy_sync_service_sign_in (dialog->sync_service, email, uid,
-                             session_token, key_fetch_token, unwrap_kb);
-  goto out_no_error;
-
-out_error:
-  sync_sign_in_details_show (dialog, _("Something went wrong, please try again."));
-  webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
-out_no_error:
-  if (node)
-    json_node_unref (node);
-  if (error)
-    g_error_free (error);
-  g_free (json_string);
 }
 
 static void
