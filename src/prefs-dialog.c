@@ -344,11 +344,11 @@ sync_secrets_store_finished_cb (EphySyncService *service,
 }
 
 static void
-sync_send_message_to_content (PrefsDialog *dialog,
-                              const char  *channel_id,
-                              const char  *command,
-                              const char  *message_id,
-                              JsonObject  *data)
+sync_message_to_fxa_content (PrefsDialog *dialog,
+                             const char  *channel_id,
+                             const char  *command,
+                             const char  *message_id,
+                             JsonObject  *data)
 {
   JsonNode *node;
   JsonObject *detail;
@@ -383,9 +383,9 @@ sync_send_message_to_content (PrefsDialog *dialog,
 }
 
 static void
-sync_fxa_server_message_cb (WebKitUserContentManager *manager,
-                            WebKitJavascriptResult   *result,
-                            PrefsDialog              *dialog)
+sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
+                                  WebKitJavascriptResult   *result,
+                                  PrefsDialog              *dialog)
 {
   JsonNode *node = NULL;
   JsonObject *json = NULL;
@@ -451,11 +451,11 @@ sync_fxa_server_message_cb (WebKitUserContentManager *manager,
     /* We need to confirm a relink. */
     data = json_object_new ();
     json_object_set_boolean_member (data, "ok", TRUE);
-    sync_send_message_to_content (dialog,
-                                  json_object_get_string_member (detail, "id"),
-                                  "fxaccounts:can_link_account",
-                                  json_object_get_string_member (message, "messageId"),
-                                  data);
+    sync_message_to_fxa_content (dialog,
+                                 json_object_get_string_member (detail, "id"),
+                                 "fxaccounts:can_link_account",
+                                 json_object_get_string_member (message, "messageId"),
+                                 data);
     json_object_unref (data);
     goto out_no_error;
   }
@@ -527,7 +527,7 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
     webkit_user_content_manager_add_script (dialog->fxa_manager, dialog->fxa_script);
     g_signal_connect (dialog->fxa_manager,
                       "script-message-received::toChromeMessageHandler",
-                      G_CALLBACK (sync_fxa_server_message_cb),
+                      G_CALLBACK (sync_message_from_fxa_content_cb),
                       dialog);
     webkit_user_content_manager_register_script_message_handler (dialog->fxa_manager,
                                                                  "toChromeMessageHandler");
