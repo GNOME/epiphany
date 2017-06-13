@@ -41,6 +41,7 @@ struct _EphySyncService {
   guint        source_id;
 
   char        *user;
+  char        *crypto_keys;
   GHashTable  *secrets;
   GSList      *managers;
 
@@ -1495,8 +1496,8 @@ store_secrets_cb (SecretService   *service,
     ephy_sync_service_destroy_session (self, NULL);
     g_hash_table_remove_all (self->secrets);
   } else {
+    LOG ("Successfully stored sync secrets");
     ephy_sync_utils_set_sync_user (self->user);
-    ephy_sync_service_register_device (self, NULL);
   }
 
   g_signal_emit (self, signals[STORE_FINISHED], 0, error);
@@ -1539,6 +1540,7 @@ ephy_sync_service_store_secrets (EphySyncService *self)
   /* Translators: %s is the email of the user. */
   label = g_strdup_printf (_("The sync secrets of %s"), self->user);
 
+  LOG ("Storing sync secrets...");
   secret_service_store (NULL, EPHY_SYNC_SECRET_SCHEMA,
                         attributes, NULL, label, secret, NULL,
                         (GAsyncReadyCallback)store_secrets_cb, self);
@@ -1561,6 +1563,7 @@ ephy_sync_service_dispose (GObject *object)
 
   ephy_sync_service_clear_storage_credentials (self);
   g_clear_object (&self->session);
+  g_clear_pointer (&self->crypto_keys, g_free);
   g_clear_pointer (&self->key_pair, ephy_sync_crypto_rsa_key_pair_free);
   g_clear_pointer (&self->secrets, g_hash_table_destroy);
   g_clear_pointer (&self->managers, g_slist_free);
@@ -1651,14 +1654,35 @@ ephy_sync_service_new (gboolean sync_periodically)
                                           NULL));
 }
 
-static char *
+static void
+upload_crypto_keys_cb (SoupSession *session,
+                       SoupMessage *msg,
+                       gpointer     user_data)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+
+  if (msg->status_code != 200) {
+    g_warning ("Failed to upload crypto/keys record. Status code: %u, response: %s",
+               msg->status_code, msg->response_body->data);
+    ephy_sync_service_report_sign_in_error (self,
+                                            _("Failed to upload crypto/keys record."),
+                                            NULL, TRUE);
+  } else {
+    LOG ("Successfully uploaded crypto/keys record");
+    ephy_sync_service_set_secret (self, secrets[CRYPTO_KEYS], self->crypto_keys);
+    ephy_sync_service_register_device (self, NULL);
+  }
+
+  g_clear_pointer (&self->crypto_keys, g_free);
+}
+
+static void
 ephy_sync_service_upload_crypto_keys (EphySyncService *self)
 {
   SyncCryptoKeyBundle *bundle;
   JsonNode *node;
   JsonObject *record;
-  char *payload_clear;
-  char *payload_cipher;
+  char *payload;
   char *body;
   const char *kb_hex;
   guint8 *kb;
@@ -1669,27 +1693,25 @@ ephy_sync_service_upload_crypto_keys (EphySyncService *self)
 
   node = json_node_new (JSON_NODE_OBJECT);
   record = json_object_new ();
-  payload_clear = ephy_sync_crypto_generate_crypto_keys ();
+  self->crypto_keys = ephy_sync_crypto_generate_crypto_keys ();
   kb = ephy_sync_utils_decode_hex (kb_hex);
   bundle = ephy_sync_crypto_derive_master_bundle (kb);
-  payload_cipher = ephy_sync_crypto_encrypt_record (payload_clear, bundle);
-  json_object_set_string_member (record, "payload", payload_cipher);
+  payload = ephy_sync_crypto_encrypt_record (self->crypto_keys, bundle);
+  json_object_set_string_member (record, "payload", payload);
   json_object_set_string_member (record, "id", "keys");
   json_node_set_object (node, record);
   body = json_to_string (node, FALSE);
 
   ephy_sync_service_queue_storage_request (self, "storage/crypto/keys",
-                                           SOUP_METHOD_PUT, body,
-                                           -1, -1, NULL, NULL);
+                                           SOUP_METHOD_PUT, body, -1, -1,
+                                           upload_crypto_keys_cb, self);
 
   g_free (body);
-  g_free (payload_cipher);
+  g_free (payload);
   g_free (kb);
   json_object_unref (record);
   json_node_unref (node);
   ephy_sync_crypto_key_bundle_free (bundle);
-
-  return payload_clear;
 }
 
 static void
@@ -1703,12 +1725,13 @@ get_crypto_keys_cb (SoupSession *session,
   JsonObject *json = NULL;
   GError *error = NULL;
   const char *payload;
-  char *crypto_keys = NULL;
+  char *crypto_keys;
   guint8 *kb = NULL;
 
   if (msg->status_code == 404) {
-    crypto_keys = ephy_sync_service_upload_crypto_keys (self);
-    goto store_secrets;
+    LOG ("crypto/keys record not found, uploading new one...");
+    ephy_sync_service_upload_crypto_keys (self);
+    return;
   }
 
   if (msg->status_code != 200) {
@@ -1744,10 +1767,10 @@ get_crypto_keys_cb (SoupSession *session,
     goto out_error;
   }
 
-store_secrets:
   ephy_sync_service_set_secret (self, secrets[CRYPTO_KEYS], crypto_keys);
-  ephy_sync_service_store_secrets (self);
+  ephy_sync_service_register_device (self, NULL);
   goto out_no_error;
+
 out_error:
   ephy_sync_service_report_sign_in_error (self, _("Failed to retrieve crypto keys."),
                                           NULL, TRUE);
@@ -1767,6 +1790,7 @@ ephy_sync_service_get_crypto_keys (EphySyncService *self)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
+  LOG ("Getting account's crypto keys...");
   ephy_sync_service_queue_storage_request (self, "storage/crypto/keys",
                                            SOUP_METHOD_GET, NULL, -1, -1,
                                            get_crypto_keys_cb, self);
@@ -1786,6 +1810,25 @@ make_engine_object (int version)
   g_free (sync_id);
 
   return object;
+}
+
+static void
+upload_meta_global_cb (SoupSession *session,
+                       SoupMessage *msg,
+                       gpointer     user_data)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+
+  if (msg->status_code != 200) {
+    g_warning ("Failed to upload meta/global record. Status code: %u, response: %s",
+               msg->status_code, msg->response_body->data);
+    ephy_sync_service_report_sign_in_error (self,
+                                            _("Failed to upload meta/global record."),
+                                            NULL, TRUE);
+  } else {
+    LOG ("Successfully uploaded meta/global record");
+    ephy_sync_service_get_crypto_keys (self);
+  }
 }
 
 static void
@@ -1827,8 +1870,8 @@ ephy_sync_service_upload_meta_global (EphySyncService *self)
   body = json_to_string (node, FALSE);
 
   ephy_sync_service_queue_storage_request (self, "storage/meta/global",
-                                           SOUP_METHOD_PUT, body,
-                                           -1, -1, NULL, NULL);
+                                           SOUP_METHOD_PUT, body, -1, -1,
+                                           upload_meta_global_cb, self);
 
   g_free (body);
   g_free (payload_str);
@@ -1852,8 +1895,9 @@ verify_storage_version_cb (SoupSession *session,
   int storage_version;
 
   if (msg->status_code == 404) {
+    LOG ("meta/global record not found, uploading new one...");
     ephy_sync_service_upload_meta_global (self);
-    goto obtain_crypto_keys;
+    return;
   }
 
   if (msg->status_code != 200) {
@@ -1902,9 +1946,9 @@ verify_storage_version_cb (SoupSession *session,
     goto out_error;
   }
 
-obtain_crypto_keys:
   ephy_sync_service_get_crypto_keys (self);
   goto out_no_error;
+
 out_error:
   message = message ? message : _("Failed to verify storage version.");
   ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
@@ -1922,6 +1966,7 @@ ephy_sync_service_verify_storage_version (EphySyncService *self)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
+  LOG ("Verifying account's storage version...");
   ephy_sync_service_queue_storage_request (self, "storage/meta/global",
                                            SOUP_METHOD_GET, NULL, -1, -1,
                                            verify_storage_version_cb, self);
@@ -2074,6 +2119,7 @@ ephy_sync_service_sign_in (EphySyncService *self,
                                  session_token, unwrap_kb,
                                  token_id_hex, req_hmac_key,
                                  resp_hmac_key, resp_xor_key);
+  LOG ("Getting account's Sync Key...");
   ephy_sync_service_fxa_hawk_get (self, "account/keys",
                                   token_id_hex, req_hmac_key, 32,
                                   get_account_keys_cb, data);
@@ -2146,6 +2192,26 @@ ephy_sync_service_unregister_manager (EphySyncService           *self,
   g_signal_handlers_disconnect_by_func (manager, synchronizable_modified_cb, self);
 }
 
+static void
+register_device_cb (SoupSession *session,
+                    SoupMessage *msg,
+                    gpointer     user_data)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+
+  if (msg->status_code != 200) {
+    g_warning ("Failed to register device. Status code: %u, response: %s",
+               msg->status_code, msg->response_body->data);
+    ephy_sync_service_report_sign_in_error (self,
+                                            _("Failed to register device."),
+                                            NULL, TRUE);
+  } else {
+    LOG ("Successfully registered device");
+    if (self->is_signing_in)
+      ephy_sync_service_store_secrets (self);
+  }
+}
+
 void
 ephy_sync_service_register_device (EphySyncService *self,
                                    const char      *device_name)
@@ -2205,9 +2271,11 @@ ephy_sync_service_register_device (EphySyncService *self,
   body = json_to_string (node, FALSE);
 
   /* Upload BSO and store the new device ID and name. */
+  LOG ("Registering device with name '%s'...", name);
   endpoint = g_strdup_printf ("storage/clients/%s", id);
-  ephy_sync_service_queue_storage_request (self, endpoint, SOUP_METHOD_PUT,
-                                           body, -1, -1, NULL, NULL);
+  ephy_sync_service_queue_storage_request (self, endpoint,
+                                           SOUP_METHOD_PUT, body, -1, -1,
+                                           register_device_cb, self);
 
   ephy_sync_utils_set_device_id (id);
   ephy_sync_utils_set_device_name (name);
