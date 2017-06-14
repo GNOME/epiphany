@@ -21,7 +21,6 @@
 #pragma once
 
 #include <glib-object.h>
-#include <json-glib/json-glib.h>
 #include <nettle/rsa.h>
 
 G_BEGIN_DECLS
@@ -88,7 +87,8 @@ void                   ephy_sync_crypto_hawk_header_free        (SyncCryptoHawkH
 SyncCryptoRSAKeyPair  *ephy_sync_crypto_rsa_key_pair_new        (void);
 void                   ephy_sync_crypto_rsa_key_pair_free       (SyncCryptoRSAKeyPair *key_pair);
 
-SyncCryptoKeyBundle   *ephy_sync_crypto_key_bundle_new          (JsonArray *array);
+SyncCryptoKeyBundle   *ephy_sync_crypto_key_bundle_new          (const char *aes_key_b64,
+                                                                 const char *hmac_key_b64);
 void                   ephy_sync_crypto_key_bundle_free         (SyncCryptoKeyBundle *bundle);
 
 void                   ephy_sync_crypto_derive_session_token    (const char  *session_token,

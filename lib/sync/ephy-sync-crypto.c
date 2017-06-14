@@ -26,6 +26,7 @@
 
 #include <glib/gstdio.h>
 #include <inttypes.h>
+#include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
 #include <nettle/cbc.h>
 #include <nettle/aes.h>
@@ -443,31 +444,29 @@ ephy_sync_crypto_rsa_key_pair_free (SyncCryptoRSAKeyPair *key_pair)
 }
 
 SyncCryptoKeyBundle *
-ephy_sync_crypto_key_bundle_new (JsonArray *array)
+ephy_sync_crypto_key_bundle_new (const char *aes_key_b64,
+                                 const char *hmac_key_b64)
 {
   SyncCryptoKeyBundle *bundle;
-  char *aes_key_hex;
-  char *hmac_key_hex;
   guint8 *aes_key;
   guint8 *hmac_key;
-  gsize len;
+  gsize aes_key_len;
+  gsize hmac_key_len;
 
-  g_return_val_if_fail (array, NULL);
-  g_return_val_if_fail (json_array_get_length (array) == 2, NULL);
+  g_return_val_if_fail (aes_key_b64, NULL);
+  g_return_val_if_fail (hmac_key_b64, NULL);
 
-  aes_key = g_base64_decode (json_array_get_string_element (array, 0), &len);
-  hmac_key = g_base64_decode (json_array_get_string_element (array, 1), &len);
-  aes_key_hex = ephy_sync_utils_encode_hex (aes_key, 32);
-  hmac_key_hex = ephy_sync_utils_encode_hex (hmac_key, 32);
+  aes_key = g_base64_decode (aes_key_b64, &aes_key_len);
+  g_return_val_if_fail (aes_key_len == 32, NULL);
+  hmac_key = g_base64_decode (hmac_key_b64, &hmac_key_len);
+  g_return_val_if_fail (hmac_key_len == 32, NULL);
 
   bundle = g_slice_new (SyncCryptoKeyBundle);
-  bundle->aes_key_hex = g_strdup (aes_key_hex);
-  bundle->hmac_key_hex = g_strdup (hmac_key_hex);
+  bundle->aes_key_hex = ephy_sync_utils_encode_hex (aes_key, aes_key_len);
+  bundle->hmac_key_hex = ephy_sync_utils_encode_hex (hmac_key, hmac_key_len);
 
   g_free (aes_key);
   g_free (hmac_key);
-  g_free (aes_key_hex);
-  g_free (hmac_key_hex);
 
   return bundle;
 }

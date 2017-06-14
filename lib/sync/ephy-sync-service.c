@@ -347,7 +347,8 @@ ephy_sync_service_get_key_bundle (EphySyncService *self,
   array = json_object_has_member (collections, collection) ?
           json_object_get_array_member (collections, collection) :
           json_object_get_array_member (json, "default");
-  bundle = ephy_sync_crypto_key_bundle_new (array);
+  bundle = ephy_sync_crypto_key_bundle_new (json_array_get_string_element (array, 0),
+                                            json_array_get_string_element (array, 1));
 
   json_node_unref (node);
 

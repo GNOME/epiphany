@@ -23,6 +23,7 @@
 #include "ephy-sync-crypto.h"
 
 #include <glib-object.h>
+#include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
