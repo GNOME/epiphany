@@ -590,8 +590,10 @@ parse_rdf_lang_tag (xmlNode  *child,
     }
   }
 
-  if (lang) xmlFree (lang);
-  if (*value != content) xmlFree (content);
+  if (lang)
+    xmlFree (lang);
+  if (*value != content)
+    xmlFree (content);
 }
 
 static void

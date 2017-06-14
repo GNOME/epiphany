@@ -280,10 +280,12 @@ notebook_drag_data_received_cb (GtkWidget        *widget,
   g_signal_stop_emission_by_name (widget, "drag-data-received");
 
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_ARBITRARY_URL)) return;
+                              EPHY_PREFS_LOCKDOWN_ARBITRARY_URL))
+    return;
 
   data = gtk_selection_data_get_data (selection_data);
-  if (gtk_selection_data_get_length (selection_data) <= 0 || data == NULL) return;
+  if (gtk_selection_data_get_length (selection_data) <= 0 || data == NULL)
+    return;
 
   window = EPHY_WINDOW (gtk_widget_get_toplevel (widget));
   notebook = ephy_window_get_notebook (window);
@@ -303,7 +305,8 @@ notebook_drag_data_received_cb (GtkWidget        *widget,
     int i;
 
     uris = gtk_selection_data_get_uris (selection_data);
-    if (uris == NULL) return;
+    if (uris == NULL)
+      return;
 
     for (i = 0; uris[i] != NULL && i < INSANE_NUMBER_OF_URLS; i++) {
       embed = ephy_link_open (EPHY_LINK (notebook), uris[i], embed,
