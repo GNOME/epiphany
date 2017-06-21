@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-05-08 20:45+0000\n"
-"PO-Revision-Date: 2017-05-14 23:11+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"POT-Creation-Date: 2017-06-21 06:25+0000\n"
+"PO-Revision-Date: 2017-06-21 22:13+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
 msgid "GNOME Web"
@@ -81,7 +81,6 @@ msgid "org.gnome.Epiphany"
 msgstr "org.gnome.Epiphany"
 
 #: data/org.gnome.Epiphany.desktop.in:19
-#| msgid "_New Window"
 msgid "New Window"
 msgstr "Új ablak"
 
@@ -520,13 +519,15 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:231
 msgid "Enable site-specific quirks"
-msgstr ""
+msgstr "Oldalfüggő kompatibilitási mód engedélyezése"
 
 #: data/org.gnome.epiphany.gschema.xml:232
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
 msgstr ""
+"Engedélyezi a kompatibilitási módot, hogy egyes webhelyek jobban működjenek. "
+"Érdemes lehet kikapcsolni, ha egy bizonyos problémát követ nyomon."
 
 #: data/org.gnome.epiphany.gschema.xml:238
 msgid "The downloads folder"
@@ -1156,15 +1157,15 @@ msgstr "A szó vagy kifejezés előző előfordulása az oldalon"
 msgid "Find next occurrence of the search string"
 msgstr "A szó vagy kifejezés következő előfordulása az oldalon"
 
-#: embed/ephy-web-view.c:529
+#: embed/ephy-web-view.c:525
 msgid "Not No_w"
 msgstr "_Most nem"
 
-#: embed/ephy-web-view.c:530
+#: embed/ephy-web-view.c:526
 msgid "_Never Save"
 msgstr "Soha _ne mentse"
 
-#: embed/ephy-web-view.c:531 lib/widgets/ephy-file-chooser.c:121
+#: embed/ephy-web-view.c:527 lib/widgets/ephy-file-chooser.c:121
 #: src/window-commands.c:447
 msgid "_Save"
 msgstr "M_entés"
@@ -1172,32 +1173,32 @@ msgstr "M_entés"
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:542
+#: embed/ephy-web-view.c:538
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Szeretné elmenteni a jelszavát a(z) „%s” weboldalhoz?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:790
+#: embed/ephy-web-view.c:786
 msgid ""
-"Heads-up: this form is not secure. If you type your password, it will be "
-"visible to cybercriminals!"
+"Heads-up: this form is not secure. If you type your password, it will not be "
+"kept private."
 msgstr ""
 "Figyelmeztetés: ez az űrlap nem biztonságos. Ha beírja a jelszavát, akkor "
-"látható lesz a kiberbűnözők számára!"
+"nem marad titokban."
 
 # FF-másolás :)
-#: embed/ephy-web-view.c:1393
+#: embed/ephy-web-view.c:1389
 msgid "Deny"
 msgstr "Titok"
 
 # FF-másolás :)
-#: embed/ephy-web-view.c:1394
+#: embed/ephy-web-view.c:1390
 msgid "Allow"
 msgstr "Megosztás"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1409
+#: embed/ephy-web-view.c:1405
 #, c-format
 msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgstr ""
@@ -1205,35 +1206,35 @@ msgstr ""
 "megjeleníteni."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1414
+#: embed/ephy-web-view.c:1410
 #, c-format
 msgid "The page at <b>%s</b> wants to know your location."
 msgstr "<b>%s</b> tudni szeretné az Ön tartózkodási helyét."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1419
+#: embed/ephy-web-view.c:1415
 #, c-format
 msgid "The page at <b>%s</b> wants to use your microphone."
 msgstr "<b>%s</b> szeretné használni a mikrofonját."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1424
+#: embed/ephy-web-view.c:1420
 #, c-format
 msgid "The page at <b>%s</b> wants to use your webcam."
 msgstr "<b>%s</b> szeretné használni a webkameráját."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1590
+#: embed/ephy-web-view.c:1591
 #, c-format
 msgid "Loading “%s”…"
 msgstr "„%s” betöltése…"
 
-#: embed/ephy-web-view.c:1592
+#: embed/ephy-web-view.c:1593
 msgid "Loading…"
 msgstr "Betöltés…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1839
+#: embed/ephy-web-view.c:1840
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1241,7 +1242,7 @@ msgstr ""
 "tartozik."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1844
+#: embed/ephy-web-view.c:1845
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1250,14 +1251,14 @@ msgstr ""
 "dátumot a számítógépe naptárában."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1849
+#: embed/ephy-web-view.c:1850
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Ennek a weboldalnak az azonosítóját nem egy megbízható szervezet bocsájtotta "
 "ki."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1854
+#: embed/ephy-web-view.c:1855
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1265,7 +1266,7 @@ msgstr ""
 "lehet."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1859
+#: embed/ephy-web-view.c:1860
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1274,7 +1275,7 @@ msgstr ""
 "amely kibocsájtotta azt."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1864
+#: embed/ephy-web-view.c:1865
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1283,7 +1284,7 @@ msgstr ""
 "titkosítást használ."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1869
+#: embed/ephy-web-view.c:1870
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1293,23 +1294,23 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1931 embed/ephy-web-view.c:1985
+#: embed/ephy-web-view.c:1932 embed/ephy-web-view.c:1986
 msgid "Problem Loading Page"
 msgstr "Hiba az oldal betöltése közben"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1934
+#: embed/ephy-web-view.c:1935
 msgid "Unable to display this website"
 msgstr "A weboldal tartalma nem jeleníthető meg"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1938
+#: embed/ephy-web-view.c:1939
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "A(z) %s helyen lévő oldal nem érhető el."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1942
+#: embed/ephy-web-view.c:1943
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1318,7 +1319,7 @@ msgstr ""
 "lehet ellenőrizni, hogy internetkapcsolata megfelelően működik-e."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1952
+#: embed/ephy-web-view.c:1953
 #, c-format
 msgid "The precise error was: %s"
 msgstr "A pontos hiba ez volt: %s"
@@ -1326,68 +1327,68 @@ msgstr "A pontos hiba ez volt: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:1957 embed/ephy-web-view.c:2008
-#: embed/ephy-web-view.c:2049
+#: embed/ephy-web-view.c:1958 embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2050
 msgid "Reload"
 msgstr "Újratöltés"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:1960 embed/ephy-web-view.c:2011
-#: embed/ephy-web-view.c:2052
+#: embed/ephy-web-view.c:1961 embed/ephy-web-view.c:2012
+#: embed/ephy-web-view.c:2053
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1988
+#: embed/ephy-web-view.c:1989
 msgid "Oops! There may be a problem"
 msgstr "Jaj! Hiba történhetett"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1992
+#: embed/ephy-web-view.c:1993
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "A(z) %s oldal okozhatta a Web váratlan bezárását."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1999
+#: embed/ephy-web-view.c:2000
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Ha ez újra megtörténik, akkor jelentse a problémát a(z) %s fejlesztőinek."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2035
+#: embed/ephy-web-view.c:2036
 msgid "Problem Displaying Page"
 msgstr "Hiba az oldal megjelenítése közben"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2038
+#: embed/ephy-web-view.c:2039
 msgid "Oops!"
 msgstr "Hopp!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2041
+#: embed/ephy-web-view.c:2042
 msgid "Something went wrong while displaying this page."
 msgstr "Hiba történt az oldal megjelenítésekor."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2043
+#: embed/ephy-web-view.c:2044
 msgid "Please reload or visit a different page to continue."
 msgstr "Töltse be újra, vagy látogasson meg egy másik oldalt a folytatáshoz."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2076
+#: embed/ephy-web-view.c:2077
 msgid "Security Violation"
 msgstr "Biztonsági probléma"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2079
+#: embed/ephy-web-view.c:2080
 msgid "This Connection is Not Secure"
 msgstr "A kapcsolata nem biztonságos"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2083
+#: embed/ephy-web-view.c:2084
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1398,36 +1399,36 @@ msgstr ""
 "információkat."
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2093
+#: embed/ephy-web-view.c:2094
 msgid "Go Back"
 msgstr "Ugrás vissza"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:2096
+#: embed/ephy-web-view.c:2097
 msgctxt "back-access-key"
 msgid "B"
 msgstr "V"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2099
+#: embed/ephy-web-view.c:2100
 msgid "Accept Risk and Proceed"
 msgstr "Kockázat elfogadása és folytatás"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
-#: embed/ephy-web-view.c:2103
+#: embed/ephy-web-view.c:2104
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "F"
 
-#: embed/ephy-web-view.c:2155
+#: embed/ephy-web-view.c:2156
 msgid "None specified"
 msgstr "Nincs megadva"
 
-#: embed/ephy-web-view.c:2238
+#: embed/ephy-web-view.c:2239
 msgid "Technical information"
 msgstr "Technikai információk"
 
-#: embed/ephy-web-view.c:3090
+#: embed/ephy-web-view.c:3091
 msgid "_OK"
 msgstr "_OK"
 
@@ -1714,7 +1715,7 @@ msgid "Paste and _Go"
 msgstr "Beillesztés és _ugrás"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:688 src/ephy-window.c:870
+#: lib/widgets/ephy-location-entry.c:688 src/ephy-window.c:872
 msgid "_Undo"
 msgstr "_Visszavonás"
 
@@ -1852,7 +1853,7 @@ msgid "View downloads"
 msgstr "Letöltések megtekintése"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-header-bar.c:800 src/ephy-notebook.c:479
+#: src/ephy-header-bar.c:800 src/ephy-notebook.c:482
 msgid "Open a new tab"
 msgstr "Új lap megnyitása"
 
@@ -1929,11 +1930,11 @@ msgid "Web options"
 msgstr "Web beállításai"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:486
+#: src/ephy-notebook.c:489
 msgid "View open tabs"
 msgstr "Nyitott lapok megtekintése"
 
-#: src/ephy-notebook.c:747
+#: src/ephy-notebook.c:750
 msgid "Close tab"
 msgstr "Lap bezárása"
 
@@ -1981,133 +1982,133 @@ msgstr "Ha kilép, akkor a letöltések megszakadnak"
 msgid "Quit and cancel downloads"
 msgstr "Kilépés, és letöltések megszakítása"
 
-#: src/ephy-window.c:871
+#: src/ephy-window.c:873
 msgid "Re_do"
 msgstr "Mé_gis"
 
 #. Edit.
-#: src/ephy-window.c:874
+#: src/ephy-window.c:876
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: src/ephy-window.c:875
+#: src/ephy-window.c:877
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: src/ephy-window.c:876
+#: src/ephy-window.c:878
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: src/ephy-window.c:877
+#: src/ephy-window.c:879
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: src/ephy-window.c:879
+#: src/ephy-window.c:881
 msgid "S_end Link by Email…"
 msgstr "Hivatkozás _küldése e-mailben…"
 
-#: src/ephy-window.c:881
+#: src/ephy-window.c:883
 msgid "_Reload"
 msgstr "_Frissítés"
 
-#: src/ephy-window.c:882
+#: src/ephy-window.c:884
 msgid "_Back"
 msgstr "_Vissza"
 
-#: src/ephy-window.c:883
+#: src/ephy-window.c:885
 msgid "_Forward"
 msgstr "_Előre"
 
 #. Bookmarks
-#: src/ephy-window.c:886
+#: src/ephy-window.c:888
 msgid "Add Boo_kmark…"
 msgstr "_Könyvjelző hozzáadása…"
 
 #. Links.
-#: src/ephy-window.c:890
+#: src/ephy-window.c:892
 msgid "Open Link in New _Window"
 msgstr "Hivatkozás megnyitása új _ablakban"
 
-#: src/ephy-window.c:891
+#: src/ephy-window.c:893
 msgid "Open Link in New _Tab"
 msgstr "Hivatkozás megnyitása új _lapon"
 
-#: src/ephy-window.c:892
+#: src/ephy-window.c:894
 msgid "Open Link in I_ncognito Window"
 msgstr "Hivatkozás megnyitása i_nkognitó ablakban"
 
-#: src/ephy-window.c:893
+#: src/ephy-window.c:895
 msgid "_Save Link As…"
 msgstr "Hivatkozás _mentése másként…"
 
-#: src/ephy-window.c:894
+#: src/ephy-window.c:896
 msgid "_Copy Link Address"
 msgstr "Hivatkozás _címének másolása"
 
-#: src/ephy-window.c:895
+#: src/ephy-window.c:897
 msgid "_Copy E-mail Address"
 msgstr "E-_mail cím másolása"
 
 #. Images.
-#: src/ephy-window.c:899
+#: src/ephy-window.c:901
 msgid "View _Image in New Tab"
 msgstr "_Kép megtekintése új lapon"
 
-#: src/ephy-window.c:900
+#: src/ephy-window.c:902
 msgid "Copy I_mage Address"
 msgstr "Kép címé_nek másolása"
 
-#: src/ephy-window.c:901
+#: src/ephy-window.c:903
 msgid "_Save Image As…"
 msgstr "Ké_p mentése másként…"
 
-#: src/ephy-window.c:902
+#: src/ephy-window.c:904
 msgid "Set as _Wallpaper"
 msgstr "Beállítás _háttérképként"
 
 #. Video.
-#: src/ephy-window.c:906
+#: src/ephy-window.c:908
 msgid "Open Video in New _Window"
 msgstr "Videó megnyitása új _ablakban"
 
-#: src/ephy-window.c:907
+#: src/ephy-window.c:909
 msgid "Open Video in New _Tab"
 msgstr "Videó megnyitása új _lapon"
 
-#: src/ephy-window.c:908
+#: src/ephy-window.c:910
 msgid "_Save Video As…"
 msgstr "Videó _mentése másként…"
 
-#: src/ephy-window.c:909
+#: src/ephy-window.c:911
 msgid "_Copy Video Address"
 msgstr "Videó _címének másolása"
 
 #. Audio.
-#: src/ephy-window.c:913
+#: src/ephy-window.c:915
 msgid "Open Audio in New _Window"
 msgstr "Hang megnyitás új _ablakban"
 
-#: src/ephy-window.c:914
+#: src/ephy-window.c:916
 msgid "Open Audio in New _Tab"
 msgstr "Hang megnyitása új _lapon"
 
-#: src/ephy-window.c:915
+#: src/ephy-window.c:917
 msgid "_Save Audio As…"
 msgstr "Hang _mentése másként…"
 
-#: src/ephy-window.c:916
+#: src/ephy-window.c:918
 msgid "_Copy Audio Address"
 msgstr "Hang _címének másolása"
 
-#: src/ephy-window.c:921
+#: src/ephy-window.c:923
 msgid "Save Pa_ge As…"
 msgstr "_Oldal mentése másként…"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:924
 msgid "_Page Source"
 msgstr "Oldal fo_rrása"
 
-#: src/ephy-window.c:1359
+#: src/ephy-window.c:1302
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "„%s” keresése a világhálón"
@@ -2125,16 +2126,16 @@ msgid "Save Media As"
 msgstr "Média mentése másként"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:254 src/prefs-dialog.c:1655
+#: src/prefs-dialog.c:254 src/prefs-dialog.c:1670
 #, c-format
 msgid "Currently logged in as %s"
 msgstr "Jelenleg bejelentkezve mint: %s"
 
-#: src/prefs-dialog.c:413
+#: src/prefs-dialog.c:432
 msgid "Something went wrong, please try again."
 msgstr "Hiba történt, próbálja újra."
 
-#: src/prefs-dialog.c:437
+#: src/prefs-dialog.c:456
 msgid "Please don’t leave this page until you have completed the verification."
 msgstr "Ne hagyja el ezt az oldalt, amíg nem fejezte be az ellenőrzést."
 
@@ -2142,7 +2143,7 @@ msgstr "Ne hagyja el ezt az oldalt, amíg nem fejezte be az ellenőrzést."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:847 src/prefs-dialog.c:851
+#: src/prefs-dialog.c:862 src/prefs-dialog.c:866
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2151,25 +2152,24 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:858
+#: src/prefs-dialog.c:873
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Felhasználó által megadott (%s)"
 
-#: src/prefs-dialog.c:880
+#: src/prefs-dialog.c:895
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Rendszer nyelve (%s)"
 msgstr[1] "Rendszer nyelvei (%s)"
 
-#: src/prefs-dialog.c:1123 src/resources/gtk/prefs-dialog.ui:765
+#: src/prefs-dialog.c:1138 src/resources/gtk/prefs-dialog.ui:765
 msgid "Language"
 msgstr "Nyelv"
 
-#: src/prefs-dialog.c:1201
-#| msgid "Select a Directory"
+#: src/prefs-dialog.c:1216
 msgid "Select a directory"
 msgstr "Válasszon egy könyvtárat"
 
@@ -2181,27 +2181,27 @@ msgstr ""
 "A Web 3.6-ban elavulttá vált a könyvtár, és a beállítások át lettek "
 "költöztetve a ~/.config/epiphany alá"
 
-#: src/profile-migrator/ephy-profile-migrator.c:927
+#: src/profile-migrator/ephy-profile-migrator.c:932
 msgid "Search the Web"
 msgstr "Keresés a világhálón"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1062
+#: src/profile-migrator/ephy-profile-migrator.c:1067
 msgid "Executes only the n-th migration step"
 msgstr "Csak az n. költöztetési lépés végrehajtása"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1064
+#: src/profile-migrator/ephy-profile-migrator.c:1069
 msgid "Specifies the required version for the migrator"
 msgstr "Megadja a szükséges verziót a költöztetőnek"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1066
+#: src/profile-migrator/ephy-profile-migrator.c:1071
 msgid "Specifies the profile where the migrator should run"
 msgstr "Megadja a költöztető futtatásához használandó profilt"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1084
+#: src/profile-migrator/ephy-profile-migrator.c:1089
 msgid "Web profile migrator"
 msgstr "Web profilköltöztető"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1085
+#: src/profile-migrator/ephy-profile-migrator.c:1090
 msgid "Web profile migrator options"
 msgstr "Web profilköltöztető beállításai"
 
@@ -2559,7 +2559,6 @@ msgid "Search Engines"
 msgstr "Keresőmotorok"
 
 #: src/resources/gtk/prefs-dialog.ui:177
-#| msgid "Manage Search Engines"
 msgid "_Manage Search Engines"
 msgstr "_Keresőmotorok kezelése"
 
@@ -2628,7 +2627,6 @@ msgid "Use custom _stylesheet"
 msgstr "Egyé_ni stíluslap használata"
 
 #: src/resources/gtk/prefs-dialog.ui:441
-#| msgid "_Edit Stylesheet…"
 msgid "_Edit Stylesheet"
 msgstr "Stíl_uslap szerkesztése"
 
@@ -2637,7 +2635,6 @@ msgid "Fonts & Style"
 msgstr "Betűkészletek és stílus"
 
 #: src/resources/gtk/prefs-dialog.ui:492
-#| msgid "Manage _Cookies…"
 msgid "Manage _Cookies"
 msgstr "_Sütik kezelése"
 
@@ -2659,7 +2656,6 @@ msgid "_Never accept"
 msgstr "S_oha ne fogadja el"
 
 #: src/resources/gtk/prefs-dialog.ui:563
-#| msgid "Manage _Passwords…"
 msgid "Manage _Passwords"
 msgstr "_Jelszavak kezelése"
 
@@ -2676,7 +2672,6 @@ msgid "You can clear stored personal data."
 msgstr "Törölheti a tárolt személyes adatokat."
 
 #: src/resources/gtk/prefs-dialog.ui:616
-#| msgid "Manage Personal _Data…"
 msgid "Manage Personal _Data"
 msgstr "Személyes _adatok kezelése"
 
@@ -2685,7 +2680,6 @@ msgid "Stored Data"
 msgstr "Tárolt adatok"
 
 #: src/resources/gtk/prefs-dialog.ui:695
-#| msgid "_Add"
 msgid "_Add…"
 msgstr "_Hozzáadás…"
 
@@ -2814,7 +2808,6 @@ msgid "Navigation"
 msgstr "Navigáció"
 
 #: src/resources/gtk/shortcuts-dialog.ui:90
-#| msgid "Go to your homepage"
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "Ugrás a kezdőoldalra"
@@ -3050,7 +3043,6 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: src/window-commands.c:110
-#| msgid "Ch_oose File"
 msgid "Ch_oose File…"
 msgstr "_Válasszon fájlt…"
 
@@ -3132,7 +3124,8 @@ msgstr ""
 "Kelemen Gábor <kelemeng at gnome dot hu>\n"
 "Meskó Balázs <meskobalazs at gmail dot com>\n"
 "Tímár András <timar at gnome dot hu>\n"
-"Úr Balázs <urbalazs at gmail dot com>"
+"Úr Balázs <urbalazs at gmail dot com>\n"
+"Meskó Balázs <meskobalazs at fedoraproject dot org>"
 
 #: src/window-commands.c:657
 msgid "Web Website"
