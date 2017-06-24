@@ -627,7 +627,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
                                  PrefsDialog *dialog)
 {
 
-  ephy_sync_service_sign_out (dialog->sync_service);
+  ephy_sync_service_sign_out (dialog->sync_service, TRUE);
 
   /* Show Firefox Accounts iframe. */
   sync_setup_firefox_iframe (dialog);
