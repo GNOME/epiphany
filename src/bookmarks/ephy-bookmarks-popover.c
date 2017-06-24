@@ -98,7 +98,7 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *self,
     }
   }
 
-  /* The first time a tag is asigned to a bookmark, a tag row is created and
+  /* The first time a tag is assigned to a bookmark, a tag row is created and
    * added to the tags list */
   if (g_sequence_get_length (ephy_bookmarks_manager_get_bookmarks_with_tag (manager, tag)) == 1) {
     tag_row = create_tag_row (tag);
