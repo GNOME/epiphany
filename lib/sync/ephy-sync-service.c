@@ -506,6 +506,28 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
   storage_request_async_data_free (data);
 }
 
+static void
+ephy_sync_service_send_all_storage_requests (EphySyncService *self)
+{
+  StorageRequestAsyncData *data;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  while (!g_queue_is_empty (self->storage_queue)) {
+    data = g_queue_pop_head (self->storage_queue);
+    ephy_sync_service_send_storage_request (self, data);
+  }
+}
+
+static void
+ephy_sync_service_clear_storage_queue (EphySyncService *self)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  while (!g_queue_is_empty (self->storage_queue))
+    storage_request_async_data_free (g_queue_pop_head (self->storage_queue));
+}
+
 static gboolean
 ephy_sync_service_verify_certificate (EphySyncService *self,
                                       const char      *certificate)
@@ -754,19 +776,23 @@ get_storage_credentials_cb (SoupSession *session,
   self->storage_credentials_key = g_strdup (key);
   self->storage_credentials_expiry_time = duration + g_get_real_time () / 1000000;
 
-  while (!g_queue_is_empty (self->storage_queue))
-    ephy_sync_service_send_storage_request (self, g_queue_pop_head (self->storage_queue));
+  ephy_sync_service_send_all_storage_requests (self);
   goto out;
 
 out_error:
   message = _("Failed to obtain storage credentials.");
   suggestion = _("Please visit Preferences and sign in again to continue syncing.");
+
   if (self->is_signing_in)
     ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
   else
     ephy_notification_show (ephy_notification_new (message, suggestion));
+
+  ephy_sync_service_clear_storage_queue (self);
+
 out:
   self->locked = FALSE;
+
   if (node)
     json_node_unref (node);
   if (error)
@@ -862,7 +888,7 @@ get_signed_certificate_cb (SoupSession *session,
   if (json_object_get_int_member (json, "errno") == 110) {
     message = _("The password of your Firefox account seems to have been changed.");
     suggestion = _("Please visit Preferences and sign in with the new password to continue syncing.");
-    ephy_sync_service_sign_out (self);
+    ephy_sync_service_sign_out (self, FALSE);
   }
 
   g_warning ("Failed to sign certificate. Status code: %u, response: %s",
@@ -871,11 +897,15 @@ get_signed_certificate_cb (SoupSession *session,
 out_error:
   message = message ? message : _("Failed to obtain signed certificate.");
   suggestion = suggestion ? suggestion : _("Please visit Preferences and sign in again to continue syncing.");
+
   if (self->is_signing_in)
     ephy_sync_service_report_sign_in_error (self, message, NULL, TRUE);
   else
     ephy_notification_show (ephy_notification_new (message, suggestion));
+
+  ephy_sync_service_clear_storage_queue (self);
   self->locked = FALSE;
+
 out_no_error:
   if (node)
     json_node_unref (node);
@@ -2291,18 +2321,12 @@ delete_open_tabs_record_cb (SoupSession *session,
                             SoupMessage *msg,
                             gpointer     user_data)
 {
-  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
-
   if (msg->status_code != 200) {
     g_warning ("Failed to delete open tabs record. Status code: %u, response: %s",
                msg->status_code, msg->response_body->data);
   } else {
     LOG ("Successfully deleted open tabs record");
   }
-
-  /* This is the last storage message of this session, clear queue. */
-  while (!g_queue_is_empty (self->storage_queue))
-    storage_request_async_data_free (g_queue_pop_head (self->storage_queue));
 }
 
 static void
@@ -2340,20 +2364,31 @@ ephy_sync_service_unregister_device (EphySyncService *self)
   ephy_sync_service_queue_storage_request (self, endpoint,
                                            SOUP_METHOD_DELETE,
                                            NULL, -1, -1,
-                                           delete_open_tabs_record_cb, self);
+                                           delete_open_tabs_record_cb, NULL);
   g_free (endpoint);
   g_free (id);
 }
 
 void
-ephy_sync_service_sign_out (EphySyncService *self)
+ephy_sync_service_sign_out (EphySyncService *self,
+                            gboolean         unregister_device)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
 
+  /* If we sign out without unregistering the device, then the current id of
+   * the device should not be cleared, but preserved for further use (Ephy will
+   * use the same id next time the user signs in). This way we prevent a zombie
+   * record in the clients collection on the Sync Storage Server.
+   */
+  if (unregister_device) {
+    ephy_sync_service_unregister_device (self);
+    ephy_sync_utils_set_device_id (NULL);
+  }
+
   ephy_sync_service_stop_periodical_sync (self);
-  ephy_sync_service_unregister_device (self);
   ephy_sync_service_destroy_session (self, NULL);
   ephy_sync_service_forget_secrets (self);
+  ephy_sync_service_clear_storage_queue (self);
   ephy_sync_service_clear_storage_credentials (self);
 
   /* Clear managers. */
@@ -2368,7 +2403,6 @@ ephy_sync_service_sign_out (EphySyncService *self)
   ephy_sync_utils_set_history_sync_is_initial (TRUE);
 
   ephy_sync_utils_set_sync_time (0);
-  ephy_sync_utils_set_device_id (NULL);
   ephy_sync_utils_set_sync_user (NULL);
 }
 
