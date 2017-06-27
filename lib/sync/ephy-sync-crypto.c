@@ -970,16 +970,9 @@ ephy_sync_crypto_pad (const char *text,
   g_assert (text);
   g_assert (out_len);
 
-  if (text_len % block_len == 0)
-    *out_len = text_len;
-  else
-    *out_len = text_len + block_len - text_len % block_len;
-
+  *out_len = text_len + block_len - text_len % block_len;
   out = g_malloc (*out_len);
-
-  if (text_len % block_len != 0)
-    memset (out, block_len - text_len % block_len, *out_len);
-
+  memset (out, block_len - text_len % block_len, *out_len);
   memcpy (out, text, text_len);
 
   return out;
