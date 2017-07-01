@@ -79,7 +79,7 @@ if get_option('enable_firefox_sync')
 endif
 
 if get_option('enable_https_everywhere')
-  httpseverywhere_dep = dependency('httpseverywhere-0.2', version: '>= 0.2.2')
+  httpseverywhere_dep = dependency('httpseverywhere-0.4', version: '>= 0.2.2')
 endif
 
 subdir('data')
