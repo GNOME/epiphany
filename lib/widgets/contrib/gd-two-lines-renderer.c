@@ -87,15 +87,13 @@ apply_subtitle_style_to_layout (GtkStyleContext *context,
                                 GtkStateFlags    flags)
 {
   PangoFontDescription *desc;
-  GdkRGBA rgba = {0.0, 0.0, 0.0, 0.0};
   PangoAttrList *layout_attr;
-  PangoAttribute *attr_color;
+  PangoAttribute *attr_alpha;
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, flags);
   gtk_style_context_get (context, gtk_style_context_get_state (context),
                          "font", &desc,
-                         "color", &rgba,
                          NULL);
   gtk_style_context_restore (context);
 
@@ -104,16 +102,11 @@ apply_subtitle_style_to_layout (GtkStyleContext *context,
   pango_layout_set_font_description (layout, desc);
   pango_font_description_free (desc);
 
-  /* Set the color */
-  rgba.red = CLAMP(1.0 - ((1.0 - rgba.red) * SUBTITLE_DIM_PERCENTAGE), 0.0, 1.0);
-  rgba.green = CLAMP(1.0 - ((1.0 - rgba.green) * SUBTITLE_DIM_PERCENTAGE), 0.0, 1.0);
-  rgba.blue = CLAMP(1.0 - ((1.0 - rgba.blue) * SUBTITLE_DIM_PERCENTAGE), 0.0, 1.0);
-
+  /* Set the font alpha */
   layout_attr = pango_attr_list_new ();
-  attr_color = pango_attr_foreground_new (rgba.red * 65535,
-                                          rgba.green * 65535,
-                                          rgba.blue * 65535);
-  pango_attr_list_insert (layout_attr, attr_color);
+  attr_alpha = pango_attr_foreground_alpha_new (SUBTITLE_DIM_PERCENTAGE * 65535);
+  pango_attr_list_insert (layout_attr, attr_alpha);
+
   pango_layout_set_attributes (layout, layout_attr);
   pango_attr_list_unref (layout_attr);
 }
