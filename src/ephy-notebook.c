@@ -308,7 +308,7 @@ notebook_drag_data_received_cb (GtkWidget        *widget,
     if (uris == NULL)
       return;
 
-    for (i = 0; uris[i] != NULL && i < INSANE_NUMBER_OF_URLS; i++) {
+    for (i = 0; i < INSANE_NUMBER_OF_URLS && uris[i] != NULL; i++) {
       embed = ephy_link_open (EPHY_LINK (notebook), uris[i], embed,
                               (embed && i == 0) ? 0 : EPHY_LINK_NEW_TAB);
     }
