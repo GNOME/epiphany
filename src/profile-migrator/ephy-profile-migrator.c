@@ -576,7 +576,7 @@ parse_rdf_lang_tag (xmlNode  *child,
 
   locales = g_get_language_names ();
 
-  for (i = 0; locales[i] && i < *best_match; i++) {
+  for (i = 0; i < *best_match && locales[i]; i++) {
     if (!strcmp (locales[i], this_language)) {
       /* if we've already encountered a less accurate
        * translation, then free it */
