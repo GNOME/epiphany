@@ -159,12 +159,6 @@ download_estimated_progress_changed_cb (EphyDownloadsManager *manager)
   g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
 }
 
-static void
-download_created_destination_cb (EphyDownloadsManager *manager)
-{
-  ephy_downloads_manager_acquire_session_inhibitor (manager);
-}
-
 void
 ephy_downloads_manager_add_download (EphyDownloadsManager *manager,
                                      EphyDownload         *download)
@@ -177,6 +171,8 @@ ephy_downloads_manager_add_download (EphyDownloadsManager *manager,
   if (g_list_find (manager->downloads, download))
     return;
 
+  ephy_downloads_manager_acquire_session_inhibitor (manager);
+
   manager->downloads = g_list_prepend (manager->downloads, g_object_ref (download));
   g_signal_connect (download, "completed",
                     G_CALLBACK (download_completed_cb),
@@ -188,9 +184,6 @@ ephy_downloads_manager_add_download (EphyDownloadsManager *manager,
   wk_download = ephy_download_get_webkit_download (download);
   g_signal_connect_swapped (wk_download, "notify::estimated-progress",
                             G_CALLBACK (download_estimated_progress_changed_cb),
-                            manager);
-  g_signal_connect_swapped (wk_download, "created-destination",
-                            G_CALLBACK (download_created_destination_cb),
                             manager);
   g_signal_emit (manager, signals[DOWNLOAD_ADDED], 0, download);
   g_signal_emit (manager, signals[ESTIMATED_PROGRESS_CHANGED], 0);
