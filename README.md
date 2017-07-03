@@ -3,13 +3,13 @@ The name meaning:
 "An intuitive grasp of reality through
 something (as an event) usually simple and striking"
 
-MANIFESTO
+# MANIFESTO
 
 A web browser is more than an application, it is a way of thinking, it is
 a way of seeing the world. Epiphany's principles are simplicity and standards
 compliance.
 
-Simplicity:
+# Simplicity:
 
 Epiphany aims to utilize the simplest interface possible for a browser.  Keep
 in mind that simple does not necessarily mean less powerful.  We believe
@@ -27,7 +27,7 @@ and the ever popular command line.
 Other tasks like mail can be handled with your favorite e-mail application
 (Evolution, pine, mutt, balsa, pronto, whatever).
 
-Standards compliance:
+# Standards compliance:
 
 The introduction of non-standard features in browsers could make it difficult
 or impossible to use alternative products like Epiphany if developers embrace
@@ -39,7 +39,7 @@ one platform to dominate the market.
 Standards compliance ensures the freedom of choice.  Epiphany aims to achieve
 this.
 
-USER INTERFACE LINES
+# USER INTERFACE LINES
 
 - HIG compliance
 
@@ -78,12 +78,12 @@ We target web users, we dont directly target web developers.
 A few geek-oriented feautures can be kept as
 long as they are non-obtrusive.
 
-REQUIREMENTS
+# REQUIREMENTS
 
 You will need a complete installation of GNOME 2.x desktop.
 The required WebKit version will be specified in the release notes.
 
-HOW TO HELP
+# HOW TO HELP
 
 You can report new bugs at
  http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany
@@ -108,6 +108,6 @@ A: If it makes sense to turn on unconditionally,
    Just be prepared to hear the above objections if your patch
    adds some crack-ridden configuration option.
 
-CONTACTS
+# CONTACTS
 
 Epiphany Mailing List <epiphany-list@gnome.org>
