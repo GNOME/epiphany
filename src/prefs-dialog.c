@@ -116,7 +116,6 @@ struct _PrefsDialog {
   GHashTable *iso_3166_table;
 
   /* sync */
-  EphySyncService *sync_service;
   GtkWidget *sync_page_box;
   GtkWidget *sync_firefox_iframe_box;
   GtkWidget *sync_firefox_iframe_label;
@@ -141,7 +140,6 @@ struct _PrefsDialog {
   GtkWidget *sync_device_name_cancel_button;
   GtkWidget *sync_last_sync_time_box;
   GtkWidget *sync_last_sync_time_label;
-  gboolean sync_was_signed_in;
 
   WebKitWebView *fxa_web_view;
   WebKitUserContentManager *fxa_manager;
@@ -179,11 +177,6 @@ prefs_dialog_finalize (GObject *object)
     g_object_unref (dialog->fxa_manager);
   }
 
-  if (dialog->sync_service != NULL) {
-    if (ephy_sync_utils_user_is_signed_in () && !dialog->sync_was_signed_in)
-      ephy_sync_service_start_sync (dialog->sync_service);
-  }
-
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
 }
 
@@ -193,6 +186,7 @@ sync_collection_toggled_cb (GtkToggleButton *button,
 {
   EphySynchronizableManager *manager = NULL;
   EphyShell *shell = ephy_shell_get_default ();
+  EphySyncService *service = ephy_shell_get_sync_service (shell);
 
   if (GTK_WIDGET (button) == dialog->sync_bookmarks_checkbutton) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
@@ -208,9 +202,9 @@ sync_collection_toggled_cb (GtkToggleButton *button,
   }
 
   if (gtk_toggle_button_get_active (button)) {
-    ephy_sync_service_register_manager (dialog->sync_service, manager);
+    ephy_sync_service_register_manager (service, manager);
   } else {
-    ephy_sync_service_unregister_manager (dialog->sync_service, manager);
+    ephy_sync_service_unregister_manager (service, manager);
     ephy_synchronizable_manager_set_is_initial_sync (manager, TRUE);
   }
 }
@@ -293,20 +287,15 @@ sync_secrets_store_finished_cb (EphySyncService *service,
                                 GError          *error,
                                 PrefsDialog     *dialog)
 {
-  EphySynchronizableManager *manager;
-  EphyShell *shell = ephy_shell_get_default ();
-
   g_assert (EPHY_IS_SYNC_SERVICE (service));
   g_assert (EPHY_IS_PREFS_DIALOG (dialog));
 
   if (!error) {
-    char *text;
-    char *user;
-
     /* Show sync options panel. */
-    user = g_strdup_printf ("<b>%s</b>", ephy_sync_utils_get_sync_user ());
+    char *user = g_strdup_printf ("<b>%s</b>", ephy_sync_utils_get_sync_user ());
     /* Translators: the %s refers to the email of the currently logged in user. */
-    text = g_strdup_printf (_("Logged in as %s"), user);
+    char *text = g_strdup_printf (_("Logged in as %s"), user);
+
     gtk_label_set_markup (GTK_LABEL (dialog->sync_firefox_account_label), text);
     gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
                           dialog->sync_firefox_iframe_box);
@@ -316,23 +305,6 @@ sync_secrets_store_finished_cb (EphySyncService *service,
     gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
                         dialog->sync_options_box,
                         FALSE, FALSE, 0);
-
-    if (ephy_sync_utils_bookmarks_sync_is_enabled ()) {
-      manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
-      ephy_sync_service_register_manager (service, manager);
-    }
-    if (ephy_sync_utils_passwords_sync_is_enabled ()) {
-      manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
-      ephy_sync_service_register_manager (service, manager);
-    }
-    if (ephy_sync_utils_history_sync_is_enabled ()) {
-      manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
-      ephy_sync_service_register_manager (service, manager);
-    }
-    if (ephy_sync_utils_open_tabs_sync_is_enabled ()) {
-      manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
-      ephy_sync_service_register_manager (service, manager);
-    }
 
     g_free (text);
     g_free (user);
@@ -552,8 +524,8 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
       sync_sign_in_details_show (dialog, _("Please don’t leave this page until "
                                            "you have completed the verification."));
 
-    ephy_sync_service_sign_in (dialog->sync_service, email, uid,
-                               session_token, key_fetch_token, unwrap_kb);
+    ephy_sync_service_sign_in (ephy_shell_get_sync_service (ephy_shell_get_default ()),
+                               email, uid, session_token, key_fetch_token, unwrap_kb);
   }
 
 out:
@@ -626,8 +598,9 @@ static void
 on_sync_sign_out_button_clicked (GtkWidget   *button,
                                  PrefsDialog *dialog)
 {
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
 
-  ephy_sync_service_sign_out (dialog->sync_service, TRUE);
+  ephy_sync_service_sign_out (service, TRUE);
 
   /* Show Firefox Accounts iframe. */
   sync_setup_firefox_iframe (dialog);
@@ -639,16 +612,16 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
                       dialog->sync_firefox_iframe_box,
                       FALSE, FALSE, 0);
   gtk_widget_set_visible (dialog->sync_last_sync_time_box, FALSE);
-
-  dialog->sync_was_signed_in = FALSE;
 }
 
 static void
 on_sync_sync_now_button_clicked (GtkWidget   *button,
                                  PrefsDialog *dialog)
 {
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+
   gtk_widget_set_sensitive (button, FALSE);
-  ephy_sync_service_sync (dialog->sync_service);
+  ephy_sync_service_sync (service);
 }
 
 static void
@@ -679,10 +652,11 @@ static void
 on_sync_device_name_save_button_clicked (GtkWidget   *button,
                                          PrefsDialog *dialog)
 {
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
   const char *name;
 
   name = gtk_entry_get_text (GTK_ENTRY (dialog->sync_device_name_entry));
-  ephy_sync_service_register_device (dialog->sync_service, name);
+  ephy_sync_service_register_device (service, name);
 
   gtk_widget_set_sensitive (GTK_WIDGET (dialog->sync_device_name_entry), FALSE);
   gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_change_button), TRUE);
@@ -1863,11 +1837,13 @@ setup_language_page (PrefsDialog *dialog)
 static void
 setup_sync_page (PrefsDialog *dialog)
 {
-  GSettings *sync_settings;
-  char *user;
-  char *name;
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  GSettings *sync_settings = ephy_settings_get (EPHY_PREFS_SYNC_SCHEMA);
+  char *user = ephy_sync_utils_get_sync_user ();
+  char *name = ephy_sync_utils_get_device_name ();
 
-  user = ephy_sync_utils_get_sync_user ();
+  gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
+
   if (!user) {
     sync_setup_firefox_iframe (dialog);
     gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
@@ -1887,13 +1863,6 @@ setup_sync_page (PrefsDialog *dialog)
     g_free (email);
     g_free (text);
   }
-
-  name = ephy_sync_utils_get_device_name ();
-  gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
-
-  sync_settings = ephy_settings_get (EPHY_PREFS_SYNC_SCHEMA);
-  dialog->sync_service = ephy_shell_get_sync_service (ephy_shell_get_default ());
-  dialog->sync_was_signed_in = user != NULL;
 
   g_settings_bind (sync_settings,
                    EPHY_PREFS_SYNC_WITH_FIREFOX,
@@ -1961,13 +1930,13 @@ setup_sync_page (PrefsDialog *dialog)
                           dialog->synced_tabs_button, "sensitive",
                           G_BINDING_SYNC_CREATE);
 
-  g_signal_connect_object (dialog->sync_service, "sync-secrets-store-finished",
+  g_signal_connect_object (service, "sync-secrets-store-finished",
                            G_CALLBACK (sync_secrets_store_finished_cb),
                            dialog, 0);
-  g_signal_connect_object (dialog->sync_service, "sync-sign-in-error",
+  g_signal_connect_object (service, "sync-sign-in-error",
                            G_CALLBACK (sync_sign_in_error_cb),
                            dialog, 0);
-  g_signal_connect_object (dialog->sync_service, "sync-finished",
+  g_signal_connect_object (service, "sync-finished",
                            G_CALLBACK (sync_finished_cb),
                            dialog, 0);
   g_signal_connect_object (dialog->sync_with_firefox_checkbutton, "toggled",
