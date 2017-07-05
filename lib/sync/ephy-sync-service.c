@@ -86,6 +86,7 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 enum {
   STORE_FINISHED,
+  LOAD_FINISHED,
   SIGN_IN_ERROR,
   SYNC_FINISHED,
   LAST_SIGNAL
@@ -1469,8 +1470,7 @@ load_secrets_cb (SecretService   *service,
     ephy_sync_service_set_secret (self, l->data,
                                   json_object_get_string_member (object, l->data));
 
-  if (self->sync_periodically)
-    ephy_sync_service_start_sync (self);
+  g_signal_emit (self, signals[LOAD_FINISHED], 0);
   goto out_no_error;
 
 out_error:
@@ -1652,6 +1652,13 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_ERROR);
+
+  signals[LOAD_FINISHED] =
+    g_signal_new ("sync-secrets-load-finished",
+                  EPHY_TYPE_SYNC_SERVICE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 
   signals[SIGN_IN_ERROR] =
     g_signal_new ("sync-sign-in-error",

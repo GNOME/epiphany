@@ -312,12 +312,44 @@ download_started_cb (WebKitWebContext *web_context,
 }
 
 static void
+sync_secrets_load_finished_cb (EphySyncService *service,
+                               EphyShell       *shell)
+{
+  EphySynchronizableManager *manager;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_SHELL (shell));
+
+  if (ephy_sync_utils_bookmarks_sync_is_enabled ()) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
+    ephy_sync_service_register_manager (service, manager);
+  }
+
+  if (ephy_sync_utils_passwords_sync_is_enabled ()) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
+    ephy_sync_service_register_manager (service, manager);
+  }
+
+  if (ephy_sync_utils_history_sync_is_enabled ()) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
+    ephy_sync_service_register_manager (service, manager);
+  }
+
+  if (ephy_sync_utils_open_tabs_sync_is_enabled ()) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
+    ephy_sync_service_register_manager (service, manager);
+  }
+
+  ephy_sync_service_start_sync (service);
+}
+
+static void
 ephy_shell_startup (GApplication *application)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
   EphyShell *shell = EPHY_SHELL (application);
-  EphySynchronizableManager *manager;
   EphyEmbedShellMode mode;
+  EphySyncService *service;
   GtkBuilder *builder;
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
@@ -350,25 +382,11 @@ ephy_shell_startup (GApplication *application)
                               "enabled",
                               G_BINDING_SYNC_CREATE);
 
-      /* Register the synchronizable managers. */
-      if (ephy_sync_utils_bookmarks_sync_is_enabled ()) {
-        manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
-        ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
-      }
-
-      if (ephy_sync_utils_passwords_sync_is_enabled ()) {
-        manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
-        ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
-      }
-
-      if (ephy_sync_utils_history_sync_is_enabled ()) {
-        manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
-        ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
-      }
-
-      if (ephy_sync_utils_open_tabs_sync_is_enabled ()) {
-        manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
-        ephy_sync_service_register_manager (ephy_shell_get_sync_service (shell), manager);
+      if (ephy_sync_utils_user_is_signed_in ()) {
+        service = ephy_shell_get_sync_service (shell);
+        g_signal_connect_object (service, "sync-secrets-load-finished",
+                                 G_CALLBACK (sync_secrets_load_finished_cb),
+                                 shell, 0);
       }
     }
 
