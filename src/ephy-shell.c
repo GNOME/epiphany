@@ -312,8 +312,8 @@ download_started_cb (WebKitWebContext *web_context,
 }
 
 static void
-sync_secrets_load_finished_cb (EphySyncService *service,
-                               EphyShell       *shell)
+register_synchronizable_managers (EphyShell       *shell,
+                                  EphySyncService *service)
 {
   EphySynchronizableManager *manager;
 
@@ -339,7 +339,41 @@ sync_secrets_load_finished_cb (EphySyncService *service,
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
     ephy_sync_service_register_manager (service, manager);
   }
+}
 
+static gboolean
+start_sync_after_sign_in (EphySyncService *service)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+
+  ephy_sync_service_start_sync (service);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+sync_secrets_store_finished_cb (EphySyncService *service,
+                                GError          *error,
+                                EphyShell       *shell)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_SHELL (shell));
+
+  if (!error) {
+    register_synchronizable_managers (shell, service);
+    /* Allow a 30 seconds window for the user to select their sync options. */
+    g_timeout_add_seconds (30, (GSourceFunc)start_sync_after_sign_in, service);
+  }
+}
+
+static void
+sync_secrets_load_finished_cb (EphySyncService *service,
+                               EphyShell       *shell)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_SHELL (shell));
+
+  register_synchronizable_managers (shell, service);
   ephy_sync_service_start_sync (service);
 }
 
@@ -349,7 +383,6 @@ ephy_shell_startup (GApplication *application)
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
   EphyShell *shell = EPHY_SHELL (application);
   EphyEmbedShellMode mode;
-  EphySyncService *service;
   GtkBuilder *builder;
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
@@ -383,10 +416,8 @@ ephy_shell_startup (GApplication *application)
                               G_BINDING_SYNC_CREATE);
 
       if (ephy_sync_utils_user_is_signed_in ()) {
-        service = ephy_shell_get_sync_service (shell);
-        g_signal_connect_object (service, "sync-secrets-load-finished",
-                                 G_CALLBACK (sync_secrets_load_finished_cb),
-                                 shell, 0);
+        /* Create the sync service. */
+        ephy_shell_get_sync_service (shell);
       }
     }
 
@@ -825,8 +856,18 @@ ephy_shell_get_sync_service (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
-  if (shell->sync_service == NULL)
+  if (shell->sync_service == NULL) {
     shell->sync_service = ephy_sync_service_new (TRUE);
+
+    g_signal_connect_object (shell->sync_service,
+                             "sync-secrets-store-finished",
+                             G_CALLBACK (sync_secrets_store_finished_cb),
+                             shell, 0);
+    g_signal_connect_object (shell->sync_service,
+                             "sync-secrets-load-finished",
+                             G_CALLBACK (sync_secrets_load_finished_cb),
+                             shell, 0);
+  }
 
   return shell->sync_service;
 }
