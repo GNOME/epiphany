@@ -227,7 +227,7 @@ prefs_dialog_finalize (GObject *object)
 #if ENABLE_FIREFOX_SYNC
   if (dialog->fxa_web_view != NULL) {
     webkit_user_content_manager_unregister_script_message_handler (dialog->fxa_manager,
-                                                                   "accountsCommandHandler");
+                                                                   "toChromeMessageHandler");
     webkit_user_script_unref (dialog->fxa_script);
     g_object_unref (dialog->fxa_manager);
   }
