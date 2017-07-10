@@ -40,6 +40,7 @@ help_linguas = [
   'fr',
   'hu',
   'ko',
+  'pl',
   'pt_BR',
   'ru',
   'sv'
