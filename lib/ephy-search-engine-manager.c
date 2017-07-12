@@ -149,6 +149,19 @@ ephy_search_engine_manager_get_address (EphySearchEngineManager *manager,
 }
 
 const char *
+ephy_search_engine_manager_get_address_for_default_engine (EphySearchEngineManager *manager)
+{
+  char *name;
+  const char *address;
+
+  name = ephy_search_engine_manager_get_default_engine (manager);
+  address = ephy_search_engine_manager_get_address (manager, name);
+  g_free (name);
+
+  return address;
+}
+
+const char *
 ephy_search_engine_manager_get_bang (EphySearchEngineManager *manager,
                                      const char              *name)
 {
