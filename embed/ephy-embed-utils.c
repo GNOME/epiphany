@@ -270,15 +270,13 @@ ephy_embed_utils_autosearch_address (const char *search_key)
 {
   char *query_param;
   const char *address_search;
-  char *default_name;
   char *effective_address;
   EphyEmbedShell *shell;
   EphySearchEngineManager *search_engine_manager;
 
   shell = ephy_embed_shell_get_default ();
   search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
-  default_name = ephy_search_engine_manager_get_default_engine (search_engine_manager);
-  address_search = ephy_search_engine_manager_get_address (search_engine_manager, default_name);
+  address_search = ephy_search_engine_manager_get_address_for_default_engine (search_engine_manager);
 
   query_param = soup_form_encode ("q", search_key, NULL);
 #pragma GCC diagnostic push
@@ -288,7 +286,6 @@ ephy_embed_utils_autosearch_address (const char *search_key)
   effective_address = g_strdup_printf (address_search, query_param + 2);
 #pragma GCC diagnostic pop
   g_free (query_param);
-  g_free (default_name);
 
   return effective_address;
 }

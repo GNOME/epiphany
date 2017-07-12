@@ -39,6 +39,8 @@ G_DECLARE_FINAL_TYPE (EphySearchEngineManager, ephy_search_engine_manager, EPHY,
 EphySearchEngineManager     *ephy_search_engine_manager_new                      (void);
 const char                  *ephy_search_engine_manager_get_address              (EphySearchEngineManager *manager,
                                                                                   const char              *name);
+const char                  *ephy_search_engine_manager_get_address_for_default_engine
+                                                                                 (EphySearchEngineManager *manager);
 const char                  *ephy_search_engine_manager_get_bang                 (EphySearchEngineManager *manager,
                                                                                   const char              *name);
 char                        *ephy_search_engine_manager_get_default_engine       (EphySearchEngineManager *manager);
