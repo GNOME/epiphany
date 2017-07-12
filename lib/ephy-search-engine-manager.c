@@ -27,6 +27,8 @@
 #include "ephy-settings.h"
 #include "ephy-prefs.h"
 
+#define FALLBACK_ADDRESS "https://duckduckgo.com/?q=%s&t=epiphany"
+
 enum {
   SEARCH_ENGINES_CHANGED,
   LAST_SIGNAL
@@ -145,7 +147,7 @@ ephy_search_engine_manager_get_address (EphySearchEngineManager *manager,
   if (info)
     return info->address;
 
-  return NULL;
+  return FALLBACK_ADDRESS;
 }
 
 const char *
