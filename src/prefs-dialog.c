@@ -1315,10 +1315,17 @@ new_tab_homepage_get_mapping (GValue   *value,
 static GVariant *
 new_tab_homepage_set_mapping (const GValue       *value,
                               const GVariantType *expected_type,
-                              gpointer            user_data)
+                              gpointer           user_data)
 {
+  PrefsDialog *dialog = EPHY_PREFS_DIALOG (user_data);
+
   if (!g_value_get_boolean (value))
     return NULL;
+
+  /* In case the new tab button is pressed while there's text in the custom homepage entry */
+  gtk_entry_set_text (GTK_ENTRY (dialog->custom_homepage_entry), "");
+  gtk_widget_set_sensitive (dialog->custom_homepage_entry, FALSE);
+
   return g_variant_new_string ("");
 }
 
@@ -1339,10 +1346,15 @@ blank_homepage_get_mapping (GValue   *value,
 static GVariant *
 blank_homepage_set_mapping (const GValue       *value,
                             const GVariantType *expected_type,
-                            gpointer            user_data)
+                            gpointer           user_data)
 {
+  PrefsDialog *dialog = EPHY_PREFS_DIALOG (user_data);
+
   if (!g_value_get_boolean (value))
     return NULL;
+
+  gtk_entry_set_text (GTK_ENTRY (dialog->custom_homepage_entry), "");
+
   return g_variant_new_string ("about:blank");
 }
 
@@ -1364,11 +1376,12 @@ custom_homepage_set_mapping (const GValue       *value,
                              const GVariantType *expected_type,
                              gpointer            user_data)
 {
-  PrefsDialog *dialog = user_data;
+  PrefsDialog *dialog = EPHY_PREFS_DIALOG (user_data);
   const char *setting;
 
   if (!g_value_get_boolean (value)) {
     gtk_widget_set_sensitive (dialog->custom_homepage_entry, FALSE);
+    gtk_entry_set_text (GTK_ENTRY (dialog->custom_homepage_entry), "");
     return NULL;
   }
 
@@ -1379,6 +1392,7 @@ custom_homepage_set_mapping (const GValue       *value,
     return NULL;
 
   gtk_entry_set_text (GTK_ENTRY (dialog->custom_homepage_entry), setting);
+
   return g_variant_new_string (setting);
 }
 
@@ -1386,8 +1400,15 @@ static void
 custom_homepage_entry_changed (GtkEntry    *entry,
                                PrefsDialog *dialog)
 {
-  g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL,
-                         gtk_entry_get_text (entry));
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->custom_homepage_radiobutton))) {
+    g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL,
+                           gtk_entry_get_text (entry));
+  } else if ((gtk_entry_get_text (entry) != NULL) &&
+             gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->new_tab_homepage_radiobutton))) {
+    g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_HOMEPAGE_URL, gtk_entry_get_text (entry));
+    gtk_widget_set_sensitive (dialog->custom_homepage_entry, TRUE);
+    gtk_widget_grab_focus (dialog->custom_homepage_entry);
+  }
 }
 
 static void
@@ -1436,7 +1457,7 @@ setup_general_page (PrefsDialog *dialog)
                                 G_SETTINGS_BIND_DEFAULT,
                                 new_tab_homepage_get_mapping,
                                 new_tab_homepage_set_mapping,
-                                NULL,
+                                dialog,
                                 NULL);
   g_settings_bind_with_mapping (settings,
                                 EPHY_PREFS_HOMEPAGE_URL,
@@ -1445,7 +1466,7 @@ setup_general_page (PrefsDialog *dialog)
                                 G_SETTINGS_BIND_DEFAULT,
                                 blank_homepage_get_mapping,
                                 blank_homepage_set_mapping,
-                                NULL,
+                                dialog,
                                 NULL);
   g_settings_bind_with_mapping (settings,
                                 EPHY_PREFS_HOMEPAGE_URL,
