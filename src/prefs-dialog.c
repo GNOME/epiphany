@@ -1330,7 +1330,7 @@ new_tab_homepage_get_mapping (GValue   *value,
 static GVariant *
 new_tab_homepage_set_mapping (const GValue       *value,
                               const GVariantType *expected_type,
-                              gpointer           user_data)
+                              gpointer            user_data)
 {
   PrefsDialog *dialog = EPHY_PREFS_DIALOG (user_data);
 
@@ -1361,7 +1361,7 @@ blank_homepage_get_mapping (GValue   *value,
 static GVariant *
 blank_homepage_set_mapping (const GValue       *value,
                             const GVariantType *expected_type,
-                            gpointer           user_data)
+                            gpointer            user_data)
 {
   PrefsDialog *dialog = EPHY_PREFS_DIALOG (user_data);
 
