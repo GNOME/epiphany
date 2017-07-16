@@ -311,7 +311,7 @@ history_service_url_title_changed_cb (EphyHistoryService *service,
 
 static void
 history_service_url_deleted_cb (EphyHistoryService *service,
-                                const char         *url,
+                                EphyHistoryURL     *url,
                                 EphyEmbedShell     *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
@@ -320,7 +320,7 @@ history_service_url_deleted_cb (EphyHistoryService *service,
   for (l = priv->web_extensions; l; l = g_list_next (l)) {
     EphyWebExtensionProxy *web_extension = (EphyWebExtensionProxy *)l->data;
 
-    ephy_web_extension_proxy_history_delete_url (web_extension, url);
+    ephy_web_extension_proxy_history_delete_url (web_extension, url->url);
   }
 }
 

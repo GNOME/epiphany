@@ -25,6 +25,7 @@
 #include "ephy-history-types.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-sync-utils.h"
 
 #include <errno.h>
 #include <glib.h>
@@ -221,9 +222,8 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE,
-                  2,
-                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  EPHY_TYPE_HISTORY_PAGE_VISIT_TYPE);
+                  1,
+                  G_TYPE_POINTER | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 /**
  * EphyHistoryService::urls-visited:
@@ -268,7 +268,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
-                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+                  G_TYPE_POINTER | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   signals[HOST_DELETED] =
     g_signal_new ("host-deleted",
@@ -579,6 +579,8 @@ ephy_history_service_execute_add_visit_helper (EphyHistoryService *self, EphyHis
   if (ephy_history_service_get_url_row (self, visit->url->url, visit->url) == NULL) {
     visit->url->last_visit_time = visit->visit_time;
     visit->url->visit_count = 1;
+    if (!visit->url->sync_id)
+      visit->url->sync_id = ephy_sync_utils_get_random_sync_id ();
 
     ephy_history_service_add_url_row (self, visit->url);
 
@@ -594,6 +596,9 @@ ephy_history_service_execute_add_visit_helper (EphyHistoryService *self, EphyHis
 
     ephy_history_service_update_url_row (self, visit->url);
   }
+
+  if (visit->url->notify_visit)
+    g_signal_emit (self, signals[VISIT_URL], 0, visit->url);
 
   ephy_history_service_add_visit_row (self, visit);
   return visit->id != -1;
@@ -1058,7 +1063,7 @@ ephy_history_service_get_host_for_url (EphyHistoryService    *self,
 static gboolean
 delete_urls_signal_emit (SignalEmissionContext *ctx)
 {
-  char *url = (char *)ctx->user_data;
+  EphyHistoryURL *url = (EphyHistoryURL *)ctx->user_data;
 
   g_signal_emit (ctx->service, signals[URL_DELETED], 0, url);
 
@@ -1081,12 +1086,14 @@ ephy_history_service_execute_delete_urls (EphyHistoryService *self,
     url = l->data;
     ephy_history_service_delete_url (self, url);
 
-    ctx = signal_emission_context_new (self, g_strdup (url->url),
-                                       (GDestroyNotify)g_free);
-    g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-                     (GSourceFunc)delete_urls_signal_emit,
-                     ctx,
-                     (GDestroyNotify)signal_emission_context_free);
+    if (url->notify_delete) {
+      ctx = signal_emission_context_new (self, ephy_history_url_copy (url),
+                                         (GDestroyNotify)ephy_history_url_free);
+      g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                       (GSourceFunc)delete_urls_signal_emit,
+                       ctx,
+                       (GDestroyNotify)signal_emission_context_free);
+    }
   }
 
   ephy_history_service_delete_orphan_hosts (self);
@@ -1305,22 +1312,23 @@ ephy_history_service_find_urls (EphyHistoryService *self,
 }
 
 void
-ephy_history_service_visit_url (EphyHistoryService      *self,
-                                const char              *url,
-                                EphyHistoryPageVisitType visit_type)
+ephy_history_service_visit_url (EphyHistoryService       *self,
+                                const char               *url,
+                                const char               *sync_id,
+                                gint64                    visit_time,
+                                EphyHistoryPageVisitType  visit_type,
+                                gboolean                  should_notify)
 {
   EphyHistoryPageVisit *visit;
 
   g_return_if_fail (EPHY_IS_HISTORY_SERVICE (self));
   g_return_if_fail (url != NULL);
+  g_return_if_fail (visit_time > 0);
 
-  g_signal_emit (self, signals[VISIT_URL], 0, url, visit_type);
-
-  visit = ephy_history_page_visit_new (url,
-                                       time (NULL),
-                                       visit_type);
-  ephy_history_service_add_visit (self,
-                                  visit, NULL, NULL, NULL);
+  visit = ephy_history_page_visit_new (url, visit_time, visit_type);
+  visit->url->sync_id = g_strdup (sync_id);
+  visit->url->notify_visit = should_notify;
+  ephy_history_service_add_visit (self, visit, NULL, NULL, NULL);
   ephy_history_page_visit_free (visit);
 
   ephy_history_service_queue_urls_visited (self);

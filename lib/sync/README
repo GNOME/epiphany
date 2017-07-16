@@ -1,0 +1,476 @@
+
+                        Firefox Sync Support in Epiphany
+
+  Overview
+  --------
+
+  Firefox Sync [0] is a browser synchronization feature developed by Mozilla
+  and is currently used to synchronize data between desktop and mobile Firefox
+  browsers. The way it is designed ensures data security in such a manner that
+  not even Mozilla can read the user data on the storage servers.
+
+  To synchronize data via Firefox Sync, users must own a Firefox account.
+
+  Behind the Scenes
+  -----------------
+
+  Firefox Sync relies on the existence of a server to store the synchronized
+  records. This server is called the Sync Storage Server [1] and the current
+  version of its API is 1.5 [2], which is being used since 2014. Each record
+  that is synchronized (a.k.a. BSO - Basic Storage Object) is grouped with
+  other related records into collections. Besides the default collections
+  (i.e. bookmarks, history, passwords, tabs), there are additional collections
+  (clients, crypto, meta) used for management purposes.
+
+  After a quick glance at the API, you may notice that clients access the stored
+  records on the server relatively easy, via HTTP requests. However, there are a
+  couple of aspects that need to be taken into consideration before being able
+  to communicate with the Sync Storage Server:
+
+  1) What is the URL of the Sync Storage Server and how do you obtain it?
+     Moreover, since every request sent to the Sync Storage Server needs to
+     be authenticated with Hawk [3], how do you obtain the Hawk id and key?
+
+  2) How do you decrypt the response so that you can actually "see" the stored
+     record? As mentioned in the Mozilla docs, the only job of the Sync Storage
+     Server is to store the records (it does not alter or delete them).
+     So it falls into the responsibility of the clients to encrypt the records
+     that are uploaded to the server.
+
+  These aspects will be covered in the following chapters.
+
+  Obtaining the Storage Credentials
+  ---------------------------------
+
+  To obtain the storage credentials (i.e. the URL of the Sync Storage Server and
+  the Hawk id and key), the sync clients have to interact with the Token Server
+  [4][5]. In the context of Firefox Sync, the role of the Token Server is to
+  share the URL of the Sync Storage Server together with a pair of Hawk id and
+  key in exchange for a BrowserID assertion [6]. However, the Hawk id and key
+  have a limited expiry time, so clients need to take that into consideration
+  and request new credentials when the previous ones have expired.
+
+  So the next question that raises is: how do you make the BrowserID assertion?
+  More exactly, since every BrowserID assertion requires a signed identity
+  certificate, where do you get the certificate from?
+
+  The certificate is obtained from the Firefox Accounts Server [7][8], more
+  specifically from the /certificate/sign endpoint. As you can see in the API,
+  requests to this endpoint have to be Hawk-authenticated based on a so-called
+  sessionToken (a 32 bytes token) that is obtained from the /account/login
+  endpoint (this endpoint does not require Hawk authentication). Details about
+  how the email and the password of the user's Firefox account are stretched to
+  obtain the request body of the login request can be found here [9], however it
+  is of no big interest since this is made automatically by the Firefox Accounts
+  Content Server [10] (how Epiphany uses the Firefox Accounts Content Server to
+  do the login will be explained later). What is important to know is how the
+  sessionToken is derived to obtain the Hawk id and key that will be used to
+  authenticate the request to the certificate endpoint. The process is explained
+  here [11] and it involves the sessionToken being fed into HKDF [12] to obtain
+  the Hawk id and key.
+
+  To summarize, the steps of obtaining the storage credentials are:
+
+  1. Login with the Firefox account and obtain a sessionToken. This is a one
+     time step since the sessionToken lasts forever until revoked by a password
+     change or explicit revocation command (via the /session/destroy endpoint of
+     the Firefox Accounts Server) and can be used an unlimited number of times.
+
+  2. Based on the sessionToken, obtain a signed identity certificate from the
+     /certificate/sign endpoint of the Firefox Accounts Server. The certificate
+     has a limited lifetime of 24 hours.
+
+  3. Create the BrowserID assertion from the previously obtained certificate.
+
+  4. Send a request to the Token Server with the Authorization HTTP header set
+     to the BrowserID assertion. The Token Server will respond with the URL of
+     the Sync Storage Server and the Hawk id and key together with the validity
+     duration.
+
+  5. When the validity duration has expired, repeat from step 2.
+
+  Encrypting and Decrypting Records
+  ---------------------------------
+
+  Every collection on the Sync Storage Server has a key bundle associated
+  formed of two keys: a symmetric encryption key and an HMAC key. The former
+  is used to encrypt and decrypt the records with AES-256, while the latter
+  is used to verify the records using HMAC hashing. Both keys are 32 bytes.
+  The hashing algorithm used is SHA-256. Besides the bundles associated with
+  each collection, there is also a default key bundle which is supposed to be
+  used when handling records belonging to a collection that has no key bundle
+  associated.
+
+  All the key bundles (including the default one) are stored in the crypto/keys
+  record [13] on the Sync Storage Server. This is a normal record, but with a
+  special meaning: being a record that holds information about the keys used to
+  encrypt/decrypt all the other records, it cannot be encrypted with any of
+  those keys for obvious reasons. Therefore it is encrypted and verified with a
+  different key bundle derived from the Sync Key or the Master Sync Key.
+
+  The Master Sync Key is a 32 bytes token available only to sync clients and
+  is obtained from the Firefox Accounts Server via the /account/keys endpoint.
+  This endpoint enforces the requests to be Hawk-authenticated based on a
+  keyFetchToken. The keyFetchToken is also a 32 bytes token and is obtained at
+  login along with the sessionToken. The process of deriving the keyFetchToken
+  into the Hawk id and key used to authenticate the request and the process of
+  extracting the Master Sync Key from response bundle are thoroughly explained
+  here [14]. Note that the Master Sync Key is referred there as kB. In short,
+  the keyFetchToken is used to derive four other tokens through two HKDF
+  processes. The first HKDF process derives the Hawk id and key together with
+  a new keying material that serves as input for the second HKDF process.
+  The second HKDF process derives a response HMAC key and a response XOR key.
+  In response to the Hawk request, the server sends in return a bundle which
+  holds a ciphertext and a pre-calculated HMAC value. Clients use the response
+  HMAC key to compute the HMAC value of the ciphertext to validate it. After
+  that, the ciphertext is XORed with the response XOR key to obtain a 64 bytes
+  token. The first 32 bytes represent kA which is left unused. The last 32 bytes
+  are XORed with unwrapBKey to obtain kB (a.k.a the Master Sync Key). unwrapBKey
+  is yet another 32 bytes token returned at login together with sessionToken
+  and keyFetchToken). The hashing algorithm used is SHA-256.
+
+  Note that the Master Sync Key is an immutable token which is generated when
+  the Firefox account is created. Therefore, it should be considered a secret
+  and not ever be displayed in plain text as it could lead to the account's
+  data on the Sync Storage Server being compromised.
+
+  Having the Master Sync Key, deriving the key bundle that is used to encrypt
+  and verify the crypto/keys record is rather trivial: just perform a two-step
+  HKDF with an all-zeros salt. T(1) will represent the AES encryption key and
+  T(2) will represent the HMAC key. Having this key bundle, the crypto/keys
+  record can be decrypted to extract the default key bundle together with the
+  per-collection key bundles.
+
+  After that, clients are ready to upload/download records to/from the Sync
+  Storage Server. The flow when uploading a record is:
+
+  1. Serialize the object representing a bookmark/history/password/tab into
+     a JSON object. The stringified JSON object will represent the cleartext.
+
+  2. Encrypt the cleartext with AES-256 using the encryption key from the
+     corresponding collection's key bundle or from the default key bundle if
+     the collection does not have a key bundle associated. As an initialization
+     vector (IV) for AES-256, a random 16 bytes token will be used. AES-256
+     will output the ciphertext which will be base64 encoded afterward.
+
+  3. Compute the HMAC value of the base64 encoded ciphertext using the HMAC
+     key from the corresponding collection's key bundle or from the default
+     key bundle if the collection does not have a key bundle associated.
+     The hashing algorithm used is SHA-256.
+
+  4. Create a JSON object containing the base64 encoded ciphertext, the
+     base64 encoded initialization vector and the hex encoded HMAC value.
+     The stringified JSON object will represent the payload of the BSO
+     that will be uploaded to the Sync Storage Server.
+
+  5. Create a JSON object containing the id of the record and the previously
+     computed payload. The id of the record is a base64 URL-safe string that
+     is randomly generated (however when updating a record the id must be
+     preserved) and is usually 12 characters long. The stringified JSON object
+     will represent the body of the request sent to the Sync Storage Server.
+     Of course, the request will be Hawk-authenticated with the Hawk id and key
+     obtained from the Token Server.
+
+  The flow is reversed when downloading a record.
+
+  More details about the cryptography of the Sync Storage Server can be found
+  here [15].
+
+  Firefox Objects Formats
+  -----------------------
+
+  The Firefox format of the objects uploaded to the Sync Storage Server is
+  described here [16]. You will notice there are multiple versions described
+  for each collection, however, all collections currently use version 1, except
+  for bookmarks which use version 2. All formats are JSON objects.
+
+  In Epiphany, these formats are described by the GObject properties of the
+  objects that are synchronized:
+
+    * EphyBookmark for bookmarks
+    * EphyPasswordRecord for passwords
+    * EphyHistoryRecord for history
+    * EphyOpenTabsRecord for tabs
+
+  All these objects implement the JsonSerializable interface which allows
+  GObjects to be serialized into JSON strings and to be constructed from JSON
+  strings based on the properties of the object. They also implement the
+  EphySynchronizable interface which describes an object viable to become a BSO.
+
+  Signing in to Firefox Sync in Epiphany
+  --------------------------------------
+
+  As mentioned in the previous chapters, a vital part of Firefox Sync is
+  signing in with the email and password of the Firefox account and obtaining
+  a sessionToken, a keyFetchToken and an unwrapBKey that are further used to
+  access data on the Sync Storage Server.
+
+  In Epiphany, users can sign in with an existing Firefox account or create
+  a new one via the Sync tab in the preferences dialog. After the sign in has
+  completed successfully, users can customize their sync experience by choosing
+  what collections to sync (bookmarks, history, password and open tabs), whether
+  to sync or not with Firefox and the sync frequency.
+
+  However, it is important to understand what happens behind the scenes when
+  users sign in. The preferences dialog displays a Firefox iframe where users
+  type their email and password of their Firefox account and click Sign In.
+  The Firefox iframe is actually the web interface of the Firefox Accounts
+  Server, called the Firefox Accounts Content Server. This is the preferred
+  way of communicating sync related information from the Firefox Accounts
+  Server to Firefox Sync clients (the other way is by direct requests to the
+  login endpoint of the Firefox Accounts Server but that has been pretty much
+  restricted from public access). Communication with the Firefox Accounts
+  Content Server is made via the WebChannels flow [17] which is briefly
+  described further.
+
+  The Firefox iframe is loaded in a WebKitWebView inside the Sync tab of the
+  preferences dialog. A JavaScript that listens to WebChannelMessageToChrome
+  events is added to the WebKitUserContentManager of the WebKitWebView.
+  WebChannelMessageToChrome events are messages that come from the Firefox
+  Accounts Content Server to the web browser. When such an event is received,
+  the JavaScript forwards it to the WebKitUserContentManager via the
+  "script-message-received" signal. The callback connected to this signal in
+  the preferences dialog will parse the message and respond with a
+  WebChannelMessageToContent event through webkit_web_view_run_javascript()
+  if necessary. WebChannelMessageToContent events are messages that go from
+  the web browser to the Firefox Accounts Content Server.
+  Both WebChannelMessageToChrome and WebChannelMessageToContent events have a
+  "detail" JSON object that has the following members: the id of the WebChannel
+  and a "message" JSON object.
+
+  The "message" JSON object has the following members:
+
+    * command: string, one of "fxaccounts:can_link_account", "fxaccounts:login",
+      "fxaccounts:delete_account", "fxaccounts:change_password",
+      "fxaccounts:loaded", "profile:change".
+
+    * messageId: string, a unique identifier that should be kept the same when
+      responding to a message.
+
+    * data: JSON object, optional, carries the actual data of the message.
+
+  The WebChannelMessageToChrome/WebChannelMessageToContent sign in flow is:
+
+  1. "fxaccounts:loaded" command is received via WebChannelMessageToChrome when
+     the Firefox iframe is loaded. No data is sent and no response is expected.
+
+  2. "fxaccounts:can_link_account" command is received via
+     WebChannelMessageToChrome when the user has entered the credentials and
+     submitted the form. The data received contains the email of the user.
+     A response with an "ok" field is expected.
+
+  3. A WebChannelMessageToContent message is sent in response to the previous
+     command. The fields detail.message.command, detail.message.messageId and
+     detail.id are kept the same. The field detail.message.data is set to
+     {ok: true}.
+
+  4. "fxaccounts:login" command is received via WebChannelMessageToChrome.
+     No response is expected. The data field contains the sessionToken,
+     keyFetchToken and unwrapBKey tokens amongst other. Now the client has
+     everything it needs and the sync can begin.
+
+  After the sync tokens have been received via "fxaccounts:login" command in
+  the preferences dialog, they are passed to EphySyncService via the _sign_in()
+  function. After that, EphySyncService takes care of the rest:
+
+    * It retrieves the Master Sync Key.
+
+    * It verifies the version of the Sync Storage Server. EphySyncService only
+      supports version 1.5 so the sign in will fail in case it detects a lower
+      version. The version is kept on the Sync Storage Server in the meta/global
+      record [18]. This is a special record that is not encrypted and contains
+      general information about the state of the Sync Storage Server. In case
+      the meta/global record is missing (this happens when the Firefox account
+      is newly created), EphySyncService will generate and upload a new one.
+
+    * It retrieves account's crypto keys from the Sync Storage Server. In case
+      the crypto/keys record does not exist (this happens when the Firefox
+      account is newly created), EphySyncService will generate and upload a new
+      crypto/keys record that contains a randomly generated default key bundle.
+
+    * It registers the current device in the clients collection on the Sync
+      Storage Server.
+
+    * It stores the sync secrets (sessionToken, uid, Master Sync Key, crypto
+      keys) in the sync SecretSchema. They are kept there until sign out when
+      the SecretSchema is cleared. At this point, the sign in is considered
+      complete and the Firefox iframe is replaced with the panel that displays
+      the sync configuration options.
+
+  Note that the above steps are chronological. If any failure happens at any
+  point, EphySyncService will abort and report a sign in error next to the
+  Firefox iframe.
+
+  Sync Modules in Epiphany
+  ------------------------
+
+  I. EphySyncService
+
+  Synchronization in Epiphany is made via EphySyncService, which is a
+  singleton object residing in EphyShell, being accessible anywhere in
+  src/ via ephy_shell_get_sync_service(). However, EphySyncService is designed
+  to operate mostly on its own so you probably won't have to deal with it in
+  newly written code. EphySyncService handles all aspects of the communication
+  with the Sync Storage Server (uploads and downloads records), Token Server
+  (gets the storage credentials) and Firefox Accounts Server (gets account keys,
+  gets certificates, destroys the session). It also schedules and does
+  periodical synchronizations via every collection's manager.
+
+  The requests to the Sync Storage Server are sent internally via
+  ephy_sync_service_queue_storage_request(). This checks whether the storage
+  credentials are expired or not. If not expired, the request is sent directly
+  via ephy_sync_service_send_storage_request(), otherwise, the request is put
+  in a message queue and new storage credentials are obtained. When the new
+  storage credentials have been obtained, the queue will be emptied and all
+  requests will be sent.
+
+  The API of EphySyncService is rather simple. It contains functions to sign in,
+  sign out, start periodical synchronization and do a synchronization. Besides
+  these, there are four other functions:
+
+    * _new(). This is the constructor. It receives a boolean that says whether
+      this sync service should do periodical synchronizations. This is needed
+      because passwords are saved from EphyWebExtension which runs in another
+      process (the web process). For that, EphyWebExtension needs to have its
+      own EphySyncService that will upload/update/delete passwords once they are
+      saved/modified/deleted but will not do any periodical synchronizations.
+      Periodical synchronizations (which synchronize all records from all
+      collections) will only be made by the EphySyncService that belongs to the
+      UI process.
+
+    * _register_device(). This function adds the current device with the given
+      name to the clients collection on the Sync Storage Server. The clients
+      collection is a special collection which stores data about the devices
+      connected to the Firefox account. It is worth mentioning that every device
+      is identified by a device id and a device name. The device id is randomly
+      generated at login by EphySyncService and cannot be changed by users.
+      The device name can be edited by users from the preferences dialog.
+      If no device name is chosen, then the default is used: "@username's
+      Epiphany on @hostname".
+
+    * _register_manager() and _unregister_manager(). These will be explained in
+      the context of EphySynchronizableManager.
+
+  The sign out function is more of a cleanup function: it stops the periodical
+  synchronization, unregisters the device by deleting the associated record
+  from the clients collection, deletes the associated record from the tabs
+  collection, destroys the session, clears the message queue, unregisters
+  all managers and clears the SecretSchema that contains the sync secrets.
+
+  II. EphySynchronizableManager
+
+  EphySynchronizableManager is an interface that describes the common
+  functionality of every collection and is implemented by every collection
+  manager: EphyBookmarksManager, EphyPasswordManager, EphyHistoryManager and
+  EphyOpenTabsManager. All these managers are also singleton objects residing
+  in EphyShell and are accessible in src/ via ephy_shell_get_<manager>().
+  The main reason why such an interface is needed is that EphySyncService is
+  defined under lib/ which makes it unable to access objects from src/ (i.e.
+  EphyBookmark and EphyBookmarksManager) so it needs to access them through
+  a delegate interface. EphySyncService is defined under lib/ because it is
+  required by EphyWebExtension which is defined under embed/. (See section
+  LAYERING in HACKING). For the same reason, EphySyncService has functions to
+  register/unregister EphySynchronizableManagers. Managers are registered in
+  EphyShell when EphySyncService is created based on the user preferences stored
+  in the GSettings schema. Managers are also registered and unregistered when
+  users toggle the check buttons that say whether a collection should be
+  synchronized or not in the preferences dialog.
+
+  The API of EphySynchronizableManager is described in the source code via
+  documentation comments. EphySynchronizableManager provides two signals:
+  "synchronizable-modified" and "synchronizable-deleted". The implementations
+  of EphySynchronizableManager trigger the first signal when an object has
+  been added or modified so it needs to be uploaded to be Sync Storage Server
+  and the second signal when an object has been deleted locally so it needs to
+  be deleted from the Sync Storage Server too. EphySyncService connects a
+  callback to these signals for every manager that has been registered to it
+  and disconnects it when the manager is unregistered. This way any local
+  changes to the synchronized objects will be mirrored instantly on the Sync
+  Storage Server. However, in case EphySyncService finds a newer version of
+  the object on the server, it will download it.
+
+  Note that when a record is deleted from the Sync Storage Server, it does not
+  disappear from the server. It is only marked as deleted with a "deleted" flag
+  set to true. This way other sync clients will know that the record has been
+  deleted by another client and will delete it too from their local collection.
+  See ephy_sync_debug_delete_record() vs ephy_sync_debug_erase_record() for more
+  details about this.
+
+  The synchronization merge logic of every collection is described in the
+  source code comments of every manager's merge function.
+
+  III. EphySynchronizable
+
+  EphySynchronizable is another delegate interface that describes the
+  objects that are uploaded and downloaded from the Sync Storage Server.
+  It is implemented by EphyBookmark, EphyPasswordRecord, EphyHistoryRecord
+  and EphyOpenTabsRecord which also implement the JsonSerializable interface
+  so that they can be converted to BSOs. EphySynchronizable objects are managed
+  by the associated EphySynchronizableManager. The API of EphySynchronizable is
+  described in the source code via documentation comments.
+
+  IV. EphySyncCrypto
+
+  EphySyncCrypto is a helper module that handles all the cryptographic stuff.
+  Its API include:
+
+    * _derive_session_token(). Derives the Hawk id and key from a sessionToken.
+
+    * _derive_key_fetch_token(). Derives the Hawk id and key, the response HMAC
+      key and the response XOR key from a keyFetchToken.
+
+    * _derive_master_keys(). Derives the Master Sync Key from the unwrapBKey
+      token, the bundle returned by the /accounts/keys endpoint of the Firefox
+      Accounts Server, the response HMAC key and the response XOR key. kB is
+      the Master Sync Key and kA is left unused.
+
+    * _derive_master_bundle(). Derives the key bundle from the Master Sync Key.
+
+    * _generate_crypto_keys(). Generates a new crypto/keys record.
+
+    * _encrypt_record(). Encrypts a cleartext into a BSO payload.
+
+    * _decrypt_record(). Decrypts a BSO payload into a cleartext.
+
+    * _rsa_key_pair_new(). Generates an RSA key pair. This is needed when
+      obtaining an identity certificate and creating the BrowserID assertion.
+
+    * _create_assertion(). Creates a BrowserID assertion from a certificate, an
+      audience and an RSA key pair.
+
+    * _hawk_header_new(). Creates a Hawk header that is used to authenticate
+      Hawk requests. Unfortunately, there isn't any C library for creating Hawk
+      headers so the code has been reproduced from a Python library [19].
+
+  Until Nettle adds support for HKDF, Epiphany will use its own implementation
+  of HKDF.
+
+  V. EphySyncDebug
+
+  EphySyncDebug is a helper module for debugging purposes. All its functions
+  use only synchronous API calls and should not be used in production code.
+  Its API is described in the source code via documentation comments.
+
+  References
+  ----------
+
+   [0] https://wiki.mozilla.org/Services/Sync
+   [1] https://github.com/mozilla-services/server-syncstorage
+   [2] https://mozilla-services.readthedocs.io/en/latest/storage/apis-1.5.html
+   [3] https://github.com/hueniverse/hawk/blob/master/README.md
+   [4] https://mozilla-services.readthedocs.io/en/latest/token/index.html
+   [5] https://github.com/mozilla-services/tokenserver
+   [6] https://fuller.li/posts/how-does-browserid-work/
+   [7] https://mozilla-services.readthedocs.io/en/latest/fxa/index.html
+   [8] https://github.com/mozilla/fxa-auth-server/
+   [9] https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#login-obtaining-the-sessiontoken
+  [10] https://github.com/mozilla/fxa-content-server/
+  [11] https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#signing-certificates
+  [12] https://tools.ietf.org/html/rfc5869
+  [13] https://mozilla-services.readthedocs.io/en/latest/sync/storageformat5.html#crypto-keys-record
+  [14] https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#-fetching-sync-keys
+  [15] https://mozilla-services.readthedocs.io/en/latest/sync/storageformat5.html#cryptography
+  [16] https://mozilla-services.readthedocs.io/en/latest/sync/objectformats.html
+  [17] https://github.com/mozilla/fxa-content-server/blob/master/docs/relier-communication-protocols/fx-webchannel.md
+  [18] https://mozilla-services.readthedocs.io/en/latest/sync/storageformat5.html#metaglobal-record
+  [19] https://github.com/mozilla/PyHawk

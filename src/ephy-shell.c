@@ -32,9 +32,11 @@
 #include "ephy-header-bar.h"
 #include "ephy-history-dialog.h"
 #include "ephy-lockdown.h"
+#include "ephy-notification.h"
 #include "ephy-prefs.h"
 #include "ephy-session.h"
 #include "ephy-settings.h"
+#include "ephy-sync-utils.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
@@ -47,20 +49,17 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
-#if ENABLE_FIREFOX_SYNC
-#include "ephy-notification.h"
-#endif
-
 struct _EphyShell {
   EphyEmbedShell parent_instance;
 
   EphySession *session;
-#if ENABLE_FIREFOX_SYNC
   EphySyncService *sync_service;
-#endif
   GList *windows;
   GObject *lockdown;
   EphyBookmarksManager *bookmarks_manager;
+  EphyPasswordManager *password_manager;
+  EphyHistoryManager *history_manager;
+  EphyOpenTabsManager *open_tabs_manager;
   GNetworkMonitor *network_monitor;
   GtkWidget *history_dialog;
   GObject *prefs_dialog;
@@ -312,33 +311,77 @@ download_started_cb (WebKitWebContext *web_context,
   g_object_unref (ephy_download);
 }
 
-#if ENABLE_FIREFOX_SYNC
 static void
-sync_tokens_load_finished_cb (EphySyncService *service,
-                              GError          *error,
-                              gpointer         user_data)
+register_synchronizable_managers (EphyShell       *shell,
+                                  EphySyncService *service)
 {
-  EphyNotification *notification;
+  EphySynchronizableManager *manager;
 
   g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_SHELL (shell));
 
-  /* If the tokens were successfully loaded, start the periodical sync.
-   * Otherwise, notify the user to sign in again. */
-  if (error == NULL) {
-    ephy_sync_service_start_periodical_sync (service, TRUE);
-  } else {
-    notification = ephy_notification_new (error->message,
-                                          _("Please visit Preferences and sign in "
-                                            "again to continue the sync process."));
-    ephy_notification_show (notification);
+  if (ephy_sync_utils_bookmarks_sync_is_enabled ()) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
+    ephy_sync_service_register_manager (service, manager);
+  }
+
+  if (ephy_sync_utils_passwords_sync_is_enabled ()) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
+    ephy_sync_service_register_manager (service, manager);
+  }
+
+  if (ephy_sync_utils_history_sync_is_enabled ()) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
+    ephy_sync_service_register_manager (service, manager);
+  }
+
+  if (ephy_sync_utils_open_tabs_sync_is_enabled ()) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
+    ephy_sync_service_register_manager (service, manager);
   }
 }
-#endif
+
+static gboolean
+start_sync_after_sign_in (EphySyncService *service)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+
+  ephy_sync_service_start_sync (service);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+sync_secrets_store_finished_cb (EphySyncService *service,
+                                GError          *error,
+                                EphyShell       *shell)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_SHELL (shell));
+
+  if (!error) {
+    register_synchronizable_managers (shell, service);
+    /* Allow a 30 seconds window for the user to select their sync options. */
+    g_timeout_add_seconds (30, (GSourceFunc)start_sync_after_sign_in, service);
+  }
+}
+
+static void
+sync_secrets_load_finished_cb (EphySyncService *service,
+                               EphyShell       *shell)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_SHELL (shell));
+
+  register_synchronizable_managers (shell, service);
+  ephy_sync_service_start_sync (service);
+}
 
 static void
 ephy_shell_startup (GApplication *application)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
+  EphyShell *shell = EPHY_SHELL (application);
   EphyEmbedShellMode mode;
   GtkBuilder *builder;
 
@@ -365,21 +408,18 @@ ephy_shell_startup (GApplication *application)
       g_action_map_add_action_entries (G_ACTION_MAP (application),
                                        app_normal_mode_entries, G_N_ELEMENTS (app_normal_mode_entries),
                                        application);
-      g_object_bind_property (G_OBJECT (ephy_shell_get_session (EPHY_SHELL (application))),
+      g_object_bind_property (G_OBJECT (ephy_shell_get_session (shell)),
                               "can-undo-tab-closed",
                               g_action_map_lookup_action (G_ACTION_MAP (application),
                                                           "reopen-closed-tab"),
                               "enabled",
                               G_BINDING_SYNC_CREATE);
-    }
 
-#if ENABLE_FIREFOX_SYNC
-    /* Create the sync service. */
-    ephy_shell->sync_service = ephy_sync_service_new ();
-    g_signal_connect (ephy_shell->sync_service,
-                      "sync-tokens-load-finished",
-                      G_CALLBACK (sync_tokens_load_finished_cb), NULL);
-#endif
+      if (ephy_sync_utils_user_is_signed_in ()) {
+        /* Create the sync service. */
+        ephy_shell_get_sync_service (shell);
+      }
+    }
 
     gtk_application_set_app_menu (GTK_APPLICATION (application),
                                   G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
@@ -647,10 +687,11 @@ ephy_shell_dispose (GObject *object)
   g_clear_pointer (&shell->history_dialog, gtk_widget_destroy);
   g_clear_object (&shell->prefs_dialog);
   g_clear_object (&shell->network_monitor);
-#if ENABLE_FIREFOX_SYNC
   g_clear_object (&shell->sync_service);
-#endif
   g_clear_object (&shell->bookmarks_manager);
+  g_clear_object (&shell->password_manager);
+  g_clear_object (&shell->history_manager);
+  g_clear_object (&shell->open_tabs_manager);
 
   g_slist_free_full (shell->open_uris_idle_ids, remove_open_uris_idle_cb);
   shell->open_uris_idle_ids = NULL;
@@ -802,7 +843,6 @@ ephy_shell_get_session (EphyShell *shell)
   return shell->session;
 }
 
-#if ENABLE_FIREFOX_SYNC
 /**
  * ephy_shell_get_sync_service:
  * @shell: the #EphyShell
@@ -816,9 +856,21 @@ ephy_shell_get_sync_service (EphyShell *shell)
 {
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
+  if (shell->sync_service == NULL) {
+    shell->sync_service = ephy_sync_service_new (TRUE);
+
+    g_signal_connect_object (shell->sync_service,
+                             "sync-secrets-store-finished",
+                             G_CALLBACK (sync_secrets_store_finished_cb),
+                             shell, 0);
+    g_signal_connect_object (shell->sync_service,
+                             "sync-secrets-load-finished",
+                             G_CALLBACK (sync_secrets_load_finished_cb),
+                             shell, 0);
+  }
+
   return shell->sync_service;
 }
-#endif
 
 /**
  * ephy_shell_get_bookmarks_manager:
@@ -837,6 +889,61 @@ ephy_shell_get_bookmarks_manager (EphyShell *shell)
     shell->bookmarks_manager = ephy_bookmarks_manager_new ();
 
   return shell->bookmarks_manager;
+}
+
+/**
+ * ephy_shell_get_password_manager:
+ * @shell: the #EphyShell
+ *
+ * Returns the passwords manager.
+ *
+ * Return value: (transfer none): An #EphyPasswordManager.
+ */
+EphyPasswordManager *
+ephy_shell_get_password_manager (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->password_manager == NULL)
+    shell->password_manager = ephy_password_manager_new ();
+
+  return shell->password_manager;
+}
+
+/**
+ * ephy_shell_get_history_manager:
+ * @shell: the #EphyShell
+ *
+ * Returns the history manager.
+ *
+ * Return value: (transfer none): An #EphyHistoryManager.
+ */
+EphyHistoryManager *
+ephy_shell_get_history_manager (EphyShell *shell)
+{
+  EphyEmbedShell *embed_shell;
+  EphyHistoryService *service;
+
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->history_manager == NULL) {
+    embed_shell = ephy_embed_shell_get_default ();
+    service = ephy_embed_shell_get_global_history_service (embed_shell);
+    shell->history_manager = ephy_history_manager_new (service);
+  }
+
+  return shell->history_manager;
+}
+
+EphyOpenTabsManager *
+ephy_shell_get_open_tabs_manager (EphyShell *shell)
+{
+  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+
+  if (shell->open_tabs_manager == NULL)
+    shell->open_tabs_manager = ephy_open_tabs_manager_new ();
+
+  return shell->open_tabs_manager;
 }
 
 /**

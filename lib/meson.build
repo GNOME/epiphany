@@ -20,7 +20,6 @@ libephymisc_sources = [
   'ephy-favicon-helpers.c',
   'ephy-file-helpers.c',
   'ephy-filters-manager.c',
-  'ephy-form-auth-data.c',
   'ephy-gui.c',
   'ephy-langs.c',
   'ephy-permissions-manager.c',
@@ -34,6 +33,7 @@ libephymisc_sources = [
   'ephy-sqlite-connection.c',
   'ephy-sqlite-statement.c',
   'ephy-string.c',
+  'ephy-sync-utils.c',
   'ephy-time-helpers.c',
   'ephy-uri-helpers.c',
   'ephy-uri-tester-shared.c',
@@ -87,4 +87,5 @@ ephymisc_dep = declare_dependency(
   sources: enums
 )
 
+subdir('sync')
 subdir('widgets')

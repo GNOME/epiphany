@@ -25,16 +25,16 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-embed-shell.h"
 #include "ephy-embed.h"
+#include "ephy-history-manager.h"
+#include "ephy-open-tabs-manager.h"
+#include "ephy-password-manager.h"
 #include "ephy-session.h"
+#include "ephy-sync-service.h"
 #include "ephy-window.h"
 
 #include <webkit2/webkit2.h>
 #include <glib-object.h>
 #include <glib.h>
-
-#if ENABLE_FIREFOX_SYNC
-#include "ephy-sync-service.h"
-#endif
 
 G_BEGIN_DECLS
 
@@ -105,9 +105,13 @@ GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
 
 EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
 
-#if ENABLE_FIREFOX_SYNC
+EphyPasswordManager *ephy_shell_get_password_manager     (EphyShell *shell);
+
+EphyHistoryManager *ephy_shell_get_history_manager       (EphyShell *shell);
+
+EphyOpenTabsManager *ephy_shell_get_open_tabs_manager    (EphyShell *shell);
+
 EphySyncService *ephy_shell_get_sync_service             (EphyShell *shell);
-#endif
 
 GtkWidget       *ephy_shell_get_history_dialog           (EphyShell *shell);
 

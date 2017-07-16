@@ -52,7 +52,7 @@ void                     ephy_history_service_delete_host             (EphyHisto
 void                     ephy_history_service_get_url                 (EphyHistoryService *self, const char *url, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_delete_urls             (EphyHistoryService *self, GList *urls, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_find_urls               (EphyHistoryService *self, gint64 from, gint64 to, guint limit, gint host, GList *substring_list, EphyHistorySortType sort_type, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
-void                     ephy_history_service_visit_url               (EphyHistoryService *self, const char *orig_url, EphyHistoryPageVisitType visit_type);
+void                     ephy_history_service_visit_url               (EphyHistoryService *self, const char *url, const char *sync_id, gint64 visit_time, EphyHistoryPageVisitType visit_type, gboolean should_notify);
 void                     ephy_history_service_clear                   (EphyHistoryService *self, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 void                     ephy_history_service_find_hosts              (EphyHistoryService *self, gint64 from, gint64 to, GCancellable *cancellable, EphyHistoryJobCallback callback, gpointer user_data);
 

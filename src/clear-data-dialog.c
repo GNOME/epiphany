@@ -26,7 +26,6 @@
 #include <string.h>
 #include <webkit2/webkit2.h>
 
-#include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
 #include "ephy-embed-shell.h"
 

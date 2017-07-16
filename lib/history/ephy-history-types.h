@@ -71,26 +71,29 @@ typedef struct _EphyHistoryURL
   int id;
   char* url;
   char* title;
+  char *sync_id;
   int visit_count;
   int typed_count;
-  gint64 last_visit_time;
-  gint64 thumbnail_time;
+  gint64 last_visit_time; /* Microseconds */
+  gint64 thumbnail_time;  /* Seconds */
   gboolean hidden;
   EphyHistoryHost *host;
+  gboolean notify_visit;
+  gboolean notify_delete;
 } EphyHistoryURL;
 
 typedef struct _EphyHistoryPageVisit
 {
   EphyHistoryURL* url;
   int id;
-  gint64 visit_time;
+  gint64 visit_time; /* Microseconds */
   EphyHistoryPageVisitType visit_type;
 } EphyHistoryPageVisit;
 
 typedef struct _EphyHistoryQuery
 {
-  gint64 from;
-  gint64 to;
+  gint64 from;  /* Microseconds */
+  gint64 to;    /* Microseconds */
   guint limit;
   GList* substring_list;
   gboolean ignore_hidden;

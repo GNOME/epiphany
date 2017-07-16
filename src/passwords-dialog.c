@@ -27,7 +27,6 @@
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
 
-#include "ephy-form-auth-data.h"
 #include "ephy-uri-helpers.h"
 #include "passwords-dialog.h"
 
@@ -39,14 +38,11 @@ typedef enum {
   COL_PASSWORDS_DATA,
 } PasswordsDialogColumn;
 
-#define URI_KEY           "uri"
-#define FORM_USERNAME_KEY "form_username"
-#define FORM_PASSWORD_KEY "form_password"
-#define USERNAME_KEY      "username"
-
 struct _EphyPasswordsDialog {
   GtkDialog parent_instance;
 
+  EphyPasswordManager *manager;
+  GSList *records;
   GtkWidget *passwords_treeview;
   GtkTreeSelection *tree_selection;
   GtkWidget *liststore;
@@ -59,8 +55,6 @@ struct _EphyPasswordsDialog {
 
   GActionGroup *action_group;
 
-  SecretService *ss;
-  GCancellable *ss_cancellable;
   gboolean filled;
 
   char *search_text;
@@ -68,14 +62,48 @@ struct _EphyPasswordsDialog {
 
 G_DEFINE_TYPE (EphyPasswordsDialog, ephy_passwords_dialog, GTK_TYPE_DIALOG)
 
-static void populate_model (EphyPasswordsDialog *dialog);
+enum {
+  PROP_0,
+  PROP_PASSWORD_MANAGER,
+  LAST_PROP
+};
+
+static GParamSpec *obj_properties[LAST_PROP];
 
 static void
-reload_model (EphyPasswordsDialog *dialog)
+ephy_passwords_dialog_set_property (GObject      *object,
+                                    guint         prop_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
 {
-  gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
-  dialog->filled = FALSE;
-  populate_model (dialog);
+  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
+
+  switch (prop_id) {
+    case PROP_PASSWORD_MANAGER:
+      g_clear_object (&dialog->manager);
+      dialog->manager = g_object_ref (g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
+}
+
+static void
+ephy_passwords_dialog_get_property (GObject    *object,
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
+{
+  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
+
+  switch (prop_id) {
+    case PROP_PASSWORD_MANAGER:
+      g_value_set_object (value, dialog->manager);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
 }
 
 static void
@@ -83,31 +111,15 @@ ephy_passwords_dialog_dispose (GObject *object)
 {
   EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (object);
 
-  if (dialog->ss_cancellable != NULL) {
-    g_cancellable_cancel (dialog->ss_cancellable);
-    g_clear_object (&(dialog->ss_cancellable));
-  }
+  g_clear_object (&dialog->manager);
 
-  g_clear_object (&(dialog->ss));
   g_free (dialog->search_text);
   dialog->search_text = NULL;
 
+  g_slist_free_full (dialog->records, g_object_unref);
+  dialog->records = NULL;
+
   G_OBJECT_CLASS (ephy_passwords_dialog_parent_class)->dispose (object);
-}
-
-static void
-secret_remove_ready_cb (GObject             *source,
-                        GAsyncResult        *res,
-                        EphyPasswordsDialog *dialog)
-{
-  secret_item_delete_finish (SECRET_ITEM (source), res, NULL);
-}
-
-static void
-secret_remove (EphyPasswordsDialog *dialog,
-               SecretItem          *item)
-{
-  secret_item_delete (item, NULL, (GAsyncReadyCallback)secret_remove_ready_cb, dialog);
 }
 
 static void
@@ -155,15 +167,21 @@ forget (GSimpleAction *action,
   /* Removal */
   for (r = rlist; r != NULL; r = r->next) {
     GValue val = { 0, };
-    SecretItem *item;
+    EphyPasswordRecord *record;
     GtkTreeIter filter_iter;
     GtkTreeIter child_iter;
 
     path = gtk_tree_row_reference_get_path ((GtkTreeRowReference *)r->data);
     gtk_tree_model_get_iter (model, &iter, path);
     gtk_tree_model_get_value (model, &iter, COL_PASSWORDS_DATA, &val);
-    item = g_value_get_object (&val);
-    secret_remove (dialog, item);
+    record = g_value_get_object (&val);
+    ephy_password_manager_forget (dialog->manager,
+                                  ephy_password_record_get_hostname (record),
+                                  ephy_password_record_get_username (record),
+                                  ephy_password_record_get_username_field (record),
+                                  ephy_password_record_get_password_field (record));
+    dialog->records = g_slist_remove (dialog->records, record);
+    g_object_unref (record);
     g_value_unset (&val);
 
     gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (dialog->treemodelsort),
@@ -341,7 +359,18 @@ ephy_passwords_dialog_class_init (EphyPasswordsDialogClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->set_property = ephy_passwords_dialog_set_property;
+  object_class->get_property = ephy_passwords_dialog_get_property;
   object_class->dispose = ephy_passwords_dialog_dispose;
+
+  obj_properties[PROP_PASSWORD_MANAGER] =
+    g_param_spec_object ("password-manager",
+                         "Password manager",
+                         "Password Manager",
+                         EPHY_TYPE_PASSWORD_MANAGER,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/passwords-dialog.ui");
@@ -362,105 +391,55 @@ ephy_passwords_dialog_class_init (EphyPasswordsDialogClass *klass)
 }
 
 static void
-delete_all_passwords_ready_cb (GObject             *source_object,
-                               GAsyncResult        *res,
-                               EphyPasswordsDialog *dialog)
-{
-  secret_service_clear_finish (dialog->ss, res, NULL);
-  reload_model (dialog);
-}
-
-static void
 forget_all (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
   EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
-  GHashTable *attributes;
 
-  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
-  secret_service_clear (dialog->ss,
-                        EPHY_FORM_PASSWORD_SCHEMA,
-                        attributes,
-                        dialog->ss_cancellable,
-                        (GAsyncReadyCallback)delete_all_passwords_ready_cb,
-                        dialog);
-  g_hash_table_unref (attributes);
+  ephy_password_manager_forget_all (dialog->manager);
+
+  gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
+  dialog->filled = FALSE;
+
+  g_slist_free_full (dialog->records, g_object_unref);
+  dialog->records = NULL;
 }
 
 static void
-secrets_search_ready_cb (GObject             *source_object,
-                         GAsyncResult        *res,
-                         EphyPasswordsDialog *dialog)
+populate_model_cb (GSList   *records,
+                   gpointer  user_data)
 {
-  GList *matches;
-  GList *l;
+  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
 
-  matches = secret_service_search_finish (dialog->ss, res, NULL);
-
-  for (l = matches; l != NULL; l = l->next) {
-    SecretItem *item = l->data;
-    SecretValue *value = NULL;
-    GHashTable *attributes = NULL;
-    const char *username = NULL;
-    const char *password = NULL;
-    char *origin = NULL;
+  for (GSList *l = records; l && l->data; l = l->next) {
+    EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (l->data);
     GtkTreeIter iter;
-
-    attributes = secret_item_get_attributes (item);
-    username = g_hash_table_lookup (attributes, USERNAME_KEY);
-    value = secret_item_get_secret (item);
-    password = secret_value_get (value, NULL);
-    origin = ephy_uri_to_security_origin (g_hash_table_lookup (attributes, URI_KEY));
-    if (origin == NULL) {
-      g_hash_table_unref (attributes);
-      continue;
-    }
 
     gtk_list_store_insert_with_values (GTK_LIST_STORE (dialog->liststore),
                                        &iter,
                                        -1,
-                                       COL_PASSWORDS_ORIGIN, origin,
-                                       COL_PASSWORDS_USER, username,
-                                       COL_PASSWORDS_PASSWORD, password,
+                                       COL_PASSWORDS_ORIGIN, ephy_password_record_get_hostname (record),
+                                       COL_PASSWORDS_USER, ephy_password_record_get_username (record),
+                                       COL_PASSWORDS_PASSWORD, ephy_password_record_get_password (record),
                                        COL_PASSWORDS_INVISIBLE, "●●●●●●●●",
-                                       COL_PASSWORDS_DATA, item,
+                                       COL_PASSWORDS_DATA, record,
                                        -1);
-
-    g_free (origin);
-    g_hash_table_unref (attributes);
   }
 
-  g_list_free_full (matches, g_object_unref);
+  dialog->records = records;
 }
 
 static void
 populate_model (EphyPasswordsDialog *dialog)
 {
-  GHashTable *attributes;
-
+  g_assert (EPHY_IS_PASSWORDS_DIALOG (dialog));
   g_assert (dialog->filled == FALSE);
 
-  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
-
-  secret_service_search (dialog->ss,
-                         EPHY_FORM_PASSWORD_SCHEMA,
-                         attributes,
-                         SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
-                         dialog->ss_cancellable,
-                         (GAsyncReadyCallback)secrets_search_ready_cb,
-                         dialog);
-
-  g_hash_table_unref (attributes);
-}
-
-static void
-secrets_ready_cb (GObject             *source_object,
-                  GAsyncResult        *res,
-                  EphyPasswordsDialog *dialog)
-{
-  dialog->ss = secret_service_get_finish (res, NULL);
-  populate_model (dialog);
+  /* Ask for all password records. */
+  ephy_password_manager_query (dialog->manager,
+                               NULL, NULL, NULL, NULL,
+                               populate_model_cb, dialog);
 }
 
 static gboolean
@@ -511,6 +490,15 @@ create_action_group (EphyPasswordsDialog *dialog)
 }
 
 static void
+show_dialog_cb (GtkWidget *widget,
+                gpointer   user_data)
+{
+  EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (widget);
+
+  populate_model (dialog);
+}
+
+static void
 ephy_passwords_dialog_init (EphyPasswordsDialog *dialog)
 {
   gtk_widget_init_template (GTK_WIDGET (dialog));
@@ -520,22 +508,19 @@ ephy_passwords_dialog_init (EphyPasswordsDialog *dialog)
                                           dialog,
                                           NULL);
 
-  dialog->ss_cancellable = g_cancellable_new ();
-  secret_service_get (SECRET_SERVICE_OPEN_SESSION | SECRET_SERVICE_LOAD_COLLECTIONS,
-                      dialog->ss_cancellable,
-                      (GAsyncReadyCallback)secrets_ready_cb,
-                      dialog);
-
   dialog->action_group = create_action_group (dialog);
   gtk_widget_insert_action_group (GTK_WIDGET (dialog), "passwords", dialog->action_group);
 
   update_selection_actions (G_ACTION_MAP (dialog->action_group), FALSE);
+
+  g_signal_connect (GTK_WIDGET (dialog), "show", G_CALLBACK (show_dialog_cb), NULL);
 }
 
 EphyPasswordsDialog *
-ephy_passwords_dialog_new (void)
+ephy_passwords_dialog_new (EphyPasswordManager *manager)
 {
-  return g_object_new (EPHY_TYPE_PASSWORDS_DIALOG,
-                       "use-header-bar", TRUE,
-                       NULL);
+  return EPHY_PASSWORDS_DIALOG (g_object_new (EPHY_TYPE_PASSWORDS_DIALOG,
+                                              "password-manager", manager,
+                                              "use-header-bar", TRUE,
+                                              NULL));
 }

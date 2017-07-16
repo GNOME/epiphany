@@ -18,8 +18,10 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "ephy-bookmarks-export.h"
 
+#include "ephy-synchronizable.h"
 #include "gvdb-builder.h"
 
 static void
@@ -45,7 +47,7 @@ build_variant (EphyBookmark *bookmark)
   g_variant_builder_add (&builder, "x", ephy_bookmark_get_time_added (bookmark));
   g_variant_builder_add (&builder, "s", ephy_bookmark_get_title (bookmark));
   g_variant_builder_add (&builder, "s", ephy_bookmark_get_id (bookmark));
-  g_variant_builder_add (&builder, "d", ephy_bookmark_get_modification_time (bookmark));
+  g_variant_builder_add (&builder, "d", ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark)));
   g_variant_builder_add (&builder, "b", ephy_bookmark_is_uploaded (bookmark));
 
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("as"));

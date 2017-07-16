@@ -19,19 +19,17 @@
  */
 
 #include "config.h"
-
 #include "ephy-bookmark.h"
 
-#include "ephy-shell.h"
+#include "ephy-bookmarks-manager.h"
+#include "ephy-synchronizable.h"
 
 #include <string.h>
 
-#if ENABLE_FIREFOX_SYNC
-#include "ephy-sync-crypto.h"
-#include "ephy-sync-utils.h"
-#endif
-
-#define ID_LEN 32
+#define BOOKMARK_TYPE_VAL            "bookmark"
+#define BOOKMARK_PARENT_ID_VAL       "toolbar"
+#define BOOKMARK_PARENT_NAME_VAL     "Bookmarks Toolbar"
+#define BOOKMARK_LOAD_IN_SIDEBAR_VAL FALSE
 
 struct _EphyBookmark {
   GObject      parent_instance;
@@ -41,27 +39,36 @@ struct _EphyBookmark {
   GSequence   *tags;
   gint64       time_added;
 
-  /* Keep the modified timestamp as double, and not float, to
-   * preserve the precision enforced by the Storage Server. */
+  /* Firefox Sync specific fields.
+   * Time modified timestamp must be double to match server's precision. */
   char        *id;
-  double       modified;
-  gboolean     uploaded;
+  char        *type;
+  char        *parent_id;
+  char        *parent_name;
+  gboolean     load_in_sidebar;
+  double       server_time_modified;
 };
 
-static JsonSerializableIface *serializable_iface = NULL;
-
-static void json_serializable_iface_init (gpointer g_iface);
+static void json_serializable_iface_init (JsonSerializableIface *iface);
+static void ephy_synchronizable_iface_init (EphySynchronizableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE,
-                                               json_serializable_iface_init))
+                                               json_serializable_iface_init)
+                        G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE,
+                                               ephy_synchronizable_iface_init))
 
 enum {
   PROP_0,
-  PROP_TAGS,
-  PROP_TIME_ADDED,
-  PROP_TITLE,
-  PROP_URL,
+  PROP_TIME_ADDED,      /* Epiphany */
+  PROP_ID,              /* Firefox Sync */
+  PROP_TITLE,           /* Epiphany && Firefox Sync */
+  PROP_BMK_URI,         /* Epiphany && Firefox Sync */
+  PROP_TAGS,            /* Epiphany && Firefox Sync */
+  PROP_TYPE,            /* Firefox Sync */
+  PROP_PARENT_ID,       /* Firefox Sync */
+  PROP_PARENT_NAME,     /* Firefox Sync */
+  PROP_LOAD_IN_SIDEBAR, /* Firefox Sync */
   LAST_PROP
 };
 
@@ -83,19 +90,37 @@ ephy_bookmark_set_property (GObject      *object,
   EphyBookmark *self = EPHY_BOOKMARK (object);
 
   switch (prop_id) {
-    case PROP_TAGS:
-      if (self->tags != NULL)
-        g_sequence_free (self->tags);
-      self->tags = g_value_get_pointer (value);
-      break;
     case PROP_TIME_ADDED:
       ephy_bookmark_set_time_added (self, g_value_get_int64 (value));
       break;
     case PROP_TITLE:
       ephy_bookmark_set_title (self, g_value_get_string (value));
       break;
-    case PROP_URL:
+    case PROP_BMK_URI:
       ephy_bookmark_set_url (self, g_value_get_string (value));
+      break;
+    case PROP_TAGS:
+      if (self->tags != NULL)
+        g_sequence_free (self->tags);
+      self->tags = g_value_get_pointer (value);
+      break;
+    case PROP_TYPE:
+      g_free (self->type);
+      self->type = g_strdup (g_value_get_string (value));
+      break;
+    case PROP_PARENT_ID:
+      g_free (self->parent_id);
+      self->parent_id = g_strdup (g_value_get_string (value));
+      break;
+    case PROP_PARENT_NAME:
+      g_free (self->parent_name);
+      self->parent_name = g_strdup (g_value_get_string (value));
+      break;
+    case PROP_LOAD_IN_SIDEBAR:
+      self->load_in_sidebar = g_value_get_boolean (value);
+      break;
+    case PROP_ID:
+      ephy_bookmark_set_id (self, g_value_get_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -103,25 +128,40 @@ ephy_bookmark_set_property (GObject      *object,
 }
 
 static void
-ephy_bookmark_get_property (GObject      *object,
-                            guint         prop_id,
-                            GValue       *value,
-                            GParamSpec   *pspec)
+ephy_bookmark_get_property (GObject    *object,
+                            guint       prop_id,
+                            GValue     *value,
+                            GParamSpec *pspec)
 {
   EphyBookmark *self = EPHY_BOOKMARK (object);
 
   switch (prop_id) {
-    case PROP_TAGS:
-      g_value_set_pointer (value, ephy_bookmark_get_tags (self));
-      break;
     case PROP_TIME_ADDED:
       g_value_set_int64 (value, ephy_bookmark_get_time_added (self));
       break;
     case PROP_TITLE:
       g_value_set_string (value, ephy_bookmark_get_title (self));
       break;
-    case PROP_URL:
+    case PROP_BMK_URI:
       g_value_set_string (value, ephy_bookmark_get_url (self));
+      break;
+    case PROP_TAGS:
+      g_value_set_pointer (value, ephy_bookmark_get_tags (self));
+      break;
+    case PROP_TYPE:
+      g_value_set_string (value, self->type);
+      break;
+    case PROP_PARENT_ID:
+      g_value_set_string (value, self->parent_id);
+      break;
+    case PROP_PARENT_NAME:
+      g_value_set_string (value, self->parent_name);
+      break;
+    case PROP_LOAD_IN_SIDEBAR:
+      g_value_set_boolean (value, self->load_in_sidebar);
+      break;
+    case PROP_ID:
+      g_value_set_string (value, ephy_bookmark_get_id (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -137,7 +177,8 @@ ephy_bookmark_finalize (GObject *object)
   g_free (self->title);
   g_free (self->id);
 
-  g_sequence_free (self->tags);
+  if (self->tags)
+    g_sequence_free (self->tags);
 
   G_OBJECT_CLASS (ephy_bookmark_parent_class)->finalize (object);
 }
@@ -151,12 +192,6 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
   object_class->get_property = ephy_bookmark_get_property;
   object_class->finalize = ephy_bookmark_finalize;
 
-  obj_properties[PROP_TAGS] =
-    g_param_spec_pointer ("tags",
-                          "Tags",
-                          "The bookmark's tags",
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
-
   obj_properties[PROP_TIME_ADDED] =
     g_param_spec_int64 ("time-added",
                         "Time added",
@@ -166,6 +201,13 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
                         0,
                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
+  obj_properties[PROP_ID] =
+    g_param_spec_string ("id",
+                         "Id",
+                         "The bookmark's id",
+                         "Default bookmark id",
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+
   obj_properties[PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
@@ -173,12 +215,46 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
                          "Default bookmark title",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
-  obj_properties[PROP_URL] =
-    g_param_spec_string ("url",
-                         "URL",
-                         "The bookmark's URL",
+  obj_properties[PROP_BMK_URI] =
+    g_param_spec_string ("bmkUri",
+                         "URI",
+                         "The bookmark's URI",
                          "about:overview",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_TAGS] =
+    g_param_spec_pointer ("tags",
+                          "Tags",
+                          "The bookmark's tags",
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_TYPE] =
+    g_param_spec_string ("type",
+                         "Type",
+                         "Of type bookmark",
+                         "default",
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_PARENT_ID] =
+    g_param_spec_string ("parentid",
+                         "ParentID",
+                         "The parent's id",
+                         "default",
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_PARENT_NAME] =
+    g_param_spec_string ("parentName",
+                         "ParentName",
+                         "The parent's name",
+                         "default",
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_LOAD_IN_SIDEBAR] =
+    g_param_spec_boolean ("loadInSidebar",
+                          "LoadInSiderbar",
+                          "Load in sidebar",
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
@@ -204,114 +280,24 @@ ephy_bookmark_class_init (EphyBookmarkClass *klass)
 static void
 ephy_bookmark_init (EphyBookmark *self)
 {
-#if ENABLE_FIREFOX_SYNC
-  self->id = g_malloc0 (ID_LEN + 1);
-  ephy_sync_crypto_random_hex_gen (NULL, ID_LEN, (guint8 *)self->id);
-#else
-  static const char hex_digits[] = "0123456789abcdef";
-  FILE *fp;
-  gsize num_bytes;
-  guint8 *bytes;
-
-  num_bytes = (ID_LEN + 1) / 2;
-  bytes = g_malloc (num_bytes);
-
-  fp = fopen ("/dev/urandom", "r");
-  fread (bytes, sizeof (guint8), num_bytes, fp);
-
-  self->id = g_malloc0 (ID_LEN + 1);
-  for (gsize i = 0; i < num_bytes; i++) {
-    self->id[2 * i] = hex_digits[bytes[i] >> 4];
-    self->id[2 * i + 1] = hex_digits[bytes[i] & 0xf];
-  }
-
-  g_free (bytes);
-  fclose (fp);
-#endif
-}
-
-static JsonNode *
-ephy_bookmark_json_serializable_serialize_property (JsonSerializable *serializable,
-                                                    const char       *name,
-                                                    const GValue     *value,
-                                                    GParamSpec       *pspec)
-{
-  JsonNode *node = NULL;
-
-  if (g_strcmp0 (name, "tags") == 0) {
-    GSequence *tags;
-    GSequenceIter *iter;
-    JsonArray *array;
-
-    node = json_node_new (JSON_NODE_ARRAY);
-    array = json_array_new ();
-    tags = g_value_get_pointer (value);
-
-    for (iter = g_sequence_get_begin_iter (tags);
-         !g_sequence_iter_is_end (iter);
-         iter = g_sequence_iter_next (iter)) {
-      json_array_add_string_element (array, g_sequence_get (iter));
-    }
-
-    json_node_set_array (node, array);
-  } else {
-    node = serializable_iface->serialize_property (serializable, name,
-                                                   value, pspec);
-  }
-
-  return node;
-}
-
-static gboolean
-ephy_bookmark_json_serializable_deserialize_property (JsonSerializable *serializable,
-                                                      const char       *name,
-                                                      GValue           *value,
-                                                      GParamSpec       *pspec,
-                                                      JsonNode         *node)
-{
-  if (g_strcmp0 (name, "tags") == 0) {
-    GSequence *tags;
-    JsonArray *array;
-    const char *tag;
-
-    g_assert (JSON_NODE_HOLDS_ARRAY (node));
-    array = json_node_get_array (node);
-    tags = g_sequence_new (g_free);
-
-    for (gsize i = 0; i < json_array_get_length (array); i++) {
-      tag = json_node_get_string (json_array_get_element (array, i));
-      g_sequence_insert_sorted (tags, g_strdup (tag),
-                                (GCompareDataFunc)ephy_bookmark_tags_compare, NULL);
-    }
-
-    g_value_set_pointer (value, tags);
-  } else {
-    serializable_iface->deserialize_property (serializable, name,
-                                              value, pspec, node);
-  }
-
-  return TRUE;
-}
-
-static void
-json_serializable_iface_init (gpointer g_iface)
-{
-  JsonSerializableIface *iface = g_iface;
-
-  serializable_iface = g_type_default_interface_peek (JSON_TYPE_SERIALIZABLE);
-
-  iface->serialize_property = ephy_bookmark_json_serializable_serialize_property;
-  iface->deserialize_property = ephy_bookmark_json_serializable_deserialize_property;
 }
 
 EphyBookmark *
-ephy_bookmark_new (const char *url, const char *title, GSequence *tags)
+ephy_bookmark_new (const char *url,
+                   const char *title,
+                   GSequence  *tags,
+                   const char *id)
 {
   return g_object_new (EPHY_TYPE_BOOKMARK,
-                       "url", url,
-                       "title", title,
-                       "tags", tags,
                        "time-added", g_get_real_time (),
+                       "title", title,
+                       "bmkUri", url,
+                       "tags", tags,
+                       "type", BOOKMARK_TYPE_VAL,
+                       "parentid", BOOKMARK_PARENT_ID_VAL,
+                       "parentName", BOOKMARK_PARENT_NAME_VAL,
+                       "loadInSidebar", BOOKMARK_LOAD_IN_SIDEBAR_VAL,
+                       "id", id,
                        NULL);
 }
 
@@ -389,37 +375,23 @@ ephy_bookmark_get_id (EphyBookmark *self)
 }
 
 void
-ephy_bookmark_set_modification_time (EphyBookmark *self,
-                                     double        modified)
-{
-  g_return_if_fail (EPHY_IS_BOOKMARK (self));
-
-  self->modified = modified;
-}
-
-double
-ephy_bookmark_get_modification_time (EphyBookmark *self)
-{
-  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), -1);
-
-  return self->modified;
-}
-
-void
 ephy_bookmark_set_is_uploaded (EphyBookmark *self,
                                gboolean      uploaded)
 {
-  g_return_if_fail (EPHY_IS_BOOKMARK (self));
 
-  self->uploaded = uploaded;
+  /* FIXME: This is no longer used for Firefox Sync, but bookmarks import/export
+   * expects it. We need to delete it and write a migrator for bookmarks. */
+  g_return_if_fail (EPHY_IS_BOOKMARK (self));
 }
 
 gboolean
 ephy_bookmark_is_uploaded (EphyBookmark *self)
 {
+  /* FIXME: This is no longer used for Firefox Sync, but bookmarks import/export
+   * expects it. We need to delete it and write a migrator for bookmarks. */
   g_return_val_if_fail (EPHY_IS_BOOKMARK (self), FALSE);
 
-  return self->uploaded;
+  return FALSE;
 }
 
 void
@@ -542,92 +514,102 @@ ephy_bookmark_tags_compare (const char *tag1, const char *tag2)
   return result;
 }
 
-#if ENABLE_FIREFOX_SYNC
-char *
-ephy_bookmark_to_bso (EphyBookmark *self)
+static JsonNode *
+serializable_serialize_property (JsonSerializable *serializable,
+                                 const char       *name,
+                                 const GValue     *value,
+                                 GParamSpec       *pspec)
 {
-  EphySyncService *service;
-  guint8 *encrypted;
-  guint8 *sync_key;
-  char *serialized;
-  char *payload;
-  char *bso;
-  gsize length;
+  JsonNode *node = NULL;
 
-  g_return_val_if_fail (EPHY_IS_BOOKMARK (self), NULL);
+  if (g_strcmp0 (name, "tags") == 0) {
+    GSequence *tags;
+    GSequenceIter *iter;
+    JsonArray *array;
 
-  /* Convert a Bookmark object to a BSO (Basic Store Object). That is a generic
-   * JSON wrapper around all items passed into and out of the SyncStorage server.
-   * The current flow is:
-   * 1. Serialize the Bookmark to a JSON string.
-   * 2. Encrypt the JSON string using the sync key from the sync service.
-   * 3. Encode the encrypted bytes to base64 url safe.
-   * 4. Create a new JSON string that contains the id of the Bookmark and the
-        encoded bytes as payload. This is actually the BSO that is going to be
-        stored on the SyncStorage server.
-   * See https://docs.services.mozilla.com/storage/apis-1.5.html
-   */
+    node = json_node_new (JSON_NODE_ARRAY);
+    array = json_array_new ();
+    tags = g_value_get_pointer (value);
 
-  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
-  sync_key = ephy_sync_crypto_decode_hex (ephy_sync_service_get_token (service, TOKEN_KB));
-  serialized = json_gobject_to_data (G_OBJECT (self), NULL);
-  encrypted = ephy_sync_crypto_aes_256 (AES_256_MODE_ENCRYPT, sync_key,
-                                        (guint8 *)serialized, strlen (serialized), &length);
-  payload = ephy_sync_crypto_base64_urlsafe_encode (encrypted, length, FALSE);
-  bso = ephy_sync_utils_create_bso_json (self->id, payload);
+    if (tags != NULL) {
+      for (iter = g_sequence_get_begin_iter (tags);
+           !g_sequence_iter_is_end (iter);
+           iter = g_sequence_iter_next (iter)) {
+        json_array_add_string_element (array, g_sequence_get (iter));
+      }
+    }
 
-  g_free (sync_key);
-  g_free (serialized);
-  g_free (encrypted);
-  g_free (payload);
-
-  return bso;
-}
-
-EphyBookmark *
-ephy_bookmark_from_bso (JsonObject *bso)
-{
-  EphySyncService *service;
-  EphyBookmark *bookmark = NULL;
-  GObject *object;
-  GError *error = NULL;
-  guint8 *sync_key;
-  guint8 *decoded;
-  gsize decoded_len;
-  char *decrypted;
-
-  g_return_val_if_fail (bso != NULL, NULL);
-
-  /* Convert a BSO to a Bookmark object. The flow is similar to the one from
-   * ephy_bookmark_to_bso(), only that the steps are reversed:
-   * 1. Decode the payload from base64 url safe to raw bytes.
-   * 2. Decrypt the bytes using the sync key to obtain the serialized Bookmark.
-   * 3. Deserialize the JSON string into a Bookmark object.
-   */
-
-  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
-  sync_key = ephy_sync_crypto_decode_hex (ephy_sync_service_get_token (service, TOKEN_KB));
-  decoded = ephy_sync_crypto_base64_urlsafe_decode (json_object_get_string_member (bso, "payload"),
-                                                    &decoded_len, FALSE);
-  decrypted = (char *)ephy_sync_crypto_aes_256 (AES_256_MODE_DECRYPT, sync_key,
-                                                decoded, decoded_len, NULL);
-  object = json_gobject_from_data (EPHY_TYPE_BOOKMARK, decrypted, strlen (decrypted), &error);
-
-  if (object == NULL) {
-    g_warning ("Failed to create GObject from data: %s", error->message);
-    g_error_free (error);
-    goto out;
+    json_node_set_array (node, array);
+  } else if (!g_strcmp0 (name, "time-added")) {
+    /* This is not a Firefox bookmark property, skip it.  */
+  } else {
+    node = json_serializable_default_serialize_property (serializable, name, value, pspec);
   }
 
-  bookmark = EPHY_BOOKMARK (object);
-  ephy_bookmark_set_id (bookmark, json_object_get_string_member (bso, "id"));
-  ephy_bookmark_set_modification_time (bookmark, json_object_get_double_member (bso, "modified"));
-  ephy_bookmark_set_is_uploaded (bookmark, TRUE);
-
-out:
-  g_free (decoded);
-  g_free (decrypted);
-
-  return bookmark;
+  return node;
 }
-#endif
+
+static gboolean
+serializable_deserialize_property (JsonSerializable *serializable,
+                                   const char       *name,
+                                   GValue           *value,
+                                   GParamSpec       *pspec,
+                                   JsonNode         *node)
+{
+  if (g_strcmp0 (name, "tags") == 0) {
+    GSequence *tags;
+    JsonArray *array;
+    const char *tag;
+
+    g_assert (JSON_NODE_HOLDS_ARRAY (node));
+    array = json_node_get_array (node);
+    tags = g_sequence_new (g_free);
+
+    for (gsize i = 0; i < json_array_get_length (array); i++) {
+      tag = json_node_get_string (json_array_get_element (array, i));
+      g_sequence_insert_sorted (tags, g_strdup (tag),
+                                (GCompareDataFunc)ephy_bookmark_tags_compare, NULL);
+    }
+
+    g_value_set_pointer (value, tags);
+
+    return TRUE;
+  }
+
+  return json_serializable_default_deserialize_property (serializable, name, value, pspec, node);
+}
+
+static void
+json_serializable_iface_init (JsonSerializableIface *iface)
+{
+  iface->serialize_property = serializable_serialize_property;
+  iface->deserialize_property = serializable_deserialize_property;
+}
+
+static const char *
+synchronizable_get_id (EphySynchronizable *synchronizable)
+{
+  return ephy_bookmark_get_id (EPHY_BOOKMARK (synchronizable));
+}
+
+static double
+synchronizable_get_server_time_modified (EphySynchronizable *synchronizable)
+{
+  return EPHY_BOOKMARK (synchronizable)->server_time_modified;
+}
+
+static void
+synchronizable_set_server_time_modified (EphySynchronizable *synchronizable,
+                                         double              server_time_modified)
+{
+  EPHY_BOOKMARK (synchronizable)->server_time_modified = server_time_modified;
+}
+
+static void
+ephy_synchronizable_iface_init (EphySynchronizableInterface *iface)
+{
+  iface->get_id = synchronizable_get_id;
+  iface->get_server_time_modified = synchronizable_get_server_time_modified;
+  iface->set_server_time_modified = synchronizable_set_server_time_modified;
+  iface->to_bso = ephy_synchronizable_default_to_bso;
+}

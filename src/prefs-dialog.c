@@ -38,23 +38,21 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
+#include "ephy-sync-service.h"
+#include "ephy-sync-utils.h"
+#include "ephy-time-helpers.h"
 #include "ephy-uri-tester-shared.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
 #include "languages.h"
 #include "passwords-dialog.h"
+#include "synced-tabs-dialog.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <JavaScriptCore/JavaScript.h>
 #include <json-glib/json-glib.h>
 #include <string.h>
-
-#if ENABLE_FIREFOX_SYNC
-#include "ephy-sync-crypto.h"
-#include "ephy-sync-secret.h"
-#include "ephy-sync-service.h"
-#endif
 
 #define DOWNLOAD_BUTTON_WIDTH   8
 #define FXA_IFRAME_URL "https://accounts.firefox.com/signin?service=sync&context=fx_desktop_v3"
@@ -66,6 +64,8 @@ enum {
 
 struct _PrefsDialog {
   GtkDialog parent_instance;
+
+  GtkWidget *notebook;
 
   /* general */
   GtkWidget *homepage_box;
@@ -115,37 +115,36 @@ struct _PrefsDialog {
   GHashTable *iso_639_table;
   GHashTable *iso_3166_table;
 
-#if ENABLE_FIREFOX_SYNC
   /* sync */
-  GtkWidget *sync_authenticate_box;
-  GtkWidget *sync_sign_in_box;
-  GtkWidget *sync_sign_in_details;
-  GtkWidget *sync_sign_out_box;
-  GtkWidget *sync_sign_out_details;
+  GtkWidget *sync_page_box;
+  GtkWidget *sync_firefox_iframe_box;
+  GtkWidget *sync_firefox_iframe_label;
+  GtkWidget *sync_firefox_account_box;
+  GtkWidget *sync_firefox_account_label;
   GtkWidget *sync_sign_out_button;
+  GtkWidget *sync_options_box;
+  GtkWidget *sync_with_firefox_checkbutton;
+  GtkWidget *sync_bookmarks_checkbutton;
+  GtkWidget *sync_passwords_checkbutton;
+  GtkWidget *sync_history_checkbutton;
+  GtkWidget *sync_open_tabs_checkbutton;
+  GtkWidget *sync_frequency_5_min_radiobutton;
+  GtkWidget *sync_frequency_15_min_radiobutton;
+  GtkWidget *sync_frequency_30_min_radiobutton;
+  GtkWidget *sync_frequency_60_min_radiobutton;
+  GtkWidget *sync_now_button;
+  GtkWidget *synced_tabs_button;
+  GtkWidget *sync_device_name_entry;
+  GtkWidget *sync_device_name_change_button;
+  GtkWidget *sync_device_name_save_button;
+  GtkWidget *sync_device_name_cancel_button;
+  GtkWidget *sync_last_sync_time_box;
+  GtkWidget *sync_last_sync_time_label;
 
   WebKitWebView *fxa_web_view;
   WebKitUserContentManager *fxa_manager;
   WebKitUserScript *fxa_script;
-  guint fxa_id;
-#endif
-  GtkWidget *notebook;
 };
-
-#if ENABLE_FIREFOX_SYNC
-typedef struct {
-  PrefsDialog *dialog;
-  char        *email;
-  char        *uid;
-  char        *sessionToken;
-  char        *keyFetchToken;
-  char        *unwrapBKey;
-  guint8      *tokenID;
-  guint8      *reqHMACkey;
-  guint8      *respHMACkey;
-  guint8      *respXORkey;
-} FxACallbackData;
-#endif
 
 enum {
   COL_TITLE_ELIDED,
@@ -154,59 +153,6 @@ enum {
 };
 
 G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
-
-#if ENABLE_FIREFOX_SYNC
-static FxACallbackData *
-fxa_callback_data_new (PrefsDialog *dialog,
-                       const char  *email,
-                       const char  *uid,
-                       const char  *sessionToken,
-                       const char  *keyFetchToken,
-                       const char  *unwrapBKey,
-                       guint8      *tokenID,
-                       guint8      *reqHMACkey,
-                       guint8      *respHMACkey,
-                       guint8      *respXORkey)
-{
-  FxACallbackData *data = g_slice_new (FxACallbackData);
-
-  data->dialog = g_object_ref (dialog);
-  data->email = g_strdup (email);
-  data->uid = g_strdup (uid);
-  data->sessionToken = g_strdup (sessionToken);
-  data->keyFetchToken = g_strdup (keyFetchToken);
-  data->unwrapBKey = g_strdup (unwrapBKey);
-  data->tokenID = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (data->tokenID, tokenID, EPHY_SYNC_TOKEN_LENGTH);
-  data->reqHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (data->reqHMACkey, reqHMACkey, EPHY_SYNC_TOKEN_LENGTH);
-  data->respHMACkey = g_malloc (EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (data->respHMACkey, respHMACkey, EPHY_SYNC_TOKEN_LENGTH);
-  data->respXORkey = g_malloc (2 * EPHY_SYNC_TOKEN_LENGTH);
-  memcpy (data->respXORkey, respXORkey, 2 * EPHY_SYNC_TOKEN_LENGTH);
-
-  return data;
-}
-
-static void
-fxa_callback_data_free (FxACallbackData *data)
-{
-  g_assert (data != NULL);
-
-  g_object_unref (data->dialog);
-  g_free (data->email);
-  g_free (data->uid);
-  g_free (data->sessionToken);
-  g_free (data->keyFetchToken);
-  g_free (data->unwrapBKey);
-  g_free (data->tokenID);
-  g_free (data->reqHMACkey);
-  g_free (data->respHMACkey);
-  g_free (data->respXORkey);
-
-  g_slice_free (FxACallbackData, data);
-}
-#endif
 
 static void
 prefs_dialog_finalize (GObject *object)
@@ -224,7 +170,6 @@ prefs_dialog_finalize (GObject *object)
   g_hash_table_destroy (dialog->iso_639_table);
   g_hash_table_destroy (dialog->iso_3166_table);
 
-#if ENABLE_FIREFOX_SYNC
   if (dialog->fxa_web_view != NULL) {
     webkit_user_content_manager_unregister_script_message_handler (dialog->fxa_manager,
                                                                    "toChromeMessageHandler");
@@ -232,106 +177,150 @@ prefs_dialog_finalize (GObject *object)
     g_object_unref (dialog->fxa_manager);
   }
 
-  if (dialog->fxa_id != 0) {
-    g_source_remove (dialog->fxa_id);
-    dialog->fxa_id = 0;
-  }
-#endif
-
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
 }
 
-#if ENABLE_FIREFOX_SYNC
 static void
-hide_fxa_iframe (PrefsDialog *dialog,
-                 const char  *email)
+sync_collection_toggled_cb (GtkToggleButton *button,
+                            PrefsDialog     *dialog)
 {
-  char *text;
-  char *account;
+  EphySynchronizableManager *manager = NULL;
+  EphyShell *shell = ephy_shell_get_default ();
+  EphySyncService *service = ephy_shell_get_sync_service (shell);
 
-  account = g_strdup_printf ("<b>%s</b>", email);
-  /* Translators: the %s refers to the email of the currently logged in user. */
-  text = g_strdup_printf (_("Currently logged in as %s"), account);
-  gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details), text);
+  if (GTK_WIDGET (button) == dialog->sync_bookmarks_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
+  } else if (GTK_WIDGET (button) == dialog->sync_passwords_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
+  } else if (GTK_WIDGET (button) == dialog->sync_history_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
+  } else if (GTK_WIDGET (button) == dialog->sync_open_tabs_checkbutton) {
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_open_tabs_manager (shell));
+    ephy_open_tabs_manager_clear_cache (EPHY_OPEN_TABS_MANAGER (manager));
+  } else {
+    g_assert_not_reached ();
+  }
 
-  gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
-                        dialog->sync_sign_in_box);
-  gtk_box_pack_start (GTK_BOX (dialog->sync_authenticate_box),
-                      dialog->sync_sign_out_box,
-                      TRUE, TRUE, 0);
-
-  g_free (text);
-  g_free (account);
+  if (gtk_toggle_button_get_active (button)) {
+    ephy_sync_service_register_manager (service, manager);
+  } else {
+    ephy_sync_service_unregister_manager (service, manager);
+    ephy_synchronizable_manager_set_is_initial_sync (manager, TRUE);
+  }
 }
 
 static void
-sync_tokens_store_finished_cb (EphySyncService *service,
-                               GError          *error,
-                               PrefsDialog     *dialog)
+sync_with_firefox_toggled_cb (GtkToggleButton *button,
+                              PrefsDialog     *dialog)
+{
+  gboolean button_is_active = gtk_toggle_button_get_active (button);
+
+  /* Make sure this is called only when the button was toggled by the user. */
+  g_assert (button_is_active != ephy_sync_utils_sync_with_firefox ());
+
+  ephy_sync_utils_set_bookmarks_sync_is_initial (TRUE);
+  ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
+  ephy_sync_utils_set_history_sync_is_initial (TRUE);
+}
+
+static void
+sync_set_last_sync_time (PrefsDialog *dialog)
+{
+  gint64 sync_time = ephy_sync_utils_get_sync_time ();
+
+  if (sync_time) {
+    char *time = ephy_time_helpers_utf_friendly_time (sync_time);
+    /* Translators: the %s refers to the time at which the last sync was made.
+     * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
+     */
+    char *text = g_strdup_printf (_("Last synchronized: %s"), time);
+
+    gtk_label_set_text (GTK_LABEL (dialog->sync_last_sync_time_label), text);
+    gtk_widget_set_visible (dialog->sync_last_sync_time_box, TRUE);
+
+    g_free (text);
+    g_free (time);
+  }
+}
+
+static void
+sync_finished_cb (EphySyncService *service,
+                  PrefsDialog     *dialog)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (service));
   g_assert (EPHY_IS_PREFS_DIALOG (dialog));
 
-  if (error == NULL) {
-    /* Show the 'Signed in' panel. */
-    hide_fxa_iframe (dialog, ephy_sync_service_get_user_email (service));
-
-    /* Do a first time sync and set a periodical sync to be executed. */
-    ephy_sync_service_sync_bookmarks (service, TRUE);
-    ephy_sync_service_start_periodical_sync (service, FALSE);
-  } else {
-    char *message;
-
-    /* Destroy the current session. */
-    ephy_sync_service_destroy_session (service, NULL);
-
-    /* Unset the email and tokens. */
-    g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, "");
-    ephy_sync_service_clear_tokens (service);
-
-    /* Display the error message to the user. */
-    message = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>", error->message);
-    gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details), message);
-    gtk_widget_set_visible (dialog->sync_sign_in_details, TRUE);
-    webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
-
-    g_free (message);
-  }
-}
-
-static gboolean
-poll_fxa_server (gpointer user_data)
-{
-  FxACallbackData *data;
-  EphySyncService *service;
-  char *bundle;
-
-  data = (FxACallbackData *)user_data;
-  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
-  bundle = ephy_sync_service_start_sign_in (service, data->tokenID, data->reqHMACkey);
-
-  if (bundle != NULL) {
-    ephy_sync_service_finish_sign_in (service, data->email, data->uid,
-                                      data->sessionToken, data->keyFetchToken,
-                                      data->unwrapBKey, bundle,
-                                      data->respHMACkey, data->respXORkey);
-
-    g_free (bundle);
-    fxa_callback_data_free (data);
-    data->dialog->fxa_id = 0;
-
-    return G_SOURCE_REMOVE;
-  }
-
-  return G_SOURCE_CONTINUE;
+  gtk_widget_set_sensitive (dialog->sync_now_button, TRUE);
+  sync_set_last_sync_time (dialog);
 }
 
 static void
-sync_send_message_to_content (PrefsDialog *dialog,
-                              const char  *channel_id,
-                              const char  *command,
-                              const char  *message_id,
-                              JsonObject  *data)
+sync_sign_in_details_show (PrefsDialog *dialog,
+                           const char  *text)
+{
+  char *message;
+
+  g_assert (EPHY_IS_PREFS_DIALOG (dialog));
+
+  message = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>", text);
+  gtk_label_set_markup (GTK_LABEL (dialog->sync_firefox_iframe_label), message);
+  gtk_widget_set_visible (dialog->sync_firefox_iframe_label, TRUE);
+
+  g_free (message);
+}
+
+static void
+sync_sign_in_error_cb (EphySyncService *service,
+                       const char      *error,
+                       PrefsDialog     *dialog)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_PREFS_DIALOG (dialog));
+
+  /* Display the error message and reload the iframe. */
+  sync_sign_in_details_show (dialog, error);
+  webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
+}
+
+static void
+sync_secrets_store_finished_cb (EphySyncService *service,
+                                GError          *error,
+                                PrefsDialog     *dialog)
+{
+  g_assert (EPHY_IS_SYNC_SERVICE (service));
+  g_assert (EPHY_IS_PREFS_DIALOG (dialog));
+
+  if (!error) {
+    /* Show sync options panel. */
+    char *user = g_strdup_printf ("<b>%s</b>", ephy_sync_utils_get_sync_user ());
+    /* Translators: the %s refers to the email of the currently logged in user. */
+    char *text = g_strdup_printf (_("Logged in as %s"), user);
+
+    gtk_label_set_markup (GTK_LABEL (dialog->sync_firefox_account_label), text);
+    gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
+                          dialog->sync_firefox_iframe_box);
+    gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
+                        dialog->sync_firefox_account_box,
+                        FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
+                        dialog->sync_options_box,
+                        FALSE, FALSE, 0);
+
+    g_free (text);
+    g_free (user);
+  } else {
+    /* Display the error message and reload the iframe. */
+    sync_sign_in_details_show (dialog, error->message);
+    webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
+  }
+}
+
+static void
+sync_message_to_fxa_content (PrefsDialog *dialog,
+                             const char  *web_channel_id,
+                             const char  *command,
+                             const char  *message_id,
+                             JsonObject  *data)
 {
   JsonNode *node;
   JsonObject *detail;
@@ -340,12 +329,18 @@ sync_send_message_to_content (PrefsDialog *dialog,
   char *script;
   const char *type;
 
+  g_assert (EPHY_IS_PREFS_DIALOG (dialog));
+  g_assert (web_channel_id);
+  g_assert (command);
+  g_assert (message_id);
+  g_assert (data);
+
   message = json_object_new ();
   json_object_set_string_member (message, "command", command);
   json_object_set_string_member (message, "messageId", message_id);
   json_object_set_object_member (message, "data", json_object_ref (data));
   detail = json_object_new ();
-  json_object_set_string_member (detail, "id", channel_id);
+  json_object_set_string_member (detail, "id", web_channel_id);
   json_object_set_object_member (detail, "message", message);
   node = json_node_new (JSON_NODE_OBJECT);
   json_node_set_object (node, detail);
@@ -365,203 +360,326 @@ sync_send_message_to_content (PrefsDialog *dialog,
   json_node_unref (node);
 }
 
-static void
-server_message_received_cb (WebKitUserContentManager *manager,
-                            WebKitJavascriptResult   *result,
-                            PrefsDialog              *dialog)
+static gboolean
+sync_parse_message_from_fxa_content (const char  *message,
+                                     char       **web_channel_id,
+                                     char       **message_id,
+                                     char       **command,
+                                     JsonObject **data,
+                                     char       **error_msg)
 {
-  EphySyncService *service;
-  JsonParser *parser;
+  JsonNode *node;
   JsonObject *object;
   JsonObject *detail;
-  JsonObject *message;
-  char *json_string;
+  JsonObject *msg;
+  JsonObject *msg_data = NULL;
   const char *type;
-  const char *command;
+  const char *channel_id;
+  const char *cmd;
+  const char *error = NULL;
+  gboolean success = FALSE;
 
-  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
-  json_string = ephy_embed_utils_get_js_result_as_string (result);
-  parser = json_parser_new ();
-  json_parser_load_from_data (parser, json_string, -1, NULL);
-  object = json_node_get_object (json_parser_get_root (parser));
+  g_assert (message);
+  g_assert (web_channel_id);
+  g_assert (message_id);
+  g_assert (command);
+  g_assert (data);
+  g_assert (error_msg);
+
+  /* Expected message format is:
+   * {
+   *   type: "WebChannelMessageToChrome",
+   *   detail: {
+   *     id: <id> (string, the id of the WebChannel),
+   *     message: {
+   *       messageId: <messageId> (optional string, the message id),
+   *       command: <command> (string, the message command),
+   *       data: <data> (optional JSON object, the message data)
+   *     }
+   *   }
+   * }
+   */
+
+  node = json_from_string (message, NULL);
+  if (!node) {
+    error = "Message is not a valid JSON";
+    goto out_error;
+  }
+  object = json_node_get_object (node);
+  if (!object) {
+    error = "Message is not a JSON object";
+    goto out_error;
+  }
   type = json_object_get_string_member (object, "type");
-
-  /* The only message type we can receive is WebChannelMessageToChrome. */
-  if (g_strcmp0 (type, "WebChannelMessageToChrome") != 0) {
-    g_warning ("Unknown command type: %s", type);
-    goto out;
+  if (!type) {
+    error = "Message has missing or invalid 'type' member";
+    goto out_error;
+  } else if (strcmp (type, "WebChannelMessageToChrome")) {
+    error = "Message type is not WebChannelMessageToChrome";
+    goto out_error;
   }
-
   detail = json_object_get_object_member (object, "detail");
-  message = json_object_get_object_member (detail, "message");
-  command = json_object_get_string_member (message, "command");
-
-  if (g_strcmp0 (command, "fxaccounts:loaded") == 0) {
-    LOG ("Loaded Firefox Sign In iframe");
-    gtk_widget_set_visible (dialog->sync_sign_in_details, FALSE);
-  } else if (g_strcmp0 (command, "fxaccounts:can_link_account") == 0) {
-    /* We need to confirm a relink. */
-    JsonObject *data = json_object_new ();
-    json_object_set_boolean_member (data, "ok", TRUE);
-    sync_send_message_to_content (dialog,
-                                  json_object_get_string_member (detail, "id"),
-                                  "fxaccounts:can_link_account",
-                                  json_object_get_string_member (message, "messageId"),
-                                  data);
-    json_object_unref (data);
-  } else if (g_strcmp0 (command, "fxaccounts:login") == 0) {
-    JsonObject *data = json_object_get_object_member (message, "data");
-    const char *email = json_object_get_string_member (data, "email");
-    const char *uid = json_object_get_string_member (data, "uid");
-    const char *sessionToken = json_object_get_string_member (data, "sessionToken");
-    const char *keyFetchToken = json_object_get_string_member (data, "keyFetchToken");
-    const char *unwrapBKey = json_object_get_string_member (data, "unwrapBKey");
-    guint8 *tokenID;
-    guint8 *reqHMACkey;
-    guint8 *respHMACkey;
-    guint8 *respXORkey;
-    char *text;
-
-    /* Cannot retrieve the sync keys without keyFetchToken or unwrapBKey. */
-    if (keyFetchToken == NULL || unwrapBKey == NULL) {
-      g_warning ("Ignoring login with keyFetchToken or unwrapBKey missing!"
-                 "Cannot retrieve sync keys with one of them missing.");
-      ephy_sync_service_destroy_session (service, sessionToken);
-
-      text = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>",
-                              _("Something went wrong, please try again."));
-      gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details), text);
-      gtk_widget_set_visible (dialog->sync_sign_in_details, TRUE);
-      webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
-
-      g_free (text);
-      goto out;
-    }
-
-    /* Derive tokenID, reqHMACkey, respHMACkey and respXORkey from the keyFetchToken.
-     * tokenID and reqHMACkey are used to make a HAWK request to the "GET /account/keys"
-     * API. The server looks up the stored table entry with tokenID, checks the request
-     * HMAC for validity, then returns the pre-encrypted response.
-     * See https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#fetching-sync-keys */
-    ephy_sync_crypto_process_key_fetch_token (keyFetchToken,
-                                              &tokenID, &reqHMACkey,
-                                              &respHMACkey, &respXORkey);
-
-    /* If the account is not verified, then poll the server repeatedly
-     * until the verification has finished. */
-    if (json_object_get_boolean_member (data, "verified") == FALSE) {
-      FxACallbackData *cb_data;
-
-      text = g_strdup_printf ("<span fgcolor='#e6780b'>%s</span>",
-                              _("Please don’t leave this page until you have completed the verification."));
-      gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_in_details), text);
-      gtk_widget_set_visible (dialog->sync_sign_in_details, TRUE);
-
-      cb_data = fxa_callback_data_new (dialog, email, uid, sessionToken,
-                                       keyFetchToken, unwrapBKey, tokenID,
-                                       reqHMACkey, respHMACkey, respXORkey);
-      dialog->fxa_id = g_timeout_add_seconds (2, (GSourceFunc)poll_fxa_server, cb_data);
-
-      g_free (text);
-    } else {
-      char *bundle;
-
-      bundle = ephy_sync_service_start_sign_in (service, tokenID, reqHMACkey);
-      ephy_sync_service_finish_sign_in (service, email, uid, sessionToken, keyFetchToken,
-                                        unwrapBKey, bundle, respHMACkey, respXORkey);
-
-      g_free (bundle);
-    }
-  } else {
-    g_warning ("Unexepected command: %s", command);
+  if (!detail) {
+    error = "Message has missing or invalid 'detail' member";
+    goto out_error;
+  }
+  channel_id = json_object_get_string_member (detail, "id");
+  if (!channel_id) {
+    error = "'Detail' object has missing or invalid 'id' member";
+    goto out_error;
+  }
+  msg = json_object_get_object_member (detail, "message");
+  if (!msg) {
+    error = "'Detail' object has missing or invalid 'message' member";
+    goto out_error;
+  }
+  cmd = json_object_get_string_member (msg, "command");
+  if (!cmd) {
+    error = "'Message' object has missing or invalid 'command' member";
+    goto out_error;
   }
 
-out:
-  g_free (json_string);
-  g_object_unref (parser);
+  *web_channel_id = g_strdup (channel_id);
+  *command = g_strdup (cmd);
+  *message_id = json_object_has_member (msg, "messageId") ?
+                g_strdup (json_object_get_string_member (msg, "messageId")) :
+                NULL;
+  if (json_object_has_member (msg, "data"))
+    msg_data = json_object_get_object_member (msg, "data");
+  *data = msg_data ? json_object_ref (msg_data) : NULL;
+
+  success = TRUE;
+  *error_msg = NULL;
+  goto out_no_error;
+
+out_error:
+  *web_channel_id = NULL;
+  *command = NULL;
+  *message_id = NULL;
+  *error_msg = g_strdup (error);
+
+out_no_error:
+  json_node_unref (node);
+
+  return success;
 }
 
 static void
-setup_fxa_sign_in_view (PrefsDialog *dialog)
+sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
+                                  WebKitJavascriptResult   *result,
+                                  PrefsDialog              *dialog)
+{
+  JsonObject *data = NULL;
+  char *message = NULL;
+  char *web_channel_id = NULL;
+  char *message_id = NULL;
+  char *command = NULL;
+  char *error_msg = NULL;
+  gboolean is_error = FALSE;
+
+  message = ephy_embed_utils_get_js_result_as_string (result);
+  if (!message) {
+    g_warning ("Failed to get JavaScript result as string");
+    is_error = TRUE;
+    goto out;
+  }
+
+  if (!sync_parse_message_from_fxa_content (message, &web_channel_id,
+                                            &message_id, &command,
+                                            &data, &error_msg)) {
+    g_warning ("Failed to parse message from FxA Content Server: %s", error_msg);
+    is_error = TRUE;
+    goto out;
+  }
+
+  LOG ("WebChannelMessageToChrome: received %s command", command);
+
+  if (!g_strcmp0 (command, "fxaccounts:can_link_account")) {
+    /* Confirm a relink. Respond with {ok: true}. */
+    JsonObject *response = json_object_new ();
+    json_object_set_boolean_member (response, "ok", TRUE);
+    sync_message_to_fxa_content (dialog, web_channel_id, command, message_id, response);
+    json_object_unref (response);
+  } else if (!g_strcmp0 (command, "fxaccounts:login")) {
+    /* Extract sync tokens and pass them to the sync service. */
+    const char *email = json_object_get_string_member (data, "email");
+    const char *uid = json_object_get_string_member (data, "uid");
+    const char *session_token = json_object_get_string_member (data, "sessionToken");
+    const char *key_fetch_token = json_object_get_string_member (data, "keyFetchToken");
+    const char *unwrap_kb = json_object_get_string_member (data, "unwrapBKey");
+
+    if (!email || !uid || !session_token || !key_fetch_token || !unwrap_kb) {
+      g_warning ("Message data has missing or invalid members");
+      is_error = TRUE;
+      goto out;
+    }
+    if (!json_object_has_member (data, "verified") ||
+        !JSON_NODE_HOLDS_VALUE (json_object_get_member (data, "verified"))) {
+      g_warning ("Message data has missing or invalid 'verified' member");
+      is_error = TRUE;
+      goto out;
+    }
+
+    if (!json_object_get_boolean_member (data, "verified"))
+      sync_sign_in_details_show (dialog, _("Please don’t leave this page until "
+                                           "you have completed the verification."));
+
+    ephy_sync_service_sign_in (ephy_shell_get_sync_service (ephy_shell_get_default ()),
+                               email, uid, session_token, key_fetch_token, unwrap_kb);
+  }
+
+out:
+  if (data)
+    json_object_unref (data);
+  g_free (message);
+  g_free (web_channel_id);
+  g_free (message_id);
+  g_free (command);
+  g_free (error_msg);
+
+  if (is_error) {
+    sync_sign_in_details_show (dialog, _("Something went wrong, please try again later."));
+    webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
+  }
+}
+
+static void
+sync_setup_firefox_iframe (PrefsDialog *dialog)
 {
   EphyEmbedShell *shell;
   WebKitWebContext *embed_context;
   WebKitWebContext *sync_context;
   const char *script;
 
-  script = "function handleToChromeMessage(evt) {"
-           "  let e = JSON.stringify({type: evt.type, detail: evt.detail});"
-           "  window.webkit.messageHandlers.toChromeMessageHandler.postMessage(e);"
-           "};"
-           "window.addEventListener(\"WebChannelMessageToChrome\", handleToChromeMessage);";
-  dialog->fxa_script = webkit_user_script_new (script,
-                                               WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
-                                               WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
-                                               NULL, NULL);
-  dialog->fxa_manager = webkit_user_content_manager_new ();
-  webkit_user_content_manager_add_script (dialog->fxa_manager, dialog->fxa_script);
-  g_signal_connect (dialog->fxa_manager,
-                    "script-message-received::toChromeMessageHandler",
-                    G_CALLBACK (server_message_received_cb),
-                    dialog);
-  webkit_user_content_manager_register_script_message_handler (dialog->fxa_manager,
-                                                               "toChromeMessageHandler");
+  if (!dialog->fxa_web_view) {
+    script = "function handleToChromeMessage(evt) {"
+             "  let e = JSON.stringify({type: evt.type, detail: evt.detail});"
+             "  window.webkit.messageHandlers.toChromeMessageHandler.postMessage(e);"
+             "};"
+             "window.addEventListener(\"WebChannelMessageToChrome\", handleToChromeMessage);";
+    dialog->fxa_script = webkit_user_script_new (script,
+                                                 WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
+                                                 WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
+                                                 NULL, NULL);
+    dialog->fxa_manager = webkit_user_content_manager_new ();
+    webkit_user_content_manager_add_script (dialog->fxa_manager, dialog->fxa_script);
+    g_signal_connect (dialog->fxa_manager,
+                      "script-message-received::toChromeMessageHandler",
+                      G_CALLBACK (sync_message_from_fxa_content_cb),
+                      dialog);
+    webkit_user_content_manager_register_script_message_handler (dialog->fxa_manager,
+                                                                 "toChromeMessageHandler");
 
-  shell = ephy_embed_shell_get_default ();
-  embed_context = ephy_embed_shell_get_web_context (shell);
+    shell = ephy_embed_shell_get_default ();
+    embed_context = ephy_embed_shell_get_web_context (shell);
+    sync_context = webkit_web_context_new ();
+    webkit_web_context_set_preferred_languages (sync_context,
+                                                g_object_get_data (G_OBJECT (embed_context), "preferred-languages"));
 
-  sync_context = webkit_web_context_new ();
-  webkit_web_context_set_preferred_languages (sync_context,
-                                              g_object_get_data (G_OBJECT (embed_context), "preferred-languages"));
-  dialog->fxa_web_view = WEBKIT_WEB_VIEW (g_object_new (WEBKIT_TYPE_WEB_VIEW,
-                                                        "user-content-manager", dialog->fxa_manager,
-                                                        "settings", ephy_embed_prefs_get_settings (),
-                                                        "web-context", sync_context,
-                                                        NULL));
-  g_object_unref (sync_context);
+    dialog->fxa_web_view = WEBKIT_WEB_VIEW (g_object_new (WEBKIT_TYPE_WEB_VIEW,
+                                                          "user-content-manager", dialog->fxa_manager,
+                                                          "settings", ephy_embed_prefs_get_settings (),
+                                                          "web-context", sync_context,
+                                                          NULL));
+    gtk_widget_set_visible (GTK_WIDGET (dialog->fxa_web_view), TRUE);
+    gtk_widget_set_size_request (GTK_WIDGET (dialog->fxa_web_view), 450, 450);
+    gtk_box_pack_start (GTK_BOX (dialog->sync_firefox_iframe_box),
+                      GTK_WIDGET (dialog->fxa_web_view),
+                      FALSE, FALSE, 0);
 
-  gtk_widget_set_visible (GTK_WIDGET (dialog->fxa_web_view), TRUE);
-  gtk_widget_set_size_request (GTK_WIDGET (dialog->fxa_web_view), 450, 450);
+    g_object_unref (sync_context);
+  }
+
   webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
-
-  gtk_widget_set_visible (dialog->sync_sign_in_details, FALSE);
-  gtk_container_add (GTK_CONTAINER (dialog->sync_sign_in_box),
-                     GTK_WIDGET (dialog->fxa_web_view));
+  gtk_widget_set_visible (dialog->sync_firefox_iframe_label, FALSE);
 }
 
 static void
 on_sync_sign_out_button_clicked (GtkWidget   *button,
                                  PrefsDialog *dialog)
 {
-  EphySyncService *service;
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
 
-  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  ephy_sync_service_sign_out (service, TRUE);
 
-  /* Destroy session and delete tokens. */
-  ephy_sync_service_stop_periodical_sync (service);
-  ephy_sync_service_destroy_session (service, NULL);
-  ephy_sync_service_clear_storage_credentials (service);
-  ephy_sync_service_clear_tokens (service);
-  ephy_sync_secret_forget_tokens ();
-  ephy_sync_service_set_user_email (service, NULL);
-  ephy_sync_service_set_sync_time (service, 0);
-
-  g_settings_set_string (EPHY_SETTINGS_MAIN, EPHY_PREFS_SYNC_USER, "");
-
-  /* Show sign in box. */
-  if (dialog->fxa_web_view == NULL)
-    setup_fxa_sign_in_view (dialog);
-  else
-    webkit_web_view_load_uri (dialog->fxa_web_view, FXA_IFRAME_URL);
-
-  gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
-                        dialog->sync_sign_out_box);
-  gtk_box_pack_start (GTK_BOX (dialog->sync_authenticate_box),
-                      dialog->sync_sign_in_box,
-                      TRUE, TRUE, 0);
-  gtk_widget_set_visible (dialog->sync_sign_in_details, FALSE);
+  /* Show Firefox Accounts iframe. */
+  sync_setup_firefox_iframe (dialog);
+  gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
+                        dialog->sync_firefox_account_box);
+  gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
+                        dialog->sync_options_box);
+  gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
+                      dialog->sync_firefox_iframe_box,
+                      FALSE, FALSE, 0);
+  gtk_widget_set_visible (dialog->sync_last_sync_time_box, FALSE);
 }
-#endif
+
+static void
+on_sync_sync_now_button_clicked (GtkWidget   *button,
+                                 PrefsDialog *dialog)
+{
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+
+  gtk_widget_set_sensitive (button, FALSE);
+  ephy_sync_service_sync (service);
+}
+
+static void
+on_sync_synced_tabs_button_clicked (GtkWidget   *button,
+                                    PrefsDialog *dialog)
+{
+  EphyOpenTabsManager *manager;
+  SyncedTabsDialog *synced_tabs_dialog;
+
+  manager = ephy_shell_get_open_tabs_manager (ephy_shell_get_default ());
+  synced_tabs_dialog = synced_tabs_dialog_new (manager);
+  gtk_window_set_transient_for (GTK_WINDOW (synced_tabs_dialog), GTK_WINDOW (dialog));
+  gtk_window_set_modal (GTK_WINDOW (synced_tabs_dialog), TRUE);
+  gtk_window_present (GTK_WINDOW (synced_tabs_dialog));
+}
+
+static void
+on_sync_device_name_change_button_clicked (GtkWidget   *button,
+                                           PrefsDialog *dialog)
+{
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog->sync_device_name_entry), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_change_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_save_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_cancel_button), TRUE);
+}
+
+static void
+on_sync_device_name_save_button_clicked (GtkWidget   *button,
+                                         PrefsDialog *dialog)
+{
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  const char *name;
+
+  name = gtk_entry_get_text (GTK_ENTRY (dialog->sync_device_name_entry));
+  ephy_sync_service_register_device (service, name);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog->sync_device_name_entry), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_change_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_save_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_cancel_button), FALSE);
+}
+
+static void
+on_sync_device_name_cancel_button_clicked (GtkWidget   *button,
+                                           PrefsDialog *dialog)
+{
+  char *name;
+
+  name = ephy_sync_utils_get_device_name ();
+  gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog->sync_device_name_entry), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_change_button), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_save_button), FALSE);
+  gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_cancel_button), FALSE);
+
+  g_free (name);
+}
 
 static void
 on_manage_cookies_button_clicked (GtkWidget   *button,
@@ -581,8 +699,10 @@ on_manage_passwords_button_clicked (GtkWidget   *button,
                                     PrefsDialog *dialog)
 {
   EphyPasswordsDialog *passwords_dialog;
+  EphyPasswordManager *password_manager;
 
-  passwords_dialog = ephy_passwords_dialog_new ();
+  password_manager = ephy_shell_get_password_manager (ephy_shell_get_default ());
+  passwords_dialog = ephy_passwords_dialog_new (password_manager);
 
   gtk_window_set_transient_for (GTK_WINDOW (passwords_dialog), GTK_WINDOW (dialog));
   gtk_window_set_modal (GTK_WINDOW (passwords_dialog), TRUE);
@@ -612,6 +732,9 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/prefs-dialog.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
+
   /* general */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, homepage_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, new_tab_homepage_radiobutton);
@@ -653,20 +776,41 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_down_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_spell_checking_checkbutton);
 
-#if ENABLE_FIREFOX_SYNC
   /* sync */
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_authenticate_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_in_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_in_details);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_details);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_page_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_iframe_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_iframe_label);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_account_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_account_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_button);
-#endif
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, notebook);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_options_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_with_firefox_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_bookmarks_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_passwords_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_history_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_open_tabs_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_5_min_radiobutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_15_min_radiobutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_30_min_radiobutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_60_min_radiobutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_now_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, synced_tabs_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_entry);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_change_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_save_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_cancel_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_last_sync_time_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_last_sync_time_label);
 
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_sign_out_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_sync_now_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_synced_tabs_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_change_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_save_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_sync_device_name_cancel_button_clicked);
 }
 
 static void
@@ -1272,6 +1416,28 @@ clear_personal_data_button_clicked_cb (GtkWidget   *button,
 }
 
 static gboolean
+sync_frequency_get_mapping (GValue   *value,
+                            GVariant *variant,
+                            gpointer  user_data)
+{
+  if (GPOINTER_TO_UINT (user_data) == g_variant_get_uint32 (variant))
+    g_value_set_boolean (value, TRUE);
+
+  return TRUE;
+}
+
+static GVariant *
+sync_frequency_set_mapping (const GValue       *value,
+                            const GVariantType *expected_type,
+                            gpointer            user_data)
+{
+  if (!g_value_get_boolean (value))
+    return NULL;
+
+  return g_variant_new_uint32 (GPOINTER_TO_UINT (user_data));
+}
+
+static gboolean
 cookies_get_mapping (GValue   *value,
                      GVariant *variant,
                      gpointer  user_data)
@@ -1668,38 +1834,130 @@ setup_language_page (PrefsDialog *dialog)
   create_language_section (dialog);
 }
 
-#if ENABLE_FIREFOX_SYNC
 static void
 setup_sync_page (PrefsDialog *dialog)
 {
-  EphySyncService *service;
-  char *account;
-  char *text;
+  EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  GSettings *sync_settings = ephy_settings_get (EPHY_PREFS_SYNC_SCHEMA);
+  char *user = ephy_sync_utils_get_sync_user ();
+  char *name = ephy_sync_utils_get_device_name ();
 
-  service = ephy_shell_get_sync_service (ephy_shell_get_default ());
+  gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
 
-  if (ephy_sync_service_is_signed_in (service) == FALSE) {
-    setup_fxa_sign_in_view (dialog);
-    gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
-                          dialog->sync_sign_out_box);
+  if (!user) {
+    sync_setup_firefox_iframe (dialog);
+    gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
+                          dialog->sync_firefox_account_box);
+    gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
+                          dialog->sync_options_box);
   } else {
-    gtk_container_remove (GTK_CONTAINER (dialog->sync_authenticate_box),
-                          dialog->sync_sign_in_box);
-
-    account = g_strdup_printf ("<b>%s</b>", ephy_sync_service_get_user_email (service));
+    char *email = g_strdup_printf ("<b>%s</b>", user);
     /* Translators: the %s refers to the email of the currently logged in user. */
-    text = g_strdup_printf (_("Currently logged in as %s"), account);
-    gtk_label_set_markup (GTK_LABEL (dialog->sync_sign_out_details), text);
+    char *text = g_strdup_printf (_("Logged in as %s"), email);
 
+    sync_set_last_sync_time (dialog);
+    gtk_label_set_markup (GTK_LABEL (dialog->sync_firefox_account_label), text);
+    gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
+                          dialog->sync_firefox_iframe_box);
+
+    g_free (email);
     g_free (text);
-    g_free (account);
   }
 
-  g_signal_connect_object (service, "sync-tokens-store-finished",
-                           G_CALLBACK (sync_tokens_store_finished_cb),
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_WITH_FIREFOX,
+                   dialog->sync_with_firefox_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_BOOKMARKS_ENABLED,
+                   dialog->sync_bookmarks_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
+                   dialog->sync_passwords_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_HISTORY_ENABLED,
+                   dialog->sync_history_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (sync_settings,
+                   EPHY_PREFS_SYNC_OPEN_TABS_ENABLED,
+                   dialog->sync_open_tabs_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind_with_mapping (sync_settings,
+                                EPHY_PREFS_SYNC_FREQUENCY,
+                                dialog->sync_frequency_5_min_radiobutton,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                sync_frequency_get_mapping,
+                                sync_frequency_set_mapping,
+                                GINT_TO_POINTER (5),
+                                NULL);
+  g_settings_bind_with_mapping (sync_settings,
+                                EPHY_PREFS_SYNC_FREQUENCY,
+                                dialog->sync_frequency_15_min_radiobutton,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                sync_frequency_get_mapping,
+                                sync_frequency_set_mapping,
+                                GINT_TO_POINTER (15),
+                                NULL);
+  g_settings_bind_with_mapping (sync_settings,
+                                EPHY_PREFS_SYNC_FREQUENCY,
+                                dialog->sync_frequency_30_min_radiobutton,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                sync_frequency_get_mapping,
+                                sync_frequency_set_mapping,
+                                GINT_TO_POINTER (30),
+                                NULL);
+  g_settings_bind_with_mapping (sync_settings,
+                                EPHY_PREFS_SYNC_FREQUENCY,
+                                dialog->sync_frequency_60_min_radiobutton,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                sync_frequency_get_mapping,
+                                sync_frequency_set_mapping,
+                                GINT_TO_POINTER (60),
+                                NULL);
+
+  g_object_bind_property (dialog->sync_open_tabs_checkbutton, "active",
+                          dialog->synced_tabs_button, "sensitive",
+                          G_BINDING_SYNC_CREATE);
+
+  g_signal_connect_object (service, "sync-secrets-store-finished",
+                           G_CALLBACK (sync_secrets_store_finished_cb),
                            dialog, 0);
+  g_signal_connect_object (service, "sync-sign-in-error",
+                           G_CALLBACK (sync_sign_in_error_cb),
+                           dialog, 0);
+  g_signal_connect_object (service, "sync-finished",
+                           G_CALLBACK (sync_finished_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_with_firefox_checkbutton, "toggled",
+                           G_CALLBACK (sync_with_firefox_toggled_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_bookmarks_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_passwords_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_history_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           dialog, 0);
+  g_signal_connect_object (dialog->sync_open_tabs_checkbutton, "toggled",
+                           G_CALLBACK (sync_collection_toggled_cb),
+                           dialog, 0);
+
+  g_free (user);
+  g_free (name);
 }
-#endif
 
 static void
 prefs_dialog_init (PrefsDialog *dialog)
@@ -1724,18 +1982,11 @@ prefs_dialog_init (PrefsDialog *dialog)
   setup_fonts_page (dialog);
   setup_stored_data_page (dialog);
   setup_language_page (dialog);
-#if ENABLE_FIREFOX_SYNC
-  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    setup_sync_page (dialog);
 
-    /* TODO: Switch back to using a template callback in class_init once sync is unconditionally enabled. */
-    g_signal_connect (dialog->sync_sign_out_button, "clicked",
-                      G_CALLBACK (on_sync_sign_out_button_clicked), dialog);
-  } else
+  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
     gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
-#else
-  gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
-#endif
+  else
+    setup_sync_page (dialog);
 
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
   g_signal_connect (dialog, "response",

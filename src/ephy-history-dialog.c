@@ -86,7 +86,8 @@ static GParamSpec *obj_properties[LAST_PROP];
 typedef enum {
   COLUMN_DATE,
   COLUMN_NAME,
-  COLUMN_LOCATION
+  COLUMN_LOCATION,
+  COLUMN_SYNC_ID
 } EphyHistoryDialogColumns;
 
 static gboolean
@@ -112,6 +113,7 @@ add_urls_source (EphyHistoryDialog *self)
                                        COLUMN_DATE, url->last_visit_time,
                                        COLUMN_NAME, url->title,
                                        COLUMN_LOCATION, url->url,
+                                       COLUMN_SYNC_ID, url->sync_id,
                                        -1);
     self->urls = g_list_remove_link (self->urls, element);
     ephy_history_url_free (url);
@@ -318,6 +320,7 @@ get_url_from_path (GtkTreeModel *model,
   gtk_tree_model_get (model, &iter,
                       COLUMN_NAME, &url->title,
                       COLUMN_LOCATION, &url->url,
+                      COLUMN_SYNC_ID, &url->sync_id,
                       -1);
   return url;
 }
@@ -696,16 +699,15 @@ convert_date_data_func (GtkTreeViewColumn *column,
 {
   int col_id = GPOINTER_TO_INT (user_data);
   gint64 value;
-  time_t time;
   char *friendly;
 
   gtk_tree_model_get (model, iter,
                       col_id,
                       &value,
                       -1);
-  time = (time_t)value;
 
-  friendly = ephy_time_helpers_utf_friendly_time (time);
+  /* Convert back to seconds. */
+  friendly = ephy_time_helpers_utf_friendly_time (value / 1000000);
   g_object_set (renderer, "text", friendly, NULL);
   g_free (friendly);
 }

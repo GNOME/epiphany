@@ -34,13 +34,14 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-form-auth-data.h"
 #include "ephy-history-service.h"
+#include "ephy-password-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
 #include "ephy-search-engine-manager.h"
 #include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-sync-utils.h"
 #include "ephy-uri-tester-shared.h"
 #include "ephy-web-app-utils.h"
 
@@ -284,7 +285,7 @@ store_form_auth_data_cb (GObject      *object,
 {
   GError *error = NULL;
 
-  if (ephy_form_auth_data_store_finish (res, &error) == FALSE) {
+  if (ephy_password_manager_store_finish (res, &error) == FALSE) {
     g_warning ("Couldn't store a form password: %s", error->message);
     g_error_free (error);
     goto out;
@@ -311,7 +312,7 @@ load_collection_items_cb (SecretCollection *collection,
   SecretValue *secret;
   GList *l;
   GHashTable *attributes, *t;
-  const char *server, *username, *form_username, *form_password, *password;
+  const char *server, *username, *username_field, *password_field, *password;
   char *actual_server;
   SoupURI *uri;
   GError *error = NULL;
@@ -340,20 +341,20 @@ load_collection_items_cb (SecretCollection *collection,
       username = g_hash_table_lookup (attributes, "user");
       uri = soup_uri_new (server);
       t = soup_form_decode (uri->query);
-      form_username = g_hash_table_lookup (t, FORM_USERNAME_KEY);
-      form_password = g_hash_table_lookup (t, FORM_PASSWORD_KEY);
+      username_field = g_hash_table_lookup (t, USERNAME_FIELD_KEY);
+      password_field = g_hash_table_lookup (t, PASSWORD_FIELD_KEY);
       soup_uri_set_query (uri, NULL);
       actual_server = soup_uri_to_string (uri, FALSE);
       secret_item_load_secret_sync (item, NULL, NULL);
       secret = secret_item_get_secret (item);
       password = secret_value_get (secret, NULL);
-      ephy_form_auth_data_store (actual_server,
-                                 form_username,
-                                 form_password,
-                                 username,
-                                 password,
-                                 (GAsyncReadyCallback)store_form_auth_data_cb,
-                                 g_hash_table_ref (attributes));
+      ephy_password_manager_store_raw (actual_server,
+                                       username,
+                                       password,
+                                       username_field,
+                                       password_field,
+                                       (GAsyncReadyCallback)store_form_auth_data_cb,
+                                       g_hash_table_ref (attributes));
       g_free (actual_server);
       secret_value_unref (secret);
       g_hash_table_unref (t);
@@ -442,7 +443,7 @@ migrate_insecure_password (SecretItem *item)
   const char *original_uri;
 
   attributes = secret_item_get_attributes (item);
-  original_uri = g_hash_table_lookup (attributes, URI_KEY);
+  original_uri = g_hash_table_lookup (attributes, HOSTNAME_KEY);
   original_origin = webkit_security_origin_new_for_uri (original_uri);
   if (original_origin == NULL) {
     g_warning ("Failed to convert URI %s to a security origin, insecure password will not be migrated", original_uri);
@@ -461,7 +462,7 @@ migrate_insecure_password (SecretItem *item)
     new_uri = webkit_security_origin_to_string (new_origin);
     webkit_security_origin_unref (new_origin);
 
-    g_hash_table_replace (attributes, g_strdup (URI_KEY), new_uri);
+    g_hash_table_replace (attributes, g_strdup (HOSTNAME_KEY), new_uri);
     secret_item_set_attributes_sync (item, EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL, &error);
     if (error != NULL) {
       g_warning ("Failed to convert URI %s to https://, insecure password will not be migrated: %s", original_uri, error->message);
@@ -646,11 +647,15 @@ parse_rdf_item (EphyBookmarksManager *manager,
 
   if (link) {
     EphyBookmark *bookmark;
+    char *id;
 
     g_sequence_sort (tags, (GCompareDataFunc)ephy_bookmark_tags_compare, NULL);
-    bookmark = ephy_bookmark_new ((const char *)link, (const char *)title, tags);
+    id = ephy_sync_utils_get_random_sync_id ();
+    bookmark = ephy_bookmark_new ((const char *)link, (const char *)title, tags, id);
     ephy_bookmarks_manager_add_bookmark (manager, bookmark);
+
     g_object_unref (bookmark);
+    g_free (id);
   } else {
     g_sequence_free (tags);
   }
@@ -975,6 +980,171 @@ migrate_search_engines (void)
 }
 
 static void
+migrate_passwords_to_firefox_sync_passwords (void)
+{
+  GHashTable *attributes;
+  GList *passwords = NULL;
+  GError *error = NULL;
+  int default_profile_migration_version;
+
+  /* Similar to the insecure passowrds migration, we want to migrate passwords
+   * to Firefox Sync passwords only once since saved passwords are stored
+   * globally and not per profile. This won't affect password lookup for web
+   * apps because this migration only adds a couple of new fields to the
+   * password schema, fields that are not taken into consideration when
+   * querying passwords.
+   */
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  if (default_profile_migration_version >= EPHY_FIREFOX_SYNC_PASSWORDS_MIGRATION_VERSION)
+    return;
+
+  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
+  passwords = secret_service_search_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA, attributes,
+                                          SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                                          NULL, &error);
+  if (error) {
+    g_warning ("Failed to search the password schema: %s", error->message);
+    goto out;
+  }
+
+  secret_service_clear_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
+                             attributes, NULL, &error);
+  if (error) {
+    g_warning ("Failed to clear the password schema: %s", error->message);
+    goto out;
+  }
+
+  for (GList *l = passwords; l && l->data; l = l->next) {
+    SecretItem *item = (SecretItem *)l->data;
+    SecretValue *value = secret_item_get_secret (item);
+    GHashTable *attrs = secret_item_get_attributes (item);
+    const char *hostname = g_hash_table_lookup (attrs, HOSTNAME_KEY);
+    const char *username = g_hash_table_lookup (attrs, USERNAME_KEY);
+    char *uuid = g_uuid_string_random ();
+    char *label;
+
+    g_hash_table_insert (attrs, g_strdup (ID_KEY), g_strdup_printf ("{%s}", uuid));
+    g_hash_table_insert (attrs, g_strdup (SERVER_TIME_MODIFIED_KEY), g_strdup ("0"));
+
+    if (username)
+      label = g_strdup_printf ("Password for %s in a form in %s", username, hostname);
+    else
+      label = g_strdup_printf ("Password in a form in %s", hostname);
+    secret_service_store_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
+                               attrs, NULL, label,
+                               value, NULL, &error);
+    if (error) {
+      g_warning ("Failed to store password: %s", error->message);
+      g_clear_pointer (&error, g_error_free);
+    }
+
+    g_free (label);
+    g_free (uuid);
+    secret_value_unref (value);
+    g_hash_table_unref (attrs);
+  }
+
+out:
+  if (error)
+    g_error_free (error);
+  g_hash_table_unref (attributes);
+  g_list_free_full (passwords, g_object_unref);
+}
+
+static void
+migrate_history_to_firefox_sync_history (void)
+{
+  EphySQLiteConnection *history_db = NULL;
+  EphySQLiteStatement *statement = NULL;
+  GSList *ids = NULL;
+  GError *error = NULL;
+  char *history_filename;
+  const char *sql_query;
+  int id;
+
+  history_filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
+  if (!g_file_test (history_filename, G_FILE_TEST_EXISTS)) {
+    LOG ("There is no history to migrate...");
+    goto out;
+  }
+
+  history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE);
+  ephy_sqlite_connection_open (history_db, history_filename, &error);
+  if (error) {
+    g_warning ("Failed to open history database: %s\n", error->message);
+    goto out;
+  }
+
+  /* Get the ID of each row in table. */
+  sql_query = "SELECT DISTINCT urls.id FROM urls ORDER BY urls.id";
+  statement = ephy_sqlite_connection_create_statement (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to create SQLite statement: %s", error->message);
+    goto out;
+  }
+
+  while (ephy_sqlite_statement_step (statement, &error)) {
+    if (error) {
+      g_warning ("Error in ephy_sqlite_statement_step: %s", error->message);
+      g_error_free (error);
+      error = NULL;
+    } else {
+      id = ephy_sqlite_statement_get_column_as_int (statement, 0);
+      ids = g_slist_prepend (ids, GINT_TO_POINTER (id));
+    }
+  }
+
+  /* Add new sync_id column. */
+  sql_query = "ALTER TABLE urls ADD COLUMN sync_id LONGVARCAR";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to add new column to urls table: %s", error->message);
+    goto out;
+  }
+
+  /* Set sync_id for each row. */
+  for (GSList *l = ids; l && l->data; l = l->next) {
+    char *sync_id = ephy_sync_utils_get_random_sync_id ();
+    char *sql = g_strdup_printf ("UPDATE urls SET sync_id = \"%s\" WHERE id=%d",
+                                 sync_id, GPOINTER_TO_INT (l->data));
+
+    ephy_sqlite_connection_execute (history_db, sql, &error);
+    if (error) {
+      g_warning ("Failed to set sync ID: %s", error->message);
+      g_error_free (error);
+      error = NULL;
+    }
+
+    g_free (sync_id);
+    g_free (sql);
+  }
+
+  /* Update visit timestamps to microseconds. */
+  sql_query = "UPDATE urls SET last_visit_time = last_visit_time * 1000000";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error) {
+    g_warning ("Failed to update last visit time to microseconds: %s", error->message);
+    goto out;
+  }
+
+  sql_query = "UPDATE visits SET visit_time = visit_time * 1000000";
+  ephy_sqlite_connection_execute (history_db, sql_query, &error);
+  if (error)
+    g_warning ("Failed to update visit time to microseconds: %s", error->message);
+
+out:
+  g_free (history_filename);
+  if (history_db)
+    g_object_unref (history_db);
+  if (statement)
+    g_object_unref (statement);
+  if (ids)
+    g_slist_free (ids);
+  if (error)
+    g_error_free (error);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1005,6 +1175,8 @@ const EphyProfileMigrator migrators[] = {
   /* 15 */ migrate_permissions,
   /* 16 */ migrate_settings,
   /* 17 */ migrate_search_engines,
+  /* 18 */ migrate_passwords_to_firefox_sync_passwords,
+  /* 19 */ migrate_history_to_firefox_sync_history,
 };
 
 static gboolean
