@@ -600,7 +600,7 @@ entry_paste_and_go_activate_cb (GtkMenuItem       *item,
 {
   GtkClipboard *clipboard;
 
-  clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+  clipboard = gtk_clipboard_get_default (gdk_display_get_default ());
   gtk_clipboard_request_text (clipboard,
                               (GtkClipboardTextReceivedFunc)paste_received,
                               entry);

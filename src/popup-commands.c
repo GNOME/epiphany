@@ -104,9 +104,7 @@ popup_cmd_media_in_new_window (GSimpleAction *action,
 static void
 popup_cmd_copy_to_clipboard (EphyWindow *window, const char *text)
 {
-  gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE),
-                          text, -1);
-  gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY),
+  gtk_clipboard_set_text (gtk_clipboard_get_default (gdk_display_get_default ()),
                           text, -1);
 }
 

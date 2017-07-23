@@ -393,7 +393,8 @@ copy_url (GSimpleAction *action,
 
   if (g_list_length (selection) == 1) {
     EphyHistoryURL *url = selection->data;
-    gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), url->url, -1);
+    gtk_clipboard_set_text (gtk_clipboard_get_default (gdk_display_get_default ()),
+                            url->url, -1);
   }
 
   g_list_free_full (selection, (GDestroyNotify)ephy_history_url_free);
