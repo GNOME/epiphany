@@ -3205,6 +3205,7 @@ ephy_web_view_save_main_resource_cb (GFile         *file,
                                 (GAsyncReadyCallback)web_resource_get_data_cb,
                                 output_stream);
 }
+
 /**
  * ephy_web_view_save:
  * @view: an #EphyWebView
@@ -3222,15 +3223,16 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
 
   file = g_file_new_for_uri (uri);
 
-  if (g_str_has_suffix (uri, ".mhtml"))
-    webkit_web_view_save_to_file (WEBKIT_WEB_VIEW (view), file, WEBKIT_SAVE_MODE_MHTML,
-                                  NULL, NULL, NULL);
-  else
+  if (g_str_has_suffix (uri, ".html")) {
     g_file_replace_async (file, NULL, FALSE,
                           G_FILE_CREATE_REPLACE_DESTINATION | G_FILE_CREATE_PRIVATE,
                           G_PRIORITY_DEFAULT, NULL,
                           (GAsyncReadyCallback)ephy_web_view_save_main_resource_cb,
                           view);
+  } else {
+    webkit_web_view_save_to_file (WEBKIT_WEB_VIEW (view), file, WEBKIT_SAVE_MODE_MHTML,
+                                  NULL, NULL, NULL);
+  }
   g_object_unref (file);
 }
 
