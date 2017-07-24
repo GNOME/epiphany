@@ -2914,7 +2914,7 @@ title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
   ephy_web_view_get_security_level (view, &security_level, &certificate, &tls_errors);
 
   security_popover = ephy_security_popover_new (GTK_WIDGET (title_widget),
-                                                ephy_title_widget_get_address (title_widget),
+                                                ephy_web_view_get_address (view),
                                                 certificate,
                                                 tls_errors,
                                                 security_level);
