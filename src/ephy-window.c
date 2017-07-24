@@ -3288,15 +3288,13 @@ open_certificate_popover (EphyWindow *window,
 	GTlsCertificate *certificate;
 	GTlsCertificateFlags tls_errors;
 	EphySecurityLevel security_level;
-	GtkWidget *location_entry;
 	GtkWidget *certificate_popover;
 
 	view = ephy_embed_get_web_view (priv->active_embed);
 	ephy_web_view_get_security_level (view, &security_level, &certificate, &tls_errors);
-	location_entry = ephy_toolbar_get_location_entry (EPHY_TOOLBAR (priv->toolbar));
 
 	certificate_popover = ephy_certificate_popover_new (relative_to,
-							    ephy_location_entry_get_location (EPHY_LOCATION_ENTRY (location_entry)),
+							    ephy_web_view_get_address (view),
 							    certificate,
 							    tls_errors,
 							    security_level);
