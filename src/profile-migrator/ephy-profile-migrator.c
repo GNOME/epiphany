@@ -1032,8 +1032,6 @@ ephy_migrator (void)
   int latest, i;
   EphyProfileMigrator m;
 
-  g_assert (EPHY_PROFILE_MIGRATION_VERSION == G_N_ELEMENTS (migrators));
-
   /* Always try to migrate the data from the old profile dir at the
    * very beginning. */
   migrate_profile_gnome2_to_xdg ();
@@ -1103,6 +1101,8 @@ main (int argc, char *argv[])
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
+
+  g_assert (EPHY_PROFILE_MIGRATION_VERSION == G_N_ELEMENTS (migrators));
 
   option_group = g_option_group_new ("ephy-profile-migrator",
                                      N_("Web profile migrator"),
