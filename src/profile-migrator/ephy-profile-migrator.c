@@ -975,6 +975,24 @@ migrate_search_engines (void)
 }
 
 static void
+migrate_icon_database (void)
+{
+  char *path;
+  GError *error = NULL;
+
+  /* Favicons used to be saved here by mistake. Delete them! */
+  path = g_build_filename (g_get_user_cache_dir (), "icondatabase", NULL);
+  ephy_file_delete_dir_recursively (path, &error);
+
+  if (error) {
+    g_warning ("Failed to delete %s: %s", path, error->message);
+    g_error_free (error);
+  }
+
+  g_free (path);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1005,6 +1023,7 @@ const EphyProfileMigrator migrators[] = {
   /* 15 */ migrate_permissions,
   /* 16 */ migrate_settings,
   /* 17 */ migrate_search_engines,
+  /* 18 */ migrate_icon_database,
 };
 
 static gboolean
