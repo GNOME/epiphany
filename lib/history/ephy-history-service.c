@@ -575,10 +575,13 @@ ephy_history_service_execute_add_visit_helper (EphyHistoryService *self, EphyHis
   visit->url->host->visit_count++;
   ephy_history_service_update_host_row (self, visit->url->host);
 
-  /* A NULL return here means that the URL does not yet exist in the database */
+  /* A NULL return here means that the URL does not yet exist in the database.
+   * This overwrites visit->url so we have to test the sync id against NULL on
+   * both branches. */
   if (ephy_history_service_get_url_row (self, visit->url->url, visit->url) == NULL) {
     visit->url->last_visit_time = visit->visit_time;
     visit->url->visit_count = 1;
+
     if (!visit->url->sync_id)
       visit->url->sync_id = ephy_sync_utils_get_random_sync_id ();
 
@@ -593,6 +596,9 @@ ephy_history_service_execute_add_visit_helper (EphyHistoryService *self, EphyHis
 
     if (visit->visit_time > visit->url->last_visit_time)
       visit->url->last_visit_time = visit->visit_time;
+
+    if (!visit->url->sync_id)
+      visit->url->sync_id = ephy_sync_utils_get_random_sync_id ();
 
     ephy_history_service_update_url_row (self, visit->url);
   }

@@ -1074,11 +1074,9 @@ migrate_history_to_firefox_sync_history (void)
 {
   EphySQLiteConnection *history_db = NULL;
   EphySQLiteStatement *statement = NULL;
-  GSList *ids = NULL;
   GError *error = NULL;
   char *history_filename;
   const char *sql_query;
-  int id;
 
   history_filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
   if (!g_file_test (history_filename, G_FILE_TEST_EXISTS)) {
@@ -1093,48 +1091,12 @@ migrate_history_to_firefox_sync_history (void)
     goto out;
   }
 
-  /* Get the ID of each row in table. */
-  sql_query = "SELECT DISTINCT urls.id FROM urls ORDER BY urls.id";
-  statement = ephy_sqlite_connection_create_statement (history_db, sql_query, &error);
-  if (error) {
-    g_warning ("Failed to create SQLite statement: %s", error->message);
-    goto out;
-  }
-
-  while (ephy_sqlite_statement_step (statement, &error)) {
-    if (error) {
-      g_warning ("Error in ephy_sqlite_statement_step: %s", error->message);
-      g_error_free (error);
-      error = NULL;
-    } else {
-      id = ephy_sqlite_statement_get_column_as_int (statement, 0);
-      ids = g_slist_prepend (ids, GINT_TO_POINTER (id));
-    }
-  }
-
-  /* Add new sync_id column. */
+  /* Add new sync_id column. All sync ids will default to NULL. */
   sql_query = "ALTER TABLE urls ADD COLUMN sync_id LONGVARCAR";
   ephy_sqlite_connection_execute (history_db, sql_query, &error);
   if (error) {
     g_warning ("Failed to add new column to urls table: %s", error->message);
     goto out;
-  }
-
-  /* Set sync_id for each row. */
-  for (GSList *l = ids; l && l->data; l = l->next) {
-    char *sync_id = ephy_sync_utils_get_random_sync_id ();
-    char *sql = g_strdup_printf ("UPDATE urls SET sync_id = \"%s\" WHERE id=%d",
-                                 sync_id, GPOINTER_TO_INT (l->data));
-
-    ephy_sqlite_connection_execute (history_db, sql, &error);
-    if (error) {
-      g_warning ("Failed to set sync ID: %s", error->message);
-      g_error_free (error);
-      error = NULL;
-    }
-
-    g_free (sync_id);
-    g_free (sql);
   }
 
   /* Update visit timestamps to microseconds. */
@@ -1156,8 +1118,6 @@ out:
     g_object_unref (history_db);
   if (statement)
     g_object_unref (statement);
-  if (ids)
-    g_slist_free (ids);
   if (error)
     g_error_free (error);
 }

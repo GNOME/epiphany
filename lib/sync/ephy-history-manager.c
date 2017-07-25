@@ -494,6 +494,11 @@ merge_history_cb (EphyHistoryService    *service,
 
   for (GList *l = urls; l && l->data; l = l->next) {
     EphyHistoryURL *url = (EphyHistoryURL *)l->data;
+
+    /* Ignore migrated history, i.e. URLs with a NULL id. */
+    if (!url->sync_id)
+      continue;
+
     records = g_slist_prepend (records, ephy_history_record_new (url->sync_id,
                                                                  url->title,
                                                                  url->url,

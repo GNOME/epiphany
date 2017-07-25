@@ -175,7 +175,7 @@ ephy_history_service_update_url_row (EphyHistoryService *self, EphyHistoryURL *u
   g_assert (self->history_database != NULL);
 
   statement = ephy_sqlite_connection_create_statement (self->history_database,
-                                                       "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=?, hidden_from_overview=?, thumbnail_update_time=? "
+                                                       "UPDATE urls SET title=?, visit_count=?, typed_count=?, last_visit_time=?, hidden_from_overview=?, thumbnail_update_time=?, sync_id=? "
                                                        "WHERE id=?", &error);
   if (error) {
     g_warning ("Could not build urls table modification statement: %s", error->message);
@@ -189,7 +189,8 @@ ephy_history_service_update_url_row (EphyHistoryService *self, EphyHistoryURL *u
       ephy_sqlite_statement_bind_int64 (statement, 3, url->last_visit_time, &error) == FALSE ||
       ephy_sqlite_statement_bind_int (statement, 4, url->hidden, &error) == FALSE ||
       ephy_sqlite_statement_bind_int64 (statement, 5, url->thumbnail_time, &error) == FALSE ||
-      ephy_sqlite_statement_bind_int (statement, 6, url->id, &error) == FALSE) {
+      ephy_sqlite_statement_bind_string (statement, 6, url->sync_id, &error) == FALSE ||
+      ephy_sqlite_statement_bind_int (statement, 7, url->id, &error) == FALSE) {
     g_warning ("Could not modify URL in urls table: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
