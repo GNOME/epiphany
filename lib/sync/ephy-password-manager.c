@@ -290,7 +290,8 @@ populate_cache_cb (GSList   *records,
     const char *hostname = ephy_password_record_get_hostname (record);
     const char *username = ephy_password_record_get_username (record);
 
-    ephy_password_manager_cache_add (self, hostname, username);
+    if (username)
+      ephy_password_manager_cache_add (self, hostname, username);
   }
 
   g_slist_free_full (records, g_object_unref);
@@ -416,20 +417,24 @@ ephy_password_manger_store_record (EphyPasswordManager *self,
                                    EphyPasswordRecord  *record)
 {
   GHashTable *attributes;
+  const char *hostname;
+  const char *username;
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
 
+  hostname = ephy_password_record_get_hostname (record);
+  username = ephy_password_record_get_username (record);
   attributes = get_attributes_table (ephy_password_record_get_id (record),
-                                     ephy_password_record_get_hostname (record),
-                                     ephy_password_record_get_username (record),
+                                     hostname,
+                                     username,
                                      ephy_password_record_get_username_field (record),
                                      ephy_password_record_get_password_field (record),
                                      ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (record)));
   store_internal (ephy_password_record_get_password (record), attributes, NULL, NULL);
-  ephy_password_manager_cache_add (self,
-                                   ephy_password_record_get_hostname (record),
-                                   ephy_password_record_get_username (record));
+
+  if (username)
+    ephy_password_manager_cache_add (self, hostname, username);
 
   g_hash_table_unref (attributes);
 }
