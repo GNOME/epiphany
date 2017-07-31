@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 3.26.x\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-05-25 20:13+0000\n"
-"PO-Revision-Date: 2017-06-11 16:34+0200\n"
+"POT-Creation-Date: 2017-07-27 06:18+0000\n"
+"PO-Revision-Date: 2017-07-31 10:14+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -20,7 +20,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
 msgid "GNOME Web"
@@ -266,7 +265,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:104
 msgid "The sync user currently logged in"
-msgstr ""
+msgstr "Synkroniseringsbruker som er logget inn"
 
 #: data/org.gnome.epiphany.gschema.xml:105
 msgid ""
@@ -276,7 +275,7 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:109
 msgid "Sync timestamp"
-msgstr ""
+msgstr "Tidsstempel for synkronisering"
 
 #: data/org.gnome.epiphany.gschema.xml:110
 msgid "The timestamp at which last we had the last sync"
@@ -682,7 +681,7 @@ msgstr "Slett"
 msgid "Installed on:"
 msgstr "Installert:"
 
-#: embed/ephy-about-handler.c:457 embed/ephy-embed-utils.c:347
+#: embed/ephy-about-handler.c:457 embed/ephy-embed-utils.c:344
 msgid "Most Visited"
 msgstr "Mest besøkte"
 
@@ -1127,7 +1126,9 @@ msgstr "Vil du lagre passordet til «%s»?"
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
-msgstr "Merk: dette skjemaet er ikke sikkert. Hvis du skriver inn passordet vil det ikke være privat."
+msgstr ""
+"Merk: dette skjemaet er ikke sikkert. Hvis du skriver inn passordet vil det "
+"ikke være privat."
 
 #: embed/ephy-web-view.c:1389
 msgid "Deny"
@@ -1787,7 +1788,7 @@ msgid "View downloads"
 msgstr "Vis nedlastinger"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-header-bar.c:800 src/ephy-notebook.c:479
+#: src/ephy-header-bar.c:800 src/ephy-notebook.c:482
 msgid "Open a new tab"
 msgstr "Åpne en ny fane"
 
@@ -1862,11 +1863,11 @@ msgid "Web options"
 msgstr "Alternativer for Nettleser"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:486
+#: src/ephy-notebook.c:489
 msgid "View open tabs"
 msgstr "Vis åpne faner"
 
-#: src/ephy-notebook.c:747
+#: src/ephy-notebook.c:750
 msgid "Close tab"
 msgstr "Lukk fane"
 
@@ -2045,29 +2046,29 @@ msgstr "_Sidens kildekode"
 msgid "Search the Web for “%s”"
 msgstr "Søk etter «%s» på nettet"
 
-#: src/popup-commands.c:231
+#: src/popup-commands.c:229
 msgid "Save Link As"
 msgstr "Lagre lenke som"
 
-#: src/popup-commands.c:239
+#: src/popup-commands.c:237
 msgid "Save Image As"
 msgstr "Lagre bilde som"
 
-#: src/popup-commands.c:247
+#: src/popup-commands.c:245
 msgid "Save Media As"
 msgstr "Lagre medie som"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:254 src/prefs-dialog.c:1655
+#: src/prefs-dialog.c:254 src/prefs-dialog.c:1691
 #, c-format
 msgid "Currently logged in as %s"
 msgstr "Logget inn som %s"
 
-#: src/prefs-dialog.c:413
+#: src/prefs-dialog.c:432
 msgid "Something went wrong, please try again."
 msgstr "Noe gikk galt. Prøv igjen."
 
-#: src/prefs-dialog.c:437
+#: src/prefs-dialog.c:456
 msgid "Please don’t leave this page until you have completed the verification."
 msgstr "Ikke forlat denne siden før du har fullført verifikasjonen."
 
@@ -2075,7 +2076,7 @@ msgstr "Ikke forlat denne siden før du har fullført verifikasjonen."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:847 src/prefs-dialog.c:851
+#: src/prefs-dialog.c:862 src/prefs-dialog.c:866
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2084,24 +2085,24 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:858
+#: src/prefs-dialog.c:873
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Brukerdefinert (%s)"
 
-#: src/prefs-dialog.c:880
+#: src/prefs-dialog.c:895
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Systemspråk [%s]"
 msgstr[1] "Systemspråk [%s]"
 
-#: src/prefs-dialog.c:1123 src/resources/gtk/prefs-dialog.ui:765
+#: src/prefs-dialog.c:1138 src/resources/gtk/prefs-dialog.ui:765
 msgid "Language"
 msgstr "Språk"
 
-#: src/prefs-dialog.c:1201
+#: src/prefs-dialog.c:1216
 msgid "Select a directory"
 msgstr "Velg en katalog"
 
@@ -2113,27 +2114,27 @@ msgstr ""
 "Nettleser 3.6 bruker ikke denne mappen lenger, og prøvde å flytte dette "
 "oppsettet til ~/.config/epiphany"
 
-#: src/profile-migrator/ephy-profile-migrator.c:930
+#: src/profile-migrator/ephy-profile-migrator.c:932
 msgid "Search the Web"
 msgstr "Søk på nettet"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1065
+#: src/profile-migrator/ephy-profile-migrator.c:1084
 msgid "Executes only the n-th migration step"
 msgstr "Kjører bare n'te flyttesteg"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1067
+#: src/profile-migrator/ephy-profile-migrator.c:1086
 msgid "Specifies the required version for the migrator"
 msgstr "Velger nødvendig versjon for flyttefunksjon"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1069
+#: src/profile-migrator/ephy-profile-migrator.c:1088
 msgid "Specifies the profile where the migrator should run"
 msgstr "Velger  hvilken profil som skal flyttes"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1087
+#: src/profile-migrator/ephy-profile-migrator.c:1108
 msgid "Web profile migrator"
 msgstr "Profilflytting for Nettleser"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1088
+#: src/profile-migrator/ephy-profile-migrator.c:1109
 msgid "Web profile migrator options"
 msgstr "Alternativer for profilflytting for Nettleser"
 
