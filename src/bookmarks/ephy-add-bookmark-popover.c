@@ -118,13 +118,13 @@ ephy_add_bookmark_popover_closed_cb (GtkPopover *popover,
 
   g_assert (EPHY_IS_ADD_BOOKMARK_POPOVER (popover));
 
+  self = EPHY_ADD_BOOKMARK_POPOVER (popover);
   manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
 
   ephy_bookmarks_manager_save_to_file_async (manager, NULL,
                                              ephy_bookmarks_manager_save_to_file_warn_on_error_cb,
                                              NULL);
 
-  self = EPHY_ADD_BOOKMARK_POPOVER (popover);
   g_clear_pointer (&self->address, g_free);
   g_clear_pointer (&self->grid, gtk_widget_destroy);
 }

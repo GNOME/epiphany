@@ -23,6 +23,7 @@
 
 #include "ephy-embed-shell.h"
 #include "ephy-embed-prefs.h"
+#include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-history-service.h"
 #include "ephy-prefs.h"
@@ -454,7 +455,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                           "<body>\n",
                           lang, lang,
                           ((gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL) ? "rtl" : "ltr"),
-                          _("Most Visited"));
+                          _(OVERVIEW_PAGE_TITLE));
   g_free (lang);
 
   if (g_list_length (urls) == 0 || !success) {

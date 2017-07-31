@@ -1005,7 +1005,7 @@ migrate_passwords_to_firefox_sync_passwords (void)
   GError *error = NULL;
   int default_profile_migration_version;
 
-  /* Similar to the insecure passowrds migration, we want to migrate passwords
+  /* Similar to the insecure passwords migration, we want to migrate passwords
    * to Firefox Sync passwords only once since saved passwords are stored
    * globally and not per profile. This won't affect password lookup for web
    * apps because this migration only adds a couple of new fields to the

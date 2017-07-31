@@ -84,7 +84,10 @@ base64_to_base64_urlsafe (char *text)
 {
   g_assert (text);
 
-  /* Replace '+' with '-' and '/' with '_' */
+  /* / and + are inappropriate for URLs and file systems paths, so they have to
+   * be omitted to make the base64 string safe. / is replaced with _ and + is
+   * replaced with -.
+   */
   g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=/", '-');
   g_strcanon (text, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=-", '_');
 }
@@ -265,7 +268,7 @@ ephy_sync_utils_get_device_name (void)
   name = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_NAME);
   if (!g_strcmp0 (name, "")) {
     g_free (name);
-    name = g_strdup_printf ("%s's Epiphany on %s",
+    name = g_strdup_printf ("%s's GNOME Web on %s",
                             g_get_user_name (), g_get_host_name ());
   }
 

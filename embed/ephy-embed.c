@@ -46,7 +46,6 @@ static void     ephy_embed_restored_window_cb (EphyEmbedShell *shell,
 
 #define EPHY_EMBED_STATUSBAR_TAB_MESSAGE_CONTEXT_DESCRIPTION "tab_message"
 #define MAX_TITLE_LENGTH 512 /* characters */
-#define EMPTY_PAGE_TITLE _("Blank page") /* Title for the empty page */
 
 typedef struct {
   gchar *text;
@@ -263,7 +262,7 @@ ephy_embed_set_title (EphyEmbed  *embed,
 
     if (new_title == NULL || new_title[0] == '\0') {
       g_free (new_title);
-      new_title = g_strdup (EMPTY_PAGE_TITLE);
+      new_title = g_strdup (_(BLANK_PAGE_TITLE));
     }
   }
 

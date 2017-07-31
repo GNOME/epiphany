@@ -341,7 +341,7 @@ ephy_embed_utils_get_title_from_address (const char *address)
 
   if (!strcmp (address, EPHY_ABOUT_SCHEME ":overview") ||
       !strcmp (address, "about:overview"))
-    return g_strdup (_("Most Visited"));
+    return g_strdup (_(OVERVIEW_PAGE_TITLE));
 
   return ephy_string_get_host_name (address);
 }

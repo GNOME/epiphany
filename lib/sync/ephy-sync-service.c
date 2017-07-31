@@ -32,7 +32,7 @@
 #include <json-glib/json-glib.h>
 #include <string.h>
 
-#define STORAGE_VERSION 5
+#define EPHY_STORAGE_VERSION 5
 
 struct _EphySyncService {
   GObject      parent_instance;
@@ -641,7 +641,8 @@ ephy_sync_service_forget_secrets (EphySyncService *self)
   g_assert (self->secrets);
 
   user = ephy_sync_utils_get_sync_user ();
-  g_assert (user);
+  g_return_if_fail (user);
+
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
                                         ACCOUNT_KEY, user,
                                         NULL);
@@ -1900,7 +1901,7 @@ ephy_sync_service_upload_meta_global (EphySyncService *self)
   json_object_set_object_member (engines, "passwords", make_engine_object (1));
   json_object_set_object_member (engines, "forms", make_engine_object (1));
   json_object_set_object_member (payload, "engines", engines);
-  json_object_set_int_member (payload, "storageVersion", STORAGE_VERSION);
+  json_object_set_int_member (payload, "storageVersion", EPHY_STORAGE_VERSION);
   sync_id = ephy_sync_utils_get_random_sync_id ();
   json_object_set_string_member (payload, "syncID", sync_id);
   json_node_set_object (node, payload);
@@ -1978,11 +1979,11 @@ verify_storage_version_cb (SoupSession *session,
     goto out_error;
   }
   storage_version = json_object_get_int_member (json, "storageVersion");
-  if (storage_version != STORAGE_VERSION) {
+  if (storage_version != EPHY_STORAGE_VERSION) {
     /* Translators: the %d is the storage version, the \n is a newline character. */
-    message = g_strdup_printf (_("Your Firefox Account uses storage version %d "
-                                 "which Epiphany does not support.\n"
-                                 "Create a new account to use the latest storage version."),
+    message = g_strdup_printf (_("Your Firefox Account uses storage version %d. "
+                                 "Web only supports version %d."),
+                               EPHY_STORAGE_VERSION,
                                storage_version);
     goto out_error;
   }
@@ -2273,7 +2274,7 @@ ephy_sync_service_register_device (EphySyncService *self,
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
 
   /* Make protocol. */
-  protocol = g_strdup_printf ("1.%d", STORAGE_VERSION);
+  protocol = g_strdup_printf ("1.%d", EPHY_STORAGE_VERSION);
   array = json_array_new ();
   json_array_add_string_element (array, protocol);
 

@@ -1983,10 +1983,10 @@ prefs_dialog_init (PrefsDialog *dialog)
   setup_stored_data_page (dialog);
   setup_language_page (dialog);
 
-  if (mode == EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
-    gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
-  else
+  if (mode == EPHY_EMBED_SHELL_MODE_BROWSER)
     setup_sync_page (dialog);
+  else
+    gtk_notebook_remove_page (GTK_NOTEBOOK (dialog->notebook), -1);
 
   ephy_gui_ensure_window_group (GTK_WINDOW (dialog));
   g_signal_connect (dialog, "response",

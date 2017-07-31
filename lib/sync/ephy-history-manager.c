@@ -118,7 +118,8 @@ ephy_history_manager_set_property (GObject      *object,
 
   switch (prop_id) {
     case PROP_HISTORY_SERVICE:
-      g_clear_object (&self->service);
+      if (self->service)
+        g_object_unref (self->service);
       self->service = g_object_ref (g_value_get_object (value));
       break;
     default:

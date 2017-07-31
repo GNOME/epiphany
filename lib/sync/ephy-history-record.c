@@ -156,7 +156,9 @@ ephy_history_record_finalize (GObject *object)
   g_free (self->id);
   g_free (self->title);
   g_free (self->uri);
-  g_sequence_free (self->visits);
+
+  if (self->visits)
+    g_sequence_free (self->visits);
 
   G_OBJECT_CLASS (ephy_history_record_parent_class)->finalize (object);
 }

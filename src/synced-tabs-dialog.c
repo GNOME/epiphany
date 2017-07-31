@@ -235,7 +235,8 @@ synced_tabs_dialog_set_property (GObject      *object,
 
   switch (prop_id) {
     case PROP_OPEN_TABS_MANAGER:
-      g_clear_object (&dialog->manager);
+      if (dialog->manager)
+        g_object_unref (dialog->manager);
       dialog->manager = g_object_ref (g_value_get_object (value));
       break;
     default:
