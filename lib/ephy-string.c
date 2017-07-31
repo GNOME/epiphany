@@ -244,40 +244,31 @@ ephy_string_commandline_args_to_uris (char **arguments, GError **error)
 }
 
 char *
-ephy_string_find_and_replace (const char *string,
+ephy_string_find_and_replace (const char *haystack,
                               const char *to_find,
                               const char *to_repl)
 {
-  const char *haystack = string;
-  const char *needle = NULL;
-  char *out;
-  gsize haystack_len;
+  GString *string;
+  const char *needle;
   gsize to_find_len;
   gsize to_repl_len;
-  gsize new_len = 0;
-  gsize skip_len = 0;
+  gsize pos = 0;
+  gsize i = 0;
 
-  g_return_val_if_fail (string, NULL);
-  g_return_val_if_fail (to_find, NULL);
-  g_return_val_if_fail (to_repl, NULL);
-
-  haystack_len = strlen (string);
+  string = g_string_new (haystack);
   to_find_len = strlen (to_find);
   to_repl_len = strlen (to_repl);
-  out = g_malloc (haystack_len + 1);
 
-  while ((needle = g_strstr_len (haystack, -1, to_find)) != NULL) {
-    haystack_len += to_find_len - to_repl_len;
-    out = g_realloc (out, haystack_len + 1);
-    skip_len = needle - haystack;
-    memcpy (out + new_len, haystack, skip_len);
-    memcpy (out + new_len + skip_len, to_repl, to_repl_len);
-    new_len += skip_len + to_repl_len;
+  while ((needle = strstr (haystack, to_find)) != NULL) {
+    pos += needle - haystack;
+    g_string_erase (string, pos + i * (to_repl_len - to_find_len), to_find_len);
+    g_string_insert (string, pos + i * (to_repl_len - to_find_len), to_repl);
     haystack = needle + to_find_len;
+    pos += to_find_len;
+    i++;
   }
-  strcpy (out + new_len, haystack);
 
-  return out;
+  return g_string_free (string, FALSE);
 }
 
 char **
