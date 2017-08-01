@@ -91,6 +91,6 @@ subdir('src')
 
 # All tests are broken *at dist time only* due to some weird meson bug.
 # Uncomment when it works.
-#subdir('tests')
+subdir('tests')
 
 meson.add_install_script('post_install.py')
