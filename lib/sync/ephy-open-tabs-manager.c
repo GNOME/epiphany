@@ -21,15 +21,14 @@
 #include "config.h"
 #include "ephy-open-tabs-manager.h"
 
-#include "ephy-embed-container.h"
-#include "ephy-embed-shell.h"
-#include "ephy-embed-utils.h"
 #include "ephy-settings.h"
 #include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
 
 struct _EphyOpenTabsManager {
   GObject parent_instance;
+
+  EphyTabsCatalog *catalog;
 
   /* A list of EphyOpenTabsRecord objects describing the open tabs
    * of other sync clients. This is updated at every sync. */
@@ -42,6 +41,50 @@ G_DEFINE_TYPE_WITH_CODE (EphyOpenTabsManager, ephy_open_tabs_manager, G_TYPE_OBJ
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_SYNCHRONIZABLE_MANAGER,
                                                 ephy_synchronizable_manager_iface_init))
 
+enum {
+  PROP_0,
+  PROP_TABS_CATALOG,
+  LAST_PROP
+};
+
+static GParamSpec *obj_properties[LAST_PROP];
+
+static void
+ephy_open_tabs_manager_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (object);
+
+  switch (prop_id) {
+    case PROP_TABS_CATALOG:
+      if (self->catalog)
+        g_object_unref (self->catalog);
+      self->catalog = g_object_ref (g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
+static void
+ephy_open_tabs_manager_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (object);
+
+  switch (prop_id) {
+    case PROP_TABS_CATALOG:
+      g_value_set_object (value, self->catalog);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  }
+}
+
 static void
 ephy_open_tabs_manager_finalize (GObject *object)
 {
@@ -53,11 +96,33 @@ ephy_open_tabs_manager_finalize (GObject *object)
 }
 
 static void
+ephy_open_tabs_manager_dispose (GObject *object)
+{
+  EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (object);
+
+  g_clear_object (&self->catalog);
+
+  G_OBJECT_CLASS (ephy_open_tabs_manager_parent_class)->dispose (object);
+}
+
+static void
 ephy_open_tabs_manager_class_init (EphyOpenTabsManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->set_property = ephy_open_tabs_manager_set_property;
+  object_class->get_property = ephy_open_tabs_manager_get_property;
+  object_class->dispose = ephy_open_tabs_manager_dispose;
   object_class->finalize = ephy_open_tabs_manager_finalize;
+
+  obj_properties[PROP_TABS_CATALOG] =
+    g_param_spec_object ("tabs-catalog",
+                         "Tabs catalog",
+                         "Tabs Catalog",
+                         EPHY_TYPE_TABS_CATALOG,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
 
 static void
@@ -66,55 +131,37 @@ ephy_open_tabs_manager_init (EphyOpenTabsManager *self)
 }
 
 EphyOpenTabsManager *
-ephy_open_tabs_manager_new (void)
+ephy_open_tabs_manager_new (EphyTabsCatalog *catalog)
 {
-  return EPHY_OPEN_TABS_MANAGER (g_object_new (EPHY_TYPE_OPEN_TABS_MANAGER, NULL));
+  return EPHY_OPEN_TABS_MANAGER (g_object_new (EPHY_TYPE_OPEN_TABS_MANAGER,
+                                               "tabs-catalog", catalog,
+                                               NULL));
 }
 
 EphyOpenTabsRecord *
 ephy_open_tabs_manager_get_local_tabs (EphyOpenTabsManager *self)
 {
   EphyOpenTabsRecord *local_tabs;
-  WebKitFaviconDatabase *database;
-  EphyEmbedShell *embed_shell;
-  GList *windows;
-  GList *tabs;
-  char *favicon;
+  EphyTabInfo *info;
+  GSList *tabs_info;
   char *id;
   char *name;
-  const char *title;
-  const char *url;
 
   g_return_val_if_fail (EPHY_IS_OPEN_TABS_MANAGER (self), NULL);
 
-  embed_shell = ephy_embed_shell_get_default ();
-  windows = gtk_application_get_windows (GTK_APPLICATION (embed_shell));
-  database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (embed_shell));
   id = ephy_sync_utils_get_device_id ();
   name = ephy_sync_utils_get_device_name ();
   local_tabs = ephy_open_tabs_record_new (id, name);
 
-  for (GList *l = windows; l && l->data; l = l->next) {
-    tabs = ephy_embed_container_get_children (l->data);
-
-    for (GList *t = tabs; t && t->data; t = t->next) {
-      title = ephy_embed_get_title (t->data);
-
-      if (!g_strcmp0 (title, _(BLANK_PAGE_TITLE)) || !g_strcmp0 (title, _(OVERVIEW_PAGE_TITLE)))
-        continue;
-
-      url = ephy_web_view_get_display_address (ephy_embed_get_web_view (t->data));
-      favicon = webkit_favicon_database_get_favicon_uri (database, url);
-      ephy_open_tabs_record_add_tab (local_tabs, title, url, favicon);
-
-      g_free (favicon);
-    }
-
-    g_list_free (tabs);
+  tabs_info = ephy_tabs_catalog_get_tabs_info (self->catalog);
+  for (GSList *l = tabs_info; l && l->data; l = l->next) {
+    info = (EphyTabInfo *)l->data;
+    ephy_open_tabs_record_add_tab (local_tabs, info->title, info->url, info->favicon);
   }
 
   g_free (id);
   g_free (name);
+  g_slist_free_full (tabs_info, (GDestroyNotify)ephy_tab_info_free);
 
   return local_tabs;
 }

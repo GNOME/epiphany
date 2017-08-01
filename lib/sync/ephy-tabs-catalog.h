@@ -20,20 +20,31 @@
 
 #pragma once
 
-#include "ephy-open-tabs-record.h"
-#include "ephy-tabs-catalog.h"
-
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_OPEN_TABS_MANAGER (ephy_open_tabs_manager_get_type ())
+#define EPHY_TYPE_TABS_CATALOG (ephy_tabs_catalog_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyOpenTabsManager, ephy_open_tabs_manager, EPHY, OPEN_TABS_MANAGER, GObject)
+G_DECLARE_INTERFACE (EphyTabsCatalog, ephy_tabs_catalog, EPHY, TABS_CATALOG, GObject)
 
-EphyOpenTabsManager *ephy_open_tabs_manager_new             (EphyTabsCatalog *catalog);
-EphyOpenTabsRecord  *ephy_open_tabs_manager_get_local_tabs  (EphyOpenTabsManager *self);
-GSList              *ephy_open_tabs_manager_get_remote_tabs (EphyOpenTabsManager *self);
-void                 ephy_open_tabs_manager_clear_cache     (EphyOpenTabsManager *self);
+struct _EphyTabsCatalogInterface {
+  GTypeInterface parent_iface;
+
+  GSList * (*get_tabs_info) (EphyTabsCatalog *catalog);
+};
+
+GSList *ephy_tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog);
+
+typedef struct {
+  char *title;
+  char *url;
+  char *favicon;
+} EphyTabInfo;
+
+EphyTabInfo *ephy_tab_info_new  (const char *title,
+                                 const char *url,
+                                 const char *favicon);
+void         ephy_tab_info_free (EphyTabInfo *info);
 
 G_END_DECLS

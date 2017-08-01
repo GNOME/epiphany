@@ -941,7 +941,7 @@ ephy_shell_get_open_tabs_manager (EphyShell *shell)
   g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
 
   if (shell->open_tabs_manager == NULL)
-    shell->open_tabs_manager = ephy_open_tabs_manager_new ();
+    shell->open_tabs_manager = ephy_open_tabs_manager_new (EPHY_TABS_CATALOG (shell));
 
   return shell->open_tabs_manager;
 }

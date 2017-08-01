@@ -22,7 +22,6 @@
 #include "ephy-sync-service.h"
 
 #include "ephy-debug.h"
-#include "ephy-embed-prefs.h"
 #include "ephy-notification.h"
 #include "ephy-settings.h"
 #include "ephy-sync-crypto.h"
@@ -30,6 +29,7 @@
 
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
+#include <libsoup/soup.h>
 #include <string.h>
 
 #define EPHY_STORAGE_VERSION 5
@@ -1611,15 +1611,14 @@ static void
 ephy_sync_service_constructed (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
-  WebKitSettings *settings;
-  const char *user_agent;
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->constructed (object);
 
   if (self->sync_periodically) {
-    settings = ephy_embed_prefs_get_settings ();
-    user_agent = webkit_settings_get_user_agent (settings);
+    char *user_agent = g_settings_get_string (EPHY_SETTINGS_WEB,
+                                              EPHY_PREFS_WEB_USER_AGENT);
     g_object_set (self->session, "user-agent", user_agent, NULL);
+    g_free (user_agent);
 
     g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_FREQUENCY,
                       G_CALLBACK (sync_frequency_changed_cb), self);

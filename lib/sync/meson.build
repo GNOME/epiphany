@@ -9,7 +9,8 @@ libephysync_sources = [
   'ephy-sync-crypto.c',
   'ephy-sync-service.c',
   'ephy-synchronizable-manager.c',
-  'ephy-synchronizable.c'
+  'ephy-synchronizable.c',
+  'ephy-tabs-catalog.c'
 ]
 
 libephysync_deps = [
@@ -29,7 +30,6 @@ libephysync_includes = include_directories(
   '../history',
   '../widgets',
   '../..',
-  '../../embed',
   'debug'
 )
 
