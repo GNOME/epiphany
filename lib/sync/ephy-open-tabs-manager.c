@@ -42,14 +42,13 @@ G_DEFINE_TYPE_WITH_CODE (EphyOpenTabsManager, ephy_open_tabs_manager, G_TYPE_OBJ
                                                 ephy_synchronizable_manager_iface_init))
 
 static void
-ephy_open_tabs_manager_dispose (GObject *object)
+ephy_open_tabs_manager_finalize (GObject *object)
 {
   EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (object);
 
   g_slist_free_full (self->remote_records, g_object_unref);
-  self->remote_records = NULL;
 
-  G_OBJECT_CLASS (ephy_open_tabs_manager_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_open_tabs_manager_parent_class)->finalize (object);
 }
 
 static void
@@ -57,7 +56,7 @@ ephy_open_tabs_manager_class_init (EphyOpenTabsManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = ephy_open_tabs_manager_dispose;
+  object_class->finalize = ephy_open_tabs_manager_finalize;
 }
 
 static void

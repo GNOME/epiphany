@@ -149,16 +149,16 @@ ephy_history_record_get_property (GObject    *object,
 }
 
 static void
-ephy_history_record_dispose (GObject *object)
+ephy_history_record_finalize (GObject *object)
 {
   EphyHistoryRecord *self = EPHY_HISTORY_RECORD (object);
 
-  g_clear_pointer (&self->id, g_free);
-  g_clear_pointer (&self->title, g_free);
-  g_clear_pointer (&self->uri, g_free);
-  g_clear_pointer (&self->visits, g_sequence_free);
+  g_free (self->id);
+  g_free (self->title);
+  g_free (self->uri);
+  g_sequence_free (self->visits);
 
-  G_OBJECT_CLASS (ephy_history_record_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_history_record_parent_class)->finalize (object);
 }
 
 static void
@@ -168,7 +168,7 @@ ephy_history_record_class_init (EphyHistoryRecordClass *klass)
 
   object_class->set_property = ephy_history_record_set_property;
   object_class->get_property = ephy_history_record_get_property;
-  object_class->dispose = ephy_history_record_dispose;
+  object_class->finalize = ephy_history_record_finalize;
 
   obj_properties[PROP_ID] =
     g_param_spec_string ("id",

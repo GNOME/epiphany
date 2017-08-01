@@ -109,16 +109,15 @@ ephy_open_tabs_record_get_property (GObject    *object,
 }
 
 static void
-ephy_open_tabs_record_dispose (GObject *object)
+ephy_open_tabs_record_finalize (GObject *object)
 {
   EphyOpenTabsRecord *self = EPHY_OPEN_TABS_RECORD (object);
 
-  g_clear_pointer (&self->id, g_free);
-  g_clear_pointer (&self->client_name, g_free);
+  g_free (self->id);
+  g_free (self->client_name);
   g_slist_free_full (self->tabs, (GDestroyNotify)json_object_unref);
-  self->tabs = NULL;
 
-  G_OBJECT_CLASS (ephy_open_tabs_record_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_open_tabs_record_parent_class)->finalize (object);
 }
 
 static void
@@ -128,7 +127,7 @@ ephy_open_tabs_record_class_init (EphyOpenTabsRecordClass *klass)
 
   object_class->set_property = ephy_open_tabs_record_set_property;
   object_class->get_property = ephy_open_tabs_record_get_property;
-  object_class->dispose = ephy_open_tabs_record_dispose;
+  object_class->finalize = ephy_open_tabs_record_finalize;
 
   obj_properties[PROP_ID] =
     g_param_spec_string ("id",

@@ -154,19 +154,19 @@ ephy_password_record_get_property (GObject    *object,
 }
 
 static void
-ephy_password_record_dispose (GObject *object)
+ephy_password_record_finalize (GObject *object)
 {
   EphyPasswordRecord *self = EPHY_PASSWORD_RECORD (object);
 
-  g_clear_pointer (&self->id, g_free);
-  g_clear_pointer (&self->hostname, g_free);
-  g_clear_pointer (&self->form_submit_url, g_free);
-  g_clear_pointer (&self->username, g_free);
-  g_clear_pointer (&self->password, g_free);
-  g_clear_pointer (&self->username_field, g_free);
-  g_clear_pointer (&self->password_field, g_free);
+  g_free (self->id);
+  g_free (self->hostname);
+  g_free (self->form_submit_url);
+  g_free (self->username);
+  g_free (self->password);
+  g_free (self->username_field);
+  g_free (self->password_field);
 
-  G_OBJECT_CLASS (ephy_password_record_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ephy_password_record_parent_class)->finalize (object);
 }
 
 static void
@@ -176,7 +176,7 @@ ephy_password_record_class_init (EphyPasswordRecordClass *klass)
 
   object_class->set_property = ephy_password_record_set_property;
   object_class->get_property = ephy_password_record_get_property;
-  object_class->dispose = ephy_password_record_dispose;
+  object_class->finalize = ephy_password_record_finalize;
 
   obj_properties[PROP_ID] =
     g_param_spec_string ("id",

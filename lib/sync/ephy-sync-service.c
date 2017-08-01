@@ -1577,21 +1577,31 @@ ephy_sync_service_store_secrets (EphySyncService *self)
 }
 
 static void
-ephy_sync_service_dispose (GObject *object)
+ephy_sync_service_finalize (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
 
   if (ephy_sync_utils_user_is_signed_in ())
     ephy_sync_service_stop_periodical_sync (self);
 
-  ephy_sync_service_clear_storage_credentials (self);
-  g_clear_object (&self->session);
-  g_clear_pointer (&self->crypto_keys, g_free);
-  g_clear_pointer (&self->key_pair, ephy_sync_crypto_rsa_key_pair_free);
-  g_clear_pointer (&self->secrets, g_hash_table_destroy);
-  g_clear_pointer (&self->managers, g_slist_free);
+  if (self->key_pair)
+    ephy_sync_crypto_rsa_key_pair_free (self->key_pair);
+
+  g_free (self->crypto_keys);
+  g_slist_free (self->managers);
   g_queue_free_full (self->storage_queue, (GDestroyNotify)storage_request_async_data_free);
-  self->storage_queue = NULL;
+  ephy_sync_service_clear_storage_credentials (self);
+
+  G_OBJECT_CLASS (ephy_sync_service_parent_class)->finalize (object);
+}
+
+static void
+ephy_sync_service_dispose (GObject *object)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (object);
+
+  g_clear_object (&self->session);
+  g_clear_pointer (&self->secrets, g_hash_table_unref);
 
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->dispose (object);
 }
@@ -1635,6 +1645,7 @@ ephy_sync_service_class_init (EphySyncServiceClass *klass)
   object_class->get_property = ephy_sync_service_get_property;
   object_class->constructed = ephy_sync_service_constructed;
   object_class->dispose = ephy_sync_service_dispose;
+  object_class->finalize = ephy_sync_service_finalize;
 
   obj_properties[PROP_SYNC_PERIODICALLY] =
     g_param_spec_boolean ("sync-periodically",
