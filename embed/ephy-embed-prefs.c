@@ -27,10 +27,9 @@
 #include "ephy-langs.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
+#include "ephy-user-agent.h"
 
-#include <glib.h>
 #include <math.h>
-#include <webkit2/webkit2.h>
 
 typedef struct {
   const char *schema;
@@ -111,99 +110,22 @@ webkit_pref_callback_user_stylesheet (GSettings  *settings,
   }
 }
 
-static char *
-webkit_pref_get_vendor_user_agent (void)
-{
-  char *vendor_user_agent = NULL;
-  GKeyFile *branding_keyfile;
-
-  branding_keyfile = g_key_file_new ();
-
-  if (g_key_file_load_from_file (branding_keyfile, PKGDATADIR "/branding.conf",
-                                 G_KEY_FILE_NONE, NULL)) {
-    char *vendor;
-    char *vendor_sub;
-    char *vendor_comment;
-
-    vendor = g_key_file_get_string (branding_keyfile,
-                                    "User Agent", "Vendor", NULL);
-    vendor_sub = g_key_file_get_string (branding_keyfile,
-                                        "User Agent", "VendorSub", NULL);
-    vendor_comment = g_key_file_get_string (branding_keyfile,
-                                            "User Agent", "VendorComment", NULL);
-
-    if (vendor) {
-      vendor_user_agent = g_strconcat (vendor,
-                                       vendor_sub ? "/" : "",
-                                       vendor_sub ? vendor_sub : "",
-                                       vendor_comment ? " (" : "",
-                                       vendor_comment ? vendor_comment : "",
-                                       vendor_comment ? ")" : "",
-                                       NULL);
-    }
-
-    g_free (vendor);
-    g_free (vendor_sub);
-    g_free (vendor_comment);
-  }
-
-  g_key_file_free (branding_keyfile);
-
-  return vendor_user_agent;
-}
-
-static const char *
-webkit_pref_get_internal_user_agent (void)
-{
-  static char *user_agent = NULL;
-  static gboolean initialized = FALSE;
-  char *vendor_user_agent;
-  const char *webkit_user_agent;
-
-  if (initialized)
-    return user_agent;
-
-  initialized = TRUE;
-
-  vendor_user_agent = webkit_pref_get_vendor_user_agent ();
-  webkit_user_agent = webkit_settings_get_user_agent (webkit_settings);
-
-  if (vendor_user_agent) {
-    user_agent = g_strdup_printf ("%s %s Epiphany/%s", webkit_user_agent,
-                                  vendor_user_agent, VERSION);
-    g_free (vendor_user_agent);
-  } else {
-    user_agent = g_strdup_printf ("%s Epiphany/%s", webkit_user_agent, VERSION);
-  }
-
-  return user_agent;
-}
-
 static void
 webkit_pref_callback_user_agent (GSettings  *settings,
                                  const char *key,
                                  gpointer    data)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-  char *value;
   char *user_agent;
-  const char *base_user_agent;
-
-  value = g_settings_get_string (settings, key);
-  if (value != NULL && value[0] != '\0')
-    base_user_agent = value;
-  else
-    base_user_agent = webkit_pref_get_internal_user_agent ();
 
   if (ephy_embed_shell_get_mode (shell) == EPHY_EMBED_SHELL_MODE_APPLICATION)
-    user_agent = g_strdup_printf ("%s (Web App)", base_user_agent);
+    user_agent = g_strdup_printf ("%s (Web App)", ephy_user_agent_get_internal ());
   else
-    user_agent = g_strdup (base_user_agent);
+    user_agent = g_strdup (ephy_user_agent_get_internal ());
 
   webkit_settings_set_user_agent (webkit_settings, user_agent);
 
   g_free (user_agent);
-  g_free (value);
 }
 
 static gdouble

@@ -26,6 +26,7 @@
 #include "ephy-settings.h"
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-utils.h"
+#include "ephy-user-agent.h"
 
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
@@ -1615,10 +1616,9 @@ ephy_sync_service_constructed (GObject *object)
   G_OBJECT_CLASS (ephy_sync_service_parent_class)->constructed (object);
 
   if (self->sync_periodically) {
-    char *user_agent = g_settings_get_string (EPHY_SETTINGS_WEB,
-                                              EPHY_PREFS_WEB_USER_AGENT);
-    g_object_set (self->session, "user-agent", user_agent, NULL);
-    g_free (user_agent);
+    g_object_set (self->session,
+                  "user-agent", ephy_user_agent_get_internal (),
+                  NULL);
 
     g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_FREQUENCY,
                       G_CALLBACK (sync_frequency_changed_cb), self);
