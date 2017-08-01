@@ -177,9 +177,7 @@ forget (GSimpleAction *action,
     record = g_value_get_object (&val);
     ephy_password_manager_forget (dialog->manager,
                                   ephy_password_record_get_hostname (record),
-                                  ephy_password_record_get_username (record),
-                                  ephy_password_record_get_username_field (record),
-                                  ephy_password_record_get_password_field (record));
+                                  ephy_password_record_get_username (record));
     dialog->records = g_slist_remove (dialog->records, record);
     g_object_unref (record);
     g_value_unset (&val);

@@ -699,20 +699,17 @@ forget_cb (GSList   *records,
 void
 ephy_password_manager_forget (EphyPasswordManager *self,
                               const char          *hostname,
-                              const char          *username,
-                              const char          *username_field,
-                              const char          *password_field)
+                              const char          *username)
 {
   g_return_if_fail (EPHY_IS_PASSWORD_MANAGER (self));
   g_return_if_fail (hostname);
-  g_return_if_fail (password_field);
-  g_return_if_fail (!username_field || username);
+  g_return_if_fail (username);
 
   /* synchronizable-deleted signal needs an EphySynchronizable object,
    * therefore we need to obtain the password record first and then emit
    * the signal before clearing the password from the secret schema. */
   ephy_password_manager_query (self, hostname, username,
-                               username_field, password_field,
+                               NULL, NULL,
                                forget_cb, self);
 }
 

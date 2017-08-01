@@ -63,9 +63,7 @@ void                 ephy_password_manager_query                    (EphyPasswor
                                                                      gpointer                          user_data);
 void                 ephy_password_manager_forget                    (EphyPasswordManager *self,
                                                                       const char          *hostname,
-                                                                      const char          *username,
-                                                                      const char          *username_field,
-                                                                      const char          *password_field);
+                                                                      const char          *username);
 void                 ephy_password_manager_forget_all                (EphyPasswordManager *self);
 /* Note: Below functions are deprecated and should not be used in newly written code.
  * The only reason they still exist is that the profile migrator expects them. */
