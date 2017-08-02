@@ -26,7 +26,6 @@ libephyembed_sources = [
   'ephy-encodings.c',
   'ephy-file-monitor.c',
   'ephy-find-toolbar.c',
-  'ephy-notification-container.c',
   'ephy-option-menu.c',
   'ephy-web-view.c',
   'ephy-web-extension-proxy.c',

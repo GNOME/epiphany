@@ -18,7 +18,6 @@ libephywidgets_sources = [
   'ephy-file-chooser.c',
   'ephy-location-entry.c',
   'ephy-middle-clickable-button.c',
-  'ephy-notification.c',
   'ephy-security-popover.c',
   'ephy-title-box.c',
   'ephy-title-widget.c',

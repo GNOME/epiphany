@@ -14,6 +14,7 @@ libephysync_sources = [
 ]
 
 libephysync_deps = [
+  ephymisc_dep,
   glib_dep,
   gmp_dep,
   hogweed_dep,
@@ -33,10 +34,12 @@ libephysync_includes = include_directories(
   'debug'
 )
 
-libephysync = static_library('ephysync',
+libephysync = shared_library('ephysync',
   libephysync_sources,
   dependencies: libephysync_deps,
-  include_directories: libephysync_includes
+  include_directories: libephysync_includes,
+  install: true,
+  install_dir: pkglibdir
 )
 
 ephysync_dep = declare_dependency(
