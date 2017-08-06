@@ -990,7 +990,8 @@ migrate_icon_database (void)
   ephy_file_delete_dir_recursively (path, &error);
 
   if (error) {
-    g_warning ("Failed to delete %s: %s", path, error->message);
+    if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+      g_warning ("Failed to delete %s: %s", path, error->message);
     g_error_free (error);
   }
 
@@ -1095,7 +1096,8 @@ migrate_history_to_firefox_sync_history (void)
   sql_query = "ALTER TABLE urls ADD COLUMN sync_id LONGVARCAR";
   ephy_sqlite_connection_execute (history_db, sql_query, &error);
   if (error) {
-    g_warning ("Failed to add new column to urls table: %s", error->message);
+    /* SQLite gives only a generic error code if the column already exists, so
+     * assume this migrator has been run already and don't print a warning. */
     goto out;
   }
 
