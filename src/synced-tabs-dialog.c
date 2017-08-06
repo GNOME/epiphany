@@ -122,7 +122,7 @@ treeview_row_activated_cb (GtkTreeView       *view,
   shell = ephy_shell_get_default ();
   window = gtk_application_get_active_window (GTK_APPLICATION (shell));
   embed = ephy_shell_new_tab (shell, EPHY_WINDOW (window),
-                              NULL, EPHY_NEW_TAB_APPEND_LAST);
+                              NULL, EPHY_NEW_TAB_JUMP);
   ephy_web_view_load_url (ephy_embed_get_web_view (embed), url);
 
   g_free (url);
