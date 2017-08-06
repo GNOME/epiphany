@@ -123,7 +123,6 @@ struct _PrefsDialog {
   GtkWidget *sync_firefox_account_label;
   GtkWidget *sync_sign_out_button;
   GtkWidget *sync_options_box;
-  GtkWidget *sync_with_firefox_checkbutton;
   GtkWidget *sync_bookmarks_checkbutton;
   GtkWidget *sync_passwords_checkbutton;
   GtkWidget *sync_history_checkbutton;
@@ -207,20 +206,6 @@ sync_collection_toggled_cb (GtkToggleButton *button,
     ephy_sync_service_unregister_manager (service, manager);
     ephy_synchronizable_manager_set_is_initial_sync (manager, TRUE);
   }
-}
-
-static void
-sync_with_firefox_toggled_cb (GtkToggleButton *button,
-                              PrefsDialog     *dialog)
-{
-  gboolean button_is_active = gtk_toggle_button_get_active (button);
-
-  /* Make sure this is called only when the button was toggled by the user. */
-  g_assert (button_is_active != ephy_sync_utils_sync_with_firefox ());
-
-  ephy_sync_utils_set_bookmarks_sync_is_initial (TRUE);
-  ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
-  ephy_sync_utils_set_history_sync_is_initial (TRUE);
 }
 
 static void
@@ -784,7 +769,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_account_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_options_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_with_firefox_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_bookmarks_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_passwords_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_history_checkbutton);
@@ -1870,11 +1854,6 @@ setup_sync_page (PrefsDialog *dialog)
   }
 
   g_settings_bind (sync_settings,
-                   EPHY_PREFS_SYNC_WITH_FIREFOX,
-                   dialog->sync_with_firefox_checkbutton,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (sync_settings,
                    EPHY_PREFS_SYNC_BOOKMARKS_ENABLED,
                    dialog->sync_bookmarks_checkbutton,
                    "active",
@@ -1943,9 +1922,6 @@ setup_sync_page (PrefsDialog *dialog)
                            dialog, 0);
   g_signal_connect_object (service, "sync-finished",
                            G_CALLBACK (sync_finished_cb),
-                           dialog, 0);
-  g_signal_connect_object (dialog->sync_with_firefox_checkbutton, "toggled",
-                           G_CALLBACK (sync_with_firefox_toggled_cb),
                            dialog, 0);
   g_signal_connect_object (dialog->sync_bookmarks_checkbutton, "toggled",
                            G_CALLBACK (sync_collection_toggled_cb),
