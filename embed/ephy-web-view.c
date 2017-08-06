@@ -1413,6 +1413,7 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   GtkWidget *label;
   char *message;
   char *origin;
+  char *bold_origin;
 
   info_bar = gtk_info_bar_new_with_buttons (_("Deny"), GTK_RESPONSE_NO,
                                             _("Allow"), GTK_RESPONSE_YES,
@@ -1427,26 +1428,28 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   if (origin == NULL)
     return;
 
+  bold_origin = g_markup_printf_escaped ("<b>%s</b>", origin);
+
   switch (permission_type) {
   case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
     /* Translators: Notification policy for a specific site. */
-    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to show desktop notifications."),
-                                       origin);
+    message = g_strdup_printf (_("The page at %s wants to show desktop notifications."),
+                               bold_origin);
     break;
   case EPHY_PERMISSION_TYPE_ACCESS_LOCATION:
     /* Translators: Geolocation policy for a specific site. */
-    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to know your location."),
-                                       origin);
+    message = g_strdup_printf (_("The page at %s wants to know your location."),
+                               bold_origin);
     break;
   case EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE:
     /* Translators: Microphone policy for a specific site. */
-    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your microphone."),
-                                       origin);
+    message = g_strdup_printf (_("The page at %s wants to use your microphone."),
+                               bold_origin);
     break;
   case EPHY_PERMISSION_TYPE_ACCESS_WEBCAM:
     /* Translators: Webcam policy for a specific site. */
-    message = g_markup_printf_escaped (_("The page at <b>%s</b> wants to use your webcam."),
-                                       origin);
+    message = g_strdup_printf (_("The page at %s wants to use your webcam."),
+                               bold_origin);
     break;
   case EPHY_PERMISSION_TYPE_SAVE_PASSWORD:
   default:
@@ -1456,8 +1459,6 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), message);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-
-  g_free (message);
 
   content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
   gtk_container_add (GTK_CONTAINER (content_area), label);
@@ -1470,7 +1471,6 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
                     G_CALLBACK (decide_on_permission_request),
                     data);
   g_object_weak_ref (G_OBJECT (info_bar), (GWeakNotify)permission_request_info_bar_destroyed_cb, data);
-  g_free (origin);
 
   switch (permission_type) {
   case EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS:
@@ -1493,6 +1493,10 @@ show_permission_request_info_bar (WebKitWebView           *web_view,
   ephy_embed_add_top_widget (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view),
                              info_bar,
                              EPHY_EMBED_TOP_WIDGET_POLICY_DESTROY_ON_TRANSITION);
+
+  g_free (message);
+  g_free (origin);
+  g_free (bold_origin);
 }
 
 static gboolean

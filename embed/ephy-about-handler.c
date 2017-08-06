@@ -576,7 +576,7 @@ ephy_about_handler_handle_incognito (EphyAboutHandler       *handler,
                           gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL ? "rtl" : "ltr",
                           _("Private Browsing"),
                           _("Private Browsing"),
-                          _("You are currently browsing <em>incognito</em>. Pages viewed in this "
+                          _("You are currently browsing incognito. Pages viewed in this "
                             "mode will not show up in your browsing history and all stored "
                             "information will be cleared when you close the window. Files you "
                             "download will be kept."),
