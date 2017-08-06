@@ -231,7 +231,7 @@ migrate_new_urls_table (void)
   ephy_sqlite_connection_open (history_database, filename, &error);
 
   if (error) {
-    g_warning ("Failed to open history database: %s\n", error->message);
+    g_warning ("Failed to open history database: %s", error->message);
     g_error_free (error);
     g_free (filename);
     return;
@@ -242,7 +242,7 @@ migrate_new_urls_table (void)
                                   "ADD COLUMN thumbnail_update_time INTEGER DEFAULT 0",
                                   &error);
   if (error) {
-    g_warning ("Failed to add new column to table in history backend: %s\n",
+    g_warning ("Failed to add new column to table in history backend: %s",
                error->message);
     g_error_free (error);
     error = NULL;
@@ -252,7 +252,7 @@ migrate_new_urls_table (void)
                                   "ADD COLUMN hidden_from_overview INTEGER DEFAULT 0",
                                   &error);
   if (error) {
-    g_warning ("Failed to add new column to table in history backend: %s\n",
+    g_warning ("Failed to add new column to table in history backend: %s",
                error->message);
     g_error_free (error);
     error = NULL;
@@ -688,7 +688,7 @@ migrate_bookmarks (void)
 
   doc = xmlParseFile (filename);
   if (doc == NULL) {
-    g_warning ("Failed to re-import the bookmarks. All bookmarks lost!\n");
+    g_warning ("Failed to re-import the bookmarks. All bookmarks lost!");
     goto out;
   }
 
@@ -1087,7 +1087,7 @@ migrate_history_to_firefox_sync_history (void)
   history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE);
   ephy_sqlite_connection_open (history_db, history_filename, &error);
   if (error) {
-    g_warning ("Failed to open history database: %s\n", error->message);
+    g_warning ("Failed to open history database: %s", error->message);
     goto out;
   }
 
