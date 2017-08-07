@@ -244,8 +244,9 @@ ephy_password_manager_cache_remove (EphyPasswordManager *self,
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (self->cache);
-  g_assert (hostname);
-  g_assert (username);
+
+  if (!hostname || !username)
+    return;
 
   usernames = g_hash_table_lookup (self->cache, hostname);
   if (usernames) {
@@ -267,8 +268,9 @@ ephy_password_manager_cache_add (EphyPasswordManager *self,
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (self->cache);
-  g_assert (hostname);
-  g_assert (username);
+
+  if (!hostname || !username)
+    return;
 
   usernames = g_hash_table_lookup (self->cache, hostname);
   for (GSList *l = usernames; l && l->data; l = l->next) {
@@ -290,8 +292,7 @@ populate_cache_cb (GSList   *records,
     const char *hostname = ephy_password_record_get_hostname (record);
     const char *username = ephy_password_record_get_username (record);
 
-    if (username)
-      ephy_password_manager_cache_add (self, hostname, username);
+    ephy_password_manager_cache_add (self, hostname, username);
   }
 
   g_slist_free_full (records, g_object_unref);
@@ -433,8 +434,7 @@ ephy_password_manger_store_record (EphyPasswordManager *self,
                                      ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (record)));
   store_internal (ephy_password_record_get_password (record), attributes, NULL, NULL);
 
-  if (username)
-    ephy_password_manager_cache_add (self, hostname, username);
+  ephy_password_manager_cache_add (self, hostname, username);
 
   g_hash_table_unref (attributes);
 }
@@ -809,10 +809,21 @@ replace_existing_cb (GSList   *records,
 {
   ReplaceRecordAsyncData *data = (ReplaceRecordAsyncData *)user_data;
 
-  /* We only expect one matching record here. */
-  g_assert (g_slist_length (records) == 1);
-
-  ephy_password_manager_forget_record (data->manager, records->data, data->record);
+  for (GSList *l = records; l && l->data; l = l->next) {
+    /* NULL fields can cause the query to match other records too,
+     * so we need to make sure we have the record we've been looking for. */
+    if (!g_strcmp0 (ephy_password_record_get_hostname (records->data),
+                    ephy_password_record_get_hostname (data->record)) &&
+        !g_strcmp0 (ephy_password_record_get_username (records->data),
+                    ephy_password_record_get_username (data->record)) &&
+        !g_strcmp0 (ephy_password_record_get_username_field (records->data),
+                    ephy_password_record_get_username_field (data->record)) &&
+        !g_strcmp0 (ephy_password_record_get_password_field (records->data),
+                    ephy_password_record_get_password_field (data->record))) {
+      ephy_password_manager_forget_record (data->manager, records->data, data->record);
+      break;
+    }
+  }
 
   replace_record_async_data_free (data);
 }

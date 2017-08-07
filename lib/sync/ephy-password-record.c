@@ -334,11 +334,46 @@ ephy_password_record_get_time_password_changed (EphyPasswordRecord *self)
   return self->time_password_changed;
 }
 
+static JsonNode *
+serializable_serialize_property (JsonSerializable *serializable,
+                                 const char       *name,
+                                 const GValue     *value,
+                                 GParamSpec       *pspec)
+{
+  /* Firefox expects null usernames as empty strings. */
+  if (!g_strcmp0 (name, "username") || !g_strcmp0 (name, "usernameField")) {
+    if (g_value_get_string (value) == NULL) {
+      JsonNode *node = json_node_new (JSON_NODE_VALUE);
+      json_node_set_string (node, "");
+      return node;
+    }
+  }
+
+  return json_serializable_default_serialize_property (serializable, name, value, pspec);
+}
+
+static gboolean
+serializable_deserialize_property (JsonSerializable *serializable,
+                                   const char       *name,
+                                   GValue           *value,
+                                   GParamSpec       *pspec,
+                                   JsonNode         *node)
+{
+  if (!g_strcmp0 (name, "username") || !g_strcmp0 (name, "usernameField")) {
+    if (!g_strcmp0 (json_node_get_string (node), "")) {
+      g_value_set_string (value, NULL);
+      return TRUE;
+    }
+  }
+
+  return json_serializable_default_deserialize_property (serializable, name, value, pspec, node);
+}
+
 static void
 json_serializable_iface_init (JsonSerializableIface *iface)
 {
-  iface->serialize_property = json_serializable_default_serialize_property;
-  iface->deserialize_property = json_serializable_default_deserialize_property;
+  iface->serialize_property = serializable_serialize_property;
+  iface->deserialize_property = serializable_deserialize_property;
 }
 
 static const char *
