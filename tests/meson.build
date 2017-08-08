@@ -42,11 +42,12 @@ if get_option('enable_unit_tests')
   )
   test('Encodings test', encodings_test)
 
-  file_helpers_test = executable('test-ephy-file-helpers',
-    'ephy-file-helpers-test.c',
-    dependencies: ephymain_dep
-  )
-  test('File helpers test', file_helpers_test)
+  # https://bugzilla.gnome.org/show_bug.cgi?id=786001
+  # file_helpers_test = executable('test-ephy-file-helpers',
+  #   'ephy-file-helpers-test.c',
+  #   dependencies: ephymain_dep
+  # )
+  # test('File helpers test', file_helpers_test)
 
   history_test = executable('test-ephy-history',
     'ephy-history-test.c',
