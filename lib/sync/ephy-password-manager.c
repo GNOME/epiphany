@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2017 Gabriel Ivascu <ivascu.gabriel59@gmail.com>
+ *  Copyright © 2017 Gabriel Ivascu <gabrielivascu@gnome.org>
  *
  *  This file is part of Epiphany.
  *
