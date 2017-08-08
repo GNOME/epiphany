@@ -915,7 +915,7 @@ ephy_embed_shell_startup (GApplication *application)
 {
   EphyEmbedShell *shell = EPHY_EMBED_SHELL (application);
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  const char *favicon_db_path;
+  char *favicon_db_path;
   WebKitCookieManager *cookie_manager;
   char *filename;
   char *cookie_policy;
@@ -980,8 +980,12 @@ ephy_embed_shell_startup (GApplication *application)
                     shell);
 
   /* Favicon Database */
-  favicon_db_path = (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE ? ephy_dot_dir () : NULL);
+  if (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE)
+    favicon_db_path = g_build_filename (ephy_dot_dir (), "icondatabase", NULL);
+  else
+    favicon_db_path = g_build_filename (g_get_user_cache_dir (), "epiphany", "icondatabase", NULL);
   webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
+  g_free (favicon_db_path);
 
   /* Do not ignore TLS errors. */
   webkit_web_context_set_tls_errors_policy (priv->web_context, WEBKIT_TLS_ERRORS_POLICY_FAIL);
