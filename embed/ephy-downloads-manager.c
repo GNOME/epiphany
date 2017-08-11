@@ -165,8 +165,8 @@ ephy_downloads_manager_add_download (EphyDownloadsManager *manager,
 {
   WebKitDownload *wk_download;
 
-  g_return_if_fail (EPHY_IS_DOWNLOADS_MANAGER (manager));
-  g_return_if_fail (EPHY_IS_DOWNLOAD (download));
+  g_assert (EPHY_IS_DOWNLOADS_MANAGER (manager));
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   if (g_list_find (manager->downloads, download))
     return;
@@ -195,8 +195,8 @@ ephy_downloads_manager_remove_download (EphyDownloadsManager *manager,
 {
   GList *download_link;
 
-  g_return_if_fail (EPHY_IS_DOWNLOADS_MANAGER (manager));
-  g_return_if_fail (EPHY_IS_DOWNLOAD (download));
+  g_assert (EPHY_IS_DOWNLOADS_MANAGER (manager));
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   download_link = g_list_find (manager->downloads, download);
   if (!download_link)
@@ -212,7 +212,7 @@ ephy_downloads_manager_has_active_downloads (EphyDownloadsManager *manager)
 {
   GList *l;
 
-  g_return_val_if_fail (EPHY_IS_DOWNLOADS_MANAGER (manager), FALSE);
+  g_assert (EPHY_IS_DOWNLOADS_MANAGER (manager));
 
   for (l = manager->downloads; l; l = g_list_next (l)) {
     EphyDownload *download = EPHY_DOWNLOAD (l->data);
@@ -227,7 +227,7 @@ ephy_downloads_manager_has_active_downloads (EphyDownloadsManager *manager)
 GList *
 ephy_downloads_manager_get_downloads (EphyDownloadsManager *manager)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOADS_MANAGER (manager), NULL);
+  g_assert (EPHY_IS_DOWNLOADS_MANAGER (manager));
 
   return manager->downloads;
 }
@@ -239,7 +239,7 @@ ephy_downloads_manager_get_estimated_progress (EphyDownloadsManager *manager)
   guint n_active = 0;
   gdouble progress = 0;
 
-  g_return_val_if_fail (EPHY_IS_DOWNLOADS_MANAGER (manager), 0);
+  g_assert (EPHY_IS_DOWNLOADS_MANAGER (manager));
 
   for (l = manager->downloads; l; l = g_list_next (l)) {
     EphyDownload *download = EPHY_DOWNLOAD (l->data);

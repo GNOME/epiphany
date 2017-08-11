@@ -144,7 +144,7 @@ tab_search_key_press_cb (WebKitWebView   *web_view,
 {
   GtkWidget *widget = (GtkWidget *)toolbar;
 
-  g_return_val_if_fail (event != NULL, FALSE);
+  g_assert (event != NULL);
 
   /* check for / and ' which open the find toolbar in text resp. link mode */
   if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (widget)) == FALSE) {
@@ -586,7 +586,7 @@ ephy_find_toolbar_open (EphyFindToolbar *toolbar,
                         gboolean         links_only,
                         gboolean         typing_ahead)
 {
-  g_return_if_fail (toolbar->web_view != NULL);
+  g_assert (toolbar->web_view != NULL);
 
   toolbar->typing_ahead = typing_ahead;
   toolbar->links_only = links_only;

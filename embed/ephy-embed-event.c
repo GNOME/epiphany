@@ -78,7 +78,7 @@ ephy_embed_event_get_context (EphyEmbedEvent *event)
 {
   guint context;
 
-  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), 0);
+  g_assert (EPHY_IS_EMBED_EVENT (event));
 
   g_object_get (event->hit_test_result, "context", &context, NULL);
   return context;
@@ -87,7 +87,7 @@ ephy_embed_event_get_context (EphyEmbedEvent *event)
 guint
 ephy_embed_event_get_button (EphyEmbedEvent *event)
 {
-  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), 0);
+  g_assert (EPHY_IS_EMBED_EVENT (event));
 
   return event->button;
 }
@@ -95,7 +95,7 @@ ephy_embed_event_get_button (EphyEmbedEvent *event)
 guint
 ephy_embed_event_get_modifier (EphyEmbedEvent *event)
 {
-  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), 0);
+  g_assert (EPHY_IS_EMBED_EVENT (event));
 
   return event->modifier;
 }
@@ -104,7 +104,7 @@ void
 ephy_embed_event_get_coords (EphyEmbedEvent *event,
                              guint *x, guint *y)
 {
-  g_return_if_fail (EPHY_IS_EMBED_EVENT (event));
+  g_assert (EPHY_IS_EMBED_EVENT (event));
 
   if (x)
     *x = event->x;
@@ -123,8 +123,8 @@ ephy_embed_event_get_property (EphyEmbedEvent *event,
                                const char     *name,
                                GValue         *value)
 {
-  g_return_if_fail (EPHY_IS_EMBED_EVENT (event));
-  g_return_if_fail (name);
+  g_assert (EPHY_IS_EMBED_EVENT (event));
+  g_assert (name);
 
   /* FIXME: ugly hack! This only works for now because all properties
      we have are strings */
@@ -137,8 +137,8 @@ gboolean
 ephy_embed_event_has_property (EphyEmbedEvent *event,
                                const char     *name)
 {
-  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), FALSE);
-  g_return_val_if_fail (name, FALSE);
+  g_assert (EPHY_IS_EMBED_EVENT (event));
+  g_assert (name);
 
   return g_object_class_find_property (G_OBJECT_GET_CLASS (event->hit_test_result),
                                        name) != NULL;
@@ -153,7 +153,7 @@ ephy_embed_event_has_property (EphyEmbedEvent *event,
 WebKitHitTestResult *
 ephy_embed_event_get_hit_test_result (EphyEmbedEvent *event)
 {
-  g_return_val_if_fail (EPHY_IS_EMBED_EVENT (event), NULL);
+  g_assert (EPHY_IS_EMBED_EVENT (event));
 
   return event->hit_test_result;
 }

@@ -59,8 +59,8 @@ ephy_embed_container_add_child (EphyEmbedContainer *container,
 {
   EphyEmbedContainerInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), -1);
-  g_return_val_if_fail (EPHY_IS_EMBED (child), -1);
+  g_assert (EPHY_IS_EMBED_CONTAINER (container));
+  g_assert (EPHY_IS_EMBED (child));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
   return iface->add_child (container, child, position, set_active);
@@ -79,8 +79,8 @@ ephy_embed_container_set_active_child (EphyEmbedContainer *container,
 {
   EphyEmbedContainerInterface *iface;
 
-  g_return_if_fail (EPHY_IS_EMBED_CONTAINER (container));
-  g_return_if_fail (EPHY_IS_EMBED (child));
+  g_assert (EPHY_IS_EMBED_CONTAINER (container));
+  g_assert (EPHY_IS_EMBED (child));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
 
@@ -100,8 +100,8 @@ ephy_embed_container_remove_child (EphyEmbedContainer *container,
 {
   EphyEmbedContainerInterface *iface;
 
-  g_return_if_fail (EPHY_IS_EMBED_CONTAINER (container));
-  g_return_if_fail (EPHY_IS_EMBED (child));
+  g_assert (EPHY_IS_EMBED_CONTAINER (container));
+  g_assert (EPHY_IS_EMBED (child));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
 
@@ -121,7 +121,7 @@ ephy_embed_container_get_active_child (EphyEmbedContainer *container)
 {
   EphyEmbedContainerInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), NULL);
+  g_assert (EPHY_IS_EMBED_CONTAINER (container));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
   return iface->get_active_child (container);
@@ -141,7 +141,7 @@ ephy_embed_container_get_children (EphyEmbedContainer *container)
 {
   EphyEmbedContainerInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), NULL);
+  g_assert (EPHY_IS_EMBED_CONTAINER (container));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
   return iface->get_children (container);
@@ -160,7 +160,7 @@ ephy_embed_container_get_is_popup (EphyEmbedContainer *container)
 {
   EphyEmbedContainerInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_EMBED_CONTAINER (container), FALSE);
+  g_assert (EPHY_IS_EMBED_CONTAINER (container));
 
   iface = EPHY_EMBED_CONTAINER_GET_IFACE (container);
   return iface->get_is_popup (container);

@@ -224,7 +224,7 @@ ephy_encoding_init (EphyEncoding *encoding)
 const char *
 ephy_encoding_get_title (EphyEncoding *encoding)
 {
-  g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
+  g_assert (EPHY_IS_ENCODING (encoding));
 
   return encoding->title;
 }
@@ -232,7 +232,7 @@ ephy_encoding_get_title (EphyEncoding *encoding)
 const char *
 ephy_encoding_get_title_elided (EphyEncoding *encoding)
 {
-  g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
+  g_assert (EPHY_IS_ENCODING (encoding));
 
   return encoding->title_elided;
 }
@@ -240,7 +240,7 @@ ephy_encoding_get_title_elided (EphyEncoding *encoding)
 const char *
 ephy_encoding_get_collation_key (EphyEncoding *encoding)
 {
-  g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
+  g_assert (EPHY_IS_ENCODING (encoding));
 
   return encoding->collation_key;
 }
@@ -248,7 +248,7 @@ ephy_encoding_get_collation_key (EphyEncoding *encoding)
 const char *
 ephy_encoding_get_encoding (EphyEncoding *encoding)
 {
-  g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
+  g_assert (EPHY_IS_ENCODING (encoding));
 
   return encoding->encoding;
 }
@@ -256,14 +256,15 @@ ephy_encoding_get_encoding (EphyEncoding *encoding)
 int
 ephy_encoding_get_language_groups (EphyEncoding *encoding)
 {
-  g_return_val_if_fail (EPHY_IS_ENCODING (encoding), LG_NONE);
+  g_assert (EPHY_IS_ENCODING (encoding));
 
   return encoding->language_groups;
 }
 
 EphyEncoding *
-ephy_encoding_new (const char *encoding, const char *title,
-                   int language_groups)
+ephy_encoding_new (const char *encoding,
+                   const char *title,
+                   int         language_groups)
 {
   return g_object_new (EPHY_TYPE_ENCODING,
                        "encoding", encoding,

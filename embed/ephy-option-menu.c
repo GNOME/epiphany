@@ -499,8 +499,8 @@ GtkWidget *
 ephy_option_menu_new (EphyWebView      *view,
                       WebKitOptionMenu *menu)
 {
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
-  g_return_val_if_fail (WEBKIT_IS_OPTION_MENU (menu), NULL);
+  g_assert (EPHY_IS_WEB_VIEW (view));
+  g_assert (WEBKIT_IS_OPTION_MENU (menu));
 
   return g_object_new (EPHY_TYPE_OPTION_MENU,
                        "view", view,
@@ -547,8 +547,8 @@ ephy_option_menu_popup (EphyOptionMenu *menu,
   GtkWidget *toplevel;
   GtkScrolledWindow *swindow;
 
-  g_return_if_fail (EPHY_IS_OPTION_MENU (menu));
-  g_return_if_fail (rect != NULL);
+  g_assert (EPHY_IS_OPTION_MENU (menu));
+  g_assert (rect != NULL);
 
   window = gtk_widget_get_window (GTK_WIDGET (menu->view));
   gdk_window_get_origin (window, &x, &y);
@@ -629,7 +629,7 @@ ephy_option_menu_popup (EphyOptionMenu *menu,
 void
 ephy_option_menu_popdown (EphyOptionMenu *menu)
 {
-  g_return_if_fail (EPHY_IS_OPTION_MENU (menu));
+  g_assert (EPHY_IS_OPTION_MENU (menu));
 
   if (!menu->device)
     return;

@@ -165,7 +165,7 @@ ephy_web_extension_proxy_new (GDBusConnection *connection)
 {
   EphyWebExtensionProxy *web_extension;
 
-  g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), NULL);
+  g_assert (G_IS_DBUS_CONNECTION (connection));
 
   web_extension = g_object_new (EPHY_TYPE_WEB_EXTENSION_PROXY, NULL);
 
@@ -193,7 +193,7 @@ ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExten
                                                                     guint                  request_id,
                                                                     gboolean               response)
 {
-  g_return_if_fail (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
+  g_assert (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
 
   if (!web_extension->proxy)
     return;
@@ -234,7 +234,7 @@ ephy_web_extension_proxy_web_page_has_modified_forms (EphyWebExtensionProxy *web
 {
   GTask *task;
 
-  g_return_if_fail (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
+  g_assert (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
 
   task = g_task_new (web_extension, cancellable, callback, user_data);
 
@@ -259,7 +259,7 @@ ephy_web_extension_proxy_web_page_has_modified_forms_finish (EphyWebExtensionPro
                                                              GAsyncResult          *result,
                                                              GError               **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, web_extension), FALSE);
+  g_assert (g_task_is_valid (result, web_extension));
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
@@ -291,7 +291,7 @@ ephy_web_extension_proxy_get_best_web_app_icon (EphyWebExtensionProxy *web_exten
 {
   GTask *task;
 
-  g_return_if_fail (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
+  g_assert (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
 
   task = g_task_new (web_extension, cancellable, callback, user_data);
 
@@ -321,7 +321,7 @@ ephy_web_extension_proxy_get_best_web_app_icon_finish (EphyWebExtensionProxy *we
   GVariant *variant;
   GTask *task = G_TASK (result);
 
-  g_return_val_if_fail (g_task_is_valid (result, web_extension), FALSE);
+  g_assert (g_task_is_valid (result, web_extension));
 
   variant = g_task_propagate_pointer (task, error);
   if (!variant)
@@ -363,7 +363,7 @@ ephy_web_extension_proxy_get_web_app_title (EphyWebExtensionProxy *web_extension
 {
   GTask *task;
 
-  g_return_if_fail (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
+  g_assert (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
 
   task = g_task_new (web_extension, cancellable, callback, user_data);
 
@@ -388,7 +388,7 @@ ephy_web_extension_proxy_get_web_app_title_finish (EphyWebExtensionProxy *web_ex
                                                    GAsyncResult          *result,
                                                    GError               **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, web_extension), FALSE);
+  g_assert (g_task_is_valid (result, web_extension));
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }

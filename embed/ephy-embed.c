@@ -135,8 +135,8 @@ ephy_embed_statusbar_get_context_id (EphyEmbed *embed, const char  *context_desc
   char *string;
   guint id;
 
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), 0);
-  g_return_val_if_fail (context_description != NULL, 0);
+  g_assert (EPHY_IS_EMBED (embed));
+  g_assert (context_description != NULL);
 
   /* we need to preserve namespaces on object datas */
   string = g_strconcat ("ephy-embed-status-bar-context:", context_description, NULL);
@@ -167,7 +167,7 @@ ephy_embed_set_statusbar_label (EphyEmbed *embed, const char *label)
 static void
 ephy_embed_statusbar_update (EphyEmbed *embed, const char *text)
 {
-  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_assert (EPHY_IS_EMBED (embed));
 
   ephy_embed_set_statusbar_label (embed, text);
 }
@@ -177,9 +177,9 @@ ephy_embed_statusbar_push (EphyEmbed *embed, guint context_id, const char *text)
 {
   EphyEmbedStatusbarMsg *msg;
 
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), 0);
-  g_return_val_if_fail (context_id != 0, 0);
-  g_return_val_if_fail (text != NULL, 0);
+  g_assert (EPHY_IS_EMBED (embed));
+  g_assert (context_id != 0);
+  g_assert (text != NULL);
 
   msg = g_slice_new (EphyEmbedStatusbarMsg);
   msg->text = g_strdup (text);
@@ -201,8 +201,8 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
   EphyEmbedStatusbarMsg *msg;
   GSList *list;
 
-  g_return_if_fail (EPHY_IS_EMBED (embed));
-  g_return_if_fail (context_id != 0);
+  g_assert (EPHY_IS_EMBED (embed));
+  g_assert (context_id != 0);
 
   for (list = embed->messages; list; list = list->next) {
     msg = list->data;
@@ -815,7 +815,7 @@ ephy_embed_init (EphyEmbed *embed)
 EphyWebView *
 ephy_embed_get_web_view (EphyEmbed *embed)
 {
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+  g_assert (EPHY_IS_EMBED (embed));
 
   return EPHY_WEB_VIEW (embed->web_view);
 }
@@ -831,7 +831,7 @@ ephy_embed_get_web_view (EphyEmbed *embed)
 EphyFindToolbar *
 ephy_embed_get_find_toolbar (EphyEmbed *embed)
 {
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+  g_assert (EPHY_IS_EMBED (embed));
 
   return EPHY_FIND_TOOLBAR (embed->find_toolbar);
 }
@@ -903,8 +903,8 @@ ephy_embed_remove_top_widget (EphyEmbed *embed, GtkWidget *widget)
 void
 ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitURIRequest *request, WebKitWebViewSessionState *state)
 {
-  g_return_if_fail (EPHY_IS_EMBED (embed));
-  g_return_if_fail (WEBKIT_IS_URI_REQUEST (request));
+  g_assert (EPHY_IS_EMBED (embed));
+  g_assert (WEBKIT_IS_URI_REQUEST (request));
 
   g_clear_pointer (&embed->delayed_state, webkit_web_view_session_state_unref);
   g_clear_object (&embed->delayed_request);
@@ -925,7 +925,7 @@ ephy_embed_set_delayed_load_request (EphyEmbed *embed, WebKitURIRequest *request
 gboolean
 ephy_embed_has_load_pending (EphyEmbed *embed)
 {
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+  g_assert (EPHY_IS_EMBED (embed));
 
   return !!embed->delayed_request;
 }
@@ -933,7 +933,7 @@ ephy_embed_has_load_pending (EphyEmbed *embed)
 const char *
 ephy_embed_get_title (EphyEmbed *embed)
 {
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+  g_assert (EPHY_IS_EMBED (embed));
 
   return embed->title;
 }
@@ -950,7 +950,7 @@ ephy_embed_get_title (EphyEmbed *embed)
 gboolean
 ephy_embed_inspector_is_loaded (EphyEmbed *embed)
 {
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), FALSE);
+  g_assert (EPHY_IS_EMBED (embed));
 
   return embed->inspector_loaded;
 }
@@ -960,7 +960,7 @@ ephy_embed_attach_notification_container (EphyEmbed *embed)
 {
   EphyNotificationContainer *container;
 
-  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_assert (EPHY_IS_EMBED (embed));
 
   container = ephy_notification_container_get_default ();
   if (gtk_widget_get_parent (GTK_WIDGET (container)) == NULL)
@@ -972,7 +972,7 @@ ephy_embed_detach_notification_container (EphyEmbed *embed)
 {
   EphyNotificationContainer *container;
 
-  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_assert (EPHY_IS_EMBED (embed));
 
   container = ephy_notification_container_get_default ();
   if (gtk_widget_get_parent (GTK_WIDGET (container)) == embed->overlay) {

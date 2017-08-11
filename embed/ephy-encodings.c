@@ -206,7 +206,7 @@ ephy_encodings_get_encoding (EphyEncodings *encodings,
 {
   EphyEncoding *encoding;
 
-  g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
+  g_assert (EPHY_IS_ENCODINGS (encodings));
 
   encoding = g_hash_table_lookup (encodings->hash, code);
 
@@ -273,7 +273,7 @@ ephy_encodings_get_all (EphyEncodings *encodings)
 {
   GList *l = NULL;
 
-  g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
+  g_assert (EPHY_IS_ENCODINGS (encodings));
 
   g_hash_table_foreach (encodings->hash, (GHFunc)get_all_encodings, &l);
 
@@ -287,8 +287,8 @@ ephy_encodings_add_recent (EphyEncodings *encodings,
   GSList *element, *l;
   GVariantBuilder builder;
 
-  g_return_if_fail (EPHY_IS_ENCODINGS (encodings));
-  g_return_if_fail (code != NULL);
+  g_assert (EPHY_IS_ENCODINGS (encodings));
+  g_assert (code != NULL);
 
   if (ephy_encodings_get_encoding (encodings, code, FALSE) == NULL)
     return;
@@ -331,13 +331,13 @@ ephy_encodings_get_recent (EphyEncodings *encodings)
   GSList *l;
   GList *list = NULL;
 
-  g_return_val_if_fail (EPHY_IS_ENCODINGS (encodings), NULL);
+  g_assert (EPHY_IS_ENCODINGS (encodings));
 
   for (l = encodings->recent; l != NULL; l = l->next) {
     EphyEncoding *encoding;
 
     encoding = ephy_encodings_get_encoding (encodings, (char *)l->data, FALSE);
-    g_return_val_if_fail (EPHY_IS_ENCODING (encoding), NULL);
+    g_assert (EPHY_IS_ENCODING (encoding));
 
     list = g_list_prepend (list, encoding);
   }

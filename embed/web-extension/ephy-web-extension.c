@@ -1692,7 +1692,7 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
 {
   GDBusAuthObserver *observer;
 
-  g_return_if_fail (EPHY_IS_WEB_EXTENSION (extension));
+  g_assert (EPHY_IS_WEB_EXTENSION (extension));
 
   if (extension->initialized)
     return;

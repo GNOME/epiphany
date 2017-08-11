@@ -112,7 +112,7 @@ void
 ephy_web_overview_model_set_urls (EphyWebOverviewModel *model,
                                   GList                *urls)
 {
-  g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
+  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
   g_list_free_full (model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
   model->items = urls;
@@ -122,7 +122,7 @@ ephy_web_overview_model_set_urls (EphyWebOverviewModel *model,
 GList *
 ephy_web_overview_model_get_urls (EphyWebOverviewModel *model)
 {
-  g_return_val_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model), NULL);
+  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
   return model->items;
 }
@@ -134,7 +134,7 @@ ephy_web_overview_model_set_url_thumbnail (EphyWebOverviewModel *model,
 {
   const char *thumbnail_path;
 
-  g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
+  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
   thumbnail_path = ephy_web_overview_model_get_url_thumbnail (model, url);
   if (g_strcmp0 (thumbnail_path, path) == 0)
@@ -148,7 +148,7 @@ const char *
 ephy_web_overview_model_get_url_thumbnail (EphyWebOverviewModel *model,
                                            const char           *url)
 {
-  g_return_val_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model), NULL);
+  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
   return g_hash_table_lookup (model->thumbnails, url);
 }
@@ -161,7 +161,7 @@ ephy_web_overview_model_set_url_title (EphyWebOverviewModel *model,
   GList *l;
   gboolean changed = FALSE;
 
-  g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
+  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
   for (l = model->items; l; l = g_list_next (l)) {
     EphyWebOverviewModelItem *item = (EphyWebOverviewModelItem *)l->data;
@@ -188,7 +188,7 @@ ephy_web_overview_model_delete_url (EphyWebOverviewModel *model,
   GList *l;
   gboolean changed = FALSE;
 
-  g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
+  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
   l = model->items;
   while (l) {
@@ -216,7 +216,7 @@ ephy_web_overview_model_delete_host (EphyWebOverviewModel *model,
   GList *l;
   gboolean changed = FALSE;
 
-  g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
+  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
   l = model->items;
   while (l) {
@@ -242,7 +242,7 @@ ephy_web_overview_model_delete_host (EphyWebOverviewModel *model,
 void
 ephy_web_overview_model_clear (EphyWebOverviewModel *model)
 {
-  g_return_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model));
+  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
   if (!model->items)
     return;

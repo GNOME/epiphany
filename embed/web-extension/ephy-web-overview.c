@@ -441,8 +441,8 @@ EphyWebOverview *
 ephy_web_overview_new (WebKitWebPage        *web_page,
                        EphyWebOverviewModel *model)
 {
-  g_return_val_if_fail (WEBKIT_IS_WEB_PAGE (web_page), NULL);
-  g_return_val_if_fail (EPHY_IS_WEB_OVERVIEW_MODEL (model), NULL);
+  g_assert (WEBKIT_IS_WEB_PAGE (web_page));
+  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
   return g_object_new (EPHY_TYPE_WEB_OVERVIEW,
                        "web-page", web_page,

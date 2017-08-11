@@ -203,10 +203,10 @@ popups_manager_new_window_info (EphyEmbedContainer *container)
   char *features;
 
   g_object_get (container, "is-popup", &is_popup, NULL);
-  g_return_val_if_fail (is_popup, g_strdup (""));
+  g_assert (is_popup);
 
   embed = ephy_embed_container_get_active_child (container);
-  g_return_val_if_fail (embed != NULL, g_strdup (""));
+  g_assert (embed != NULL);
 
   gtk_widget_get_allocation (GTK_WIDGET (embed), &allocation);
 
@@ -264,7 +264,7 @@ popups_manager_hide (EphyEmbedContainer *container,
   char *features;
 
   embed = ephy_embed_container_get_active_child (container);
-  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_assert (EPHY_IS_EMBED (embed));
 
   location = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
   if (location == NULL) return;
@@ -815,8 +815,8 @@ allow_tls_certificate_cb (EphyEmbedShell *shell,
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
     return;
 
-  g_return_if_fail (G_IS_TLS_CERTIFICATE (view->certificate));
-  g_return_if_fail (view->tls_error_failing_uri != NULL);
+  g_assert (G_IS_TLS_CERTIFICATE (view->certificate));
+  g_assert (view->tls_error_failing_uri != NULL);
 
   uri = soup_uri_new (view->tls_error_failing_uri);
   webkit_web_context_allow_tls_certificate_for_host (ephy_embed_shell_get_web_context (shell),
@@ -1251,10 +1251,10 @@ new_window_cb (EphyWebView *view,
 {
   EphyEmbedContainer *container;
 
-  g_return_if_fail (new_view != NULL);
+  g_assert (new_view != NULL);
 
   container = EPHY_EMBED_CONTAINER (gtk_widget_get_toplevel (GTK_WIDGET (new_view)));
-  g_return_if_fail (container != NULL || !gtk_widget_is_toplevel (GTK_WIDGET (container)));
+  g_assert (container != NULL || !gtk_widget_is_toplevel (GTK_WIDGET (container)));
 
   popups_manager_add_window (view, container);
 }
@@ -1834,7 +1834,7 @@ ephy_web_view_set_placeholder (EphyWebView *view,
 {
   char *html;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   /* We want only the actual load to be the one recorded in history, but
    * doing a load here is the simplest way to replace the loading
@@ -1937,7 +1937,7 @@ detailed_message_from_tls_errors (GTlsCertificateFlags tls_errors)
 EphyWebViewErrorPage
 ephy_web_view_get_error_page (EphyWebView *view)
 {
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), EPHY_WEB_VIEW_ERROR_PAGE_NONE);
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   return view->error_page;
 }
@@ -2178,7 +2178,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
   const char *icon_name = NULL;
   const char *reason = NULL;
 
-  g_return_if_fail (page != EPHY_WEB_VIEW_ERROR_PAGE_NONE);
+  g_assert (page != EPHY_WEB_VIEW_ERROR_PAGE_NONE);
 
   view->loading_error_page = TRUE;
   view->error_page = page;
@@ -2566,8 +2566,8 @@ ephy_web_view_load_request (EphyWebView      *view,
   const char *url;
   char *effective_url;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-  g_return_if_fail (WEBKIT_IS_URI_REQUEST (request));
+  g_assert (EPHY_IS_WEB_VIEW (view));
+  g_assert (WEBKIT_IS_URI_REQUEST (request));
 
   url = webkit_uri_request_get_uri (request);
   effective_url = ephy_embed_utils_normalize_address (url);
@@ -2591,8 +2591,8 @@ ephy_web_view_load_url (EphyWebView *view,
 {
   char *effective_url;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-  g_return_if_fail (url);
+  g_assert (EPHY_IS_WEB_VIEW (view));
+  g_assert (url);
 
   effective_url = ephy_embed_utils_normalize_address (url);
   if (g_str_has_prefix (effective_url, "javascript:")) {
@@ -2757,7 +2757,7 @@ ephy_web_view_get_navigation_flags (EphyWebView *view)
 const char *
 ephy_web_view_get_status_message (EphyWebView *view)
 {
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   if (view->link_message && view->link_message[0] != '\0')
     return view->link_message;
@@ -2780,7 +2780,7 @@ ephy_web_view_get_status_message (EphyWebView *view)
 const char *
 ephy_web_view_get_link_message (EphyWebView *view)
 {
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   return view->link_message;
 }
@@ -2799,7 +2799,7 @@ ephy_web_view_set_link_message (EphyWebView *view,
 {
   char *decoded_address;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   g_free (view->link_message);
 
@@ -2826,7 +2826,7 @@ void
 ephy_web_view_set_security_level (EphyWebView      *view,
                                   EphySecurityLevel level)
 {
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   if (view->security_level != level) {
     view->security_level = level;
@@ -2860,7 +2860,7 @@ ephy_web_view_set_security_level (EphyWebView      *view,
 const char *
 ephy_web_view_get_typed_address (EphyWebView *view)
 {
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), NULL);
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   return view->typed_address;
 }
@@ -2877,7 +2877,7 @@ void
 ephy_web_view_set_typed_address (EphyWebView *view,
                                  const char  *address)
 {
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   g_free (view->typed_address);
   view->typed_address = g_strdup (address);
@@ -2919,7 +2919,7 @@ ephy_web_view_has_modified_forms (EphyWebView        *view,
 {
   GTask *task;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
 
@@ -2941,7 +2941,7 @@ ephy_web_view_has_modified_forms_finish (EphyWebView  *view,
                                          GAsyncResult *result,
                                          GError      **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, view), FALSE);
+  g_assert (g_task_is_valid (result, view));
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
@@ -2988,7 +2988,7 @@ ephy_web_view_get_best_web_app_icon (EphyWebView        *view,
 {
   GTask *task;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
 
@@ -3016,7 +3016,7 @@ ephy_web_view_get_best_web_app_icon_finish (EphyWebView  *view,
   GetBestWebAppIconAsyncData *data;
   GTask *task = G_TASK (result);
 
-  g_return_val_if_fail (g_task_is_valid (result, view), FALSE);
+  g_assert (g_task_is_valid (result, view));
 
   data = g_task_propagate_pointer (task, error);
   if (!data)
@@ -3059,7 +3059,7 @@ ephy_web_view_get_web_app_title (EphyWebView        *view,
 {
   GTask *task;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
 
@@ -3081,7 +3081,7 @@ ephy_web_view_get_web_app_title_finish (EphyWebView  *view,
                                         GAsyncResult *result,
                                         GError      **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, view), NULL);
+  g_assert (g_task_is_valid (result, view));
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
@@ -3103,7 +3103,7 @@ ephy_web_view_get_security_level (EphyWebView          *view,
                                   GTlsCertificate     **certificate,
                                   GTlsCertificateFlags *errors)
 {
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   if (level)
     *level = view->security_level;
@@ -3168,7 +3168,7 @@ ephy_web_view_print (EphyWebView *view)
   EphyEmbedShell *shell;
   GtkPrintSettings *settings;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   shell = ephy_embed_shell_get_default ();
 
@@ -3253,8 +3253,8 @@ ephy_web_view_save (EphyWebView *view, const char *uri)
 {
   GFile *file;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-  g_return_if_fail (uri);
+  g_assert (EPHY_IS_WEB_VIEW (view));
+  g_assert (uri);
 
   file = g_file_new_for_uri (uri);
 
@@ -3284,7 +3284,7 @@ ephy_web_view_load_homepage (EphyWebView *view)
   EphyEmbedShellMode mode;
   char *home;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   shell = ephy_embed_shell_get_default ();
   mode = ephy_embed_shell_get_mode (shell);
@@ -3311,7 +3311,7 @@ ephy_web_view_load_new_tab_page (EphyWebView *view)
   EphyEmbedShell *shell;
   EphyEmbedShellMode mode;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   shell = ephy_embed_shell_get_default ();
   mode = ephy_embed_shell_get_mode (shell);
@@ -3333,7 +3333,7 @@ ephy_web_view_load_new_tab_page (EphyWebView *view)
 EphyHistoryPageVisitType
 ephy_web_view_get_visit_type (EphyWebView *view)
 {
-  g_return_val_if_fail (EPHY_IS_WEB_VIEW (view), EPHY_PAGE_VISIT_NONE);
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   return view->visit_type;
 }
@@ -3349,7 +3349,7 @@ ephy_web_view_get_visit_type (EphyWebView *view)
 void
 ephy_web_view_set_visit_type (EphyWebView *view, EphyHistoryPageVisitType visit_type)
 {
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WEB_VIEW (view));
 
   view->visit_type = visit_type;
 }

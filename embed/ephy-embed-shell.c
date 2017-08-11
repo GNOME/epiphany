@@ -539,7 +539,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
 
   if (priv->global_history_service == NULL) {
     char *filename;
@@ -554,7 +554,7 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
     filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
     priv->global_history_service = ephy_history_service_new (filename, mode);
     g_free (filename);
-    g_return_val_if_fail (priv->global_history_service, NULL);
+    g_assert (priv->global_history_service);
     g_signal_connect (priv->global_history_service, "urls-visited",
                       G_CALLBACK (history_service_urls_visited_cb),
                       shell);
@@ -597,7 +597,7 @@ ephy_embed_shell_get_encodings (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
 
   if (priv->encodings == NULL)
     priv->encodings = ephy_encodings_new ();
@@ -1291,7 +1291,7 @@ ephy_embed_shell_set_page_setup (EphyEmbedShell *shell,
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   char *path;
 
-  g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
 
   if (page_setup != NULL)
     g_object_ref (page_setup);
@@ -1318,7 +1318,7 @@ ephy_embed_shell_get_page_setup (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
 
   if (priv->page_setup == NULL) {
     GError *error = NULL;
@@ -1354,7 +1354,7 @@ ephy_embed_shell_set_print_settings (EphyEmbedShell   *shell,
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   char *path;
 
-  g_return_if_fail (EPHY_IS_EMBED_SHELL (shell));
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
 
   if (settings != NULL)
     g_object_ref (settings);
@@ -1382,7 +1382,7 @@ ephy_embed_shell_get_print_settings (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
 
   if (priv->print_settings == NULL) {
     GError *error = NULL;
@@ -1414,7 +1414,7 @@ ephy_embed_shell_get_mode (EphyEmbedShell *shell)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), EPHY_EMBED_SHELL_MODE_BROWSER);
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
 
   return priv->mode;
 }
@@ -1442,8 +1442,8 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
   GList *list = NULL;
   gboolean ret = FALSE;
 
-  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), FALSE);
-  g_return_val_if_fail (file || mime_type, FALSE);
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
+  g_assert (file || mime_type);
 
   app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
 

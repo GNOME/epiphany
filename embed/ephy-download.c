@@ -270,8 +270,8 @@ void
 ephy_download_set_destination_uri (EphyDownload *download,
                                    const char   *destination)
 {
-  g_return_if_fail (EPHY_IS_DOWNLOAD (download));
-  g_return_if_fail (destination != NULL);
+  g_assert (EPHY_IS_DOWNLOAD (download));
+  g_assert (destination != NULL);
 
   webkit_download_set_destination (download->download, destination);
   g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_DESTINATION]);
@@ -290,7 +290,7 @@ void
 ephy_download_set_action (EphyDownload          *download,
                           EphyDownloadActionType action)
 {
-  g_return_if_fail (EPHY_IS_DOWNLOAD (download));
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   download->action = action;
   g_object_notify_by_pspec (G_OBJECT (download), obj_properties[PROP_ACTION]);
@@ -307,7 +307,7 @@ ephy_download_set_action (EphyDownload          *download,
 WebKitDownload *
 ephy_download_get_webkit_download (EphyDownload *download)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   return download->download;
 }
@@ -323,7 +323,7 @@ ephy_download_get_webkit_download (EphyDownload *download)
 const char *
 ephy_download_get_destination_uri (EphyDownload *download)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   return webkit_download_get_destination (download->download);
 }
@@ -342,7 +342,7 @@ ephy_download_get_destination_uri (EphyDownload *download)
 EphyDownloadActionType
 ephy_download_get_action (EphyDownload *download)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), EPHY_DOWNLOAD_ACTION_NONE);
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   return download->action;
 }
@@ -373,7 +373,7 @@ ephy_download_get_start_time (EphyDownload *download)
 void
 ephy_download_cancel (EphyDownload *download)
 {
-  g_return_if_fail (EPHY_IS_DOWNLOAD (download));
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   webkit_download_cancel (download->download);
 }
@@ -381,7 +381,7 @@ ephy_download_cancel (EphyDownload *download)
 gboolean
 ephy_download_is_active (EphyDownload *download)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), FALSE);
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   return !download->finished;
 }
@@ -389,7 +389,7 @@ ephy_download_is_active (EphyDownload *download)
 gboolean
 ephy_download_succeeded (EphyDownload *download)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), FALSE);
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   return download->finished && !download->error;
 }
@@ -398,7 +398,7 @@ gboolean
 ephy_download_failed (EphyDownload *download,
                       GError      **error)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), FALSE);
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   if (download->finished && download->error) {
     if (error)
@@ -722,7 +722,7 @@ ephy_download_new (WebKitDownload *download)
 {
   EphyDownload *ephy_download;
 
-  g_return_val_if_fail (WEBKIT_IS_DOWNLOAD (download), NULL);
+  g_assert (WEBKIT_IS_DOWNLOAD (download));
 
   ephy_download = g_object_new (EPHY_TYPE_DOWNLOAD, NULL);
 
@@ -763,7 +763,7 @@ ephy_download_new_for_uri (const char *uri)
   WebKitDownload *download;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-  g_return_val_if_fail (uri != NULL, NULL);
+  g_assert (uri != NULL);
 
   download = webkit_web_context_download_uri (ephy_embed_shell_get_web_context (shell), uri);
   ephy_download = ephy_download_new (download);

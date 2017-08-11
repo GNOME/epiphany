@@ -222,7 +222,7 @@ ephy_embed_utils_normalize_address (const char *address)
 {
   char *effective_address = NULL;
 
-  g_return_val_if_fail (address, NULL);
+  g_assert (address);
 
   if (is_bang_search (address)) {
     EphyEmbedShell *shell;

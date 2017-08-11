@@ -52,7 +52,7 @@ static GParamSpec *obj_properties[LAST_PROP];
 static void
 ephy_file_monitor_cancel (EphyFileMonitor *monitor)
 {
-  g_return_if_fail (EPHY_IS_FILE_MONITOR (monitor));
+  g_assert (EPHY_IS_FILE_MONITOR (monitor));
 
   if (monitor->monitor != NULL) {
     LOG ("Cancelling file monitor");
@@ -171,8 +171,8 @@ ephy_file_monitor_update_location (EphyFileMonitor *file_monitor,
   GFileType file_type;
   GFileInfo *file_info;
 
-  g_return_if_fail (EPHY_IS_FILE_MONITOR (file_monitor));
-  g_return_if_fail (address != NULL);
+  g_assert (EPHY_IS_FILE_MONITOR (file_monitor));
+  g_assert (address != NULL);
 
   ephy_file_monitor_cancel (file_monitor);
 

@@ -926,7 +926,7 @@ ephy_uri_tester_load (EphyUriTester *tester)
   GTask *task;
   char **trash;
 
-  g_return_if_fail (EPHY_IS_URI_TESTER (tester));
+  g_assert (EPHY_IS_URI_TESTER (tester));
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
     tester->adblock_loaded = TRUE;
