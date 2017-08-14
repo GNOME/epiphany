@@ -1392,11 +1392,7 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
 
   /* Do not allow recursive calls into the browser, they can lead to
    * infinite loops and they should never happen anyway. */
-
-  /* FIXME: Should use g_application_get_application_id() here instead of
-   * hardcoding epiphany.desktop. But first, we have to rename the desktop file.
-   */
-  if (!app || g_strcmp0 (g_app_info_get_id (app), "epiphany.desktop") == 0)
+  if (!app || g_strcmp0 (g_app_info_get_id (app), "org.gnome.Epiphany.desktop") == 0)
     return ret;
 
   list = g_list_append (list, file);
