@@ -214,9 +214,10 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
   GSequence *bookmarks = NULL;
   gboolean ret = TRUE;
   gchar *filename;
-  const char *statement_str = "SELECT b.id, p.url, b.title, b.dateAdded, b.guid "
+  const char *statement_str = "SELECT b.id, p.url, b.title, b.dateAdded, b.guid, g.title "
                               "FROM moz_bookmarks b "
                               "JOIN moz_places p ON b.fk=p.id "
+                              "JOIN moz_bookmarks g ON b.parent=g.id "
                               "WHERE b.type=1 AND p.url NOT LIKE 'about%' "
                               "               AND p.url NOT LIKE 'place%' "
                               "               AND b.title IS NOT NULL "
@@ -261,12 +262,15 @@ ephy_bookmarks_import_from_firefox (EphyBookmarksManager  *manager,
     const char *title = ephy_sqlite_statement_get_column_as_string (statement, 2);
     gint64 time_added = ephy_sqlite_statement_get_column_as_int64 (statement, 3);
     const char *guid = ephy_sqlite_statement_get_column_as_string (statement, 4);
+    const char *parent_title = ephy_sqlite_statement_get_column_as_string (statement, 5);
     EphyBookmark *bookmark;
     GSequence *tags;
 
     tags = g_sequence_new (g_free);
     bookmark = ephy_bookmark_new (url, title, tags, guid);
     ephy_bookmark_set_time_added (bookmark, time_added);
+    if (!g_strcmp0 (parent_title, FIREFOX_BOOKMARKS_MOBILE_FOLDER))
+      ephy_bookmark_add_tag (bookmark, EPHY_BOOKMARKS_MOBILE_TAG);
     load_tags_for_bookmark (connection, bookmark, bookmark_id);
 
     g_sequence_prepend (bookmarks, bookmark);

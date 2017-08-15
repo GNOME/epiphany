@@ -756,8 +756,9 @@ ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
     if (g_strcmp0 (type, "bookmark") || !g_strcmp0 (parent_id, "unfiled"))
       goto next;
 
-    if (!g_strcmp0 (parent_id, "mobile") && !ephy_bookmark_has_tag (l->data, "Mobile"))
-      ephy_bookmark_add_tag (l->data, "Mobile");
+    if (!g_strcmp0 (parent_id, "mobile") &&
+        !ephy_bookmark_has_tag (l->data, EPHY_BOOKMARKS_MOBILE_TAG))
+      ephy_bookmark_add_tag (l->data, EPHY_BOOKMARKS_MOBILE_TAG);
 
     /* Bookmarks from server may miss the time added timestamp. */
     if (!ephy_bookmark_get_time_added (l->data))
@@ -849,8 +850,9 @@ ephy_bookmarks_manager_handle_regular_merge (EphyBookmarksManager *self,
     if (g_strcmp0 (type, "bookmark") || !g_strcmp0 (parent_id, "unfiled"))
       goto next;
 
-    if (!g_strcmp0 (parent_id, "mobile") && !ephy_bookmark_has_tag (l->data, "Mobile"))
-      ephy_bookmark_add_tag (l->data, "Mobile");
+    if (!g_strcmp0 (parent_id, "mobile") &&
+        !ephy_bookmark_has_tag (l->data, EPHY_BOOKMARKS_MOBILE_TAG))
+      ephy_bookmark_add_tag (l->data, EPHY_BOOKMARKS_MOBILE_TAG);
 
     /* Bookmarks from server may miss the time added timestamp. */
     if (!ephy_bookmark_get_time_added (l->data))
@@ -906,8 +908,8 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
   GList *to_upload = NULL;
 
-  if (!ephy_bookmarks_manager_tag_exists (self, "Mobile"))
-    ephy_bookmarks_manager_create_tag (self, "Mobile");
+  if (!ephy_bookmarks_manager_tag_exists (self, EPHY_BOOKMARKS_MOBILE_TAG))
+    ephy_bookmarks_manager_create_tag (self, EPHY_BOOKMARKS_MOBILE_TAG);
 
   if (is_initial)
     to_upload = ephy_bookmarks_manager_handle_initial_merge (self,
