@@ -414,8 +414,8 @@ store_internal (const char          *password,
 }
 
 static void
-ephy_password_manger_store_record (EphyPasswordManager *self,
-                                   EphyPasswordRecord  *record)
+ephy_password_manager_store_record (EphyPasswordManager *self,
+                                    EphyPasswordRecord  *record)
 {
   GHashTable *attributes;
   const char *hostname;
@@ -451,7 +451,7 @@ update_password_cb (GList    *records,
 
   record = EPHY_PASSWORD_RECORD (records->data);
   ephy_password_record_set_password (record, data->password);
-  ephy_password_manger_store_record (data->manager, record);
+  ephy_password_manager_store_record (data->manager, record);
   g_signal_emit_by_name (data->manager, "synchronizable-modified", record, FALSE);
 
   g_list_free_full (records, g_object_unref);
@@ -497,7 +497,7 @@ ephy_password_manager_save (EphyPasswordManager *self,
                                      username, password,
                                      username_field, password_field,
                                      timestamp, timestamp);
-  ephy_password_manger_store_record (self, record);
+  ephy_password_manager_store_record (self, record);
   g_signal_emit_by_name (self, "synchronizable-modified", record, FALSE);
 
   g_free (hostname);
@@ -641,7 +641,7 @@ secret_service_clear_cb (SecretService *service,
 
   if (user_data) {
     ReplaceRecordAsyncData *data = (ReplaceRecordAsyncData *)user_data;
-    ephy_password_manger_store_record (data->manager, data->record);
+    ephy_password_manager_store_record (data->manager, data->record);
     replace_record_async_data_free (data);
   }
 }
@@ -790,7 +790,7 @@ synchronizable_manager_add (EphySynchronizableManager *manager,
   EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (manager);
   EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (synchronizable);
 
-  ephy_password_manger_store_record (self, record);
+  ephy_password_manager_store_record (self, record);
 }
 
 static void
@@ -983,7 +983,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
         }
       } else {
         /* Different id, different tuple. This is a new record. */
-        ephy_password_manger_store_record (self, l->data);
+        ephy_password_manager_store_record (self, l->data);
         g_hash_table_add (dont_upload, g_strdup (remote_id));
       }
     }
@@ -1060,7 +1060,7 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
         }
       } else {
         /* Different id, different tuple. This is a new record. */
-        ephy_password_manger_store_record (self, l->data);
+        ephy_password_manager_store_record (self, l->data);
       }
     }
   }
