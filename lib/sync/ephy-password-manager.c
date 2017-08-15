@@ -887,6 +887,20 @@ get_record_by_parameters (GSList     *records,
 }
 
 static GSList *
+delete_record_by_id (GSList     *records,
+                     const char *id)
+{
+  for (GSList *l = records; l && l->data; l = l->next) {
+    if (!g_strcmp0 (ephy_password_record_get_id (l->data), id)) {
+      g_object_unref (l->data);
+      return g_slist_delete_link (records, l);
+    }
+  }
+
+  return records;
+}
+
+static GSList *
 ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
                                             GSList              *local_records,
                                             GSList              *remote_records)
@@ -987,10 +1001,10 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
 }
 
 static GSList *
-ephy_password_manager_handle_regular_merge (EphyPasswordManager *self,
-                                            GSList              *local_records,
-                                            GSList              *deleted_records,
-                                            GSList              *updated_records)
+ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
+                                            GSList              **local_records,
+                                            GSList               *deleted_records,
+                                            GSList               *updated_records)
 {
   EphyPasswordRecord *record;
   GSList *to_upload = NULL;
@@ -1006,9 +1020,11 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager *self,
 
   for (GSList *l = deleted_records; l && l->data; l = l->next) {
     remote_id = ephy_password_record_get_id (l->data);
-    record = get_record_by_id (local_records, remote_id);
-    if (record)
+    record = get_record_by_id (*local_records, remote_id);
+    if (record) {
       ephy_password_manager_forget_record (self, record, NULL);
+      *local_records = delete_record_by_id (*local_records, remote_id);
+    }
   }
 
   /* See comment in ephy_password_manager_handle_initial_merge. */
@@ -1020,12 +1036,12 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager *self,
     remote_password_field = ephy_password_record_get_password_field (l->data);
     remote_timestamp = ephy_password_record_get_time_password_changed (l->data);
 
-    record = get_record_by_id (local_records, remote_id);
+    record = get_record_by_id (*local_records, remote_id);
     if (record) {
       /* Same id. Overwrite local record. */
       ephy_password_manager_forget_record (self, record, l->data);
     } else {
-      record = get_record_by_parameters (local_records,
+      record = get_record_by_parameters (*local_records,
                                          remote_hostname,
                                          remote_username,
                                          remote_username_field,
@@ -1064,7 +1080,7 @@ merge_cb (GSList   *records,
                                                             data->remotes_updated);
   else
     to_upload = ephy_password_manager_handle_regular_merge (data->manager,
-                                                            records,
+                                                            &records,
                                                             data->remotes_deleted,
                                                             data->remotes_updated);
 
