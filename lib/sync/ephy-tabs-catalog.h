@@ -31,10 +31,10 @@ G_DECLARE_INTERFACE (EphyTabsCatalog, ephy_tabs_catalog, EPHY, TABS_CATALOG, GOb
 struct _EphyTabsCatalogInterface {
   GTypeInterface parent_iface;
 
-  GSList * (*get_tabs_info) (EphyTabsCatalog *catalog);
+  GList * (*get_tabs_info) (EphyTabsCatalog *catalog);
 };
 
-GSList *ephy_tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog);
+GList *ephy_tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog);
 
 typedef struct {
   char *title;

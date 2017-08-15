@@ -173,7 +173,7 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
 {
   PopulateRowAsyncData *data;
   JsonArray *url_history;
-  GSList *tabs;
+  GList *tabs;
   const char *title;
   const char *url;
 
@@ -194,7 +194,7 @@ synced_tabs_dialog_populate_from_record (SyncedTabsDialog   *dialog,
                                      -1);
 
   tabs = ephy_open_tabs_record_get_tabs (record);
-  for (GSList *l = tabs; l && l->data; l = l->next) {
+  for (GList *l = tabs; l && l->data; l = l->next) {
     title = json_object_get_string_member (l->data, "title");
     url_history = json_object_get_array_member (l->data, "urlHistory");
     url = json_array_get_string_element (url_history, 0);
@@ -210,7 +210,7 @@ static void
 synced_tabs_dialog_populate_model (SyncedTabsDialog *dialog)
 {
   EphyOpenTabsRecord *record;
-  GSList *remotes;
+  GList *remotes;
   guint index = 0;
 
   /* Insert local tabs. */
@@ -219,7 +219,7 @@ synced_tabs_dialog_populate_model (SyncedTabsDialog *dialog)
 
   /* Insert remote tabs. */
   remotes = ephy_open_tabs_manager_get_remote_tabs (dialog->manager);
-  for (GSList *l = remotes; l && l->data; l = l->next)
+  for (GList *l = remotes; l && l->data; l = l->next)
     synced_tabs_dialog_populate_from_record (dialog, l->data, FALSE, index++);
 
   g_object_unref (record);

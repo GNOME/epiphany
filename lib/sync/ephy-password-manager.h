@@ -42,10 +42,10 @@ const SecretSchema *ephy_password_manager_get_password_schema (void) G_GNUC_CONS
 
 G_DECLARE_FINAL_TYPE (EphyPasswordManager, ephy_password_manager, EPHY, PASSWORD_MANAGER, GObject)
 
-typedef void (*EphyPasswordManagerQueryCallback) (GSList *records, gpointer user_data);
+typedef void (*EphyPasswordManagerQueryCallback) (GList *records, gpointer user_data);
 
 EphyPasswordManager *ephy_password_manager_new                      (void);
-GSList              *ephy_password_manager_get_cached_users_for_uri (EphyPasswordManager *self,
+GList               *ephy_password_manager_get_cached_users_for_uri (EphyPasswordManager *self,
                                                                      const char          *uri);
 void                 ephy_password_manager_save                     (EphyPasswordManager *self,
                                                                      const char          *uri,

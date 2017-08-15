@@ -251,9 +251,9 @@ ephy_synchronizable_manager_save (EphySynchronizableManager *manager,
  * @manager: an #EphySynchronizableManager
  * @is_initial: a boolean saying whether the collection managed by @manager
  *              requires an initial sync (i.e. a first time sync)
- * @remotes_deleted: (transfer none): a #GSList holding the #EphySynchronizable
+ * @remotes_deleted: (transfer none): a #GList holding the #EphySynchronizable
  *                   objects that were removed remotely from the server.
- * @remotes_updated: (transfer none): a #GSList holding the #EphySynchronizable
+ * @remotes_updated: (transfer none): a #GList holding the #EphySynchronizable
  *                   objects that were updated remotely on the server.
  * @callback: an #EphySynchronizableManagerMergeCallback that will be called
  *            when the merge is complete.
@@ -267,8 +267,8 @@ ephy_synchronizable_manager_save (EphySynchronizableManager *manager,
 void
 ephy_synchronizable_manager_merge (EphySynchronizableManager              *manager,
                                    gboolean                                is_initial,
-                                   GSList                                 *remotes_deleted,
-                                   GSList                                 *remotes_updated,
+                                   GList                                  *remotes_deleted,
+                                   GList                                  *remotes_updated,
                                    EphySynchronizableManagerMergeCallback  callback,
                                    gpointer                                user_data)
 {

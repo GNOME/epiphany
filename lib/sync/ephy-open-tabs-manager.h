@@ -33,7 +33,7 @@ G_DECLARE_FINAL_TYPE (EphyOpenTabsManager, ephy_open_tabs_manager, EPHY, OPEN_TA
 
 EphyOpenTabsManager *ephy_open_tabs_manager_new             (EphyTabsCatalog *catalog);
 EphyOpenTabsRecord  *ephy_open_tabs_manager_get_local_tabs  (EphyOpenTabsManager *self);
-GSList              *ephy_open_tabs_manager_get_remote_tabs (EphyOpenTabsManager *self);
+GList               *ephy_open_tabs_manager_get_remote_tabs (EphyOpenTabsManager *self);
 void                 ephy_open_tabs_manager_clear_cache     (EphyOpenTabsManager *self);
 
 G_END_DECLS

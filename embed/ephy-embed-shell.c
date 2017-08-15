@@ -103,14 +103,14 @@ G_DEFINE_TYPE_WITH_CODE (EphyEmbedShell, ephy_embed_shell, GTK_TYPE_APPLICATION,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TABS_CATALOG,
                                                 ephy_embed_shell_tabs_catalog_iface_init))
 
-static GSList *
+static GList *
 tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (catalog);
   WebKitFaviconDatabase *database;
   GList *windows;
   GList *tabs;
-  GSList *tabs_info = NULL;
+  GList *tabs_info = NULL;
   const char *title;
   const char *url;
   char *favicon;
@@ -130,8 +130,8 @@ tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
       url = ephy_web_view_get_display_address (ephy_embed_get_web_view (t->data));
       favicon = webkit_favicon_database_get_favicon_uri (database, url);
 
-      tabs_info = g_slist_prepend (tabs_info,
-                                   ephy_tab_info_new (title, url, favicon));
+      tabs_info = g_list_prepend (tabs_info,
+                                  ephy_tab_info_new (title, url, favicon));
 
       g_free (favicon);
     }

@@ -48,8 +48,8 @@ static GParamSpec *obj_properties[LAST_PROP];
 typedef struct {
   EphyHistoryManager                     *manager;
   gboolean                                is_initial;
-  GSList                                 *remotes_deleted;
-  GSList                                 *remotes_updated;
+  GList                                  *remotes_deleted;
+  GList                                  *remotes_updated;
   EphySynchronizableManagerMergeCallback  callback;
   gpointer                                user_data;
 } MergeHistoryAsyncData;
@@ -57,8 +57,8 @@ typedef struct {
 static MergeHistoryAsyncData *
 merge_history_async_data_new (EphyHistoryManager                     *manager,
                               gboolean                                is_initial,
-                              GSList                                 *remotes_deleted,
-                              GSList                                 *remotes_updated,
+                              GList                                  *remotes_deleted,
+                              GList                                  *remotes_updated,
                               EphySynchronizableManagerMergeCallback  callback,
                               gpointer                                user_data)
 {
@@ -287,12 +287,12 @@ synchronizable_manager_save (EphySynchronizableManager *manager,
 }
 
 static EphyHistoryRecord *
-get_record_by_id (GSList     *records,
+get_record_by_id (GList      *records,
                   const char *id)
 {
   g_assert (id);
 
-  for (GSList *l = records; l && l->data; l = l->next) {
+  for (GList *l = records; l && l->data; l = l->next) {
     if (!g_strcmp0 (ephy_history_record_get_id (l->data), id))
       return l->data;
   }
@@ -301,12 +301,12 @@ get_record_by_id (GSList     *records,
 }
 
 static EphyHistoryRecord *
-get_record_by_url (GSList     *records,
+get_record_by_url (GList      *records,
                    const char *url)
 {
   g_assert (url);
 
-  for (GSList *l = records; l && l->data; l = l->next) {
+  for (GList *l = records; l && l->data; l = l->next) {
     if (!g_strcmp0 (ephy_history_record_get_uri (l->data), url))
       return l->data;
   }
@@ -314,14 +314,14 @@ get_record_by_url (GSList     *records,
   return NULL;
 }
 
-static GSList *
-delete_record_by_id (GSList     *records,
+static GList *
+delete_record_by_id (GList      *records,
                      const char *id)
 {
-  for (GSList *l = records; l && l->data; l = l->next) {
+  for (GList *l = records; l && l->data; l = l->next) {
     if (!g_strcmp0 (ephy_history_record_get_id (l->data), id)) {
       g_object_unref (l->data);
-      return g_slist_delete_link (records, l);
+      return g_list_delete_link (records, l);
     }
   }
 
@@ -354,14 +354,14 @@ ephy_history_manager_handle_different_id_same_url (EphyHistoryManager *self,
   ephy_history_record_add_visit_time (remote, local_last_visit_time);
 }
 
-static GSList *
+static GList *
 ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
-                                           GSList             *local_records,
-                                           GSList             *remote_records)
+                                           GList              *local_records,
+                                           GList              *remote_records)
 {
   EphyHistoryRecord *record;
   GHashTable *dont_upload;
-  GSList *to_upload = NULL;
+  GList *to_upload = NULL;
   const char *remote_id;
   const char *remote_url;
   gint64 remote_last_visit_time;
@@ -377,7 +377,7 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
    */
   dont_upload = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-  for (GSList *l = remote_records; l && l->data; l = l->next) {
+  for (GList *l = remote_records; l && l->data; l = l->next) {
     remote_id = ephy_history_record_get_id (l->data);
     remote_url = ephy_history_record_get_uri (l->data);
     remote_last_visit_time = ephy_history_record_get_last_visit_time (l->data);
@@ -393,7 +393,7 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
                                         EPHY_PAGE_VISIT_LINK, FALSE);
 
       if (ephy_history_record_add_visit_time (l->data, local_last_visit_time))
-        to_upload = g_slist_prepend (to_upload, g_object_ref (l->data));
+        to_upload = g_list_prepend (to_upload, g_object_ref (l->data));
 
       g_hash_table_add (dont_upload, g_strdup (remote_id));
     } else {
@@ -402,7 +402,7 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
         /* Different ID, same URL. Keep local ID. */
         g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
         ephy_history_manager_handle_different_id_same_url (self, record, l->data);
-        to_upload = g_slist_prepend (to_upload, g_object_ref (l->data));
+        to_upload = g_list_prepend (to_upload, g_object_ref (l->data));
         g_hash_table_add (dont_upload, g_strdup (ephy_history_record_get_id (record)));
       } else {
         /* Different ID, different URL. This is a new record. */
@@ -415,10 +415,10 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
   }
 
   /* Set the remaining local records to be uploaded to server. */
-  for (GSList *l = local_records; l && l->data; l = l->next) {
+  for (GList *l = local_records; l && l->data; l = l->next) {
     record = EPHY_HISTORY_RECORD (l->data);
     if (!g_hash_table_contains (dont_upload, ephy_history_record_get_id (record))) {
-      to_upload = g_slist_prepend (to_upload, g_object_ref (record));
+      to_upload = g_list_prepend (to_upload, g_object_ref (record));
     }
   }
 
@@ -427,14 +427,14 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
   return to_upload;
 }
 
-static GSList *
+static GList *
 ephy_history_manager_handle_regular_merge (EphyHistoryManager  *self,
-                                           GSList             **local_records,
-                                           GSList              *deleted_records,
-                                           GSList              *updated_records)
+                                           GList              **local_records,
+                                           GList               *deleted_records,
+                                           GList               *updated_records)
 {
   EphyHistoryRecord *record;
-  GSList *to_upload = NULL;
+  GList *to_upload = NULL;
   const char *remote_id;
   const char *remote_url;
   gint64 remote_last_visit_time;
@@ -442,7 +442,7 @@ ephy_history_manager_handle_regular_merge (EphyHistoryManager  *self,
 
   g_assert (EPHY_IS_HISTORY_MANAGER (self));
 
-  for (GSList *l = deleted_records; l && l->data; l = l->next) {
+  for (GList *l = deleted_records; l && l->data; l = l->next) {
     remote_id = ephy_history_record_get_id (l->data);
     record = get_record_by_id (*local_records, remote_id);
     if (record) {
@@ -453,7 +453,7 @@ ephy_history_manager_handle_regular_merge (EphyHistoryManager  *self,
   }
 
   /* See comment in ephy_history_manager_handle_initial_merge. */
-  for (GSList *l = updated_records; l && l->data; l = l->next) {
+  for (GList *l = updated_records; l && l->data; l = l->next) {
     remote_id = ephy_history_record_get_id (l->data);
     remote_url = ephy_history_record_get_uri (l->data);
     remote_last_visit_time = ephy_history_record_get_last_visit_time (l->data);
@@ -482,7 +482,7 @@ ephy_history_manager_handle_regular_merge (EphyHistoryManager  *self,
         /* Different ID, same URL. Keep local ID. */
         g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
         ephy_history_manager_handle_different_id_same_url (self, record, l->data);
-        to_upload = g_slist_prepend (to_upload, g_object_ref (l->data));
+        to_upload = g_list_prepend (to_upload, g_object_ref (l->data));
       } else {
         /* Different ID, different URL. This is a new record. */
         if (remote_last_visit_time > 0)
@@ -502,8 +502,8 @@ merge_history_cb (EphyHistoryService    *service,
                   GList                 *urls,
                   MergeHistoryAsyncData *data)
 {
-  GSList *records = NULL;
-  GSList *to_upload = NULL;
+  GList *records = NULL;
+  GList *to_upload = NULL;
 
   if (!success) {
     g_warning ("Failed to retrieve URLs in history");
@@ -517,10 +517,10 @@ merge_history_cb (EphyHistoryService    *service,
     if (!url->sync_id)
       continue;
 
-    records = g_slist_prepend (records, ephy_history_record_new (url->sync_id,
-                                                                 url->title,
-                                                                 url->url,
-                                                                 url->last_visit_time));
+    records = g_list_prepend (records, ephy_history_record_new (url->sync_id,
+                                                                url->title,
+                                                                url->url,
+                                                                url->last_visit_time));
   }
 
   if (data->is_initial)
@@ -537,15 +537,15 @@ out:
   data->callback (to_upload, TRUE, data->user_data);
 
   g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
-  g_slist_free_full (records, g_object_unref);
+  g_list_free_full (records, g_object_unref);
   merge_history_async_data_free (data);
 }
 
 static void
 synchronizable_manager_merge (EphySynchronizableManager              *manager,
                               gboolean                                is_initial,
-                              GSList                                 *remotes_deleted,
-                              GSList                                 *remotes_updated,
+                              GList                                  *remotes_deleted,
+                              GList                                  *remotes_updated,
                               EphySynchronizableManagerMergeCallback  callback,
                               gpointer                                user_data)
 {

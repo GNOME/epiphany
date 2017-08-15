@@ -42,7 +42,7 @@ struct _EphyPasswordsDialog {
   GtkDialog parent_instance;
 
   EphyPasswordManager *manager;
-  GSList *records;
+  GList *records;
   GtkWidget *passwords_treeview;
   GtkTreeSelection *tree_selection;
   GtkWidget *liststore;
@@ -117,7 +117,7 @@ ephy_passwords_dialog_dispose (GObject *object)
   g_free (dialog->search_text);
   dialog->search_text = NULL;
 
-  g_slist_free_full (dialog->records, g_object_unref);
+  g_list_free_full (dialog->records, g_object_unref);
   dialog->records = NULL;
 
   G_OBJECT_CLASS (ephy_passwords_dialog_parent_class)->dispose (object);
@@ -179,7 +179,7 @@ forget (GSimpleAction *action,
     ephy_password_manager_forget (dialog->manager,
                                   ephy_password_record_get_hostname (record),
                                   ephy_password_record_get_username (record));
-    dialog->records = g_slist_remove (dialog->records, record);
+    dialog->records = g_list_remove (dialog->records, record);
     g_object_unref (record);
     g_value_unset (&val);
 
@@ -401,17 +401,17 @@ forget_all (GSimpleAction *action,
   gtk_list_store_clear (GTK_LIST_STORE (dialog->liststore));
   dialog->filled = FALSE;
 
-  g_slist_free_full (dialog->records, g_object_unref);
+  g_list_free_full (dialog->records, g_object_unref);
   dialog->records = NULL;
 }
 
 static void
-populate_model_cb (GSList   *records,
+populate_model_cb (GList    *records,
                    gpointer  user_data)
 {
   EphyPasswordsDialog *dialog = EPHY_PASSWORDS_DIALOG (user_data);
 
-  for (GSList *l = records; l && l->data; l = l->next) {
+  for (GList *l = records; l && l->data; l = l->next) {
     EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (l->data);
     GtkTreeIter iter;
 

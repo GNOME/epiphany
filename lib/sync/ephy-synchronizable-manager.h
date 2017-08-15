@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_INTERFACE (EphySynchronizableManager, ephy_synchronizable_manager, EPHY, SYNCHRONIZABLE_MANAGER, GObject)
 
-typedef void (*EphySynchronizableManagerMergeCallback) (GSList *to_upload, gboolean should_force, gpointer user_data);
+typedef void (*EphySynchronizableManagerMergeCallback) (GList *to_upload, gboolean should_force, gpointer user_data);
 
 struct _EphySynchronizableManagerInterface {
   GTypeInterface parent_iface;
@@ -51,8 +51,8 @@ struct _EphySynchronizableManagerInterface {
                                                    EphySynchronizable        *synchronizable);
   void                 (*merge)                   (EphySynchronizableManager              *manager,
                                                    gboolean                                is_initial,
-                                                   GSList                                 *remotes_deleted,
-                                                   GSList                                 *remotes_updated,
+                                                   GList                                  *remotes_deleted,
+                                                   GList                                  *remotes_updated,
                                                    EphySynchronizableManagerMergeCallback  callback,
                                                    gpointer                                user_data);
 };
@@ -73,8 +73,8 @@ void                ephy_synchronizable_manager_save                    (EphySyn
                                                                          EphySynchronizable        *synchronizable);
 void                ephy_synchronizable_manager_merge                   (EphySynchronizableManager              *manager,
                                                                          gboolean                                is_initial,
-                                                                         GSList                                 *remotes_deleted,
-                                                                         GSList                                 *remotes_updated,
+                                                                         GList                                  *remotes_deleted,
+                                                                         GList                                  *remotes_updated,
                                                                          EphySynchronizableManagerMergeCallback  callback,
                                                                          gpointer                                user_data);
 

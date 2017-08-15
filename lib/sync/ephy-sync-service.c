@@ -122,8 +122,8 @@ typedef struct {
   EphySynchronizableManager *manager;
   gboolean                   is_initial;
   gboolean                   is_last;
-  GSList                    *remotes_deleted;
-  GSList                    *remotes_updated;
+  GList                     *remotes_deleted;
+  GList                     *remotes_updated;
 } SyncCollectionAsyncData;
 
 typedef struct {
@@ -239,8 +239,8 @@ sync_collection_async_data_free (SyncCollectionAsyncData *data)
 
   g_object_unref (data->service);
   g_object_unref (data->manager);
-  g_slist_free_full (data->remotes_deleted, g_object_unref);
-  g_slist_free_full (data->remotes_updated, g_object_unref);
+  g_list_free_full (data->remotes_deleted, g_object_unref);
+  g_list_free_full (data->remotes_updated, g_object_unref);
   g_slice_free (SyncCollectionAsyncData, data);
 }
 
@@ -1246,13 +1246,13 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
 }
 
 static void
-merge_collection_finished_cb (GSList   *to_upload,
+merge_collection_finished_cb (GList    *to_upload,
                               gboolean  should_force,
                               gpointer  user_data)
 {
   SyncCollectionAsyncData *data = (SyncCollectionAsyncData *)user_data;
 
-  for (GSList *l = to_upload; l && l->data; l = l->next)
+  for (GList *l = to_upload; l && l->data; l = l->next)
     ephy_sync_service_upload_synchronizable (data->service, data->manager,
                                              l->data, should_force);
 
@@ -1260,7 +1260,7 @@ merge_collection_finished_cb (GSList   *to_upload,
     g_signal_emit (data->service, signals[SYNC_FINISHED], 0);
 
   if (to_upload)
-    g_slist_free_full (to_upload, g_object_unref);
+    g_list_free_full (to_upload, g_object_unref);
   sync_collection_async_data_free (data);
 }
 
@@ -1308,14 +1308,14 @@ sync_collection_cb (SoupSession *session,
       continue;
     }
     if (is_deleted)
-      data->remotes_deleted = g_slist_prepend (data->remotes_deleted, remote);
+      data->remotes_deleted = g_list_prepend (data->remotes_deleted, remote);
     else
-      data->remotes_updated = g_slist_prepend (data->remotes_updated, remote);
+      data->remotes_updated = g_list_prepend (data->remotes_updated, remote);
   }
 
   LOG ("Found %u deleted objects and %u new/updated objects in %s collection",
-       g_slist_length (data->remotes_deleted),
-       g_slist_length (data->remotes_updated),
+       g_list_length (data->remotes_deleted),
+       g_list_length (data->remotes_updated),
        collection);
 
   /* Update sync time. */

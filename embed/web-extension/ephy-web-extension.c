@@ -367,7 +367,7 @@ out:
 }
 
 static void
-should_store_cb (GSList   *records,
+should_store_cb (GList    *records,
                  gpointer  user_data)
 {
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (user_data);
@@ -445,7 +445,7 @@ out:
     g_free (origin);
   g_free (uri_string);
   g_object_unref (form_auth);
-  g_slist_free_full (records, g_object_unref);
+  g_list_free_full (records, g_object_unref);
 }
 
 static gboolean
@@ -499,7 +499,7 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
 }
 
 static void
-fill_form_cb (GSList   *records,
+fill_form_cb (GList    *records,
               gpointer  user_data)
 {
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (user_data);
@@ -528,7 +528,7 @@ fill_form_cb (GSList   *records,
   webkit_dom_html_input_element_set_auto_filled (password_node, TRUE);
   webkit_dom_html_input_element_set_editing_value (password_node, password);
 
-  g_slist_free_full (records, g_object_unref);
+  g_list_free_full (records, g_object_unref);
 }
 
 static void
@@ -739,7 +739,7 @@ show_user_choices (WebKitDOMDocument *document,
   WebKitDOMNode *body;
   WebKitDOMElement *main_div;
   WebKitDOMElement *ul;
-  GSList *cached_users;
+  GList *cached_users;
   gboolean username_node_ever_edited;
   double x, y;
   double input_width;
@@ -785,13 +785,13 @@ show_user_choices (WebKitDOMDocument *document,
                                     "padding: 0;",
                                     NULL);
 
-  cached_users = (GSList *)g_object_get_data (G_OBJECT (username_node), "ephy-cached-users");
+  cached_users = (GList *)g_object_get_data (G_OBJECT (username_node), "ephy-cached-users");
 
   username_node_ever_edited =
     GPOINTER_TO_INT (g_object_get_data (G_OBJECT (username_node),
                                         "ephy-user-ever-edited"));
 
-  for (GSList *l = cached_users; l && l->data; l = l->next) {
+  for (GList *l = cached_users; l && l->data; l = l->next) {
     const char *user = l->data;
     WebKitDOMElement *li;
     WebKitDOMElement *anchor;
@@ -1111,7 +1111,7 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
     /* We have a field that may be the user, and one for a password. */
     if (ephy_web_dom_utils_find_form_auth_elements (form, &username_node, &password_node)) {
       EphyEmbedFormAuth *form_auth;
-      GSList *cached_users;
+      GList *cached_users;
       const char *uri;
 
       LOG ("Hooking and pre-filling a form");

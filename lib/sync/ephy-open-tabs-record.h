@@ -32,7 +32,7 @@ EphyOpenTabsRecord *ephy_open_tabs_record_new             (const char *id,
                                                            const char *client_name);
 const char         *ephy_open_tabs_record_get_id          (EphyOpenTabsRecord *self);
 const char         *ephy_open_tabs_record_get_client_name (EphyOpenTabsRecord *self);
-GSList             *ephy_open_tabs_record_get_tabs        (EphyOpenTabsRecord *self);
+GList              *ephy_open_tabs_record_get_tabs        (EphyOpenTabsRecord *self);
 void                ephy_open_tabs_record_add_tab         (EphyOpenTabsRecord *self,
                                                            const char         *title,
                                                            const char         *url,

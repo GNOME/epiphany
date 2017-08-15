@@ -730,11 +730,11 @@ synchronizable_manager_save (EphySynchronizableManager *manager,
                                              NULL);
 }
 
-static GSList *
+static GList *
 ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
-                                             GSList               *remote_bookmarks)
+                                             GList                *remote_bookmarks)
 {
-  GSList *to_upload = NULL;
+  GList *to_upload = NULL;
   EphyBookmark *bookmark;
   GSequence *bookmarks;
   GSequenceIter *iter;
@@ -745,7 +745,7 @@ ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
 
   dont_upload = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-  for (GSList *l = remote_bookmarks; l && l->data; l = l->next) {
+  for (GList *l = remote_bookmarks; l && l->data; l = l->next) {
     const char *id;
     const char *url;
     char *type;
@@ -809,7 +809,7 @@ next:
        !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
     bookmark = g_sequence_get (iter);
     if (!g_hash_table_contains (dont_upload, ephy_bookmark_get_id (bookmark)))
-      to_upload = g_slist_prepend (to_upload, g_object_ref (bookmark));
+      to_upload = g_list_prepend (to_upload, g_object_ref (bookmark));
   }
 
   /* Commit changes to file. */
@@ -821,24 +821,24 @@ next:
   return to_upload;
 }
 
-static GSList *
+static GList *
 ephy_bookmarks_manager_handle_regular_merge (EphyBookmarksManager *self,
-                                             GSList               *updated_bookmarks,
-                                             GSList               *deleted_bookmarks)
+                                             GList                *updated_bookmarks,
+                                             GList                *deleted_bookmarks)
 {
-  GSList *to_upload = NULL;
+  GList *to_upload = NULL;
   EphyBookmark *bookmark;
   double timestamp;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
 
-  for (GSList *l = deleted_bookmarks; l && l->data; l = l->next) {
+  for (GList *l = deleted_bookmarks; l && l->data; l = l->next) {
     bookmark = ephy_bookmarks_manager_get_bookmark_by_id (self, ephy_bookmark_get_id (l->data));
     if (bookmark)
       ephy_bookmarks_manager_remove_bookmark_internal (self, bookmark);
   }
 
-  for (GSList *l = updated_bookmarks; l && l->data; l = l->next) {
+  for (GList *l = updated_bookmarks; l && l->data; l = l->next) {
     const char *id;
     const char *url;
     char *type;
@@ -872,7 +872,7 @@ ephy_bookmarks_manager_handle_regular_merge (EphyBookmarksManager *self,
         ephy_bookmarks_manager_copy_tags_from_bookmark (self, bookmark, l->data);
         timestamp = ephy_synchronizable_get_server_time_modified (l->data);
         ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), timestamp);
-        to_upload = g_slist_prepend (to_upload, g_object_ref (bookmark));
+        to_upload = g_list_prepend (to_upload, g_object_ref (bookmark));
       } else {
         /* Different id, different url. Add remote bookmark. */
         ephy_bookmarks_manager_add_bookmark_internal (self, l->data, FALSE);
@@ -898,13 +898,13 @@ next:
 static void
 synchronizable_manager_merge (EphySynchronizableManager              *manager,
                               gboolean                                is_initial,
-                              GSList                                 *remotes_deleted,
-                              GSList                                 *remotes_updated,
+                              GList                                  *remotes_deleted,
+                              GList                                  *remotes_updated,
                               EphySynchronizableManagerMergeCallback  callback,
                               gpointer                                user_data)
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
-  GSList *to_upload = NULL;
+  GList *to_upload = NULL;
 
   if (!ephy_bookmarks_manager_tag_exists (self, "Mobile"))
     ephy_bookmarks_manager_create_tag (self, "Mobile");

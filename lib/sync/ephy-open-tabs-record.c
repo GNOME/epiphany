@@ -37,7 +37,7 @@ struct _EphyOpenTabsRecord {
    * @lastUsed: an integer representing the UNIX time in seconds at which the
    *            tab was last accessed, or 0
    */
-  GSList *tabs;
+  GList *tabs;
 };
 
 static void json_serializable_iface_init (JsonSerializableIface *iface);
@@ -77,7 +77,7 @@ ephy_open_tabs_record_set_property (GObject      *object,
       self->client_name = g_strdup (g_value_get_string (value));
       break;
     case PROP_TABS:
-      g_slist_free_full (self->tabs, (GDestroyNotify)json_object_unref);
+      g_list_free_full (self->tabs, (GDestroyNotify)json_object_unref);
       self->tabs = g_value_get_pointer (value);
       break;
     default:
@@ -115,7 +115,7 @@ ephy_open_tabs_record_finalize (GObject *object)
 
   g_free (self->id);
   g_free (self->client_name);
-  g_slist_free_full (self->tabs, (GDestroyNotify)json_object_unref);
+  g_list_free_full (self->tabs, (GDestroyNotify)json_object_unref);
 
   G_OBJECT_CLASS (ephy_open_tabs_record_parent_class)->finalize (object);
 }
@@ -181,7 +181,7 @@ ephy_open_tabs_record_get_client_name (EphyOpenTabsRecord *self)
   return self->client_name;
 }
 
-GSList *
+GList *
 ephy_open_tabs_record_get_tabs (EphyOpenTabsRecord *self)
 {
   g_return_val_if_fail (EPHY_IS_OPEN_TABS_RECORD (self), NULL);
@@ -211,7 +211,7 @@ ephy_open_tabs_record_add_tab (EphyOpenTabsRecord *self,
   json_object_set_string_member (tab, "icon", favicon);
   json_object_set_int_member (tab, "lastUsed", g_get_real_time () / 1000000);
 
-  self->tabs = g_slist_prepend (self->tabs, tab);
+  self->tabs = g_list_prepend (self->tabs, tab);
 }
 
 static JsonNode *
@@ -244,11 +244,11 @@ serializable_deserialize_property (JsonSerializable *serializable,
 {
   if (!g_strcmp0 (name, "tabs")) {
     JsonArray *array;
-    GSList *tabs = NULL;
+    GList *tabs = NULL;
 
     array = json_node_get_array (node);
     for (guint i = 0; i < json_array_get_length (array); i++)
-      tabs = g_slist_prepend (tabs, json_object_ref (json_array_get_object_element (array, i)));
+      tabs = g_list_prepend (tabs, json_object_ref (json_array_get_object_element (array, i)));
 
     g_value_set_pointer (value, tabs);
 

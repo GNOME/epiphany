@@ -32,7 +32,7 @@ struct _EphyOpenTabsManager {
 
   /* A list of EphyOpenTabsRecord objects describing the open tabs
    * of other sync clients. This is updated at every sync. */
-  GSList *remote_records;
+  GList *remote_records;
 };
 
 static void ephy_synchronizable_manager_iface_init (EphySynchronizableManagerInterface *iface);
@@ -90,7 +90,7 @@ ephy_open_tabs_manager_finalize (GObject *object)
 {
   EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (object);
 
-  g_slist_free_full (self->remote_records, g_object_unref);
+  g_list_free_full (self->remote_records, g_object_unref);
 
   G_OBJECT_CLASS (ephy_open_tabs_manager_parent_class)->finalize (object);
 }
@@ -143,7 +143,7 @@ ephy_open_tabs_manager_get_local_tabs (EphyOpenTabsManager *self)
 {
   EphyOpenTabsRecord *local_tabs;
   EphyTabInfo *info;
-  GSList *tabs_info;
+  GList *tabs_info;
   char *id;
   char *name;
 
@@ -154,19 +154,19 @@ ephy_open_tabs_manager_get_local_tabs (EphyOpenTabsManager *self)
   local_tabs = ephy_open_tabs_record_new (id, name);
 
   tabs_info = ephy_tabs_catalog_get_tabs_info (self->catalog);
-  for (GSList *l = tabs_info; l && l->data; l = l->next) {
+  for (GList *l = tabs_info; l && l->data; l = l->next) {
     info = (EphyTabInfo *)l->data;
     ephy_open_tabs_record_add_tab (local_tabs, info->title, info->url, info->favicon);
   }
 
   g_free (id);
   g_free (name);
-  g_slist_free_full (tabs_info, (GDestroyNotify)ephy_tab_info_free);
+  g_list_free_full (tabs_info, (GDestroyNotify)ephy_tab_info_free);
 
   return local_tabs;
 }
 
-GSList *
+GList *
 ephy_open_tabs_manager_get_remote_tabs (EphyOpenTabsManager *self)
 {
   g_return_val_if_fail (EPHY_IS_OPEN_TABS_MANAGER (self), NULL);
@@ -179,7 +179,7 @@ ephy_open_tabs_manager_clear_cache (EphyOpenTabsManager *self)
 {
   g_return_if_fail (EPHY_IS_OPEN_TABS_MANAGER (self));
 
-  g_slist_free_full (self->remote_records, g_object_unref);
+  g_list_free_full (self->remote_records, g_object_unref);
   self->remote_records = NULL;
 }
 
@@ -250,33 +250,33 @@ synchronizable_manager_save (EphySynchronizableManager *manager,
 static void
 synchronizable_manager_merge (EphySynchronizableManager              *manager,
                               gboolean                                is_initial,
-                              GSList                                 *remotes_deleted,
-                              GSList                                 *remotes_updated,
+                              GList                                  *remotes_deleted,
+                              GList                                  *remotes_updated,
                               EphySynchronizableManagerMergeCallback  callback,
                               gpointer                                user_data)
 {
   EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (manager);
   EphyOpenTabsRecord *local_tabs;
-  GSList *to_upload = NULL;
+  GList *to_upload = NULL;
   char *id;
 
   id = ephy_sync_utils_get_device_id ();
-  g_slist_free_full (self->remote_records, g_object_unref);
+  g_list_free_full (self->remote_records, g_object_unref);
   self->remote_records = NULL;
 
-  for (GSList *l = remotes_updated; l && l->data; l = l->next) {
+  for (GList *l = remotes_updated; l && l->data; l = l->next) {
     /* Exclude the record which describes the local open tabs. */
     if (!g_strcmp0 (id, ephy_open_tabs_record_get_id (l->data)))
       continue;
 
-    self->remote_records = g_slist_prepend (self->remote_records, g_object_ref (l->data));
+    self->remote_records = g_list_prepend (self->remote_records, g_object_ref (l->data));
   }
 
   /* Only upload the local open tabs, we don't want to alter open tabs of
    * other clients. Also, overwrite any previous value by doing a force upload.
    */
   local_tabs = ephy_open_tabs_manager_get_local_tabs (self);
-  to_upload = g_slist_prepend (to_upload, local_tabs);
+  to_upload = g_list_prepend (to_upload, local_tabs);
 
   g_free (id);
 

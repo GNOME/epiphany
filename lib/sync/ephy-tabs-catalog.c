@@ -35,9 +35,9 @@ ephy_tabs_catalog_default_init (EphyTabsCatalogInterface *iface)
  *
  * Returns the title, URL and favicon URI of every tab of @catalog.
  *
- * Return value: (transfer full): a #GSList of #EphyTabInfo
+ * Return value: (transfer full): a #GList of #EphyTabInfo
  **/
-GSList *
+GList *
 ephy_tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
 {
   EphyTabsCatalogInterface *iface;
