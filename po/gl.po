@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany-master-po-gl-47333.merged\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=epipha"
 "ny&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-08-10 13:41+0000\n"
-"PO-Revision-Date: 2017-08-12 16:40+0200\n"
+"POT-Creation-Date: 2017-08-16 09:00+0000\n"
+"PO-Revision-Date: 2017-08-17 00:51+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1445,6 +1445,7 @@ msgstr ""
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
 #: embed/ephy-web-view.c:1967 embed/ephy-web-view.c:2021
+#, c-format
 msgid "Problem Loading Page"
 msgstr "Problema na carga da páxina"
 
@@ -1509,6 +1510,7 @@ msgstr "Se isto volve a suceder, informe do erro aos desenvolvedores de %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:2071
+#, c-format
 msgid "Problem Displaying Page"
 msgstr "Problema ao mostrar a páxina"
 
@@ -1529,6 +1531,7 @@ msgstr "Por favor, recárguea ou visite unha páxina distinta para continuar."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:2112
+#, c-format
 msgid "Security Violation"
 msgstr "Violación de seguranza"
 
@@ -1799,7 +1802,6 @@ msgid "Failed to retrieve the Sync Key"
 msgstr "Produciuse un fallo ao obter a chave de sincronización"
 
 #: lib/sync/ephy-sync-service.c:2247
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to register device."
 msgstr "Produciuse un fallo ao rexistrar o dispositivo."
 
@@ -2010,32 +2012,40 @@ msgid "Bookmark Properties"
 msgstr "Propiedades dos marcadores"
 
 #: src/bookmarks/ephy-bookmarks-import.c:121
+#, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
 msgstr ""
 "O ficheiro non é un ficheiro de marcadores de Epiphany válido: falta a táboa "
 "de etiquetas"
 
 #: src/bookmarks/ephy-bookmarks-import.c:139
+#, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr ""
 "Non é un ficheiro de marcadores de Epiphany válido: falta a táboa de "
 "marcadores"
 
-#: src/bookmarks/ephy-bookmarks-import.c:239
+#: src/bookmarks/ephy-bookmarks-import.c:240
+#, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
 msgstr ""
 "Non foi posíbel abrir a base de datos de marcadores de Firefox. Pécheo e "
 "ténteo de novo."
 
-#: src/bookmarks/ephy-bookmarks-import.c:252
-#: src/bookmarks/ephy-bookmarks-import.c:281
+#: src/bookmarks/ephy-bookmarks-import.c:253
+#: src/bookmarks/ephy-bookmarks-import.c:285
+#, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Non se puideron obter os marcadores de Firefox!"
 
 #: src/bookmarks/ephy-bookmarks-manager.h:34
 msgid "Favorites"
 msgstr "Favoritos"
+
+#: src/bookmarks/ephy-bookmarks-manager.h:35
+msgid "Mobile"
+msgstr "Móbil"
 
 #: src/clear-data-dialog.c:80
 msgid "HTTP disk cache"
@@ -2373,7 +2383,6 @@ msgstr "Última sincronización: %s"
 #. Translators: the %s refers to the email of the currently logged in user.
 #: src/prefs-dialog.c:282 src/prefs-dialog.c:1845
 #, c-format
-#| msgid "Currently logged in as %s"
 msgid "Logged in as %s"
 msgstr "Sesión iniciada como %s"
 
@@ -2382,7 +2391,6 @@ msgid "Please don’t leave this page until you have completed the verification.
 msgstr "Non deixe esta páxina ate que complete a verificación."
 
 #: src/prefs-dialog.c:526
-#| msgid "Something went wrong, please try again."
 msgid "Something went wrong, please try again later."
 msgstr "Algo foi mal, ténteo de novo máis tarde."
 
@@ -2417,7 +2425,6 @@ msgid "Language"
 msgstr "Idioma"
 
 #: src/prefs-dialog.c:1344
-#| msgid "Select a Directory"
 msgid "Select a directory"
 msgstr "Seleccionar un cartafol"
 
@@ -2808,7 +2815,6 @@ msgid "Search Engines"
 msgstr "Motores de busca"
 
 #: src/resources/gtk/prefs-dialog.ui:177
-#| msgid "Manage Search Engines"
 msgid "_Manage Search Engines"
 msgstr "_Xestionar os motores de busca"
 
@@ -2877,7 +2883,6 @@ msgid "Use custom _stylesheet"
 msgstr "Usar _follas de estilo personalizadas"
 
 #: src/resources/gtk/prefs-dialog.ui:441
-#| msgid "_Edit Stylesheet…"
 msgid "_Edit Stylesheet"
 msgstr "_Editar folla de estilos"
 
@@ -2886,7 +2891,6 @@ msgid "Fonts & Style"
 msgstr "Tipos de fonte e estilo"
 
 #: src/resources/gtk/prefs-dialog.ui:492
-#| msgid "Manage _Cookies…"
 msgid "Manage _Cookies"
 msgstr "Xestionar _cookies"
 
@@ -2900,7 +2904,6 @@ msgstr "Só _desde os sitios que visite"
 
 #. Refers to "Only from sites you visit" option under Cookies.
 #: src/resources/gtk/prefs-dialog.ui:525
-#| msgid "<small>For example, not from advertisers on these sites</small>"
 msgid "For example, not from advertisers on these sites"
 msgstr "Por exemplo para non ter publicidade neses sitios"
 
@@ -2909,7 +2912,6 @@ msgid "_Never accept"
 msgstr "_Non aceptar nunca"
 
 #: src/resources/gtk/prefs-dialog.ui:566
-#| msgid "Manage _Passwords…"
 msgid "Manage _Passwords"
 msgstr "Xestionar _contrasinais"
 
@@ -2926,7 +2928,6 @@ msgid "You can clear stored personal data."
 msgstr "Pode limpar os datos persoais almacenados"
 
 #: src/resources/gtk/prefs-dialog.ui:619
-#| msgid "Manage Personal _Data…"
 msgid "Manage Personal _Data"
 msgstr "Xestionar _datos personais"
 
@@ -2935,7 +2936,6 @@ msgid "Stored Data"
 msgstr "Datos almacenados"
 
 #: src/resources/gtk/prefs-dialog.ui:698
-#| msgid "_Add"
 msgid "_Add…"
 msgstr "_Engadir…"
 
