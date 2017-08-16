@@ -1125,6 +1125,78 @@ out:
 }
 
 static void
+migrate_passwords_add_target_origin (void)
+{
+  GHashTable *attributes;
+  GList *passwords = NULL;
+  GError *error = NULL;
+  int default_profile_migration_version;
+
+  /* Similar to Firefox Sync and the insecure passwords migrations.
+   * This is also a migration that runs once, and not for each profile
+   * Adds target_origin field to all existing records,
+   * with the same value as hostname
+   */
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  if (default_profile_migration_version >= EPHY_TARGET_ORIGIN_MIGRATION_VERSION)
+    return;
+
+  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
+  passwords = secret_service_search_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA, attributes,
+                                          SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                                          NULL, &error);
+  if (error) {
+    g_warning ("Failed to search the password schema: %s", error->message);
+    goto out;
+  }
+
+  secret_service_clear_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
+                             attributes, NULL, &error);
+  if (error) {
+    g_warning ("Failed to clear the password schema: %s", error->message);
+    goto out;
+  }
+
+  for (GList *l = passwords; l && l->data; l = l->next) {
+    SecretItem *item = (SecretItem *)l->data;
+    SecretValue *value = secret_item_get_secret (item);
+    GHashTable *attrs = secret_item_get_attributes (item);
+    const char *hostname = g_hash_table_lookup (attrs, HOSTNAME_KEY);
+    const char *username = g_hash_table_lookup (attrs, USERNAME_KEY);
+    const char *target_origin = g_hash_table_lookup (attrs, TARGET_ORIGIN_KEY);
+    char *label;
+
+    // In most cases target_origin has the same value as hostname
+    // We don't have a way of figuring out the correct value retroactively,
+    // so just use the hostname value
+    if (target_origin == NULL)
+      g_hash_table_insert (attrs, g_strdup (TARGET_ORIGIN_KEY), g_strdup (hostname));
+
+    if (username)
+      label = g_strdup_printf ("Password for %s in a form in %s", username, hostname);
+    else
+      label = g_strdup_printf ("Password in a form in %s", hostname);
+    secret_service_store_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
+                               attrs, NULL, label,
+                               value, NULL, &error);
+    if (error) {
+      g_warning ("Failed to store password: %s", error->message);
+      g_clear_pointer (&error, g_error_free);
+    }
+
+    g_free (label);
+    secret_value_unref (value);
+    g_hash_table_unref (attrs);
+  }
+
+out:
+  if (error)
+    g_error_free (error);
+  g_hash_table_unref (attributes);
+  g_list_free_full (passwords, g_object_unref);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1158,6 +1230,7 @@ const EphyProfileMigrator migrators[] = {
   /* 18 */ migrate_icon_database,
   /* 19 */ migrate_passwords_to_firefox_sync_passwords,
   /* 20 */ migrate_history_to_firefox_sync_history,
+  /* 21 */ migrate_passwords_add_target_origin,
 };
 
 static gboolean
