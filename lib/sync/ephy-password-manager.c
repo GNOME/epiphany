@@ -987,9 +987,22 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
           g_hash_table_add (dont_upload, g_strdup (remote_id));
         }
       } else {
-        /* Different id, different tuple. This is a new record. */
-        ephy_password_manager_store_record (self, l->data);
-        g_hash_table_add (dont_upload, g_strdup (remote_id));
+        record = get_record_by_parameters (local_records,
+                                           remote_hostname,
+                                           remote_hostname,
+                                           remote_username,
+                                           remote_username_field,
+                                           remote_password_field);
+        if (record) {
+          /* A leftover from migration: the local record has incorrect target_origin
+           * Replace it with remote record */
+          ephy_password_manager_forget_record (self, record, l->data);
+          g_hash_table_add (dont_upload, g_strdup (ephy_password_record_get_id (record)));
+        } else {
+          /* Different id, different tuple. This is a new record. */
+          ephy_password_manager_store_record (self, l->data);
+          g_hash_table_add (dont_upload, g_strdup (remote_id));
+        }
       }
     }
   }
