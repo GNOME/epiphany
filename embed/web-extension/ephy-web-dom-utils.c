@@ -23,6 +23,34 @@
 
 #include <libsoup/soup.h>
 #include <stdio.h>
+#include <string.h>
+
+typedef struct {
+  WebKitDOMHTMLInputElement *element;
+  gint index;
+} InputElementData;
+
+static InputElementData *
+input_element_data_new (WebKitDOMHTMLInputElement *element,
+                        gint                       index)
+{
+  InputElementData *data;
+
+  data = g_slice_new (InputElementData);
+  data->element = g_object_ref (element);
+  data->index = index;
+
+  return data;
+}
+
+static void
+input_element_data_free (InputElementData *data)
+{
+  g_assert (data);
+
+  g_object_unref (data->element);
+  g_slice_free (InputElementData, data);
+}
 
 /**
  * ephy_web_dom_utils_has_modified_forms:
@@ -457,17 +485,15 @@ ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
   g_free (image);
 }
 
-gboolean
-ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
-                                            WebKitDOMNode           **username,
-                                            WebKitDOMNode           **password)
+GPtrArray *
+ephy_web_dom_utils_find_password_fields (WebKitDOMHTMLFormElement *form,
+                                         AuthCacheMode             mode)
 {
+  GPtrArray *password_fields = NULL;
   WebKitDOMHTMLCollection *elements;
-  WebKitDOMNode *username_node = NULL;
-  WebKitDOMNode *password_node = NULL;
   guint i, n_elements;
-  gboolean found_auth_elements = FALSE;
-  gboolean found_auth_no_username_elements = FALSE;
+
+  password_fields = g_ptr_array_new_full (3, (GDestroyNotify)input_element_data_free);
 
   elements = webkit_dom_html_form_element_get_elements (form);
   n_elements = webkit_dom_html_collection_get_length (elements);
@@ -475,63 +501,178 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
   for (i = 0; i < n_elements; i++) {
     WebKitDOMNode *element;
     char *element_type;
-    char *element_name;
+    char *element_value;
+    InputElementData *data;
 
     element = webkit_dom_html_collection_item (elements, i);
     if (!WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
       continue;
 
-    g_object_get (element, "type", &element_type, "name", &element_name, NULL);
+    g_object_get (element, "type", &element_type, "value", &element_value, NULL);
+    if (g_strcmp0 (element_type, "password") != 0)
+      goto next;
 
-    if (g_strcmp0 (element_type, "text") == 0 ||
-        g_strcmp0 (element_type, "email") == 0 ||
-        g_strcmp0 (element_type, "tel") == 0) {
-      /* We found more than one inputs of type text; we won't be saving here. */
-      if (username_node) {
-        g_free (element_type);
-        found_auth_elements = FALSE;
-        break;
-      }
+    if ((element_value == NULL || strlen (element_value) == 0) &&
+        mode == AUTH_CACHE_SUBMIT)
+      goto next;
 
-      username_node = g_object_ref (element);
-      found_auth_elements = TRUE;
-    } else if (g_strcmp0 (element_type, "password") == 0) {
-      /* We found more than one inputs of type password; we won't be saving here. */
-      if (password_node) {
-        g_free (element_type);
-        found_auth_elements = FALSE;
-        break;
-      }
+    data = input_element_data_new (WEBKIT_DOM_HTML_INPUT_ELEMENT (element), i);
 
-      password_node = g_object_ref (element);
-      found_auth_elements = TRUE;
+    g_ptr_array_add (password_fields, data);
 
-      /* We found an input that usually doesn't require a separate login
-       * adminpw is used by mailman admin pages */
-      if (g_strcmp0 (element_name, "adminpw") == 0)
-        found_auth_no_username_elements = TRUE;
-    }
-
+next:
     g_free (element_type);
-    g_free (element_name);
+    g_free (element_value);
   }
 
   g_object_unref (elements);
 
-  if (found_auth_no_username_elements && password_node) {
-    g_clear_object (&username_node);
-    *username = NULL;
-    *password = password_node;
-
-    return TRUE;
+  /*
+   * We only want to process forms with 1-3 fields. A common
+   * case is to have a "change password" form with 3 fields:
+   * Old password, New password, Confirm new password.
+   * Forms with more than 3 password fields are unlikely,
+   * and we don't know how to process them, so reject them
+   */
+  if (password_fields->len == 0 || password_fields->len > 3) {
+    g_ptr_array_free (password_fields, TRUE);
+    return NULL;
   }
 
-  if (found_auth_elements && username_node && password_node) {
-    *username = username_node;
-    *password = password_node;
+  return password_fields;
+}
 
-    return TRUE;
+/*
+ * The heuristic is based on the one used in Firefox. See
+ * https://dxr.mozilla.org/mozilla-central/rev/892c8916ba32b7733e06bfbfdd4083ffae3ca028/toolkit/components/passwordmgr/LoginManagerContent.jsm#733
+ */
+gboolean
+ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
+                                            WebKitDOMNode           **username,
+                                            WebKitDOMNode           **password,
+                                            AuthCacheMode             mode)
+{
+  WebKitDOMHTMLCollection *elements;
+  WebKitDOMHTMLInputElement *username_node = NULL;
+  WebKitDOMHTMLInputElement *password_node = NULL;
+  gint i, password_node_index;
+  GPtrArray *password_nodes = NULL;
+  gchar **passwords;
+  InputElementData *first_password_node_data = NULL;
+
+  password_nodes = ephy_web_dom_utils_find_password_fields (form, mode);
+  if (password_nodes == NULL)
+    return FALSE;
+
+  /*
+   * Start at the first found password field and search backwards.
+   * Assume the first eligible field to contain username
+   */
+  first_password_node_data = g_ptr_array_index (password_nodes, 0);
+  elements = webkit_dom_html_form_element_get_elements (form);
+  for (i = first_password_node_data->index; i >= 0; i--) {
+    WebKitDOMNode *element;
+    gchar *element_type;
+
+    element = webkit_dom_html_collection_item (elements, i);
+    if (!WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element))
+      continue;
+
+    g_object_get (element, "type", &element_type, NULL);
+    if (g_strcmp0 (element_type, "text") == 0 ||
+        g_strcmp0 (element_type, "email") == 0 ||
+        g_strcmp0 (element_type, "tel") == 0 ||
+        g_strcmp0 (element_type, "url") == 0 ||
+        g_strcmp0 (element_type, "number") == 0) {
+      username_node = g_object_ref (element);
+      g_free (element_type);
+      break;
+    }
+
+    g_free (element_type);
   }
+
+  /*
+   * Choose password field that contains the password that we want to store
+   * To do that, we compare the field values. We can only do this when user
+   * submits login data, because otherwise all the fields are empty. In that
+   * case just pick the first field
+   */
+  if (mode == AUTH_CACHE_AUTOFILL || password_nodes->len == 1) {
+    /* If mode == AUTH_CACHE_AUTOFILL, we expect all fields to be empty */
+    password_node_index = 0;
+  } else {
+    /* Get values of all password fields */
+    passwords = g_malloc0 (password_nodes->len * sizeof (gchar *));
+    for (i = password_nodes->len - 1; i >= 0; i--) {
+      WebKitDOMHTMLInputElement *element;
+      element = ((InputElementData *) g_ptr_array_index (password_nodes, i))->element;
+      passwords[i] = webkit_dom_html_input_element_get_value (element);
+    }
+
+    if (password_nodes->len == 2) {
+      /*
+       * If there are two password fields, assume that the form has either
+       * Password and Confirm password fields, or Old password and New password.
+       * That can be guessed by comparing values in the fields. If they are
+       * different, we assume that the second password is "new" and use it.
+       * If they match, then just take the first field.
+       */
+      if (g_strcmp0 (passwords[0], passwords[1]) == 0) {
+        /* Password / Confirm password */
+        password_node_index = 0;
+      } else {
+        /* Old password / New password */
+        password_node_index = 1;
+      }
+    } else if (password_nodes->len == 3) {
+      /*
+       * This is probably a complete Old password, New password, Confirm
+       * new password case. Here we assume that if two fields have the same
+       * value, then it's the new password and we should take it. A special
+       * case is when all 3 passwords are different. We don't know what to
+       * do in this case, so just reject the form,
+       */
+      if (g_strcmp0 (passwords[0], passwords[1]) == 0 &&
+          g_strcmp0 (passwords[1], passwords[2]) == 0) {
+        /* All values are same */
+        password_node_index = 0;
+      } else if (g_strcmp0 (passwords[0], passwords[1]) == 0) {
+        /* New password / Confirm new password / Old password */
+        password_node_index = 0;
+      } else if (g_strcmp0 (passwords[0], passwords[2]) == 0) {
+        /* New password / Old password / Confirm new password */
+        password_node_index = 0;
+      } else if (g_strcmp0 (passwords[1], passwords[2]) == 0) {
+        /* Old password / New password / Confirm new password */
+        password_node_index = 1;
+      } else {
+        /* All values are different. Reject the form */
+        password_node_index = -1;
+      }
+    }
+
+    for (i = 0; i < password_nodes->len; i++)
+      g_free (passwords[i]);
+    g_free (passwords);
+  }
+
+  if (password_node_index >= 0) {
+    InputElementData *password_data = g_ptr_array_index (password_nodes,
+                                                         password_node_index);
+    password_node = g_object_ref (password_data->element);
+  }
+
+  if (username_node)
+    *username = WEBKIT_DOM_NODE (username_node);
+  if (password_node)
+    *password = WEBKIT_DOM_NODE (password_node);
+
+  g_object_unref (elements);
+  g_ptr_array_free (password_nodes, TRUE);
+
+  if (*password)
+    return TRUE;
 
   if (username_node)
     g_object_unref (username_node);

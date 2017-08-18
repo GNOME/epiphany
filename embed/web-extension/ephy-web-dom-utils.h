@@ -24,6 +24,11 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  AUTH_CACHE_SUBMIT,
+  AUTH_CACHE_AUTOFILL
+} AuthCacheMode;
+
 gboolean ephy_web_dom_utils_has_modified_forms (WebKitDOMDocument *document);
 
 char * ephy_web_dom_utils_get_application_title (WebKitDOMDocument *document);
@@ -33,9 +38,13 @@ void ephy_web_dom_utils_get_best_icon (WebKitDOMDocument *document,
                                        char             **uri_out,
                                        char             **color_out);
 
+GPtrArray *ephy_web_dom_utils_find_password_fields (WebKitDOMHTMLFormElement *form,
+                                                    AuthCacheMode             mode);
+
 gboolean ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
                                                      WebKitDOMNode           **username,
-                                                     WebKitDOMNode           **password);
+                                                     WebKitDOMNode           **password,
+                                                     AuthCacheMode             mode);
 
 gboolean ephy_web_dom_utils_form_contains_sensitive_element (WebKitDOMHTMLFormElement *form);
 

@@ -469,7 +469,10 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
   char *uri_str;
   char *form_action;
 
-  if (!ephy_web_dom_utils_find_form_auth_elements (dom_form, &username_node, &password_node))
+  if (!ephy_web_dom_utils_find_form_auth_elements (dom_form,
+                                                   &username_node,
+                                                   &password_node,
+                                                   AUTH_CACHE_SUBMIT))
     return TRUE;
 
   if (username_node) {
@@ -1134,7 +1137,10 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
       continue;
 
     /* We have a field that may be the user, and one for a password. */
-    if (ephy_web_dom_utils_find_form_auth_elements (form, &username_node, &password_node)) {
+    if (ephy_web_dom_utils_find_form_auth_elements (form,
+                                                    &username_node,
+                                                    &password_node,
+                                                    AUTH_CACHE_AUTOFILL)) {
       EphyEmbedFormAuth *form_auth;
       GList *cached_users;
       const char *uri;
