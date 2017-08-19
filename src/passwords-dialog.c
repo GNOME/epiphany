@@ -176,9 +176,7 @@ forget (GSimpleAction *action,
     gtk_tree_model_get_iter (model, &iter, path);
     gtk_tree_model_get_value (model, &iter, COL_PASSWORDS_DATA, &val);
     record = g_value_get_object (&val);
-    ephy_password_manager_forget (dialog->manager,
-                                  ephy_password_record_get_hostname (record),
-                                  ephy_password_record_get_username (record));
+    ephy_password_manager_forget (dialog->manager, ephy_password_record_get_id (record));
     dialog->records = g_list_remove (dialog->records, record);
     g_object_unref (record);
     g_value_unset (&val);
@@ -437,7 +435,7 @@ populate_model (EphyPasswordsDialog *dialog)
 
   /* Ask for all password records. */
   ephy_password_manager_query (dialog->manager,
-                               NULL, NULL, NULL, NULL,
+                               NULL, NULL, NULL, NULL, NULL,
                                populate_model_cb, dialog);
 }
 

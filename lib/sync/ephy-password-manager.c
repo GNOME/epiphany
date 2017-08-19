@@ -324,7 +324,7 @@ ephy_password_manager_init (EphyPasswordManager *self)
 {
   LOG ("Loading usernames into internal cache...");
   self->cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  ephy_password_manager_query (self, NULL, NULL, NULL, NULL,
+  ephy_password_manager_query (self, NULL, NULL, NULL, NULL, NULL,
                                populate_cache_cb, self);
 }
 
@@ -446,7 +446,7 @@ update_password_cb (GList    *records,
   UpdatePasswordAsyncData *data = (UpdatePasswordAsyncData *)user_data;
   EphyPasswordRecord *record;
 
-  /* We only expect one matching record here. */
+  /* We expect only one matching record here. */
   g_assert (g_list_length (records) == 1);
 
   record = EPHY_PASSWORD_RECORD (records->data);
@@ -482,7 +482,8 @@ ephy_password_manager_save (EphyPasswordManager *self,
   if (!is_new) {
     LOG ("Updating password for (%s, %s, %s, %s)",
          uri, username, username_field, password_field);
-    ephy_password_manager_query (self, uri, username,
+    ephy_password_manager_query (self, NULL,
+                                 uri, username,
                                  username_field, password_field,
                                  update_password_cb,
                                  update_password_async_data_new (self, password));
@@ -562,6 +563,7 @@ out:
 
 void
 ephy_password_manager_query (EphyPasswordManager              *self,
+                             const char                       *id,
                              const char                       *uri,
                              const char                       *username,
                              const char                       *username_field,
@@ -577,7 +579,7 @@ ephy_password_manager_query (EphyPasswordManager              *self,
   LOG ("Querying password records for (%s, %s, %s, %s)",
        uri, username, username_field, password_field);
 
-  attributes = get_attributes_table (NULL, uri, username,
+  attributes = get_attributes_table (id, uri, username,
                                      username_field, password_field, -1);
   data = query_async_data_new (callback, user_data);
 
@@ -686,7 +688,7 @@ forget_cb (GList    *records,
   EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (user_data);
   EphyPasswordRecord *record;
 
-  /* We only expect one matching record here. */
+  /* We expect only one matching record here. */
   g_assert (g_list_length (records) == 1);
 
   record = EPHY_PASSWORD_RECORD (records->data);
@@ -698,18 +700,16 @@ forget_cb (GList    *records,
 
 void
 ephy_password_manager_forget (EphyPasswordManager *self,
-                              const char          *hostname,
-                              const char          *username)
+                              const char          *id)
 {
   g_return_if_fail (EPHY_IS_PASSWORD_MANAGER (self));
-  g_return_if_fail (hostname);
-  g_return_if_fail (username);
+  g_return_if_fail (id);
 
   /* synchronizable-deleted signal needs an EphySynchronizable object,
    * therefore we need to obtain the password record first and then emit
    * the signal before clearing the password from the secret schema. */
-  ephy_password_manager_query (self, hostname, username,
-                               NULL, NULL,
+  ephy_password_manager_query (self, id,
+                               NULL, NULL, NULL, NULL,
                                forget_cb, self);
 }
 
@@ -741,7 +741,7 @@ ephy_password_manager_forget_all (EphyPasswordManager *self)
   /* synchronizable-deleted signal needs an EphySynchronizable object, therefore
    * we need to obtain the password records first and emit the signal for each
    * one before clearing the secret schema. */
-  ephy_password_manager_query (self, NULL, NULL, NULL, NULL,
+  ephy_password_manager_query (self, NULL, NULL, NULL, NULL, NULL,
                                forget_all_cb, self);
 }
 
@@ -809,22 +809,12 @@ replace_existing_cb (GList    *records,
 {
   ReplaceRecordAsyncData *data = (ReplaceRecordAsyncData *)user_data;
 
-  for (GList *l = records; l && l->data; l = l->next) {
-    /* NULL fields can cause the query to match other records too,
-     * so we need to make sure we have the record we've been looking for. */
-    if (!g_strcmp0 (ephy_password_record_get_hostname (records->data),
-                    ephy_password_record_get_hostname (data->record)) &&
-        !g_strcmp0 (ephy_password_record_get_username (records->data),
-                    ephy_password_record_get_username (data->record)) &&
-        !g_strcmp0 (ephy_password_record_get_username_field (records->data),
-                    ephy_password_record_get_username_field (data->record)) &&
-        !g_strcmp0 (ephy_password_record_get_password_field (records->data),
-                    ephy_password_record_get_password_field (data->record))) {
-      ephy_password_manager_forget_record (data->manager, records->data, data->record);
-      break;
-    }
-  }
+  /* We expect only one matching record here. */
+  g_assert (g_list_length (records) == 1);
 
+  ephy_password_manager_forget_record (data->manager, records->data, data->record);
+
+  g_list_free_full (records, g_object_unref);
   replace_record_async_data_free (data);
 }
 
@@ -835,11 +825,8 @@ ephy_password_manager_replace_existing (EphyPasswordManager *self,
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
 
-  ephy_password_manager_query (self,
-                               ephy_password_record_get_hostname (record),
-                               ephy_password_record_get_username (record),
-                               ephy_password_record_get_username_field (record),
-                               ephy_password_record_get_password_field (record),
+  ephy_password_manager_query (self, ephy_password_record_get_id (record),
+                               NULL, NULL, NULL, NULL,
                                replace_existing_cb,
                                replace_record_async_data_new (self, record));
 }
@@ -1101,7 +1088,7 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
 {
   EphyPasswordManager *self = EPHY_PASSWORD_MANAGER (manager);
 
-  ephy_password_manager_query (self, NULL, NULL, NULL, NULL,
+  ephy_password_manager_query (self, NULL, NULL, NULL, NULL, NULL,
                                merge_cb,
                                merge_passwords_async_data_new (self,
                                                                is_initial,

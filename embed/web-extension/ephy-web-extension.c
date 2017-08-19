@@ -483,6 +483,7 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
   uri_str = soup_uri_to_string (uri, FALSE);
 
   ephy_password_manager_query (extension->password_manager,
+                               NULL,
                                uri_str,
                                username_field_value,
                                username_field_name,
@@ -563,6 +564,7 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
     g_clear_pointer (&username, g_free);
 
   ephy_password_manager_query (extension->password_manager,
+                               NULL,
                                uri_str,
                                username,
                                username_field_name,

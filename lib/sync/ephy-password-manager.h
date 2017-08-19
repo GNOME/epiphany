@@ -55,6 +55,7 @@ void                 ephy_password_manager_save                     (EphyPasswor
                                                                      const char          *password_field,
                                                                      gboolean             is_new);
 void                 ephy_password_manager_query                    (EphyPasswordManager              *self,
+                                                                     const char                       *id,
                                                                      const char                       *uri,
                                                                      const char                       *username,
                                                                      const char                       *username_field,
@@ -62,8 +63,7 @@ void                 ephy_password_manager_query                    (EphyPasswor
                                                                      EphyPasswordManagerQueryCallback  callback,
                                                                      gpointer                          user_data);
 void                 ephy_password_manager_forget                    (EphyPasswordManager *self,
-                                                                      const char          *hostname,
-                                                                      const char          *username);
+                                                                      const char          *id);
 void                 ephy_password_manager_forget_all                (EphyPasswordManager *self);
 /* Note: Below functions are deprecated and should not be used in newly written code.
  * The only reason they still exist is that the profile migrator expects them. */
