@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-08-07 14:14+0000\n"
-"PO-Revision-Date: 2017-08-09 14:11+0700\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+"POT-Creation-Date: 2017-08-16 09:00+0000\n"
+"PO-Revision-Date: 2017-08-20 13:19+0700\n"
+"Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
 msgid "GNOME Web"
@@ -1425,6 +1425,7 @@ msgstr ""
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
 #: embed/ephy-web-view.c:1967 embed/ephy-web-view.c:2021
+#, c-format
 msgid "Problem Loading Page"
 msgstr "Masalah Saat Memuat Halaman"
 
@@ -1490,6 +1491,7 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:2071
+#, c-format
 msgid "Problem Displaying Page"
 msgstr "Masalah Saat Menampilkan Halaman"
 
@@ -1510,6 +1512,7 @@ msgstr "Harap muat ulang atau kunjungi halaman lain untuk melanjutkan."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:2112
+#, c-format
 msgid "Security Violation"
 msgstr "Pelanggaran Keamanan"
 
@@ -1686,14 +1689,14 @@ msgstr "Berkas lokal"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:393
+#: lib/sync/ephy-password-manager.c:394
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Sandi bagi %s dalam suatu formulir dalam %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:397
+#: lib/sync/ephy-password-manager.c:398
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Sandi dalam suatu formulir di %s"
@@ -1976,32 +1979,40 @@ msgid "Bookmark Properties"
 msgstr "Properti Penanda Taut"
 
 #: src/bookmarks/ephy-bookmarks-import.c:121
+#, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
 msgstr ""
 "Berkas merupakan berkas penanda taut Epiphany yang tidak valid: tabel tag "
 "hilang"
 
 #: src/bookmarks/ephy-bookmarks-import.c:139
+#, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr ""
 "Berkas merupakan berkas penanda taut Epiphany yang tidak valid: tabel "
 "penanda taut hilang"
 
-#: src/bookmarks/ephy-bookmarks-import.c:239
+#: src/bookmarks/ephy-bookmarks-import.c:240
+#, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
 msgstr ""
 "Basis data penanda taut Firefox tidak bisa dibuka. Tutup Firefox dan coba "
 "lagi."
 
-#: src/bookmarks/ephy-bookmarks-import.c:252
-#: src/bookmarks/ephy-bookmarks-import.c:281
+#: src/bookmarks/ephy-bookmarks-import.c:253
+#: src/bookmarks/ephy-bookmarks-import.c:285
+#, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Penanda taut Firefox tidak dapat diambil!"
 
 #: src/bookmarks/ephy-bookmarks-manager.h:34
 msgid "Favorites"
 msgstr "Favorit"
+
+#: src/bookmarks/ephy-bookmarks-manager.h:35
+msgid "Mobile"
+msgstr "Seluler"
 
 #: src/clear-data-dialog.c:80
 msgid "HTTP disk cache"
