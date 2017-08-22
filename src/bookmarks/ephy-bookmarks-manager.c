@@ -908,9 +908,6 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
   GList *to_upload = NULL;
 
-  if (!ephy_bookmarks_manager_tag_exists (self, EPHY_BOOKMARKS_MOBILE_TAG))
-    ephy_bookmarks_manager_create_tag (self, EPHY_BOOKMARKS_MOBILE_TAG);
-
   if (is_initial)
     to_upload = ephy_bookmarks_manager_handle_initial_merge (self,
                                                              remotes_updated);
