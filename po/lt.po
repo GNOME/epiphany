@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-08-09 20:09+0000\n"
-"PO-Revision-Date: 2017-08-13 23:19+0300\n"
+"POT-Creation-Date: 2017-08-16 09:00+0000\n"
+"PO-Revision-Date: 2017-08-22 22:48+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -550,7 +550,6 @@ msgstr ""
 "Ar naujas langas, kuris nėra atkuriamas iš ankstesnio seanso, yra išdidintas."
 
 #: data/org.gnome.epiphany.gschema.xml:277
-#| msgid "Currently logged in as %s"
 msgid "Currently signed in sync user"
 msgstr "Šiuo metu prisijungta sinchronizuojamu naudotoju"
 
@@ -563,12 +562,10 @@ msgstr ""
 "sinchronizavimui su Mozilla serveriais."
 
 #: data/org.gnome.epiphany.gschema.xml:282
-#| msgid "Sync timestamp"
 msgid "Last sync timestamp"
 msgstr "Paskutinės sinchronizacijos laiko žyma"
 
 #: data/org.gnome.epiphany.gschema.xml:283
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Paskutinės sinchronizacijos UNIX laikas sekundėmis."
 
@@ -581,7 +578,6 @@ msgid "The sync device ID of the current device."
 msgstr "Dabartinio įrenginio sinchronizacijos ID"
 
 #: data/org.gnome.epiphany.gschema.xml:292
-#| msgid "Sync timestamp"
 msgid "Sync device name"
 msgstr "Sinchronizacijos įrenginio pavadinimas"
 
@@ -610,7 +606,6 @@ msgstr ""
 "kolekcijomis, priešingu atveju NEIGIAMA."
 
 #: data/org.gnome.epiphany.gschema.xml:307
-#| msgid "No bookmarks yet?"
 msgid "Enable bookmarks sync"
 msgstr "Įjungti gairių sinchronizaciją"
 
@@ -621,12 +616,10 @@ msgstr ""
 "NEIGIAMA."
 
 #: data/org.gnome.epiphany.gschema.xml:312
-#| msgid "Sync timestamp"
 msgid "Bookmarks sync timestamp"
 msgstr "Gairių sinchronizacijos laiko žyma"
 
 #: data/org.gnome.epiphany.gschema.xml:313
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Paskutinės gairių sinchronizacijos laiko žyma."
 
@@ -645,7 +638,6 @@ msgstr ""
 "NEIGIAMA."
 
 #: data/org.gnome.epiphany.gschema.xml:322
-#| msgid "Filter passwords"
 msgid "Enable passwords sync"
 msgstr "Įjungti slaptažodžių sinchronizaciją"
 
@@ -656,12 +648,10 @@ msgstr ""
 "atveju NEIGIAMA."
 
 #: data/org.gnome.epiphany.gschema.xml:327
-#| msgid "Sync timestamp"
 msgid "Passwords sync timestamp"
 msgstr "Slaptažodžių sinchronizacijos laiko žyma"
 
 #: data/org.gnome.epiphany.gschema.xml:328
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Paskutinės slaptažodžių sinchronizacijos laiko žyma."
 
@@ -684,12 +674,10 @@ msgstr ""
 "atveju NEIGIAMA."
 
 #: data/org.gnome.epiphany.gschema.xml:342
-#| msgid "Sync timestamp"
 msgid "History sync timestamp"
 msgstr "Retrospektyvos sinchronizacijos laiko žyma"
 
 #: data/org.gnome.epiphany.gschema.xml:343
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The timestamp at which last history sync was made."
 msgstr "Paskutinės retrospektyvos sinchronizacijos laiko žyma."
 
@@ -702,7 +690,6 @@ msgstr ""
 "atveju NEIGIAMA."
 
 #: data/org.gnome.epiphany.gschema.xml:352
-#| msgid "View open tabs"
 msgid "Enable open tabs sync"
 msgstr "Įjungti atvertų kortelių sinchronizaciją"
 
@@ -713,12 +700,10 @@ msgstr ""
 "atveju NEIGIAMA."
 
 #: data/org.gnome.epiphany.gschema.xml:357
-#| msgid "Sync timestamp"
 msgid "Open tabs sync timestamp"
 msgstr "Atvertų kortelių sinchronizacijos laiko žyma"
 
 #: data/org.gnome.epiphany.gschema.xml:358
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Paskutinės atvertų kortelių sinchronizacijos laiko žyma."
 
@@ -898,10 +883,6 @@ msgid "Private Browsing"
 msgstr "Privatusis naršymas"
 
 #: embed/ephy-about-handler.c:579
-#| msgid ""
-#| "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
-#| "will not show up in your browsing history and all stored information will "
-#| "be cleared when you close the window. Files you download will be kept."
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1341,28 +1322,24 @@ msgstr "Leisti"
 #. Translators: Notification policy for a specific site.
 #: embed/ephy-web-view.c:1436
 #, c-format
-#| msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Tinklalapis %s nori rodyti darbalaukio pranešimus."
 
 #. Translators: Geolocation policy for a specific site.
 #: embed/ephy-web-view.c:1441
 #, c-format
-#| msgid "The page at <b>%s</b> wants to know your location."
 msgid "The page at %s wants to know your location."
 msgstr "Tinklalapis %s nori žinotų jūsų buvimo vietą."
 
 #. Translators: Microphone policy for a specific site.
 #: embed/ephy-web-view.c:1446
 #, c-format
-#| msgid "The page at <b>%s</b> wants to use your microphone."
 msgid "The page at %s wants to use your microphone."
 msgstr "Tinklalapis %s nori naudoti mikrofoną."
 
 #. Translators: Webcam policy for a specific site.
 #: embed/ephy-web-view.c:1451
 #, c-format
-#| msgid "The page at <b>%s</b> wants to use your webcam."
 msgid "The page at %s wants to use your webcam."
 msgstr "Tinklalapis %s nori naudoti kamerą."
 
@@ -1433,6 +1410,7 @@ msgstr ""
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
 #: embed/ephy-web-view.c:1967 embed/ephy-web-view.c:2021
+#, c-format
 msgid "Problem Loading Page"
 msgstr "Problema įkeliant puslapį"
 
@@ -1496,6 +1474,7 @@ msgstr "Jei taip nutiks dar kartą, praneškite apie klaidą %s kūrėjams."
 
 #. Page title when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:2071
+#, c-format
 msgid "Problem Displaying Page"
 msgstr "Kilo problema parodant puslapį"
 
@@ -1516,6 +1495,7 @@ msgstr "Įkelkite iš naujo arba aplankykite kitą tinklalapį, jei norite tęst
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:2112
+#, c-format
 msgid "Security Violation"
 msgstr "Saugumo pažeidimas"
 
@@ -1710,22 +1690,16 @@ msgstr "Nepavyko gauti saugyklos įgaliojimų."
 
 #: lib/sync/ephy-sync-service.c:787 lib/sync/ephy-sync-service.c:902
 #: lib/sync/ephy-sync-service.c:1479
-#| msgid ""
-#| "Please visit Preferences and sign in again to continue the sync process."
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Nueikite į Nustatymus ir prisijunkite nauju slaptažodžiu, jei norite tęsti "
 "sinchronizaciją."
 
 #: lib/sync/ephy-sync-service.c:892
-#| msgid "The password of your Firefox account %s seems to have been changed."
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Atrodo jūsų Firefox paskyros slaptažodis buvo pakeistas."
 
 #: lib/sync/ephy-sync-service.c:893
-#| msgid ""
-#| "Please visit Preferences and sign in with the new password to continue "
-#| "the sync process."
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1738,7 +1712,6 @@ msgid "Failed to obtain signed certificate."
 msgstr "Nepavyko gauti pasirašyto liudijimo."
 
 #: lib/sync/ephy-sync-service.c:1451
-#| msgid "Could not find the sync tokens for the currently logged-in user."
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Nepavyko rasti sinchronizacijos paslapčių šiuo metu prisijungusiam "
@@ -1755,7 +1728,6 @@ msgstr "Dabartinio naudotojo sinchronizacijos paslaptys yra netinkamos."
 #. Translators: %s is the email of the user.
 #: lib/sync/ephy-sync-service.c:1566
 #, c-format
-#| msgid "The sync tokens of %s"
 msgid "The sync secrets of %s"
 msgstr "%s sinchronizacijos paslaptys"
 
@@ -1764,7 +1736,6 @@ msgid "Failed to upload crypto/keys record."
 msgstr "Nepavyko nusiųsti šifro/raktų įrašo."
 
 #: lib/sync/ephy-sync-service.c:1816
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to retrieve crypto keys."
 msgstr "Nepavyko gauti šifravimo raktų."
 
@@ -1790,7 +1761,6 @@ msgid "Failed to retrieve the Sync Key"
 msgstr "Nepavyko gauti sinchronizacijos rakto"
 
 #: lib/sync/ephy-sync-service.c:2247
-#| msgid "Failed to create directory “%s”."
 msgid "Failed to register device."
 msgstr "Nepavyko užregistruoti įrenginio."
 
@@ -2007,28 +1977,36 @@ msgid "Bookmark Properties"
 msgstr "Gairių savybės"
 
 #: src/bookmarks/ephy-bookmarks-import.c:121
+#, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
 msgstr "Failas nėra tinkamas Epiphany gairių failas: trūksta žymų lentelės"
 
 #: src/bookmarks/ephy-bookmarks-import.c:139
+#, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr "Failas nėra tinkamas Epiphany gairių failas: trūksta gairių lentelės"
 
-#: src/bookmarks/ephy-bookmarks-import.c:239
+#: src/bookmarks/ephy-bookmarks-import.c:240
+#, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
 msgstr ""
 "Nepavyko atverti Firefox gairių duomenų bazės. Užverkite Firefox ir "
 "bandykite vėl."
 
-#: src/bookmarks/ephy-bookmarks-import.c:252
-#: src/bookmarks/ephy-bookmarks-import.c:281
+#: src/bookmarks/ephy-bookmarks-import.c:253
+#: src/bookmarks/ephy-bookmarks-import.c:285
+#, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "Nepavyko gauti Firefox gairių!"
 
 #: src/bookmarks/ephy-bookmarks-manager.h:34
 msgid "Favorites"
 msgstr "Mėgiamiausi"
+
+#: src/bookmarks/ephy-bookmarks-manager.h:35
+msgid "Mobile"
+msgstr "Mobilusis"
 
 #: src/clear-data-dialog.c:80
 msgid "HTTP disk cache"
@@ -2366,7 +2344,6 @@ msgstr "Paskutinės sinchronizacija: %s"
 #. Translators: the %s refers to the email of the currently logged in user.
 #: src/prefs-dialog.c:282 src/prefs-dialog.c:1845
 #, c-format
-#| msgid "Currently logged in as %s"
 msgid "Logged in as %s"
 msgstr "Prisijungta naudotoju %s"
 
@@ -2375,7 +2352,6 @@ msgid "Please don’t leave this page until you have completed the verification.
 msgstr "Neišeikite iš šio puslapio iki pabaigsite tikrinimą."
 
 #: src/prefs-dialog.c:526
-#| msgid "Something went wrong, please try again."
 msgid "Something went wrong, please try again later."
 msgstr "Atsitiko kažkas negero, bandykite dar kartą."
 
@@ -2890,7 +2866,6 @@ msgstr "Tik iš lankomų _svetainių"
 
 #. Refers to "Only from sites you visit" option under Cookies.
 #: src/resources/gtk/prefs-dialog.ui:525
-#| msgid "<small>For example, not from advertisers on these sites</small>"
 msgid "For example, not from advertisers on these sites"
 msgstr "Pavyzdžiui, ne iš reklamų šiose svetainėse"
 
@@ -2947,15 +2922,10 @@ msgid "_Enable spell checking"
 msgstr "Įjungti _rašybos tikrinimą"
 
 #: src/resources/gtk/prefs-dialog.ui:790
-#| msgid "Firefox"
 msgid "Firefox Sync"
 msgstr "Firefox sinchronizacija"
 
 #: src/resources/gtk/prefs-dialog.ui:808
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web on other "
-#| "computers. Web is not Firefox and cannot sync with Firefox. Web is not "
-#| "produced or endorsed by Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not produced or endorsed by Mozilla."
@@ -2965,7 +2935,6 @@ msgstr ""
 "neremia."
 
 #: src/resources/gtk/prefs-dialog.ui:842
-#| msgid "Firefox"
 msgid "Firefox Account"
 msgstr "Firefox paskyra"
 
@@ -2974,12 +2943,10 @@ msgid "Sign _out"
 msgstr "_Atsijungti"
 
 #: src/resources/gtk/prefs-dialog.ui:884
-#| msgid "Sync timestamp"
 msgid "Sync Options"
 msgstr "Sinchronizacijos parametrai"
 
 #: src/resources/gtk/prefs-dialog.ui:904
-#| msgid "Location"
 msgid "Collections"
 msgstr "Kolekcijos"
 
@@ -2988,18 +2955,14 @@ msgid "S_ynced tabs"
 msgstr "S_inchronizuojamos kortelės"
 
 #: src/resources/gtk/prefs-dialog.ui:928
-#| msgctxt "shortcut window"
-#| msgid "Bookmarks"
 msgid "_Bookmarks"
 msgstr "_Gairės"
 
 #: src/resources/gtk/prefs-dialog.ui:935
-#| msgid "Passwords"
 msgid "_Passwords"
 msgstr "Sla_ptažodžiai"
 
 #: src/resources/gtk/prefs-dialog.ui:949
-#| msgid "Open in New _Tabs"
 msgid "Open _Tabs"
 msgstr "Atvertos _kortelės"
 
@@ -3008,7 +2971,6 @@ msgid "Frequency"
 msgstr "Dažnis"
 
 #: src/resources/gtk/prefs-dialog.ui:972
-#| msgid "Sync"
 msgid "Sync _now"
 msgstr "Sinchronizuoti _dabar"
 
@@ -3322,7 +3284,6 @@ msgid "Search the Web for %s"
 msgstr "Ieškoti internete %s"
 
 #: src/synced-tabs-dialog.c:184
-#| msgid "Local files"
 msgid "Local Tabs"
 msgstr "Vietinės kortelės"
 
