@@ -30,8 +30,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyBookmarkRow, ephy_bookmark_row, EPHY, BOOKMARK_ROW, GtkListBoxRow)
 
-GtkWidget           *ephy_bookmark_row_new            (EphyBookmark *bookmark);
+GtkWidget           *ephy_bookmark_row_new              (EphyBookmark *bookmark);
 
-EphyBookmark        *ephy_bookmark_row_get_bookmark   (EphyBookmarkRow *self);
+EphyBookmark        *ephy_bookmark_row_get_bookmark     (EphyBookmarkRow *self);
+
+const char          *ephy_bookmark_row_get_bookmark_url (EphyBookmarkRow *self);
 
 G_END_DECLS

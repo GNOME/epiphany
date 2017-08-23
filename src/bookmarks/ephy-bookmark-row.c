@@ -238,3 +238,11 @@ ephy_bookmark_row_get_bookmark (EphyBookmarkRow *self)
 
   return self->bookmark;
 }
+
+const char *
+ephy_bookmark_row_get_bookmark_url (EphyBookmarkRow *self)
+{
+  g_return_val_if_fail (EPHY_IS_BOOKMARK_ROW (self), NULL);
+
+  return ephy_bookmark_get_url (self->bookmark);
+}
