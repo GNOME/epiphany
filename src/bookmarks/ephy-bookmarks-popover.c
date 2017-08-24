@@ -79,6 +79,7 @@ remove_bookmark_row_from_container (GtkContainer *container,
       break;
     }
   }
+  g_list_free (children);
 }
 
 static void
@@ -151,6 +152,7 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
         }
       }
     }
+    g_list_free (children);
 
     if (!exists) {
       row = create_bookmark_row (bookmark, self);
@@ -185,6 +187,7 @@ ephy_bookmarks_popover_bookmark_tag_removed_cb (EphyBookmarksPopover *self,
         if (g_strcmp0 (title, tag) == 0)
           gtk_container_remove (GTK_CONTAINER (self->tags_list_box), GTK_WIDGET (l->data));
       }
+      g_list_free (children);
   }
 }
 
@@ -367,17 +370,17 @@ ephy_bookmarks_popover_actions_tag_detail_back (GSimpleAction *action,
                                                 gpointer       user_data)
 {
   EphyBookmarksPopover *self = user_data;
-  GList *l;
+  GList *children;
 
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
 
   gtk_stack_set_visible_child_name (GTK_STACK (self->toplevel_stack),
                                     "default");
 
-  for (l = gtk_container_get_children (GTK_CONTAINER (self->tag_detail_list_box));
-       l != NULL;
-       l = l->next)
+  children = gtk_container_get_children (GTK_CONTAINER (self->tag_detail_list_box));
+  for (GList *l = children; l != NULL; l = l->next)
     gtk_container_remove (GTK_CONTAINER (self->tag_detail_list_box), l->data);
+  g_list_free (children);
 }
 
 static void
