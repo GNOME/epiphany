@@ -662,6 +662,7 @@ entry_populate_popup_cb (GtkEntry          *entry,
     if (GTK_IS_SEPARATOR_MENU_ITEM (item->data))
       sep++;
   }
+  g_list_free (children);
 
   gtk_menu_shell_insert (GTK_MENU_SHELL (menu), clear_menuitem, pos - 1);
 
@@ -676,6 +677,7 @@ entry_populate_popup_cb (GtkEntry          *entry,
     }
   }
   g_assert (paste_menuitem != NULL);
+  g_list_free (children);
 
   g_signal_connect (paste_and_go_menuitem, "activate",
                     G_CALLBACK (entry_paste_and_go_activate_cb), lentry);
