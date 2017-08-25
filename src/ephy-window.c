@@ -1535,6 +1535,10 @@ populate_context_menu (WebKitWebView       *web_view,
     GList *l;
     gboolean has_guesses = FALSE;
 
+    /* FIXME: Add a Spelling Suggestions... submenu. Utilize
+     * WEBKIT_CONTEXT_MENU_ACTION_NO_GUESSES_FOUND,
+     * WEBKIT_CONTEXT_MENU_ACTION_IGNORE_SPELLING, and
+     * WEBKIT_CONTEXT_MENU_ACTION_LEARN_SPELLING. */
     for (l = spelling_guess_items; l; l = g_list_next (l)) {
       WebKitContextMenuItem *item = WEBKIT_CONTEXT_MENU_ITEM (l->data);
 
