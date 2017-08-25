@@ -550,6 +550,11 @@ secret_service_search_cb (SecretService  *service,
     LOG ("Found password record for (%s, %s, %s, %s, %s)",
          hostname, target_origin, username, username_field, password_field);
 
+    if (!id || !hostname || !target_origin || !password_field || !timestamp) {
+      LOG ("Password record is corrupted, skipping it...");
+      goto next;
+    }
+
     record = ephy_password_record_new (id, hostname, target_origin,
                                        username, password,
                                        username_field, password_field,
@@ -560,6 +565,7 @@ secret_service_search_cb (SecretService  *service,
                                                   server_time_modified);
     records = g_list_prepend (records, record);
 
+next:
     secret_value_unref (value);
     g_hash_table_unref (attributes);
   }
