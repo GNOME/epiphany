@@ -435,7 +435,7 @@ populate_model (EphyPasswordsDialog *dialog)
 
   /* Ask for all password records. */
   ephy_password_manager_query (dialog->manager,
-                               NULL, NULL, NULL, NULL, NULL,
+                               NULL, NULL, NULL, NULL, NULL, NULL,
                                populate_model_cb, dialog);
 }
 

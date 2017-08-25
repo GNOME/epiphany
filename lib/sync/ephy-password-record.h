@@ -30,6 +30,7 @@ G_DECLARE_FINAL_TYPE (EphyPasswordRecord, ephy_password_record, EPHY, PASSWORD_R
 
 EphyPasswordRecord *ephy_password_record_new                        (const char *id,
                                                                      const char *hostname,
+                                                                     const char *target_origin,
                                                                      const char *username,
                                                                      const char *password,
                                                                      const char *username_field,
@@ -38,6 +39,7 @@ EphyPasswordRecord *ephy_password_record_new                        (const char 
                                                                      guint64     time_password_changed);
 const char         *ephy_password_record_get_id                     (EphyPasswordRecord *self);
 const char         *ephy_password_record_get_hostname               (EphyPasswordRecord *self);
+const char         *ephy_password_record_get_target_origin          (EphyPasswordRecord *self);
 const char         *ephy_password_record_get_username               (EphyPasswordRecord *self);
 const char         *ephy_password_record_get_password               (EphyPasswordRecord *self);
 void                ephy_password_record_set_password               (EphyPasswordRecord *self,

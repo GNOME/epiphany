@@ -31,6 +31,7 @@ const SecretSchema *ephy_password_manager_get_password_schema (void) G_GNUC_CONS
 
 #define ID_KEY                    "id"
 #define HOSTNAME_KEY              "uri"
+#define TARGET_ORIGIN_KEY         "target_origin"
 #define USERNAME_FIELD_KEY        "form_username"
 #define PASSWORD_FIELD_KEY        "form_password"
 #define USERNAME_KEY              "username"
@@ -49,6 +50,7 @@ GList               *ephy_password_manager_get_cached_users_for_uri (EphyPasswor
                                                                      const char          *uri);
 void                 ephy_password_manager_save                     (EphyPasswordManager *self,
                                                                      const char          *uri,
+                                                                     const char          *target_origin,
                                                                      const char          *username,
                                                                      const char          *password,
                                                                      const char          *username_field,
@@ -57,6 +59,7 @@ void                 ephy_password_manager_save                     (EphyPasswor
 void                 ephy_password_manager_query                    (EphyPasswordManager              *self,
                                                                      const char                       *id,
                                                                      const char                       *uri,
+                                                                     const char                       *target_origin,
                                                                      const char                       *username,
                                                                      const char                       *username_field,
                                                                      const char                       *password_field,

@@ -266,6 +266,7 @@ store_password (EphyEmbedFormAuth *form_auth)
 {
   SoupURI *uri;
   char *uri_str;
+  char *target_origin;
   char *username_field_name = NULL;
   char *username_field_value = NULL;
   char *password_field_name = NULL;
@@ -287,9 +288,11 @@ store_password (EphyEmbedFormAuth *form_auth)
 
   uri = ephy_embed_form_auth_get_uri (form_auth);
   uri_str = soup_uri_to_string (uri, FALSE);
+  target_origin = ephy_embed_form_auth_get_target_origin (form_auth);
   password_updated = ephy_embed_form_auth_get_password_updated (form_auth);
   ephy_password_manager_save (extension->password_manager,
                               uri_str,
+                              target_origin,
                               username_field_value,
                               password_field_value,
                               username_field_name,
@@ -297,6 +300,7 @@ store_password (EphyEmbedFormAuth *form_auth)
                               !password_updated);
 
   g_free (uri_str);
+  g_free (target_origin);
   g_free (username_field_name);
   g_free (username_field_value);
   g_free (password_field_name);
@@ -456,12 +460,14 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
   EphyWebExtension *extension = ephy_web_extension_get ();
   EphyEmbedFormAuth *form_auth;
   SoupURI *uri;
+  char *target_origin;
   WebKitDOMNode *username_node = NULL;
   WebKitDOMNode *password_node = NULL;
   char *username_field_name = NULL;
   char *username_field_value = NULL;
   char *password_field_name = NULL;
   char *uri_str;
+  char *form_action;
 
   if (!ephy_web_dom_utils_find_form_auth_elements (dom_form, &username_node, &password_node))
     return TRUE;
@@ -472,8 +478,17 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
                   NULL);
   }
 
+  form_action = webkit_dom_html_form_element_get_action (dom_form);
+  if (form_action == NULL)
+    form_action = g_strdup (webkit_web_page_get_uri (web_page));
+  target_origin = ephy_uri_to_security_origin (form_action);
+
   /* EphyEmbedFormAuth takes ownership of the nodes */
-  form_auth = ephy_embed_form_auth_new (web_page, username_node, password_node, username_field_value);
+  form_auth = ephy_embed_form_auth_new (web_page,
+                                        target_origin,
+                                        username_node,
+                                        password_node,
+                                        username_field_value);
   uri = ephy_embed_form_auth_get_uri (form_auth);
   soup_uri_set_query (uri, NULL);
 
@@ -485,12 +500,15 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
   ephy_password_manager_query (extension->password_manager,
                                NULL,
                                uri_str,
+                               target_origin,
                                username_field_value,
                                username_field_name,
                                password_field_name,
                                should_store_cb,
                                form_auth);
 
+  g_free (form_action);
+  g_free (target_origin);
   g_free (username_field_name);
   g_free (username_field_value);
   g_free (password_field_name);
@@ -537,6 +555,7 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
 {
   SoupURI *uri;
   char *uri_str;
+  char *target_origin;
   char *username = NULL;
   char *username_field_name = NULL;
   char *password_field_name = NULL;
@@ -563,9 +582,12 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
   if (username != NULL && g_str_equal (username, ""))
     g_clear_pointer (&username, g_free);
 
+  target_origin = ephy_embed_form_auth_get_target_origin (form_auth);
+
   ephy_password_manager_query (extension->password_manager,
                                NULL,
                                uri_str,
+                               target_origin,
                                username,
                                username_field_name,
                                password_field_name,
@@ -573,6 +595,7 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
                                form_auth);
 
   g_free (uri_str);
+  g_free (target_origin);
   g_free (username);
   g_free (username_field_name);
   g_free (password_field_name);
@@ -1115,11 +1138,24 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
       EphyEmbedFormAuth *form_auth;
       GList *cached_users;
       const char *uri;
+      char *form_action;
+      char *target_origin;
+
+      uri = webkit_web_page_get_uri (web_page);
+
+      form_action = webkit_dom_html_form_element_get_action (form);
+      if (form_action == NULL)
+        form_action = g_strdup (uri);
+      target_origin = ephy_uri_to_security_origin (form_action);
 
       LOG ("Hooking and pre-filling a form");
 
       /* EphyEmbedFormAuth takes ownership of the nodes */
-      form_auth = ephy_embed_form_auth_new (web_page, username_node, password_node, NULL);
+      form_auth = ephy_embed_form_auth_new (web_page,
+                                            target_origin,
+                                            username_node,
+                                            password_node,
+                                            NULL);
       webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form), "submit",
                                                   G_CALLBACK (form_submitted_cb), FALSE,
                                                   web_page);
@@ -1130,7 +1166,6 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
       }
 
       /* Plug in the user autocomplete */
-      uri = webkit_web_page_get_uri (web_page);
       cached_users = ephy_password_manager_get_cached_users_for_uri (extension->password_manager, uri);
 
       if (cached_users && cached_users->next && username_node) {
@@ -1158,6 +1193,8 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
 
       pre_fill_form (form_auth);
 
+      g_free (form_action);
+      g_free (target_origin);
       g_object_weak_ref (G_OBJECT (form), form_destroyed_cb, form_auth);
     } else
       LOG ("No pre-fillable/hookable form found");

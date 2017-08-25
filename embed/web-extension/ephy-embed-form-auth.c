@@ -26,6 +26,7 @@ struct _EphyEmbedFormAuth {
 
   guint64 page_id;
   SoupURI *uri;
+  SoupURI *target_origin;
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
   char *username;
@@ -41,6 +42,8 @@ ephy_embed_form_auth_finalize (GObject *object)
 
   if (form_auth->uri)
     soup_uri_free (form_auth->uri);
+  if (form_auth->target_origin)
+    soup_uri_free (form_auth->target_origin);
   g_clear_object (&form_auth->username_node);
   g_clear_object (&form_auth->password_node);
 
@@ -62,6 +65,7 @@ ephy_embed_form_auth_class_init (EphyEmbedFormAuthClass *klass)
 
 EphyEmbedFormAuth *
 ephy_embed_form_auth_new (WebKitWebPage *web_page,
+                          const char    *target_origin,
                           WebKitDOMNode *username_node,
                           WebKitDOMNode *password_node,
                           const char    *username)
@@ -74,11 +78,18 @@ ephy_embed_form_auth_new (WebKitWebPage *web_page,
 
   form_auth->page_id = webkit_web_page_get_id (web_page);
   form_auth->uri = soup_uri_new (webkit_web_page_get_uri (web_page));
+  form_auth->target_origin = soup_uri_new (target_origin);
   form_auth->username_node = username_node;
   form_auth->password_node = password_node;
   form_auth->username = g_strdup (username);
 
   return form_auth;
+}
+
+char *
+ephy_embed_form_auth_get_target_origin (EphyEmbedFormAuth *form_auth)
+{
+  return soup_uri_to_string (form_auth->target_origin, FALSE);
 }
 
 WebKitDOMNode *
