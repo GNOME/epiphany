@@ -278,7 +278,9 @@ ephy_uri_decode (const char *uri_string)
   /* This object is threadsafe to *use*, but need to create it exactly once. */
   g_mutex_lock (&idna_creation_mutex);
   if (idna == NULL) {
-    idna = uidna_openUTS46 (UIDNA_DEFAULT, &error);
+    /* These flags should be synced with URLParser::internationalDomainNameTranscoder
+     * in WebKit's URLParser.cpp. */
+    idna = uidna_openUTS46 (UIDNA_CHECK_BIDI | UIDNA_CHECK_CONTEXTJ | UIDNA_NONTRANSITIONAL_TO_UNICODE | UIDNA_NONTRANSITIONAL_TO_ASCII, &error);
     if (U_FAILURE (error))
       g_error ("ICU error opening UTS #46 context: %d", error);
   }
