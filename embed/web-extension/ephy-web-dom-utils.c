@@ -555,7 +555,7 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
   WebKitDOMHTMLCollection *elements;
   WebKitDOMHTMLInputElement *username_node = NULL;
   WebKitDOMHTMLInputElement *password_node = NULL;
-  gint i, password_node_index;
+  gint i, password_node_index = 0;
   GPtrArray *password_nodes = NULL;
   gchar **passwords;
   InputElementData *first_password_node_data = NULL;
