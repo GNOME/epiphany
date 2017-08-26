@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 const SecretSchema *ephy_password_manager_get_password_schema (void) G_GNUC_CONST;
 
 #define ID_KEY                    "id"
-#define HOSTNAME_KEY              "uri"
+#define ORIGIN_KEY                "uri" /* TODO: Rename to "origin". Requires migration. */
 #define TARGET_ORIGIN_KEY         "target_origin"
 #define USERNAME_FIELD_KEY        "form_username"
 #define PASSWORD_FIELD_KEY        "form_password"
@@ -46,10 +46,10 @@ G_DECLARE_FINAL_TYPE (EphyPasswordManager, ephy_password_manager, EPHY, PASSWORD
 typedef void (*EphyPasswordManagerQueryCallback) (GList *records, gpointer user_data);
 
 EphyPasswordManager *ephy_password_manager_new                      (void);
-GList               *ephy_password_manager_get_cached_users_for_uri (EphyPasswordManager *self,
-                                                                     const char          *uri);
+GList               *ephy_password_manager_get_cached_users         (EphyPasswordManager *self,
+                                                                     const char          *origin);
 void                 ephy_password_manager_save                     (EphyPasswordManager *self,
-                                                                     const char          *uri,
+                                                                     const char          *origin,
                                                                      const char          *target_origin,
                                                                      const char          *username,
                                                                      const char          *password,
@@ -58,7 +58,7 @@ void                 ephy_password_manager_save                     (EphyPasswor
                                                                      gboolean             is_new);
 void                 ephy_password_manager_query                    (EphyPasswordManager              *self,
                                                                      const char                       *id,
-                                                                     const char                       *uri,
+                                                                     const char                       *origin,
                                                                      const char                       *target_origin,
                                                                      const char                       *username,
                                                                      const char                       *username_field,
@@ -70,7 +70,7 @@ void                 ephy_password_manager_forget                    (EphyPasswo
 void                 ephy_password_manager_forget_all                (EphyPasswordManager *self);
 /* Note: Below functions are deprecated and should not be used in newly written code.
  * The only reason they still exist is that the profile migrator expects them. */
-void                 ephy_password_manager_store_raw                 (const char          *uri,
+void                 ephy_password_manager_store_raw                 (const char          *origin,
                                                                       const char          *username,
                                                                       const char          *password,
                                                                       const char          *username_field,

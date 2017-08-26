@@ -313,7 +313,7 @@ load_collection_items_cb (SecretCollection *collection,
   GList *l;
   GHashTable *attributes, *t;
   const char *server, *username, *username_field, *password_field, *password;
-  char *actual_server;
+  char *origin;
   SoupURI *uri;
   GError *error = NULL;
   GList *items;
@@ -344,18 +344,18 @@ load_collection_items_cb (SecretCollection *collection,
       username_field = g_hash_table_lookup (t, USERNAME_FIELD_KEY);
       password_field = g_hash_table_lookup (t, PASSWORD_FIELD_KEY);
       soup_uri_set_query (uri, NULL);
-      actual_server = soup_uri_to_string (uri, FALSE);
+      origin = soup_uri_to_string (uri, FALSE);
       secret_item_load_secret_sync (item, NULL, NULL);
       secret = secret_item_get_secret (item);
       password = secret_value_get (secret, NULL);
-      ephy_password_manager_store_raw (actual_server,
+      ephy_password_manager_store_raw (origin,
                                        username,
                                        password,
                                        username_field,
                                        password_field,
                                        (GAsyncReadyCallback)store_form_auth_data_cb,
                                        g_hash_table_ref (attributes));
-      g_free (actual_server);
+      g_free (origin);
       secret_value_unref (secret);
       g_hash_table_unref (t);
       soup_uri_free (uri);
@@ -443,7 +443,7 @@ migrate_insecure_password (SecretItem *item)
   const char *original_uri;
 
   attributes = secret_item_get_attributes (item);
-  original_uri = g_hash_table_lookup (attributes, HOSTNAME_KEY);
+  original_uri = g_hash_table_lookup (attributes, ORIGIN_KEY);
   original_origin = webkit_security_origin_new_for_uri (original_uri);
   if (original_origin == NULL) {
     g_warning ("Failed to convert URI %s to a security origin, insecure password will not be migrated", original_uri);
@@ -462,7 +462,7 @@ migrate_insecure_password (SecretItem *item)
     new_uri = webkit_security_origin_to_string (new_origin);
     webkit_security_origin_unref (new_origin);
 
-    g_hash_table_replace (attributes, g_strdup (HOSTNAME_KEY), new_uri);
+    g_hash_table_replace (attributes, g_strdup (ORIGIN_KEY), new_uri);
     secret_item_set_attributes_sync (item, EPHY_FORM_PASSWORD_SCHEMA, attributes, NULL, &error);
     if (error != NULL) {
       g_warning ("Failed to convert URI %s to https://, insecure password will not be migrated: %s", original_uri, error->message);
@@ -1037,7 +1037,7 @@ migrate_passwords_to_firefox_sync_passwords (void)
     SecretItem *item = (SecretItem *)l->data;
     SecretValue *value = secret_item_get_secret (item);
     GHashTable *attrs = secret_item_get_attributes (item);
-    const char *hostname = g_hash_table_lookup (attrs, HOSTNAME_KEY);
+    const char *origin = g_hash_table_lookup (attrs, ORIGIN_KEY);
     const char *username = g_hash_table_lookup (attrs, USERNAME_KEY);
     char *uuid = g_uuid_string_random ();
     char *label;
@@ -1046,9 +1046,9 @@ migrate_passwords_to_firefox_sync_passwords (void)
     g_hash_table_insert (attrs, g_strdup (SERVER_TIME_MODIFIED_KEY), g_strdup ("0"));
 
     if (username)
-      label = g_strdup_printf ("Password for %s in a form in %s", username, hostname);
+      label = g_strdup_printf ("Password for %s in a form in %s", username, origin);
     else
-      label = g_strdup_printf ("Password in a form in %s", hostname);
+      label = g_strdup_printf ("Password in a form in %s", origin);
     secret_service_store_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
                                attrs, NULL, label,
                                value, NULL, &error);
@@ -1135,7 +1135,7 @@ migrate_passwords_add_target_origin (void)
   /* Similar to Firefox Sync and the insecure passwords migrations.
    * This is also a migration that runs once, and not for each profile
    * Adds target_origin field to all existing records,
-   * with the same value as hostname
+   * with the same value as origin.
    */
   default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
   if (default_profile_migration_version >= EPHY_TARGET_ORIGIN_MIGRATION_VERSION)
@@ -1161,21 +1161,22 @@ migrate_passwords_add_target_origin (void)
     SecretItem *item = (SecretItem *)l->data;
     SecretValue *value = secret_item_get_secret (item);
     GHashTable *attrs = secret_item_get_attributes (item);
-    const char *hostname = g_hash_table_lookup (attrs, HOSTNAME_KEY);
+    const char *origin = g_hash_table_lookup (attrs, ORIGIN_KEY);
     const char *username = g_hash_table_lookup (attrs, USERNAME_KEY);
     const char *target_origin = g_hash_table_lookup (attrs, TARGET_ORIGIN_KEY);
     char *label;
 
-    // In most cases target_origin has the same value as hostname
-    // We don't have a way of figuring out the correct value retroactively,
-    // so just use the hostname value
+    /* In most cases target_origin has the same value as origin
+     * We don't have a way of figuring out the correct value retroactively,
+     * so just use the origin value.
+    */
     if (target_origin == NULL)
-      g_hash_table_insert (attrs, g_strdup (TARGET_ORIGIN_KEY), g_strdup (hostname));
+      g_hash_table_insert (attrs, g_strdup (TARGET_ORIGIN_KEY), g_strdup (origin));
 
     if (username)
-      label = g_strdup_printf ("Password for %s in a form in %s", username, hostname);
+      label = g_strdup_printf ("Password for %s in a form in %s", username, origin);
     else
-      label = g_strdup_printf ("Password in a form in %s", hostname);
+      label = g_strdup_printf ("Password in a form in %s", origin);
     secret_service_store_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
                                attrs, NULL, label,
                                value, NULL, &error);

@@ -27,7 +27,7 @@ struct _EphyPasswordRecord {
   GObject parent_instance;
 
   char    *id;
-  char    *hostname;
+  char    *origin;
   char    *target_origin;
   char    *username;
   char    *password;
@@ -51,7 +51,7 @@ G_DEFINE_TYPE_WITH_CODE (EphyPasswordRecord, ephy_password_record, G_TYPE_OBJECT
 enum {
   PROP_0,
   PROP_ID,                    /* Firefox Sync */
-  PROP_HOSTNAME,              /* Epiphany && Firefox Sync */
+  PROP_ORIGIN,                /* Epiphany && Firefox Sync */
   PROP_TARGET_ORIGIN,         /* Epiphany && Firefox Sync */
   PROP_USERNAME,              /* Epiphany && Firefox Sync */
   PROP_PASSWORD,              /* Epiphany && Firefox Sync */
@@ -77,9 +77,9 @@ ephy_password_record_set_property (GObject      *object,
       g_free (self->id);
       self->id = g_strdup (g_value_get_string (value));
       break;
-    case PROP_HOSTNAME:
-      g_free (self->hostname);
-      self->hostname = g_strdup (g_value_get_string (value));
+    case PROP_ORIGIN:
+      g_free (self->origin);
+      self->origin = g_strdup (g_value_get_string (value));
       break;
     case PROP_TARGET_ORIGIN:
       g_free (self->target_origin);
@@ -124,8 +124,8 @@ ephy_password_record_get_property (GObject    *object,
     case PROP_ID:
       g_value_set_string (value, self->id);
       break;
-    case PROP_HOSTNAME:
-      g_value_set_string (value, self->hostname);
+    case PROP_ORIGIN:
+      g_value_set_string (value, self->origin);
       break;
     case PROP_TARGET_ORIGIN:
       g_value_set_string (value, self->target_origin);
@@ -159,7 +159,7 @@ ephy_password_record_finalize (GObject *object)
   EphyPasswordRecord *self = EPHY_PASSWORD_RECORD (object);
 
   g_free (self->id);
-  g_free (self->hostname);
+  g_free (self->origin);
   g_free (self->target_origin);
   g_free (self->username);
   g_free (self->password);
@@ -179,27 +179,34 @@ ephy_password_record_class_init (EphyPasswordRecordClass *klass)
   object_class->finalize = ephy_password_record_finalize;
 
   /* The property names must match Firefox password object structure, see
-   * https://mozilla-services.readthedocs.io/en/latest/sync/objectformats.html#passwords */
+   * https://mozilla-services.readthedocs.io/en/latest/sync/objectformats.html#passwords
+   */
   obj_properties[PROP_ID] =
     g_param_spec_string ("id",
                          "Id",
                          "Id of the password record",
                          "Default id",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
-  obj_properties[PROP_HOSTNAME] =
+  /* Origin matches hostname field from Firefox.
+   * Despite its name, it's actually a security origin (scheme + host + port), so call it appropriately, see
+   * https://dxr.mozilla.org/mozilla-central/rev/892c8916ba32b7733e06bfbfdd4083ffae3ca028/toolkit/components/passwordmgr/LoginManagerContent.jsm#922
+   * https://dxr.mozilla.org/mozilla-central/rev/892c8916ba32b7733e06bfbfdd4083ffae3ca028/toolkit/components/passwordmgr/LoginManagerContent.jsm#1380
+   */
+  obj_properties[PROP_ORIGIN] =
     g_param_spec_string ("hostname",
-                         "Hostname",
-                         "Hostname url that password is applicable at",
-                         "Default hostname",
+                         "Security origin",
+                         "Security origin of the URI that password is applicable at",
+                         "Default security origin",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   /* Target origin matches formSubmitURL field from Firefox.
-   * Despite its name, it's actually an origin, so call it appropriately, see
-   * https://dxr.mozilla.org/mozilla-central/rev/892c8916ba32b7733e06bfbfdd4083ffae3ca028/toolkit/components/passwordmgr/LoginManagerContent.jsm#928 */
+   * Despite its name, it's actually a security origin, so call it appropriately, see
+   * https://dxr.mozilla.org/mozilla-central/rev/892c8916ba32b7733e06bfbfdd4083ffae3ca028/toolkit/components/passwordmgr/LoginManagerContent.jsm#928
+   */
   obj_properties[PROP_TARGET_ORIGIN] =
     g_param_spec_string ("formSubmitURL",
                          "Target origin",
-                         "The target origin of the URI where that password is applicable at",
-                         "Default target origin URI",
+                         "The target origin of the URI that password is applicable at",
+                         "Default target origin",
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   obj_properties[PROP_USERNAME] =
     g_param_spec_string ("username",
@@ -252,7 +259,7 @@ ephy_password_record_init (EphyPasswordRecord *self)
 
 EphyPasswordRecord *
 ephy_password_record_new (const char *id,
-                          const char *hostname,
+                          const char *origin,
                           const char *target_origin,
                           const char *username,
                           const char *password,
@@ -263,7 +270,7 @@ ephy_password_record_new (const char *id,
 {
   return EPHY_PASSWORD_RECORD (g_object_new (EPHY_TYPE_PASSWORD_RECORD,
                                              "id", id,
-                                             "hostname", hostname,
+                                             "hostname", origin,
                                              "formSubmitURL", target_origin,
                                              "username", username,
                                              "password", password,
@@ -283,11 +290,11 @@ ephy_password_record_get_id (EphyPasswordRecord *self)
 }
 
 const char *
-ephy_password_record_get_hostname (EphyPasswordRecord *self)
+ephy_password_record_get_origin (EphyPasswordRecord *self)
 {
   g_return_val_if_fail (EPHY_IS_PASSWORD_RECORD (self), NULL);
 
-  return self->hostname;
+  return self->origin;
 }
 
 const char *

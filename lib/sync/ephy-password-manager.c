@@ -25,7 +25,6 @@
 #include "ephy-settings.h"
 #include "ephy-sync-utils.h"
 #include "ephy-synchronizable-manager.h"
-#include "ephy-uri-helpers.h"
 
 #include <glib/gi18n.h>
 #include <stdio.h>
@@ -37,7 +36,7 @@ ephy_password_manager_get_password_schema (void)
     "org.epiphany.FormPassword", SECRET_SCHEMA_NONE,
     {
       { ID_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
-      { HOSTNAME_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
+      { ORIGIN_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
       { TARGET_ORIGIN_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
       { USERNAME_FIELD_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
       { PASSWORD_FIELD_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
@@ -184,7 +183,7 @@ replace_record_async_data_free (ReplaceRecordAsyncData *data)
 
 static GHashTable *
 get_attributes_table (const char *id,
-                      const char *uri,
+                      const char *origin,
                       const char *target_origin,
                       const char *username,
                       const char *username_field,
@@ -197,14 +196,14 @@ get_attributes_table (const char *id,
     g_hash_table_insert (attributes,
                          g_strdup (ID_KEY),
                          g_strdup (id));
-  if (uri)
+  if (origin)
     g_hash_table_insert (attributes,
-                         g_strdup (HOSTNAME_KEY),
-                         ephy_uri_to_security_origin (uri));
+                         g_strdup (ORIGIN_KEY),
+                         g_strdup (origin));
   if (target_origin)
     g_hash_table_insert (attributes,
                          g_strdup (TARGET_ORIGIN_KEY),
-                         ephy_uri_to_security_origin (target_origin));
+                         g_strdup (target_origin));
   if (username)
     g_hash_table_insert (attributes,
                          g_strdup (USERNAME_KEY),
@@ -242,7 +241,7 @@ ephy_password_manager_cache_clear (EphyPasswordManager *self)
 
 static void
 ephy_password_manager_cache_remove (EphyPasswordManager *self,
-                                    const char          *hostname,
+                                    const char          *origin,
                                     const char          *username)
 {
   GList *usernames;
@@ -251,23 +250,23 @@ ephy_password_manager_cache_remove (EphyPasswordManager *self,
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (self->cache);
 
-  if (!hostname || !username)
+  if (!origin || !username)
     return;
 
-  usernames = g_hash_table_lookup (self->cache, hostname);
+  usernames = g_hash_table_lookup (self->cache, origin);
   if (usernames) {
     for (GList *l = usernames; l && l->data; l = l->next) {
       if (g_strcmp0 (username, l->data))
         new_usernames = g_list_prepend (new_usernames, g_strdup (l->data));
     }
-    g_hash_table_replace (self->cache, g_strdup (hostname), new_usernames);
+    g_hash_table_replace (self->cache, g_strdup (origin), new_usernames);
     g_list_free_full (usernames, g_free);
   }
 }
 
 static void
 ephy_password_manager_cache_add (EphyPasswordManager *self,
-                                 const char          *hostname,
+                                 const char          *origin,
                                  const char          *username)
 {
   GList *usernames;
@@ -275,16 +274,16 @@ ephy_password_manager_cache_add (EphyPasswordManager *self,
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (self->cache);
 
-  if (!hostname || !username)
+  if (!origin || !username)
     return;
 
-  usernames = g_hash_table_lookup (self->cache, hostname);
+  usernames = g_hash_table_lookup (self->cache, origin);
   for (GList *l = usernames; l && l->data; l = l->next) {
     if (!g_strcmp0 (username, l->data))
       return;
   }
   usernames = g_list_prepend (usernames, g_strdup (username));
-  g_hash_table_replace (self->cache, g_strdup (hostname), usernames);
+  g_hash_table_replace (self->cache, g_strdup (origin), usernames);
 }
 
 static void
@@ -295,10 +294,10 @@ populate_cache_cb (GList    *records,
 
   for (GList *l = records; l && l->data; l = l->next) {
     EphyPasswordRecord *record = EPHY_PASSWORD_RECORD (l->data);
-    const char *hostname = ephy_password_record_get_hostname (record);
+    const char *origin = ephy_password_record_get_origin (record);
     const char *username = ephy_password_record_get_username (record);
 
-    ephy_password_manager_cache_add (self, hostname, username);
+    ephy_password_manager_cache_add (self, origin, username);
   }
 
   g_list_free_full (records, g_object_unref);
@@ -341,20 +340,13 @@ ephy_password_manager_new (void)
 }
 
 GList *
-ephy_password_manager_get_cached_users_for_uri (EphyPasswordManager *self,
-                                                const char          *uri)
+ephy_password_manager_get_cached_users (EphyPasswordManager *self,
+                                        const char          *origin)
 {
-  GList *list;
-  char *hostname;
-
   g_return_val_if_fail (EPHY_IS_PASSWORD_MANAGER (self), NULL);
-  g_return_val_if_fail (uri, NULL);
+  g_return_val_if_fail (origin, NULL);
 
-  hostname = ephy_uri_to_security_origin (uri);
-  list = g_hash_table_lookup (self->cache, hostname);
-  g_free (hostname);
-
-  return list;
+  return g_hash_table_lookup (self->cache, origin);
 }
 
 static void
@@ -381,7 +373,7 @@ store_internal (const char          *password,
 {
   SecretValue *value;
   GTask *task;
-  const char *hostname;
+  const char *origin;
   const char *username;
   char *label;
 
@@ -390,22 +382,22 @@ store_internal (const char          *password,
 
   task = g_task_new (NULL, NULL, callback, user_data);
   value = secret_value_new (password, -1, "text/plain");
-  hostname = g_hash_table_lookup (attributes, HOSTNAME_KEY);
+  origin = g_hash_table_lookup (attributes, ORIGIN_KEY);
   username = g_hash_table_lookup (attributes, USERNAME_KEY);
 
   if (username) {
     /* Translators: The first %s is the username and the second one is the
      * security origin where this is happening. Example: gnome@gmail.com and
      * https://mail.google.com. */
-    label = g_strdup_printf (_("Password for %s in a form in %s"), username, hostname);
+    label = g_strdup_printf (_("Password for %s in a form in %s"), username, origin);
   } else {
     /* Translators: The %s is the security origin where this is happening.
      * Example: https://mail.google.com. */
-    label = g_strdup_printf (_("Password in a form in %s"), hostname);
+    label = g_strdup_printf (_("Password in a form in %s"), origin);
   }
 
   LOG ("Storing password record for (%s, %s, %s, %s)",
-       hostname, username,
+       origin, username,
        (char *)g_hash_table_lookup (attributes, USERNAME_FIELD_KEY),
        (char *)g_hash_table_lookup (attributes, PASSWORD_FIELD_KEY));
 
@@ -424,16 +416,16 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
                                     EphyPasswordRecord  *record)
 {
   GHashTable *attributes;
-  const char *hostname;
+  const char *origin;
   const char *username;
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
 
-  hostname = ephy_password_record_get_hostname (record);
+  origin = ephy_password_record_get_origin (record);
   username = ephy_password_record_get_username (record);
   attributes = get_attributes_table (ephy_password_record_get_id (record),
-                                     hostname,
+                                     origin,
                                      ephy_password_record_get_target_origin (record),
                                      username,
                                      ephy_password_record_get_username_field (record),
@@ -441,7 +433,7 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
                                      ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (record)));
   store_internal (ephy_password_record_get_password (record), attributes, NULL, NULL);
 
-  ephy_password_manager_cache_add (self, hostname, username);
+  ephy_password_manager_cache_add (self, origin, username);
 
   g_hash_table_unref (attributes);
 }
@@ -467,7 +459,7 @@ update_password_cb (GList    *records,
 
 void
 ephy_password_manager_save (EphyPasswordManager *self,
-                            const char          *uri,
+                            const char          *origin,
                             const char          *target_origin,
                             const char          *username,
                             const char          *password,
@@ -476,13 +468,12 @@ ephy_password_manager_save (EphyPasswordManager *self,
                             gboolean             is_new)
 {
   EphyPasswordRecord *record;
-  char *hostname;
   char *uuid;
   char *id;
   gint64 timestamp;
 
   g_return_if_fail (EPHY_IS_PASSWORD_MANAGER (self));
-  g_return_if_fail (uri);
+  g_return_if_fail (origin);
   g_return_if_fail (target_origin);
   g_return_if_fail (password);
   g_return_if_fail (!username_field || username);
@@ -490,9 +481,9 @@ ephy_password_manager_save (EphyPasswordManager *self,
 
   if (!is_new) {
     LOG ("Updating password for (%s, %s, %s, %s, %s)",
-         uri, target_origin, username, username_field, password_field);
+         origin, target_origin, username, username_field, password_field);
     ephy_password_manager_query (self, NULL,
-                                 uri, target_origin, username,
+                                 origin, target_origin, username,
                                  username_field, password_field,
                                  update_password_cb,
                                  update_password_async_data_new (self, password));
@@ -502,15 +493,13 @@ ephy_password_manager_save (EphyPasswordManager *self,
   uuid = g_uuid_string_random ();
   id = g_strdup_printf ("{%s}", uuid);
   timestamp = g_get_real_time () / 1000;
-  hostname = ephy_uri_to_security_origin (uri);
-  record = ephy_password_record_new (id, hostname, target_origin,
+  record = ephy_password_record_new (id, origin, target_origin,
                                      username, password,
                                      username_field, password_field,
                                      timestamp, timestamp);
   ephy_password_manager_store_record (self, record);
   g_signal_emit_by_name (self, "synchronizable-modified", record, FALSE);
 
-  g_free (hostname);
   g_free (uuid);
   g_free (id);
   g_object_unref (record);
@@ -537,7 +526,7 @@ secret_service_search_cb (SecretService  *service,
     GHashTable *attributes = secret_item_get_attributes (item);
     SecretValue *value = secret_item_get_secret (item);
     const char *id = g_hash_table_lookup (attributes, ID_KEY);
-    const char *hostname = g_hash_table_lookup (attributes, HOSTNAME_KEY);
+    const char *origin = g_hash_table_lookup (attributes, ORIGIN_KEY);
     const char *target_origin = g_hash_table_lookup (attributes, TARGET_ORIGIN_KEY);
     const char *username = g_hash_table_lookup (attributes, USERNAME_KEY);
     const char *username_field = g_hash_table_lookup (attributes, USERNAME_FIELD_KEY);
@@ -548,14 +537,14 @@ secret_service_search_cb (SecretService  *service,
     EphyPasswordRecord *record;
 
     LOG ("Found password record for (%s, %s, %s, %s, %s)",
-         hostname, target_origin, username, username_field, password_field);
+         origin, target_origin, username, username_field, password_field);
 
-    if (!id || !hostname || !target_origin || !password_field || !timestamp) {
+    if (!id || !origin || !target_origin || !password_field || !timestamp) {
       LOG ("Password record is corrupted, skipping it...");
       goto next;
     }
 
-    record = ephy_password_record_new (id, hostname, target_origin,
+    record = ephy_password_record_new (id, origin, target_origin,
                                        username, password,
                                        username_field, password_field,
                                        secret_item_get_created (item) * 1000,
@@ -580,7 +569,7 @@ out:
 void
 ephy_password_manager_query (EphyPasswordManager              *self,
                              const char                       *id,
-                             const char                       *uri,
+                             const char                       *origin,
                              const char                       *target_origin,
                              const char                       *username,
                              const char                       *username_field,
@@ -594,9 +583,9 @@ ephy_password_manager_query (EphyPasswordManager              *self,
   g_return_if_fail (EPHY_IS_PASSWORD_MANAGER (self));
 
   LOG ("Querying password records for (%s, %s, %s, %s)",
-       uri, username, username_field, password_field);
+       origin, username, username_field, password_field);
 
-  attributes = get_attributes_table (id, uri, target_origin, username,
+  attributes = get_attributes_table (id, origin, target_origin, username,
                                      username_field, password_field, -1);
   data = query_async_data_new (callback, user_data);
 
@@ -612,7 +601,7 @@ ephy_password_manager_query (EphyPasswordManager              *self,
 }
 
 void
-ephy_password_manager_store_raw (const char          *uri,
+ephy_password_manager_store_raw (const char          *origin,
                                  const char          *username,
                                  const char          *password,
                                  const char          *username_field,
@@ -622,12 +611,12 @@ ephy_password_manager_store_raw (const char          *uri,
 {
   GHashTable *attributes;
 
-  g_return_if_fail (uri);
+  g_return_if_fail (origin);
   g_return_if_fail (password);
   g_return_if_fail (!username_field || username);
   g_return_if_fail (!password_field || password);
 
-  attributes = get_attributes_table (NULL, uri, uri, username,
+  attributes = get_attributes_table (NULL, origin, origin, username,
                                      username_field, password_field, -1);
   store_internal (password, attributes, callback, user_data);
 
@@ -676,7 +665,7 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
 
   attributes = get_attributes_table (ephy_password_record_get_id (record),
-                                     ephy_password_record_get_hostname (record),
+                                     ephy_password_record_get_origin (record),
                                      ephy_password_record_get_target_origin (record),
                                      ephy_password_record_get_username (record),
                                      ephy_password_record_get_username_field (record),
@@ -684,7 +673,7 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
                                      -1);
 
   LOG ("Forgetting password record for (%s, %s, %s, %s, %s)",
-       ephy_password_record_get_hostname (record),
+       ephy_password_record_get_origin (record),
        ephy_password_record_get_target_origin (record),
        ephy_password_record_get_username (record),
        ephy_password_record_get_username_field (record),
@@ -695,7 +684,7 @@ ephy_password_manager_forget_record (EphyPasswordManager *self,
                         replacement ? replace_record_async_data_new (self, replacement) : NULL);
 
   ephy_password_manager_cache_remove (self,
-                                      ephy_password_record_get_hostname (record),
+                                      ephy_password_record_get_origin (record),
                                       ephy_password_record_get_username (record));
   g_hash_table_unref (attributes);
 }
@@ -876,7 +865,7 @@ get_record_by_id (GList      *records,
 
 static EphyPasswordRecord *
 get_record_by_parameters (GList      *records,
-                          const char *hostname,
+                          const char *origin,
                           const char *target_origin,
                           const char *username,
                           const char *username_field,
@@ -884,7 +873,7 @@ get_record_by_parameters (GList      *records,
 {
   for (GList *l = records; l && l->data; l = l->next) {
     if (!g_strcmp0 (ephy_password_record_get_username (l->data), username) &&
-        !g_strcmp0 (ephy_password_record_get_hostname (l->data), hostname) &&
+        !g_strcmp0 (ephy_password_record_get_origin (l->data), origin) &&
         !g_strcmp0 (ephy_password_record_get_target_origin (l->data), target_origin) &&
         !g_strcmp0 (ephy_password_record_get_username_field (l->data), username_field) &&
         !g_strcmp0 (ephy_password_record_get_password_field (l->data), password_field))
@@ -918,7 +907,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
   GHashTable *dont_upload;
   GList *to_upload = NULL;
   const char *remote_id;
-  const char *remote_hostname;
+  const char *remote_origin;
   const char *remote_target_origin;
   const char *remote_username;
   const char *remote_password;
@@ -932,7 +921,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
 
   /* A saved password record is uniquely identified by its ID or by its tuple
-   * of (hostname, username, username field, password field). When importing
+   * of (origin, username, username field, password field). When importing
    * password records from server, we may encounter duplicates either by ID
    * or by mentioned tuple. We start from the assumption that same ID means
    * same tuple but same tuple does not necessarily mean same ID. This is what
@@ -942,7 +931,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
 
   for (GList *l = remote_records; l && l->data; l = l->next) {
     remote_id = ephy_password_record_get_id (l->data);
-    remote_hostname = ephy_password_record_get_hostname (l->data);
+    remote_origin = ephy_password_record_get_origin (l->data);
     remote_target_origin = ephy_password_record_get_target_origin (l->data);
     remote_username = ephy_password_record_get_username (l->data);
     remote_password = ephy_password_record_get_password (l->data);
@@ -976,7 +965,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
       }
     } else {
       record = get_record_by_parameters (local_records,
-                                         remote_hostname,
+                                         remote_origin,
                                          remote_target_origin,
                                          remote_username,
                                          remote_username_field,
@@ -994,8 +983,8 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
         }
       } else {
         record = get_record_by_parameters (local_records,
-                                           remote_hostname,
-                                           remote_hostname,
+                                           remote_origin,
+                                           remote_origin,
                                            remote_username,
                                            remote_username_field,
                                            remote_password_field);
@@ -1034,7 +1023,7 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
   EphyPasswordRecord *record;
   GList *to_upload = NULL;
   const char *remote_id;
-  const char *remote_hostname;
+  const char *remote_origin;
   const char *remote_target_origin;
   const char *remote_username;
   const char *remote_username_field;
@@ -1056,7 +1045,7 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
   /* See comment in ephy_password_manager_handle_initial_merge. */
   for (GList *l = updated_records; l && l->data; l = l->next) {
     remote_id = ephy_password_record_get_id (l->data);
-    remote_hostname = ephy_password_record_get_hostname (l->data);
+    remote_origin = ephy_password_record_get_origin (l->data);
     remote_target_origin = ephy_password_record_get_target_origin (l->data);
     remote_username = ephy_password_record_get_username (l->data);
     remote_username_field = ephy_password_record_get_username_field (l->data);
@@ -1069,7 +1058,7 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
       ephy_password_manager_forget_record (self, record, l->data);
     } else {
       record = get_record_by_parameters (*local_records,
-                                         remote_hostname,
+                                         remote_origin,
                                          remote_target_origin,
                                          remote_username,
                                          remote_username_field,
