@@ -275,6 +275,8 @@ store_password (EphyEmbedFormAuth *form_auth)
   WebKitDOMNode *username_node;
   EphyWebExtension *extension = ephy_web_extension_get ();
 
+  g_assert (extension->password_manager);
+
   username_node = ephy_embed_form_auth_get_username_node (form_auth);
   if (username_node)
     g_object_get (username_node,
@@ -469,6 +471,9 @@ form_submitted_cb (WebKitDOMHTMLFormElement *dom_form,
   char *uri_str;
   char *form_action;
 
+  if (!extension->password_manager)
+    return TRUE;
+
   if (!ephy_web_dom_utils_find_form_auth_elements (dom_form,
                                                    &username_node,
                                                    &password_node,
@@ -571,6 +576,9 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
     return;
 
   extension = ephy_web_extension_get ();
+  if (!extension->password_manager)
+    return;
+
   uri_str = soup_uri_to_string (uri, FALSE);
   username_node = ephy_embed_form_auth_get_username_node (form_auth);
   if (username_node) {
