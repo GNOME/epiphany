@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include <dazzle.h>
 #include <gtk/gtk.h>
 
 #include "ephy-security-levels.h"
@@ -31,7 +32,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_LOCATION_ENTRY (ephy_location_entry_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkEntry)
+G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, DzlSuggestionEntry)
 
 typedef enum {
   EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN,
@@ -40,21 +41,6 @@ typedef enum {
 } EphyLocationEntryBookmarkIconState;
 
 GtkWidget      *ephy_location_entry_new                        (void);
-
-void            ephy_location_entry_set_completion             (EphyLocationEntry *entry,
-                                                                GtkTreeModel      *model,
-                                                                guint              text_col,
-                                                                guint              action_col,
-                                                                guint              keywords_col,
-                                                                guint              relevance_col,
-                                                                guint              url_col,
-                                                                guint              extra_col,
-                                                                guint              favicon_col);
-
-void            ephy_location_entry_set_match_func             (EphyLocationEntry           *entry,
-                                                                GtkEntryCompletionMatchFunc  match_func,
-                                                                gpointer                     user_data,
-                                                                GDestroyNotify               notify);
 
 gboolean        ephy_location_entry_get_can_undo               (EphyLocationEntry *entry);
 

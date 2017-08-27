@@ -9,13 +9,7 @@ if get_option('unit_tests')
   # ephytestutils_dep = declare_dependency(
   #   link_with: libephytestutils
   # )
-
-  completion_model_test = executable('test-ephy-completion-model',
-    'ephy-completion-model-test.c',
-    dependencies: ephymain_dep
-  )
-  test('Completion model test', completion_model_test)
-
+  #
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=778153
   # download_test = executable('test-ephy-download',
   #   'ephy-download-test.c',
@@ -54,12 +48,6 @@ if get_option('unit_tests')
     dependencies: ephymain_dep
   )
   test('History test', history_test)
-
-  location_entry_test = executable('test-location-entry',
-    'ephy-location-entry-test.c',
-    dependencies: ephymain_dep
-  )
-  test('Location entry test', location_entry_test)
 
   migration_test = executable('test-ephy-migration',
     'ephy-migration-test.c',

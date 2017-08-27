@@ -22,8 +22,6 @@
 #include "config.h"
 #include "ephy-location-controller.h"
 
-
-#include "ephy-completion-model.h"
 #include "ephy-debug.h"
 #include "ephy-dnd.h"
 #include "ephy-embed-container.h"
@@ -31,10 +29,12 @@
 #include "ephy-link.h"
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
+#include "ephy-suggestion-model.h"
 #include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
 #include "ephy-widgets-type-builtins.h"
 
+#include <dazzle.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <string.h>
@@ -78,16 +78,6 @@ static GParamSpec *obj_properties[LAST_PROP];
 G_DEFINE_TYPE_WITH_CODE (EphyLocationController, ephy_location_controller, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
                                                 NULL))
-
-static gboolean
-match_func (GtkEntryCompletion *completion,
-            const char         *key,
-            GtkTreeIter        *iter,
-            gpointer            data)
-{
-  /* We want every row in the model to show up. */
-  return TRUE;
-}
 
 static void
 entry_drag_data_received_cb (GtkWidget *widget,
@@ -182,33 +172,18 @@ entry_activate_cb (GtkEntry               *entry,
 }
 
 static void
-update_done_cb (EphyHistoryService *service,
-                gboolean            success,
-                gpointer            result_data,
-                gpointer            user_data)
-{
-  /* FIXME: this hack is needed for the completion entry popup
-   * to resize smoothly. See:
-   * https://bugzilla.gnome.org/show_bug.cgi?id=671074 */
-  gtk_entry_completion_complete (GTK_ENTRY_COMPLETION (user_data));
-}
-
-static void
 user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
 {
   const char *address;
-  GtkTreeModel *model;
-  GtkEntryCompletion *completion;
+  GListModel *model;
 
   address = ephy_title_widget_get_address (EPHY_TITLE_WIDGET (widget));
 
   LOG ("user_changed_cb, address %s", address);
 
-  completion = gtk_entry_get_completion (GTK_ENTRY (widget));
-  model = gtk_entry_completion_get_model (completion);
+  model = dzl_suggestion_entry_get_model (DZL_SUGGESTION_ENTRY (widget));
 
-  ephy_completion_model_update_for_string (EPHY_COMPLETION_MODEL (model), address,
-                                           update_done_cb, completion);
+  ephy_suggestion_model_query_async (EPHY_SUGGESTION_MODEL (model), address, NULL, NULL, NULL);
 }
 
 static void
@@ -292,84 +267,12 @@ switch_page_cb (GtkNotebook            *notebook,
 }
 
 static void
-action_activated_cb (GtkEntryCompletion     *completion,
-                     int                     index,
-                     EphyLocationController *controller)
-{
-  GtkWidget *entry;
-  char *content;
-  char *url;
-  char **engine_names;
-
-  entry = gtk_entry_completion_get_entry (completion);
-  content = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-  if (content == NULL)
-    return;
-
-  engine_names = ephy_search_engine_manager_get_names (controller->search_engine_manager);
-  url = ephy_search_engine_manager_build_search_address (controller->search_engine_manager,
-                                                         engine_names[index],
-                                                         content);
-  g_strfreev (engine_names);
-
-  ephy_link_open (EPHY_LINK (controller), url, NULL,
-                  ephy_link_flags_from_current_event ());
-  g_free (content);
-  g_free (url);
-}
-
-static void
-fill_entry_completion_with_actions (GtkEntryCompletion     *completion,
-                                    EphyLocationController *controller)
-{
-  char **engine_names;
-
-  engine_names = ephy_search_engine_manager_get_names (controller->search_engine_manager);
-
-  controller->num_search_engines_actions = 0;
-
-  for (guint i = 0; engine_names[i] != NULL; i++) {
-    gtk_entry_completion_insert_action_text (completion, i, engine_names[i]);
-    controller->num_search_engines_actions++;
-  }
-
-  g_strfreev (engine_names);
-}
-
-static void
-add_completion_actions (EphyLocationController *controller,
-                        EphyLocationEntry      *lentry)
-{
-  GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
-
-  fill_entry_completion_with_actions (completion, controller);
-  g_signal_connect (completion, "action_activated",
-                    G_CALLBACK (action_activated_cb), controller);
-}
-
-static void
-search_engines_changed_cb (EphySearchEngineManager *manager,
-                           gpointer  data)
-{
-  EphyLocationController *controller;
-  GtkEntryCompletion *completion;
-
-  controller = EPHY_LOCATION_CONTROLLER (data);
-  completion = gtk_entry_get_completion (GTK_ENTRY (controller->title_widget));
-
-  for (guint i = 0; i < controller->num_search_engines_actions; i++)
-    gtk_entry_completion_delete_action (completion, 0);
-
-  fill_entry_completion_with_actions (completion, controller);
-}
-
-static void
 ephy_location_controller_constructed (GObject *object)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
   EphyHistoryService *history_service;
   EphyBookmarksManager *bookmarks_manager;
-  EphyCompletionModel *model;
+  EphySuggestionModel *model;
   GtkWidget *notebook, *widget;
 
   G_OBJECT_CLASS (ephy_location_controller_parent_class)->constructed (object);
@@ -389,27 +292,13 @@ ephy_location_controller_constructed (GObject *object)
 
   history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   bookmarks_manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
-  model = ephy_completion_model_new (history_service, bookmarks_manager);
-  ephy_location_entry_set_completion (EPHY_LOCATION_ENTRY (controller->title_widget),
-                                      GTK_TREE_MODEL (model),
-                                      EPHY_COMPLETION_TEXT_COL,
-                                      EPHY_COMPLETION_ACTION_COL,
-                                      EPHY_COMPLETION_KEYWORDS_COL,
-                                      EPHY_COMPLETION_RELEVANCE_COL,
-                                      EPHY_COMPLETION_URL_COL,
-                                      EPHY_COMPLETION_EXTRA_COL,
-                                      EPHY_COMPLETION_FAVICON_COL);
+  model = ephy_suggestion_model_new (history_service, bookmarks_manager);
+  dzl_suggestion_entry_set_model (DZL_SUGGESTION_ENTRY (controller->title_widget), G_LIST_MODEL (model));
   g_object_unref (model);
 
-  ephy_location_entry_set_match_func (EPHY_LOCATION_ENTRY (controller->title_widget),
-                                      match_func,
-                                      controller->title_widget,
-                                      NULL);
-
-  add_completion_actions (controller, EPHY_LOCATION_ENTRY (controller->title_widget));
-
-  g_signal_connect_object (controller->search_engine_manager, "changed",
-                           G_CALLBACK (search_engines_changed_cb), controller, 0);
+/* FIXME: What to do with search engines? Add them to the model? Probably not?
+ * Make the bangs mandatory?
+ */
 
   g_object_bind_property (controller, "editable",
                           controller->title_widget, "editable",
