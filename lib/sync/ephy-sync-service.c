@@ -1453,7 +1453,7 @@ load_secrets_cb (SecretService   *service,
   }
 
   if (!(res && res->data)) {
-    message = _("The sync secrets for the current sync user are null.");
+    message = _("Could not find the sync secrets for the current sync user.");
     goto out_error;
   }
 
