@@ -2884,7 +2884,7 @@ setup_header_bar (EphyWindow *window)
   EphyTitleWidget *title_widget;
 
   header_bar = ephy_header_bar_new (window);
-  gtk_window_set_titlebar (GTK_WINDOW (window), header_bar);
+  dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), header_bar);
   gtk_widget_show (header_bar);
 
   app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
