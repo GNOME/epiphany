@@ -41,6 +41,7 @@
 #include "ephy-web-app-utils.h"
 #include "ephy-web-extension-proxy.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
@@ -98,7 +99,7 @@ static EphyEmbedShell *embed_shell = NULL;
 
 static void ephy_embed_shell_tabs_catalog_iface_init (EphyTabsCatalogInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyEmbedShell, ephy_embed_shell, GTK_TYPE_APPLICATION,
+G_DEFINE_TYPE_WITH_CODE (EphyEmbedShell, ephy_embed_shell, DZL_TYPE_APPLICATION,
                          G_ADD_PRIVATE (EphyEmbedShell)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TABS_CATALOG,
                                                 ephy_embed_shell_tabs_catalog_iface_init))
