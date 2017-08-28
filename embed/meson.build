@@ -33,6 +33,7 @@ libephyembed_sources = [
 ]
 
 libephyembed_deps = [
+  ephymisc_dep,
   gio_dep,
   glib_dep,
   gtk_dep,
