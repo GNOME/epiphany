@@ -52,6 +52,7 @@
 #include "popup-commands.h"
 #include "window-commands.h"
 
+#include <dazzle.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkx.h>
 #include <gio/gio.h>
@@ -72,6 +73,10 @@
 static void ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
                                                           GVariant      *state,
                                                           gpointer       user_data);
+
+static void ephy_window_embed_container_iface_init (EphyEmbedContainerInterface *iface);
+
+static void ephy_window_link_iface_init (EphyLinkInterface *iface);
 
 const struct {
   const char *action_and_target;
@@ -134,7 +139,7 @@ const struct {
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
 
 struct _EphyWindow {
-  GtkApplicationWindow parent_instance;
+  DzlApplicationWindow parent_instance;
 
   GtkWidget *header_bar;
   EphyBookmarksManager *bookmarks_manager;
@@ -180,6 +185,13 @@ enum {
   SENS_FLAG_NAVIGATION    = 1 << 4,
   SENS_FLAG_IS_BLANK      = 1 << 5
 };
+
+G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, DZL_TYPE_APPLICATION_WINDOW,
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
+                                                ephy_window_link_iface_init)
+                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
+                                                ephy_window_embed_container_iface_init))
+
 
 static gint
 impl_add_child (EphyEmbedContainer *container,
@@ -389,12 +401,6 @@ ephy_window_link_iface_init (EphyLinkInterface *iface)
 {
   iface->open_link = ephy_window_open_link;
 }
-
-G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, GTK_TYPE_APPLICATION_WINDOW,
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
-                                                ephy_window_link_iface_init)
-                         G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
-                                                ephy_window_embed_container_iface_init))
 
 static void
 sync_chromes_visibility (EphyWindow *window)
