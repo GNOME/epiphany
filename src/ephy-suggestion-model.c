@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- * Copyright (C) 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright © 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 
 #include "config.h"
 #include "ephy-suggestion-model.h"
+
+#include "ephy-suggestion.h"
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
@@ -135,7 +137,7 @@ ephy_suggestion_model_init (EphySuggestionModel *self)
 static GType
 ephy_suggestion_model_get_item_type (GListModel *model)
 {
-  return DZL_TYPE_SUGGESTION;
+  return EPHY_TYPE_SUGGESTION;
 }
 
 static guint
@@ -324,20 +326,11 @@ query_completed_cb (EphyHistoryService *service,
     title = ephy_bookmark_get_title (bookmark);
 
     if (should_add_bookmark_to_model (self, query, title, url)) {
-      DzlSuggestion *suggestion;
-      char *escaped_url = g_markup_escape_text (url, -1);
-      char *escaped_title = g_markup_escape_text (title, -1);
+      EphySuggestion *suggestion;
 
-      suggestion = g_object_new (DZL_TYPE_SUGGESTION,
-                                 "title", escaped_url,
-                                 "subtitle", escaped_title,
-                                 "id", url,
-                                 NULL);
+      suggestion = ephy_suggestion_new (title, url);
       g_sequence_append (self->items, suggestion);
       added++;
-
-      g_free (escaped_url);
-      g_free (escaped_title);
     }
   }
 
@@ -346,21 +339,11 @@ query_completed_cb (EphyHistoryService *service,
 
   for (const GList *p = g_list_last (urls); p != NULL; p = p->prev) {
     EphyHistoryURL *url = (EphyHistoryURL *)p->data;
-    DzlSuggestion *suggestion;
-    char *escaped_url = g_markup_escape_text (url->url, -1);
-    char *escaped_title = g_markup_escape_text (url->title, -1);
+    EphySuggestion *suggestion;
 
-    suggestion = g_object_new (DZL_TYPE_SUGGESTION,
-                               "icon-name", "web-browser-symbolic",
-                               "id", url->url,
-                               "title", escaped_url,
-                               "subtitle", escaped_title,
-                               NULL);
+    suggestion = ephy_suggestion_new (url->title, url->url);
     g_sequence_prepend (self->items, suggestion);
     added++;
-
-    g_free (escaped_url);
-    g_free (escaped_title);
   }
 
   g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
