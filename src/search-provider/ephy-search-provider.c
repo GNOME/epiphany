@@ -18,6 +18,8 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// FIXME FIXME FIXME: Update search provider to work with EphySuggestionModel
+
 #include "config.h"
 
 #include "ephy-search-provider.h"
