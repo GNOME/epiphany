@@ -4,11 +4,13 @@ types_headers = [
   'history/ephy-history-types.h'
 ]
 
-enums = gnome.mkenums('ephy-lib',
+lib_enums = gnome.mkenums('ephy-lib',
   sources: types_headers,
   h_template: 'ephy-lib-type-builtins.h.in',
   c_template: 'ephy-lib-type-builtins.c.in'
 )
+
+ephy_lib_type_builtins_h = lib_enums[1]
 
 libephymisc_sources = [
   'contrib/eggtreemultidnd.c',
@@ -47,7 +49,7 @@ libephymisc_sources = [
   'history/ephy-history-service-urls-table.c',
   'history/ephy-history-service-visits-table.c',
   'history/ephy-history-types.c',
-  enums
+  lib_enums
 ]
 
 libephymisc_deps = [
@@ -87,7 +89,7 @@ ephymisc_dep = declare_dependency(
   link_with: libephymisc,
   include_directories: libephymisc_includes,
   dependencies: libephymisc_deps,
-  sources: enums
+  sources: lib_enums
 )
 
 subdir('sync')

@@ -2,7 +2,7 @@ types_headers = [
   'ephy-location-entry.h'
 ]
 
-enums = gnome.mkenums('ephy-widgets',
+widget_enums = gnome.mkenums('ephy-widgets',
   sources: types_headers,
   h_template: 'ephy-widgets-type-builtins.h.in',
   c_template: 'ephy-widgets-type-builtins.c.in'
@@ -21,7 +21,7 @@ libephywidgets_sources = [
   'ephy-security-popover.c',
   'ephy-title-box.c',
   'ephy-title-widget.c',
-  enums
+  widget_enums
 ]
 
 libephywidgets_deps = [
@@ -55,5 +55,8 @@ ephywidgets_dep = declare_dependency(
   link_with: libephywidgets,
   include_directories: libephywidgets_includes,
   dependencies: libephywidgets_deps,
-  sources: enums
+  sources: [
+    ephy_lib_type_builtins_h,
+    widget_enums
+  ]
 )
