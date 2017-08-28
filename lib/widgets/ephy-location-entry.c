@@ -355,6 +355,17 @@ ephy_location_entry_cut_clipboard (GtkEntry *entry)
 }
 
 static void
+ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
+                                          DzlSuggestion      *suggestion)
+{
+  /* The suggestion ID is the unescaped URL, which is what we need. */
+  gtk_entry_set_text (GTK_ENTRY (entry), dzl_suggestion_get_id (suggestion));
+
+  /* Now trigger the load.... */
+  g_signal_emit_by_name (entry, "activate");
+}
+
+static void
 ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface)
 {
   iface->get_address = ephy_location_entry_title_widget_get_address;
@@ -369,6 +380,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkEntryClass *entry_class = GTK_ENTRY_CLASS (klass);
+  DzlSuggestionEntryClass *dzl_entry_class = DZL_SUGGESTION_ENTRY_CLASS (klass);
 
   object_class->get_property = ephy_location_entry_get_property;
   object_class->set_property = ephy_location_entry_set_property;
@@ -380,6 +392,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
   entry_class->copy_clipboard = ephy_location_entry_copy_clipboard;
   entry_class->cut_clipboard = ephy_location_entry_cut_clipboard;
+
+  dzl_entry_class->suggestion_activated = ephy_location_entry_suggestion_activated;
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
