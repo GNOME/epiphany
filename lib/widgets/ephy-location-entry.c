@@ -501,7 +501,7 @@ entry_key_press_cb (GtkEntry          *entry,
     /* Make sure the location is activated on CTRL+l even when the
      * completion popup is shown and have an active keyboard grab.
      */
-    ephy_location_entry_activate (location_entry);
+    ephy_location_entry_focus (location_entry);
   }
 
   /* FIXME: Why do we have to activate the location entry manually? */
@@ -910,7 +910,7 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
 }
 
 /**
- * ephy_location_entry_activate:
+ * ephy_location_entry_focus:
  * @entry: an #EphyLocationEntry widget
  *
  * Set focus on @entry and select the text whithin. This is called when the
@@ -918,7 +918,7 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
  *
  **/
 void
-ephy_location_entry_activate (EphyLocationEntry *entry)
+ephy_location_entry_focus (EphyLocationEntry *entry)
 {
   GtkWidget *toplevel, *widget = GTK_WIDGET (entry);
 

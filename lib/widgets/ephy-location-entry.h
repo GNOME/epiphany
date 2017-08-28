@@ -52,7 +52,7 @@ gboolean        ephy_location_entry_reset                      (EphyLocationEntr
 
 void            ephy_location_entry_undo_reset                 (EphyLocationEntry *entry);
 
-void            ephy_location_entry_activate                   (EphyLocationEntry *entry);
+void            ephy_location_entry_focus                      (EphyLocationEntry *entry);
 
 void            ephy_location_entry_set_bookmark_icon_state    (EphyLocationEntry                  *entry,
                                                                 EphyLocationEntryBookmarkIconState  state);
