@@ -267,7 +267,11 @@ ephy_location_entry_get_property (GObject    *object,
 static void
 ephy_location_entry_constructed (GObject *object)
 {
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
+
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->constructed (object);
+
+  dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry), dzl_suggestion_entry_window_position_func, NULL, NULL);
 
 #if GTK_CHECK_VERSION(3, 22, 20)
   gtk_entry_set_input_hints (GTK_ENTRY (object), GTK_INPUT_HINT_NO_EMOJI);
@@ -382,6 +386,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   GtkEntryClass *entry_class = GTK_ENTRY_CLASS (klass);
   DzlSuggestionEntryClass *dzl_entry_class = DZL_SUGGESTION_ENTRY_CLASS (klass);
 
+  object_class->constructed = ephy_location_entry_constructed;
   object_class->get_property = ephy_location_entry_get_property;
   object_class->set_property = ephy_location_entry_set_property;
   object_class->constructed = ephy_location_entry_constructed;
