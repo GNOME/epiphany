@@ -114,6 +114,12 @@ G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, DZL_TYPE_SUGGES
                                                 ephy_location_entry_title_widget_interface_init))
 
 static void
+ephy_location_entry_activate (EphyLocationEntry *entry)
+{
+  g_signal_emit_by_name (entry, "activate");
+}
+
+static void
 update_address_state (EphyLocationEntry *entry)
 {
   const char *text;
@@ -366,7 +372,7 @@ ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
   gtk_entry_set_text (GTK_ENTRY (entry), dzl_suggestion_get_id (suggestion));
 
   /* Now trigger the load.... */
-  g_signal_emit_by_name (entry, "activate");
+  ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
 }
 
 static void
@@ -504,59 +510,12 @@ entry_key_press_cb (GtkEntry          *entry,
     ephy_location_entry_focus (location_entry);
   }
 
-  /* FIXME: Why do we have to activate the location entry manually? */
-  if (event->keyval == GDK_KEY_Return)
-    g_signal_emit_by_name (entry, "activate");
+  if (event->keyval == GDK_KEY_Return ||
+      event->keyval == GDK_KEY_KP_Enter ||
+      event->keyval == GDK_KEY_ISO_Enter)
+    ephy_location_entry_activate (location_entry);
 
   return FALSE;
-}
-
-static gboolean
-entry_key_press_after_cb (GtkEntry          *entry,
-                          GdkEventKey       *event,
-                          EphyLocationEntry *lentry)
-{
-  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
-
-  if ((event->keyval == GDK_KEY_Return ||
-       event->keyval == GDK_KEY_KP_Enter ||
-       event->keyval == GDK_KEY_ISO_Enter) &&
-      (state == GDK_CONTROL_MASK ||
-       state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))) {
-    /* gtk_im_context_reset (entry->im_context); */
-
-    lentry->needs_reset = TRUE;
-    g_signal_emit_by_name (entry, "activate");
-
-    return TRUE;
-  }
-
-  if ((event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down)
-      && state == 0) {
-    /* If we are focusing the entry, with the cursor at the end of it
-     * we emit the changed signal, so that the completion popup appears */
-    const char *string;
-
-    string = gtk_entry_get_text (entry);
-    if (gtk_editable_get_position (GTK_EDITABLE (entry)) == (int)strlen (string)) {
-      g_signal_emit_by_name (entry, "changed", 0);
-      return TRUE;
-    }
-  }
-
-  return FALSE;
-}
-
-static void
-entry_activate_after_cb (GtkEntry          *entry,
-                         EphyLocationEntry *lentry)
-{
-  lentry->user_changed = FALSE;
-
-  if (lentry->needs_reset) {
-    ephy_location_entry_reset_internal (lentry, TRUE);
-    lentry->needs_reset = FALSE;
-  }
 }
 
 static void
@@ -576,7 +535,7 @@ paste_received (GtkClipboard      *clipboard,
 {
   if (text) {
     gtk_entry_set_text (GTK_ENTRY (entry), text);
-    g_signal_emit_by_name (entry, "activate");
+    ephy_location_entry_activate (entry);
   }
 }
 
@@ -733,11 +692,6 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
                     "signal::key-press-event", G_CALLBACK (entry_key_press_cb), lentry,
                     "signal::changed", G_CALLBACK (editable_changed_cb), lentry,
                     NULL);
-
-  g_signal_connect_after (entry, "key-press-event",
-                          G_CALLBACK (entry_key_press_after_cb), lentry);
-  g_signal_connect_after (entry, "activate",
-                          G_CALLBACK (entry_activate_after_cb), lentry);
 }
 
 static void
@@ -868,9 +822,8 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
   ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), text);
   g_free (url);
 
-  if (notify) {
+  if (notify)
     g_signal_emit (entry, signals[USER_CHANGED], 0);
-  }
 
   entry->user_changed = FALSE;
 
