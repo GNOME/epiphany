@@ -21,32 +21,12 @@
 
 #include <dazzle.h>
 #include <glib.h>
-#include <string.h>
 
 struct _EphySuggestion {
   DzlSuggestion parent;
 };
 
 G_DEFINE_TYPE (EphySuggestion, ephy_suggestion, DZL_TYPE_SUGGESTION)
-
-char *
-ephy_suggestion_suggest_suffix (DzlSuggestion *self,
-                                const char    *typed_text)
-{
-  const char *suffix;
-  const char *url;
-
-  if (typed_text == NULL || strlen (typed_text) == 0 ||
-      g_str_has_prefix ("www.", typed_text) ||
-      g_str_has_prefix ("http://www.", typed_text) ||
-      g_str_has_prefix ("https://www.", typed_text))
-    return NULL;
-
-  url = dzl_suggestion_get_id (self);
-  suffix = strstr (url, typed_text);
-
-  return suffix ? g_strdup (&suffix[strlen (typed_text)]) : NULL;
-}
 
 char *
 ephy_suggestion_replace_typed_text (DzlSuggestion *self,
@@ -62,7 +42,6 @@ ephy_suggestion_class_init (EphySuggestionClass *klass)
 {
   DzlSuggestionClass *dzl_suggestion_class = DZL_SUGGESTION_CLASS (klass);
 
-  dzl_suggestion_class->suggest_suffix = ephy_suggestion_suggest_suffix;
   dzl_suggestion_class->replace_typed_text = ephy_suggestion_replace_typed_text;
 }
 
