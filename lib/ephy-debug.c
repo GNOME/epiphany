@@ -93,7 +93,6 @@ log_module (const gchar   *log_domain,
     g_print ("%s\n", message);
   }
 }
-#endif
 
 #define MAX_DEPTH 200
 
@@ -141,29 +140,6 @@ trap_handler (const char    *log_domain,
     }
   }
 }
-
-/**
- * ephy_debug_init:
- *
- * Starts the debugging facility. See Epiphany's HACKING file for
- * more information. It also starts module logging and profiling if the
- * appropiate variables are set: EPHY_LOG_MODULES and EPHY_PROFILE_MODULES.
- **/
-void
-ephy_debug_init (void)
-{
-#if DEVELOPER_MODE
-  ephy_log_modules = build_modules ("EPHY_LOG_MODULES", &ephy_log_all_modules);
-  g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, log_module, NULL);
-
-  ephy_profile_modules = build_modules ("EPHY_PROFILE_MODULES", &ephy_profile_all_modules);
-#endif
-
-  ephy_debug_break = g_getenv ("EPHY_DEBUG_BREAK");
-  g_log_set_default_handler (trap_handler, NULL);
-}
-
-#if DEVELOPER_MODE
 
 static EphyProfiler *
 ephy_profiler_new (const char *name, const char *module)
@@ -270,6 +246,32 @@ ephy_profiler_stop (const char *name)
 
   ephy_profiler_dump (profiler);
   ephy_profiler_free (profiler);
+}
+
+/**
+ * ephy_debug_init:
+ *
+ * Starts the debugging facility. See Epiphany's HACKING file for
+ * more information. It also starts module logging and profiling if the
+ * appropiate variables are set: EPHY_LOG_MODULES and EPHY_PROFILE_MODULES.
+ **/
+void
+ephy_debug_init (void)
+{
+  ephy_log_modules = build_modules ("EPHY_LOG_MODULES", &ephy_log_all_modules);
+  g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, log_module, NULL);
+
+  ephy_profile_modules = build_modules ("EPHY_PROFILE_MODULES", &ephy_profile_all_modules);
+
+  ephy_debug_break = g_getenv ("EPHY_DEBUG_BREAK");
+  g_log_set_default_handler (trap_handler, NULL);
+}
+
+#else
+
+void
+ephy_debug_init (void)
+{
 }
 
 #endif
