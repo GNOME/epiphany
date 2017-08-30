@@ -267,11 +267,11 @@ store_password (EphyEmbedFormAuth *form_auth)
   SoupURI *uri;
   char *uri_str;
   char *origin;
-  char *target_origin;
   char *username_field_name = NULL;
   char *username_field_value = NULL;
   char *password_field_name = NULL;
   char *password_field_value = NULL;
+  const char *target_origin;
   gboolean password_updated;
   WebKitDOMNode *username_node;
   EphyWebExtension *extension = ephy_web_extension_get ();
@@ -305,7 +305,6 @@ store_password (EphyEmbedFormAuth *form_auth)
 
   g_free (uri_str);
   g_free (origin);
-  g_free (target_origin);
   g_free (username_field_name);
   g_free (username_field_value);
   g_free (password_field_name);
@@ -570,10 +569,10 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
   SoupURI *uri;
   char *uri_str;
   char *origin;
-  char *target_origin;
   char *username = NULL;
   char *username_field_name = NULL;
   char *password_field_name = NULL;
+  const char *target_origin;
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
   EphyWebExtension *extension;
@@ -615,7 +614,6 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
 
   g_free (uri_str);
   g_free (origin);
-  g_free (target_origin);
   g_free (username);
   g_free (username_field_name);
   g_free (password_field_name);
