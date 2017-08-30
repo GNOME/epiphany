@@ -41,13 +41,10 @@
 
 static const char *ephy_debug_break = NULL;
 
-#ifndef DISABLE_PROFILING
+#if DEVELOPER_MODE
 static GHashTable *ephy_profilers_hash = NULL;
 static char **ephy_profile_modules;
 static gboolean ephy_profile_all_modules;
-#endif /* !DISABLE_PROFILING */
-
-#ifndef NDEBUG
 
 static char **
 build_modules (const char *name,
@@ -67,9 +64,6 @@ build_modules (const char *name,
 
   return g_strsplit (g_getenv (name), ":", -1);
 }
-#endif
-
-#ifndef DISABLE_LOGGING
 
 static char **ephy_log_modules;
 static gboolean ephy_log_all_modules;
@@ -99,7 +93,7 @@ log_module (const gchar   *log_domain,
     g_print ("%s\n", message);
   }
 }
-#endif /* !DISABLE_LOGGING */
+#endif
 
 #define MAX_DEPTH 200
 
@@ -158,21 +152,18 @@ trap_handler (const char    *log_domain,
 void
 ephy_debug_init (void)
 {
-#ifndef DISABLE_LOGGING
+#if DEVELOPER_MODE
   ephy_log_modules = build_modules ("EPHY_LOG_MODULES", &ephy_log_all_modules);
-
   g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, log_module, NULL);
+
+  ephy_profile_modules = build_modules ("EPHY_PROFILE_MODULES", &ephy_profile_all_modules);
 #endif
 
   ephy_debug_break = g_getenv ("EPHY_DEBUG_BREAK");
   g_log_set_default_handler (trap_handler, NULL);
-
-#ifndef DISABLE_PROFILING
-  ephy_profile_modules = build_modules ("EPHY_PROFILE_MODULES", &ephy_profile_all_modules);
-#endif
 }
 
-#ifndef DISABLE_PROFILING
+#if DEVELOPER_MODE
 
 static EphyProfiler *
 ephy_profiler_new (const char *name, const char *module)
@@ -280,4 +271,5 @@ ephy_profiler_stop (const char *name)
   ephy_profiler_dump (profiler);
   ephy_profiler_free (profiler);
 }
+
 #endif

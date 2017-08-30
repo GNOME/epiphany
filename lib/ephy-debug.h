@@ -24,40 +24,20 @@
 
 G_BEGIN_DECLS
 
-#ifdef NDEBUG
-#define DISABLE_LOGGING
-#define DISABLE_PROFILING
-#endif
-
-#if defined(G_HAVE_GNUC_VARARGS)
-
-#ifdef DISABLE_LOGGING
-#define LOG(msg, args...) G_STMT_START { } G_STMT_END
+#if DEVELOPER_MODE
+#define LOG(msg, args...)		 g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,		\
+                                    "[ %s ] " msg,				\
+                                    __FILE__ , ## args)
 #else
-#define LOG(msg, args...)			\
-g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,		\
-       "[ %s ] " msg,				\
-       __FILE__ , ## args)
-#endif
-
-#elif defined(G_HAVE_ISO_VARARGS)
-
 #define LOG(...) G_STMT_START { } G_STMT_END
-
-#else /* no varargs macros */
-
-static void LOG(const char *format, ...) {}
-
 #endif
 
-#ifdef DISABLE_PROFILING
+#if DEVELOPER_MODE
+#define START_PROFILER(name)	ephy_profiler_start (name, __FILE__);
+#define STOP_PROFILER(name)   ephy_profiler_stop (name);
+#else
 #define START_PROFILER(name)
 #define STOP_PROFILER(name)
-#else
-#define START_PROFILER(name)	\
-ephy_profiler_start (name, __FILE__);
-#define STOP_PROFILER(name)	\
-ephy_profiler_stop (name);
 #endif
 
 typedef struct
@@ -69,7 +49,7 @@ typedef struct
 
 void		ephy_debug_init		(void);
 
-#ifndef DISABLE_PROFILING
+#if DEVELOPER_MODE
 
 void		ephy_profiler_start	(const char *name,
 					 const char *module);

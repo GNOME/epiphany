@@ -33,8 +33,9 @@ conf.set_quoted('PKGLIBEXECDIR', pkglibexecdir)
 conf.set_quoted('SOURCE_ROOT', meson.source_root())
 conf.set_quoted('VERSION', meson.project_version())
 
-conf.set10('ENABLE_NLS', true)
+conf.set10('DEVELOPER_MODE', get_option('developer_mode'))
 conf.set10('ENABLE_HTTPS_EVERYWHERE', get_option('enable_https_everywhere'))
+conf.set10('ENABLE_NLS', true)
 
 configure_file(
   output: 'config.h',
