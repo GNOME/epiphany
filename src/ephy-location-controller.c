@@ -51,7 +51,7 @@ struct _EphyLocationController {
   EphyWindow *window;
   EphyTitleWidget *title_widget;
   char *address;
-  guint editable : 1;
+  gboolean editable;
   gboolean sync_address_is_blocked;
   EphySearchEngineManager *search_engine_manager;
   guint num_search_engines_actions;
