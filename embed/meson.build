@@ -44,7 +44,7 @@ libephyembed_deps = [
   webkit2gtk_dep
 ]
 
-if get_option('enable_https_everywhere')
+if get_option('https_everywhere')
   libephyembed_deps += httpseverywhere_dep
 endif
 

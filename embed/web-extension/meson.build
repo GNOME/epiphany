@@ -14,7 +14,7 @@ web_extension_deps = [
   webkit2gtk_web_extension_dep
 ]
 
-if get_option('enable_https_everywhere')
+if get_option('https_everywhere')
   web_extension_deps += httpseverywhere_dep
 endif
 

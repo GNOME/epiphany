@@ -1,4 +1,4 @@
-if get_option('enable_unit_tests')
+if get_option('unit_tests')
   # FIXME: The tests that need ephy-test-utils are all disabled....
   #
   # libephytestutils = static_library('ephytestutils',

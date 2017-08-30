@@ -34,7 +34,7 @@ conf.set_quoted('SOURCE_ROOT', meson.source_root())
 conf.set_quoted('VERSION', meson.project_version())
 
 conf.set10('DEVELOPER_MODE', get_option('developer_mode'))
-conf.set10('ENABLE_HTTPS_EVERYWHERE', get_option('enable_https_everywhere'))
+conf.set10('ENABLE_HTTPS_EVERYWHERE', get_option('https_everywhere'))
 
 configure_file(
   output: 'config.h',
@@ -74,7 +74,7 @@ cc = meson.get_compiler('c')
 gmp_dep = cc.find_library('gmp')
 m_dep = cc.find_library('m', required: false)
 
-if get_option('enable_https_everywhere')
+if get_option('https_everywhere')
   httpseverywhere_dep = dependency('httpseverywhere-0.4', version: '>= 0.2.2')
 endif
 
