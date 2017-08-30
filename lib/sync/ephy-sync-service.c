@@ -1478,6 +1478,13 @@ load_secrets_cb (SecretService   *service,
 out_error:
   suggestion = _("Please visit Preferences and sign in again to continue syncing.");
   ephy_notification_show (ephy_notification_new (message, suggestion));
+  /* Reset the sync user so that it will be considered signed-out
+   * when the preferences dialog is opened. */
+  ephy_sync_utils_set_sync_user (NULL);
+  ephy_sync_utils_set_sync_time (0);
+  ephy_sync_utils_set_bookmarks_sync_is_initial (TRUE);
+  ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
+  ephy_sync_utils_set_history_sync_is_initial (TRUE);
 out_no_error:
   if (value)
     secret_value_unref (value);
