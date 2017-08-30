@@ -42,6 +42,7 @@ ephy_embed_form_auth_finalize (GObject *object)
 
   if (form_auth->uri)
     soup_uri_free (form_auth->uri);
+  g_free (form_auth->username);
   g_free (form_auth->target_origin);
   g_clear_object (&form_auth->username_node);
   g_clear_object (&form_auth->password_node);
