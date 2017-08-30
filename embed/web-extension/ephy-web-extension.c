@@ -227,15 +227,12 @@ web_page_send_request (WebKitWebPage     *web_page,
 
     modified_uri = result;
   } else if (!modified_uri) {
-    LOG ("Going to load %s", request_uri);
     return FALSE;
   }
 
   if (g_strcmp0 (request_uri, modified_uri) != 0) {
     LOG ("Rewrote %s to %s", request_uri, modified_uri);
     webkit_uri_request_set_uri (request, modified_uri);
-  } else {
-    LOG ("Going to load %s", request_uri);
   }
 
   g_free (modified_uri);
