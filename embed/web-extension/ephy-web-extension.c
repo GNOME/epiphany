@@ -148,10 +148,18 @@ should_use_https_everywhere (const char *request_uri,
 
 static gboolean
 should_use_adblocker (const char *request_uri,
-                      const char *page_uri)
+                      const char *page_uri,
+                      const char *redirected_request_uri)
 {
-  /* Always load the main resource. */
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
+    return FALSE;
+
+  /* Always load the main resource... */
   if (g_strcmp0 (request_uri, page_uri) == 0)
+    return FALSE;
+
+  /* ...even during a redirect, when page_uri is stale. */
+  if (g_strcmp0 (page_uri, redirected_request_uri) == 0)
     return FALSE;
 
   /* Always load data requests, as uri_tester won't do any good here. */
@@ -189,9 +197,9 @@ web_page_send_request (WebKitWebPage     *web_page,
 
   request_uri = webkit_uri_request_get_uri (request);
   page_uri = webkit_web_page_get_uri (web_page);
+  redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
 
-  if (!should_use_adblocker (request_uri, page_uri) ||
-      !g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
+  if (!should_use_adblocker (request_uri, page_uri, redirected_response_uri))
     flags &= ~EPHY_URI_TEST_ADBLOCK;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
@@ -204,7 +212,6 @@ web_page_send_request (WebKitWebPage     *web_page,
     modified_uri = ephy_remove_tracking_from_uri (request_uri);
   }
 
-  redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
   if (!should_use_https_everywhere (request_uri, redirected_response_uri))
     flags &= ~EPHY_URI_TEST_HTTPS_EVERYWHERE;
 
