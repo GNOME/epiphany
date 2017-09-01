@@ -354,7 +354,7 @@ ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
 {
   GKeyFile *file;
   char *filename;
-  char **groups;
+  char **groups = NULL;
   gsize groups_length;
   GList *origins = NULL;
   GError *error = NULL;
@@ -380,17 +380,13 @@ ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
     if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
       g_warning ("Error processing %s: %s", filename, error->message);
     g_error_free (error);
-    return NULL;
+    goto out;
   }
 
   groups = g_key_file_get_groups (file, &groups_length);
   for (guint i = 0; i < groups_length; i++)
     origins = g_list_concat (origins,
                              origins_for_keyfile_group (file, filename, groups[i], type, permit));
-
-  g_key_file_unref (file);
-  g_strfreev (groups);
-  g_free (filename);
 
   /* Cache the results. */
   if (origins != NULL) {
@@ -399,6 +395,11 @@ ephy_permissions_manager_get_matching_origins (EphyPermissionsManager *manager,
                          GINT_TO_POINTER (type),
                          origins);
   }
+
+out:
+  g_key_file_unref (file);
+  g_strfreev (groups);
+  g_free (filename);
 
   return origins;
 }
