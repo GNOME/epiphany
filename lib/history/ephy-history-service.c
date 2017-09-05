@@ -320,6 +320,7 @@ ephy_history_service_class_init (EphyHistoryServiceClass *klass)
 static void
 ephy_history_service_init (EphyHistoryService *self)
 {
+  self->priv = EPHY_HISTORY_SERVICE_GET_PRIVATE (self);
 }
 
 EphyHistoryService *
