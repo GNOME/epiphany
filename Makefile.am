@@ -4,8 +4,9 @@ if ENABLE_TESTS
 SUBDIRS += tests
 endif
 
-DISTCHECK_CONFIGURE_FLAGS = \
-	--enable-debug
+AM_DISTCHECK_CONFIGURE_FLAGS = \
+	--enable-debug \
+	--disable-tests
 
 @CODE_COVERAGE_RULES@
 
