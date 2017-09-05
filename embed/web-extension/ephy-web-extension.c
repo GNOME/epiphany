@@ -114,10 +114,13 @@ web_page_send_request (WebKitWebPage *web_page,
   const char *original_request_uri;
   const char *request_uri;
   const char *page_uri;
+  const char *redirected_response_uri;
   gboolean ret;
 
   request_uri = webkit_uri_request_get_uri (request);
   original_request_uri = request_uri;
+
+  redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     SoupMessageHeaders *headers;
@@ -144,8 +147,12 @@ web_page_send_request (WebKitWebPage *web_page,
 
   page_uri = webkit_web_page_get_uri (web_page);
 
-  /* Always load the main resource. */
+  /* Always load the main resource... */
   if (g_strcmp0 (original_request_uri, page_uri) == 0)
+    return FALSE;
+
+  /* ...even during a redirect, when page_uri is stale. */
+  if (g_strcmp0 (page_uri, redirected_response_uri) == 0)
     return FALSE;
 
   /* Always load data requests, as uri_tester won't do any good here. */
