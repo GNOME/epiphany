@@ -707,6 +707,7 @@ initialize_web_extensions (WebKitWebContext *web_context,
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GVariant *user_data;
   gboolean private_profile;
+  gboolean browser_mode;
   const char *address;
 
   webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_EXTENSIONS_DIR);
@@ -714,11 +715,13 @@ initialize_web_extensions (WebKitWebContext *web_context,
   address = priv->dbus_server ? g_dbus_server_get_client_address (priv->dbus_server) : NULL;
 
   private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO;
-  user_data = g_variant_new ("(msssb)",
+  browser_mode = priv->mode == EPHY_EMBED_SHELL_MODE_BROWSER;
+  user_data = g_variant_new ("(msssbb)",
                              address,
                              ephy_dot_dir (),
                              ephy_filters_manager_get_adblock_filters_dir (priv->filters_manager),
-                             private_profile);
+                             private_profile,
+                             browser_mode);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, user_data);
 }
 

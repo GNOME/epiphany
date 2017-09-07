@@ -415,7 +415,7 @@ ephy_shell_startup (GApplication *application)
                               "enabled",
                               G_BINDING_SYNC_CREATE);
 
-      if (ephy_sync_utils_user_is_signed_in ()) {
+      if (mode == EPHY_EMBED_SHELL_MODE_BROWSER && ephy_sync_utils_user_is_signed_in ()) {
         /* Create the sync service. */
         ephy_shell_get_sync_service (shell);
       }

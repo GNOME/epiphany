@@ -1701,7 +1701,8 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
                                WebKitWebExtension *wk_extension,
                                const char         *server_address,
                                const char         *adblock_data_dir,
-                               gboolean            is_private_profile)
+                               gboolean            is_private_profile,
+                               gboolean            is_browser_mode)
 {
   GDBusAuthObserver *observer;
 
@@ -1716,11 +1717,13 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
   if (!is_private_profile) {
     extension->password_manager = ephy_password_manager_new ();
 
-    if (ephy_sync_utils_user_is_signed_in ())
-      ephy_web_extension_create_sync_service (extension);
+    if (is_browser_mode) {
+      if (ephy_sync_utils_user_is_signed_in ())
+        ephy_web_extension_create_sync_service (extension);
 
-    g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_USER,
-                      G_CALLBACK (ephy_prefs_sync_user_cb), extension);
+      g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_USER,
+                        G_CALLBACK (ephy_prefs_sync_user_cb), extension);
+    }
   }
 
   extension->permissions_manager = ephy_permissions_manager_new ();

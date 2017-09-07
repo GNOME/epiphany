@@ -38,9 +38,10 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
   const char *dot_dir;
   const char *adblock_data_dir;
   gboolean private_profile;
+  gboolean browser_mode;
   GError *error = NULL;
 
-  g_variant_get (user_data, "(m&s&s&sb)", &server_address, &dot_dir, &adblock_data_dir, &private_profile);
+  g_variant_get (user_data, "(m&s&s&sbb)", &server_address, &dot_dir, &adblock_data_dir, &private_profile, &browser_mode);
 
   if (!server_address) {
     g_warning ("UI process did not start D-Bus server, giving up.");
@@ -60,7 +61,8 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
                                  webkit_extension,
                                  server_address,
                                  adblock_data_dir,
-                                 private_profile);
+                                 private_profile,
+                                 browser_mode);
 }
 
 static void __attribute__((destructor))
