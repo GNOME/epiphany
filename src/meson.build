@@ -91,7 +91,6 @@ codegen = gnome.gdbus_codegen('ephy-shell-search-provider-generated',
   namespace: 'Ephy'
 )
 
-'''
 search_provider_sources = [
   'search-provider/ephy-search-provider.c',
   'search-provider/ephy-search-provider-main.c',
@@ -105,7 +104,6 @@ executable('epiphany-search-provider',
   install_dir: libexecdir,
   install_rpath: pkglibdir
 )
-'''
 
 resource_files = files('resources/epiphany.gresource.xml')
 resources = gnome.compile_resources('epiphany-resources',

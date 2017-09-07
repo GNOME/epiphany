@@ -18,18 +18,16 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// FIXME FIXME FIXME: Update search provider to work with EphySuggestionModel
-
 #include "config.h"
 
 #include "ephy-search-provider.h"
 
 #include "ephy-bookmarks-manager.h"
-#include "ephy-completion-model.h"
 #include "ephy-file-helpers.h"
 #include "ephy-prefs.h"
 #include "ephy-profile-utils.h"
 #include "ephy-shell.h"
+#include "ephy-suggestion-model.h"
 
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
@@ -45,7 +43,7 @@ struct _EphySearchProvider {
 
   GSettings                *settings;
   EphyBookmarksManager     *bookmarks_manager;
-  EphyCompletionModel      *model;
+  EphySuggestionModel      *model;
 };
 
 struct _EphySearchProviderClass {
@@ -57,29 +55,29 @@ G_DEFINE_TYPE (EphySearchProvider, ephy_search_provider, G_TYPE_APPLICATION)
 #define INACTIVITY_TIMEOUT 60 * 1000 /* One minute, in milliseconds */
 
 static void
-on_model_updated (EphyHistoryService *service,
-                  gboolean            success,
-                  gpointer            result_data,
-                  gpointer            user_data)
+on_model_updated (GObject      *source_object,
+                  GAsyncResult *result,
+                  GTask        *task)
 {
-  GTask *task = user_data;
   EphySearchProvider *self = g_task_get_source_object (task);
-  GtkTreeModel *model = GTK_TREE_MODEL (self->model);
-  GtkTreeIter iter;
+  EphySuggestion *suggestion;
   GPtrArray *results;
   const char *search_string;
-  gboolean ok;
-
+  guint n_items;
+  GError *error = NULL;
   results = g_ptr_array_new ();
 
-  ok = gtk_tree_model_get_iter_first (model, &iter);
-  while (ok) {
-    char *result;
-
-    result = gtk_tree_model_get_string_from_iter (model, &iter);
-    g_ptr_array_add (results, result);
-
-    ok = gtk_tree_model_iter_next (model, &iter);
+  if (ephy_suggestion_model_query_finish (self->model,
+                                          result,
+                                          &error)) {
+    n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
+    for (guint i = 0; i < n_items; i++) {
+      suggestion = g_list_model_get_item (G_LIST_MODEL (self->model), i);
+      g_ptr_array_add (results, g_strdup (dzl_suggestion_get_id (DZL_SUGGESTION (suggestion))));
+    }
+  } else {
+    g_warning ("Failed to query suggestion model: %s", error->message);
+    g_error_free (error);
   }
 
   search_string = g_task_get_task_data (task);
@@ -108,16 +106,16 @@ gather_results_async (EphySearchProvider *self,
 {
   GTask *task;
   char *search_string;
-
   task = g_task_new (self, cancellable, callback, user_data);
 
   search_string = g_strjoinv (" ", terms);
   g_task_set_task_data (task, search_string, g_free);
 
-  ephy_completion_model_update_for_string (self->model,
-                                           search_string,
-                                           on_model_updated,
-                                           task);
+  ephy_suggestion_model_query_async (self->model,
+                                     search_string,
+                                     cancellable,
+                                     (GAsyncReadyCallback)on_model_updated,
+                                     task);
 }
 
 static void
@@ -128,7 +126,6 @@ complete_request (GObject      *object,
   EphySearchProvider *self = EPHY_SEARCH_PROVIDER (object);
   char **results;
   GError *error;
-
   error = NULL;
   results = gather_results_finish (self, result, &error);
 
@@ -179,14 +176,8 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
                          char                    **results,
                          EphySearchProvider       *self)
 {
-  GtkTreeModel *model = GTK_TREE_MODEL (self->model);
-  GtkTreeIter iter;
   int i;
   GVariantBuilder builder;
-  GIcon *favicon;
-  char *name, *url;
-  gboolean is_bookmark;
-
   g_application_hold (G_APPLICATION (self));
   g_cancellable_cancel (self->cancellable);
 
@@ -203,54 +194,25 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
       g_variant_builder_add (&builder, "{sv}",
                              "gicon", g_variant_new_string ("org.gnome.Epiphany"));
       g_variant_builder_close (&builder);
-      continue;
+    } else {
+      EphySuggestion *suggestion;
+      const char *decoded_url;
+      const char *title;
+
+      suggestion = ephy_suggestion_model_get_suggestion_with_id (self->model, results[i]);
+      /* FIXME: It's not decoded and it's XML escaped, title is escaped too. Bad! */
+      decoded_url = dzl_suggestion_get_subtitle (DZL_SUGGESTION (suggestion));
+      title = dzl_suggestion_get_title (DZL_SUGGESTION (suggestion));
+
+      g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
+      g_variant_builder_add (&builder, "{sv}",
+                             "id", g_variant_new_string (decoded_url));
+      g_variant_builder_add (&builder, "{sv}",
+                             "name", g_variant_new_string (title));
+      g_variant_builder_add (&builder, "{sv}",
+                             "gicon", g_variant_new_string ("text-html"));
+      g_variant_builder_close (&builder);
     }
-
-    if (!gtk_tree_model_get_iter_from_string (model, &iter, results[i]))
-      continue;
-
-    gtk_tree_model_get (model, &iter,
-                        EPHY_COMPLETION_TEXT_COL, &name,
-                        EPHY_COMPLETION_URL_COL, &url,
-                        EPHY_COMPLETION_FAVICON_COL, &favicon,
-                        EPHY_COMPLETION_EXTRA_COL, &is_bookmark,
-                        -1);
-
-    g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
-    g_variant_builder_add (&builder, "{sv}",
-                           "id", g_variant_new_string (url));
-    g_variant_builder_add (&builder, "{sv}",
-                           "name", g_variant_new_string (name));
-
-    if (favicon == NULL) {
-      char *type;
-
-      type = g_content_type_from_mime_type ("text/html");
-      favicon = g_content_type_get_icon (type);
-
-      if (is_bookmark) {
-        GEmblem *emblem;
-        GIcon *emblem_icon, *emblemed;
-
-        emblem_icon = g_themed_icon_new ("emblem-favorite");
-        emblem = g_emblem_new (emblem_icon);
-
-        emblemed = g_emblemed_icon_new (favicon, emblem);
-
-        g_object_unref (emblem);
-        g_object_unref (emblem_icon);
-        g_object_unref (favicon);
-        favicon = emblemed;
-      }
-    }
-
-    g_variant_builder_add (&builder, "{sv}",
-                           "icon", g_icon_serialize (favicon));
-    g_variant_builder_close (&builder);
-
-    g_object_unref (favicon);
-    g_free (name);
-    g_free (url);
   }
 
   ephy_shell_search_provider2_complete_get_result_metas (skeleton,
@@ -267,7 +229,6 @@ launch_uri (const char *uri,
             guint       timestamp)
 {
   char *str;
-
   /* TODO: Handle the timestamp */
   str = g_strdup_printf ("epiphany %s", uri);
   g_spawn_command_line_async (str, NULL);
@@ -372,7 +333,7 @@ ephy_search_provider_init (EphySearchProvider *self)
 
   filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
   self->bookmarks_manager = ephy_bookmarks_manager_new ();
-  self->model = ephy_completion_model_new (ephy_embed_shell_get_global_history_service (shell),
+  self->model = ephy_suggestion_model_new (ephy_embed_shell_get_global_history_service (shell),
                                            self->bookmarks_manager);
   g_free (filename);
 

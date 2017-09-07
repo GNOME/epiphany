@@ -20,8 +20,9 @@
 
 #include <gio/gio.h>
 
-#include "ephy-history-service.h"
 #include "ephy-bookmarks-manager.h"
+#include "ephy-history-service.h"
+#include "ephy-suggestion.h"
 
 G_BEGIN_DECLS
 
@@ -29,15 +30,17 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphySuggestionModel, ephy_suggestion_model, EPHY, SUGGESTION_MODEL, GObject)
 
-EphySuggestionModel *ephy_suggestion_model_new          (EphyHistoryService    *history_service,
-                                                         EphyBookmarksManager  *bookmarks_manager);
-void                 ephy_suggestion_model_query_async  (EphySuggestionModel   *self,
-                                                         const gchar           *query,
-                                                         GCancellable          *cancellable,
-                                                         GAsyncReadyCallback    callback,
-                                                         gpointer               user_data);
-gboolean             ephy_suggestion_model_query_finish (EphySuggestionModel   *self,
-                                                         GAsyncResult          *result,
-                                                         GError               **error);
+EphySuggestionModel *ephy_suggestion_model_new                    (EphyHistoryService    *history_service,
+                                                                   EphyBookmarksManager  *bookmarks_manager);
+void                 ephy_suggestion_model_query_async            (EphySuggestionModel   *self,
+                                                                   const gchar           *query,
+                                                                   GCancellable          *cancellable,
+                                                                   GAsyncReadyCallback    callback,
+                                                                   gpointer               user_data);
+gboolean             ephy_suggestion_model_query_finish           (EphySuggestionModel   *self,
+                                                                   GAsyncResult          *result,
+                                                                   GError               **error);
+EphySuggestion      *ephy_suggestion_model_get_suggestion_with_id (EphySuggestionModel *self,
+                                                                   const char          *id);
 
 G_END_DECLS
