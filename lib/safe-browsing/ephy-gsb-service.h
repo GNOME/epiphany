@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2009 Xan López
+ *  Copyright © 2017 Gabriel Ivascu <gabrielivascu@gnome.org>
  *
  *  This file is part of Epiphany.
  *
@@ -20,26 +20,14 @@
 
 #pragma once
 
-#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_PROFILE_MIGRATION_VERSION 21
-#define EPHY_INSECURE_PASSWORDS_MIGRATION_VERSION 11
-#define EPHY_SETTINGS_MIGRATION_VERSION 16
-#define EPHY_FIREFOX_SYNC_PASSWORDS_MIGRATION_VERSION 19
-#define EPHY_TARGET_ORIGIN_MIGRATION_VERSION 21
+#define EPHY_TYPE_GSB_SERVICE (ephy_gsb_service_get_type ())
 
-#define EPHY_BOOKMARKS_FILE     "bookmarks.gvdb"
-#define EPHY_HISTORY_FILE       "ephy-history.db"
-/* Threat list database for Google Safe Browsing. */
-#define EPHY_GSB_FILE           "gsb-threats.db"
+G_DECLARE_FINAL_TYPE (EphyGSBService, ephy_gsb_service, EPHY, GSB_SERVICE, GObject)
 
-int ephy_profile_utils_get_migration_version (void);
-int ephy_profile_utils_get_migration_version_for_profile_dir (const char *profile_directory);
-
-gboolean ephy_profile_utils_set_migration_version (int version);
-
-gboolean ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run, gboolean debug);
+EphyGSBService *ephy_gsb_service_new (const char *db_path);
 
 G_END_DECLS

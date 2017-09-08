@@ -48,6 +48,8 @@ libephymisc_sources = [
   'history/ephy-history-service-urls-table.c',
   'history/ephy-history-service-visits-table.c',
   'history/ephy-history-types.c',
+  'safe-browsing/ephy-gsb-service.c',
+  'safe-browsing/ephy-gsb-storage.c',
   enums
 ]
 
@@ -74,7 +76,8 @@ libephymisc_includes = include_directories(
   '..',
   'contrib',
   'contrib/gvdb',
-  'history'
+  'history',
+  'safe-browsing'
 )
 
 libephymisc = shared_library('ephymisc',

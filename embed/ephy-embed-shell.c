@@ -57,6 +57,7 @@
 typedef struct {
   WebKitWebContext *web_context;
   EphyHistoryService *global_history_service;
+  EphyGSBService *global_gsb_service;
   EphyEncodings *encodings;
   GtkPageSetup *page_setup;
   GtkPrintSettings *print_settings;
@@ -168,6 +169,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->page_setup);
   g_clear_object (&priv->print_settings);
   g_clear_object (&priv->global_history_service);
+  g_clear_object (&priv->global_gsb_service);
   g_clear_object (&priv->about_handler);
   g_clear_object (&priv->user_content);
   g_clear_object (&priv->downloads_manager);
@@ -573,6 +575,31 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
   }
 
   return priv->global_history_service;
+}
+
+/**
+ * ephy_embed_shell_get_global_gsb_service:
+ * @shell: the #EphyEmbedShell
+ *
+ * Return value: (transfer none): the global #EphyGSBService
+ **/
+EphyGSBService *
+ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
+
+  if (priv->global_gsb_service == NULL) {
+    char *filename;
+
+    filename = g_build_filename (ephy_dot_dir (), EPHY_GSB_FILE, NULL);
+    priv->global_gsb_service = ephy_gsb_service_new (filename);
+
+    g_free (filename);
+  }
+
+  return priv->global_gsb_service;
 }
 
 static void

@@ -26,6 +26,7 @@
 
 #include "ephy-downloads-manager.h"
 #include "ephy-encodings.h"
+#include "ephy-gsb-service.h"
 #include "ephy-history-service.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-search-engine-manager.h"
@@ -58,6 +59,7 @@ EphyEmbedShell    *ephy_embed_shell_get_default                (void);
 WebKitWebContext  *ephy_embed_shell_get_web_context            (EphyEmbedShell   *shell);
 EphyHistoryService
                   *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);
+EphyGSBService    *ephy_embed_shell_get_global_gsb_service     (EphyEmbedShell   *shell);
 EphyEncodings     *ephy_embed_shell_get_encodings              (EphyEmbedShell   *shell);
 void               ephy_embed_shell_restored_window            (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_page_setup             (EphyEmbedShell   *shell,
