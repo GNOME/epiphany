@@ -1795,9 +1795,6 @@ load_changed_cb (WebKitWebView  *web_view,
         ephy_web_view_set_address (view, loading_uri);
 
       ephy_web_view_set_loading_message (view, loading_uri);
-
-      /* Zoom level. */
-      restore_zoom_level (view, loading_uri);
       break;
     }
     case WEBKIT_LOAD_REDIRECTED:
@@ -1835,6 +1832,9 @@ load_changed_cb (WebKitWebView  *web_view,
         view->loading_error_page = FALSE;
       else
         view->error_page = EPHY_WEB_VIEW_ERROR_PAGE_NONE;
+
+      /* Zoom level. */
+      restore_zoom_level (view, uri);
 
       break;
     }
