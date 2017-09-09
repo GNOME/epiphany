@@ -286,7 +286,7 @@ launch_search (EphySearchProvider *self,
 
   shell = ephy_embed_shell_get_default ();
   search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
-  address_search = ephy_search_engine_manager_get_address_for_default_engine (search_engine_manager);
+  address_search = ephy_search_engine_manager_get_default_search_address (search_engine_manager);
 
   search_string = g_strjoinv (" ", terms);
   query_param = soup_form_encode ("q", search_string, NULL);
