@@ -39,9 +39,8 @@
  * analyze modules. Refer to doc/debugging.txt for more information.
  */
 
-static const char *ephy_debug_break = NULL;
-
 #if DEVELOPER_MODE
+static const char *ephy_debug_break = NULL;
 static GHashTable *ephy_profilers_hash = NULL;
 static char **ephy_profile_modules;
 static gboolean ephy_profile_all_modules;
