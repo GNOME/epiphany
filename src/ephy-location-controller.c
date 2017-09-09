@@ -32,6 +32,7 @@
 #include "ephy-location-entry.h"
 #include "ephy-shell.h"
 #include "ephy-title-widget.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-widgets-type-builtins.h"
 
 #include <gdk/gdkkeysyms.h>
@@ -232,7 +233,7 @@ get_location_cb (EphyLocationEntry      *entry,
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (controller->window));
   address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
-  return ephy_embed_utils_is_no_show_address (address) ? NULL : g_strdup (address);
+  return ephy_embed_utils_is_no_show_address (address) ? NULL : ephy_uri_decode (address);
 }
 
 static char *
