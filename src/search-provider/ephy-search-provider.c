@@ -28,6 +28,7 @@
 #include "ephy-profile-utils.h"
 #include "ephy-shell.h"
 #include "ephy-suggestion-model.h"
+#include "ephy-uri-helpers.h"
 
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
@@ -196,22 +197,25 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
       g_variant_builder_close (&builder);
     } else {
       EphySuggestion *suggestion;
-      const char *decoded_url;
       const char *title;
+      const char *uri;
+      char *decoded_uri;
 
       suggestion = ephy_suggestion_model_get_suggestion_with_uri (self->model, results[i]);
-      /* FIXME: It's not decoded and it's XML escaped, title is escaped too. Bad! */
-      decoded_url = dzl_suggestion_get_subtitle (DZL_SUGGESTION (suggestion));
-      title = dzl_suggestion_get_title (DZL_SUGGESTION (suggestion));
+      title = ephy_suggestion_get_unescaped_title (suggestion);
+      uri = ephy_suggestion_get_uri (suggestion);
+      decoded_uri = ephy_uri_decode (uri);
 
       g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
       g_variant_builder_add (&builder, "{sv}",
-                             "id", g_variant_new_string (decoded_url));
+                             "id", g_variant_new_string (decoded_uri));
       g_variant_builder_add (&builder, "{sv}",
                              "name", g_variant_new_string (title));
       g_variant_builder_add (&builder, "{sv}",
                              "gicon", g_variant_new_string ("text-html"));
       g_variant_builder_close (&builder);
+
+      g_free (decoded_uri);
     }
   }
 
