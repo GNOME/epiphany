@@ -147,11 +147,11 @@ ephy_search_engine_manager_get_address (EphySearchEngineManager *manager,
   if (info)
     return info->address;
 
-  return FALLBACK_ADDRESS;
+  return NULL;
 }
 
 const char *
-ephy_search_engine_manager_get_address_for_default_engine (EphySearchEngineManager *manager)
+ephy_search_engine_manager_get_default_search_address (EphySearchEngineManager *manager)
 {
   char *name;
   const char *address;
@@ -160,7 +160,7 @@ ephy_search_engine_manager_get_address_for_default_engine (EphySearchEngineManag
   address = ephy_search_engine_manager_get_address (manager, name);
   g_free (name);
 
-  return address;
+  return address ? address : FALLBACK_ADDRESS;
 }
 
 const char *
