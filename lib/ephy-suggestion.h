@@ -27,7 +27,9 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (EphySuggestion, ephy_suggestion, EPHY, SUGGESTION, DzlSuggestion)
 
 // FIXME: How about favicon?
-EphySuggestion *ephy_suggestion_new (const char *title,
-                                     const char *uri);
+EphySuggestion *ephy_suggestion_new     (const char *title,
+                                         const char *uri);
+
+const char     *ephy_suggestion_get_uri (EphySuggestion *self);
 
 G_END_DECLS

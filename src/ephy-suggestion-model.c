@@ -402,20 +402,20 @@ ephy_suggestion_model_query_finish (EphySuggestionModel  *self,
 }
 
 EphySuggestion *
-ephy_suggestion_model_get_suggestion_with_id (EphySuggestionModel *self,
-                                              const char          *id)
+ephy_suggestion_model_get_suggestion_with_uri (EphySuggestionModel *self,
+                                               const char          *uri)
 {
   GSequenceIter *iter;
 
   g_return_val_if_fail (EPHY_IS_SUGGESTION_MODEL (self), NULL);
-  g_return_val_if_fail (id != NULL && *id != '\0', NULL);
+  g_return_val_if_fail (uri != NULL && *uri != '\0', NULL);
 
   for (iter = g_sequence_get_begin_iter (self->items);
        !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
     EphySuggestion *suggestion;
 
     suggestion = g_sequence_get (iter);
-    if (strcmp (dzl_suggestion_get_id (DZL_SUGGESTION (suggestion)), id) == 0)
+    if (strcmp (ephy_suggestion_get_uri (suggestion), uri) == 0)
       return suggestion;
   }
 

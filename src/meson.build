@@ -35,7 +35,6 @@ libephymain_sources = [
   'ephy-search-engine-dialog.c',
   'ephy-session.c',
   'ephy-shell.c',
-  'ephy-suggestion.c',
   'ephy-suggestion-model.c',
   'ephy-window.c',
   'passwords-dialog.c',

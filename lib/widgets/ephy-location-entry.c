@@ -31,6 +31,7 @@
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
+#include "ephy-suggestion.h"
 #include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
 
@@ -368,8 +369,7 @@ static void
 ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
                                           DzlSuggestion      *suggestion)
 {
-  /* The suggestion ID is the unescaped URL, which is what we need. */
-  gtk_entry_set_text (GTK_ENTRY (entry), dzl_suggestion_get_id (suggestion));
+  gtk_entry_set_text (GTK_ENTRY (entry), ephy_suggestion_get_uri (EPHY_SUGGESTION (suggestion)));
 
   /* Now trigger the load.... */
   ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));

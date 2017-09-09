@@ -32,7 +32,11 @@ char *
 ephy_suggestion_replace_typed_text (DzlSuggestion *self,
                                     const char    *typed_text)
 {
-  const char *url = dzl_suggestion_get_id (self);
+  const char *url;
+
+  g_assert (EPHY_IS_SUGGESTION (self));
+
+  url = ephy_suggestion_get_uri (EPHY_SUGGESTION (self));
 
   return g_strdup (url);
 }
@@ -64,8 +68,17 @@ ephy_suggestion_new (const char *title,
                              "title", escaped_title,
                              "subtitle", escaped_uri,
                              NULL);
+
   g_free (escaped_title);
   g_free (escaped_uri);
 
   return suggestion;
+}
+
+const char *
+ephy_suggestion_get_uri (EphySuggestion *self)
+{
+  g_assert (EPHY_IS_SUGGESTION (self));
+
+  return dzl_suggestion_get_id (DZL_SUGGESTION (self));
 }

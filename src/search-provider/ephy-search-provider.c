@@ -73,7 +73,7 @@ on_model_updated (GObject      *source_object,
     n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
     for (guint i = 0; i < n_items; i++) {
       suggestion = g_list_model_get_item (G_LIST_MODEL (self->model), i);
-      g_ptr_array_add (results, g_strdup (dzl_suggestion_get_id (DZL_SUGGESTION (suggestion))));
+      g_ptr_array_add (results, g_strdup (ephy_suggestion_get_uri (suggestion)));
     }
   } else {
     g_warning ("Failed to query suggestion model: %s", error->message);
@@ -199,7 +199,7 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
       const char *decoded_url;
       const char *title;
 
-      suggestion = ephy_suggestion_model_get_suggestion_with_id (self->model, results[i]);
+      suggestion = ephy_suggestion_model_get_suggestion_with_uri (self->model, results[i]);
       /* FIXME: It's not decoded and it's XML escaped, title is escaped too. Bad! */
       decoded_url = dzl_suggestion_get_subtitle (DZL_SUGGESTION (suggestion));
       title = dzl_suggestion_get_title (DZL_SUGGESTION (suggestion));
