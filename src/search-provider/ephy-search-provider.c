@@ -281,14 +281,12 @@ launch_search (EphySearchProvider *self,
   const char *address_search;
   char *query_param;
   char *effective_url;
-  char *default_name;
   EphyEmbedShell *shell;
   EphySearchEngineManager *search_engine_manager;
 
   shell = ephy_embed_shell_get_default ();
   search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
-  default_name = ephy_search_engine_manager_get_default_engine (search_engine_manager);
-  address_search = ephy_search_engine_manager_get_address (search_engine_manager, default_name);
+  address_search = ephy_search_engine_manager_get_address_for_default_engine (search_engine_manager);
 
   search_string = g_strjoinv (" ", terms);
   query_param = soup_form_encode ("q", search_string, NULL);
@@ -305,7 +303,6 @@ launch_search (EphySearchProvider *self,
   g_free (query_param);
   g_free (effective_url);
   g_free (search_string);
-  g_free (default_name);
 }
 
 static gboolean
