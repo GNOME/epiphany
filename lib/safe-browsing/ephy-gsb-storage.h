@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyGSBStorage, ephy_gsb_storage, EPHY, GSB_STORAGE, GObject)
 
-EphyGSBStorage *ephy_gsb_storage_new (const char *db_path);
+EphyGSBStorage *ephy_gsb_storage_new          (const char *db_path);
+gboolean        ephy_gsb_storage_is_operable  (EphyGSBStorage *self);
 
 G_END_DECLS
