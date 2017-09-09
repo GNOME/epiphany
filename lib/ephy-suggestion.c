@@ -19,6 +19,8 @@
 #include "config.h"
 #include "ephy-suggestion.h"
 
+#include "ephy-uri-helpers.h"
+
 #include <dazzle.h>
 #include <glib.h>
 
@@ -60,7 +62,8 @@ ephy_suggestion_new (const char *title,
 {
   EphySuggestion *suggestion;
   char *escaped_title = g_markup_escape_text (title, -1);
-  char *escaped_uri = g_markup_escape_text (uri, -1);
+  char *decoded_uri = ephy_uri_decode (uri);
+  char *escaped_uri = g_markup_escape_text (decoded_uri, -1);
 
   suggestion = g_object_new (EPHY_TYPE_SUGGESTION,
                              "icon-name", "web-browser-symbolic",
@@ -70,6 +73,7 @@ ephy_suggestion_new (const char *title,
                              NULL);
 
   g_free (escaped_title);
+  g_free (decoded_uri);
   g_free (escaped_uri);
 
   return suggestion;
