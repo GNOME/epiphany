@@ -6,7 +6,7 @@
 # Jordi Mallach <jordi@sindominio.net>, 2003, 2004, 2005.
 # Xavier Conde Rueda <xavi.conde@gmail.com>, 2004, 2005.
 # Gil Forcada <gilforcada@guifi.net>, 2006-2013, 2013, 2014.
-# Jordi Serratosa <jordis@softcatala.cat>, 2012.
+# Jordi Serratosa <jordis@softcatala.cat>, 2012, 2017.
 # Xavi Ivars <xavi.ivars@gmail.com>, 2017.
 # Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2017.
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: epiphany 1.10\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-09-01 13:57+0000\n"
+"POT-Creation-Date: 2017-09-09 04:36+0000\n"
 "PO-Revision-Date: 2017-09-03 10:28+0200\n"
 "Last-Translator: Carles Ferrando Garcia <carles.ferrando@gmail.com>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 "El navegador del GNOME, amb una gran integració amb l'escriptori i una "
 "interfície d'usuari simple i intuïtiva que us permet centrar-vos en les "
-"pàgines web. Si busqueu una vista simple, neta, bella de la xarxa, aquest és "
+"pàgines web. Si busqueu una vista simple, neta i bella de la xarxa, aquest és "
 "el vostre navegador."
 
 #: data/org.gnome.Epiphany.appdata.xml.in:15
@@ -209,7 +209,7 @@ msgid ""
 "enable-smooth-scrolling instead."
 msgstr ""
 "OBSOLET: Aquesta clau és obsoleta i s'ignora. Useu al seu lloc /org/gnome/"
-"epiphany/web/enable-smooth-scrolling ."
+"epiphany/web/enable-smooth-scrolling."
 
 #: data/org.gnome.epiphany.gschema.xml:80
 msgid "Don’t use an external application to view page source."
@@ -287,7 +287,7 @@ msgstr "Llista de filtres d'adblock"
 
 #: data/org.gnome.epiphany.gschema.xml:106
 msgid "List of URLs with filter rules to be used by the adblock."
-msgstr "Llista d'URLs amb regles de filtres per a utilitzar-les amb l'adblock."
+msgstr "Llista dels URL amb regles de filtres per a utilitzar-les amb l'adblock."
 
 #: data/org.gnome.epiphany.gschema.xml:112
 msgid "Expand tabs size to fill the available space on the tabs bar."
@@ -487,7 +487,7 @@ msgid ""
 msgstr ""
 "Habilita les capçaleres DNT i l'eliminació dels paràmetres de consulta de "
 "seguiment. Fixeu-vos que quan canvieu aquest paràmetre al diàleg de "
-"preferències, la configuració de Adblock-filtres s'actualitzarà per afegir/"
+"preferències, la configuració d'Adblock-filtres s'actualitzarà per afegir/"
 "traure els filtres EasyPrivacy."
 
 #: data/org.gnome.epiphany.gschema.xml:212
@@ -575,7 +575,7 @@ msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
-"L'adreça de correu electrònic enllaçada al compte de Firefox que s'utilitza "
+"L'adreça electrònica enllaçada al compte de Firefox que s'utilitza "
 "per sincronitzar dades amb els servidors de Mozilla."
 
 #: data/org.gnome.epiphany.gschema.xml:282
@@ -592,7 +592,7 @@ msgstr "ID del dispositiu sincronitzat"
 
 #: data/org.gnome.epiphany.gschema.xml:288
 msgid "The sync device ID of the current device."
-msgstr "La ID dels dispositiu sincronitzat del dispositiu actual."
+msgstr "L'ID del dispositiu sincronitzat del dispositiu actual."
 
 #: data/org.gnome.epiphany.gschema.xml:292
 msgid "Sync device name"
@@ -608,7 +608,7 @@ msgstr "La freqüència de sincronització en minuts"
 
 #: data/org.gnome.epiphany.gschema.xml:298
 msgid "The number of minutes between two consecutive syncs."
-msgstr "El nombre de minuts entre dos sincronitzacions consecutives."
+msgstr "El nombre de minuts entre dues sincronitzacions consecutives."
 
 #: data/org.gnome.epiphany.gschema.xml:302
 msgid "Sync data with Firefox"
@@ -1723,7 +1723,7 @@ msgstr "Contrasenya en un formulari de %s"
 
 #: lib/sync/ephy-sync-service.c:786
 msgid "Failed to obtain storage credentials."
-msgstr "Fallada en obtindre les credencial d'emmagatzematge."
+msgstr "No s'han pogut obtenir les credencials d'emmagatzematge."
 
 #: lib/sync/ephy-sync-service.c:787 lib/sync/ephy-sync-service.c:902
 #: lib/sync/ephy-sync-service.c:1479
@@ -1746,7 +1746,7 @@ msgstr ""
 
 #: lib/sync/ephy-sync-service.c:901
 msgid "Failed to obtain signed certificate."
-msgstr "Fallada  en obtindre el certificat signat."
+msgstr "No s'ha pogut obtenir el certificat signat."
 
 #: lib/sync/ephy-sync-service.c:1451 lib/sync/ephy-sync-service.c:1456
 msgid "Could not find the sync secrets for the current sync user."
@@ -1768,15 +1768,15 @@ msgstr "Els testimonis de sincronització de %s"
 
 #: lib/sync/ephy-sync-service.c:1716
 msgid "Failed to upload crypto/keys record."
-msgstr "Fallada en carregar la dada xifrada/claus."
+msgstr "No s'ha pogut carregar la dada xifrada/claus."
 
 #: lib/sync/ephy-sync-service.c:1823
 msgid "Failed to retrieve crypto keys."
-msgstr "No s'han pogut obtindre les claus xifrades."
+msgstr "No s'han pogut obtenir les claus xifrades."
 
 #: lib/sync/ephy-sync-service.c:1874
 msgid "Failed to upload meta/global record."
-msgstr "Fallada per carregar la dada meta/global."
+msgstr "No s'ha pogut carregar la dada meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
 #: lib/sync/ephy-sync-service.c:1990
@@ -1789,11 +1789,11 @@ msgstr ""
 
 #: lib/sync/ephy-sync-service.c:2001
 msgid "Failed to verify storage version."
-msgstr "Fallada en verificar la versió d'emmagatzematge."
+msgstr "No s'ha pogut verificar la versió d'emmagatzematge."
 
 #: lib/sync/ephy-sync-service.c:2042 lib/sync/ephy-sync-service.c:2120
 msgid "Failed to retrieve the Sync Key"
-msgstr "Fallada en obtindre la clau de sincronització"
+msgstr "No s'ha pogut obtenir la clau de sincronització"
 
 #: lib/sync/ephy-sync-service.c:2254
 msgid "Failed to register device."
@@ -1944,20 +1944,20 @@ msgstr "Tots els fitxers"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:649 src/ephy-history-dialog.c:258
+#: lib/widgets/ephy-location-entry.c:660 src/ephy-history-dialog.c:258
 msgid "Cl_ear"
 msgstr "N_eteja"
 
-#: lib/widgets/ephy-location-entry.c:669
+#: lib/widgets/ephy-location-entry.c:680
 msgid "Paste and _Go"
 msgstr "Enganxa i _vés"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:690 src/ephy-window.c:872
+#: lib/widgets/ephy-location-entry.c:701 src/ephy-window.c:872
 msgid "_Undo"
 msgstr "_Desfés"
 
-#: lib/widgets/ephy-location-entry.c:697
+#: lib/widgets/ephy-location-entry.c:708
 msgid "_Redo"
 msgstr "_Refés"
 
@@ -2436,7 +2436,7 @@ msgstr "Cerqueu el web"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1292
 msgid "Executes only the n-th migration step"
-msgstr "Executa només la passa de migració n-éssima"
+msgstr "Executa només la passa de migració n-èssima"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1294
 msgid "Specifies the required version for the migrator"
@@ -3058,7 +3058,7 @@ msgid ""
 "from the resulting address and replace it with %s."
 msgstr ""
 "Per determinar l'adreça de cerca, feu una cerca utilitzant el motor de cerca "
-"que voleu afegir i comproveu la direcció resultant. Traieu el terme de cerca "
+"que voleu afegir i comproveu l'adreça resultant. Traieu el terme de cerca "
 "des de la direcció resultant i reemplaceu-lo amb %s."
 
 #: src/resources/gtk/shortcuts-dialog.ui:15
@@ -3199,7 +3199,7 @@ msgstr "Preferències"
 #: src/resources/gtk/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Bookmark current page"
-msgstr "Desa la pàgina actual en adreces d'interés"
+msgstr "Desa la pàgina actual en adreces d'interès"
 
 #: src/resources/gtk/shortcuts-dialog.ui:211
 msgctxt "shortcut window"
@@ -3279,7 +3279,7 @@ msgstr "Selecciona-ho tot"
 #: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Select page URL"
-msgstr "Selecciona la URL de la pàgina"
+msgstr "Selecciona l'URL de la pàgina"
 
 #: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
