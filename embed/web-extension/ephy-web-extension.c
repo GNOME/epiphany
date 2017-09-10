@@ -644,15 +644,6 @@ remove_user_choices (WebKitDOMDocument *document)
 }
 
 static gboolean
-username_changed_cb (WebKitDOMNode     *username_node,
-                     WebKitDOMEvent    *dom_event,
-                     EphyEmbedFormAuth *form_auth)
-{
-  pre_fill_form (form_auth);
-  return TRUE;
-}
-
-static gboolean
 user_chosen_cb (WebKitDOMNode  *li,
                 WebKitDOMEvent *dom_event,
                 WebKitDOMNode  *username_node)
@@ -1189,11 +1180,6 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
       webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form), "submit",
                                                   G_CALLBACK (form_submitted_cb), FALSE,
                                                   web_page);
-      if (username_node) {
-        webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "blur",
-                                                    G_CALLBACK (username_changed_cb), FALSE,
-                                                    form_auth);
-      }
 
       /* Plug in the user autocomplete */
       origin = ephy_uri_to_security_origin (uri);
