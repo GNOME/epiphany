@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-08-08 00:37+0000\n"
-"PO-Revision-Date: 2017-08-08 10:21+0200\n"
+"POT-Creation-Date: 2017-09-09 21:15+0000\n"
+"PO-Revision-Date: 2017-09-11 15:51+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -1447,6 +1447,7 @@ msgstr ""
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
 #: embed/ephy-web-view.c:1967 embed/ephy-web-view.c:2021
+#, c-format
 msgid "Problem Loading Page"
 msgstr "Problema al cargar la página"
 
@@ -1512,6 +1513,7 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a process crash error.
 #: embed/ephy-web-view.c:2071
+#, c-format
 msgid "Problem Displaying Page"
 msgstr "Problema al mostrar la página"
 
@@ -1532,6 +1534,7 @@ msgstr "Recargue la página o visite una página diferente para continuar."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
 #: embed/ephy-web-view.c:2112
+#, c-format
 msgid "Security Violation"
 msgstr "Violación de seguridad"
 
@@ -1708,14 +1711,14 @@ msgstr "Archivos locales"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:394
+#: lib/sync/ephy-password-manager.c:392
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Contraseña para %s en un formulario en %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:398
+#: lib/sync/ephy-password-manager.c:396
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Contraseña para %s en un formulario"
@@ -1747,39 +1750,35 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Falló al obtener el certificado firmado."
 
-#: lib/sync/ephy-sync-service.c:1451
+#: lib/sync/ephy-sync-service.c:1451 lib/sync/ephy-sync-service.c:1456
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "No se pudieron obtener los secretos de sincronización del usuario actual."
-
-#: lib/sync/ephy-sync-service.c:1456
-msgid "The sync secrets for the current sync user are null."
-msgstr "Los secretos de sincronización para el usuario actual son nulos."
 
 #: lib/sync/ephy-sync-service.c:1465
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Los secretos de sincronización para el usuario actual no son válidos."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1566
+#: lib/sync/ephy-sync-service.c:1573
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Los secretos de sincronización de %s"
 
-#: lib/sync/ephy-sync-service.c:1709
+#: lib/sync/ephy-sync-service.c:1716
 msgid "Failed to upload crypto/keys record."
 msgstr "Falló al subir el registro de cifrado/claves."
 
-#: lib/sync/ephy-sync-service.c:1816
+#: lib/sync/ephy-sync-service.c:1823
 msgid "Failed to retrieve crypto keys."
 msgstr "Falló al obtener las claves de cifrado."
 
-#: lib/sync/ephy-sync-service.c:1867
+#: lib/sync/ephy-sync-service.c:1874
 msgid "Failed to upload meta/global record."
 msgstr "Falló al subir el registro meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:1983
+#: lib/sync/ephy-sync-service.c:1990
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1787,15 +1786,15 @@ msgstr ""
 "Su cuenta de Firefox usa la versión %d de almacenamiento. Web sólo soporta "
 "la versión %d."
 
-#: lib/sync/ephy-sync-service.c:1994
+#: lib/sync/ephy-sync-service.c:2001
 msgid "Failed to verify storage version."
 msgstr "Falló al verificar la versión del almacenamiento."
 
-#: lib/sync/ephy-sync-service.c:2035 lib/sync/ephy-sync-service.c:2113
+#: lib/sync/ephy-sync-service.c:2042 lib/sync/ephy-sync-service.c:2120
 msgid "Failed to retrieve the Sync Key"
 msgstr "Falló al obtener la clave de sincronización"
 
-#: lib/sync/ephy-sync-service.c:2247
+#: lib/sync/ephy-sync-service.c:2254
 msgid "Failed to register device."
 msgstr "Falló al registrar el dispositivo."
 
@@ -1944,20 +1943,20 @@ msgstr "Todos los archivos"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:649 src/ephy-history-dialog.c:258
+#: lib/widgets/ephy-location-entry.c:660 src/ephy-history-dialog.c:258
 msgid "Cl_ear"
 msgstr "_Limpiar"
 
-#: lib/widgets/ephy-location-entry.c:668
+#: lib/widgets/ephy-location-entry.c:680
 msgid "Paste and _Go"
 msgstr "Pegar e _ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:688 src/ephy-window.c:872
+#: lib/widgets/ephy-location-entry.c:701 src/ephy-window.c:872
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: lib/widgets/ephy-location-entry.c:695
+#: lib/widgets/ephy-location-entry.c:708
 msgid "_Redo"
 msgstr "_Rehacer"
 
@@ -2006,32 +2005,40 @@ msgid "Bookmark Properties"
 msgstr "Propiedades de los marcadores"
 
 #: src/bookmarks/ephy-bookmarks-import.c:121
+#, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing tags table"
 msgstr ""
 "No es un archivo de marcadores de Epiphany válido: falta la tabla de "
 "etiquetas"
 
 #: src/bookmarks/ephy-bookmarks-import.c:139
+#, c-format
 msgid "File is not a valid Epiphany bookmarks file: missing bookmarks table"
 msgstr ""
 "No es un archivo de marcadores de Epiphany válido: falta la tabla de "
 "marcadores"
 
-#: src/bookmarks/ephy-bookmarks-import.c:239
+#: src/bookmarks/ephy-bookmarks-import.c:240
+#, c-format
 msgid ""
 "Firefox bookmarks database could not be opened. Close Firefox and try again."
 msgstr ""
 "No se pudo abrir la base de datos de marcadores de Firefox. Ciérrelo e "
 "inténtelo de nuevo."
 
-#: src/bookmarks/ephy-bookmarks-import.c:252
-#: src/bookmarks/ephy-bookmarks-import.c:281
+#: src/bookmarks/ephy-bookmarks-import.c:253
+#: src/bookmarks/ephy-bookmarks-import.c:285
+#, c-format
 msgid "Firefox bookmarks could not be retrieved!"
 msgstr "No se pudieron obtener los marcadores de Firefox."
 
 #: src/bookmarks/ephy-bookmarks-manager.h:34
 msgid "Favorites"
 msgstr "Favoritos"
+
+#: src/bookmarks/ephy-bookmarks-manager.h:35
+msgid "Mobile"
+msgstr "Móvil"
 
 #: src/clear-data-dialog.c:80
 msgid "HTTP disk cache"
@@ -2427,23 +2434,23 @@ msgstr ""
 msgid "Search the Web"
 msgstr "Buscar en la web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1218
+#: src/profile-migrator/ephy-profile-migrator.c:1292
 msgid "Executes only the n-th migration step"
 msgstr "Ejecuta en n-ésimo paso dela migración"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1220
+#: src/profile-migrator/ephy-profile-migrator.c:1294
 msgid "Specifies the required version for the migrator"
 msgstr "Especifica la versión requerida por el migrador"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1222
+#: src/profile-migrator/ephy-profile-migrator.c:1296
 msgid "Specifies the profile where the migrator should run"
 msgstr "Especifica el perfil que debe ejecutar el migrador"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1242
+#: src/profile-migrator/ephy-profile-migrator.c:1316
 msgid "Web profile migrator"
 msgstr "Migrador de perfiles de Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1243
+#: src/profile-migrator/ephy-profile-migrator.c:1317
 msgid "Web profile migrator options"
 msgstr "Opciones del migrador de perfiles de Web"
 
@@ -2894,7 +2901,6 @@ msgstr "Sólo desde los sitios que _visita"
 
 #. Refers to "Only from sites you visit" option under Cookies.
 #: src/resources/gtk/prefs-dialog.ui:525
-#| msgid "<small>For example, not from advertisers on these sites</small>"
 msgid "For example, not from advertisers on these sites"
 msgstr "Por ejemplo, no de publicidad de estos sitios"
 
@@ -3478,6 +3484,9 @@ msgstr ""
 #: src/window-commands.c:2127
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "The sync secrets for the current sync user are null."
+#~ msgstr "Los secretos de sincronización para el usuario actual son nulos."
 
 #~ msgid "The sync user currently logged in"
 #~ msgstr "El usuario sincronizado con sesión iniciada actualmente"
