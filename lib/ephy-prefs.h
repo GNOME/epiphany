@@ -99,6 +99,8 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_ENABLE_ADBLOCK              "enable-adblock"
 #define EPHY_PREFS_WEB_REMEMBER_PASSWORDS          "remember-passwords"
 #define EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS "enable-site-specific-quirks"
+#define EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING        "enable-safe-browsing"
+#define EPHY_PREFS_WEB_GSB_API_KEY                 "gsb-api-key"
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,

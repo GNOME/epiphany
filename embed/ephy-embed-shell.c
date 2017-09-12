@@ -591,11 +591,14 @@ ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
   g_return_val_if_fail (EPHY_IS_EMBED_SHELL (shell), NULL);
 
   if (priv->global_gsb_service == NULL) {
+    char *api_key;
     char *filename;
 
+    api_key = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_GSB_API_KEY);
     filename = g_build_filename (ephy_dot_dir (), EPHY_GSB_FILE, NULL);
-    priv->global_gsb_service = ephy_gsb_service_new (filename);
+    priv->global_gsb_service = ephy_gsb_service_new (api_key, filename);
 
+    g_free (api_key);
     g_free (filename);
   }
 

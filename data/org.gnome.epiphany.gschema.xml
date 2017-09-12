@@ -222,6 +222,16 @@
 			<summary>Enable site-specific quirks</summary>
 			<description>Enable quirks to make specific websites work better. You might want to disable this setting if debugging a specific issue.</description>
 		</key>
+		<key type="b" name="enable-safe-browsing">
+			<default>true</default>
+			<summary>Enable safe browsing</summary>
+			<description>Whether to enable safe browsing. Safe browsing operates via Google Safe Browsing API v4.</description>
+		</key>
+		<key type="s" name="gsb-api-key">
+			<default>'AIzaSyAtuURrRblYXvwCyDC5ZFq0mEw1x4VN6KA'</default>
+			<summary>Google Safe Browsing API key</summary>
+			<description>The API key used to access the Google Safe Browsing API v4.</description>
+		</key>
 	</schema>
 	<schema id="org.gnome.Epiphany.state">
 		<key type="s" name="download-dir">

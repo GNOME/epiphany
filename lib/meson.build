@@ -50,6 +50,7 @@ libephymisc_sources = [
   'history/ephy-history-types.c',
   'safe-browsing/ephy-gsb-service.c',
   'safe-browsing/ephy-gsb-storage.c',
+  'safe-browsing/ephy-gsb-utils.c',
   enums
 ]
 
@@ -62,6 +63,7 @@ libephymisc_deps = [
   gnome_desktop_dep,
   gtk_dep,
   icu_uc_dep,
+  json_glib_dep,
   libdazzle_dep,
   libsecret_dep,
   libsoup_dep,

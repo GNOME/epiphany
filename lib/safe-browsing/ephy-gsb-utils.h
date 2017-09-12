@@ -20,15 +20,25 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_GSB_SERVICE (ephy_gsb_service_get_type ())
+typedef struct {
+  char *threat_type;
+  char *platform_type;
+  char *threat_entry_type;
+  char *client_state;
+  gint64 timestamp;
+} EphyGSBThreatList;
 
-G_DECLARE_FINAL_TYPE (EphyGSBService, ephy_gsb_service, EPHY, GSB_SERVICE, GObject)
+EphyGSBThreatList *ephy_gsb_threat_list_new   (const char *threat_type,
+                                               const char *platform_type,
+                                               const char *threat_entry_type,
+                                               const char *client_state,
+                                               gint64      timestamp);
+void               ephy_gsb_threat_list_free  (EphyGSBThreatList *list);
 
-EphyGSBService *ephy_gsb_service_new (const char *api_key,
-                                      const char *db_path);
+char              *ephy_gsb_utils_make_list_updates_request (GList *threat_lists);
 
 G_END_DECLS
