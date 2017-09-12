@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: epiphany trunk\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-08-24 09:07+0000\n"
+"POT-Creation-Date: 2017-09-09 12:37+0000\n"
 "PO-Revision-Date: 2017-08-25 01:49+0300\n"
 "Last-Translator: Stas Solovey <whats_up@tut.by>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
@@ -1694,14 +1694,14 @@ msgstr "Локальные файлы"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:394
+#: lib/sync/ephy-password-manager.c:392
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Пароль для %s в форме в %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:398
+#: lib/sync/ephy-password-manager.c:396
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Пароль в форме в %s"
@@ -1733,17 +1733,11 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Не удалось получить подписанный сертификат."
 
-#: lib/sync/ephy-sync-service.c:1451
+#: lib/sync/ephy-sync-service.c:1451 lib/sync/ephy-sync-service.c:1456
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Не удалось найти токены синхронизации для текущего авторизованного "
 "пользователя."
-
-#: lib/sync/ephy-sync-service.c:1456
-msgid "The sync secrets for the current sync user are null."
-msgstr ""
-"Токены синхронизации для текущего синхронизируемого пользователя являются "
-"недействительными."
 
 #: lib/sync/ephy-sync-service.c:1465
 msgid "The sync secrets for the current sync user are invalid."
@@ -1752,25 +1746,25 @@ msgstr ""
 "недействительны."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1566
+#: lib/sync/ephy-sync-service.c:1573
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Токены синхронизации %s"
 
-#: lib/sync/ephy-sync-service.c:1709
+#: lib/sync/ephy-sync-service.c:1716
 msgid "Failed to upload crypto/keys record."
 msgstr "Не удалось загрузить запись криптографических ключей."
 
-#: lib/sync/ephy-sync-service.c:1816
+#: lib/sync/ephy-sync-service.c:1823
 msgid "Failed to retrieve crypto keys."
 msgstr "Не удалось получить криптографические ключи."
 
-#: lib/sync/ephy-sync-service.c:1867
+#: lib/sync/ephy-sync-service.c:1874
 msgid "Failed to upload meta/global record."
 msgstr "Не удалось загрузить запись метаданных."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:1983
+#: lib/sync/ephy-sync-service.c:1990
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1778,15 +1772,15 @@ msgstr ""
 "Ваша учетная запись Firefox использует версию хранилища %d. Веб-браузер "
 "поддерживает только версию %d."
 
-#: lib/sync/ephy-sync-service.c:1994
+#: lib/sync/ephy-sync-service.c:2001
 msgid "Failed to verify storage version."
 msgstr "Не удалось проверить версию хранилища."
 
-#: lib/sync/ephy-sync-service.c:2035 lib/sync/ephy-sync-service.c:2113
+#: lib/sync/ephy-sync-service.c:2042 lib/sync/ephy-sync-service.c:2120
 msgid "Failed to retrieve the Sync Key"
 msgstr "Не удалось получить ключ синхронизации"
 
-#: lib/sync/ephy-sync-service.c:2247
+#: lib/sync/ephy-sync-service.c:2254
 msgid "Failed to register device."
 msgstr "Не удалось зарегистрировать устройство."
 
@@ -1941,20 +1935,20 @@ msgstr "Все файлы"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:649 src/ephy-history-dialog.c:258
+#: lib/widgets/ephy-location-entry.c:660 src/ephy-history-dialog.c:258
 msgid "Cl_ear"
 msgstr "О_чистить"
 
-#: lib/widgets/ephy-location-entry.c:669
+#: lib/widgets/ephy-location-entry.c:680
 msgid "Paste and _Go"
 msgstr "Вставить и _перейти"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:690 src/ephy-window.c:872
+#: lib/widgets/ephy-location-entry.c:701 src/ephy-window.c:872
 msgid "_Undo"
 msgstr "_Отменить"
 
-#: lib/widgets/ephy-location-entry.c:697
+#: lib/widgets/ephy-location-entry.c:708
 msgid "_Redo"
 msgstr "_Повторить"
 
@@ -2426,23 +2420,23 @@ msgstr ""
 msgid "Search the Web"
 msgstr "Поиск в веб"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1218
+#: src/profile-migrator/ephy-profile-migrator.c:1292
 msgid "Executes only the n-th migration step"
 msgstr "Запускает только n-ый шаг переноса"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1220
+#: src/profile-migrator/ephy-profile-migrator.c:1294
 msgid "Specifies the required version for the migrator"
 msgstr "Указывает требуемую версию для модуля переноса"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1222
+#: src/profile-migrator/ephy-profile-migrator.c:1296
 msgid "Specifies the profile where the migrator should run"
 msgstr "Указывает профиль, для которого нужно запустить модуль переноса"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1242
+#: src/profile-migrator/ephy-profile-migrator.c:1316
 msgid "Web profile migrator"
 msgstr "Помощник переноса профилей"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1243
+#: src/profile-migrator/ephy-profile-migrator.c:1317
 msgid "Web profile migrator options"
 msgstr "Параметры помощника переноса профилей"
 
@@ -2488,7 +2482,7 @@ msgstr "_Справка"
 #: src/resources/gtk/application-menu.ui:59
 #: src/resources/gtk/application-menu.ui:79
 msgid "_About"
-msgstr "_О программе"
+msgstr "_О приложении"
 
 #: src/resources/gtk/application-menu.ui:63
 #: src/resources/gtk/application-menu.ui:83
@@ -3476,6 +3470,11 @@ msgstr ""
 #: src/window-commands.c:2127
 msgid "_Enable"
 msgstr "_Включить"
+
+#~ msgid "The sync secrets for the current sync user are null."
+#~ msgstr ""
+#~ "Токены синхронизации для текущего синхронизируемого пользователя являются "
+#~ "недействительными."
 
 #~ msgid "The sync user currently logged in"
 #~ msgstr "Текущий пользователь, авторизованный для синхронизации"
