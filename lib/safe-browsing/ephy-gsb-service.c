@@ -39,6 +39,7 @@ struct _EphyGSBService {
 
   char           *api_key;
   EphyGSBStorage *storage;
+  gboolean        is_updating;
   SoupSession    *session;
 };
 
@@ -80,25 +81,42 @@ json_object_has_non_null_array_member (JsonObject *object,
 }
 
 static void
-update_threat_lists_cb (SoupSession *session,
-                        SoupMessage *msg,
-                        gpointer     user_data)
+ephy_gsb_service_update_thread (GTask          *task,
+                                EphyGSBService *self,
+                                gpointer        task_data,
+                                GCancellable   *cancellable)
 {
-  EphyGSBService *self = EPHY_GSB_SERVICE (user_data);
-  JsonNode *node;
-  JsonObject *object;
+  JsonNode *body_node;
+  JsonObject *body_obj;
   JsonArray *responses;
-  gint64 next_update_time;
+  SoupMessage *msg;
+  GList *threat_lists;
+  gint64 next_update_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
+  char *url;
+  char *body;
+
+  g_assert (EPHY_IS_GSB_SERVICE (self));
+  g_assert (ephy_gsb_storage_is_operable (self->storage));
+
+  threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
+  if (!threat_lists)
+    return;
+
+  body = ephy_gsb_utils_make_list_updates_request (threat_lists);
+  url = g_strdup_printf ("%sthreatListUpdates:fetch?key=%s", API_PREFIX, self->api_key);
+  msg = soup_message_new (SOUP_METHOD_POST, url);
+  soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
+  soup_session_send_message (self->session, msg);
 
   if (msg->status_code != 200) {
     LOG ("Cannot update GSB threat lists. Server responded: %u, %s",
          msg->status_code, msg->response_body->data);
-    return;
+    goto out;
   }
 
-  node = json_from_string (msg->response_body->data, NULL);
-  object = json_node_get_object (node);
-  responses = json_object_get_array_member (object, "listUpdateResponses");
+  body_node = json_from_string (msg->response_body->data, NULL);
+  body_obj = json_node_get_object (body_node);
+  responses = json_object_get_array_member (body_obj, "listUpdateResponses");
 
   for (guint i = 0; i < json_array_get_length (responses); i++) {
     EphyGSBThreatList *list;
@@ -160,47 +178,48 @@ update_threat_lists_cb (SoupSession *session,
   }
 
   /* Update next update time. */
-  if (json_object_has_non_null_string_member (object, "minimumWaitDuration")) {
+  if (json_object_has_non_null_string_member (body_obj, "minimumWaitDuration")) {
     const char *duration_str;
     double duration;
 
-    duration_str = json_object_get_string_member (object, "minimumWaitDuration");
+    duration_str = json_object_get_string_member (body_obj, "minimumWaitDuration");
     /* Handle the trailing 's' character. */
     sscanf (duration_str, "%lfs", &duration);
     next_update_time = CURRENT_TIME + (gint64)ceil (duration);
-  } else {
-    next_update_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
   }
 
   ephy_gsb_storage_set_next_update_time (self->storage, next_update_time);
-  /* TODO: Schedule a next update in (next_update_time - CURRENT_TIME) seconds. */
 
-  json_node_unref (node);
+  json_node_unref (body_node);
+out:
+  g_free (url);
+  g_object_unref (msg);
+  g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
 }
 
 static void
-ephy_gsb_service_update_threat_lists (EphyGSBService *self)
+ephy_gsb_service_update_finished_cb (EphyGSBService *self,
+                                     GAsyncResult   *result,
+                                     gpointer        user_data)
 {
-  SoupMessage *msg;
-  GList *threat_lists;
-  char *url;
-  char *body;
+  /* TODO: Schedule a next update in (next_update_time - CURRENT_TIME) seconds. */
+  self->is_updating = FALSE;
+}
+
+static void
+ephy_gsb_service_update (EphyGSBService *self)
+{
+  GTask *task;
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
   g_assert (ephy_gsb_storage_is_operable (self->storage));
 
-  threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
-  if (!threat_lists)
-    return;
-
-  body = ephy_gsb_utils_make_list_updates_request (threat_lists);
-  url = g_strdup_printf ("%sthreatListUpdates:fetch?key=%s", API_PREFIX, self->api_key);
-  msg = soup_message_new (SOUP_METHOD_POST, url);
-  soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
-  soup_session_queue_message (self->session, msg, update_threat_lists_cb, self);
-
-  g_free (url);
-  g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
+  self->is_updating = TRUE;
+  task = g_task_new (self, NULL,
+                     (GAsyncReadyCallback)ephy_gsb_service_update_finished_cb,
+                     NULL);
+  g_task_run_in_thread (task, (GTaskThreadFunc)ephy_gsb_service_update_thread);
+  g_object_unref (task);
 }
 
 static void
@@ -279,10 +298,8 @@ ephy_gsb_service_constructed (GObject *object)
     return;
 
   next_update_time = ephy_gsb_storage_get_next_update_time (self->storage);
-  if (CURRENT_TIME >= next_update_time) {
-    /* TODO: This takes too long, needs to run in a separate thread. */
-    ephy_gsb_service_update_threat_lists (self);
-  }
+  if (CURRENT_TIME >= next_update_time)
+    ephy_gsb_service_update (self);
 }
 
 static void
