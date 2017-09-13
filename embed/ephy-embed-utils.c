@@ -151,7 +151,7 @@ is_public_domain (const char *address)
     return FALSE;
 
   if (g_regex_match (get_domain_regex (), host, 0, NULL)) {
-    if (g_str_equal (host, "localhost"))
+    if (!strcmp (host, "localhost"))
       retval = TRUE;
     else {
       const char *end;
@@ -237,7 +237,7 @@ ephy_embed_utils_normalize_address (const char *address)
   if (ephy_embed_utils_address_is_existing_absolute_filename (address))
     return g_strconcat ("file://", address, NULL);
 
-  if (g_str_has_prefix (address, "about:") && !g_str_equal (address, "about:blank"))
+  if (g_str_has_prefix (address, "about:") && strcmp (address, "about:blank"))
     return g_strconcat (EPHY_ABOUT_SCHEME, address + strlen ("about"), NULL);
 
   if (!ephy_embed_utils_address_has_web_scheme (address)) {
@@ -327,7 +327,7 @@ ephy_embed_utils_is_no_show_address (const char *address)
     return FALSE;
 
   for (i = 0; do_not_show_address[i]; i++)
-    if (g_str_equal (address, do_not_show_address[i]))
+    if (!strcmp (address, do_not_show_address[i]))
       return TRUE;
 
   return FALSE;

@@ -46,9 +46,9 @@ server_callback (SoupServer        *server,
                  SoupClientContext *context,
                  gpointer           data)
 {
-  if (g_str_equal (path, "/cancelled"))
+  if (!strcmp (path, "/cancelled"))
     soup_message_set_status (msg, SOUP_STATUS_CANT_CONNECT);
-  else if (g_str_equal (path, "/redirect")) {
+  else if (!strcmp (path, "/redirect")) {
     soup_message_set_status (msg, SOUP_STATUS_MOVED_PERMANENTLY);
     soup_message_headers_append (msg->response_headers, "Location", "/redirect-result");
   } else

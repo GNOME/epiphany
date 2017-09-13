@@ -57,7 +57,7 @@ server_callback (SoupServer        *server,
 {
   soup_message_set_status (msg, SOUP_STATUS_OK);
 
-  if (g_str_equal (path, "/cancelled"))
+  if (!strcmp (path, "/cancelled"))
     soup_message_set_status (msg, SOUP_STATUS_CANT_CONNECT);
 
   soup_message_body_append (msg->response_body, SOUP_MEMORY_STATIC,

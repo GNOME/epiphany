@@ -603,7 +603,7 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
     g_object_get (password_node, "name", &password_field_name, NULL);
 
   /* The username node is empty, so pre-fill with the default. */
-  if (username != NULL && g_str_equal (username, ""))
+  if (!g_strcmp0 (username, ""))
     g_clear_pointer (&username, g_free);
 
   uri_str = soup_uri_to_string (uri, FALSE);

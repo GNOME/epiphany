@@ -250,19 +250,19 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
       char *name = g_match_info_fetch (match_info, 1);
       char **size = NULL;
 
-      if (g_str_equal (name, "Size"))
+      if (!strcmp (name, "Size"))
         size = &vma->size;
-      else if (g_str_equal (name, "Rss"))
+      else if (!strcmp (name, "Rss"))
         size = &vma->rss;
-      else if (g_str_equal (name, "Pss"))
+      else if (!strcmp (name, "Pss"))
         size = &vma->pss;
-      else if (g_str_equal (name, "Shared_Clean"))
+      else if (!strcmp (name, "Shared_Clean"))
         size = &vma->shared_clean;
-      else if (g_str_equal (name, "Shared_Dirty"))
+      else if (!strcmp (name, "Shared_Dirty"))
         size = &vma->shared_dirty;
-      else if (g_str_equal (name, "Private_Clean"))
+      else if (!strcmp (name, "Private_Clean"))
         size = &vma->private_clean;
-      else if (g_str_equal (name, "Private_Dirty"))
+      else if (!strcmp (name, "Private_Dirty"))
         size = &vma->private_dirty;
 
       if (size)
@@ -421,7 +421,7 @@ static void ephy_smaps_pid_children_to_html (EphySMaps *smaps, GString *str, pid
     pid_t pid, ppid;
     EphyProcess process;
 
-    if (g_str_equal (name, "self"))
+    if (!strcmp (name, "self"))
       continue;
 
     pid = get_pid_from_proc_name (name);

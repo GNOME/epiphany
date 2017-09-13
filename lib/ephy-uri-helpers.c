@@ -182,7 +182,7 @@ is_garbage (const char *name,
     if (fields[i].host != NULL &&
         !g_str_has_suffix (host, fields[i].host))
       continue;
-    if (g_str_equal (fields[i].field, name))
+    if (!g_strcmp0 (fields[i].field, name))
       return TRUE;
   }
 

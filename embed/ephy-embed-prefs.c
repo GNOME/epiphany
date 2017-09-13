@@ -244,7 +244,7 @@ normalize_languages (char **languages)
   langs = g_ptr_array_new ();
 
   for (i = 0; languages && languages[i]; i++) {
-    if (g_str_equal (languages[i], "system")) {
+    if (!strcmp (languages[i], "system")) {
       char **sys_langs = ephy_langs_get_languages ();
       int j;
 
@@ -314,11 +314,11 @@ ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager *cookie_manager,
 {
   WebKitCookieAcceptPolicy policy;
 
-  if (g_str_equal (settings_policy, "never"))
+  if (!strcmp (settings_policy, "never"))
     policy = WEBKIT_COOKIE_POLICY_ACCEPT_NEVER;
-  else if (g_str_equal (settings_policy, "always"))
+  else if (!strcmp (settings_policy, "always"))
     policy = WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS;
-  else if (g_str_equal (settings_policy, "no-third-party"))
+  else if (!strcmp (settings_policy, "no-third-party"))
     policy = WEBKIT_COOKIE_POLICY_ACCEPT_NO_THIRD_PARTY;
   else {
     g_warn_if_reached ();

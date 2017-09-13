@@ -141,9 +141,9 @@ ephy_file_get_downloads_dir (void)
   download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
                                         EPHY_PREFS_STATE_DOWNLOAD_DIR);
 
-  if (g_str_equal (download_dir, "Desktop"))
+  if (!g_strcmp0 (download_dir, "Desktop"))
     download_dir = ephy_file_desktop_dir ();
-  if (g_str_equal (download_dir, "Downloads") ||
+  if (!g_strcmp0 (download_dir, "Downloads") ||
       g_path_is_absolute (download_dir) != TRUE)
     download_dir = ephy_file_download_dir ();
 

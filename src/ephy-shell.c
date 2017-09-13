@@ -1124,7 +1124,7 @@ open_uris_data_new (EphyShell       *shell,
   fullscreen_lockdown = g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
                                                 EPHY_PREFS_LOCKDOWN_FULLSCREEN);
 
-  have_uris = uris && !(g_strv_length ((char **)uris) == 1 && g_str_equal (uris[0], ""));
+  have_uris = uris && !(g_strv_length ((char **)uris) == 1 && !g_strcmp0 (uris[0], ""));
 
   if (startup_flags & EPHY_STARTUP_NEW_WINDOW && !fullscreen_lockdown) {
     data->window = ephy_window_new ();

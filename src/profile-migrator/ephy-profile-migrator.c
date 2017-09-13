@@ -781,7 +781,7 @@ migrate_adblock_filters (void)
         char *url;
 
         url = g_strstrip (filter_list[i]);
-        if (url[0] != '\0' && !g_str_equal (url, ADBLOCK_DEFAULT_FILTER_URL))
+        if (url[0] != '\0' && strcmp (url, ADBLOCK_DEFAULT_FILTER_URL))
           g_ptr_array_add (filters_array, g_strdup (url));
       }
 
@@ -868,7 +868,7 @@ static gboolean
 is_deprecated_setting (const char *setting)
 {
   for (guint i = 0; i < G_N_ELEMENTS (deprecated_settings); i++) {
-    if (g_str_equal (setting, deprecated_settings[i]))
+    if (!strcmp (setting, deprecated_settings[i]))
       return TRUE;
   }
 
