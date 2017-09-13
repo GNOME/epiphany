@@ -120,6 +120,36 @@ bind_threat_list_params (EphySQLiteStatement *statement,
   return TRUE;
 }
 
+static void
+ephy_gsb_storage_start_transaction (EphyGSBStorage *self)
+{
+  GError *error = NULL;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+
+  ephy_sqlite_connection_begin_transaction (self->db, &error);
+  if (error) {
+    g_warning ("Failed to begin transaction on GSB database: %s", error->message);
+    g_error_free (error);
+  }
+}
+
+static void
+ephy_gsb_storage_end_transaction (EphyGSBStorage *self)
+{
+  GError *error = NULL;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+
+  ephy_sqlite_connection_commit_transaction (self->db, &error);
+  if (error) {
+    g_warning ("Failed to commit transaction on GSB database: %s", error->message);
+    g_error_free (error);
+  }
+}
+
 static gboolean
 ephy_gsb_storage_init_metadata_table (EphyGSBStorage *self)
 {
@@ -827,11 +857,9 @@ out:
   return prefixes;
 }
 
-static GList *
-ephy_gsb_storage_delete_batch (EphyGSBStorage     *self,
-                               EphyGSBThreatList  *list,
-                               GList              *prefixes,
-                               gsize               num_prefixes)
+static EphySQLiteStatement *
+ephy_gsb_storage_make_delete_hash_prefix_statement (EphyGSBStorage *self,
+                                                    gsize           num_prefixes)
 {
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
@@ -839,8 +867,6 @@ ephy_gsb_storage_delete_batch (EphyGSBStorage     *self,
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (self->is_operable);
-  g_assert (list);
-  g_assert (prefixes);
 
   sql = g_string_new ("DELETE FROM hash_prefix WHERE "
                       "threat_type=? AND platform_type=? and threat_entry_type=? "
@@ -853,7 +879,38 @@ ephy_gsb_storage_delete_batch (EphyGSBStorage     *self,
   statement = ephy_sqlite_connection_create_statement (self->db, sql->str, &error);
   if (error) {
     g_warning ("Failed to create delete hash prefix statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+  }
+
+  g_string_free (sql, TRUE);
+
+  return statement;
+}
+
+static GList *
+ephy_gsb_storage_delete_hash_prefix_batch (EphyGSBStorage      *self,
+                                           EphyGSBThreatList   *list,
+                                           GList               *prefixes,
+                                           gsize                num_prefixes,
+                                           EphySQLiteStatement *stmt)
+{
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
+  gboolean free_statement = TRUE;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+  g_assert (list);
+  g_assert (prefixes);
+
+  if (stmt) {
+    statement = stmt;
+    ephy_sqlite_statement_reset (statement);
+    free_statement = FALSE;
+  } else {
+    statement = ephy_gsb_storage_make_delete_hash_prefix_statement (self, num_prefixes);
+    if (!statement)
+      return prefixes;
   }
 
   if (!bind_threat_list_params (statement, list, 0, 1, 2, -1))
@@ -861,27 +918,25 @@ ephy_gsb_storage_delete_batch (EphyGSBStorage     *self,
 
   for (gsize i = 0; i < num_prefixes; i++) {
     GBytes *prefix = (GBytes *)prefixes->data;
-    ephy_sqlite_statement_bind_blob (statement, i + 3,
-                                     g_bytes_get_data (prefix, NULL),
-                                     g_bytes_get_size (prefix),
-                                     &error);
-    if (error) {
-      g_warning ("Failed to bind blob in delete hash prefix statement: %s", error->message);
+    if (!ephy_sqlite_statement_bind_blob (statement, i + 3,
+                                          g_bytes_get_data (prefix, NULL),
+                                          g_bytes_get_size (prefix),
+                                          NULL)) {
+      g_warning ("Failed to bind values in delete hash prefix statement");
       goto out;
     }
     prefixes = prefixes->next;
   }
 
   ephy_sqlite_statement_step (statement, &error);
-  if (error)
+  if (error) {
     g_warning ("Failed to execute delete hash prefix statement: %s", error->message);
+    g_error_free (error);
+  }
 
 out:
-  g_string_free (sql, TRUE);
-  if (statement)
+  if (free_statement && statement)
     g_object_unref (statement);
-  if (error)
-    g_error_free (error);
 
   /* Return where we left off. */
   return prefixes;
@@ -892,6 +947,7 @@ ephy_gsb_storage_delete_hash_prefixes (EphyGSBStorage    *self,
                                        EphyGSBThreatList *list,
                                        JsonArray         *indices)
 {
+  EphySQLiteStatement *statement = NULL;
   GList *prefixes = NULL;
   GList *head = NULL;
   GHashTable *set;
@@ -912,47 +968,89 @@ ephy_gsb_storage_delete_hash_prefixes (EphyGSBStorage    *self,
   prefixes = ephy_gsb_storage_get_hash_prefixes_to_delete (self, list, set, &num_prefixes);
   head = prefixes;
 
-  for (gsize i = 0; i < num_prefixes / BATCH_SIZE; i++)
-    head = ephy_gsb_storage_delete_batch (self, list, head, BATCH_SIZE);
+  ephy_gsb_storage_start_transaction (self);
 
-  if (num_prefixes % BATCH_SIZE != 0)
-    ephy_gsb_storage_delete_batch (self, list, head, num_prefixes % BATCH_SIZE);
+  if (num_prefixes / BATCH_SIZE > 0) {
+    /* Reuse statement to increase performance. */
+    statement = ephy_gsb_storage_make_delete_hash_prefix_statement (self, BATCH_SIZE);
+
+    for (gsize i = 0; i < num_prefixes / BATCH_SIZE; i++) {
+      head = ephy_gsb_storage_delete_hash_prefix_batch (self, list,
+                                                        head, BATCH_SIZE,
+                                                        statement);
+    }
+  }
+
+  if (num_prefixes % BATCH_SIZE != 0) {
+    ephy_gsb_storage_delete_hash_prefix_batch (self, list,
+                                               head, num_prefixes % BATCH_SIZE,
+                                               NULL);
+  }
+
+  ephy_gsb_storage_end_transaction (self);
 
   g_hash_table_unref (set);
   g_list_free_full (prefixes, (GDestroyNotify)g_bytes_unref);
+  if (statement)
+    g_object_unref (statement);
 }
 
-static void
-ephy_gsb_storage_insert_batch (EphyGSBStorage    *self,
-                               EphyGSBThreatList *list,
-                               const guint8      *prefixes,
-                               gsize              start,
-                               gsize              end,
-                               gsize              len)
+static EphySQLiteStatement *
+ephy_gsb_storage_make_insert_hash_prefix_statement (EphyGSBStorage *self,
+                                                    gsize           num_prefixes)
 {
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
   GString *sql;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+
+  sql = g_string_new ("INSERT INTO hash_prefix "
+                      "(cue, value, threat_type, platform_type, threat_entry_type) VALUES ");
+  for (gsize i = 0; i < num_prefixes; i++)
+    g_string_append (sql, "(?, ?, ?, ?, ?),");
+  /* Remove trailing comma character. */
+  g_string_erase (sql, sql->len - 1, -1);
+
+  statement = ephy_sqlite_connection_create_statement (self->db, sql->str, &error);
+  if (error) {
+    g_warning ("Failed to create insert hash prefix statement: %s", error->message);
+    g_error_free (error);
+  }
+
+  g_string_free (sql, TRUE);
+
+  return statement;
+}
+
+static void
+ephy_gsb_storage_insert_hash_prefix_batch (EphyGSBStorage      *self,
+                                           EphyGSBThreatList   *list,
+                                           const guint8        *prefixes,
+                                           gsize                start,
+                                           gsize                end,
+                                           gsize                len,
+                                           EphySQLiteStatement *stmt)
+{
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
   gsize id = 0;
+  gboolean free_statement = TRUE;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (self->is_operable);
   g_assert (list);
   g_assert (prefixes);
 
-  sql = g_string_new ("INSERT INTO hash_prefix "
-                      "(cue, value, threat_type, platform_type, threat_entry_type) VALUES ");
-  for (gsize k = start; k < end; k += len)
-    g_string_append (sql, "(?, ?, ?, ?, ?),");
-  /* Remove trailing comma character. */
-  g_string_erase (sql, sql->len - 1, -1);
-
-  statement = ephy_sqlite_connection_create_statement (self->db, sql->str, &error);
-  g_string_free (sql, TRUE);
-
-  if (error) {
-    g_warning ("Failed to create insert hash prefix statement: %s", error->message);
-    goto out;
+  if (stmt) {
+    statement = stmt;
+    ephy_sqlite_statement_reset (statement);
+    free_statement = FALSE;
+  } else {
+    statement = ephy_gsb_storage_make_insert_hash_prefix_statement (self, (end - start + 1) / len);
+    if (!statement)
+      return;
   }
 
   for (gsize k = start; k < end; k += len) {
@@ -966,14 +1064,14 @@ ephy_gsb_storage_insert_batch (EphyGSBStorage    *self,
   }
 
   ephy_sqlite_statement_step (statement, &error);
-  if (error)
+  if (error) {
     g_warning ("Failed to execute insert hash prefix statement: %s", error->message);
+    g_error_free (error);
+  }
 
 out:
-  if (statement)
+  if (free_statement && statement)
     g_object_unref (statement);
-  if (error)
-    g_error_free (error);
 }
 
 void
@@ -982,10 +1080,11 @@ ephy_gsb_storage_insert_hash_prefixes (EphyGSBStorage    *self,
                                        gsize              prefix_len,
                                        const char        *prefixes_b64)
 {
+  EphySQLiteStatement *statement = NULL;
   guint8 *prefixes;
   gsize prefixes_len;
+  gsize num_prefixes;
   gsize num_batches;
-  gboolean leftovers;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (self->is_operable);
@@ -994,24 +1093,37 @@ ephy_gsb_storage_insert_hash_prefixes (EphyGSBStorage    *self,
   g_assert (prefixes_b64);
 
   prefixes = g_base64_decode (prefixes_b64, &prefixes_len);
-  num_batches = (prefixes_len / prefix_len) / BATCH_SIZE;
-  leftovers = (prefixes_len / prefix_len) % BATCH_SIZE != 0;
+  num_prefixes = prefixes_len / prefix_len;
+  num_batches = num_prefixes / BATCH_SIZE;
 
-  LOG ("Inserting %lu hash prefixes of size %ld...", prefixes_len / prefix_len, prefix_len);
+  LOG ("Inserting %lu hash prefixes of size %ld...", num_prefixes, prefix_len);
 
-  for (gsize i = 0; i < num_batches; i++) {
-    ephy_gsb_storage_insert_batch (self, list, prefixes,
-                                   i * prefix_len * BATCH_SIZE,
-                                   (i + 1) * prefix_len * BATCH_SIZE,
-                                   prefix_len);
+  ephy_gsb_storage_start_transaction (self);
+
+  if (num_batches > 0) {
+    /* Reuse statement to increase performance. */
+    statement = ephy_gsb_storage_make_insert_hash_prefix_statement (self, BATCH_SIZE);
+
+    for (gsize i = 0; i < num_batches; i++) {
+      ephy_gsb_storage_insert_hash_prefix_batch (self, list, prefixes,
+                                                 i * prefix_len * BATCH_SIZE,
+                                                 (i + 1) * prefix_len * BATCH_SIZE,
+                                                 prefix_len,
+                                                 statement);
+    }
   }
 
-  if (leftovers) {
-    ephy_gsb_storage_insert_batch (self, list, prefixes,
-                                   num_batches * prefix_len * BATCH_SIZE,
-                                   prefixes_len - 1,
-                                   prefix_len);
+  if (num_prefixes % BATCH_SIZE != 0) {
+    ephy_gsb_storage_insert_hash_prefix_batch (self, list, prefixes,
+                                               num_batches * prefix_len * BATCH_SIZE,
+                                               prefixes_len - 1,
+                                               prefix_len,
+                                               NULL);
   }
+
+  ephy_gsb_storage_end_transaction (self);
 
   g_free (prefixes);
+  if (statement)
+    g_object_unref (statement);
 }
