@@ -136,7 +136,7 @@ ephy_download_set_property (GObject      *object,
 const char *
 ephy_download_get_content_type (EphyDownload *download)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), NULL);
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   return download->content_type;
 }
@@ -359,7 +359,7 @@ ephy_download_get_action (EphyDownload *download)
 guint32
 ephy_download_get_start_time (EphyDownload *download)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (download), 0);
+  g_assert (EPHY_IS_DOWNLOAD (download));
 
   return download->start_time;
 }
