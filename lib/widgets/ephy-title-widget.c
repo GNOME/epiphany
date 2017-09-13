@@ -56,11 +56,11 @@ ephy_title_widget_get_address (EphyTitleWidget *widget)
 {
   EphyTitleWidgetInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_TITLE_WIDGET (widget), NULL);
+  g_assert (EPHY_IS_TITLE_WIDGET (widget));
 
   iface = EPHY_TITLE_WIDGET_GET_IFACE (widget);
 
-  g_return_val_if_fail (iface->get_address, NULL);
+  g_assert (iface->get_address);
   return iface->get_address (widget);
 }
 
@@ -70,11 +70,11 @@ ephy_title_widget_set_address (EphyTitleWidget *widget,
 {
   EphyTitleWidgetInterface *iface;
 
-  g_return_if_fail (EPHY_IS_TITLE_WIDGET (widget));
+  g_assert (EPHY_IS_TITLE_WIDGET (widget));
 
   iface = EPHY_TITLE_WIDGET_GET_IFACE (widget);
 
-  g_return_if_fail (iface->set_address);
+  g_assert (iface->set_address);
   iface->set_address (widget, address);
 }
 
@@ -83,11 +83,11 @@ ephy_title_widget_get_security_level (EphyTitleWidget *widget)
 {
   EphyTitleWidgetInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_TITLE_WIDGET (widget), EPHY_SECURITY_LEVEL_TO_BE_DETERMINED);
+  g_assert (EPHY_IS_TITLE_WIDGET (widget));
 
   iface = EPHY_TITLE_WIDGET_GET_IFACE (widget);
 
-  g_return_val_if_fail (iface->get_security_level, EPHY_SECURITY_LEVEL_TO_BE_DETERMINED);
+  g_assert (iface->get_security_level);
   return iface->get_security_level (widget);
 }
 
@@ -97,10 +97,10 @@ ephy_title_widget_set_security_level (EphyTitleWidget   *widget,
 {
   EphyTitleWidgetInterface *iface;
 
-  g_return_if_fail (EPHY_IS_TITLE_WIDGET (widget));
+  g_assert (EPHY_IS_TITLE_WIDGET (widget));
 
   iface = EPHY_TITLE_WIDGET_GET_IFACE (widget);
 
-  g_return_if_fail (iface->set_security_level);
+  g_assert (iface->set_security_level);
   iface->set_security_level (widget, security_level);
 }

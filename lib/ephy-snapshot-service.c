@@ -290,9 +290,9 @@ ephy_snapshot_service_save_snapshot_async (EphySnapshotService *service,
 {
   GTask *task;
 
-  g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
-  g_return_if_fail (GDK_IS_PIXBUF (snapshot));
-  g_return_if_fail (url != NULL);
+  g_assert (EPHY_IS_SNAPSHOT_SERVICE (service));
+  g_assert (GDK_IS_PIXBUF (snapshot));
+  g_assert (url != NULL);
 
   task = g_task_new (service, cancellable, callback, user_data);
   g_task_set_priority (task, G_PRIORITY_LOW);
@@ -308,7 +308,7 @@ ephy_snapshot_service_save_snapshot_finish (EphySnapshotService *service,
                                             GAsyncResult        *result,
                                             GError             **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, service), NULL);
+  g_assert (g_task_is_valid (result, service));
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
@@ -497,7 +497,7 @@ ephy_snapshot_service_lookup_cached_snapshot_path (EphySnapshotService *service,
 {
   SnapshotPathCachedData *data;
 
-  g_return_val_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service), NULL);
+  g_assert (EPHY_IS_SNAPSHOT_SERVICE (service));
 
   data = g_hash_table_lookup (service->cache, url);
 
@@ -548,8 +548,8 @@ ephy_snapshot_service_get_snapshot_path_for_url_async (EphySnapshotService *serv
   GTask *task;
   const char *path;
 
-  g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
-  g_return_if_fail (url != NULL);
+  g_assert (EPHY_IS_SNAPSHOT_SERVICE (service));
+  g_assert (url != NULL);
 
   task = g_task_new (service, cancellable, callback, user_data);
 
@@ -590,7 +590,7 @@ ephy_snapshot_service_get_snapshot_path_for_url_finish (EphySnapshotService *ser
                                                         GAsyncResult        *result,
                                                         GError             **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, service), NULL);
+  g_assert (g_task_is_valid (result, service));
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
@@ -625,9 +625,9 @@ ephy_snapshot_service_get_snapshot_path_async (EphySnapshotService *service,
   const char *uri;
   const char *path;
 
-  g_return_if_fail (EPHY_IS_SNAPSHOT_SERVICE (service));
-  g_return_if_fail (WEBKIT_IS_WEB_VIEW (web_view));
-  g_return_if_fail (webkit_web_view_get_uri (web_view));
+  g_assert (EPHY_IS_SNAPSHOT_SERVICE (service));
+  g_assert (WEBKIT_IS_WEB_VIEW (web_view));
+  g_assert (webkit_web_view_get_uri (web_view));
 
   task = g_task_new (service, cancellable, callback, user_data);
 
@@ -655,7 +655,7 @@ ephy_snapshot_service_get_snapshot_path_finish (EphySnapshotService *service,
                                                 GAsyncResult        *result,
                                                 GError             **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, service), NULL);
+  g_assert (g_task_is_valid (result, service));
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }

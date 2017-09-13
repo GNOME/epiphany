@@ -39,8 +39,8 @@ ephy_signal_accumulator_object (GSignalInvocationHint *ihint,
     g_value_set_object (return_accu, object);
 
     return FALSE;
-  } else if (object != NULL) {
-    g_return_val_if_reached (TRUE);
+  } else {
+    g_assert (object == NULL);
   }
 
   return TRUE;

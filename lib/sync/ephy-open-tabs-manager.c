@@ -147,7 +147,7 @@ ephy_open_tabs_manager_get_local_tabs (EphyOpenTabsManager *self)
   char *id;
   char *name;
 
-  g_return_val_if_fail (EPHY_IS_OPEN_TABS_MANAGER (self), NULL);
+  g_assert (EPHY_IS_OPEN_TABS_MANAGER (self));
 
   id = ephy_sync_utils_get_device_id ();
   name = ephy_sync_utils_get_device_name ();
@@ -169,7 +169,7 @@ ephy_open_tabs_manager_get_local_tabs (EphyOpenTabsManager *self)
 GList *
 ephy_open_tabs_manager_get_remote_tabs (EphyOpenTabsManager *self)
 {
-  g_return_val_if_fail (EPHY_IS_OPEN_TABS_MANAGER (self), NULL);
+  g_assert (EPHY_IS_OPEN_TABS_MANAGER (self));
 
   return self->remote_records;
 }
@@ -177,7 +177,7 @@ ephy_open_tabs_manager_get_remote_tabs (EphyOpenTabsManager *self)
 void
 ephy_open_tabs_manager_clear_cache (EphyOpenTabsManager *self)
 {
-  g_return_if_fail (EPHY_IS_OPEN_TABS_MANAGER (self));
+  g_assert (EPHY_IS_OPEN_TABS_MANAGER (self));
 
   g_list_free_full (self->remote_records, g_object_unref);
   self->remote_records = NULL;

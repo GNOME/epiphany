@@ -66,7 +66,7 @@ ephy_sync_crypto_hawk_options_new (const char *app,
 void
 ephy_sync_crypto_hawk_options_free (SyncCryptoHawkOptions *options)
 {
-  g_return_if_fail (options);
+  g_assert (options);
 
   g_free (options->app);
   g_free (options->dlg);
@@ -291,10 +291,10 @@ ephy_sync_crypto_hawk_header_new (const char            *url,
   guint8 *bytes;
   gint64 ts;
 
-  g_return_val_if_fail (url, NULL);
-  g_return_val_if_fail (method, NULL);
-  g_return_val_if_fail (id, NULL);
-  g_return_val_if_fail (key, NULL);
+  g_assert (url);
+  g_assert (method);
+  g_assert (id);
+  g_assert (key);
 
   ts = g_get_real_time () / 1000000;
   hash = options ? g_strdup (options->hash) : NULL;
@@ -396,7 +396,7 @@ ephy_sync_crypto_hawk_header_new (const char            *url,
 void
 ephy_sync_crypto_hawk_header_free (SyncCryptoHawkHeader *header)
 {
-  g_return_if_fail (header);
+  g_assert (header);
 
   g_free (header->header);
   ephy_sync_crypto_hawk_artifacts_free (header->artifacts);
@@ -435,7 +435,7 @@ ephy_sync_crypto_rsa_key_pair_new (void)
 void
 ephy_sync_crypto_rsa_key_pair_free (SyncCryptoRSAKeyPair *key_pair)
 {
-  g_return_if_fail (key_pair);
+  g_assert (key_pair);
 
   rsa_public_key_clear (&key_pair->public);
   rsa_private_key_clear (&key_pair->private);
@@ -453,13 +453,13 @@ ephy_sync_crypto_key_bundle_new (const char *aes_key_b64,
   gsize aes_key_len;
   gsize hmac_key_len;
 
-  g_return_val_if_fail (aes_key_b64, NULL);
-  g_return_val_if_fail (hmac_key_b64, NULL);
+  g_assert (aes_key_b64);
+  g_assert (hmac_key_b64);
 
   aes_key = g_base64_decode (aes_key_b64, &aes_key_len);
-  g_return_val_if_fail (aes_key_len == 32, NULL);
+  g_assert (aes_key_len == 32);
   hmac_key = g_base64_decode (hmac_key_b64, &hmac_key_len);
-  g_return_val_if_fail (hmac_key_len == 32, NULL);
+  g_assert (hmac_key_len == 32);
 
   bundle = g_slice_new (SyncCryptoKeyBundle);
   bundle->aes_key_hex = ephy_sync_utils_encode_hex (aes_key, aes_key_len);
@@ -474,7 +474,7 @@ ephy_sync_crypto_key_bundle_new (const char *aes_key_b64,
 void
 ephy_sync_crypto_key_bundle_free (SyncCryptoKeyBundle *bundle)
 {
-  g_return_if_fail (bundle);
+  g_assert (bundle);
 
   g_free (bundle->aes_key_hex);
   g_free (bundle->hmac_key_hex);
@@ -612,10 +612,10 @@ ephy_sync_crypto_derive_session_token (const char  *session_token,
   char *info;
   gsize len = 32; /* sessionToken is always 32 bytes. */
 
-  g_return_if_fail (session_token);
-  g_return_if_fail (token_id);
-  g_return_if_fail (req_hmac_key);
-  g_return_if_fail (request_key);
+  g_assert (session_token);
+  g_assert (token_id);
+  g_assert (req_hmac_key);
+  g_assert (request_key);
 
   token = ephy_sync_utils_decode_hex (session_token);
   info = ephy_sync_crypto_kw ("sessionToken");
@@ -654,11 +654,11 @@ ephy_sync_crypto_derive_key_fetch_token (const char  *key_fetch_token,
   char *info_keys;
   gsize len = 32; /* keyFetchToken is always 32 bytes. */
 
-  g_return_if_fail (key_fetch_token);
-  g_return_if_fail (token_id);
-  g_return_if_fail (req_hmac_key);
-  g_return_if_fail (resp_hmac_key);
-  g_return_if_fail (resp_xor_key);
+  g_assert (key_fetch_token);
+  g_assert (token_id);
+  g_assert (req_hmac_key);
+  g_assert (resp_hmac_key);
+  g_assert (resp_xor_key);
 
   kft = ephy_sync_utils_decode_hex (key_fetch_token);
   info_kft = ephy_sync_crypto_kw ("keyFetchToken");
@@ -748,12 +748,12 @@ ephy_sync_crypto_derive_master_keys (const char    *bundle_hex,
   gboolean retval = TRUE;
   gsize len = 32; /* The master sync keys are always 32 bytes. */
 
-  g_return_val_if_fail (bundle_hex, FALSE);
-  g_return_val_if_fail (resp_hmac_key, FALSE);
-  g_return_val_if_fail (resp_xor_key, FALSE);
-  g_return_val_if_fail (unwrap_kb, FALSE);
-  g_return_val_if_fail (ka, FALSE);
-  g_return_val_if_fail (kb, FALSE);
+  g_assert (bundle_hex);
+  g_assert (resp_hmac_key);
+  g_assert (resp_xor_key);
+  g_assert (unwrap_kb);
+  g_assert (ka);
+  g_assert (kb);
 
   bundle = ephy_sync_utils_decode_hex (bundle_hex);
   ciphertext = g_malloc (2 * len);
@@ -809,7 +809,7 @@ ephy_sync_crypto_derive_master_bundle (const guint8 *key)
   const char *info = "identity.mozilla.com/picl/v1/oldsync";
   gsize len = 32; /* kB is always 32 bytes. */
 
-  g_return_val_if_fail (key, NULL);
+  g_assert (key);
 
   /* Perform a two step HKDF with an all-zeros salt.
    * T(1) will represent the AES key, T(2) will represent the HMAC key.
@@ -913,9 +913,9 @@ ephy_sync_crypto_create_assertion (const char           *certificate,
   gsize count;
   int success;
 
-  g_return_val_if_fail (certificate, NULL);
-  g_return_val_if_fail (audience, NULL);
-  g_return_val_if_fail (key_pair, NULL);
+  g_assert (certificate);
+  g_assert (audience);
+  g_assert (key_pair);
 
   /* Encode the header and body to base64 url safe and join them. */
   expires_at = g_get_real_time () / 1000 + seconds * 1000;
@@ -1023,8 +1023,8 @@ ephy_sync_crypto_encrypt_record (const char          *cleartext,
   guint8 *iv;
   gsize ciphertext_len;
 
-  g_return_val_if_fail (cleartext, NULL);
-  g_return_val_if_fail (bundle, NULL);
+  g_assert (cleartext);
+  g_assert (bundle);
 
   /* Get the encryption key and the HMAC key. */
   aes_key = ephy_sync_utils_decode_hex (bundle->aes_key_hex);
@@ -1151,8 +1151,8 @@ ephy_sync_crypto_decrypt_record (const char          *payload,
   gsize ciphertext_len;
   gsize iv_len;
 
-  g_return_val_if_fail (payload, NULL);
-  g_return_val_if_fail (bundle, NULL);
+  g_assert (payload);
+  g_assert (bundle);
 
   /* Extract ciphertext, iv and hmac from payload. */
   node = json_from_string (payload, &error);

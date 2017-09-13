@@ -201,7 +201,7 @@ ephy_notification_new (const char *head,
 void
 ephy_notification_show (EphyNotification *self)
 {
-  g_return_if_fail (EPHY_IS_NOTIFICATION (self));
+  g_assert (EPHY_IS_NOTIFICATION (self));
 
   ephy_notification_container_add_notification (ephy_notification_container_get_default (),
                                                 GTK_WIDGET (self));

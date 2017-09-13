@@ -134,7 +134,7 @@ ephy_title_box_title_widget_get_address (EphyTitleWidget *widget)
 {
   EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
 
-  g_return_val_if_fail (title_box, NULL);
+  g_assert (title_box);
 
   return gtk_label_get_text (GTK_LABEL (title_box->subtitle));
 }
@@ -145,7 +145,7 @@ ephy_title_box_title_widget_set_address (EphyTitleWidget *widget,
 {
   EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
 
-  g_return_if_fail (title_box);
+  g_assert (title_box);
 
   if (address && *address)
     gtk_label_set_text (GTK_LABEL (title_box->subtitle), address);
@@ -156,7 +156,7 @@ ephy_title_box_title_widget_get_security_level (EphyTitleWidget *widget)
 {
   EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
 
-  g_return_val_if_fail (title_box, EPHY_SECURITY_LEVEL_TO_BE_DETERMINED);
+  g_assert (title_box);
 
   return title_box->security_level;
 }
@@ -168,7 +168,7 @@ ephy_title_box_title_widget_set_security_level (EphyTitleWidget  *widget,
   EphyTitleBox *title_box = EPHY_TITLE_BOX (widget);
   const char *icon_name;
 
-  g_return_if_fail (title_box);
+  g_assert (title_box);
 
   icon_name = ephy_security_level_to_icon_name (security_level);
 

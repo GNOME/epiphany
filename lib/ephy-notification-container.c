@@ -72,8 +72,8 @@ void
 ephy_notification_container_add_notification (EphyNotificationContainer *self,
                                               GtkWidget                 *notification)
 {
-  g_return_if_fail (EPHY_IS_NOTIFICATION_CONTAINER (self));
-  g_return_if_fail (GTK_IS_WIDGET (notification));
+  g_assert (EPHY_IS_NOTIFICATION_CONTAINER (self));
+  g_assert (GTK_IS_WIDGET (notification));
 
   gtk_container_add (GTK_CONTAINER (self->grid), notification);
   gtk_widget_show_all (GTK_WIDGET (self));

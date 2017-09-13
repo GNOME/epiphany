@@ -99,8 +99,8 @@ ephy_create_file_chooser (const char           *title,
   GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];
   char *downloads_dir;
 
-  g_return_val_if_fail (GTK_IS_WINDOW (parent), NULL);
-  g_return_val_if_fail (default_filter >= 0 && default_filter <= EPHY_FILE_FILTER_LAST, NULL);
+  g_assert (GTK_IS_WINDOW (parent));
+  g_assert (default_filter >= 0 && default_filter <= EPHY_FILE_FILTER_LAST);
 
   dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (title,
                                                           GTK_WINDOW (parent),

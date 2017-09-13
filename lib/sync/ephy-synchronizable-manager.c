@@ -76,7 +76,7 @@ ephy_synchronizable_manager_get_collection_name (EphySynchronizableManager *mana
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager), NULL);
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   return iface->get_collection_name (manager);
@@ -95,7 +95,7 @@ ephy_synchronizable_manager_get_synchronizable_type (EphySynchronizableManager *
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager), 0);
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   return iface->get_synchronizable_type (manager);
@@ -115,7 +115,7 @@ ephy_synchronizable_manager_is_initial_sync (EphySynchronizableManager *manager)
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager), FALSE);
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   return iface->is_initial_sync (manager);
@@ -135,7 +135,7 @@ ephy_synchronizable_manager_set_is_initial_sync (EphySynchronizableManager *mana
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   iface->set_is_initial_sync (manager, is_initial);
@@ -155,7 +155,7 @@ ephy_synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager), 0);
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   return iface->get_sync_time (manager);
@@ -174,7 +174,7 @@ ephy_synchronizable_manager_set_sync_time (EphySynchronizableManager *manager,
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   iface->set_sync_time (manager, sync_time);
@@ -193,8 +193,8 @@ ephy_synchronizable_manager_add (EphySynchronizableManager *manager,
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
-  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE (synchronizable));
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
+  g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   iface->add (manager, synchronizable);
@@ -213,8 +213,8 @@ ephy_synchronizable_manager_remove (EphySynchronizableManager *manager,
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
-  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE (synchronizable));
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
+  g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   iface->remove (manager, synchronizable);
@@ -239,8 +239,8 @@ ephy_synchronizable_manager_save (EphySynchronizableManager *manager,
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
-  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE (synchronizable));
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
+  g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   iface->save (manager, synchronizable);
@@ -274,8 +274,8 @@ ephy_synchronizable_manager_merge (EphySynchronizableManager              *manag
 {
   EphySynchronizableManagerInterface *iface;
 
-  g_return_if_fail (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
-  g_return_if_fail (callback);
+  g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
+  g_assert (callback);
 
   iface = EPHY_SYNCHRONIZABLE_MANAGER_GET_IFACE (manager);
   iface->merge (manager, is_initial, remotes_deleted, remotes_updated, callback, user_data);

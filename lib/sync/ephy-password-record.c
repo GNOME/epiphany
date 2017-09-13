@@ -284,7 +284,7 @@ ephy_password_record_new (const char *id,
 const char *
 ephy_password_record_get_id (EphyPasswordRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_PASSWORD_RECORD (self), NULL);
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
   return self->id;
 }
@@ -292,7 +292,7 @@ ephy_password_record_get_id (EphyPasswordRecord *self)
 const char *
 ephy_password_record_get_origin (EphyPasswordRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_PASSWORD_RECORD (self), NULL);
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
   return self->origin;
 }
@@ -300,7 +300,7 @@ ephy_password_record_get_origin (EphyPasswordRecord *self)
 const char *
 ephy_password_record_get_target_origin (EphyPasswordRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_PASSWORD_RECORD (self), NULL);
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
   return self->target_origin;
 }
@@ -308,7 +308,7 @@ ephy_password_record_get_target_origin (EphyPasswordRecord *self)
 const char *
 ephy_password_record_get_username (EphyPasswordRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_PASSWORD_RECORD (self), NULL);
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
   return self->username;
 }
@@ -316,7 +316,7 @@ ephy_password_record_get_username (EphyPasswordRecord *self)
 const char *
 ephy_password_record_get_password (EphyPasswordRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_PASSWORD_RECORD (self), NULL);
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
   return self->password;
 }
@@ -325,7 +325,7 @@ void
 ephy_password_record_set_password (EphyPasswordRecord *self,
                                    const char         *password)
 {
-  g_return_if_fail (EPHY_IS_PASSWORD_RECORD (self));
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
   g_free (self->password);
   self->password = g_strdup (password);
@@ -334,7 +334,7 @@ ephy_password_record_set_password (EphyPasswordRecord *self,
 const char *
 ephy_password_record_get_username_field (EphyPasswordRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_PASSWORD_RECORD (self), NULL);
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
   return self->username_field;
 }
@@ -342,7 +342,7 @@ ephy_password_record_get_username_field (EphyPasswordRecord *self)
 const char *
 ephy_password_record_get_password_field (EphyPasswordRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_PASSWORD_RECORD (self), NULL);
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
   return self->password_field;
 }
@@ -350,7 +350,7 @@ ephy_password_record_get_password_field (EphyPasswordRecord *self)
 guint64
 ephy_password_record_get_time_password_changed (EphyPasswordRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_PASSWORD_RECORD (self), 0);
+  g_assert (EPHY_IS_PASSWORD_RECORD (self));
 
   return self->time_password_changed;
 }

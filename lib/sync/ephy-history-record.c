@@ -230,8 +230,8 @@ void
 ephy_history_record_set_id (EphyHistoryRecord *self,
                             const char        *id)
 {
-  g_return_if_fail (EPHY_IS_HISTORY_RECORD (self));
-  g_return_if_fail (id);
+  g_assert (EPHY_IS_HISTORY_RECORD (self));
+  g_assert (id);
 
   g_free (self->id);
   self->id = g_strdup (id);
@@ -240,7 +240,7 @@ ephy_history_record_set_id (EphyHistoryRecord *self,
 const char *
 ephy_history_record_get_id (EphyHistoryRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_HISTORY_RECORD (self), NULL);
+  g_assert (EPHY_IS_HISTORY_RECORD (self));
 
   return self->id;
 }
@@ -248,7 +248,7 @@ ephy_history_record_get_id (EphyHistoryRecord *self)
 const char *
 ephy_history_record_get_title (EphyHistoryRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_HISTORY_RECORD (self), NULL);
+  g_assert (EPHY_IS_HISTORY_RECORD (self));
 
   return self->title;
 }
@@ -256,7 +256,7 @@ ephy_history_record_get_title (EphyHistoryRecord *self)
 const char *
 ephy_history_record_get_uri (EphyHistoryRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_HISTORY_RECORD (self), NULL);
+  g_assert (EPHY_IS_HISTORY_RECORD (self));
 
   return self->uri;
 }
@@ -266,8 +266,8 @@ ephy_history_record_get_last_visit_time (EphyHistoryRecord *self)
 {
   EphyHistoryRecordVisit *visit;
 
-  g_return_val_if_fail (EPHY_IS_HISTORY_RECORD (self), -1);
-  g_return_val_if_fail (self->visits, -1);
+  g_assert (EPHY_IS_HISTORY_RECORD (self));
+  g_assert (self->visits);
 
   if (g_sequence_is_empty (self->visits))
     return -1;
@@ -284,7 +284,7 @@ ephy_history_record_add_visit_time (EphyHistoryRecord *self,
 {
   EphyHistoryRecordVisit *visit;
 
-  g_return_val_if_fail (EPHY_IS_HISTORY_RECORD (self), FALSE);
+  g_assert (EPHY_IS_HISTORY_RECORD (self));
 
   visit = ephy_history_record_visit_new (visit_time, EPHY_PAGE_VISIT_LINK);
   if (g_sequence_lookup (self->visits, visit,

@@ -486,7 +486,7 @@ ephy_download_widget_init (EphyDownloadWidget *widget)
 EphyDownload *
 ephy_download_widget_get_download (EphyDownloadWidget *widget)
 {
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD_WIDGET (widget), NULL);
+  g_assert (EPHY_IS_DOWNLOAD_WIDGET (widget));
   return widget->download;
 }
 
@@ -504,7 +504,7 @@ ephy_download_widget_new (EphyDownload *ephy_download)
 {
   EphyDownloadWidget *widget;
 
-  g_return_val_if_fail (EPHY_IS_DOWNLOAD (ephy_download), NULL);
+  g_assert (EPHY_IS_DOWNLOAD (ephy_download));
 
   widget = g_object_new (EPHY_TYPE_DOWNLOAD_WIDGET,
                          "download", ephy_download, NULL);

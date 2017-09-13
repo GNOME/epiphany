@@ -500,7 +500,7 @@ ephy_sync_debug_view_collection (const char *collection,
   char *endpoint;
   char *response;
 
-  g_return_if_fail (collection);
+  g_assert (collection);
 
   endpoint = g_strdup_printf ("storage/%s?full=true", collection);
   response = ephy_sync_debug_send_request (endpoint, "GET", NULL);
@@ -567,8 +567,8 @@ ephy_sync_debug_view_record (const char *collection,
   char *record;
   const char *payload;
 
-  g_return_if_fail (collection);
-  g_return_if_fail (id);
+  g_assert (collection);
+  g_assert (id);
 
   id_safe = soup_uri_encode (id, NULL);
   endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
@@ -629,7 +629,7 @@ ephy_sync_debug_delete_collection (const char *collection)
   char *endpoint;
   char *response;
 
-  g_return_if_fail (collection);
+  g_assert (collection);
 
   endpoint = g_strdup_printf ("storage/%s", collection);
   response = ephy_sync_debug_send_request (endpoint, "GET", NULL);
@@ -691,8 +691,8 @@ ephy_sync_debug_delete_record (const char *collection,
   char *body;
   char *response;
 
-  g_return_if_fail (collection);
-  g_return_if_fail (id);
+  g_assert (collection);
+  g_assert (id);
 
   bundle = ephy_sync_debug_get_bundle_for_collection (collection);
   if (!bundle)
@@ -730,7 +730,7 @@ ephy_sync_debug_erase_collection (const char *collection)
   char *endpoint;
   char *response;
 
-  g_return_if_fail (collection);
+  g_assert (collection);
 
   endpoint = g_strdup_printf ("storage/%s", collection);
   response = ephy_sync_debug_send_request (endpoint, "DELETE", NULL);
@@ -762,8 +762,8 @@ ephy_sync_debug_erase_record (const char *collection,
   char *endpoint;
   char *response;
 
-  g_return_if_fail (collection);
-  g_return_if_fail (id);
+  g_assert (collection);
+  g_assert (id);
 
   id_safe = soup_uri_encode (id, NULL);
   endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);

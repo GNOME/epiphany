@@ -168,7 +168,7 @@ ephy_open_tabs_record_new (const char *id,
 const char *
 ephy_open_tabs_record_get_id (EphyOpenTabsRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_OPEN_TABS_RECORD (self), NULL);
+  g_assert (EPHY_IS_OPEN_TABS_RECORD (self));
 
   return self->id;
 }
@@ -176,7 +176,7 @@ ephy_open_tabs_record_get_id (EphyOpenTabsRecord *self)
 const char *
 ephy_open_tabs_record_get_client_name (EphyOpenTabsRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_OPEN_TABS_RECORD (self), NULL);
+  g_assert (EPHY_IS_OPEN_TABS_RECORD (self));
 
   return self->client_name;
 }
@@ -184,7 +184,7 @@ ephy_open_tabs_record_get_client_name (EphyOpenTabsRecord *self)
 GList *
 ephy_open_tabs_record_get_tabs (EphyOpenTabsRecord *self)
 {
-  g_return_val_if_fail (EPHY_IS_OPEN_TABS_RECORD (self), NULL);
+  g_assert (EPHY_IS_OPEN_TABS_RECORD (self));
 
   return self->tabs;
 }
@@ -198,9 +198,9 @@ ephy_open_tabs_record_add_tab (EphyOpenTabsRecord *self,
   JsonObject *tab;
   JsonArray *url_history;
 
-  g_return_if_fail (EPHY_IS_OPEN_TABS_RECORD (self));
-  g_return_if_fail (title);
-  g_return_if_fail (url);
+  g_assert (EPHY_IS_OPEN_TABS_RECORD (self));
+  g_assert (title);
+  g_assert (url);
 
   tab = json_object_new ();
   json_object_set_string_member (tab, "title", title);

@@ -336,8 +336,8 @@ ephy_certificate_dialog_new (GtkWindow           *parent,
 {
   GtkWidget *dialog;
 
-  g_return_val_if_fail (address != NULL, NULL);
-  g_return_val_if_fail (G_IS_TLS_CERTIFICATE (certificate), NULL);
+  g_assert (address != NULL);
+  g_assert (G_IS_TLS_CERTIFICATE (certificate));
 
   dialog = GTK_WIDGET (g_object_new (EPHY_TYPE_CERTIFICATE_DIALOG,
                                      "address", address,

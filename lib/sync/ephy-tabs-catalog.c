@@ -42,7 +42,7 @@ ephy_tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
 {
   EphyTabsCatalogInterface *iface;
 
-  g_return_val_if_fail (EPHY_IS_TABS_CATALOG (catalog), NULL);
+  g_assert (EPHY_IS_TABS_CATALOG (catalog));
 
   iface = EPHY_TABS_CATALOG_GET_IFACE (catalog);
   return iface->get_tabs_info (catalog);
@@ -66,7 +66,7 @@ ephy_tab_info_new (const char *title,
 void
 ephy_tab_info_free (EphyTabInfo *info)
 {
-  g_return_if_fail (info);
+  g_assert (info);
 
   g_free (info->title);
   g_free (info->url);

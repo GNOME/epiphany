@@ -539,7 +539,7 @@ load_mime_from_xml (void)
   GBytes *bytes;
   EphyMimePermission permission = EPHY_MIME_PERMISSION_UNKNOWN;
 
-  g_return_if_fail (mime_table == NULL);
+  g_assert (mime_table == NULL);
 
   mime_table = g_hash_table_new_full (g_str_hash, g_str_equal,
                                       xmlFree, NULL);
@@ -594,7 +594,7 @@ ephy_file_check_mime (const char *mime_type)
   EphyMimePermission permission;
   gpointer tmp;
 
-  g_return_val_if_fail (mime_type != NULL, EPHY_MIME_PERMISSION_UNKNOWN);
+  g_assert (mime_type != NULL);
 
   if (mime_table == NULL) {
     load_mime_from_xml ();
@@ -695,7 +695,7 @@ ephy_file_launcher_get_app_info_for_file (GFile      *file,
 {
   GAppInfo *app = NULL;
 
-  g_return_val_if_fail (file || mime_type, FALSE);
+  g_assert (file || mime_type);
 
   if (mime_type != NULL) {
     app = g_app_info_get_default_for_type (mime_type,
@@ -744,7 +744,7 @@ ephy_file_launch_handler (const char *mime_type,
   GAppInfo *app = NULL;
   gboolean ret = FALSE;
 
-  g_return_val_if_fail (file != NULL, FALSE);
+  g_assert (file != NULL);
 
   app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
 
@@ -882,7 +882,7 @@ ephy_file_delete_uri (const char *uri)
   GFile *file;
   gboolean ret;
 
-  g_return_if_fail (uri);
+  g_assert (uri);
 
   file = g_file_new_for_uri (uri);
 
@@ -912,7 +912,7 @@ ephy_file_move_uri (const char *source_uri, const char *dest_uri)
   GFile *dest;
   gboolean ret;
 
-  g_return_val_if_fail (source_uri && dest_uri, FALSE);
+  g_assert (source_uri && dest_uri);
 
   src = g_file_new_for_uri (source_uri);
   dest = g_file_new_for_uri (dest_uri);
@@ -952,7 +952,7 @@ ephy_file_create_data_uri_for_filename (const char *filename,
   gchar *uri = NULL;
   GFileInfo *file_info = NULL;
 
-  g_return_val_if_fail (filename != NULL, NULL);
+  g_assert (filename != NULL);
 
   if (!g_file_get_contents (filename, &data, &data_length, NULL))
     return NULL;
@@ -998,7 +998,7 @@ ephy_file_create_data_uri_for_filename (const char *filename,
 char *
 ephy_sanitize_filename (char *filename)
 {
-  g_return_val_if_fail (filename != NULL, NULL);
+  g_assert (filename != NULL);
 
   return g_strdelimit (filename, G_DIR_SEPARATOR_S, '_');
 }

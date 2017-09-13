@@ -98,7 +98,7 @@ ephy_string_shorten (char *str,
   glong actual_length;
   gulong bytes;
 
-  g_return_val_if_fail (target_length > 0, NULL);
+  g_assert (target_length > 0);
 
   if (!str)
     return NULL;

@@ -76,7 +76,7 @@ eel_strdup_strftime (const char *format, struct tm *time_pieces)
   /* Format could be translated, and contain UTF-8 chars,
    * so convert to locale encoding which strftime uses */
   converted = g_locale_from_utf8 (format, -1, NULL, NULL, NULL);
-  g_return_val_if_fail (converted != NULL, NULL);
+  g_assert (converted != NULL);
 
   string = g_string_new ("");
   remainder = converted;

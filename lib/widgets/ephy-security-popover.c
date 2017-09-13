@@ -348,7 +348,7 @@ GtkWidget *ephy_security_popover_new (GtkWidget           *relative_to,
                                       GTlsCertificateFlags tls_errors,
                                       EphySecurityLevel    security_level)
 {
-  g_return_val_if_fail (address != NULL, NULL);
+  g_assert (address != NULL);
 
   return GTK_WIDGET (g_object_new (EPHY_TYPE_SECURITY_POPOVER,
                                    "address", address,

@@ -182,7 +182,7 @@ ephy_profiler_dump (EphyProfiler *profiler)
 {
   double seconds;
 
-  g_return_if_fail (profiler != NULL);
+  g_assert (profiler != NULL);
 
   seconds = g_timer_elapsed (profiler->timer, NULL);
 
@@ -194,7 +194,7 @@ ephy_profiler_dump (EphyProfiler *profiler)
 static void
 ephy_profiler_free (EphyProfiler *profiler)
 {
-  g_return_if_fail (profiler != NULL);
+  g_assert (profiler != NULL);
 
   g_timer_destroy (profiler->timer);
   g_free (profiler->name);

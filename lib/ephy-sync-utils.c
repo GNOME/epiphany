@@ -51,7 +51,7 @@ ephy_sync_utils_encode_hex (const guint8 *data,
 {
   char *encoded;
 
-  g_return_val_if_fail (data, NULL);
+  g_assert (data);
 
   encoded = g_malloc (data_len * 2 + 1);
   for (gsize i = 0; i < data_len; i++) {
@@ -70,7 +70,7 @@ ephy_sync_utils_decode_hex (const char *hex)
 {
   guint8 *decoded;
 
-  g_return_val_if_fail (hex, NULL);
+  g_assert (hex);
 
   decoded = g_malloc (strlen (hex) / 2);
   for (gsize i = 0, j = 0; i < strlen (hex); i += 2, j++)
@@ -102,7 +102,7 @@ ephy_sync_utils_base64_urlsafe_encode (const guint8 *data,
   gsize start = 0;
   gssize end;
 
-  g_return_val_if_fail (data, NULL);
+  g_assert (data);
 
   base64 = g_base64_encode (data, data_len);
   end = strlen (base64) - 1;
@@ -143,8 +143,8 @@ ephy_sync_utils_base64_urlsafe_decode (const char   *text,
   char *to_decode;
   char *suffix = NULL;
 
-  g_return_val_if_fail (text, NULL);
-  g_return_val_if_fail (out_len, NULL);
+  g_assert (text);
+  g_assert (out_len);
 
   /* Fill the text with trailing '=' characters up to the proper length. */
   if (should_fill)
@@ -190,7 +190,7 @@ ephy_sync_utils_get_audience (const char *url)
   char *audience;
   char *port;
 
-  g_return_val_if_fail (url, NULL);
+  g_assert (url);
 
   uri = soup_uri_new (url);
   scheme = soup_uri_get_scheme (uri);

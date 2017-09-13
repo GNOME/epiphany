@@ -99,7 +99,7 @@ ephy_langs_append_languages (GArray *array)
   int i;
 
   languages = g_get_language_names ();
-  g_return_if_fail (languages != NULL);
+  g_assert (languages != NULL);
 
   /* FIXME: maybe just use the first, instead of all of them? */
   for (i = 0; languages[i] != NULL; i++) {

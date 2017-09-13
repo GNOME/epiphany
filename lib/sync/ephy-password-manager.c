@@ -343,8 +343,8 @@ GList *
 ephy_password_manager_get_cached_users (EphyPasswordManager *self,
                                         const char          *origin)
 {
-  g_return_val_if_fail (EPHY_IS_PASSWORD_MANAGER (self), NULL);
-  g_return_val_if_fail (origin, NULL);
+  g_assert (EPHY_IS_PASSWORD_MANAGER (self));
+  g_assert (origin);
 
   return g_hash_table_lookup (self->cache, origin);
 }
@@ -472,12 +472,12 @@ ephy_password_manager_save (EphyPasswordManager *self,
   char *id;
   gint64 timestamp;
 
-  g_return_if_fail (EPHY_IS_PASSWORD_MANAGER (self));
-  g_return_if_fail (origin);
-  g_return_if_fail (target_origin);
-  g_return_if_fail (password);
-  g_return_if_fail (!username_field || username);
-  g_return_if_fail (!password_field || password);
+  g_assert (EPHY_IS_PASSWORD_MANAGER (self));
+  g_assert (origin);
+  g_assert (target_origin);
+  g_assert (password);
+  g_assert (!username_field || username);
+  g_assert (!password_field || password);
 
   if (!is_new) {
     LOG ("Updating password for (%s, %s, %s, %s, %s)",
@@ -580,7 +580,7 @@ ephy_password_manager_query (EphyPasswordManager              *self,
   QueryAsyncData *data;
   GHashTable *attributes;
 
-  g_return_if_fail (EPHY_IS_PASSWORD_MANAGER (self));
+  g_assert (EPHY_IS_PASSWORD_MANAGER (self));
 
   LOG ("Querying password records for (%s, %s, %s, %s)",
        origin, username, username_field, password_field);
@@ -611,10 +611,10 @@ ephy_password_manager_store_raw (const char          *origin,
 {
   GHashTable *attributes;
 
-  g_return_if_fail (origin);
-  g_return_if_fail (password);
-  g_return_if_fail (!username_field || username);
-  g_return_if_fail (!password_field || password);
+  g_assert (origin);
+  g_assert (password);
+  g_assert (!username_field || username);
+  g_assert (!password_field || password);
 
   attributes = get_attributes_table (NULL, origin, origin, username,
                                      username_field, password_field, -1);
@@ -627,8 +627,8 @@ gboolean
 ephy_password_manager_store_finish (GAsyncResult  *result,
                                     GError       **error)
 {
-  g_return_val_if_fail (!error || !(*error), FALSE);
-  g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
+  g_assert (!error || !(*error));
+  g_assert (g_task_is_valid (result, NULL));
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
@@ -710,8 +710,8 @@ void
 ephy_password_manager_forget (EphyPasswordManager *self,
                               const char          *id)
 {
-  g_return_if_fail (EPHY_IS_PASSWORD_MANAGER (self));
-  g_return_if_fail (id);
+  g_assert (EPHY_IS_PASSWORD_MANAGER (self));
+  g_assert (id);
 
   /* synchronizable-deleted signal needs an EphySynchronizable object,
    * therefore we need to obtain the password record first and then emit
@@ -744,7 +744,7 @@ forget_all_cb (GList    *records,
 void
 ephy_password_manager_forget_all (EphyPasswordManager *self)
 {
-  g_return_if_fail (EPHY_IS_PASSWORD_MANAGER (self));
+  g_assert (EPHY_IS_PASSWORD_MANAGER (self));
 
   /* synchronizable-deleted signal needs an EphySynchronizable object, therefore
    * we need to obtain the password records first and emit the signal for each

@@ -129,7 +129,7 @@ ephy_web_application_delete (const char *name)
   GFile *launcher = NULL;
   gboolean return_value = FALSE;
 
-  g_return_val_if_fail (name, FALSE);
+  g_assert (name);
 
   profile_dir = ephy_web_application_get_profile_directory (name);
   if (!profile_dir)
@@ -188,7 +188,7 @@ create_desktop_file (const char *address,
   GFile *link;
   GError *error = NULL;
 
-  g_return_val_if_fail (profile_dir, NULL);
+  g_assert (profile_dir);
 
   wm_class = get_wm_class_from_app_title (title);
   filename = desktop_filename_from_wm_class (wm_class);
@@ -348,7 +348,7 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
   char *desktop_filename;
   GDesktopAppInfo *desktop_info;
 
-  g_return_if_fail (profile_directory != NULL);
+  g_assert (profile_directory != NULL);
 
   app_name = g_strrstr (profile_directory, EPHY_WEB_APP_PREFIX);
   if (!app_name) {
@@ -391,7 +391,7 @@ ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
   const char *wm_class;
   GIcon *icon;
 
-  g_return_if_fail (G_IS_DESKTOP_APP_INFO (desktop_info));
+  g_assert (G_IS_DESKTOP_APP_INFO (desktop_info));
 
   app_info = G_APP_INFO (desktop_info);
   g_set_prgname (g_app_info_get_name (app_info));
