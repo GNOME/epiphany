@@ -40,6 +40,7 @@ struct _EphyGSBService {
   char           *api_key;
   EphyGSBStorage *storage;
   gboolean        is_updating;
+  guint           source_id;
   SoupSession    *session;
 };
 
@@ -53,6 +54,8 @@ enum {
 };
 
 static GParamSpec *obj_properties[LAST_PROP];
+
+static gboolean ephy_gsb_service_update (EphyGSBService *self);
 
 static inline gboolean
 json_object_has_non_null_string_member (JsonObject *object,
@@ -81,6 +84,20 @@ json_object_has_non_null_array_member (JsonObject *object,
 }
 
 static void
+ephy_gsb_service_schedule_update (EphyGSBService *self,
+                                  gint64          interval)
+{
+  g_assert (EPHY_IS_GSB_SERVICE (self));
+  g_assert (ephy_gsb_storage_is_operable (self->storage));
+  g_assert (interval > 0);
+
+  self->source_id = g_timeout_add_seconds (interval,
+                                           (GSourceFunc)ephy_gsb_service_update,
+                                           self);
+  LOG ("Next update scheduled in %ld seconds", interval);
+}
+
+static void
 ephy_gsb_service_update_thread (GTask          *task,
                                 EphyGSBService *self,
                                 gpointer        task_data,
@@ -89,10 +106,10 @@ ephy_gsb_service_update_thread (GTask          *task,
   JsonNode *body_node;
   JsonObject *body_obj;
   JsonArray *responses;
-  SoupMessage *msg;
-  GList *threat_lists;
+  SoupMessage *msg = NULL;
+  GList *threat_lists = NULL;
   gint64 next_update_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
-  char *url;
+  char *url = NULL;
   char *body;
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
@@ -100,7 +117,7 @@ ephy_gsb_service_update_thread (GTask          *task,
 
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists)
-    return;
+    goto out;
 
   body = ephy_gsb_utils_make_list_updates_request (threat_lists);
   url = g_strdup_printf ("%sthreatListUpdates:fetch?key=%s", API_PREFIX, self->api_key);
@@ -193,8 +210,11 @@ ephy_gsb_service_update_thread (GTask          *task,
   json_node_unref (body_node);
 out:
   g_free (url);
-  g_object_unref (msg);
+  if (msg)
+    g_object_unref (msg);
   g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
+
+  g_task_return_int (task, next_update_time);
 }
 
 static void
@@ -202,11 +222,14 @@ ephy_gsb_service_update_finished_cb (EphyGSBService *self,
                                      GAsyncResult   *result,
                                      gpointer        user_data)
 {
-  /* TODO: Schedule a next update in (next_update_time - CURRENT_TIME) seconds. */
+  gint64 next_update_time;
+
+  next_update_time = g_task_propagate_int (G_TASK (result), NULL);
+  ephy_gsb_service_schedule_update (self, next_update_time - CURRENT_TIME);
   self->is_updating = FALSE;
 }
 
-static void
+static gboolean
 ephy_gsb_service_update (EphyGSBService *self)
 {
   GTask *task;
@@ -220,6 +243,8 @@ ephy_gsb_service_update (EphyGSBService *self)
                      NULL);
   g_task_run_in_thread (task, (GTaskThreadFunc)ephy_gsb_service_update_thread);
   g_object_unref (task);
+
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -283,6 +308,11 @@ ephy_gsb_service_dispose (GObject *object)
   g_clear_object (&self->storage);
   g_clear_object (&self->session);
 
+  if (self->source_id != 0) {
+    g_source_remove (self->source_id);
+    self->source_id = 0;
+  }
+
   G_OBJECT_CLASS (ephy_gsb_service_parent_class)->dispose (object);
 }
 
@@ -290,16 +320,19 @@ static void
 ephy_gsb_service_constructed (GObject *object)
 {
   EphyGSBService *self = EPHY_GSB_SERVICE (object);
-  gint64 next_update_time;
+  gint64 interval;
 
   G_OBJECT_CLASS (ephy_gsb_service_parent_class)->constructed (object);
 
   if (!ephy_gsb_storage_is_operable (self->storage))
     return;
 
-  next_update_time = ephy_gsb_storage_get_next_update_time (self->storage);
-  if (CURRENT_TIME >= next_update_time)
+  interval = ephy_gsb_storage_get_next_update_time (self->storage) - CURRENT_TIME;
+
+  if (interval <= 0)
     ephy_gsb_service_update (self);
+  else
+    ephy_gsb_service_schedule_update (self, interval);
 }
 
 static void
