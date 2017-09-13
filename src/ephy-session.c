@@ -230,7 +230,7 @@ ephy_session_undo_close_tab (EphySession *session)
   EphyNotebook *notebook;
   EphyNewTabFlags flags = EPHY_NEW_TAB_JUMP;
 
-  g_return_if_fail (EPHY_IS_SESSION (session));
+  g_assert (EPHY_IS_SESSION (session));
 
   tab = g_queue_pop_head (session->closed_tabs);
   if (tab == NULL)
@@ -317,7 +317,7 @@ ephy_session_tab_closed (EphySession  *session,
 gboolean
 ephy_session_get_can_undo_tab_closed (EphySession *session)
 {
-  g_return_val_if_fail (EPHY_IS_SESSION (session), FALSE);
+  g_assert (EPHY_IS_SESSION (session));
 
   return g_queue_is_empty (session->closed_tabs) == FALSE;
 }
@@ -505,7 +505,7 @@ ephy_session_close (EphySession *session)
 {
   EphyPrefsRestoreSessionPolicy policy;
 
-  g_return_if_fail (EPHY_IS_SESSION (session));
+  g_assert (EPHY_IS_SESSION (session));
 
   LOG ("ephy_session_close");
 
@@ -985,7 +985,7 @@ ephy_session_save (EphySession *session)
 {
   EphyPrefsRestoreSessionPolicy policy;
 
-  g_return_if_fail (EPHY_IS_SESSION (session));
+  g_assert (EPHY_IS_SESSION (session));
 
   if (session->save_source_id) {
     return;
@@ -1399,8 +1399,8 @@ ephy_session_load_from_stream (EphySession        *session,
   GMarkupParseContext *parser;
   LoadFromStreamAsyncData *data;
 
-  g_return_if_fail (EPHY_IS_SESSION (session));
-  g_return_if_fail (G_IS_INPUT_STREAM (stream));
+  g_assert (EPHY_IS_SESSION (session));
+  g_assert (G_IS_INPUT_STREAM (stream));
 
   g_application_hold (G_APPLICATION (ephy_shell_get_default ()));
 
@@ -1438,7 +1438,7 @@ ephy_session_load_from_stream_finish (EphySession  *session,
                                       GAsyncResult *result,
                                       GError      **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, session), FALSE);
+  g_assert (g_task_is_valid (result, session));
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
@@ -1538,8 +1538,8 @@ ephy_session_load (EphySession        *session,
   GTask *task;
   LoadAsyncData *data;
 
-  g_return_if_fail (EPHY_IS_SESSION (session));
-  g_return_if_fail (filename);
+  g_assert (EPHY_IS_SESSION (session));
+  g_assert (filename);
 
   LOG ("ephy_sesion_load %s", filename);
 
@@ -1574,7 +1574,7 @@ ephy_session_load_finish (EphySession  *session,
                           GAsyncResult *result,
                           GError      **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, session), FALSE);
+  g_assert (g_task_is_valid (result, session));
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
@@ -1660,7 +1660,7 @@ ephy_session_resume_finish (EphySession  *session,
                             GAsyncResult *result,
                             GError      **error)
 {
-  g_return_val_if_fail (g_task_is_valid (result, session), FALSE);
+  g_assert (g_task_is_valid (result, session));
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
@@ -1672,7 +1672,7 @@ ephy_session_clear (EphySession *session)
   EphyShell *shell;
   GList *windows, *p;
 
-  g_return_if_fail (EPHY_IS_SESSION (session));
+  g_assert (EPHY_IS_SESSION (session));
 
   shell = ephy_shell_get_default ();
   windows = g_list_copy (gtk_application_get_windows (GTK_APPLICATION (shell)));

@@ -6,13 +6,10 @@ Some TODO items, in no particular order:
 - Use G_SOURCE_CONTINUE/G_SOURCE_REMOVE.
 - Name all timeout and idle sources
 - Replace constructor functions with constructed functions
-- Use g_clear_object in dispose/finalize
-- Get rid of object references in dispose, not finalize
-- embed/ does not make much sense anymore as a name. Rename to
-  something else, perhaps core/? webview/?
+- Use g_clear_object/g_clear_pointer in dispose/finalize
+- Replace dispose with finalize wherever possible
 - Use GtkBuilder instead of declaring the UIs with C
 - We practically don't test any part of Epiphany, change that (how do
   you test UI code? There's like 3 or 4 frameworks for this, pick one?
   What does Chrome do?)
 - g_str_equal -> g_strcmp0 or strcmp except in hash maps
-- g_return -> g_assert more or less everywhere

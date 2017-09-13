@@ -489,7 +489,7 @@ ephy_location_controller_finalize (GObject *object)
 const char *
 ephy_location_controller_get_address (EphyLocationController *controller)
 {
-  g_return_val_if_fail (EPHY_IS_LOCATION_CONTROLLER (controller), "");
+  g_assert (EPHY_IS_LOCATION_CONTROLLER (controller));
 
   return controller->address;
 }
@@ -505,7 +505,7 @@ void
 ephy_location_controller_set_address (EphyLocationController *controller,
                                       const char             *address)
 {
-  g_return_if_fail (EPHY_IS_LOCATION_CONTROLLER (controller));
+  g_assert (EPHY_IS_LOCATION_CONTROLLER (controller));
 
   LOG ("set_address %s", address);
 

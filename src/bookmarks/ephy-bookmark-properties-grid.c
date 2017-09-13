@@ -537,8 +537,8 @@ ephy_bookmark_properties_grid_new (EphyBookmark                   *bookmark,
                                    EphyBookmarkPropertiesGridType  type,
                                    GtkWidget                      *parent)
 {
-  g_return_val_if_fail (EPHY_IS_BOOKMARK (bookmark), NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (parent), NULL);
+  g_assert (EPHY_IS_BOOKMARK (bookmark));
+  g_assert (GTK_IS_WIDGET (parent));
 
   return g_object_new (EPHY_TYPE_BOOKMARK_PROPERTIES_GRID,
                        "bookmark", bookmark,
@@ -550,7 +550,7 @@ ephy_bookmark_properties_grid_new (EphyBookmark                   *bookmark,
 GtkWidget *
 ephy_bookmark_properties_grid_get_add_tag_button (EphyBookmarkPropertiesGrid *self)
 {
-  g_return_val_if_fail (EPHY_IS_BOOKMARK_PROPERTIES_GRID (self), NULL);
+  g_assert (EPHY_IS_BOOKMARK_PROPERTIES_GRID (self));
 
   return self->add_tag_button;
 }

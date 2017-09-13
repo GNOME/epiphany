@@ -140,7 +140,7 @@ ephy_add_bookmark_popover_init (EphyAddBookmarkPopover *self)
 GtkWidget *
 ephy_add_bookmark_popover_new (EphyHeaderBar *header_bar)
 {
-  g_return_val_if_fail (EPHY_IS_HEADER_BAR (header_bar), NULL);
+  g_assert (EPHY_IS_HEADER_BAR (header_bar));
 
   return g_object_new (EPHY_TYPE_ADD_BOOKMARK_POPOVER,
                        "header-bar", header_bar,

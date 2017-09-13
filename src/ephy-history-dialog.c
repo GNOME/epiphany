@@ -475,7 +475,7 @@ on_treeview_row_activated (GtkTreeView       *view,
   window = EPHY_WINDOW (get_target_window (self));
   url = get_url_from_path (gtk_tree_view_get_model (view),
                            path);
-  g_return_if_fail (url != NULL);
+  g_assert (url != NULL);
 
   embed = ephy_shell_new_tab (ephy_shell_get_default (),
                               window, NULL, EPHY_NEW_TAB_JUMP);
@@ -741,7 +741,7 @@ ephy_history_dialog_new (EphyHistoryService *history_service)
 {
   EphyHistoryDialog *self;
 
-  g_return_val_if_fail (history_service != NULL, NULL);
+  g_assert (history_service != NULL);
 
   self = g_object_new (EPHY_TYPE_HISTORY_DIALOG,
                        "use-header-bar", TRUE,

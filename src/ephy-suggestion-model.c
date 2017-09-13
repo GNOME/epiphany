@@ -174,8 +174,8 @@ EphySuggestionModel *
 ephy_suggestion_model_new (EphyHistoryService   *history_service,
                            EphyBookmarksManager *bookmarks_manager)
 {
-  g_return_val_if_fail (EPHY_IS_HISTORY_SERVICE (history_service), NULL);
-  g_return_val_if_fail (EPHY_IS_BOOKMARKS_MANAGER (bookmarks_manager), NULL);
+  g_assert (EPHY_IS_HISTORY_SERVICE (history_service));
+  g_assert (EPHY_IS_BOOKMARKS_MANAGER (bookmarks_manager));
 
   return g_object_new (EPHY_TYPE_SUGGESTION_MODEL,
                        "history-service", history_service,
@@ -363,9 +363,9 @@ ephy_suggestion_model_query_async (EphySuggestionModel *self,
   char **strings;
   GList *qlist = NULL;
 
-  g_return_if_fail (EPHY_IS_SUGGESTION_MODEL (self));
-  g_return_if_fail (query != NULL);
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (EPHY_IS_SUGGESTION_MODEL (self));
+  g_assert (query != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ephy_suggestion_model_query_async);
@@ -395,8 +395,8 @@ ephy_suggestion_model_query_finish (EphySuggestionModel  *self,
                                     GAsyncResult         *result,
                                     GError              **error)
 {
-  g_return_val_if_fail (EPHY_IS_SUGGESTION_MODEL (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_assert (EPHY_IS_SUGGESTION_MODEL (self));
+  g_assert (G_IS_TASK (result));
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
@@ -407,8 +407,8 @@ ephy_suggestion_model_get_suggestion_with_uri (EphySuggestionModel *self,
 {
   GSequenceIter *iter;
 
-  g_return_val_if_fail (EPHY_IS_SUGGESTION_MODEL (self), NULL);
-  g_return_val_if_fail (uri != NULL && *uri != '\0', NULL);
+  g_assert (EPHY_IS_SUGGESTION_MODEL (self));
+  g_assert (uri != NULL && *uri != '\0');
 
   for (iter = g_sequence_get_begin_iter (self->items);
        !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {

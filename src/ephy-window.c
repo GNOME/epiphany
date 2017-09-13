@@ -201,8 +201,7 @@ impl_add_child (EphyEmbedContainer *container,
 {
   EphyWindow *window = EPHY_WINDOW (container);
 
-  g_return_val_if_fail (!window->is_popup ||
-                        gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->notebook)) < 1, -1);
+  g_assert (!window->is_popup || gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->notebook)) < 1);
 
   return ephy_notebook_add_tab (EPHY_NOTEBOOK (window->notebook),
                                 child, position, jump_to);
@@ -717,7 +716,7 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
     CanEditCommandAsyncData *data;
 
     embed = window->active_embed;
-    g_return_if_fail (embed != NULL);
+    g_assert (embed != NULL);
 
     view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
@@ -1179,8 +1178,8 @@ sync_tab_popups_allowed (EphyWebView *view,
   GAction *action;
   gboolean allow;
 
-  g_return_if_fail (EPHY_IS_WEB_VIEW (view));
-  g_return_if_fail (EPHY_IS_WINDOW (window));
+  g_assert (EPHY_IS_WEB_VIEW (view));
+  g_assert (EPHY_IS_WINDOW (window));
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
@@ -2041,7 +2040,7 @@ ephy_window_connect_active_embed (EphyWindow *window)
   WebKitWebView *web_view;
   EphyWebView *view;
 
-  g_return_if_fail (window->active_embed != NULL);
+  g_assert (window->active_embed != NULL);
 
   embed = window->active_embed;
   view = ephy_embed_get_web_view (embed);
@@ -2120,7 +2119,7 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
   WebKitWebView *web_view;
   EphyWebView *view;
 
-  g_return_if_fail (window->active_embed != NULL);
+  g_assert (window->active_embed != NULL);
 
   embed = window->active_embed;
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
@@ -2178,8 +2177,8 @@ ephy_window_set_active_tab (EphyWindow *window, EphyEmbed *new_embed)
 {
   EphyEmbed *old_embed;
 
-  g_return_if_fail (EPHY_IS_WINDOW (window));
-  g_return_if_fail (gtk_widget_get_toplevel (GTK_WIDGET (new_embed)) == GTK_WIDGET (window));
+  g_assert (EPHY_IS_WINDOW (window));
+  g_assert (gtk_widget_get_toplevel (GTK_WIDGET (new_embed)) == GTK_WIDGET (window));
 
   old_embed = window->active_embed;
 
@@ -2391,7 +2390,7 @@ notebook_page_added_cb (EphyNotebook *notebook,
 {
   LOG ("page-added notebook %p embed %p position %u\n", notebook, embed, position);
 
-  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_assert (EPHY_IS_EMBED (embed));
 
   g_signal_connect_object (ephy_embed_get_web_view (embed), "download-only-load",
                            G_CALLBACK (download_only_load_cb), window, G_CONNECT_AFTER);
@@ -2415,7 +2414,7 @@ notebook_page_removed_cb (EphyNotebook *notebook,
   if (window->closing)
     return;
 
-  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_assert (EPHY_IS_EMBED (embed));
 
   g_signal_handlers_disconnect_by_func
     (ephy_embed_get_web_view (embed), G_CALLBACK (download_only_load_cb), window);
@@ -2507,7 +2506,7 @@ real_get_active_tab (EphyWindow *window, int page_num)
 
   embed = gtk_notebook_get_nth_page (window->notebook, page_num);
 
-  g_return_val_if_fail (EPHY_IS_EMBED (embed), NULL);
+  g_assert (EPHY_IS_EMBED (embed));
 
   return EPHY_EMBED (embed);
 }
@@ -2812,13 +2811,13 @@ allow_popups_notifier (GSettings  *settings,
   GList *tabs;
   EphyEmbed *embed;
 
-  g_return_if_fail (EPHY_IS_WINDOW (window));
+  g_assert (EPHY_IS_WINDOW (window));
 
   tabs = impl_get_children (EPHY_EMBED_CONTAINER (window));
 
   for (; tabs; tabs = g_list_next (tabs)) {
     embed = EPHY_EMBED (tabs->data);
-    g_return_if_fail (EPHY_IS_EMBED (embed));
+    g_assert (EPHY_IS_EMBED (embed));
 
     g_object_notify (G_OBJECT (ephy_embed_get_web_view (embed)), "popups-allowed");
   }
@@ -3192,7 +3191,7 @@ ephy_window_new (void)
 GtkWidget *
 ephy_window_get_notebook (EphyWindow *window)
 {
-  g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+  g_assert (EPHY_IS_WINDOW (window));
 
   return GTK_WIDGET (window->notebook);
 }
@@ -3208,7 +3207,7 @@ ephy_window_get_notebook (EphyWindow *window)
 GtkWidget *
 ephy_window_get_current_find_toolbar (EphyWindow *window)
 {
-  g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+  g_assert (EPHY_IS_WINDOW (window));
 
   return GTK_WIDGET (ephy_embed_get_find_toolbar (window->active_embed));
 }
@@ -3227,7 +3226,7 @@ void
 ephy_window_load_url (EphyWindow *window,
                       const char *url)
 {
-  g_return_if_fail (url != NULL);
+  g_assert (url != NULL);
 
   ephy_link_open (EPHY_LINK (window), url, NULL, 0);
 }
@@ -3268,10 +3267,10 @@ ephy_window_set_zoom (EphyWindow *window,
   double current_zoom = 1.0;
   WebKitWebView *web_view;
 
-  g_return_if_fail (EPHY_IS_WINDOW (window));
+  g_assert (EPHY_IS_WINDOW (window));
 
   embed = window->active_embed;
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
@@ -3295,10 +3294,10 @@ ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
   EphyEmbed *embed;
   gboolean allow;
 
-  g_return_if_fail (EPHY_IS_WINDOW (window));
+  g_assert (EPHY_IS_WINDOW (window));
 
   embed = window->active_embed;
-  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_assert (EPHY_IS_EMBED (embed));
 
   allow = g_variant_get_boolean (state);
 
@@ -3318,7 +3317,7 @@ ephy_window_change_allow_popup_windows_state (GSimpleAction *action,
 EphyEmbedEvent *
 ephy_window_get_context_event (EphyWindow *window)
 {
-  g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+  g_assert (EPHY_IS_WINDOW (window));
 
   return window->context_event;
 }
@@ -3367,7 +3366,7 @@ ephy_window_set_location (EphyWindow *window,
 EphyLocationController *
 ephy_window_get_location_controller (EphyWindow *window)
 {
-  g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+  g_assert (EPHY_IS_WINDOW (window));
 
   return window->location_controller;
 }
@@ -3529,7 +3528,7 @@ ephy_window_close (EphyWindow *window)
 EphyWindowChrome
 ephy_window_get_chrome (EphyWindow *window)
 {
-  g_return_val_if_fail (EPHY_IS_WINDOW (window), EPHY_WINDOW_CHROME_DEFAULT);
+  g_assert (EPHY_IS_WINDOW (window));
 
   return window->chrome;
 }

@@ -694,7 +694,7 @@ window_cmd_navigation (GSimpleAction *action,
   WebKitWebView *web_view;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
@@ -717,7 +717,7 @@ window_cmd_navigation_new_tab (GSimpleAction *action,
   WebKitWebView *web_view;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
@@ -770,7 +770,7 @@ window_cmd_stop (GSimpleAction *action,
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   gtk_widget_grab_focus (GTK_WIDGET (embed));
 
@@ -811,7 +811,7 @@ window_cmd_reload (GSimpleAction *action,
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   gtk_widget_grab_focus (GTK_WIDGET (embed));
 
@@ -1358,7 +1358,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   char *escaped_address;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   view = EPHY_WEB_VIEW (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed));
 
@@ -1495,7 +1495,7 @@ window_cmd_save_as (GSimpleAction *action,
   char *suggested_filename;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   dialog = ephy_create_file_chooser (_("Save"),
                                      GTK_WIDGET (window),
@@ -1574,7 +1574,7 @@ window_cmd_cut (GSimpleAction *action,
   } else {
     EphyEmbed *embed;
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
+    g_assert (embed != NULL);
 
     webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_CUT);
   }
@@ -1594,7 +1594,7 @@ window_cmd_copy (GSimpleAction *action,
     EphyEmbed *embed;
 
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
+    g_assert (embed != NULL);
 
     webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_COPY);
   }
@@ -1614,7 +1614,7 @@ window_cmd_paste (GSimpleAction *action,
     EphyEmbed *embed;
 
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
+    g_assert (embed != NULL);
 
     webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), WEBKIT_EDITING_COMMAND_PASTE);
   }
@@ -1634,7 +1634,7 @@ window_cmd_delete (GSimpleAction *action,
     EphyEmbed *embed;
 
     embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
+    g_assert (embed != NULL);
 
     /* FIXME: TODO */
 #if 0
@@ -1655,7 +1655,7 @@ window_cmd_print (GSimpleAction *action,
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_assert (EPHY_IS_EMBED (embed));
   view = ephy_embed_get_web_view (embed);
 
   ephy_web_view_print (view);
@@ -1971,7 +1971,7 @@ window_cmd_page_source (GSimpleAction *action,
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   address = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
 
@@ -2011,7 +2011,7 @@ window_cmd_toggle_inspector (GSimpleAction *action,
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   gtk_widget_grab_focus (GTK_WIDGET (embed));
 
@@ -2041,7 +2041,7 @@ window_cmd_select_all (GSimpleAction *action,
 
     embed = ephy_embed_container_get_active_child
               (EPHY_EMBED_CONTAINER (window));
-    g_return_if_fail (embed != NULL);
+    g_assert (embed != NULL);
 
     webkit_web_view_execute_editing_command (EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed), "SelectAll");
   }
@@ -2060,7 +2060,7 @@ window_cmd_send_to (GSimpleAction *action,
 
   embed = ephy_embed_container_get_active_child
             (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   location = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
   title = ephy_embed_get_title (embed);
@@ -2166,7 +2166,7 @@ window_cmd_tabs_previous (GSimpleAction *action,
   GtkWidget *nb;
 
   nb = ephy_window_get_notebook (EPHY_WINDOW (user_data));
-  g_return_if_fail (nb != NULL);
+  g_assert (nb != NULL);
 
   ephy_notebook_prev_page (EPHY_NOTEBOOK (nb));
 }
@@ -2179,7 +2179,7 @@ window_cmd_tabs_next (GSimpleAction *action,
   GtkWidget *nb;
 
   nb = ephy_window_get_notebook (EPHY_WINDOW (user_data));
-  g_return_if_fail (nb != NULL);
+  g_assert (nb != NULL);
 
   ephy_notebook_next_page (EPHY_NOTEBOOK (nb));
 }
@@ -2296,7 +2296,7 @@ window_cmd_tabs_close (GSimpleAction *action,
   }
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   g_signal_emit_by_name (notebook, "tab-close-request", embed);
 }

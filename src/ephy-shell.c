@@ -615,7 +615,7 @@ ephy_shell_before_emit (GApplication *application,
 static GObject *
 ephy_shell_get_lockdown (EphyShell *shell)
 {
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+  g_assert (EPHY_IS_SHELL (shell));
 
   if (shell->lockdown == NULL)
     shell->lockdown = g_object_new (EPHY_TYPE_LOCKDOWN, NULL);
@@ -752,9 +752,9 @@ ephy_shell_new_tab_full (EphyShell      *shell,
   gboolean jump_to = FALSE;
   int position = -1;
 
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
-  g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
-  g_return_val_if_fail (EPHY_IS_EMBED (previous_embed) || !previous_embed, NULL);
+  g_assert (EPHY_IS_SHELL (shell));
+  g_assert (EPHY_IS_WINDOW (window));
+  g_assert (EPHY_IS_EMBED (previous_embed) || !previous_embed);
 
   embed_shell = EPHY_EMBED_SHELL (shell);
 
@@ -831,7 +831,7 @@ ephy_shell_get_session (EphyShell *shell)
 {
   EphyEmbedShellMode mode;
 
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+  g_assert (EPHY_IS_SHELL (shell));
 
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (shell));
   if (mode ==  EPHY_EMBED_SHELL_MODE_APPLICATION || mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
@@ -854,7 +854,7 @@ ephy_shell_get_session (EphyShell *shell)
 EphySyncService *
 ephy_shell_get_sync_service (EphyShell *shell)
 {
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+  g_assert (EPHY_IS_SHELL (shell));
 
   if (shell->sync_service == NULL) {
     shell->sync_service = ephy_sync_service_new (TRUE);
@@ -883,7 +883,7 @@ ephy_shell_get_sync_service (EphyShell *shell)
 EphyBookmarksManager *
 ephy_shell_get_bookmarks_manager (EphyShell *shell)
 {
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+  g_assert (EPHY_IS_SHELL (shell));
 
   if (shell->bookmarks_manager == NULL)
     shell->bookmarks_manager = ephy_bookmarks_manager_new ();
@@ -902,7 +902,7 @@ ephy_shell_get_bookmarks_manager (EphyShell *shell)
 EphyPasswordManager *
 ephy_shell_get_password_manager (EphyShell *shell)
 {
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+  g_assert (EPHY_IS_SHELL (shell));
 
   if (shell->password_manager == NULL)
     shell->password_manager = ephy_password_manager_new ();
@@ -924,7 +924,7 @@ ephy_shell_get_history_manager (EphyShell *shell)
   EphyEmbedShell *embed_shell;
   EphyHistoryService *service;
 
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+  g_assert (EPHY_IS_SHELL (shell));
 
   if (shell->history_manager == NULL) {
     embed_shell = ephy_embed_shell_get_default ();
@@ -938,7 +938,7 @@ ephy_shell_get_history_manager (EphyShell *shell)
 EphyOpenTabsManager *
 ephy_shell_get_open_tabs_manager (EphyShell *shell)
 {
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), NULL);
+  g_assert (EPHY_IS_SHELL (shell));
 
   if (shell->open_tabs_manager == NULL)
     shell->open_tabs_manager = ephy_open_tabs_manager_new (EPHY_TABS_CATALOG (shell));
@@ -1036,7 +1036,7 @@ void
 ephy_shell_set_startup_context (EphyShell               *shell,
                                 EphyShellStartupContext *ctx)
 {
-  g_return_if_fail (EPHY_IS_SHELL (shell));
+  g_assert (EPHY_IS_SHELL (shell));
 
   g_assert (shell->local_startup_context == NULL);
 
@@ -1048,7 +1048,7 @@ ephy_shell_get_n_windows (EphyShell *shell)
 {
   GList *list;
 
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), 0);
+  g_assert (EPHY_IS_SHELL (shell));
 
   list = gtk_application_get_windows (GTK_APPLICATION (shell));
   return g_list_length (list);
@@ -1061,7 +1061,7 @@ ephy_shell_close_all_windows (EphyShell *shell)
   gboolean retval = TRUE;
   EphySession *session = ephy_shell_get_session (shell);
 
-  g_return_val_if_fail (EPHY_IS_SHELL (shell), FALSE);
+  g_assert (EPHY_IS_SHELL (shell));
 
   if (session)
     ephy_session_close (session);
@@ -1228,7 +1228,7 @@ ephy_shell_open_uris (EphyShell       *shell,
   OpenURIsData *data;
   guint id;
 
-  g_return_if_fail (EPHY_IS_SHELL (shell));
+  g_assert (EPHY_IS_SHELL (shell));
 
   data = open_uris_data_new (shell, uris, startup_flags, user_time);
   id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,

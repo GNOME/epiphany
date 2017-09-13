@@ -57,10 +57,10 @@ view_in_destination (EphyWindow     *window,
   EphyNewTabFlags flags = 0;
 
   event = ephy_window_get_context_event (window);
-  g_return_if_fail (event != NULL);
+  g_assert (event != NULL);
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_if_fail (embed != NULL);
+  g_assert (embed != NULL);
 
   ephy_embed_event_get_property (event, property_name, &value);
   switch (destination) {
@@ -119,7 +119,7 @@ popup_cmd_copy_link_address (GSimpleAction *action,
   GValue value = { 0, };
 
   event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-  g_return_if_fail (event != NULL);
+  g_assert (event != NULL);
 
   context = ephy_embed_event_get_context (event);
 
@@ -206,7 +206,7 @@ save_property_url (const char *title,
   GValue value = G_VALUE_INIT;
 
   event = ephy_window_get_context_event (window);
-  g_return_if_fail (event != NULL);
+  g_assert (event != NULL);
 
   ephy_embed_event_get_property (event, property, &value);
   location = g_value_get_string (&value);
@@ -269,7 +269,7 @@ popup_cmd_set_image_as_background (GSimpleAction *action,
   EphyDownload *download;
 
   event = ephy_window_get_context_event (EPHY_WINDOW (user_data));
-  g_return_if_fail (event != NULL);
+  g_assert (event != NULL);
 
   ephy_embed_event_get_property (event, "image-uri", &value);
   location = g_value_get_string (&value);

@@ -234,7 +234,7 @@ ephy_bookmark_row_new (EphyBookmark *bookmark)
 EphyBookmark *
 ephy_bookmark_row_get_bookmark (EphyBookmarkRow *self)
 {
-  g_return_val_if_fail (EPHY_IS_BOOKMARK_ROW (self), NULL);
+  g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
   return self->bookmark;
 }
@@ -242,7 +242,7 @@ ephy_bookmark_row_get_bookmark (EphyBookmarkRow *self)
 const char *
 ephy_bookmark_row_get_bookmark_url (EphyBookmarkRow *self)
 {
-  g_return_val_if_fail (EPHY_IS_BOOKMARK_ROW (self), NULL);
+  g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
   return ephy_bookmark_get_url (self->bookmark);
 }

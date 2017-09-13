@@ -187,7 +187,7 @@ find_tab_num_at_pos (EphyNotebook *notebook, gint abs_x, gint abs_y)
     gint x_root, y_root;
 
     tab = gtk_notebook_get_tab_label (nb, page);
-    g_return_val_if_fail (tab != NULL, -1);
+    g_assert (tab != NULL);
 
     if (!gtk_widget_get_mapped (GTK_WIDGET (tab))) {
       page_num++;
@@ -604,7 +604,7 @@ sync_load_status (EphyWebView *view, GParamSpec *pspec, GtkWidget *proxy)
 
   spinner = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "spinner"));
   icon = GTK_WIDGET (g_object_get_data (G_OBJECT (proxy), "icon"));
-  g_return_if_fail (spinner != NULL && icon != NULL);
+  g_assert (spinner != NULL && icon != NULL);
 
   embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (view);
   if (ephy_web_view_is_loading (view) && !ephy_embed_has_load_pending (embed)) {
@@ -852,7 +852,7 @@ ephy_notebook_add_tab (EphyNotebook *notebook,
 {
   GtkNotebook *gnotebook = GTK_NOTEBOOK (notebook);
 
-  g_return_val_if_fail (EPHY_IS_NOTEBOOK (notebook), -1);
+  g_assert (EPHY_IS_NOTEBOOK (notebook));
 
   position = gtk_notebook_insert_page (GTK_NOTEBOOK (notebook),
                                        GTK_WIDGET (embed),
@@ -992,7 +992,7 @@ ephy_notebook_next_page (EphyNotebook *notebook)
 {
   gint current_page, n_pages;
 
-  g_return_if_fail (EPHY_IS_NOTEBOOK (notebook));
+  g_assert (EPHY_IS_NOTEBOOK (notebook));
 
   current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
   n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
@@ -1024,7 +1024,7 @@ ephy_notebook_prev_page (EphyNotebook *notebook)
 {
   gint current_page;
 
-  g_return_if_fail (EPHY_IS_NOTEBOOK (notebook));
+  g_assert (EPHY_IS_NOTEBOOK (notebook));
 
   current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 

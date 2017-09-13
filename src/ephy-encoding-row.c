@@ -50,7 +50,7 @@ void
 ephy_encoding_row_set_selected (EphyEncodingRow *row,
                                 gboolean         selected)
 {
-  g_return_if_fail (EPHY_IS_ENCODING_ROW (row));
+  g_assert (EPHY_IS_ENCODING_ROW (row));
 
   if (selected)
     gtk_widget_show (GTK_WIDGET (row->selected_image));
@@ -68,7 +68,7 @@ static void
 ephy_encoding_row_set_encoding (EphyEncodingRow *self,
                                 EphyEncoding    *encoding)
 {
-  g_return_if_fail (EPHY_IS_ENCODING (encoding));
+  g_assert (EPHY_IS_ENCODING (encoding));
 
   self->encoding = encoding;
   gtk_label_set_text (self->encoding_label,

@@ -113,7 +113,7 @@ sync_encoding_against_embed (EphyEncodingDialog *dialog)
 
   dialog->update_embed_tag = TRUE;
 
-  g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
+  g_assert (EPHY_IS_EMBED (dialog->embed));
   view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
   encoding = webkit_web_view_get_custom_charset (view);
@@ -170,7 +170,7 @@ ephy_encoding_dialog_attach_embed (EphyEncodingDialog *dialog)
   EphyEmbed **embedptr;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (dialog->window));
-  g_return_if_fail (EPHY_IS_EMBED (embed));
+  g_assert (EPHY_IS_EMBED (embed));
 
   g_signal_connect (G_OBJECT (ephy_embed_get_web_view (embed)), "load-changed",
                     G_CALLBACK (embed_net_stop_cb), dialog);
@@ -195,7 +195,7 @@ activate_choice (EphyEncodingDialog *dialog)
 {
   WebKitWebView *view;
 
-  g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
+  g_assert (EPHY_IS_EMBED (dialog->embed));
   view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
   if (gtk_switch_get_active (dialog->default_switch)) {
@@ -381,7 +381,7 @@ ephy_encoding_dialog_constructed (GObject *object)
   /* selected encoding */
   dialog = EPHY_ENCODING_DIALOG (object);
 
-  g_return_if_fail (EPHY_IS_EMBED (dialog->embed));
+  g_assert (EPHY_IS_EMBED (dialog->embed));
   view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (dialog->embed);
 
   dialog->selected_encoding = webkit_web_view_get_custom_charset (view);
@@ -434,7 +434,7 @@ static void
 ephy_encoding_dialog_set_parent_window (EphyEncodingDialog *dialog,
                                         EphyWindow         *window)
 {
-  g_return_if_fail (EPHY_IS_WINDOW (window));
+  g_assert (EPHY_IS_WINDOW (window));
 
   g_signal_connect (G_OBJECT (window), "notify::active-child",
                     G_CALLBACK (ephy_encoding_dialog_sync_embed), dialog);

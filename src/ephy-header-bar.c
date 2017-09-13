@@ -283,7 +283,7 @@ new_history_menu_item (EphyWebView *view,
   WebKitFaviconDatabase *database;
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
 
-  g_return_val_if_fail (address != NULL && origtext != NULL, NULL);
+  g_assert (address != NULL && origtext != NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
@@ -328,7 +328,7 @@ middle_click_handle_on_history_menu_item (EphyEmbed                 *embed,
                                   EPHY_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (embed))),
                                   embed,
                                   0);
-  g_return_if_fail (new_embed != NULL);
+  g_assert (new_embed != NULL);
 
   /* Load the new URL */
   url = webkit_back_forward_list_item_get_original_uri (item);
@@ -383,7 +383,7 @@ build_dropdown_menu (EphyWindow                    *window,
   WebKitWebView *web_view;
 
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_return_val_if_fail (embed != NULL, NULL);
+  g_assert (embed != NULL);
 
   menu = GTK_MENU_SHELL (gtk_menu_new ());
 
@@ -877,7 +877,7 @@ ephy_header_bar_class_init (EphyHeaderBarClass *klass)
 GtkWidget *
 ephy_header_bar_new (EphyWindow *window)
 {
-  g_return_val_if_fail (EPHY_IS_WINDOW (window), NULL);
+  g_assert (EPHY_IS_WINDOW (window));
 
   return GTK_WIDGET (g_object_new (EPHY_TYPE_HEADER_BAR,
                                    "show-close-button", TRUE,
