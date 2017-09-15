@@ -41,4 +41,6 @@ void               ephy_gsb_threat_list_free  (EphyGSBThreatList *list);
 
 char              *ephy_gsb_utils_make_list_updates_request (GList *threat_lists);
 
+char              *ephy_gsb_utils_canonicalize              (const char *url);
+
 G_END_DECLS

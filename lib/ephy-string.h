@@ -44,6 +44,11 @@ char     *ephy_string_find_and_replace         (const char *string,
                                                 const char *to_find,
                                                 const char *to_repl);
 
+char     *ephy_string_remove_leading           (char *string,
+                                                char  ch);
+char     *ephy_string_remove_trailing          (char *string,
+                                                char  ch);
+
 char    **ephy_strv_append                     (const char * const *strv,
                                                 const char *str);
 char    **ephy_strv_remove                     (const char * const *strv,

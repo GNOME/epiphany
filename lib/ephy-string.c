@@ -248,27 +248,71 @@ ephy_string_find_and_replace (const char *haystack,
                               const char *to_find,
                               const char *to_repl)
 {
-  GString *string;
-  const char *needle;
+  GString *str;
+  const char *tmp;
   gsize to_find_len;
-  gsize to_repl_len;
-  gsize pos = 0;
-  gsize i = 0;
+  gsize pos;
 
-  string = g_string_new (haystack);
+  g_assert (haystack);
+  g_assert (to_find);
+  g_assert (to_repl);
+
+  str = g_string_new (haystack);
   to_find_len = strlen (to_find);
-  to_repl_len = strlen (to_repl);
 
-  while ((needle = strstr (haystack, to_find)) != NULL) {
-    pos += needle - haystack;
-    g_string_erase (string, pos + i * (to_repl_len - to_find_len), to_find_len);
-    g_string_insert (string, pos + i * (to_repl_len - to_find_len), to_repl);
-    haystack = needle + to_find_len;
-    pos += to_find_len;
-    i++;
+  while ((tmp = strstr (str->str, to_find)) != NULL) {
+    pos = tmp - str->str;
+    g_string_erase (str, pos, to_find_len);
+    g_string_insert (str, pos, to_repl);
   }
 
-  return g_string_free (string, FALSE);
+  return g_string_free (str, FALSE);
+}
+
+/*
+ * Adapted from GLib's g_strchug()
+ *
+ * This function doesn't allocate or reallocate any memory;
+ * it modifies @string in place. Therefore, it cannot be used on
+ * statically allocated strings.
+ *
+ * The pointer to @string is returned to allow the nesting of functions.
+ */
+char *
+ephy_string_remove_leading (char *string,
+                            char  ch)
+{
+  char *start;
+
+  g_assert (string);
+
+  for (start = string; *start && *start == ch; start++)
+    ;
+
+  memmove (string, start, strlen (start) + 1);
+
+  return string;
+}
+
+/*
+ * Adapted from GLib's g_strchomp()
+ *
+ * This function doesn't allocate or reallocate any memory;
+ * it modifies @string in place. Therefore, it cannot be used on
+ * statically allocated strings.
+ *
+ * The pointer to @string is returned to allow the nesting of functions.
+ */
+char *
+ephy_string_remove_trailing (char *string,
+                             char  ch)
+{
+  g_assert (string);
+
+  for (gssize i = strlen (string) - 1; i >= 0 && string[i] == ch; i--)
+    string[i] = '\0';
+
+  return string;
 }
 
 char **
