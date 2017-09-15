@@ -43,6 +43,12 @@ if get_option('unit_tests')
   # )
   # test('File helpers test', file_helpers_test)
 
+  gsb_utils_test = executable('test-ephy-gsb-utils',
+    'ephy-gsb-utils-test.c',
+    dependencies: ephymain_dep
+  )
+  test('GSB utils test', gsb_utils_test)
+
   history_test = executable('test-ephy-history',
     'ephy-history-test.c',
     dependencies: ephymain_dep
