@@ -76,7 +76,7 @@ test_ephy_gsb_utils_canonicalize (void)
     CanonicalizeTest test = canonicalize_tests[i];
     char *url_canonical;
 
-    url_canonical = ephy_gsb_utils_canonicalize (test.url_raw);
+    url_canonical = ephy_gsb_utils_canonicalize (test.url_raw, NULL, NULL, NULL);
     g_assert_cmpstr (url_canonical, ==, test.url_canonical);
 
     g_free (url_canonical);

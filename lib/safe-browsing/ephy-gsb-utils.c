@@ -29,6 +29,8 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
+#define MAX_HOST_SUFFIXES 5
+#define MAX_PATH_PREFIXES 6
 #define MAX_UNESCAPE_STEP 1024
 
 EphyGSBThreatList *
@@ -242,7 +244,10 @@ ephy_gsb_utils_canonicalize_host (const char *host)
  * https://developers.google.com/safe-browsing/v4/urls-hashing#canonicalization
  */
 char *
-ephy_gsb_utils_canonicalize (const char *url)
+ephy_gsb_utils_canonicalize (const char  *url,
+                             char       **host_out,
+                             char       **path_out,
+                             char       **query_out)
 {
   SoupURI *uri;
   char *tmp;
@@ -301,6 +306,13 @@ ephy_gsb_utils_canonicalize (const char *url)
                               host_canonical, path_canonical);
   }
 
+  if (host_out)
+    *host_out = g_strdup (host_canonical);
+  if (path_out)
+    *path_out = g_strdup (path_canonical);
+  if (query_out)
+    *query_out = g_strdup (query);
+
   g_free (host);
   g_free (path);
   g_free (host_canonical);
@@ -308,4 +320,139 @@ ephy_gsb_utils_canonicalize (const char *url)
   soup_uri_free (uri);
 
   return retval;
+}
+
+/*
+ * https://developers.google.com/safe-browsing/v4/urls-hashing#suffixprefix-expressions
+ */
+static GList *
+ephy_gsb_utils_compute_host_suffixes (const char *host)
+{
+  GList *retval = NULL;
+  struct in_addr addr;
+  char **tokens;
+  int steps;
+  int start;
+  int num_tokens;
+
+  g_assert (host);
+
+  retval = g_list_prepend (retval, g_strdup (host));
+
+  /* If host is an IP address, return immediately. */
+  if (inet_aton (host, &addr) != 0)
+    return retval;
+
+  tokens = g_strsplit (host, ".", -1);
+  num_tokens = g_strv_length (tokens);
+  start = MAX (num_tokens - MAX_HOST_SUFFIXES, 1);
+  steps = MIN (num_tokens - 1 - start, MAX_HOST_SUFFIXES - 1);
+
+  for (int i = start; i < start + steps; i++)
+    retval = g_list_prepend (retval, g_strjoinv (".", tokens + i));
+
+  g_strfreev (tokens);
+
+  return g_list_reverse (retval);
+}
+
+/*
+ * https://developers.google.com/safe-browsing/v4/urls-hashing#suffixprefix-expressions
+ */
+static GList *
+ephy_gsb_utils_compute_path_prefixes (const char *path,
+                                      const char *query)
+{
+  GList *retval = NULL;
+  char *no_trailing;
+  char **tokens;
+  int steps;
+  int num_tokens;
+  int no_trailing_len;
+  gboolean has_trailing;
+
+  g_assert (path);
+
+  if (query)
+    retval = g_list_prepend (retval, g_strjoin ("?", path, query, NULL));
+  retval = g_list_prepend (retval, g_strdup (path));
+
+  if (!g_strcmp0 (path, "/"))
+    return retval;
+
+  has_trailing = path[strlen (path) - 1] == '/';
+  no_trailing = ephy_string_remove_trailing (g_strdup (path), '/');
+  no_trailing_len = strlen (no_trailing);
+
+  tokens = g_strsplit (no_trailing, "/", -1);
+  num_tokens = g_strv_length (tokens);
+  steps = MIN (num_tokens, MAX_PATH_PREFIXES - 2);
+
+  for (int i = 0; i < steps; i++) {
+    char *value = g_strconcat (i > 0 ? retval->data : "", tokens[i], "/", NULL);
+
+    if ((has_trailing && !g_strcmp0 (value, path)) ||
+        (!has_trailing && !strncmp (value, no_trailing, no_trailing_len))) {
+      g_free (value);
+      break;
+    }
+
+    retval = g_list_prepend (retval, value);
+  }
+
+  g_free (no_trailing);
+  g_strfreev (tokens);
+
+  return g_list_reverse (retval);
+}
+
+GList *
+ephy_gsb_utils_compute_hashes (const char *url)
+{
+  GChecksum *checksum;
+  GList *retval = NULL;
+  GList *host_suffixes;
+  GList *path_prefixes;
+  char *url_canonical;
+  char *host = NULL;
+  char *path = NULL;
+  char *query = NULL;
+  gsize hash_len = g_checksum_type_get_length (G_CHECKSUM_SHA256);
+
+  g_assert (url);
+
+  url_canonical = ephy_gsb_utils_canonicalize (url, &host, &path, &query);
+  if (!url_canonical)
+    return NULL;
+
+  host_suffixes = ephy_gsb_utils_compute_host_suffixes (host);
+  path_prefixes = ephy_gsb_utils_compute_path_prefixes (path, query);
+  checksum = g_checksum_new (G_CHECKSUM_SHA256);
+
+  /* Get the hash of every host-path combination.
+   * The maximum number of combinations is MAX_HOST_SUFFIXES * MAX_PATH_PREFIXES.
+   */
+  for (GList *h = host_suffixes; h && h->data; h = h->next) {
+    for (GList *p = path_prefixes; p && p->data; p = p->next) {
+      char *value = g_strconcat (h->data, p->data, NULL);
+      guint8 *hash = g_malloc (hash_len);
+
+      g_checksum_reset (checksum);
+      g_checksum_update (checksum, (const guint8 *)value, strlen (value));
+      g_checksum_get_digest (checksum, hash, &hash_len);
+      retval = g_list_prepend (retval, hash);
+
+      g_free (value);
+    }
+  }
+
+  g_free (host);
+  g_free (path);
+  g_free (query);
+  g_free (url_canonical);
+  g_checksum_free (checksum);
+  g_list_free_full (host_suffixes, g_free);
+  g_list_free_full (path_prefixes, g_free);
+
+  return g_list_reverse (retval);
 }
