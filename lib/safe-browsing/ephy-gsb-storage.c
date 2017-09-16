@@ -1127,3 +1127,70 @@ ephy_gsb_storage_insert_hash_prefixes (EphyGSBStorage    *self,
   if (statement)
     g_object_unref (statement);
 }
+
+GList *
+ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
+                                       GList          *cues)
+{
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
+  GList *retval = NULL;
+  GString *sql;
+  guint id = 0;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+  g_assert (cues);
+
+  sql = g_string_new ("SELECT value, threat_type, platform_type, threat_entry_type, "
+                      "negative_expires_at <= (CAST(strftime('%s', 'now') AS INT)) "
+                      "FROM hash_prefix WHERE cue IN (");
+  for (GList *l = cues; l && l->data; l = l->next)
+    g_string_append (sql, "?,");
+  /* Replace trailing comma character with close parenthesis character. */
+  g_string_overwrite (sql, sql->len - 1, ")");
+
+  statement = ephy_sqlite_connection_create_statement (self->db, sql->str, &error);
+  if (error) {
+    g_warning ("Failed to create select hash prefix statement: %s", error->message);
+    goto out;
+  }
+
+  for (GList *l = cues; l && l->data; l = l->next) {
+    ephy_sqlite_statement_bind_blob (statement, id++, l->data, CUE_LEN, &error);
+    if (error) {
+      g_warning ("Failed to bind cue value as blob: %s", error->message);
+      goto out;
+    }
+  }
+
+  while (ephy_sqlite_statement_step (statement, &error)) {
+    const guint8 *blob = ephy_sqlite_statement_get_column_as_blob (statement, 0);
+    gsize size = ephy_sqlite_statement_get_column_size (statement, 0);
+    const char *threat_type = ephy_sqlite_statement_get_column_as_string (statement, 1);
+    const char *platform_type = ephy_sqlite_statement_get_column_as_string (statement, 2);
+    const char *threat_entry_type = ephy_sqlite_statement_get_column_as_string (statement, 3);
+    gboolean negative_expired = ephy_sqlite_statement_get_column_as_boolean (statement, 4);
+    EphyGSBHashPrefixLookup *lookup = ephy_gsb_hash_prefix_lookup_new (blob, size,
+                                                                       threat_type,
+                                                                       platform_type,
+                                                                       threat_entry_type,
+                                                                       negative_expired);
+    retval = g_list_prepend (retval, lookup);
+  }
+
+  if (error) {
+    g_warning ("Failed to execute select hash prefix statement: %s", error->message);
+    g_list_free_full (retval, (GDestroyNotify)ephy_gsb_hash_prefix_lookup_free);
+    retval = NULL;
+  }
+
+out:
+  g_string_free (sql, TRUE);
+  if (statement)
+    g_object_unref (statement);
+  if (error)
+    g_error_free (error);
+
+  return g_list_reverse (retval);
+}

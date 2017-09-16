@@ -25,26 +25,42 @@
 G_BEGIN_DECLS
 
 typedef struct {
-  char *threat_type;
-  char *platform_type;
-  char *threat_entry_type;
-  char *client_state;
-  gint64 timestamp;
+  char   *threat_type;
+  char   *platform_type;
+  char   *threat_entry_type;
+  char   *client_state;
+  gint64  timestamp;
 } EphyGSBThreatList;
 
-EphyGSBThreatList *ephy_gsb_threat_list_new   (const char *threat_type,
-                                               const char *platform_type,
-                                               const char *threat_entry_type,
-                                               const char *client_state,
-                                               gint64      timestamp);
-void               ephy_gsb_threat_list_free  (EphyGSBThreatList *list);
+typedef struct {
+  GBytes   *prefix; /* The first 4-32 bytes of the hash */
+  char     *threat_type;
+  char     *platform_type;
+  char     *threat_entry_type;
+  gboolean  negative_expired;
+} EphyGSBHashPrefixLookup;
 
-char              *ephy_gsb_utils_make_list_updates_request (GList *threat_lists);
+EphyGSBThreatList       *ephy_gsb_threat_list_new                 (const char *threat_type,
+                                                                   const char *platform_type,
+                                                                   const char *threat_entry_type,
+                                                                   const char *client_state,
+                                                                   gint64      timestamp);
+void                     ephy_gsb_threat_list_free                (EphyGSBThreatList *list);
 
-char              *ephy_gsb_utils_canonicalize              (const char  *url,
-                                                             char       **host_out,
-                                                             char       **path_out,
-                                                             char       **query_out);
-GList             *ephy_gsb_utils_compute_hashes            (const char *url);
+EphyGSBHashPrefixLookup *ephy_gsb_hash_prefix_lookup_new          (const guint8 *prefix,
+                                                                   gsize         length,
+                                                                   const char   *threat_type,
+                                                                   const char   *platform_type,
+                                                                   const char   *threat_entry_type,
+                                                                   gboolean      negative_expired);
+void                     ephy_gsb_hash_prefix_lookup_free         (EphyGSBHashPrefixLookup *lookup);
+
+char                    *ephy_gsb_utils_make_list_updates_request (GList *threat_lists);
+
+char                    *ephy_gsb_utils_canonicalize              (const char  *url,
+                                                                   char       **host_out,
+                                                                   char       **path_out,
+                                                                   char       **query_out);
+GList                   *ephy_gsb_utils_compute_hashes            (const char *url);
 
 G_END_DECLS
