@@ -161,7 +161,7 @@ test_ephy_gsb_utils_compute_hashes (void)
     g_assert_cmpuint (g_list_length (hashes), ==, test.num_hashes);
 
     for (guint k = 0; k < test.num_hashes; k++, h = h->next) {
-      char *hash_hex = bytes_to_hex (h->data, 32);
+      char *hash_hex = bytes_to_hex (h->data, GSB_HASH_SIZE);
       g_assert_cmpstr (hash_hex, ==, test.hashes_hex[k]);
       g_free (hash_hex);
     }

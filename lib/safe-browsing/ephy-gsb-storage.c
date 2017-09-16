@@ -681,7 +681,7 @@ ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
   char *retval = NULL;
   GChecksum *checksum = NULL;
   guint8 *digest = NULL;
-  gsize digest_len = g_checksum_type_get_length (G_CHECKSUM_SHA256);
+  gsize digest_len = GSB_HASH_SIZE;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (self->is_operable);
@@ -699,7 +699,7 @@ ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
   if (!bind_threat_list_params (statement, list, 0, 1, 2, -1))
     goto out;
 
-  checksum = g_checksum_new (G_CHECKSUM_SHA256);
+  checksum = g_checksum_new (GSB_HASH_TYPE);
   while (ephy_sqlite_statement_step (statement, &error)) {
     g_checksum_update (checksum,
                        ephy_sqlite_statement_get_column_as_blob (statement, 0),
@@ -1182,6 +1182,72 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
   if (error) {
     g_warning ("Failed to execute select hash prefix statement: %s", error->message);
     g_list_free_full (retval, (GDestroyNotify)ephy_gsb_hash_prefix_lookup_free);
+    retval = NULL;
+  }
+
+out:
+  g_string_free (sql, TRUE);
+  if (statement)
+    g_object_unref (statement);
+  if (error)
+    g_error_free (error);
+
+  return g_list_reverse (retval);
+}
+
+GList *
+ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
+                                     GList          *hashes)
+{
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
+  GList *retval = NULL;
+  GString *sql;
+  guint id = 0;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+  g_assert (hashes);
+
+  sql = g_string_new ("SELECT value, threat_type, platform_type, threat_entry_type, "
+                      "expires_at <= (CAST(strftime('%s', 'now') AS INT)) "
+                      "FROM hash_full WHERE value IN (");
+  for (GList *l = hashes; l && l->data; l = l->next)
+    g_string_append (sql, "?,");
+  /* Replace trailing comma character with close parenthesis character. */
+  g_string_overwrite (sql, sql->len - 1, ")");
+
+  statement = ephy_sqlite_connection_create_statement (self->db, sql->str, &error);
+  if (error) {
+    g_warning ("Failed to create select full hash statement: %s", error->message);
+    goto out;
+  }
+
+  for (GList *l = hashes; l && l->data; l = l->next) {
+    ephy_sqlite_statement_bind_blob (statement, id++, l->data, GSB_HASH_SIZE, &error);
+    if (error) {
+      g_warning ("Failed to bind hash value as blob: %s", error->message);
+      goto out;
+    }
+  }
+
+  while (ephy_sqlite_statement_step (statement, &error)) {
+    const guint8 *blob = ephy_sqlite_statement_get_column_as_blob (statement, 0);
+    const char *threat_type = ephy_sqlite_statement_get_column_as_string (statement, 1);
+    const char *platform_type = ephy_sqlite_statement_get_column_as_string (statement, 2);
+    const char *threat_entry_type = ephy_sqlite_statement_get_column_as_string (statement, 3);
+    gboolean expired = ephy_sqlite_statement_get_column_as_boolean (statement, 4);
+    EphyGSBHashFullLookup *lookup = ephy_gsb_hash_full_lookup_new (blob,
+                                                                   threat_type,
+                                                                   platform_type,
+                                                                   threat_entry_type,
+                                                                   expired);
+    retval = g_list_prepend (retval, lookup);
+  }
+
+  if (error) {
+    g_warning ("Failed to execute select full hash statement: %s", error->message);
+    g_list_free_full (retval, (GDestroyNotify)ephy_gsb_hash_full_lookup_free);
     retval = NULL;
   }
 

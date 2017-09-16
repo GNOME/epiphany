@@ -24,6 +24,9 @@
 
 G_BEGIN_DECLS
 
+#define GSB_HASH_TYPE G_CHECKSUM_SHA256
+#define GSB_HASH_SIZE (g_checksum_type_get_length (GSB_HASH_TYPE))
+
 typedef struct {
   char   *threat_type;
   char   *platform_type;
@@ -40,6 +43,14 @@ typedef struct {
   gboolean  negative_expired;
 } EphyGSBHashPrefixLookup;
 
+typedef struct {
+  guint8   *hash; /* The 32 bytes full hash */
+  char     *threat_type;
+  char     *platform_type;
+  char     *threat_entry_type;
+  gboolean  expired;
+} EphyGSBHashFullLookup;
+
 EphyGSBThreatList       *ephy_gsb_threat_list_new                 (const char *threat_type,
                                                                    const char *platform_type,
                                                                    const char *threat_entry_type,
@@ -54,6 +65,13 @@ EphyGSBHashPrefixLookup *ephy_gsb_hash_prefix_lookup_new          (const guint8 
                                                                    const char   *threat_entry_type,
                                                                    gboolean      negative_expired);
 void                     ephy_gsb_hash_prefix_lookup_free         (EphyGSBHashPrefixLookup *lookup);
+
+EphyGSBHashFullLookup   *ephy_gsb_hash_full_lookup_new            (const guint8 *hash,
+                                                                   const char   *threat_type,
+                                                                   const char   *platform_type,
+                                                                   const char   *threat_entry_type,
+                                                                   gboolean      expired);
+void                     ephy_gsb_hash_full_lookup_free           (EphyGSBHashFullLookup *lookup);
 
 char                    *ephy_gsb_utils_make_list_updates_request (GList *threat_lists);
 

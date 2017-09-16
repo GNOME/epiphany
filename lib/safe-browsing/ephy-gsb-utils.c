@@ -104,6 +104,43 @@ ephy_gsb_hash_prefix_lookup_free (EphyGSBHashPrefixLookup *lookup)
   g_slice_free (EphyGSBHashPrefixLookup, lookup);
 }
 
+EphyGSBHashFullLookup *
+ephy_gsb_hash_full_lookup_new (const guint8 *hash,
+                               const char   *threat_type,
+                               const char   *platform_type,
+                               const char   *threat_entry_type,
+                               gboolean      expired)
+{
+  EphyGSBHashFullLookup *lookup;
+
+  g_assert (hash);
+  g_assert (threat_type);
+  g_assert (platform_type);
+  g_assert (threat_entry_type);
+
+  lookup = g_slice_new (EphyGSBHashFullLookup);
+  lookup->hash = g_malloc (GSB_HASH_SIZE);
+  memcpy (lookup->hash, hash, GSB_HASH_SIZE);
+  lookup->threat_type = g_strdup (threat_type);
+  lookup->platform_type = g_strdup (platform_type);
+  lookup->threat_entry_type = g_strdup (threat_entry_type);
+  lookup->expired = expired;
+
+  return lookup;
+}
+
+void
+ephy_gsb_hash_full_lookup_free (EphyGSBHashFullLookup *lookup)
+{
+  g_assert (lookup);
+
+  g_free (lookup->hash);
+  g_free (lookup->threat_type);
+  g_free (lookup->platform_type);
+  g_free (lookup->threat_entry_type);
+  g_slice_free (EphyGSBHashFullLookup, lookup);
+}
+
 static JsonObject *
 ephy_gsb_utils_make_client_info (void)
 {
@@ -454,7 +491,7 @@ ephy_gsb_utils_compute_hashes (const char *url)
   char *host = NULL;
   char *path = NULL;
   char *query = NULL;
-  gsize hash_len = g_checksum_type_get_length (G_CHECKSUM_SHA256);
+  gsize hash_len = GSB_HASH_SIZE;
 
   g_assert (url);
 
