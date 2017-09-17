@@ -55,5 +55,9 @@ GList          *ephy_gsb_storage_lookup_hash_prefixes   (EphyGSBStorage *self,
                                                          GList          *cues);
 GList          *ephy_gsb_storage_lookup_full_hashes     (EphyGSBStorage *self,
                                                          GList          *hashes);
+void            ephy_gsb_storage_insert_full_hash       (EphyGSBStorage    *self,
+                                                         EphyGSBThreatList *list,
+                                                         const guint8      *hash,
+                                                         gint64             duration);
 
 G_END_DECLS

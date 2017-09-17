@@ -1260,3 +1260,78 @@ out:
 
   return g_list_reverse (retval);
 }
+
+void
+ephy_gsb_storage_insert_full_hash (EphyGSBStorage    *self,
+                                   EphyGSBThreatList *list,
+                                   const guint8      *hash,
+                                   gint64             duration)
+{
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
+  const char *sql;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+  g_assert (list);
+  g_assert (hash);
+
+  LOG ("Inserting full hash with duration %ld for list %s/%s/%s",
+       duration, list->threat_type, list->platform_type, list->threat_entry_type);
+
+  sql = "INSERT OR IGNORE INTO hash_full "
+        "(value, threat_type, platform_type, threat_entry_type) "
+        "VALUES (?, ?, ?, ?)";
+  statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
+  if (error) {
+    g_warning ("Failed to create insert full hash statement: %s", error->message);
+    goto out;
+  }
+
+  if (!bind_threat_list_params (statement, list, 1, 2, 3, -1))
+    goto out;
+  ephy_sqlite_statement_bind_blob (statement, 0, hash, GSB_HASH_SIZE, &error);
+  if (error) {
+    g_warning ("Failed to bind blob in insert full hash statement: %s", error->message);
+    goto out;
+  }
+
+  ephy_sqlite_statement_step (statement, &error);
+  if (error) {
+    g_warning ("Failed to execute insert full hash statement: %s", error->message);
+    goto out;
+  }
+
+  /* Update expiration time. */
+  g_clear_object (&statement);
+  sql = "UPDATE hash_full SET expires_at=(CAST(strftime('%s', 'now') AS INT)) + ? "
+        "WHERE value=? AND threat_type=? AND platform_type=? AND threat_entry_type=?";
+  statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
+  if (error) {
+    g_warning ("Failed to create update full hash statement: %s", error->message);
+    goto out;
+  }
+
+  ephy_sqlite_statement_bind_int64 (statement, 0, duration, &error);
+  if (error) {
+    g_warning ("Failed to bind int64 in update full hash statement: %s", error->message);
+    goto out;
+  }
+  ephy_sqlite_statement_bind_blob (statement, 1, hash, GSB_HASH_SIZE, &error);
+  if (error) {
+    g_warning ("Failed to bind blob in update full hash statement: %s", error->message);
+    goto out;
+  }
+  if (!bind_threat_list_params (statement, list, 2, 3, 4, -1))
+    goto out;
+
+  ephy_sqlite_statement_step (statement, &error);
+  if (error)
+    g_warning ("Failed to execute insert full hash statement: %s", error->message);
+
+out:
+  if (statement)
+    g_object_unref (statement);
+  if (error)
+    g_error_free (error);
+}
