@@ -31,33 +31,36 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyGSBStorage, ephy_gsb_storage, EPHY, GSB_STORAGE, GObject)
 
-EphyGSBStorage *ephy_gsb_storage_new                    (const char *db_path);
-gboolean        ephy_gsb_storage_is_operable            (EphyGSBStorage *self);
-gint64          ephy_gsb_storage_get_next_update_time   (EphyGSBStorage *self);
-void            ephy_gsb_storage_set_next_update_time   (EphyGSBStorage *self,
-                                                         gint64          next_update_time);
-GList          *ephy_gsb_storage_get_threat_lists       (EphyGSBStorage *self);
-char           *ephy_gsb_storage_compute_checksum       (EphyGSBStorage    *self,
-                                                         EphyGSBThreatList *list);
-void            ephy_gsb_storage_update_client_state    (EphyGSBStorage    *self,
-                                                         EphyGSBThreatList *list,
-                                                         gboolean           clear);
-void            ephy_gsb_storage_clear_hash_prefixes    (EphyGSBStorage    *self,
-                                                         EphyGSBThreatList *list);
-void            ephy_gsb_storage_delete_hash_prefixes   (EphyGSBStorage    *self,
-                                                         EphyGSBThreatList *list,
-                                                         JsonArray         *indices);
-void            ephy_gsb_storage_insert_hash_prefixes   (EphyGSBStorage    *self,
-                                                         EphyGSBThreatList *list,
-                                                         gsize              prefix_len,
-                                                         const char        *prefixes_b64);
-GList          *ephy_gsb_storage_lookup_hash_prefixes   (EphyGSBStorage *self,
-                                                         GList          *cues);
-GList          *ephy_gsb_storage_lookup_full_hashes     (EphyGSBStorage *self,
-                                                         GList          *hashes);
-void            ephy_gsb_storage_insert_full_hash       (EphyGSBStorage    *self,
-                                                         EphyGSBThreatList *list,
-                                                         const guint8      *hash,
-                                                         gint64             duration);
+EphyGSBStorage *ephy_gsb_storage_new                            (const char *db_path);
+gboolean        ephy_gsb_storage_is_operable                    (EphyGSBStorage *self);
+gint64          ephy_gsb_storage_get_next_update_time           (EphyGSBStorage *self);
+void            ephy_gsb_storage_set_next_update_time           (EphyGSBStorage *self,
+                                                                 gint64          next_update_time);
+GList          *ephy_gsb_storage_get_threat_lists               (EphyGSBStorage *self);
+char           *ephy_gsb_storage_compute_checksum               (EphyGSBStorage    *self,
+                                                                 EphyGSBThreatList *list);
+void            ephy_gsb_storage_update_client_state            (EphyGSBStorage    *self,
+                                                                 EphyGSBThreatList *list,
+                                                                 gboolean           clear);
+void            ephy_gsb_storage_clear_hash_prefixes            (EphyGSBStorage    *self,
+                                                                 EphyGSBThreatList *list);
+void            ephy_gsb_storage_delete_hash_prefixes           (EphyGSBStorage    *self,
+                                                                 EphyGSBThreatList *list,
+                                                                 JsonArray         *indices);
+void            ephy_gsb_storage_insert_hash_prefixes           (EphyGSBStorage    *self,
+                                                                 EphyGSBThreatList *list,
+                                                                 gsize              prefix_len,
+                                                                 const char        *prefixes_b64);
+GList          *ephy_gsb_storage_lookup_hash_prefixes           (EphyGSBStorage *self,
+                                                                 GList          *cues);
+GList          *ephy_gsb_storage_lookup_full_hashes             (EphyGSBStorage *self,
+                                                                 GList          *hashes);
+void            ephy_gsb_storage_insert_full_hash               (EphyGSBStorage    *self,
+                                                                 EphyGSBThreatList *list,
+                                                                 const guint8      *hash,
+                                                                 gint64             duration);
+void            ephy_gsb_storage_update_hash_prefix_expiration  (EphyGSBStorage *self,
+                                                                 GBytes         *prefix,
+                                                                 gint64          duration);
 
 G_END_DECLS

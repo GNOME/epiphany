@@ -74,6 +74,8 @@ EphyGSBHashFullLookup   *ephy_gsb_hash_full_lookup_new            (const guint8 
 void                     ephy_gsb_hash_full_lookup_free           (EphyGSBHashFullLookup *lookup);
 
 char                    *ephy_gsb_utils_make_list_updates_request (GList *threat_lists);
+char                    *ephy_gsb_utils_make_full_hashes_request  (GList *threat_lists,
+                                                                   GList *hash_prefixes);
 
 char                    *ephy_gsb_utils_canonicalize              (const char  *url,
                                                                    char       **host_out,

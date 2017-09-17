@@ -57,6 +57,37 @@ static GParamSpec *obj_properties[LAST_PROP];
 
 static gboolean ephy_gsb_service_update (EphyGSBService *self);
 
+typedef struct {
+  EphyGSBService *service;
+  GList          *prefixes;
+} FindFullHashesData;
+
+static FindFullHashesData *
+find_full_hashes_data_new (EphyGSBService *service,
+                                 GList          *prefixes)
+{
+  FindFullHashesData *data;
+
+  g_assert (EPHY_IS_GSB_SERVICE (service));
+  g_assert (prefixes);
+
+  data = g_slice_new (FindFullHashesData);
+  data->service = g_object_ref (service);
+  data->prefixes = g_list_copy_deep (prefixes, (GCopyFunc)g_bytes_ref, NULL);
+
+  return data;
+}
+
+static void
+find_full_hashes_data_free (FindFullHashesData *data)
+{
+  g_assert (data);
+
+  g_object_unref (data->service);
+  g_list_free_full (data->prefixes, (GDestroyNotify)g_bytes_unref);
+  g_slice_free (FindFullHashesData, data);
+}
+
 static inline gboolean
 json_object_has_non_null_string_member (JsonObject *object,
                                         const char *member)
@@ -385,4 +416,92 @@ ephy_gsb_service_new (const char *api_key,
   g_object_unref (storage);
 
   return service;
+}
+
+static void
+ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
+                                      SoupMessage *msg,
+                                      gpointer     user_data)
+{
+  FindFullHashesData *data = (FindFullHashesData *)user_data;
+  EphyGSBService *self = data->service;
+  JsonNode *body_node;
+  JsonObject *body_obj;
+  JsonArray *matches;
+  const char *negative_duration;
+  double duration;
+
+  if (msg->status_code != 200) {
+    LOG ("Cannot update full hashes. Server responded: %u, %s",
+         msg->status_code, msg->response_body->data);
+    goto out;
+  }
+
+  body_node = json_from_string (msg->response_body->data, NULL);
+  body_obj = json_node_get_object (body_node);
+  matches = json_object_get_array_member (body_obj, "matches");
+
+  for (guint i = 0; i < json_array_get_length (matches); i++) {
+    EphyGSBThreatList *list;
+    JsonObject *match = json_array_get_object_element (matches, i);
+    const char *threat_type = json_object_get_string_member (match, "threatType");
+    const char *platform_type = json_object_get_string_member (match, "platformType");
+    const char *threat_entry_type = json_object_get_string_member (match, "threatEntryType");
+    JsonObject *threat = json_object_get_object_member (match, "threat");
+    const char *hash_b64 = json_object_get_string_member (threat, "hash");
+    const char *positive_duration;
+    guint8 *hash;
+    gsize length;
+
+    list = ephy_gsb_threat_list_new (threat_type, platform_type, threat_entry_type, NULL, 0);
+    hash = g_base64_decode (hash_b64, &length);
+    positive_duration = json_object_get_string_member (match, "cacheDuration");
+    sscanf (positive_duration, "%lfs", &duration);
+
+    ephy_gsb_storage_insert_full_hash (self->storage, list, hash, floor (duration));
+
+    g_free (hash);
+    ephy_gsb_threat_list_free (list);
+  }
+
+  /* Update negative cache duration. */
+  negative_duration = json_object_get_string_member (body_obj, "negativeCacheDuration");
+  sscanf (negative_duration, "%lfs", &duration);
+  for (GList *l = data->prefixes; l && l->data; l = l->next)
+    ephy_gsb_storage_update_hash_prefix_expiration (self->storage, l->data, floor (duration));
+
+  /* TODO: Handle minimumWaitDuration. */
+
+  json_node_unref (body_node);
+out:
+  find_full_hashes_data_free (data);
+}
+
+static void
+ephy_gsb_service_find_full_hashes (EphyGSBService *self,
+                                   GList          *prefixes)
+{
+  SoupMessage *msg;
+  GList *threat_lists;
+  char *url;
+  char *body;
+
+  g_assert (EPHY_IS_GSB_SERVICE (self));
+  g_assert (ephy_gsb_storage_is_operable (self->storage));
+  g_assert (prefixes);
+
+  LOG ("Updating full hashes of %u prefixes", g_list_length (prefixes));
+
+  threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
+  body = ephy_gsb_utils_make_full_hashes_request (threat_lists, prefixes);
+  url = g_strdup_printf ("%sfullHashes:find?key=%s", API_PREFIX, self->api_key);
+
+  msg = soup_message_new (SOUP_METHOD_POST, url);
+  soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
+  soup_session_queue_message (self->session, msg,
+                              ephy_gsb_service_find_full_hashes_cb,
+                              find_full_hashes_data_new (self, prefixes));
+
+  g_free (url);
+  g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
 }

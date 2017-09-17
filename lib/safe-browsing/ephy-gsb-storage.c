@@ -1335,3 +1335,50 @@ out:
   if (error)
     g_error_free (error);
 }
+
+void
+ephy_gsb_storage_update_hash_prefix_expiration (EphyGSBStorage *self,
+                                                GBytes         *prefix,
+                                                gint64          duration)
+{
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
+  const char *sql;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+  g_assert (prefix);
+
+  sql = "UPDATE hash_prefix "
+        "SET negative_expires_at=(CAST(strftime('%s', 'now') AS INT)) + ? "
+        "WHERE value=?";
+  statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
+  if (error) {
+    g_warning ("Failed to create update hash prefix statement: %s", error->message);
+    goto out;
+  }
+
+  ephy_sqlite_statement_bind_int64 (statement, 0, duration, &error);
+  if (error) {
+    g_warning ("Failed to bind int64 in update hash prefix statement: %s", error->message);
+    goto out;
+  }
+  ephy_sqlite_statement_bind_blob (statement, 1,
+                                   g_bytes_get_data (prefix, NULL),
+                                   g_bytes_get_size (prefix),
+                                   &error);
+  if (error) {
+    g_warning ("Failed to bind blob in update hash prefix statement: %s", error->message);
+    goto out;
+  }
+
+  ephy_sqlite_statement_step (statement, &error);
+  if (error)
+    g_warning ("Failed to execute update hash prefix statement: %s", error->message);
+
+out:
+  if (statement)
+    g_object_unref (statement);
+  if (error)
+    g_error_free (error);
+}

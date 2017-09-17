@@ -211,6 +211,102 @@ ephy_gsb_utils_make_list_updates_request (GList *threat_lists)
   return retval;
 }
 
+char *
+ephy_gsb_utils_make_full_hashes_request (GList *threat_lists,
+                                         GList *hash_prefixes)
+{
+  GHashTable *threat_types_set;
+  GHashTable *platform_types_set;
+  GHashTable *threat_entry_types_set;
+  GList *threat_types_list;
+  GList *platform_types_list;
+  GList *threat_entry_types_list;
+  JsonArray *threat_types;
+  JsonArray *platform_types;
+  JsonArray *threat_entry_types;
+  JsonArray *threat_entries;
+  JsonArray *client_states;
+  JsonObject *threat_info;
+  JsonObject *body_obj;
+  JsonNode *body_node;
+  char *body;
+
+  g_assert (threat_lists);
+  g_assert (hash_prefixes);
+
+  client_states = json_array_new ();
+  threat_types_set = g_hash_table_new (g_str_hash, g_str_equal);
+  platform_types_set = g_hash_table_new (g_str_hash, g_str_equal);
+  threat_entry_types_set = g_hash_table_new (g_str_hash, g_str_equal);
+
+  for (GList *l = threat_lists; l && l->data; l = l->next) {
+    EphyGSBThreatList *list = (EphyGSBThreatList *)l->data;
+
+    if (!g_hash_table_contains (threat_types_set, list->threat_type))
+      g_hash_table_add (threat_types_set, list->threat_type);
+    if (!g_hash_table_contains (platform_types_set, list->platform_type))
+      g_hash_table_add (platform_types_set, list->platform_type);
+    if (!g_hash_table_contains (threat_entry_types_set, list->threat_entry_type))
+      g_hash_table_add (threat_entry_types_set, list->threat_entry_type);
+
+    json_array_add_string_element (client_states, list->client_state);
+  }
+
+  threat_types = json_array_new ();
+  threat_types_list = g_hash_table_get_keys (threat_types_set);
+  for (GList *l = threat_types_list; l && l->data; l = l->next)
+    json_array_add_string_element (threat_types, (const char *)l->data);
+
+  platform_types = json_array_new ();
+  platform_types_list = g_hash_table_get_keys (platform_types_set);
+  for (GList *l = platform_types_list; l && l->data; l = l->next)
+    json_array_add_string_element (platform_types, (const char *)l->data);
+
+  threat_entry_types = json_array_new ();
+  threat_entry_types_list = g_hash_table_get_keys (threat_entry_types_set);
+  for (GList *l = threat_entry_types_list; l && l->data; l = l->next)
+    json_array_add_string_element (threat_entry_types, (const char *)l->data);
+
+  threat_entries = json_array_new ();
+  for (GList *l = hash_prefixes; l && l->data; l = l->next) {
+    JsonObject *threat_entry = json_object_new ();
+    char *hash = g_base64_encode (g_bytes_get_data (l->data, NULL),
+                                  g_bytes_get_size (l->data));
+
+    json_object_set_string_member (threat_entry, "hash", hash);
+    json_array_add_object_element (threat_entries, threat_entry);
+
+    g_free (hash);
+  }
+
+  threat_info = json_object_new ();
+  json_object_set_array_member (threat_info, "threatTypes", threat_types);
+  json_object_set_array_member (threat_info, "platformTypes", platform_types);
+  json_object_set_array_member (threat_info, "threatEntryTypes", threat_entry_types);
+  json_object_set_array_member (threat_info, "threatEntries", threat_entries);
+
+  body_obj = json_object_new ();
+  json_object_set_object_member (body_obj, "client", ephy_gsb_utils_make_client_info ());
+  json_object_set_array_member (body_obj, "clientStates", client_states);
+  json_object_set_object_member (body_obj, "threatInfo", threat_info);
+  json_object_set_null_member (body_obj, "apiClient");
+
+  body_node = json_node_new (JSON_NODE_OBJECT);
+  json_node_set_object (body_node, body_obj);
+  body = json_to_string (body_node, TRUE);
+
+  g_list_free (threat_types_list);
+  g_list_free (platform_types_list);
+  g_list_free (threat_entry_types_list);
+  g_hash_table_unref (threat_types_set);
+  g_hash_table_unref (platform_types_set);
+  g_hash_table_unref (threat_entry_types_set);
+  json_object_unref (body_obj);
+  json_node_unref (body_node);
+
+  return body;
+}
+
 static char *
 ephy_gsb_utils_full_unescape (const char *part)
 {
