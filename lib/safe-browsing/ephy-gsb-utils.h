@@ -44,7 +44,7 @@ typedef struct {
 } EphyGSBHashPrefixLookup;
 
 typedef struct {
-  guint8   *hash; /* The 32 bytes full hash */
+  GBytes   *hash; /* The 32 bytes full hash */
   char     *threat_type;
   char     *platform_type;
   char     *threat_entry_type;

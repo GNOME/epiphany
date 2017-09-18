@@ -119,8 +119,7 @@ ephy_gsb_hash_full_lookup_new (const guint8 *hash,
   g_assert (threat_entry_type);
 
   lookup = g_slice_new (EphyGSBHashFullLookup);
-  lookup->hash = g_malloc (GSB_HASH_SIZE);
-  memcpy (lookup->hash, hash, GSB_HASH_SIZE);
+  lookup->hash = g_bytes_new (hash, GSB_HASH_SIZE);
   lookup->threat_type = g_strdup (threat_type);
   lookup->platform_type = g_strdup (platform_type);
   lookup->threat_entry_type = g_strdup (threat_entry_type);
@@ -134,7 +133,7 @@ ephy_gsb_hash_full_lookup_free (EphyGSBHashFullLookup *lookup)
 {
   g_assert (lookup);
 
-  g_free (lookup->hash);
+  g_bytes_unref (lookup->hash);
   g_free (lookup->threat_type);
   g_free (lookup->platform_type);
   g_free (lookup->threat_entry_type);
@@ -610,8 +609,9 @@ ephy_gsb_utils_compute_hashes (const char *url)
       g_checksum_reset (checksum);
       g_checksum_update (checksum, (const guint8 *)value, strlen (value));
       g_checksum_get_digest (checksum, hash, &hash_len);
-      retval = g_list_prepend (retval, hash);
+      retval = g_list_prepend (retval, g_bytes_new (hash, hash_len));
 
+      g_free (hash);
       g_free (value);
     }
   }

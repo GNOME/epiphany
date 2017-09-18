@@ -1157,7 +1157,9 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
   }
 
   for (GList *l = cues; l && l->data; l = l->next) {
-    ephy_sqlite_statement_bind_blob (statement, id++, l->data, CUE_LEN, &error);
+    ephy_sqlite_statement_bind_blob (statement, id++,
+                                     g_bytes_get_data (l->data, NULL), CUE_LEN,
+                                     &error);
     if (error) {
       g_warning ("Failed to bind cue value as blob: %s", error->message);
       goto out;
@@ -1224,7 +1226,9 @@ ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
   }
 
   for (GList *l = hashes; l && l->data; l = l->next) {
-    ephy_sqlite_statement_bind_blob (statement, id++, l->data, GSB_HASH_SIZE, &error);
+    ephy_sqlite_statement_bind_blob (statement, id++,
+                                     g_bytes_get_data (l->data, NULL), GSB_HASH_SIZE,
+                                     &error);
     if (error) {
       g_warning ("Failed to bind hash value as blob: %s", error->message);
       goto out;
