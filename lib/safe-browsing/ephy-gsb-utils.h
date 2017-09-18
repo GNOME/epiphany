@@ -24,6 +24,7 @@
 
 G_BEGIN_DECLS
 
+#define GSB_CUE_LEN   4
 #define GSB_HASH_TYPE G_CHECKSUM_SHA256
 #define GSB_HASH_SIZE (g_checksum_type_get_length (GSB_HASH_TYPE))
 
@@ -57,6 +58,8 @@ EphyGSBThreatList       *ephy_gsb_threat_list_new                 (const char *t
                                                                    const char *client_state,
                                                                    gint64      timestamp);
 void                     ephy_gsb_threat_list_free                (EphyGSBThreatList *list);
+gboolean                 ephy_gsb_threat_list_equal               (EphyGSBThreatList *l1,
+                                                                   EphyGSBThreatList *l2);
 
 EphyGSBHashPrefixLookup *ephy_gsb_hash_prefix_lookup_new          (const guint8 *prefix,
                                                                    gsize         length,
@@ -82,5 +85,8 @@ char                    *ephy_gsb_utils_canonicalize              (const char  *
                                                                    char       **path_out,
                                                                    char       **query_out);
 GList                   *ephy_gsb_utils_compute_hashes            (const char *url);
+GList                   *ephy_gsb_utils_get_hash_cues             (GList *hashes);
+gboolean                 ephy_gsb_utils_hash_has_prefix           (GBytes *hash,
+                                                                   GBytes *prefix);
 
 G_END_DECLS

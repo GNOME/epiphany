@@ -28,7 +28,17 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyGSBService, ephy_gsb_service, EPHY, GSB_SERVICE, GObject)
 
-EphyGSBService *ephy_gsb_service_new (const char *api_key,
-                                      const char *db_path);
+/* @threats is a set of EphyGSBThreatList where the URL is considered unsafe.
+ * The caller takes ownership of the GHashTable and needs to free it.
+ */
+typedef void (*EphyGSBServiceVerifyURLCallback) (GHashTable *threats,
+                                                 gpointer    user_data);
+
+EphyGSBService *ephy_gsb_service_new        (const char *api_key,
+                                             const char *db_path);
+void            ephy_gsb_service_verify_url (EphyGSBService                  *self,
+                                             const char                      *url,
+                                             EphyGSBServiceVerifyURLCallback  callback,
+                                             gpointer                         user_data);
 
 G_END_DECLS

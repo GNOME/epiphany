@@ -28,8 +28,6 @@
 #include <glib/gstdio.h>
 #include <string.h>
 
-#define CUE_LEN 4
-
 /* Keep this lower than 200 or else you'll get "too many SQL variables" error
  * in ephy_gsb_storage_insert_batch(). SQLITE_MAX_VARIABLE_NUMBER is hardcoded
  * in sqlite3 as 999.
@@ -1054,7 +1052,7 @@ ephy_gsb_storage_insert_hash_prefix_batch (EphyGSBStorage      *self,
   }
 
   for (gsize k = start; k < end; k += len) {
-    if (!ephy_sqlite_statement_bind_blob (statement, id++, prefixes + k, CUE_LEN, NULL) ||
+    if (!ephy_sqlite_statement_bind_blob (statement, id++, prefixes + k, GSB_CUE_LEN, NULL) ||
         !ephy_sqlite_statement_bind_blob (statement, id++, prefixes + k, len, NULL) ||
         !bind_threat_list_params (statement, list, id, id + 1, id + 2, -1)) {
       g_warning ("Failed to bind values in hash prefix statement");
@@ -1158,7 +1156,7 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
 
   for (GList *l = cues; l && l->data; l = l->next) {
     ephy_sqlite_statement_bind_blob (statement, id++,
-                                     g_bytes_get_data (l->data, NULL), CUE_LEN,
+                                     g_bytes_get_data (l->data, NULL), GSB_CUE_LEN,
                                      &error);
     if (error) {
       g_warning ("Failed to bind cue value as blob: %s", error->message);

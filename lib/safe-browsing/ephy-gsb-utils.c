@@ -67,6 +67,23 @@ ephy_gsb_threat_list_free (EphyGSBThreatList *list)
   g_slice_free (EphyGSBThreatList, list);
 }
 
+gboolean
+ephy_gsb_threat_list_equal (EphyGSBThreatList *l1,
+                            EphyGSBThreatList *l2)
+{
+  g_assert (l1);
+  g_assert (l2);
+
+  if (g_strcmp0 (l1->threat_type, l2->threat_type) != 0)
+    return FALSE;
+  if (g_strcmp0 (l1->platform_type, l2->platform_type) != 0)
+    return FALSE;
+  if (g_strcmp0 (l1->threat_entry_type, l2->threat_entry_type) != 0)
+    return FALSE;
+
+  return TRUE;
+}
+
 EphyGSBHashPrefixLookup *
 ephy_gsb_hash_prefix_lookup_new (const guint8 *prefix,
                                  gsize         length,
@@ -625,4 +642,41 @@ ephy_gsb_utils_compute_hashes (const char *url)
   g_list_free_full (path_prefixes, g_free);
 
   return g_list_reverse (retval);
+}
+
+GList *
+ephy_gsb_utils_get_hash_cues (GList *hashes)
+{
+  GList *retval = NULL;
+
+  g_assert (hashes);
+
+  for (GList *l = hashes; l && l->data; l = l->next) {
+    const char *hash = g_bytes_get_data (l->data, NULL);
+    retval = g_list_prepend (retval, g_bytes_new (hash, GSB_CUE_LEN));
+  }
+
+  return g_list_reverse (retval);
+}
+
+gboolean
+ephy_gsb_utils_hash_has_prefix (GBytes *hash,
+                                GBytes *prefix)
+{
+  const guint8 *hash_data;
+  const guint8 *prefix_data;
+  gsize prefix_len;
+
+  g_assert (hash);
+  g_assert (prefix);
+
+  hash_data = g_bytes_get_data (hash, NULL);
+  prefix_data = g_bytes_get_data (prefix, &prefix_len);
+
+  for (gsize i = 0; i < prefix_len; i++) {
+    if (hash_data[i] != prefix_data[i])
+      return FALSE;
+  }
+
+  return TRUE;
 }
