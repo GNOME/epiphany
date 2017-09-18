@@ -59,6 +59,7 @@ void            ephy_gsb_storage_insert_full_hash               (EphyGSBStorage 
                                                                  EphyGSBThreatList *list,
                                                                  const guint8      *hash,
                                                                  gint64             duration);
+void            ephy_gsb_storage_delete_old_full_hashes         (EphyGSBStorage *self);
 void            ephy_gsb_storage_update_hash_prefix_expiration  (EphyGSBStorage *self,
                                                                  GBytes         *prefix,
                                                                  gint64          duration);

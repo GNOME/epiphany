@@ -28,6 +28,8 @@
 #include <glib/gstdio.h>
 #include <string.h>
 
+#define EXPIRATION_THRESHOLD (8 * 60 * 60)
+
 /* Keep this lower than 200 or else you'll get "too many SQL variables" error
  * in ephy_gsb_storage_insert_batch(). SQLITE_MAX_VARIABLE_NUMBER is hardcoded
  * in sqlite3 as 999.
@@ -1330,6 +1332,43 @@ ephy_gsb_storage_insert_full_hash (EphyGSBStorage    *self,
   ephy_sqlite_statement_step (statement, &error);
   if (error)
     g_warning ("Failed to execute insert full hash statement: %s", error->message);
+
+out:
+  if (statement)
+    g_object_unref (statement);
+  if (error)
+    g_error_free (error);
+}
+
+void
+ephy_gsb_storage_delete_old_full_hashes (EphyGSBStorage *self)
+{
+  EphySQLiteStatement *statement = NULL;
+  GError *error = NULL;
+  const char *sql;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+
+  LOG ("Deleting full hashes expired for more than %d seconds", EXPIRATION_THRESHOLD);
+
+  sql = "DELETE FROM hash_full "
+        "WHERE expires_at <= (CAST(strftime('%s', 'now') AS INT)) - ?";
+  statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
+  if (error) {
+    g_warning ("Failed to create delete full hash statement: %s", error->message);
+    goto out;
+  }
+
+  ephy_sqlite_statement_bind_int64 (statement, 0, EXPIRATION_THRESHOLD, &error);
+  if (error) {
+    g_warning ("Failed to bind int64 in delete full hash statement: %s", error->message);
+    goto out;
+  }
+
+  ephy_sqlite_statement_step (statement, &error);
+  if (error)
+    g_warning ("Failed to execute delete full hash statement: %s", error->message);
 
 out:
   if (statement)

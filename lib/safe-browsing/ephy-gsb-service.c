@@ -167,6 +167,8 @@ ephy_gsb_service_update_thread (GTask          *task,
   g_assert (EPHY_IS_GSB_SERVICE (self));
   g_assert (ephy_gsb_storage_is_operable (self->storage));
 
+  ephy_gsb_storage_delete_old_full_hashes (self->storage);
+
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists)
     goto out;
