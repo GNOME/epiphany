@@ -44,6 +44,8 @@ struct _EphyGSBService {
   guint           source_id;
 
   gint64          next_full_hashes_request_time;
+  gint64          back_off_mode_exit_time;
+  gint64          num_fails;
 
   SoupSession    *session;
 };
@@ -139,6 +141,38 @@ json_object_has_non_null_array_member (JsonObject *object,
   return JSON_NODE_HOLDS_ARRAY (node);
 }
 
+/*
+ * https://developers.google.com/safe-browsing/v4/request-frequency#back-off-mode
+ */
+static inline void
+ephy_gsb_service_update_back_off_mode (EphyGSBService *self)
+{
+  gint64 duration;
+
+  g_assert (EPHY_IS_GSB_SERVICE (self));
+
+  duration = (1 << self->num_fails++) * 15 * 60 * (g_random_double () + 1);
+  self->back_off_mode_exit_time = CURRENT_TIME + MIN (duration, 24 * 60 * 60);
+
+  LOG ("Set back-off mode for %ld seconds", duration);
+}
+
+static inline void
+ephy_gsb_service_reset_back_off_mode (EphyGSBService *self)
+{
+  g_assert (EPHY_IS_GSB_SERVICE (self));
+
+  self->num_fails = self->back_off_mode_exit_time = 0;
+}
+
+static inline gboolean
+ephy_gsb_service_is_back_off_mode (EphyGSBService *self)
+{
+  g_assert (EPHY_IS_GSB_SERVICE (self));
+
+  return self->num_fails > 0 && CURRENT_TIME < self->back_off_mode_exit_time;
+}
+
 static void
 ephy_gsb_service_schedule_update (EphyGSBService *self,
                                   gint64          interval)
@@ -183,11 +217,16 @@ ephy_gsb_service_update_thread (GTask          *task,
   soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
   soup_session_send_message (self->session, msg);
 
+  /* Handle unsuccessful responses. */
   if (msg->status_code != 200) {
-    LOG ("Cannot update GSB threat lists. Server responded: %u, %s",
-         msg->status_code, msg->response_body->data);
+    LOG ("Cannot update threat lists, got: %u, %s", msg->status_code, msg->response_body->data);
+    ephy_gsb_service_update_back_off_mode (self);
+    next_update_time = self->back_off_mode_exit_time;
     goto out;
   }
+
+  /* Successful response, reset back-off mode. */
+  ephy_gsb_service_reset_back_off_mode (self);
 
   body_node = json_from_string (msg->response_body->data, NULL);
   body_obj = json_node_get_object (body_node);
@@ -459,11 +498,15 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
   const char *duration_str;
   double duration;
 
+  /* Handle unsuccessful responses. */
   if (msg->status_code != 200) {
-    LOG ("Cannot update full hashes. Server responded: %u, %s",
-         msg->status_code, msg->response_body->data);
+    LOG ("Cannot update full hashes, got: %u, %s", msg->status_code, msg->response_body->data);
+    ephy_gsb_service_update_back_off_mode (self);
     goto out;
   }
+
+  /* Successful response, reset back-off mode. */
+  ephy_gsb_service_reset_back_off_mode (self);
 
   body_node = json_from_string (msg->response_body->data, NULL);
   body_obj = json_node_get_object (body_node);
@@ -557,6 +600,13 @@ ephy_gsb_service_find_full_hashes (EphyGSBService                  *self,
     callback (threats, user_data);
     return;
   }
+
+   if (ephy_gsb_service_is_back_off_mode (self)) {
+    LOG ("Cannot send fullHashes:find request. Back-off mode is enabled for %ld seconds",
+         self->back_off_mode_exit_time - CURRENT_TIME);
+    callback (threats, user_data);
+    return;
+   }
 
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists) {
