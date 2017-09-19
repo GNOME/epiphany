@@ -39,8 +39,12 @@ struct _EphyGSBService {
 
   char           *api_key;
   EphyGSBStorage *storage;
+
   gboolean        is_updating;
   guint           source_id;
+
+  gint64          next_full_hashes_request_time;
+
   SoupSession    *session;
 };
 
@@ -452,7 +456,7 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
   JsonObject *body_obj;
   JsonArray *matches;
   GList *hashes_lookup = NULL;
-  const char *negative_duration;
+  const char *duration_str;
   double duration;
 
   if (msg->status_code != 200) {
@@ -490,12 +494,17 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
   }
 
   /* Update negative cache duration. */
-  negative_duration = json_object_get_string_member (body_obj, "negativeCacheDuration");
-  sscanf (negative_duration, "%lfs", &duration);
+  duration_str = json_object_get_string_member (body_obj, "negativeCacheDuration");
+  sscanf (duration_str, "%lfs", &duration);
   for (GList *l = data->matching_prefixes; l && l->data; l = l->next)
     ephy_gsb_storage_update_hash_prefix_expiration (self->storage, l->data, floor (duration));
 
-  /* TODO: Handle minimumWaitDuration. */
+  /* Handle minimum wait duration. */
+  if (json_object_has_non_null_string_member (body_obj, "minimumWaitDuration")) {
+    duration_str = json_object_get_string_member (body_obj, "minimumWaitDuration");
+    sscanf (duration_str, "%lfs", &duration);
+    self->next_full_hashes_request_time = CURRENT_TIME + (gint64)ceil (duration);
+  }
 
   /* Repeat the full hash verification. */
   hashes_lookup = ephy_gsb_storage_lookup_full_hashes (self->storage, data->matching_hashes);
@@ -541,6 +550,13 @@ ephy_gsb_service_find_full_hashes (EphyGSBService                  *self,
   g_assert (matching_prefixes);
   g_assert (matching_hashes);
   g_assert (callback);
+
+  if (CURRENT_TIME < self->next_full_hashes_request_time) {
+    LOG ("Cannot send fullHashes:find request. Requests are restricted for %ld seconds",
+         self->next_full_hashes_request_time - CURRENT_TIME);
+    callback (threats, user_data);
+    return;
+  }
 
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists) {
