@@ -189,11 +189,10 @@ ephy_gsb_storage_init_metadata_table (EphyGSBStorage *self)
 static gboolean
 ephy_gsb_storage_init_threats_table (EphyGSBStorage *self)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
-  GString *string = NULL;
+  GString *string;
   const char *sql;
-  gboolean retval = FALSE;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (EPHY_IS_SQLITE_CONNECTION (self->db));
@@ -212,7 +211,8 @@ ephy_gsb_storage_init_threats_table (EphyGSBStorage *self)
   ephy_sqlite_connection_execute (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create threats table: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return FALSE;
   }
 
   sql = "INSERT INTO threats (threat_type, platform_type, threat_entry_type) VALUES ";
@@ -223,9 +223,12 @@ ephy_gsb_storage_init_threats_table (EphyGSBStorage *self)
   g_string_erase (string, string->len - 1, -1);
 
   statement = ephy_sqlite_connection_create_statement (self->db, string->str, &error);
+  g_string_free (string, TRUE);
+
   if (error) {
     g_warning ("Failed to create threats table insert statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return FALSE;
   }
 
   for (guint i = 0; i < G_N_ELEMENTS (gsb_linux_threat_lists); i++) {
@@ -238,22 +241,15 @@ ephy_gsb_storage_init_threats_table (EphyGSBStorage *self)
   }
 
   ephy_sqlite_statement_step (statement, &error);
+  g_object_unref (statement);
+
   if (error) {
     g_warning ("Failed to insert initial data into threats table: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return FALSE;
   }
 
-  retval = TRUE;
-
-out:
-  if (string)
-    g_string_free (string, TRUE);
-  if (statement)
-    g_object_unref (statement);
-  if (error)
-    g_error_free (error);
-
-  return retval;
+  return TRUE;
 }
 
 static gboolean
@@ -344,28 +340,29 @@ ephy_gsb_storage_open_db (EphyGSBStorage *self)
   ephy_sqlite_connection_open (self->db, self->db_path, &error);
   if (error) {
     g_warning ("Failed to open GSB database at %s: %s", self->db_path, error->message);
-    goto out_err;
+    g_error_free (error);
+    g_clear_object (&self->db);
+    return FALSE;
   }
 
   /* Enable foreign keys. */
   ephy_sqlite_connection_execute (self->db, "PRAGMA foreign_keys=ON", &error);
   if (error) {
     g_warning ("Failed to enable foreign keys pragma: %s", error->message);
-    goto out_err;
+    g_error_free (error);
+    g_clear_object (&self->db);
+    return FALSE;
   }
 
   ephy_sqlite_connection_execute (self->db, "PRAGMA synchronous=OFF", &error);
   if (error) {
     g_warning ("Failed to disable synchronous pragma: %s", error->message);
-    goto out_err;
+    g_error_free (error);
+    g_clear_object (&self->db);
+    return FALSE;
   }
 
   return TRUE;
-
-out_err:
-  g_clear_object (&self->db);
-  g_error_free (error);
-  return FALSE;
 }
 
 static void
@@ -412,7 +409,7 @@ ephy_gsb_storage_init_db (EphyGSBStorage *self)
 static gboolean
 ephy_gsb_storage_check_schema_version (EphyGSBStorage *self)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   gboolean success;
   const char *schema_version;
@@ -430,6 +427,7 @@ ephy_gsb_storage_check_schema_version (EphyGSBStorage *self)
   }
 
   ephy_sqlite_statement_step (statement, &error);
+
   if (error) {
     g_warning ("Failed to retrieve schema version: %s", error->message);
     g_error_free (error);
@@ -559,7 +557,7 @@ ephy_gsb_storage_is_operable (EphyGSBStorage *self)
 gint64
 ephy_gsb_storage_get_next_update_time (EphyGSBStorage *self)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   const char *next_update_at;
   const char *sql;
@@ -596,10 +594,10 @@ void
 ephy_gsb_storage_set_next_update_time (EphyGSBStorage *self,
                                        gint64          next_update_time)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
-  char *value = NULL;
   const char *sql;
+  char *value;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (self->is_operable);
@@ -608,32 +606,34 @@ ephy_gsb_storage_set_next_update_time (EphyGSBStorage *self,
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create update next update time statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return;
   }
 
-  value = g_strdup_printf ("%ld", next_update_time);;
+  value = g_strdup_printf ("%ld", next_update_time);
   ephy_sqlite_statement_bind_string (statement, 0, value, &error);
+  g_free (value);
+
   if (error) {
     g_warning ("Failed to bind string in next update time statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    g_object_unref (statement);
+    return;
   }
 
   ephy_sqlite_statement_step (statement, &error);
-  if (error)
-    g_warning ("Failed to update next update time: %s", error->message);
+  g_object_unref (statement);
 
-out:
-  g_free (value);
-  if (statement)
-    g_object_unref (statement);
-  if (error)
+  if (error) {
+    g_warning ("Failed to update next update time: %s", error->message);
     g_error_free (error);
+  }
 }
 
 GList *
 ephy_gsb_storage_get_threat_lists (EphyGSBStorage *self)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   GList *threat_lists = NULL;
   const char *sql;
@@ -675,12 +675,12 @@ char *
 ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
                                    EphyGSBThreatList *list)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   const char *sql;
   char *retval = NULL;
-  GChecksum *checksum = NULL;
-  guint8 *digest = NULL;
+  GChecksum *checksum ;
+  guint8 *digest;
   gsize digest_len = GSB_HASH_SIZE;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
@@ -693,11 +693,14 @@ ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create select hash prefix statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return NULL;
   }
 
-  if (!bind_threat_list_params (statement, list, 0, 1, 2, -1))
-    goto out;
+  if (!bind_threat_list_params (statement, list, 0, 1, 2, -1)) {
+    g_object_unref (statement);
+    return NULL;
+  }
 
   checksum = g_checksum_new (GSB_HASH_TYPE);
   while (ephy_sqlite_statement_step (statement, &error)) {
@@ -708,6 +711,7 @@ ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
 
   if (error) {
     g_warning ("Failed to execute select hash prefix statement: %s", error->message);
+    g_error_free (error);
     goto out;
   }
 
@@ -715,14 +719,10 @@ ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
   g_checksum_get_digest (checksum, digest, &digest_len);
   retval = g_base64_encode (digest, digest_len);
 
-out:
   g_free (digest);
-  if (statement)
-    g_object_unref (statement);
-  if (checksum)
-    g_checksum_free (checksum);
-  if (error)
-    g_error_free (error);
+out:
+  g_object_unref (statement);
+  g_checksum_free (checksum);
 
   return retval;
 }
@@ -732,7 +732,7 @@ ephy_gsb_storage_update_client_state (EphyGSBStorage    *self,
                                       EphyGSBThreatList *list,
                                       gboolean           clear)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   const char *sql;
 
@@ -753,28 +753,29 @@ ephy_gsb_storage_update_client_state (EphyGSBStorage    *self,
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create update threats statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return;
   }
 
-  if (!bind_threat_list_params (statement, list, 1, 2, 3, clear ? -1 : 0))
-    goto out;
+  if (!bind_threat_list_params (statement, list, 1, 2, 3, clear ? -1 : 0)) {
+    g_object_unref (statement);
+    return;
+  }
 
   ephy_sqlite_statement_step (statement, &error);
-  if (error)
+  if (error) {
     g_warning ("Failed to execute update threat statement: %s", error->message);
-
-out:
-  if (statement)
-    g_object_unref (statement);
-  if (error)
     g_error_free (error);
+  }
+
+  g_object_unref (statement);
 }
 
 void
 ephy_gsb_storage_clear_hash_prefixes (EphyGSBStorage    *self,
                                       EphyGSBThreatList *list)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   const char *sql;
 
@@ -787,21 +788,22 @@ ephy_gsb_storage_clear_hash_prefixes (EphyGSBStorage    *self,
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create delete hash prefix statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return;
   }
 
-  if (!bind_threat_list_params (statement, list, 0, 1, 2, -1))
-    goto out;
+  if (!bind_threat_list_params (statement, list, 0, 1, 2, -1)) {
+    g_object_unref (statement);
+    return;
+  }
 
   ephy_sqlite_statement_step (statement, &error);
-  if (error)
+  if (error) {
     g_warning ("Failed to execute clear hash prefix statement: %s", error->message);
-
-out:
-  if (statement)
-    g_object_unref (statement);
-  if (error)
     g_error_free (error);
+  }
+
+  g_object_unref (statement);
 }
 
 static GList *
@@ -810,7 +812,7 @@ ephy_gsb_storage_get_hash_prefixes_to_delete (EphyGSBStorage    *self,
                                               GHashTable        *indices,
                                               gsize             *num_prefixes)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   GList *prefixes = NULL;
   const char *sql;
@@ -829,11 +831,14 @@ ephy_gsb_storage_get_hash_prefixes_to_delete (EphyGSBStorage    *self,
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create select prefix value statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return NULL;
   }
 
-  if (!bind_threat_list_params (statement, list, 0, 1, 2, -1))
-    goto out;
+  if (!bind_threat_list_params (statement, list, 0, 1, 2, -1)) {
+    g_object_unref (statement);
+    return NULL;
+  }
 
   while (ephy_sqlite_statement_step (statement, &error)) {
     if (g_hash_table_contains (indices, GINT_TO_POINTER (index))) {
@@ -845,14 +850,12 @@ ephy_gsb_storage_get_hash_prefixes_to_delete (EphyGSBStorage    *self,
     index++;
   }
 
-  if (error)
+  if (error) {
     g_warning ("Failed to execute select prefix value statement: %s", error->message);
-
-out:
-  if (statement)
-    g_object_unref (statement);
-  if (error)
     g_error_free (error);
+  }
+
+  g_object_unref (statement);
 
   return prefixes;
 }
@@ -861,7 +864,7 @@ static EphySQLiteStatement *
 ephy_gsb_storage_make_delete_hash_prefix_statement (EphyGSBStorage *self,
                                                     gsize           num_prefixes)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   GString *sql;
 
@@ -999,7 +1002,7 @@ static EphySQLiteStatement *
 ephy_gsb_storage_make_insert_hash_prefix_statement (EphyGSBStorage *self,
                                                     gsize           num_prefixes)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   GString *sql;
 
@@ -1132,7 +1135,7 @@ GList *
 ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
                                        GList          *cues)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   GList *retval = NULL;
   GString *sql;
@@ -1151,9 +1154,12 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
   g_string_overwrite (sql, sql->len - 1, ")");
 
   statement = ephy_sqlite_connection_create_statement (self->db, sql->str, &error);
+  g_string_free (sql, TRUE);
+
   if (error) {
     g_warning ("Failed to create select hash prefix statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return NULL;
   }
 
   for (GList *l = cues; l && l->data; l = l->next) {
@@ -1162,7 +1168,9 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
                                      &error);
     if (error) {
       g_warning ("Failed to bind cue value as blob: %s", error->message);
-      goto out;
+      g_error_free (error);
+      g_object_unref (statement);
+      return NULL;
     }
   }
 
@@ -1183,16 +1191,12 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
 
   if (error) {
     g_warning ("Failed to execute select hash prefix statement: %s", error->message);
+    g_error_free (error);
     g_list_free_full (retval, (GDestroyNotify)ephy_gsb_hash_prefix_lookup_free);
     retval = NULL;
   }
 
-out:
-  g_string_free (sql, TRUE);
-  if (statement)
-    g_object_unref (statement);
-  if (error)
-    g_error_free (error);
+  g_object_unref (statement);
 
   return g_list_reverse (retval);
 }
@@ -1201,7 +1205,7 @@ GList *
 ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
                                      GList          *hashes)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   GList *retval = NULL;
   GString *sql;
@@ -1220,9 +1224,12 @@ ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
   g_string_overwrite (sql, sql->len - 1, ")");
 
   statement = ephy_sqlite_connection_create_statement (self->db, sql->str, &error);
+  g_string_free (sql, TRUE);
+
   if (error) {
     g_warning ("Failed to create select full hash statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return NULL;
   }
 
   for (GList *l = hashes; l && l->data; l = l->next) {
@@ -1231,7 +1238,9 @@ ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
                                      &error);
     if (error) {
       g_warning ("Failed to bind hash value as blob: %s", error->message);
-      goto out;
+      g_error_free (error);
+      g_object_unref (statement);
+      return NULL;
     }
   }
 
@@ -1251,16 +1260,12 @@ ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
 
   if (error) {
     g_warning ("Failed to execute select full hash statement: %s", error->message);
+    g_error_free (error);
     g_list_free_full (retval, (GDestroyNotify)ephy_gsb_hash_full_lookup_free);
     retval = NULL;
   }
 
-out:
-  g_string_free (sql, TRUE);
-  if (statement)
-    g_object_unref (statement);
-  if (error)
-    g_error_free (error);
+  g_object_unref (statement);
 
   return g_list_reverse (retval);
 }
@@ -1343,7 +1348,7 @@ out:
 void
 ephy_gsb_storage_delete_old_full_hashes (EphyGSBStorage *self)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   const char *sql;
 
@@ -1357,24 +1362,25 @@ ephy_gsb_storage_delete_old_full_hashes (EphyGSBStorage *self)
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create delete full hash statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return;
   }
 
   ephy_sqlite_statement_bind_int64 (statement, 0, EXPIRATION_THRESHOLD, &error);
   if (error) {
     g_warning ("Failed to bind int64 in delete full hash statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    g_object_unref (statement);
+    return;
   }
 
   ephy_sqlite_statement_step (statement, &error);
-  if (error)
+  if (error) {
     g_warning ("Failed to execute delete full hash statement: %s", error->message);
-
-out:
-  if (statement)
-    g_object_unref (statement);
-  if (error)
     g_error_free (error);
+  }
+
+  g_object_unref (statement);
 }
 
 void
@@ -1382,7 +1388,7 @@ ephy_gsb_storage_update_hash_prefix_expiration (EphyGSBStorage *self,
                                                 GBytes         *prefix,
                                                 gint64          duration)
 {
-  EphySQLiteStatement *statement = NULL;
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   const char *sql;
 
@@ -1396,13 +1402,16 @@ ephy_gsb_storage_update_hash_prefix_expiration (EphyGSBStorage *self,
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create update hash prefix statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    return;
   }
 
   ephy_sqlite_statement_bind_int64 (statement, 0, duration, &error);
   if (error) {
     g_warning ("Failed to bind int64 in update hash prefix statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    g_object_unref (statement);
+    return;
   }
   ephy_sqlite_statement_bind_blob (statement, 1,
                                    g_bytes_get_data (prefix, NULL),
@@ -1410,16 +1419,16 @@ ephy_gsb_storage_update_hash_prefix_expiration (EphyGSBStorage *self,
                                    &error);
   if (error) {
     g_warning ("Failed to bind blob in update hash prefix statement: %s", error->message);
-    goto out;
+    g_error_free (error);
+    g_object_unref (statement);
+    return;
   }
 
   ephy_sqlite_statement_step (statement, &error);
-  if (error)
+  if (error) {
     g_warning ("Failed to execute update hash prefix statement: %s", error->message);
-
-out:
-  if (statement)
-    g_object_unref (statement);
-  if (error)
     g_error_free (error);
+  }
+
+  g_object_unref (statement);
 }
