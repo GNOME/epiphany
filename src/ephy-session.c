@@ -1018,7 +1018,7 @@ confirm_before_recover (EphyWindow *window, const char *url, const char *title)
                                    0);
 
   ephy_web_view_load_error_page (ephy_embed_get_web_view (embed), url,
-                                 EPHY_WEB_VIEW_ERROR_PAGE_CRASH, NULL);
+                                 EPHY_WEB_VIEW_ERROR_PAGE_CRASH, NULL, NULL);
 }
 
 static void

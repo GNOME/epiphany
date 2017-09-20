@@ -28,6 +28,10 @@ G_BEGIN_DECLS
 #define GSB_HASH_TYPE G_CHECKSUM_SHA256
 #define GSB_HASH_SIZE (g_checksum_type_get_length (GSB_HASH_TYPE))
 
+#define GSB_THREAT_TYPE_MALWARE            "MALWARE"
+#define GSB_THREAT_TYPE_SOCIAL_ENGINEERING "SOCIAL_ENGINEERING"
+#define GSB_THREAT_TYPE_UNWANTED_SOFTWARE  "UNWANTED_SOFTWARE"
+
 typedef struct {
   char   *threat_type;
   char   *platform_type;

@@ -80,6 +80,7 @@ enum {
   WEB_VIEW_CREATED,
   PAGE_CREATED,
   ALLOW_TLS_CERTIFICATE,
+  ALLOW_UNSAFE_BROWSING,
   FORM_AUTH_DATA_SAVE_REQUESTED,
   SENSITIVE_FORM_FOCUSED,
 
@@ -334,6 +335,17 @@ web_extension_tls_error_page_message_received_cb (WebKitUserContentManager *mana
 
   page_id = ephy_embed_utils_get_js_result_as_number (message);
   g_signal_emit (shell, signals[ALLOW_TLS_CERTIFICATE], 0, page_id);
+}
+
+static void
+web_extension_unsafe_browsing_error_page_message_received_cb (WebKitUserContentManager *manager,
+                                                              WebKitJavascriptResult   *message,
+                                                              EphyEmbedShell           *shell)
+{
+  guint64 page_id;
+
+  page_id = ephy_embed_utils_get_js_result_as_number (message);
+  g_signal_emit (shell, signals[ALLOW_UNSAFE_BROWSING], 0, page_id);
 }
 
 static void
@@ -986,6 +998,12 @@ ephy_embed_shell_startup (GApplication *application)
                     shell);
 
   webkit_user_content_manager_register_script_message_handler (priv->user_content,
+                                                               "unsafeBrowsingErrorPage");
+  g_signal_connect (priv->user_content, "script-message-received::unsafeBrowsingErrorPage",
+                    G_CALLBACK (web_extension_unsafe_browsing_error_page_message_received_cb),
+                    shell);
+
+  webkit_user_content_manager_register_script_message_handler (priv->user_content,
                                                                "formAuthData");
   g_signal_connect (priv->user_content, "script-message-received::formAuthData",
                     G_CALLBACK (web_extension_form_auth_data_message_received_cb),
@@ -1254,6 +1272,22 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
    */
   signals[ALLOW_TLS_CERTIFICATE] =
     g_signal_new ("allow-tls-certificate",
+                  EPHY_TYPE_EMBED_SHELL,
+                  G_SIGNAL_RUN_FIRST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_UINT64);
+
+  /**
+   * EphyEmbedShell::allow-unsafe-browsing:
+   * @shell: the #EphyEmbedShell
+   * @page_id: the identifier of the web page
+   *
+   * Emitted when the web extension requests an exception be
+   * permitted for the unsafe browsing warning on the given page
+   */
+  signals[ALLOW_UNSAFE_BROWSING] =
+    g_signal_new ("allow-unsafe-browsing",
                   EPHY_TYPE_EMBED_SHELL,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL, NULL,

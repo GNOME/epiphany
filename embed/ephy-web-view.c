@@ -33,6 +33,7 @@
 #include "ephy-favicon-helpers.h"
 #include "ephy-file-helpers.h"
 #include "ephy-file-monitor.h"
+#include "ephy-gsb-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-option-menu.h"
@@ -78,6 +79,7 @@ struct _EphyWebView {
   guint load_failed : 1;
   guint history_frozen : 1;
   guint ever_committed : 1;
+  guint bypass_gsb_verification : 1;
 
   char *address;
   char *display_address;
@@ -827,6 +829,18 @@ allow_tls_certificate_cb (EphyEmbedShell *shell,
 }
 
 static void
+allow_unsafe_browsing_cb (EphyEmbedShell *shell,
+                          guint64         page_id,
+                          EphyWebView    *view)
+{
+  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
+    return;
+
+  view->bypass_gsb_verification = TRUE;
+  ephy_web_view_load_url (view, ephy_web_view_get_address (view));
+}
+
+static void
 page_created_cb (EphyEmbedShell        *shell,
                  guint64                page_id,
                  EphyWebExtensionProxy *web_extension,
@@ -848,6 +862,10 @@ page_created_cb (EphyEmbedShell        *shell,
 
   g_signal_connect_object (shell, "allow-tls-certificate",
                            G_CALLBACK (allow_tls_certificate_cb),
+                           view, 0);
+
+  g_signal_connect_object (shell, "allow-unsafe-browsing",
+                           G_CALLBACK (allow_unsafe_browsing_cb),
                            view, 0);
 }
 
@@ -1008,7 +1026,7 @@ process_crashed_cb (EphyWebView *web_view, gpointer user_data)
     return;
 
   ephy_web_view_load_error_page (web_view, ephy_web_view_get_address (web_view),
-                                 EPHY_WEB_VIEW_ERROR_PROCESS_CRASH, NULL);
+                                 EPHY_WEB_VIEW_ERROR_PROCESS_CRASH, NULL, NULL);
 }
 
 static gboolean
@@ -1259,12 +1277,74 @@ new_window_cb (EphyWebView *view,
   popups_manager_add_window (view, container);
 }
 
+typedef struct {
+  EphyWebView          *web_view;
+  WebKitPolicyDecision *decision;
+  char                 *request_uri;
+} VerifyUrlData;
+
+static inline VerifyUrlData *
+verify_url_data_new (EphyWebView          *web_view,
+                     WebKitPolicyDecision *decision,
+                     const char           *request_uri)
+{
+  VerifyUrlData *data = g_slice_new (VerifyUrlData);
+
+  data->web_view = g_object_ref (web_view);
+  data->decision = g_object_ref (decision);
+  data->request_uri = g_strdup (request_uri);
+
+  return data;
+}
+
+static inline void
+verify_url_data_free (VerifyUrlData *data)
+{
+  g_object_unref (data->web_view);
+  g_object_unref (data->decision);
+  g_free (data->request_uri);
+  g_slice_free (VerifyUrlData, data);
+}
+
+static void
+verify_url_cb (GHashTable *threats,
+               gpointer    user_data)
+{
+  VerifyUrlData *data = (VerifyUrlData *)user_data;
+  EphyGSBThreatList *list;
+  GList *threat_lists;
+
+  if (g_hash_table_size (threats) == 0) {
+    webkit_policy_decision_use (data->decision);
+    goto out;
+  }
+
+  webkit_policy_decision_ignore (data->decision);
+
+  /* Very rarely there are URLs that pose multiple types of threats.
+   * However, inform the user only about the first threat type.
+   */
+  threat_lists = g_hash_table_get_keys (threats);
+  list = threat_lists->data;
+  ephy_web_view_load_error_page (data->web_view, data->request_uri,
+                                 EPHY_WEB_VIEW_ERROR_UNSAFE_BROWSING,
+                                 NULL, list->threat_type);
+
+  g_list_free (threat_lists);
+out:
+  g_hash_table_unref (threats);
+  verify_url_data_free (data);
+}
+
 static gboolean
 decide_policy_cb (WebKitWebView           *web_view,
                   WebKitPolicyDecision    *decision,
                   WebKitPolicyDecisionType decision_type,
                   gpointer                 user_data)
 {
+  EphyGSBService *service;
+  WebKitNavigationPolicyDecision *navigation_decision;
+  WebKitNavigationAction *action;
   WebKitResponsePolicyDecision *response_decision;
   WebKitURIResponse *response;
   WebKitURIRequest *request;
@@ -1272,6 +1352,30 @@ decide_policy_cb (WebKitWebView           *web_view,
   EphyWebViewDocumentType type;
   const char *mime_type;
   const char *request_uri;
+
+  if (decision_type == WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION) {
+    if (!g_settings_get_boolean (EPHY_SETTINGS_WEB,
+                                 EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING))
+      return FALSE;
+
+    if (EPHY_WEB_VIEW (web_view)->bypass_gsb_verification) {
+      EPHY_WEB_VIEW (web_view)->bypass_gsb_verification = FALSE;
+      return FALSE;
+    }
+
+    navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
+    action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
+    request = webkit_navigation_action_get_request (action);
+    request_uri = webkit_uri_request_get_uri (request);
+
+    service = ephy_embed_shell_get_global_gsb_service (ephy_embed_shell_get_default ());
+    ephy_gsb_service_verify_url (service, request_uri, verify_url_cb,
+                                 verify_url_data_new (EPHY_WEB_VIEW (web_view),
+                                                      decision, request_uri));
+
+    /* Delay decision until the safe browsing verification has completed. */
+    return TRUE;
+  }
 
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
     return FALSE;
@@ -2155,6 +2259,7 @@ format_tls_error_page (EphyWebView *view,
 static void
 format_unsafe_browsing_error_page (EphyWebView *view,
                                    const char  *origin,
+                                   const char  *threat_type,
                                    char       **page_title,
                                    char       **message_title,
                                    char       **message_body,
@@ -2178,17 +2283,47 @@ format_unsafe_browsing_error_page (EphyWebView *view,
   *message_title = g_strdup (_("Unsafe website detected!"));
 
   formatted_origin = g_strdup_printf ("<strong>%s</strong>", origin);
-  /* Error details on the unsafe browsing error page. */
-  first_paragraph = g_strdup_printf (_("%s is reported to be unsafe. It might "
-                                       "trick you by pretending to be a "
-                                       "different website to steal your "
-                                       "information, or it might harm "
-                                       "your computer by installing malicious "
-                                       "software."), /* FIXME: be more accurate */
-                                     formatted_origin);
+  /* Error details on the unsafe browsing error page.
+   * https://developers.google.com/safe-browsing/v4/usage-limits#UserWarnings
+   */
+  if (!g_strcmp0 (threat_type, GSB_THREAT_TYPE_MALWARE)) {
+    first_paragraph = g_strdup_printf (_("Visiting %s may harm your computer. This "
+                                         "page appears to contain malicious code that could "
+                                         "be downloaded to your computer without your consent."),
+                                       formatted_origin);
+    *message_details = g_strdup_printf (_("You can learn more about harmful web content "
+                                          "including viruses and other malicious code "
+                                          "and how to protect your computer at %s."),
+                                        "<a href=\"https://www.stopbadware.org/\">"
+                                          "www.stopbadware.org"
+                                        "</a>");
+  } else if (!g_strcmp0 (threat_type, GSB_THREAT_TYPE_SOCIAL_ENGINEERING)) {
+    first_paragraph = g_strdup_printf (_("Attackers on %s may trick you into doing "
+                                         "something dangerous like installing software or "
+                                         "revealing your personal information (for example, "
+                                         "passwords, phone numbers, or credit cards)."),
+                                       formatted_origin);
+    *message_details = g_strdup_printf (_("You can find out more about social engineering "
+                                          "(phishing) at %s or from %s."),
+                                        "<a href=\"https://support.google.com/webmasters/answer/6350487\">"
+                                          "Social Engineering (Phishing and Deceptive Sites)"
+                                        "</a>",
+                                        "<a href=\"https://www.antiphishing.org/\">"
+                                          "www.antiphishing.org"
+                                        "</a>");
+  } else {
+    first_paragraph = g_strdup_printf (_("%s may contain harmful programs. Attackers might "
+                                         "attempt to trick you into installing programs that "
+                                         "harm your browsing experience (for example, by changing "
+                                         "your homepage or showing extra ads on sites you visit)."),
+                                       formatted_origin);
+    *message_details = g_strdup_printf (_("You can learn more about unwanted software at %s."),
+                                        "<a href=\"https://www.google.com/about/unwanted-software-policy.html\">"
+                                          "Unwanted Software Policy"
+                                        "</a>");
+  }
 
   *message_body = g_strdup_printf ("<p>%s</p>", first_paragraph);
-  *message_details = g_strdup (""); /* FIXME */
 
   /* The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE. */
   *button_label = g_strdup (_("Go Back"));
@@ -2216,6 +2351,7 @@ format_unsafe_browsing_error_page (EphyWebView *view,
  * @uri: uri that caused the failure
  * @page: one of #EphyWebViewErrorPage
  * @error: a GError to inspect, or %NULL
+ * @user_data: a pointer to additional data
  *
  * Loads an error page appropiate for @page in @view.
  *
@@ -2224,7 +2360,8 @@ void
 ephy_web_view_load_error_page (EphyWebView         *view,
                                const char          *uri,
                                EphyWebViewErrorPage page,
-                               GError              *error)
+                               GError              *error,
+                               gpointer             user_data)
 {
   GBytes *html_file;
   GString *html = g_string_new ("");
@@ -2322,6 +2459,7 @@ ephy_web_view_load_error_page (EphyWebView         *view,
     case EPHY_WEB_VIEW_ERROR_UNSAFE_BROWSING:
       format_unsafe_browsing_error_page (view,
                                          origin,
+                                         user_data,
                                          &page_title,
                                          &msg_title,
                                          &msg_body,
@@ -2400,7 +2538,7 @@ load_failed_cb (WebKitWebView  *web_view,
   if (error->domain != WEBKIT_NETWORK_ERROR &&
       error->domain != WEBKIT_POLICY_ERROR &&
       error->domain != WEBKIT_PLUGIN_ERROR) {
-    ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
+    ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error, NULL);
     return TRUE;
   }
 
@@ -2418,7 +2556,7 @@ load_failed_cb (WebKitWebView  *web_view,
     case WEBKIT_PLUGIN_ERROR_CANNOT_LOAD_PLUGIN:
     case WEBKIT_PLUGIN_ERROR_JAVA_UNAVAILABLE:
     case WEBKIT_PLUGIN_ERROR_CONNECTION_CANCELLED:
-      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error);
+      ephy_web_view_load_error_page (view, uri, EPHY_WEB_VIEW_ERROR_PAGE_NETWORK_ERROR, error, NULL);
       return TRUE;
     case WEBKIT_NETWORK_ERROR_CANCELLED:
     {
@@ -2462,7 +2600,7 @@ load_failed_with_tls_error_cb (WebKitWebView       *web_view,
   view->tls_errors = errors;
   view->tls_error_failing_uri = g_strdup (uri);
   ephy_web_view_load_error_page (EPHY_WEB_VIEW (web_view), uri,
-                                 EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL);
+                                 EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE, NULL, NULL);
 
   return TRUE;
 }

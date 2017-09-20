@@ -46,10 +46,10 @@
  * The format is {THREAT_TYPE, PLATFORM_TYPE, THREAT_ENTRY_TYPE}.
  */
 static const char * const gsb_linux_threat_lists[][3] = {
-  {"MALWARE",            "LINUX", "URL"},
-  {"SOCIAL_ENGINEERING", "LINUX", "URL"},
-  {"UNWANTED_SOFTWARE",  "LINUX", "URL"},
-  {"MALWARE",            "LINUX", "IP_RANGE"},
+  {GSB_THREAT_TYPE_MALWARE,            "LINUX", "URL"},
+  {GSB_THREAT_TYPE_SOCIAL_ENGINEERING, "LINUX", "URL"},
+  {GSB_THREAT_TYPE_UNWANTED_SOFTWARE,  "LINUX", "URL"},
+  {GSB_THREAT_TYPE_MALWARE,            "LINUX", "IP_RANGE"},
 };
 
 struct _EphyGSBStorage {
