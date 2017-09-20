@@ -196,10 +196,10 @@ ephy_gsb_service_update_thread (GTask          *task,
   JsonNode *body_node;
   JsonObject *body_obj;
   JsonArray *responses;
-  SoupMessage *msg = NULL;
-  GList *threat_lists = NULL;
+  SoupMessage *msg;
+  GList *threat_lists;
   gint64 next_update_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
-  char *url = NULL;
+  char *url;
   char *body;
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
@@ -208,8 +208,10 @@ ephy_gsb_service_update_thread (GTask          *task,
   ephy_gsb_storage_delete_old_full_hashes (self->storage);
 
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
-  if (!threat_lists)
-    goto out;
+  if (!threat_lists) {
+    g_task_return_int (task, next_update_time);
+    return;
+  }
 
   body = ephy_gsb_utils_make_list_updates_request (threat_lists);
   url = g_strdup_printf ("%sthreatListUpdates:fetch?key=%s", API_PREFIX, self->api_key);
@@ -217,12 +219,15 @@ ephy_gsb_service_update_thread (GTask          *task,
   soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
   soup_session_send_message (self->session, msg);
 
+  g_free (url);
+
   /* Handle unsuccessful responses. */
   if (msg->status_code != 200) {
     LOG ("Cannot update threat lists, got: %u, %s", msg->status_code, msg->response_body->data);
     ephy_gsb_service_update_back_off_mode (self);
-    next_update_time = self->back_off_mode_exit_time;
-    goto out;
+    g_object_unref (msg);
+    g_task_return_int (task, self->back_off_mode_exit_time);
+    return;
   }
 
   /* Successful response, reset back-off mode. */
@@ -304,11 +309,8 @@ ephy_gsb_service_update_thread (GTask          *task,
 
   ephy_gsb_storage_set_next_update_time (self->storage, next_update_time);
 
+  g_object_unref (msg);
   json_node_unref (body_node);
-out:
-  g_free (url);
-  if (msg)
-    g_object_unref (msg);
   g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
 
   g_task_return_int (task, next_update_time);
@@ -491,10 +493,10 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
 {
   FindFullHashesData *data = (FindFullHashesData *)user_data;
   EphyGSBService *self = data->service;
-  JsonNode *body_node = NULL;
+  JsonNode *body_node;
   JsonObject *body_obj;
   JsonArray *matches;
-  GList *hashes_lookup = NULL;
+  GList *hashes_lookup;
   const char *duration_str;
   double duration;
 
@@ -502,7 +504,9 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
   if (msg->status_code != 200) {
     LOG ("Cannot update full hashes, got: %u, %s", msg->status_code, msg->response_body->data);
     ephy_gsb_service_update_back_off_mode (self);
-    goto out;
+    data->callback (data->threats, data->user_data);
+    find_full_hashes_data_free (data);
+    return;
   }
 
   /* Successful response, reset back-off mode. */
@@ -564,11 +568,9 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
     }
   }
 
-out:
   data->callback (data->threats, data->user_data);
 
-  if (body_node)
-    json_node_unref (body_node);
+  json_node_unref (body_node);
   g_list_free_full (hashes_lookup, (GDestroyNotify)ephy_gsb_hash_full_lookup_free);
   find_full_hashes_data_free (data);
 }
@@ -679,7 +681,8 @@ ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
   /* If there are no database matches, then the URL is safe. */
   if (g_hash_table_size (matching_hashes_set) == 0) {
     LOG ("No database match, URL is safe");
-    goto return_result;
+    callback (threats, user_data);
+    goto out;
   }
 
   /* Check for full hashes matches.
@@ -707,7 +710,8 @@ ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
    */
   if (g_hash_table_size (threats) > 0) {
     LOG ("Positive cache hit, URL is not safe");
-    goto return_result;
+    callback (threats, user_data);
+    goto out;
   }
 
   /* Check for negative cache hit. That is, there are no expired
@@ -722,7 +726,8 @@ ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
   }
   if (!has_matching_expired_hashes && !has_matching_expired_prefixes) {
     LOG ("Negative cache hit, URL is safe");
-    goto return_result;
+    callback (threats, user_data);
+    goto out;
   }
 
   /* At this point we have either expired full hash matches and/or
@@ -736,10 +741,6 @@ ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
   ephy_gsb_service_find_full_hashes (self, threats,
                                      matching_prefixes, matching_hashes,
                                      callback, user_data);
-  goto out;
-
-return_result:
-  callback (threats, user_data);
 
 out:
   g_list_free (matching_prefixes);
