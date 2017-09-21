@@ -2360,17 +2360,16 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
                                          "move-right");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), page_num < n_pages - 1);
 
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *)event);
+    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+                    NULL, NULL,
+                    event->button, event->time);
   } else {
     tab = GTK_WIDGET (window->active_embed);
     tab_label = gtk_notebook_get_tab_label (notebook, tab);
 
-    /* Not tested, because I don't know how to trigger this code. */
-    gtk_menu_popup_at_widget (GTK_MENU (menu),
-                              tab_label,
-                              GDK_GRAVITY_SOUTH_WEST,
-                              GDK_GRAVITY_NORTH_WEST,
-                              NULL);
+    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+                    ephy_gui_menu_position_under_widget, tab_label,
+                    0, gtk_get_current_event_time ());
     gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
   }
 
