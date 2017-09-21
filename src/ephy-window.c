@@ -2924,7 +2924,7 @@ title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
                     G_CALLBACK (gtk_widget_destroy), NULL);
   gtk_popover_set_pointing_to (GTK_POPOVER (security_popover), lock_position);
   gtk_popover_set_position (GTK_POPOVER (security_popover), GTK_POS_BOTTOM);
-  gtk_popover_popup (GTK_POPOVER (security_popover));
+  gtk_widget_show (security_popover);
 }
 
 static GtkWidget *

@@ -234,5 +234,5 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
   g_free (self->address);
   self->address = g_strdup (address);
 
-  gtk_popover_popup (GTK_POPOVER (self));
+  gtk_widget_show (GTK_WIDGET (self));
 }
