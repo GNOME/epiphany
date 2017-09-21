@@ -289,23 +289,46 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
     if (active == 0) {
       GtkFileFilter *filter;
 
+#if GTK_CHECK_VERSION(3, 20, 0)
       file_chooser_dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (_("Choose File"),
                                                                            GTK_WINDOW (dialog),
                                                                            GTK_FILE_CHOOSER_ACTION_OPEN,
                                                                            _("I_mport"),
                                                                            _("_Cancel")));
+#else
+      file_chooser_dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                                          "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+                                          "filter", filter,
+                                          "modal", TRUE,
+                                          "transient-for", dialog,
+                                          "title", _("Choose File"),
+                                          NULL);
+
+      gtk_dialog_add_buttons (GTK_DIALOG (file_chooser_dialog),
+                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                              GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                              NULL);
+#endif
       gtk_file_chooser_set_show_hidden (file_chooser_dialog, TRUE);
 
       filter = gtk_file_filter_new ();
       gtk_file_filter_add_pattern (filter, "*.gvdb");
       gtk_file_chooser_set_filter (file_chooser_dialog, filter);
 
+#if GTK_CHECK_VERSION(3, 20, 0)
       chooser_response = gtk_native_dialog_run (GTK_NATIVE_DIALOG (file_chooser_dialog));
+#else
+      chooser_response = gtk_dialog_run (GTK_DIALOG (file_chooser_dialog));
+#endif
       if (chooser_response == GTK_RESPONSE_ACCEPT) {
         GError *error = NULL;
         char *filename;
 
+#if GTK_CHECK_VERSION(3, 20, 0)
         gtk_native_dialog_hide (GTK_NATIVE_DIALOG (file_chooser_dialog));
+#else
+        gtk_widget_hide (GTK_WIDGET (file_chooser_dialog));
+#endif
 
         filename = gtk_file_chooser_get_filename (file_chooser_dialog);
         imported = ephy_bookmarks_import (manager, filename, &error);
@@ -322,7 +345,11 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
 
         gtk_widget_destroy (import_info_dialog);
       }
+#if GTK_CHECK_VERSION(3, 20, 0)
       g_object_unref (file_chooser_dialog);
+#else
+      gtk_widget_destroy (GTK_WIDGET (file_chooser_dialog));
+#endif
     } else if (active == 1) {
       GError *error = NULL;
       GSList *profiles;
@@ -445,11 +472,21 @@ window_cmd_export_bookmarks (GSimpleAction *action,
   gboolean exported;
   GtkFileFilter *filter;
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (_("Choose File"),
                                                           GTK_WINDOW (user_data),
                                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                                           _("_Save"),
                                                           _("_Cancel")));
+#else
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_SAVE,
+                         "filter", filter,
+                         "modal", TRUE,
+                         "transient-for", user_data,
+                         "title", _("Choose File"),
+                         NULL);
+#endif
   gtk_file_chooser_set_show_hidden (dialog, TRUE);
 
   /* Translators: Only translate the part before ".gvdb" (e.g. "bookmarks") */
@@ -459,12 +496,20 @@ window_cmd_export_bookmarks (GSimpleAction *action,
   gtk_file_filter_add_pattern (filter, "*.gvdb");
   gtk_file_chooser_set_filter (dialog, filter);
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   chooser_response = gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog));
+#else
+  chooser_response = gtk_dialog_run (GTK_DIALOG (dialog));
+#endif
   if (chooser_response == GTK_RESPONSE_ACCEPT) {
     GError *error = NULL;
     char *filename;
 
+#if GTK_CHECK_VERSION(3, 20, 0)
     gtk_native_dialog_hide (GTK_NATIVE_DIALOG (dialog));
+#else
+    gtk_widget_hide (GTK_WIDGET (dialog));
+#endif
 
     filename = gtk_file_chooser_get_filename (dialog);
     exported = ephy_bookmarks_export (manager, filename, &error);
@@ -481,7 +526,11 @@ window_cmd_export_bookmarks (GSimpleAction *action,
     gtk_widget_destroy (export_info_dialog);
   }
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   g_object_unref (dialog);
+#else
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+#endif
 }
 
 void
@@ -861,12 +910,12 @@ window_cmd_new_tab (GSimpleAction *action,
 }
 
 static void
-open_response_cb (GtkNativeDialog *dialog, int response, EphyWindow *window)
+open_response_cb (GtkFileChooser *dialog, int response, EphyWindow *window)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
     char *uri, *converted;
 
-    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+    uri = gtk_file_chooser_get_uri (dialog);
     if (uri != NULL) {
       converted = g_filename_to_utf8 (uri, -1, NULL, NULL, NULL);
 
@@ -879,7 +928,11 @@ open_response_cb (GtkNativeDialog *dialog, int response, EphyWindow *window)
     }
   }
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   g_object_unref (dialog);
+#else
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+#endif
 }
 
 void
@@ -898,7 +951,11 @@ window_cmd_open (GSimpleAction *action,
   g_signal_connect (dialog, "response",
                     G_CALLBACK (open_response_cb), window);
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+#else
+  gtk_widget_show (GTK_WIDGET (dialog));
+#endif
 }
 
 typedef struct {
@@ -1449,7 +1506,7 @@ get_suggested_filename (EphyEmbed *embed)
 }
 
 static void
-save_response_cb (GtkNativeDialog *dialog, int response, EphyEmbed *embed)
+save_response_cb (GtkFileChooser *dialog, int response, EphyEmbed *embed)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
     char *uri, *converted;
@@ -1468,7 +1525,11 @@ save_response_cb (GtkNativeDialog *dialog, int response, EphyEmbed *embed)
     }
   }
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   g_object_unref (dialog);
+#else
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+#endif
 }
 
 void
@@ -1499,7 +1560,11 @@ window_cmd_save_as (GSimpleAction *action,
   g_signal_connect (dialog, "response",
                     G_CALLBACK (save_response_cb), embed);
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+#else
+  gtk_widget_show (GTK_WIDGET (dialog));
+#endif
 }
 
 void

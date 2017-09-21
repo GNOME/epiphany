@@ -102,12 +102,21 @@ ephy_create_file_chooser (const char           *title,
   g_return_val_if_fail (GTK_IS_WINDOW (parent), NULL);
   g_return_val_if_fail (default_filter >= 0 && default_filter <= EPHY_FILE_FILTER_LAST, NULL);
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (title,
                                                           GTK_WINDOW (parent),
                                                           action,
                                                           NULL,
                                                           _("_Cancel")));
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
+#else
+  dialog = GTK_FILE_CHOOSER (gtk_file_chooser_dialog_new (title,
+                                                          GTK_WINDOW (parent),
+                                                          action,
+                                                          NULL,
+                                                          NULL));
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+#endif
 
   downloads_dir = ephy_file_get_downloads_dir ();
   gtk_file_chooser_add_shortcut_folder (dialog, downloads_dir, NULL);
@@ -116,9 +125,33 @@ ephy_create_file_chooser (const char           *title,
   if (action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
       action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER) {
+#if GTK_CHECK_VERSION(3, 20, 0)
     gtk_file_chooser_native_set_accept_label (GTK_FILE_CHOOSER_NATIVE (dialog), _("_Open"));
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                            GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                            NULL);
+#pragma GCC diagnostic pop
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+                                     GTK_RESPONSE_ACCEPT);
+#endif
   } else if (action == GTK_FILE_CHOOSER_ACTION_SAVE) {
+#if GTK_CHECK_VERSION(3, 20, 0)
     gtk_file_chooser_native_set_accept_label (GTK_FILE_CHOOSER_NATIVE (dialog), _("_Save"));
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                            GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                            NULL);
+#pragma GCC diagnostic pop
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+                                     GTK_RESPONSE_ACCEPT);
+#endif
   }
 
   if (default_filter != EPHY_FILE_FILTER_NONE) {

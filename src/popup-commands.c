@@ -168,7 +168,11 @@ filename_suggested_cb (EphyDownload        *download,
   gtk_file_chooser_set_current_name (dialog, sanitized_filename);
   g_free (sanitized_filename);
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   if (gtk_native_dialog_run (GTK_NATIVE_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+#else
+  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+#endif
     char *uri;
     WebKitDownload *webkit_download;
 
@@ -188,7 +192,11 @@ filename_suggested_cb (EphyDownload        *download,
                      g_object_unref);
   }
 
+#if GTK_CHECK_VERSION(3, 20, 0)
   g_object_unref (dialog);
+#else
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+#endif
   g_free (data->title);
   g_object_unref (data->window);
   g_free (data);
