@@ -31,7 +31,7 @@ dnl Must be a valid git tag
 m4_define([epiphany_changelog_start],[3.24.0])
 
 AC_INIT([GNOME Web Browser],[3.24.5],[http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany],[epiphany])
-AX_IS_RELEASE([git-directory])
+AX_IS_RELEASE([always])
 
 AC_PREREQ([2.69])
 
