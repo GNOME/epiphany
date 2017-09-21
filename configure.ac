@@ -108,7 +108,6 @@ PKG_CHECK_MODULES([GNOME_DESKTOP], [gnome-desktop-3.0 >= 2.91.2])
 PKG_CHECK_MODULES([GTK], [gtk+-3.0 >= $GTK_REQUIRED])
 PKG_CHECK_MODULES([GTK_UNIX_PRINT], [gtk+-unix-print-3.0 >= $GTK_REQUIRED])
 PKG_CHECK_MODULES([ICU_UC], [icu-uc >= 4.6])
-PKG_CHECK_MODULES([JSON_GLIB], [json-glib-1.0 >= 1.2.0])
 PKG_CHECK_MODULES([LIBNOTIFY], [libnotify >= 0.5.1])
 PKG_CHECK_MODULES([LIBSECRET], [libsecret-1 >= 0.14])
 PKG_CHECK_MODULES([LIBSOUP], [libsoup-2.4 >= 2.48.0])
@@ -140,7 +139,8 @@ AC_ARG_ENABLE([firefox-sync],
 	[enable_firefox_sync=no]
 )
 AS_IF([test "x$enable_firefox_sync" = "xyes"],
-	[PKG_CHECK_MODULES([HOGWEED], [hogweed >= 3.2])
+	[PKG_CHECK_MODULES([JSON_GLIB], [json-glib-1.0 >= 1.2.0])
+	 PKG_CHECK_MODULES([HOGWEED], [hogweed >= 3.2])
 	 PKG_CHECK_MODULES([NETTLE], [nettle >= 3.2])
 	 AC_DEFINE([ENABLE_SYNC], [1], [Define if Firefox Sync support is enabled])]
 )

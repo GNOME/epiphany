@@ -48,6 +48,7 @@ struct _EphyBookmark {
   gboolean     uploaded;
 };
 
+#ifdef ENABLE_SYNC
 static JsonSerializableIface *serializable_iface = NULL;
 
 static void json_serializable_iface_init (gpointer g_iface);
@@ -55,6 +56,9 @@ static void json_serializable_iface_init (gpointer g_iface);
 G_DEFINE_TYPE_WITH_CODE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE,
                                                json_serializable_iface_init))
+#else
+G_DEFINE_TYPE (EphyBookmark, ephy_bookmark, G_TYPE_OBJECT)
+#endif
 
 enum {
   PROP_0,
@@ -230,6 +234,7 @@ ephy_bookmark_init (EphyBookmark *self)
 #endif
 }
 
+#ifdef ENABLE_SYNC
 static JsonNode *
 ephy_bookmark_json_serializable_serialize_property (JsonSerializable *serializable,
                                                     const char       *name,
@@ -303,6 +308,7 @@ json_serializable_iface_init (gpointer g_iface)
   iface->serialize_property = ephy_bookmark_json_serializable_serialize_property;
   iface->deserialize_property = ephy_bookmark_json_serializable_deserialize_property;
 }
+#endif
 
 EphyBookmark *
 ephy_bookmark_new (const char *url, const char *title, GSequence *tags)

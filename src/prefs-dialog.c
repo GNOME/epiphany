@@ -47,10 +47,11 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <JavaScriptCore/JavaScript.h>
-#include <json-glib/json-glib.h>
 #include <string.h>
 
 #ifdef ENABLE_SYNC
+#include <json-glib/json-glib.h>
+
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-secret.h"
 #include "ephy-sync-service.h"

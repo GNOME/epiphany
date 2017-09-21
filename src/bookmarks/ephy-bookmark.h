@@ -21,7 +21,10 @@
 #pragma once
 
 #include <glib-object.h>
+
+#ifdef ENABLE_SYNC
 #include <json-glib/json-glib.h>
+#endif
 
 G_BEGIN_DECLS
 
