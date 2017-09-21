@@ -25,13 +25,129 @@
 #include "ephy-string.h"
 
 #include <arpa/inet.h>
-#include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
+#include <stdio.h>
 #include <string.h>
 
 #define MAX_HOST_SUFFIXES 5
 #define MAX_PATH_PREFIXES 6
 #define MAX_UNESCAPE_STEP 1024
+
+typedef struct {
+  guint8 *data;     /* The bit stream as an array of bytes */
+  gsize   data_len; /* The number of bytes in the array */
+  guint8 *curr;     /* The current byte in the bit stream */
+  guint8  mask;     /* Bit mask to read a bit within a byte */
+  gsize   num_read; /* The number of bits read so far */
+} EphyGSBBitReader;
+
+typedef struct {
+  EphyGSBBitReader *reader;
+  guint             parameter; /* Golomb-Rice parameter, between 2 and 28 */
+} EphyGSBRiceDecoder;
+
+static inline EphyGSBBitReader *
+ephy_gsb_bit_reader_new (const guint8 *data,
+                         gsize         data_len)
+{
+  EphyGSBBitReader *reader;
+
+  g_assert (data);
+  g_assert (data_len > 0);
+
+  reader = g_slice_new (EphyGSBBitReader);
+  reader->curr = reader->data = g_malloc (data_len);
+  memcpy (reader->data, data, data_len);
+  reader->data_len = data_len;
+  reader->mask = 0x01;
+  reader->num_read = 0;
+
+  return reader;
+}
+
+static inline void
+ephy_gsb_bit_reader_free (EphyGSBBitReader *reader)
+{
+  g_assert (reader);
+
+  g_free (reader->data);
+  g_slice_free (EphyGSBBitReader, reader);
+}
+
+/*
+ * https://developers.google.com/safe-browsing/v4/compression#bit-encoderdecoder
+ */
+static guint32
+ephy_gsb_bit_reader_read (EphyGSBBitReader *reader,
+                          guint             num_bits)
+{
+  guint32 retval = 0;
+
+  /* Cannot read more than 4 bytes at once. */
+  g_assert (num_bits <= 32);
+  /* Cannot read more bits than the buffer has left. */
+  g_assert (reader->num_read + num_bits <= reader->data_len * 8);
+
+  /* Within a byte, the least-significant bits come before the most-significant
+   * bits in the bit stream. */
+  for (guint i = 0; i < num_bits; i++) {
+    if (*reader->curr & reader->mask)
+      retval |= 1 << i;
+
+    reader->mask <<= 1;
+    if (reader->mask == 0) {
+      reader->curr++;
+      reader->mask = 0x01;
+    }
+  }
+
+  reader->num_read += num_bits;
+
+  return retval;
+}
+
+static inline EphyGSBRiceDecoder *
+ephy_gsb_rice_decoder_new (const guint8 *data,
+                           gsize         data_len,
+                           guint         parameter)
+{
+  EphyGSBRiceDecoder *decoder;
+
+  g_assert (data);
+  g_assert (data_len > 0);
+
+  decoder = g_slice_new (EphyGSBRiceDecoder);
+  decoder->reader = ephy_gsb_bit_reader_new (data, data_len);
+  decoder->parameter = parameter;
+
+  return decoder;
+}
+
+static inline void
+ephy_gsb_rice_decoder_free (EphyGSBRiceDecoder *decoder)
+{
+  g_assert (decoder);
+
+  ephy_gsb_bit_reader_free (decoder->reader);
+  g_slice_free (EphyGSBRiceDecoder, decoder);
+}
+
+static guint32
+ephy_gsb_rice_decoder_next (EphyGSBRiceDecoder *decoder)
+{
+  guint32 quotient = 0;
+  guint32 remainder;
+  guint32 bit;
+
+  g_assert (decoder);
+
+  while ((bit = ephy_gsb_bit_reader_read (decoder->reader, 1)) != 0)
+    quotient += bit;
+
+  remainder = ephy_gsb_bit_reader_read (decoder->reader, decoder->parameter);
+
+  return (quotient << decoder->parameter) + remainder;
+}
 
 EphyGSBThreatList *
 ephy_gsb_threat_list_new (const char *threat_type,
@@ -176,7 +292,8 @@ ephy_gsb_utils_make_contraints (void)
   JsonArray *compressions;
 
   compressions = json_array_new ();
-  json_array_add_string_element (compressions, "RAW");
+  json_array_add_string_element (compressions, GSB_COMPRESSION_TYPE_RAW);
+  json_array_add_string_element (compressions, GSB_COMPRESSION_TYPE_RICE);
 
   constraints = json_object_new ();
   /* No restriction for the number of update entries. */
@@ -321,6 +438,58 @@ ephy_gsb_utils_make_full_hashes_request (GList *threat_lists,
   json_node_unref (body_node);
 
   return body;
+}
+
+/*
+ * https://developers.google.com/safe-browsing/v4/compression#rice-compression
+ */
+guint32 *
+ephy_gsb_utils_rice_delta_decode (JsonObject *rde,
+                                  gsize      *num_items)
+{
+  EphyGSBRiceDecoder *decoder;
+  const char *data_b64 = NULL;
+  const char *first_value_str;
+  guint32 *items;
+  guint8 *data;
+  gsize data_len;
+  gsize num_entries = 0;
+  guint parameter = 0;
+
+  g_assert (rde);
+  g_assert (num_items);
+
+  /* This field is never missing. */
+  first_value_str = json_object_get_string_member (rde, "firstValue");
+
+  if (json_object_has_member (rde, "riceParameter"))
+    parameter = json_object_get_int_member (rde, "riceParameter");
+  if (json_object_has_member (rde, "numEntries"))
+    num_entries = json_object_get_int_member (rde, "numEntries");
+  if (json_object_has_member (rde, "encodedData"))
+    data_b64 = json_object_get_string_member (rde, "encodedData");
+
+  *num_items = 1 + num_entries;
+  items = g_malloc (*num_items * sizeof (guint32));
+  sscanf (first_value_str, "%u", &items[0]);
+
+  if (num_entries == 0)
+    return items;
+
+  /* Sanity check. */
+  if (parameter < 2 || parameter > 28 || data_b64 == NULL)
+    return items;
+
+  data = g_base64_decode (data_b64, &data_len);
+  decoder = ephy_gsb_rice_decoder_new (data, data_len, parameter);
+
+  for (gsize i = 1; i <= num_entries; i++)
+    items[i] = items[i - 1] + ephy_gsb_rice_decoder_next (decoder);
+
+  g_free (data);
+  ephy_gsb_rice_decoder_free (decoder);
+
+  return items;
 }
 
 static char *
@@ -653,7 +822,7 @@ ephy_gsb_utils_get_hash_cues (GList *hashes)
 
   for (GList *l = hashes; l && l->data; l = l->next) {
     const char *hash = g_bytes_get_data (l->data, NULL);
-    retval = g_list_prepend (retval, g_bytes_new (hash, GSB_CUE_LEN));
+    retval = g_list_prepend (retval, g_bytes_new (hash, GSB_HASH_CUE_LEN));
   }
 
   return g_list_reverse (retval);

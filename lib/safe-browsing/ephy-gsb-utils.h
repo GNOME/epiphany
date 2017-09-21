@@ -21,12 +21,19 @@
 #pragma once
 
 #include <glib.h>
+#include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
-#define GSB_CUE_LEN   4
+#define GSB_HASH_CUE_LEN    4
+#define GSB_RICE_PREFIX_LEN 4
+
 #define GSB_HASH_TYPE G_CHECKSUM_SHA256
 #define GSB_HASH_SIZE (g_checksum_type_get_length (GSB_HASH_TYPE))
+
+#define GSB_COMPRESSION_TYPE_RAW         "RAW"
+#define GSB_COMPRESSION_TYPE_RICE        "RICE"
+#define GSB_COMPRESSION_TYPE_UNSPECIFIED "COMPRESSION_TYPE_UNSPECIFIED"
 
 #define GSB_THREAT_TYPE_MALWARE            "MALWARE"
 #define GSB_THREAT_TYPE_SOCIAL_ENGINEERING "SOCIAL_ENGINEERING"
@@ -83,6 +90,9 @@ void                     ephy_gsb_hash_full_lookup_free           (EphyGSBHashFu
 char                    *ephy_gsb_utils_make_list_updates_request (GList *threat_lists);
 char                    *ephy_gsb_utils_make_full_hashes_request  (GList *threat_lists,
                                                                    GList *hash_prefixes);
+
+guint32                 *ephy_gsb_utils_rice_delta_decode         (JsonObject *rde,
+                                                                   gsize      *num_items);
 
 char                    *ephy_gsb_utils_canonicalize              (const char  *url,
                                                                    char       **host_out,

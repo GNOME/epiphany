@@ -23,7 +23,6 @@
 #include "ephy-gsb-utils.h"
 
 #include <glib-object.h>
-#include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
@@ -46,11 +45,10 @@ void            ephy_gsb_storage_clear_hash_prefixes            (EphyGSBStorage 
                                                                  EphyGSBThreatList *list);
 void            ephy_gsb_storage_delete_hash_prefixes           (EphyGSBStorage    *self,
                                                                  EphyGSBThreatList *list,
-                                                                 JsonArray         *indices);
+                                                                 JsonObject        *tes);
 void            ephy_gsb_storage_insert_hash_prefixes           (EphyGSBStorage    *self,
                                                                  EphyGSBThreatList *list,
-                                                                 gsize              prefix_len,
-                                                                 const char        *prefixes_b64);
+                                                                 JsonObject        *tes);
 GList          *ephy_gsb_storage_lookup_hash_prefixes           (EphyGSBStorage *self,
                                                                  GList          *cues);
 GList          *ephy_gsb_storage_lookup_full_hashes             (EphyGSBStorage *self,

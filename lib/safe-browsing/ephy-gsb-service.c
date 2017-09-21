@@ -263,9 +263,7 @@ ephy_gsb_service_update_thread (GTask          *task,
       JsonArray *removals = json_object_get_array_member (lur, "removals");
       for (guint k = 0; k < json_array_get_length (removals); k++) {
         JsonObject *tes = json_array_get_object_element (removals, k);
-        JsonObject *raw_indices = json_object_get_object_member (tes, "rawIndices");
-        JsonArray *indices = json_object_get_array_member (raw_indices, "indices");
-        ephy_gsb_storage_delete_hash_prefixes (self->storage, list, indices);
+        ephy_gsb_storage_delete_hash_prefixes (self->storage, list, tes);
       }
     }
 
@@ -274,10 +272,7 @@ ephy_gsb_service_update_thread (GTask          *task,
       JsonArray *additions = json_object_get_array_member (lur, "additions");
       for (guint k = 0; k < json_array_get_length (additions); k++) {
         JsonObject *tes = json_array_get_object_element (additions, k);
-        JsonObject *raw_hashes = json_object_get_object_member (tes, "rawHashes");
-        gint64 prefix_size = json_object_get_int_member (raw_hashes, "prefixSize");
-        const char *hashes = json_object_get_string_member (raw_hashes, "rawHashes");
-        ephy_gsb_storage_insert_hash_prefixes (self->storage, list, prefix_size, hashes);
+        ephy_gsb_storage_insert_hash_prefixes (self->storage, list, tes);
       }
     }
 

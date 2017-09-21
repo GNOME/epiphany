@@ -841,7 +841,7 @@ ephy_gsb_storage_get_hash_prefixes_to_delete (EphyGSBStorage    *self,
   }
 
   while (ephy_sqlite_statement_step (statement, &error)) {
-    if (g_hash_table_contains (indices, GINT_TO_POINTER (index))) {
+    if (g_hash_table_contains (indices, GUINT_TO_POINTER (index))) {
       const guint8 *blob = ephy_sqlite_statement_get_column_as_blob (statement, 0);
       gsize size = ephy_sqlite_statement_get_column_size (statement, 0);
       prefixes = g_list_prepend (prefixes, g_bytes_new (blob, size));
@@ -891,11 +891,11 @@ ephy_gsb_storage_make_delete_hash_prefix_statement (EphyGSBStorage *self,
 }
 
 static GList *
-ephy_gsb_storage_delete_hash_prefix_batch (EphyGSBStorage      *self,
-                                           EphyGSBThreatList   *list,
-                                           GList               *prefixes,
-                                           gsize                num_prefixes,
-                                           EphySQLiteStatement *stmt)
+ephy_gsb_storage_delete_hash_prefixes_batch (EphyGSBStorage      *self,
+                                             EphyGSBThreatList   *list,
+                                             GList               *prefixes,
+                                             gsize                num_prefixes,
+                                             EphySQLiteStatement *stmt)
 {
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
@@ -945,10 +945,11 @@ out:
   return prefixes;
 }
 
-void
-ephy_gsb_storage_delete_hash_prefixes (EphyGSBStorage    *self,
-                                       EphyGSBThreatList *list,
-                                       JsonArray         *indices)
+static void
+ephy_gsb_storage_delete_hash_prefixes_internal (EphyGSBStorage    *self,
+                                                EphyGSBThreatList *list,
+                                                guint32           *indices,
+                                                gsize              num_indices)
 {
   EphySQLiteStatement *statement = NULL;
   GList *prefixes = NULL;
@@ -961,12 +962,12 @@ ephy_gsb_storage_delete_hash_prefixes (EphyGSBStorage    *self,
   g_assert (list);
   g_assert (indices);
 
-  LOG ("Deleting %u hash prefixes...", json_array_get_length (indices));
+  LOG ("Deleting %lu hash prefixes...", num_indices);
 
-  /* Move indices from the JSON array to a hash table set. */
+  /* Move indices from the array to a hash table set. */
   set = g_hash_table_new (g_direct_hash, g_direct_equal);
-  for (guint i = 0; i < json_array_get_length (indices); i++)
-    g_hash_table_add (set, GINT_TO_POINTER (json_array_get_int_element (indices, i)));
+  for (gsize i = 0; i < num_indices; i++)
+    g_hash_table_add (set, GUINT_TO_POINTER (indices[i]));
 
   prefixes = ephy_gsb_storage_get_hash_prefixes_to_delete (self, list, set, &num_prefixes);
   head = prefixes;
@@ -978,16 +979,16 @@ ephy_gsb_storage_delete_hash_prefixes (EphyGSBStorage    *self,
     statement = ephy_gsb_storage_make_delete_hash_prefix_statement (self, BATCH_SIZE);
 
     for (gsize i = 0; i < num_prefixes / BATCH_SIZE; i++) {
-      head = ephy_gsb_storage_delete_hash_prefix_batch (self, list,
-                                                        head, BATCH_SIZE,
-                                                        statement);
+      head = ephy_gsb_storage_delete_hash_prefixes_batch (self, list,
+                                                          head, BATCH_SIZE,
+                                                          statement);
     }
   }
 
   if (num_prefixes % BATCH_SIZE != 0) {
-    ephy_gsb_storage_delete_hash_prefix_batch (self, list,
-                                               head, num_prefixes % BATCH_SIZE,
-                                               NULL);
+    ephy_gsb_storage_delete_hash_prefixes_batch (self, list,
+                                                 head, num_prefixes % BATCH_SIZE,
+                                                 NULL);
   }
 
   ephy_gsb_storage_end_transaction (self);
@@ -996,6 +997,42 @@ ephy_gsb_storage_delete_hash_prefixes (EphyGSBStorage    *self,
   g_list_free_full (prefixes, (GDestroyNotify)g_bytes_unref);
   if (statement)
     g_object_unref (statement);
+}
+
+void
+ephy_gsb_storage_delete_hash_prefixes (EphyGSBStorage    *self,
+                                       EphyGSBThreatList *list,
+                                       JsonObject        *tes)
+{
+  JsonObject *raw_indices;
+  JsonObject *rice_indices;
+  JsonArray *indices_arr;
+  const char *compression;
+  guint32 *indices;
+  gsize num_indices;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+  g_assert (list);
+  g_assert (tes);
+
+  compression = json_object_get_string_member (tes, "compressionType");
+  if (!g_strcmp0 (compression, GSB_COMPRESSION_TYPE_RICE)) {
+    rice_indices = json_object_get_object_member (tes, "riceIndices");
+    indices = ephy_gsb_utils_rice_delta_decode (rice_indices, &num_indices);
+  } else {
+    raw_indices = json_object_get_object_member (tes, "rawIndices");
+    indices_arr = json_object_get_array_member (raw_indices, "indices");
+    num_indices = json_array_get_length (indices_arr);
+
+    indices = g_malloc (num_indices * sizeof (guint32));
+    for (gsize i = 0; i < num_indices; i++)
+      indices[i] = json_array_get_int_element (indices_arr, i);
+  }
+
+  ephy_gsb_storage_delete_hash_prefixes_internal (self, list, indices, num_indices);
+
+  g_free (indices);
 }
 
 static EphySQLiteStatement *
@@ -1028,13 +1065,13 @@ ephy_gsb_storage_make_insert_hash_prefix_statement (EphyGSBStorage *self,
 }
 
 static void
-ephy_gsb_storage_insert_hash_prefix_batch (EphyGSBStorage      *self,
-                                           EphyGSBThreatList   *list,
-                                           const guint8        *prefixes,
-                                           gsize                start,
-                                           gsize                end,
-                                           gsize                len,
-                                           EphySQLiteStatement *stmt)
+ephy_gsb_storage_insert_hash_prefixes_batch (EphyGSBStorage      *self,
+                                             EphyGSBThreatList   *list,
+                                             const guint8        *prefixes,
+                                             gsize                start,
+                                             gsize                end,
+                                             gsize                len,
+                                             EphySQLiteStatement *stmt)
 {
   EphySQLiteStatement *statement = NULL;
   GError *error = NULL;
@@ -1057,7 +1094,7 @@ ephy_gsb_storage_insert_hash_prefix_batch (EphyGSBStorage      *self,
   }
 
   for (gsize k = start; k < end; k += len) {
-    if (!ephy_sqlite_statement_bind_blob (statement, id++, prefixes + k, GSB_CUE_LEN, NULL) ||
+    if (!ephy_sqlite_statement_bind_blob (statement, id++, prefixes + k, GSB_HASH_CUE_LEN, NULL) ||
         !ephy_sqlite_statement_bind_blob (statement, id++, prefixes + k, len, NULL) ||
         !bind_threat_list_params (statement, list, id, id + 1, id + 2, -1)) {
       g_warning ("Failed to bind values in hash prefix statement");
@@ -1077,58 +1114,96 @@ out:
     g_object_unref (statement);
 }
 
-void
-ephy_gsb_storage_insert_hash_prefixes (EphyGSBStorage    *self,
-                                       EphyGSBThreatList *list,
-                                       gsize              prefix_len,
-                                       const char        *prefixes_b64)
+static void
+ephy_gsb_storage_insert_hash_prefixes_internal (EphyGSBStorage    *self,
+                                                EphyGSBThreatList *list,
+                                                const guint8      *prefixes,
+                                                gsize              num_prefixes,
+                                                gsize              prefix_len)
 {
   EphySQLiteStatement *statement = NULL;
-  guint8 *prefixes;
-  gsize prefixes_len;
-  gsize num_prefixes;
   gsize num_batches;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (self->is_operable);
   g_assert (list);
-  g_assert (prefix_len > 0);
-  g_assert (prefixes_b64);
-
-  prefixes = g_base64_decode (prefixes_b64, &prefixes_len);
-  num_prefixes = prefixes_len / prefix_len;
-  num_batches = num_prefixes / BATCH_SIZE;
+  g_assert (prefixes);
 
   LOG ("Inserting %lu hash prefixes of size %ld...", num_prefixes, prefix_len);
 
   ephy_gsb_storage_start_transaction (self);
 
+  num_batches = num_prefixes / BATCH_SIZE;
   if (num_batches > 0) {
     /* Reuse statement to increase performance. */
     statement = ephy_gsb_storage_make_insert_hash_prefix_statement (self, BATCH_SIZE);
 
     for (gsize i = 0; i < num_batches; i++) {
-      ephy_gsb_storage_insert_hash_prefix_batch (self, list, prefixes,
-                                                 i * prefix_len * BATCH_SIZE,
-                                                 (i + 1) * prefix_len * BATCH_SIZE,
-                                                 prefix_len,
-                                                 statement);
+      ephy_gsb_storage_insert_hash_prefixes_batch (self, list, prefixes,
+                                                   i * prefix_len * BATCH_SIZE,
+                                                   (i + 1) * prefix_len * BATCH_SIZE,
+                                                   prefix_len,
+                                                   statement);
     }
   }
 
   if (num_prefixes % BATCH_SIZE != 0) {
-    ephy_gsb_storage_insert_hash_prefix_batch (self, list, prefixes,
-                                               num_batches * prefix_len * BATCH_SIZE,
-                                               prefixes_len - 1,
-                                               prefix_len,
-                                               NULL);
+    ephy_gsb_storage_insert_hash_prefixes_batch (self, list, prefixes,
+                                                 num_batches * prefix_len * BATCH_SIZE,
+                                                 num_prefixes * prefix_len - 1,
+                                                 prefix_len,
+                                                 NULL);
   }
 
   ephy_gsb_storage_end_transaction (self);
 
-  g_free (prefixes);
   if (statement)
     g_object_unref (statement);
+}
+
+void
+ephy_gsb_storage_insert_hash_prefixes (EphyGSBStorage    *self,
+                                       EphyGSBThreatList *list,
+                                       JsonObject        *tes)
+{
+  JsonObject *raw_hashes;
+  JsonObject *rice_hashes;
+  const char *compression;
+  const char *prefixes_b64;
+  guint32 *items = NULL;
+  guint8 *prefixes;
+  gsize prefixes_len;
+  gsize prefix_len;
+  gsize num_prefixes;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (self->is_operable);
+  g_assert (list);
+  g_assert (tes);
+
+  compression = json_object_get_string_member (tes, "compressionType");
+  if (!g_strcmp0 (compression, GSB_COMPRESSION_TYPE_RICE)) {
+    rice_hashes = json_object_get_object_member (tes, "riceHashes");
+    items = ephy_gsb_utils_rice_delta_decode (rice_hashes, &num_prefixes);
+
+    prefixes = g_malloc (num_prefixes * GSB_RICE_PREFIX_LEN);
+    for (gsize i = 0; i < num_prefixes; i++)
+      memcpy (prefixes + i * GSB_RICE_PREFIX_LEN, &items[i], GSB_RICE_PREFIX_LEN);
+
+    prefix_len = GSB_RICE_PREFIX_LEN;
+  } else {
+    raw_hashes = json_object_get_object_member (tes, "rawHashes");
+    prefix_len = json_object_get_int_member (raw_hashes, "prefixSize");
+    prefixes_b64 = json_object_get_string_member (raw_hashes, "rawHashes");
+
+    prefixes = g_base64_decode (prefixes_b64, &prefixes_len);
+    num_prefixes = prefixes_len / prefix_len;
+  }
+
+  ephy_gsb_storage_insert_hash_prefixes_internal (self, list, prefixes, num_prefixes, prefix_len);
+
+  g_free (items);
+  g_free (prefixes);
 }
 
 GList *
@@ -1164,7 +1239,7 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
 
   for (GList *l = cues; l && l->data; l = l->next) {
     ephy_sqlite_statement_bind_blob (statement, id++,
-                                     g_bytes_get_data (l->data, NULL), GSB_CUE_LEN,
+                                     g_bytes_get_data (l->data, NULL), GSB_HASH_CUE_LEN,
                                      &error);
     if (error) {
       g_warning ("Failed to bind cue value as blob: %s", error->message);
