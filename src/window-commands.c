@@ -2043,6 +2043,7 @@ window_cmd_send_to (GSimpleAction *action,
   EphyEmbed *embed;
   char *command, *subject, *body;
   const char *location, *title;
+  GdkScreen *screen;
   GError *error = NULL;
 
   embed = ephy_embed_container_get_active_child
@@ -2062,7 +2063,13 @@ window_cmd_send_to (GSimpleAction *action,
   g_free (subject);
   g_free (body);
 
-  if (!gtk_show_uri_on_window (GTK_WINDOW (window), command, gtk_get_current_event_time (), &error)) {
+  if (window) {
+    screen = gtk_widget_get_screen (GTK_WIDGET (window));
+  } else {
+    screen = gdk_screen_get_default ();
+  }
+
+  if (!gtk_show_uri (screen, command, gtk_get_current_event_time (), &error)) {
     g_warning ("Unable to send link by email: %s\n", error->message);
     g_error_free (error);
   }
