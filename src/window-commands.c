@@ -289,6 +289,9 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
     if (active == 0) {
       GtkFileFilter *filter;
 
+      filter = gtk_file_filter_new ();
+      gtk_file_filter_add_pattern (filter, "*.gvdb");
+
 #if GTK_CHECK_VERSION(3, 20, 0)
       file_chooser_dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (_("Choose File"),
                                                                            GTK_WINDOW (dialog),
@@ -310,9 +313,6 @@ dialog_bookmarks_import_cb (GtkDialog   *dialog,
                               NULL);
 #endif
       gtk_file_chooser_set_show_hidden (file_chooser_dialog, TRUE);
-
-      filter = gtk_file_filter_new ();
-      gtk_file_filter_add_pattern (filter, "*.gvdb");
       gtk_file_chooser_set_filter (file_chooser_dialog, filter);
 
 #if GTK_CHECK_VERSION(3, 20, 0)
@@ -474,7 +474,6 @@ window_cmd_export_bookmarks (GSimpleAction *action,
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_pattern (filter, "*.gvdb");
-  gtk_file_chooser_set_filter (dialog, filter);
 
 #if GTK_CHECK_VERSION(3, 20, 0)
   dialog = GTK_FILE_CHOOSER (gtk_file_chooser_native_new (_("Choose File"),
@@ -492,6 +491,7 @@ window_cmd_export_bookmarks (GSimpleAction *action,
                          NULL);
 #endif
   gtk_file_chooser_set_show_hidden (dialog, TRUE);
+  gtk_file_chooser_set_filter (dialog, filter);
 
   /* Translators: Only translate the part before ".gvdb" (e.g. "bookmarks") */
   gtk_file_chooser_set_current_name (dialog, _("bookmarks.gvdb"));
