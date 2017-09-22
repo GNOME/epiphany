@@ -414,6 +414,10 @@ ephy_gsb_service_dispose (GObject *object)
     ephy_gsb_storage_set_metadata (self->storage,
                                    "next_list_updates_time",
                                    self->next_list_updates_time);
+    /* Store next fullHashes:find request time. */
+    ephy_gsb_storage_set_metadata (self->storage,
+                                   "next_full_hashes_time",
+                                   self->next_full_hashes_time);
   }
 
   g_clear_object (&self->storage);
@@ -436,6 +440,11 @@ ephy_gsb_service_constructed (GObject *object)
 
   if (!ephy_gsb_storage_is_operable (self->storage))
     return;
+
+  /* Restore next fullHashes:find request time. */
+  self->next_full_hashes_time = ephy_gsb_storage_get_metadata (self->storage,
+                                                               "next_full_hashes_time",
+                                                               CURRENT_TIME);
 
   /* Restore next threatListUpdates:fetch request time. */
   self->next_list_updates_time = ephy_gsb_storage_get_metadata (self->storage,
@@ -609,7 +618,7 @@ ephy_gsb_service_find_full_hashes (EphyGSBService                  *self,
   g_assert (matching_hashes);
   g_assert (callback);
 
-  if (CURRENT_TIME < self->next_full_hashes_time) {
+  if (self->next_full_hashes_time > CURRENT_TIME) {
     LOG ("Cannot send fullHashes:find request. Requests are restricted for %ld seconds",
          self->next_full_hashes_time - CURRENT_TIME);
     callback (threats, user_data);
