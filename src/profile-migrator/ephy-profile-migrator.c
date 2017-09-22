@@ -77,62 +77,6 @@ profile_dir_exists (void)
   return g_file_test (ephy_dot_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR);
 }
 
-static void
-migrate_profile (const char *old_dir,
-                 const char *new_dir)
-{
-  char *parent_dir;
-  char *updated;
-  const char *message;
-
-  if (g_file_test (new_dir, G_FILE_TEST_EXISTS) ||
-      !g_file_test (old_dir, G_FILE_TEST_IS_DIR))
-    return;
-
-  /* Test if we already attempted to migrate first. */
-  updated = g_build_filename (old_dir, "DEPRECATED-DIRECTORY", NULL);
-  message = _("Web 3.6 deprecated this directory and tried migrating "
-              "this configuration to ~/.config/epiphany");
-
-  parent_dir = g_path_get_dirname (new_dir);
-  if (g_mkdir_with_parents (parent_dir, 0700) == 0) {
-    int fd, res;
-
-    /* rename() works fine if the destination directory is empty. */
-    res = g_rename (old_dir, new_dir);
-    if (res == -1 && !g_file_test (updated, G_FILE_TEST_EXISTS)) {
-      fd = g_creat (updated, 0600);
-      if (fd != -1) {
-        res = write (fd, message, strlen (message));
-        close (fd);
-      }
-    }
-  }
-
-  g_free (parent_dir);
-  g_free (updated);
-}
-
-static void
-migrate_profile_gnome2_to_xdg (void)
-{
-  char *old_dir;
-  char *new_dir;
-
-  old_dir = g_build_filename (g_get_home_dir (),
-                              ".gnome2",
-                              "epiphany",
-                              NULL);
-  new_dir = g_build_filename (g_get_user_config_dir (),
-                              "epiphany",
-                              NULL);
-
-  migrate_profile (old_dir, new_dir);
-
-  g_free (new_dir);
-  g_free (old_dir);
-}
-
 static char *
 fix_desktop_file_and_return_new_location (const char *dir)
 {
@@ -1239,10 +1183,6 @@ ephy_migrator (void)
 {
   int latest, i;
   EphyProfileMigrator m;
-
-  /* Always try to migrate the data from the old profile dir at the
-   * very beginning. */
-  migrate_profile_gnome2_to_xdg ();
 
   /* If after this point there's no profile dir, there's no point in
    * running anything because Epiphany has never run in this sytem, so
