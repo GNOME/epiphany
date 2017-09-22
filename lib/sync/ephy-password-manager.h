@@ -68,16 +68,5 @@ void                 ephy_password_manager_query                    (EphyPasswor
 void                 ephy_password_manager_forget                    (EphyPasswordManager *self,
                                                                       const char          *id);
 void                 ephy_password_manager_forget_all                (EphyPasswordManager *self);
-/* Note: Below functions are deprecated and should not be used in newly written code.
- * The only reason they still exist is that the profile migrator expects them. */
-void                 ephy_password_manager_store_raw                 (const char          *origin,
-                                                                      const char          *username,
-                                                                      const char          *password,
-                                                                      const char          *username_field,
-                                                                      const char          *password_field,
-                                                                      GAsyncReadyCallback  callback,
-                                                                      gpointer             user_data);
-gboolean             ephy_password_manager_store_finish              (GAsyncResult  *result,
-                                                                      GError       **error);
 
 G_END_DECLS
