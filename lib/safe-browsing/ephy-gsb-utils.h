@@ -48,9 +48,6 @@ typedef struct {
 
 typedef struct {
   GBytes   *prefix; /* The first 4-32 bytes of the hash */
-  char     *threat_type;
-  char     *platform_type;
-  char     *threat_entry_type;
   gboolean  negative_expired;
 } EphyGSBHashPrefixLookup;
 
@@ -72,9 +69,6 @@ gboolean                 ephy_gsb_threat_list_equal               (EphyGSBThreat
 
 EphyGSBHashPrefixLookup *ephy_gsb_hash_prefix_lookup_new          (const guint8 *prefix,
                                                                    gsize         length,
-                                                                   const char   *threat_type,
-                                                                   const char   *platform_type,
-                                                                   const char   *threat_entry_type,
                                                                    gboolean      negative_expired);
 void                     ephy_gsb_hash_prefix_lookup_free         (EphyGSBHashPrefixLookup *lookup);
 

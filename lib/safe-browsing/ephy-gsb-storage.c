@@ -1224,8 +1224,7 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
   g_assert (self->is_operable);
   g_assert (cues);
 
-  sql = g_string_new ("SELECT value, threat_type, platform_type, threat_entry_type, "
-                      "negative_expires_at <= (CAST(strftime('%s', 'now') AS INT)) "
+  sql = g_string_new ("SELECT value, negative_expires_at <= (CAST(strftime('%s', 'now') AS INT)) "
                       "FROM hash_prefix WHERE cue IN (");
   for (GList *l = cues; l && l->data; l = l->next)
     g_string_append (sql, "?,");
@@ -1256,16 +1255,8 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
   while (ephy_sqlite_statement_step (statement, &error)) {
     const guint8 *blob = ephy_sqlite_statement_get_column_as_blob (statement, 0);
     gsize size = ephy_sqlite_statement_get_column_size (statement, 0);
-    const char *threat_type = ephy_sqlite_statement_get_column_as_string (statement, 1);
-    const char *platform_type = ephy_sqlite_statement_get_column_as_string (statement, 2);
-    const char *threat_entry_type = ephy_sqlite_statement_get_column_as_string (statement, 3);
-    gboolean negative_expired = ephy_sqlite_statement_get_column_as_boolean (statement, 4);
-    EphyGSBHashPrefixLookup *lookup = ephy_gsb_hash_prefix_lookup_new (blob, size,
-                                                                       threat_type,
-                                                                       platform_type,
-                                                                       threat_entry_type,
-                                                                       negative_expired);
-    retval = g_list_prepend (retval, lookup);
+    gboolean negative_expired = ephy_sqlite_statement_get_column_as_boolean (statement, 1);
+    retval = g_list_prepend (retval, ephy_gsb_hash_prefix_lookup_new (blob, size, negative_expired));
   }
 
   if (error) {

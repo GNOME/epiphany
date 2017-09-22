@@ -201,23 +201,14 @@ ephy_gsb_threat_list_equal (EphyGSBThreatList *l1,
 EphyGSBHashPrefixLookup *
 ephy_gsb_hash_prefix_lookup_new (const guint8 *prefix,
                                  gsize         length,
-                                 const char   *threat_type,
-                                 const char   *platform_type,
-                                 const char   *threat_entry_type,
                                  gboolean      negative_expired)
 {
   EphyGSBHashPrefixLookup *lookup;
 
   g_assert (prefix);
-  g_assert (threat_type);
-  g_assert (platform_type);
-  g_assert (threat_entry_type);
 
   lookup = g_slice_new (EphyGSBHashPrefixLookup);
   lookup->prefix = g_bytes_new (prefix, length);
-  lookup->threat_type = g_strdup (threat_type);
-  lookup->platform_type = g_strdup (platform_type);
-  lookup->threat_entry_type = g_strdup (threat_entry_type);
   lookup->negative_expired = negative_expired;
 
   return lookup;
@@ -229,9 +220,6 @@ ephy_gsb_hash_prefix_lookup_free (EphyGSBHashPrefixLookup *lookup)
   g_assert (lookup);
 
   g_bytes_unref (lookup->prefix);
-  g_free (lookup->threat_type);
-  g_free (lookup->platform_type);
-  g_free (lookup->threat_entry_type);
   g_slice_free (EphyGSBHashPrefixLookup, lookup);
 }
 
