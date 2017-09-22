@@ -40,11 +40,10 @@ G_BEGIN_DECLS
 #define GSB_THREAT_TYPE_UNWANTED_SOFTWARE  "UNWANTED_SOFTWARE"
 
 typedef struct {
-  char   *threat_type;
-  char   *platform_type;
-  char   *threat_entry_type;
-  char   *client_state;
-  gint64  timestamp;
+  char *threat_type;
+  char *platform_type;
+  char *threat_entry_type;
+  char *client_state;
 } EphyGSBThreatList;
 
 typedef struct {
@@ -66,8 +65,7 @@ typedef struct {
 EphyGSBThreatList       *ephy_gsb_threat_list_new                 (const char *threat_type,
                                                                    const char *platform_type,
                                                                    const char *threat_entry_type,
-                                                                   const char *client_state,
-                                                                   gint64      timestamp);
+                                                                   const char *client_state);
 void                     ephy_gsb_threat_list_free                (EphyGSBThreatList *list);
 gboolean                 ephy_gsb_threat_list_equal               (EphyGSBThreatList *l1,
                                                                    EphyGSBThreatList *l2);

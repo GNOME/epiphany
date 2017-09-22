@@ -263,8 +263,7 @@ ephy_gsb_service_update_thread (GTask          *task,
     list = ephy_gsb_threat_list_new (json_object_get_string_member (lur, "threatType"),
                                      json_object_get_string_member (lur, "platformType"),
                                      json_object_get_string_member (lur, "threatEntryType"),
-                                     json_object_get_string_member (lur, "newClientState"),
-                                     CURRENT_TIME);
+                                     json_object_get_string_member (lur, "newClientState"));
     LOG ("Updating list %s/%s/%s", list->threat_type, list->platform_type, list->threat_entry_type);
 
     /* If full update, clear all previous hash prefixes for the given list. */
@@ -572,7 +571,7 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
     guint8 *hash;
     gsize length;
 
-    list = ephy_gsb_threat_list_new (threat_type, platform_type, threat_entry_type, NULL, 0);
+    list = ephy_gsb_threat_list_new (threat_type, platform_type, threat_entry_type, NULL);
     hash = g_base64_decode (hash_b64, &length);
     positive_duration = json_object_get_string_member (match, "cacheDuration");
     sscanf (positive_duration, "%lfs", &duration);
@@ -606,7 +605,7 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
       list = ephy_gsb_threat_list_new (lookup->threat_type,
                                        lookup->platform_type,
                                        lookup->threat_entry_type,
-                                       NULL, 0);
+                                       NULL);
       g_hash_table_add (data->threats, list);
     }
   }
@@ -743,7 +742,7 @@ ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
       list = ephy_gsb_threat_list_new (lookup->threat_type,
                                        lookup->platform_type,
                                        lookup->threat_entry_type,
-                                       NULL, 0);
+                                       NULL);
       g_hash_table_add (threats, list);
     }
   }

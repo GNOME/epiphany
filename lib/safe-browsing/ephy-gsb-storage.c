@@ -226,7 +226,6 @@ ephy_gsb_storage_init_threats_table (EphyGSBStorage *self)
         "platform_type VARCHAR NOT NULL,"
         "threat_entry_type VARCHAR NOT NULL,"
         "client_state VARCHAR,"
-        "timestamp INTEGER NOT NULL DEFAULT (CAST(strftime('%s', 'now') AS INT)),"
         "PRIMARY KEY (threat_type, platform_type, threat_entry_type)"
         ")";
   ephy_sqlite_connection_execute (self->db, sql, &error);
@@ -256,7 +255,7 @@ ephy_gsb_storage_init_threats_table (EphyGSBStorage *self)
     EphyGSBThreatList *list = ephy_gsb_threat_list_new (gsb_linux_threat_lists[i][0],
                                                         gsb_linux_threat_lists[i][1],
                                                         gsb_linux_threat_lists[i][2],
-                                                        NULL, 0);
+                                                        NULL);
     bind_threat_list_params (statement, list, i * 3, i * 3 + 1, i * 3 + 2, -1);
     ephy_gsb_threat_list_free (list);
   }
@@ -291,7 +290,6 @@ ephy_gsb_storage_init_hash_prefix_table (EphyGSBStorage *self)
         "threat_type VARCHAR NOT NULL,"
         "platform_type VARCHAR NOT NULL,"
         "threat_entry_type VARCHAR NOT NULL,"
-        "timestamp INTEGER NOT NULL DEFAULT (CAST(strftime('%s', 'now') AS INT)),"
         "negative_expires_at INTEGER NOT NULL DEFAULT (CAST(strftime('%s', 'now') AS INT)),"
         "PRIMARY KEY (value, threat_type, platform_type, threat_entry_type),"
         "FOREIGN KEY(threat_type, platform_type, threat_entry_type)"
@@ -325,7 +323,6 @@ ephy_gsb_storage_init_hash_full_table (EphyGSBStorage *self)
         "threat_type VARCHAR NOT NULL,"
         "platform_type VARCHAR NOT NULL,"
         "threat_entry_type VARCHAR NOT NULL,"
-        "timestamp INTEGER NOT NULL DEFAULT (CAST(strftime('%s', 'now') AS INT)),"
         "expires_at INTEGER NOT NULL DEFAULT (CAST(strftime('%s', 'now') AS INT)),"
         "PRIMARY KEY (value, threat_type, platform_type, threat_entry_type)"
         ")";
@@ -652,7 +649,7 @@ ephy_gsb_storage_get_threat_lists (EphyGSBStorage *self)
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (self->is_operable);
 
-  sql = "SELECT threat_type, platform_type, threat_entry_type, client_state, timestamp FROM threats";
+  sql = "SELECT threat_type, platform_type, threat_entry_type, client_state FROM threats";
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create select threat lists statement: %s", error->message);
@@ -665,10 +662,8 @@ ephy_gsb_storage_get_threat_lists (EphyGSBStorage *self)
     const char *platform_type = ephy_sqlite_statement_get_column_as_string (statement, 1);
     const char *threat_entry_type = ephy_sqlite_statement_get_column_as_string (statement, 2);
     const char *client_state = ephy_sqlite_statement_get_column_as_string (statement, 3);
-    gint64 timestamp = ephy_sqlite_statement_get_column_as_int64 (statement, 4);
     EphyGSBThreatList *list = ephy_gsb_threat_list_new (threat_type, platform_type,
-                                                        threat_entry_type, client_state,
-                                                        timestamp);
+                                                        threat_entry_type, client_state);
     threat_lists = g_list_prepend (threat_lists, list);
   }
 
@@ -752,12 +747,10 @@ ephy_gsb_storage_update_client_state (EphyGSBStorage    *self,
   g_assert (list);
 
   if (clear) {
-    sql = "UPDATE threats SET "
-          "timestamp=(CAST(strftime('%s', 'now') AS INT)), client_state=NULL "
+    sql = "UPDATE threats SET client_state=NULL "
           "WHERE threat_type=? AND platform_type=? AND threat_entry_type=?";
   } else {
-    sql = "UPDATE threats SET "
-          "timestamp=(CAST(strftime('%s', 'now') AS INT)), client_state=? "
+    sql = "UPDATE threats SET client_state=? "
           "WHERE threat_type=? AND platform_type=? AND threat_entry_type=?";
   }
 

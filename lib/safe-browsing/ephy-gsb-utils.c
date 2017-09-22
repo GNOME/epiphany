@@ -153,8 +153,7 @@ EphyGSBThreatList *
 ephy_gsb_threat_list_new (const char *threat_type,
                           const char *platform_type,
                           const char *threat_entry_type,
-                          const char *client_state,
-                          gint64      timestamp)
+                          const char *client_state)
 {
   EphyGSBThreatList *list;
 
@@ -167,7 +166,6 @@ ephy_gsb_threat_list_new (const char *threat_type,
   list->platform_type = g_strdup (platform_type);
   list->threat_entry_type = g_strdup (threat_entry_type);
   list->client_state = g_strdup (client_state);
-  list->timestamp = timestamp;
 
   return list;
 }
