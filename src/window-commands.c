@@ -159,18 +159,20 @@ get_firefox_profiles (void)
   channel = g_io_channel_new_file (filename, "r", NULL);
   g_free (filename);
 
-  do {
-    g_io_channel_read_line (channel, &line, &length, NULL, NULL);
+  if (channel) {
+    do {
+      g_io_channel_read_line (channel, &line, &length, NULL, NULL);
 
-    profile = g_strdup_printf ("[Profile%d]\n", count);
-    if (g_strcmp0 (line, profile) == 0) {
-      profiles = g_slist_append (profiles, get_path (channel));
+      profile = g_strdup_printf ("[Profile%d]\n", count);
+      if (g_strcmp0 (line, profile) == 0) {
+        profiles = g_slist_append (profiles, get_path (channel));
 
-      count++;
-    }
-    g_free (profile);
-    g_free (line);
-  } while (length != 0);
+        count++;
+      }
+      g_free (profile);
+      g_free (line);
+    } while (length != 0);
+  }
 
   return profiles;
 }
