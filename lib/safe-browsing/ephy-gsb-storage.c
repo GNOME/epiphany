@@ -176,7 +176,7 @@ ephy_gsb_storage_init_metadata_table (EphyGSBStorage *self)
 
   sql = "INSERT INTO metadata (key, value) VALUES"
         "('schema_version', ?),"
-        "('next_update_time', (CAST(strftime('%s', 'now') AS INT)))";
+        "('next_list_updates_time', (CAST(strftime('%s', 'now') AS INT)))";
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create metadata insert statement: %s", error->message);

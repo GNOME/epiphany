@@ -43,9 +43,9 @@ struct _EphyGSBService {
   gboolean        is_updating;
   guint           source_id;
 
-  gint64          next_full_hashes_request_time;
-  gint64          back_off_mode_exit_time;
-  gint64          num_fails;
+  gint64          next_full_hashes_time;
+  gint64          back_off_exit_time;
+  gint64          back_off_num_fails;
 
   SoupSession    *session;
 };
@@ -151,8 +151,8 @@ ephy_gsb_service_update_back_off_mode (EphyGSBService *self)
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
 
-  duration = (1 << self->num_fails++) * 15 * 60 * (g_random_double () + 1);
-  self->back_off_mode_exit_time = CURRENT_TIME + MIN (duration, 24 * 60 * 60);
+  duration = (1 << self->back_off_num_fails++) * 15 * 60 * (g_random_double () + 1);
+  self->back_off_exit_time = CURRENT_TIME + MIN (duration, 24 * 60 * 60);
 
   LOG ("Set back-off mode for %ld seconds", duration);
 }
@@ -162,7 +162,7 @@ ephy_gsb_service_reset_back_off_mode (EphyGSBService *self)
 {
   g_assert (EPHY_IS_GSB_SERVICE (self));
 
-  self->num_fails = self->back_off_mode_exit_time = 0;
+  self->back_off_num_fails = self->back_off_exit_time = 0;
 }
 
 static inline gboolean
@@ -170,7 +170,7 @@ ephy_gsb_service_is_back_off_mode (EphyGSBService *self)
 {
   g_assert (EPHY_IS_GSB_SERVICE (self));
 
-  return self->num_fails > 0 && CURRENT_TIME < self->back_off_mode_exit_time;
+  return self->back_off_num_fails > 0 && CURRENT_TIME < self->back_off_exit_time;
 }
 
 static void
@@ -198,7 +198,7 @@ ephy_gsb_service_update_thread (GTask          *task,
   JsonArray *responses;
   SoupMessage *msg;
   GList *threat_lists;
-  gint64 next_update_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
+  gint64 next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
   char *url;
   char *body;
 
@@ -209,7 +209,7 @@ ephy_gsb_service_update_thread (GTask          *task,
 
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists) {
-    g_task_return_int (task, next_update_time);
+    g_task_return_int (task, next_list_updates_time);
     return;
   }
 
@@ -226,7 +226,7 @@ ephy_gsb_service_update_thread (GTask          *task,
     LOG ("Cannot update threat lists, got: %u, %s", msg->status_code, msg->response_body->data);
     ephy_gsb_service_update_back_off_mode (self);
     g_object_unref (msg);
-    g_task_return_int (task, self->back_off_mode_exit_time);
+    g_task_return_int (task, self->back_off_exit_time);
     return;
   }
 
@@ -299,16 +299,16 @@ ephy_gsb_service_update_thread (GTask          *task,
     duration_str = json_object_get_string_member (body_obj, "minimumWaitDuration");
     /* Handle the trailing 's' character. */
     sscanf (duration_str, "%lfs", &duration);
-    next_update_time = CURRENT_TIME + (gint64)ceil (duration);
+    next_list_updates_time = CURRENT_TIME + (gint64)ceil (duration);
   }
 
-  ephy_gsb_storage_set_metadata (self->storage, "next_update_time", next_update_time);
+  ephy_gsb_storage_set_metadata (self->storage, "next_list_updates_time", next_list_updates_time);
 
   g_object_unref (msg);
   json_node_unref (body_node);
   g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
 
-  g_task_return_int (task, next_update_time);
+  g_task_return_int (task, next_list_updates_time);
 }
 
 static void
@@ -316,10 +316,10 @@ ephy_gsb_service_update_finished_cb (EphyGSBService *self,
                                      GAsyncResult   *result,
                                      gpointer        user_data)
 {
-  gint64 next_update_time;
+  gint64 next_list_updates_time;
 
-  next_update_time = g_task_propagate_int (G_TASK (result), NULL);
-  ephy_gsb_service_schedule_update (self, next_update_time - CURRENT_TIME);
+  next_list_updates_time = g_task_propagate_int (G_TASK (result), NULL);
+  ephy_gsb_service_schedule_update (self, next_list_updates_time - CURRENT_TIME);
   self->is_updating = FALSE;
 }
 
@@ -414,7 +414,7 @@ static void
 ephy_gsb_service_constructed (GObject *object)
 {
   EphyGSBService *self = EPHY_GSB_SERVICE (object);
-  gint64 next_update_time;
+  gint64 next_list_updates_time;
   gint64 now = CURRENT_TIME;
 
   G_OBJECT_CLASS (ephy_gsb_service_parent_class)->constructed (object);
@@ -422,11 +422,11 @@ ephy_gsb_service_constructed (GObject *object)
   if (!ephy_gsb_storage_is_operable (self->storage))
     return;
 
-  next_update_time = ephy_gsb_storage_get_metadata (self->storage,
-                                                    "next_update_time",
+  next_list_updates_time = ephy_gsb_storage_get_metadata (self->storage,
+                                                    "next_list_updates_time",
                                                     now);
-  if (next_update_time > now)
-    ephy_gsb_service_schedule_update (self, next_update_time - now);
+  if (next_list_updates_time > now)
+    ephy_gsb_service_schedule_update (self, next_list_updates_time - now);
   else
     ephy_gsb_service_update (self);
 }
@@ -547,7 +547,7 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
   if (json_object_has_non_null_string_member (body_obj, "minimumWaitDuration")) {
     duration_str = json_object_get_string_member (body_obj, "minimumWaitDuration");
     sscanf (duration_str, "%lfs", &duration);
-    self->next_full_hashes_request_time = CURRENT_TIME + (gint64)ceil (duration);
+    self->next_full_hashes_time = CURRENT_TIME + (gint64)ceil (duration);
   }
 
   /* Repeat the full hash verification. */
@@ -593,16 +593,16 @@ ephy_gsb_service_find_full_hashes (EphyGSBService                  *self,
   g_assert (matching_hashes);
   g_assert (callback);
 
-  if (CURRENT_TIME < self->next_full_hashes_request_time) {
+  if (CURRENT_TIME < self->next_full_hashes_time) {
     LOG ("Cannot send fullHashes:find request. Requests are restricted for %ld seconds",
-         self->next_full_hashes_request_time - CURRENT_TIME);
+         self->next_full_hashes_time - CURRENT_TIME);
     callback (threats, user_data);
     return;
   }
 
    if (ephy_gsb_service_is_back_off_mode (self)) {
     LOG ("Cannot send fullHashes:find request. Back-off mode is enabled for %ld seconds",
-         self->back_off_mode_exit_time - CURRENT_TIME);
+         self->back_off_exit_time - CURRENT_TIME);
     callback (threats, user_data);
     return;
    }
