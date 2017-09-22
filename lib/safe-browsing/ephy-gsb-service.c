@@ -174,7 +174,7 @@ ephy_gsb_service_is_back_off_mode (EphyGSBService *self)
 {
   g_assert (EPHY_IS_GSB_SERVICE (self));
 
-  return self->back_off_num_fails > 0 && CURRENT_TIME < self->back_off_exit_time;
+  return self->back_off_num_fails > 0 && self->back_off_exit_time > CURRENT_TIME;
 }
 
 static void
@@ -418,6 +418,13 @@ ephy_gsb_service_dispose (GObject *object)
     ephy_gsb_storage_set_metadata (self->storage,
                                    "next_full_hashes_time",
                                    self->next_full_hashes_time);
+    /* Store back-off parameters. */
+    ephy_gsb_storage_set_metadata (self->storage,
+                                   "back_off_exit_time",
+                                   self->back_off_exit_time);
+    ephy_gsb_storage_set_metadata (self->storage,
+                                   "back_off_num_fails",
+                                   self->back_off_num_fails);
   }
 
   g_clear_object (&self->storage);
@@ -441,6 +448,14 @@ ephy_gsb_service_constructed (GObject *object)
   if (!ephy_gsb_storage_is_operable (self->storage))
     return;
 
+  /* Restore back-off parameters. */
+  self->back_off_exit_time = ephy_gsb_storage_get_metadata (self->storage,
+                                                            "back_off_exit_time",
+                                                            CURRENT_TIME);
+  self->back_off_num_fails = ephy_gsb_storage_get_metadata (self->storage,
+                                                            "back_off_num_fails",
+                                                            0);
+
   /* Restore next fullHashes:find request time. */
   self->next_full_hashes_time = ephy_gsb_storage_get_metadata (self->storage,
                                                                "next_full_hashes_time",
@@ -450,6 +465,12 @@ ephy_gsb_service_constructed (GObject *object)
   self->next_list_updates_time = ephy_gsb_storage_get_metadata (self->storage,
                                                                 "next_list_updates_time",
                                                                 CURRENT_TIME);
+
+  if (ephy_gsb_service_is_back_off_mode (self))
+    self->next_list_updates_time = self->back_off_exit_time;
+  else
+    ephy_gsb_service_reset_back_off_mode (self);
+
   if (self->next_list_updates_time > CURRENT_TIME)
     ephy_gsb_service_schedule_update (self);
   else
