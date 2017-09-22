@@ -31,6 +31,9 @@
 #include <string.h>
 
 #define API_PREFIX        "https://safebrowsing.googleapis.com/v4/"
+
+/* See comment in ephy_gsb_service_schedule_update(). */
+#define JITTER            2                               /* seconds */
 #define CURRENT_TIME      (g_get_real_time () / 1000000)  /* seconds */
 #define DEFAULT_WAIT_TIME (30 * 60)                       /* seconds */
 
@@ -44,6 +47,7 @@ struct _EphyGSBService {
   guint           source_id;
 
   gint64          next_full_hashes_time;
+  gint64          next_list_updates_time;
   gint64          back_off_exit_time;
   gint64          back_off_num_fails;
 
@@ -174,11 +178,23 @@ ephy_gsb_service_is_back_off_mode (EphyGSBService *self)
 }
 
 static void
-ephy_gsb_service_schedule_update (EphyGSBService *self,
-                                  gint64          interval)
+ephy_gsb_service_schedule_update (EphyGSBService *self)
 {
+  gint64 interval;
+
   g_assert (EPHY_IS_GSB_SERVICE (self));
   g_assert (ephy_gsb_storage_is_operable (self->storage));
+
+  /* This function should only be called when self->next_list_updates_time is
+   * greater than CURRENT_TIME. However, asserting (self->next_list_updates_time
+   * - CURRENT_TIME) to be greater than 0 can be faulty in the (very rare, but
+   * not impossible) case when the value returned by CURRENT_TIME changes while
+   * calling this function to become equal to self->next_list_updates_time, i.e.
+   * when opening Epiphany at the exact same second as next_list_updates_time
+   * value read from disk. To prevent a crash in that situation, add a jitter
+   * value to the difference between next_list_updates_time and CURRENT_TIME.
+   */
+  interval = self->next_list_updates_time - CURRENT_TIME + JITTER;
   g_assert (interval > 0);
 
   self->source_id = g_timeout_add_seconds (interval,
@@ -198,7 +214,6 @@ ephy_gsb_service_update_thread (GTask          *task,
   JsonArray *responses;
   SoupMessage *msg;
   GList *threat_lists;
-  gint64 next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
   char *url;
   char *body;
 
@@ -209,7 +224,7 @@ ephy_gsb_service_update_thread (GTask          *task,
 
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists) {
-    g_task_return_int (task, next_list_updates_time);
+    self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
     return;
   }
 
@@ -226,7 +241,7 @@ ephy_gsb_service_update_thread (GTask          *task,
     LOG ("Cannot update threat lists, got: %u, %s", msg->status_code, msg->response_body->data);
     ephy_gsb_service_update_back_off_mode (self);
     g_object_unref (msg);
-    g_task_return_int (task, self->back_off_exit_time);
+    self->next_list_updates_time = self->back_off_exit_time;
     return;
   }
 
@@ -299,16 +314,14 @@ ephy_gsb_service_update_thread (GTask          *task,
     duration_str = json_object_get_string_member (body_obj, "minimumWaitDuration");
     /* Handle the trailing 's' character. */
     sscanf (duration_str, "%lfs", &duration);
-    next_list_updates_time = CURRENT_TIME + (gint64)ceil (duration);
+    self->next_list_updates_time = CURRENT_TIME + (gint64)ceil (duration);
+  } else {
+    self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
   }
-
-  ephy_gsb_storage_set_metadata (self->storage, "next_list_updates_time", next_list_updates_time);
 
   g_object_unref (msg);
   json_node_unref (body_node);
   g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
-
-  g_task_return_int (task, next_list_updates_time);
 }
 
 static void
@@ -316,11 +329,8 @@ ephy_gsb_service_update_finished_cb (EphyGSBService *self,
                                      GAsyncResult   *result,
                                      gpointer        user_data)
 {
-  gint64 next_list_updates_time;
-
-  next_list_updates_time = g_task_propagate_int (G_TASK (result), NULL);
-  ephy_gsb_service_schedule_update (self, next_list_updates_time - CURRENT_TIME);
   self->is_updating = FALSE;
+  ephy_gsb_service_schedule_update (self);
 }
 
 static gboolean
@@ -399,6 +409,13 @@ ephy_gsb_service_dispose (GObject *object)
 {
   EphyGSBService *self = EPHY_GSB_SERVICE (object);
 
+  if (self->storage && ephy_gsb_storage_is_operable (self->storage)) {
+    /* Store next threatListUpdates:fetch request time. */
+    ephy_gsb_storage_set_metadata (self->storage,
+                                   "next_list_updates_time",
+                                   self->next_list_updates_time);
+  }
+
   g_clear_object (&self->storage);
   g_clear_object (&self->session);
 
@@ -414,19 +431,18 @@ static void
 ephy_gsb_service_constructed (GObject *object)
 {
   EphyGSBService *self = EPHY_GSB_SERVICE (object);
-  gint64 next_list_updates_time;
-  gint64 now = CURRENT_TIME;
 
   G_OBJECT_CLASS (ephy_gsb_service_parent_class)->constructed (object);
 
   if (!ephy_gsb_storage_is_operable (self->storage))
     return;
 
-  next_list_updates_time = ephy_gsb_storage_get_metadata (self->storage,
-                                                    "next_list_updates_time",
-                                                    now);
-  if (next_list_updates_time > now)
-    ephy_gsb_service_schedule_update (self, next_list_updates_time - now);
+  /* Restore next threatListUpdates:fetch request time. */
+  self->next_list_updates_time = ephy_gsb_storage_get_metadata (self->storage,
+                                                                "next_list_updates_time",
+                                                                CURRENT_TIME);
+  if (self->next_list_updates_time > CURRENT_TIME)
+    ephy_gsb_service_schedule_update (self);
   else
     ephy_gsb_service_update (self);
 }
