@@ -32,9 +32,12 @@ G_DECLARE_FINAL_TYPE (EphyGSBStorage, ephy_gsb_storage, EPHY, GSB_STORAGE, GObje
 
 EphyGSBStorage *ephy_gsb_storage_new                            (const char *db_path);
 gboolean        ephy_gsb_storage_is_operable                    (EphyGSBStorage *self);
-gint64          ephy_gsb_storage_get_next_update_time           (EphyGSBStorage *self);
-void            ephy_gsb_storage_set_next_update_time           (EphyGSBStorage *self,
-                                                                 gint64          next_update_time);
+gint64          ephy_gsb_storage_get_metadata                   (EphyGSBStorage *self,
+                                                                 const char     *key,
+                                                                 gint64          default_value);
+void            ephy_gsb_storage_set_metadata                   (EphyGSBStorage *self,
+                                                                 const char     *key,
+                                                                 gint64          value);
 GList          *ephy_gsb_storage_get_threat_lists               (EphyGSBStorage *self);
 char           *ephy_gsb_storage_compute_checksum               (EphyGSBStorage    *self,
                                                                  EphyGSBThreatList *list);

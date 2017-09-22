@@ -302,7 +302,7 @@ ephy_gsb_service_update_thread (GTask          *task,
     next_update_time = CURRENT_TIME + (gint64)ceil (duration);
   }
 
-  ephy_gsb_storage_set_next_update_time (self->storage, next_update_time);
+  ephy_gsb_storage_set_metadata (self->storage, "next_update_time", next_update_time);
 
   g_object_unref (msg);
   json_node_unref (body_node);
@@ -414,19 +414,21 @@ static void
 ephy_gsb_service_constructed (GObject *object)
 {
   EphyGSBService *self = EPHY_GSB_SERVICE (object);
-  gint64 interval;
+  gint64 next_update_time;
+  gint64 now = CURRENT_TIME;
 
   G_OBJECT_CLASS (ephy_gsb_service_parent_class)->constructed (object);
 
   if (!ephy_gsb_storage_is_operable (self->storage))
     return;
 
-  interval = ephy_gsb_storage_get_next_update_time (self->storage) - CURRENT_TIME;
-
-  if (interval <= 0)
-    ephy_gsb_service_update (self);
+  next_update_time = ephy_gsb_storage_get_metadata (self->storage,
+                                                    "next_update_time",
+                                                    now);
+  if (next_update_time > now)
+    ephy_gsb_service_schedule_update (self, next_update_time - now);
   else
-    ephy_gsb_service_schedule_update (self, interval);
+    ephy_gsb_service_update (self);
 }
 
 static void

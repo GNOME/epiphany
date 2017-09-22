@@ -36,11 +36,11 @@
  */
 #define BATCH_SIZE 199
 
-/* Update schema version if you:
+/* Increment schema version if you:
  * 1) Modify the database table structure.
  * 2) Add new threat lists below.
  */
-#define SCHEMA_VERSION "1.0"
+#define SCHEMA_VERSION 1
 
 /* The available Linux threat lists of Google Safe Browsing API v4.
  * The format is {THREAT_TYPE, PLATFORM_TYPE, THREAT_ENTRY_TYPE}.
@@ -153,6 +153,7 @@ ephy_gsb_storage_end_transaction (EphyGSBStorage *self)
 static gboolean
 ephy_gsb_storage_init_metadata_table (EphyGSBStorage *self)
 {
+  EphySQLiteStatement *statement;
   GError *error = NULL;
   const char *sql;
 
@@ -163,8 +164,8 @@ ephy_gsb_storage_init_metadata_table (EphyGSBStorage *self)
     return TRUE;
 
   sql = "CREATE TABLE metadata ("
-        "name VARCHAR NOT NULL PRIMARY KEY,"
-        "value VARCHAR NOT NULL"
+        "key VARCHAR NOT NULL PRIMARY KEY,"
+        "value INTEGER NOT NULL"
         ")";
   ephy_sqlite_connection_execute (self->db, sql, &error);
   if (error) {
@@ -173,10 +174,27 @@ ephy_gsb_storage_init_metadata_table (EphyGSBStorage *self)
     return FALSE;
   }
 
-  sql = "INSERT INTO metadata (name, value) VALUES"
-        "('schema_version', '"SCHEMA_VERSION"'),"
-        "('next_update_at', strftime('%s', 'now'))";
-  ephy_sqlite_connection_execute (self->db, sql, &error);
+  sql = "INSERT INTO metadata (key, value) VALUES"
+        "('schema_version', ?),"
+        "('next_update_time', (CAST(strftime('%s', 'now') AS INT)))";
+  statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
+  if (error) {
+    g_warning ("Failed to create metadata insert statement: %s", error->message);
+    g_error_free (error);
+    return FALSE;
+  }
+
+  ephy_sqlite_statement_bind_int64 (statement, 0, SCHEMA_VERSION, &error);
+  if (error) {
+    g_warning ("Failed to bind int64 in metadata insert statement: %s", error->message);
+    g_error_free (error);
+    g_object_unref (statement);
+    return FALSE;
+  }
+
+  ephy_sqlite_statement_step (statement, &error);
+  g_object_unref (statement);
+
   if (error) {
     g_warning ("Failed to insert initial data into metadata table: %s", error->message);
     g_error_free (error);
@@ -406,41 +424,17 @@ ephy_gsb_storage_init_db (EphyGSBStorage *self)
   return success;
 }
 
-static gboolean
+static inline gboolean
 ephy_gsb_storage_check_schema_version (EphyGSBStorage *self)
 {
-  EphySQLiteStatement *statement;
-  GError *error = NULL;
-  gboolean success;
-  const char *schema_version;
-  const char *sql;
+  gint64 schema_version;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (EPHY_IS_SQLITE_CONNECTION (self->db));
 
-  sql = "SELECT value FROM metadata WHERE name='schema_version'";
-  statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
-  if (error) {
-    g_warning ("Failed to create select schema version statement: %s", error->message);
-    g_error_free (error);
-    return FALSE;
-  }
+  schema_version = ephy_gsb_storage_get_metadata (self, "schema_version", 0);
 
-  ephy_sqlite_statement_step (statement, &error);
-
-  if (error) {
-    g_warning ("Failed to retrieve schema version: %s", error->message);
-    g_error_free (error);
-    g_object_unref (statement);
-    return FALSE;
-  }
-
-  schema_version = ephy_sqlite_statement_get_column_as_string (statement, 0);
-  success = g_strcmp0 (schema_version, SCHEMA_VERSION) == 0;
-
-  g_object_unref (statement);
-
-  return success;
+  return schema_version == SCHEMA_VERSION;
 }
 
 static void
@@ -555,67 +549,81 @@ ephy_gsb_storage_is_operable (EphyGSBStorage *self)
 }
 
 gint64
-ephy_gsb_storage_get_next_update_time (EphyGSBStorage *self)
+ephy_gsb_storage_get_metadata (EphyGSBStorage *self,
+                               const char     *key,
+                               gint64          default_value)
 {
   EphySQLiteStatement *statement;
   GError *error = NULL;
-  const char *next_update_at;
   const char *sql;
-  gint64 next_update_time;
+  gint64 value;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
-  g_assert (self->is_operable);
+  g_assert (EPHY_IS_SQLITE_CONNECTION (self->db));
+  g_assert (key);
 
-  sql = "SELECT value FROM metadata WHERE name='next_update_at'";
+  sql = "SELECT value FROM metadata WHERE key=?";
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
-    g_warning ("Failed to create select next update statement: %s", error->message);
+    g_warning ("Failed to create select metadata statement: %s", error->message);
     g_error_free (error);
-    return G_MAXINT64;
+    return default_value;
+  }
+
+  ephy_sqlite_statement_bind_string (statement, 0, key, &error);
+  if (error) {
+    g_warning ("Failed to bind key as string in select metadata statement: %s", error->message);
+    g_error_free (error);
+    g_object_unref (statement);
+    return default_value;
   }
 
   ephy_sqlite_statement_step (statement, &error);
   if (error) {
-    g_warning ("Failed to retrieve next update time: %s", error->message);
+    g_warning ("Failed to execute select metadata statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
-    return G_MAXINT64;
+    return default_value;
   }
 
-  next_update_at = ephy_sqlite_statement_get_column_as_string (statement, 0);
-  sscanf (next_update_at, "%ld", &next_update_time);
-
+  value = ephy_sqlite_statement_get_column_as_int64 (statement, 0);
   g_object_unref (statement);
 
-  return next_update_time;
+  return value;
 }
 
 void
-ephy_gsb_storage_set_next_update_time (EphyGSBStorage *self,
-                                       gint64          next_update_time)
+ephy_gsb_storage_set_metadata (EphyGSBStorage *self,
+                               const char     *key,
+                               gint64          value)
 {
   EphySQLiteStatement *statement;
   GError *error = NULL;
   const char *sql;
-  char *value;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (self->is_operable);
+  g_assert (key);
 
-  sql = "UPDATE metadata SET value=? WHERE name='next_update_at'";
+  sql = "UPDATE metadata SET value=? WHERE key=?";
   statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
   if (error) {
-    g_warning ("Failed to create update next update time statement: %s", error->message);
+    g_warning ("Failed to create update metadata statement: %s", error->message);
     g_error_free (error);
     return;
   }
 
-  value = g_strdup_printf ("%ld", next_update_time);
-  ephy_sqlite_statement_bind_string (statement, 0, value, &error);
-  g_free (value);
-
+  ephy_sqlite_statement_bind_int64 (statement, 0, value, &error);
   if (error) {
-    g_warning ("Failed to bind string in next update time statement: %s", error->message);
+    g_warning ("Failed to bind value as int64 in update metadata statement: %s", error->message);
+    g_error_free (error);
+    g_object_unref (statement);
+    return;
+  }
+
+  ephy_sqlite_statement_bind_string (statement, 1, key, &error);
+  if (error) {
+    g_warning ("Failed to bind key as string in update metadata statement: %s", error->message);
     g_error_free (error);
     g_object_unref (statement);
     return;
@@ -625,7 +633,7 @@ ephy_gsb_storage_set_next_update_time (EphyGSBStorage *self,
   g_object_unref (statement);
 
   if (error) {
-    g_warning ("Failed to update next update time: %s", error->message);
+    g_warning ("Failed to execute update metadata statement: %s", error->message);
     g_error_free (error);
   }
 }
