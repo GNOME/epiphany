@@ -82,6 +82,7 @@ struct _PrefsDialog {
   GtkWidget *popups_allow_checkbutton;
   GtkWidget *adblock_allow_checkbutton;
   GtkWidget *enable_plugins_checkbutton;
+  GtkWidget *enable_safe_browsing_checkbutton;
 
   /* fonts */
   GtkWidget *use_gnome_fonts_checkbutton;
@@ -733,6 +734,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, popups_allow_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, adblock_allow_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_plugins_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_safe_browsing_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_hbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_label);
 
@@ -1684,6 +1686,11 @@ setup_general_page (PrefsDialog *dialog)
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_PLUGINS,
                    dialog->enable_plugins_checkbutton,
+                   "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (web_settings,
+                   EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING,
+                   dialog->enable_safe_browsing_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
