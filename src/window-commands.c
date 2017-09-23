@@ -174,6 +174,8 @@ get_firefox_profiles (void)
     } while (length != 0);
   }
 
+  g_io_channel_unref (channel);
+
   return profiles;
 }
 
