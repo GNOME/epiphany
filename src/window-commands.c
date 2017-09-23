@@ -172,9 +172,9 @@ get_firefox_profiles (void)
       g_free (profile);
       g_free (line);
     } while (length != 0);
-  }
 
-  g_io_channel_unref (channel);
+    g_io_channel_unref (channel);
+  }
 
   return profiles;
 }
