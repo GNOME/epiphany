@@ -535,7 +535,7 @@ secret_service_search_cb (SecretService  *service,
     LOG ("Found password record for (%s, %s, %s, %s, %s)",
          origin, target_origin, username, username_field, password_field);
 
-    if (!id || !origin || !target_origin || !password_field || !timestamp) {
+    if (!id || !origin || !target_origin || !timestamp) {
       LOG ("Password record is corrupted, skipping it...");
       goto next;
     }

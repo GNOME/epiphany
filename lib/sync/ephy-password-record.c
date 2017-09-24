@@ -361,13 +361,11 @@ serializable_serialize_property (JsonSerializable *serializable,
                                  const GValue     *value,
                                  GParamSpec       *pspec)
 {
-  /* Firefox expects null usernames as empty strings. */
-  if (!g_strcmp0 (name, "username") || !g_strcmp0 (name, "usernameField")) {
-    if (g_value_get_string (value) == NULL) {
-      JsonNode *node = json_node_new (JSON_NODE_VALUE);
-      json_node_set_string (node, "");
-      return node;
-    }
+  /* Convert NULL to "", as Firefox expects empty strings for missing fields. */
+  if (G_VALUE_HOLDS_STRING (value) && g_value_get_string (value) == NULL) {
+    JsonNode *node = json_node_new (JSON_NODE_VALUE);
+    json_node_set_string (node, "");
+    return node;
   }
 
   return json_serializable_default_serialize_property (serializable, name, value, pspec);
@@ -380,11 +378,10 @@ serializable_deserialize_property (JsonSerializable *serializable,
                                    GParamSpec       *pspec,
                                    JsonNode         *node)
 {
-  if (!g_strcmp0 (name, "username") || !g_strcmp0 (name, "usernameField")) {
-    if (!g_strcmp0 (json_node_get_string (node), "")) {
-      g_value_set_string (value, NULL);
-      return TRUE;
-    }
+  /* Convert "" back to NULL. */
+  if (G_VALUE_HOLDS_STRING (value) && !g_strcmp0 (json_node_get_string (node), "")) {
+    g_value_set_string (value, NULL);
+    return TRUE;
   }
 
   return json_serializable_default_deserialize_property (serializable, name, value, pspec, node);
