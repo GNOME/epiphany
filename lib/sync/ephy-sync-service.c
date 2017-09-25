@@ -1569,7 +1569,7 @@ ephy_sync_service_store_secrets (EphySyncService *self)
   while (g_hash_table_iter_next (&iter, &key, &value))
     json_object_set_string_member (object, key, value);
   json_node_set_object (node, object);
-  json_string = json_to_string (node, TRUE);
+  json_string = json_to_string (node, FALSE);
 
   secret = secret_value_new (json_string, -1, "text/plain");
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
