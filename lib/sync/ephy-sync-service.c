@@ -1458,6 +1458,12 @@ load_secrets_cb (SecretService   *service,
   }
 
   value = secret_item_get_secret ((SecretItem *)res->data);
+  if (!value) {
+    g_warning ("Failed to retrieve the value of the sync secrets");
+    message = _("The sync secrets for the current sync user are invalid.");
+    goto out_error;
+  }
+
   node = json_from_string (secret_value_get_text (value), &error);
   if (error) {
     g_warning ("Sync secrets are not a valid JSON: %s", error->message);
