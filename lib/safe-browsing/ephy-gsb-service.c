@@ -65,6 +65,13 @@ enum {
 
 static GParamSpec *obj_properties[LAST_PROP];
 
+enum {
+  UPDATE_FINISHED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 static gboolean ephy_gsb_service_update (EphyGSBService *self);
 
 typedef struct {
@@ -329,6 +336,7 @@ ephy_gsb_service_update_finished_cb (EphyGSBService *self,
                                      gpointer        user_data)
 {
   self->is_updating = FALSE;
+  g_signal_emit (self, signals[UPDATE_FINISHED], 0);
   ephy_gsb_service_schedule_update (self);
 }
 
@@ -509,6 +517,13 @@ ephy_gsb_service_class_init (EphyGSBServiceClass *klass)
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
+
+  signals[UPDATE_FINISHED] =
+    g_signal_new ("update-finished",
+                  EPHY_TYPE_GSB_SERVICE,
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL,
+                  G_TYPE_NONE, 0);
 }
 
 EphyGSBService *
