@@ -648,56 +648,11 @@ update_edit_action_sensitivity (EphyWindow *window, const char *action_name, gbo
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), sensitive || hide);
 }
 
-typedef struct {
-  EphyWindow *window;
-  const char *action_name;
-  gboolean hide;
-} CanEditCommandAsyncData;
-
-static CanEditCommandAsyncData *
-can_edit_command_async_data_new (EphyWindow *window, const gchar *action_name, gboolean hide)
-{
-  CanEditCommandAsyncData *data;
-
-  data = g_slice_new (CanEditCommandAsyncData);
-  data->window = g_object_ref (window);
-  data->action_name = action_name;
-  data->hide = hide;
-
-  return data;
-}
-
-static void
-can_edit_command_async_data_free (CanEditCommandAsyncData *data)
-{
-  if (G_UNLIKELY (!data))
-    return;
-
-  g_object_unref (data->window);
-  g_slice_free (CanEditCommandAsyncData, data);
-}
-
-static void
-can_edit_command_callback (GObject *object, GAsyncResult *result, CanEditCommandAsyncData *data)
-{
-  gboolean sensitive;
-  GError *error = NULL;
-
-  sensitive = webkit_web_view_can_execute_editing_command_finish (WEBKIT_WEB_VIEW (object), result, &error);
-  if (!error) {
-    update_edit_action_sensitivity (data->window, data->action_name, sensitive, data->hide);
-  } else {
-    g_error_free (error);
-  }
-
-  can_edit_command_async_data_free (data);
-}
-
 static void
 update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 {
   GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
-  gboolean can_copy, can_cut, can_undo, can_redo, can_paste;
+  gboolean can_cut, can_copy, can_undo, can_redo, can_paste;
 
   if (GTK_IS_EDITABLE (widget)) {
     EphyTitleWidget *title_widget;
@@ -707,8 +662,8 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
 
     has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), NULL, NULL);
 
-    can_copy = has_selection;
     can_cut = has_selection;
+    can_copy = has_selection;
     can_paste = TRUE;
     can_undo = EPHY_IS_LOCATION_ENTRY (title_widget) &&
                ephy_location_entry_get_can_undo (EPHY_LOCATION_ENTRY (title_widget));
@@ -717,34 +672,19 @@ update_edit_actions_sensitivity (EphyWindow *window, gboolean hide)
   } else {
     EphyEmbed *embed;
     WebKitWebView *view;
-    CanEditCommandAsyncData *data;
+    WebKitEditorState *state;
 
     embed = window->active_embed;
     g_assert (embed != NULL);
 
     view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+    state = webkit_web_view_get_editor_state (view);
 
-    data = can_edit_command_async_data_new (window, "copy", hide);
-    webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_COPY, NULL,
-                                                 (GAsyncReadyCallback)can_edit_command_callback,
-                                                 data);
-    data = can_edit_command_async_data_new (window, "cut", hide);
-    webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_CUT, NULL,
-                                                 (GAsyncReadyCallback)can_edit_command_callback,
-                                                 data);
-    data = can_edit_command_async_data_new (window, "paste", hide);
-    webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_PASTE, NULL,
-                                                 (GAsyncReadyCallback)can_edit_command_callback,
-                                                 data);
-    data = can_edit_command_async_data_new (window, "undo", hide);
-    webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_UNDO, NULL,
-                                                 (GAsyncReadyCallback)can_edit_command_callback,
-                                                 data);
-    data = can_edit_command_async_data_new (window, "redo", hide);
-    webkit_web_view_can_execute_editing_command (view, WEBKIT_EDITING_COMMAND_REDO, NULL,
-                                                 (GAsyncReadyCallback)can_edit_command_callback,
-                                                 data);
-    return;
+    can_cut = webkit_editor_state_is_cut_available (state);
+    can_copy = webkit_editor_state_is_copy_available (state);
+    can_paste = webkit_editor_state_is_paste_available (state);
+    can_undo = webkit_editor_state_is_undo_available (state);
+    can_redo = webkit_editor_state_is_redo_available (state);
   }
 
   update_edit_action_sensitivity (window, "cut", can_cut, hide);
@@ -1404,6 +1344,16 @@ find_spelling_guess_context_menu_items (WebKitContextMenu *context_menu)
   return g_list_reverse (retval);
 }
 
+static gboolean
+should_show_copy_outside_editable (WebKitWebView *view)
+{
+  WebKitEditorState *state;
+
+  state = webkit_web_view_get_editor_state (view);
+
+  return webkit_editor_state_is_copy_available (state);
+}
+
 static void
 parse_context_menu_user_data (WebKitContextMenu *context_menu,
                               const char       **selected_text)
@@ -1530,8 +1480,10 @@ populate_context_menu (WebKitWebView       *web_view,
       webkit_context_menu_append (context_menu,
                                   webkit_context_menu_item_new_separator ());
     }
-    add_action_to_context_menu (context_menu, window_action_group,
-                                "copy", window);
+
+    if (should_show_copy_outside_editable (web_view))
+      add_action_to_context_menu (context_menu, window_action_group,
+                                  "copy", window);
     if (can_search_selection)
       add_action_to_context_menu (context_menu, popup_action_group,
                                   search_selection_action_name, window);
@@ -1608,8 +1560,9 @@ populate_context_menu (WebKitWebView       *web_view,
                                   webkit_context_menu_item_new_separator ());
     }
 
-    add_action_to_context_menu (context_menu, window_action_group,
-                                "copy", window);
+    if (should_show_copy_outside_editable (web_view))
+      add_action_to_context_menu (context_menu, window_action_group,
+                                  "copy", window);
     if (can_search_selection)
       add_action_to_context_menu (context_menu, popup_action_group,
                                   search_selection_action_name, window);
