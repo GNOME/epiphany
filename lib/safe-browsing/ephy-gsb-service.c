@@ -556,30 +556,33 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
 
   body_node = json_from_string (msg->response_body->data, NULL);
   body_obj = json_node_get_object (body_node);
-  matches = json_object_get_array_member (body_obj, "matches");
 
-  /* Update full hashes in database. */
-  for (guint i = 0; i < json_array_get_length (matches); i++) {
-    EphyGSBThreatList *list;
-    JsonObject *match = json_array_get_object_element (matches, i);
-    const char *threat_type = json_object_get_string_member (match, "threatType");
-    const char *platform_type = json_object_get_string_member (match, "platformType");
-    const char *threat_entry_type = json_object_get_string_member (match, "threatEntryType");
-    JsonObject *threat = json_object_get_object_member (match, "threat");
-    const char *hash_b64 = json_object_get_string_member (threat, "hash");
-    const char *positive_duration;
-    guint8 *hash;
-    gsize length;
+  if (json_object_has_non_null_array_member (body_obj, "matches")) {
+    matches = json_object_get_array_member (body_obj, "matches");
 
-    list = ephy_gsb_threat_list_new (threat_type, platform_type, threat_entry_type, NULL);
-    hash = g_base64_decode (hash_b64, &length);
-    positive_duration = json_object_get_string_member (match, "cacheDuration");
-    sscanf (positive_duration, "%lfs", &duration);
+    /* Update full hashes in database. */
+    for (guint i = 0; i < json_array_get_length (matches); i++) {
+      EphyGSBThreatList *list;
+      JsonObject *match = json_array_get_object_element (matches, i);
+      const char *threat_type = json_object_get_string_member (match, "threatType");
+      const char *platform_type = json_object_get_string_member (match, "platformType");
+      const char *threat_entry_type = json_object_get_string_member (match, "threatEntryType");
+      JsonObject *threat = json_object_get_object_member (match, "threat");
+      const char *hash_b64 = json_object_get_string_member (threat, "hash");
+      const char *positive_duration;
+      guint8 *hash;
+      gsize length;
 
-    ephy_gsb_storage_insert_full_hash (self->storage, list, hash, floor (duration));
+      list = ephy_gsb_threat_list_new (threat_type, platform_type, threat_entry_type, NULL);
+      hash = g_base64_decode (hash_b64, &length);
+      positive_duration = json_object_get_string_member (match, "cacheDuration");
+      sscanf (positive_duration, "%lfs", &duration);
 
-    g_free (hash);
-    ephy_gsb_threat_list_free (list);
+      ephy_gsb_storage_insert_full_hash (self->storage, list, hash, floor (duration));
+
+      g_free (hash);
+      ephy_gsb_threat_list_free (list);
+    }
   }
 
   /* Update negative cache duration. */
