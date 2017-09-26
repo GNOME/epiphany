@@ -20,9 +20,13 @@
 
 #include "config.h"
 
+#include "ephy-debug.h"
+#include "ephy-file-helpers.h"
+#include "ephy-gsb-service.h"
 #include "ephy-gsb-utils.h"
 
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
 typedef struct {
@@ -171,15 +175,103 @@ test_ephy_gsb_utils_compute_hashes (void)
   }
 }
 
+typedef struct {
+  const char *url;
+  gboolean    is_threat;
+} VerifyURLTest;
+
+static const VerifyURLTest verify_url_tests[] = {
+  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/MALWARE/URL/",                    TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/SOCIAL_ENGINEERING/URL/",         TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/LINUX/UNWANTED_SOFTWARE/URL/",          TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/MALWARE/URL/",             TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/SOCIAL_ENGINEERING/URL/",  TRUE},
+  {"https://testsafebrowsing.appspot.com/apiv4/ANY_PLATFORM/UNWANTED_SOFTWARE/URL/",   TRUE},
+#if 0
+  /* FIXME: https://groups.google.com/forum/#!topic/google-safe-browsing-api/S6pWV_cjwGU */
+  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/MALWARE/URL/",                  FALSE},
+  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/SOCIAL_ENGINEERING/URL/",       FALSE},
+  {"https://testsafebrowsing.appspot.com/apiv4/WINDOWS/UNWANTED_SOFTWARE/URL/",        FALSE},
+#endif
+};
+
+static GMainLoop *test_verify_url_loop;
+static int        test_verify_url_counter;
+
+static void
+test_verify_url_cb (GHashTable *threats,
+                    gpointer    user_data)
+{
+  gboolean is_threat = GPOINTER_TO_UINT (user_data);
+
+  g_assert_true ((g_hash_table_size (threats) > 0) == is_threat);
+
+  if (--test_verify_url_counter == 0)
+    g_main_loop_quit (test_verify_url_loop);
+}
+
+static void
+gsb_service_update_finished_cb (EphyGSBService *service,
+                                gpointer        user_data)
+{
+  for (guint i = 0; i < G_N_ELEMENTS (verify_url_tests); i++) {
+    VerifyURLTest test = verify_url_tests[i];
+
+    ephy_gsb_service_verify_url (service,
+                                 test.url,
+                                 test_verify_url_cb,
+                                 GUINT_TO_POINTER (test.is_threat));
+  }
+}
+
+static void
+test_ephy_gsb_service_verify_url (void)
+{
+  EphyGSBService *service;
+  char *db_path;
+
+  db_path = g_build_filename (g_get_tmp_dir (), "gsb-threats-test.db", NULL);
+  if (g_file_test (db_path, G_FILE_TEST_IS_REGULAR))
+    g_unlink (db_path);
+
+  /* Note that this test takes a bit longer to execute because we have to wait
+   * for the temporary threats database to be populated with data from the server.
+   */
+  service = ephy_gsb_service_new ("AIzaSyAtuURrRblYXvwCyDC5ZFq0mEw1x4VN6KA", db_path);
+  g_signal_connect (service, "update-finished",
+                    G_CALLBACK (gsb_service_update_finished_cb), NULL);
+
+  test_verify_url_counter = G_N_ELEMENTS (verify_url_tests);
+  test_verify_url_loop = g_main_loop_new (NULL, FALSE);
+  g_main_loop_run (test_verify_url_loop);
+
+  g_free (db_path);
+  g_object_unref (service);
+  g_main_loop_unref (test_verify_url_loop);
+}
+
 int
 main (int argc, char *argv[])
 {
+  GError *error = NULL;
+
   gtk_test_init (&argc, &argv);
+
+  ephy_debug_init ();
+
+  ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, &error);
+  if (error) {
+    g_debug ("ephy_file_helpers_init() failed: %s\n", error->message);
+    g_error_free (error);
+    return -1;
+  }
 
   g_test_add_func ("/lib/safe-browsing/test_ephy_gsb_utils_canonicalize",
                    test_ephy_gsb_utils_canonicalize);
   g_test_add_func ("/lib/safe-browsing/test_ephy_gsb_utils_compute_hashes",
                    test_ephy_gsb_utils_compute_hashes);
+  g_test_add_func ("/lib/safe-browsing/test_ephy_gsb_service_verify_url",
+                   test_ephy_gsb_service_verify_url);
 
   return g_test_run ();
 }
