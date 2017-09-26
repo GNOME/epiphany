@@ -293,6 +293,16 @@ ephy_gsb_utils_make_contraints (void)
   return constraints;
 }
 
+/**
+ * ephy_gsb_utils_make_list_updates_request:
+ * @threat_lists: a #GList of #EphyGSBThreatList
+ *
+ * Create the request body for a threatListUpdates:fetch request.
+ *
+ * https://developers.google.com/safe-browsing/v4/reference/rest/v4/threatListUpdates/fetch#request-body
+ *
+ * Return value: (transfer full): the string representation of the request body
+ **/
 char *
 ephy_gsb_utils_make_list_updates_request (GList *threat_lists)
 {
@@ -330,6 +340,17 @@ ephy_gsb_utils_make_list_updates_request (GList *threat_lists)
   return retval;
 }
 
+/**
+ * ephy_gsb_utils_make_full_hashes_request:
+ * @threat_lists: a #GList of #EphyGSBThreatList
+ * @hash_prefixes: a #GList of #GBytes
+ *
+ * Create the request body for a fullHashes:find request.
+ *
+ * https://developers.google.com/safe-browsing/v4/reference/rest/v4/fullHashes/find#request-body
+ *
+ * Return value: (transfer full): the string representation of the request body
+ **/
 char *
 ephy_gsb_utils_make_full_hashes_request (GList *threat_lists,
                                          GList *hash_prefixes)
@@ -426,9 +447,20 @@ ephy_gsb_utils_make_full_hashes_request (GList *threat_lists,
   return body;
 }
 
-/*
+/**
+ * ephy_gsb_utils_rice_delta_decode:
+ * @rde: a RiceDeltaEncoding object as a #JsonObject
+ * @num_items: out parameter for the length of the returned array. This will be
+ *             equal to 1 + RiceDeltaEncoding.numEntries
+ *
+ * Decompress the Rice-encoded data of a ThreatEntrySet received from a
+ * threatListUpdates:fetch response.
+ *
  * https://developers.google.com/safe-browsing/v4/compression#rice-compression
- */
+ * https://developers.google.com/safe-browsing/v4/reference/rest/v4/threatListUpdates/fetch#ricedeltaencoding
+ *
+ * Return value: (transfer full): the decompressed values as an array of guint32s
+ **/
 guint32 *
 ephy_gsb_utils_rice_delta_decode (JsonObject *rde,
                                   gsize      *num_items)
@@ -581,9 +613,20 @@ ephy_gsb_utils_canonicalize_host (const char *host)
   return retval;
 }
 
-/*
+/**
+ * ephy_gsb_utils_canonicalize:
+ * @url: the URL to canonicalize
+ * @host_out: out parameter for the host value of the canonicalized URL or %NULL
+ * @path_out: out parameter for the path value of the canonicalized URL or %NULL
+ * @query_out: out parameter for the query value of the canonicalized URL or %NULL
+ *
+ * Canonicalize @url according to Google Safe Browsing API v4 specification.
+ *
  * https://developers.google.com/safe-browsing/v4/urls-hashing#canonicalization
- */
+ *
+ * Return value: (transfer full): the canonical form of @url or %NULL if @url
+ *               is not a valid URL
+ **/
 char *
 ephy_gsb_utils_canonicalize (const char  *url,
                              char       **host_out,
@@ -747,6 +790,19 @@ ephy_gsb_utils_compute_path_prefixes (const char *path,
   return g_list_reverse (retval);
 }
 
+/**
+ * ephy_gsb_utils_compute_hashes:
+ * @url: the URL whose hashes to be computed
+ *
+ * Compute the SHA256 hashes of @url.
+ *
+ * https://developers.google.com/safe-browsing/v4/urls-hashing#hash-computations
+ *
+ * Return value: (element-type #GBytes) (transfer full): a #GList containing the
+ *               full hashes of @url. The caller takes ownership of the list and
+ *               its content. Use g_list_free_full() with g_bytes_unref() as
+ *               free_func when done using the list.
+ **/
 GList *
 ephy_gsb_utils_compute_hashes (const char *url)
 {
@@ -799,6 +855,18 @@ ephy_gsb_utils_compute_hashes (const char *url)
   return g_list_reverse (retval);
 }
 
+/**
+ * ephy_gsb_utils_get_hash_cues:
+ * @hashes: a #GList of #GBytes
+ *
+ * Get the hash cues from a list of full hashes. The hash cue length is
+ * specified by the GSB_HASH_CUE_LEN macro.
+ *
+ * Return value: (element-type #GBytes) (transfer full): a #GList containing
+ *               the cues of each hash in @hashes. The caller takes ownership
+ *               of the list and its content. Use g_list_free_full() with
+ *               g_bytes_unref() as free_func when done using the list.
+ **/
 GList *
 ephy_gsb_utils_get_hash_cues (GList *hashes)
 {
@@ -814,6 +882,15 @@ ephy_gsb_utils_get_hash_cues (GList *hashes)
   return g_list_reverse (retval);
 }
 
+/**
+ * ephy_gsb_utils_hash_has_prefix:
+ * @hash: the full hash to verify
+ * @prefix: the hash prefix to verify
+ *
+ * Verify whether @hash begins with the prefix @prefix.
+ *
+ * Return value: %TRUE if @hash begins with @prefix
+ **/
 gboolean
 ephy_gsb_utils_hash_has_prefix (GBytes *hash,
                                 GBytes *prefix)

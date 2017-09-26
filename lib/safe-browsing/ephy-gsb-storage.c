@@ -540,6 +540,16 @@ ephy_gsb_storage_new (const char *db_path)
   return g_object_new (EPHY_TYPE_GSB_STORAGE, "db-path", db_path, NULL);
 }
 
+/**
+ * ephy_gsb_storage_is_operable:
+ * @self: an #EphyGSBStorage
+ *
+ * Verify whether the local database is operable, i.e. no error occurred during
+ * the opening and/or initialization of the database. No operations on @self are
+ * allowed if the local database is inoperable.
+ *
+ * Return value: %TRUE if the local database is operable
+ **/
 gboolean
 ephy_gsb_storage_is_operable (EphyGSBStorage *self)
 {
@@ -548,6 +558,16 @@ ephy_gsb_storage_is_operable (EphyGSBStorage *self)
   return self->is_operable;
 }
 
+/**
+ * ephy_gsb_storage_get_metadata:
+ * @self: an #EphyGSBStorage
+ * @key: the key whose value to retrieve
+ * @default_value: the value to return in case of error or if @key is missing
+ *
+ * Retrieve the value of a key from the metadata table of the local database.
+ *
+ * Return value: The metadata value associated with @key
+ **/
 gint64
 ephy_gsb_storage_get_metadata (EphyGSBStorage *self,
                                const char     *key,
@@ -592,6 +612,14 @@ ephy_gsb_storage_get_metadata (EphyGSBStorage *self,
   return value;
 }
 
+/**
+ * ephy_gsb_storage_set_metadata:
+ * @self: an #EphyGSBStorage
+ * @key: the key whose value to update
+ * @value: the updated value
+ *
+ * Update the value of a key in the metadata table of the local database.
+ **/
 void
 ephy_gsb_storage_set_metadata (EphyGSBStorage *self,
                                const char     *key,
@@ -638,6 +666,19 @@ ephy_gsb_storage_set_metadata (EphyGSBStorage *self,
   }
 }
 
+/**
+ * ephy_gsb_storage_get_threat_lists:
+ * @self: an #EphyGSBStorage
+ *
+ * Retrieve the list of supported threat lists from the threats table of the
+ * local database.
+ *
+ * Return value: (element-type #EphyGSBThreatList) (transfer full): a #GList
+ *               containing the threat lists. The caller takes ownership
+ *               of the list and its content. Use g_list_free_full() with
+ *               ephy_gsb_threat_list_free() as free_func when done using
+ *               the list.
+ **/
 GList *
 ephy_gsb_storage_get_threat_lists (EphyGSBStorage *self)
 {
@@ -677,6 +718,18 @@ ephy_gsb_storage_get_threat_lists (EphyGSBStorage *self)
   return g_list_reverse (threat_lists);
 }
 
+/**
+ * ephy_gsb_storage_compute_checksum:
+ * @self: an #EphyGSBSTorage
+ * @list: an #EphyGSBThreatList
+ *
+ * Compute the SHA256 checksum of the lexicographically sorted list of all the
+ * hash prefixes belonging to @list in the local database.
+ *
+ * https://developers.google.com/safe-browsing/v4/local-databases#validation-checks
+ *
+ * Return value: (transfer full): the base64 encoded checksum or %NULL if error
+ **/
 char *
 ephy_gsb_storage_compute_checksum (EphyGSBStorage    *self,
                                    EphyGSBThreatList *list)
@@ -733,6 +786,16 @@ out:
   return retval;
 }
 
+/**
+ * ephy_gsb_storage_update_client_state:
+ * @self: an #EphyGSBStorage
+ * @list: an #EphyGSBThreatList
+ * @clear: %TRUE if the client state should be set to %NULL
+ *
+ * Update the client state column of @list in the threats table of the local
+ * database. The new state is set according to the client_state field of @list.
+ * Set @clear to %TRUE if you wish to reset the state.
+ **/
 void
 ephy_gsb_storage_update_client_state (EphyGSBStorage    *self,
                                       EphyGSBThreatList *list,
@@ -775,6 +838,13 @@ ephy_gsb_storage_update_client_state (EphyGSBStorage    *self,
   g_object_unref (statement);
 }
 
+/**
+ * ephy_gsb_storage_clear_hash_prefixes:
+ * @self: an #EphyGSBStorage
+ * @list: an #EphyGSBThreatList
+ *
+ * Delete all hash prefixes belonging to @list from the local database.
+ **/
 void
 ephy_gsb_storage_clear_hash_prefixes (EphyGSBStorage    *self,
                                       EphyGSBThreatList *list)
@@ -1003,6 +1073,15 @@ ephy_gsb_storage_delete_hash_prefixes_internal (EphyGSBStorage    *self,
     g_object_unref (statement);
 }
 
+/**
+ * ephy_gsb_storage_delete_hash_prefixes:
+ * @self: an #EphyGSBStorage
+ * @list: an #EphyGSBThreatList
+ * @tes: a ThreatEntrySet object as a #JsonObject
+ *
+ * Delete hash prefixes belonging to @list from the local database. Use this
+ * when handling the response of a threatListUpdates:fetch request.
+ **/
 void
 ephy_gsb_storage_delete_hash_prefixes (EphyGSBStorage    *self,
                                        EphyGSBThreatList *list,
@@ -1165,6 +1244,15 @@ ephy_gsb_storage_insert_hash_prefixes_internal (EphyGSBStorage    *self,
     g_object_unref (statement);
 }
 
+/**
+ * ephy_gsb_storage_insert_hash_prefixes:
+ * @self: an #EphyGSBStorage
+ * @list: an #EphyGSBThreatList
+ * @tes: a ThreatEntrySet object as a #JsonObject
+ *
+ * Insert hash prefixes belonging to @list in the local database. Use this
+ * when handling the response of a threatListUpdates:fetch request.
+ **/
 void
 ephy_gsb_storage_insert_hash_prefixes (EphyGSBStorage    *self,
                                        EphyGSBThreatList *list,
@@ -1210,6 +1298,21 @@ ephy_gsb_storage_insert_hash_prefixes (EphyGSBStorage    *self,
   g_free (prefixes);
 }
 
+/**
+ * ephy_gsb_storage_lookup_hash_prefixes:
+ * @self: an #EphyGSBStorage
+ * @cues: a #GList of hash cues as #GBytes
+ *
+ * Retrieve the hash prefixes and their negative cache expiration time from the
+ * local database that begin with the hash cues in @cues. The hash cue length is
+ * specified by the GSB_HASH_CUE_LEN macro.
+ *
+ * Return value: (element-type #EphyGSBHashPrefixLookup) (transfer-full):
+ *               a #GList containing the lookup result.  The caller takes
+ *               ownership of the list and its content. Use g_list_free_full()
+ *               with ephy_gsb_hash_prefix_lookup_free() as free_func when done
+ *               using the list.
+ **/
 GList *
 ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
                                        GList          *cues)
@@ -1271,6 +1374,21 @@ ephy_gsb_storage_lookup_hash_prefixes (EphyGSBStorage *self,
   return g_list_reverse (retval);
 }
 
+/**
+ * ephy_gsb_storage_lookup_full_hashes:
+ * @self: an #EphyGSBStorage
+ * @hashes: a #GList of full hashes as #GBytes
+ *
+ * Retrieve the full hashes together with their positive cache expiration time
+ * and threat parameters from the local database that match any of the hashes
+ * in @hashes.
+ *
+ * Return value: (element-type #EphyGSBHashFullLookup) (transfer-full):
+ *               a #GList containing the lookup result.  The caller takes
+ *               ownership of the list and its content. Use g_list_free_full()
+ *               with ephy_gsb_hash_full_lookup_free() as free_func when done
+ *               using the list.
+ **/
 GList *
 ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
                                      GList          *hashes)
@@ -1340,6 +1458,18 @@ ephy_gsb_storage_lookup_full_hashes (EphyGSBStorage *self,
   return g_list_reverse (retval);
 }
 
+/**
+ * ephy_gsb_storage_insert_full_hash:
+ * @self: an #EphyGSBStorage
+ * @list: an #EphyGSBThreatList
+ * @hash: the full SHA256 hash
+ * @duration: the positive cache duration
+ *
+ * Insert a full hash belonging to @list in the local database. Use this
+ * when handling the response from a fullHashes:find request. If @hash
+ * already exists in the database and belongs to @list, then only the
+ * duration is updated. Otherwise, a new record is created.
+ **/
 void
 ephy_gsb_storage_insert_full_hash (EphyGSBStorage    *self,
                                    EphyGSBThreatList *list,
@@ -1415,6 +1545,13 @@ out:
     g_error_free (error);
 }
 
+/**
+ * ephy_gsb_storage_delete_old_full_hashes:
+ * @self: an #EphyGSBStorage
+ *
+ * Delete long expired full hashes from the local database. The expiration
+ * threshold is specified by the EXPIRATION_THRESHOLD macro.
+ **/
 void
 ephy_gsb_storage_delete_old_full_hashes (EphyGSBStorage *self)
 {
@@ -1453,6 +1590,14 @@ ephy_gsb_storage_delete_old_full_hashes (EphyGSBStorage *self)
   g_object_unref (statement);
 }
 
+/**
+ * ephy_gsb_storage_update_hash_prefix_expiration:
+ * @self: an #EphyGSBStorage
+ * @prefix: the hash prefix
+ * @duration: the negative cache duration
+ *
+ * Update the negative cache expiration time of a hash prefix in the local database.
+ **/
 void
 ephy_gsb_storage_update_hash_prefix_expiration (EphyGSBStorage *self,
                                                 GBytes         *prefix,

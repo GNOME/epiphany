@@ -797,6 +797,16 @@ out:
   g_hash_table_unref (matching_hashes_set);
 }
 
+/**
+ * ephy_gsb_service_verify_url:
+ * @self: an #EphyGSBService
+ * @url: the URL to verify
+ * @callback: an #EphyGSBServiceVerifyURLCallback to be called when the
+              verification has completed
+ * @user_data: user data for the callback
+ *
+ * Verify whether @url is safe to browse according to Google Safe Browsing.
+ **/
 void
 ephy_gsb_service_verify_url (EphyGSBService                  *self,
                              const char                      *url,
