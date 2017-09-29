@@ -206,25 +206,6 @@ typedef enum {
   WEBKIT_HISTORY_FORWARD
 } WebKitHistoryType;
 
-static void
-ephy_history_cleared_cb (EphyHistoryService *history,
-                         gpointer            user_data)
-{
-  GActionGroup *action_group;
-  GAction *action;
-  guint i;
-  gchar **actions;
-
-  action_group = gtk_widget_get_action_group (GTK_WIDGET (user_data), "toolbar");
-  actions = g_action_group_list_actions (action_group);
-  for (i = 0; actions[i] != NULL; i++) {
-    action = g_action_map_lookup_action (G_ACTION_MAP (action_group), actions[i]);
-    ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action), SENS_FLAG, TRUE);
-  }
-
-  g_strfreev (actions);
-}
-
 static gboolean
 item_enter_notify_event_cb (GtkWidget   *widget,
                             GdkEvent    *event,
@@ -628,7 +609,6 @@ ephy_header_bar_constructed (GObject *object)
   GtkWidget *page_menu_popover;
   EphyDownloadsManager *downloads_manager;
   GtkBuilder *builder;
-  EphyHistoryService *history_service;
   EphyEmbedShell *embed_shell;
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
@@ -826,12 +806,6 @@ ephy_header_bar_constructed (GObject *object)
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), header_bar->downloads_revealer);
   gtk_widget_show (header_bar->downloads_revealer);
-
-  history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
-
-  g_signal_connect (history_service,
-                    "cleared", G_CALLBACK (ephy_history_cleared_cb),
-                    header_bar->window);
 }
 
 static void
