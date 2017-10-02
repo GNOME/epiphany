@@ -1,0 +1,93 @@
+{
+    "app-id": "org.gnome.Epiphany",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "3.24",
+    "branch": "stable",
+    "sdk": "org.gnome.Sdk",
+    "command": "epiphany",
+    "tags": [],
+    "finish-args": [
+        /* X11 + XShm access */
+        "--share=ipc", "--socket=x11",
+        /* Wayland access */
+        "--socket=wayland",
+        /* OpenGL access */
+        "--device=dri",
+        /* Needs to talk to the network: */
+        "--share=network",
+        /* Play sounds */
+        "--socket=pulseaudio",
+        /* Allow using the HTML5 Geolocation API */
+        "--system-talk-name=org.freedesktop.GeoClue2",
+        /* Needed for dconf to work */
+        "--filesystem=xdg-run/dconf", "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "build-options" : {
+        "cflags": "-O2 -g",
+        "cxxflags": "-O2 -g",
+        "env": {
+            "V": "1"
+        }
+    },
+    "cleanup": ["/include", "/lib/pkgconfig",
+                "/share/pkgconfig", "/share/aclocal",
+                "/man", "/share/man", "/share/gtk-doc",
+                "/share/dbus-1",
+                "*.la", "*.a"],
+    "modules": [
+        {
+            "name": "avahi",
+            "cleanup": [ "/bin" ],
+            "config-opts": [
+                "--with-distro=none",
+                "--enable-gobject",
+                "--with-xml=expat",
+                "--disable-libdaemon",
+                "--disable-core-docs",
+                "--disable-manpages",
+                "--disable-mono",
+                "--disable-qt3",
+                "--disable-qt4",
+                "--disable-python",
+                "--disable-gtk",
+                "--disable-gtk3"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://avahi.org/download/avahi-0.6.31.tar.gz",
+                    "sha256": "8372719b24e2dd75de6f59bb1315e600db4fd092805bd1201ed0cb651a2dab48"
+                },
+                {
+                    "type": "shell",
+                    "commands": [
+                        "cp -f /usr/share/gnu-config/config.sub .",
+                        "cp -f /usr/share/gnu-config/config.guess ."
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "gnome-desktop",
+            "config-opts": ["--disable-debug-tools", "--disable-udev"],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/gnome-desktop/3.24/gnome-desktop-3.24.2.tar.xz",
+                    "sha256": "8fa1de66a6a75963bffc79b01a60434c71237d44c51beca09c0f714a032d785e"
+                }
+            ]
+        },
+        {
+            "name": "epiphany",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/epiphany/3.24/epiphany-3.24.2.tar.xz",
+                    "sha256": "5abc0d0c60591df5236ac9b8979dc9f7d9acbb8ad0902b4772d2b7beea81c58d"
+                }
+            ]
+        }
+    ]
+}
