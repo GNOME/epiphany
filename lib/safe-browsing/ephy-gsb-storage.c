@@ -36,21 +36,8 @@
  */
 #define BATCH_SIZE 199
 
-/* Increment schema version if you:
- * 1) Modify the database table structure.
- * 2) Add new threat lists below.
- */
+/* Increment schema version if you modify the database table structure. */
 #define SCHEMA_VERSION 1
-
-/* The available Linux threat lists of Google Safe Browsing API v4.
- * The format is {THREAT_TYPE, PLATFORM_TYPE, THREAT_ENTRY_TYPE}.
- */
-static const char * const gsb_linux_threat_lists[][3] = {
-  {GSB_THREAT_TYPE_MALWARE,            "LINUX", "URL"},
-  {GSB_THREAT_TYPE_SOCIAL_ENGINEERING, "LINUX", "URL"},
-  {GSB_THREAT_TYPE_UNWANTED_SOFTWARE,  "LINUX", "URL"},
-  {GSB_THREAT_TYPE_MALWARE,            "LINUX", "IP_RANGE"},
-};
 
 struct _EphyGSBStorage {
   GObject parent_instance;
@@ -210,9 +197,7 @@ ephy_gsb_storage_init_metadata_table (EphyGSBStorage *self)
 static gboolean
 ephy_gsb_storage_init_threats_table (EphyGSBStorage *self)
 {
-  EphySQLiteStatement *statement;
   GError *error = NULL;
-  GString *string;
   const char *sql;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
@@ -231,40 +216,6 @@ ephy_gsb_storage_init_threats_table (EphyGSBStorage *self)
   ephy_sqlite_connection_execute (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create threats table: %s", error->message);
-    g_error_free (error);
-    return FALSE;
-  }
-
-  sql = "INSERT INTO threats (threat_type, platform_type, threat_entry_type) VALUES ";
-  string = g_string_new (sql);
-  for (guint i = 0; i < G_N_ELEMENTS (gsb_linux_threat_lists); i++)
-    g_string_append (string, "(?, ?, ?),");
-  /* Remove trailing comma character. */
-  g_string_erase (string, string->len - 1, -1);
-
-  statement = ephy_sqlite_connection_create_statement (self->db, string->str, &error);
-  g_string_free (string, TRUE);
-
-  if (error) {
-    g_warning ("Failed to create threats table insert statement: %s", error->message);
-    g_error_free (error);
-    return FALSE;
-  }
-
-  for (guint i = 0; i < G_N_ELEMENTS (gsb_linux_threat_lists); i++) {
-    EphyGSBThreatList *list = ephy_gsb_threat_list_new (gsb_linux_threat_lists[i][0],
-                                                        gsb_linux_threat_lists[i][1],
-                                                        gsb_linux_threat_lists[i][2],
-                                                        NULL);
-    bind_threat_list_params (statement, list, i * 3, i * 3 + 1, i * 3 + 2, -1);
-    ephy_gsb_threat_list_free (list);
-  }
-
-  ephy_sqlite_statement_step (statement, &error);
-  g_object_unref (statement);
-
-  if (error) {
-    g_warning ("Failed to insert initial data into threats table: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
@@ -664,6 +615,52 @@ ephy_gsb_storage_set_metadata (EphyGSBStorage *self,
     g_warning ("Failed to execute update metadata statement: %s", error->message);
     g_error_free (error);
   }
+}
+
+/**
+ * ephy_gsb_storage_insert_threat_list:
+ * @self: an #EphyGSBStorage
+ * @list: an #EphyGSBThreatList
+ *
+ * Insert a threat lists into the local database. If the combination
+ * THREAT_TYPE/PLATFORM_TYPE/THREAT_ENTRY_TYPE already exists in the
+ * database, then this function does nothing. The client state is ignored.
+ * Use ephy_gsb_storage_update_client_state() if you need to update the
+ * client state.
+ **/
+void
+ephy_gsb_storage_insert_threat_list (EphyGSBStorage    *self,
+                                     EphyGSBThreatList *list)
+{
+  EphySQLiteStatement *statement;
+  GError *error = NULL;
+  const char *sql;
+
+  g_assert (EPHY_IS_GSB_STORAGE (self));
+  g_assert (list);
+
+  sql = "INSERT OR IGNORE INTO threats "
+        "(threat_type, platform_type, threat_entry_type, client_state) "
+        "VALUES (?, ?, ?, ?)";
+  statement = ephy_sqlite_connection_create_statement (self->db, sql, &error);
+  if (error) {
+    g_warning ("Failed to create insert threat list statement: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  if (!bind_threat_list_params (statement, list, 0, 1, 2, -1)) {
+    g_object_unref (statement);
+    return;
+  }
+
+  ephy_sqlite_statement_step (statement, &error);
+  if (error) {
+    g_warning ("Failed to execute insert threat list statement: %s", error->message);
+    g_error_free (error);
+  }
+
+  g_object_unref (statement);
 }
 
 /**
