@@ -236,11 +236,15 @@ ephy_gsb_service_fetch_threat_lists (EphyGSBService *self)
   if (msg->status_code != 200) {
     LOG ("Failed to fetch the threat lists from the server, got: %u, %s",
          msg->status_code, msg->response_body->data);
-    g_object_unref (msg);
-    return NULL;
+    goto out;
   }
 
   body_node = json_from_string (msg->response_body->data, NULL);
+  if (!body_node || !JSON_NODE_HOLDS_OBJECT (body_node)) {
+    g_warning ("Response is not a valid JSON object");
+    goto out;
+  }
+
   body_obj = json_node_get_object (body_node);
 
   if (json_object_has_non_null_array_member (body_obj, "threatLists")) {
@@ -262,9 +266,11 @@ ephy_gsb_service_fetch_threat_lists (EphyGSBService *self)
     }
   }
 
+out:
   g_free (url);
   g_object_unref (msg);
-  json_node_unref (body_node);
+  if (body_node)
+    json_node_unref (body_node);
 
   return g_list_reverse (retval);
 }
@@ -280,11 +286,16 @@ ephy_gsb_service_update_thread (GTask          *task,
   JsonArray *responses;
   SoupMessage *msg = NULL;
   GList *threat_lists = NULL;
-  char *url;
+  char *url = NULL;
   char *body;
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
   g_assert (ephy_gsb_storage_is_operable (self->storage));
+
+  /* Set up a default next update time in case of failure or non-existent
+   * minimum wait duration.
+   */
+  self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
 
   ephy_gsb_storage_delete_old_full_hashes (self->storage);
 
@@ -296,7 +307,7 @@ ephy_gsb_service_update_thread (GTask          *task,
 
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists) {
-    self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
+    LOG ("No threat lists to update");
     goto out;
   }
 
@@ -305,8 +316,6 @@ ephy_gsb_service_update_thread (GTask          *task,
   msg = soup_message_new (SOUP_METHOD_POST, url);
   soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
   soup_session_send_message (self->session, msg);
-
-  g_free (url);
 
   /* Handle unsuccessful responses. */
   if (msg->status_code != 200) {
@@ -320,6 +329,11 @@ ephy_gsb_service_update_thread (GTask          *task,
   ephy_gsb_service_reset_back_off_mode (self);
 
   body_node = json_from_string (msg->response_body->data, NULL);
+  if (!body_node || !JSON_NODE_HOLDS_OBJECT (body_node)) {
+    g_warning ("Response is not a valid JSON object");
+    goto out;
+  }
+
   body_obj = json_node_get_object (body_node);
   responses = json_object_get_array_member (body_obj, "listUpdateResponses");
 
@@ -385,11 +399,10 @@ ephy_gsb_service_update_thread (GTask          *task,
     /* Handle the trailing 's' character. */
     sscanf (duration_str, "%lfs", &duration);
     self->next_list_updates_time = CURRENT_TIME + (gint64)ceil (duration);
-  } else {
-    self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
   }
 
 out:
+  g_free (url);
   if (msg)
     g_object_unref (msg);
   if (body_node)
@@ -601,10 +614,10 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
 {
   FindFullHashesData *data = (FindFullHashesData *)user_data;
   EphyGSBService *self = data->service;
-  JsonNode *body_node;
+  JsonNode *body_node = NULL;
   JsonObject *body_obj;
   JsonArray *matches;
-  GList *hashes_lookup;
+  GList *hashes_lookup = NULL;
   const char *duration_str;
   double duration;
 
@@ -612,15 +625,18 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
   if (msg->status_code != 200) {
     LOG ("Cannot update full hashes, got: %u, %s", msg->status_code, msg->response_body->data);
     ephy_gsb_service_update_back_off_mode (self);
-    data->callback (data->threats, data->user_data);
-    find_full_hashes_data_free (data);
-    return;
+    goto out;
   }
 
   /* Successful response, reset back-off mode. */
   ephy_gsb_service_reset_back_off_mode (self);
 
   body_node = json_from_string (msg->response_body->data, NULL);
+  if (!body_node || !JSON_NODE_HOLDS_OBJECT (body_node)) {
+    g_warning ("Response is not a valid JSON object");
+    goto out;
+  }
+
   body_obj = json_node_get_object (body_node);
 
   if (json_object_has_non_null_array_member (body_obj, "matches")) {
@@ -680,11 +696,13 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
     }
   }
 
+out:
   data->callback (data->threats, data->user_data);
 
-  json_node_unref (body_node);
-  g_list_free_full (hashes_lookup, (GDestroyNotify)ephy_gsb_hash_full_lookup_free);
+  if (body_node)
+    json_node_unref (body_node);
   find_full_hashes_data_free (data);
+  g_list_free_full (hashes_lookup, (GDestroyNotify)ephy_gsb_hash_full_lookup_free);
 }
 
 static void
