@@ -165,6 +165,9 @@ ephy_gsb_service_update_back_off_mode (EphyGSBService *self)
   duration = (1 << self->back_off_num_fails++) * 15 * 60 * (g_random_double () + 1);
   self->back_off_exit_time = CURRENT_TIME + MIN (duration, 24 * 60 * 60);
 
+  ephy_gsb_storage_set_metadata (self->storage, "back_off_exit_time", self->back_off_exit_time);
+  ephy_gsb_storage_set_metadata (self->storage, "back_off_num_fails", self->back_off_num_fails);
+
   LOG ("Set back-off mode for %ld seconds", duration);
 }
 
@@ -216,11 +219,11 @@ ephy_gsb_service_update_thread (GTask          *task,
                                 gpointer        task_data,
                                 GCancellable   *cancellable)
 {
-  JsonNode *body_node;
+  JsonNode *body_node = NULL;
   JsonObject *body_obj;
   JsonArray *responses;
-  SoupMessage *msg;
-  GList *threat_lists;
+  SoupMessage *msg = NULL;
+  GList *threat_lists = NULL;
   char *url;
   char *body;
 
@@ -232,7 +235,7 @@ ephy_gsb_service_update_thread (GTask          *task,
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists) {
     self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
-    return;
+    goto out;
   }
 
   body = ephy_gsb_utils_make_list_updates_request (threat_lists);
@@ -247,9 +250,8 @@ ephy_gsb_service_update_thread (GTask          *task,
   if (msg->status_code != 200) {
     LOG ("Cannot update threat lists, got: %u, %s", msg->status_code, msg->response_body->data);
     ephy_gsb_service_update_back_off_mode (self);
-    g_object_unref (msg);
     self->next_list_updates_time = self->back_off_exit_time;
-    return;
+    goto out;
   }
 
   /* Successful response, reset back-off mode. */
@@ -325,9 +327,14 @@ ephy_gsb_service_update_thread (GTask          *task,
     self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
   }
 
-  g_object_unref (msg);
-  json_node_unref (body_node);
+out:
+  if (msg)
+    g_object_unref (msg);
+  if (body_node)
+    json_node_unref (body_node);
   g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
+
+  ephy_gsb_storage_set_metadata (self->storage, "next_list_updates_time", self->next_list_updates_time);
 }
 
 static void
@@ -415,24 +422,6 @@ static void
 ephy_gsb_service_dispose (GObject *object)
 {
   EphyGSBService *self = EPHY_GSB_SERVICE (object);
-
-  if (self->storage && ephy_gsb_storage_is_operable (self->storage)) {
-    /* Store next threatListUpdates:fetch request time. */
-    ephy_gsb_storage_set_metadata (self->storage,
-                                   "next_list_updates_time",
-                                   self->next_list_updates_time);
-    /* Store next fullHashes:find request time. */
-    ephy_gsb_storage_set_metadata (self->storage,
-                                   "next_full_hashes_time",
-                                   self->next_full_hashes_time);
-    /* Store back-off parameters. */
-    ephy_gsb_storage_set_metadata (self->storage,
-                                   "back_off_exit_time",
-                                   self->back_off_exit_time);
-    ephy_gsb_storage_set_metadata (self->storage,
-                                   "back_off_num_fails",
-                                   self->back_off_num_fails);
-  }
 
   g_clear_object (&self->storage);
   g_clear_object (&self->session);
@@ -611,6 +600,7 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
     duration_str = json_object_get_string_member (body_obj, "minimumWaitDuration");
     sscanf (duration_str, "%lfs", &duration);
     self->next_full_hashes_time = CURRENT_TIME + (gint64)ceil (duration);
+    ephy_gsb_storage_set_metadata (self->storage, "next_full_hashes_time", self->next_full_hashes_time);
   }
 
   /* Repeat the full hash verification. */
