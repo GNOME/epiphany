@@ -251,13 +251,19 @@ ephy_gsb_service_fetch_threat_lists (EphyGSBService *self)
     threat_lists = json_object_get_array_member (body_obj, "threatLists");
     for (guint i = 0; i < json_array_get_length (threat_lists); i++) {
       descriptor = json_array_get_object_element (threat_lists, i);
+      threat_type = json_object_get_string_member (descriptor, "threatType");
       platform_type = json_object_get_string_member (descriptor, "platformType");
 
-      /* Filter out non-Linux threats. */
-      if (g_strcmp0 (platform_type, "LINUX") != 0)
-        continue;
+      /* Keep SOCIAL_ENGINEERING threats that are for any platform.
+       * Keep MALWARE/UNWANTED_SOFTWARE threats that are for Linux only.
+       */
+      if (g_strcmp0 (threat_type, "SOCIAL_ENGINEERING") == 0) {
+        if (g_strcmp0 (platform_type, "ANY_PLATFORM") != 0)
+          continue;
+      } else if (g_strcmp0 (platform_type, "LINUX") != 0) {
+          continue;
+      }
 
-      threat_type = json_object_get_string_member (descriptor, "threatType");
       threat_entry_type = json_object_get_string_member (descriptor, "threatEntryType");
       retval = g_list_prepend (retval, ephy_gsb_threat_list_new (threat_type,
                                                                  platform_type,
