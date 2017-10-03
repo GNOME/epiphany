@@ -447,7 +447,6 @@ void
 ephy_sync_debug_view_secrets (void)
 {
   GHashTable *attributes;
-  SecretValue *value;
   GList *result;
   GError *error = NULL;
 
@@ -468,14 +467,16 @@ ephy_sync_debug_view_secrets (void)
    * this list would normally have only one element, but for the sake of
    * debugging purposes we iterate through all the list.
    */
+#if DEVELOPER_MODE
   for (GList *l = result; l && l->data; l = l->next) {
     GHashTable *attrs = secret_item_get_attributes (result->data);
     const char *account = g_hash_table_lookup (attrs, ACCOUNT_KEY);
-    value = secret_item_get_secret (result->data);
+    SecretValue *value = secret_item_get_secret (result->data);
     LOG ("Sync secrets of %s: %s", account, secret_value_get_text (value));
     secret_value_unref (value);
     g_hash_table_unref (attrs);
   }
+#endif
 
   g_list_free_full (result, g_object_unref);
 free_attributes:
