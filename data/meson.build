@@ -49,7 +49,7 @@ configure_file(
   install: true,
   install_dir: join_paths(datadir, 'dbus-1', 'services')
 )
-install_data('epiphany-search-provider.ini',
+install_data('org.gnome.Epiphany.search-provider.ini',
   install_dir: join_paths(datadir, 'gnome-shell', 'search-providers')
 )
 
