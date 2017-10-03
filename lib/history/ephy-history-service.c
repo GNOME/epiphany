@@ -391,23 +391,6 @@ ephy_history_service_commit_transaction (EphyHistoryService *self)
   }
 }
 
-static void
-ephy_history_service_enable_foreign_keys (EphyHistoryService *self)
-{
-  GError *error = NULL;
-
-  if (self->history_database == NULL)
-    return;
-
-  ephy_sqlite_connection_execute (self->history_database,
-                                  "PRAGMA foreign_keys = ON", &error);
-
-  if (error) {
-    g_warning ("Could not enable foreign keys pragma: %s", error->message);
-    g_error_free (error);
-  }
-}
-
 static gboolean
 ephy_history_service_open_database_connections (EphyHistoryService *self)
 {
@@ -434,9 +417,9 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
     }
     g_error_free (error);
     return FALSE;
+  } else {
+    ephy_sqlite_connection_enable_foreign_keys (self->history_database);
   }
-
-  ephy_history_service_enable_foreign_keys (self);
 
   return self->read_only ||
           (ephy_history_service_initialize_hosts_table (self) &&

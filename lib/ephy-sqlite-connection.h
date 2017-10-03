@@ -46,6 +46,7 @@ void                    ephy_sqlite_connection_get_error               (EphySQLi
 gboolean                ephy_sqlite_connection_execute                 (EphySQLiteConnection *self, const char *sql, GError **error);
 EphySQLiteStatement *   ephy_sqlite_connection_create_statement        (EphySQLiteConnection *self, const char *sql, GError **error);
 gint64                  ephy_sqlite_connection_get_last_insert_id      (EphySQLiteConnection *self);
+void                    ephy_sqlite_connection_enable_foreign_keys     (EphySQLiteConnection *self);
 
 gboolean                ephy_sqlite_connection_begin_transaction       (EphySQLiteConnection *self, GError **error);
 gboolean                ephy_sqlite_connection_commit_transaction      (EphySQLiteConnection *self, GError **error);

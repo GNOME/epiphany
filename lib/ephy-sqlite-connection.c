@@ -191,6 +191,20 @@ ephy_sqlite_connection_get_last_insert_id (EphySQLiteConnection *self)
   return sqlite3_last_insert_rowid (self->database);
 }
 
+void
+ephy_sqlite_connection_enable_foreign_keys (EphySQLiteConnection *self)
+{
+  GError *error = NULL;
+
+  g_assert (EPHY_IS_SQLITE_CONNECTION (self));
+
+  ephy_sqlite_connection_execute (self, "PRAGMA foreign_keys=ON", &error);
+  if (error) {
+    g_warning ("Failed to enable foreign keys pragma: %s", error->message);
+    g_error_free (error);
+  }
+}
+
 gboolean
 ephy_sqlite_connection_begin_transaction (EphySQLiteConnection *self, GError **error)
 {
