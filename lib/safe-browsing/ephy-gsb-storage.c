@@ -318,17 +318,13 @@ ephy_gsb_storage_open_db (EphyGSBStorage *self)
   ephy_sqlite_connection_execute (self->db, "PRAGMA foreign_keys=ON", &error);
   if (error) {
     g_warning ("Failed to enable foreign keys pragma: %s", error->message);
-    g_error_free (error);
-    g_clear_object (&self->db);
-    return FALSE;
+    g_clear_pointer (&error, (GDestroyNotify)g_error_free);
   }
 
   ephy_sqlite_connection_execute (self->db, "PRAGMA synchronous=OFF", &error);
   if (error) {
     g_warning ("Failed to disable synchronous pragma: %s", error->message);
     g_error_free (error);
-    g_clear_object (&self->db);
-    return FALSE;
   }
 
   return TRUE;
