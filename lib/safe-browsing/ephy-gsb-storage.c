@@ -24,8 +24,6 @@
 #include "ephy-debug.h"
 #include "ephy-sqlite-connection.h"
 
-#include <errno.h>
-#include <glib/gstdio.h>
 #include <string.h>
 
 #define EXPIRATION_THRESHOLD (8 * 60 * 60)
@@ -287,16 +285,6 @@ ephy_gsb_storage_init_hash_full_table (EphyGSBStorage *self)
   return TRUE;
 }
 
-static void
-ephy_gsb_storage_close_db (EphyGSBStorage *self)
-{
-  g_assert (EPHY_IS_GSB_STORAGE (self));
-  g_assert (EPHY_IS_SQLITE_CONNECTION (self->db));
-
-  ephy_sqlite_connection_close (self->db);
-  g_clear_object (&self->db);
-}
-
 static gboolean
 ephy_gsb_storage_open_db (EphyGSBStorage *self)
 {
@@ -305,8 +293,8 @@ ephy_gsb_storage_open_db (EphyGSBStorage *self)
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (!self->db);
 
-  self->db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE);
-  ephy_sqlite_connection_open (self->db, self->db_path, &error);
+  self->db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE, self->db_path);
+  ephy_sqlite_connection_open (self->db, &error);
   if (error) {
     g_warning ("Failed to open GSB database at %s: %s", self->db_path, error->message);
     g_error_free (error);
@@ -323,23 +311,6 @@ ephy_gsb_storage_open_db (EphyGSBStorage *self)
   }
 
   return TRUE;
-}
-
-static void
-ephy_gsb_storage_delete_db (EphyGSBStorage *self)
-{
-  char *journal;
-
-  g_assert (EPHY_IS_GSB_STORAGE (self));
-
-  if (g_unlink (self->db_path) == -1 && errno != ENOENT)
-    g_warning ("Failed to delete GSB database at %s: %s", self->db_path, g_strerror (errno));
-
-  journal = g_strdup_printf ("%s-journal", self->db_path);
-  if (g_unlink (journal) == -1 && errno != ENOENT)
-    g_warning ("Failed to delete GSB database journal at %s: %s", journal, g_strerror (errno));
-
-  g_free (journal);
 }
 
 static gboolean
@@ -359,8 +330,9 @@ ephy_gsb_storage_init_db (EphyGSBStorage *self)
             ephy_gsb_storage_init_hash_full_table (self);
 
   if (!success) {
-    ephy_gsb_storage_close_db (self);
-    ephy_gsb_storage_delete_db (self);
+    ephy_sqlite_connection_close (self->db);
+    ephy_sqlite_connection_delete_database (self->db);
+    g_clear_object (&self->db);
   }
 
   return success;
@@ -420,8 +392,10 @@ ephy_gsb_storage_finalize (GObject *object)
   EphyGSBStorage *self = EPHY_GSB_STORAGE (object);
 
   g_free (self->db_path);
-  if (self->db)
-    ephy_gsb_storage_close_db (self);
+  if (self->db) {
+    ephy_sqlite_connection_close (self->db);
+    g_object_unref (self->db);
+  }
 
   G_OBJECT_CLASS (ephy_gsb_storage_parent_class)->finalize (object);
 }
@@ -442,8 +416,9 @@ ephy_gsb_storage_constructed (GObject *object)
     success = ephy_gsb_storage_open_db (self);
     if (success && !ephy_gsb_storage_check_schema_version (self)) {
       LOG ("GSB database schema incompatibility, recreating database...");
-      ephy_gsb_storage_close_db (self);
-      ephy_gsb_storage_delete_db (self);
+      ephy_sqlite_connection_close (self->db);
+      ephy_sqlite_connection_delete_database (self->db);
+      g_clear_object (&self->db);
       success = ephy_gsb_storage_init_db (self);
     }
   }

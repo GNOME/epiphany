@@ -23,11 +23,14 @@
 
 #include "ephy-lib-type-builtins.h"
 
+#include <errno.h>
+#include <glib/gstdio.h>
 #include <sqlite3.h>
 
 struct _EphySQLiteConnection {
   GObject parent_instance;
 
+  char *database_path;
   sqlite3 *database;
   EphySQLiteConnectionMode mode;
 };
@@ -37,6 +40,7 @@ G_DEFINE_TYPE (EphySQLiteConnection, ephy_sqlite_connection, G_TYPE_OBJECT);
 enum {
   PROP_0,
   PROP_MODE,
+  PROP_DATABASE_PATH,
   LAST_PROP
 };
 
@@ -45,6 +49,7 @@ static GParamSpec *obj_properties[LAST_PROP];
 static void
 ephy_sqlite_connection_finalize (GObject *self)
 {
+  g_free (EPHY_SQLITE_CONNECTION (self)->database_path);
   ephy_sqlite_connection_close (EPHY_SQLITE_CONNECTION (self));
   G_OBJECT_CLASS (ephy_sqlite_connection_parent_class)->finalize (self);
 }
@@ -60,6 +65,9 @@ ephy_sqlite_connection_set_property (GObject      *object,
   switch (property_id) {
     case PROP_MODE:
       self->mode = g_value_get_enum (value);
+      break;
+    case PROP_DATABASE_PATH:
+      self->database_path = g_value_dup_string (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (self, property_id, pspec);
@@ -83,6 +91,13 @@ ephy_sqlite_connection_class_init (EphySQLiteConnectionClass *klass)
                        EPHY_SQLITE_CONNECTION_MODE_READWRITE,
                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
+  obj_properties[PROP_DATABASE_PATH] =
+    g_param_spec_string ("database-path",
+                         "Database path",
+                         "The path of the SQLite database file",
+                         NULL,
+                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 }
 
@@ -105,22 +120,23 @@ set_error_from_string (const char *string, GError **error)
 }
 
 EphySQLiteConnection *
-ephy_sqlite_connection_new (EphySQLiteConnectionMode mode)
+ephy_sqlite_connection_new (EphySQLiteConnectionMode mode, const char *database_path)
 {
   return EPHY_SQLITE_CONNECTION (g_object_new (EPHY_TYPE_SQLITE_CONNECTION,
                                                "mode", mode,
+                                               "database-path", database_path,
                                                NULL));
 }
 
 gboolean
-ephy_sqlite_connection_open (EphySQLiteConnection *self, const gchar *filename, GError **error)
+ephy_sqlite_connection_open (EphySQLiteConnection *self, GError **error)
 {
   if (self->database) {
     set_error_from_string ("Connection already open.", error);
     return FALSE;
   }
 
-  if (sqlite3_open_v2 (filename,
+  if (sqlite3_open_v2 (self->database_path,
                        &self->database,
                        self->mode == EPHY_SQLITE_CONNECTION_MODE_READ_ONLY ? SQLITE_OPEN_READONLY
                                                                            : SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
@@ -140,6 +156,23 @@ ephy_sqlite_connection_close (EphySQLiteConnection *self)
     sqlite3_close (self->database);
     self->database = NULL;
   }
+}
+
+void
+ephy_sqlite_connection_delete_database (EphySQLiteConnection *self)
+{
+  char *journal;
+
+  g_assert (EPHY_IS_SQLITE_CONNECTION (self));
+
+  if (g_file_test (self->database_path, G_FILE_TEST_EXISTS) && g_unlink (self->database_path) == -1)
+    g_warning ("Failed to delete database at %s: %s", self->database_path, g_strerror (errno));
+
+  journal = g_strdup_printf ("%s-journal", self->database_path);
+  if (g_file_test (journal, G_FILE_TEST_EXISTS) && g_unlink (journal) == -1)
+    g_warning ("Failed to delete database journal at %s: %s", journal, g_strerror (errno));
+
+  g_free (journal);
 }
 
 void

@@ -402,8 +402,9 @@ ephy_history_service_open_database_connections (EphyHistoryService *self)
     g_object_unref (self->history_database);
 
   self->history_database = ephy_sqlite_connection_new (self->read_only ? EPHY_SQLITE_CONNECTION_MODE_READ_ONLY
-                                                                       : EPHY_SQLITE_CONNECTION_MODE_READWRITE);
-  ephy_sqlite_connection_open (self->history_database, self->history_filename, &error);
+                                                                       : EPHY_SQLITE_CONNECTION_MODE_READWRITE,
+                                                       self->history_filename);
+  ephy_sqlite_connection_open (self->history_database, &error);
   if (error) {
     g_object_unref (self->history_database);
     self->history_database = NULL;
@@ -1128,22 +1129,13 @@ ephy_history_service_execute_clear (EphyHistoryService *self,
                                     gpointer            pointer,
                                     gpointer           *result)
 {
-  char *journal_filename;
-
   if (self->history_database == NULL ||
       self->read_only)
     return FALSE;
 
   ephy_history_service_commit_transaction (self);
   ephy_sqlite_connection_close (self->history_database);
-
-  if (g_unlink (self->history_filename) == -1)
-    g_warning ("Failed to delete %s: %s", self->history_filename, g_strerror (errno));
-
-  journal_filename = g_strdup_printf ("%s-journal", self->history_filename);
-  if (g_unlink (journal_filename) == -1 && errno != ENOENT)
-    g_warning ("Failed to delete %s: %s", journal_filename, g_strerror (errno));
-  g_free (journal_filename);
+  ephy_sqlite_connection_delete_database (self->history_database);
 
   ephy_history_service_open_database_connections (self);
   ephy_history_service_open_transaction (self);

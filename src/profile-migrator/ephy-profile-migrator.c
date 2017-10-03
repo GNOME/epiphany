@@ -762,8 +762,9 @@ migrate_history_to_firefox_sync_history (void)
     goto out;
   }
 
-  history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE);
-  ephy_sqlite_connection_open (history_db, history_filename, &error);
+  history_db = ephy_sqlite_connection_new (EPHY_SQLITE_CONNECTION_MODE_READWRITE,
+                                           history_filename);
+  ephy_sqlite_connection_open (history_db, &error);
   if (error) {
     g_warning ("Failed to open history database: %s", error->message);
     g_clear_object (&history_db);
