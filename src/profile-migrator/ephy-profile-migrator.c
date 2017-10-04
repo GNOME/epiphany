@@ -18,17 +18,6 @@
  *  along with Epiphany.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Portions of this file based on Chromium code.
- * License block as follows:
- *
- * Copyright (c) 2009 The Chromium Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style license that can be
- * found in the LICENSE file.
- *
- * The LICENSE file from Chromium can be found in the LICENSE.chromium
- * file.
- */
-
 #include "config.h"
 
 #include "ephy-bookmarks-manager.h"
