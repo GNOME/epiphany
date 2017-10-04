@@ -210,6 +210,8 @@ ephy_gsb_service_schedule_update (EphyGSBService *self)
   self->source_id = g_timeout_add_seconds (interval,
                                            (GSourceFunc)ephy_gsb_service_update,
                                            self);
+  g_source_set_name_by_id (self->source_id, "[epiphany] gsb_service_update");
+
   LOG ("Next update scheduled in %ld seconds", interval);
 }
 
