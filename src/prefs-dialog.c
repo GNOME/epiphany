@@ -30,6 +30,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-gui.h"
 #include "ephy-langs.h"
 #include "ephy-prefs.h"
@@ -1709,7 +1710,10 @@ setup_general_page (PrefsDialog *dialog)
                     G_CALLBACK (do_not_track_button_clicked_cb),
                     dialog);
 
-  create_download_path_button (dialog);
+  if (ephy_is_running_inside_flatpak ())
+    gtk_widget_hide (dialog->download_button_label);
+  else
+    create_download_path_button (dialog);
 }
 
 static void
