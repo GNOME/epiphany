@@ -1405,6 +1405,7 @@ ephy_sync_service_schedule_periodical_sync (EphySyncService *self)
   self->source_id = g_timeout_add_seconds (seconds,
                                            (GSourceFunc)ephy_sync_service_sync_internal,
                                            self);
+  g_source_set_name_by_id (self->source_id, "[epiphany] sync_service_sync");
 
   LOG ("Scheduled new sync with frequency %u minutes", seconds / 60);
 }
