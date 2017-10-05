@@ -25,6 +25,7 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
@@ -620,7 +621,7 @@ ephy_about_handler_handle_request (EphyAboutHandler       *handler,
     handled = ephy_about_handler_handle_memory (handler, request);
   else if (!g_strcmp0 (path, "epiphany"))
     handled = ephy_about_handler_handle_epiphany (handler, request);
-  else if (!g_strcmp0 (path, "applications"))
+  else if (!g_strcmp0 (path, "applications") && !ephy_is_running_inside_flatpak ())
     handled = ephy_about_handler_handle_applications (handler, request);
   else if (!g_strcmp0 (path, "overview"))
     handled = ephy_about_handler_handle_html_overview (handler, request);
