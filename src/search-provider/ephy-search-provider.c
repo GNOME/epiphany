@@ -451,6 +451,6 @@ EphySearchProvider *
 ephy_search_provider_new (void)
 {
   return g_object_new (EPHY_TYPE_SEARCH_PROVIDER,
-                       "application-id", "org.gnome.EpiphanySearchProvider",
+                       "application-id", "org.gnome.Epiphany.SearchProvider",
                        NULL);
 }
