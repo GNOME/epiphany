@@ -4,10 +4,8 @@ types_headers = [
   'history/ephy-history-types.h'
 ]
 
-enums = gnome.mkenums('ephy-lib',
-  sources: types_headers,
-  h_template: 'ephy-lib-type-builtins.h.in',
-  c_template: 'ephy-lib-type-builtins.c.in'
+enums = gnome.mkenums_simple('ephy-lib-type-builtins',
+  sources: types_headers
 )
 
 libephymisc_sources = [

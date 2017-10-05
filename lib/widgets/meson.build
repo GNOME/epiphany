@@ -2,10 +2,8 @@ types_headers = [
   'ephy-location-entry.h'
 ]
 
-enums = gnome.mkenums('ephy-widgets',
-  sources: types_headers,
-  h_template: 'ephy-widgets-type-builtins.h.in',
-  c_template: 'ephy-widgets-type-builtins.c.in'
+enums = gnome.mkenums_simple('ephy-widgets-type-builtins',
+  sources: types_headers
 )
 
 libephywidgets_sources = [

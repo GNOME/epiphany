@@ -6,10 +6,8 @@ types_headers = [
   'ephy-web-view.h'
 ]
 
-enums = gnome.mkenums('ephy-embed',
-  sources: types_headers,
-  h_template: 'ephy-embed-type-builtins.h.in',
-  c_template: 'ephy-embed-type-builtins.c.in'
+enums = gnome.mkenums_simple('ephy-embed-type-builtins',
+  sources: types_headers
 )
 
 libephyembed_sources = [

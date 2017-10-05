@@ -6,10 +6,8 @@ types_headers = [
   'ephy-window.h'
 ]
 
-enums = gnome.mkenums('ephy',
-  sources: types_headers,
-  h_template: 'ephy-type-builtins.h.in',
-  c_template: 'ephy-type-builtins.c.in'
+enums = gnome.mkenums_simple('ephy-type-builtins',
+  sources: types_headers
 )
 
 libephymain_sources = [
