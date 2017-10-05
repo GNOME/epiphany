@@ -43,8 +43,8 @@ install_data('org.gnome.epiphany.gschema.xml',
 serviceconf = configuration_data()
 serviceconf.set('libexecdir', libexecdir)
 configure_file(
-  input: 'org.gnome.EpiphanySearchProvider.service.in',
-  output: 'org.gnome.EpiphanySearchProvider.service',
+  input: 'org.gnome.Epiphany.SearchProvider.service.in',
+  output: 'org.gnome.Epiphany.SearchProvider.service',
   configuration: serviceconf,
   install: true,
   install_dir: join_paths(datadir, 'dbus-1', 'services')
