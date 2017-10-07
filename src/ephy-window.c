@@ -1509,9 +1509,9 @@ populate_context_menu (WebKitWebView       *web_view,
     update_edit_actions_sensitivity (window, TRUE);
     update_link_actions_sensitivity (window, link_has_web_scheme);
 
+    add_action_to_context_menu (context_menu, popup_action_group,
+                                "open-link-in-new-tab", window);
     if (!app_mode) {
-      add_action_to_context_menu (context_menu, popup_action_group,
-                                  "open-link-in-new-tab", window);
       add_action_to_context_menu (context_menu, popup_action_group,
                                   "open-link-in-new-window", window);
       if (!incognito_mode)
@@ -1845,7 +1845,7 @@ create_web_view_cb (WebKitWebView          *web_view,
   EphyNewTabFlags flags;
   EphyWindow *target_window;
 
-  if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION) &&
+  if ((ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) ||
       (g_settings_get_boolean (EPHY_SETTINGS_MAIN,
                                EPHY_PREFS_NEW_WINDOWS_IN_TABS) ||
        g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -3022,7 +3022,6 @@ static const char *disabled_actions_for_app_mode[] = { "open",
                                                        "save-as-application",
                                                        "encoding",
                                                        "bookmark-page",
-                                                       "new-tab",
                                                        "home" };
 
 static void
@@ -3200,7 +3199,7 @@ ephy_window_constructed (GObject *object)
       ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                             SENS_FLAG_CHROME, TRUE);
     }
-    chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR | EPHY_WINDOW_CHROME_BOOKMARKS);
+    chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_BOOKMARKS);
   } else if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "bookmark-page");
