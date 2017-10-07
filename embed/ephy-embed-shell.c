@@ -37,6 +37,7 @@
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-tabs-catalog.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-uri-tester-shared.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-web-extension-proxy.h"
@@ -73,6 +74,7 @@ typedef struct {
   EphyFiltersManager *filters_manager;
   EphySearchEngineManager *search_engine_manager;
   GCancellable *cancellable;
+  GList *app_origins;
 } EphyEmbedShellPrivate;
 
 enum {
@@ -179,6 +181,16 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->dbus_server);
   g_clear_object (&priv->filters_manager);
   g_clear_object (&priv->search_engine_manager);
+
+  G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
+}
+
+static void
+ephy_embed_shell_finalize (GObject *object)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (EPHY_EMBED_SHELL (object));
+
+  g_list_free_full (priv->app_origins, g_free);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
 }
@@ -1193,6 +1205,7 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
 
   object_class->dispose = ephy_embed_shell_dispose;
+  object_class->finalize = ephy_embed_shell_finalize;
   object_class->set_property = ephy_embed_shell_set_property;
   object_class->get_property = ephy_embed_shell_get_property;
   object_class->constructed = ephy_embed_shell_constructed;
@@ -1481,6 +1494,51 @@ ephy_embed_shell_get_mode (EphyEmbedShell *shell)
   g_assert (EPHY_IS_EMBED_SHELL (shell));
 
   return priv->mode;
+}
+
+/**
+ * ephy_embed_shell_add_app_related_uri:
+ * @shell: an #EphyEmbedShell
+ * @uri: the URI
+ **/
+void
+ephy_embed_shell_add_app_related_uri (EphyEmbedShell *shell, const char *uri)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  char *origin;
+
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
+  g_assert (priv->mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
+
+  origin = ephy_uri_to_security_origin (uri);
+
+  if (!g_list_find_custom (priv->app_origins, origin, (GCompareFunc)g_strcmp0))
+    priv->app_origins = g_list_append (priv->app_origins, origin);
+}
+
+/**
+ * ephy_embed_shell_uri_looks_related_to_application:
+ * @shell: an #EphyEmbedShell
+ * @uri: the URI
+ *
+ * Returns: %TRUE if @uri looks related, %FALSE otherwise
+ **/
+gboolean
+ephy_embed_shell_uri_looks_related_to_app (EphyEmbedShell *shell,
+                                           const char     *uri)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  g_assert (EPHY_IS_EMBED_SHELL (shell));
+  g_assert (priv->mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
+
+  for (GList *iter = priv->app_origins; iter != NULL; iter = iter->next) {
+    const char *iter_uri = (const char *)iter->data;
+    if (ephy_embed_utils_urls_have_same_origin (iter_uri, uri))
+      return TRUE;
+  }
+
+  return FALSE;
 }
 
 /**
