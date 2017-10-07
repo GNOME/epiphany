@@ -109,6 +109,7 @@ void                       ephy_web_view_get_security_level       (EphyWebView  
                                                                    GTlsCertificateFlags      *errors);
 void                       ephy_web_view_print                    (EphyWebView               *view);
 const char *               ephy_web_view_get_address              (EphyWebView               *view);
+const char *             ephy_web_view_get_last_committed_address (EphyWebView               *view);
 const char *               ephy_web_view_get_display_address      (EphyWebView               *view);
 void                       ephy_web_view_set_placeholder          (EphyWebView               *view,
                                                                    const char                *uri,

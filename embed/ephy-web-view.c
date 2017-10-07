@@ -80,6 +80,7 @@ struct _EphyWebView {
   guint history_frozen : 1;
   guint ever_committed : 1;
 
+  char *last_committed_address;
   char *address;
   char *display_address;
   char *typed_address;
@@ -923,6 +924,7 @@ ephy_web_view_finalize (GObject *object)
 
   ephy_web_view_popups_manager_reset (view);
 
+  g_free (view->last_committed_address);
   g_free (view->address);
   g_free (view->display_address);
   g_free (view->typed_address);
@@ -1679,6 +1681,9 @@ ephy_web_view_set_committed_location (EphyWebView *view,
     ephy_web_view_set_address (view, location);
     ephy_web_view_set_loading_message (view, location);
   }
+
+  g_clear_pointer (&view->last_committed_address, g_free);
+  view->last_committed_address = g_strdup (ephy_web_view_get_address (view));
 
   ephy_web_view_set_link_message (view, NULL);
 
@@ -2785,6 +2790,22 @@ const char *
 ephy_web_view_get_address (EphyWebView *view)
 {
   return view->address ? view->address : "about:blank";
+}
+
+/**
+ * ephy_web_view_get_last_committed_address:
+ * @view: an #EphyWebView
+ *
+ * Returns the address of the last committed page, percent-encoded.
+ * This URI should not be displayed to the user; to do that, use
+ * ephy_web_view_get_display_address().
+ *
+ * Return value: @view's address. Will never be %NULL.
+ **/
+const char *
+ephy_web_view_get_last_committed_address (EphyWebView *view)
+{
+  return view->last_committed_address ? view->last_committed_address : "about:blank";
 }
 
 /**
