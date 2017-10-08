@@ -83,6 +83,9 @@ void window_cmd_new_tab                         (GSimpleAction *action,
 void window_cmd_open                            (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_open_in_browser                 (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_save_as                         (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
