@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-08-16 09:00+0000\n"
-"PO-Revision-Date: 2017-08-23 09:55-0200\n"
+"POT-Creation-Date: 2017-09-29 16:26+0000\n"
+"PO-Revision-Date: 2017-10-08 15:04-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -74,7 +74,7 @@ msgstr "O projeto GNOME"
 
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:294
 #: embed/ephy-about-handler.c:325 src/ephy-main.c:102 src/ephy-main.c:270
-#: src/ephy-main.c:412 src/window-commands.c:638
+#: src/ephy-main.c:412 src/window-commands.c:642
 msgid "Web"
 msgstr "Web"
 
@@ -578,7 +578,6 @@ msgstr ""
 "deve ser inicializada do estado maximizado."
 
 #: data/org.gnome.epiphany.gschema.xml:277
-#| msgid "Currently logged in as %s"
 msgid "Currently signed in sync user"
 msgstr "Usuário de sincronização atualmente autenticado"
 
@@ -591,12 +590,10 @@ msgstr ""
 "servidores do Mozilla."
 
 #: data/org.gnome.epiphany.gschema.xml:282
-#| msgid "Sync timestamp"
 msgid "Last sync timestamp"
 msgstr "Última marca de tempo"
 
 #: data/org.gnome.epiphany.gschema.xml:283
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "O tempo UNIX no qual a última sincronização foi feita, em segundos."
 
@@ -609,7 +606,6 @@ msgid "The sync device ID of the current device."
 msgstr "O ID do dispositivo de sincronização do dispositivo atual."
 
 #: data/org.gnome.epiphany.gschema.xml:292
-#| msgid "Sync timestamp"
 msgid "Sync device name"
 msgstr "Nome do dispositivo de sincronização"
 
@@ -638,7 +634,6 @@ msgstr ""
 "Firefox; do contrário, FALSO."
 
 #: data/org.gnome.epiphany.gschema.xml:307
-#| msgid "No bookmarks yet?"
 msgid "Enable bookmarks sync"
 msgstr "Habilitar sincronização de favoritos"
 
@@ -649,12 +644,10 @@ msgstr ""
 "FALSO."
 
 #: data/org.gnome.epiphany.gschema.xml:312
-#| msgid "Sync timestamp"
 msgid "Bookmarks sync timestamp"
 msgstr "Marca de tempo de sincronização de favoritos"
 
 #: data/org.gnome.epiphany.gschema.xml:313
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr ""
 "A marca de tempo na qual a última sincronização de favoritos foi feita."
@@ -674,7 +667,6 @@ msgstr ""
 "vez; do contrário, FALSO."
 
 #: data/org.gnome.epiphany.gschema.xml:322
-#| msgid "Filter passwords"
 msgid "Enable passwords sync"
 msgstr "Habilitar sincronização de senhas"
 
@@ -684,12 +676,10 @@ msgstr ""
 "VERDADEIRO se a coleção de senhas deve ser sincronizada; do contrário, FALSO."
 
 #: data/org.gnome.epiphany.gschema.xml:327
-#| msgid "Sync timestamp"
 msgid "Passwords sync timestamp"
 msgstr "Marca de tempo de sincronização de senhas"
 
 #: data/org.gnome.epiphany.gschema.xml:328
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The timestamp at which last passwords sync was made."
 msgstr "A marca de tempo na qual a última sincronização de senhas foi feita."
 
@@ -712,12 +702,10 @@ msgstr ""
 "FALSO."
 
 #: data/org.gnome.epiphany.gschema.xml:342
-#| msgid "Sync timestamp"
 msgid "History sync timestamp"
 msgstr "Marca de tempo de sincronização de histórico"
 
 #: data/org.gnome.epiphany.gschema.xml:343
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The timestamp at which last history sync was made."
 msgstr ""
 "A marca de tempo na qual a última sincronização de histórico foi feita."
@@ -731,7 +719,6 @@ msgstr ""
 "vez; do contrário, FALSO."
 
 #: data/org.gnome.epiphany.gschema.xml:352
-#| msgid "View open tabs"
 msgid "Enable open tabs sync"
 msgstr "Habilita sincronização de abas abertas"
 
@@ -742,12 +729,10 @@ msgstr ""
 "FALSO."
 
 #: data/org.gnome.epiphany.gschema.xml:357
-#| msgid "Sync timestamp"
 msgid "Open tabs sync timestamp"
 msgstr "Marca de tempo de sincronização de abas abertas"
 
 #: data/org.gnome.epiphany.gschema.xml:358
-#| msgid "The timestamp at which last we had the last sync"
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 "A marca de tempo na qual a última sincronização de abas abertas foi feita."
@@ -934,10 +919,6 @@ msgid "Private Browsing"
 msgstr "Navegação privativa"
 
 #: embed/ephy-about-handler.c:579
-#| msgid ""
-#| "You are currently browsing <em>incognito</em>. Pages viewed in this mode "
-#| "will not show up in your browsing history and all stored information will "
-#| "be cleared when you close the window. Files you download will be kept."
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1345,7 +1326,7 @@ msgid "_Never Save"
 msgstr "_Nunca salvar"
 
 #: embed/ephy-web-view.c:529 lib/widgets/ephy-file-chooser.c:121
-#: src/resources/gtk/prefs-dialog.ui:1061 src/window-commands.c:447
+#: src/resources/gtk/prefs-dialog.ui:1061 src/window-commands.c:451
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -1359,9 +1340,6 @@ msgstr "Você deseja salvar sua senha pra “%s”?"
 
 #. Translators: Message appears when insecure password form is focused.
 #: embed/ephy-web-view.c:788
-#| msgid ""
-#| "Heads-up: this form is not secure. If you type your password, it will be "
-#| "visible to cybercriminals!"
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1380,28 +1358,24 @@ msgstr "Permitir"
 #. Translators: Notification policy for a specific site.
 #: embed/ephy-web-view.c:1436
 #, c-format
-#| msgid "The page at <b>%s</b> wants to show desktop notifications."
 msgid "The page at %s wants to show desktop notifications."
 msgstr "A página em %s deseja mostrar notificações na área de trabalho."
 
 #. Translators: Geolocation policy for a specific site.
 #: embed/ephy-web-view.c:1441
 #, c-format
-#| msgid "The page at <b>%s</b> wants to know your location."
 msgid "The page at %s wants to know your location."
 msgstr "A página em %s deseja saber sua localização."
 
 #. Translators: Microphone policy for a specific site.
 #: embed/ephy-web-view.c:1446
 #, c-format
-#| msgid "The page at <b>%s</b> wants to use your microphone."
 msgid "The page at %s wants to use your microphone."
 msgstr "A página em %s deseja usar seu microfone."
 
 #. Translators: Webcam policy for a specific site.
 #: embed/ephy-web-view.c:1451
 #, c-format
-#| msgid "The page at <b>%s</b> wants to use your webcam."
 msgid "The page at %s wants to use your webcam."
 msgstr "A página em %s deseja usar sua webcam."
 
@@ -1741,14 +1715,14 @@ msgstr "Arquivos locais"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:394
+#: lib/sync/ephy-password-manager.c:392
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "Senha para %s em um formulário em %s"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:398
+#: lib/sync/ephy-password-manager.c:396
 #, c-format
 msgid "Password in a form in %s"
 msgstr "Senha em um formulário em %s"
@@ -1758,23 +1732,17 @@ msgid "Failed to obtain storage credentials."
 msgstr "Falha ao obter credenciais de armazenamento."
 
 #: lib/sync/ephy-sync-service.c:787 lib/sync/ephy-sync-service.c:902
-#: lib/sync/ephy-sync-service.c:1479
-#| msgid ""
-#| "Please visit Preferences and sign in again to continue the sync process."
+#: lib/sync/ephy-sync-service.c:1485
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Por favor, visite as Preferências e autentique-se novamente para continuar a "
 "sincronização."
 
 #: lib/sync/ephy-sync-service.c:892
-#| msgid "The password of your Firefox account %s seems to have been changed."
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "A senha da sua conta Firefox parece ter sido alterada."
 
 #: lib/sync/ephy-sync-service.c:893
-#| msgid ""
-#| "Please visit Preferences and sign in with the new password to continue "
-#| "the sync process."
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1786,46 +1754,38 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Falha a obter certificado assinado."
 
-#: lib/sync/ephy-sync-service.c:1451
-#| msgid "Could not find the sync tokens for the currently logged-in user."
+#: lib/sync/ephy-sync-service.c:1451 lib/sync/ephy-sync-service.c:1456
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Não foi possível localizar os segredos de sincronização para o usuário de "
 "sincronização atual."
 
-#: lib/sync/ephy-sync-service.c:1456
-msgid "The sync secrets for the current sync user are null."
-msgstr ""
-"Os segredos de sincronização para o usuário de sincronização atual são nulos."
-
-#: lib/sync/ephy-sync-service.c:1465
+#: lib/sync/ephy-sync-service.c:1463 lib/sync/ephy-sync-service.c:1471
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Os segredos de sincronização para o usuário de sincronização atual são "
 "inválidos."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1566
+#: lib/sync/ephy-sync-service.c:1579
 #, c-format
-#| msgid "The sync tokens of %s"
 msgid "The sync secrets of %s"
 msgstr "Os segredos de sincronização de %s"
 
-#: lib/sync/ephy-sync-service.c:1709
+#: lib/sync/ephy-sync-service.c:1722
 msgid "Failed to upload crypto/keys record."
 msgstr "Falha ao atualizar o registro cripto/chaves."
 
-#: lib/sync/ephy-sync-service.c:1816
-#| msgid "Failed to create directory “%s”."
+#: lib/sync/ephy-sync-service.c:1829
 msgid "Failed to retrieve crypto keys."
 msgstr "Falha ao obter chaves criptográficas."
 
-#: lib/sync/ephy-sync-service.c:1867
+#: lib/sync/ephy-sync-service.c:1880
 msgid "Failed to upload meta/global record."
 msgstr "Falha ao enviar registro meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:1983
+#: lib/sync/ephy-sync-service.c:1996
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1833,16 +1793,15 @@ msgstr ""
 "Sua conta Firefox usa armazenamento de versão %d. O Web oferece suporte a "
 "versão %d."
 
-#: lib/sync/ephy-sync-service.c:1994
+#: lib/sync/ephy-sync-service.c:2007
 msgid "Failed to verify storage version."
 msgstr "Falha ao verificar a versão de armazenamento."
 
-#: lib/sync/ephy-sync-service.c:2035 lib/sync/ephy-sync-service.c:2113
+#: lib/sync/ephy-sync-service.c:2048 lib/sync/ephy-sync-service.c:2126
 msgid "Failed to retrieve the Sync Key"
 msgstr "Falha ao obter a chave Sync"
 
-#: lib/sync/ephy-sync-service.c:2247
-#| msgid "Failed to create directory “%s”."
+#: lib/sync/ephy-sync-service.c:2260
 msgid "Failed to register device."
 msgstr "Falha ao registrar o dispositivo."
 
@@ -1961,9 +1920,9 @@ msgid "Starting…"
 msgstr "Iniciando…"
 
 #: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1069
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:227
-#: src/window-commands.c:292 src/window-commands.c:389
-#: src/window-commands.c:448 src/window-commands.c:1369
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:231
+#: src/window-commands.c:296 src/window-commands.c:393
+#: src/window-commands.c:452 src/window-commands.c:1373
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1991,20 +1950,20 @@ msgstr "Todos os arquivos"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:649 src/ephy-history-dialog.c:258
+#: lib/widgets/ephy-location-entry.c:660 src/ephy-history-dialog.c:258
 msgid "Cl_ear"
 msgstr "_Limpar"
 
-#: lib/widgets/ephy-location-entry.c:668
+#: lib/widgets/ephy-location-entry.c:680
 msgid "Paste and _Go"
 msgstr "C_olar e ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:688 src/ephy-window.c:872
+#: lib/widgets/ephy-location-entry.c:701 src/ephy-window.c:872
 msgid "_Undo"
 msgstr "Desfa_zer"
 
-#: lib/widgets/ephy-location-entry.c:695
+#: lib/widgets/ephy-location-entry.c:708
 msgid "_Redo"
 msgstr "_Refazer"
 
@@ -2118,37 +2077,37 @@ msgid "Reload the current page"
 msgstr "Recarrega a página atual"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-header-bar.c:574
+#: src/ephy-header-bar.c:555
 msgid "Stop loading the current page"
 msgstr "Para de carregar a página atual"
 
 #. Translators: tooltip for the back button
-#: src/ephy-header-bar.c:650
+#: src/ephy-header-bar.c:630
 msgid "Go back to the previous page"
 msgstr "Vai para a página anterior"
 
 #. Translators: tooltip for the forward button
-#: src/ephy-header-bar.c:669
+#: src/ephy-header-bar.c:649
 msgid "Go forward to the next page"
 msgstr "Vai para a próxima página"
 
 #. Translators: tooltip for the secret homepage button
-#: src/ephy-header-bar.c:708
+#: src/ephy-header-bar.c:688
 msgid "Go to your homepage"
 msgstr "Vai para a página inicial"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-header-bar.c:764
+#: src/ephy-header-bar.c:744
 msgid "View and manage your bookmarks"
 msgstr "Visualiza e gerencia seus favoritos"
 
 #. Translators: tooltip for the downloads button
-#: src/ephy-header-bar.c:781
+#: src/ephy-header-bar.c:761
 msgid "View downloads"
 msgstr "Visualiza downloads"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-header-bar.c:800 src/ephy-notebook.c:482
+#: src/ephy-header-bar.c:780 src/ephy-notebook.c:482
 msgid "Open a new tab"
 msgstr "Abre em nova aba"
 
@@ -2424,7 +2383,6 @@ msgstr "Última sincronização: %s"
 #. Translators: the %s refers to the email of the currently logged in user.
 #: src/prefs-dialog.c:282 src/prefs-dialog.c:1845
 #, c-format
-#| msgid "Currently logged in as %s"
 msgid "Logged in as %s"
 msgstr "Autenticado como %s"
 
@@ -2433,7 +2391,6 @@ msgid "Please don’t leave this page until you have completed the verification.
 msgstr "Por favor, não saia dessa página até ter completado a verificação."
 
 #: src/prefs-dialog.c:526
-#| msgid "Something went wrong, please try again."
 msgid "Something went wrong, please try again later."
 msgstr "Alguma coisa deu errado, por favor tente novamente depois."
 
@@ -2468,7 +2425,6 @@ msgid "Language"
 msgstr "Idioma"
 
 #: src/prefs-dialog.c:1344
-#| msgid "Select a Directory"
 msgid "Select a directory"
 msgstr "Selecione um diretório"
 
@@ -2484,23 +2440,23 @@ msgstr ""
 msgid "Search the Web"
 msgstr "Pesquisar na web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1218
+#: src/profile-migrator/ephy-profile-migrator.c:1292
 msgid "Executes only the n-th migration step"
 msgstr "Executar somente o n-ésimo passo"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1220
+#: src/profile-migrator/ephy-profile-migrator.c:1294
 msgid "Specifies the required version for the migrator"
 msgstr "Especifica a versão necessária para o migrador"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1222
+#: src/profile-migrator/ephy-profile-migrator.c:1296
 msgid "Specifies the profile where the migrator should run"
 msgstr "Especifica o perfil onde o migrador deve ser executado"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1242
+#: src/profile-migrator/ephy-profile-migrator.c:1316
 msgid "Web profile migrator"
 msgstr "Migrador de perfil do Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1243
+#: src/profile-migrator/ephy-profile-migrator.c:1317
 msgid "Web profile migrator options"
 msgstr "Opções do migrador de perfis do Web"
 
@@ -2860,7 +2816,6 @@ msgid "Search Engines"
 msgstr "Mecanismos de pesquisa"
 
 #: src/resources/gtk/prefs-dialog.ui:177
-#| msgid "Manage Search Engines"
 msgid "_Manage Search Engines"
 msgstr "_Gerenciar mecanismos de pesquisa"
 
@@ -2929,7 +2884,6 @@ msgid "Use custom _stylesheet"
 msgstr "Usar folha de e_stilos personalizada"
 
 #: src/resources/gtk/prefs-dialog.ui:441
-#| msgid "_Edit Stylesheet…"
 msgid "_Edit Stylesheet"
 msgstr "_Editar folha de estilo"
 
@@ -2938,7 +2892,6 @@ msgid "Fonts & Style"
 msgstr "Fontes e estilos"
 
 #: src/resources/gtk/prefs-dialog.ui:492
-#| msgid "Manage _Cookies…"
 msgid "Manage _Cookies"
 msgstr "Gerenciar _cookies"
 
@@ -2952,7 +2905,6 @@ msgstr "Apenas de sites que você _visita"
 
 #. Refers to "Only from sites you visit" option under Cookies.
 #: src/resources/gtk/prefs-dialog.ui:525
-#| msgid "<small>For example, not from advertisers on these sites</small>"
 msgid "For example, not from advertisers on these sites"
 msgstr "Por exemplo, não de anunciantes nesses sites"
 
@@ -2961,7 +2913,6 @@ msgid "_Never accept"
 msgstr "_Nunca aceitar"
 
 #: src/resources/gtk/prefs-dialog.ui:566
-#| msgid "Manage _Passwords…"
 msgid "Manage _Passwords"
 msgstr "Gerenciar _senhas"
 
@@ -2978,7 +2929,6 @@ msgid "You can clear stored personal data."
 msgstr "Você pode limpar os dados pessoais armazenados."
 
 #: src/resources/gtk/prefs-dialog.ui:619
-#| msgid "Manage Personal _Data…"
 msgid "Manage Personal _Data"
 msgstr "Gerenciar _dados pessoais"
 
@@ -2987,7 +2937,6 @@ msgid "Stored Data"
 msgstr "Dados armazenados"
 
 #: src/resources/gtk/prefs-dialog.ui:698
-#| msgid "_Add"
 msgid "_Add…"
 msgstr "_Adicionar…"
 
@@ -3012,24 +2961,18 @@ msgid "_Enable spell checking"
 msgstr "_Habilitar verificação ortográfica"
 
 #: src/resources/gtk/prefs-dialog.ui:790
-#| msgid "Firefox"
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
 #: src/resources/gtk/prefs-dialog.ui:808
-#| msgid ""
-#| "Sign in with your Firefox account to sync your data with Web on other "
-#| "computers. Web is not Firefox and cannot sync with Firefox. Web is not "
-#| "produced or endorsed by Mozilla."
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not produced or endorsed by Mozilla."
 msgstr ""
 "Autentique-se com sua conta Firefox para sincronizar seus dados com Web em "
-"outros computadores. Web não é produzido ou endorsado pela Mozilla."
+"outros computadores. Web não é produzido ou endossado pela Mozilla."
 
 #: src/resources/gtk/prefs-dialog.ui:842
-#| msgid "Firefox"
 msgid "Firefox Account"
 msgstr "Conta Firefox"
 
@@ -3038,12 +2981,10 @@ msgid "Sign _out"
 msgstr "Desc_onectar"
 
 #: src/resources/gtk/prefs-dialog.ui:884
-#| msgid "Sync timestamp"
 msgid "Sync Options"
 msgstr "Opções do Sync"
 
 #: src/resources/gtk/prefs-dialog.ui:904
-#| msgid "Location"
 msgid "Collections"
 msgstr "Coleções"
 
@@ -3056,12 +2997,10 @@ msgid "_Bookmarks"
 msgstr "_Favoritos"
 
 #: src/resources/gtk/prefs-dialog.ui:935
-#| msgid "Passwords"
 msgid "_Passwords"
 msgstr "_Senhas"
 
 #: src/resources/gtk/prefs-dialog.ui:949
-#| msgid "Open in New _Tabs"
 msgid "Open _Tabs"
 msgstr "Abrir a_bas"
 
@@ -3070,7 +3009,6 @@ msgid "Frequency"
 msgstr "Frequência"
 
 #: src/resources/gtk/prefs-dialog.ui:972
-#| msgid "Sync"
 msgid "Sync _now"
 msgstr "Sincronizar ago_ra"
 
@@ -3188,7 +3126,6 @@ msgid "Navigation"
 msgstr "Navegação"
 
 #: src/resources/gtk/shortcuts-dialog.ui:90
-#| msgid "Go to your homepage"
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "Vai para a página inicial"
@@ -3388,7 +3325,6 @@ msgid "Search the Web for %s"
 msgstr "Pesquisar na web por %s"
 
 #: src/synced-tabs-dialog.c:184
-#| msgid "Local files"
 msgid "Local Tabs"
 msgstr "Abas locais"
 
@@ -3397,70 +3333,69 @@ msgid "GVDB File"
 msgstr "Arquivo GVDB"
 
 #. Skip Firefox option if user doesn't have a Firefox profile
-#: src/window-commands.c:96 src/window-commands.c:199
+#: src/window-commands.c:96 src/window-commands.c:203
 msgid "Firefox"
 msgstr "Firefox"
 
 #: src/window-commands.c:110
-#| msgid "Ch_oose File"
 msgid "Ch_oose File…"
 msgstr "Esc_olher arquivo…"
 
-#: src/window-commands.c:112 src/window-commands.c:291
+#: src/window-commands.c:112 src/window-commands.c:295
 msgid "I_mport"
 msgstr "I_mportar"
 
-#: src/window-commands.c:224
+#: src/window-commands.c:228
 msgid "Select Profile"
 msgstr "Selecionar perfil"
 
-#: src/window-commands.c:229
+#: src/window-commands.c:233
 msgid "_Select"
 msgstr "_Selecionar"
 
 # Ao rodar na interface do glade, "escolha" me parece a flexão correta - Enrico
-#: src/window-commands.c:288 src/window-commands.c:444
+#: src/window-commands.c:292 src/window-commands.c:448
 msgid "Choose File"
 msgstr "Escolher arquivo"
 
-#: src/window-commands.c:315 src/window-commands.c:356
+#: src/window-commands.c:319 src/window-commands.c:360
 msgid "Bookmarks successfully imported!"
 msgstr "Favoritos importados com sucesso!"
 
-#: src/window-commands.c:386
+#: src/window-commands.c:390
 msgid "Import Bookmarks"
 msgstr "Importar favoritos"
 
-#: src/window-commands.c:391
+#: src/window-commands.c:395
 msgid "Ch_oose File"
 msgstr "Esc_olher arquivo"
 
-#: src/window-commands.c:404
+#: src/window-commands.c:408
 msgid "From:"
 msgstr "De:"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:452
+#: src/window-commands.c:456
 msgid "bookmarks.gvdb"
 msgstr "favoritos.gvdb"
 
-#: src/window-commands.c:474
+#: src/window-commands.c:478
 msgid "Bookmarks successfully exported!"
 msgstr "Favoritos exportados com sucesso!"
 
-#: src/window-commands.c:599 src/window-commands.c:622
+#: src/window-commands.c:603 src/window-commands.c:626
 msgid "Contact us at:"
 msgstr "Contate-nos em:"
 
-#: src/window-commands.c:602
+#: src/window-commands.c:606
 msgid "Contributors:"
 msgstr "Contribuidores:"
 
-#: src/window-commands.c:605
+#: src/window-commands.c:609
 msgid "Past developers:"
 msgstr "Desenvolvedores no passado:"
 
-#: src/window-commands.c:631
+#: src/window-commands.c:635
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3477,7 +3412,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:654
+#: src/window-commands.c:658
 msgid "translator-credits"
 msgstr ""
 "Afonso Celso Medina <medina@maua.br>\n"
@@ -3502,66 +3437,66 @@ msgstr ""
 "Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Enrico Nicoletto <liverig@gmail.com>"
 
-#: src/window-commands.c:657
+#: src/window-commands.c:661
 msgid "Web Website"
 msgstr "Site do Navegador web"
 
-#: src/window-commands.c:906
+#: src/window-commands.c:910
 msgid "Open"
 msgstr "Abrir"
 
-#: src/window-commands.c:1269
+#: src/window-commands.c:1273
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Um aplicativo web com o nome “%s” já existe. Você deseja substituí-lo?"
 
-#: src/window-commands.c:1272
+#: src/window-commands.c:1276
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window-commands.c:1274
+#: src/window-commands.c:1278
 msgid "Replace"
 msgstr "Substituir"
 
-#: src/window-commands.c:1278
+#: src/window-commands.c:1282
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Um aplicativo com mesmo nome já existe. Substituí-lo irá sobrescrevê-lo."
 
-#: src/window-commands.c:1313
+#: src/window-commands.c:1317
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "O aplicativo “%s” está pronto para ser usado"
 
-#: src/window-commands.c:1316
+#: src/window-commands.c:1320
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "O aplicativo “%s” não pôde ser criado"
 
-#: src/window-commands.c:1324
+#: src/window-commands.c:1328
 msgid "Launch"
 msgstr "Iniciar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1366
+#: src/window-commands.c:1370
 msgid "Create Web Application"
 msgstr "Cria um aplicativo web"
 
-#: src/window-commands.c:1371
+#: src/window-commands.c:1375
 msgid "C_reate"
 msgstr "C_riar"
 
-#: src/window-commands.c:1500
+#: src/window-commands.c:1504
 msgid "Save"
 msgstr "Salvar"
 
-#: src/window-commands.c:2121
+#: src/window-commands.c:2125
 msgid "Enable caret browsing mode?"
 msgstr "Ativar o modo de navegação com cursor?"
 
-#: src/window-commands.c:2124
+#: src/window-commands.c:2128
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3572,9 +3507,14 @@ msgstr ""
 "lhe navegar nelas com o seu teclado. Você deseja habilitar o modo de "
 "navegação com cursor?"
 
-#: src/window-commands.c:2127
+#: src/window-commands.c:2131
 msgid "_Enable"
 msgstr "_Ativar"
+
+#~ msgid "The sync secrets for the current sync user are null."
+#~ msgstr ""
+#~ "Os segredos de sincronização para o usuário de sincronização atual são "
+#~ "nulos."
 
 #~ msgid "The sync user currently logged in"
 #~ msgstr "O usuário de sincronização atualmente autenticado"
