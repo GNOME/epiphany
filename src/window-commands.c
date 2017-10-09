@@ -936,6 +936,8 @@ window_cmd_open_in_browser (GSimpleAction *action,
 
   ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
                                          gtk_window_get_screen (GTK_WINDOW (window)));
+
+  ephy_window_close_active_child (window);
 }
 
 typedef struct {
