@@ -1660,9 +1660,6 @@ populate_context_menu (WebKitWebView       *web_view,
 
   g_free (search_selection_action_name);
 
-  if (app_mode)
-    return FALSE;
-
   if (is_document && !is_image && !is_media) {
     webkit_context_menu_append (context_menu,
                                 webkit_context_menu_item_new_separator ());
@@ -2917,12 +2914,9 @@ setup_location_controller (EphyWindow    *window,
 }
 
 static const char *disabled_actions_for_app_mode[] = { "open",
-                                                       "save-as",
                                                        "save-as-application",
                                                        "encoding",
                                                        "bookmark-page",
-                                                       "page-source",
-                                                       "toggle-inspector",
                                                        "new-tab",
                                                        "home" };
 
