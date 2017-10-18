@@ -34,6 +34,7 @@
 #include "ephy-embed-utils.h"
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
+#include "ephy-gsb-utils.h"
 #include "ephy-gui.h"
 #include "ephy-header-bar.h"
 #include "ephy-link.h"
@@ -1875,11 +1876,47 @@ create_web_view_cb (WebKitWebView          *web_view,
   return new_web_view;
 }
 
+typedef struct {
+  EphyWindow               *window;
+  WebKitWebView            *web_view;
+  WebKitPolicyDecision     *decision;
+  WebKitPolicyDecisionType  decision_type;
+  char                     *request_uri;
+} VerifyUrlAsyncData;
+
+static inline VerifyUrlAsyncData *
+verify_url_async_data_new (EphyWindow               *window,
+                           WebKitWebView            *web_view,
+                           WebKitPolicyDecision     *decision,
+                           WebKitPolicyDecisionType  decision_type,
+                           const char               *request_uri)
+{
+  VerifyUrlAsyncData *data = g_slice_new (VerifyUrlAsyncData);
+
+  data->window = g_object_ref (window);
+  data->web_view = g_object_ref (web_view);
+  data->decision = g_object_ref (decision);
+  data->decision_type = decision_type;
+  data->request_uri = g_strdup (request_uri);
+
+  return data;
+}
+
+static inline void
+verify_url_async_data_free (VerifyUrlAsyncData *data)
+{
+  g_object_unref (data->window);
+  g_object_unref (data->web_view);
+  g_object_unref (data->decision);
+  g_free (data->request_uri);
+  g_slice_free (VerifyUrlAsyncData, data);
+}
+
 static gboolean
-decide_policy_cb (WebKitWebView           *web_view,
-                  WebKitPolicyDecision    *decision,
-                  WebKitPolicyDecisionType decision_type,
-                  EphyWindow              *window)
+decide_navigation_policy (WebKitWebView            *web_view,
+                          WebKitPolicyDecision     *decision,
+                          WebKitPolicyDecisionType  decision_type,
+                          EphyWindow               *window)
 {
   WebKitNavigationPolicyDecision *navigation_decision;
   WebKitNavigationAction *navigation_action;
@@ -1888,8 +1925,10 @@ decide_policy_cb (WebKitWebView           *web_view,
   const char *uri;
   EphyEmbed *embed;
 
-  if (decision_type == WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
-    return FALSE;
+  g_assert (WEBKIT_IS_WEB_VIEW (web_view));
+  g_assert (WEBKIT_IS_NAVIGATION_POLICY_DECISION (decision));
+  g_assert (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE);
+  g_assert (EPHY_IS_WINDOW (window));
 
   navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
   navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
@@ -2028,6 +2067,74 @@ decide_policy_cb (WebKitWebView           *web_view,
   }
 
   return FALSE;
+}
+
+static void
+verify_url_cb (GHashTable *threats,
+               gpointer    user_data)
+{
+  VerifyUrlAsyncData *data = user_data;
+
+  if (g_hash_table_size (threats) > 0) {
+    GList *threat_lists = g_hash_table_get_keys (threats);
+    EphyGSBThreatList *list = threat_lists->data;
+
+    webkit_policy_decision_ignore (data->decision);
+
+    /* Very rarely there are URLs that pose multiple types of threats.
+     * However, inform the user only about the first threat type.
+     */
+    ephy_web_view_load_error_page (EPHY_WEB_VIEW (data->web_view),
+                                   data->request_uri,
+                                   EPHY_WEB_VIEW_ERROR_UNSAFE_BROWSING,
+                                   NULL, list->threat_type);
+
+    g_list_free (threat_lists);
+  } else {
+    decide_navigation_policy (data->web_view, data->decision,
+                              data->decision_type, data->window);
+  }
+
+  g_hash_table_unref (threats);
+  verify_url_async_data_free (data);
+}
+
+static gboolean
+decide_policy_cb (WebKitWebView           *web_view,
+                  WebKitPolicyDecision    *decision,
+                  WebKitPolicyDecisionType decision_type,
+                  EphyWindow              *window)
+{
+  EphyGSBService *service;
+  WebKitNavigationPolicyDecision *navigation_decision;
+  WebKitNavigationAction *navigation_action;
+  WebKitURIRequest *request;
+  const char *request_uri;
+
+  if (decision_type == WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
+    return FALSE;
+
+  navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
+  navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
+  request = webkit_navigation_action_get_request (navigation_action);
+  request_uri = webkit_uri_request_get_uri (request);
+
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING)) {
+    if (ephy_web_view_get_should_bypass_safe_browsing (EPHY_WEB_VIEW (web_view))) {
+      /* This means the user has decided to proceed to an unsafe website. */
+      ephy_web_view_set_should_bypass_safe_browsing (EPHY_WEB_VIEW (web_view), FALSE);
+      return decide_navigation_policy (web_view, decision, decision_type, window);
+    }
+
+    service = ephy_embed_shell_get_global_gsb_service (ephy_embed_shell_get_default ());
+    ephy_gsb_service_verify_url (service, request_uri, verify_url_cb,
+                                 verify_url_async_data_new (window, web_view,
+                                                            decision, decision_type,
+                                                            request_uri));
+    return TRUE;
+  }
+
+  return decide_navigation_policy (web_view, decision, decision_type, window);
 }
 
 static void

@@ -79,7 +79,6 @@ struct _EphyWebView {
   guint load_failed : 1;
   guint history_frozen : 1;
   guint ever_committed : 1;
-  guint bypass_gsb_verification : 1;
 
   char *address;
   char *display_address;
@@ -120,6 +119,7 @@ struct _EphyWebView {
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
 
+  gboolean bypass_safe_browsing;
   gboolean loading_error_page;
   char *tls_error_failing_uri;
 
@@ -836,7 +836,7 @@ allow_unsafe_browsing_cb (EphyEmbedShell *shell,
   if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (view)) != page_id)
     return;
 
-  view->bypass_gsb_verification = TRUE;
+  ephy_web_view_set_should_bypass_safe_browsing (view, TRUE);
   ephy_web_view_load_url (view, ephy_web_view_get_address (view));
 }
 
@@ -1277,74 +1277,12 @@ new_window_cb (EphyWebView *view,
   popups_manager_add_window (view, container);
 }
 
-typedef struct {
-  EphyWebView          *web_view;
-  WebKitPolicyDecision *decision;
-  char                 *request_uri;
-} VerifyUrlData;
-
-static inline VerifyUrlData *
-verify_url_data_new (EphyWebView          *web_view,
-                     WebKitPolicyDecision *decision,
-                     const char           *request_uri)
-{
-  VerifyUrlData *data = g_slice_new (VerifyUrlData);
-
-  data->web_view = g_object_ref (web_view);
-  data->decision = g_object_ref (decision);
-  data->request_uri = g_strdup (request_uri);
-
-  return data;
-}
-
-static inline void
-verify_url_data_free (VerifyUrlData *data)
-{
-  g_object_unref (data->web_view);
-  g_object_unref (data->decision);
-  g_free (data->request_uri);
-  g_slice_free (VerifyUrlData, data);
-}
-
-static void
-verify_url_cb (GHashTable *threats,
-               gpointer    user_data)
-{
-  VerifyUrlData *data = (VerifyUrlData *)user_data;
-  EphyGSBThreatList *list;
-  GList *threat_lists;
-
-  if (g_hash_table_size (threats) == 0) {
-    webkit_policy_decision_use (data->decision);
-    goto out;
-  }
-
-  webkit_policy_decision_ignore (data->decision);
-
-  /* Very rarely there are URLs that pose multiple types of threats.
-   * However, inform the user only about the first threat type.
-   */
-  threat_lists = g_hash_table_get_keys (threats);
-  list = threat_lists->data;
-  ephy_web_view_load_error_page (data->web_view, data->request_uri,
-                                 EPHY_WEB_VIEW_ERROR_UNSAFE_BROWSING,
-                                 NULL, list->threat_type);
-
-  g_list_free (threat_lists);
-out:
-  g_hash_table_unref (threats);
-  verify_url_data_free (data);
-}
-
 static gboolean
 decide_policy_cb (WebKitWebView           *web_view,
                   WebKitPolicyDecision    *decision,
                   WebKitPolicyDecisionType decision_type,
                   gpointer                 user_data)
 {
-  EphyGSBService *service;
-  WebKitNavigationPolicyDecision *navigation_decision;
-  WebKitNavigationAction *action;
   WebKitResponsePolicyDecision *response_decision;
   WebKitURIResponse *response;
   WebKitURIRequest *request;
@@ -1352,30 +1290,6 @@ decide_policy_cb (WebKitWebView           *web_view,
   EphyWebViewDocumentType type;
   const char *mime_type;
   const char *request_uri;
-
-  if (decision_type == WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION) {
-    if (!g_settings_get_boolean (EPHY_SETTINGS_WEB,
-                                 EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING))
-      return FALSE;
-
-    if (EPHY_WEB_VIEW (web_view)->bypass_gsb_verification) {
-      EPHY_WEB_VIEW (web_view)->bypass_gsb_verification = FALSE;
-      return FALSE;
-    }
-
-    navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
-    action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
-    request = webkit_navigation_action_get_request (action);
-    request_uri = webkit_uri_request_get_uri (request);
-
-    service = ephy_embed_shell_get_global_gsb_service (ephy_embed_shell_get_default ());
-    ephy_gsb_service_verify_url (service, request_uri, verify_url_cb,
-                                 verify_url_data_new (EPHY_WEB_VIEW (web_view),
-                                                      decision, request_uri));
-
-    /* Delay decision until the safe browsing verification has completed. */
-    return TRUE;
-  }
 
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
     return FALSE;
@@ -3109,6 +3023,23 @@ ephy_web_view_set_typed_address (EphyWebView *view,
   view->typed_address = g_strdup (address);
 
   g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_TYPED_ADDRESS]);
+}
+
+gboolean
+ephy_web_view_get_should_bypass_safe_browsing (EphyWebView *view)
+{
+  g_assert (EPHY_IS_WEB_VIEW (view));
+
+  return view->bypass_safe_browsing;
+}
+
+void
+ephy_web_view_set_should_bypass_safe_browsing (EphyWebView *view,
+                                               gboolean     bypass_safe_browsing)
+{
+  g_assert (EPHY_IS_WEB_VIEW (view));
+
+  view->bypass_safe_browsing = bypass_safe_browsing;
 }
 
 static void

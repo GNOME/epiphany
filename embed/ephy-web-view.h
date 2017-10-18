@@ -91,6 +91,9 @@ void                       ephy_web_view_set_security_level       (EphyWebView  
 const char *               ephy_web_view_get_typed_address        (EphyWebView               *view);
 void                       ephy_web_view_set_typed_address        (EphyWebView               *view,
                                                                    const char                *address);
+gboolean            ephy_web_view_get_should_bypass_safe_browsing (EphyWebView               *view);
+void                ephy_web_view_set_should_bypass_safe_browsing (EphyWebView               *view,
+                                                                   gboolean                   bypass_safe_browsing);
 gboolean                   ephy_web_view_get_is_blank             (EphyWebView               *view);
 gboolean                   ephy_web_view_is_overview              (EphyWebView               *view);
 void                       ephy_web_view_has_modified_forms       (EphyWebView               *view,
