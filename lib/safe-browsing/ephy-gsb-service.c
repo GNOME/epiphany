@@ -74,58 +74,6 @@ static guint signals[LAST_SIGNAL];
 
 static gboolean ephy_gsb_service_update (EphyGSBService *self);
 
-typedef struct {
-  EphyGSBService                  *service;
-  GHashTable                      *threats;
-  GList                           *matching_prefixes;
-  GList                           *matching_hashes;
-  EphyGSBServiceVerifyURLCallback  callback;
-  gpointer                         user_data;
-} FindFullHashesData;
-
-static FindFullHashesData *
-find_full_hashes_data_new (EphyGSBService                  *service,
-                           GHashTable                      *threats,
-                           GList                           *matching_prefixes,
-                           GList                           *matching_hashes,
-                           EphyGSBServiceVerifyURLCallback  callback,
-                           gpointer                         user_data)
-{
-  FindFullHashesData *data;
-
-  g_assert (EPHY_IS_GSB_SERVICE (service));
-  g_assert (threats);
-  g_assert (matching_prefixes);
-  g_assert (matching_hashes);
-  g_assert (callback);
-
-  data = g_slice_new (FindFullHashesData);
-  data->service = g_object_ref (service);
-  data->threats = g_hash_table_ref (threats);
-  data->matching_prefixes = g_list_copy_deep (matching_prefixes,
-                                              (GCopyFunc)g_bytes_ref,
-                                              NULL);
-  data->matching_hashes = g_list_copy_deep (matching_hashes,
-                                            (GCopyFunc)g_bytes_ref,
-                                            NULL);
-  data->callback = callback;
-  data->user_data = user_data;
-
-  return data;
-}
-
-static void
-find_full_hashes_data_free (FindFullHashesData *data)
-{
-  g_assert (data);
-
-  g_object_unref (data->service);
-  g_hash_table_unref (data->threats);
-  g_list_free_full (data->matching_prefixes, (GDestroyNotify)g_bytes_unref);
-  g_list_free_full (data->matching_hashes, (GDestroyNotify)g_bytes_unref);
-  g_slice_free (FindFullHashesData, data);
-}
-
 static inline gboolean
 json_object_has_non_null_string_member (JsonObject *object,
                                         const char *member)
@@ -216,7 +164,7 @@ ephy_gsb_service_schedule_update (EphyGSBService *self)
 }
 
 static GList *
-ephy_gsb_service_fetch_threat_lists (EphyGSBService *self)
+ephy_gsb_service_fetch_threat_lists_sync (EphyGSBService *self)
 {
   GList *retval = NULL;
   JsonNode *body_node;
@@ -308,7 +256,7 @@ ephy_gsb_service_update_thread (GTask          *task,
   ephy_gsb_storage_delete_old_full_hashes (self->storage);
 
   /* Fetch and store new threat lists, if any. */
-  threat_lists = ephy_gsb_service_fetch_threat_lists (self);
+  threat_lists = ephy_gsb_service_fetch_threat_lists_sync (self);
   for (GList *l = threat_lists; l && l->data; l = l->next)
     ephy_gsb_storage_insert_threat_list (self->storage, l->data);
   g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
@@ -616,18 +564,44 @@ ephy_gsb_service_new (const char *api_key,
 }
 
 static void
-ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
-                                      SoupMessage *msg,
-                                      gpointer     user_data)
+ephy_gsb_service_update_full_hashes_sync (EphyGSBService *self,
+                                          GList          *prefixes)
 {
-  FindFullHashesData *data = (FindFullHashesData *)user_data;
-  EphyGSBService *self = data->service;
-  JsonNode *body_node = NULL;
+  SoupMessage *msg;
+  GList *threat_lists;
+  JsonNode *body_node;
   JsonObject *body_obj;
   JsonArray *matches;
-  GList *hashes_lookup = NULL;
   const char *duration_str;
+  char *url;
+  char *body;
   double duration;
+
+  g_assert (EPHY_IS_GSB_SERVICE (self));
+  g_assert (ephy_gsb_storage_is_operable (self->storage));
+  g_assert (prefixes);
+
+  if (self->next_full_hashes_time > CURRENT_TIME) {
+    LOG ("Cannot send fullHashes:find request. Requests are restricted for %ld seconds",
+         self->next_full_hashes_time - CURRENT_TIME);
+    return;
+  }
+
+  if (ephy_gsb_service_is_back_off_mode (self)) {
+    LOG ("Cannot send fullHashes:find request. Back-off mode is enabled for %ld seconds",
+         self->back_off_exit_time - CURRENT_TIME);
+    return;
+  }
+
+  threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
+  if (!threat_lists)
+    return;
+
+  body = ephy_gsb_utils_make_full_hashes_request (threat_lists, prefixes);
+  url = g_strdup_printf ("%sfullHashes:find?key=%s", API_PREFIX, self->api_key);
+  msg = soup_message_new (SOUP_METHOD_POST, url);
+  soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
+  soup_session_send_message (self->session, msg);
 
   /* Handle unsuccessful responses. */
   if (msg->status_code != 200) {
@@ -678,7 +652,7 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
   /* Update negative cache duration. */
   duration_str = json_object_get_string_member (body_obj, "negativeCacheDuration");
   sscanf (duration_str, "%lfs", &duration);
-  for (GList *l = data->matching_prefixes; l && l->data; l = l->next)
+  for (GList *l = prefixes; l && l->data; l = l->next)
     ephy_gsb_storage_update_hash_prefix_expiration (self->storage, l->data, floor (duration));
 
   /* Handle minimum wait duration. */
@@ -689,110 +663,48 @@ ephy_gsb_service_find_full_hashes_cb (SoupSession *session,
     ephy_gsb_storage_set_metadata (self->storage, "next_full_hashes_time", self->next_full_hashes_time);
   }
 
-  /* Repeat the full hash verification. */
-  hashes_lookup = ephy_gsb_storage_lookup_full_hashes (self->storage, data->matching_hashes);
-  for (GList *l = hashes_lookup; l && l->data; l = l->next) {
-    EphyGSBHashFullLookup *lookup = (EphyGSBHashFullLookup *)l->data;
-    EphyGSBThreatList *list;
-
-    if (!lookup->expired) {
-      list = ephy_gsb_threat_list_new (lookup->threat_type,
-                                       lookup->platform_type,
-                                       lookup->threat_entry_type,
-                                       NULL);
-      g_hash_table_add (data->threats, list);
-    }
-  }
-
+  json_node_unref (body_node);
 out:
-  data->callback (data->threats, data->user_data);
-
-  if (body_node)
-    json_node_unref (body_node);
-  find_full_hashes_data_free (data);
-  g_list_free_full (hashes_lookup, (GDestroyNotify)ephy_gsb_hash_full_lookup_free);
-}
-
-static void
-ephy_gsb_service_find_full_hashes (EphyGSBService                  *self,
-                                   GHashTable                      *threats,
-                                   GList                           *matching_prefixes,
-                                   GList                           *matching_hashes,
-                                   EphyGSBServiceVerifyURLCallback  callback,
-                                   gpointer                         user_data)
-{
-  FindFullHashesData *data;
-  SoupMessage *msg;
-  GList *threat_lists;
-  char *url;
-  char *body;
-
-  g_assert (EPHY_IS_GSB_SERVICE (self));
-  g_assert (ephy_gsb_storage_is_operable (self->storage));
-  g_assert (threats);
-  g_assert (matching_prefixes);
-  g_assert (matching_hashes);
-  g_assert (callback);
-
-  if (self->next_full_hashes_time > CURRENT_TIME) {
-    LOG ("Cannot send fullHashes:find request. Requests are restricted for %ld seconds",
-         self->next_full_hashes_time - CURRENT_TIME);
-    callback (threats, user_data);
-    return;
-  }
-
-   if (ephy_gsb_service_is_back_off_mode (self)) {
-    LOG ("Cannot send fullHashes:find request. Back-off mode is enabled for %ld seconds",
-         self->back_off_exit_time - CURRENT_TIME);
-    callback (threats, user_data);
-    return;
-   }
-
-  threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
-  if (!threat_lists) {
-    callback (threats, user_data);
-    return;
-  }
-
-  body = ephy_gsb_utils_make_full_hashes_request (threat_lists, matching_prefixes);
-  url = g_strdup_printf ("%sfullHashes:find?key=%s", API_PREFIX, self->api_key);
-  msg = soup_message_new (SOUP_METHOD_POST, url);
-  soup_message_set_request (msg, "application/json", SOUP_MEMORY_TAKE, body, strlen (body));
-
-  data = find_full_hashes_data_new (self, threats,
-                                    matching_prefixes, matching_hashes,
-                                    callback, user_data);
-  soup_session_queue_message (self->session, msg,
-                              ephy_gsb_service_find_full_hashes_cb, data);
-
   g_free (url);
   g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
+  g_object_unref (msg);
 }
 
 static void
-ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
-                                GList                           *hashes,
-                                GHashTable                      *threats,
-                                EphyGSBServiceVerifyURLCallback  callback,
-                                gpointer                         user_data)
+ephy_gsb_service_verify_url_thread (GTask          *task,
+                                    EphyGSBService *self,
+                                    const char     *url,
+                                    GCancellable   *cancellable)
 {
-  GList *cues;
+  GList *hashes = NULL;
+  GList *cues = NULL;
   GList *prefixes_lookup = NULL;
   GList *hashes_lookup = NULL;
   GList *matching_prefixes = NULL;
   GList *matching_hashes = NULL;
-  GHashTable *matching_prefixes_set;
-  GHashTable *matching_hashes_set;
+  GHashTable *matching_prefixes_set = NULL;
+  GHashTable *matching_hashes_set = NULL;
   GHashTableIter iter;
   gpointer value;
   gboolean has_matching_expired_hashes = FALSE;
   gboolean has_matching_expired_prefixes = FALSE;
+  GList *threats = NULL;
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
-  g_assert (ephy_gsb_storage_is_operable (self->storage));
-  g_assert (threats);
-  g_assert (hashes);
-  g_assert (callback);
+  g_assert (G_IS_TASK (task));
+  g_assert (url);
+
+  /* If the local database is broken or an update is in course, we cannot
+   * really verify the URL, so we have no choice other than to consider it safe.
+   */
+  if (!ephy_gsb_storage_is_operable (self->storage) || self->is_updating) {
+    LOG ("Local GSB storage is not available at the moment, cannot verify URL");
+    goto out;
+  }
+
+  hashes = ephy_gsb_utils_compute_hashes (url);
+  if (!hashes)
+    goto out;
 
   matching_prefixes_set = g_hash_table_new (g_bytes_hash, g_bytes_equal);
   matching_hashes_set = g_hash_table_new (g_bytes_hash, g_bytes_equal);
@@ -819,7 +731,6 @@ ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
   /* If there are no database matches, then the URL is safe. */
   if (g_hash_table_size (matching_hashes_set) == 0) {
     LOG ("No database match, URL is safe");
-    callback (threats, user_data);
     goto out;
   }
 
@@ -830,30 +741,23 @@ ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
   hashes_lookup = ephy_gsb_storage_lookup_full_hashes (self->storage, matching_hashes);
   for (GList *l = hashes_lookup; l && l->data; l = l->next) {
     EphyGSBHashFullLookup *lookup = (EphyGSBHashFullLookup *)l->data;
-    EphyGSBThreatList *list;
 
-    if (lookup->expired) {
+    if (lookup->expired)
       has_matching_expired_hashes = TRUE;
-    } else {
-      list = ephy_gsb_threat_list_new (lookup->threat_type,
-                                       lookup->platform_type,
-                                       lookup->threat_entry_type,
-                                       NULL);
-      g_hash_table_add (threats, list);
-    }
+    else if (!g_list_find_custom (threats, lookup->threat_type, (GCompareFunc)g_strcmp0))
+      threats = g_list_append (threats, g_strdup (lookup->threat_type));
   }
 
   /* Check for positive cache hit.
    * That is, there is at least one unexpired full hash match.
    */
-  if (g_hash_table_size (threats) > 0) {
+  if (threats) {
     LOG ("Positive cache hit, URL is not safe");
-    callback (threats, user_data);
     goto out;
   }
 
-  /* Check for negative cache hit. That is, there are no expired
-   * full hash matches and all hash prefix matches are negative-unexpired.
+  /* Check for negative cache hit, i.e. there are no expired full hash
+   * matches and all hash prefix matches are negative-unexpired.
    */
   g_hash_table_iter_init (&iter, matching_prefixes_set);
   while (g_hash_table_iter_next (&iter, NULL, &value)) {
@@ -864,7 +768,6 @@ ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
   }
   if (!has_matching_expired_hashes && !has_matching_expired_prefixes) {
     LOG ("Negative cache hit, URL is safe");
-    callback (threats, user_data);
     goto out;
   }
 
@@ -873,68 +776,59 @@ ephy_gsb_service_verify_hashes (EphyGSBService                  *self,
    * the server whether the URL is safe or not. We do this by updating
    * the full hashes of the matching prefixes with fresh values from
    * server and re-checking for positive cache hits.
-   * See ephy_gsb_service_find_full_hashes_cb().
    */
   matching_prefixes = g_hash_table_get_keys (matching_prefixes_set);
-  ephy_gsb_service_find_full_hashes (self, threats,
-                                     matching_prefixes, matching_hashes,
-                                     callback, user_data);
+  ephy_gsb_service_update_full_hashes_sync (self, matching_prefixes);
+
+  /* Repeat the full hash verification. */
+  g_list_free_full (hashes_lookup, (GDestroyNotify)ephy_gsb_hash_full_lookup_free);
+  hashes_lookup = ephy_gsb_storage_lookup_full_hashes (self->storage, matching_hashes);
+  for (GList *l = hashes_lookup; l && l->data; l = l->next) {
+    EphyGSBHashFullLookup *lookup = (EphyGSBHashFullLookup *)l->data;
+
+    if (!lookup->expired &&
+        !g_list_find_custom (threats, lookup->threat_type, (GCompareFunc)g_strcmp0))
+      threats = g_list_append (threats, g_strdup (lookup->threat_type));
+  }
 
 out:
+  g_task_return_pointer (task, threats, NULL);
+
   g_list_free (matching_prefixes);
   g_list_free (matching_hashes);
+  g_list_free_full (hashes, (GDestroyNotify)g_bytes_unref);
   g_list_free_full (cues, (GDestroyNotify)g_bytes_unref);
   g_list_free_full (prefixes_lookup, (GDestroyNotify)ephy_gsb_hash_prefix_lookup_free);
   g_list_free_full (hashes_lookup, (GDestroyNotify)ephy_gsb_hash_full_lookup_free);
-  g_hash_table_unref (matching_prefixes_set);
-  g_hash_table_unref (matching_hashes_set);
+  if (matching_prefixes_set)
+    g_hash_table_unref (matching_prefixes_set);
+  if (matching_hashes_set)
+    g_hash_table_unref (matching_hashes_set);
 }
 
-/**
- * ephy_gsb_service_verify_url:
- * @self: an #EphyGSBService
- * @url: the URL to verify
- * @callback: an #EphyGSBServiceVerifyURLCallback to be called when the
-              verification has completed
- * @user_data: user data for the callback
- *
- * Verify whether @url is safe to browse according to Google Safe Browsing.
- **/
 void
-ephy_gsb_service_verify_url (EphyGSBService                  *self,
-                             const char                      *url,
-                             EphyGSBServiceVerifyURLCallback  callback,
-                             gpointer                         user_data)
+ephy_gsb_service_verify_url (EphyGSBService      *self,
+                             const char          *url,
+                             GAsyncReadyCallback  callback,
+                             gpointer             user_data)
 {
-  GHashTable *threats;
-  GList *hashes;
+  GTask *task;
 
   g_assert (EPHY_IS_GSB_SERVICE (self));
   g_assert (url);
+  g_assert (callback);
 
-  if (!callback)
-    return;
+  task = g_task_new (self, NULL, callback, user_data);
+  g_task_set_task_data (task, g_strdup (url), g_free);
+  g_task_run_in_thread (task, (GTaskThreadFunc)ephy_gsb_service_verify_url_thread);
+  g_object_unref (task);
+}
 
-  threats = g_hash_table_new_full (g_direct_hash,
-                                   (GEqualFunc)ephy_gsb_threat_list_equal,
-                                   (GDestroyNotify)ephy_gsb_threat_list_free,
-                                   NULL);
+GList *
+ephy_gsb_service_verify_url_finish (EphyGSBService *self,
+                                    GAsyncResult   *result)
+{
+  g_assert (g_task_is_valid (result, self));
 
-  /* If the local database is broken or an update is in course, we cannot
-   * really verify the URL, so we have no choice other than to consider it safe.
-   */
-  if (!ephy_gsb_storage_is_operable (self->storage) || self->is_updating) {
-    LOG ("Local GSB storage is not available at the moment, cannot verify URL");
-    callback (threats, user_data);
-    return;
-  }
-
-  hashes = ephy_gsb_utils_compute_hashes (url);
-  if (!hashes) {
-    callback (threats, user_data);
-    return;
-  }
-
-  ephy_gsb_service_verify_hashes (self, hashes, threats, callback, user_data);
-  g_list_free_full (hashes, (GDestroyNotify)g_bytes_unref);
+  return g_task_propagate_pointer (G_TASK (result), NULL);
 }

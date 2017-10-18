@@ -2070,15 +2070,13 @@ decide_navigation_policy (WebKitWebView            *web_view,
 }
 
 static void
-verify_url_cb (GHashTable *threats,
-               gpointer    user_data)
+verify_url_cb (EphyGSBService     *service,
+               GAsyncResult       *result,
+               VerifyUrlAsyncData *data)
 {
-  VerifyUrlAsyncData *data = user_data;
+  GList *threats = ephy_gsb_service_verify_url_finish (service, result);
 
-  if (g_hash_table_size (threats) > 0) {
-    GList *threat_lists = g_hash_table_get_keys (threats);
-    EphyGSBThreatList *list = threat_lists->data;
-
+  if (threats) {
     webkit_policy_decision_ignore (data->decision);
 
     /* Very rarely there are URLs that pose multiple types of threats.
@@ -2087,15 +2085,14 @@ verify_url_cb (GHashTable *threats,
     ephy_web_view_load_error_page (EPHY_WEB_VIEW (data->web_view),
                                    data->request_uri,
                                    EPHY_WEB_VIEW_ERROR_UNSAFE_BROWSING,
-                                   NULL, list->threat_type);
+                                   NULL, threats->data);
 
-    g_list_free (threat_lists);
+    g_list_free_full (threats, g_free);
   } else {
     decide_navigation_policy (data->web_view, data->decision,
                               data->decision_type, data->window);
   }
 
-  g_hash_table_unref (threats);
   verify_url_async_data_free (data);
 }
 
@@ -2127,7 +2124,8 @@ decide_policy_cb (WebKitWebView           *web_view,
     }
 
     service = ephy_embed_shell_get_global_gsb_service (ephy_embed_shell_get_default ());
-    ephy_gsb_service_verify_url (service, request_uri, verify_url_cb,
+    ephy_gsb_service_verify_url (service, request_uri,
+                                 (GAsyncReadyCallback)verify_url_cb,
                                  verify_url_async_data_new (window, web_view,
                                                             decision, decision_type,
                                                             request_uri));

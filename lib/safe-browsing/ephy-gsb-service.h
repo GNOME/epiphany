@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <gio/gio.h>
 #include <glib-object.h>
 
 G_BEGIN_DECLS
@@ -28,26 +29,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyGSBService, ephy_gsb_service, EPHY, GSB_SERVICE, GObject)
 
-/**
- * EphyGSBServiceVerifyURLCallback:
- * @threats: the browsing lists where the URL is considered unsafe
- * @user_data: user data for callback
- *
- * The callback to be called when ephy_gsb_service_verify_url() completes the
- * verification of the URL. @threats is a hash table used a set (see
- * g_hash_table_add()) of #EphyGSBThreatList that contains the threat lists
- * where the URL is active. The hash table will never be %NULL (if the URL is
- * safe, then the hash table will be empty). Use g_hash_table_unref() when done
- * using it.
- **/
-typedef void (*EphyGSBServiceVerifyURLCallback) (GHashTable *threats,
-                                                 gpointer    user_data);
-
-EphyGSBService *ephy_gsb_service_new        (const char *api_key,
-                                             const char *db_path);
-void            ephy_gsb_service_verify_url (EphyGSBService                  *self,
-                                             const char                      *url,
-                                             EphyGSBServiceVerifyURLCallback  callback,
-                                             gpointer                         user_data);
+EphyGSBService *ephy_gsb_service_new                (const char *api_key,
+                                                     const char *db_path);
+void            ephy_gsb_service_verify_url         (EphyGSBService      *self,
+                                                     const char          *url,
+                                                     GAsyncReadyCallback  callback,
+                                                     gpointer             user_data);
+GList          *ephy_gsb_service_verify_url_finish  (EphyGSBService  *self,
+                                                     GAsyncResult    *result);
 
 G_END_DECLS

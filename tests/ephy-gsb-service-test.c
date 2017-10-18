@@ -199,14 +199,18 @@ static GMainLoop *test_verify_url_loop;
 static int        test_verify_url_counter;
 
 static void
-test_verify_url_cb (GHashTable *threats,
-                    gpointer    user_data)
+test_verify_url_cb (EphyGSBService *service,
+                    GAsyncResult   *result,
+                    gpointer        user_data)
 {
   gboolean is_threat = GPOINTER_TO_UINT (user_data);
+  GList *threats = ephy_gsb_service_verify_url_finish (service, result);
 
-  g_assert_true ((g_hash_table_size (threats) > 0) == is_threat);
+  g_assert_true ((threats != NULL) == is_threat);
 
-  if (--test_verify_url_counter == 0)
+  g_list_free_full (threats, g_free);
+
+  if (g_atomic_int_dec_and_test (&test_verify_url_counter))
     g_main_loop_quit (test_verify_url_loop);
 }
 
@@ -219,7 +223,7 @@ gsb_service_update_finished_cb (EphyGSBService *service,
 
     ephy_gsb_service_verify_url (service,
                                  test.url,
-                                 test_verify_url_cb,
+                                 (GAsyncReadyCallback)test_verify_url_cb,
                                  GUINT_TO_POINTER (test.is_threat));
   }
 }
