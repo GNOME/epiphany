@@ -35,7 +35,7 @@
 #define BATCH_SIZE 199
 
 /* Increment schema version if you modify the database table structure. */
-#define SCHEMA_VERSION 1
+#define SCHEMA_VERSION 2
 
 struct _EphyGSBStorage {
   GObject parent_instance;
@@ -252,6 +252,14 @@ ephy_gsb_storage_init_hash_prefix_table (EphyGSBStorage *self)
     return FALSE;
   }
 
+  sql = "CREATE INDEX idx_hash_prefix_cue ON hash_prefix (cue)";
+  ephy_sqlite_connection_execute (self->db, sql, &error);
+  if (error) {
+    g_warning ("Failed to create idx_hash_prefix_cue index: %s", error->message);
+    g_error_free (error);
+    return FALSE;
+  }
+
   return TRUE;
 }
 
@@ -278,6 +286,14 @@ ephy_gsb_storage_init_hash_full_table (EphyGSBStorage *self)
   ephy_sqlite_connection_execute (self->db, sql, &error);
   if (error) {
     g_warning ("Failed to create hash_full table: %s", error->message);
+    g_error_free (error);
+    return FALSE;
+  }
+
+  sql = "CREATE INDEX idx_hash_full_value ON hash_full (value)";
+  ephy_sqlite_connection_execute (self->db, sql, &error);
+  if (error) {
+    g_warning ("Failed to create idx_hash_full_value index: %s", error->message);
     g_error_free (error);
     return FALSE;
   }
