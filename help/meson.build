@@ -32,22 +32,7 @@ help_media = [
   'media/web-browser.png'
 ]
 
-help_linguas = [
-  'cs',
-  'de',
-  'el',
-  'es',
-  'fr',
-  'hu',
-  'ko',
-  'pl',
-  'pt_BR',
-  'ru',
-  'sv'
-]
-
 gnome.yelp(meson.project_name(),
   sources: help_files,
   media: help_media,
-  languages: help_linguas,
 )
