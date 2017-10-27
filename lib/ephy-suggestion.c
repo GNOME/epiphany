@@ -137,6 +137,26 @@ ephy_suggestion_new (const char *title,
   return suggestion;
 }
 
+EphySuggestion *
+ephy_suggestion_new_without_subtitle (const char *title,
+                                      const char *uri)
+{
+  EphySuggestion *suggestion;
+  char *escaped_title;
+
+  escaped_title = g_markup_escape_text (title, -1);
+  suggestion = g_object_new (EPHY_TYPE_SUGGESTION,
+                             "icon-name", "web-browser-symbolic",
+                             "id", uri,
+                             "title", escaped_title,
+                             "unescaped-title", title,
+                             NULL);
+
+  g_free (escaped_title);
+
+  return suggestion;
+}
+
 const char *
 ephy_suggestion_get_unescaped_title (EphySuggestion *self)
 {

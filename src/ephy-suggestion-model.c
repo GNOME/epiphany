@@ -342,8 +342,6 @@ add_history (EphySuggestionModel *self,
   return added;
 }
 
-/* FIXME: This leaves much to be desired.
- * Need to add a way to not display the URL. */
 static guint
 add_search_engines (EphySuggestionModel *self,
                     const char          *query)
@@ -362,7 +360,7 @@ add_search_engines (EphySuggestionModel *self,
     char *address;
 
     address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
-    suggestion = ephy_suggestion_new (engines[i], address);
+    suggestion = ephy_suggestion_new_without_subtitle (engines[i], address);
 
     g_sequence_append (self->items, suggestion);
     added++;
