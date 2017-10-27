@@ -290,30 +290,15 @@ should_add_bookmark_to_model (EphySuggestionModel *self,
   return ret;
 }
 
-static void
-query_completed_cb (EphyHistoryService *service,
-                    gboolean            success,
-                    gpointer            result_data,
-                    gpointer            user_data)
+static guint
+add_bookmarks (EphySuggestionModel *self,
+               const char          *query)
 {
-  GTask *task = user_data;
-  EphySuggestionModel *self;
-  const gchar *query;
   GSequence *bookmarks;
-  GList *urls = NULL;
-  guint removed;
   guint added = 0;
 
-  self = g_task_get_source_object (task);
-  query = g_task_get_task_data (task);
-
-  removed = g_sequence_get_length (self->items);
-
-  g_clear_pointer (&self->items, g_sequence_free);
-  self->items = g_sequence_new (g_object_unref);
-
-  /* Add bookmarks */
   bookmarks = ephy_bookmarks_manager_get_bookmarks (self->bookmarks_manager);
+
   for (GSequenceIter *iter = g_sequence_get_begin_iter (bookmarks);
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter)) {
@@ -334,8 +319,14 @@ query_completed_cb (EphyHistoryService *service,
     }
   }
 
-  /* History */
-  urls = (GList *)result_data;
+  return added;
+}
+
+static guint
+add_history (EphySuggestionModel *self,
+             GList               *urls)
+{
+  guint added = 0;
 
   for (const GList *p = g_list_last (urls); p != NULL; p = p->prev) {
     EphyHistoryURL *url = (EphyHistoryURL *)p->data;
@@ -345,6 +336,34 @@ query_completed_cb (EphyHistoryService *service,
     g_sequence_prepend (self->items, suggestion);
     added++;
   }
+
+  return added;
+}
+
+static void
+query_completed_cb (EphyHistoryService *service,
+                    gboolean            success,
+                    gpointer            result_data,
+                    gpointer            user_data)
+{
+  GTask *task = user_data;
+  EphySuggestionModel *self;
+  const gchar *query;
+  GList *urls;
+  guint removed;
+  guint added;
+
+  self = g_task_get_source_object (task);
+  query = g_task_get_task_data (task);
+  urls = (GList *)result_data;
+
+  removed = g_sequence_get_length (self->items);
+
+  g_clear_pointer (&self->items, g_sequence_free);
+  self->items = g_sequence_new (g_object_unref);
+
+  added = add_bookmarks (self, query);
+  added += add_history (self, urls);
 
   g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
 
