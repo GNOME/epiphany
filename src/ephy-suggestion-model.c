@@ -330,12 +330,12 @@ add_history (EphySuggestionModel *self,
 {
   guint added = 0;
 
-  for (const GList *p = g_list_last (urls); p != NULL; p = p->prev) {
+  for (const GList *p = urls; p != NULL; p = p->next) {
     EphyHistoryURL *url = (EphyHistoryURL *)p->data;
     EphySuggestion *suggestion;
 
     suggestion = ephy_suggestion_new (url->title, url->url);
-    g_sequence_prepend (self->items, suggestion);
+    g_sequence_append (self->items, suggestion);
     added++;
   }
 
@@ -364,7 +364,7 @@ add_search_engines (EphySuggestionModel *self,
     address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
     suggestion = ephy_suggestion_new (engines[i], address);
 
-    g_sequence_prepend (self->items, suggestion);
+    g_sequence_append (self->items, suggestion);
     added++;
 
     g_free (address);
