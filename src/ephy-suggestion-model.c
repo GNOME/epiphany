@@ -19,6 +19,8 @@
 #include "config.h"
 #include "ephy-suggestion-model.h"
 
+#include "ephy-embed-shell.h"
+#include "ephy-search-engine-manager.h"
 #include "ephy-suggestion.h"
 
 #include <dazzle.h>
@@ -340,6 +342,39 @@ add_history (EphySuggestionModel *self,
   return added;
 }
 
+/* FIXME: This leaves much to be desired.
+ * Need to add a way to not display the URL. */
+static guint
+add_search_engines (EphySuggestionModel *self,
+                    const char          *query)
+{
+  EphyEmbedShell *shell;
+  EphySearchEngineManager *manager;
+  char **engines;
+  guint added = 0;
+
+  shell = ephy_embed_shell_get_default ();
+  manager = ephy_embed_shell_get_search_engine_manager (shell);
+  engines = ephy_search_engine_manager_get_names (manager);
+
+  for (guint i = 0; engines[i] != NULL; i++) {
+    EphySuggestion *suggestion;
+    char *address;
+
+    address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
+    suggestion = ephy_suggestion_new (engines[i], address);
+
+    g_sequence_prepend (self->items, suggestion);
+    added++;
+
+    g_free (address);
+  }
+
+  g_strfreev (engines);
+
+  return added;
+}
+
 static void
 query_completed_cb (EphyHistoryService *service,
                     gboolean            success,
@@ -364,6 +399,7 @@ query_completed_cb (EphyHistoryService *service,
 
   added = add_bookmarks (self, query);
   added += add_history (self, urls);
+  added += add_search_engines (self, query);
 
   g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
 
