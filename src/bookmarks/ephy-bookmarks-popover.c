@@ -89,31 +89,48 @@ ephy_bookmarks_popover_bookmark_tag_added_cb (EphyBookmarksPopover *self,
                                               EphyBookmarksManager *manager)
 {
   GtkWidget *tag_row;
+  GList *children;
+  GList *l;
+  gboolean exists;
+  const char *visible_stack_child;
+  const char *title;
+  const char *type;
 
   g_assert (EPHY_IS_BOOKMARK (bookmark));
   g_assert (EPHY_IS_BOOKMARKS_POPOVER (self));
 
   /* If the bookmark no longer has 0 tags, we remove it from the tags list box */
-  if (g_sequence_get_length (ephy_bookmark_get_tags (bookmark)) == 1) {
-    const char *visible_stack_child;
-
+  if (g_sequence_get_length (ephy_bookmark_get_tags (bookmark)) == 1)
     remove_bookmark_row_from_container (GTK_CONTAINER (self->tags_list_box),
                                         ephy_bookmark_get_url (bookmark));
 
-    /* If we are on the tag detail list box, then the user has toggled the state
-     * of the tag widget multiple times. The first time the bookmark was removed
-     * from the list box. Now we have to add it back. */
-    visible_stack_child = gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack));
-    if (g_strcmp0 (visible_stack_child, "tag_detail") == 0) {
-      GtkWidget *row;
-      row = create_bookmark_row (bookmark, self);
-      gtk_container_add (GTK_CONTAINER (self->tag_detail_list_box), row);
-    }
+  /* If we are on the tag detail list box, then the user has toggled the state
+   * of the tag widget multiple times. The first time the bookmark was removed
+   * from the list box. Now we have to add it back. */
+  visible_stack_child = gtk_stack_get_visible_child_name (GTK_STACK (self->toplevel_stack));
+  if (g_strcmp0 (visible_stack_child, "tag_detail") == 0 &&
+      g_strcmp0 (self->tag_detail_tag, tag) == 0) {
+    GtkWidget *row;
+
+    row = create_bookmark_row (bookmark, self);
+    gtk_container_add (GTK_CONTAINER (self->tag_detail_list_box), row);
   }
 
-  /* The first time a tag is assigned to a bookmark, a tag row is created and
-   * added to the tags list */
-  if (g_sequence_get_length (ephy_bookmarks_manager_get_bookmarks_with_tag (manager, tag)) == 1) {
+  exists = FALSE;
+  children = gtk_container_get_children (GTK_CONTAINER (self->tags_list_box));
+  for (l = children; l != NULL; l = l->next) {
+    title = g_object_get_data (G_OBJECT (l->data), "title");
+    type = g_object_get_data (G_OBJECT (l->data), "type");
+
+    if (g_strcmp0 (title, tag) == 0 &&
+        g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_TAG) == 0) {
+      exists = TRUE;
+      break;
+    }
+  }
+  g_list_free (children);
+
+  if (!exists) {
     tag_row = create_tag_row (tag);
     gtk_container_add (GTK_CONTAINER (self->tags_list_box), tag_row);
   }
