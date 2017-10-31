@@ -1980,7 +1980,6 @@ decide_navigation_policy (WebKitWebView            *web_view,
       } else if (!ephy_embed_shell_uri_looks_related_to_app (ephy_embed_shell_get_default (),
                                                              ephy_web_view_get_last_committed_address (EPHY_WEB_VIEW (web_view)))) {
         return FALSE;
-#if WEBKIT_CHECK_VERSION(2, 19, 1)
       } else if (webkit_navigation_action_is_redirect (navigation_action)) {
         EphyHeaderBar *header_bar;
         EphyTitleWidget *title_widget;
@@ -1997,7 +1996,6 @@ decide_navigation_policy (WebKitWebView            *web_view,
         title_widget = ephy_header_bar_get_title_widget (header_bar);
         g_object_notify (G_OBJECT (title_widget), "address");
         return FALSE;
-#endif
       }
 
       /* This does not look like a part of the application itself, so open it in a new tab
