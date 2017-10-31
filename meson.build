@@ -44,7 +44,7 @@ configure_file(
 glib_requirement = '>= 2.52.0'
 gtk_requirement = '>= 3.22.13'
 nettle_requirement = '>= 3.2'
-webkitgtk_requirement = '>= 2.17.4'
+webkitgtk_requirement = '>= 2.19.1'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
