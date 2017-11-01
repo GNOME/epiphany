@@ -307,15 +307,17 @@ serializable_serialize_property (JsonSerializable *serializable,
                                  const GValue     *value,
                                  GParamSpec       *pspec)
 {
-  if (!g_strcmp0 (name, "visits")) {
-    JsonNode *node;
-    JsonArray *array;
-    GSequence *visits;
-    GSequenceIter *it;
+  if (G_VALUE_HOLDS_STRING (value) && g_value_get_string (value) == NULL) {
+    JsonNode *node = json_node_new (JSON_NODE_VALUE);
+    json_node_set_string (node, "");
+    return node;
+  }
 
-    node = json_node_new (JSON_NODE_ARRAY);
-    array = json_array_new ();
-    visits = g_value_get_pointer (value);
+  if (!g_strcmp0 (name, "visits")) {
+    JsonNode *node = json_node_new (JSON_NODE_ARRAY);
+    JsonArray *array = json_array_new ();
+    GSequence *visits = g_value_get_pointer (value);
+    GSequenceIter *it;
 
     if (visits != NULL) {
       for (it = g_sequence_get_begin_iter (visits); !g_sequence_iter_is_end (it); it = g_sequence_iter_next (it)) {
@@ -342,12 +344,14 @@ serializable_deserialize_property (JsonSerializable *serializable,
                                    GParamSpec       *pspec,
                                    JsonNode         *node)
 {
-  if (!g_strcmp0 (name, "visits")) {
-    JsonArray *array;
-    GSequence *visits;
+  if (G_VALUE_HOLDS_STRING (value) && JSON_NODE_HOLDS_NULL (node)) {
+    g_value_set_string (value, "");
+    return TRUE;
+  }
 
-    array = json_node_get_array (node);
-    visits = g_sequence_new ((GDestroyNotify)ephy_history_record_visit_free);
+  if (!g_strcmp0 (name, "visits")) {
+    JsonArray *array = json_node_get_array (node);
+    GSequence *visits = g_sequence_new ((GDestroyNotify)ephy_history_record_visit_free);
 
     for (guint i = 0; i < json_array_get_length (array); i++) {
       JsonObject *object = json_node_get_object (json_array_get_element (array, i));

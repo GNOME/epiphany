@@ -220,6 +220,12 @@ serializable_serialize_property (JsonSerializable *serializable,
                                  const GValue     *value,
                                  GParamSpec       *pspec)
 {
+  if (G_VALUE_HOLDS_STRING (value) && g_value_get_string (value) == NULL) {
+    JsonNode *node = json_node_new (JSON_NODE_VALUE);
+    json_node_set_string (node, "");
+    return node;
+  }
+
   if (!g_strcmp0 (name, "tabs")) {
     JsonNode *node = json_node_new (JSON_NODE_ARRAY);
     JsonArray *array = json_array_new ();
@@ -242,6 +248,11 @@ serializable_deserialize_property (JsonSerializable *serializable,
                                    GParamSpec       *pspec,
                                    JsonNode         *node)
 {
+  if (G_VALUE_HOLDS_STRING (value) && JSON_NODE_HOLDS_NULL (node)) {
+    g_value_set_string (value, "");
+    return TRUE;
+  }
+
   if (!g_strcmp0 (name, "tabs")) {
     JsonArray *array;
     GList *tabs = NULL;
