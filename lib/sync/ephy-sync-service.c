@@ -2308,7 +2308,7 @@ ephy_sync_service_register_device (EphySyncService *self,
   json_object_set_string_member (record, "version", VERSION);
   json_object_set_array_member (record, "protocols", array);
   json_object_set_string_member (record, "os", "Linux");
-  json_object_set_null_member (record, "appPackage");
+  json_object_set_string_member (record, "appPackage", "org.gnome.epiphany");
   json_object_set_string_member (record, "application", "Epiphany");
 
   /* Get record's string representation. */
