@@ -101,7 +101,11 @@ static const char * const ephy_prefs_state_schema[] = {
 #define EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS "enable-site-specific-quirks"
 #define EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING        "enable-safe-browsing"
 #define EPHY_PREFS_WEB_GSB_API_KEY                 "gsb-api-key"
+<<<<<<< HEAD
 #define EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL          "default-zoom-level"
+=======
+#define EPHY_PREFS_WEB_ENABLE_AUTOSEARCH           "enable-autosearch"
+>>>>>>> Add setting to disable autosearch
 
 static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_FONT_MIN_SIZE,
@@ -126,7 +130,8 @@ static const char * const ephy_prefs_web_schema[] = {
   EPHY_PREFS_WEB_ENABLE_SITE_SPECIFIC_QUIRKS,
   EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING,
   EPHY_PREFS_WEB_GSB_API_KEY,
-  EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL
+  EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL,
+  EPHY_PREFS_WEB_ENABLE_AUTOSEARCH
 };
 
 #define EPHY_PREFS_SCHEMA                             "org.gnome.Epiphany"

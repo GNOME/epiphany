@@ -25,6 +25,7 @@
 #include "ephy-embed-utils.h"
 
 #include "ephy-about-handler.h"
+#include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-string.h"
 
@@ -275,6 +276,9 @@ ephy_embed_utils_autosearch_address (const char *search_key)
   char *effective_address;
   EphyEmbedShell *shell;
   EphySearchEngineManager *search_engine_manager;
+
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_AUTOSEARCH))
+    return g_strdup (search_key);
 
   shell = ephy_embed_shell_get_default ();
   search_engine_manager = ephy_embed_shell_get_search_engine_manager (shell);
