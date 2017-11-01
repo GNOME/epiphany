@@ -520,16 +520,17 @@ serializable_serialize_property (JsonSerializable *serializable,
                                  const GValue     *value,
                                  GParamSpec       *pspec)
 {
-  JsonNode *node = NULL;
+  if (G_VALUE_HOLDS_STRING (value) && g_value_get_string (value) == NULL) {
+    JsonNode *node = json_node_new (JSON_NODE_VALUE);
+    json_node_set_string (node, "");
+    return node;
+  }
 
   if (g_strcmp0 (name, "tags") == 0) {
-    GSequence *tags;
+    JsonNode *node = json_node_new (JSON_NODE_ARRAY);
+    JsonArray *array = json_array_new ();
+    GSequence *tags = g_value_get_pointer (value);
     GSequenceIter *iter;
-    JsonArray *array;
-
-    node = json_node_new (JSON_NODE_ARRAY);
-    array = json_array_new ();
-    tags = g_value_get_pointer (value);
 
     if (tags != NULL) {
       for (iter = g_sequence_get_begin_iter (tags);
@@ -540,13 +541,15 @@ serializable_serialize_property (JsonSerializable *serializable,
     }
 
     json_node_set_array (node, array);
-  } else if (!g_strcmp0 (name, "time-added")) {
-    /* This is not a Firefox bookmark property, skip it.  */
-  } else {
-    node = json_serializable_default_serialize_property (serializable, name, value, pspec);
+
+    return node;
   }
 
-  return node;
+  /* This is not a Firefox bookmark property, skip it. */
+  if (!g_strcmp0 (name, "time-added"))
+    return NULL;
+
+  return json_serializable_default_serialize_property (serializable, name, value, pspec);
 }
 
 static gboolean
@@ -556,14 +559,15 @@ serializable_deserialize_property (JsonSerializable *serializable,
                                    GParamSpec       *pspec,
                                    JsonNode         *node)
 {
-  if (g_strcmp0 (name, "tags") == 0) {
-    GSequence *tags;
-    JsonArray *array;
-    const char *tag;
+  if (G_VALUE_HOLDS_STRING (value) && JSON_NODE_HOLDS_NULL (node)) {
+    g_value_set_string (value, "");
+    return TRUE;
+  }
 
-    g_assert (JSON_NODE_HOLDS_ARRAY (node));
-    array = json_node_get_array (node);
-    tags = g_sequence_new (g_free);
+  if (g_strcmp0 (name, "tags") == 0) {
+    GSequence *tags = g_sequence_new (g_free);
+    JsonArray *array = json_node_get_array (node);
+    const char *tag;
 
     for (gsize i = 0; i < json_array_get_length (array); i++) {
       tag = json_node_get_string (json_array_get_element (array, i));
