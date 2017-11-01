@@ -1197,6 +1197,60 @@ out:
   g_list_free_full (passwords, g_object_unref);
 }
 
+static const char * const old_sync_settings[] = {
+    EPHY_PREFS_SYNC_USER,
+    EPHY_PREFS_SYNC_TIME,
+    EPHY_PREFS_SYNC_DEVICE_ID,
+    EPHY_PREFS_SYNC_DEVICE_NAME,
+    EPHY_PREFS_SYNC_FREQUENCY,
+    EPHY_PREFS_SYNC_WITH_FIREFOX,
+    EPHY_PREFS_SYNC_BOOKMARKS_ENABLED,
+    EPHY_PREFS_SYNC_BOOKMARKS_TIME,
+    EPHY_PREFS_SYNC_BOOKMARKS_INITIAL,
+    EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
+    EPHY_PREFS_SYNC_PASSWORDS_TIME,
+    EPHY_PREFS_SYNC_PASSWORDS_INITIAL,
+    EPHY_PREFS_SYNC_HISTORY_ENABLED,
+    EPHY_PREFS_SYNC_HISTORY_TIME,
+    EPHY_PREFS_SYNC_HISTORY_INITIAL,
+    EPHY_PREFS_SYNC_OPEN_TABS_ENABLED,
+    EPHY_PREFS_SYNC_OPEN_TABS_TIME
+};
+
+static void
+migrate_sync_settings_path (void)
+{
+  GSettings *deprecated_settings = ephy_settings_get ("org.gnome.Epiphany.sync.DEPRECATED");
+
+  /* Sync settings are only used in browser mode, so no need to migrate if we
+   * are not in browser mode. */
+  if (!ephy_dot_dir_is_default ())
+    return;
+
+  for (guint i = 0; i < G_N_ELEMENTS (old_sync_settings); i++) {
+    GVariant *user_value;
+
+    /* Has the setting been changed from its default? */
+    user_value = g_settings_get_user_value (deprecated_settings, old_sync_settings[i]);
+
+    if (user_value != NULL) {
+      GVariant *value;
+
+      value = g_settings_get_value (deprecated_settings, old_sync_settings[i]);
+      g_settings_set_value (EPHY_SETTINGS_SYNC, old_sync_settings[i], value);
+
+      /* We do not want to ever run this migration again, to avoid writing old
+       * values over new ones. So be cautious and reset the old settings. */
+      g_settings_reset (deprecated_settings, old_sync_settings[i]);
+
+      g_variant_unref (value);
+      g_variant_unref (user_value);
+    }
+  }
+
+  g_settings_sync ();
+}
+
 static void
 migrate_nothing (void)
 {
@@ -1232,6 +1286,7 @@ const EphyProfileMigrator migrators[] = {
   /* 19 */ migrate_passwords_to_firefox_sync_passwords,
   /* 20 */ migrate_history_to_firefox_sync_history,
   /* 21 */ migrate_passwords_add_target_origin,
+  /* 22 */ migrate_sync_settings_path
 };
 
 static gboolean
