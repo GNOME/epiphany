@@ -1912,6 +1912,7 @@ ephy_sync_service_upload_meta_global (EphySyncService *self)
   json_object_set_object_member (engines, "bookmarks", make_engine_object (2));
   json_object_set_object_member (engines, "history", make_engine_object (1));
   json_object_set_object_member (engines, "passwords", make_engine_object (1));
+  json_object_set_object_member (engines, "tabs", make_engine_object (1));
   json_object_set_object_member (engines, "forms", make_engine_object (1));
   json_object_set_object_member (payload, "engines", engines);
   json_object_set_int_member (payload, "storageVersion", EPHY_STORAGE_VERSION);
