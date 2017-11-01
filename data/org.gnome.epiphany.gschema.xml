@@ -281,7 +281,7 @@
 			<default>false</default>
 		</key>
 	</schema>
-	<schema path="/org/gnome/Epiphany/sync/" id="org.gnome.Epiphany.sync">
+	<schema path="/org/gnome/epiphany/sync/" id="org.gnome.Epiphany.sync">
 		<key type="s" name="sync-user">
 			<default>''</default>
 			<summary>Currently signed in sync user</summary>
@@ -366,6 +366,93 @@
 			<default>0</default>
 			<summary>Open tabs sync timestamp</summary>
 			<description>The timestamp at which last open tabs sync was made.</description>
+		</key>
+	</schema>
+	<schema path="/org/gnome/Epiphany/sync/" id="org.gnome.Epiphany.sync.DEPRECATED">
+		<key type="s" name="sync-user">
+			<default>''</default>
+			<summary>Currently signed in sync user</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="x" name="sync-time">
+			<default>0</default>
+			<summary>Last sync timestamp</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="s" name="sync-device-id">
+			<default>''</default>
+			<summary>Sync device ID</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="s" name="sync-device-name">
+			<default>''</default>
+			<summary>Sync device name</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="u" name="sync-frequency">
+			<default>30</default>
+			<summary>The sync frequency in minutes</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="b" name="sync-with-firefox">
+			<default>true</default>
+			<summary>Sync data with Firefox</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="b" name="sync-bookmarks-enabled">
+			<default>false</default>
+			<summary>Enable bookmarks sync</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="d" name="sync-bookmarks-time">
+			<default>0</default>
+			<summary>Bookmarks sync timestamp</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="b" name="sync-bookmarks-initial">
+			<default>true</default>
+			<summary>Initial sync or normal sync</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="b" name="sync-passwords-enabled">
+			<default>false</default>
+			<summary>Enable passwords sync</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="d" name="sync-passwords-time">
+			<default>0</default>
+			<summary>Passwords sync timestamp</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="b" name="sync-passwords-initial">
+			<default>true</default>
+			<summary>Initial sync or normal sync</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="b" name="sync-history-enabled">
+			<default>false</default>
+			<summary>Enable history sync</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="d" name="sync-history-time">
+			<default>0</default>
+			<summary>History sync timestamp</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="b" name="sync-history-initial">
+			<default>true</default>
+			<summary>Initial sync or normal sync</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="b" name="sync-open-tabs-enabled">
+			<default>false</default>
+			<summary>Enable open tabs sync</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
+		</key>
+		<key type="d" name="sync-open-tabs-time">
+			<default>0</default>
+			<summary>Open tabs sync timestamp</summary>
+			<description>DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/sync/ instead.</description>
 		</key>
 	</schema>
 	<enum id="org.gnome.Epiphany.Permission">
