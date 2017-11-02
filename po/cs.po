@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-10-24 17:33+0000\n"
-"PO-Revision-Date: 2017-10-30 16:19+0100\n"
+"POT-Creation-Date: 2017-11-01 21:13+0000\n"
+"PO-Revision-Date: 2017-11-02 08:58+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -580,6 +580,7 @@ msgstr ""
 "jako maximalizované."
 
 #: data/org.gnome.epiphany.gschema.xml:287
+#: data/org.gnome.epiphany.gschema.xml:374
 msgid "Currently signed in sync user"
 msgstr "Právě přihlášený synchronizující uživatel"
 
@@ -592,6 +593,7 @@ msgstr ""
 "servery Mozilla."
 
 #: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:379
 msgid "Last sync timestamp"
 msgstr "Časové razítko poslední synchronizace"
 
@@ -601,6 +603,7 @@ msgstr ""
 "Časový údaj v UNIXovém formáty, kdy se naposledy provedla synchronizace."
 
 #: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:384
 msgid "Sync device ID"
 msgstr "ID synchronizačního zařízení"
 
@@ -609,6 +612,7 @@ msgid "The sync device ID of the current device."
 msgstr "ID synchronizačního zařízení pro aktuální zařízení."
 
 #: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:389
 msgid "Sync device name"
 msgstr "Název synchronizačního zařízení"
 
@@ -617,6 +621,7 @@ msgid "The sync device name of the current device."
 msgstr "Název synchronizačního zařízení pro aktuální zařízení."
 
 #: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:394
 msgid "The sync frequency in minutes"
 msgstr "Četnost synchronizací, v minutách"
 
@@ -625,6 +630,7 @@ msgid "The number of minutes between two consecutive syncs."
 msgstr "Počet minut mezi dvěma následujícími synchronizacemi."
 
 #: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:399
 msgid "Sync data with Firefox"
 msgstr "Synchronizovat data s Firefoxem"
 
@@ -637,6 +643,7 @@ msgstr ""
 "opačném případě vypnuto."
 
 #: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:404
 msgid "Enable bookmarks sync"
 msgstr "Povolit synchronizaci záložek"
 
@@ -647,6 +654,7 @@ msgstr ""
 "vypnuto."
 
 #: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:409
 msgid "Bookmarks sync timestamp"
 msgstr "Časové razítko synchronizace záložek"
 
@@ -657,6 +665,9 @@ msgstr "Časový údaj, kdy se naposledy provedla synchronizace záložek."
 #: data/org.gnome.epiphany.gschema.xml:327
 #: data/org.gnome.epiphany.gschema.xml:342
 #: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:414
+#: data/org.gnome.epiphany.gschema.xml:429
+#: data/org.gnome.epiphany.gschema.xml:444
 msgid "Initial sync or normal sync"
 msgstr "Počáteční nebo normální synchronizace"
 
@@ -669,6 +680,7 @@ msgstr ""
 "připadě vypnuto."
 
 #: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:419
 msgid "Enable passwords sync"
 msgstr "Povolit synchronizaci hesel"
 
@@ -678,6 +690,7 @@ msgstr ""
 "Zapnuto, když se má synchronizovat kolekce hesel. V opačném připadě vypnuto."
 
 #: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:424
 msgid "Passwords sync timestamp"
 msgstr "Časové razítko synchronizace hesel"
 
@@ -694,6 +707,7 @@ msgstr ""
 "připadě vypnuto."
 
 #: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:434
 msgid "Enable history sync"
 msgstr "Povolit synchronizaci historie"
 
@@ -704,6 +718,7 @@ msgstr ""
 "vypnuto."
 
 #: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:439
 msgid "History sync timestamp"
 msgstr "Časové razítko synchronizace historie"
 
@@ -720,6 +735,7 @@ msgstr ""
 "připadě vypnuto."
 
 #: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:449
 msgid "Enable open tabs sync"
 msgstr "Povolit synchronizaci otevřených karet"
 
@@ -730,6 +746,7 @@ msgstr ""
 "připadě vypnuto."
 
 #: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:454
 msgid "Open tabs sync timestamp"
 msgstr "Časové razítko synchronizace otevřených karet"
 
@@ -737,13 +754,37 @@ msgstr "Časové razítko synchronizace otevřených karet"
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Časový údaj, kdy se naposledy provedla synchronizace otevřených karet."
 
-#: data/org.gnome.epiphany.gschema.xml:379
+#: data/org.gnome.epiphany.gschema.xml:375
+#: data/org.gnome.epiphany.gschema.xml:380
+#: data/org.gnome.epiphany.gschema.xml:385
+#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:405
+#: data/org.gnome.epiphany.gschema.xml:410
+#: data/org.gnome.epiphany.gschema.xml:415
+#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:425
+#: data/org.gnome.epiphany.gschema.xml:430
+#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:440
+#: data/org.gnome.epiphany.gschema.xml:445
+#: data/org.gnome.epiphany.gschema.xml:450
+#: data/org.gnome.epiphany.gschema.xml:455
+msgid ""
+"DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
+"sync/ instead."
+msgstr ""
+"ZAVRŽENÉ: Tento klíč byl zavržen a je ignorován. Místo něj použijte „/org/"
+"gnome/epiphany/sync“."
+
+#: data/org.gnome.epiphany.gschema.xml:466
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Rozhodnutí, které se použije, když tento server požaduje souhlas pro použití "
 "mikrofónu"
 
-#: data/org.gnome.epiphany.gschema.xml:380
+#: data/org.gnome.epiphany.gschema.xml:467
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -755,14 +796,14 @@ msgstr ""
 "prohlížeč se musí na oprávnění zeptat uživatele, zatímco „allow“ (povolit) a "
 "„deny“ (zamítnout) říká, že se má rozhodnout automaticky na vyžádání."
 
-#: data/org.gnome.epiphany.gschema.xml:384
+#: data/org.gnome.epiphany.gschema.xml:471
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Rozhodnutí, které se použije, když tento server požaduje souhlas pro použití "
 "geolokace"
 
-#: data/org.gnome.epiphany.gschema.xml:385
+#: data/org.gnome.epiphany.gschema.xml:472
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -775,14 +816,14 @@ msgstr ""
 "„allow“ (povolit) a „deny“ (zamítnout) říká, že se má rozhodnout automaticky "
 "na vyžádání."
 
-#: data/org.gnome.epiphany.gschema.xml:389
+#: data/org.gnome.epiphany.gschema.xml:476
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Rozhodnutí, které se použije, když tento server požaduje souhlas pro "
 "upozornění"
 
-#: data/org.gnome.epiphany.gschema.xml:390
+#: data/org.gnome.epiphany.gschema.xml:477
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -794,14 +835,14 @@ msgstr ""
 "musí na oprávnění zeptat uživatele, zatímco „allow“ (povolit) a "
 "„deny“ (zamítnout) říká, že se má rozhodnout automaticky na vyžádání."
 
-#: data/org.gnome.epiphany.gschema.xml:394
+#: data/org.gnome.epiphany.gschema.xml:481
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Rozhodnutí, které se použije, když tento server požaduje souhlas pro uložení "
 "hesla"
 
-#: data/org.gnome.epiphany.gschema.xml:395
+#: data/org.gnome.epiphany.gschema.xml:482
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -813,13 +854,13 @@ msgstr ""
 "oprávnění zeptat uživatele, zatímco „allow“ (povolit) a „deny“ (zamítnout) "
 "říká, že se má rozhodnout automaticky na vyžádání."
 
-#: data/org.gnome.epiphany.gschema.xml:399
+#: data/org.gnome.epiphany.gschema.xml:486
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Rozhodnutí, které se použije, když tento server požaduje souhlas pro použití "
 "webové kamery"
 
-#: data/org.gnome.epiphany.gschema.xml:400
+#: data/org.gnome.epiphany.gschema.xml:487
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -1857,22 +1898,22 @@ msgid "Failed to upload meta/global record."
 msgstr "Selhalo nahrání meta/globálního záznamu."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:1997
+#: lib/sync/ephy-sync-service.c:1998
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Váš účet Firefox používá verzi úložiště %d. Web podporuje jen verzi %d."
 
-#: lib/sync/ephy-sync-service.c:2008
+#: lib/sync/ephy-sync-service.c:2009
 msgid "Failed to verify storage version."
 msgstr "Selhalo ověření verze úložiště."
 
-#: lib/sync/ephy-sync-service.c:2049 lib/sync/ephy-sync-service.c:2127
+#: lib/sync/ephy-sync-service.c:2050 lib/sync/ephy-sync-service.c:2128
 msgid "Failed to retrieve the Sync Key"
 msgstr "Selhalo získání synchronizačního klíče"
 
-#: lib/sync/ephy-sync-service.c:2261
+#: lib/sync/ephy-sync-service.c:2262
 msgid "Failed to register device."
 msgstr "Selhala registrace zařízení."
 
@@ -2036,7 +2077,7 @@ msgid "Paste and _Go"
 msgstr "Vložit a pře_jít"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:635 src/ephy-window.c:883
+#: lib/widgets/ephy-location-entry.c:635 src/ephy-window.c:823
 msgid "_Undo"
 msgstr "_Zpět"
 
@@ -2154,45 +2195,45 @@ msgid "Reload the current page"
 msgstr "Znovu načíst aktuální stránku"
 
 #. Translators: tooltip for the stop button
-#: src/ephy-header-bar.c:558
+#: src/ephy-header-bar.c:561
 msgid "Stop loading the current page"
 msgstr "Zastavit načítání aktuální stránky"
 
 #. Translators: tooltip for the back button
-#: src/ephy-header-bar.c:653
+#: src/ephy-header-bar.c:656
 msgid "Go back to the previous page"
 msgstr "Zpět na předchozí stránku"
 
 #. Translators: tooltip for the forward button
-#: src/ephy-header-bar.c:672
+#: src/ephy-header-bar.c:675
 msgid "Go forward to the next page"
 msgstr "Vpřed na následující stránku"
 
 #. Translators: tooltip for the secret homepage button
-#: src/ephy-header-bar.c:711
+#: src/ephy-header-bar.c:714
 msgid "Go to your homepage"
 msgstr "Na domovskou stránku"
 
 #. Translators: tooltip for the bookmarks popover button
-#: src/ephy-header-bar.c:772
+#: src/ephy-header-bar.c:775
 msgid "View and manage your bookmarks"
 msgstr "Zobrazit a spravovat záložky"
 
-#: src/ephy-header-bar.c:783
+#: src/ephy-header-bar.c:786
 msgid "Open in browser"
 msgstr "Otevřít v prohlížeči"
 
-#: src/ephy-header-bar.c:785
+#: src/ephy-header-bar.c:788
 msgid "Open the page in your default browser"
 msgstr "Otevřít stránku ve výchozím prohlížeči"
 
 #. Translators: tooltip for the downloads button
-#: src/ephy-header-bar.c:809
+#: src/ephy-header-bar.c:812
 msgid "View downloads"
 msgstr "Zobrazit stahování"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-header-bar.c:828 src/ephy-notebook.c:479
+#: src/ephy-header-bar.c:831 src/ephy-notebook.c:479
 msgid "Open a new tab"
 msgstr "Otevřít novou kartu"
 
@@ -2313,133 +2354,133 @@ msgstr "Pokud aplikaci ukončíte, probíhající stahování budou zrušena"
 msgid "Quit and cancel downloads"
 msgstr "Ukončit a zrušit stahování"
 
-#: src/ephy-window.c:884
+#: src/ephy-window.c:824
 msgid "Re_do"
 msgstr "Zn_ovu"
 
 #. Edit.
-#: src/ephy-window.c:887
+#: src/ephy-window.c:827
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: src/ephy-window.c:888
+#: src/ephy-window.c:828
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: src/ephy-window.c:889
+#: src/ephy-window.c:829
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: src/ephy-window.c:890
+#: src/ephy-window.c:830
 msgid "Select _All"
 msgstr "Vy_brat vše"
 
-#: src/ephy-window.c:892
+#: src/ephy-window.c:832
 msgid "S_end Link by Email…"
 msgstr "Odeslat odkaz _e-mailem…"
 
-#: src/ephy-window.c:894
+#: src/ephy-window.c:834
 msgid "_Reload"
 msgstr "_Obnovit"
 
-#: src/ephy-window.c:895
+#: src/ephy-window.c:835
 msgid "_Back"
 msgstr "_Zpět"
 
-#: src/ephy-window.c:896
+#: src/ephy-window.c:836
 msgid "_Forward"
 msgstr "_Vpřed"
 
 #. Bookmarks
-#: src/ephy-window.c:899
+#: src/ephy-window.c:839
 msgid "Add Boo_kmark…"
 msgstr "Přid_at záložku…"
 
 #. Links.
-#: src/ephy-window.c:903
+#: src/ephy-window.c:843
 msgid "Open Link in New _Window"
 msgstr "Otevřít odkaz v novém _okně"
 
-#: src/ephy-window.c:904
+#: src/ephy-window.c:844
 msgid "Open Link in New _Tab"
 msgstr "Otevřít odkaz v nové _kartě"
 
-#: src/ephy-window.c:905
+#: src/ephy-window.c:845
 msgid "Open Link in I_ncognito Window"
 msgstr "Otevřít odkaz v a_nonymním okně"
 
-#: src/ephy-window.c:906
+#: src/ephy-window.c:846
 msgid "_Save Link As…"
 msgstr "_Uložit odkaz jako…"
 
-#: src/ephy-window.c:907
+#: src/ephy-window.c:847
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
-#: src/ephy-window.c:908
+#: src/ephy-window.c:848
 msgid "_Copy E-mail Address"
 msgstr "_Kopírovat e-mailovou adresu"
 
 #. Images.
-#: src/ephy-window.c:912
+#: src/ephy-window.c:852
 msgid "View _Image in New Tab"
 msgstr "Zobraz_it obrázek v nové kartě"
 
-#: src/ephy-window.c:913
+#: src/ephy-window.c:853
 msgid "Copy I_mage Address"
 msgstr "Kopírovat adresu _obrázku"
 
-#: src/ephy-window.c:914
+#: src/ephy-window.c:854
 msgid "_Save Image As…"
 msgstr "_Uložit obrázek jako…"
 
-#: src/ephy-window.c:915
+#: src/ephy-window.c:855
 msgid "Set as _Wallpaper"
 msgstr "Nastavit jako _tapetu plochy"
 
 #. Video.
-#: src/ephy-window.c:919
+#: src/ephy-window.c:859
 msgid "Open Video in New _Window"
 msgstr "Otevřít video v novém _okně"
 
-#: src/ephy-window.c:920
+#: src/ephy-window.c:860
 msgid "Open Video in New _Tab"
 msgstr "Otevřít video v nové kar_tě"
 
-#: src/ephy-window.c:921
+#: src/ephy-window.c:861
 msgid "_Save Video As…"
 msgstr "_Uložit video jako…"
 
-#: src/ephy-window.c:922
+#: src/ephy-window.c:862
 msgid "_Copy Video Address"
 msgstr "_Kopírovat adresu videa"
 
 #. Audio.
-#: src/ephy-window.c:926
+#: src/ephy-window.c:866
 msgid "Open Audio in New _Window"
 msgstr "Otevřít zvuk v novém _okně"
 
-#: src/ephy-window.c:927
+#: src/ephy-window.c:867
 msgid "Open Audio in New _Tab"
 msgstr "Otevřít zvuk v nové kar_tě"
 
-#: src/ephy-window.c:928
+#: src/ephy-window.c:868
 msgid "_Save Audio As…"
 msgstr "_Uložit zvuk jako…"
 
-#: src/ephy-window.c:929
+#: src/ephy-window.c:869
 msgid "_Copy Audio Address"
 msgstr "_Kopírovat adresu zvuku"
 
-#: src/ephy-window.c:934
+#: src/ephy-window.c:874
 msgid "Save Pa_ge As…"
 msgstr "_Uložit stránku jako…"
 
-#: src/ephy-window.c:935
+#: src/ephy-window.c:875
 msgid "_Page Source"
 msgstr "Z_drojový kód stránky"
 
-#: src/ephy-window.c:1318
+#: src/ephy-window.c:1258
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Na webu vyhledat „%s“"
@@ -2517,23 +2558,23 @@ msgstr "Výběr složky"
 msgid "Search the Web"
 msgstr "Na webu vyhledat"
 
-#: src/profile-migrator/ephy-profile-migrator.c:958
+#: src/profile-migrator/ephy-profile-migrator.c:1013
 msgid "Executes only the n-th migration step"
 msgstr "Provede pouze n-tý krok převodu"
 
-#: src/profile-migrator/ephy-profile-migrator.c:960
+#: src/profile-migrator/ephy-profile-migrator.c:1015
 msgid "Specifies the required version for the migrator"
 msgstr "Udává požadovanou verzi nástroje pro převod profilu"
 
-#: src/profile-migrator/ephy-profile-migrator.c:962
+#: src/profile-migrator/ephy-profile-migrator.c:1017
 msgid "Specifies the profile where the migrator should run"
 msgstr "Udává název profilu, ve kterém převod spustit"
 
-#: src/profile-migrator/ephy-profile-migrator.c:982
+#: src/profile-migrator/ephy-profile-migrator.c:1037
 msgid "Web profile migrator"
 msgstr "Převod profilu aplikace Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:983
+#: src/profile-migrator/ephy-profile-migrator.c:1038
 msgid "Web profile migrator options"
 msgstr "Volby převodu profilu aplikace Web"
 
