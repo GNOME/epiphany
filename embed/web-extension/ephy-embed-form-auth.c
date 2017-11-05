@@ -30,6 +30,7 @@ struct _EphyEmbedFormAuth {
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
   char *username;
+  char *password;
   gboolean password_updated;
 };
 
@@ -43,6 +44,7 @@ ephy_embed_form_auth_finalize (GObject *object)
   if (form_auth->uri)
     soup_uri_free (form_auth->uri);
   g_free (form_auth->username);
+  g_free (form_auth->password);
   g_free (form_auth->target_origin);
   g_clear_object (&form_auth->username_node);
   g_clear_object (&form_auth->password_node);
@@ -68,7 +70,8 @@ ephy_embed_form_auth_new (WebKitWebPage *web_page,
                           const char    *target_origin,
                           WebKitDOMNode *username_node,
                           WebKitDOMNode *password_node,
-                          const char    *username)
+                          const char    *username,
+                          const char    *password)
 {
   EphyEmbedFormAuth *form_auth;
 
@@ -82,6 +85,7 @@ ephy_embed_form_auth_new (WebKitWebPage *web_page,
   form_auth->username_node = username_node;
   form_auth->password_node = password_node;
   form_auth->username = g_strdup (username);
+  form_auth->password = g_strdup (password);
 
   return form_auth;
 }
@@ -120,6 +124,12 @@ const char *
 ephy_embed_form_auth_get_username (EphyEmbedFormAuth *form_auth)
 {
   return form_auth->username;
+}
+
+const char *
+ephy_embed_form_auth_get_password (EphyEmbedFormAuth *form_auth)
+{
+  return form_auth->password;
 }
 
 gboolean

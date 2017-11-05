@@ -34,13 +34,15 @@ EphyEmbedFormAuth *ephy_embed_form_auth_new                   (WebKitWebPage    
                                                                const char        *target_origin,
                                                                WebKitDOMNode     *username_node,
                                                                WebKitDOMNode     *password_node,
-                                                               const char        *username);
+                                                               const char        *username,
+                                                               const char        *password);
 WebKitDOMNode     *ephy_embed_form_auth_get_username_node     (EphyEmbedFormAuth *form_auth);
 WebKitDOMNode     *ephy_embed_form_auth_get_password_node     (EphyEmbedFormAuth *form_auth);
 const char        *ephy_embed_form_auth_get_target_origin     (EphyEmbedFormAuth *form_auth);
 SoupURI           *ephy_embed_form_auth_get_uri               (EphyEmbedFormAuth *form_auth);
 guint64            ephy_embed_form_auth_get_page_id           (EphyEmbedFormAuth *form_auth);
 const char        *ephy_embed_form_auth_get_username          (EphyEmbedFormAuth *form_auth);
+const char        *ephy_embed_form_auth_get_password          (EphyEmbedFormAuth *form_auth);
 gboolean           ephy_embed_form_auth_get_password_updated  (EphyEmbedFormAuth *form_auth);
 void               ephy_embed_form_auth_set_password_updated  (EphyEmbedFormAuth *form_auth,
                                                                gboolean           password_updated);
