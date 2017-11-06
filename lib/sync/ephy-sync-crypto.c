@@ -919,7 +919,7 @@ ephy_sync_crypto_create_assertion (const char           *certificate,
 
   /* Encode the header and body to base64 url safe and join them. */
   expires_at = g_get_real_time () / 1000 + seconds * 1000;
-  body = g_strdup_printf ("{\"exp\": %lu, \"aud\": \"%s\"}", expires_at, audience);
+  body = g_strdup_printf ("{\"exp\": %"PRIu64", \"aud\": \"%s\"}", expires_at, audience);
   body_b64 = ephy_sync_utils_base64_urlsafe_encode ((guint8 *)body, strlen (body), TRUE);
   header_b64 = ephy_sync_utils_base64_urlsafe_encode ((guint8 *)header, strlen (header), TRUE);
   to_sign = g_strdup_printf ("%s.%s", header_b64, body_b64);
