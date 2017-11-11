@@ -502,8 +502,8 @@ navigation_button_release_event_cb (GtkButton *button,
   action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (button));
   action_group = gtk_widget_get_action_group (GTK_WIDGET (header_bar->window), "toolbar");
 
-  direction = strstr (action_name, "back") == 0 ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
-                                                : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
+  direction = strcmp (action_name, "toolbar.navigation-back") == 0 ? EPHY_NAVIGATION_HISTORY_DIRECTION_BACK
+                                                                   : EPHY_NAVIGATION_HISTORY_DIRECTION_FORWARD;
 
   switch (((GdkEventButton *)event)->button) {
     case GDK_BUTTON_MIDDLE:
