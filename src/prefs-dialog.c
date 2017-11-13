@@ -507,10 +507,6 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
       goto out;
     }
 
-    if (!json_object_get_boolean_member (data, "verified"))
-      sync_sign_in_details_show (dialog, _("Please don’t leave this page until "
-                                           "you have completed the verification."));
-
     ephy_sync_service_sign_in (ephy_shell_get_sync_service (ephy_shell_get_default ()),
                                email, uid, session_token, key_fetch_token, unwrap_kb);
   }
