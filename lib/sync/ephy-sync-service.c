@@ -1375,10 +1375,17 @@ ephy_sync_service_sync_collection (EphySyncService           *self,
 static gboolean
 ephy_sync_service_sync_internal (EphySyncService *self)
 {
+  GNetworkMonitor *monitor;
   guint index = 0;
   guint num_managers;
 
   g_assert (ephy_sync_utils_user_is_signed_in ());
+
+  monitor = g_network_monitor_get_default ();
+  if (g_network_monitor_get_connectivity (monitor) != G_NETWORK_CONNECTIVITY_FULL) {
+    g_signal_emit (self, signals[SYNC_FINISHED], 0);
+    return G_SOURCE_CONTINUE;
+  }
 
   if (!self->managers) {
     g_signal_emit (self, signals[SYNC_FINISHED], 0);
@@ -2191,9 +2198,15 @@ synchronizable_deleted_cb (EphySynchronizableManager *manager,
                            EphySynchronizable        *synchronizable,
                            EphySyncService           *self)
 {
+  GNetworkMonitor *monitor;
+
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
   g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
   g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  monitor = g_network_monitor_get_default ();
+  if (g_network_monitor_get_connectivity (monitor) != G_NETWORK_CONNECTIVITY_FULL)
+    return;
 
   if (!ephy_sync_utils_user_is_signed_in ())
     return;
@@ -2207,9 +2220,15 @@ synchronizable_modified_cb (EphySynchronizableManager *manager,
                             gboolean                   should_force,
                             EphySyncService           *self)
 {
+  GNetworkMonitor *monitor;
+
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
   g_assert (EPHY_IS_SYNCHRONIZABLE (synchronizable));
   g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  monitor = g_network_monitor_get_default ();
+  if (g_network_monitor_get_connectivity (monitor) != G_NETWORK_CONNECTIVITY_FULL)
+    return;
 
   if (!ephy_sync_utils_user_is_signed_in ())
     return;
