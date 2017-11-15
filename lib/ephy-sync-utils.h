@@ -69,19 +69,19 @@ gboolean  ephy_sync_utils_sync_with_firefox             (void);
 gboolean  ephy_sync_utils_bookmarks_sync_is_enabled     (void);
 void      ephy_sync_utils_set_bookmarks_sync_time       (double time);
 double    ephy_sync_utils_get_bookmarks_sync_time       (void);
-void      ephy_sync_utils_set_bookmarks_sync_is_initial (double is_initial);
+void      ephy_sync_utils_set_bookmarks_sync_is_initial (gboolean is_initial);
 gboolean  ephy_sync_utils_get_bookmarks_sync_is_initial (void);
 
 gboolean  ephy_sync_utils_passwords_sync_is_enabled     (void);
 void      ephy_sync_utils_set_passwords_sync_time       (double time);
 double    ephy_sync_utils_get_passwords_sync_time       (void);
-void      ephy_sync_utils_set_passwords_sync_is_initial (double is_initial);
+void      ephy_sync_utils_set_passwords_sync_is_initial (gboolean is_initial);
 gboolean  ephy_sync_utils_get_passwords_sync_is_initial (void);
 
 gboolean  ephy_sync_utils_history_sync_is_enabled       (void);
 void      ephy_sync_utils_set_history_sync_time         (double time);
 double    ephy_sync_utils_get_history_sync_time         (void);
-void      ephy_sync_utils_set_history_sync_is_initial   (double is_initial);
+void      ephy_sync_utils_set_history_sync_is_initial   (gboolean is_initial);
 gboolean  ephy_sync_utils_get_history_sync_is_initial   (void);
 
 gboolean  ephy_sync_utils_open_tabs_sync_is_enabled     (void);

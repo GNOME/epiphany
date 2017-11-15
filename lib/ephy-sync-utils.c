@@ -353,7 +353,7 @@ ephy_sync_utils_get_bookmarks_sync_time (void)
 }
 
 void
-ephy_sync_utils_set_bookmarks_sync_is_initial (double is_initial)
+ephy_sync_utils_set_bookmarks_sync_is_initial (gboolean is_initial)
 {
   g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_INITIAL, is_initial);
 }
@@ -383,7 +383,7 @@ ephy_sync_utils_get_passwords_sync_time (void)
 }
 
 void
-ephy_sync_utils_set_passwords_sync_is_initial (double is_initial)
+ephy_sync_utils_set_passwords_sync_is_initial (gboolean is_initial)
 {
   g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_INITIAL, is_initial);
 }
@@ -413,7 +413,7 @@ ephy_sync_utils_get_history_sync_time (void)
 }
 
 void
-ephy_sync_utils_set_history_sync_is_initial (double is_initial)
+ephy_sync_utils_set_history_sync_is_initial (gboolean is_initial)
 {
   g_settings_set_boolean (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_INITIAL, is_initial);
 }
