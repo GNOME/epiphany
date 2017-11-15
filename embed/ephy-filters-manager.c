@@ -21,6 +21,7 @@
 #include "config.h"
 #include "ephy-filters-manager.h"
 
+#include "ephy-download.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-uri-tester-shared.h"
@@ -80,31 +81,20 @@ adblock_filter_file_is_valid (GFile *file)
 
 typedef struct {
   EphyFiltersManager *manager;
-
-  char *src_uri;
-  GFile *filter_file;
-  GFile *tmp_file;
+  EphyDownload *download;
+  char *source_uri;
 } AdblockFilterRetrieveData;
 
 static AdblockFilterRetrieveData *
 adblock_filter_retrieve_data_new (EphyFiltersManager *manager,
-                                  GFile              *src_file,
-                                  GFile              *filter_file)
+                                  EphyDownload       *download,
+                                  char               *source_uri)
 {
   AdblockFilterRetrieveData* data;
-  char *path, *tmp_path;
-
   data = g_slice_new (AdblockFilterRetrieveData);
   data->manager = g_object_ref (manager);
-  data->src_uri = g_file_get_uri (src_file);
-  data->filter_file = g_object_ref (filter_file);
-
-  path = g_file_get_path (filter_file);
-  tmp_path = g_strdup_printf ("%s.tmp", path);
-  g_free (path);
-  data->tmp_file = g_file_new_for_path (tmp_path);
-  g_free (tmp_path);
-
+  data->download = g_object_ref (download);
+  data->source_uri = g_strdup (source_uri);
   return data;
 }
 
@@ -112,57 +102,66 @@ static void
 adblock_filter_retrieve_data_free (AdblockFilterRetrieveData *data)
 {
   g_object_unref (data->manager);
-  g_object_unref (data->filter_file);
-  g_object_unref (data->tmp_file);
-
-  g_free (data->src_uri);
-
+  g_object_unref (data->download);
+  g_free (data->source_uri);
   g_slice_free (AdblockFilterRetrieveData, data);
 }
 
 static void
-retrieve_filter_file_finished (GFile                     *src,
-                               GAsyncResult              *result,
-                               AdblockFilterRetrieveData *data)
+download_completed_cb (EphyDownload              *download,
+                       AdblockFilterRetrieveData *data)
 {
-  GError *error = NULL;
-
-  if (!g_file_copy_finish (src, result, &error) ||
-      !g_file_move (data->tmp_file, data->filter_file, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error)) {
-    GFileOutputStream *stream;
-
-    /* If failed to retrieve, create an empty file if it doesn't exist to unblock extensions */
-    stream = g_file_create (data->filter_file, G_FILE_CREATE_NONE, NULL, NULL);
-    if (stream)
-      g_object_unref (stream);
-
-    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-      g_warning ("Error retrieving filter %s: %s\n", data->src_uri, error->message);
-    g_error_free (error);
-  }
-
+  g_signal_handlers_disconnect_by_data (download, data);
   adblock_filter_retrieve_data_free (data);
 }
 
 static void
-retrieve_filter_file (EphyFiltersManager *manager,
-                      const char         *filter_url,
-                      GFile              *file)
+download_error_cb (EphyDownload              *download,
+                   GError                    *error,
+                   AdblockFilterRetrieveData *data)
 {
-  GFile *src = g_file_new_for_uri (filter_url);
+  GFileOutputStream *stream;
+  GFile *file;
+
+  /* Create an empty file if it doesn't exist to unblock extensions */
+  file = g_file_new_for_uri (ephy_download_get_destination_uri (download));
+  stream = g_file_create (file, G_FILE_CREATE_NONE, NULL, NULL);
+  if (stream)
+    g_object_unref (stream);
+  g_object_unref (file);
+
+  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    g_warning ("Error retrieving filter %s: %s\n", data->source_uri, error->message);
+
+  g_signal_handlers_disconnect_by_data (download, data);
+  adblock_filter_retrieve_data_free (data);
+}
+
+static void
+start_retrieving_filter_file (EphyFiltersManager *manager,
+                              const char         *filter_url,
+                              GFile              *destination)
+{
+  EphyDownload *download;
+  WebKitDownload *wk_download;
   AdblockFilterRetrieveData *data;
+  char *path;
 
-  data = adblock_filter_retrieve_data_new (manager, src, file);
+  download = ephy_download_new_for_uri (filter_url);
+  path = g_file_get_uri (destination);
+  ephy_download_set_destination_uri (download, path);
+  g_free (path);
 
-  g_file_copy_async (src, data->tmp_file,
-                     G_FILE_COPY_OVERWRITE,
-                     G_PRIORITY_DEFAULT,
-                     manager->cancellable,
-                     NULL, NULL,
-                     (GAsyncReadyCallback)retrieve_filter_file_finished,
-                     data);
+  wk_download = ephy_download_get_webkit_download (download);
+  webkit_download_set_allow_overwrite (wk_download, TRUE);
 
-  g_object_unref (src);
+  data = adblock_filter_retrieve_data_new (manager, download, g_strdup (filter_url));
+
+  g_signal_connect (download, "completed",
+                    G_CALLBACK (download_completed_cb), data);
+  g_signal_connect (download, "error",
+                    G_CALLBACK (download_error_cb), data);
+  g_object_unref (download);
 }
 
 static void
@@ -246,7 +245,7 @@ update_adblock_filter_files (EphyFiltersManager *manager)
 
     filter_file = ephy_uri_tester_get_adblock_filter_file (manager->filters_dir, filters[i]);
     if (!adblock_filter_file_is_valid (filter_file))
-      retrieve_filter_file (manager, filters[i], filter_file);
+      start_retrieving_filter_file (manager, filters[i], filter_file);
     files = g_list_prepend (files, filter_file);
   }
 
