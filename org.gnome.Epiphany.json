@@ -23,7 +23,9 @@
         "--filesystem=xdg-run/dconf", "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         /* We need access to auth agents */
-        "--talk-name=org.freedesktop.secrets"
+        "--talk-name=org.freedesktop.secrets",
+        /* Needed to download files */
+        "--filesystem=~/Downloads"
     ],
     "build-options" : {
         "cflags": "-O2 -g",
