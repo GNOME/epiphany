@@ -687,13 +687,14 @@ download_finished_cb (WebKitDownload *wk_download,
                       EphyDownload   *download)
 {
   download->finished = TRUE;
-  g_signal_emit (download, signals[COMPLETED], 0);
 
   if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_AUTO_DOWNLOADS) &&
       download->action == EPHY_DOWNLOAD_ACTION_NONE)
     ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_OPEN, download->start_time);
   else
     ephy_download_do_download_action (download, download->action, download->start_time);
+
+  g_signal_emit (download, signals[COMPLETED], 0);
 }
 
 static void

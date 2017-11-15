@@ -930,10 +930,6 @@ ephy_embed_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
-  filters_dir = adblock_filters_dir (shell);
-  priv->filters_manager = ephy_filters_manager_new (filters_dir);
-  g_free (filters_dir);
-
   ephy_embed_shell_create_web_context (shell);
 
   ephy_embed_shell_setup_web_extensions_server (shell);
@@ -1028,6 +1024,10 @@ ephy_embed_shell_startup (GApplication *application)
                                          EPHY_PREFS_WEB_COOKIES_POLICY);
   ephy_embed_prefs_set_cookie_accept_policy (cookie_manager, cookie_policy);
   g_free (cookie_policy);
+
+  filters_dir = adblock_filters_dir (shell);
+  priv->filters_manager = ephy_filters_manager_new (filters_dir);
+  g_free (filters_dir);
 
 #if ENABLE_HTTPS_EVERYWHERE
     /* We might want to be smarter about this in the future. For now,

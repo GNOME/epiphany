@@ -19,7 +19,6 @@ libephymisc_sources = [
   'ephy-dnd.c',
   'ephy-favicon-helpers.c',
   'ephy-file-helpers.c',
-  'ephy-filters-manager.c',
   'ephy-flatpak-utils.c',
   'ephy-gui.c',
   'ephy-langs.c',
