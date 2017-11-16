@@ -562,8 +562,8 @@ window_cmd_show_about (GSimpleAction *action,
   GKeyFile *key_file;
   GBytes *bytes;
   GError *error = NULL;
-  char **list, **authors, **contributors, **past_authors, **artists, **documenters;
-  gsize n_authors, n_contributors, n_past_authors, n_artists, n_documenters, i, j;
+  char **list, **authors, **maintainers, **past_maintainers, **contributors, **artists, **documenters;
+  gsize n_authors, n_maintainers, n_past_maintainers, n_contributors, n_artists, n_documenters, i, j;
 
   key_file = g_key_file_new ();
   bytes = g_resources_lookup_data ("/org/gnome/epiphany/about.ini", 0, NULL);
@@ -574,12 +574,14 @@ window_cmd_show_about (GSimpleAction *action,
   }
   g_bytes_unref (bytes);
 
-  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors",
+  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Author",
                                      &n_authors, NULL);
+  maintainers = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Maintainers",
+                                            &n_maintainers, NULL);
+  past_maintainers = g_key_file_get_string_list (key_file, ABOUT_GROUP, "PastMaintainers",
+                                                 &n_past_maintainers, NULL);
   contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors",
                                              &n_contributors, NULL);
-  past_authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "PastAuthors",
-                                             &n_past_authors, NULL);
 
 #define APPEND(_to, _from) \
   _to[i++] = g_strdup (_from);
@@ -595,19 +597,23 @@ window_cmd_show_about (GSimpleAction *action,
   }
 
   authors = g_new (char *, (list ? n_authors : 0) +
-                   (contributors ? n_contributors : 0) +
-                   (past_authors ? n_past_authors : 0) + 7 + 1);
+                   (maintainers ? n_maintainers : 0) +
+                   (past_maintainers ? n_past_maintainers : 0) +
+                   (contributors ? n_contributors : 0) + 9 + 1);
   i = 0;
   APPEND_STRV_AND_FREE (authors, list);
+  APPEND (authors, "");
+  APPEND (authors, "Current maintainers:");
+  APPEND_STRV_AND_FREE (authors, maintainers);
   APPEND (authors, "");
   APPEND (authors, _("Contact us at:"));
   APPEND (authors, "<epiphany-list@gnome.org>");
   APPEND (authors, "");
+  APPEND (authors, _("Past maintainers:"));
+  APPEND_STRV_AND_FREE (authors, past_maintainers);
+  APPEND (authors, "");
   APPEND (authors, _("Contributors:"));
   APPEND_STRV_AND_FREE (authors, contributors);
-  APPEND (authors, "");
-  APPEND (authors, _("Past developers:"));
-  APPEND_STRV_AND_FREE (authors, past_authors);
   authors[i++] = NULL;
 
   list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
