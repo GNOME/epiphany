@@ -353,7 +353,7 @@ ephy_gsb_service_update_thread (GTask          *task,
 
     duration_str = json_object_get_string_member (body_obj, "minimumWaitDuration");
     /* g_ascii_strtod() ignores trailing characters, i.e. 's' character. */
-    duration = g_ascii_strtod (duration_str, &end);
+    duration = g_ascii_strtod (duration_str, NULL);
     self->next_list_updates_time = CURRENT_TIME + (gint64)ceil (duration);
   }
 
