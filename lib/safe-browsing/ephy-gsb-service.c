@@ -373,7 +373,7 @@ ephy_gsb_service_update_finished_cb (EphyGSBService *self,
                                      GAsyncResult   *result,
                                      gpointer        user_data)
 {
-  self->is_updating = FALSE;
+  g_atomic_int_set (&self->is_updating, FALSE);
   g_signal_emit (self, signals[UPDATE_FINISHED], 0);
   ephy_gsb_service_schedule_update (self);
 }
@@ -386,7 +386,7 @@ ephy_gsb_service_update (EphyGSBService *self)
   g_assert (EPHY_IS_GSB_SERVICE (self));
   g_assert (ephy_gsb_storage_is_operable (self->storage));
 
-  self->is_updating = TRUE;
+  g_atomic_int_set (&self->is_updating, TRUE);
   task = g_task_new (self, NULL,
                      (GAsyncReadyCallback)ephy_gsb_service_update_finished_cb,
                      NULL);
@@ -700,8 +700,13 @@ ephy_gsb_service_verify_url_thread (GTask          *task,
   /* If the local database is broken or an update is in course, we cannot
    * really verify the URL, so we have no choice other than to consider it safe.
    */
-  if (!ephy_gsb_storage_is_operable (self->storage) || self->is_updating) {
-    LOG ("Local GSB storage is not available at the moment, cannot verify URL");
+  if (g_atomic_int_get (&self->is_updating)) {
+    LOG ("Local GSB database is being updated, cannot verify URL");
+    goto out;
+  }
+
+  if (!ephy_gsb_storage_is_operable (self->storage)) {
+    LOG ("Local GSB database is broken, cannot verify URL");
     goto out;
   }
 
