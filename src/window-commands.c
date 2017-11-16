@@ -639,7 +639,11 @@ window_cmd_show_about (GSimpleAction *action,
                               webkit_get_micro_version ());
 
   gtk_show_about_dialog (window ? GTK_WINDOW (window) : NULL,
+#if !TECH_PREVIEW
                          "program-name", _("Web"),
+#else
+                         "program-name", _("Epiphany Technology Preview"),
+#endif
                          "version", VERSION,
                          "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
                          "Copyright © 2003–2017 The Web Developers",
@@ -658,7 +662,11 @@ window_cmd_show_about (GSimpleAction *action,
                          "translator-credits", _("translator-credits"),
                          "logo-icon-name", "org.gnome.Epiphany",
                          "website", "https://wiki.gnome.org/Apps/Web",
+#if !TECH_PREVIEW
                          "website-label", _("Web Website"),
+#else
+                         "website-label", _("Website"),
+#endif
                          "license-type", GTK_LICENSE_GPL_3_0,
                          "wrap-license", TRUE,
                          NULL);

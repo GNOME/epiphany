@@ -31,10 +31,20 @@ conf.set_quoted('LOCALEDIR', localedir)
 conf.set_quoted('PKGDATADIR', pkgdatadir)
 conf.set_quoted('PKGLIBEXECDIR', pkglibexecdir)
 conf.set_quoted('SOURCE_ROOT', meson.source_root())
-conf.set_quoted('VERSION', meson.project_version())
+
+# FIXME: Get rid of this option. This feature should be polished up and enabled unconditionally.
+conf.set10('ENABLE_HTTPS_EVERYWHERE', get_option('https_everywhere'))
 
 conf.set10('DEVELOPER_MODE', get_option('developer_mode'))
-conf.set10('ENABLE_HTTPS_EVERYWHERE', get_option('https_everywhere'))
+
+tech_preview = get_option('tech_preview')
+conf.set10('TECH_PREVIEW', tech_preview)
+
+if tech_preview
+  conf.set_quoted('VERSION', run_command('git', 'describe').stdout().strip())
+else
+  conf.set_quoted('VERSION', meson.project_version())
+endif
 
 configure_file(
   output: 'config.h',
