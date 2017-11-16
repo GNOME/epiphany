@@ -167,7 +167,7 @@ static GList *
 ephy_gsb_service_fetch_threat_lists_sync (EphyGSBService *self)
 {
   GList *retval = NULL;
-  JsonNode *body_node;
+  JsonNode *body_node = NULL;
   JsonObject *body_obj;
   JsonArray *threat_lists;
   JsonObject *descriptor;
