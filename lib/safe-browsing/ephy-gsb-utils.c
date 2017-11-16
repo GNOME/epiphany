@@ -489,7 +489,7 @@ ephy_gsb_utils_rice_delta_decode (JsonObject *rde,
 
   *num_items = 1 + num_entries;
   items = g_malloc (*num_items * sizeof (guint32));
-  sscanf (first_value_str, "%u", &items[0]);
+  items[0] = g_ascii_strtoull (first_value_str, NULL, 10);
 
   if (num_entries == 0)
     return items;

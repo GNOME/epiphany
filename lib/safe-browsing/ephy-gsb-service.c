@@ -352,8 +352,8 @@ ephy_gsb_service_update_thread (GTask          *task,
     double duration;
 
     duration_str = json_object_get_string_member (body_obj, "minimumWaitDuration");
-    /* Handle the trailing 's' character. */
-    sscanf (duration_str, "%lfs", &duration);
+    /* g_ascii_strtod() ignores trailing characters, i.e. 's' character. */
+    duration = g_ascii_strtod (duration_str, &end);
     self->next_list_updates_time = CURRENT_TIME + (gint64)ceil (duration);
   }
 
@@ -640,7 +640,8 @@ ephy_gsb_service_update_full_hashes_sync (EphyGSBService *self,
       list = ephy_gsb_threat_list_new (threat_type, platform_type, threat_entry_type, NULL);
       hash = g_base64_decode (hash_b64, &length);
       positive_duration = json_object_get_string_member (match, "cacheDuration");
-      sscanf (positive_duration, "%lfs", &duration);
+      /* g_ascii_strtod() ignores trailing characters, i.e. 's' character. */
+      duration = g_ascii_strtod (positive_duration, NULL);
 
       ephy_gsb_storage_insert_full_hash (self->storage, list, hash, floor (duration));
 
@@ -651,14 +652,16 @@ ephy_gsb_service_update_full_hashes_sync (EphyGSBService *self,
 
   /* Update negative cache duration. */
   duration_str = json_object_get_string_member (body_obj, "negativeCacheDuration");
-  sscanf (duration_str, "%lfs", &duration);
+  /* g_ascii_strtod() ignores trailing characters, i.e. 's' character. */
+  duration = g_ascii_strtod (duration_str, NULL);
   for (GList *l = prefixes; l && l->data; l = l->next)
     ephy_gsb_storage_update_hash_prefix_expiration (self->storage, l->data, floor (duration));
 
   /* Handle minimum wait duration. */
   if (json_object_has_non_null_string_member (body_obj, "minimumWaitDuration")) {
     duration_str = json_object_get_string_member (body_obj, "minimumWaitDuration");
-    sscanf (duration_str, "%lfs", &duration);
+    /* g_ascii_strtod() ignores trailing characters, i.e. 's' character. */
+    duration = g_ascii_strtod (duration_str, NULL);
     self->next_full_hashes_time = CURRENT_TIME + (gint64)ceil (duration);
     ephy_gsb_storage_set_metadata (self->storage, "next_full_hashes_time", self->next_full_hashes_time);
   }
