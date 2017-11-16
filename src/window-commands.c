@@ -603,7 +603,7 @@ window_cmd_show_about (GSimpleAction *action,
   i = 0;
   APPEND_STRV_AND_FREE (authors, list);
   APPEND (authors, "");
-  APPEND (authors, "Current maintainers:");
+  APPEND (authors, _("Current maintainers:"));
   APPEND_STRV_AND_FREE (authors, maintainers);
   APPEND (authors, "");
   APPEND (authors, _("Contact us at:"));
