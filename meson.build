@@ -41,7 +41,12 @@ tech_preview = get_option('tech_preview')
 conf.set10('TECH_PREVIEW', tech_preview)
 
 if tech_preview
-  conf.set_quoted('VERSION', run_command('git', 'describe').stdout().strip())
+  msg = 'Computing Epiphany Tech Preview version: '
+  res = run_command(join_paths(meson.source_root(), 'compute-tech-preview-version.sh'))
+  assert(res.returncode() == 0, msg + 'FAIL (script returned nonzero exit status)')
+  tech_preview_version = res.stdout().strip()
+  message(msg + tech_preview_version)
+  conf.set_quoted('VERSION', tech_preview_version)
 else
   conf.set_quoted('VERSION', meson.project_version())
 endif
