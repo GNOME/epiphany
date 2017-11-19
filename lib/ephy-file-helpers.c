@@ -1041,3 +1041,33 @@ ephy_open_incognito_window (const char *uri)
 
   g_free (command);
 }
+
+gboolean
+ephy_file_launch_via_uri_handler (const char *uri)
+{
+  GdkDisplay *display;
+  GdkAppLaunchContext *context;
+  GError *error = NULL;
+
+  display = gdk_display_get_default ();
+  context = gdk_display_get_app_launch_context (display);
+
+  g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), &error);
+
+  if (error != NULL) {
+    g_warning ("Failed to launch handler for URI %s: %s", uri, error->message);
+    g_error_free (error);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+gboolean
+ephy_file_launch_file_via_uri_handler (GFile *file)
+{
+  const char *uri;
+
+  uri = g_file_get_uri (file);
+  return ephy_file_launch_via_uri_handler (uri);
+}
