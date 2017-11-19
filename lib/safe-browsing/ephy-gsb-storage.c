@@ -783,6 +783,7 @@ ephy_gsb_storage_update_client_state (EphyGSBStorage    *self,
   EphySQLiteStatement *statement;
   GError *error = NULL;
   const char *sql;
+  gboolean success;
 
   g_assert (EPHY_IS_GSB_STORAGE (self));
   g_assert (self->is_operable);
@@ -803,7 +804,12 @@ ephy_gsb_storage_update_client_state (EphyGSBStorage    *self,
     return;
   }
 
-  if (!bind_threat_list_params (statement, list, 1, 2, 3, clear ? -1 : 0)) {
+  if (clear)
+    success = bind_threat_list_params (statement, list, 0, 1, 2, -1);
+  else
+    success = bind_threat_list_params (statement, list, 1, 2, 3, 0);
+
+  if (!success) {
     g_object_unref (statement);
     return;
   }
