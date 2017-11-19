@@ -32,6 +32,7 @@
 #include "ephy-encodings.h"
 #include "ephy-file-helpers.h"
 #include "ephy-filters-manager.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
@@ -1566,6 +1567,10 @@ ephy_embed_shell_launch_handler (EphyEmbedShell *shell,
 
   g_assert (EPHY_IS_EMBED_SHELL (shell));
   g_assert (file || mime_type);
+
+  if (ephy_is_running_inside_flatpak ()) {
+    return ephy_file_launch_file_via_uri_handler (file);
+  }
 
   app = ephy_file_launcher_get_app_info_for_file (file, mime_type);
 

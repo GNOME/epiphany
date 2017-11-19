@@ -94,6 +94,8 @@ char       *       ephy_sanitize_filename                   (char               
 GAppInfo   *       ephy_file_launcher_get_app_info_for_file (GFile                 *file,
                                                              const char            *mime_type);
 void               ephy_open_default_instance_window        (void);
-void               ephy_open_incognito_window               (const char *uri);
+void               ephy_open_incognito_window               (const char            *uri);
+gboolean           ephy_file_launch_via_uri_handler         (const char            *uri);
+gboolean           ephy_file_launch_file_via_uri_handler    (GFile                 *file);
 
 G_END_DECLS
