@@ -167,7 +167,7 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
   GtkWidget *scrolled_window;
   GtkWidget *vbox, *hbox;
   GList *downloads, *l;
-  EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());;
+  EphyDownloadsManager *manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
