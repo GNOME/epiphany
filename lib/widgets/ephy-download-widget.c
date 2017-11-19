@@ -22,9 +22,10 @@
 #include "ephy-download-widget.h"
 
 #include "ephy-debug.h"
-#include "ephy-uri-helpers.h"
-#include "ephy-embed-shell.h"
 #include "ephy-downloads-manager.h"
+#include "ephy-embed-shell.h"
+#include "ephy-flatpak-utils.h"
+#include "ephy-uri-helpers.h"
 
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
@@ -274,7 +275,7 @@ widget_action_button_clicked_cb (EphyDownloadWidget *widget)
     ephy_downloads_manager_remove_download (manager, widget->download);
   } else {
     ephy_download_do_download_action (widget->download,
-                                      EPHY_DOWNLOAD_ACTION_BROWSE_TO,
+                                      ephy_is_running_inside_flatpak () ? EPHY_DOWNLOAD_ACTION_OPEN : EPHY_DOWNLOAD_ACTION_BROWSE_TO,
                                       gtk_get_current_event_time ());
   }
 }
