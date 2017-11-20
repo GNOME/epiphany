@@ -10,9 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 3.27.x\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-11-05 11:37+0000\n"
-"PO-Revision-Date: 2017-11-09 18:45+0100\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
+"product=epiphany&keywords=I18N+L10N&component=I18N\n"
+"POT-Creation-Date: 2017-11-17 21:12+0000\n"
+"PO-Revision-Date: 2017-11-20 11:50+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -55,7 +56,7 @@ msgstr "GNOME prosjektet"
 
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:295
 #: embed/ephy-about-handler.c:326 src/ephy-main.c:102 src/ephy-main.c:270
-#: src/ephy-main.c:412 src/window-commands.c:642
+#: src/ephy-main.c:412 src/window-commands.c:649
 msgid "Web"
 msgstr "Internett"
 
@@ -502,15 +503,12 @@ msgid ""
 msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:232
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle caret browsing"
 msgid "Google Safe Browsing API key"
-msgstr "Slå på/av markør i nettleser"
+msgstr "API-nøkkel for Google sikker nettlesing"
 
 #: data/org.gnome.epiphany.gschema.xml:233
 msgid "The API key used to access the Google Safe Browsing API v4."
-msgstr ""
+msgstr "API-nøkkel som brukes for å aksessere API v4 for Google sikker nettlesing."
 
 #: data/org.gnome.epiphany.gschema.xml:239
 msgid "The downloads folder"
@@ -532,7 +530,7 @@ msgstr "Vindusposisjon"
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
-msgstr ""
+msgstr "Posisjon som skal brukes for et nytt vindu som ikke er gjenopprettet fra en tidligere økt."
 
 #: data/org.gnome.epiphany.gschema.xml:252
 msgid "Window size"
@@ -542,7 +540,7 @@ msgstr "Vindustørrelse"
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
-msgstr ""
+msgstr "Størrelse som skal brukes for et nytt vindu som ikke er gjenopprettet fra en tidligere økt."
 
 #: data/org.gnome.epiphany.gschema.xml:257
 msgid "Is maximized"
@@ -658,10 +656,8 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:337
 #: data/org.gnome.epiphany.gschema.xml:424
-#, fuzzy
-#| msgid "Sync timestamp"
 msgid "Passwords sync timestamp"
-msgstr "Tidsstempel for synkronisering"
+msgstr "Tidsstempel for synkronisering av passord"
 
 #: data/org.gnome.epiphany.gschema.xml:338
 msgid "The timestamp at which last passwords sync was made."
@@ -684,10 +680,8 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:352
 #: data/org.gnome.epiphany.gschema.xml:439
-#, fuzzy
-#| msgid "Sync timestamp"
 msgid "History sync timestamp"
-msgstr "Tidsstempel for synkronisering"
+msgstr "Tidsstempel for synkronisering av historikk"
 
 #: data/org.gnome.epiphany.gschema.xml:353
 msgid "The timestamp at which last history sync was made."
@@ -701,10 +695,8 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:362
 #: data/org.gnome.epiphany.gschema.xml:449
-#, fuzzy
-#| msgid "View open tabs"
 msgid "Enable open tabs sync"
-msgstr "Vis åpne faner"
+msgstr "Slå på synkronisering av åpne faner"
 
 #: data/org.gnome.epiphany.gschema.xml:363
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
@@ -712,10 +704,8 @@ msgstr ""
 
 #: data/org.gnome.epiphany.gschema.xml:367
 #: data/org.gnome.epiphany.gschema.xml:454
-#, fuzzy
-#| msgid "Sync timestamp"
 msgid "Open tabs sync timestamp"
-msgstr "Tidsstempel for synkronisering"
+msgstr "Tidsstempel for synkronisering av åpne faner"
 
 #: data/org.gnome.epiphany.gschema.xml:368
 msgid "The timestamp at which last open tabs sync was made."
@@ -738,16 +728,10 @@ msgstr ""
 #: data/org.gnome.epiphany.gschema.xml:445
 #: data/org.gnome.epiphany.gschema.xml:450
 #: data/org.gnome.epiphany.gschema.xml:455
-#, fuzzy
-#| msgid ""
-#| "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#| "search-engines instead."
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "sync/ instead."
-msgstr ""
-"UTFASET: Denne nøkkelen er utfaset og blir ignorert. Bruk /org/gnome/"
-"epiphany/search-engines i stedet."
+msgstr "UTFASET: Denne nøkkelen er utfaset og blir ignorert. Bruk /org/gnome/epiphany/sync i stedet."
 
 #: data/org.gnome.epiphany.gschema.xml:466
 msgid "Decision to apply when microphone permission is requested for this host"
@@ -1581,14 +1565,18 @@ msgstr "Utrygt nettsted oppdaget!"
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
 "code that could be downloaded to your computer without your consent."
-msgstr "Du kan skade datamaskinen din ved å besøke %s. Denne siden inneholder ondsinnet kode som kan bli lastet ned til din datamaskin uten ditt samtykke."
+msgstr ""
+"Du kan skade datamaskinen din ved å besøke %s. Denne siden inneholder "
+"ondsinnet kode som kan bli lastet ned til din datamaskin uten ditt samtykke."
 
 #: embed/ephy-web-view.c:2213
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
 "malicious code and how to protect your computer at %s."
-msgstr "Du kan lære mer om skadelig innhold på nettet, som virus og annen ondsinnet kode, og hvordan du beskytter datamaskinen din på %s."
+msgstr ""
+"Du kan lære mer om skadelig innhold på nettet, som virus og annen ondsinnet "
+"kode, og hvordan du beskytter datamaskinen din på %s."
 
 #: embed/ephy-web-view.c:2220
 #, c-format
@@ -1596,10 +1584,10 @@ msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
 "software or revealing your personal information (for example, passwords, "
 "phone numbers, or credit cards)."
-msgstr ""
+msgstr "Angripere på %s kan lure deg til å gjøre noe farlig som å installere programvare eller å få tak i din personlige informasjon (for eksempel passord, telefonnummer eller kredittkort)."
 
 #: embed/ephy-web-view.c:2225
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr "Du kan finne ut mer om "
@@ -1610,7 +1598,7 @@ msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
 "installing programs that harm your browsing experience (for example, by "
 "changing your homepage or showing extra ads on sites you visit)."
-msgstr ""
+msgstr "%s kan inneholde skadelige programmer. Angripere kan forsøke å lure deg til å installere programmer som skader din nettleseropplevelse (for eksempel ved å endre din hjemmeside eller å vise ekstra reklame på sider du besøker)."
 
 #: embed/ephy-web-view.c:2239
 #, c-format
@@ -1770,7 +1758,7 @@ msgid "Failed to obtain storage credentials."
 msgstr "Klarte ikke å hente påloggingsinformasjon for lagring."
 
 #: lib/sync/ephy-sync-service.c:787 lib/sync/ephy-sync-service.c:902
-#: lib/sync/ephy-sync-service.c:1486
+#: lib/sync/ephy-sync-service.c:1493
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Åpne brukervalg og logg inn igjen for å fortsette synkroniseringsprosessen."
@@ -1791,49 +1779,49 @@ msgstr ""
 msgid "Failed to obtain signed certificate."
 msgstr "Klarte ikke å hente signert sertifikat."
 
-#: lib/sync/ephy-sync-service.c:1452 lib/sync/ephy-sync-service.c:1457
+#: lib/sync/ephy-sync-service.c:1459 lib/sync/ephy-sync-service.c:1464
 msgid "Could not find the sync secrets for the current sync user."
 msgstr "Fant ikke synkroniseringshemmelighet for innlogget bruker."
 
-#: lib/sync/ephy-sync-service.c:1464 lib/sync/ephy-sync-service.c:1472
+#: lib/sync/ephy-sync-service.c:1471 lib/sync/ephy-sync-service.c:1479
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Synkroniseringshemmelighet for aktiv bruker er ugyldig."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1580
+#: lib/sync/ephy-sync-service.c:1587
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Synkroniseringshemmelighet for %s"
 
-#: lib/sync/ephy-sync-service.c:1723
+#: lib/sync/ephy-sync-service.c:1730
 msgid "Failed to upload crypto/keys record."
 msgstr "Klarte ikke å laste opp krypto-/nøkkelpost."
 
-#: lib/sync/ephy-sync-service.c:1830
+#: lib/sync/ephy-sync-service.c:1837
 msgid "Failed to retrieve crypto keys."
 msgstr "Klarte ikke å hente krypteringsnøkler."
 
-#: lib/sync/ephy-sync-service.c:1881
+#: lib/sync/ephy-sync-service.c:1888
 msgid "Failed to upload meta/global record."
 msgstr "Klarte ikke å laste opp meta/global post."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:1998
+#: lib/sync/ephy-sync-service.c:2005
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Din Firefox-konto bruker lagerversjon %d. Nettleser støtter bare versjon %d."
 
-#: lib/sync/ephy-sync-service.c:2009
+#: lib/sync/ephy-sync-service.c:2016
 msgid "Failed to verify storage version."
 msgstr "Klarte ikke å verifisere lagerversjon."
 
-#: lib/sync/ephy-sync-service.c:2050 lib/sync/ephy-sync-service.c:2128
+#: lib/sync/ephy-sync-service.c:2057 lib/sync/ephy-sync-service.c:2135
 msgid "Failed to retrieve the Sync Key"
 msgstr "Klarte ikke å hente synkroniseringsnøkkel"
 
-#: lib/sync/ephy-sync-service.c:2262
+#: lib/sync/ephy-sync-service.c:2281
 msgid "Failed to register device."
 msgstr "Klarte ikke å registrere enhet."
 
@@ -1954,7 +1942,7 @@ msgstr "Starter …"
 #: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1076
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:231
 #: src/window-commands.c:296 src/window-commands.c:393
-#: src/window-commands.c:452 src/window-commands.c:1395
+#: src/window-commands.c:452 src/window-commands.c:1409
 msgid "_Cancel"
 msgstr "A_vbryt"
 
@@ -2416,16 +2404,12 @@ msgid "Last synchronized: %s"
 msgstr "Sist synkronisert: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:284 src/prefs-dialog.c:1856
+#: src/prefs-dialog.c:284 src/prefs-dialog.c:1852
 #, c-format
 msgid "Logged in as %s"
 msgstr "Logget inn som %s"
 
-#: src/prefs-dialog.c:511
-msgid "Please don’t leave this page until you have completed the verification."
-msgstr "Ikke forlat denne siden før du har fullført verifikasjonen."
-
-#: src/prefs-dialog.c:528
+#: src/prefs-dialog.c:524
 msgid "Something went wrong, please try again later."
 msgstr "Noe gikk galt. Prøv igjen senere."
 
@@ -2433,7 +2417,7 @@ msgstr "Noe gikk galt. Prøv igjen senere."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:993 src/prefs-dialog.c:997
+#: src/prefs-dialog.c:989 src/prefs-dialog.c:993
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2442,24 +2426,24 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1004
+#: src/prefs-dialog.c:1000
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Brukerdefinert (%s)"
 
-#: src/prefs-dialog.c:1026
+#: src/prefs-dialog.c:1022
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Systemspråk [%s]"
 msgstr[1] "Systemspråk [%s]"
 
-#: src/prefs-dialog.c:1269 src/resources/gtk/prefs-dialog.ui:775
+#: src/prefs-dialog.c:1265 src/resources/gtk/prefs-dialog.ui:775
 msgid "Language"
 msgstr "Språk"
 
-#: src/prefs-dialog.c:1347
+#: src/prefs-dialog.c:1343
 msgid "Select a directory"
 msgstr "Velg en katalog"
 
@@ -2887,10 +2871,8 @@ msgid "Enable _plugins"
 msgstr "Slå på _tillegg"
 
 #: src/resources/gtk/prefs-dialog.ui:286
-#, fuzzy
-#| msgid "Try to block web _trackers"
 msgid "Try to block dangerous web_sites"
-msgstr "Prøv å blokkere _sporing på nettet"
+msgstr "Prøv å blokkere _farlige nettsteder"
 
 #: src/resources/gtk/prefs-dialog.ui:300
 msgid "General"
@@ -3137,210 +3119,205 @@ msgstr "Lagre side"
 
 #: src/resources/gtk/shortcuts-dialog.ui:47
 msgctxt "shortcut window"
-msgid "Save page as web app"
-msgstr "Lagre side som nettprogram"
-
-#: src/resources/gtk/shortcuts-dialog.ui:54
-msgctxt "shortcut window"
 msgid "Print page"
 msgstr "Skriv ut side"
 
-#: src/resources/gtk/shortcuts-dialog.ui:61
+#: src/resources/gtk/shortcuts-dialog.ui:54
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Avslutt"
 
-#: src/resources/gtk/shortcuts-dialog.ui:68
+#: src/resources/gtk/shortcuts-dialog.ui:61
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Hjelp"
 
-#: src/resources/gtk/shortcuts-dialog.ui:75
+#: src/resources/gtk/shortcuts-dialog.ui:68
 msgctxt "shortcut window"
 msgid "Shortcuts"
 msgstr "Snarveier"
 
-#: src/resources/gtk/shortcuts-dialog.ui:86
+#: src/resources/gtk/shortcuts-dialog.ui:79
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigasjon"
 
-#: src/resources/gtk/shortcuts-dialog.ui:90
+#: src/resources/gtk/shortcuts-dialog.ui:83
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "Gå til hjemmesiden"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:90
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Last denne siden på nytt"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Stopp lasting av denne siden"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Gå tilbake til forrige side"
 
-#: src/resources/gtk/shortcuts-dialog.ui:118
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Gå frem til neste side"
 
-#: src/resources/gtk/shortcuts-dialog.ui:129
+#: src/resources/gtk/shortcuts-dialog.ui:122
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Faner"
 
-#: src/resources/gtk/shortcuts-dialog.ui:133
+#: src/resources/gtk/shortcuts-dialog.ui:126
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Ny fane"
 
-#: src/resources/gtk/shortcuts-dialog.ui:140
+#: src/resources/gtk/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Lukk aktiv fane"
 
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Gjenåpne lukket fane"
 
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Gå til neste fane"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Gå til forrige fane"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Flytt denne fanen til venstre"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Flytt denne fanen til høyre"
 
-#: src/resources/gtk/shortcuts-dialog.ui:186
+#: src/resources/gtk/shortcuts-dialog.ui:179
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Forskjellig"
 
-#: src/resources/gtk/shortcuts-dialog.ui:190
+#: src/resources/gtk/shortcuts-dialog.ui:183
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Historikk"
 
-#: src/resources/gtk/shortcuts-dialog.ui:197
+#: src/resources/gtk/shortcuts-dialog.ui:190
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Brukervalg"
 
-#: src/resources/gtk/shortcuts-dialog.ui:204
+#: src/resources/gtk/shortcuts-dialog.ui:197
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Lag bokmerke for aktiv side"
 
-#: src/resources/gtk/shortcuts-dialog.ui:211
+#: src/resources/gtk/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Slå på/av markør i nettleser"
 
-#: src/resources/gtk/shortcuts-dialog.ui:222
+#: src/resources/gtk/shortcuts-dialog.ui:215
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Vis"
 
-#: src/resources/gtk/shortcuts-dialog.ui:226
+#: src/resources/gtk/shortcuts-dialog.ui:219
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Zoom inn"
 
-#: src/resources/gtk/shortcuts-dialog.ui:233
+#: src/resources/gtk/shortcuts-dialog.ui:226
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Zoom ut"
 
-#: src/resources/gtk/shortcuts-dialog.ui:240
+#: src/resources/gtk/shortcuts-dialog.ui:233
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Nullstill zoom"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
+#: src/resources/gtk/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Fullskjerm"
 
-#: src/resources/gtk/shortcuts-dialog.ui:254
+#: src/resources/gtk/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Vis sidens kildekode"
 
-#: src/resources/gtk/shortcuts-dialog.ui:261
+#: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Slå på/av inspektør"
 
-#: src/resources/gtk/shortcuts-dialog.ui:272
+#: src/resources/gtk/shortcuts-dialog.ui:265
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Redigering"
 
-#: src/resources/gtk/shortcuts-dialog.ui:276
+#: src/resources/gtk/shortcuts-dialog.ui:269
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: src/resources/gtk/shortcuts-dialog.ui:283
+#: src/resources/gtk/shortcuts-dialog.ui:276
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopier"
 
-#: src/resources/gtk/shortcuts-dialog.ui:290
+#: src/resources/gtk/shortcuts-dialog.ui:283
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Lim inn"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Angre"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Gjenopprett"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Velg alt"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Velg URL for siden"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Søk"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Neste søkeresultat"
 
-#: src/resources/gtk/shortcuts-dialog.ui:339
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Forrige søkeresultat"
@@ -3422,19 +3399,23 @@ msgstr "bookmarks.gvdb"
 msgid "Bookmarks successfully exported!"
 msgstr "Bokmerkene er eksportert!"
 
-#: src/window-commands.c:603 src/window-commands.c:626
+#: src/window-commands.c:606
+msgid "Current maintainers:"
+msgstr "Aktive vedlikeholdere:"
+
+#: src/window-commands.c:609 src/window-commands.c:632
 msgid "Contact us at:"
 msgstr "Kontakt oss her:"
 
-#: src/window-commands.c:606
+#: src/window-commands.c:612
+msgid "Past maintainers:"
+msgstr "Tidligere vedlikeholdere:"
+
+#: src/window-commands.c:615
 msgid "Contributors:"
 msgstr "Bidragsytere:"
 
-#: src/window-commands.c:609
-msgid "Past developers:"
-msgstr "Tidligere utviklere:"
-
-#: src/window-commands.c:635
+#: src/window-commands.c:641
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3442,6 +3423,10 @@ msgid ""
 msgstr ""
 "Enkel, vakker visning av nettet.\n"
 "Med WebKitGTK+ %d.%d.%d som motor"
+
+#: src/window-commands.c:651
+msgid "Epiphany Technology Preview"
+msgstr "Epiphany teknologiforhåndsvisning"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3451,34 +3436,38 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:658
+#: src/window-commands.c:668
 msgid "translator-credits"
 msgstr ""
 "Kjartan Maraas <kmaraas@gnome.org>\n"
 "Torstein Adolf Winterseth <kvikende@fsfe.org>"
 
-#: src/window-commands.c:661
+#: src/window-commands.c:672
 msgid "Web Website"
 msgstr "Nettsted for GNOME Nettleser"
 
-#: src/window-commands.c:910
+#: src/window-commands.c:674
+msgid "Website"
+msgstr "Nettsted"
+
+#: src/window-commands.c:924
 msgid "Open"
 msgstr "Åpne"
 
-#: src/window-commands.c:1295
+#: src/window-commands.c:1309
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Det finnes allerede et nettprogram med navn «%s». Vil du erstatte det?"
 
-#: src/window-commands.c:1298
+#: src/window-commands.c:1312
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: src/window-commands.c:1300
+#: src/window-commands.c:1314
 msgid "Replace"
 msgstr "Erstatt"
 
-#: src/window-commands.c:1304
+#: src/window-commands.c:1318
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -3486,38 +3475,38 @@ msgstr ""
 "Det finnes allerede et program med dette navnet. Hvis du erstatter det, blir "
 "det overskrevet."
 
-#: src/window-commands.c:1339
+#: src/window-commands.c:1353
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Programmet «%s» er klart til bruk"
 
-#: src/window-commands.c:1342
+#: src/window-commands.c:1356
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Klarte ikke å lage programmet «%s»"
 
-#: src/window-commands.c:1350
+#: src/window-commands.c:1364
 msgid "Launch"
 msgstr "Start"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1392
+#: src/window-commands.c:1406
 msgid "Create Web Application"
 msgstr "Lag nettsideprogram"
 
-#: src/window-commands.c:1397
+#: src/window-commands.c:1411
 msgid "C_reate"
 msgstr "_Lag"
 
-#: src/window-commands.c:1526
+#: src/window-commands.c:1540
 msgid "Save"
 msgstr "Lagre"
 
-#: src/window-commands.c:2147
+#: src/window-commands.c:2161
 msgid "Enable caret browsing mode?"
 msgstr "Slå på markør i nettleser?"
 
-#: src/window-commands.c:2150
+#: src/window-commands.c:2164
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3527,6 +3516,6 @@ msgstr ""
 "bevegelig markør på nettsidene som lar deg flytte rundt med tastaturet. Vil "
 "du slå på markørmodus?"
 
-#: src/window-commands.c:2153
+#: src/window-commands.c:2167
 msgid "_Enable"
 msgstr "_Slå på"
