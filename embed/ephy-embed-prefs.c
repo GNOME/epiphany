@@ -29,8 +29,6 @@
 #include "ephy-settings.h"
 #include "ephy-user-agent.h"
 
-#include <math.h>
-
 typedef struct {
   const char *schema;
   const char *key;
@@ -128,41 +126,6 @@ webkit_pref_callback_user_agent (GSettings  *settings,
   g_free (user_agent);
 }
 
-static gdouble
-get_screen_dpi (GdkScreen *screen)
-{
-  gdouble dpi;
-  gdouble dp, di;
-
-  dpi = gdk_screen_get_resolution (screen);
-  if (dpi != -1)
-    return dpi;
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  dp = hypot (gdk_screen_get_width (screen), gdk_screen_get_height (screen));
-  di = hypot (gdk_screen_get_width_mm (screen), gdk_screen_get_height_mm (screen)) / 25.4;
-#pragma GCC diagnostic pop
-
-  return dp / di;
-}
-
-static guint
-normalize_font_size (gdouble font_size)
-{
-  /* WebKit2 uses font sizes in pixels. */
-  GdkScreen *screen;
-  gdouble dpi;
-
-  /* FIXME: We should use the view screen instead of the detault one
-   * but we don't have access to the view here.
-   */
-  screen = gdk_screen_get_default ();
-  dpi = screen ? get_screen_dpi (screen) : 96;
-
-  return font_size / 72.0 * dpi;
-}
-
 static void
 webkit_pref_callback_font_size (GSettings  *settings,
                                 const char *key,
@@ -196,7 +159,7 @@ webkit_pref_callback_font_size (GSettings  *settings,
     pango_font_description_free (desc);
   }
 
-  g_object_set (webkit_settings, webkit_pref, normalize_font_size (size), NULL);
+  g_object_set (webkit_settings, webkit_pref, webkit_settings_font_size_to_pixels (size), NULL);
   g_free (value);
 }
 
@@ -348,15 +311,17 @@ webkit_pref_callback_cookie_accept_policy (GSettings  *settings,
 }
 
 static void
-ephy_embed_prefs_update_font_settings (GSettings *ephy_settings, const char *key)
+webkit_pref_callback_gnome_fonts (GSettings  *ephy_settings,
+                                  const char *key,
+                                  gpointer    data)
 {
   if (g_settings_get_boolean (ephy_settings, key)) {
     g_object_set (webkit_settings,
                   "default-font-family", "serif",
                   "sans-serif-font-family", "sans-serif",
                   "monospace-font-family", "monospace",
-                  "default-font-size", normalize_font_size (12),
-                  "default-monospace-font-size", normalize_font_size (10),
+                  "default-font-size", webkit_settings_font_size_to_pixels (12),
+                  "default-monospace-font-size", webkit_settings_font_size_to_pixels (10),
                   NULL);
   } else {
     /* Sync with Epiphany values */
@@ -374,14 +339,6 @@ ephy_embed_prefs_update_font_settings (GSettings *ephy_settings, const char *key
     webkit_pref_callback_font_family (ephy_settings, EPHY_PREFS_WEB_SERIF_FONT,
                                       (gpointer)"serif-font-family");
   }
-}
-
-static void
-webkit_pref_callback_gnome_fonts (GSettings  *ephy_settings,
-                                  const char *key,
-                                  gpointer    data)
-{
-  ephy_embed_prefs_update_font_settings (ephy_settings, key);
 }
 
 static void
@@ -407,15 +364,6 @@ webkit_pref_callback_enable_spell_checking (GSettings  *settings,
     g_strfreev (languages);
     g_strfreev (normalized);
   }
-}
-
-static void
-gtk_settings_xft_dpi_changed_cb (GtkSettings *gtk_settings,
-                                 GParamSpec  *pspec,
-                                 gpointer     data)
-{
-  GSettings *gsettings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
-  ephy_embed_prefs_update_font_settings (gsettings, EPHY_PREFS_WEB_USE_GNOME_FONTS);
 }
 
 static const PrefData webkit_pref_entries[] =
@@ -477,7 +425,6 @@ static const PrefData webkit_pref_entries[] =
 static gpointer
 ephy_embed_prefs_init (gpointer user_data)
 {
-  GtkSettings *gtk_settings;
   guint i;
 
   webkit_settings = webkit_settings_new_with_settings ("enable-developer-extras", TRUE,
@@ -502,16 +449,6 @@ ephy_embed_prefs_init (gpointer user_data)
                       G_CALLBACK (webkit_pref_entries[i].callback),
                       (gpointer)webkit_pref_entries[i].webkit_pref);
     g_free (key);
-  }
-
-  /* Connect to the "notify::gtk-xft-dpi" signal for GtkSettings, so that
-   * we can update the font size in real time if the screen's resolution
-   * for font handling changes (e.g. enabled "Large Text" a11y mode).
-   */
-  gtk_settings = gtk_settings_get_default ();
-  if (gtk_settings) {
-    g_signal_connect (gtk_settings, "notify::gtk-xft-dpi",
-                      G_CALLBACK (gtk_settings_xft_dpi_changed_cb), NULL);
   }
 
   g_settings_bind (EPHY_SETTINGS_MAIN,
