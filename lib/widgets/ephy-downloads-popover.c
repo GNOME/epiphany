@@ -74,7 +74,16 @@ static void
 download_added_cb (EphyDownloadsPopover *popover,
                    EphyDownload         *download)
 {
+  GtkWidget *row;
   GtkWidget *widget;
+
+  row = gtk_list_box_row_new ();
+  if (ephy_is_running_inside_flatpak ()) {
+    gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+    gtk_list_box_row_set_selectable (GTK_LIST_BOX_ROW (row), FALSE);
+  }
+  gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), row);
+  gtk_widget_show (row);
 
   widget = ephy_download_widget_new (download);
   g_signal_connect_object (download, "completed",
@@ -83,7 +92,7 @@ download_added_cb (EphyDownloadsPopover *popover,
   g_signal_connect_object (download, "error",
                            G_CALLBACK (download_failed_cb),
                            popover, G_CONNECT_SWAPPED);
-  gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), widget);
+  gtk_container_add (GTK_CONTAINER (row), widget);
   gtk_widget_show (widget);
 }
 
@@ -194,6 +203,7 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
   downloads = ephy_downloads_manager_get_downloads (manager);
   for (l = downloads; l != NULL; l = g_list_next (l)) {
     EphyDownload *download = (EphyDownload *)l->data;
+    GtkWidget *row;
     GtkWidget *widget;
 
     g_signal_connect_object (download, "completed",
@@ -203,8 +213,16 @@ ephy_downloads_popover_init (EphyDownloadsPopover *popover)
                              G_CALLBACK (download_failed_cb),
                              popover, G_CONNECT_SWAPPED);
 
+    row = gtk_list_box_row_new ();
+    if (ephy_is_running_inside_flatpak ()) {
+      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+      gtk_list_box_row_set_selectable (GTK_LIST_BOX_ROW (row), FALSE);
+    }
+    gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), row);
+    gtk_widget_show (row);
+
     widget = ephy_download_widget_new (download);
-    gtk_list_box_prepend (GTK_LIST_BOX (popover->downloads_box), widget);
+    gtk_container_add (GTK_CONTAINER (row), widget);
     gtk_widget_show (widget);
   }
 
