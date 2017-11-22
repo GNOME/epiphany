@@ -25,14 +25,13 @@
 #include "ephy-location-controller.h"
 #include "ephy-web-view.h"
 
-#include <dazzle.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
 #define EPHY_TYPE_WINDOW (ephy_window_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyWindow, ephy_window, EPHY, WINDOW, DzlApplicationWindow)
+G_DECLARE_FINAL_TYPE (EphyWindow, ephy_window, EPHY, WINDOW, GtkApplicationWindow)
 
 typedef enum
 {

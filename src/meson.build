@@ -22,6 +22,7 @@ libephymain_sources = [
   'clear-data-dialog.c',
   'cookies-dialog.c',
   'ephy-action-helper.c',
+  'ephy-completion-model.c',
   'ephy-encoding-dialog.c',
   'ephy-encoding-row.c',
   'ephy-header-bar.c',
@@ -33,7 +34,6 @@ libephymain_sources = [
   'ephy-search-engine-dialog.c',
   'ephy-session.c',
   'ephy-shell.c',
-  'ephy-suggestion-model.c',
   'ephy-window.c',
   'passwords-dialog.c',
   'popup-commands.c',
@@ -101,6 +101,7 @@ executable('epiphany-search-provider',
   install_dir: libexecdir,
   install_rpath: pkglibdir
 )
+
 
 resource_files = files('resources/epiphany.gresource.xml')
 resources = gnome.compile_resources('epiphany-resources',

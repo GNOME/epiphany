@@ -31,11 +31,10 @@
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
-#include "ephy-suggestion.h"
 #include "ephy-title-widget.h"
 #include "ephy-uri-helpers.h"
+#include "gd-two-lines-renderer.h"
 
-#include <dazzle.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -55,7 +54,7 @@
  */
 
 struct _EphyLocationEntry {
-  DzlSuggestionEntry parent_instance;
+  GtkEntry parent_instance;
 
   GtkTreeModel *model;
 
@@ -92,6 +91,12 @@ struct _EphyLocationEntry {
 
 static gboolean ephy_location_entry_reset_internal (EphyLocationEntry *, gboolean);
 
+static void extracell_data_func (GtkCellLayout   *cell_layout,
+                                 GtkCellRenderer *cell,
+                                 GtkTreeModel    *tree_model,
+                                 GtkTreeIter     *iter,
+                                 gpointer         data);
+
 enum {
   PROP_0,
   PROP_ADDRESS,
@@ -110,15 +115,9 @@ static gint signals[LAST_SIGNAL] = { 0 };
 
 static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, DZL_TYPE_SUGGESTION_ENTRY,
+G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_ENTRY,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                 ephy_location_entry_title_widget_interface_init))
-
-static void
-ephy_location_entry_activate (EphyLocationEntry *entry)
-{
-  g_signal_emit_by_name (entry, "activate");
-}
 
 static void
 update_address_state (EphyLocationEntry *entry)
@@ -274,11 +273,7 @@ ephy_location_entry_get_property (GObject    *object,
 static void
 ephy_location_entry_constructed (GObject *object)
 {
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (object);
-
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->constructed (object);
-
-  dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (entry), dzl_suggestion_entry_window_position_func, NULL, NULL);
 
 #if GTK_CHECK_VERSION(3, 22, 20)
   gtk_entry_set_input_hints (GTK_ENTRY (object), GTK_INPUT_HINT_NO_EMOJI);
@@ -366,16 +361,6 @@ ephy_location_entry_cut_clipboard (GtkEntry *entry)
 }
 
 static void
-ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
-                                          DzlSuggestion      *suggestion)
-{
-  gtk_entry_set_text (GTK_ENTRY (entry), ephy_suggestion_get_uri (EPHY_SUGGESTION (suggestion)));
-
-  /* Now trigger the load.... */
-  ephy_location_entry_activate (EPHY_LOCATION_ENTRY (entry));
-}
-
-static void
 ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface)
 {
   iface->get_address = ephy_location_entry_title_widget_get_address;
@@ -390,9 +375,7 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkEntryClass *entry_class = GTK_ENTRY_CLASS (klass);
-  DzlSuggestionEntryClass *dzl_entry_class = DZL_SUGGESTION_ENTRY_CLASS (klass);
 
-  object_class->constructed = ephy_location_entry_constructed;
   object_class->get_property = ephy_location_entry_get_property;
   object_class->set_property = ephy_location_entry_set_property;
   object_class->constructed = ephy_location_entry_constructed;
@@ -403,8 +386,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
 
   entry_class->copy_clipboard = ephy_location_entry_copy_clipboard;
   entry_class->cut_clipboard = ephy_location_entry_cut_clipboard;
-
-  dzl_entry_class->suggestion_activated = ephy_location_entry_suggestion_activated;
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
@@ -507,15 +488,100 @@ entry_key_press_cb (GtkEntry          *entry,
     /* Make sure the location is activated on CTRL+l even when the
      * completion popup is shown and have an active keyboard grab.
      */
-    ephy_location_entry_focus (location_entry);
+    ephy_location_entry_activate (location_entry);
   }
 
-  if (event->keyval == GDK_KEY_Return ||
-      event->keyval == GDK_KEY_KP_Enter ||
-      event->keyval == GDK_KEY_ISO_Enter)
-    ephy_location_entry_activate (location_entry);
+  return FALSE;
+}
+
+static gboolean
+entry_key_press_after_cb (GtkEntry          *entry,
+                          GdkEventKey       *event,
+                          EphyLocationEntry *lentry)
+{
+  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
+
+  if ((event->keyval == GDK_KEY_Return ||
+       event->keyval == GDK_KEY_KP_Enter ||
+       event->keyval == GDK_KEY_ISO_Enter) &&
+      (state == GDK_CONTROL_MASK ||
+       state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))) {
+    /* gtk_im_context_reset (entry->im_context); */
+
+    lentry->needs_reset = TRUE;
+    g_signal_emit_by_name (entry, "activate");
+
+    return TRUE;
+  }
+
+  if ((event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down)
+      && state == 0) {
+    /* If we are focusing the entry, with the cursor at the end of it
+     * we emit the changed signal, so that the completion popup appears */
+    const char *string;
+
+    string = gtk_entry_get_text (entry);
+    if (gtk_editable_get_position (GTK_EDITABLE (entry)) == (int)strlen (string)) {
+      g_signal_emit_by_name (entry, "changed", 0);
+      return TRUE;
+    }
+  }
 
   return FALSE;
+}
+
+static void
+entry_activate_after_cb (GtkEntry          *entry,
+                         EphyLocationEntry *lentry)
+{
+  lentry->user_changed = FALSE;
+
+  if (lentry->needs_reset) {
+    ephy_location_entry_reset_internal (lentry, TRUE);
+    lentry->needs_reset = FALSE;
+  }
+}
+
+static gboolean
+match_selected_cb (GtkEntryCompletion *completion,
+                   GtkTreeModel       *model,
+                   GtkTreeIter        *iter,
+                   EphyLocationEntry  *entry)
+{
+  char *item = NULL;
+  guint state;
+
+  gtk_tree_model_get (model, iter,
+                      entry->action_col, &item, -1);
+  if (item == NULL) return FALSE;
+
+  ephy_gui_get_current_event (NULL, &state, NULL);
+
+  entry->needs_reset = (state == GDK_CONTROL_MASK ||
+                        state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK));
+
+  ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), item);
+  /* gtk_im_context_reset (GTK_ENTRY (entry)->im_context); */
+  g_signal_emit_by_name (entry, "activate");
+
+  g_free (item);
+
+  return TRUE;
+}
+
+static void
+action_activated_after_cb (GtkEntryCompletion *completion,
+                           gint                index,
+                           EphyLocationEntry  *lentry)
+{
+  guint state, button;
+
+  ephy_gui_get_current_event (NULL, &state, &button);
+  if ((state == GDK_CONTROL_MASK ||
+       state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) ||
+      button == 2) {
+    ephy_location_entry_reset_internal (lentry, TRUE);
+  }
 }
 
 static void
@@ -535,7 +601,7 @@ paste_received (GtkClipboard      *clipboard,
 {
   if (text) {
     gtk_entry_set_text (GTK_ENTRY (entry), text);
-    ephy_location_entry_activate (entry);
+    g_signal_emit_by_name (entry, "activate");
   }
 }
 
@@ -692,6 +758,11 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
                     "signal::key-press-event", G_CALLBACK (entry_key_press_cb), lentry,
                     "signal::changed", G_CALLBACK (editable_changed_cb), lentry,
                     NULL);
+
+  g_signal_connect_after (entry, "key-press-event",
+                          G_CALLBACK (entry_key_press_after_cb), lentry);
+  g_signal_connect_after (entry, "activate",
+                          G_CALLBACK (entry_activate_after_cb), lentry);
 }
 
 static void
@@ -768,6 +839,238 @@ schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *ur
 }
 #endif
 
+static gboolean
+cursor_on_match_cb (GtkEntryCompletion *completion,
+                    GtkTreeModel       *model,
+                    GtkTreeIter        *iter,
+                    EphyLocationEntry  *le)
+{
+  char *url = NULL;
+  GtkWidget *entry;
+
+  gtk_tree_model_get (model, iter,
+                      le->url_col,
+                      &url, -1);
+  entry = gtk_entry_completion_get_entry (completion);
+
+  /* Prevent the update so we keep the highlight from our input.
+   * See textcell_data_func().
+   */
+  le->block_update = TRUE;
+  gtk_entry_set_text (GTK_ENTRY (entry), url);
+  gtk_editable_set_position (GTK_EDITABLE (entry), -1);
+  le->block_update = FALSE;
+
+#if 0
+/* FIXME: Refactor the DNS prefetch, this is a layering violation */
+  schedule_dns_prefetch (le, 250, (const gchar *)url);
+#endif
+
+  g_free (url);
+
+  return TRUE;
+}
+
+static void
+extracell_data_func (GtkCellLayout   *cell_layout,
+                     GtkCellRenderer *cell,
+                     GtkTreeModel    *tree_model,
+                     GtkTreeIter     *iter,
+                     gpointer         data)
+{
+  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (data);
+  gboolean is_bookmark = FALSE;
+  GValue visible = { 0, };
+
+  gtk_tree_model_get (tree_model, iter,
+                      entry->extra_col, &is_bookmark,
+                      -1);
+
+  if (is_bookmark)
+    g_object_set (cell,
+                  "icon-name", "user-bookmarks-symbolic",
+                  NULL);
+
+  g_value_init (&visible, G_TYPE_BOOLEAN);
+  g_value_set_boolean (&visible, is_bookmark);
+  g_object_set_property (G_OBJECT (cell), "visible", &visible);
+  g_value_unset (&visible);
+}
+
+/**
+ * ephy_location_entry_set_match_func:
+ * @entry: an #EphyLocationEntry widget
+ * @match_func: a #GtkEntryCompletionMatchFunc
+ * @user_data: user_data to pass to the @match_func
+ * @notify: a #GDestroyNotify, like the one given to
+ * gtk_entry_completion_set_match_func
+ *
+ * Sets the match_func for the internal #GtkEntryCompletion to @match_func.
+ *
+ **/
+void
+ephy_location_entry_set_match_func (EphyLocationEntry          *entry,
+                                    GtkEntryCompletionMatchFunc match_func,
+                                    gpointer                    user_data,
+                                    GDestroyNotify              notify)
+{
+  GtkEntryCompletion *completion;
+
+  completion = gtk_entry_get_completion (GTK_ENTRY (entry));
+  gtk_entry_completion_set_match_func (completion, match_func, user_data, notify);
+}
+
+/**
+ * ephy_location_entry_set_completion:
+ * @entry: an #EphyLocationEntry widget
+ * @model: the #GtkModel for the completion
+ * @text_col: column id to access #GtkModel relevant data
+ * @action_col: column id to access #GtkModel relevant data
+ * @keywords_col: column id to access #GtkModel relevant data
+ * @relevance_col: column id to access #GtkModel relevant data
+ * @url_col: column id to access #GtkModel relevant data
+ * @extra_col: column id to access #GtkModel relevant data
+ * @favicon_col: column id to access #GtkModel relevant data
+ *
+ * Initializes @entry to have a #GtkEntryCompletion using @model as the
+ * internal #GtkModel. The *_col arguments are for internal data retrieval from
+ * @model, like when setting the text property of one of the #GtkCellRenderer
+ * of the completion.
+ *
+ **/
+void
+ephy_location_entry_set_completion (EphyLocationEntry *entry,
+                                    GtkTreeModel      *model,
+                                    guint              text_col,
+                                    guint              action_col,
+                                    guint              keywords_col,
+                                    guint              relevance_col,
+                                    guint              url_col,
+                                    guint              extra_col,
+                                    guint              favicon_col)
+{
+  GtkEntryCompletion *completion;
+  GtkCellRenderer *cell;
+
+  entry->text_col = text_col;
+  entry->action_col = action_col;
+  entry->keywords_col = keywords_col;
+  entry->relevance_col = relevance_col;
+  entry->url_col = url_col;
+  entry->extra_col = extra_col;
+  entry->favicon_col = favicon_col;
+
+  completion = gtk_entry_completion_new ();
+  gtk_entry_completion_set_model (completion, model);
+  g_signal_connect (completion, "match-selected",
+                    G_CALLBACK (match_selected_cb), entry);
+  g_signal_connect_after (completion, "action-activated",
+                          G_CALLBACK (action_activated_after_cb), entry);
+
+  cell = gtk_cell_renderer_pixbuf_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
+                              cell, FALSE);
+  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
+                                 cell, "pixbuf", favicon_col);
+
+  /* Pixel-perfect aligment with the location entry favicon
+   * (16x16). Consider that this /might/ depend on the theme.
+   *
+   * The GtkEntryCompletion can not be themed so we work-around
+   * that with padding and fixed sizes.
+   * For the first cell, this is:
+   *
+   * ___+++++iiiiiiiiiiiiiiii++__ttt...bbb++++++__
+   *
+   * _ = widget spacing, can not be handled (3 px)
+   * + = padding (5 px) (ICON_PADDING_LEFT)
+   * i = the icon (16 px) (ICON_CONTENT_WIDTH)
+   * + = padding (2 px) (ICON_PADDING_RIGHT) (cut by the fixed_size)
+   * _ = spacing between cells, can not be handled (2 px)
+   * t = the text (expands)
+   * b = bookmark icon (16 px)
+   * + = padding (6 px) (BKMK_PADDING_RIGHT)
+   * _ = widget spacing, can not be handled (2 px)
+   *
+   * Each character is a pixel.
+   *
+   * The text cell and the bookmark icon cell are much more
+   * flexible in its aligment, because they do not have to align
+   * with anything in the entry.
+   */
+
+#define ROW_PADDING_VERT 4
+
+#define ICON_PADDING_LEFT 5
+#define ICON_CONTENT_WIDTH 16
+#define ICON_PADDING_RIGHT 9
+
+#define ICON_CONTENT_HEIGHT 16
+
+#define TEXT_PADDING_LEFT 0
+
+#define BKMK_PADDING_RIGHT 6
+
+  gtk_cell_renderer_set_padding
+    (cell, ICON_PADDING_LEFT, ROW_PADDING_VERT);
+  gtk_cell_renderer_set_fixed_size
+    (cell,
+    (ICON_PADDING_LEFT + ICON_CONTENT_WIDTH + ICON_PADDING_RIGHT),
+    ICON_CONTENT_HEIGHT);
+  gtk_cell_renderer_set_alignment (cell, 0.0, 0.5);
+
+  cell = gd_two_lines_renderer_new ();
+  g_object_set (cell,
+                "ellipsize", PANGO_ELLIPSIZE_END,
+                "text-lines", 2,
+                NULL);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
+                              cell, TRUE);
+  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
+                                 cell, "text", text_col);
+  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
+                                 cell, "line-two", url_col);
+
+  /* Pixel-perfect aligment with the text in the location entry.
+   * See above.
+   */
+  gtk_cell_renderer_set_padding
+    (cell, TEXT_PADDING_LEFT, ROW_PADDING_VERT);
+  gtk_cell_renderer_set_alignment (cell, 0.0, 0.5);
+
+  /*
+   * As the width of the entry completion is known in advance
+   * (as big as the entry you are completing on), we can set
+   * any fixed width (the 1 is just this random number here)
+   * Since the height is known too, we avoid computing the actual
+   * sizes of the cells, which takes a lot of CPU time and does
+   * not get used anyway.
+   */
+  gtk_cell_renderer_set_fixed_size (cell, 1, -1);
+  gtk_cell_renderer_text_set_fixed_height_from_font (GTK_CELL_RENDERER_TEXT (cell), 2);
+
+  cell = gtk_cell_renderer_pixbuf_new ();
+  g_object_set (cell, "follow-state", TRUE, NULL);
+  gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (completion),
+                            cell, FALSE);
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (completion),
+                                      cell, extracell_data_func,
+                                      entry,
+                                      NULL);
+
+  /* Pixel-perfect aligment. This just keeps the same margin from
+   * the border than the favicon on the other side. See above. */
+  gtk_cell_renderer_set_padding
+    (cell, BKMK_PADDING_RIGHT, ROW_PADDING_VERT);
+
+  g_object_set (completion, "inline-selection", TRUE, NULL);
+  g_signal_connect (completion, "cursor-on-match",
+                    G_CALLBACK (cursor_on_match_cb), entry);
+
+  gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+  g_object_unref (completion);
+}
+
 /**
  * ephy_location_entry_get_can_undo:
  * @entry: an #EphyLocationEntry widget
@@ -822,8 +1125,9 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
   ephy_title_widget_set_address (EPHY_TITLE_WIDGET (entry), text);
   g_free (url);
 
-  if (notify)
+  if (notify) {
     g_signal_emit (entry, signals[USER_CHANGED], 0);
+  }
 
   entry->user_changed = FALSE;
 
@@ -863,7 +1167,7 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
 }
 
 /**
- * ephy_location_entry_focus:
+ * ephy_location_entry_activate:
  * @entry: an #EphyLocationEntry widget
  *
  * Set focus on @entry and select the text whithin. This is called when the
@@ -871,7 +1175,7 @@ ephy_location_entry_reset (EphyLocationEntry *entry)
  *
  **/
 void
-ephy_location_entry_focus (EphyLocationEntry *entry)
+ephy_location_entry_activate (EphyLocationEntry *entry)
 {
   GtkWidget *toplevel, *widget = GTK_WIDGET (entry);
 
