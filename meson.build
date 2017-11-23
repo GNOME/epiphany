@@ -31,13 +31,25 @@ conf.set_quoted('LOCALEDIR', localedir)
 conf.set_quoted('PKGDATADIR', pkgdatadir)
 conf.set_quoted('PKGLIBEXECDIR', pkglibexecdir)
 conf.set_quoted('SOURCE_ROOT', meson.source_root())
-conf.set_quoted('VERSION', meson.project_version())
-
-conf.set10('DEVELOPER_MODE', get_option('developer_mode'))
-conf.set10('TECH_PREVIEW', get_option('tech_preview'))
 
 # FIXME: Get rid of this option. This feature should be polished up and enabled unconditionally.
 conf.set10('ENABLE_HTTPS_EVERYWHERE', get_option('https_everywhere'))
+
+conf.set10('DEVELOPER_MODE', get_option('developer_mode'))
+
+tech_preview = get_option('tech_preview')
+conf.set10('TECH_PREVIEW', tech_preview)
+
+if tech_preview
+  msg = 'Computing Epiphany Tech Preview version: '
+  res = run_command(join_paths(meson.source_root(), 'compute-tech-preview-version.sh'))
+  assert(res.returncode() == 0, msg + 'FAIL (script returned nonzero exit status)')
+  tech_preview_version = res.stdout().strip()
+  message(msg + tech_preview_version)
+  conf.set_quoted('VERSION', tech_preview_version)
+else
+  conf.set_quoted('VERSION', meson.project_version())
+endif
 
 configure_file(
   output: 'config.h',

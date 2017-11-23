@@ -647,11 +647,10 @@ window_cmd_show_about (GSimpleAction *action,
   gtk_show_about_dialog (window ? GTK_WINDOW (window) : NULL,
 #if !TECH_PREVIEW
                          "program-name", _("Web"),
-                         "version", VERSION,
 #else
                          "program-name", _("Epiphany Technology Preview"),
-                         "version", __DATE__ " " __TIME__,
 #endif
+                         "version", VERSION,
                          "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
                          "Copyright © 2003–2017 The Web Developers",
                          "artists", artists,
