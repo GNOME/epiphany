@@ -48,7 +48,7 @@ ephy_sync_debug_load_secrets (void)
   }
 
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
-                                        ACCOUNT_KEY, user,
+                                        EPHY_SYNC_SECRET_ACCOUNT_KEY, user,
                                         NULL);
   result = secret_service_search_sync (NULL,
                                        EPHY_SYNC_SECRET_SCHEMA,
@@ -270,7 +270,7 @@ ephy_sync_debug_get_signed_certificate (const char           *session_token,
   json_node_set_object (node, json_body);
   body = json_to_string (node, FALSE);
 
-  url = g_strdup_printf ("%s/certificate/sign", FIREFOX_ACCOUNTS_SERVER_URL);
+  url = g_strdup_printf ("%s/certificate/sign", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL);
   msg = ephy_sync_debug_prepare_soup_message (url, "POST", body,
                                               id_hex, key, 32);
   session = soup_session_new ();
@@ -342,13 +342,13 @@ ephy_sync_debug_get_storage_credentials (char **storage_endpoint,
   if (!certificate)
     goto free_keypair;
 
-  audience = ephy_sync_utils_get_audience (TOKEN_SERVER_URL);
+  audience = ephy_sync_utils_get_audience (EPHY_SYNC_FX_TOKEN_SERVER_URL);
   assertion = ephy_sync_crypto_create_assertion (certificate, audience, 300, keypair);
   kb = ephy_sync_utils_decode_hex (json_object_get_string_member (secrets, "master_key"));
   hashed_kb = g_compute_checksum_for_data (G_CHECKSUM_SHA256, kb, 32);
   client_state = g_strndup (hashed_kb, 32);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
-  msg = soup_message_new ("GET", TOKEN_SERVER_URL);
+  msg = soup_message_new ("GET", EPHY_SYNC_FX_TOKEN_SERVER_URL);
   soup_message_headers_append (msg->request_headers, "X-Client-State", client_state);
   soup_message_headers_append (msg->request_headers, "authorization", authorization);
   session = soup_session_new ();
@@ -470,7 +470,7 @@ ephy_sync_debug_view_secrets (void)
 #if DEVELOPER_MODE
   for (GList *l = result; l && l->data; l = l->next) {
     GHashTable *attrs = secret_item_get_attributes (result->data);
-    const char *account = g_hash_table_lookup (attrs, ACCOUNT_KEY);
+    const char *account = g_hash_table_lookup (attrs, EPHY_SYNC_SECRET_ACCOUNT_KEY);
     SecretValue *value = secret_item_get_secret (result->data);
     LOG ("Sync secrets of %s: %s", account, secret_value_get_text (value));
     secret_value_unref (value);

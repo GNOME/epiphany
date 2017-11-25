@@ -33,8 +33,6 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#define EPHY_STORAGE_VERSION 5
-
 struct _EphySyncService {
   GObject      parent_instance;
 
@@ -406,7 +404,7 @@ ephy_sync_service_fxa_hawk_post (EphySyncService     *self,
   g_assert (key);
   g_assert (request_body);
 
-  url = g_strdup_printf ("%s/%s", FIREFOX_ACCOUNTS_SERVER_URL, endpoint);
+  url = g_strdup_printf ("%s/%s", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL, endpoint);
   msg = soup_message_new (SOUP_METHOD_POST, url);
   soup_message_set_request (msg, content_type, SOUP_MEMORY_COPY,
                             request_body, strlen (request_body));
@@ -442,7 +440,7 @@ ephy_sync_service_fxa_hawk_get (EphySyncService     *self,
   g_assert (id);
   g_assert (key);
 
-  url = g_strdup_printf ("%s/%s", FIREFOX_ACCOUNTS_SERVER_URL, endpoint);
+  url = g_strdup_printf ("%s/%s", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL, endpoint);
   msg = soup_message_new (SOUP_METHOD_GET, url);
   header = ephy_sync_crypto_hawk_header_new (url, "GET", id, key, key_len, NULL);
   soup_message_headers_append (msg->request_headers, "authorization", header->header);
@@ -596,7 +594,7 @@ ephy_sync_service_verify_certificate (EphySyncService *self,
     g_warning ("JSON object has missing or invalid 'email' member");
     goto out;
   }
-  uri = soup_uri_new (FIREFOX_ACCOUNTS_SERVER_URL);
+  uri = soup_uri_new (EPHY_SYNC_FX_ACCOUNTS_SERVER_URL);
   expected = g_strdup_printf ("%s@%s",
                               ephy_sync_service_get_secret (self, secrets[UID]),
                               soup_uri_get_host (uri));
@@ -645,7 +643,7 @@ ephy_sync_service_forget_secrets (EphySyncService *self)
   g_assert (user);
 
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
-                                        ACCOUNT_KEY, user,
+                                        EPHY_SYNC_SECRET_ACCOUNT_KEY, user,
                                         NULL);
   secret_service_clear (NULL, EPHY_SYNC_SECRET_SCHEMA, attributes, NULL,
                         (GAsyncReadyCallback)forget_secrets_cb, NULL);
@@ -688,7 +686,7 @@ ephy_sync_service_destroy_session (EphySyncService *self,
     session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
   g_assert (session_token);
 
-  url = g_strdup_printf ("%s/session/destroy", FIREFOX_ACCOUNTS_SERVER_URL);
+  url = g_strdup_printf ("%s/session/destroy", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL);
   ephy_sync_crypto_derive_session_token (session_token, &token_id,
                                          &req_hmac_key, &tmp);
   token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
@@ -817,7 +815,7 @@ ephy_sync_service_trade_browserid_assertion (EphySyncService *self)
   g_assert (self->certificate);
   g_assert (self->key_pair);
 
-  audience = ephy_sync_utils_get_audience (TOKEN_SERVER_URL);
+  audience = ephy_sync_utils_get_audience (EPHY_SYNC_FX_TOKEN_SERVER_URL);
   assertion = ephy_sync_crypto_create_assertion (self->certificate, audience,
                                                  300, self->key_pair);
   kb = ephy_sync_utils_decode_hex (ephy_sync_service_get_secret (self, secrets[MASTER_KEY]));
@@ -825,7 +823,7 @@ ephy_sync_service_trade_browserid_assertion (EphySyncService *self)
   client_state = g_strndup (hashed_kb, 32);
   authorization = g_strdup_printf ("BrowserID %s", assertion);
 
-  msg = soup_message_new (SOUP_METHOD_GET, TOKEN_SERVER_URL);
+  msg = soup_message_new (SOUP_METHOD_GET, EPHY_SYNC_FX_TOKEN_SERVER_URL);
   /* We need to add the X-Client-State header so that the Token Server will
    * recognize accounts that were previously used to sync Firefox data too.
    */
@@ -1519,7 +1517,7 @@ ephy_sync_service_load_secrets (EphySyncService *self)
 
   user = ephy_sync_utils_get_sync_user ();
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
-                                        ACCOUNT_KEY, user,
+                                        EPHY_SYNC_SECRET_ACCOUNT_KEY, user,
                                         NULL);
   secret_service_search (NULL, EPHY_SYNC_SECRET_SCHEMA, attributes,
                          SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
@@ -1581,7 +1579,7 @@ ephy_sync_service_store_secrets (EphySyncService *self)
 
   secret = secret_value_new (json_string, -1, "text/plain");
   attributes = secret_attributes_build (EPHY_SYNC_SECRET_SCHEMA,
-                                        ACCOUNT_KEY, self->user,
+                                        EPHY_SYNC_SECRET_ACCOUNT_KEY, self->user,
                                         NULL);
   /* Translators: %s is the email of the user. */
   label = g_strdup_printf (_("The sync secrets of %s"), self->user);
@@ -1922,7 +1920,7 @@ ephy_sync_service_upload_meta_global (EphySyncService *self)
   json_object_set_object_member (engines, "tabs", make_engine_object (1));
   json_object_set_object_member (engines, "forms", make_engine_object (1));
   json_object_set_object_member (payload, "engines", engines);
-  json_object_set_int_member (payload, "storageVersion", EPHY_STORAGE_VERSION);
+  json_object_set_int_member (payload, "storageVersion", EPHY_SYNC_STORAGE_VERSION);
   sync_id = ephy_sync_utils_get_random_sync_id ();
   json_object_set_string_member (payload, "syncID", sync_id);
   json_node_set_object (node, payload);
@@ -2000,11 +1998,11 @@ verify_storage_version_cb (SoupSession *session,
     goto out_error;
   }
   storage_version = json_object_get_int_member (json, "storageVersion");
-  if (storage_version != EPHY_STORAGE_VERSION) {
+  if (storage_version != EPHY_SYNC_STORAGE_VERSION) {
     /* Translators: the %d is the storage version, the \n is a newline character. */
     message = g_strdup_printf (_("Your Firefox Account uses storage version %d. "
                                  "Web only supports version %d."),
-                               EPHY_STORAGE_VERSION,
+                               EPHY_SYNC_STORAGE_VERSION,
                                storage_version);
     goto out_error;
   }
@@ -2307,7 +2305,7 @@ ephy_sync_service_register_device (EphySyncService *self,
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
   /* Make protocol. */
-  protocol = g_strdup_printf ("1.%d", EPHY_STORAGE_VERSION);
+  protocol = g_strdup_printf ("1.%d", EPHY_SYNC_STORAGE_VERSION);
   array = json_array_new ();
   json_array_add_string_element (array, protocol);
 

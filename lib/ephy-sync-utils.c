@@ -27,8 +27,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define SYNC_ID_LEN 12
-
 static const char hex_digits[] = "0123456789abcdef";
 
 const SecretSchema *
@@ -37,7 +35,7 @@ ephy_sync_utils_get_secret_schema (void)
   static const SecretSchema schema = {
     "org.epiphany.SyncSecrets", SECRET_SCHEMA_NONE,
     {
-      { ACCOUNT_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
+      { EPHY_SYNC_SECRET_ACCOUNT_KEY, SECRET_SCHEMA_ATTRIBUTE_STRING },
       { "NULL", 0 },
     }
   };
@@ -219,12 +217,12 @@ ephy_sync_utils_get_random_sync_id (void)
 
   /* The sync id is a base64-urlsafe string. Base64 uses 4 chars to represent 3 bytes,
    * therefore we need ceil(len * 3 / 4) bytes to cover the requested length. */
-  bytes_len = (SYNC_ID_LEN + 3) / 4 * 3;
+  bytes_len = (EPHY_SYNC_BSO_ID_LEN + 3) / 4 * 3;
   bytes = g_malloc (bytes_len);
 
   ephy_sync_utils_generate_random_bytes (NULL, bytes_len, bytes);
   base64 = ephy_sync_utils_base64_urlsafe_encode (bytes, bytes_len, FALSE);
-  id = g_strndup (base64, SYNC_ID_LEN);
+  id = g_strndup (base64, EPHY_SYNC_BSO_ID_LEN);
 
   g_free (base64);
   g_free (bytes);
