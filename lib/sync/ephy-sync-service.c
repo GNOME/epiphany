@@ -2275,9 +2275,8 @@ register_device_cb (SoupSession *session,
   if (msg->status_code != 200) {
     g_warning ("Failed to register device. Status code: %u, response: %s",
                msg->status_code, msg->response_body->data);
-    ephy_sync_service_report_sign_in_error (self,
-                                            _("Failed to register device."),
-                                            NULL, TRUE);
+    if (self->is_signing_in)
+      ephy_sync_service_report_sign_in_error (self, _("Failed to register device."), NULL, TRUE);
   } else {
     LOG ("Successfully registered device");
     if (self->is_signing_in)
