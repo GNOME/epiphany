@@ -26,7 +26,6 @@
 #include "ephy-sync-crypto.h"
 #include "ephy-sync-utils.h"
 
-#include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
 #include <string.h>
 
@@ -125,8 +124,37 @@ free_secrets:
 }
 
 static char *
-ephy_sync_debug_get_body_for_delete (const char          *id,
-                                     SyncCryptoKeyBundle *bundle)
+ephy_sync_debug_make_upload_body (const char          *id,
+                                  const char          *record,
+                                  SyncCryptoKeyBundle *bundle)
+{
+  JsonNode *node;
+  JsonObject *json;
+  char *payload;
+  char *body;
+
+  g_assert (id);
+  g_assert (record);
+  g_assert (bundle);
+
+  payload = ephy_sync_crypto_encrypt_record (record, bundle);
+  json = json_object_new ();
+  json_object_set_string_member (json, "id", id);
+  json_object_set_string_member (json, "payload", payload);
+  node = json_node_new (JSON_NODE_OBJECT);
+  json_node_set_object (node, json);
+  body = json_to_string (node, FALSE);
+
+  g_free (payload);
+  json_object_unref (json);
+  json_node_unref (node);
+
+  return body;
+}
+
+static char *
+ephy_sync_debug_make_delete_body (const char          *id,
+                                  SyncCryptoKeyBundle *bundle)
 {
   JsonNode *node;
   JsonObject *json;
@@ -613,6 +641,47 @@ free_endpoint:
 }
 
 /**
+ * ephy_sync_debug_upload_record:
+ * @collection: the collection name
+ * @id: the record id
+ * @record: record's JSON representation
+ *
+ * Upload record with id @id to collection @collection.
+ **/
+void
+ephy_sync_debug_upload_record (const char *collection,
+                               const char *id,
+                               const char *record)
+{
+  SyncCryptoKeyBundle *bundle;
+  char *id_safe;
+  char *endpoint;
+  char *body;
+  char *response;
+
+  g_assert (collection);
+  g_assert (id);
+  g_assert (record);
+
+  bundle = ephy_sync_debug_get_bundle_for_collection (collection);
+  if (!bundle)
+    return;
+
+  id_safe = soup_uri_encode (id, NULL);
+  endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
+  body = ephy_sync_debug_make_upload_body (id, record, bundle);
+  response = ephy_sync_debug_send_request (endpoint, "PUT", body);
+
+  LOG ("%s", response);
+
+  g_free (id_safe);
+  g_free (endpoint);
+  g_free (body);
+  g_free (response);
+  ephy_sync_crypto_key_bundle_free (bundle);
+}
+
+/**
  * ephy_sync_debug_delete_collection:
  * @collection: the collection name
  *
@@ -652,7 +721,7 @@ ephy_sync_debug_delete_collection (const char *collection)
   for (guint i = 0; i < json_array_get_length (array); i++) {
     const char *id = json_array_get_string_element (array, i);
     char *id_safe = soup_uri_encode (id, NULL);
-    char *body = ephy_sync_debug_get_body_for_delete (id, bundle);
+    char *body = ephy_sync_debug_make_delete_body (id, bundle);
     char *to = g_strdup_printf ("storage/%s/%s", collection, id_safe);
     char *resp = ephy_sync_debug_send_request (to, "PUT", body);
 
@@ -701,7 +770,7 @@ ephy_sync_debug_delete_record (const char *collection,
 
   id_safe = soup_uri_encode (id, NULL);
   endpoint = g_strdup_printf ("storage/%s/%s", collection, id_safe);
-  body = ephy_sync_debug_get_body_for_delete (id, bundle);
+  body = ephy_sync_debug_make_delete_body (id, bundle);
   response = ephy_sync_debug_send_request (endpoint, "PUT", body);
 
   LOG ("%s", response);
@@ -934,4 +1003,125 @@ free_response:
   g_free (response);
 free_secrets:
   json_object_unref (secrets);
+}
+
+/**
+ * ephy_sync_debug_view_connected_devices:
+ *
+ * Displays the current devices connected to Firefox Sync for the signed in user.
+ *
+ * https://github.com/mozilla/fxa-auth-server/blob/master/docs/api.md#get-accountdevices
+ **/
+void
+ephy_sync_debug_view_connected_devices (void)
+{
+  JsonObject *secrets;
+  SoupSession *session;
+  SoupMessage *msg;
+  guint8 *id;
+  guint8 *key;
+  guint8 *tmp;
+  char *id_hex;
+  char *url;
+  const char *session_token;
+
+  secrets = ephy_sync_debug_load_secrets ();
+  if (!secrets)
+    return;
+
+  session_token = json_object_get_string_member (secrets, "session_token");
+  ephy_sync_crypto_derive_session_token (session_token, &id, &key, &tmp);
+
+  url = g_strdup_printf ("%s/account/devices", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL);
+  id_hex = ephy_sync_utils_encode_hex (id, 32);
+  msg = ephy_sync_debug_prepare_soup_message (url, "GET", NULL, id_hex, key, 32);
+  session = soup_session_new ();
+  soup_session_send_message (session, msg);
+
+  LOG ("%s", msg->response_body->data);
+
+  g_object_unref (session);
+  g_object_unref (msg);
+  g_free (id_hex);
+  g_free (url);
+  g_free (id);
+  g_free (key);
+  g_free (tmp);
+  json_object_unref (secrets);
+}
+
+/**
+ * ephy_sync_debug_get_current_device:
+ *
+ * Gets the current device connected to Firefox Sync for the signed in user.
+ *
+ * https://github.com/mozilla/fxa-auth-server/blob/master/docs/api.md#get-accountdevices
+ *
+ * Return value: (transfer full): the current device as a #JsonObject
+ **/
+JsonObject *
+ephy_sync_debug_get_current_device (void)
+{
+  JsonObject *retval = NULL;
+  JsonObject *secrets;
+  JsonNode *response;
+  JsonArray *array;
+  SoupSession *session;
+  SoupMessage *msg;
+  GError *error = NULL;
+  guint8 *id;
+  guint8 *key;
+  guint8 *tmp;
+  char *id_hex;
+  char *url;
+  const char *session_token;
+  guint status_code;
+
+  secrets = ephy_sync_debug_load_secrets ();
+  if (!secrets)
+    return NULL;
+
+  session_token = json_object_get_string_member (secrets, "session_token");
+  ephy_sync_crypto_derive_session_token (session_token, &id, &key, &tmp);
+
+  url = g_strdup_printf ("%s/account/devices", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL);
+  id_hex = ephy_sync_utils_encode_hex (id, 32);
+  msg = ephy_sync_debug_prepare_soup_message (url, "GET", NULL, id_hex, key, 32);
+  session = soup_session_new ();
+  status_code = soup_session_send_message (session, msg);
+
+  if (status_code != 200) {
+    LOG ("Failed to GET account devices: %s", msg->response_body->data);
+    goto free_session;
+  }
+
+  response = json_from_string (msg->response_body->data, &error);
+  if (error) {
+    LOG ("Response is not a valid JSON: %s", error->message);
+    g_error_free (error);
+    goto free_session;
+  }
+
+  array = json_node_get_array (response);
+  for (guint i = 0; i < json_array_get_length (array); i++) {
+    JsonObject *device = json_array_get_object_element (array, i);
+
+    if (json_object_get_boolean_member (device, "isCurrentDevice")) {
+      retval = json_object_ref (device);
+      break;
+    }
+  }
+
+  json_node_unref (response);
+free_session:
+  g_object_unref (session);
+  g_object_unref (msg);
+  g_free (id_hex);
+  g_free (url);
+  g_free (id);
+  g_free (key);
+  g_free (tmp);
+  json_object_unref (secrets);
+
+  return retval;
 }

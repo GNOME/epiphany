@@ -21,27 +21,33 @@
 #pragma once
 
 #include <glib.h>
+#include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
-void ephy_sync_debug_view_secrets             (void);
-void ephy_sync_debug_view_collection          (const char *collection,
-                                               gboolean    decrypt);
-void ephy_sync_debug_view_record              (const char *collection,
-                                               const char *id,
-                                               gboolean    decrypt);
-void ephy_sync_debug_delete_collection        (const char *collection);
-void ephy_sync_debug_delete_record            (const char *collection,
-                                               const char *id);
-void ephy_sync_debug_erase_collection         (const char *collection);
-void ephy_sync_debug_erase_record             (const char *collection,
-                                               const char *id);
-void ephy_sync_debug_view_collection_info     (void);
-void ephy_sync_debug_view_quota_info          (void);
-void ephy_sync_debug_view_collection_usage    (void);
-void ephy_sync_debug_view_collection_counts   (void);
-void ephy_sync_debug_view_configuration_info  (void);
-void ephy_sync_debug_view_meta_global_record  (void);
-void ephy_sync_debug_view_crypto_keys_record  (void);
+void        ephy_sync_debug_view_secrets            (void);
+void        ephy_sync_debug_view_collection         (const char *collection,
+                                                     gboolean    decrypt);
+void        ephy_sync_debug_view_record             (const char *collection,
+                                                     const char *id,
+                                                     gboolean    decrypt);
+void        ephy_sync_debug_upload_record           (const char *collection,
+                                                     const char *id,
+                                                     const char *body);
+void        ephy_sync_debug_delete_collection       (const char *collection);
+void        ephy_sync_debug_delete_record           (const char *collection,
+                                                     const char *id);
+void        ephy_sync_debug_erase_collection        (const char *collection);
+void        ephy_sync_debug_erase_record            (const char *collection,
+                                                     const char *id);
+void        ephy_sync_debug_view_collection_info    (void);
+void        ephy_sync_debug_view_quota_info         (void);
+void        ephy_sync_debug_view_collection_usage   (void);
+void        ephy_sync_debug_view_collection_counts  (void);
+void        ephy_sync_debug_view_configuration_info (void);
+void        ephy_sync_debug_view_meta_global_record (void);
+void        ephy_sync_debug_view_crypto_keys_record (void);
+void        ephy_sync_debug_view_connected_devices  (void);
+JsonObject *ephy_sync_debug_get_current_device      (void);
 
 G_END_DECLS

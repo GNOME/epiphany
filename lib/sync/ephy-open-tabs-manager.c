@@ -144,23 +144,24 @@ ephy_open_tabs_manager_get_local_tabs (EphyOpenTabsManager *self)
   EphyOpenTabsRecord *local_tabs;
   EphyTabInfo *info;
   GList *tabs_info;
-  char *id;
-  char *name;
+  char *device_bso_id;
+  char *device_name;
 
   g_assert (EPHY_IS_OPEN_TABS_MANAGER (self));
 
-  id = ephy_sync_utils_get_device_id ();
-  name = ephy_sync_utils_get_device_name ();
-  local_tabs = ephy_open_tabs_record_new (id, name);
+  device_bso_id = ephy_sync_utils_get_device_bso_id ();
+  device_name = ephy_sync_utils_get_device_name ();
 
+  local_tabs = ephy_open_tabs_record_new (device_bso_id, device_name);
   tabs_info = ephy_tabs_catalog_get_tabs_info (self->catalog);
+
   for (GList *l = tabs_info; l && l->data; l = l->next) {
     info = (EphyTabInfo *)l->data;
     ephy_open_tabs_record_add_tab (local_tabs, info->title, info->url, info->favicon);
   }
 
-  g_free (id);
-  g_free (name);
+  g_free (device_bso_id);
+  g_free (device_name);
   g_list_free_full (tabs_info, (GDestroyNotify)ephy_tab_info_free);
 
   return local_tabs;
@@ -258,15 +259,15 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
   EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (manager);
   EphyOpenTabsRecord *local_tabs;
   GList *to_upload = NULL;
-  char *id;
+  char *device_bso_id;
 
-  id = ephy_sync_utils_get_device_id ();
+  device_bso_id = ephy_sync_utils_get_device_bso_id ();
   g_list_free_full (self->remote_records, g_object_unref);
   self->remote_records = NULL;
 
   for (GList *l = remotes_updated; l && l->data; l = l->next) {
     /* Exclude the record which describes the local open tabs. */
-    if (!g_strcmp0 (id, ephy_open_tabs_record_get_id (l->data)))
+    if (!g_strcmp0 (device_bso_id, ephy_open_tabs_record_get_id (l->data)))
       continue;
 
     self->remote_records = g_list_prepend (self->remote_records, g_object_ref (l->data));
@@ -278,7 +279,7 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
   local_tabs = ephy_open_tabs_manager_get_local_tabs (self);
   to_upload = g_list_prepend (to_upload, local_tabs);
 
-  g_free (id);
+  g_free (device_bso_id);
 
   callback (to_upload, TRUE, user_data);
 }
