@@ -34,6 +34,7 @@ const SecretSchema *ephy_sync_utils_get_secret_schema (void) G_GNUC_CONST;
 #define EPHY_SYNC_FX_ACCOUNTS_SERVER_URL  "https://api.accounts.firefox.com/v1"
 
 #define EPHY_SYNC_STORAGE_VERSION 5
+#define EPHY_SYNC_DEVICE_ID_LEN   32
 #define EPHY_SYNC_BSO_ID_LEN      12
 
 char     *ephy_sync_utils_encode_hex                    (const guint8 *data,
@@ -53,8 +54,13 @@ void      ephy_sync_utils_generate_random_bytes         (void   *random_ctx,
 char     *ephy_sync_utils_get_audience                  (const char *url);
 char     *ephy_sync_utils_get_random_sync_id            (void);
 
+char     *ephy_sync_utils_make_client_record            (const char *device_bso_id,
+                                                         const char *device_id,
+                                                         const char *device_name);
+
 void      ephy_sync_utils_set_device_id                 (const char *id);
 char     *ephy_sync_utils_get_device_id                 (void);
+char     *ephy_sync_utils_get_device_bso_id             (void);
 
 void      ephy_sync_utils_set_device_name               (const char *name);
 char     *ephy_sync_utils_get_device_name               (void);

@@ -23,6 +23,8 @@
 
 #include "ephy-settings.h"
 
+#include <inttypes.h>
+#include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
 #include <stdio.h>
 #include <string.h>
@@ -230,6 +232,46 @@ ephy_sync_utils_get_random_sync_id (void)
   return id;
 }
 
+char *
+ephy_sync_utils_make_client_record (const char *device_bso_id,
+                                    const char *device_id,
+                                    const char *device_name)
+{
+  JsonNode *node;
+  JsonObject *object;
+  JsonArray *array;
+  char *protocol;
+  char *retval;
+
+  g_assert (device_bso_id);
+  g_assert (device_id);
+  g_assert (device_name);
+
+  array = json_array_new ();
+  protocol = g_strdup_printf ("1.%"PRIu32, EPHY_SYNC_STORAGE_VERSION);
+  json_array_add_string_element (array, protocol);
+
+  object = json_object_new ();
+  json_object_set_string_member (object, "id", device_bso_id);
+  json_object_set_string_member (object, "fxaDeviceId", device_id);
+  json_object_set_string_member (object, "name", device_name);
+  json_object_set_string_member (object, "type", "desktop");
+  json_object_set_string_member (object, "version", VERSION);
+  json_object_set_array_member (object, "protocols", array);
+  json_object_set_string_member (object, "os", "Linux");
+  json_object_set_string_member (object, "appPackage", "org.gnome.epiphany");
+  json_object_set_string_member (object, "application", "Epiphany");
+
+  node = json_node_new (JSON_NODE_OBJECT);
+  json_node_take_object (node, object);
+  retval = json_to_string (node, FALSE);
+
+  g_free (protocol);
+  json_node_unref (node);
+
+  return retval;
+}
+
 void
 ephy_sync_utils_set_device_id (const char *id)
 {
@@ -240,15 +282,25 @@ ephy_sync_utils_set_device_id (const char *id)
 char *
 ephy_sync_utils_get_device_id (void)
 {
-  char *id;
+  return g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_ID);
+}
 
-  id = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_ID);
-  if (!g_strcmp0 (id, "")) {
-    g_free (id);
-    id = ephy_sync_utils_get_random_sync_id ();
+char *
+ephy_sync_utils_get_device_bso_id (void)
+{
+  char *device_bso_id;
+  char *device_id;
+
+  device_id = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_ID);
+  if (!g_strcmp0 (device_id, "")) {
+    /* This should never be reached. */
+    return g_strnfill (EPHY_SYNC_BSO_ID_LEN, '0');
   }
 
-  return id;
+  device_bso_id = g_strndup (device_id, EPHY_SYNC_BSO_ID_LEN);
+  g_free (device_id);
+
+  return device_bso_id;
 }
 
 void
@@ -264,11 +316,12 @@ ephy_sync_utils_get_device_name (void)
   char *name;
 
   name = g_settings_get_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_NAME);
-  if (!g_strcmp0 (name, "")) {
-    g_free (name);
-    name = g_strdup_printf ("%s's GNOME Web on %s",
-                            g_get_user_name (), g_get_host_name ());
-  }
+  if (g_strcmp0 (name, ""))
+    return name;
+
+  g_free (name);
+  name = g_strdup_printf ("%s’s GNOME Web on %s", g_get_user_name (), g_get_host_name ());
+  g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_NAME, name);
 
   return name;
 }

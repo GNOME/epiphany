@@ -582,7 +582,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
 {
   EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
 
-  ephy_sync_service_sign_out (service, TRUE);
+  ephy_sync_service_sign_out (service);
 
   /* Show Firefox Accounts iframe. */
   sync_setup_firefox_iframe (dialog);
@@ -643,7 +643,7 @@ on_sync_device_name_save_button_clicked (GtkWidget   *button,
     gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
     g_free (name);
   } else {
-    ephy_sync_service_register_device (service, text);
+    ephy_sync_service_update_device_name (service, text);
   }
 
   gtk_widget_set_sensitive (GTK_WIDGET (dialog->sync_device_name_entry), FALSE);

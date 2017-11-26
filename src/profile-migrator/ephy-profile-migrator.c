@@ -41,6 +41,7 @@
 #include "ephy-search-engine-manager.h"
 #include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-sync-debug.h"
 #include "ephy-sync-utils.h"
 #include "ephy-uri-tester-shared.h"
 #include "ephy-web-app-utils.h"
@@ -1252,6 +1253,54 @@ migrate_sync_settings_path (void)
 }
 
 static void
+migrate_sync_device_info (void)
+{
+  JsonObject *device;
+  const char *device_id;
+  const char *device_name;
+  char *prev_device_id;
+  char *device_bso_id;
+  char *record;
+  int default_profile_migration_version;
+
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  if (default_profile_migration_version >= EPHY_SYNC_DEVICE_ID_MIGRATION_VERSION)
+    return;
+
+  if (!ephy_sync_utils_user_is_signed_in ())
+    return;
+
+  /* Fetch the device info from the Firefox Accounts Server. */
+  device = ephy_sync_debug_get_current_device ();
+  if (!device) {
+    g_warning ("Failed to migrate sync device info. Sign in again to Sync "
+               "to have your device re-registered and continue syncing.");
+    return;
+  }
+
+  /* Erase previous records from the Sync Storage Server. */
+  prev_device_id = ephy_sync_utils_get_device_id ();
+  ephy_sync_debug_erase_record ("clients", prev_device_id);
+  ephy_sync_debug_erase_record ("tabs", prev_device_id);
+
+  /* Use the device id and name assigned by the Firefox Accounts Server at sign in.
+   * The user can change later the device name in the Preferences dialog. */
+  device_id = json_object_get_string_member (device, "id");
+  ephy_sync_utils_set_device_id (device_id);
+  device_name = json_object_get_string_member (device, "name");
+  ephy_sync_utils_set_device_name (device_name);
+
+  device_bso_id = ephy_sync_utils_get_device_bso_id ();
+  record = ephy_sync_utils_make_client_record (device_bso_id, device_id, device_name);
+  ephy_sync_debug_upload_record ("clients", device_bso_id, record);
+
+  g_free (record);
+  g_free (device_bso_id);
+  g_free (prev_device_id);
+  json_object_unref (device);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1286,7 +1335,8 @@ const EphyProfileMigrator migrators[] = {
   /* 19 */ migrate_passwords_to_firefox_sync_passwords,
   /* 20 */ migrate_history_to_firefox_sync_history,
   /* 21 */ migrate_passwords_add_target_origin,
-  /* 22 */ migrate_sync_settings_path
+  /* 22 */ migrate_sync_settings_path,
+  /* 23 */ migrate_sync_device_info,
 };
 
 static gboolean

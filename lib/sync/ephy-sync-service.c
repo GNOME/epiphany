@@ -686,6 +686,7 @@ ephy_sync_service_destroy_session (EphySyncService *self,
     session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
   g_assert (session_token);
 
+  /* This also destroys the device associated with the session token. */
   url = g_strdup_printf ("%s/session/destroy", EPHY_SYNC_FX_ACCOUNTS_SERVER_URL);
   ephy_sync_crypto_derive_session_token (session_token, &token_id,
                                          &req_hmac_key, &tmp);
@@ -889,7 +890,7 @@ get_signed_certificate_cb (SoupSession *session,
   if (json_object_get_int_member (json, "errno") == 110) {
     message = _("The password of your Firefox account seems to have been changed.");
     suggestion = _("Please visit Preferences and sign in with the new password to continue syncing.");
-    ephy_sync_service_sign_out (self, FALSE);
+    ephy_sync_service_sign_out (self);
   }
 
   g_warning ("Failed to sign certificate. Status code: %u, response: %s",
@@ -1597,6 +1598,79 @@ ephy_sync_service_store_secrets (EphySyncService *self)
 }
 
 static void
+upload_client_record_cb (SoupSession *session,
+                         SoupMessage *msg,
+                         gpointer     user_data)
+{
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+
+  if (msg->status_code != 200) {
+    g_warning ("Failed to upload client record. Status code: %u, response: %s",
+               msg->status_code, msg->response_body->data);
+    if (self->is_signing_in)
+      ephy_sync_service_report_sign_in_error (self, _("Failed to upload client record."), NULL, TRUE);
+  } else {
+    LOG ("Successfully uploaded client record");
+    if (self->is_signing_in)
+      ephy_sync_service_store_secrets (self);
+  }
+}
+
+static void
+ephy_sync_service_upload_client_record (EphySyncService *self)
+{
+  SyncCryptoKeyBundle *bundle;
+  JsonNode *node;
+  JsonObject *bso;
+  char *device_bso_id;
+  char *device_id;
+  char *device_name;
+  char *record;
+  char *encrypted;
+  char *body;
+  char *endpoint;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  /* Make device ID and name. */
+  device_bso_id = ephy_sync_utils_get_device_bso_id ();
+  device_id = ephy_sync_utils_get_device_id ();
+  device_name = ephy_sync_utils_get_device_name ();
+
+  /* Make BSO as string. */
+  record = ephy_sync_utils_make_client_record (device_bso_id, device_id, device_name);
+  bundle = ephy_sync_service_get_key_bundle (self, "clients");
+  encrypted = ephy_sync_crypto_encrypt_record (record, bundle);
+
+  bso = json_object_new ();
+  json_object_set_string_member (bso, "id", device_bso_id);
+  json_object_set_string_member (bso, "payload", encrypted);
+
+  node = json_node_new (JSON_NODE_OBJECT);
+  json_node_set_object (node, bso);
+  body = json_to_string (node, FALSE);
+
+  /* Upload BSO and store the new device ID and name. */
+  LOG ("Uploading client record, device_bso_id=%s, device_id=%s, device_name=%s",
+       device_bso_id, device_id, device_name);
+  endpoint = g_strdup_printf ("storage/clients/%s", device_bso_id);
+  ephy_sync_service_queue_storage_request (self, endpoint,
+                                           SOUP_METHOD_PUT, body, -1, -1,
+                                           upload_client_record_cb, self);
+
+  g_free (device_bso_id);
+  g_free (device_id);
+  g_free (device_name);
+  g_free (record);
+  g_free (encrypted);
+  g_free (endpoint);
+  g_free (body);
+  json_object_unref (bso);
+  json_node_unref (node);
+  ephy_sync_crypto_key_bundle_free (bundle);
+}
+
+static void
 ephy_sync_service_finalize (GObject *object)
 {
   EphySyncService *self = EPHY_SYNC_SERVICE (object);
@@ -1729,7 +1803,7 @@ upload_crypto_keys_cb (SoupSession *session,
   } else {
     LOG ("Successfully uploaded crypto/keys record");
     ephy_sync_service_set_secret (self, secrets[CRYPTO_KEYS], self->crypto_keys);
-    ephy_sync_service_register_device (self, NULL);
+    ephy_sync_service_upload_client_record (self);
   }
 
   g_clear_pointer (&self->crypto_keys, g_free);
@@ -1827,7 +1901,7 @@ get_crypto_keys_cb (SoupSession *session,
   }
 
   ephy_sync_service_set_secret (self, secrets[CRYPTO_KEYS], crypto_keys);
-  ephy_sync_service_register_device (self, NULL);
+  ephy_sync_service_upload_client_record (self);
   goto out_no_error;
 
 out_error:
@@ -2033,6 +2107,94 @@ ephy_sync_service_verify_storage_version (EphySyncService *self)
 }
 
 static void
+upload_fxa_device_cb (SoupSession *session,
+                      SoupMessage *msg,
+                      gpointer     user_data)
+{
+  EphySyncService *self = user_data;
+  JsonNode *node;
+  JsonObject *object;
+  GError *error = NULL;
+
+  if (msg->status_code != 200) {
+    g_warning ("Failed to upload device info on FxA Server. Status code: %u, response: %s",
+               msg->status_code, msg->response_body->data);
+    goto out_error;
+  }
+
+  node = json_from_string (msg->response_body->data, &error);
+  if (error) {
+    g_warning ("Response is not a valid JSON: %s", error->message);
+    g_error_free (error);
+    goto out_error;
+  }
+
+  object = json_node_get_object (node);
+  ephy_sync_utils_set_device_id (json_object_get_string_member (object, "id"));
+  json_node_unref (node);
+
+  LOG ("Successfully uploaded device info on FxA Server");
+  if (self->is_signing_in)
+    ephy_sync_service_verify_storage_version (self);
+  return;
+
+out_error:
+  if (self->is_signing_in)
+    ephy_sync_service_report_sign_in_error (self, _("Failed to upload device info"), NULL, TRUE);
+}
+
+static void
+ephy_sync_service_upload_fxa_device (EphySyncService *self)
+{
+  JsonNode *node;
+  JsonObject *object;
+  const char *session_token;
+  char *body;
+  char *device_name;
+  char *token_id_hex;
+  guint8 *token_id;
+  guint8 *req_hmac_key;
+  guint8 *tmp;
+
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+
+  object = json_object_new ();
+  device_name = ephy_sync_utils_get_device_name ();
+  json_object_set_string_member (object, "name", device_name);
+  json_object_set_string_member (object, "type", "desktop");
+
+  /* If we are signing in, the ID for the newly registered device will be returned
+   * by the FxA server in the response. Otherwise, we are updating the current
+   * device (i.e. setting its name), so we use the previously obtained ID. */
+  if (!self->is_signing_in) {
+    char *device_id = ephy_sync_utils_get_device_id ();
+    json_object_set_string_member (object, "id", device_id);
+    g_free (device_id);
+  }
+
+  node = json_node_new (JSON_NODE_OBJECT);
+  json_node_take_object (node, object);
+  body = json_to_string (node, FALSE);
+
+  session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
+  ephy_sync_crypto_derive_session_token (session_token, &token_id, &req_hmac_key, &tmp);
+  token_id_hex = ephy_sync_utils_encode_hex (token_id, 32);
+
+  LOG ("Uploading device info on FxA Server...");
+  ephy_sync_service_fxa_hawk_post (self, "account/device", token_id_hex,
+                                   req_hmac_key, 32, body,
+                                   upload_fxa_device_cb, self);
+
+  g_free (body);
+  g_free (device_name);
+  g_free (token_id_hex);
+  g_free (token_id);
+  g_free (req_hmac_key);
+  g_free (tmp);
+  json_node_unref (node);
+}
+
+static void
 ephy_sync_service_sign_in_finish (EphySyncService *self,
                                   SignInAsyncData *data,
                                   const char      *bundle)
@@ -2070,7 +2232,7 @@ ephy_sync_service_sign_in_finish (EphySyncService *self,
   kb_hex = ephy_sync_utils_encode_hex (kb, 32);
   ephy_sync_service_set_secret (self, secrets[MASTER_KEY], kb_hex);
 
-  ephy_sync_service_verify_storage_version (self);
+  ephy_sync_service_upload_fxa_device (self);
 
   g_free (kb_hex);
   g_free (kb);
@@ -2264,104 +2426,16 @@ ephy_sync_service_unregister_manager (EphySyncService           *self,
   g_signal_handlers_disconnect_by_func (manager, synchronizable_modified_cb, self);
 }
 
-static void
-register_device_cb (SoupSession *session,
-                    SoupMessage *msg,
-                    gpointer     user_data)
-{
-  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
-
-  if (msg->status_code != 200) {
-    g_warning ("Failed to register device. Status code: %u, response: %s",
-               msg->status_code, msg->response_body->data);
-    if (self->is_signing_in)
-      ephy_sync_service_report_sign_in_error (self, _("Failed to register device."), NULL, TRUE);
-  } else {
-    LOG ("Successfully registered device");
-    if (self->is_signing_in)
-      ephy_sync_service_store_secrets (self);
-  }
-}
-
 void
-ephy_sync_service_register_device (EphySyncService *self,
-                                   const char      *device_name)
+ephy_sync_service_update_device_name (EphySyncService *self,
+                                      const char      *name)
 {
-  SyncCryptoKeyBundle *bundle;
-  JsonNode *node;
-  JsonObject *bso;
-  JsonObject *record;
-  JsonArray *array;
-  char *id;
-  char *name;
-  char *protocol;
-  char *cleartext;
-  char *encrypted;
-  char *body;
-  char *endpoint;
+  g_assert (EPHY_IS_SYNC_SERVICE (self));
+  g_assert (name);
 
-  g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
-
-  /* Make protocol. */
-  protocol = g_strdup_printf ("1.%d", EPHY_SYNC_STORAGE_VERSION);
-  array = json_array_new ();
-  json_array_add_string_element (array, protocol);
-
-  /* Make device ID and name. */
-  id = ephy_sync_utils_get_device_id ();
-  if (device_name)
-    name = g_strdup (device_name);
-  else
-    name = ephy_sync_utils_get_device_name ();
-
-  /* Set record members. */
-  record = json_object_new ();
-  json_object_set_string_member (record, "id", id);
-  json_object_set_string_member (record, "fxaDeviceId",
-                                 ephy_sync_service_get_secret (self, secrets[UID]));
-  json_object_set_string_member (record, "name", name);
-  json_object_set_string_member (record, "type", "desktop");
-  json_object_set_string_member (record, "version", VERSION);
-  json_object_set_array_member (record, "protocols", array);
-  json_object_set_string_member (record, "os", "Linux");
-  json_object_set_string_member (record, "appPackage", "org.gnome.epiphany");
-  json_object_set_string_member (record, "application", "Epiphany");
-
-  /* Get record's string representation. */
-  node = json_node_new (JSON_NODE_OBJECT);
-  json_node_set_object (node, record);
-  cleartext = json_to_string (node, FALSE);
-
-  /* Make BSO as string. */
-  bundle = ephy_sync_service_get_key_bundle (self, "clients");
-  encrypted = ephy_sync_crypto_encrypt_record (cleartext, bundle);
-  bso = json_object_new ();
-  json_object_set_string_member (bso, "id", id);
-  json_object_set_string_member (bso, "payload", encrypted);
-  json_node_set_object (node, bso);
-  body = json_to_string (node, FALSE);
-
-  /* Upload BSO and store the new device ID and name. */
-  LOG ("Registering device with name '%s'...", name);
-  endpoint = g_strdup_printf ("storage/clients/%s", id);
-  ephy_sync_service_queue_storage_request (self, endpoint,
-                                           SOUP_METHOD_PUT, body, -1, -1,
-                                           register_device_cb, self);
-
-  ephy_sync_utils_set_device_id (id);
   ephy_sync_utils_set_device_name (name);
-
-  g_free (endpoint);
-  g_free (body);
-  g_free (encrypted);
-  ephy_sync_crypto_key_bundle_free (bundle);
-  g_free (cleartext);
-  g_free (name);
-  g_free (id);
-  g_free (protocol);
-  json_object_unref (record);
-  json_object_unref (bso);
-  json_node_unref (node);
+  ephy_sync_service_upload_fxa_device (self);
+  ephy_sync_service_upload_client_record (self);
 }
 
 static void
@@ -2378,62 +2452,52 @@ delete_open_tabs_record_cb (SoupSession *session,
 }
 
 static void
-unregister_device_cb (SoupSession *session,
-                      SoupMessage *msg,
-                      gpointer     user_data)
+delete_client_record_cb (SoupSession *session,
+                         SoupMessage *msg,
+                         gpointer     user_data)
 {
   if (msg->status_code != 200) {
-    g_warning ("Failed to unregister device. Status code: %u, response: %s",
+    g_warning ("Failed to delete client record. Status code: %u, response: %s",
                msg->status_code, msg->response_body->data);
   } else {
-    LOG ("Successfully unregistered device");
+    LOG ("Successfully deleted client record");
   }
 }
 
 static void
-ephy_sync_service_unregister_device (EphySyncService *self)
+ephy_sync_service_cleanup_storage_singletons (EphySyncService *self)
 {
   char *endpoint;
-  char *id;
+  char *device_bso_id;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
-  id = ephy_sync_utils_get_device_id ();
+  device_bso_id = ephy_sync_utils_get_device_bso_id ();
   /* Delete the client record associated to this device. */
-  endpoint = g_strdup_printf ("storage/clients/%s", id);
+  endpoint = g_strdup_printf ("storage/clients/%s", device_bso_id);
   ephy_sync_service_queue_storage_request (self, endpoint,
                                            SOUP_METHOD_DELETE,
                                            NULL, -1, -1,
-                                           unregister_device_cb, NULL);
+                                           delete_client_record_cb, NULL);
   g_free (endpoint);
 
   /* Delete the open tabs record associated to this device. */
-  endpoint = g_strdup_printf ("storage/tabs/%s", id);
+  endpoint = g_strdup_printf ("storage/tabs/%s", device_bso_id);
   ephy_sync_service_queue_storage_request (self, endpoint,
                                            SOUP_METHOD_DELETE,
                                            NULL, -1, -1,
                                            delete_open_tabs_record_cb, NULL);
   g_free (endpoint);
-  g_free (id);
+  g_free (device_bso_id);
 }
 
 void
-ephy_sync_service_sign_out (EphySyncService *self,
-                            gboolean         unregister_device)
+ephy_sync_service_sign_out (EphySyncService *self)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
 
-  /* If we sign out without unregistering the device, then the current id of
-   * the device should not be cleared, but preserved for further use (Ephy will
-   * use the same id next time the user signs in). This way we prevent a zombie
-   * record in the clients collection on the Sync Storage Server.
-   */
-  if (unregister_device) {
-    ephy_sync_service_unregister_device (self);
-    ephy_sync_utils_set_device_id (NULL);
-  }
-
   ephy_sync_service_stop_periodical_sync (self);
+  ephy_sync_service_cleanup_storage_singletons (self);
   ephy_sync_service_destroy_session (self, NULL);
   ephy_sync_service_forget_secrets (self);
   ephy_sync_service_clear_storage_queue (self);
@@ -2450,6 +2514,7 @@ ephy_sync_service_sign_out (EphySyncService *self,
   ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
   ephy_sync_utils_set_history_sync_is_initial (TRUE);
 
+  ephy_sync_utils_set_device_id (NULL);
   ephy_sync_utils_set_sync_time (0);
   ephy_sync_utils_set_sync_user (NULL);
 }

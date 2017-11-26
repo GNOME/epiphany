@@ -37,12 +37,11 @@ void             ephy_sync_service_sign_in            (EphySyncService *self,
                                                        const char      *session_token,
                                                        const char      *key_fetch_token,
                                                        const char      *unwrap_kb);
-void             ephy_sync_service_sign_out           (EphySyncService *self,
-                                                       gboolean         unregister_device);
+void             ephy_sync_service_sign_out           (EphySyncService *self);
 void             ephy_sync_service_sync               (EphySyncService *self);
 void             ephy_sync_service_start_sync         (EphySyncService *self);
-void             ephy_sync_service_register_device    (EphySyncService *self,
-                                                       const char      *device_name);
+void             ephy_sync_service_update_device_name (EphySyncService *self,
+                                                       const char      *name);
 void             ephy_sync_service_register_manager   (EphySyncService           *self,
                                                        EphySynchronizableManager *manager);
 void             ephy_sync_service_unregister_manager (EphySyncService           *self,

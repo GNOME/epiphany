@@ -59,6 +59,7 @@ libephymisc_deps = [
   gnome_desktop_dep,
   gtk_dep,
   icu_uc_dep,
+  json_glib_dep,
   libsecret_dep,
   libsoup_dep,
   libxml_dep,
