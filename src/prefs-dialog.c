@@ -635,10 +635,16 @@ on_sync_device_name_save_button_clicked (GtkWidget   *button,
                                          PrefsDialog *dialog)
 {
   EphySyncService *service = ephy_shell_get_sync_service (ephy_shell_get_default ());
-  const char *name;
+  const char *text;
 
-  name = gtk_entry_get_text (GTK_ENTRY (dialog->sync_device_name_entry));
-  ephy_sync_service_register_device (service, name);
+  text = gtk_entry_get_text (GTK_ENTRY (dialog->sync_device_name_entry));
+  if (!g_strcmp0 (text, "")) {
+    char *name = ephy_sync_utils_get_device_name ();
+    gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
+    g_free (name);
+  } else {
+    ephy_sync_service_register_device (service, text);
+  }
 
   gtk_widget_set_sensitive (GTK_WIDGET (dialog->sync_device_name_entry), FALSE);
   gtk_widget_set_visible (GTK_WIDGET (dialog->sync_device_name_change_button), TRUE);
