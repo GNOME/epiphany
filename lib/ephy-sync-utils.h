@@ -54,7 +54,7 @@ void      ephy_sync_utils_generate_random_bytes         (void   *random_ctx,
 char     *ephy_sync_utils_get_audience                  (const char *url);
 char     *ephy_sync_utils_get_random_sync_id            (void);
 
-char     *ephy_sync_utils_make_client_record            (const char *sync_id,
+char     *ephy_sync_utils_make_client_record            (const char *device_bso_id,
                                                          const char *device_id,
                                                          const char *device_name);
 
