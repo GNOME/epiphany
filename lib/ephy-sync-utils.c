@@ -23,6 +23,7 @@
 
 #include "ephy-settings.h"
 
+#include <glib/gi18n.h>
 #include <inttypes.h>
 #include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
@@ -320,7 +321,9 @@ ephy_sync_utils_get_device_name (void)
     return name;
 
   g_free (name);
-  name = g_strdup_printf ("%s’s GNOME Web on %s", g_get_user_name (), g_get_host_name ());
+  /* Translators: First %s is the name of the user currently logged in on the
+   * machine. The second %s is the machine's name. */
+  name = g_strdup_printf (_("%s’s GNOME Web on %s"), g_get_user_name (), g_get_host_name ());
   g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_NAME, name);
 
   return name;
