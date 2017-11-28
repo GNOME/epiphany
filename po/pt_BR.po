@@ -26,10 +26,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-11-01 19:45+0000\n"
-"PO-Revision-Date: 2017-11-06 16:20-0200\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=epipha"
+"ny&keywords=I18N+L10N&component=I18N\n"
+"POT-Creation-Date: 2017-11-27 14:18+0000\n"
+"PO-Revision-Date: 2017-11-27 23:17-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -771,9 +771,6 @@ msgstr ""
 #: data/org.gnome.epiphany.gschema.xml:435
 #: data/org.gnome.epiphany.gschema.xml:440
 #: data/org.gnome.epiphany.gschema.xml:445
-#| msgid ""
-#| "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#| "search-engines instead."
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "sync/ instead."
@@ -1771,22 +1768,22 @@ msgstr "Senha para %s em um formulário em %s"
 msgid "Password in a form in %s"
 msgstr "Senha em um formulário em %s"
 
-#: lib/sync/ephy-sync-service.c:786
+#: lib/sync/ephy-sync-service.c:785
 msgid "Failed to obtain storage credentials."
 msgstr "Falha ao obter credenciais de armazenamento."
 
-#: lib/sync/ephy-sync-service.c:787 lib/sync/ephy-sync-service.c:902
-#: lib/sync/ephy-sync-service.c:1485
+#: lib/sync/ephy-sync-service.c:786 lib/sync/ephy-sync-service.c:901
+#: lib/sync/ephy-sync-service.c:1491
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Por favor, visite as Preferências e autentique-se novamente para continuar a "
 "sincronização."
 
-#: lib/sync/ephy-sync-service.c:892
+#: lib/sync/ephy-sync-service.c:891
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "A senha da sua conta Firefox parece ter sido alterada."
 
-#: lib/sync/ephy-sync-service.c:893
+#: lib/sync/ephy-sync-service.c:892
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1794,42 +1791,47 @@ msgstr ""
 "Por favor, visite as Preferências e autentique-se com a nova senha para "
 "continuar a sincronização."
 
-#: lib/sync/ephy-sync-service.c:901
+#: lib/sync/ephy-sync-service.c:900
 msgid "Failed to obtain signed certificate."
 msgstr "Falha a obter certificado assinado."
 
-#: lib/sync/ephy-sync-service.c:1451 lib/sync/ephy-sync-service.c:1456
+#: lib/sync/ephy-sync-service.c:1457 lib/sync/ephy-sync-service.c:1462
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Não foi possível localizar os segredos de sincronização para o usuário de "
 "sincronização atual."
 
-#: lib/sync/ephy-sync-service.c:1463 lib/sync/ephy-sync-service.c:1471
+#: lib/sync/ephy-sync-service.c:1469 lib/sync/ephy-sync-service.c:1477
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Os segredos de sincronização para o usuário de sincronização atual são "
 "inválidos."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1579
+#: lib/sync/ephy-sync-service.c:1585
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Os segredos de sincronização de %s"
 
-#: lib/sync/ephy-sync-service.c:1722
+#: lib/sync/ephy-sync-service.c:1611
+#| msgid "Failed to upload crypto/keys record."
+msgid "Failed to upload client record."
+msgstr "Falha ao atualizar o registro cliente."
+
+#: lib/sync/ephy-sync-service.c:1801
 msgid "Failed to upload crypto/keys record."
 msgstr "Falha ao atualizar o registro cripto/chaves."
 
-#: lib/sync/ephy-sync-service.c:1829
+#: lib/sync/ephy-sync-service.c:1908
 msgid "Failed to retrieve crypto keys."
 msgstr "Falha ao obter chaves criptográficas."
 
-#: lib/sync/ephy-sync-service.c:1880
+#: lib/sync/ephy-sync-service.c:1959
 msgid "Failed to upload meta/global record."
 msgstr "Falha ao enviar registro meta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:1996
+#: lib/sync/ephy-sync-service.c:2076
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1837,17 +1839,18 @@ msgstr ""
 "Sua conta Firefox usa armazenamento de versão %d. O Web oferece suporte a "
 "versão %d."
 
-#: lib/sync/ephy-sync-service.c:2007
+#: lib/sync/ephy-sync-service.c:2087
 msgid "Failed to verify storage version."
 msgstr "Falha ao verificar a versão de armazenamento."
 
-#: lib/sync/ephy-sync-service.c:2048 lib/sync/ephy-sync-service.c:2126
+#: lib/sync/ephy-sync-service.c:2143
+#| msgid "Failed to upload crypto/keys record."
+msgid "Failed to upload device info"
+msgstr "Falha ao atualizar a informação do dispositivo"
+
+#: lib/sync/ephy-sync-service.c:2216 lib/sync/ephy-sync-service.c:2294
 msgid "Failed to retrieve the Sync Key"
 msgstr "Falha ao obter a chave Sync"
-
-#: lib/sync/ephy-sync-service.c:2260
-msgid "Failed to register device."
-msgstr "Falha ao registrar o dispositivo."
 
 #: lib/widgets/ephy-certificate-dialog.c:102
 msgid "The certificate does not match this website"
@@ -1898,68 +1901,68 @@ msgstr ""
 "Este certificado é válido. Porém, os recursos nesta página foram enviados de "
 "forma insegura."
 
-#: lib/widgets/ephy-downloads-popover.c:225
+#: lib/widgets/ephy-downloads-popover.c:246
 msgid "_Clear All"
 msgstr "_Limpar tudo"
 
-#: lib/widgets/ephy-download-widget.c:79
+#: lib/widgets/ephy-download-widget.c:80
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "%d segundo restante"
 msgstr[1] "%d segundos restantes"
 
-#: lib/widgets/ephy-download-widget.c:83
+#: lib/widgets/ephy-download-widget.c:84
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "%d minuto restante"
 msgstr[1] "%d minutos restantes"
 
-#: lib/widgets/ephy-download-widget.c:87
+#: lib/widgets/ephy-download-widget.c:88
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "%d hora restante"
 msgstr[1] "%d horas restantes"
 
-#: lib/widgets/ephy-download-widget.c:91
+#: lib/widgets/ephy-download-widget.c:92
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "%d dia restante"
 msgstr[1] "%d dias restantes"
 
-#: lib/widgets/ephy-download-widget.c:95
+#: lib/widgets/ephy-download-widget.c:96
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "%d semana restante"
 msgstr[1] "%d semanas restantes"
 
-#: lib/widgets/ephy-download-widget.c:99
+#: lib/widgets/ephy-download-widget.c:100
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
 msgstr[0] "%d mês restante"
 msgstr[1] "%d meses restantes"
 
-#: lib/widgets/ephy-download-widget.c:222
-#: lib/widgets/ephy-download-widget.c:406
+#: lib/widgets/ephy-download-widget.c:223
+#: lib/widgets/ephy-download-widget.c:407
 msgid "Finished"
 msgstr "Terminado"
 
-#: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:402
+#: lib/widgets/ephy-download-widget.c:240
+#: lib/widgets/ephy-download-widget.c:403
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Erro ao baixar: %s"
 
-#: lib/widgets/ephy-download-widget.c:266
+#: lib/widgets/ephy-download-widget.c:267
 msgid "Cancelling…"
 msgstr "Cancelando…"
 
-#: lib/widgets/ephy-download-widget.c:408
+#: lib/widgets/ephy-download-widget.c:409
 msgid "Starting…"
 msgstr "Iniciando…"
 
@@ -2425,16 +2428,12 @@ msgid "Last synchronized: %s"
 msgstr "Última sincronização: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:283 src/prefs-dialog.c:1849
+#: src/prefs-dialog.c:283 src/prefs-dialog.c:1851
 #, c-format
 msgid "Logged in as %s"
 msgstr "Autenticado como %s"
 
-#: src/prefs-dialog.c:510
-msgid "Please don’t leave this page until you have completed the verification."
-msgstr "Por favor, não saia dessa página até ter completado a verificação."
-
-#: src/prefs-dialog.c:527
+#: src/prefs-dialog.c:523
 msgid "Something went wrong, please try again later."
 msgstr "Alguma coisa deu errado, por favor tente novamente depois."
 
@@ -2442,7 +2441,7 @@ msgstr "Alguma coisa deu errado, por favor tente novamente depois."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:991 src/prefs-dialog.c:995
+#: src/prefs-dialog.c:993 src/prefs-dialog.c:997
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2451,28 +2450,28 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1002
+#: src/prefs-dialog.c:1004
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definido pelo usuário (%s)"
 
-#: src/prefs-dialog.c:1024
+#: src/prefs-dialog.c:1026
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma do sistema (%s)"
 msgstr[1] "Idiomas do sistema (%s)"
 
-#: src/prefs-dialog.c:1267 src/resources/gtk/prefs-dialog.ui:768
+#: src/prefs-dialog.c:1269 src/resources/gtk/prefs-dialog.ui:768
 msgid "Language"
 msgstr "Idioma"
 
-#: src/prefs-dialog.c:1345
+#: src/prefs-dialog.c:1347
 msgid "Select a directory"
 msgstr "Selecione um diretório"
 
-#: src/profile-migrator/ephy-profile-migrator.c:94
+#: src/profile-migrator/ephy-profile-migrator.c:95
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -2480,27 +2479,27 @@ msgstr ""
 "Este diretório é obsoleto em Web 3.6 e foi feito uma tentativa de migrar "
 "esta configuração para ~/.config/epiphany"
 
-#: src/profile-migrator/ephy-profile-migrator.c:937
+#: src/profile-migrator/ephy-profile-migrator.c:938
 msgid "Search the Web"
 msgstr "Pesquisar na web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1347
+#: src/profile-migrator/ephy-profile-migrator.c:1397
 msgid "Executes only the n-th migration step"
 msgstr "Executar somente o n-ésimo passo"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1349
+#: src/profile-migrator/ephy-profile-migrator.c:1399
 msgid "Specifies the required version for the migrator"
 msgstr "Especifica a versão necessária para o migrador"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1351
+#: src/profile-migrator/ephy-profile-migrator.c:1401
 msgid "Specifies the profile where the migrator should run"
 msgstr "Especifica o perfil onde o migrador deve ser executado"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1371
+#: src/profile-migrator/ephy-profile-migrator.c:1421
 msgid "Web profile migrator"
 msgstr "Migrador de perfil do Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1372
+#: src/profile-migrator/ephy-profile-migrator.c:1422
 msgid "Web profile migrator options"
 msgstr "Opções do migrador de perfis do Web"
 
@@ -3150,210 +3149,205 @@ msgstr "Salva a página"
 
 #: src/resources/gtk/shortcuts-dialog.ui:47
 msgctxt "shortcut window"
-msgid "Save page as web app"
-msgstr "Salva a página como aplicativo web"
-
-#: src/resources/gtk/shortcuts-dialog.ui:54
-msgctxt "shortcut window"
 msgid "Print page"
 msgstr "Imprime a página"
 
-#: src/resources/gtk/shortcuts-dialog.ui:61
+#: src/resources/gtk/shortcuts-dialog.ui:54
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Sai"
 
-#: src/resources/gtk/shortcuts-dialog.ui:68
+#: src/resources/gtk/shortcuts-dialog.ui:61
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Ajuda"
 
-#: src/resources/gtk/shortcuts-dialog.ui:75
+#: src/resources/gtk/shortcuts-dialog.ui:68
 msgctxt "shortcut window"
 msgid "Shortcuts"
 msgstr "Atalhos"
 
-#: src/resources/gtk/shortcuts-dialog.ui:86
+#: src/resources/gtk/shortcuts-dialog.ui:79
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navegação"
 
-#: src/resources/gtk/shortcuts-dialog.ui:90
+#: src/resources/gtk/shortcuts-dialog.ui:83
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "Vai para a página inicial"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:90
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Recarrega a página atual"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Para de carregar a página atual"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Vai para a página anterior"
 
-#: src/resources/gtk/shortcuts-dialog.ui:118
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Vai para a próxima página"
 
-#: src/resources/gtk/shortcuts-dialog.ui:129
+#: src/resources/gtk/shortcuts-dialog.ui:122
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Abas"
 
-#: src/resources/gtk/shortcuts-dialog.ui:133
+#: src/resources/gtk/shortcuts-dialog.ui:126
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Nova aba"
 
-#: src/resources/gtk/shortcuts-dialog.ui:140
+#: src/resources/gtk/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Fecha a aba atual"
 
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Reabre uma aba fechada"
 
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Vai para a próxima aba"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Vai para a aba anterior"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Move a aba atual para a esquerda"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Move a aba atual para a direita"
 
-#: src/resources/gtk/shortcuts-dialog.ui:186
+#: src/resources/gtk/shortcuts-dialog.ui:179
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Diversos"
 
-#: src/resources/gtk/shortcuts-dialog.ui:190
+#: src/resources/gtk/shortcuts-dialog.ui:183
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Histórico"
 
-#: src/resources/gtk/shortcuts-dialog.ui:197
+#: src/resources/gtk/shortcuts-dialog.ui:190
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferências"
 
-#: src/resources/gtk/shortcuts-dialog.ui:204
+#: src/resources/gtk/shortcuts-dialog.ui:197
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Favorita a página atual"
 
-#: src/resources/gtk/shortcuts-dialog.ui:211
+#: src/resources/gtk/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Ativa/desativa a navegação com cursor"
 
-#: src/resources/gtk/shortcuts-dialog.ui:222
+#: src/resources/gtk/shortcuts-dialog.ui:215
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Visão"
 
-#: src/resources/gtk/shortcuts-dialog.ui:226
+#: src/resources/gtk/shortcuts-dialog.ui:219
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Amplia"
 
-#: src/resources/gtk/shortcuts-dialog.ui:233
+#: src/resources/gtk/shortcuts-dialog.ui:226
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Reduz"
 
-#: src/resources/gtk/shortcuts-dialog.ui:240
+#: src/resources/gtk/shortcuts-dialog.ui:233
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Restaura ampliação"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
+#: src/resources/gtk/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Tela cheia"
 
-#: src/resources/gtk/shortcuts-dialog.ui:254
+#: src/resources/gtk/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Exibe o código-fonte da página"
 
-#: src/resources/gtk/shortcuts-dialog.ui:261
+#: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Ativa/desativa o inspetor"
 
-#: src/resources/gtk/shortcuts-dialog.ui:272
+#: src/resources/gtk/shortcuts-dialog.ui:265
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Editação"
 
-#: src/resources/gtk/shortcuts-dialog.ui:276
+#: src/resources/gtk/shortcuts-dialog.ui:269
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Recorta"
 
-#: src/resources/gtk/shortcuts-dialog.ui:283
+#: src/resources/gtk/shortcuts-dialog.ui:276
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Copia"
 
-#: src/resources/gtk/shortcuts-dialog.ui:290
+#: src/resources/gtk/shortcuts-dialog.ui:283
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Cola"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Desfaz"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Refaz"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Seleciona tudo"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Seleciona a URL da página"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Pesquisa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Próximo resultado da pesquisa"
 
-#: src/resources/gtk/shortcuts-dialog.ui:339
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Resultado anterior da pesquisa"
@@ -3563,6 +3557,17 @@ msgstr ""
 #: src/window-commands.c:2131
 msgid "_Enable"
 msgstr "_Ativar"
+
+#~ msgid "Failed to register device."
+#~ msgstr "Falha ao registrar o dispositivo."
+
+#~ msgid ""
+#~ "Please don’t leave this page until you have completed the verification."
+#~ msgstr "Por favor, não saia dessa página até ter completado a verificação."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Save page as web app"
+#~ msgstr "Salva a página como aplicativo web"
 
 #~ msgid "The sync secrets for the current sync user are null."
 #~ msgstr ""
