@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-11-05 11:37+0000\n"
-"PO-Revision-Date: 2017-11-06 09:44+0100\n"
+"POT-Creation-Date: 2017-11-28 01:18+0000\n"
+"PO-Revision-Date: 2017-11-29 20:31+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
 msgid "GNOME Web"
@@ -68,7 +68,7 @@ msgstr "Das GNOME-Projekt"
 
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:295
 #: embed/ephy-about-handler.c:326 src/ephy-main.c:102 src/ephy-main.c:270
-#: src/ephy-main.c:412 src/window-commands.c:642
+#: src/ephy-main.c:412 src/window-commands.c:649
 msgid "Web"
 msgstr "Internet"
 
@@ -1871,22 +1871,22 @@ msgstr "Passwort für %s auf %s"
 msgid "Password in a form in %s"
 msgstr "Passwort in einem Eingabefeld auf %s"
 
-#: lib/sync/ephy-sync-service.c:786
+#: lib/sync/ephy-sync-service.c:785
 msgid "Failed to obtain storage credentials."
 msgstr "Speicherzugangsdaten konnten nicht geholt werden."
 
-#: lib/sync/ephy-sync-service.c:787 lib/sync/ephy-sync-service.c:902
-#: lib/sync/ephy-sync-service.c:1486
+#: lib/sync/ephy-sync-service.c:786 lib/sync/ephy-sync-service.c:901
+#: lib/sync/ephy-sync-service.c:1492
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Bitte öffnen Sie die Einstellungen und melden Sie sich erneut an, um den "
 "Abgleichvorgang fortzusetzen."
 
-#: lib/sync/ephy-sync-service.c:892
+#: lib/sync/ephy-sync-service.c:891
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Das Passwort Ihres Firefox-Kontos scheint geändert worden zu sein."
 
-#: lib/sync/ephy-sync-service.c:893
+#: lib/sync/ephy-sync-service.c:892
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1894,42 +1894,46 @@ msgstr ""
 "Bitte öffnen Sie die Einstellungen und melden Sie sich mit dem neuen "
 "Passwort an, um den Abgleichvorgang fortzusetzen."
 
-#: lib/sync/ephy-sync-service.c:901
+#: lib/sync/ephy-sync-service.c:900
 msgid "Failed to obtain signed certificate."
 msgstr "Signiertes Zertifikat konnte nicht geholt werden."
 
 # »Sync« ist hier ein Eigenname:
 # https://www.mozilla.org/de/firefox/sync/
-#: lib/sync/ephy-sync-service.c:1452 lib/sync/ephy-sync-service.c:1457
+#: lib/sync/ephy-sync-service.c:1458 lib/sync/ephy-sync-service.c:1463
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Sync-Token für den aktuell angemeldeten Benutzer konnten nicht gefunden "
 "werden."
 
-#: lib/sync/ephy-sync-service.c:1464 lib/sync/ephy-sync-service.c:1472
+#: lib/sync/ephy-sync-service.c:1470 lib/sync/ephy-sync-service.c:1478
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Die Sync-Anmeldedaten für den aktuellen Sync-Benutzer sind ungültig."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1580
+#: lib/sync/ephy-sync-service.c:1586
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Die Sync-Token von %s"
 
-#: lib/sync/ephy-sync-service.c:1723
+#: lib/sync/ephy-sync-service.c:1612
+msgid "Failed to upload client record."
+msgstr "Client-Datensatz konnte nicht übertragen werden."
+
+#: lib/sync/ephy-sync-service.c:1802
 msgid "Failed to upload crypto/keys record."
 msgstr "Crypto/keys-Datensatz konnte nicht übertragen werden."
 
-#: lib/sync/ephy-sync-service.c:1830
+#: lib/sync/ephy-sync-service.c:1909
 msgid "Failed to retrieve crypto keys."
 msgstr "Krypto-Schlüssel konnten nicht geholt werden."
 
-#: lib/sync/ephy-sync-service.c:1881
+#: lib/sync/ephy-sync-service.c:1960
 msgid "Failed to upload meta/global record."
 msgstr "Meta/global-Datensatz konnte nicht übertragen werden."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:1998
+#: lib/sync/ephy-sync-service.c:2077
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1937,17 +1941,17 @@ msgstr ""
 "Ihr Firefox-Konto verwendet die Speicherversion %d. Web unterstützt nur "
 "Version %d."
 
-#: lib/sync/ephy-sync-service.c:2009
+#: lib/sync/ephy-sync-service.c:2088
 msgid "Failed to verify storage version."
 msgstr "Speicherversion konnte nicht überprüft werden."
 
-#: lib/sync/ephy-sync-service.c:2050 lib/sync/ephy-sync-service.c:2128
+#: lib/sync/ephy-sync-service.c:2144
+msgid "Failed to upload device info"
+msgstr "Geräteinformation konnte nicht übertragen werden"
+
+#: lib/sync/ephy-sync-service.c:2217 lib/sync/ephy-sync-service.c:2295
 msgid "Failed to retrieve the Sync Key"
 msgstr "Der Sync-Schlüssel konnte nicht geholt werden"
-
-#: lib/sync/ephy-sync-service.c:2262
-msgid "Failed to register device."
-msgstr "Gerät konnte nicht registriert werden."
 
 #: lib/widgets/ephy-certificate-dialog.c:102
 msgid "The certificate does not match this website"
@@ -1998,75 +2002,75 @@ msgstr ""
 "Dieses Zertifikat ist gültig. Ressourcen auf dieser Seite wurden jedoch "
 "unsicher gesendet."
 
-#: lib/widgets/ephy-downloads-popover.c:225
+#: lib/widgets/ephy-downloads-popover.c:246
 msgid "_Clear All"
 msgstr "Alle _leeren"
 
-#: lib/widgets/ephy-download-widget.c:79
+#: lib/widgets/ephy-download-widget.c:80
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "%d Sekunde verbleibend"
 msgstr[1] "%d Sekunden verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:83
+#: lib/widgets/ephy-download-widget.c:84
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "%d Minute verbleibend"
 msgstr[1] "%d Minuten verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:87
+#: lib/widgets/ephy-download-widget.c:88
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "%d Stunde verbleibend"
 msgstr[1] "%d Stunden verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:91
+#: lib/widgets/ephy-download-widget.c:92
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "%d Tag verbleibend"
 msgstr[1] "%d Tage verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:95
+#: lib/widgets/ephy-download-widget.c:96
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "%d Woche verbleibend"
 msgstr[1] "%d Wochen verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:99
+#: lib/widgets/ephy-download-widget.c:100
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
 msgstr[0] "%d Monat verbleibend"
 msgstr[1] "%d Monate verbleibend"
 
-#: lib/widgets/ephy-download-widget.c:222
-#: lib/widgets/ephy-download-widget.c:406
+#: lib/widgets/ephy-download-widget.c:223
+#: lib/widgets/ephy-download-widget.c:407
 msgid "Finished"
 msgstr "Abgeschlossen"
 
-#: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:402
+#: lib/widgets/ephy-download-widget.c:240
+#: lib/widgets/ephy-download-widget.c:403
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Fehler beim Herunterladen: %s"
 
-#: lib/widgets/ephy-download-widget.c:266
+#: lib/widgets/ephy-download-widget.c:267
 msgid "Cancelling…"
 msgstr "Wird abgebrochen …"
 
-#: lib/widgets/ephy-download-widget.c:408
+#: lib/widgets/ephy-download-widget.c:409
 msgid "Starting…"
 msgstr "Wird gestartet …"
 
 #: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1076
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:231
 #: src/window-commands.c:296 src/window-commands.c:393
-#: src/window-commands.c:452 src/window-commands.c:1395
+#: src/window-commands.c:452 src/window-commands.c:1409
 msgid "_Cancel"
 msgstr "A_bbrechen"
 
@@ -2094,20 +2098,20 @@ msgstr "Alle Dateien"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:594 src/ephy-history-dialog.c:258
+#: lib/widgets/ephy-location-entry.c:660 src/ephy-history-dialog.c:258
 msgid "Cl_ear"
 msgstr "_Leeren"
 
-#: lib/widgets/ephy-location-entry.c:614
+#: lib/widgets/ephy-location-entry.c:680
 msgid "Paste and _Go"
 msgstr "Einfü_gen und weiter"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:635 src/ephy-window.c:823
+#: lib/widgets/ephy-location-entry.c:701 src/ephy-window.c:817
 msgid "_Undo"
 msgstr "_Rückgängig"
 
-#: lib/widgets/ephy-location-entry.c:642
+#: lib/widgets/ephy-location-entry.c:708
 msgid "_Redo"
 msgstr "_Wiederholen"
 
@@ -2358,157 +2362,157 @@ msgstr "Neue Adresse"
 msgid "Bang"
 msgstr "Kürzel"
 
-#: src/ephy-window.c:265
+#: src/ephy-window.c:253
 msgid "Do you want to leave this website?"
 msgstr "Möchten Sie diese Internetseite verlassen?"
 
-#: src/ephy-window.c:266
+#: src/ephy-window.c:254
 msgid "A form you modified has not been submitted."
 msgstr "Ein von Ihnen ausgefülltes Formular wurde nicht abgeschickt."
 
-#: src/ephy-window.c:267
+#: src/ephy-window.c:255
 msgid "_Discard form"
 msgstr "Formulareingaben _verwerfen"
 
-#: src/ephy-window.c:282
+#: src/ephy-window.c:270
 msgid "There are ongoing downloads"
 msgstr "Downloads sind gerade aktiv"
 
-#: src/ephy-window.c:283
+#: src/ephy-window.c:271
 msgid "If you quit, the downloads will be cancelled"
 msgstr "Falls Sie beenden, werden die Downloads abgebrochen"
 
-#: src/ephy-window.c:284
+#: src/ephy-window.c:272
 msgid "Quit and cancel downloads"
 msgstr "Beenden und Downloads abbrechen"
 
-#: src/ephy-window.c:824
+#: src/ephy-window.c:818
 msgid "Re_do"
 msgstr "_Wiederholen"
 
 #. Edit.
-#: src/ephy-window.c:827
+#: src/ephy-window.c:821
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: src/ephy-window.c:828
+#: src/ephy-window.c:822
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: src/ephy-window.c:829
+#: src/ephy-window.c:823
 msgid "_Paste"
 msgstr "E_infügen"
 
-#: src/ephy-window.c:830
+#: src/ephy-window.c:824
 msgid "Select _All"
 msgstr "_Alles markieren"
 
-#: src/ephy-window.c:832
+#: src/ephy-window.c:826
 msgid "S_end Link by Email…"
 msgstr "Verweis _verschicken an …"
 
-#: src/ephy-window.c:834
+#: src/ephy-window.c:828
 msgid "_Reload"
 msgstr "A_ktualisieren"
 
-#: src/ephy-window.c:835
+#: src/ephy-window.c:829
 msgid "_Back"
 msgstr "_Zurück"
 
-#: src/ephy-window.c:836
+#: src/ephy-window.c:830
 msgid "_Forward"
 msgstr "_Vor"
 
 #. Bookmarks
-#: src/ephy-window.c:839
+#: src/ephy-window.c:833
 msgid "Add Boo_kmark…"
 msgstr "Lesezeichen _hinzufügen …"
 
 #. Links.
-#: src/ephy-window.c:843
+#: src/ephy-window.c:837
 msgid "Open Link in New _Window"
 msgstr "Verweis in _neuem Fenster öffnen"
 
-#: src/ephy-window.c:844
+#: src/ephy-window.c:838
 msgid "Open Link in New _Tab"
 msgstr "Verweis in neuem _Reiter öffnen"
 
-#: src/ephy-window.c:845
+#: src/ephy-window.c:839
 msgid "Open Link in I_ncognito Window"
 msgstr "Verweis in neuem _Inkognito-Fenster öffnen"
 
-#: src/ephy-window.c:846
+#: src/ephy-window.c:840
 msgid "_Save Link As…"
 msgstr "Verweis _speichern unter …"
 
-#: src/ephy-window.c:847
+#: src/ephy-window.c:841
 msgid "_Copy Link Address"
 msgstr "Verweisadresse _kopieren"
 
-#: src/ephy-window.c:848
+#: src/ephy-window.c:842
 msgid "_Copy E-mail Address"
 msgstr "E-Mail-Adresse _kopieren"
 
 #. Images.
-#: src/ephy-window.c:852
+#: src/ephy-window.c:846
 msgid "View _Image in New Tab"
 msgstr "_Bild in neuem Reiter anzeigen"
 
-#: src/ephy-window.c:853
+#: src/ephy-window.c:847
 msgid "Copy I_mage Address"
 msgstr "Bil_dadresse kopieren"
 
-#: src/ephy-window.c:854
+#: src/ephy-window.c:848
 msgid "_Save Image As…"
 msgstr "Bi_ld speichern unter …"
 
-#: src/ephy-window.c:855
+#: src/ephy-window.c:849
 msgid "Set as _Wallpaper"
 msgstr "Als _Hintergrund festlegen"
 
 #. Video.
-#: src/ephy-window.c:859
+#: src/ephy-window.c:853
 msgid "Open Video in New _Window"
 msgstr "Video in neuem _Fenster öffnen"
 
-#: src/ephy-window.c:860
+#: src/ephy-window.c:854
 msgid "Open Video in New _Tab"
 msgstr "Video in neuem _Reiter öffnen"
 
-#: src/ephy-window.c:861
+#: src/ephy-window.c:855
 msgid "_Save Video As…"
 msgstr "Video _speichern unter …"
 
-#: src/ephy-window.c:862
+#: src/ephy-window.c:856
 msgid "_Copy Video Address"
 msgstr "Video-Adresse _kopieren"
 
 #. Audio.
-#: src/ephy-window.c:866
+#: src/ephy-window.c:860
 msgid "Open Audio in New _Window"
 msgstr "Audio in neuem _Fenster öffnen"
 
-#: src/ephy-window.c:867
+#: src/ephy-window.c:861
 msgid "Open Audio in New _Tab"
 msgstr "Audio in neuem _Reiter öffnen"
 
-#: src/ephy-window.c:868
+#: src/ephy-window.c:862
 msgid "_Save Audio As…"
 msgstr "Audio _speichern unter …"
 
-#: src/ephy-window.c:869
+#: src/ephy-window.c:863
 msgid "_Copy Audio Address"
 msgstr "Audio-Adresse kopieren"
 
-#: src/ephy-window.c:874
+#: src/ephy-window.c:868
 msgid "Save Pa_ge As…"
 msgstr "Seite speichern _unter …"
 
-#: src/ephy-window.c:875
+#: src/ephy-window.c:869
 msgid "_Page Source"
 msgstr "_Quelltext der Seite"
 
-#: src/ephy-window.c:1258
+#: src/ephy-window.c:1252
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Nach »%s« im Internet suchen"
@@ -2534,17 +2538,12 @@ msgid "Last synchronized: %s"
 msgstr "Zuletzt abgeglichen: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:284 src/prefs-dialog.c:1856
+#: src/prefs-dialog.c:284 src/prefs-dialog.c:1858
 #, c-format
 msgid "Logged in as %s"
 msgstr "Angemeldet als %s"
 
-#: src/prefs-dialog.c:511
-msgid "Please don’t leave this page until you have completed the verification."
-msgstr ""
-"Bitte verlassen Sie diese Seite nicht, bis die Überprüfung abgeschlossen ist."
-
-#: src/prefs-dialog.c:528
+#: src/prefs-dialog.c:524
 msgid "Something went wrong, please try again later."
 msgstr "Etwas ging schief, bitte versuchen Sie es später erneut."
 
@@ -2552,7 +2551,7 @@ msgstr "Etwas ging schief, bitte versuchen Sie es später erneut."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:993 src/prefs-dialog.c:997
+#: src/prefs-dialog.c:995 src/prefs-dialog.c:999
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2561,48 +2560,48 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1004
+#: src/prefs-dialog.c:1006
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Benutzerdefiniert (%s)"
 
-#: src/prefs-dialog.c:1026
+#: src/prefs-dialog.c:1028
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Systemsprache (%s)"
 msgstr[1] "Systemsprachen (%s)"
 
-#: src/prefs-dialog.c:1269 src/resources/gtk/prefs-dialog.ui:775
+#: src/prefs-dialog.c:1271 src/resources/gtk/prefs-dialog.ui:775
 msgid "Language"
 msgstr "Sprache"
 
-#: src/prefs-dialog.c:1347
+#: src/prefs-dialog.c:1349
 msgid "Select a directory"
 msgstr "Wählen Sie einen Ordner"
 
-#: src/profile-migrator/ephy-profile-migrator.c:603
+#: src/profile-migrator/ephy-profile-migrator.c:604
 msgid "Search the Web"
 msgstr "Im Internet suchen"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1013
+#: src/profile-migrator/ephy-profile-migrator.c:1063
 msgid "Executes only the n-th migration step"
 msgstr "Nur den n-ten Migrationsschritt ausführen"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1015
+#: src/profile-migrator/ephy-profile-migrator.c:1065
 msgid "Specifies the required version for the migrator"
 msgstr "Bestimmt die benötigte Version des Migrators"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1017
+#: src/profile-migrator/ephy-profile-migrator.c:1067
 msgid "Specifies the profile where the migrator should run"
 msgstr "Bestimmt das Profil, wo der Migrator ausgeführt werden sollte"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1037
+#: src/profile-migrator/ephy-profile-migrator.c:1087
 msgid "Web profile migrator"
 msgstr "Internet Profilmigrator"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1038
+#: src/profile-migrator/ephy-profile-migrator.c:1088
 msgid "Web profile migrator options"
 msgstr "Einstellungen für den Internet Profilmigrator"
 
@@ -3255,210 +3254,205 @@ msgstr "Seite speichern unter"
 
 #: src/resources/gtk/shortcuts-dialog.ui:47
 msgctxt "shortcut window"
-msgid "Save page as web app"
-msgstr "Seite als Web-Anwendung speichern"
-
-#: src/resources/gtk/shortcuts-dialog.ui:54
-msgctxt "shortcut window"
 msgid "Print page"
 msgstr "Seite drucken"
 
-#: src/resources/gtk/shortcuts-dialog.ui:61
+#: src/resources/gtk/shortcuts-dialog.ui:54
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/resources/gtk/shortcuts-dialog.ui:68
+#: src/resources/gtk/shortcuts-dialog.ui:61
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/resources/gtk/shortcuts-dialog.ui:75
+#: src/resources/gtk/shortcuts-dialog.ui:68
 msgctxt "shortcut window"
 msgid "Shortcuts"
 msgstr "Tastenkombinationen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:86
+#: src/resources/gtk/shortcuts-dialog.ui:79
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Navigation"
 
-#: src/resources/gtk/shortcuts-dialog.ui:90
+#: src/resources/gtk/shortcuts-dialog.ui:83
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "Zur Startseite wechseln"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:90
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Aktuelle Seite neu laden"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Aktuelle Seite nicht weiter laden"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Zurück zur vorherigen Seite"
 
-#: src/resources/gtk/shortcuts-dialog.ui:118
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Vorwärts zur nächsten Seite"
 
-#: src/resources/gtk/shortcuts-dialog.ui:129
+#: src/resources/gtk/shortcuts-dialog.ui:122
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Reiter"
 
-#: src/resources/gtk/shortcuts-dialog.ui:133
+#: src/resources/gtk/shortcuts-dialog.ui:126
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Neuer Reiter"
 
-#: src/resources/gtk/shortcuts-dialog.ui:140
+#: src/resources/gtk/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Aktuellen Reiter schließen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Geschlossenen Reiter erneut öffnen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Zum nächsten Reiter gehen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Zum vorherigen Reiter gehen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Aktuellen Reiter nach links verschieben"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Aktuellen Reiter nach rechts verschieben"
 
-#: src/resources/gtk/shortcuts-dialog.ui:186
+#: src/resources/gtk/shortcuts-dialog.ui:179
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Verschiedenes"
 
-#: src/resources/gtk/shortcuts-dialog.ui:190
+#: src/resources/gtk/shortcuts-dialog.ui:183
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Chronik"
 
-#: src/resources/gtk/shortcuts-dialog.ui:197
+#: src/resources/gtk/shortcuts-dialog.ui:190
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:204
+#: src/resources/gtk/shortcuts-dialog.ui:197
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Lesezeichen für diese Seite erstellen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:211
+#: src/resources/gtk/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Caret-Modus aktivieren/deaktivieren"
 
-#: src/resources/gtk/shortcuts-dialog.ui:222
+#: src/resources/gtk/shortcuts-dialog.ui:215
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Ansicht"
 
-#: src/resources/gtk/shortcuts-dialog.ui:226
+#: src/resources/gtk/shortcuts-dialog.ui:219
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Vergrößern"
 
-#: src/resources/gtk/shortcuts-dialog.ui:233
+#: src/resources/gtk/shortcuts-dialog.ui:226
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Verkleinern"
 
-#: src/resources/gtk/shortcuts-dialog.ui:240
+#: src/resources/gtk/shortcuts-dialog.ui:233
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Ansicht zurücksetzen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
+#: src/resources/gtk/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Vollbild"
 
-#: src/resources/gtk/shortcuts-dialog.ui:254
+#: src/resources/gtk/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Quelltext der Seite ansehen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:261
+#: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "Inspektor ein-/ausschalten"
 
-#: src/resources/gtk/shortcuts-dialog.ui:272
+#: src/resources/gtk/shortcuts-dialog.ui:265
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Bearbeiten"
 
-#: src/resources/gtk/shortcuts-dialog.ui:276
+#: src/resources/gtk/shortcuts-dialog.ui:269
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: src/resources/gtk/shortcuts-dialog.ui:283
+#: src/resources/gtk/shortcuts-dialog.ui:276
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopieren"
 
-#: src/resources/gtk/shortcuts-dialog.ui:290
+#: src/resources/gtk/shortcuts-dialog.ui:283
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Einfügen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Rückgängig"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Wiederholen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Alles markieren"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Seitenadresse auswählen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Suchen"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Nächstes Suchergebnis"
 
-#: src/resources/gtk/shortcuts-dialog.ui:339
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Vorheriges Suchergebnis"
@@ -3477,7 +3471,7 @@ msgstr ""
 "Firefox Sync mit diesem Konto verwenden. Öffnen Sie einen Reiter durch "
 "Doppelklick auf dessen Namen (»Lokale Reiter« können nicht geöffnet werden)."
 
-#: src/search-provider/ephy-search-provider.c:193
+#: src/search-provider/ephy-search-provider.c:199
 #, c-format
 msgid "Search the Web for %s"
 msgstr "Nach »%s« im Internet suchen"
@@ -3540,19 +3534,23 @@ msgstr "Lesezeichen.gvdb"
 msgid "Bookmarks successfully exported!"
 msgstr "Lesezeichen erfolgreich exportiert!"
 
-#: src/window-commands.c:603 src/window-commands.c:626
+#: src/window-commands.c:606
+msgid "Current maintainers:"
+msgstr ""
+
+#: src/window-commands.c:609 src/window-commands.c:632
 msgid "Contact us at:"
 msgstr "Sie erreichen uns unter:"
 
-#: src/window-commands.c:606
+#: src/window-commands.c:612
+msgid "Past maintainers:"
+msgstr ""
+
+#: src/window-commands.c:615
 msgid "Contributors:"
 msgstr "Mitwirkende:"
 
-#: src/window-commands.c:609
-msgid "Past developers:"
-msgstr "Vorherige Entwickler:"
-
-#: src/window-commands.c:635
+#: src/window-commands.c:641
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3560,6 +3558,10 @@ msgid ""
 msgstr ""
 "Ein einfacher, klarer, wunderschöner Blick auf das Internet.\n"
 "Basierend auf WebKitGTK+ %d.%d.%d"
+
+#: src/window-commands.c:651
+msgid "Epiphany Technology Preview"
+msgstr ""
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3569,7 +3571,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:658
+#: src/window-commands.c:668
 msgid "translator-credits"
 msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
@@ -3583,30 +3585,34 @@ msgstr ""
 "Franco Della-Monica <franco.della.monica@gmail.com>\n"
 "Florian Heiser <gnu.l10n.de@gmail.com>"
 
-#: src/window-commands.c:661
+#: src/window-commands.c:672
 msgid "Web Website"
 msgstr "Internet Internetseite"
 
-#: src/window-commands.c:910
+#: src/window-commands.c:674
+msgid "Website"
+msgstr "Internetseite"
+
+#: src/window-commands.c:924
 msgid "Open"
 msgstr "Öffnen"
 
-#: src/window-commands.c:1295
+#: src/window-commands.c:1309
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr ""
 "Eine Internet-Anwendung namens »%s« existiert bereits. Wollen Sie sie "
 "ersetzen?"
 
-#: src/window-commands.c:1298
+#: src/window-commands.c:1312
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/window-commands.c:1300
+#: src/window-commands.c:1314
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: src/window-commands.c:1304
+#: src/window-commands.c:1318
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -3614,38 +3620,38 @@ msgstr ""
 "Eine Anwendung mit diesem Namen ist bereits vorhanden. Beim Überschreiben "
 "geht ihr Inhalt verloren."
 
-#: src/window-commands.c:1339
+#: src/window-commands.c:1353
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Die Anwendung »%s« ist bereit zur Benutzung"
 
-#: src/window-commands.c:1342
+#: src/window-commands.c:1356
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Die Anwendung »%s« konnte nicht erzeugt werden"
 
-#: src/window-commands.c:1350
+#: src/window-commands.c:1364
 msgid "Launch"
 msgstr "Starten"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1392
+#: src/window-commands.c:1406
 msgid "Create Web Application"
 msgstr "Internet-Anwendung erstellen"
 
-#: src/window-commands.c:1397
+#: src/window-commands.c:1411
 msgid "C_reate"
 msgstr "E_rstellen"
 
-#: src/window-commands.c:1526
+#: src/window-commands.c:1540
 msgid "Save"
 msgstr "Speichern"
 
-#: src/window-commands.c:2147
+#: src/window-commands.c:2161
 msgid "Enable caret browsing mode?"
 msgstr "Soll der Caret-Modus aktiviert werden?"
 
-#: src/window-commands.c:2150
+#: src/window-commands.c:2164
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3656,6 +3662,6 @@ msgstr ""
 "Sie mit der Tastatur steuern können. Wollen Sie die Eingabemarke-Navigation "
 "einschalten?"
 
-#: src/window-commands.c:2153
+#: src/window-commands.c:2167
 msgid "_Enable"
 msgstr "_Aktivieren"
