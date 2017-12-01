@@ -257,8 +257,7 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
                               gpointer                                user_data)
 {
   EphyOpenTabsManager *self = EPHY_OPEN_TABS_MANAGER (manager);
-  EphyOpenTabsRecord *local_tabs;
-  GList *to_upload = NULL;
+  GPtrArray *to_upload;
   char *device_bso_id;
 
   device_bso_id = ephy_sync_utils_get_device_bso_id ();
@@ -276,12 +275,12 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
   /* Only upload the local open tabs, we don't want to alter open tabs of
    * other clients. Also, overwrite any previous value by doing a force upload.
    */
-  local_tabs = ephy_open_tabs_manager_get_local_tabs (self);
-  to_upload = g_list_prepend (to_upload, local_tabs);
+  to_upload = g_ptr_array_new_with_free_func (g_object_unref);
+  g_ptr_array_add (to_upload, ephy_open_tabs_manager_get_local_tabs (self));
 
   g_free (device_bso_id);
 
-  callback (to_upload, TRUE, user_data);
+  callback (to_upload, user_data);
 }
 
 static void

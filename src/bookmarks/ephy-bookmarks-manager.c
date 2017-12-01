@@ -730,11 +730,11 @@ synchronizable_manager_save (EphySynchronizableManager *manager,
                                              NULL);
 }
 
-static GList *
+static GPtrArray *
 ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
                                              GList                *remote_bookmarks)
 {
-  GList *to_upload = NULL;
+  GPtrArray *to_upload;
   EphyBookmark *bookmark;
   GSequence *bookmarks;
   GSequenceIter *iter;
@@ -743,6 +743,7 @@ ephy_bookmarks_manager_handle_initial_merge (EphyBookmarksManager *self,
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
 
+  to_upload = g_ptr_array_new_with_free_func (g_object_unref);
   dont_upload = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   for (GList *l = remote_bookmarks; l && l->data; l = l->next) {
@@ -810,7 +811,7 @@ next:
        !g_sequence_iter_is_end (iter); iter = g_sequence_iter_next (iter)) {
     bookmark = g_sequence_get (iter);
     if (!g_hash_table_contains (dont_upload, ephy_bookmark_get_id (bookmark)))
-      to_upload = g_list_prepend (to_upload, g_object_ref (bookmark));
+      g_ptr_array_add (to_upload, g_object_ref (bookmark));
   }
 
   /* Commit changes to file. */
@@ -822,16 +823,18 @@ next:
   return to_upload;
 }
 
-static GList *
+static GPtrArray *
 ephy_bookmarks_manager_handle_regular_merge (EphyBookmarksManager *self,
                                              GList                *updated_bookmarks,
                                              GList                *deleted_bookmarks)
 {
-  GList *to_upload = NULL;
+  GPtrArray *to_upload;
   EphyBookmark *bookmark;
   double timestamp;
 
   g_assert (EPHY_IS_BOOKMARKS_MANAGER (self));
+
+  to_upload = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (GList *l = deleted_bookmarks; l && l->data; l = l->next) {
     bookmark = ephy_bookmarks_manager_get_bookmark_by_id (self, ephy_bookmark_get_id (l->data));
@@ -874,7 +877,7 @@ ephy_bookmarks_manager_handle_regular_merge (EphyBookmarksManager *self,
         ephy_bookmarks_manager_copy_tags_from_bookmark (self, bookmark, l->data);
         timestamp = ephy_synchronizable_get_server_time_modified (l->data);
         ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark), timestamp);
-        to_upload = g_list_prepend (to_upload, g_object_ref (bookmark));
+        g_ptr_array_add (to_upload, g_object_ref (bookmark));
       } else {
         /* Different id, different url. Add remote bookmark. */
         ephy_bookmarks_manager_add_bookmark_internal (self, l->data, FALSE);
@@ -906,17 +909,14 @@ synchronizable_manager_merge (EphySynchronizableManager              *manager,
                               gpointer                                user_data)
 {
   EphyBookmarksManager *self = EPHY_BOOKMARKS_MANAGER (manager);
-  GList *to_upload = NULL;
+  GPtrArray *to_upload;
 
   if (is_initial)
-    to_upload = ephy_bookmarks_manager_handle_initial_merge (self,
-                                                             remotes_updated);
+    to_upload = ephy_bookmarks_manager_handle_initial_merge (self, remotes_updated);
   else
-    to_upload = ephy_bookmarks_manager_handle_regular_merge (self,
-                                                             remotes_updated,
-                                                             remotes_deleted);
+    to_upload = ephy_bookmarks_manager_handle_regular_merge (self, remotes_updated, remotes_deleted);
 
-  callback (to_upload, FALSE, user_data);
+  callback (to_upload, user_data);
 }
 
 static void
