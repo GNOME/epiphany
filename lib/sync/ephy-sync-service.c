@@ -2444,12 +2444,25 @@ delete_open_tabs_record_cb (SoupSession *session,
                             SoupMessage *msg,
                             gpointer     user_data)
 {
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+  const char *session_token;
+
   if (msg->status_code != 200) {
     g_warning ("Failed to delete open tabs record. Status code: %u, response: %s",
                msg->status_code, msg->response_body->data);
   } else {
     LOG ("Successfully deleted open tabs record");
   }
+
+  ephy_sync_service_clear_storage_queue (self);
+  ephy_sync_service_clear_storage_credentials (self);
+
+  session_token = ephy_sync_service_get_secret (self, secrets[SESSION_TOKEN]);
+  ephy_sync_service_destroy_session (self, session_token);
+
+  ephy_sync_service_forget_secrets (self);
+  ephy_sync_utils_set_device_id (NULL);
+  ephy_sync_utils_set_sync_user (NULL);
 }
 
 static void
@@ -2457,16 +2470,30 @@ delete_client_record_cb (SoupSession *session,
                          SoupMessage *msg,
                          gpointer     user_data)
 {
+  EphySyncService *self = EPHY_SYNC_SERVICE (user_data);
+  char *endpoint;
+  char *device_bso_id;
+
   if (msg->status_code != 200) {
     g_warning ("Failed to delete client record. Status code: %u, response: %s",
                msg->status_code, msg->response_body->data);
   } else {
     LOG ("Successfully deleted client record");
   }
+
+  device_bso_id = ephy_sync_utils_get_device_bso_id ();
+  /* Delete the open tabs record associated to this device. */
+  endpoint = g_strdup_printf ("storage/tabs/%s", device_bso_id);
+  ephy_sync_service_queue_storage_request (self, endpoint,
+                                           SOUP_METHOD_DELETE,
+                                           NULL, -1, -1,
+                                           delete_open_tabs_record_cb, self);
+  g_free (endpoint);
+  g_free (device_bso_id);
 }
 
 static void
-ephy_sync_service_cleanup_storage_singletons (EphySyncService *self)
+ephy_sync_service_delete_client_record (EphySyncService *self)
 {
   char *endpoint;
   char *device_bso_id;
@@ -2479,15 +2506,7 @@ ephy_sync_service_cleanup_storage_singletons (EphySyncService *self)
   ephy_sync_service_queue_storage_request (self, endpoint,
                                            SOUP_METHOD_DELETE,
                                            NULL, -1, -1,
-                                           delete_client_record_cb, NULL);
-  g_free (endpoint);
-
-  /* Delete the open tabs record associated to this device. */
-  endpoint = g_strdup_printf ("storage/tabs/%s", device_bso_id);
-  ephy_sync_service_queue_storage_request (self, endpoint,
-                                           SOUP_METHOD_DELETE,
-                                           NULL, -1, -1,
-                                           delete_open_tabs_record_cb, NULL);
+                                           delete_client_record_cb, self);
   g_free (endpoint);
   g_free (device_bso_id);
 }
@@ -2498,11 +2517,7 @@ ephy_sync_service_sign_out (EphySyncService *self)
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
   ephy_sync_service_stop_periodical_sync (self);
-  ephy_sync_service_cleanup_storage_singletons (self);
-  ephy_sync_service_destroy_session (self, NULL);
-  ephy_sync_service_forget_secrets (self);
-  ephy_sync_service_clear_storage_queue (self);
-  ephy_sync_service_clear_storage_credentials (self);
+  ephy_sync_service_delete_client_record (self);
 
   /* Clear managers. */
   for (GSList *l = self->managers; l && l->data; l = l->next) {
@@ -2514,10 +2529,7 @@ ephy_sync_service_sign_out (EphySyncService *self)
   ephy_sync_utils_set_bookmarks_sync_is_initial (TRUE);
   ephy_sync_utils_set_passwords_sync_is_initial (TRUE);
   ephy_sync_utils_set_history_sync_is_initial (TRUE);
-
-  ephy_sync_utils_set_device_id (NULL);
   ephy_sync_utils_set_sync_time (0);
-  ephy_sync_utils_set_sync_user (NULL);
 }
 
 void
