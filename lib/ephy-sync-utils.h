@@ -37,6 +37,9 @@ const SecretSchema *ephy_sync_utils_get_secret_schema (void) G_GNUC_CONST;
 #define EPHY_SYNC_DEVICE_ID_LEN   32
 #define EPHY_SYNC_BSO_ID_LEN      12
 
+#define EPHY_SYNC_BATCH_SIZE    80
+#define EPHY_SYNC_MAX_BATCHES   80
+
 char     *ephy_sync_utils_encode_hex                    (const guint8 *data,
                                                          gsize         data_len);
 guint8   *ephy_sync_utils_decode_hex                    (const char   *hex);

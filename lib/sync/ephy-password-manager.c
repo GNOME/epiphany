@@ -861,14 +861,14 @@ delete_record_by_id (GList      *records,
   return records;
 }
 
-static GList *
+static GPtrArray *
 ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
                                             GList               *local_records,
                                             GList               *remote_records)
 {
   EphyPasswordRecord *record;
   GHashTable *dont_upload;
-  GList *to_upload = NULL;
+  GPtrArray *to_upload;
   const char *remote_id;
   const char *remote_origin;
   const char *remote_target_origin;
@@ -890,6 +890,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
    * same tuple but same tuple does not necessarily mean same ID. This is what
    * our merge logic is based on.
    */
+  to_upload = g_ptr_array_new_with_free_func (g_object_unref);
   dont_upload = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   for (GList *l = remote_records; l && l->data; l = l->next) {
@@ -969,7 +970,7 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
   for (GList *l = local_records; l && l->data; l = l->next) {
     record = EPHY_PASSWORD_RECORD (l->data);
     if (!g_hash_table_contains (dont_upload, ephy_password_record_get_id (record)))
-      to_upload = g_list_prepend (to_upload, g_object_ref (record));
+      g_ptr_array_add (to_upload, g_object_ref (record));
   }
 
   g_hash_table_unref (dont_upload);
@@ -977,14 +978,14 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
   return to_upload;
 }
 
-static GList *
+static GPtrArray *
 ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
                                             GList               **local_records,
                                             GList                *deleted_records,
                                             GList                *updated_records)
 {
   EphyPasswordRecord *record;
-  GList *to_upload = NULL;
+  GPtrArray *to_upload;
   const char *remote_id;
   const char *remote_origin;
   const char *remote_target_origin;
@@ -995,6 +996,8 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
   guint64 local_timestamp;
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
+
+  to_upload = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (GList *l = deleted_records; l && l->data; l = l->next) {
     remote_id = ephy_password_record_get_id (l->data);
@@ -1031,7 +1034,7 @@ ephy_password_manager_handle_regular_merge (EphyPasswordManager  *self,
         local_timestamp = ephy_password_record_get_time_password_changed (record);
         if (local_timestamp > remote_timestamp) {
           /* Local record is newer. Keep it, upload it and delete remote record from server. */
-          to_upload = g_list_prepend (to_upload, g_object_ref (record));
+          g_ptr_array_add (to_upload, g_object_ref (record));
           g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
         } else {
           /* Remote record is newer. Forget local record and store remote record. */
@@ -1052,19 +1055,17 @@ merge_cb (GList    *records,
           gpointer  user_data)
 {
   MergePasswordsAsyncData *data = (MergePasswordsAsyncData *)user_data;
-  GList *to_upload = NULL;
+  GPtrArray *to_upload;
 
   if (data->is_initial)
-    to_upload = ephy_password_manager_handle_initial_merge (data->manager,
-                                                            records,
+    to_upload = ephy_password_manager_handle_initial_merge (data->manager, records,
                                                             data->remotes_updated);
   else
-    to_upload = ephy_password_manager_handle_regular_merge (data->manager,
-                                                            &records,
+    to_upload = ephy_password_manager_handle_regular_merge (data->manager, &records,
                                                             data->remotes_deleted,
                                                             data->remotes_updated);
 
-  data->callback (to_upload, FALSE, data->user_data);
+  data->callback (to_upload, data->user_data);
 
   g_list_free_full (records, g_object_unref);
   merge_passwords_async_data_free (data);

@@ -312,7 +312,7 @@ ephy_history_manager_handle_different_id_same_url (EphyHistoryManager *self,
   ephy_history_record_add_visit_time (remote, local_last_visit_time);
 }
 
-static GList *
+static GPtrArray *
 ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
                                            GHashTable         *records_ht_id,
                                            GHashTable         *records_ht_url,
@@ -321,13 +321,15 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
   EphyHistoryRecord *record;
   GHashTableIter iter;
   gpointer key, value;
-  GList *to_upload = NULL;
+  GPtrArray *to_upload;
   const char *remote_id;
   const char *remote_url;
   gint64 remote_last_visit_time;
   gint64 local_last_visit_time;
 
   g_assert (EPHY_IS_HISTORY_MANAGER (self));
+
+  to_upload = g_ptr_array_new_with_free_func (g_object_unref);
 
   /* A history record is uniquely identified by its sync ID or by its URL. When
    * importing history records from server, we may encounter duplicates either
@@ -352,7 +354,7 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
                                         EPHY_PAGE_VISIT_LINK, FALSE);
 
       if (ephy_history_record_add_visit_time (l->data, local_last_visit_time))
-        to_upload = g_list_prepend (to_upload, g_object_ref (l->data));
+        g_ptr_array_add (to_upload, g_object_ref (l->data));
 
       g_hash_table_remove (records_ht_id, remote_id);
     } else {
@@ -362,7 +364,7 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
         /* Different ID, same URL. Keep local ID. */
         g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
         ephy_history_manager_handle_different_id_same_url (self, record, l->data);
-        to_upload = g_list_prepend (to_upload, g_object_ref (l->data));
+        g_ptr_array_add (to_upload, g_object_ref (l->data));
         g_hash_table_remove (records_ht_id, ephy_history_record_get_id (record));
       } else {
         /* Different ID, different URL. This is a new record. */
@@ -377,12 +379,12 @@ ephy_history_manager_handle_initial_merge (EphyHistoryManager *self,
   /* Set the remaining local records to be uploaded to server. */
   g_hash_table_iter_init (&iter, records_ht_id);
   while (g_hash_table_iter_next (&iter, &key, &value))
-    to_upload = g_list_prepend (to_upload, g_object_ref (value));
+    g_ptr_array_add (to_upload, g_object_ref (value));
 
   return to_upload;
 }
 
-static GList *
+static GPtrArray *
 ephy_history_manager_handle_regular_merge (EphyHistoryManager  *self,
                                            GHashTable          *records_ht_id,
                                            GHashTable          *records_ht_url,
@@ -390,13 +392,15 @@ ephy_history_manager_handle_regular_merge (EphyHistoryManager  *self,
                                            GList               *updated_records)
 {
   EphyHistoryRecord *record;
-  GList *to_upload = NULL;
+  GPtrArray *to_upload;
   const char *remote_id;
   const char *remote_url;
   gint64 remote_last_visit_time;
   gint64 local_last_visit_time;
 
   g_assert (EPHY_IS_HISTORY_MANAGER (self));
+
+  to_upload = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (GList *l = deleted_records; l && l->data; l = l->next) {
     remote_id = ephy_history_record_get_id (l->data);
@@ -443,7 +447,7 @@ ephy_history_manager_handle_regular_merge (EphyHistoryManager  *self,
         /* Different ID, same URL. Keep local ID. */
         g_signal_emit_by_name (self, "synchronizable-deleted", l->data);
         ephy_history_manager_handle_different_id_same_url (self, record, l->data);
-        to_upload = g_list_prepend (to_upload, g_object_ref (l->data));
+        g_ptr_array_add (to_upload, g_object_ref (l->data));
       } else {
         /* Different ID, different URL. This is a new record. */
         if (remote_last_visit_time > 0)
@@ -465,7 +469,7 @@ merge_history_cb (EphyHistoryService    *service,
 {
   GHashTable *records_ht_id = NULL;
   GHashTable *records_ht_url = NULL;
-  GList *to_upload = NULL;
+  GPtrArray *to_upload = NULL;
 
   if (!success) {
     g_warning ("Failed to retrieve URLs in history");
@@ -501,7 +505,7 @@ merge_history_cb (EphyHistoryService    *service,
                                                            data->remotes_updated);
 
 out:
-  data->callback (to_upload, TRUE, data->user_data);
+  data->callback (to_upload, data->user_data);
 
   g_list_free_full (urls, (GDestroyNotify)ephy_history_url_free);
   if (records_ht_id)
