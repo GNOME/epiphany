@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-11-01 19:45+0000\n"
-"PO-Revision-Date: 2017-11-13 00:52+0300\n"
+"POT-Creation-Date: 2017-12-03 08:41+0000\n"
+"PO-Revision-Date: 2017-12-03 17:10+0300\n"
 "Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -760,9 +760,6 @@ msgstr "Son açık sekme eşzamanlamasının yapıldığı zamana ait zaman damg
 #: data/org.gnome.epiphany.gschema.xml:435
 #: data/org.gnome.epiphany.gschema.xml:440
 #: data/org.gnome.epiphany.gschema.xml:445
-#| msgid ""
-#| "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#| "search-engines instead."
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "sync/ instead."
@@ -1653,6 +1650,13 @@ msgstr "Yardım görüntülenemiyor: %s"
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "http://duckduckgo.com/?q=%s&t=epiphany&kl=tr-tr&kad=tr_TR"
 
+#. Translators: First %s is the name of the user currently logged in on the
+#. * machine. The second %s is the machine's name.
+#: lib/ephy-sync-utils.c:326
+#, c-format
+msgid "%s’s GNOME Web on %s"
+msgstr "%2$s üzerinde %1$s’in GNOME Web’i"
+
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
 #: lib/ephy-time-helpers.c:226
 msgid "Today %I∶%M %p"
@@ -1750,22 +1754,22 @@ msgstr "%s kullanıcısının %s adresindeki parolası"
 msgid "Password in a form in %s"
 msgstr "%s formundaki parola"
 
-#: lib/sync/ephy-sync-service.c:786
+#: lib/sync/ephy-sync-service.c:844
 msgid "Failed to obtain storage credentials."
 msgstr "Depo kimlik bilgilerini alma başarısız."
 
-#: lib/sync/ephy-sync-service.c:787 lib/sync/ephy-sync-service.c:902
-#: lib/sync/ephy-sync-service.c:1485
+#: lib/sync/ephy-sync-service.c:845 lib/sync/ephy-sync-service.c:960
+#: lib/sync/ephy-sync-service.c:1716
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Eşzamanlama sürecine devam etmek için lütfen Tercihlere gidin ve yeniden "
 "oturum açın."
 
-#: lib/sync/ephy-sync-service.c:892
+#: lib/sync/ephy-sync-service.c:950
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Firefox hesabınız parolası değiştirilmiş gibi görünüyor."
 
-#: lib/sync/ephy-sync-service.c:893
+#: lib/sync/ephy-sync-service.c:951
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1773,39 +1777,44 @@ msgstr ""
 "Eşzamanlama sürecine devam etmek için tütfen Tercihlere gidin ve yeni "
 "parolayla oturum açın."
 
-#: lib/sync/ephy-sync-service.c:901
+#: lib/sync/ephy-sync-service.c:959
 msgid "Failed to obtain signed certificate."
 msgstr "İmzalı sertifikayı alma başarısız."
 
-#: lib/sync/ephy-sync-service.c:1451 lib/sync/ephy-sync-service.c:1456
+#: lib/sync/ephy-sync-service.c:1682 lib/sync/ephy-sync-service.c:1687
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Giriş yapmış geçerli kullanıcı için eşzamanlama  anahtarları bulunamadı."
 
-#: lib/sync/ephy-sync-service.c:1463 lib/sync/ephy-sync-service.c:1471
+#: lib/sync/ephy-sync-service.c:1694 lib/sync/ephy-sync-service.c:1702
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Şu anki kullanıcının eşzamanlama anahtarı geçersiz."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1579
+#: lib/sync/ephy-sync-service.c:1810
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "%s kullanıcısının eşzamanlama anahtarları"
 
-#: lib/sync/ephy-sync-service.c:1722
+#: lib/sync/ephy-sync-service.c:1836
+#| msgid "Failed to upload crypto/keys record."
+msgid "Failed to upload client record."
+msgstr "İstemci kaydını karşıya yukleme başarısız."
+
+#: lib/sync/ephy-sync-service.c:2026
 msgid "Failed to upload crypto/keys record."
 msgstr "Şifreleme/anahtar kaydını karşıya yukleme başarısız."
 
-#: lib/sync/ephy-sync-service.c:1829
+#: lib/sync/ephy-sync-service.c:2133
 msgid "Failed to retrieve crypto keys."
 msgstr "Şifreleme anahtarını alma başarısız."
 
-#: lib/sync/ephy-sync-service.c:1880
+#: lib/sync/ephy-sync-service.c:2184
 msgid "Failed to upload meta/global record."
 msgstr "Üst/genel kayıtları karşıya yukleme başarısız."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:1996
+#: lib/sync/ephy-sync-service.c:2301
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1813,17 +1822,18 @@ msgstr ""
 "Firefox hesabınız %d depo sürümünü kullanıyor. Web sadece %d sürümünü "
 "destekliyor."
 
-#: lib/sync/ephy-sync-service.c:2007
+#: lib/sync/ephy-sync-service.c:2312
 msgid "Failed to verify storage version."
 msgstr "Depo sürümünü doğrulama başarısız."
 
-#: lib/sync/ephy-sync-service.c:2048 lib/sync/ephy-sync-service.c:2126
+#: lib/sync/ephy-sync-service.c:2368
+#| msgid "Failed to upload crypto/keys record."
+msgid "Failed to upload device info"
+msgstr "Cihaz bilgisini karşıya yukleme başarısız"
+
+#: lib/sync/ephy-sync-service.c:2441 lib/sync/ephy-sync-service.c:2519
 msgid "Failed to retrieve the Sync Key"
 msgstr "Eşzamanlama anahtarını alma başarısız"
-
-#: lib/sync/ephy-sync-service.c:2260
-msgid "Failed to register device."
-msgstr "Aygıtı kaydetme başarısız."
 
 #: lib/widgets/ephy-certificate-dialog.c:102
 msgid "The certificate does not match this website"
@@ -1874,62 +1884,62 @@ msgstr ""
 "Sertifika geçerli. Fakat, bu sayfadaki kaynaklar güvensiz şekilde "
 "gönderilmiş."
 
-#: lib/widgets/ephy-downloads-popover.c:225
+#: lib/widgets/ephy-downloads-popover.c:246
 msgid "_Clear All"
 msgstr "Tümünü Temiz_le"
 
-#: lib/widgets/ephy-download-widget.c:79
+#: lib/widgets/ephy-download-widget.c:80
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
 msgstr[0] "%d saniye kaldı"
 
-#: lib/widgets/ephy-download-widget.c:83
+#: lib/widgets/ephy-download-widget.c:84
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
 msgstr[0] "%d dakika kaldı"
 
-#: lib/widgets/ephy-download-widget.c:87
+#: lib/widgets/ephy-download-widget.c:88
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
 msgstr[0] "%d saat kaldı"
 
-#: lib/widgets/ephy-download-widget.c:91
+#: lib/widgets/ephy-download-widget.c:92
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
 msgstr[0] "%d gün kaldı"
 
-#: lib/widgets/ephy-download-widget.c:95
+#: lib/widgets/ephy-download-widget.c:96
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
 msgstr[0] "%d hafta kaldı"
 
-#: lib/widgets/ephy-download-widget.c:99
+#: lib/widgets/ephy-download-widget.c:100
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
 msgstr[0] "%d ay kaldı"
 
-#: lib/widgets/ephy-download-widget.c:222
-#: lib/widgets/ephy-download-widget.c:406
+#: lib/widgets/ephy-download-widget.c:223
+#: lib/widgets/ephy-download-widget.c:407
 msgid "Finished"
 msgstr "Bitti"
 
-#: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:402
+#: lib/widgets/ephy-download-widget.c:240
+#: lib/widgets/ephy-download-widget.c:403
 #, c-format
 msgid "Error downloading: %s"
 msgstr "İndirilirken hata oluştu: %s"
 
-#: lib/widgets/ephy-download-widget.c:266
+#: lib/widgets/ephy-download-widget.c:267
 msgid "Cancelling…"
 msgstr "İptal ediliyor…"
 
-#: lib/widgets/ephy-download-widget.c:408
+#: lib/widgets/ephy-download-widget.c:409
 msgid "Starting…"
 msgstr "Başlatılıyor…"
 
@@ -2392,16 +2402,12 @@ msgid "Last synchronized: %s"
 msgstr "Son eşzamanlama: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:283 src/prefs-dialog.c:1849
+#: src/prefs-dialog.c:283 src/prefs-dialog.c:1851
 #, c-format
 msgid "Logged in as %s"
 msgstr "%s olarak oturum açıldı"
 
-#: src/prefs-dialog.c:510
-msgid "Please don’t leave this page until you have completed the verification."
-msgstr "Lütfen doğrulamayı tamamlamadan bu sayfayı terk etmeyiniz."
-
-#: src/prefs-dialog.c:527
+#: src/prefs-dialog.c:523
 msgid "Something went wrong, please try again later."
 msgstr "Bir şeyler yanlış gitti, lütfen yeniden deneyin."
 
@@ -2409,7 +2415,7 @@ msgstr "Bir şeyler yanlış gitti, lütfen yeniden deneyin."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:991 src/prefs-dialog.c:995
+#: src/prefs-dialog.c:993 src/prefs-dialog.c:997
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2418,27 +2424,27 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1002
+#: src/prefs-dialog.c:1004
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Kullanıcı tanımlı (%s)"
 
-#: src/prefs-dialog.c:1024
+#: src/prefs-dialog.c:1026
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Sistem dili (%s)"
 
-#: src/prefs-dialog.c:1267 src/resources/gtk/prefs-dialog.ui:768
+#: src/prefs-dialog.c:1269 src/resources/gtk/prefs-dialog.ui:768
 msgid "Language"
 msgstr "Dil"
 
-#: src/prefs-dialog.c:1345
+#: src/prefs-dialog.c:1347
 msgid "Select a directory"
 msgstr "Bir Dizin Seçin"
 
-#: src/profile-migrator/ephy-profile-migrator.c:94
+#: src/profile-migrator/ephy-profile-migrator.c:95
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -2446,27 +2452,27 @@ msgstr ""
 "Web 3.6, bu dizini kullanım dışı bıraktı ve yapılandırmayı ~/.config/"
 "epiphany adresine taşımaya çalıştı."
 
-#: src/profile-migrator/ephy-profile-migrator.c:937
+#: src/profile-migrator/ephy-profile-migrator.c:938
 msgid "Search the Web"
 msgstr "Web’te Ara"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1347
+#: src/profile-migrator/ephy-profile-migrator.c:1397
 msgid "Executes only the n-th migration step"
 msgstr "Sadece n-inci taşıma adımını yürütür"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1349
+#: src/profile-migrator/ephy-profile-migrator.c:1399
 msgid "Specifies the required version for the migrator"
 msgstr "Taşımak için gerekli sürüm numarasını gösterir"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1351
+#: src/profile-migrator/ephy-profile-migrator.c:1401
 msgid "Specifies the profile where the migrator should run"
 msgstr "Taşıyıcının çalıştırması gereken profili belirtir"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1371
+#: src/profile-migrator/ephy-profile-migrator.c:1421
 msgid "Web profile migrator"
 msgstr "Web profil taşıyıcısı"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1372
+#: src/profile-migrator/ephy-profile-migrator.c:1422
 msgid "Web profile migrator options"
 msgstr "Web profil taşıma seçenekleri"
 
@@ -3113,210 +3119,205 @@ msgstr "Sayfayı kaydet"
 
 #: src/resources/gtk/shortcuts-dialog.ui:47
 msgctxt "shortcut window"
-msgid "Save page as web app"
-msgstr "Sayfayı web uygulaması olarak kaydet"
-
-#: src/resources/gtk/shortcuts-dialog.ui:54
-msgctxt "shortcut window"
 msgid "Print page"
 msgstr "Sayfayı yazdır"
 
-#: src/resources/gtk/shortcuts-dialog.ui:61
+#: src/resources/gtk/shortcuts-dialog.ui:54
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Çıkış"
 
-#: src/resources/gtk/shortcuts-dialog.ui:68
+#: src/resources/gtk/shortcuts-dialog.ui:61
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Yardım"
 
-#: src/resources/gtk/shortcuts-dialog.ui:75
+#: src/resources/gtk/shortcuts-dialog.ui:68
 msgctxt "shortcut window"
 msgid "Shortcuts"
 msgstr "Kısayollar"
 
-#: src/resources/gtk/shortcuts-dialog.ui:86
+#: src/resources/gtk/shortcuts-dialog.ui:79
 msgctxt "shortcut window"
 msgid "Navigation"
 msgstr "Gezginme"
 
-#: src/resources/gtk/shortcuts-dialog.ui:90
+#: src/resources/gtk/shortcuts-dialog.ui:83
 msgctxt "shortcut window"
 msgid "Go to homepage"
 msgstr "Başlangıç sayfasına git"
 
-#: src/resources/gtk/shortcuts-dialog.ui:97
+#: src/resources/gtk/shortcuts-dialog.ui:90
 msgctxt "shortcut window"
 msgid "Reload current page"
 msgstr "Geçerli sayfayı yeniden yükle"
 
-#: src/resources/gtk/shortcuts-dialog.ui:104
+#: src/resources/gtk/shortcuts-dialog.ui:97
 msgctxt "shortcut window"
 msgid "Stop loading current page"
 msgstr "Geçerli sayfanın yüklenmesini durdur"
 
-#: src/resources/gtk/shortcuts-dialog.ui:111
+#: src/resources/gtk/shortcuts-dialog.ui:104
 msgctxt "shortcut window"
 msgid "Go back to the previous page"
 msgstr "Önceki sayfaya git"
 
-#: src/resources/gtk/shortcuts-dialog.ui:118
+#: src/resources/gtk/shortcuts-dialog.ui:111
 msgctxt "shortcut window"
 msgid "Go forward to the next page"
 msgstr "Sonraki sayfaya git"
 
-#: src/resources/gtk/shortcuts-dialog.ui:129
+#: src/resources/gtk/shortcuts-dialog.ui:122
 msgctxt "shortcut window"
 msgid "Tabs"
 msgstr "Sekmeler"
 
-#: src/resources/gtk/shortcuts-dialog.ui:133
+#: src/resources/gtk/shortcuts-dialog.ui:126
 msgctxt "shortcut window"
 msgid "New tab"
 msgstr "Yeni sekme"
 
-#: src/resources/gtk/shortcuts-dialog.ui:140
+#: src/resources/gtk/shortcuts-dialog.ui:133
 msgctxt "shortcut window"
 msgid "Close current tab"
 msgstr "Geçerli sekmeyi kapat"
 
-#: src/resources/gtk/shortcuts-dialog.ui:147
+#: src/resources/gtk/shortcuts-dialog.ui:140
 msgctxt "shortcut window"
 msgid "Reopen closed tab"
 msgstr "Kapatılan sekmeyi yeniden aç"
 
-#: src/resources/gtk/shortcuts-dialog.ui:154
+#: src/resources/gtk/shortcuts-dialog.ui:147
 msgctxt "shortcut window"
 msgid "Go to the next tab"
 msgstr "Sonraki sekmeye git"
 
-#: src/resources/gtk/shortcuts-dialog.ui:161
+#: src/resources/gtk/shortcuts-dialog.ui:154
 msgctxt "shortcut window"
 msgid "Go to the previous tab"
 msgstr "Önceki sekmeye git"
 
-#: src/resources/gtk/shortcuts-dialog.ui:168
+#: src/resources/gtk/shortcuts-dialog.ui:161
 msgctxt "shortcut window"
 msgid "Move current tab to the left"
 msgstr "Geçerli sekmeyi sola taşı"
 
-#: src/resources/gtk/shortcuts-dialog.ui:175
+#: src/resources/gtk/shortcuts-dialog.ui:168
 msgctxt "shortcut window"
 msgid "Move current tab to the right"
 msgstr "Geçerli sekmeyi sağa taşı"
 
-#: src/resources/gtk/shortcuts-dialog.ui:186
+#: src/resources/gtk/shortcuts-dialog.ui:179
 msgctxt "shortcut window"
 msgid "Miscellaneous"
 msgstr "Çeşitli"
 
-#: src/resources/gtk/shortcuts-dialog.ui:190
+#: src/resources/gtk/shortcuts-dialog.ui:183
 msgctxt "shortcut window"
 msgid "History"
 msgstr "Geçmiş"
 
-#: src/resources/gtk/shortcuts-dialog.ui:197
+#: src/resources/gtk/shortcuts-dialog.ui:190
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: src/resources/gtk/shortcuts-dialog.ui:204
+#: src/resources/gtk/shortcuts-dialog.ui:197
 msgctxt "shortcut window"
 msgid "Bookmark current page"
 msgstr "Geçerli sayfayı yer imlerine ekle"
 
-#: src/resources/gtk/shortcuts-dialog.ui:211
+#: src/resources/gtk/shortcuts-dialog.ui:204
 msgctxt "shortcut window"
 msgid "Toggle caret browsing"
 msgstr "Karet taramayı aç/kapat"
 
-#: src/resources/gtk/shortcuts-dialog.ui:222
+#: src/resources/gtk/shortcuts-dialog.ui:215
 msgctxt "shortcut window"
 msgid "View"
 msgstr "Görünüm"
 
-#: src/resources/gtk/shortcuts-dialog.ui:226
+#: src/resources/gtk/shortcuts-dialog.ui:219
 msgctxt "shortcut window"
 msgid "Zoom in"
 msgstr "Yakınlaştır"
 
-#: src/resources/gtk/shortcuts-dialog.ui:233
+#: src/resources/gtk/shortcuts-dialog.ui:226
 msgctxt "shortcut window"
 msgid "Zoom out"
 msgstr "Uzaklaştır"
 
-#: src/resources/gtk/shortcuts-dialog.ui:240
+#: src/resources/gtk/shortcuts-dialog.ui:233
 msgctxt "shortcut window"
 msgid "Reset zoom"
 msgstr "Yakınlaştırmayı sıfırla"
 
-#: src/resources/gtk/shortcuts-dialog.ui:247
+#: src/resources/gtk/shortcuts-dialog.ui:240
 msgctxt "shortcut window"
 msgid "Fullscreen"
 msgstr "Tam Ekran"
 
-#: src/resources/gtk/shortcuts-dialog.ui:254
+#: src/resources/gtk/shortcuts-dialog.ui:247
 msgctxt "shortcut window"
 msgid "View page source"
 msgstr "Sayfa kaynağını görüntüle"
 
-#: src/resources/gtk/shortcuts-dialog.ui:261
+#: src/resources/gtk/shortcuts-dialog.ui:254
 msgctxt "shortcut window"
 msgid "Toggle inspector"
 msgstr "İnceleyiciyi aç/kapat"
 
-#: src/resources/gtk/shortcuts-dialog.ui:272
+#: src/resources/gtk/shortcuts-dialog.ui:265
 msgctxt "shortcut window"
 msgid "Editing"
 msgstr "Düzenleme"
 
-#: src/resources/gtk/shortcuts-dialog.ui:276
+#: src/resources/gtk/shortcuts-dialog.ui:269
 msgctxt "shortcut window"
 msgid "Cut"
 msgstr "Kes"
 
-#: src/resources/gtk/shortcuts-dialog.ui:283
+#: src/resources/gtk/shortcuts-dialog.ui:276
 msgctxt "shortcut window"
 msgid "Copy"
 msgstr "Kopyala"
 
-#: src/resources/gtk/shortcuts-dialog.ui:290
+#: src/resources/gtk/shortcuts-dialog.ui:283
 msgctxt "shortcut window"
 msgid "Paste"
 msgstr "Yapıştır"
 
-#: src/resources/gtk/shortcuts-dialog.ui:297
+#: src/resources/gtk/shortcuts-dialog.ui:290
 msgctxt "shortcut window"
 msgid "Undo"
 msgstr "Geri Al"
 
-#: src/resources/gtk/shortcuts-dialog.ui:304
+#: src/resources/gtk/shortcuts-dialog.ui:297
 msgctxt "shortcut window"
 msgid "Redo"
 msgstr "Yinele"
 
-#: src/resources/gtk/shortcuts-dialog.ui:311
+#: src/resources/gtk/shortcuts-dialog.ui:304
 msgctxt "shortcut window"
 msgid "Select all"
 msgstr "Tümünü seç"
 
-#: src/resources/gtk/shortcuts-dialog.ui:318
+#: src/resources/gtk/shortcuts-dialog.ui:311
 msgctxt "shortcut window"
 msgid "Select page URL"
 msgstr "Sayfa adresini (URL) seç"
 
-#: src/resources/gtk/shortcuts-dialog.ui:325
+#: src/resources/gtk/shortcuts-dialog.ui:318
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Ara"
 
-#: src/resources/gtk/shortcuts-dialog.ui:332
+#: src/resources/gtk/shortcuts-dialog.ui:325
 msgctxt "shortcut window"
 msgid "Next search result"
 msgstr "Sonraki arama sonucu"
 
-#: src/resources/gtk/shortcuts-dialog.ui:339
+#: src/resources/gtk/shortcuts-dialog.ui:332
 msgctxt "shortcut window"
 msgid "Previous search result"
 msgstr "Önceki arama sonucu"
@@ -3510,6 +3511,17 @@ msgstr ""
 #: src/window-commands.c:2131
 msgid "_Enable"
 msgstr "_Etkinleştir"
+
+#~ msgid "Failed to register device."
+#~ msgstr "Aygıtı kaydetme başarısız."
+
+#~ msgid ""
+#~ "Please don’t leave this page until you have completed the verification."
+#~ msgstr "Lütfen doğrulamayı tamamlamadan bu sayfayı terk etmeyiniz."
+
+#~ msgctxt "shortcut window"
+#~ msgid "Save page as web app"
+#~ msgstr "Sayfayı web uygulaması olarak kaydet"
 
 #~ msgid "The sync secrets for the current sync user are null."
 #~ msgstr "Şu anki kullanıcı için eşzamanlama anahtarları null."
