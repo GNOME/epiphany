@@ -28,8 +28,10 @@
 #include <inttypes.h>
 #include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
-#include <nettle/cbc.h>
 #include <nettle/aes.h>
+#include <nettle/cbc.h>
+#include <nettle/hkdf.h>
+#include <nettle/hmac.h>
 #include <string.h>
 
 #define HAWK_VERSION  1
@@ -521,84 +523,43 @@ ephy_sync_crypto_concat_bytes (const guint8 *bytes,
   return out;
 }
 
-static void
+static guint8 *
 ephy_sync_crypto_hkdf (const guint8 *in,
                        gsize         in_len,
-                       guint8       *salt,
-                       gsize         salt_len,
                        const guint8 *info,
                        gsize         info_len,
-                       guint8       *out,
                        gsize         out_len)
 {
-  char *prk_hex;
-  char *tmp_hex;
-  guint8 *tmp;
+  struct hmac_sha256_ctx ctx;
+  guint8 *salt;
   guint8 *prk;
-  guint8 *out_full;
-  guint8 *data;
-  guint8 counter;
-  gsize hash_len;
-  gsize data_len;
-  gsize n;
+  guint8 *out;
 
   g_assert (in);
   g_assert (info);
-  g_assert (out);
 
-  hash_len = g_checksum_type_get_length (G_CHECKSUM_SHA256);
-  g_assert (out_len <= hash_len * 255);
+  /* Salt is an array of hash length zeros. */
+  salt = g_malloc0 (SHA256_DIGEST_SIZE);
+  prk = g_malloc (SHA256_DIGEST_SIZE);
+  out = g_malloc (out_len);
 
-  /* Implementation of the HMAC-based Extract-and-Expand Key Derivation Function.
-   * See https://tools.ietf.org/html/rfc5869
-   */
+  hmac_sha256_set_key(&ctx, SHA256_DIGEST_SIZE, salt);
+  hkdf_extract(&ctx,
+               (nettle_hash_update_func*) hmac_sha256_update,
+               (nettle_hash_digest_func*) hmac_sha256_digest,
+               SHA256_DIGEST_SIZE,
+               in_len, in, prk);
+  hmac_sha256_set_key(&ctx, SHA256_DIGEST_SIZE, prk);
+  hkdf_expand(&ctx,
+              (nettle_hash_update_func*) hmac_sha256_update,
+              (nettle_hash_digest_func*) hmac_sha256_digest,
+              SHA256_DIGEST_SIZE,
+              info_len, info, out_len, out);
 
-  /* If salt value was not provided, use an array of hash_len zeros. */
-  if (!salt) {
-    salt = g_malloc0 (hash_len);
-    salt_len = hash_len;
-  }
-
-  /* Step 1: Extract */
-  prk_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
-                                     salt, salt_len,
-                                     in, in_len);
-  prk = ephy_sync_utils_decode_hex (prk_hex);
-
-  /* Step 2: Expand */
-  counter = 1;
-  n = (out_len + hash_len - 1) / hash_len;
-  out_full = g_malloc (n * hash_len);
-
-  for (gsize i = 0; i < n; i++, counter++) {
-    if (i == 0) {
-      data = ephy_sync_crypto_concat_bytes (info, info_len, &counter, 1, NULL);
-      data_len = info_len + 1;
-    } else {
-      data = ephy_sync_crypto_concat_bytes (out_full + (i - 1) * hash_len, hash_len,
-                                            info, info_len,
-                                            &counter, 1,
-                                            NULL);
-      data_len = hash_len + info_len + 1;
-    }
-
-    tmp_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
-                                       prk, hash_len,
-                                       data, data_len);
-    tmp = ephy_sync_utils_decode_hex (tmp_hex);
-    memcpy (out_full + i * hash_len, tmp, hash_len);
-
-    g_free (data);
-    g_free (tmp);
-    g_free (tmp_hex);
-  }
-
-  memcpy (out, out_full, out_len);
-
-  g_free (prk_hex);
   g_free (salt);
   g_free (prk);
-  g_free (out_full);
+
+  return out;
 }
 
 void
@@ -619,13 +580,11 @@ ephy_sync_crypto_derive_session_token (const char  *session_token,
 
   token = ephy_sync_utils_decode_hex (session_token);
   info = ephy_sync_crypto_kw ("sessionToken");
-  out = g_malloc (3 * len);
 
   /* Use the sessionToken to derive tokenID, reqHMACkey and requestKey. */
-  ephy_sync_crypto_hkdf (token, len,
-                         NULL, 0,
-                         (guint8 *)info, strlen (info),
-                         out, 3 * len);
+  out = ephy_sync_crypto_hkdf (token, len,
+                               (const guint8 *)info, strlen (info),
+                               3 * len);
 
   *token_id = g_malloc (len);
   *req_hmac_key = g_malloc (len);
@@ -663,14 +622,11 @@ ephy_sync_crypto_derive_key_fetch_token (const char  *key_fetch_token,
   kft = ephy_sync_utils_decode_hex (key_fetch_token);
   info_kft = ephy_sync_crypto_kw ("keyFetchToken");
   info_keys = ephy_sync_crypto_kw ("account/keys");
-  out1 = g_malloc (3 * len);
-  out2 = g_malloc (3 * len);
 
   /* Use the keyFetchToken to derive tokenID, reqHMACkey and keyRequestKey. */
-  ephy_sync_crypto_hkdf (kft, len,
-                         NULL, 0,
-                         (guint8 *)info_kft, strlen (info_kft),
-                         out1, 3 * len);
+  out1 = ephy_sync_crypto_hkdf (kft, len,
+                                (const guint8 *)info_kft, strlen (info_kft),
+                                3 * len);
 
   *token_id = g_malloc (len);
   *req_hmac_key = g_malloc (len);
@@ -680,10 +636,9 @@ ephy_sync_crypto_derive_key_fetch_token (const char  *key_fetch_token,
   memcpy (key_request_key, out1 + 2 * len, len);
 
   /* Use the keyRequestKey to derive respHMACkey and respXORkey. */
-  ephy_sync_crypto_hkdf (key_request_key, len,
-                         NULL, 0,
-                         (guint8 *)info_keys, strlen (info_keys),
-                         out2, 3 * len);
+  out2 = ephy_sync_crypto_hkdf (key_request_key, len,
+                                (const guint8 *)info_keys, strlen (info_keys),
+                                3 * len);
 
   *resp_hmac_key = g_malloc (len);
   *resp_xor_key = g_malloc (2 * len);
