@@ -545,14 +545,14 @@ ephy_sync_crypto_hkdf (const guint8 *in,
 
   hmac_sha256_set_key(&ctx, SHA256_DIGEST_SIZE, salt);
   hkdf_extract(&ctx,
-               (nettle_hash_update_func*) hmac_sha256_update,
-               (nettle_hash_digest_func*) hmac_sha256_digest,
+               (nettle_hash_update_func *)hmac_sha256_update,
+               (nettle_hash_digest_func *)hmac_sha256_digest,
                SHA256_DIGEST_SIZE,
                in_len, in, prk);
   hmac_sha256_set_key(&ctx, SHA256_DIGEST_SIZE, prk);
   hkdf_expand(&ctx,
-              (nettle_hash_update_func*) hmac_sha256_update,
-              (nettle_hash_digest_func*) hmac_sha256_digest,
+              (nettle_hash_update_func *)hmac_sha256_update,
+              (nettle_hash_digest_func *)hmac_sha256_digest,
               SHA256_DIGEST_SIZE,
               info_len, info, out_len, out);
 
