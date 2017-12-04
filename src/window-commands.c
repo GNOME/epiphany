@@ -40,6 +40,7 @@
 #include "ephy-file-chooser.h"
 #include "ephy-file-helpers.h"
 #include "ephy-find-toolbar.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-gui.h"
 #include "ephy-header-bar.h"
 #include "ephy-history-dialog.h"
@@ -1796,6 +1797,55 @@ view_source_embedded (const char *uri, EphyEmbed *embed)
 }
 
 static void
+tmp_source_delete_cb (GObject *source, GAsyncResult *result, gpointer data)
+{
+  GFile *file = G_FILE (source);
+  GError *error = NULL;
+
+  if (!g_file_delete_finish (G_FILE (source), result, &error)) {
+    g_warning ("Failed to delete %s: %s", g_file_get_path (file), error->message);
+    g_error_free (error);
+  }
+
+  g_object_unref (file);
+}
+
+static void
+delete_tmp_source_file (GOutputStream *ostream)
+{
+  char *uri;
+  GFile *file;
+
+  g_object_get (G_OBJECT (ostream), "ephy-save-temp-source-uri", &uri, NULL);
+  file = g_file_new_for_uri (uri);
+  g_file_delete_async (file, G_PRIORITY_LOW, NULL, tmp_source_delete_cb, NULL);
+
+  g_free (uri);
+}
+
+static void
+portal_opened_cb (GObject *source, GAsyncResult *result, gpointer data)
+{
+  char *path = data;
+  GFile *file;
+  gboolean ret;
+  GError *error = NULL;
+
+  ret = ephy_open_file_via_flatpak_portal_finish (result, &error);
+  if (!ret) {
+    /* It can be canceled by the user, even without a cancellable. */
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to open file via flatpak portal: %s", error->message);
+    g_error_free (error);
+  }
+
+  file = g_file_new_for_path (path);
+  g_free (path);
+
+  g_file_delete_async (file, G_PRIORITY_LOW, NULL, tmp_source_delete_cb, NULL);
+}
+
+static void
 save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointer data)
 {
   const char *uri;
@@ -1806,12 +1856,21 @@ save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointe
   if (error) {
     g_warning ("Unable to close file: %s", error->message);
     g_error_free (error);
+    delete_tmp_source_file (ostream);
     return;
   }
 
   uri = (const char *)g_object_get_data (G_OBJECT (ostream), "ephy-save-temp-source-uri");
 
   file = g_file_new_for_uri (uri);
+
+  if (ephy_is_running_inside_flatpak ()) {
+    const char *path;
+
+    path = g_file_get_path (file);
+    ephy_open_file_via_flatpak_portal (path, NULL, portal_opened_cb, g_strdup (path));
+    goto out;
+  }
 
   if (!ephy_file_launch_handler ("text/plain", file, gtk_get_current_event_time ())) {
     /* Fallback to view the source inside the browser */
@@ -1823,8 +1882,9 @@ save_temp_source_close_cb (GOutputStream *ostream, GAsyncResult *result, gpointe
                                             "ephy-save-temp-source-embed");
     view_source_embedded (uri, embed);
   }
-  g_object_unref (ostream);
 
+out:
+  g_object_unref (ostream);
   g_object_unref (file);
 }
 
@@ -1879,6 +1939,7 @@ get_main_resource_data_cb (WebKitWebResource *resource, GAsyncResult *result, GO
   if (error) {
     g_warning ("Unable to get main resource data: %s", error->message);
     g_error_free (error);
+    delete_tmp_source_file (ostream);
     return;
   }
 
@@ -1938,19 +1999,26 @@ save_temp_source (EphyEmbed *embed,
 {
   GFile *file;
   char *tmp, *base;
-  const char *static_temp_dir;
 
-  static_temp_dir = ephy_file_tmp_dir ();
-  if (static_temp_dir == NULL) {
-    return;
+  if (ephy_is_running_inside_flatpak ()) {
+    /* It has to go here because the portal has no access to our tmpfs.
+     * This means we have to delete it manually! */
+    base = g_build_filename (g_get_user_cache_dir (), "tmp", "viewsourceXXXXXX", NULL);
+  } else {
+    const char *static_temp_dir;
+
+    static_temp_dir = ephy_file_tmp_dir ();
+    if (static_temp_dir == NULL)
+      return;
+
+    base = g_build_filename (static_temp_dir, "viewsourceXXXXXX", NULL);
   }
 
-  base = g_build_filename (static_temp_dir, "viewsourceXXXXXX", NULL);
   tmp = ephy_file_tmp_filename (base, "html");
   g_free (base);
-  if (tmp == NULL) {
+
+  if (tmp == NULL)
     return;
-  }
 
   file = g_file_new_for_path (tmp);
   g_file_replace_async (file, NULL, FALSE,
