@@ -39,7 +39,7 @@ ephy_user_agent_get_internal (void)
     return user_agent;
 
   settings = webkit_settings_new ();
-  user_agent = g_strdup_printf ("%s Epiphany/%s", webkit_settings_get_user_agent (settings), VERSION);
+  user_agent = g_strdup_printf ("%s Epiphany/605.1", webkit_settings_get_user_agent (settings));
   g_object_unref (settings);
 
   return user_agent;
