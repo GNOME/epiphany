@@ -803,6 +803,44 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 }
 
 static void
+css_file_opened_cb (GObject      *source,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  gboolean ret;
+  GError *error = NULL;
+
+  ret = ephy_open_file_via_flatpak_portal_finish (result, &error);
+  if (!ret) {
+    if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      g_warning ("Failed to open CSS file: %s", error->message);
+    g_error_free (error);
+  }
+}
+
+static void
+css_file_created_cb (GObject      *source,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  GFile *file = G_FILE (source);
+  GFileOutputStream *stream;
+  GError *error = NULL;
+
+  stream = g_file_create_finish (file, result, &error);
+  if (stream == NULL && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
+    g_warning ("Failed to create %s: %s", g_file_get_path (file), error->message);
+  else
+    ephy_open_file_via_flatpak_portal (g_file_get_path (file), NULL, css_file_opened_cb, NULL);
+
+  if (error != NULL)
+    g_error_free (error);
+  if (stream != NULL)
+    g_object_unref (stream);
+  g_object_unref (file);
+}
+
+static void
 css_edit_button_clicked_cb (GtkWidget   *button,
                             PrefsDialog *pd)
 {
@@ -812,9 +850,13 @@ css_edit_button_clicked_cb (GtkWidget   *button,
                                                     USER_STYLESHEET_FILENAME,
                                                     NULL));
 
-  ephy_file_launch_handler ("text/plain", css_file,
-                            gtk_get_current_event_time ());
-  g_object_unref (css_file);
+  if (ephy_is_running_inside_flatpak ()) {
+    g_file_create_async (css_file, G_FILE_CREATE_NONE, G_PRIORITY_DEFAULT, NULL, css_file_created_cb, NULL);
+  } else {
+    ephy_file_launch_handler ("text/plain", css_file,
+                              gtk_get_current_event_time ());
+    g_object_unref (css_file);
+  }
 }
 
 static void
