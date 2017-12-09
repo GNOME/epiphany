@@ -980,6 +980,6 @@ ephy_embed_detach_notification_container (EphyEmbed *embed)
      * notification widget, removing it from the container will destroy the
      * singleton. To prevent this, add a reference to it before removing it
      * from the container. */
-    gtk_container_remove (GTK_CONTAINER (embed->overlay), g_object_ref (container));
+    gtk_container_remove (GTK_CONTAINER (embed->overlay), g_object_ref (GTK_WIDGET (container)));
   }
 }

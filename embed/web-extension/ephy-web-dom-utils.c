@@ -584,7 +584,7 @@ ephy_web_dom_utils_find_form_auth_elements (WebKitDOMHTMLFormElement *form,
         g_strcmp0 (element_type, "tel") == 0 ||
         g_strcmp0 (element_type, "url") == 0 ||
         g_strcmp0 (element_type, "number") == 0) {
-      username_node = g_object_ref (element);
+      username_node = g_object_ref (WEBKIT_DOM_HTML_INPUT_ELEMENT (element));
       g_free (element_type);
       break;
     }
