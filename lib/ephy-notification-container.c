@@ -79,3 +79,18 @@ ephy_notification_container_add_notification (EphyNotificationContainer *self,
   gtk_widget_show_all (GTK_WIDGET (self));
   gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
 }
+
+guint
+ephy_notification_container_get_num_children (EphyNotificationContainer *self)
+{
+  GList *children;
+  guint retval;
+
+  g_assert (EPHY_IS_NOTIFICATION_CONTAINER (self));
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->grid));
+  retval = g_list_length (children);
+  g_list_free (children);
+
+  return retval;
+}

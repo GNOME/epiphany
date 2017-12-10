@@ -118,8 +118,13 @@ close_button_clicked_cb (GtkButton        *button,
 {
   EphyNotificationContainer *container = ephy_notification_container_get_default ();
 
-  gtk_widget_hide (GTK_WIDGET (container));
-  gtk_revealer_set_reveal_child (GTK_REVEALER (container), FALSE);
+  /* gtk_widget_destroy() removes the widget from its parent container. */
+  gtk_widget_destroy (GTK_WIDGET (self));
+
+  if (ephy_notification_container_get_num_children (container) == 0) {
+    gtk_widget_hide (GTK_WIDGET (container));
+    gtk_revealer_set_reveal_child (GTK_REVEALER (container), FALSE);
+  }
 }
 
 static void

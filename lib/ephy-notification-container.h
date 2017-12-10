@@ -32,5 +32,6 @@ EphyNotificationContainer *ephy_notification_container_get_default      (void);
 
 void                       ephy_notification_container_add_notification (EphyNotificationContainer *self,
                                                                          GtkWidget                 *notification);
+guint                      ephy_notification_container_get_num_children (EphyNotificationContainer *self);
 
 G_END_DECLS
