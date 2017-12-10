@@ -1398,6 +1398,9 @@ window_cmd_save_as_application (GSimpleAction *action,
   char *markup;
   char *escaped_address;
 
+  if (ephy_is_running_inside_flatpak ())
+    return;
+
   embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
   g_assert (embed != NULL);
 
