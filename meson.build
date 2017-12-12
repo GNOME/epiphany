@@ -58,7 +58,7 @@ configure_file(
 
 glib_requirement = '>= 2.52.0'
 gtk_requirement = '>= 3.22.13'
-nettle_requirement = '>= 3.4'
+nettle_requirement = '>= 3.2'
 webkitgtk_requirement = '>= 2.19.2'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')

@@ -30,7 +30,9 @@
 #include <libsoup/soup.h>
 #include <nettle/aes.h>
 #include <nettle/cbc.h>
+#if (NETTLE_VERSION_MAJOR >= 3 && NETTLE_VERSION_MINOR >= 4)
 #include <nettle/hkdf.h>
+#endif
 #include <nettle/hmac.h>
 #include <string.h>
 
@@ -530,6 +532,7 @@ ephy_sync_crypto_hkdf (const guint8 *in,
                        gsize         info_len,
                        gsize         out_len)
 {
+#if (NETTLE_VERSION_MAJOR >= 3 && NETTLE_VERSION_MINOR >= 4)
   struct hmac_sha256_ctx ctx;
   guint8 *salt;
   guint8 *prk;
@@ -560,6 +563,68 @@ ephy_sync_crypto_hkdf (const guint8 *in,
   g_free (prk);
 
   return out;
+#else
+  char *prk_hex;
+  char *tmp_hex;
+  guint8 *tmp;
+  guint8 *out_full;
+  guint8 *data;
+  guint8 *salt;
+  guint8 *prk;
+  guint8 *out;
+  guint8 counter;
+  gsize data_len;
+  gsize n;
+
+  g_assert (in);
+  g_assert (info);
+
+  /* Salt is an array of hash length zeros. */
+  salt = g_malloc0 (SHA256_DIGEST_SIZE);
+  out = g_malloc (out_len);
+
+  /* Step 1: Extract (https://tools.ietf.org/html/rfc5869) */
+  prk_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
+                                     salt, SHA256_DIGEST_SIZE,
+                                     in, in_len);
+  prk = ephy_sync_utils_decode_hex (prk_hex);
+
+  /* Step 2: Expand (https://tools.ietf.org/html/rfc5869) */
+  counter = 1;
+  n = (out_len + SHA256_DIGEST_SIZE - 1) / SHA256_DIGEST_SIZE;
+  out_full = g_malloc (n * SHA256_DIGEST_SIZE);
+
+  for (gsize i = 0; i < n; i++, counter++) {
+    if (i == 0) {
+      data = ephy_sync_crypto_concat_bytes (info, info_len, &counter, 1, NULL);
+      data_len = info_len + 1;
+    } else {
+      data = ephy_sync_crypto_concat_bytes (out_full + (i - 1) * SHA256_DIGEST_SIZE,
+                                            SHA256_DIGEST_SIZE, info, info_len,
+                                            &counter, 1, NULL);
+      data_len = SHA256_DIGEST_SIZE + info_len + 1;
+    }
+
+    tmp_hex = g_compute_hmac_for_data (G_CHECKSUM_SHA256,
+                                       prk, SHA256_DIGEST_SIZE,
+                                       data, data_len);
+    tmp = ephy_sync_utils_decode_hex (tmp_hex);
+    memcpy (out_full + i * SHA256_DIGEST_SIZE, tmp, SHA256_DIGEST_SIZE);
+
+    g_free (data);
+    g_free (tmp);
+    g_free (tmp_hex);
+  }
+
+  memcpy (out, out_full, out_len);
+
+  g_free (prk_hex);
+  g_free (salt);
+  g_free (prk);
+  g_free (out_full);
+
+  return out;
+#endif
 }
 
 void
