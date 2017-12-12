@@ -27,6 +27,7 @@
 #include "ephy-synchronizable-manager.h"
 
 #include <glib/gi18n.h>
+#include <inttypes.h>
 #include <stdio.h>
 
 const SecretSchema *
@@ -188,7 +189,7 @@ get_attributes_table (const char *id,
                       const char *username,
                       const char *username_field,
                       const char *password_field,
-                      double      server_time_modified)
+                      gint64      server_time_modified)
 {
   GHashTable *attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
 
@@ -219,7 +220,7 @@ get_attributes_table (const char *id,
   if (server_time_modified >= 0)
     g_hash_table_insert (attributes,
                          g_strdup (SERVER_TIME_MODIFIED_KEY),
-                         g_strdup_printf ("%.2lf", server_time_modified));
+                         g_strdup_printf ("%"PRId64, server_time_modified));
 
   return attributes;
 }
@@ -391,7 +392,7 @@ ephy_password_manager_store_record (EphyPasswordManager *self,
   const char *username_field;
   const char *password_field;
   char *label;
-  double modified;
+  gint64 modified;
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (EPHY_IS_PASSWORD_RECORD (record));
@@ -529,7 +530,7 @@ secret_service_search_cb (SecretService  *service,
     const char *password_field = g_hash_table_lookup (attributes, PASSWORD_FIELD_KEY);
     const char *timestamp = g_hash_table_lookup (attributes, SERVER_TIME_MODIFIED_KEY);
     const char *password = secret_value_get (value, NULL);
-    double server_time_modified;
+    gint64 server_time_modified;
     EphyPasswordRecord *record;
 
     LOG ("Found password record for (%s, %s, %s, %s, %s)",
@@ -545,7 +546,7 @@ secret_service_search_cb (SecretService  *service,
                                        username_field, password_field,
                                        secret_item_get_created (item) * 1000,
                                        secret_item_get_modified (item) * 1000);
-    sscanf (timestamp, "%lf", &server_time_modified);
+    server_time_modified = g_ascii_strtod (timestamp, NULL);
     ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (record),
                                                   server_time_modified);
     records = g_list_prepend (records, record);
@@ -741,7 +742,7 @@ synchronizable_manager_set_is_initial_sync (EphySynchronizableManager *manager,
   ephy_sync_utils_set_passwords_sync_is_initial (is_initial);
 }
 
-static double
+static gint64
 synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
 {
   return ephy_sync_utils_get_passwords_sync_time ();
@@ -749,7 +750,7 @@ synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
 
 static void
 synchronizable_manager_set_sync_time (EphySynchronizableManager *manager,
-                                      double                     sync_time)
+                                      gint64                     sync_time)
 {
   ephy_sync_utils_set_passwords_sync_time (sync_time);
 }
@@ -878,8 +879,8 @@ ephy_password_manager_handle_initial_merge (EphyPasswordManager *self,
   const char *remote_password_field;
   guint64 remote_timestamp;
   guint64 local_timestamp;
-  double remote_server_time_modified;
-  double local_server_time_modified;
+  gint64 remote_server_time_modified;
+  gint64 local_server_time_modified;
 
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
 

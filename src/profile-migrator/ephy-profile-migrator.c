@@ -34,16 +34,20 @@
 #include "ephy-sync-utils.h"
 #include "ephy-uri-tester-shared.h"
 #include "ephy-web-app-utils.h"
+#include "gvdb-builder.h"
+#include "gvdb-reader.h"
 
 #include <errno.h>
 #include <fcntl.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+#include <inttypes.h>
 #include <libsecret/secret.h>
 #include <libsoup/soup.h>
 #include <libxml/HTMLtree.h>
 #include <libxml/xmlreader.h>
 #include <locale.h>
+#include <math.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <webkit2/webkit2.h>
@@ -970,6 +974,199 @@ migrate_sync_device_info (void)
   json_object_unref (device);
 }
 
+static GVariant *
+convert_bookmark_timestamp (GVariant *value)
+{
+  GVariantBuilder builder;
+  GVariantIter *iter;
+  gboolean is_uploaded;
+  gint64 time_added;
+  gint64 timestamp_i;
+  double timestamp_d;
+  const char *title;
+  const char *id;
+  char *tag;
+
+  g_variant_get (value, "(x&s&sdbas)",
+                 &time_added, &title, &id,
+                 &timestamp_d, &is_uploaded, &iter);
+  timestamp_i = ceil (timestamp_d);
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(xssxbas)"));
+  g_variant_builder_add (&builder, "x", time_added);
+  g_variant_builder_add (&builder, "s", title);
+  g_variant_builder_add (&builder, "s", id);
+  g_variant_builder_add (&builder, "x", timestamp_i);
+  g_variant_builder_add (&builder, "b", is_uploaded);
+
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("as"));
+  while (g_variant_iter_next (iter, "s", &tag)) {
+    g_variant_builder_add (&builder, "s", tag);
+    g_free (tag);
+  }
+  g_variant_builder_close (&builder);
+
+  g_variant_iter_free (iter);
+
+  return g_variant_builder_end (&builder);
+}
+
+static void
+migrate_bookmarks_timestamp (void)
+{
+  GvdbTable *root_table_in = NULL;
+  GvdbTable *bookmarks_table_in = NULL;
+  GvdbTable *tags_table_in = NULL;
+  GHashTable *root_table_out = NULL;
+  GHashTable *bookmarks_table_out = NULL;
+  GHashTable *tags_table_out = NULL;
+  GError *error = NULL;
+  char **tags = NULL;
+  char **urls = NULL;
+  char *filename;
+  int length;
+
+  filename = g_build_filename (ephy_dot_dir (), EPHY_BOOKMARKS_FILE, NULL);
+  root_table_in = gvdb_table_new (filename, TRUE, &error);
+  if (error) {
+    g_warning ("Failed to create Gvdb table: %s", error->message);
+    goto out;
+  }
+
+  bookmarks_table_in = gvdb_table_get_table (root_table_in, "bookmarks");
+  if (!bookmarks_table_in) {
+    g_warning ("Failed to find bookmarks inner table");
+    goto out;
+  }
+
+  tags_table_in = gvdb_table_get_table (root_table_in, "tags");
+  if (!tags_table_in) {
+    g_warning ("Failed to find tags inner table");
+    goto out;
+  }
+
+  root_table_out = gvdb_hash_table_new (NULL, NULL);
+  bookmarks_table_out = gvdb_hash_table_new (root_table_out, "bookmarks");
+  tags_table_out = gvdb_hash_table_new (root_table_out, "tags");
+
+  tags = gvdb_table_get_names (tags_table_in, &length);
+  for (int i = 0; i < length; i++)
+    gvdb_hash_table_insert (tags_table_out, tags[i]);
+
+  urls = gvdb_table_get_names (bookmarks_table_in, &length);
+  for (int i = 0; i < length; i++) {
+    GVariant *value = gvdb_table_get_value (bookmarks_table_in, urls[i]);
+    GVariant *new_value = convert_bookmark_timestamp (value);
+    GvdbItem *item = gvdb_hash_table_insert (bookmarks_table_out, urls[i]);
+    gvdb_item_set_value (item, new_value);
+    g_variant_unref (value);
+  }
+
+  gvdb_table_write_contents (root_table_out, filename, FALSE, NULL);
+
+out:
+  if (error)
+    g_error_free (error);
+  if (root_table_out)
+    g_hash_table_unref (root_table_out);
+  if (bookmarks_table_out)
+    g_hash_table_unref (bookmarks_table_out);
+  if (tags_table_out)
+    g_hash_table_unref (tags_table_out);
+  if (root_table_in)
+    gvdb_table_free (root_table_in);
+  if (bookmarks_table_in)
+    gvdb_table_free (bookmarks_table_in);
+  if (tags_table_in)
+    gvdb_table_free (tags_table_in);
+  g_strfreev (urls);
+  g_strfreev (tags);
+  g_free (filename);
+}
+
+static void
+migrate_passwords_timestamp (void)
+{
+  GHashTable *attributes;
+  GHashTable *attrs;
+  SecretItem *item;
+  SecretValue *value;
+  GList *passwords = NULL;
+  GError *error = NULL;
+  const char *origin;
+  const char *username;
+  const char *timestamp;
+  char *label;
+  double timestamp_d;
+  gint64 timestamp_i;
+  int default_profile_migration_version;
+
+  /* We want this migration to run only once. */
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  if (default_profile_migration_version >= EPHY_PASSWORDS_TIMESTAMP_MIGRATION_VERSION)
+    return;
+
+  attributes = secret_attributes_build (EPHY_FORM_PASSWORD_SCHEMA, NULL);
+  passwords = secret_service_search_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA, attributes,
+                                          SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+                                          NULL, &error);
+  if (error) {
+    g_warning ("Failed to search the password schema: %s", error->message);
+    goto out;
+  }
+
+  secret_service_clear_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
+                             attributes, NULL, &error);
+  if (error) {
+    g_warning ("Failed to clear the password schema: %s", error->message);
+    goto out;
+  }
+
+  for (GList *p = passwords; p && p->data; p = p->next) {
+    item = (SecretItem *)p->data;
+    value = secret_item_get_secret (item);
+
+    if (!value)
+      continue;
+
+    attrs = secret_item_get_attributes (item);
+    origin = g_hash_table_lookup (attrs, ORIGIN_KEY);
+    username = g_hash_table_lookup (attrs, USERNAME_KEY);
+    timestamp = g_hash_table_lookup (attrs, SERVER_TIME_MODIFIED_KEY);
+
+    if (!origin || !timestamp)
+      goto next;
+
+    timestamp_d = g_ascii_strtod (timestamp, NULL);
+    timestamp_i = (gint64)ceil (timestamp_d);
+    g_hash_table_insert (attrs, g_strdup (SERVER_TIME_MODIFIED_KEY), g_strdup_printf ("%"PRId64, timestamp_i));
+
+    if (username)
+      label = g_strdup_printf ("Password for %s in a form in %s", username, origin);
+    else
+      label = g_strdup_printf ("Password in a form in %s", origin);
+
+    secret_service_store_sync (NULL, EPHY_FORM_PASSWORD_SCHEMA,
+                               attrs, NULL, label,
+                               value, NULL, &error);
+    if (error) {
+      g_warning ("Failed to store password: %s", error->message);
+      g_clear_pointer (&error, g_error_free);
+    }
+
+    g_free (label);
+next:
+    g_hash_table_unref (attrs);
+    secret_value_unref (value);
+  }
+
+out:
+  if (error)
+    g_error_free (error);
+  g_hash_table_unref (attributes);
+  g_list_free_full (passwords, g_object_unref);
+}
+
 static void
 migrate_nothing (void)
 {
@@ -1007,6 +1204,8 @@ const EphyProfileMigrator migrators[] = {
   /* 21 */ migrate_passwords_add_target_origin,
   /* 22 */ migrate_sync_settings_path,
   /* 23 */ migrate_sync_device_info,
+  /* 24 */ migrate_bookmarks_timestamp,
+  /* 25 */ migrate_passwords_timestamp,
 };
 
 static gboolean

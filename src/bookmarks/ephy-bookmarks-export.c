@@ -42,12 +42,12 @@ build_variant (EphyBookmark *bookmark)
   GSequence *tags;
   GSequenceIter *iter;
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(xssdbas)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(xssxbas)"));
 
   g_variant_builder_add (&builder, "x", ephy_bookmark_get_time_added (bookmark));
   g_variant_builder_add (&builder, "s", ephy_bookmark_get_title (bookmark));
   g_variant_builder_add (&builder, "s", ephy_bookmark_get_id (bookmark));
-  g_variant_builder_add (&builder, "d", ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark)));
+  g_variant_builder_add (&builder, "x", ephy_synchronizable_get_server_time_modified (EPHY_SYNCHRONIZABLE (bookmark)));
   g_variant_builder_add (&builder, "b", ephy_bookmark_is_uploaded (bookmark));
 
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("as"));

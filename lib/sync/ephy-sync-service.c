@@ -30,7 +30,9 @@
 
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
+#include <inttypes.h>
 #include <libsoup/soup.h>
+#include <math.h>
 #include <string.h>
 
 struct _EphySyncService {
@@ -97,8 +99,8 @@ typedef struct {
   char                *endpoint;
   char                *method;
   char                *request_body;
-  double               modified_since;
-  double               unmodified_since;
+  gint64               modified_since;
+  gint64               unmodified_since;
   SoupSessionCallback  callback;
   gpointer             user_data;
 } StorageRequestAsyncData;
@@ -145,8 +147,8 @@ static StorageRequestAsyncData *
 storage_request_async_data_new (const char          *endpoint,
                                 const char          *method,
                                 const char          *request_body,
-                                double               modified_since,
-                                double               unmodified_since,
+                                gint64               modified_since,
+                                gint64               unmodified_since,
                                 SoupSessionCallback  callback,
                                 gpointer             user_data)
 {
@@ -539,12 +541,12 @@ ephy_sync_service_send_storage_request (EphySyncService         *self,
     soup_message_headers_append (msg->request_headers, "content-type", content_type);
 
   if (data->modified_since >= 0) {
-    if_modified_since = g_strdup_printf ("%.2lf", data->modified_since);
+    if_modified_since = g_strdup_printf ("%"PRId64, data->modified_since);
     soup_message_headers_append (msg->request_headers, "X-If-Modified-Since", if_modified_since);
   }
 
   if (data->unmodified_since >= 0) {
-    if_unmodified_since = g_strdup_printf ("%.2lf", data->unmodified_since);
+    if_unmodified_since = g_strdup_printf ("%"PRId64, data->unmodified_since);
     soup_message_headers_append (msg->request_headers, "X-If-Unmodified-Since", if_unmodified_since);
   }
 
@@ -1040,8 +1042,8 @@ ephy_sync_service_queue_storage_request (EphySyncService     *self,
                                          const char          *endpoint,
                                          const char          *method,
                                          const char          *request_body,
-                                         double               modified_since,
-                                         double               unmodified_since,
+                                         gint64               modified_since,
+                                         gint64               unmodified_since,
                                          SoupSessionCallback  callback,
                                          gpointer             user_data)
 {
@@ -1236,7 +1238,7 @@ upload_synchronizable_cb (SoupSession *session,
                           gpointer     user_data)
 {
   SyncAsyncData *data = (SyncAsyncData *)user_data;
-  double time_modified;
+  gint64 time_modified;
 
   /* Code 412 means that there is a more recent version on the server.
    * Download it.
@@ -1246,7 +1248,7 @@ upload_synchronizable_cb (SoupSession *session,
     ephy_sync_service_download_synchronizable (data->service, data->manager, data->synchronizable);
   } else if (msg->status_code == 200) {
     LOG ("Successfully uploaded to server");
-    time_modified = g_ascii_strtod (msg->response_body->data, NULL);
+    time_modified = ceil (g_ascii_strtod (msg->response_body->data, NULL));
     ephy_synchronizable_set_server_time_modified (data->synchronizable, time_modified);
     ephy_synchronizable_manager_save (data->manager, data->synchronizable);
   } else {
@@ -1271,7 +1273,7 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
   char *id_safe;
   const char *collection;
   const char *id;
-  double time_modified;
+  gint64 time_modified;
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
@@ -1583,7 +1585,7 @@ ephy_sync_service_sync_collection (EphySyncService           *self,
   if (is_initial) {
     endpoint = g_strdup_printf ("storage/%s?full=true", collection);
   } else {
-    endpoint = g_strdup_printf ("storage/%s?newer=%.2lf&full=true", collection,
+    endpoint = g_strdup_printf ("storage/%s?newer=%"PRId64"&full=true", collection,
                                 ephy_synchronizable_manager_get_sync_time (manager));
   }
 

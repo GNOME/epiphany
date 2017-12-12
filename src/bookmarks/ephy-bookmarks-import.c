@@ -58,13 +58,13 @@ get_bookmarks_from_table (GvdbTable *table)
     const char *title;
     gint64 time_added;
     char *id;
-    double server_time_modified;
+    gint64 server_time_modified;
     gboolean is_uploaded;
 
     /* Obtain the corresponding GVariant. */
     value = gvdb_table_get_value (table, list[i]);
 
-    g_variant_get (value, "(x&s&sdbas)",
+    g_variant_get (value, "(x&s&sxbas)",
                    &time_added, &title, &id,
                    &server_time_modified, &is_uploaded, &iter);
 

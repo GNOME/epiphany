@@ -35,8 +35,7 @@ struct _EphyPasswordRecord {
   char    *password_field;
   guint64  time_created;
   guint64  time_password_changed;
-
-  double   server_time_modified;
+  gint64   server_time_modified;
 };
 
 static void json_serializable_iface_init (JsonSerializableIface *iface);
@@ -400,7 +399,7 @@ synchronizable_get_id (EphySynchronizable *synchronizable)
   return ephy_password_record_get_id (EPHY_PASSWORD_RECORD (synchronizable));
 }
 
-static double
+static gint64
 synchronizable_get_server_time_modified (EphySynchronizable *synchronizable)
 {
   return EPHY_PASSWORD_RECORD (synchronizable)->server_time_modified;
@@ -408,7 +407,7 @@ synchronizable_get_server_time_modified (EphySynchronizable *synchronizable)
 
 static void
 synchronizable_set_server_time_modified (EphySynchronizable *synchronizable,
-                                         double              server_time_modified)
+                                         gint64              server_time_modified)
 {
   EPHY_PASSWORD_RECORD (synchronizable)->server_time_modified = server_time_modified;
 }

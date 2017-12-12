@@ -35,17 +35,17 @@ struct _EphySynchronizableInterface {
   GTypeInterface parent_iface;
 
   const char * (*get_id)                   (EphySynchronizable  *synchronizable);
-  double       (*get_server_time_modified) (EphySynchronizable  *synchronizable);
+  gint64       (*get_server_time_modified) (EphySynchronizable  *synchronizable);
   void         (*set_server_time_modified) (EphySynchronizable  *synchronizable,
-                                            double               time_modified);
+                                            gint64               time_modified);
   JsonNode *   (*to_bso)                   (EphySynchronizable  *synchronizable,
                                             SyncCryptoKeyBundle *bundle);
 };
 
 const char *ephy_synchronizable_get_id                    (EphySynchronizable  *synchronizable);
-double      ephy_synchronizable_get_server_time_modified  (EphySynchronizable  *synchronizable);
+gint64      ephy_synchronizable_get_server_time_modified  (EphySynchronizable  *synchronizable);
 void        ephy_synchronizable_set_server_time_modified  (EphySynchronizable  *synchronizable,
-                                                           double               time_modified);
+                                                           gint64               time_modified);
 JsonNode   *ephy_synchronizable_to_bso                    (EphySynchronizable  *synchronizable,
                                                            SyncCryptoKeyBundle *bundle);
 /* This can't be an interface method because we lack the EphySynchronizable object. */
