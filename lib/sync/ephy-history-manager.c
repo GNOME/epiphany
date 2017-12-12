@@ -228,7 +228,7 @@ synchronizable_manager_set_is_initial_sync (EphySynchronizableManager *manager,
   ephy_sync_utils_set_history_sync_is_initial (is_initial);
 }
 
-static double
+static gint64
 synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
 {
   return ephy_sync_utils_get_history_sync_time ();
@@ -236,7 +236,7 @@ synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
 
 static void
 synchronizable_manager_set_sync_time (EphySynchronizableManager *manager,
-                                      double                     sync_time)
+                                      gint64                     sync_time)
 {
   ephy_sync_utils_set_history_sync_time (sync_time);
 }

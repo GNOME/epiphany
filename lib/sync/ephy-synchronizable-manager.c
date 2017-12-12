@@ -150,7 +150,7 @@ ephy_synchronizable_manager_set_is_initial_sync (EphySynchronizableManager *mana
  *
  * Return value: the timestamp of @manager's collection last sync.
  **/
-double
+gint64
 ephy_synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
 {
   EphySynchronizableManagerInterface *iface;
@@ -170,7 +170,7 @@ ephy_synchronizable_manager_get_sync_time (EphySynchronizableManager *manager)
  **/
 void
 ephy_synchronizable_manager_set_sync_time (EphySynchronizableManager *manager,
-                                           double                     sync_time)
+                                           gint64                     sync_time)
 {
   EphySynchronizableManagerInterface *iface;
 

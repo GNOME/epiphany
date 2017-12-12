@@ -395,15 +395,15 @@ ephy_sync_utils_bookmarks_sync_is_enabled (void)
 }
 
 void
-ephy_sync_utils_set_bookmarks_sync_time (double time)
+ephy_sync_utils_set_bookmarks_sync_time (gint64 time)
 {
-  g_settings_set_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_TIME, time);
+  g_settings_set_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_TIME, time);
 }
 
-double
+gint64
 ephy_sync_utils_get_bookmarks_sync_time (void)
 {
-  return g_settings_get_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_TIME);
+  return g_settings_get_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_BOOKMARKS_TIME);
 }
 
 void
@@ -425,15 +425,15 @@ ephy_sync_utils_passwords_sync_is_enabled (void)
 }
 
 void
-ephy_sync_utils_set_passwords_sync_time (double time)
+ephy_sync_utils_set_passwords_sync_time (gint64 time)
 {
-  g_settings_set_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_TIME, time);
+  g_settings_set_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_TIME, time);
 }
 
-double
+gint64
 ephy_sync_utils_get_passwords_sync_time (void)
 {
-  return g_settings_get_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_TIME);
+  return g_settings_get_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_PASSWORDS_TIME);
 }
 
 void
@@ -455,15 +455,15 @@ ephy_sync_utils_history_sync_is_enabled (void)
 }
 
 void
-ephy_sync_utils_set_history_sync_time (double time)
+ephy_sync_utils_set_history_sync_time (gint64 time)
 {
-  g_settings_set_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_TIME, time);
+  g_settings_set_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_TIME, time);
 }
 
-double
+gint64
 ephy_sync_utils_get_history_sync_time (void)
 {
-  return g_settings_get_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_TIME);
+  return g_settings_get_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_HISTORY_TIME);
 }
 
 void
@@ -485,13 +485,13 @@ ephy_sync_utils_open_tabs_sync_is_enabled (void)
 }
 
 void
-ephy_sync_utils_set_open_tabs_sync_time (double time)
+ephy_sync_utils_set_open_tabs_sync_time (gint64 time)
 {
-  g_settings_set_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_TIME, time);
+  g_settings_set_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_TIME, time);
 }
 
-double
+gint64
 ephy_sync_utils_get_open_tabs_sync_time (void)
 {
-  return g_settings_get_double (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_TIME);
+  return g_settings_get_int64 (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_OPEN_TABS_TIME);
 }

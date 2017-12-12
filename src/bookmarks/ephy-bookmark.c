@@ -39,14 +39,13 @@ struct _EphyBookmark {
   GSequence   *tags;
   gint64       time_added;
 
-  /* Firefox Sync specific fields.
-   * Time modified timestamp must be double to match server's precision. */
+  /* Firefox Sync specific fields. */
   char        *id;
   char        *type;
   char        *parent_id;
   char        *parent_name;
   gboolean     load_in_sidebar;
-  double       server_time_modified;
+  gint64       server_time_modified;
 };
 
 static void json_serializable_iface_init (JsonSerializableIface *iface);
@@ -596,7 +595,7 @@ synchronizable_get_id (EphySynchronizable *synchronizable)
   return ephy_bookmark_get_id (EPHY_BOOKMARK (synchronizable));
 }
 
-static double
+static gint64
 synchronizable_get_server_time_modified (EphySynchronizable *synchronizable)
 {
   return EPHY_BOOKMARK (synchronizable)->server_time_modified;
@@ -604,7 +603,7 @@ synchronizable_get_server_time_modified (EphySynchronizable *synchronizable)
 
 static void
 synchronizable_set_server_time_modified (EphySynchronizable *synchronizable,
-                                         double              server_time_modified)
+                                         gint64              server_time_modified)
 {
   EPHY_BOOKMARK (synchronizable)->server_time_modified = server_time_modified;
 }

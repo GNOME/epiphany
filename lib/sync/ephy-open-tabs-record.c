@@ -282,7 +282,7 @@ synchronizable_get_id (EphySynchronizable *synchronizable)
   return EPHY_OPEN_TABS_RECORD (synchronizable)->id;
 }
 
-static double
+static gint64
 synchronizable_get_server_time_modified (EphySynchronizable *synchronizable)
 {
   /* No implementation.
@@ -293,7 +293,7 @@ synchronizable_get_server_time_modified (EphySynchronizable *synchronizable)
 
 static void
 synchronizable_set_server_time_modified (EphySynchronizable *synchronizable,
-                                         double              server_time_modified)
+                                         gint64              server_time_modified)
 {
   /* No implementation.
    * We don't care about the server time modified of open tabs records.

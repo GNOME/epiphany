@@ -21,6 +21,8 @@
 #include "config.h"
 #include "ephy-synchronizable.h"
 
+#include <math.h>
+
 G_DEFINE_INTERFACE (EphySynchronizable, ephy_synchronizable, JSON_TYPE_SERIALIZABLE);
 
 static void
@@ -59,7 +61,7 @@ ephy_synchronizable_get_id (EphySynchronizable *synchronizable)
  *
  * Return value: @synchronizable's last modification time
  **/
-double
+gint64
 ephy_synchronizable_get_server_time_modified (EphySynchronizable *synchronizable)
 {
   EphySynchronizableInterface *iface;
@@ -79,7 +81,7 @@ ephy_synchronizable_get_server_time_modified (EphySynchronizable *synchronizable
  **/
 void
 ephy_synchronizable_set_server_time_modified (EphySynchronizable *synchronizable,
-                                              double              server_time_modified)
+                                              gint64              server_time_modified)
 {
   EphySynchronizableInterface *iface;
 
@@ -191,7 +193,7 @@ ephy_synchronizable_from_bso (JsonNode            *bso,
   }
 
   ephy_synchronizable_set_server_time_modified (EPHY_SYNCHRONIZABLE (object),
-                                                server_time_modified);
+                                                ceil (server_time_modified));
 
 out:
   if (node)
