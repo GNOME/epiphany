@@ -22,9 +22,9 @@ msgstr ""
 "Project-Id-Version: Epiphany master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-11-28 01:18+0000\n"
-"PO-Revision-Date: 2017-11-29 20:28+0100\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2017-12-08 16:30+0000\n"
+"PO-Revision-Date: 2017-12-10 14:11+0100\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,7 @@ msgstr "Das GNOME-Projekt"
 
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:295
 #: embed/ephy-about-handler.c:326 src/ephy-main.c:102 src/ephy-main.c:270
-#: src/ephy-main.c:412 src/window-commands.c:642
+#: src/ephy-main.c:412 src/window-commands.c:643
 msgid "Web"
 msgstr "Internet"
 
@@ -1371,7 +1371,7 @@ msgid "_Never Save"
 msgstr "_Nie speichern"
 
 #: embed/ephy-web-view.c:529 lib/widgets/ephy-file-chooser.c:121
-#: src/resources/gtk/prefs-dialog.ui:1061 src/window-commands.c:451
+#: src/resources/gtk/prefs-dialog.ui:1061 src/window-commands.c:452
 msgid "_Save"
 msgstr "_Speichern"
 
@@ -1681,6 +1681,13 @@ msgstr "Hilfe konnte nicht angezeigt werden: %s"
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.de/?q=%s&amp;t=epiphany"
 
+#. Translators: First %s is the name of the user currently logged in on the
+#. * machine. The second %s is the machine's name.
+#: lib/ephy-sync-utils.c:326
+#, c-format
+msgid "%s’s GNOME Web on %s"
+msgstr "%ss GNOME Web auf %s"
+
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
 #: lib/ephy-time-helpers.c:226
 msgid "Today %I∶%M %p"
@@ -1778,22 +1785,22 @@ msgstr "Passwort für %s auf %s"
 msgid "Password in a form in %s"
 msgstr "Passwort in einem Eingabefeld auf %s"
 
-#: lib/sync/ephy-sync-service.c:785
+#: lib/sync/ephy-sync-service.c:844
 msgid "Failed to obtain storage credentials."
 msgstr "Speicherzugangsdaten konnten nicht geholt werden."
 
-#: lib/sync/ephy-sync-service.c:786 lib/sync/ephy-sync-service.c:901
-#: lib/sync/ephy-sync-service.c:1491
+#: lib/sync/ephy-sync-service.c:845 lib/sync/ephy-sync-service.c:960
+#: lib/sync/ephy-sync-service.c:1716
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Bitte öffnen Sie die Einstellungen und melden Sie sich erneut an, um den "
 "Abgleichvorgang fortzusetzen."
 
-#: lib/sync/ephy-sync-service.c:891
+#: lib/sync/ephy-sync-service.c:950
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Das Passwort Ihres Firefox-Kontos scheint geändert worden zu sein."
 
-#: lib/sync/ephy-sync-service.c:892
+#: lib/sync/ephy-sync-service.c:951
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1801,46 +1808,46 @@ msgstr ""
 "Bitte öffnen Sie die Einstellungen und melden Sie sich mit dem neuen "
 "Passwort an, um den Abgleichvorgang fortzusetzen."
 
-#: lib/sync/ephy-sync-service.c:900
+#: lib/sync/ephy-sync-service.c:959
 msgid "Failed to obtain signed certificate."
 msgstr "Signiertes Zertifikat konnte nicht geholt werden."
 
 # »Sync« ist hier ein Eigenname:
 # https://www.mozilla.org/de/firefox/sync/
-#: lib/sync/ephy-sync-service.c:1457 lib/sync/ephy-sync-service.c:1462
+#: lib/sync/ephy-sync-service.c:1682 lib/sync/ephy-sync-service.c:1687
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Sync-Token für den aktuell angemeldeten Benutzer konnten nicht gefunden "
 "werden."
 
-#: lib/sync/ephy-sync-service.c:1469 lib/sync/ephy-sync-service.c:1477
+#: lib/sync/ephy-sync-service.c:1694 lib/sync/ephy-sync-service.c:1702
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Die Sync-Anmeldedaten für den aktuellen Sync-Benutzer sind ungültig."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1585
+#: lib/sync/ephy-sync-service.c:1810
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Die Sync-Token von %s"
 
-#: lib/sync/ephy-sync-service.c:1611
+#: lib/sync/ephy-sync-service.c:1836
 msgid "Failed to upload client record."
 msgstr "Client-Datensatz konnte nicht übertragen werden."
 
-#: lib/sync/ephy-sync-service.c:1801
+#: lib/sync/ephy-sync-service.c:2026
 msgid "Failed to upload crypto/keys record."
 msgstr "Crypto/keys-Datensatz konnte nicht übertragen werden."
 
-#: lib/sync/ephy-sync-service.c:1908
+#: lib/sync/ephy-sync-service.c:2133
 msgid "Failed to retrieve crypto keys."
 msgstr "Krypto-Schlüssel konnten nicht geholt werden."
 
-#: lib/sync/ephy-sync-service.c:1959
+#: lib/sync/ephy-sync-service.c:2184
 msgid "Failed to upload meta/global record."
 msgstr "Meta/global-Datensatz konnte nicht übertragen werden."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2076
+#: lib/sync/ephy-sync-service.c:2301
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1848,15 +1855,15 @@ msgstr ""
 "Ihr Firefox-Konto verwendet die Speicherversion %d. Web unterstützt nur "
 "Version %d."
 
-#: lib/sync/ephy-sync-service.c:2087
+#: lib/sync/ephy-sync-service.c:2312
 msgid "Failed to verify storage version."
 msgstr "Speicherversion konnte nicht überprüft werden."
 
-#: lib/sync/ephy-sync-service.c:2143
+#: lib/sync/ephy-sync-service.c:2368
 msgid "Failed to upload device info"
 msgstr "Geräteinformation konnte nicht übertragen werden"
 
-#: lib/sync/ephy-sync-service.c:2216 lib/sync/ephy-sync-service.c:2294
+#: lib/sync/ephy-sync-service.c:2441 lib/sync/ephy-sync-service.c:2519
 msgid "Failed to retrieve the Sync Key"
 msgstr "Der Sync-Schlüssel konnte nicht geholt werden"
 
@@ -1975,9 +1982,9 @@ msgid "Starting…"
 msgstr "Wird gestartet …"
 
 #: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1069
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:231
-#: src/window-commands.c:296 src/window-commands.c:393
-#: src/window-commands.c:452 src/window-commands.c:1373
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:232
+#: src/window-commands.c:297 src/window-commands.c:394
+#: src/window-commands.c:453 src/window-commands.c:1374
 msgid "_Cancel"
 msgstr "A_bbrechen"
 
@@ -3383,73 +3390,73 @@ msgstr "Nach »%s« im Internet suchen"
 msgid "Local Tabs"
 msgstr "Lokale Reiter"
 
-#: src/window-commands.c:95
+#: src/window-commands.c:96
 msgid "GVDB File"
 msgstr "GVDB-Datei"
 
 #. Skip Firefox option if user doesn't have a Firefox profile
-#: src/window-commands.c:96 src/window-commands.c:203
+#: src/window-commands.c:97 src/window-commands.c:204
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:110
+#: src/window-commands.c:111
 msgid "Ch_oose File…"
 msgstr "Datei _wählen …"
 
-#: src/window-commands.c:112 src/window-commands.c:295
+#: src/window-commands.c:113 src/window-commands.c:296
 msgid "I_mport"
 msgstr "_Importieren"
 
-#: src/window-commands.c:228
+#: src/window-commands.c:229
 msgid "Select Profile"
 msgstr "Profil auswählen"
 
-#: src/window-commands.c:233
+#: src/window-commands.c:234
 msgid "_Select"
 msgstr "A_uswählen"
 
-#: src/window-commands.c:292 src/window-commands.c:448
+#: src/window-commands.c:293 src/window-commands.c:449
 msgid "Choose File"
 msgstr "Datei wählen"
 
-#: src/window-commands.c:319 src/window-commands.c:360
+#: src/window-commands.c:320 src/window-commands.c:361
 msgid "Bookmarks successfully imported!"
 msgstr "Lesezeichen erfolgreich importiert!"
 
-#: src/window-commands.c:390
+#: src/window-commands.c:391
 msgid "Import Bookmarks"
 msgstr "Lesezeichen importieren"
 
-#: src/window-commands.c:395
+#: src/window-commands.c:396
 msgid "Ch_oose File"
 msgstr "Datei _wählen"
 
-#: src/window-commands.c:408
+#: src/window-commands.c:409
 msgid "From:"
 msgstr "Von:"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:456
+#: src/window-commands.c:457
 msgid "bookmarks.gvdb"
 msgstr "Lesezeichen.gvdb"
 
-#: src/window-commands.c:478
+#: src/window-commands.c:479
 msgid "Bookmarks successfully exported!"
 msgstr "Lesezeichen erfolgreich exportiert!"
 
-#: src/window-commands.c:603 src/window-commands.c:626
+#: src/window-commands.c:604 src/window-commands.c:627
 msgid "Contact us at:"
 msgstr "Sie erreichen uns unter:"
 
-#: src/window-commands.c:606
+#: src/window-commands.c:607
 msgid "Contributors:"
 msgstr "Mitwirkende:"
 
-#: src/window-commands.c:609
+#: src/window-commands.c:610
 msgid "Past developers:"
 msgstr "Vorherige Entwickler:"
 
-#: src/window-commands.c:635
+#: src/window-commands.c:636
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3466,7 +3473,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:658
+#: src/window-commands.c:659
 msgid "translator-credits"
 msgstr ""
 "Christian Neumair <chris@gnome-de.org>\n"
@@ -3480,30 +3487,30 @@ msgstr ""
 "Franco Della-Monica <franco.della.monica@gmail.com>\n"
 "Florian Heiser <gnu.l10n.de@gmail.com>"
 
-#: src/window-commands.c:661
+#: src/window-commands.c:662
 msgid "Web Website"
 msgstr "Internet Internetseite"
 
-#: src/window-commands.c:910
+#: src/window-commands.c:911
 msgid "Open"
 msgstr "Öffnen"
 
-#: src/window-commands.c:1273
+#: src/window-commands.c:1274
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr ""
 "Eine Internet-Anwendung namens »%s« existiert bereits. Wollen Sie sie "
 "ersetzen?"
 
-#: src/window-commands.c:1276
+#: src/window-commands.c:1277
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/window-commands.c:1278
+#: src/window-commands.c:1279
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: src/window-commands.c:1282
+#: src/window-commands.c:1283
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -3511,38 +3518,38 @@ msgstr ""
 "Eine Anwendung mit diesem Namen ist bereits vorhanden. Beim Überschreiben "
 "geht ihr Inhalt verloren."
 
-#: src/window-commands.c:1317
+#: src/window-commands.c:1318
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Die Anwendung »%s« ist bereit zur Benutzung"
 
-#: src/window-commands.c:1320
+#: src/window-commands.c:1321
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Die Anwendung »%s« konnte nicht erzeugt werden"
 
-#: src/window-commands.c:1328
+#: src/window-commands.c:1329
 msgid "Launch"
 msgstr "Starten"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1370
+#: src/window-commands.c:1371
 msgid "Create Web Application"
 msgstr "Internet-Anwendung erstellen"
 
-#: src/window-commands.c:1375
+#: src/window-commands.c:1376
 msgid "C_reate"
 msgstr "E_rstellen"
 
-#: src/window-commands.c:1504
+#: src/window-commands.c:1505
 msgid "Save"
 msgstr "Speichern"
 
-#: src/window-commands.c:2125
+#: src/window-commands.c:2193
 msgid "Enable caret browsing mode?"
 msgstr "Soll der Caret-Modus aktiviert werden?"
 
-#: src/window-commands.c:2128
+#: src/window-commands.c:2196
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3553,6 +3560,6 @@ msgstr ""
 "Sie mit der Tastatur steuern können. Wollen Sie die Eingabemarke-Navigation "
 "einschalten?"
 
-#: src/window-commands.c:2131
+#: src/window-commands.c:2199
 msgid "_Enable"
 msgstr "_Aktivieren"
