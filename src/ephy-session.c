@@ -822,22 +822,30 @@ save_session_in_thread_finished_cb (GObject      *source_object,
 static gboolean
 session_seems_sane (GList *windows)
 {
-  GList *w;
-  GList *t;
+  for (GList *w = windows; w != NULL; w = w->next) {
+    for (GList *t = ((SessionWindow *)w->data)->tabs; t != NULL; t = t->next) {
+      const char *url = ((SessionTab *)t->data)->url;
+      SoupURI *uri;
+      gboolean sane = FALSE;
 
-  for (w = windows; w != NULL; w = w->next) {
-    for (t = ((SessionWindow *)w->data)->tabs; t != NULL; t = t->next) {
-       const char *url = ((SessionTab *)t->data)->url;
-       SoupURI *uri = soup_uri_new (url);
-       if (uri) {
-         soup_uri_free (uri);
-       }
-       /* Blank URLs can occur in some situations. Don't save them, but also
-        * do not torpedo the entire session as it's not a bug. */
-       else if (strcmp (url, "") != 0) {
-         g_critical ("Refusing to save session due to invalid URL %s", url);
-         return FALSE;
-       }
+      /* Blank URLs can occur in some situations. Just ignore these, as they
+       * are harmless and not an indicator of a corrupted session. */
+      if (strcmp (url, "") == 0)
+        continue;
+
+      uri = soup_uri_new (url);
+      if (uri) {
+        if (uri->host != NULL ||
+            uri->scheme == SOUP_URI_SCHEME_DATA ||
+            uri->scheme == SOUP_URI_SCHEME_FILE)
+          sane = TRUE;
+        soup_uri_free (uri);
+      }
+
+      if (!sane) {
+        g_critical ("Refusing to save session due to invalid URL %s", url);
+        return FALSE;
+      }
     }
   }
 
