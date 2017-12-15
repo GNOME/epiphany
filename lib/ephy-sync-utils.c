@@ -322,7 +322,8 @@ ephy_sync_utils_get_device_name (void)
 
   g_free (name);
   /* Translators: First %s is the name of the user currently logged in on the
-   * machine. The second %s is the machine's name. */
+   * machine. The second %s is the machine's name. You can use the variables
+   * in a different order by changing them to %2$s and %1$s. */
   name = g_strdup_printf (_("%s’s GNOME Web on %s"), g_get_user_name (), g_get_host_name ());
   g_settings_set_string (EPHY_SETTINGS_SYNC, EPHY_PREFS_SYNC_DEVICE_NAME, name);
 
