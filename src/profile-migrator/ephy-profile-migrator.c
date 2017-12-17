@@ -1240,9 +1240,18 @@ migrate_sync_settings_path (void)
 
     if (user_value != NULL) {
       GVariant *value;
+      const GVariantType *type;
 
       value = g_settings_get_value (deprecated_settings, old_sync_settings[i]);
-      g_settings_set_value (EPHY_SETTINGS_SYNC, old_sync_settings[i], value);
+      type = g_variant_get_type (value);
+
+      /* All double values in the old sync schema have been converted to gint64 in the new schema. */
+      if (g_variant_type_equal (type, G_VARIANT_TYPE_DOUBLE)) {
+        g_settings_set_value (EPHY_SETTINGS_SYNC, old_sync_settings[i],
+                              g_variant_new_int64 (ceil (g_variant_get_double (value))));
+      } else {
+        g_settings_set_value (EPHY_SETTINGS_SYNC, old_sync_settings[i], value);
+      }
 
       /* We do not want to ever run this migration again, to avoid writing old
        * values over new ones. So be cautious and reset the old settings. */
