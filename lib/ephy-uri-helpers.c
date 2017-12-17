@@ -252,6 +252,160 @@ ephy_remove_tracking_from_uri (const char *uri_string)
   return ret;
 }
 
+static inline void
+script_table_update (GHashTable     *table,
+                     GUnicodeScript  script)
+{
+  gpointer value;
+  gpointer new_value;
+
+  value = g_hash_table_lookup (table, GINT_TO_POINTER (script));
+  new_value = GINT_TO_POINTER (GPOINTER_TO_INT (value) + 1);
+  g_hash_table_replace (table, GINT_TO_POINTER (script), new_value);
+}
+
+static inline int
+script_table_get (GHashTable     *table,
+                  GUnicodeScript  script)
+{
+  gpointer value;
+
+  value = g_hash_table_lookup (table, GINT_TO_POINTER (script));
+  return GPOINTER_TO_INT (value);
+}
+
+/**
+ * validate_unicode_label:
+ * @label: a domain label, UTF-8 encoded
+ *
+ * Verifies whether @label is safe to be displayed as Unicode characters, as per
+ * this algorithm: https://wiki.mozilla.org/IDN_Display_Algorithm#Algorithm. If
+ * %FALSE is returned, then @label should be displayed as Punycode text.
+ *
+ * Return value: %TRUE if @label is considered safe, %FALSE otherwise
+ **/
+gboolean
+validate_unicode_label (const char *label)
+{
+  GHashTable *table;
+  GUnicodeScript script;
+  gunichar *unichars;
+  gunichar saved_zero_char = 0;
+  gboolean retval = FALSE;
+  long num;
+
+  g_assert (label);
+
+  if (!g_utf8_validate (label, -1, NULL))
+    return FALSE;
+
+  /* Use a hash table to count the occurrences of every script,
+   * except Common and Inherited. */
+  table = g_hash_table_new (g_direct_hash, g_direct_equal);
+  unichars = g_utf8_to_ucs4_fast (label, -1, &num);
+
+  for (gunichar *u = unichars; u && *u; u++) {
+    script = g_unichar_get_script (*u);
+
+    if (script != G_UNICODE_SCRIPT_COMMON && script != G_UNICODE_SCRIPT_INHERITED)
+      script_table_update (table, script);
+    else
+      num--;
+
+    /* Check for mixed numbering systems. */
+    if (g_unichar_isdigit (*u)) {
+      gunichar zero_char = *u - g_unichar_digit_value (*u);
+      if (saved_zero_char == 0)
+        saved_zero_char = zero_char;
+      else if (zero_char != saved_zero_char)
+        goto out;
+    }
+  }
+
+  /* Single script, allow. */
+  if (g_hash_table_size (table) < 2) {
+    retval = TRUE;
+    goto out;
+  }
+
+  /* Chinese scripts. */
+  if (script_table_get (table, G_UNICODE_SCRIPT_LATIN) +
+      script_table_get (table, G_UNICODE_SCRIPT_HAN) +
+      script_table_get (table, G_UNICODE_SCRIPT_BOPOMOFO) == num) {
+    retval = TRUE;
+    goto out;
+  }
+
+  /* Korean scripts. */
+  if (script_table_get (table, G_UNICODE_SCRIPT_LATIN) +
+      script_table_get (table, G_UNICODE_SCRIPT_HAN) +
+      script_table_get (table, G_UNICODE_SCRIPT_HANGUL) == num) {
+    retval = TRUE;
+    goto out;
+  }
+
+  /* Japanese scripts. */
+  if (script_table_get (table, G_UNICODE_SCRIPT_LATIN) +
+      script_table_get (table, G_UNICODE_SCRIPT_HAN) +
+      script_table_get (table, G_UNICODE_SCRIPT_HIRAGANA) +
+      script_table_get (table, G_UNICODE_SCRIPT_KATAKANA) == num) {
+    retval = TRUE;
+    goto out;
+  }
+
+  /* Ban mixes of more than two scripts. */
+  if (g_hash_table_size (table) > 2)
+    goto out;
+
+  /* Ban any mix of two scrips that doesn't contain Latin. */
+  if (script_table_get (table, G_UNICODE_SCRIPT_LATIN) == 0)
+    goto out;
+
+  /* Ban Latin + Cyrillic or Latin + Greek. */
+  if (script_table_get (table, G_UNICODE_SCRIPT_CYRILLIC) > 0 ||
+      script_table_get (table, G_UNICODE_SCRIPT_GREEK) > 0)
+    goto out;
+
+  /* Allow Latin + any other single script. */
+  retval = TRUE;
+
+out:
+  g_hash_table_unref (table);
+  g_free (unichars);
+
+  return retval;
+}
+
+static char *
+evaluate_host_for_display (const char *original_host,
+                           const char *unicode_host)
+{
+  char **original_labels;
+  char **unicode_labels;
+  char *retval;
+
+  g_assert (original_host);
+  g_assert (unicode_host);
+
+  /* These arrays will have the same length. */
+  original_labels = g_strsplit (original_host, ".", -1);
+  unicode_labels = g_strsplit (unicode_host, ".", -1);
+
+  for (guint i = 0; i < g_strv_length (unicode_labels); i++) {
+    if (!validate_unicode_label (unicode_labels[i])) {
+      g_free (unicode_labels[i]);
+      unicode_labels[i] = g_strdup (original_labels[i]);
+    }
+  }
+
+  retval = g_strjoinv (".", unicode_labels);
+  g_strfreev (original_labels);
+  g_strfreev (unicode_labels);
+
+  return retval;
+}
+
+
 /* Use this function to format a URI for display. The URIs used
  * internally by WebKit may contain percent-encoded characters or
  * punycode, which we do not want the user to see.
@@ -266,6 +420,7 @@ ephy_uri_decode (const char *uri_string)
   static GMutex idna_creation_mutex;
   SoupURI *uri;
   char *percent_encoded_uri;
+  char *percent_decoded_host;
   char *idna_decoded_name;
   char *fully_decoded_uri;
   UIDNAInfo info = UIDNA_INFO_INITIALIZER;
@@ -307,8 +462,10 @@ ephy_uri_decode (const char *uri_string)
       return g_strdup (uri_string);
     }
 
+    percent_decoded_host = soup_uri_decode (uri->host);
     g_free (uri->host);
-    uri->host = idna_decoded_name;
+    uri->host = evaluate_host_for_display (percent_decoded_host, idna_decoded_name);
+    g_free (percent_decoded_host);
   }
 
   /* Note: this also strips passwords from the display URI. */
