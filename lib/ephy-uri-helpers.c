@@ -284,7 +284,7 @@ script_table_get (GHashTable     *table,
  *
  * Return value: %TRUE if @label is considered safe, %FALSE otherwise
  **/
-gboolean
+static gboolean
 validate_unicode_label (const char *label)
 {
   GHashTable *table;
