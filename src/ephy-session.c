@@ -833,6 +833,10 @@ session_seems_sane (GList *windows)
       if (strcmp (url, "") == 0)
         continue;
 
+      /* Ignore fake about "URLs." */
+      if (g_str_has_prefix (url, "about:"))
+        continue;
+
       uri = soup_uri_new (url);
       if (uri) {
         if (uri->host != NULL ||
