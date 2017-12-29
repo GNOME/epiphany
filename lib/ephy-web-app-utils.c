@@ -350,7 +350,7 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
 
   g_assert (profile_directory != NULL);
 
-  app_name = g_strrstr (profile_directory, EPHY_WEB_APP_PREFIX);
+  app_name = strstr (profile_directory, EPHY_WEB_APP_PREFIX);
   if (!app_name) {
     g_warning ("Profile directory %s does not begin with required web app prefix %s", profile_directory, EPHY_WEB_APP_PREFIX);
     exit (1);
