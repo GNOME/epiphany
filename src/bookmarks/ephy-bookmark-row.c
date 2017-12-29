@@ -157,6 +157,31 @@ favicon_image_destroyed (EphyBookmarkRow *self,
   self->favicon_image = NULL;
 }
 
+static gboolean
+transform_bookmark_title (GBinding     *binding,
+                          const GValue *from_value,
+                          GValue       *to_value,
+                          gpointer      user_data)
+{
+  const char *title;
+
+  title = g_value_get_string (from_value);
+
+  if (strlen (title) == 0) {
+    EphyBookmark *bookmark;
+    const char *url;
+
+    bookmark = EPHY_BOOKMARK (user_data);
+    url = ephy_bookmark_get_url (bookmark);
+
+    g_value_set_string (to_value, url);
+  } else {
+    g_value_set_string (to_value, title);
+  }
+
+  return TRUE;
+}
+
 static void
 ephy_bookmark_row_constructed (GObject *object)
 {
@@ -166,9 +191,12 @@ ephy_bookmark_row_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_bookmark_row_parent_class)->constructed (object);
 
-  g_object_bind_property (self->bookmark, "title",
-                          self->title_label, "label",
-                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (self->bookmark, "title",
+                               self->title_label, "label",
+                               G_BINDING_SYNC_CREATE,
+                               transform_bookmark_title,
+                               NULL,
+                               self->bookmark, NULL);
 
   database = webkit_web_context_get_favicon_database (ephy_embed_shell_get_web_context (shell));
   webkit_favicon_database_get_favicon (database,
