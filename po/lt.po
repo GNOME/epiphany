@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2017-11-13 16:36+0000\n"
-"PO-Revision-Date: 2017-11-25 21:38+0200\n"
+"POT-Creation-Date: 2017-12-29 13:50+0000\n"
+"PO-Revision-Date: 2017-12-30 20:19+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -57,7 +57,7 @@ msgstr "GNOME projektas"
 
 #: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:295
 #: embed/ephy-about-handler.c:326 src/ephy-main.c:102 src/ephy-main.c:270
-#: src/ephy-main.c:412 src/window-commands.c:642
+#: src/ephy-main.c:412 src/window-commands.c:643
 msgid "Web"
 msgstr "Žiniatinklis"
 
@@ -741,9 +741,6 @@ msgstr "Paskutinės atvertų kortelių sinchronizacijos laiko žyma."
 #: data/org.gnome.epiphany.gschema.xml:435
 #: data/org.gnome.epiphany.gschema.xml:440
 #: data/org.gnome.epiphany.gschema.xml:445
-#| msgid ""
-#| "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#| "search-engines instead."
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "sync/ instead."
@@ -1334,7 +1331,7 @@ msgid "_Never Save"
 msgstr "_Niekada neįrašyti"
 
 #: embed/ephy-web-view.c:529 lib/widgets/ephy-file-chooser.c:121
-#: src/resources/gtk/prefs-dialog.ui:1061 src/window-commands.c:451
+#: src/resources/gtk/prefs-dialog.ui:1061 src/window-commands.c:452
 msgid "_Save"
 msgstr "Į_rašyti"
 
@@ -1631,6 +1628,13 @@ msgstr "Nepavyko parodyti žinyno: %s"
 msgid "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 msgstr "https://duckduckgo.com/?q=%s&amp;t=epiphany"
 
+#. Translators: First %s is the name of the user currently logged in on the
+#. * machine. The second %s is the machine's name.
+#: lib/ephy-sync-utils.c:326
+#, c-format
+msgid "%s’s GNOME Web on %s"
+msgstr "%s GNOME Žiniatinklis %s"
+
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
 #: lib/ephy-time-helpers.c:226
 msgid "Today %I∶%M %p"
@@ -1716,34 +1720,34 @@ msgstr "Vietiniai failai"
 #. Translators: The first %s is the username and the second one is the
 #. * security origin where this is happening. Example: gnome@gmail.com and
 #. * https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:392
+#: lib/sync/ephy-password-manager.c:393
 #, c-format
 msgid "Password for %s in a form in %s"
 msgstr "%s slaptažodis %s formoje"
 
 #. Translators: The %s is the security origin where this is happening.
 #. * Example: https://mail.google.com.
-#: lib/sync/ephy-password-manager.c:396
+#: lib/sync/ephy-password-manager.c:397
 #, c-format
 msgid "Password in a form in %s"
 msgstr "%s slaptažodis formoje"
 
-#: lib/sync/ephy-sync-service.c:786
+#: lib/sync/ephy-sync-service.c:846
 msgid "Failed to obtain storage credentials."
 msgstr "Nepavyko gauti saugyklos įgaliojimų."
 
-#: lib/sync/ephy-sync-service.c:787 lib/sync/ephy-sync-service.c:902
-#: lib/sync/ephy-sync-service.c:1485
+#: lib/sync/ephy-sync-service.c:847 lib/sync/ephy-sync-service.c:962
+#: lib/sync/ephy-sync-service.c:1718
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Nueikite į Nustatymus ir prisijunkite nauju slaptažodžiu, jei norite tęsti "
 "sinchronizaciją."
 
-#: lib/sync/ephy-sync-service.c:892
+#: lib/sync/ephy-sync-service.c:952
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Atrodo jūsų Firefox paskyros slaptažodis buvo pakeistas."
 
-#: lib/sync/ephy-sync-service.c:893
+#: lib/sync/ephy-sync-service.c:953
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1751,40 +1755,45 @@ msgstr ""
 "Nueikite į Nustatymus ir prisijunkite nauju slaptažodžiu, jei norite tęsti "
 "sinchronizaciją."
 
-#: lib/sync/ephy-sync-service.c:901
+#: lib/sync/ephy-sync-service.c:961
 msgid "Failed to obtain signed certificate."
 msgstr "Nepavyko gauti pasirašyto liudijimo."
 
-#: lib/sync/ephy-sync-service.c:1451 lib/sync/ephy-sync-service.c:1456
+#: lib/sync/ephy-sync-service.c:1684 lib/sync/ephy-sync-service.c:1689
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Nepavyko rasti sinchronizacijos paslapčių šiuo metu prisijungusiam "
 "naudotojui."
 
-#: lib/sync/ephy-sync-service.c:1463 lib/sync/ephy-sync-service.c:1471
+#: lib/sync/ephy-sync-service.c:1696 lib/sync/ephy-sync-service.c:1704
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Dabartinio naudotojo sinchronizacijos paslaptys yra netinkamos."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1579
+#: lib/sync/ephy-sync-service.c:1812
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "%s sinchronizacijos paslaptys"
 
-#: lib/sync/ephy-sync-service.c:1722
+#: lib/sync/ephy-sync-service.c:1838
+#| msgid "Failed to upload crypto/keys record."
+msgid "Failed to upload client record."
+msgstr "Nepavyko nusiųsti kliento įrašo."
+
+#: lib/sync/ephy-sync-service.c:2028
 msgid "Failed to upload crypto/keys record."
 msgstr "Nepavyko nusiųsti šifro/raktų įrašo."
 
-#: lib/sync/ephy-sync-service.c:1829
+#: lib/sync/ephy-sync-service.c:2135
 msgid "Failed to retrieve crypto keys."
 msgstr "Nepavyko gauti šifravimo raktų."
 
-#: lib/sync/ephy-sync-service.c:1880
+#: lib/sync/ephy-sync-service.c:2186
 msgid "Failed to upload meta/global record."
 msgstr "Nepavyko nusiųsti meta/globalaus įrašo."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:1997
+#: lib/sync/ephy-sync-service.c:2303
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1792,17 +1801,18 @@ msgstr ""
 "Jūsų Firefox paskyra naudoja saugyklos versiją %d. Žiniatinklis palaiko tik "
 "versiją %d."
 
-#: lib/sync/ephy-sync-service.c:2008
+#: lib/sync/ephy-sync-service.c:2314
 msgid "Failed to verify storage version."
 msgstr "Nepavyko patikrinti saugyklos versijos."
 
-#: lib/sync/ephy-sync-service.c:2049 lib/sync/ephy-sync-service.c:2127
+#: lib/sync/ephy-sync-service.c:2370
+#| msgid "Failed to upload crypto/keys record."
+msgid "Failed to upload device info"
+msgstr "Nepavyko nusiųsti įrenginio informacijos."
+
+#: lib/sync/ephy-sync-service.c:2443 lib/sync/ephy-sync-service.c:2521
 msgid "Failed to retrieve the Sync Key"
 msgstr "Nepavyko gauti sinchronizacijos rakto"
-
-#: lib/sync/ephy-sync-service.c:2261
-msgid "Failed to register device."
-msgstr "Nepavyko užregistruoti įrenginio."
 
 #: lib/widgets/ephy-certificate-dialog.c:102
 msgid "The certificate does not match this website"
@@ -1853,11 +1863,11 @@ msgstr ""
 "Liudijimas yra tinkamas, tačiau šio puslapio ištekliai buvo siunčiami "
 "nesaugiai."
 
-#: lib/widgets/ephy-downloads-popover.c:225
+#: lib/widgets/ephy-downloads-popover.c:246
 msgid "_Clear All"
 msgstr "Iš_valyti viską"
 
-#: lib/widgets/ephy-download-widget.c:79
+#: lib/widgets/ephy-download-widget.c:80
 #, c-format
 msgid "%d second left"
 msgid_plural "%d seconds left"
@@ -1865,7 +1875,7 @@ msgstr[0] "Liko %d sekundė"
 msgstr[1] "Liko %d sekundės"
 msgstr[2] "Liko %d sekundžių"
 
-#: lib/widgets/ephy-download-widget.c:83
+#: lib/widgets/ephy-download-widget.c:84
 #, c-format
 msgid "%d minute left"
 msgid_plural "%d minutes left"
@@ -1873,7 +1883,7 @@ msgstr[0] "Liko %d minutė"
 msgstr[1] "Liko %d minutės"
 msgstr[2] "Liko %d minučių"
 
-#: lib/widgets/ephy-download-widget.c:87
+#: lib/widgets/ephy-download-widget.c:88
 #, c-format
 msgid "%d hour left"
 msgid_plural "%d hours left"
@@ -1881,7 +1891,7 @@ msgstr[0] "Liko %d valanda"
 msgstr[1] "Liko %d valandos"
 msgstr[2] "Liko %d valandų"
 
-#: lib/widgets/ephy-download-widget.c:91
+#: lib/widgets/ephy-download-widget.c:92
 #, c-format
 msgid "%d day left"
 msgid_plural "%d days left"
@@ -1889,7 +1899,7 @@ msgstr[0] "Liko %d diena"
 msgstr[1] "Liko %d dienos"
 msgstr[2] "Liko %d dienų"
 
-#: lib/widgets/ephy-download-widget.c:95
+#: lib/widgets/ephy-download-widget.c:96
 #, c-format
 msgid "%d week left"
 msgid_plural "%d weeks left"
@@ -1897,7 +1907,7 @@ msgstr[0] "Liko %d savaitė"
 msgstr[1] "Liko %d savaitės"
 msgstr[2] "Liko %d savaičių"
 
-#: lib/widgets/ephy-download-widget.c:99
+#: lib/widgets/ephy-download-widget.c:100
 #, c-format
 msgid "%d month left"
 msgid_plural "%d months left"
@@ -1905,29 +1915,29 @@ msgstr[0] "Liko %d mėnuo"
 msgstr[1] "Liko %d mėnesiai"
 msgstr[2] "Liko %d mėnesių"
 
-#: lib/widgets/ephy-download-widget.c:222
-#: lib/widgets/ephy-download-widget.c:406
+#: lib/widgets/ephy-download-widget.c:223
+#: lib/widgets/ephy-download-widget.c:407
 msgid "Finished"
 msgstr "Baigta"
 
-#: lib/widgets/ephy-download-widget.c:239
-#: lib/widgets/ephy-download-widget.c:402
+#: lib/widgets/ephy-download-widget.c:240
+#: lib/widgets/ephy-download-widget.c:403
 #, c-format
 msgid "Error downloading: %s"
 msgstr "Klaida parsiunčiant %s"
 
-#: lib/widgets/ephy-download-widget.c:266
+#: lib/widgets/ephy-download-widget.c:267
 msgid "Cancelling…"
 msgstr "Atmetama…"
 
-#: lib/widgets/ephy-download-widget.c:408
+#: lib/widgets/ephy-download-widget.c:409
 msgid "Starting…"
 msgstr "Pradedama..."
 
 #: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1069
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:231
-#: src/window-commands.c:296 src/window-commands.c:393
-#: src/window-commands.c:452 src/window-commands.c:1373
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:232
+#: src/window-commands.c:297 src/window-commands.c:394
+#: src/window-commands.c:453 src/window-commands.c:1377
 msgid "_Cancel"
 msgstr "A_tsisakyti"
 
@@ -2382,7 +2392,7 @@ msgid "Last synchronized: %s"
 msgstr "Paskutinės sinchronizacija: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:283 src/prefs-dialog.c:1845
+#: src/prefs-dialog.c:283 src/prefs-dialog.c:1893
 #, c-format
 msgid "Logged in as %s"
 msgstr "Prisijungta naudotoju %s"
@@ -2395,7 +2405,7 @@ msgstr "Atsitiko kažkas negero, bandykite dar kartą."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:987 src/prefs-dialog.c:991
+#: src/prefs-dialog.c:1035 src/prefs-dialog.c:1039
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2404,13 +2414,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:998
+#: src/prefs-dialog.c:1046
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Nurodyta naudotojo (%s)"
 
-#: src/prefs-dialog.c:1020
+#: src/prefs-dialog.c:1068
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2418,15 +2428,15 @@ msgstr[0] "Sistemos kalba (%s)"
 msgstr[1] "Sistemos kalbos (%s)"
 msgstr[2] "Sistemos kalbų (%s)"
 
-#: src/prefs-dialog.c:1263 src/resources/gtk/prefs-dialog.ui:768
+#: src/prefs-dialog.c:1311 src/resources/gtk/prefs-dialog.ui:768
 msgid "Language"
 msgstr "Kalba"
 
-#: src/prefs-dialog.c:1341
+#: src/prefs-dialog.c:1389
 msgid "Select a directory"
 msgstr "Pasirinkite aplanką"
 
-#: src/profile-migrator/ephy-profile-migrator.c:94
+#: src/profile-migrator/ephy-profile-migrator.c:99
 msgid ""
 "Web 3.6 deprecated this directory and tried migrating this configuration to "
 "~/.config/epiphany"
@@ -2434,27 +2444,27 @@ msgstr ""
 "Žiniatinklis 3.6 apleido šį katalogą ir bando migruoti konfigūraciją į ~/."
 "config/epiphany"
 
-#: src/profile-migrator/ephy-profile-migrator.c:937
+#: src/profile-migrator/ephy-profile-migrator.c:942
 msgid "Search the Web"
 msgstr "Ieškoti internete"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1347
+#: src/profile-migrator/ephy-profile-migrator.c:1605
 msgid "Executes only the n-th migration step"
 msgstr "vykdo tik n-ąjį migracijos žingsnį"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1349
+#: src/profile-migrator/ephy-profile-migrator.c:1607
 msgid "Specifies the required version for the migrator"
 msgstr "Nurodo migracijai reikalingą versiją"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1351
+#: src/profile-migrator/ephy-profile-migrator.c:1609
 msgid "Specifies the profile where the migrator should run"
 msgstr "Nurodo profilį, kur turi vykti migracija"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1371
+#: src/profile-migrator/ephy-profile-migrator.c:1629
 msgid "Web profile migrator"
 msgstr "Žiniatinklio profilio migruotojas"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1372
+#: src/profile-migrator/ephy-profile-migrator.c:1630
 msgid "Web profile migrator options"
 msgstr "Žiniatinklio profilio migruotojo parametrai"
 
@@ -3327,73 +3337,73 @@ msgstr "Ieškoti internete %s"
 msgid "Local Tabs"
 msgstr "Vietinės kortelės"
 
-#: src/window-commands.c:95
+#: src/window-commands.c:96
 msgid "GVDB File"
 msgstr "GVDB failas"
 
 #. Skip Firefox option if user doesn't have a Firefox profile
-#: src/window-commands.c:96 src/window-commands.c:203
+#: src/window-commands.c:97 src/window-commands.c:204
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:110
+#: src/window-commands.c:111
 msgid "Ch_oose File…"
 msgstr "_Pasirinkite failą…"
 
-#: src/window-commands.c:112 src/window-commands.c:295
+#: src/window-commands.c:113 src/window-commands.c:296
 msgid "I_mport"
 msgstr "I_mportuoti"
 
-#: src/window-commands.c:228
+#: src/window-commands.c:229
 msgid "Select Profile"
 msgstr "Pasirinkite profilį"
 
-#: src/window-commands.c:233
+#: src/window-commands.c:234
 msgid "_Select"
 msgstr "_Pasirinkite"
 
-#: src/window-commands.c:292 src/window-commands.c:448
+#: src/window-commands.c:293 src/window-commands.c:449
 msgid "Choose File"
 msgstr "Pasirinkite failą"
 
-#: src/window-commands.c:319 src/window-commands.c:360
+#: src/window-commands.c:320 src/window-commands.c:361
 msgid "Bookmarks successfully imported!"
 msgstr "Gairės sėkmingai importuotos!"
 
-#: src/window-commands.c:390
+#: src/window-commands.c:391
 msgid "Import Bookmarks"
 msgstr "Importuoti gaires"
 
-#: src/window-commands.c:395
+#: src/window-commands.c:396
 msgid "Ch_oose File"
 msgstr "_Pasirinkite failą"
 
-#: src/window-commands.c:408
+#: src/window-commands.c:409
 msgid "From:"
 msgstr "Nuo:"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:456
+#: src/window-commands.c:457
 msgid "bookmarks.gvdb"
 msgstr "gairės.gvdb"
 
-#: src/window-commands.c:478
+#: src/window-commands.c:479
 msgid "Bookmarks successfully exported!"
 msgstr "Gairės sėkmingai eksportuotos!"
 
-#: src/window-commands.c:603 src/window-commands.c:626
+#: src/window-commands.c:604 src/window-commands.c:627
 msgid "Contact us at:"
 msgstr "Susisiekite su mumis:"
 
-#: src/window-commands.c:606
+#: src/window-commands.c:607
 msgid "Contributors:"
 msgstr "Prisidėjo:"
 
-#: src/window-commands.c:609
+#: src/window-commands.c:610
 msgid "Past developers:"
 msgstr "Ankstesnieji kūrėjai:"
 
-#: src/window-commands.c:635
+#: src/window-commands.c:636
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3410,7 +3420,7 @@ msgstr ""
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:658
+#: src/window-commands.c:659
 msgid "translator-credits"
 msgstr ""
 "išvertė:\n"
@@ -3418,65 +3428,65 @@ msgstr ""
 "Žygimantas Beručka <zygis@gnome.org>,\n"
 "Justina Klingaitė <justina.klingaite@gmail.com>"
 
-#: src/window-commands.c:661
+#: src/window-commands.c:662
 msgid "Web Website"
 msgstr "Žiniatinklio naršyklės svetainė"
 
-#: src/window-commands.c:910
+#: src/window-commands.c:911
 msgid "Open"
 msgstr "Atverti"
 
-#: src/window-commands.c:1273
+#: src/window-commands.c:1274
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Internetinė programa „%s“ jau yra. Ar norite ją pakeisti?"
 
-#: src/window-commands.c:1276
+#: src/window-commands.c:1277
 msgid "Cancel"
 msgstr "Atmesti"
 
-#: src/window-commands.c:1278
+#: src/window-commands.c:1279
 msgid "Replace"
 msgstr "Pakeisti"
 
-#: src/window-commands.c:1282
+#: src/window-commands.c:1283
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "Failas tokiu pavadinimu jau yra. Pakeitimas ją perrašys."
 
-#: src/window-commands.c:1317
+#: src/window-commands.c:1318
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Programa „%s“ pasiruošusi naudojimui"
 
-#: src/window-commands.c:1320
+#: src/window-commands.c:1321
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Nepavyko sukurti programos „%s“"
 
-#: src/window-commands.c:1328
+#: src/window-commands.c:1329
 msgid "Launch"
 msgstr "Paleisti"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1370
+#: src/window-commands.c:1374
 msgid "Create Web Application"
 msgstr "Sukurti internetinę programą"
 
-#: src/window-commands.c:1375
+#: src/window-commands.c:1379
 msgid "C_reate"
 msgstr "Suku_rti"
 
-#: src/window-commands.c:1504
+#: src/window-commands.c:1508
 msgid "Save"
 msgstr "Įrašyti"
 
-#: src/window-commands.c:2125
+#: src/window-commands.c:2196
 msgid "Enable caret browsing mode?"
 msgstr "Įjungti naršymą naudojant rodyklių klavišus?"
 
-#: src/window-commands.c:2128
+#: src/window-commands.c:2199
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3486,9 +3496,12 @@ msgstr ""
 "puslapiuose stumdomą žymiklį, leidžiantį jums judėti naudojant klaviatūrą. "
 "Ar norite dabar įjungti naršymą naudojant rodyklių klavišus?"
 
-#: src/window-commands.c:2131
+#: src/window-commands.c:2202
 msgid "_Enable"
 msgstr "_Įjungti"
+
+#~ msgid "Failed to register device."
+#~ msgstr "Nepavyko užregistruoti įrenginio."
 
 #~ msgid "The sync secrets for the current sync user are null."
 #~ msgstr "Dabartinio naudotojo sinchronizacijos paslaptys yra null."
