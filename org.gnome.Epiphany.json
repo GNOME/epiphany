@@ -41,16 +41,6 @@
                 "*.la", "*.a"],
     "modules": [
         {
-            "name": "gnome-desktop",
-            "config-opts": ["--disable-debug-tools", "--disable-udev"],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://git.gnome.org/browse/gnome-desktop"
-                }
-            ]
-        },
-        {
             "name": "epiphany",
             "config-opts": ["-Dtech_preview=true"],
             "buildsystem": "meson",

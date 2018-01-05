@@ -153,7 +153,6 @@ ephy_history_url_copy (EphyHistoryURL *url)
   copy->sync_id = g_strdup (url->sync_id);
   copy->hidden = url->hidden;
   copy->host = ephy_history_host_copy (url->host);
-  copy->thumbnail_time = url->thumbnail_time;
   copy->notify_visit = url->notify_visit;
   copy->notify_delete = url->notify_delete;
 

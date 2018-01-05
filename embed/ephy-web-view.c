@@ -608,30 +608,24 @@ ephy_web_view_history_cleared_cb (EphyHistoryService *history_service,
   ephy_web_view_clear_history (view);
 }
 
-typedef struct {
-  char *url;
-  time_t mtime;
-} GetSnapshotPathAsyncData;
-
 static void
-got_snapshot_path_cb (EphySnapshotService      *service,
-                      GAsyncResult             *result,
-                      GetSnapshotPathAsyncData *data)
+got_snapshot_path_cb (EphySnapshotService *service,
+                      GAsyncResult        *result,
+                      char                *url)
 {
   char *snapshot;
   GError *error = NULL;
 
   snapshot = ephy_snapshot_service_get_snapshot_path_finish (service, result, &error);
   if (snapshot) {
-    ephy_embed_shell_set_thumbnail_path (ephy_embed_shell_get_default (), data->url, data->mtime, snapshot);
+    ephy_embed_shell_set_thumbnail_path (ephy_embed_shell_get_default (), url, snapshot);
     g_free (snapshot);
   } else {
     /* Bad luck, not something to warn about. */
-    g_info ("Failed to get snapshot for URL %s: %s", data->url, error->message);
+    g_info ("Failed to get snapshot for URL %s: %s", url, error->message);
     g_error_free (error);
   }
-  g_free (data->url);
-  g_free (data);
+  g_free (url);
 }
 
 static gboolean
@@ -640,19 +634,15 @@ web_view_check_snapshot (WebKitWebView *web_view)
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
   EphySnapshotService *service = ephy_snapshot_service_get_default ();
   const char *url = webkit_web_view_get_uri (web_view);
-  GetSnapshotPathAsyncData *data;
 
   view->snapshot_timeout_id = 0;
 
   if (view->error_page != EPHY_WEB_VIEW_ERROR_PAGE_NONE)
     return FALSE;
 
-  data = g_new (GetSnapshotPathAsyncData, 1);
-  data->url = g_strdup (url);
-  data->mtime = time (NULL);
-  ephy_snapshot_service_get_snapshot_path_async (service, web_view, data->mtime, NULL,
+  ephy_snapshot_service_get_snapshot_path_async (service, web_view, NULL,
                                                  (GAsyncReadyCallback)got_snapshot_path_cb,
-                                                 data);
+                                                 g_strdup (url));
 
   return FALSE;
 }

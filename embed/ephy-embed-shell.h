@@ -79,7 +79,6 @@ gboolean           ephy_embed_shell_uri_looks_related_to_app   (EphyEmbedShell  
 void               ephy_embed_shell_clear_cache                (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_thumbnail_path         (EphyEmbedShell   *shell,
                                                                 const char       *url,
-                                                                time_t            mtime,
                                                                 const char       *path);
 void               ephy_embed_shell_schedule_thumbnail_update  (EphyEmbedShell   *shell,
                                                                 EphyHistoryURL   *url);
