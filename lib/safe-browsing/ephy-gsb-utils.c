@@ -666,6 +666,12 @@ ephy_gsb_utils_canonicalize (const char  *url,
     return NULL;
   }
 
+  /* Check for e.g. blob or data URIs */
+  if (!uri->host) {
+    soup_uri_free (uri);
+    return NULL;
+  }
+
   /* Remove fragment. */
   soup_uri_set_fragment (uri, NULL);
 
