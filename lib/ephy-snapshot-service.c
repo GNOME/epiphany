@@ -22,6 +22,7 @@
 #include "ephy-snapshot-service.h"
 
 #include "ephy-favicon-helpers.h"
+#include "ephy-file-helpers.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <stdio.h>
@@ -119,16 +120,24 @@ validate_thumbnail_path (const char *path,
 }
 
 static char *
-thumbnail_path (const char *uri)
+thumbnail_directory (void)
 {
-  char *path, *file;
-
-  file = thumbnail_filename (uri);
-  path = g_build_filename (g_get_user_cache_dir (),
+  return g_build_filename (g_get_user_cache_dir (),
                            "epiphany",
                            "thumbnails",
-                           file,
                            NULL);
+}
+
+static char *
+thumbnail_path (const char *uri)
+{
+  char *path, *file, *dir;
+
+  dir = thumbnail_directory ();
+  file = thumbnail_filename (uri);
+  path = g_build_filename (dir, file, NULL);
+
+  g_free (dir);
   g_free (file);
 
   return path;
@@ -740,4 +749,45 @@ ephy_snapshot_service_get_snapshot_path_finish (EphySnapshotService *service,
   g_assert (g_task_is_valid (result, service));
 
   return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+got_snapshot_path_to_delete_cb (EphySnapshotService *service,
+                                GAsyncResult        *result,
+                                gpointer             user_data)
+{
+  char *path;
+
+  path = ephy_snapshot_service_get_snapshot_path_for_url_finish (service, result, NULL);
+  if (path)
+    unlink (path);
+  g_free (path);
+}
+
+void
+ephy_snapshot_service_delete_snapshot_for_url (EphySnapshotService *service,
+                                               const char          *url)
+{
+  ephy_snapshot_service_get_snapshot_path_for_url_async (service,
+                                                         url,
+                                                         NULL,
+                                                         (GAsyncReadyCallback)got_snapshot_path_to_delete_cb,
+                                                         NULL);
+}
+
+void
+ephy_snapshot_service_delete_all_snapshots (EphySnapshotService *service)
+{
+  GError *error = NULL;
+  char *dir;
+
+  dir = thumbnail_directory ();
+
+  ephy_file_delete_dir_recursively (dir, &error);
+  if (error) {
+    g_warning ("Failed to delete thumbnail directory: %s", error->message);
+    g_error_free (error);
+  }
+
+  g_free (dir);
 }

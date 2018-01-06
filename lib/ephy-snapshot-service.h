@@ -70,4 +70,9 @@ char                *ephy_snapshot_service_get_snapshot_path_finish         (Eph
                                                                              GAsyncResult *result,
                                                                              GError **error);
 
+void                 ephy_snapshot_service_delete_snapshot_for_url          (EphySnapshotService *service,
+                                                                             const char          *url);
+
+void                 ephy_snapshot_service_delete_all_snapshots             (EphySnapshotService *service);
+
 G_END_DECLS

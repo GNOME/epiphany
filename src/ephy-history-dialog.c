@@ -28,6 +28,7 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-shell.h"
+#include "ephy-snapshot-service.h"
 #include "ephy-uri-helpers.h"
 #include "ephy-time-helpers.h"
 #include "ephy-window.h"
@@ -44,6 +45,7 @@
 struct _EphyHistoryDialog {
   GtkDialog parent_instance;
 
+  EphySnapshotService *snapshot_service;
   EphyHistoryService *history_service;
   GCancellable *cancellable;
 
@@ -232,6 +234,8 @@ confirmation_dialog_response_cb (GtkWidget         *dialog,
     ephy_history_service_clear (self->history_service,
                                 NULL, NULL, NULL);
     filter_now (self);
+
+    ephy_snapshot_service_delete_all_snapshots (self->snapshot_service);
   }
 }
 
@@ -357,6 +361,9 @@ delete_selected (EphyHistoryDialog *self)
   selected = get_selection (self);
   ephy_history_service_delete_urls (self->history_service, selected, self->cancellable,
                                     (EphyHistoryJobCallback)on_browse_history_deleted_cb, self);
+
+  for (GList *l = selected; l; l = l->next)
+    ephy_snapshot_service_delete_snapshot_for_url (self->snapshot_service, ((EphyHistoryURL *)l->data)->url);
 }
 
 static void
@@ -777,6 +784,7 @@ ephy_history_dialog_init (EphyHistoryDialog *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  self->snapshot_service = ephy_snapshot_service_get_default ();
   self->cancellable = g_cancellable_new ();
 
   self->urls = NULL;
