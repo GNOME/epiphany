@@ -683,6 +683,36 @@ download_created_destination_cb (WebKitDownload *wk_download,
 }
 
 static void
+display_download_finished_notification (WebKitDownload *download)
+{
+  GApplication *application;
+  GtkWindow *toplevel;
+  const char *dest;
+
+  application = G_APPLICATION (ephy_embed_shell_get_default ());
+  toplevel = gtk_application_get_active_window (GTK_APPLICATION (application));
+  dest = webkit_download_get_destination (download);
+
+  if (!gtk_window_is_active (toplevel) && dest != NULL) {
+    char *filename;
+    char *message;
+    GNotification *notification;
+
+    filename = g_filename_display_basename (dest);
+    /* Translators: a desktop notification when a download finishes. */
+    message = g_strdup_printf (_("Finished downloading %s"), filename);
+    /* Translators: the title of the notification. */
+    notification = g_notification_new (_("Download finished"));
+    g_notification_set_body (notification, message);
+    g_application_send_notification (application, "download-finished", notification);
+
+    g_free (filename);
+    g_free (message);
+    g_object_unref (notification);
+  }
+}
+
+static void
 download_finished_cb (WebKitDownload *wk_download,
                       EphyDownload   *download)
 {
@@ -694,6 +724,7 @@ download_finished_cb (WebKitDownload *wk_download,
   else
     ephy_download_do_download_action (download, download->action, download->start_time);
 
+  display_download_finished_notification (wk_download);
   g_signal_emit (download, signals[COMPLETED], 0);
 }
 
