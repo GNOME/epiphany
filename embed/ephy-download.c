@@ -41,6 +41,8 @@ struct _EphyDownload {
   char *destination;
   char *content_type;
 
+  gboolean show_notification;
+
   EphyDownloadActionType action;
   guint32 start_time;
   gboolean finished;
@@ -602,6 +604,8 @@ ephy_download_init (EphyDownload *download)
   download->action = EPHY_DOWNLOAD_ACTION_NONE;
 
   download->start_time = gtk_get_current_event_time ();
+
+  download->show_notification = TRUE;
 }
 
 static void
@@ -724,7 +728,9 @@ download_finished_cb (WebKitDownload *wk_download,
   else
     ephy_download_do_download_action (download, download->action, download->start_time);
 
-  display_download_finished_notification (wk_download);
+  if (download->show_notification)
+    display_download_finished_notification (wk_download);
+
   g_signal_emit (download, signals[COMPLETED], 0);
 }
 
@@ -802,4 +808,12 @@ ephy_download_new_for_uri (const char *uri)
   g_object_unref (download);
 
   return ephy_download;
+}
+
+void
+ephy_download_disable_desktop_notification (EphyDownload *download)
+{
+  g_assert (EPHY_IS_DOWNLOAD (download));
+
+  download->show_notification = FALSE;
 }
