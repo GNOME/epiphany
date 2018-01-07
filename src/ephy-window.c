@@ -2071,7 +2071,8 @@ decide_policy_cb (WebKitWebView           *web_view,
   WebKitURIRequest *request;
   const char *request_uri;
 
-  if (decision_type == WEBKIT_POLICY_DECISION_TYPE_RESPONSE)
+  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION &&
+      decision_type != WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION)
     return FALSE;
 
   navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (decision);
