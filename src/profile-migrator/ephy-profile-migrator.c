@@ -1177,38 +1177,6 @@ out:
 }
 
 static void
-migrate_snapshot_thumbnails (void)
-{
-  /* We used to store snapshot service thumbnails in the global desktop
-   * thumbnail directory... which is not in any way namespaced to Epiphany.
-   * To avoid leaking old thumbnails on disk, revealing the user's browsing
-   * history, we have to delete all the thumbnails. That's fine because
-   * anything in the cache directory is fair game for deletion at any time.
-   *
-   * Note we don't have to delete thumbnails/normal because Epiphany does not
-   * create thumbnails of this size.
-   */
-  GError *error = NULL;
-  char *dir;
-
-  dir = g_build_filename (g_get_user_cache_dir (), "thumbnails", "large", NULL);
-  ephy_file_delete_dir_recursively (dir, &error);
-  if (error) {
-    g_warning ("Failed to delete %s: %s", dir, error->message);
-    g_error_free (error);
-  }
-  g_free (dir);
-
-  dir = g_build_filename (g_get_user_cache_dir (), "thumbnails", "fail", NULL);
-  ephy_file_delete_dir_recursively (dir, &error);
-  if (error) {
-    g_warning ("Failed to delete %s: %s", dir, error->message);
-    g_error_free (error);
-  }
-  g_free (dir);
-}
-
-static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1247,7 +1215,6 @@ const EphyProfileMigrator migrators[] = {
   /* 23 */ migrate_sync_device_info,
   /* 24 */ migrate_bookmarks_timestamp,
   /* 25 */ migrate_passwords_timestamp,
-  /* 26 */ migrate_snapshot_thumbnails
 };
 
 static gboolean
