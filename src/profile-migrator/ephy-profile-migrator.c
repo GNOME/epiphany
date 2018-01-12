@@ -1215,6 +1215,7 @@ const EphyProfileMigrator migrators[] = {
   /* 23 */ migrate_sync_device_info,
   /* 24 */ migrate_bookmarks_timestamp,
   /* 25 */ migrate_passwords_timestamp,
+  /* 26 */ migrate_nothing
 };
 
 static gboolean
