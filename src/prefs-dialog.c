@@ -97,6 +97,7 @@ struct _PrefsDialog {
   /* stored data */
   GtkWidget *always;
   GtkWidget *no_third_party;
+  GtkWidget *intelligent_tracking_prevention;
   GtkWidget *never;
   GtkWidget *remember_passwords_checkbutton;
   GtkWidget *do_not_track_checkbutton;
@@ -753,6 +754,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   /* stored data */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, always);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, no_third_party);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, intelligent_tracking_prevention);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, never);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, remember_passwords_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_checkbutton);
@@ -1486,6 +1488,8 @@ cookies_get_mapping (GValue   *value,
 
   if (g_strcmp0 (name, "no_third_party") == 0)
     name = "no-third-party";
+  else if (g_strcmp0 (name, "intelligent_tracking_prevention") == 0)
+    name = "intelligent-tracking-prevention";
 
   /* If the button name matches the setting, it should be active. */
   if (g_strcmp0 (name, setting) == 0)
@@ -1509,6 +1513,8 @@ cookies_set_mapping (const GValue       *value,
   name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
   if (g_strcmp0 (name, "no_third_party") == 0)
     variant = g_variant_new_string ("no-third-party");
+  else if (g_strcmp0 (name, "intelligent_tracking_prevention") == 0)
+    variant = g_variant_new_string ("intelligent-tracking-prevention");
   else
     variant = g_variant_new_string (name);
 
@@ -1840,6 +1846,15 @@ setup_stored_data_page (PrefsDialog *dialog)
                                 cookies_get_mapping,
                                 cookies_set_mapping,
                                 dialog->no_third_party,
+                                NULL);
+  g_settings_bind_with_mapping (web_settings,
+                                EPHY_PREFS_WEB_COOKIES_POLICY,
+                                dialog->intelligent_tracking_prevention,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                cookies_get_mapping,
+                                cookies_set_mapping,
+                                dialog->intelligent_tracking_prevention,
                                 NULL);
   g_settings_bind_with_mapping (web_settings,
                                 EPHY_PREFS_WEB_COOKIES_POLICY,

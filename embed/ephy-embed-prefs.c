@@ -275,20 +275,28 @@ void
 ephy_embed_prefs_set_cookie_accept_policy (WebKitCookieManager *cookie_manager,
                                            const char          *settings_policy)
 {
+  EphyEmbedShell *shell;
+  WebKitWebContext *context;
+  WebKitWebsiteDataManager *manager;
   WebKitCookieAcceptPolicy policy;
 
   if (!strcmp (settings_policy, "never"))
     policy = WEBKIT_COOKIE_POLICY_ACCEPT_NEVER;
   else if (!strcmp (settings_policy, "always"))
     policy = WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS;
-  else if (!strcmp (settings_policy, "no-third-party"))
+  else if (!strcmp (settings_policy, "no-third-party") || !strcmp (settings_policy, "intelligent-tracking-prevention"))
     policy = WEBKIT_COOKIE_POLICY_ACCEPT_NO_THIRD_PARTY;
   else {
     g_warn_if_reached ();
     return;
   }
-
   webkit_cookie_manager_set_accept_policy (cookie_manager, policy);
+
+  shell = ephy_embed_shell_get_default ();
+  context = ephy_embed_shell_get_web_context (shell);
+  manager = webkit_web_context_get_website_data_manager (context);
+  webkit_website_data_manager_set_resource_load_statistics_enabled (manager,
+                                                                    !strcmp (settings_policy, "intelligent-tracking-prevention"));
 }
 
 static void
