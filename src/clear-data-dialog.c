@@ -68,7 +68,8 @@ G_DEFINE_TYPE (ClearDataDialog, clear_data_dialog, GTK_TYPE_DIALOG)
   WEBKIT_WEBSITE_DATA_LOCAL_STORAGE | \
   WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES | \
   WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES | \
-  WEBKIT_WEBSITE_DATA_PLUGIN_DATA
+  WEBKIT_WEBSITE_DATA_PLUGIN_DATA | \
+  WEBKIT_WEBSITE_DATA_RESOURCE_LOAD_STATISTICS
 
 typedef struct {
   WebKitWebsiteDataTypes type;
@@ -82,7 +83,8 @@ static const DataEntry data_entries[] = {
   { WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE, TRUE, N_("Offline web application cache") },
   { WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES, FALSE, N_("IndexedDB databases") },
   { WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES, FALSE, N_("WebSQL databases") },
-  { WEBKIT_WEBSITE_DATA_PLUGIN_DATA, FALSE, N_("Plugins data") }
+  { WEBKIT_WEBSITE_DATA_PLUGIN_DATA, FALSE, N_("Plugins data") },
+  { WEBKIT_WEBSITE_DATA_RESOURCE_LOAD_STATISTICS, FALSE, N_("Resource load statistics") }
 };
 
 static WebKitWebsiteDataManager *
