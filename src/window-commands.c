@@ -52,6 +52,7 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
+#include "ephy-vcs-version.h"
 #include "ephy-web-app-utils.h"
 #include "ephy-zoom.h"
 
@@ -651,7 +652,7 @@ window_cmd_show_about (GSimpleAction *action,
 #else
                          "program-name", _("Epiphany Technology Preview"),
 #endif
-                         "version", VERSION,
+                         "version", VCSVERSION,
                          "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
                          "Copyright © 2003–2018 The Web Developers",
                          "artists", artists,

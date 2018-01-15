@@ -31,6 +31,7 @@
 #include "ephy-settings.h"
 #include "ephy-smaps.h"
 #include "ephy-snapshot-service.h"
+#include "ephy-vcs-version.h"
 #include "ephy-web-app-utils.h"
 
 #include <gio/gio.h>
@@ -270,7 +271,7 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
   char *version;
   GtkIconInfo *icon_info;
 
-  version = g_strdup_printf (_("Version %s"), VERSION);
+  version = g_strdup_printf (_("Version %s"), VCSVERSION);
 
   icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
                                           "org.gnome.Epiphany",

@@ -29,6 +29,7 @@
 #include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-string.h"
+#include "ephy-vcs-version.h"
 #include "ephy-web-app-utils.h"
 
 #include <errno.h>
@@ -99,7 +100,7 @@ option_version_cb (const gchar *option_name,
                    gpointer     data,
                    GError     **error)
 {
-  g_print ("%s %s\n", _("Web"), VERSION);
+  g_print ("%s %s\n", _("Web"), VCSVERSION);
 
   exit (EXIT_SUCCESS);
   return FALSE;

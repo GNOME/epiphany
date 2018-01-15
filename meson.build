@@ -40,21 +40,29 @@ conf.set10('DEVELOPER_MODE', get_option('developer_mode'))
 tech_preview = get_option('tech_preview')
 conf.set10('TECH_PREVIEW', tech_preview)
 
-if tech_preview
-  msg = 'Computing Epiphany Tech Preview version: '
-  res = run_command(join_paths(meson.source_root(), 'compute-tech-preview-version.sh'))
-  assert(res.returncode() == 0, msg + 'FAIL (script returned nonzero exit status)')
-  tech_preview_version = res.stdout().strip()
-  message(msg + tech_preview_version)
-  conf.set_quoted('VERSION', tech_preview_version)
-else
-  conf.set_quoted('VERSION', meson.project_version())
-endif
+conf.set_quoted('VERSION', meson.project_version())
 
 configure_file(
   output: 'config.h',
   configuration: conf
 )
+
+if tech_preview
+  vcs_tag(
+    input: 'ephy-vcs-version.h.in',
+    output: 'ephy-vcs-version.h',
+    replace_string: '@VCSVERSION@'
+  )
+else
+  version_conf = configuration_data()
+  version_conf.set('VCSVERSION', meson.project_version())
+
+  configure_file(
+    input: 'ephy-vcs-version.h.in',
+    output: 'ephy-vcs-version.h',
+    configuration: version_conf
+  )
+endif
 
 glib_requirement = '>= 2.52.0'
 gtk_requirement = '>= 3.22.13'
