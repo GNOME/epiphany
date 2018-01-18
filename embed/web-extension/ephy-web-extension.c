@@ -415,7 +415,7 @@ should_store_cb (GList    *records,
   if (permission == EPHY_PERMISSION_UNDECIDED && ephy_dot_dir_is_web_application ())
     permission = EPHY_PERMISSION_PERMIT;
 
-  password = ephy_embed_form_auth_get_username (form_auth);
+  password = ephy_embed_form_auth_get_password (form_auth);
   if (password == NULL || strlen (password) == 0)
     goto out;
 
