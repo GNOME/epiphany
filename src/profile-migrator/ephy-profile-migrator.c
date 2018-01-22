@@ -996,6 +996,9 @@ convert_bookmark_timestamp (GVariant *value)
   const char *id;
   char *tag;
 
+  if (!g_variant_check_format_string (value, "(x&s&sdbas)", FALSE))
+    return NULL;
+
   g_variant_get (value, "(x&s&sdbas)",
                  &time_added, &title, &id,
                  &timestamp_d, &is_uploaded, &iter);
@@ -1066,9 +1069,14 @@ migrate_bookmarks_timestamp (void)
   for (int i = 0; i < length; i++) {
     GVariant *value = gvdb_table_get_value (bookmarks_table_in, urls[i]);
     GVariant *new_value = convert_bookmark_timestamp (value);
-    GvdbItem *item = gvdb_hash_table_insert (bookmarks_table_out, urls[i]);
-    gvdb_item_set_value (item, new_value);
+    if (new_value != NULL) {
+      GvdbItem *item = gvdb_hash_table_insert (bookmarks_table_out, urls[i]);
+      gvdb_item_set_value (item, new_value);
+    }
     g_variant_unref (value);
+
+    if (new_value == NULL)
+      goto out;
   }
 
   gvdb_table_write_contents (root_table_out, filename, FALSE, NULL);
