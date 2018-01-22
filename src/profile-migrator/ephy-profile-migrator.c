@@ -1326,7 +1326,7 @@ convert_bookmark_timestamp (GVariant *value)
   const char *id;
   char *tag;
 
-  if (!g_variant_check_format_string (value, "(x&s&sdbas)", FALSE))
+  if (!g_variant_check_format_string (value, "(xssdbas)", FALSE))
     return NULL;
 
   g_variant_get (value, "(x&s&sdbas)",
