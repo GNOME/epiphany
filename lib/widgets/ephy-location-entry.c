@@ -718,16 +718,14 @@ entry_populate_popup_cb (GtkEntry          *entry,
 }
 
 static gboolean
-icon_button_press_event_cb (GtkWidget           *entry,
-                            GtkEntryIconPosition position,
-                            GdkEventButton      *event,
-                            EphyLocationEntry   *lentry)
+icon_button_icon_press_event_cb (GtkWidget           *entry,
+                                 GtkEntryIconPosition position,
+                                 GdkEventButton      *event,
+                                 EphyLocationEntry   *lentry)
 {
-  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
-
-  if (event->type == GDK_BUTTON_PRESS &&
-      event->button == 1 &&
-      state == 0 /* left */) {
+  if (((event->type == GDK_BUTTON_PRESS &&
+        event->button == 1) ||
+       (event->type == GDK_TOUCH_BEGIN))) {
     if (position == GTK_ENTRY_ICON_PRIMARY) {
       GdkRectangle lock_position;
       gtk_entry_get_icon_area (GTK_ENTRY (entry), GTK_ENTRY_ICON_PRIMARY, &lock_position);
@@ -753,7 +751,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
                                      "non-starred-symbolic");
 
   g_object_connect (entry,
-                    "signal::icon-press", G_CALLBACK (icon_button_press_event_cb), lentry,
+                    "signal::icon-press", G_CALLBACK (icon_button_icon_press_event_cb), lentry,
                     "signal::populate-popup", G_CALLBACK (entry_populate_popup_cb), lentry,
                     "signal::key-press-event", G_CALLBACK (entry_key_press_cb), lentry,
                     "signal::changed", G_CALLBACK (editable_changed_cb), lentry,
