@@ -606,14 +606,17 @@ ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
 
   if (priv->global_gsb_service == NULL) {
     char *api_key;
-    char *filename;
+    char *dot_dir;
+    char *db_path;
 
     api_key = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_GSB_API_KEY);
-    filename = g_build_filename (ephy_dot_dir (), EPHY_GSB_FILE, NULL);
-    priv->global_gsb_service = ephy_gsb_service_new (api_key, filename);
+    dot_dir = ephy_default_dot_dir ();
+    db_path = g_build_filename (dot_dir, EPHY_GSB_FILE, NULL);
+    priv->global_gsb_service = ephy_gsb_service_new (api_key, db_path);
 
     g_free (api_key);
-    g_free (filename);
+    g_free (dot_dir);
+    g_free (db_path);
   }
 
   return priv->global_gsb_service;
