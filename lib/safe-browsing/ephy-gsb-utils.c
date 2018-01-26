@@ -467,7 +467,7 @@ ephy_gsb_utils_rice_delta_decode (JsonObject *rde,
 {
   EphyGSBRiceDecoder *decoder;
   const char *data_b64 = NULL;
-  const char *first_value_str;
+  const char *first_value_str = NULL;
   guint32 *items;
   guint8 *data;
   gsize data_len;
@@ -477,9 +477,8 @@ ephy_gsb_utils_rice_delta_decode (JsonObject *rde,
   g_assert (rde);
   g_assert (num_items);
 
-  /* This field is never missing. */
-  first_value_str = json_object_get_string_member (rde, "firstValue");
-
+  if (json_object_has_member (rde, "firstValue"))
+    first_value_str = json_object_get_string_member (rde, "firstValue");
   if (json_object_has_member (rde, "riceParameter"))
     parameter = json_object_get_int_member (rde, "riceParameter");
   if (json_object_has_member (rde, "numEntries"))
@@ -489,7 +488,7 @@ ephy_gsb_utils_rice_delta_decode (JsonObject *rde,
 
   *num_items = 1 + num_entries;
   items = g_malloc (*num_items * sizeof (guint32));
-  items[0] = g_ascii_strtoull (first_value_str, NULL, 10);
+  items[0] = first_value_str ? g_ascii_strtoull (first_value_str, NULL, 10) : 0;
 
   if (num_entries == 0)
     return items;
