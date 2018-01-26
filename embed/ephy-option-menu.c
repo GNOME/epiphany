@@ -584,9 +584,7 @@ ephy_option_menu_popup (EphyOptionMenu *menu,
   gtk_scrolled_window_set_min_content_height (swindow, n_items * height);
 
   gtk_widget_get_preferred_size (GTK_WIDGET (menu), &menu_req, NULL);
-  if (x < area.x)
-    x = area.x;
-  else if (x + menu_req.width > area.x + area.width)
+  if (x + menu_req.width > area.x + area.width)
     x = area.x + area.width - menu_req.width;
 
   if (y + rect->height + menu_req.height <= area.y + area.height ||
@@ -595,6 +593,7 @@ ephy_option_menu_popup (EphyOptionMenu *menu,
   } else {
     y -= menu_req.height;
   }
+
   gtk_window_move (GTK_WINDOW (menu), x, y);
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menu->view));
