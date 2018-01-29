@@ -23,51 +23,20 @@
 
 #include <math.h>
 
-int
-ephy_zoom_get_zoom_level_index (float level)
-{
-  guint i;
-  float previous, current, mean;
-
-  previous = zoom_levels[0].level;
-
-  for (i = 1; i < n_zoom_levels; i++) {
-    current = zoom_levels[i].level;
-    mean = sqrt (previous * current);
-
-    if (level <= mean) return i - 1;
-
-    previous = current;
-  }
-
-  return n_zoom_levels - 1;
-}
-
-
 float
 ephy_zoom_get_changed_zoom_level (float level, int steps)
 {
-  int index;
+  float new_level = level;
 
-  index = ephy_zoom_get_zoom_level_index (level);
-  return zoom_levels[CLAMP (index + steps, 0, (int)n_zoom_levels - 1)].level;
-}
-
-float
-ephy_zoom_get_nearest_zoom_level (float level)
-{
-  return ephy_zoom_get_changed_zoom_level (level, 0);
-}
-
-const char *
-ephy_zoom_get_zoom_level_name (float level)
-{
-  unsigned int i;
-
-  for (i = 0; i < n_zoom_levels; i++) {
-    if (zoom_levels[i].level == level)
-      return zoom_levels[i].name;
+  if (steps == -1) {
+    new_level -= 0.25;
+    if (new_level < ZOOM_MINIMAL)
+      new_level = ZOOM_MINIMAL;
+  } else if (steps == 1) {
+    new_level += 0.25;
+    if (new_level > ZOOM_MAXIMAL)
+      new_level = ZOOM_MAXIMAL;
   }
 
-  return "";
+  return new_level;
 }

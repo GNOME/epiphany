@@ -961,6 +961,7 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
   gboolean can_zoom_in = TRUE, can_zoom_out = TRUE, can_zoom_normal = FALSE;
   double zoom;
   GtkWidget *zoom_level_button;
+  gchar *zoom_level;
 
   if (window->closing)
     return;
@@ -969,7 +970,9 @@ sync_tab_zoom (WebKitWebView *web_view, GParamSpec *pspec, EphyWindow *window)
 
   zoom_level_button = ephy_header_bar_get_zoom_level_button (EPHY_HEADER_BAR (window->header_bar));
 
-  gtk_button_set_label (GTK_BUTTON (zoom_level_button), ephy_zoom_get_zoom_level_name (zoom));
+  zoom_level = g_strdup_printf ("%2.0f%%", zoom * 100);
+  gtk_button_set_label (GTK_BUTTON (zoom_level_button), zoom_level);
+  g_free (zoom_level);
 
   if (zoom >= ZOOM_MAXIMAL) {
     can_zoom_in = FALSE;
