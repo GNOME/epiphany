@@ -51,6 +51,7 @@ struct _EphyLocationController {
 
   EphyWindow *window;
   EphyTitleWidget *title_widget;
+  GtkGesture *longpress_gesture;
   char *address;
   gboolean editable;
   gboolean sync_address_is_blocked;
@@ -364,6 +365,17 @@ search_engines_changed_cb (EphySearchEngineManager *manager,
 }
 
 static void
+longpress_gesture_cb (GtkGestureLongPress *gesture,
+                      gdouble              x,
+                      gdouble              y,
+                      gpointer             user_data)
+{
+  EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (user_data);
+
+  gtk_editable_select_region (GTK_EDITABLE (controller->title_widget), 0, -1);
+}
+
+static void
 ephy_location_controller_constructed (GObject *object)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
@@ -386,6 +398,10 @@ ephy_location_controller_constructed (GObject *object)
 
   if (!EPHY_IS_LOCATION_ENTRY (controller->title_widget))
     return;
+
+  controller->longpress_gesture = gtk_gesture_long_press_new (widget);
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (controller->longpress_gesture), TRUE);
+  g_signal_connect (controller->longpress_gesture, "pressed", G_CALLBACK(longpress_gesture_cb), controller);
 
   history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   bookmarks_manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
@@ -491,6 +507,8 @@ ephy_location_controller_dispose (GObject *object)
       controller->title_widget == NULL) {
     return;
   }
+
+  g_clear_object (&controller->longpress_gesture);
 
   if (EPHY_IS_LOCATION_ENTRY (controller->title_widget)) {
     g_signal_handlers_disconnect_matched (controller, G_SIGNAL_MATCH_DATA,
