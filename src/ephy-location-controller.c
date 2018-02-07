@@ -401,7 +401,7 @@ ephy_location_controller_constructed (GObject *object)
 
   controller->longpress_gesture = gtk_gesture_long_press_new (widget);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (controller->longpress_gesture), TRUE);
-  g_signal_connect (controller->longpress_gesture, "pressed", G_CALLBACK(longpress_gesture_cb), controller);
+  g_signal_connect (controller->longpress_gesture, "pressed", G_CALLBACK (longpress_gesture_cb), controller);
 
   history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   bookmarks_manager = ephy_shell_get_bookmarks_manager (ephy_shell_get_default ());
