@@ -11,18 +11,18 @@
 # Neriman Kara <nerimankaraa@gmail.com>, 2016.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2017.
 # İbrahim Aydın <brhm.1995@hotmail.com>, 2017.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2013, 2017.
 # Burak Kahraman <burakkaankhrmn@gmail.com>, 2017.
 # Muhammet Kara <muhammetk@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2013, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2018-01-29 15:46+0000\n"
-"PO-Revision-Date: 2018-02-10 11:58+0300\n"
-"Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
+"POT-Creation-Date: 2018-02-10 09:00+0000\n"
+"PO-Revision-Date: 2018-02-11 16:30+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "GNOME için web tarayıcısı; masaüstü ile sıkı bir tümleştirmeye sahip, basit "
 "ve sezgisel kullanıcı arayüzüyle web sayfalarınıza odaklanmanıza olanak "
-"tanır. Eğer web ortamının sade, temiz, güzel bir görünümünü arıyorsanız, "
+"tanır. Eğer web ortamının yalın, temiz, güzel bir görünümünü arıyorsanız, "
 "aradığınız tarayıcı budur."
 
 #: data/org.gnome.Epiphany.appdata.xml.in:15
@@ -75,7 +75,7 @@ msgstr "Web Tarayıcı"
 
 #: data/org.gnome.Epiphany.desktop.in:5
 msgid "Browse the web"
-msgstr "Web’e gözat"
+msgstr "Web’e göz at"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Epiphany.desktop.in:7
@@ -336,8 +336,8 @@ msgid ""
 msgstr ""
 "Sekme çubuğunun ne zaman gösterileceğini denetler. Kullanılabilecek değerler "
 "şunlardır: “her zaman” (sekme çubuğu her zaman gösterilir), “more-than-"
-"one” (iki veya daha fazla sekme olduğunda gösterilir) ve “never” (sekme "
-"çubuğu asla gösterilmez)."
+"one” (iki veya daha çok sekme olduğunda gösterilir) ve “never” (sekme çubuğu "
+"asla gösterilmez)."
 
 #: data/org.gnome.epiphany.gschema.xml:129
 msgid "Minimum font size"
@@ -533,17 +533,18 @@ msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
 msgstr ""
+"Güvenli taramanın etkinleştirilip etkinleştirilmeyeceği. Güvenli tarama, "
+"Google Güvenli Tarama API v4 aracılığıyla çalışır."
 
 #: data/org.gnome.epiphany.gschema.xml:232
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle caret browsing"
 msgid "Google Safe Browsing API key"
-msgstr "Karet taramayı aç/kapat"
+msgstr "Google Güvenli Tarama API anahtarı"
 
 #: data/org.gnome.epiphany.gschema.xml:233
 msgid "The API key used to access the Google Safe Browsing API v4."
-msgstr ""
+msgstr "Google Güvenli Tarama API v4ʼe erişmek için kullanılan API anahtarı."
 
 #: data/org.gnome.epiphany.gschema.xml:239
 msgid "The downloads folder"
@@ -782,7 +783,6 @@ msgstr "Son açık sekme eşzamanlamasının yapıldığı zamana ait zaman damg
 #: data/org.gnome.epiphany.gschema.xml:445
 #: data/org.gnome.epiphany.gschema.xml:450
 #: data/org.gnome.epiphany.gschema.xml:455
-#, fuzzy
 #| msgid ""
 #| "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 #| "search-engines instead."
@@ -791,7 +791,7 @@ msgid ""
 "sync/ instead."
 msgstr ""
 "ARTIK KULLANILMIYOR: Bu anahtar artık kullanılmıyor ve yok sayılmıştır. "
-"Bunun yerine /org/gnome/epiphany/search-engines kullanın."
+"Bunun yerine /org/gnome/epiphany/sync/ kullanın."
 
 #: data/org.gnome.epiphany.gschema.xml:466
 msgid "Decision to apply when microphone permission is requested for this host"
@@ -980,7 +980,7 @@ msgstr ""
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
-"Gizli tarama kipi, etkinliklerinizi sadece bu bilgisayarı kullanan "
+"Gizli tarama kipi, etkinliklerinizi yalnızca bu bilgisayarı kullanan "
 "kişilerden saklar."
 
 #: embed/ephy-about-handler.c:587
@@ -996,17 +996,16 @@ msgstr ""
 
 #. Translators: a desktop notification when a download finishes.
 #: embed/ephy-download.c:707
-#, fuzzy, c-format
+#, c-format
 #| msgid "Error downloading: %s"
 msgid "Finished downloading %s"
-msgstr "İndirilirken hata oluştu: %s"
+msgstr "%s indirmesi bitti"
 
 #. Translators: the title of the notification.
 #: embed/ephy-download.c:709
-#, fuzzy
 #| msgid "Downloads"
 msgid "Download finished"
-msgstr "İndirilenler"
+msgstr "İndirme bitti"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
 #: embed/ephy-embed.c:538
@@ -1162,7 +1161,7 @@ msgstr "Yunanca (_Windows-1253)"
 
 #: embed/ephy-encodings.c:90
 msgid "Gujarati (_MacGujarati)"
-msgstr "Gujarati (_MacGujarati)"
+msgstr "Guceratça (_MacGujarati)"
 
 #: embed/ephy-encodings.c:91
 msgid "Gurmukhi (Mac_Gurmukhi)"
@@ -1465,7 +1464,7 @@ msgid ""
 "computer’s calendar."
 msgstr ""
 "Bu web sitesinin kimliği güvenilemeyecek kadar eski. Bilgisayarınızın "
-"takvimindeki tarihi kontrol edin."
+"takvimindeki tarihi denetleyin."
 
 #. Possible error message when a site presents a bad certificate.
 #: embed/ephy-web-view.c:1898
@@ -1503,8 +1502,8 @@ msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
 msgstr ""
-"Bu web sitesinin kimliği sadece gelecekteki tarihler için geçerli. "
-"Bilgisayarınızın takvimindeki tarihi kontrol edin."
+"Bu web sitesinin kimliği yalnızca gelecekteki tarihler için geçerli. "
+"Bilgisayarınızın takvimindeki tarihi denetleyin."
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
@@ -1660,6 +1659,8 @@ msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
 "code that could be downloaded to your computer without your consent."
 msgstr ""
+"%s adresini ziyaret etmek bilgisayarınıza zarar verebilir. Bu sayfa "
+"isteğiniz dışında bilgisayarınıza inen zararlı bir kod içeriyor gibi duruyor."
 
 #: embed/ephy-web-view.c:2203
 #, c-format
@@ -1667,6 +1668,9 @@ msgid ""
 "You can learn more about harmful web content including viruses and other "
 "malicious code and how to protect your computer at %s."
 msgstr ""
+"Virüs ve başka kötü niyetli kodlar bulunan web içerikleriyle ilgili daha "
+"çoğunu ve bilgisayarınızı bunlardan nasıl koruyacağınızı %s adresinden "
+"öğrenebilirsiniz."
 
 #: embed/ephy-web-view.c:2210
 #, c-format
@@ -1675,12 +1679,17 @@ msgid ""
 "software or revealing your personal information (for example, passwords, "
 "phone numbers, or credit cards)."
 msgstr ""
+"%s adresindeki saldırganlar, yazılım kurmak veya kişisel bilgilerinizi "
+"(örneğin parolalar, telefon numaraları veya kredi kartları) ele vermek gibi "
+"tehlikeli şeyler yapmanız için sizi kandırabilir."
 
 #: embed/ephy-web-view.c:2215
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
+"Sosyal mühendislik (kimlik hırsızlığı) ile ilgili daha çoğunu %s veya %s "
+"adresinde bulabilirsiniz."
 
 #: embed/ephy-web-view.c:2224
 #, c-format
@@ -1694,10 +1703,11 @@ msgstr ""
 "sayfanızı değiştirmek veya girdiğiniz sitelerde fazladan reklam göstermek)."
 
 #: embed/ephy-web-view.c:2229
-#, fuzzy, c-format
+#, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr ""
-"İstenmeyen yazılımlar hakkında daha fazla bilgiyi %s yazarak öğrenebilirsiniz"
+"İstenmeyen yazılımlarla ilgili daha çok bilgiyi %s adresinden "
+"öğrenebilirsiniz."
 
 #: embed/ephy-web-view.c:2304
 msgid "None specified"
@@ -1756,7 +1766,7 @@ msgstr "http://duckduckgo.com/?q=%s&t=epiphany&kl=tr-tr&kad=tr_TR"
 #: lib/ephy-sync-utils.c:327
 #, c-format
 msgid "%s’s GNOME Web on %s"
-msgstr ""
+msgstr "%2$s üzerindeki %1$s GNOME Webʼi"
 
 #. Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am"
 #: lib/ephy-time-helpers.c:226
@@ -1849,7 +1859,7 @@ msgstr "İmzalı sertifikayı alma başarısız."
 #: lib/sync/ephy-sync-service.c:1685 lib/sync/ephy-sync-service.c:1690
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
-"Giriş yapmış geçerli kullanıcı için eşzamanlama  anahtarları bulunamadı."
+"Giriş yapmış geçerli kullanıcı için eşzamanlama anahtarları bulunamadı."
 
 #: lib/sync/ephy-sync-service.c:1697 lib/sync/ephy-sync-service.c:1705
 msgid "The sync secrets for the current sync user are invalid."
@@ -1862,10 +1872,9 @@ msgid "The sync secrets of %s"
 msgstr "%s kullanıcısının eşzamanlama anahtarları"
 
 #: lib/sync/ephy-sync-service.c:1839
-#, fuzzy
 #| msgid "Failed to upload crypto/keys record."
 msgid "Failed to upload client record."
-msgstr "Şifreleme/anahtar kaydını karşıya yukleme başarısız."
+msgstr "İstemci kaydı yükleme başarısız"
 
 #: lib/sync/ephy-sync-service.c:2029
 msgid "Failed to upload crypto/keys record."
@@ -1885,7 +1894,7 @@ msgstr "Üst/genel kayıtları karşıya yukleme başarısız."
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
-"Firefox hesabınız %d depo sürümünü kullanıyor. Web sadece %d sürümünü "
+"Firefox hesabınız %d depo sürümünü kullanıyor. Web yalnızca %d sürümünü "
 "destekliyor."
 
 #: lib/sync/ephy-sync-service.c:2315
@@ -1893,10 +1902,9 @@ msgid "Failed to verify storage version."
 msgstr "Depo sürümünü doğrulama başarısız."
 
 #: lib/sync/ephy-sync-service.c:2371
-#, fuzzy
 #| msgid "Failed to upload crypto/keys record."
 msgid "Failed to upload device info"
-msgstr "Şifreleme/anahtar kaydını karşıya yukleme başarısız."
+msgstr "Aygıt bilgisi yükleme başarısız"
 
 #: lib/sync/ephy-sync-service.c:2444 lib/sync/ephy-sync-service.c:2522
 msgid "Failed to retrieve the Sync Key"
@@ -2190,14 +2198,12 @@ msgid "View and manage your bookmarks"
 msgstr "Yer imlerinizi görün ve yönetin"
 
 #: src/ephy-header-bar.c:786
-#, fuzzy
 msgid "Open in browser"
-msgstr "Tarayıcıdan açın"
+msgstr "Tarayıcıda aç"
 
 #: src/ephy-header-bar.c:788
-#, fuzzy
 msgid "Open the page in your default browser"
-msgstr "Sayfayı varsayılan tarayıcıdan açın."
+msgstr "Sayfayı öntanımlı tarayıcınızda açın"
 
 #. Translators: tooltip for the downloads button
 #: src/ephy-header-bar.c:812
@@ -2354,7 +2360,7 @@ msgstr "Bağlantıyı E-posta ile _Gönder…"
 
 #: src/ephy-window.c:828
 msgid "_Reload"
-msgstr "T_ekrar Yükle"
+msgstr "_Yeniden Yükle"
 
 #: src/ephy-window.c:829
 msgid "_Back"
@@ -2527,7 +2533,7 @@ msgstr "Web’te Ara"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1280
 msgid "Executes only the n-th migration step"
-msgstr "Sadece n-inci taşıma adımını yürütür"
+msgstr "Yalnızca n-inci taşıma adımını yürütür"
 
 #: src/profile-migrator/ephy-profile-migrator.c:1282
 msgid "Specifies the required version for the migrator"
@@ -2945,9 +2951,8 @@ msgid "Enable _plugins"
 msgstr "_Eklentileri etkinleştir"
 
 #: src/resources/gtk/prefs-dialog.ui:286
-#, fuzzy
 msgid "Try to block dangerous web_sites"
-msgstr "Zararlı internet _sitelerini engellemyi deneyin."
+msgstr "Tehlikeli web _sitelerini engellemeyi dene"
 
 #: src/resources/gtk/prefs-dialog.ui:300
 msgid "General"
@@ -2999,7 +3004,7 @@ msgstr "_Her zaman kabul et"
 
 #: src/resources/gtk/prefs-dialog.ui:522
 msgid "Only _from sites you visit"
-msgstr "Sadece _ziyaret ettiğiniz sitelerden"
+msgstr "Yalnızca _ziyaret ettiğiniz sitelerden"
 
 #. Refers to "Only from sites you visit" option under Cookies.
 #: src/resources/gtk/prefs-dialog.ui:532
@@ -3475,7 +3480,7 @@ msgstr "Yer imleri başarıyla dışa aktarıldı!"
 
 #: src/window-commands.c:608
 msgid "Current maintainers:"
-msgstr ""
+msgstr "Şimdiki bakımcılar:"
 
 #: src/window-commands.c:611 src/window-commands.c:634
 msgid "Contact us at:"
@@ -3483,7 +3488,7 @@ msgstr "Bize ulaşmak için:"
 
 #: src/window-commands.c:614
 msgid "Past maintainers:"
-msgstr ""
+msgstr "Geçmiş bakımcılar:"
 
 #: src/window-commands.c:617
 msgid "Contributors:"
@@ -3500,7 +3505,7 @@ msgstr ""
 
 #: src/window-commands.c:653
 msgid "Epiphany Technology Preview"
-msgstr ""
+msgstr "Epiphany Teknoloji Önizlemesi"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3523,10 +3528,9 @@ msgid "Web Website"
 msgstr "Web Web Sitesi"
 
 #: src/window-commands.c:676
-#, fuzzy
 #| msgid "Web Website"
 msgid "Website"
-msgstr "Web Web Sitesi"
+msgstr "Web sitesi"
 
 #: src/window-commands.c:926
 msgid "Open"
@@ -3552,8 +3556,8 @@ msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
-"Bu adda bir uygulama zaten bulunuyor. Değiştirme işlemi, var olan "
-"uygulamanın üzerine yazacaktır."
+"Aynı adda bir uygulama zaten var. Değiştirme işlemi var olan uygulamanın "
+"üzerine yazacaktır."
 
 #: src/window-commands.c:1355
 #, c-format
