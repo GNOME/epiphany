@@ -1581,6 +1581,7 @@ get_host_for_url_cb (gpointer service,
   EphyHistoryHost *host;
   EphyWebView *view;
   double current_zoom;
+  double set_zoom;
 
   if (success == FALSE)
     return;
@@ -1590,9 +1591,15 @@ get_host_for_url_cb (gpointer service,
 
   current_zoom = webkit_web_view_get_zoom_level (WEBKIT_WEB_VIEW (view));
 
-  if (host->zoom_level != current_zoom) {
+  if (host->visit_count == 0) {
+    set_zoom = g_settings_get_double (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DEFAULT_ZOOM_LEVEL);
+  } else {
+    set_zoom = host->zoom_level;
+  }
+
+  if (set_zoom != current_zoom) {
     view->is_setting_zoom = TRUE;
-    webkit_web_view_set_zoom_level (WEBKIT_WEB_VIEW (view), host->zoom_level);
+    webkit_web_view_set_zoom_level (WEBKIT_WEB_VIEW (view), set_zoom);
     view->is_setting_zoom = FALSE;
   }
 
