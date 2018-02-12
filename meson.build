@@ -97,7 +97,7 @@ gmp_dep = cc.find_library('gmp')
 m_dep = cc.find_library('m', required: false)
 
 if get_option('https_everywhere')
-  httpseverywhere_dep = dependency('httpseverywhere-0.6')
+  httpseverywhere_dep = dependency('httpseverywhere-0.8')
 endif
 
 subdir('data')
