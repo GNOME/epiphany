@@ -404,11 +404,43 @@ ephy_settings_get_tabs_bar_position (void)
 }
 
 static void
+label_set_hexpand (GtkWidget *label, GtkPositionType type)
+{
+  switch (type) {
+    case GTK_POS_LEFT:
+    case GTK_POS_RIGHT:
+      gtk_widget_set_hexpand (label, FALSE);
+      break;
+    case GTK_POS_TOP:
+    case GTK_POS_BOTTOM:
+      gtk_widget_set_hexpand (label, TRUE);
+      break;
+    default:
+      break;
+  }
+}
+
+static void
 position_changed_cb (GSettings    *settings,
                      char         *key,
                      EphyNotebook *nb)
 {
-  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (nb), ephy_settings_get_tabs_bar_position ());
+  GtkPositionType type = ephy_settings_get_tabs_bar_position ();
+  gint pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb));
+  gint i;
+
+  /* Update halign of all notebook label widgets (sub-box) */
+  for (i = 0; i < pages; i++) {
+    GtkWidget *child = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nb), i);
+    GtkWidget *label_widget = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), child);
+    GtkWidget *box = gtk_container_get_children (GTK_CONTAINER (label_widget))->data;
+    GList *children = gtk_container_get_children (GTK_CONTAINER (box));
+    GtkWidget *label = GTK_WIDGET (g_list_nth_data (children, 2));
+
+    label_set_hexpand (label, type);
+  }
+
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (nb), type);
 }
 
 static void
@@ -701,6 +733,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
   GtkWidget *hbox, *label, *close_button, *image, *spinner, *icon, *speaker_icon;
   GtkWidget *box;
   EphyWebView *view;
+  GtkPositionType type = ephy_settings_get_tabs_bar_position ();
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_show (box);
@@ -709,7 +742,7 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
    * equal amount of space around the label */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_show (hbox);
-  gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (hbox, GTK_ALIGN_FILL);
   gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
   /* setup load feedback */
@@ -725,6 +758,8 @@ build_tab_label (EphyNotebook *nb, EphyEmbed *embed)
   label = gtk_label_new (NULL);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
+  gtk_widget_set_halign (label, GTK_ALIGN_FILL);
+  label_set_hexpand (label, type);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
   gtk_widget_show (label);
 
