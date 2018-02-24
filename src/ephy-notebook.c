@@ -219,6 +219,12 @@ button_press_cb (EphyNotebook   *notebook,
 
   tab_clicked = find_tab_num_at_pos (notebook, event->x_root, event->y_root);
 
+  if (event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_MIDDLE) {
+    GtkWidget *tab = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), tab_clicked);
+    g_signal_emit (notebook, signals[TAB_CLOSE_REQUEST], 0, tab);
+    return GDK_EVENT_STOP;
+  }
+
   if (event->type == GDK_BUTTON_PRESS &&
       event->button == 3 &&
       (event->state & gtk_accelerator_get_default_mod_mask ()) == 0) {
