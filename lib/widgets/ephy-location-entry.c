@@ -28,6 +28,7 @@
 #include "ephy-widgets-type-builtins.h"
 #include "ephy-about-handler.h"
 #include "ephy-debug.h"
+#include "ephy-embed-utils.h"
 #include "ephy-gui.h"
 #include "ephy-lib-type-builtins.h"
 #include "ephy-signal-accumulator.h"
@@ -66,6 +67,8 @@ struct _EphyLocationEntry {
 
   char *before_completion;
   char *saved_text;
+  char *address;
+  char *title;
 
   guint text_col;
   guint action_col;
@@ -104,6 +107,11 @@ enum {
   LAST_PROP
 };
 
+enum {
+  ENTRY_SHOW_TITLE,
+  ENTRY_SHOW_ADDRESS
+};
+
 enum signalsEnum {
   USER_CHANGED,
   BOOKMARK_CLICKED,
@@ -118,6 +126,73 @@ static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInte
 G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_ENTRY,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                 ephy_location_entry_title_widget_interface_init))
+
+static void
+entry_set_address (EphyLocationEntry *entry,
+                   const gchar       *address)
+{
+  g_free (entry->address);
+  entry->address = g_strdup (address);
+}
+
+static void
+entry_set_title (EphyLocationEntry *entry,
+                 const gchar       *title)
+{
+  g_free (entry->title);
+  entry->title = g_strdup (title);
+}
+
+static char *
+format_address (const char *url)
+{
+  SoupURI *soup_uri;
+  char *result;
+
+  if (url == NULL)
+    return NULL;
+
+  soup_uri = soup_uri_new (url);
+  if (soup_uri == NULL)
+    return NULL;
+
+  if (((soup_uri->scheme == SOUP_URI_SCHEME_HTTP) && (soup_uri->port != 80)) ||
+      ((soup_uri->scheme == SOUP_URI_SCHEME_HTTPS) && (soup_uri->port != 443)))
+    result = g_strdup_printf ("%s:%u: ", soup_uri->host, soup_uri->port);
+  else
+    result = g_strdup_printf ("%s: ", soup_uri->host);
+
+  soup_uri_free (soup_uri);
+
+  return result;
+}
+
+static void
+entry_update_text (EphyLocationEntry *entry,
+                   int                type)
+{
+  if (type == ENTRY_SHOW_TITLE) {
+    gchar *base_url = format_address (entry->address);
+    gchar *text = g_strdup_printf ("%s%s",
+                                   base_url != NULL ? base_url : "",
+                                   entry->title);
+    gtk_entry_set_text (GTK_ENTRY (entry), text);
+    g_free (text);
+    g_free (base_url);
+  } else if (type == ENTRY_SHOW_ADDRESS) {
+    const gchar *address = entry->address;
+
+    if (!address || ephy_embed_utils_is_no_show_address (address) ||
+        !g_strcmp0 (entry->title, OVERVIEW_PAGE_TITLE) ||
+        !g_strcmp0 (entry->title, BLANK_PAGE_TITLE)) {
+        address = "";
+    }
+
+    gtk_entry_set_text (GTK_ENTRY (entry), address);
+  }
+
+  gtk_widget_set_opacity (GTK_WIDGET (entry), 0.8);
+}
 
 static void
 update_address_state (EphyLocationEntry *entry)
@@ -136,7 +211,7 @@ ephy_location_entry_title_widget_get_address (EphyTitleWidget *widget)
 
   g_assert (entry);
 
-  return gtk_entry_get_text (GTK_ENTRY (widget));
+  return entry->address;
 }
 
 static void
@@ -182,7 +257,10 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   entry->hash = g_str_hash (effective_text ? effective_text : text);
 
   entry->block_update = TRUE;
-  gtk_entry_set_text (GTK_ENTRY (entry), effective_text ? effective_text : text);
+
+  entry_set_address (entry, effective_text ? effective_text : text);
+  entry_update_text (entry, ENTRY_SHOW_TITLE);
+
   entry->block_update = FALSE;
   g_free (effective_text);
 
@@ -589,7 +667,8 @@ entry_clear_activate_cb (GtkMenuItem       *item,
                          EphyLocationEntry *entry)
 {
   entry->block_update = TRUE;
-  gtk_entry_set_text (GTK_ENTRY (entry), "");
+  entry_set_address (entry, "");
+  entry_update_text (entry, ENTRY_SHOW_ADDRESS);
   entry->block_update = FALSE;
   entry->user_changed = TRUE;
 }
@@ -600,7 +679,8 @@ paste_received (GtkClipboard      *clipboard,
                 EphyLocationEntry *entry)
 {
   if (text) {
-    gtk_entry_set_text (GTK_ENTRY (entry), text);
+    entry_set_address (entry, text);
+    entry_update_text (entry, ENTRY_SHOW_ADDRESS);
     g_signal_emit_by_name (entry, "activate");
   }
 }
@@ -739,6 +819,48 @@ icon_button_icon_press_event_cb (GtkWidget           *entry,
   return FALSE;
 }
 
+static gboolean
+enter_notify_event_cb (GtkWidget         *entry,
+                       GdkEvent          *event,
+                       EphyLocationEntry *lentry)
+{
+  if (!gtk_widget_has_focus (GTK_WIDGET (lentry)))
+    entry_update_text (lentry, ENTRY_SHOW_ADDRESS);
+
+  return FALSE;
+}
+
+static gboolean
+leave_notify_event_cb (GtkWidget         *entry,
+                       GdkEvent          *event,
+                       EphyLocationEntry *lentry)
+{
+  if (!gtk_widget_has_focus (entry))
+    entry_update_text (lentry, ENTRY_SHOW_TITLE);
+
+  return FALSE;
+}
+
+static gboolean
+focus_in_event_cb (GtkWidget         *widget,
+                   GdkEvent          *event,
+                   EphyLocationEntry *lentry)
+{
+  entry_update_text (lentry, ENTRY_SHOW_ADDRESS);
+
+  return FALSE;
+}
+
+static gboolean
+focus_out_event_cb (GtkWidget         *widget,
+                    GdkEvent          *event,
+                    EphyLocationEntry *lentry)
+{
+  entry_update_text (lentry, ENTRY_SHOW_TITLE);
+
+  return FALSE;
+}
+
 static void
 ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
 {
@@ -749,6 +871,9 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
                                      GTK_ENTRY_ICON_SECONDARY,
                                      "non-starred-symbolic");
+
+  gtk_entry_set_placeholder_text (GTK_ENTRY (entry),
+                                  _("Search or enter address"));
 
   g_object_connect (entry,
                     "signal::icon-press", G_CALLBACK (icon_button_icon_press_event_cb), lentry,
@@ -761,6 +886,16 @@ ephy_location_entry_construct_contents (EphyLocationEntry *lentry)
                           G_CALLBACK (entry_key_press_after_cb), lentry);
   g_signal_connect_after (entry, "activate",
                           G_CALLBACK (entry_activate_after_cb), lentry);
+
+  g_signal_connect_object (entry, "enter-notify-event",
+                           G_CALLBACK (enter_notify_event_cb), lentry, 0);
+  g_signal_connect_object (entry, "leave-notify-event",
+                           G_CALLBACK (leave_notify_event_cb), lentry, 0);
+  g_signal_connect_object (entry, "focus-in-event",
+                           G_CALLBACK (focus_in_event_cb), lentry, 0);
+  g_signal_connect_object (entry, "focus-out-event",
+                           G_CALLBACK (focus_out_event_cb), lentry, 0);
+
 }
 
 static void
@@ -855,7 +990,8 @@ cursor_on_match_cb (GtkEntryCompletion *completion,
    * See textcell_data_func().
    */
   le->block_update = TRUE;
-  gtk_entry_set_text (GTK_ENTRY (entry), url);
+  entry_set_address (le, url);
+  entry_update_text (le, ENTRY_SHOW_ADDRESS);
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   le->block_update = FALSE;
 
@@ -1142,7 +1278,8 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
 void
 ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 {
-  gtk_entry_set_text (GTK_ENTRY (entry), entry->saved_text);
+  entry_set_address (entry, entry->saved_text);
+  entry_update_text (entry, ENTRY_SHOW_ADDRESS);
   entry->can_redo = FALSE;
   entry->user_changed = TRUE;
 }
@@ -1269,4 +1406,25 @@ GSList *
 ephy_location_entry_get_search_terms (EphyLocationEntry *entry)
 {
   return entry->search_terms;
+}
+
+
+/**
+ * ephy_location_entry_set_title:
+ * @entry: an #EphyLocationEntry widget
+ * @title: web title
+ *
+ * Set webview title
+ *
+ **/
+void
+ephy_location_entry_set_title (EphyLocationEntry *entry,
+                               const char        *title)
+{
+  g_assert (EPHY_IS_LOCATION_ENTRY (entry));
+
+  entry_set_title (entry, title);
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (entry)))
+    entry_update_text (entry, ENTRY_SHOW_TITLE);
 }

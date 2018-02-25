@@ -79,4 +79,7 @@ void            ephy_location_entry_set_add_bookmark_popover   (EphyLocationEntr
 
 GtkPopover     *ephy_location_entry_get_add_bookmark_popover   (EphyLocationEntry *entry);
 
+void            ephy_location_entry_set_title                  (EphyLocationEntry *entry,
+                                                                const char        *title);
+
 G_END_DECLS
