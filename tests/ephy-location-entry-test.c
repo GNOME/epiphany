@@ -95,7 +95,7 @@ test_entry_get_location_empty (void)
   widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
 
   get = ephy_title_widget_get_address (widget);
-  g_assert_cmpstr ("", ==, get);
+  g_assert_null (get);
 }
 
 static void
