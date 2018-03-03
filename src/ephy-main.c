@@ -196,6 +196,10 @@ main (int   argc,
   EphyFileHelpersFlags flags;
   GDesktopAppInfo *desktop_info = NULL;
 
+#if DEVELOPER_MODE
+  g_setenv ("GSETTINGS_SCHEMA_DIR", BUILD_ROOT "/data", FALSE);
+#endif
+
   /* Initialize the i18n stuff */
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
