@@ -40,6 +40,7 @@ libephymain_sources = [
   'prefs-dialog.c',
   'synced-tabs-dialog.c',
   'window-commands.c',
+  compile_schemas,
   enums
 ]
 
