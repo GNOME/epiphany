@@ -1233,7 +1233,7 @@ ephy_migrator (void)
   EphyProfileMigrator m;
 
   /* If after this point there's no profile dir, there's no point in
-   * running anything because Epiphany has never run in this sytem, so
+   * running anything because Epiphany has never run in this system, so
    * exit here. */
   if (!profile_dir_exists ())
     return TRUE;
