@@ -1143,18 +1143,11 @@ sync_tab_title (EphyEmbed  *embed,
                 GParamSpec *pspec,
                 EphyWindow *window)
 {
-  EphyTitleWidget *title_widget;
-  const gchar *title;
-
   if (window->closing)
     return;
 
-  title = ephy_embed_get_title (embed);
   gtk_window_set_title (GTK_WINDOW (window),
-                        title);
-  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
-  if (EPHY_IS_LOCATION_ENTRY (title_widget))
-    ephy_location_entry_set_title (EPHY_LOCATION_ENTRY (title_widget), title);
+                        ephy_embed_get_title (embed));
 }
 
 static gboolean
