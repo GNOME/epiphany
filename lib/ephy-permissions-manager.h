@@ -22,6 +22,7 @@
 #pragma once
 
 #include <glib-object.h>
+#include <jsc/jsc.h>
 
 G_BEGIN_DECLS
 
@@ -57,5 +58,9 @@ GList                  *ephy_permissions_manager_get_permitted_origins (EphyPerm
                                                                         EphyPermissionType      type);
 GList                  *ephy_permissions_manager_get_denied_origins    (EphyPermissionsManager *manager,
                                                                         EphyPermissionType      type);
+
+void                    ephy_permissions_manager_export_to_js_context  (EphyPermissionsManager *manager,
+                                                                        JSCContext             *js_context,
+                                                                        JSCValue               *js_namespace);
 
 G_END_DECLS

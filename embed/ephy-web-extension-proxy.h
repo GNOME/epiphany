@@ -32,33 +32,6 @@ EphyWebExtensionProxy *ephy_web_extension_proxy_new                             
 void                   ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExtensionProxy *web_extension,
                                                                                            guint                  request_id,
                                                                                            gboolean               response);
-void                   ephy_web_extension_proxy_web_page_has_modified_forms               (EphyWebExtensionProxy *web_extension,
-                                                                                           guint64                page_id,
-                                                                                           GCancellable          *cancellable,
-                                                                                           GAsyncReadyCallback    callback,
-                                                                                           gpointer               user_data);
-gboolean               ephy_web_extension_proxy_web_page_has_modified_forms_finish        (EphyWebExtensionProxy *web_extension,
-                                                                                           GAsyncResult          *result,
-                                                                                           GError               **error);
-void                   ephy_web_extension_proxy_get_best_web_app_icon                     (EphyWebExtensionProxy *web_extension,
-                                                                                           guint64                page_id,
-                                                                                           const char            *base_uri,
-                                                                                           GCancellable          *cancellable,
-                                                                                           GAsyncReadyCallback    callback,
-                                                                                           gpointer               user_data);
-gboolean               ephy_web_extension_proxy_get_best_web_app_icon_finish              (EphyWebExtensionProxy *web_extension,
-                                                                                           GAsyncResult          *result,
-                                                                                           char                 **icon_uri,
-                                                                                           char                 **icon_color,
-                                                                                           GError               **error);
-void                   ephy_web_extension_proxy_get_web_app_title                         (EphyWebExtensionProxy *web_extension,
-                                                                                           guint64                page_id,
-                                                                                           GCancellable          *cancellable,
-                                                                                           GAsyncReadyCallback    callback,
-                                                                                           gpointer               user_data);
-char                  *ephy_web_extension_proxy_get_web_app_title_finish                  (EphyWebExtensionProxy *web_extension,
-                                                                                           GAsyncResult          *result,
-                                                                                           GError               **error);
 void                   ephy_web_extension_proxy_history_set_urls                          (EphyWebExtensionProxy *web_extension,
                                                                                            GList                 *urls);
 void                   ephy_web_extension_proxy_history_set_url_thumbnail                 (EphyWebExtensionProxy *web_extension,

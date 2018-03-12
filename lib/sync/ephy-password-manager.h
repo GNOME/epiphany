@@ -23,6 +23,7 @@
 #include "ephy-password-record.h"
 
 #include <glib-object.h>
+#include <jsc/jsc.h>
 #include <libsecret/secret.h>
 
 G_BEGIN_DECLS
@@ -68,5 +69,8 @@ void                 ephy_password_manager_query                    (EphyPasswor
 void                 ephy_password_manager_forget                    (EphyPasswordManager *self,
                                                                       const char          *id);
 void                 ephy_password_manager_forget_all                (EphyPasswordManager *self);
+void                 ephy_password_manager_export_to_js_context      (EphyPasswordManager *self,
+                                                                      JSCContext          *js_context,
+                                                                      JSCValue            *js_namespace);
 
 G_END_DECLS

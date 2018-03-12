@@ -417,3 +417,64 @@ ephy_permissions_manager_get_denied_origins (EphyPermissionsManager *manager,
 {
   return ephy_permissions_manager_get_matching_origins (manager, type, FALSE);
 }
+
+static EphyPermission
+js_permissions_manager_get_permission (EphyPermissionsManager *manager,
+                                       EphyPermissionType      type,
+                                       const char             *origin)
+{
+  return ephy_permissions_manager_get_permission (manager, type, origin);
+}
+
+void
+ephy_permissions_manager_export_to_js_context (EphyPermissionsManager *manager,
+                                               JSCContext             *js_context,
+                                               JSCValue               *js_namespace)
+{
+  JSCClass *js_class;
+  JSCValue *js_enum, *js_enum_value;
+  JSCValue *js_permissions_manager;
+
+  js_class = jsc_context_register_class (js_context, "PermissionsManager", NULL, NULL, NULL);
+  jsc_class_add_method (js_class,
+                        "permission",
+                        G_CALLBACK (js_permissions_manager_get_permission), NULL, NULL,
+                        G_TYPE_INT, 2,
+                        G_TYPE_INT, G_TYPE_STRING);
+
+  js_permissions_manager = jsc_value_new_object (js_context, manager, js_class);
+  jsc_value_object_set_property (js_namespace, "permissionsManager", js_permissions_manager);
+  g_object_unref (js_permissions_manager);
+
+  js_enum = jsc_value_new_object (js_context, NULL, NULL);
+  js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_UNDECIDED);
+  jsc_value_object_set_property (js_enum, "UNDECIDED", js_enum_value);
+  g_object_unref (js_enum_value);
+  js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_DENY);
+  jsc_value_object_set_property (js_enum, "DENY", js_enum_value);
+  g_object_unref (js_enum_value);
+  js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_PERMIT);
+  jsc_value_object_set_property (js_enum, "PERMIT", js_enum_value);
+  g_object_unref (js_enum_value);
+  jsc_value_object_set_property (js_namespace, "Permission", js_enum);
+  g_object_unref (js_enum);
+
+  js_enum = jsc_value_new_object (js_context, NULL, NULL);
+  js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_TYPE_SHOW_NOTIFICATIONS);
+  jsc_value_object_set_property (js_enum, "SHOW_NOTIFICATIONS", js_enum_value);
+  g_object_unref (js_enum_value);
+  js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_TYPE_SAVE_PASSWORD);
+  jsc_value_object_set_property (js_enum, "SAVE_PASSWORD", js_enum_value);
+  g_object_unref (js_enum_value);
+  js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_TYPE_ACCESS_LOCATION);
+  jsc_value_object_set_property (js_enum, "ACCESS_LOCATION", js_enum_value);
+  g_object_unref (js_enum_value);
+  js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_TYPE_ACCESS_MICROPHONE);
+  jsc_value_object_set_property (js_enum, "ACCESS_MICROPHONE", js_enum_value);
+  g_object_unref (js_enum_value);
+  js_enum_value = jsc_value_new_number (js_context, EPHY_PERMISSION_TYPE_ACCESS_WEBCAM);
+  jsc_value_object_set_property (js_enum, "ACCESS_WEBCAM", js_enum_value);
+  g_object_unref (js_enum_value);
+  jsc_value_object_set_property (js_namespace, "PermissionType", js_enum);
+  g_object_unref (js_enum);
+}

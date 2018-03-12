@@ -203,7 +203,7 @@ web_extension_form_auth_data_message_received_cb (WebKitUserContentManager *mana
   GVariant *variant;
   gchar *message_str;
 
-  message_str = ephy_embed_utils_get_js_result_as_string (message);
+  message_str = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
   variant = g_variant_parse (G_VARIANT_TYPE ("(utss)"), message_str, NULL, NULL, NULL);
   g_free (message_str);
 
@@ -223,7 +223,7 @@ web_extension_sensitive_form_focused_message_received_cb (WebKitUserContentManag
   GVariant *variant;
   char *message_str;
 
-  message_str = ephy_embed_utils_get_js_result_as_string (message);
+  message_str = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
   variant = g_variant_parse (G_VARIANT_TYPE ("(tb)"), message_str, NULL, NULL, NULL);
   g_free (message_str);
 
@@ -317,7 +317,7 @@ web_extension_overview_message_received_cb (WebKitUserContentManager *manager,
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   char *url_to_remove;
 
-  url_to_remove = ephy_embed_utils_get_js_result_as_string (message);
+  url_to_remove = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
 
   priv->hiding_overview_item++;
   ephy_history_service_set_url_hidden (priv->global_history_service,
@@ -341,7 +341,7 @@ web_extension_tls_error_page_message_received_cb (WebKitUserContentManager *mana
 {
   guint64 page_id;
 
-  page_id = ephy_embed_utils_get_js_result_as_number (message);
+  page_id = jsc_value_to_double (webkit_javascript_result_get_js_value (message));
   g_signal_emit (shell, signals[ALLOW_TLS_CERTIFICATE], 0, page_id);
 }
 
@@ -352,7 +352,7 @@ web_extension_unsafe_browsing_error_page_message_received_cb (WebKitUserContentM
 {
   guint64 page_id;
 
-  page_id = ephy_embed_utils_get_js_result_as_number (message);
+  page_id = jsc_value_to_double (webkit_javascript_result_get_js_value (message));
   g_signal_emit (shell, signals[ALLOW_UNSAFE_BROWSING], 0, page_id);
 }
 
@@ -363,7 +363,7 @@ web_extension_about_apps_message_received_cb (WebKitUserContentManager *manager,
 {
   char *app_id;
 
-  app_id = ephy_embed_utils_get_js_result_as_string (message);
+  app_id = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
   ephy_web_application_delete (app_id);
   g_free (app_id);
 }

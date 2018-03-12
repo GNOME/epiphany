@@ -463,7 +463,7 @@ sync_message_from_fxa_content_cb (WebKitUserContentManager *manager,
   char *error_msg = NULL;
   gboolean is_error = FALSE;
 
-  message = ephy_embed_utils_get_js_result_as_string (result);
+  message = jsc_value_to_string (webkit_javascript_result_get_js_value (result));
   if (!message) {
     g_warning ("Failed to get JavaScript result as string");
     is_error = TRUE;
