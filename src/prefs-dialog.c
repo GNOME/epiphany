@@ -76,7 +76,6 @@ struct _PrefsDialog {
   GtkWidget *custom_homepage_entry;
   GtkWidget *download_button_hbox;
   GtkWidget *download_button_label;
-  GtkWidget *automatic_downloads_checkbutton;
   GtkWidget *search_box;
   GtkWidget *session_box;
   GtkWidget *restore_session_checkbutton;
@@ -730,7 +729,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, blank_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_entry);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, automatic_downloads_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, session_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, restore_session_checkbutton);
@@ -1710,11 +1708,6 @@ setup_general_page (PrefsDialog *dialog)
                     G_CALLBACK (custom_homepage_entry_icon_released),
                     NULL);
 
-  g_settings_bind (settings,
-                   EPHY_PREFS_AUTO_DOWNLOADS,
-                   dialog->automatic_downloads_checkbutton,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
   g_settings_bind_with_mapping (settings,
                                 EPHY_PREFS_RESTORE_SESSION_POLICY,
                                 dialog->restore_session_checkbutton,
@@ -2006,8 +1999,6 @@ prefs_dialog_init (PrefsDialog *dialog)
   gtk_widget_set_visible (dialog->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->search_box,
-                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (dialog->automatic_downloads_checkbutton,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);

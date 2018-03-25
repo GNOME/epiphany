@@ -451,10 +451,6 @@ ephy_download_do_download_action (EphyDownload          *download,
       LOG ("ephy_download_do_download_action: none");
       ret = TRUE;
       break;
-    case EPHY_DOWNLOAD_ACTION_DO_NOT_AUTO_OPEN:
-      LOG ("ephy_download_do_download_action: do_not_auto_open");
-      ret = TRUE;
-      break;
     default:
       g_assert_not_reached ();
   }
@@ -520,9 +516,8 @@ ephy_download_class_init (EphyDownloadClass *klass)
   /**
    * EphyDownload::action:
    *
-   * Action to take when the download finishes and "Automatically download and
-   * open files" is enabled, or when ephy_download_do_download_action () is
-   * called.
+   * Action to take when the download finishes or when
+   * ephy_download_do_download_action () is called.
    */
   obj_properties[PROP_ACTION] =
     g_param_spec_enum ("action",
@@ -726,11 +721,7 @@ download_finished_cb (WebKitDownload *wk_download,
 {
   download->finished = TRUE;
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_MAIN, EPHY_PREFS_AUTO_DOWNLOADS) &&
-      download->action == EPHY_DOWNLOAD_ACTION_NONE)
-    ephy_download_do_download_action (download, EPHY_DOWNLOAD_ACTION_OPEN, download->start_time);
-  else
-    ephy_download_do_download_action (download, download->action, download->start_time);
+  ephy_download_do_download_action (download, download->action, download->start_time);
 
   if (download->show_notification)
     display_download_finished_notification (wk_download);

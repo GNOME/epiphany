@@ -133,7 +133,6 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_HOMEPAGE_URL                       "homepage-url"
 #define EPHY_PREFS_DEPRECATED_USER_AGENT              "user-agent"
 #define EPHY_PREFS_NEW_WINDOWS_IN_TABS                "new-windows-in-tabs"
-#define EPHY_PREFS_AUTO_DOWNLOADS                     "automatic-downloads"
 #define EPHY_PREFS_WARN_ON_CLOSE_UNSUBMITTED_DATA     "warn-on-close-unsubmitted-data"
 #define EPHY_PREFS_DEPRECATED_REMEMBER_PASSWORDS      "remember-passwords"
 #define EPHY_PREFS_KEYWORD_SEARCH_URL                 "keyword-search-url"

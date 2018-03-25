@@ -148,7 +148,6 @@ start_retrieving_filter_file (EphyFiltersManager *manager,
   char *path;
 
   download = ephy_download_new_for_uri (filter_url);
-  ephy_download_set_action (download, EPHY_DOWNLOAD_ACTION_DO_NOT_AUTO_OPEN);
   path = g_file_get_uri (destination);
   ephy_download_set_destination_uri (download, path);
   ephy_download_disable_desktop_notification (download);
