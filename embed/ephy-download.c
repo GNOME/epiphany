@@ -449,6 +449,10 @@ ephy_download_do_download_action (EphyDownload          *download,
       LOG ("ephy_download_do_download_action: none");
       ret = TRUE;
       break;
+    case EPHY_DOWNLOAD_ACTION_DO_NOT_AUTO_OPEN:
+      LOG ("ephy_download_do_download_action: do_not_auto_open");
+      ret = TRUE;
+      break;
     default:
       g_assert_not_reached ();
   }
