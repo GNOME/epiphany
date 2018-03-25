@@ -135,8 +135,12 @@ ephy_profile_utils_do_migration (const char *profile_directory, int test_to_run,
 
   argv[i++] = NULL;
 
+#if DEVELOPER_MODE
+  argv[0] = BUILD_ROOT "/src/" EPHY_PROFILE_MIGRATOR;
+#else
   if (debug)
     argv[0] = BUILD_ROOT "/src/" EPHY_PROFILE_MIGRATOR;
+#endif
 
   ret = g_spawn_sync (NULL, (char **)argv, envp, G_SPAWN_SEARCH_PATH,
                       NULL, NULL, NULL, NULL,
