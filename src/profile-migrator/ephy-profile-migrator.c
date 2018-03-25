@@ -594,6 +594,9 @@ migrate_settings (void)
   g_settings_sync ();
 }
 
+/* Originally migrator #17, but moved to spot #27 because it uses the
+ * bookmarks manager, which requires that we have already run #24.
+ */
 static void
 migrate_search_engines (void)
 {
@@ -1214,7 +1217,7 @@ const EphyProfileMigrator migrators[] = {
   /* 14 */ migrate_initial_state,
   /* 15 */ migrate_permissions,
   /* 16 */ migrate_settings,
-  /* 17 */ migrate_search_engines,
+  /* 17 */ migrate_nothing,
   /* 18 */ migrate_icon_database,
   /* 19 */ migrate_passwords_to_firefox_sync_passwords,
   /* 20 */ migrate_history_to_firefox_sync_history,
@@ -1223,7 +1226,8 @@ const EphyProfileMigrator migrators[] = {
   /* 23 */ migrate_sync_device_info,
   /* 24 */ migrate_bookmarks_timestamp,
   /* 25 */ migrate_passwords_timestamp,
-  /* 26 */ migrate_nothing
+  /* 26 */ migrate_nothing,
+  /* 27 */ migrate_search_engines
 };
 
 static gboolean
