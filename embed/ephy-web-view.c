@@ -595,20 +595,6 @@ ephy_web_view_is_history_frozen (EphyWebView *view)
   return view->history_frozen;
 }
 
-
-static void
-ephy_web_view_clear_history (EphyWebView *view)
-{
-  /* TODO: WebKitBackForwardList is read-only in WebKit2 */
-}
-
-static void
-ephy_web_view_history_cleared_cb (EphyHistoryService *history_service,
-                                  EphyWebView        *view)
-{
-  ephy_web_view_clear_history (view);
-}
-
 static void
 got_snapshot_path_cb (EphySnapshotService *service,
                       GAsyncResult        *result,
@@ -934,10 +920,6 @@ ephy_web_view_dispose (GObject *object)
     ephy_option_menu_popdown (EPHY_OPTION_MENU (view->option_menu));
     view->option_menu = NULL;
   }
-
-  g_signal_handlers_disconnect_by_func (view->history_service,
-                                        ephy_web_view_history_cleared_cb,
-                                        EPHY_WEB_VIEW (object));
 
   g_clear_object (&view->file_monitor);
 
@@ -2651,10 +2633,6 @@ ephy_web_view_init (EphyWebView *web_view)
 
   web_view->history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   web_view->history_service_cancellable = g_cancellable_new ();
-
-  g_signal_connect_object (web_view->history_service,
-                           "cleared", G_CALLBACK (ephy_web_view_history_cleared_cb),
-                           web_view, 0);
 
   g_signal_connect (web_view, "decide-policy",
                     G_CALLBACK (decide_policy_cb),
