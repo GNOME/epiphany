@@ -111,6 +111,7 @@ struct _EphyWebView {
   GCancellable *history_service_cancellable;
 
   guint snapshot_timeout_id;
+  char *pending_snapshot_uri;
 
   EphyHistoryPageVisitType visit_type;
 
@@ -628,21 +629,71 @@ got_snapshot_path_cb (EphySnapshotService *service,
   g_free (url);
 }
 
-static gboolean
-web_view_check_snapshot (WebKitWebView *web_view)
+static void
+take_snapshot (EphyWebView *view)
 {
-  EphyWebView *view = EPHY_WEB_VIEW (web_view);
   EphySnapshotService *service = ephy_snapshot_service_get_default ();
-  const char *url = webkit_web_view_get_uri (web_view);
+
+  ephy_snapshot_service_get_snapshot_path_async (service, WEBKIT_WEB_VIEW (view), NULL,
+                                                 (GAsyncReadyCallback)got_snapshot_path_cb,
+                                                 g_strdup (view->pending_snapshot_uri));
+}
+
+static void
+history_service_query_urls_cb (EphyHistoryService *service,
+                               gboolean            success,
+                               GList              *urls,
+                               EphyWebView        *view)
+{
+  const char *url = webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view));
+
+  if (!success)
+    goto out;
+
+  /* Have we already started a new load? */
+  if (strcmp (url, view->pending_snapshot_uri) != 0)
+    goto out;
+
+  for (GList *l = urls; l; l = g_list_next (l)) {
+    EphyHistoryURL *history_url = l->data;
+
+    /* Take snapshot if this URL is one of the top history results. */
+    if (strcmp (history_url->url, view->pending_snapshot_uri) == 0) {
+      take_snapshot (view);
+      break;
+    }
+  }
+
+out:
+  g_clear_pointer (&view->pending_snapshot_uri, g_free);
+  g_object_unref (view);
+}
+
+static gboolean
+maybe_take_snapshot (EphyWebView *view)
+{
+  EphyEmbedShell *shell;
+  EphyHistoryService *service;
+  EphyHistoryQuery *query;
 
   view->snapshot_timeout_id = 0;
 
   if (view->error_page != EPHY_WEB_VIEW_ERROR_PAGE_NONE)
     return FALSE;
 
-  ephy_snapshot_service_get_snapshot_path_async (service, web_view, NULL,
-                                                 (GAsyncReadyCallback)got_snapshot_path_cb,
-                                                 g_strdup (url));
+  shell = ephy_embed_shell_get_default ();
+  service = ephy_embed_shell_get_global_history_service (shell);
+
+  /* We want to save snapshots for just a couple more pages than are present
+   * in the overview, so new snapshots are immediately available when the user
+   * deletes a couple pages from the overview. Let's say five more.
+   */
+  query = ephy_history_query_new_for_overview ();
+  query->limit += 5;
+  ephy_history_service_query_urls (service, query, NULL,
+                                   (EphyHistoryJobCallback)history_service_query_urls_cb,
+                                   g_object_ref (view));
+  ephy_history_query_free (query);
 
   return FALSE;
 }
@@ -921,6 +972,7 @@ ephy_web_view_finalize (GObject *object)
   g_free (view->link_message);
   g_free (view->loading_message);
   g_free (view->tls_error_failing_uri);
+  g_free (view->pending_snapshot_uri);
 
   G_OBJECT_CLASS (ephy_web_view_parent_class)->finalize (object);
 }
@@ -1821,8 +1873,10 @@ load_changed_cb (WebKitWebView  *web_view,
          */
         if (view->snapshot_timeout_id == 0) {
           view->snapshot_timeout_id = g_timeout_add_seconds_full (G_PRIORITY_LOW, 1,
-                                                                  (GSourceFunc)web_view_check_snapshot,
+                                                                  (GSourceFunc)maybe_take_snapshot,
                                                                   web_view, NULL);
+          g_free (view->pending_snapshot_uri);
+          view->pending_snapshot_uri = g_strdup (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (view)));
         }
       }
 
