@@ -33,9 +33,10 @@
 #include "ephy-sync-utils.h"
 #include "ephy-uri-helpers.h"
 #include "ephy-uri-tester.h"
-#include "ephy-web-overview.h"
+#include "ephy-web-overview-model.h"
 
 #include <gio/gio.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <jsc/jsc.h>
 #include <libsoup/soup.h>
@@ -393,19 +394,6 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
   g_object_unref (js_context);
 }
 
-static void
-web_page_uri_changed (WebKitWebPage    *web_page,
-                      GParamSpec       *param_spec,
-                      EphyWebExtension *extension)
-{
-  EphyWebOverview *overview = NULL;
-
-  if (g_strcmp0 (webkit_web_page_get_uri (web_page), "ephy-about:overview") == 0)
-    overview = ephy_web_overview_new (web_page, extension->overview_model);
-
-  g_object_set_data_full (G_OBJECT (web_page), "ephy-web-overview", overview, g_object_unref);
-}
-
 static gboolean
 web_page_context_menu (WebKitWebPage          *web_page,
                        WebKitContextMenu      *context_menu,
@@ -505,9 +493,6 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
   g_signal_connect (web_page, "send-request",
                     G_CALLBACK (web_page_send_request),
                     extension);
-  g_signal_connect (web_page, "notify::uri",
-                    G_CALLBACK (web_page_uri_changed),
-                    extension);
   g_signal_connect (web_page, "context-menu",
                     G_CALLBACK (web_page_context_menu),
                     extension);
@@ -583,7 +568,7 @@ handle_method_call (GDBusConnection       *connection,
       const char *path;
 
       g_variant_get (parameters, "(&s&s)", &url, &path);
-      ephy_web_overview_model_set_url_thumbnail (extension->overview_model, url, path);
+      ephy_web_overview_model_set_url_thumbnail (extension->overview_model, url, path, TRUE);
     }
     g_dbus_method_invocation_return_value (invocation, NULL);
   } else if (g_strcmp0 (method_name, "HistorySetURLTitle") == 0) {
@@ -808,6 +793,12 @@ js_log (const char *message)
   LOG ("%s", message);
 }
 
+static char *
+js_gettext (const char *message)
+{
+  return g_strdup (g_dgettext (GETTEXT_PACKAGE, message));
+}
+
 static void
 js_auto_fill (JSCValue   *js_element,
               const char *value)
@@ -882,6 +873,39 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                         G_TYPE_STRING);
   jsc_value_object_set_property (js_ephy, "log", js_function);
   g_object_unref (js_function);
+
+  js_function = jsc_value_new_function (js_context,
+                                        "gettext",
+                                        G_CALLBACK (js_gettext), NULL, NULL,
+                                        G_TYPE_STRING, 1,
+                                        G_TYPE_STRING);
+  jsc_value_object_set_property (js_ephy, "_", js_function);
+  g_object_unref (js_function);
+
+  if (g_strcmp0 (webkit_web_page_get_uri (page), "ephy-about:overview") == 0) {
+    JSCValue *js_overview;
+    JSCValue *js_overview_ctor;
+    JSCValue *jsc_overview_model;
+
+    bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/overview.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+    data = g_bytes_get_data (bytes, &data_size);
+    result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/overview.js");
+    g_bytes_unref (bytes);
+    g_object_unref (result);
+
+    jsc_overview_model = ephy_web_overview_model_export_to_js_context (extension->overview_model,
+                                                                       js_context);
+
+    js_overview_ctor = jsc_value_object_get_property (js_ephy, "Overview");
+    js_overview = jsc_value_constructor_call (js_overview_ctor,
+                                              JSC_TYPE_VALUE, jsc_overview_model,
+                                              G_TYPE_NONE);
+    jsc_value_object_set_property (js_ephy, "overview", js_overview);
+
+    g_object_unref (js_overview);
+    g_object_unref (jsc_overview_model);
+    g_object_unref (js_overview_ctor);
+  }
 
   ephy_permissions_manager_export_to_js_context (extension->permissions_manager,
                                                  js_context,

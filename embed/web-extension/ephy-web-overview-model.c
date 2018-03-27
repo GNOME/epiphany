@@ -28,19 +28,13 @@ struct _EphyWebOverviewModel {
 
   GList *items;
   GHashTable *thumbnails;
+
+  GHashTable *urls_listeners;
+  GHashTable *thumbnail_listeners;
+  GHashTable *title_listeners;
 };
 
 G_DEFINE_TYPE (EphyWebOverviewModel, ephy_web_overview_model, G_TYPE_OBJECT)
-
-enum {
-  URLS_CHANGED,
-  THUMBNAIL_CHANGED,
-  TITLE_CHANGED,
-
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
 
 static void
 ephy_web_overview_model_dispose (GObject *object)
@@ -57,6 +51,10 @@ ephy_web_overview_model_dispose (GObject *object)
     model->thumbnails = NULL;
   }
 
+  g_clear_pointer (&model->urls_listeners, g_hash_table_destroy);
+  g_clear_pointer (&model->thumbnail_listeners, g_hash_table_destroy);
+  g_clear_pointer (&model->title_listeners, g_hash_table_destroy);
+
   G_OBJECT_CLASS (ephy_web_overview_model_parent_class)->dispose (object);
 }
 
@@ -66,31 +64,6 @@ ephy_web_overview_model_class_init (EphyWebOverviewModelClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ephy_web_overview_model_dispose;
-
-  signals[URLS_CHANGED] =
-    g_signal_new ("urls-changed",
-                  EPHY_TYPE_WEB_OVERVIEW_MODEL,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
-
-  signals[THUMBNAIL_CHANGED] =
-    g_signal_new ("thumbnail-changed",
-                  EPHY_TYPE_WEB_OVERVIEW_MODEL,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_STRING,
-                  G_TYPE_STRING);
-
-  signals[TITLE_CHANGED] =
-    g_signal_new ("title-changed",
-                  EPHY_TYPE_WEB_OVERVIEW_MODEL,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_STRING,
-                  G_TYPE_STRING);
 }
 
 static void
@@ -100,6 +73,112 @@ ephy_web_overview_model_init (EphyWebOverviewModel *model)
                                              g_str_equal,
                                              (GDestroyNotify)g_free,
                                              (GDestroyNotify)g_free);
+  model->urls_listeners = g_hash_table_new_full (g_direct_hash,
+                                                 g_direct_equal,
+                                                 g_object_unref,
+                                                 NULL);
+  model->thumbnail_listeners = g_hash_table_new_full (g_direct_hash,
+                                                      g_direct_equal,
+                                                      g_object_unref,
+                                                      NULL);
+  model->title_listeners = g_hash_table_new_full (g_direct_hash,
+                                                  g_direct_equal,
+                                                  g_object_unref,
+                                                  NULL);
+}
+
+static GPtrArray *
+ephy_web_overview_model_urls_to_js_value (EphyWebOverviewModel *model,
+                                          JSCContext           *js_context)
+{
+  GPtrArray *urls;
+  GList *l;
+
+  urls = g_ptr_array_new_with_free_func (g_object_unref);
+  for (l = model->items; l; l = g_list_next (l)) {
+    EphyWebOverviewModelItem *item = (EphyWebOverviewModelItem *)l->data;
+    JSCValue *js_item, *value;
+
+    js_item = jsc_value_new_object (js_context, NULL, NULL);
+    value = jsc_value_new_string (js_context, item->url);
+    jsc_value_object_set_property (js_item, "url", value);
+    g_object_unref (value);
+
+    value = jsc_value_new_string (js_context, item->title);
+    jsc_value_object_set_property (js_item, "title", value);
+    g_object_unref (value);
+
+    g_ptr_array_add (urls, js_item);
+  }
+
+  return urls;
+}
+
+static void
+ephy_web_overview_model_notify_urls_changed (EphyWebOverviewModel *model)
+{
+  GHashTableIter iter;
+  gpointer key;
+  GPtrArray *urls = NULL;
+
+  g_hash_table_iter_init (&iter, model->urls_listeners);
+  while (g_hash_table_iter_next (&iter, &key, NULL)) {
+    JSCValue *value;
+
+    value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
+    if (value && jsc_value_is_function (value)) {
+      if (!urls)
+        urls = ephy_web_overview_model_urls_to_js_value (model, jsc_value_get_context (value));
+      jsc_value_function_call (value, G_TYPE_PTR_ARRAY, urls, G_TYPE_NONE);
+    }
+    if (value)
+      g_object_unref (value);
+  }
+
+  if (urls)
+    g_ptr_array_unref (urls);
+}
+
+static void
+ephy_web_overview_model_notify_thumbnail_changed (EphyWebOverviewModel *model,
+                                                  const char           *url,
+                                                  const char           *path)
+{
+  GHashTableIter iter;
+  gpointer key;
+
+  g_hash_table_iter_init (&iter, model->thumbnail_listeners);
+  while (g_hash_table_iter_next (&iter, &key, NULL)) {
+    JSCValue *value;
+
+    value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
+    if (value) {
+      if (jsc_value_is_function (value))
+        jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, path, G_TYPE_NONE);
+      g_object_unref (value);
+    }
+  }
+}
+
+static void
+ephy_web_overview_model_notify_title_changed (EphyWebOverviewModel *model,
+                                              const char           *url,
+                                              const char           *title)
+{
+  GHashTableIter iter;
+  gpointer key;
+
+  g_hash_table_iter_init (&iter, model->title_listeners);
+  while (g_hash_table_iter_next (&iter, &key, NULL)) {
+    JSCValue *value;
+
+    value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
+    if (value) {
+      if (jsc_value_is_function (value))
+        jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, title, G_TYPE_NONE);
+      g_object_unref (value);
+    }
+  }
 }
 
 EphyWebOverviewModel *
@@ -116,41 +195,26 @@ ephy_web_overview_model_set_urls (EphyWebOverviewModel *model,
 
   g_list_free_full (model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
   model->items = urls;
-  g_signal_emit (model, signals[URLS_CHANGED], 0);
-}
-
-GList *
-ephy_web_overview_model_get_urls (EphyWebOverviewModel *model)
-{
-  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
-
-  return model->items;
+  ephy_web_overview_model_notify_urls_changed (model);
 }
 
 void
 ephy_web_overview_model_set_url_thumbnail (EphyWebOverviewModel *model,
                                            const char           *url,
-                                           const char           *path)
+                                           const char           *path,
+                                           gboolean              notify)
 {
   const char *thumbnail_path;
 
   g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
 
-  thumbnail_path = ephy_web_overview_model_get_url_thumbnail (model, url);
+  thumbnail_path = g_hash_table_lookup (model->thumbnails, url);
   if (g_strcmp0 (thumbnail_path, path) == 0)
     return;
 
   g_hash_table_insert (model->thumbnails, g_strdup (url), g_strdup (path));
-  g_signal_emit (model, signals[THUMBNAIL_CHANGED], 0, url, path);
-}
-
-const char *
-ephy_web_overview_model_get_url_thumbnail (EphyWebOverviewModel *model,
-                                           const char           *url)
-{
-  g_assert (EPHY_IS_WEB_OVERVIEW_MODEL (model));
-
-  return g_hash_table_lookup (model->thumbnails, url);
+  if (notify)
+    ephy_web_overview_model_notify_thumbnail_changed (model, url, path);
 }
 
 void
@@ -178,7 +242,7 @@ ephy_web_overview_model_set_url_title (EphyWebOverviewModel *model,
   }
 
   if (changed)
-    g_signal_emit (model, signals[TITLE_CHANGED], 0, url, title);
+    ephy_web_overview_model_notify_title_changed (model, url, title);
 }
 
 void
@@ -206,7 +270,7 @@ ephy_web_overview_model_delete_url (EphyWebOverviewModel *model,
   }
 
   if (changed)
-    g_signal_emit (model, signals[URLS_CHANGED], 0);
+    ephy_web_overview_model_notify_urls_changed (model);
 }
 
 void
@@ -236,7 +300,7 @@ ephy_web_overview_model_delete_host (EphyWebOverviewModel *model,
   }
 
   if (changed)
-    g_signal_emit (model, signals[URLS_CHANGED], 0);
+    ephy_web_overview_model_notify_urls_changed (model);
 }
 
 void
@@ -249,7 +313,7 @@ ephy_web_overview_model_clear (EphyWebOverviewModel *model)
 
   g_list_free_full (model->items, (GDestroyNotify)ephy_web_overview_model_item_free);
   model->items = NULL;
-  g_signal_emit (model, signals[URLS_CHANGED], 0);
+  ephy_web_overview_model_notify_urls_changed (model);
 }
 
 EphyWebOverviewModelItem *
@@ -275,4 +339,131 @@ ephy_web_overview_model_item_free (EphyWebOverviewModelItem *item)
   g_free (item->title);
 
   g_slice_free (EphyWebOverviewModelItem, item);
+}
+
+static void
+js_web_overview_model_set_thumbnail (EphyWebOverviewModel *model,
+                                     const char           *url,
+                                     const char           *path)
+{
+  ephy_web_overview_model_set_url_thumbnail (model, url, path, FALSE);
+}
+
+static char *
+js_web_overview_model_get_thumbnail (EphyWebOverviewModel *model,
+                                     const char           *url)
+{
+  return g_strdup (g_hash_table_lookup (model->thumbnails, url));
+}
+
+static GPtrArray *
+js_web_overview_model_get_urls (EphyWebOverviewModel *model)
+{
+  return ephy_web_overview_model_urls_to_js_value (model, jsc_context_get_current ());
+}
+
+static void
+js_event_listener_destroyed (JSCWeakValue *weak_value,
+                             GHashTable   *listeners)
+{
+  g_hash_table_remove (listeners, weak_value);
+}
+
+static void
+js_web_overview_model_add_urls_changed_event_listener (EphyWebOverviewModel *model,
+                                                       JSCValue             *js_function)
+{
+  JSCWeakValue *weak_value;
+
+  if (!jsc_value_is_function (js_function)) {
+    jsc_context_throw (jsc_context_get_current (), "Invalid type passed to onurlschanged");
+    return;
+  }
+
+  weak_value = jsc_weak_value_new (js_function);
+  g_signal_connect (weak_value, "cleared",
+                    G_CALLBACK (js_event_listener_destroyed),
+                    model->urls_listeners);
+  g_hash_table_add (model->urls_listeners, weak_value);
+}
+
+static void
+js_web_overview_model_add_thumbnail_changed_event_listener (EphyWebOverviewModel *model,
+                                                            JSCValue             *js_function)
+{
+  JSCWeakValue *weak_value;
+
+  if (!jsc_value_is_function (js_function)) {
+    jsc_context_throw (jsc_context_get_current (), "Invalid type passed to onthumbnailchanged");
+    return;
+  }
+
+  weak_value = jsc_weak_value_new (js_function);
+  g_signal_connect (weak_value, "cleared",
+                    G_CALLBACK (js_event_listener_destroyed),
+                    model->thumbnail_listeners);
+  g_hash_table_add (model->thumbnail_listeners, weak_value);
+}
+
+static void
+js_web_overview_model_add_title_changed_event_listener (EphyWebOverviewModel *model,
+                                                        JSCValue             *js_function)
+{
+  JSCWeakValue *weak_value;
+
+  if (!jsc_value_is_function (js_function)) {
+    jsc_context_throw (jsc_context_get_current (), "Invalid type passed to ontitlechanged");
+    return;
+  }
+
+  weak_value = jsc_weak_value_new (js_function);
+  g_signal_connect (weak_value, "cleared",
+                    G_CALLBACK (js_event_listener_destroyed),
+                    model->title_listeners);
+  g_hash_table_add (model->title_listeners, weak_value);
+}
+
+JSCValue *
+ephy_web_overview_model_export_to_js_context (EphyWebOverviewModel *model,
+                                              JSCContext           *js_context)
+{
+  JSCClass *js_class;
+
+  js_class = jsc_context_register_class (js_context, "OverviewModel", NULL, NULL, NULL);
+  jsc_class_add_method (js_class,
+                        "setThumbnail",
+                        G_CALLBACK (js_web_overview_model_set_thumbnail), NULL, NULL,
+                        G_TYPE_NONE, 2,
+                        G_TYPE_STRING, G_TYPE_STRING);
+  jsc_class_add_method (js_class,
+                        "getThumbnail",
+                        G_CALLBACK (js_web_overview_model_get_thumbnail), NULL, NULL,
+                        G_TYPE_STRING, 1,
+                        G_TYPE_STRING);
+  jsc_class_add_property (js_class,
+                          "urls",
+                          G_TYPE_PTR_ARRAY,
+                          G_CALLBACK (js_web_overview_model_get_urls),
+                          NULL,
+                          NULL, NULL);
+  jsc_class_add_property (js_class,
+                          "onurlschanged",
+                          JSC_TYPE_VALUE,
+                          NULL,
+                          G_CALLBACK (js_web_overview_model_add_urls_changed_event_listener),
+                          NULL, NULL);
+  jsc_class_add_property (js_class,
+                          "onthumbnailchanged",
+                          JSC_TYPE_VALUE,
+                          NULL,
+                          G_CALLBACK (js_web_overview_model_add_thumbnail_changed_event_listener),
+                          NULL, NULL);
+  jsc_class_add_property (js_class,
+                          "ontitlechanged",
+                          JSC_TYPE_VALUE,
+                          NULL,
+                          G_CALLBACK (js_web_overview_model_add_title_changed_event_listener),
+                          NULL, NULL);
+
+  return jsc_value_new_object (js_context, model, js_class);
 }

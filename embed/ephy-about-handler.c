@@ -437,22 +437,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                           "  <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n"
                           "  <meta name=\"viewport\" content=\"width=device-width\">"
                           "  <link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">\n"
-                          "  <script>\n"
-                          "    document.onkeypress = function listenKeypress(event) {\n"
-                          "      // Remove from overview when Del is pressed\n"
-                          "      if (event.which == 127) {\n"
-                          "        var focused = document.activeElement;\n"
-                          "        if (focused.className == \"overview-item\") {\n"
-                          "          removeFromOverview(focused, event);\n"
-                          "        }\n"
-                          "      }\n"
-                          "    }\n"
-                          "    function removeFromOverview(elem, event) {\n"
-                          "      event.preventDefault();\n"
-                          "      elem.className +=\" overview-removed \";\n"
-                          "      window.webkit.messageHandlers.overview.postMessage(elem.href);\n"
-                          "    }\n"
-                          "  </script>\n"
+                          "  <script> </script>\n"
                           "</head>\n"
                           "<body>\n",
                           lang, lang,
@@ -468,7 +453,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
                                             128,
                                             0);
     g_string_append_printf (data_str,
-                            "  <div class=\"overview-empty\">\n"
+                            "  <div id=\"overview\" class=\"overview-empty\">\n"
                             "    <img src=\"file://%s\"/>\n"
                             "    <div><h1>%s</h1></div>\n"
                             "    <div><p>%s</p></div>\n"
@@ -498,7 +483,7 @@ history_service_query_urls_cb (EphyHistoryService     *history,
 
     g_string_append_printf (data_str,
                             "<a class=\"overview-item\" title=\"%s\" href=\"%s\">"
-                            "  <div class=\"overview-close-button\" onclick=\"removeFromOverview(this.parentNode, event)\" title=\"%s\">&#10006;</div>"
+                            "  <div class=\"overview-close-button\" title=\"%s\">&#10006;</div>"
                             "  <span class=\"overview-thumbnail\"%s></span>"
                             "  <span class=\"overview-title\">%s</span>"
                             "</a>",

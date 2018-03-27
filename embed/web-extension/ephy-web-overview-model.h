@@ -21,6 +21,7 @@
 #pragma once
 
 #include <glib-object.h>
+#include <jsc/jsc.h>
 
 G_BEGIN_DECLS
 
@@ -31,12 +32,10 @@ G_DECLARE_FINAL_TYPE (EphyWebOverviewModel, ephy_web_overview_model, EPHY, WEB_O
 EphyWebOverviewModel *ephy_web_overview_model_new               (void);
 void                  ephy_web_overview_model_set_urls          (EphyWebOverviewModel *model,
                                                                  GList                *urls);
-GList                *ephy_web_overview_model_get_urls          (EphyWebOverviewModel *model);
 void                  ephy_web_overview_model_set_url_thumbnail (EphyWebOverviewModel *model,
                                                                  const char           *url,
-                                                                 const char           *path);
-const char           *ephy_web_overview_model_get_url_thumbnail (EphyWebOverviewModel *model,
-                                                                 const char           *url);
+                                                                 const char           *path,
+                                                                 gboolean              notify);
 void                  ephy_web_overview_model_set_url_title     (EphyWebOverviewModel *model,
                                                                  const char           *url,
                                                                  const char           *title);
@@ -57,5 +56,8 @@ struct _EphyWebOverviewModelItem
 EphyWebOverviewModelItem *ephy_web_overview_model_item_new  (const char               *url,
                                                              const char               *title);
 void                      ephy_web_overview_model_item_free (EphyWebOverviewModelItem *item);
+
+JSCValue *ephy_web_overview_model_export_to_js_context  (EphyWebOverviewModel *model,
+                                                         JSCContext           *js_context);
 
 G_END_DECLS

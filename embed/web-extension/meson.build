@@ -9,7 +9,6 @@ web_extension_sources = [
   'ephy-uri-tester.c',
   'ephy-web-extension.c',
   'ephy-web-extension-main.c',
-  'ephy-web-overview.c',
   'ephy-web-overview-model.c',
   resources
 ]

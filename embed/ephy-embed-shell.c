@@ -49,7 +49,6 @@
 
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
-#define OVERVIEW_RELOAD_DELAY 500
 
 typedef struct {
   WebKitWebContext *web_context;
@@ -63,8 +62,6 @@ typedef struct {
   EphyDownloadsManager *downloads_manager;
   EphyPermissionsManager *permissions_manager;
   EphyAboutHandler *about_handler;
-  guint update_overview_timeout_id;
-  guint hiding_overview_item;
   GDBusServer *dbus_server;
   GList *web_extensions;
   EphyFiltersManager *filters_manager;
@@ -157,11 +154,6 @@ ephy_embed_shell_dispose (GObject *object)
   if (priv->cancellable) {
     g_cancellable_cancel (priv->cancellable);
     g_clear_object (&priv->cancellable);
-  }
-
-  if (priv->update_overview_timeout_id > 0) {
-    g_source_remove (priv->update_overview_timeout_id);
-    priv->update_overview_timeout_id = 0;
   }
 
   g_clear_object (&priv->encodings);
@@ -275,35 +267,13 @@ history_service_urls_visited_cb (EphyHistoryService *history,
   ephy_embed_shell_update_overview_urls (shell);
 }
 
-static gboolean
-ephy_embed_shell_update_overview_timeout_cb (EphyEmbedShell *shell)
-{
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  priv->update_overview_timeout_id = 0;
-
-  if (priv->hiding_overview_item > 0)
-    return FALSE;
-
-  ephy_embed_shell_update_overview_urls (shell);
-
-  return FALSE;
-}
-
 static void
 history_set_url_hidden_cb (EphyHistoryService *service,
                            gboolean            success,
                            gpointer            result_data,
                            EphyEmbedShell     *shell)
 {
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
-  priv->hiding_overview_item--;
-
   if (!success)
-    return;
-
-  if (priv->update_overview_timeout_id > 0)
     return;
 
   ephy_embed_shell_update_overview_urls (shell);
@@ -319,19 +289,11 @@ web_extension_overview_message_received_cb (WebKitUserContentManager *manager,
 
   url_to_remove = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
 
-  priv->hiding_overview_item++;
   ephy_history_service_set_url_hidden (priv->global_history_service,
                                        url_to_remove, TRUE, NULL,
                                        (EphyHistoryJobCallback)history_set_url_hidden_cb,
                                        shell);
   g_free (url_to_remove);
-
-  if (priv->update_overview_timeout_id > 0)
-    g_source_remove (priv->update_overview_timeout_id);
-
-  /* Wait for the CSS animations to finish before refreshing */
-  priv->update_overview_timeout_id =
-    g_timeout_add (OVERVIEW_RELOAD_DELAY, (GSourceFunc)ephy_embed_shell_update_overview_timeout_cb, shell);
 }
 
 static void
