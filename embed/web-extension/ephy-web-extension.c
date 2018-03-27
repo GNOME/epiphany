@@ -1572,7 +1572,7 @@ ephy_prefs_sync_user_cb (GSettings *settings,
    */
   if (ephy_sync_utils_user_is_signed_in ())
     ephy_web_extension_create_sync_service (extension);
-  else
+  else if (extension->sync_service)
     ephy_web_extension_destroy_sync_service (extension);
 }
 
