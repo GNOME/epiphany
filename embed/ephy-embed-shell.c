@@ -47,10 +47,6 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
-#if ENABLE_HTTPS_EVERYWHERE
-#include <httpseverywhere.h>
-#endif
-
 #define PAGE_SETUP_FILENAME "page-setup-gtk.ini"
 #define PRINT_SETTINGS_FILENAME "print-settings.ini"
 #define OVERVIEW_RELOAD_DELAY 500
@@ -913,26 +909,6 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
   g_object_unref (manager);
 }
 
-#if ENABLE_HTTPS_EVERYWHERE
-static void
-https_everywhere_update_cb (HTTPSEverywhereUpdater *updater,
-                            GAsyncResult           *result)
-{
-  GError *error = NULL;
-
-  https_everywhere_updater_update_finish (updater, result, &error);
-
-  if (!error)
-    return;
-
-  if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
-      !g_error_matches (error, HTTPS_EVERYWHERE_UPDATE_ERROR, HTTPS_EVERYWHERE_UPDATE_ERROR_IN_PROGRESS) &&
-      !g_error_matches (error, HTTPS_EVERYWHERE_UPDATE_ERROR, HTTPS_EVERYWHERE_UPDATE_ERROR_NO_UPDATE_AVAILABLE))
-    g_warning ("Failed to update HTTPS Everywhere rulesets: %s", error->message);
-  g_error_free (error);
-}
-#endif
-
 static char *
 adblock_filters_dir (EphyEmbedShell *shell)
 {
@@ -960,10 +936,6 @@ ephy_embed_shell_startup (GApplication *application)
   char *filename;
   char *cookie_policy;
   char *filters_dir;
-#if ENABLE_HTTPS_EVERYWHERE
-  HTTPSEverywhereContext *context;
-  HTTPSEverywhereUpdater *updater;
-#endif
 
   G_APPLICATION_CLASS (ephy_embed_shell_parent_class)->startup (application);
 
@@ -1071,24 +1043,6 @@ ephy_embed_shell_startup (GApplication *application)
   filters_dir = adblock_filters_dir (shell);
   priv->filters_manager = ephy_filters_manager_new (filters_dir);
   g_free (filters_dir);
-
-#if ENABLE_HTTPS_EVERYWHERE
-    /* We might want to be smarter about this in the future. For now,
-     * trigger an update of the rulesets once each time Epiphany is started.
-     * Note that the updated rules will not be used until the next time Epiphany
-     * is started. */
-  if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST &&
-      priv->mode != EPHY_EMBED_SHELL_MODE_SEARCH_PROVIDER) {
-    context = https_everywhere_context_new ();
-    updater = https_everywhere_updater_new (context);
-    https_everywhere_updater_update (updater,
-                                     priv->cancellable,
-                                     (GAsyncReadyCallback)https_everywhere_update_cb,
-                                     NULL);
-    g_object_unref (context);
-    g_object_unref (updater);
-  }
-#endif
 }
 
 static void

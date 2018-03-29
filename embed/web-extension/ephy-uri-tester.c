@@ -37,10 +37,6 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
-#if ENABLE_HTTPS_EVERYWHERE
-#include <httpseverywhere.h>
-#endif
-
 #define SIGNATURE_SIZE 8
 
 struct _EphyUriTester {
@@ -69,11 +65,6 @@ struct _EphyUriTester {
   GMainLoop *load_loop;
   int adblock_filters_to_load;
   gboolean adblock_loaded;
-#if ENABLE_HTTPS_EVERYWHERE
-  gboolean https_everywhere_loaded;
-
-  HTTPSEverywhereContext *https_everywhere_context;
-#endif
 };
 
 enum {
@@ -538,24 +529,9 @@ ephy_uri_tester_adblock_loaded (EphyUriTester *tester)
 {
   if (g_atomic_int_dec_and_test (&tester->adblock_filters_to_load)) {
     tester->adblock_loaded = TRUE;
-#if ENABLE_HTTPS_EVERYWHERE
-    if (tester->https_everywhere_loaded)
-      g_main_loop_quit (tester->load_loop);
-#else
     g_main_loop_quit (tester->load_loop);
-#endif
   }
 }
-
-#if ENABLE_HTTPS_EVERYWHERE
-static void
-ephy_uri_tester_https_everywhere_loaded (EphyUriTester *tester)
-{
-  tester->https_everywhere_loaded = TRUE;
-  if (tester->adblock_loaded)
-    g_main_loop_quit (tester->load_loop);
-}
-#endif
 
 static void
 file_parse_cb (GDataInputStream *stream, GAsyncResult *result, EphyUriTester *tester)
@@ -623,43 +599,17 @@ ephy_uri_tester_block_uri (EphyUriTester *tester,
 char *
 ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
                              const char       *request_uri,
-                             const char       *page_uri,
-                             EphyUriTestFlags  flags)
+                             const char       *page_uri)
 {
   /* Should we block the URL outright? */
-  if ((flags & EPHY_URI_TEST_ADBLOCK) &&
-      ephy_uri_tester_block_uri (tester, request_uri, page_uri)) {
+  if (ephy_uri_tester_block_uri (tester, request_uri, page_uri)) {
     g_debug ("Request '%s' blocked (page: '%s')", request_uri, page_uri);
 
     return NULL;
   }
 
-#if ENABLE_HTTPS_EVERYWHERE
-  if ((flags & EPHY_URI_TEST_HTTPS_EVERYWHERE) && tester->https_everywhere_context != NULL)
-    return https_everywhere_context_rewrite (tester->https_everywhere_context, request_uri);
-#endif
-
   return g_strdup (request_uri);
 }
-
-#if ENABLE_HTTPS_EVERYWHERE
-static void
-https_everywhere_context_init_cb (HTTPSEverywhereContext *context,
-                                  GAsyncResult           *res,
-                                  EphyUriTester          *tester)
-{
-  GError *error = NULL;
-
-  https_everywhere_context_init_finish (context, res, &error);
-
-  if (error) {
-    g_warning ("Failed to initialize HTTPS Everywhere context: %s", error->message);
-    g_error_free (error);
-  }
-
-  ephy_uri_tester_https_everywhere_loaded (tester);
-}
-#endif
 
 static void
 adblock_file_monitor_changed (GFileMonitor     *monitor,
@@ -722,16 +672,6 @@ ephy_uri_tester_load_sync (GTask         *task,
   context = g_main_context_new ();
   g_main_context_push_thread_default (context);
   tester->load_loop = g_main_loop_new (context, FALSE);
-
-#if ENABLE_HTTPS_EVERYWHERE
-  if (!tester->https_everywhere_loaded) {
-    g_assert (tester->https_everywhere_context == NULL);
-    tester->https_everywhere_context = https_everywhere_context_new ();
-    https_everywhere_context_init (tester->https_everywhere_context, NULL,
-                                   (GAsyncReadyCallback)https_everywhere_context_init_cb,
-                                   tester);
-  }
-#endif
 
   if (!tester->adblock_loaded)
     ephy_uri_tester_begin_loading_adblock_filters (tester, &monitors);
@@ -817,22 +757,6 @@ ephy_uri_tester_set_property (GObject      *object,
 }
 
 static void
-ephy_uri_tester_dispose (GObject *object)
-{
-#if ENABLE_HTTPS_EVERYWHERE
-  EphyUriTester *tester = EPHY_URI_TESTER (object);
-#endif
-
-  LOG ("EphyUriTester disposing %p", object);
-
-#if ENABLE_HTTPS_EVERYWHERE
-  g_clear_object (&tester->https_everywhere_context);
-#endif
-
-  G_OBJECT_CLASS (ephy_uri_tester_parent_class)->dispose (object);
-}
-
-static void
 ephy_uri_tester_finalize (GObject *object)
 {
   EphyUriTester *tester = EPHY_URI_TESTER (object);
@@ -868,7 +792,6 @@ ephy_uri_tester_class_init (EphyUriTesterClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->set_property = ephy_uri_tester_set_property;
-  object_class->dispose = ephy_uri_tester_dispose;
   object_class->finalize = ephy_uri_tester_finalize;
 
   obj_properties[PROP_ADBLOCK_DATA_DIR] =
@@ -931,11 +854,7 @@ ephy_uri_tester_load (EphyUriTester *tester)
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
     tester->adblock_loaded = TRUE;
 
-  if (tester->adblock_loaded
-#if ENABLE_HTTPS_EVERYWHERE
-      && tester->https_everywhere_loaded
-#endif
-     )
+  if (tester->adblock_loaded)
     return;
 
   g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_WEB, ephy_uri_tester_adblock_filters_changed_cb, tester);

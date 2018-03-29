@@ -28,20 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EphyUriTester, ephy_uri_tester, EPHY, URI_TESTER, GObject)
 
-typedef enum
-{
-  EPHY_URI_TEST_ADBLOCK          = 1 << 1,
-  EPHY_URI_TEST_HTTPS_EVERYWHERE = 1 << 2,
-  EPHY_URI_TEST_ALL              = EPHY_URI_TEST_ADBLOCK | EPHY_URI_TEST_HTTPS_EVERYWHERE
-} EphyUriTestFlags;
-
-
 EphyUriTester *ephy_uri_tester_new         (const char       *adblock_data_dir);
 void           ephy_uri_tester_load        (EphyUriTester    *tester);
 char          *ephy_uri_tester_rewrite_uri (EphyUriTester    *tester,
                                             const char       *request_uri,
-                                            const char       *page_uri,
-                                            EphyUriTestFlags  flags);
+                                            const char       *page_uri);
 
 
 G_END_DECLS

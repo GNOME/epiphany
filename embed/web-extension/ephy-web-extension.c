@@ -109,47 +109,6 @@ static const char introspection_xml[] =
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
 static gboolean
-should_use_https_everywhere (const char *request_uri,
-                             const char *redirected_uri)
-{
-#if ENABLE_HTTPS_EVERYWHERE
-  SoupURI *request_soup_uri;
-  SoupURI *redirected_soup_uri;
-  gboolean result = TRUE;
-
-  request_soup_uri = soup_uri_new (request_uri);
-  if (request_soup_uri->scheme != SOUP_URI_SCHEME_HTTP) {
-    soup_uri_free (request_soup_uri);
-    return FALSE;
-  }
-
-  if (!redirected_uri) {
-    soup_uri_free (request_soup_uri);
-    return TRUE;
-  }
-
-  redirected_soup_uri = soup_uri_new (redirected_uri);
-
-  if (request_soup_uri->scheme == SOUP_URI_SCHEME_HTTP &&
-      redirected_soup_uri->scheme == SOUP_URI_SCHEME_HTTPS) {
-    /* If the server redirected us from an https:// URI to an http:// URI, we'd
-     * better not try to use HTTPS Everywhere as it'll just be a redirect loop.
-     * So now we compare ignoring scheme and port.... */
-    redirected_soup_uri->scheme = SOUP_URI_SCHEME_HTTP;
-    redirected_soup_uri->port = request_soup_uri->port;
-    result = !soup_uri_equal (request_soup_uri, redirected_soup_uri);
-  }
-
-  soup_uri_free (request_soup_uri);
-  soup_uri_free (redirected_soup_uri);
-
-  return result;
-#else
-  return FALSE;
-#endif
-}
-
-static gboolean
 should_use_adblocker (const char *request_uri,
                       const char *page_uri,
                       const char *redirected_request_uri)
@@ -196,14 +155,10 @@ web_page_send_request (WebKitWebPage     *web_page,
   const char *redirected_response_uri;
   const char *page_uri;
   char *modified_uri = NULL;
-  EphyUriTestFlags flags = EPHY_URI_TEST_ALL;
 
   request_uri = webkit_uri_request_get_uri (request);
   page_uri = webkit_web_page_get_uri (web_page);
   redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
-
-  if (!should_use_adblocker (request_uri, page_uri, redirected_response_uri))
-    flags &= ~EPHY_URI_TEST_ADBLOCK;
 
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     SoupMessageHeaders *headers = webkit_uri_request_get_http_headers (request);
@@ -215,16 +170,13 @@ web_page_send_request (WebKitWebPage     *web_page,
     modified_uri = ephy_remove_tracking_from_uri (request_uri);
   }
 
-  if (!should_use_https_everywhere (request_uri, redirected_response_uri))
-    flags &= ~EPHY_URI_TEST_HTTPS_EVERYWHERE;
-
-  if ((flags & EPHY_URI_TEST_ADBLOCK) || (flags & EPHY_URI_TEST_HTTPS_EVERYWHERE)) {
+  if (should_use_adblocker (request_uri, page_uri, redirected_response_uri)) {
     char *result;
 
     ephy_uri_tester_load (extension->uri_tester);
     result = ephy_uri_tester_rewrite_uri (extension->uri_tester,
                                           modified_uri ? modified_uri : request_uri,
-                                          page_uri, flags);
+                                          page_uri);
     g_free (modified_uri);
 
     if (!result) {
