@@ -637,7 +637,7 @@ history_service_query_urls_cb (EphyHistoryService *service,
     goto out;
 
   /* Have we already started a new load? */
-  if (strcmp (url, view->pending_snapshot_uri) != 0)
+  if (g_strcmp0 (url, view->pending_snapshot_uri) != 0)
     goto out;
 
   for (GList *l = urls; l; l = g_list_next (l)) {
