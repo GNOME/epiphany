@@ -43,10 +43,6 @@ libephyembed_deps = [
   webkit2gtk_dep
 ]
 
-if get_option('https_everywhere')
-  libephyembed_deps += httpseverywhere_dep
-endif
-
 libephyembed_includes = include_directories(
   '.',
   '..',

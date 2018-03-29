@@ -14,10 +14,6 @@ web_extension_deps = [
   webkit2gtk_web_extension_dep
 ]
 
-if get_option('https_everywhere')
-  web_extension_deps += httpseverywhere_dep
-endif
-
 shared_module('ephywebextension',
   web_extension_sources,
   dependencies: web_extension_deps,
