@@ -298,8 +298,8 @@ action_activated_cb (GtkEntryCompletion     *completion,
                      EphyLocationController *controller)
 {
   GtkWidget *entry;
+  char *url = NULL;
   char *content;
-  char *url;
   char **engine_names;
 
   entry = gtk_entry_completion_get_entry (completion);
@@ -308,13 +308,15 @@ action_activated_cb (GtkEntryCompletion     *completion,
     return;
 
   engine_names = ephy_search_engine_manager_get_names (controller->search_engine_manager);
-  url = ephy_search_engine_manager_build_search_address (controller->search_engine_manager,
-                                                         engine_names[index],
-                                                         content);
-  g_strfreev (engine_names);
+  if (index < g_strv_length (engine_names)) {
+    url = ephy_search_engine_manager_build_search_address (controller->search_engine_manager,
+                                                           engine_names[index],
+                                                           content);
+    ephy_link_open (EPHY_LINK (controller), url, NULL,
+                    ephy_link_flags_from_current_event ());
+  }
 
-  ephy_link_open (EPHY_LINK (controller), url, NULL,
-                  ephy_link_flags_from_current_event ());
+  g_strfreev (engine_names);
   g_free (content);
   g_free (url);
 }
