@@ -134,32 +134,6 @@ clear_status (EphyFindToolbar *toolbar)
   webkit_find_controller_search_finish (toolbar->controller);
 }
 
-/* Code adapted from gtktreeview.c:gtk_tree_view_key_press() and
- * gtk_tree_view_real_start_interactive_seach()
- */
-static gboolean
-tab_search_key_press_cb (WebKitWebView   *web_view,
-                         GdkEventKey     *event,
-                         EphyFindToolbar *toolbar)
-{
-  GtkWidget *widget = (GtkWidget *)toolbar;
-
-  g_assert (event != NULL);
-
-  /* check for / and ' which open the find toolbar in text resp. link mode */
-  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (widget)) == FALSE) {
-    if (event->keyval == GDK_KEY_slash) {
-      ephy_find_toolbar_open (toolbar, FALSE, TRUE);
-      return TRUE;
-    } else if (event->keyval == GDK_KEY_apostrophe) {
-      ephy_find_toolbar_open (toolbar, TRUE, TRUE);
-      return TRUE;
-    }
-  }
-
-  return FALSE;
-}
-
 static void
 real_find (EphyFindToolbar  *toolbar,
            EphyFindDirection direction)
@@ -562,10 +536,6 @@ ephy_find_toolbar_set_web_view (EphyFindToolbar *toolbar,
                       toolbar);
 
     clear_status (toolbar);
-
-    g_signal_connect_object (EPHY_WEB_VIEW (web_view), "search-key-press",
-                             G_CALLBACK (tab_search_key_press_cb),
-                             toolbar, 0);
   }
 }
 

@@ -93,7 +93,7 @@ const struct {
   { "win.zoom-out", { "<Primary>minus", "<Primary>KP_Subtract", "ZoomOut", NULL } },
   { "win.zoom-normal", { "<Primary>0", "<Primary>KP_0", NULL } },
   { "win.print", { "<Primary>P", NULL } },
-  { "win.find", { "<Primary>F", "Search", NULL } },
+  { "win.find", { "<Primary>F", NULL } },
   { "win.find-prev", { "<shift><Primary>G", NULL } },
   { "win.find-next", { "<Primary>G", NULL } },
   { "win.bookmark-page", { "<Primary>D", "AddFavorite", NULL } },
