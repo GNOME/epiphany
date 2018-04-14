@@ -431,7 +431,6 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "enable-fullscreen", TRUE,
                                                        "enable-javascript", TRUE,
                                                        "enable-dns-prefetching", TRUE,
-                                                       "hardware-acceleration-policy", WEBKIT_HARDWARE_ACCELERATION_POLICY_ON_DEMAND,
                                                        "javascript-can-open-windows-automatically", TRUE,
                                                        NULL);
 
