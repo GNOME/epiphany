@@ -743,7 +743,11 @@ initialize_web_extensions (WebKitWebContext *web_context,
   gboolean browser_mode;
   const char *address;
 
+#if DEVELOPER_MODE
+  webkit_web_context_set_web_extensions_directory (web_context, BUILD_ROOT "/embed/web-extension");
+#else
   webkit_web_context_set_web_extensions_directory (web_context, EPHY_WEB_EXTENSIONS_DIR);
+#endif
 
   address = priv->dbus_server ? g_dbus_server_get_client_address (priv->dbus_server) : NULL;
 
