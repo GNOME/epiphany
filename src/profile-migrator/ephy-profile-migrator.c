@@ -610,6 +610,11 @@ migrate_search_engines (void)
   char *default_search_engine_address;
   const char *default_search_engine_name = _("Search the Web");
 
+  /* Search engine settings are only used in browser mode, so no need to migrate
+   * if we are not in browser mode. */
+  if (!ephy_dot_dir_is_default ())
+    return;
+
   bookmarks_manager = ephy_bookmarks_manager_new ();
   search_engine_manager = ephy_search_engine_manager_new ();
 
