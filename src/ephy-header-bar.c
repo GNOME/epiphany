@@ -27,8 +27,6 @@
 #include "ephy-add-bookmark-popover.h"
 #include "ephy-bookmarks-popover.h"
 #include "ephy-bookmark-properties-grid.h"
-#include "ephy-downloads-popover.h"
-#include "ephy-downloads-progress-icon.h"
 #include "ephy-embed.h"
 #include "ephy-embed-container.h"
 #include "ephy-embed-prefs.h"
@@ -63,6 +61,7 @@ struct _EphyHeaderBar {
   EphyWindow *window;
   EphyTitleWidget *title_widget;
   EphyActionBarStart *action_bar_start;
+  EphyActionBarEnd *action_bar_end;
   GtkWidget *navigation_box;
   GtkWidget *reader_mode_revealer;
   GtkWidget *reader_mode_button;
@@ -70,66 +69,10 @@ struct _EphyHeaderBar {
   GtkWidget *new_tab_button;
   GtkWidget *bookmarks_button;
   GtkWidget *page_menu_button;
-  GtkWidget *downloads_revealer;
-  GtkWidget *downloads_button;
-  GtkWidget *downloads_popover;
   GtkWidget *zoom_level_button;
 };
 
 G_DEFINE_TYPE (EphyHeaderBar, ephy_header_bar, GTK_TYPE_HEADER_BAR)
-
-static gboolean
-header_bar_is_for_active_window (EphyHeaderBar *header_bar)
-{
-  EphyShell *shell = ephy_shell_get_default ();
-  GtkWindow *active_window;
-
-  active_window = gtk_application_get_active_window (GTK_APPLICATION (shell));
-
-  return active_window == GTK_WINDOW (header_bar->window);
-}
-
-static void
-download_added_cb (EphyDownloadsManager *manager,
-                   EphyDownload         *download,
-                   EphyHeaderBar        *header_bar)
-{
-  if (!header_bar->downloads_popover) {
-    header_bar->downloads_popover = ephy_downloads_popover_new (header_bar->downloads_button);
-    gtk_menu_button_set_popover (GTK_MENU_BUTTON (header_bar->downloads_button),
-                                 header_bar->downloads_popover);
-  }
-
-  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->downloads_revealer), TRUE);
-
-  if (header_bar_is_for_active_window (header_bar))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (header_bar->downloads_button), TRUE);
-}
-
-static void
-download_completed_cb (EphyDownloadsManager *manager,
-                       EphyDownload         *download,
-                       EphyHeaderBar        *header_bar)
-{
-  if (header_bar_is_for_active_window (header_bar))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (header_bar->downloads_button), TRUE);
-}
-
-static void
-download_removed_cb (EphyDownloadsManager *manager,
-                     EphyDownload         *download,
-                     EphyHeaderBar        *header_bar)
-{
-  if (!ephy_downloads_manager_get_downloads (manager))
-    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->downloads_revealer), FALSE);
-}
-
-static void
-downloads_estimated_progress_cb (EphyDownloadsManager *manager,
-                                 EphyHeaderBar        *header_bar)
-{
-  gtk_widget_queue_draw (gtk_button_get_image (GTK_BUTTON (header_bar->downloads_button)));
-}
 
 static void
 ephy_header_bar_set_property (GObject      *object,
@@ -175,9 +118,11 @@ sync_chromes_visibility (EphyHeaderBar *header_bar)
 
   gtk_widget_set_visible (ephy_action_bar_start_get_navigation_box (header_bar->action_bar_start),
                           chrome & EPHY_WINDOW_CHROME_HEADER_BAR);
-  gtk_widget_set_visible (header_bar->bookmarks_button, chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
+  ephy_action_bar_end_set_show_bookmarks_button (header_bar->action_bar_end,
+                                                 chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
   gtk_widget_set_visible (header_bar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
-  gtk_widget_set_visible (header_bar->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
+  ephy_action_bar_end_set_show_new_tab_button (header_bar->action_bar_end,
+                                               chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
 
 static void
@@ -195,35 +140,11 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
 }
 
 static void
-notebook_show_tabs_changed_cb (GtkNotebook   *notebook,
-                               GParamSpec    *pspec,
-                               EphyHeaderBar *header_bar)
-{
-  gboolean visible = !gtk_notebook_get_show_tabs (notebook);
-
-  if (visible) {
-    gtk_widget_show (header_bar->new_tab_revealer);
-    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer), TRUE);
-  } else {
-    /* Note the animation here doesn't actually work, since we hide the revealer
-     * right away. That's not ideal, but not much we can do about it, since
-     * hiding the revealer results in the location entry expanding, and that
-     * needs to happen immediately or it looks pretty bad, so we can't wait
-     * until the animation completes. Using the revealer is still worthwhile
-     * because the new tab button reveal animation is more important.
-     */
-    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer), FALSE);
-    gtk_widget_hide (header_bar->new_tab_revealer);
-  }
-}
-
-static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
-  GtkWidget *button, *notebook;
+  GtkWidget *button;
   GtkWidget *page_menu_popover;
-  EphyDownloadsManager *downloads_manager;
   GtkBuilder *builder;
   EphyEmbedShell *embed_shell;
 
@@ -282,78 +203,12 @@ ephy_header_bar_constructed (GObject *object)
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
-  /* Bookmarks button */
-  button = gtk_menu_button_new ();
-  header_bar->bookmarks_button = button;
-  gtk_button_set_image (GTK_BUTTON (button),
-                        gtk_image_new_from_icon_name ("ephy-bookmarks-symbolic", GTK_ICON_SIZE_BUTTON));
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  /* Translators: tooltip for the bookmarks popover button */
-  gtk_widget_set_tooltip_text (button, _("View and manage your bookmarks"));
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (ephy_bookmarks_popover_new ()));
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
+  /* End action elements */
+  header_bar->action_bar_end = ephy_action_bar_end_new ();
+  gtk_widget_show (GTK_WIDGET (header_bar->action_bar_end));
 
-  /* Downloads */
-  downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());
-
-  header_bar->downloads_revealer = gtk_revealer_new ();
-  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->downloads_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->downloads_revealer),
-                                 ephy_downloads_manager_get_downloads (downloads_manager) != NULL);
-
-  button = gtk_menu_button_new ();
-  header_bar->downloads_button = button;
-  gtk_button_set_image (GTK_BUTTON (button), ephy_downloads_progress_icon_new ());
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  /* Translators: tooltip for the downloads button */
-  gtk_widget_set_tooltip_text (button, _("View downloads"));
-  gtk_container_add (GTK_CONTAINER (header_bar->downloads_revealer), button);
-  gtk_widget_show (button);
-
-  if (ephy_downloads_manager_get_downloads (downloads_manager)) {
-    header_bar->downloads_popover = ephy_downloads_popover_new (button);
-    gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), header_bar->downloads_popover);
-  }
-
-  /* New Tab */
-  header_bar->new_tab_revealer = gtk_revealer_new ();
-  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->new_tab_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), header_bar->new_tab_revealer);
-
-  button = gtk_button_new ();
-  header_bar->new_tab_button = button;
-  gtk_button_set_image (GTK_BUTTON (button),
-                        gtk_image_new_from_icon_name ("tab-new-symbolic", GTK_ICON_SIZE_BUTTON));
-  /* Translators: tooltip for the new tab button */
-  gtk_widget_set_tooltip_text (button, _("Open a new tab"));
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "win.new-tab");
-  gtk_container_add (GTK_CONTAINER (header_bar->new_tab_revealer), button);
-  gtk_widget_show (button);
-
-  notebook = ephy_window_get_notebook (header_bar->window);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->new_tab_revealer),
-                                 !gtk_notebook_get_show_tabs (GTK_NOTEBOOK (notebook)));
-  gtk_widget_set_visible (header_bar->new_tab_revealer,
-                          !gtk_notebook_get_show_tabs (GTK_NOTEBOOK (notebook)));
-  g_signal_connect_object (notebook, "notify::show-tabs",
-                           G_CALLBACK (notebook_show_tabs_changed_cb), header_bar, 0);
-
-  g_signal_connect_object (downloads_manager, "download-added",
-                           G_CALLBACK (download_added_cb),
-                           object, 0);
-  g_signal_connect_object (downloads_manager, "download-completed",
-                           G_CALLBACK (download_completed_cb),
-                           object, 0);
-  g_signal_connect_object (downloads_manager, "download-removed",
-                           G_CALLBACK (download_removed_cb),
-                           object, 0);
-  g_signal_connect_object (downloads_manager, "estimated-progress-changed",
-                           G_CALLBACK (downloads_estimated_progress_cb),
-                           object, 0);
-
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), header_bar->downloads_revealer);
-  gtk_widget_show (header_bar->downloads_revealer);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar),
+                           GTK_WIDGET (header_bar->action_bar_end));
 }
 
 static void
@@ -421,4 +276,10 @@ EphyActionBarStart *
 ephy_header_bar_get_action_bar_start (EphyHeaderBar *header_bar)
 {
   return header_bar->action_bar_start;
+}
+
+EphyActionBarEnd *
+ephy_header_bar_get_action_bar_end (EphyHeaderBar *header_bar)
+{
+  return header_bar->action_bar_end;
 }
