@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="EphyActionBar" parent="GtkRevealer">
+    <property name="transition-type">slide-up</property>
+    <child>
+      <object class="GtkActionBar" id="action_bar">
+        <property name="visible">True</property>
+        <child>
+            <object class="EphyActionBarStart" id="action_bar_start">
+              <property name="visible">True</property>
+            </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child>
+          <object class="EphyActionBarEnd" id="action_bar_end">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
