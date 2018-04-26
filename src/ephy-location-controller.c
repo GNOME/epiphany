@@ -352,7 +352,7 @@ add_completion_actions (EphyLocationController *controller,
 
 static void
 search_engines_changed_cb (EphySearchEngineManager *manager,
-                           gpointer  data)
+                           gpointer                 data)
 {
   EphyLocationController *controller;
   GtkEntryCompletion *completion;
