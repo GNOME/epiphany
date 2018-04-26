@@ -3000,18 +3000,6 @@ static const char *disabled_actions_for_app_mode[] = { "open",
                                                        "new-tab",
                                                        "home" };
 
-static void
-parse_css_error (GtkCssProvider *provider,
-                 GtkCssSection  *section,
-                 GError         *error,
-                 gpointer        user_data)
-{
-  g_warning ("CSS error in section beginning line %u at offset %u:\n %s",
-             gtk_css_section_get_start_line (section) + 1,
-             gtk_css_section_get_start_position (section),
-             error->message);
-}
-
 static gboolean
 browse_with_caret_get_mapping (GValue   *value,
                                GVariant *variant,
@@ -3029,7 +3017,6 @@ ephy_window_constructed (GObject *object)
   GAction *action;
   GActionGroup *action_group;
   GSimpleActionGroup *simple_action_group;
-  GtkCssProvider *css_provider;
   guint i;
   EphyEmbedShellMode mode;
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
@@ -3114,17 +3101,6 @@ ephy_window_constructed (GObject *object)
   window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
   gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (window->notebook));
   gtk_widget_show (GTK_WIDGET (window->notebook));
-
-  /* Attach the CSS provider to the window. */
-  css_provider = gtk_css_provider_new ();
-  g_signal_connect (css_provider,
-                    "parsing-error",
-                    G_CALLBACK (parse_css_error), window);
-  gtk_css_provider_load_from_resource (css_provider, "/org/gnome/epiphany/epiphany.css");
-  gtk_style_context_add_provider_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)),
-                                             GTK_STYLE_PROVIDER (css_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_object_unref (css_provider);
 
   /* other notifiers */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");

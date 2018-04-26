@@ -32,6 +32,7 @@ libephyembed_sources = [
 ]
 
 libephyembed_deps = [
+  dazzle_dep,
   ephymisc_dep,
   gio_dep,
   glib_dep,
@@ -40,7 +41,7 @@ libephyembed_deps = [
   libsecret_dep,
   libsoup_dep,
   m_dep,
-  webkit2gtk_dep
+  webkit2gtk_dep,
 ]
 
 libephyembed_includes = include_directories(

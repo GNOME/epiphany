@@ -23,6 +23,7 @@ libephywidgets_sources = [
 ]
 
 libephywidgets_deps = [
+  dazzle_dep,
   ephymisc_dep,
   gcr_dep,
   gdk_dep,
@@ -31,7 +32,7 @@ libephywidgets_deps = [
   glib_dep,
   gtk_dep,
   libsoup_dep,
-  webkit2gtk_dep
+  webkit2gtk_dep,
 ]
 
 libephywidgets_includes = include_directories(

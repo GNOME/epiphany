@@ -1,5 +1,6 @@
 #!/bin/sh
 
-GTK_SOURCE_PATH="../../../gtk+-3"
+: ${GTK_SOURCE_PATH:="../../../gtk+-3"}
 
-sass --sourcemap=none --update -I ${GTK_SOURCE_PATH}/gtk/theme/Adwaita .
+sass --sourcemap=none --update -I ${GTK_SOURCE_PATH}/gtk/theme/Adwaita \
+	"$(dirname "$0")/themes"

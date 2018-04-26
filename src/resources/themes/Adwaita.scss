@@ -1,0 +1,69 @@
+@import 'definitions';
+
+// Include base styling.
+@import url("resource:///org/gnome/Epiphany/themes/shared.css");
+
+
+.incognito-mode {
+  &.titlebar {
+    @include headerbar_fill($incognito_color, $edge_color, -gtk-icontheme($incognito_icon) 160px 0 / 64px 64px no-repeat);
+
+    border-color: _border_color($incognito_color);
+
+    color: transparentize($fg_color, 0.8); // this is the color of the overlayed icon
+
+    > * {
+      color: $fg_color;
+
+      &:backdrop { color: $backdrop_fg_color }
+    }
+
+    &:backdrop {
+      background-image: -gtk-icontheme($incognito_icon), image($incognito_color);
+      box-shadow: inset 0 1px $edge_color;
+      color: transparentize($backdrop_fg_color, 0.9); // color of the overlayed icon in backdrop
+    }
+
+    button { // changing the headerbar background color requires changing widget borders accordingly
+      @include button(normal, $incognito_color);
+
+      &.flat, &.titlebutton { @include button(undecorated); }
+
+      &.titlebutton { @include _button_text_shadow($fg_color, $incognito_color); }
+
+      &:hover { @include button(hover, $incognito_color); }
+
+      &:active, &:checked, &#ephy-page-menu-button.active-menu { @include button(active, $incognito_color); }
+
+      &:disabled { @include button(insensitive, $incognito_color); }
+
+      &:backdrop {
+        @include button(backdrop, $incognito_color);
+        border-color: _border_color($incognito_color);
+
+        &:active {
+          @include button(backdrop-active, $incognito_color);
+          border-color: _border_color($incognito_color);
+        }
+
+        &:disabled {
+          @include button(backdrop-insensitive, $incognito_color);
+          border-color: _border_color($incognito_color);
+        }
+      }
+
+      &.flat:backdrop, &.titlebutton:backdrop { @include button(undecorated); }
+    }
+
+    entry {
+      border-color: _border_color($incognito_color);
+
+      &:focus {
+        border-color: entry_focus_border($selected_bg_color);
+        box-shadow: entry_focus_shadow($selected_bg_color);
+      }
+
+      &:backdrop { box-shadow: none; }
+    }
+  }
+}
