@@ -39,6 +39,18 @@
                 "/man", "/share/man", "/share/gtk-doc",
                 "*.la", "*.a"],
     "modules": [
+         {
+            "name": "libdazzle",
+            "config-opts": [ "--libdir=/app/lib" ],
+            "buildsystem": "meson",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://git.gnome.org/browse/libdazzle"
+                }
+            ]
+        },
         {
             "name": "epiphany",
             "config-opts": ["-Dtech_preview=true"],
