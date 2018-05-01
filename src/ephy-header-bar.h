@@ -25,6 +25,7 @@
 #include "ephy-action-bar-end.h"
 #include "ephy-action-bar-start.h"
 #include "ephy-title-widget.h"
+#include "ephy-adaptive-mode.h"
 #include "ephy-window.h"
 
 G_BEGIN_DECLS
@@ -40,5 +41,7 @@ GtkWidget       *ephy_header_bar_get_page_menu_button              (EphyHeaderBa
 EphyWindow      *ephy_header_bar_get_window                        (EphyHeaderBar *header_bar);
 EphyActionBarStart *ephy_header_bar_get_action_bar_start           (EphyHeaderBar *header_bar);
 EphyActionBarEnd *ephy_header_bar_get_action_bar_end               (EphyHeaderBar *header_bar);
+void             ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
+                                                    EphyAdaptiveMode  adaptive_mode);
 
 G_END_DECLS
