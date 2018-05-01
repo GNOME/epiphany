@@ -24,6 +24,7 @@
 #include "config.h"
 #include "ephy-window.h"
 
+#include "ephy-action-bar.h"
 #include "ephy-action-helper.h"
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
@@ -140,6 +141,7 @@ struct _EphyWindow {
   EphyBookmarksManager *bookmarks_manager;
   GHashTable *action_labels;
   GtkNotebook *notebook;
+  GtkWidget *action_bar;
   EphyEmbed *active_embed;
   EphyWindowChrome chrome;
   EphyEmbedEvent *context_event;
@@ -712,8 +714,11 @@ change_combined_stop_reload_state (GSimpleAction *action,
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyActionBarStart *header_bar_start = ephy_header_bar_get_action_bar_start (EPHY_HEADER_BAR (window->header_bar));
+  EphyActionBarStart *action_bar_start = ephy_action_bar_get_action_bar_start (EPHY_ACTION_BAR (window->action_bar));
 
   ephy_action_bar_start_change_combined_stop_reload_state (header_bar_start,
+                                                           g_variant_get_boolean (loading));
+  ephy_action_bar_start_change_combined_stop_reload_state (action_bar_start,
                                                            g_variant_get_boolean (loading));
 
   g_simple_action_set_state (action, loading);
@@ -2713,17 +2718,30 @@ ephy_window_configure_event (GtkWidget *widget,
                              GdkEventConfigure *event)
 {
   EphyWindow *window = EPHY_WINDOW (widget);
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+  EphyActionBar *action_bar = EPHY_ACTION_BAR (window->action_bar);
+  EphyAdaptiveMode adaptive_mode;
   gboolean result;
+  gint width, height;
 
   result = GTK_WIDGET_CLASS (ephy_window_parent_class)->configure_event (widget, event);
+
+  gtk_window_get_size (GTK_WINDOW (widget),
+                       &width,
+                       &height);
+
+  adaptive_mode = width <= 720 ?
+    EPHY_ADAPTIVE_MODE_NARROW :
+    EPHY_ADAPTIVE_MODE_NORMAL;
+  ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
+  ephy_action_bar_set_adaptive_mode (action_bar, adaptive_mode);
 
   if (!window->is_maximized && !window->is_fullscreen) {
     gtk_window_get_position (GTK_WINDOW (widget),
                              &window->current_x,
                              &window->current_y);
-    gtk_window_get_size (GTK_WINDOW (widget),
-                         &window->current_width,
-                         &window->current_height);
+    window->current_width = width;
+    window->current_width = height;
   }
 
   return result;
@@ -2915,6 +2933,37 @@ sync_user_input_cb (EphyLocationController *action,
 }
 
 static void
+update_new_tab_button_visibility (EphyWindow *window)
+{
+  gboolean visible = !gtk_notebook_get_show_tabs (window->notebook);
+  EphyActionBarEnd *header_bar_end = ephy_header_bar_get_action_bar_end (EPHY_HEADER_BAR (window->header_bar));
+  EphyActionBarEnd *action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (window->action_bar));
+
+  if (visible) {
+    ephy_action_bar_end_set_show_new_tab_button (header_bar_end, TRUE);
+    ephy_action_bar_end_set_show_new_tab_button (action_bar_end, TRUE);
+  } else {
+    /* Note the animation here doesn't actually work, since we hide the revealer
+     * right away. That's not ideal, but not much we can do about it, since
+     * hiding the revealer results in the location entry expanding, and that
+     * needs to happen immediately or it looks pretty bad, so we can't wait
+     * until the animation completes. Using the revealer is still worthwhile
+     * because the new tab button reveal animation is more important.
+     */
+    ephy_action_bar_end_set_show_new_tab_button (header_bar_end, FALSE);
+    ephy_action_bar_end_set_show_new_tab_button (action_bar_end, FALSE);
+  }
+}
+
+static void
+notebook_show_tabs_changed_cb (GtkNotebook *notebook,
+                               GParamSpec  *pspec,
+                               EphyWindow  *window)
+{
+  update_new_tab_button_visibility (window);
+}
+
+static void
 title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
                               GdkRectangle    *lock_position,
                               gpointer         user_data)
@@ -2983,6 +3032,18 @@ setup_location_controller (EphyWindow    *window,
   return location_controller;
 }
 
+static GtkWidget *
+setup_action_bar (EphyWindow *window)
+{
+  GtkWidget *action_bar;
+
+  action_bar = (GtkWidget *) ephy_action_bar_new ();
+  gtk_revealer_set_transition_type (GTK_REVEALER (action_bar), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
+  gtk_widget_show (action_bar);
+
+  return action_bar;
+}
+
 static const char *disabled_actions_for_app_mode[] = { "open",
                                                        "save-as-application",
                                                        "encoding",
@@ -3004,6 +3065,7 @@ static void
 ephy_window_constructed (GObject *object)
 {
   EphyWindow *window;
+  GtkBox *box;
   GAction *action;
   GActionGroup *action_group;
   GSimpleActionGroup *simple_action_group;
@@ -3085,11 +3147,18 @@ ephy_window_constructed (GObject *object)
   setup_tab_accels (window);
 
   window->notebook = setup_notebook (window);
+  g_signal_connect_object (window->notebook, "notify::show-tabs",
+                           G_CALLBACK (notebook_show_tabs_changed_cb), window, 0);
 
   /* Setup the toolbar. */
   window->header_bar = setup_header_bar (window);
   window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (window->notebook));
+  window->action_bar = setup_action_bar (window);
+  box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+  gtk_box_pack_start (box, GTK_WIDGET (window->notebook), TRUE, TRUE, 0);
+  gtk_box_pack_start (box, GTK_WIDGET (window->action_bar), FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (box));
+  gtk_widget_show (GTK_WIDGET (box));
   gtk_widget_show (GTK_WIDGET (window->notebook));
 
   /* other notifiers */
@@ -3153,6 +3222,8 @@ ephy_window_constructed (GObject *object)
     ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                           SENS_FLAG_CHROME, TRUE);
   }
+
+  update_new_tab_button_visibility (window);
 
   ephy_window_set_chrome (window, chrome);
 }
