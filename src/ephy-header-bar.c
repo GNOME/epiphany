@@ -60,6 +60,8 @@ struct _EphyHeaderBar {
 
   EphyWindow *window;
   EphyTitleWidget *title_widget;
+  GtkRevealer *start_revealer;
+  GtkRevealer *end_revealer;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
   GtkWidget *page_menu_button;
@@ -134,6 +136,14 @@ add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
 }
 
 static void
+update_revealer_visibility (GtkRevealer *revealer)
+{
+  gtk_widget_set_visible (GTK_WIDGET (revealer),
+                          gtk_revealer_get_reveal_child (revealer) ||
+                          gtk_revealer_get_child_revealed (revealer));
+}
+
+static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
@@ -150,9 +160,17 @@ ephy_header_bar_constructed (GObject *object)
   /* Start action elements */
   header_bar->action_bar_start = ephy_action_bar_start_new ();
   gtk_widget_show (GTK_WIDGET (header_bar->action_bar_start));
+  header_bar->start_revealer = GTK_REVEALER (gtk_revealer_new ());
+  g_signal_connect (header_bar->start_revealer, "notify::child-revealed",
+                    G_CALLBACK (update_revealer_visibility), NULL);
+  g_signal_connect (header_bar->start_revealer, "notify::reveal-child",
+                    G_CALLBACK (update_revealer_visibility), NULL);
+  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->start_revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT);
+  gtk_container_add (GTK_CONTAINER (header_bar->start_revealer), GTK_WIDGET (header_bar->action_bar_start));
+  gtk_widget_set_margin_end (GTK_WIDGET (header_bar->action_bar_start), 54);
 
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar),
-                             GTK_WIDGET (header_bar->action_bar_start));
+                             GTK_WIDGET (header_bar->start_revealer));
 
   embed_shell = ephy_embed_shell_get_default ();
 
@@ -161,8 +179,6 @@ ephy_header_bar_constructed (GObject *object)
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_title_box_new ());
   else
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
-  gtk_widget_set_margin_start (GTK_WIDGET (header_bar->title_widget), 54);
-  gtk_widget_set_margin_end (GTK_WIDGET (header_bar->title_widget), 54);
   gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_widget));
   gtk_widget_show (GTK_WIDGET (header_bar->title_widget));
 
@@ -200,9 +216,17 @@ ephy_header_bar_constructed (GObject *object)
   /* End action elements */
   header_bar->action_bar_end = ephy_action_bar_end_new ();
   gtk_widget_show (GTK_WIDGET (header_bar->action_bar_end));
+  header_bar->end_revealer = GTK_REVEALER (gtk_revealer_new ());
+  g_signal_connect (header_bar->end_revealer, "notify::child-revealed",
+                    G_CALLBACK (update_revealer_visibility), NULL);
+  g_signal_connect (header_bar->end_revealer, "notify::reveal-child",
+                    G_CALLBACK (update_revealer_visibility), NULL);
+  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->end_revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT);
+  gtk_container_add (GTK_CONTAINER (header_bar->end_revealer), GTK_WIDGET (header_bar->action_bar_end));
+  gtk_widget_set_margin_start (GTK_WIDGET (header_bar->action_bar_end), 54);
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar),
-                           GTK_WIDGET (header_bar->action_bar_end));
+                           GTK_WIDGET (header_bar->end_revealer));
 }
 
 static void
@@ -276,4 +300,22 @@ EphyActionBarEnd *
 ephy_header_bar_get_action_bar_end (EphyHeaderBar *header_bar)
 {
   return header_bar->action_bar_end;
+}
+
+void
+ephy_header_bar_set_adaptive_mode (EphyHeaderBar    *header_bar,
+                                   EphyAdaptiveMode  adaptive_mode)
+{
+  switch (adaptive_mode) {
+  case EPHY_ADAPTIVE_MODE_NORMAL:
+    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), TRUE);
+    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), TRUE);
+
+    break;
+  case EPHY_ADAPTIVE_MODE_NARROW:
+    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->start_revealer), FALSE);
+    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->end_revealer), FALSE);
+
+    break;
+  }
 }
