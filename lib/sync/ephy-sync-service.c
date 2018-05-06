@@ -2797,9 +2797,10 @@ void
 ephy_sync_service_start_sync (EphySyncService *self)
 {
   g_assert (EPHY_IS_SYNC_SERVICE (self));
-  g_assert (ephy_sync_utils_user_is_signed_in ());
   g_assert (self->sync_periodically);
 
-  ephy_sync_service_sync_internal (self);
-  ephy_sync_service_schedule_periodical_sync (self);
+  if (ephy_sync_utils_user_is_signed_in ()) {
+    ephy_sync_service_sync_internal (self);
+    ephy_sync_service_schedule_periodical_sync (self);
+  }
 }
