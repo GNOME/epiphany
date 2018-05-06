@@ -2796,9 +2796,10 @@ void
 ephy_sync_service_start_sync (EphySyncService *self)
 {
   g_return_if_fail (EPHY_IS_SYNC_SERVICE (self));
-  g_return_if_fail (ephy_sync_utils_user_is_signed_in ());
   g_return_if_fail (self->sync_periodically);
 
-  ephy_sync_service_sync_internal (self);
-  ephy_sync_service_schedule_periodical_sync (self);
+  if (ephy_sync_utils_user_is_signed_in ()) {
+    ephy_sync_service_sync_internal (self);
+    ephy_sync_service_schedule_periodical_sync (self);
+  }
 }
