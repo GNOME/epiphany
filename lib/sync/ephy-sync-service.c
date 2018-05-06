@@ -401,6 +401,11 @@ ephy_sync_service_get_key_bundle (EphySyncService *self,
   g_assert (collection);
 
   crypto_keys = ephy_sync_service_get_secret (self, secrets[CRYPTO_KEYS]);
+  if (!crypto_keys) {
+    g_warning ("Missing crypto-keys secret");
+    return NULL;
+  }
+
   node = json_from_string (crypto_keys, &error);
   g_assert (!error);
   json = json_node_get_object (node);
@@ -1111,6 +1116,10 @@ ephy_sync_service_delete_synchronizable (EphySyncService           *self,
   g_assert (ephy_sync_utils_user_is_signed_in ());
 
   collection = ephy_synchronizable_manager_get_collection_name (manager);
+  bundle = ephy_sync_service_get_key_bundle (self, collection);
+  if (!bundle)
+    return;
+
   id = ephy_synchronizable_get_id (synchronizable);
   /* Firefox uses UUIDs with curly braces as IDs for saved passwords records.
    * Curly braces are unsafe characters in URLs so they must be encoded.
@@ -1124,7 +1133,6 @@ ephy_sync_service_delete_synchronizable (EphySyncService           *self,
   json_object_set_string_member (object, "id", id);
   json_object_set_boolean_member (object, "deleted", TRUE);
   record = json_to_string (node, FALSE);
-  bundle = ephy_sync_service_get_key_bundle (self, collection);
   payload = ephy_sync_crypto_encrypt_record (record, bundle);
   json_object_remove_member (object, "deleted");
   json_object_set_string_member (object, "payload", payload);
@@ -1172,6 +1180,9 @@ download_synchronizable_cb (SoupSession *session,
   type = ephy_synchronizable_manager_get_synchronizable_type (data->manager);
   collection = ephy_synchronizable_manager_get_collection_name (data->manager);
   bundle = ephy_sync_service_get_key_bundle (data->service, collection);
+  if (!bundle)
+    goto out;
+
   synchronizable = EPHY_SYNCHRONIZABLE (ephy_synchronizable_from_bso (node, type, bundle, &is_deleted));
   if (!synchronizable) {
     g_warning ("Failed to create synchronizable object from BSO");
@@ -1282,6 +1293,9 @@ ephy_sync_service_upload_synchronizable (EphySyncService           *self,
 
   collection = ephy_synchronizable_manager_get_collection_name (manager);
   bundle = ephy_sync_service_get_key_bundle (self, collection);
+  if (!bundle)
+    return;
+
   bso = ephy_synchronizable_to_bso (synchronizable, bundle);
   id = ephy_synchronizable_get_id (synchronizable);
   /* Firefox uses UUIDs with curly braces as IDs for saved passwords records.
@@ -1320,9 +1334,12 @@ ephy_sync_service_split_into_batches (EphySyncService           *self,
   g_assert (EPHY_IS_SYNCHRONIZABLE_MANAGER (manager));
   g_assert (synchronizables);
 
-  batches = g_ptr_array_new_with_free_func (g_free);
   collection = ephy_synchronizable_manager_get_collection_name (manager);
   bundle = ephy_sync_service_get_key_bundle (self, collection);
+  if (!bundle)
+    return NULL;
+
+  batches = g_ptr_array_new_with_free_func (g_free);
 
   for (guint i = start; i < end; i += EPHY_SYNC_BATCH_SIZE) {
     JsonNode *node = json_node_new (JSON_NODE_ARRAY);
@@ -1502,7 +1519,7 @@ sync_collection_cb (SoupSession *session,
 {
   SyncCollectionAsyncData *data = (SyncCollectionAsyncData *)user_data;
   EphySynchronizable *remote;
-  SyncCryptoKeyBundle *bundle;
+  SyncCryptoKeyBundle *bundle = NULL;
   JsonNode *node = NULL;
   JsonArray *array = NULL;
   GError *error = NULL;
@@ -1530,6 +1547,9 @@ sync_collection_cb (SoupSession *session,
 
   type = ephy_synchronizable_manager_get_synchronizable_type (data->manager);
   bundle = ephy_sync_service_get_key_bundle (data->service, collection);
+  if (!bundle)
+    goto out_error;
+
   for (guint i = 0; i < json_array_get_length (array); i++) {
     remote = EPHY_SYNCHRONIZABLE (ephy_synchronizable_from_bso (json_array_get_element (array, i),
                                                                 type, bundle, &is_deleted));
@@ -1559,6 +1579,8 @@ out_error:
     g_signal_emit (data->service, signals[SYNC_FINISHED], 0);
   sync_collection_async_data_free (data);
 out_no_error:
+  if (bundle)
+    ephy_sync_crypto_key_bundle_free (bundle);
   if (node)
     json_node_unref (node);
   if (error)
@@ -1860,6 +1882,10 @@ ephy_sync_service_upload_client_record (EphySyncService *self)
 
   g_assert (EPHY_IS_SYNC_SERVICE (self));
 
+  bundle = ephy_sync_service_get_key_bundle (self, "clients");
+  if (!bundle)
+    return;
+
   /* Make device ID and name. */
   device_bso_id = ephy_sync_utils_get_device_bso_id ();
   device_id = ephy_sync_utils_get_device_id ();
@@ -1867,7 +1893,6 @@ ephy_sync_service_upload_client_record (EphySyncService *self)
 
   /* Make BSO as string. */
   record = ephy_sync_utils_make_client_record (device_bso_id, device_id, device_name);
-  bundle = ephy_sync_service_get_key_bundle (self, "clients");
   encrypted = ephy_sync_crypto_encrypt_record (record, bundle);
 
   bso = json_object_new ();
