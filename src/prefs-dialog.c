@@ -173,6 +173,8 @@ prefs_dialog_finalize (GObject *object)
   if (dialog->fxa_web_view != NULL) {
     webkit_user_content_manager_unregister_script_message_handler (dialog->fxa_manager,
                                                                    "toChromeMessageHandler");
+    webkit_user_content_manager_unregister_script_message_handler (dialog->fxa_manager,
+                                                                   "openWebmailClickHandler");
     webkit_user_script_unref (dialog->fxa_script);
     g_object_unref (dialog->fxa_manager);
   }
@@ -526,6 +528,32 @@ out:
 }
 
 static void
+sync_open_webmail_clicked_cb (WebKitUserContentManager *manager,
+                              WebKitJavascriptResult   *result,
+                              PrefsDialog              *dialog)
+{
+  EphyShell *shell;
+  EphyEmbed *embed;
+  GtkWindow *window;
+  char *url;
+
+  url = jsc_value_to_string (webkit_javascript_result_get_js_value (result));
+  if (url) {
+    /* Open a new tab to the webmail URL. */
+    shell = ephy_shell_get_default ();
+    window = gtk_application_get_active_window (GTK_APPLICATION (shell));
+    embed = ephy_shell_new_tab (shell, EPHY_WINDOW (window),
+                                NULL, EPHY_NEW_TAB_JUMP);
+    ephy_web_view_load_url (ephy_embed_get_web_view (embed), url);
+
+    /* Close the preferences dialog. */
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+
+    g_free (url);
+  }
+}
+
+static void
 sync_setup_firefox_iframe (PrefsDialog *dialog)
 {
   EphyEmbedShell *shell;
@@ -534,11 +562,22 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
   const char *script;
 
   if (!dialog->fxa_web_view) {
-    script = "function handleToChromeMessage(evt) {"
-             "  let e = JSON.stringify({type: evt.type, detail: evt.detail});"
+    script =
+             /* Handle sign-in messages from the FxA content server. */
+             "function handleToChromeMessage(event) {"
+             "  let e = JSON.stringify({type: event.type, detail: event.detail});"
              "  window.webkit.messageHandlers.toChromeMessageHandler.postMessage(e);"
              "};"
-             "window.addEventListener(\"WebChannelMessageToChrome\", handleToChromeMessage);";
+             "window.addEventListener('WebChannelMessageToChrome', handleToChromeMessage);"
+             /* Handle open-webmail click event. */
+             "function handleOpenWebmailClick(event) {"
+             "  if (event.target.id == 'open-webmail' && event.target.hasAttribute('href'))"
+             "    window.webkit.messageHandlers.openWebmailClickHandler.postMessage(event.target.getAttribute('href'));"
+             "};"
+             "var stage = document.getElementById('stage');"
+             "if (stage)"
+             "  stage.addEventListener('click', handleOpenWebmailClick);";
+
     dialog->fxa_script = webkit_user_script_new (script,
                                                  WEBKIT_USER_CONTENT_INJECT_TOP_FRAME,
                                                  WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
@@ -549,8 +588,14 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
                       "script-message-received::toChromeMessageHandler",
                       G_CALLBACK (sync_message_from_fxa_content_cb),
                       dialog);
+    g_signal_connect (dialog->fxa_manager,
+                      "script-message-received::openWebmailClickHandler",
+                      G_CALLBACK (sync_open_webmail_clicked_cb),
+                      dialog);
     webkit_user_content_manager_register_script_message_handler (dialog->fxa_manager,
                                                                  "toChromeMessageHandler");
+    webkit_user_content_manager_register_script_message_handler (dialog->fxa_manager,
+                                                                 "openWebmailClickHandler");
 
     shell = ephy_embed_shell_get_default ();
     embed_context = ephy_embed_shell_get_web_context (shell);
