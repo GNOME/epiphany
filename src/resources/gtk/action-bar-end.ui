@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="EphyActionBarEnd" parent="GtkBox">
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkMenuButton" id="bookmarks_button">
+        <property name="visible">True</property>
+        <property name="valign">center</property>
+        <!-- Translators: tooltip for the bookmarks popover button -->
+        <property name="tooltip_text" translatable="yes">View and manage your bookmarks</property>
+        <property name="popover">bookmarks_popover</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+        <child>
+          <object class="GtkImage" id="bookmarks_image">
+            <property name="visible">True</property>
+            <property name="icon-name">ephy-bookmarks-symbolic</property>
+            <property name="icon-size">1</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRevealer" id="new_tab_revealer">
+        <property name="visible">False</property>
+        <property name="transition-type">crossfade</property>
+        <child>
+          <object class="GtkButton" id="new_tab_button">
+            <property name="visible">True</property>
+            <property name="action-name">win.new-tab</property>
+            <property name="valign">center</property>
+            <!-- Translators: tooltip for the new tab button -->
+            <property name="tooltip_text" translatable="yes">Open a new tab</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage" id="new_tab_image">
+                <property name="visible">True</property>
+                <property name="icon-name">tab-new-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRevealer" id="downloads_revealer">
+        <property name="visible">True</property>
+        <property name="transition-type">crossfade</property>
+        <child>
+          <object class="GtkMenuButton" id="downloads_button">
+            <property name="visible">True</property>
+            <property name="valign">center</property>
+            <!-- Translators: tooltip for the downloads button -->
+            <property name="tooltip_text" translatable="yes">View downloads</property>
+            <property name="image">downloads_image</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="EphyDownloadsProgressIcon" id="downloads_image">
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
+  </template>
+  <object class="EphyBookmarksPopover" id="bookmarks_popover">
+    <property name="visible">True</property>
+  </object>
+</interface>
