@@ -21,6 +21,7 @@ libephymain_sources = [
   'bookmarks/ephy-bookmarks-popover.c',
   'clear-data-dialog.c',
   'cookies-dialog.c',
+  'ephy-action-bar-end.c',
   'ephy-action-bar-start.c',
   'ephy-action-helper.c',
   'ephy-completion-model.c',
