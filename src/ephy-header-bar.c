@@ -751,7 +751,7 @@ ephy_header_bar_constructed (GObject *object)
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   /* Translators: tooltip for the bookmarks popover button */
   gtk_widget_set_tooltip_text (button, _("View and manage your bookmarks"));
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (ephy_bookmarks_popover_new (header_bar->window)));
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (ephy_bookmarks_popover_new ()));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
 
   /* Downloads */
