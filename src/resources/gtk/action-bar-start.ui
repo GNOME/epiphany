@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="EphyActionBarStart" parent="GtkBox">
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkBox" id="navigation_box">
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <property name="homogeneous">True</property>
+        <style>
+          <class name="raised"/>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GtkButton" id="navigation_back">
+            <property name="visible">True</property>
+            <property name="action-name">toolbar.navigation-back</property>
+            <property name="valign">center</property>
+            <!-- Translators: tooltip for the back button -->
+            <property name="tooltip_text" translatable="yes">Go back to the previous page</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage" id="back_image">
+                <property name="visible">True</property>
+                <property name="icon-name">go-previous-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="navigation_forward">
+            <property name="visible">True</property>
+            <property name="action-name">toolbar.navigation-forward</property>
+            <property name="valign">center</property>
+            <!-- Translators: tooltip for the forward button -->
+            <property name="tooltip_text" translatable="yes">Go forward to the next page</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage" id="forward_image">
+                <property name="visible">True</property>
+                <property name="icon-name">go-next-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="combined_stop_reload_button">
+        <property name="visible">True</property>
+        <property name="action-name">toolbar.combined-stop-reload</property>
+        <property name="valign">center</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+        <child>
+          <object class="GtkImage" id="combined_stop_reload_image">
+            <property name="visible">True</property>
+            <property name="icon-name">view-refresh-symbolic</property>
+            <property name="icon-size">1</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="homepage_button">
+        <property name="visible">True</property>
+        <property name="action-name">win.home</property>
+        <property name="valign">center</property>
+        <!-- Translators: tooltip for the secret homepage button -->
+        <property name="tooltip_text" translatable="yes">Go to your homepage</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+        <child>
+          <object class="GtkImage" id="homepage_image">
+            <property name="visible">True</property>
+            <property name="icon-name">go-home-symbolic</property>
+            <property name="icon-size">1</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
