@@ -27,6 +27,7 @@
 #include "ephy-bookmarks-manager.h"
 #include "ephy-debug.h"
 #include "ephy-shell.h"
+#include "ephy-window.h"
 
 #include <glib/gi18n.h>
 
@@ -42,21 +43,12 @@ struct _EphyBookmarksPopover {
   char                  *tag_detail_tag;
 
   EphyBookmarksManager  *manager;
-  EphyWindow            *window;
 };
 
 G_DEFINE_TYPE (EphyBookmarksPopover, ephy_bookmarks_popover, GTK_TYPE_POPOVER)
 
 #define EPHY_LIST_BOX_ROW_TYPE_BOOKMARK "bookmark"
 #define EPHY_LIST_BOX_ROW_TYPE_TAG "tag"
-
-enum {
-  PROP_0,
-  PROP_WINDOW,
-  LAST_PROP
-};
-
-static GParamSpec *obj_properties[LAST_PROP];
 
 static GtkWidget *create_bookmark_row (gpointer item, gpointer user_data);
 static GtkWidget *create_tag_row (const char *tag);
@@ -446,12 +438,17 @@ ephy_bookmarks_popover_list_box_row_activated_cb (EphyBookmarksPopover   *self,
 
   type = g_object_get_data (G_OBJECT (row), "type");
   if (g_strcmp0 (type, EPHY_LIST_BOX_ROW_TYPE_BOOKMARK) == 0) {
+    GtkWidget *window;
     GActionGroup *action_group;
     GAction *action;
     const char *url;
 
-    action_group = gtk_widget_get_action_group (GTK_WIDGET (self->window), "win");
+    window = gtk_widget_get_ancestor (GTK_WIDGET (self), EPHY_TYPE_WINDOW);
+    g_assert (EPHY_IS_WINDOW (window));
+    action_group = gtk_widget_get_action_group (window, "win");
+    g_assert (action_group != NULL);
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "open-bookmark");
+    g_assert (action != NULL);
     url = ephy_bookmark_row_get_bookmark_url (EPHY_BOOKMARK_ROW (row));
 
     g_action_activate (action, g_variant_new_string (url));
@@ -472,39 +469,12 @@ ephy_bookmarks_popover_finalize (GObject *object)
 }
 
 static void
-ephy_bookmarks_popover_set_property (GObject      *object,
-                                     guint         prop_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
-{
-  EphyBookmarksPopover *self = EPHY_BOOKMARKS_POPOVER (object);
-
-  switch (prop_id) {
-    case PROP_WINDOW:
-      self->window = g_value_get_object (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
-}
-
-static void
 ephy_bookmarks_popover_class_init (EphyBookmarksPopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = ephy_bookmarks_popover_finalize;
-  object_class->set_property = ephy_bookmarks_popover_set_property;
-
-  obj_properties[PROP_WINDOW] =
-    g_param_spec_object ("window",
-                         "An EphyWindow object",
-                         "The popover's parent EphyWindow",
-                         EPHY_TYPE_WINDOW,
-                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/epiphany/gtk/bookmarks-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, EphyBookmarksPopover, toplevel_stack);
@@ -609,9 +579,8 @@ ephy_bookmarks_popover_init (EphyBookmarksPopover *self)
 }
 
 EphyBookmarksPopover *
-ephy_bookmarks_popover_new (EphyWindow *window)
+ephy_bookmarks_popover_new (void)
 {
   return g_object_new (EPHY_TYPE_BOOKMARKS_POPOVER,
-                       "window", window,
                        NULL);
 }
