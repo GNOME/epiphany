@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2018-04-18 03:02+0000\n"
-"PO-Revision-Date: 2018-04-25 12:37+0200\n"
+"POT-Creation-Date: 2018-04-30 15:34+0000\n"
+"PO-Revision-Date: 2018-05-08 12:18+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -531,11 +531,28 @@ msgstr ""
 msgid "Default zoom level for new pages"
 msgstr "Nivel de ampliación predeterminado para las páginas nuevas"
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:236
+#| msgid "Enable adblock"
+msgid "Enable autosearch"
+msgstr "Activar la búsqueda automática"
+
+#: data/org.gnome.epiphany.gschema.xml:237
+msgid ""
+"Whether to automatically search the web when something that does not look "
+"like a URL is entered in the address bar. If this setting is disabled, "
+"everything will be loaded as a URL unless a search engine is explicitly "
+"selected from the dropdown menu."
+msgstr ""
+"indica si se debe buscar automáticamente en la web cuando algo escrito en la "
+"barra de direcciones no se parece a un URL. Si esta opción se desactiva todo "
+"se tratará como un URL a menos que se indique explícitamente un motor de "
+"búsqueda en el menú desplegable."
+
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid "The downloads folder"
 msgstr "La carpeta de descargas"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -544,11 +561,11 @@ msgstr ""
 "para usar la carpeta de descargas predeterminada, o \"Desktop\" para usar la "
 "carpeta del escritorio."
 
-#: data/org.gnome.epiphany.gschema.xml:246
+#: data/org.gnome.epiphany.gschema.xml:251
 msgid "Window position"
 msgstr "Posición de la ventana"
 
-#: data/org.gnome.epiphany.gschema.xml:247
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -556,11 +573,11 @@ msgstr ""
 "La posición que usar para una ventana nueva que no se restaura de una sesión "
 "anterior."
 
-#: data/org.gnome.epiphany.gschema.xml:251
+#: data/org.gnome.epiphany.gschema.xml:256
 msgid "Window size"
 msgstr "Tamaño de la ventana"
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:257
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -568,11 +585,11 @@ msgstr ""
 "El tamaño que usar para una ventana nueva que no se restaura de una sesión "
 "anterior."
 
-#: data/org.gnome.epiphany.gschema.xml:256
+#: data/org.gnome.epiphany.gschema.xml:261
 msgid "Is maximized"
 msgstr "Está maximizada"
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:262
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -580,12 +597,24 @@ msgstr ""
 "Indica si una ventana nueva que no se restaura de una sesión anterior debe "
 "estar maximizada inicialmente."
 
-#: data/org.gnome.epiphany.gschema.xml:286
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:277
+msgid "Disable forward and back buttons"
+msgstr "Desactiva los botones Adelante y Atrás"
+
+#: data/org.gnome.epiphany.gschema.xml:278
+msgid ""
+"If set to “true”, forward and back buttons are disabled, preventing users "
+"from accessing immediate browser history"
+msgstr ""
+"Si es cierto los botones de Adelanta y Atrás estarán desactivados, evitando "
+"que los usuarios puede acceder al histórico inmediato"
+
+#: data/org.gnome.epiphany.gschema.xml:293
+#: data/org.gnome.epiphany.gschema.xml:380
 msgid "Currently signed in sync user"
 msgstr "Actualmente registrado como usuario de sincronización"
 
-#: data/org.gnome.epiphany.gschema.xml:287
+#: data/org.gnome.epiphany.gschema.xml:294
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -593,49 +622,49 @@ msgstr ""
 "La cuenta de correo-e asociada a la cuenta de Firefox usada para sincronizar "
 "datos con los servidores de Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:291
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:385
 msgid "Last sync timestamp"
 msgstr "Marca de tiempo de la última sincronización"
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:299
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "La hora UNIX en que se hizo la última sincronización, en segundos."
 
-#: data/org.gnome.epiphany.gschema.xml:296
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid "Sync device ID"
 msgstr "ID del dispositivo que sincronizar"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:304
 msgid "The sync device ID of the current device."
 msgstr "El ID del dispositivo de sincronización para el dispositivo actual."
 
-#: data/org.gnome.epiphany.gschema.xml:301
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid "Sync device name"
 msgstr "Sincronizar nombre del dispositivo"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid "The sync device name of the current device."
 msgstr ""
 "El nombre del dispositivo de sincronización para el dispositivo actual."
 
-#: data/org.gnome.epiphany.gschema.xml:306
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "The sync frequency in minutes"
 msgstr "La frecuencia de sincronización en minutos"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid "The number of minutes between two consecutive syncs."
 msgstr "El número de minutos entre dos sincronizaciones consecutivas."
 
-#: data/org.gnome.epiphany.gschema.xml:311
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid "Sync data with Firefox"
 msgstr "Sincronizar datos con Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:319
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -643,37 +672,37 @@ msgstr ""
 "Cierto si las colecciones de Epiphany se deben sincronizar con las "
 "colecciones de Firefox, falso en otro caso."
 
-#: data/org.gnome.epiphany.gschema.xml:316
-#: data/org.gnome.epiphany.gschema.xml:403
+#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid "Enable bookmarks sync"
 msgstr "Activar sincronización de marcadores"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:324
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "Cierto si se debe sincronizar la colección de marcadores, falso en otro caso."
 
-#: data/org.gnome.epiphany.gschema.xml:321
-#: data/org.gnome.epiphany.gschema.xml:408
+#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid "Bookmarks sync timestamp"
 msgstr "Marca de tiempo de sincronización de marcadores"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:329
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr ""
 "La marca de tiempo en la que se produjo la última sincronización de "
 "marcadores"
 
-#: data/org.gnome.epiphany.gschema.xml:326
-#: data/org.gnome.epiphany.gschema.xml:341
-#: data/org.gnome.epiphany.gschema.xml:356
-#: data/org.gnome.epiphany.gschema.xml:413
-#: data/org.gnome.epiphany.gschema.xml:428
-#: data/org.gnome.epiphany.gschema.xml:443
+#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:450
 msgid "Initial sync or normal sync"
 msgstr "Sincronización inicial o normal"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:334
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -681,29 +710,29 @@ msgstr ""
 "Cierto si se debe sincronizar la colección de marcadores por primera vez, "
 "falso en otro caso."
 
-#: data/org.gnome.epiphany.gschema.xml:331
-#: data/org.gnome.epiphany.gschema.xml:418
+#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid "Enable passwords sync"
 msgstr "Activar sincronización contraseñas"
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:339
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 "Cierto si se debe sincronizar la colección de contraseñas, falso en otro "
 "caso."
 
-#: data/org.gnome.epiphany.gschema.xml:336
-#: data/org.gnome.epiphany.gschema.xml:423
+#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid "Passwords sync timestamp"
 msgstr "Marca de tiempo de la sincronización de contraseñas"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:344
 msgid "The timestamp at which last passwords sync was made."
 msgstr ""
 "La marca de tiempo en la que se produjo la última sincronización de "
 "contraseñas"
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:349
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -711,28 +740,28 @@ msgstr ""
 "Cierto si se debe sincronizar la colección de contraseñas por primera vez, "
 "falso en otro caso."
 
-#: data/org.gnome.epiphany.gschema.xml:346
-#: data/org.gnome.epiphany.gschema.xml:433
+#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid "Enable history sync"
 msgstr "Activar histórico de sincronización"
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:354
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "Cierto si se debe sincronizar la colección del histórico, falso en otro caso."
 
-#: data/org.gnome.epiphany.gschema.xml:351
-#: data/org.gnome.epiphany.gschema.xml:438
+#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid "History sync timestamp"
 msgstr "Marca de tiempo del histórico de sincronización"
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:359
 msgid "The timestamp at which last history sync was made."
 msgstr ""
 "La marca de tiempo en la que se produjo la última sincronización del "
 "histórico"
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:364
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -740,45 +769,45 @@ msgstr ""
 "Cierto si se debe sincronizar la colección del histórico por primera vez, "
 "falso en otro caso."
 
-#: data/org.gnome.epiphany.gschema.xml:361
-#: data/org.gnome.epiphany.gschema.xml:448
+#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:455
 msgid "Enable open tabs sync"
 msgstr "Activar la sincronización de las pestañas abiertas"
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:369
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "Cierto si se debe sincronizar la colección de pestañas abiertas, falso en "
 "otro caso."
 
-#: data/org.gnome.epiphany.gschema.xml:366
-#: data/org.gnome.epiphany.gschema.xml:453
+#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:460
 msgid "Open tabs sync timestamp"
 msgstr "Marca de tiempo de sincronización de pestañas abiertas"
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:374
 msgid "The timestamp at which last open tabs sync was made."
 msgstr ""
 "La marca de tiempo en la que se produjo la última sincronización de pestañas "
 "abiertas."
 
-#: data/org.gnome.epiphany.gschema.xml:374
-#: data/org.gnome.epiphany.gschema.xml:379
-#: data/org.gnome.epiphany.gschema.xml:384
-#: data/org.gnome.epiphany.gschema.xml:389
-#: data/org.gnome.epiphany.gschema.xml:394
-#: data/org.gnome.epiphany.gschema.xml:399
-#: data/org.gnome.epiphany.gschema.xml:404
-#: data/org.gnome.epiphany.gschema.xml:409
-#: data/org.gnome.epiphany.gschema.xml:414
-#: data/org.gnome.epiphany.gschema.xml:419
-#: data/org.gnome.epiphany.gschema.xml:424
-#: data/org.gnome.epiphany.gschema.xml:429
-#: data/org.gnome.epiphany.gschema.xml:434
-#: data/org.gnome.epiphany.gschema.xml:439
-#: data/org.gnome.epiphany.gschema.xml:444
-#: data/org.gnome.epiphany.gschema.xml:449
-#: data/org.gnome.epiphany.gschema.xml:454
+#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:421
+#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:436
+#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:456
+#: data/org.gnome.epiphany.gschema.xml:461
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "sync/ instead."
@@ -786,13 +815,13 @@ msgstr ""
 "OBSOLETO: esta clave está obsoleta y se ignorará. Use /org/gnome/epiphany/"
 "sync/ en su lugar."
 
-#: data/org.gnome.epiphany.gschema.xml:465
+#: data/org.gnome.epiphany.gschema.xml:472
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Decisión que aplicar cuando se solicita permiso para usar el micrófono de "
 "este equipo"
 
-#: data/org.gnome.epiphany.gschema.xml:466
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -804,13 +833,13 @@ msgstr ""
 "navegador pedirá permiso al usuario, mientras que 'allow' y 'deny' indican "
 "automáticamente la respuesta."
 
-#: data/org.gnome.epiphany.gschema.xml:470
+#: data/org.gnome.epiphany.gschema.xml:477
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Decisión que aplicar cuando se solicita permiso para geolocalizar este equipo"
 
-#: data/org.gnome.epiphany.gschema.xml:471
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -822,14 +851,14 @@ msgstr ""
 "significa que el navegador pedirá permiso al usuario, mientras que 'allow' y "
 "'deny' indican automáticamente la respuesta."
 
-#: data/org.gnome.epiphany.gschema.xml:475
+#: data/org.gnome.epiphany.gschema.xml:482
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Decisión que aplicar cuando se solicita permiso para mostrar notificaciones "
 "en este equipo."
 
-#: data/org.gnome.epiphany.gschema.xml:476
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -841,14 +870,14 @@ msgstr ""
 "que el navegador pedirá permiso al usuario, mientras que 'allow' y 'deny' "
 "indican automáticamente la respuesta."
 
-#: data/org.gnome.epiphany.gschema.xml:480
+#: data/org.gnome.epiphany.gschema.xml:487
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Decisión que aplicar cuando se solicita permiso para guardar la contraseña "
 "para este equipo"
 
-#: data/org.gnome.epiphany.gschema.xml:481
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -860,13 +889,13 @@ msgstr ""
 "el navegador pedirá permiso al usuario, mientras que 'allow' y 'deny' "
 "indican automáticamente la respuesta."
 
-#: data/org.gnome.epiphany.gschema.xml:485
+#: data/org.gnome.epiphany.gschema.xml:492
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Decisión que aplicar cuando se solicita permiso para usar la cámara web de "
 "este equipo"
 
-#: data/org.gnome.epiphany.gschema.xml:486
+#: data/org.gnome.epiphany.gschema.xml:493
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -950,23 +979,24 @@ msgid "Installed on:"
 msgstr "Instalada el:"
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:464
 msgid "Welcome to Web"
 msgstr "Bienvenido a Web"
 
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:464
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Empiece a navegar y los sitios que más visite aparecerán aquí."
 
-#: embed/ephy-about-handler.c:505
+#: embed/ephy-about-handler.c:490
+#: embed/web-extension/resources/js/overview.js:101
 msgid "Remove from overview"
 msgstr "Quitar de la vista general"
 
-#: embed/ephy-about-handler.c:579 embed/ephy-about-handler.c:580
+#: embed/ephy-about-handler.c:564 embed/ephy-about-handler.c:565
 msgid "Private Browsing"
 msgstr "Navegación privada"
 
-#: embed/ephy-about-handler.c:581
+#: embed/ephy-about-handler.c:566
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -977,14 +1007,14 @@ msgstr ""
 "información almacenada se limpiará cuando cierre la ventana. Los archivos "
 "que descargue se conservarán."
 
-#: embed/ephy-about-handler.c:585
+#: embed/ephy-about-handler.c:570
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "El modo de incógnito oculta su actividad sólo ante la gente que use este "
 "mismo equipo."
 
-#: embed/ephy-about-handler.c:587
+#: embed/ephy-about-handler.c:572
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1019,7 +1049,7 @@ msgstr "ESC"
 msgid "F11"
 msgstr "F11"
 
-#: embed/ephy-embed-utils.c:63
+#: embed/ephy-embed-utils.c:64
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Enviar correo-e a la dirección «%s»"
@@ -1716,7 +1746,7 @@ msgstr "Ninguna espacificada"
 msgid "Technical information"
 msgstr "Información técnica"
 
-#: embed/ephy-web-view.c:3333
+#: embed/ephy-web-view.c:3343
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -2217,7 +2247,7 @@ msgid "View downloads"
 msgstr "Ver descargas"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-header-bar.c:831 src/ephy-notebook.c:485
+#: src/ephy-header-bar.c:831 src/ephy-notebook.c:488
 msgid "Open a new tab"
 msgstr "Abrir una pestaña nueva"
 
@@ -2294,11 +2324,11 @@ msgid "Web options"
 msgstr "Opciones de Web"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:492
+#: src/ephy-notebook.c:495
 msgid "View open tabs"
 msgstr "Ver las pestañas abiertas"
 
-#: src/ephy-notebook.c:753
+#: src/ephy-notebook.c:756
 msgid "Close tab"
 msgstr "Cerrar pestaña"
 
@@ -2539,23 +2569,23 @@ msgstr "Seleccione una carpeta"
 msgid "Search the Web"
 msgstr "Buscar en la web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1284
+#: src/profile-migrator/ephy-profile-migrator.c:1289
 msgid "Executes only the n-th migration step"
 msgstr "Ejecuta en n-ésimo paso dela migración"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1286
+#: src/profile-migrator/ephy-profile-migrator.c:1291
 msgid "Specifies the required version for the migrator"
 msgstr "Especifica la versión requerida por el migrador"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1288
+#: src/profile-migrator/ephy-profile-migrator.c:1293
 msgid "Specifies the profile where the migrator should run"
 msgstr "Especifica el perfil que debe ejecutar el migrador"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1308
+#: src/profile-migrator/ephy-profile-migrator.c:1313
 msgid "Web profile migrator"
 msgstr "Migrador de perfiles de Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1309
+#: src/profile-migrator/ephy-profile-migrator.c:1314
 msgid "Web profile migrator options"
 msgstr "Opciones del migrador de perfiles de Web"
 
@@ -2938,7 +2968,6 @@ msgid "Try to block _advertisements"
 msgstr "Intentar bloquear _anuncios"
 
 #: src/resources/gtk/prefs-dialog.ui:257
-#| msgid "Try to block web _trackers"
 msgid "Try to block web _trackers (including social media buttons)"
 msgstr ""
 "Intentar bloquear _rastreadores web (incluyendo botones de redes sociales)"
