@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: epiphany master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2018-04-17 13:39+0000\n"
-"PO-Revision-Date: 2018-04-17 21:47+0200\n"
+"POT-Creation-Date: 2018-05-08 11:29+0000\n"
+"PO-Revision-Date: 2018-05-08 22:26+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -524,11 +524,23 @@ msgstr ""
 msgid "Default zoom level for new pages"
 msgstr "Privzeta raven približanja za nove strani"
 
-#: data/org.gnome.epiphany.gschema.xml:238
+#: data/org.gnome.epiphany.gschema.xml:236
+msgid "Enable autosearch"
+msgstr "Omogoči samodejno iskanje"
+
+#: data/org.gnome.epiphany.gschema.xml:237
+msgid ""
+"Whether to automatically search the web when something that does not look "
+"like a URL is entered in the address bar. If this setting is disabled, "
+"everything will be loaded as a URL unless a search engine is explicitly "
+"selected from the dropdown menu."
+msgstr ""
+
+#: data/org.gnome.epiphany.gschema.xml:243
 msgid "The downloads folder"
 msgstr "Mapa prejemanja"
 
-#: data/org.gnome.epiphany.gschema.xml:239
+#: data/org.gnome.epiphany.gschema.xml:244
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -536,11 +548,11 @@ msgstr ""
 "Pot do mape, kamor naj bodo prejete datoteke; v mapo \"Prejeto\" kot "
 "privzeto mapo za prejemanje ali na \"Namizje\" kot namizna mapa."
 
-#: data/org.gnome.epiphany.gschema.xml:246
+#: data/org.gnome.epiphany.gschema.xml:251
 msgid "Window position"
 msgstr "Položaj okna"
 
-#: data/org.gnome.epiphany.gschema.xml:247
+#: data/org.gnome.epiphany.gschema.xml:252
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -548,11 +560,11 @@ msgstr ""
 "Položaj okna, ki naj bo uporabljen pri odpiranju novega okna, ki ni "
 "obnovljeno iz predhodne seje."
 
-#: data/org.gnome.epiphany.gschema.xml:251
+#: data/org.gnome.epiphany.gschema.xml:256
 msgid "Window size"
 msgstr "Velikost okna"
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:257
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -560,11 +572,11 @@ msgstr ""
 "Velikost okna, ki naj bo uporabljena pri odpiranju novega okna, ki ni "
 "obnovljeno iz predhodne seje."
 
-#: data/org.gnome.epiphany.gschema.xml:256
+#: data/org.gnome.epiphany.gschema.xml:261
 msgid "Is maximized"
 msgstr "Je razpeto"
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:262
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -572,12 +584,24 @@ msgstr ""
 "Ali naj bo okno, ki ni obnovljeno iz predhodne seje, ob odpiranju razpeto "
 "čez celoten zaslon."
 
-#: data/org.gnome.epiphany.gschema.xml:286
-#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:277
+msgid "Disable forward and back buttons"
+msgstr "Onemogoči gumba za naprej in nazaj po straneh"
+
+#: data/org.gnome.epiphany.gschema.xml:278
+msgid ""
+"If set to “true”, forward and back buttons are disabled, preventing users "
+"from accessing immediate browser history"
+msgstr ""
+"Izbrana možnost onemogoči prikaz gumbov za pomikanje po zgodovini brskanja "
+"strani, s čimer se onemogoči neposreden pregled iskanja"
+
+#: data/org.gnome.epiphany.gschema.xml:293
+#: data/org.gnome.epiphany.gschema.xml:380
 msgid "Currently signed in sync user"
 msgstr "Trenutno prijavljen uporabniški račun usklajevanja"
 
-#: data/org.gnome.epiphany.gschema.xml:287
+#: data/org.gnome.epiphany.gschema.xml:294
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -585,48 +609,48 @@ msgstr ""
 "Elektronski naslov, povezan z računom Firefox, ki se uporablja za "
 "usklajevanje podatkov s strežniki."
 
-#: data/org.gnome.epiphany.gschema.xml:291
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:298
+#: data/org.gnome.epiphany.gschema.xml:385
 msgid "Last sync timestamp"
 msgstr "Časovni žig usklajevanja"
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:299
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "Časovni žig UNIX ob zadnjem usklajevanja (v sekundah)."
 
-#: data/org.gnome.epiphany.gschema.xml:296
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:303
+#: data/org.gnome.epiphany.gschema.xml:390
 msgid "Sync device ID"
 msgstr "Uskladi ID naprave"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:304
 msgid "The sync device ID of the current device."
 msgstr "Usklajevanje ID trenutno uporabljene naprave."
 
-#: data/org.gnome.epiphany.gschema.xml:301
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:308
+#: data/org.gnome.epiphany.gschema.xml:395
 msgid "Sync device name"
 msgstr "Uskladi ime naprave"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:309
 msgid "The sync device name of the current device."
 msgstr "Usklajevanje imena trenutno uporabljene naprave."
 
-#: data/org.gnome.epiphany.gschema.xml:306
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:313
+#: data/org.gnome.epiphany.gschema.xml:400
 msgid "The sync frequency in minutes"
 msgstr "Pogostost preverjanja (v minutah)"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:314
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Čas v minutah med zaporednimi usklajevanji."
 
-#: data/org.gnome.epiphany.gschema.xml:311
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:318
+#: data/org.gnome.epiphany.gschema.xml:405
 msgid "Sync data with Firefox"
 msgstr "Uskladi podatke Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:319
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -635,124 +659,124 @@ msgstr ""
 "ne."
 
 # G:1 K:0 O:0
-#: data/org.gnome.epiphany.gschema.xml:316
-#: data/org.gnome.epiphany.gschema.xml:403
+#: data/org.gnome.epiphany.gschema.xml:323
+#: data/org.gnome.epiphany.gschema.xml:410
 msgid "Enable bookmarks sync"
 msgstr "Omogoči usklajevanje zaznamkov"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:324
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr "PRAV, če naj se zbirka zaznamkov usklajuje, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:321
-#: data/org.gnome.epiphany.gschema.xml:408
+#: data/org.gnome.epiphany.gschema.xml:328
+#: data/org.gnome.epiphany.gschema.xml:415
 msgid "Bookmarks sync timestamp"
 msgstr "Časovni žig usklajevanja zaznamkov"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:329
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Časovni žig zadnjega usklajevanja zaznamkov."
 
-#: data/org.gnome.epiphany.gschema.xml:326
-#: data/org.gnome.epiphany.gschema.xml:341
-#: data/org.gnome.epiphany.gschema.xml:356
-#: data/org.gnome.epiphany.gschema.xml:413
-#: data/org.gnome.epiphany.gschema.xml:428
-#: data/org.gnome.epiphany.gschema.xml:443
+#: data/org.gnome.epiphany.gschema.xml:333
+#: data/org.gnome.epiphany.gschema.xml:348
+#: data/org.gnome.epiphany.gschema.xml:363
+#: data/org.gnome.epiphany.gschema.xml:420
+#: data/org.gnome.epiphany.gschema.xml:435
+#: data/org.gnome.epiphany.gschema.xml:450
 msgid "Initial sync or normal sync"
 msgstr "Začetno ali običajno usklajevanje"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:334
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "PRAV, če je treba zbirko zaznamkov prvič uskladiti, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:331
-#: data/org.gnome.epiphany.gschema.xml:418
+#: data/org.gnome.epiphany.gschema.xml:338
+#: data/org.gnome.epiphany.gschema.xml:425
 msgid "Enable passwords sync"
 msgstr "Omogoči usklajevanje gesel"
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:339
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "PRAV, če naj se zbirka gesel usklajuje, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:336
-#: data/org.gnome.epiphany.gschema.xml:423
+#: data/org.gnome.epiphany.gschema.xml:343
+#: data/org.gnome.epiphany.gschema.xml:430
 msgid "Passwords sync timestamp"
 msgstr "Časovni žig usklajevanja gesel"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:344
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Časovni žig zadnjega usklajevanja gesel."
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:349
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "PRAV, če je treba zbirko gesel prvič uskladiti, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:346
-#: data/org.gnome.epiphany.gschema.xml:433
+#: data/org.gnome.epiphany.gschema.xml:353
+#: data/org.gnome.epiphany.gschema.xml:440
 msgid "Enable history sync"
 msgstr "Omogoči usklajevanje zgodovine"
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:354
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "PRAV, če naj se zgodovina usklajuje, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:351
-#: data/org.gnome.epiphany.gschema.xml:438
+#: data/org.gnome.epiphany.gschema.xml:358
+#: data/org.gnome.epiphany.gschema.xml:445
 msgid "History sync timestamp"
 msgstr "Časovni žig usklajevanja zgodovine"
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:359
 msgid "The timestamp at which last history sync was made."
 msgstr "Časovni žig zadnjega usklajevanja zgodovine brskanja."
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:364
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "PRAV, če je treba zgodovino prvič uskladiti, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:361
-#: data/org.gnome.epiphany.gschema.xml:448
+#: data/org.gnome.epiphany.gschema.xml:368
+#: data/org.gnome.epiphany.gschema.xml:455
 msgid "Enable open tabs sync"
 msgstr "Omogoči usklajevanje odprtih zavihkov"
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:369
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "PRAV, če naj se zbirka odprtih zavihkov usklajuje, NAPAK, če naj se ne."
 
-#: data/org.gnome.epiphany.gschema.xml:366
-#: data/org.gnome.epiphany.gschema.xml:453
+#: data/org.gnome.epiphany.gschema.xml:373
+#: data/org.gnome.epiphany.gschema.xml:460
 msgid "Open tabs sync timestamp"
 msgstr "Časovni žig usklajevanja zavihkov"
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:374
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Časovni žig zadnjega usklajevanja odprtih zavihkov."
 
-#: data/org.gnome.epiphany.gschema.xml:374
-#: data/org.gnome.epiphany.gschema.xml:379
-#: data/org.gnome.epiphany.gschema.xml:384
-#: data/org.gnome.epiphany.gschema.xml:389
-#: data/org.gnome.epiphany.gschema.xml:394
-#: data/org.gnome.epiphany.gschema.xml:399
-#: data/org.gnome.epiphany.gschema.xml:404
-#: data/org.gnome.epiphany.gschema.xml:409
-#: data/org.gnome.epiphany.gschema.xml:414
-#: data/org.gnome.epiphany.gschema.xml:419
-#: data/org.gnome.epiphany.gschema.xml:424
-#: data/org.gnome.epiphany.gschema.xml:429
-#: data/org.gnome.epiphany.gschema.xml:434
-#: data/org.gnome.epiphany.gschema.xml:439
-#: data/org.gnome.epiphany.gschema.xml:444
-#: data/org.gnome.epiphany.gschema.xml:449
-#: data/org.gnome.epiphany.gschema.xml:454
+#: data/org.gnome.epiphany.gschema.xml:381
+#: data/org.gnome.epiphany.gschema.xml:386
+#: data/org.gnome.epiphany.gschema.xml:391
+#: data/org.gnome.epiphany.gschema.xml:396
+#: data/org.gnome.epiphany.gschema.xml:401
+#: data/org.gnome.epiphany.gschema.xml:406
+#: data/org.gnome.epiphany.gschema.xml:411
+#: data/org.gnome.epiphany.gschema.xml:416
+#: data/org.gnome.epiphany.gschema.xml:421
+#: data/org.gnome.epiphany.gschema.xml:426
+#: data/org.gnome.epiphany.gschema.xml:431
+#: data/org.gnome.epiphany.gschema.xml:436
+#: data/org.gnome.epiphany.gschema.xml:441
+#: data/org.gnome.epiphany.gschema.xml:446
+#: data/org.gnome.epiphany.gschema.xml:451
+#: data/org.gnome.epiphany.gschema.xml:456
+#: data/org.gnome.epiphany.gschema.xml:461
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "sync/ instead."
@@ -760,13 +784,13 @@ msgstr ""
 "OPUŠČENO: Ta ključ je opuščen in bo prezrt. Namesto starega ključa "
 "uporabite /org/gnome/epiphany/sync/."
 
-#: data/org.gnome.epiphany.gschema.xml:465
+#: data/org.gnome.epiphany.gschema.xml:472
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za uporabo mikrofona za "
 "tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:466
+#: data/org.gnome.epiphany.gschema.xml:473
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -778,14 +802,14 @@ msgstr ""
 "uporabnikov odziv, medtem ko »dovoli« in »zavrni« opredeljujeta samodejni "
 "odziv na zahtevo."
 
-#: data/org.gnome.epiphany.gschema.xml:470
+#: data/org.gnome.epiphany.gschema.xml:477
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za uporabo storitev "
 "geolokacije za tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:471
+#: data/org.gnome.epiphany.gschema.xml:478
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -797,14 +821,14 @@ msgstr ""
 "odziv, medtem ko »dovoli« in »zavrni« opredeljujeta samodejni odziv na "
 "zahtevo."
 
-#: data/org.gnome.epiphany.gschema.xml:475
+#: data/org.gnome.epiphany.gschema.xml:482
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za javljanje obvestil "
 "za tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:476
+#: data/org.gnome.epiphany.gschema.xml:483
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -815,14 +839,14 @@ msgstr ""
 "gostitelja. Privzeta možnost »neodločeno« zahteva uporabnikov odziv, medtem "
 "ko »dovoli« in »zavrni« opredeljujeta samodejni odziv na zahtevo."
 
-#: data/org.gnome.epiphany.gschema.xml:480
+#: data/org.gnome.epiphany.gschema.xml:487
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za shranjevanje gesla "
 "za tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:481
+#: data/org.gnome.epiphany.gschema.xml:488
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -834,13 +858,13 @@ msgstr ""
 "odziv, medtem ko »dovoli« in »zavrni« opredeljujeta samodejni odziv na "
 "zahtevo."
 
-#: data/org.gnome.epiphany.gschema.xml:485
+#: data/org.gnome.epiphany.gschema.xml:492
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Odločitev za uveljavitev, ko so zahtevana dovoljenja za uporabo spletne "
 "kamere za tega gostitelja"
 
-#: data/org.gnome.epiphany.gschema.xml:486
+#: data/org.gnome.epiphany.gschema.xml:493
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -924,25 +948,26 @@ msgid "Installed on:"
 msgstr "Nameščeno:"
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:464
 msgid "Welcome to Web"
 msgstr "Dobrodošli v programu Web"
 
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:464
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Ko začnete z brskanjem, bodo najpogosteje obiskane strani prikazane na tem "
 "mestu."
 
-#: embed/ephy-about-handler.c:505
+#: embed/ephy-about-handler.c:490
+#: embed/web-extension/resources/js/overview.js:101
 msgid "Remove from overview"
 msgstr "Odstrani iz pregleda"
 
-#: embed/ephy-about-handler.c:579 embed/ephy-about-handler.c:580
+#: embed/ephy-about-handler.c:564 embed/ephy-about-handler.c:565
 msgid "Private Browsing"
 msgstr "Zasebno brskanje"
 
-#: embed/ephy-about-handler.c:581
+#: embed/ephy-about-handler.c:566
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -952,14 +977,14 @@ msgstr ""
 "prikazane v zgodovini brskanja in vsi podatki, pridobljeni med to sejo, bodo "
 "po zaprtju okna izbrisani. Prejete datoteke bodo ohranjene."
 
-#: embed/ephy-about-handler.c:585
+#: embed/ephy-about-handler.c:570
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "V zasebnem načinu, lahko prikrijete dejavnosti, ki jih izvajate na spletu "
 "pred drugimi uporabniki tega računalnika."
 
-#: embed/ephy-about-handler.c:587
+#: embed/ephy-about-handler.c:572
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -996,7 +1021,7 @@ msgstr "Esc"
 msgid "F11"
 msgstr "F11"
 
-#: embed/ephy-embed-utils.c:63
+#: embed/ephy-embed-utils.c:64
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Pošlji elektronsko sporočilo za »%s«"
@@ -1760,7 +1785,7 @@ msgstr "Ni določeno"
 msgid "Technical information"
 msgstr "Tehnični podatki"
 
-#: embed/ephy-web-view.c:3333
+#: embed/ephy-web-view.c:3343
 msgid "_OK"
 msgstr "_V redu"
 
@@ -1875,22 +1900,22 @@ msgstr "Geslo za %s na spletišču %s"
 msgid "Password in a form in %s"
 msgstr "Geslo v obrazcu %s"
 
-#: lib/sync/ephy-sync-service.c:846
+#: lib/sync/ephy-sync-service.c:851
 msgid "Failed to obtain storage credentials."
 msgstr "Pridobivanje poveril shrambe je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:847 lib/sync/ephy-sync-service.c:962
-#: lib/sync/ephy-sync-service.c:1719
+#: lib/sync/ephy-sync-service.c:852 lib/sync/ephy-sync-service.c:967
+#: lib/sync/ephy-sync-service.c:1741
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Med nastavitvami znova omogočite prijavo in nato nadaljujte postopek "
 "usklajevanja."
 
-#: lib/sync/ephy-sync-service.c:952
+#: lib/sync/ephy-sync-service.c:957
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Geslo računa Firefox je najverjetneje spremenjeno."
 
-#: lib/sync/ephy-sync-service.c:953
+#: lib/sync/ephy-sync-service.c:958
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1898,59 +1923,59 @@ msgstr ""
 "Če želite nadaljevati z usklajevanjem, se med nastavitvami prijavite z novim "
 "geslom."
 
-#: lib/sync/ephy-sync-service.c:961
+#: lib/sync/ephy-sync-service.c:966
 msgid "Failed to obtain signed certificate."
 msgstr "Pridobivanje podpisanega potrdila je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:1685 lib/sync/ephy-sync-service.c:1690
+#: lib/sync/ephy-sync-service.c:1707 lib/sync/ephy-sync-service.c:1712
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Ni mogoče najti usklajevalnih žetonov za trenutno prijavljenega uporabnika."
 
-#: lib/sync/ephy-sync-service.c:1697 lib/sync/ephy-sync-service.c:1705
+#: lib/sync/ephy-sync-service.c:1719 lib/sync/ephy-sync-service.c:1727
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Usklajevalni žetoni za trenutno prijavljenega uporabnika niso veljavni."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1813
+#: lib/sync/ephy-sync-service.c:1835
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Usklajevalni žetoni za %s"
 
-#: lib/sync/ephy-sync-service.c:1839
+#: lib/sync/ephy-sync-service.c:1861
 msgid "Failed to upload client record."
 msgstr "Pošiljanje zapisa odjemalca je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2029
+#: lib/sync/ephy-sync-service.c:2054
 msgid "Failed to upload crypto/keys record."
 msgstr "Pošiljanje zapisa šifrirnih ključev je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2136
+#: lib/sync/ephy-sync-service.c:2161
 msgid "Failed to retrieve crypto keys."
 msgstr "Pridobivanje šifrirnih ključev je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2187
+#: lib/sync/ephy-sync-service.c:2212
 msgid "Failed to upload meta/global record."
 msgstr "Pošiljanje zapisa splošnih in meta podatkov je spodletelo."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2304
+#: lib/sync/ephy-sync-service.c:2329
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
 msgstr ""
 "Račun Firefox uporablja različico shrambe %d, program Web pa podpira le %d."
 
-#: lib/sync/ephy-sync-service.c:2315
+#: lib/sync/ephy-sync-service.c:2340
 msgid "Failed to verify storage version."
 msgstr "Overjanje različice shrambe je spodletela."
 
-#: lib/sync/ephy-sync-service.c:2371
+#: lib/sync/ephy-sync-service.c:2396
 msgid "Failed to upload device info"
 msgstr "Pošiljanje podrobnosti o napravi je spodletelo."
 
-#: lib/sync/ephy-sync-service.c:2444 lib/sync/ephy-sync-service.c:2522
+#: lib/sync/ephy-sync-service.c:2469 lib/sync/ephy-sync-service.c:2547
 msgid "Failed to retrieve the Sync Key"
 msgstr "Pridobivanje usklajevalnega ključa je spodletelo."
 
@@ -2279,7 +2304,7 @@ msgid "View downloads"
 msgstr "Prejete datoteke"
 
 #. Translators: tooltip for the new tab button
-#: src/ephy-header-bar.c:831 src/ephy-notebook.c:485
+#: src/ephy-header-bar.c:831 src/ephy-notebook.c:488
 msgid "Open a new tab"
 msgstr "Odpri nov zavihek"
 
@@ -2364,11 +2389,11 @@ msgid "Web options"
 msgstr "Možnosti programa"
 
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:492
+#: src/ephy-notebook.c:495
 msgid "View open tabs"
 msgstr "Pogled odprtih zavihkov"
 
-#: src/ephy-notebook.c:753
+#: src/ephy-notebook.c:756
 msgid "Close tab"
 msgstr "Zapri zavihek"
 
@@ -2577,18 +2602,18 @@ msgstr "Shrani predstavno datoteko kot ..."
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:222
+#: src/prefs-dialog.c:224
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Nazadnje usklajeno: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:283 src/prefs-dialog.c:1893
+#: src/prefs-dialog.c:285 src/prefs-dialog.c:1938
 #, c-format
 msgid "Logged in as %s"
 msgstr "Prijava %s"
 
-#: src/prefs-dialog.c:523
+#: src/prefs-dialog.c:525
 msgid "Something went wrong, please try again later."
 msgstr "Prišlo je do napake, poskusite znova."
 
@@ -2596,7 +2621,7 @@ msgstr "Prišlo je do napake, poskusite znova."
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:1035 src/prefs-dialog.c:1039
+#: src/prefs-dialog.c:1080 src/prefs-dialog.c:1084
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2605,13 +2630,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1046
+#: src/prefs-dialog.c:1091
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Uporabniško določeno (%s)"
 
-#: src/prefs-dialog.c:1068
+#: src/prefs-dialog.c:1113
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2620,11 +2645,11 @@ msgstr[1] "Sistemski jezik (%s)"
 msgstr[2] "Sistemska jezika (%s)"
 msgstr[3] "Sistemski jeziki (%s)"
 
-#: src/prefs-dialog.c:1311 src/resources/gtk/prefs-dialog.ui:768
+#: src/prefs-dialog.c:1356 src/resources/gtk/prefs-dialog.ui:768
 msgid "Language"
 msgstr "Jezik"
 
-#: src/prefs-dialog.c:1389
+#: src/prefs-dialog.c:1434
 msgid "Select a directory"
 msgstr "Izbor mape"
 
@@ -2633,23 +2658,23 @@ msgstr "Izbor mape"
 msgid "Search the Web"
 msgstr "Preišči splet"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1284
+#: src/profile-migrator/ephy-profile-migrator.c:1289
 msgid "Executes only the n-th migration step"
 msgstr "Izvede le n-ti korak migracije"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1286
+#: src/profile-migrator/ephy-profile-migrator.c:1291
 msgid "Specifies the required version for the migrator"
 msgstr "Določa zahtevano različico migratorja"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1288
+#: src/profile-migrator/ephy-profile-migrator.c:1293
 msgid "Specifies the profile where the migrator should run"
 msgstr "Določa profil, v katerem naj se zažene migrator"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1308
+#: src/profile-migrator/ephy-profile-migrator.c:1313
 msgid "Web profile migrator"
 msgstr "Prenos profila programa Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1309
+#: src/profile-migrator/ephy-profile-migrator.c:1314
 msgid "Web profile migrator options"
 msgstr "Možnosti prenosa profila programa Web"
 
@@ -2660,8 +2685,6 @@ msgstr "_Novo okno"
 
 # G:1 K:0 O:0
 #: src/resources/gtk/application-menu.ui:11
-#: src/resources/gtk/page-menu-popover.ui:147
-#: src/resources/gtk/page-menu-popover-flatpak.ui:147
 msgid "New _Incognito Window"
 msgstr "Novo _zasebno okno"
 
@@ -2946,18 +2969,12 @@ msgstr "Približaj"
 msgid "_New Tab"
 msgstr "_Nov zavihek"
 
-# G:1 K:0 O:0
-#: src/resources/gtk/page-menu-popover.ui:139
-#: src/resources/gtk/page-menu-popover-flatpak.ui:139
-msgid "New _Window"
-msgstr "Novo o_kno"
-
-#: src/resources/gtk/page-menu-popover.ui:163
-#: src/resources/gtk/page-menu-popover-flatpak.ui:163
+#: src/resources/gtk/page-menu-popover.ui:147
+#: src/resources/gtk/page-menu-popover-flatpak.ui:147
 msgid "Text _Encoding"
 msgstr "_Znakovno kodiranje besedila"
 
-#: src/resources/gtk/page-menu-popover.ui:179
+#: src/resources/gtk/page-menu-popover.ui:163
 msgid "Install Site as Web _Application…"
 msgstr "Namesti spletišče kot _spletni program"
 
@@ -3741,6 +3758,10 @@ msgstr ""
 #: src/window-commands.c:2239
 msgid "_Enable"
 msgstr "_Omogoči"
+
+# G:1 K:0 O:0
+#~ msgid "New _Window"
+#~ msgstr "Novo o_kno"
 
 #~ msgid "Automatic downloads"
 #~ msgstr "Samodejno prejemanje"
