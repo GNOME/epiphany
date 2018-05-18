@@ -54,7 +54,6 @@
 #include "window-commands.h"
 
 #include <gdk/gdkkeysyms.h>
-#include <gdk/gdkx.h>
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>

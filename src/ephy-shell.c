@@ -46,7 +46,6 @@
 #include "window-commands.h"
 
 #include <glib/gi18n.h>
-#include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
 struct _EphyShell {
