@@ -1,66 +1,73 @@
 {
-    "app-id": "org.gnome.Epiphany",
-    "runtime": "org.gnome.Platform",
-    "runtime-version": "master",
-    "sdk": "org.gnome.Sdk",
-    "command": "epiphany",
-    "tags": ["nightly"],
-    "desktop-file-name-suffix": " (Epiphany Technology Preview)",
-    "finish-args": [
-        /* X11 + XShm access */
-        "--share=ipc", "--socket=x11",
-        /* Wayland access */
+    "app-id" : "org.gnome.Epiphany",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "master",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "epiphany",
+    "tags" : [
+        "nightly"
+    ],
+    "desktop-file-name-suffix" : " (Epiphany Technology Preview)",
+    "finish-args" : [
+        "--share=ipc",
+        "--socket=x11",
         "--socket=wayland",
-        /* OpenGL access */
         "--device=dri",
-        /* Needs to talk to the network: */
         "--share=network",
-        /* Play sounds */
         "--socket=pulseaudio",
-        /* Allow using the HTML5 Geolocation API */
         "--system-talk-name=org.freedesktop.GeoClue2",
-        /* Needed for dconf to work */
-        "--filesystem=xdg-run/dconf", "--filesystem=~/.config/dconf:ro",
-        "--talk-name=ca.desrt.dconf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
-        /* We need access to auth agents */
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--talk-name=org.freedesktop.secrets",
-        /* Needed to download files */
         "--filesystem=xdg-download"
     ],
     "build-options" : {
-        "cflags": "-O2 -g",
-        "cxxflags": "-O2 -g",
-        "env": {
-            "V": "1"
+        "cflags" : "-O2 -g",
+        "cxxflags" : "-O2 -g",
+        "env" : {
+            "V" : "1"
         }
     },
-    "cleanup": ["/include", "/lib/pkgconfig",
-                "/share/pkgconfig", "/share/aclocal",
-                "/man", "/share/man", "/share/gtk-doc",
-                "*.la", "*.a"],
-    "modules": [
-         {
-            "name": "libdazzle",
-            "config-opts": [ "--libdir=/app/lib" ],
-            "buildsystem": "meson",
-            "builddir": true,
-            "sources": [
+    "cleanup" : [
+        "/include",
+        "/lib/pkgconfig",
+        "/share/pkgconfig",
+        "/share/aclocal",
+        "/man",
+        "/share/man",
+        "/share/gtk-doc",
+        "*.la",
+        "*.a"
+    ],
+    "modules" : [
+        {
+            "name" : "libdazzle",
+            "config-opts" : [
+                "--libdir=/app/lib"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/libdazzle.git"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
                 }
             ]
         },
         {
-            "name": "epiphany",
-            "config-opts": ["-Dtech_preview=true"],
-            "buildsystem": "meson",
-            "builddir": true,
-            "sources": [
+            "name" : "epiphany",
+            "config-opts" : [
+                "-Dtech_preview=true"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://git.gnome.org/browse/epiphany",
-                    "disable-shallow-clone": true
+                    "type" : "git",
+                    "url" : "https://git.gnome.org/browse/epiphany",
+                    "disable-shallow-clone" : true
                 }
             ]
         }
