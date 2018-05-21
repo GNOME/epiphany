@@ -1463,21 +1463,16 @@ do_not_track_button_clicked_cb (GtkWidget   *button,
 {
   char **filters;
   char **new_filters;
-  char **newer_filters;
 
   filters = g_settings_get_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button))) {
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     new_filters = ephy_strv_append ((const char * const *)filters, ADBLOCK_PRIVACY_FILTER_URL);
-    newer_filters = ephy_strv_append ((const char * const *)new_filters, ADBLOCK_ANNOYANCE_FILTER_URL);
-  } else {
+  else
     new_filters = ephy_strv_remove ((const char * const *)filters, ADBLOCK_PRIVACY_FILTER_URL);
-    newer_filters = ephy_strv_remove ((const char * const *)new_filters, ADBLOCK_ANNOYANCE_FILTER_URL);
-  }
-  g_settings_set_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS, (const char * const *)newer_filters);
+  g_settings_set_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS, (const char * const *)new_filters);
 
   g_strfreev (filters);
   g_strfreev (new_filters);
-  g_strfreev (newer_filters);
 }
 
 static void
