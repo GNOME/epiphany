@@ -26,8 +26,6 @@ G_BEGIN_DECLS
 
 #define ADBLOCK_DEFAULT_FILTER_URL "https://easylist.to/easylist/easylist.txt"
 #define ADBLOCK_PRIVACY_FILTER_URL "https://easylist.to/easylist/easyprivacy.txt"
-/* The annoyance filter includes the social button filter, which is important for privacy too. */
-#define ADBLOCK_ANNOYANCE_FILTER_URL "https://easylist.to/easylist/fanboy-annoyance.txt"
 
 GFile *ephy_uri_tester_get_adblock_filter_file (const char *adblock_data_dir,
                                                 const char *filter_url);
