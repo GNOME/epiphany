@@ -30,6 +30,7 @@
 #include "ephy-search-engine-manager.h"
 #include "ephy-settings.h"
 #include "ephy-sqlite-connection.h"
+#include "ephy-string.h"
 #include "ephy-sync-debug.h"
 #include "ephy-sync-utils.h"
 #include "ephy-uri-tester-shared.h"
@@ -1193,6 +1194,28 @@ out:
 }
 
 static void
+migrate_annoyance_list (void)
+{
+  GVariant *user_value;
+  const char **filters;
+  char **modified_filters;
+
+  /* Has the filters setting been modified? If not, we're done. */
+  user_value = g_settings_get_user_value (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS);
+  if (!user_value)
+    return;
+
+  /* The annoyance list was causing a bunch of problems. Forcibly remove it. */
+  filters = g_variant_get_strv (user_value, NULL);
+  modified_filters = ephy_strv_remove (filters, "https://easylist.to/easylist/fanboy-annoyance.txt");
+  g_settings_set_strv (EPHY_SETTINGS_MAIN, EPHY_PREFS_ADBLOCK_FILTERS, (const char * const *)modified_filters);
+
+  g_variant_unref (user_value);
+  g_free (filters);
+  g_strfreev (modified_filters);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1232,7 +1255,8 @@ const EphyProfileMigrator migrators[] = {
   /* 24 */ migrate_bookmarks_timestamp,
   /* 25 */ migrate_passwords_timestamp,
   /* 26 */ migrate_nothing,
-  /* 27 */ migrate_search_engines
+  /* 27 */ migrate_search_engines,
+  /* 28 */ migrate_annoyance_list
 };
 
 static gboolean
