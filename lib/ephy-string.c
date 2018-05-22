@@ -119,8 +119,7 @@ ephy_string_shorten (char *str,
   new_str = g_new (gchar, bytes + strlen (ELLIPSIS) + 1);
 
   strncpy (new_str, str, bytes);
-  strncpy (new_str + bytes, ELLIPSIS, strlen (ELLIPSIS));
-  new_str[bytes + strlen (ELLIPSIS)] = '\0';
+  strncpy (new_str + bytes, ELLIPSIS, strlen (ELLIPSIS) + 1);
 
   g_free (str);
 
