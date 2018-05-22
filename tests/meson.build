@@ -74,14 +74,15 @@ if get_option('unit_tests')
   #      env: envs
   # )
 
-  gsb_service_test = executable('test-ephy-gsb-service',
-    'ephy-gsb-service-test.c',
-    dependencies: ephymain_dep
-  )
-  test('GSB service test',
-       gsb_service_test,
-       env: envs
-  )
+  # https://bugzilla.gnome.org/show_bug.cgi?id=796324
+  #gsb_service_test = executable('test-ephy-gsb-service',
+  #  'ephy-gsb-service-test.c',
+  #  dependencies: ephymain_dep
+  #)
+  #test('GSB service test',
+  #     gsb_service_test,
+  #     env: envs
+  #)
 
   history_test = executable('test-ephy-history',
     'ephy-history-test.c',
