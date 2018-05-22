@@ -29,8 +29,6 @@
 #include <string.h>
 #include <sys/types.h>
 
-#define ELLIPSIS "\xe2\x80\xa6"
-
 gboolean
 ephy_string_to_int (const char *string, gulong *integer)
 {
@@ -116,10 +114,11 @@ ephy_string_shorten (char *str,
   /* create string */
   bytes = GPOINTER_TO_UINT (g_utf8_offset_to_pointer (str, target_length - 1) - str);
 
-  new_str = g_new (gchar, bytes + strlen (ELLIPSIS) + 1);
+  /* +1 for ellipsis, +1 for trailing NUL */
+  new_str = g_new (gchar, bytes + 1 + 1);
 
   strncpy (new_str, str, bytes);
-  strncpy (new_str + bytes, ELLIPSIS, strlen (ELLIPSIS) + 1);
+  strcat (new_str, "…");
 
   g_free (str);
 
