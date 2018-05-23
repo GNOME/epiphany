@@ -828,8 +828,15 @@ session_seems_sane (GList *windows)
       SoupURI *uri;
       gboolean sane = FALSE;
 
+      /* NULL URLs are possible when an invalid URL is opened by JS.
+       * E.g. <script>win = window.open("blah", "WIN");</script>
+       */
+      if (url == NULL)
+        continue;
+
       /* Blank URLs can occur in some situations. Just ignore these, as they
-       * are harmless and not an indicator of a corrupted session. */
+       * are harmless and not an indicator of a corrupted session.
+       */
       if (strcmp (url, "") == 0)
         continue;
 
