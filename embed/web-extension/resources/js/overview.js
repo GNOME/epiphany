@@ -204,8 +204,8 @@ Ephy.Overview.Item = class OverviewItem
         if (!background)
             return null;
 
-        if (background.startsWith('url(file://'))
-            return background.replace('url(file://', '').replace(') no-repeat', '');
+        if (background.startsWith('url("file://'))
+            return background.replace('url("file://', '').replace('") no-repeat', '');
 
         return null;
     }
