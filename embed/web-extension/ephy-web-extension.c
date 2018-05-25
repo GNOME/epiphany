@@ -345,6 +345,9 @@ should_store_cb (GList    *records,
   const char *password;
   char *origin = NULL;
 
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS))
+    return;
+
   uri = ephy_embed_form_auth_get_uri (form_auth);
   uri_string = soup_uri_to_string (uri, FALSE);
   if (uri_string == NULL)
