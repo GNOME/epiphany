@@ -96,114 +96,6 @@ ephy_about_handler_finish_request (WebKitURISchemeRequest *request,
   g_object_unref (stream);
 }
 
-typedef struct {
-  EphyAboutHandler *handler;
-  WebKitURISchemeRequest *request;
-} EphyAboutRequest;
-
-static EphyAboutRequest *
-ephy_about_request_new (EphyAboutHandler       *handler,
-                        WebKitURISchemeRequest *request)
-{
-  EphyAboutRequest *about_request;
-
-  about_request = g_slice_new (EphyAboutRequest);
-  about_request->handler = g_object_ref (handler);
-  about_request->request = g_object_ref (request);
-
-  return about_request;
-}
-
-static void
-ephy_about_request_free (EphyAboutRequest *about_request)
-{
-  g_object_unref (about_request->handler);
-  g_object_unref (about_request->request);
-
-  g_slice_free (EphyAboutRequest, about_request);
-}
-
-static void
-get_plugins_cb (WebKitWebContext *web_context,
-                GAsyncResult     *result,
-                EphyAboutRequest *about_request)
-{
-  GString *data_str;
-  gsize data_length;
-  GList *plugin_list, *p;
-  gboolean enabled;
-
-  enabled = g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_PLUGINS);
-
-  data_str = g_string_new ("<html>");
-  g_string_append_printf (data_str, "<head><title>%s</title>"
-                          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
-                          "<link href=\""EPHY_PAGE_TEMPLATE_ABOUT_CSS "\" rel=\"stylesheet\" type=\"text/css\">"
-                          "</head><body>",
-                          _("Installed plugins"));
-  g_string_append_printf (data_str, "<h1>%s</h1>", _("Plugins"));
-
-  if (!enabled)
-    g_string_append_printf (data_str, "<p><b>%s</b></p>", _("Plugins are disabled in the preferences"));
-
-  plugin_list = webkit_web_context_get_plugins_finish (web_context, result, NULL);
-  for (p = plugin_list; p; p = p->next) {
-    WebKitPlugin *plugin = WEBKIT_PLUGIN (p->data);
-    GList *m, *mime_types;
-
-    /* TODO: Enable/disable plugins in WebKit2 */
-    g_string_append_printf (data_str, "<h2>%s</h2>%s<br>%s: <b>%s</b>"  \
-                            "<table id=\"plugin-table\">"               \
-                            "  <thead><tr><th>%s</th><th>%s</th><th>%s</th></tr></thead><tbody>",
-                            webkit_plugin_get_name (plugin),
-                            webkit_plugin_get_description (plugin),
-                            _("Enabled"), /*webkit_plugin_get_enabled (plugin) && */ enabled ? _("Yes") : _("No"),
-                            _("MIME type"), _("Description"), _("Suffixes"));
-
-    mime_types = webkit_plugin_get_mime_info_list (plugin);
-
-    for (m = mime_types; m; m = m->next) {
-      WebKitMimeInfo *mime_info = (WebKitMimeInfo *)m->data;
-      const gchar * const *extensions;
-      guint i;
-
-      g_string_append_printf (data_str, "<tr><td>%s</td><td>%s</td><td>",
-                              webkit_mime_info_get_mime_type (mime_info),
-                              webkit_mime_info_get_description (mime_info));
-
-      extensions = webkit_mime_info_get_extensions (mime_info);
-      for (i = 0; extensions && extensions[i] != NULL; i++)
-        g_string_append_printf (data_str, "%s%c", extensions[i],
-                                extensions[i + 1] ? ',' : ' ');
-
-      g_string_append (data_str, "</td></tr>");
-    }
-
-    g_string_append (data_str, "</tbody></table>");
-  }
-  g_string_append (data_str, "</body></html>");
-
-  g_list_free_full (plugin_list, g_object_unref);
-
-  data_length = data_str->len;
-  ephy_about_handler_finish_request (about_request->request, g_string_free (data_str, FALSE), data_length);
-  ephy_about_request_free (about_request);
-}
-
-static gboolean
-ephy_about_handler_handle_plugins (EphyAboutHandler       *handler,
-                                   WebKitURISchemeRequest *request)
-{
-  EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-
-  webkit_web_context_get_plugins (ephy_embed_shell_get_web_context (shell),
-                                  NULL,
-                                  (GAsyncReadyCallback)get_plugins_cb,
-                                  ephy_about_request_new (handler, request));
-
-  return TRUE;
-}
-
 static void
 handle_memory_finished_cb (EphyAboutHandler       *handler,
                            GAsyncResult           *result,
@@ -601,9 +493,7 @@ ephy_about_handler_handle_request (EphyAboutHandler       *handler,
 
   path = webkit_uri_scheme_request_get_path (request);
 
-  if (!g_strcmp0 (path, "plugins"))
-    handled = ephy_about_handler_handle_plugins (handler, request);
-  else if (!g_strcmp0 (path, "memory"))
+  if (!g_strcmp0 (path, "memory"))
     handled = ephy_about_handler_handle_memory (handler, request);
   else if (!g_strcmp0 (path, "epiphany"))
     handled = ephy_about_handler_handle_epiphany (handler, request);
