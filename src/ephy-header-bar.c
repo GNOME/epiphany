@@ -34,7 +34,6 @@
 #include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
 #include "ephy-favicon-helpers.h"
-#include "ephy-file-helpers.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-gui.h"
 #include "ephy-history-service.h"
@@ -76,7 +75,6 @@ struct _EphyHeaderBar {
   GtkWidget *downloads_button;
   GtkWidget *downloads_popover;
   GtkWidget *zoom_level_button;
-  GtkWidget *open_in_browser_revealer;
 
   guint navigation_buttons_menu_timeout;
 };
@@ -608,26 +606,6 @@ notebook_show_tabs_changed_cb (GtkNotebook   *notebook,
 }
 
 static void
-address_changed_cb (EphyTitleWidget *title_widget,
-                    GParamSpec      *pspec,
-                    EphyHeaderBar   *header_bar)
-{
-  const char *uri;
-  gboolean is_app_related;
-
-  uri = ephy_title_widget_get_address (title_widget);
-  is_app_related = ephy_embed_shell_uri_looks_related_to_app (ephy_embed_shell_get_default (), uri);
-
-  if (is_app_related) {
-    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->open_in_browser_revealer), FALSE);
-    gtk_widget_hide (header_bar->open_in_browser_revealer);
-  } else {
-    gtk_widget_show (header_bar->open_in_browser_revealer);
-    gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->open_in_browser_revealer), TRUE);
-  }
-}
-
-static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
@@ -775,26 +753,6 @@ ephy_header_bar_constructed (GObject *object)
   gtk_widget_set_tooltip_text (button, _("View and manage your bookmarks"));
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), GTK_WIDGET (ephy_bookmarks_popover_new (header_bar->window)));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), button);
-
-  /* Open in browser */
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    header_bar->open_in_browser_revealer = gtk_revealer_new ();
-    gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->open_in_browser_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
-    gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), header_bar->open_in_browser_revealer);
-
-    button = gtk_button_new ();
-    gtk_button_set_label (GTK_BUTTON (button), _("Open in browser"));
-    gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-    gtk_widget_set_tooltip_text (button, _("Open the page in your default browser"));
-    gtk_actionable_set_action_name (GTK_ACTIONABLE (button),
-                                    "toolbar.open-in-browser");
-
-    gtk_container_add (GTK_CONTAINER (header_bar->open_in_browser_revealer), button);
-    gtk_widget_show (button);
-
-    g_signal_connect (header_bar->title_widget, "notify::address",
-                      G_CALLBACK (address_changed_cb), header_bar);
-  }
 
   /* Downloads */
   downloads_manager = ephy_embed_shell_get_downloads_manager (ephy_embed_shell_get_default ());

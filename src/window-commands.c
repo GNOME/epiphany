@@ -934,26 +934,6 @@ window_cmd_open (GSimpleAction *action,
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
 }
 
-void
-window_cmd_open_in_browser (GSimpleAction *action,
-                            GVariant      *parameter,
-                            gpointer       user_data)
-{
-  EphyWindow *window = user_data;
-  EphyEmbed *embed;
-  EphyWebView *view;
-  const char *uri;
-
-  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  g_assert (embed != NULL);
-
-  view = ephy_embed_get_web_view (embed);
-  uri = ephy_web_view_get_address (view);
-
-  ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
-                                         gtk_window_get_screen (GTK_WINDOW (window)));
-}
-
 typedef struct {
   EphyWebView *view;
   GtkWidget *image;

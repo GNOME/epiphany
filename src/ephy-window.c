@@ -116,9 +116,6 @@ const struct {
   { "toolbar.reload", { "<Primary>R", "<shift><Primary>R", "F5", "<Primary>F5", "<shift>F5", "<shift><Primary>F5", "Refresh", "Reload", NULL } },
   { "toolbar.combined-stop-reload", { NULL } },
 
-  /* Application mode */
-  { "toolbar.open-in-browser", { NULL } },
-
   /* Tabs */
   { "tab.previous", { "<Primary>Page_Up", "<Primary>KP_9", "<shift><Primary>Tab", NULL } },
   { "tab.next", { "<Primary>Page_Down", "<Primary>KP_3", "<Primary>Tab", NULL } },
@@ -767,9 +764,7 @@ static const GActionEntry toolbar_entries [] = {
   { "stop", window_cmd_stop },
   { "reload", window_cmd_reload },
   { "always-stop", window_cmd_stop },
-  { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", ephy_header_bar_change_combined_stop_reload_state },
-
-  { "open-in-browser", window_cmd_open_in_browser }
+  { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", ephy_header_bar_change_combined_stop_reload_state }
 };
 
 static const GActionEntry popup_entries [] = {
@@ -918,11 +913,6 @@ _ephy_window_set_default_actions_sensitive (EphyWindow *window,
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "toolbar");
   action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                        "combined-stop-reload");
-  ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
-                                        flags, set);
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                       "open-in-browser");
   ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                         flags, set);
 }

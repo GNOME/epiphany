@@ -76,8 +76,6 @@ ephy_title_widget_set_address (EphyTitleWidget *widget,
 
   g_assert (iface->set_address);
   iface->set_address (widget, address);
-
-  g_object_notify (G_OBJECT (widget), "address");
 }
 
 EphySecurityLevel
@@ -105,6 +103,4 @@ ephy_title_widget_set_security_level (EphyTitleWidget   *widget,
 
   g_assert (iface->set_security_level);
   iface->set_security_level (widget, security_level);
-
-  g_object_notify (G_OBJECT (widget), "security-level");
 }
