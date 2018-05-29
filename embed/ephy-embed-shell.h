@@ -73,10 +73,6 @@ gboolean           ephy_embed_shell_launch_handler             (EphyEmbedShell  
                                                                 GFile            *file,
                                                                 const char       *mime_type,
                                                                 guint32           user_time);
-void               ephy_embed_shell_add_app_related_uri        (EphyEmbedShell   *shell,
-                                                                const char       *uri);
-gboolean           ephy_embed_shell_uri_looks_related_to_app   (EphyEmbedShell   *shell,
-                                                                const char       *uri);
 void               ephy_embed_shell_clear_cache                (EphyEmbedShell   *shell);
 void               ephy_embed_shell_set_thumbnail_path         (EphyEmbedShell   *shell,
                                                                 const char       *url,

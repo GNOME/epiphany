@@ -1229,11 +1229,6 @@ ephy_shell_open_uris (EphyShell       *shell,
 
   g_assert (EPHY_IS_SHELL (shell));
 
-  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    for (int i = 0; uris[i] != NULL; i++)
-      ephy_embed_shell_add_app_related_uri (ephy_embed_shell_get_default (), uris[i]);
-  }
-
   data = open_uris_data_new (shell, uris, startup_flags, user_time);
   id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
                         (GSourceFunc)ephy_shell_open_uris_idle,
