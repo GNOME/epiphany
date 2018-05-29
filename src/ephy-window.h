@@ -60,8 +60,6 @@ GtkWidget        *ephy_window_get_header_bar      (EphyWindow *window);
 
 gboolean          ephy_window_close               (EphyWindow *window);
 
-void              ephy_window_close_active_child  (EphyWindow *window);
-
 EphyWindowChrome  ephy_window_get_chrome          (EphyWindow *window);
 
 EphyLocationController  *ephy_window_get_location_controller (EphyWindow *window);

@@ -2503,13 +2503,6 @@ ephy_window_close_tab (EphyWindow *window,
   }
 }
 
-void
-ephy_window_close_active_child (EphyWindow *window)
-{
-  EphyEmbed *embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-  ephy_window_close_tab (window, embed);
-}
-
 static void
 tab_has_modified_forms_cb (EphyWebView  *view,
                            GAsyncResult *result,
