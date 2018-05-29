@@ -1764,9 +1764,19 @@ web_view_ready_cb (WebKitWebView *web_view,
   using_new_window = window != parent_view_window;
 
   if (using_new_window) {
-    g_assert (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) != EPHY_EMBED_SHELL_MODE_APPLICATION);
     ephy_window_configure_for_view (window, web_view);
     g_signal_emit_by_name (parent_web_view, "new-window", web_view);
+  }
+
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION &&
+      !webkit_web_view_get_uri (web_view)) {
+    /* Wait until we have a valid URL to decide whether to show the window
+     * or load the URL in the default web browser
+     */
+    g_object_set_data_full (G_OBJECT (window), "referrer",
+                            g_strdup (webkit_web_view_get_uri (parent_web_view)),
+                            g_free);
+    return TRUE;
   }
 
   gtk_widget_show (GTK_WIDGET (window));
@@ -1910,49 +1920,33 @@ decide_navigation_policy (WebKitWebView            *web_view,
   navigation_type = webkit_navigation_action_get_navigation_type (navigation_action);
 
   if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    if (!gtk_widget_is_visible (GTK_WIDGET (window))) {
+      char *referrer;
+
+      referrer = (char *)g_object_get_data (G_OBJECT (window), "referrer");
+
+      if (ephy_embed_utils_urls_have_same_origin (uri, referrer)) {
+        gtk_widget_show (GTK_WIDGET (window));
+      } else {
+        ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
+                                               gtk_window_get_screen (GTK_WINDOW (window)));
+        webkit_policy_decision_ignore (decision);
+
+        gtk_widget_destroy (GTK_WIDGET (window));
+
+        return TRUE;
+      }
+    }
+
     if (navigation_type == WEBKIT_NAVIGATION_TYPE_LINK_CLICKED) {
-      EphyEmbed *new_embed;
-      EphyWebView *new_view;
-
-      if (ephy_embed_shell_uri_looks_related_to_app (ephy_embed_shell_get_default (), uri)) {
-        return FALSE;
-      } else if (!ephy_embed_shell_uri_looks_related_to_app (ephy_embed_shell_get_default (),
-                                                             ephy_web_view_get_last_committed_address (EPHY_WEB_VIEW (web_view)))) {
-        return FALSE;
-      } else if (webkit_navigation_action_is_redirect (navigation_action)) {
-        EphyHeaderBar *header_bar;
-        EphyTitleWidget *title_widget;
-
-        /* If the application's origin does a server redirect to an external origin, it is likely
-         * to be an authentication or authentication mechanism that is a part of the application.
-         */
-        ephy_embed_shell_add_app_related_uri (ephy_embed_shell_get_default (), uri);
-
-        /* The HeaderBar uses the address to decide whether to show some items of its UI.
-         * This new URI being part of the application may make it change its mind.
-         * */
-        header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
-        title_widget = ephy_header_bar_get_title_widget (header_bar);
-        g_object_notify (G_OBJECT (title_widget), "address");
+      if (ephy_embed_utils_urls_have_same_origin (uri, webkit_web_view_get_uri (web_view))) {
         return FALSE;
       }
 
-      /* This does not look like a part of the application itself, so open it in a new tab
-       * which will provide a way of opening in the default browser.
-       */
-      embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
-
-      new_embed = ephy_shell_new_tab_full (ephy_shell_get_default (),
-                                           NULL, NULL,
-                                           window,
-                                           embed,
-                                           EPHY_NEW_TAB_APPEND_AFTER | EPHY_NEW_TAB_JUMP,
-                                           0);
-
-      new_view = ephy_embed_get_web_view (new_embed);
-      ephy_web_view_load_request (new_view, request);
-
+      ephy_file_open_uri_in_default_browser (uri, GDK_CURRENT_TIME,
+                                             gtk_window_get_screen (GTK_WINDOW (window)));
       webkit_policy_decision_ignore (decision);
+
       return TRUE;
     }
   }
