@@ -344,12 +344,10 @@ static void
 update_tabs_visibility (EphyNotebook *nb,
                         gboolean      before_inserting)
 {
-  EphyEmbedShellMode mode;
   gboolean show_tabs = FALSE;
   guint num;
   EphyPrefsUITabsBarVisibilityPolicy policy;
 
-  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
   num = gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb));
 
   if (before_inserting)
@@ -358,9 +356,8 @@ update_tabs_visibility (EphyNotebook *nb,
   policy = g_settings_get_enum (EPHY_SETTINGS_UI,
                                 EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY);
 
-  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
-      ((policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_MORE_THAN_ONE && num > 1) ||
-        policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS))
+  if (((policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_MORE_THAN_ONE && num > 1) ||
+       policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS))
     show_tabs = TRUE;
 
   /* Only show the tabs when the "tabs-allowed" property is TRUE. */
