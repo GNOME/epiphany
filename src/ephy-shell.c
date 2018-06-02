@@ -633,6 +633,11 @@ ephy_shell_constructed (GObject *object)
     g_application_set_flags (G_APPLICATION (object), flags);
   }
 
+  if (ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (object)) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    dzl_application_add_resources (DZL_APPLICATION (object),
+                                   "resource:///org/gnome/Epiphany");
+  }
+
   /* FIXME: not sure if this is the best place to put this stuff. */
   ephy_shell_get_lockdown (EPHY_SHELL (object));
 
