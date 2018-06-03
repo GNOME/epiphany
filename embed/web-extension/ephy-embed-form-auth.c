@@ -21,11 +21,13 @@
 #include <config.h>
 #include "ephy-embed-form-auth.h"
 
+#include "ephy-uri-helpers.h"
+
 struct _EphyEmbedFormAuth {
   GObject parent_instance;
 
   guint64 page_id;
-  SoupURI *uri;
+  char *origin;
   char *target_origin;
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
@@ -41,10 +43,9 @@ ephy_embed_form_auth_finalize (GObject *object)
 {
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (object);
 
-  if (form_auth->uri)
-    soup_uri_free (form_auth->uri);
   g_free (form_auth->username);
   g_free (form_auth->password);
+  g_free (form_auth->origin);
   g_free (form_auth->target_origin);
   g_clear_object (&form_auth->username_node);
   g_clear_object (&form_auth->password_node);
@@ -67,27 +68,43 @@ ephy_embed_form_auth_class_init (EphyEmbedFormAuthClass *klass)
 
 EphyEmbedFormAuth *
 ephy_embed_form_auth_new (WebKitWebPage *web_page,
-                          const char    *target_origin,
+                          const char    *form_action,
                           WebKitDOMNode *username_node,
                           WebKitDOMNode *password_node,
                           const char    *username,
                           const char    *password)
 {
   EphyEmbedFormAuth *form_auth;
+  char *origin;
 
   g_assert (WEBKIT_DOM_IS_NODE (password_node));
+
+  origin = ephy_uri_to_security_origin (webkit_web_page_get_uri (web_page));
+  if (!origin)
+    return NULL;
 
   form_auth = EPHY_EMBED_FORM_AUTH (g_object_new (EPHY_TYPE_EMBED_FORM_AUTH, NULL));
 
   form_auth->page_id = webkit_web_page_get_id (web_page);
-  form_auth->uri = soup_uri_new (webkit_web_page_get_uri (web_page));
-  form_auth->target_origin = g_strdup (target_origin);
+  form_auth->origin = origin;
   form_auth->username_node = username_node;
   form_auth->password_node = password_node;
   form_auth->username = g_strdup (username);
   form_auth->password = g_strdup (password);
 
+  if (form_action)
+    form_auth->target_origin = ephy_uri_to_security_origin (form_action);
+
+  if (!form_auth->target_origin)
+    form_auth->target_origin = g_strdup (form_auth->origin);
+
   return form_auth;
+}
+
+const char *
+ephy_embed_form_auth_get_origin (EphyEmbedFormAuth *form_auth)
+{
+  return form_auth->origin;
 }
 
 const char *
@@ -106,12 +123,6 @@ WebKitDOMNode *
 ephy_embed_form_auth_get_password_node (EphyEmbedFormAuth *form_auth)
 {
   return form_auth->password_node;
-}
-
-SoupURI *
-ephy_embed_form_auth_get_uri (EphyEmbedFormAuth *form_auth)
-{
-  return form_auth->uri;
 }
 
 guint64

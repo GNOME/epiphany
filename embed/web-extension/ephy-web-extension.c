@@ -224,14 +224,10 @@ form_auth_data_save_request_new_id (void)
 static void
 store_password (EphyEmbedFormAuth *form_auth)
 {
-  SoupURI *uri;
-  char *uri_str;
-  char *origin;
   char *username_field_name = NULL;
   char *password_field_name = NULL;
   const char *username = NULL;
   const char *password = NULL;
-  const char *target_origin;
   gboolean password_updated;
   WebKitDOMNode *username_node;
   EphyWebExtension *extension = ephy_web_extension_get ();
@@ -250,22 +246,16 @@ store_password (EphyEmbedFormAuth *form_auth)
                 NULL);
   password = ephy_embed_form_auth_get_password (form_auth);
 
-  uri = ephy_embed_form_auth_get_uri (form_auth);
-  uri_str = soup_uri_to_string (uri, FALSE);
-  origin = ephy_uri_to_security_origin (uri_str);
-  target_origin = ephy_embed_form_auth_get_target_origin (form_auth);
   password_updated = ephy_embed_form_auth_get_password_updated (form_auth);
   ephy_password_manager_save (extension->password_manager,
-                              origin,
-                              target_origin,
+                              ephy_embed_form_auth_get_origin (form_auth),
+                              ephy_embed_form_auth_get_target_origin (form_auth),
                               username,
                               password,
                               username_field_name,
                               password_field_name,
                               !password_updated);
 
-  g_free (uri_str);
-  g_free (origin);
   g_free (username_field_name);
   g_free (password_field_name);
 }
@@ -415,17 +405,13 @@ handle_form_submission (WebKitWebPage            *web_page,
 {
   EphyWebExtension *extension = ephy_web_extension_get ();
   EphyEmbedFormAuth *form_auth;
-  SoupURI *uri;
-  char *target_origin;
   WebKitDOMNode *username_node = NULL;
   WebKitDOMNode *password_node = NULL;
   char *username_field_name = NULL;
   char *username_field_value = NULL;
   char *password_field_name = NULL;
   char *password_field_value = NULL;
-  char *uri_str;
-  char *origin;
-  char *form_action;
+  char *form_action = NULL;
 
   if (!extension->password_manager)
     return;
@@ -438,52 +424,49 @@ handle_form_submission (WebKitWebPage            *web_page,
 
   if (username_node) {
     g_object_get (username_node,
+                  "name", &username_field_name,
+                  NULL);
+    g_object_get (username_node,
                   "value", &username_field_value,
                   NULL);
   }
+
+  g_object_get (password_node,
+                "name", &password_field_name,
+                NULL);
   g_object_get (password_node,
                 "value", &password_field_value,
                 NULL);
 
   form_action = webkit_dom_html_form_element_get_action (dom_form);
-  if (form_action == NULL)
-    form_action = g_strdup (webkit_web_page_get_uri (web_page));
-  target_origin = ephy_uri_to_security_origin (form_action);
 
   /* EphyEmbedFormAuth takes ownership of the nodes */
   form_auth = ephy_embed_form_auth_new (web_page,
-                                        target_origin,
+                                        form_action,
                                         username_node,
                                         password_node,
                                         username_field_value,
                                         password_field_value);
-  uri = ephy_embed_form_auth_get_uri (form_auth);
-  soup_uri_set_query (uri, NULL);
-
-  if (username_node)
-    g_object_get (username_node, "name", &username_field_name, NULL);
-  g_object_get (password_node, "name", &password_field_name, NULL);
-  uri_str = soup_uri_to_string (uri, FALSE);
-  origin = ephy_uri_to_security_origin (uri_str);
-
-  ephy_password_manager_query (extension->password_manager,
-                               NULL,
-                               origin,
-                               target_origin,
-                               username_field_value,
-                               username_field_name,
-                               password_field_name,
-                               should_store_cb,
-                               form_auth);
+  if (form_auth) {
+    ephy_password_manager_query (extension->password_manager,
+                                 NULL,
+                                 ephy_embed_form_auth_get_origin (form_auth),
+                                 ephy_embed_form_auth_get_target_origin (form_auth),
+                                 username_field_value,
+                                 username_field_name,
+                                 password_field_name,
+                                 should_store_cb,
+                                 form_auth);
+  } else {
+    LOG ("URI %s cannot be used to form a valid security origin, not storing password",
+         webkit_web_page_get_uri (web_page));
+  }
 
   g_free (form_action);
-  g_free (target_origin);
   g_free (username_field_name);
   g_free (username_field_value);
   g_free (password_field_name);
   g_free (password_field_value);
-  g_free (uri_str);
-  g_free (origin);
 }
 
 static void
@@ -545,20 +528,12 @@ fill_form_cb (GList    *records,
 static void
 pre_fill_form (EphyEmbedFormAuth *form_auth)
 {
-  SoupURI *uri;
-  char *uri_str;
-  char *origin;
   char *username = NULL;
   char *username_field_name = NULL;
   char *password_field_name = NULL;
-  const char *target_origin;
   WebKitDOMNode *username_node;
   WebKitDOMNode *password_node;
   EphyWebExtension *extension;
-
-  uri = ephy_embed_form_auth_get_uri (form_auth);
-  if (!uri)
-    return;
 
   extension = ephy_web_extension_get ();
   if (!extension->password_manager)
@@ -569,30 +544,24 @@ pre_fill_form (EphyEmbedFormAuth *form_auth)
     g_object_get (username_node, "name", &username_field_name, NULL);
     g_object_get (username_node, "value", &username, NULL);
   }
+
   password_node = ephy_embed_form_auth_get_password_node (form_auth);
-  if (password_node)
-    g_object_get (password_node, "name", &password_field_name, NULL);
+  g_object_get (password_node, "name", &password_field_name, NULL);
 
   /* The username node is empty, so pre-fill with the default. */
   if (!g_strcmp0 (username, ""))
     g_clear_pointer (&username, g_free);
 
-  uri_str = soup_uri_to_string (uri, FALSE);
-  origin = ephy_uri_to_security_origin (uri_str);
-  target_origin = ephy_embed_form_auth_get_target_origin (form_auth);
-
   ephy_password_manager_query (extension->password_manager,
                                NULL,
-                               origin,
-                               target_origin,
+                               ephy_embed_form_auth_get_origin (form_auth),
+                               ephy_embed_form_auth_get_target_origin (form_auth),
                                username,
                                username_field_name,
                                password_field_name,
                                fill_form_cb,
                                form_auth);
 
-  g_free (uri_str);
-  g_free (origin);
   g_free (username);
   g_free (username_field_name);
   g_free (password_field_name);
@@ -1128,31 +1097,30 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
                                                     AUTH_CACHE_AUTOFILL)) {
       EphyEmbedFormAuth *form_auth;
       GList *cached_users;
-      const char *uri;
-      char *origin;
       char *form_action;
-      char *target_origin;
-
-      uri = webkit_web_page_get_uri (web_page);
 
       form_action = webkit_dom_html_form_element_get_action (form);
-      if (form_action == NULL)
-        form_action = g_strdup (uri);
-      target_origin = ephy_uri_to_security_origin (form_action);
-
-      LOG ("Hooking and pre-filling a form");
 
       /* EphyEmbedFormAuth takes ownership of the nodes */
       form_auth = ephy_embed_form_auth_new (web_page,
-                                            target_origin,
+                                            form_action,
                                             username_node,
                                             password_node,
                                             NULL,
                                             NULL);
+      g_free (form_action);
+
+      if (!form_auth) {
+        LOG ("URI %s cannot be used to form a valid security origin, not hooking form",
+             webkit_web_page_get_uri (web_page));
+        continue;
+      }
+
+      LOG ("Hooking and pre-filling a form");
 
       /* Plug in the user autocomplete */
-      origin = ephy_uri_to_security_origin (uri);
-      cached_users = ephy_password_manager_get_cached_users (extension->password_manager, origin);
+      cached_users = ephy_password_manager_get_cached_users (extension->password_manager,
+                                                             ephy_embed_form_auth_get_origin (form_auth));
 
       if (cached_users && cached_users->next && username_node) {
         LOG ("More than 1 password saved, hooking menu for choosing which on focus");
@@ -1174,17 +1142,15 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
         webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (username_node), "blur",
                                                     G_CALLBACK (username_node_changed_cb), FALSE,
                                                     web_page);
-      } else
+      } else {
         LOG ("No items or a single item in cached_users, not hooking menu for choosing.");
+      }
 
       pre_fill_form (form_auth);
-
-      g_free (origin);
-      g_free (form_action);
-      g_free (target_origin);
       g_object_weak_ref (G_OBJECT (form), form_destroyed_cb, form_auth);
-    } else
+    } else {
       LOG ("No pre-fillable/hookable form found");
+    }
   }
 }
 
