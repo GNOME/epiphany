@@ -271,7 +271,8 @@ popups_manager_hide (EphyEmbedContainer *container,
   g_assert (EPHY_IS_EMBED (embed));
 
   location = ephy_web_view_get_address (ephy_embed_get_web_view (embed));
-  if (location == NULL) return;
+  if (location == NULL)
+    return;
 
   features = popups_manager_new_window_info (container);
 
