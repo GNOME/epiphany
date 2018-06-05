@@ -66,6 +66,8 @@ struct _EphyHeaderBar {
   EphyWindow *window;
   EphyTitleWidget *title_widget;
   GtkWidget *navigation_box;
+  GtkWidget *reader_mode_revealer;
+  GtkWidget *reader_mode_button;
   GtkWidget *new_tab_revealer;
   GtkWidget *new_tab_button;
   GtkWidget *combined_stop_reload_button;
@@ -606,6 +608,18 @@ notebook_show_tabs_changed_cb (GtkNotebook   *notebook,
 }
 
 static void
+reader_mode_button_toggled_cb (GtkWidget *button,
+                               gpointer   user_data)
+{
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (user_data);
+  EphyWindow *window = ephy_header_bar_get_window (header_bar);
+  EphyEmbed *embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  EphyWebView *view = ephy_embed_get_web_view (embed);
+
+  ephy_web_view_toggle_reader_mode (view, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)));
+}
+
+static void
 ephy_header_bar_constructed (GObject *object)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (object);
@@ -813,6 +827,23 @@ ephy_header_bar_constructed (GObject *object)
                            G_CALLBACK (downloads_estimated_progress_cb),
                            object, 0);
 
+  /* Reader Mode */
+  header_bar->reader_mode_revealer = gtk_revealer_new ();
+  gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->reader_mode_revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), header_bar->reader_mode_revealer);
+
+  button = gtk_toggle_button_new ();
+  g_signal_connect_object (button, "toggled",
+                           G_CALLBACK (reader_mode_button_toggled_cb),
+                           object, 0);
+  header_bar->reader_mode_button = button;
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_icon_name ("view-dual-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (header_bar->reader_mode_revealer), button);
+  gtk_widget_show (button);
+  gtk_widget_show (header_bar->reader_mode_revealer);
+
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar), header_bar->downloads_revealer);
   gtk_widget_show (header_bar->downloads_revealer);
 }
@@ -890,4 +921,15 @@ EphyWindow *
 ephy_header_bar_get_window (EphyHeaderBar *header_bar)
 {
   return header_bar->window;
+}
+
+void
+ephy_header_bar_set_reader_mode_state (EphyHeaderBar *header_bar,
+                                       EphyWebView   *view)
+{
+  gboolean available = ephy_web_view_is_reader_mode_available (view);
+
+  gtk_revealer_set_reveal_child (GTK_REVEALER (header_bar->reader_mode_revealer), available);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (header_bar->reader_mode_button),
+                                ephy_web_view_get_reader_mode_state (view));
 }
