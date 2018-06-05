@@ -41,5 +41,7 @@ EphyTitleWidget *ephy_header_bar_get_title_widget                  (EphyHeaderBa
 GtkWidget       *ephy_header_bar_get_zoom_level_button             (EphyHeaderBar *header_bar);
 GtkWidget       *ephy_header_bar_get_page_menu_button              (EphyHeaderBar *header_bar);
 EphyWindow      *ephy_header_bar_get_window                        (EphyHeaderBar *header_bar);
+void             ephy_header_bar_set_read_mode_state               (EphyHeaderBar *header_bar,
+                                                                    EphyWebView   *view);
 
 G_END_DECLS

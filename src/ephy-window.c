@@ -2436,6 +2436,14 @@ download_only_load_cb (EphyWebView *view,
 }
 
 static void
+reader_mode_cb (EphyWebView *view,
+                GParamSpec  *pspec,
+                EphyWindow  *window)
+{
+  ephy_header_bar_set_read_mode_state (EPHY_HEADER_BAR (window->header_bar), view);
+}
+
+static void
 notebook_page_added_cb (EphyNotebook *notebook,
                         EphyEmbed    *embed,
                         guint         position,
@@ -2447,6 +2455,9 @@ notebook_page_added_cb (EphyNotebook *notebook,
 
   g_signal_connect_object (ephy_embed_get_web_view (embed), "download-only-load",
                            G_CALLBACK (download_only_load_cb), window, G_CONNECT_AFTER);
+
+  g_signal_connect_object (ephy_embed_get_web_view (embed), "notify::reader-mode",
+                           G_CALLBACK (reader_mode_cb), window, G_CONNECT_AFTER);
 
   if (window->present_on_insert) {
     window->present_on_insert = FALSE;
@@ -2573,6 +2584,7 @@ notebook_switch_page_cb (GtkNotebook *notebook,
   EphyEmbed *embed;
   GActionGroup *group;
   GAction *action;
+  EphyWebView *view;
 
   LOG ("switch-page notebook %p position %u\n", notebook, page_num);
 
@@ -2581,6 +2593,7 @@ notebook_switch_page_cb (GtkNotebook *notebook,
 
   /* get the new tab */
   embed = real_get_active_tab (window, page_num);
+  view = ephy_embed_get_web_view (embed);
 
   /* update new tab */
   ephy_window_set_active_tab (window, embed);
@@ -2589,6 +2602,8 @@ notebook_switch_page_cb (GtkNotebook *notebook,
   group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
   action = g_action_map_lookup_action (G_ACTION_MAP (group), "show-tab");
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_uint32 (page_num));
+
+  ephy_header_bar_set_read_mode_state (EPHY_HEADER_BAR (window->header_bar), view);
 }
 
 static GtkNotebook *

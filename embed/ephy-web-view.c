@@ -88,6 +88,13 @@ struct _EphyWebView {
   char *link_message;
   GdkPixbuf *icon;
 
+  /* Reader mode */
+  char *reader_content;
+  char *reader_byline;
+  gboolean reader_active;
+  guint reader_js_timeout;
+  const char *reader_url;
+
   /* Local file watch. */
   EphyFileMonitor *file_monitor;
 
@@ -150,6 +157,7 @@ enum {
   PROP_STATUS_MESSAGE,
   PROP_TYPED_ADDRESS,
   PROP_IS_BLANK,
+  PROP_READER_MODE,
   LAST_PROP
 };
 
@@ -969,6 +977,71 @@ _ephy_web_view_set_is_blank (EphyWebView *view,
   }
 }
 
+static
+char *readability_get_property_string (WebKitJavascriptResult *js_result,
+                                       char                   *property)
+{
+  JSCValue *jsc_value;
+  char *result = NULL;
+
+  jsc_value = webkit_javascript_result_get_js_value (js_result);
+
+  if (!jsc_value_is_object (jsc_value))
+    return NULL;
+
+  if (jsc_value_object_has_property (jsc_value, property)) {
+    JSCValue *jsc_content = jsc_value_object_get_property (jsc_value, property);
+
+    result = jsc_value_to_string (jsc_content);
+
+    if (result && !strcmp (result, "null")) {
+      g_free (result);
+
+      result = NULL;
+    }
+  }
+
+  return result;
+}
+
+static void
+readability_finish_cb (GObject      *object,
+                       GAsyncResult *result,
+                       gpointer       user_data)
+{
+  EphyWebView *view = user_data;
+  WebKitJavascriptResult *js_result;
+  GError *error = NULL;
+
+  js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
+  if (!js_result) {
+    g_warning ("Error running javascript: %s", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  view->reader_byline = readability_get_property_string (js_result, "byline");
+  view->reader_content = readability_get_property_string (js_result, "content");
+
+  if (view->reader_content != NULL)
+    g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_READER_MODE]);
+}
+
+static gboolean
+run_readability_js (gpointer data)
+{
+  WebKitWebView *web_view = data;
+
+  EPHY_WEB_VIEW (web_view)->reader_js_timeout = 0;
+  webkit_web_view_run_javascript_from_gresource (web_view,
+                                                 "/org/gnome/epiphany/readability.js",
+                                                 NULL,
+                                                 readability_finish_cb,
+                                                 EPHY_WEB_VIEW (web_view));
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 title_changed_cb (WebKitWebView *web_view,
                   GParamSpec    *spec,
@@ -1239,6 +1312,18 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+/**
+ * EphyWebView:reader-mode:
+ *
+ * Whether the view is in reader mode.
+ **/
+  obj_properties[PROP_READER_MODE] =
+    g_param_spec_boolean ("reader-mode",
+                          "Is reader mod",
+                          "If the EphyWebView is in reader mode",
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_properties);
 
 /**
@@ -1281,6 +1366,13 @@ ephy_web_view_class_init (EphyWebViewClass *klass)
  * replaced by a download, and that is the only reason why the @view has been created.
  **/
   g_signal_new ("download-only-load",
+                EPHY_TYPE_WEB_VIEW,
+                G_SIGNAL_RUN_FIRST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE,
+                0);
+
+  g_signal_new ("read-mode-update",
                 EPHY_TYPE_WEB_VIEW,
                 G_SIGNAL_RUN_FIRST,
                 0, NULL, NULL, NULL,
@@ -1834,6 +1926,13 @@ load_changed_cb (WebKitWebView  *web_view,
       /* Zoom level. */
       restore_zoom_level (view, uri);
 
+      /* Reset reader content */
+      if (!view->reader_active) {
+        g_clear_pointer (&view->reader_content, g_free);
+
+        g_signal_emit_by_name (view, "read-mode-update", NULL);
+      }
+
       break;
     }
     case WEBKIT_LOAD_FINISHED:
@@ -1861,6 +1960,14 @@ load_changed_cb (WebKitWebView  *web_view,
       }
 
       ephy_web_view_thaw_history (view);
+
+      if (view->reader_js_timeout) {
+        g_source_remove (view->reader_js_timeout);
+        view->reader_js_timeout = 0;
+      }
+
+      if (!view->reader_active)
+        view->reader_js_timeout = g_idle_add (run_readability_js, web_view);
 
       break;
 
@@ -2766,6 +2873,8 @@ ephy_web_view_load_url (EphyWebView *view,
   g_assert (EPHY_IS_WEB_VIEW (view));
   g_assert (url);
 
+  view->reader_active = FALSE;
+
   effective_url = ephy_embed_utils_normalize_address (url);
   if (g_str_has_prefix (effective_url, "javascript:")) {
     char *decoded_url;
@@ -3549,4 +3658,68 @@ ephy_web_view_set_visit_type (EphyWebView *view, EphyHistoryPageVisitType visit_
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   view->visit_type = visit_type;
+}
+
+
+void
+ephy_web_view_enable_read_mode (EphyWebView *view, gboolean state)
+{
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (view);
+  GString *html;
+  GBytes *style_css;
+  const gchar *title;
+
+  state = view->reader_active;
+
+  if (state) {
+    ephy_web_view_freeze_history (view);
+    webkit_web_view_load_uri (web_view, view->reader_url);
+    view->reader_active = FALSE;
+    return;
+  }
+
+  if (!ephy_web_view_is_read_mode_available (view)) {
+   view->reader_active = FALSE;
+   return;
+  }
+
+  view->reader_url = g_strdup (ephy_web_view_get_address (view));
+  html = g_string_new ("");
+  style_css = g_resources_lookup_data("/org/gnome/epiphany/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  title = webkit_web_view_get_title (web_view);
+  g_string_append_printf (html, "<style>%s</style>"
+                                "<title>%s</title>"
+                                "<body>"
+                                "<article>"
+                                "<h2>"
+                                "%s"
+                                "</h2>"
+                                "<i>"
+                                "%s"
+                                "</i>"
+                                "<hr>",
+                                (gchar *)g_bytes_get_data (style_css, NULL),
+                                title,
+                                title,
+                                view->reader_byline != NULL ? view->reader_byline : "");
+  g_string_append (html, view->reader_content);
+  g_string_append (html, "</article>");
+
+  ephy_web_view_freeze_history (view);
+  webkit_web_view_load_alternate_html (web_view, html->str, view->reader_url, NULL);
+  view->reader_active = TRUE;
+  g_string_free (html, TRUE);
+}
+
+
+gboolean
+ephy_web_view_is_read_mode_available (EphyWebView *view)
+{
+  return view->reader_content != NULL && strlen (view->reader_content) > 0;
+}
+
+gboolean
+ephy_web_view_get_read_mode_state (EphyWebView *view)
+{
+  return view->reader_active;
 }

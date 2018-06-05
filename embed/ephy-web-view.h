@@ -149,4 +149,11 @@ char *                     ephy_web_view_create_web_application   (EphyWebView  
                                                                    const char                *title,
                                                                    GdkPixbuf                 *icon);
 
+void                       ephy_web_view_enable_read_mode         (EphyWebView               *view,
+                                                                   gboolean                   state);
+
+gboolean                   ephy_web_view_is_read_mode_available   (EphyWebView               *view);
+
+gboolean                   ephy_web_view_get_read_mode_state      (EphyWebView               *view);
+
 G_END_DECLS
