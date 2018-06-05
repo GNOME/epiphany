@@ -1,0 +1,136 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * Alternatively, the contents of this file may be used under the terms
+ * of the GNU General Public License Version 3, as described below:
+ *
+ * This file is free software: you may copy, redistribute and/or modify
+ * it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This file is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see http://www.gnu.org/licenses/.
+ *
+ * Changes
+ * - replace Firefox specific css extensions with WebKit css extensions
+ * - append FeedView css selectors
+ *
+ * - Adjusted for Epiphany (Removing footer)
+ */
+
+h1,
+h2,
+h3 {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 1.6em;
+  line-height: 1.25em;
+}
+
+h2 {
+  font-size: 1.2em;
+  line-height: 1.51em;
+}
+
+h3 {
+  font-size: 1em;
+  line-height: 1.66em;
+}
+
+a {
+  text-decoration: underline;
+  font-weight: normal;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+  color: #0095dd;
+}
+
+* {
+  max-width: 100%;
+  height: auto;
+}
+
+p,
+code,
+pre,
+blockquote,
+ul,
+ol,
+li,
+figure,
+.wp-caption {
+  margin: 0 0 30px 0;
+}
+
+p > img:only-child,
+p > a:only-child > img:only-child,
+.wp-caption img,
+figure img {
+  display: block;
+}
+
+.caption,
+.wp-caption-text,
+figcaption {
+  font-size: 0.9em;
+  line-height: 1.48em;
+  font-style: italic;
+}
+
+code,
+pre {
+  white-space: pre-wrap;
+}
+
+blockquote {
+  padding: 0;
+  -webkit-padding-start: 16px;
+}
+
+ul,
+ol {
+  padding: 0;
+}
+
+ul {
+  -webkit-padding-start: 30px;
+  list-style: disc;
+}
+
+ol {
+  -webkit-padding-start: 30px;
+  list-style: decimal;
+}
+
+/* Hide elements with common "hidden" class names */
+.visually-hidden,
+.visuallyhidden,
+.hidden,
+.invisible,
+.sr-only {
+  display: none;
+}
+
+article {
+  overflow-y: hidden;
+  margin: 20px auto;
+  width: 640px;
+  color: #333;
+  font-family: Sans;
+  font-size: 18px;
+  word-wrap:break-word;
+}
