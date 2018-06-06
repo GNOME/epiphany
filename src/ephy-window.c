@@ -137,6 +137,8 @@ struct _EphyWindow {
   GtkApplicationWindow parent_instance;
 
   GtkWidget *header_bar;
+  GtkWidget *overlay;
+  GtkWidget *fullscreen_header_bar;
   EphyBookmarksManager *bookmarks_manager;
   GHashTable *action_labels;
   GtkNotebook *notebook;
@@ -146,11 +148,15 @@ struct _EphyWindow {
   WebKitHitTestResult *hit_test_result;
   guint idle_worker;
   EphyLocationController *location_controller;
+  GtkGesture *swipe;
+  GtkGesture *pan;
 
   gint current_width;
   gint current_height;
   gint current_x;
   gint current_y;
+
+  guint fullscreen_header_bar_id;
 
   guint has_default_size : 1;
   guint has_default_position : 1;
@@ -1137,6 +1143,8 @@ sync_tab_title (EphyEmbed  *embed,
 
   gtk_window_set_title (GTK_WINDOW (window),
                         ephy_embed_get_title (embed));
+
+  gtk_header_bar_set_title (GTK_HEADER_BAR (window->fullscreen_header_bar), ephy_embed_get_title (embed));
 }
 
 static gboolean
@@ -2638,6 +2646,8 @@ ephy_window_dispose (GObject *object)
 
     g_clear_object (&window->bookmarks_manager);
     g_clear_object (&window->hit_test_result);
+    g_clear_object (&window->swipe);
+    g_clear_object (&window->pan);
 
     g_hash_table_unref (window->action_labels);
   }
@@ -2715,6 +2725,41 @@ ephy_window_configure_event (GtkWidget *widget,
   return result;
 }
 
+static void
+ephy_window_fullscreen_button_clicked_cb (GtkWidget *widget,
+                                          gpointer   user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+
+  gtk_window_unfullscreen (GTK_WINDOW (window));
+}
+
+static gboolean
+ephy_window_hide_fullscreen_header_bar (EphyWindow *window)
+{
+  if (window->fullscreen_header_bar_id) {
+    dzl_gtk_widget_hide_with_fade (window->fullscreen_header_bar);
+    g_source_remove (window->fullscreen_header_bar_id);
+    window->fullscreen_header_bar_id = 0;
+  }
+
+  return FALSE;
+}
+
+static void
+ephy_window_show_fullscreen_header_bar (EphyWindow *window)
+{
+  dzl_gtk_widget_show_with_fade (window->fullscreen_header_bar);
+
+  if (window->fullscreen_header_bar_id)
+    g_source_remove (window->fullscreen_header_bar_id);
+
+  window->fullscreen_header_bar_id = g_timeout_add_seconds (2,
+                                                            (GSourceFunc)ephy_window_hide_fullscreen_header_bar,
+                                                            window);
+  g_source_set_name_by_id (window->fullscreen_header_bar_id, "[epiphany] fullscreen_header_bar_hide");
+}
+
 static gboolean
 ephy_window_state_event (GtkWidget           *widget,
                          GdkEventWindowState *event)
@@ -2737,6 +2782,7 @@ ephy_window_state_event (GtkWidget           *widget,
       ephy_window_fullscreen (window);
     } else {
       ephy_window_unfullscreen (window);
+      ephy_window_hide_fullscreen_header_bar (window);
     }
 
     action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
@@ -2947,6 +2993,7 @@ setup_header_bar (EphyWindow *window)
   g_signal_connect (title_widget, "lock-clicked",
                     G_CALLBACK (title_widget_lock_clicked_cb), window);
 
+
   return header_bar;
 }
 
@@ -2986,6 +3033,24 @@ browse_with_caret_get_mapping (GValue   *value,
   return TRUE;
 }
 
+
+static void
+ephy_window_pan_cb (GtkGesturePan   *gesture,
+                    GtkPanDirection  direction,
+                    gdouble          offset,
+                    gpointer         user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+
+  if (!window->is_fullscreen)
+    return;
+
+  if (direction == GTK_PAN_DIRECTION_DOWN) 
+    ephy_window_show_fullscreen_header_bar (window);
+  else
+    ephy_window_hide_fullscreen_header_bar (window);
+}
+
 static void
 ephy_window_constructed (GObject *object)
 {
@@ -2997,6 +3062,7 @@ ephy_window_constructed (GObject *object)
   EphyEmbedShellMode mode;
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
+  GtkWidget *fullscreen_header_bar_button;
 
   G_OBJECT_CLASS (ephy_window_parent_class)->constructed (object);
 
@@ -3073,10 +3139,27 @@ ephy_window_constructed (GObject *object)
   window->notebook = setup_notebook (window);
 
   /* Setup the toolbar. */
+  window->overlay = gtk_overlay_new ();
+  gtk_widget_show (window->overlay);
+
   window->header_bar = setup_header_bar (window);
   window->location_controller = setup_location_controller (window, EPHY_HEADER_BAR (window->header_bar));
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (window->notebook));
+  gtk_overlay_add_overlay (GTK_OVERLAY (window->overlay), GTK_WIDGET (window->notebook));
+
+  gtk_container_add (GTK_CONTAINER (window), window->overlay);
   gtk_widget_show (GTK_WIDGET (window->notebook));
+
+  /* Fullscreen header bar */
+  window->fullscreen_header_bar = gtk_header_bar_new ();
+  fullscreen_header_bar_button = gtk_button_new_from_icon_name ("view-fullscreen-symbolic", GTK_ICON_SIZE_BUTTON);
+  g_signal_connect (fullscreen_header_bar_button, "clicked", G_CALLBACK (ephy_window_fullscreen_button_clicked_cb), window);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (window->fullscreen_header_bar), fullscreen_header_bar_button);
+  gtk_widget_set_visible (fullscreen_header_bar_button, TRUE);
+
+  gtk_widget_set_halign (window->fullscreen_header_bar, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (window->fullscreen_header_bar, GTK_ALIGN_START);
+  gtk_widget_set_no_show_all (window->fullscreen_header_bar, TRUE);
+  gtk_overlay_add_overlay (GTK_OVERLAY (window->overlay), window->fullscreen_header_bar);
 
   /* other notifiers */
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
@@ -3139,6 +3222,14 @@ ephy_window_constructed (GObject *object)
     ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                           SENS_FLAG_CHROME, TRUE);
   }
+
+  window->swipe = gtk_gesture_swipe_new (GTK_WIDGET (window));
+
+  window->pan = gtk_gesture_pan_new (GTK_WIDGET (window), GTK_ORIENTATION_VERTICAL);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (window->pan), GTK_PHASE_CAPTURE);
+  g_signal_connect (window->pan, "pan", G_CALLBACK (ephy_window_pan_cb), window);
+
+  gtk_gesture_group (window->swipe, window->pan);
 
   ephy_window_set_chrome (window, chrome);
 }
