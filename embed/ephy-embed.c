@@ -983,3 +983,10 @@ ephy_embed_detach_notification_container (EphyEmbed *embed)
     gtk_container_remove (GTK_CONTAINER (embed->overlay), g_object_ref (GTK_WIDGET (container)));
   }
 }
+
+void
+ephy_embed_add_overlay_widget (EphyEmbed *embed,
+                               GtkWidget *widget)
+{
+  gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), widget);
+}
