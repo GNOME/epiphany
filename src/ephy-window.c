@@ -705,6 +705,20 @@ enable_edit_actions_sensitivity (EphyWindow *window)
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 }
 
+static void
+change_combined_stop_reload_state (GSimpleAction *action,
+                                   GVariant      *loading,
+                                   gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyActionBarStart *header_bar_start = ephy_header_bar_get_action_bar_start (EPHY_HEADER_BAR (window->header_bar));
+
+  ephy_action_bar_start_change_combined_stop_reload_state (header_bar_start,
+                                                           g_variant_get_boolean (loading));
+
+  g_simple_action_set_state (action, loading);
+}
+
 static const GActionEntry window_entries [] =
 {
   { "page-menu", window_cmd_page_menu },
@@ -764,7 +778,7 @@ static const GActionEntry toolbar_entries [] = {
   { "stop", window_cmd_stop },
   { "reload", window_cmd_reload },
   { "always-stop", window_cmd_stop },
-  { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", ephy_header_bar_change_combined_stop_reload_state }
+  { "combined-stop-reload", window_cmd_combined_stop_reload, NULL, "false", change_combined_stop_reload_state }
 };
 
 static const GActionEntry popup_entries [] = {

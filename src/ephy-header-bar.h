@@ -33,11 +33,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (EphyHeaderBar, ephy_header_bar, EPHY, HEADER_BAR, GtkHeaderBar)
 
 GtkWidget       *ephy_header_bar_new                               (EphyWindow    *window);
-
-void             ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
-                                                                    GVariant      *state,
-                                                                    gpointer       user_data);
-
 EphyTitleWidget *ephy_header_bar_get_title_widget                  (EphyHeaderBar *header_bar);
 GtkWidget       *ephy_header_bar_get_zoom_level_button             (EphyHeaderBar *header_bar);
 GtkWidget       *ephy_header_bar_get_page_menu_button              (EphyHeaderBar *header_bar);
