@@ -22,6 +22,7 @@
 
 #include <gtk/gtk.h>
 
+#include "ephy-action-bar-start.h"
 #include "ephy-title-widget.h"
 #include "ephy-window.h"
 
@@ -43,5 +44,6 @@ GtkWidget       *ephy_header_bar_get_page_menu_button              (EphyHeaderBa
 EphyWindow      *ephy_header_bar_get_window                        (EphyHeaderBar *header_bar);
 void             ephy_header_bar_set_reader_mode_state             (EphyHeaderBar *header_bar,
                                                                     EphyWebView   *view);
+EphyActionBarStart *ephy_header_bar_get_action_bar_start           (EphyHeaderBar *header_bar);
 
 G_END_DECLS
