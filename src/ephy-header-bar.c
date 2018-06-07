@@ -177,22 +177,6 @@ sync_chromes_visibility (EphyHeaderBar *header_bar)
   gtk_widget_set_visible (header_bar->new_tab_button, chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
 
-void
-ephy_header_bar_change_combined_stop_reload_state (GSimpleAction *action,
-                                                   GVariant      *loading,
-                                                   gpointer       user_data)
-{
-  EphyWindow *window = EPHY_WINDOW (user_data);
-  EphyHeaderBar *header_bar;
-
-  header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
-
-  ephy_action_bar_start_change_combined_stop_reload_state (header_bar->action_bar_start,
-                                                           g_variant_get_boolean (loading));
-
-  g_simple_action_set_state (action, loading);
-}
-
 static void
 add_bookmark_button_clicked_cb (EphyLocationEntry *entry,
                                 gpointer          *user_data)
