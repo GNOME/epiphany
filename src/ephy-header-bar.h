@@ -22,6 +22,7 @@
 
 #include <gtk/gtk.h>
 
+#include "ephy-action-bar-start.h"
 #include "ephy-title-widget.h"
 #include "ephy-window.h"
 
@@ -41,5 +42,6 @@ EphyTitleWidget *ephy_header_bar_get_title_widget                  (EphyHeaderBa
 GtkWidget       *ephy_header_bar_get_zoom_level_button             (EphyHeaderBar *header_bar);
 GtkWidget       *ephy_header_bar_get_page_menu_button              (EphyHeaderBar *header_bar);
 EphyWindow      *ephy_header_bar_get_window                        (EphyHeaderBar *header_bar);
+EphyActionBarStart *ephy_header_bar_get_action_bar_start           (EphyHeaderBar *header_bar);
 
 G_END_DECLS
