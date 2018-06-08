@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_LOCATION_ENTRY (ephy_location_entry_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkEntry)
+G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkOverlay)
 
 typedef enum {
   EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN,
@@ -78,5 +78,19 @@ void            ephy_location_entry_set_add_bookmark_popover   (EphyLocationEntr
                                                                 GtkPopover        *popover);
 
 GtkPopover     *ephy_location_entry_get_add_bookmark_popover   (EphyLocationEntry *entry);
+
+GtkWidget      *ephy_location_entry_get_entry                  (EphyLocationEntry *entry);
+
+GtkWidget      *ephy_location_entry_get_bookmark_widget        (EphyLocationEntry *entry);
+
+GtkWidget      *ephy_location_entry_get_reader_mode_widget     (EphyLocationEntry *entry);
+
+void            ephy_location_entry_set_reader_mode_visible    (EphyLocationEntry *entry,
+                                                                gboolean           visible);
+
+void            ephy_location_entry_set_reader_mode_state      (EphyLocationEntry *entry,
+                                                                gboolean           active);
+
+gboolean        ephy_location_entry_get_reader_mode_state      (EphyLocationEntry *entry);
 
 G_END_DECLS
