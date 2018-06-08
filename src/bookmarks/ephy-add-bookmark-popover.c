@@ -81,13 +81,15 @@ ephy_add_bookmark_popover_constructed (GObject *object)
 {
   EphyAddBookmarkPopover *self = EPHY_ADD_BOOKMARK_POPOVER (object);
   GtkWidget *location_entry;
+  GtkWidget *bookmark;
 
   G_OBJECT_CLASS (ephy_add_bookmark_popover_parent_class)->constructed (object);
 
   location_entry = GTK_WIDGET (ephy_header_bar_get_title_widget (self->header_bar));
   g_assert (EPHY_IS_LOCATION_ENTRY (location_entry));
+  bookmark = ephy_location_entry_get_bookmark_widget (EPHY_LOCATION_ENTRY (location_entry));
 
-  gtk_popover_set_relative_to (GTK_POPOVER (self), location_entry);
+  gtk_popover_set_relative_to (GTK_POPOVER (self), bookmark);
 }
 
 static void
