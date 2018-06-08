@@ -44,6 +44,9 @@
 #include <webkit2/webkit-web-extension.h>
 #include <JavaScriptCore/JavaScript.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 struct _EphyWebExtension {
   GObject parent_instance;
 
@@ -1639,3 +1642,5 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
 
   extension->uri_tester = ephy_uri_tester_new (adblock_data_dir);
 }
+
+#pragma GCC diagnostic pop

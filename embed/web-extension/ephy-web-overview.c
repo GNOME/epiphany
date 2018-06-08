@@ -24,6 +24,9 @@
 #include <string.h>
 #include <webkitdom/webkitdom.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 struct _EphyWebOverview {
   GObject parent_instance;
 
@@ -449,3 +452,5 @@ ephy_web_overview_new (WebKitWebPage        *web_page,
                        "model", model,
                        NULL);
 }
+
+#pragma GCC diagnostic pop

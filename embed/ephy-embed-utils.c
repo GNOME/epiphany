@@ -33,6 +33,9 @@
 #include <libsoup/soup.h>
 #include <string.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 static GRegex *non_search_regex;
 static GRegex *domain_regex;
 
@@ -408,3 +411,5 @@ ephy_embed_utils_shutdown (void)
   g_clear_pointer (&non_search_regex, (GDestroyNotify)g_regex_unref);
   g_clear_pointer (&domain_regex, (GDestroyNotify)g_regex_unref);
 }
+
+#pragma GCC diagnostic pop

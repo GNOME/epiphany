@@ -23,6 +23,9 @@
 
 #include "ephy-uri-helpers.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 struct _EphyEmbedFormAuth {
   GObject parent_instance;
 
@@ -161,3 +164,5 @@ ephy_embed_form_auth_get_owner_document (EphyEmbedFormAuth *form_auth)
 {
   return webkit_dom_node_get_owner_document (form_auth->password_node);
 }
+
+#pragma GCC diagnostic pop

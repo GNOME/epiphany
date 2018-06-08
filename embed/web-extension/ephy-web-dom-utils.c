@@ -25,6 +25,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 typedef struct {
   WebKitDOMHTMLInputElement *element;
   gint index;
@@ -802,3 +805,5 @@ ephy_web_dom_utils_get_selection_as_string (WebKitDOMDOMSelection *selection)
 
   return string;
 }
+
+#pragma GCC diagnostic pop
