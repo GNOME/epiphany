@@ -265,25 +265,13 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
 {
   char *username_field_value = NULL;
   guint request_id;
-  SoupURI *uri;
   WebKitDOMNode *username_node;
   WebKitDOMDOMWindow *dom_window = NULL;
   GVariant *variant;
   char *message = NULL;
-  char *uri_string = NULL;
-  char *origin = NULL;
 
   dom_window = webkit_dom_document_get_default_view (ephy_embed_form_auth_get_owner_document (form_auth));
   if (dom_window == NULL)
-    goto out;
-
-  uri = ephy_embed_form_auth_get_uri (form_auth);
-  if (uri == NULL)
-    goto out;
-
-  uri_string = soup_uri_to_string (uri, FALSE);
-  origin = ephy_uri_to_security_origin (uri_string);
-  if (origin == NULL)
     goto out;
 
   request_id = form_auth_data_save_request_new_id ();
@@ -295,7 +283,7 @@ request_decision_on_storing (EphyEmbedFormAuth *form_auth)
   variant = g_variant_new ("(utss)",
                            request_id,
                            ephy_embed_form_auth_get_page_id (form_auth),
-                           origin,
+                           ephy_embed_form_auth_get_origin (form_auth),
                            username_field_value ? username_field_value : "");
   g_free (username_field_value);
 
@@ -315,12 +303,7 @@ out:
     g_object_unref (dom_window);
   if (form_auth != NULL)
     g_object_unref (form_auth);
-  if (message != NULL)
-    g_free (message);
-  if (uri_string != NULL)
-    g_free (uri_string);
-  if (origin != NULL)
-    g_free (origin);
+  g_free (message);
 }
 
 static void
@@ -330,26 +313,15 @@ should_store_cb (GList    *records,
   EphyEmbedFormAuth *form_auth = EPHY_EMBED_FORM_AUTH (user_data);
   EphyWebExtension *web_extension;
   EphyPermission permission;
-  SoupURI *uri;
-  char *uri_string;
   const char *password;
-  char *origin = NULL;
 
   if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS))
     return;
 
-  uri = ephy_embed_form_auth_get_uri (form_auth);
-  uri_string = soup_uri_to_string (uri, FALSE);
-  if (uri_string == NULL)
-    return;
-  origin = ephy_uri_to_security_origin (uri_string);
-  if (origin == NULL)
-    goto out;
-
   web_extension = ephy_web_extension_get ();
   permission = ephy_permissions_manager_get_permission (web_extension->permissions_manager,
                                                         EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
-                                                        origin);
+                                                        ephy_embed_form_auth_get_origin (form_auth));
 
   if (permission == EPHY_PERMISSION_DENY) {
     LOG ("User/password storage permission previously denied. Not asking about storing.");
@@ -392,9 +364,6 @@ should_store_cb (GList    *records,
   }
 
 out:
-  if (origin != NULL)
-    g_free (origin);
-  g_free (uri_string);
   g_object_unref (form_auth);
   g_list_free_full (records, g_object_unref);
 }
