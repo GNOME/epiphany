@@ -200,12 +200,14 @@ user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
   const char *address;
   GtkTreeModel *model;
   GtkEntryCompletion *completion;
+  GtkWidget *entry;
 
   address = ephy_title_widget_get_address (EPHY_TITLE_WIDGET (widget));
 
   LOG ("user_changed_cb, address %s", address);
 
-  completion = gtk_entry_get_completion (GTK_ENTRY (widget));
+  entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (widget));
+  completion = gtk_entry_get_completion (GTK_ENTRY (entry));
   model = gtk_entry_completion_get_model (completion);
 
   ephy_completion_model_update_for_string (EPHY_COMPLETION_MODEL (model), address,
@@ -343,7 +345,8 @@ static void
 add_completion_actions (EphyLocationController *controller,
                         EphyLocationEntry      *lentry)
 {
-  GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (lentry));
+  GtkWidget *entry = ephy_location_entry_get_entry (lentry);
+  GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (entry));
 
   fill_entry_completion_with_actions (completion, controller);
   g_signal_connect (completion, "action_activated",
@@ -356,9 +359,11 @@ search_engines_changed_cb (EphySearchEngineManager *manager,
 {
   EphyLocationController *controller;
   GtkEntryCompletion *completion;
+  GtkWidget *entry;
 
   controller = EPHY_LOCATION_CONTROLLER (data);
-  completion = gtk_entry_get_completion (GTK_ENTRY (controller->title_widget));
+  entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (controller->title_widget));
+  completion = gtk_entry_get_completion (GTK_ENTRY (entry));
 
   for (guint i = 0; i < controller->num_search_engines_actions; i++)
     gtk_entry_completion_delete_action (completion, 0);
@@ -378,13 +383,33 @@ longpress_gesture_cb (GtkGestureLongPress *gesture,
 }
 
 static void
+reader_mode_button_press_event_cb (GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   user_data)
+{
+  EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (user_data);
+  EphyWindow *window = controller->window;
+  EphyEmbed *embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  EphyWebView *view = ephy_embed_get_web_view (embed);
+  EphyLocationEntry *lentry;
+
+  g_assert (EPHY_IS_LOCATION_ENTRY (controller->title_widget));
+
+  lentry = EPHY_LOCATION_ENTRY (controller->title_widget);
+
+  ephy_location_entry_set_reader_mode_state (lentry, !ephy_location_entry_get_reader_mode_state (lentry));
+  ephy_web_view_toggle_reader_mode (view, ephy_location_entry_get_reader_mode_state (lentry));
+}
+
+
+static void
 ephy_location_controller_constructed (GObject *object)
 {
   EphyLocationController *controller = EPHY_LOCATION_CONTROLLER (object);
   EphyHistoryService *history_service;
   EphyBookmarksManager *bookmarks_manager;
   EphyCompletionModel *model;
-  GtkWidget *notebook, *widget;
+  GtkWidget *notebook, *widget, *reader_mode, *entry;
 
   G_OBJECT_CLASS (ephy_location_controller_parent_class)->constructed (object);
 
@@ -429,14 +454,18 @@ ephy_location_controller_constructed (GObject *object)
   g_signal_connect_object (controller->search_engine_manager, "changed",
                            G_CALLBACK (search_engines_changed_cb), controller, 0);
 
+  reader_mode = ephy_location_entry_get_reader_mode_widget (EPHY_LOCATION_ENTRY (controller->title_widget));
+  g_signal_connect (G_OBJECT (reader_mode), "button-press-event", G_CALLBACK (reader_mode_button_press_event_cb), controller);
+
+  entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (controller->title_widget));
   g_object_bind_property (controller, "editable",
-                          controller->title_widget, "editable",
+                          entry, "editable",
                           G_BINDING_SYNC_CREATE);
 
   g_signal_connect_object (widget, "drag-data-received",
                            G_CALLBACK (entry_drag_data_received_cb),
                            controller, 0);
-  g_signal_connect_object (widget, "activate",
+  g_signal_connect_object (entry, "activate",
                            G_CALLBACK (entry_activate_cb),
                            controller, 0);
   g_signal_connect_object (widget, "user-changed",
