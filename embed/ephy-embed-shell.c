@@ -63,6 +63,7 @@ typedef struct {
   EphyPermissionsManager *permissions_manager;
   EphyAboutHandler *about_handler;
   EphyViewSourceHandler *source_handler;
+  char *guid;
   GDBusServer *dbus_server;
   GList *web_extensions;
   EphyFiltersManager *filters_manager;
@@ -167,6 +168,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->downloads_manager);
   g_clear_object (&priv->permissions_manager);
   g_clear_object (&priv->web_context);
+  g_clear_pointer (&priv->guid, g_free);
   g_clear_object (&priv->dbus_server);
   g_clear_object (&priv->filters_manager);
   g_clear_object (&priv->search_engine_manager);
@@ -715,7 +717,8 @@ initialize_web_extensions (WebKitWebContext *web_context,
 
   private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO;
   browser_mode = priv->mode == EPHY_EMBED_SHELL_MODE_BROWSER;
-  user_data = g_variant_new ("(msssbb)",
+  user_data = g_variant_new ("(smsssbb)",
+                             priv->guid,
                              address,
                              ephy_dot_dir (),
                              ephy_filters_manager_get_adblock_filters_dir (priv->filters_manager),
@@ -779,12 +782,10 @@ ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
   GDBusAuthObserver *observer;
   char *address;
-  char *guid;
   GError *error = NULL;
 
   address = g_strdup_printf ("unix:tmpdir=%s", g_get_tmp_dir ());
 
-  guid = g_dbus_generate_guid ();
   observer = g_dbus_auth_observer_new ();
 
   g_signal_connect (observer, "authorize-authenticated-peer",
@@ -797,7 +798,7 @@ ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
    */
   priv->dbus_server = g_dbus_server_new_sync (address,
                                               G_DBUS_SERVER_FLAGS_NONE,
-                                              guid,
+                                              priv->guid,
                                               observer,
                                               NULL,
                                               &error);
@@ -814,7 +815,6 @@ ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
 
  out:
   g_free (address);
-  g_free (guid);
   g_object_unref (observer);
 }
 
@@ -1083,6 +1083,7 @@ ephy_embed_shell_constructed (GObject *object)
 
   shell = EPHY_EMBED_SHELL (object);
   priv = ephy_embed_shell_get_instance_private (shell);
+  priv->guid = g_dbus_generate_guid ();
   mode = ephy_embed_shell_get_mode (shell);
 
   /* These do not run the EmbedShell application instance, so make sure that
@@ -1463,6 +1464,14 @@ ephy_embed_shell_get_user_content_manager (EphyEmbedShell *shell)
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
   return priv->user_content;
+}
+
+const char *
+ephy_embed_shell_get_guid (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  return priv->guid;
 }
 
 WebKitWebContext *

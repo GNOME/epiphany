@@ -3207,7 +3207,7 @@ has_modified_forms_cb (WebKitWebView *view,
   WebKitJavascriptResult *js_result;
   gboolean retval = FALSE;
 
-  js_result = webkit_web_view_run_javascript_finish (view, result, NULL);
+  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, NULL);
   if (js_result) {
     retval = jsc_value_to_boolean (webkit_javascript_result_get_js_value (js_result));
     webkit_javascript_result_unref (js_result);
@@ -3242,11 +3242,12 @@ ephy_web_view_has_modified_forms (EphyWebView        *view,
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
-  webkit_web_view_run_javascript (WEBKIT_WEB_VIEW (view),
-                                  "Ephy.hasModifiedForms();",
-                                  cancellable,
-                                  (GAsyncReadyCallback)has_modified_forms_cb,
-                                  task);
+  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (view),
+                                           "Ephy.hasModifiedForms();",
+                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                           cancellable,
+                                           (GAsyncReadyCallback)has_modified_forms_cb,
+                                           task);
 }
 
 gboolean
@@ -3281,7 +3282,7 @@ get_best_web_app_icon_cb (WebKitWebView *view,
   WebKitJavascriptResult *js_result;
   GError *error = NULL;
 
-  js_result = webkit_web_view_run_javascript_finish (view, result, &error);
+  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, &error);
   if (js_result) {
     JSCValue *js_value, *js_uri, *js_color;
     GetBestWebAppIconAsyncData *data;
@@ -3321,11 +3322,12 @@ ephy_web_view_get_best_web_app_icon (EphyWebView        *view,
 
   task = g_task_new (view, cancellable, callback, user_data);
   script = g_strdup_printf ("Ephy.getWebAppIcon(\"%s\");", webkit_web_view_get_uri (wk_view));
-  webkit_web_view_run_javascript (wk_view,
-                                  script,
-                                  cancellable,
-                                  (GAsyncReadyCallback)get_best_web_app_icon_cb,
-                                  task);
+  webkit_web_view_run_javascript_in_world (wk_view,
+                                           script,
+                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                           cancellable,
+                                           (GAsyncReadyCallback)get_best_web_app_icon_cb,
+                                           task);
   g_free (script);
 }
 
@@ -3366,7 +3368,7 @@ get_web_app_title_cb (WebKitWebView *view,
   WebKitJavascriptResult *js_result;
   GError *error = NULL;
 
-  js_result = webkit_web_view_run_javascript_finish (view, result, &error);
+  js_result = webkit_web_view_run_javascript_in_world_finish (view, result, &error);
   if (js_result) {
     JSCValue *js_value;
     char *retval = NULL;
@@ -3393,11 +3395,12 @@ ephy_web_view_get_web_app_title (EphyWebView        *view,
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   task = g_task_new (view, cancellable, callback, user_data);
-  webkit_web_view_run_javascript (WEBKIT_WEB_VIEW (view),
-                                  "Ephy.getWebAppTitle();",
-                                  cancellable,
-                                  (GAsyncReadyCallback)get_web_app_title_cb,
-                                  task);
+  webkit_web_view_run_javascript_in_world (WEBKIT_WEB_VIEW (view),
+                                           "Ephy.getWebAppTitle();",
+                                           ephy_embed_shell_get_guid (ephy_embed_shell_get_default ()),
+                                           cancellable,
+                                           (GAsyncReadyCallback)get_web_app_title_cb,
+                                           task);
 }
 
 char *

@@ -960,6 +960,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
 void
 ephy_web_extension_initialize (EphyWebExtension   *extension,
                                WebKitWebExtension *wk_extension,
+                               const char         *guid,
                                const char         *server_address,
                                const char         *adblock_data_dir,
                                gboolean            is_private_profile,
@@ -974,7 +975,7 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
 
   extension->initialized = TRUE;
 
-  extension->script_world = webkit_script_world_new ();
+  extension->script_world = webkit_script_world_new_with_name (guid);
   g_signal_connect (extension->script_world,
                     "window-object-cleared",
                     G_CALLBACK (window_object_cleared_cb),

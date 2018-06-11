@@ -56,6 +56,7 @@ struct _EphyEmbedShellClass
 };
 
 EphyEmbedShell    *ephy_embed_shell_get_default                (void);
+const char        *ephy_embed_shell_get_guid                   (EphyEmbedShell   *shell);
 WebKitWebContext  *ephy_embed_shell_get_web_context            (EphyEmbedShell   *shell);
 EphyHistoryService
                   *ephy_embed_shell_get_global_history_service (EphyEmbedShell   *shell);

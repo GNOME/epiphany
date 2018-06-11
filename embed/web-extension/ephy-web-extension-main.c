@@ -34,6 +34,7 @@ G_MODULE_EXPORT void
 webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_extension,
                                                 GVariant           *user_data)
 {
+  const char *guid;
   const char *server_address;
   const char *dot_dir;
   const char *adblock_data_dir;
@@ -41,7 +42,7 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
   gboolean browser_mode;
   GError *error = NULL;
 
-  g_variant_get (user_data, "(m&s&s&sbb)", &server_address, &dot_dir, &adblock_data_dir, &private_profile, &browser_mode);
+  g_variant_get (user_data, "(&sm&s&s&sbb)", &guid, &server_address, &dot_dir, &adblock_data_dir, &private_profile, &browser_mode);
 
   if (!server_address) {
     g_warning ("UI process did not start D-Bus server, giving up.");
@@ -59,6 +60,7 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
 
   ephy_web_extension_initialize (extension,
                                  webkit_extension,
+                                 guid,
                                  server_address,
                                  adblock_data_dir,
                                  private_profile,
