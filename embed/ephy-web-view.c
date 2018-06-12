@@ -36,7 +36,6 @@
 #include "ephy-gsb-utils.h"
 #include "ephy-history-service.h"
 #include "ephy-lib-type-builtins.h"
-#include "ephy-option-menu.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
@@ -112,8 +111,6 @@ struct _EphyWebView {
   GtkWidget *webcam_info_bar;
   GtkWidget *password_info_bar;
   GtkWidget *sensitive_form_info_bar;
-
-  GtkWidget *option_menu;
 
   EphyHistoryService *history_service;
   GCancellable *history_service_cancellable;
@@ -928,13 +925,6 @@ ephy_web_view_dispose (GObject *object)
   untrack_info_bar (&view->password_info_bar);
   untrack_info_bar (&view->sensitive_form_info_bar);
 
-  if (view->option_menu) {
-    g_object_remove_weak_pointer (G_OBJECT (view->option_menu),
-                                  (gpointer *)&view->option_menu);
-    ephy_option_menu_popdown (EPHY_OPTION_MENU (view->option_menu));
-    view->option_menu = NULL;
-  }
-
   g_clear_object (&view->file_monitor);
 
   g_clear_object (&view->icon);
@@ -1143,21 +1133,6 @@ process_crashed_cb (EphyWebView *web_view, gpointer user_data)
                                  EPHY_WEB_VIEW_ERROR_PROCESS_CRASH, NULL, NULL);
 }
 
-static gboolean
-show_option_menu_cb (EphyWebView      *web_view,
-                     WebKitOptionMenu *menu,
-                     GdkEvent         *event,
-                     GdkRectangle     *rect)
-{
-  g_assert (!web_view->option_menu);
-  web_view->option_menu = ephy_option_menu_new (web_view, menu);
-  g_object_add_weak_pointer (G_OBJECT (web_view->option_menu),
-                             (gpointer *)&web_view->option_menu);
-  ephy_option_menu_popup (EPHY_OPTION_MENU (web_view->option_menu), event, rect);
-
-  return TRUE;
-}
-
 static void
 ephy_web_view_constructed (GObject *object)
 {
@@ -1169,8 +1144,6 @@ ephy_web_view_constructed (GObject *object)
 
   g_signal_connect (web_view, "web-process-crashed",
                     G_CALLBACK (process_crashed_cb), NULL);
-  g_signal_connect (web_view, "show-option-menu",
-                    G_CALLBACK (show_option_menu_cb), NULL);
   g_signal_connect_swapped (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
                             "changed", G_CALLBACK (update_navigation_flags), web_view);
 }
