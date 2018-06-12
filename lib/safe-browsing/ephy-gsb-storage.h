@@ -38,8 +38,6 @@ gint64          ephy_gsb_storage_get_metadata                   (EphyGSBStorage 
 void            ephy_gsb_storage_set_metadata                   (EphyGSBStorage *self,
                                                                  const char     *key,
                                                                  gint64          value);
-void            ephy_gsb_storage_insert_threat_list             (EphyGSBStorage    *self,
-                                                                 EphyGSBThreatList *list);
 GList          *ephy_gsb_storage_get_threat_lists               (EphyGSBStorage *self);
 char           *ephy_gsb_storage_compute_checksum               (EphyGSBStorage    *self,
                                                                  EphyGSBThreatList *list);
