@@ -163,74 +163,6 @@ ephy_gsb_service_schedule_update (EphyGSBService *self)
   LOG ("Next update scheduled in %ld seconds", interval);
 }
 
-static GList *
-ephy_gsb_service_fetch_threat_lists_sync (EphyGSBService *self)
-{
-  GList *retval = NULL;
-  JsonNode *body_node = NULL;
-  JsonObject *body_obj;
-  JsonArray *threat_lists;
-  JsonObject *descriptor;
-  const char *threat_type;
-  const char *platform_type;
-  const char *threat_entry_type;
-  SoupMessage *msg;
-  char *url;
-
-  g_assert (EPHY_IS_GSB_SERVICE (self));
-
-  url = g_strdup_printf ("%sthreatLists?key=%s", API_PREFIX, self->api_key);
-  msg = soup_message_new (SOUP_METHOD_GET, url);
-  soup_session_send_message (self->session, msg);
-
-  if (msg->status_code != 200) {
-    LOG ("Failed to fetch the threat lists from the server, got: %u, %s",
-         msg->status_code, msg->response_body->data);
-    goto out;
-  }
-
-  body_node = json_from_string (msg->response_body->data, NULL);
-  if (!body_node || !JSON_NODE_HOLDS_OBJECT (body_node)) {
-    g_warning ("Response is not a valid JSON object");
-    goto out;
-  }
-
-  body_obj = json_node_get_object (body_node);
-
-  if (json_object_has_non_null_array_member (body_obj, "threatLists")) {
-    threat_lists = json_object_get_array_member (body_obj, "threatLists");
-    for (guint i = 0; i < json_array_get_length (threat_lists); i++) {
-      descriptor = json_array_get_object_element (threat_lists, i);
-      threat_type = json_object_get_string_member (descriptor, "threatType");
-      platform_type = json_object_get_string_member (descriptor, "platformType");
-
-      /* Keep SOCIAL_ENGINEERING threats that are for any platform.
-       * Keep MALWARE/UNWANTED_SOFTWARE threats that are for Linux only.
-       */
-      if (g_strcmp0 (threat_type, "SOCIAL_ENGINEERING") == 0) {
-        if (g_strcmp0 (platform_type, "ANY_PLATFORM") != 0)
-          continue;
-      } else if (g_strcmp0 (platform_type, "LINUX") != 0) {
-          continue;
-      }
-
-      threat_entry_type = json_object_get_string_member (descriptor, "threatEntryType");
-      retval = g_list_prepend (retval, ephy_gsb_threat_list_new (threat_type,
-                                                                 platform_type,
-                                                                 threat_entry_type,
-                                                                 NULL));
-    }
-  }
-
-out:
-  g_free (url);
-  g_object_unref (msg);
-  if (body_node)
-    json_node_unref (body_node);
-
-  return g_list_reverse (retval);
-}
-
 static void
 ephy_gsb_service_update_thread (GTask          *task,
                                 EphyGSBService *self,
@@ -254,12 +186,6 @@ ephy_gsb_service_update_thread (GTask          *task,
   self->next_list_updates_time = CURRENT_TIME + DEFAULT_WAIT_TIME;
 
   ephy_gsb_storage_delete_old_full_hashes (self->storage);
-
-  /* Fetch and store new threat lists, if any. */
-  threat_lists = ephy_gsb_service_fetch_threat_lists_sync (self);
-  for (GList *l = threat_lists; l && l->data; l = l->next)
-    ephy_gsb_storage_insert_threat_list (self->storage, l->data);
-  g_list_free_full (threat_lists, (GDestroyNotify)ephy_gsb_threat_list_free);
 
   threat_lists = ephy_gsb_storage_get_threat_lists (self->storage);
   if (!threat_lists) {
