@@ -153,7 +153,7 @@ ephy_web_application_delete (const char *name)
     goto out;
 
   desktop_path = g_build_filename (g_get_user_data_dir (), "applications", desktop_file, NULL);
-  if (g_file_test (desktop_path, G_FILE_TEST_IS_DIR)) {
+  if (g_file_test (desktop_path, G_FILE_TEST_IS_SYMLINK)) {
     launcher = g_file_new_for_path (desktop_path);
     if (!g_file_delete (launcher, NULL, NULL))
       goto out;
