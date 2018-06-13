@@ -178,14 +178,14 @@ ephy_uri_tester_is_matched (EphyUriTester *tester,
                             const char    *page_uri,
                             gboolean       whitelist)
 {
-  char *value;
+  gpointer is_matched;
   GHashTable *urlcache = tester->urlcache;
   if (whitelist)
     urlcache = tester->whitelisted_urlcache;
 
   /* Check cached URLs first. */
-  if ((value = g_hash_table_lookup (urlcache, req_uri)))
-    return GPOINTER_TO_INT (value);
+  if (g_hash_table_lookup_extended (urlcache, req_uri, NULL, &is_matched))
+    return GPOINTER_TO_INT (is_matched);
 
   /* Look for a match either by key or by pattern. */
   if (ephy_uri_tester_is_matched_by_key (tester, opts, req_uri, page_uri, whitelist)) {
@@ -199,6 +199,7 @@ ephy_uri_tester_is_matched (EphyUriTester *tester,
     return TRUE;
   }
 
+  /* No match. */
   g_hash_table_insert (urlcache, g_strdup (req_uri), GINT_TO_POINTER (FALSE));
   return FALSE;
 }
