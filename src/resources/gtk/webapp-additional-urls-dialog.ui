@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.10 -->
+  <object class="GtkListStore" id="liststore">
+    <columns>
+      <!-- column-name URL -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <template class="EphyWebappAdditionalURLsDialog" parent="GtkDialog">
+    <property name="height_request">500</property>
+    <property name="modal">True</property>
+    <property name="window_position">center</property>
+    <property name="default_width">300</property>
+    <property name="default_height">400</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="headerbar">
+      <object class="GtkHeaderBar">
+        <property name="title" translatable="yes">Additional URLs</property>
+        <property name="show-close-button">True</property>
+        <child>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">C_lear All</property>
+            <property name="visible">True</property>
+            <property name="use_underline">True</property>
+            <property name="valign">center</property>
+            <property name="action-name">webapp-additional-urls.forget-all</property>
+            <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="clicked"/>
+            <style>
+              <class name="destructive-action"/>
+              <class name="text-button"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin">12</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">dialog-information-symbolic</property>
+                <property name="icon_size">6</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">A URL that starts with any of the additional URLs will be opened by the web application. If you omit the URL scheme, the one from the currently loaded URL will be used.</property>
+                <property name="wrap">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="width_request">400</property>
+            <property name="height_request">300</property>
+            <property name="visible">True</property>
+            <property name="expand">True</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="min_content_width">300</property>
+            <property name="min_content_height">300</property>
+            <child>
+              <object class="GtkTreeView" id="treeview">
+                <property name="visible">True</property>
+                <property name="model">liststore</property>
+                <property name="enable_search">False</property>
+                <property name="search_column">0</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="tree_selection">
+                    <property name="mode">multiple</property>
+                    <signal name="changed" handler="on_treeview_selection_changed"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="url_column">
+                    <property name="sizing">autosize</property>
+                    <property name="title" translatable="yes">URL</property>
+                    <property name="clickable">True</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">0</property>
+                    <child>
+                      <object class="GtkCellRendererText">
+                        <property name="editable">TRUE</property>
+                        <signal name="edited" handler="on_cell_edited"/>
+                      </object>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkActionBar">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Add new URL</property>
+                <property name="action-name">webapp-additional-urls.new</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon_name">list-add-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Remove the selected URLs</property>
+                <property name="action-name">webapp-additional-urls.forget</property>
+                <accelerator key="Delete" signal="clicked"/>
+                <accelerator key="KP_Delete" signal="clicked"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon_name">list-remove-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

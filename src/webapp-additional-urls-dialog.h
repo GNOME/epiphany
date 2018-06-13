@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2010 Igalia S.L.
+ *  Copyright © 2018 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -20,23 +20,13 @@
 
 #pragma once
 
-#include <glib.h>
-#include <gio/gio.h>
-
-#include "ephy-prefs.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_SETTINGS_MAIN      ephy_settings_get (EPHY_PREFS_SCHEMA)
-#define EPHY_SETTINGS_UI        ephy_settings_get (EPHY_PREFS_UI_SCHEMA)
-#define EPHY_SETTINGS_WEB       ephy_settings_get (EPHY_PREFS_WEB_SCHEMA)
-#define EPHY_SETTINGS_LOCKDOWN  ephy_settings_get (EPHY_PREFS_LOCKDOWN_SCHEMA)
-#define EPHY_SETTINGS_STATE     ephy_settings_get (EPHY_PREFS_STATE_SCHEMA)
-#define EPHY_SETTINGS_SYNC      ephy_settings_get (EPHY_PREFS_SYNC_SCHEMA)
-#define EPHY_SETTINGS_WEB_APP   ephy_settings_get (EPHY_PREFS_WEB_APP_SCHEMA)
+#define EPHY_TYPE_WEBAPP_ADDITIONAL_URLS_DIALOG (ephy_webapp_additional_urls_dialog_get_type ())
+G_DECLARE_FINAL_TYPE (EphyWebappAdditionalURLsDialog, ephy_webapp_additional_urls_dialog, EPHY, WEBAPP_ADDITIONAL_URLS_DIALOG, GtkDialog);
 
-GSettings *ephy_settings_get (const char *schema);
-
-void ephy_settings_shutdown (void);
+EphyWebappAdditionalURLsDialog *ephy_webapp_additional_urls_dialog_new (void);
 
 G_END_DECLS

@@ -237,6 +237,13 @@
 			<description>Whether to automatically search the web when something that does not look like a URL is entered in the address bar. If this setting is disabled, everything will be loaded as a URL unless a search engine is explicitly selected from the dropdown menu.</description>
 		</key>
 	</schema>
+        <schema id="org.gnome.Epiphany.webapp">
+                <key type="as" name="additional-urls">
+                      <default>[]</default>
+                      <summary>Web application additional URLs.</summary>
+                      <description>The list of URLs that should be opened by the web application</description>
+                </key>
+        </schema>
 	<schema id="org.gnome.Epiphany.state">
 		<key type="s" name="download-dir">
 			<default>'Downloads'</default>

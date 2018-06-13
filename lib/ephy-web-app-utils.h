@@ -38,26 +38,34 @@ typedef struct {
 #define EPHY_WEB_APP_PREFIX "app-"
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
 
-char    *ephy_web_application_get_app_id_from_name (const char *name);
+char               *ephy_web_application_get_app_id_from_name (const char *name);
 
-char    *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon);
+char               *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon);
 
-char    *ephy_web_application_ensure_for_app_info (GAppInfo *app_info);
+char               *ephy_web_application_ensure_for_app_info (GAppInfo *app_info);
 
-gboolean ephy_web_application_delete (const char *id);
+gboolean            ephy_web_application_delete (const char *id);
 
-void     ephy_web_application_setup_from_profile_directory (const char *profile_directory);
+void                ephy_web_application_setup_from_profile_directory (const char *profile_directory);
 
-void     ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info);
+void                ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info);
 
-char    *ephy_web_application_get_profile_directory (const char *id);
+char               *ephy_web_application_get_profile_directory (const char *id);
 
-GList   *ephy_web_application_get_application_list (void);
+EphyWebApplication *ephy_web_application_for_profile_directory (const char *profile_dir);
 
-void     ephy_web_application_free_application_list (GList *list);
+void                ephy_web_application_free (EphyWebApplication *app);
 
-gboolean ephy_web_application_exists (const char *id);
+gboolean            ephy_web_application_exists (const char *id);
 
-void     ephy_web_application_initialize_settings (const char *profile_directory);
+GList              *ephy_web_application_get_application_list (void);
+
+void                ephy_web_application_free_application_list (GList *list);
+
+void                ephy_web_application_initialize_settings (const char *profile_directory);
+
+gboolean            ephy_web_application_is_uri_allowed (const char* uri);
+
+gboolean            ephy_web_application_save (EphyWebApplication *app);
 
 G_END_DECLS

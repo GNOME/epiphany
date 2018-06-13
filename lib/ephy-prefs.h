@@ -177,12 +177,17 @@ static const char * const ephy_prefs_web_schema[] = {
 #define EPHY_PREFS_SYNC_OPEN_TABS_ENABLED "sync-open-tabs-enabled"
 #define EPHY_PREFS_SYNC_OPEN_TABS_TIME    "sync-open-tabs-time"
 
+#define EPHY_PREFS_WEB_APP_SCHEMA          "org.gnome.Epiphany.webapp"
+#define EPHY_PREFS_WEB_APP_ADDITIONAL_URLS "additional-urls"
+
 static struct {
   const char *schema;
   const char *path;
+  gboolean is_webapp_only;
 } const ephy_prefs_relocatable_schemas[] = {
-  { EPHY_PREFS_STATE_SCHEMA, "state/" },
-  { EPHY_PREFS_WEB_SCHEMA, "web/" },
+  { EPHY_PREFS_STATE_SCHEMA, "state/", FALSE },
+  { EPHY_PREFS_WEB_SCHEMA, "web/", FALSE },
+  { EPHY_PREFS_WEB_APP_SCHEMA, "webapp/", TRUE }
 };
 
 G_END_DECLS

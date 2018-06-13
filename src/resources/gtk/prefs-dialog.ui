@@ -99,6 +99,106 @@
                   </object>
                 </child>
                 <child>
+                  <object class="GtkBox" id="webapp_box">
+                    <property name="visible">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="hexpand">True</property>
+                            <property name="label" translatable="yes">Web Application</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="webapp_additional_urls_dialog_button">
+                            <property name="label" translatable="yes">_Manage Additional URLs</property>
+                            <property name="visible">True</property>
+                            <property name="use-underline">True</property>
+                            <signal name="clicked" handler="on_manage_webapp_additional_urls_button_clicked"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkGrid">
+                        <property name="visible">True</property>
+                        <property name="column-spacing">12</property>
+                        <property name="row-spacing">6</property>
+                        <property name="margin-start">12</property>
+                        <child>
+                          <object class="GtkButton" id="webapp_icon_button">
+                            <property name="visible">true</property>
+                            <property name="halign">center</property>
+                            <signal name="clicked" handler="on_webapp_icon_button_clicked"/>
+                            <child>
+                              <object class="GtkImage" id="webapp_icon">
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                            <property name="height">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Homepage:</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="webapp_url">
+                            <property name="visible">True</property>
+                            <property name="hexpand">True</property>
+                            <signal name="changed" handler="on_webapp_entry_changed"/>
+                          </object>
+                          <packing>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Title:</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="webapp_title">
+                            <property name="visible">True</property>
+                            <property name="hexpand">True</property>
+                            <signal name="changed" handler="on_webapp_entry_changed"/>
+                          </object>
+                          <packing>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
