@@ -57,6 +57,9 @@ ephy_settings_init (void)
   for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_relocatable_schemas); i++) {
     char *path;
 
+    if (!web_app_name && ephy_prefs_relocatable_schemas[i].is_webapp_only)
+      continue;
+
     path = g_build_path ("/", base_path, ephy_prefs_relocatable_schemas[i].path, NULL);
     g_hash_table_insert (settings, g_strdup (ephy_prefs_relocatable_schemas[i].schema),
                          g_settings_new_with_path (ephy_prefs_relocatable_schemas[i].schema, path));

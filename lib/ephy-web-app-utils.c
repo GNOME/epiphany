@@ -23,11 +23,12 @@
 
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-prefs.h"
+#include "ephy-settings.h"
 
 #include <errno.h>
 #include <gio/gio.h>
 #include <glib/gstdio.h>
+#include <libsoup/soup.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -462,7 +463,7 @@ ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
     gdk_set_program_class (wm_class);
 }
 
-static void
+void
 ephy_web_application_free (EphyWebApplication *app)
 {
   g_free (app->id);
@@ -473,7 +474,8 @@ ephy_web_application_free (EphyWebApplication *app)
   g_slice_free (EphyWebApplication, app);
 }
 
-static EphyWebApplication *
+
+EphyWebApplication *
 ephy_web_application_for_profile_directory (const char *profile_dir)
 {
   EphyWebApplication *app;
@@ -658,4 +660,109 @@ ephy_web_application_initialize_settings (const char *profile_directory)
   g_object_unref (settings);
   g_object_unref (web_app_settings);
   g_free (name);
+}
+
+gboolean
+ephy_web_application_is_uri_allowed (const char* uri)
+{
+  SoupURI *request_uri;
+  char **urls;
+  guint i;
+  gboolean matched = FALSE;
+
+  if (g_strcmp0 (uri, "about:blank") == 0)
+    return TRUE;
+
+  request_uri = soup_uri_new (uri);
+  if (!request_uri)
+    return FALSE;
+
+  urls = g_settings_get_strv (EPHY_SETTINGS_WEB_APP, EPHY_PREFS_WEB_APP_ADDITIONAL_URLS);
+  for (i = 0; urls[i] && !matched; i++) {
+    if (!strstr (urls[i], "://")) {
+      char *url = g_strdup_printf ("%s://%s", request_uri->scheme, urls[i]);
+
+      matched = g_str_has_prefix (uri, url);
+      g_free (url);
+    } else {
+      matched = g_str_has_prefix (uri, urls[i]);
+    }
+  }
+  g_strfreev (urls);
+
+  soup_uri_free (request_uri);
+
+  return matched;
+}
+
+gboolean
+ephy_web_application_save (EphyWebApplication *app)
+{
+  char *profile_dir;
+  char *desktop_file_path;
+  char *contents;
+  gboolean saved = FALSE;
+  GError *error = NULL;
+
+  profile_dir = ephy_web_application_get_profile_directory (app->id);
+  desktop_file_path = g_build_filename (profile_dir, app->desktop_file, NULL);
+  if (g_file_get_contents (desktop_file_path, &contents, NULL, &error)) {
+    GKeyFile *key;
+    char *name;
+    char *icon;
+    char *exec;
+    char **strings;
+    guint exec_length;
+    gboolean changed = FALSE;
+
+    key = g_key_file_new ();
+    g_key_file_load_from_data (key, contents, -1, 0, NULL);
+
+    name = g_key_file_get_string (key, "Desktop Entry", "Name", NULL);
+    if (g_strcmp0 (name, app->name) != 0) {
+      changed = TRUE;
+      g_key_file_set_string (key, "Desktop Entry", "Name", app->name);
+    }
+    g_free (name);
+
+    icon = g_key_file_get_string (key, "Desktop Entry", "Icon", NULL);
+    if (g_strcmp0 (name, app->icon_url) != 0) {
+      changed = TRUE;
+      g_key_file_set_string (key, "Desktop Entry", "Icon", app->icon_url);
+    }
+    g_free (icon);
+
+    exec = g_key_file_get_string (key, "Desktop Entry", "Exec", NULL);
+    strings = g_strsplit (exec, " ", -1);
+    g_free (exec);
+
+    exec_length = g_strv_length (strings);
+    if (g_strcmp0 (strings[exec_length - 1], app->url) != 0) {
+      changed = TRUE;
+      g_free (strings[exec_length - 1]);
+      strings[exec_length - 1] = g_strdup (app->url);
+      exec = g_strjoinv (" ", strings);
+      g_key_file_set_string (key, "Desktop Entry", "Exec", exec);
+      g_free (exec);
+    }
+    g_strfreev (strings);
+
+    if (changed) {
+      saved = g_key_file_save_to_file (key, desktop_file_path, &error);
+      if (!saved) {
+        g_warning ("Failed to save desktop file of web application: %s\n", error->message);
+        g_error_free (error);
+      }
+    }
+    g_free (contents);
+    g_key_file_free (key);
+  } else {
+    g_warning ("Failed to load desktop file of web application: %s\n", error->message);
+    g_error_free (error);
+  }
+
+  g_free (desktop_file_path);
+  g_free (profile_dir);
+
+  return saved;
 }

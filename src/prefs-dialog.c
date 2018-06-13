@@ -43,11 +43,13 @@
 #include "ephy-sync-utils.h"
 #include "ephy-time-helpers.h"
 #include "ephy-uri-tester-shared.h"
+#include "ephy-web-app-utils.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
 #include "languages.h"
 #include "passwords-dialog.h"
 #include "synced-tabs-dialog.h"
+#include "webapp-additional-urls-dialog.h"
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -74,6 +76,12 @@ struct _PrefsDialog {
   GtkWidget *blank_homepage_radiobutton;
   GtkWidget *custom_homepage_radiobutton;
   GtkWidget *custom_homepage_entry;
+  EphyWebApplication *webapp;
+  guint webapp_save_id;
+  GtkWidget *webapp_box;
+  GtkWidget *webapp_icon;
+  GtkWidget *webapp_url;
+  GtkWidget *webapp_title;
   GtkWidget *download_button_hbox;
   GtkWidget *download_button_label;
   GtkWidget *download_box;
@@ -179,6 +187,8 @@ prefs_dialog_finalize (GObject *object)
     webkit_user_script_unref (dialog->fxa_script);
     g_object_unref (dialog->fxa_manager);
   }
+
+  g_clear_pointer (&dialog->webapp, ephy_web_application_free);
 
   G_OBJECT_CLASS (prefs_dialog_parent_class)->finalize (object);
 }
@@ -715,6 +725,165 @@ on_sync_device_name_cancel_button_clicked (GtkWidget   *button,
   g_free (name);
 }
 
+static gboolean
+save_web_application (PrefsDialog *dialog)
+{
+  gboolean changed = FALSE;
+  const char *text;
+
+  dialog->webapp_save_id = 0;
+
+  if (!dialog->webapp)
+    return G_SOURCE_REMOVE;
+
+  text = gtk_entry_get_text (GTK_ENTRY (dialog->webapp_url));
+  if (g_strcmp0 (dialog->webapp->url, text) != 0) {
+    g_free (dialog->webapp->url);
+    dialog->webapp->url = g_strdup (text);
+    changed = TRUE;
+  }
+
+  text = gtk_entry_get_text (GTK_ENTRY (dialog->webapp_title));
+  if (g_strcmp0 (dialog->webapp->name, text) != 0) {
+    g_free (dialog->webapp->name);
+    dialog->webapp->name = g_strdup (text);
+    changed = TRUE;
+  }
+
+  text = (const char *)g_object_get_data (G_OBJECT (dialog->webapp_icon), "ephy-webapp-icon-url");
+  if (g_strcmp0 (dialog->webapp->icon_url, text) != 0) {
+    g_free (dialog->webapp->icon_url);
+    dialog->webapp->icon_url = g_strdup (text);
+    changed = TRUE;
+  }
+
+  if (changed)
+    ephy_web_application_save (dialog->webapp);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+prefs_dialog_save_web_application (PrefsDialog *dialog)
+{
+  if (!dialog->webapp)
+    return;
+
+  if (dialog->webapp_save_id)
+    g_source_remove (dialog->webapp_save_id);
+
+  dialog->webapp_save_id = g_timeout_add_seconds (1, (GSourceFunc)save_web_application, dialog);
+}
+
+static void
+prefs_dialog_update_webapp_icon (PrefsDialog *dialog,
+                                 const char  *icon_url)
+{
+  GdkPixbuf *icon, *scaled_icon;
+  int icon_width, icon_height;
+  double scale;
+
+  icon = gdk_pixbuf_new_from_file (icon_url, NULL);
+  if (!icon)
+    return;
+
+  icon_width = gdk_pixbuf_get_width (icon);
+  icon_height = gdk_pixbuf_get_height (icon);
+  scale = MIN ((double)64 / icon_width, (double)64 / icon_height);
+  scaled_icon = gdk_pixbuf_scale_simple (icon, icon_width * scale, icon_height * scale, GDK_INTERP_NEAREST);
+  g_object_unref (icon);
+  gtk_image_set_from_pixbuf (GTK_IMAGE (dialog->webapp_icon), scaled_icon);
+  g_object_set_data_full (G_OBJECT (dialog->webapp_icon), "ephy-webapp-icon-url",
+                          g_strdup (icon_url), g_free);
+  g_object_unref (scaled_icon);
+}
+
+static void
+webapp_icon_chooser_response_cb (GtkNativeDialog *file_chooser,
+                                 int              response,
+                                 PrefsDialog     *dialog)
+{
+  if (response == GTK_RESPONSE_ACCEPT) {
+    char *icon_url;
+
+    icon_url = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_chooser));
+    prefs_dialog_update_webapp_icon (dialog, icon_url);
+    g_free (icon_url);
+    prefs_dialog_save_web_application (dialog);
+  }
+
+  g_object_unref (file_chooser);
+}
+
+static void
+on_webapp_icon_button_clicked (GtkWidget   *button,
+                               PrefsDialog *dialog)
+{
+  GtkFileChooser *file_chooser;
+  GSList *pixbuf_formats, *l;
+  GtkFileFilter *images_filter;
+
+  file_chooser = ephy_create_file_chooser (_("Web Application Icon"),
+                                           GTK_WIDGET (dialog),
+                                           GTK_FILE_CHOOSER_ACTION_OPEN,
+                                           EPHY_FILE_FILTER_NONE);
+  images_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (images_filter, _("Supported Image Files"));
+  gtk_file_chooser_add_filter (file_chooser, images_filter);
+
+  pixbuf_formats = gdk_pixbuf_get_formats ();
+  for (l = pixbuf_formats; l; l = g_slist_next (l)) {
+    GdkPixbufFormat *format = (GdkPixbufFormat *)l->data;
+    GtkFileFilter *filter;
+    gchar *name;
+    gchar **mime_types;
+    guint i;
+
+    if (gdk_pixbuf_format_is_disabled (format) || !gdk_pixbuf_format_is_writable (format))
+      continue;
+
+    filter = gtk_file_filter_new ();
+    name = gdk_pixbuf_format_get_description (format);
+    gtk_file_filter_set_name (filter, name);
+    g_free (name);
+
+    mime_types = gdk_pixbuf_format_get_mime_types (format);
+    for (i = 0; mime_types[i] != 0; i++) {
+      gtk_file_filter_add_mime_type (images_filter, mime_types[i]);
+      gtk_file_filter_add_mime_type (filter, mime_types[i]);
+    }
+    g_strfreev (mime_types);
+
+    gtk_file_chooser_add_filter (file_chooser, filter);
+  }
+  g_slist_free (pixbuf_formats);
+
+  g_signal_connect (file_chooser, "response",
+                    G_CALLBACK (webapp_icon_chooser_response_cb),
+                    dialog);
+
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (file_chooser));
+}
+
+static void
+on_webapp_entry_changed (GtkEditable *editable,
+                         PrefsDialog *dialog)
+{
+  prefs_dialog_save_web_application (dialog);
+}
+
+static void
+on_manage_webapp_additional_urls_button_clicked (GtkWidget   *button,
+                                                 PrefsDialog *dialog)
+{
+  EphyWebappAdditionalURLsDialog *urls_dialog;
+
+  urls_dialog = ephy_webapp_additional_urls_dialog_new ();
+  gtk_window_set_transient_for (GTK_WINDOW (urls_dialog), GTK_WINDOW (dialog));
+  gtk_window_set_modal (GTK_WINDOW (urls_dialog), TRUE);
+  gtk_window_present (GTK_WINDOW (urls_dialog));
+}
+
 static void
 on_manage_cookies_button_clicked (GtkWidget   *button,
                                   PrefsDialog *dialog)
@@ -775,6 +944,10 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, blank_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_entry);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_icon);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_url);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_title);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, session_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, restore_session_checkbutton);
@@ -835,6 +1008,9 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_last_sync_time_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_last_sync_time_label);
 
+  gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_manage_webapp_additional_urls_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_cookies_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_manage_passwords_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_search_engine_dialog_button_clicked);
@@ -1451,11 +1627,16 @@ create_download_path_button (PrefsDialog *dialog)
 }
 
 static void
-prefs_dialog_response_cb (GtkDialog *widget,
-                          int        response,
-                          GtkDialog *dialog)
+prefs_dialog_response_cb (GtkWidget   *widget,
+                          int          response,
+                          PrefsDialog *dialog)
 {
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  if (dialog->webapp_save_id) {
+    g_source_remove (dialog->webapp_save_id);
+    save_web_application (dialog);
+  }
+
+  gtk_widget_destroy (widget);
 }
 
 static void
@@ -1702,6 +1883,13 @@ setup_general_page (PrefsDialog *dialog)
 {
   GSettings *settings;
   GSettings *web_settings;
+
+  if (ephy_embed_shell_get_mode (ephy_embed_shell_get_default ()) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    dialog->webapp = ephy_web_application_for_profile_directory (ephy_dot_dir ());
+    prefs_dialog_update_webapp_icon (dialog, dialog->webapp->icon_url);
+    gtk_entry_set_text (GTK_ENTRY (dialog->webapp_url), dialog->webapp->url);
+    gtk_entry_set_text (GTK_ENTRY (dialog->webapp_title), dialog->webapp->name);
+  }
 
   settings = ephy_settings_get (EPHY_PREFS_SCHEMA);
   web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
@@ -2032,6 +2220,8 @@ prefs_dialog_init (PrefsDialog *dialog)
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+  gtk_widget_set_visible (dialog->webapp_box,
+                          mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->homepage_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->search_box,

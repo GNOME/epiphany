@@ -42,6 +42,7 @@ libephymain_sources = [
   'popup-commands.c',
   'prefs-dialog.c',
   'synced-tabs-dialog.c',
+  'webapp-additional-urls-dialog.c',
   'window-commands.c',
   compile_schemas,
   enums
