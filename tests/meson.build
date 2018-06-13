@@ -169,15 +169,14 @@ if get_option('unit_tests')
        env: envs,
   )
 
-  # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=759256
-  # web_app_utils_test = executable('test-ephy-web-app-utils',
-  #   'ephy-web-app-utils-test.c',
-  #   dependencies: ephymain_dep
-  # )
-  # test('Web app utils test',
-  #      web_app_utils_test,
-  #      env: envs
-  # )
+  web_app_utils_test = executable('test-ephy-web-app-utils',
+    'ephy-web-app-utils-test.c',
+    dependencies: ephymain_dep
+  )
+  test('Web app utils test',
+       web_app_utils_test,
+       env: envs
+  )
 
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=780280
   # web_view_test = executable('test-ephy-web-view',

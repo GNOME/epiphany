@@ -65,7 +65,7 @@ test_web_app_lifetime (void)
     g_test_message ("NAME: %s", test.name);
 
     /* Test creation */
-    desktop_file = ephy_web_application_create (test.url, test.name, NULL);
+    desktop_file = ephy_web_application_create (test.name, test.url, NULL);
     g_assert (g_str_has_prefix (desktop_file, ephy_dot_dir ()));
     g_assert (g_file_test (desktop_file, G_FILE_TEST_EXISTS));
 
@@ -91,7 +91,7 @@ test_web_app_lifetime (void)
     g_assert_cmpstr (app->name, ==, test.name);
     g_assert_cmpstr (app->url, ==, test.url);
     g_assert_cmpstr (app->desktop_file, ==, basename);
-    g_assert (g_str_has_prefix (app->icon_url, profile_dir));
+    g_assert_null (app->icon_url);
 
     ephy_web_application_free_application_list (apps);
 
@@ -120,7 +120,7 @@ main (int argc, char *argv[])
 {
   int ret;
 
-  if (!ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE | EPHY_FILE_HELPERS_ENSURE_EXISTS, NULL)) {
+  if (!ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_TESTING_MODE | EPHY_FILE_HELPERS_ENSURE_EXISTS, NULL)) {
     g_debug ("Something wrong happened with ephy_file_helpers_init()");
     return -1;
   }

@@ -62,7 +62,8 @@
 typedef enum {
   EPHY_PROFILE_DIR_UNKNOWN,
   EPHY_PROFILE_DIR_DEFAULT,
-  EPHY_PROFILE_DIR_WEB_APP
+  EPHY_PROFILE_DIR_WEB_APP,
+  EPHY_PROFILE_DIR_TEST
 } EphyProfileDirType;
 
 static GHashTable *files;
@@ -245,7 +246,7 @@ ephy_dot_dir (void)
 gboolean
 ephy_dot_dir_is_default (void)
 {
-  return dot_dir_type == EPHY_PROFILE_DIR_DEFAULT;
+  return dot_dir_type == EPHY_PROFILE_DIR_DEFAULT || dot_dir_type == EPHY_PROFILE_DIR_TEST;
 }
 
 /**
@@ -271,7 +272,9 @@ ephy_dot_dir_is_web_application (void)
 char *
 ephy_default_dot_dir (void)
 {
-  return g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
+  return dot_dir_type == EPHY_PROFILE_DIR_TEST ?
+    g_strdup (ephy_dot_dir ()) :
+    g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
 }
 
 /**
@@ -302,7 +305,7 @@ ephy_file_helpers_init (const char          *profile_dir,
                                  (GDestroyNotify)g_free);
 
   keep_directory = flags & EPHY_FILE_HELPERS_KEEP_DIR;
-  private_profile = flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE;
+  private_profile = (flags & EPHY_FILE_HELPERS_PRIVATE_PROFILE || flags & EPHY_FILE_HELPERS_TESTING_MODE);
   steal_data_from_profile = flags & EPHY_FILE_HELPERS_STEAL_DATA;
 
   if (profile_dir != NULL && !steal_data_from_profile) {
@@ -333,11 +336,13 @@ ephy_file_helpers_init (const char          *profile_dir,
     dot_dir = g_build_filename (ephy_file_tmp_dir (),
                                 "epiphany",
                                 NULL);
+    if (flags & EPHY_FILE_HELPERS_TESTING_MODE)
+      dot_dir_type = EPHY_PROFILE_DIR_TEST;
   }
 
   if (dot_dir == NULL) {
-    dot_dir = ephy_default_dot_dir ();
     dot_dir_type = EPHY_PROFILE_DIR_DEFAULT;
+    dot_dir = ephy_default_dot_dir ();
   }
 
   if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS)
