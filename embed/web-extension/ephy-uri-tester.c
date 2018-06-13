@@ -189,7 +189,7 @@ ephy_uri_tester_is_matched (EphyUriTester *tester,
 
   /* Look for a match either by key or by pattern. */
   if (ephy_uri_tester_is_matched_by_key (tester, opts, req_uri, page_uri, whitelist)) {
-    g_hash_table_insert (urlcache, g_strdup (req_uri), g_strdup ("1"));
+    g_hash_table_insert (urlcache, g_strdup (req_uri), GINT_TO_POINTER (TRUE));
     return TRUE;
   }
 
