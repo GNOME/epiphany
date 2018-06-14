@@ -28,83 +28,139 @@
 #include <errno.h>
 #include <gio/gio.h>
 #include <glib/gstdio.h>
-#include <libsoup/soup.h>
 #include <stdlib.h>
 #include <string.h>
-#include <webkit2/webkit2.h>
 
-#define EPHY_WEB_APP_DESKTOP_FILE_PREFIX "epiphany-"
+/* Web Apps are installed in the default config dir of the user.
+ * Every app has its own profile directory. To create a web app
+ * an id needs to be generated using the given name as
+ * <normalized-name>-checksum.
+ *
+ * The id is used to uniquely identify the app.
+ *  - Program name: epiphany-<id>
+ *  - Profile directory: app-<program-name>
+ *  - Desktop file: <profile-dir>/<program-name>.desktop
+ *
+ * System web applications have a profile dir without a desktop file.
+ */
 
-/* This is necessary because of gnome-shell's guessing of a .desktop
-   filename from WM_CLASS property. */
-static char *
-get_wm_class_from_app_title (const char *title)
+#define EPHY_WEB_APP_PROGRAM_NAME_PREFIX "epiphany-"
+
+char *
+ephy_web_application_get_app_id_from_name (const char *name)
 {
-  char *normal_title;
-  char *wm_class;
+  char *normal_id;
   char *checksum;
+  char *id;
 
-  normal_title = g_utf8_strdown (title, -1);
-  g_strdelimit (normal_title, " ", '-');
-  g_strdelimit (normal_title, G_DIR_SEPARATOR_S, '-');
-  checksum = g_compute_checksum_for_string (G_CHECKSUM_SHA1, title, -1);
-  wm_class = g_strconcat (EPHY_WEB_APP_DESKTOP_FILE_PREFIX, normal_title, "-", checksum, NULL);
+  normal_id = g_utf8_strdown (name, -1);
+  g_strdelimit (normal_id, " ", '-');
+  g_strdelimit (normal_id, G_DIR_SEPARATOR_S, '-');
 
+  checksum = g_compute_checksum_for_string (G_CHECKSUM_SHA1, name, -1);
+  id = g_strdup_printf ("%s-%s", normal_id, checksum);
+
+  g_free (normal_id);
   g_free (checksum);
-  g_free (normal_title);
 
-  return wm_class;
+  return id;
 }
 
-/* Gets the proper .desktop filename from a WM_CLASS string,
-   converting to the local charset when needed. */
 static char *
-desktop_filename_from_wm_class (char *wm_class)
+get_encoded_path (const char *path)
 {
   char *encoded;
-  char *filename = NULL;
   GError *error = NULL;
 
-  encoded = g_filename_from_utf8 (wm_class, -1, NULL, NULL, &error);
+  encoded = g_filename_from_utf8 (path, -1, NULL, NULL, &error);
   if (error) {
     g_warning ("%s", error->message);
     g_error_free (error);
     return NULL;
   }
-  filename = g_strconcat (encoded, ".desktop", NULL);
-  g_free (encoded);
 
-  return filename;
+  return encoded;
+}
+
+static char *
+get_app_profile_directory_name (const char *id)
+{
+  char *profile_dir;
+  char *encoded;
+
+  profile_dir = g_strconcat (EPHY_WEB_APP_PREFIX, EPHY_WEB_APP_PROGRAM_NAME_PREFIX, id, NULL);
+  encoded = get_encoded_path (profile_dir);
+  g_free (profile_dir);
+
+  return encoded;
+}
+
+static char *
+get_app_desktop_filename (const char *id)
+{
+  char *filename;
+  char *encoded;
+
+  filename = g_strconcat (EPHY_WEB_APP_PROGRAM_NAME_PREFIX, id, ".desktop", NULL);
+  encoded = get_encoded_path (filename);
+  g_free (filename);
+
+  return encoded;
+}
+
+static const char *
+get_program_name_from_profile_directory (const char *profile_dir)
+{
+  const char *name;
+
+  name = strstr (profile_dir, EPHY_WEB_APP_PREFIX);
+  if (!name) {
+    g_warning ("Profile directory %s does not begin with required web app prefix %s", profile_dir, EPHY_WEB_APP_PREFIX);
+    return NULL;
+  }
+
+  return name + strlen (EPHY_WEB_APP_PREFIX);
+}
+
+static const char *
+get_app_id_from_program_name (const char *name)
+{
+  if (!g_str_has_prefix (name, EPHY_WEB_APP_PROGRAM_NAME_PREFIX)) {
+    g_warning ("Program name %s does not begin with required prefix %s", name, EPHY_WEB_APP_PROGRAM_NAME_PREFIX);
+    return NULL;
+  }
+
+  return name + strlen (EPHY_WEB_APP_PROGRAM_NAME_PREFIX);
+}
+
+static const char *
+get_app_id_from_profile_directory (const char *profile_dir)
+{
+  const char *program_name;
+
+  program_name = get_program_name_from_profile_directory (profile_dir);
+  return program_name ? get_app_id_from_program_name (program_name) : NULL;
 }
 
 /**
  * ephy_web_application_get_profile_directory:
- * @name: the application name
+ * @id: the application identifier
  *
- * Gets the directory where the profile for @name is meant to be stored.
+ * Gets the directory where the profile for @id is meant to be stored.
  *
  * Returns: (transfer full): A newly allocated string.
  **/
 char *
-ephy_web_application_get_profile_directory (const char *name)
+ephy_web_application_get_profile_directory (const char *id)
 {
-  char *dot_dir, *app_dir, *wm_class, *profile_dir, *encoded;
-  GError *error = NULL;
+  char *dot_dir, *app_dir, *profile_dir;
 
-  wm_class = get_wm_class_from_app_title (name);
-  encoded = g_filename_from_utf8 (wm_class, -1, NULL, NULL, &error);
-  g_free (wm_class);
-
-  if (error) {
-    g_warning ("%s", error->message);
-    g_error_free (error);
+  app_dir = get_app_profile_directory_name (id);
+  if (!app_dir)
     return NULL;
-  }
 
   dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
-  app_dir = g_strconcat (EPHY_WEB_APP_PREFIX, encoded, NULL);
   profile_dir = g_build_filename (dot_dir ? dot_dir : ephy_dot_dir (), app_dir, NULL);
-  g_free (encoded);
   g_free (app_dir);
   g_free (dot_dir);
 
@@ -113,7 +169,7 @@ ephy_web_application_get_profile_directory (const char *name)
 
 /**
  * ephy_web_application_delete:
- * @name: the name of the web application do delete
+ * @id: the identifier of the web application do delete
  *
  * Deletes all the data associated with a Web Application created by
  * Epiphany.
@@ -121,24 +177,23 @@ ephy_web_application_get_profile_directory (const char *name)
  * Returns: %TRUE if the web app was succesfully deleted, %FALSE otherwise
  **/
 gboolean
-ephy_web_application_delete (const char *name)
+ephy_web_application_delete (const char *id)
 {
-  char *profile_dir = NULL;
+  char *profile_dir;
   char *desktop_file = NULL, *desktop_path = NULL;
-  char *wm_class;
   GFile *launcher = NULL;
   gboolean return_value = FALSE;
 
-  g_assert (name);
+  g_assert (id);
 
-  profile_dir = ephy_web_application_get_profile_directory (name);
+  profile_dir = ephy_web_application_get_profile_directory (id);
   if (!profile_dir)
     goto out;
 
   /* If there's no profile dir for this app, it means it does not
    * exist. */
   if (!g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
-    g_warning ("No application with name '%s' is installed.\n", name);
+    g_warning ("No application with id '%s' is installed.\n", id);
     goto out;
   }
 
@@ -146,9 +201,7 @@ ephy_web_application_delete (const char *name)
     goto out;
   LOG ("Deleted application profile.\n");
 
-  wm_class = get_wm_class_from_app_title (name);
-  desktop_file = desktop_filename_from_wm_class (wm_class);
-  g_free (wm_class);
+  desktop_file = get_app_desktop_filename (id);
   if (!desktop_file)
     goto out;
 
@@ -174,9 +227,10 @@ ephy_web_application_delete (const char *name)
 }
 
 static char *
-create_desktop_file (const char *address,
+create_desktop_file (const char *id,
+                     const char *name,
+                     const char *address,
                      const char *profile_dir,
-                     const char *title,
                      GdkPixbuf  *icon)
 {
   GKeyFile *file = NULL;
@@ -190,14 +244,12 @@ create_desktop_file (const char *address,
 
   g_assert (profile_dir);
 
-  wm_class = get_wm_class_from_app_title (title);
-  filename = desktop_filename_from_wm_class (wm_class);
-
+  filename = get_app_desktop_filename (id);
   if (!filename)
-    goto out;
+    return NULL;
 
   file = g_key_file_new ();
-  g_key_file_set_value (file, "Desktop Entry", "Name", title);
+  g_key_file_set_value (file, "Desktop Entry", "Name", name);
   exec_string = g_strdup_printf ("epiphany --application-mode --profile=\"%s\" %s",
                                  profile_dir,
                                  address);
@@ -225,7 +277,9 @@ create_desktop_file (const char *address,
     g_free (path);
   }
 
+  wm_class = g_strconcat (EPHY_WEB_APP_PROGRAM_NAME_PREFIX, id, NULL);
   g_key_file_set_value (file, "Desktop Entry", "StartupWMClass", wm_class);
+  g_free (wm_class);
   data = g_key_file_to_data (file, NULL, NULL);
 
   desktop_file_path = g_build_filename (profile_dir, filename, NULL);
@@ -248,11 +302,9 @@ create_desktop_file (const char *address,
     g_warning ("Error creating application symlink: %s", error->message);
     g_error_free (error);
   }
+
   g_free (apps_path);
   g_free (filename);
-
- out:
-  g_free (wm_class);
   g_free (data);
   g_key_file_free (file);
 
@@ -261,6 +313,7 @@ create_desktop_file (const char *address,
 
 /**
  * ephy_web_application_create:
+ * @id: the identifier for the new web application
  * @address: the address of the new web application
  * @name: the name for the new web application
  * @icon: the icon for the new web application
@@ -270,14 +323,17 @@ create_desktop_file (const char *address,
  * Returns: (transfer-full): the path to the desktop file representing the new application
  **/
 char *
-ephy_web_application_create (const char *address, const char *name, GdkPixbuf *icon)
+ephy_web_application_create (const char *id,
+                             const char *address,
+                             const char *name,
+                             GdkPixbuf  *icon)
 {
-  char *profile_dir = NULL;
+  char *profile_dir;
   char *desktop_file_path = NULL;
 
   /* If there's already a WebApp profile for the contents of this
    * view, do nothing. */
-  profile_dir = ephy_web_application_get_profile_directory (name);
+  profile_dir = ephy_web_application_get_profile_directory (id);
   if (g_file_test (profile_dir, G_FILE_TEST_IS_DIR)) {
     LOG ("Profile directory %s already exists", profile_dir);
     goto out;
@@ -290,7 +346,7 @@ ephy_web_application_create (const char *address, const char *name, GdkPixbuf *i
   }
 
   /* Create the deskop file. */
-  desktop_file_path = create_desktop_file (address, profile_dir, name, icon);
+  desktop_file_path = create_desktop_file (id, name, address, profile_dir, icon);
   if (desktop_file_path)
     ephy_web_application_initialize_settings (profile_dir);
 
@@ -304,34 +360,17 @@ ephy_web_application_create (const char *address, const char *name, GdkPixbuf *i
 char *
 ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
 {
+  char *id;
   char *profile_dir;
-  const char *cmd;
-  char *address;
 
-  profile_dir = ephy_web_application_get_profile_directory (g_app_info_get_name (app_info));
+  id = ephy_web_application_get_app_id_from_name (g_app_info_get_name (app_info));
+  profile_dir = ephy_web_application_get_profile_directory (id);
+  g_free (id);
+
   if (g_mkdir (profile_dir, 488) == -1) {
     if (errno == EEXIST)
       return profile_dir;
 
-    g_free (profile_dir);
-    return NULL;
-  }
-
-  /* The address should be the last command line argument in the desktop file */
-  cmd = g_app_info_get_commandline (app_info);
-  if (!cmd) {
-    g_free (profile_dir);
-    return NULL;
-  }
-
-  address = g_strrstr (cmd, " ");
-  if (!address) {
-    g_free (profile_dir);
-    return NULL;
-  }
-
-  address++;
-  if (*address == '\0') {
     g_free (profile_dir);
     return NULL;
   }
@@ -342,7 +381,8 @@ ephy_web_application_ensure_for_app_info (GAppInfo *app_info)
 void
 ephy_web_application_setup_from_profile_directory (const char *profile_directory)
 {
-  const char *app_name;
+  const char *program_name;
+  const char *id;
   char *app_icon;
   char *desktop_basename;
   char *desktop_filename;
@@ -350,18 +390,18 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
 
   g_assert (profile_directory != NULL);
 
-  app_name = strstr (profile_directory, EPHY_WEB_APP_PREFIX);
-  if (!app_name) {
-    g_warning ("Profile directory %s does not begin with required web app prefix %s", profile_directory, EPHY_WEB_APP_PREFIX);
+  program_name = get_program_name_from_profile_directory (profile_directory);
+  if (!program_name)
     exit (1);
-  }
 
-  /* Skip the 'app-' part */
-  app_name += strlen (EPHY_WEB_APP_PREFIX);
-  g_set_prgname (app_name);
+  g_set_prgname (program_name);
+
+  id = get_app_id_from_program_name (program_name);
+  if (!id)
+    exit (1);
 
   /* Get display name from desktop file */
-  desktop_basename = g_strconcat (app_name, ".desktop", NULL);
+  desktop_basename = get_app_desktop_filename (id);
   desktop_filename = g_build_filename (profile_directory, desktop_basename, NULL);
   desktop_info = g_desktop_app_info_new_from_filename (desktop_filename);
   if (!desktop_info) {
@@ -376,7 +416,7 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
   /* We need to re-set this because we have already parsed the
    * options, which inits GTK+ and sets this as a side effect.
    */
-  gdk_set_program_class (app_name);
+  gdk_set_program_class (program_name);
 
   g_free (app_icon);
   g_free (desktop_basename);
@@ -422,6 +462,76 @@ ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info)
     gdk_set_program_class (wm_class);
 }
 
+static void
+ephy_web_application_free (EphyWebApplication *app)
+{
+  g_free (app->id);
+  g_free (app->name);
+  g_free (app->icon_url);
+  g_free (app->url);
+  g_free (app->desktop_file);
+  g_slice_free (EphyWebApplication, app);
+}
+
+static EphyWebApplication *
+ephy_web_application_for_profile_directory (const char *profile_dir)
+{
+  EphyWebApplication *app;
+  char *desktop_file_path;
+  const char *id;
+  GDesktopAppInfo *desktop_info;
+  const char *exec;
+  int argc;
+  char **argv;
+  GFile *file;
+  GFileInfo *file_info;
+  guint64 created;
+  GDate *date;
+
+  id = get_app_id_from_profile_directory (profile_dir);
+  if (!id)
+    return NULL;
+
+  app = g_slice_new0 (EphyWebApplication);
+  app->id = g_strdup (id);
+
+  app->desktop_file = get_app_desktop_filename (id);
+  desktop_file_path = g_build_filename (profile_dir, app->desktop_file, NULL);
+  desktop_info = g_desktop_app_info_new_from_filename (desktop_file_path);
+  if (!desktop_info) {
+    ephy_web_application_free (app);
+    g_free (desktop_file_path);
+    return NULL;
+  }
+
+  app->name = g_strdup (g_app_info_get_name (G_APP_INFO (desktop_info)));
+  app->icon_url = g_desktop_app_info_get_string (desktop_info, "Icon");
+  exec = g_app_info_get_commandline (G_APP_INFO (desktop_info));
+  if (g_shell_parse_argv (exec, &argc, &argv, NULL)) {
+    app->url = g_strdup (argv[argc - 1]);
+    g_strfreev (argv);
+  }
+
+  g_object_unref (desktop_info);
+
+  file = g_file_new_for_path (desktop_file_path);
+
+  /* FIXME: this should use TIME_CREATED but it does not seem to be working. */
+  file_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
+  created = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  date = g_date_new ();
+  g_date_set_time_t (date, (time_t)created);
+  g_date_strftime (app->install_date, 127, "%x", date);
+
+  g_date_free (date);
+  g_object_unref (file);
+  g_object_unref (file_info);
+  g_free (desktop_file_path);
+
+  return app;
+}
+
 /**
  * ephy_web_application_get_application_list:
  *
@@ -449,69 +559,18 @@ ephy_web_application_get_application_list (void)
 
   info = g_file_enumerator_next_file (children, NULL, NULL);
   while (info) {
-    EphyWebApplication *app;
     const char *name;
-    glong prefix_length = g_utf8_strlen (EPHY_WEB_APP_PREFIX, -1);
 
     name = g_file_info_get_name (info);
     if (g_str_has_prefix (name, EPHY_WEB_APP_PREFIX)) {
+      EphyWebApplication *app;
       char *profile_dir;
-      guint64 created;
-      GDate *date;
-      char *desktop_file, *desktop_file_path;
-      char *contents;
-      GFileInfo *desktop_info;
-
-      app = g_slice_new0 (EphyWebApplication);
 
       profile_dir = g_build_filename (default_dot_dir ? default_dot_dir : ephy_dot_dir (), name, NULL);
-      app->icon_url = g_build_filename (profile_dir, EPHY_WEB_APP_ICON_NAME, NULL);
-
-      desktop_file = g_strconcat (name + prefix_length, ".desktop", NULL);
-      desktop_file_path = g_build_filename (profile_dir, desktop_file, NULL);
-      app->desktop_file = g_strdup (desktop_file);
-
-      if (g_file_get_contents (desktop_file_path, &contents, NULL, NULL)) {
-        char *exec;
-        char **strings;
-        GKeyFile *key;
-        int i;
-        GFile *file;
-
-        key = g_key_file_new ();
-        g_key_file_load_from_data (key, contents, -1, 0, NULL);
-        app->name = g_key_file_get_string (key, "Desktop Entry", "Name", NULL);
-        exec = g_key_file_get_string (key, "Desktop Entry", "Exec", NULL);
-        strings = g_strsplit (exec, " ", -1);
-
-        for (i = 0; strings[i]; i++);
-        app->url = g_strdup (strings[i - 1]);
-
-        g_strfreev (strings);
-        g_free (exec);
-        g_key_file_free (key);
-
-        file = g_file_new_for_path (desktop_file_path);
-
-        /* FIXME: this should use TIME_CREATED but it does not seem to be working. */
-        desktop_info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
-        created = g_file_info_get_attribute_uint64 (desktop_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
-
-        date = g_date_new ();
-        g_date_set_time_t (date, (time_t)created);
-        g_date_strftime (app->install_date, 127, "%x", date);
-
-        g_date_free (date);
-        g_object_unref (file);
-        g_object_unref (desktop_info);
-
-        applications = g_list_append (applications, app);
-      }
-
-      g_free (contents);
-      g_free (desktop_file);
+      app = ephy_web_application_for_profile_directory (profile_dir);
+      if (app)
+        applications = g_list_prepend (applications, app);
       g_free (profile_dir);
-      g_free (desktop_file_path);
     }
 
     g_object_unref (info);
@@ -522,17 +581,7 @@ ephy_web_application_get_application_list (void)
   g_object_unref (children);
   g_free (default_dot_dir);
 
-  return applications;
-}
-
-static void
-ephy_web_application_free (EphyWebApplication *app)
-{
-  g_free (app->name);
-  g_free (app->icon_url);
-  g_free (app->url);
-  g_free (app->desktop_file);
-  g_slice_free (EphyWebApplication, app);
+  return g_list_reverse (applications);
 }
 
 /**
@@ -544,27 +593,22 @@ ephy_web_application_free (EphyWebApplication *app)
 void
 ephy_web_application_free_application_list (GList *list)
 {
-  GList *p;
-
-  for (p = list; p; p = p->next)
-    ephy_web_application_free ((EphyWebApplication *)p->data);
-
-  g_list_free (list);
+  g_list_free_full (list, (GDestroyNotify)ephy_web_application_free);
 }
 
 /**
  * ephy_web_application_exists:
- * @name: the potential name of the web application
+ * @id: the potential identifier of the web application
  *
- * Returns: whether an application with @name exists.
+ * Returns: whether an application with @id exists.
  **/
 gboolean
-ephy_web_application_exists (const char *name)
+ephy_web_application_exists (const char *id)
 {
   char *profile_dir;
   gboolean profile_exists;
 
-  profile_dir = ephy_web_application_get_profile_directory (name);
+  profile_dir = ephy_web_application_get_profile_directory (id);
   profile_exists = g_file_test (profile_dir, G_FILE_TEST_IS_DIR);
   g_free (profile_dir);
 

@@ -53,23 +53,44 @@ test_web_app_lifetime (void)
 
   for (i = 0; i < G_N_ELEMENTS (test_web_app); i++) {
     WebAppTest test = test_web_app[i];
-
-    char *desktop_file = NULL;
-    char *profile_dir = NULL;
-    char *basename = NULL;
-    char *desktop_link = NULL;
-
-    GList *apps = NULL;
-    EphyWebApplication *app = NULL;
+    char *id;
+    char *desktop_file;
+    GKeyFile *key_file;
+    char *program_name;
+    char *name, *exec, *wm_class;
+    char *profile_dir;
+    char *basename;
+    char *desktop_link;
+    GList *apps;
+    EphyWebApplication *app;
 
     g_test_message ("NAME: %s", test.name);
 
     /* Test creation */
-    desktop_file = ephy_web_application_create (test.name, test.url, NULL);
+    id = ephy_web_application_get_app_id_from_name (test.name);
+    desktop_file = ephy_web_application_create (id, test.url, test.name, NULL);
     g_assert (g_str_has_prefix (desktop_file, ephy_dot_dir ()));
     g_assert (g_file_test (desktop_file, G_FILE_TEST_EXISTS));
 
-    profile_dir = ephy_web_application_get_profile_directory (test.name);
+    /* Test the desktop file */
+    key_file = g_key_file_new ();
+    g_assert (g_key_file_load_from_file (key_file, desktop_file, G_KEY_FILE_NONE, NULL));
+    name = g_key_file_get_string (key_file, "Desktop Entry", "Name", NULL);
+    g_assert_cmpstr (name, ==, test.name);
+    g_free (name);
+    exec = g_key_file_get_string (key_file, "Desktop Entry", "Exec", NULL);
+    g_assert (g_str_has_suffix (exec, test.url));
+    g_free (exec);
+    g_assert_null (g_key_file_get_string (key_file, "Desktop Entry", "Icon", NULL));
+    wm_class = g_key_file_get_string (key_file, "Desktop Entry", "StartupWMClass", NULL);
+    program_name = g_strdup_printf ("epiphany-%s", id);
+    g_assert_cmpstr (wm_class, ==, program_name);
+    g_free (program_name);
+    g_free (wm_class);
+    g_key_file_free (key_file);
+
+    /* test profile directory */
+    profile_dir = ephy_web_application_get_profile_directory (id);
     g_assert (g_str_has_prefix (desktop_file, profile_dir));
     g_assert (g_str_has_prefix (profile_dir, ephy_dot_dir ()));
     g_assert (g_file_test (profile_dir, G_FILE_TEST_EXISTS));
@@ -81,13 +102,14 @@ test_web_app_lifetime (void)
     g_assert (g_file_test (desktop_link, G_FILE_TEST_IS_SYMLINK));
 
     /* Test exists API */
-    g_assert (ephy_web_application_exists (test.name));
+    g_assert (ephy_web_application_exists (id));
 
     /* Test list API */
     apps = ephy_web_application_get_application_list ();
     g_assert_cmpint (g_list_length (apps), ==, 1);
 
     app = apps->data;
+    g_assert_cmpstr (app->id, ==, id);
     g_assert_cmpstr (app->name, ==, test.name);
     g_assert_cmpstr (app->url, ==, test.url);
     g_assert_cmpstr (app->desktop_file, ==, basename);
@@ -97,17 +119,18 @@ test_web_app_lifetime (void)
 
     /* Test delete API */
     g_test_message ("DELETE: %s", test.name);
-    g_assert (ephy_web_application_delete (test.name));
+    g_assert (ephy_web_application_delete (id));
 
     g_assert (g_file_test (desktop_link, G_FILE_TEST_EXISTS) == FALSE);
     g_assert (g_file_test (desktop_link, G_FILE_TEST_IS_SYMLINK) == FALSE);
     g_assert (g_file_test (profile_dir, G_FILE_TEST_EXISTS) == FALSE);
-    g_assert (ephy_web_application_exists (test.name) == FALSE);
+    g_assert (ephy_web_application_exists (id) == FALSE);
 
     apps = ephy_web_application_get_application_list ();
     g_assert_cmpint (g_list_length (apps), ==, 0);
     ephy_web_application_free_application_list (apps);
 
+    g_free (id);
     g_free (desktop_link);
     g_free (basename);
     g_free (profile_dir);
