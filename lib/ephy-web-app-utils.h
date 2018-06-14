@@ -27,33 +27,36 @@
 G_BEGIN_DECLS
 
 typedef struct {
-    char *name;
-    char *icon_url;
-    char *url;
-    char *desktop_file;
-    char install_date[128];
+  char *id;
+  char *name;
+  char *icon_url;
+  char *url;
+  char *desktop_file;
+  char install_date[128];
 } EphyWebApplication;
 
 #define EPHY_WEB_APP_PREFIX "app-"
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
 
-char    *ephy_web_application_create (const char *address, const char *name, GdkPixbuf *icon);
+char    *ephy_web_application_get_app_id_from_name (const char *name);
+
+char    *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon);
 
 char    *ephy_web_application_ensure_for_app_info (GAppInfo *app_info);
 
-gboolean ephy_web_application_delete (const char *name);
+gboolean ephy_web_application_delete (const char *id);
 
 void     ephy_web_application_setup_from_profile_directory (const char *profile_directory);
 
 void     ephy_web_application_setup_from_desktop_file (GDesktopAppInfo *desktop_info);
 
-char    *ephy_web_application_get_profile_directory (const char *name);
+char    *ephy_web_application_get_profile_directory (const char *id);
 
 GList   *ephy_web_application_get_application_list (void);
 
 void     ephy_web_application_free_application_list (GList *list);
 
-gboolean ephy_web_application_exists (const char *name);
+gboolean ephy_web_application_exists (const char *id);
 
 void     ephy_web_application_initialize_settings (const char *profile_directory);
 

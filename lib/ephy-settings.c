@@ -48,7 +48,7 @@ ephy_settings_init (void)
                                     g_str_equal, g_free,
                                     g_object_unref);
 
-  web_app_name = g_strrstr (profile_directory, EPHY_WEB_APP_PREFIX);
+  web_app_name = strstr (profile_directory, EPHY_WEB_APP_PREFIX);
   if (web_app_name)
     base_path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", web_app_name, NULL);
   else

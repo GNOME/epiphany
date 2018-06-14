@@ -87,7 +87,7 @@ migrate_app_desktop_file_categories (void)
 
     file = g_key_file_new ();
 
-    app_path = ephy_web_application_get_profile_directory (app->name);
+    app_path = ephy_web_application_get_profile_directory (app->id);
     desktop_file_path = g_build_filename (app_path, app->desktop_file, NULL);
     g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
 

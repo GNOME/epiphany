@@ -1311,25 +1311,32 @@ dialog_save_as_application_response_cb (GtkDialog                 *dialog,
                                         gint                       response,
                                         EphyApplicationDialogData *data)
 {
-  const char *app_name;
-  char *desktop_file;
-  char *message;
-  NotifyNotification *notification;
-
   if (response == GTK_RESPONSE_OK) {
-    app_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
+    const char *app_name;
+    char *app_id;
+    char *desktop_file;
+    char *message;
+    NotifyNotification *notification;
 
-    if (ephy_web_application_exists (app_name)) {
+    app_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
+    app_id = ephy_web_application_get_app_id_from_name (app_name);
+
+    if (ephy_web_application_exists (app_id)) {
       if (confirm_web_application_overwrite (GTK_WINDOW (dialog), app_name))
-        ephy_web_application_delete (app_name);
-      else
+        ephy_web_application_delete (app_id);
+      else {
+        g_free (app_id);
         return;
+      }
     }
 
     /* Create Web Application, including a new profile and .desktop file. */
-    desktop_file = ephy_web_application_create (webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)),
+    desktop_file = ephy_web_application_create (app_id,
+                                                webkit_web_view_get_uri (WEBKIT_WEB_VIEW (data->view)),
                                                 app_name,
                                                 gtk_image_get_pixbuf (GTK_IMAGE (data->image)));
+    g_free (app_id);
+
     if (desktop_file)
       message = g_strdup_printf (_("The application “%s” is ready to be used"),
                                  app_name);
