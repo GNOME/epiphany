@@ -427,7 +427,7 @@ ephy_gsb_storage_set_property (GObject      *object,
   switch (prop_id) {
     case PROP_DB_PATH:
       g_free (self->db_path);
-      self->db_path = g_strdup (g_value_get_string (value));
+      self->db_path = g_value_dup_string (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

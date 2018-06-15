@@ -102,15 +102,15 @@ ephy_history_record_set_property (GObject      *object,
   switch (prop_id) {
     case PROP_ID:
       g_free (self->id);
-      self->id = g_strdup (g_value_get_string (value));
+      self->id = g_value_dup_string (value);
       break;
     case PROP_TITLE:
       g_free (self->title);
-      self->title = g_strdup (g_value_get_string (value));
+      self->title = g_value_dup_string (value);
       break;
     case PROP_URI:
       g_free (self->uri);
-      self->uri = g_strdup (g_value_get_string (value));
+      self->uri = g_value_dup_string (value);
       break;
     case PROP_VISITS:
       if (self->visits)

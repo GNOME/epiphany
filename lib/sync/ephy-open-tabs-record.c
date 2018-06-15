@@ -70,11 +70,11 @@ ephy_open_tabs_record_set_property (GObject      *object,
   switch (prop_id) {
     case PROP_ID:
       g_free (self->id);
-      self->id = g_strdup (g_value_get_string (value));
+      self->id = g_value_dup_string (value);
       break;
     case PROP_CLIENT_NAME:
       g_free (self->client_name);
-      self->client_name = g_strdup (g_value_get_string (value));
+      self->client_name = g_value_dup_string (value);
       break;
     case PROP_TABS:
       g_list_free_full (self->tabs, (GDestroyNotify)json_object_unref);

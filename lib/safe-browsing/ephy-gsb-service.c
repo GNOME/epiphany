@@ -333,7 +333,7 @@ ephy_gsb_service_set_property (GObject      *object,
   switch (prop_id) {
     case PROP_API_KEY:
       g_free (self->api_key);
-      self->api_key = g_strdup (g_value_get_string (value));
+      self->api_key = g_value_dup_string (value);
       break;
     case PROP_GSB_STORAGE:
       if (self->storage)

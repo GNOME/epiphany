@@ -130,7 +130,7 @@ ephy_encoding_set_property (GObject      *object,
       char *elided, *collate_key, *normalised;
 
       g_free (encoding->title);
-      encoding->title = g_strdup (g_value_get_string (value));
+      encoding->title = g_value_dup_string (value);
 
       elided = elide_underscores (encoding->title);
       normalised = g_utf8_normalize (elided, -1, G_NORMALIZE_DEFAULT);
@@ -149,15 +149,15 @@ ephy_encoding_set_property (GObject      *object,
     }
     case PROP_TITLE_ELIDED:
       g_free (encoding->title_elided);
-      encoding->title_elided = g_strdup (g_value_get_string (value));
+      encoding->title_elided = g_value_dup_string (value);
       break;
     case PROP_COLLATION_KEY:
       g_free (encoding->collation_key);
-      encoding->collation_key = g_strdup (g_value_get_string (value));
+      encoding->collation_key = g_value_dup_string (value);
       break;
     case PROP_ENCODING:
       g_free (encoding->encoding);
-      encoding->encoding = g_strdup (g_value_get_string (value));
+      encoding->encoding = g_value_dup_string (value);
       break;
     case PROP_LANGUAGE_GROUPS:
       encoding->language_groups = g_value_get_int (value);

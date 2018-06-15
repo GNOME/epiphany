@@ -74,31 +74,31 @@ ephy_password_record_set_property (GObject      *object,
   switch (prop_id) {
     case PROP_ID:
       g_free (self->id);
-      self->id = g_strdup (g_value_get_string (value));
+      self->id = g_value_dup_string (value);
       break;
     case PROP_ORIGIN:
       g_free (self->origin);
-      self->origin = g_strdup (g_value_get_string (value));
+      self->origin = g_value_dup_string (value);
       break;
     case PROP_TARGET_ORIGIN:
       g_free (self->target_origin);
-      self->target_origin = g_strdup (g_value_get_string (value));
+      self->target_origin = g_value_dup_string (value);
       break;
     case PROP_USERNAME:
       g_free (self->username);
-      self->username = g_strdup (g_value_get_string (value));
+      self->username = g_value_dup_string (value);
       break;
     case PROP_PASSWORD:
       g_free (self->password);
-      self->password = g_strdup (g_value_get_string (value));
+      self->password = g_value_dup_string (value);
       break;
     case PROP_USERNAME_FIELD:
       g_free (self->username_field);
-      self->username_field = g_strdup (g_value_get_string (value));
+      self->username_field = g_value_dup_string (value);
       break;
     case PROP_PASSWORD_FIELD:
       g_free (self->password_field);
-      self->password_field = g_strdup (g_value_get_string (value));
+      self->password_field = g_value_dup_string (value);
       break;
     case PROP_TIME_CREATED:
       self->time_created = g_value_get_uint64 (value);

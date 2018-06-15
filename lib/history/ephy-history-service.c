@@ -102,7 +102,7 @@ ephy_history_service_set_property (GObject *object, guint property_id, const GVa
   switch (property_id) {
     case PROP_HISTORY_FILENAME:
       g_free (self->history_filename);
-      self->history_filename = g_strdup (g_value_get_string (value));
+      self->history_filename = g_value_dup_string (value);
       break;
     case PROP_READ_ONLY:
       self->read_only = g_value_get_boolean (value);

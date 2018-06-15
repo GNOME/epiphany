@@ -105,15 +105,15 @@ ephy_bookmark_set_property (GObject      *object,
       break;
     case PROP_TYPE:
       g_free (self->type);
-      self->type = g_strdup (g_value_get_string (value));
+      self->type = g_value_dup_string (value);
       break;
     case PROP_PARENT_ID:
       g_free (self->parent_id);
-      self->parent_id = g_strdup (g_value_get_string (value));
+      self->parent_id = g_value_dup_string (value);
       break;
     case PROP_PARENT_NAME:
       g_free (self->parent_name);
-      self->parent_name = g_strdup (g_value_get_string (value));
+      self->parent_name = g_value_dup_string (value);
       break;
     case PROP_LOAD_IN_SIDEBAR:
       self->load_in_sidebar = g_value_get_boolean (value);
