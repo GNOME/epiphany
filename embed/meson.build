@@ -32,7 +32,7 @@ libephyembed_sources = [
 ]
 
 libephyembed_deps = [
-  dazzle_dep,
+  libdazzle_dep,
   ephymisc_dep,
   gio_dep,
   glib_dep,

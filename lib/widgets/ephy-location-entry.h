@@ -41,21 +41,6 @@ typedef enum {
 
 GtkWidget      *ephy_location_entry_new                        (void);
 
-void            ephy_location_entry_set_completion             (EphyLocationEntry *entry,
-                                                                GtkTreeModel      *model,
-                                                                guint              text_col,
-                                                                guint              action_col,
-                                                                guint              keywords_col,
-                                                                guint              relevance_col,
-                                                                guint              url_col,
-                                                                guint              extra_col,
-                                                                guint              favicon_col);
-
-void            ephy_location_entry_set_match_func             (EphyLocationEntry           *entry,
-                                                                GtkEntryCompletionMatchFunc  match_func,
-                                                                gpointer                     user_data,
-                                                                GDestroyNotify               notify);
-
 gboolean        ephy_location_entry_get_can_undo               (EphyLocationEntry *entry);
 
 gboolean        ephy_location_entry_get_can_redo               (EphyLocationEntry *entry);
@@ -66,7 +51,7 @@ gboolean        ephy_location_entry_reset                      (EphyLocationEntr
 
 void            ephy_location_entry_undo_reset                 (EphyLocationEntry *entry);
 
-void            ephy_location_entry_activate                   (EphyLocationEntry *entry);
+void            ephy_location_entry_focus                      (EphyLocationEntry *entry);
 
 void            ephy_location_entry_set_bookmark_icon_state    (EphyLocationEntry                  *entry,
                                                                 EphyLocationEntryBookmarkIconState  state);

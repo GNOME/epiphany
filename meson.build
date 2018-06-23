@@ -70,7 +70,6 @@ nettle_requirement = '>= 3.2'
 webkitgtk_requirement = '>= 2.21.5'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
-dazzle_dep = dependency('libdazzle-1.0', version: '>= 3.28.0')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
 gdk_dep = dependency('gdk-3.0', version: gtk_requirement)
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= 2.36.5')
@@ -83,6 +82,7 @@ hogweed_dep = dependency('hogweed', version: nettle_requirement)
 icu_uc_dep = dependency('icu-uc', version: '>= 4.6')
 iso_codes_dep = dependency('iso-codes', version: '>= 0.35')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.4')
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.29.4', fallback : ['libdazzle', 'libdazzle_dep'])
 libnotify_dep = dependency('libnotify', version: '>= 0.5.1')
 libsecret_dep = dependency('libsecret-1', version: '>= 0.14')
 libsoup_dep = dependency('libsoup-2.4', version: '>= 2.48.0')

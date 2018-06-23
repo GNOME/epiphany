@@ -38,11 +38,13 @@ test_entry_new (void)
 static void
 test_entry_get_entry (void)
 {
-  EphyLocationEntry *entry;
+  EphyLocationEntry *lentry;
+  GtkWidget *entry;
 
-  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  lentry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  entry = ephy_location_entry_get_entry (lentry);
 
-  g_assert (GTK_IS_ENTRY (ephy_location_entry_get_entry (entry)));
+  g_assert (GTK_IS_ENTRY (entry));
 }
 
 static void
@@ -104,16 +106,19 @@ test_entry_can_undo (void)
 {
   const char *test = "test";
 
-  EphyLocationEntry *entry;
-  entry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+  EphyLocationEntry *lentry;
+  GtkWidget *entry;
 
-  g_assert_cmpint (ephy_location_entry_get_can_undo (entry), ==, FALSE);
+  lentry = EPHY_LOCATION_ENTRY (ephy_location_entry_new ());
+
+  g_assert_cmpint (ephy_location_entry_get_can_undo (lentry), ==, FALSE);
 
   /* Use gtk_* function or otherwise user_changed won't be correctly handled
    * internally by the location entry (see editable_changed_cb and
    * block_update) */
-  gtk_entry_set_text (GTK_ENTRY (ephy_location_entry_get_entry (entry)), test);
-  g_assert_cmpint (ephy_location_entry_get_can_undo (entry), ==, TRUE);
+  entry = ephy_location_entry_get_entry (lentry);
+  gtk_entry_set_text (GTK_ENTRY (entry), test);
+  g_assert_cmpint (ephy_location_entry_get_can_undo (lentry), ==, TRUE);
 }
 
 static void

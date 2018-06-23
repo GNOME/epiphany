@@ -3435,7 +3435,7 @@ ephy_window_activate_location (EphyWindow *window)
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
 
   if (EPHY_IS_LOCATION_ENTRY (title_widget))
-    ephy_location_entry_activate (EPHY_LOCATION_ENTRY (title_widget));
+    ephy_location_entry_focus (EPHY_LOCATION_ENTRY (title_widget));
 }
 
 /**
