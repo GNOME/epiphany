@@ -17,15 +17,6 @@ if get_option('unit_tests')
   #   link_with: libephytestutils
   # )
 
-  completion_model_test = executable('test-ephy-completion-model',
-    'ephy-completion-model-test.c',
-    dependencies: ephymain_dep
-  )
-  test('Completion model test',
-       completion_model_test,
-       env: envs
-  )
-
   # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=778153
   # download_test = executable('test-ephy-download',
   #   'ephy-download-test.c',
