@@ -88,7 +88,7 @@ typedef struct {
 static AdblockFilterRetrieveData *
 adblock_filter_retrieve_data_new (EphyFiltersManager *manager,
                                   EphyDownload       *download,
-                                  char               *source_uri)
+                                  const char         *source_uri)
 {
   AdblockFilterRetrieveData* data;
   data = g_slice_new (AdblockFilterRetrieveData);
@@ -157,7 +157,7 @@ start_retrieving_filter_file (EphyFiltersManager *manager,
   wk_download = ephy_download_get_webkit_download (download);
   webkit_download_set_allow_overwrite (wk_download, TRUE);
 
-  data = adblock_filter_retrieve_data_new (manager, download, g_strdup (filter_url));
+  data = adblock_filter_retrieve_data_new (manager, download, filter_url);
 
   g_signal_connect (download, "completed",
                     G_CALLBACK (download_completed_cb), data);
