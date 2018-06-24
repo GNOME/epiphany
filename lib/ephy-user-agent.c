@@ -35,8 +35,11 @@ ephy_user_agent_get_internal (void)
     return user_agent;
 
   user_agent = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_USER_AGENT);
-  if (user_agent && user_agent[0])
-    return user_agent;
+  if (user_agent) {
+    if (user_agent[0])
+      return user_agent;
+    g_free (user_agent);
+  }
 
   settings = webkit_settings_new ();
   user_agent = g_strdup_printf ("%s Epiphany/605.1.15", webkit_settings_get_user_agent (settings));
