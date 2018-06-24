@@ -1028,6 +1028,7 @@ readability_js_finish_cb (GObject      *object,
 
   view->reader_byline = readability_get_property_string (js_result, "byline");
   view->reader_content = readability_get_property_string (js_result, "content");
+  webkit_javascript_result_unref (js_result);
 
   g_object_notify_by_pspec (G_OBJECT (view), obj_properties[PROP_READER_MODE]);
 }
