@@ -459,6 +459,8 @@ ephy_uri_decode (const char *uri_string)
 
     if (U_FAILURE (error)) {
       g_warning ("ICU error converting domain %s for display: %d", uri->host, error);
+      soup_uri_free (uri);
+      g_free (idna_decoded_name);
       return g_strdup (uri_string);
     }
 
@@ -466,6 +468,7 @@ ephy_uri_decode (const char *uri_string)
     g_free (uri->host);
     uri->host = evaluate_host_for_display (percent_decoded_host, idna_decoded_name);
     g_free (percent_decoded_host);
+    g_free (idna_decoded_name);
   }
 
   /* Note: this also strips passwords from the display URI. */
