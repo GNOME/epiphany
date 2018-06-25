@@ -76,6 +76,7 @@ struct _PrefsDialog {
   GtkWidget *custom_homepage_entry;
   GtkWidget *download_button_hbox;
   GtkWidget *download_button_label;
+  GtkWidget *download_box;
   GtkWidget *search_box;
   GtkWidget *session_box;
   GtkWidget *restore_session_checkbutton;
@@ -782,6 +783,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_safe_browsing_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_hbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_label);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_box);
 
   /* fonts */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_gnome_fonts_checkbutton);
@@ -1789,7 +1791,7 @@ setup_general_page (PrefsDialog *dialog)
                     dialog);
 
   if (ephy_is_running_inside_flatpak ())
-    gtk_widget_hide (dialog->download_button_label);
+    gtk_widget_hide (dialog->download_box);
   else
     create_download_path_button (dialog);
 }
