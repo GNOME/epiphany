@@ -142,12 +142,17 @@ ephy_file_get_downloads_dir (void)
   download_dir = g_settings_get_string (EPHY_SETTINGS_STATE,
                                         EPHY_PREFS_STATE_DOWNLOAD_DIR);
 
-  if (!g_strcmp0 (download_dir, "Downloads") ||
+  if (g_strcmp0 (download_dir, "Downloads") == 0 ||
       !g_path_is_absolute (download_dir) ||
-      ephy_is_running_inside_flatpak ())
-    download_dir = ephy_file_download_dir ();
-  else if (!g_strcmp0 (download_dir, "Desktop"))
-    download_dir = ephy_file_desktop_dir ();
+      ephy_is_running_inside_flatpak ()) {
+    g_free (download_dir);
+    return ephy_file_download_dir ();
+  }
+
+  if (g_strcmp0 (download_dir, "Desktop") == 0) {
+    g_free (download_dir);
+    return ephy_file_desktop_dir ();
+  }
 
   return download_dir;
 }
