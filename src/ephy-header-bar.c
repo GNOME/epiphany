@@ -206,14 +206,13 @@ ephy_header_bar_constructed (GObject *object)
                         gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   g_type_ensure (G_TYPE_THEMED_ICON);
-  /* FIXME: This is horrible, but it doesn't seem possible to hide a single menu item of an existing menu.
-   * Calling gtk_widget_hide() on the child menu item somehow hides the entire menu! */
-  if (ephy_is_running_inside_flatpak ())
-    builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover-flatpak.ui");
-  else
-    builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
+  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
   page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));
   header_bar->zoom_level_button = GTK_WIDGET (gtk_builder_get_object (builder, "zoom-level"));
+  if (ephy_is_running_inside_flatpak ()) {
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
+  }
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
   g_object_unref (builder);
 
