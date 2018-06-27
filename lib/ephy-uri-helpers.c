@@ -515,5 +515,6 @@ ephy_uri_to_security_origin (const char *uri_string)
   result = webkit_security_origin_to_string (origin);
   webkit_security_origin_unref (origin);
 
-  return result != NULL ? g_strdup (result) : NULL;
+  /* May be NULL. */
+  return result;
 }
