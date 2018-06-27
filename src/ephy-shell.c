@@ -419,9 +419,6 @@ ephy_shell_startup (GApplication *application)
         ephy_shell_get_sync_service (shell);
       }
     }
-
-    gtk_application_set_app_menu (GTK_APPLICATION (application),
-                                  G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   } else {
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_mode_app_entries, G_N_ELEMENTS (app_mode_app_entries),
