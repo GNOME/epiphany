@@ -377,6 +377,31 @@ sync_secrets_load_finished_cb (EphySyncService *service,
 }
 
 static void
+set_accel_for_action (GtkApplication *application,
+                      const gchar    *detailed_action_name,
+                      const gchar    *accel)
+{
+  const char *accels[] = { accel, NULL };
+
+  gtk_application_set_accels_for_action (application, detailed_action_name, accels);
+}
+
+static void
+set_accels (GtkApplication *application)
+{
+  set_accel_for_action (application, "app.new-window", "<Primary>n");
+  set_accel_for_action (application, "app.new-incognito", "<Primary><Shift>n");
+  set_accel_for_action (application, "app.reopen-closed-tab", "<Primary><Shift>t");
+  set_accel_for_action (application, "app.import-bookmarks", "<Primary><Shift>m");
+  set_accel_for_action (application, "app.export-bookmarks", "<Primary><Shift>x");
+  set_accel_for_action (application, "app.history", "<Primary>h");
+  set_accel_for_action (application, "app.preferences", "<Primary>e");
+  set_accel_for_action (application, "app.shortcuts", "<Primary>F1");
+  set_accel_for_action (application, "app.help", "F1");
+  set_accel_for_action (application, "app.quit", "<Primary>q");
+}
+
+static void
 ephy_shell_startup (GApplication *application)
 {
   EphyEmbedShell *embed_shell = EPHY_EMBED_SHELL (application);
@@ -418,10 +443,9 @@ ephy_shell_startup (GApplication *application)
         /* Create the sync service. */
         ephy_shell_get_sync_service (shell);
       }
-    }
 
-    gtk_application_set_app_menu (GTK_APPLICATION (application),
-                                  G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+      set_accels (GTK_APPLICATION (application));
+    }
   } else {
     g_action_map_add_action_entries (G_ACTION_MAP (application),
                                      app_mode_app_entries, G_N_ELEMENTS (app_mode_app_entries),
