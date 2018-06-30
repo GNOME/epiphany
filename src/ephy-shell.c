@@ -788,6 +788,7 @@ ephy_shell_new_tab_full (EphyShell      *shell,
   embed = EPHY_EMBED (g_object_new (EPHY_TYPE_EMBED,
                                     "web-view", web_view,
                                     "title", title,
+                                    "progress-bar", ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION,
                                     NULL));
   gtk_widget_show (GTK_WIDGET (embed));
   ephy_embed_container_add_child (EPHY_EMBED_CONTAINER (window), embed, position, jump_to);
