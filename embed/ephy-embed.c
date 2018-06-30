@@ -87,6 +87,7 @@ struct _EphyEmbed {
   gulong status_handler_id;
   gulong progress_update_handler_id;
   gboolean inspector_loaded;
+  gboolean progress_bar_enabled;
 };
 
 G_DEFINE_TYPE (EphyEmbed, ephy_embed, GTK_TYPE_BOX)
@@ -95,6 +96,7 @@ enum {
   PROP_0,
   PROP_WEB_VIEW,
   PROP_TITLE,
+  PROP_PROGRESS_BAR,
   LAST_PROP
 };
 
@@ -444,6 +446,9 @@ ephy_embed_set_property (GObject      *object,
     case PROP_TITLE:
       ephy_embed_set_title (embed, g_value_get_string (value));
       break;
+    case PROP_PROGRESS_BAR:
+      embed->progress_bar_enabled = g_value_get_boolean (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -464,6 +469,9 @@ ephy_embed_get_property (GObject    *object,
       break;
     case PROP_TITLE:
       g_value_set_string (value, ephy_embed_get_title (embed));
+      break;
+    case PROP_PROGRESS_BAR:
+      g_value_set_boolean (value, embed->progress_bar_enabled);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -506,6 +514,13 @@ ephy_embed_class_init (EphyEmbedClass *klass)
                          "The embed's title",
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  obj_properties[PROP_PROGRESS_BAR] =
+    g_param_spec_boolean ("progress-bar",
+                          "Progress bar",
+                          "Whether to show progress bar within embed",
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (object_class, LAST_PROP, obj_properties);
 }
@@ -736,12 +751,14 @@ ephy_embed_constructed (GObject *object)
 
   gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->floating_bar);
 
-  embed->progress = gtk_progress_bar_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (embed->progress),
-                               GTK_STYLE_CLASS_OSD);
-  gtk_widget_set_halign (embed->progress, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (embed->progress, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->progress);
+  if (embed->progress_bar_enabled) {
+    embed->progress = gtk_progress_bar_new ();
+    gtk_style_context_add_class (gtk_widget_get_style_context (embed->progress),
+                                 GTK_STYLE_CLASS_OSD);
+    gtk_widget_set_halign (embed->progress, GTK_ALIGN_FILL);
+    gtk_widget_set_valign (embed->progress, GTK_ALIGN_START);
+    gtk_overlay_add_overlay (GTK_OVERLAY (embed->overlay), embed->progress);
+  }
 
   embed->find_toolbar = ephy_find_toolbar_new (embed->web_view);
   g_signal_connect (embed->find_toolbar, "close",
@@ -754,8 +771,10 @@ ephy_embed_constructed (GObject *object)
 
   paned = GTK_WIDGET (embed->paned);
 
-  embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
-                                                        G_CALLBACK (progress_update), object);
+  if (embed->progress_bar_enabled)
+    embed->progress_update_handler_id = g_signal_connect (embed->web_view, "notify::estimated-load-progress",
+                                                          G_CALLBACK (progress_update), object);
+
   gtk_paned_pack1 (GTK_PANED (paned), GTK_WIDGET (embed->overlay),
                    TRUE, FALSE);
 
