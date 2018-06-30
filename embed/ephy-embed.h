@@ -54,5 +54,6 @@ gboolean         ephy_embed_inspector_is_loaded           (EphyEmbed *embed);
 const char      *ephy_embed_get_title                     (EphyEmbed *embed);
 void             ephy_embed_attach_notification_container (EphyEmbed *embed);
 void             ephy_embed_detach_notification_container (EphyEmbed *embed);
+void             ephy_embed_disable_progress_bar          (EphyEmbed *embed);
 
 G_END_DECLS

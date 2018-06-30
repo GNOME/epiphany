@@ -983,3 +983,11 @@ ephy_embed_detach_notification_container (EphyEmbed *embed)
     gtk_container_remove (GTK_CONTAINER (embed->overlay), g_object_ref (GTK_WIDGET (container)));
   }
 }
+
+void
+ephy_embed_disable_progress_bar (EphyEmbed *embed)
+{
+  g_signal_handlers_disconnect_by_func (embed->web_view,
+                                        G_CALLBACK (progress_update),
+                                        G_OBJECT (embed));
+}
