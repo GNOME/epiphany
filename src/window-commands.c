@@ -1697,7 +1697,7 @@ window_cmd_find (GSimpleAction *action,
   EphyFindToolbar *toolbar;
 
   toolbar = EPHY_FIND_TOOLBAR (ephy_window_get_current_find_toolbar (window));
-  ephy_find_toolbar_toggle_state (toolbar);
+  ephy_find_toolbar_open (toolbar, FALSE, FALSE);
 }
 
 void
