@@ -508,7 +508,7 @@ char *
 ephy_uri_to_security_origin (const char *uri_string)
 {
   WebKitSecurityOrigin *origin;
-  const char *result;
+  char *result;
 
   /* Convert to URI containing only protocol, host, and port. */
   origin = webkit_security_origin_new_for_uri (uri_string);
