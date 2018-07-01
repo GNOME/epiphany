@@ -671,11 +671,7 @@ window_cmd_show_about (GSimpleAction *action,
                          "translator-credits", _("translator-credits"),
                          "logo-icon-name", "org.gnome.Epiphany",
                          "website", "https://wiki.gnome.org/Apps/Web",
-#if !TECH_PREVIEW
-                         "website-label", _("Web Website"),
-#else
                          "website-label", _("Website"),
-#endif
                          "license-type", GTK_LICENSE_GPL_3_0,
                          "wrap-license", TRUE,
                          NULL);
