@@ -136,7 +136,7 @@ const struct {
 #define SETTINGS_CONNECTION_DATA_KEY    "EphyWindowSettings"
 
 struct _EphyWindow {
-  GtkApplicationWindow parent_instance;
+  DzlApplicationWindow parent_instance;
 
   GtkWidget *header_bar;
   EphyBookmarksManager *bookmarks_manager;
@@ -392,7 +392,7 @@ ephy_window_link_iface_init (EphyLinkInterface *iface)
   iface->open_link = ephy_window_open_link;
 }
 
-G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, GTK_TYPE_APPLICATION_WINDOW,
+G_DEFINE_TYPE_WITH_CODE (EphyWindow, ephy_window, DZL_TYPE_APPLICATION_WINDOW,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_LINK,
                                                 ephy_window_link_iface_init)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_EMBED_CONTAINER,
@@ -490,7 +490,6 @@ ephy_window_fullscreen (EphyWindow *window)
   sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
   sync_chromes_visibility (window);
-  gtk_widget_hide (window->header_bar);
   ephy_embed_entering_fullscreen (embed);
 }
 
@@ -499,7 +498,6 @@ ephy_window_unfullscreen (EphyWindow *window)
 {
   window->is_fullscreen = FALSE;
 
-  gtk_widget_show (window->header_bar);
   sync_chromes_visibility (window);
   ephy_embed_leaving_fullscreen (window->active_embed);
 }
@@ -2837,6 +2835,7 @@ ephy_window_state_event (GtkWidget           *widget,
     } else {
       ephy_window_unfullscreen (window);
     }
+    dzl_application_window_set_fullscreen (DZL_APPLICATION_WINDOW (window), fullscreen);
 
     action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "fullscreen");
@@ -3002,9 +3001,16 @@ sync_user_input_cb (EphyLocationController *action,
 static void
 update_new_tab_button_visibility (EphyWindow *window)
 {
-  gboolean visible = !gtk_notebook_get_show_tabs (window->notebook);
-  EphyActionBarEnd *header_bar_end = ephy_header_bar_get_action_bar_end (EPHY_HEADER_BAR (window->header_bar));
-  EphyActionBarEnd *action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (window->action_bar));
+  EphyActionBarEnd *header_bar_end;
+  EphyActionBarEnd *action_bar_end;
+  gboolean visible;
+
+  if (!gtk_widget_get_mapped (GTK_WIDGET (window)))
+    return;
+
+  visible = !gtk_notebook_get_show_tabs (window->notebook);
+  header_bar_end = ephy_header_bar_get_action_bar_end (EPHY_HEADER_BAR (window->header_bar));
+  action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (window->action_bar));
 
   if (visible) {
     ephy_action_bar_end_set_show_new_tab_button (header_bar_end, TRUE);
@@ -3067,7 +3073,7 @@ setup_header_bar (EphyWindow *window)
   EphyTitleWidget *title_widget;
 
   header_bar = ephy_header_bar_new (window);
-  gtk_window_set_titlebar (GTK_WINDOW (window), header_bar);
+  dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), header_bar);
   gtk_widget_show (header_bar);
 
   app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
