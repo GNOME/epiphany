@@ -70,7 +70,7 @@ nettle_requirement = '>= 3.2'
 webkitgtk_requirement = '>= 2.21.4'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
-dazzle_dep = dependency('libdazzle-1.0', version: '>= 3.28.0')
+dazzle_dep = dependency('libdazzle-1.0', version: '>= 3.29.4', fallback : ['libdazzle', 'libdazzle_dep'])
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
 gdk_dep = dependency('gdk-3.0', version: gtk_requirement)
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= 2.36.5')
