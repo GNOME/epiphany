@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2018-06-28 13:15+0000\n"
-"PO-Revision-Date: 2018-06-29 13:48+0200\n"
+"POT-Creation-Date: 2018-07-01 22:45+0000\n"
+"PO-Revision-Date: 2018-07-09 08:40+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -551,7 +551,6 @@ msgid "Web application additional URLs"
 msgstr "URL de aplicación web adicional"
 
 #: data/org.gnome.epiphany.gschema.xml:244
-#| msgid "List of installed web applications"
 msgid "The list of URLs that should be opened by the web application"
 msgstr "LA lista de URL que debe abrir la aplicación web"
 
@@ -1006,16 +1005,16 @@ msgid "Download finished"
 msgstr "Descarga finalizada"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Pulse %s para salir del modo a pantalla completa"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "F11"
 msgstr "F11"
 
@@ -2029,7 +2028,7 @@ msgstr "Iniciando…"
 #: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1162
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
-#: src/window-commands.c:455 src/window-commands.c:1400
+#: src/window-commands.c:455 src/window-commands.c:1396
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2057,20 +2056,20 @@ msgstr "Todos los archivos"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:654 src/ephy-history-dialog.c:262
+#: lib/widgets/ephy-location-entry.c:673 src/ephy-history-dialog.c:262
 msgid "Cl_ear"
 msgstr "_Limpiar"
 
-#: lib/widgets/ephy-location-entry.c:674
+#: lib/widgets/ephy-location-entry.c:693
 msgid "Paste and _Go"
 msgstr "Pegar e _ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:695 src/ephy-window.c:831
+#: lib/widgets/ephy-location-entry.c:714 src/ephy-window.c:831
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: lib/widgets/ephy-location-entry.c:702
+#: lib/widgets/ephy-location-entry.c:721
 msgid "_Redo"
 msgstr "_Rehacer"
 
@@ -2473,7 +2472,6 @@ msgid "Something went wrong, please try again later."
 msgstr "Algo salió mal, inténtelo de nuevo más tarde."
 
 #: src/prefs-dialog.c:826
-#| msgid "Create Web Application"
 msgid "Web Application Icon"
 msgstr "Icono de aplicación web"
 
@@ -2920,7 +2918,6 @@ msgid "_Custom:"
 msgstr "_Personalizado:"
 
 #: src/resources/gtk/prefs-dialog.ui:114
-#| msgid "Applications"
 msgid "Web Application"
 msgstr "Aplicación web"
 
@@ -2929,12 +2926,10 @@ msgid "_Manage Additional URLs"
 msgstr "_Gestionar URL adicionales"
 
 #: src/resources/gtk/prefs-dialog.ui:157
-#| msgid "Homepage"
 msgid "Homepage:"
 msgstr "Página de inicio:"
 
 #: src/resources/gtk/prefs-dialog.ui:179
-#| msgid "_Title:"
 msgid "Title:"
 msgstr "Título:"
 
@@ -3445,7 +3440,6 @@ msgstr ""
 "pulsando dos veces sobre su nombre (las pestañas locales no se pueden abrir)."
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:20
-#| msgid "Additional safe protocols"
 msgid "Additional URLs"
 msgstr "URL adicionales"
 
@@ -3455,13 +3449,15 @@ msgid ""
 "application. If you omit the URL scheme, the one from the currently loaded "
 "URL will be used."
 msgstr ""
+"Un URL que empieza por cualquiera de los URL adicionales se abrirá con la "
+"aplicación Web. Si omite el esquema URL se usará el del URL cargado "
+"actualmente."
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:124
 msgid "Add new URL"
 msgstr "Añadir URL nuevo"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:137
-#| msgid "Remove the selected pages from history"
 msgid "Remove the selected URLs"
 msgstr "Quita los URL seleccionados"
 
@@ -3572,70 +3568,66 @@ msgstr ""
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: src/window-commands.c:675
-msgid "Web Website"
-msgstr "Sitio web de Web"
-
-#: src/window-commands.c:677
+#: src/window-commands.c:674
 msgid "Website"
 msgstr "Página web"
 
-#: src/window-commands.c:927
+#: src/window-commands.c:923
 msgid "Open"
 msgstr "Abrir"
 
-#: src/window-commands.c:1290
+#: src/window-commands.c:1286
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Ya existe una aplicación web con nombre «%s». ¿Quiere reemplazarla?"
 
-#: src/window-commands.c:1293
+#: src/window-commands.c:1289
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window-commands.c:1295
+#: src/window-commands.c:1291
 msgid "Replace"
 msgstr "Reemplazar"
 
-#: src/window-commands.c:1299
+#: src/window-commands.c:1295
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr ""
 "Ya existe una aplicación con el mismo nombre. Reemplazarla la sobrescribirá."
 
-#: src/window-commands.c:1341
+#: src/window-commands.c:1337
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "La aplicación «%s» está lista para usarse"
 
-#: src/window-commands.c:1344
+#: src/window-commands.c:1340
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "No se pudo crear la aplicación «%s»"
 
-#: src/window-commands.c:1352
+#: src/window-commands.c:1348
 msgid "Launch"
 msgstr "Lanzar"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1397
+#: src/window-commands.c:1393
 msgid "Create Web Application"
 msgstr "Crear una aplicación web"
 
-#: src/window-commands.c:1402
+#: src/window-commands.c:1398
 msgid "C_reate"
 msgstr "C_rear"
 
-#: src/window-commands.c:1531
+#: src/window-commands.c:1527
 msgid "Save"
 msgstr "Guardar"
 
-#: src/window-commands.c:2230
+#: src/window-commands.c:2226
 msgid "Enable caret browsing mode?"
 msgstr "¿Activar el modo de navegación con cursor?"
 
-#: src/window-commands.c:2233
+#: src/window-commands.c:2229
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3645,9 +3637,12 @@ msgstr ""
 "característica ubica un cursor movible en las páginas web, permitiéndole "
 "moverse con su teclado. ¿Quiere activar el modo de navegación con cursor?"
 
-#: src/window-commands.c:2236
+#: src/window-commands.c:2232
 msgid "_Enable"
 msgstr "_Activar"
+
+#~ msgid "Web Website"
+#~ msgstr "Sitio web de Web"
 
 #~ msgid "Installed plugins"
 #~ msgstr "Complementos instalados"
