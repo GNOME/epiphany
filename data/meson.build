@@ -19,44 +19,30 @@ i18n.merge_file('appdata-file',
   po_dir: '../po'
 )
 
-# We need three custom_target() calls because Meson doesn't have very
-# good support for GSettings yet. First, generate our GSettings enums
-# in the build directory. Then, copy the gschema into the build
-# directory to ensure it is in the same place as the enums file. Then
-# we can run glib-compile-schemas on it. We have to compile schemas in
-# the build directory to ensure that our tests don't fail if run on a
-# system where epiphany is not already installed. epiphany will also
-# look for schemas here if built in developer mode.
-#
-# https://github.com/mesonbuild/meson/issues/1687
-generate_enums = custom_target('gsettings-enums',
-  input: '../lib/ephy-prefs.h',
-  output: 'org.gnome.Epiphany.enums.xml',
-  install: true,
+generate_enums = gnome.mkenums('org.gnome.Epiphany.enums.xml',
+  sources: '../lib/ephy-prefs.h',
+  comments: '<!-- @comment@ -->',
+  fhead: '<schemalist>',
+  vhead: '  <@type@ id="org.gnome.Epiphany.@EnumName@">',
+  vprod: '    <value nick="@valuenick@" value="@valuenum@"/>',
+  vtail: '  </@type@>',
+  ftail: '</schemalist>',
   install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
-  capture: true,
-  command: [find_program('glib-mkenums'),
-    '--comments', '<!-- @comment@ -->',
-    '--fhead', '<schemalist>',
-    '--vhead', '  <@type@ id="org.gnome.Epiphany.@EnumName@">',
-    '--vprod', '    <value nick="@valuenick@" value="@valuenum@"/>',
-    '--vtail', '  </@type@>',
-    '--ftail', '</schemalist>',
-    '@INPUT@'
-  ]
 )
-copy_gschema = custom_target('copy-gschema-to-builddir',
+# Copy file from source into build for glib-compile-schemas
+# https://github.com/mesonbuild/meson/issues/2219
+# gnome.compile_schemas() also needs a dependencies arg
+configure_file(
   input: 'org.gnome.epiphany.gschema.xml',
-  output: 'renamed-hack.gschema.xml',
-  command: ['cp', '@INPUT@', '@OUTPUT@']
+  output: 'org.gnome.epiphany.gschema.xml',
+  configuration: configuration_data()
 )
 compile_schemas = custom_target('glib-compile-schemas',
   output: 'gschemas.compiled',
-  install: false,
   command: [find_program('glib-compile-schemas'),
     meson.current_build_dir()
   ],
-  depends: [generate_enums, copy_gschema]
+  depends: [generate_enums]
 )
 install_data('org.gnome.epiphany.gschema.xml',
   install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
