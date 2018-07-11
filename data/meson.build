@@ -42,7 +42,7 @@ compile_schemas = custom_target('glib-compile-schemas',
   command: [find_program('glib-compile-schemas'),
     meson.current_build_dir()
   ],
-  depends: [generate_enums]
+  depends: generate_enums
 )
 install_data('org.gnome.epiphany.gschema.xml',
   install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
