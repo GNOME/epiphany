@@ -1,21 +1,25 @@
+# Epiphany
+
+## Introduction
+
 Epiphany is a GNOME web browser based on the WebKit rendering engine.
 The name meaning:
 "An intuitive grasp of reality through
 something (as an event) usually simple and striking"
 
-MANIFESTO
+## Manifesto
 
 A web browser is more than an application, it is a way of thinking, it is
 a way of seeing the world. Epiphany's principles are simplicity and standards
 compliance.
 
-Simplicity:
+#### Simplicity
 
 Epiphany aims to utilize the simplest interface possible for a browser.  Keep
 in mind that simple does not necessarily mean less powerful.  We believe
 the commonly used browsers of today are too big, buggy, and bloated. Epiphany
 addresses simplicity with a small browser designed for the web -- not mail,
-newsgroups, file management, instant messenging or coffee making.  The UNIX
+newsgroups, file management, instant messaging or coffee making.  The UNIX
 philosophy is to design small tools that do one thing, and do it well.
 
 Epiphany also address simplicity with modularity to make a light and powerful
@@ -27,7 +31,7 @@ and the ever popular command line.
 Other tasks like mail can be handled with your favorite e-mail application
 (Evolution, pine, mutt, balsa, pronto, whatever).
 
-Standards compliance:
+#### Standards compliance
 
 The introduction of non-standard features in browsers could make it difficult
 or impossible to use alternative products like Epiphany if developers embrace
@@ -39,7 +43,7 @@ one platform to dominate the market.
 Standards compliance ensures the freedom of choice.  Epiphany aims to achieve
 this.
 
-USER INTERFACE LINES
+#### User Interface Lines
 
 - HIG compliance
 
@@ -53,7 +57,7 @@ to the HIG team for future consideration.
 - GNOME integration
 
 Epiphany's main goal is to be integrated with the GNOME desktop.
-We dont aim to make epiphany usable outside GNOME. If someone will like
+We don't aim to make epiphany usable outside GNOME. If someone will like
 to use it anyway, it's just a plus. Ex: Making people happy that
 don't have control center installed is not a good reason
 to have mime configuration in epiphany itself.
@@ -66,30 +70,29 @@ Feature bloat and user interface clutter is evil :)
 
 We will follow the new GNOME policy about preferences.
 I think Havoc Pennington already explained it a lot
-better than I could ever do.
-http://www106.pair.com/rhp/free-software-ui.html
+better than I could ever do [here](https://ometer.com/preferences.html).
 
 - User target
 
 We target non-technical users by design.
 This happens to be 90% of the user population.
 (Technical details should not exposed in the interface)
-We target web users, we dont directly target web developers.
+We target web users, we don't directly target web developers.
 A few geek-oriented feautures can be kept as
 long as they are non-obtrusive.
 
-REQUIREMENTS
+## Requirments
 
-You will need a complete installation of GNOME 2.x desktop.
+You will need a complete installation of GNOME 2.x/3.x desktop.
 The required WebKit version will be specified in the release notes.
 
-HOW TO HELP
+## How To Help
 
 You can report new bugs at
  http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany
 And feel free to send patches.
 
-About new feautures I'll just quote Metacity FAQ.
+About new features I'll just quote Metacity FAQ.
 
 Q: Will you add my feature?
 
@@ -108,6 +111,5 @@ A: If it makes sense to turn on unconditionally,
    Just be prepared to hear the above objections if your patch
    adds some crack-ridden configuration option.
 
-CONTACTS
-
+## Contact Us
 Epiphany Mailing List <epiphany-list@gnome.org>
