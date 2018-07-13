@@ -88,8 +88,7 @@ The required WebKit version will be specified in the release notes.
 
 ## How To Help
 
-You can report new bugs at
- http://bugzilla.gnome.org/enter_bug.cgi?product=epiphany
+You can report new bugs at [gitlab](https://gitlab.gnome.org/GNOME/epiphany/issues/new),
 And feel free to send patches.
 
 About new features I'll just quote Metacity FAQ.
