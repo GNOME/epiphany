@@ -27,6 +27,7 @@ generate_enums = gnome.mkenums('org.gnome.Epiphany.enums.xml',
   vprod: '    <value nick="@valuenick@" value="@valuenum@"/>',
   vtail: '  </@type@>',
   ftail: '</schemalist>',
+  install_header: true,
   install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
 )
 # Copy file from source into build for glib-compile-schemas
