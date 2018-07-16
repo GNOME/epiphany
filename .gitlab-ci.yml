@@ -17,7 +17,7 @@ flatpak:
         FLATPAK_MODULE: "epiphany"
         # Make sure to keep this in sync with the Flatpak manifest, all arguments
         # are passed except the config-args because we build it ourselves
-        MESON_ARGS: "-Dunit_tests=all -Dtech_preview=true"
+        MESON_ARGS: "-Dunit_tests=all"
         DBUS_ID: "org.gnome.Epiphany"
 
     script:
