@@ -80,7 +80,8 @@ if get_option('unit_tests')
   )
   test('GSB service test',
        gsb_service_test,
-       env: envs
+       env: envs,
+       timeout: 90 # slow!
   )
 
   history_test = executable('test-ephy-history',
