@@ -397,6 +397,7 @@ test_complex_url_query (void)
   GList *visits;
 
   visits = create_visits_for_complex_tests ();
+  g_free (temporary_file);
 
   ephy_history_service_add_visits (service, visits, NULL, perform_complex_url_query, NULL);
 
@@ -437,6 +438,7 @@ test_complex_url_query_with_time_range (void)
   GList *visits;
 
   visits = create_visits_for_complex_tests ();
+  g_free (temporary_file);
 
   ephy_history_service_add_visits (service, visits, NULL, perform_complex_url_query_with_time_range, NULL);
 
@@ -487,6 +489,7 @@ test_clear (void)
 
   ephy_history_service_add_visits (service, visits, NULL, NULL, NULL);
   ephy_history_service_clear (service, NULL, perform_query_after_clear, NULL);
+  g_free (temporary_file);
 
   gtk_main ();
 }
