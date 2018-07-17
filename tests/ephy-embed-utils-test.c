@@ -133,7 +133,7 @@ main (int argc, char *argv[])
   guint i;
   gtk_test_init (&argc, &argv);
 
-  ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL);
+  ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_TESTING_MODE, NULL);
   _ephy_shell_create_instance (EPHY_EMBED_SHELL_MODE_TEST);
 
   for (i = 0; i < G_N_ELEMENTS (tests_has_scheme); i++) {

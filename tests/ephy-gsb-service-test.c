@@ -263,7 +263,7 @@ main (int argc, char *argv[])
 
   ephy_debug_init ();
 
-  ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, &error);
+  ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_TESTING_MODE, &error);
   if (error) {
     g_debug ("ephy_file_helpers_init() failed: %s\n", error->message);
     g_error_free (error);
