@@ -872,7 +872,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
 
   bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/ephy.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   data = g_bytes_get_data (bytes, &data_size);
-  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/ephy.js");
+  result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/ephy.js", 1);
   g_bytes_unref (bytes);
   g_object_unref (result);
 
@@ -901,7 +901,7 @@ window_object_cleared_cb (WebKitScriptWorld *world,
 
     bytes = g_resources_lookup_data ("/org/gnome/epiphany-web-extension/js/overview.js", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
     data = g_bytes_get_data (bytes, &data_size);
-    result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/overview.js");
+    result = jsc_context_evaluate_with_source_uri (js_context, data, data_size, "resource:///org/gnome/epiphany-web-extension/js/overview.js", 1);
     g_bytes_unref (bytes);
     g_object_unref (result);
 
