@@ -24,12 +24,225 @@
  * - append FeedView css selectors
  *
  * - Adjusted for Epiphany (Removing footer)
+ *
+ * Notes:
+ *
+ * - WCAG 2.0 level AA recommends at least 4.5 for normal text, 3 for large
+ *   text. See: https://marijohannessen.github.io/color-contrast-checker/
+ *
+ * - The @font-face rules try to use locally installed copies of the fonts,
+ *   and fallback to the bundled versions. As per W3C recommendation, the
+ *   rules include both full font names and PostScript names to assure
+ *   proper matching across platforms and installed font formats. See:
+ *   https://www.w3.org/TR/css-fonts-3/#font-face-rule
  */
+
+@font-face {
+  font-family: ephy-reader-serif;
+  src: local('Merriweather'),
+       local('Merriweather-Regular'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/Merriweather-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-serif;
+  src: local('Merriweather Italic'),
+       local('Merriweather-Italic'),
+       local('Merriweather-It'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/Merriweather-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-serif;
+  src: local('Merriweather Bold'),
+       local('Merriweather-Bold'),
+       local('Merriweather-Bd'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/Merriweather-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-serif;
+  src: local('Merriweather Bold Italic'),
+       local('Merriweather-BoldItalic'),
+       local('Merriweather-BoldIt'),
+       local('Merriweather-BdItalic'),
+       local('Merriweather-BdIt'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/Merriweather-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-sans;
+  src: local('Merriweather Sans'),
+       local('MerriweatherSans-Regular'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/MerriweatherSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-sans;
+  src: local('Merriweather Sans Italic'),
+       local('MerriweatherSans-Italic'),
+       local('MerriweatherSans-It'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/MerriweatherSans-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-sans;
+  src: local('Merriweather Sans Bold'),
+       local('MerriweatherSans-Bold'),
+       local('MerriweatherSans-Bd'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/MerriweatherSans-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-sans;
+  src: local('Merriweather Sans Bold Italic'),
+       local('MerriweatherSans-BoldItalic'),
+       local('MerriweatherSans-BoldIt'),
+       local('MerriweatherSans-BdItalic'),
+       local('MerriweatherSans-BdIt'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/MerriweatherSans-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-mono;
+  src: local('Source Code Pro'),
+       local('SourceCodePro-Regular'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/SourceCodePro-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-mono;
+  src: local('Source Code Pro Italic'),
+       local('SourceCodePro-Italic'),
+       local('SourceCodePro-It'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/SourceCodePro-It.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-mono;
+  src: local('Source Code Pro Bold'),
+       local('SourceCodePro-Bold'),
+       local('SourceCodePro-Bd'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/SourceCodePro-Regular.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: ephy-reader-mono;
+  src: local('Source Code Pro Bold Italic'),
+       local('SourceCodePro-BoldItalic'),
+       local('SourceCodePro-BoldIt'),
+       local('SourceCodePro-BdItalic'),
+       local('SourceCodePro-BdIt'),
+       url('ephy-resource:///org/gnome/epiphany/fonts/SourceCodePro-Regular.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: block;
+}
+
+
+body.sans,
+body.sans * {
+  font-family: ephy-reader-sans, sans-serif;
+}
+
+body.serif,
+body.serif * {
+  font-family: ephy-reader-serif, serif;
+}
+
+* {
+  line-height: 165%;
+  text-rendering: optimizeLegibility;
+}
+
+body.light {
+  /* Contrast ratio: 10.49 */
+  color: #333333;
+  background: #efefee;
+}
+
+body.dark {
+  color: #efefef;
+  background: #181818;
+}
 
 h1,
 h2,
-h3 {
+h3,
+h4,
+h5,
+h6 {
+  /* Contrast ratio: 4.77 */
   font-weight: bold;
+  color: #555555;
+  font-family: ephy-reader-serif, serif;
+}
+
+body.serif h1,
+body.serif h2,
+body.serif h3,
+body.serif h4,
+body.serif h5,
+body.serif h6 {
+  font-family: ephy-reader-sans, sans-serif;
+}
+
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6 {
+  color: #999999;
+}
+
+
+tt,
+code,
+pre {
+  font-family: ephy-reader-mono, monospace;
+}
+
+hr {
+  border: 1px solid #efefef;
+}
+
+picture img {
+  border-radius: 3px;
 }
 
 h1 {
@@ -129,8 +342,6 @@ article {
   overflow-y: hidden;
   margin: 20px auto;
   width: 640px;
-  color: #333;
-  font-family: Sans;
   font-size: 18px;
-  word-wrap:break-word;
+  word-wrap: break-word;
 }

@@ -117,6 +117,16 @@
 			<summary>The visibility policy for the tabs  bar.</summary>
 			<description>Controls when the tabs bar is shown. Possible values are “always” (the tabs bar is always shown), “more-than-one” (the tabs bar is only shown if there’s two or more tabs) and “never” (the tabs bar is never shown).</description>
 		</key>
+		<key name="reader-font-style" enum="org.gnome.Epiphany.EphyPrefsUIReaderFontStyle">
+			<default>'sans'</default>
+			<summary>Reader mode article font style.</summary>
+			<description>Chooses the style of the main body text for articles in reader mode. Possible values are “sans” and “serif”.</description>
+		</key>
+		<key name="reader-color-scheme" enum="org.gnome.Epiphany.EphyPrefsUIReaderColorScheme">
+			<default>'light'</default>
+			<summary>Reader mode color scheme.</summary>
+			<description>Selects the style of colors for articles displayed in reader mode. Possible values are “light” (dark text on light background) and “dark” (light text on dark background).</description>
+		</key>
 	</schema>
 	<schema id="org.gnome.Epiphany.web">
 		<key type="i" name="min-font-size">
