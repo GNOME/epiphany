@@ -1,4 +1,5 @@
 types_headers = [
+  'ephy-prefs.h',
   'ephy-security-levels.h',
   'ephy-sqlite-connection.h',
   'history/ephy-history-types.h'
