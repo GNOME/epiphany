@@ -3654,6 +3654,24 @@ ephy_web_view_set_visit_type (EphyWebView *view, EphyHistoryPageVisitType visit_
 }
 
 
+static const char *
+enum_nick (GType enum_type,
+           int   value)
+{
+    GEnumClass *enum_class;
+    const GEnumValue *enum_value;
+    const char *nick = NULL;
+
+    enum_class = g_type_class_ref (enum_type);
+    enum_value = g_enum_get_value (enum_class, value);
+    if (enum_value)
+        nick = enum_value->value_nick;
+
+    g_type_class_unref (enum_class);
+    return nick;
+}
+
+
 /**
  * ephy_web_view_toggle_reader_mode:
  * @view: an #EphyWebView
@@ -3669,6 +3687,8 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
   GString *html;
   GBytes *style_css;
   const gchar *title;
+  const gchar *font_style;
+  const gchar *color_scheme;
 
   if (view->reader_active == active)
     return;
@@ -3689,9 +3709,15 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
   html = g_string_new ("");
   style_css = g_resources_lookup_data ("/org/gnome/epiphany/reader.css", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   title = webkit_web_view_get_title (web_view);
+  font_style = enum_nick (EPHY_TYPE_PREFS_READER_FONT_STYLE,
+                          g_settings_get_enum (EPHY_SETTINGS_READER,
+                                               EPHY_PREFS_READER_FONT_STYLE));
+  color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
+                            g_settings_get_enum (EPHY_SETTINGS_READER,
+                                                 EPHY_PREFS_READER_COLOR_SCHEME));
   g_string_append_printf (html, "<style>%s</style>"
                                 "<title>%s</title>"
-                                "<body>"
+                                "<body class='%s %s'>"
                                 "<article>"
                                 "<h2>"
                                 "%s"
@@ -3702,6 +3728,8 @@ ephy_web_view_toggle_reader_mode (EphyWebView *view,
                                 "<hr>",
                                 (gchar *)g_bytes_get_data (style_css, NULL),
                                 title,
+                                font_style,
+                                color_scheme,
                                 title,
                                 view->reader_byline != NULL ? view->reader_byline : "");
   g_string_append (html, view->reader_content);
