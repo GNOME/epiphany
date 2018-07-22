@@ -97,6 +97,11 @@ population. Technical details should not exposed in the interface.
 We target web users, not web developers. A few geek-oriented feautures, like the
 web inspector, are welcome so long as they are non-obtrusive.
 
+# Website
+
+[Epiphany has a website,](https://wiki.gnome.org/Apps/Web) though there is not
+very much content there.
+
 # Contact Us
 
 The recommended way to contact us is via the Epiphany mailing list
