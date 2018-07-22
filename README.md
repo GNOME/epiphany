@@ -81,7 +81,8 @@ guidelines will be considered a bug.
 ## GNOME Integration
 
 Epiphany's main goal is to be integrated with GNOME, as well as similar
-desktops. We don't aim to make Epiphany usable outside a GNOME environment.
+desktops (notably elementary OS). We don't aim to make Epiphany usable outside
+these environments.
 
 ## Preferences
 
