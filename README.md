@@ -67,7 +67,7 @@ Epiphany is not just free of cost; more importantly, the source code is made
 available to you under a license that [respects your freedom](https://www.gnu.org/philosophy/philosophy.html).
 
 Just as GNOME exists to oppose proprietary desktop software, Epiphany opposes
-the dominance of the web by proprietary software browsers. Today's chief
+the dominance of the web by proprietary software web browsers. Today's chief
 offender is Google Chrome, a browser that purports to be open source, yet
 actually includes several proprietary components. In contrast, Epiphany is fully
 free software.
