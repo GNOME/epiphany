@@ -1,4 +1,69 @@
-# Code Style
+The first part of this document includes guidelines for submitting issue
+reports. This is kept very short, so please read it before submitting your issue
+report.
+
+The second part of this document includes tips for hacking on Epiphany, intended
+for developers submitting merge requests. You don't have to read it before
+submitting a merge request, but it should be useful.
+
+# Submitting an Issue Report?
+
+Thanks for reporting your problem with Epiphany.
+
+## Software versions
+
+Please include the following in your report:
+
+ * Epiphany version
+ * WebKitGTK+ version
+ * Operating system and version
+
+Check the About dialog if you're not sure what Epiphany or WebKitGTK+ versions
+you have.
+
+## Web Content Bugs
+
+This is the **wrong place** to report bugs with web content (e.g. incorrect page
+rendering, broken JavaScript, problems with video playback, font issues, network
+issues, or generally anything at all wrong with a website). These problems
+should all be reported directly on [WebKit Bugzilla](https://bugs.webkit.org)
+instead. The Epiphany developers are also WebKit developers, and we will see
+your WebKit bug reports so long as you are careful to select the WebKitGTK+
+Bugzilla component when reporting the issue. Don't forget! Please also add the
+`[GTK]` prefix to the title of your bug.
+
+In general, only problems with the GTK+ user interface around the web content
+view (e.g. menus, preferences dialog, window chrome, history, bookmarks, tabs)
+or Epiphany features (e.g. Firefox Sync, adblocker, web apps) should be reported
+on Epiphany's GitLab issue tracker.
+
+Don't worry if you accidentally submit your report in the wrong place. This
+happens all the time, since it's sometimes difficult to guess whether Epiphany
+or WebKit is responsible for a bug. If we suspect an issue reported on the
+Epiphany issue tracker is actually a WebKit bug, we will close it and ask you to
+report the issue on WebKit Bugzilla instead.
+
+## Crashes
+
+If Epiphany crashed, then we really need a backtrace taken in gdb with `bt full`
+in order to solve the problem. Be sure to install the necessary debuginfo
+packages for all frames that appear in the crashing thread.
+[Learn how to include a good backtrace.](https://wiki.gnome.org/Community/GettingInTouch/Bugzilla/GettingTraces)
+
+If you see the message "Oops! Something went wrong while displaying this page,"
+that means WebKit has crashed. Please follow the steps above to take a quality
+backtrace for the WebKitWebProcess and to report it on WebKit Bugzilla (not on
+Epiphany's GitLab).
+
+We always appreciate crash reports that include a quality backtrace. Crash
+reports without a useful backtrace will be closed.
+
+# Submitting a Merge Request?
+
+Thanks for your contribution. Here are some tips to ease your introduction
+to Epiphany development.
+
+## Code Style
 
 In order to keep the code nice and clean we have a few requirements you'll
 need to stick to in order to get your patch accepted:
@@ -33,9 +98,9 @@ need to stick to in order to get your patch accepted:
  * There's no space between a type cast and the variable name:  Right:
    `(int *)foo`. Wrong: `(int*) foo`.
 
-# Code Structure
+## Code Structure
 
-## Layering
+### Layering
 
 The code is currently structured into layers, where higher-level layers have
 full access to lower-level layers, but lower-level layers have no access to the
@@ -52,7 +117,7 @@ The build system enforces that higher-level layers are not in the include path
 of lower-level layers, so you should not be able to break the layering unless
 you go out of your way to do so.
 
-## GtkApplication and EphyShell
+### GtkApplication and EphyShell
 
 Epiphany has one singleton `EphyShell` object. Its inheritance hierarchy is:
 
@@ -67,16 +132,16 @@ There is exactly one instance of `EphyShell`, and it is also both the
 `EphyEmbedShell` and the `GtkApplication`. Use normal GObject casts to get a
 pointer to the type you need.
 
-`EphyShell` is a singleton object where we put all our global state, so it's kind
-of like having a global variable, but more organized. You can access it from
-anywhere in `src/` using `ephy_shell_get_default()`.
+`EphyShell` is a singleton object where we put all our global state, so it's
+kind of like having a global variable, but more organized. You can access it
+from anywhere in `src/` using `ephy_shell_get_default()`.
 
 `EphyEmbedShell` is a separate class from `EphyShell` for layering purposes. It
 is accessible anywhere from `embed/` or `src/`. So if you have global stuff
 that you need to access from `embed/`, you need to put it in `EphyEmbedShell`,
 not `EphyShell`.
 
-## Important Epiphany Objects
+### Important Epiphany Objects
 
 `EphyWindow` is a subclass of `GtkApplicationWindow`, which is a subclass of
 `GtkWindow`. It's the window. You can have any number of windows open at a time.
@@ -87,7 +152,7 @@ or more tabs, and each tab is an `EphyEmbed`. That's worth repeating: an
 `EphyWebView` (subclass of `WebKitWebView`). This is the object that actually
 displays the web page, where all the web browser magic happens.
 
-## Important WebKitGTK+ Objects
+### Important WebKitGTK+ Objects
 
 WebKitGTK+ is a WebKit port that provides a GTK+ API wrapper around WebKit.
 
@@ -110,11 +175,11 @@ There is separate documentation for the [main WebKitGTK+ API](https://webkitgtk.
 for the [WebKitGTK+ DOM API](https://webkitgtk.org/reference/webkitdomgtk/unstable/index.html),
 and for the [WebKitGTK+ JavaScriptCore API](https://webkitgtk.org/reference/jsc-glib/unstable/index.html).
 
-## Modern WebKit Process Architecture
+### Modern WebKit Process Architecture
 
 Modern WebKit (formerly WebKit2) has a multiprocess architecture to improve the
-robustness of the browser. The UI process (the main epiphany process) runs several
-subprocesses:
+robustness of the browser. The UI process (the main epiphany process) runs
+several subprocesses:
 
  * Any number of WebKitWebProcesses, which handle rendering web content
  * One WebKitNetworkProcess, which handles most network requests
@@ -134,7 +199,7 @@ UI process running at a time. An exception is if you use incognito mode, or
 private profile mode (which is only available from the command line). In such
 cases, there is no shared state with the main Epiphany browser process.
 
-## Epiphany Web Extension
+### Epiphany Web Extension
 
 For some Epiphany features, we need to run code in the web process. This code is
 called the "web extension" and lives in `embed/web-extension/`. It is compiled
@@ -146,8 +211,8 @@ the shared system and session busses), and advertises the address of its D-Bus
 server to the web extension by passing it in a `GVariant` parameter to
 `webkit_web_context_set_web_extensions_initialization_user_data()`. Now the
 Epiphany UI process and web extension can communicate back and forth via D-Bus.
-`EphyWebExtensionProxy` encapsulates this IPC in the UI process; `EphyEmbedShell`
-uses it to communicate with the web process.
+`EphyWebExtensionProxy` encapsulates this IPC in the UI process;
+`EphyEmbedShell` uses it to communicate with the web process.
 
 Epiphany uses script message handlers as an additional form of IPC besides
 D-Bus. This allows the web extension to send a `WebKitJavascriptResult` directly
@@ -155,21 +220,21 @@ to the UI process, which is received in `EphyEmbedShell`. This should generally
 be used rather than D-Bus when you need to send a message from the web process
 to the UI process.
 
-# Debugging
+## Debugging
 
 To enable debugging use the configure option `-Ddeveloper_mode=true`.
 
-## Logging
+### Logging
 
 At execution time, you must enable the log service. To enable the
-log service, set the environment variable `EPHY_LOG_MODULES`, which has the form:
-`<moduleName>[:<moduleName>]*`, where `moduleName` is a filename. E.g.
+log service, set the environment variable `EPHY_LOG_MODULES`, which has the
+form: `<moduleName>[:<moduleName>]*`, where `moduleName` is a filename. E.g.
 `export EPHY_LOG_MODULES=ephy-window.c:ephy-autocompletion.c`. The special log
 module `all` enables all log modules.
 
 Use the `LOG()` macro to put debug messages in the code.
 
-## Warnings
+### Warnings
 
 At execution time, you must enable the service. To enable you to debug
 warnings, set the environment variable `EPHY_DEBUG_BREAK`.
@@ -187,7 +252,7 @@ Possible value for `EPHY_DEBUG_BREAK` variable:
 			the debugger.
 ```
 
-## Profiling
+### Profiling
 
 At execution time, you must enable the profiling service. To enable the
 profiling service, set the environment variable `EPHY_PROFILING_MODULES`,
