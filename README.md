@@ -3,6 +3,37 @@ GNOME Web (codename: Epiphany) is a GNOME web browser based on
 usually sudden manifestation or perception of the essential nature or meaning of
 something" ([Merriam-Webster](https://www.merriam-webster.com/dictionary/epiphany)).
 
+Epiphany is opinionated.
+
+# Download and Install
+
+Epiphany is designed for Linux systems. The recommended way to install Epiphany
+is via [Flatpak](https://www.flatpak.org/). You may:
+
+ * [Download the latest stable version from Flathub](https://flathub.org/repo/appstream/org.gnome.Epiphany.flatpakref)
+   (recommended); or
+ * [Download Epiphany Technology Preview](https://webkitgtk.org/epiphany-tech-preview)
+   if you are adventurous and want to help test tomorrow's Epiphany today. It
+   is **not stable**.
+ 
+Epiphany is probably also available via your operating system's package manager,
+but such packages are often outdated and insecure. Flatpak is the best
+application distribution mechanism for Linux.
+
+# Building from Source
+
+Epiphany uses the [Meson build system](http://mesonbuild.com/). You can build
+Epiphany the same way you would any software that uses Meson. For example:
+
+```
+$ mkdir build && cd build
+$ meson ..
+$ ninja
+$ ninja install
+```
+
+Meson is the best build system.
+
 # Manifesto
 
 A web browser is more than an application: it is a way of thinking, a way of
@@ -41,10 +72,10 @@ offender is Google Chrome, a browser that purports to be open source, yet
 actually includes several proprietary components. In contrast, Epiphany is fully
 free software.
 
-# Human Interface Guidelines
+# Human Interface
 
 Epiphany follows the [GNOME Human Interface Guidelines](https://developer.gnome.org/hig/stable/).
-Unless there are very serious reasons to make an exception, not following the
+Unless there are serious reasons to make an exception, not following the
 guidelines will be considered a bug.
 
 ## GNOME Integration
@@ -55,8 +86,8 @@ desktops. We don't aim to make Epiphany usable outside a GNOME environment.
 ## Preferences
 
 We are cautious about adding new preferences. Preferences can be added when they
-make sense, but they should always be carefully-considered. We know from
-experience that [preferences come with a cost](https://ometer.com/preferences.html).
+make sense, but they should always be carefully-considered.
+[Preferences come with a cost](https://ometer.com/preferences.html).
 
 ## Target Audience
 
