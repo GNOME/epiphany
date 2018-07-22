@@ -34,8 +34,8 @@ Bugzilla component when reporting the issue. Don't forget! Please also add the
 
 In general, only problems with the GTK+ user interface around the web content
 view (e.g. menus, preferences dialog, window chrome, history, bookmarks, tabs)
-or Epiphany features (e.g. Firefox Sync, adblocker, web apps) should be reported
-on Epiphany's GitLab issue tracker.
+or Epiphany features (e.g. Firefox Sync, adblocker, password manager, web apps)
+should be reported on Epiphany's GitLab issue tracker.
 
 Don't worry if you accidentally submit your report in the wrong place. This
 happens all the time, since it's sometimes difficult to guess whether Epiphany
