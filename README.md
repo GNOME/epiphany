@@ -29,7 +29,7 @@ Epiphany the same way you would any software that uses Meson. For example:
 $ mkdir build && cd build
 $ meson ..
 $ ninja
-$ ninja install
+$ sudo ninja install
 ```
 
 Meson is the best build system.
