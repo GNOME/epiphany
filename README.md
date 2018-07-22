@@ -1,114 +1,72 @@
-# Epiphany
+GNOME Web (codename: Epiphany) is a GNOME web browser based on
+[the WebKit rendering engine](https://webkit.org/). The codename means "a
+usually sudden manifestation or perception of the essential nature or meaning of
+something" ([Merriam-Webster](https://www.merriam-webster.com/dictionary/epiphany)).
 
-## Introduction
+# Manifesto
 
-Epiphany is a GNOME web browser based on the WebKit rendering engine.
-The name meaning:
-"An intuitive grasp of reality through
-something (as an event) usually simple and striking"
+A web browser is more than an application: it is a way of thinking, a way of
+seeing the world. Epiphany's principles are simplicity, standards compliance,
+and software freedom.
 
-## Manifesto
+## Simplicity
 
-A web browser is more than an application, it is a way of thinking, it is
-a way of seeing the world. Epiphany's principles are simplicity and standards
-compliance.
+Feature bloat and user interface clutter is evil.
 
-#### Simplicity
+Epiphany aims to present the simplest interface possible for a browser. Simple
+does not necessarily mean less-powerful. The commonly-used browsers of today are
+too big, buggy, and bloated. Epiphany is a small browser designed for the web:
+not for mail, newsgroups, file management, instant messaging, or coffeemaking.
+The UNIX philosophy is to design small tools that do one thing and do it well.
 
-Epiphany aims to utilize the simplest interface possible for a browser.  Keep
-in mind that simple does not necessarily mean less powerful.  We believe
-the commonly used browsers of today are too big, buggy, and bloated. Epiphany
-addresses simplicity with a small browser designed for the web -- not mail,
-newsgroups, file management, instant messaging or coffee making.  The UNIX
-philosophy is to design small tools that do one thing, and do it well.
+## Standards Compliance
 
-Epiphany also address simplicity with modularity to make a light and powerful
-application.  If something can be implemented using external applications
-or components, we use it rather than wasting resources in the web browser.
-Integration with other desktop applications can also be achieved using DBus
-and the ever popular command line.
-
-Other tasks like mail can be handled with your favorite e-mail application
-(Evolution, pine, mutt, balsa, pronto, whatever).
-
-#### Standards compliance
-
-The introduction of non-standard features in browsers could make it difficult
+The introduction of nonstandard features in browsers could make it difficult
 or impossible to use alternative products like Epiphany if developers embrace
-them. Alternative (standards complying) browsers could not be able to
-fully access web sites making use of these features.  The success of
-non-standard features can ultimately lead to forcing one browser, on
-one platform to dominate the market.
+them. Alternative standards-complying browsers might not be able to fully access
+websites making use of these features. The success of nonstandard features can
+ultimately lead one browser to dominate the market.
 
-Standards compliance ensures the freedom of choice.  Epiphany aims to achieve
+Standards compliance ensures the freedom of choice. Epiphany aims to achieve
 this.
 
-#### User Interface Lines
+## Software Freedom
 
-- HIG compliance
+Epiphany is not just free of cost; more importantly, the source code is made
+available to you under a license that [respects your freedom](https://www.gnu.org/philosophy/philosophy.html).
 
-Epiphany is going to follow latest version of the GNOME Human Interface
-Guidelines. Unless there are very serious reasons to make an exception not
-following it will be considered a bug.
-"I follow the HIG only when I like it" is not a legitimate approach.
-Any areas where we diverge from the HIG will communicated
-to the HIG team for future consideration.
+Just as GNOME exists to oppose proprietary desktop software, Epiphany opposes
+the dominance of the web by proprietary software browsers. Today's chief
+offender is Google Chrome, a browser that purports to be open source, yet
+actually includes several proprietary components. In contrast, Epiphany is fully
+free software.
 
-- GNOME integration
+# Human Interface Guidelines
 
-Epiphany's main goal is to be integrated with the GNOME desktop.
-We don't aim to make epiphany usable outside GNOME. If someone will like
-to use it anyway, it's just a plus. Ex: Making people happy that
-don't have control center installed is not a good reason
-to have mime configuration in epiphany itself.
+Epiphany follows the [GNOME Human Interface Guidelines](https://developer.gnome.org/hig/stable/).
+Unless there are very serious reasons to make an exception, not following the
+guidelines will be considered a bug.
 
-- Simple design
+## GNOME Integration
 
-Feature bloat and user interface clutter is evil :)
+Epiphany's main goal is to be integrated with GNOME, as well as similar
+desktops. We don't aim to make Epiphany usable outside a GNOME environment.
 
-- Preferences
+## Preferences
 
-We will follow the new GNOME policy about preferences.
-I think Havoc Pennington already explained it a lot
-better than I could ever do [here](https://ometer.com/preferences.html).
+We are cautious about adding new preferences. Preferences can be added when they
+make sense, but they should always be carefully-considered. We know from
+experience that [preferences come with a cost](https://ometer.com/preferences.html).
 
-- User target
+## Target Audience
 
-We target non-technical users by design.
-This happens to be 90% of the user population.
-(Technical details should not exposed in the interface)
-We target web users, we don't directly target web developers.
-A few geek-oriented feautures can be kept as
-long as they are non-obtrusive.
+We target nontechnical users by design. This happens to be 90% of the user
+population. Technical details should not exposed in the interface.
 
-## Requirments
+We target web users, not web developers. A few geek-oriented feautures, like the
+web inspector, are welcome so long as they are non-obtrusive.
 
-You will need a complete installation of GNOME 2.x/3.x desktop.
-The required WebKit version will be specified in the release notes.
+# Contact Us
 
-## How To Help
-
-You can report new bugs at [gitlab](https://gitlab.gnome.org/GNOME/epiphany/issues/new),
-And feel free to send patches.
-
-About new features I'll just quote Metacity FAQ.
-
-Q: Will you add my feature?
-
-A: If it makes sense to turn on unconditionally,
-   or is genuinely a harmless preference that I would not
-   be embarrassed to put in a simple, uncluttered, user-friendly
-   configuration dialog.
-
-   If the only rationale for your feature is that other
-   [browsers] have it, or that you are personally used to it, or something
-   like that, then I will not be impressed. [Epiphany] is firmly in the
-   "choose good defaults" camp rather than the "offer 6 equally broken
-   ways to do it, and let the user pick one" camp.
-
-   Don't let this discourage patches and fixes - I love those. ;-)
-   Just be prepared to hear the above objections if your patch
-   adds some crack-ridden configuration option.
-
-## Contact Us
-Epiphany Mailing List <epiphany-list@gnome.org>
+The recommended way to contact us is via the Epiphany mailing list
+<epiphany-list@gnome.org>.
