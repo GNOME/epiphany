@@ -93,7 +93,7 @@ struct _PrefsDialog {
   GtkWidget *enable_plugins_checkbutton;
   GtkWidget *enable_safe_browsing_checkbutton;
 
-  /* fonts */
+  /* fonts & style */
   GtkWidget *use_gnome_fonts_checkbutton;
   GtkWidget *custom_fonts_table;
   GtkWidget *sans_fontbutton;
@@ -101,6 +101,10 @@ struct _PrefsDialog {
   GtkWidget *mono_fontbutton;
   GtkWidget *css_checkbox;
   GtkWidget *css_edit_button;
+  GtkWidget *reader_mode_font_sans;
+  GtkWidget *reader_mode_font_serif;
+  GtkWidget *reader_mode_colors_light;
+  GtkWidget *reader_mode_colors_dark;
 
   /* stored data */
   GtkWidget *always;
@@ -958,7 +962,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_box);
 
-  /* fonts */
+  /* fonts & style */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_gnome_fonts_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_fonts_table);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sans_fontbutton);
@@ -966,6 +970,10 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, mono_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_checkbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_edit_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_font_sans);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_font_serif);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_colors_light);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_colors_dark);
 
   /* stored data */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, always);
@@ -1984,12 +1992,82 @@ setup_general_page (PrefsDialog *dialog)
     create_download_path_button (dialog);
 }
 
+static gboolean
+reader_mode_font_style_get_mapping (GValue   *value,
+                                    GVariant *variant,
+                                    gpointer  user_data)
+{
+  const char *setting;
+  const char *name;
+
+  setting = g_variant_get_string (variant, NULL);
+  name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
+  g_assert (g_str_has_prefix (name, "reader_mode_font_"));
+
+  if (g_strcmp0 (setting, name + 17) == 0)
+    g_value_set_boolean (value, TRUE);
+
+  return TRUE;
+}
+
+static GVariant *
+reader_mode_font_style_set_mapping (const GValue       *value,
+                                    const GVariantType *expected_type,
+                                    gpointer            user_data)
+{
+  const char *name;
+
+  /* Don't act unless the button has been activated (turned ON). */
+  if (!g_value_get_boolean (value))
+    return NULL;
+
+  name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
+  g_assert (g_str_has_prefix (name, "reader_mode_font_"));
+  return g_variant_new_string (name + 17);
+}
+
+static gboolean
+reader_mode_colors_get_mapping (GValue   *value,
+                                GVariant *variant,
+                                gpointer  user_data)
+{
+  const char *setting;
+  const char *name;
+
+  setting = g_variant_get_string (variant, NULL);
+  name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
+  g_assert (g_str_has_prefix (name, "reader_mode_colors_"));
+
+  if (g_strcmp0 (setting, name + 19) == 0)
+    g_value_set_boolean (value, TRUE);
+
+  return TRUE;
+}
+
+static GVariant *
+reader_mode_colors_set_mapping (const GValue       *value,
+                                const GVariantType *expected_type,
+                                gpointer            user_data)
+{
+  const char *name;
+
+  /* Don't act unless the button has been activated (turned ON). */
+  if (!g_value_get_boolean (value))
+    return NULL;
+
+  name = gtk_buildable_get_name (GTK_BUILDABLE (user_data));
+  g_assert (g_str_has_prefix (name, "reader_mode_colors_"));
+  return g_variant_new_string (name + 19);
+}
+
 static void
 setup_fonts_page (PrefsDialog *dialog)
 {
   GSettings *web_settings;
+  GSettings *reader_settings;
 
   web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+  reader_settings = ephy_settings_get (EPHY_PREFS_READER_SCHEMA);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_USE_GNOME_FONTS,
@@ -2027,6 +2105,44 @@ setup_fonts_page (PrefsDialog *dialog)
                    dialog->css_edit_button,
                    "sensitive",
                    G_SETTINGS_BIND_GET);
+
+  g_settings_bind_with_mapping (reader_settings,
+                                "font-style",
+                                dialog->reader_mode_font_sans,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                reader_mode_font_style_get_mapping,
+                                reader_mode_font_style_set_mapping,
+                                dialog->reader_mode_font_sans,
+                                NULL);
+  g_settings_bind_with_mapping (reader_settings,
+                                "font-style",
+                                dialog->reader_mode_font_serif,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                reader_mode_font_style_get_mapping,
+                                reader_mode_font_style_set_mapping,
+                                dialog->reader_mode_font_serif,
+                                NULL);
+  g_settings_bind_with_mapping (reader_settings,
+                                "color-scheme",
+                                dialog->reader_mode_colors_light,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                reader_mode_colors_get_mapping,
+                                reader_mode_colors_set_mapping,
+                                dialog->reader_mode_colors_light,
+                                NULL);
+  g_settings_bind_with_mapping (reader_settings,
+                                "color-scheme",
+                                dialog->reader_mode_colors_dark,
+                                "active",
+                                G_SETTINGS_BIND_DEFAULT,
+                                reader_mode_colors_get_mapping,
+                                reader_mode_colors_set_mapping,
+                                dialog->reader_mode_colors_dark,
+                                NULL);
+
   g_signal_connect (dialog->css_edit_button,
                     "clicked",
                     G_CALLBACK (css_edit_button_clicked_cb),
