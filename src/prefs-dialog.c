@@ -33,6 +33,7 @@
 #include "ephy-flatpak-utils.h"
 #include "ephy-gui.h"
 #include "ephy-langs.h"
+#include "ephy-lib-type-builtins.h"
 #include "ephy-prefs.h"
 #include "ephy-search-engine-dialog.h"
 #include "ephy-session.h"
@@ -93,7 +94,7 @@ struct _PrefsDialog {
   GtkWidget *enable_plugins_checkbutton;
   GtkWidget *enable_safe_browsing_checkbutton;
 
-  /* fonts */
+  /* fonts & style */
   GtkWidget *use_gnome_fonts_checkbutton;
   GtkWidget *custom_fonts_table;
   GtkWidget *sans_fontbutton;
@@ -101,6 +102,8 @@ struct _PrefsDialog {
   GtkWidget *mono_fontbutton;
   GtkWidget *css_checkbox;
   GtkWidget *css_edit_button;
+  GtkWidget *reader_mode_font_style;
+  GtkWidget *reader_mode_color_scheme;
 
   /* stored data */
   GtkWidget *always;
@@ -958,7 +961,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_box);
 
-  /* fonts */
+  /* fonts & style */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_gnome_fonts_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_fonts_table);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sans_fontbutton);
@@ -966,6 +969,8 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, mono_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_checkbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_edit_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_font_style);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_color_scheme);
 
   /* stored data */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, always);
@@ -1984,12 +1989,118 @@ setup_general_page (PrefsDialog *dialog)
     create_download_path_button (dialog);
 }
 
+enum {
+  ENUM_MODEL_COLUMN_LABEL,
+  ENUM_MODEL_COLUMN_NICK,
+  ENUM_MODEL_N_COLUMNS,
+};
+
+typedef struct {
+  gint        value;
+  const char *label;
+} EnumModelItem;
+
+static GtkTreeModel *
+enum_model_new (GType                enum_type,
+                gsize                n_items,
+                const EnumModelItem *items)
+{
+  GtkListStore *model;
+  GEnumClass *enum_class;
+  gsize i;
+
+  enum_class = g_type_class_ref (enum_type);
+  model = gtk_list_store_new (ENUM_MODEL_N_COLUMNS,
+                              G_TYPE_STRING,
+                              G_TYPE_STRING);
+
+  for (i = 0; i < n_items; i++) {
+    GtkTreeIter iter;
+    const char *nick;
+    guint  j;
+
+    nick = NULL;
+    for (j = 0; j < enum_class->n_values; j++) {
+      if (enum_class->values[j].value == items[i].value) {
+        nick = enum_class->values[j].value_nick;
+        break;
+      }
+    }
+    g_assert (nick != NULL);
+
+    gtk_list_store_append (model, &iter);
+    gtk_list_store_set (model,
+                        &iter,
+                        ENUM_MODEL_COLUMN_LABEL, _(items[i].label),
+                        ENUM_MODEL_COLUMN_NICK, nick,
+                        -1);
+  }
+
+  return GTK_TREE_MODEL (model);
+}
+
+static void
+enum_model_attach (GtkTreeModel *model,
+                   GtkComboBox  *combobox,
+                   GSettings    *settings,
+                   const char   *key)
+{
+  GtkCellRenderer *renderer;
+
+  gtk_cell_layout_clear (GTK_CELL_LAYOUT (combobox));
+
+  gtk_combo_box_set_model (combobox, model);
+  gtk_combo_box_set_id_column (combobox,
+                               ENUM_MODEL_COLUMN_NICK);
+
+  g_settings_bind (settings,
+                   key,
+                   combobox,
+                   "active-id",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
+                              renderer,
+                              FALSE);
+  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combobox),
+                                 renderer,
+                                 "text",
+                                 ENUM_MODEL_COLUMN_LABEL);
+}
+
+static const EnumModelItem reader_font_style_items[] = {
+  { EPHY_PREFS_READER_FONT_STYLE_SANS,  N_("Sans")  },
+  { EPHY_PREFS_READER_FONT_STYLE_SERIF, N_("Serif") },
+};
+
+static const EnumModelItem reader_color_scheme_items[] = {
+  { EPHY_PREFS_READER_COLORS_LIGHT, N_("Light") },
+  { EPHY_PREFS_READER_COLORS_DARK,  N_("Dark")  },
+};
+
 static void
 setup_fonts_page (PrefsDialog *dialog)
 {
   GSettings *web_settings;
+  GSettings *reader_settings;
 
   web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
+  reader_settings = ephy_settings_get (EPHY_PREFS_READER_SCHEMA);
+
+  enum_model_attach (enum_model_new (EPHY_TYPE_PREFS_READER_FONT_STYLE,
+                                     G_N_ELEMENTS (reader_font_style_items),
+                                     reader_font_style_items),
+                     GTK_COMBO_BOX (dialog->reader_mode_font_style),
+                     reader_settings,
+                     EPHY_PREFS_READER_FONT_STYLE);
+
+  enum_model_attach (enum_model_new (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
+                                     G_N_ELEMENTS (reader_color_scheme_items),
+                                     reader_color_scheme_items),
+                     GTK_COMBO_BOX (dialog->reader_mode_color_scheme),
+                     reader_settings,
+                     EPHY_PREFS_READER_COLOR_SCHEME);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_USE_GNOME_FONTS,
@@ -2027,6 +2138,7 @@ setup_fonts_page (PrefsDialog *dialog)
                    dialog->css_edit_button,
                    "sensitive",
                    G_SETTINGS_BIND_GET);
+
   g_signal_connect (dialog->css_edit_button,
                     "clicked",
                     G_CALLBACK (css_edit_button_clicked_cb),
