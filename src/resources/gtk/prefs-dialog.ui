@@ -265,7 +265,7 @@
                             </attributes>
                           </object>
                         </child>
-			<child>
+                        <child>
                           <object class="GtkButton" id="search_engine_dialog_button">
                             <property name="label" translatable="yes">_Manage Search Engines</property>
                             <property name="visible">True</property>
@@ -275,10 +275,10 @@
                         </child>
                       </object>
                     </child>
-		    <child>
-		      <object class="GtkLabel">
+                    <child>
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
-			<property name="margin_left">12</property>
+                        <property name="margin_left">12</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">You can select different search engines to use.</property>
                         <attributes>
@@ -529,14 +529,108 @@
                             <property name="use-underline">True</property>
                           </object>
                         </child>
+						<child>
+						  <object class="GtkButton" id="css_edit_button">
+							<property name="label" translatable="yes">_Edit Stylesheet</property>
+							<property name="visible">True</property>
+							<property name="use-underline">True</property>
+						  </object>
+						</child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <property name="margin-top">12</property>
                         <child>
-                          <object class="GtkButton" id="css_edit_button">
-                            <property name="label" translatable="yes">_Edit Stylesheet</property>
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="use-underline">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="margin_top">6</property>
+                            <property name="label" translatable="yes">Reader Mode</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_left">12</property>
+                            <property name="row_spacing">6</property>
+                            <property name="hexpand">True</property>
+                            <property name="column_spacing">12</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">center</property>
+                                <property name="margin_left">12</property>
+                                <property name="label" translatable="yes">Font style:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">center</property>
+                                <property name="margin_left">12</property>
+                                <property name="label" translatable="yes">Color scheme:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="reader_mode_font_style">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="reader_mode_color_scheme">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
