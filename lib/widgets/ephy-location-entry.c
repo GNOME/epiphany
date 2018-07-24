@@ -57,7 +57,6 @@ struct _EphyLocationEntry {
   GtkOverlay parent_instance;
 
   GtkWidget *url_entry;
-  GtkWidget *progress_bar;
   GtkWidget *bookmark;
   GtkWidget *bookmark_event_box;
   GtkWidget *reader_mode;
@@ -776,7 +775,10 @@ button_box_size_allocated_cb (GtkWidget    *widget,
   GtkCssProvider *css_provider = gtk_css_provider_new();
   gchar *css;
 
-  css = g_strdup_printf (".url_entry { padding-right: %dpx; }", allocation->width + 5);
+  css = g_strdup_printf (".url_entry { padding-right: %dpx; }"\
+                         ".url_entry progress { margin-right: -%dpx; }",
+                         allocation->width + 5,
+                         allocation->width);
   gtk_css_provider_load_from_data (css_provider, css, -1, NULL);
 
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
@@ -801,14 +803,6 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   g_signal_connect (G_OBJECT (entry->url_entry), "cut-clipboard", G_CALLBACK (ephy_location_entry_cut_clipboard), NULL);
   gtk_widget_show (entry->url_entry);
   gtk_overlay_add_overlay (GTK_OVERLAY (entry), entry->url_entry);
-
-  /* Progress bar */
-  entry->progress_bar = gtk_progress_bar_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (entry->progress_bar), "url_progress");
-  gtk_widget_set_halign (entry->progress_bar, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (entry->progress_bar, GTK_ALIGN_END);
-  gtk_widget_show (entry->progress_bar);
-  gtk_overlay_add_overlay (GTK_OVERLAY (entry), entry->progress_bar);
 
   /* Button Box */
   button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
@@ -1404,8 +1398,7 @@ progress_hide (gpointer user_data)
 {
   EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (user_data);
 
-  gtk_widget_hide (entry->progress_bar);
-  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (entry->progress_bar), 0);
+  gtk_entry_set_progress_fraction (GTK_ENTRY (entry->url_entry), 0);
 
   if (entry->progress_timeout) {
     g_source_remove (entry->progress_timeout);
@@ -1424,7 +1417,7 @@ ephy_location_entry_set_fraction_internal (gpointer user_data)
   gdouble current;
 
   entry->progress_timeout = 0;
-  current = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (entry->progress_bar));
+  current = gtk_entry_get_progress_fraction (GTK_ENTRY (entry->url_entry));
 
   if ((entry->progress_fraction - current) > 0.5 || entry->progress_fraction == 1.0)
     ms = 10;
@@ -1433,12 +1426,10 @@ ephy_location_entry_set_fraction_internal (gpointer user_data)
 
   progress = current + 0.025;
   if (progress < entry->progress_fraction) {
-    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (entry->progress_bar),
-                                   progress);
+    gtk_entry_set_progress_fraction (GTK_ENTRY (entry->url_entry), progress);
     entry->progress_timeout = g_timeout_add (ms, ephy_location_entry_set_fraction_internal, entry);
   } else {
-    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (entry->progress_bar),
-                                   entry->progress_fraction);
+    gtk_entry_set_progress_fraction (GTK_ENTRY (entry->url_entry), entry->progress_fraction);
     if (entry->progress_fraction == 1.0)
       entry->progress_timeout = g_timeout_add (500, progress_hide, entry);
   }
@@ -1457,12 +1448,9 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
  }
 
   if (!loading) {
-    gtk_widget_hide (entry->progress_bar);
+    gtk_entry_set_progress_fraction (GTK_ENTRY (entry->url_entry), 0);
     return;
   }
-
-  if (!gtk_widget_is_visible (entry->progress_bar))
-    gtk_widget_show (entry->progress_bar);
 
   entry->progress_fraction = fraction;
   ephy_location_entry_set_fraction_internal (entry);
