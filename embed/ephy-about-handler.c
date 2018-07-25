@@ -185,10 +185,14 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
                           "</div></body></html>",
                           _("About Web"),
                           icon_info ? gtk_icon_info_get_filename (icon_info) : "",
-                          _("Web"),
+#if !TECH_PREVIEW
+                         _("Web"),
+#else
+                         _("Epiphany Technology Preview"),
+#endif
                           version,
                           _("A simple, clean, beautiful view of the web"),
-                          "WebKit", webkit_get_major_version (), webkit_get_minor_version (), webkit_get_micro_version ());
+                          "WebKitGTK+", webkit_get_major_version (), webkit_get_minor_version (), webkit_get_micro_version ());
   g_free (version);
   if (icon_info)
     g_object_unref (icon_info);
