@@ -167,8 +167,8 @@ ephy_about_handler_handle_about (EphyAboutHandler       *handler,
 
   icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
                                           "org.gnome.Epiphany",
-                                          512,
-                                          GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+                                          256,
+                                          GTK_ICON_LOOKUP_FORCE_SVG);
 
   data = g_strdup_printf ("<html><head><title>%s</title>"
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
