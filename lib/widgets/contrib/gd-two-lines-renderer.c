@@ -12,8 +12,7 @@
  * License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License 
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  *
  * Author: Cosimo Cecchi <cosimoc@redhat.com>
  *
@@ -25,9 +24,9 @@
 #define SUBTITLE_DIM_PERCENTAGE 0.55
 #define SUBTITLE_SIZE_PERCENTAGE 0.82
 
-G_DEFINE_TYPE (GdTwoLinesRenderer, gd_two_lines_renderer, GTK_TYPE_CELL_RENDERER_TEXT)
-
-struct _GdTwoLinesRendererPrivate {
+struct _GdTwoLinesRenderer
+{
+  GtkCellRendererText parent_instance;
   gchar *line_two;
   gint text_lines;
 };
@@ -39,6 +38,8 @@ enum {
 };
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
+
+G_DEFINE_TYPE (GdTwoLinesRenderer, gd_two_lines_renderer, GTK_TYPE_CELL_RENDERER_TEXT)
 
 static PangoLayout *
 create_layout_with_attrs (GtkWidget *widget,
@@ -129,10 +130,10 @@ gd_two_lines_renderer_prepare_layouts (GdTwoLinesRenderer *self,
   line_one = create_layout_with_attrs (widget, cell_area,
                                        self, PANGO_ELLIPSIZE_MIDDLE);
 
-  if (self->priv->line_two == NULL ||
-      g_strcmp0 (self->priv->line_two, "") == 0)
+  if (self->line_two == NULL ||
+      g_strcmp0 (self->line_two, "") == 0)
     {
-      pango_layout_set_height (line_one, - (self->priv->text_lines));
+      pango_layout_set_height (line_one, - (self->text_lines));
 
       if (text != NULL)
         pango_layout_set_text (line_one, text, -1);
@@ -149,9 +150,9 @@ gd_two_lines_renderer_prepare_layouts (GdTwoLinesRenderer *self,
       apply_subtitle_style_to_layout (context, line_two, GTK_STATE_FLAG_NORMAL);
       gtk_style_context_restore (context);
 
-      pango_layout_set_height (line_one, - (self->priv->text_lines - 1));
+      pango_layout_set_height (line_one, - (self->text_lines - 1));
       pango_layout_set_height (line_two, -1);
-      pango_layout_set_text (line_two, self->priv->line_two, -1);
+      pango_layout_set_text (line_two, self->line_two, -1);
 
       if (text != NULL)
         pango_layout_set_text (line_one, text, -1);
@@ -499,11 +500,11 @@ static void
 gd_two_lines_renderer_set_line_two (GdTwoLinesRenderer *self,
                                     const gchar *line_two)
 {
-  if (g_strcmp0 (self->priv->line_two, line_two) == 0)
+  if (g_strcmp0 (self->line_two, line_two) == 0)
     return;
 
-  g_free (self->priv->line_two);
-  self->priv->line_two = g_strdup (line_two);
+  g_free (self->line_two);
+  self->line_two = g_strdup (line_two);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LINE_TWO]);
 }
@@ -512,10 +513,10 @@ static void
 gd_two_lines_renderer_set_text_lines (GdTwoLinesRenderer *self,
                                       gint text_lines)
 {
-  if (self->priv->text_lines == text_lines)
+  if (self->text_lines == text_lines)
     return;
 
-  self->priv->text_lines = text_lines;
+  self->text_lines = text_lines;
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TEXT_LINES]);
 }
 
@@ -552,10 +553,10 @@ gd_two_lines_renderer_get_property (GObject    *object,
   switch (property_id)
     {
     case PROP_TEXT_LINES:
-      g_value_set_int (value, self->priv->text_lines);
+      g_value_set_int (value, self->text_lines);
       break;
     case PROP_LINE_TWO:
-      g_value_set_string (value, self->priv->line_two);
+      g_value_set_string (value, self->line_two);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -568,7 +569,7 @@ gd_two_lines_renderer_finalize (GObject *object)
 {
   GdTwoLinesRenderer *self = GD_TWO_LINES_RENDERER (object);
 
-  g_free (self->priv->line_two);
+  g_free (self->line_two);
 
   G_OBJECT_CLASS (gd_two_lines_renderer_parent_class)->finalize (object);
 }
@@ -603,15 +604,12 @@ gd_two_lines_renderer_class_init (GdTwoLinesRendererClass *klass)
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_type_class_add_private (klass, sizeof (GdTwoLinesRendererPrivate));
   g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
 }
 
 static void
 gd_two_lines_renderer_init (GdTwoLinesRenderer *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GD_TYPE_TWO_LINES_RENDERER,
-                                            GdTwoLinesRendererPrivate);
 }
 
 GtkCellRenderer *

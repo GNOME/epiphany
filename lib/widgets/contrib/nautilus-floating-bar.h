@@ -1,7 +1,7 @@
-
 /* Nautilus - Floating status bar.
  *
  * Copyright (C) 2011 Red Hat Inc.
+ * Copyright (C) 2018 Igalia S.L.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,40 +20,17 @@
  *
  */
 
-#ifndef __NAUTILUS_FLOATING_BAR_H__
-#define __NAUTILUS_FLOATING_BAR_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
 #define NAUTILUS_FLOATING_BAR_ACTION_ID_STOP 1
 
-#define NAUTILUS_TYPE_FLOATING_BAR nautilus_floating_bar_get_type()
-#define NAUTILUS_FLOATING_BAR(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), NAUTILUS_TYPE_FLOATING_BAR, NautilusFloatingBar))
-#define NAUTILUS_FLOATING_BAR_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST ((klass), NAUTILUS_TYPE_FLOATING_BAR, NautilusFloatingBarClass))
-#define NAUTILUS_IS_FLOATING_BAR(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), NAUTILUS_TYPE_FLOATING_BAR))
-#define NAUTILUS_IS_FLOATING_BAR_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE ((klass), NAUTILUS_TYPE_FLOATING_BAR))
-#define NAUTILUS_FLOATING_BAR_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), NAUTILUS_TYPE_FLOATING_BAR, NautilusFloatingBarClass))
+#define NAUTILUS_TYPE_FLOATING_BAR nautilus_floating_bar_get_type ()
 
-typedef struct _NautilusFloatingBar NautilusFloatingBar;
-typedef struct _NautilusFloatingBarClass NautilusFloatingBarClass;
-typedef struct _NautilusFloatingBarDetails NautilusFloatingBarDetails;
+G_DECLARE_FINAL_TYPE (NautilusFloatingBar, nautilus_floating_bar, NAUTILUS, FLOATING_BAR, GtkBox)
 
-struct _NautilusFloatingBar {
-	GtkBox parent;
-	NautilusFloatingBarDetails *priv;
-};
-
-struct _NautilusFloatingBarClass {
-	GtkBoxClass parent_class;
-};
-
-/* GObject */
-GType       nautilus_floating_bar_get_type  (void);
+G_BEGIN_DECLS
 
 GtkWidget * nautilus_floating_bar_new              (const gchar *primary_label,
 						    const gchar *details_label,
@@ -76,4 +53,4 @@ void        nautilus_floating_bar_cleanup_actions  (NautilusFloatingBar *self);
 
 void        nautilus_floating_bar_remove_hover_timeout (NautilusFloatingBar *self);
 
-#endif /* __NAUTILUS_FLOATING_BAR_H__ */
+G_END_DECLS
