@@ -382,6 +382,6 @@ ephy_embed_utils_urls_have_same_origin (const char *a_url,
 void
 ephy_embed_utils_shutdown (void)
 {
-  g_clear_pointer (&non_search_regex, (GDestroyNotify)g_regex_unref);
-  g_clear_pointer (&domain_regex, (GDestroyNotify)g_regex_unref);
+  g_clear_pointer (&non_search_regex, g_regex_unref);
+  g_clear_pointer (&domain_regex, g_regex_unref);
 }
