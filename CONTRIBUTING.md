@@ -245,11 +245,11 @@ Possible value for `EPHY_DEBUG_BREAK` variable:
 	stack		Prints a stack trace.
 
 	suspend		Use this to stop execution when a warning occurs.
-			You can then attach a debugger to the process.
+                You can then attach a debugger to the process.
 
 	trap		Use this while running epiphany in a debugger.
-			This makes execution stop and gives back control to
-			the debugger.
+                This makes execution stop and gives back control to
+                the debugger.
 ```
 
 ### Profiling
