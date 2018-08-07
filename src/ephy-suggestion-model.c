@@ -34,6 +34,7 @@ struct _EphySuggestionModel {
   EphyBookmarksManager *bookmarks_manager;
   GSequence            *items;
   GSList               *search_terms;
+  GCancellable         *icon_cancellable;
 };
 
 enum {
@@ -58,6 +59,9 @@ ephy_suggestion_model_finalize (GObject *object)
   g_clear_object (&self->bookmarks_manager);
   g_clear_object (&self->history_service);
   g_clear_pointer (&self->items, g_sequence_free);
+
+  g_cancellable_cancel (self->icon_cancellable);
+  g_clear_object (&self->icon_cancellable);
 
   g_slist_free_full (self->search_terms, (GDestroyNotify)g_regex_unref);
 
@@ -292,15 +296,28 @@ should_add_bookmark_to_model (EphySuggestionModel *self,
   return ret;
 }
 
+typedef struct {
+  EphySuggestionModel *model;
+  EphySuggestion *suggestion;
+} IconLoadHelper;
+
 static void
 icon_loaded_cb (GObject      *source,
                 GAsyncResult *result,
                 gpointer      user_data)
 {
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
-  EphySuggestion *suggestion = EPHY_SUGGESTION (user_data);
-  cairo_surface_t *favicon = webkit_favicon_database_get_favicon_finish (database, result, NULL);
+  EphySuggestion *suggestion;
+  cairo_surface_t *favicon;
+  IconLoadHelper *helper = user_data;
 
+  if (g_cancellable_is_cancelled (helper->model->icon_cancellable)) {
+    g_slice_free (IconLoadHelper, helper);
+    return;
+  }
+
+  suggestion = EPHY_SUGGESTION (helper->suggestion);
+  favicon = webkit_favicon_database_get_favicon_finish (database, result, NULL);
   if (favicon != NULL) {
     gdouble x_scale, y_scale;
     int x, y;
@@ -315,18 +332,28 @@ icon_loaded_cb (GObject      *source,
     ephy_suggestion_set_favicon (suggestion, favicon);
   }
 
-  g_object_unref (suggestion);
+  g_slice_free (IconLoadHelper, helper);
 }
 
 static void
-load_favicon (EphySuggestion *suggestion,
-              const char     *url)
+load_favicon (EphySuggestionModel *model,
+              EphySuggestion      *suggestion,
+              const char          *url)
 {
   EphyEmbedShell *shell = ephy_embed_shell_get_default ();
   WebKitWebContext *context = ephy_embed_shell_get_web_context (shell);
   WebKitFaviconDatabase *database = webkit_web_context_get_favicon_database (context);
+  IconLoadHelper *helper;
 
-  webkit_favicon_database_get_favicon (database, url, NULL, icon_loaded_cb, g_object_ref (suggestion));
+  helper = g_slice_new0 (IconLoadHelper);
+  helper->model = model;
+  helper->suggestion = suggestion;
+
+  webkit_favicon_database_get_favicon (database,
+                                       url,
+                                       model->icon_cancellable,
+                                       icon_loaded_cb,
+                                       helper);
 }
 
 static guint
@@ -353,7 +380,7 @@ add_bookmarks (EphySuggestionModel *self,
       EphySuggestion *suggestion;
 
       suggestion = ephy_suggestion_new (title, url);
-      load_favicon (suggestion, url);
+      load_favicon (self, suggestion, url);
 
       g_sequence_append (self->items, suggestion);
       added++;
@@ -375,7 +402,7 @@ add_history (EphySuggestionModel *self,
     EphySuggestion *suggestion;
 
     suggestion = ephy_suggestion_new (url->title, url->url);
-    load_favicon (suggestion, url->url);
+    load_favicon (self, suggestion, url->url);
 
     g_sequence_append (self->items, suggestion);
     added++;
@@ -403,7 +430,7 @@ add_search_engines (EphySuggestionModel *self,
 
     address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
     suggestion = ephy_suggestion_new_without_subtitle (engines[i], address);
-    load_favicon (suggestion, address);
+    load_favicon (self, suggestion, address);
 
     g_sequence_append (self->items, suggestion);
     added++;
@@ -437,6 +464,11 @@ query_completed_cb (EphyHistoryService *service,
 
   g_clear_pointer (&self->items, g_sequence_free);
   self->items = g_sequence_new (g_object_unref);
+
+  g_cancellable_cancel (self->icon_cancellable);
+  g_clear_object (&self->icon_cancellable);
+
+  self->icon_cancellable = g_cancellable_new ();
 
   if (strlen (query) > 0) {
     added = add_bookmarks (self, query);
