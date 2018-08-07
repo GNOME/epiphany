@@ -83,7 +83,7 @@ hogweed_dep = dependency('hogweed', version: nettle_requirement)
 icu_uc_dep = dependency('icu-uc', version: '>= 4.6')
 iso_codes_dep = dependency('iso-codes', version: '>= 0.35')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.4')
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.29.4', fallback : ['libdazzle', 'libdazzle_dep'])
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.29.4', required: false)
 libnotify_dep = dependency('libnotify', version: '>= 0.5.1')
 libsecret_dep = dependency('libsecret-1', version: '>= 0.14')
 libsoup_dep = dependency('libsoup-2.4', version: '>= 2.48.0')
@@ -93,6 +93,13 @@ nettle_dep = dependency('nettle', version: nettle_requirement)
 sqlite3_dep = dependency('sqlite3', version: '>= 3.0')
 webkit2gtk_dep = dependency('webkit2gtk-4.0', version: webkitgtk_requirement)
 webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', version: webkitgtk_requirement)
+
+# Ubuntu 18.04 has libdazzle 3.28, the max we can require from the system, but
+# we need 3.30, so bundle it if the system copy is too old.
+if not libdazzle_dep.found()
+  libdazzle_sub = subproject('libdazzle', default_options: ['package_subdir=epiphany'])
+  libdazzle_dep = libdazzle_sub.get_variable('libdazzle_dep')
+endif
 
 cc = meson.get_compiler('c')
 gmp_dep = cc.find_library('gmp')
