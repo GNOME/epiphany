@@ -1131,10 +1131,10 @@ process_terminated_cb (EphyWebView                       *web_view,
 {
   switch (reason) {
   case WEBKIT_WEB_PROCESS_CRASHED:
-    g_critical (_("Web process crashed"));
+    g_warning (_("Web process crashed"));
     break;
   case WEBKIT_WEB_PROCESS_EXCEEDED_MEMORY_LIMIT:
-    g_critical (_("Web process terminated due to exceeding memory limit"));
+    g_warning (_("Web process terminated due to exceeding memory limit"));
     break;
   }
 
