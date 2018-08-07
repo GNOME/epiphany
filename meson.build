@@ -96,8 +96,10 @@ webkit2gtk_web_extension_dep = dependency('webkit2gtk-web-extension-4.0', versio
 # Ubuntu 18.04 has libdazzle 3.28, the max we can require from the system, but
 # we need 3.30, so bundle it if the system copy is too old.
 if not libdazzle_dep.found()
-  libdazzle_sub = subproject('libdazzle', default_options: ['package_subdir=epiphany'])
-  libdazzle_dep = libdazzle_sub.get_variable('libdazzle_dep')
+  libdazzle_dep = subproject('libdazzle', default_options: ['package_subdir=epiphany',
+                                                            'enable_tools=false',
+                                                            'with_introspection=false',
+                                                            'with_vapi=false']).get_variable('libdazzle_dep')
 endif
 
 cc = meson.get_compiler('c')
