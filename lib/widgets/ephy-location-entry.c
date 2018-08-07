@@ -230,10 +230,16 @@ ephy_location_entry_title_widget_set_security_level (EphyTitleWidget   *widget,
 
   g_assert (entry);
 
-  icon_name = ephy_security_level_to_icon_name (security_level);
-  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry->url_entry),
-                                     GTK_ENTRY_ICON_PRIMARY,
-                                     icon_name);
+  if (!entry->reader_mode_active) {
+    icon_name = ephy_security_level_to_icon_name (security_level);
+    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry->url_entry),
+                                       GTK_ENTRY_ICON_PRIMARY,
+                                       icon_name);
+  } else {
+    gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry->url_entry),
+                                       GTK_ENTRY_ICON_PRIMARY,
+                                       NULL);
+  }
 
   entry->security_level = security_level;
 }
