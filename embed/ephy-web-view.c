@@ -1125,13 +1125,23 @@ mouse_target_changed_cb (EphyWebView         *web_view,
 }
 
 static void
-process_crashed_cb (EphyWebView *web_view, gpointer user_data)
+process_terminated_cb (EphyWebView                       *web_view,
+                       WebKitWebProcessTerminationReason  reason,
+                       gpointer                           user_data)
 {
-  if (ephy_embed_has_load_pending (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view)))
-    return;
+  switch (reason) {
+  case WEBKIT_WEB_PROCESS_CRASHED:
+    g_critical (_("Web process crashed"));
+    break;
+  case WEBKIT_WEB_PROCESS_EXCEEDED_MEMORY_LIMIT:
+    g_critical (_("Web process terminated due to exceeding memory limit"));
+    break;
+  }
 
-  ephy_web_view_load_error_page (web_view, ephy_web_view_get_address (web_view),
-                                 EPHY_WEB_VIEW_ERROR_PROCESS_CRASH, NULL, NULL);
+  if (!ephy_embed_has_load_pending (EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view))) {
+    ephy_web_view_load_error_page (web_view, ephy_web_view_get_address (web_view),
+                                   EPHY_WEB_VIEW_ERROR_PROCESS_CRASH, NULL, NULL);
+  }
 }
 
 static void
@@ -1143,8 +1153,8 @@ ephy_web_view_constructed (GObject *object)
 
   g_signal_emit_by_name (ephy_embed_shell_get_default (), "web-view-created", web_view);
 
-  g_signal_connect (web_view, "web-process-crashed",
-                    G_CALLBACK (process_crashed_cb), NULL);
+  g_signal_connect (web_view, "web-process-terminated",
+                    G_CALLBACK (process_terminated_cb), NULL);
   g_signal_connect_swapped (webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (web_view)),
                             "changed", G_CALLBACK (update_navigation_flags), web_view);
 }
