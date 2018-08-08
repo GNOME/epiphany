@@ -2726,6 +2726,49 @@ script_dialog_cb (WebKitWebView      *web_view,
   return TRUE;
 }
 
+static const char *
+enum_nick (GType enum_type,
+           int   value)
+{
+    GEnumClass *enum_class;
+    const GEnumValue *enum_value;
+    const char *nick = NULL;
+
+    enum_class = g_type_class_ref (enum_type);
+    enum_value = g_enum_get_value (enum_class, value);
+    if (enum_value)
+        nick = enum_value->value_nick;
+
+    g_type_class_unref (enum_class);
+    return nick;
+}
+
+static void
+reader_setting_changed_cb (GSettings   *settings,
+                           gchar       *key,
+                           EphyWebView *web_view)
+{
+  const gchar *font_style;
+  const gchar *color_scheme;
+  gchar *js_snippet;
+
+  if (!web_view->reader_active)
+    return;
+
+  font_style = enum_nick (EPHY_TYPE_PREFS_READER_FONT_STYLE,
+                          g_settings_get_enum (settings,
+                                               EPHY_PREFS_READER_FONT_STYLE));
+  color_scheme = enum_nick (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
+                            g_settings_get_enum (settings,
+                                                 EPHY_PREFS_READER_COLOR_SCHEME));
+
+  js_snippet = g_strdup_printf ("document.body.className = '%s %s'",
+                                font_style,
+                                color_scheme);
+  webkit_web_view_run_javascript (WEBKIT_WEB_VIEW (web_view), js_snippet, NULL, NULL, NULL);
+  g_free (js_snippet);
+}
+
 static void
 ephy_web_view_init (EphyWebView *web_view)
 {
@@ -2738,6 +2781,14 @@ ephy_web_view_init (EphyWebView *web_view)
 
   web_view->history_service = ephy_embed_shell_get_global_history_service (ephy_embed_shell_get_default ());
   web_view->history_service_cancellable = g_cancellable_new ();
+
+  g_signal_connect (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_FONT_STYLE,
+                    G_CALLBACK (reader_setting_changed_cb),
+                    web_view);
+
+  g_signal_connect (EPHY_SETTINGS_READER, "changed::" EPHY_PREFS_READER_COLOR_SCHEME,
+                    G_CALLBACK (reader_setting_changed_cb),
+                    web_view);
 
   g_signal_connect (web_view, "decide-policy",
                     G_CALLBACK (decide_policy_cb),
@@ -3661,24 +3712,6 @@ ephy_web_view_set_visit_type (EphyWebView *view, EphyHistoryPageVisitType visit_
   g_assert (EPHY_IS_WEB_VIEW (view));
 
   view->visit_type = visit_type;
-}
-
-
-static const char *
-enum_nick (GType enum_type,
-           int   value)
-{
-    GEnumClass *enum_class;
-    const GEnumValue *enum_value;
-    const char *nick = NULL;
-
-    enum_class = g_type_class_ref (enum_type);
-    enum_value = g_enum_get_value (enum_class, value);
-    if (enum_value)
-        nick = enum_value->value_nick;
-
-    g_type_class_unref (enum_class);
-    return nick;
 }
 
 
