@@ -740,6 +740,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   /* URL entry */
   entry->url_entry = dzl_suggestion_entry_new ();
+  dzl_suggestion_entry_set_activate_on_single_click (DZL_SUGGESTION_ENTRY (entry->url_entry), FALSE);
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry->url_entry)), "url_entry");
   g_signal_connect (G_OBJECT (entry->url_entry), "copy-clipboard", G_CALLBACK (ephy_location_entry_copy_clipboard), NULL);
   g_signal_connect (G_OBJECT (entry->url_entry), "cut-clipboard", G_CALLBACK (ephy_location_entry_cut_clipboard), NULL);
