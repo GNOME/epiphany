@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2018-08-05 00:34+0000\n"
-"PO-Revision-Date: 2018-08-05 15:00+0300\n"
+"POT-Creation-Date: 2018-08-07 22:49+0000\n"
+"PO-Revision-Date: 2018-08-11 18:02+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -517,7 +517,6 @@ msgid "Default zoom level for new pages"
 msgstr "Numatytasis mastelis naujiems puslapiams"
 
 #: data/org.gnome.epiphany.gschema.xml:236
-#| msgid "Enable adblock"
 msgid "Enable autosearch"
 msgstr "Įjungti automatinę paiešką"
 
@@ -537,7 +536,6 @@ msgid "Web application additional URLs"
 msgstr "Internetinių programų papildomi URL"
 
 #: data/org.gnome.epiphany.gschema.xml:244
-#| msgid "List of installed web applications"
 msgid "The list of URLs that should be opened by the web application"
 msgstr "URL sąrašas, kuriuos reikia atverti žiniatinklyje"
 
@@ -1384,57 +1382,65 @@ msgstr ""
 "Įspėjame: ši forma nėra saugi. Jei įvesite savo slaptažodį, jo privatumas "
 "nebus užtikrintas."
 
-#: embed/ephy-web-view.c:1536
+#: embed/ephy-web-view.c:1134
+msgid "Web process crashed"
+msgstr "Žiniatinklio procesas nulūžo"
+
+#: embed/ephy-web-view.c:1137
+msgid "Web process terminated due to exceeding memory limit"
+msgstr "Žiniatinklio procesas baigė darbą, nes nepakako atminties"
+
+#: embed/ephy-web-view.c:1546
 msgid "Deny"
 msgstr "Drausti"
 
-#: embed/ephy-web-view.c:1537
+#: embed/ephy-web-view.c:1547
 msgid "Allow"
 msgstr "Leisti"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1554
+#: embed/ephy-web-view.c:1564
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Tinklalapis %s nori rodyti darbalaukio pranešimus."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1559
+#: embed/ephy-web-view.c:1569
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Tinklalapis %s nori žinotų jūsų buvimo vietą."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1564
+#: embed/ephy-web-view.c:1574
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Tinklalapis %s nori naudoti mikrofoną."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1569
+#: embed/ephy-web-view.c:1579
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Tinklalapis %s nori naudoti kamerą."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1748
+#: embed/ephy-web-view.c:1758
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Įkeliama „%s“…"
 
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1760
 msgid "Loading…"
 msgstr "Įkeliama…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:2036
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Šis tinklalapis pateikė identifikaciją, kuri priklauso kitam tinklalapiui."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2031
+#: embed/ephy-web-view.c:2041
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1443,19 +1449,19 @@ msgstr ""
 "savo kompiuterio datą."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2036
+#: embed/ephy-web-view.c:2046
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Šio tinklalapio identifikacijos neišdavė patikima organizacija."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2041
+#: embed/ephy-web-view.c:2051
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 "Šio tinklalapio identifikacijos nepavyko apdoroti. Ji gali būti sugadinta."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2046
+#: embed/ephy-web-view.c:2056
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1463,7 +1469,7 @@ msgstr ""
 "Šio tinklalapio identifikacija buvo atšaukta ją išdavusios organizacijos."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2051
+#: embed/ephy-web-view.c:2061
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1472,7 +1478,7 @@ msgstr ""
 "šifravimą."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2056
+#: embed/ephy-web-view.c:2066
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1482,24 +1488,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2119 embed/ephy-web-view.c:2175
+#: embed/ephy-web-view.c:2129 embed/ephy-web-view.c:2185
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problema įkeliant puslapį"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2122
+#: embed/ephy-web-view.c:2132
 msgid "Unable to display this website"
 msgstr "Nepavyko parodyti šio tinklalapio"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2126
+#: embed/ephy-web-view.c:2136
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Tinklalapis %s atrodo yra nepasiekiamas."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2130
+#: embed/ephy-web-view.c:2140
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1508,7 +1514,7 @@ msgstr ""
 "Nepamirškite patikrinti, ar jūsų interneto ryšys veikia gerai."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2140
+#: embed/ephy-web-view.c:2150
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Tiksli klaida buvo: %s"
@@ -1516,69 +1522,69 @@ msgstr "Tiksli klaida buvo: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2145 embed/ephy-web-view.c:2198
-#: embed/ephy-web-view.c:2241
+#: embed/ephy-web-view.c:2155 embed/ephy-web-view.c:2208
+#: embed/ephy-web-view.c:2251
 msgid "Reload"
 msgstr "Įkelti iš naujo"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2148 embed/ephy-web-view.c:2201
-#: embed/ephy-web-view.c:2244
+#: embed/ephy-web-view.c:2158 embed/ephy-web-view.c:2211
+#: embed/ephy-web-view.c:2254
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2178
+#: embed/ephy-web-view.c:2188
 msgid "Oops! There may be a problem"
 msgstr "Oi! Atrodo yra problema"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2182
+#: embed/ephy-web-view.c:2192
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Gali būti, kad Žiniatinklis nustojo veikti dėl tinklalapio %s."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2189
+#: embed/ephy-web-view.c:2199
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Jei taip nutiks dar kartą, praneškite apie klaidą %s kūrėjams."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2227
+#: embed/ephy-web-view.c:2237
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Kilo problema parodant puslapį"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2230
+#: embed/ephy-web-view.c:2240
 msgid "Oops!"
 msgstr "Oi!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2233
+#: embed/ephy-web-view.c:2243
 msgid "Something went wrong while displaying this page."
 msgstr "Bandant parodyti šį puslapį atsitiko kažkas negero."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2235
+#: embed/ephy-web-view.c:2245
 msgid "Please reload or visit a different page to continue."
 msgstr "Įkelkite iš naujo arba aplankykite kitą tinklalapį, jei norite tęsti."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2270
+#: embed/ephy-web-view.c:2280
 #, c-format
 msgid "Security Violation"
 msgstr "Saugumo pažeidimas"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2273
+#: embed/ephy-web-view.c:2283
 msgid "This Connection is Not Secure"
 msgstr "Šis ryšys yra nesaugus"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2277
+#: embed/ephy-web-view.c:2287
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1589,42 +1595,42 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2287 embed/ephy-web-view.c:2376
+#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
 msgid "Go Back"
 msgstr "Grįžti atgal"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2290 embed/ephy-web-view.c:2379
+#: embed/ephy-web-view.c:2300 embed/ephy-web-view.c:2389
 msgctxt "back-access-key"
 msgid "B"
 msgstr "G"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2293 embed/ephy-web-view.c:2382
+#: embed/ephy-web-view.c:2303 embed/ephy-web-view.c:2392
 msgid "Accept Risk and Proceed"
 msgstr "Rizikuoti ir tęsti"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
+#: embed/ephy-web-view.c:2307 embed/ephy-web-view.c:2396
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "T"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2327
+#: embed/ephy-web-view.c:2337
 #, c-format
 msgid "Security Warning"
 msgstr "Saugumo įspėjimas"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2330
+#: embed/ephy-web-view.c:2340
 msgid "Unsafe website detected!"
 msgstr "Aptiktas nesaugus tinklalapis!"
 
-#: embed/ephy-web-view.c:2337
+#: embed/ephy-web-view.c:2347
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1633,7 +1639,7 @@ msgstr ""
 "Apsilankymas %s gali užkrėsti jūsų kompiuterį. Atrodo šis puslapis turi "
 "kenksmingo kodo, kuris gali būti parsiųstas be jūsų sutikimo."
 
-#: embed/ephy-web-view.c:2341
+#: embed/ephy-web-view.c:2351
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1642,7 +1648,7 @@ msgstr ""
 "Galite sužinoti daugiau apie kenksmingą interneto turinį, įskaitant virusus "
 "bei kitą kenksmingą kodą bei kaip apsaugoti jūsų kompiuterį %s."
 
-#: embed/ephy-web-view.c:2348
+#: embed/ephy-web-view.c:2358
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1653,14 +1659,14 @@ msgstr ""
 "įdiegtumėte programinę įrangą arba atskleistumėte asmeninę informaciją "
 "(slaptažodžius, telefonų numerius ar kredito kortelių informaciją)."
 
-#: embed/ephy-web-view.c:2353
+#: embed/ephy-web-view.c:2363
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
 "Galite sužinoti daugiau apie socialinę inžineriją (apgaulę) %s arba iš %s."
 
-#: embed/ephy-web-view.c:2362
+#: embed/ephy-web-view.c:2372
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1671,20 +1677,20 @@ msgstr ""
 "įdiegtumėte programas, galinčias pakenkti jūsų naršymui (pvz. pakeisti namų "
 "puslapį arba parodyti papildomų reklamų jūsų lankomuose tinklalapiuose)."
 
-#: embed/ephy-web-view.c:2367
+#: embed/ephy-web-view.c:2377
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Daugiau apie nepageidaujamą programinę įrangą galite sužinoti %s."
 
-#: embed/ephy-web-view.c:2442
+#: embed/ephy-web-view.c:2452
 msgid "None specified"
 msgstr "Joks nenurodytas"
 
-#: embed/ephy-web-view.c:2547
+#: embed/ephy-web-view.c:2557
 msgid "Technical information"
 msgstr "Techninė informacija"
 
-#: embed/ephy-web-view.c:3427
+#: embed/ephy-web-view.c:3437
 msgid "_OK"
 msgstr "_Gerai"
 
@@ -2193,7 +2199,7 @@ msgstr "Įkelti nurodytą seanso failą"
 msgid "Add a bookmark"
 msgstr "Pridėti gairę"
 
-#: src/ephy-main.c:121 src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#: src/ephy-main.c:121
 msgid "URL"
 msgstr "URL"
 
@@ -2438,7 +2444,6 @@ msgid "Something went wrong, please try again later."
 msgstr "Atsitiko kažkas negero, bandykite dar kartą."
 
 #: src/prefs-dialog.c:826
-#| msgid "Create Web Application"
 msgid "Web Application Icon"
 msgstr "Internetinės programos piktograma"
 
@@ -2789,32 +2794,38 @@ msgid "_Close"
 msgstr "_Užverti"
 
 #: src/resources/gtk/page-menu-popover.ui:21
-#: src/resources/gtk/page-menu-popover.ui:22
 msgid "Zoom Out"
 msgstr "Mažinti"
+
+#: src/resources/gtk/page-menu-popover.ui:22
+#| msgid "Zoom Out"
+msgctxt "tooltip"
+msgid "Zoom Out"
+msgstr "Sumažinti"
 
 #: src/resources/gtk/page-menu-popover.ui:38
 msgid "Restore Zoom"
 msgstr "Atstatyti mastelį"
 
 #: src/resources/gtk/page-menu-popover.ui:53
-#: src/resources/gtk/page-menu-popover.ui:54
 msgid "Zoom In"
 msgstr "Didinti"
 
+#: src/resources/gtk/page-menu-popover.ui:54
+#| msgid "Zoom In"
+msgctxt "tooltip"
+msgid "Zoom In"
+msgstr "Padidinti"
+
 #: src/resources/gtk/page-menu-popover.ui:78
-#| msgid "_Print…"
 msgid "Print…"
 msgstr "Spausdinti…"
 
 #: src/resources/gtk/page-menu-popover.ui:93
-#| msgid "_Find…"
 msgid "Find…"
 msgstr "Rasti…"
 
 #: src/resources/gtk/page-menu-popover.ui:108
-#| msgctxt "shortcut window"
-#| msgid "Fullscreen"
 msgid "Fullscreen"
 msgstr "Visame ekrane"
 
@@ -2888,7 +2899,6 @@ msgid "_Custom:"
 msgstr "_Pasirinktinis"
 
 #: src/resources/gtk/prefs-dialog.ui:114
-#| msgid "Applications"
 msgid "Web Application"
 msgstr "Internetinė programa"
 
@@ -2897,12 +2907,10 @@ msgid "_Manage Additional URLs"
 msgstr "_Tvarkyti papildomus URL"
 
 #: src/resources/gtk/prefs-dialog.ui:157
-#| msgid "Homepage"
 msgid "Homepage:"
 msgstr "Namų tinklalapis:"
 
 #: src/resources/gtk/prefs-dialog.ui:179
-#| msgid "_Title:"
 msgid "Title:"
 msgstr "Antraštė:"
 
@@ -3425,12 +3433,17 @@ msgstr ""
 "programoje. Jei praleisite URL schemą, bus naudojama schema iš šiuo metu "
 "įkelto URL."
 
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#| msgid "URL"
+msgctxt "Column header in the Additional URLs dialog"
+msgid "URL"
+msgstr "URL"
+
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:124
 msgid "Add new URL"
 msgstr "Pridėti naują URL"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:137
-#| msgid "Remove the selected pages from history"
 msgid "Remove the selected URLs"
 msgstr "Pašalinti pasirinktus URL"
 
