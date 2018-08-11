@@ -36,10 +36,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany master\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2018-03-03 17:32+0000\n"
-"PO-Revision-Date: 2018-03-11 10:23+0100\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
+"POT-Creation-Date: 2018-08-10 18:47+0000\n"
+"PO-Revision-Date: 2018-08-11 12:27+0200\n"
 "Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
 "Language-Team: français <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -47,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.1\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
 msgid "GNOME Web"
@@ -81,9 +80,9 @@ msgstr "Le site de GNOME affiché dans GNOME Web"
 msgid "The GNOME Project"
 msgstr "Le projet GNOME"
 
-#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:296
-#: embed/ephy-about-handler.c:327 src/ephy-main.c:103 src/ephy-main.c:275
-#: src/ephy-main.c:417 src/window-commands.c:651
+#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:189
+#: embed/ephy-about-handler.c:223 src/ephy-main.c:103 src/ephy-main.c:275
+#: src/ephy-main.c:417 src/window-commands.c:652
 msgid "Web"
 msgstr "Web"
 
@@ -169,7 +168,7 @@ msgstr ""
 "raccourci."
 
 #: data/org.gnome.epiphany.gschema.xml:42
-#: data/org.gnome.epiphany.gschema.xml:202
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid "User agent"
 msgstr "Agent utilisateur"
 
@@ -184,35 +183,22 @@ msgstr ""
 "et ignorée. À la place, utilisez /org/gnome/epiphany/web/user-agent."
 
 #: data/org.gnome.epiphany.gschema.xml:51
-msgid "Automatic downloads"
-msgstr "Téléchargements automatiques"
-
-#: data/org.gnome.epiphany.gschema.xml:52
-msgid ""
-"When files cannot be opened by the browser they are automatically downloaded "
-"to the download folder and opened with the appropriate application."
-msgstr ""
-"Quand des fichiers ne peuvent pas être ouverts dans le navigateur, ils sont "
-"automatiquement téléchargés dans le dossier des téléchargements puis ouverts "
-"avec l’application appropriée."
-
-#: data/org.gnome.epiphany.gschema.xml:56
 msgid "Force new windows to be opened in tabs"
 msgstr "Imposer l’ouverture des nouvelles fenêtres dans un nouvel onglet"
 
-#: data/org.gnome.epiphany.gschema.xml:57
+#: data/org.gnome.epiphany.gschema.xml:52
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr ""
 "Imposer l’ouverture des nouvelles fenêtres dans un nouvel onglet au lieu "
 "d’utiliser une nouvelle fenêtre."
 
-#: data/org.gnome.epiphany.gschema.xml:61
-#: data/org.gnome.epiphany.gschema.xml:217
+#: data/org.gnome.epiphany.gschema.xml:56
+#: data/org.gnome.epiphany.gschema.xml:212
 msgid "Remember passwords"
 msgstr "Mémoriser les mots de passe"
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid ""
 "Whether to store and prefill passwords in websites. DEPRECATED: This key is "
 "deprecated and ignored. Use /org/gnome/epiphany/web/remember-passwords "
@@ -222,12 +208,12 @@ msgstr ""
 "Web. OBSOLÈTE : cette clé est obsolète et ignorée. À la place, utilisez /org/"
 "gnome/epiphany/web/remember-passwords."
 
-#: data/org.gnome.epiphany.gschema.xml:73
-#: data/org.gnome.epiphany.gschema.xml:197
+#: data/org.gnome.epiphany.gschema.xml:68
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid "Enable smooth scrolling"
 msgstr "Activer le défilement doux"
 
-#: data/org.gnome.epiphany.gschema.xml:74
+#: data/org.gnome.epiphany.gschema.xml:69
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/web/"
 "enable-smooth-scrolling instead."
@@ -235,17 +221,17 @@ msgstr ""
 "OBSOLÈTE : cette clé est obsolète et ignorée. À la place, utilisez /org/"
 "gnome/epiphany/web/enable-smooth-scrolling."
 
-#: data/org.gnome.epiphany.gschema.xml:80
+#: data/org.gnome.epiphany.gschema.xml:75
 msgid "Don’t use an external application to view page source."
 msgstr ""
 "Ne pas utiliser de programme externe pour visualiser le code source des "
 "pages."
 
-#: data/org.gnome.epiphany.gschema.xml:84
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid "Whether to automatically restore the last session"
 msgstr "Indique s’il faut restaurer automatiquement la dernière session"
 
-#: data/org.gnome.epiphany.gschema.xml:85
+#: data/org.gnome.epiphany.gschema.xml:80
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored), "
@@ -257,7 +243,7 @@ msgstr ""
 "« crashed » (la session est restaurée seulement si l’application s’est "
 "arrêtée brutalement), « never » (la page d’accueil est toujours affichée)."
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
@@ -265,7 +251,7 @@ msgstr ""
 "Définit s’il faut retarder le chargement des onglets qui ne sont pas "
 "immédiatement visibles à la restauration de la session"
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:85
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -274,11 +260,11 @@ msgstr ""
 "« true » (vrai), les onglets ne commencent pas à se charger tant que "
 "l’utilisateur ne les ouvre pas."
 
-#: data/org.gnome.epiphany.gschema.xml:94
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "Process model"
 msgstr "Modèle de processus"
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:90
 msgid ""
 "This option allows to set the process model used. Use “shared-secondary-"
 "process” to use a single web process shared by all the tabs and “one-"
@@ -289,7 +275,7 @@ msgstr ""
 "onglets et « one-secondary-process-per-web-view » utilise un processus "
 "différent pour chaque onglet."
 
-#: data/org.gnome.epiphany.gschema.xml:99
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid ""
 "Maximum number of web processes created at the same time when using “one-"
 "secondary-process-per-web-view” model"
@@ -297,7 +283,7 @@ msgstr ""
 "Nombre maximum de processus web créés au même moment lors de l’utilisation "
 "du modèle « one-secondary-process-per-web-view »"
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid ""
 "This option sets a limit to the number of web processes that will be used at "
 "the same time for the “one-secondary-process-per-web-view” model. The "
@@ -308,23 +294,23 @@ msgstr ""
 "process-per-web-view ». La valeur par défaut est « 0 », ce qui signifie une "
 "absence de limites."
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "List of adblock filters"
 msgstr "Liste des filtres anti-publicités."
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid "List of URLs with filter rules to be used by the adblock."
 msgstr ""
 "Liste des URL avec des règles de filtrage à l’usage des logiciels anti-"
 "publicités."
 
-#: data/org.gnome.epiphany.gschema.xml:112
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "Étendre la taille des onglets afin de remplir l’espace disponible dans la "
 "barre d’onglets."
 
-#: data/org.gnome.epiphany.gschema.xml:113
+#: data/org.gnome.epiphany.gschema.xml:108
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar."
@@ -332,11 +318,11 @@ msgstr ""
 "Si activé, les onglets seront étendus afin d’utiliser la totalité de "
 "l’espace disponible dans la barre d’onglets."
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "The position of the tabs bar."
 msgstr "La position de la barre d’onglets."
 
-#: data/org.gnome.epiphany.gschema.xml:118
+#: data/org.gnome.epiphany.gschema.xml:113
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -347,11 +333,11 @@ msgstr ""
 "verticaux avec la barre sur la gauche) et « right » (onglets verticaux avec "
 "la barre sur la droite)."
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "The visibility policy for the tabs bar."
 msgstr "La politique de visibilité de la barre des onglets."
 
-#: data/org.gnome.epiphany.gschema.xml:123
+#: data/org.gnome.epiphany.gschema.xml:118
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -362,23 +348,23 @@ msgstr ""
 "than-one » (la barre est affichée uniquement s’il y a deux onglets ou plus), "
 "« never » (la barre n’est jamais affichée)."
 
-#: data/org.gnome.epiphany.gschema.xml:129
+#: data/org.gnome.epiphany.gschema.xml:124
 msgid "Minimum font size"
 msgstr "Taille minimale de la police"
 
-#: data/org.gnome.epiphany.gschema.xml:133
+#: data/org.gnome.epiphany.gschema.xml:128
 msgid "Use GNOME fonts"
 msgstr "Utiliser les polices de GNOME"
 
-#: data/org.gnome.epiphany.gschema.xml:134
+#: data/org.gnome.epiphany.gschema.xml:129
 msgid "Use GNOME font settings."
 msgstr "Utilise les paramètres des polices de GNOME."
 
-#: data/org.gnome.epiphany.gschema.xml:138
+#: data/org.gnome.epiphany.gschema.xml:133
 msgid "Custom sans-serif font"
 msgstr "Police sans serif personnalisée"
 
-#: data/org.gnome.epiphany.gschema.xml:139
+#: data/org.gnome.epiphany.gschema.xml:134
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -386,11 +372,11 @@ msgstr ""
 "Une valeur à utiliser pour remplacer la police sans serif du bureau lorsque "
 "« use-gnome-fonts » est activée."
 
-#: data/org.gnome.epiphany.gschema.xml:143
+#: data/org.gnome.epiphany.gschema.xml:138
 msgid "Custom serif font"
 msgstr "Police avec serif personnalisée"
 
-#: data/org.gnome.epiphany.gschema.xml:144
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -398,11 +384,11 @@ msgstr ""
 "Une valeur à utiliser pour remplacer la police avec serif du bureau lorsque "
 "« use-gnome-fonts » est activée."
 
-#: data/org.gnome.epiphany.gschema.xml:148
+#: data/org.gnome.epiphany.gschema.xml:143
 msgid "Custom monospace font"
 msgstr "Police à largeur fixe personnalisée"
 
-#: data/org.gnome.epiphany.gschema.xml:149
+#: data/org.gnome.epiphany.gschema.xml:144
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -410,52 +396,52 @@ msgstr ""
 "Une valeur à utiliser pour remplacer la police à largeur fixe du bureau "
 "lorsque « use-gnome-fonts » est activée."
 
-#: data/org.gnome.epiphany.gschema.xml:153
+#: data/org.gnome.epiphany.gschema.xml:148
 msgid "Use a custom CSS"
 msgstr "Utiliser un style CSS personnalisé"
 
-#: data/org.gnome.epiphany.gschema.xml:154
+#: data/org.gnome.epiphany.gschema.xml:149
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr ""
 "Utiliser un style CSS personnalisé pour modifier le style CSS propre des "
 "sites Web."
 
-#: data/org.gnome.epiphany.gschema.xml:158
+#: data/org.gnome.epiphany.gschema.xml:153
 msgid "Enable spell checking"
 msgstr "Activer la vérification orthographique"
 
-#: data/org.gnome.epiphany.gschema.xml:159
+#: data/org.gnome.epiphany.gschema.xml:154
 msgid "Spell check any text typed in editable areas."
 msgstr "Vérifier l’orthographe des textes saisis dans les zones de saisie."
 
-#: data/org.gnome.epiphany.gschema.xml:163
+#: data/org.gnome.epiphany.gschema.xml:158
 msgid "Default encoding"
 msgstr "Encodage par défaut"
 
-#: data/org.gnome.epiphany.gschema.xml:164
+#: data/org.gnome.epiphany.gschema.xml:159
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Encodage par défaut. Les valeurs autorisées sont celles que WebKitGTK+ "
 "comprend."
 
-#: data/org.gnome.epiphany.gschema.xml:168
-#: src/resources/gtk/prefs-dialog.ui:666
+#: data/org.gnome.epiphany.gschema.xml:163
+#: src/resources/gtk/prefs-dialog.ui:752
 msgid "Languages"
 msgstr "Langues"
 
-#: data/org.gnome.epiphany.gschema.xml:169
+#: data/org.gnome.epiphany.gschema.xml:164
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Langues préférées. Un tableau des codes des locales ou « system » pour "
 "utiliser la locale courante."
 
-#: data/org.gnome.epiphany.gschema.xml:173
+#: data/org.gnome.epiphany.gschema.xml:168
 msgid "Cookie accept"
 msgstr "Cookie accepté"
 
-#: data/org.gnome.epiphany.gschema.xml:174
+#: data/org.gnome.epiphany.gschema.xml:169
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -463,42 +449,42 @@ msgstr ""
 "Acceptation des cookies. Les valeurs autorisées sont : « toujours », « sauf "
 "les cookies tiers » et « jamais »."
 
-#: data/org.gnome.epiphany.gschema.xml:178
+#: data/org.gnome.epiphany.gschema.xml:173
 msgid "Allow popups"
 msgstr "Autoriser les fenêtres surgissantes"
 
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:174
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Autoriser les sites à ouvrir des nouvelles fenêtres en utilisant le "
 "JavaScript (si le JavaScript est activé)."
 
-#: data/org.gnome.epiphany.gschema.xml:183
+#: data/org.gnome.epiphany.gschema.xml:178
 msgid "Enable Plugins"
 msgstr "Activer les greffons"
 
-#: data/org.gnome.epiphany.gschema.xml:187
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid "Enable WebGL"
 msgstr "Activer le WebGL"
 
-#: data/org.gnome.epiphany.gschema.xml:188
+#: data/org.gnome.epiphany.gschema.xml:183
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Indique si la prise en charge des contextes WebGL est activée."
 
-#: data/org.gnome.epiphany.gschema.xml:192
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid "Enable WebAudio"
 msgstr "Activer le WebAudio"
 
-#: data/org.gnome.epiphany.gschema.xml:193
+#: data/org.gnome.epiphany.gschema.xml:188
 msgid "Whether to enable support for WebAudio."
 msgstr "Indique si la prise en charge du WebAudio est activée."
 
-#: data/org.gnome.epiphany.gschema.xml:198
+#: data/org.gnome.epiphany.gschema.xml:193
 msgid "Whether to enable smooth scrolling."
 msgstr "Indique s’il faut activer le défilement doux."
 
-#: data/org.gnome.epiphany.gschema.xml:203
+#: data/org.gnome.epiphany.gschema.xml:198
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -506,43 +492,43 @@ msgstr ""
 "Chaîne de caractères utilisée comme agent utilisateur afin que les serveurs "
 "Web puissent identifier le navigateur."
 
-#: data/org.gnome.epiphany.gschema.xml:207
+#: data/org.gnome.epiphany.gschema.xml:202
 msgid "Do Not Track"
 msgstr "Ne pas pister"
 
-#: data/org.gnome.epiphany.gschema.xml:208
+#: data/org.gnome.epiphany.gschema.xml:203
 msgid ""
 "Enables DNT headers and tracking query parameter removal. Note that when "
 "changing this setting from the preferences dialog, the adblock-filters "
 "setting will additionally be updated to add/remove EasyPrivacy filters."
 msgstr ""
-"Active les en-têtes « Ne pas pister » (DNT) et la suppression des paramètres de "
-"suivi des requêtes. Notez que le changement de ce réglage depuis la boîte de "
-"dialogue des préférences provoque la mise à jour de filtres des logiciels "
+"Active les en-têtes « Ne pas pister » (DNT) et la suppression des paramètres "
+"de suivi des requêtes. Notez que le changement de ce réglage depuis la boîte "
+"de dialogue des préférences provoque la mise à jour de filtres des logiciels "
 "anti-publicités à la valeur « add/remove EasyPrivacy filters »."
 
-#: data/org.gnome.epiphany.gschema.xml:212
+#: data/org.gnome.epiphany.gschema.xml:207
 msgid "Enable adblock"
 msgstr "Activer le blocage des publicités"
 
-#: data/org.gnome.epiphany.gschema.xml:213
+#: data/org.gnome.epiphany.gschema.xml:208
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr ""
 "Indique s’il faut bloquer les publicités au sein de certaines pages Web."
 
-#: data/org.gnome.epiphany.gschema.xml:218
+#: data/org.gnome.epiphany.gschema.xml:213
 msgid "Whether to store and prefill passwords in websites."
 msgstr ""
 "Indique s’il faut enregistrer et pré-remplir les mots de passe dans les "
 "sites Web."
 
-#: data/org.gnome.epiphany.gschema.xml:222
+#: data/org.gnome.epiphany.gschema.xml:217
 msgid "Enable site-specific quirks"
 msgstr "Activer les excentricités spécifiques à un site"
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:218
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -551,11 +537,11 @@ msgstr ""
 "fonctionnent mieux. Désactivez ce paramètre si vous souhaitez déboguer un "
 "problème spécifique."
 
-#: data/org.gnome.epiphany.gschema.xml:227
+#: data/org.gnome.epiphany.gschema.xml:222
 msgid "Enable safe browsing"
 msgstr "Activer la navigation sécurisée"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:223
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
@@ -563,24 +549,49 @@ msgstr ""
 "Indique s’il faut activer la navigation sécurisée. La navigation sécurisée "
 "s’effectue via l’API « Google Safe Browsing » v4."
 
-#: data/org.gnome.epiphany.gschema.xml:232
+#: data/org.gnome.epiphany.gschema.xml:227
 msgid "Google Safe Browsing API key"
 msgstr "Clé d’API « Google Safe Browsing »"
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:228
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr ""
 "La clé d’API utilisée pour accéder à l’API « Google Safe Browsing » v4."
 
-#: data/org.gnome.epiphany.gschema.xml:237
+#: data/org.gnome.epiphany.gschema.xml:232
 msgid "Default zoom level for new pages"
 msgstr "Niveau de zoom par défaut pour les nouvelles pages"
 
+#: data/org.gnome.epiphany.gschema.xml:236
+msgid "Enable autosearch"
+msgstr "Activer la recherche automatique"
+
+#: data/org.gnome.epiphany.gschema.xml:237
+msgid ""
+"Whether to automatically search the web when something that does not look "
+"like a URL is entered in the address bar. If this setting is disabled, "
+"everything will be loaded as a URL unless a search engine is explicitly "
+"selected from the dropdown menu."
+msgstr ""
+"Indique s’il faut rechercher automatiquement sur le web lorsque quelque "
+"chose qui ne ressemble pas à un URL est renseigné dans la barre d’adresse. "
+"Si cette option est désactivée, toute recherche sera considérée comme un URL "
+"à moins qu’un moteur de recherche ne soit explicitement sélectionné dans le "
+"menu déroulant."
+
 #: data/org.gnome.epiphany.gschema.xml:243
+msgid "Web application additional URLs"
+msgstr "URL supplémentaires de l’application web"
+
+#: data/org.gnome.epiphany.gschema.xml:244
+msgid "The list of URLs that should be opened by the web application"
+msgstr "Liste des URL qui doivent être ouverts par l’application web"
+
+#: data/org.gnome.epiphany.gschema.xml:250
 msgid "The downloads folder"
 msgstr "Le dossier des téléchargements"
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:251
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -589,11 +600,11 @@ msgstr ""
 "« Téléchargements » pour utiliser le dossier de téléchargement par défaut ou "
 "« Bureau » pour utiliser le dossier du bureau."
 
-#: data/org.gnome.epiphany.gschema.xml:251
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "Window position"
 msgstr "Position de la fenêtre"
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -601,11 +612,11 @@ msgstr ""
 "La position à utiliser pour une nouvelle fenêtre qui n’est pas restaurée "
 "d’une session précédente."
 
-#: data/org.gnome.epiphany.gschema.xml:256
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid "Window size"
 msgstr "Taille de la fenêtre"
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
@@ -613,11 +624,11 @@ msgstr ""
 "La taille à utiliser pour une nouvelle fenêtre qui n’est pas restaurée d’une "
 "session précédente."
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:268
 msgid "Is maximized"
 msgstr "Est maximisée"
 
-#: data/org.gnome.epiphany.gschema.xml:262
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -625,12 +636,24 @@ msgstr ""
 "Indique si une nouvelle fenêtre qui n’est pas restaurée d’une session "
 "précédente doit être maximisée à l’ouverture."
 
-#: data/org.gnome.epiphany.gschema.xml:291
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:284
+msgid "Disable forward and back buttons"
+msgstr "Désactiver les boutons « Suivant » et « Précédent »"
+
+#: data/org.gnome.epiphany.gschema.xml:285
+msgid ""
+"If set to “true”, forward and back buttons are disabled, preventing users "
+"from accessing immediate browser history"
+msgstr ""
+"Si définit à « true » (vrai), les boutons « Suivant » et « Précédent » sont "
+"désactivés, empêchant les utilisateurs d’accéder à l’historique du navigateur"
+
+#: data/org.gnome.epiphany.gschema.xml:300
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "Currently signed in sync user"
 msgstr "Utilisateur actuellement connecté pour la synchronisation"
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:301
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -638,48 +661,48 @@ msgstr ""
 "L’adresse de courriel liée au compte Firefox utilisée pour synchroniser les "
 "données avec les serveurs de Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:296
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:305
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "Last sync timestamp"
 msgstr "Horodatage de la dernière synchronisation"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:306
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "L’horodatage UNIX de la dernière synchronisation en secondes."
 
-#: data/org.gnome.epiphany.gschema.xml:301
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:310
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "Sync device ID"
 msgstr "Identifiant de périphérique synchronisé"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:311
 msgid "The sync device ID of the current device."
 msgstr "L’identifiant de synchronisation du périphérique actuel."
 
-#: data/org.gnome.epiphany.gschema.xml:306
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:315
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "Sync device name"
 msgstr "Nom de périphérique synchronisé"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:316
 msgid "The sync device name of the current device."
 msgstr "Le nom de synchronisation du périphérique actuel."
 
-#: data/org.gnome.epiphany.gschema.xml:311
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:320
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "The sync frequency in minutes"
 msgstr "La fréquence de synchro en minutes"
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Le nombre de minutes entre deux synchronisations consécutives."
 
-#: data/org.gnome.epiphany.gschema.xml:316
-#: data/org.gnome.epiphany.gschema.xml:403
+#: data/org.gnome.epiphany.gschema.xml:325
+#: data/org.gnome.epiphany.gschema.xml:412
 msgid "Sync data with Firefox"
 msgstr "Synchroniser les données avec Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -687,36 +710,36 @@ msgstr ""
 "TRUE (vrai) si les collections Ephy doivent être synchronisées avec celles "
 "de Firefox, FALSE (faux) sinon."
 
-#: data/org.gnome.epiphany.gschema.xml:321
-#: data/org.gnome.epiphany.gschema.xml:408
+#: data/org.gnome.epiphany.gschema.xml:330
+#: data/org.gnome.epiphany.gschema.xml:417
 msgid "Enable bookmarks sync"
 msgstr "Activer la synchronisation des signets"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:331
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (vrai) si la collection de signets doit être synchronisée, FALSE (faux) "
 "sinon."
 
-#: data/org.gnome.epiphany.gschema.xml:326
-#: data/org.gnome.epiphany.gschema.xml:413
+#: data/org.gnome.epiphany.gschema.xml:335
+#: data/org.gnome.epiphany.gschema.xml:422
 msgid "Bookmarks sync timestamp"
 msgstr "Horodatage de synchronisation des signets"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:336
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "L’horodatage de la dernière synchronisation des signets."
 
-#: data/org.gnome.epiphany.gschema.xml:331
-#: data/org.gnome.epiphany.gschema.xml:346
-#: data/org.gnome.epiphany.gschema.xml:361
-#: data/org.gnome.epiphany.gschema.xml:418
-#: data/org.gnome.epiphany.gschema.xml:433
-#: data/org.gnome.epiphany.gschema.xml:448
+#: data/org.gnome.epiphany.gschema.xml:340
+#: data/org.gnome.epiphany.gschema.xml:355
+#: data/org.gnome.epiphany.gschema.xml:370
+#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:457
 msgid "Initial sync or normal sync"
 msgstr "Synchronisation initiale ou normale"
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:341
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -724,27 +747,27 @@ msgstr ""
 "TRUE (vrai) si la collection de signets doit être synchronisée pour la "
 "première fois, FALSE (faux) sinon."
 
-#: data/org.gnome.epiphany.gschema.xml:336
-#: data/org.gnome.epiphany.gschema.xml:423
+#: data/org.gnome.epiphany.gschema.xml:345
+#: data/org.gnome.epiphany.gschema.xml:432
 msgid "Enable passwords sync"
 msgstr "Activer la synchronisation des mots de passe"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:346
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (vrai) si la collection des mots de passe doit être synchronisée, FALSE "
 "(faux) sinon."
 
-#: data/org.gnome.epiphany.gschema.xml:341
-#: data/org.gnome.epiphany.gschema.xml:428
+#: data/org.gnome.epiphany.gschema.xml:350
+#: data/org.gnome.epiphany.gschema.xml:437
 msgid "Passwords sync timestamp"
 msgstr "Horodatage de synchronisation des mots de passe"
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:351
 msgid "The timestamp at which last passwords sync was made."
 msgstr "L’horodatage de la dernière synchronisation des mots de passe."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:356
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -752,27 +775,27 @@ msgstr ""
 "TRUE (vrai) si la collection des mots de passe doit être synchronisée pour "
 "la première fois, FALSE (faux) sinon."
 
-#: data/org.gnome.epiphany.gschema.xml:351
-#: data/org.gnome.epiphany.gschema.xml:438
+#: data/org.gnome.epiphany.gschema.xml:360
+#: data/org.gnome.epiphany.gschema.xml:447
 msgid "Enable history sync"
 msgstr "Activer la synchronisation de l’historique"
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (vrai) si la collection de l’historique doit être synchronisée, FALSE "
 "(faux) sinon."
 
-#: data/org.gnome.epiphany.gschema.xml:356
-#: data/org.gnome.epiphany.gschema.xml:443
+#: data/org.gnome.epiphany.gschema.xml:365
+#: data/org.gnome.epiphany.gschema.xml:452
 msgid "History sync timestamp"
 msgstr "Horodatage de synchronisation de l’historique"
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid "The timestamp at which last history sync was made."
 msgstr "L’horodatage de la dernière synchronisation de l’historique."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
@@ -780,43 +803,43 @@ msgstr ""
 "TRUE (vrai) si la collection de l’historique doit être synchronisée pour la "
 "première fois, FALSE (faux) sinon."
 
-#: data/org.gnome.epiphany.gschema.xml:366
-#: data/org.gnome.epiphany.gschema.xml:453
+#: data/org.gnome.epiphany.gschema.xml:375
+#: data/org.gnome.epiphany.gschema.xml:462
 msgid "Enable open tabs sync"
 msgstr "Activer la synchronisation des onglets ouverts"
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "TRUE (vrai) si la collection des onglets ouverts doit être synchronisée, "
 "FALSE (faux) sinon."
 
-#: data/org.gnome.epiphany.gschema.xml:371
-#: data/org.gnome.epiphany.gschema.xml:458
+#: data/org.gnome.epiphany.gschema.xml:380
+#: data/org.gnome.epiphany.gschema.xml:467
 msgid "Open tabs sync timestamp"
 msgstr "Horodatage de synchronisation des onglets ouverts"
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "L’horodatage de la dernière synchronisation des onglets ouverts."
 
-#: data/org.gnome.epiphany.gschema.xml:379
-#: data/org.gnome.epiphany.gschema.xml:384
-#: data/org.gnome.epiphany.gschema.xml:389
-#: data/org.gnome.epiphany.gschema.xml:394
-#: data/org.gnome.epiphany.gschema.xml:399
-#: data/org.gnome.epiphany.gschema.xml:404
-#: data/org.gnome.epiphany.gschema.xml:409
-#: data/org.gnome.epiphany.gschema.xml:414
-#: data/org.gnome.epiphany.gschema.xml:419
-#: data/org.gnome.epiphany.gschema.xml:424
-#: data/org.gnome.epiphany.gschema.xml:429
-#: data/org.gnome.epiphany.gschema.xml:434
-#: data/org.gnome.epiphany.gschema.xml:439
-#: data/org.gnome.epiphany.gschema.xml:444
-#: data/org.gnome.epiphany.gschema.xml:449
-#: data/org.gnome.epiphany.gschema.xml:454
-#: data/org.gnome.epiphany.gschema.xml:459
+#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:403
+#: data/org.gnome.epiphany.gschema.xml:408
+#: data/org.gnome.epiphany.gschema.xml:413
+#: data/org.gnome.epiphany.gschema.xml:418
+#: data/org.gnome.epiphany.gschema.xml:423
+#: data/org.gnome.epiphany.gschema.xml:428
+#: data/org.gnome.epiphany.gschema.xml:433
+#: data/org.gnome.epiphany.gschema.xml:438
+#: data/org.gnome.epiphany.gschema.xml:443
+#: data/org.gnome.epiphany.gschema.xml:448
+#: data/org.gnome.epiphany.gschema.xml:453
+#: data/org.gnome.epiphany.gschema.xml:458
+#: data/org.gnome.epiphany.gschema.xml:463
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "sync/ instead."
@@ -824,13 +847,13 @@ msgstr ""
 "OBSOLÈTE : cette clé est obsolète et ignorée. À la place, utilisez /org/"
 "gnome/epiphany/sync/."
 
-#: data/org.gnome.epiphany.gschema.xml:470
+#: data/org.gnome.epiphany.gschema.xml:479
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
 "Décision à appliquer lorsque l’autorisation d’utiliser son microphone est "
 "demandée pour cet hôte"
 
-#: data/org.gnome.epiphany.gschema.xml:471
+#: data/org.gnome.epiphany.gschema.xml:480
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -843,14 +866,14 @@ msgstr ""
 "que « allow » (autoriser) et « deny » (interdire) lui indique la décision "
 "qu’il doit prendre lui-même sur demande."
 
-#: data/org.gnome.epiphany.gschema.xml:475
+#: data/org.gnome.epiphany.gschema.xml:484
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Décision à appliquer lorsque la permission de géolocalisation est requise "
 "par cet hôte"
 
-#: data/org.gnome.epiphany.gschema.xml:476
+#: data/org.gnome.epiphany.gschema.xml:485
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -863,14 +886,14 @@ msgstr ""
 "tandis que « allow » (autoriser) et « deny » (interdire) lui indique la "
 "décision qu’il doit prendre lui-même sur demande."
 
-#: data/org.gnome.epiphany.gschema.xml:480
+#: data/org.gnome.epiphany.gschema.xml:489
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
 "Décision à appliquer lorsque la permission de notification est requise par "
 "cet hôte"
 
-#: data/org.gnome.epiphany.gschema.xml:481
+#: data/org.gnome.epiphany.gschema.xml:490
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -883,14 +906,14 @@ msgstr ""
 "« allow » (autoriser) et « deny » (interdire) lui indique la décision qu’il "
 "doit prendre lui-même sur demande."
 
-#: data/org.gnome.epiphany.gschema.xml:485
+#: data/org.gnome.epiphany.gschema.xml:494
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Décision à appliquer lorsque la permission de mémoriser le mot de passe est "
 "requise par cet hôte"
 
-#: data/org.gnome.epiphany.gschema.xml:486
+#: data/org.gnome.epiphany.gschema.xml:495
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -903,13 +926,13 @@ msgstr ""
 "que « allow » (autoriser) et « deny » (interdire) lui indique la décision "
 "qu’il doit prendre lui-même sur demande."
 
-#: data/org.gnome.epiphany.gschema.xml:490
+#: data/org.gnome.epiphany.gschema.xml:499
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Décision à appliquer lorsque la permission d’accéder à la webcam de "
 "l’utilisateur est requise par cet hôte"
 
-#: data/org.gnome.epiphany.gschema.xml:491
+#: data/org.gnome.epiphany.gschema.xml:500
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -922,97 +945,65 @@ msgstr ""
 "que « allow » (autoriser)et « deny » (interdire) lui indique la décision "
 "qu’il doit prendre lui-même sur demande."
 
-#: embed/ephy-about-handler.c:143
-msgid "Installed plugins"
-msgstr "Greffons installés"
-
-#: embed/ephy-about-handler.c:144
-msgid "Plugins"
-msgstr "Greffons"
-
-#: embed/ephy-about-handler.c:147
-msgid "Plugins are disabled in the preferences"
-msgstr "Les greffons sont désactivés dans les préférences"
-
-#: embed/ephy-about-handler.c:160
-msgid "Enabled"
-msgstr "Activés"
-
-#. webkit_plugin_get_enabled (plugin) &&
-#: embed/ephy-about-handler.c:160
-msgid "Yes"
-msgstr "Oui"
-
-#: embed/ephy-about-handler.c:160
-msgid "No"
-msgstr "Non"
-
-#: embed/ephy-about-handler.c:161
-msgid "MIME type"
-msgstr "Type MIME"
-
-#: embed/ephy-about-handler.c:161
-msgid "Description"
-msgstr "Description"
-
-#: embed/ephy-about-handler.c:161
-msgid "Suffixes"
-msgstr "Suffixes"
-
-#: embed/ephy-about-handler.c:224 embed/ephy-about-handler.c:226
+#: embed/ephy-about-handler.c:116 embed/ephy-about-handler.c:118
 msgid "Memory usage"
 msgstr "Utilisation de la mémoire"
 
-#: embed/ephy-about-handler.c:274
+#: embed/ephy-about-handler.c:166
 #, c-format
 msgid "Version %s"
 msgstr "Version %s"
 
-#: embed/ephy-about-handler.c:294
+#: embed/ephy-about-handler.c:186
 msgid "About Web"
 msgstr "À propos de Web"
 
-#: embed/ephy-about-handler.c:298
+#: embed/ephy-about-handler.c:191 src/window-commands.c:654
+msgid "Epiphany Technology Preview"
+msgstr "Aperçu technologique d’Epiphany"
+
+#: embed/ephy-about-handler.c:194
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Une vue simple, propre et belle du Web"
 
-#: embed/ephy-about-handler.c:356 embed/ephy-about-handler.c:357
+#: embed/ephy-about-handler.c:252 embed/ephy-about-handler.c:253
 msgid "Applications"
 msgstr "Applications"
 
-#: embed/ephy-about-handler.c:358
+#: embed/ephy-about-handler.c:254
 msgid "List of installed web applications"
 msgstr "Liste des applications Web installées"
 
-#: embed/ephy-about-handler.c:372
+#: embed/ephy-about-handler.c:268
 msgid "Delete"
 msgstr "Supprimer"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:374
+#: embed/ephy-about-handler.c:270
 msgid "Installed on:"
 msgstr "Installé le :"
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:360
 msgid "Welcome to Web"
 msgstr "Bienvenue dans GNOME Web"
 
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:360
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Commencez à naviguer et les sites que vous avez le plus visités apparaîtront "
 "ici."
 
-#: embed/ephy-about-handler.c:505
+#: embed/ephy-about-handler.c:386
+#: embed/web-extension/resources/js/overview.js:101
 msgid "Remove from overview"
 msgstr "Supprimer de la vue d’ensemble"
 
-#: embed/ephy-about-handler.c:579 embed/ephy-about-handler.c:580
+#: embed/ephy-about-handler.c:460 embed/ephy-about-handler.c:461
 msgid "Private Browsing"
 msgstr "Navigation privée"
 
-#: embed/ephy-about-handler.c:581
+#: embed/ephy-about-handler.c:462
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1023,14 +1014,14 @@ msgstr ""
 "information en mémoire sera détruite à la fermeture de la fenêtre. Les "
 "fichiers téléchargés seront conservés."
 
-#: embed/ephy-about-handler.c:585
+#: embed/ephy-about-handler.c:466
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Le mode incognito masque votre activité seulement aux autres utilisateurs de "
 "cet ordinateur."
 
-#: embed/ephy-about-handler.c:587
+#: embed/ephy-about-handler.c:468
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1042,31 +1033,31 @@ msgstr ""
 "sites Web pourront toujours vous pister."
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:707
+#: embed/ephy-download.c:706
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Téléchargement de %s terminé"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:709
+#: embed/ephy-download.c:708
 msgid "Download finished"
 msgstr "Téléchargement terminé"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Appuyez sur %s pour quitter le mode plein écran"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "ESC"
 msgstr "Échap"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "F11"
 msgstr "F11"
 
-#: embed/ephy-embed-utils.c:63
+#: embed/ephy-embed-utils.c:65
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Envoyer un courriel à l’adresse « %s »"
@@ -1412,41 +1403,46 @@ msgstr "Texte non trouvé"
 msgid "Search wrapped back to the top"
 msgstr "La recherche est revenue au début"
 
-#: embed/ephy-find-toolbar.c:390
+#: embed/ephy-find-toolbar.c:364
 msgid "Type to search…"
 msgstr "Commencez la saisie pour rechercher…"
 
-#: embed/ephy-find-toolbar.c:396
+#: embed/ephy-find-toolbar.c:370
 msgid "Find previous occurrence of the search string"
 msgstr "Recherche la précédente occurrence de la chaîne"
 
-#: embed/ephy-find-toolbar.c:404
+#: embed/ephy-find-toolbar.c:378
 msgid "Find next occurrence of the search string"
 msgstr "Recherche la prochaine occurrence de la chaîne"
 
-#: embed/ephy-web-view.c:530
+#: embed/ephy-view-source-handler.c:255
+#, c-format
+msgid "%s is not a valid URI"
+msgstr "« %s » n’est pas un URL valide"
+
+#: embed/ephy-web-view.c:542
 msgid "Not No_w"
 msgstr "Pas _maintenant"
 
-#: embed/ephy-web-view.c:531
+#: embed/ephy-web-view.c:543
 msgid "_Never Save"
 msgstr "_Ne jamais enregistrer"
 
-#: embed/ephy-web-view.c:532 lib/widgets/ephy-file-chooser.c:121
-#: src/resources/gtk/prefs-dialog.ui:1068 src/window-commands.c:453
+#: embed/ephy-web-view.c:544 lib/widgets/ephy-file-chooser.c:121
+#: src/resources/gtk/prefs-dialog.ui:1154 src/window-commands.c:454
 msgid "_Save"
 msgstr "_Enregistrer"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:543
+#: embed/ephy-web-view.c:555
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Voulez-vous enregistrer votre mot de passe pour « %s » ?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:781
+#: embed/ephy-web-view.c:829
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1454,16 +1450,26 @@ msgstr ""
 "Attention : ce formulaire n’est pas sécurisé. Si vous entrez votre mot de "
 "passe, il ne restera pas privé."
 
-#: embed/ephy-web-view.c:1428
+#: embed/ephy-web-view.c:1134
+msgid "Web process crashed"
+msgstr "Le processus web a planté"
+
+#: embed/ephy-web-view.c:1137
+msgid "Web process terminated due to exceeding memory limit"
+msgstr ""
+"Le processus web s’est terminé à cause d’une consommation de mémoire "
+"excessive"
+
+#: embed/ephy-web-view.c:1546
 msgid "Deny"
 msgstr "Interdire"
 
-#: embed/ephy-web-view.c:1429
+#: embed/ephy-web-view.c:1547
 msgid "Allow"
 msgstr "Autoriser"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1446
+#: embed/ephy-web-view.c:1564
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr ""
@@ -1471,35 +1477,35 @@ msgstr ""
 "bureau."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1451
+#: embed/ephy-web-view.c:1569
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "La page à %s demande à connaître votre localisation."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1456
+#: embed/ephy-web-view.c:1574
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "La page à %s demande à utiliser votre microphone."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1461
+#: embed/ephy-web-view.c:1579
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "La page à %s demande à utiliser votre webcam."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1640
+#: embed/ephy-web-view.c:1758
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Chargement de « %s »…"
 
-#: embed/ephy-web-view.c:1642
+#: embed/ephy-web-view.c:1760
 msgid "Loading…"
 msgstr "Chargement…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1895
+#: embed/ephy-web-view.c:2036
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1507,7 +1513,7 @@ msgstr ""
 "site Web différent."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1900
+#: embed/ephy-web-view.c:2041
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1516,14 +1522,14 @@ msgstr ""
 "fiables. Vérifiez la date sur votre ordinateur."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1905
+#: embed/ephy-web-view.c:2046
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Les données d’identification de ce site Web n’ont pas été délivrées par une "
 "organisation de confiance."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1910
+#: embed/ephy-web-view.c:2051
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1531,7 +1537,7 @@ msgstr ""
 "Elles peuvent être corrompues."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1915
+#: embed/ephy-web-view.c:2056
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1540,7 +1546,7 @@ msgstr ""
 "l’organisation de confiance qui les a délivrées."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1920
+#: embed/ephy-web-view.c:2061
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1549,7 +1555,7 @@ msgstr ""
 "utilisent un chiffrement faible."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1925
+#: embed/ephy-web-view.c:2066
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1559,24 +1565,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1988 embed/ephy-web-view.c:2044
+#: embed/ephy-web-view.c:2129 embed/ephy-web-view.c:2185
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problème de chargement de la page"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1991
+#: embed/ephy-web-view.c:2132
 msgid "Unable to display this website"
 msgstr "Impossible d’afficher ce site Web"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1995
+#: embed/ephy-web-view.c:2136
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Le site à l’adresse %s paraît indisponible."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1999
+#: embed/ephy-web-view.c:2140
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1586,7 +1592,7 @@ msgstr ""
 "connexion à Internet."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2150
 #, c-format
 msgid "The precise error was: %s"
 msgstr "L’erreur précise était : %s"
@@ -1594,69 +1600,69 @@ msgstr "L’erreur précise était : %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2014 embed/ephy-web-view.c:2067
-#: embed/ephy-web-view.c:2110
+#: embed/ephy-web-view.c:2155 embed/ephy-web-view.c:2208
+#: embed/ephy-web-view.c:2251
 msgid "Reload"
 msgstr "Recharger"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2070
-#: embed/ephy-web-view.c:2113
+#: embed/ephy-web-view.c:2158 embed/ephy-web-view.c:2211
+#: embed/ephy-web-view.c:2254
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2047
+#: embed/ephy-web-view.c:2188
 msgid "Oops! There may be a problem"
 msgstr "Oups ! Il y a peut-être un problème"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2051
+#: embed/ephy-web-view.c:2192
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "La page %s a peut-être provoqué la fermeture intempestive de Web."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2058
+#: embed/ephy-web-view.c:2199
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Si cela se reproduit, rapportez l’anomalie aux développeurs %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2096
+#: embed/ephy-web-view.c:2237
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problème d’affichage de la page"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2099
+#: embed/ephy-web-view.c:2240
 msgid "Oops!"
 msgstr "Oups !"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2102
+#: embed/ephy-web-view.c:2243
 msgid "Something went wrong while displaying this page."
 msgstr "Quelque chose s’est mal passé lors de l’affichage de cette page."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2104
+#: embed/ephy-web-view.c:2245
 msgid "Please reload or visit a different page to continue."
 msgstr "Rechargez la page ou visitez-en une autre pour continuer."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2139
+#: embed/ephy-web-view.c:2280
 #, c-format
 msgid "Security Violation"
 msgstr "Violation de la sécurité"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2142
+#: embed/ephy-web-view.c:2283
 msgid "This Connection is Not Secure"
 msgstr "Cette connexion n’est pas sécurisée"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2146
+#: embed/ephy-web-view.c:2287
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1667,42 +1673,42 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2156 embed/ephy-web-view.c:2245
+#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
 msgid "Go Back"
 msgstr "Revenir"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2159 embed/ephy-web-view.c:2248
+#: embed/ephy-web-view.c:2300 embed/ephy-web-view.c:2389
 msgctxt "back-access-key"
 msgid "B"
 msgstr "R"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2162 embed/ephy-web-view.c:2251
+#: embed/ephy-web-view.c:2303 embed/ephy-web-view.c:2392
 msgid "Accept Risk and Proceed"
 msgstr "Accepter le risque et continuer"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2166 embed/ephy-web-view.c:2255
+#: embed/ephy-web-view.c:2307 embed/ephy-web-view.c:2396
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "A"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2196
+#: embed/ephy-web-view.c:2337
 #, c-format
 msgid "Security Warning"
 msgstr "Avertissement de sécurité"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2199
+#: embed/ephy-web-view.c:2340
 msgid "Unsafe website detected!"
 msgstr "Site Web dangereux détecté !"
 
-#: embed/ephy-web-view.c:2206
+#: embed/ephy-web-view.c:2347
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1712,7 +1718,7 @@ msgstr ""
 "contenir du code malicieux qui peut être téléchargé sur votre ordinateur "
 "sans votre consentement."
 
-#: embed/ephy-web-view.c:2210
+#: embed/ephy-web-view.c:2351
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1722,7 +1728,7 @@ msgstr ""
 "les virus et autres codes malveillants, et sur la façon de protéger votre "
 "ordinateur sur %s."
 
-#: embed/ephy-web-view.c:2217
+#: embed/ephy-web-view.c:2358
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1734,7 +1740,7 @@ msgstr ""
 "personnelles (par exemple des mots de passe, des numéros de téléphone ou de "
 "cartes de crédit)."
 
-#: embed/ephy-web-view.c:2222
+#: embed/ephy-web-view.c:2363
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1742,7 +1748,7 @@ msgstr ""
 "Vous pouvez en apprendre plus sur l’ingénierie sociale (ou hameçonnage) sur "
 "%s ou depuis %s."
 
-#: embed/ephy-web-view.c:2231
+#: embed/ephy-web-view.c:2372
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1754,44 +1760,44 @@ msgstr ""
 "navigation (par exemple, en modifiant votre page d’accueil ou en vous "
 "montrant des publicités supplémentaires sur les sites que vous visitez)."
 
-#: embed/ephy-web-view.c:2236
+#: embed/ephy-web-view.c:2377
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Vous pouvez en apprendre plus sur les logiciels indésirables sur %s."
 
-#: embed/ephy-web-view.c:2311
+#: embed/ephy-web-view.c:2452
 msgid "None specified"
 msgstr "Aucune indication"
 
-#: embed/ephy-web-view.c:2416
+#: embed/ephy-web-view.c:2557
 msgid "Technical information"
 msgstr "Information technique"
 
-#: embed/ephy-web-view.c:3301
+#: embed/ephy-web-view.c:3437
 msgid "_OK"
 msgstr "_Valider"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:115
+#: lib/ephy-file-helpers.c:119 src/resources/gtk/prefs-dialog.ui:215
 msgid "Downloads"
 msgstr "Téléchargements"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:172
+#: lib/ephy-file-helpers.c:178
 msgid "Desktop"
 msgstr "Bureau"
 
-#: lib/ephy-file-helpers.c:323
+#: lib/ephy-file-helpers.c:331
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Impossible de créer le répertoire temporaire dans « %s »."
 
-#: lib/ephy-file-helpers.c:444
+#: lib/ephy-file-helpers.c:454
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Le fichier « %s » existe. Veuillez le déplacer."
 
-#: lib/ephy-file-helpers.c:463
+#: lib/ephy-file-helpers.c:473
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Impossible de créer le répertoire « %s »."
@@ -1879,21 +1885,21 @@ msgstr "Le mot de passe de %s dans un formulaire de %s"
 msgid "Password in a form in %s"
 msgstr "Le mot de passe dans un formulaire de %s"
 
-#: lib/sync/ephy-sync-service.c:846
+#: lib/sync/ephy-sync-service.c:851
 msgid "Failed to obtain storage credentials."
 msgstr "Échec de l’obtention des identifiants."
 
-#: lib/sync/ephy-sync-service.c:847 lib/sync/ephy-sync-service.c:962
-#: lib/sync/ephy-sync-service.c:1719
+#: lib/sync/ephy-sync-service.c:852 lib/sync/ephy-sync-service.c:967
+#: lib/sync/ephy-sync-service.c:1741
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Visitez les préférences et connectez-vous pour poursuivre la synchronisation."
 
-#: lib/sync/ephy-sync-service.c:952
+#: lib/sync/ephy-sync-service.c:957
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Le mot de passe de votre compte Firefox semble avoir changé."
 
-#: lib/sync/ephy-sync-service.c:953
+#: lib/sync/ephy-sync-service.c:958
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1901,45 +1907,45 @@ msgstr ""
 "Visitez les préférences et connectez-vous avec votre nouveau mot de passe "
 "pour poursuivre la synchronisation."
 
-#: lib/sync/ephy-sync-service.c:961
+#: lib/sync/ephy-sync-service.c:966
 msgid "Failed to obtain signed certificate."
 msgstr "Échec de l’obtention du certificat signé."
 
-#: lib/sync/ephy-sync-service.c:1685 lib/sync/ephy-sync-service.c:1690
+#: lib/sync/ephy-sync-service.c:1707 lib/sync/ephy-sync-service.c:1712
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Impossible de trouver les secrets de synchronisation pour l’utilisateur "
 "connecté."
 
-#: lib/sync/ephy-sync-service.c:1697 lib/sync/ephy-sync-service.c:1705
+#: lib/sync/ephy-sync-service.c:1719 lib/sync/ephy-sync-service.c:1727
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
 "Les secrets de synchronisation pour l’utilisateur actuel ne sont pas valides."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1813
+#: lib/sync/ephy-sync-service.c:1835
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "Les secrets de synchronisation de %s"
 
-#: lib/sync/ephy-sync-service.c:1839
+#: lib/sync/ephy-sync-service.c:1861
 msgid "Failed to upload client record."
 msgstr "Échec de l’envoi de l’enregistrement du client."
 
-#: lib/sync/ephy-sync-service.c:2029
+#: lib/sync/ephy-sync-service.c:2054
 msgid "Failed to upload crypto/keys record."
 msgstr "Échec de l’envoi de l’enregistrement de chiffrement/clés."
 
-#: lib/sync/ephy-sync-service.c:2136
+#: lib/sync/ephy-sync-service.c:2161
 msgid "Failed to retrieve crypto keys."
 msgstr "Échec de la récupération des clés de chiffrement."
 
-#: lib/sync/ephy-sync-service.c:2187
+#: lib/sync/ephy-sync-service.c:2212
 msgid "Failed to upload meta/global record."
 msgstr "Échec de l’envoi de l’enregistrement méta/global."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2304
+#: lib/sync/ephy-sync-service.c:2329
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1947,15 +1953,15 @@ msgstr ""
 "Votre compte Firefox utilise le stockage version %d. Web ne prend en charge "
 "que la version %d."
 
-#: lib/sync/ephy-sync-service.c:2315
+#: lib/sync/ephy-sync-service.c:2340
 msgid "Failed to verify storage version."
 msgstr "Échec de la vérification de la version du stockage."
 
-#: lib/sync/ephy-sync-service.c:2371
+#: lib/sync/ephy-sync-service.c:2396
 msgid "Failed to upload device info"
 msgstr "Échec de l’envoi des informations de l’appareil"
 
-#: lib/sync/ephy-sync-service.c:2444 lib/sync/ephy-sync-service.c:2522
+#: lib/sync/ephy-sync-service.c:2469 lib/sync/ephy-sync-service.c:2547
 msgid "Failed to retrieve the Sync Key"
 msgstr "Échec de la récupération de la clé de synchronisation"
 
@@ -2073,10 +2079,10 @@ msgstr "Annulation…"
 msgid "Starting…"
 msgstr "Démarrage…"
 
-#: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1076
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:233
-#: src/window-commands.c:298 src/window-commands.c:395
-#: src/window-commands.c:454 src/window-commands.c:1414
+#: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1162
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
+#: src/window-commands.c:299 src/window-commands.c:396
+#: src/window-commands.c:455 src/window-commands.c:1396
 msgid "_Cancel"
 msgstr "A_nnuler"
 
@@ -2104,20 +2110,20 @@ msgstr "Tous les fichiers"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:660 src/ephy-history-dialog.c:262
+#: lib/widgets/ephy-location-entry.c:678 src/ephy-history-dialog.c:262
 msgid "Cl_ear"
 msgstr "E_ffacer"
 
-#: lib/widgets/ephy-location-entry.c:680
+#: lib/widgets/ephy-location-entry.c:698
 msgid "Paste and _Go"
 msgstr "Coller et _aller"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:701 src/ephy-window.c:817
+#: lib/widgets/ephy-location-entry.c:719 src/ephy-window.c:831
 msgid "_Undo"
 msgstr "A_nnuler"
 
-#: lib/widgets/ephy-location-entry.c:708
+#: lib/widgets/ephy-location-entry.c:726
 msgid "_Redo"
 msgstr "_Rétablir"
 
@@ -2226,52 +2232,13 @@ msgid "Plugins data"
 msgstr "Données des greffons"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-header-bar.c:87
+#: src/ephy-action-bar-start.c:34
 msgid "Reload the current page"
 msgstr "Recharger la page actuelle"
 
-#. Translators: tooltip for the stop button
-#: src/ephy-header-bar.c:561
+#: src/ephy-action-bar-start.c:521
 msgid "Stop loading the current page"
 msgstr "Arrêter le chargement de la page actuelle"
-
-#. Translators: tooltip for the back button
-#: src/ephy-header-bar.c:656
-msgid "Go back to the previous page"
-msgstr "Revenir à la page précédente"
-
-#. Translators: tooltip for the forward button
-#: src/ephy-header-bar.c:675
-msgid "Go forward to the next page"
-msgstr "Passer à la page suivante"
-
-#. Translators: tooltip for the secret homepage button
-#: src/ephy-header-bar.c:714
-msgid "Go to your homepage"
-msgstr "Aller à votre page d’accueil"
-
-#. Translators: tooltip for the bookmarks popover button
-#: src/ephy-header-bar.c:775
-msgid "View and manage your bookmarks"
-msgstr "Afficher et gérer vos signets"
-
-#: src/ephy-header-bar.c:786
-msgid "Open in browser"
-msgstr "Ouvrir dans le navigateur"
-
-#: src/ephy-header-bar.c:788
-msgid "Open the page in your default browser"
-msgstr "Ouvrir la page dans votre navigateur par défaut"
-
-#. Translators: tooltip for the downloads button
-#: src/ephy-header-bar.c:812
-msgid "View downloads"
-msgstr "Afficher les téléchargements"
-
-#. Translators: tooltip for the new tab button
-#: src/ephy-header-bar.c:831 src/ephy-notebook.c:485
-msgid "Open a new tab"
-msgstr "Ouvrir un nouvel onglet"
 
 #: src/ephy-history-dialog.c:252
 msgid "Clear browsing history?"
@@ -2339,18 +2306,23 @@ msgstr "REP"
 
 #: src/ephy-main.c:132
 msgid "URL …"
-msgstr "URL …"
+msgstr "URL…"
 
 #: src/ephy-main.c:276
 msgid "Web options"
 msgstr "Options de Web"
 
+#. Translators: tooltip for the new tab button
+#: src/ephy-notebook.c:488 src/resources/gtk/action-bar-end.ui:37
+msgid "Open a new tab"
+msgstr "Ouvrir un nouvel onglet"
+
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:492
+#: src/ephy-notebook.c:495
 msgid "View open tabs"
 msgstr "Afficher les onglets ouverts"
 
-#: src/ephy-notebook.c:753
+#: src/ephy-notebook.c:756
 msgid "Close tab"
 msgstr "Fermer l’onglet"
 
@@ -2367,157 +2339,157 @@ msgstr "Nouvelle adresse"
 msgid "Bang"
 msgstr "Raccourci"
 
-#: src/ephy-window.c:253
+#: src/ephy-window.c:252
 msgid "Do you want to leave this website?"
 msgstr "Voulez-vous quitter ce site Web ?"
 
-#: src/ephy-window.c:254
+#: src/ephy-window.c:253
 msgid "A form you modified has not been submitted."
 msgstr "Un formulaire que vous avez documenté n’a pas été soumis."
 
-#: src/ephy-window.c:255
+#: src/ephy-window.c:254
 msgid "_Discard form"
 msgstr "_Abandonner le formulaire"
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:269
 msgid "There are ongoing downloads"
 msgstr "Des téléchargements sont en cours"
 
-#: src/ephy-window.c:271
+#: src/ephy-window.c:270
 msgid "If you quit, the downloads will be cancelled"
 msgstr "Si vous quittez, les téléchargements seront annulés"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:271
 msgid "Quit and cancel downloads"
 msgstr "Quitter et annuler les téléchargements"
 
-#: src/ephy-window.c:818
+#: src/ephy-window.c:832
 msgid "Re_do"
 msgstr "_Rétablir"
 
 #. Edit.
-#: src/ephy-window.c:821
+#: src/ephy-window.c:835
 msgid "Cu_t"
 msgstr "Co_uper"
 
-#: src/ephy-window.c:822
+#: src/ephy-window.c:836
 msgid "_Copy"
 msgstr "_Copier"
 
-#: src/ephy-window.c:823
+#: src/ephy-window.c:837
 msgid "_Paste"
 msgstr "C_oller"
 
-#: src/ephy-window.c:824
+#: src/ephy-window.c:838
 msgid "Select _All"
 msgstr "_Tout sélectionner"
 
-#: src/ephy-window.c:826
+#: src/ephy-window.c:840
 msgid "S_end Link by Email…"
 msgstr "_Envoyer le lien par courriel…"
 
-#: src/ephy-window.c:828
+#: src/ephy-window.c:842
 msgid "_Reload"
 msgstr "_Recharger"
 
-#: src/ephy-window.c:829
+#: src/ephy-window.c:843
 msgid "_Back"
 msgstr "_Précédent"
 
-#: src/ephy-window.c:830
+#: src/ephy-window.c:844
 msgid "_Forward"
 msgstr "_Suivant"
 
 #. Bookmarks
-#: src/ephy-window.c:833
+#: src/ephy-window.c:847
 msgid "Add Boo_kmark…"
 msgstr "_Ajouter un signet…"
 
 #. Links.
-#: src/ephy-window.c:837
+#: src/ephy-window.c:851
 msgid "Open Link in New _Window"
 msgstr "Ouvrir le lien dans une nouvelle _fenêtre"
 
-#: src/ephy-window.c:838
+#: src/ephy-window.c:852
 msgid "Open Link in New _Tab"
 msgstr "Ouvrir dans un nouvel ongle_t"
 
-#: src/ephy-window.c:839
+#: src/ephy-window.c:853
 msgid "Open Link in I_ncognito Window"
 msgstr "Ouvrir le lien dans une fenêtre i_ncognito"
 
-#: src/ephy-window.c:840
+#: src/ephy-window.c:854
 msgid "_Save Link As…"
 msgstr "_Enregistrer le lien sous…"
 
-#: src/ephy-window.c:841
+#: src/ephy-window.c:855
 msgid "_Copy Link Address"
 msgstr "_Copier l’adresse du lien"
 
-#: src/ephy-window.c:842
+#: src/ephy-window.c:856
 msgid "_Copy E-mail Address"
 msgstr "_Copier l’adresse courriel"
 
 #. Images.
-#: src/ephy-window.c:846
+#: src/ephy-window.c:860
 msgid "View _Image in New Tab"
 msgstr "Afficher l’_image dans un nouvel onglet"
 
-#: src/ephy-window.c:847
+#: src/ephy-window.c:861
 msgid "Copy I_mage Address"
 msgstr "Copier l’adresse de l’i_mage"
 
-#: src/ephy-window.c:848
+#: src/ephy-window.c:862
 msgid "_Save Image As…"
 msgstr "Enregistrer l’image _sous…"
 
-#: src/ephy-window.c:849
+#: src/ephy-window.c:863
 msgid "Set as _Wallpaper"
 msgstr "Définir comme p_apier peint"
 
 #. Video.
-#: src/ephy-window.c:853
+#: src/ephy-window.c:867
 msgid "Open Video in New _Window"
 msgstr "Ouvrir la vidéo dans une _nouvelle fenêtre"
 
-#: src/ephy-window.c:854
+#: src/ephy-window.c:868
 msgid "Open Video in New _Tab"
 msgstr "Ouvrir la vidéo dans un nouvel ongle_t"
 
-#: src/ephy-window.c:855
+#: src/ephy-window.c:869
 msgid "_Save Video As…"
 msgstr "_Enregistrer la vidéo sous…"
 
-#: src/ephy-window.c:856
+#: src/ephy-window.c:870
 msgid "_Copy Video Address"
 msgstr "_Copier l’adresse de la vidéo"
 
 #. Audio.
-#: src/ephy-window.c:860
+#: src/ephy-window.c:874
 msgid "Open Audio in New _Window"
 msgstr "Ouvrir l’audio dans une _nouvelle fenêtre"
 
-#: src/ephy-window.c:861
+#: src/ephy-window.c:875
 msgid "Open Audio in New _Tab"
 msgstr "Ouvrir l’audio dans un nouvel ongle_t"
 
-#: src/ephy-window.c:862
+#: src/ephy-window.c:876
 msgid "_Save Audio As…"
 msgstr "_Enregistrer l’audio sous…"
 
-#: src/ephy-window.c:863
+#: src/ephy-window.c:877
 msgid "_Copy Audio Address"
 msgstr "_Copier l’adresse de l’audio"
 
-#: src/ephy-window.c:868
+#: src/ephy-window.c:882
 msgid "Save Pa_ge As…"
 msgstr "Enregistrer la pa_ge sous…"
 
-#: src/ephy-window.c:869
+#: src/ephy-window.c:883
 msgid "_Page Source"
 msgstr "_Source de la page"
 
-#: src/ephy-window.c:1255
+#: src/ephy-window.c:1264
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Rechercher « %s » sur le Web"
@@ -2537,26 +2509,34 @@ msgstr "Enregistrer le média sous"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:223
+#: src/prefs-dialog.c:235
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Dernière synchronisation : %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:284 src/prefs-dialog.c:1900
+#: src/prefs-dialog.c:296 src/prefs-dialog.c:2117
 #, c-format
 msgid "Logged in as %s"
 msgstr "Connecté en tant que %s"
 
-#: src/prefs-dialog.c:524
+#: src/prefs-dialog.c:536
 msgid "Something went wrong, please try again later."
 msgstr "Quelque chose s’est mal passé. Essayez à nouveau plus tard."
+
+#: src/prefs-dialog.c:826
+msgid "Web Application Icon"
+msgstr "Icône de l’application web"
+
+#: src/prefs-dialog.c:831
+msgid "Supported Image Files"
+msgstr "Fichiers images pris en charge"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:1037 src/prefs-dialog.c:1041
+#: src/prefs-dialog.c:1257 src/prefs-dialog.c:1261
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2565,58 +2545,81 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1048
+#: src/prefs-dialog.c:1268
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Définie par l’utilisateur (%s)"
 
-#: src/prefs-dialog.c:1070
+#: src/prefs-dialog.c:1290
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Langue du système (%s)"
 msgstr[1] "Langues du système (%s)"
 
-#: src/prefs-dialog.c:1313 src/resources/gtk/prefs-dialog.ui:775
+#: src/prefs-dialog.c:1533 src/resources/gtk/prefs-dialog.ui:861
 msgid "Language"
 msgstr "Langue"
 
-#: src/prefs-dialog.c:1391
+#: src/prefs-dialog.c:1611
 msgid "Select a directory"
 msgstr "Sélectionner un répertoire"
 
-#: src/profile-migrator/ephy-profile-migrator.c:608
+#: src/profile-migrator/ephy-profile-migrator.c:612
 msgid "Search the Web"
 msgstr "Rechercher sur le Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1280
+#: src/profile-migrator/ephy-profile-migrator.c:1313
 msgid "Executes only the n-th migration step"
 msgstr "Exécute seulement la n-ième étape de la migration"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1282
+#: src/profile-migrator/ephy-profile-migrator.c:1315
 msgid "Specifies the required version for the migrator"
 msgstr "Indique la version requise pour l’outil de migration"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1284
+#: src/profile-migrator/ephy-profile-migrator.c:1317
 msgid "Specifies the profile where the migrator should run"
 msgstr "Indique le profil à migrer"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1304
+#: src/profile-migrator/ephy-profile-migrator.c:1337
 msgid "Web profile migrator"
 msgstr "Migrateur de profil de Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1305
+#: src/profile-migrator/ephy-profile-migrator.c:1338
 msgid "Web profile migrator options"
 msgstr "Options de l’outil de migration de profil de Web"
+
+#. Translators: tooltip for the bookmarks popover button
+#: src/resources/gtk/action-bar-end.ui:10
+msgid "View and manage your bookmarks"
+msgstr "Afficher et gérer vos signets"
+
+#. Translators: tooltip for the downloads button
+#: src/resources/gtk/action-bar-end.ui:64
+msgid "View downloads"
+msgstr "Afficher les téléchargements"
+
+#. Translators: tooltip for the back button
+#: src/resources/gtk/action-bar-start.ui:20
+msgid "Go back to the previous page"
+msgstr "Revenir à la page précédente"
+
+#. Translators: tooltip for the forward button
+#: src/resources/gtk/action-bar-start.ui:39
+msgid "Go forward to the next page"
+msgstr "Passer à la page suivante"
+
+#. Translators: tooltip for the secret homepage button
+#: src/resources/gtk/action-bar-start.ui:77
+msgid "Go to your homepage"
+msgstr "Aller à votre page d’accueil"
 
 #: src/resources/gtk/application-menu.ui:6
 msgid "_New Window"
 msgstr "_Nouvelle fenêtre"
 
 #: src/resources/gtk/application-menu.ui:11
-#: src/resources/gtk/page-menu-popover.ui:147
-#: src/resources/gtk/page-menu-popover-flatpak.ui:147
 msgid "New _Incognito Window"
 msgstr "Nouvelle fenêtre pr_ivée"
 
@@ -2633,7 +2636,7 @@ msgid "E_xport Bookmarks"
 msgstr "E_xporter les signets"
 
 #: src/resources/gtk/application-menu.ui:35
-#: src/resources/gtk/prefs-dialog.ui:949
+#: src/resources/gtk/prefs-dialog.ui:1035
 msgid "_History"
 msgstr "_Historique"
 
@@ -2774,13 +2777,14 @@ msgstr ""
 "Vous ne pourrez pas annuler cette action. Les données que vous choisissez "
 "d’effacer le seront définitivement."
 
-#: src/resources/gtk/cookies-dialog.ui:31 src/resources/gtk/prefs-dialog.ui:491
+#: src/resources/gtk/cookies-dialog.ui:31 src/resources/gtk/prefs-dialog.ui:577
 msgid "Cookies"
 msgstr "Cookies"
 
 #: src/resources/gtk/cookies-dialog.ui:35
 #: src/resources/gtk/history-dialog.ui:46
 #: src/resources/gtk/passwords-dialog.ui:39
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
 msgid "C_lear All"
 msgstr "E_ffacer tout"
 
@@ -2870,42 +2874,53 @@ msgid "_Close"
 msgstr "_Fermer"
 
 #: src/resources/gtk/page-menu-popover.ui:21
-#: src/resources/gtk/page-menu-popover.ui:75
-#: src/resources/gtk/page-menu-popover.ui:90
-#: src/resources/gtk/page-menu-popover-flatpak.ui:21
-#: src/resources/gtk/page-menu-popover-flatpak.ui:75
-#: src/resources/gtk/page-menu-popover-flatpak.ui:90
 msgid "Zoom Out"
 msgstr "Zoom arrière"
 
-#: src/resources/gtk/page-menu-popover.ui:51
-#: src/resources/gtk/page-menu-popover.ui:105
-#: src/resources/gtk/page-menu-popover-flatpak.ui:51
-#: src/resources/gtk/page-menu-popover-flatpak.ui:105
+#: src/resources/gtk/page-menu-popover.ui:22
+msgctxt "tooltip"
+msgid "Zoom Out"
+msgstr "Zoom arrière"
+
+#: src/resources/gtk/page-menu-popover.ui:38
+msgid "Restore Zoom"
+msgstr "Restaurer le zoom"
+
+#: src/resources/gtk/page-menu-popover.ui:53
 msgid "Zoom In"
 msgstr "Zoom avant"
 
-#: src/resources/gtk/page-menu-popover.ui:131
-#: src/resources/gtk/page-menu-popover-flatpak.ui:131
+#: src/resources/gtk/page-menu-popover.ui:54
+msgctxt "tooltip"
+msgid "Zoom In"
+msgstr "Zoom avant"
+
+#: src/resources/gtk/page-menu-popover.ui:78
+msgid "Print…"
+msgstr "Impression…"
+
+#: src/resources/gtk/page-menu-popover.ui:93
+msgid "Find…"
+msgstr "Rechercher…"
+
+#: src/resources/gtk/page-menu-popover.ui:108
+msgid "Fullscreen"
+msgstr "Plein écran"
+
+#: src/resources/gtk/page-menu-popover.ui:134
 msgid "_New Tab"
 msgstr "Nouvel _onglet"
 
-#: src/resources/gtk/page-menu-popover.ui:139
-#: src/resources/gtk/page-menu-popover-flatpak.ui:139
-msgid "New _Window"
-msgstr "_Nouvelle fenêtre"
-
-#: src/resources/gtk/page-menu-popover.ui:163
-#: src/resources/gtk/page-menu-popover-flatpak.ui:163
+#: src/resources/gtk/page-menu-popover.ui:150
 msgid "Text _Encoding"
 msgstr "_Codage du texte"
 
-#: src/resources/gtk/page-menu-popover.ui:179
+#: src/resources/gtk/page-menu-popover.ui:166
 msgid "Install Site as Web _Application…"
 msgstr "Enregistrer le site en tant qu’application _Web…"
 
 #: src/resources/gtk/passwords-dialog.ui:35
-#: src/resources/gtk/prefs-dialog.ui:565
+#: src/resources/gtk/prefs-dialog.ui:651
 msgid "Passwords"
 msgstr "Mots de passe"
 
@@ -2961,172 +2976,180 @@ msgstr "Page _vierge"
 msgid "_Custom:"
 msgstr "_Personnalisé :"
 
-#: src/resources/gtk/prefs-dialog.ui:134
+#: src/resources/gtk/prefs-dialog.ui:114
+msgid "Web Application"
+msgstr "Application web"
+
+#: src/resources/gtk/prefs-dialog.ui:122
+msgid "_Manage Additional URLs"
+msgstr "_Gérer les URL supplémentaires"
+
+#: src/resources/gtk/prefs-dialog.ui:157
+msgid "Homepage:"
+msgstr "Page d’accueil :"
+
+#: src/resources/gtk/prefs-dialog.ui:179
+msgid "Title:"
+msgstr "Titre :"
+
+#: src/resources/gtk/prefs-dialog.ui:234
 msgid "_Download folder:"
 msgstr "Dossier des _téléchargements :"
 
-#: src/resources/gtk/prefs-dialog.ui:145
-msgid "A_utomatically open downloaded files"
-msgstr "Ouvrir _automatiquement les fichiers téléchargés"
-
-#: src/resources/gtk/prefs-dialog.ui:169
+#: src/resources/gtk/prefs-dialog.ui:262
 msgid "Search Engines"
 msgstr "Moteurs de recherche"
 
-#: src/resources/gtk/prefs-dialog.ui:177
+#: src/resources/gtk/prefs-dialog.ui:270
 msgid "_Manage Search Engines"
 msgstr "Gérer les _moteurs de recherche"
 
-#: src/resources/gtk/prefs-dialog.ui:190
+#: src/resources/gtk/prefs-dialog.ui:283
 msgid "You can select different search engines to use."
 msgstr "Vous pouvez choisir différents moteurs de recherche à utiliser."
 
-#: src/resources/gtk/prefs-dialog.ui:211
+#: src/resources/gtk/prefs-dialog.ui:304
 msgid "Session"
 msgstr "Session"
 
-#: src/resources/gtk/prefs-dialog.ui:225
+#: src/resources/gtk/prefs-dialog.ui:318
 msgid "_Remember previous tabs on startup"
 msgstr "Se _souvenir des onglets ouverts au démarrage"
 
-#: src/resources/gtk/prefs-dialog.ui:243
+#: src/resources/gtk/prefs-dialog.ui:336
 msgid "Web Content"
 msgstr "Contenus du Web"
 
-#: src/resources/gtk/prefs-dialog.ui:257
+#: src/resources/gtk/prefs-dialog.ui:350
 msgid "Try to block _advertisements"
 msgstr "Essayer de bloquer les p_ublicités"
 
-#: src/resources/gtk/prefs-dialog.ui:264
+#: src/resources/gtk/prefs-dialog.ui:357
 msgid "Try to block web _trackers"
 msgstr "Essayer de bloquer les _suiveurs Web"
 
-#: src/resources/gtk/prefs-dialog.ui:272
+#: src/resources/gtk/prefs-dialog.ui:365
 msgid "Block popup _windows"
 msgstr "Bloquer les _fenêtres surgissantes"
 
-#: src/resources/gtk/prefs-dialog.ui:279
-msgid "Enable _plugins"
-msgstr "Activer les _greffons"
-
-#: src/resources/gtk/prefs-dialog.ui:286
+#: src/resources/gtk/prefs-dialog.ui:372
 msgid "Try to block dangerous web_sites"
 msgstr "Essayer de bloquer les _sites dangereux"
 
-#: src/resources/gtk/prefs-dialog.ui:300
+#: src/resources/gtk/prefs-dialog.ui:386
 msgid "General"
 msgstr "Général"
 
-#: src/resources/gtk/prefs-dialog.ui:320
+#: src/resources/gtk/prefs-dialog.ui:406
 msgid "Fonts"
 msgstr "Polices"
 
-#: src/resources/gtk/prefs-dialog.ui:334
+#: src/resources/gtk/prefs-dialog.ui:420
 msgid "_Use system fonts"
 msgstr "_Utiliser les polices système"
 
-#: src/resources/gtk/prefs-dialog.ui:349
+#: src/resources/gtk/prefs-dialog.ui:435
 msgid "Sans serif font:"
 msgstr "Police sans serif :"
 
-#: src/resources/gtk/prefs-dialog.ui:373
+#: src/resources/gtk/prefs-dialog.ui:459
 msgid "Serif font:"
 msgstr "Police serif :"
 
-#: src/resources/gtk/prefs-dialog.ui:395
+#: src/resources/gtk/prefs-dialog.ui:481
 msgid "Monospace font:"
 msgstr "Police à largeur fixe :"
 
-#: src/resources/gtk/prefs-dialog.ui:427
+#: src/resources/gtk/prefs-dialog.ui:513
 msgid "Style"
 msgstr "Style"
 
-#: src/resources/gtk/prefs-dialog.ui:440
+#: src/resources/gtk/prefs-dialog.ui:526
 msgid "Use custom _stylesheet"
 msgstr "Utiliser une feuille de _style personnalisée"
 
-#: src/resources/gtk/prefs-dialog.ui:448
+#: src/resources/gtk/prefs-dialog.ui:534
 msgid "_Edit Stylesheet"
 msgstr "Mo_difier la feuille de style"
 
-#: src/resources/gtk/prefs-dialog.ui:465
+#: src/resources/gtk/prefs-dialog.ui:551
 msgid "Fonts & Style"
 msgstr "Polices et styles"
 
-#: src/resources/gtk/prefs-dialog.ui:499
+#: src/resources/gtk/prefs-dialog.ui:585
 msgid "Manage _Cookies"
 msgstr "Gérer les _cookies"
 
-#: src/resources/gtk/prefs-dialog.ui:515
+#: src/resources/gtk/prefs-dialog.ui:601
 msgid "_Always accept"
 msgstr "_Toujours les accepter"
 
-#: src/resources/gtk/prefs-dialog.ui:522
+#: src/resources/gtk/prefs-dialog.ui:608
 msgid "Only _from sites you visit"
 msgstr "_Uniquement ceux des sites que vous visitez"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:532
+#: src/resources/gtk/prefs-dialog.ui:618
 msgid "For example, not from advertisers on these sites"
 msgstr "Par exemple, pas ceux des publicités sur ces sites"
 
-#: src/resources/gtk/prefs-dialog.ui:542
+#: src/resources/gtk/prefs-dialog.ui:628
 msgid "_Never accept"
 msgstr "_Ne jamais les accepter"
 
-#: src/resources/gtk/prefs-dialog.ui:573
+#: src/resources/gtk/prefs-dialog.ui:659
 msgid "Manage _Passwords"
 msgstr "Gérer les mots de _passe"
 
-#: src/resources/gtk/prefs-dialog.ui:583
+#: src/resources/gtk/prefs-dialog.ui:669
 msgid "_Remember passwords"
 msgstr "_Se souvenir des mots de passe"
 
-#: src/resources/gtk/prefs-dialog.ui:600
+#: src/resources/gtk/prefs-dialog.ui:686
 msgid "Personal Data"
 msgstr "Données personnelles"
 
-#: src/resources/gtk/prefs-dialog.ui:621
+#: src/resources/gtk/prefs-dialog.ui:707
 msgid "You can clear stored personal data."
 msgstr "Vous pouvez supprimer les données qui vous concernent."
 
-#: src/resources/gtk/prefs-dialog.ui:626
+#: src/resources/gtk/prefs-dialog.ui:712
 msgid "Manage Personal _Data"
 msgstr "_Gérer les données personnelles"
 
-#: src/resources/gtk/prefs-dialog.ui:644
+#: src/resources/gtk/prefs-dialog.ui:730
 msgid "Stored Data"
 msgstr "Données enregistrées"
 
-#: src/resources/gtk/prefs-dialog.ui:705
+#: src/resources/gtk/prefs-dialog.ui:791
 msgid "_Add…"
 msgstr "_Ajouter…"
 
-#: src/resources/gtk/prefs-dialog.ui:712
+#: src/resources/gtk/prefs-dialog.ui:798
 msgid "_Remove"
 msgstr "_Enlever"
 
-#: src/resources/gtk/prefs-dialog.ui:719
+#: src/resources/gtk/prefs-dialog.ui:805
 msgid "_Up"
 msgstr "_Haut"
 
-#: src/resources/gtk/prefs-dialog.ui:726
+#: src/resources/gtk/prefs-dialog.ui:812
 msgid "_Down"
 msgstr "_Bas"
 
-#: src/resources/gtk/prefs-dialog.ui:749
+#: src/resources/gtk/prefs-dialog.ui:835
 msgid "Spell Checking"
 msgstr "Vérification orthographique"
 
-#: src/resources/gtk/prefs-dialog.ui:758
+#: src/resources/gtk/prefs-dialog.ui:844
 msgid "_Enable spell checking"
 msgstr "Activer la _vérification orthographique"
 
-#: src/resources/gtk/prefs-dialog.ui:797
+#: src/resources/gtk/prefs-dialog.ui:883
 msgid "Firefox Sync"
 msgstr "Synchronisation Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:815
+#: src/resources/gtk/prefs-dialog.ui:901
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not produced or endorsed by Mozilla."
@@ -3135,71 +3158,71 @@ msgstr ""
 "et Firefox sur d’autres ordinateurs. Web n’est ni produit, ni pris en charge "
 "par Mozilla."
 
-#: src/resources/gtk/prefs-dialog.ui:849
+#: src/resources/gtk/prefs-dialog.ui:935
 msgid "Firefox Account"
 msgstr "Compte Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:857
+#: src/resources/gtk/prefs-dialog.ui:943
 msgid "Sign _out"
 msgstr "Se _déconnecter"
 
-#: src/resources/gtk/prefs-dialog.ui:891
+#: src/resources/gtk/prefs-dialog.ui:977
 msgid "Sync Options"
 msgstr "Options de synchronisation"
 
-#: src/resources/gtk/prefs-dialog.ui:911
+#: src/resources/gtk/prefs-dialog.ui:997
 msgid "Collections"
 msgstr "Collections"
 
-#: src/resources/gtk/prefs-dialog.ui:919
+#: src/resources/gtk/prefs-dialog.ui:1005
 msgid "S_ynced tabs"
 msgstr "_Onglets synchronisés"
 
-#: src/resources/gtk/prefs-dialog.ui:935
+#: src/resources/gtk/prefs-dialog.ui:1021
 msgid "_Bookmarks"
 msgstr "_Signets"
 
-#: src/resources/gtk/prefs-dialog.ui:942
+#: src/resources/gtk/prefs-dialog.ui:1028
 msgid "_Passwords"
 msgstr "Mots de _passe"
 
-#: src/resources/gtk/prefs-dialog.ui:956
+#: src/resources/gtk/prefs-dialog.ui:1042
 msgid "Open _Tabs"
 msgstr "Ongle_ts ouverts"
 
-#: src/resources/gtk/prefs-dialog.ui:971
+#: src/resources/gtk/prefs-dialog.ui:1057
 msgid "Frequency"
 msgstr "Fréquence"
 
-#: src/resources/gtk/prefs-dialog.ui:979
+#: src/resources/gtk/prefs-dialog.ui:1065
 msgid "Sync _now"
 msgstr "Synchroniser _maintenant"
 
-#: src/resources/gtk/prefs-dialog.ui:998
+#: src/resources/gtk/prefs-dialog.ui:1084
 msgid "_5 min"
 msgstr "_5 min"
 
-#: src/resources/gtk/prefs-dialog.ui:1005
+#: src/resources/gtk/prefs-dialog.ui:1091
 msgid "_15 min"
 msgstr "_15 min"
 
-#: src/resources/gtk/prefs-dialog.ui:1013
+#: src/resources/gtk/prefs-dialog.ui:1099
 msgid "_30 min"
 msgstr "_30 min"
 
-#: src/resources/gtk/prefs-dialog.ui:1021
+#: src/resources/gtk/prefs-dialog.ui:1107
 msgid "_60 min"
 msgstr "_60 min"
 
-#: src/resources/gtk/prefs-dialog.ui:1052
+#: src/resources/gtk/prefs-dialog.ui:1138
 msgid "Device name"
 msgstr "Nom du périphérique"
 
-#: src/resources/gtk/prefs-dialog.ui:1060
+#: src/resources/gtk/prefs-dialog.ui:1146
 msgid "_Change"
 msgstr "Mo_difier"
 
-#: src/resources/gtk/prefs-dialog.ui:1110
+#: src/resources/gtk/prefs-dialog.ui:1196
 msgid "Sync"
 msgstr "Synchronisation"
 
@@ -3474,6 +3497,33 @@ msgstr ""
 "utilisent Firefox Sync avec ce compte. Ouvrez un onglet en double-cliquant "
 "sur son nom (les onglets « locaux » ne peuvent pas être ouverts)."
 
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:20
+msgid "Additional URLs"
+msgstr "URL supplémentaires"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:64
+msgid ""
+"A URL that starts with any of the additional URLs will be opened by the web "
+"application. If you omit the URL scheme, the one from the currently loaded "
+"URL will be used."
+msgstr ""
+"Un URL qui débute comme n’importe quel URL supplémentaire sera ouvert par "
+"l’application web. Si vous omettez le schéma d’URL, celui chargé par l’URL "
+"courant sera utilisé."
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+msgctxt "Column header in the Additional URLs dialog"
+msgid "URL"
+msgstr "URL"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:124
+msgid "Add new URL"
+msgstr "Ajouter un nouvel URL"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:137
+msgid "Remove the selected URLs"
+msgstr "Retirer les URL sélectionnés"
+
 #: src/search-provider/ephy-search-provider.c:199
 #, c-format
 msgid "Search the Web for %s"
@@ -3483,77 +3533,77 @@ msgstr "Rechercher %s sur le Web"
 msgid "Local Tabs"
 msgstr "Onglets locaux"
 
-#: src/window-commands.c:97
+#: src/window-commands.c:98
 msgid "GVDB File"
 msgstr "Fichier GVDB"
 
 #. Skip Firefox option if user doesn't have a Firefox profile
-#: src/window-commands.c:98 src/window-commands.c:205
+#: src/window-commands.c:99 src/window-commands.c:206
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:112
+#: src/window-commands.c:113
 msgid "Ch_oose File…"
 msgstr "Ch_oisir un fichier…"
 
-#: src/window-commands.c:114 src/window-commands.c:297
+#: src/window-commands.c:115 src/window-commands.c:298
 msgid "I_mport"
 msgstr "I_mporter"
 
-#: src/window-commands.c:230
+#: src/window-commands.c:231
 msgid "Select Profile"
 msgstr "Choisir un profil"
 
-#: src/window-commands.c:235
+#: src/window-commands.c:236
 msgid "_Select"
 msgstr "_Choisir"
 
-#: src/window-commands.c:294 src/window-commands.c:450
+#: src/window-commands.c:295 src/window-commands.c:451
 msgid "Choose File"
 msgstr "Choisir un fichier"
 
-#: src/window-commands.c:321 src/window-commands.c:362
+#: src/window-commands.c:322 src/window-commands.c:363
 msgid "Bookmarks successfully imported!"
 msgstr "Les signets ont été importés !"
 
-#: src/window-commands.c:392
+#: src/window-commands.c:393
 msgid "Import Bookmarks"
 msgstr "Importer des signets"
 
-#: src/window-commands.c:397
+#: src/window-commands.c:398
 msgid "Ch_oose File"
 msgstr "Ch_oisir un fichier"
 
-#: src/window-commands.c:410
+#: src/window-commands.c:411
 msgid "From:"
 msgstr "Depuis :"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:458
+#: src/window-commands.c:459
 msgid "bookmarks.gvdb"
 msgstr "signets.gvdb"
 
-#: src/window-commands.c:480
+#: src/window-commands.c:481
 msgid "Bookmarks successfully exported!"
 msgstr "Les signets ont été exportés !"
 
-#: src/window-commands.c:608
+#: src/window-commands.c:609
 msgid "Current maintainers:"
 msgstr "Mainteneurs actuels :"
 
-#: src/window-commands.c:611 src/window-commands.c:634
+#: src/window-commands.c:612 src/window-commands.c:635
 msgid "Contact us at:"
 msgstr "Contactez-nous à :"
 
-#: src/window-commands.c:614
+#: src/window-commands.c:615
 msgid "Past maintainers:"
 msgstr "Anciens mainteneurs :"
 
-#: src/window-commands.c:617
+#: src/window-commands.c:618
 msgid "Contributors:"
 msgstr "Contributeurs :"
 
-#: src/window-commands.c:643
+#: src/window-commands.c:644
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3561,10 +3611,6 @@ msgid ""
 msgstr ""
 "Une vue simple, propre et belle du Web.\n"
 "Propulsé par WebKitGTK+ %d.%d.%d"
-
-#: src/window-commands.c:653
-msgid "Epiphany Technology Preview"
-msgstr "Aperçu technologique d’Epiphany"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3574,7 +3620,7 @@ msgstr "Aperçu technologique d’Epiphany"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:670
+#: src/window-commands.c:671
 msgid "translator-credits"
 msgstr ""
 "Christophe Fergeau <teuf@users.sourceforge.net>\n"
@@ -3604,33 +3650,29 @@ msgstr ""
 "Alexandre Franke <alexandre.franke@gmail.com>"
 
 #: src/window-commands.c:674
-msgid "Web Website"
-msgstr "Site Web de Web"
-
-#: src/window-commands.c:676
 msgid "Website"
 msgstr "Site Web"
 
-#: src/window-commands.c:926
+#: src/window-commands.c:923
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/window-commands.c:1311
+#: src/window-commands.c:1286
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr ""
 "Une application Web nommée « %s » est déjà présente. Voulez-vous la "
 "remplacer ?"
 
-#: src/window-commands.c:1314
+#: src/window-commands.c:1289
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/window-commands.c:1316
+#: src/window-commands.c:1291
 msgid "Replace"
 msgstr "Remplacer"
 
-#: src/window-commands.c:1320
+#: src/window-commands.c:1295
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
@@ -3638,38 +3680,38 @@ msgstr ""
 "Une application avec ce nom existe déjà. Elle sera écrasée par celle que "
 "vous souhaitez créer."
 
-#: src/window-commands.c:1355
+#: src/window-commands.c:1337
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "L’application « %s » est prête à être utilisée"
 
-#: src/window-commands.c:1358
+#: src/window-commands.c:1340
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "L’application « %s » n’a pas pu être créée"
 
-#: src/window-commands.c:1366
+#: src/window-commands.c:1348
 msgid "Launch"
 msgstr "Démarrer"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1411
+#: src/window-commands.c:1393
 msgid "Create Web Application"
 msgstr "Créer une application Web"
 
-#: src/window-commands.c:1416
+#: src/window-commands.c:1398
 msgid "C_reate"
 msgstr "C_réer"
 
-#: src/window-commands.c:1545
+#: src/window-commands.c:1527
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/window-commands.c:2233
+#: src/window-commands.c:2226
 msgid "Enable caret browsing mode?"
 msgstr "Activer le mode de navigation au curseur ?"
 
-#: src/window-commands.c:2236
+#: src/window-commands.c:2229
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3680,6 +3722,63 @@ msgstr ""
 "permettant de vous déplacer avec votre clavier. Voulez-vous activer le mode "
 "de navigation au curseur ?"
 
-#: src/window-commands.c:2239
+#: src/window-commands.c:2232
 msgid "_Enable"
 msgstr "_Activer"
+
+#~ msgid "Automatic downloads"
+#~ msgstr "Téléchargements automatiques"
+
+#~ msgid ""
+#~ "When files cannot be opened by the browser they are automatically "
+#~ "downloaded to the download folder and opened with the appropriate "
+#~ "application."
+#~ msgstr ""
+#~ "Quand des fichiers ne peuvent pas être ouverts dans le navigateur, ils "
+#~ "sont automatiquement téléchargés dans le dossier des téléchargements puis "
+#~ "ouverts avec l’application appropriée."
+
+#~ msgid "Installed plugins"
+#~ msgstr "Greffons installés"
+
+#~ msgid "Plugins"
+#~ msgstr "Greffons"
+
+#~ msgid "Plugins are disabled in the preferences"
+#~ msgstr "Les greffons sont désactivés dans les préférences"
+
+#~ msgid "Enabled"
+#~ msgstr "Activés"
+
+#~ msgid "Yes"
+#~ msgstr "Oui"
+
+#~ msgid "No"
+#~ msgstr "Non"
+
+#~ msgid "MIME type"
+#~ msgstr "Type MIME"
+
+#~ msgid "Description"
+#~ msgstr "Description"
+
+#~ msgid "Suffixes"
+#~ msgstr "Suffixes"
+
+#~ msgid "Open in browser"
+#~ msgstr "Ouvrir dans le navigateur"
+
+#~ msgid "Open the page in your default browser"
+#~ msgstr "Ouvrir la page dans votre navigateur par défaut"
+
+#~ msgid "New _Window"
+#~ msgstr "_Nouvelle fenêtre"
+
+#~ msgid "A_utomatically open downloaded files"
+#~ msgstr "Ouvrir _automatiquement les fichiers téléchargés"
+
+#~ msgid "Enable _plugins"
+#~ msgstr "Activer les _greffons"
+
+#~ msgid "Web Website"
+#~ msgstr "Site Web de Web"
