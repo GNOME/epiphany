@@ -12,16 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany 3.3.91\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2018-06-28 13:15+0000\n"
-"PO-Revision-Date: 2018-06-29 07:18+0800\n"
-"Last-Translator: Yi-Jyun Pan <pan93412@gmail.com>\n"
+"POT-Creation-Date: 2018-08-07 22:49+0000\n"
+"PO-Revision-Date: 2018-08-12 15:42+0800\n"
+"Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 1.8.4\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
 msgid "GNOME Web"
@@ -54,8 +54,8 @@ msgstr "在 GNOME《網頁》顯示 GNOME 網站"
 msgid "The GNOME Project"
 msgstr "GNOME 專案"
 
-#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:188
-#: embed/ephy-about-handler.c:219 src/ephy-main.c:103 src/ephy-main.c:275
+#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:189
+#: embed/ephy-about-handler.c:223 src/ephy-main.c:103 src/ephy-main.c:275
 #: src/ephy-main.c:417 src/window-commands.c:652
 msgid "Web"
 msgstr "網頁"
@@ -831,46 +831,50 @@ msgstr "版本 %s"
 msgid "About Web"
 msgstr "關於 Web"
 
-#: embed/ephy-about-handler.c:190
+#: embed/ephy-about-handler.c:191 src/window-commands.c:654
+msgid "Epiphany Technology Preview"
+msgstr "Epiphany 技術預覽版"
+
+#: embed/ephy-about-handler.c:194
 msgid "A simple, clean, beautiful view of the web"
 msgstr "簡單、乾淨、美麗的網頁面貌"
 
-#: embed/ephy-about-handler.c:248 embed/ephy-about-handler.c:249
+#: embed/ephy-about-handler.c:252 embed/ephy-about-handler.c:253
 msgid "Applications"
 msgstr "應用程式"
 
-#: embed/ephy-about-handler.c:250
+#: embed/ephy-about-handler.c:254
 msgid "List of installed web applications"
 msgstr "已安裝的網頁應用程式清單"
 
-#: embed/ephy-about-handler.c:264
+#: embed/ephy-about-handler.c:268
 msgid "Delete"
 msgstr "刪除"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:266
+#: embed/ephy-about-handler.c:270
 msgid "Installed on:"
 msgstr "安裝於："
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:356
+#: embed/ephy-about-handler.c:360
 msgid "Welcome to Web"
 msgstr "歡迎使用網頁"
 
-#: embed/ephy-about-handler.c:356
+#: embed/ephy-about-handler.c:360
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "開始瀏覽，而您訪問量最大的網站會出現在這裡。"
 
-#: embed/ephy-about-handler.c:382
+#: embed/ephy-about-handler.c:386
 #: embed/web-extension/resources/js/overview.js:101
 msgid "Remove from overview"
 msgstr "從概覽中移除"
 
-#: embed/ephy-about-handler.c:456 embed/ephy-about-handler.c:457
+#: embed/ephy-about-handler.c:460 embed/ephy-about-handler.c:461
 msgid "Private Browsing"
 msgstr "隱密瀏覽"
 
-#: embed/ephy-about-handler.c:458
+#: embed/ephy-about-handler.c:462
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -879,12 +883,12 @@ msgstr ""
 "您目前正在隱密瀏覽。這個模式中檢視過的網頁將不會出現在瀏覽紀錄中，且所有儲存"
 "的資訊都會在關閉視窗時清除。下載的檔案則會保留下來。"
 
-#: embed/ephy-about-handler.c:462
+#: embed/ephy-about-handler.c:466
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr "隱密模式只能對使用這臺電腦的其他人隱藏您的活動。"
 
-#: embed/ephy-about-handler.c:464
+#: embed/ephy-about-handler.c:468
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -905,16 +909,16 @@ msgid "Download finished"
 msgstr "下載完成"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "按下 %s 離開全螢幕"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "F11"
 msgstr "F11"
 
@@ -1310,88 +1314,96 @@ msgid ""
 "kept private."
 msgstr "注意：這份表單不安全。如果您輸入您的密碼，很有可能不被私密保存。"
 
-#: embed/ephy-web-view.c:1536
+#: embed/ephy-web-view.c:1134
+msgid "Web process crashed"
+msgstr "網路程序崩潰"
+
+#: embed/ephy-web-view.c:1137
+msgid "Web process terminated due to exceeding memory limit"
+msgstr "網路程序因為超出記憶體限制而被中止"
+
+#: embed/ephy-web-view.c:1546
 msgid "Deny"
 msgstr "禁止"
 
-#: embed/ephy-web-view.c:1537
+#: embed/ephy-web-view.c:1547
 msgid "Allow"
 msgstr "允許"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1554
+#: embed/ephy-web-view.c:1564
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "位於 %s 的網頁想要顯示桌面通知。"
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1559
+#: embed/ephy-web-view.c:1569
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "位於 %s 的網頁想要知道您的位置。"
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1564
+#: embed/ephy-web-view.c:1574
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "位於 %s 的網頁想要使用您的麥克風。"
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1569
+#: embed/ephy-web-view.c:1579
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "位於 %s 的網頁想要使用您的網路攝影機。"
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1748
+#: embed/ephy-web-view.c:1758
 #, c-format
 msgid "Loading “%s”…"
 msgstr "正在載入「%s」…"
 
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1760
 msgid "Loading…"
 msgstr "載入中…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:2036
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "這個網站呈現的識別屬於不同的網站。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2031
+#: embed/ephy-web-view.c:2041
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
 msgstr "這個網站的識別太老以致難以信任。請檢查您電腦的日期是否正確。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2036
+#: embed/ephy-web-view.c:2046
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "這個網站的識別並非來自可信任的組織。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2041
+#: embed/ephy-web-view.c:2051
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "這個網站的識別無法處理。它可能已損壞。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2046
+#: embed/ephy-web-view.c:2056
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
 msgstr "這個網站的識別已被發行它的信任組織註銷。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2051
+#: embed/ephy-web-view.c:2061
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
 msgstr "這個網站的識別不可信任，因為它使用非常弱的加密。"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2056
+#: embed/ephy-web-view.c:2066
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1399,24 +1411,24 @@ msgstr "這個網站的識別有效日期在未來。請檢查您電腦的日期
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2119 embed/ephy-web-view.c:2175
+#: embed/ephy-web-view.c:2129 embed/ephy-web-view.c:2185
 #, c-format
 msgid "Problem Loading Page"
 msgstr "載入頁面時發生錯誤"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2122
+#: embed/ephy-web-view.c:2132
 msgid "Unable to display this website"
 msgstr "無法顯示這個網站"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2126
+#: embed/ephy-web-view.c:2136
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "在 %s 的網站似乎無法使用。"
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2130
+#: embed/ephy-web-view.c:2140
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1425,7 +1437,7 @@ msgstr ""
 "常。"
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2140
+#: embed/ephy-web-view.c:2150
 #, c-format
 msgid "The precise error was: %s"
 msgstr "精確的錯誤是：%s"
@@ -1433,69 +1445,69 @@ msgstr "精確的錯誤是：%s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2145 embed/ephy-web-view.c:2198
-#: embed/ephy-web-view.c:2241
+#: embed/ephy-web-view.c:2155 embed/ephy-web-view.c:2208
+#: embed/ephy-web-view.c:2251
 msgid "Reload"
 msgstr "重新載入"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2148 embed/ephy-web-view.c:2201
-#: embed/ephy-web-view.c:2244
+#: embed/ephy-web-view.c:2158 embed/ephy-web-view.c:2211
+#: embed/ephy-web-view.c:2254
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2178
+#: embed/ephy-web-view.c:2188
 msgid "Oops! There may be a problem"
 msgstr "噢！可能有問題發生"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2182
+#: embed/ephy-web-view.c:2192
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "網頁 %s 可能導致 Web 意外關閉。"
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2189
+#: embed/ephy-web-view.c:2199
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "如果再發生這種情況，請將問題報告給 %s 開發團隊。"
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2227
+#: embed/ephy-web-view.c:2237
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "顯示頁面時發生問題"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2230
+#: embed/ephy-web-view.c:2240
 msgid "Oops!"
 msgstr "噢！"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2233
+#: embed/ephy-web-view.c:2243
 msgid "Something went wrong while displaying this page."
 msgstr "顯示這個頁面時有錯誤發生。"
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2235
+#: embed/ephy-web-view.c:2245
 msgid "Please reload or visit a different page to continue."
 msgstr "請重新載入或瀏覽不同的頁面以繼續。"
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2270
+#: embed/ephy-web-view.c:2280
 #, c-format
 msgid "Security Violation"
 msgstr "違反安全性"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2273
+#: embed/ephy-web-view.c:2283
 msgid "This Connection is Not Secure"
 msgstr "這個連線並不安全"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2277
+#: embed/ephy-web-view.c:2287
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1505,42 +1517,42 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2287 embed/ephy-web-view.c:2376
+#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
 msgid "Go Back"
 msgstr "返回"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2290 embed/ephy-web-view.c:2379
+#: embed/ephy-web-view.c:2300 embed/ephy-web-view.c:2389
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2293 embed/ephy-web-view.c:2382
+#: embed/ephy-web-view.c:2303 embed/ephy-web-view.c:2392
 msgid "Accept Risk and Proceed"
 msgstr "接受風險並繼續"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
+#: embed/ephy-web-view.c:2307 embed/ephy-web-view.c:2396
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2327
+#: embed/ephy-web-view.c:2337
 #, c-format
 msgid "Security Warning"
 msgstr "安全性警告"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2330
+#: embed/ephy-web-view.c:2340
 msgid "Unsafe website detected!"
 msgstr "偵測到不安全的網站！"
 
-#: embed/ephy-web-view.c:2337
+#: embed/ephy-web-view.c:2347
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1549,7 +1561,7 @@ msgstr ""
 "訪問 %s 可能會損害您的電腦。這個網頁似乎包含可不經您同意就下載到您電腦中的惡"
 "意程式碼。"
 
-#: embed/ephy-web-view.c:2341
+#: embed/ephy-web-view.c:2351
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1558,7 +1570,7 @@ msgstr ""
 "您可以前往 %s 深入學習何謂有害網頁，如病毒與其他惡意程式碼等，以及該如何保護"
 "您電腦的相關資訊。"
 
-#: embed/ephy-web-view.c:2348
+#: embed/ephy-web-view.c:2358
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1568,14 +1580,14 @@ msgstr ""
 "%s 的攻擊者可能欺騙您做些危險的事情，例如安裝軟體或是揭露您的個人資訊（舉例："
 "密碼、電話號碼、信用卡號碼等）。"
 
-#: embed/ephy-web-view.c:2353
+#: embed/ephy-web-view.c:2363
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
 "你可以前往 %s 或從 %s 瞭解更多有關何謂社交工程（網路釣魚） 的相關資訊。"
 
-#: embed/ephy-web-view.c:2362
+#: embed/ephy-web-view.c:2372
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1585,20 +1597,20 @@ msgstr ""
 "%s 可能包含有害程式。攻擊者可能試圖欺騙您安裝會傷害瀏覽體驗的程式（例如：更換"
 "您的瀏覽器首頁，或是在您造訪的網頁中顯示額外的廣告）。"
 
-#: embed/ephy-web-view.c:2367
+#: embed/ephy-web-view.c:2377
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "您可以前往 %s 深入學習有關不需要軟體的相關資訊。"
 
-#: embed/ephy-web-view.c:2442
+#: embed/ephy-web-view.c:2452
 msgid "None specified"
 msgstr "沒有指定"
 
-#: embed/ephy-web-view.c:2547
+#: embed/ephy-web-view.c:2557
 msgid "Technical information"
 msgstr "技術資料"
 
-#: embed/ephy-web-view.c:3427
+#: embed/ephy-web-view.c:3437
 msgid "_OK"
 msgstr "確定(_O)"
 
@@ -1891,7 +1903,7 @@ msgstr "正在開始…"
 #: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1162
 #: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
 #: src/window-commands.c:299 src/window-commands.c:396
-#: src/window-commands.c:455 src/window-commands.c:1400
+#: src/window-commands.c:455 src/window-commands.c:1396
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -1919,20 +1931,20 @@ msgstr "所有檔案"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:654 src/ephy-history-dialog.c:262
+#: lib/widgets/ephy-location-entry.c:672 src/ephy-history-dialog.c:262
 msgid "Cl_ear"
 msgstr "清除(_E)"
 
-#: lib/widgets/ephy-location-entry.c:674
+#: lib/widgets/ephy-location-entry.c:692
 msgid "Paste and _Go"
 msgstr "貼上並瀏覽(_G)"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:695 src/ephy-window.c:831
+#: lib/widgets/ephy-location-entry.c:713 src/ephy-window.c:831
 msgid "_Undo"
 msgstr "復原(_U)"
 
-#: lib/widgets/ephy-location-entry.c:702
+#: lib/widgets/ephy-location-entry.c:720
 msgid "_Redo"
 msgstr "取消復原(_R)"
 
@@ -2077,7 +2089,7 @@ msgstr "載入指定的工作階段檔案"
 msgid "Add a bookmark"
 msgstr "加入書籤"
 
-#: src/ephy-main.c:121 src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#: src/ephy-main.c:121
 msgid "URL"
 msgstr "URL"
 
@@ -2667,18 +2679,26 @@ msgid "_Close"
 msgstr "關閉(_C)"
 
 #: src/resources/gtk/page-menu-popover.ui:21
-#: src/resources/gtk/page-menu-popover.ui:22
 msgid "Zoom Out"
 msgstr "拉遠"
+
+#: src/resources/gtk/page-menu-popover.ui:22
+msgctxt "tooltip"
+msgid "Zoom Out"
+msgstr "縮小"
 
 #: src/resources/gtk/page-menu-popover.ui:38
 msgid "Restore Zoom"
 msgstr "還原縮放比例"
 
 #: src/resources/gtk/page-menu-popover.ui:53
-#: src/resources/gtk/page-menu-popover.ui:54
 msgid "Zoom In"
 msgstr "拉近"
+
+#: src/resources/gtk/page-menu-popover.ui:54
+msgctxt "tooltip"
+msgid "Zoom In"
+msgstr "放大"
 
 #: src/resources/gtk/page-menu-popover.ui:78
 msgid "Print…"
@@ -3292,6 +3312,11 @@ msgstr ""
 "以任何附加連結為開頭的的連結，將會以網頁應用程式開啟。如果你省略了 URL 前綴，"
 "就使用其中一個目前載入的連結。"
 
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+msgctxt "Column header in the Additional URLs dialog"
+msgid "URL"
+msgstr "URL"
+
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:124
 msgid "Add new URL"
 msgstr "增加新連結"
@@ -3388,10 +3413,6 @@ msgstr ""
 "簡單、乾淨、美麗的網頁面貌。\n"
 "使用 WebKitGTK+ %d.%d.%d"
 
-#: src/window-commands.c:654
-msgid "Epiphany Technology Preview"
-msgstr "Epiphany 技術預覽版"
-
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
 #. * the translators.
@@ -3411,69 +3432,65 @@ msgstr ""
 "Ching-Hung Lin <billlin@wshlab2.ee.kuas.edu.tw>, 2004\n"
 "Abel Cheung <maddog@linux.org.hk>, 2003"
 
-#: src/window-commands.c:675
-msgid "Web Website"
-msgstr "網頁網站"
-
-#: src/window-commands.c:677
+#: src/window-commands.c:674
 msgid "Website"
 msgstr "網站"
 
-#: src/window-commands.c:927
+#: src/window-commands.c:923
 msgid "Open"
 msgstr "開啟"
 
-#: src/window-commands.c:1290
+#: src/window-commands.c:1286
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "已存在名為「%s」的網頁應用程式。您想要取代它嗎？"
 
-#: src/window-commands.c:1293
+#: src/window-commands.c:1289
 msgid "Cancel"
 msgstr "取消"
 
-#: src/window-commands.c:1295
+#: src/window-commands.c:1291
 msgid "Replace"
 msgstr "取代"
 
-#: src/window-commands.c:1299
+#: src/window-commands.c:1295
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "以此為名的應用程式已經存在。取代它會將它覆蓋。"
 
-#: src/window-commands.c:1341
+#: src/window-commands.c:1337
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "應用程式「%s」已經準備好可以使用"
 
-#: src/window-commands.c:1344
+#: src/window-commands.c:1340
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "無法建立應用程式「%s」"
 
-#: src/window-commands.c:1352
+#: src/window-commands.c:1348
 msgid "Launch"
 msgstr "執行"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1397
+#: src/window-commands.c:1393
 msgid "Create Web Application"
 msgstr "建立網頁應用程式"
 
-#: src/window-commands.c:1402
+#: src/window-commands.c:1398
 msgid "C_reate"
 msgstr "建立(_R)"
 
-#: src/window-commands.c:1531
+#: src/window-commands.c:1527
 msgid "Save"
 msgstr "儲存"
 
-#: src/window-commands.c:2230
+#: src/window-commands.c:2226
 msgid "Enable caret browsing mode?"
 msgstr "是否啟用鍵盤瀏覽？"
 
-#: src/window-commands.c:2233
+#: src/window-commands.c:2229
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3482,9 +3499,12 @@ msgstr ""
 "按下 F7 會開啟或關閉鍵盤瀏覽。這個功能會在網頁中放置一個可移動的游標，讓您可"
 "以使用鍵盤隨處移動。您是否要啟用鍵盤瀏覽？"
 
-#: src/window-commands.c:2236
+#: src/window-commands.c:2232
 msgid "_Enable"
 msgstr "啟用(_E)"
+
+#~ msgid "Web Website"
+#~ msgstr "網頁網站"
 
 #~ msgid "Installed plugins"
 #~ msgstr "已安裝的外掛程式"
