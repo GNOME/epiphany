@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2018-08-05 00:34+0000\n"
-"PO-Revision-Date: 2018-08-05 20:38+0300\n"
+"POT-Creation-Date: 2018-08-07 22:49+0000\n"
+"PO-Revision-Date: 2018-08-09 16:20+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -556,7 +556,6 @@ msgid "Web application additional URLs"
 msgstr "Web uygulaması ek URLʼleri"
 
 #: data/org.gnome.epiphany.gschema.xml:244
-#| msgid "List of installed web applications"
 msgid "The list of URLs that should be opened by the web application"
 msgstr "Web uygulaması tarafından açılması gereken URLʼlerin listesi"
 
@@ -1403,56 +1402,64 @@ msgstr ""
 "Uyarı: bu form güvenli değil. Eğer parolanızı yazarsanız, gizli "
 "tutulmayacaktır."
 
-#: embed/ephy-web-view.c:1536
+#: embed/ephy-web-view.c:1134
+msgid "Web process crashed"
+msgstr "Web süreci çöktü"
+
+#: embed/ephy-web-view.c:1137
+msgid "Web process terminated due to exceeding memory limit"
+msgstr "Web süreci bellek sınırını aştığı için son buldu"
+
+#: embed/ephy-web-view.c:1546
 msgid "Deny"
 msgstr "Reddet"
 
-#: embed/ephy-web-view.c:1537
+#: embed/ephy-web-view.c:1547
 msgid "Allow"
 msgstr "İzin ver"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1554
+#: embed/ephy-web-view.c:1564
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "%s konumundaki sayfa, masaüstü bildirimleri göstermek istiyor."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1559
+#: embed/ephy-web-view.c:1569
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "%s sayfası konumunuzu bilmek istiyor."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1564
+#: embed/ephy-web-view.c:1574
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "%s sayfası mikrofonunuzu kullanmak istiyor."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1569
+#: embed/ephy-web-view.c:1579
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "%s sayfası web kameranızı kullanmak istiyor."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1748
+#: embed/ephy-web-view.c:1758
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” yükleniyor…"
 
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1760
 msgid "Loading…"
 msgstr "Yükleniyor…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:2036
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr "Bu web sitesi farklı bir web sitesine ait kimlik sundu."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2031
+#: embed/ephy-web-view.c:2041
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1461,19 +1468,19 @@ msgstr ""
 "takvimindeki tarihi denetleyin."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2036
+#: embed/ephy-web-view.c:2046
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Bu web sitesinin kimliği güvenilir bir kuruluş tarafından düzenlenmemiş."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2041
+#: embed/ephy-web-view.c:2051
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr "Bu web sitesinin kimliği işlenemedi. Bozuk olabilir."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2046
+#: embed/ephy-web-view.c:2056
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1482,7 +1489,7 @@ msgstr ""
 "edildi."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2051
+#: embed/ephy-web-view.c:2061
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1491,7 +1498,7 @@ msgstr ""
 "kullanıyor."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2056
+#: embed/ephy-web-view.c:2066
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1501,24 +1508,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2119 embed/ephy-web-view.c:2175
+#: embed/ephy-web-view.c:2129 embed/ephy-web-view.c:2185
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Sayfa Yükleme Sorunu"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2122
+#: embed/ephy-web-view.c:2132
 msgid "Unable to display this website"
 msgstr "Bu web sitesi gösterilemiyor"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2126
+#: embed/ephy-web-view.c:2136
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "%s konumundaki site şu anda kullanılamıyor."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2130
+#: embed/ephy-web-view.c:2140
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1527,7 +1534,7 @@ msgstr ""
 "bağlantınızın doğru olarak çalışıp çalışmadığını doğrulamak isteyebilirsiniz."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2140
+#: embed/ephy-web-view.c:2150
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Ayrıntılı hata: %s"
@@ -1535,72 +1542,72 @@ msgstr "Ayrıntılı hata: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2145 embed/ephy-web-view.c:2198
-#: embed/ephy-web-view.c:2241
+#: embed/ephy-web-view.c:2155 embed/ephy-web-view.c:2208
+#: embed/ephy-web-view.c:2251
 msgid "Reload"
 msgstr "Yeniden Yükle"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2148 embed/ephy-web-view.c:2201
-#: embed/ephy-web-view.c:2244
+#: embed/ephy-web-view.c:2158 embed/ephy-web-view.c:2211
+#: embed/ephy-web-view.c:2254
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2178
+#: embed/ephy-web-view.c:2188
 msgid "Oops! There may be a problem"
 msgstr "Amanın! Bir sorun olabilir"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2182
+#: embed/ephy-web-view.c:2192
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 "%s sayfası, Web’in beklenmedik şekilde kapanmasına neden olmuş olabilir."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2189
+#: embed/ephy-web-view.c:2199
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Eğer bu yeniden olursa, lütfen sorunu %s geliştiricilerine bildirin."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2227
+#: embed/ephy-web-view.c:2237
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Sayfa Görüntüleme Sorunu"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2230
+#: embed/ephy-web-view.c:2240
 msgid "Oops!"
 msgstr "Amanın!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2233
+#: embed/ephy-web-view.c:2243
 msgid "Something went wrong while displaying this page."
 msgstr "Bu sayfa görüntülenirken bir şeyler yanlış gitti."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2235
+#: embed/ephy-web-view.c:2245
 msgid "Please reload or visit a different page to continue."
 msgstr ""
 "Devam etmek için lütfen sayfayı yeniden yükleyin ya da başka bir sayfayı "
 "ziyaret edin."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2270
+#: embed/ephy-web-view.c:2280
 #, c-format
 msgid "Security Violation"
 msgstr "Güvenlik İhlali"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2273
+#: embed/ephy-web-view.c:2283
 msgid "This Connection is Not Secure"
 msgstr "Bu Bağlantı Güvenli Değil"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2277
+#: embed/ephy-web-view.c:2287
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1612,42 +1619,42 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2287 embed/ephy-web-view.c:2376
+#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
 msgid "Go Back"
 msgstr "Geri Git"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2290 embed/ephy-web-view.c:2379
+#: embed/ephy-web-view.c:2300 embed/ephy-web-view.c:2389
 msgctxt "back-access-key"
 msgid "B"
 msgstr "G"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2293 embed/ephy-web-view.c:2382
+#: embed/ephy-web-view.c:2303 embed/ephy-web-view.c:2392
 msgid "Accept Risk and Proceed"
 msgstr "Tehlikeyi Kabul Et ve Devam Et"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
+#: embed/ephy-web-view.c:2307 embed/ephy-web-view.c:2396
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "D"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2327
+#: embed/ephy-web-view.c:2337
 #, c-format
 msgid "Security Warning"
 msgstr "Güvenlik Uyarısı"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2330
+#: embed/ephy-web-view.c:2340
 msgid "Unsafe website detected!"
 msgstr "Güvenli olmayan web sitesi tespit edildi!"
 
-#: embed/ephy-web-view.c:2337
+#: embed/ephy-web-view.c:2347
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1656,7 +1663,7 @@ msgstr ""
 "%s adresini ziyaret etmek bilgisayarınıza zarar verebilir. Bu sayfa "
 "isteğiniz dışında bilgisayarınıza inen zararlı bir kod içeriyor gibi duruyor."
 
-#: embed/ephy-web-view.c:2341
+#: embed/ephy-web-view.c:2351
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1666,7 +1673,7 @@ msgstr ""
 "çoğunu ve bilgisayarınızı bunlardan nasıl koruyacağınızı %s adresinden "
 "öğrenebilirsiniz."
 
-#: embed/ephy-web-view.c:2348
+#: embed/ephy-web-view.c:2358
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1677,7 +1684,7 @@ msgstr ""
 "(örneğin parolalar, telefon numaraları veya kredi kartları) ele vermek gibi "
 "tehlikeli şeyler yapmanız için sizi kandırabilir."
 
-#: embed/ephy-web-view.c:2353
+#: embed/ephy-web-view.c:2363
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1685,7 +1692,7 @@ msgstr ""
 "Sosyal mühendislik (kimlik hırsızlığı) ile ilgili daha çoğunu %s veya %s "
 "adresinde bulabilirsiniz."
 
-#: embed/ephy-web-view.c:2362
+#: embed/ephy-web-view.c:2372
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1696,22 +1703,22 @@ msgstr ""
 "olumsuz etkileyecek programlar kurdurmaya çalışabilirler (örneğin, başlangıç "
 "sayfanızı değiştirmek veya girdiğiniz sitelerde fazladan reklam göstermek)."
 
-#: embed/ephy-web-view.c:2367
+#: embed/ephy-web-view.c:2377
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr ""
 "İstenmeyen yazılımlarla ilgili daha çok bilgiyi %s adresinden "
 "öğrenebilirsiniz."
 
-#: embed/ephy-web-view.c:2442
+#: embed/ephy-web-view.c:2452
 msgid "None specified"
 msgstr "Hiçbir şey belirtilmemiş"
 
-#: embed/ephy-web-view.c:2547
+#: embed/ephy-web-view.c:2557
 msgid "Technical information"
 msgstr "Teknik bilgiler"
 
-#: embed/ephy-web-view.c:3427
+#: embed/ephy-web-view.c:3437
 msgid "_OK"
 msgstr "_Tamam"
 
@@ -2208,7 +2215,7 @@ msgstr "Seçilen oturum dosyasını yükle"
 msgid "Add a bookmark"
 msgstr "Yer imi ekle"
 
-#: src/ephy-main.c:121 src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#: src/ephy-main.c:121
 msgid "URL"
 msgstr "URL"
 
@@ -2453,7 +2460,6 @@ msgid "Something went wrong, please try again later."
 msgstr "Bir şeyler yanlış gitti, lütfen yeniden deneyin."
 
 #: src/prefs-dialog.c:826
-#| msgid "Create Web Application"
 msgid "Web Application Icon"
 msgstr "Web Uygulaması Simgesi"
 
@@ -2802,7 +2808,12 @@ msgid "_Close"
 msgstr "_Kapat"
 
 #: src/resources/gtk/page-menu-popover.ui:21
+msgid "Zoom Out"
+msgstr "Uzaklaştır"
+
 #: src/resources/gtk/page-menu-popover.ui:22
+#| msgid "Zoom Out"
+msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
@@ -2811,7 +2822,12 @@ msgid "Restore Zoom"
 msgstr "Yakınlaştırmayı Düzelt"
 
 #: src/resources/gtk/page-menu-popover.ui:53
+msgid "Zoom In"
+msgstr "Yakınlaştır"
+
 #: src/resources/gtk/page-menu-popover.ui:54
+#| msgid "Zoom In"
+msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
@@ -2820,13 +2836,10 @@ msgid "Print…"
 msgstr "Yazdır…"
 
 #: src/resources/gtk/page-menu-popover.ui:93
-#| msgid "_Find…"
 msgid "Find…"
 msgstr "Bul…"
 
 #: src/resources/gtk/page-menu-popover.ui:108
-#| msgctxt "shortcut window"
-#| msgid "Fullscreen"
 msgid "Fullscreen"
 msgstr "Tam Ekran"
 
@@ -2900,7 +2913,6 @@ msgid "_Custom:"
 msgstr "_Özel:"
 
 #: src/resources/gtk/prefs-dialog.ui:114
-#| msgid "Applications"
 msgid "Web Application"
 msgstr "Web Uygulaması"
 
@@ -2909,12 +2921,10 @@ msgid "_Manage Additional URLs"
 msgstr "Ek URLʼleri _Yönet"
 
 #: src/resources/gtk/prefs-dialog.ui:157
-#| msgid "Homepage"
 msgid "Homepage:"
 msgstr "Başlangıç sayfası:"
 
 #: src/resources/gtk/prefs-dialog.ui:179
-#| msgid "_Title:"
 msgid "Title:"
 msgstr "Başlık:"
 
@@ -2951,7 +2961,6 @@ msgid "Try to block _advertisements"
 msgstr "Rekl_amları engellemeyi dene"
 
 #: src/resources/gtk/prefs-dialog.ui:357
-#| msgid "Try to block dangerous web_sites"
 msgid "Try to block web _trackers"
 msgstr "Web _takipçilerini engellemeyi dene"
 
@@ -3435,12 +3444,17 @@ msgid ""
 "URL will be used."
 msgstr ""
 
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#| msgid "URL"
+msgctxt "Column header in the Additional URLs dialog"
+msgid "URL"
+msgstr "URL"
+
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:124
 msgid "Add new URL"
 msgstr "Yeni URL ekle"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:137
-#| msgid "Remove the selected pages from history"
 msgid "Remove the selected URLs"
 msgstr "Seçili URLʼleri kaldır"
 
