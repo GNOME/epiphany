@@ -10,8 +10,10 @@ Epiphany is opinionated.
 Epiphany is designed for Linux systems. The recommended way to install Epiphany
 is via [Flatpak](https://www.flatpak.org/). You may:
 
- * [Download the latest stable version from Flathub](https://flathub.org/repo/appstream/org.gnome.Epiphany.flatpakref)
-   (recommended); or
+ * ~~[Download the latest stable version from Flathub](https://flathub.org/repo/appstream/org.gnome.Epiphany.flatpakref)
+   (recommended).~~ Flathub downloads are currently not recommended due to major
+   security problems discovered in the application runtime. We expect this
+   situation to be improved in the future. In the meantime, do not use.
  * [Download Epiphany Technology Preview](https://webkitgtk.org/epiphany-tech-preview)
    if you are adventurous and want to help test tomorrow's Epiphany today. It
    is **not stable**.
