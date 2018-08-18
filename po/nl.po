@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2018-07-01 02:24+0000\n"
-"PO-Revision-Date: 2018-07-28 11:33+0100\n"
+"POT-Creation-Date: 2018-08-07 22:49+0000\n"
+"PO-Revision-Date: 2018-08-18 09:52+0100\n"
 "Last-Translator: Hannie Dumoleyn <hannie@ubuntu-nl.org>\n"
 "Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
@@ -60,8 +60,8 @@ msgstr "De Gnome-website weergegeven in Gnome Web"
 msgid "The GNOME Project"
 msgstr "Het Gnome-project"
 
-#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:188
-#: embed/ephy-about-handler.c:219 src/ephy-main.c:103 src/ephy-main.c:275
+#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:189
+#: embed/ephy-about-handler.c:223 src/ephy-main.c:103 src/ephy-main.c:275
 #: src/ephy-main.c:417 src/window-commands.c:652
 msgid "Web"
 msgstr "Web"
@@ -554,7 +554,6 @@ msgid "Default zoom level for new pages"
 msgstr "Standaard zoomniveau voor nieuwe pagina’s"
 
 #: data/org.gnome.epiphany.gschema.xml:236
-#| msgid "Enable adblock"
 msgid "Enable autosearch"
 msgstr "Automatisch zoeken inschakelen"
 
@@ -565,17 +564,16 @@ msgid ""
 "everything will be loaded as a URL unless a search engine is explicitly "
 "selected from the dropdown menu."
 msgstr ""
-"Of er automatisch op internet gezocht moet worden wanneer er in de adresbalk"
-" iets is ingevoerd dat er niet uitziet als een URL. Wanneer deze instelling"
-" is uitgeschakeld, dan wordt alles als een URL geladen, tenzij een"
-" zoekmachine expliciet is geselecteerd in het vervolgkeuzemenu."
+"Of er automatisch op internet gezocht moet worden wanneer er in de adresbalk "
+"iets is ingevoerd dat er niet uitziet als een URL. Wanneer deze instelling "
+"is uitgeschakeld, dan wordt alles als een URL geladen, tenzij een "
+"zoekmachine expliciet is geselecteerd in het vervolgkeuzemenu."
 
 #: data/org.gnome.epiphany.gschema.xml:243
 msgid "Web application additional URLs"
 msgstr "Aanvullende URL's van webtoepassingen"
 
 #: data/org.gnome.epiphany.gschema.xml:244
-#| msgid "List of installed web applications"
 msgid "The list of URLs that should be opened by the web application"
 msgstr "De lijst van URL's die geopend moet worden door de webtoepassing"
 
@@ -640,9 +638,9 @@ msgid ""
 "If set to “true”, forward and back buttons are disabled, preventing users "
 "from accessing immediate browser history"
 msgstr ""
-"Als dit ingesteld is op ‘true’, dan zijn de knoppen vooruit en terug"
-" uitgeschakeld; hierdoor hebben gebruikers geen directe toegang tot de"
-" browsergeschiedenis."
+"Als dit ingesteld is op ‘true’, dan zijn de knoppen vooruit en terug "
+"uitgeschakeld; hierdoor hebben gebruikers geen directe toegang tot de "
+"browsergeschiedenis."
 
 #: data/org.gnome.epiphany.gschema.xml:300
 #: data/org.gnome.epiphany.gschema.xml:387
@@ -961,50 +959,54 @@ msgstr "Versie %s"
 msgid "About Web"
 msgstr "Info over Web"
 
-#: embed/ephy-about-handler.c:190
+#: embed/ephy-about-handler.c:191 src/window-commands.c:654
+msgid "Epiphany Technology Preview"
+msgstr "Epiphany Technology Preview"
+
+#: embed/ephy-about-handler.c:194
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Een eenvoudige, heldere en mooie weergave van het web"
 
-#: embed/ephy-about-handler.c:248 embed/ephy-about-handler.c:249
+#: embed/ephy-about-handler.c:252 embed/ephy-about-handler.c:253
 msgid "Applications"
 msgstr "Toepassingen"
 
-#: embed/ephy-about-handler.c:250
+#: embed/ephy-about-handler.c:254
 msgid "List of installed web applications"
 msgstr "Lijst van geïnstalleerde toepassingen"
 
 # src/bookmarks_editor.c:949
 # src/bookmarks_editor.c:1169
 # src/menubar.c:39
-#: embed/ephy-about-handler.c:264
+#: embed/ephy-about-handler.c:268
 msgid "Delete"
 msgstr "Verwijderen"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:266
+#: embed/ephy-about-handler.c:270
 msgid "Installed on:"
 msgstr "Geïnstalleerd op:"
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:356
+#: embed/ephy-about-handler.c:360
 msgid "Welcome to Web"
 msgstr "Welkom bij Web"
 
-#: embed/ephy-about-handler.c:356
+#: embed/ephy-about-handler.c:360
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Begin met browsen en uw meest bezochte pagina’s verschijnen hier."
 
 # src/menubar.c:150
-#: embed/ephy-about-handler.c:382
+#: embed/ephy-about-handler.c:386
 #: embed/web-extension/resources/js/overview.js:101
 msgid "Remove from overview"
 msgstr "Verwijderen uit overzicht"
 
-#: embed/ephy-about-handler.c:456 embed/ephy-about-handler.c:457
+#: embed/ephy-about-handler.c:460 embed/ephy-about-handler.c:461
 msgid "Private Browsing"
 msgstr "Privénavigatie"
 
-#: embed/ephy-about-handler.c:458
+#: embed/ephy-about-handler.c:462
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -1015,14 +1017,14 @@ msgstr ""
 "wordt gewist wanneer u het venster sluit. Bestanden die u downloadt blijven "
 "behouden."
 
-#: embed/ephy-about-handler.c:462
+#: embed/ephy-about-handler.c:466
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Incognito-modus verbergt uw activiteit alleen voor personen die deze "
 "computer gebruiken."
 
-#: embed/ephy-about-handler.c:464
+#: embed/ephy-about-handler.c:468
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1045,16 +1047,16 @@ msgstr "Download is voltooid"
 
 # src/main.c:111
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Druk op %s om volledig scherm te verlaten"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "ESC"
 msgstr "ESC"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "F11"
 msgstr "F11"
 
@@ -1536,59 +1538,67 @@ msgstr ""
 "Waarschuwing: dit formulier is niet veilig. Als u uw wachtwoord invoert zal "
 "dit niet privé gehouden worden."
 
-#: embed/ephy-web-view.c:1536
+#: embed/ephy-web-view.c:1134
+msgid "Web process crashed"
+msgstr "webproces gecrasht"
+
+#: embed/ephy-web-view.c:1137
+msgid "Web process terminated due to exceeding memory limit"
+msgstr "Het webproces is beëindigd omdat de geheugengrens wordt overschreden"
+
+#: embed/ephy-web-view.c:1546
 msgid "Deny"
 msgstr "Weigeren"
 
-#: embed/ephy-web-view.c:1537
+#: embed/ephy-web-view.c:1547
 msgid "Allow"
 msgstr "Toestaan"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1554
+#: embed/ephy-web-view.c:1564
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "De pagina %s wil bureaubladnotificaties tonen."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1559
+#: embed/ephy-web-view.c:1569
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "De pagina %s wil uw locatiegegevens weten."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1564
+#: embed/ephy-web-view.c:1574
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "De pagina %s wil uw microfoon gebruiken."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1569
+#: embed/ephy-web-view.c:1579
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "De pagina %s wil uw webcam gebruiken."
 
 # src/mozcallbacks.c:424
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1748
+#: embed/ephy-web-view.c:1758
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laden van ‘%s’…"
 
 # src/mozcallbacks.c:424
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1760
 msgid "Loading…"
 msgstr "Laden…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:2036
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Deze website presenteerde identificatie die bij een andere website hoort."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2031
+#: embed/ephy-web-view.c:2041
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1597,14 +1607,14 @@ msgstr ""
 "datum op de kalender van uw computer."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2036
+#: embed/ephy-web-view.c:2046
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "De identificatie van deze website is niet uitgegeven door een vertrouwde "
 "organisatie."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2041
+#: embed/ephy-web-view.c:2051
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1612,7 +1622,7 @@ msgstr ""
 "beschadigd."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2046
+#: embed/ephy-web-view.c:2056
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1621,7 +1631,7 @@ msgstr ""
 "organisatie die haar heeft verstrekt."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2051
+#: embed/ephy-web-view.c:2061
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1630,7 +1640,7 @@ msgstr ""
 "zwakke versleuteling gebruikt."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2056
+#: embed/ephy-web-view.c:2066
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1641,24 +1651,24 @@ msgstr ""
 # src/mozcallbacks.c:424
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2119 embed/ephy-web-view.c:2175
+#: embed/ephy-web-view.c:2129 embed/ephy-web-view.c:2185
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Probleem bij het laden van pagina"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2122
+#: embed/ephy-web-view.c:2132
 msgid "Unable to display this website"
 msgstr "Deze website kan niet worden weergegeven"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2126
+#: embed/ephy-web-view.c:2136
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "De website %s lijkt niet beschikbaar te zijn."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2130
+#: embed/ephy-web-view.c:2140
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1668,7 +1678,7 @@ msgstr ""
 "functioneert."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2140
+#: embed/ephy-web-view.c:2150
 #, c-format
 msgid "The precise error was: %s"
 msgstr "De exacte foutmelding was: %s"
@@ -1678,32 +1688,32 @@ msgstr "De exacte foutmelding was: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2145 embed/ephy-web-view.c:2198
-#: embed/ephy-web-view.c:2241
+#: embed/ephy-web-view.c:2155 embed/ephy-web-view.c:2208
+#: embed/ephy-web-view.c:2251
 msgid "Reload"
 msgstr "Herladen"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2148 embed/ephy-web-view.c:2201
-#: embed/ephy-web-view.c:2244
+#: embed/ephy-web-view.c:2158 embed/ephy-web-view.c:2211
+#: embed/ephy-web-view.c:2254
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "H"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2178
+#: embed/ephy-web-view.c:2188
 msgid "Oops! There may be a problem"
 msgstr "Oeps! Er zou een probleem kunnen zijn"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2182
+#: embed/ephy-web-view.c:2192
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr ""
 "Mogelijk heeft de pagina %s ervoor gezorgd dat Web onverwacht is afgesloten."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2189
+#: embed/ephy-web-view.c:2199
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
@@ -1711,40 +1721,40 @@ msgstr ""
 
 # src/menubar.c:63
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2227
+#: embed/ephy-web-view.c:2237
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Probleem bij het weergeven van pagina"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2230
+#: embed/ephy-web-view.c:2240
 msgid "Oops!"
 msgstr "Oeps!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2233
+#: embed/ephy-web-view.c:2243
 msgid "Something went wrong while displaying this page."
 msgstr "Er ging iets mis bij het weergeven van deze pagina."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2235
+#: embed/ephy-web-view.c:2245
 msgid "Please reload or visit a different page to continue."
 msgstr ""
 "Gelieve opnieuw te laden of een andere pagina te bezoeken om door te gaan."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2270
+#: embed/ephy-web-view.c:2280
 #, c-format
 msgid "Security Violation"
 msgstr "Overtreding van de veiligheidsvoorschriften"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2273
+#: embed/ephy-web-view.c:2283
 msgid "This Connection is Not Secure"
 msgstr "Deze verbinding is niet veilig"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2277
+#: embed/ephy-web-view.c:2287
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1755,42 +1765,42 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2287 embed/ephy-web-view.c:2376
+#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
 msgid "Go Back"
 msgstr "Terug"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2290 embed/ephy-web-view.c:2379
+#: embed/ephy-web-view.c:2300 embed/ephy-web-view.c:2389
 msgctxt "back-access-key"
 msgid "B"
 msgstr "T"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2293 embed/ephy-web-view.c:2382
+#: embed/ephy-web-view.c:2303 embed/ephy-web-view.c:2392
 msgid "Accept Risk and Proceed"
 msgstr "Risico accepteren en doorgaan"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
+#: embed/ephy-web-view.c:2307 embed/ephy-web-view.c:2396
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "D"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2327
+#: embed/ephy-web-view.c:2337
 #, c-format
 msgid "Security Warning"
 msgstr "Veiligsheidswaarschuwing"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2330
+#: embed/ephy-web-view.c:2340
 msgid "Unsafe website detected!"
 msgstr "Onveilige website gedetecteerd!"
 
-#: embed/ephy-web-view.c:2337
+#: embed/ephy-web-view.c:2347
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1800,7 +1810,7 @@ msgstr ""
 "code te bevatten die naar uw computer gedownload kan worden zonder uw "
 "toestemming."
 
-#: embed/ephy-web-view.c:2341
+#: embed/ephy-web-view.c:2351
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1809,7 +1819,7 @@ msgstr ""
 "U kunt meer te weten komen over schadelijke websites, virussen en andere "
 "kwaadaardige code en hoe uw computer hiertegen te beschermen, op %s."
 
-#: embed/ephy-web-view.c:2348
+#: embed/ephy-web-view.c:2358
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1820,7 +1830,7 @@ msgstr ""
 "installeren van software of het prijsgeven van uw persoonlijke informatie "
 "(bijvoorbeeld wachtwoorden, telefoonnummers of creditcards)."
 
-#: embed/ephy-web-view.c:2353
+#: embed/ephy-web-view.c:2363
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1828,7 +1838,7 @@ msgstr ""
 "U kunt meer te weten komen over ‘social engineering’ (phishing) op %s of van "
 "%s."
 
-#: embed/ephy-web-view.c:2362
+#: embed/ephy-web-view.c:2372
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1840,20 +1850,20 @@ msgstr ""
 "beïnvloeden (bijvoorbeeld door uw startpagina te wijzigen of extra "
 "advertenties te tonen op websites die u bezoekt)."
 
-#: embed/ephy-web-view.c:2367
+#: embed/ephy-web-view.c:2377
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "U kunt meer te weten komen over ongewenste software op %s."
 
-#: embed/ephy-web-view.c:2442
+#: embed/ephy-web-view.c:2452
 msgid "None specified"
 msgstr "Niet opgegeven"
 
-#: embed/ephy-web-view.c:2547
+#: embed/ephy-web-view.c:2557
 msgid "Technical information"
 msgstr "Technische informatie"
 
-#: embed/ephy-web-view.c:3427
+#: embed/ephy-web-view.c:3437
 msgid "_OK"
 msgstr "_Ok"
 
@@ -2203,22 +2213,22 @@ msgstr "Alle bestanden"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:654 src/ephy-history-dialog.c:262
+#: lib/widgets/ephy-location-entry.c:672 src/ephy-history-dialog.c:262
 msgid "Cl_ear"
 msgstr "_Wissen"
 
-#: lib/widgets/ephy-location-entry.c:674
+#: lib/widgets/ephy-location-entry.c:692
 msgid "Paste and _Go"
 msgstr "Plakken en _Gaan"
 
 # src/mozilla_i18n.c:37
 # ui/preferences.glade.h:202
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:695 src/ephy-window.c:831
+#: lib/widgets/ephy-location-entry.c:713 src/ephy-window.c:831
 msgid "_Undo"
 msgstr "_Ongedaan maken"
 
-#: lib/widgets/ephy-location-entry.c:702
+#: lib/widgets/ephy-location-entry.c:720
 msgid "_Redo"
 msgstr "O_pnieuw"
 
@@ -2381,7 +2391,7 @@ msgstr "Bladwijzer toevoegen"
 # src/main.c:134
 # ui/bookmarks.glade.h:41
 # ui/epiphany.glade.h:125
-#: src/ephy-main.c:121 src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#: src/ephy-main.c:121
 msgid "URL"
 msgstr "URL"
 
@@ -2666,7 +2676,6 @@ msgstr "Er ging iets mis, probeer het later opnieuw."
 
 # src/menubar.c:54
 #: src/prefs-dialog.c:826
-#| msgid "Create Web Application"
 msgid "Web Application Icon"
 msgstr "Webtoepassingspictogram"
 
@@ -3083,7 +3092,13 @@ msgstr "Sl_uiten"
 
 # src/menubar.c:127
 #: src/resources/gtk/page-menu-popover.ui:21
+msgid "Zoom Out"
+msgstr "Uitzoomen"
+
+# src/menubar.c:127
 #: src/resources/gtk/page-menu-popover.ui:22
+#| msgid "Zoom Out"
+msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Uitzoomen"
 
@@ -3093,7 +3108,13 @@ msgstr "Zoom herstellen"
 
 # src/menubar.c:127
 #: src/resources/gtk/page-menu-popover.ui:53
+msgid "Zoom In"
+msgstr "Inzoomen"
+
+# src/menubar.c:127
 #: src/resources/gtk/page-menu-popover.ui:54
+#| msgid "Zoom In"
+msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Inzoomen"
 
@@ -3104,14 +3125,11 @@ msgstr "Afdrukken…"
 
 # ui/epiphany.glade.h:149
 #: src/resources/gtk/page-menu-popover.ui:93
-#| msgid "_Find…"
 msgid "Find…"
 msgstr "Zoeken…"
 
 # src/menubar.c:165
 #: src/resources/gtk/page-menu-popover.ui:108
-#| msgctxt "shortcut window"
-#| msgid "Fullscreen"
 msgid "Fullscreen"
 msgstr "Volledig scherm"
 
@@ -3205,7 +3223,6 @@ msgid "_Custom:"
 msgstr "_Aangepast:"
 
 #: src/resources/gtk/prefs-dialog.ui:114
-#| msgid "Applications"
 msgid "Web Application"
 msgstr "Webtoepassing"
 
@@ -3214,13 +3231,11 @@ msgid "_Manage Additional URLs"
 msgstr "Aanvullende URL's beheren"
 
 #: src/resources/gtk/prefs-dialog.ui:157
-#| msgid "Homepage"
 msgid "Homepage:"
 msgstr "Startpagina:"
 
 # ui/epiphany.glade.h:121
 #: src/resources/gtk/prefs-dialog.ui:179
-#| msgid "_Title:"
 msgid "Title:"
 msgstr "Titel:"
 
@@ -3810,16 +3825,24 @@ msgid ""
 "application. If you omit the URL scheme, the one from the currently loaded "
 "URL will be used."
 msgstr ""
-"Een URL die gestart wordt met een van de aanvullende URL's zal door de"
-" webtoepassing geopend worden. Als u het URL-schema overslaat, dan zal die"
-" van de momenteel geladen URL gebruikt worden."
+"Een URL die gestart wordt met een van de aanvullende URL's zal door de "
+"webtoepassing geopend worden. Als u het URL-schema overslaat, dan zal die "
+"van de momenteel geladen URL gebruikt worden."
+
+# src/main.c:134
+# ui/bookmarks.glade.h:41
+# ui/epiphany.glade.h:125
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#| msgid "URL"
+msgctxt "Column header in the Additional URLs dialog"
+msgid "URL"
+msgstr "URL"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:124
 msgid "Add new URL"
 msgstr "Nieuwe URL toevoegen"
 
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:137
-#| msgid "Remove the selected pages from history"
 msgid "Remove the selected URLs"
 msgstr "De geselecteerde URL’s verwijderen"
 
@@ -3922,10 +3945,6 @@ msgid ""
 msgstr ""
 "Een simpele, heldere en mooie weergave van het web.\n"
 "Op basis van WebKitGTK+ %d.%d.%d"
-
-#: src/window-commands.c:654
-msgid "Epiphany Technology Preview"
-msgstr "Epiphany Technology Preview"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
