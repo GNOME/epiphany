@@ -189,25 +189,6 @@ ephy_web_extension_proxy_new (GDBusConnection *connection)
 }
 
 void
-ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExtensionProxy *web_extension,
-                                                                    guint                  request_id,
-                                                                    gboolean               response)
-{
-  g_assert (EPHY_IS_WEB_EXTENSION_PROXY (web_extension));
-
-  if (!web_extension->proxy)
-    return;
-
-  g_dbus_proxy_call (web_extension->proxy,
-                     "FormAuthDataSaveConfirmationResponse",
-                     g_variant_new ("(ub)", request_id, response),
-                     G_DBUS_CALL_FLAGS_NONE,
-                     -1,
-                     web_extension->cancellable,
-                     NULL, NULL);
-}
-
-void
 ephy_web_extension_proxy_history_set_urls (EphyWebExtensionProxy *web_extension,
                                            GList                 *urls)
 {
@@ -308,6 +289,46 @@ ephy_web_extension_proxy_history_clear (EphyWebExtensionProxy *web_extension)
   g_dbus_proxy_call (web_extension->proxy,
                      "HistoryClear",
                      NULL,
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1,
+                     web_extension->cancellable,
+                     NULL, NULL);
+}
+
+void
+ephy_web_extension_proxy_password_cached_users_response (EphyWebExtensionProxy *web_extension,
+                                                         GList                 *users,
+                                                         gint32                 id)
+{
+  if (!web_extension->proxy)
+    return;
+
+  GList *l;
+  g_auto(GVariantBuilder) builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
+  for (l = users; l != NULL; l = l->next)
+    g_variant_builder_add (&builder, "s", l->data);
+
+  g_dbus_proxy_call (web_extension->proxy,
+                     "PasswordCachedUsersResponse",
+                     g_variant_new ("(asi)", &builder, id),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1,
+                     web_extension->cancellable,
+                     NULL, NULL);
+}
+
+void
+ephy_web_extension_proxy_password_query_response (EphyWebExtensionProxy *web_extension,
+                                                  const char            *username,
+                                                  const char            *password,
+                                                  gint32                 id)
+{
+  if (!web_extension->proxy)
+    return;
+
+  g_dbus_proxy_call (web_extension->proxy,
+                     "PasswordQueryResponse",
+                     g_variant_new ("(ssi)", username ?: "", password ?: "", id),
                      G_DBUS_CALL_FLAGS_NONE,
                      -1,
                      web_extension->cancellable,

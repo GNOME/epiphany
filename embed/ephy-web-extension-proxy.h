@@ -29,9 +29,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (EphyWebExtensionProxy, ephy_web_extension_proxy, EPHY, WEB_EXTENSION_PROXY, GObject)
 
 EphyWebExtensionProxy *ephy_web_extension_proxy_new                                       (GDBusConnection       *connection);
-void                   ephy_web_extension_proxy_form_auth_data_save_confirmation_response (EphyWebExtensionProxy *web_extension,
-                                                                                           guint                  request_id,
-                                                                                           gboolean               response);
 void                   ephy_web_extension_proxy_history_set_urls                          (EphyWebExtensionProxy *web_extension,
                                                                                            GList                 *urls);
 void                   ephy_web_extension_proxy_history_set_url_thumbnail                 (EphyWebExtensionProxy *web_extension,
@@ -45,5 +42,11 @@ void                   ephy_web_extension_proxy_history_delete_url              
 void                   ephy_web_extension_proxy_history_delete_host                       (EphyWebExtensionProxy *web_extension,
                                                                                            const char            *host);
 void                   ephy_web_extension_proxy_history_clear                             (EphyWebExtensionProxy *web_extension);
-
+void                   ephy_web_extension_proxy_password_cached_users_response            (EphyWebExtensionProxy *web_extension,
+                                                                                           GList                 *users,
+                                                                                           gint32                 id);
+void                   ephy_web_extension_proxy_password_query_response                   (EphyWebExtensionProxy *web_extension,
+                                                                                           const char            *username,
+                                                                                           const char            *password,
+                                                                                           gint32                 id);
 G_END_DECLS

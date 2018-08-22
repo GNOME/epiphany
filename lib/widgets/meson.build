@@ -42,6 +42,7 @@ libephywidgets_includes = include_directories(
   '../history',
   '../..',
   '../../embed',
+  '../sync',
   'contrib'
 )
 

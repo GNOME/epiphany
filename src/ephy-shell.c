@@ -910,7 +910,7 @@ ephy_shell_get_password_manager (EphyShell *shell)
   g_assert (EPHY_IS_SHELL (shell));
 
   if (shell->password_manager == NULL)
-    shell->password_manager = ephy_password_manager_new ();
+    shell->password_manager = g_object_ref (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL(shell)));
 
   return shell->password_manager;
 }

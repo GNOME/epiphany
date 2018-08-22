@@ -34,10 +34,12 @@
 #include "ephy-filters-manager.h"
 #include "ephy-flatpak-utils.h"
 #include "ephy-history-service.h"
+#include "ephy-password-manager.h"
 #include "ephy-profile-utils.h"
 #include "ephy-settings.h"
 #include "ephy-snapshot-service.h"
 #include "ephy-tabs-catalog.h"
+#include "ephy-uri-helpers.h"
 #include "ephy-uri-tester-shared.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
@@ -61,6 +63,7 @@ typedef struct {
   WebKitUserContentManager *user_content;
   EphyDownloadsManager *downloads_manager;
   EphyPermissionsManager *permissions_manager;
+  EphyPasswordManager *password_manager;
   EphyAboutHandler *about_handler;
   EphyViewSourceHandler *source_handler;
   char *guid;
@@ -77,7 +80,6 @@ enum {
   PAGE_CREATED,
   ALLOW_TLS_CERTIFICATE,
   ALLOW_UNSAFE_BROWSING,
-  FORM_AUTH_DATA_SAVE_REQUESTED,
   SENSITIVE_FORM_FOCUSED,
 
   LAST_SIGNAL
@@ -101,6 +103,52 @@ G_DEFINE_TYPE_WITH_CODE (EphyEmbedShell, ephy_embed_shell, DZL_TYPE_APPLICATION,
                          G_ADD_PRIVATE (EphyEmbedShell)
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TABS_CATALOG,
                                                 ephy_embed_shell_tabs_catalog_iface_init))
+
+static EphyWebView *
+ephy_embed_shell_get_view_for_page_id_and_origin (EphyEmbedShell *self,
+                                                  guint64         page_id,
+                                                  const char     *origin)
+{
+  GList *windows = gtk_application_get_windows (GTK_APPLICATION (self));
+
+  for (GList *l = windows; l && l->data; l = l->next) {
+    g_autoptr(GList) tabs = ephy_embed_container_get_children (l->data);
+
+    for (GList *t = tabs; t && t->data; t = t->next) {
+      const char *title = ephy_embed_get_title (t->data);
+
+      if (!g_strcmp0 (title, _(BLANK_PAGE_TITLE)) || !g_strcmp0 (title, _(OVERVIEW_PAGE_TITLE)))
+        continue;
+
+      EphyWebView *ephy_view = ephy_embed_get_web_view (t->data);
+      WebKitWebView *web_view = WEBKIT_WEB_VIEW (ephy_view);
+
+      if (webkit_web_view_get_page_id (web_view) != page_id)
+        continue;
+
+      g_autofree char *real_origin = ephy_uri_to_security_origin (webkit_web_view_get_uri (web_view));
+
+      if (g_strcmp0 (real_origin, origin)) {
+        g_warning ("Extension's origin '%s' doesn't match real origin '%s'", origin, real_origin);
+        return NULL;
+      }
+
+      return ephy_view;
+    }
+  }
+
+  g_warning ("Extension requested page id that wasn't found");
+  return NULL;
+}
+
+static EphyWebExtensionProxy *
+ephy_embed_shell_get_extension_proxy_for_page_id_and_origin (EphyEmbedShell *self,
+                                                             guint64         page_id,
+                                                             const char     *origin)
+{
+  EphyWebView *view = ephy_embed_shell_get_view_for_page_id_and_origin (self, page_id, origin);
+  return view ? ephy_web_view_get_web_extension_proxy (view) : NULL;
+}
 
 static GList *
 tabs_catalog_get_tabs_info (EphyTabsCatalog *catalog)
@@ -166,6 +214,7 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->source_handler);
   g_clear_object (&priv->user_content);
   g_clear_object (&priv->downloads_manager);
+  g_clear_object (&priv->password_manager);
   g_clear_object (&priv->permissions_manager);
   g_clear_object (&priv->web_context);
   g_clear_pointer (&priv->guid, g_free);
@@ -174,28 +223,6 @@ ephy_embed_shell_dispose (GObject *object)
   g_clear_object (&priv->search_engine_manager);
 
   G_OBJECT_CLASS (ephy_embed_shell_parent_class)->dispose (object);
-}
-
-static void
-web_extension_form_auth_data_message_received_cb (WebKitUserContentManager *manager,
-                                                  WebKitJavascriptResult   *message,
-                                                  EphyEmbedShell           *shell)
-{
-  guint request_id;
-  guint64 page_id;
-  const char *origin;
-  const char *username;
-  GVariant *variant;
-  gchar *message_str;
-
-  message_str = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
-  variant = g_variant_parse (G_VARIANT_TYPE ("(utss)"), message_str, NULL, NULL, NULL);
-  g_free (message_str);
-
-  g_variant_get (variant, "(ut&s&s)", &request_id, &page_id, &origin, &username);
-  g_signal_emit (shell, signals[FORM_AUTH_DATA_SAVE_REQUESTED], 0,
-                 request_id, page_id, origin, username);
-  g_variant_unref (variant);
 }
 
 static void
@@ -321,6 +348,215 @@ web_extension_about_apps_message_received_cb (WebKitUserContentManager *manager,
   app_id = jsc_value_to_string (webkit_javascript_result_get_js_value (message));
   ephy_web_application_delete (app_id);
   g_free (app_id);
+}
+
+typedef struct {
+  EphyEmbedShell *shell;
+  char *origin;
+  gint32 promise_id;
+  gint32 page_id;
+} PasswordManagerData;
+
+static void
+password_manager_query_finished_cb (GList               *records,
+                                    PasswordManagerData *data)
+{
+  EphyPasswordRecord *record;
+  const char *username = NULL;
+  const char *password = NULL;
+
+  record = records && records->data ? EPHY_PASSWORD_RECORD (records->data) : NULL;
+  if (record) {
+    username = ephy_password_record_get_username (record);
+    password = ephy_password_record_get_password (record);
+  }
+
+  EphyWebExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id_and_origin (
+                                    data->shell, data->page_id, data->origin);
+  if (proxy)
+    ephy_web_extension_proxy_password_query_response (proxy, username, password, data->promise_id);
+
+  g_object_unref (data->shell);
+  g_free (data->origin);
+  g_free (data);
+}
+
+static char *
+property_to_string_or_null (JSCValue *value, const char *name)
+{
+  g_autoptr(JSCValue) prop = jsc_value_object_get_property (value, name);
+  if (jsc_value_is_null (prop) || jsc_value_is_undefined (prop))
+    return NULL;
+  return jsc_value_to_string (prop);
+}
+
+static int
+property_to_int32 (JSCValue *value, const char *name)
+{
+  g_autoptr(JSCValue) prop = jsc_value_object_get_property (value, name);
+  return jsc_value_to_int32 (prop);
+}
+
+static void
+web_extension_password_manager_query_received_cb (WebKitUserContentManager *manager,
+                                                  WebKitJavascriptResult   *message,
+                                                  EphyEmbedShell           *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+  JSCValue *value = webkit_javascript_result_get_js_value (message);
+  g_autofree char *origin = property_to_string_or_null (value, "origin");
+  g_autofree char *target_origin = property_to_string_or_null (value, "targetOrigin");
+  g_autofree char *username = property_to_string_or_null (value, "username");
+  g_autofree char *username_field = property_to_string_or_null (value, "usernameField");
+  g_autofree char *password_field = property_to_string_or_null (value, "passwordField");
+  gint32 promise_id = property_to_int32 (value, "promiseID");
+  gint32 page_id = property_to_int32 (value, "pageID");
+
+  PasswordManagerData *data = g_new (PasswordManagerData, 1);
+  data->shell = g_object_ref (shell);
+  data->promise_id = promise_id;
+  data->page_id = page_id;
+  data->origin = g_steal_pointer (&origin);
+
+  ephy_password_manager_query (priv->password_manager,
+                               NULL,
+                               origin,
+                               target_origin,
+                               username,
+                               username_field,
+                               password_field,
+                               (EphyPasswordManagerQueryCallback)password_manager_query_finished_cb,
+                               data);
+}
+
+typedef struct {
+  EphyPasswordManager *password_manager;
+  EphyPermissionsManager *permissions_manager;
+  char *origin;
+  char *target_origin;
+  char *username;
+  char *password;
+  char *username_field;
+  char *password_field;
+  gboolean is_new;
+} SaveAuthRequest;
+
+static void
+save_auth_request_free (SaveAuthRequest *request,
+                        GClosure        *ignored)
+{
+  g_object_unref (request->password_manager);
+  g_object_unref (request->permissions_manager);
+  g_free (request->origin);
+  g_free (request->target_origin);
+  g_free (request->username);
+  g_free (request->password);
+  g_free (request->username_field);
+  g_free (request->password_field);
+  g_free (request);
+}
+
+static void
+save_auth_request_response_cb (GtkInfoBar          *info_bar,
+                               gint                 response_id,
+                               SaveAuthRequest      *data)
+{
+  if (response_id == GTK_RESPONSE_REJECT) {
+    ephy_permissions_manager_set_permission (data->permissions_manager,
+                                             EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
+                                             data->origin,
+                                             EPHY_PERMISSION_DENY);
+  }
+  else if (response_id == GTK_RESPONSE_YES) {
+    ephy_password_manager_save (data->password_manager, data->origin, data->target_origin,
+                                data->username, data->password, data->username_field,
+                                data->password_field, data->is_new);
+  }
+
+  gtk_widget_destroy (GTK_WIDGET (info_bar));
+}
+
+static void
+web_extension_password_manager_save_real (EphyEmbedShell *shell,
+                                          JSCValue       *value,
+                                          gboolean        is_request)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  g_autofree char *origin = property_to_string_or_null (value, "origin");
+  g_autofree char *target_origin = property_to_string_or_null (value, "targetOrigin");
+  g_autofree char *username = property_to_string_or_null (value, "username");
+  g_autofree char *password = property_to_string_or_null (value, "password");
+  g_autofree char *username_field = property_to_string_or_null (value, "usernameField");
+  g_autofree char *password_field = property_to_string_or_null (value, "passwordField");
+  g_autoptr(JSCValue) is_new_prop = jsc_value_object_get_property (value, "isNew");
+  gboolean is_new = jsc_value_to_boolean (is_new_prop);
+  gint32 page_id = property_to_int32 (value, "pageID");
+
+  // This also sanity checks that a page isn't saving websites for other origins
+  EphyWebView *view = ephy_embed_shell_get_view_for_page_id_and_origin (
+                                    shell, page_id, origin);
+  if (!view)
+    return;
+
+  if (!is_request) {
+    ephy_password_manager_save (priv->password_manager, origin, target_origin, username,
+                                password, username_field, password_field, is_new);
+    return;
+  }
+
+  SaveAuthRequest *request = g_new (SaveAuthRequest, 1);
+  request->password_manager = g_object_ref (priv->password_manager);
+  request->permissions_manager = g_object_ref (priv->permissions_manager);
+  request->origin = g_steal_pointer (&origin);
+  request->target_origin = g_steal_pointer (&target_origin);
+  request->username = g_steal_pointer (&username);
+  request->password = g_steal_pointer (&password);
+  request->username_field = g_steal_pointer (&username_field);
+  request->password_field = g_steal_pointer (&password_field);
+  request->is_new = is_new;
+  ephy_web_view_show_auth_form_save_request (view, origin, username,
+                                             G_CALLBACK(save_auth_request_response_cb),
+                                             request, (GClosureNotify)save_auth_request_free);
+}
+
+static void
+web_extension_password_manager_save_received_cb (WebKitUserContentManager *manager,
+                                                 WebKitJavascriptResult   *message,
+                                                 EphyEmbedShell           *shell)
+{
+  JSCValue *value = webkit_javascript_result_get_js_value (message);
+  web_extension_password_manager_save_real (shell, value, FALSE);
+}
+
+static void
+web_extension_password_manager_request_save_received_cb (WebKitUserContentManager *manager,
+                                                         WebKitJavascriptResult   *message,
+                                                         EphyEmbedShell           *shell)
+{
+  JSCValue *value = webkit_javascript_result_get_js_value (message);
+  web_extension_password_manager_save_real (shell, value, TRUE);
+}
+
+static void
+web_extension_password_manager_cached_users_received_cb (WebKitUserContentManager *manager,
+                                                         WebKitJavascriptResult   *message,
+                                                         EphyEmbedShell           *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  JSCValue *value = webkit_javascript_result_get_js_value (message);
+  g_autofree char *origin = jsc_value_to_string (jsc_value_object_get_property (value, "origin"));
+  gint32 promise_id = jsc_value_to_int32 (jsc_value_object_get_property (value, "promiseID"));
+  gint32 page_id = jsc_value_to_int32 (jsc_value_object_get_property (value, "pageID"));
+
+  GList *cached_users;
+  cached_users = ephy_password_manager_get_cached_users (priv->password_manager, origin);
+
+  EphyWebExtensionProxy *proxy = ephy_embed_shell_get_extension_proxy_for_page_id_and_origin (
+                                    shell, page_id, origin);
+  if (proxy)
+    ephy_web_extension_proxy_password_cached_users_response (proxy, cached_users, promise_id);
 }
 
 static void
@@ -933,13 +1169,6 @@ ephy_embed_shell_startup (GApplication *application)
                     shell);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
-                                                                        "formAuthData",
-                                                                        priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::formAuthData",
-                    G_CALLBACK (web_extension_form_auth_data_message_received_cb),
-                    shell);
-
-  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "sensitiveFormFocused",
                                                                         priv->guid);
   g_signal_connect (priv->user_content, "script-message-received::sensitiveFormFocused",
@@ -952,6 +1181,34 @@ ephy_embed_shell_startup (GApplication *application)
                     G_CALLBACK (web_extension_about_apps_message_received_cb),
                     shell);
 
+  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
+                                                                        "passwordManagerQuery",
+                                                                        priv->guid);
+  g_signal_connect (priv->user_content, "script-message-received::passwordManagerQuery",
+                    G_CALLBACK (web_extension_password_manager_query_received_cb),
+                    shell);
+
+  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
+                                                                        "passwordManagerCachedUsers",
+                                                                        priv->guid);
+  g_signal_connect (priv->user_content, "script-message-received::passwordManagerCachedUsers",
+                    G_CALLBACK (web_extension_password_manager_cached_users_received_cb),
+                    shell);
+
+  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
+                                                                        "passwordManagerSave",
+                                                                        priv->guid);
+  g_signal_connect (priv->user_content, "script-message-received::passwordManagerSave",
+                    G_CALLBACK (web_extension_password_manager_save_received_cb),
+                    shell);
+
+  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
+                                                                        "passwordManagerRequestSave",
+                                                                        priv->guid);
+  g_signal_connect (priv->user_content, "script-message-received::passwordManagerRequestSave",
+                    G_CALLBACK (web_extension_password_manager_request_save_received_cb),
+                    shell);
+
   ephy_embed_shell_setup_process_model (shell);
   g_signal_connect (priv->web_context, "initialize-web-extensions",
                     G_CALLBACK (initialize_web_extensions),
@@ -961,6 +1218,8 @@ ephy_embed_shell_startup (GApplication *application)
   g_signal_connect (priv->web_context, "initialize-notification-permissions",
                     G_CALLBACK (initialize_notification_permissions),
                     shell);
+
+  priv->password_manager = ephy_password_manager_new ();
 
   /* Favicon Database */
   if (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE)
@@ -1038,12 +1297,21 @@ ephy_embed_shell_shutdown (GApplication *application)
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content,
                                                                  "unsafeBrowsingErrorPage");
   webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
-                                                                          "formAuthData",
+                                                                          "passwordManagerRequestSave",
                                                                           priv->guid);
   webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
                                                                           "sensitiveFormFocused",
                                                                           priv->guid);
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "aboutApps");
+  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
+                                                                          "passwordManagerQuery",
+                                                                          priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
+                                                                          "passwordManagerSave",
+                                                                          priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
+                                                                          "passwordManagerCachedUsers",
+                                                                          priv->guid);
 
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
 
@@ -1223,29 +1491,6 @@ ephy_embed_shell_class_init (EphyEmbedShellClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_UINT64);
-
-  /**
-   * EphyEmbedShell::form-auth-data-save-requested:
-   * @shell: the #EphyEmbedShell
-   * @request_id: the identifier of the request
-   * @page_id: the identifier of the web page
-   * @hostname: the hostname
-   * @username: the username
-   *
-   * Emitted when a web page requests confirmation to save
-   * the form authentication data for the given @hostname and
-   * @username
-   */
-  signals[FORM_AUTH_DATA_SAVE_REQUESTED] =
-    g_signal_new ("form-auth-data-save-requested",
-                  EPHY_TYPE_EMBED_SHELL,
-                  G_SIGNAL_RUN_FIRST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 4,
-                  G_TYPE_UINT,
-                  G_TYPE_UINT64,
-                  G_TYPE_STRING,
-                  G_TYPE_STRING);
 
   /**
    * EphyEmbedShell::sensitive-form-focused
@@ -1521,4 +1766,12 @@ ephy_embed_shell_get_search_engine_manager (EphyEmbedShell *shell)
   if (!priv->search_engine_manager)
     priv->search_engine_manager = ephy_search_engine_manager_new ();
   return priv->search_engine_manager;
+}
+
+EphyPasswordManager *
+ephy_embed_shell_get_password_manager (EphyEmbedShell *shell)
+{
+  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
+
+  return priv->password_manager;
 }
