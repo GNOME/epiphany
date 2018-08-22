@@ -471,7 +471,7 @@ sync_tab_security (EphyWebView *view,
   if (window->closing)
     return;
 
-  ephy_web_view_get_security_level (view, &security_level, NULL, NULL);
+  ephy_web_view_get_security_level (view, &security_level, NULL, NULL, NULL);
 
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
   ephy_title_widget_set_security_level (title_widget, security_level);
@@ -3046,16 +3046,17 @@ title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
   EphyWebView *view;
+  const char *address;
   GTlsCertificate *certificate;
   GTlsCertificateFlags tls_errors;
   EphySecurityLevel security_level;
   GtkWidget *security_popover;
 
   view = ephy_embed_get_web_view (window->active_embed);
-  ephy_web_view_get_security_level (view, &security_level, &certificate, &tls_errors);
+  ephy_web_view_get_security_level (view, &security_level, &address, &certificate, &tls_errors);
 
   security_popover = ephy_security_popover_new (GTK_WIDGET (title_widget),
-                                                ephy_web_view_get_address (view),
+                                                address,
                                                 certificate,
                                                 tls_errors,
                                                 security_level);

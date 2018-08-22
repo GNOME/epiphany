@@ -105,6 +105,7 @@ gboolean                  ephy_web_view_has_modified_forms_finish (EphyWebView  
                                                                    GError                   **error);
 void                       ephy_web_view_get_security_level       (EphyWebView               *view,
                                                                    EphySecurityLevel         *level,
+                                                                   const char               **address,
                                                                    GTlsCertificate          **certificate,
                                                                    GTlsCertificateFlags      *errors);
 void                       ephy_web_view_print                    (EphyWebView               *view);
