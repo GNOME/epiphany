@@ -1057,7 +1057,9 @@ ephy_embed_shell_shutdown (GApplication *application)
 
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "overview");
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "tlsErrorPage");
+  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "unsafeBrowsingErrorPage");
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "formAuthData");
+  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "sensitiveFormFocused");
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "aboutApps");
 
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
