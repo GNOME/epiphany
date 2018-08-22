@@ -331,8 +331,7 @@ ephy_location_entry_get_preferred_height (GtkWidget *widget,
 }
 
 static void
-ephy_location_entry_copy_clipboard (GtkEntry *entry,
-                                    gpointer  user_data)
+ephy_location_entry_do_copy_clipboard (GtkEntry *entry)
 {
   char *text;
   gint start;
@@ -356,6 +355,15 @@ ephy_location_entry_copy_clipboard (GtkEntry *entry,
 }
 
 static void
+ephy_location_entry_copy_clipboard (GtkEntry *entry,
+                                    gpointer  user_data)
+{
+  ephy_location_entry_do_copy_clipboard (entry);
+
+  g_signal_stop_emission_by_name (entry, "copy-clipboard");
+}
+
+static void
 ephy_location_entry_cut_clipboard (GtkEntry *entry)
 {
   if (!gtk_editable_get_editable (GTK_EDITABLE (entry))) {
@@ -363,8 +371,10 @@ ephy_location_entry_cut_clipboard (GtkEntry *entry)
     return;
   }
 
-  ephy_location_entry_copy_clipboard (entry, NULL);
+  ephy_location_entry_do_copy_clipboard (entry);
   gtk_editable_delete_selection (GTK_EDITABLE (entry));
+
+  g_signal_stop_emission_by_name (entry, "cut-clipboard");
 }
 
 static void
