@@ -1,160 +1,43 @@
-button.active-menu {
-  color: #2e3436;
-  outline-color: rgba(46, 52, 54, 0.3);
-  border-color: #b6b6b3;
-  background-image: image(#d9d9d7);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0);
-  text-shadow: none;
-  -gtk-icon-shadow: none; }
+.floating-bar { background-color: @theme_base_color; border-width: 1px; border-style: solid solid none; border-color: @borders; border-radius: 3px 3px 0 0; }
 
-.floating-bar {
-  background-color: @theme_base_color;
-  border-width: 1px;
-  border-style: solid solid none;
-  border-color: @borders;
-  border-radius: 3px 3px 0 0; }
-  .floating-bar.left {
-    border-left-style: none;
-    border-top-left-radius: 0; }
-  .floating-bar.right {
-    border-right-style: none;
-    border-top-right-radius: 0; }
-  .floating-bar:backdrop {
-    background-color: @theme_unfocused_base_color;
-    border-color: @unfocused_borders; }
+.floating-bar.left { border-left-style: none; border-top-left-radius: 0; }
 
-.incognito-mode.titlebar {
-  background-image: -gtk-icontheme("user-not-tracked-symbolic");
-  background-repeat: no-repeat;
-  background-position: 157px 0;
-  background-size: 64px 64px;
-  color: rgba(0, 0, 0, 0.35); }
+.floating-bar.right { border-right-style: none; border-top-right-radius: 0; }
 
-.selected {
-  color: @theme_selected_bg_color; }
+.floating-bar:backdrop { background-color: @theme_unfocused_base_color; border-color: @unfocused_borders; }
 
-/* Bookmarks */
-.starred {
-  color: orange; }
+.incognito-mode.titlebar { background-image: -gtk-icontheme("user-not-tracked-symbolic"); background-repeat: no-repeat; background-position: 157px 0; background-size: 64px 64px; color: rgba(0, 0, 0, 0.35); }
 
-.bookmarks-row button {
-  opacity: 0.25; }
-.bookmarks-row:hover button {
-  opacity: 1; }
+.entry_icon { color: mix(@theme_fg_color, @theme_base_color, 0.2); }
 
-.bookmark-tag-widget {
-  padding-left: 8px;
-  background-color: #cfcfcd; }
-  .bookmark-tag-widget label {
-    padding-left: 8px;
-    padding-right: 8px; }
-  .bookmark-tag-widget button {
-    background: none;
-    border: none;
-    box-shadow: none; }
-    .bookmark-tag-widget button:last-child image {
-      color: #454f52; }
-    .bookmark-tag-widget button:last-child:hover image {
-      border: 1px solid;
-      border-radius: 3px;
-      color: #454f52;
-      outline-color: rgba(69, 79, 82, 0.3);
-      border-color: #b6b6b3;
-      border-bottom-color: #91918c;
-      background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
-      text-shadow: 0 1px rgba(255, 255, 255, 0.7692307692);
-      -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.7692307692);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.8);
-      color: #454f52;
-      outline-color: rgba(69, 79, 82, 0.3);
-      border-color: #b6b6b3;
-      border-bottom-color: #91918c;
-      text-shadow: 0 1px rgba(255, 255, 255, 0.7692307692);
-      -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.7692307692);
-      box-shadow: inset 0 1px white;
-      background-image: linear-gradient(to bottom, #f7f7f7, #e8e8e7 60%, #dededd); }
-    .bookmark-tag-widget button:last-child:active image {
-      color: #454f52;
-      outline-color: rgba(69, 79, 82, 0.3);
-      border-color: #b6b6b3;
-      border-bottom-color: #91918c;
-      background-image: linear-gradient(to bottom, #e8e8e7, #dededd 60%, #cfcfcd);
-      text-shadow: 0 1px rgba(255, 255, 255, 0.7692307692);
-      -gtk-icon-shadow: 0 1px rgba(255, 255, 255, 0.7692307692);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.8);
-      color: #454f52;
-      outline-color: rgba(69, 79, 82, 0.3);
-      border-color: #b6b6b3;
-      background-image: image(#d9d9d7);
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0);
-      text-shadow: none;
-      -gtk-icon-shadow: none; }
+.entry_icon:hover { color: @theme_fg_color; }
 
-.bookmark-tag-widget-selected {
-  background-color: #4a90d9; }
-  .bookmark-tag-widget-selected image {
-    color: white; }
-  .bookmark-tag-widget-selected label {
-    color: white; }
-  .bookmark-tag-widget-selected button:last-child image {
-    color: white; }
-  .bookmark-tag-widget-selected button:last-child:hover image {
-    color: white;
-    outline-color: rgba(255, 255, 255, 0.3);
-    border-color: #215d9c;
-    border-bottom-color: #184472;
-    background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.5435294118);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.5435294118);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4);
-    color: white;
-    outline-color: rgba(255, 255, 255, 0.3);
-    border-color: #215d9c;
-    border-bottom-color: #184472;
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.4955294118);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.4955294118);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4);
-    background-image: linear-gradient(to bottom, #63a0de, #4a90d9 60%, #3986d5); }
-  .bookmark-tag-widget-selected button:last-child:active image {
-    color: white;
-    outline-color: rgba(255, 255, 255, 0.3);
-    border-color: #215d9c;
-    border-bottom-color: #184472;
-    background-image: linear-gradient(to bottom, #4a90d9, #3986d5 60%, #2a76c6);
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.5435294118);
-    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.5435294118);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4);
-    color: white;
-    outline-color: rgba(255, 255, 255, 0.3);
-    border-color: #215d9c;
-    background-image: image(#3180d4);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0);
-    text-shadow: none;
-    -gtk-icon-shadow: none; }
+.entry_icon:active { color: @theme_selected_bg_color; }
 
-/* "Press $KEY to exit fullscreen" overlay text */
-#fullscreen-popup {
-  padding: 12px;
-  border-radius: 18px;
-  background: rgba(0, 0, 0, 0.65);
-  color: white; }
+.entry_icon:backdrop { color: mix(@theme_unfocused_fg_color, @theme_unfocused_base_color, 0.2); }
 
-.url_progress {
-    border: none;
-    background-color: transparent;
-    background-image: none;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    margin-top: 0px;
-    margin-bottom: 6px; }
+.entry_icon.selected { color: @theme_selected_bg_color; }
 
-.url_progress progress {
-    background-color: @theme_selected_bg_color;
-    background-image: none;
-    border: none;
-    min-height: 2px; }
+.entry_icon.starred { color: orange; }
 
-.url_progress trough {
-    border: none;
-    background-color: transparent;
-    background-image: none; }
+.bookmarks-row button { opacity: 0.25; }
+
+.bookmarks-row:hover button { opacity: 1; }
+
+.bookmark-tag-widget { padding-left: 8px; background-color: darker(@theme_bg_color); }
+
+.bookmark-tag-widget label { padding-left: 8px; padding-right: 8px; }
+
+.bookmark-tag-widget image, .bookmark-tag-widget label { color: @theme_fg_color; }
+
+.bookmark-tag-widget-selected { background-color: @theme_selected_bg_color; }
+
+.bookmark-tag-widget-selected image, .bookmark-tag-widget-selected label { color: @theme_selected_fg_color; }
+
+#fullscreen-popup { padding: 12px; border-radius: 18px; background: rgba(0, 0, 0, 0.65); color: white; }
+
+.url_progress { border: none; background-color: transparent; background-image: none; padding-top: 0px; padding-bottom: 0px; margin-top: 0px; margin-bottom: 6px; }
+
+.url_progress progress { background-color: @theme_selected_bg_color; background-image: none; border: none; min-height: 2px; }
+
+.url_progress trough { border: none; background-color: transparent; background-image: none; }
