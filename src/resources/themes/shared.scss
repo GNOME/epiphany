@@ -1,13 +1,5 @@
 @import 'definitions';
 
-// menu button fix, yeah this is ugly
-
-button.active-menu {
-  @include button(active);
-
-  &:backdrop { @include button(active-backdrop); }
-}
-
 // floating status bar
 .floating-bar {
   background-color: themecolor(theme_base_color);
