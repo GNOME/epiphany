@@ -204,7 +204,7 @@ sync_collection_toggled_cb (GtkToggleButton *button,
   if (GTK_WIDGET (button) == dialog->sync_bookmarks_checkbutton) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
   } else if (GTK_WIDGET (button) == dialog->sync_passwords_checkbutton) {
-    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL(shell)));
   } else if (GTK_WIDGET (button) == dialog->sync_history_checkbutton) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
   } else if (GTK_WIDGET (button) == dialog->sync_open_tabs_checkbutton) {
@@ -904,7 +904,7 @@ on_manage_passwords_button_clicked (GtkWidget   *button,
   EphyPasswordsDialog *passwords_dialog;
   EphyPasswordManager *password_manager;
 
-  password_manager = ephy_shell_get_password_manager (ephy_shell_get_default ());
+  password_manager = ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL(ephy_shell_get_default ()));
   passwords_dialog = ephy_passwords_dialog_new (password_manager);
 
   gtk_window_set_transient_for (GTK_WINDOW (passwords_dialog), GTK_WINDOW (dialog));
