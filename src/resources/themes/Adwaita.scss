@@ -67,3 +67,73 @@
     }
   }
 }
+
+
+$close_button_fg_color: lighten($fg_color, 10%);
+.bookmark-tag-widget {
+  background-color: darken($bg_color, 10%);
+
+  image,
+  label {
+    color: $fg_color;
+  }
+
+  button {
+    background: none;
+    border: none;
+    box-shadow: none;
+
+    &:last-child {
+      image {
+        color: $close_button_fg_color;
+      }
+
+      &:hover {
+        image {
+          border: 1px solid;
+          border-radius: 3px;
+          @include button(normal, $bg_color, $close_button_fg_color);
+          @include button(hover, $bg_color, $close_button_fg_color);
+        }
+      }
+
+      &:active {
+        image {
+          @include button(normal, $bg_color, $close_button_fg_color);
+          @include button(active, $bg_color, $close_button_fg_color);
+        }
+      }
+    }
+  }
+}
+
+.bookmark-tag-widget-selected {
+  background-color: themecolor(theme_selected_bg_color);
+
+  image,
+  label {
+    color: themecolor(theme_selected_fg_color);
+  }
+
+  button {
+    &:last-child {
+      image {
+        color: themecolor(theme_selected_fg_color);
+      }
+
+      &:hover {
+        image {
+          @include button(normal, $selected_bg_color, $selected_fg_color);
+          @include button(hover, $selected_bg_color, $selected_fg_color);
+        }
+      }
+
+      &:active {
+        image {
+          @include button(normal, $selected_bg_color, $selected_fg_color);
+          @include button(active, $selected_bg_color, $selected_fg_color);
+        }
+      }
+    }
+  }
+}

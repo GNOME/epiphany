@@ -56,76 +56,28 @@
   }
 }
 
-$close_button_fg_color: lighten($fg_color, 10%);
 .bookmark-tag-widget {
   padding-left: 8px;
-  background-color: darken($bg_color, 10%);
+  background-color: #{"darker(" + themecolor(theme_bg_color) + ")"};
 
   label {
     padding-left: 8px;
     padding-right: 8px;
   }
 
-  button {
-    background: none;
-    border: none;
-    box-shadow: none;
-
-    &:last-child {
-      image {
-        color: $close_button_fg_color;
-      }
-
-      &:hover {
-        image {
-          border: 1px solid;
-          border-radius: 3px;
-          @include button(normal, $bg_color, $close_button_fg_color);
-          @include button(hover, $bg_color, $close_button_fg_color);
-        }
-      }
-
-      &:active {
-        image {
-          @include button(normal, $bg_color, $close_button_fg_color);
-          @include button(active, $bg_color, $close_button_fg_color);
-        }
-      }
-    }
+  image,
+  label {
+    // FIXME: This should be theme_text_color, but HighContrast doesn't export it
+    color: themecolor(theme_fg_color);
   }
 }
 
 .bookmark-tag-widget-selected {
-  background-color: $selected_bg_color;
+  background-color: themecolor(theme_selected_bg_color);
 
-  image {
-    color: white;
-  }
-
+  image,
   label {
-    color: white;
-  }
-
-  button {
-    &:last-child {
-      image {
-        color: white;
-      }
-
-      &:hover {
-        image {
-          @include button(normal, $selected_bg_color, white);
-          @include button(hover, $selected_bg_color, white);
-        }
-      }
-
-      &:active {
-        image {
-          @include button(normal, $selected_bg_color, white);
-          @include button(active, $selected_bg_color, white);
-        }
-      }
-    }
+    color: themecolor(theme_selected_fg_color);
   }
 }
 
