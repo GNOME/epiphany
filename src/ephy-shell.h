@@ -105,8 +105,6 @@ GNetworkMonitor *ephy_shell_get_net_monitor              (EphyShell *shell);
 
 EphyBookmarksManager *ephy_shell_get_bookmarks_manager   (EphyShell *shell);
 
-EphyPasswordManager *ephy_shell_get_password_manager     (EphyShell *shell);
-
 EphyHistoryManager *ephy_shell_get_history_manager       (EphyShell *shell);
 
 EphyOpenTabsManager *ephy_shell_get_open_tabs_manager    (EphyShell *shell);
