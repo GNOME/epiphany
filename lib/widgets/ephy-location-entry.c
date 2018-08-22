@@ -816,6 +816,7 @@ static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
   GtkWidget *button_box;
+  GtkStyleContext *context;
 
   LOG ("EphyLocationEntry constructing contents %p", entry);
 
@@ -845,12 +846,18 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_container_add (GTK_CONTAINER(entry->bookmark_event_box), entry->bookmark);
   gtk_box_pack_end (GTK_BOX (button_box), entry->bookmark_event_box, FALSE, FALSE, 6);
 
+  context = gtk_widget_get_style_context (entry->bookmark);
+  gtk_style_context_add_class (context, "entry_icon");
+
   /* Reader Mode */
   entry->reader_mode_event_box = gtk_event_box_new ();
   entry->reader_mode = gtk_image_new_from_icon_name ("ephy-reader-mode-symbolic", GTK_ICON_SIZE_MENU);
   gtk_widget_show (entry->reader_mode);
   gtk_container_add (GTK_CONTAINER(entry->reader_mode_event_box), entry->reader_mode);
   gtk_box_pack_end (GTK_BOX (button_box), entry->reader_mode_event_box, FALSE, FALSE, 6);
+
+  context = gtk_widget_get_style_context (entry->reader_mode);
+  gtk_style_context_add_class (context, "entry_icon");
 
   g_object_connect (entry->url_entry,
                     "signal::icon-press", G_CALLBACK (icon_button_icon_press_event_cb), entry,
