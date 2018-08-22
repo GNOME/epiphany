@@ -28,6 +28,7 @@
 #include "ephy-encodings.h"
 #include "ephy-gsb-service.h"
 #include "ephy-history-service.h"
+#include "ephy-password-manager.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-search-engine-manager.h"
 
@@ -84,5 +85,6 @@ WebKitUserContentManager *ephy_embed_shell_get_user_content_manager (EphyEmbedSh
 EphyDownloadsManager     *ephy_embed_shell_get_downloads_manager    (EphyEmbedShell *shell);
 EphyPermissionsManager   *ephy_embed_shell_get_permissions_manager  (EphyEmbedShell *shell);
 EphySearchEngineManager  *ephy_embed_shell_get_search_engine_manager (EphyEmbedShell *shell);
+EphyPasswordManager      *ephy_embed_shell_get_password_manager      (EphyEmbedShell *shell);
 
 G_END_DECLS

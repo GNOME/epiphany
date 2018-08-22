@@ -309,6 +309,82 @@ Ephy.PreFillUserMenu = class PreFillUserMenu
     }
 };
 
+Ephy.PasswordManager = class PasswordManager
+{
+    constructor(pageID)
+    {
+        this._pageID = pageID;
+        this._pendingPromises = [];
+        this._promiseCounter = 0;
+    }
+
+    _takePendingPromise(id)
+    {
+        let element = this._pendingPromises.find(element => element.promiseID === id);
+        if (element)
+            this._pendingPromises = this._pendingPromises.filter(element => element.promiseID !== id);
+        return element;
+    }
+
+    _onQueryResponse(username, password, id)
+    {
+        let element = this._takePendingPromise(id)
+        if (element) {
+            if (username !== '' && password !== '')
+                element.resolver({username, password});
+            else
+                element.resolver(null);
+        }
+    }
+
+    query(origin, targetOrigin, username, usernameField, passwordField)
+    {
+        return new Promise((resolver, reject) => {
+            let promiseID = this._promiseCounter++;
+            window.webkit.messageHandlers.passwordManagerQuery.postMessage({
+                origin, targetOrigin, username, usernameField, passwordField, promiseID,
+                pageID: this._pageID,
+            });
+            this._pendingPromises.push({promiseID, resolver});
+        });
+    }
+
+    save(origin, targetOrigin, username, password, usernameField, passwordField, isNew)
+    {
+        window.webkit.messageHandlers.passwordManagerSave.postMessage({
+            origin, targetOrigin, username, password, usernameField, passwordField, isNew,
+            pageID: this._pageID,
+        });
+    }
+
+    requestSave(origin, targetOrigin, username, password, usernameField, passwordField, isNew, pageID)
+    {
+        Ephy.log(pageID + ' == ' + this._pageID);
+        window.webkit.messageHandlers.passwordManagerRequestSave.postMessage({
+            origin, targetOrigin, username, password, usernameField, passwordField, isNew,
+            pageID,
+        });
+    }
+
+    _onCachedUserResponse(users, id)
+    {
+        let element = this._takePendingPromise(id)
+        if (element)
+            element.resolver(users);
+    }
+
+    cachedUsers(origin)
+    {
+        return new Promise((resolver, reject) => {
+            let promiseID = this._promiseCounter++;
+            window.webkit.messageHandlers.passwordManagerCachedUsers.postMessage({
+                origin, promiseID, pageID: this._pageID,
+            });
+            this._pendingPromises.push({promiseID, resolver});
+        });
+    }
+}
+
 Ephy.FormManager = class FormManager
 {
     constructor(pageID, form)
@@ -367,18 +443,20 @@ Ephy.FormManager = class FormManager
         Ephy.log('Hooking and pre-filling a form');
 
         if (this._formAuth.usernameNode) {
-            let users = Ephy.passwordManager.cachedUsers(this._formAuth.url.origin);
-            if (users.length > 1) {
-                Ephy.log('More than one password saved, hooking menu for choosing which on focus');
-                this._preFillUserMenu = new Ephy.PreFillUserMenu(this, this._formAuth.usernameNode, users, this._formAuth.passwordNode);
-            } else {
-                Ephy.log('Single item in cached_users, not hooking menu for choosing.');
-            }
+            Ephy.passwordManager.cachedUsers(this._formAuth.url.origin).then((users) => {
+                if (users.length > 1) {
+                    Ephy.log('More than one password saved, hooking menu for choosing which on focus');
+                    this._preFillUserMenu = new Ephy.PreFillUserMenu(this, this._formAuth.usernameNode, users, this._formAuth.passwordNode);
+                } else {
+                    Ephy.log('Single item in cached_users, not hooking menu for choosing.');
+                }
+
+                this.preFill();
+            });
         } else {
             Ephy.log('No items in cached_users, not hooking menu for choosing.');
+            this.preFill();
         }
-
-        this.preFill();
     }
 
     preFill()
@@ -412,7 +490,7 @@ Ephy.FormManager = class FormManager
         );
     }
 
-    handleFormSubmission(saveAuthRequester)
+    handleFormSubmission()
     {
         if (!this._formAuth)
             return;
@@ -472,13 +550,14 @@ Ephy.FormManager = class FormManager
                     Ephy.log('No result on query; asking whether we should store.');
                 }
 
-                window.webkit.messageHandlers.formAuthData.postMessage(saveAuthRequester(self._pageID,
+                Ephy.passwordManager.requestSave(
                     self._formAuth.url.origin, self._formAuth.targetURL.origin,
                     self._formAuth.usernameNode && self._formAuth.usernameNode.value ? self._formAuth.usernameNode.value : null,
                     self._formAuth.passwordNode.value ? self._formAuth.passwordNode.value : null,
                     self._formAuth.usernameNode ? self._formAuth.usernameNode.name : null,
                     self._formAuth.passwordNode.name ? self._formAuth.passwordNode.name : null,
-                    authInfo == null));
+                    authInfo == null,
+                    self._pageID);
             }
         );
     }

@@ -26,6 +26,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-history-types.h"
 #include "ephy-security-levels.h"
+#include "ephy-web-extension-proxy.h"
 
 G_BEGIN_DECLS
 
@@ -156,5 +157,14 @@ void                       ephy_web_view_toggle_reader_mode       (EphyWebView  
 gboolean                   ephy_web_view_is_reader_mode_available (EphyWebView               *view);
 
 gboolean                   ephy_web_view_get_reader_mode_state    (EphyWebView               *view);
+
+EphyWebExtensionProxy     *ephy_web_view_get_web_extension_proxy  (EphyWebView               *view);
+
+gulong                     ephy_web_view_show_auth_form_save_request (EphyWebView            *web_view,
+                                                                      const char             *origin,
+                                                                      const char             *username,
+                                                                      GCallback               response_callback,
+                                                                      gpointer                response_data,
+                                                                      GClosureNotify          response_destroy);
 
 G_END_DECLS
