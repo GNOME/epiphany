@@ -71,6 +71,7 @@ static EphyShell *ephy_shell = NULL;
 
 static void ephy_shell_dispose (GObject *object);
 static void ephy_shell_finalize (GObject *object);
+static EphyPasswordManager *ephy_shell_get_password_manager (EphyShell *shell);
 
 G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
@@ -904,13 +905,13 @@ ephy_shell_get_bookmarks_manager (EphyShell *shell)
  *
  * Return value: (transfer none): An #EphyPasswordManager.
  */
-EphyPasswordManager *
+static EphyPasswordManager *
 ephy_shell_get_password_manager (EphyShell *shell)
 {
   g_assert (EPHY_IS_SHELL (shell));
 
   if (shell->password_manager == NULL)
-    shell->password_manager = ephy_password_manager_new ();
+    shell->password_manager = g_object_ref (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (shell)));
 
   return shell->password_manager;
 }
