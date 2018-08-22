@@ -26,6 +26,7 @@
 #include "ephy-embed-shell.h"
 #include "ephy-history-types.h"
 #include "ephy-security-levels.h"
+#include "ephy-web-extension-proxy.h"
 
 G_BEGIN_DECLS
 
@@ -68,6 +69,9 @@ typedef enum {
   EPHY_WEB_VIEW_ERROR_INVALID_TLS_CERTIFICATE,
   EPHY_WEB_VIEW_ERROR_UNSAFE_BROWSING
 } EphyWebViewErrorPage;
+
+typedef void (* EphySaveRequestCallback) (int      response_id,
+                                          gpointer data);
 
 GType                      ephy_web_view_chrome_get_type          (void);
 GType                      ephy_web_view_security_level_get_type  (void);
@@ -156,5 +160,14 @@ void                       ephy_web_view_toggle_reader_mode       (EphyWebView  
 gboolean                   ephy_web_view_is_reader_mode_available (EphyWebView               *view);
 
 gboolean                   ephy_web_view_get_reader_mode_state    (EphyWebView               *view);
+
+EphyWebExtensionProxy     *ephy_web_view_get_web_extension_proxy  (EphyWebView               *view);
+
+void                       ephy_web_view_show_auth_form_save_request (EphyWebView            *web_view,
+                                                                      const char             *origin,
+                                                                      const char             *username,
+                                                                      EphySaveRequestCallback response_callback,
+                                                                      gpointer                response_data,
+                                                                      GDestroyNotify          response_destroy);
 
 G_END_DECLS
