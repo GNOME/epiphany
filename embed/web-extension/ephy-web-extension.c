@@ -25,12 +25,9 @@
 #include "ephy-dbus-util.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
-#include "ephy-password-manager.h"
 #include "ephy-permissions-manager.h"
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
-#include "ephy-sync-service.h"
-#include "ephy-sync-utils.h"
 #include "ephy-uri-helpers.h"
 #include "ephy-uri-tester.h"
 #include "ephy-web-overview-model.h"
@@ -53,14 +50,14 @@ struct _EphyWebExtension {
   GDBusConnection *dbus_connection;
   GArray *page_created_signals_pending;
 
-  EphySyncService *sync_service;
-  EphyPasswordManager *password_manager;
-  GHashTable *form_auth_data_save_requests;
   EphyWebOverviewModel *overview_model;
   EphyPermissionsManager *permissions_manager;
   EphyUriTester *uri_tester;
 
   WebKitScriptWorld *script_world;
+  WebKitWebPage *web_page;
+
+  gboolean is_private_profile;
 };
 
 static const char introspection_xml[] =
@@ -69,10 +66,6 @@ static const char introspection_xml[] =
   "  <signal name='PageCreated'>"
   "   <arg type='t' name='page_id' direction='out'/>"
   "  </signal>"
-  "  <method name='FormAuthDataSaveConfirmationResponse'>"
-  "   <arg type='u' name='request_id' direction='in'/>"
-  "   <arg type='b' name='should_store' direction='in'/>"
-  "  </method>"
   "  <method name='HistorySetURLs'>"
   "   <arg type='a(ss)' name='urls' direction='in'/>"
   "  </method>"
@@ -91,6 +84,15 @@ static const char introspection_xml[] =
   "   <arg type='s' name='host' direction='in'/>"
   "  </method>"
   "  <method name='HistoryClear'/>"
+  "  <method name='PasswordQueryResponse'>"
+  "    <arg type='s' name='username' direction='in'/>"
+  "    <arg type='s' name='password' direction='in'/>"
+  "    <arg type='i' name='id' direction='in'/>"
+  "  </method>"
+  "  <method name='PasswordCachedUsersResponse'>"
+  "    <arg type='as' name='users' direction='in'/>"
+  "    <arg type='i' name='id' direction='in'/>"
+  "  </method>"
   " </interface>"
   "</node>";
 
@@ -187,106 +189,6 @@ web_page_send_request (WebKitWebPage     *web_page,
   return FALSE;
 }
 
-typedef struct {
-  char *origin;
-  char *target_origin;
-  char *username;
-  char *password;
-  char *username_field_name;
-  char *password_field_name;
-  gboolean is_new;
-} SaveAuthRequest;
-
-static SaveAuthRequest *
-save_auth_request_new (const char *origin,
-                       const char *target_origin,
-                       const char *username,
-                       const char *password,
-                       const char *username_field_name,
-                       const char *password_field_name,
-                       gboolean    is_new)
-{
-  SaveAuthRequest *request;
-
-  request = g_new (SaveAuthRequest, 1);
-  request->origin = g_strdup (origin);
-  request->target_origin = g_strdup (target_origin);
-  request->username = g_strdup (username);
-  request->password = g_strdup (password);
-  request->username_field_name = g_strdup (username_field_name);
-  request->password_field_name = g_strdup (password_field_name);
-  request->is_new = is_new;
-
-  return request;
-}
-
-static void
-save_auth_request_free (SaveAuthRequest *request)
-{
-  g_free (request->origin);
-  g_free (request->target_origin);
-  g_free (request->username);
-  g_free (request->password);
-  g_free (request->username_field_name);
-  g_free (request->password_field_name);
-
-  g_free (request);
-}
-
-static GHashTable *
-ephy_web_extension_get_form_auth_data_save_requests (EphyWebExtension *extension)
-{
-  if (!extension->form_auth_data_save_requests) {
-    extension->form_auth_data_save_requests =
-      g_hash_table_new_full (g_direct_hash,
-                             g_direct_equal,
-                             NULL,
-                             (GDestroyNotify)save_auth_request_free);
-  }
-
-  return extension->form_auth_data_save_requests;
-}
-
-static guint
-form_auth_data_save_request_new_id (void)
-{
-  static guint form_auth_data_save_request_id = 0;
-
-  return ++form_auth_data_save_request_id;
-}
-
-static char *
-save_auth_requester (guint64     page_id,
-                     const char *origin,
-                     const char *target_origin,
-                     const char *username,
-                     const char *password,
-                     const char *username_field_name,
-                     const char *password_field_name,
-                     gboolean    is_new)
-{
-  GVariant *variant;
-  guint request_id;
-  char *retval;
-
-  request_id = form_auth_data_save_request_new_id ();
-  variant = g_variant_new ("(utss)",
-                           request_id,
-                           page_id,
-                           origin,
-                           username ? username : "");
-
-  retval = g_variant_print (variant, FALSE);
-  g_variant_unref (variant);
-
-  g_hash_table_insert (ephy_web_extension_get_form_auth_data_save_requests (ephy_web_extension_get ()),
-                       GINT_TO_POINTER (request_id), save_auth_request_new (origin, target_origin, username,
-                                                                            password, username_field_name,
-                                                                            password_field_name, is_new));
-
-  return retval;
-}
-
 static void
 web_page_will_submit_form (WebKitWebPage            *web_page,
                            WebKitDOMHTMLFormElement *dom_form,
@@ -301,7 +203,6 @@ web_page_will_submit_form (WebKitWebPage            *web_page,
   JSCContext *js_context;
   JSCValue *js_ephy;
   JSCValue *js_form;
-  JSCValue *js_requester;
   JSCValue *js_result;
 
   form_submit_handled =
@@ -318,21 +219,12 @@ web_page_will_submit_form (WebKitWebPage            *web_page,
   js_context = webkit_frame_get_js_context_for_script_world (source_frame, extension->script_world);
   js_ephy = jsc_context_get_value (js_context, "Ephy");
   js_form = webkit_frame_get_js_value_for_dom_object_in_script_world (frame, WEBKIT_DOM_OBJECT (dom_form), extension->script_world);
-  js_requester = jsc_value_new_function (js_context,
-                                         "saveAuthRequester",
-                                         G_CALLBACK (save_auth_requester), NULL, NULL,
-                                         G_TYPE_STRING, 8,
-                                         G_TYPE_UINT64, G_TYPE_STRING, G_TYPE_STRING,
-                                         G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                                         G_TYPE_STRING, G_TYPE_BOOLEAN);
   js_result = jsc_value_object_invoke_method (js_ephy,
                                               "handleFormSubmission",
                                               G_TYPE_UINT64, webkit_web_page_get_id (web_page),
                                               JSC_TYPE_VALUE, js_form,
-                                              JSC_TYPE_VALUE, js_requester,
                                               G_TYPE_NONE);
   g_object_unref (js_result);
-  g_object_unref (js_requester);
   g_object_unref (js_form);
   g_object_unref (js_ephy);
   g_object_unref (js_context);
@@ -382,7 +274,7 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
                                           G_CALLBACK (sensitive_form_message_serializer), NULL, NULL,
                                           G_TYPE_STRING, 2,
                                           G_TYPE_UINT64, G_TYPE_BOOLEAN);
-  remember_passwords = extension->password_manager &&
+  remember_passwords = !extension->is_private_profile &&
                        g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS);
   js_result = jsc_value_object_invoke_method (js_ephy,
                                               "formControlsAssociated",
@@ -496,6 +388,7 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
   g_object_unref (js_context);
 
   page_id = webkit_web_page_get_id (web_page);
+  extension->web_page = web_page;
   if (extension->dbus_connection)
     ephy_web_extension_emit_page_created (extension, page_id);
   else
@@ -515,6 +408,18 @@ ephy_web_extension_page_created_cb (EphyWebExtension *extension,
                     extension);
 }
 
+static JSCValue *
+get_password_manager (EphyWebExtension *self)
+{
+  g_assert (self->web_page);
+
+  WebKitFrame *frame = webkit_web_page_get_main_frame (self->web_page);
+  JSCContext *context = webkit_frame_get_js_context_for_script_world (frame,
+                          self->script_world);
+  JSCValue *ephy = jsc_context_get_value (context, "Ephy");
+  return jsc_value_object_get_property (ephy, "passwordManager");
+}
+
 static void
 handle_method_call (GDBusConnection       *connection,
                     const char            *sender,
@@ -530,32 +435,7 @@ handle_method_call (GDBusConnection       *connection,
   if (g_strcmp0 (interface_name, EPHY_WEB_EXTENSION_INTERFACE) != 0)
     return;
 
-  if (g_strcmp0 (method_name, "FormAuthDataSaveConfirmationResponse") == 0) {
-    SaveAuthRequest *request;
-    guint request_id;
-    gboolean should_store;
-    GHashTable *requests;
-
-    requests = ephy_web_extension_get_form_auth_data_save_requests (extension);
-
-    g_variant_get (parameters, "(ub)", &request_id, &should_store);
-
-    request = g_hash_table_lookup (requests, GINT_TO_POINTER (request_id));
-    if (!request)
-      return;
-
-    if (should_store) {
-      ephy_password_manager_save (extension->password_manager,
-                                  request->origin,
-                                  request->target_origin,
-                                  request->username,
-                                  request->password,
-                                  request->username_field_name,
-                                  request->password_field_name,
-                                  request->is_new);
-    }
-    g_hash_table_remove (requests, GINT_TO_POINTER (request_id));
-  } else if (g_strcmp0 (method_name, "HistorySetURLs") == 0) {
+  if (g_strcmp0 (method_name, "HistorySetURLs") == 0) {
     if (extension->overview_model) {
       GVariantIter iter;
       GVariant *array;
@@ -611,6 +491,27 @@ handle_method_call (GDBusConnection       *connection,
     if (extension->overview_model)
       ephy_web_overview_model_clear (extension->overview_model);
     g_dbus_method_invocation_return_value (invocation, NULL);
+  } else if (g_strcmp0 (method_name, "PasswordCachedUsersResponse") == 0) {
+    g_autofree const char **users;
+    gint32 id;
+
+    users = g_variant_get_strv (g_variant_get_child_value (parameters, 0), NULL);
+    g_variant_get_child (parameters, 1, "i", &id);
+
+    JSCValue *password_manager = get_password_manager (extension);
+    jsc_value_object_invoke_method (password_manager, "_onCachedUserResponse",
+                                    G_TYPE_STRV, users, G_TYPE_INT, id, G_TYPE_NONE);
+  } else if(g_strcmp0 (method_name, "PasswordQueryResponse") == 0) {
+    const char *username;
+    const char *password;
+    gint32 id;
+
+    g_variant_get (parameters, "(&s&si)", &username, &password, &id);
+    JSCValue *password_manager = get_password_manager (extension);
+    jsc_value_object_invoke_method (password_manager, "_onQueryResponse",
+                                    G_TYPE_STRING, username,
+                                    G_TYPE_STRING, password,
+                                    G_TYPE_INT, id, G_TYPE_NONE);
   }
 }
 
@@ -621,78 +522,6 @@ static const GDBusInterfaceVTable interface_vtable = {
 };
 
 static void
-ephy_prefs_passwords_sync_enabled_cb (GSettings *settings,
-                                      char      *key,
-                                      gpointer   user_data)
-{
-  EphyWebExtension *extension;
-  EphySynchronizableManager *manager;
-
-  extension = EPHY_WEB_EXTENSION (user_data);
-  manager = EPHY_SYNCHRONIZABLE_MANAGER (extension->password_manager);
-
-  if (g_settings_get_boolean (settings, key))
-    ephy_sync_service_register_manager (extension->sync_service, manager);
-  else
-    ephy_sync_service_unregister_manager (extension->sync_service, manager);
-}
-
-static void
-ephy_web_extension_create_sync_service (EphyWebExtension *extension)
-{
-  EphySynchronizableManager *manager;
-
-  g_assert (EPHY_IS_WEB_EXTENSION (extension));
-  g_assert (EPHY_IS_PASSWORD_MANAGER (extension->password_manager));
-  g_assert (!extension->sync_service);
-
-  extension->sync_service = ephy_sync_service_new (FALSE);
-  manager = EPHY_SYNCHRONIZABLE_MANAGER (extension->password_manager);
-
-  if (ephy_sync_utils_passwords_sync_is_enabled ())
-    ephy_sync_service_register_manager (extension->sync_service, manager);
-
-  g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_PASSWORDS_ENABLED,
-                    G_CALLBACK (ephy_prefs_passwords_sync_enabled_cb), extension);
-}
-
-static void
-ephy_web_extension_destroy_sync_service (EphyWebExtension *extension)
-{
-  EphySynchronizableManager *manager;
-
-  g_assert (EPHY_IS_WEB_EXTENSION (extension));
-  g_assert (EPHY_IS_PASSWORD_MANAGER (extension->password_manager));
-  g_assert (EPHY_IS_SYNC_SERVICE (extension->sync_service));
-
-  manager = EPHY_SYNCHRONIZABLE_MANAGER (extension->password_manager);
-  ephy_sync_service_unregister_manager (extension->sync_service, manager);
-  g_signal_handlers_disconnect_by_func (EPHY_SETTINGS_SYNC,
-                                        ephy_prefs_passwords_sync_enabled_cb,
-                                        extension);
-
-  g_clear_object (&extension->sync_service);
-}
-
-static void
-ephy_prefs_sync_user_cb (GSettings *settings,
-                         char      *key,
-                         gpointer   user_data)
-{
-  EphyWebExtension *extension = EPHY_WEB_EXTENSION (user_data);
-
-  /* If the sync user has changed we need to destroy the previous sync service
-   * (which is no longer valid because the user specific data has been cleared)
-   * and create a new one which will load the new user specific data. This way
-   * we will correctly upload new saved passwords in the future.
-   */
-  if (ephy_sync_utils_user_is_signed_in ())
-    ephy_web_extension_create_sync_service (extension);
-  else if (extension->sync_service)
-    ephy_web_extension_destroy_sync_service (extension);
-}
-
-static void
 ephy_web_extension_dispose (GObject *object)
 {
   EphyWebExtension *extension = EPHY_WEB_EXTENSION (object);
@@ -700,17 +529,6 @@ ephy_web_extension_dispose (GObject *object)
   g_clear_object (&extension->uri_tester);
   g_clear_object (&extension->overview_model);
   g_clear_object (&extension->permissions_manager);
-
-  if (extension->password_manager) {
-    if (extension->sync_service)
-      ephy_web_extension_destroy_sync_service (extension);
-    g_clear_object (&extension->password_manager);
-  }
-
-  if (extension->form_auth_data_save_requests) {
-    g_hash_table_destroy (extension->form_auth_data_save_requests);
-    extension->form_auth_data_save_requests = NULL;
-  }
 
   if (extension->page_created_signals_pending) {
     g_array_free (extension->page_created_signals_pending, TRUE);
@@ -923,10 +741,14 @@ window_object_cleared_cb (WebKitScriptWorld *world,
                                                  js_context,
                                                  js_ephy);
 
-  if (extension->password_manager) {
-    ephy_password_manager_export_to_js_context (extension->password_manager,
-                                                js_context,
-                                                js_ephy);
+  if (!extension->is_private_profile) {
+    guint64 page_id = webkit_web_page_get_id (page);
+    g_assert (page_id < G_MAXINT32);
+
+    g_autoptr(JSCValue) js_password_manager_ctor = jsc_value_object_get_property (js_ephy, "PasswordManager");
+    g_autoptr(JSCValue) js_password_manager = jsc_value_constructor_call (js_password_manager_ctor,
+                                                                          G_TYPE_INT, page_id, G_TYPE_NONE);
+    jsc_value_object_set_property (js_ephy, "passwordManager", js_password_manager);
 
     js_function = jsc_value_new_function (js_context,
                                           "autoFill",
@@ -982,17 +804,8 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
                     extension);
 
   extension->extension = g_object_ref (wk_extension);
-  if (!is_private_profile) {
-    extension->password_manager = ephy_password_manager_new ();
 
-    if (is_browser_mode) {
-      if (ephy_sync_utils_user_is_signed_in ())
-        ephy_web_extension_create_sync_service (extension);
-
-      g_signal_connect (EPHY_SETTINGS_SYNC, "changed::"EPHY_PREFS_SYNC_USER,
-                        G_CALLBACK (ephy_prefs_sync_user_cb), extension);
-    }
-  }
+  extension->is_private_profile = is_private_profile;
 
   extension->permissions_manager = ephy_permissions_manager_new ();
 

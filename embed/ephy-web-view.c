@@ -44,7 +44,6 @@
 #include "ephy-uri-helpers.h"
 #include "ephy-view-source-handler.h"
 #include "ephy-web-app-utils.h"
-#include "ephy-web-extension-proxy.h"
 #include "ephy-zoom.h"
 
 #include <gio/gio.h>
@@ -571,6 +570,22 @@ ephy_web_view_create_form_auth_save_confirmation_info_bar (EphyWebView *web_view
   return info_bar;
 }
 
+void
+ephy_web_view_show_auth_form_save_request (EphyWebView   *web_view,
+                                           const char    *origin,
+                                           const char    *username,
+                                           GCallback      response_callback,
+                                           gpointer       response_data,
+                                           GClosureNotify response_destroy)
+{
+  GtkWidget *info_bar;
+
+  info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, origin, username);
+  g_signal_connect_data (info_bar, "response",
+                         response_callback, response_data, response_destroy, 0);
+  gtk_widget_show (info_bar);
+}
+
 static void
 update_navigation_flags (WebKitWebView *view)
 {
@@ -721,94 +736,6 @@ icon_changed_cb (EphyWebView *view,
   _ephy_web_view_update_icon (view);
 }
 
-typedef struct {
-  EphyWebView *web_view;
-  guint request_id;
-  char *origin;
-} FormAuthRequestData;
-
-static FormAuthRequestData *
-form_auth_request_data_new (EphyWebView *web_view,
-                            guint        request_id,
-                            const char  *origin)
-{
-  FormAuthRequestData *data;
-  data = g_slice_new (FormAuthRequestData);
-  data->web_view = web_view;
-  data->request_id = request_id;
-  data->origin = g_strdup (origin);
-  return data;
-}
-
-static void
-form_auth_request_data_free (FormAuthRequestData *data)
-{
-  g_free (data->origin);
-  g_slice_free (FormAuthRequestData, data);
-}
-
-static void
-form_auth_save_confirmation_info_bar_destroyed_cb (FormAuthRequestData *data,
-                                                   GObject             *where_the_info_bar_was)
-{
-  /* Ensure the hash table entry in the web process is removed. */
-  if (data->web_view->web_extension)
-    ephy_web_extension_proxy_form_auth_data_save_confirmation_response (data->web_view->web_extension,
-                                                                        data->request_id,
-                                                                        FALSE);
-  form_auth_request_data_free (data);
-}
-
-static void
-form_auth_data_save_confirmation_response (GtkInfoBar          *info_bar,
-                                           gint                 response_id,
-                                           FormAuthRequestData *data)
-{
-  if (data->web_view->web_extension) {
-    ephy_web_extension_proxy_form_auth_data_save_confirmation_response (data->web_view->web_extension,
-                                                                        data->request_id,
-                                                                        response_id == GTK_RESPONSE_YES);
-  }
-
-  if (response_id == GTK_RESPONSE_REJECT) {
-    EphyEmbedShell *shell = ephy_embed_shell_get_default ();
-    EphyPermissionsManager *manager = ephy_embed_shell_get_permissions_manager (shell);
-
-    ephy_permissions_manager_set_permission (manager,
-                                             EPHY_PERMISSION_TYPE_SAVE_PASSWORD,
-                                             data->origin,
-                                             EPHY_PERMISSION_DENY);
-  }
-
-  g_object_weak_unref (G_OBJECT (info_bar), (GWeakNotify)form_auth_save_confirmation_info_bar_destroyed_cb, data);
-  gtk_widget_destroy (GTK_WIDGET (info_bar));
-  form_auth_request_data_free (data);
-}
-
-static void
-form_auth_data_save_requested (EphyEmbedShell *shell,
-                               guint           request_id,
-                               guint64         page_id,
-                               const char     *origin,
-                               const char     *username,
-                               EphyWebView    *web_view)
-{
-  GtkWidget *info_bar;
-  FormAuthRequestData *data;
-
-  if (webkit_web_view_get_page_id (WEBKIT_WEB_VIEW (web_view)) != page_id)
-    return;
-
-  info_bar = ephy_web_view_create_form_auth_save_confirmation_info_bar (web_view, origin, username);
-  data = form_auth_request_data_new (web_view, request_id, origin);
-  g_signal_connect (info_bar, "response",
-                    G_CALLBACK (form_auth_data_save_confirmation_response),
-                    data);
-  g_object_weak_ref (G_OBJECT (info_bar), (GWeakNotify)form_auth_save_confirmation_info_bar_destroyed_cb, data);
-
-  gtk_widget_show (info_bar);
-}
-
 static void
 sensitive_form_focused_cb (EphyEmbedShell *shell,
                            guint64         page_id,
@@ -891,10 +818,6 @@ page_created_cb (EphyEmbedShell        *shell,
 
   view->web_extension = web_extension;
   g_object_add_weak_pointer (G_OBJECT (view->web_extension), (gpointer *)&view->web_extension);
-
-  g_signal_connect_object (shell, "form-auth-data-save-requested",
-                           G_CALLBACK (form_auth_data_save_requested),
-                           view, 0);
 
   g_signal_connect_object (shell, "sensitive-form-focused",
                            G_CALLBACK (sensitive_form_focused_cb),
@@ -3745,4 +3668,10 @@ gboolean
 ephy_web_view_get_reader_mode_state (EphyWebView *view)
 {
   return view->reader_active;
+}
+
+EphyWebExtensionProxy *
+ephy_web_view_get_web_extension_proxy (EphyWebView *view)
+{
+  return view->web_extension;
 }
