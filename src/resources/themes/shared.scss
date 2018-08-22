@@ -24,7 +24,6 @@
   }
 }
 
-
 // incognito mode
 .incognito-mode {
   &.titlebar {
@@ -36,10 +35,12 @@
   }
 }
 
+// Reader mode
 .selected {
-  color: themecolor(theme_selected_bg_color); }
+  color: themecolor(theme_selected_bg_color);
+}
 
-/* Bookmarks */
+// Bookmarks
 .starred {
   color: orange;
 }
@@ -81,7 +82,7 @@
   }
 }
 
-/* "Press $KEY to exit fullscreen" overlay text */
+// "Press $KEY to exit fullscreen" overlay text
 #fullscreen-popup {
   padding: 12px;
   border-radius: 18px;
@@ -90,21 +91,24 @@
 }
 
 .url_progress {
-    border: none;
-    background-color: transparent;
-    background-image: none;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    margin-top: 0px;
-    margin-bottom: 6px; }
+  border: none;
+  background-color: transparent;
+  background-image: none;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom: 6px;
 
-.url_progress progress {
+  progress {
     background-color: themecolor(theme_selected_bg_color);
     background-image: none;
     border: none;
-    min-height: 2px; }
+    min-height: 2px;
+  }
 
-.url_progress trough {
+  trough {
     border: none;
     background-color: transparent;
-    background-image: none; }
+    background-image: none;
+  }
+}
