@@ -913,8 +913,9 @@ ephy_embed_shell_startup (GApplication *application)
   if (priv->mode != EPHY_EMBED_SHELL_MODE_TEST)
     priv->user_content = webkit_user_content_manager_new ();
 
-  webkit_user_content_manager_register_script_message_handler (priv->user_content,
-                                                               "overview");
+  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
+                                                                        "overview",
+                                                                        priv->guid);
   g_signal_connect (priv->user_content, "script-message-received::overview",
                     G_CALLBACK (web_extension_overview_message_received_cb),
                     shell);
@@ -931,14 +932,16 @@ ephy_embed_shell_startup (GApplication *application)
                     G_CALLBACK (web_extension_unsafe_browsing_error_page_message_received_cb),
                     shell);
 
-  webkit_user_content_manager_register_script_message_handler (priv->user_content,
-                                                               "formAuthData");
+  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
+                                                                        "formAuthData",
+                                                                        priv->guid);
   g_signal_connect (priv->user_content, "script-message-received::formAuthData",
                     G_CALLBACK (web_extension_form_auth_data_message_received_cb),
                     shell);
 
-  webkit_user_content_manager_register_script_message_handler (priv->user_content,
-                                                               "sensitiveFormFocused");
+  webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
+                                                                        "sensitiveFormFocused",
+                                                                        priv->guid);
   g_signal_connect (priv->user_content, "script-message-received::sensitiveFormFocused",
                     G_CALLBACK (web_extension_sensitive_form_focused_message_received_cb),
                     shell);
@@ -1027,11 +1030,19 @@ ephy_embed_shell_shutdown (GApplication *application)
   if (priv->dbus_server)
     g_dbus_server_stop (priv->dbus_server);
 
-  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "overview");
-  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "tlsErrorPage");
-  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "unsafeBrowsingErrorPage");
-  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "formAuthData");
-  webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "sensitiveFormFocused");
+  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
+                                                                          "overview",
+                                                                          priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler (priv->user_content,
+                                                                 "tlsErrorPage");
+  webkit_user_content_manager_unregister_script_message_handler (priv->user_content,
+                                                                 "unsafeBrowsingErrorPage");
+  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
+                                                                          "formAuthData",
+                                                                          priv->guid);
+  webkit_user_content_manager_unregister_script_message_handler_in_world (priv->user_content,
+                                                                          "sensitiveFormFocused",
+                                                                          priv->guid);
   webkit_user_content_manager_unregister_script_message_handler (priv->user_content, "aboutApps");
 
   g_list_foreach (priv->web_extensions, (GFunc)ephy_embed_shell_unwatch_web_extension, application);
