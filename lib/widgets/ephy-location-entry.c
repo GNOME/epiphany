@@ -995,7 +995,7 @@ extracell_data_func (GtkCellLayout   *cell_layout,
 
   if (is_bookmark)
     g_object_set (cell,
-                  "icon-name", "user-bookmarks-symbolic",
+                  "icon-name", "starred-symbolic",
                   NULL);
 
   g_value_init (&visible, G_TYPE_BOOLEAN);
