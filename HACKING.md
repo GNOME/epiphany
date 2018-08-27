@@ -12,9 +12,7 @@ suggestions.
 In order to keep the code nice and clean we have a few requirements you'll
 need to stick to in order to get your patch accepted:
 
- * Use 2-space no-tabs for indentation (mandatory on new files, old
-   ones will be re-indented eventually. When modifying an existing file
-   with 8-space indentation keep the old style please).
+ * Use 2-space no-tabs for indentation.
 
  * Use K&R style for the braces.
 
