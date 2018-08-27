@@ -21,8 +21,6 @@
 #include "config.h"
 #include "ephy-zoom.h"
 
-#include <math.h>
-
 float
 ephy_zoom_get_changed_zoom_level (float level, int steps)
 {
