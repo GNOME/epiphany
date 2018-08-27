@@ -1,5 +1,12 @@
 Here are some tips to ease your introduction to Epiphany development.
 
+# Building the Code
+
+Epiphany often requires an unstable development release of WebKit to build
+successfully. If you're not sure how to handle this, refer to the
+[development wiki page](https://wiki.gnome.org/Apps/Web/Development) for
+suggestions.
+
 # Code Style
 
 In order to keep the code nice and clean we have a few requirements you'll
