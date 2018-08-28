@@ -522,21 +522,21 @@ ephy_embed_shell_get_global_history_service (EphyEmbedShell *shell)
     priv->global_history_service = ephy_history_service_new (filename, mode);
     g_free (filename);
     g_assert (priv->global_history_service);
-    g_signal_connect (priv->global_history_service, "urls-visited",
-                      G_CALLBACK (history_service_urls_visited_cb),
-                      shell);
-    g_signal_connect (priv->global_history_service, "url-title-changed",
-                      G_CALLBACK (history_service_url_title_changed_cb),
-                      shell);
-    g_signal_connect (priv->global_history_service, "url-deleted",
-                      G_CALLBACK (history_service_url_deleted_cb),
-                      shell);
-    g_signal_connect (priv->global_history_service, "host-deleted",
-                      G_CALLBACK (history_service_host_deleted_cb),
-                      shell);
-    g_signal_connect (priv->global_history_service, "cleared",
-                      G_CALLBACK (history_service_cleared_cb),
-                      shell);
+    g_signal_connect_object (priv->global_history_service, "urls-visited",
+                             G_CALLBACK (history_service_urls_visited_cb),
+                             shell, 0);
+    g_signal_connect_object (priv->global_history_service, "url-title-changed",
+                             G_CALLBACK (history_service_url_title_changed_cb),
+                             shell, 0);
+    g_signal_connect_object (priv->global_history_service, "url-deleted",
+                             G_CALLBACK (history_service_url_deleted_cb),
+                             shell, 0);
+    g_signal_connect_object (priv->global_history_service, "host-deleted",
+                             G_CALLBACK (history_service_host_deleted_cb),
+                             shell, 0);
+    g_signal_connect_object (priv->global_history_service, "cleared",
+                             G_CALLBACK (history_service_cleared_cb),
+                             shell, 0);
   }
 
   return priv->global_history_service;
@@ -788,8 +788,8 @@ ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
 
   observer = g_dbus_auth_observer_new ();
 
-  g_signal_connect (observer, "authorize-authenticated-peer",
-                    G_CALLBACK (authorize_authenticated_peer_cb), shell);
+  g_signal_connect_object (observer, "authorize-authenticated-peer",
+                           G_CALLBACK (authorize_authenticated_peer_cb), shell, 0);
 
   /* Why sync?
    *
@@ -809,8 +809,8 @@ ephy_embed_shell_setup_web_extensions_server (EphyEmbedShell *shell)
     goto out;
   }
 
-  g_signal_connect (priv->dbus_server, "new-connection",
-                    G_CALLBACK (new_connection_cb), shell);
+  g_signal_connect_object (priv->dbus_server, "new-connection",
+                           G_CALLBACK (new_connection_cb), shell, 0);
   g_dbus_server_start (priv->dbus_server);
 
  out:
@@ -916,51 +916,51 @@ ephy_embed_shell_startup (GApplication *application)
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "overview",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::overview",
-                    G_CALLBACK (web_extension_overview_message_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::overview",
+                           G_CALLBACK (web_extension_overview_message_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler (priv->user_content,
                                                                "tlsErrorPage");
-  g_signal_connect (priv->user_content, "script-message-received::tlsErrorPage",
-                    G_CALLBACK (web_extension_tls_error_page_message_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::tlsErrorPage",
+                           G_CALLBACK (web_extension_tls_error_page_message_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler (priv->user_content,
                                                                "unsafeBrowsingErrorPage");
-  g_signal_connect (priv->user_content, "script-message-received::unsafeBrowsingErrorPage",
-                    G_CALLBACK (web_extension_unsafe_browsing_error_page_message_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::unsafeBrowsingErrorPage",
+                           G_CALLBACK (web_extension_unsafe_browsing_error_page_message_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "formAuthData",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::formAuthData",
-                    G_CALLBACK (web_extension_form_auth_data_message_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::formAuthData",
+                           G_CALLBACK (web_extension_form_auth_data_message_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler_in_world (priv->user_content,
                                                                         "sensitiveFormFocused",
                                                                         priv->guid);
-  g_signal_connect (priv->user_content, "script-message-received::sensitiveFormFocused",
-                    G_CALLBACK (web_extension_sensitive_form_focused_message_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::sensitiveFormFocused",
+                           G_CALLBACK (web_extension_sensitive_form_focused_message_received_cb),
+                           shell, 0);
 
   webkit_user_content_manager_register_script_message_handler (priv->user_content,
                                                                "aboutApps");
-  g_signal_connect (priv->user_content, "script-message-received::aboutApps",
-                    G_CALLBACK (web_extension_about_apps_message_received_cb),
-                    shell);
+  g_signal_connect_object (priv->user_content, "script-message-received::aboutApps",
+                           G_CALLBACK (web_extension_about_apps_message_received_cb),
+                           shell, 0);
 
   ephy_embed_shell_setup_process_model (shell);
-  g_signal_connect (priv->web_context, "initialize-web-extensions",
-                    G_CALLBACK (initialize_web_extensions),
-                    shell);
+  g_signal_connect_object (priv->web_context, "initialize-web-extensions",
+                           G_CALLBACK (initialize_web_extensions),
+                           shell, 0);
 
   priv->permissions_manager = ephy_permissions_manager_new ();
-  g_signal_connect (priv->web_context, "initialize-notification-permissions",
-                    G_CALLBACK (initialize_notification_permissions),
-                    shell);
+  g_signal_connect_object (priv->web_context, "initialize-notification-permissions",
+                           G_CALLBACK (initialize_notification_permissions),
+                           shell, 0);
 
   /* Favicon Database */
   if (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE)
