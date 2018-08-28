@@ -3284,7 +3284,7 @@ ephy_window_constructed (GObject *object)
       ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                             SENS_FLAG_CHROME, TRUE);
     }
-    chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_MENU | EPHY_WINDOW_CHROME_TABSBAR | EPHY_WINDOW_CHROME_BOOKMARKS);
+    chrome &= ~(EPHY_WINDOW_CHROME_LOCATION | EPHY_WINDOW_CHROME_TABSBAR | EPHY_WINDOW_CHROME_BOOKMARKS);
   } else if (mode == EPHY_EMBED_SHELL_MODE_INCOGNITO) {
     action_group = gtk_widget_get_action_group (GTK_WIDGET (window), "win");
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group), "bookmark-page");

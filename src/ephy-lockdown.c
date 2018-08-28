@@ -85,7 +85,9 @@ typedef struct {
 static const BindAction app_actions[] = {
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "new-window", "enabled" },
   { EPHY_PREFS_LOCKDOWN_FULLSCREEN, "new-incognito", "enabled" },
+};
 
+static const BindAction app_mode_app_actions[] = {
   { EPHY_PREFS_LOCKDOWN_HISTORY, "history", "enabled" }
 };
 
@@ -206,13 +208,16 @@ window_added_cb (GtkApplication *application,
                     EPHY_PREFS_LOCKDOWN_ARBITRARY_URL, EPHY_WINDOW (window));
 
   mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (application));
+  action_group = G_ACTION_GROUP (G_APPLICATION (application));
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION) {
     /* These actions do not exist in application mode. */
-    action_group = G_ACTION_GROUP (G_APPLICATION (application));
     bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
                                action_group, app_actions,
                                G_N_ELEMENTS (app_actions));
   }
+  bind_settings_and_actions (EPHY_SETTINGS_LOCKDOWN,
+                             action_group, app_mode_app_actions,
+                             G_N_ELEMENTS (app_mode_app_actions));
 
   action_group = gtk_widget_get_action_group (GTK_WIDGET (window),
                                               "win");

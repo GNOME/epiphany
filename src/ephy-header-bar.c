@@ -23,29 +23,16 @@
 #include "config.h"
 #include "ephy-header-bar.h"
 
-#include "ephy-action-helper.h"
 #include "ephy-add-bookmark-popover.h"
-#include "ephy-bookmarks-popover.h"
-#include "ephy-bookmark-properties-grid.h"
-#include "ephy-embed.h"
-#include "ephy-embed-container.h"
-#include "ephy-embed-prefs.h"
 #include "ephy-embed-utils.h"
-#include "ephy-favicon-helpers.h"
 #include "ephy-flatpak-utils.h"
-#include "ephy-gui.h"
-#include "ephy-history-service.h"
 #include "ephy-location-entry.h"
-#include "ephy-middle-clickable-button.h"
-#include "ephy-prefs.h"
-#include "ephy-settings.h"
 #include "ephy-shell.h"
 #include "ephy-title-box.h"
 #include "ephy-title-widget.h"
 #include "ephy-type-builtins.h"
 
 #include <glib/gi18n.h>
-#include <webkit2/webkit2.h>
 
 enum {
   PROP_0,
@@ -209,7 +196,21 @@ ephy_header_bar_constructed (GObject *object)
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/page-menu-popover.ui");
   page_menu_popover = GTK_WIDGET (gtk_builder_get_object (builder, "page-menu-popover"));
   header_bar->zoom_level_button = GTK_WIDGET (gtk_builder_get_object (builder, "zoom-level"));
-  if (ephy_is_running_inside_flatpak ()) {
+  if (ephy_embed_shell_get_mode (embed_shell) == EPHY_EMBED_SHELL_MODE_APPLICATION) {
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "new-window-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "new-window-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "new-incognito-window-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "reopen-closed-tab-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "bookmarks-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "import-bookmarks-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "export-bookmarks-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "override-text-encoding-separator")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "override-text-encoding-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "keyboard-shortcuts-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
+  } else if (ephy_is_running_inside_flatpak ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
   }

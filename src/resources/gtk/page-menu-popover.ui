@@ -120,6 +120,31 @@
             </child>
           </object>
         </child>
+        <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
+        <child>
+          <object class="GtkSeparator" id="new-window-separator">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton" id="new-window-button">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">_New Window</property>
+            <property name="action-name">app.new-window</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton" id="new-incognito-window-button">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">New _Incognito Window</property>
+            <property name="action-name">app.new-incognito</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
         <child>
           <object class="GtkSeparator">
             <property name="orientation">horizontal</property>
@@ -128,16 +153,26 @@
             <property name="visible">True</property>
           </object>
         </child>
+        <!-- FRAGILE: This button is manually removed for app mode in ephy-header-bar.c. -->
         <child>
-          <object class="GtkModelButton">
+          <object class="GtkModelButton" id="reopen-closed-tab-button">
             <property name="can_focus">True</property>
-            <property name="text" translatable="yes">_New Tab</property>
-            <property name="action-name">win.new-tab</property>
+            <property name="text" translatable="yes">Reopen Closed _Tab</property>
+            <property name="action-name">app.reopen-closed-tab</property>
             <property name="visible">True</property>
           </object>
         </child>
         <child>
-          <object class="GtkSeparator">
+          <object class="GtkModelButton">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">_History</property>
+            <property name="action-name">app.history</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
+        <child>
+          <object class="GtkSeparator" id="bookmarks-separator">
             <property name="orientation">horizontal</property>
             <property name="margin-top">6</property>
             <property name="margin-bottom">6</property>
@@ -145,13 +180,22 @@
           </object>
         </child>
         <child>
-          <object class="GtkModelButton">
+          <object class="GtkModelButton" id="import-bookmarks-button">
             <property name="can_focus">True</property>
-            <property name="text" translatable="yes">Text _Encoding</property>
-            <property name="action-name">win.encoding</property>
+            <property name="text" translatable="yes">I_mport Bookmarks…</property>
+            <property name="action-name">app.import-bookmarks</property>
             <property name="visible">True</property>
           </object>
         </child>
+        <child>
+          <object class="GtkModelButton" id="export-bookmarks-button">
+            <property name="can_focus">True</property>
+            <property name="text" translatable="yes">E_xport Bookmarks…</property>
+            <property name="action-name">app.export-bookmarks</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
         <child>
           <object class="GtkSeparator" id="save-as-application-separator">
             <property name="orientation">horizontal</property>
@@ -168,8 +212,9 @@
             <property name="visible">True</property>
           </object>
         </child>
+        <!-- FRAGILE: These buttons are manually removed for app mode in ephy-header-bar.c. -->
         <child>
-          <object class="GtkSeparator">
+          <object class="GtkSeparator" id="override-text-encoding-separator">
             <property name="orientation">horizontal</property>
             <property name="margin-top">6</property>
             <property name="margin-bottom">6</property>
@@ -177,58 +222,10 @@
           </object>
         </child>
         <child>
-          <object class="GtkModelButton">
+          <object class="GtkModelButton" id="override-text-encoding-button">
             <property name="can_focus">True</property>
-            <property name="text" translatable="yes">_New Window</property>
-            <property name="action-name">app.new-window</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="can_focus">True</property>
-            <property name="text" translatable="yes">New _Incognito Window</property>
-            <property name="action-name">app.new-incognito</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="can_focus">True</property>
-            <property name="text" translatable="yes">Reopen Closed _Tab</property>
-            <property name="action-name">app.reopen-closed-tab</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="orientation">horizontal</property>
-            <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="can_focus">True</property>
-            <property name="text" translatable="yes">I_mport Bookmarks</property>
-            <property name="action-name">app.import-bookmarks</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="can_focus">True</property>
-            <property name="text" translatable="yes">E_xport Bookmarks</property>
-            <property name="action-name">app.export-bookmarks</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="can_focus">True</property>
-            <property name="text" translatable="yes">_History</property>
-            <property name="action-name">app.history</property>
+            <property name="text" translatable="yes">_Override Text Encoding…</property>
+            <property name="action-name">win.encoding</property>
             <property name="visible">True</property>
           </object>
         </child>
@@ -256,16 +253,18 @@
             <property name="visible">True</property>
           </object>
         </child>
+        <!-- FRAGILE: This button is manually removed for app mode in ephy-header-bar.c. -->
         <child>
-          <object class="GtkModelButton">
+          <object class="GtkModelButton" id="keyboard-shortcuts-button">
             <property name="can_focus">True</property>
             <property name="text" translatable="yes">_Keyboard Shortcuts</property>
             <property name="action-name">app.shortcuts</property>
             <property name="visible">True</property>
           </object>
         </child>
+        <!-- FRAGILE: This button is manually removed for app mode in ephy-header-bar.c. -->
         <child>
-          <object class="GtkModelButton">
+          <object class="GtkModelButton" id="help-button">
             <property name="can_focus">True</property>
             <property name="text" translatable="yes">_Help</property>
             <property name="action-name">app.help</property>
