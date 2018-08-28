@@ -204,7 +204,7 @@ sync_collection_toggled_cb (GtkToggleButton *button,
   if (GTK_WIDGET (button) == dialog->sync_bookmarks_checkbutton) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_bookmarks_manager (shell));
   } else if (GTK_WIDGET (button) == dialog->sync_passwords_checkbutton) {
-    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL(shell)));
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (shell)));
   } else if (GTK_WIDGET (button) == dialog->sync_history_checkbutton) {
     manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_history_manager (shell));
   } else if (GTK_WIDGET (button) == dialog->sync_open_tabs_checkbutton) {
