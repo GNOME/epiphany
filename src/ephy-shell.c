@@ -56,7 +56,6 @@ struct _EphyShell {
   GList *windows;
   GObject *lockdown;
   EphyBookmarksManager *bookmarks_manager;
-  EphyPasswordManager *password_manager;
   EphyHistoryManager *history_manager;
   EphyOpenTabsManager *open_tabs_manager;
   GNetworkMonitor *network_monitor;
@@ -71,7 +70,6 @@ static EphyShell *ephy_shell = NULL;
 
 static void ephy_shell_dispose (GObject *object);
 static void ephy_shell_finalize (GObject *object);
-static EphyPasswordManager *ephy_shell_get_password_manager (EphyShell *shell);
 
 G_DEFINE_TYPE (EphyShell, ephy_shell, EPHY_TYPE_EMBED_SHELL)
 
@@ -332,7 +330,7 @@ register_synchronizable_managers (EphyShell       *shell,
   }
 
   if (ephy_sync_utils_passwords_sync_is_enabled ()) {
-    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_shell_get_password_manager (shell));
+    manager = EPHY_SYNCHRONIZABLE_MANAGER (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (shell)));
     ephy_sync_service_register_manager (service, manager);
   }
 
@@ -706,7 +704,6 @@ ephy_shell_dispose (GObject *object)
   g_clear_object (&shell->network_monitor);
   g_clear_object (&shell->sync_service);
   g_clear_object (&shell->bookmarks_manager);
-  g_clear_object (&shell->password_manager);
   g_clear_object (&shell->history_manager);
   g_clear_object (&shell->open_tabs_manager);
 
@@ -907,25 +904,6 @@ ephy_shell_get_bookmarks_manager (EphyShell *shell)
     shell->bookmarks_manager = ephy_bookmarks_manager_new ();
 
   return shell->bookmarks_manager;
-}
-
-/**
- * ephy_shell_get_password_manager:
- * @shell: the #EphyShell
- *
- * Returns the passwords manager.
- *
- * Return value: (transfer none): An #EphyPasswordManager.
- */
-static EphyPasswordManager *
-ephy_shell_get_password_manager (EphyShell *shell)
-{
-  g_assert (EPHY_IS_SHELL (shell));
-
-  if (shell->password_manager == NULL)
-    shell->password_manager = g_object_ref (ephy_embed_shell_get_password_manager (EPHY_EMBED_SHELL (shell)));
-
-  return shell->password_manager;
 }
 
 /**
