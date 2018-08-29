@@ -3069,16 +3069,11 @@ static GtkWidget *
 setup_header_bar (EphyWindow *window)
 {
   GtkWidget *header_bar;
-  EphyEmbedShellMode app_mode;
   EphyTitleWidget *title_widget;
 
   header_bar = ephy_header_bar_new (window);
   dzl_application_window_set_titlebar (DZL_APPLICATION_WINDOW (window), header_bar);
   gtk_widget_show (header_bar);
-
-  app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
-  if (app_mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
-    gtk_style_context_add_class (gtk_widget_get_style_context (header_bar), "incognito-mode");
 
   title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (header_bar));
   g_signal_connect (title_widget, "lock-clicked",
@@ -3147,6 +3142,7 @@ ephy_window_constructed (GObject *object)
   EphyEmbedShellMode mode;
   EphyWindowChrome chrome = EPHY_WINDOW_CHROME_DEFAULT;
   GApplication *app;
+  EphyEmbedShellMode app_mode;
 
   G_OBJECT_CLASS (ephy_window_parent_class)->constructed (object);
 
@@ -3223,6 +3219,11 @@ ephy_window_constructed (GObject *object)
   window->notebook = setup_notebook (window);
   g_signal_connect_object (window->notebook, "notify::show-tabs",
                            G_CALLBACK (notebook_show_tabs_changed_cb), window, 0);
+
+  /* Setup incognito mode style */
+  app_mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
+  if (app_mode == EPHY_EMBED_SHELL_MODE_INCOGNITO)
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (window)), "incognito-mode");
 
   /* Setup the toolbar. */
   window->header_bar = setup_header_bar (window);
