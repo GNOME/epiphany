@@ -3298,6 +3298,9 @@ ephy_window_constructed (GObject *object)
 
   update_new_tab_button_visibility (window);
 
+  gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window),
+                                           FALSE);
+
   ephy_window_set_chrome (window, chrome);
 }
 
