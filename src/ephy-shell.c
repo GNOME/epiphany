@@ -395,9 +395,6 @@ ephy_shell_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ephy_shell_parent_class)->startup (application);
 
-  /* DzlApplicationMenu sets its own app menu. Override it. */
-  gtk_application_set_app_menu (GTK_APPLICATION (application), NULL);
-
   /* We're not remoting; start our services */
   g_signal_connect (ephy_embed_shell_get_web_context (embed_shell),
                     "download-started",
