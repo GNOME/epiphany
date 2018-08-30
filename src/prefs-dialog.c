@@ -102,6 +102,7 @@ struct _PrefsDialog {
   GtkWidget *mono_fontbutton;
   GtkWidget *css_checkbox;
   GtkWidget *css_edit_button;
+  GtkWidget *reader_mode_box;
   GtkWidget *reader_mode_font_style;
   GtkWidget *reader_mode_color_scheme;
 
@@ -969,6 +970,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, mono_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_checkbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_edit_button);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_font_style);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_color_scheme);
 
@@ -2347,6 +2349,8 @@ prefs_dialog_init (PrefsDialog *dialog)
   gtk_widget_set_visible (dialog->session_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->do_not_track_checkbutton,
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+  gtk_widget_set_visible (dialog->reader_mode_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
 
   setup_general_page (dialog);
