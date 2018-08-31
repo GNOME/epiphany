@@ -32,7 +32,8 @@ conf.set_quoted('PKGDATADIR', pkgdatadir)
 conf.set_quoted('PKGLIBEXECDIR', pkglibexecdir)
 conf.set_quoted('SOURCE_ROOT', meson.source_root())
 
-conf.set10('DEVELOPER_MODE', get_option('developer_mode'))
+developer_mode = get_option('developer_mode')
+conf.set10('DEVELOPER_MODE', developer_mode)
 
 tech_preview = get_option('tech_preview')
 conf.set10('TECH_PREVIEW', tech_preview)
@@ -44,7 +45,7 @@ configure_file(
   configuration: conf
 )
 
-if tech_preview
+if tech_preview or developer_mode
   vcs_tag(
     input: 'ephy-vcs-version.h.in',
     output: 'ephy-vcs-version.h',
