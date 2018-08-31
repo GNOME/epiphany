@@ -530,6 +530,7 @@ static void
 sync_setup_firefox_iframe (PrefsDialog *dialog)
 {
   EphyEmbedShell *shell;
+  WebKitWebsiteDataManager *manager;
   WebKitWebContext *embed_context;
   WebKitWebContext *sync_context;
   const char *script;
@@ -555,7 +556,8 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
 
     shell = ephy_embed_shell_get_default ();
     embed_context = ephy_embed_shell_get_web_context (shell);
-    sync_context = webkit_web_context_new ();
+    manager = webkit_web_context_get_website_data_manager (embed_context);
+    sync_context = webkit_web_context_new_with_website_data_manager (manager);
     webkit_web_context_set_preferred_languages (sync_context,
                                                 g_object_get_data (G_OBJECT (embed_context), "preferred-languages"));
 
