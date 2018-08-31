@@ -508,7 +508,7 @@ web_extension_password_manager_save_real (EphyEmbedShell *shell,
   request->username_field = g_steal_pointer (&username_field);
   request->password_field = g_steal_pointer (&password_field);
   request->is_new = is_new;
-  ephy_web_view_show_auth_form_save_request (view, origin, username,
+  ephy_web_view_show_auth_form_save_request (view, request->origin, request->username,
                                              (EphyPasswordSaveRequestCallback)save_auth_request_response_cb,
                                              request, (GDestroyNotify)save_auth_request_free);
 }
