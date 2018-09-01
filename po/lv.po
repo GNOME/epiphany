@@ -11,10 +11,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=epiphan"
-"y&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2018-03-05 15:18+0000\n"
-"PO-Revision-Date: 2018-03-09 21:30+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
+"POT-Creation-Date: 2018-08-28 17:28+0000\n"
+"PO-Revision-Date: 2018-09-01 22:10+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -57,9 +56,9 @@ msgstr "GNOME tīmekļa vietne attēlota GNOME tīmeklī"
 msgid "The GNOME Project"
 msgstr "GNOME projekts"
 
-#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:296
-#: embed/ephy-about-handler.c:327 src/ephy-main.c:103 src/ephy-main.c:275
-#: src/ephy-main.c:417 src/window-commands.c:651
+#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:189
+#: embed/ephy-about-handler.c:223 src/ephy-main.c:103 src/ephy-main.c:275
+#: src/ephy-main.c:417 src/window-commands.c:652
 msgid "Web"
 msgstr "Tīmeklis"
 
@@ -144,7 +143,7 @@ msgstr ""
 "dzini apraksta nosaukums, adrese un sitiens (saīsne)."
 
 #: data/org.gnome.epiphany.gschema.xml:42
-#: data/org.gnome.epiphany.gschema.xml:202
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid "User agent"
 msgstr "Lietotāja aģents"
 
@@ -159,32 +158,20 @@ msgstr ""
 "vietā izmantojiet /org/gnome/epiphany/web/user-agent."
 
 #: data/org.gnome.epiphany.gschema.xml:51
-msgid "Automatic downloads"
-msgstr "Automātiskas lejupielādes"
-
-#: data/org.gnome.epiphany.gschema.xml:52
-msgid ""
-"When files cannot be opened by the browser they are automatically downloaded "
-"to the download folder and opened with the appropriate application."
-msgstr ""
-"Ja datnes nevar atvērt ar pārlūku, tās tiek automātiski lejupielādētas mapē "
-"Lejupielādes un atvērtas ar atbilstošo lietotni."
-
-#: data/org.gnome.epiphany.gschema.xml:56
 msgid "Force new windows to be opened in tabs"
 msgstr "Piespiest jaunos logus atvērt cilnēs"
 
-#: data/org.gnome.epiphany.gschema.xml:57
+#: data/org.gnome.epiphany.gschema.xml:52
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "Piespiest jaunu logu pieprasījumus atvērt cilnēs, nevis jaunos logos."
 
-#: data/org.gnome.epiphany.gschema.xml:61
-#: data/org.gnome.epiphany.gschema.xml:217
+#: data/org.gnome.epiphany.gschema.xml:56
+#: data/org.gnome.epiphany.gschema.xml:212
 msgid "Remember passwords"
 msgstr "Atcerēties paroles"
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid ""
 "Whether to store and prefill passwords in websites. DEPRECATED: This key is "
 "deprecated and ignored. Use /org/gnome/epiphany/web/remember-passwords "
@@ -194,12 +181,12 @@ msgstr ""
 "atslēga ir novecojusi un tiks ignorēta. Tā vietā izmantojiet /org/gnome/"
 "epiphany/web/remember-passwords."
 
-#: data/org.gnome.epiphany.gschema.xml:73
-#: data/org.gnome.epiphany.gschema.xml:197
+#: data/org.gnome.epiphany.gschema.xml:68
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid "Enable smooth scrolling"
 msgstr "Ieslēgt plūstošo ritināšanu"
 
-#: data/org.gnome.epiphany.gschema.xml:74
+#: data/org.gnome.epiphany.gschema.xml:69
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/web/"
 "enable-smooth-scrolling instead."
@@ -207,15 +194,15 @@ msgstr ""
 "NOVECOJIS: šī atslēga ir novecojusi un tiks ignorēta. Tā vietā izmantojiet /"
 "org/gnome/epiphany/web/enable-smooth-scrolling."
 
-#: data/org.gnome.epiphany.gschema.xml:80
+#: data/org.gnome.epiphany.gschema.xml:75
 msgid "Don’t use an external application to view page source."
 msgstr "Neizmantot ārēju lietotni, lai skatītu lapas pirmkodu."
 
-#: data/org.gnome.epiphany.gschema.xml:84
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid "Whether to automatically restore the last session"
 msgstr "Vai automātiski atjaunot pēdējo sesiju"
 
-#: data/org.gnome.epiphany.gschema.xml:85
+#: data/org.gnome.epiphany.gschema.xml:80
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored), "
@@ -226,14 +213,14 @@ msgstr ""
 "vērtības ir “always” (vienmēr), “crashed” (tikai pēc avārijas) un "
 "“never” (nekad)."
 
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr ""
 "Vai aizkavēt ciļņu ielādēšanu, kas nav uzreiz redzamas, atjaunojot sesiju"
 
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:85
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -241,11 +228,11 @@ msgstr ""
 "Kad šī opcija ir iestatīta uz patiess, atjaunojot sesiju, cilnes nesāks "
 "ielādēties, līdz kamēr lietotājs uz tām nepārslēgsies."
 
-#: data/org.gnome.epiphany.gschema.xml:94
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "Process model"
 msgstr "Procesa modelis"
 
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:90
 msgid ""
 "This option allows to set the process model used. Use “shared-secondary-"
 "process” to use a single web process shared by all the tabs and “one-"
@@ -256,7 +243,7 @@ msgstr ""
 "“one-secondary-process-per-web-view”, lai katra cilne izmantotu savu tīmekļa "
 "procesu."
 
-#: data/org.gnome.epiphany.gschema.xml:99
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid ""
 "Maximum number of web processes created at the same time when using “one-"
 "secondary-process-per-web-view” model"
@@ -264,7 +251,7 @@ msgstr ""
 "Maksimālais vienlaicīgi veidojamais tīmekļa procesu skaits, izmantojot “one-"
 "secondary-process-per-web-view” modeli"
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid ""
 "This option sets a limit to the number of web processes that will be used at "
 "the same time for the “one-secondary-process-per-web-view” model. The "
@@ -274,19 +261,19 @@ msgstr ""
 "vienlaicīgi “one-secondary-process-per-web-view” modelim. Noklusējuma "
 "vērtība ir “0”, kas nozīmē, ka nav limitu."
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "List of adblock filters"
 msgstr "Saraksts ar reklāmu bloķētāju filtriem"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid "List of URLs with filter rules to be used by the adblock."
 msgstr "Saraksts ar filtru kārtulu URL, kurus izmantos reklāmu bloķētājs."
 
-#: data/org.gnome.epiphany.gschema.xml:112
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr "Izvērt ciļņu izmērus, līdz tie aizpilda pieejamo vietu ciļņu joslā."
 
-#: data/org.gnome.epiphany.gschema.xml:113
+#: data/org.gnome.epiphany.gschema.xml:108
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar."
@@ -294,11 +281,11 @@ msgstr ""
 "Ja ieslēgts, cilnes tiks izvērstas, lai aizpildītu visu pieejamo vietu ciļņu "
 "joslā."
 
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "The position of the tabs bar."
 msgstr "Ciļņu joslas novietojums."
 
-#: data/org.gnome.epiphany.gschema.xml:118
+#: data/org.gnome.epiphany.gschema.xml:113
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -308,11 +295,11 @@ msgstr ""
 "noklusējuma vērtība), “bottom” (apakšā), “left” (vertikālas cilnes, josla "
 "kreisajā pusē) un “right” (vertikālas cilnes, josla labajā pusē)."
 
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "The visibility policy for the tabs bar."
 msgstr "Ciļņu joslas redzamība."
 
-#: data/org.gnome.epiphany.gschema.xml:123
+#: data/org.gnome.epiphany.gschema.xml:118
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -321,23 +308,23 @@ msgstr ""
 "Nosaka, kad rādīt ciļņu joslu. Iespējamās vērtības ir “always” (vienmēr), "
 "“more-than-one” (ja atvērta vairāk kā viena cilne) un “never” (nekad)."
 
-#: data/org.gnome.epiphany.gschema.xml:129
+#: data/org.gnome.epiphany.gschema.xml:124
 msgid "Minimum font size"
 msgstr "Minimālais fonta izmērs"
 
-#: data/org.gnome.epiphany.gschema.xml:133
+#: data/org.gnome.epiphany.gschema.xml:128
 msgid "Use GNOME fonts"
 msgstr "Lietot GNOME fontus"
 
-#: data/org.gnome.epiphany.gschema.xml:134
+#: data/org.gnome.epiphany.gschema.xml:129
 msgid "Use GNOME font settings."
 msgstr "Lietot GNOME fontu iestatījumus."
 
-#: data/org.gnome.epiphany.gschema.xml:138
+#: data/org.gnome.epiphany.gschema.xml:133
 msgid "Custom sans-serif font"
 msgstr "Pielāgots bezrēdzes fonts"
 
-#: data/org.gnome.epiphany.gschema.xml:139
+#: data/org.gnome.epiphany.gschema.xml:134
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -345,11 +332,11 @@ msgstr ""
 "Fonts, ko lietot darbvirsmas bezrēdzes fonta vietā, kad iestatīts use-gnome-"
 "fonts."
 
-#: data/org.gnome.epiphany.gschema.xml:143
+#: data/org.gnome.epiphany.gschema.xml:138
 msgid "Custom serif font"
 msgstr "Pielāgots rēdzes fonts"
 
-#: data/org.gnome.epiphany.gschema.xml:144
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -357,11 +344,11 @@ msgstr ""
 "Fonts, ko lietot darbvirsmas rēdzes fonta vietā, kad iestatīts use-gnome-"
 "fonts."
 
-#: data/org.gnome.epiphany.gschema.xml:148
+#: data/org.gnome.epiphany.gschema.xml:143
 msgid "Custom monospace font"
 msgstr "Pielāgots fiksēta platuma fonts"
 
-#: data/org.gnome.epiphany.gschema.xml:149
+#: data/org.gnome.epiphany.gschema.xml:144
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -369,49 +356,49 @@ msgstr ""
 "Fonts, ko lietot darbvirsmas fiksēta platuma fonta vietā, kad iestatīts use-"
 "gnome-fonts."
 
-#: data/org.gnome.epiphany.gschema.xml:153
+#: data/org.gnome.epiphany.gschema.xml:148
 msgid "Use a custom CSS"
 msgstr "Lietot pielāgotu CSS"
 
-#: data/org.gnome.epiphany.gschema.xml:154
+#: data/org.gnome.epiphany.gschema.xml:149
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr "Lietot pielāgotu CSS, lai mainītu tīmekļa vietnes izskatu."
 
-#: data/org.gnome.epiphany.gschema.xml:158
+#: data/org.gnome.epiphany.gschema.xml:153
 msgid "Enable spell checking"
 msgstr "Ieslēgt pareizrakstības pārbaudi"
 
-#: data/org.gnome.epiphany.gschema.xml:159
+#: data/org.gnome.epiphany.gschema.xml:154
 msgid "Spell check any text typed in editable areas."
 msgstr "Pārbaudīt jebkura teksta pareizrakstību rediģējamos laukos."
 
-#: data/org.gnome.epiphany.gschema.xml:163
+#: data/org.gnome.epiphany.gschema.xml:158
 msgid "Default encoding"
 msgstr "Noklusētais kodējums"
 
-#: data/org.gnome.epiphany.gschema.xml:164
+#: data/org.gnome.epiphany.gschema.xml:159
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Noklusētais kodējums. Iespējamās vērtības ir tās, ko saprot WebKitGTK+."
 
-#: data/org.gnome.epiphany.gschema.xml:168
-#: src/resources/gtk/prefs-dialog.ui:666
+#: data/org.gnome.epiphany.gschema.xml:163
+#: src/resources/gtk/prefs-dialog.ui:752
 msgid "Languages"
 msgstr "Valodas"
 
-#: data/org.gnome.epiphany.gschema.xml:169
+#: data/org.gnome.epiphany.gschema.xml:164
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
 "Vēlamās valodas. Masīvs ar lokāļu kodiem, vai “system”, lai izmantotu "
 "pašreizējo lokāli."
 
-#: data/org.gnome.epiphany.gschema.xml:173
+#: data/org.gnome.epiphany.gschema.xml:168
 msgid "Cookie accept"
 msgstr "Pieņemt sīkdatnes"
 
-#: data/org.gnome.epiphany.gschema.xml:174
+#: data/org.gnome.epiphany.gschema.xml:169
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -419,41 +406,41 @@ msgstr ""
 "No kurienes pieņemt sīkdatnes. Iespējamās vērtības ir “always”, “no-third-"
 "party” un “never”."
 
-#: data/org.gnome.epiphany.gschema.xml:178
+#: data/org.gnome.epiphany.gschema.xml:173
 msgid "Allow popups"
 msgstr "Atļaut izlecošos logus"
 
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:174
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
 "Atļaut lapām atvērt jaunus logus ar JavaScript (ja JavaScript ir ieslēgts)."
 
-#: data/org.gnome.epiphany.gschema.xml:183
+#: data/org.gnome.epiphany.gschema.xml:178
 msgid "Enable Plugins"
 msgstr "Ieslēgt spraudņus"
 
-#: data/org.gnome.epiphany.gschema.xml:187
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid "Enable WebGL"
 msgstr "Ieslēgt WebGL"
 
-#: data/org.gnome.epiphany.gschema.xml:188
+#: data/org.gnome.epiphany.gschema.xml:183
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Vai ieslēgt WebGL kontekstu atbalstu."
 
-#: data/org.gnome.epiphany.gschema.xml:192
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid "Enable WebAudio"
 msgstr "Ieslēgt WebAudio"
 
-#: data/org.gnome.epiphany.gschema.xml:193
+#: data/org.gnome.epiphany.gschema.xml:188
 msgid "Whether to enable support for WebAudio."
 msgstr "Vai ieslēgt WebAudio atbalstu."
 
-#: data/org.gnome.epiphany.gschema.xml:198
+#: data/org.gnome.epiphany.gschema.xml:193
 msgid "Whether to enable smooth scrolling."
 msgstr "Vai ieslēgt plūstošo ritināšanu"
 
-#: data/org.gnome.epiphany.gschema.xml:203
+#: data/org.gnome.epiphany.gschema.xml:198
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -461,11 +448,11 @@ msgstr ""
 "Virkne, kas tiks izmantota kā lietotāja aģents, lai identificētu pārlūku "
 "tīmekļa serveriem."
 
-#: data/org.gnome.epiphany.gschema.xml:207
+#: data/org.gnome.epiphany.gschema.xml:202
 msgid "Do Not Track"
 msgstr "Neizsekot"
 
-#: data/org.gnome.epiphany.gschema.xml:208
+#: data/org.gnome.epiphany.gschema.xml:203
 msgid ""
 "Enables DNT headers and tracking query parameter removal. Note that when "
 "changing this setting from the preferences dialog, the adblock-filters "
@@ -476,25 +463,25 @@ msgstr ""
 "dialoglodziņa, reklāmu bloķēšanas filtra iestatījumi tiks papildu "
 "atjaunināti, lai pievienotu / noņemtu EasyPrivacy filtrus."
 
-#: data/org.gnome.epiphany.gschema.xml:212
+#: data/org.gnome.epiphany.gschema.xml:207
 msgid "Enable adblock"
 msgstr "Ieslēgt reklāmu bloķētāju"
 
-#: data/org.gnome.epiphany.gschema.xml:213
+#: data/org.gnome.epiphany.gschema.xml:208
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Vai bloķēt iegultās reklāmas, ko varētu mēģināt parādīt tīmekļa lapas."
 
-#: data/org.gnome.epiphany.gschema.xml:218
+#: data/org.gnome.epiphany.gschema.xml:213
 msgid "Whether to store and prefill passwords in websites."
 msgstr "Vai saglabāt un automātiski aizpildīt paroles tīmekļa vietnēs."
 
-#: data/org.gnome.epiphany.gschema.xml:222
+#: data/org.gnome.epiphany.gschema.xml:217
 msgid "Enable site-specific quirks"
 msgstr "Ieslēgt vietnei specifiskus trikus"
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:218
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
@@ -502,38 +489,60 @@ msgstr ""
 "Ieslēgt trikus, lai noteiktas vietnes strādātu labāk. Šo iespēju vajadzētu "
 "izslēgt šo iestatījumu, ja vēlaties atkļūdot specifisku problēmu."
 
-#: data/org.gnome.epiphany.gschema.xml:227
-#| msgid "Enable caret browsing mode?"
+#: data/org.gnome.epiphany.gschema.xml:222
 msgid "Enable safe browsing"
 msgstr "Ieslēgt drošu pārlūkošanu"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:223
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
 msgstr ""
-"Vai ieslēgt drošo pārlūkošanu. Drošā pārlūkošana izmanto Google Safe Browsing"
-" API v4."
+"Vai ieslēgt drošo pārlūkošanu. Drošā pārlūkošana izmanto Google Safe "
+"Browsing API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:232
-#| msgctxt "shortcut window"
-#| msgid "Toggle caret browsing"
+#: data/org.gnome.epiphany.gschema.xml:227
 msgid "Google Safe Browsing API key"
 msgstr "Google Safe Browsing API atslēga"
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:228
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr "API atslēga, ko izmantot, lai piekļūtu Google Safe Browsing API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:237
+#: data/org.gnome.epiphany.gschema.xml:232
 msgid "Default zoom level for new pages"
 msgstr "Noklusējuma līmenis jaunu lapu mērogam"
 
+#: data/org.gnome.epiphany.gschema.xml:236
+#| msgid "Enable adblock"
+msgid "Enable autosearch"
+msgstr "Ieslēgt automātisko meklēšanu"
+
+#: data/org.gnome.epiphany.gschema.xml:237
+msgid ""
+"Whether to automatically search the web when something that does not look "
+"like a URL is entered in the address bar. If this setting is disabled, "
+"everything will be loaded as a URL unless a search engine is explicitly "
+"selected from the dropdown menu."
+msgstr ""
+"Vai automātiski meklēt tīmeklī, ja adreses joslā ir ierakstīts kaut kas tāds,"
+" kas neizskatās pēc URL. Ja šis iestatījums ir izslēgts, viss tiks ielādēts"
+" kā URL, izņemot ja izkrītošajā izvēlnē tiks izvēlēts meklēšanas dzinis."
+
 #: data/org.gnome.epiphany.gschema.xml:243
+msgid "Web application additional URLs"
+msgstr "Tīmekļa lietotnes papildu URL"
+
+#: data/org.gnome.epiphany.gschema.xml:244
+#| msgid "List of installed web applications"
+msgid "The list of URLs that should be opened by the web application"
+msgstr "Saraksts ar URL, kurus vajadzētu atvērt tīmekļa lietotnei"
+
+#: data/org.gnome.epiphany.gschema.xml:250
 msgid "The downloads folder"
 msgstr "Lejupielāžu mape"
 
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:251
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -541,11 +550,11 @@ msgstr ""
 "Ceļš līdz mapei, kurā lejupielādēt datnes; vai “Lejupielādes”, lai lietotu "
 "noklusēto lejupielāžu mapi, vai “Darbvirsma”, lai lietotu darbvirsmas mapi."
 
-#: data/org.gnome.epiphany.gschema.xml:251
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "Window position"
 msgstr "Loga novietojums"
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
@@ -553,22 +562,22 @@ msgstr ""
 "Novietojums, ko izmantot jaunam logam, kas nav atjaunots no iepriekšējās "
 "sesijas."
 
-#: data/org.gnome.epiphany.gschema.xml:256
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid "Window size"
 msgstr "Loga izmērs"
 
-#: data/org.gnome.epiphany.gschema.xml:257
+#: data/org.gnome.epiphany.gschema.xml:264
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
 msgstr ""
 "Izmērs, ko izmantot jaunam logam, kas nav atjaunots no iepriekšējās sesijas."
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:268
 msgid "Is maximized"
 msgstr "Ir maksimizēts"
 
-#: data/org.gnome.epiphany.gschema.xml:262
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -576,12 +585,24 @@ msgstr ""
 "Vai jaunam logam, kas nav atjaunots no iepriekšējās sesijas, vajadzētu "
 "sākumā būt maksimizētam."
 
-#: data/org.gnome.epiphany.gschema.xml:291
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:284
+msgid "Disable forward and back buttons"
+msgstr "Izslēgt pogas “uz priekšu” un “atpakaļ”"
+
+#: data/org.gnome.epiphany.gschema.xml:285
+msgid ""
+"If set to “true”, forward and back buttons are disabled, preventing users "
+"from accessing immediate browser history"
+msgstr ""
+"Ja iestatīts uz “patiess”, pogas “uz priekšu” un “atpakaļ” ir izslēgtas, kas"
+" liedz lietotājiem piekļūt tuvākajai pārlūkošanas vēsturei."
+
+#: data/org.gnome.epiphany.gschema.xml:300
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "Currently signed in sync user"
 msgstr "Pašlaik ierakstījies kā sinhronizēšanas lietotājs"
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:301
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
@@ -589,48 +610,48 @@ msgstr ""
 "E-pasta adrese, kas ir saistīta ar Firefox kontu, ko izmanto datu "
 "sinhronizēšanai ar Mozilla serveriem."
 
-#: data/org.gnome.epiphany.gschema.xml:296
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:305
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "Last sync timestamp"
 msgstr "Pēdējās sinhronizācijas laika spiedogs"
 
-#: data/org.gnome.epiphany.gschema.xml:297
+#: data/org.gnome.epiphany.gschema.xml:306
 msgid "The UNIX time at which last sync was made in seconds."
 msgstr "UNIX laiks, kurā bija veikta pēdējā sinhronizēšana."
 
-#: data/org.gnome.epiphany.gschema.xml:301
-#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:310
+#: data/org.gnome.epiphany.gschema.xml:397
 msgid "Sync device ID"
 msgstr "Sinhronizēšanas ierīces ID"
 
-#: data/org.gnome.epiphany.gschema.xml:302
+#: data/org.gnome.epiphany.gschema.xml:311
 msgid "The sync device ID of the current device."
 msgstr "Sinhronizēšanas ierīces ID šai ierīcei."
 
-#: data/org.gnome.epiphany.gschema.xml:306
-#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:315
+#: data/org.gnome.epiphany.gschema.xml:402
 msgid "Sync device name"
 msgstr "Sinhronizēšanas ierīces nosaukums"
 
-#: data/org.gnome.epiphany.gschema.xml:307
+#: data/org.gnome.epiphany.gschema.xml:316
 msgid "The sync device name of the current device."
 msgstr "Sinhronizēšanas ierīces nosaukums šai ierīcei."
 
-#: data/org.gnome.epiphany.gschema.xml:311
-#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:320
+#: data/org.gnome.epiphany.gschema.xml:407
 msgid "The sync frequency in minutes"
 msgstr "Sinhronizēšanas biežums, minūtēs"
 
-#: data/org.gnome.epiphany.gschema.xml:312
+#: data/org.gnome.epiphany.gschema.xml:321
 msgid "The number of minutes between two consecutive syncs."
 msgstr "Minūtes starp divām secīgām sinhronizēšanām."
 
-#: data/org.gnome.epiphany.gschema.xml:316
-#: data/org.gnome.epiphany.gschema.xml:403
+#: data/org.gnome.epiphany.gschema.xml:325
+#: data/org.gnome.epiphany.gschema.xml:412
 msgid "Sync data with Firefox"
 msgstr "Sinhronizēt datus ar Firefox"
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
@@ -638,140 +659,137 @@ msgstr ""
 "PATIESS, ja Ephy kolekcijām vajadzētu tik sinhronizētām ar Firefox "
 "kolekcijām, citādi APLAMS."
 
-#: data/org.gnome.epiphany.gschema.xml:321
-#: data/org.gnome.epiphany.gschema.xml:408
+#: data/org.gnome.epiphany.gschema.xml:330
+#: data/org.gnome.epiphany.gschema.xml:417
 msgid "Enable bookmarks sync"
 msgstr "Ieslēgt grāmatzīmju sinhronizēšanu?"
 
-#: data/org.gnome.epiphany.gschema.xml:322
+#: data/org.gnome.epiphany.gschema.xml:331
 msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
 "PATIESS, ja grāmatzīmju kolekciju vajadzētu sinhronizēt, citādi APLAMS."
 
-#: data/org.gnome.epiphany.gschema.xml:326
-#: data/org.gnome.epiphany.gschema.xml:413
+#: data/org.gnome.epiphany.gschema.xml:335
+#: data/org.gnome.epiphany.gschema.xml:422
 msgid "Bookmarks sync timestamp"
 msgstr "Grāmatzīmju sinhronizēšanas laika spiedogs"
 
-#: data/org.gnome.epiphany.gschema.xml:327
+#: data/org.gnome.epiphany.gschema.xml:336
 msgid "The timestamp at which last bookmarks sync was made."
 msgstr "Laika spiedogs, kurā tika veikta pēdējā grāmatzīmju sinhronizēšana."
 
-#: data/org.gnome.epiphany.gschema.xml:331
-#: data/org.gnome.epiphany.gschema.xml:346
-#: data/org.gnome.epiphany.gschema.xml:361
-#: data/org.gnome.epiphany.gschema.xml:418
-#: data/org.gnome.epiphany.gschema.xml:433
-#: data/org.gnome.epiphany.gschema.xml:448
+#: data/org.gnome.epiphany.gschema.xml:340
+#: data/org.gnome.epiphany.gschema.xml:355
+#: data/org.gnome.epiphany.gschema.xml:370
+#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:457
 msgid "Initial sync or normal sync"
 msgstr "Sākotnējā sinhronizēšana vai parastā sinhronizēšana"
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:341
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
 "PATIESS, ja grāmatzīmju kolekciju jāsihronizē pirmo reizi, citādi APLAMS."
 
-#: data/org.gnome.epiphany.gschema.xml:336
-#: data/org.gnome.epiphany.gschema.xml:423
+#: data/org.gnome.epiphany.gschema.xml:345
+#: data/org.gnome.epiphany.gschema.xml:432
 msgid "Enable passwords sync"
 msgstr "Ieslēgt paroļu sinhronizēšanu"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:346
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr "PATIESS, ja paroļu kolekciju vajadzētu sinhronizēt, citādi APLAMS."
 
-#: data/org.gnome.epiphany.gschema.xml:341
-#: data/org.gnome.epiphany.gschema.xml:428
+#: data/org.gnome.epiphany.gschema.xml:350
+#: data/org.gnome.epiphany.gschema.xml:437
 msgid "Passwords sync timestamp"
 msgstr "Paroļu sinhronizēšanas laika spiedogs"
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:351
 msgid "The timestamp at which last passwords sync was made."
 msgstr "Laika spiedogs, kurā tika veikta pēdējā paroļu sinhronizēšana."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:356
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "PATIESS, ja paroļu kolekciju jāsihronizē pirmo reizi, citādi APLAMS."
 
-#: data/org.gnome.epiphany.gschema.xml:351
-#: data/org.gnome.epiphany.gschema.xml:438
+#: data/org.gnome.epiphany.gschema.xml:360
+#: data/org.gnome.epiphany.gschema.xml:447
 msgid "Enable history sync"
 msgstr "Ieslēgt sinhronizēšanas vēsturi"
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr "PATIESS, ja vēstures kolekciju vajadzētu sinhronizēt, citādi APLAMS."
 
-#: data/org.gnome.epiphany.gschema.xml:356
-#: data/org.gnome.epiphany.gschema.xml:443
+#: data/org.gnome.epiphany.gschema.xml:365
+#: data/org.gnome.epiphany.gschema.xml:452
 msgid "History sync timestamp"
 msgstr "Vēstures sinhronizēšanas laika spiedogs"
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid "The timestamp at which last history sync was made."
 msgstr "Laika spiedogs, kurā tika veikta pēdējā vēstures sinhronizēšana."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr "PATIESS, ja vēstures kolekciju jāsihronizē pirmo reizi, citādi APLAMS."
 
-#: data/org.gnome.epiphany.gschema.xml:366
-#: data/org.gnome.epiphany.gschema.xml:453
+#: data/org.gnome.epiphany.gschema.xml:375
+#: data/org.gnome.epiphany.gschema.xml:462
 msgid "Enable open tabs sync"
 msgstr "Ieslēgt atvērto ciļņu sinhronizēšanu"
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
 "PATIESS, ja atvērto ciļņu kolekciju vajadzētu sinhronizēt, citādi APLAMS."
 
-#: data/org.gnome.epiphany.gschema.xml:371
-#: data/org.gnome.epiphany.gschema.xml:458
+#: data/org.gnome.epiphany.gschema.xml:380
+#: data/org.gnome.epiphany.gschema.xml:467
 msgid "Open tabs sync timestamp"
 msgstr "Atvērto ciļņu sinhronizēšanas laika spiedogs"
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "The timestamp at which last open tabs sync was made."
 msgstr "Laika spiedogs, kurā tika veikta pēdējā atvērto ciļņu sinhronizēšana."
 
-#: data/org.gnome.epiphany.gschema.xml:379
-#: data/org.gnome.epiphany.gschema.xml:384
-#: data/org.gnome.epiphany.gschema.xml:389
-#: data/org.gnome.epiphany.gschema.xml:394
-#: data/org.gnome.epiphany.gschema.xml:399
-#: data/org.gnome.epiphany.gschema.xml:404
-#: data/org.gnome.epiphany.gschema.xml:409
-#: data/org.gnome.epiphany.gschema.xml:414
-#: data/org.gnome.epiphany.gschema.xml:419
-#: data/org.gnome.epiphany.gschema.xml:424
-#: data/org.gnome.epiphany.gschema.xml:429
-#: data/org.gnome.epiphany.gschema.xml:434
-#: data/org.gnome.epiphany.gschema.xml:439
-#: data/org.gnome.epiphany.gschema.xml:444
-#: data/org.gnome.epiphany.gschema.xml:449
-#: data/org.gnome.epiphany.gschema.xml:454
-#: data/org.gnome.epiphany.gschema.xml:459
-#| msgid ""
-#| "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
-#| "search-engines instead."
+#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:403
+#: data/org.gnome.epiphany.gschema.xml:408
+#: data/org.gnome.epiphany.gschema.xml:413
+#: data/org.gnome.epiphany.gschema.xml:418
+#: data/org.gnome.epiphany.gschema.xml:423
+#: data/org.gnome.epiphany.gschema.xml:428
+#: data/org.gnome.epiphany.gschema.xml:433
+#: data/org.gnome.epiphany.gschema.xml:438
+#: data/org.gnome.epiphany.gschema.xml:443
+#: data/org.gnome.epiphany.gschema.xml:448
+#: data/org.gnome.epiphany.gschema.xml:453
+#: data/org.gnome.epiphany.gschema.xml:458
+#: data/org.gnome.epiphany.gschema.xml:463
+#: data/org.gnome.epiphany.gschema.xml:468
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "sync/ instead."
 msgstr ""
-"NOVECOJIS: šī atslēga ir novecojusi un tiks ignorēta. Tā vietā izmantojiet"
-" /org/gnome/epiphany/sync/."
+"NOVECOJIS: šī atslēga ir novecojusi un tiks ignorēta. Tā vietā izmantojiet /"
+"org/gnome/epiphany/sync/."
 
-#: data/org.gnome.epiphany.gschema.xml:470
+#: data/org.gnome.epiphany.gschema.xml:479
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr "Kuru lēmumu pieņemt, kad šim datoram tiek prasītas mikrofona atļaujas"
 
-#: data/org.gnome.epiphany.gschema.xml:471
+#: data/org.gnome.epiphany.gschema.xml:480
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
@@ -783,13 +801,13 @@ msgstr ""
 "ka pārlūkam ir jāvaicā lietotāja atļauja, savukārt “allow” (atļaut) un "
 "“deny” (aizliegt) norāda, ka lēmums ir jāveic automātiski pēc pieprasījuma."
 
-#: data/org.gnome.epiphany.gschema.xml:475
+#: data/org.gnome.epiphany.gschema.xml:484
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
 "Kuru lēmumu pieņemt, kad šim datoram tiek prasītas ģeolokācijas atļaujas"
 
-#: data/org.gnome.epiphany.gschema.xml:476
+#: data/org.gnome.epiphany.gschema.xml:485
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
@@ -802,12 +820,12 @@ msgstr ""
 "un “deny” (aizliegt) norāda, ka lēmums ir jāveic automātiski pēc "
 "pieprasījuma."
 
-#: data/org.gnome.epiphany.gschema.xml:480
+#: data/org.gnome.epiphany.gschema.xml:489
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr "Kuru lēmumu pieņemt, kad šim datoram tiek prasītas paziņojumu atļaujas"
 
-#: data/org.gnome.epiphany.gschema.xml:481
+#: data/org.gnome.epiphany.gschema.xml:490
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
@@ -819,14 +837,14 @@ msgstr ""
 "ir jāvaicā lietotāja atļauja, savukārt “allow” (atļaut) un “deny” (aizliegt) "
 "norāda, ka lēmums ir jāveic automātiski pēc pieprasījuma."
 
-#: data/org.gnome.epiphany.gschema.xml:485
+#: data/org.gnome.epiphany.gschema.xml:494
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
 "Kuru lēmumu pieņemt, kad šim datoram tiek prasītas paroles saglabāšanas "
 "atļaujas"
 
-#: data/org.gnome.epiphany.gschema.xml:486
+#: data/org.gnome.epiphany.gschema.xml:495
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
@@ -838,12 +856,12 @@ msgstr ""
 "ir jāvaicā lietotāja atļauja, savukārt “allow” (atļaut) un “deny” (aizliegt) "
 "norāda, ka lēmums ir jāveic automātiski pēc pieprasījuma."
 
-#: data/org.gnome.epiphany.gschema.xml:490
+#: data/org.gnome.epiphany.gschema.xml:499
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
 "Kuru lēmumu pieņemt, kad šim datoram tiek prasītas tīmekļa kameras atļaujas"
 
-#: data/org.gnome.epiphany.gschema.xml:491
+#: data/org.gnome.epiphany.gschema.xml:500
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
@@ -856,95 +874,63 @@ msgstr ""
 "un “deny” (aizliegt) norāda, ka lēmums ir jāveic automātiski pēc "
 "pieprasījuma."
 
-#: embed/ephy-about-handler.c:143
-msgid "Installed plugins"
-msgstr "Instalētie spraudņi"
-
-#: embed/ephy-about-handler.c:144
-msgid "Plugins"
-msgstr "Spraudņi"
-
-#: embed/ephy-about-handler.c:147
-msgid "Plugins are disabled in the preferences"
-msgstr "Spraudņi ir izslēgti iestatījumos"
-
-#: embed/ephy-about-handler.c:160
-msgid "Enabled"
-msgstr "Ieslēgts"
-
-#. webkit_plugin_get_enabled (plugin) &&
-#: embed/ephy-about-handler.c:160
-msgid "Yes"
-msgstr "Jā"
-
-#: embed/ephy-about-handler.c:160
-msgid "No"
-msgstr "Nē"
-
-#: embed/ephy-about-handler.c:161
-msgid "MIME type"
-msgstr "MIME tips"
-
-#: embed/ephy-about-handler.c:161
-msgid "Description"
-msgstr "Apraksts"
-
-#: embed/ephy-about-handler.c:161
-msgid "Suffixes"
-msgstr "Sufiksi"
-
-#: embed/ephy-about-handler.c:224 embed/ephy-about-handler.c:226
+#: embed/ephy-about-handler.c:116 embed/ephy-about-handler.c:118
 msgid "Memory usage"
 msgstr "Atmiņas lietojums"
 
-#: embed/ephy-about-handler.c:274
+#: embed/ephy-about-handler.c:166
 #, c-format
 msgid "Version %s"
 msgstr "Versija %s"
 
-#: embed/ephy-about-handler.c:294
+#: embed/ephy-about-handler.c:186
 msgid "About Web"
 msgstr "_Par “Tīmekli”"
 
-#: embed/ephy-about-handler.c:298
+#: embed/ephy-about-handler.c:191 src/window-commands.c:654
+msgid "Epiphany Technology Preview"
+msgstr "Epiphany tehnoloģiju priekšskatījums"
+
+#: embed/ephy-about-handler.c:194
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Vienkāršs, tīrs, skaists skats uz tīmekli"
 
-#: embed/ephy-about-handler.c:356 embed/ephy-about-handler.c:357
+#: embed/ephy-about-handler.c:252 embed/ephy-about-handler.c:253
 msgid "Applications"
 msgstr "Lietotnes"
 
-#: embed/ephy-about-handler.c:358
+#: embed/ephy-about-handler.c:254
 msgid "List of installed web applications"
 msgstr "Saraksts ar instalētajām tīmekļa lietotnēm"
 
-#: embed/ephy-about-handler.c:372
+#: embed/ephy-about-handler.c:268
 msgid "Delete"
 msgstr "Dzēst"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:374
+#: embed/ephy-about-handler.c:270
 msgid "Installed on:"
 msgstr "Instalēts:"
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:360
 msgid "Welcome to Web"
 msgstr "Laipni lūdzam Tīmeklī"
 
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:360
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Sāciet pārlūkot, un jūsu visvairāk apmeklētās vietnes parādīsies šeit."
 
-#: embed/ephy-about-handler.c:505
+#: embed/ephy-about-handler.c:386
+#: embed/web-extension/resources/js/overview.js:101
 msgid "Remove from overview"
 msgstr "Izņemt no pārskata"
 
-#: embed/ephy-about-handler.c:579 embed/ephy-about-handler.c:580
+#: embed/ephy-about-handler.c:460 embed/ephy-about-handler.c:461
 msgid "Private Browsing"
 msgstr "Privātā pārlūkošana"
 
-#: embed/ephy-about-handler.c:581
+#: embed/ephy-about-handler.c:462
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -954,14 +940,14 @@ msgstr ""
 "neparādīsies pārlūkošanas vēsturē un visa uzglabātā informācija tiks "
 "izdzēsta līdz ar loga aizvēršanu. Jūsu lejupielādētās datnes tiks paturētas."
 
-#: embed/ephy-about-handler.c:585
+#: embed/ephy-about-handler.c:466
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Inkognito režīms slēpj jūsu aktivitātes no citiem cilvēkiem, kas izmanto šo "
 "datoru."
 
-#: embed/ephy-about-handler.c:587
+#: embed/ephy-about-handler.c:468
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -972,33 +958,31 @@ msgstr ""
 "apmeklējat, vēl aizvien varēs jūs izsekot."
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:707
+#: embed/ephy-download.c:706
 #, c-format
-#| msgid "Error downloading: %s"
 msgid "Finished downloading %s"
 msgstr "Pabeidza lejupielādēt %s"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:709
-#| msgid "Downloads"
+#: embed/ephy-download.c:708
 msgid "Download finished"
 msgstr "Lejupielāde ir pabeigta"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Spiediet %s, lai pamestu pilnekrānu"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "ESC"
 msgstr "Esc"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "F11"
 msgstr "F11"
 
-#: embed/ephy-embed-utils.c:63
+#: embed/ephy-embed-utils.c:65
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Sūtīt e-pasta vēstuli “%s”"
@@ -1344,98 +1328,111 @@ msgstr "Teksts nav atrasts"
 msgid "Search wrapped back to the top"
 msgstr "Meklēšana atgriezās atpakaļ augšā"
 
-#: embed/ephy-find-toolbar.c:390
+#: embed/ephy-find-toolbar.c:364
 msgid "Type to search…"
 msgstr "Rakstiet, lai meklētu…"
 
-#: embed/ephy-find-toolbar.c:396
+#: embed/ephy-find-toolbar.c:370
 msgid "Find previous occurrence of the search string"
 msgstr "Meklēt iepriekšējo meklētās virknes parādīšanos"
 
-#: embed/ephy-find-toolbar.c:404
+#: embed/ephy-find-toolbar.c:378
 msgid "Find next occurrence of the search string"
 msgstr "Meklēt nākamo meklētās virknes parādīšanos"
 
-#: embed/ephy-web-view.c:530
+#: embed/ephy-view-source-handler.c:255
+#, c-format
+msgid "%s is not a valid URI"
+msgstr "%s nav derīgs URI"
+
+#: embed/ephy-web-view.c:543
 msgid "Not No_w"
 msgstr "Ne ta_gad"
 
-#: embed/ephy-web-view.c:531
+#: embed/ephy-web-view.c:544
 msgid "_Never Save"
 msgstr "_Nekad nesaglabāt"
 
-#: embed/ephy-web-view.c:532 lib/widgets/ephy-file-chooser.c:121
-#: src/resources/gtk/prefs-dialog.ui:1068 src/window-commands.c:453
+#: embed/ephy-web-view.c:545 lib/widgets/ephy-file-chooser.c:121
+#: src/resources/gtk/prefs-dialog.ui:1154 src/window-commands.c:454
 msgid "_Save"
 msgstr "_Saglabāt"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:543
+#: embed/ephy-web-view.c:556
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Vai vēlaties saglabāt savu “%s” paroli?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:781
+#: embed/ephy-web-view.c:830
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
 msgstr ""
 "Ņem vērā, ka šī forma nav droša. Ja ievadīsiet savu paroli, tā nebūs privāta."
 
-#: embed/ephy-web-view.c:1428
+#: embed/ephy-web-view.c:1136
+msgid "Web process crashed"
+msgstr "Tīmekļa process avarēja"
+
+#: embed/ephy-web-view.c:1139
+msgid "Web process terminated due to exceeding memory limit"
+msgstr "Tīmekļa process pārtrauca darbību, jo beidzās atvēlētā atmiņa"
+
+#: embed/ephy-web-view.c:1548
 msgid "Deny"
 msgstr "Liegt"
 
-#: embed/ephy-web-view.c:1429
+#: embed/ephy-web-view.c:1549
 msgid "Allow"
 msgstr "Atļaut"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1446
+#: embed/ephy-web-view.c:1566
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Vietnes %s lapa vēlas jums parādīt darbvirsmas paziņojumus."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1451
+#: embed/ephy-web-view.c:1571
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Vietnes %s lapa vēlas zināt jūsu atrašanās vietu."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1456
+#: embed/ephy-web-view.c:1576
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Vietnes %s lapa vēlas izmantot jūsu mikrofonu."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1461
+#: embed/ephy-web-view.c:1581
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Vietnes %s lapa vēlas izmantot jūsu tīmekļa kameru."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1640
+#: embed/ephy-web-view.c:1760
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Ielādē “%s”..."
 
-#: embed/ephy-web-view.c:1642
+#: embed/ephy-web-view.c:1762
 msgid "Loading…"
 msgstr "Ielādē..."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1895
+#: embed/ephy-web-view.c:2041
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Šī tīmekļa vietne sniedza identifikāciju, kas pieder citai tīmekļa vietnei."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1900
+#: embed/ephy-web-view.c:2046
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1444,12 +1441,12 @@ msgstr ""
 "sava datora kalendāra datumu."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1905
+#: embed/ephy-web-view.c:2051
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr "Šīs tīmekļa vietnes identifikāciju neizdeva uzticama institūcija."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1910
+#: embed/ephy-web-view.c:2056
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1457,7 +1454,7 @@ msgstr ""
 "bojāta."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1915
+#: embed/ephy-web-view.c:2061
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1465,7 +1462,7 @@ msgstr ""
 "Šīs tīmekļa vietnes identifikāciju atsauca institūcija, kura to ir izdevusi."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1920
+#: embed/ephy-web-view.c:2066
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1474,7 +1471,7 @@ msgstr ""
 "šifrēšanu."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1925
+#: embed/ephy-web-view.c:2071
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1484,24 +1481,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1988 embed/ephy-web-view.c:2044
+#: embed/ephy-web-view.c:2134 embed/ephy-web-view.c:2190
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problēma, ielādējot lapu"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1991
+#: embed/ephy-web-view.c:2137
 msgid "Unable to display this website"
 msgstr "Neizdevās parādīt šo tīmekļa vietni"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1995
+#: embed/ephy-web-view.c:2141
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Izskatās, ka vietne %s nav pieejama."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1999
+#: embed/ephy-web-view.c:2145
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1510,7 +1507,7 @@ msgstr ""
 "Neaizmirstiet pārbaudīt, vai jūsu interneta savienojums darbojas pareizi."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2155
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Precīzā kļūda bija: %s"
@@ -1518,70 +1515,70 @@ msgstr "Precīzā kļūda bija: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2014 embed/ephy-web-view.c:2067
-#: embed/ephy-web-view.c:2110
+#: embed/ephy-web-view.c:2160 embed/ephy-web-view.c:2213
+#: embed/ephy-web-view.c:2256
 msgid "Reload"
 msgstr "Pārlādēt"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2070
-#: embed/ephy-web-view.c:2113
+#: embed/ephy-web-view.c:2163 embed/ephy-web-view.c:2216
+#: embed/ephy-web-view.c:2259
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2047
+#: embed/ephy-web-view.c:2193
 msgid "Oops! There may be a problem"
 msgstr "Ak vai! Gadījās problēma"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2051
+#: embed/ephy-web-view.c:2197
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Iespējams %s vietnes dēļ “Tīmeklis” negaidīti aizvērās."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2058
+#: embed/ephy-web-view.c:2204
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Ja tas atkal atkārtojas, lūdzu, ziņojiet par problēmu %s izstrādātājiem."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2096
+#: embed/ephy-web-view.c:2242
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problēma, attēlojot lapu"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2099
+#: embed/ephy-web-view.c:2245
 msgid "Oops!"
 msgstr "Ak vai!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2102
+#: embed/ephy-web-view.c:2248
 msgid "Something went wrong while displaying this page."
 msgstr "Kaut kas nogāja greizi, attēlojot šo lapu."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2104
+#: embed/ephy-web-view.c:2250
 msgid "Please reload or visit a different page to continue."
 msgstr "Lūdzu, pārlādējiet to, vai apmeklējiet citu lapu, lai turpinātu."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2139
+#: embed/ephy-web-view.c:2285
 #, c-format
 msgid "Security Violation"
 msgstr "Drošības pārkāpums"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2142
+#: embed/ephy-web-view.c:2288
 msgid "This Connection is Not Secure"
 msgstr "Šis savienojums nav drošs"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2146
+#: embed/ephy-web-view.c:2292
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1592,129 +1589,128 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2156 embed/ephy-web-view.c:2245
+#: embed/ephy-web-view.c:2302 embed/ephy-web-view.c:2391
 msgid "Go Back"
 msgstr "Iet atpakaļ"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2159 embed/ephy-web-view.c:2248
+#: embed/ephy-web-view.c:2305 embed/ephy-web-view.c:2394
 msgctxt "back-access-key"
 msgid "B"
 msgstr "I"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2162 embed/ephy-web-view.c:2251
+#: embed/ephy-web-view.c:2308 embed/ephy-web-view.c:2397
 msgid "Accept Risk and Proceed"
 msgstr "Pieņemt risku un turpināt"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2166 embed/ephy-web-view.c:2255
+#: embed/ephy-web-view.c:2312 embed/ephy-web-view.c:2401
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "T"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2196
+#: embed/ephy-web-view.c:2342
 #, c-format
-#| msgid "Security Violation"
 msgid "Security Warning"
 msgstr "Drošības brīdinājums"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2199
+#: embed/ephy-web-view.c:2345
 msgid "Unsafe website detected!"
 msgstr "Atklāta nedroša vietne!"
 
-#: embed/ephy-web-view.c:2206
+#: embed/ephy-web-view.c:2352
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
 "code that could be downloaded to your computer without your consent."
 msgstr ""
-"%s apmeklēšana var kaitēt jūsu datoram. Izskatās, ka šī lapa satur"
-" ļaunprogrammatūru, kas varētu tikt lejupielādēta uz jūsu datora bez jūsu"
-" piekrišanas."
+"%s apmeklēšana var kaitēt jūsu datoram. Izskatās, ka šī lapa satur "
+"ļaunprogrammatūru, kas varētu tikt lejupielādēta uz jūsu datora bez jūsu "
+"piekrišanas."
 
-#: embed/ephy-web-view.c:2210
+#: embed/ephy-web-view.c:2356
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
 "malicious code and how to protect your computer at %s."
 msgstr ""
-"Jūs varat uzzināt vairāk par kaitīgu tīmekļa saturu, tai skaitā vīrusiem un"
-" citu ļaunprogrammatūru un kā sevi aizsargāt, apmeklējot %s."
+"Jūs varat uzzināt vairāk par kaitīgu tīmekļa saturu, tai skaitā vīrusiem un "
+"citu ļaunprogrammatūru un kā sevi aizsargāt, apmeklējot %s."
 
-#: embed/ephy-web-view.c:2217
+#: embed/ephy-web-view.c:2363
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
 "software or revealing your personal information (for example, passwords, "
 "phone numbers, or credit cards)."
 msgstr ""
-"Vietnes %s uzbrucēji varētu jūs iemānīt izdarīt kaut ko bīstamu, piemēram,"
-" instalēt programmatūru vai atklāt savu personīgo informāciju (piemēram,"
-" paroles, tālruņa numurus vai kredītkartes)."
+"Vietnes %s uzbrucēji varētu jūs iemānīt izdarīt kaut ko bīstamu, piemēram, "
+"instalēt programmatūru vai atklāt savu personīgo informāciju (piemēram, "
+"paroles, tālruņa numurus vai kredītkartes)."
 
-#: embed/ephy-web-view.c:2222
+#: embed/ephy-web-view.c:2368
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
-"Jūs varat uzzināt vairāk par sociālo inženieriju (pikšķerēšanu) vietnē %s vai"
-" no %s."
+"Jūs varat uzzināt vairāk par sociālo inženieriju (pikšķerēšanu) vietnē %s "
+"vai no %s."
 
-#: embed/ephy-web-view.c:2231
+#: embed/ephy-web-view.c:2377
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
 "installing programs that harm your browsing experience (for example, by "
 "changing your homepage or showing extra ads on sites you visit)."
 msgstr ""
-"%s var saturēt kaitīgas programmas. Uzbrucējs varētu jūs iemānīt instalēt"
-" programmas, kas ir kaitīgas jūsu pārlūkošanas pieredzei (piemēram, mainot"
-" jūsu mājas lapu vai rādot papildu reklāmas vietnēs, kuras apmeklējat)."
+"%s var saturēt kaitīgas programmas. Uzbrucējs varētu jūs iemānīt instalēt "
+"programmas, kas ir kaitīgas jūsu pārlūkošanas pieredzei (piemēram, mainot "
+"jūsu mājas lapu vai rādot papildu reklāmas vietnēs, kuras apmeklējat)."
 
-#: embed/ephy-web-view.c:2236
+#: embed/ephy-web-view.c:2382
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Jūs varat uzzināt vairāk par nevēlamo programmatūru vietnē %s."
 
-#: embed/ephy-web-view.c:2311
+#: embed/ephy-web-view.c:2457
 msgid "None specified"
 msgstr "Nav norādīts"
 
-#: embed/ephy-web-view.c:2416
+#: embed/ephy-web-view.c:2562
 msgid "Technical information"
 msgstr "Tehniskā informācija"
 
-#: embed/ephy-web-view.c:3301
+#: embed/ephy-web-view.c:3447
 msgid "_OK"
 msgstr "_Labi"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:115
+#: lib/ephy-file-helpers.c:119 src/resources/gtk/prefs-dialog.ui:215
 msgid "Downloads"
 msgstr "Lejupielādes"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:172
+#: lib/ephy-file-helpers.c:178
 msgid "Desktop"
 msgstr "Darbvirsma"
 
-#: lib/ephy-file-helpers.c:323
+#: lib/ephy-file-helpers.c:331
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Neizdevās izveidot pagaidu direktoriju mapē “%s”."
 
-#: lib/ephy-file-helpers.c:444
+#: lib/ephy-file-helpers.c:454
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Datne “%s” jau eksistē. Lūdzu, pārvietojiet to citur."
 
-#: lib/ephy-file-helpers.c:463
+#: lib/ephy-file-helpers.c:473
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Neizdevās izveidot direktoriju “%s”."
@@ -1802,22 +1798,22 @@ msgstr "%s parole formā vietnē %s "
 msgid "Password in a form in %s"
 msgstr "Parole formā vietnē %s"
 
-#: lib/sync/ephy-sync-service.c:846
+#: lib/sync/ephy-sync-service.c:851
 msgid "Failed to obtain storage credentials."
 msgstr "Neizdevās iegūt krātuves akreditācijas datus."
 
-#: lib/sync/ephy-sync-service.c:847 lib/sync/ephy-sync-service.c:962
-#: lib/sync/ephy-sync-service.c:1719
+#: lib/sync/ephy-sync-service.c:852 lib/sync/ephy-sync-service.c:967
+#: lib/sync/ephy-sync-service.c:1741
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
 "Lai turpinātu sinhronizēšanu, ejiet uz iestatījumiem un vēlreiz "
 "ierakstieties."
 
-#: lib/sync/ephy-sync-service.c:952
+#: lib/sync/ephy-sync-service.c:957
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Izskatās, ka jūsu Firefox konta parole ir mainīta."
 
-#: lib/sync/ephy-sync-service.c:953
+#: lib/sync/ephy-sync-service.c:958
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
@@ -1825,44 +1821,43 @@ msgstr ""
 "Lai turpinātu sinhronizēšanu, ejiet uz iestatījumiem un ierakstieties ar "
 "jauno paroli."
 
-#: lib/sync/ephy-sync-service.c:961
+#: lib/sync/ephy-sync-service.c:966
 msgid "Failed to obtain signed certificate."
 msgstr "Neizdevās iegūt parakstītu sertifikātu."
 
-#: lib/sync/ephy-sync-service.c:1685 lib/sync/ephy-sync-service.c:1690
+#: lib/sync/ephy-sync-service.c:1707 lib/sync/ephy-sync-service.c:1712
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
 "Nevarēja atrast sinhronizācijas noslēpumus šim sinhronizācijas lietotājam."
 
-#: lib/sync/ephy-sync-service.c:1697 lib/sync/ephy-sync-service.c:1705
+#: lib/sync/ephy-sync-service.c:1719 lib/sync/ephy-sync-service.c:1727
 msgid "The sync secrets for the current sync user are invalid."
 msgstr "Sinhronizācijas noslēpumi šim sinhronizācijas lietotājam ir nederīgi."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1813
+#: lib/sync/ephy-sync-service.c:1835
 #, c-format
 msgid "The sync secrets of %s"
 msgstr "%s sinhronizācijas noslēpumi"
 
-#: lib/sync/ephy-sync-service.c:1839
-#| msgid "Failed to upload crypto/keys record."
+#: lib/sync/ephy-sync-service.c:1861
 msgid "Failed to upload client record."
 msgstr "Neizdevās augšupielādēt klienta ierakstu."
 
-#: lib/sync/ephy-sync-service.c:2029
+#: lib/sync/ephy-sync-service.c:2054
 msgid "Failed to upload crypto/keys record."
 msgstr "Neizdevās augšupielādēt šifru/atslēgu ierakstu."
 
-#: lib/sync/ephy-sync-service.c:2136
+#: lib/sync/ephy-sync-service.c:2161
 msgid "Failed to retrieve crypto keys."
 msgstr "Neizdevās saņemt šifra astlēgas."
 
-#: lib/sync/ephy-sync-service.c:2187
+#: lib/sync/ephy-sync-service.c:2212
 msgid "Failed to upload meta/global record."
 msgstr "Neizdevās augšupielādēt meta/globālo ierakstu."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2304
+#: lib/sync/ephy-sync-service.c:2329
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1870,16 +1865,15 @@ msgstr ""
 "Jūsu Firefox konts izmanto krātuves versiju %d. “Tīmeklis” atbalsta tikai "
 "versiju %d."
 
-#: lib/sync/ephy-sync-service.c:2315
+#: lib/sync/ephy-sync-service.c:2340
 msgid "Failed to verify storage version."
 msgstr "Neizdevās pārbaudīt krātuves versiju."
 
-#: lib/sync/ephy-sync-service.c:2371
-#| msgid "Failed to upload crypto/keys record."
+#: lib/sync/ephy-sync-service.c:2396
 msgid "Failed to upload device info"
 msgstr "Neizdevās augšupielādēt informāciju par ierīci"
 
-#: lib/sync/ephy-sync-service.c:2444 lib/sync/ephy-sync-service.c:2522
+#: lib/sync/ephy-sync-service.c:2469 lib/sync/ephy-sync-service.c:2547
 msgid "Failed to retrieve the Sync Key"
 msgstr "Neizdevās saņemt sinhronizācijas atslēgu"
 
@@ -2001,10 +1995,10 @@ msgstr "Atceļ…"
 msgid "Starting…"
 msgstr "Uzsāk…"
 
-#: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1076
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:233
-#: src/window-commands.c:298 src/window-commands.c:395
-#: src/window-commands.c:454 src/window-commands.c:1414
+#: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1162
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
+#: src/window-commands.c:299 src/window-commands.c:396
+#: src/window-commands.c:455 src/window-commands.c:1396
 msgid "_Cancel"
 msgstr "At_celt"
 
@@ -2032,20 +2026,20 @@ msgstr "Visas datnes"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:660 src/ephy-history-dialog.c:262
+#: lib/widgets/ephy-location-entry.c:688 src/ephy-history-dialog.c:262
 msgid "Cl_ear"
 msgstr "N_otīrīt"
 
-#: lib/widgets/ephy-location-entry.c:680
+#: lib/widgets/ephy-location-entry.c:708
 msgid "Paste and _Go"
 msgstr "_Ielīmēt un doties"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:701 src/ephy-window.c:817
+#: lib/widgets/ephy-location-entry.c:729 src/ephy-window.c:831
 msgid "_Undo"
 msgstr "_Atsaukt"
 
-#: lib/widgets/ephy-location-entry.c:708
+#: lib/widgets/ephy-location-entry.c:736
 msgid "_Redo"
 msgstr "Ata_tsaukt"
 
@@ -2151,53 +2145,13 @@ msgid "Plugins data"
 msgstr "Spraudņu dati"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-header-bar.c:87
+#: src/ephy-action-bar-start.c:34
 msgid "Reload the current page"
 msgstr "Pārlādēt šo lapu"
 
-#. Translators: tooltip for the stop button
-#: src/ephy-header-bar.c:561
+#: src/ephy-action-bar-start.c:521
 msgid "Stop loading the current page"
 msgstr "Apturēt šīs lapas ielādi"
-
-#. Translators: tooltip for the back button
-#: src/ephy-header-bar.c:656
-msgid "Go back to the previous page"
-msgstr "Iet atpakaļ uz iepriekšējo lapu"
-
-#. Translators: tooltip for the forward button
-#: src/ephy-header-bar.c:675
-msgid "Go forward to the next page"
-msgstr "Iet uz nākamo lapu"
-
-#. Translators: tooltip for the secret homepage button
-#: src/ephy-header-bar.c:714
-msgid "Go to your homepage"
-msgstr "Iet uz jūsu mājaslapu"
-
-#. Translators: tooltip for the bookmarks popover button
-#: src/ephy-header-bar.c:775
-msgid "View and manage your bookmarks"
-msgstr "Skatīt un pārvaldīt grāmatzīmes"
-
-#: src/ephy-header-bar.c:786
-#| msgid "Open a new browser window"
-msgid "Open in browser"
-msgstr "Atvērt pārlūkā"
-
-#: src/ephy-header-bar.c:788
-msgid "Open the page in your default browser"
-msgstr "Atvērt lapu jūsu noklusējuma pārlūkā"
-
-#. Translators: tooltip for the downloads button
-#: src/ephy-header-bar.c:812
-msgid "View downloads"
-msgstr "Skatīt lejupielādes"
-
-#. Translators: tooltip for the new tab button
-#: src/ephy-header-bar.c:831 src/ephy-notebook.c:485
-msgid "Open a new tab"
-msgstr "Atvērt jaunu cilni"
 
 #: src/ephy-history-dialog.c:252
 msgid "Clear browsing history?"
@@ -2271,12 +2225,17 @@ msgstr "URL …"
 msgid "Web options"
 msgstr "Tīmekļa pārlūka opcijas"
 
+#. Translators: tooltip for the new tab button
+#: src/ephy-notebook.c:488 src/resources/gtk/action-bar-end.ui:37
+msgid "Open a new tab"
+msgstr "Atvērt jaunu cilni"
+
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:492
+#: src/ephy-notebook.c:495
 msgid "View open tabs"
 msgstr "Skatīt atvērtās cilnes"
 
-#: src/ephy-notebook.c:753
+#: src/ephy-notebook.c:756
 msgid "Close tab"
 msgstr "Aizvērt cilni"
 
@@ -2293,157 +2252,157 @@ msgstr "Jauna adrese"
 msgid "Bang"
 msgstr "Sitiens"
 
-#: src/ephy-window.c:253
+#: src/ephy-window.c:252
 msgid "Do you want to leave this website?"
 msgstr "Vai vēlaties pamest šo tīmekļa vietni?"
 
-#: src/ephy-window.c:254
+#: src/ephy-window.c:253
 msgid "A form you modified has not been submitted."
 msgstr "Forma, kuru jūs mainījāt, netika nosūtīta."
 
-#: src/ephy-window.c:255
+#: src/ephy-window.c:254
 msgid "_Discard form"
 msgstr "_Atmest formu"
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:269
 msgid "There are ongoing downloads"
 msgstr "Ir aktīvas lejupielādes"
 
-#: src/ephy-window.c:271
+#: src/ephy-window.c:270
 msgid "If you quit, the downloads will be cancelled"
 msgstr "Ja iziesiet, visas lejupielādes tiks atceltas"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:271
 msgid "Quit and cancel downloads"
 msgstr "Iziet un atcelt lejupielādes"
 
-#: src/ephy-window.c:818
+#: src/ephy-window.c:832
 msgid "Re_do"
 msgstr "Atat_saukt"
 
 #. Edit.
-#: src/ephy-window.c:821
+#: src/ephy-window.c:835
 msgid "Cu_t"
 msgstr "Iz_griezt"
 
-#: src/ephy-window.c:822
+#: src/ephy-window.c:836
 msgid "_Copy"
 msgstr "_Kopēt"
 
-#: src/ephy-window.c:823
+#: src/ephy-window.c:837
 msgid "_Paste"
 msgstr "_Ielīmēt"
 
-#: src/ephy-window.c:824
+#: src/ephy-window.c:838
 msgid "Select _All"
 msgstr "Izvēlēties _visu"
 
-#: src/ephy-window.c:826
+#: src/ephy-window.c:840
 msgid "S_end Link by Email…"
 msgstr "Sūtīt saiti pa e-pastu..."
 
-#: src/ephy-window.c:828
+#: src/ephy-window.c:842
 msgid "_Reload"
 msgstr "_Pārlādēt"
 
-#: src/ephy-window.c:829
+#: src/ephy-window.c:843
 msgid "_Back"
 msgstr "_Atpakaļ"
 
-#: src/ephy-window.c:830
+#: src/ephy-window.c:844
 msgid "_Forward"
 msgstr "Uz _priekšu"
 
 #. Bookmarks
-#: src/ephy-window.c:833
+#: src/ephy-window.c:847
 msgid "Add Boo_kmark…"
 msgstr "Pievienot grāmat_zīmi..."
 
 #. Links.
-#: src/ephy-window.c:837
+#: src/ephy-window.c:851
 msgid "Open Link in New _Window"
 msgstr "Atvērt saiti jaunā _logā"
 
-#: src/ephy-window.c:838
+#: src/ephy-window.c:852
 msgid "Open Link in New _Tab"
 msgstr "Atvērt saiti jaunā _cilnē"
 
-#: src/ephy-window.c:839
+#: src/ephy-window.c:853
 msgid "Open Link in I_ncognito Window"
 msgstr "Atvērt saiti inkognito _logā"
 
-#: src/ephy-window.c:840
+#: src/ephy-window.c:854
 msgid "_Save Link As…"
 msgstr "_Saglabāt saiti kā..."
 
-#: src/ephy-window.c:841
+#: src/ephy-window.c:855
 msgid "_Copy Link Address"
 msgstr "_Kopēt saites adresi"
 
-#: src/ephy-window.c:842
+#: src/ephy-window.c:856
 msgid "_Copy E-mail Address"
 msgstr "_Kopēt e-pasta adresi"
 
 #. Images.
-#: src/ephy-window.c:846
+#: src/ephy-window.c:860
 msgid "View _Image in New Tab"
 msgstr "Skatīt _attēlu jaunā cilnē"
 
-#: src/ephy-window.c:847
+#: src/ephy-window.c:861
 msgid "Copy I_mage Address"
 msgstr "Kopēt a_ttēla adresi"
 
-#: src/ephy-window.c:848
+#: src/ephy-window.c:862
 msgid "_Save Image As…"
 msgstr "_Saglabāt attēlu kā..."
 
-#: src/ephy-window.c:849
+#: src/ephy-window.c:863
 msgid "Set as _Wallpaper"
 msgstr "Iestatīt kā _ekrāntapeti"
 
 #. Video.
-#: src/ephy-window.c:853
+#: src/ephy-window.c:867
 msgid "Open Video in New _Window"
 msgstr "Atvērt video jaunā _logā"
 
-#: src/ephy-window.c:854
+#: src/ephy-window.c:868
 msgid "Open Video in New _Tab"
 msgstr "Atvērt video jaunā _cilnē"
 
-#: src/ephy-window.c:855
+#: src/ephy-window.c:869
 msgid "_Save Video As…"
 msgstr "_Saglabāt video kā…"
 
-#: src/ephy-window.c:856
+#: src/ephy-window.c:870
 msgid "_Copy Video Address"
 msgstr "_Kopēt video adresi"
 
 #. Audio.
-#: src/ephy-window.c:860
+#: src/ephy-window.c:874
 msgid "Open Audio in New _Window"
 msgstr "Atvērt audio jaunā _logā"
 
-#: src/ephy-window.c:861
+#: src/ephy-window.c:875
 msgid "Open Audio in New _Tab"
 msgstr "Atvērt audio jaunā _cilnē"
 
-#: src/ephy-window.c:862
+#: src/ephy-window.c:876
 msgid "_Save Audio As…"
 msgstr "_Saglabāt audio kā…"
 
-#: src/ephy-window.c:863
+#: src/ephy-window.c:877
 msgid "_Copy Audio Address"
 msgstr "_Kopēt audio adresi"
 
-#: src/ephy-window.c:868
+#: src/ephy-window.c:882
 msgid "Save Pa_ge As…"
 msgstr "Sa_glabāt lapu kā..."
 
-#: src/ephy-window.c:869
+#: src/ephy-window.c:883
 msgid "_Page Source"
 msgstr "_Lapas pirmkods"
 
-#: src/ephy-window.c:1255
+#: src/ephy-window.c:1264
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Meklēt “%s” tīmeklī"
@@ -2463,26 +2422,35 @@ msgstr "Saglabāt mediju kā"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:223
+#: src/prefs-dialog.c:235
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Pēdējā sinhronizācija: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:284 src/prefs-dialog.c:1900
+#: src/prefs-dialog.c:296 src/prefs-dialog.c:2117
 #, c-format
 msgid "Logged in as %s"
 msgstr "Ierakstījies kā %s"
 
-#: src/prefs-dialog.c:524
+#: src/prefs-dialog.c:536
 msgid "Something went wrong, please try again later."
 msgstr "Kaut kas nogāja greizi, mēģiniet vēlāk vēlreiz."
+
+#: src/prefs-dialog.c:826
+#| msgid "Create Web Application"
+msgid "Web Application Icon"
+msgstr "Tīmekļa lietotnes ikona"
+
+#: src/prefs-dialog.c:831
+msgid "Supported Image Files"
+msgstr "Atbalstītās attēlu datnes"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:1037 src/prefs-dialog.c:1041
+#: src/prefs-dialog.c:1257 src/prefs-dialog.c:1261
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2491,13 +2459,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1048
+#: src/prefs-dialog.c:1268
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Lietotāja noteikta (%s)"
 
-#: src/prefs-dialog.c:1070
+#: src/prefs-dialog.c:1290
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2505,45 +2473,68 @@ msgstr[0] "Sistēmas valoda (%s)"
 msgstr[1] "Sistēmas valodas (%s)"
 msgstr[2] "Sistēmas valodas (%s)"
 
-#: src/prefs-dialog.c:1313 src/resources/gtk/prefs-dialog.ui:775
+#: src/prefs-dialog.c:1533 src/resources/gtk/prefs-dialog.ui:861
 msgid "Language"
 msgstr "Valoda"
 
-#: src/prefs-dialog.c:1391
+#: src/prefs-dialog.c:1611
 msgid "Select a directory"
 msgstr "Izvēlieties direktoriju"
 
-#: src/profile-migrator/ephy-profile-migrator.c:608
+#: src/profile-migrator/ephy-profile-migrator.c:612
 msgid "Search the Web"
 msgstr "Meklēt tīmeklī"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1280
+#: src/profile-migrator/ephy-profile-migrator.c:1313
 msgid "Executes only the n-th migration step"
 msgstr "Veic tikai n-to migrācijas soli"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1282
+#: src/profile-migrator/ephy-profile-migrator.c:1315
 msgid "Specifies the required version for the migrator"
 msgstr "Norāda migratoram nepieciešamo versiju"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1284
+#: src/profile-migrator/ephy-profile-migrator.c:1317
 msgid "Specifies the profile where the migrator should run"
 msgstr "Norāda profilu, kurā migratoram vajadzētu darboties"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1304
+#: src/profile-migrator/ephy-profile-migrator.c:1337
 msgid "Web profile migrator"
 msgstr "“Tīmeklis” profilu migrators"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1305
+#: src/profile-migrator/ephy-profile-migrator.c:1338
 msgid "Web profile migrator options"
 msgstr "“Tīmeklis” profilu migratora opcijas"
+
+#. Translators: tooltip for the bookmarks popover button
+#: src/resources/gtk/action-bar-end.ui:10
+msgid "View and manage your bookmarks"
+msgstr "Skatīt un pārvaldīt grāmatzīmes"
+
+#. Translators: tooltip for the downloads button
+#: src/resources/gtk/action-bar-end.ui:64
+msgid "View downloads"
+msgstr "Skatīt lejupielādes"
+
+#. Translators: tooltip for the back button
+#: src/resources/gtk/action-bar-start.ui:20
+msgid "Go back to the previous page"
+msgstr "Iet atpakaļ uz iepriekšējo lapu"
+
+#. Translators: tooltip for the forward button
+#: src/resources/gtk/action-bar-start.ui:39
+msgid "Go forward to the next page"
+msgstr "Iet uz nākamo lapu"
+
+#. Translators: tooltip for the secret homepage button
+#: src/resources/gtk/action-bar-start.ui:77
+msgid "Go to your homepage"
+msgstr "Iet uz jūsu mājaslapu"
 
 #: src/resources/gtk/application-menu.ui:6
 msgid "_New Window"
 msgstr "_Jauns logs"
 
 #: src/resources/gtk/application-menu.ui:11
-#: src/resources/gtk/page-menu-popover.ui:147
-#: src/resources/gtk/page-menu-popover-flatpak.ui:147
 msgid "New _Incognito Window"
 msgstr "Jauns _inkognito logs"
 
@@ -2560,7 +2551,7 @@ msgid "E_xport Bookmarks"
 msgstr "E_ksportēt grāmatzīmes"
 
 #: src/resources/gtk/application-menu.ui:35
-#: src/resources/gtk/prefs-dialog.ui:949
+#: src/resources/gtk/prefs-dialog.ui:1035
 msgid "_History"
 msgstr "_Vēsture"
 
@@ -2701,13 +2692,14 @@ msgstr ""
 "Jūs nevarat atsaukt šo darbību. Datus, kurus jūs norādāt kā attīrāmus, "
 "nevarēs atgriezt."
 
-#: src/resources/gtk/cookies-dialog.ui:31 src/resources/gtk/prefs-dialog.ui:491
+#: src/resources/gtk/cookies-dialog.ui:31 src/resources/gtk/prefs-dialog.ui:577
 msgid "Cookies"
 msgstr "Sīkdatnes"
 
 #: src/resources/gtk/cookies-dialog.ui:35
 #: src/resources/gtk/history-dialog.ui:46
 #: src/resources/gtk/passwords-dialog.ui:39
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
 msgid "C_lear All"
 msgstr "Attīrīt _visu"
 
@@ -2797,42 +2789,59 @@ msgid "_Close"
 msgstr "_Aizvērt"
 
 #: src/resources/gtk/page-menu-popover.ui:21
-#: src/resources/gtk/page-menu-popover.ui:75
-#: src/resources/gtk/page-menu-popover.ui:90
-#: src/resources/gtk/page-menu-popover-flatpak.ui:21
-#: src/resources/gtk/page-menu-popover-flatpak.ui:75
-#: src/resources/gtk/page-menu-popover-flatpak.ui:90
 msgid "Zoom Out"
 msgstr "Tālināt"
 
-#: src/resources/gtk/page-menu-popover.ui:51
-#: src/resources/gtk/page-menu-popover.ui:105
-#: src/resources/gtk/page-menu-popover-flatpak.ui:51
-#: src/resources/gtk/page-menu-popover-flatpak.ui:105
+#: src/resources/gtk/page-menu-popover.ui:22
+#| msgid "Zoom Out"
+msgctxt "tooltip"
+msgid "Zoom Out"
+msgstr "Tālināt"
+
+#: src/resources/gtk/page-menu-popover.ui:38
+msgid "Restore Zoom"
+msgstr "Atjaunot mērogu"
+
+#: src/resources/gtk/page-menu-popover.ui:53
 msgid "Zoom In"
 msgstr "Tuvināt"
 
-#: src/resources/gtk/page-menu-popover.ui:131
-#: src/resources/gtk/page-menu-popover-flatpak.ui:131
+#: src/resources/gtk/page-menu-popover.ui:54
+#| msgid "Zoom In"
+msgctxt "tooltip"
+msgid "Zoom In"
+msgstr "Tuvināt"
+
+#: src/resources/gtk/page-menu-popover.ui:78
+#| msgid "_Print…"
+msgid "Print…"
+msgstr "Drukāt…"
+
+#: src/resources/gtk/page-menu-popover.ui:93
+#| msgid "_Find…"
+msgid "Find…"
+msgstr "Meklēt…"
+
+#: src/resources/gtk/page-menu-popover.ui:108
+#| msgctxt "shortcut window"
+#| msgid "Fullscreen"
+msgid "Fullscreen"
+msgstr "Pilnekrāns"
+
+#: src/resources/gtk/page-menu-popover.ui:134
 msgid "_New Tab"
 msgstr "Jauna cil_ne"
 
-#: src/resources/gtk/page-menu-popover.ui:139
-#: src/resources/gtk/page-menu-popover-flatpak.ui:139
-msgid "New _Window"
-msgstr "Jauns _logs"
-
-#: src/resources/gtk/page-menu-popover.ui:163
-#: src/resources/gtk/page-menu-popover-flatpak.ui:163
+#: src/resources/gtk/page-menu-popover.ui:150
 msgid "Text _Encoding"
 msgstr "Teksta _kodējums"
 
-#: src/resources/gtk/page-menu-popover.ui:179
+#: src/resources/gtk/page-menu-popover.ui:166
 msgid "Install Site as Web _Application…"
 msgstr "Instalēt vietni kā _tīmekļa lietotni…"
 
 #: src/resources/gtk/passwords-dialog.ui:35
-#: src/resources/gtk/prefs-dialog.ui:565
+#: src/resources/gtk/prefs-dialog.ui:651
 msgid "Passwords"
 msgstr "Paroles"
 
@@ -2888,173 +2897,183 @@ msgstr "_Tukša lapa"
 msgid "_Custom:"
 msgstr "_Pielāgots:"
 
-#: src/resources/gtk/prefs-dialog.ui:134
+#: src/resources/gtk/prefs-dialog.ui:114
+#| msgid "Applications"
+msgid "Web Application"
+msgstr "Tīmekļa lietotne"
+
+#: src/resources/gtk/prefs-dialog.ui:122
+msgid "_Manage Additional URLs"
+msgstr "_Pārvaldīt papildu URL"
+
+#: src/resources/gtk/prefs-dialog.ui:157
+#| msgid "Homepage"
+msgid "Homepage:"
+msgstr "Mājaslapa:"
+
+#: src/resources/gtk/prefs-dialog.ui:179
+#| msgid "_Title:"
+msgid "Title:"
+msgstr "Nosaukums:"
+
+#: src/resources/gtk/prefs-dialog.ui:234
 msgid "_Download folder:"
 msgstr "_Lejupielādes mape:"
 
-#: src/resources/gtk/prefs-dialog.ui:145
-msgid "A_utomatically open downloaded files"
-msgstr "A_utomātiski atvērt lejupielādētas datnes"
-
-#: src/resources/gtk/prefs-dialog.ui:169
+#: src/resources/gtk/prefs-dialog.ui:262
 msgid "Search Engines"
 msgstr "Meklēšanas dziņi"
 
-#: src/resources/gtk/prefs-dialog.ui:177
+#: src/resources/gtk/prefs-dialog.ui:270
 msgid "_Manage Search Engines"
 msgstr "Pārvaldīt _meklēšanas dziņus"
 
-#: src/resources/gtk/prefs-dialog.ui:190
+#: src/resources/gtk/prefs-dialog.ui:283
 msgid "You can select different search engines to use."
 msgstr "Jūs varat izvēlēties dažādus meklēšanas dziņus, ko izmantot."
 
-#: src/resources/gtk/prefs-dialog.ui:211
+#: src/resources/gtk/prefs-dialog.ui:304
 msgid "Session"
 msgstr "Sesija"
 
-#: src/resources/gtk/prefs-dialog.ui:225
+#: src/resources/gtk/prefs-dialog.ui:318
 msgid "_Remember previous tabs on startup"
 msgstr "Palaižot atce_rēties iepriekšējās cilnes"
 
-#: src/resources/gtk/prefs-dialog.ui:243
+#: src/resources/gtk/prefs-dialog.ui:336
 msgid "Web Content"
 msgstr "Tīmekļa saturs"
 
-#: src/resources/gtk/prefs-dialog.ui:257
+#: src/resources/gtk/prefs-dialog.ui:350
 msgid "Try to block _advertisements"
 msgstr "Mēģināt _bloķēt reklāmas"
 
-#: src/resources/gtk/prefs-dialog.ui:264
+#: src/resources/gtk/prefs-dialog.ui:357
 msgid "Try to block web _trackers"
 msgstr "Mēģināt bloķēt _tīmekļa izsekotājus"
 
-#: src/resources/gtk/prefs-dialog.ui:272
+#: src/resources/gtk/prefs-dialog.ui:365
 msgid "Block popup _windows"
 msgstr "Bloķēt izlecošos _logus"
 
-#: src/resources/gtk/prefs-dialog.ui:279
-msgid "Enable _plugins"
-msgstr "Ieslēgt s_praudņus"
-
-#: src/resources/gtk/prefs-dialog.ui:286
-#| msgid "Try to block web _trackers"
+#: src/resources/gtk/prefs-dialog.ui:372
 msgid "Try to block dangerous web_sites"
 msgstr "Mēģināt bloķēt bī_stamas tīmekļa vietnes"
 
-#: src/resources/gtk/prefs-dialog.ui:300
+#: src/resources/gtk/prefs-dialog.ui:386
 msgid "General"
 msgstr "Vispārīgi"
 
-#: src/resources/gtk/prefs-dialog.ui:320
+#: src/resources/gtk/prefs-dialog.ui:406
 msgid "Fonts"
 msgstr "Fonti"
 
-#: src/resources/gtk/prefs-dialog.ui:334
+#: src/resources/gtk/prefs-dialog.ui:420
 msgid "_Use system fonts"
 msgstr "Lietot sistēmas font_us"
 
-#: src/resources/gtk/prefs-dialog.ui:349
+#: src/resources/gtk/prefs-dialog.ui:435
 msgid "Sans serif font:"
 msgstr "Bezrēdzes fonts:"
 
-#: src/resources/gtk/prefs-dialog.ui:373
+#: src/resources/gtk/prefs-dialog.ui:459
 msgid "Serif font:"
 msgstr "Rēdzes fonts:"
 
-#: src/resources/gtk/prefs-dialog.ui:395
+#: src/resources/gtk/prefs-dialog.ui:481
 msgid "Monospace font:"
 msgstr "Fiksēta platuma fonts:"
 
-#: src/resources/gtk/prefs-dialog.ui:427
+#: src/resources/gtk/prefs-dialog.ui:513
 msgid "Style"
 msgstr "Stils"
 
-#: src/resources/gtk/prefs-dialog.ui:440
+#: src/resources/gtk/prefs-dialog.ui:526
 msgid "Use custom _stylesheet"
 msgstr "Lietot pielāgotu _stila lapu"
 
-#: src/resources/gtk/prefs-dialog.ui:448
+#: src/resources/gtk/prefs-dialog.ui:534
 msgid "_Edit Stylesheet"
 msgstr "R_ediģēt stila lapu"
 
-#: src/resources/gtk/prefs-dialog.ui:465
+#: src/resources/gtk/prefs-dialog.ui:551
 msgid "Fonts & Style"
 msgstr "Fonti un stils"
 
-#: src/resources/gtk/prefs-dialog.ui:499
+#: src/resources/gtk/prefs-dialog.ui:585
 msgid "Manage _Cookies"
 msgstr "Pārvaldīt _sīkdatnes"
 
-#: src/resources/gtk/prefs-dialog.ui:515
+#: src/resources/gtk/prefs-dialog.ui:601
 msgid "_Always accept"
 msgstr "_Vienmēr pieņemt"
 
-#: src/resources/gtk/prefs-dialog.ui:522
+#: src/resources/gtk/prefs-dialog.ui:608
 msgid "Only _from sites you visit"
 msgstr "Tikai _no vietnēm, kuras jūs apmeklējat"
 
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:532
+#: src/resources/gtk/prefs-dialog.ui:618
 msgid "For example, not from advertisers on these sites"
 msgstr "Piemēram, ne no reklāmu servisiem šajās vietnēs"
 
-#: src/resources/gtk/prefs-dialog.ui:542
+#: src/resources/gtk/prefs-dialog.ui:628
 msgid "_Never accept"
 msgstr "_Nekad nepieņemt"
 
-#: src/resources/gtk/prefs-dialog.ui:573
+#: src/resources/gtk/prefs-dialog.ui:659
 msgid "Manage _Passwords"
 msgstr "Pārvaldīt _paroles"
 
-#: src/resources/gtk/prefs-dialog.ui:583
+#: src/resources/gtk/prefs-dialog.ui:669
 msgid "_Remember passwords"
 msgstr "Atce_rēties paroles"
 
-#: src/resources/gtk/prefs-dialog.ui:600
+#: src/resources/gtk/prefs-dialog.ui:686
 msgid "Personal Data"
 msgstr "Personiskie dati"
 
-#: src/resources/gtk/prefs-dialog.ui:621
+#: src/resources/gtk/prefs-dialog.ui:707
 msgid "You can clear stored personal data."
 msgstr "Jūs varat attīrīt saglabātos personiskos datus."
 
-#: src/resources/gtk/prefs-dialog.ui:626
+#: src/resources/gtk/prefs-dialog.ui:712
 msgid "Manage Personal _Data"
 msgstr "Pārvaldīt personiskos _datus"
 
-#: src/resources/gtk/prefs-dialog.ui:644
+#: src/resources/gtk/prefs-dialog.ui:730
 msgid "Stored Data"
 msgstr "Saglabātie dati"
 
-#: src/resources/gtk/prefs-dialog.ui:705
+#: src/resources/gtk/prefs-dialog.ui:791
 msgid "_Add…"
 msgstr "_Pievienot…"
 
-#: src/resources/gtk/prefs-dialog.ui:712
+#: src/resources/gtk/prefs-dialog.ui:798
 msgid "_Remove"
 msgstr "_Izņemt"
 
-#: src/resources/gtk/prefs-dialog.ui:719
+#: src/resources/gtk/prefs-dialog.ui:805
 msgid "_Up"
 msgstr "_Augšup"
 
-#: src/resources/gtk/prefs-dialog.ui:726
+#: src/resources/gtk/prefs-dialog.ui:812
 msgid "_Down"
 msgstr "_Lejup"
 
-#: src/resources/gtk/prefs-dialog.ui:749
+#: src/resources/gtk/prefs-dialog.ui:835
 msgid "Spell Checking"
 msgstr "Pareizrakstības pārbaude"
 
-#: src/resources/gtk/prefs-dialog.ui:758
+#: src/resources/gtk/prefs-dialog.ui:844
 msgid "_Enable spell checking"
 msgstr "Ieslēgt par_eizrakstības pārbaudi"
 
-#: src/resources/gtk/prefs-dialog.ui:797
+#: src/resources/gtk/prefs-dialog.ui:883
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/prefs-dialog.ui:815
+#: src/resources/gtk/prefs-dialog.ui:901
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not produced or endorsed by Mozilla."
@@ -3063,71 +3082,71 @@ msgstr ""
 "Firefox uz citiem datoriem. Mozilla nav Tīmekli nav veidojusi, ne "
 "atbalstījusi."
 
-#: src/resources/gtk/prefs-dialog.ui:849
+#: src/resources/gtk/prefs-dialog.ui:935
 msgid "Firefox Account"
 msgstr "Firefox konts"
 
-#: src/resources/gtk/prefs-dialog.ui:857
+#: src/resources/gtk/prefs-dialog.ui:943
 msgid "Sign _out"
 msgstr "_Izrakstīties"
 
-#: src/resources/gtk/prefs-dialog.ui:891
+#: src/resources/gtk/prefs-dialog.ui:977
 msgid "Sync Options"
 msgstr "Sinhronizēšanas opcijas"
 
-#: src/resources/gtk/prefs-dialog.ui:911
+#: src/resources/gtk/prefs-dialog.ui:997
 msgid "Collections"
 msgstr "Kolekcijas"
 
-#: src/resources/gtk/prefs-dialog.ui:919
+#: src/resources/gtk/prefs-dialog.ui:1005
 msgid "S_ynced tabs"
 msgstr "S_inhronizētās cilnes"
 
-#: src/resources/gtk/prefs-dialog.ui:935
+#: src/resources/gtk/prefs-dialog.ui:1021
 msgid "_Bookmarks"
 msgstr "_Grāmatzīmes"
 
-#: src/resources/gtk/prefs-dialog.ui:942
+#: src/resources/gtk/prefs-dialog.ui:1028
 msgid "_Passwords"
 msgstr "_Paroles"
 
-#: src/resources/gtk/prefs-dialog.ui:956
+#: src/resources/gtk/prefs-dialog.ui:1042
 msgid "Open _Tabs"
 msgstr "Atvērtās _cilnēs"
 
-#: src/resources/gtk/prefs-dialog.ui:971
+#: src/resources/gtk/prefs-dialog.ui:1057
 msgid "Frequency"
 msgstr "Biežums"
 
-#: src/resources/gtk/prefs-dialog.ui:979
+#: src/resources/gtk/prefs-dialog.ui:1065
 msgid "Sync _now"
 msgstr "Sinhro_nizēt tagad"
 
-#: src/resources/gtk/prefs-dialog.ui:998
+#: src/resources/gtk/prefs-dialog.ui:1084
 msgid "_5 min"
 msgstr "_5 min"
 
-#: src/resources/gtk/prefs-dialog.ui:1005
+#: src/resources/gtk/prefs-dialog.ui:1091
 msgid "_15 min"
 msgstr "_15 min"
 
-#: src/resources/gtk/prefs-dialog.ui:1013
+#: src/resources/gtk/prefs-dialog.ui:1099
 msgid "_30 min"
 msgstr "_30 min"
 
-#: src/resources/gtk/prefs-dialog.ui:1021
+#: src/resources/gtk/prefs-dialog.ui:1107
 msgid "_60 min"
 msgstr "_60 min"
 
-#: src/resources/gtk/prefs-dialog.ui:1052
+#: src/resources/gtk/prefs-dialog.ui:1138
 msgid "Device name"
 msgstr "Ierīces nosaukums"
 
-#: src/resources/gtk/prefs-dialog.ui:1060
+#: src/resources/gtk/prefs-dialog.ui:1146
 msgid "_Change"
 msgstr "_Mainīt"
 
-#: src/resources/gtk/prefs-dialog.ui:1110
+#: src/resources/gtk/prefs-dialog.ui:1196
 msgid "Sync"
 msgstr "Sinhronizācija"
 
@@ -3402,6 +3421,34 @@ msgstr ""
 "Firefox Sync ar šo kontu. Atveriet kontu, veicot dubultklikšķi uz tā "
 "nosaukuma (cilnes zem “Lokālās cilnes” nevar atvērt)."
 
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:20
+msgid "Additional URLs"
+msgstr "Papildu URL"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:64
+msgid ""
+"A URL that starts with any of the additional URLs will be opened by the web "
+"application. If you omit the URL scheme, the one from the currently loaded "
+"URL will be used."
+msgstr ""
+"URL, kas sākas ar kādu no papildu URL tiks atvēri tīmekļa lietotnē. Ja"
+" izlaidīsiet URL shēmu, tiks izmantots kāds no pašlaik ielādētajiem URL."
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#| msgid "URL"
+msgctxt "Column header in the Additional URLs dialog"
+msgid "URL"
+msgstr "URL"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:124
+msgid "Add new URL"
+msgstr "Pievienot jaunu URL"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:137
+#| msgid "Remove the selected pages from history"
+msgid "Remove the selected URLs"
+msgstr "Izņemt izvēlētos URL"
+
 #: src/search-provider/ephy-search-provider.c:199
 #, c-format
 msgid "Search the Web for %s"
@@ -3411,77 +3458,77 @@ msgstr "Meklēt %s tīmeklī"
 msgid "Local Tabs"
 msgstr "Lokālās cilnes"
 
-#: src/window-commands.c:97
+#: src/window-commands.c:98
 msgid "GVDB File"
 msgstr "GVDB datne"
 
 #. Skip Firefox option if user doesn't have a Firefox profile
-#: src/window-commands.c:98 src/window-commands.c:205
+#: src/window-commands.c:99 src/window-commands.c:206
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:112
+#: src/window-commands.c:113
 msgid "Ch_oose File…"
 msgstr "Iz_vēlieties datni…"
 
-#: src/window-commands.c:114 src/window-commands.c:297
+#: src/window-commands.c:115 src/window-commands.c:298
 msgid "I_mport"
 msgstr "I_mportēt"
 
-#: src/window-commands.c:230
+#: src/window-commands.c:231
 msgid "Select Profile"
 msgstr "Izvēlieties profilu"
 
-#: src/window-commands.c:235
+#: src/window-commands.c:236
 msgid "_Select"
 msgstr "Izvēlētie_s"
 
-#: src/window-commands.c:294 src/window-commands.c:450
+#: src/window-commands.c:295 src/window-commands.c:451
 msgid "Choose File"
 msgstr "Izvēlieties datni"
 
-#: src/window-commands.c:321 src/window-commands.c:362
+#: src/window-commands.c:322 src/window-commands.c:363
 msgid "Bookmarks successfully imported!"
 msgstr "Grāmatzīme veiksmīgi importēta!"
 
-#: src/window-commands.c:392
+#: src/window-commands.c:393
 msgid "Import Bookmarks"
 msgstr "Importēt grāmatzīmes"
 
-#: src/window-commands.c:397
+#: src/window-commands.c:398
 msgid "Ch_oose File"
 msgstr "Iz_vēlieties datni"
 
-#: src/window-commands.c:410
+#: src/window-commands.c:411
 msgid "From:"
 msgstr "No:"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:458
+#: src/window-commands.c:459
 msgid "bookmarks.gvdb"
 msgstr "grāmatzīmes.gvdb"
 
-#: src/window-commands.c:480
+#: src/window-commands.c:481
 msgid "Bookmarks successfully exported!"
 msgstr "Grāmatzīme veiksmīgi eksportēta!"
 
-#: src/window-commands.c:608
+#: src/window-commands.c:609
 msgid "Current maintainers:"
 msgstr "Pašreizējie uzturētāji:"
 
-#: src/window-commands.c:611 src/window-commands.c:634
+#: src/window-commands.c:612 src/window-commands.c:635
 msgid "Contact us at:"
 msgstr "Sazinieties ar mums:"
 
-#: src/window-commands.c:614
+#: src/window-commands.c:615
 msgid "Past maintainers:"
 msgstr "Iepriekšējie uzturētāji:"
 
-#: src/window-commands.c:617
+#: src/window-commands.c:618
 msgid "Contributors:"
 msgstr "Veidotāji:"
 
-#: src/window-commands.c:643
+#: src/window-commands.c:644
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3489,10 +3536,6 @@ msgid ""
 msgstr ""
 "Vienkāršs, tīrs, skaists skats uz tīmekli.\n"
 "Darbina WebKitGTK+ %d.%d.%d"
-
-#: src/window-commands.c:653
-msgid "Epiphany Technology Preview"
-msgstr "Epiphany tehnoloģiju priekšskatījums"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3502,77 +3545,72 @@ msgstr "Epiphany tehnoloģiju priekšskatījums"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:670
+#: src/window-commands.c:671
 msgid "translator-credits"
 msgstr ""
 "Pēteris Krišjānis <pecisk@gmail.com>\n"
 "Anita Reitere <nitalynx@gmail.com>"
 
 #: src/window-commands.c:674
-msgid "Web Website"
-msgstr "Tīmekļa pārlūka mājas lapa"
-
-#: src/window-commands.c:676
-#| msgid "Web Website"
 msgid "Website"
 msgstr "Tīmekļa vietne"
 
-#: src/window-commands.c:926
+#: src/window-commands.c:923
 msgid "Open"
 msgstr "Atvērt"
 
-#: src/window-commands.c:1311
+#: src/window-commands.c:1286
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr ""
 "Tīmekļa lietotne ar nosaukumu “%s” jau eksistē. Vai vēlaties to aizvietot?"
 
-#: src/window-commands.c:1314
+#: src/window-commands.c:1289
 msgid "Cancel"
 msgstr "Atcelt"
 
-#: src/window-commands.c:1316
+#: src/window-commands.c:1291
 msgid "Replace"
 msgstr "Aizvietot"
 
-#: src/window-commands.c:1320
+#: src/window-commands.c:1295
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "Lietotne ar tādu nosaukumu jau eksistē. Aizvietošana to pārrakstīts."
 
-#: src/window-commands.c:1355
+#: src/window-commands.c:1337
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Lietotne “%s” ir gatava lietošanai"
 
-#: src/window-commands.c:1358
+#: src/window-commands.c:1340
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Lietotni “%s” neizdevās izveidot"
 
-#: src/window-commands.c:1366
+#: src/window-commands.c:1348
 msgid "Launch"
 msgstr "Palaist"
 
 #. Show dialog with icon, title.
-#: src/window-commands.c:1411
+#: src/window-commands.c:1393
 msgid "Create Web Application"
 msgstr "Izveidot tīmekļa lietotni"
 
-#: src/window-commands.c:1416
+#: src/window-commands.c:1398
 msgid "C_reate"
 msgstr "Iz_veidot"
 
-#: src/window-commands.c:1545
+#: src/window-commands.c:1527
 msgid "Save"
 msgstr "Saglabāt"
 
-#: src/window-commands.c:2233
+#: src/window-commands.c:2226
 msgid "Enable caret browsing mode?"
 msgstr "Ieslēgt kursora pārlūkošanas režīmu?"
 
-#: src/window-commands.c:2236
+#: src/window-commands.c:2229
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3582,9 +3620,66 @@ msgstr ""
 "lapās novieto kursoru, kuru var pārvietot ar tastatūru. Vai vēlaties aktivēt "
 "kursora pārlūkošanu?"
 
-#: src/window-commands.c:2239
+#: src/window-commands.c:2232
 msgid "_Enable"
 msgstr "I_eslēgt"
+
+#~ msgid "Automatic downloads"
+#~ msgstr "Automātiskas lejupielādes"
+
+#~ msgid ""
+#~ "When files cannot be opened by the browser they are automatically "
+#~ "downloaded to the download folder and opened with the appropriate "
+#~ "application."
+#~ msgstr ""
+#~ "Ja datnes nevar atvērt ar pārlūku, tās tiek automātiski lejupielādētas "
+#~ "mapē Lejupielādes un atvērtas ar atbilstošo lietotni."
+
+#~ msgid "Installed plugins"
+#~ msgstr "Instalētie spraudņi"
+
+#~ msgid "Plugins"
+#~ msgstr "Spraudņi"
+
+#~ msgid "Plugins are disabled in the preferences"
+#~ msgstr "Spraudņi ir izslēgti iestatījumos"
+
+#~ msgid "Enabled"
+#~ msgstr "Ieslēgts"
+
+#~ msgid "Yes"
+#~ msgstr "Jā"
+
+#~ msgid "No"
+#~ msgstr "Nē"
+
+#~ msgid "MIME type"
+#~ msgstr "MIME tips"
+
+#~ msgid "Description"
+#~ msgstr "Apraksts"
+
+#~ msgid "Suffixes"
+#~ msgstr "Sufiksi"
+
+#~| msgid "Open a new browser window"
+#~ msgid "Open in browser"
+#~ msgstr "Atvērt pārlūkā"
+
+#~ msgid "Open the page in your default browser"
+#~ msgstr "Atvērt lapu jūsu noklusējuma pārlūkā"
+
+#~ msgid "New _Window"
+#~ msgstr "Jauns _logs"
+
+#~ msgid "A_utomatically open downloaded files"
+#~ msgstr "A_utomātiski atvērt lejupielādētas datnes"
+
+#~ msgid "Enable _plugins"
+#~ msgstr "Ieslēgt s_praudņus"
+
+#~ msgid "Web Website"
+#~ msgstr "Tīmekļa pārlūka mājas lapa"
 
 #~ msgid "50%"
 #~ msgstr "50%"
@@ -3980,9 +4075,6 @@ msgstr "I_eslēgt"
 #~ msgid "Create topic “%s”"
 #~ msgstr "Izveidot tematu “%s”"
 
-#~ msgid "_Title:"
-#~ msgstr "_Nosaukums:"
-
 #~ msgid "A_ddress:"
 #~ msgstr "A_drese:"
 
@@ -4062,12 +4154,6 @@ msgstr "I_eslēgt"
 
 #~ msgid "Save _As…"
 #~ msgstr "Saglabāt _kā..."
-
-#~ msgid "_Print…"
-#~ msgstr "_Drukāt…"
-
-#~ msgid "_Find…"
-#~ msgstr "_Meklēt…"
 
 #~ msgid "Find Ne_xt"
 #~ msgstr "Meklēt nā_kamo"
