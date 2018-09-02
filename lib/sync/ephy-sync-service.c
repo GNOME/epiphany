@@ -2111,7 +2111,7 @@ get_crypto_keys_cb (SoupSession *session,
   JsonObject *json = NULL;
   GError *error = NULL;
   const char *payload;
-  char *crypto_keys;
+  char *crypto_keys = NULL;
   guint8 *kb = NULL;
 
   if (msg->status_code == 404) {
