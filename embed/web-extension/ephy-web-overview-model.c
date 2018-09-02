@@ -124,12 +124,14 @@ ephy_web_overview_model_notify_urls_changed (EphyWebOverviewModel *model)
   g_hash_table_iter_init (&iter, model->urls_listeners);
   while (g_hash_table_iter_next (&iter, &key, NULL)) {
     JSCValue *value;
+    JSCValue *ret;
 
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value && jsc_value_is_function (value)) {
       if (!urls)
         urls = ephy_web_overview_model_urls_to_js_value (model, jsc_value_get_context (value));
-      jsc_value_function_call (value, G_TYPE_PTR_ARRAY, urls, G_TYPE_NONE);
+      ret = jsc_value_function_call (value, G_TYPE_PTR_ARRAY, urls, G_TYPE_NONE);
+      g_object_unref (ret);
     }
     if (value)
       g_object_unref (value);
@@ -150,11 +152,14 @@ ephy_web_overview_model_notify_thumbnail_changed (EphyWebOverviewModel *model,
   g_hash_table_iter_init (&iter, model->thumbnail_listeners);
   while (g_hash_table_iter_next (&iter, &key, NULL)) {
     JSCValue *value;
+    JSCValue *ret;
 
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value) {
-      if (jsc_value_is_function (value))
-        jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, path, G_TYPE_NONE);
+      if (jsc_value_is_function (value)) {
+        ret = jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, path, G_TYPE_NONE);
+        g_object_unref (ret);
+      }
       g_object_unref (value);
     }
   }
@@ -171,11 +176,14 @@ ephy_web_overview_model_notify_title_changed (EphyWebOverviewModel *model,
   g_hash_table_iter_init (&iter, model->title_listeners);
   while (g_hash_table_iter_next (&iter, &key, NULL)) {
     JSCValue *value;
+    JSCValue *ret;
 
     value = jsc_weak_value_get_value (JSC_WEAK_VALUE (key));
     if (value) {
-      if (jsc_value_is_function (value))
-        jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, title, G_TYPE_NONE);
+      if (jsc_value_is_function (value)) {
+        ret = jsc_value_function_call (value, G_TYPE_STRING, url, G_TYPE_STRING, title, G_TYPE_NONE);
+        g_object_unref (ret);
+      }
       g_object_unref (value);
     }
   }
