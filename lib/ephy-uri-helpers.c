@@ -179,7 +179,8 @@ is_garbage (const char *name,
     return FALSE;
 
   for (i = 0; i < G_N_ELEMENTS (fields); i++) {
-    if (fields[i].host != NULL &&
+    if (host != NULL &&
+        fields[i].host != NULL &&
         !g_str_has_suffix (host, fields[i].host))
       continue;
     if (!g_strcmp0 (fields[i].field, name))
