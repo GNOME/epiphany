@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 #define EPHY_TYPE_LOCATION_ENTRY (ephy_location_entry_get_type())
 
-G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkOverlay)
+G_DECLARE_FINAL_TYPE (EphyLocationEntry, ephy_location_entry, EPHY, LOCATION_ENTRY, GtkBox)
 
 typedef enum {
   EPHY_LOCATION_ENTRY_BOOKMARK_ICON_HIDDEN,

@@ -54,7 +54,7 @@
  */
 
 struct _EphyLocationEntry {
-  GtkOverlay parent_instance;
+  GtkBox parent_instance;
 
   GtkWidget *url_entry;
   GtkWidget *bookmark;
@@ -122,7 +122,7 @@ static gint signals[LAST_SIGNAL] = { 0 };
 
 static void ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_OVERLAY,
+G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_BOX,
                          G_IMPLEMENT_INTERFACE (EPHY_TYPE_TITLE_WIDGET,
                                                 ephy_location_entry_title_widget_interface_init))
 
@@ -318,16 +318,6 @@ ephy_location_entry_get_preferred_width (GtkWidget *widget,
 }
 
 static void
-ephy_location_entry_get_preferred_height (GtkWidget *widget,
-                                          gint      *minimum_height,
-                                          gint      *natural_height)
-{
-  EphyLocationEntry *entry = EPHY_LOCATION_ENTRY (widget);
-
-  gtk_widget_get_preferred_height (entry->url_entry, minimum_height, natural_height);
-}
-
-static void
 ephy_location_entry_do_copy_clipboard (GtkEntry *entry)
 {
   char *text;
@@ -375,6 +365,36 @@ ephy_location_entry_cut_clipboard (GtkEntry *entry)
 }
 
 static void
+ephy_location_entry_focus_in_event (GtkWidget *widget,
+                                    GdkEvent  *event,
+                                    gpointer   user_data)
+{
+  GtkWidget *entry = GTK_WIDGET (user_data);
+  GtkStyleContext *context;
+  GtkStateFlags flags;
+
+  context = gtk_widget_get_style_context (entry);
+  flags = gtk_style_context_get_state (context);
+  flags |= GTK_STATE_FLAG_FOCUSED;
+  gtk_style_context_set_state (context, flags);
+}
+
+static void
+ephy_location_entry_focus_out_event (GtkWidget *widget,
+                                     GdkEvent  *event,
+                                     gpointer   user_data)
+{
+  GtkWidget *entry = GTK_WIDGET (user_data);
+  GtkStyleContext *context;
+  GtkStateFlags flags;
+
+  context = gtk_widget_get_style_context (entry);
+  flags = gtk_style_context_get_state (context);
+  flags &= ~GTK_STATE_FLAG_FOCUSED;
+  gtk_style_context_set_state (context, flags);
+}
+
+static void
 ephy_location_entry_title_widget_interface_init (EphyTitleWidgetInterface *iface)
 {
   iface->get_address = ephy_location_entry_title_widget_get_address;
@@ -395,7 +415,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   object_class->finalize = ephy_location_entry_finalize;
 
   widget_class->get_preferred_width = ephy_location_entry_get_preferred_width;
-  widget_class->get_preferred_height = ephy_location_entry_get_preferred_height;
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
@@ -463,6 +482,8 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
                                      G_TYPE_STRING,
                                      0,
                                      G_TYPE_NONE);
+
+  gtk_widget_class_set_css_name (widget_class, "entry");
 }
 
 static void
@@ -764,27 +785,6 @@ bookmark_icon_button_press_event_cb (GtkWidget           *entry,
 }
 
 static void
-button_box_size_allocated_cb (GtkWidget    *widget,
-                              GdkRectangle *allocation,
-                              gint          baseline,
-                              GdkRectangle *out_clip,
-                              gpointer      user_data)
-{
-  GtkCssProvider *css_provider = gtk_css_provider_new();
-  gchar *css;
-
-  css = g_strdup_printf (".url_entry { padding-right: %dpx; }", allocation->width + 5);
-  gtk_css_provider_load_from_data (css_provider, css, -1, NULL);
-
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (css_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-  g_object_unref (css_provider);
-  g_free (css);
-}
-
-static void
 ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 {
   GtkWidget *button_box;
@@ -794,21 +794,23 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   /* URL entry */
   entry->url_entry = gtk_entry_new ();
+//  gtk_entry_set_has_frame (GTK_ENTRY (entry->url_entry), false);
   gtk_style_context_add_class (gtk_widget_get_style_context (entry->url_entry), "url_entry");
   g_signal_connect (G_OBJECT (entry->url_entry), "copy-clipboard", G_CALLBACK (ephy_location_entry_copy_clipboard), NULL);
   g_signal_connect (G_OBJECT (entry->url_entry), "cut-clipboard", G_CALLBACK (ephy_location_entry_cut_clipboard), NULL);
+  g_signal_connect (G_OBJECT (entry->url_entry), "focus-in-event", G_CALLBACK (ephy_location_entry_focus_in_event), entry);
+  g_signal_connect (G_OBJECT (entry->url_entry), "focus-out-event", G_CALLBACK (ephy_location_entry_focus_out_event), entry);
   gtk_widget_show (entry->url_entry);
-  gtk_overlay_add_overlay (GTK_OVERLAY (entry), entry->url_entry);
+  gtk_box_pack_start (GTK_BOX (entry), entry->url_entry, TRUE, TRUE, 0);
 
   /* Button Box */
   button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_set_homogeneous (GTK_BOX (button_box), FALSE);
-  g_signal_connect (G_OBJECT (button_box), "size-allocate", G_CALLBACK (button_box_size_allocated_cb), NULL);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (button_box), GTK_BUTTONBOX_EXPAND);
   gtk_widget_set_halign (button_box, GTK_ALIGN_END);
-  gtk_widget_set_margin_end (button_box, 5);
+  gtk_box_set_spacing (GTK_BOX (button_box), 6);
   gtk_widget_show (button_box);
-  gtk_overlay_add_overlay (GTK_OVERLAY (entry), button_box);
+  gtk_box_pack_start (GTK_BOX (entry), button_box, FALSE, FALSE, 0);
 
   /* Bookmark */
   entry->bookmark_event_box = gtk_event_box_new ();
@@ -816,20 +818,20 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_widget_show (entry->bookmark);
   g_signal_connect (G_OBJECT (entry->bookmark_event_box), "button_press_event", G_CALLBACK (bookmark_icon_button_press_event_cb), entry);
   gtk_container_add (GTK_CONTAINER(entry->bookmark_event_box), entry->bookmark);
-  gtk_box_pack_end (GTK_BOX (button_box), entry->bookmark_event_box, FALSE, FALSE, 6);
-
-  context = gtk_widget_get_style_context (entry->bookmark);
-  gtk_style_context_add_class (context, "entry_icon");
+  gtk_box_pack_end (GTK_BOX (button_box), entry->bookmark_event_box, FALSE, FALSE, 0);
 
   /* Reader Mode */
   entry->reader_mode_event_box = gtk_event_box_new ();
   entry->reader_mode = gtk_image_new_from_icon_name ("ephy-reader-mode-symbolic", GTK_ICON_SIZE_MENU);
   gtk_widget_show (entry->reader_mode);
   gtk_container_add (GTK_CONTAINER(entry->reader_mode_event_box), entry->reader_mode);
-  gtk_box_pack_end (GTK_BOX (button_box), entry->reader_mode_event_box, FALSE, FALSE, 6);
+  gtk_box_pack_end (GTK_BOX (button_box), entry->reader_mode_event_box, FALSE, FALSE, 0);
 
   context = gtk_widget_get_style_context (entry->reader_mode);
-  gtk_style_context_add_class (context, "entry_icon");
+  gtk_style_context_add_class (context, "right");
+
+  context = gtk_widget_get_style_context (entry->bookmark);
+  gtk_style_context_add_class (context, "right");
 
   g_object_connect (entry->url_entry,
                     "signal::icon-press", G_CALLBACK (icon_button_icon_press_event_cb), entry,

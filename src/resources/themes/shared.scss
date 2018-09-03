@@ -35,31 +35,22 @@
   }
 }
 
-// entry icons colors
-.entry_icon {
-  color: #{"mix(" + themecolor(theme_fg_color) + ", " + themecolor(theme_base_color) + ", 0.2)"};
+.url_entry {
+  background: none;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
 
-  &:hover {
-    color: themecolor(theme_fg_color);
-  }
+// Reader mode
+.selected {
+  color: themecolor(theme_selected_bg_color);
+}
 
-  &:active {
-    color: themecolor(theme_selected_bg_color);
-  }
-
-  &:backdrop {
-    color: #{"mix(" + themecolor(theme_unfocused_fg_color) + ", " + themecolor(theme_unfocused_base_color) + ", 0.2)"};
-  }
-
-  // Reader mode
-  &.selected {
-    color: themecolor(theme_selected_bg_color);
-  }
-
-  // Bookmarks
-  &.starred {
-    color: orange;
-  }
+// Bookmarks
+.starred {
+  color: orange;
 }
 
 .bookmarks-row {
