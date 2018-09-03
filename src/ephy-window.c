@@ -2099,30 +2099,11 @@ decide_policy_cb (WebKitWebView           *web_view,
 }
 
 static void
-progress_update (WebKitWebView *web_view,
-                 GParamSpec    *pspec,
-                 EphyWindow    *window)
-{
-  EphyTitleWidget *title_widget;
-  gdouble progress;
-  gboolean loading;
-
-  progress = webkit_web_view_get_estimated_load_progress (web_view);
-  loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (web_view));
-
-  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
-
-  ephy_location_entry_set_progress (EPHY_LOCATION_ENTRY (title_widget), progress, loading);
-}
-
-
-static void
 ephy_window_connect_active_embed (EphyWindow *window)
 {
   EphyEmbed *embed;
   WebKitWebView *web_view;
   EphyWebView *view;
-  EphyTitleWidget *title_widget;
 
   g_assert (window->active_embed != NULL);
 
@@ -2144,18 +2125,6 @@ ephy_window_connect_active_embed (EphyWindow *window)
   sync_tab_popups_allowed (view, NULL, window);
 
   sync_tab_zoom (web_view, NULL, window);
-
-  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
-
-  if (EPHY_IS_LOCATION_ENTRY (title_widget)) {
-    gdouble progress = webkit_web_view_get_estimated_load_progress (web_view);
-    gboolean loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (web_view));
-
-    ephy_location_entry_set_progress (EPHY_LOCATION_ENTRY (title_widget), progress, loading);
-    g_signal_connect_object (web_view, "notify::estimated-load-progress",
-                             G_CALLBACK (progress_update),
-                             window, 0);
-  }
 
   g_signal_connect_object (web_view, "notify::zoom-level",
                            G_CALLBACK (sync_tab_zoom),
@@ -2223,9 +2192,6 @@ ephy_window_disconnect_active_embed (EphyWindow *window)
 
   ephy_embed_detach_notification_container (window->active_embed);
 
-  g_signal_handlers_disconnect_by_func (web_view,
-                                        G_CALLBACK (progress_update),
-                                        window);
   g_signal_handlers_disconnect_by_func (web_view,
                                         G_CALLBACK (sync_tab_zoom),
                                         window);

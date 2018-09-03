@@ -93,8 +93,4 @@ void            ephy_location_entry_set_reader_mode_state      (EphyLocationEntr
 
 gboolean        ephy_location_entry_get_reader_mode_state      (EphyLocationEntry *entry);
 
-void            ephy_location_entry_set_progress               (EphyLocationEntry *entry,
-                                                                gdouble            progress,
-                                                                gboolean           loading);
-
 G_END_DECLS
