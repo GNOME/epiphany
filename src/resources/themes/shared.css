@@ -8,17 +8,11 @@
 
 .incognito-mode headerbar { background-image: -gtk-icontheme("user-not-tracked-symbolic"); background-repeat: no-repeat; background-position: 157px 0; background-size: 64px 64px; color: rgba(0, 0, 0, 0.35); }
 
-.entry_icon { color: mix(@theme_fg_color, @theme_base_color, 0.2); }
+.url_entry { background: none; border: none; box-shadow: none; margin: 0; padding: 0; }
 
-.entry_icon:hover { color: @theme_fg_color; }
+.selected { color: @theme_selected_bg_color; }
 
-.entry_icon:active { color: @theme_selected_bg_color; }
-
-.entry_icon:backdrop { color: mix(@theme_unfocused_fg_color, @theme_unfocused_base_color, 0.2); }
-
-.entry_icon.selected { color: @theme_selected_bg_color; }
-
-.entry_icon.starred { color: orange; }
+.starred { color: orange; }
 
 .bookmarks-row button { opacity: 0.25; }
 
