@@ -127,6 +127,10 @@ G_DEFINE_TYPE_WITH_CODE (EphyLocationEntry, ephy_location_entry, GTK_TYPE_OVERLA
                                                 ephy_location_entry_title_widget_interface_init))
 
 static void
+editable_changed_cb (GtkEditable       *editable,
+                     EphyLocationEntry *entry);
+
+static void
 ephy_location_entry_activate (EphyLocationEntry *entry)
 {
   g_signal_emit_by_name (entry->url_entry, "activate");
@@ -195,7 +199,11 @@ ephy_location_entry_title_widget_set_address (EphyTitleWidget *widget,
   entry->hash = g_str_hash (effective_text ? effective_text : text);
 
   entry->block_update = TRUE;
+  g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
   gtk_entry_set_text (GTK_ENTRY (entry->url_entry), effective_text ? effective_text : text);
+  g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
+
+  dzl_suggestion_entry_hide_suggestions (DZL_SUGGESTION_ENTRY (entry->url_entry));
   entry->block_update = FALSE;
   g_free (effective_text);
 
@@ -737,10 +745,29 @@ ephy_location_entry_suggestion_activated (DzlSuggestionEntry *entry,
 {
   EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
   DzlSuggestion *suggestion = dzl_suggestion_entry_get_suggestion (entry);
+  g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
   gtk_entry_set_text (GTK_ENTRY (entry), ephy_suggestion_get_uri (EPHY_SUGGESTION (suggestion)));
+  g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
+
+  g_signal_stop_emission_by_name (entry, "suggestion-activated");
+
+  dzl_suggestion_entry_hide_suggestions (entry);
 
   /* Now trigger the load.... */
   ephy_location_entry_activate (EPHY_LOCATION_ENTRY (lentry));
+}
+
+static void
+suggestion_selected (DzlSuggestionEntry *entry,
+                     DzlSuggestion      *suggestion,
+                     gpointer            user_data)
+{
+  const gchar *uri = dzl_suggestion_get_id (suggestion);
+
+  g_signal_handlers_block_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
+  gtk_entry_set_text (GTK_ENTRY (entry), uri);
+  gtk_editable_set_position (GTK_EDITABLE (entry), -1);
+  g_signal_handlers_unblock_by_func (entry, G_CALLBACK (editable_changed_cb), user_data);
 }
 
 static void
@@ -762,6 +789,8 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry->url_entry)), "url_entry");
   g_signal_connect (G_OBJECT (entry->url_entry), "copy-clipboard", G_CALLBACK (ephy_location_entry_copy_clipboard), NULL);
   g_signal_connect (G_OBJECT (entry->url_entry), "cut-clipboard", G_CALLBACK (ephy_location_entry_cut_clipboard), NULL);
+  g_signal_connect (G_OBJECT (entry->url_entry), "changed", G_CALLBACK (editable_changed_cb), entry);
+  g_signal_connect (G_OBJECT (entry->url_entry), "suggestion-selected", G_CALLBACK (suggestion_selected), entry);
   gtk_widget_show (GTK_WIDGET (entry->url_entry));
   gtk_overlay_add_overlay (GTK_OVERLAY (entry), GTK_WIDGET (entry->url_entry));
 
@@ -800,7 +829,6 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
                     "signal::icon-press", G_CALLBACK (icon_button_icon_press_event_cb), entry,
                     "signal::populate-popup", G_CALLBACK (entry_populate_popup_cb), entry,
                     "signal::key-press-event", G_CALLBACK (entry_key_press_cb), entry,
-                    "signal::changed", G_CALLBACK (editable_changed_cb), entry,
                     NULL);
 
   g_signal_connect (entry->url_entry, "suggestion-activated",

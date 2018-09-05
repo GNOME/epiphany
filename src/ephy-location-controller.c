@@ -177,15 +177,14 @@ static void
 user_changed_cb (GtkWidget *widget, EphyLocationController *controller)
 {
   const char *address;
-  GtkWidget *entry;
+  DzlSuggestionEntry *entry = DZL_SUGGESTION_ENTRY (ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (widget)));
   GListModel *model;
 
-  address = ephy_title_widget_get_address (EPHY_TITLE_WIDGET (widget));
+  address = dzl_suggestion_entry_get_typed_text (entry);
 
   LOG ("user_changed_cb, address %s", address);
 
-  entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (widget));
-  model = dzl_suggestion_entry_get_model (DZL_SUGGESTION_ENTRY (entry));
+  model = dzl_suggestion_entry_get_model (entry);
 
   ephy_suggestion_model_query_async (EPHY_SUGGESTION_MODEL (model), address, NULL, NULL, NULL);
 }
@@ -300,7 +299,6 @@ reader_mode_button_press_event_cb (GtkWidget *widget,
   ephy_web_view_toggle_reader_mode (view, ephy_location_entry_get_reader_mode_state (lentry));
 }
 
-
 static void
 ephy_location_controller_constructed (GObject *object)
 {
@@ -326,6 +324,8 @@ ephy_location_controller_constructed (GObject *object)
     return;
 
   entry = ephy_location_entry_get_entry (EPHY_LOCATION_ENTRY (controller->title_widget));
+  g_signal_connect (controller->title_widget, "user-changed", G_CALLBACK (user_changed_cb), controller);
+
   controller->longpress_gesture = gtk_gesture_long_press_new (entry);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (controller->longpress_gesture), TRUE);
   g_signal_connect (controller->longpress_gesture, "pressed", G_CALLBACK (longpress_gesture_cb), entry);
@@ -349,8 +349,6 @@ ephy_location_controller_constructed (GObject *object)
   g_signal_connect_object (entry, "activate",
                            G_CALLBACK (entry_activate_cb),
                            controller, 0);
-  g_signal_connect_object (widget, "user-changed",
-                           G_CALLBACK (user_changed_cb), controller, 0);
   g_signal_connect_object (widget, "get-location",
                            G_CALLBACK (get_location_cb), controller, 0);
   g_signal_connect_object (widget, "get-title",

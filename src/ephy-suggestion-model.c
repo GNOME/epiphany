@@ -33,7 +33,7 @@ struct _EphySuggestionModel {
   EphyHistoryService   *history_service;
   EphyBookmarksManager *bookmarks_manager;
   GSequence            *items;
-  GSList               *search_terms;
+  gchar               **search_terms;
   GCancellable         *icon_cancellable;
 };
 
@@ -63,7 +63,7 @@ ephy_suggestion_model_finalize (GObject *object)
   g_cancellable_cancel (self->icon_cancellable);
   g_clear_object (&self->icon_cancellable);
 
-  g_slist_free_full (self->search_terms, (GDestroyNotify)g_regex_unref);
+  g_strfreev (self->search_terms);
 
   G_OBJECT_CLASS (ephy_suggestion_model_parent_class)->finalize (object);
 }
@@ -193,82 +193,11 @@ static void
 update_search_terms (EphySuggestionModel *self,
                      const char          *text)
 {
-  const char *current;
-  const char *ptr;
-  char *tmp;
-  char *term;
-  GRegex *term_regex;
-  GRegex *quote_regex;
-  gint count;
-  gboolean inside_quotes = FALSE;
-
   g_assert (EPHY_IS_SUGGESTION_MODEL (self));
 
-  if (self->search_terms) {
-    g_slist_free_full (self->search_terms, (GDestroyNotify)g_regex_unref);
-    self->search_terms = NULL;
-  }
+  g_strfreev (self->search_terms);
 
-  quote_regex = g_regex_new ("\"", G_REGEX_OPTIMIZE,
-                             G_REGEX_MATCH_NOTEMPTY, NULL);
-
-  /*
-   * This code loops through the string using pointer arythmetics.
-   * Although the string we are handling may contain UTF-8 chars
-   * this works because only ASCII chars affect what is actually
-   * copied from the string as a search term.
-   */
-  for (count = 0, current = ptr = text; ptr[0] != '\0'; ptr++, count++) {
-    /*
-     * If we found a double quote character; we will
-     * consume bytes up until the next quote, or
-     * end of line;
-     */
-    if (ptr[0] == '"')
-      inside_quotes = !inside_quotes;
-
-    /*
-     * If we found a space, and we are not looking for a
-     * closing double quote, or if the next char is the
-     * end of the string, append what we have already as
-     * a search term.
-     */
-    if (((ptr[0] == ' ') && (!inside_quotes)) || ptr[1] == '\0') {
-      /*
-       * We special-case the end of the line because
-       * we would otherwise not copy the last character
-       * of the search string, since the for loop will
-       * stop before that.
-       */
-      if (ptr[1] == '\0')
-        count++;
-
-      /*
-       * remove quotes, and quote any regex-sensitive
-       * characters
-       */
-      tmp = g_regex_escape_string (current, count);
-      term = g_regex_replace (quote_regex, tmp, -1, 0,
-                              "", G_REGEX_MATCH_NOTEMPTY, NULL);
-      g_strstrip (term);
-      g_free (tmp);
-
-      /* we don't want empty search terms */
-      if (term[0] != '\0') {
-        term_regex = g_regex_new (term,
-                                  G_REGEX_CASELESS | G_REGEX_OPTIMIZE,
-                                  G_REGEX_MATCH_NOTEMPTY, NULL);
-        self->search_terms = g_slist_append (self->search_terms, term_regex);
-      }
-      g_free (term);
-
-      /* count will be incremented by the for loop */
-      count = -1;
-      current = ptr + 1;
-    }
-  }
-
-  g_regex_unref (quote_regex);
+  self->search_terms = g_strsplit (text, " ", -1);
 }
 
 static gboolean
@@ -280,13 +209,13 @@ should_add_bookmark_to_model (EphySuggestionModel *self,
   gboolean ret = TRUE;
 
   if (self->search_terms) {
-    GSList *iter;
-    GRegex *current = NULL;
+    guint len = g_strv_length (self->search_terms);
+    guint i;
 
-    for (iter = self->search_terms; iter != NULL; iter = iter->next) {
-      current = (GRegex *)iter->data;
-      if ((!g_regex_match (current, title ? title : "", G_REGEX_MATCH_NOTEMPTY, NULL)) &&
-          (!g_regex_match (current, location ? location : "", G_REGEX_MATCH_NOTEMPTY, NULL))) {
+    for (i = 0; i < len; i++) {
+      gchar *str = self->search_terms[i];
+
+      if (!strstr (str, title ? title : "") && !strstr (str, location ? location : "")) {
         ret = FALSE;
         break;
       }
@@ -445,15 +374,15 @@ query_completed_cb (EphyHistoryService *service,
   query = g_task_get_task_data (task);
   urls = (GList *)result_data;
 
-  removed = g_sequence_get_length (self->items);
-
-  g_clear_pointer (&self->items, g_sequence_free);
-  self->items = g_sequence_new (g_object_unref);
-
   g_cancellable_cancel (self->icon_cancellable);
   g_clear_object (&self->icon_cancellable);
 
   self->icon_cancellable = g_cancellable_new ();
+
+  removed = g_sequence_get_length (self->items);
+
+  g_clear_pointer (&self->items, g_sequence_free);
+  self->items = g_sequence_new (g_object_unref);
 
   if (strlen (query) > 0) {
     added = add_bookmarks (self, query);
