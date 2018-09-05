@@ -129,6 +129,7 @@ complete_request (GObject      *object,
   char **results;
   GError *error;
   error = NULL;
+
   results = gather_results_finish (self, result, &error);
 
   if (results) {
@@ -180,6 +181,7 @@ handle_get_result_metas (EphyShellSearchProvider2 *skeleton,
 {
   int i;
   GVariantBuilder builder;
+
   g_application_hold (G_APPLICATION (self));
   g_cancellable_cancel (self->cancellable);
 
