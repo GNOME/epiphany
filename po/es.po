@@ -13,15 +13,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: epiphany.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
-"POT-Creation-Date: 2018-07-01 22:45+0000\n"
-"PO-Revision-Date: 2018-07-09 08:40+0200\n"
+"POT-Creation-Date: 2018-09-04 06:13+0000\n"
+"PO-Revision-Date: 2018-09-05 11:04+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
@@ -56,8 +56,8 @@ msgstr "La página web de GNOME mostrada en GNOME Web"
 msgid "The GNOME Project"
 msgstr "El proyecto GNOME"
 
-#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:188
-#: embed/ephy-about-handler.c:219 src/ephy-main.c:103 src/ephy-main.c:275
+#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:189
+#: embed/ephy-about-handler.c:223 src/ephy-main.c:103 src/ephy-main.c:275
 #: src/ephy-main.c:417 src/window-commands.c:652
 msgid "Web"
 msgstr "Web"
@@ -926,46 +926,50 @@ msgstr "Versión %s"
 msgid "About Web"
 msgstr "Acerca de Web"
 
-#: embed/ephy-about-handler.c:190
+#: embed/ephy-about-handler.c:191 src/window-commands.c:654
+msgid "Epiphany Technology Preview"
+msgstr "Tecnología de vista previa de Epiphany"
+
+#: embed/ephy-about-handler.c:194
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Una vista simple, limpia y bonita de la web"
 
-#: embed/ephy-about-handler.c:248 embed/ephy-about-handler.c:249
+#: embed/ephy-about-handler.c:252 embed/ephy-about-handler.c:253
 msgid "Applications"
 msgstr "Aplicaciones"
 
-#: embed/ephy-about-handler.c:250
+#: embed/ephy-about-handler.c:254
 msgid "List of installed web applications"
 msgstr "Lista de las aplicaciones web instaladas"
 
-#: embed/ephy-about-handler.c:264
+#: embed/ephy-about-handler.c:268
 msgid "Delete"
 msgstr "Eliminar"
 
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:266
+#: embed/ephy-about-handler.c:270
 msgid "Installed on:"
 msgstr "Instalada el:"
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:356
+#: embed/ephy-about-handler.c:360
 msgid "Welcome to Web"
 msgstr "Bienvenido a Web"
 
-#: embed/ephy-about-handler.c:356
+#: embed/ephy-about-handler.c:360
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr "Empiece a navegar y los sitios que más visite aparecerán aquí."
 
-#: embed/ephy-about-handler.c:382
+#: embed/ephy-about-handler.c:386
 #: embed/web-extension/resources/js/overview.js:101
 msgid "Remove from overview"
 msgstr "Quitar de la vista general"
 
-#: embed/ephy-about-handler.c:456 embed/ephy-about-handler.c:457
+#: embed/ephy-about-handler.c:460 embed/ephy-about-handler.c:461
 msgid "Private Browsing"
 msgstr "Navegación privada"
 
-#: embed/ephy-about-handler.c:458
+#: embed/ephy-about-handler.c:462
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -976,14 +980,14 @@ msgstr ""
 "información almacenada se limpiará cuando cierre la ventana. Los archivos "
 "que descargue se conservarán."
 
-#: embed/ephy-about-handler.c:462
+#: embed/ephy-about-handler.c:466
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "El modo de incógnito oculta su actividad sólo ante la gente que use este "
 "mismo equipo."
 
-#: embed/ephy-about-handler.c:464
+#: embed/ephy-about-handler.c:468
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1381,15 +1385,15 @@ msgstr "Busca la siguiente aparición de la cadena de búsqueda"
 msgid "%s is not a valid URI"
 msgstr "%s no es un URI válido"
 
-#: embed/ephy-web-view.c:542
+#: embed/ephy-web-view.c:543
 msgid "Not No_w"
 msgstr "Ahora _no"
 
-#: embed/ephy-web-view.c:543
+#: embed/ephy-web-view.c:544
 msgid "_Never Save"
 msgstr "_Nunca guardar"
 
-#: embed/ephy-web-view.c:544 lib/widgets/ephy-file-chooser.c:121
+#: embed/ephy-web-view.c:545 lib/widgets/ephy-file-chooser.c:121
 #: src/resources/gtk/prefs-dialog.ui:1154 src/window-commands.c:454
 msgid "_Save"
 msgstr "_Guardar"
@@ -1397,13 +1401,13 @@ msgstr "_Guardar"
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:555
+#: embed/ephy-web-view.c:556
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "¿Quiere guardar la contraseña para «%s»?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:829
+#: embed/ephy-web-view.c:830
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
@@ -1411,50 +1415,59 @@ msgstr ""
 "Advertencia: este formulario no es seguro. Si escribe su contraseña, no se "
 "mantendrá en privado."
 
-#: embed/ephy-web-view.c:1536
+#: embed/ephy-web-view.c:1136
+msgid "Web process crashed"
+msgstr "El proceso web ha fallado"
+
+#: embed/ephy-web-view.c:1139
+msgid "Web process terminated due to exceeding memory limit"
+msgstr ""
+"El proceso web ha terminado debido a que ha superado el límite de memoria"
+
+#: embed/ephy-web-view.c:1548
 msgid "Deny"
 msgstr "Denegar"
 
-#: embed/ephy-web-view.c:1537
+#: embed/ephy-web-view.c:1549
 msgid "Allow"
 msgstr "Permitir"
 
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1554
+#: embed/ephy-web-view.c:1566
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "La página %s quiere mostrar notificaciones en el escritorio."
 
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1559
+#: embed/ephy-web-view.c:1571
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "La página %s quiere saber su ubicación."
 
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1564
+#: embed/ephy-web-view.c:1576
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "La página %s quiere usar su micrófono."
 
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1569
+#: embed/ephy-web-view.c:1581
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "La página %s quiere usar su cámara web."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1748
+#: embed/ephy-web-view.c:1760
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
-#: embed/ephy-web-view.c:1750
+#: embed/ephy-web-view.c:1762
 msgid "Loading…"
 msgstr "Cargando…"
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2026
+#: embed/ephy-web-view.c:2041
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
@@ -1462,7 +1475,7 @@ msgstr ""
 "diferente."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2031
+#: embed/ephy-web-view.c:2046
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1471,14 +1484,14 @@ msgstr ""
 "Compruebe la fecha en el calendario de su equipo."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2036
+#: embed/ephy-web-view.c:2051
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "La identificación de este sitio web no la ha emitido una organización de "
 "confianza."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2041
+#: embed/ephy-web-view.c:2056
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
@@ -1486,7 +1499,7 @@ msgstr ""
 "corrupta."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2046
+#: embed/ephy-web-view.c:2061
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1495,7 +1508,7 @@ msgstr ""
 "revocado."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2051
+#: embed/ephy-web-view.c:2066
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1504,7 +1517,7 @@ msgstr ""
 "cifrado muy débil."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:2056
+#: embed/ephy-web-view.c:2071
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1514,24 +1527,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2119 embed/ephy-web-view.c:2175
+#: embed/ephy-web-view.c:2134 embed/ephy-web-view.c:2190
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problema al cargar la página"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2122
+#: embed/ephy-web-view.c:2137
 msgid "Unable to display this website"
 msgstr "No se puede mostrar esta página web"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2126
+#: embed/ephy-web-view.c:2141
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "El sitio en %s parece no estar disponible."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2130
+#: embed/ephy-web-view.c:2145
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1541,7 +1554,7 @@ msgstr ""
 "funcionando correctamente."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2140
+#: embed/ephy-web-view.c:2155
 #, c-format
 msgid "The precise error was: %s"
 msgstr "El error concreto es: %s"
@@ -1549,70 +1562,70 @@ msgstr "El error concreto es: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2145 embed/ephy-web-view.c:2198
-#: embed/ephy-web-view.c:2241
+#: embed/ephy-web-view.c:2160 embed/ephy-web-view.c:2213
+#: embed/ephy-web-view.c:2256
 msgid "Reload"
 msgstr "Recargar"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2148 embed/ephy-web-view.c:2201
-#: embed/ephy-web-view.c:2244
+#: embed/ephy-web-view.c:2163 embed/ephy-web-view.c:2216
+#: embed/ephy-web-view.c:2259
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "R"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2178
+#: embed/ephy-web-view.c:2193
 msgid "Oops! There may be a problem"
 msgstr "Es posible que haya un problema"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2182
+#: embed/ephy-web-view.c:2197
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "La página %s puede haber causado que Web se cerrase inesperadamente."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2189
+#: embed/ephy-web-view.c:2204
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr ""
 "Si esto vuelve a suceder, informe del error a los desarrolladores de %s."
 
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2227
+#: embed/ephy-web-view.c:2242
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problema al mostrar la página"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2230
+#: embed/ephy-web-view.c:2245
 msgid "Oops!"
 msgstr "¡Ups!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2233
+#: embed/ephy-web-view.c:2248
 msgid "Something went wrong while displaying this page."
 msgstr "Algo salió mal al mostrar esta página."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2235
+#: embed/ephy-web-view.c:2250
 msgid "Please reload or visit a different page to continue."
 msgstr "Recargue la página o visite una página diferente para continuar."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2270
+#: embed/ephy-web-view.c:2285
 #, c-format
 msgid "Security Violation"
 msgstr "Violación de seguridad"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2273
+#: embed/ephy-web-view.c:2288
 msgid "This Connection is Not Secure"
 msgstr "Esta conexión no es segura"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2277
+#: embed/ephy-web-view.c:2292
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1623,42 +1636,42 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2287 embed/ephy-web-view.c:2376
+#: embed/ephy-web-view.c:2302 embed/ephy-web-view.c:2391
 msgid "Go Back"
 msgstr "Atrás"
 
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2290 embed/ephy-web-view.c:2379
+#: embed/ephy-web-view.c:2305 embed/ephy-web-view.c:2394
 msgctxt "back-access-key"
 msgid "B"
 msgstr "B"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2293 embed/ephy-web-view.c:2382
+#: embed/ephy-web-view.c:2308 embed/ephy-web-view.c:2397
 msgid "Accept Risk and Proceed"
 msgstr "Aceptar riesgo y seguir"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2297 embed/ephy-web-view.c:2386
+#: embed/ephy-web-view.c:2312 embed/ephy-web-view.c:2401
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "P"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2327
+#: embed/ephy-web-view.c:2342
 #, c-format
 msgid "Security Warning"
 msgstr "Advertencia de seguridad"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2330
+#: embed/ephy-web-view.c:2345
 msgid "Unsafe website detected!"
 msgstr "Sitio web no seguro detectado"
 
-#: embed/ephy-web-view.c:2337
+#: embed/ephy-web-view.c:2352
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1667,7 +1680,7 @@ msgstr ""
 "Visitar %s puede dañar su equipo. Esta página puede contener código "
 "malicioso que se puede descargar en su equipo sin su consentimiento."
 
-#: embed/ephy-web-view.c:2341
+#: embed/ephy-web-view.c:2356
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
@@ -1676,7 +1689,7 @@ msgstr ""
 "Puede aprender más sobre el contenido web malicioso incluyendo virus y otro "
 "código malicioso y sobre cómo proteger su equipo en %s."
 
-#: embed/ephy-web-view.c:2348
+#: embed/ephy-web-view.c:2363
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
@@ -1687,7 +1700,7 @@ msgstr ""
 "como instalar software o desvelar su información personal (por ejemplo, "
 "contraseñas, números de teléfono o tarjetas de crédito)."
 
-#: embed/ephy-web-view.c:2353
+#: embed/ephy-web-view.c:2368
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
@@ -1695,7 +1708,7 @@ msgstr ""
 "Puede encontrar más información sobre la ingeniería social (phishing) en %s "
 "o desde %s."
 
-#: embed/ephy-web-view.c:2362
+#: embed/ephy-web-view.c:2377
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
@@ -1707,20 +1720,20 @@ msgstr ""
 "ejemplo, cambiando su página de inicio o mostrando anuncios en las páginas "
 "que visite)."
 
-#: embed/ephy-web-view.c:2367
+#: embed/ephy-web-view.c:2382
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "Puede aprender más sobre el software no deseado en %s."
 
-#: embed/ephy-web-view.c:2442
+#: embed/ephy-web-view.c:2457
 msgid "None specified"
 msgstr "Ninguna espacificada"
 
-#: embed/ephy-web-view.c:2547
+#: embed/ephy-web-view.c:2562
 msgid "Technical information"
 msgstr "Información técnica"
 
-#: embed/ephy-web-view.c:3427
+#: embed/ephy-web-view.c:3447
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -2056,20 +2069,20 @@ msgstr "Todos los archivos"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:673 src/ephy-history-dialog.c:262
+#: lib/widgets/ephy-location-entry.c:688 src/ephy-history-dialog.c:262
 msgid "Cl_ear"
 msgstr "_Limpiar"
 
-#: lib/widgets/ephy-location-entry.c:693
+#: lib/widgets/ephy-location-entry.c:708
 msgid "Paste and _Go"
 msgstr "Pegar e _ir"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:714 src/ephy-window.c:831
+#: lib/widgets/ephy-location-entry.c:729 src/ephy-window.c:831
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: lib/widgets/ephy-location-entry.c:721
+#: lib/widgets/ephy-location-entry.c:736
 msgid "_Redo"
 msgstr "_Rehacer"
 
@@ -2182,7 +2195,7 @@ msgstr "Datos de complementos"
 msgid "Reload the current page"
 msgstr "Recargar la página actual"
 
-#: src/ephy-action-bar-start.c:521
+#: src/ephy-action-bar-start.c:523
 msgid "Stop loading the current page"
 msgstr "Detener la carga de la página actual"
 
@@ -2226,7 +2239,7 @@ msgstr "Cargar el archivo de sesiones dado"
 msgid "Add a bookmark"
 msgstr "Añadir un marcador"
 
-#: src/ephy-main.c:121 src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#: src/ephy-main.c:121
 msgid "URL"
 msgstr "URL"
 
@@ -2462,7 +2475,7 @@ msgid "Last synchronized: %s"
 msgstr "Última sincronización: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:296 src/prefs-dialog.c:2117
+#: src/prefs-dialog.c:296 src/prefs-dialog.c:2119
 #, c-format
 msgid "Logged in as %s"
 msgstr "Sesión iniciada como %s"
@@ -2471,11 +2484,11 @@ msgstr "Sesión iniciada como %s"
 msgid "Something went wrong, please try again later."
 msgstr "Algo salió mal, inténtelo de nuevo más tarde."
 
-#: src/prefs-dialog.c:826
+#: src/prefs-dialog.c:828
 msgid "Web Application Icon"
 msgstr "Icono de aplicación web"
 
-#: src/prefs-dialog.c:831
+#: src/prefs-dialog.c:833
 msgid "Supported Image Files"
 msgstr "Archivos de imagen soportados"
 
@@ -2483,7 +2496,7 @@ msgstr "Archivos de imagen soportados"
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:1257 src/prefs-dialog.c:1261
+#: src/prefs-dialog.c:1259 src/prefs-dialog.c:1263
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2492,24 +2505,24 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1268
+#: src/prefs-dialog.c:1270
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Definido por el usuario (%s)"
 
-#: src/prefs-dialog.c:1290
+#: src/prefs-dialog.c:1292
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
 msgstr[0] "Idioma del sistema (%s)"
 msgstr[1] "Idiomas del sistema (%s)"
 
-#: src/prefs-dialog.c:1533 src/resources/gtk/prefs-dialog.ui:861
+#: src/prefs-dialog.c:1535 src/resources/gtk/prefs-dialog.ui:861
 msgid "Language"
 msgstr "Idioma"
 
-#: src/prefs-dialog.c:1611
+#: src/prefs-dialog.c:1613
 msgid "Select a directory"
 msgstr "Seleccione una carpeta"
 
@@ -2725,8 +2738,7 @@ msgstr ""
 "No puede deshacer esta acción. Los datos que está seleccionando para limpiar "
 "se perderán para siempre."
 
-#: src/resources/gtk/cookies-dialog.ui:31
-#: src/resources/gtk/prefs-dialog.ui:577
+#: src/resources/gtk/cookies-dialog.ui:31 src/resources/gtk/prefs-dialog.ui:577
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -2823,7 +2835,12 @@ msgid "_Close"
 msgstr "_Cerrar"
 
 #: src/resources/gtk/page-menu-popover.ui:21
+msgid "Zoom Out"
+msgstr "Reducir"
+
 #: src/resources/gtk/page-menu-popover.ui:22
+#| msgid "Zoom Out"
+msgctxt "tooltip"
 msgid "Zoom Out"
 msgstr "Reducir"
 
@@ -2832,7 +2849,12 @@ msgid "Restore Zoom"
 msgstr "Restaurar ampliación"
 
 #: src/resources/gtk/page-menu-popover.ui:53
+msgid "Zoom In"
+msgstr "Ampliar"
+
 #: src/resources/gtk/page-menu-popover.ui:54
+#| msgid "Zoom In"
+msgctxt "tooltip"
 msgid "Zoom In"
 msgstr "Ampliar"
 
@@ -3453,6 +3475,12 @@ msgstr ""
 "aplicación Web. Si omite el esquema URL se usará el del URL cargado "
 "actualmente."
 
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#| msgid "URL"
+msgctxt "Column header in the Additional URLs dialog"
+msgid "URL"
+msgstr "URL"
+
 #: src/resources/gtk/webapp-additional-urls-dialog.ui:124
 msgid "Add new URL"
 msgstr "Añadir URL nuevo"
@@ -3548,10 +3576,6 @@ msgid ""
 msgstr ""
 "Una vista simple, limpia y bonita de la web.\n"
 "Basado en WebKitGTK+ %d.%d.%d"
-
-#: src/window-commands.c:654
-msgid "Epiphany Technology Preview"
-msgstr "Tecnología de vista previa de Epiphany"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
