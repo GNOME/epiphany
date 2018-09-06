@@ -68,6 +68,7 @@ struct _EphyLocationEntry {
   GBinding *paste_binding;
 
   GtkPopover *add_bookmark_popover;
+  GtkCssProvider *css_provider;
 
   gboolean reader_mode_active;
 
@@ -84,6 +85,7 @@ struct _EphyLocationEntry {
 
   guint hash;
 
+  guint allocation_width;
   guint progress_timeout;
   gdouble progress_fraction;
 
@@ -395,6 +397,8 @@ ephy_location_entry_dispose (GObject *object)
     g_source_remove (entry->progress_timeout);
     entry->progress_timeout = 0;
   }
+
+  g_clear_object (&entry->css_provider);
 
   G_OBJECT_CLASS (ephy_location_entry_parent_class)->dispose (object);
 }
@@ -784,12 +788,15 @@ bookmark_icon_button_press_event_cb (GtkWidget           *entry,
 static void
 button_box_size_allocated_cb (GtkWidget    *widget,
                               GdkRectangle *allocation,
-                              gint          baseline,
-                              GdkRectangle *out_clip,
                               gpointer      user_data)
 {
-  GtkCssProvider *css_provider = gtk_css_provider_new();
+  EphyLocationEntry *lentry = EPHY_LOCATION_ENTRY (user_data);
   gchar *css;
+
+  if (lentry->allocation_width == allocation->width)
+    return;
+
+  lentry->allocation_width = allocation->width;
 
   /* We are using the CSS provider here to solve UI displaying issues:
    *  - padding-right is used to prevent text below the icons on the right side
@@ -800,15 +807,10 @@ button_box_size_allocated_cb (GtkWidget    *widget,
    */
   css = g_strdup_printf (".url_entry { padding-right: %dpx; }"\
                          ".url_entry progress { margin-right: -%dpx; }",
-                         allocation->width + 5,
-                         allocation->width);
-  gtk_css_provider_load_from_data (css_provider, css, -1, NULL);
+                         lentry->allocation_width + 5,
+                         lentry->allocation_width);
+  gtk_css_provider_load_from_data (lentry->css_provider, css, -1, NULL);
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (css_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-  g_object_unref (css_provider);
   g_free (css);
 }
 
@@ -822,6 +824,12 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
 
   /* URL entry */
   entry->url_entry = gtk_entry_new ();
+
+  /* Add special widget css provider */
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry->url_entry));
+  entry->css_provider = gtk_css_provider_new ();
+  gtk_style_context_add_provider (context, GTK_STYLE_PROVIDER (entry->css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
   gtk_style_context_add_class (gtk_widget_get_style_context (entry->url_entry), "url_entry");
   g_signal_connect (G_OBJECT (entry->url_entry), "copy-clipboard", G_CALLBACK (ephy_location_entry_copy_clipboard), NULL);
   g_signal_connect (G_OBJECT (entry->url_entry), "cut-clipboard", G_CALLBACK (ephy_location_entry_cut_clipboard), NULL);
@@ -831,7 +839,7 @@ ephy_location_entry_construct_contents (EphyLocationEntry *entry)
   /* Button Box */
   button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_set_homogeneous (GTK_BOX (button_box), FALSE);
-  g_signal_connect (G_OBJECT (button_box), "size-allocate", G_CALLBACK (button_box_size_allocated_cb), NULL);
+  g_signal_connect (G_OBJECT (button_box), "size-allocate", G_CALLBACK (button_box_size_allocated_cb), entry);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (button_box), GTK_BUTTONBOX_EXPAND);
   gtk_widget_set_halign (button_box, GTK_ALIGN_END);
   gtk_widget_set_margin_end (button_box, 5);
