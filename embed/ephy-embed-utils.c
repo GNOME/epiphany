@@ -205,19 +205,25 @@ ephy_embed_utils_address_is_valid (const char *address)
 {
   char *scheme;
   gboolean retval;
+  GAppInfo *info = NULL;
 
   if (!address)
     return FALSE;
 
   scheme = g_uri_parse_scheme (address);
 
-  retval = scheme ||
+  if (scheme != NULL) {
+    info = g_app_info_get_default_for_uri_scheme (scheme);
+    g_free (scheme);
+  }
+
+  retval = info ||
            ephy_embed_utils_address_is_existing_absolute_filename (address) ||
            g_regex_match (get_non_search_regex (), address, 0, NULL) ||
            is_public_domain (address) ||
            is_bang_search (address);
 
-  g_free (scheme);
+  g_clear_object (&info);
 
   return retval;
 }
