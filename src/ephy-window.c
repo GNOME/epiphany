@@ -101,6 +101,7 @@ const struct {
   { "win.encoding", { NULL } },
   { "win.page-source", { "<Primary>U", NULL } },
   { "win.toggle-inspector", { "<shift><Primary>I", "F12", NULL } },
+  { "win.toggle-reader-mode", { "<Primary><shift>r", NULL } },
 
   { "win.select-all", { "<Primary>A", NULL } },
 
@@ -748,6 +749,7 @@ static const GActionEntry window_entries [] =
   { "encoding", window_cmd_encoding },
   { "page-source", window_cmd_page_source },
   { "toggle-inspector", window_cmd_toggle_inspector },
+  { "toggle-reader-mode", window_cmd_toggle_reader_mode },
 
   { "select-all", window_cmd_select_all },
 
@@ -1782,6 +1784,7 @@ web_view_ready_cb (WebKitWebView *web_view,
   using_new_window = window != parent_view_window;
 
   if (using_new_window) {
+    g_print ("%s(): Called\n", __FUNCTION__);
     ephy_window_configure_for_view (window, web_view);
     g_signal_emit_by_name (parent_web_view, "new-window", web_view);
   }
