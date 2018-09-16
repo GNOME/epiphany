@@ -3,22 +3,22 @@
 # This file is distributed under the same license as the epiphany package.
 # Marcel Telka <marcel@telka.sk>, 2003, 2004, 2005.
 # Dušan Kazik <prescott66@gmail.com>, 2012, 2015.
+# Peter Vágner <pvagner@pvagner.tk>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: epiphany\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
-"product=epiphany&keywords=I18N+L10N&component=I18N\n"
-"POT-Creation-Date: 2018-03-05 15:18+0000\n"
-"PO-Revision-Date: 2018-03-18 15:34+0100\n"
-"Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/epiphany/issues\n"
+"POT-Creation-Date: 2018-08-28 17:28+0000\n"
+"PO-Revision-Date: 2018-09-13 15:01+0200\n"
+"Last-Translator: Peter Vágner <pvagner@pvagner.tk>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: data/org.gnome.Epiphany.appdata.xml.in:6
 msgid "GNOME Web"
@@ -57,9 +57,9 @@ msgstr "Projekt GNOME"
 
 # https://bugzilla.gnome.org/show_bug.cgi?id=687595
 # desktop entry name
-#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:296
-#: embed/ephy-about-handler.c:327 src/ephy-main.c:103 src/ephy-main.c:275
-#: src/ephy-main.c:417 src/window-commands.c:651
+#: data/org.gnome.Epiphany.desktop.in:3 embed/ephy-about-handler.c:189
+#: embed/ephy-about-handler.c:223 src/ephy-main.c:103 src/ephy-main.c:275
+#: src/ephy-main.c:417 src/window-commands.c:652
 msgid "Web"
 msgstr "Web"
 
@@ -114,6 +114,8 @@ msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "search-engines instead."
 msgstr ""
+"ZAVRHNUTÉ: Tento kľúč je zavrhnutý a ignorovaný. Namiesto neho používajte "
+"prosím /org/gnome/epiphany/search-engines ."
 
 # gsettings summary
 #: data/org.gnome.epiphany.gschema.xml:26
@@ -122,7 +124,7 @@ msgstr "Predvolený nástroj na vyhľadávanie."
 
 #: data/org.gnome.epiphany.gschema.xml:27
 msgid "Name of the search engine selected by default."
-msgstr ""
+msgstr "Názov predvolene vybratého nástroja na vyhľadávanie."
 
 #: data/org.gnome.epiphany.gschema.xml:30
 msgid ""
@@ -141,16 +143,18 @@ msgid ""
 "List of the default search engines. It is an array in which each search "
 "engine is described by a name, an address, and a bang (shortcut)."
 msgstr ""
+"Zoznam predvolených nástrojov na vyhľadávanie. Je to pole nástrojov, kde pre "
+"každý nástroj je uvedený jeho názov, URL adresa a skrátený príkaz s "
+"výkričnikom na začiatku."
 
 # gsettings summary
 #: data/org.gnome.epiphany.gschema.xml:42
-#: data/org.gnome.epiphany.gschema.xml:202
+#: data/org.gnome.epiphany.gschema.xml:197
 msgid "User agent"
 msgstr "Používateľský agent"
 
 # gsettings description
 #: data/org.gnome.epiphany.gschema.xml:43
-#, fuzzy
 #| msgid ""
 #| "String that will be used as user agent, to identify the browser to the "
 #| "web servers."
@@ -160,71 +164,62 @@ msgid ""
 "epiphany/web/user-agent instead."
 msgstr ""
 "Reťazec, ktorý bude použitý ako agent používateľa, kvôli rozpoznaniu "
-"prehliadača webovými servermi."
+"prehliadača webovými servermi. ZAVRHNUTÉ: Tento kľúč je zavrhnutý a "
+"ignorovaný. Namiesto neho prosím použite /org/gnome/epiphany/web/user-agent ."
 
 # gsettings summary
 #: data/org.gnome.epiphany.gschema.xml:51
-msgid "Automatic downloads"
-msgstr "Automatické preberanie"
-
-# DK: momentalny preklad default priecinka je "Stiahnuté".prepise sa na "Prebraté" po zjednotení prekladu slova "download"
-# gsettings description
-#: data/org.gnome.epiphany.gschema.xml:52
-msgid ""
-"When files cannot be opened by the browser they are automatically downloaded "
-"to the download folder and opened with the appropriate application."
-msgstr ""
-"Keď súbory nemôžu byť otvorené pomocou prehliadača, sú automaticky prevzaté "
-"do priečinka „Stiahnuté“ a otvorené pomocou príslušnej aplikácie."
-
-# gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:56
 msgid "Force new windows to be opened in tabs"
 msgstr "Vynútiť otvorenie nových okien na kartách"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:57
+#: data/org.gnome.epiphany.gschema.xml:52
 msgid ""
 "Force new window requests to be opened in tabs instead of using a new window."
 msgstr "Vynúti otvorenie stránok na kartách namiesto otvorenia v novom okne."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:61
-#: data/org.gnome.epiphany.gschema.xml:217
+#: data/org.gnome.epiphany.gschema.xml:56
+#: data/org.gnome.epiphany.gschema.xml:212
 msgid "Remember passwords"
 msgstr "Zapamätať heslá"
 
-#: data/org.gnome.epiphany.gschema.xml:62
+#: data/org.gnome.epiphany.gschema.xml:57
 msgid ""
 "Whether to store and prefill passwords in websites. DEPRECATED: This key is "
 "deprecated and ignored. Use /org/gnome/epiphany/web/remember-passwords "
 "instead."
 msgstr ""
+"Určuje, Či sa budú uchovávať a predvypĺňať heslá na webových stránkach. "
+"ZAVRHNUTÉ: Tento kľúč je zavrhnutý a ignorovaný. Namiesto neho používajte "
+"prosím /org/gnome/epiphany/web/remember-passwords ."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:73
-#: data/org.gnome.epiphany.gschema.xml:197
+#: data/org.gnome.epiphany.gschema.xml:68
+#: data/org.gnome.epiphany.gschema.xml:192
 msgid "Enable smooth scrolling"
 msgstr "Povoliť plynulé rolovanie"
 
-#: data/org.gnome.epiphany.gschema.xml:74
+#: data/org.gnome.epiphany.gschema.xml:69
 msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/web/"
 "enable-smooth-scrolling instead."
 msgstr ""
+"ZAVRHNUTÉ: Tento kľúč je zavrhnutý a ignorovaný. Namiesto neho používajte "
+"prosím /org/gnome/epiphany/web/enable-smooth-scrolling ."
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:80
+#: data/org.gnome.epiphany.gschema.xml:75
 msgid "Don’t use an external application to view page source."
 msgstr "Nepoužiť externú aplikáciu na zobrazenie zdrojového kódu stránky."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:84
+#: data/org.gnome.epiphany.gschema.xml:79
 msgid "Whether to automatically restore the last session"
 msgstr "Určuje, či sa má automaticky obnoviť posledná relácia"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:85
+#: data/org.gnome.epiphany.gschema.xml:80
 msgid ""
 "Defines how the session will be restored during startup. Allowed values are "
 "“always” (the previous state of the application is always restored), "
@@ -237,16 +232,16 @@ msgstr ""
 "stránka)."
 
 # summary
-#: data/org.gnome.epiphany.gschema.xml:89
+#: data/org.gnome.epiphany.gschema.xml:84
 msgid ""
 "Whether to delay loading of tabs that are not immediately visible on session "
 "restore"
 msgstr ""
-"Určiť, či sa má odložiť načítanie kariet, ktoré nie sú okamžite viditeľné "
+"Určuje, či sa má odložiť načítanie kariet, ktoré nie sú okamžite viditeľné "
 "pri obnovení relácie"
 
 # description
-#: data/org.gnome.epiphany.gschema.xml:90
+#: data/org.gnome.epiphany.gschema.xml:85
 msgid ""
 "When this option is set to true, tabs will not start loading until the user "
 "switches to them, upon session restore."
@@ -254,13 +249,13 @@ msgstr ""
 "Keď je táto voľba nastavená na hodnotu true, po obnovení relácie nebude "
 "spustené načítanie kariet, až pokiaľ používateľ na ne neprepne."
 
-#: data/org.gnome.epiphany.gschema.xml:94
+#: data/org.gnome.epiphany.gschema.xml:89
 msgid "Process model"
 msgstr "Model procesov"
 
 # DK: uvodzovky
 # PV: „“
-#: data/org.gnome.epiphany.gschema.xml:95
+#: data/org.gnome.epiphany.gschema.xml:90
 msgid ""
 "This option allows to set the process model used. Use “shared-secondary-"
 "process” to use a single web process shared by all the tabs and “one-"
@@ -270,7 +265,7 @@ msgstr ""
 "process“ ak chcete použiť spoločný proces pre všetky karty a „one-secondary-"
 "process-per-web-view“ ak chcete pre každú kartu použiť samostatný proces."
 
-#: data/org.gnome.epiphany.gschema.xml:99
+#: data/org.gnome.epiphany.gschema.xml:94
 msgid ""
 "Maximum number of web processes created at the same time when using “one-"
 "secondary-process-per-web-view” model"
@@ -279,7 +274,7 @@ msgstr ""
 "modelu „one-secondary-process-per-web-view“(jeden druhoradý proces na jedno "
 "zobrazenie webu)"
 
-#: data/org.gnome.epiphany.gschema.xml:100
+#: data/org.gnome.epiphany.gschema.xml:95
 msgid ""
 "This option sets a limit to the number of web processes that will be used at "
 "the same time for the “one-secondary-process-per-web-view” model. The "
@@ -290,20 +285,22 @@ msgstr ""
 "druhoradý proces na jedno zobrazenie webu). Predvolená hodnota je „0“ a "
 "znamená bez obmedzenia."
 
-#: data/org.gnome.epiphany.gschema.xml:105
+#: data/org.gnome.epiphany.gschema.xml:100
 msgid "List of adblock filters"
-msgstr ""
+msgstr "Zoznam filtrov adblock"
 
-#: data/org.gnome.epiphany.gschema.xml:106
+#: data/org.gnome.epiphany.gschema.xml:101
 msgid "List of URLs with filter rules to be used by the adblock."
 msgstr ""
+"Zoznam URL adries obsahujúce pravidlá filtrovania adblock, ktoré budú "
+"použité na blokovanie reklám."
 
-#: data/org.gnome.epiphany.gschema.xml:112
+#: data/org.gnome.epiphany.gschema.xml:107
 msgid "Expand tabs size to fill the available space on the tabs bar."
 msgstr ""
 "Zväčšiť veľkosť kariet tak, aby vyplnili dostupné miesto v paneli kariet."
 
-#: data/org.gnome.epiphany.gschema.xml:113
+#: data/org.gnome.epiphany.gschema.xml:108
 msgid ""
 "If enabled the tabs will expand to use the entire available space in the "
 "tabs bar."
@@ -312,12 +309,12 @@ msgstr ""
 "paneli kariet."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:117
+#: data/org.gnome.epiphany.gschema.xml:112
 msgid "The position of the tabs bar."
 msgstr "Pozícia panelu kariet."
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:118
+#: data/org.gnome.epiphany.gschema.xml:113
 msgid ""
 "Controls where the tabs bar is shown. Possible values are “top” (the "
 "default), “bottom”, “left” (vertical tabs with bar on the left) and "
@@ -328,12 +325,12 @@ msgstr ""
 "„right“ (zvislé karty s panelom vpravo)."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:122
+#: data/org.gnome.epiphany.gschema.xml:117
 msgid "The visibility policy for the tabs bar."
 msgstr "Zásady viditeľnosti panelu kariet."
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:123
+#: data/org.gnome.epiphany.gschema.xml:118
 msgid ""
 "Controls when the tabs bar is shown. Possible values are “always” (the tabs "
 "bar is always shown), “more-than-one” (the tabs bar is only shown if there’s "
@@ -345,27 +342,27 @@ msgstr ""
 "zobrazený)."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:129
+#: data/org.gnome.epiphany.gschema.xml:124
 msgid "Minimum font size"
 msgstr "Minimálna veľkosť písma"
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:133
+#: data/org.gnome.epiphany.gschema.xml:128
 msgid "Use GNOME fonts"
 msgstr "Použiť písma prostredia GNOME"
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:134
+#: data/org.gnome.epiphany.gschema.xml:129
 msgid "Use GNOME font settings."
 msgstr "Použiť nastavenie písma prostredia GNOME"
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:138
+#: data/org.gnome.epiphany.gschema.xml:133
 msgid "Custom sans-serif font"
 msgstr "Vlastné písmo typu sans-serif"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:139
+#: data/org.gnome.epiphany.gschema.xml:134
 msgid ""
 "A value to be used to override sans-serif desktop font when use-gnome-fonts "
 "is set."
@@ -374,12 +371,12 @@ msgstr ""
 "sans-serif pri použití nastavenia „use-gnome-fonts“."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:143
+#: data/org.gnome.epiphany.gschema.xml:138
 msgid "Custom serif font"
 msgstr "Vlastné písmo typu serif"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:144
+#: data/org.gnome.epiphany.gschema.xml:139
 msgid ""
 "A value to be used to override serif desktop font when use-gnome-fonts is "
 "set."
@@ -388,12 +385,12 @@ msgstr ""
 "serif pri použití nastavenia „use-gnome-fonts“."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:148
+#: data/org.gnome.epiphany.gschema.xml:143
 msgid "Custom monospace font"
 msgstr "Vlastné písmo typu monospace"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:149
+#: data/org.gnome.epiphany.gschema.xml:144
 msgid ""
 "A value to be used to override monospace desktop font when use-gnome-fonts "
 "is set."
@@ -402,56 +399,58 @@ msgstr ""
 "monospace pri použití nastavenia „use-gnome-fonts“."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:153
+#: data/org.gnome.epiphany.gschema.xml:148
 msgid "Use a custom CSS"
 msgstr "Použiť vlastné CSS"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:154
+#: data/org.gnome.epiphany.gschema.xml:149
 msgid "Use a custom CSS file to modify websites own CSS."
 msgstr ""
 "Použiť vlastný súbor štýlov CSS na úpravu pôvodných štýlov webovej stránky."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:158
+#: data/org.gnome.epiphany.gschema.xml:153
 msgid "Enable spell checking"
 msgstr "Povoliť kontrolu pravopisu"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:159
+#: data/org.gnome.epiphany.gschema.xml:154
 msgid "Spell check any text typed in editable areas."
 msgstr "Kontrolovať pravopis zadaného textu v upraviteľných oblastiach."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:163
+#: data/org.gnome.epiphany.gschema.xml:158
 msgid "Default encoding"
 msgstr "Predvolené kódovanie"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:164
+#: data/org.gnome.epiphany.gschema.xml:159
 msgid ""
 "Default encoding. Accepted values are the ones WebKitGTK+ can understand."
 msgstr ""
 "Predvolené kódovanie. Prijateľné hodnoty sú tie, ktoré rozpozná WebKitGTK+."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:168
-#: src/resources/gtk/prefs-dialog.ui:666
+#: data/org.gnome.epiphany.gschema.xml:163
+#: src/resources/gtk/prefs-dialog.ui:752
 msgid "Languages"
 msgstr "Jazyky"
 
-#: data/org.gnome.epiphany.gschema.xml:169
+#: data/org.gnome.epiphany.gschema.xml:164
 msgid ""
 "Preferred languages. Array of locale codes or “system” to use current locale."
 msgstr ""
+"Uprednostňované jazyky. Pole identifikátorov miestnych nastavení locale "
+"alebo slovo „system“ na použitie momentálnych miestnych nastavení."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:173
+#: data/org.gnome.epiphany.gschema.xml:168
 msgid "Cookie accept"
 msgstr "Prijímať cookies"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:174
+#: data/org.gnome.epiphany.gschema.xml:169
 msgid ""
 "Where to accept cookies from. Possible values are “always”, “no-third-party” "
 "and “never”."
@@ -460,12 +459,12 @@ msgstr ""
 "party“ (nikto ďalší) a „never“ (nikdy)."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:178
+#: data/org.gnome.epiphany.gschema.xml:173
 msgid "Allow popups"
 msgstr "Povoliť vyskakovacie okná"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:179
+#: data/org.gnome.epiphany.gschema.xml:174
 msgid ""
 "Allow sites to open new windows using JavaScript (if JavaScript is enabled)."
 msgstr ""
@@ -473,37 +472,37 @@ msgstr ""
 "povolený)."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:183
+#: data/org.gnome.epiphany.gschema.xml:178
 msgid "Enable Plugins"
 msgstr "Povoliť zásuvné moduly"
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:187
+#: data/org.gnome.epiphany.gschema.xml:182
 msgid "Enable WebGL"
 msgstr "Povoliť WebGL"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:188
+#: data/org.gnome.epiphany.gschema.xml:183
 msgid "Whether to enable support for WebGL contexts."
 msgstr "Určuje, či sa má povoliť podpora pre kontexty WebGL."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:192
+#: data/org.gnome.epiphany.gschema.xml:187
 msgid "Enable WebAudio"
 msgstr "Povoliť WebAudio"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:193
+#: data/org.gnome.epiphany.gschema.xml:188
 msgid "Whether to enable support for WebAudio."
 msgstr "Určuje, či sa má povoliť podpora pre WebAudio."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:198
+#: data/org.gnome.epiphany.gschema.xml:193
 msgid "Whether to enable smooth scrolling."
 msgstr "Určuje, či sa má povoliť plynulé rolovanie."
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:203
+#: data/org.gnome.epiphany.gschema.xml:198
 msgid ""
 "String that will be used as user agent, to identify the browser to the web "
 "servers."
@@ -512,79 +511,116 @@ msgstr ""
 "prehliadača webovými servermi."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:207
+#: data/org.gnome.epiphany.gschema.xml:202
 msgid "Do Not Track"
 msgstr "Nesledovať"
 
-#: data/org.gnome.epiphany.gschema.xml:208
+#: data/org.gnome.epiphany.gschema.xml:203
 msgid ""
 "Enables DNT headers and tracking query parameter removal. Note that when "
 "changing this setting from the preferences dialog, the adblock-filters "
 "setting will additionally be updated to add/remove EasyPrivacy filters."
 msgstr ""
+"Zapína odosielanie HTTP hlavičiek DNT a odstraňovanie argumentov určených na "
+"sledovanie používateľov z http požiadaviek. Všimnite si, že ak túto voľbu "
+"zmeníte v dialógu nastavenia, voľba adblock-filters sa automaticky "
+"aktualizuje pridaním/odstránením jednoduchých filtrov súkromia EasyPrivacy."
 
 # gsettings summary
-#: data/org.gnome.epiphany.gschema.xml:212
+#: data/org.gnome.epiphany.gschema.xml:207
 msgid "Enable adblock"
 msgstr "Povoliť adblock"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:213
+#: data/org.gnome.epiphany.gschema.xml:208
 msgid ""
 "Whether to block the embedded advertisements that web pages might want to "
 "show."
 msgstr "Určuje, či sa majú zablokovať reklamy zobrazované webovými stránkami."
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:218
+#: data/org.gnome.epiphany.gschema.xml:213
 msgid "Whether to store and prefill passwords in websites."
 msgstr ""
-"Určuje, či sa majú ukladať a následne predpĺňať heslá vo webových stránkach."
+"Určuje, či sa majú ukladať a následne automaticky vypĺňať heslá vo webových "
+"stránkach."
 
-#: data/org.gnome.epiphany.gschema.xml:222
+#: data/org.gnome.epiphany.gschema.xml:217
 msgid "Enable site-specific quirks"
-msgstr ""
+msgstr "Povoliť vlastnosti určené pre konkrétne stránky"
 
-#: data/org.gnome.epiphany.gschema.xml:223
+#: data/org.gnome.epiphany.gschema.xml:218
 msgid ""
 "Enable quirks to make specific websites work better. You might want to "
 "disable this setting if debugging a specific issue."
 msgstr ""
+"Povoľte tieto funkcie na zaistenie lepšej kompatibility s niektorými "
+"webovými stránkami. Ak ladíte konkrétny problém, mali by ste mať túto voľbu "
+"vypnutú."
 
-#: data/org.gnome.epiphany.gschema.xml:227
-#, fuzzy
+#: data/org.gnome.epiphany.gschema.xml:222
 #| msgid "Enable caret browsing mode?"
 msgid "Enable safe browsing"
-msgstr "Povoliť režim prehliadania pomocou klávesnice?"
+msgstr "Povoliť bezpečné prehliadanie"
 
-#: data/org.gnome.epiphany.gschema.xml:228
+#: data/org.gnome.epiphany.gschema.xml:223
 msgid ""
 "Whether to enable safe browsing. Safe browsing operates via Google Safe "
 "Browsing API v4."
 msgstr ""
+"Určuje, či sa použije bezpečné prehliadanie. Bezpečné prehliadanie pracuje s "
+"využitím služieb od spoločnosti Google cez rozhranie Safe Browsing API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:232
-#, fuzzy
+#: data/org.gnome.epiphany.gschema.xml:227
 #| msgctxt "shortcut window"
 #| msgid "Toggle caret browsing"
 msgid "Google Safe Browsing API key"
-msgstr "Prepnutie režimu prehliadania pomocou klávesnice"
+msgstr "Kľúč aplikačného rozhrania služby Google Safe Browsing API"
 
-#: data/org.gnome.epiphany.gschema.xml:233
+#: data/org.gnome.epiphany.gschema.xml:228
 msgid "The API key used to access the Google Safe Browsing API v4."
 msgstr ""
+"Kľúč potrebný na prístup k aplikačnému rozhraniu Google Safe Browsing API v4."
 
-#: data/org.gnome.epiphany.gschema.xml:237
+#: data/org.gnome.epiphany.gschema.xml:232
 msgid "Default zoom level for new pages"
-msgstr ""
+msgstr "Predvolená úroveň priblíženia pre nové stránky"
 
 # gsettings summary
+#: data/org.gnome.epiphany.gschema.xml:236
+#| msgid "Enable adblock"
+msgid "Enable autosearch"
+msgstr "Povoliť automatické vyhľadávanie"
+
+#: data/org.gnome.epiphany.gschema.xml:237
+msgid ""
+"Whether to automatically search the web when something that does not look "
+"like a URL is entered in the address bar. If this setting is disabled, "
+"everything will be loaded as a URL unless a search engine is explicitly "
+"selected from the dropdown menu."
+msgstr ""
+"Určuje, či automaticky vyhľadávať na webe ak panel s adresou obsahuje obsah, "
+"ktorý sa nepodobá na URL adresu stránky. Ak je táto voľba zakázaná, "
+"akýkoľvek obsah v panely s adresou bude spracovaný ako URL adresa jedine, že "
+"vo vyskakovacom menu bude ručne vybraté vyhľadávanie."
+
 #: data/org.gnome.epiphany.gschema.xml:243
+msgid "Web application additional URLs"
+msgstr "Ďalšie URL adresy webovej aplikácie"
+
+# p
+#: data/org.gnome.epiphany.gschema.xml:244
+#| msgid "List of installed web applications"
+msgid "The list of URLs that should be opened by the web application"
+msgstr "Zoznam URL adries, ktoré môžu byť otvorené webovou aplikáciou"
+
+# gsettings summary
+#: data/org.gnome.epiphany.gschema.xml:250
 msgid "The downloads folder"
 msgstr "Priečinok pre preberanie súborov"
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:244
+#: data/org.gnome.epiphany.gschema.xml:251
 msgid ""
 "The path of the folder where to download files to; or “Downloads” to use the "
 "default downloads folder, or “Desktop” to use the desktop folder."
@@ -593,35 +629,34 @@ msgstr ""
 "„Downloads“ (Stiahnuté) pre použitie štandardného priečinku preberaní, alebo "
 "„Desktop“ (Pracovná plocha) pre použitie priečinka pracovnej plochy."
 
-#: data/org.gnome.epiphany.gschema.xml:251
+#: data/org.gnome.epiphany.gschema.xml:258
 msgid "Window position"
 msgstr "Pozícia okna"
 
-#: data/org.gnome.epiphany.gschema.xml:252
+#: data/org.gnome.epiphany.gschema.xml:259
 msgid ""
 "The position to use for a new window that is not restored from a previous "
 "session."
 msgstr "Pozícia nového okna, ktoré nie je obnovené z predošlej relácie."
 
-#: data/org.gnome.epiphany.gschema.xml:256
+#: data/org.gnome.epiphany.gschema.xml:263
 msgid "Window size"
 msgstr "Veľkosť okna"
 
-#: data/org.gnome.epiphany.gschema.xml:257
-#, fuzzy
+#: data/org.gnome.epiphany.gschema.xml:264
 #| msgid ""
 #| "The width to use for a new window that is not restored from a previous "
 #| "session."
 msgid ""
 "The size to use for a new window that is not restored from a previous "
 "session."
-msgstr "Šírka nového okna, ktoré nie je obnovené z predošlej relácie."
+msgstr "Veľkosť nového okna, ktoré nie je obnovené z predošlej relácie."
 
-#: data/org.gnome.epiphany.gschema.xml:261
+#: data/org.gnome.epiphany.gschema.xml:268
 msgid "Is maximized"
 msgstr "Je maximalizované"
 
-#: data/org.gnome.epiphany.gschema.xml:262
+#: data/org.gnome.epiphany.gschema.xml:269
 msgid ""
 "Whether a new window that is not restored from a previous session should be "
 "initially maximized."
@@ -629,189 +664,214 @@ msgstr ""
 "Určuje, či má byť okno, ktoré nie je obnovené z predošlej relácie "
 "maximalizované po otvorení."
 
-#: data/org.gnome.epiphany.gschema.xml:291
-#: data/org.gnome.epiphany.gschema.xml:378
+#: data/org.gnome.epiphany.gschema.xml:284
+msgid "Disable forward and back buttons"
+msgstr "Zakázať tlačidlá Späť a Dopredu"
+
+#: data/org.gnome.epiphany.gschema.xml:285
+msgid ""
+"If set to “true”, forward and back buttons are disabled, preventing users "
+"from accessing immediate browser history"
+msgstr ""
+"Ak je nastavené na „true“, tlačidlá Dopredu a Späť sú zakázané, čo "
+"znemožňuje používateľom pristupovať k bezprostrednej histórii prehliadania"
+
+#: data/org.gnome.epiphany.gschema.xml:300
+#: data/org.gnome.epiphany.gschema.xml:387
 msgid "Currently signed in sync user"
 msgstr "Momentálne prihlásený ako používateľ služby sync"
 
-#: data/org.gnome.epiphany.gschema.xml:292
+#: data/org.gnome.epiphany.gschema.xml:301
 msgid ""
 "The email linked to the Firefox Account used to sync data with Mozilla’s "
 "servers."
 msgstr ""
+"Emailová adresa priradená k účtu Firefox použitého na synchronizáciu údajov "
+"so servermi spoločnosti Mozilla."
 
-#: data/org.gnome.epiphany.gschema.xml:296
-#: data/org.gnome.epiphany.gschema.xml:383
+#: data/org.gnome.epiphany.gschema.xml:305
+#: data/org.gnome.epiphany.gschema.xml:392
 msgid "Last sync timestamp"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:297
-msgid "The UNIX time at which last sync was made in seconds."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:301
-#: data/org.gnome.epiphany.gschema.xml:388
-msgid "Sync device ID"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:302
-msgid "The sync device ID of the current device."
-msgstr ""
+msgstr "Časová značka poslednej synchronizácie"
 
 #: data/org.gnome.epiphany.gschema.xml:306
-#: data/org.gnome.epiphany.gschema.xml:393
-msgid "Sync device name"
-msgstr ""
+msgid "The UNIX time at which last sync was made in seconds."
+msgstr "Časová značka UNIX naposledy vykonanej synchronizácie v sekundách"
 
-#: data/org.gnome.epiphany.gschema.xml:307
-msgid "The sync device name of the current device."
-msgstr ""
+#: data/org.gnome.epiphany.gschema.xml:310
+#: data/org.gnome.epiphany.gschema.xml:397
+msgid "Sync device ID"
+msgstr "ID zariadenia pre synchronizáciu"
 
 #: data/org.gnome.epiphany.gschema.xml:311
-#: data/org.gnome.epiphany.gschema.xml:398
-msgid "The sync frequency in minutes"
-msgstr ""
+msgid "The sync device ID of the current device."
+msgstr "ID zariadenia pre synchronizáciu aktuálneho zariadenia."
 
-#: data/org.gnome.epiphany.gschema.xml:312
-msgid "The number of minutes between two consecutive syncs."
-msgstr ""
+#: data/org.gnome.epiphany.gschema.xml:315
+#: data/org.gnome.epiphany.gschema.xml:402
+msgid "Sync device name"
+msgstr "Názov zariadenia pre synchronizáciu"
 
 #: data/org.gnome.epiphany.gschema.xml:316
-#: data/org.gnome.epiphany.gschema.xml:403
-msgid "Sync data with Firefox"
-msgstr ""
+msgid "The sync device name of the current device."
+msgstr "Názov zariadenia pre synchronizáciu aktuálneho zariadenia."
 
-#: data/org.gnome.epiphany.gschema.xml:317
+#: data/org.gnome.epiphany.gschema.xml:320
+#: data/org.gnome.epiphany.gschema.xml:407
+msgid "The sync frequency in minutes"
+msgstr "Interval synchronizácie v minútach"
+
+#: data/org.gnome.epiphany.gschema.xml:321
+msgid "The number of minutes between two consecutive syncs."
+msgstr ""
+"Počet minút medzi dvoma po sebe nasledujúcimi pokusmi o synchronizáciu."
+
+#: data/org.gnome.epiphany.gschema.xml:325
+#: data/org.gnome.epiphany.gschema.xml:412
+msgid "Sync data with Firefox"
+msgstr "Synchronizovať údaje s prehliadačom Firefox"
+
+#: data/org.gnome.epiphany.gschema.xml:326
 msgid ""
 "TRUE if Ephy collections should be synced with Firefox collections, FALSE "
 "otherwise."
 msgstr ""
+"TRUE ak majú byť zozbierané údaje Ephy synchronizované so zbierkami Firefox."
 
-#: data/org.gnome.epiphany.gschema.xml:321
-#: data/org.gnome.epiphany.gschema.xml:408
-#, fuzzy
+#: data/org.gnome.epiphany.gschema.xml:330
+#: data/org.gnome.epiphany.gschema.xml:417
 #| msgid "No bookmarks yet?"
 msgid "Enable bookmarks sync"
-msgstr "Zatiaľ žiadne záložky?"
-
-#: data/org.gnome.epiphany.gschema.xml:322
-msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:326
-#: data/org.gnome.epiphany.gschema.xml:413
-msgid "Bookmarks sync timestamp"
-msgstr ""
-
-#: data/org.gnome.epiphany.gschema.xml:327
-msgid "The timestamp at which last bookmarks sync was made."
-msgstr ""
+msgstr "Povoliť synchronizáciu záložiek"
 
 #: data/org.gnome.epiphany.gschema.xml:331
-#: data/org.gnome.epiphany.gschema.xml:346
-#: data/org.gnome.epiphany.gschema.xml:361
-#: data/org.gnome.epiphany.gschema.xml:418
-#: data/org.gnome.epiphany.gschema.xml:433
-#: data/org.gnome.epiphany.gschema.xml:448
-msgid "Initial sync or normal sync"
+msgid "TRUE if bookmarks collection should be synced, FALSE otherwise."
 msgstr ""
+"TRUE ak má byť synchronizovaná zbierka záložiek , FALSE v ostatných "
+"prípadoch."
 
-#: data/org.gnome.epiphany.gschema.xml:332
+#: data/org.gnome.epiphany.gschema.xml:335
+#: data/org.gnome.epiphany.gschema.xml:422
+msgid "Bookmarks sync timestamp"
+msgstr "Časová značka synchronizácie záložiek"
+
+#: data/org.gnome.epiphany.gschema.xml:336
+msgid "The timestamp at which last bookmarks sync was made."
+msgstr "Časová značka naposledy vykonanej synchronizácie záložiek."
+
+#: data/org.gnome.epiphany.gschema.xml:340
+#: data/org.gnome.epiphany.gschema.xml:355
+#: data/org.gnome.epiphany.gschema.xml:370
+#: data/org.gnome.epiphany.gschema.xml:427
+#: data/org.gnome.epiphany.gschema.xml:442
+#: data/org.gnome.epiphany.gschema.xml:457
+msgid "Initial sync or normal sync"
+msgstr "Úvodná alebo bežná synchronizácia"
+
+#: data/org.gnome.epiphany.gschema.xml:341
 msgid ""
 "TRUE if bookmarks collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"TRUE ak je potrebné synchronizovať zbierku záložiek prvý krát, FALSE v "
+"ostatných prípadoch."
 
 # GtkCheckButton label
-#: data/org.gnome.epiphany.gschema.xml:336
-#: data/org.gnome.epiphany.gschema.xml:423
-#, fuzzy
+#: data/org.gnome.epiphany.gschema.xml:345
+#: data/org.gnome.epiphany.gschema.xml:432
 #| msgid "Filter passwords"
 msgid "Enable passwords sync"
-msgstr "Filtruje heslá"
+msgstr "Povoliť synchronizáciu hesiel"
 
-#: data/org.gnome.epiphany.gschema.xml:337
+#: data/org.gnome.epiphany.gschema.xml:346
 msgid "TRUE if passwords collection should be synced, FALSE otherwise."
 msgstr ""
+"TRUE ak má byť synchronizovaná zbierka hesiel, FALSE v ostatných prípadoch."
 
-#: data/org.gnome.epiphany.gschema.xml:341
-#: data/org.gnome.epiphany.gschema.xml:428
+#: data/org.gnome.epiphany.gschema.xml:350
+#: data/org.gnome.epiphany.gschema.xml:437
 msgid "Passwords sync timestamp"
-msgstr ""
+msgstr "Časová značka synchronizácie hesiel"
 
-#: data/org.gnome.epiphany.gschema.xml:342
+#: data/org.gnome.epiphany.gschema.xml:351
 msgid "The timestamp at which last passwords sync was made."
-msgstr ""
+msgstr "Časová značka naposledy vykonanej synchronizácie hesiel."
 
-#: data/org.gnome.epiphany.gschema.xml:347
+#: data/org.gnome.epiphany.gschema.xml:356
 msgid ""
 "TRUE if passwords collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"TRUE ak je potrebné synchronizovať zbierku hesiel prvý krát, FALSE v "
+"ostatných prípadoch."
 
-#: data/org.gnome.epiphany.gschema.xml:351
-#: data/org.gnome.epiphany.gschema.xml:438
+#: data/org.gnome.epiphany.gschema.xml:360
+#: data/org.gnome.epiphany.gschema.xml:447
 msgid "Enable history sync"
-msgstr ""
+msgstr "Povoliť synchronizáciu histórie"
 
-#: data/org.gnome.epiphany.gschema.xml:352
+#: data/org.gnome.epiphany.gschema.xml:361
 msgid "TRUE if history collection should be synced, FALSE otherwise."
 msgstr ""
+"TRUE ak má byť synchronizovaná zozbieraná história prehliadania, FALSE v "
+"ostatných prípadoch."
 
-#: data/org.gnome.epiphany.gschema.xml:356
-#: data/org.gnome.epiphany.gschema.xml:443
+#: data/org.gnome.epiphany.gschema.xml:365
+#: data/org.gnome.epiphany.gschema.xml:452
 msgid "History sync timestamp"
-msgstr ""
+msgstr "Časová značka synchronizácie histórie"
 
-#: data/org.gnome.epiphany.gschema.xml:357
+#: data/org.gnome.epiphany.gschema.xml:366
 msgid "The timestamp at which last history sync was made."
-msgstr ""
+msgstr "Časová značka naposledy vykonanej synchronizácie histórie."
 
-#: data/org.gnome.epiphany.gschema.xml:362
+#: data/org.gnome.epiphany.gschema.xml:371
 msgid ""
 "TRUE if history collection needs to be synced for the first time, FALSE "
 "otherwise."
 msgstr ""
+"TRUE ak je potrebné synchronizovať zozbieranú históriu prvý krát, FALSE v "
+"ostatných prípadoch."
 
-#: data/org.gnome.epiphany.gschema.xml:366
-#: data/org.gnome.epiphany.gschema.xml:453
-#, fuzzy
+#: data/org.gnome.epiphany.gschema.xml:375
+#: data/org.gnome.epiphany.gschema.xml:462
 #| msgid "View open tabs"
 msgid "Enable open tabs sync"
-msgstr "Zobrazí otvorené karty"
+msgstr "Povoliť synchronizáciu otvorených kariet"
 
-#: data/org.gnome.epiphany.gschema.xml:367
+#: data/org.gnome.epiphany.gschema.xml:376
 msgid "TRUE if open tabs collection should be synced, FALSE otherwise."
 msgstr ""
+"TRUE ak sa má synchronizovať zbierka otvorených kariet, FALSE v ostatných "
+"prípadoch."
 
-#: data/org.gnome.epiphany.gschema.xml:371
-#: data/org.gnome.epiphany.gschema.xml:458
+#: data/org.gnome.epiphany.gschema.xml:380
+#: data/org.gnome.epiphany.gschema.xml:467
 msgid "Open tabs sync timestamp"
-msgstr ""
+msgstr "Časová značka synchronizácie otvorených kariet"
 
-#: data/org.gnome.epiphany.gschema.xml:372
+#: data/org.gnome.epiphany.gschema.xml:381
 msgid "The timestamp at which last open tabs sync was made."
-msgstr ""
+msgstr "Časová značka naposledy vykonanej synchronizácie otvorených kariet."
 
 # gsettings description
-#: data/org.gnome.epiphany.gschema.xml:379
-#: data/org.gnome.epiphany.gschema.xml:384
-#: data/org.gnome.epiphany.gschema.xml:389
-#: data/org.gnome.epiphany.gschema.xml:394
-#: data/org.gnome.epiphany.gschema.xml:399
-#: data/org.gnome.epiphany.gschema.xml:404
-#: data/org.gnome.epiphany.gschema.xml:409
-#: data/org.gnome.epiphany.gschema.xml:414
-#: data/org.gnome.epiphany.gschema.xml:419
-#: data/org.gnome.epiphany.gschema.xml:424
-#: data/org.gnome.epiphany.gschema.xml:429
-#: data/org.gnome.epiphany.gschema.xml:434
-#: data/org.gnome.epiphany.gschema.xml:439
-#: data/org.gnome.epiphany.gschema.xml:444
-#: data/org.gnome.epiphany.gschema.xml:449
-#: data/org.gnome.epiphany.gschema.xml:454
-#: data/org.gnome.epiphany.gschema.xml:459
-#, fuzzy
+#: data/org.gnome.epiphany.gschema.xml:388
+#: data/org.gnome.epiphany.gschema.xml:393
+#: data/org.gnome.epiphany.gschema.xml:398
+#: data/org.gnome.epiphany.gschema.xml:403
+#: data/org.gnome.epiphany.gschema.xml:408
+#: data/org.gnome.epiphany.gschema.xml:413
+#: data/org.gnome.epiphany.gschema.xml:418
+#: data/org.gnome.epiphany.gschema.xml:423
+#: data/org.gnome.epiphany.gschema.xml:428
+#: data/org.gnome.epiphany.gschema.xml:433
+#: data/org.gnome.epiphany.gschema.xml:438
+#: data/org.gnome.epiphany.gschema.xml:443
+#: data/org.gnome.epiphany.gschema.xml:448
+#: data/org.gnome.epiphany.gschema.xml:453
+#: data/org.gnome.epiphany.gschema.xml:458
+#: data/org.gnome.epiphany.gschema.xml:463
+#: data/org.gnome.epiphany.gschema.xml:468
 #| msgid ""
 #| "String that will be used as user agent, to identify the browser to the "
 #| "web servers."
@@ -819,171 +879,167 @@ msgid ""
 "DEPRECATED: This key is deprecated and ignored. Use /org/gnome/epiphany/"
 "sync/ instead."
 msgstr ""
-"Reťazec, ktorý bude použitý ako agent používateľa, kvôli rozpoznaniu "
-"prehliadača webovými servermi."
+"ZAVRHNUTÉ: Tento kľúč je zavrhnutý a ignorovaný. Namiesto neho prosím "
+"použite /org/gnome/epiphany/sync/ ."
 
-#: data/org.gnome.epiphany.gschema.xml:470
+#: data/org.gnome.epiphany.gschema.xml:479
 msgid "Decision to apply when microphone permission is requested for this host"
 msgstr ""
+"Rozhodnutie, ktoré aplikovať pri žiadosti o právo používať mikrofón pre "
+"tohoto hostiteľa"
 
-#: data/org.gnome.epiphany.gschema.xml:471
+#: data/org.gnome.epiphany.gschema.xml:480
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s microphone. The “undecided” default means the browser "
 "needs to ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
+"Táto voľba sa používa na uloženie informácii o udelení práva pristupovať k "
+"používateľovmu mikrofónu pre zadaného hostiteľa. „undecided“ (predvolené) "
+"znamená, že sa prehliadač musí opýtať používateľa na udelenie oprávnenia, "
+"zatiaľ čo „allow“ a „deny“ umožňujú nastaviť rozhodnutie automaticky v čase "
+"žiadosti."
 
-#: data/org.gnome.epiphany.gschema.xml:475
+#: data/org.gnome.epiphany.gschema.xml:484
 msgid ""
 "Decision to apply when geolocation permission is requested for this host"
 msgstr ""
+"Rozhodnutie, ktoré aplikovať pri žiadosti o právo pristupovať k polohe pre "
+"tohoto hostiteľa"
 
-#: data/org.gnome.epiphany.gschema.xml:476
+#: data/org.gnome.epiphany.gschema.xml:485
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s location. The “undecided” default means the browser "
 "needs to ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
+"Táto voľba sa používa na uloženie informácii o udelení práva pristupovať k "
+"používateľovej polohe pre zadaného hostiteľa. „undecided“ (predvolené) "
+"znamená, že sa prehliadač musí opýtať používateľa na udelenie oprávnenia, "
+"zatiaľ čo „allow“ a „deny“ umožňujú nastaviť rozhodnutie automaticky v čase "
+"žiadosti."
 
-#: data/org.gnome.epiphany.gschema.xml:480
+#: data/org.gnome.epiphany.gschema.xml:489
 msgid ""
 "Decision to apply when notification permission is requested for this host"
 msgstr ""
+"Rozhodnutie, ktoré aplikovať pri žiadosti o právo zobrazovať oznámenia pre "
+"tohoto hostiteľa"
 
-#: data/org.gnome.epiphany.gschema.xml:481
+#: data/org.gnome.epiphany.gschema.xml:490
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to show notifications. The “undecided” default means the browser needs to "
 "ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
+"Táto voľba sa používa na uloženie informácii o udelení práva zobrazovať "
+"oznámenia pre zadaného hostiteľa. „undecided“ (predvolené) znamená, že sa "
+"prehliadač musí opýtať používateľa na udelenie oprávnenia, zatiaľ čo „allow“ "
+"a „deny“ umožňujú nastaviť rozhodnutie automaticky v čase žiadosti."
 
-#: data/org.gnome.epiphany.gschema.xml:485
+#: data/org.gnome.epiphany.gschema.xml:494
 msgid ""
 "Decision to apply when save password permission is requested for this host"
 msgstr ""
+"Rozhodnutie, ktoré aplikovať pri žiadosti o právo ukladať heslá pre tohoto "
+"hostiteľa"
 
-#: data/org.gnome.epiphany.gschema.xml:486
+#: data/org.gnome.epiphany.gschema.xml:495
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to save passwords. The “undecided” default means the browser needs to ask "
 "the user for permission, while “allow” and “deny” tell it to automatically "
 "make the decision upon request."
 msgstr ""
+"Táto voľba sa používa na uloženie informácii o udelení práva ukladať heslá "
+"pre zadaného hostiteľa. „undecided“ (predvolené) znamená, že sa prehliadač "
+"musí opýtať používateľa na udelenie oprávnenia, zatiaľ čo „allow“ a „deny“ "
+"umožňujú nastaviť rozhodnutie automaticky v čase žiadosti."
 
-#: data/org.gnome.epiphany.gschema.xml:490
+#: data/org.gnome.epiphany.gschema.xml:499
 msgid "Decision to apply when webcam permission is requested for this host"
 msgstr ""
+"Rozhodnutie, ktoré aplikovať pri žiadosti o právo používať webkameru pre "
+"tohoto hostiteľa"
 
-#: data/org.gnome.epiphany.gschema.xml:491
+#: data/org.gnome.epiphany.gschema.xml:500
 msgid ""
 "This option is used to save whether a given host has been given permission "
 "to access the user’s webcam. The “undecided” default means the browser needs "
 "to ask the user for permission, while “allow” and “deny” tell it to "
 "automatically make the decision upon request."
 msgstr ""
-
-# title, h1
-#: embed/ephy-about-handler.c:143
-msgid "Installed plugins"
-msgstr "Nainštalované zásuvné moduly"
-
-# gsettings summary
-#: embed/ephy-about-handler.c:144
-msgid "Plugins"
-msgstr "Zásuvné moduly"
-
-#: embed/ephy-about-handler.c:147
-msgid "Plugins are disabled in the preferences"
-msgstr "Zásuvné moduly sú zakázané v nastaveniach"
-
-#: embed/ephy-about-handler.c:160
-msgid "Enabled"
-msgstr "Povolený"
-
-#. webkit_plugin_get_enabled (plugin) &&
-#: embed/ephy-about-handler.c:160
-msgid "Yes"
-msgstr "Áno"
-
-#: embed/ephy-about-handler.c:160
-msgid "No"
-msgstr "Nie"
-
-# th
-#: embed/ephy-about-handler.c:161
-msgid "MIME type"
-msgstr "Typ MIME"
-
-# th
-#: embed/ephy-about-handler.c:161
-msgid "Description"
-msgstr "Popis"
-
-# th
-#: embed/ephy-about-handler.c:161
-msgid "Suffixes"
-msgstr "Prípony"
+"Táto voľba sa používa na uloženie informácii o udelení práva pristupovať k "
+"používateľovej webkamere pre zadaného hostiteľa. „undecided“ (predvolené) "
+"znamená, že sa prehliadač musí opýtať používateľa na udelenie oprávnenia, "
+"zatiaľ čo „allow“ a „deny“ umožňujú nastaviť rozhodnutie automaticky v čase "
+"žiadosti."
 
 # title
-#: embed/ephy-about-handler.c:224 embed/ephy-about-handler.c:226
+#: embed/ephy-about-handler.c:116 embed/ephy-about-handler.c:118
 msgid "Memory usage"
 msgstr "Využitie pamäte"
 
-#: embed/ephy-about-handler.c:274
+#: embed/ephy-about-handler.c:166
 #, c-format
 msgid "Version %s"
 msgstr "Verzia %s"
 
-#: embed/ephy-about-handler.c:294
+#: embed/ephy-about-handler.c:186
 msgid "About Web"
 msgstr "O programe Web"
 
-#: embed/ephy-about-handler.c:298
+#: embed/ephy-about-handler.c:191 src/window-commands.c:654
+msgid "Epiphany Technology Preview"
+msgstr "Ukážka technológie aplikácie Epiphany"
+
+#: embed/ephy-about-handler.c:194
 msgid "A simple, clean, beautiful view of the web"
 msgstr "Jednoduché, jasné, nádherné prezeranie webových stránok."
 
 # title, h1
-#: embed/ephy-about-handler.c:356 embed/ephy-about-handler.c:357
+#: embed/ephy-about-handler.c:252 embed/ephy-about-handler.c:253
 msgid "Applications"
 msgstr "Aplikácie"
 
 # p
-#: embed/ephy-about-handler.c:358
+#: embed/ephy-about-handler.c:254
 msgid "List of installed web applications"
 msgstr "Zoznam nainštalovaných webových aplikácií"
 
-#: embed/ephy-about-handler.c:372
+#: embed/ephy-about-handler.c:268
 msgid "Delete"
 msgstr "Odstrániť"
 
 # td
 #. Note for translators: this refers to the installation date.
-#: embed/ephy-about-handler.c:374
+#: embed/ephy-about-handler.c:270
 msgid "Installed on:"
 msgstr "Dátum inštalácie:"
 
 #. Displayed when opening the browser for the first time.
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:360
 msgid "Welcome to Web"
 msgstr "Vitajte v aplikácii Web"
 
-#: embed/ephy-about-handler.c:479
+#: embed/ephy-about-handler.c:360
 msgid "Start browsing and your most-visited sites will appear here."
 msgstr ""
 "Začnite s prehliadaním a vaše najnavštevovanejšie stránky sa zobrazia tu."
 
-#: embed/ephy-about-handler.c:505
+#: embed/ephy-about-handler.c:386
+#: embed/web-extension/resources/js/overview.js:101
 msgid "Remove from overview"
 msgstr "Odstrániť z prehľadu"
 
-#: embed/ephy-about-handler.c:579 embed/ephy-about-handler.c:580
+#: embed/ephy-about-handler.c:460 embed/ephy-about-handler.c:461
 msgid "Private Browsing"
 msgstr "Súkromné prehliadanie"
 
-#: embed/ephy-about-handler.c:581
+#: embed/ephy-about-handler.c:462
 msgid ""
 "You are currently browsing incognito. Pages viewed in this mode will not "
 "show up in your browsing history and all stored information will be cleared "
@@ -994,14 +1050,14 @@ msgstr ""
 "informácie budú zmazané po zavretí okna. Súbory, ktoré prevezmete, budú "
 "zachované."
 
-#: embed/ephy-about-handler.c:585
+#: embed/ephy-about-handler.c:466
 msgid ""
 "Incognito mode hides your activity only from people using this computer."
 msgstr ""
 "Režim inkognito skryje vašu aktivitu iba pred ľuďmi, ktorí používajú tento "
 "počítač."
 
-#: embed/ephy-about-handler.c:587
+#: embed/ephy-about-handler.c:468
 msgid ""
 "It will not hide your activity from your employer if you are at work. Your "
 "internet service provider, your government, other governments, the websites "
@@ -1013,31 +1069,31 @@ msgstr ""
 "týchto stránkach vás môžu naďalej sledovať."
 
 #. Translators: a desktop notification when a download finishes.
-#: embed/ephy-download.c:707
+#: embed/ephy-download.c:706
 #, c-format
 msgid "Finished downloading %s"
 msgstr "Preberanie súboru %s bolo dokončené"
 
 #. Translators: the title of the notification.
-#: embed/ephy-download.c:709
+#: embed/ephy-download.c:708
 msgid "Download finished"
 msgstr "Preberanie dokončené"
 
 #. Translators: 'ESC' and 'F11' are keyboard keys.
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 #, c-format
 msgid "Press %s to exit fullscreen"
 msgstr "Stlačením klávesu %s ukončíte režim na celú obrazovku"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "ESC"
 msgstr "Esc"
 
-#: embed/ephy-embed.c:538
+#: embed/ephy-embed.c:553
 msgid "F11"
 msgstr "F11"
 
-#: embed/ephy-embed-utils.c:63
+#: embed/ephy-embed-utils.c:65
 #, c-format
 msgid "Send an email message to “%s”"
 msgstr "Odoslať email na adresu „%s“"
@@ -1386,63 +1442,80 @@ msgstr "Text sa nenašiel"
 msgid "Search wrapped back to the top"
 msgstr "Vyhľadá výraz z dola nahor"
 
-#: embed/ephy-find-toolbar.c:390
+#: embed/ephy-find-toolbar.c:364
 msgid "Type to search…"
 msgstr "Zadajte text na vyhľadanie…"
 
 # tooltip
-#: embed/ephy-find-toolbar.c:396
+#: embed/ephy-find-toolbar.c:370
 msgid "Find previous occurrence of the search string"
 msgstr "Nájde predchádzajúci výskyt hľadaného reťazca"
 
 # tooltip
-#: embed/ephy-find-toolbar.c:404
+#: embed/ephy-find-toolbar.c:378
 msgid "Find next occurrence of the search string"
 msgstr "Nájde ďalší výskyt hľadaného reťazca"
 
-#: embed/ephy-web-view.c:530
+#: embed/ephy-view-source-handler.c:255
+#, c-format
+msgid "%s is not a valid URI"
+msgstr "Adresa %s nie je platným identifikátorom URI"
+
+#: embed/ephy-web-view.c:543
 msgid "Not No_w"
 msgstr "Teraz _nie"
 
 # GtkRadioButton label
-#: embed/ephy-web-view.c:531
+#: embed/ephy-web-view.c:544
 msgid "_Never Save"
 msgstr "_Nikdy neukladať"
 
-#: embed/ephy-web-view.c:532 lib/widgets/ephy-file-chooser.c:121
-#: src/resources/gtk/prefs-dialog.ui:1068 src/window-commands.c:453
+#: embed/ephy-web-view.c:545 lib/widgets/ephy-file-chooser.c:121
+#: src/resources/gtk/prefs-dialog.ui:1154 src/window-commands.c:454
 msgid "_Save"
 msgstr "_Uložiť"
 
 #. Translators: The %s the hostname where this is happening.
 #. * Example: mail.google.com.
 #.
-#: embed/ephy-web-view.c:543
+#: embed/ephy-web-view.c:556
 #, c-format
 msgid "Do you want to save your password for “%s”?"
 msgstr "Chcete uložiť heslo pre stránku „%s“?"
 
 #. Translators: Message appears when insecure password form is focused.
-#: embed/ephy-web-view.c:781
+#: embed/ephy-web-view.c:830
 msgid ""
 "Heads-up: this form is not secure. If you type your password, it will not be "
 "kept private."
 msgstr ""
+"Pozor: Tento formulár nie je dostatočne bezpečný. Ak doň vpíšete svoje "
+"heslo, môže sa stať, že nebude uchované v súkromí."
+
+#: embed/ephy-web-view.c:1136
+msgid "Web process crashed"
+msgstr "Proces aplikácii web skončil pádom"
+
+#: embed/ephy-web-view.c:1139
+msgid "Web process terminated due to exceeding memory limit"
+msgstr ""
+"Proces aplikácii web bol neočakávane ukončený pretože bol prekročený limit "
+"pridelenej pamäte"
 
 # button
-#: embed/ephy-web-view.c:1428
+#: embed/ephy-web-view.c:1548
 msgid "Deny"
 msgstr "Odmietnuť"
 
 # button
-#: embed/ephy-web-view.c:1429
+#: embed/ephy-web-view.c:1549
 msgid "Allow"
 msgstr "Povoliť"
 
 # PM: myslí sa GPS - takto to bude zrozumiteľnejšie
 # %s adresa
 #. Translators: Notification policy for a specific site.
-#: embed/ephy-web-view.c:1446
+#: embed/ephy-web-view.c:1566
 #, c-format
 msgid "The page at %s wants to show desktop notifications."
 msgstr "Stránka %s chce zobraziť oznámenia v pracovnom prostredí."
@@ -1450,7 +1523,7 @@ msgstr "Stránka %s chce zobraziť oznámenia v pracovnom prostredí."
 # PM: myslí sa GPS - takto to bude zrozumiteľnejšie
 # %s adresa
 #. Translators: Geolocation policy for a specific site.
-#: embed/ephy-web-view.c:1451
+#: embed/ephy-web-view.c:1571
 #, c-format
 msgid "The page at %s wants to know your location."
 msgstr "Stránka %s chce poznať vašu polohu."
@@ -1458,7 +1531,7 @@ msgstr "Stránka %s chce poznať vašu polohu."
 # PM: myslí sa GPS - takto to bude zrozumiteľnejšie
 # %s adresa
 #. Translators: Microphone policy for a specific site.
-#: embed/ephy-web-view.c:1456
+#: embed/ephy-web-view.c:1576
 #, c-format
 msgid "The page at %s wants to use your microphone."
 msgstr "Stránka %s chce použiť váš mikrofón."
@@ -1466,32 +1539,32 @@ msgstr "Stránka %s chce použiť váš mikrofón."
 # PM: myslí sa GPS - takto to bude zrozumiteľnejšie
 # %s adresa
 #. Translators: Webcam policy for a specific site.
-#: embed/ephy-web-view.c:1461
+#: embed/ephy-web-view.c:1581
 #, c-format
 msgid "The page at %s wants to use your webcam."
 msgstr "Stránka %s chce použiť vašu webkameru."
 
 #. translators: %s here is the address of the web page
-#: embed/ephy-web-view.c:1640
+#: embed/ephy-web-view.c:1760
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Načítava sa „%s“…"
 
-#: embed/ephy-web-view.c:1642
+#: embed/ephy-web-view.c:1762
 msgid "Loading…"
 msgstr "Načítava sa…"
 
 # DK: zjednotil by som preklad "identification" na "identifikácia". aj ked sa spomina certifikat.
 # PV: Akceptujem, ja som však zvyknutý radšej hovoriť o certifikáte ako o identifikácii
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1895
+#: embed/ephy-web-view.c:2041
 msgid ""
 "This website presented identification that belongs to a different website."
 msgstr ""
 "Táto webová stránka predložila identifikáciu určenú pre inú webovú stránku."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1900
+#: embed/ephy-web-view.c:2046
 msgid ""
 "This website’s identification is too old to trust. Check the date on your "
 "computer’s calendar."
@@ -1500,20 +1573,20 @@ msgstr ""
 "je zastaralá. Skontrolujte nastavenie dátumu na vašom počítači."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1905
+#: embed/ephy-web-view.c:2051
 msgid "This website’s identification was not issued by a trusted organization."
 msgstr ""
 "Identifikácia tejto webovej stránky nebola vydaná dôveryhodnou organizáciou."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1910
+#: embed/ephy-web-view.c:2056
 msgid ""
 "This website’s identification could not be processed. It may be corrupted."
 msgstr ""
 "Nie je možné získať identifikáciu tejto webovej stránky. Môže byť poškodená."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1915
+#: embed/ephy-web-view.c:2061
 msgid ""
 "This website’s identification has been revoked by the trusted organization "
 "that issued it."
@@ -1522,7 +1595,7 @@ msgstr ""
 "organizáciou, ktorá ju vydala."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1920
+#: embed/ephy-web-view.c:2066
 msgid ""
 "This website’s identification cannot be trusted because it uses very weak "
 "encryption."
@@ -1531,7 +1604,7 @@ msgstr ""
 "je zakódovaná slabou šifrou."
 
 #. Possible error message when a site presents a bad certificate.
-#: embed/ephy-web-view.c:1925
+#: embed/ephy-web-view.c:2071
 msgid ""
 "This website’s identification is only valid for future dates. Check the date "
 "on your computer’s calendar."
@@ -1541,24 +1614,24 @@ msgstr ""
 
 #. Page title when a site cannot be loaded due to a network error.
 #. Page title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:1988 embed/ephy-web-view.c:2044
+#: embed/ephy-web-view.c:2134 embed/ephy-web-view.c:2190
 #, c-format
 msgid "Problem Loading Page"
 msgstr "Problém pri načítaní stránky"
 
 #. Message title when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1991
+#: embed/ephy-web-view.c:2137
 msgid "Unable to display this website"
 msgstr "Nie je možné zobraziť túto webovú stránku"
 
 #. Error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1995
+#: embed/ephy-web-view.c:2141
 #, c-format
 msgid "The site at %s seems to be unavailable."
 msgstr "Zdá sa, že stránka na adrese %s nie je dostupná."
 
 #. Further error details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:1999
+#: embed/ephy-web-view.c:2145
 msgid ""
 "It may be temporarily inaccessible or moved to a new address. You may wish "
 "to verify that your internet connection is working correctly."
@@ -1568,7 +1641,7 @@ msgstr ""
 "správne."
 
 #. Technical details when a site cannot be loaded due to a network error.
-#: embed/ephy-web-view.c:2009
+#: embed/ephy-web-view.c:2155
 #, c-format
 msgid "The precise error was: %s"
 msgstr "Presný popis chyby bol: %s"
@@ -1576,70 +1649,70 @@ msgstr "Presný popis chyby bol: %s"
 #. The button on the network error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the page crash error page. DO NOT ADD MNEMONICS HERE.
 #. The button on the process crash error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2014 embed/ephy-web-view.c:2067
-#: embed/ephy-web-view.c:2110
+#: embed/ephy-web-view.c:2160 embed/ephy-web-view.c:2213
+#: embed/ephy-web-view.c:2256
 msgid "Reload"
 msgstr "Znovu načítať"
 
 #. Mnemonic for the Reload button on browser error pages.
-#: embed/ephy-web-view.c:2017 embed/ephy-web-view.c:2070
-#: embed/ephy-web-view.c:2113
+#: embed/ephy-web-view.c:2163 embed/ephy-web-view.c:2216
+#: embed/ephy-web-view.c:2259
 msgctxt "reload-access-key"
 msgid "R"
 msgstr "Z"
 
 #. Message title when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2047
+#: embed/ephy-web-view.c:2193
 msgid "Oops! There may be a problem"
 msgstr "Ale nie! Vyskytol sa problém"
 
 #. Error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2051
+#: embed/ephy-web-view.c:2197
 #, c-format
 msgid "The page %s may have caused Web to close unexpectedly."
 msgstr "Stránka %s mohla spôsobiť neočakávané zatvorenie aplikácie Web."
 
 #. Further error details when a site cannot be loaded due to a page crash error.
-#: embed/ephy-web-view.c:2058
+#: embed/ephy-web-view.c:2204
 #, c-format
 msgid "If this happens again, please report the problem to the %s developers."
 msgstr "Ak sa toto vyskytne znovu, prosím, nahláste problém vývojárom %s."
 
 # DK: dal by som Problém pri zobrazovaní stránky
 #. Page title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2096
+#: embed/ephy-web-view.c:2242
 #, c-format
 msgid "Problem Displaying Page"
 msgstr "Problém pri zobrazovaní stránky"
 
 #. Message title when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2099
+#: embed/ephy-web-view.c:2245
 msgid "Oops!"
 msgstr "Ale nie!"
 
 #. Error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2102
+#: embed/ephy-web-view.c:2248
 msgid "Something went wrong while displaying this page."
 msgstr "Počas zobrazovania tejto stránky nastala chyba."
 
 #. Further error details when a site cannot be loaded due to a process crash error.
-#: embed/ephy-web-view.c:2104
+#: embed/ephy-web-view.c:2250
 msgid "Please reload or visit a different page to continue."
 msgstr "Prosím, načítajte ju znovu, alebo pokračujte návštevou inej stránky."
 
 #. Page title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2139
+#: embed/ephy-web-view.c:2285
 #, c-format
 msgid "Security Violation"
 msgstr "Narušenie bezpečnosti"
 
 #. Message title when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2142
+#: embed/ephy-web-view.c:2288
 msgid "This Connection is Not Secure"
 msgstr "Toto pripojenie nie je bezpečné"
 
 #. Error details when a site is not loaded due to an invalid TLS certificate.
-#: embed/ephy-web-view.c:2146
+#: embed/ephy-web-view.c:2292
 #, c-format
 msgid ""
 "This does not look like the real %s. Attackers might be trying to steal or "
@@ -1650,43 +1723,43 @@ msgstr ""
 
 #. The button on the invalid TLS certificate error page. DO NOT ADD MNEMONICS HERE.
 #. The button on unsafe browsing error page. DO NOT ADD MNEMONICS HERE.
-#: embed/ephy-web-view.c:2156 embed/ephy-web-view.c:2245
+#: embed/ephy-web-view.c:2302 embed/ephy-web-view.c:2391
 msgid "Go Back"
 msgstr "Prejsť späť"
 
 # GtkLabel label
 #. Mnemonic for the Go Back button on the invalid TLS certificate error page.
 #. Mnemonic for the Go Back button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2159 embed/ephy-web-view.c:2248
+#: embed/ephy-web-view.c:2305 embed/ephy-web-view.c:2394
 msgctxt "back-access-key"
 msgid "B"
 msgstr "s"
 
 #. The hidden button on the invalid TLS certificate error page. Do not add mnemonics here.
 #. The hidden button on the unsafe browsing error page. Do not add mnemonics here.
-#: embed/ephy-web-view.c:2162 embed/ephy-web-view.c:2251
+#: embed/ephy-web-view.c:2308 embed/ephy-web-view.c:2397
 msgid "Accept Risk and Proceed"
 msgstr "Prijať riziko a pokračovať"
 
 #. Mnemonic for the Accept Risk and Proceed button on the invalid TLS certificate error page.
 #. Mnemonic for the Accept Risk and Proceed button on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2166 embed/ephy-web-view.c:2255
+#: embed/ephy-web-view.c:2312 embed/ephy-web-view.c:2401
 msgctxt "proceed-anyway-access-key"
 msgid "P"
 msgstr "j"
 
 #. Page title when a site is flagged by Google Safe Browsing verification.
-#: embed/ephy-web-view.c:2196
+#: embed/ephy-web-view.c:2342
 #, c-format
 msgid "Security Warning"
 msgstr "Bezpečnostné upozornenie"
 
 #. Message title on the unsafe browsing error page.
-#: embed/ephy-web-view.c:2199
+#: embed/ephy-web-view.c:2345
 msgid "Unsafe website detected!"
 msgstr "Bola zistená nebezpečná webová stránka!"
 
-#: embed/ephy-web-view.c:2206
+#: embed/ephy-web-view.c:2352
 #, c-format
 msgid ""
 "Visiting %s may harm your computer. This page appears to contain malicious "
@@ -1696,74 +1769,84 @@ msgstr ""
 "obsahuje škodlivý kód, ktorý môže byť prevzatý do vášho počítača bez "
 "dovolenia."
 
-#: embed/ephy-web-view.c:2210
+#: embed/ephy-web-view.c:2356
 #, c-format
 msgid ""
 "You can learn more about harmful web content including viruses and other "
 "malicious code and how to protect your computer at %s."
 msgstr ""
+"Dozvedieť sa viac o nevhodnom webovom obsahu, čo zahŕňa počítačové vírusy a "
+"ďalší škodlivý kód aj o tom, ako chrániť váš počítač sa môžete na stránke %s."
 
-#: embed/ephy-web-view.c:2217
+#: embed/ephy-web-view.c:2363
 #, c-format
 msgid ""
 "Attackers on %s may trick you into doing something dangerous like installing "
 "software or revealing your personal information (for example, passwords, "
 "phone numbers, or credit cards)."
 msgstr ""
+"Útočníci na stránke %s vás môžu naviesť na nebezpečné konanie, akým môže byť "
+"aj inštalácia softvéru alebo prezradenie osobných údajov (napr. hesiel, "
+"telefónnych čísiel alebo čísiel kreditných kariet)."
 
-#: embed/ephy-web-view.c:2222
+#: embed/ephy-web-view.c:2368
 #, c-format
 msgid ""
 "You can find out more about social engineering (phishing) at %s or from %s."
 msgstr ""
+"Viac o sociálnom inžinierstve (phishing) môžete nájsť na stránke %s alebo %s."
 
-#: embed/ephy-web-view.c:2231
+#: embed/ephy-web-view.c:2377
 #, c-format
 msgid ""
 "%s may contain harmful programs. Attackers might attempt to trick you into "
 "installing programs that harm your browsing experience (for example, by "
 "changing your homepage or showing extra ads on sites you visit)."
 msgstr ""
+"%s môže obsahovať nevhodné aplikácie. Útočníci sa môžu pokúsiť naviesť vás "
+"na inštaláciu programov, ktoré vám môžu škodiť pri prehliadaní webových "
+"stránok (napríklad zmeniť domovskú stránku alebo zobrazovať na vami "
+"navštevovaných stránkach ešte viac reklám)."
 
-#: embed/ephy-web-view.c:2236
+#: embed/ephy-web-view.c:2382
 #, c-format
 msgid "You can learn more about unwanted software at %s."
 msgstr "O nežiaducom softvéri môžete viac zistiť na adrese %s."
 
 # chyba
-#: embed/ephy-web-view.c:2311
+#: embed/ephy-web-view.c:2457
 msgid "None specified"
 msgstr "Žiadna konkrétna"
 
-#: embed/ephy-web-view.c:2416
+#: embed/ephy-web-view.c:2562
 msgid "Technical information"
 msgstr "Technické informácie"
 
-#: embed/ephy-web-view.c:3301
+#: embed/ephy-web-view.c:3447
 msgid "_OK"
 msgstr "_OK"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:118 src/resources/gtk/prefs-dialog.ui:115
+#: lib/ephy-file-helpers.c:119 src/resources/gtk/prefs-dialog.ui:215
 msgid "Downloads"
 msgstr "Preberanie"
 
 #. If we don't have XDG user dirs info, return an educated guess.
-#: lib/ephy-file-helpers.c:172
+#: lib/ephy-file-helpers.c:178
 msgid "Desktop"
 msgstr "Pracovná plocha"
 
-#: lib/ephy-file-helpers.c:323
+#: lib/ephy-file-helpers.c:331
 #, c-format
 msgid "Could not create a temporary directory in “%s”."
 msgstr "Nepodarilo sa vytvoriť dočasný adresár v „%s“."
 
-#: lib/ephy-file-helpers.c:444
+#: lib/ephy-file-helpers.c:454
 #, c-format
 msgid "The file “%s” exists. Please move it out of the way."
 msgstr "Súbor „%s“ už existuje. Prosím, premiestnite ho."
 
-#: lib/ephy-file-helpers.c:463
+#: lib/ephy-file-helpers.c:473
 #, c-format
 msgid "Failed to create directory “%s”."
 msgstr "Zlyhalo vytváranie adresára „%s“."
@@ -1851,68 +1934,71 @@ msgstr "Heslo pre používateľa %s vo formulári na adrese %s"
 msgid "Password in a form in %s"
 msgstr "Heslo vo formulári na adrese %s"
 
-#: lib/sync/ephy-sync-service.c:846
+#: lib/sync/ephy-sync-service.c:851
 msgid "Failed to obtain storage credentials."
 msgstr "Zlyhalo získanie poverení k úložisku."
 
-#: lib/sync/ephy-sync-service.c:847 lib/sync/ephy-sync-service.c:962
-#: lib/sync/ephy-sync-service.c:1719
+#: lib/sync/ephy-sync-service.c:852 lib/sync/ephy-sync-service.c:967
+#: lib/sync/ephy-sync-service.c:1741
 msgid "Please visit Preferences and sign in again to continue syncing."
 msgstr ""
+"Aby ste mohli pokračovať v synchronizácii, otvorte si prosím dialógové okno "
+"Nastavenia a prihláste sa znovu."
 
-#: lib/sync/ephy-sync-service.c:952
+#: lib/sync/ephy-sync-service.c:957
 msgid "The password of your Firefox account seems to have been changed."
 msgstr "Zdá sa, že heslo k vášmu účtu aplikácie Firefox bolo zmenené."
 
-#: lib/sync/ephy-sync-service.c:953
+#: lib/sync/ephy-sync-service.c:958
 msgid ""
 "Please visit Preferences and sign in with the new password to continue "
 "syncing."
 msgstr ""
+"Aby ste mohli pokračovať v synchronizácii, otvorte si prosím dialóg "
+"Nastavenia a prihláste sa s novým heslom."
 
-#: lib/sync/ephy-sync-service.c:961
+#: lib/sync/ephy-sync-service.c:966
 msgid "Failed to obtain signed certificate."
-msgstr ""
+msgstr "Zlyhalo získanie podpísaného certifikátu."
 
-#: lib/sync/ephy-sync-service.c:1685 lib/sync/ephy-sync-service.c:1690
-#, fuzzy
+#: lib/sync/ephy-sync-service.c:1707 lib/sync/ephy-sync-service.c:1712
 #| msgid "Could not find the sync tokens for the currently logged-in user."
 msgid "Could not find the sync secrets for the current sync user."
 msgstr ""
-"Nepodarilo sa nájsť tokeny služby sync pre momentálne prihláseného "
+"Nepodarilo sa nájsť tajné tokeny služby sync pre momentálne prihláseného "
 "používateľa."
 
-#: lib/sync/ephy-sync-service.c:1697 lib/sync/ephy-sync-service.c:1705
+#: lib/sync/ephy-sync-service.c:1719 lib/sync/ephy-sync-service.c:1727
 msgid "The sync secrets for the current sync user are invalid."
 msgstr ""
+"Tajné tokeny služby sync momentálne prihláseného používateľa sú neplatné."
 
 #. Translators: %s is the email of the user.
-#: lib/sync/ephy-sync-service.c:1813
-#, fuzzy, c-format
+#: lib/sync/ephy-sync-service.c:1835
+#, c-format
 #| msgid "The sync user currently logged in"
 msgid "The sync secrets of %s"
-msgstr "Momentálne prihlásený používateľ služby sync"
+msgstr "Tajné tokeny služby sync pre používateľa %s"
 
-#: lib/sync/ephy-sync-service.c:1839
+#: lib/sync/ephy-sync-service.c:1861
 msgid "Failed to upload client record."
-msgstr ""
+msgstr "Zlyhalo nahrávanie záznamu o klientovi."
 
-#: lib/sync/ephy-sync-service.c:2029
+#: lib/sync/ephy-sync-service.c:2054
 msgid "Failed to upload crypto/keys record."
-msgstr ""
+msgstr "Zlyhalo nahrávanie záznamu šifrovacích kľúčov."
 
-#: lib/sync/ephy-sync-service.c:2136
-#, fuzzy
+#: lib/sync/ephy-sync-service.c:2161
 #| msgid "Failed to create directory “%s”."
 msgid "Failed to retrieve crypto keys."
-msgstr "Zlyhalo vytváranie adresára „%s“."
+msgstr "Zlyhalo získavanie šifrovacích kľúčov."
 
-#: lib/sync/ephy-sync-service.c:2187
+#: lib/sync/ephy-sync-service.c:2212
 msgid "Failed to upload meta/global record."
-msgstr ""
+msgstr "Zlyhalo nahrávanie globálneho meta záznamu."
 
 #. Translators: the %d is the storage version, the \n is a newline character.
-#: lib/sync/ephy-sync-service.c:2304
+#: lib/sync/ephy-sync-service.c:2329
 #, c-format
 msgid ""
 "Your Firefox Account uses storage version %d. Web only supports version %d."
@@ -1920,17 +2006,16 @@ msgstr ""
 "Váš účet aplikácie Firefox používa verziu úložiska %d. Aplikácie Web "
 "podporuje iba verziu %d."
 
-#: lib/sync/ephy-sync-service.c:2315
+#: lib/sync/ephy-sync-service.c:2340
 msgid "Failed to verify storage version."
 msgstr "Zlyhalo overenie verzie úložiska."
 
-#: lib/sync/ephy-sync-service.c:2371
-#, fuzzy
+#: lib/sync/ephy-sync-service.c:2396
 #| msgid "Failed to create directory “%s”."
 msgid "Failed to upload device info"
-msgstr "Zlyhalo vytváranie adresára „%s“."
+msgstr "Zlyhalo nahrávanie informácií o zariadení."
 
-#: lib/sync/ephy-sync-service.c:2444 lib/sync/ephy-sync-service.c:2522
+#: lib/sync/ephy-sync-service.c:2469 lib/sync/ephy-sync-service.c:2547
 msgid "Failed to retrieve the Sync Key"
 msgstr "Zlyhalo získanie kľúča služby Sync"
 
@@ -2057,10 +2142,10 @@ msgid "Starting…"
 msgstr "Spúšťa sa…"
 
 # menu item
-#: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1076
-#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:233
-#: src/window-commands.c:298 src/window-commands.c:395
-#: src/window-commands.c:454 src/window-commands.c:1414
+#: lib/widgets/ephy-file-chooser.c:109 src/resources/gtk/prefs-dialog.ui:1162
+#: src/resources/gtk/prefs-lang-dialog.ui:16 src/window-commands.c:234
+#: src/window-commands.c:299 src/window-commands.c:396
+#: src/window-commands.c:455 src/window-commands.c:1396
 msgid "_Cancel"
 msgstr "_Zrušiť"
 
@@ -2089,20 +2174,20 @@ msgstr "Všetky súbory"
 #. * standard items in the GtkEntry context menu (Cut, Copy, Paste, Delete,
 #. * Select All, Input Methods and Insert Unicode control character.)
 #.
-#: lib/widgets/ephy-location-entry.c:660 src/ephy-history-dialog.c:262
+#: lib/widgets/ephy-location-entry.c:688 src/ephy-history-dialog.c:262
 msgid "Cl_ear"
 msgstr "V_ymazať"
 
-#: lib/widgets/ephy-location-entry.c:680
+#: lib/widgets/ephy-location-entry.c:708
 msgid "Paste and _Go"
 msgstr "Vložiť a _prejsť"
 
 #. Undo, redo.
-#: lib/widgets/ephy-location-entry.c:701 src/ephy-window.c:817
+#: lib/widgets/ephy-location-entry.c:729 src/ephy-window.c:831
 msgid "_Undo"
 msgstr "_Vrátiť"
 
-#: lib/widgets/ephy-location-entry.c:708
+#: lib/widgets/ephy-location-entry.c:736
 msgid "_Redo"
 msgstr "_Zopakovať"
 
@@ -2178,7 +2263,7 @@ msgstr ""
 #: src/bookmarks/ephy-bookmarks-import.c:285
 #, c-format
 msgid "Firefox bookmarks could not be retrieved!"
-msgstr "Záložky aplikácie Firefox sa nepodarilo získať!"
+msgstr "Nepodarilo sa získať záložky aplikácie Firefox!"
 
 #: src/bookmarks/ephy-bookmarks-manager.h:34
 msgid "Favorites"
@@ -2186,7 +2271,7 @@ msgstr "Obľúbené"
 
 #: src/bookmarks/ephy-bookmarks-manager.h:35
 msgid "Mobile"
-msgstr ""
+msgstr "Mobilné"
 
 # gsettings summary
 #: src/clear-data-dialog.c:80
@@ -2199,10 +2284,9 @@ msgstr "Údaje miestneho úložiska"
 
 # p
 #: src/clear-data-dialog.c:82
-#, fuzzy
 #| msgid "List of installed web applications"
 msgid "Offline web application cache"
-msgstr "Zoznam nainštalovaných webových aplikácií"
+msgstr "Vyrovnávacia pamäť webových aplikácií v režime bez pripojenia"
 
 #: src/clear-data-dialog.c:83
 msgid "IndexedDB databases"
@@ -2218,55 +2302,13 @@ msgid "Plugins data"
 msgstr "Údaje zásuvných modulov"
 
 #. Translators: tooltip for the refresh button
-#: src/ephy-header-bar.c:87
+#: src/ephy-action-bar-start.c:34
 msgid "Reload the current page"
 msgstr "Znovu načíta aktuálnu stránku"
 
-#. Translators: tooltip for the stop button
-#: src/ephy-header-bar.c:561
+#: src/ephy-action-bar-start.c:521
 msgid "Stop loading the current page"
 msgstr "Zastaví načítanie aktuálnej stránky"
-
-#. Translators: tooltip for the back button
-#: src/ephy-header-bar.c:656
-msgid "Go back to the previous page"
-msgstr "Prejde späť na predchádzajúcu stránku"
-
-#. Translators: tooltip for the forward button
-#: src/ephy-header-bar.c:675
-msgid "Go forward to the next page"
-msgstr "Prejde dopredu na nasledujúcu stránku"
-
-#. Translators: tooltip for the secret homepage button
-#: src/ephy-header-bar.c:714
-msgid "Go to your homepage"
-msgstr "Prejde na vašu domovskú stránku"
-
-#. Translators: tooltip for the bookmarks popover button
-#: src/ephy-header-bar.c:775
-msgid "View and manage your bookmarks"
-msgstr "Zobrazí a spravuje vaše záložky"
-
-# cmd desc
-#: src/ephy-header-bar.c:786
-#, fuzzy
-#| msgid "Open a new browser window"
-msgid "Open in browser"
-msgstr "Otvorí nové okno prehliadača"
-
-#: src/ephy-header-bar.c:788
-msgid "Open the page in your default browser"
-msgstr ""
-
-#. Translators: tooltip for the downloads button
-#: src/ephy-header-bar.c:812
-msgid "View downloads"
-msgstr "Zobrazí preberania"
-
-#. Translators: tooltip for the new tab button
-#: src/ephy-header-bar.c:831 src/ephy-notebook.c:485
-msgid "Open a new tab"
-msgstr "Otvorí novú kartu"
 
 #: src/ephy-history-dialog.c:252
 msgid "Clear browsing history?"
@@ -2350,13 +2392,18 @@ msgstr "URL…"
 msgid "Web options"
 msgstr "Voľby programu Web"
 
+#. Translators: tooltip for the new tab button
+#: src/ephy-notebook.c:488 src/resources/gtk/action-bar-end.ui:37
+msgid "Open a new tab"
+msgstr "Otvorí novú kartu"
+
 #. Translators: tooltip for the tab switcher menu button
-#: src/ephy-notebook.c:492
+#: src/ephy-notebook.c:495
 msgid "View open tabs"
 msgstr "Zobrazí otvorené karty"
 
 # tooltip
-#: src/ephy-notebook.c:753
+#: src/ephy-notebook.c:756
 msgid "Close tab"
 msgstr "Zavrie kartu"
 
@@ -2370,166 +2417,167 @@ msgstr "Nová adresa"
 
 #: src/ephy-search-engine-dialog.c:32
 #: src/resources/gtk/search-engine-dialog.ui:177
+#, fuzzy
 msgid "Bang"
-msgstr ""
+msgstr "Výkričník"
 
-#: src/ephy-window.c:253
+#: src/ephy-window.c:252
 msgid "Do you want to leave this website?"
 msgstr "Chcete opustiť túto webovú stránku?"
 
-#: src/ephy-window.c:254
+#: src/ephy-window.c:253
 msgid "A form you modified has not been submitted."
 msgstr "Formulár, ktorý ste upravili, nebol odovzdaný."
 
-#: src/ephy-window.c:255
+#: src/ephy-window.c:254
 msgid "_Discard form"
 msgstr "_Zahodiť formulár"
 
-#: src/ephy-window.c:270
+#: src/ephy-window.c:269
 msgid "There are ongoing downloads"
 msgstr "Prebiehajú preberania"
 
-#: src/ephy-window.c:271
+#: src/ephy-window.c:270
 msgid "If you quit, the downloads will be cancelled"
 msgstr "Ak skončíte, preberania budú zrušené"
 
-#: src/ephy-window.c:272
+#: src/ephy-window.c:271
 msgid "Quit and cancel downloads"
 msgstr "Skončiť a zrušiť preberania"
 
-#: src/ephy-window.c:818
+#: src/ephy-window.c:832
 msgid "Re_do"
 msgstr "_Zopakovať"
 
 #. Edit.
-#: src/ephy-window.c:821
+#: src/ephy-window.c:835
 msgid "Cu_t"
 msgstr "Vys_trihnúť"
 
-#: src/ephy-window.c:822
+#: src/ephy-window.c:836
 msgid "_Copy"
 msgstr "_Kopírovať"
 
-#: src/ephy-window.c:823
+#: src/ephy-window.c:837
 msgid "_Paste"
 msgstr "_Vložiť"
 
-#: src/ephy-window.c:824
+#: src/ephy-window.c:838
 msgid "Select _All"
 msgstr "Vybrať _všetko"
 
-#: src/ephy-window.c:826
+#: src/ephy-window.c:840
 msgid "S_end Link by Email…"
 msgstr "_Odoslať odkaz emailom…"
 
-#: src/ephy-window.c:828
+#: src/ephy-window.c:842
 msgid "_Reload"
 msgstr "_Znova načítať"
 
-#: src/ephy-window.c:829
+#: src/ephy-window.c:843
 msgid "_Back"
 msgstr "_Späť"
 
-#: src/ephy-window.c:830
+#: src/ephy-window.c:844
 msgid "_Forward"
 msgstr "_Dopredu"
 
 #. Bookmarks
-#: src/ephy-window.c:833
+#: src/ephy-window.c:847
 msgid "Add Boo_kmark…"
 msgstr "Pridať zá_ložku…"
 
 #. Links.
-#: src/ephy-window.c:837
+#: src/ephy-window.c:851
 msgid "Open Link in New _Window"
 msgstr "Otvoriť odkaz v novom _okne"
 
-#: src/ephy-window.c:838
+#: src/ephy-window.c:852
 msgid "Open Link in New _Tab"
 msgstr "Otvoriť odkaz na novej kar_te"
 
-#: src/ephy-window.c:839
+#: src/ephy-window.c:853
 msgid "Open Link in I_ncognito Window"
 msgstr "Otvoriť odkaz v okne i_nkognito"
 
 # https://bugzilla.gnome.org/show_bug.cgi?id=687594
-#: src/ephy-window.c:840
+#: src/ephy-window.c:854
 msgid "_Save Link As…"
 msgstr "_Uložiť cieľ odkazu ako…"
 
-#: src/ephy-window.c:841
+#: src/ephy-window.c:855
 msgid "_Copy Link Address"
 msgstr "_Kopírovať adresu odkazu"
 
-#: src/ephy-window.c:842
+#: src/ephy-window.c:856
 msgid "_Copy E-mail Address"
 msgstr "_Kopírovať emailovú adresu"
 
 #. Images.
-#: src/ephy-window.c:846
+#: src/ephy-window.c:860
 msgid "View _Image in New Tab"
 msgstr "Zobraziť _obrázok na novej karte"
 
-#: src/ephy-window.c:847
+#: src/ephy-window.c:861
 msgid "Copy I_mage Address"
 msgstr "Kopírovať adresu _obrázka"
 
-#: src/ephy-window.c:848
+#: src/ephy-window.c:862
 msgid "_Save Image As…"
 msgstr "_Uložiť obrázok ako…"
 
 # DK: wallpaper prekladame ako Pozadie pracovnej plochy
-#: src/ephy-window.c:849
+#: src/ephy-window.c:863
 msgid "Set as _Wallpaper"
 msgstr "Nastaviť ako _pozadie pracovnej plochy"
 
 #. Video.
-#: src/ephy-window.c:853
+#: src/ephy-window.c:867
 msgid "Open Video in New _Window"
 msgstr "Otvoriť video v novom _okne"
 
-#: src/ephy-window.c:854
+#: src/ephy-window.c:868
 msgid "Open Video in New _Tab"
 msgstr "Otvoriť video na novej _karte"
 
 # https://bugzilla.gnome.org/show_bug.cgi?id=687594
-#: src/ephy-window.c:855
+#: src/ephy-window.c:869
 msgid "_Save Video As…"
 msgstr "_Uložiť video ako…"
 
-#: src/ephy-window.c:856
+#: src/ephy-window.c:870
 msgid "_Copy Video Address"
 msgstr "_Kopírovať adresu videa"
 
 # DK: tieto retazce s "audiom" mi nejako nesedia. zisti coho sa to tyka to audio. ci by to nemohlo byt nieco na styl "Otvoriť zuvkový súbor/prvok(neviem čo) v novom okne"
 # DK:inde mas pouzite "zvukovy subor".tak to zjednot tak
 #. Audio.
-#: src/ephy-window.c:860
+#: src/ephy-window.c:874
 msgid "Open Audio in New _Window"
 msgstr "Otvoriť zvukový súbor v novom _okne"
 
-#: src/ephy-window.c:861
+#: src/ephy-window.c:875
 msgid "Open Audio in New _Tab"
 msgstr "Otvoriť zvukový súbor na novej _karte"
 
 # https://bugzilla.gnome.org/show_bug.cgi?id=687594
-#: src/ephy-window.c:862
+#: src/ephy-window.c:876
 msgid "_Save Audio As…"
 msgstr "_Uložiť zvukový súbor ako…"
 
-#: src/ephy-window.c:863
+#: src/ephy-window.c:877
 msgid "_Copy Audio Address"
 msgstr "_Kopírovať adresu zvukového súboru"
 
-#: src/ephy-window.c:868
+#: src/ephy-window.c:882
 msgid "Save Pa_ge As…"
 msgstr "_Uložiť stránku ako…"
 
-#: src/ephy-window.c:869
+#: src/ephy-window.c:883
 msgid "_Page Source"
 msgstr "_Zdrojový kód stránky"
 
-#: src/ephy-window.c:1255
+#: src/ephy-window.c:1264
 #, c-format
 msgid "Search the Web for “%s”"
 msgstr "Vyhľadanie výrazu „%s“ na webe"
@@ -2551,28 +2599,37 @@ msgstr "Uložiť médiá ako"
 #. Translators: the %s refers to the time at which the last sync was made.
 #. * For example: Today 04:34 PM, Sun 11:25 AM, May 31 06:41 PM.
 #.
-#: src/prefs-dialog.c:223
+#: src/prefs-dialog.c:235
 #, c-format
 msgid "Last synchronized: %s"
 msgstr "Naposledy synchronizované: %s"
 
 #. Translators: the %s refers to the email of the currently logged in user.
-#: src/prefs-dialog.c:284 src/prefs-dialog.c:1900
+#: src/prefs-dialog.c:296 src/prefs-dialog.c:2117
 #, c-format
 msgid "Logged in as %s"
 msgstr "Prihlásený ako %s"
 
-#: src/prefs-dialog.c:524
-#, fuzzy
+#: src/prefs-dialog.c:536
 #| msgid "Something went wrong, please try again."
 msgid "Something went wrong, please try again later."
-msgstr "Niekde nastala chyba. Prosím, skúste to znovu."
+msgstr "Niekde nastala chyba. Prosím, skúste to znovu neskôr."
+
+# window title
+#: src/prefs-dialog.c:826
+#| msgid "Create Web Application"
+msgid "Web Application Icon"
+msgstr "Ikona webovej aplikácie"
+
+#: src/prefs-dialog.c:831
+msgid "Supported Image Files"
+msgstr "Podporované súbory obrázkov"
 
 #. Translators: the first %s is the language name, and the
 #. * second %s is the locale name. Example:
 #. * "French (France)"
 #.
-#: src/prefs-dialog.c:1037 src/prefs-dialog.c:1041
+#: src/prefs-dialog.c:1257 src/prefs-dialog.c:1261
 #, c-format
 msgctxt "language"
 msgid "%s (%s)"
@@ -2581,13 +2638,13 @@ msgstr "%s (%s)"
 #. Translators: this refers to a user-define language code
 #. * (one which isn't in our built-in list).
 #.
-#: src/prefs-dialog.c:1048
+#: src/prefs-dialog.c:1268
 #, c-format
 msgctxt "language"
 msgid "User defined (%s)"
 msgstr "Používateľom určený (%s)"
 
-#: src/prefs-dialog.c:1070
+#: src/prefs-dialog.c:1290
 #, c-format
 msgid "System language (%s)"
 msgid_plural "System languages (%s)"
@@ -2596,50 +2653,73 @@ msgstr[1] "Systémový jazyk (%s)"
 msgstr[2] "Systémové jazyky (%s)"
 
 # tab
-#: src/prefs-dialog.c:1313 src/resources/gtk/prefs-dialog.ui:775
+#: src/prefs-dialog.c:1533 src/resources/gtk/prefs-dialog.ui:861
 msgid "Language"
 msgstr "Jazyk"
 
 # window title
-#: src/prefs-dialog.c:1391
+#: src/prefs-dialog.c:1611
 msgid "Select a directory"
 msgstr "Výber adresára"
 
-#: src/profile-migrator/ephy-profile-migrator.c:608
+#: src/profile-migrator/ephy-profile-migrator.c:612
 msgid "Search the Web"
 msgstr "Prehľadávanie webu"
 
 # cmd desc
-#: src/profile-migrator/ephy-profile-migrator.c:1280
+#: src/profile-migrator/ephy-profile-migrator.c:1313
 msgid "Executes only the n-th migration step"
 msgstr "Uskutoční iba n-tý krok migrácie"
 
 # cmd desc
-#: src/profile-migrator/ephy-profile-migrator.c:1282
+#: src/profile-migrator/ephy-profile-migrator.c:1315
 msgid "Specifies the required version for the migrator"
 msgstr "Určuje požadovanú verziu migračného nástroja"
 
 # cmd desc
-#: src/profile-migrator/ephy-profile-migrator.c:1284
+#: src/profile-migrator/ephy-profile-migrator.c:1317
 msgid "Specifies the profile where the migrator should run"
 msgstr "Určuje profil, v ktorom sa spustí migračný nástroj"
 
 # cmd group
-#: src/profile-migrator/ephy-profile-migrator.c:1304
+#: src/profile-migrator/ephy-profile-migrator.c:1337
 msgid "Web profile migrator"
 msgstr "Nástroj na migráciu profilu programu Web"
 
-#: src/profile-migrator/ephy-profile-migrator.c:1305
+#: src/profile-migrator/ephy-profile-migrator.c:1338
 msgid "Web profile migrator options"
 msgstr "Voľby nástroja na migráciu profilu programu Web"
+
+#. Translators: tooltip for the bookmarks popover button
+#: src/resources/gtk/action-bar-end.ui:10
+msgid "View and manage your bookmarks"
+msgstr "Zobrazí a spravuje vaše záložky"
+
+#. Translators: tooltip for the downloads button
+#: src/resources/gtk/action-bar-end.ui:64
+msgid "View downloads"
+msgstr "Zobrazí preberania"
+
+#. Translators: tooltip for the back button
+#: src/resources/gtk/action-bar-start.ui:20
+msgid "Go back to the previous page"
+msgstr "Prejde späť na predchádzajúcu stránku"
+
+#. Translators: tooltip for the forward button
+#: src/resources/gtk/action-bar-start.ui:39
+msgid "Go forward to the next page"
+msgstr "Prejde dopredu na nasledujúcu stránku"
+
+#. Translators: tooltip for the secret homepage button
+#: src/resources/gtk/action-bar-start.ui:77
+msgid "Go to your homepage"
+msgstr "Prejde na vašu domovskú stránku"
 
 #: src/resources/gtk/application-menu.ui:6
 msgid "_New Window"
 msgstr "_Nové okno"
 
 #: src/resources/gtk/application-menu.ui:11
-#: src/resources/gtk/page-menu-popover.ui:147
-#: src/resources/gtk/page-menu-popover-flatpak.ui:147
 msgid "New _Incognito Window"
 msgstr "Nové okno v režime _inkognito"
 
@@ -2658,7 +2738,7 @@ msgid "E_xport Bookmarks"
 msgstr "E_xportovať záložky"
 
 #: src/resources/gtk/application-menu.ui:35
-#: src/resources/gtk/prefs-dialog.ui:949
+#: src/resources/gtk/prefs-dialog.ui:1035
 msgid "_History"
 msgstr "_História"
 
@@ -2747,17 +2827,15 @@ msgid "Search"
 msgstr "Hľadanie"
 
 #: src/resources/gtk/clear-data-dialog.ui:56
-#, fuzzy
 #| msgid "Filter cookies"
 msgid "Filter domains"
-msgstr "Filtruje cookies"
+msgstr "Filtruje domény"
 
 # window title
 #: src/resources/gtk/clear-data-dialog.ui:87
-#, fuzzy
 #| msgid "Search cookies"
 msgid "Search domains"
-msgstr "Vyhľadajte cookies"
+msgstr "Vyhľadajte domény"
 
 #: src/resources/gtk/clear-data-dialog.ui:103
 msgid ""
@@ -2765,6 +2843,9 @@ msgid ""
 "that period. If you choose from the beginning of time, then you can also "
 "clear data only for particular websites."
 msgstr ""
+"Môžete vybrať obdobie, za ktoré si želáte vymazať údaje pre všetky "
+"webstránky zmenené vo vybratom čase. Ak vyberiete od začiatku, môžete tiež "
+"vymazať všetky údaje pre jednotlivé stránky zvlášť."
 
 #: src/resources/gtk/clear-data-dialog.ui:120
 msgid "Clear selected personal data _from:"
@@ -2803,13 +2884,14 @@ msgstr ""
 "budú natrvalo odstránené."
 
 # GtkLabel label
-#: src/resources/gtk/cookies-dialog.ui:31 src/resources/gtk/prefs-dialog.ui:491
+#: src/resources/gtk/cookies-dialog.ui:31 src/resources/gtk/prefs-dialog.ui:577
 msgid "Cookies"
 msgstr "Cookies"
 
 #: src/resources/gtk/cookies-dialog.ui:35
 #: src/resources/gtk/history-dialog.ui:46
 #: src/resources/gtk/passwords-dialog.ui:39
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:24
 msgid "C_lear All"
 msgstr "Vy_mazať všetko"
 
@@ -2907,43 +2989,59 @@ msgid "_Close"
 msgstr "Za_vrieť"
 
 #: src/resources/gtk/page-menu-popover.ui:21
-#: src/resources/gtk/page-menu-popover.ui:75
-#: src/resources/gtk/page-menu-popover.ui:90
-#: src/resources/gtk/page-menu-popover-flatpak.ui:21
-#: src/resources/gtk/page-menu-popover-flatpak.ui:75
-#: src/resources/gtk/page-menu-popover-flatpak.ui:90
 msgid "Zoom Out"
 msgstr "Zmenšiť"
 
-#: src/resources/gtk/page-menu-popover.ui:51
-#: src/resources/gtk/page-menu-popover.ui:105
-#: src/resources/gtk/page-menu-popover-flatpak.ui:51
-#: src/resources/gtk/page-menu-popover-flatpak.ui:105
+#: src/resources/gtk/page-menu-popover.ui:22
+#| msgid "Zoom Out"
+msgctxt "tooltip"
+msgid "Zoom Out"
+msgstr "Zmenšiť"
+
+#: src/resources/gtk/page-menu-popover.ui:38
+msgid "Restore Zoom"
+msgstr "Obnoviť veľkosť"
+
+#: src/resources/gtk/page-menu-popover.ui:53
 msgid "Zoom In"
 msgstr "Zväčšiť"
 
-#: src/resources/gtk/page-menu-popover.ui:131
-#: src/resources/gtk/page-menu-popover-flatpak.ui:131
+#: src/resources/gtk/page-menu-popover.ui:54
+#| msgid "Zoom In"
+msgctxt "tooltip"
+msgid "Zoom In"
+msgstr "Zväčšiť"
+
+#: src/resources/gtk/page-menu-popover.ui:78
+msgid "Print…"
+msgstr "Tlačiť…"
+
+#: src/resources/gtk/page-menu-popover.ui:93
+#| msgid "_Find…"
+msgid "Find…"
+msgstr "Nájsť…"
+
+#: src/resources/gtk/page-menu-popover.ui:108
+#| msgctxt "shortcut window"
+#| msgid "Fullscreen"
+msgid "Fullscreen"
+msgstr "Režim na celú obrazovku"
+
+#: src/resources/gtk/page-menu-popover.ui:134
 msgid "_New Tab"
 msgstr "_Nová karta"
 
-#: src/resources/gtk/page-menu-popover.ui:139
-#: src/resources/gtk/page-menu-popover-flatpak.ui:139
-msgid "New _Window"
-msgstr "Nové o_kno"
-
-#: src/resources/gtk/page-menu-popover.ui:163
-#: src/resources/gtk/page-menu-popover-flatpak.ui:163
+#: src/resources/gtk/page-menu-popover.ui:150
 msgid "Text _Encoding"
 msgstr "_Kódovanie textu"
 
-#: src/resources/gtk/page-menu-popover.ui:179
+#: src/resources/gtk/page-menu-popover.ui:166
 msgid "Install Site as Web _Application…"
 msgstr "Inštalovať stránku ako _webovú aplikáciu…"
 
 # GtkLabel label
 #: src/resources/gtk/passwords-dialog.ui:35
-#: src/resources/gtk/prefs-dialog.ui:565
+#: src/resources/gtk/prefs-dialog.ui:651
 msgid "Passwords"
 msgstr "Heslá"
 
@@ -3007,280 +3105,291 @@ msgstr "P_rázdna stránka"
 msgid "_Custom:"
 msgstr "V_lastná:"
 
+# title, h1
+#: src/resources/gtk/prefs-dialog.ui:114
+#| msgid "Applications"
+msgid "Web Application"
+msgstr "Webová aplikácia"
+
+#: src/resources/gtk/prefs-dialog.ui:122
+msgid "_Manage Additional URLs"
+msgstr "S_pravovať ďalšie URL adresy"
+
+#: src/resources/gtk/prefs-dialog.ui:157
+#| msgid "Homepage"
+msgid "Homepage:"
+msgstr "Domovská stránka:"
+
+# PM: ide o názov záložky
+#: src/resources/gtk/prefs-dialog.ui:179
+#| msgid "_Title:"
+msgid "Title:"
+msgstr "Názov:"
+
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:134
+#: src/resources/gtk/prefs-dialog.ui:234
 msgid "_Download folder:"
 msgstr "_Priečinok na preberanie:"
 
-# GtkCheckButton label
-#: src/resources/gtk/prefs-dialog.ui:145
-msgid "A_utomatically open downloaded files"
-msgstr "A_utomaticky otvoriť prebrané súbory"
-
 # window title
-#: src/resources/gtk/prefs-dialog.ui:169
+#: src/resources/gtk/prefs-dialog.ui:262
 msgid "Search Engines"
 msgstr "Nástroje na vyhľadávanie"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:177
+#: src/resources/gtk/prefs-dialog.ui:270
 msgid "_Manage Search Engines"
 msgstr "Spravovať _nástroje na vyhľadávanie"
 
-#: src/resources/gtk/prefs-dialog.ui:190
+#: src/resources/gtk/prefs-dialog.ui:283
 msgid "You can select different search engines to use."
 msgstr "Môžete vybrať rôzne nástroje na vyhľadávanie, ktoré sa majú použiť."
 
-#: src/resources/gtk/prefs-dialog.ui:211
+#: src/resources/gtk/prefs-dialog.ui:304
 msgid "Session"
 msgstr "Relácia"
 
-#: src/resources/gtk/prefs-dialog.ui:225
+#: src/resources/gtk/prefs-dialog.ui:318
 msgid "_Remember previous tabs on startup"
 msgstr "Za_pamätať predchádzajúce karty po spustení"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:243
+#: src/resources/gtk/prefs-dialog.ui:336
 msgid "Web Content"
 msgstr "Webový obsah"
 
 # DK: https://bugzilla.gnome.org/show_bug.cgi?id=686711 - fixed
 # GtkCheckButton label
-#: src/resources/gtk/prefs-dialog.ui:257
+#: src/resources/gtk/prefs-dialog.ui:350
 msgid "Try to block _advertisements"
 msgstr "Pokúsiť sa zablokovať _reklamy"
 
-#: src/resources/gtk/prefs-dialog.ui:264
+#: src/resources/gtk/prefs-dialog.ui:357
 msgid "Try to block web _trackers"
 msgstr "Pokúsiť sa zablokovať webové _sledovače"
 
 # GtkCheckButton label
-#: src/resources/gtk/prefs-dialog.ui:272
+#: src/resources/gtk/prefs-dialog.ui:365
 msgid "Block popup _windows"
 msgstr "Blokovať v_yskakovacie okná"
 
-# GtkCheckButton label
-#: src/resources/gtk/prefs-dialog.ui:279
-msgid "Enable _plugins"
-msgstr "Povoliť _zásuvné moduly"
-
-#: src/resources/gtk/prefs-dialog.ui:286
+#: src/resources/gtk/prefs-dialog.ui:372
 msgid "Try to block dangerous web_sites"
 msgstr "Pokúsiť sa zablokovať nebezpečné webové _stránky"
 
 # tab
-#: src/resources/gtk/prefs-dialog.ui:300
+#: src/resources/gtk/prefs-dialog.ui:386
 msgid "General"
 msgstr "Všeobecné"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:320
+#: src/resources/gtk/prefs-dialog.ui:406
 msgid "Fonts"
 msgstr "Písma"
 
 # GtkCheckButton label
-#: src/resources/gtk/prefs-dialog.ui:334
+#: src/resources/gtk/prefs-dialog.ui:420
 msgid "_Use system fonts"
 msgstr "_Použiť systémové písma"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:349
+#: src/resources/gtk/prefs-dialog.ui:435
 msgid "Sans serif font:"
 msgstr "Písmo typu Sans serif:"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:373
+#: src/resources/gtk/prefs-dialog.ui:459
 msgid "Serif font:"
 msgstr "Písmo typu Serif:"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:395
+#: src/resources/gtk/prefs-dialog.ui:481
 msgid "Monospace font:"
 msgstr "Písmo typu Monospace:"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:427
+#: src/resources/gtk/prefs-dialog.ui:513
 msgid "Style"
 msgstr "Štýl"
 
 # GtkCheckButton label
-#: src/resources/gtk/prefs-dialog.ui:440
+#: src/resources/gtk/prefs-dialog.ui:526
 msgid "Use custom _stylesheet"
 msgstr "Použiť vla_stné kaskádové štýly"
 
 # GtkButton label
-#: src/resources/gtk/prefs-dialog.ui:448
+#: src/resources/gtk/prefs-dialog.ui:534
 msgid "_Edit Stylesheet"
 msgstr "_Upraviť kaskádové štýly"
 
 # tab
-#: src/resources/gtk/prefs-dialog.ui:465
+#: src/resources/gtk/prefs-dialog.ui:551
 msgid "Fonts & Style"
 msgstr "Písma a štýl"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:499
-#, fuzzy
+#: src/resources/gtk/prefs-dialog.ui:585
 #| msgid "Manage _Cookies…"
 msgid "Manage _Cookies"
-msgstr "Spravovať _cookies…"
+msgstr "Spravovať _cookies"
 
 # GtkRadioButton label
-#: src/resources/gtk/prefs-dialog.ui:515
+#: src/resources/gtk/prefs-dialog.ui:601
 msgid "_Always accept"
 msgstr "_Prijímať vždy"
 
 # GtkRadioButton label
-#: src/resources/gtk/prefs-dialog.ui:522
+#: src/resources/gtk/prefs-dialog.ui:608
 msgid "Only _from sites you visit"
 msgstr "_Len zo stránok, ktoré navštívite"
 
 # GtkLabel label
 #. Refers to "Only from sites you visit" option under Cookies.
-#: src/resources/gtk/prefs-dialog.ui:532
+#: src/resources/gtk/prefs-dialog.ui:618
 msgid "For example, not from advertisers on these sites"
 msgstr "Napríklad nie od inzerentov na týchto stránkach"
 
 # GtkRadioButton label
-#: src/resources/gtk/prefs-dialog.ui:542
+#: src/resources/gtk/prefs-dialog.ui:628
 msgid "_Never accept"
 msgstr "_Nikdy neprijímať"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:573
-#, fuzzy
+#: src/resources/gtk/prefs-dialog.ui:659
 #| msgid "Manage _Passwords…"
 msgid "Manage _Passwords"
-msgstr "Spravovať _Heslá…"
+msgstr "Spravovať _Heslá"
 
 # GtkCheckButton label
-#: src/resources/gtk/prefs-dialog.ui:583
+#: src/resources/gtk/prefs-dialog.ui:669
 msgid "_Remember passwords"
 msgstr "_Zapamätať heslá"
 
-#: src/resources/gtk/prefs-dialog.ui:600
+#: src/resources/gtk/prefs-dialog.ui:686
 msgid "Personal Data"
 msgstr "Osobné údaje"
 
-#: src/resources/gtk/prefs-dialog.ui:621
+#: src/resources/gtk/prefs-dialog.ui:707
 msgid "You can clear stored personal data."
 msgstr "Môžete vymazať uložené osobné údaje."
 
-#: src/resources/gtk/prefs-dialog.ui:626
-#, fuzzy
+#: src/resources/gtk/prefs-dialog.ui:712
 #| msgid "Manage Personal _Data…"
 msgid "Manage Personal _Data"
-msgstr "Spravovať osobné údaj_e…"
+msgstr "Spravovať osobné údaj_e"
 
-#: src/resources/gtk/prefs-dialog.ui:644
+#: src/resources/gtk/prefs-dialog.ui:730
 msgid "Stored Data"
 msgstr "Uložené údaje"
 
-#: src/resources/gtk/prefs-dialog.ui:705
+#: src/resources/gtk/prefs-dialog.ui:791
 msgid "_Add…"
 msgstr "_Pridať…"
 
-#: src/resources/gtk/prefs-dialog.ui:712
+#: src/resources/gtk/prefs-dialog.ui:798
 msgid "_Remove"
 msgstr "Od_strániť"
 
-#: src/resources/gtk/prefs-dialog.ui:719
+#: src/resources/gtk/prefs-dialog.ui:805
 msgid "_Up"
 msgstr "_Hore"
 
-#: src/resources/gtk/prefs-dialog.ui:726
+#: src/resources/gtk/prefs-dialog.ui:812
 msgid "_Down"
 msgstr "D_olu"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:749
+#: src/resources/gtk/prefs-dialog.ui:835
 msgid "Spell Checking"
 msgstr "Kontrola pravopisu"
 
 # GtkCheckButton label
-#: src/resources/gtk/prefs-dialog.ui:758
+#: src/resources/gtk/prefs-dialog.ui:844
 msgid "_Enable spell checking"
 msgstr "_Povoliť kontrolu pravopisu"
 
-#: src/resources/gtk/prefs-dialog.ui:797
+#: src/resources/gtk/prefs-dialog.ui:883
 msgid "Firefox Sync"
 msgstr "Firefox Sync"
 
-#: src/resources/gtk/prefs-dialog.ui:815
+#: src/resources/gtk/prefs-dialog.ui:901
 msgid ""
 "Sign in with your Firefox account to sync your data with Web and Firefox on "
 "other computers. Web is not produced or endorsed by Mozilla."
 msgstr ""
+"Aby ste mohli synchronizovať údaje s aplikáciou Web a prehliadačom Firefox "
+"na iných zariadeniach, prihláste sa s účtom Firefox. Spoločnosť Mozilla "
+"nevydáva a nepodporuje aplikáciu Web."
 
-#: src/resources/gtk/prefs-dialog.ui:849
+#: src/resources/gtk/prefs-dialog.ui:935
 msgid "Firefox Account"
 msgstr "Účet aplikácie Firefox"
 
-#: src/resources/gtk/prefs-dialog.ui:857
+#: src/resources/gtk/prefs-dialog.ui:943
 msgid "Sign _out"
 msgstr "_Odhlásiť sa"
 
-#: src/resources/gtk/prefs-dialog.ui:891
+#: src/resources/gtk/prefs-dialog.ui:977
 msgid "Sync Options"
 msgstr "Voľby služby Sync"
 
-#: src/resources/gtk/prefs-dialog.ui:911
+#: src/resources/gtk/prefs-dialog.ui:997
 msgid "Collections"
 msgstr "Zbierky"
 
-#: src/resources/gtk/prefs-dialog.ui:919
+#: src/resources/gtk/prefs-dialog.ui:1005
 msgid "S_ynced tabs"
 msgstr "S_ynchronizované karty"
 
-#: src/resources/gtk/prefs-dialog.ui:935
+#: src/resources/gtk/prefs-dialog.ui:1021
 msgid "_Bookmarks"
 msgstr "_Záložky"
 
 # GtkLabel label
-#: src/resources/gtk/prefs-dialog.ui:942
+#: src/resources/gtk/prefs-dialog.ui:1028
 msgid "_Passwords"
 msgstr "_Heslá"
 
 # PK: plural forms?
-#: src/resources/gtk/prefs-dialog.ui:956
+#: src/resources/gtk/prefs-dialog.ui:1042
 msgid "Open _Tabs"
 msgstr "Otvoriť _karty"
 
-#: src/resources/gtk/prefs-dialog.ui:971
+#: src/resources/gtk/prefs-dialog.ui:1057
 msgid "Frequency"
 msgstr "Frekvencia"
 
-#: src/resources/gtk/prefs-dialog.ui:979
+#: src/resources/gtk/prefs-dialog.ui:1065
 msgid "Sync _now"
 msgstr "Synchronizovať _teraz"
 
-#: src/resources/gtk/prefs-dialog.ui:998
+#: src/resources/gtk/prefs-dialog.ui:1084
 msgid "_5 min"
 msgstr "_5 minút"
 
-#: src/resources/gtk/prefs-dialog.ui:1005
+#: src/resources/gtk/prefs-dialog.ui:1091
 msgid "_15 min"
 msgstr "_15 minút"
 
-#: src/resources/gtk/prefs-dialog.ui:1013
+#: src/resources/gtk/prefs-dialog.ui:1099
 msgid "_30 min"
 msgstr "_30 minút"
 
-#: src/resources/gtk/prefs-dialog.ui:1021
+#: src/resources/gtk/prefs-dialog.ui:1107
 msgid "_60 min"
 msgstr "_60 minút"
 
-#: src/resources/gtk/prefs-dialog.ui:1052
+#: src/resources/gtk/prefs-dialog.ui:1138
 msgid "Device name"
 msgstr "Názov zariadenia"
 
-#: src/resources/gtk/prefs-dialog.ui:1060
+#: src/resources/gtk/prefs-dialog.ui:1146
 msgid "_Change"
 msgstr "Z_meniť"
 
-#: src/resources/gtk/prefs-dialog.ui:1110
+#: src/resources/gtk/prefs-dialog.ui:1196
 msgid "Sync"
-msgstr ""
+msgstr "Synchronizácia"
 
 # GtkDialog title
 #: src/resources/gtk/prefs-lang-dialog.ui:13
@@ -3294,15 +3403,14 @@ msgstr "Zvoľte _jazyk:"
 
 #: src/resources/gtk/search-engine-dialog.ui:11
 msgid "Manage Search Engines"
-msgstr ""
+msgstr "Spravovať nástroje vyhľadávania"
 
 # DK:ide o predvolené kódovanie - v predvolbach
 # GtkLabel label
 #: src/resources/gtk/search-engine-dialog.ui:212
-#, fuzzy
 #| msgid "De_fault:"
 msgid "Default"
-msgstr "Pr_edvolené:"
+msgstr "Predvolené"
 
 #: src/resources/gtk/search-engine-dialog.ui:264
 #, c-format
@@ -3311,6 +3419,9 @@ msgid ""
 "that you want to add and check the resulting address. Remove the search term "
 "from the resulting address and replace it with %s."
 msgstr ""
+"Adresu nástroja vyhľadávania zistíte tak, že vykonáte vyhľadávanie priamo "
+"cez webovú stránku služby, ktorú sa chystáte pridať. Vo výslednej URL adrese "
+"nahradíte hľadaný výraz znakmi %s."
 
 #: src/resources/gtk/shortcuts-dialog.ui:15
 msgctxt "shortcut window"
@@ -3553,6 +3664,39 @@ msgid ""
 "with this account. Open a tab by double clicking its name (tabs under Local "
 "Tabs cannot be opened)."
 msgstr ""
+"Nižšie je zobrazený zoznam otvorených kariet synchronizovaných s vašimi "
+"ostatnými zariadeniami prihlásenými do služby Firefox sync. Kartu otvoríte "
+"dvojitým kliknutím (miestne karty nie je možné otvoriť)."
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:20
+msgid "Additional URLs"
+msgstr "Ďalšie URL adresy"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:64
+msgid ""
+"A URL that starts with any of the additional URLs will be opened by the web "
+"application. If you omit the URL scheme, the one from the currently loaded "
+"URL will be used."
+msgstr ""
+"URL adresa, ktorá začína niektorou zo zadaných ďalších URL adries bude "
+"otvorená webovou aplikáciou. Ak vynecháte schému, použije sa schéma "
+"momentálne načítanej URL adresy."
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:99
+#| msgid "URL"
+msgctxt "Column header in the Additional URLs dialog"
+msgid "URL"
+msgstr "URL"
+
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:124
+msgid "Add new URL"
+msgstr "Pridať novú URL"
+
+# tooltip
+#: src/resources/gtk/webapp-additional-urls-dialog.ui:137
+#| msgid "Remove the selected pages from history"
+msgid "Remove the selected URLs"
+msgstr "Odstrániť vybrané URL adresy"
 
 #: src/search-provider/ephy-search-provider.c:199
 #, c-format
@@ -3563,81 +3707,81 @@ msgstr "Vyhľadanie výrazu %s na webe"
 msgid "Local Tabs"
 msgstr "Miestne karty"
 
-#: src/window-commands.c:97
+#: src/window-commands.c:98
 msgid "GVDB File"
 msgstr "Súbor GVDB"
 
 #. Skip Firefox option if user doesn't have a Firefox profile
-#: src/window-commands.c:98 src/window-commands.c:205
+#: src/window-commands.c:99 src/window-commands.c:206
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/window-commands.c:112
+#: src/window-commands.c:113
 msgid "Ch_oose File…"
 msgstr "Zv_oliť súbor…"
 
-#: src/window-commands.c:114 src/window-commands.c:297
+#: src/window-commands.c:115 src/window-commands.c:298
 msgid "I_mport"
 msgstr "I_mportovať"
 
 # dialog title
-#: src/window-commands.c:230
+#: src/window-commands.c:231
 msgid "Select Profile"
 msgstr "Výber profilu"
 
-#: src/window-commands.c:235
+#: src/window-commands.c:236
 msgid "_Select"
 msgstr "Vy_brať"
 
 # dialog title
-#: src/window-commands.c:294 src/window-commands.c:450
+#: src/window-commands.c:295 src/window-commands.c:451
 msgid "Choose File"
 msgstr "Výber súboru"
 
-#: src/window-commands.c:321 src/window-commands.c:362
+#: src/window-commands.c:322 src/window-commands.c:363
 msgid "Bookmarks successfully imported!"
 msgstr "Záložky boli úspešne importované!"
 
 # window title
-#: src/window-commands.c:392
+#: src/window-commands.c:393
 msgid "Import Bookmarks"
 msgstr "Importovanie záložiek"
 
-#: src/window-commands.c:397
+#: src/window-commands.c:398
 msgid "Ch_oose File"
 msgstr "Zv_oliť súbor"
 
-#: src/window-commands.c:410
+#: src/window-commands.c:411
 msgid "From:"
 msgstr "Od:"
 
 #. Translators: Only translate the part before ".gvdb" (e.g. "bookmarks")
-#: src/window-commands.c:458
+#: src/window-commands.c:459
 msgid "bookmarks.gvdb"
 msgstr "záložky.gvdb"
 
-#: src/window-commands.c:480
+#: src/window-commands.c:481
 msgid "Bookmarks successfully exported!"
 msgstr "Záložky boli úspešne exportované!"
 
-#: src/window-commands.c:608
+#: src/window-commands.c:609
 msgid "Current maintainers:"
 msgstr "Aktuálni správcovia:"
 
 # emails
-#: src/window-commands.c:611 src/window-commands.c:634
+#: src/window-commands.c:612 src/window-commands.c:635
 msgid "Contact us at:"
 msgstr "Kontaktujte nás na:"
 
-#: src/window-commands.c:614
+#: src/window-commands.c:615
 msgid "Past maintainers:"
 msgstr "Predošlí správcovia:"
 
-#: src/window-commands.c:617
+#: src/window-commands.c:618
 msgid "Contributors:"
 msgstr "Prispievatelia:"
 
-#: src/window-commands.c:643
+#: src/window-commands.c:644
 #, c-format
 msgid ""
 "A simple, clean, beautiful view of the web.\n"
@@ -3645,10 +3789,6 @@ msgid ""
 msgstr ""
 "Jednoduché, jasné, nádherné prezeranie webových stránok.\n"
 "Aplikácia využíva jadro WebKitGTK+ %d.%d.%d"
-
-#: src/window-commands.c:653
-msgid "Epiphany Technology Preview"
-msgstr "Ukážka technológie aplikácie Epiphany"
 
 #. Translators: This is a special message that shouldn't be translated
 #. * literally. It is used in the about box to give credits to
@@ -3658,7 +3798,7 @@ msgstr "Ukážka technológie aplikácie Epiphany"
 #. * this translation; in that case, please write each of them on a separate
 #. * line seperated by newlines (\n).
 #.
-#: src/window-commands.c:670
+#: src/window-commands.c:671
 msgid "translator-credits"
 msgstr ""
 "Marcel Telka <marcel@telka.sk>\n"
@@ -3666,71 +3806,67 @@ msgstr ""
 "Peter Vágner <pvdeejay@gmail.com>"
 
 #: src/window-commands.c:674
-msgid "Web Website"
-msgstr "Webová stránka"
-
-#: src/window-commands.c:676
 msgid "Website"
 msgstr "Webová stránka"
 
 # menu item
-#: src/window-commands.c:926
+#: src/window-commands.c:923
 msgid "Open"
 msgstr "Otvoriť"
 
-#: src/window-commands.c:1311
+#: src/window-commands.c:1286
 #, c-format
 msgid "A web application named “%s” already exists. Do you want to replace it?"
 msgstr "Webová aplikácia s názvom „%s“ už existuje. Chcete ju nahradiť?"
 
 # menu item
-#: src/window-commands.c:1314
+#: src/window-commands.c:1289
 msgid "Cancel"
 msgstr "Zrušiť"
 
-#: src/window-commands.c:1316
+#: src/window-commands.c:1291
 msgid "Replace"
 msgstr "Nahradiť"
 
-#: src/window-commands.c:1320
+#: src/window-commands.c:1295
 msgid ""
 "An application with the same name already exists. Replacing it will "
 "overwrite it."
 msgstr "Aplikácia s týmto názvom už existuje. Nahradením bude prepísaná."
 
-#: src/window-commands.c:1355
+#: src/window-commands.c:1337
 #, c-format
 msgid "The application “%s” is ready to be used"
 msgstr "Aplikácia „%s“ je pripravená na použitie"
 
-#: src/window-commands.c:1358
+#: src/window-commands.c:1340
 #, c-format
 msgid "The application “%s” could not be created"
 msgstr "Nepodarilo sa vytvoriť aplikáciu „%s“"
 
-#: src/window-commands.c:1366
+#: src/window-commands.c:1348
 msgid "Launch"
 msgstr "Spustiť"
 
 # window title
 #. Show dialog with icon, title.
-#: src/window-commands.c:1411
+#: src/window-commands.c:1393
 msgid "Create Web Application"
 msgstr "Vytvorenie webovej aplikácie"
 
-#: src/window-commands.c:1416
+#: src/window-commands.c:1398
 msgid "C_reate"
 msgstr "Vytvo_riť"
 
-#: src/window-commands.c:1545
+#: src/window-commands.c:1527
 msgid "Save"
 msgstr "Uložiť"
 
-#: src/window-commands.c:2233
+#: src/window-commands.c:2226
 msgid "Enable caret browsing mode?"
 msgstr "Povoliť režim prehliadania pomocou klávesnice?"
 
-#: src/window-commands.c:2236
+#: src/window-commands.c:2229
 msgid ""
 "Pressing F7 turns caret browsing on or off. This feature places a moveable "
 "cursor in web pages, allowing you to move around with your keyboard. Do you "
@@ -3741,9 +3877,75 @@ msgstr ""
 "pohybovať sa po stránke pomocou klávesnice. Chcete povoliť prehliadanie "
 "pomocou klávesnice?"
 
-#: src/window-commands.c:2239
+#: src/window-commands.c:2232
 msgid "_Enable"
 msgstr "_Povoliť"
+
+# gsettings summary
+#~ msgid "Automatic downloads"
+#~ msgstr "Automatické preberanie"
+
+# DK: momentalny preklad default priecinka je "Stiahnuté".prepise sa na "Prebraté" po zjednotení prekladu slova "download"
+# gsettings description
+#~ msgid ""
+#~ "When files cannot be opened by the browser they are automatically "
+#~ "downloaded to the download folder and opened with the appropriate "
+#~ "application."
+#~ msgstr ""
+#~ "Keď súbory nemôžu byť otvorené pomocou prehliadača, sú automaticky "
+#~ "prevzaté do priečinka „Stiahnuté“ a otvorené pomocou príslušnej aplikácie."
+
+# title, h1
+#~ msgid "Installed plugins"
+#~ msgstr "Nainštalované zásuvné moduly"
+
+# gsettings summary
+#~ msgid "Plugins"
+#~ msgstr "Zásuvné moduly"
+
+#~ msgid "Plugins are disabled in the preferences"
+#~ msgstr "Zásuvné moduly sú zakázané v nastaveniach"
+
+#~ msgid "Enabled"
+#~ msgstr "Povolený"
+
+#~ msgid "Yes"
+#~ msgstr "Áno"
+
+#~ msgid "No"
+#~ msgstr "Nie"
+
+# th
+#~ msgid "MIME type"
+#~ msgstr "Typ MIME"
+
+# th
+#~ msgid "Description"
+#~ msgstr "Popis"
+
+# th
+#~ msgid "Suffixes"
+#~ msgstr "Prípony"
+
+# cmd desc
+#, fuzzy
+#~| msgid "Open a new browser window"
+#~ msgid "Open in browser"
+#~ msgstr "Otvorí nové okno prehliadača"
+
+#~ msgid "New _Window"
+#~ msgstr "Nové o_kno"
+
+# GtkCheckButton label
+#~ msgid "A_utomatically open downloaded files"
+#~ msgstr "A_utomaticky otvoriť prebrané súbory"
+
+# GtkCheckButton label
+#~ msgid "Enable _plugins"
+#~ msgstr "Povoliť _zásuvné moduly"
+
+#~ msgid "Web Website"
+#~ msgstr "Webová stránka"
 
 #~ msgid "50%"
 #~ msgstr "50 %"
@@ -3819,9 +4021,6 @@ msgstr "_Povoliť"
 #~ "The height to use for a new window that is not restored from a previous "
 #~ "session."
 #~ msgstr "Výška nového okna, ktoré nie je obnovené z predošlej relácie."
-
-#~ msgid "%s is not a valid URI"
-#~ msgstr "Adresa %s nie je platným identifikátorom URI"
 
 #~ msgid "DuckDuckGo"
 #~ msgstr "DuckDuckGo"
@@ -4259,10 +4458,6 @@ msgstr "_Povoliť"
 #~ msgid "Search the Web for '%s'"
 #~ msgstr "Vyhľadanie výrazu „%s“ na webe"
 
-# PM: ide o názov záložky
-#~ msgid "_Title:"
-#~ msgstr "_Názov:"
-
 #~ msgid "A_ddress:"
 #~ msgstr "A_dresa:"
 
@@ -4277,12 +4472,6 @@ msgstr "_Povoliť"
 
 #~ msgid "Save _As…"
 #~ msgstr "Uložiť _ako…"
-
-#~ msgid "Print…"
-#~ msgstr "Tlačiť…"
-
-#~ msgid "_Find…"
-#~ msgstr "_Nájsť…"
 
 #~ msgid "_Add Bookmark…"
 #~ msgstr "_Pridať záložku…"
