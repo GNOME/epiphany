@@ -431,6 +431,7 @@ ephy_embed_prefs_init (gpointer user_data)
                                                        "enable-fullscreen", TRUE,
                                                        "enable-javascript", TRUE,
                                                        "enable-dns-prefetching", TRUE,
+                                                       "enable-mediasource", TRUE,
                                                        "javascript-can-open-windows-automatically", TRUE,
                                                        NULL);
 
