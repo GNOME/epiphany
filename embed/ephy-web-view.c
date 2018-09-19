@@ -1036,16 +1036,19 @@ readability_js_finish_cb (GObject      *object,
 }
 
 static gboolean
-run_readability_js (gpointer data)
+run_readability_js_if_needed (gpointer data)
 {
   EphyWebView *web_view = data;
 
-  web_view->reader_js_timeout = 0;
-  webkit_web_view_run_javascript_from_gresource (WEBKIT_WEB_VIEW (web_view),
-                                                 "/org/gnome/epiphany/readability.js",
-                                                 NULL,
-                                                 readability_js_finish_cb,
-                                                 web_view);
+  /* Internal pages should never receive reader mode. */
+  if (!ephy_embed_utils_is_no_show_address (web_view->address)) {
+    web_view->reader_js_timeout = 0;
+    webkit_web_view_run_javascript_from_gresource (WEBKIT_WEB_VIEW (web_view),
+                                                   "/org/gnome/epiphany/readability.js",
+                                                   NULL,
+                                                   readability_js_finish_cb,
+                                                   web_view);
+  }
 
   return G_SOURCE_REMOVE;
 }
@@ -1972,7 +1975,7 @@ load_changed_cb (WebKitWebView  *web_view,
 
       view->reader_loading = FALSE;
       if (!view->reader_active)
-        view->reader_js_timeout = g_idle_add (run_readability_js, web_view);
+        view->reader_js_timeout = g_idle_add (run_readability_js_if_needed, web_view);
 
       break;
 
