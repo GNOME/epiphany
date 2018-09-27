@@ -3108,7 +3108,7 @@ setup_action_bar (EphyWindow *window)
 {
   GtkWidget *action_bar;
 
-  action_bar = GTK_WIDGET (ephy_action_bar_new ());
+  action_bar = GTK_WIDGET (ephy_action_bar_new (window));
   gtk_revealer_set_transition_type (GTK_REVEALER (action_bar), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
   gtk_widget_show (action_bar);
 

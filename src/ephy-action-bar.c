@@ -21,9 +21,18 @@
 
 #include "ephy-action-bar.h"
 
+enum {
+  PROP_0,
+  PROP_WINDOW,
+  N_PROPERTIES
+};
+
+static GParamSpec *object_properties[N_PROPERTIES] = { NULL, };
+
 struct _EphyActionBar {
   GtkRevealer parent_instance;
 
+  EphyWindow *window;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
 };
@@ -31,9 +40,85 @@ struct _EphyActionBar {
 G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, GTK_TYPE_REVEALER)
 
 static void
+sync_chromes_visibility (EphyActionBar *action_bar)
+{
+  EphyWindowChrome chrome;
+
+  chrome = ephy_window_get_chrome (action_bar->window);
+
+  gtk_widget_set_visible (ephy_action_bar_start_get_navigation_box (action_bar->action_bar_start),
+                          chrome & EPHY_WINDOW_CHROME_HEADER_BAR);
+  ephy_action_bar_end_set_show_bookmarks_button (action_bar->action_bar_end,
+                                                 chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
+  ephy_action_bar_end_set_show_new_tab_button (action_bar->action_bar_end,
+                                               chrome & EPHY_WINDOW_CHROME_TABSBAR);
+}
+
+static void
+ephy_action_bar_set_property (GObject      *object,
+                              guint         property_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
+
+  switch (property_id) {
+    case PROP_WINDOW:
+      action_bar->window = EPHY_WINDOW (g_value_get_object (value));
+      g_object_notify_by_pspec (object, object_properties[PROP_WINDOW]);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+  }
+}
+
+static void
+ephy_action_bar_get_property (GObject    *object,
+                              guint       property_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
+
+  switch (property_id) {
+    case PROP_WINDOW:
+      g_value_set_object (value, action_bar->window);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+  }
+}
+
+static void
+ephy_action_bar_constructed (GObject *object)
+{
+  EphyActionBar *action_bar = EPHY_ACTION_BAR (object);
+
+  g_signal_connect_object (action_bar->window, "notify::chrome",
+                           G_CALLBACK (sync_chromes_visibility), action_bar,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 ephy_action_bar_class_init (EphyActionBarClass *klass)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gobject_class->set_property = ephy_action_bar_set_property;
+  gobject_class->get_property = ephy_action_bar_get_property;
+  gobject_class->constructed = ephy_action_bar_constructed;
+
+  object_properties[PROP_WINDOW] =
+    g_param_spec_object ("window",
+                         "Window",
+                         "The action_bar's EphyWindow",
+                         EPHY_TYPE_WINDOW,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class,
+                                     N_PROPERTIES,
+                                     object_properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/epiphany/gtk/action-bar.ui");
@@ -57,9 +142,10 @@ ephy_action_bar_init (EphyActionBar *action_bar)
 }
 
 EphyActionBar *
-ephy_action_bar_new (void)
+ephy_action_bar_new (EphyWindow *window)
 {
   return g_object_new (EPHY_TYPE_ACTION_BAR,
+                       "window", window,
                        NULL);
 }
 
