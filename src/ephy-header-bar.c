@@ -160,8 +160,9 @@ ephy_header_bar_constructed (GObject *object)
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
 
-  g_signal_connect_swapped (header_bar->window, "notify::chrome",
-                            G_CALLBACK (sync_chromes_visibility), header_bar);
+  g_signal_connect_object (header_bar->window, "notify::chrome",
+                           G_CALLBACK (sync_chromes_visibility), header_bar,
+                           G_CONNECT_SWAPPED);
 
   /* Start action elements */
   header_bar->action_bar_start = ephy_action_bar_start_new ();
