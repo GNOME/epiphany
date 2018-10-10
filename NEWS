@@ -1,3 +1,35 @@
+3.31.1 - October 10, 2018
+=========================
+
+- Add keyboard shortcut for reader mode (#526)
+- Fix too many button being available for small windows in app mode (#544, Adrien Plazas)
+- Move password management from the web process to the UI process (Patrick Griffis)
+- Fix Google Search in Russian localization and switch to google.ru (Alexandr Sidorenko)
+- Add preferences for reader mode and improve styling (Adrián Pérez de Castro)
+- New, redesigned Epiphany icon (Jakub Steiner)
+- New fancier address bar dropdown based on libdazzle
+- Removed GNOME application menu
+
+3.30.1 - September 21, 2018
+===========================
+
+This release is intended to fix video playback on YouTube. We believe that
+YouTube began requiring media source extensions to play WebM videos on Tuesday
+of this week, so we have enabled it.
+
+You are strongly encouraged to update to WebKitGTK+ 2.22.2 and the forthcoming
+GStreamer 1.14.4 to minimize video playback disruptions. It's not really
+reliable enough to be enabled yet, but it's a whole lot better than no YouTube.
+
+- Enable media source extensions
+- Don't show reader mode icon on internal pages (e.g. about:incognito)
+- Add reader mode styling for <mark> elements (#46, Adrián Pérez de Castro)
+- Fix searches using a colon in the first word (#90)
+- Fix frequent crashes, and also fix address bar with multiple windows open (#519)
+- Fix crash on homedepot.com
+- Hide homepage button in app mode
+- Ensure Firefox Sync preferences web view uses Epiphany data directories
+
 3.30.0 - September 2, 2018
 ==========================
 
