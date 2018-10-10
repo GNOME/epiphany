@@ -1042,7 +1042,6 @@ run_readability_js_if_needed (gpointer data)
 
   /* Internal pages should never receive reader mode. */
   if (!ephy_embed_utils_is_no_show_address (web_view->address)) {
-    web_view->reader_js_timeout = 0;
     webkit_web_view_run_javascript_from_gresource (WEBKIT_WEB_VIEW (web_view),
                                                    "/org/gnome/epiphany/readability.js",
                                                    NULL,
@@ -1050,6 +1049,7 @@ run_readability_js_if_needed (gpointer data)
                                                    web_view);
   }
 
+  web_view->reader_js_timeout = 0;
   return G_SOURCE_REMOVE;
 }
 
