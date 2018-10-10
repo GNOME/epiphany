@@ -31,7 +31,13 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 
+#include <sys/stat.h>
+#include <sys/types.h>
+
+#define MAX_PREVIEW_SIZE 180
+#define MAX_PREVIEW_SOURCE_SIZE 4096
 
 static GtkFileFilter *
 ephy_file_chooser_add_pattern_filter (GtkFileChooser *dialog,
@@ -89,6 +95,53 @@ ephy_file_chooser_add_mime_filter (GtkFileChooser *dialog,
   return filth;
 }
 
+static void
+update_preview_cb (GtkFileChooser *file_chooser,
+                   gpointer        data)
+{
+  GtkImage *preview = GTK_IMAGE (data);
+  g_autofree char *filename = gtk_file_chooser_get_preview_filename (file_chooser);
+  gint preview_width = 0;
+  gint preview_height = 0;
+  struct g_stat st_buf;
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
+
+  GdkPixbufFormat *preview_format = gdk_pixbuf_get_file_info (filename,
+                                                              &preview_width,
+                                                              &preview_height);
+
+  if (!filename || g_stat (filename, &st_buf) || (!S_ISREG (st_buf.st_mode))) {
+    gtk_file_chooser_set_preview_widget_active (file_chooser, FALSE);
+    return; // stat failed or file is not regular
+  }
+
+  if (!preview_format ||
+      preview_width <= 0 || preview_height <= 0 ||
+      preview_width > MAX_PREVIEW_SOURCE_SIZE ||
+      preview_height > MAX_PREVIEW_SOURCE_SIZE) {
+    gtk_file_chooser_set_preview_widget_active (file_chooser, FALSE);
+    return; // unpreviewable, 0px, or unsafely large
+  }
+
+  if (preview_width > MAX_PREVIEW_SIZE || preview_height > MAX_PREVIEW_SIZE) {
+    pixbuf = gdk_pixbuf_new_from_file_at_size (filename,
+                                               MAX_PREVIEW_SIZE,
+                                               MAX_PREVIEW_SIZE,
+                                               NULL);
+  } else {
+    pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+  }
+
+  pixbuf = gdk_pixbuf_apply_embedded_orientation (pixbuf);
+
+  gtk_widget_set_size_request (GTK_WIDGET (preview),
+                               gdk_pixbuf_get_width (pixbuf) + 6,
+                               gdk_pixbuf_get_height (pixbuf) + 6);
+
+  gtk_image_set_from_pixbuf (preview, pixbuf);
+  gtk_file_chooser_set_preview_widget_active (file_chooser, pixbuf != NULL);
+}
+
 GtkFileChooser *
 ephy_create_file_chooser (const char           *title,
                           GtkWidget            *parent,
@@ -98,6 +151,7 @@ ephy_create_file_chooser (const char           *title,
   GtkFileChooser *dialog;
   GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];
   char *downloads_dir;
+  GtkWidget *preview = gtk_image_new ();
 
   g_assert (GTK_IS_WINDOW (parent));
   g_assert (default_filter >= 0 && default_filter <= EPHY_FILE_FILTER_LAST);
@@ -120,6 +174,12 @@ ephy_create_file_chooser (const char           *title,
   } else if (action == GTK_FILE_CHOOSER_ACTION_SAVE) {
     gtk_file_chooser_native_set_accept_label (GTK_FILE_CHOOSER_NATIVE (dialog), _("_Save"));
   }
+
+  gtk_file_chooser_set_preview_widget (dialog, preview);
+  gtk_file_chooser_set_use_preview_label (dialog, FALSE);
+  g_signal_connect (dialog, "update-preview",
+                    G_CALLBACK (update_preview_cb),
+                    preview);
 
   if (default_filter != EPHY_FILE_FILTER_NONE) {
     filter[EPHY_FILE_FILTER_ALL_SUPPORTED] =
