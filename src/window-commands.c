@@ -561,84 +561,29 @@ window_cmd_show_about (GSimpleAction *action,
                        gpointer       user_data)
 {
   EphyWindow *window = EPHY_WINDOW (user_data);
+  GtkAboutDialog *dialog;
   char *comments = NULL;
   GKeyFile *key_file;
   GBytes *bytes;
   GError *error = NULL;
-  char **list, **authors, **maintainers, **past_maintainers, **contributors, **artists, **documenters;
-  gsize n_authors, n_maintainers, n_past_maintainers, n_contributors, n_artists, n_documenters, i, j;
+  char **authors, **maintainers, **past_maintainers, **contributors, **artists, **documenters;
 
   key_file = g_key_file_new ();
   bytes = g_resources_lookup_data ("/org/gnome/epiphany/about.ini", 0, NULL);
   if (!g_key_file_load_from_data (key_file, g_bytes_get_data (bytes, NULL), -1, 0, &error)) {
     g_warning ("Couldn't load about data: %s\n", error->message);
     g_error_free (error);
+    g_key_file_free (key_file);
     return;
   }
   g_bytes_unref (bytes);
 
-  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Author",
-                                     &n_authors, NULL);
-  maintainers = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Maintainers",
-                                            &n_maintainers, NULL);
-  past_maintainers = g_key_file_get_string_list (key_file, ABOUT_GROUP, "PastMaintainers",
-                                                 &n_past_maintainers, NULL);
-  contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors",
-                                             &n_contributors, NULL);
-
-#define APPEND(_to, _from) \
-  _to[i++] = g_strdup (_from);
-
-#define APPEND_STRV_AND_FREE(_to, _from) \
-  if (_from) \
-  { \
-    for (j = 0; _from[j] != NULL; ++j) \
-    { \
-      _to[i++] = _from[j]; \
-    } \
-    g_free (_from); \
-  }
-
-  authors = g_new (char *, (list ? n_authors : 0) +
-                   (maintainers ? n_maintainers : 0) +
-                   (past_maintainers ? n_past_maintainers : 0) +
-                   (contributors ? n_contributors : 0) + 9 + 1);
-  i = 0;
-  APPEND_STRV_AND_FREE (authors, list);
-  APPEND (authors, "");
-  APPEND (authors, _("Current maintainers:"));
-  APPEND_STRV_AND_FREE (authors, maintainers);
-  APPEND (authors, "");
-  APPEND (authors, _("Contact us at:"));
-  APPEND (authors, "<epiphany-list@gnome.org>");
-  APPEND (authors, "");
-  APPEND (authors, _("Past maintainers:"));
-  APPEND_STRV_AND_FREE (authors, past_maintainers);
-  APPEND (authors, "");
-  APPEND (authors, _("Contributors:"));
-  APPEND_STRV_AND_FREE (authors, contributors);
-  authors[i++] = NULL;
-
-  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
-
-  artists = g_new (char *, (list ? n_artists : 0) + 4 + 1);
-  i = 0;
-  APPEND_STRV_AND_FREE (artists, list);
-  artists[i++] = NULL;
-
-  list = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
-
-  documenters = g_new (char *, (list ? n_documenters : 0) + 3 + 1);
-  i = 0;
-  APPEND_STRV_AND_FREE (documenters, list);
-  APPEND (documenters, "");
-  APPEND (documenters, _("Contact us at:"));
-  APPEND (documenters, "<gnome-doc-list@gnome.org>");
-  documenters[i++] = NULL;
-
-#undef APPEND
-#undef APPEND_STRV_AND_FREE
-
+  authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Author", NULL, NULL);
+  maintainers = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Maintainers", NULL, NULL);
+  past_maintainers = g_key_file_get_string_list (key_file, ABOUT_GROUP, "PastMaintainers", NULL, NULL);
+  contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors", NULL, NULL);
+  artists = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", NULL, NULL);
+  documenters = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", NULL, NULL);
   g_key_file_free (key_file);
 
   comments = g_strdup_printf (_("A simple, clean, beautiful view of the web.\n"
@@ -647,39 +592,45 @@ window_cmd_show_about (GSimpleAction *action,
                               webkit_get_minor_version (),
                               webkit_get_micro_version ());
 
-  gtk_show_about_dialog (window ? GTK_WINDOW (window) : NULL,
+  dialog = GTK_ABOUT_DIALOG (gtk_about_dialog_new ());
+
+  if (window)
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+
 #if !TECH_PREVIEW
-                         "program-name", _("Web"),
+  gtk_about_dialog_set_program_name (dialog, _("Web"));
 #else
-                         "program-name", _("Epiphany Technology Preview"),
+  gtk_about_dialog_set_program_name (dialog, _("Epiphany Technology Preview"));
 #endif
-                         "version", VCSVERSION,
-                         "copyright", "Copyright © 2002–2004 Marco Pesenti Gritti\n"
-                         "Copyright © 2003–2018 The Web Developers",
-                         "artists", artists,
-                         "authors", authors,
-                         "comments", comments,
-                         "documenters", documenters,
-                         /* Translators: This is a special message that shouldn't be translated
-                          * literally. It is used in the about box to give credits to
-                          * the translators.
-                          * Thus, you should translate it to your name and email address.
-                          * You should also include other translators who have contributed to
-                          * this translation; in that case, please write each of them on a separate
-                          * line seperated by newlines (\n).
-                          */
-                         "translator-credits", _("translator-credits"),
-                         "logo-icon-name", "org.gnome.Epiphany",
-                         "website", "https://wiki.gnome.org/Apps/Web",
-                         "website-label", _("Website"),
-                         "license-type", GTK_LICENSE_GPL_3_0,
-                         "wrap-license", TRUE,
-                         NULL);
+
+  gtk_about_dialog_set_version (dialog, VCSVERSION);
+  gtk_about_dialog_set_copyright (dialog, "Copyright © 2002–2004 Marco Pesenti Gritti\n"
+                                          "Copyright © 2003–2018 The GNOME Web Developers");
+  gtk_about_dialog_set_comments (dialog, comments);
+  gtk_about_dialog_set_license_type (dialog, GTK_LICENSE_GPL_3_0);
+  gtk_about_dialog_set_website (dialog, "https://wiki.gnome.org/Apps/Web");
+  gtk_about_dialog_set_website_label (dialog, _("Website"));
+  gtk_about_dialog_set_logo_icon_name (dialog, "org.gnome.Epiphany");
+
+  /* We have to use add_credit_section() for documenters and artists to
+   * ensure maintainers get sorted first. */
+  gtk_about_dialog_set_authors (dialog, (const char **)authors);
+  gtk_about_dialog_set_translator_credits (dialog, _("translator-credits"));
+  gtk_about_dialog_add_credit_section (dialog, _("Current maintainers"), (const char **)maintainers);
+  gtk_about_dialog_add_credit_section (dialog, _("Past maintainers"), (const char **)past_maintainers);
+  gtk_about_dialog_add_credit_section (dialog, _("Documented by"), (const char **)documenters);
+  gtk_about_dialog_add_credit_section (dialog, _("Artwork by"), (const char **)artists);
+  gtk_about_dialog_add_credit_section (dialog, _("Contributors"), (const char **)contributors);
+
+  gtk_dialog_run (GTK_DIALOG (dialog));
 
   g_free (comments);
   g_strfreev (artists);
   g_strfreev (authors);
+  g_strfreev (contributors);
   g_strfreev (documenters);
+  g_strfreev (maintainers);
+  g_strfreev (past_maintainers);
 }
 
 void
