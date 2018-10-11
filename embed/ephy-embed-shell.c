@@ -842,7 +842,7 @@ source_request_cb (WebKitURISchemeRequest *request,
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
 
-  ephy_view_source_handler_handle_request (priv->source_handler, request);
+  ephy_source_transform_handler_handle_request (EPHY_SOURCE_TRANSFORM_HANDLER (priv->source_handler), request);
 }
 
 static void

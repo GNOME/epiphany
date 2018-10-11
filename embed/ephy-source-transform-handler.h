@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /*
- *  Copyright © 2016 Igalia S.L.
+ *  Copyright © 2016, 2018 Igalia S.L.
  *
  *  This file is part of Epiphany.
  *
@@ -20,18 +20,24 @@
 
 #pragma once
 
-#include "ephy-source-transform-handler.h"
-
 #include <webkit2/webkit2.h>
 
 G_BEGIN_DECLS
 
-#define EPHY_TYPE_VIEW_SOURCE_HANDLER (ephy_view_source_handler_get_type ())
+#define EPHY_TYPE_SOURCE_TRANSFORM_HANDLER (ephy_source_transform_handler_get_type ())
 
-G_DECLARE_FINAL_TYPE (EphyViewSourceHandler, ephy_view_source_handler, EPHY, VIEW_SOURCE_HANDLER, EphySourceTransformHandler)
+G_DECLARE_DERIVABLE_TYPE (EphySourceTransformHandler, ephy_source_transform_handler, EPHY, SOURCE_TRANSFORM_HANDLER, GObject)
 
-#define EPHY_VIEW_SOURCE_SCHEME "ephy-source"
+struct _EphySourceTransformHandlerClass
+{
+  GObjectClass parent_class;
 
-EphyViewSourceHandler *ephy_view_source_handler_new            (void);
+  guchar *(* transform_source) (EphySourceTransformHandler *handler,
+                                const guchar               *source,
+                                gsize                       length);
+};
+
+void ephy_source_transform_handler_handle_request (EphySourceTransformHandler  *handler,
+                                                   WebKitURISchemeRequest      *request);
 
 G_END_DECLS
