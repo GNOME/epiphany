@@ -104,6 +104,7 @@ update_preview_cb (GtkFileChooser *file_chooser,
 
   struct g_stat st_buf;
   if (!filename || g_stat(filename, &st_buf) || (!S_ISREG(st_buf.st_mode))) {
+    gtk_file_chooser_set_preview_widget_active(file_chooser, FALSE);
     return; // stat failed or file is not regular
   }
 
@@ -116,6 +117,7 @@ update_preview_cb (GtkFileChooser *file_chooser,
       preview_width <= 0 || preview_height <= 0 ||
       preview_width > MAX_PREVIEW_SOURCE_SIZE ||
       preview_height > MAX_PREVIEW_SOURCE_SIZE) {
+    gtk_file_chooser_set_preview_widget_active(file_chooser, FALSE);
     return; // unpreviewable, 0px, or unsafely large
   }
 
