@@ -529,7 +529,7 @@ entry_key_press_cb (GtkEntry          *entry,
     /* Make sure the location is activated on CTRL+l even when the
      * completion popup is shown and have an active keyboard grab.
      */
-    ephy_location_entry_activate (location_entry);
+    ephy_location_entry_focus (location_entry);
   }
 
   if (event->keyval == GDK_KEY_Return ||
