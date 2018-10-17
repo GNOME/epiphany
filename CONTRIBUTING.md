@@ -22,12 +22,13 @@ you have.
 
 This is the **wrong place** to report bugs with web content (e.g. incorrect page
 rendering, broken JavaScript, problems with video playback, font issues, network
-issues, or generally anything at all wrong with a website). These problems
-should all be reported directly on [WebKit Bugzilla](https://bugs.webkit.org)
-instead. The Epiphany developers are also WebKit developers, and we will see
-your WebKit bug reports so long as you are careful to select the WebKitGTK+
-Bugzilla component when reporting the issue. Don't forget! Please also add the
-`[GTK]` prefix to the title of your bug.
+issues, web inspector issues, or generally anything at all wrong with a
+website). These problems should all be reported directly on
+[WebKit Bugzilla](https://bugs.webkit.org) instead. The Epiphany developers are
+also WebKit developers, and we will see your WebKit bug reports so long as you
+are careful to select the WebKitGTK+ Bugzilla component when reporting the
+issue. Don't forget! Please also add the `[GTK]` prefix to the title of your
+bug.
 
 In general, only problems with the GTK+ user interface around the web content
 view (e.g. menus, preferences dialog, window chrome, history, bookmarks, tabs)
