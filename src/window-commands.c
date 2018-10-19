@@ -623,6 +623,7 @@ window_cmd_show_about (GSimpleAction *action,
   gtk_about_dialog_add_credit_section (dialog, _("Contributors"), (const char **)contributors);
 
   gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 
   g_free (comments);
   g_strfreev (artists);
