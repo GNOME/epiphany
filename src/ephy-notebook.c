@@ -253,6 +253,7 @@ ephy_notebook_switch_page_cb (GtkNotebook *notebook,
   GtkWidget *child;
 
   child = gtk_notebook_get_nth_page (notebook, page_num);
+  gtk_widget_grab_focus (child);
 
   /* Remove the old page, we dont want to grow unnecessarily
    * the list */
