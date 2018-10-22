@@ -329,7 +329,7 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
                                 WebKitFileChooserRequest *request)
 {
 
-  GtkWidget* toplevel = gtk_widget_get_toplevel (GTK_WIDGET(web_view));
+  GtkWidget* toplevel = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
 
   GtkFileChooser *dialog;
 
@@ -343,9 +343,9 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
   GtkFileFilter* filter = webkit_file_chooser_request_get_mime_types_filter (request);
 
   if (filter)
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER(dialog), filter);
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
 
-  gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER(dialog), allowsMultipleSelection);
+  gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (dialog), allowsMultipleSelection);
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (open_response_cb),
