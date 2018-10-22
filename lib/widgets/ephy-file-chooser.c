@@ -97,49 +97,49 @@ ephy_file_chooser_add_mime_filter (GtkFileChooser *dialog,
 
 static void
 update_preview_cb (GtkFileChooser *file_chooser,
-                        gpointer data)
+                   gpointer data)
 {
   GtkImage *preview = GTK_IMAGE (data);
-  g_autofree char *filename = gtk_file_chooser_get_preview_filename(file_chooser);
-
+  g_autofree char *filename = gtk_file_chooser_get_preview_filename (file_chooser);
+  gint preview_width = 0;
+  gint preview_height = 0;
   struct g_stat st_buf;
-  if (!filename || g_stat(filename, &st_buf) || (!S_ISREG(st_buf.st_mode))) {
-    gtk_file_chooser_set_preview_widget_active(file_chooser, FALSE);
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
+
+  if (!filename || g_stat (filename, &st_buf) || (!S_ISREG (st_buf.st_mode))) {
+    gtk_file_chooser_set_preview_widget_active (file_chooser, FALSE);
     return; // stat failed or file is not regular
   }
 
-  gint preview_width = 0;
-  gint preview_height = 0;
-  GdkPixbufFormat *preview_format = gdk_pixbuf_get_file_info(filename,
-                                                             &preview_width,
-                                                             &preview_height);
+  GdkPixbufFormat *preview_format = gdk_pixbuf_get_file_info (filename,
+                                                              &preview_width,
+                                                              &preview_height);
   if (!preview_format ||
       preview_width <= 0 || preview_height <= 0 ||
       preview_width > MAX_PREVIEW_SOURCE_SIZE ||
       preview_height > MAX_PREVIEW_SOURCE_SIZE) {
-    gtk_file_chooser_set_preview_widget_active(file_chooser, FALSE);
+    gtk_file_chooser_set_preview_widget_active (file_chooser, FALSE);
     return; // unpreviewable, 0px, or unsafely large
   }
 
-  g_autoptr(GdkPixbuf) pixbuf = NULL;
   if (preview_width > MAX_PREVIEW_SIZE || preview_height > MAX_PREVIEW_SIZE) {
-    pixbuf = gdk_pixbuf_new_from_file_at_size(filename,
-                                                      MAX_PREVIEW_SIZE,
-                                                      MAX_PREVIEW_SIZE,
-                                                      NULL);
+    pixbuf = gdk_pixbuf_new_from_file_at_size (filename,
+                                               MAX_PREVIEW_SIZE,
+                                               MAX_PREVIEW_SIZE,
+                                               NULL);
   }
   else {
-    pixbuf = gdk_pixbuf_new_from_file(filename, NULL);
+    pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
   }
 
-  pixbuf = gdk_pixbuf_apply_embedded_orientation(pixbuf);
+  pixbuf = gdk_pixbuf_apply_embedded_orientation (pixbuf);
 
-  gtk_widget_set_size_request(GTK_WIDGET (preview),
-                                     gdk_pixbuf_get_width(pixbuf) + 6,
-                                     gdk_pixbuf_get_height(pixbuf) + 6);
+  gtk_widget_set_size_request (GTK_WIDGET (preview),
+                               gdk_pixbuf_get_width (pixbuf) + 6,
+                               gdk_pixbuf_get_height (pixbuf) + 6);
 
-  gtk_image_set_from_pixbuf(preview, pixbuf);
-  gtk_file_chooser_set_preview_widget_active(file_chooser, pixbuf != NULL);
+  gtk_image_set_from_pixbuf (preview, pixbuf);
+  gtk_file_chooser_set_preview_widget_active (file_chooser, pixbuf != NULL);
 }
 
 GtkFileChooser *
@@ -175,9 +175,11 @@ ephy_create_file_chooser (const char           *title,
   }
 
   GtkWidget *preview = gtk_image_new();
-  gtk_file_chooser_set_preview_widget(dialog, preview);
-  gtk_file_chooser_set_use_preview_label(dialog, FALSE);
-  g_signal_connect(dialog, "update-preview", G_CALLBACK(update_preview_cb), preview);
+  gtk_file_chooser_set_preview_widget (dialog, preview);
+  gtk_file_chooser_set_use_preview_label (dialog, FALSE);
+  g_signal_connect (dialog, "update-preview",
+                    G_CALLBACK (update_preview_cb),
+                    preview);
 
   if (default_filter != EPHY_FILE_FILTER_NONE) {
     filter[EPHY_FILE_FILTER_ALL_SUPPORTED] =
