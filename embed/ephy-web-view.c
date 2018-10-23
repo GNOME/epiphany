@@ -302,19 +302,19 @@ popups_manager_hide_all (EphyWebView *view)
 }
 
 static void
-open_response_cb (GtkFileChooser* dialog,
-                  gint response,
-                  WebKitFileChooserRequest* request)
+open_response_cb (GtkFileChooser           *dialog,
+                  gint                     response,
+                  WebKitFileChooserRequest *request)
 {
   if (response == GTK_RESPONSE_ACCEPT) {
-    GSList *filesList = gtk_file_chooser_get_filenames (dialog);
-    GPtrArray *filesArray = g_ptr_array_new ();
-    for (GSList *file = filesList; file; file = g_slist_next (file))
-      g_ptr_array_add (filesArray, file->data);
-    g_ptr_array_add (filesArray, 0);
-    webkit_file_chooser_request_select_files (request, (const gchar * const *)filesArray->pdata);
-    g_slist_free (filesList);
-    g_ptr_array_free (filesArray, FALSE);
+    GSList *file_list = gtk_file_chooser_get_filenames (dialog);
+    GPtrArray *file_array = g_ptr_array_new ();
+    for (GSList *file = file_list; file; file = g_slist_next (file))
+      g_ptr_array_add (file_array, file->data);
+    g_ptr_array_add (file_array, 0);
+    webkit_file_chooser_request_select_files (request, (const gchar * const *)file_array->pdata);
+    g_slist_free (file_list);
+    g_ptr_array_free (file_array, FALSE);
   } else {
     webkit_file_chooser_request_cancel (request);
   }
@@ -329,23 +329,23 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
                                 WebKitFileChooserRequest *request)
 {
 
-  GtkWidget* toplevel = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
+  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (web_view));
 
   GtkFileChooser *dialog;
+
+  gboolean allows_multiple_selection = webkit_file_chooser_request_get_select_multiple (request);
+
+  GtkFileFilter *filter = webkit_file_chooser_request_get_mime_types_filter (request);
 
   dialog = ephy_create_file_chooser (_("Open"),
                                      GTK_WIDGET (toplevel),
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
                                      EPHY_FILE_FILTER_ALL_SUPPORTED);
 
-  gboolean allowsMultipleSelection = webkit_file_chooser_request_get_select_multiple (request);
-
-  GtkFileFilter* filter = webkit_file_chooser_request_get_mime_types_filter (request);
-
   if (filter)
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
 
-  gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (dialog), allowsMultipleSelection);
+  gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (dialog), allows_multiple_selection);
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (open_response_cb),

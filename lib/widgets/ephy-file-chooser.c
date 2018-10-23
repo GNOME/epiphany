@@ -97,7 +97,7 @@ ephy_file_chooser_add_mime_filter (GtkFileChooser *dialog,
 
 static void
 update_preview_cb (GtkFileChooser *file_chooser,
-                   gpointer data)
+                   gpointer       data)
 {
   GtkImage *preview = GTK_IMAGE (data);
   g_autofree char *filename = gtk_file_chooser_get_preview_filename (file_chooser);
@@ -106,14 +106,14 @@ update_preview_cb (GtkFileChooser *file_chooser,
   struct g_stat st_buf;
   g_autoptr (GdkPixbuf) pixbuf = NULL;
 
+  GdkPixbufFormat *preview_format = gdk_pixbuf_get_file_info (filename,
+                                                              &preview_width,
+                                                              &preview_height);
+
   if (!filename || g_stat (filename, &st_buf) || (!S_ISREG (st_buf.st_mode))) {
     gtk_file_chooser_set_preview_widget_active (file_chooser, FALSE);
     return; // stat failed or file is not regular
   }
-
-  GdkPixbufFormat *preview_format = gdk_pixbuf_get_file_info (filename,
-                                                              &preview_width,
-                                                              &preview_height);
   if (!preview_format ||
       preview_width <= 0 || preview_height <= 0 ||
       preview_width > MAX_PREVIEW_SOURCE_SIZE ||
@@ -127,8 +127,7 @@ update_preview_cb (GtkFileChooser *file_chooser,
                                                MAX_PREVIEW_SIZE,
                                                MAX_PREVIEW_SIZE,
                                                NULL);
-  }
-  else {
+  } else {
     pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
   }
 
@@ -151,6 +150,7 @@ ephy_create_file_chooser (const char           *title,
   GtkFileChooser *dialog;
   GtkFileFilter *filter[EPHY_FILE_FILTER_LAST];
   char *downloads_dir;
+  GtkWidget *preview = gtk_image_new ();
 
   g_assert (GTK_IS_WINDOW (parent));
   g_assert (default_filter >= 0 && default_filter <= EPHY_FILE_FILTER_LAST);
@@ -174,7 +174,6 @@ ephy_create_file_chooser (const char           *title,
     gtk_file_chooser_native_set_accept_label (GTK_FILE_CHOOSER_NATIVE (dialog), _("_Save"));
   }
 
-  GtkWidget *preview = gtk_image_new();
   gtk_file_chooser_set_preview_widget (dialog, preview);
   gtk_file_chooser_set_use_preview_label (dialog, FALSE);
   g_signal_connect (dialog, "update-preview",
