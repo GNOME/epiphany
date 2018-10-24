@@ -31,10 +31,10 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <glib/gstdio.h>
+
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #define MAX_PREVIEW_SIZE 180
 #define MAX_PREVIEW_SOURCE_SIZE 4096
@@ -114,6 +114,7 @@ update_preview_cb (GtkFileChooser *file_chooser,
     gtk_file_chooser_set_preview_widget_active (file_chooser, FALSE);
     return; // stat failed or file is not regular
   }
+
   if (!preview_format ||
       preview_width <= 0 || preview_height <= 0 ||
       preview_width > MAX_PREVIEW_SOURCE_SIZE ||
