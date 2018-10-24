@@ -97,7 +97,7 @@ ephy_file_chooser_add_mime_filter (GtkFileChooser *dialog,
 
 static void
 update_preview_cb (GtkFileChooser *file_chooser,
-                   gpointer       data)
+                   gpointer        data)
 {
   GtkImage *preview = GTK_IMAGE (data);
   g_autofree char *filename = gtk_file_chooser_get_preview_filename (file_chooser);
