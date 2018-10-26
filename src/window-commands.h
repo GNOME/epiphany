@@ -182,9 +182,6 @@ void window_cmd_tabs_detach                     (GSimpleAction *action,
 void window_cmd_tabs_close                      (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
-void window_cmd_tabs_close_others               (GSimpleAction *action,
-                                                 GVariant      *parameter,
-                                                 gpointer       user_data);
 void window_cmd_tabs_close_right               (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

@@ -2359,36 +2359,6 @@ window_cmd_tabs_close (GSimpleAction *action,
 }
 
 void
-window_cmd_tabs_close_others (GSimpleAction *action,
-                       GVariant      *parameter,
-                       gpointer       user_data)
-{
-  EphyWindow *window = user_data;
-  GtkWidget *notebook;
-  EphyEmbed *embed;
-
-  notebook = ephy_window_get_notebook (window);
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_QUIT) &&
-      gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1) {
-    return;
-  }
-
-  int n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-
-  int current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-
-  for (int i = 0; i < n_pages; i++) {
-    if (i != current_page) {
-      embed = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
-      g_assert (embed != NULL);
-      g_signal_emit_by_name (notebook, "tab-close-request", embed);
-    }
-  }
-}
-
-void
 window_cmd_tabs_close_right (GSimpleAction *action,
                        GVariant      *parameter,
                        gpointer       user_data)
