@@ -2358,12 +2358,6 @@ window_cmd_tabs_close (GSimpleAction *action,
   g_signal_emit_by_name (notebook, "tab-close-request", embed);
 }
 
-/* void close_other_pages (GtkWidget *page, */
-/*                         gint safe_page_no) */
-/* { */
-
-/* } */
-
 void
 window_cmd_tabs_close_others (GSimpleAction *action,
                        GVariant      *parameter,
@@ -2383,18 +2377,14 @@ window_cmd_tabs_close_others (GSimpleAction *action,
 
   int n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
 
-  /* gtk_container_foreach (GTK_CONTAINER (notebook), ) */
-  /* GList *children = ephy_embed_container_get_children (EPHY_EMBED_CONTAINER (window)); */
-
-  /* GList *child = g_list_first(children)->data; */
   int current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 
   for (int i = 0; i < n_pages; i++) {
     if (i != current_page) {
-       embed = gtk_notebook_get_nth_page (notebook, i);
-       g_signal_emit_by_name (notebook, "tab-close-request", embed);
+      embed = gtk_notebook_get_nth_page (notebook, i);
+      g_assert (embed != NULL);
+      g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", embed);
     }
-    /* child = child->next; */
   }
 }
 
