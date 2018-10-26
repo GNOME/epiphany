@@ -2385,7 +2385,7 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
   GActionGroup *action_group;
   GAction *action;
 
-  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/menus.ui");
+  builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/notebook-context-menu.ui");
 
   menu_model = G_MENU (gtk_builder_get_object (builder, "notebook-menu"));
   menu = gtk_menu_new_from_model (G_MENU_MODEL (menu_model));
