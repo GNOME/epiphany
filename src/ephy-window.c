@@ -773,6 +773,7 @@ static const GActionEntry tab_entries [] = {
   { "duplicate", window_cmd_tabs_duplicate },
   { "detach", window_cmd_tabs_detach },
   { "close", window_cmd_tabs_close },
+  {"close-right", window_cmd_tabs_close_right },
   {"close-others", window_cmd_tabs_close_others }
 };
 
@@ -2409,6 +2410,11 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "move-right");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), page_num < n_pages - 1);
+
+    /* enable/disable close others/right */
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "close-right");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), page_num < n_pages - 1);
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
