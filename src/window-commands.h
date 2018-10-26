@@ -169,7 +169,7 @@ void window_cmd_tabs_next                       (GSimpleAction *action,
                                                  gpointer       user_data);
 void window_cmd_tabs_move_left                  (GSimpleAction *action,
                                                  GVariant      *state,
-                                                gpointer       user_data);
+                                                 gpointer       user_data);
 void window_cmd_tabs_move_right                 (GSimpleAction *action,
                                                  GVariant      *state,
                                                  gpointer       user_data);
@@ -180,6 +180,12 @@ void window_cmd_tabs_detach                     (GSimpleAction *action,
                                                  GVariant      *state,
                                                  gpointer       user_data);
 void window_cmd_tabs_close                      (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
+void window_cmd_tabs_close_left                 (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
+void window_cmd_tabs_close_right                (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
 void window_cmd_show_tab                        (GSimpleAction *action,

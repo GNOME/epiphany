@@ -768,11 +768,11 @@ static const GActionEntry window_entries [] =
 static const GActionEntry tab_entries [] = {
   { "previous", window_cmd_tabs_previous },
   { "next", window_cmd_tabs_next },
-  { "move-left", window_cmd_tabs_move_left },
-  { "move-right", window_cmd_tabs_move_right },
   { "duplicate", window_cmd_tabs_duplicate },
   { "detach", window_cmd_tabs_detach },
-  { "close", window_cmd_tabs_close }
+  { "close", window_cmd_tabs_close },
+  { "close-left", window_cmd_tabs_close_left },
+  { "close-right", window_cmd_tabs_close_right }
 };
 
 static const GActionEntry toolbar_entries [] = {
@@ -2401,13 +2401,13 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
     n_pages = gtk_notebook_get_n_pages (notebook);
     page_num = gtk_notebook_page_num (notebook, tab);
 
-    /* enable/disable move left/right items*/
+    /* enable/disable close others/left/right */
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                         "move-left");
+                                         "close-left");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), page_num > 0);
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
-                                         "move-right");
+                                         "close-right");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), page_num < n_pages - 1);
 
     gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *)event);
