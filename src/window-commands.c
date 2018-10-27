@@ -2382,6 +2382,8 @@ window_cmd_tabs_close_left (GSimpleAction *action,
     g_assert (l->data != NULL);
     g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", l->data);
   }
+
+  g_list_free (pages_to_close);
 }
 
 void
@@ -2408,6 +2410,7 @@ window_cmd_tabs_close_right (GSimpleAction *action,
     g_assert (l->data != NULL);
     g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", l->data);
   }
+
   g_list_free (pages_to_close);
 }
 
