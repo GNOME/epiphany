@@ -2359,6 +2359,32 @@ window_cmd_tabs_close (GSimpleAction *action,
 }
 
 void
+window_cmd_tabs_close_left (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  GtkWidget *notebook;
+  EphyEmbed *embed;
+  int n_pages, current_page_no;
+  GList *pages_to_close = NULL;
+
+  notebook = ephy_window_get_notebook (window);
+  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+  current_page_no = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+
+  for (int i = 0; i < current_page_no; i++) {
+    embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+    pages_to_close = g_list_append (pages_to_close, embed);
+  }
+
+  for (GList *l = pages_to_close; l != NULL; l = l->next) {
+    g_assert (l->data != NULL);
+    g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", l->data);
+  }
+}
+
+void
 window_cmd_tabs_close_right (GSimpleAction *action,
                              GVariant      *parameter,
                              gpointer       user_data)
@@ -2366,23 +2392,21 @@ window_cmd_tabs_close_right (GSimpleAction *action,
   EphyWindow *window = user_data;
   GtkWidget *notebook;
   EphyEmbed *embed;
+  int n_pages, current_page_no;
+  GList *pages_to_close = NULL;
 
   notebook = ephy_window_get_notebook (window);
+  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+  current_page_no = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_QUIT) &&
-      gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1) {
-    return;
+  for (int i = current_page_no + 1; i < n_pages; i++) {
+    embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+    pages_to_close = g_list_append (pages_to_close, embed);
   }
 
-  int n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-
-  int current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-
-  for (int i = current_page + 1; i < n_pages; i++) {
-    embed = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i);
-    g_assert (embed != NULL);
-    g_signal_emit_by_name (notebook, "tab-close-request", embed);
+  for (GList *l = pages_to_close; l != NULL; l = l->next) {
+    g_assert (l->data != NULL);
+    g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", l->data);
   }
 }
 
