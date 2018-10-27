@@ -773,7 +773,7 @@ static const GActionEntry tab_entries [] = {
   { "duplicate", window_cmd_tabs_duplicate },
   { "detach", window_cmd_tabs_detach },
   { "close", window_cmd_tabs_close },
-  {"close-others", window_cmd_tabs_close_others }
+  { "close-others", window_cmd_tabs_close_others }
 };
 
 static const GActionEntry toolbar_entries [] = {
