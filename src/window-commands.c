@@ -2360,8 +2360,8 @@ window_cmd_tabs_close (GSimpleAction *action,
 
 void
 window_cmd_tabs_close_left (GSimpleAction *action,
-                             GVariant      *parameter,
-                             gpointer       user_data)
+                            GVariant      *parameter,
+                            gpointer       user_data)
 {
   EphyWindow *window = user_data;
   GtkWidget *notebook;
