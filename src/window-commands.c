@@ -2366,26 +2366,27 @@ window_cmd_tabs_close_others (GSimpleAction *action,
   EphyWindow *window = user_data;
   GtkWidget *notebook;
   EphyEmbed *embed;
+  int n_pages, current_page;
+  GList *pages_to_close = NULL;
+  GList *closing_page;
 
   notebook = ephy_window_get_notebook (window);
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
-                              EPHY_PREFS_LOCKDOWN_QUIT) &&
-      gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) == 1) {
-    return;
-  }
-
-  int n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-
-  int current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
+  current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 
   for (int i = 0; i < n_pages; i++) {
     if (i != current_page) {
-      embed = gtk_notebook_get_nth_page (notebook, i);
-      g_assert (embed != NULL);
-      g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", embed);
+      embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
+      pages_to_close = g_list_append (pages_to_close, embed);
     }
   }
+
+  for (closing_page = pages_to_close; closing_page != NULL; closing_page = closing_page->next) {
+    g_assert (closing_page->data != NULL);
+    g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", closing_page->data);
+  }
+
+  g_list_free (pages_to_close);
 }
 
 void
