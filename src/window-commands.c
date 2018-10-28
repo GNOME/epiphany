@@ -2367,7 +2367,7 @@ window_cmd_tabs_close_others (GSimpleAction *action,
   GtkWidget *notebook;
   EphyEmbed *embed;
   int n_pages, current_page;
-  GList *pages_to_close = NULL;
+  GSList *pages_to_close = NULL;
 
   notebook = ephy_window_get_notebook (window);
   n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
@@ -2376,16 +2376,16 @@ window_cmd_tabs_close_others (GSimpleAction *action,
   for (int i = 0; i < n_pages; i++) {
     if (i != current_page) {
       embed = EPHY_EMBED (gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), i));
-      pages_to_close = g_list_append (pages_to_close, embed);
+      pages_to_close = g_slist_prepend (pages_to_close, embed);
     }
   }
 
-  for (GList *l = pages_to_close; l != NULL; l = l->next) {
+  for (GSList *l = pages_to_close; l != NULL; l = l->next) {
     g_assert (l->data != NULL);
     g_signal_emit_by_name (GTK_NOTEBOOK (notebook), "tab-close-request", l->data);
   }
 
-  g_list_free (pages_to_close);
+  g_slist_free (pages_to_close);
 }
 
 void
