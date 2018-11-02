@@ -2366,11 +2366,10 @@ window_cmd_tabs_close_left (GSimpleAction *action,
   EphyWindow *window = user_data;
   GtkWidget *notebook;
   EphyEmbed *embed;
-  int n_pages, current_page_no;
+  int current_page_no;
   GSList *pages_to_close = NULL;
 
   notebook = ephy_window_get_notebook (window);
-  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
   current_page_no = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 
   for (int i = 0; i < current_page_no; i++) {
