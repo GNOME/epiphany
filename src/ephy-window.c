@@ -2813,7 +2813,7 @@ ephy_window_configure_event (GtkWidget *widget,
                              &window->current_x,
                              &window->current_y);
     window->current_width = width;
-    window->current_width = height;
+    window->current_height = height;
   }
 
   return result;
