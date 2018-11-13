@@ -48,6 +48,8 @@
 struct _EphyNotebook {
   GtkNotebook parent_instance;
 
+  EphyAdaptiveMode adaptive_mode;
+
   GList *focused_pages;
   guint tabs_vis_notifier_id;
 
@@ -360,6 +362,7 @@ update_tabs_visibility (EphyNotebook *nb,
                                 EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY);
 
   if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
+      nb->adaptive_mode != EPHY_ADAPTIVE_MODE_NARROW &&
       ((policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_MORE_THAN_ONE && num > 1) ||
         policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS))
     show_tabs = TRUE;
@@ -1047,4 +1050,14 @@ ephy_notebook_get_pages_menu (EphyNotebook *notebook)
   g_assert (EPHY_IS_NOTEBOOK (notebook));
 
   return notebook->tab_menu;
+}
+
+void
+ephy_notebook_set_adaptive_mode (EphyNotebook     *notebook,
+                                 EphyAdaptiveMode  adaptive_mode)
+{
+  g_assert (EPHY_IS_NOTEBOOK (notebook));
+
+  notebook->adaptive_mode = adaptive_mode;
+  update_tabs_visibility (notebook, FALSE);
 }

@@ -25,6 +25,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include "ephy-adaptive-mode.h"
 #include "ephy-embed.h"
 
 G_BEGIN_DECLS
@@ -46,5 +47,8 @@ void            ephy_notebook_next_page         (EphyNotebook *notebook);
 void            ephy_notebook_prev_page         (EphyNotebook *notebook);
 
 GMenu          *ephy_notebook_get_pages_menu    (EphyNotebook *notebook);
+
+void            ephy_notebook_set_adaptive_mode (EphyNotebook     *notebook,
+                                                 EphyAdaptiveMode  adaptive_mode);
 
 G_END_DECLS
