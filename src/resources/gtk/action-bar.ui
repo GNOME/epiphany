@@ -14,6 +14,28 @@
           </packing>
         </child>
         <child>
+          <object class="GtkMenuButton" id="pages_button">
+            <property name="visible">True</property>
+            <property name="valign">center</property>
+            <!-- Translators: tooltip for the page switcher menu button -->
+            <property name="tooltip_text" translatable="yes">View open pages</property>
+            <property name="popover">pages_popover</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage" id="bookmarks_image">
+                <property name="visible">True</property>
+                <property name="icon-name">view-paged-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
           <object class="EphyActionBarEnd" id="action_bar_end">
             <property name="visible">True</property>
           </object>
@@ -24,4 +46,7 @@
       </object>
     </child>
   </template>
+  <object class="EphyPagesPopover" id="pages_popover">
+    <property name="visible">True</property>
+  </object>
 </interface>
