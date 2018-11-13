@@ -497,6 +497,7 @@ update_adaptive_mode (EphyWindow *window)
 {
   EphyHeaderBar *header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
   EphyActionBar *action_bar = EPHY_ACTION_BAR (window->action_bar);
+  EphyNotebook *notebook = EPHY_NOTEBOOK (window->notebook);
   gboolean is_narrow, is_mobile_landscape;
   EphyAdaptiveMode adaptive_mode;
   gint width, height;
@@ -533,6 +534,7 @@ update_adaptive_mode (EphyWindow *window)
     EPHY_ADAPTIVE_MODE_NORMAL;
   ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
   ephy_action_bar_set_adaptive_mode (action_bar, adaptive_mode);
+  ephy_notebook_set_adaptive_mode (notebook, adaptive_mode);
 }
 
 static void
