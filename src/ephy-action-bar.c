@@ -200,6 +200,31 @@ ephy_action_bar_get_action_bar_end (EphyActionBar *action_bar)
 }
 
 void
+ephy_action_bar_set_pages_menu_model (EphyActionBar *action_bar,
+                                      GMenuModel    *menu_model)
+{
+  GMenuModel *old_menu_model;
+
+  old_menu_model = gtk_menu_button_get_menu_model (GTK_MENU_BUTTON (action_bar->pages_button));
+  if (old_menu_model != NULL)
+    g_signal_handlers_disconnect_by_data (old_menu_model, action_bar);
+
+  if (menu_model != NULL) {
+    g_signal_connect_swapped (menu_model,
+                              "items-changed",
+                              G_CALLBACK (update_pages_button_visibility),
+                              action_bar);
+    gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (action_bar->pages_button),
+                                    G_MENU_MODEL (menu_model));
+  }
+  else
+    gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (action_bar->pages_button),
+                                    NULL);
+
+  update_pages_button_visibility (action_bar);
+}
+
+void
 ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
