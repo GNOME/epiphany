@@ -3309,10 +3309,15 @@ static GtkWidget *
 setup_action_bar (EphyWindow *window)
 {
   GtkWidget *action_bar;
+  GMenu *pages_menu;
 
   action_bar = GTK_WIDGET (ephy_action_bar_new (window));
   gtk_revealer_set_transition_type (GTK_REVEALER (action_bar), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
   gtk_widget_show (action_bar);
+
+  pages_menu = ephy_notebook_get_pages_menu (EPHY_NOTEBOOK (window->notebook));
+  ephy_action_bar_set_pages_menu_model (EPHY_ACTION_BAR (action_bar),
+                                        G_MENU_MODEL (pages_menu));
 
   return action_bar;
 }
