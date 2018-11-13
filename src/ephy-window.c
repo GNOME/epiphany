@@ -3314,6 +3314,9 @@ setup_action_bar (EphyWindow *window)
   gtk_revealer_set_transition_type (GTK_REVEALER (action_bar), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
   gtk_widget_show (action_bar);
 
+  ephy_action_bar_set_notebook (EPHY_ACTION_BAR (action_bar),
+                                EPHY_NOTEBOOK (window->notebook));
+
   return action_bar;
 }
 
