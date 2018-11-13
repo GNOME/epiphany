@@ -20,6 +20,8 @@
  */
 
 #include "ephy-action-bar.h"
+#include "ephy-settings.h"
+#include "ephy-shell.h"
 
 enum {
   PROP_0,
@@ -35,6 +37,7 @@ struct _EphyActionBar {
   EphyWindow *window;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
+  GtkMenuButton *pages_button;
 };
 
 G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, GTK_TYPE_REVEALER)
@@ -50,6 +53,35 @@ sync_chromes_visibility (EphyActionBar *action_bar)
                           chrome & EPHY_WINDOW_CHROME_HEADER_BAR);
   ephy_action_bar_end_set_show_bookmarks_button (action_bar->action_bar_end,
                                                  chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
+}
+
+/*
+ * Hide the pages button if there is only one page and the pref is not set or
+ * when in application mode.
+ */
+static void
+update_pages_button_visibility (EphyActionBar *action_bar)
+{
+  GMenuModel *pages_menu_model;
+  EphyEmbedShellMode mode;
+  gboolean show_tabs = FALSE;
+  gint pages_number = 0;
+  EphyPrefsUITabsBarVisibilityPolicy policy;
+
+  pages_menu_model = gtk_menu_button_get_menu_model (action_bar->pages_button);
+  if (pages_menu_model != NULL)
+    pages_number = g_menu_model_get_n_items (pages_menu_model);
+  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
+
+  policy = g_settings_get_enum (EPHY_SETTINGS_UI,
+                                EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY);
+
+  if (mode != EPHY_EMBED_SHELL_MODE_APPLICATION &&
+      ((policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_MORE_THAN_ONE && pages_number > 1) ||
+        policy == EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY_ALWAYS))
+    show_tabs = TRUE;
+
+  gtk_widget_set_visible (GTK_WIDGET (action_bar->pages_button), show_tabs);
 }
 
 static void
@@ -126,6 +158,9 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
                                         action_bar_start);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBar,
+                                        pages_button);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBar,
                                         action_bar_end);
 }
 
@@ -137,6 +172,11 @@ ephy_action_bar_init (EphyActionBar *action_bar)
   EPHY_TYPE_ACTION_BAR_START;
 
   gtk_widget_init_template (GTK_WIDGET (action_bar));
+
+  g_signal_connect_swapped (EPHY_SETTINGS_UI,
+                            "changed::" EPHY_PREFS_UI_TABS_BAR_VISIBILITY_POLICY,
+                            G_CALLBACK (update_pages_button_visibility),
+                            action_bar);
 }
 
 EphyActionBar *
