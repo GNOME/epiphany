@@ -500,8 +500,18 @@ Ephy.FormManager = class FormManager
             return;
         }
 
-        if (!this._formAuth.passwordNode.value)
+        if (!this._formAuth.passwordNode.value || !this._formAuth.passwordNode.name)
             return;
+
+        let password = this._formAuth.passwordNode.value;
+        let passwordField = this._formAuth.passwordNode.name;
+
+        let username = null;
+        let usernameField = null;
+        if (this._formAuth.usernameNode && this._formAuth.usernameNode.value && this._formAuth.usernameNode.name) {
+            username = this._formAuth.usernameNode.value;
+            usernameField = this._formAuth.usernameNode.name;
+        }
 
         this._formAuth.url = new URL(String(window.location));
         try {
@@ -523,23 +533,21 @@ Ephy.FormManager = class FormManager
         Ephy.passwordManager.query(
             this._formAuth.url.origin,
             this._formAuth.targetURL.origin,
-            this._formAuth.usernameNode && this._formAuth.usernameNode.value ? this._formAuth.usernameNode.value : null,
-            this._formAuth.usernameNode ? this._formAuth.usernameNode.name : null,
-            this._formAuth.passwordNode.name ? this._formAuth.passwordNode.name : null).then(function (authInfo) {
+            username,
+            usernameField,
+            passwordField).then(function (authInfo) {
                 if (authInfo) {
-                    if (authInfo.username == self._formAuth.usernameNode.value &&
-                        authInfo.password == self._formAuth.passwordNode.value) {
+                    if (authInfo.username == username && authInfo.password == password) {
                         Ephy.log('User/password already stored. Not asking about storing.');
                         return;
                     }
 
                     if (permission == Ephy.Permission.PERMIT) {
                         Ephy.log('User/password not yet stored. Storing.');
-                        Ephy.passwordManager.save(self._formAuth.url.origin, self._formAuth.targetURL.origin,
-                                                  self._formAuth.usernameNode && self._formAuth.usernameNode.value ? self._formAuth.usernameNode.value : null,
-                                                  self._formAuth.passwordNode.value ? self._formAuth.passwordNode.value : null,
-                                                  self._formAuth.usernameNode ? self._formAuth.usernameNode.name : null,
-                                                  self._formAuth.passwordNode.name ? self._formAuth.passwordNode.name : null,
+                        Ephy.passwordManager.save(self._formAuth.url.origin,
+                                                  self._formAuth.targetURL.origin,
+                                                  username, password,
+                                                  usernameField, passwordField,
                                                   false);
                         return;
                     }
@@ -549,14 +557,12 @@ Ephy.FormManager = class FormManager
                     Ephy.log('No result on query; asking whether we should store.');
                 }
 
-                Ephy.passwordManager.requestSave(
-                    self._formAuth.url.origin, self._formAuth.targetURL.origin,
-                    self._formAuth.usernameNode && self._formAuth.usernameNode.value ? self._formAuth.usernameNode.value : null,
-                    self._formAuth.passwordNode.value ? self._formAuth.passwordNode.value : null,
-                    self._formAuth.usernameNode ? self._formAuth.usernameNode.name : null,
-                    self._formAuth.passwordNode.name ? self._formAuth.passwordNode.name : null,
-                    authInfo == null,
-                    self._pageID);
+                Ephy.passwordManager.requestSave(self._formAuth.url.origin,
+                                                 self._formAuth.targetURL.origin,
+                                                 username, password,
+                                                 usernameField, passwordField,
+                                                 authInfo == null,
+                                                 self._pageID);
             }
         );
     }
