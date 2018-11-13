@@ -474,7 +474,6 @@ web_extension_password_manager_save_real (EphyEmbedShell *shell,
                                           gboolean        is_request)
 {
   EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-
   g_autofree char *origin = property_to_string_or_null (value, "origin");
   g_autofree char *target_origin = property_to_string_or_null (value, "targetOrigin");
   g_autofree char *username = property_to_string_or_null (value, "username");
@@ -484,12 +483,26 @@ web_extension_password_manager_save_real (EphyEmbedShell *shell,
   g_autoptr(JSCValue) is_new_prop = jsc_value_object_get_property (value, "isNew");
   gboolean is_new = jsc_value_to_boolean (is_new_prop);
   gint32 page_id = property_to_int32 (value, "pageID");
+  EphyWebView *view;
 
-  // This also sanity checks that a page isn't saving websites for other origins
-  EphyWebView *view = ephy_embed_shell_get_view_for_page_id (shell,
-                                                             page_id,
-                                                             origin);
-  if (!view)
+  /* Both password and password field are required. */
+  if (password == NULL || password_field == NULL)
+    return;
+
+  /* The username field is required if username is present. */
+  if (username != NULL && username_field == NULL)
+    g_clear_pointer (&username_field, g_free);
+
+  /* The username is required if username field is present. */
+  if (username == NULL && username_field != NULL)
+    g_clear_pointer (&username, g_free);
+
+  /* This also sanity checks that a page isn't saving websites for
+   * other origins. Remember the request comes from the untrusted web
+   * process and we have to make sure it's not being evil here.
+   */
+  view = ephy_embed_shell_get_view_for_page_id (shell, page_id, origin);
+  if (view == NULL)
     return;
 
   if (!is_request) {
