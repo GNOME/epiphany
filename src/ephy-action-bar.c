@@ -180,6 +180,13 @@ ephy_action_bar_get_action_bar_end (EphyActionBar *action_bar)
 }
 
 void
+ephy_action_bar_set_notebook (EphyActionBar *action_bar,
+                              EphyNotebook  *notebook)
+{
+  ephy_pages_popover_set_notebook (action_bar->pages_popover, notebook);
+}
+
+void
 ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {
