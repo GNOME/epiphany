@@ -20,6 +20,9 @@
  */
 
 #include "ephy-action-bar.h"
+#include "ephy-pages-popover.h"
+#include "ephy-settings.h"
+#include "ephy-shell.h"
 
 enum {
   PROP_0,
@@ -35,6 +38,8 @@ struct _EphyActionBar {
   EphyWindow *window;
   EphyActionBarStart *action_bar_start;
   EphyActionBarEnd *action_bar_end;
+  GtkMenuButton *pages_button;
+  EphyPagesPopover *pages_popover;
 };
 
 G_DEFINE_TYPE (EphyActionBar, ephy_action_bar, GTK_TYPE_REVEALER)
@@ -126,17 +131,32 @@ ephy_action_bar_class_init (EphyActionBarClass *klass)
                                         action_bar_start);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBar,
+                                        pages_button);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBar,
+                                        pages_popover);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBar,
                                         action_bar_end);
 }
 
 static void
 ephy_action_bar_init (EphyActionBar *action_bar)
 {
+  EphyEmbedShellMode mode;
+
   /* Ensure the types used by the template have been initialized. */
   EPHY_TYPE_ACTION_BAR_END;
   EPHY_TYPE_ACTION_BAR_START;
 
   gtk_widget_init_template (GTK_WIDGET (action_bar));
+
+  mode = ephy_embed_shell_get_mode (EPHY_EMBED_SHELL (ephy_shell_get_default ()));
+  gtk_widget_set_visible (GTK_WIDGET (action_bar->pages_button),
+                          mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
+
+  ephy_pages_popover_set_adaptive_mode (action_bar->pages_popover,
+                                        EPHY_ADAPTIVE_MODE_NARROW);
 }
 
 EphyActionBar *
