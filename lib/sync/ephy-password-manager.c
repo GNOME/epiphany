@@ -474,9 +474,15 @@ ephy_password_manager_save (EphyPasswordManager *self,
   g_assert (EPHY_IS_PASSWORD_MANAGER (self));
   g_assert (origin);
   g_assert (target_origin);
+
+  /* Although we don't enforce these requirements for Firefox passwords,
+   * any password saved by Epiphany must have both password and
+   * password_field, so that it can be filled in. username and
+   * username_field are optional, but if one is provided, both must be.
+   */
   g_assert (password);
-  g_assert (!username_field || username);
-  g_assert (!password_field || password);
+  g_assert (password_field);
+  g_assert ((username && username_field) || (!username && !username_field));
 
   if (!is_new) {
     LOG ("Updating password for (%s, %s, %s, %s, %s)",
