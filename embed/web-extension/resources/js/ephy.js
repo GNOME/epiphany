@@ -581,7 +581,7 @@ Ephy.FormManager = class FormManager
         window.webkit.messageHandlers.sensitiveFormFocused.postMessage(this._sensitiveElementMessageSerializer(this._pageID, isInsecureAction));
     }
 
-    _findPasswordFields(forAutofill)
+    _findPasswordFields()
     {
         let passwordFields = [];
         for (let i = 0; i < this._form.elements.length; i++) {
@@ -602,7 +602,7 @@ Ephy.FormManager = class FormManager
 
     _findFormAuthElements(forAutofill)
     {
-        let passwordNodes = this._findPasswordFields(forAutofill);
+        let passwordNodes = this._findPasswordFields();
         if (!passwordNodes || !passwordNodes.length)
             return null;
 
