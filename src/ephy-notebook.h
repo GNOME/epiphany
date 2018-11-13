@@ -45,4 +45,6 @@ void            ephy_notebook_next_page         (EphyNotebook *notebook);
 
 void            ephy_notebook_prev_page         (EphyNotebook *notebook);
 
+GMenu          *ephy_notebook_get_pages_menu    (EphyNotebook *notebook);
+
 G_END_DECLS
