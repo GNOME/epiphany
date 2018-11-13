@@ -208,6 +208,33 @@ ephy_action_bar_get_action_bar_end (EphyActionBar *action_bar)
 }
 
 void
+ephy_action_bar_set_notebook (EphyActionBar *action_bar,
+                              EphyNotebook  *notebook)
+{
+  EphyNotebook *old_notebook;
+  GMenu *pages_menu;
+
+  old_notebook = ephy_pages_popover_get_notebook (action_bar->pages_popover);
+  if (old_notebook != NULL) {
+    pages_menu = ephy_notebook_get_pages_menu (old_notebook);
+    g_signal_handlers_disconnect_by_data (pages_menu, action_bar);
+  }
+
+  ephy_pages_popover_set_notebook (action_bar->pages_popover, notebook);
+
+  if (notebook != NULL) {
+    pages_menu = ephy_notebook_get_pages_menu (notebook);
+    g_signal_connect_swapped (pages_menu,
+                              "items-changed",
+                              G_CALLBACK (update_pages_button_visibility),
+                              action_bar);
+    ephy_pages_popover_set_notebook (action_bar->pages_popover, notebook);
+  }
+
+  update_pages_button_visibility (action_bar);
+}
+
+void
 ephy_action_bar_set_adaptive_mode (EphyActionBar    *action_bar,
                                    EphyAdaptiveMode  adaptive_mode)
 {

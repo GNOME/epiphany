@@ -26,6 +26,7 @@
 #include "ephy-action-bar-end.h"
 #include "ephy-action-bar-start.h"
 #include "ephy-adaptive-mode.h"
+#include "ephy-notebook.h"
 #include "ephy-window.h"
 
 G_BEGIN_DECLS
@@ -37,6 +38,8 @@ G_DECLARE_FINAL_TYPE (EphyActionBar, ephy_action_bar, EPHY, ACTION_BAR, GtkRevea
 EphyActionBar      *ephy_action_bar_new                  (EphyWindow *window);
 EphyActionBarStart *ephy_action_bar_get_action_bar_start (EphyActionBar *action_bar);
 EphyActionBarEnd   *ephy_action_bar_get_action_bar_end   (EphyActionBar *action_bar);
+void                ephy_action_bar_set_notebook         (EphyActionBar *action_bar,
+                                                          EphyNotebook  *notebook);
 void                ephy_action_bar_set_adaptive_mode    (EphyActionBar    *action_bar,
                                                           EphyAdaptiveMode  adaptive_mode);
 
