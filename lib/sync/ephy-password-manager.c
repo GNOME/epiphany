@@ -443,12 +443,14 @@ update_password_cb (GList    *records,
   EphyPasswordRecord *record;
 
   /* We expect only one matching record here. */
-  g_assert (g_list_length (records) == 1);
-
-  record = EPHY_PASSWORD_RECORD (records->data);
-  ephy_password_record_set_password (record, data->password);
-  ephy_password_manager_store_record (data->manager, record);
-  g_signal_emit_by_name (data->manager, "synchronizable-modified", record, FALSE);
+  if (g_list_length (records) == 1) {
+    record = EPHY_PASSWORD_RECORD (records->data);
+    ephy_password_record_set_password (record, data->password);
+    ephy_password_manager_store_record (data->manager, record);
+    g_signal_emit_by_name (data->manager, "synchronizable-modified", record, FALSE);
+  } else {
+    g_warn_if_reached ();
+  }
 
   g_list_free_full (records, g_object_unref);
   update_password_async_data_free (data);
@@ -661,11 +663,13 @@ forget_cb (GList    *records,
   EphyPasswordRecord *record;
 
   /* We expect only one matching record here. */
-  g_assert (g_list_length (records) == 1);
-
-  record = EPHY_PASSWORD_RECORD (records->data);
-  g_signal_emit_by_name (self, "synchronizable-deleted", record);
-  ephy_password_manager_forget_record (self, record, NULL);
+  if (g_list_length (records) == 1) {
+    record = EPHY_PASSWORD_RECORD (records->data);
+    g_signal_emit_by_name (self, "synchronizable-deleted", record);
+    ephy_password_manager_forget_record (self, record, NULL);
+  } else {
+    g_warn_if_reached ();
+  }
 
   g_list_free_full (records, g_object_unref);
 }
@@ -782,9 +786,10 @@ replace_existing_cb (GList    *records,
   ManageRecordAsyncData *data = (ManageRecordAsyncData *)user_data;
 
   /* We expect only one matching record here. */
-  g_assert (g_list_length (records) == 1);
-
-  ephy_password_manager_forget_record (data->manager, records->data, data->record);
+  if (g_list_length (records) == 1)
+    ephy_password_manager_forget_record (data->manager, records->data, data->record);
+  else
+    g_warn_if_reached ();
 
   g_list_free_full (records, g_object_unref);
   manage_record_async_data_free (data);
