@@ -30,7 +30,7 @@
     </section>
   </menu>
   <template class="EphyHistoryDialog" parent="GtkDialog">
-    <property name="height_request">500</property>
+    <property name="height_request">200</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="default_width">1000</property>
@@ -77,13 +77,13 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="width_request">400</property>
-                <property name="height_request">300</property>
+                <property name="width_request">300</property>
+                <property name="height_request">100</property>
                 <property name="visible">True</property>
                 <property name="expand">True</property>
                 <property name="shadow_type">in</property>
                 <property name="min_content_width">300</property>
-                <property name="min_content_height">300</property>
+                <property name="min_content_height">100</property>
                 <child>
                   <object class="GtkTreeView" id="treeview">
                     <property name="visible">True</property>
