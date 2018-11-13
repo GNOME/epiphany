@@ -1040,3 +1040,11 @@ ephy_notebook_prev_page (EphyNotebook *notebook)
       gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), -1);
   }
 }
+
+GMenu *
+ephy_notebook_get_pages_menu (EphyNotebook *notebook)
+{
+  g_assert (EPHY_IS_NOTEBOOK (notebook));
+
+  return notebook->tab_menu;
+}
