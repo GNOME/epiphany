@@ -25,17 +25,10 @@
 
 G_BEGIN_DECLS
 
-#define ISO_639_DOMAIN	"iso_639"
-#define ISO_3166_DOMAIN	"iso_3166"
-
 void			     ephy_langs_append_languages (GArray *array);
 
 void			     ephy_langs_sanitise	       (GArray *array);
 
 char			   **ephy_langs_get_languages	   (void);
-
-GHashTable		*ephy_langs_iso_639_table	   (void);
-
-GHashTable		*ephy_langs_iso_3166_table   (void);
 
 G_END_DECLS

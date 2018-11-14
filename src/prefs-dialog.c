@@ -47,7 +47,7 @@
 #include "ephy-web-app-utils.h"
 #include "clear-data-dialog.h"
 #include "cookies-dialog.h"
-#include "languages.h"
+#include "gnome-languages.h"
 #include "passwords-dialog.h"
 #include "synced-tabs-dialog.h"
 #include "webapp-additional-urls-dialog.h"
@@ -126,9 +126,6 @@ struct _PrefsDialog {
   GtkTreeView *add_lang_treeview;
   GtkTreeModel *lang_model;
 
-  GHashTable *iso_639_table;
-  GHashTable *iso_3166_table;
-
   /* sync */
   GtkWidget *sync_page_box;
   GtkWidget *sync_firefox_iframe_box;
@@ -179,9 +176,6 @@ prefs_dialog_finalize (GObject *object)
                                   (gpointer *)add_lang_dialog);
     g_object_unref (dialog->add_lang_dialog);
   }
-
-  g_hash_table_destroy (dialog->iso_639_table);
-  g_hash_table_destroy (dialog->iso_3166_table);
 
   if (dialog->fxa_web_view != NULL) {
     webkit_user_content_manager_unregister_script_message_handler (dialog->fxa_manager,
@@ -1238,50 +1232,6 @@ add_lang_dialog_response_cb (GtkWidget   *widget,
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
-static char *
-get_name_for_lang_code (PrefsDialog *pd,
-                        const char  *code)
-{
-  char **str;
-  char *name;
-  const char *langname, *localename;
-  int len;
-
-  str = g_strsplit (code, "-", -1);
-  len = g_strv_length (str);
-  g_assert (len != 0);
-
-  langname = (const char *)g_hash_table_lookup (pd->iso_639_table, str[0]);
-
-  if (len == 1 && langname != NULL) {
-    name = g_strdup (dgettext (ISO_639_DOMAIN, langname));
-  } else if (len == 2 && langname != NULL) {
-    localename = (const char *)g_hash_table_lookup (pd->iso_3166_table, str[1]);
-
-    if (localename != NULL) {
-      /* Translators: the first %s is the language name, and the
-       * second %s is the locale name. Example:
-       * "French (France)"
-       */
-      name = g_strdup_printf (C_("language", "%s (%s)"),
-                              dgettext (ISO_639_DOMAIN, langname),
-                              dgettext (ISO_3166_DOMAIN, localename));
-    } else {
-      name = g_strdup_printf (C_("language", "%s (%s)"),
-                              dgettext (ISO_639_DOMAIN, langname), str[1]);
-    }
-  } else {
-    /* Translators: this refers to a user-define language code
-     * (one which isn't in our built-in list).
-     */
-    name = g_strdup_printf (C_("language", "User defined (%s)"), code);
-  }
-
-  g_strfreev (str);
-
-  return name;
-}
-
 static void
 add_system_language_entry (GtkListStore *store)
 {
@@ -1322,8 +1272,9 @@ setup_add_language_dialog (PrefsDialog *dialog)
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
   GtkTreeIter iter;
-  guint i;
+  guint i, n;
   GtkBuilder *builder;
+  g_auto(GStrv) locales;
 
   builder = gtk_builder_new_from_resource ("/org/gnome/epiphany/gtk/prefs-lang-dialog.ui");
   ad = GTK_WIDGET (gtk_builder_get_object (builder, "add_language_dialog"));
@@ -1333,18 +1284,34 @@ setup_add_language_dialog (PrefsDialog *dialog)
 
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
-  for (i = 0; i < G_N_ELEMENTS (languages); i++) {
-    const char *code = languages[i];
-    char *name;
+  locales = gnome_get_all_locales ();
+  n = g_strv_length (locales);
 
-    name = get_name_for_lang_code (dialog, code);
+  for (i = 0; i < n; i++) {
+    const char *locale = locales[i];
+    g_autofree char *language_code = NULL;
+    g_autofree char *country_code = NULL;
+    g_autofree char *language_name = NULL;
+    g_autofree char *shortened_locale = NULL;
+
+    if (!gnome_parse_locale (locale, &language_code, &country_code, NULL, NULL))
+      break;
+
+    if (language_code == NULL)
+      break;
+
+    language_name = gnome_get_language_from_locale (locale, locale);
+
+    if (country_code != NULL)
+      shortened_locale = g_strdup_printf ("%s-%s", language_code, country_code);
+    else
+      shortened_locale = g_strdup (language_code);
 
     gtk_list_store_append (store, &iter);
     gtk_list_store_set (store, &iter,
-                        COL_LANG_NAME, name,
-                        COL_LANG_CODE, code,
+                        COL_LANG_NAME, language_name,
+                        COL_LANG_CODE, shortened_locale,
                         -1);
-    g_free (name);
   }
 
   add_system_language_entry (store);
@@ -1513,9 +1480,6 @@ create_language_section (PrefsDialog *dialog)
   char **list = NULL;
   int i;
 
-  dialog->iso_639_table = ephy_langs_iso_639_table ();
-  dialog->iso_3166_table = ephy_langs_iso_3166_table ();
-
   g_signal_connect (dialog->lang_add_button, "clicked",
                     G_CALLBACK (language_editor_add_button_clicked_cb), dialog);
   g_signal_connect (dialog->lang_remove_button, "clicked",
@@ -1561,15 +1525,18 @@ create_language_section (PrefsDialog *dialog)
 
   /* Fill languages editor */
   for (i = 0; list[i]; i++) {
-    const char *code = (const char *)list[i];
+    const char *code = list[i];
 
     if (strcmp (code, "system") == 0) {
       add_system_language_entry (store);
     } else if (code[0] != '\0') {
       char *text;
 
-      text = get_name_for_lang_code (dialog, code);
+      /* Change hyphens to underscores. */
+      g_strdelimit ((char *)code, "-", '_');
+      text = gnome_get_language_from_locale (code, code);
       language_editor_add (dialog, code, text);
+
       g_free (text);
     }
   }

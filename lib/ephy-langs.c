@@ -21,10 +21,6 @@
 #include "config.h"
 #include "ephy-langs.h"
 
-#include "ephy-debug.h"
-
-#include <glib/gi18n.h>
-#include <libxml/xmlreader.h>
 #include <string.h>
 
 /* sanitise the languages list according to the rules for HTTP accept-language
@@ -101,7 +97,6 @@ ephy_langs_append_languages (GArray *array)
   languages = g_get_language_names ();
   g_assert (languages != NULL);
 
-  /* FIXME: maybe just use the first, instead of all of them? */
   for (i = 0; languages[i] != NULL; i++) {
     if (strstr (languages[i], ".") == 0 &&
         strstr (languages[i], "@") == 0 &&
@@ -132,168 +127,4 @@ ephy_langs_get_languages (void)
   ephy_langs_sanitise (array);
 
   return (char **)(void *)g_array_free (array, FALSE);
-}
-
-static void
-ephy_langs_bind_iso_domains (void)
-{
-  static gboolean bound = FALSE;
-
-  if (bound == FALSE) {
-    bindtextdomain (ISO_639_DOMAIN, ISO_CODES_PREFIX "/share/locale");
-    bind_textdomain_codeset (ISO_639_DOMAIN, "UTF-8");
-
-    bindtextdomain (ISO_3166_DOMAIN, ISO_CODES_PREFIX "/share/locale");
-    bind_textdomain_codeset (ISO_3166_DOMAIN, "UTF-8");
-
-    bound = TRUE;
-  }
-}
-
-static void
-read_iso_639_entry (xmlTextReaderPtr reader,
-                    GHashTable      *table)
-{
-  xmlChar *code, *name;
-
-  code = xmlTextReaderGetAttribute (reader, (const xmlChar *)"iso_639_1_code");
-  name = xmlTextReaderGetAttribute (reader, (const xmlChar *)"name");
-
-  /* Get iso-639-2 code */
-  if (code == NULL || code[0] == '\0') {
-    xmlFree (code);
-    /* FIXME: use the 2T or 2B code? */
-    code = xmlTextReaderGetAttribute (reader, (const xmlChar *)"iso_639_2T_code");
-  }
-
-  if (code != NULL && code[0] != '\0' && name != NULL && name[0] != '\0') {
-    g_hash_table_insert (table, code, name);
-  } else {
-    xmlFree (code);
-    xmlFree (name);
-  }
-}
-
-static void
-read_iso_3166_entry (xmlTextReaderPtr reader,
-                     GHashTable      *table)
-{
-  xmlChar *code, *name;
-
-  code = xmlTextReaderGetAttribute (reader, (const xmlChar *)"alpha_2_code");
-  name = xmlTextReaderGetAttribute (reader, (const xmlChar *)"common_name");
-  if (name == NULL)
-    name = xmlTextReaderGetAttribute (reader, (const xmlChar *)"name");
-
-  if (code != NULL && code[0] != '\0' && name != NULL && name[0] != '\0') {
-    g_hash_table_insert (table, code, name);
-  } else {
-    xmlFree (code);
-    xmlFree (name);
-  }
-}
-
-typedef enum {
-  STATE_START,
-  STATE_STOP,
-  STATE_ENTRIES,
-} ParserState;
-
-static void
-load_iso_entries (int      iso,
-                  GFunc    read_entry_func,
-                  gpointer user_data)
-{
-  xmlTextReaderPtr reader;
-  ParserState state = STATE_START;
-  xmlChar iso_entries[32], iso_entry[32];
-  char *filename;
-  int ret = -1;
-
-  LOG ("Loading ISO-%d codes", iso);
-
-  START_PROFILER ("Loading ISO codes")
-
-  filename = g_strdup_printf (ISO_CODES_PREFIX "/share/xml/iso-codes/iso_%d.xml", iso);
-  reader = xmlNewTextReaderFilename (filename);
-  if (reader == NULL)
-    goto out;
-
-  xmlStrPrintf (iso_entries, sizeof (iso_entries), "iso_%d_entries", iso);
-  xmlStrPrintf (iso_entry, sizeof (iso_entry), "iso_%d_entry", iso);
-
-  ret = xmlTextReaderRead (reader);
-
-  while (ret == 1) {
-    const xmlChar *tag;
-    xmlReaderTypes type;
-
-    tag = xmlTextReaderConstName (reader);
-    type = xmlTextReaderNodeType (reader);
-
-    if (state == STATE_ENTRIES &&
-        type == XML_READER_TYPE_ELEMENT &&
-        xmlStrEqual (tag, iso_entry)) {
-      read_entry_func (reader, user_data);
-    } else if (state == STATE_START &&
-               type == XML_READER_TYPE_ELEMENT &&
-               xmlStrEqual (tag, iso_entries)) {
-      state = STATE_ENTRIES;
-    } else if (state == STATE_ENTRIES &&
-               type == XML_READER_TYPE_END_ELEMENT &&
-               xmlStrEqual (tag, iso_entries)) {
-      state = STATE_STOP;
-    } else if (type == XML_READER_TYPE_SIGNIFICANT_WHITESPACE ||
-               type == XML_READER_TYPE_WHITESPACE ||
-               type == XML_READER_TYPE_TEXT ||
-               type == XML_READER_TYPE_COMMENT) {
-      /* eat it */
-    } else {
-      /* ignore it */
-    }
-
-    ret = xmlTextReaderRead (reader);
-  }
-
-  xmlFreeTextReader (reader);
-
- out:
-  if (ret < 0 || state != STATE_STOP) {
-    g_warning ("Failed to load ISO-%d codes from %s!\n",
-               iso, filename);
-  }
-
-  g_free (filename);
-
-  STOP_PROFILER ("Loading ISO codes")
-}
-
-GHashTable *
-ephy_langs_iso_639_table (void)
-{
-  GHashTable *table;
-
-  ephy_langs_bind_iso_domains ();
-  table = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                 (GDestroyNotify)xmlFree,
-                                 (GDestroyNotify)xmlFree);
-
-  load_iso_entries (639, (GFunc)read_iso_639_entry, table);
-
-  return table;
-}
-
-GHashTable *
-ephy_langs_iso_3166_table (void)
-{
-  GHashTable *table;
-
-  ephy_langs_bind_iso_domains ();
-  table = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                 (GDestroyNotify)g_free,
-                                 (GDestroyNotify)xmlFree);
-
-  load_iso_entries (3166, (GFunc)read_iso_3166_entry, table);
-
-  return table;
 }
