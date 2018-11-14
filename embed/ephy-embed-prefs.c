@@ -245,7 +245,7 @@ webkit_pref_callback_accept_languages (GSettings  *settings,
     if (!g_strcmp0 (languages[i], "system")) {
       ephy_langs_append_languages (array);
     } else if (languages[i][0] != '\0') {
-      char *str = g_ascii_strdown (languages[i], -1);
+      char *str = g_strdup (languages[i]);
       g_array_append_val (array, str);
     }
   }

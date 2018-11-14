@@ -106,9 +106,8 @@ ephy_langs_append_languages (GArray *array)
     if (strstr (languages[i], ".") == 0 &&
         strstr (languages[i], "@") == 0 &&
         strcmp (languages[i], "C") != 0) {
-      /* change to lowercase and '_' to '-' */
-      lang = g_strdelimit (g_ascii_strdown
-                             (languages[i], -1), "_", '-');
+      /* change '_' to '-' */
+      lang = g_strdelimit (g_strdup (languages[i]), "_", '-');
 
       g_array_append_val (array, lang);
     }
@@ -187,12 +186,7 @@ read_iso_3166_entry (xmlTextReaderPtr reader,
     name = xmlTextReaderGetAttribute (reader, (const xmlChar *)"name");
 
   if (code != NULL && code[0] != '\0' && name != NULL && name[0] != '\0') {
-    char *lcode;
-
-    lcode = g_ascii_strdown ((char *)code, -1);
-    xmlFree (code);
-
-    g_hash_table_insert (table, lcode, name);
+    g_hash_table_insert (table, code, name);
   } else {
     xmlFree (code);
     xmlFree (name);
