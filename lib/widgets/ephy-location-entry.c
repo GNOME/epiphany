@@ -728,6 +728,8 @@ button_box_size_allocated_cb (GtkWidget    *widget,
    *    including border spacing 5).
    *  - progress margin-right is used to allow progress bar below icons on the
    *    right side.
+   *
+   * FIXME: Loading CSS during size_allocate is ILLEGAL and BROKEN.
    */
   css = g_strdup_printf (".url_entry { padding-right: %dpx; }"\
                          ".url_entry progress { margin-right: -%dpx; }",
