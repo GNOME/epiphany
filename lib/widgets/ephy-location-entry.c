@@ -1205,13 +1205,20 @@ ephy_location_entry_set_progress (EphyLocationEntry *entry,
                                   gdouble            fraction,
                                   gboolean           loading)
 {
+  gdouble current_progress;
+
   if (entry->progress_timeout) {
     g_source_remove (entry->progress_timeout);
     entry->progress_timeout = 0;
  }
 
   if (!loading) {
-    gtk_entry_set_progress_fraction (GTK_ENTRY (entry->url_entry), 0);
+    /* Setting progress to 0 when it is already 0 can actually cause the
+     * progress bar to be shown. Yikes....
+     */
+    current_progress = gtk_entry_get_progress_fraction (GTK_ENTRY (entry->url_entry));
+    if (current_progress != 0.0)
+      gtk_entry_set_progress_fraction (GTK_ENTRY (entry->url_entry), 0.0);
     return;
   }
 
