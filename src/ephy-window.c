@@ -2109,12 +2109,16 @@ progress_update (WebKitWebView *web_view,
   EphyTitleWidget *title_widget;
   gdouble progress;
   gboolean loading;
+  const char *address;
 
   progress = webkit_web_view_get_estimated_load_progress (web_view);
   loading = ephy_web_view_is_loading (EPHY_WEB_VIEW (web_view));
 
-  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
+  address = ephy_web_view_get_address (EPHY_WEB_VIEW (web_view));
+  if (ephy_embed_utils_is_no_show_address (address))
+    loading = FALSE;
 
+  title_widget = ephy_header_bar_get_title_widget (EPHY_HEADER_BAR (window->header_bar));
   ephy_location_entry_set_progress (EPHY_LOCATION_ENTRY (title_widget), progress, loading);
 }
 
