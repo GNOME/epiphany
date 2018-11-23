@@ -477,6 +477,49 @@ sync_tab_security (EphyWebView *view,
 }
 
 static void
+update_adaptive_mode (EphyWindow *window)
+{
+  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
+  EphyActionBar *action_bar = EPHY_ACTION_BAR (window->action_bar);
+  gboolean is_narrow, is_mobile_landscape;
+  EphyAdaptiveMode adaptive_mode;
+  gint width, height;
+  GdkDisplay *display;
+  GdkWindow *surface;
+  GdkMonitor *monitor = NULL;
+  GdkRectangle geometry = {};
+
+  gtk_window_get_size (GTK_WINDOW (window),
+                       &width,
+                       &height);
+
+  /* Get the monitor to guess whether we are on a mobile or not. If not found,
+   * fallback to the window size.
+   */
+  display = gtk_widget_get_display (GTK_WIDGET (window));
+  surface = gtk_widget_get_window (GTK_WIDGET (window));
+  if (display != NULL && surface != NULL)
+    monitor = gdk_display_get_monitor_at_window (display, surface);
+  if (monitor != NULL)
+    gdk_monitor_get_geometry (monitor, &geometry);
+  else
+    geometry.height = height;
+
+  /* window->is_maximized doesn't work here for some reason, so we use
+   * gtk_window_is_maximized() instead.
+   */
+  is_narrow = width <= 600;
+  is_mobile_landscape = geometry.height <= 400 &&
+                        (gtk_window_is_maximized (GTK_WINDOW (window)) ||
+                         window->is_fullscreen);
+  adaptive_mode = is_narrow || is_mobile_landscape ?
+    EPHY_ADAPTIVE_MODE_NARROW :
+    EPHY_ADAPTIVE_MODE_NORMAL;
+  ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
+  ephy_action_bar_set_adaptive_mode (action_bar, adaptive_mode);
+}
+
+static void
 ephy_window_fullscreen (EphyWindow *window)
 {
   EphyEmbed *embed;
@@ -488,6 +531,7 @@ ephy_window_fullscreen (EphyWindow *window)
   sync_tab_load_status (ephy_embed_get_web_view (embed), WEBKIT_LOAD_STARTED, window);
   sync_tab_security (ephy_embed_get_web_view (embed), NULL, window);
 
+  update_adaptive_mode (window);
   sync_chromes_visibility (window);
   ephy_embed_entering_fullscreen (embed);
 }
@@ -497,6 +541,7 @@ ephy_window_unfullscreen (EphyWindow *window)
 {
   window->is_fullscreen = FALSE;
 
+  update_adaptive_mode (window);
   sync_chromes_visibility (window);
   ephy_embed_leaving_fullscreen (window->active_embed);
 }
@@ -2881,9 +2926,6 @@ ephy_window_configure_event (GtkWidget *widget,
                              GdkEventConfigure *event)
 {
   EphyWindow *window = EPHY_WINDOW (widget);
-  EphyHeaderBar *header_bar = EPHY_HEADER_BAR (ephy_window_get_header_bar (window));
-  EphyActionBar *action_bar = EPHY_ACTION_BAR (window->action_bar);
-  EphyAdaptiveMode adaptive_mode;
   gboolean result;
   gint width, height;
 
@@ -2893,12 +2935,6 @@ ephy_window_configure_event (GtkWidget *widget,
                        &width,
                        &height);
 
-  adaptive_mode = width <= 720 ?
-    EPHY_ADAPTIVE_MODE_NARROW :
-    EPHY_ADAPTIVE_MODE_NORMAL;
-  ephy_header_bar_set_adaptive_mode (header_bar, adaptive_mode);
-  ephy_action_bar_set_adaptive_mode (action_bar, adaptive_mode);
-
   if (!window->is_maximized && !window->is_fullscreen) {
     gtk_window_get_position (GTK_WINDOW (widget),
                              &window->current_x,
@@ -2906,6 +2942,8 @@ ephy_window_configure_event (GtkWidget *widget,
     window->current_width = width;
     window->current_height = height;
   }
+
+  update_adaptive_mode (window);
 
   return result;
 }
@@ -2943,6 +2981,8 @@ ephy_window_state_event (GtkWidget           *widget,
   } else if (event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED) {
     window->is_maximized = event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED;
   }
+
+  update_adaptive_mode (window);
 
   return result;
 }
@@ -3008,6 +3048,8 @@ ephy_window_show (GtkWidget *widget)
       window->has_default_size = TRUE;
     }
   }
+
+  update_adaptive_mode (window);
 
   GTK_WIDGET_CLASS (ephy_window_parent_class)->show (widget);
 }
