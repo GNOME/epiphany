@@ -33,6 +33,8 @@
 #include "ephy-type-builtins.h"
 
 #include <glib/gi18n.h>
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
 
 enum {
   PROP_0,
@@ -144,6 +146,7 @@ ephy_header_bar_constructed (GObject *object)
   GtkWidget *page_menu_popover;
   GtkBuilder *builder;
   EphyEmbedShell *embed_shell;
+  HdyColumn *column;
 
   G_OBJECT_CLASS (ephy_header_bar_parent_class)->constructed (object);
 
@@ -161,7 +164,6 @@ ephy_header_bar_constructed (GObject *object)
                     G_CALLBACK (update_revealer_visibility), NULL);
   gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->start_revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT);
   gtk_container_add (GTK_CONTAINER (header_bar->start_revealer), GTK_WIDGET (header_bar->action_bar_start));
-  gtk_widget_set_margin_end (GTK_WIDGET (header_bar->action_bar_start), 54);
 
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header_bar),
                              GTK_WIDGET (header_bar->start_revealer));
@@ -173,7 +175,13 @@ ephy_header_bar_constructed (GObject *object)
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_title_box_new ());
   else
     header_bar->title_widget = EPHY_TITLE_WIDGET (ephy_location_entry_new ());
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (header_bar->title_widget));
+  column = hdy_column_new ();
+  gtk_widget_set_hexpand (GTK_WIDGET (column), TRUE);
+  gtk_widget_show (GTK_WIDGET (column));
+  hdy_column_set_maximum_width (column, 860);
+  hdy_column_set_linear_growth_width (column, 560);
+  gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (header_bar->title_widget));
+  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header_bar), GTK_WIDGET (column));
   gtk_widget_show (GTK_WIDGET (header_bar->title_widget));
 
   if (EPHY_IS_LOCATION_ENTRY (header_bar->title_widget)) {
@@ -230,7 +238,6 @@ ephy_header_bar_constructed (GObject *object)
                     G_CALLBACK (update_revealer_visibility), NULL);
   gtk_revealer_set_transition_type (GTK_REVEALER (header_bar->end_revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT);
   gtk_container_add (GTK_CONTAINER (header_bar->end_revealer), GTK_WIDGET (header_bar->action_bar_end));
-  gtk_widget_set_margin_start (GTK_WIDGET (header_bar->action_bar_end), 54);
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header_bar),
                            GTK_WIDGET (header_bar->end_revealer));
