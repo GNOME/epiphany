@@ -320,18 +320,6 @@ ephy_location_entry_finalize (GObject *object)
 }
 
 static void
-ephy_location_entry_get_preferred_width (GtkWidget *widget,
-                                         gint      *minimum_width,
-                                         gint      *natural_width)
-{
-  if (minimum_width)
-    *minimum_width = -1;
-
-  if (natural_width)
-    *natural_width = 848;
-}
-
-static void
 ephy_location_entry_get_preferred_height (GtkWidget *widget,
                                           gint      *minimum_height,
                                           gint      *natural_height)
@@ -425,7 +413,6 @@ ephy_location_entry_class_init (EphyLocationEntryClass *klass)
   object_class->finalize = ephy_location_entry_finalize;
   object_class->dispose = ephy_location_entry_dispose;
 
-  widget_class->get_preferred_width = ephy_location_entry_get_preferred_width;
   widget_class->get_preferred_height = ephy_location_entry_get_preferred_height;
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
