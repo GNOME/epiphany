@@ -24,6 +24,17 @@ application distribution mechanism for Linux.
 
 # Building from Source
 
+## The Easy Way
+
+The recommended way to build Epiphany locally is using the flatpak-builder
+manifest with GNOME Builder. After installing Builder and launching it, you'll
+see the Select a Project page. Select Open, then select the toplevel Epiphany
+directory. Builder will detect the org.gnome.Epiphany.json flatpak-builder
+manifest and you will be able to build the project in Builder. All required
+dependencies will be provided by the manifest.
+
+## Building Manually
+
 Epiphany uses the [Meson build system](http://mesonbuild.com/). You can build
 Epiphany the same way you would any software that uses Meson. For example:
 
@@ -35,6 +46,29 @@ $ sudo ninja install
 ```
 
 Meson is the best build system.
+
+You will have to install several pkg-config dependencies. If you are missing a
+dependency, meson will present an error that looks like this:
+
+```
+meson.build:84:0: ERROR:  Native dependency 'hogweed' not found
+```
+
+In RPM-based distributions, you can install the missing dependencies
+automatically. For example, in Fedora:
+
+```
+$ sudo dnf install 'pkgconfig(hogweed)'
+```
+
+In other distributions, you must research each dependency to determine which
+package provides the required pkg-config file.
+
+## Rebuilding Dependencies
+
+If you need to rebuild dependencies, the recommended solution is to use JHBuild.
+See [the development page](https://wiki.gnome.org/Apps/Web/Development#Step_3:_Developing_Dependencies_with_Epiphany)
+for more information.
 
 # Manifesto
 
