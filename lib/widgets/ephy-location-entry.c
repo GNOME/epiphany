@@ -545,7 +545,9 @@ entry_clear_activate_cb (GtkMenuItem       *item,
                          EphyLocationEntry *entry)
 {
   entry->block_update = TRUE;
+  g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
   gtk_entry_set_text (GTK_ENTRY (entry->url_entry), "");
+  g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
   entry->block_update = FALSE;
   entry->user_changed = TRUE;
 }
@@ -556,8 +558,10 @@ paste_received (GtkClipboard      *clipboard,
                 EphyLocationEntry *entry)
 {
   if (text) {
+    g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
     gtk_entry_set_text (GTK_ENTRY (entry->url_entry), text);
     ephy_location_entry_activate (entry);
+    g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
   }
 }
 
@@ -984,7 +988,9 @@ ephy_location_entry_reset_internal (EphyLocationEntry *entry,
 void
 ephy_location_entry_undo_reset (EphyLocationEntry *entry)
 {
+  g_signal_handlers_block_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
   gtk_entry_set_text (GTK_ENTRY (entry->url_entry), entry->saved_text);
+  g_signal_handlers_unblock_by_func (entry->url_entry, G_CALLBACK (editable_changed_cb), entry);
   entry->can_redo = FALSE;
   entry->user_changed = TRUE;
 }
