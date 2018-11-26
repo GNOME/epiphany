@@ -346,21 +346,26 @@ ephy_find_toolbar_load_changed_cb (WebKitWebView   *web_view,
 static void
 ephy_find_toolbar_init (EphyFindToolbar *toolbar)
 {
+  GtkWidget *column;
   GtkWidget *box;
   GtkSizeGroup *size_group;
 
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
+  column = GTK_WIDGET (hdy_column_new ());
+  hdy_column_set_maximum_width (HDY_COLUMN (column), 400);
+  hdy_column_set_linear_growth_width (HDY_COLUMN (column), 300);
+  gtk_container_add (GTK_CONTAINER (toolbar), column);
+
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                GTK_STYLE_CLASS_RAISED);
   gtk_style_context_add_class (gtk_widget_get_style_context (box),
                                GTK_STYLE_CLASS_LINKED);
-  gtk_container_add (GTK_CONTAINER (toolbar), box);
+  gtk_container_add (GTK_CONTAINER (column), box);
 
   toolbar->entry = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (toolbar->entry), 32);
+  gtk_widget_set_hexpand (GTK_WIDGET (toolbar->entry), TRUE);
   gtk_entry_set_max_length (GTK_ENTRY (toolbar->entry), 512);
   gtk_entry_set_placeholder_text (GTK_ENTRY (toolbar->entry), _("Type to search…"));
   gtk_container_add (GTK_CONTAINER (box), toolbar->entry);
