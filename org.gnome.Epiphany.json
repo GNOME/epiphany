@@ -76,6 +76,24 @@
             ]
         },
         {
+            "name" : "libhandy",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dexamples=false",
+                "-Dglade_catalog=false",
+                "-Dintrospection=false",
+                "-Dtests=false",
+                "-Dvapi=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "search-bar",
+                    "url" : "https://source.puri.sm/adrien.plazas/libhandy.git"
+                }
+            ]
+        },
+        {
             "name" : "epiphany",
             "config-opts" : [
                 "-Dtech_preview=true"
