@@ -6,9 +6,11 @@ Some TODO items, in no particular order:
 - Use G_SOURCE_CONTINUE/G_SOURCE_REMOVE.
 - Name all timeout and idle sources
 - Replace constructor functions with constructed functions
-- Use g_clear_object/g_clear_pointer in dispose/finalize
+- Use g_clear_object/g_clear_pointer in dispose (and finalize?)
 - Replace dispose with finalize wherever possible
 - Use GtkBuilder instead of declaring the UIs with C
+- Use g_autofree/g_autoptr where possible
+- Write out foo == NULL instead of !foo where possible
 - We practically don't test any part of Epiphany, change that (how do
   you test UI code? There's like 3 or 4 frameworks for this, pick one?
   What does Chrome do?)
