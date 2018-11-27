@@ -53,6 +53,7 @@ libephymain_deps = [
   ephymisc_dep,
   ephysync_dep,
   ephywidgets_dep,
+  libhandy_dep,
   libnotify_dep
 ]
 
