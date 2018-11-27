@@ -372,7 +372,8 @@ ephy_web_view_get_popups_allowed (EphyWebView *view)
   gboolean allow;
 
   location = ephy_web_view_get_address (view);
-  if (location == NULL) return FALSE;/* FALSE, TRUE… same thing */
+  if (location == NULL)
+    return FALSE; /* FALSE, TRUE… same thing */
 
   allow = g_settings_get_boolean (EPHY_SETTINGS_WEB,
                                   EPHY_PREFS_WEB_ENABLE_POPUPS);
