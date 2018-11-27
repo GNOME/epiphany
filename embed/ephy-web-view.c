@@ -1107,7 +1107,7 @@ ephy_web_view_set_address (EphyWebView *view,
   view->address = g_strdup (address);
 
   g_free (view->display_address);
-  view->display_address = ephy_uri_decode (view->address);
+  view->display_address = view->address != NULL ? ephy_uri_decode (view->address) : NULL;
 
   _ephy_web_view_set_is_blank (view, ephy_embed_utils_url_is_empty (address));
 
