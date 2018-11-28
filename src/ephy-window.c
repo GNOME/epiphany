@@ -208,10 +208,8 @@ impl_set_active_child (EphyEmbedContainer *container,
 
   window = EPHY_WINDOW (container);
 
-  page = gtk_notebook_page_num
-           (window->notebook, GTK_WIDGET (child));
-  gtk_notebook_set_current_page
-    (window->notebook, page);
+  page = gtk_notebook_page_num (window->notebook, GTK_WIDGET (child));
+  gtk_notebook_set_current_page (window->notebook, page);
 }
 
 static GtkWidget *
@@ -228,8 +226,7 @@ construct_confirm_close_dialog (EphyWindow *window,
                                    GTK_BUTTONS_CANCEL,
                                    "%s", title);
 
-  gtk_message_dialog_format_secondary_text
-    (GTK_MESSAGE_DIALOG (dialog), "%s", info);
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", info);
 
   gtk_dialog_add_button (GTK_DIALOG (dialog),
                          action, GTK_RESPONSE_ACCEPT);
