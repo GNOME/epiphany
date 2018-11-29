@@ -265,7 +265,7 @@ ephy_bookmark_properties_grid_buffer_text_changed_cb (EphyBookmarkPropertiesGrid
   group = gtk_widget_get_action_group (GTK_WIDGET (self), "grid");
   action = g_action_map_lookup_action (G_ACTION_MAP (group), "add-tag");
   text = gtk_entry_buffer_get_text (buffer);
-  if (ephy_bookmarks_manager_tag_exists (self->manager, text))
+  if (ephy_bookmarks_manager_tag_exists (self->manager, text) || g_strcmp0 (text, "") == 0)
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
   else
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
