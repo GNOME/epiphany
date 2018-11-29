@@ -67,7 +67,7 @@ endif
 # Dependencies policy: except for WebKitGTK+, all dependency versions must be
 # available in Ubuntu 18.04. Please check before bumping the required version
 # of any dependency.
-glib_requirement = '>= 2.52.0'
+glib_requirement = '>= 2.56.0'
 gtk_requirement = '>= 3.22.13'
 nettle_requirement = '>= 3.2'
 webkitgtk_requirement = '>= 2.23.1'
