@@ -1215,8 +1215,6 @@ ephy_embed_shell_startup (GApplication *application)
                     G_CALLBACK (web_extension_password_manager_request_save_received_cb),
                     shell);
 
-  webkit_web_context_set_sandbox_enabled (priv->web_context, TRUE);
-
   ephy_embed_shell_setup_process_model (shell);
   g_signal_connect_object (priv->web_context, "initialize-web-extensions",
                            G_CALLBACK (initialize_web_extensions),
