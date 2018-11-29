@@ -150,6 +150,7 @@ struct _EphyWindow {
   WebKitHitTestResult *hit_test_result;
   guint idle_worker;
   EphyLocationController *location_controller;
+  guint modified_forms_timeout_id;
 
   gint current_width;
   gint current_height;
@@ -2591,9 +2592,13 @@ ephy_window_close_tab (EphyWindow *window,
   g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
   gtk_widget_destroy (GTK_WIDGET (tab));
 
-  /* If that was the last tab, destroy the window. */
-  if (gtk_notebook_get_n_pages (window->notebook) == 0)
-    gtk_widget_destroy (GTK_WIDGET (window));
+  /* If that was the last tab, destroy the window.
+   *
+   * Beware: window->closing could be true now, after destroying the
+   * tab, even if it wasn't at the start of this function.
+   */
+  if (!window->closing && gtk_notebook_get_n_pages (window->notebook) == 0)
+   gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 typedef struct {
@@ -2811,6 +2816,8 @@ ephy_window_dispose (GObject *object)
 
     g_clear_object (&window->bookmarks_manager);
     g_clear_object (&window->hit_test_result);
+
+    g_clear_handle_id (&window->modified_forms_timeout_id, g_source_remove);
 
     g_hash_table_unref (window->action_labels);
   }
@@ -3680,6 +3687,7 @@ continue_window_close_after_modified_forms_check (ModifiedFormsData *data)
   gboolean should_close;
 
   data->window->checking_modified_forms = FALSE;
+  g_clear_handle_id (&data->window->modified_forms_timeout_id, g_source_remove);
 
   if (data->modified_embed) {
     /* jump to the first tab with modified forms */
@@ -3718,6 +3726,21 @@ has_modified_forms_cb (EphyWebView       *view,
   modified_forms_data_free (data);
 }
 
+static gboolean
+has_modified_forms_timeout_cb (ModifiedFormsData *data)
+{
+  data->window->modified_forms_timeout_id = 0;
+
+  /* We have a stalled web process. Using the cancellable is not enough.
+   * Nothing for it but to force things. Each web view's
+   * has_modified_forms_cb() will complete as that view is being
+   * destroyed.
+   */
+  gtk_widget_destroy (GTK_WIDGET (data->window));
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ephy_window_check_modified_forms (EphyWindow *window)
 {
@@ -3740,6 +3763,13 @@ ephy_window_check_modified_forms (EphyWindow *window)
                                       (GAsyncReadyCallback)has_modified_forms_cb,
                                       data);
   }
+
+  /* Set timeout to guard against web process hangs. Otherwise, a single
+   * unresponsive web process would prevent the window from closing.
+   */
+  window->modified_forms_timeout_id =
+    g_timeout_add_seconds (1, (GSourceFunc)has_modified_forms_timeout_cb, data);
+
   g_list_free (tabs);
 }
 
