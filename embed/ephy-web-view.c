@@ -338,7 +338,7 @@ ephy_web_view_run_file_chooser (WebKitWebView            *web_view,
   dialog = ephy_create_file_chooser (_("Open"),
                                      GTK_WIDGET (toplevel),
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
-                                     EPHY_FILE_FILTER_ALL_SUPPORTED);
+                                     EPHY_FILE_FILTER_ALL);
 
   if (filter)
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
