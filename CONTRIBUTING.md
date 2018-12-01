@@ -3,13 +3,9 @@ very short, so please read it before reporting your issue.
 
 For tips for hacking on Epiphany, see the HACKING.md file.
 
-# Submitting an Issue Report?
+# Software versions
 
-Thanks for reporting your problem with Epiphany.
-
-## Software versions
-
-Please include the following in your report:
+Please include the following in your issue report:
 
  * Epiphany version
  * WebKitGTK+ version
@@ -18,7 +14,7 @@ Please include the following in your report:
 Check the About dialog if you're not sure what Epiphany or WebKitGTK+ versions
 you have.
 
-## Web Content Bugs
+# Web Content Bugs
 
 This is the **wrong place** to report bugs with web content (e.g. incorrect page
 rendering, broken JavaScript, problems with video playback, font issues, network
@@ -41,7 +37,7 @@ or WebKit is responsible for a bug. If we suspect an issue reported on the
 Epiphany issue tracker is actually a WebKit bug, we will close it and ask you to
 report the issue on WebKit Bugzilla instead.
 
-## Crashes
+# Crashes
 
 If Epiphany crashed, then we really need a backtrace taken in gdb with `bt full`
 in order to solve the problem. Be sure to install the necessary debuginfo
