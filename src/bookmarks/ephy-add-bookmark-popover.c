@@ -210,17 +210,20 @@ ephy_add_bookmark_popover_show (EphyAddBookmarkPopover *self)
 
   bookmark = ephy_bookmarks_manager_get_bookmark_by_url (manager, address);
   if (!bookmark) {
-    char *id = ephy_sync_utils_get_random_sync_id ();
-    bookmark = ephy_bookmark_new (address,
-                                  ephy_embed_get_title (embed),
-                                  g_sequence_new (g_free),
-                                  id);
+    g_autofree char *id = NULL;
+    g_autoptr(EphyBookmark) new_bookmark = NULL;
 
-    ephy_bookmarks_manager_add_bookmark (manager, bookmark);
+    id = ephy_sync_utils_get_random_sync_id ();
+    new_bookmark = ephy_bookmark_new (address,
+                                      ephy_embed_get_title (embed),
+                                      g_sequence_new (g_free),
+                                      id);
+
+    ephy_bookmarks_manager_add_bookmark (manager, new_bookmark);
     ephy_location_entry_set_bookmark_icon_state (location_entry,
                                                  EPHY_LOCATION_ENTRY_BOOKMARK_ICON_BOOKMARKED);
-    g_object_unref (bookmark);
-    g_free (id);
+
+    bookmark = new_bookmark;
   }
 
   g_signal_connect_object (manager, "bookmark-removed",
