@@ -82,10 +82,10 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
                                      GAsyncResult *result,
                                      gpointer      user_data)
 {
-  EphyBookmarkRow *self = user_data;
+  g_autoptr(EphyBookmarkRow) self = user_data;
   WebKitFaviconDatabase *database = WEBKIT_FAVICON_DATABASE (source);
   cairo_surface_t *icon_surface;
-  GdkPixbuf *favicon = NULL;
+  g_autoptr(GdkPixbuf) favicon = NULL;
 
   g_assert (EPHY_IS_BOOKMARK_ROW (self));
 
@@ -98,10 +98,7 @@ ephy_bookmark_row_favicon_loaded_cb (GObject      *source,
   if (favicon) {
     if (self->favicon_image != NULL)
       gtk_image_set_from_pixbuf (GTK_IMAGE (self->favicon_image), favicon);
-    g_object_unref (favicon);
   }
-
-  g_object_unref (self);
 }
 
 static void
