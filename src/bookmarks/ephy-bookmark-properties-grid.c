@@ -375,11 +375,11 @@ ephy_bookmark_properties_grid_constructed (GObject *object)
 
   /* Set text for address entry */
   if (self->type == EPHY_BOOKMARK_PROPERTIES_GRID_TYPE_DIALOG) {
-    char *decoded_address;
+    g_autofree char *decoded_address = NULL;
+
     address = ephy_bookmark_get_url (self->bookmark);
     decoded_address = ephy_uri_decode (address);
     gtk_entry_set_text (GTK_ENTRY (self->address_entry), decoded_address);
-    g_free (decoded_address);
 
     g_object_bind_property (GTK_ENTRY (self->address_entry), "text",
                             self->bookmark, "bmkUri",
@@ -481,7 +481,7 @@ static const GActionEntry entries[] = {
 static void
 ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
 {
-  GSimpleActionGroup *group;
+  g_autoptr(GSimpleActionGroup) group = NULL;
   GAction *action;
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -522,8 +522,6 @@ ephy_bookmark_properties_grid_init (EphyBookmarkPropertiesGrid *self)
    * entry */
   action = g_action_map_lookup_action (G_ACTION_MAP (group), "add-tag");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-
-  g_object_unref (group);
 
   g_signal_connect_object (gtk_entry_get_buffer (GTK_ENTRY (self->add_tag_entry)),
                            "notify::text",
