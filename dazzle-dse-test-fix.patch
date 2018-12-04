@@ -1,0 +1,68 @@
+diff --git a/src/suggestions/dzl-suggestion-entry.c b/src/suggestions/dzl-suggestion-entry.c
+index fc67fc4..bab0d6b 100644
+--- a/src/suggestions/dzl-suggestion-entry.c
++++ b/src/suggestions/dzl-suggestion-entry.c
+@@ -144,13 +144,17 @@ dzl_suggestion_entry_focus_out_event (GtkWidget     *widget,
+                                       GdkEventFocus *event)
+ {
+   DzlSuggestionEntry *self = (DzlSuggestionEntry *)widget;
++  gboolean ret;
++
++  DZL_ENTRY;
+ 
+   g_assert (DZL_IS_SUGGESTION_ENTRY (self));
+   g_assert (event != NULL);
+ 
+   g_signal_emit (self, signals [HIDE_SUGGESTIONS], 0);
+ 
+-  return GTK_WIDGET_CLASS (dzl_suggestion_entry_parent_class)->focus_out_event (widget, event);
++  ret = GTK_WIDGET_CLASS (dzl_suggestion_entry_parent_class)->focus_out_event (widget, event);
++  DZL_RETURN (ret);
+ }
+ 
+ static void
+diff --git a/src/suggestions/dzl-suggestion-popover.c b/src/suggestions/dzl-suggestion-popover.c
+index 06f259e..24942ba 100644
+--- a/src/suggestions/dzl-suggestion-popover.c
++++ b/src/suggestions/dzl-suggestion-popover.c
+@@ -788,38 +788,8 @@ dzl_suggestion_popover_items_changed (DzlSuggestionPopover *self,
+       DZL_EXIT;
+     }
+ 
+-  if (self->popup_requested)
+-    {
+-      dzl_suggestion_popover_popup (self);
+-      self->popup_requested = FALSE;
+-      DZL_EXIT;
+-    }
+-
+-  /*
+-   * If we are currently animating in the initial view of the popover,
+-   * then we might need to cancel that animation and rely on the elastic
+-   * bin for smooth resizing.
+-   */
+-  if (gtk_revealer_get_reveal_child (self->revealer) &&
+-      !gtk_revealer_get_child_revealed (self->revealer) &&
+-      (removed || added))
+-    {
+-      g_signal_handlers_block_by_func (self->revealer,
+-                                       G_CALLBACK (dzl_suggestion_popover_notify_child_revealed),
+-                                       self);
+-      gtk_revealer_set_transition_duration (self->revealer, 0);
+-      gtk_revealer_set_reveal_child (self->revealer, FALSE);
+-      gtk_revealer_set_reveal_child (self->revealer, TRUE);
+-      g_signal_handlers_unblock_by_func (self->revealer,
+-                                         G_CALLBACK (dzl_suggestion_popover_notify_child_revealed),
+-                                         self);
+-    }
+-  else
+-    {
+-      dzl_suggestion_popover_popup (self);
+-      self->popup_requested = FALSE;
+-    }
+-
++  dzl_suggestion_popover_popup (self);
++  self->popup_requested = FALSE;
+   DZL_EXIT;
+ }
+ 
