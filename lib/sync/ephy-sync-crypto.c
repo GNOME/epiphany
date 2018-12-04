@@ -51,7 +51,7 @@ ephy_sync_crypto_hawk_options_new (const char *app,
 {
   SyncCryptoHawkOptions *options;
 
-  options = g_slice_new (SyncCryptoHawkOptions);
+  options = g_new (SyncCryptoHawkOptions, 1);
   options->app = g_strdup (app);
   options->dlg = g_strdup (dlg);
   options->ext = g_strdup (ext);
@@ -80,7 +80,7 @@ ephy_sync_crypto_hawk_options_free (SyncCryptoHawkOptions *options)
   g_free (options->payload);
   g_free (options->timestamp);
 
-  g_slice_free (SyncCryptoHawkOptions, options);
+  g_free (options);
 }
 
 static SyncCryptoHawkArtifacts *
@@ -97,7 +97,7 @@ ephy_sync_crypto_hawk_artifacts_new (const char *app,
 {
   SyncCryptoHawkArtifacts *artifacts;
 
-  artifacts = g_slice_new (SyncCryptoHawkArtifacts);
+  artifacts = g_new (SyncCryptoHawkArtifacts, 1);
   artifacts->app = g_strdup (app);
   artifacts->dlg = g_strdup (dlg);
   artifacts->ext = g_strdup (ext);
@@ -128,7 +128,7 @@ ephy_sync_crypto_hawk_artifacts_free (SyncCryptoHawkArtifacts *artifacts)
   g_free (artifacts->resource);
   g_free (artifacts->ts);
 
-  g_slice_free (SyncCryptoHawkArtifacts, artifacts);
+  g_free (artifacts);
 }
 
 static char *
@@ -381,7 +381,7 @@ ephy_sync_crypto_hawk_header_new (const char            *url,
       header = hawk_append_to_header (header, "dlg", artifacts->dlg);
   }
 
-  hawk_header = g_slice_new (SyncCryptoHawkHeader);
+  hawk_header = g_new (SyncCryptoHawkHeader, 1);
   hawk_header->header = g_strdup (header);
   hawk_header->artifacts = artifacts;
 
@@ -403,7 +403,7 @@ ephy_sync_crypto_hawk_header_free (SyncCryptoHawkHeader *header)
   g_free (header->header);
   ephy_sync_crypto_hawk_artifacts_free (header->artifacts);
 
-  g_slice_free (SyncCryptoHawkHeader, header);
+  g_free (header);
 }
 
 SyncCryptoRSAKeyPair *
@@ -427,7 +427,7 @@ ephy_sync_crypto_rsa_key_pair_new (void)
   /* Given correct parameters, this never fails. */
   g_assert (success);
 
-  key_pair = g_slice_new (SyncCryptoRSAKeyPair);
+  key_pair = g_new (SyncCryptoRSAKeyPair, 1);
   key_pair->public = public;
   key_pair->private = private;
 
@@ -442,7 +442,7 @@ ephy_sync_crypto_rsa_key_pair_free (SyncCryptoRSAKeyPair *key_pair)
   rsa_public_key_clear (&key_pair->public);
   rsa_private_key_clear (&key_pair->private);
 
-  g_slice_free (SyncCryptoRSAKeyPair, key_pair);
+  g_free (key_pair);
 }
 
 SyncCryptoKeyBundle *
@@ -463,7 +463,7 @@ ephy_sync_crypto_key_bundle_new (const char *aes_key_b64,
   hmac_key = g_base64_decode (hmac_key_b64, &hmac_key_len);
   g_assert (hmac_key_len == 32);
 
-  bundle = g_slice_new (SyncCryptoKeyBundle);
+  bundle = g_new (SyncCryptoKeyBundle, 1);
   bundle->aes_key_hex = ephy_sync_utils_encode_hex (aes_key, aes_key_len);
   bundle->hmac_key_hex = ephy_sync_utils_encode_hex (hmac_key, hmac_key_len);
 
@@ -481,7 +481,7 @@ ephy_sync_crypto_key_bundle_free (SyncCryptoKeyBundle *bundle)
   g_free (bundle->aes_key_hex);
   g_free (bundle->hmac_key_hex);
 
-  g_slice_free (SyncCryptoKeyBundle, bundle);
+  g_free (bundle);
 }
 
 static char *
@@ -790,7 +790,7 @@ ephy_sync_crypto_derive_master_bundle (const guint8 *key)
                                           prk, len,
                                           tmp, len + strlen (info) + 1);
 
-  bundle = g_slice_new (SyncCryptoKeyBundle);
+  bundle = g_new (SyncCryptoKeyBundle, 1);
   bundle->aes_key_hex = g_strdup (aes_key_hex);
   bundle->hmac_key_hex = g_strdup (hmac_key_hex);
 

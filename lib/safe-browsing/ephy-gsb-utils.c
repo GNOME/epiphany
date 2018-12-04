@@ -55,7 +55,7 @@ ephy_gsb_bit_reader_new (const guint8 *data,
   g_assert (data);
   g_assert (data_len > 0);
 
-  reader = g_slice_new (EphyGSBBitReader);
+  reader = g_new (EphyGSBBitReader, 1);
   reader->curr = reader->data = g_malloc (data_len);
   memcpy (reader->data, data, data_len);
   reader->data_len = data_len;
@@ -71,7 +71,7 @@ ephy_gsb_bit_reader_free (EphyGSBBitReader *reader)
   g_assert (reader);
 
   g_free (reader->data);
-  g_slice_free (EphyGSBBitReader, reader);
+  g_free (reader);
 }
 
 /*
@@ -116,7 +116,7 @@ ephy_gsb_rice_decoder_new (const guint8 *data,
   g_assert (data);
   g_assert (data_len > 0);
 
-  decoder = g_slice_new (EphyGSBRiceDecoder);
+  decoder = g_new (EphyGSBRiceDecoder, 1);
   decoder->reader = ephy_gsb_bit_reader_new (data, data_len);
   decoder->parameter = parameter;
 
@@ -129,7 +129,7 @@ ephy_gsb_rice_decoder_free (EphyGSBRiceDecoder *decoder)
   g_assert (decoder);
 
   ephy_gsb_bit_reader_free (decoder->reader);
-  g_slice_free (EphyGSBRiceDecoder, decoder);
+  g_free (decoder);
 }
 
 static guint32
@@ -161,7 +161,7 @@ ephy_gsb_threat_list_new (const char *threat_type,
   g_assert (platform_type);
   g_assert (threat_entry_type);
 
-  list = g_slice_new (EphyGSBThreatList);
+  list = g_new (EphyGSBThreatList, 1);
   list->threat_type = g_strdup (threat_type);
   list->platform_type = g_strdup (platform_type);
   list->threat_entry_type = g_strdup (threat_entry_type);
@@ -178,7 +178,7 @@ ephy_gsb_threat_list_free (EphyGSBThreatList *list)
   g_free (list->platform_type);
   g_free (list->threat_entry_type);
   g_free (list->client_state);
-  g_slice_free (EphyGSBThreatList, list);
+  g_free (list);
 }
 
 gboolean
@@ -207,7 +207,7 @@ ephy_gsb_hash_prefix_lookup_new (const guint8 *prefix,
 
   g_assert (prefix);
 
-  lookup = g_slice_new (EphyGSBHashPrefixLookup);
+  lookup = g_new (EphyGSBHashPrefixLookup, 1);
   lookup->prefix = g_bytes_new (prefix, length);
   lookup->negative_expired = negative_expired;
 
@@ -220,7 +220,7 @@ ephy_gsb_hash_prefix_lookup_free (EphyGSBHashPrefixLookup *lookup)
   g_assert (lookup);
 
   g_bytes_unref (lookup->prefix);
-  g_slice_free (EphyGSBHashPrefixLookup, lookup);
+  g_free (lookup);
 }
 
 EphyGSBHashFullLookup *
@@ -237,7 +237,7 @@ ephy_gsb_hash_full_lookup_new (const guint8 *hash,
   g_assert (platform_type);
   g_assert (threat_entry_type);
 
-  lookup = g_slice_new (EphyGSBHashFullLookup);
+  lookup = g_new (EphyGSBHashFullLookup, 1);
   lookup->hash = g_bytes_new (hash, GSB_HASH_SIZE);
   lookup->threat_type = g_strdup (threat_type);
   lookup->platform_type = g_strdup (platform_type);
@@ -256,7 +256,7 @@ ephy_gsb_hash_full_lookup_free (EphyGSBHashFullLookup *lookup)
   g_free (lookup->threat_type);
   g_free (lookup->platform_type);
   g_free (lookup->threat_entry_type);
-  g_slice_free (EphyGSBHashFullLookup, lookup);
+  g_free (lookup);
 }
 
 static JsonObject *

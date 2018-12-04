@@ -330,7 +330,7 @@ ephy_web_overview_model_item_new (const char *url,
 {
   EphyWebOverviewModelItem *item;
 
-  item = g_slice_new0 (EphyWebOverviewModelItem);
+  item = g_new0 (EphyWebOverviewModelItem, 1);
   item->url = g_strdup (url);
   item->title = g_strdup (title);
 
@@ -346,7 +346,7 @@ ephy_web_overview_model_item_free (EphyWebOverviewModelItem *item)
   g_free (item->url);
   g_free (item->title);
 
-  g_slice_free (EphyWebOverviewModelItem, item);
+  g_free (item);
 }
 
 static void

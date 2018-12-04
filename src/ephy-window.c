@@ -1904,7 +1904,7 @@ verify_url_async_data_new (EphyWindow               *window,
                            WebKitPolicyDecisionType  decision_type,
                            const char               *request_uri)
 {
-  VerifyUrlAsyncData *data = g_slice_new (VerifyUrlAsyncData);
+  VerifyUrlAsyncData *data = g_new (VerifyUrlAsyncData, 1);
 
   data->window = g_object_ref (window);
   data->web_view = g_object_ref (web_view);
@@ -1922,7 +1922,7 @@ verify_url_async_data_free (VerifyUrlAsyncData *data)
   g_object_unref (data->web_view);
   g_object_unref (data->decision);
   g_free (data->request_uri);
-  g_slice_free (VerifyUrlAsyncData, data);
+  g_free (data);
 }
 
 static gboolean
@@ -3720,7 +3720,7 @@ modified_forms_data_free (ModifiedFormsData *data)
 {
   g_object_unref (data->cancellable);
 
-  g_slice_free (ModifiedFormsData, data);
+  g_free (data);
 }
 
 static void
@@ -3791,7 +3791,7 @@ ephy_window_check_modified_forms (EphyWindow *window)
 
   window->checking_modified_forms = TRUE;
 
-  data = g_slice_new0 (ModifiedFormsData);
+  data = g_new0 (ModifiedFormsData, 1);
   data->window = window;
   data->cancellable = g_cancellable_new ();
   data->embeds_to_check = gtk_notebook_get_n_pages (window->notebook);

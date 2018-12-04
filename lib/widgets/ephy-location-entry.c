@@ -858,7 +858,7 @@ free_prefetch_helper (PrefetchHelper *helper)
 {
   soup_uri_free (helper->uri);
   g_object_unref (helper->entry);
-  g_slice_free (PrefetchHelper, helper);
+  g_free (helper);
 }
 
 static gboolean
@@ -889,7 +889,7 @@ schedule_dns_prefetch (EphyLocationEntry *entry, guint interval, const gchar *ur
   if (entry->dns_prefetch_handler)
     g_source_remove (entry->dns_prefetch_handler);
 
-  helper = g_slice_new0 (PrefetchHelper);
+  helper = g_new0 (PrefetchHelper, 1);
   helper->entry = g_object_ref (entry);
   helper->uri = uri;
 

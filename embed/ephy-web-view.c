@@ -176,7 +176,7 @@ popups_manager_free_info (PopupInfo *popup)
   g_free (popup->url);
   g_free (popup->name);
   g_free (popup->features);
-  g_slice_free (PopupInfo, popup);
+  g_free (popup);
 }
 
 static void
@@ -241,7 +241,7 @@ popups_manager_add (EphyWebView *view,
   LOG ("popups_manager_add: view %p, url %s, features %s",
        view, url, features);
 
-  popup = g_slice_new (PopupInfo);
+  popup = g_new (PopupInfo, 1);
 
   popup->url = g_strdup (url);
   popup->name = g_strdup (name);
@@ -1474,7 +1474,7 @@ permission_request_data_new (EphyWebView             *web_view,
                              const char              *origin)
 {
   PermissionRequestData *data;
-  data = g_slice_new (PermissionRequestData);
+  data = g_new (PermissionRequestData, 1);
   data->web_view = web_view;
   /* Ref the decision to keep it alive while we decide */
   data->request = g_object_ref (request);
@@ -1487,7 +1487,7 @@ permission_request_data_free (PermissionRequestData *data)
 {
   g_object_unref (data->request);
   g_free (data->origin);
-  g_slice_free (PermissionRequestData, data);
+  g_free (data);
 }
 
 static void
@@ -3334,7 +3334,7 @@ get_best_web_app_icon_async_data_free (GetBestWebAppIconAsyncData *data)
   g_free (data->icon_uri);
   g_free (data->icon_color);
 
-  g_slice_free (GetBestWebAppIconAsyncData, data);
+  g_free (data);
 }
 
 static void
@@ -3350,7 +3350,7 @@ get_best_web_app_icon_cb (WebKitWebView *view,
     JSCValue *js_value, *js_uri, *js_color;
     GetBestWebAppIconAsyncData *data;
 
-    data = g_slice_new0 (GetBestWebAppIconAsyncData);
+    data = g_new0 (GetBestWebAppIconAsyncData, 1);
     js_value = webkit_javascript_result_get_js_value (js_result);
     g_assert (jsc_value_is_object (js_value));
 

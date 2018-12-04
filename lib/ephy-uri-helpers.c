@@ -48,7 +48,7 @@ query_item_free (QueryItem *item)
 {
   g_free (item->decoded_name);
   g_free (item->pair);
-  g_slice_free (QueryItem, item);
+  g_free (item);
 }
 
 #define XDIGIT(c) ((c) <= '9' ? (c) - '0' : ((c) & 0x4F) - 'A' + 10)
@@ -103,7 +103,7 @@ query_split (const char *query)
       decoded_name = NULL;
     }
 
-    item = g_slice_new0 (QueryItem);
+    item = g_new0 (QueryItem, 1);
     item->decoded_name = decoded_name;
     item->pair = pair;
     items = g_list_prepend (items, item);

@@ -74,7 +74,7 @@ populate_row_async_data_new (SyncedTabsDialog *dialog,
 {
   PopulateRowAsyncData *data;
 
-  data = g_slice_new (PopulateRowAsyncData);
+  data = g_new (PopulateRowAsyncData, 1);
   data->dialog = g_object_ref (dialog);
   data->title = g_strdup (title);
   data->url = g_strdup (url);
@@ -89,7 +89,7 @@ populate_row_async_data_free (PopulateRowAsyncData *data)
   g_object_unref (data->dialog);
   g_free (data->title);
   g_free (data->url);
-  g_slice_free (PopulateRowAsyncData, data);
+  g_free (data);
 }
 
 static void

@@ -64,7 +64,7 @@ merge_history_async_data_new (EphyHistoryManager                     *manager,
 {
   MergeHistoryAsyncData *data;
 
-  data = g_slice_new (MergeHistoryAsyncData);
+  data = g_new (MergeHistoryAsyncData, 1);
   data->manager = g_object_ref (manager);
   data->is_initial = is_initial;
   data->remotes_deleted = remotes_deleted;
@@ -81,7 +81,7 @@ merge_history_async_data_free (MergeHistoryAsyncData *data)
   g_assert (data);
 
   g_object_unref (data->manager);
-  g_slice_free (MergeHistoryAsyncData, data);
+  g_free (data);
 }
 
 static void

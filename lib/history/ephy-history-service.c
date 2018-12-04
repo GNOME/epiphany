@@ -325,7 +325,7 @@ ephy_history_service_message_new (EphyHistoryService           *service,
                                   EphyHistoryJobCallback        callback,
                                   gpointer                      user_data)
 {
-  EphyHistoryServiceMessage *message = g_slice_alloc0 (sizeof (EphyHistoryServiceMessage));
+  EphyHistoryServiceMessage *message = g_new0 (EphyHistoryServiceMessage, 1);
 
   message->service = service;
   message->type = type;
@@ -347,7 +347,7 @@ ephy_history_service_message_free (EphyHistoryServiceMessage *message)
   if (message->cancellable)
     g_object_unref (message->cancellable);
 
-  g_slice_free1 (sizeof (EphyHistoryServiceMessage), message);
+  g_free (message);
 }
 
 static void
@@ -523,7 +523,7 @@ signal_emission_context_free (SignalEmissionContext *ctx)
   g_object_unref (ctx->service);
   if (ctx->destroy_func && ctx->user_data)
     ctx->destroy_func (ctx->user_data);
-  g_slice_free (SignalEmissionContext, ctx);
+  g_free (ctx);
 }
 
 static SignalEmissionContext *
@@ -531,7 +531,7 @@ signal_emission_context_new (EphyHistoryService *service,
                              gpointer            user_data,
                              GDestroyNotify      destroy_func)
 {
-  SignalEmissionContext *ctx = g_slice_new0 (SignalEmissionContext);
+  SignalEmissionContext *ctx = g_new0 (SignalEmissionContext, 1);
 
   ctx->service = g_object_ref (service);
   ctx->user_data = user_data;

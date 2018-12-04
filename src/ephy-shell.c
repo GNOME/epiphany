@@ -94,7 +94,7 @@ ephy_shell_startup_context_new (EphyStartupFlags startup_flags,
                                 char **arguments,
                                 guint32 user_time)
 {
-  EphyShellStartupContext *ctx = g_slice_new0 (EphyShellStartupContext);
+  EphyShellStartupContext *ctx = g_new0 (EphyShellStartupContext, 1);
 
   ctx->startup_flags = startup_flags;
 
@@ -120,7 +120,7 @@ ephy_shell_startup_context_free (EphyShellStartupContext *ctx)
 
   g_strfreev (ctx->arguments);
 
-  g_slice_free (EphyShellStartupContext, ctx);
+  g_free (ctx);
 }
 
 static void
@@ -579,7 +579,7 @@ ephy_shell_before_emit (GApplication *application,
   g_variant_iter_init (&iter, platform_data);
   while (g_variant_iter_loop (&iter, "{&sv}", &key, &value)) {
     if (strcmp (key, "ephy-shell-startup-context") == 0) {
-      ctx = g_slice_new0 (EphyShellStartupContext);
+      ctx = g_new0 (EphyShellStartupContext, 1);
 
       /*
        * Iterate over the startup context variant and fill the members
@@ -1109,7 +1109,7 @@ open_uris_data_new (EphyShell       *shell,
   gboolean have_uris;
   EphySession *session = ephy_shell_get_session (shell);
 
-  data = g_slice_new0 (OpenURIsData);
+  data = g_new0 (OpenURIsData, 1);
   data->shell = shell;
   data->session = session ? g_object_ref (session) : NULL;
   data->uris = g_strdupv ((char **)uris);
@@ -1143,8 +1143,7 @@ open_uris_data_free (OpenURIsData *data)
   g_application_release (G_APPLICATION (data->shell));
   g_clear_object (&data->session);
   g_strfreev (data->uris);
-
-  g_slice_free (OpenURIsData, data);
+  g_free (data);
 }
 
 static gboolean
