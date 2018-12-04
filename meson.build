@@ -69,7 +69,7 @@ endif
 # of any dependency.
 glib_requirement = '>= 2.56.0'
 gtk_requirement = '>= 3.22.13'
-nettle_requirement = '>= 3.2'
+nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.21.92'
 
 cairo_dep = dependency('cairo', version: '>= 1.2')
