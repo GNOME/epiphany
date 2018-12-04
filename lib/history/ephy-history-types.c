@@ -25,7 +25,7 @@
 EphyHistoryPageVisit *
 ephy_history_page_visit_new_with_url (EphyHistoryURL *url, gint64 visit_time, EphyHistoryPageVisitType visit_type)
 {
-  EphyHistoryPageVisit *visit = g_slice_alloc0 (sizeof (EphyHistoryPageVisit));
+  EphyHistoryPageVisit *visit = g_new0 (EphyHistoryPageVisit, 1);
   visit->id = -1;
   visit->url = url;
   visit->visit_time = visit_time;
@@ -47,7 +47,7 @@ ephy_history_page_visit_free (EphyHistoryPageVisit *visit)
     return;
 
   ephy_history_url_free (visit->url);
-  g_slice_free1 (sizeof (EphyHistoryPageVisit), visit);
+  g_free (visit);
 }
 
 EphyHistoryPageVisit *
@@ -80,7 +80,7 @@ ephy_history_page_visit_list_free (GList *list)
 EphyHistoryHost *
 ephy_history_host_new (const char *url, const char *title, int visit_count, double zoom_level)
 {
-  EphyHistoryHost *host = g_slice_alloc0 (sizeof (EphyHistoryHost));
+  EphyHistoryHost *host = g_new0 (EphyHistoryHost, 1);
 
   host->id = -1;
   host->url = g_strdup (url);
@@ -116,14 +116,13 @@ ephy_history_host_free (EphyHistoryHost *host)
 
   g_free (host->url);
   g_free (host->title);
-
-  g_slice_free1 (sizeof (EphyHistoryHost), host);
+  g_free (host);
 }
 
 EphyHistoryURL *
 ephy_history_url_new (const char *url, const char *title, int visit_count, int typed_count, gint64 last_visit_time)
 {
-  EphyHistoryURL *history_url = g_slice_alloc0 (sizeof (EphyHistoryURL));
+  EphyHistoryURL *history_url = g_new0 (EphyHistoryURL, 1);
   history_url->id = -1;
   history_url->url = g_strdup (url);
   history_url->title = g_strdup (title);
@@ -169,7 +168,7 @@ ephy_history_url_free (EphyHistoryURL *url)
   g_free (url->title);
   g_free (url->sync_id);
   ephy_history_host_free (url->host);
-  g_slice_free1 (sizeof (EphyHistoryURL), url);
+  g_free (url);
 }
 
 GList *
@@ -200,14 +199,14 @@ ephy_history_url_list_free (GList *list)
 EphyHistoryQuery *
 ephy_history_query_new (void)
 {
-  return (EphyHistoryQuery *)g_slice_alloc0 (sizeof (EphyHistoryQuery));
+  return g_new0 (EphyHistoryQuery, 1);
 }
 
 void
 ephy_history_query_free (EphyHistoryQuery *query)
 {
   g_list_free_full (query->substring_list, g_free);
-  g_slice_free1 (sizeof (EphyHistoryQuery), query);
+  g_free (query);
 }
 
 EphyHistoryQuery *

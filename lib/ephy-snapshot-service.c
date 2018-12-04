@@ -288,7 +288,7 @@ snapshot_async_data_new (EphySnapshotService *service,
 {
   SnapshotAsyncData *data;
 
-  data = g_slice_new0 (SnapshotAsyncData);
+  data = g_new0 (SnapshotAsyncData, 1);
   data->service = g_object_ref (service);
   data->snapshot = snapshot ? g_object_ref (snapshot) : NULL;
   data->web_view = web_view;
@@ -320,8 +320,7 @@ snapshot_async_data_free (SnapshotAsyncData *data)
     g_object_remove_weak_pointer (G_OBJECT (data->web_view), (gpointer *)&data->web_view);
 
   g_free (data->url);
-
-  g_slice_free (SnapshotAsyncData, data);
+  g_free (data);
 }
 
 typedef struct {

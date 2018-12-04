@@ -102,13 +102,12 @@ static void vma_free (VMA_t *vma)
   g_free (vma->private_clean);
   g_free (vma->private_dirty);
 
-  g_slice_free (VMA_t, vma);
+  g_free (vma);
 }
 
 static void perm_entry_free (PermEntry *entry)
 {
-  if (entry)
-    g_slice_free (PermEntry, entry);
+  g_free (entry);
 }
 
 static void add_to_perm_entry (GHashTable *hash, VMA_t *entry)
@@ -121,7 +120,7 @@ static void add_to_perm_entry (GHashTable *hash, VMA_t *entry)
   value = g_hash_table_lookup (hash, perms);
 
   if (!value) {
-    value = g_slice_new0 (PermEntry);
+    value = g_new0 (PermEntry, 1);
     insert = TRUE;
   }
 
@@ -228,7 +227,7 @@ static void ephy_smaps_pid_to_html (EphySMaps *smaps, GString *str, pid_t pid, E
       if (vma)
         vma_entries = g_slist_append (vma_entries, vma);
 
-      vma = g_slice_new0 (VMA_t);
+      vma = g_new0 (VMA_t, 1);
 
       vma->start = g_match_info_fetch (match_info, 1);
       vma->end = g_match_info_fetch (match_info, 2);

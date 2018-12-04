@@ -897,7 +897,7 @@ static void
 ephy_application_dialog_data_free (EphyApplicationDialogData *data)
 {
   g_free (data->icon_href);
-  g_slice_free (EphyApplicationDialogData, data);
+  g_free (data);
 }
 
 static void
@@ -1390,7 +1390,7 @@ window_cmd_save_as_application (GSimpleAction *action,
   context = gtk_widget_get_style_context (label);
   gtk_style_context_add_class (context, "dim-label");
 
-  data = g_slice_new0 (EphyApplicationDialogData);
+  data = g_new0 (EphyApplicationDialogData, 1);
   data->view = view;
   data->image = image;
   data->entry = entry;

@@ -146,7 +146,7 @@ notebook_tracker_set_notebook (NotebookTracker *tracker,
 static NotebookTracker *
 notebook_tracker_new (EphyNotebook *notebook)
 {
-  NotebookTracker *tracker = g_slice_new0 (NotebookTracker);
+  NotebookTracker *tracker = g_new0 (NotebookTracker, 1);
 
   tracker->ref_count = 1;
   notebook_tracker_set_notebook (tracker, notebook);
@@ -169,7 +169,7 @@ notebook_tracker_unref (NotebookTracker *tracker)
     return;
 
   notebook_tracker_set_notebook (tracker, NULL);
-  g_slice_free (NotebookTracker, tracker);
+  g_free (tracker);
 }
 
 static EphyNotebook *
@@ -199,7 +199,7 @@ closed_tab_free (ClosedTab *tab)
   notebook_tracker_unref (tab->notebook_tracker);
   webkit_web_view_session_state_unref (tab->state);
 
-  g_slice_free (ClosedTab, tab);
+  g_free (tab);
 }
 
 static ClosedTab *
@@ -207,7 +207,7 @@ closed_tab_new (EphyWebView     *web_view,
                 int              position,
                 NotebookTracker *notebook_tracker)
 {
-  ClosedTab *tab = g_slice_new0 (ClosedTab);
+  ClosedTab *tab = g_new0 (ClosedTab, 1);
 
   tab->url = g_strdup (ephy_web_view_get_address (web_view));
   tab->position = position;
@@ -557,7 +557,7 @@ session_tab_new (EphyEmbed   *embed,
   EphyWebView *web_view = ephy_embed_get_web_view (embed);
   EphyWebViewErrorPage error_page = ephy_web_view_get_error_page (web_view);
 
-  session_tab = g_slice_new (SessionTab);
+  session_tab = g_new (SessionTab, 1);
 
   address = ephy_web_view_get_address (web_view);
   /* Do not store ephy-about: URIs, they are not valid for loading. */
@@ -590,7 +590,7 @@ session_tab_free (SessionTab *tab)
   g_free (tab->title);
   g_clear_pointer (&tab->state, webkit_web_view_session_state_unref);
 
-  g_slice_free (SessionTab, tab);
+  g_free (tab);
 }
 
 typedef struct {
@@ -617,7 +617,7 @@ session_window_new (EphyWindow  *window,
     return NULL;
   }
 
-  session_window = g_slice_new0 (SessionWindow);
+  session_window = g_new0 (SessionWindow, 1);
   get_window_geometry (GTK_WINDOW (window), &session_window->geometry);
   session_window->role = g_strdup (gtk_window_get_role (GTK_WINDOW (window)));
 
@@ -642,7 +642,7 @@ session_window_free (SessionWindow *session_window)
   g_free (session_window->role);
   g_list_free_full (session_window->tabs, (GDestroyNotify)session_tab_free);
 
-  g_slice_free (SessionWindow, session_window);
+  g_free (session_window);
 }
 
 typedef struct {
@@ -658,7 +658,7 @@ save_data_new (EphySession *session)
   EphyShell *shell = ephy_shell_get_default ();
   GList *windows, *w;
 
-  data = g_slice_new0 (SaveData);
+  data = g_new0 (SaveData, 1);
   data->session = g_object_ref (session);
 
   windows = gtk_application_get_windows (GTK_APPLICATION (shell));
@@ -681,7 +681,7 @@ save_data_free (SaveData *data)
 
   g_object_unref (data->session);
 
-  g_slice_free (SaveData, data);
+  g_free (data);
 }
 
 static int
@@ -1068,7 +1068,7 @@ session_parser_context_new (EphySession *session,
 {
   SessionParserContext *context;
 
-  context = g_slice_new0 (SessionParserContext);
+  context = g_new0 (SessionParserContext, 1);
   context->session = g_object_ref (session);
   context->user_time = user_time;
   context->is_first_window = TRUE;
@@ -1081,7 +1081,7 @@ session_parser_context_free (SessionParserContext *context)
 {
   g_object_unref (context->session);
 
-  g_slice_free (SessionParserContext, context);
+  g_free (context);
 }
 
 static void
@@ -1288,7 +1288,7 @@ load_from_stream_async_data_new (GMarkupParseContext *parser)
 {
   LoadFromStreamAsyncData *data;
 
-  data = g_slice_new (LoadFromStreamAsyncData);
+  data = g_new (LoadFromStreamAsyncData, 1);
   data->shell = g_object_ref (ephy_shell_get_default ());
   data->parser = parser;
 
@@ -1301,7 +1301,7 @@ load_from_stream_async_data_free (LoadFromStreamAsyncData *data)
   g_object_unref (data->shell);
   g_markup_parse_context_free (data->parser);
 
-  g_slice_free (LoadFromStreamAsyncData, data);
+  g_free (data);
 }
 
 static void
@@ -1471,7 +1471,7 @@ load_async_data_new (guint32 user_time)
 {
   LoadAsyncData *data;
 
-  data = g_slice_new (LoadAsyncData);
+  data = g_new (LoadAsyncData, 1);
   data->user_time = user_time;
 
   return data;
@@ -1480,7 +1480,7 @@ load_async_data_new (guint32 user_time)
 static void
 load_async_data_free (LoadAsyncData *data)
 {
-  g_slice_free (LoadAsyncData, data);
+  g_free (data);
 }
 
 static void

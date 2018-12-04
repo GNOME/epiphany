@@ -154,7 +154,7 @@ storage_request_async_data_new (const char          *endpoint,
 {
   StorageRequestAsyncData *data;
 
-  data = g_slice_new (StorageRequestAsyncData);
+  data = g_new (StorageRequestAsyncData, 1);
   data->endpoint = g_strdup (endpoint);
   data->method = g_strdup (method);
   data->request_body = g_strdup (request_body);
@@ -174,7 +174,7 @@ storage_request_async_data_free (StorageRequestAsyncData *data)
   g_free (data->endpoint);
   g_free (data->method);
   g_free (data->request_body);
-  g_slice_free (StorageRequestAsyncData, data);
+  g_free (data);
 }
 
 static SignInAsyncData *
@@ -190,7 +190,7 @@ sign_in_async_data_new (EphySyncService *service,
 {
   SignInAsyncData *data;
 
-  data = g_slice_new (SignInAsyncData);
+  data = g_new (SignInAsyncData, 1);
   data->service = g_object_ref (service);
   data->email = g_strdup (email);
   data->uid = g_strdup (uid);
@@ -221,7 +221,7 @@ sign_in_async_data_free (SignInAsyncData *data)
   g_free (data->req_hmac_key);
   g_free (data->resp_hmac_key);
   g_free (data->resp_xor_key);
-  g_slice_free (SignInAsyncData, data);
+  g_free (data);
 }
 
 static SyncCollectionAsyncData *
@@ -232,7 +232,7 @@ sync_collection_async_data_new (EphySyncService           *service,
 {
   SyncCollectionAsyncData *data;
 
-  data = g_slice_new (SyncCollectionAsyncData);
+  data = g_new (SyncCollectionAsyncData, 1);
   data->service = g_object_ref (service);
   data->manager = g_object_ref (manager);
   data->is_initial = is_initial;
@@ -252,7 +252,7 @@ sync_collection_async_data_free (SyncCollectionAsyncData *data)
   g_object_unref (data->manager);
   g_list_free_full (data->remotes_deleted, g_object_unref);
   g_list_free_full (data->remotes_updated, g_object_unref);
-  g_slice_free (SyncCollectionAsyncData, data);
+  g_free (data);
 }
 
 static SyncAsyncData *
@@ -262,7 +262,7 @@ sync_async_data_new (EphySyncService           *service,
 {
   SyncAsyncData *data;
 
-  data = g_slice_new (SyncAsyncData);
+  data = g_new (SyncAsyncData, 1);
   data->service = g_object_ref (service);
   data->manager = g_object_ref (manager);
   data->synchronizable = g_object_ref (synchronizable);
@@ -278,7 +278,7 @@ sync_async_data_free (SyncAsyncData *data)
   g_object_unref (data->service);
   g_object_unref (data->manager);
   g_object_unref (data->synchronizable);
-  g_slice_free (SyncAsyncData, data);
+  g_free (data);
 }
 
 static inline BatchUploadAsyncData *
@@ -293,7 +293,7 @@ batch_upload_async_data_new (EphySyncService           *service,
 {
   BatchUploadAsyncData *data;
 
-  data = g_slice_new (BatchUploadAsyncData);
+  data = g_new (BatchUploadAsyncData, 1);
   data->service = g_object_ref (service);
   data->manager = g_object_ref (manager);
   data->synchronizables = g_ptr_array_ref (synchronizables);
@@ -326,7 +326,7 @@ batch_upload_async_data_free (BatchUploadAsyncData *data)
   g_object_unref (data->manager);
   g_ptr_array_unref (data->synchronizables);
   g_free (data->batch_id);
-  g_slice_free (BatchUploadAsyncData, data);
+  g_free (data);
 }
 
 static void

@@ -64,7 +64,7 @@ ephy_history_record_visit_new (gint64 timestamp,
 {
   EphyHistoryRecordVisit *visit;
 
-  visit = g_slice_new (EphyHistoryRecordVisit);
+  visit = g_new (EphyHistoryRecordVisit, 1);
   visit->timestamp = timestamp;
   visit->type = type;
 
@@ -76,7 +76,7 @@ ephy_history_record_visit_free (EphyHistoryRecordVisit *visit)
 {
   g_assert (visit);
 
-  g_slice_free (EphyHistoryRecordVisit, visit);
+  g_free (visit);
 }
 
 static int

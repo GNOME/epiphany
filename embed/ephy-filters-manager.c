@@ -91,7 +91,7 @@ adblock_filter_retrieve_data_new (EphyFiltersManager *manager,
                                   const char         *source_uri)
 {
   AdblockFilterRetrieveData* data;
-  data = g_slice_new (AdblockFilterRetrieveData);
+  data = g_new (AdblockFilterRetrieveData, 1);
   data->manager = g_object_ref (manager);
   data->download = g_object_ref (download);
   data->source_uri = g_strdup (source_uri);
@@ -104,7 +104,7 @@ adblock_filter_retrieve_data_free (AdblockFilterRetrieveData *data)
   g_object_unref (data->manager);
   g_object_unref (data->download);
   g_free (data->source_uri);
-  g_slice_free (AdblockFilterRetrieveData, data);
+  g_free (data);
 }
 
 static void

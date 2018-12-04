@@ -183,7 +183,7 @@ ephy_embed_statusbar_push (EphyEmbed *embed, guint context_id, const char *text)
   g_assert (context_id != 0);
   g_assert (text != NULL);
 
-  msg = g_slice_new (EphyEmbedStatusbarMsg);
+  msg = g_new (EphyEmbedStatusbarMsg, 1);
   msg->text = g_strdup (text);
   msg->context_id = context_id;
   msg->message_id = embed->seq_message_id++;
@@ -212,7 +212,7 @@ ephy_embed_statusbar_pop (EphyEmbed *embed, guint context_id)
     if (msg->context_id == context_id) {
       embed->messages = g_slist_remove_link (embed->messages, list);
       g_free (msg->text);
-      g_slice_free (EphyEmbedStatusbarMsg, msg);
+      g_free (msg);
       g_slist_free_1 (list);
       break;
     }
@@ -414,7 +414,7 @@ ephy_embed_finalize (GObject *object)
 
     msg = list->data;
     g_free (msg->text);
-    g_slice_free (EphyEmbedStatusbarMsg, msg);
+    g_free (msg);
   }
 
   g_slist_free (embed->messages);

@@ -471,7 +471,7 @@ ephy_web_application_free (EphyWebApplication *app)
   g_free (app->icon_url);
   g_free (app->url);
   g_free (app->desktop_file);
-  g_slice_free (EphyWebApplication, app);
+  g_free (app);
 }
 
 
@@ -494,7 +494,7 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
   if (!id)
     return NULL;
 
-  app = g_slice_new0 (EphyWebApplication);
+  app = g_new0 (EphyWebApplication, 1);
   app->id = g_strdup (id);
 
   app->desktop_file = get_app_desktop_filename (id);

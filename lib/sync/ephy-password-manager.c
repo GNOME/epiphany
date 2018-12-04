@@ -91,7 +91,7 @@ query_async_data_new (EphyPasswordManagerQueryCallback callback,
 {
   QueryAsyncData *data;
 
-  data = g_slice_new (QueryAsyncData);
+  data = g_new (QueryAsyncData, 1);
   data->callback = callback;
   data->user_data = user_data;
 
@@ -103,7 +103,7 @@ query_async_data_free (QueryAsyncData *data)
 {
   g_assert (data);
 
-  g_slice_free (QueryAsyncData, data);
+  g_free (data);
 }
 
 static UpdatePasswordAsyncData *
@@ -112,7 +112,7 @@ update_password_async_data_new (EphyPasswordManager *manager,
 {
   UpdatePasswordAsyncData *data;
 
-  data = g_slice_new (UpdatePasswordAsyncData);
+  data = g_new (UpdatePasswordAsyncData, 1);
   data->manager = g_object_ref (manager);
   data->password = g_strdup (password);
 
@@ -126,7 +126,7 @@ update_password_async_data_free (UpdatePasswordAsyncData *data)
 
   g_object_unref (data->manager);
   g_free (data->password);
-  g_slice_free (UpdatePasswordAsyncData, data);
+  g_free (data);
 }
 
 static MergePasswordsAsyncData *
@@ -139,7 +139,7 @@ merge_passwords_async_data_new (EphyPasswordManager                    *manager,
 {
   MergePasswordsAsyncData *data;
 
-  data = g_slice_new (MergePasswordsAsyncData);
+  data = g_new (MergePasswordsAsyncData, 1);
   data->manager = g_object_ref (manager);
   data->is_initial = is_initial;
   data->remotes_deleted = remotes_deleted;
@@ -156,7 +156,7 @@ merge_passwords_async_data_free (MergePasswordsAsyncData *data)
   g_assert (data);
 
   g_object_unref (data->manager);
-  g_slice_free (MergePasswordsAsyncData, data);
+  g_free (data);
 }
 
 static ManageRecordAsyncData *
@@ -165,7 +165,7 @@ manage_record_async_data_new (EphyPasswordManager *manager,
 {
   ManageRecordAsyncData *data;
 
-  data = g_slice_new (ManageRecordAsyncData);
+  data = g_new (ManageRecordAsyncData, 1);
   data->manager = g_object_ref (manager);
   data->record = g_object_ref (record);
 
@@ -179,7 +179,7 @@ manage_record_async_data_free (ManageRecordAsyncData *data)
 
   g_object_unref (data->manager);
   g_object_unref (data->record);
-  g_slice_free (ManageRecordAsyncData, data);
+  g_free (data);
 }
 
 static GHashTable *
