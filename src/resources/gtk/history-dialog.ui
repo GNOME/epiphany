@@ -1,53 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
-  <object class="GtkListStore" id="liststore">
-    <columns>
-      <!-- column-name DATE -->
-      <column type="gint64"/>
-      <!-- column-name TITLE -->
-      <column type="gchararray"/>
-      <!-- column-name LOCATION -->
-      <column type="gchararray"/>
-      <!-- column-name SYNC_ID -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <menu id="treeview_popup_menu_model">
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">_Open</attribute>
-        <attribute name="action">history.open-selection</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Copy Location</attribute>
-        <attribute name="action">history.copy-url</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Delete</attribute>
-        <attribute name="action">history.forget</attribute>
-      </item>
-    </section>
-  </menu>
-  <template class="EphyHistoryDialog" parent="GtkDialog">
-    <property name="height_request">500</property>
+  <requires lib="gtk+" version="3.20"/>
+  <requires lib="libhandy" version="0.0"/>
+  <template class="EphyHistoryDialog" parent="GtkWindow">
+    <property name="can_focus">False</property>
     <property name="modal">True</property>
-    <property name="window_position">center</property>
+    <property name="window_position">center-on-parent</property>
     <property name="default_width">1000</property>
     <property name="default_height">600</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <child internal-child="headerbar">
+    <child type="titlebar">
       <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="title" translatable="yes">History</property>
-        <property name="show-close-button">True</property>
+        <property name="show_close_button">True</property>
         <child>
           <object class="GtkButton" id="forget_all_button">
-            <property name="label" translatable="yes">C_lear All</property>
+            <property name="label" translatable="yes">C_lear all</property>
             <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="action_name">history.forget-all</property>
             <property name="use_underline">True</property>
-            <property name="valign">center</property>
-            <property name="action-name">history.forget-all</property>
             <style>
               <class name="destructive-action"/>
               <class name="text-button"/>
@@ -56,177 +33,130 @@
         </child>
       </object>
     </child>
-    <child internal-child="vbox">
-      <object class="GtkBox">
-        <property name="border_width">5</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkSearchEntry">
-            <property name="visible">True</property>
-            <property name="primary_icon_name">edit-find-symbolic</property>
-            <property name="primary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">False</property>
-            <property name="placeholder_text" translatable="yes">Search history</property>
-            <signal name="search-changed" handler="on_search_entry_changed"/>
-            <signal name="key-press-event" handler="on_search_key_press_event"/>
-          </object>
-        </child>
+    <child>
+      <object class="HdyColumn">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
+        <property name="margin_right">6</property>
+        <property name="margin_start">6</property>
+        <property name="margin_end">6</property>
+        <property name="margin_top">6</property>
+        <property name="margin_bottom">6</property>
+        <property name="maximum_width">600</property>
+        <property name="linear_growth_width">400</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="width_request">400</property>
-                <property name="height_request">300</property>
+              <object class="GtkSearchEntry">
                 <property name="visible">True</property>
-                <property name="expand">True</property>
-                <property name="shadow_type">in</property>
-                <property name="min_content_width">300</property>
-                <property name="min_content_height">300</property>
-                <child>
-                  <object class="GtkTreeView" id="treeview">
-                    <property name="visible">True</property>
-                    <property name="model">liststore</property>
-                    <property name="enable_search">False</property>
-                    <property name="search_column">0</property>
-                    <property name="fixed-height-mode">True</property>
-                    <signal name="button-press-event" handler="on_treeview_button_press_event"/>
-                    <signal name="key-press-event" handler="on_treeview_key_press_event"/>
-                    <signal name="row-activated" handler="on_treeview_row_activated"/>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="tree_selection">
-                        <property name="mode">multiple</property>
-                        <signal name="changed" handler="on_treeview_selection_changed"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="date_column">
-                        <property name="sizing">fixed</property>
-                        <property name="fixed-width">150</property>
-                        <property name="title" translatable="yes">Date</property>
-                        <property name="clickable">True</property>
-                        <property name="sort_indicator">True</property>
-                        <property name="sort_order">descending</property>
-                        <signal name="clicked" handler="on_treeview_column_clicked_event"/>
-                        <child>
-                          <object class="GtkCellRendererText" id="date_renderer"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="name_column">
-                        <property name="sizing">fixed</property>
-                        <property name="fixed-width">500</property>
-                        <property name="title" translatable="yes">Name</property>
-                        <property name="clickable">True</property>
-                        <signal name="clicked" handler="on_treeview_column_clicked_event"/>
-                        <child>
-                          <object class="GtkCellRendererText">
-                            <property name="ellipsize">end</property>
-                          </object>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="location_column">
-                        <property name="sizing">fixed</property>
-                        <property name="fixed-width">200</property>
-                        <property name="title" translatable="yes">Location</property>
-                        <property name="clickable">True</property>
-                        <signal name="clicked" handler="on_treeview_column_clicked_event"/>
-                        <child>
-                          <object class="GtkCellRendererText" id="location_renderer">
-                            <property name="ellipsize">end</property>
-                          </object>
-                          <attributes>
-                            <attribute name="text">2</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="primary_icon_name">edit-find-symbolic</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="primary_icon_sensitive">False</property>
+                <property name="placeholder_text" translatable="yes">Search history</property>
+                <signal name="search-changed" handler="on_search_entry_changed" swapped="no"/>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
-              <object class="GtkToolbar">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkToolItem">
+                  <object class="GtkViewport">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkListBox" id="listbox">
                         <property name="visible">True</property>
-                        <child>
-                          <object class="GtkButton" id="forget_button">
-                            <property name="visible">True</property>
-                            <property name="tooltip_text" translatable="yes">Remove the selected pages from history</property>
-                            <property name="action-name">history.forget</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="visible">True</property>
-                                <property name="icon_name">list-remove-symbolic</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
+                        <property name="can_focus">False</property>
+                        <property name="selection_mode">multiple</property>
+                        <property name="activate_on_single_click">False</property>
+                        <signal name="button-press-event" handler="on_listbox_button_press_event" swapped="no"/>
+                        <signal name="key-press-event" handler="on_listbox_key_press_event" swapped="no"/>
+                        <signal name="row-activated" handler="on_listbox_row_activated" swapped="no"/>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="homogeneous">True</property>
-                  </packing>
                 </child>
-                <child>
-                  <object class="GtkSeparatorToolItem">
-                    <property name="visible">True</property>
-                    <property name="draw">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolItem">
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="visible">True</property>
-                            <property name="tooltip_text" translatable="yes">Open the selected pages in new tabs</property>
-                            <property name="action-name">history.open-selection</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="visible">True</property>
-                                <property name="icon_name">go-jump-symbolic</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <style>
-                  <class name="inline-toolbar"/>
-                </style>
               </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
         </child>
       </object>
     </child>
   </template>
+  <object class="GtkPopoverMenu" id="popover_menu">
+    <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkModelButton">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="action_name">history.open-selection</property>
+            <property name="text" translatable="yes">_Open</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="action_name">history.copy-url</property>
+            <property name="text" translatable="yes">_Copy Location</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="action_name">history.forget</property>
+            <property name="text" translatable="yes">_Delete</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="submenu">main</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
 </interface>
