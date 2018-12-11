@@ -36,8 +36,6 @@
 #include <glib/gi18n.h>
 #include <glib-unix.h>
 #include <gtk/gtk.h>
-#define HANDY_USE_UNSTABLE_API
-#include <handy.h>
 #include <libnotify/notify.h>
 #include <libxml/xmlreader.h>
 #include <libxml/xmlversion.h>
@@ -420,8 +418,6 @@ main (int   argc,
 
     gtk_window_set_default_icon_name ("org.gnome.Epiphany");
   }
-
-  hdy_init (&argc, &argv);
 
   _ephy_shell_create_instance (mode);
 
