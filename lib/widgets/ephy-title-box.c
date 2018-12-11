@@ -117,6 +117,18 @@ ephy_title_box_constructed (GObject *object)
   gtk_widget_show_all (GTK_WIDGET (title_box));
 }
 
+static void
+ephy_title_box_get_preferred_width (GtkWidget *widget,
+                                    gint      *minimum_width,
+                                    gint      *natural_width)
+{
+  if (minimum_width)
+    *minimum_width = -1;
+
+  if (natural_width)
+    *natural_width = 860;
+}
+
 static const char *
 ephy_title_box_title_widget_get_address (EphyTitleWidget *widget)
 {
@@ -228,6 +240,7 @@ ephy_title_box_class_init (EphyTitleBoxClass *klass)
   object_class->get_property = ephy_title_box_get_property;
   object_class->set_property = ephy_title_box_set_property;
   widget_class->button_press_event = ephy_title_box_button_press_event;
+  widget_class->get_preferred_width = ephy_title_box_get_preferred_width;
 
   g_object_class_override_property (object_class, PROP_ADDRESS, "address");
   g_object_class_override_property (object_class, PROP_SECURITY_LEVEL, "security-level");
