@@ -600,6 +600,31 @@ ephy_window_delete_event (GtkWidget   *widget,
   return FALSE;
 }
 
+static gboolean
+ephy_window_scroll_event (GtkWidget      *window,
+                          GdkEventScroll *event)
+{
+  GAction *action;
+  GActionGroup *action_group;
+  const char *action_name;
+
+  if ((event->state & gtk_accelerator_get_default_mod_mask ()) != GDK_CONTROL_MASK)
+    return GDK_EVENT_PROPAGATE;
+
+  if (event->direction == GDK_SCROLL_UP)
+    action_name = "zoom-in";
+  else if (event->direction == GDK_SCROLL_DOWN)
+    action_name = "zoom-out";
+  else
+    return GDK_EVENT_PROPAGATE;
+
+  action_group = gtk_widget_get_action_group (window, "win");
+  action = g_action_map_lookup_action (G_ACTION_MAP (action_group), action_name);
+  g_action_activate (action, NULL);
+
+  return GDK_EVENT_STOP;
+}
+
 #define MAX_SPELL_CHECK_GUESSES 4
 
 static void
@@ -3415,6 +3440,7 @@ ephy_window_class_init (EphyWindowClass *klass)
   widget_class->show = ephy_window_show;
   widget_class->destroy = ephy_window_destroy;
   widget_class->delete_event = ephy_window_delete_event;
+  widget_class->scroll_event = ephy_window_scroll_event;
 
   g_object_class_override_property (object_class,
                                     PROP_ACTIVE_CHILD,
