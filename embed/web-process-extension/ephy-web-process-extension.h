@@ -34,7 +34,6 @@ void                     ephy_web_process_extension_initialize (EphyWebProcessEx
                                                                 WebKitWebExtension      *wk_extension,
                                                                 const char              *guid,
                                                                 const char              *server_address,
-                                                                const char              *adblock_data_dir,
                                                                 gboolean                 is_private_profile,
                                                                 gboolean                 is_browser_mode);
 
