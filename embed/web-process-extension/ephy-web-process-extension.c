@@ -29,7 +29,6 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-uri-helpers.h"
-#include "ephy-uri-tester.h"
 #include "ephy-web-overview-model.h"
 
 #include <gio/gio.h>
@@ -53,7 +52,6 @@ struct _EphyWebProcessExtension {
 
   EphyWebOverviewModel *overview_model;
   EphyPermissionsManager *permissions_manager;
-  EphyUriTester *uri_tester;
 
   WebKitScriptWorld *script_world;
 
@@ -102,116 +100,20 @@ static const char introspection_xml[] =
 
 G_DEFINE_TYPE (EphyWebProcessExtension, ephy_web_process_extension, G_TYPE_OBJECT)
 
-static void
-log_to_js_console (EphyWebProcessExtension *extension,
-                   WebKitWebPage           *page,
-                   const char              *str,
-                   ...)
-{
-  g_autoptr(JSCContext) js_context = NULL;
-  g_autoptr(JSCValue) js_console = NULL;
-  g_autoptr(JSCValue) js_result = NULL;
-  g_autofree char *expanded_str = NULL;
-  WebKitFrame *frame;
-  va_list args;
-  int ret;
-
-  va_start (args, str);
-  ret = g_vasprintf (&expanded_str, str, args);
-  g_assert (ret > 0);
-  va_end (args);
-
-  frame = webkit_web_page_get_main_frame (page);
-  js_context = webkit_frame_get_js_context_for_script_world (frame, extension->script_world);
-  js_console = jsc_context_get_value (js_context, "console");
-  js_result = jsc_value_object_invoke_method (js_console,
-                                              "log",
-                                              G_TYPE_STRING, expanded_str,
-                                              G_TYPE_NONE);
-}
-
-static gboolean
-should_use_adblocker (const char              *request_uri,
-                      const char              *page_uri,
-                      const char              *redirected_request_uri,
-                      EphyWebProcessExtension *extension)
-{
-  g_autofree gchar *origin = ephy_uri_to_security_origin (page_uri);
-  EphyPermission permission = EPHY_PERMISSION_UNDECIDED;
-
-  /* Check page setting first in case it overwrites global setting */
-  if (origin) {
-    permission = ephy_permissions_manager_get_permission (extension->permissions_manager,
-                                                          EPHY_PERMISSION_TYPE_SHOW_ADS,
-                                                          origin);
-    if (permission == EPHY_PERMISSION_PERMIT)
-      return FALSE;
-  }
-
-  if (permission == EPHY_PERMISSION_UNDECIDED && !g_settings_get_boolean (EPHY_SETTINGS_WEB_PROCESS_EXTENSION_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
-    return FALSE;
-
-  /* Always load the main resource... */
-  if (g_strcmp0 (request_uri, page_uri) == 0)
-    return FALSE;
-
-  /* ...even during a redirect, when page_uri is stale. */
-  if (g_strcmp0 (page_uri, redirected_request_uri) == 0)
-    return FALSE;
-
-  /* Always load data requests, as uri_tester won't do any good here. */
-  if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_DATA))
-    return FALSE;
-
-  /* Always load about pages */
-  if (g_str_has_prefix (request_uri, "about") ||
-      g_str_has_prefix (request_uri, "ephy-about"))
-    return FALSE;
-
-  /* Always load resources */
-  if (g_str_has_prefix (request_uri, "resource://") ||
-      g_str_has_prefix (request_uri, "ephy-resource://"))
-    return FALSE;
-
-  /* Always load local files */
-  if (g_str_has_prefix (request_uri, "file://"))
-    return FALSE;
-
-  return TRUE;
-}
-
 static gboolean
 web_page_send_request (WebKitWebPage            *web_page,
                        WebKitURIRequest         *request,
                        WebKitURIResponse        *redirected_response,
                        EphyWebProcessExtension  *extension)
 {
-  const char *request_uri;
-  const char *redirected_response_uri;
-  const char *page_uri;
-  g_autofree char *modified_uri = NULL;
-
-  request_uri = webkit_uri_request_get_uri (request);
-  page_uri = webkit_web_page_get_uri (web_page);
-  redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
-
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB_PROCESS_EXTENSION_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK))
-    modified_uri = ephy_remove_tracking_from_uri (request_uri);
-
-  if (should_use_adblocker (request_uri, page_uri, redirected_response_uri, extension)) {
-    gboolean result;
-
-    ephy_uri_tester_load (extension->uri_tester);
-    result = ephy_uri_tester_is_uri_allowed (extension->uri_tester,
-                                             modified_uri ? modified_uri : request_uri,
-                                             page_uri);
-    if (!result) {
-      LOG ("Adblocker refused to load %s", request_uri);
-      log_to_js_console (extension, web_page, _("Epiphany adblocker refused to load %s"), request_uri);
-      return TRUE;
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB_PROCESS_EXTENSION_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
+    const char *request_uri = webkit_uri_request_get_uri (request);
+    g_autofree char *modified_uri = ephy_remove_tracking_from_uri (request_uri);
+    if (modified_uri && g_strcmp0 (request_uri, modified_uri) != 0) {
+      LOG ("Rewrote %s to %s", request_uri, modified_uri);
+      webkit_uri_request_set_uri (request, modified_uri);
     }
   }
-
   return FALSE;
 }
 
@@ -578,7 +480,6 @@ ephy_web_process_extension_dispose (GObject *object)
 {
   EphyWebProcessExtension *extension = EPHY_WEB_PROCESS_EXTENSION (object);
 
-  g_clear_object (&extension->uri_tester);
   g_clear_object (&extension->overview_model);
   g_clear_object (&extension->permissions_manager);
 
@@ -847,7 +748,6 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
                                        WebKitWebExtension      *wk_extension,
                                        const char              *guid,
                                        const char              *server_address,
-                                       const char              *adblock_data_dir,
                                        gboolean                 is_private_profile,
                                        gboolean                 is_browser_mode)
 {
@@ -886,8 +786,6 @@ ephy_web_process_extension_initialize (EphyWebProcessExtension *extension,
                                      NULL,
                                      (GAsyncReadyCallback)dbus_connection_created_cb,
                                      extension);
-
-  extension->uri_tester = ephy_uri_tester_new (adblock_data_dir);
 
   extension->frames_map = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                                  NULL, NULL);
