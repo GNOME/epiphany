@@ -29,7 +29,6 @@
 #include "ephy-prefs.h"
 #include "ephy-settings.h"
 #include "ephy-uri-helpers.h"
-#include "ephy-uri-tester.h"
 #include "ephy-web-overview-model.h"
 
 #include <gio/gio.h>
@@ -52,7 +51,6 @@ struct _EphyWebExtension {
 
   EphyWebOverviewModel *overview_model;
   EphyPermissionsManager *permissions_manager;
-  EphyUriTester *uri_tester;
 
   WebKitScriptWorld *script_world;
 
@@ -99,42 +97,6 @@ static const char introspection_xml[] =
 
 G_DEFINE_TYPE (EphyWebExtension, ephy_web_extension, G_TYPE_OBJECT)
 
-static gboolean
-should_use_adblocker (const char *request_uri,
-                      const char *page_uri,
-                      const char *redirected_request_uri)
-{
-  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
-    return FALSE;
-
-  /* Always load the main resource... */
-  if (g_strcmp0 (request_uri, page_uri) == 0)
-    return FALSE;
-
-  /* ...even during a redirect, when page_uri is stale. */
-  if (g_strcmp0 (page_uri, redirected_request_uri) == 0)
-    return FALSE;
-
-  /* Always load data requests, as uri_tester won't do any good here. */
-  if (g_str_has_prefix (request_uri, SOUP_URI_SCHEME_DATA))
-    return FALSE;
-
-  /* Always load about pages */
-  if (g_str_has_prefix (request_uri, "about") ||
-      g_str_has_prefix (request_uri, "ephy-about"))
-    return FALSE;
-
-  /* Always load resources */
-  if (g_str_has_prefix (request_uri, "resource://") ||
-      g_str_has_prefix (request_uri, "ephy-resource://"))
-    return FALSE;
-
-  /* Always load local files */
-  if (g_str_has_prefix (request_uri, "file://"))
-    return FALSE;
-
-  return TRUE;
-}
 
 static gboolean
 web_page_send_request (WebKitWebPage     *web_page,
@@ -142,15 +104,6 @@ web_page_send_request (WebKitWebPage     *web_page,
                        WebKitURIResponse *redirected_response,
                        EphyWebExtension  *extension)
 {
-  const char *request_uri;
-  const char *redirected_response_uri;
-  const char *page_uri;
-  char *modified_uri = NULL;
-
-  request_uri = webkit_uri_request_get_uri (request);
-  page_uri = webkit_web_page_get_uri (web_page);
-  redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
-
   if (g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     SoupMessageHeaders *headers = webkit_uri_request_get_http_headers (request);
     if (headers) {
@@ -158,35 +111,14 @@ web_page_send_request (WebKitWebPage     *web_page,
        * http://tools.ietf.org/id/draft-mayer-do-not-track-00.txt */
       soup_message_headers_append (headers, "DNT", "1");
     }
-    modified_uri = ephy_remove_tracking_from_uri (request_uri);
-  }
 
-  if (should_use_adblocker (request_uri, page_uri, redirected_response_uri)) {
-    char *result;
-
-    ephy_uri_tester_load (extension->uri_tester);
-    result = ephy_uri_tester_rewrite_uri (extension->uri_tester,
-                                          modified_uri ? modified_uri : request_uri,
-                                          page_uri);
-    g_free (modified_uri);
-
-    if (!result) {
-      LOG ("Refused to load %s", request_uri);
-      return TRUE;
+    const char *request_uri = webkit_uri_request_get_uri (request);
+    g_autofree char *modified_uri = ephy_remove_tracking_from_uri (request_uri);
+    if (modified_uri && g_strcmp0 (request_uri, modified_uri) != 0) {
+      LOG ("Rewrote %s to %s", request_uri, modified_uri);
+      webkit_uri_request_set_uri (request, modified_uri);
     }
-
-    modified_uri = result;
-  } else if (!modified_uri) {
-    return FALSE;
   }
-
-  if (g_strcmp0 (request_uri, modified_uri) != 0) {
-    LOG ("Rewrote %s to %s", request_uri, modified_uri);
-    webkit_uri_request_set_uri (request, modified_uri);
-  }
-
-  g_free (modified_uri);
-
   return FALSE;
 }
 
@@ -535,7 +467,6 @@ ephy_web_extension_dispose (GObject *object)
 {
   EphyWebExtension *extension = EPHY_WEB_EXTENSION (object);
 
-  g_clear_object (&extension->uri_tester);
   g_clear_object (&extension->overview_model);
   g_clear_object (&extension->permissions_manager);
 
@@ -793,7 +724,6 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
                                WebKitWebExtension *wk_extension,
                                const char         *guid,
                                const char         *server_address,
-                               const char         *adblock_data_dir,
                                gboolean            is_private_profile,
                                gboolean            is_browser_mode)
 {
@@ -833,6 +763,4 @@ ephy_web_extension_initialize (EphyWebExtension   *extension,
                                      (GAsyncReadyCallback)dbus_connection_created_cb,
                                      extension);
   g_object_unref (observer);
-
-  extension->uri_tester = ephy_uri_tester_new (adblock_data_dir);
 }
