@@ -111,6 +111,7 @@ if not libhandy_dep.found()
   libhandy_dep = subproject('libhandy', default_options: ['examples=false',
                                                           'glade_catalog=false',
                                                           'introspection=false',
+                                                          'package_subdir=epiphany',
                                                           'tests=false',
                                                           'vapi=false']).get_variable('libhandy_dep')
 endif
