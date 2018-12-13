@@ -951,11 +951,10 @@ initialize_web_process_extensions (WebKitWebContext *web_context,
 
   private_profile = priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE || priv->mode == EPHY_EMBED_SHELL_MODE_INCOGNITO || priv->mode == EPHY_EMBED_SHELL_MODE_AUTOMATION;
   browser_mode = priv->mode == EPHY_EMBED_SHELL_MODE_BROWSER;
-  user_data = g_variant_new ("(smsmssbb)",
+  user_data = g_variant_new ("(smsmsbb)",
                              priv->guid,
                              address,
                              ephy_profile_dir_is_default () ? NULL : ephy_profile_dir (),
-                             ephy_filters_manager_get_adblock_filters_dir (priv->filters_manager),
                              private_profile,
                              browser_mode);
   webkit_web_context_set_web_extensions_initialization_user_data (web_context, g_steal_pointer (&user_data));
