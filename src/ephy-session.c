@@ -731,9 +731,9 @@ write_tab (xmlTextWriterPtr writer,
 
       data = g_bytes_get_data (bytes, &data_length);
       base64 = g_base64_encode (data, data_length);
-      ret = xmlTextWriterWriteAttribute (writer,
-                                         (const xmlChar *)"history",
-                                         (const xmlChar *)base64);
+      xmlTextWriterWriteAttribute (writer,
+                                   (const xmlChar *)"history",
+                                   (const xmlChar *)base64);
       g_free (base64);
       g_bytes_unref (bytes);
     }

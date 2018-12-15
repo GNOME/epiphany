@@ -135,6 +135,10 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
   g_assert (self->history_thread == g_thread_self ());
   g_assert (self->history_database != NULL);
 
+  if (host == NULL) {
+    return NULL;
+  }
+
   if (host_string == NULL && host != NULL)
     host_string = host->url;
 

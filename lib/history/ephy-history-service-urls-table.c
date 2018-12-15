@@ -61,6 +61,10 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
   g_assert (self->history_thread == g_thread_self ());
   g_assert (self->history_database != NULL);
 
+  if (url == NULL) {
+    return NULL;
+  }
+
   if (url_string == NULL && url != NULL)
     url_string = url->url;
 
