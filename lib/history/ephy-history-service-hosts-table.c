@@ -138,7 +138,7 @@ ephy_history_service_get_host_row (EphyHistoryService *self, const gchar *host_s
   if (host_string == NULL && host != NULL)
     host_string = host->url;
 
-  g_assert (host_string || host->id != -1);
+  g_assert (host_string || (host != NULL && host->id != -1));
 
   if (host != NULL && host->id != -1) {
     statement = ephy_sqlite_connection_create_statement (self->history_database,

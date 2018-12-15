@@ -502,7 +502,7 @@ handle_method_call (GDBusConnection       *connection,
     g_autoptr(JSCValue) password_manager = get_password_manager (extension);
     ret = jsc_value_object_invoke_method (password_manager, "_onQueryUsernamesResponse",
                                           G_TYPE_STRV, users, G_TYPE_INT, id, G_TYPE_NONE);
-  } else if(g_strcmp0 (method_name, "PasswordQueryResponse") == 0) {
+  } else if (g_strcmp0 (method_name, "PasswordQueryResponse") == 0) {
     const char *username;
     const char *password;
     gint32 id;

@@ -64,7 +64,7 @@ ephy_history_service_get_url_row (EphyHistoryService *self, const char *url_stri
   if (url_string == NULL && url != NULL)
     url_string = url->url;
 
-  g_assert (url_string || url->id != -1);
+  g_assert (url_string || (url != NULL && url->id != -1));
 
   if (url != NULL && url->id != -1) {
     statement = ephy_sqlite_connection_create_statement (self->history_database,

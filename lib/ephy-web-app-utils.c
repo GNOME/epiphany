@@ -726,7 +726,7 @@ ephy_web_application_save (EphyWebApplication *app)
     g_free (name);
 
     icon = g_key_file_get_string (key, "Desktop Entry", "Icon", NULL);
-    if (g_strcmp0 (name, app->icon_url) != 0) {
+    if (g_strcmp0 (icon, app->icon_url) != 0) {
       changed = TRUE;
       g_key_file_set_string (key, "Desktop Entry", "Icon", app->icon_url);
     }

@@ -203,7 +203,10 @@ save_thumbnail (GdkPixbuf  *pixbuf,
     g_warning ("Failed to create thumbnail %s: %s", tmp_path, error->message);
     g_error_free (error);
   }
-  unlink (tmp_path);
+
+  if (tmp_path != NULL)
+    unlink (tmp_path);
+
   g_free (path);
   g_free (tmp_path);
   g_free (dirname);
