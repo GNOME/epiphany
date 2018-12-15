@@ -506,6 +506,7 @@
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -517,91 +518,74 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkListBox" id="fonts_list">
+                        <property name="selection_mode">none</property>
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <property name="margin-start">12</property>
+                        <style>
+                          <class name="frame"/>
+                        </style>
                         <child>
-                          <object class="GtkCheckButton" id="use_gnome_fonts_checkbutton">
-                            <property name="label" translatable="yes">_Use system fonts</property>
+                          <object class="HdyExpanderRow" id="use_gnome_fonts_row">
+                            <property name="show_enable_switch">True</property>
+                            <property name="title" translatable="yes">Use custom fonts</property>
                             <property name="visible">True</property>
-                            <property name="use-underline">True</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkGrid" id="custom_fonts_table">
-                            <property name="visible">True</property>
-                            <property name="column-spacing">12</property>
-                            <property name="row-spacing">6</property>
-                            <property name="margin-start">12</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkSeparator">
+                                <property name="margin-start">24</property>
                                 <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes">Sans serif font:</property>
                               </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkFontButton" id="sans_fontbutton">
+                              <object class="GtkListBox" id="use_custom_fonts_list">
+                                <property name="margin-start">24</property>
+                                <property name="selection_mode">none</property>
                                 <property name="visible">True</property>
-                                <property name="font">Sans 12</property>
-                                <property name="use-font">True</property>
-                                <!-- hexpands the grid -->
-                                <property name="hexpand">True</property>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable">False</property>
+                                    <property name="title" translatable="yes">Sans serif font</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkFontButton" id="sans_fontbutton">
+                                        <property name="font">Sans 12</property>
+                                        <property name="use-font">True</property>
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable">False</property>
+                                    <property name="title" translatable="yes">Serif font</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkFontButton" id="serif_fontbutton">
+                                        <property name="font">Sans 12</property>
+                                        <property name="use-font">True</property>
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="HdyActionRow">
+                                    <property name="activatable">False</property>
+                                    <property name="title" translatable="yes">Monospace font</property>
+                                    <property name="visible">True</property>
+                                    <child type="action">
+                                      <object class="GtkFontButton" id="mono_fontbutton">
+                                        <property name="font">Sans 12</property>
+                                        <property name="use-font">True</property>
+                                        <property name="valign">center</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes">Serif font:</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkFontButton" id="serif_fontbutton">
-                                <property name="visible">True</property>
-                                <property name="font">Sans 12</property>
-                                <property name="use-font">True</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes">Monospace font:</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkFontButton" id="mono_fontbutton">
-                                <property name="visible">True</property>
-                                <property name="font">Sans 12</property>
-                                <property name="use-font">True</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">2</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -610,7 +594,57 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkBox" id="reader_mode_box">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Reader Mode</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkListBox" id="reader_mode_list">
+                        <property name="selection_mode">none</property>
+                        <property name="visible">True</property>
+                        <style>
+                          <class name="frame"/>
+                        </style>
+                        <child>
+                          <object class="HdyComboRow" id="reader_mode_font_style">
+                            <property name="title" translatable="yes">Font style</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="HdyComboRow" id="reader_mode_color_scheme">
+                            <property name="title" translatable="yes">Color scheme</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="css_list">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
@@ -625,151 +659,68 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkListBox">
+                        <property name="selection_mode">none</property>
                         <property name="visible">True</property>
-                        <property name="spacing">24</property>
-                        <property name="margin-start">12</property>
+                        <style>
+                          <class name="frame"/>
+                        </style>
                         <child>
-                          <object class="GtkCheckButton" id="css_checkbox">
-                            <property name="label" translatable="yes">Use custom _stylesheet</property>
+                          <object class="HdyActionRow">
+                            <property name="activatable_widget">css_switch</property>
+                            <property name="title" translatable="yes">Use custom stylesheet</property>
                             <property name="visible">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="use-underline">True</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="css_edit_button">
-                            <property name="label" translatable="yes">_Edit Stylesheet</property>
-                            <property name="visible">True</property>
-                            <property name="use-underline">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="spacing">24</property>
-                        <property name="margin-start">12</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="halign">start</property>
-                            <property name="hexpand">True</property>
-                            <property name="label" translatable="yes">Default zoom level:</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="default_zoom_spin_button">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="input_purpose">number</property>
-                            <property name="adjustment">zoom_adjustment</property>
-                            <property name="max_width_chars">5</property>
-                            <property name="value">100</property>
-                            <signal name="value-changed" handler="on_default_zoom_spin_button_value_changed"/>
-                            <signal name="output" handler="on_default_zoom_spin_button_output"/>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="reader_mode_box">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <property name="margin-top">12</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Reader Mode</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkGrid">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
-                            <property name="row_spacing">6</property>
-                            <property name="hexpand">True</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">start</property>
+                            <child type="action">
+                              <object class="GtkButton" id="css_edit_button">
                                 <property name="valign">center</property>
-                                <property name="margin_left">12</property>
-                                <property name="label" translatable="yes">Font style:</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">start</property>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="icon_name">document-edit-symbolic</property>
+                                    <property name="visible">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="action">
+                              <object class="GtkSeparator">
+                                <property name="margin_bottom">8</property>
+                                <property name="margin_top">8</property>
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                            <child type="action">
+                              <object class="GtkSwitch" id="css_switch">
                                 <property name="valign">center</property>
-                                <property name="margin_left">12</property>
-                                <property name="label" translatable="yes">Color scheme:</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="reader_mode_font_style">
                                 <property name="visible">True</property>
-                                <property name="hexpand">True</property>
                               </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="reader_mode_color_scheme">
-                                <property name="visible">True</property>
-                                <property name="hexpand">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                              </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
+                        </child>
+                        <child>
+                          <object class="HdyActionRow">
+                            <property name="activatable">False</property>
+                            <property name="title" translatable="yes">Default zoom level</property>
+                            <property name="visible">True</property>
+                            <child type="action">
+                              <object class="GtkSpinButton" id="default_zoom_spin_button">
+                                <property name="adjustment">zoom_adjustment</property>
+                                <property name="can_focus">True</property>
+                                <property name="input_purpose">number</property>
+                                <property name="max_width_chars">5</property>
+                                <property name="valign">center</property>
+                                <property name="value">100</property>
+                                <property name="visible">True</property>
+                                <signal name="output" handler="on_default_zoom_spin_button_output"/>
+                                <signal name="value-changed" handler="on_default_zoom_spin_button_value_changed"/>
+                              </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
@@ -1443,6 +1394,14 @@
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
     <widgets>
+      <widget name="sans_fontbutton"/>
+      <widget name="serif_fontbutton"/>
+      <widget name="mono_fontbutton"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
       <widget name="manage_cookies_button"/>
       <widget name="manage_passwords_button"/>
       <widget name="clear_personal_data_button"/>
@@ -1455,13 +1414,6 @@
       <widget name="synced_tabs_button"/>
       <widget name="sync_now_button"/>
       <widget name="sync_device_name_change_button"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="css_edit_button"/>
-      <widget name="default_zoom_spin_button"/>
     </widgets>
   </object>
   <object class="GtkAdjustment" id="zoom_adjustment">
