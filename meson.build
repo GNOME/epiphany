@@ -101,7 +101,7 @@ icu_uc_dep = dependency('icu-uc', version: '>= 4.6')
 iso_codes_dep = dependency('iso-codes', version: '>= 0.35')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.4')
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.29.4', required: false)
-libhandy_dep = dependency('libhandy-0.0', version: '>= 0.0.6', required: false)
+libhandy_dep = dependency('libhandy-0.0', version: '>= 0.0.7', required: false)
 libnotify_dep = dependency('libnotify', version: '>= 0.5.1')
 libsecret_dep = dependency('libsecret-1', version: '>= 0.14')
 libsoup_dep = dependency('libsoup-2.4', version: '>= 2.48.0')
@@ -124,8 +124,8 @@ endif
 # the system copy is missing or too old.
 if not libhandy_dep.found()
   libhandy_dep = subproject('libhandy', default_options: ['examples=false',
-                                                          'glade_catalog=false',
-                                                          'introspection=false',
+                                                          'glade_catalog=disabled',
+                                                          'introspection=disabled',
                                                           'package_subdir=epiphany',
                                                           'tests=false',
                                                           'vapi=false']).get_variable('libhandy_dep')
