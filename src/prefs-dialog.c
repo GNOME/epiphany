@@ -102,12 +102,11 @@ struct _PrefsDialog {
   GtkWidget *start_in_incognito_mode_switch;
 
   /* fonts & style */
-  GtkWidget *use_gnome_fonts_checkbutton;
-  GtkWidget *custom_fonts_table;
+  GtkWidget *use_gnome_fonts_row;
   GtkWidget *sans_fontbutton;
   GtkWidget *serif_fontbutton;
   GtkWidget *mono_fontbutton;
-  GtkWidget *css_checkbox;
+  GtkWidget *css_switch;
   GtkWidget *css_edit_button;
   GtkWidget *default_zoom_spin_button;
   GtkWidget *reader_mode_box;
@@ -1003,12 +1002,11 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, start_in_incognito_mode_switch);
 
   /* fonts & style */
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_gnome_fonts_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_fonts_table);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_gnome_fonts_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sans_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, serif_fontbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, mono_fontbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_checkbox);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, css_edit_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, default_zoom_spin_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_box);
@@ -2060,135 +2058,136 @@ setup_general_page (PrefsDialog *dialog)
     create_download_path_button (dialog);
 }
 
-enum {
-  ENUM_MODEL_COLUMN_LABEL,
-  ENUM_MODEL_COLUMN_NICK,
-  ENUM_MODEL_N_COLUMNS,
-};
-
-typedef struct {
-  gint        value;
-  const char *label;
-} EnumModelItem;
-
-static GtkTreeModel *
-enum_model_new (GType                enum_type,
-                gsize                n_items,
-                const EnumModelItem *items)
+static gchar *
+reader_font_style_get_name (HdyEnumValueObject *value,
+                            gpointer            user_data)
 {
-  GtkListStore *model;
-  GEnumClass *enum_class;
-  gsize i;
+  g_assert (HDY_IS_ENUM_VALUE_OBJECT (value));
 
-  enum_class = g_type_class_ref (enum_type);
-  model = gtk_list_store_new (ENUM_MODEL_N_COLUMNS,
-                              G_TYPE_STRING,
-                              G_TYPE_STRING);
-
-  for (i = 0; i < n_items; i++) {
-    GtkTreeIter iter;
-    const char *nick;
-    guint  j;
-
-    nick = NULL;
-    for (j = 0; j < enum_class->n_values; j++) {
-      if (enum_class->values[j].value == items[i].value) {
-        nick = enum_class->values[j].value_nick;
-        break;
-      }
-    }
-    g_assert (nick != NULL);
-
-    gtk_list_store_append (model, &iter);
-    gtk_list_store_set (model,
-                        &iter,
-                        ENUM_MODEL_COLUMN_LABEL, _(items[i].label),
-                        ENUM_MODEL_COLUMN_NICK, nick,
-                        -1);
+  switch (hdy_enum_value_object_get_value (value)) {
+  case EPHY_PREFS_READER_FONT_STYLE_SANS:
+    return g_strdup (N_("Sans"));
+  case EPHY_PREFS_READER_FONT_STYLE_SERIF:
+    return g_strdup (N_("Serif"));
+  default:
+    return NULL;
   }
-
-  g_type_class_unref (enum_class);
-  return GTK_TREE_MODEL (model);
 }
 
-static void
-enum_model_attach (GtkTreeModel *model,
-                   GtkComboBox  *combobox,
-                   GSettings    *settings,
-                   const char   *key)
+static gboolean
+reader_font_style_get_mapping (GValue   *value,
+                               GVariant *variant,
+                               gpointer  user_data)
 {
-  GtkCellRenderer *renderer;
+  const char *reader_colors = g_variant_get_string (variant, NULL);
 
-  gtk_cell_layout_clear (GTK_CELL_LAYOUT (combobox));
+  if (g_strcmp0 (reader_colors, "sans") == 0)
+    g_value_set_int (value, EPHY_PREFS_READER_FONT_STYLE_SANS);
+  else if (g_strcmp0 (reader_colors, "serif") == 0)
+    g_value_set_int (value, EPHY_PREFS_READER_FONT_STYLE_SERIF);
 
-  gtk_combo_box_set_model (combobox, model);
-  gtk_combo_box_set_id_column (combobox,
-                               ENUM_MODEL_COLUMN_NICK);
-
-  g_settings_bind (settings,
-                   key,
-                   combobox,
-                   "active-id",
-                   G_SETTINGS_BIND_DEFAULT);
-
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
-                              renderer,
-                              FALSE);
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combobox),
-                                 renderer,
-                                 "text",
-                                 ENUM_MODEL_COLUMN_LABEL);
+  return TRUE;
 }
 
-static const EnumModelItem reader_font_style_items[] = {
-  { EPHY_PREFS_READER_FONT_STYLE_SANS,  N_("Sans")  },
-  { EPHY_PREFS_READER_FONT_STYLE_SERIF, N_("Serif") },
-};
+static GVariant *
+reader_font_style_set_mapping (const GValue       *value,
+                               const GVariantType *expected_type,
+                               gpointer            user_data)
+{
+  switch (g_value_get_int (value)) {
+  case EPHY_PREFS_READER_FONT_STYLE_SANS:
+    return g_variant_new_string ("sans");
+  case EPHY_PREFS_READER_FONT_STYLE_SERIF:
+    return g_variant_new_string ("serif");
+  default:
+    return g_variant_new_string ("crashed");
+  }
+}
 
-static const EnumModelItem reader_color_scheme_items[] = {
-  { EPHY_PREFS_READER_COLORS_LIGHT, N_("Light") },
-  { EPHY_PREFS_READER_COLORS_DARK,  N_("Dark")  },
-};
+static gchar *
+reader_color_scheme_get_name (HdyEnumValueObject *value,
+                              gpointer            user_data)
+{
+  g_assert (HDY_IS_ENUM_VALUE_OBJECT (value));
+
+  switch (hdy_enum_value_object_get_value (value)) {
+  case EPHY_PREFS_READER_COLORS_LIGHT:
+    return g_strdup (N_("Light"));
+  case EPHY_PREFS_READER_COLORS_DARK:
+    return g_strdup (N_("Dark"));
+  default:
+    return NULL;
+  }
+}
+
+static gboolean
+reader_color_scheme_get_mapping (GValue   *value,
+                                 GVariant *variant,
+                                 gpointer  user_data)
+{
+  const char *reader_colors = g_variant_get_string (variant, NULL);
+
+  if (g_strcmp0 (reader_colors, "light") == 0)
+    g_value_set_int (value, EPHY_PREFS_READER_COLORS_LIGHT);
+  else if (g_strcmp0 (reader_colors, "dark") == 0)
+    g_value_set_int (value, EPHY_PREFS_READER_COLORS_DARK);
+
+  return TRUE;
+}
+
+static GVariant *
+reader_color_scheme_set_mapping (const GValue       *value,
+                                 const GVariantType *expected_type,
+                                 gpointer            user_data)
+{
+  switch (g_value_get_int (value)) {
+  case EPHY_PREFS_READER_COLORS_LIGHT:
+    return g_variant_new_string ("light");
+  case EPHY_PREFS_READER_COLORS_DARK:
+    return g_variant_new_string ("dark");
+  default:
+    return g_variant_new_string ("crashed");
+  }
+}
 
 static void
 setup_fonts_page (PrefsDialog *dialog)
 {
   GSettings *web_settings;
   GSettings *reader_settings;
-  GtkTreeModel *model;
 
   web_settings = ephy_settings_get (EPHY_PREFS_WEB_SCHEMA);
   reader_settings = ephy_settings_get (EPHY_PREFS_READER_SCHEMA);
 
-  model = enum_model_new (EPHY_TYPE_PREFS_READER_FONT_STYLE,
-                          G_N_ELEMENTS (reader_font_style_items),
-                          reader_font_style_items);
-  enum_model_attach (model,
-                     GTK_COMBO_BOX (dialog->reader_mode_font_style),
-                     reader_settings,
-                     EPHY_PREFS_READER_FONT_STYLE);
-  g_object_unref (model);
+  hdy_combo_row_set_for_enum (HDY_COMBO_ROW (dialog->reader_mode_font_style),
+                              EPHY_TYPE_PREFS_READER_FONT_STYLE,
+                              reader_font_style_get_name, NULL, NULL);
+  g_settings_bind_with_mapping (reader_settings,
+                                EPHY_PREFS_READER_FONT_STYLE,
+                                dialog->reader_mode_font_style,
+                                "selected-index",
+                                G_SETTINGS_BIND_DEFAULT,
+                                reader_font_style_get_mapping,
+                                reader_font_style_set_mapping,
+                                NULL, NULL);
 
-  model = enum_model_new (EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
-                          G_N_ELEMENTS (reader_color_scheme_items),
-                          reader_color_scheme_items);
-  enum_model_attach (model,
-                     GTK_COMBO_BOX (dialog->reader_mode_color_scheme),
-                     reader_settings,
-                     EPHY_PREFS_READER_COLOR_SCHEME);
-  g_object_unref (model);
+  hdy_combo_row_set_for_enum (HDY_COMBO_ROW (dialog->reader_mode_color_scheme),
+                              EPHY_TYPE_PREFS_READER_COLOR_SCHEME,
+                              reader_color_scheme_get_name, NULL, NULL);
+  g_settings_bind_with_mapping (reader_settings,
+                                EPHY_PREFS_READER_COLOR_SCHEME,
+                                dialog->reader_mode_color_scheme,
+                                "selected-index",
+                                G_SETTINGS_BIND_DEFAULT,
+                                reader_color_scheme_get_mapping,
+                                reader_color_scheme_set_mapping,
+                                NULL, NULL);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_USE_GNOME_FONTS,
-                   dialog->use_gnome_fonts_checkbutton,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_USE_GNOME_FONTS,
-                   dialog->custom_fonts_table,
-                   "sensitive",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
+                   dialog->use_gnome_fonts_row,
+                   "enable-expansion",
+                   G_SETTINGS_BIND_INVERT_BOOLEAN);
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_SANS_SERIF_FONT,
                    dialog->sans_fontbutton,
@@ -2207,7 +2206,7 @@ setup_fonts_page (PrefsDialog *dialog)
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_USER_CSS,
-                   dialog->css_checkbox,
+                   dialog->css_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (web_settings,
