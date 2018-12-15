@@ -54,6 +54,8 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#define HANDY_USE_UNSTABLE_API
+#include <handy.h>
 #include <JavaScriptCore/JavaScript.h>
 #include <json-glib/json-glib.h>
 #include <math.h>
@@ -74,6 +76,7 @@ struct _PrefsDialog {
 
   /* general */
   GtkWidget *homepage_box;
+  GtkWidget *homepage_list;
   GtkWidget *new_tab_homepage_radiobutton;
   GtkWidget *blank_homepage_radiobutton;
   GtkWidget *custom_homepage_radiobutton;
@@ -88,14 +91,19 @@ struct _PrefsDialog {
   GtkWidget *download_button_label;
   GtkWidget *download_box;
   GtkWidget *search_box;
+  GtkWidget *search_engines_list;
   GtkWidget *session_box;
   GtkWidget *browsing_box;
-  GtkWidget *restore_session_checkbutton;
-  GtkWidget *popups_allow_checkbutton;
-  GtkWidget *adblock_allow_checkbutton;
+  GtkWidget *browsing_list;
+  GtkWidget *session_list;
+  GtkWidget *restore_session_switch;
+  GtkWidget *popups_allow_switch;
+  GtkWidget *web_content_list;
+  GtkWidget *adblock_allow_row;
+  GtkWidget *block_web_trackers_list;
   GtkWidget *enable_plugins_checkbutton;
-  GtkWidget *enable_safe_browsing_checkbutton;
-  GtkWidget *enable_smooth_scrolling_checkbutton;
+  GtkWidget *enable_safe_browsing_switch;
+  GtkWidget *enable_smooth_scrolling_switch;
 
   /* fonts & style */
   GtkWidget *use_gnome_fonts_checkbutton;
@@ -115,7 +123,7 @@ struct _PrefsDialog {
   GtkWidget *no_third_party;
   GtkWidget *never;
   GtkWidget *remember_passwords_checkbutton;
-  GtkWidget *do_not_track_checkbutton;
+  GtkWidget *do_not_track_switch;
   GtkWidget *clear_personal_data_button;
 
   /* language */
@@ -973,6 +981,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
 
   /* general */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, homepage_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, homepage_list);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, new_tab_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, blank_homepage_radiobutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, custom_homepage_radiobutton);
@@ -982,13 +991,18 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_url);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, webapp_title);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_box);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, search_engines_list);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, session_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, browsing_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, restore_session_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, popups_allow_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, adblock_allow_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_safe_browsing_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_smooth_scrolling_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, browsing_list);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, session_list);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, restore_session_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, popups_allow_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, web_content_list);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, adblock_allow_row);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, block_web_trackers_list);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_safe_browsing_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_smooth_scrolling_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_hbox);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_button_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_box);
@@ -1011,7 +1025,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, no_third_party);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, never);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, remember_passwords_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, clear_personal_data_button);
 
   /* language */
@@ -1980,7 +1994,7 @@ setup_general_page (PrefsDialog *dialog)
 
   g_settings_bind_with_mapping (settings,
                                 EPHY_PREFS_RESTORE_SESSION_POLICY,
-                                dialog->restore_session_checkbutton,
+                                dialog->restore_session_switch,
                                 "active",
                                 G_SETTINGS_BIND_DEFAULT,
                                 restore_session_get_mapping,
@@ -1988,39 +2002,34 @@ setup_general_page (PrefsDialog *dialog)
                                 NULL, NULL);
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_POPUPS,
-                   dialog->popups_allow_checkbutton,
+                   dialog->popups_allow_switch,
                    "active",
                    G_SETTINGS_BIND_INVERT_BOOLEAN);
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SAFE_BROWSING,
-                   dialog->enable_safe_browsing_checkbutton,
+                   dialog->enable_safe_browsing_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-                   dialog->adblock_allow_checkbutton,
-                   "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (web_settings,
-                   EPHY_PREFS_WEB_ENABLE_ADBLOCK,
-                   dialog->do_not_track_checkbutton,
-                   "sensitive",
+                   dialog->adblock_allow_row,
+                   "enable-expansion",
                    G_SETTINGS_BIND_DEFAULT);
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_DO_NOT_TRACK,
-                   dialog->do_not_track_checkbutton,
+                   dialog->do_not_track_switch,
                    "active",
                    /* Teensy hack: don't override the previous binding. */
                    G_SETTINGS_BIND_NO_SENSITIVITY);
-  g_signal_connect (dialog->do_not_track_checkbutton,
+  g_signal_connect (dialog->do_not_track_switch,
                     "clicked",
                     G_CALLBACK (do_not_track_button_clicked_cb),
                     dialog);
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SMOOTH_SCROLLING,
-                   dialog->enable_smooth_scrolling_checkbutton,
+                   dialog->enable_smooth_scrolling_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -2381,6 +2390,13 @@ prefs_dialog_init (PrefsDialog *dialog)
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->browsing_list), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->homepage_list), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->search_engines_list), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->session_list), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->web_content_list), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->block_web_trackers_list), hdy_list_box_separator_header, NULL, NULL);
+
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
   gtk_widget_set_visible (dialog->webapp_box,
                           mode == EPHY_EMBED_SHELL_MODE_APPLICATION);
@@ -2392,9 +2408,9 @@ prefs_dialog_init (PrefsDialog *dialog)
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->browsing_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (dialog->do_not_track_checkbutton,
+  gtk_widget_set_visible (dialog->do_not_track_switch,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
-  gtk_widget_set_visible (dialog->enable_smooth_scrolling_checkbutton,
+  gtk_widget_set_visible (dialog->enable_smooth_scrolling_switch,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
   gtk_widget_set_visible (dialog->reader_mode_box,
                           mode != EPHY_EMBED_SHELL_MODE_APPLICATION);
