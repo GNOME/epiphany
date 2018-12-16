@@ -72,6 +72,7 @@ gtk_requirement = '>= 3.22.13'
 nettle_requirement = '>= 3.4'
 webkitgtk_requirement = '>= 2.21.92'
 
+gsettings_desktop_schemas = dependency('gsettings-desktop-schemas')
 cairo_dep = dependency('cairo', version: '>= 1.2')
 gcr_dep = dependency('gcr-3', version: '>= 3.5.5')
 gdk_dep = dependency('gdk-3.0', version: gtk_requirement)

@@ -27,9 +27,12 @@
 #include <config.h>
 
 #include <string.h>
+#include <gdesktop-enums.h>
+#include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <glib.h>
 
+#include "ephy-settings.h"
 #include "ephy-time-helpers.h"
 
 /* Legal conversion specifiers, as specified in the C standard. */
@@ -210,6 +213,12 @@ ephy_time_helpers_utf_friendly_time (time_t date)
   const char *format = NULL;
   char *str = NULL;
   gboolean done = FALSE;
+  GSettings *settings;
+  gboolean use_24;
+
+  settings = ephy_settings_get ("org.gnome.desktop.interface");
+
+  use_24 = g_settings_get_enum (settings, "clock-format") == G_DESKTOP_CLOCK_FORMAT_24H;
 
   nowdate = time (NULL);
 
@@ -222,8 +231,14 @@ ephy_time_helpers_utf_friendly_time (time_t date)
   if (then.tm_mday == now.tm_mday &&
       then.tm_mon == now.tm_mon &&
       then.tm_year == now.tm_year) {
-    /* Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am" */
-    format = _("Today %I∶%M %p");
+
+    if (!use_24) {
+      /* Translators: "friendly time" string for the current day, strftime format. like "Today 12∶34 am" */
+      format = _("Today %I∶%M %p");
+    } else {
+      /* Translators: "friendly time" string for the current day, strftime format. like "Today 15∶34" */
+      format = _("Today %H∶%M");
+    }
     done = TRUE;
   }
 
@@ -233,10 +248,17 @@ ephy_time_helpers_utf_friendly_time (time_t date)
     if (then.tm_mday == yesterday.tm_mday &&
         then.tm_mon == yesterday.tm_mon &&
         then.tm_year == yesterday.tm_year) {
-      /* Translators: "friendly time" string for the previous day,
-       * strftime format. e.g. "Yesterday 12∶34 am"
-       */
-      format = _("Yesterday %I∶%M %p");
+      if (!use_24) {
+        /* Translators: "friendly time" string for the previous day,
+         * strftime format. e.g. "Yesterday 12∶34 am"
+         */
+        format = _("Yesterday %I∶%M %p");
+      } else {
+        /* Translators: "friendly time" string for the previous day,
+         * strftime format. e.g. "Yesterday 15∶34"
+         */
+        format = _("Yesterday %H∶%M %p");
+      }
       done = TRUE;
     }
   }
@@ -249,10 +271,17 @@ ephy_time_helpers_utf_friendly_time (time_t date)
       if (then.tm_mday == yesterday.tm_mday &&
           then.tm_mon == yesterday.tm_mon &&
           then.tm_year == yesterday.tm_year) {
-        /* Translators: "friendly time" string for a day in the current week,
-         * strftime format. e.g. "Wed 12∶34 am"
-         */
-        format = _("%a %I∶%M %p");
+        if (!use_24) {
+          /* Translators: "friendly time" string for a day in the current week,
+           * strftime format. e.g. "Wed 12∶34 am"
+           */
+          format = _("%a %I∶%M %p");
+        } else {
+          /* Translators: "friendly time" string for a day in the current week,
+           * strftime format. e.g. "Wed 15∶34"
+           */
+          format = _("%a %H∶%M");
+        }
         done = TRUE;
         break;
       }
@@ -261,10 +290,17 @@ ephy_time_helpers_utf_friendly_time (time_t date)
 
   if (!done) {
     if (then.tm_year == now.tm_year) {
-      /* Translators: "friendly time" string for a day in the current year,
-       * strftime format. e.g. "Feb 12 12∶34 am"
-       */
-      format = _("%b %d %I∶%M %p");
+      if (!use_24) {
+        /* Translators: "friendly time" string for a day in the current year,
+         * strftime format. e.g. "Feb 12 12∶34 am"
+         */
+        format = _("%b %d %I∶%M %p");
+      } else {
+        /* Translators: "friendly time" string for a day in the current year,
+         * strftime format. e.g. "Feb 12 15∶34"
+         */
+        format = _("%b %d %H∶%M");
+      }
     } else {
       /* Translators: "friendly time" string for a day in a different year,
        * strftime format. e.g. "Feb 12 1997"
