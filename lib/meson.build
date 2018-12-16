@@ -60,6 +60,7 @@ libephymisc_deps = [
   gio_dep,
   gio_unix_dep,
   glib_dep,
+  gsettings_desktop_schemas,
   gtk_dep,
   icu_uc_dep,
   json_glib_dep,
