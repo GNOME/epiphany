@@ -386,6 +386,8 @@ ephy_encoding_dialog_constructed (GObject *object)
 
   dialog->selected_encoding = webkit_web_view_get_custom_charset (view);
 
+  g_object_bind_property (dialog->default_switch, "active", dialog->type_stack, "sensitive", G_BINDING_INVERT_BOOLEAN);
+
   /* recent */
   recent = ephy_encodings_get_recent (dialog->encodings);
   if (recent != NULL) {

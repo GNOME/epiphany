@@ -1,139 +1,241 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.14"/>
   <template class="EphyEncodingDialog" parent="GtkDialog">
-    <property name="border_width">2</property>
+    <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="title" translatable="yes">Text Encoding</property>
     <property name="role">epiphany-encoding-chooser</property>
     <property name="modal">True</property>
-    <property name="resizable">False</property>
-    <property name="width_request">500</property>
-    <property name="height_request">420</property>
+    <property name="default_width">500</property>
+    <property name="default_height">420</property>
     <property name="type_hint">dialog</property>
-    <property name="use_header_bar">1</property>
-    <property name="title" translatable="yes">Text Encoding</property>
-    <signal name="response" handler="ephy_encoding_dialog_response_cb"/>
+    <signal name="response" handler="ephy_encoding_dialog_response_cb" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
-        <property name="margin">4</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkGrid">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="orientation">horizontal</property>
-            <property name="column-spacing">6</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="hexpand">True</property>
+                <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Use the encoding specified by the document</property> <!-- TODO document default fallback -->
-                <property name="margin-left">6</property>
+                <property name="margin_left">6</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">Use the encoding specified by the document</property>
+                <property name="wrap">True</property>
               </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
             <child>
               <object class="GtkSwitch" id="default_switch">
                 <property name="visible">True</property>
-                <signal name="state-set" handler="default_switch_toggled_cb"/>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <signal name="state-set" handler="default_switch_toggled_cb" swapped="no"/>
               </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
         <child>
           <object class="GtkStack" id="type_stack">
             <property name="visible">True</property>
-            <property name="hhomogeneous">True</property>
-            <property name="interpolate-size">True</property>
-<!--            <property name="transition-type"></property> TODO -->
-            <property name="sensitive" bind-source="default_switch" bind-property="active" bind-flags="invert-boolean"/>
-            <property name="visible-child">suggested_grid</property>
+            <property name="sensitive">False</property>
+            <property name="can_focus">False</property>
+            <property name="vexpand">True</property>
+            <property name="interpolate_size">True</property>
             <child>
               <object class="GtkGrid" id="suggested_grid">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <property name="row-spacing">16</property>
+                <property name="row_spacing">16</property>
                 <child>
                   <object class="GtkGrid" id="recent_grid">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="row-spacing">8</property>
+                    <property name="row_spacing">8</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="margin-start">8</property>
-                        <property name="label" translatable="yes">Recent encodings</property> <!-- TODO better -->
+                        <property name="margin_start">8</property>
+                        <property name="label" translatable="yes">Recent encodings</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
                     </child>
                     <child>
-                      <object class="GtkListBox" id="recent_list_box">
+                      <object class="GtkFrame">
                         <property name="visible">True</property>
-                        <property name="expand">True</property>
-	                    <signal name="row-activated" handler="row_activated_cb"/>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="border_width">6</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkListBox" id="recent_list_box">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
+                          </object>
+                        </child>
+                        <child type="label_item">
+                          <placeholder/>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
                 <child>
                   <object class="GtkGrid" id="related_grid">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="row-spacing">8</property>
+                    <property name="row_spacing">8</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="margin-start">8</property>
-                        <property name="label" translatable="yes">Related encodings</property> <!-- TODO better -->
+                        <property name="margin_start">8</property>
+                        <property name="label" translatable="yes">Related encodings</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
                     </child>
                     <child>
-                      <object class="GtkListBox" id="related_list_box">
+                      <object class="GtkFrame">
                         <property name="visible">True</property>
-                        <property name="expand">True</property>
-	                    <signal name="row-activated" handler="row_activated_cb"/>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="border_width">6</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkListBox" id="related_list_box">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
+                          </object>
+                        </child>
+                        <child type="label_item">
+                          <placeholder/>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="visible">True</property>
-                    <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Show all…</property>
-                    <signal name="clicked" handler="show_all_button_clicked_cb"/>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="receives_default">False</property>
+                    <property name="hexpand">True</property>
+                    <signal name="clicked" handler="show_all_button_clicked_cb" swapped="no"/>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
                 </child>
               </object>
+              <packing>
+                <property name="name">suggested_grid</property>
+              </packing>
             </child>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="expand">True</property>
+                <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>
-                <property name="min_content_height">300</property>
                 <child>
-                  <object class="GtkListBox" id="list_box">
+                  <object class="GtkViewport">
                     <property name="visible">True</property>
-                    <property name="expand">True</property>
-<!--                    <property name="activate-on-single-click">True</property> TODO useful? -->
-                    <property name="selection-mode">browse</property>
-                    <signal name="row-activated" handler="row_activated_cb"/>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkListBox" id="list_box">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
               <packing>
                 <property name="name">scrolled-window</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
         </child>
       </object>
     </child>
