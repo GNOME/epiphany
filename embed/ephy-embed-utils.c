@@ -304,11 +304,38 @@ ephy_embed_utils_autosearch_address (const char *search_key)
   return effective_address;
 }
 
+static char *
+ensure_host_name_is_lower_case (const char *address)
+{
+  char *host = ephy_string_get_host_name (address);
+  char *lowercase_host;
+  char *ret = NULL;
+
+  if (host == NULL) {
+    return g_strdup (address);
+  }
+
+  lowercase_host = g_utf8_strdown (host, -1);
+
+  if (strcmp (host, lowercase_host)) {
+    ret = ephy_string_find_and_replace (address, host, lowercase_host);
+  } else {
+    ret = g_strdup (address);
+  }
+
+  g_free (lowercase_host);
+  g_free (host);
+
+  return ret;
+}
+
 char *
 ephy_embed_utils_normalize_or_autosearch_address (const char *address)
 {
-  if (ephy_embed_utils_address_is_valid (address))
-    return ephy_embed_utils_normalize_address (address);
+  g_autofree gchar *lower_case_address = ensure_host_name_is_lower_case (address);
+
+  if (ephy_embed_utils_address_is_valid (lower_case_address))
+    return ephy_embed_utils_normalize_address (lower_case_address);
   else
     return ephy_embed_utils_autosearch_address (address);
 }
