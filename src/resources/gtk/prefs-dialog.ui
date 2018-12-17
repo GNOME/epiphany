@@ -751,68 +751,87 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="halign">start</property>
-                            <property name="hexpand">True</property>
-                            <property name="label" translatable="yes">Cookies</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="manage_cookies_button">
-                            <property name="label" translatable="yes">Manage _Cookies</property>
-                            <property name="visible">True</property>
-                            <property name="use-underline">True</property>
-                            <signal name="clicked" handler="on_manage_cookies_button_clicked"/>
-                          </object>
-                        </child>
+                        <property name="halign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="label" translatable="yes">Cookies</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkListBox" id="cookies_list">
+                        <property name="selection_mode">none</property>
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <property name="margin-start">12</property>
+                        <style>
+                          <class name="frame"/>
+                        </style>
                         <child>
-                          <object class="GtkRadioButton" id="always">
-                            <property name="label" translatable="yes">_Always accept</property>
+                          <object class="HdyActionRow">
+                            <property name="activatable">False</property>
+                            <property name="title" translatable="yes">Manage _Cookies</property>
+                            <property name="use_underline">True</property>
                             <property name="visible">True</property>
-                            <property name="use-underline">True</property>
+                            <child type="action">
+                              <object class="GtkButton">
+                                <property name="valign">center</property>
+                                <property name="visible">True</property>
+                                <signal name="clicked" handler="on_manage_cookies_button_clicked"/>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="icon_name">emblem-system-symbolic</property>
+                                    <property name="visible">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="no_third_party">
-                            <property name="label" translatable="yes">Only _from sites you visit</property>
+                          <object class="HdyActionRow">
+                            <property name="activatable_widget">always</property>
+                            <property name="title" translatable="yes">_Always accept</property>
+                            <property name="use_underline">True</property>
                             <property name="visible">True</property>
-                            <property name="use-underline">True</property>
-                            <property name="group">always</property>
+                            <child type="prefix">
+                              <object class="GtkRadioButton" id="always">
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="HdyActionRow">
+                            <property name="activatable_widget">no_third_party</property>
+                            <property name="subtitle" translatable="yes" comments="Refers to &quot;Only from sites you visit&quot; option under Cookies.">For example, not from advertisers on these sites</property>
+                            <property name="title" translatable="yes">Only _from sites you visit</property>
+                            <property name="use_underline">True</property>
                             <property name="visible">True</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes" comments="Refers to &quot;Only from sites you visit&quot; option under Cookies.">For example, not from advertisers on these sites</property>
-                            <property name="use-markup">True</property>
-                            <property name="margin-start">22</property>
-                            <attributes>
-                              <attribute name="scale" value="0.8"/>
-                            </attributes>
+                            <child type="prefix">
+                              <object class="GtkRadioButton" id="no_third_party">
+                                <property name="group">always</property>
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="never">
-                            <property name="label" translatable="yes">_Never accept</property>
+                          <object class="HdyActionRow">
+                            <property name="activatable_widget">never</property>
+                            <property name="title" translatable="yes">_Never accept</property>
+                            <property name="use_underline">True</property>
                             <property name="visible">True</property>
-                            <property name="use-underline">True</property>
-                            <property name="group">always</property>
+                            <child type="prefix">
+                              <object class="GtkRadioButton" id="never">
+                                <property name="group">always</property>
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -825,35 +844,61 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="halign">start</property>
-                            <property name="hexpand">True</property>
-                            <property name="label" translatable="yes">Passwords</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="manage_passwords_button">
-                            <property name="label" translatable="yes">Manage _Passwords</property>
-                            <property name="visible">True</property>
-                            <property name="use-underline">True</property>
-                            <signal name="clicked" handler="on_manage_passwords_button_clicked"/>
-                          </object>
-                        </child>
+                        <property name="halign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="label" translatable="yes">Passwords</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="remember_passwords_checkbutton">
-                        <property name="label" translatable="yes">_Remember passwords</property>
+                      <object class="GtkListBox" id="passwords_list">
+                        <property name="selection_mode">none</property>
                         <property name="visible">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="margin-start">12</property>
+                        <style>
+                          <class name="frame"/>
+                        </style>
+                        <child>
+                          <object class="HdyActionRow">
+                            <property name="activatable">False</property>
+                            <property name="title" translatable="yes">Manage _Passwords</property>
+                            <property name="use_underline">True</property>
+                            <property name="visible">True</property>
+                            <child type="action">
+                              <object class="GtkButton">
+                                <property name="valign">center</property>
+                                <property name="visible">True</property>
+                                <signal name="clicked" handler="on_manage_passwords_button_clicked"/>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="icon_name">emblem-system-symbolic</property>
+                                    <property name="visible">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="HdyActionRow">
+                            <property name="activatable_widget">remember_passwords_switch</property>
+                            <property name="title" translatable="yes">_Remember passwords</property>
+                            <property name="use_underline">True</property>
+                            <property name="visible">True</property>
+                            <child type="action">
+                              <object class="GtkSwitch" id="remember_passwords_switch">
+                                <property name="valign">center</property>
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -874,29 +919,35 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkListBox" id="personal_data_list">
+                        <property name="selection_mode">none</property>
                         <property name="visible">True</property>
-                        <property name="spacing">12</property>
-                        <property name="margin-start">12</property>
+                        <style>
+                          <class name="frame"/>
+                        </style>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="HdyActionRow">
+                            <property name="activatable">False</property>
+                            <property name="subtitle" translatable="yes">You can clear stored personal data.</property>
+                            <property name="title" translatable="yes">Manage Personal _Data</property>
+                            <property name="use_underline">True</property>
                             <property name="visible">True</property>
-                            <!-- We must use xalign instead of halign because halign
-                                 does not work for labels with line wrap. And we must
-                                 allow line wrap to accomodate translations. -->
-                            <property name="xalign">0</property>
-                            <property name="wrap">True</property>
-                            <property name="max-width-chars">30</property>
-                            <property name="hexpand">True</property>
-                            <property name="label" translatable="yes">You can clear stored personal data.</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="clear_personal_data_button">
-                            <property name="label" translatable="yes">Manage Personal _Data</property>
-                            <property name="visible">True</property>
-                            <property name="valign">start</property>
-                            <property name="use-underline">True</property>
+                            <child type="action">
+                              <object class="GtkButton" id="clear_personal_data_button">
+                                <property name="valign">center</property>
+                                <property name="visible">True</property>
+                                <signal name="clicked" handler="on_manage_passwords_button_clicked"/>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="icon_name">emblem-system-symbolic</property>
+                                    <property name="visible">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -1397,14 +1448,6 @@
       <widget name="sans_fontbutton"/>
       <widget name="serif_fontbutton"/>
       <widget name="mono_fontbutton"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="manage_cookies_button"/>
-      <widget name="manage_passwords_button"/>
-      <widget name="clear_personal_data_button"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
