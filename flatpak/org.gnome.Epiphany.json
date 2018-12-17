@@ -80,6 +80,57 @@
             ]
         },
         {
+            "name": "openjpeg2",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/szukw000/openjpeg.git",
+                    "branch": "v2.1.2"
+                }
+            ]
+        },
+        {
+            "name" : "poppler",
+            "buildsystem" : "cmake-ninja",
+            "builddir": true,
+            "config-opts" : [
+                "-DENABLE_TESTING=OFF"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://anongit.freedesktop.org/git/poppler/poppler.git"
+                }
+            ]
+        },
+        {
+            "name" : "evince",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dplatform=gnome",
+                "-Dviewer=false",
+                "-Dpreviewer=false",
+                "-Dthumbnailer=false",
+                "-Dnautilus=false",
+                "-Dgtk_doc=false",
+                "-Dintrospection=false",
+                "-Ddbus=false",
+                "-Dkeyring=disabled",
+                "-Dgtk_unix_print=disabled",
+                "-Dthumbnail_cache=disabled",
+                "-Dgspell=disabled",
+                "-Dsystemduserunitdir=no"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/evince.git"
+                }
+            ]
+        },
+        {
             "name" : "epiphany",
             "config-opts" : [
                 "-Dtech_preview=true"
