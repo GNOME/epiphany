@@ -188,6 +188,9 @@ void window_cmd_tabs_close_left                 (GSimpleAction *action,
 void window_cmd_tabs_close_right                (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);
+void window_cmd_tabs_reload                     (GSimpleAction *action,
+                                                 GVariant      *parameter,
+                                                 gpointer       user_data);
 void window_cmd_tabs_close_others               (GSimpleAction *action,
                                                  GVariant      *parameter,
                                                  gpointer       user_data);

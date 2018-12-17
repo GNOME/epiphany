@@ -771,7 +771,8 @@ static const GActionEntry tab_entries [] = {
   { "close", window_cmd_tabs_close },
   { "close-left", window_cmd_tabs_close_left },
   { "close-right", window_cmd_tabs_close_right },
-  { "close-others", window_cmd_tabs_close_others }
+  { "close-others", window_cmd_tabs_close_others },
+  { "reload", window_cmd_tabs_reload },
 };
 
 static const GActionEntry toolbar_entries [] = {
