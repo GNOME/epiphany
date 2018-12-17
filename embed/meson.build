@@ -12,6 +12,7 @@ enums = gnome.mkenums_simple('ephy-embed-type-builtins',
 
 libephyembed_sources = [
   'ephy-about-handler.c',
+  'ephy-document-view.c',
   'ephy-downloads-manager.c',
   'ephy-download.c',
   'ephy-embed.c',
@@ -34,6 +35,8 @@ libephyembed_sources = [
 libephyembed_deps = [
   libdazzle_dep,
   ephymisc_dep,
+  evince_document_dep,
+  evince_view_dep,
   gio_dep,
   glib_dep,
   gtk_dep,

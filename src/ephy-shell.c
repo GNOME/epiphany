@@ -287,6 +287,8 @@ download_started_cb (WebKitWebContext *web_context,
 {
   EphyDownload *ephy_download;
   gboolean ephy_download_set;
+  GtkWindow *window;
+  EphyEmbed *embed;
 
   /* Is download locked down? */
   if (g_settings_get_boolean (EPHY_SETTINGS_LOCKDOWN,
@@ -308,6 +310,11 @@ download_started_cb (WebKitWebContext *web_context,
   ephy_downloads_manager_add_download (ephy_embed_shell_get_downloads_manager (EPHY_EMBED_SHELL (shell)),
                                        ephy_download);
   g_object_unref (ephy_download);
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (ephy_shell));
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  if (embed)
+    ephy_embed_download_started (embed, download);
 }
 
 static void
