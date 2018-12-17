@@ -1428,6 +1428,12 @@ decide_policy_cb (WebKitWebView           *web_view,
   response = webkit_response_policy_decision_get_response (response_decision);
   mime_type = webkit_uri_response_get_mime_type (response);
 
+  if (ephy_embed_utils_mime_type_is_supported_evince_document (mime_type)) {
+    EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
+
+    ephy_embed_set_mode (embed, EPHY_EMBED_MODE_EVINCE_DOCUMENT);
+  }
+
   /* If WebKit can't handle the mime type start the download
      process */
   if (webkit_response_policy_decision_is_mime_type_supported (response_decision))
@@ -1876,6 +1882,7 @@ load_changed_cb (WebKitWebView  *web_view,
                  gpointer        user_data)
 {
   EphyWebView *view = EPHY_WEB_VIEW (web_view);
+  EphyEmbed *embed = EPHY_GET_EMBED_FROM_EPHY_WEB_VIEW (web_view);
   GObject *object = G_OBJECT (web_view);
 
   g_object_freeze_notify (object);
@@ -1885,6 +1892,7 @@ load_changed_cb (WebKitWebView  *web_view,
       const char *loading_uri = NULL;
 
       view->load_failed = FALSE;
+      ephy_embed_set_mode (embed, EPHY_EMBED_MODE_WEB_VIEW);
 
       if (view->snapshot_timeout_id) {
         g_source_remove (view->snapshot_timeout_id);
