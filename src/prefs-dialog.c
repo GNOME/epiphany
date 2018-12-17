@@ -121,10 +121,13 @@ struct _PrefsDialog {
   GtkWidget *reader_mode_color_scheme;
 
   /* stored data */
+  GtkWidget *cookies_list;
   GtkWidget *always;
   GtkWidget *no_third_party;
   GtkWidget *never;
-  GtkWidget *remember_passwords_checkbutton;
+  GtkWidget *passwords_list;
+  GtkWidget *remember_passwords_switch;
+  GtkWidget *personal_data_list;
   GtkWidget *do_not_track_row;
   GtkWidget *do_not_track_switch;
   GtkWidget *clear_personal_data_button;
@@ -1026,10 +1029,13 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, reader_mode_color_scheme);
 
   /* stored data */
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, cookies_list);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, always);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, no_third_party);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, never);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, remember_passwords_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, passwords_list);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, remember_passwords_switch);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, personal_data_list);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, do_not_track_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, clear_personal_data_button);
@@ -2252,7 +2258,7 @@ setup_stored_data_page (PrefsDialog *dialog)
                                 NULL);
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_REMEMBER_PASSWORDS,
-                   dialog->remember_passwords_checkbutton,
+                   dialog->remember_passwords_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -2412,6 +2418,9 @@ prefs_dialog_init (PrefsDialog *dialog)
   gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->use_custom_fonts_list), hdy_list_box_separator_header, NULL, NULL);
   gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->css_list), hdy_list_box_separator_header, NULL, NULL);
   gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->reader_mode_list), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->cookies_list), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->passwords_list), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->personal_data_list), hdy_list_box_separator_header, NULL, NULL);
 
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
   gtk_widget_set_visible (dialog->webapp_box,
