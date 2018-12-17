@@ -103,7 +103,7 @@ should_use_adblocker (const char *request_uri,
                       const char *page_uri,
                       const char *redirected_request_uri)
 {
-  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
+  if (!g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_ENABLE_ADBLOCK))
     return FALSE;
 
   /* Always load the main resource... */
@@ -150,7 +150,7 @@ web_page_send_request (WebKitWebPage     *web_page,
   page_uri = webkit_web_page_get_uri (web_page);
   redirected_response_uri = redirected_response ? webkit_uri_response_get_uri (redirected_response) : NULL;
 
-  if (g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
+  if (g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_DO_NOT_TRACK)) {
     SoupMessageHeaders *headers = webkit_uri_request_get_http_headers (request);
     if (headers) {
       /* Do Not Track header. '1' means 'opt-out'. See:
@@ -275,7 +275,7 @@ web_page_form_controls_associated (WebKitWebPage    *web_page,
                                           G_TYPE_STRING, 2,
                                           G_TYPE_UINT64, G_TYPE_BOOLEAN);
   remember_passwords = !extension->is_private_profile &&
-                       g_settings_get_boolean (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS);
+                       g_settings_get_boolean (EPHY_SETTINGS_WEB_EXTENSION_WEB, EPHY_PREFS_WEB_REMEMBER_PASSWORDS);
   js_result = jsc_value_object_invoke_method (js_ephy,
                                               "formControlsAssociated",
                                               G_TYPE_UINT64, webkit_web_page_get_id (web_page),
