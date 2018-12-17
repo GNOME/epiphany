@@ -63,5 +63,5 @@ gboolean      ephy_download_do_download_action    (EphyDownload          *downlo
                                                    guint32                user_time);
 void          ephy_download_disable_desktop_notification
                                                   (EphyDownload *download);
-
+void          ephy_download_set_mode_document     (EphyDownload *download);
 G_END_DECLS
