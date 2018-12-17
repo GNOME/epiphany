@@ -2444,6 +2444,39 @@ window_cmd_tabs_close_others (GSimpleAction *action,
 }
 
 void
+window_cmd_tabs_reload (GSimpleAction *action,
+                        GVariant      *parameter,
+                        gpointer       user_data)
+{
+  EphyWindow *window = user_data;
+  EphyEmbed *embed;
+  WebKitWebView *view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  embed = ephy_embed_container_get_active_child
+            (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  gtk_widget_grab_focus (GTK_WIDGET (embed));
+
+  view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
+  webkit_web_view_reload (view);
+}
+
+void
+window_cmd_tabs_reopen_closed_tab (GSimpleAction *action,
+                                   GVariant      *parameter,
+                                   gpointer       user_data)
+{
+  EphySession *session = ephy_shell_get_session (ephy_shell_get_default ());
+
+  g_assert (session != NULL);
+  ephy_session_undo_close_tab (session);
+}
+
+void
 window_cmd_show_tab (GSimpleAction *action,
                      GVariant      *parameter,
                      gpointer       user_data)
