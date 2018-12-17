@@ -257,7 +257,7 @@ ephy_time_helpers_utf_friendly_time (time_t date)
         /* Translators: "friendly time" string for the previous day,
          * strftime format. e.g. "Yesterday 15∶34"
          */
-        format = _("Yesterday %H∶%M %p");
+        format = _("Yesterday %H∶%M");
       }
       done = TRUE;
     }
