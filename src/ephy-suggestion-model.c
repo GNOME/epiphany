@@ -292,8 +292,12 @@ add_bookmarks (EphySuggestionModel *self,
 
     if (should_add_bookmark_to_model (self, query, title, url)) {
       EphySuggestion *suggestion;
+      g_autofree gchar *escaped_title = NULL;
+      g_autofree gchar *markup = NULL;
 
-      suggestion = ephy_suggestion_new (title, url);
+      escaped_title = g_markup_escape_text (title, -1);
+      markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
+      suggestion = ephy_suggestion_new (markup, url);
       load_favicon (self, suggestion, url);
 
       g_sequence_append (self->items, suggestion);
@@ -314,8 +318,12 @@ add_history (EphySuggestionModel *self,
   for (const GList *p = urls; p != NULL; p = p->next) {
     EphyHistoryURL *url = (EphyHistoryURL *)p->data;
     EphySuggestion *suggestion;
+    g_autofree gchar *escaped_title = NULL;
+    g_autofree gchar *markup = NULL;
 
-    suggestion = ephy_suggestion_new (url->title, url->url);
+    escaped_title = g_markup_escape_text (url->title, -1);
+    markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
+    suggestion = ephy_suggestion_new (markup, url->url);
     load_favicon (self, suggestion, url->url);
 
     g_sequence_append (self->items, suggestion);
@@ -341,9 +349,13 @@ add_search_engines (EphySuggestionModel *self,
   for (guint i = 0; engines[i] != NULL; i++) {
     EphySuggestion *suggestion;
     char *address;
+    g_autofree gchar *escaped_title = NULL;
+    g_autofree gchar *markup = NULL;
 
     address = ephy_search_engine_manager_build_search_address (manager, engines[i], query);
-    suggestion = ephy_suggestion_new_without_subtitle (engines[i], address);
+    escaped_title = g_markup_escape_text (engines[i], -1);
+    markup = dzl_fuzzy_highlight (escaped_title, query, FALSE);
+    suggestion = ephy_suggestion_new_without_subtitle (markup, address);
     load_favicon (self, suggestion, address);
 
     g_sequence_append (self->items, suggestion);
