@@ -668,7 +668,11 @@ window_cmd_navigation (GSimpleAction *action,
   web_view = EPHY_GET_WEBKIT_WEB_VIEW_FROM_EMBED (embed);
 
   if (strstr (g_action_get_name (G_ACTION (action)), "back")) {
-    webkit_web_view_go_back (web_view);
+    if (ephy_embed_get_mode (embed) == EPHY_EMBED_MODE_WEB_VIEW) {
+      webkit_web_view_go_back (web_view);
+    } else {
+      ephy_embed_set_mode (embed, EPHY_EMBED_MODE_WEB_VIEW);
+    }
     gtk_widget_grab_focus (GTK_WIDGET (embed));
   } else {
     webkit_web_view_go_forward (web_view);

@@ -630,6 +630,18 @@ download_decide_destination_cb (WebKitDownload *wk_download,
                                 const gchar    *suggested_filename,
                                 EphyDownload   *download)
 {
+  gpointer data = g_object_get_data (G_OBJECT (download), "mode-document");
+
+  if (data != NULL) {
+    g_autofree gchar *tmp_file = g_strdup_printf ("%s/ephy-%s", g_get_user_cache_dir (), suggested_filename);
+    g_autofree gchar *file_uri = g_filename_to_uri (tmp_file, NULL, NULL);
+
+    webkit_download_set_allow_overwrite (wk_download, TRUE);
+    webkit_download_set_destination (wk_download, file_uri);
+
+    return TRUE;
+  }
+
   if (webkit_download_get_destination (wk_download))
     return TRUE;
 
@@ -811,4 +823,10 @@ ephy_download_disable_desktop_notification (EphyDownload *download)
   g_assert (EPHY_IS_DOWNLOAD (download));
 
   download->show_notification = FALSE;
+}
+
+void
+ephy_download_set_mode_document (EphyDownload *download)
+{
+  g_object_set_data (G_OBJECT (download), "mode-document", GINT_TO_POINTER (TRUE));
 }
