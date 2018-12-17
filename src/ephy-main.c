@@ -33,6 +33,7 @@
 #include "ephy-web-app-utils.h"
 
 #include <errno.h>
+#include <evince-document.h>
 #include <glib/gi18n.h>
 #include <glib-unix.h>
 #include <gtk/gtk.h>
@@ -419,6 +420,8 @@ main (int   argc,
     gtk_window_set_default_icon_name ("org.gnome.Epiphany");
   }
 
+  ev_init ();
+
   _ephy_shell_create_instance (mode);
 
   ctx = ephy_shell_startup_context_new (startup_flags,
@@ -445,6 +448,7 @@ main (int   argc,
   if (notify_is_initted ())
     notify_uninit ();
 
+  ev_shutdown ();
   ephy_settings_shutdown ();
   ephy_file_helpers_shutdown ();
   xmlCleanupParser ();
