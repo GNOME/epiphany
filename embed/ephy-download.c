@@ -762,9 +762,9 @@ ephy_download_new (WebKitDownload *download)
   g_signal_connect (download, "notify::response",
                     G_CALLBACK (download_response_changed_cb),
                     ephy_download);
-  g_signal_connect (download, "decide-destination",
-                    G_CALLBACK (download_decide_destination_cb),
-                    ephy_download);
+  g_signal_connect_after (download, "decide-destination",
+                          G_CALLBACK (download_decide_destination_cb),
+                          ephy_download);
   g_signal_connect (download, "created-destination",
                     G_CALLBACK (download_created_destination_cb),
                     ephy_download);
