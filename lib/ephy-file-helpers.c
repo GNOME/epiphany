@@ -304,8 +304,6 @@ ephy_file_helpers_init (const char          *profile_dir,
   steal_data_from_profile = flags & EPHY_FILE_HELPERS_STEAL_DATA;
 
   if (profile_dir != NULL && !steal_data_from_profile) {
-    char *basename;
-
     if (g_path_is_absolute (profile_dir)) {
       dot_dir = g_strdup (profile_dir);
     } else {
@@ -314,10 +312,9 @@ ephy_file_helpers_init (const char          *profile_dir,
       g_object_unref (file);
     }
 
-    basename = g_path_get_basename (dot_dir);
-    if (g_str_has_prefix (basename, EPHY_WEB_APP_PREFIX))
+    g_autofree char *app_file = g_build_filename (profile_dir, ".app", NULL);
+    if (g_file_test (app_file, G_FILE_TEST_EXISTS))
       dot_dir_type = EPHY_PROFILE_DIR_WEB_APP;
-    g_free (basename);
   } else if (private_profile) {
     if (ephy_file_tmp_dir () == NULL) {
       g_set_error (error,

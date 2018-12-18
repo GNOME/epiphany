@@ -76,7 +76,7 @@ migrate_app_desktop_file_categories (void)
 {
   GList *web_apps, *l;
 
-  web_apps = ephy_web_application_get_application_list ();
+  web_apps = ephy_web_application_get_legacy_application_list ();
 
   for (l = web_apps; l; l = l->next) {
     EphyWebApplication *app = (EphyWebApplication *)l->data;
@@ -1010,6 +1010,63 @@ migrate_annoyance_list (void)
 }
 
 static void
+migrate_app_profile_directories (void)
+{
+  GList *web_apps, *l;
+
+  /* Web app profiles moved from config to data dirs */
+  web_apps = ephy_web_application_get_legacy_application_list ();
+  for (l = web_apps; l; l = l->next) {
+    EphyWebApplication *app = (EphyWebApplication *)l->data;
+    g_autoptr(GError) error = NULL;
+
+    g_autofree char *old_name = g_strconcat ("app-epiphany-", app->id, NULL);
+    g_autofree char *old_path = g_build_filename (ephy_default_dot_dir (), old_name, NULL);
+    g_autoptr(GFile) old_directory = g_file_new_for_path (old_path);
+    g_autofree char *app_path = ephy_web_application_get_profile_directory (app->id);
+    g_autoptr(GFile) new_directory = g_file_new_for_path (app_path);
+
+    if (!g_file_move (old_directory, new_directory, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
+      LOG ("Failed to move directory %s to %s: %s", old_path, app_path, error->message);
+      continue;
+    }
+
+    // Create an empty file to indicate it's an app
+    g_autofree char *app_file = g_build_filename (app_path, ".app", NULL);
+    int fd = g_open (app_file, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+    if (fd < 0)
+      LOG ("Failed to create .app file: %s", g_strerror (errno));
+    else
+      close (fd);
+
+    g_autoptr(GKeyFile) file = g_key_file_new ();
+    g_autofree char *desktop_file_path = g_build_filename (app_path, app->desktop_file, NULL);
+    g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
+    g_autofree char *exec = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, &error);
+    if (exec == NULL) {
+      LOG ("Failed to get Exec key from %s: %s", desktop_file_path, error->message);
+      continue;
+    }
+
+    g_autoptr(GRegex) re = g_regex_new ("epiphany/app-epiphany-", 0, 0, NULL);
+    g_autofree char *new_exec = g_regex_replace (re, exec, -1, 0, "/epiphany-", 0, &error);
+
+    if (error != NULL) {
+      LOG ("Failed to replace Exec line %s: %s", exec, error->message);
+      g_clear_error (&error);
+    }
+
+    LOG ("migrate_app_profile_directories: setting Exec to %s", new_exec);
+    g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, new_exec);
+
+    if (!g_key_file_save_to_file (file, desktop_file_path, &error))
+      LOG ("Failed to save desktop file %s", error->message);
+  }
+
+  ephy_web_application_free_application_list (web_apps);
+}
+
+static void
 migrate_nothing (void)
 {
   /* Used to replace migrators that have been removed. Only remove migrators
@@ -1130,6 +1187,7 @@ const EphyProfileMigrator migrators[] = {
   /* 27 */ migrate_nothing,
   /* 28 */ migrate_annoyance_list,
   /* 29 */ migrate_zoom_level
+  /* 30 */ migrate_app_profile_directories,
 };
 
 static gboolean
