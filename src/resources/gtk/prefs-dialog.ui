@@ -991,19 +991,13 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkGrid">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="row-spacing">6</property>
-                        <property name="column-spacing">6</property>
-                        <property name="margin-start">12</property>
                         <child>
-                          <object class="GtkScrolledWindow">
+                          <object class="GtkFrame">
                             <property name="visible">True</property>
                             <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="hscrollbar-policy">never</property>
-                            <property name="shadow-type">in</property>
                             <child>
                               <object class="GtkTreeView" id="lang_treeview">
                                 <property name="visible">True</property>
@@ -1017,44 +1011,132 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkGrid">
+                          <object class="GtkToolbar">
                             <property name="visible">True</property>
-                            <property name="row-spacing">6</property>
-                            <property name="orientation">vertical</property>
+                            <property name="can_focus">False</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <property name="icon_size">1</property>
+                            <style>
+                              <class name="inline-toolbar"/>
+                            </style>
                             <child>
-                              <object class="GtkButton" id="lang_add_button">
-                                <property name="label" translatable="yes">_Add…</property>
+                              <object class="GtkToolItem">
                                 <property name="visible">True</property>
-                                <property name="use-underline">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <child>
+                                      <object class="GtkButton" id="lang_add_button">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject">
+                                            <property name="accessible-name" translatable="yes">Add language</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="icon_name">list-add-symbolic</property>
+                                            <property name="icon-size">1</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="lang_remove_button">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject">
+                                            <property name="accessible-name" translatable="yes">Remove language</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="icon_name">list-remove-symbolic</property>
+                                            <property name="icon-size">1</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkButton" id="lang_remove_button">
-                                <property name="label" translatable="yes">_Remove</property>
+                              <object class="GtkSeparatorToolItem">
                                 <property name="visible">True</property>
-                                <property name="use-underline">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="draw">False</property>
                               </object>
+                              <packing>
+                                <property name="expand">True</property>
+                              </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="lang_up_button">
-                                <property name="label" translatable="yes">_Up</property>
+                              <object class="GtkToolItem">
                                 <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="lang_down_button">
-                                <property name="label" translatable="yes">_Down</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <child>
+                                      <object class="GtkButton" id="lang_up_button">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject">
+                                            <property name="accessible-name" translatable="yes">Move language up</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="icon_name">go-up-symbolic</property>
+                                            <property name="icon-size">1</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="lang_down_button">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject">
+                                            <property name="accessible-name" translatable="yes">Move language down</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="icon_name">go-down-symbolic</property>
+                                            <property name="icon-size">1</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">True</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
@@ -1075,12 +1157,27 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="enable_spell_checking_checkbutton">
-                        <property name="label" translatable="yes">_Enable spell checking</property>
+                      <object class="GtkFrame">
                         <property name="visible">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="halign">start</property>
-                        <property name="margin-start">12</property>
+                        <child>
+                          <object class="GtkListBox" id="spell_checking_list">
+                            <property name="selection_mode">none</property>
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="HdyActionRow">
+                                <property name="title" translatable="yes">_Enable spell checking</property>
+                                <property name="use_underline">True</property>
+                                <property name="visible">True</property>
+                                <child type="action">
+                                  <object class="GtkSwitch" id="enable_spell_checking_switch">
+                                    <property name="valign">center</property>
+                                    <property name="visible">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
