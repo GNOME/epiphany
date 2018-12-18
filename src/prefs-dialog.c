@@ -588,6 +588,7 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
   WebKitWebsiteDataManager *manager;
   WebKitWebContext *embed_context;
   WebKitWebContext *sync_context;
+  GtkWidget *frame;
   const char *script;
 
   if (!dialog->fxa_web_view) {
@@ -637,12 +638,16 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
                                                           "user-content-manager", dialog->fxa_manager,
                                                           "settings", ephy_embed_prefs_get_settings (),
                                                           "web-context", sync_context,
+                                                          "height-request", 450,
                                                           NULL));
     gtk_widget_set_visible (GTK_WIDGET (dialog->fxa_web_view), TRUE);
-    gtk_widget_set_size_request (GTK_WIDGET (dialog->fxa_web_view), 450, 450);
+    frame = gtk_frame_new (NULL);
+    gtk_widget_set_visible (frame, TRUE);
+    gtk_container_add (GTK_CONTAINER (frame),
+                       GTK_WIDGET (dialog->fxa_web_view));
     gtk_box_pack_start (GTK_BOX (dialog->sync_firefox_iframe_box),
-                      GTK_WIDGET (dialog->fxa_web_view),
-                      FALSE, FALSE, 0);
+                        frame,
+                        FALSE, FALSE, 0);
 
     g_object_unref (sync_context);
   }
