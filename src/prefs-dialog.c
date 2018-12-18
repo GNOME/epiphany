@@ -138,7 +138,8 @@ struct _PrefsDialog {
   GtkWidget *lang_remove_button;
   GtkWidget *lang_up_button;
   GtkWidget *lang_down_button;
-  GtkWidget *enable_spell_checking_checkbutton;
+  GtkWidget *spell_checking_list;
+  GtkWidget *enable_spell_checking_switch;
 
   GtkDialog *add_lang_dialog;
   GtkTreeView *add_lang_treeview;
@@ -1046,7 +1047,8 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_remove_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_up_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_down_button);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_spell_checking_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, spell_checking_list);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_spell_checking_switch);
 
   /* sync */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_page_box);
@@ -2206,7 +2208,7 @@ setup_language_page (PrefsDialog *dialog)
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
-                   dialog->enable_spell_checking_checkbutton,
+                   dialog->enable_spell_checking_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
@@ -2350,6 +2352,7 @@ prefs_dialog_init (PrefsDialog *dialog)
   gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->cookies_list), hdy_list_box_separator_header, NULL, NULL);
   gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->passwords_list), hdy_list_box_separator_header, NULL, NULL);
   gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->personal_data_list), hdy_list_box_separator_header, NULL, NULL);
+  gtk_list_box_set_header_func (GTK_LIST_BOX (dialog->spell_checking_list), hdy_list_box_separator_header, NULL, NULL);
 
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
   gtk_widget_set_visible (dialog->webapp_box,
