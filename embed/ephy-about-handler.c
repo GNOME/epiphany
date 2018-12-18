@@ -286,7 +286,7 @@ handle_applications_sync (GTask        *task,
                           GCancellable *cancellable)
 {
   g_task_return_pointer (task,
-                         ephy_web_application_get_application_list (),
+                         ephy_web_application_get_application_list (FALSE),
                          (GDestroyNotify)ephy_web_application_free_application_list);
 }
 

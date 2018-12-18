@@ -39,7 +39,7 @@
  *
  * The id is used to uniquely identify the app.
  *  - Program name: epiphany-<id>
- *  - Profile directory: app-<program-name>
+ *  - Profile directory: <program-name>
  *  - Desktop file: <profile-dir>/<program-name>.desktop
  *
  * System web applications have a profile dir without a desktop file.
@@ -89,7 +89,7 @@ get_app_profile_directory_name (const char *id)
   char *profile_dir;
   char *encoded;
 
-  profile_dir = g_strconcat (EPHY_WEB_APP_PREFIX, EPHY_WEB_APP_PROGRAM_NAME_PREFIX, id, NULL);
+  profile_dir = g_strconcat (EPHY_WEB_APP_PROGRAM_NAME_PREFIX, id, NULL);
   encoded = get_encoded_path (profile_dir);
   g_free (profile_dir);
 
@@ -109,18 +109,18 @@ get_app_desktop_filename (const char *id)
   return encoded;
 }
 
-static const char *
-get_program_name_from_profile_directory (const char *profile_dir)
+const char *
+ephy_web_application_get_program_name_from_profile_directory (const char *profile_dir)
 {
   const char *name;
 
-  name = strstr (profile_dir, EPHY_WEB_APP_PREFIX);
+  name = strstr (profile_dir, EPHY_WEB_APP_PROGRAM_NAME_PREFIX);
   if (!name) {
-    g_warning ("Profile directory %s does not begin with required web app prefix %s", profile_dir, EPHY_WEB_APP_PREFIX);
+    g_warning ("Profile directory %s does not begin with required web app prefix %s", profile_dir, EPHY_WEB_APP_PROGRAM_NAME_PREFIX);
     return NULL;
   }
 
-  return name + strlen (EPHY_WEB_APP_PREFIX);
+  return name;
 }
 
 static const char *
@@ -139,7 +139,7 @@ get_app_id_from_profile_directory (const char *profile_dir)
 {
   const char *program_name;
 
-  program_name = get_program_name_from_profile_directory (profile_dir);
+  program_name = ephy_web_application_get_program_name_from_profile_directory (profile_dir);
   return program_name ? get_app_id_from_program_name (program_name) : NULL;
 }
 
@@ -161,7 +161,7 @@ ephy_web_application_get_profile_directory (const char *id)
     return NULL;
 
   dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
-  profile_dir = g_build_filename (dot_dir ? dot_dir : ephy_dot_dir (), app_dir, NULL);
+  profile_dir = g_build_filename (dot_dir ? dot_dir : g_get_user_config_dir (), app_dir, NULL);
   g_free (app_dir);
   g_free (dot_dir);
 
@@ -391,7 +391,7 @@ ephy_web_application_setup_from_profile_directory (const char *profile_directory
 
   g_assert (profile_directory != NULL);
 
-  program_name = get_program_name_from_profile_directory (profile_directory);
+  program_name = ephy_web_application_get_program_name_from_profile_directory (profile_directory);
   if (!program_name)
     exit (1);
 
@@ -536,6 +536,7 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
 
 /**
  * ephy_web_application_get_application_list:
+ * @only_legacy: Only include unmigrated old apps
  *
  * Gets a list of the currently installed web applications.
  * Free the returned GList with
@@ -544,7 +545,7 @@ ephy_web_application_for_profile_directory (const char *profile_dir)
  * Returns: (transfer-full): a #GList of #EphyWebApplication objects
  **/
 GList *
-ephy_web_application_get_application_list (void)
+ephy_web_application_get_application_list (gboolean only_legacy)
 {
   GFileEnumerator *children = NULL;
   GFileInfo *info;
@@ -553,7 +554,7 @@ ephy_web_application_get_application_list (void)
   char *default_dot_dir;
 
   default_dot_dir = !ephy_dot_dir_is_default () ? ephy_default_dot_dir () : NULL;
-  dot_dir = g_file_new_for_path (default_dot_dir ? default_dot_dir : ephy_dot_dir ());
+  dot_dir = g_file_new_for_path (default_dot_dir ? default_dot_dir : only_legacy ? ephy_dot_dir () : g_get_user_config_dir ());
   children = g_file_enumerate_children (dot_dir,
                                         "standard::name",
                                         0, NULL, NULL);
@@ -564,14 +565,24 @@ ephy_web_application_get_application_list (void)
     const char *name;
 
     name = g_file_info_get_name (info);
-    if (g_str_has_prefix (name, EPHY_WEB_APP_PREFIX)) {
+    if ((only_legacy && g_str_has_prefix (name, "app-")) ||
+        (!only_legacy && g_str_has_prefix (name, EPHY_WEB_APP_PROGRAM_NAME_PREFIX))) {
       EphyWebApplication *app;
       char *profile_dir;
 
       profile_dir = g_build_filename (default_dot_dir ? default_dot_dir : ephy_dot_dir (), name, NULL);
       app = ephy_web_application_for_profile_directory (profile_dir);
-      if (app)
-        applications = g_list_prepend (applications, app);
+      if (app) {
+        if (!only_legacy) {
+          g_autofree char *app_file = g_build_filename (profile_dir, ".app", NULL);
+          if (g_file_test (app_file, G_FILE_TEST_EXISTS))
+            applications = g_list_prepend (applications, app);
+          else
+            g_object_unref (app);
+        } else
+          applications = g_list_prepend (applications, app);
+      }
+
       g_free (profile_dir);
     }
 
