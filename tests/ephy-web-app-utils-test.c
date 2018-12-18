@@ -105,7 +105,7 @@ test_web_app_lifetime (void)
     g_assert (ephy_web_application_exists (id));
 
     /* Test list API */
-    apps = ephy_web_application_get_application_list ();
+    apps = ephy_web_application_get_application_list (FALSE);
     g_assert_cmpint (g_list_length (apps), ==, 1);
 
     app = apps->data;
@@ -126,7 +126,7 @@ test_web_app_lifetime (void)
     g_assert (g_file_test (profile_dir, G_FILE_TEST_EXISTS) == FALSE);
     g_assert (ephy_web_application_exists (id) == FALSE);
 
-    apps = ephy_web_application_get_application_list ();
+    apps = ephy_web_application_get_application_list (FALSE);
     g_assert_cmpint (g_list_length (apps), ==, 0);
     ephy_web_application_free_application_list (apps);
 

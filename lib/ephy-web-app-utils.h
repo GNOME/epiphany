@@ -35,10 +35,11 @@ typedef struct {
   char install_date[128];
 } EphyWebApplication;
 
-#define EPHY_WEB_APP_PREFIX "app-"
 #define EPHY_WEB_APP_ICON_NAME "app-icon.png"
 
 char               *ephy_web_application_get_app_id_from_name (const char *name);
+
+const char         *ephy_web_application_get_program_name_from_profile_directory (const char *profile_dir);
 
 char               *ephy_web_application_create (const char *id, const char *address, const char *name, GdkPixbuf *icon);
 
@@ -58,7 +59,7 @@ void                ephy_web_application_free (EphyWebApplication *app);
 
 gboolean            ephy_web_application_exists (const char *id);
 
-GList              *ephy_web_application_get_application_list (void);
+GList              *ephy_web_application_get_application_list (gboolean only_legacy);
 
 void                ephy_web_application_free_application_list (GList *list);
 
