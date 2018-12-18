@@ -37,7 +37,6 @@ static void
 ephy_settings_init (void)
 {
   const char *profile_directory;
-  const char *web_app_name;
   char *base_path;
 
   if (settings != NULL)
@@ -51,16 +50,16 @@ ephy_settings_init (void)
                                     g_str_equal, g_free,
                                     g_object_unref);
 
-  web_app_name = strstr (profile_directory, EPHY_WEB_APP_PREFIX);
-  if (web_app_name)
+  if (ephy_dot_dir_is_web_application ()) {
+    const char *web_app_name = ephy_web_application_get_program_name_from_profile_directory (profile_directory);
     base_path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", web_app_name, NULL);
-  else
+  } else
     base_path = g_strdup ("/org/gnome/epiphany/");
 
   for (guint i = 0; i < G_N_ELEMENTS (ephy_prefs_relocatable_schemas); i++) {
     char *path;
 
-    if (!web_app_name && ephy_prefs_relocatable_schemas[i].is_webapp_only)
+    if (!ephy_dot_dir_is_web_application () && ephy_prefs_relocatable_schemas[i].is_webapp_only)
       continue;
 
     path = g_build_path ("/", base_path, ephy_prefs_relocatable_schemas[i].path, NULL);
@@ -136,9 +135,17 @@ sync_settings (GSettings *original,
 static char *
 get_relocatable_path (const char *schema)
 {
+  g_autofree char *base_path = NULL;
+
+  if (ephy_dot_dir_is_web_application ()) {
+    const char *web_app_name = ephy_web_application_get_program_name_from_profile_directory (ephy_dot_dir ());
+    base_path = g_build_path ("/", "/org/gnome/epiphany/web-apps/", web_app_name, NULL);
+  } else
+    base_path = g_strdup ("/org/gnome/epiphany/");
+
   for (size_t i = 0; i < G_N_ELEMENTS (ephy_prefs_relocatable_schemas); i++) {
     if (g_strcmp0 (ephy_prefs_relocatable_schemas[i].schema, schema) == 0)
-      return g_build_path ("/", "/org/gnome/epiphany/", ephy_prefs_relocatable_schemas[i].path, NULL);
+      return g_build_path ("/", base_path, ephy_prefs_relocatable_schemas[i].path, NULL);
   }
   return NULL;
 }
@@ -160,11 +167,6 @@ ephy_settings_get_for_web_extension (const char *schema)
   g_autofree char *key_name = NULL;
 
   ephy_settings_init ();
-
-  // Web apps can't work with the sandbox anyway
-  const char *web_app_name = strstr (ephy_dot_dir (), EPHY_WEB_APP_PREFIX);
-  if (web_app_name != NULL)
-    return ephy_settings_get (schema);
 
   key_name = g_strdup_printf ("keyfile-%s", schema);
   gsettings = g_hash_table_lookup (settings, key_name);
