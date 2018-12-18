@@ -139,25 +139,20 @@ struct _PrefsDialog {
   GtkWidget *sync_firefox_iframe_box;
   GtkWidget *sync_firefox_iframe_label;
   GtkWidget *sync_firefox_account_box;
-  GtkWidget *sync_firefox_account_label;
+  GtkWidget *sync_firefox_account_row;
   GtkWidget *sync_sign_out_button;
   GtkWidget *sync_options_box;
   GtkWidget *sync_bookmarks_checkbutton;
   GtkWidget *sync_passwords_checkbutton;
   GtkWidget *sync_history_checkbutton;
   GtkWidget *sync_open_tabs_checkbutton;
-  GtkWidget *sync_frequency_5_min_radiobutton;
-  GtkWidget *sync_frequency_15_min_radiobutton;
-  GtkWidget *sync_frequency_30_min_radiobutton;
-  GtkWidget *sync_frequency_60_min_radiobutton;
+  GtkWidget *sync_frequency_row;
   GtkWidget *sync_now_button;
   GtkWidget *synced_tabs_button;
   GtkWidget *sync_device_name_entry;
   GtkWidget *sync_device_name_change_button;
   GtkWidget *sync_device_name_save_button;
   GtkWidget *sync_device_name_cancel_button;
-  GtkWidget *sync_last_sync_time_box;
-  GtkWidget *sync_last_sync_time_label;
 
   WebKitWebView *fxa_web_view;
   WebKitUserContentManager *fxa_manager;
@@ -171,6 +166,8 @@ enum {
 };
 
 G_DEFINE_TYPE (PrefsDialog, prefs_dialog, GTK_TYPE_DIALOG)
+
+static const guint sync_frequency_minutes[] = { 5, 15, 30, 60 };
 
 static void
 prefs_dialog_finalize (GObject *object)
@@ -240,8 +237,7 @@ sync_set_last_sync_time (PrefsDialog *dialog)
      */
     char *text = g_strdup_printf (_("Last synchronized: %s"), time);
 
-    gtk_label_set_text (GTK_LABEL (dialog->sync_last_sync_time_label), text);
-    gtk_widget_set_visible (dialog->sync_last_sync_time_box, TRUE);
+    hdy_action_row_set_subtitle (HDY_ACTION_ROW (dialog->sync_firefox_account_row), text);
 
     g_free (text);
     g_free (time);
@@ -296,12 +292,8 @@ sync_secrets_store_finished_cb (EphySyncService *service,
   g_assert (EPHY_IS_PREFS_DIALOG (dialog));
 
   if (!error) {
-    /* Show sync options panel. */
-    char *user = g_strdup_printf ("<b>%s</b>", ephy_sync_utils_get_sync_user ());
-    /* Translators: the %s refers to the email of the currently logged in user. */
-    char *text = g_strdup_printf (_("Logged in as %s"), user);
-
-    gtk_label_set_markup (GTK_LABEL (dialog->sync_firefox_account_label), text);
+    hdy_action_row_set_title (HDY_ACTION_ROW (dialog->sync_firefox_account_row),
+                              ephy_sync_utils_get_sync_user ());
     gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
                           dialog->sync_firefox_iframe_box);
     gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
@@ -310,9 +302,6 @@ sync_secrets_store_finished_cb (EphySyncService *service,
     gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
                         dialog->sync_options_box,
                         FALSE, FALSE, 0);
-
-    g_free (text);
-    g_free (user);
   } else {
     /* Display the error message and reload the iframe. */
     sync_sign_in_details_show (dialog, error->message);
@@ -577,6 +566,7 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
   WebKitWebsiteDataManager *manager;
   WebKitWebContext *embed_context;
   WebKitWebContext *sync_context;
+  GtkWidget *frame;
   const char *script;
 
   if (!dialog->fxa_web_view) {
@@ -626,12 +616,16 @@ sync_setup_firefox_iframe (PrefsDialog *dialog)
                                                           "user-content-manager", dialog->fxa_manager,
                                                           "settings", ephy_embed_prefs_get_settings (),
                                                           "web-context", sync_context,
+                                                          "height-request", 450,
                                                           NULL));
     gtk_widget_set_visible (GTK_WIDGET (dialog->fxa_web_view), TRUE);
-    gtk_widget_set_size_request (GTK_WIDGET (dialog->fxa_web_view), 450, 450);
+    frame = gtk_frame_new (NULL);
+    gtk_widget_set_visible (frame, TRUE);
+    gtk_container_add (GTK_CONTAINER (frame),
+                       GTK_WIDGET (dialog->fxa_web_view));
     gtk_box_pack_start (GTK_BOX (dialog->sync_firefox_iframe_box),
-                      GTK_WIDGET (dialog->fxa_web_view),
-                      FALSE, FALSE, 0);
+                        frame,
+                        FALSE, FALSE, 0);
 
     g_object_unref (sync_context);
   }
@@ -657,7 +651,7 @@ on_sync_sign_out_button_clicked (GtkWidget   *button,
   gtk_box_pack_start (GTK_BOX (dialog->sync_page_box),
                       dialog->sync_firefox_iframe_box,
                       FALSE, FALSE, 0);
-  gtk_widget_set_visible (dialog->sync_last_sync_time_box, FALSE);
+  hdy_action_row_set_subtitle (HDY_ACTION_ROW (dialog->sync_firefox_account_row), NULL);
 }
 
 static void
@@ -998,8 +992,6 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, start_in_incognito_mode_switch);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_folder_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, download_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, ask_on_download_switch);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, start_in_incognito_mode_switch);
 
   /* fonts & style */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, use_gnome_fonts_row);
@@ -1035,25 +1027,20 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_iframe_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_iframe_label);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_account_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_account_label);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_firefox_account_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_sign_out_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_options_box);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_bookmarks_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_passwords_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_history_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_open_tabs_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_5_min_radiobutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_15_min_radiobutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_30_min_radiobutton);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_60_min_radiobutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_frequency_row);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_now_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, synced_tabs_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_entry);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_change_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_save_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_device_name_cancel_button);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_last_sync_time_box);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_last_sync_time_label);
 
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_icon_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, on_webapp_entry_changed);
@@ -1728,10 +1715,18 @@ sync_frequency_get_mapping (GValue   *value,
                             GVariant *variant,
                             gpointer  user_data)
 {
-  if (GPOINTER_TO_UINT (user_data) == g_variant_get_uint32 (variant))
-    g_value_set_boolean (value, TRUE);
+  uint minutes = g_variant_get_uint32 (variant);
 
-  return TRUE;
+  for (gint i = 0; i < (gint) G_N_ELEMENTS (sync_frequency_minutes); i++) {
+    if (sync_frequency_minutes[i] != minutes)
+      continue;
+
+    g_value_set_int (value, i);
+
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 static GVariant *
@@ -1739,10 +1734,12 @@ sync_frequency_set_mapping (const GValue       *value,
                             const GVariantType *expected_type,
                             gpointer            user_data)
 {
-  if (!g_value_get_boolean (value))
+  gint i = g_value_get_int (value);
+
+  if (i >= (gint) G_N_ELEMENTS (sync_frequency_minutes))
     return NULL;
 
-  return g_variant_new_uint32 (GPOINTER_TO_UINT (user_data));
+  return g_variant_new_uint32 (sync_frequency_minutes[i]);
 }
 
 static gboolean
@@ -2286,6 +2283,32 @@ setup_language_page (PrefsDialog *dialog)
   create_language_section (dialog);
 }
 
+static GListModel *
+create_sync_frequency_minutes_model ()
+{
+  GListStore *list_store = g_list_store_new (HDY_TYPE_VALUE_OBJECT);
+  HdyValueObject *obj;
+  g_auto(GValue) value = G_VALUE_INIT;
+  guint i;
+
+  g_value_init (&value, G_TYPE_UINT);
+
+  for (i = 0; i < G_N_ELEMENTS (sync_frequency_minutes); i++) {
+    g_value_set_uint (&value, sync_frequency_minutes[i]);
+    obj = hdy_value_object_new (&value);
+    g_list_store_insert (list_store, i, obj);
+    g_clear_object (&obj);
+  }
+
+  return G_LIST_MODEL (list_store);
+}
+
+static gchar *
+get_sync_frequency_minutes_name (HdyValueObject *value)
+{
+  return g_strdup_printf ("%u min", g_value_get_uint (hdy_value_object_get_value (value)));
+}
+
 static void
 setup_sync_page (PrefsDialog *dialog)
 {
@@ -2293,6 +2316,7 @@ setup_sync_page (PrefsDialog *dialog)
   GSettings *sync_settings = ephy_settings_get (EPHY_PREFS_SYNC_SCHEMA);
   char *user = ephy_sync_utils_get_sync_user ();
   char *name = ephy_sync_utils_get_device_name ();
+  g_autoptr(GListModel) sync_frequency_minutes_model = create_sync_frequency_minutes_model ();
 
   gtk_entry_set_text (GTK_ENTRY (dialog->sync_device_name_entry), name);
 
@@ -2303,17 +2327,10 @@ setup_sync_page (PrefsDialog *dialog)
     gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
                           dialog->sync_options_box);
   } else {
-    char *email = g_strdup_printf ("<b>%s</b>", user);
-    /* Translators: the %s refers to the email of the currently logged in user. */
-    char *text = g_strdup_printf (_("Logged in as %s"), email);
-
     sync_set_last_sync_time (dialog);
-    gtk_label_set_markup (GTK_LABEL (dialog->sync_firefox_account_label), text);
+    hdy_action_row_set_title (HDY_ACTION_ROW (dialog->sync_firefox_account_row), user);
     gtk_container_remove (GTK_CONTAINER (dialog->sync_page_box),
                           dialog->sync_firefox_iframe_box);
-
-    g_free (email);
-    g_free (text);
   }
 
   g_settings_bind (sync_settings,
@@ -2336,42 +2353,20 @@ setup_sync_page (PrefsDialog *dialog)
                    dialog->sync_open_tabs_checkbutton,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
+
+  hdy_combo_row_bind_name_model (HDY_COMBO_ROW (dialog->sync_frequency_row),
+                                 sync_frequency_minutes_model,
+                                 (HdyComboRowGetNameFunc) get_sync_frequency_minutes_name,
+                                 NULL,
+                                 NULL);
   g_settings_bind_with_mapping (sync_settings,
                                 EPHY_PREFS_SYNC_FREQUENCY,
-                                dialog->sync_frequency_5_min_radiobutton,
-                                "active",
+                                dialog->sync_frequency_row,
+                                "selected-index",
                                 G_SETTINGS_BIND_DEFAULT,
                                 sync_frequency_get_mapping,
                                 sync_frequency_set_mapping,
-                                GINT_TO_POINTER (5),
-                                NULL);
-  g_settings_bind_with_mapping (sync_settings,
-                                EPHY_PREFS_SYNC_FREQUENCY,
-                                dialog->sync_frequency_15_min_radiobutton,
-                                "active",
-                                G_SETTINGS_BIND_DEFAULT,
-                                sync_frequency_get_mapping,
-                                sync_frequency_set_mapping,
-                                GINT_TO_POINTER (15),
-                                NULL);
-  g_settings_bind_with_mapping (sync_settings,
-                                EPHY_PREFS_SYNC_FREQUENCY,
-                                dialog->sync_frequency_30_min_radiobutton,
-                                "active",
-                                G_SETTINGS_BIND_DEFAULT,
-                                sync_frequency_get_mapping,
-                                sync_frequency_set_mapping,
-                                GINT_TO_POINTER (30),
-                                NULL);
-  g_settings_bind_with_mapping (sync_settings,
-                                EPHY_PREFS_SYNC_FREQUENCY,
-                                dialog->sync_frequency_60_min_radiobutton,
-                                "active",
-                                G_SETTINGS_BIND_DEFAULT,
-                                sync_frequency_get_mapping,
-                                sync_frequency_set_mapping,
-                                GINT_TO_POINTER (60),
-                                NULL);
+                                NULL, NULL);
 
   g_object_bind_property (dialog->sync_open_tabs_checkbutton, "active",
                           dialog->synced_tabs_button, "sensitive",
