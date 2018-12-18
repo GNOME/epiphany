@@ -128,7 +128,7 @@ struct _PrefsDialog {
   GtkWidget *lang_remove_button;
   GtkWidget *lang_up_button;
   GtkWidget *lang_down_button;
-  GtkWidget *enable_spell_checking_checkbutton;
+  GtkWidget *enable_spell_checking_switch;
 
   GtkDialog *add_lang_dialog;
   GtkTreeView *add_lang_treeview;
@@ -1028,7 +1028,7 @@ prefs_dialog_class_init (PrefsDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_remove_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_up_button);
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, lang_down_button);
-  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_spell_checking_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, PrefsDialog, enable_spell_checking_switch);
 
   /* sync */
   gtk_widget_class_bind_template_child (widget_class, PrefsDialog, sync_page_box);
@@ -2279,7 +2279,7 @@ setup_language_page (PrefsDialog *dialog)
 
   g_settings_bind (web_settings,
                    EPHY_PREFS_WEB_ENABLE_SPELL_CHECKING,
-                   dialog->enable_spell_checking_checkbutton,
+                   dialog->enable_spell_checking_switch,
                    "active",
                    G_SETTINGS_BIND_DEFAULT);
 
