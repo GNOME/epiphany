@@ -923,39 +923,24 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="sync_page_box">
+              <object class="HdyPreferencesPage" id="sync_page">
+                <property name="icon_name">emblem-synchronizing-symbolic</property>
+                <property name="title" translatable="yes">Sync</property>
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">12</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="HdyPreferencesGroup" id="sync_page_box">
+                    <property name="description" translatable="yes">Sign in with your Firefox account to sync your data with Web and Firefox on other computers. Web is not Firefox and is not produced or endorsed by Mozilla.</property>
+                    <property name="title" translatable="yes">Firefox Sync</property>
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Firefox Sync</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="sync_firefox_iframe_box">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
-                        <property name="margin-start">12</property>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
+                          <object class="GtkLabel" id="sync_firefox_iframe_label">
+                            <property name="visible">False</property>
                             <property name="halign">start</property>
-                            <property name="max-width-chars">48</property>
-                            <property name="wrap">True</property>
-                            <property name="label" translatable="yes">Sign in with your Firefox account to sync your data with Web and Firefox on other computers. Web is not Firefox and is not produced or endorsed by Mozilla.</property>
                           </object>
                         </child>
                       </object>
@@ -963,282 +948,163 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox" id="sync_firefox_iframe_box">
+                  <object class="HdyPreferencesGroup" id="sync_firefox_account_box">
+                    <property name="title" translatable="yes">Firefox Account</property>
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <property name="halign">center</property>
                     <child>
-                      <object class="GtkLabel" id="sync_firefox_iframe_label">
-                        <property name="visible">False</property>
-                        <property name="halign">start</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="sync_firefox_account_box">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkBox">
+                      <object class="HdyActionRow" id="sync_firefox_account_row">
+                        <property name="subtitle" translatable="yes">Logged in</property>
+                        <property name="use_underline">True</property>
                         <property name="visible">True</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="halign">start</property>
-                            <property name="hexpand">True</property>
-                            <property name="label" translatable="yes">Firefox Account</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                        </child>
-                        <child>
+                        <child type="action">
                           <object class="GtkButton" id="sync_sign_out_button">
                             <property name="label" translatable="yes">Sign _out</property>
-                            <property name="visible">True</property>
                             <property name="use-underline">True</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
                             <signal name="clicked" handler="on_sync_sign_out_button_clicked"/>
                           </object>
                         </child>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <property name="margin-start">12</property>
-                        <child>
-                          <object class="GtkLabel" id="sync_firefox_account_label">
-                            <property name="visible">True</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox" id="sync_options_box">
+                  <object class="HdyPreferencesGroup" id="sync_options_box">
+                    <property name="title" translatable="yes">Sync Options</property>
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">sync_bookmarks_checkbutton</property>
+                        <property name="title" translatable="yes">Sync _Bookmarks</property>
+                        <property name="use_underline">True</property>
                         <property name="visible">True</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Sync Options</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <child type="prefix">
+                          <object class="GtkCheckButton" id="sync_bookmarks_checkbutton">
+                            <property name="use-underline">True</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">sync_passwords_checkbutton</property>
+                        <property name="title" translatable="yes">Sync _Passwords</property>
+                        <property name="use_underline">True</property>
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">4</property>
-                        <property name="margin-start">12</property>
-                        <child>
-                          <object class="GtkBox">
+                        <child type="prefix">
+                          <object class="GtkCheckButton" id="sync_passwords_checkbutton">
+                            <property name="use-underline">True</property>
+                            <property name="valign">center</property>
                             <property name="visible">True</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="hexpand">True</property>
-                                <property name="label" translatable="yes">Collections</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="synced_tabs_button">
-                                <property name="label" translatable="yes">S_ynced tabs</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_synced_tabs_button_clicked"/>
-                              </object>
-                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">sync_history_checkbutton</property>
+                        <property name="title" translatable="yes">Sync _History</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="prefix">
+                          <object class="GtkCheckButton" id="sync_history_checkbutton">
+                            <property name="use-underline">True</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable_widget">sync_open_tabs_checkbutton</property>
+                        <property name="title" translatable="yes">Sync Open _Tabs</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="prefix">
+                          <object class="GtkCheckButton" id="sync_open_tabs_checkbutton">
+                            <property name="use-underline">True</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                        <child type="action">
+                          <object class="GtkButton" id="synced_tabs_button">
+                            <property name="label" translatable="yes">S_ynced tabs</property>
+                            <property name="use-underline">True</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                            <signal name="clicked" handler="on_sync_synced_tabs_button_clicked"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyComboRow" id="sync_frequency_row">
+                        <property name="title" translatable="yes">Frequency</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkSeparator">
+                            <property name="margin_bottom">8</property>
+                            <property name="margin_top">8</property>
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                        <child type="action">
+                          <object class="GtkButton" id="sync_now_button">
+                            <property name="label" translatable="yes">Sync _now</property>
+                            <property name="use-underline">True</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                            <signal name="clicked" handler="on_sync_sync_now_button_clicked"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="HdyActionRow">
+                        <property name="activatable">False</property>
+                        <property name="title" translatable="yes">Device name</property>
+                        <property name="use_underline">True</property>
+                        <property name="visible">True</property>
+                        <child type="action">
+                          <object class="GtkButton" id="sync_device_name_change_button">
+                            <property name="label" translatable="yes">_Change</property>
+                            <property name="use-underline">True</property>
+                            <property name="valign">center</property>
+                            <property name="visible">True</property>
+                            <signal name="clicked" handler="on_sync_device_name_change_button_clicked"/>
+                          </object>
+                        </child>
+                        <child type="action">
+                          <object class="GtkButton" id="sync_device_name_save_button">
+                            <property name="label" translatable="yes">_Save</property>
+                            <property name="use-underline">True</property>
+                            <property name="valign">center</property>
+                            <property name="visible">False</property>
+                            <signal name="clicked" handler="on_sync_device_name_save_button_clicked"/>
+                          </object>
+                        </child>
+                        <child type="action">
+                          <object class="GtkButton" id="sync_device_name_cancel_button">
+                            <property name="label" translatable="yes">_Cancel</property>
+                            <property name="use-underline">True</property>
+                            <property name="valign">center</property>
+                            <property name="visible">False</property>
+                            <signal name="clicked" handler="on_sync_device_name_cancel_button_clicked"/>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="spacing">6</property>
+                          <object class="GtkEntry" id="sync_device_name_entry">
+                            <property name="sensitive">False</property>
                             <property name="margin-start">12</property>
-                            <child>
-                              <object class="GtkCheckButton" id="sync_bookmarks_checkbutton">
-                                <property name="label" translatable="yes">_Bookmarks</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="sync_passwords_checkbutton">
-                                <property name="label" translatable="yes">_Passwords</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="sync_history_checkbutton">
-                                <property name="label" translatable="yes">_History</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="sync_open_tabs_checkbutton">
-                                <property name="label" translatable="yes">Open _Tabs</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
+                            <property name="margin-end">12</property>
+                            <property name="margin-top">8</property>
+                            <property name="margin-bottom">8</property>
                             <property name="visible">True</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="hexpand">True</property>
-                                <property name="label" translatable="yes">Frequency</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="sync_now_button">
-                                <property name="label" translatable="yes">Sync _now</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_sync_now_button_clicked"/>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">6</property>
-                            <property name="margin-start">12</property>
-                            <child>
-                              <object class="GtkBox">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkRadioButton" id="sync_frequency_5_min_radiobutton">
-                                    <property name="label" translatable="yes">_5 min</property>
-                                    <property name="visible">True</property>
-                                    <property name="use-underline">True</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="sync_frequency_15_min_radiobutton">
-                                    <property name="label" translatable="yes">_15 min</property>
-                                    <property name="visible">True</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="group">sync_frequency_5_min_radiobutton</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="sync_frequency_30_min_radiobutton">
-                                    <property name="label" translatable="yes">_30 min</property>
-                                    <property name="visible">True</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="group">sync_frequency_5_min_radiobutton</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="sync_frequency_60_min_radiobutton">
-                                    <property name="label" translatable="yes">_60 min</property>
-                                    <property name="visible">True</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="group">sync_frequency_5_min_radiobutton</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="sync_last_sync_time_box">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkLabel" id="sync_last_sync_time_label">
-                                    <property name="visible">True</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">True</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="hexpand">True</property>
-                                <property name="label" translatable="yes">Device name</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="sync_device_name_change_button">
-                                <property name="label" translatable="yes">_Change</property>
-                                <property name="visible">True</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_device_name_change_button_clicked"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="sync_device_name_save_button">
-                                <property name="label" translatable="yes">_Save</property>
-                                <property name="visible">False</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_device_name_save_button_clicked"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="sync_device_name_cancel_button">
-                                <property name="label" translatable="yes">_Cancel</property>
-                                <property name="visible">False</property>
-                                <property name="use-underline">True</property>
-                                <signal name="clicked" handler="on_sync_device_name_cancel_button_clicked"/>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="spacing">6</property>
-                            <property name="margin-start">12</property>
-                            <child>
-                              <object class="GtkEntry" id="sync_device_name_entry">
-                                <property name="visible">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="halign">start</property>
-                                <property name="width-request">250</property>
-                                <property name="sensitive">False</property>
-                              </object>
-                            </child>
                           </object>
                         </child>
                       </object>
