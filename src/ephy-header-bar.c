@@ -215,6 +215,7 @@ ephy_header_bar_constructed (GObject *object)
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "export-bookmarks-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "application-manager-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "override-text-encoding-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "override-text-encoding-button")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "keyboard-shortcuts-button")));
@@ -222,6 +223,7 @@ ephy_header_bar_constructed (GObject *object)
   } else if (ephy_is_running_inside_flatpak ()) {
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-separator")));
     gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "save-as-application-button")));
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "application-manager-button")));
   }
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
   g_object_unref (builder);
