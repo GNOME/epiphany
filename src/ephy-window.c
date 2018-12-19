@@ -819,6 +819,7 @@ static const GActionEntry tab_entries [] = {
   { "close-others", window_cmd_tabs_close_others },
   { "reload", window_cmd_tabs_reload },
   { "reopen", window_cmd_tabs_reopen_closed_tab },
+  { "reload-all", window_cmd_tabs_reload_all_tabs },
 };
 
 static const GActionEntry toolbar_entries [] = {
@@ -2462,6 +2463,10 @@ show_notebook_popup_menu (GtkNotebook    *notebook,
 
     action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
                                          "close-others");
+    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 1);
+
+    action = g_action_map_lookup_action (G_ACTION_MAP (action_group),
+                                         "reload-all");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), n_pages > 1);
 
     gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *)event);
