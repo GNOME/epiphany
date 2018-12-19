@@ -27,8 +27,8 @@
 
 G_BEGIN_DECLS
 
-#define ZOOM_MINIMAL  (0.5)
-#define ZOOM_MAXIMAL  (2.5)
+#define ZOOM_MINIMAL  (0.30f)
+#define ZOOM_MAXIMAL  (3.00f)
 #define ZOOM_IN       (-1.0)
 #define ZOOM_OUT      (-2.0)
 
