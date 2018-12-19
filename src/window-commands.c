@@ -2519,3 +2519,20 @@ window_cmd_toggle_reader_mode (GSimpleAction *action,
 
   ephy_web_view_toggle_reader_mode (web_view, !active);
 }
+
+void
+window_cmd_open_application_manager (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
+{
+  EphyWindow *window = EPHY_WINDOW (user_data);
+  EphyEmbed *embed;
+  EphyWebView *web_view;
+
+  embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
+  g_assert (embed != NULL);
+
+  web_view = ephy_embed_get_web_view (embed);
+
+  ephy_web_view_load_url (web_view, "about:applications");
+}
