@@ -8,6 +8,13 @@ project('epiphany', 'c',
 gnome = import('gnome')
 i18n = import('i18n')
 
+r = run_command('grep', '-Po', '^NAME=\K.*', '/etc/os-release')
+if r.returncode() == 0
+  distributor_name = r.stdout().strip()
+else
+  distributor_name = 'GNOME Web'
+endif
+
 prefix = get_option('prefix')
 datadir = join_paths(prefix, get_option('datadir'))
 libdir = join_paths(prefix, get_option('libdir'))
@@ -24,7 +31,7 @@ iso_codes_prefix = iso_codes.get_pkgconfig_variable('prefix')
 
 conf = configuration_data()
 conf.set_quoted('BUILD_ROOT', meson.build_root())
-conf.set_quoted('DISTRIBUTOR_NAME', get_option('distributor_name'))
+conf.set_quoted('DISTRIBUTOR_NAME', distributor_name)
 conf.set_quoted('EPHY_WEB_EXTENSIONS_DIR', webextensionsdir)
 conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 conf.set_quoted('ISO_CODES_PREFIX', iso_codes_prefix)
