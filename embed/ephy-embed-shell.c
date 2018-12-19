@@ -801,16 +801,13 @@ ephy_embed_shell_get_global_gsb_service (EphyEmbedShell *shell)
 
   if (priv->global_gsb_service == NULL) {
     char *api_key;
-    char *dot_dir;
     char *db_path;
 
     api_key = g_settings_get_string (EPHY_SETTINGS_WEB, EPHY_PREFS_WEB_GSB_API_KEY);
-    dot_dir = ephy_default_dot_dir ();
-    db_path = g_build_filename (dot_dir, EPHY_GSB_FILE, NULL);
+    db_path = g_build_filename (ephy_cache_dir (), EPHY_GSB_FILE, NULL);
     priv->global_gsb_service = ephy_gsb_service_new (api_key, db_path);
 
     g_free (api_key);
-    g_free (dot_dir);
     g_free (db_path);
   }
 
@@ -1128,18 +1125,7 @@ ephy_embed_shell_create_web_context (EphyEmbedShell *shell)
 static char *
 adblock_filters_dir (EphyEmbedShell *shell)
 {
-  EphyEmbedShellPrivate *priv = ephy_embed_shell_get_instance_private (shell);
-  char *result;
-
-  if (priv->mode == EPHY_EMBED_SHELL_MODE_APPLICATION) {
-    char *default_dot_dir = ephy_default_dot_dir ();
-
-    result = g_build_filename (default_dot_dir, "adblock", NULL);
-    g_free (default_dot_dir);
-  } else
-    result = g_build_filename (ephy_dot_dir (), "adblock", NULL);
-
-  return result;
+  return g_build_filename (ephy_cache_dir (), "adblock", NULL);
 }
 
 static void
