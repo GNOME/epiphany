@@ -69,6 +69,7 @@ static GHashTable *mime_table;
 
 static gboolean keep_directory;
 static char *dot_dir;
+static char *cache_dir;
 static char *tmp_dir;
 static EphyProfileDirType dot_dir_type;
 
@@ -231,6 +232,21 @@ ephy_dot_dir (void)
 }
 
 /**
+ * ephy_cache_dir:
+ *
+ * Gets Epiphany's cache directory, usually .cache/epiphany
+ * under user's homedir.
+ *
+ * Returns: the full path to Epiphany's cache directory
+ **/
+const char *
+ephy_cache_dir (void)
+{
+  return cache_dir;
+}
+
+
+/**
  * ephy_dot_dir_is_default:
  *
  * Returns whether the dot directory in use is the default one, found in
@@ -270,6 +286,21 @@ ephy_default_dot_dir (void)
   return dot_dir_type == EPHY_PROFILE_DIR_TEST ?
     g_strdup (ephy_dot_dir ()) :
     g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
+}
+
+/**
+ * ephy_default_cache_dir:
+ *
+ * Get the path to the default cache directory found in ~/.cache
+ *
+ * Returns: a new allocated string, free with g_free() when done.
+ */
+char *
+ephy_default_cache_dir (void)
+{
+  return dot_dir_type == EPHY_PROFILE_DIR_TEST ?
+    g_build_filename (ephy_dot_dir (), "cache", NULL) :
+    g_build_filename (g_get_user_cache_dir (), "epiphany", NULL);
 }
 
 /**
@@ -313,8 +344,11 @@ ephy_file_helpers_init (const char          *profile_dir,
     }
 
     g_autofree char *app_file = g_build_filename (profile_dir, ".app", NULL);
-    if (g_file_test (app_file, G_FILE_TEST_EXISTS))
+    if (g_file_test (app_file, G_FILE_TEST_EXISTS)) {
+      const char *app_name = ephy_web_application_get_program_name_from_profile_directory (dot_dir);
+      cache_dir = g_build_filename (g_get_user_cache_dir (), app_name, NULL);
       dot_dir_type = EPHY_PROFILE_DIR_WEB_APP;
+    }
   } else if (private_profile) {
     if (ephy_file_tmp_dir () == NULL) {
       g_set_error (error,
@@ -328,6 +362,7 @@ ephy_file_helpers_init (const char          *profile_dir,
     dot_dir = g_build_filename (ephy_file_tmp_dir (),
                                 "epiphany",
                                 NULL);
+    cache_dir = g_build_filename (dot_dir, "cache", NULL);
     if (flags & EPHY_FILE_HELPERS_TESTING_MODE)
       dot_dir_type = EPHY_PROFILE_DIR_TEST;
   }
@@ -337,8 +372,14 @@ ephy_file_helpers_init (const char          *profile_dir,
     dot_dir = ephy_default_dot_dir ();
   }
 
-  if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS)
+  if (cache_dir == NULL)
+    cache_dir = ephy_default_cache_dir ();
+
+  if (flags & EPHY_FILE_HELPERS_ENSURE_EXISTS) {
     ret = ephy_ensure_dir_exists (ephy_dot_dir (), error);
+    ephy_ensure_dir_exists (ephy_cache_dir (), NULL);
+  }
+
 
   if (steal_data_from_profile && profile_dir) {
     guint i;
@@ -395,6 +436,8 @@ ephy_file_helpers_shutdown (void)
 
   g_free (dot_dir);
   dot_dir = NULL;
+
+  g_clear_pointer (&cache_dir, g_free);
 
   if (tmp_dir != NULL) {
     if (!keep_directory) {
