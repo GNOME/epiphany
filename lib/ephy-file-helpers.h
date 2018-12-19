@@ -54,7 +54,9 @@ gboolean           ephy_file_helpers_init                   (const char         
 const char *       ephy_dot_dir                             (void);
 gboolean           ephy_dot_dir_is_default                  (void);
 gboolean           ephy_dot_dir_is_web_application          (void);
+const char *       ephy_cache_dir                           (void);
 char       *       ephy_default_dot_dir                     (void);
+char       *       ephy_default_cache_dir                   (void);
 void               ephy_file_helpers_shutdown               (void);
 char       *       ephy_file_get_downloads_dir              (void);
 char       *       ephy_file_desktop_dir                    (void);
