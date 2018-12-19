@@ -1214,10 +1214,7 @@ ephy_embed_shell_startup (GApplication *application)
   priv->password_manager = ephy_password_manager_new ();
 
   /* Favicon Database */
-  if (priv->mode == EPHY_EMBED_SHELL_MODE_PRIVATE)
-    favicon_db_path = g_build_filename (ephy_dot_dir (), "icondatabase", NULL);
-  else
-    favicon_db_path = g_build_filename (g_get_user_cache_dir (), "epiphany", "icondatabase", NULL);
+  favicon_db_path = g_build_filename (ephy_cache_dir (), "icondatabase", NULL);
   webkit_web_context_set_favicon_database_directory (priv->web_context, favicon_db_path);
   g_free (favicon_db_path);
 
