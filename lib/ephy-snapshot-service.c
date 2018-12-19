@@ -122,8 +122,7 @@ validate_thumbnail_path (const char *path,
 static char *
 thumbnail_directory (void)
 {
-  return g_build_filename (g_get_user_cache_dir (),
-                           "epiphany",
+  return g_build_filename (ephy_cache_dir (),
                            "thumbnails",
                            NULL);
 }
