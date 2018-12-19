@@ -2676,6 +2676,8 @@ static void
 ephy_window_close_tab (EphyWindow *window,
                        EphyEmbed  *tab)
 {
+  gboolean keep_window_open;
+
   /* This function can be called many times for the same embed if the
    * web process (or network process) has hung. E.g. the user could
    * click the close button several times. This is difficult to guard
@@ -2697,6 +2699,11 @@ ephy_window_close_tab (EphyWindow *window,
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab), "ephy-window-close-tab-closed")))
     return;
 
+  keep_window_open = g_settings_get_boolean (EPHY_SETTINGS_UI, EPHY_PREFS_UI_KEEP_WINDOW_OPEN);
+
+  if (keep_window_open && gtk_notebook_get_n_pages (window->notebook) == 1)
+    ephy_link_open (EPHY_LINK (window), NULL, NULL, EPHY_LINK_NEW_TAB);
+
   g_object_set_data (G_OBJECT (tab), "ephy-window-close-tab-closed", GINT_TO_POINTER (TRUE));
   gtk_widget_destroy (GTK_WIDGET (tab));
 
@@ -2706,7 +2713,7 @@ ephy_window_close_tab (EphyWindow *window,
    * tab, even if it wasn't at the start of this function.
    */
   if (!window->closing && gtk_notebook_get_n_pages (window->notebook) == 0)
-   gtk_widget_destroy (GTK_WIDGET (window));
+    gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 typedef struct {
