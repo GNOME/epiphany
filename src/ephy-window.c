@@ -3151,44 +3151,6 @@ sync_user_input_cb (EphyLocationController *action,
 }
 
 static void
-update_new_tab_button_visibility (EphyWindow *window)
-{
-  EphyActionBarEnd *header_bar_end;
-  EphyActionBarEnd *action_bar_end;
-  gboolean visible;
-
-  if (!gtk_widget_get_mapped (GTK_WIDGET (window)))
-    return;
-
-  visible = !gtk_notebook_get_show_tabs (window->notebook);
-  header_bar_end = ephy_header_bar_get_action_bar_end (EPHY_HEADER_BAR (window->header_bar));
-  action_bar_end = ephy_action_bar_get_action_bar_end (EPHY_ACTION_BAR (window->action_bar));
-
-  if (visible) {
-    ephy_action_bar_end_set_show_new_tab_button (header_bar_end, TRUE);
-    ephy_action_bar_end_set_show_new_tab_button (action_bar_end, TRUE);
-  } else {
-    /* Note the animation here doesn't actually work, since we hide the revealer
-     * right away. That's not ideal, but not much we can do about it, since
-     * hiding the revealer results in the location entry expanding, and that
-     * needs to happen immediately or it looks pretty bad, so we can't wait
-     * until the animation completes. Using the revealer is still worthwhile
-     * because the new tab button reveal animation is more important.
-     */
-    ephy_action_bar_end_set_show_new_tab_button (header_bar_end, FALSE);
-    ephy_action_bar_end_set_show_new_tab_button (action_bar_end, FALSE);
-  }
-}
-
-static void
-notebook_show_tabs_changed_cb (GtkNotebook *notebook,
-                               GParamSpec  *pspec,
-                               EphyWindow  *window)
-{
-  update_new_tab_button_visibility (window);
-}
-
-static void
 title_widget_lock_clicked_cb (EphyTitleWidget *title_widget,
                               GdkRectangle    *lock_position,
                               gpointer         user_data)
@@ -3368,8 +3330,6 @@ ephy_window_constructed (GObject *object)
   setup_tab_accels (window);
 
   window->notebook = setup_notebook (window);
-  g_signal_connect_object (window->notebook, "notify::show-tabs",
-                           G_CALLBACK (notebook_show_tabs_changed_cb), window, 0);
 
   /* Setup incognito mode style */
   mode = ephy_embed_shell_get_mode (ephy_embed_shell_get_default ());
@@ -3447,8 +3407,6 @@ ephy_window_constructed (GObject *object)
     ephy_action_change_sensitivity_flags (G_SIMPLE_ACTION (action),
                                           SENS_FLAG_CHROME, TRUE);
   }
-
-  update_new_tab_button_visibility (window);
 
   ephy_window_set_chrome (window, chrome);
 }

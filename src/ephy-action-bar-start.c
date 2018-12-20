@@ -42,6 +42,7 @@ struct _EphyActionBarStart {
   GtkWidget *combined_stop_reload_button;
   GtkWidget *combined_stop_reload_image;
   GtkWidget *homepage_button;
+  GtkWidget *new_tab_button;
 
   guint navigation_buttons_menu_timeout;
 };
@@ -490,6 +491,9 @@ ephy_action_bar_start_class_init (EphyActionBarStartClass *klass)
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarStart,
                                         homepage_button);
+  gtk_widget_class_bind_template_child (widget_class,
+                                        EphyActionBarStart,
+                                        new_tab_button);
 }
 
 static void
