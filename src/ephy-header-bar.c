@@ -237,6 +237,9 @@ ephy_header_bar_constructed (GObject *object)
       gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "help-button")));
   }
 
+  if (is_desktop_pantheon ())
+    gtk_widget_destroy (GTK_WIDGET (gtk_builder_get_object (builder, "about-button")));
+
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), page_menu_popover);
   g_object_unref (builder);
 
