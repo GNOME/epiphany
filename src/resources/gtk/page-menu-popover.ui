@@ -271,8 +271,9 @@
             <property name="visible">True</property>
           </object>
         </child>
+        <!-- FRAGILE: This button is manually removed for app mode in ephy-header-bar.c. -->
         <child>
-          <object class="GtkModelButton">
+          <object class="GtkModelButton" id="about-button">
             <property name="can_focus">True</property>
             <property name="text" translatable="yes">_About Web</property>
             <property name="action-name">app.about</property>
