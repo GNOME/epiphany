@@ -30,7 +30,6 @@ struct _EphyActionBarEnd {
   GtkBox parent_instance;
 
   GtkWidget *bookmarks_button;
-  GtkWidget *new_tab_revealer;
   GtkWidget *new_tab_button;
   GtkWidget *downloads_revealer;
   GtkWidget *downloads_button;
@@ -109,9 +108,6 @@ ephy_action_bar_end_class_init (EphyActionBarEndClass *klass)
                                         bookmarks_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,
-                                        new_tab_revealer);
-  gtk_widget_class_bind_template_child (widget_class,
-                                        EphyActionBarEnd,
                                         new_tab_button);
   gtk_widget_class_bind_template_child (widget_class,
                                         EphyActionBarEnd,
@@ -169,14 +165,6 @@ ephy_action_bar_end_set_show_bookmarks_button (EphyActionBarEnd *action_bar_end,
                                                gboolean          show)
 {
   gtk_widget_set_visible (action_bar_end->bookmarks_button, show);
-}
-
-void
-ephy_action_bar_end_set_show_new_tab_button (EphyActionBarEnd *action_bar_end,
-                                             gboolean          show)
-{
-  gtk_widget_set_visible (action_bar_end->new_tab_revealer, show);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (action_bar_end->new_tab_revealer), show);
 }
 
 GtkWidget *
