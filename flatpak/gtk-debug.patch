@@ -1,0 +1,39 @@
+From a87640c983103d578ec9750a6e882c6b943c1047 Mon Sep 17 00:00:00 2001
+From: Carlos Garnacho <carlosg@gnome.org>
+Date: Mon, 17 Dec 2018 20:05:17 +0100
+Subject: [PATCH] blah
+
+---
+ gdk/wayland/gdkdevice-wayland.c | 1 +
+ gtk/gtkmain.c                   | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/gdk/wayland/gdkdevice-wayland.c b/gdk/wayland/gdkdevice-wayland.c
+index fb3cfcb505..3837a61498 100644
+--- a/gdk/wayland/gdkdevice-wayland.c
++++ b/gdk/wayland/gdkdevice-wayland.c
+@@ -2283,6 +2283,7 @@ keyboard_handle_key (void               *data,
+   seat->keyboard_key_serial = serial;
+   seat->repeat_count = 0;
+   _gdk_wayland_display_update_serial (display, serial);
++  g_message ("Handle wl_keyboard.key %d, state: %d", key + 8, state_w);
+   deliver_key_event (data, time, key + 8, state_w, FALSE);
+
+ }
+diff --git a/gtk/gtkmain.c b/gtk/gtkmain.c
+index 12b5d6659d..1e2ab1b58c 100644
+--- a/gtk/gtkmain.c
++++ b/gtk/gtkmain.c
+@@ -1789,6 +1789,10 @@ gtk_main_do_event (GdkEvent *event)
+   if (check_event_in_child_popover (event_widget, grab_widget))
+     grab_widget = event_widget;
+
++  if (event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
++    g_message ("Handle key event %d in GTK, target widget %p (%s)",
++               event->type, grab_widget, gtk_widget_get_name (grab_widget));
++
+   /* If the widget receiving events is actually blocked by another
+    * device GTK+ grab
+    */
+--
+2.19.2
