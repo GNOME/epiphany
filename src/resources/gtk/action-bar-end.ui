@@ -25,34 +25,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkRevealer" id="new_tab_revealer">
-        <property name="visible">False</property>
-        <property name="transition-type">crossfade</property>
-        <child>
-          <object class="GtkButton" id="new_tab_button">
-            <property name="visible">True</property>
-            <property name="action-name">win.new-tab</property>
-            <property name="valign">center</property>
-            <!-- Translators: tooltip for the new tab button -->
-            <property name="tooltip_text" translatable="yes">Open a new tab</property>
-            <style>
-              <class name="image-button"/>
-            </style>
-            <child>
-              <object class="GtkImage" id="new_tab_image">
-                <property name="visible">True</property>
-                <property name="icon-name">tab-new-symbolic</property>
-                <property name="icon-size">1</property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="pack-type">end</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkRevealer" id="downloads_revealer">
         <property name="visible">True</property>
         <property name="transition-type">crossfade</property>

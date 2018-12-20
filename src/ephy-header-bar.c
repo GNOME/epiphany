@@ -56,7 +56,6 @@ struct _EphyHeaderBar {
   GtkWidget *navigation_box;
   GtkWidget *reader_mode_revealer;
   GtkWidget *reader_mode_button;
-  GtkWidget *new_tab_revealer;
   GtkWidget *new_tab_button;
   GtkWidget *bookmarks_button;
   GtkWidget *page_menu_button;
@@ -112,8 +111,6 @@ sync_chromes_visibility (EphyHeaderBar *header_bar)
   ephy_action_bar_end_set_show_bookmarks_button (header_bar->action_bar_end,
                                                  chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
   gtk_widget_set_visible (header_bar->page_menu_button, chrome & EPHY_WINDOW_CHROME_MENU);
-  ephy_action_bar_end_set_show_new_tab_button (header_bar->action_bar_end,
-                                               chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
 
 static void
