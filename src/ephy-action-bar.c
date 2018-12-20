@@ -50,8 +50,6 @@ sync_chromes_visibility (EphyActionBar *action_bar)
                           chrome & EPHY_WINDOW_CHROME_HEADER_BAR);
   ephy_action_bar_end_set_show_bookmarks_button (action_bar->action_bar_end,
                                                  chrome & EPHY_WINDOW_CHROME_BOOKMARKS);
-  ephy_action_bar_end_set_show_new_tab_button (action_bar->action_bar_end,
-                                               chrome & EPHY_WINDOW_CHROME_TABSBAR);
 }
 
 static void
