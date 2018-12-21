@@ -21,6 +21,7 @@
 #include "config.h"
 #include "ephy-debug.h"
 #include "ephy-file-helpers.h"
+#include "ephy-flatpak-utils.h"
 #include "ephy-settings.h"
 
 #include <glib.h>
@@ -102,22 +103,24 @@ typedef struct {
   const char *key_value;
   const char *expected;
   GUserDirectory user_dir;
+  gboolean in_flatpak;
 } DownloadsDirTest;
 
 static const DownloadsDirTest downloads_tests[] =
 {
-  { "Desktop", NULL, G_USER_DIRECTORY_DESKTOP },
+  { "Desktop", NULL, G_USER_DIRECTORY_DESKTOP, TRUE },
 
-  { "Downloads", NULL, G_USER_DIRECTORY_DOWNLOAD },
-  { "invalid-keyword", NULL, G_USER_DIRECTORY_DOWNLOAD },
+  { "Downloads", NULL, G_USER_DIRECTORY_DOWNLOAD, TRUE },
+  { "invalid-keyword", NULL, G_USER_DIRECTORY_DOWNLOAD, TRUE },
 
-  { "/tmp/Downloads", "/tmp/Downloads", -1 },
+  { "/tmp/Downloads", "/tmp/Downloads", -1, FALSE },
 };
 
 static void
 test_ephy_file_get_downloads_dir (void)
 {
   guint i;
+  gboolean in_flatpak = ephy_is_running_inside_flatpak ();
 
   ephy_file_helpers_init (NULL, EPHY_FILE_HELPERS_PRIVATE_PROFILE, NULL);
 
@@ -127,6 +130,9 @@ test_ephy_file_get_downloads_dir (void)
     const char *expected_dir = NULL;
 
     test = downloads_tests[i];
+
+    if (in_flatpak && !test.in_flatpak)
+      continue;
 
     if (test.expected != NULL)
       expected_dir = test.expected;
