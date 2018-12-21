@@ -59,6 +59,20 @@
             ]
         },
         {
+            "name" : "glib-networking",
+            "config-opts" : [
+                "--libdir=/app/lib"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/glib-networking.git"
+                }
+            ]
+        },
+        {
             "name" : "gtk",
             "config-opts" : [
                 "--libdir=/app/lib"
