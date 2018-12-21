@@ -361,6 +361,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/src/ephy-session/load",
                    test_ephy_session_load);
 
+#if 0
   g_test_add_func ("/src/ephy-session/clear",
                    test_ephy_session_clear);
 
@@ -377,6 +378,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/src/ephy-session/open-empty-uri-forces-new-window",
                    test_ephy_session_open_empty_uri_forces_new_window);
+#endif
 
   ret = g_test_run ();
 
