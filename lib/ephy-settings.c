@@ -122,9 +122,10 @@ sync_settings (GSettings *original,
   g_object_get (original, "settings-schema", &schema, NULL);
   keys = g_settings_schema_list_keys (schema);
 
-  for (size_t i = 0; keys[i]; ++i) {
+  for (size_t i = 0; keys[i] != NULL; ++i) {
     const char *key = keys[i];
     g_autoptr(GVariant) value = g_settings_get_user_value (original, key);
+
     if (value != NULL)
       g_settings_set_value (new, key, value);
   }
