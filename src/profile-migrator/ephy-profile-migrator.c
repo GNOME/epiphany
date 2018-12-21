@@ -1261,7 +1261,7 @@ move_directory_contents (GFile *source,
                                                                   G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
                                                                   NULL, &error);
   if (error) {
-    LOG ("Failed to enumerate files: %s", error->message);
+    g_warning ("Failed to enumerate files: %s", error->message);
     return FALSE;
   }
 
@@ -1269,7 +1269,7 @@ move_directory_contents (GFile *source,
     GFileInfo *info;
     g_autoptr(GError) error = NULL;
     if (!g_file_enumerator_iterate (direnum, &info, NULL, NULL, &error)) {
-      LOG ("Failed to enumerate dir: %s", error->message);
+      g_warning ("Failed to enumerate dir: %s", error->message);
       return FALSE;
     }
     if (!info)
@@ -1278,13 +1278,13 @@ move_directory_contents (GFile *source,
     g_autoptr(GFile) source_f = g_file_get_child (source, g_file_info_get_name (info));
     g_autoptr(GFile) dest_f = g_file_get_child (dest, g_file_info_get_name (info));
     if (!g_file_move (source_f, dest_f, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
-      LOG ("Failed to move %s: %s", g_file_info_get_name (info), error->message);
+      g_warning ("Failed to move %s: %s", g_file_info_get_name (info), error->message);
       return FALSE;
     }
   }
 
   if (!g_file_delete (source, NULL, &error))
-    LOG ("Failed to delete left-over source: %s", error->message);
+    g_warning ("Failed to delete left-over source: %s", error->message);
 
   return TRUE;
 }
@@ -1315,7 +1315,7 @@ migrate_profile_directories (void)
     g_autofree char *app_file = g_build_filename (app_path, ".app", NULL);
     int fd = g_open (app_file, O_WRONLY|O_CREAT|O_TRUNC, 0644);
     if (fd < 0)
-      LOG ("Failed to create .app file: %s", g_strerror (errno));
+      g_warning ("Failed to create .app file: %s", g_strerror (errno));
     else
       close (fd);
 
@@ -1324,7 +1324,7 @@ migrate_profile_directories (void)
     g_key_file_load_from_file (file, desktop_file_path, G_KEY_FILE_NONE, NULL);
     g_autofree char *exec = g_key_file_get_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, &error);
     if (exec == NULL) {
-      LOG ("Failed to get Exec key from %s: %s", desktop_file_path, error->message);
+      g_warning ("Failed to get Exec key from %s: %s", desktop_file_path, error->message);
       continue;
     }
 
@@ -1332,7 +1332,7 @@ migrate_profile_directories (void)
     g_autofree char *new_exec = g_regex_replace (re, exec, -1, 0, "/epiphany-", 0, &error);
 
     if (error != NULL) {
-      LOG ("Failed to replace Exec line %s: %s", exec, error->message);
+      g_warning ("Failed to replace Exec line %s: %s", exec, error->message);
       g_clear_error (&error);
     }
 
@@ -1340,7 +1340,7 @@ migrate_profile_directories (void)
     g_key_file_set_string (file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_EXEC, new_exec);
 
     if (!g_key_file_save_to_file (file, desktop_file_path, &error))
-      LOG ("Failed to save desktop file %s", error->message);
+      g_warning ("Failed to save desktop file %s", error->message);
   }
 
   ephy_web_application_free_application_list (web_apps);
