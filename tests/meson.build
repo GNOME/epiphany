@@ -55,15 +55,14 @@ if get_option('unit_tests')
        env: envs
   )
 
-  # https://bugzilla.gnome.org/show_bug.cgi?id=786001
-  # file_helpers_test = executable('test-ephy-file-helpers',
-  #   'ephy-file-helpers-test.c',
-  #   dependencies: ephymain_dep
-  # )
-  # test('File helpers test',
-  #      file_helpers_test,
-  #      env: envs
-  # )
+  file_helpers_test = executable('test-ephy-file-helpers',
+    'ephy-file-helpers-test.c',
+    dependencies: ephymain_dep
+  )
+  test('File helpers test',
+       file_helpers_test,
+       env: envs
+  )
 
   gsb_service_test = executable('test-ephy-gsb-service',
     'ephy-gsb-service-test.c',
