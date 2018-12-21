@@ -57,6 +57,38 @@ static int do_step_n = -1;
 static int migration_version = -1;
 static char *profile_dir = NULL;
 
+/* The legacy dir is used by everything before version 29 which migrates
+ * to the new directory */
+static const char *
+legacy_default_profile_dir (void)
+{
+  static char *dir = NULL;
+  if (dir == NULL)
+    dir = g_build_filename (g_get_user_config_dir (), "epiphany", NULL);
+  return dir;
+}
+
+static const char *
+legacy_profile_dir (void)
+{
+  static char *dir = NULL;
+  if (dir == NULL)
+    {
+      /* If this isn't actually a legacy dir it starts at a later migrating step anyway */
+      if (profile_dir != NULL)
+        dir = profile_dir;
+      else
+        dir = (char*)legacy_default_profile_dir ();
+    }
+  return dir;
+}
+
+static gboolean
+legacy_dir_is_default (void)
+{
+  return !strcmp (legacy_profile_dir (), legacy_default_profile_dir ());
+}
+
 /*
  * What to do to add new migration steps:
  *  - Bump EPHY_PROFILE_MIGRATION_VERSION in lib/ephy-profile-utils.h
@@ -68,7 +100,13 @@ typedef void (*EphyProfileMigrator) (void);
 static gboolean
 profile_dir_exists (void)
 {
-  return g_file_test (ephy_dot_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR);
+  if (g_file_test (ephy_dot_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+    return TRUE;
+
+  if (g_file_test (legacy_profile_dir (), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+    return TRUE;
+
+  return FALSE;
 }
 
 static void
@@ -170,7 +208,7 @@ migrate_insecure_passwords (void)
    * if this migrator has already run there. This way we avoid adding a new flag
    * file to clutter the profile dir just to check if this migrator has run.
    */
-  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (legacy_default_profile_dir ());
   if (default_profile_migration_version >= EPHY_INSECURE_PASSWORDS_MIGRATION_VERSION) {
     LOG ("Skipping insecure password migration because default profile has already migrated");
     return;
@@ -345,14 +383,14 @@ migrate_bookmarks (void)
   xmlNodePtr child;
   xmlNodePtr root;
 
-  filename = g_build_filename (ephy_dot_dir (),
+  filename = g_build_filename (legacy_profile_dir (),
                                EPHY_BOOKMARKS_FILE,
                                NULL);
   if (g_file_test (filename, G_FILE_TEST_EXISTS))
     goto out;
   g_free (filename);
 
-  filename = g_build_filename (ephy_dot_dir (),
+  filename = g_build_filename (legacy_profile_dir (),
                                "bookmarks.rdf",
                                NULL);
   if (!g_file_test (filename, G_FILE_TEST_EXISTS))
@@ -389,7 +427,7 @@ migrate_bookmarks (void)
     g_warning ("Failed to delete %s: %s", filename, g_strerror (errno));
   g_free (filename);
 
-  filename = g_build_filename (ephy_dot_dir (),
+  filename = g_build_filename (legacy_profile_dir (),
                                "ephy-bookmarks.xml",
                                NULL);
   if (g_unlink (filename) != 0)
@@ -408,22 +446,18 @@ migrate_adblock_filters (void)
   GPtrArray *filters_array = NULL;
   GError *error = NULL;
 
-  adblock_dir = g_build_filename (ephy_dot_dir (), "adblock", NULL);
+  adblock_dir = g_build_filename (legacy_profile_dir (), "adblock", NULL);
   if (!g_file_test (adblock_dir, G_FILE_TEST_IS_DIR)) {
     g_free (adblock_dir);
     return;
   }
 
-  if (!ephy_dot_dir_is_default ()) {
-    char *default_dot_dir;
-
+  if (!legacy_dir_is_default ()) {
     /* Adblock filters rules are now shared to save space */
     ephy_file_delete_dir_recursively (adblock_dir, NULL);
     g_free (adblock_dir);
 
-    default_dot_dir = ephy_default_dot_dir ();
-    adblock_dir = g_build_filename (default_dot_dir, "adblock", NULL);
-    g_free (default_dot_dir);
+    adblock_dir = g_build_filename (legacy_default_profile_dir (), "adblock", NULL);
   }
 
   filters_filename = g_build_filename (adblock_dir, "filters.list", NULL);
@@ -488,7 +522,7 @@ migrate_initial_state (void)
 
   /* EphyInitialState no longer exists. It's just window sizes, so "migrate" it
    * by simply removing the file to avoid cluttering the profile dir. */
-  filename = g_build_filename (ephy_dot_dir (), "states.xml", NULL);
+  filename = g_build_filename (legacy_profile_dir (), "states.xml", NULL);
   file = g_file_new_for_path (filename);
 
   g_file_delete (file, NULL, &error);
@@ -508,7 +542,7 @@ migrate_permissions (void)
   char *filename;
   GFile *file;
 
-  filename = g_build_filename (ephy_dot_dir (), "hosts.ini", NULL);
+  filename = g_build_filename (legacy_profile_dir (), "hosts.ini", NULL);
   file = g_file_new_for_path (filename);
   g_free (filename);
 
@@ -556,14 +590,14 @@ migrate_settings (void)
    * so if the profile dir is not the default one, it's a web app.
    * If not a web app, migrate deprecated settings.
    */
-  if (ephy_dot_dir_is_default ()) {
+  if (ephy_dot_dir_is_default () || legacy_dir_is_default ()) {
     migrate_deprecated_settings ();
     return;
   }
 
   /* If it's a web app, inherit settings from the default profile. */
   /* If the default profile hasn't been migrated yet, use the deprecated settings. */
-  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (legacy_default_profile_dir ());
   if (default_profile_migration_version < EPHY_SETTINGS_MIGRATION_VERSION) {
     GSettings *settings;
 
@@ -590,7 +624,7 @@ migrate_settings (void)
       g_variant_unref (value);
     }
   } else
-    ephy_web_application_initialize_settings (ephy_dot_dir ());
+    ephy_web_application_initialize_settings (legacy_profile_dir ());
 
   g_settings_sync ();
 }
@@ -613,7 +647,7 @@ migrate_search_engines (void)
 
   /* Search engine settings are only used in browser mode, so no need to migrate
    * if we are not in browser mode. */
-  if (!ephy_dot_dir_is_default ())
+  if (!legacy_dir_is_default ())
     return;
 
   bookmarks_manager = ephy_bookmarks_manager_new ();
@@ -693,7 +727,7 @@ migrate_passwords_to_firefox_sync_passwords (void)
    * password schema, fields that are not taken into consideration when
    * querying passwords.
    */
-  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (legacy_default_profile_dir ());
   if (default_profile_migration_version >= EPHY_FIREFOX_SYNC_PASSWORDS_MIGRATION_VERSION)
     return;
 
@@ -759,7 +793,7 @@ migrate_history_to_firefox_sync_history (void)
   char *history_filename;
   const char *sql_query;
 
-  history_filename = g_build_filename (ephy_dot_dir (), EPHY_HISTORY_FILE, NULL);
+  history_filename = g_build_filename (legacy_profile_dir (), EPHY_HISTORY_FILE, NULL);
   if (!g_file_test (history_filename, G_FILE_TEST_EXISTS)) {
     LOG ("There is no history to migrate...");
     goto out;
@@ -821,7 +855,7 @@ migrate_passwords_add_target_origin (void)
    * Adds target_origin field to all existing records,
    * with the same value as origin.
    */
-  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (legacy_default_profile_dir ());
   if (default_profile_migration_version >= EPHY_TARGET_ORIGIN_MIGRATION_VERSION)
     return;
 
@@ -908,7 +942,7 @@ migrate_sync_settings_path (void)
 
   /* Sync settings are only used in browser mode, so no need to migrate if we
    * are not in browser mode. */
-  if (!ephy_dot_dir_is_default ())
+  if (!legacy_dir_is_default ())
     return;
 
   for (guint i = 0; i < G_N_ELEMENTS (old_sync_settings); i++) {
@@ -955,7 +989,7 @@ migrate_sync_device_info (void)
   char *record;
   int default_profile_migration_version;
 
-  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (legacy_default_profile_dir ());
   if (default_profile_migration_version >= EPHY_SYNC_DEVICE_ID_MIGRATION_VERSION)
     return;
 
@@ -1047,7 +1081,7 @@ migrate_bookmarks_timestamp (void)
   char *filename;
   int length;
 
-  filename = g_build_filename (ephy_dot_dir (), EPHY_BOOKMARKS_FILE, NULL);
+  filename = g_build_filename (legacy_profile_dir (), EPHY_BOOKMARKS_FILE, NULL);
   root_table_in = gvdb_table_new (filename, TRUE, &error);
   if (error) {
     g_warning ("Failed to create Gvdb table: %s", error->message);
@@ -1128,7 +1162,7 @@ migrate_passwords_timestamp (void)
   int default_profile_migration_version;
 
   /* We want this migration to run only once. */
-  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (ephy_default_dot_dir ());
+  default_profile_migration_version = ephy_profile_utils_get_migration_version_for_profile_dir (legacy_default_profile_dir ());
   if (default_profile_migration_version >= EPHY_PASSWORDS_TIMESTAMP_MIGRATION_VERSION)
     return;
 
@@ -1215,8 +1249,48 @@ migrate_annoyance_list (void)
   g_strfreev (modified_filters);
 }
 
+static gboolean
+move_directory_contents (GFile *source,
+                         GFile *dest)
+{
+  /* Just a sanity check as it should already exist */
+  g_file_make_directory (dest, NULL, NULL);
+
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFileEnumerator) direnum = g_file_enumerate_children (source, G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                                                  G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                                                  NULL, &error);
+  if (error) {
+    LOG ("Failed to enumerate files: %s", error->message);
+    return FALSE;
+  }
+
+  while (TRUE) {
+    GFileInfo *info;
+    g_autoptr(GError) error = NULL;
+    if (!g_file_enumerator_iterate (direnum, &info, NULL, NULL, &error)) {
+      LOG ("Failed to enumerate dir: %s", error->message);
+      return FALSE;
+    }
+    if (!info)
+      break;
+
+    g_autoptr(GFile) source_f = g_file_get_child (source, g_file_info_get_name (info));
+    g_autoptr(GFile) dest_f = g_file_get_child (dest, g_file_info_get_name (info));
+    if (!g_file_move (source_f, dest_f, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
+      LOG ("Failed to move %s: %s", g_file_info_get_name (info), error->message);
+      return FALSE;
+    }
+  }
+
+  if (!g_file_delete (source, NULL, &error))
+    LOG ("Failed to delete left-over source: %s", error->message);
+
+  return TRUE;
+}
+
 static void
-migrate_app_profile_directories (void)
+migrate_profile_directories (void)
 {
   GList *web_apps, *l;
 
@@ -1227,13 +1301,13 @@ migrate_app_profile_directories (void)
     g_autoptr(GError) error = NULL;
 
     g_autofree char *old_name = g_strconcat ("app-epiphany-", app->id, NULL);
-    g_autofree char *old_path = g_build_filename (ephy_default_dot_dir (), old_name, NULL);
+    g_autofree char *old_path = g_build_filename (legacy_profile_dir (), old_name, NULL);
     g_autoptr(GFile) old_directory = g_file_new_for_path (old_path);
+
     g_autofree char *app_path = ephy_web_application_get_profile_directory (app->id);
     g_autoptr(GFile) new_directory = g_file_new_for_path (app_path);
 
-    if (!g_file_move (old_directory, new_directory, G_FILE_COPY_NONE, NULL, NULL, NULL, &error)) {
-      LOG ("Failed to move directory %s to %s: %s", old_path, app_path, error->message);
+    if (!move_directory_contents (old_directory, new_directory)) {
       continue;
     }
 
@@ -1270,6 +1344,21 @@ migrate_app_profile_directories (void)
   }
 
   ephy_web_application_free_application_list (web_apps);
+
+  /* The default profile also changed directories */
+  g_autoptr(GFile) old_directory = g_file_new_for_path (legacy_default_profile_dir ());
+  g_autoptr(GFile) new_directory = g_file_new_for_path (ephy_default_dot_dir ());
+
+  if (!move_directory_contents (old_directory, new_directory))
+    return;
+
+  /* We are also moving some cache directories so just remove the old ones */
+  g_autoptr(GFile) adblock_directory = g_file_get_child (new_directory, "adblock");
+  g_file_delete (adblock_directory, NULL, NULL);
+  g_autoptr(GFile) gsb_file = g_file_get_child (new_directory, "gsb-threats.db");
+  g_file_delete (gsb_file, NULL, NULL);
+  g_autoptr(GFile) gsb_journal_file = g_file_get_child (new_directory, "gsb-threats.db-journal");
+  g_file_delete (gsb_journal_file, NULL, NULL);
 }
 
 static void
@@ -1314,7 +1403,7 @@ const EphyProfileMigrator migrators[] = {
   /* 26 */ migrate_nothing,
   /* 27 */ migrate_search_engines,
   /* 28 */ migrate_annoyance_list,
-  /* 29 */ migrate_app_profile_directories,
+  /* 29 */ migrate_profile_directories,
 };
 
 static gboolean
@@ -1345,7 +1434,8 @@ ephy_migrator (void)
     return TRUE;
   }
 
-  latest = ephy_profile_utils_get_migration_version ();
+  latest = MAX (ephy_profile_utils_get_migration_version (),
+                ephy_profile_utils_get_migration_version_for_profile_dir (legacy_profile_dir ()));
 
   LOG ("Running migrators up to version %d, current migration version is %d.",
        EPHY_PROFILE_MIGRATION_VERSION, latest);
